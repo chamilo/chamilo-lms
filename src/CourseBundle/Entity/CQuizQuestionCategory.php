@@ -220,11 +220,6 @@ class CQuizQuestionCategory extends AbstractResource implements ResourceInterfac
         return $this->getTitle();
     }
 
-    public function getResourceFieldName(): string
-    {
-        return 'title';
-    }
-
     public function __toString(): string
     {
         return $this->getTitle();

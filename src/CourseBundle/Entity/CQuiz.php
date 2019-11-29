@@ -285,7 +285,7 @@ class CQuiz extends AbstractResource implements ResourceInterface
      */
     public function getTitle()
     {
-        return $this->title;
+        return (string) $this->title;
     }
 
     /**
@@ -958,11 +958,6 @@ class CQuiz extends AbstractResource implements ResourceInterface
     public function getResourceName(): string
     {
         return $this->getTitle();
-    }
-
-    public function getResourceFieldName(): string
-    {
-        return 'title';
     }
 
     public function __toString(): string

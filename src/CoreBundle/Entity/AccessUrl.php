@@ -506,9 +506,4 @@ class AccessUrl extends AbstractResource implements ResourceInterface
 
         return $url;
     }
-
-    public function getResourceFieldName(): string
-    {
-        return 'url';
-    }
 }

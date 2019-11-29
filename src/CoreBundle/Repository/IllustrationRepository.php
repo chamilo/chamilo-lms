@@ -3,17 +3,33 @@
 
 namespace Chamilo\CoreBundle\Repository;
 
+use APY\DataGridBundle\Grid\Column\Column;
+use APY\DataGridBundle\Grid\Grid;
 use Chamilo\CoreBundle\Entity\Illustration;
 use Chamilo\CoreBundle\Entity\Resource\AbstractResource;
 use Chamilo\CoreBundle\Entity\Resource\ResourceFile;
 use Chamilo\CoreBundle\Entity\Resource\ResourceNode;
 use Chamilo\UserBundle\Entity\User;
+use Symfony\Component\Form\FormInterface;
 
 /**
  * Class IllustrationRepository.
  */
-class IllustrationRepository extends ResourceRepository
+final class IllustrationRepository extends ResourceRepository implements ResourceRepositoryInterface
 {
+    public function saveResource(FormInterface $form, $course, $session, $fileType)
+    {
+        $newResource = $form->getData();
+        $newResource
+            //->setCourse($course)
+            //->setSession($session)
+            //->setFiletype($fileType)
+            //->setTitle($title) // already added in $form->getData()
+        ;
+
+        return $newResource;
+    }
+
     /**
      * @param $uploadFile
      */
@@ -87,5 +103,10 @@ class IllustrationRepository extends ResourceRepository
         }
 
         return '';
+    }
+
+    public function getTitleColumn(Grid $grid): Column
+    {
+        return $grid->getColumn('name');
     }
 }

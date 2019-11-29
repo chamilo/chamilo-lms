@@ -79,11 +79,6 @@ class PersonalFile extends AbstractResource implements ResourceInterface
         return $this->getName();
     }
 
-    public function getResourceFieldName(): string
-    {
-        return 'name';
-    }
-
     public function __toString(): string
     {
         return $this->getName();

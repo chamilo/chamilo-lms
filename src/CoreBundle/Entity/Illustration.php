@@ -3,8 +3,10 @@
 
 namespace Chamilo\CoreBundle\Entity;
 
+use APY\DataGridBundle\Grid\Mapping as GRID;
 use Chamilo\CoreBundle\Entity\Resource\AbstractResource;
 use Chamilo\CoreBundle\Entity\Resource\ResourceInterface;
+use Chamilo\CourseBundle\Traits\PersonalResourceTrait;
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Timestampable\Traits\TimestampableEntity;
 
@@ -13,9 +15,11 @@ use Gedmo\Timestampable\Traits\TimestampableEntity;
  *
  * @ORM\Table(name="illustration")
  * @ORM\Entity
+ * @GRID\Source(columns="id, name, resourceNode.createdAt", filterable=false, groups={"resource"})
  */
 class Illustration extends AbstractResource implements ResourceInterface
 {
+    use PersonalResourceTrait;
     use TimestampableEntity;
 
     /**
@@ -77,11 +81,6 @@ class Illustration extends AbstractResource implements ResourceInterface
     public function getResourceName(): string
     {
         return $this->getName();
-    }
-
-    public function getResourceFieldName(): string
-    {
-        return 'name';
     }
 
     public function __toString(): string

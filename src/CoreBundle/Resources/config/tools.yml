@@ -33,7 +33,10 @@ services:
             - 'asset'
             - 'asset'
             - ''
-            - {Chamilo\CoreBundle\Entity\Illustration: 'illustrations'}
+            -
+                illustrations:
+                    entity: Chamilo\CoreBundle\Entity\Illustration
+                    repository: Chamilo\CoreBundle\Repository\IllustrationRepository
             - 1
         tags:
             - {name: chamilo_core.tool}

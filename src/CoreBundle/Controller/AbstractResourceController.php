@@ -9,6 +9,7 @@ use Chamilo\CoreBundle\ToolChain;
 use Cocur\Slugify\SlugifyInterface;
 use League\Flysystem\MountManager;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\PropertyAccess\Exception\InvalidArgumentException;
 use Symfony\Contracts\Translation\TranslatorInterface;
 
 /**
@@ -64,21 +65,22 @@ abstract class AbstractResourceController extends BaseController
      *
      * @return ResourceRepository
      */
-    public function getRepository($tool, $resourceTypeName)
+    public function getRepository($tool, $resourceTypeName): ?ResourceRepository
     {
         $checker = $this->container->get('security.authorization_checker');
         $tool = $this->toolChain->getToolFromName($tool);
+
         $resourceTypeList = $tool->getResourceTypes();
 
         if (!isset($resourceTypeList[$resourceTypeName])) {
-            return null;
+            throw new InvalidArgumentException("Resource type doesn't exist: $resourceTypeName");
         }
 
         $type = $resourceTypeList[$resourceTypeName];
         $repo = $type['repository'];
         $entity = $type['entity'];
 
-        $resourceRepository = new $repo(
+        $repository = new $repo(
             $checker,
             $this->getDoctrine()->getManager(),
             $this->mountManager,
@@ -87,6 +89,6 @@ abstract class AbstractResourceController extends BaseController
             $entity
         );
 
-        return $resourceRepository;
+        return $repository;
     }
 }

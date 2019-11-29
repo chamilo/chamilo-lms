@@ -7,7 +7,7 @@ use APY\DataGridBundle\Grid\Mapping as GRID;
 use Chamilo\CoreBundle\Entity\Resource\AbstractResource;
 use Chamilo\CoreBundle\Entity\Resource\ResourceInterface;
 use Doctrine\ORM\Mapping as ORM;
-
+//
 /**
  * CLink.
  *
@@ -19,7 +19,7 @@ use Doctrine\ORM\Mapping as ORM;
  *  }
  * )
  * @ORM\Entity
- * @GRID\Source(columns="iid, title, resourceNode.createdAt", filterable=false)
+ * @GRID\Source(columns="iid, title, resourceNode.createdAt", filterable=false, groups={"resource"})
  */
 class CLink extends AbstractResource implements ResourceInterface
 {
@@ -353,11 +353,6 @@ class CLink extends AbstractResource implements ResourceInterface
     public function getResourceName(): string
     {
         return $this->getTitle();
-    }
-
-    public function getResourceFieldName(): string
-    {
-        return 'title';
     }
 
     public function __toString(): string

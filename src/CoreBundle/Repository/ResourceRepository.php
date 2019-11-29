@@ -490,10 +490,12 @@ class ResourceRepository extends EntityRepository
         $className = $repo->getClassName();
         $checker = $this->getAuthorizationChecker();
 
+        $reflectionClass = $repo->getClassMetadata()->getReflectionClass();
+
         // Check if this resource type requires to load the base course resources when using a session
-        $loadBaseSessionContent = $repo->getClassMetadata()->getReflectionClass()->hasProperty(
-            'loadCourseResourcesInSession'
-        );
+        $loadBaseSessionContent = $reflectionClass->hasProperty('loadCourseResourcesInSession');
+        $isPersonalResource = $reflectionClass->hasProperty('loadPersonalResources');
+
         $type = $this->getResourceType();
 
         $qb = $repo->getEntityManager()->createQueryBuilder()
@@ -507,13 +509,14 @@ class ResourceRepository extends EntityRepository
             )
             ->innerJoin('node.resourceLinks', 'links')
             ->where('node.resourceType = :type')
-            ->andWhere('links.course = :course')
-            ->setParameters(
-                [
-                    'type' => $type,
-                    'course' => $course,
-                ]
-            );
+            ->setParameter('type',$type);
+
+        if ($isPersonalResource === false) {
+            $qb
+                ->andWhere('links.course = :course')
+                ->setParameter('course', $course)
+            ;
+        }
 
         $isAdmin = $checker->isGranted('ROLE_ADMIN') ||
             $checker->isGranted('ROLE_CURRENT_COURSE_TEACHER');
@@ -546,10 +549,10 @@ class ResourceRepository extends EntityRepository
         }
 
         if (null === $group) {
-            $qb->andWhere('links.group IS NULL');
+           $qb->andWhere('links.group IS NULL');
         }
 
-        //echo ($qb->getQuery()->getSQL());exit;
+        ///var_dump($qb->getQuery()->getSQL(), $type->getId(), $parentNode->getId());exit;
 
         return $qb;
     }

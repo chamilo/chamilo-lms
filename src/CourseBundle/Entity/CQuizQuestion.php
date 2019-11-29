@@ -427,11 +427,6 @@ class CQuizQuestion extends AbstractResource implements ResourceInterface
         return $this->getQuestion();
     }
 
-    public function getResourceFieldName(): string
-    {
-        return 'question';
-    }
-
     public function __toString(): string
     {
         return $this->getQuestion();

@@ -34,7 +34,6 @@ class ResourceListener
     public function preUpdate(AbstractResource $resource, PreUpdateEventArgs $event)
     {
         /*error_log('preUpdate');
-        $fieldIdentifier = $resource->getResourceFieldName();
         error_log($fieldIdentifier);
         $em = $event->getEntityManager();
         if ($event->hasChangedField($fieldIdentifier)) {

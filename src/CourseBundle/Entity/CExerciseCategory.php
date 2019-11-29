@@ -109,7 +109,7 @@ class CExerciseCategory extends AbstractResource implements ResourceInterface
      */
     public function getName()
     {
-        return $this->name;
+        return (string) $this->name;
     }
 
     /**
@@ -190,10 +190,5 @@ class CExerciseCategory extends AbstractResource implements ResourceInterface
     public function getResourceName(): string
     {
         return $this->getName();
-    }
-
-    public function getResourceFieldName(): string
-    {
-        return 'name';
     }
 }

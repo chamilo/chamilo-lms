@@ -3,6 +3,8 @@
 
 namespace Chamilo\CourseBundle\Repository;
 
+use APY\DataGridBundle\Grid\Column\Column;
+use APY\DataGridBundle\Grid\Grid;
 use Chamilo\CoreBundle\Entity\Resource\ResourceLink;
 use Chamilo\CoreBundle\Repository\ResourceRepository;
 use Chamilo\CoreBundle\Repository\ResourceRepositoryInterface;
@@ -166,5 +168,10 @@ final class CDocumentRepository extends ResourceRepository implements ResourceRe
             ->getQuery();
 
         return $query->getResult();
+    }
+
+    public function getTitleColumn(Grid $grid): Column
+    {
+        return $grid->getColumn('title');
     }
 }

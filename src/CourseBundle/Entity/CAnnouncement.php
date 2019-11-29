@@ -107,7 +107,7 @@ class CAnnouncement extends AbstractResource implements ResourceInterface
      */
     public function getTitle()
     {
-        return $this->title;
+        return (string) $this->title;
     }
 
     /**
@@ -301,13 +301,8 @@ class CAnnouncement extends AbstractResource implements ResourceInterface
         return $this->getTitle();
     }
 
-    public function getResourceFieldName(): string
-    {
-        return 'title';
-    }
-
     public function __toString(): string
     {
-        // TODO: Implement __toString() method.
+        return $this->getTitle();
     }
 }

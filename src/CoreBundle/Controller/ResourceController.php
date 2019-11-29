@@ -65,7 +65,7 @@ class ResourceController extends AbstractResourceController implements CourseCon
 
         $breadcrumb = $this->breadcrumbBlockService;
         $breadcrumb->addChild(
-            $this->trans('Documents'),
+            $this->trans($tool),
             [
                 'uri' => '#',
             ]
@@ -94,7 +94,9 @@ class ResourceController extends AbstractResourceController implements CourseCon
         $repository = $this->getRepositoryFromRequest($request);
 
         $class = $repository->getRepository()->getClassName();
-        $source = new Entity($class);
+
+        // The group 'resource' is set in the @GRID\Source annotation in the entity.
+        $source = new Entity($class, 'resource');
 
         $course = $this->getCourse();
         $session = $this->getSession();
@@ -119,29 +121,33 @@ class ResourceController extends AbstractResourceController implements CourseCon
 
         $grid->setRouteUrl($this->generateUrl('chamilo_core_resource_list', $params));
 
-        //$title = $repository->get
-
-        $title = $grid->getColumn('title');
-        $title->setSafe(false); // allows links in the title
-
         //$grid->hideFilters();
         //$grid->setLimits(20);
         //$grid->isReadyForRedirect();
         //$grid->setMaxResults(1);
         //$grid->setLimits(2);
+
+        //$grid->setColumns($columns);
+
         $translation = $this->translator;
         $routeParams = $courseParams;
         $routeParams['tool'] = $tool;
         $routeParams['type'] = $type;
         $routeParams['id'] = null;
 
-        // Title link.
-        $grid->getColumn('title')->setTitle($this->trans('Name'));
-        if ($grid->hasColumn('filetype')) {
-            $grid->getColumn('filetype')->setTitle($this->trans('Type'));
-        }
+        $titleColumn = $repository->getTitleColumn($grid);
+        $titleColumn->setSafe(false); // allows links in the title
 
-        $grid->getColumn('title')->manipulateRenderCell(
+        // Title link.
+        $titleColumn->setTitle($this->trans('Name'));
+
+        //$repository->formatGrid();
+
+        /*if ($grid->hasColumn('filetype')) {
+            $grid->getColumn('filetype')->setTitle($this->trans('Type'));
+        }*/
+
+        $titleColumn->manipulateRenderCell(
             function ($value, Row $row, $router) use ($routeParams) {
                 /** @var Router $router */
                 /** @var AbstractResource $entity */
@@ -159,7 +165,6 @@ class ResourceController extends AbstractResourceController implements CourseCon
                         'chamilo_core_resource_show',
                         $myParams
                     );*/
-
                     if ($resourceNode->isResourceFileAnImage()) {
                         $url = $router->generate(
                             'chamilo_core_resource_view',
@@ -218,7 +223,9 @@ class ResourceController extends AbstractResourceController implements CourseCon
             );
         }
 
-        $grid->setHiddenColumns(['iid']);
+        if ($grid->hasColumn('iid')) {
+            $grid->setHiddenColumns(['iid']);
+        }
 
         // Delete mass action.
         if ($this->isGranted(ResourceNodeVoter::DELETE, $this->getCourse())) {

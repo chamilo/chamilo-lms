@@ -85,4 +85,10 @@ abstract class AbstractResource implements ResourceInterface
 
         return null;
     }
+
+    public static function getFieldName()
+    {
+        return 'name';
+    }
+
 }

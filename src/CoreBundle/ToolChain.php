@@ -12,6 +12,7 @@ use Chamilo\CoreBundle\Tool\AbstractTool;
 use Chamilo\CourseBundle\Entity\CTool;
 use Chamilo\SettingsBundle\Manager\SettingsManager;
 use Doctrine\Common\Persistence\ObjectManager;
+use Symfony\Component\PropertyAccess\Exception\InvalidArgumentException;
 
 /**
  * Class ToolChain.
@@ -148,7 +149,7 @@ class ToolChain
     /**
      * @param string $name
      *
-     * @return AbstractTool|false
+     * @return AbstractTool
      */
     public function getToolFromName($name)
     {
@@ -158,6 +159,6 @@ class ToolChain
             return $tools[$name];
         }
 
-        return false;
+        throw new InvalidArgumentException("Tool doesn't exist: $name");
     }
 }

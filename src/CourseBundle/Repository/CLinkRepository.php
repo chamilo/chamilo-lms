@@ -3,6 +3,8 @@
 
 namespace Chamilo\CourseBundle\Repository;
 
+use APY\DataGridBundle\Grid\Column\Column;
+use APY\DataGridBundle\Grid\Grid;
 use Chamilo\CoreBundle\Repository\ResourceRepository;
 use Chamilo\CoreBundle\Repository\ResourceRepositoryInterface;
 use Chamilo\CourseBundle\Entity\CLink;
@@ -22,13 +24,12 @@ final class CLinkRepository extends ResourceRepository implements ResourceReposi
             ->setDisplayOrder(0)
             ->setOnHomepage(0)
         ;
-            //$newResource->setSessionId($session)
-        /*$newResource
-            ->setCourse($course)
-            ->setSession($session)*/
-            //->setTitle($title) // already added in $form->getData()
-        ;
 
         return $newResource;
+    }
+
+    public function getTitleColumn(Grid $grid): Column
+    {
+        return $grid->getColumn('title');
     }
 }

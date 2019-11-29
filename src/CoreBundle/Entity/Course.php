@@ -1362,9 +1362,4 @@ class Course extends AbstractResource implements ResourceInterface
     {
         return $this->getCode();
     }
-
-    public function getResourceFieldName(): string
-    {
-        return 'code';
-    }
 }

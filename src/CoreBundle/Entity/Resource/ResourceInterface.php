@@ -15,7 +15,5 @@ interface ResourceInterface
 
     public function getResourceName(): string;
 
-    public function getResourceFieldName(): string;
-
     public function __toString(): string;
 }

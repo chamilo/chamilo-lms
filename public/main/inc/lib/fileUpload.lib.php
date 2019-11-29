@@ -1413,6 +1413,28 @@ function create_unexisting_directory(
     $course_id = $_course['real_id'];
     $session_id = (int) $session_id;
 
+    $document = DocumentManager::addDocument(
+        $_course,
+        $desired_dir_name,
+        'folder',
+        0,
+        $title,
+        null,
+        0,
+        true,
+        $to_group_id,
+        $session_id,
+        $user_id,
+        $sendNotification,
+        '',
+        null
+    );
+
+    if ($document) {
+        return $document;
+    }
+
+
     $folderExists = DocumentManager::folderExists(
         $desired_dir_name,
         $_course,

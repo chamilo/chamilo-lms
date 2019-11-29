@@ -48,6 +48,7 @@ try {
     $context = $router->getContext();
 
     $router->setContext($context);
+
     $response = $kernel->handle($request);
     $context = Container::getRouter()->getContext();
 

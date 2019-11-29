@@ -6576,10 +6576,8 @@ class learnpath
     public static function generate_learning_path_folder($course, $creatorId = 0)
     {
         // Creating learning_path folder
-        $dir = '/learning_path';
-        $filepath = api_get_path(SYS_COURSE_PATH).$course['path'].'/document';
+        $dir = 'learning_path';
         $creatorId = empty($creatorId) ? api_get_user_id() : $creatorId;
-
         $folder = false;
         $folderData = create_unexisting_directory(
             $course,
@@ -6587,7 +6585,7 @@ class learnpath
             0,
             null,
             0,
-            $filepath,
+            '',
             $dir,
             get_lang('Learning paths'),
             0

@@ -9866,7 +9866,7 @@ class learnpath
                     name="min_'.$item['id'].'" 
                     type="number" 
                     min="0" 
-                    step="any
+                    step="any"
                     max="'.$item['max_score'].'" 
                     value="'.$selectedMinScoreValue.'" 
                 />';

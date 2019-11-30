@@ -224,6 +224,8 @@ if ($installType === 'update' && in_array($my_old_version, $update_from_version_
 }
 
 $showEmailNotCheckedToStudent = 1;
+$userMailCanBeEmpty = null;
+$checkEmailByHashSent = null;
 
 if (!isset($_GET['running'])) {
     // Extract the path to append to the url if Chamilo is not installed on the web root directory.

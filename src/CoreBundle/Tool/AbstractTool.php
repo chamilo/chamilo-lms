@@ -112,7 +112,7 @@ abstract class AbstractTool implements ToolInterface
     /**
      * @return array
      */
-    public function getResourceTypes(): array
+    public function getResourceTypes()
     {
         return $this->resourceTypes;
     }

@@ -90,10 +90,44 @@ class ToolChain
 
             $types = $tool->getResourceTypes();
             if (!empty($types)) {
-                foreach ($types as $entityName => $name) {
+                foreach ($types as $name => $data) {
                     $resourceType = new ResourceType();
                     $resourceType->setName($name);
-                    $resourceType->setEntityName($entityName);
+                    $resourceType->setEntityName($data['entity']);
+                    $resourceType->setTool($toolEntity);
+                    $manager->persist($resourceType);
+                }
+            }
+
+            $manager->flush();
+        }
+    }
+
+    public function updateTools(ObjectManager $manager): void
+    {
+        $tools = $this->getTools();
+
+        /** @var AbstractTool $tool */
+        foreach ($tools as $tool) {
+            $toolEntity = new Tool();
+            $toolEntity
+                ->setName($tool->getName())
+            ;
+
+            if ($tool->getAdmin() === 1) {
+                // Only check ROLE_ADMIN
+            } else {
+                $this->setToolPermissions($toolEntity);
+            }
+
+            $manager->persist($toolEntity);
+
+            $types = $tool->getResourceTypes();
+            if (!empty($types)) {
+                foreach ($types as $name => $data) {
+                    $resourceType = new ResourceType();
+                    $resourceType->setName($name);
+                    $resourceType->setEntityName($data['entity']);
                     $resourceType->setTool($toolEntity);
                     $manager->persist($resourceType);
                 }

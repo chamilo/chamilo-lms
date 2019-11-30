@@ -66,6 +66,16 @@ class CourseController extends AbstractController
     }
 
     /**
+     * @Route("/{cid}/welcome", name="chamilo_core_course_welcome")
+     *
+     * @Entity("course", expr="repository.find(cid)")
+     */
+    public function welcomeAction(Course $course): Response
+    {
+        return $this->render('@ChamiloTheme/Course/welcome.html.twig', ['course' => $course]);
+    }
+
+    /**
      * @Route("/{cid}/about", name="chamilo_core_course_about")
      *
      * @Entity("course", expr="repository.find(cid)")
@@ -75,7 +85,6 @@ class CourseController extends AbstractController
         $courseId = $course->getId();
         $userId = $this->getUser()->getId();
 
-        $userRepo = \UserManager::getRepository();
         $em = $this->getDoctrine()->getManager();
 
         $fieldsRepo = $em->getRepository('ChamiloCoreBundle:ExtraField');

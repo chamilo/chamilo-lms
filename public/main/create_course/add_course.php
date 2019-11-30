@@ -372,7 +372,7 @@ if ($form->validate()) {
                 if ($splash === 'true') {
                     $url = Container::getRouter()->generate(
                         'chamilo_core_course_welcome',
-                        ['course' => $course_info['code']]
+                        ['cid' => $course_info['real_id']]
                     );
                     header('Location: '.$url);
                     exit;

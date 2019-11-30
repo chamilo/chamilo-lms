@@ -400,7 +400,7 @@ class ResourceNode
     /**
      * @return bool
      */
-    public function isEditable()
+    public function hasEditableContent()
     {
         if ($this->hasResourceFile()) {
             $mimeType = $this->getResourceFile()->getMimeType();

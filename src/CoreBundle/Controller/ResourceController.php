@@ -17,7 +17,6 @@ use Chamilo\CoreBundle\Entity\Resource\ResourceNode;
 use Chamilo\CoreBundle\Security\Authorization\Voter\ResourceNodeVoter;
 use Chamilo\CourseBundle\Controller\CourseControllerInterface;
 use Chamilo\CourseBundle\Controller\CourseControllerTrait;
-use Chamilo\CourseBundle\Repository\CDocumentRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Criteria;
 use Doctrine\ORM\QueryBuilder;
@@ -52,7 +51,7 @@ class ResourceController extends AbstractResourceController implements CourseCon
     /**
      * @Route("/{tool}/{type}", name="chamilo_core_resource_index")
      *
-     * Example: /document/files
+     * Example: /document/files (See the 'tool' and the 'resource_type' DB tables.)
      * For the tool value check the Tool entity.
      * For the type value check the ResourceType entity.
      */
@@ -236,7 +235,7 @@ class ResourceController extends AbstractResourceController implements CourseCon
             $grid->addMassAction($deleteMassAction);
         }
 
-        // Show resource action.
+        // Info action.
         $myRowAction = new RowAction(
             $this->trans('Info'),
             'chamilo_core_resource_info',
@@ -245,7 +244,7 @@ class ResourceController extends AbstractResourceController implements CourseCon
             [
                 'class' => 'btn btn-secondary info_action',
                 'icon' => 'fa-info-circle',
-                'iframe' => true,
+                'iframe' => false,
             ]
         );
 
@@ -258,6 +257,35 @@ class ResourceController extends AbstractResourceController implements CourseCon
             $attributes['data-action-id'] = $action->getRoute().'_'.$id;
             $attributes['data-node-id'] = $id;
 
+            $action->setAttributes($attributes);
+
+            return $action;
+        };
+
+        $myRowAction->addManipulateRender($setNodeParameters);
+        $grid->addRowAction($myRowAction);
+
+        // Download action
+        $myRowAction = new RowAction(
+            $this->trans('Download'),
+            'chamilo_core_resource_download',
+            false,
+            '_self',
+            [
+                'class' => 'btn btn-secondary download_action',
+                'icon' => 'fa-download',
+            ]
+        );
+
+        $setNodeParameters = function (RowAction $action, Row $row) use ($routeParams) {
+            $id = $row->getEntity()->getResourceNode()->getId();
+            $routeParams['id'] = $id;
+
+            $action->setRouteParameters($routeParams);
+            $attributes = $action->getAttributes();
+            //$attributes['data-action'] = $action->getRoute();
+            //$attributes['data-action-id'] = $action->getRoute().'_'.$id;
+            //$attributes['data-node-id'] = $id;
             $action->setAttributes($attributes);
 
             return $action;
@@ -422,7 +450,7 @@ class ResourceController extends AbstractResourceController implements CourseCon
 
         $form = $repository->getForm($this->container->get('form.factory'), $resource);
 
-        if ($resourceNode->isEditable()) {
+        if ($resourceNode->hasEditableContent()) {
             $form->add(
                 'content',
                 CKEditorType::class,
@@ -449,11 +477,8 @@ class ResourceController extends AbstractResourceController implements CourseCon
                 $repository->updateResourceFileContent($newResource, $data);
             }
 
-            $newResource->setTitle($form->get('title')->getData());
+            //$newResource->setTitle($form->get('title')->getData()); // already set in $form->getData()
             $repository->updateNodeForResource($newResource);
-
-            /*$em->persist($newResource);
-            $em->flush();*/
 
             $this->addFlash('success', $this->trans('Updated'));
 
@@ -696,13 +721,12 @@ class ResourceController extends AbstractResourceController implements CourseCon
             throw new FileNotFoundException('Resource not found');
         }
 
-        return $this->showFile($request, $resourceNode, $glide, $mode, $filter);
+        return $this->showFile($request, $resourceNode, $mode, $glide, $filter);
     }
 
     /**
-     * Gets a document when calling route resources_document_get_file.
+     * Gets a document when calling route resources_document_get_file
      * @deprecated
-     * @param CDocumentRepository $documentRepo
      *
      * @throws \League\Flysystem\FileNotFoundException
      */
@@ -734,29 +758,28 @@ class ResourceController extends AbstractResourceController implements CourseCon
             $this->trans('Unauthorised access to resource')
         );
 
-        return $this->showFile($request, $resourceNode, $glide, $mode, $filter);
+        return $this->showFile($request, $resourceNode, $mode, $glide,$filter);
     }
 
     /**
-     * Downloads a folder.
-     *
-     * @return Response
+     * @Route("/{tool}/{type}/{id}/download", methods={"GET"}, name="chamilo_core_resource_download")
      */
-    public function downloadFolderAction(Request $request, CDocumentRepository $documentRepo)
+    public function downloadAction(Request $request)
     {
-        $folderId = (int) $request->get('folderId');
+        $resourceNodeId = (int) $request->get('id');
         $courseNode = $this->getCourse()->getResourceNode();
 
-        if (empty($folderId)) {
+        $repo = $this->getRepositoryFromRequest($request);
+
+        if (empty($resourceNodeId)) {
             $resourceNode = $courseNode;
         } else {
-            $document = $documentRepo->find($folderId);
-            $resourceNode = $document->getResourceNode();
+            $resourceNode = $repo->getResourceNodeRepository()->find($resourceNodeId);
         }
 
-        $type = $documentRepo->getResourceType();
+        $type = $repo->getResourceType();
 
-        if (null === $resourceNode || null === $courseNode) {
+        if (null === $resourceNode) {
             throw new NotFoundHttpException();
         }
 
@@ -766,13 +789,18 @@ class ResourceController extends AbstractResourceController implements CourseCon
             $this->trans('Unauthorised access to resource')
         );
 
-        $zipName = $resourceNode->getName().'.zip';
+        $zipName = $resourceNode->getSlug().'.zip';
         $rootNodePath = $resourceNode->getPathForDisplay();
 
-        /** @var Filesystem $fileSystem */
-        $fileSystem = $this->get('oneup_flysystem.resources_filesystem');
+        if ($resourceNode->hasResourceFile()) {
+            // Redirect to download file
+            return $this->showFile($request, $resourceNode, 'download');
+        }
 
-        $resourceNodeRepo = $documentRepo->getResourceNodeRepository();
+        /** @var Filesystem $fileSystem */
+        //$fileSystem = $this->get('oneup_flysystem.resources_filesystem');
+
+        $resourceNodeRepo = $repo->getResourceNodeRepository();
 
         $criteria = Criteria::create()
             ->where(Criteria::expr()->neq('resourceFile', null))
@@ -946,7 +974,7 @@ class ResourceController extends AbstractResourceController implements CourseCon
      *
      * @return mixed|StreamedResponse
      */
-    private function showFile(Request $request, ResourceNode $resourceNode, Glide $glide, $mode = 'show', $filter = '')
+    private function showFile(Request $request, ResourceNode $resourceNode, $mode = 'show', Glide $glide = null, $filter = '')
     {
         $this->denyAccessUnlessGranted(
             ResourceNodeVoter::VIEW,

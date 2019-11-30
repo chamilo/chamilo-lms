@@ -12,6 +12,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Contracts\Translation\TranslatorInterface;
 
+
 /**
  * Each entity controller must extends this class.
  *
@@ -19,6 +20,8 @@ use Symfony\Contracts\Translation\TranslatorInterface;
  */
 abstract class BaseController extends AbstractController
 {
+    protected $translator;
+
     public static function getSubscribedServices(): array
     {
         $services = parent::getSubscribedServices();
@@ -52,7 +55,10 @@ abstract class BaseController extends AbstractController
      */
     public function trans($variable)
     {
-        return $this->container->get('translator')->trans($variable);
+        /** @var TranslatorInterface $translator */
+        $translator = $this->container->get('translator');
+
+        return $translator->trans($variable);
     }
 
     /**

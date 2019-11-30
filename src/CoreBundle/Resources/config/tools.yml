@@ -49,7 +49,13 @@ services:
             - 'authoring'
             - 'calendar/agenda.php'
             - chamilo_course.settings.agenda
-            - {Chamilo\CourseBundle\Entity\CCalendarEvent: 'events', Chamilo\CourseBundle\Entity\CCalendarEventAttachment: 'event_attachments'}
+            -
+                events:
+                    entity: Chamilo\CourseBundle\Entity\CCalendarEvent
+                    repository: Chamilo\CourseBundle\Repository\CCalendarEventRepository
+                event_attachments:
+                    entity: Chamilo\CourseBundle\Entity\CCalendarEventAttachment
+                    repository: Chamilo\CourseBundle\Repository\CCalendarEventAttachmentRepository
             - 0
         tags:
             - {name: chamilo_core.tool}
@@ -68,7 +74,13 @@ services:
             - 'authoring'
             - 'announcements/announcements.php'
             - chamilo_course.settings.announcement
-            - {Chamilo\CourseBundle\Entity\CAnnouncement: 'announcements', Chamilo\CourseBundle\Entity\CAnnouncementAttachment: 'announcements_attachments'}
+            -
+                announcements:
+                    entity: Chamilo\CourseBundle\Entity\CAnnouncement
+                    repository: Chamilo\CourseBundle\Repository\CAnnouncementRepository
+                announcements_attachments:
+                    entity: Chamilo\CourseBundle\Entity\CAnnouncementAttachment
+                    repository: Chamilo\CourseBundle\Repository\CAnnouncementAttachmentRepository
             - 0
         tags:
             - {name: chamilo_core.tool}
@@ -86,7 +98,13 @@ services:
             - 'interaction'
             - 'work/work.php'
             - chamilo_course.settings.assignment
-            - {Chamilo\CourseBundle\Entity\CStudentPublication: 'student_publications', Chamilo\CourseBundle\Entity\CStudentPublicationAssignment: 'student_publications_assignments'}
+            -
+                student_publications:
+                    entity: Chamilo\CourseBundle\Entity\CStudentPublication
+                    repository: Chamilo\CourseBundle\Repository\CStudentPublicationRepository
+                student_publications_assignments:
+                    entity: Chamilo\CourseBundle\Entity\CStudentPublicationAssignment
+                    repository: Chamilo\CourseBundle\Repository\CStudentPublicationAssignmentRepository
             - 0
         tags:
             - {name: chamilo_core.tool}
@@ -104,7 +122,10 @@ services:
             - 'authoring'
             - 'attendance/index.php'
             - '@chamilo_course.settings.attendance'
-            - {Chamilo\CourseBundle\Entity\CAttendance: 'attendances'}
+            -
+                attendances:
+                    entity: Chamilo\CourseBundle\Entity\CAttendance
+                    repository: Chamilo\CourseBundle\Repository\CAttendanceRepository
             - 0
         tags:
             - {name: chamilo_core.tool}
@@ -122,7 +143,10 @@ services:
             - 'admin'
             - 'blog/blog_admin.php'
             - '@chamilo_course.settings.blog'
-            - {Chamilo\CourseBundle\Entity\CBlog: 'blogs'}
+            -
+                blogs:
+                    entity: Chamilo\CourseBundle\Entity\CBlog
+                    repository: Chamilo\CourseBundle\Repository\CBlogRepository
             - 0
         tags:
             - {name: chamilo_core.tool}
@@ -140,7 +164,10 @@ services:
             - authoring
             - course_description/index.php
             - '@chamilo_course.settings.course_description'
-            - {Chamilo\CourseBundle\Entity\CCourseDescription: 'course_descriptions'}
+            -
+                course_descriptions:
+                    entity: Chamilo\CourseBundle\Entity\CCourseDescription
+                    repository: Chamilo\CourseBundle\Repository\CCourseDescriptionRepository
             - 0
         tags:
             - {name: chamilo_core.tool}
@@ -176,7 +203,16 @@ services:
             - authoring
             - course_progress/index.php
             - '@chamilo_course.settings.course_progress'
-            - {Chamilo\CourseBundle\Entity\CThematic: 'thematics', Chamilo\CourseBundle\Entity\CThematicAdvance: 'thematic_advance', Chamilo\CourseBundle\Entity\CThematicPlan: 'thematic_plans'}
+            -
+                thematics:
+                    entity: Chamilo\CourseBundle\Entity\CThematic
+                    repository: Chamilo\CourseBundle\Repository\CThematicRepository
+                thematic_advance:
+                    entity: Chamilo\CourseBundle\Entity\CThematicAdvance
+                    repository: Chamilo\CourseBundle\Repository\CThematicAdvanceRepository
+                thematic_plans:
+                    entity: Chamilo\CourseBundle\Entity\CThematicPlan
+                    repository: Chamilo\CourseBundle\Repository\CThematicPlanRepository
             - 0
         tags:
             - {name: chamilo_core.tool}
@@ -194,9 +230,10 @@ services:
             - authoring
             - document/document.php
             - '@chamilo_course.settings.document'
-            - files:
-                entity: Chamilo\CourseBundle\Entity\CDocument
-                repository: Chamilo\CourseBundle\Repository\CDocumentRepository
+            -
+                files:
+                    entity: Chamilo\CourseBundle\Entity\CDocument
+                    repository: Chamilo\CourseBundle\Repository\CDocumentRepository
             - 0
         tags:
             - {name: chamilo_core.tool}
@@ -214,7 +251,10 @@ services:
             - interaction
             - dropbox/index.php
             - '@chamilo_course.settings.dropbox'
-            - {Chamilo\CourseBundle\Entity\CDropbox: 'dropbox'}
+            -
+                dropbox:
+                    entity: Chamilo\CourseBundle\Entity\CDropbox
+                    repository: Chamilo\CourseBundle\Repository\CDropboxRepository
             - 0
         tags:
             - {name: chamilo_core.tool}
@@ -232,7 +272,19 @@ services:
             - authoring
             - exercise/exercise.php
             - '@chamilo_course.settings.exercise'
-            - {Chamilo\CourseBundle\Entity\CQuiz: 'exercises', Chamilo\CourseBundle\Entity\CQuizQuestion: 'questions', Chamilo\CourseBundle\Entity\CQuizQuestionCategory: 'question_categories', Chamilo\CourseBundle\Entity\CExerciseCategory: 'exercise_categories'}
+            -
+                exercises:
+                    entity: Chamilo\CourseBundle\Entity\CQuiz
+                    repository: Chamilo\CourseBundle\Repository\CQuizRepository
+                questions:
+                    entity: Chamilo\CourseBundle\Entity\CQuizQuestion
+                    repository: Chamilo\CourseBundle\Repository\CQuizQuestionRepository
+                question_categories:
+                    entity: Chamilo\CourseBundle\Entity\CQuizQuestionCategory
+                    repository: Chamilo\CourseBundle\Repository\CQuizQuestionCategoryRepository
+                exercise_categories:
+                    entity: Chamilo\CourseBundle\Entity\CExerciseCategory
+                    repository: Chamilo\CourseBundle\Repository\CExerciseCategoryRepository
             - 0
         tags:
             - {name: chamilo_core.tool}
@@ -250,7 +302,22 @@ services:
             - interaction
             - forum/index.php
             - '@chamilo_course.settings.forum'
-            - {Chamilo\CourseBundle\Entity\CForum: 'forums', Chamilo\CourseBundle\Entity\CForumAttachment: 'forum_attachments', Chamilo\CourseBundle\Entity\CForumCategory: 'forum_categories', Chamilo\CourseBundle\Entity\CForumPost: 'forum_posts', Chamilo\CourseBundle\Entity\CForumThread: 'forum_threads'}
+            -
+                forums:
+                    entity: Chamilo\CourseBundle\Entity\CForum
+                    repository: Chamilo\CourseBundle\Repository\CForumRepository
+                forum_attachments:
+                    entity: Chamilo\CourseBundle\Entity\CForumAttachment
+                    repository: Chamilo\CourseBundle\Repository\CForumAttachmentRepository
+                forum_categories:
+                    entity: Chamilo\CourseBundle\Entity\CForumCategory
+                    repository: Chamilo\CourseBundle\Repository\CForumCategoryRepository
+                forum_posts:
+                    entity: Chamilo\CourseBundle\Entity\CForumPost
+                    repository: Chamilo\CourseBundle\Repository\CForumPostRepository
+                forum_threads:
+                    entity: Chamilo\CourseBundle\Entity\CForumThread
+                    repository: Chamilo\CourseBundle\Repository\CForumThreadRepository
             - 0
         tags:
             - {name: chamilo_core.tool}
@@ -268,7 +335,10 @@ services:
             - authoring
             - glossary/index.php
             - '@chamilo_course.settings.glossary'
-            - {Chamilo\CourseBundle\Entity\CGlossary: 'glossaries'}
+            -
+                glossaries:
+                    entity: Chamilo\CourseBundle\Entity\CGlossary
+                    repository: Chamilo\CourseBundle\Repository\CGlossaryRepository
             - 0
         tags:
             - {name: chamilo_core.tool}
@@ -286,7 +356,17 @@ services:
             - authoring
             - gradebook/index.php
             - '@chamilo_course.settings.gradebook'
-            - {Chamilo\CourseBundle\Entity\CGradebookCategory: 'gradebook_categories', Chamilo\CourseBundle\Entity\CGradebookLink: 'gradebook_links', Chamilo\CourseBundle\Entity\CGradebookEvaluation: 'gradebook_evaluations'}
+            -
+                gradebook_categories:
+                    entity: Chamilo\CourseBundle\Entity\CGradebookCategory
+                    repository: Chamilo\CourseBundle\Repository\CGradebookCategoryRepository
+                gradebook_links:
+                    entity: Chamilo\CourseBundle\Entity\CGradebookLink
+                    repository: Chamilo\CourseBundle\Repository\CGradebookLinkRepository
+                gradebook_evaluations:
+                    entity: Chamilo\CourseBundle\Entity\CGradebookEvaluation
+                    repository: Chamilo\CourseBundle\Repository\CGradebookEvaluationRepositor
+
             - 0
         tags:
             - {name: chamilo_core.tool}
@@ -304,7 +384,17 @@ services:
             - 'interaction'
             - 'group/group.php'
             - '@chamilo_course.settings.group'
-            - {Chamilo\CourseBundle\Entity\CGroupInfo: 'groups', Chamilo\CourseBundle\Entity\CGroupCategory: 'group_categories'}
+            -
+                groups:
+                    entity: Chamilo\CourseBundle\Entity\CGroupInfo
+                    repository: Chamilo\CourseBundle\Repository\CGroupInfoRepository
+                group_categories:
+                    entity: Chamilo\CourseBundle\Entity\CGroupCategory
+                    repository: Chamilo\CourseBundle\Repository\CGroupCategoryRepository
+                gradebook_evaluations:
+                    entity: Chamilo\CourseBundle\Entity\CGradebookEvaluation
+                    repository: Chamilo\CourseBundle\Repository\CGradebookEvaluationRepository
+            - {Chamilo\CourseBundle\Entity\CGroupInfo: 'groups', Chamilo\CourseBundle\Entity\CGroupCategory: ''}
             - 0
         tags:
             - {name: chamilo_core.tool}
@@ -322,7 +412,13 @@ services:
             - 'authoring'
             - 'lp/lp_controller.php'
             - '@chamilo_course.settings.learning_path'
-            - {Chamilo\CourseBundle\Entity\CLp: 'lps', Chamilo\CourseBundle\Entity\CLpCategory: 'lp_categories'}
+            -
+                lps:
+                    entity: Chamilo\CourseBundle\Entity\CLp
+                    repository: Chamilo\CourseBundle\Repository\CLpCategory
+                lp_categories:
+                    entity: Chamilo\CourseBundle\Entity\CLpCategory
+                    repository: Chamilo\CourseBundle\Repository\CLpCategoryRepository
             - 0
         tags:
             - {name: chamilo_core.tool}
@@ -399,7 +495,10 @@ services:
             - 'interaction'
             - 'notebook/index.php'
             - '@chamilo_course.settings.notebook'
-            - {Chamilo\CourseBundle\Entity\CNotebook: 'notebooks'}
+            -
+                notebooks:
+                    entity: Chamilo\CourseBundle\Entity\CNotebook
+                    repository: Chamilo\CourseBundle\Repository\CNotebookRepository
             - 0
         tags:
             - {name: chamilo_core.tool}
@@ -429,7 +528,13 @@ services:
             - 'interaction'
             - 'survey/survey_list.php'
             - '@chamilo_course.settings.survey'
-            - {Chamilo\CourseBundle\Entity\CSurvey: 'surveys', Chamilo\CourseBundle\Entity\CSurveyQuestion: 'survey_questions'}
+            -
+                surveys:
+                    entity: Chamilo\CourseBundle\Entity\CSurvey
+                    repository: Chamilo\CourseBundle\Repository\CSurveyRepository
+                survey_questions:
+                    entity: Chamilo\CourseBundle\Entity\CSurveyQuestion
+                    repository: Chamilo\CourseBundle\Repository\CSurveyQuestionRepository
             - 0
         tags:
             - {name: chamilo_core.tool}
@@ -464,7 +569,10 @@ services:
             - interaction
             - ~
             - ~
-            - {Chamilo\CoreBundle\Entity\PersonaFile: 'files'}
+            -
+                files:
+                    entity: Chamilo\CoreBundle\Entity\PersonalFile
+                    repository: Chamilo\CoreBundle\Repository\PersonalFileRepository
             - 0
         tags:
             - {name: chamilo_core.tool}
@@ -482,7 +590,10 @@ services:
             - interaction
             - wiki/index.php
             - '@chamilo_course.settings.wiki'
-            - {Chamilo\CourseBundle\Entity\CWiki: 'wikis'}
+            -
+                wikis:
+                    entity: Chamilo\CourseBundle\Entity\CWiki
+                    repository: Chamilo\CourseBundle\Repository\CWikiRepository
             - 0
         tags:
             - {name: chamilo_core.tool}

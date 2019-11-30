@@ -159,6 +159,6 @@ class ToolChain
             return $tools[$name];
         }
 
-        throw new InvalidArgumentException("Tool doesn't exist: $name");
+        throw new InvalidArgumentException(sprintf("The Tool '%s' doesn't exist.", $name));
     }
 }

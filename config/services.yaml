@@ -74,12 +74,9 @@ services:
     Chamilo\CoreBundle\Component\Naming\SmartUniqueNamer:
         public: true
 
-
     Chamilo\CoreBundle\Controller\ResourceController:
         arguments:
-            - '@League\Flysystem\MountManager'
-            - '@Chamilo\CoreBundle\ToolChain'
-            - '@translator.default'
+            - '@Chamilo\CoreBundle\Repository\ResourceFactory'
             - '@Chamilo\CoreBundle\Block\BreadcrumbBlockService'
 
     Chamilo\ThemeBundle\:
@@ -176,12 +173,12 @@ imports:
     - {resource: ../src/PageBundle/Resources/config/services.yml}
     - {resource: ../vendor/knplabs/doctrine-behaviors/config/orm-services.yml}
 
-sylius_resource:
-    resources:
-        app.exercise_category:
-            driver: 'doctrine/orm'
-            classes:
-                model: 'Chamilo\CourseBundle\Entity\CExerciseCategory'
+#sylius_resource:
+#    resources:
+#        app.exercise_category:
+#            driver: 'doctrine/orm'
+#            classes:
+#                model: 'Chamilo\CourseBundle\Entity\CExerciseCategory'
 
 cocur_slugify:
     lowercase: true

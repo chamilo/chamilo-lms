@@ -12,7 +12,6 @@ use Gedmo\Timestampable\Traits\TimestampableEntity;
 
 /**
  * Illustration.
- *
  * @ORM\Table(name="illustration")
  * @ORM\Entity
  * @GRID\Source(columns="id, name, resourceNode.createdAt", filterable=false, groups={"resource"})
@@ -70,9 +69,6 @@ class Illustration extends AbstractResource implements ResourceInterface
         return $this;
     }
 
-    /**
-     * Resource identifier.
-     */
     public function getResourceIdentifier(): int
     {
         return $this->getId();

@@ -69,7 +69,7 @@ class EditorController extends BaseController
      *
      * @param int $parentId
      */
-    public function customEditorFileManager(Request $request, Grid $grid, $parentId = 0, CDocumentRepository $repository, TranslatorInterface $translator): Response
+    public function customEditorFileManager(Request $request, Grid $grid, $parentId = 0, CDocumentRepository $repository): Response
     {
         $id = $request->get('id');
 
@@ -85,7 +85,7 @@ class EditorController extends BaseController
         $this->denyAccessUnlessGranted(
             ResourceNodeVoter::VIEW,
             $parent,
-            $translator->trans('Unauthorised access to resource')
+            $this->trans('Unauthorised access to resource')
         );
 
         $source = new Entity(CDocument::class);
@@ -115,8 +115,8 @@ class EditorController extends BaseController
             )
         );*/
 
-        $grid->getColumn('title')->setTitle($translator->trans('Name'));
-        $grid->getColumn('filetype')->setTitle($translator->trans('Type'));
+        $grid->getColumn('title')->setTitle($this->trans('Name'));
+        $grid->getColumn('filetype')->setTitle($this->trans('Type'));
 
         $routeParams = $this->getCourseParams();
 

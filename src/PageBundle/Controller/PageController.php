@@ -18,7 +18,6 @@ use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
-use Symfony\Contracts\Translation\TranslatorInterface;
 
 /**
  * Class PageController.
@@ -82,7 +81,6 @@ class PageController extends BaseController
         SiteManager $siteManager,
         PageManager $pageManager,
         TemplateManager $templateManager,
-        TranslatorInterface $translator,
         BlockInteractor $blockInteractor,
         BlockManager $blockManager
     ) {
@@ -235,7 +233,7 @@ class PageController extends BaseController
             $blockToEdit->setSetting('content', $content);
             $em->merge($blockToEdit);
             $em->flush();
-            $this->addFlash('success', $translator->trans('Updated'));
+            $this->addFlash('success', $this->trans('Updated'));
 
             if (!empty($redirect)) {
                 return $this->redirect($redirect);

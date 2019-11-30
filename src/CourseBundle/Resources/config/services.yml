@@ -15,6 +15,20 @@ services:
         exclude: '../../Repository/{CDocumentRepository.php|CQuizRepository.php}'
         tags: ['doctrine.repository_service']
 
+    Chamilo\CoreBundle\Repository\ResourceFactory:
+        class: Chamilo\CoreBundle\Repository\ResourceFactory
+        arguments:
+            - League\Flysystem\MountManager
+            - Chamilo\CoreBundle\ToolChain
+            - Cocur\Slugify\SlugifyInterface
+            - '@security.authorization_checker'
+
+#    resources.asset.illustration:
+#        arguments:
+#            $entityName: 'Chamilo\CoreBundle\Entity\Illustration'
+#            $repository: 'Chamilo\CoreBundle\Repository\IllustrationRepository'
+
+
     # Entity repository as a service
     Chamilo\CourseBundle\Repository\CAnnouncementRepository:
         arguments:

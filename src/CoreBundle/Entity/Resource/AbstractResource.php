@@ -8,23 +8,23 @@ use Chamilo\CoreBundle\Entity\Course;
 use Chamilo\CoreBundle\Entity\Session;
 use Doctrine\Common\Collections\Criteria;
 use Doctrine\ORM\Mapping as ORM;
-use Sylius\Component\Resource\Model\ResourceInterface;
 
 /**
  * @ORM\MappedSuperclass
  * @ORM\HasLifecycleCallbacks
  * @ORM\EntityListeners({"Chamilo\CoreBundle\Entity\Listener\ResourceListener"})
  */
-abstract class AbstractResource implements ResourceInterface
+abstract class AbstractResource
 {
     /**
      * @GRID\Column(field="resourceNode.createdAt", title="Date added", type="datetime")
      *
-     * @ORM\OneToOne(targetEntity="Chamilo\CoreBundle\Entity\Resource\ResourceNode", cascade={"remove"}, orphanRemoval=true)
+     * @ORM\OneToOne(
+     *     targetEntity="Chamilo\CoreBundle\Entity\Resource\ResourceNode", cascade={"remove"}, orphanRemoval=true
+     * )
      * @ORM\JoinColumn(name="resource_node_id", referencedColumnName="id", onDelete="CASCADE")
      */
     public $resourceNode;
-
     //abstract public function getResourceName(): string;
 
     /**
@@ -85,10 +85,4 @@ abstract class AbstractResource implements ResourceInterface
 
         return null;
     }
-
-    public static function getFieldName()
-    {
-        return 'name';
-    }
-
 }

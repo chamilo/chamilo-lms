@@ -3,12 +3,14 @@
 
 namespace Chamilo\CoreBundle\Controller;
 
+use Chamilo\CoreBundle\Block\BreadcrumbBlockService;
 use Chamilo\CoreBundle\Entity\Course;
 use Chamilo\CoreBundle\Entity\Session;
 use Knp\Menu\FactoryInterface as MenuFactoryInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
+use Symfony\Contracts\Translation\TranslatorInterface;
 
 /**
  * Each entity controller must extends this class.
@@ -17,6 +19,20 @@ use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
  */
 abstract class BaseController extends AbstractController
 {
+    public static function getSubscribedServices(): array
+    {
+        $services = parent::getSubscribedServices();
+        $services['translator'] = TranslatorInterface::class;
+        $services['breadcrumb'] = BreadcrumbBlockService::class;
+
+        return $services;
+    }
+
+    public function getBreadCrumb(): BreadcrumbBlockService
+    {
+        return $this->container->get('breadcrumb');
+    }
+
     /**
      * @param string $message
      *
@@ -119,8 +135,6 @@ abstract class BaseController extends AbstractController
      */
     public function getRequest()
     {
-        $request = $this->container->get('request_stack')->getCurrentRequest();
-
-        return $request;
+        return $this->container->get('request_stack')->getCurrentRequest();
     }
 }

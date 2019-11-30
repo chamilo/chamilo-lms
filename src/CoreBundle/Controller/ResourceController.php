@@ -63,7 +63,7 @@ class ResourceController extends AbstractResourceController implements CourseCon
 
         $grid = $this->getGrid($request, $grid);
 
-        $breadcrumb = $this->breadcrumbBlockService;
+        $breadcrumb = $this->getBreadCrumb();
         $breadcrumb->addChild(
             $this->trans($tool),
             [
@@ -129,7 +129,6 @@ class ResourceController extends AbstractResourceController implements CourseCon
 
         //$grid->setColumns($columns);
 
-        $translation = $this->translator;
         $routeParams = $courseParams;
         $routeParams['tool'] = $tool;
         $routeParams['type'] = $type;
@@ -240,7 +239,7 @@ class ResourceController extends AbstractResourceController implements CourseCon
 
         // Show resource action.
         $myRowAction = new RowAction(
-            $translation->trans('Info'),
+            $this->trans('Info'),
             'chamilo_core_resource_info',
             false,
             '_self',
@@ -308,7 +307,7 @@ class ResourceController extends AbstractResourceController implements CourseCon
 
             // Edit action.
             $myRowAction = new RowAction(
-                $translation->trans('Edit'),
+                $this->trans('Edit'),
                 'chamilo_core_resource_edit',
                 false,
                 '_self',
@@ -319,7 +318,7 @@ class ResourceController extends AbstractResourceController implements CourseCon
 
             // More action.
             $myRowAction = new RowAction(
-                $translation->trans('More'),
+                $this->trans('More'),
                 'chamilo_core_resource_preview',
                 false,
                 '_self',
@@ -331,7 +330,7 @@ class ResourceController extends AbstractResourceController implements CourseCon
 
             // Delete action.
             $myRowAction = new RowAction(
-                $translation->trans('Delete'),
+                $this->trans('Delete'),
                 'chamilo_core_resource_delete',
                 true,
                 '_self',
@@ -341,10 +340,10 @@ class ResourceController extends AbstractResourceController implements CourseCon
             $grid->addRowAction($myRowAction);
         }
 
-        /*$grid->addExport(new CSVExport($translation->trans('CSV export'), 'export', ['course' => $courseIdentifier]));
+        /*$grid->addExport(new CSVExport($this->trans('CSV export'), 'export', ['course' => $courseIdentifier]));
         $grid->addExport(
             new ExcelExport(
-                $translation->trans('Excel export'),
+                $this->trans('Excel export'),
                 'export',
                 ['course' => $courseIdentifier]
             )
@@ -875,11 +874,11 @@ class ResourceController extends AbstractResourceController implements CourseCon
         $routeParams['type'] = $type;
 
         if (!empty($resourceNodeId)) {
-            $breadcrumb = $this->breadcrumbBlockService;
+            $breadcrumb = $this->getBreadCrumb();
 
             // Root tool link
             $breadcrumb->addChild(
-                $this->translator->trans($tool),
+                $this->trans($tool),
                 [
                     'uri' => $this->generateUrl(
                         'chamilo_core_resource_index',

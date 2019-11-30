@@ -35,7 +35,7 @@ class AccountController extends BaseController
      *
      * @param string $username
      */
-    public function editAction(Request $request, UserManagerInterface $userManager, TranslatorInterface $translator, IllustrationRepository $illustrationRepository)
+    public function editAction(Request $request, UserManagerInterface $userManager, IllustrationRepository $illustrationRepository)
     {
         $user = $this->getUser();
 
@@ -59,7 +59,7 @@ class AccountController extends BaseController
 
             $userManager->updateUser($user);
 
-            $this->addFlash('success', $translator->trans('Updated'));
+            $this->addFlash('success', $this->trans('Updated'));
             $url = $this->generateUrl('chamilo_core_user_profile', ['username' => $user->getUsername()]);
             $response = new RedirectResponse($url);
 

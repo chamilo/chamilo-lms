@@ -34,6 +34,7 @@ use Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface;
 
 /**
  * Class ResourceRepository.
+ * Extends EntityRepository is needed to process settings.
  */
 class ResourceRepository extends EntityRepository
 {
@@ -86,13 +87,13 @@ class ResourceRepository extends EntityRepository
         SlugifyInterface $slugify,
         string $className
     ) {
+        $this->authorizationChecker = $authorizationChecker;
         $this->repository = $entityManager->getRepository($className);
         // Flysystem mount name is saved in config/packages/oneup_flysystem.yaml @todo add it as a service.
         $this->fs = $mountManager->getFilesystem('resources_fs');
         $this->mountManager = $mountManager;
         $this->router = $router;
         $this->resourceNodeRepository = $entityManager->getRepository('ChamiloCoreBundle:Resource\ResourceNode');
-        $this->authorizationChecker = $authorizationChecker;
         $this->slugify = $slugify;
     }
 
@@ -743,9 +744,4 @@ class ResourceRepository extends EntityRepository
 
         return true;
     }
-
-    /*public function saveResource(FormInterface $form, $course, $session, $fileType)
-    {
-        $this->repository->saveResource($form, $course, $session, $fileType);
-    }*/
 }

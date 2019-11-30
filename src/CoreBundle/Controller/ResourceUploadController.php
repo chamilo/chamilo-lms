@@ -22,6 +22,9 @@ use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 class ResourceUploadController extends BlueimpController
 {
     /**
+     * This will upload an image to the selected node id.
+     * This action is listend by the ResourceUploadListener
+     *
      * @return JsonResponse
      */
     public function upload()
@@ -38,8 +41,6 @@ class ResourceUploadController extends BlueimpController
         $courseId = $request->get('cid');
         $sessionId = $request->get('sid');
 
-        $controller = $container->get('Chamilo\CoreBundle\Controller\ResourceController');
-
         $course = null;
         if (!empty($courseId)) {
             $course = $doctrine->getRepository('ChamiloCoreBundle:Course')->find($courseId);
@@ -53,7 +54,9 @@ class ResourceUploadController extends BlueimpController
         $token = $container->get('security.token_storage')->getToken();
         $user = $token->getUser();
 
-        $repo = $controller->getRepository($tool, $type);
+        // Create repository from tool and type.
+        $factory = $container->get('Chamilo\CoreBundle\Repository\ResourceFactory');
+        $repo = $factory->createRepository( $tool, $type);
         /** @var ResourceNode $parent */
         $parent = $repo->getResourceNodeRepository()->find($id);
 
@@ -109,7 +112,6 @@ class ResourceUploadController extends BlueimpController
                 }
             }
         } catch (UploadException $e) {
-            // return nothing
             return new JsonResponse([]);
         }
 

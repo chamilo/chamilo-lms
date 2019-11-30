@@ -36,6 +36,9 @@ class ResourceUploadListener
     {
         /** @var AbstractResource $resource */
         $resource = $event->getFile();
+        $courseId = $event->getRequest()->get('cid');
+        $sessionId = $event->getRequest()->get('sid');
+
         $resourceNode = $resource->getResourceNode();
 
         $tool = $resourceNode->getResourceType()->getTool();
@@ -46,7 +49,13 @@ class ResourceUploadListener
             //'thumbnail_url' => '',
             'url' => $this->router->generate(
                 'chamilo_core_resource_view',
-                ['tool' => $tool, 'type' => $type, 'id' => $resourceNode->getId()]
+                [
+                    'id' => $resourceNode->getId(),
+                    'tool' => $tool,
+                    'type' => $type,
+                    'cid' => $courseId,
+                    'sid' => $sessionId,
+                ]
             ),
             'size' => format_file_size($resource->getSize()),
             'type' => '',

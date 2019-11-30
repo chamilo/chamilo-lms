@@ -37,7 +37,10 @@
         {% endif %}
     {% else %}
         <div id="toolbar-document" class="actions">
-            <a class="btn btn-default" href = "{{ url('editor_filemanager', {'parentId' : parent_id}) }}">{{'Back' | trans}}</a>
+            <a class="btn btn-default"
+               href = "{{ url('resources_filemanager', {'parentId' : parent_id, 'tool' : tool, 'type' : type}) }}">
+                {{'Back' | trans}}
+            </a>
         </div>
     {% endif %}
 

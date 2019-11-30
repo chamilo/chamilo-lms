@@ -48,10 +48,12 @@ final class CDocumentRepository extends ResourceRepository implements ResourceRe
         $params = [
             'course' => $document->getCourse()->getCode(),
             'file' => ltrim($document->getPath(), '/'),
+            'tool' => 'document',
+            'type' => 'files',
         ];
 
         return $this->getRouter()->generate(
-            'resources_document_get_file',
+            'chamilo_core_resource_view',
             $params
         );
     }

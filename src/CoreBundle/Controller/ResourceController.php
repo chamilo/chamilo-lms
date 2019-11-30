@@ -92,7 +92,6 @@ class ResourceController extends AbstractResourceController implements CourseCon
         $id = (int) $request->get('id');
 
         $repository = $this->getRepositoryFromRequest($request);
-
         $class = $repository->getRepository()->getClassName();
 
         // The group 'resource' is set in the @GRID\Source annotation in the entity.
@@ -430,7 +429,7 @@ class ResourceController extends AbstractResourceController implements CourseCon
                 [
                     'mapped' => false,
                     'config' => [
-                        'filebrowserImageBrowseRoute' => 'editor_filemanager',
+                        'filebrowserImageBrowseRoute' => 'resources_filemanager',
                         'filebrowserImageBrowseRouteParameters' => $routeParams,
                     ],
                 ]
@@ -702,7 +701,7 @@ class ResourceController extends AbstractResourceController implements CourseCon
 
     /**
      * Gets a document when calling route resources_document_get_file.
-     *
+     * @deprecated
      * @param CDocumentRepository $documentRepo
      *
      * @throws \League\Flysystem\FileNotFoundException
@@ -1037,7 +1036,7 @@ class ResourceController extends AbstractResourceController implements CourseCon
                 [
                     'mapped' => false,
                     'config' => [
-                        'filebrowserImageBrowseRoute' => 'editor_filemanager',
+                        'filebrowserImageBrowseRoute' => 'resources_filemanager',
                         'filebrowserImageBrowseRouteParameters' => $params,
                     ],
                 ]

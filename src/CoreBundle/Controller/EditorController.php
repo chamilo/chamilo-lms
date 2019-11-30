@@ -10,9 +10,9 @@ use Chamilo\CoreBundle\Component\Editor\CkEditor\CkEditor;
 use Chamilo\CoreBundle\Component\Editor\Connector;
 use Chamilo\CoreBundle\Component\Editor\Finder;
 use Chamilo\CoreBundle\Component\Utils\ChamiloApi;
+use Chamilo\CoreBundle\Entity\Resource\AbstractResource;
+use Chamilo\CoreBundle\Repository\ResourceFactory;
 use Chamilo\CoreBundle\Security\Authorization\Voter\ResourceNodeVoter;
-use Chamilo\CourseBundle\Entity\CDocument;
-use Chamilo\CourseBundle\Repository\CDocumentRepository;
 use Chamilo\SettingsBundle\Manager\SettingsManager;
 use FM\ElfinderBundle\Connector\ElFinderConnector;
 use Symfony\Component\HttpFoundation\Request;
@@ -63,13 +63,11 @@ class EditorController extends BaseController
     }
 
     /**
-     * @todo use resource repository instead of hardcoded CDocumentRepository
-     *
-     * @Route("/filemanager/{parentId}", methods={"GET"}, name="editor_filemanager")
+     * @Route("/resources/{tool}/{type}/{parentId}", methods={"GET"}, name="resources_filemanager")
      *
      * @param int $parentId
      */
-    public function customEditorFileManager(Request $request, Grid $grid, $parentId = 0, CDocumentRepository $repository): Response
+    public function customEditorFileManager(ResourceFactory $resourceFactory, Request $request, $tool, $type, Grid $grid, $parentId = 0): Response
     {
         $id = $request->get('id');
 
@@ -77,6 +75,9 @@ class EditorController extends BaseController
         $session = $this->getCourseSession();
         $sessionId = $session ? $session->getId() : 0;
         $parent = $course->getResourceNode();
+
+        $repository = $resourceFactory->createRepository($tool, $type);
+        $class = $repository->getRepository()->getClassName();
 
         if (!empty($parentId)) {
             $parent = $repository->getResourceNodeRepository()->find($parentId);
@@ -88,7 +89,7 @@ class EditorController extends BaseController
             $this->trans('Unauthorised access to resource')
         );
 
-        $source = new Entity(CDocument::class);
+        $source = new Entity($class, 'resource');
 
         $qb = $repository->getResourcesByCourse($course, $session, null, $parent);
 
@@ -115,16 +116,18 @@ class EditorController extends BaseController
             )
         );*/
 
-        $grid->getColumn('title')->setTitle($this->trans('Name'));
+        $titleColumn = $repository->getTitleColumn($grid);
+
+        $titleColumn->setTitle($this->trans('Name'));
+
         $grid->getColumn('filetype')->setTitle($this->trans('Type'));
 
         $routeParams = $this->getCourseParams();
-
         $removePath = $course->getResourceNode()->getPath();
 
-        $grid->getColumn('title')->manipulateRenderCell(
-            function ($value, Row $row, $router) use ($course, $routeParams, $removePath) {
-                /** @var CDocument $entity */
+        $titleColumn->manipulateRenderCell(
+            function ($value, Row $row, $router) use ($tool, $type, $routeParams, $removePath) {
+                /** @var AbstractResource $entity */
                 $entity = $row->getEntity();
                 $resourceNode = $entity->getResourceNode();
                 $id = $resourceNode->getId();
@@ -132,14 +135,20 @@ class EditorController extends BaseController
                 $myParams = $routeParams;
                 $myParams['id'] = $id;
                 $myParams['parentId'] = $id;
+                $myParams['tool'] = $tool;
+                $myParams['type'] = $type;
 
                 unset($myParams[0]);
                 $icon = $resourceNode->getIcon().' &nbsp;';
                 if ($resourceNode->hasResourceFile()) {
                     $documentParams = $this->getCourseParams();
-                    $documentParams['file'] = $resourceNode->getPathForDisplayRemoveBase($removePath);
+                    $documentParams['tool'] = $tool;
+                    $documentParams['type'] = $type;
+                    //$documentParams['file'] = $resourceNode->getPathForDisplayRemoveBase($removePath);
+                    // use id instead of old path (like in Chamilo v1)
+                    $documentParams['id'] = $resourceNode->getId();
                     $url = $router->generate(
-                        'resources_document_get_file',
+                        'chamilo_core_resource_view',
                         $documentParams
                     );
 
@@ -147,7 +156,7 @@ class EditorController extends BaseController
                 }
 
                 $url = $router->generate(
-                    'editor_filemanager',
+                    'resources_filemanager',
                     $myParams
                 );
 
@@ -157,7 +166,7 @@ class EditorController extends BaseController
 
         return $grid->getGridResponse(
             '@ChamiloTheme/Editor/custom.html.twig',
-            ['id' => $id, 'grid' => $grid]
+            ['id' => $id, 'grid' => $grid, 'tool' => $tool, 'type' => $type]
         );
     }
 

@@ -628,6 +628,39 @@ class ResourceRepository extends EntityRepository
         }
     }
 
+    public function getResourceNodeFileContent(ResourceNode $resourceNode): string
+    {
+        try {
+            if ($resourceNode->hasResourceFile()) {
+                $resourceFile = $resourceNode->getResourceFile();
+                $fileName = $resourceFile->getFile()->getPathname();
+
+                return $this->fs->read($fileName);
+            }
+
+            return '';
+        } catch (\Throwable $exception) {
+            throw new FileNotFoundException($resourceNode);
+        }
+    }
+
+    public function getResourceNodeFileStream(ResourceNode $resourceNode)
+    {
+        try {
+            if ($resourceNode->hasResourceFile()) {
+                $resourceFile = $resourceNode->getResourceFile();
+                $fileName = $resourceFile->getFile()->getPathname();
+
+                return $this->fs->readStream($fileName);
+            }
+
+            return '';
+        } catch (\Throwable $exception) {
+            throw new FileNotFoundException($resourceNode);
+        }
+    }
+
+
     public function getResourceFileUrl(AbstractResource $resource, array $extraParams = []): string
     {
         try {

@@ -21,7 +21,6 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Criteria;
 use Doctrine\ORM\QueryBuilder;
 use FOS\CKEditorBundle\Form\Type\CKEditorType;
-use League\Flysystem\Filesystem;
 use Symfony\Component\Filesystem\Exception\FileNotFoundException;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -39,7 +38,7 @@ use ZipStream\ZipStream;
 
 /**
  * Class ResourceController.
- *
+ * @todo improve/refactor $this->denyAccessUnlessGranted
  * @Route("/resources")
  *
  * @author Julio Montoya <gugli100@gmail.com>.
@@ -60,7 +59,8 @@ class ResourceController extends AbstractResourceController implements CourseCon
         $tool = $request->get('tool');
         $type = $request->get('type');
 
-        $grid = $this->getGrid($request, $grid);
+        $course = $this->getCourse();
+        $grid = $this->getGrid($request, $grid, $course->getResourceNode()->getId());
 
         $breadcrumb = $this->getBreadCrumb();
         $breadcrumb->addChild(
@@ -80,11 +80,27 @@ class ResourceController extends AbstractResourceController implements CourseCon
     }
 
     /**
-     * @param int $resourceNodeId
+     * @Route("/{tool}/{type}/{id}/list", name="chamilo_core_resource_list")
      *
-     * @return Grid
+     * If node has children show it
      */
-    public function getGrid(Request $request, Grid $grid, $resourceNodeId = 0)
+    public function listAction(Request $request, Grid $grid): Response
+    {
+        $tool = $request->get('tool');
+        $type = $request->get('type');
+        $resourceNodeId = $request->get('id');
+
+        $grid = $this->getGrid($request, $grid, $resourceNodeId);
+
+        $this->setBreadCrumb($request);
+
+        return $grid->getGridResponse(
+            '@ChamiloTheme/Resource/index.html.twig',
+            ['parent_id' => $resourceNodeId, 'tool' => $tool, 'type' => $type, 'id' => $resourceNodeId]
+        );
+    }
+
+    public function getGrid(Request $request, Grid $grid, $resourceNodeId): Grid
     {
         $tool = $request->get('tool');
         $type = $request->get('type');
@@ -99,12 +115,15 @@ class ResourceController extends AbstractResourceController implements CourseCon
         $course = $this->getCourse();
         $session = $this->getSession();
 
-        $parent = $course->getResourceNode();
-        if (!empty($resourceNodeId)) {
-            $parent = $repository->getResourceNodeRepository()->find($resourceNodeId);
-        }
+        $parentNode = $repository->getResourceNodeRepository()->find($resourceNodeId);
 
-        $qb = $repository->getResourcesByCourse($course, $session, null, $parent);
+        $this->denyAccessUnlessGranted(
+            ResourceNodeVoter::VIEW,
+            $parentNode,
+            $this->trans('Unauthorised access to resource')
+        );
+
+        $qb = $repository->getResourcesByCourse($course, $session, null, $parentNode);
 
         // 3. Set QueryBuilder to the source.
         $source->initQueryBuilder($qb);
@@ -124,9 +143,7 @@ class ResourceController extends AbstractResourceController implements CourseCon
         //$grid->isReadyForRedirect();
         //$grid->setMaxResults(1);
         //$grid->setLimits(2);
-
         //$grid->setColumns($columns);
-
         $routeParams = $courseParams;
         $routeParams['tool'] = $tool;
         $routeParams['type'] = $type;
@@ -380,27 +397,6 @@ class ResourceController extends AbstractResourceController implements CourseCon
     }
 
     /**
-     * @Route("/{tool}/{type}/{id}/list", name="chamilo_core_resource_list")
-     *
-     * If node has children show it
-     */
-    public function listAction(Request $request, Grid $grid): Response
-    {
-        $tool = $request->get('tool');
-        $type = $request->get('type');
-        $resourceNodeId = $request->get('id');
-
-        $grid = $this->getGrid($request, $grid, $resourceNodeId);
-
-        $this->setBreadCrumb($request);
-
-        return $grid->getGridResponse(
-            '@ChamiloTheme/Resource/index.html.twig',
-            ['parent_id' => $resourceNodeId, 'tool' => $tool, 'type' => $type, 'id' => $resourceNodeId]
-        );
-    }
-
-    /**
      * @Route("/{tool}/{type}/{id}/new_folder", methods={"GET", "POST"}, name="chamilo_core_resource_new_folder")
      */
     public function newFolderAction(Request $request): Response
@@ -462,7 +458,7 @@ class ResourceController extends AbstractResourceController implements CourseCon
                     ],
                 ]
             );
-            $content = $repository->getResourceFileContent($resource);
+            $content = $repository->getResourceNodeFileContent($resourceNode);
             $form->get('content')->setData($content);
         }
 
@@ -732,7 +728,7 @@ class ResourceController extends AbstractResourceController implements CourseCon
      */
     public function getDocumentAction(Request $request, Glide $glide): Response
     {
-        $file = $request->get('file');
+        /*$file = $request->get('file');
         $mode = $request->get('mode');
 
         // see list of filters in config/services.yaml
@@ -752,13 +748,7 @@ class ResourceController extends AbstractResourceController implements CourseCon
             throw new NotFoundHttpException();
         }
 
-        $this->denyAccessUnlessGranted(
-            ResourceNodeVoter::VIEW,
-            $resourceNode,
-            $this->trans('Unauthorised access to resource')
-        );
-
-        return $this->showFile($request, $resourceNode, $mode, $glide,$filter);
+        return $this->showFile($request, $resourceNode, $mode, $glide,$filter);*/
     }
 
     /**
@@ -789,22 +779,20 @@ class ResourceController extends AbstractResourceController implements CourseCon
             $this->trans('Unauthorised access to resource')
         );
 
-        $zipName = $resourceNode->getSlug().'.zip';
-        $rootNodePath = $resourceNode->getPathForDisplay();
-
+        // If resource node has a file just download it. Don't download the children.
         if ($resourceNode->hasResourceFile()) {
-            // Redirect to download file
+            // Redirect to download single file.
             return $this->showFile($request, $resourceNode, 'download');
         }
 
-        /** @var Filesystem $fileSystem */
-        //$fileSystem = $this->get('oneup_flysystem.resources_filesystem');
+        $zipName = $resourceNode->getSlug().'.zip';
+        $rootNodePath = $resourceNode->getPathForDisplay();
 
         $resourceNodeRepo = $repo->getResourceNodeRepository();
 
         $criteria = Criteria::create()
-            ->where(Criteria::expr()->neq('resourceFile', null))
-            ->andWhere(Criteria::expr()->eq('resourceType', $type))
+            ->where(Criteria::expr()->neq('resourceFile', null)) // must have a file
+           // ->andWhere(Criteria::expr()->eq('resourceType', $type))
         ;
 
         /** @var ArrayCollection|ResourceNode[] $children */
@@ -813,23 +801,7 @@ class ResourceController extends AbstractResourceController implements CourseCon
         $qb->addCriteria($criteria);
         $children = $qb->getQuery()->getResult();
 
-        /** @var ResourceNode $node */
-        foreach ($children as $node) {
-            /*if ($node->hasResourceFile()) {
-                $resourceFile = $node->getResourceFile();
-                $systemName = $resourceFile->getFile()->getPathname();
-                $stream = $fileSystem->readStream($systemName);
-                //error_log($node->getPathForDisplay());
-                $fileToDisplay = str_replace($rootNodePath, '', $node->getPathForDisplay());
-                var_dump($fileToDisplay);
-            }*/
-            var_dump($node->getPathForDisplay());
-            //var_dump($node['path']);
-        }
-
-        exit;
-
-        $response = new StreamedResponse(function () use ($rootNodePath, $zipName, $children, $fileSystem) {
+        $response = new StreamedResponse(function () use ($rootNodePath, $zipName, $children, $repo) {
             // Define suitable options for ZipStream Archive.
             $options = new Archive();
             $options->setContentType('application/octet-stream');
@@ -840,13 +812,11 @@ class ResourceController extends AbstractResourceController implements CourseCon
             foreach ($children as $node) {
                 $resourceFile = $node->getResourceFile();
                 $systemName = $resourceFile->getFile()->getPathname();
-                $stream = $fileSystem->readStream($systemName);
+                $stream = $repo->getResourceNodeFileStream($node);
                 //error_log($node->getPathForDisplay());
                 $fileToDisplay = str_replace($rootNodePath, '', $node->getPathForDisplay());
                 $zip->addFileFromStream($fileToDisplay, $stream);
             }
-            //$data = $repo->getDocumentContent($not_deleted_file['id']);
-            //$zip->addFile($not_deleted_file['path'], $data);
             $zip->finish();
         });
 
@@ -974,13 +944,15 @@ class ResourceController extends AbstractResourceController implements CourseCon
      *
      * @return mixed|StreamedResponse
      */
-    private function showFile(Request $request, ResourceNode $resourceNode, $mode = 'show', Glide $glide = null, $filter = '')
+    private function showFile(Request $request, ResourceNode $resourceNode, string $mode = 'show', Glide $glide = null, $filter = '')
     {
         $this->denyAccessUnlessGranted(
             ResourceNodeVoter::VIEW,
             $resourceNode,
             $this->trans('Unauthorised access to resource')
         );
+
+        $repo = $this->getRepositoryFromRequest($request);
         $resourceFile = $resourceNode->getResourceFile();
 
         if (!$resourceFile) {
@@ -1021,7 +993,9 @@ class ResourceController extends AbstractResourceController implements CourseCon
                 break;
         }
 
-        $stream = $this->fs->readStream($filePath);
+        $stream = $repo->getResourceNodeFileStream($resourceNode);
+
+        //$stream = $this->fs->readStream($resourceNode);
         $response = new StreamedResponse(function () use ($stream): void {
             stream_copy_to_stream($stream, fopen('php://output', 'wb'));
         });
@@ -1048,6 +1022,22 @@ class ResourceController extends AbstractResourceController implements CourseCon
         $resourceNodeParentId = $request->get('id');
 
         $repository = $this->getRepositoryFromRequest($request);
+
+        $course = $this->getCourse();
+        $session = $this->getSession();
+        // Default parent node is course.
+        $parentNode = $course->getResourceNode();
+        if (!empty($resourceNodeParentId)) {
+            // Get parent node.
+            $parentNode = $repository->getResourceNodeRepository()->find($resourceNodeParentId);
+        }
+
+        $this->denyAccessUnlessGranted(
+            ResourceNodeVoter::CREATE,
+            $parentNode,
+            $this->trans('Unauthorised access to resource')
+        );
+
         $form = $repository->getForm($this->container->get('form.factory'));
 
         $courseParams = $this->getCourseParams();
@@ -1069,15 +1059,6 @@ class ResourceController extends AbstractResourceController implements CourseCon
                     ],
                 ]
             );
-        }
-
-        $course = $this->getCourse();
-        $session = $this->getSession();
-        // Default parent node is course.
-        $parentNode = $course->getResourceNode();
-        if (!empty($resourceNodeParentId)) {
-            // Get parent node.
-            $parentNode = $repository->getResourceNodeRepository()->find($resourceNodeParentId);
         }
 
         $form->handleRequest($request);

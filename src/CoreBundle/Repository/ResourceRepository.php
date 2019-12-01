@@ -660,7 +660,6 @@ class ResourceRepository extends EntityRepository
         }
     }
 
-
     public function getResourceFileUrl(AbstractResource $resource, array $extraParams = []): string
     {
         try {

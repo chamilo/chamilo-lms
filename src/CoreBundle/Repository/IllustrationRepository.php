@@ -89,8 +89,8 @@ final class IllustrationRepository extends ResourceRepository implements Resourc
         if ($node !== null) {
             $params = [
                 'id' => $node->getId(),
-                'tool' => 'admin',
-                'type' => 'illustrations',
+                'tool' => $node->getResourceType()->getTool(),
+                'type' => $node->getResourceType()->getName(),
             ];
             if (!empty($filter)) {
                 $params['filter'] = $filter;

@@ -12,5 +12,11 @@ services:
     chamilo_user.security.login_form_authenticator:
         class: Chamilo\UserBundle\Security\LoginFormAuthenticator
 
-    Chamilo\UserBundle\Repository\UserRepository: ~
+    Chamilo\UserBundle\Repository\UserRepository:
+        arguments:
+            $tool: 'global'
+            $type: 'users'
+        # call a method on the specified factory service
+        factory: ['@Chamilo\CoreBundle\Repository\ResourceFactory', 'createRepository']
+
     Chamilo\UserBundle\Repository\GroupRepository: ~

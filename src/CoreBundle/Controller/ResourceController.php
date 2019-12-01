@@ -17,6 +17,7 @@ use Chamilo\CoreBundle\Entity\Resource\ResourceNode;
 use Chamilo\CoreBundle\Security\Authorization\Voter\ResourceNodeVoter;
 use Chamilo\CourseBundle\Controller\CourseControllerInterface;
 use Chamilo\CourseBundle\Controller\CourseControllerTrait;
+use Chamilo\UserBundle\Entity\User;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Criteria;
 use Doctrine\ORM\QueryBuilder;
@@ -59,8 +60,17 @@ class ResourceController extends AbstractResourceController implements CourseCon
         $tool = $request->get('tool');
         $type = $request->get('type');
 
-        $course = $this->getCourse();
-        $grid = $this->getGrid($request, $grid, $course->getResourceNode()->getId());
+        $repository = $this->getRepositoryFromRequest($request);
+
+        $entityName = $repository->getResourceType()->getEntityName();
+
+        $parentResource = $this->getCourse();
+        if (null === $parentResource) {
+            /** @var User $user */
+            $parentResource = $this->getUser();
+        }
+
+        $grid = $this->getGrid($request, $grid, $parentResource->getResourceNode()->getId());
 
         $breadcrumb = $this->getBreadCrumb();
         $breadcrumb->addChild(
@@ -939,12 +949,15 @@ class ResourceController extends AbstractResourceController implements CourseCon
     }
 
     /**
-     * @param string $mode   show or download
-     * @param string $filter
+     * @param Request      $request
+     * @param ResourceNode $resourceNode
+     * @param string       $mode
+     * @param Glide|null   $glide
+     * @param string       $filter
      *
      * @return mixed|StreamedResponse
      */
-    private function showFile(Request $request, ResourceNode $resourceNode, string $mode = 'show', Glide $glide = null, $filter = '')
+    private function showFile(Request $request, ResourceNode $resourceNode, $mode = 'show', Glide $glide = null, $filter = '')
     {
         $this->denyAccessUnlessGranted(
             ResourceNodeVoter::VIEW,

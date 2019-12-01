@@ -6,6 +6,8 @@ namespace Chamilo\UserBundle\Entity;
 use Chamilo\CoreBundle\Entity\AccessUrl;
 use Chamilo\CoreBundle\Entity\AccessUrlRelUser;
 use Chamilo\CoreBundle\Entity\Course;
+use Chamilo\CoreBundle\Entity\Resource\AbstractResource;
+use Chamilo\CoreBundle\Entity\Resource\ResourceNode;
 use Chamilo\CoreBundle\Entity\Skill;
 use Chamilo\CoreBundle\Entity\UsergroupRelUser;
 use Chamilo\ThemeBundle\Model\UserInterface as ThemeUser;
@@ -16,7 +18,6 @@ use Doctrine\ORM\Event\LifecycleEventArgs;
 use Doctrine\ORM\Mapping as ORM;
 use Sonata\UserBundle\Entity\BaseUser;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
-use Symfony\Component\HttpFoundation\File\File;
 use Symfony\Component\Security\Core\User\EquatableInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Component\Validator\Constraints as Assert;
@@ -177,15 +178,6 @@ class User extends BaseUser implements ThemeUser, EquatableInterface //implement
      * @ORM\Column(name="address", type="string", length=250, nullable=true, unique=false)
      */
     protected $address;
-
-    /**
-     * Vich\UploadableField(mapping="user_image", fileNameProperty="picture_uri").
-     *
-     * note This is not a mapped field of entity metadata, just a simple property.
-     *
-     * @var File
-     */
-    protected $imageFile;
 
     /**
      * @var AccessUrl
@@ -505,6 +497,30 @@ class User extends BaseUser implements ThemeUser, EquatableInterface //implement
      * )
      */
     protected $receivedMessages;
+
+    /**
+     *
+     * @ORM\OneToOne(
+     *     targetEntity="Chamilo\CoreBundle\Entity\Resource\ResourceNode", cascade={"remove"}, orphanRemoval=true
+     * )
+     * @ORM\JoinColumn(name="resource_node_id", referencedColumnName="id", onDelete="CASCADE")
+     */
+    public $resourceNode;
+
+    /**
+     * @return $this
+     */
+    public function setResourceNode(ResourceNode $resourceNode): self
+    {
+        $this->resourceNode = $resourceNode;
+
+        return $this;
+    }
+
+    public function getResourceNode(): ResourceNode
+    {
+        return $this->resourceNode;
+    }
 
     /**
      * Constructor.
@@ -1430,34 +1446,6 @@ class User extends BaseUser implements ThemeUser, EquatableInterface //implement
     public function getIdentifier()
     {
         return $this->getId();
-    }
-
-    /**
-     * If manually uploading a file (i.e. not using Symfony Form) ensure an instance
-     * of 'UploadedFile' is injected into this setter to trigger the  update. If this
-     * bundle's configuration parameter 'inject_on_load' is set to 'true' this setter
-     * must be able to accept an instance of 'File' as the bundle will inject one here
-     * during Doctrine hydration.
-     *
-     * @param File|\Symfony\Component\HttpFoundation\File\UploadedFile $image
-     */
-    public function setImageFile(File $image)
-    {
-        $this->imageFile = $image;
-
-        if ($image) {
-            // It is required that at least one field changes if you are using doctrine
-            // otherwise the event listeners won't be called and the file is lost
-            $this->updatedAt = new \DateTime('now');
-        }
-    }
-
-    /**
-     * @return File
-     */
-    public function getImageFile()
-    {
-        return $this->imageFile;
     }
 
     /**

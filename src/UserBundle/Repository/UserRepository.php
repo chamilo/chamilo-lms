@@ -27,6 +27,8 @@ use Chamilo\CoreBundle\Entity\UserApiKey;
 use Chamilo\CoreBundle\Entity\UserCourseCategory;
 use Chamilo\CoreBundle\Entity\UsergroupRelUser;
 use Chamilo\CoreBundle\Entity\UserRelCourseVote;
+use Chamilo\CoreBundle\Repository\ResourceRepository;
+use Chamilo\CoreBundle\Repository\ResourceRepositoryInterface;
 use Chamilo\CourseBundle\Entity\CAttendanceResult;
 use Chamilo\CourseBundle\Entity\CAttendanceSheet;
 use Chamilo\CourseBundle\Entity\CBlogPost;
@@ -59,19 +61,19 @@ use Symfony\Component\Serializer\Serializer;
  * All functions that query the database (selects)
  * Functions should return query builders.
  */
-class UserRepository
+class UserRepository extends ResourceRepository
 {
     /**
      * @var EntityRepository
      */
-    private $repository;
+    //private $repository;
 
-    public function __construct(EntityManagerInterface $entityManager)
+    /*public function __construct(EntityManagerInterface $entityManager)
     {
         $this->repository = $entityManager->getRepository(User::class);
-    }
+    }*/
 
-    public function find($id): ?User
+    /*public function find($id)
     {
         $user = $this->repository->find($id);
 
@@ -80,7 +82,7 @@ class UserRepository
         }
 
         return $user;
-    }
+    }*/
 
     public function findByUsername(string $username): ?User
     {
@@ -455,7 +457,7 @@ class UserRepository
             } else {
                 $dql = "SELECT DISTINCT U
                         FROM ChamiloCoreBundle:AccessUrlRelUser R, ChamiloCoreBundle:UserRelUser UF
-                        INNER JOIN ChamiloUserBundle:User AS U 
+                        INNER JOIN ChamiloUserBundle:User AS U
                         WITH UF.friendUserId = U
                         WHERE
                             U.active = 1 AND
@@ -473,7 +475,7 @@ class UserRepository
             if ($allowSendMessageToAllUsers === 'true') {
                 $dql = "SELECT DISTINCT U
                         FROM ChamiloUserBundle:User U
-                        LEFT JOIN ChamiloCoreBundle:AccessUrlRelUser R 
+                        LEFT JOIN ChamiloCoreBundle:AccessUrlRelUser R
                         WITH U = R.user
                         WHERE
                             U.active = 1 AND
@@ -486,10 +488,10 @@ class UserRepository
                 $limit_date = api_get_utc_datetime($online_time);
                 $dql = "SELECT DISTINCT U
                         FROM ChamiloUserBundle:User U
-                        INNER JOIN ChamiloCoreBundle:TrackEOnline T 
+                        INNER JOIN ChamiloCoreBundle:TrackEOnline T
                         WITH U.id = T.loginUserId
-                        WHERE 
-                          U.active = 1 AND 
+                        WHERE
+                          U.active = 1 AND
                           T.loginDate >= '".$limit_date."'";
             }
         }

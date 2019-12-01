@@ -4,8 +4,8 @@
 namespace Chamilo\CoreBundle\Tool;
 
 /**
- * Class Admin.
+ * Class GlobalTool.
  */
-class Admin extends AbstractTool
+class GlobalTool extends AbstractTool
 {
 }

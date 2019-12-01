@@ -166,7 +166,7 @@ class ResourceRepository extends EntityRepository
      * @param null  $lockMode
      * @param null  $lockVersion
      */
-    public function find($id, $lockMode = null, $lockVersion = null): ?AbstractResource
+    public function find($id, $lockMode = null, $lockVersion = null) //: ?AbstractResource
     {
         return $this->getRepository()->find($id);
     }

@@ -965,6 +965,11 @@ class Version20 extends AbstractMigrationChamilo
         $this->addSql("ALTER TABLE c_link ADD CONSTRAINT FK_9209C2A01BAD783F FOREIGN KEY (resource_node_id) REFERENCES resource_node (id) ON DELETE CASCADE;");
         $this->addSql("CREATE UNIQUE INDEX UNIQ_9209C2A01BAD783F ON c_link (resource_node_id);");
 
+        $this->addSql("ALTER TABLE user ADD resource_node_id INT DEFAULT NULL;");
+        $this->addSql("ALTER TABLE user ADD CONSTRAINT FK_8D93D6491BAD783F FOREIGN KEY (resource_node_id) REFERENCES resource_node (id) ON DELETE CASCADE;");
+        $this->addSql("CREATE UNIQUE INDEX UNIQ_8D93D6491BAD783F ON user (resource_node_id);");
+        $this->addSql("ALTER TABLE user_audit ADD resource_node_id INT DEFAULT NULL;");
+
 /*        $this->addSql("");
         $this->addSql("");
         $this->addSql("");*/

@@ -9,12 +9,12 @@ services:
     # Tool chain is filled in file DependencyInjection/Compiler/ToolCompilerClass.php
     Chamilo\CoreBundle\ToolChain: ~
     # Admin
-    chamilo_core.tool.admin:
-        class: Chamilo\CoreBundle\Tool\Admin
+    chamilo_core.tool.global:
+        class: Chamilo\CoreBundle\Tool\GlobalTool
         arguments:
-            - 'admin'
-            - 'admin'
-            - 'admin'
+            - 'global'
+            - ''
+            - ''
             - ''
             -   urls:
                     entity: Chamilo\CoreBundle\Entity\AccessUrl
@@ -22,6 +22,9 @@ services:
                 courses:
                     entity: Chamilo\CoreBundle\Entity\Course
                     repository: Chamilo\CoreBundle\Repository\CourseRepository
+                users:
+                    entity: Chamilo\UserBundle\Entity\User
+                    repository: Chamilo\UserBundle\Repository\UserRepository
             - 1
         tags:
             - {name: chamilo_core.tool}

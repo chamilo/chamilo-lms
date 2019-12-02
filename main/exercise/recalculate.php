@@ -7,122 +7,28 @@ require_once __DIR__.'/../inc/global.inc.php';
 
 api_protect_course_script(true);
 
+if (!isset($_REQUEST['user'], $_REQUEST['exercise'], $_REQUEST['id'])) {
+    exit;
+}
+
 $isAllowedToEdit = api_is_allowed_to_edit(true, true);
 
 if (!$isAllowedToEdit) {
     exit;
 }
 
-if (!isset($_REQUEST['user'], $_REQUEST['exercise'], $_REQUEST['id'])) {
-    exit;
-}
-
-$courseId = api_get_course_int_id();
-$sessionId = api_get_session_id();
-$em = Database::getManager();
+$studentId = (int) $_REQUEST['user'];
+$exerciseId = (int) $_REQUEST['exercise'];
+$exeId = (int) $_REQUEST['id'];
 
 /** @var TrackEExercises $trackedExercise */
-$trackedExercise = $em->getRepository('ChamiloCoreBundle:TrackEExercises')->find($_REQUEST['id']);
+$trackedExercise = ExerciseLib::recalculateResult(
+    $_REQUEST['id'],
+    $_REQUEST['user'],
+    $_REQUEST['exercise']
+);
 
-if (empty($trackedExercise)) {
-    exit;
-}
-
-$studentId = $trackedExercise->getExeUserId();
-$exerciseId = $trackedExercise->getExeExoId();
-$exeId = $trackedExercise->getExeId();
-
-if ($studentId != intval($_REQUEST['user']) ||
-    $exerciseId != intval($_REQUEST['exercise'])
-) {
-    exit;
-}
-
-$questionList = $trackedExercise->getDataTracking();
-
-if (empty($questionList)) {
-    exit;
-}
-
-$questionList = explode(',', $questionList);
-
-$exercise = new Exercise($courseId);
-$exercise->read($exerciseId);
-$totalScore = 0;
-$totalWeight = 0;
-
-$useEvaluationPlugin = false;
-$pluginEvaluation = QuestionOptionsEvaluationPlugin::create();
-
-if ('true' === $pluginEvaluation->get(QuestionOptionsEvaluationPlugin::SETTING_ENABLE)) {
-    $formula = $pluginEvaluation->getFormulaForExercise($exerciseId);
-
-    if (!empty($formula)) {
-        $useEvaluationPlugin = true;
-    }
-}
-
-if (!$useEvaluationPlugin) {
-    foreach ($questionList as $questionId) {
-        $question = Question::read($questionId, api_get_course_info());
-
-        if (false === $question) {
-            continue;
-        }
-
-        $totalWeight += $question->selectWeighting();
-
-        // We're inside *one* question. Go through each possible answer for this question
-        if ($question->type === MULTIPLE_ANSWER_TRUE_FALSE_DEGREE_CERTAINTY) {
-            $result = $exercise->manage_answer(
-                $exeId,
-                $questionId,
-                [],
-                'exercise_result',
-                [],
-                false,
-                true,
-                false,
-                $exercise->selectPropagateNeg(),
-                [],
-                [],
-                true
-            );
-        } else {
-            $result = $exercise->manage_answer(
-                $exeId,
-                $questionId,
-                [],
-                'exercise_result',
-                [],
-                false,
-                true,
-                false,
-                $exercise->selectPropagateNeg(),
-                [],
-                [],
-                true
-            );
-        }
-
-        //  Adding the new score.
-        $totalScore += $result['score'];
-    }
-
-    $remindList = $trackedExercise->getQuestionsToCheck();
-    if (!empty($remindList)) {
-        $remindList = explode(',', $remindList);
-    }
-} else {
-    $totalScore = $pluginEvaluation->getResultWithFormula($exeId, $formula);
-    $totalWeight = $pluginEvaluation->getMaxScore();
-}
-
-$trackedExercise
-    ->setExeResult($totalScore)
-    ->setExeWeighting($totalWeight);
-
-$em->persist($trackedExercise);
-$em->flush();
+$totalScore = $trackedExercise->getExeResult();
+$totalWeight = $trackedExercise->getExeWeighting();
 
 echo $totalScore.'/'.$totalWeight;

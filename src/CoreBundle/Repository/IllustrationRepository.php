@@ -11,12 +11,22 @@ use Chamilo\CoreBundle\Entity\Resource\ResourceFile;
 use Chamilo\CoreBundle\Entity\Resource\ResourceNode;
 use Chamilo\UserBundle\Entity\User;
 use Symfony\Component\Form\FormInterface;
+use Symfony\Component\HttpFoundation\File\UploadedFile;
 
 /**
  * Class IllustrationRepository.
  */
 final class IllustrationRepository extends ResourceRepository implements ResourceRepositoryInterface
 {
+    public function saveUpload(UploadedFile $file)
+    {
+        /** @var Illustration $resource */
+        $resource = $this->create();
+        $resource->setName($file->getClientOriginalName());
+
+        return $resource;
+    }
+
     public function saveResource(FormInterface $form, $course, $session, $fileType)
     {
         $newResource = $form->getData();

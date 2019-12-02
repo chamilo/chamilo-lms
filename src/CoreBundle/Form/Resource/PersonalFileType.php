@@ -3,19 +3,13 @@
 
 namespace Chamilo\CoreBundle\Form\Resource;
 
-use Chamilo\CourseBundle\Entity\CLink;
+use Chamilo\CoreBundle\Entity\PersonalFile;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
-use Symfony\Component\Form\Extension\Core\Type\TextareaType;
-use Symfony\Component\Form\Extension\Core\Type\TextType;
-use Symfony\Component\Form\Extension\Core\Type\UrlType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
-/**
- * Class CLinkType.
- */
-class CLinkType extends AbstractType
+class PersonalFileType extends AbstractType
 {
     /**
      * {@inheritdoc}
@@ -23,10 +17,7 @@ class CLinkType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
-            ->add('title')
-            ->add('url', UrlType::class)
-            ->add('description', TextareaType::class)
-            ->add('target', TextType::class)
+            ->add('name')
             ->add('save', SubmitType::class);
     }
 
@@ -37,7 +28,7 @@ class CLinkType extends AbstractType
     {
         $resolver->setDefaults(
             [
-                'data_class' => CLink::class,
+                'data_class' => PersonalFile::class,
             ]
         );
     }
@@ -47,6 +38,6 @@ class CLinkType extends AbstractType
      */
     public function getName()
     {
-        return 'chamilo_link';
+        return 'chamilo_personal_file';
     }
 }

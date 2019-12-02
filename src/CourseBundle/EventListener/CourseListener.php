@@ -218,6 +218,7 @@ class CourseListener
             }
         }*/
 
+        $courseId = (int) $request->get('cid');
         $groupId = (int) $request->get('gid');
         $sessionId = (int) $request->get('sid');
 
@@ -234,26 +235,29 @@ class CourseListener
                 //|| $controllerList[0] instanceof LegacyController
             )
         ) {
-            $controller = $controllerList[0];
-            $session = $sessionHandler->get('session');
-            $course = $sessionHandler->get('course');
+            //var_dump($courseId);
+            if (!empty($courseId)) {
+                $controller = $controllerList[0];
+                $session = $sessionHandler->get('session');
+                $course = $sessionHandler->get('course');
 
-            // Sets the controller course/session in order to use:
-            // $this->getCourse() $this->getSession() in controllers
-            if ($course) {
-                $controller->setCourse($course);
+                // Sets the controller course/session in order to use:
+                // $this->getCourse() $this->getSession() in controllers
+                if ($course) {
+                    $controller->setCourse($course);
 
-                // Legacy code
-                $courseCode = $course->getCode();
-                //$courseInfo = api_get_course_info($courseCode);
-                //$container->get('twig')->addGlobal('course', $course);
-                //$sessionHandler->set('_real_cid', $course->getId());
-                //$sessionHandler->set('_cid', $course->getCode());
-                //$sessionHandler->set('_course', $courseInfo);
-            }
+                    // Legacy code
+                    $courseCode = $course->getCode();
+                    //$courseInfo = api_get_course_info($courseCode);
+                    //$container->get('twig')->addGlobal('course', $course);
+                    //$sessionHandler->set('_real_cid', $course->getId());
+                    //$sessionHandler->set('_cid', $course->getCode());
+                    //$sessionHandler->set('_course', $courseInfo);
+                }
 
-            if ($session) {
-                $controller->setSession($session);
+                if ($session) {
+                    $controller->setSession($session);
+                }
             }
 
             // Example 'chamilo_notebook.controller.notebook:indexAction'

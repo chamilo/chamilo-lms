@@ -57,7 +57,7 @@ class ResourceUploadListener
                     'sid' => $sessionId,
                 ]
             ),
-            'size' => format_file_size($resource->getSize()),
+            'size' => format_file_size($resource->getResourceNode()->getResourceFile()->getSize()),
             'type' => '',
             'result' => 'ok',
         ]];

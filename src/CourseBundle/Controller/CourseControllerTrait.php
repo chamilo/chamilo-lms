@@ -24,19 +24,16 @@ trait CourseControllerTrait
     }
 
     /**
-     * @return mixed
-     */
-    public function setSession(Session $session)
-    {
-        $this->session = $session;
-    }
-
-    /**
      * @return Course
      */
     public function getCourse()
     {
         return $this->course;
+    }
+
+    public function hasCourse(): bool
+    {
+        return null !== $this->course;
     }
 
     /**
@@ -45,6 +42,14 @@ trait CourseControllerTrait
     public function getSession()
     {
         return $this->session;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function setSession(Session $session)
+    {
+        $this->session = $session;
     }
 
     /**

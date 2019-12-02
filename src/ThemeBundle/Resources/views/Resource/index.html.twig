@@ -1,22 +1,22 @@
 {% extends "@ChamiloTheme/Layout/layout_one_col.html.twig" %}
 
 {% block content %}
-  {% if is_granted('EDIT', course) %}
-    <div class="actions">
-      <a class="btn btn-secondary"
-         href="{{ url('chamilo_core_resource_new_folder', {'tool': tool, 'type': type, 'cid': course.id, 'sid': session.id, 'id': id }) }}">
-        {{ 'New folder' | trans }}
-      </a>
-      <a class="btn btn-secondary"
-         href="{{ url('chamilo_core_resource_new', { 'tool': tool, 'type': type, 'cid': course.id, 'sid': session.id,  'id': id }) }}">
-        {{ 'Create new document' | trans }}
-      </a>
-      <a class="btn btn-secondary"
-         href="{{ url('chamilo_core_resource_upload', { 'tool': tool, 'type': type, 'cid': course.id, 'sid': session.id,  'id': id }) }}">
-        {{ 'Upload' | trans }}
-      </a>
-    </div>
-  {% endif %}
+    {% if is_granted('CREATE', parent_resource_node) %}
+        <div class="actions">
+            <a class="btn btn-secondary"
+                href="{{ url('chamilo_core_resource_new_folder', {'tool': tool, 'type': type, 'cid': course.id, 'sid': session.id, 'id': id }) }}">
+                {{ 'New folder' | trans }}
+            </a>
+            <a class="btn btn-secondary"
+               href="{{ url('chamilo_core_resource_new', { 'tool': tool, 'type': type, 'cid': course.id, 'sid': session.id,  'id': id }) }}">
+                {{ 'Create new document' | trans }}
+            </a>
+            <a class="btn btn-secondary"
+                href="{{ url('chamilo_core_resource_upload', { 'tool': tool, 'type': type, 'cid': course.id, 'sid': session.id,  'id': id }) }}">
+                {{ 'Upload' | trans }}
+            </a>
+        </div>
+    {% endif %}
 
     <style>
         .fancybox-slide--iframe .fancybox-content {

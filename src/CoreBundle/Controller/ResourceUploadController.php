@@ -5,8 +5,8 @@ namespace Chamilo\CoreBundle\Controller;
 
 use Chamilo\CoreBundle\Entity\Resource\ResourceLink;
 use Chamilo\CoreBundle\Entity\Resource\ResourceNode;
+use Chamilo\CoreBundle\Repository\ResourceRepository;
 use Chamilo\CoreBundle\Security\Authorization\Voter\ResourceNodeVoter;
-use Chamilo\CourseBundle\Entity\CDocument;
 use Oneup\UploaderBundle\Controller\BlueimpController;
 use Oneup\UploaderBundle\Uploader\File\FileInterface;
 use Oneup\UploaderBundle\Uploader\File\FilesystemFile;
@@ -56,7 +56,9 @@ class ResourceUploadController extends BlueimpController
 
         // Create repository from tool and type.
         $factory = $container->get('Chamilo\CoreBundle\Repository\ResourceFactory');
-        $repo = $factory->createRepository( $tool, $type);
+        /** @var ResourceRepository $repo */
+        $repo = $factory->createRepository($tool, $type);
+
         /** @var ResourceNode $parent */
         $parent = $repo->getResourceNodeRepository()->find($id);
 
@@ -82,16 +84,18 @@ class ResourceUploadController extends BlueimpController
 
                     $this->dispatchPreUploadEvent($file, $response, $request);
 
+                    $resource = $repo->saveUpload($file);
+
                     // Uploading file.
-                    $document = new CDocument();
+                    /*$document = new CDocument();
                     $document
                         ->setFiletype('file')
                         ->setTitle($title)
                         ->setSize($file->getSize())
-                    ;
+                    ;*/
 
-                    $em->persist($document);
-                    $resourceNode = $repo->createNodeForResource($document, $user, $parent, $file);
+                    $em->persist($resource);
+                    $resourceNode = $repo->createNodeForResource($resource, $user, $parent, $file);
 
                     $repo->addResourceNodeToCourse(
                         $resourceNode,
@@ -103,7 +107,7 @@ class ResourceUploadController extends BlueimpController
                     $em->flush();
                     // Finish uploading.
 
-                    $this->dispatchPostEvents($document, $response, $request);
+                    $this->dispatchPostEvents($resource, $response, $request);
                     /*$chunked ?
                         $this->handleChunkedUpload($file, $response, $request) :
                         $this->handleUpload($file, $response, $request);*/

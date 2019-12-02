@@ -60,17 +60,8 @@ class ResourceController extends AbstractResourceController implements CourseCon
         $tool = $request->get('tool');
         $type = $request->get('type');
 
-        $repository = $this->getRepositoryFromRequest($request);
-
-        $entityName = $repository->getResourceType()->getEntityName();
-
-        $parentResource = $this->getCourse();
-        if (null === $parentResource) {
-            /** @var User $user */
-            $parentResource = $this->getUser();
-        }
-
-        $grid = $this->getGrid($request, $grid, $parentResource->getResourceNode()->getId());
+        $parentResourceNode = $this->getParentResourceNode($request);
+        $grid = $this->getGrid($request, $grid, $parentResourceNode->getId());
 
         $breadcrumb = $this->getBreadCrumb();
         $breadcrumb->addChild(
@@ -81,12 +72,32 @@ class ResourceController extends AbstractResourceController implements CourseCon
         );
 
         // The base resource node is the course.
-        $id = $this->getCourse()->getResourceNode()->getId();
+        $id = $parentResourceNode->getId();
 
         return $grid->getGridResponse(
             '@ChamiloTheme/Resource/index.html.twig',
-            ['tool' => $tool, 'type' => $type, 'id' => $id]
+            ['tool' => $tool, 'type' => $type, 'id' => $id, 'parent_resource_node' => $parentResourceNode]
         );
+    }
+
+    private function getParentResourceNode(Request $request)
+    {
+        $parentNodeId = $request->get('id');
+
+        if (empty($parentNodeId)) {
+            if ($this->hasCourse()) {
+                $parentResourceNode = $this->getCourse()->getResourceNode();
+
+            } else {
+                /** @var User $user */
+                $parentResourceNode = $this->getUser()->getResourceNode();
+            }
+        } else {
+            $repo = $this->getDoctrine()->getRepository('ChamiloCoreBundle:Resource\ResourceNode');
+            $parentResourceNode = $repo->find($parentNodeId);
+        }
+
+        return $parentResourceNode;
     }
 
     /**
@@ -103,10 +114,17 @@ class ResourceController extends AbstractResourceController implements CourseCon
         $grid = $this->getGrid($request, $grid, $resourceNodeId);
 
         $this->setBreadCrumb($request);
+        $parentResourceNode = $this->getParentResourceNode($request);
 
         return $grid->getGridResponse(
             '@ChamiloTheme/Resource/index.html.twig',
-            ['parent_id' => $resourceNodeId, 'tool' => $tool, 'type' => $type, 'id' => $resourceNodeId]
+            [
+                'parent_id' => $resourceNodeId,
+                'tool' => $tool,
+                'type' => $type,
+                'id' => $resourceNodeId,
+                'parent_resource_node' => $parentResourceNode,
+            ]
         );
     }
 
@@ -121,10 +139,6 @@ class ResourceController extends AbstractResourceController implements CourseCon
 
         // The group 'resource' is set in the @GRID\Source annotation in the entity.
         $source = new Entity($class, 'resource');
-
-        $course = $this->getCourse();
-        $session = $this->getSession();
-
         $parentNode = $repository->getResourceNodeRepository()->find($resourceNodeId);
 
         $this->denyAccessUnlessGranted(
@@ -133,20 +147,23 @@ class ResourceController extends AbstractResourceController implements CourseCon
             $this->trans('Unauthorised access to resource')
         );
 
-        $qb = $repository->getResourcesByCourse($course, $session, null, $parentNode);
+        $course = null;
+        $session = null;
+        if ($this->hasCourse()) {
+            $course = $this->getCourse();
+            $session = $this->getSession();
+            $qb = $repository->getResourcesByCourse($course, $session, null, $parentNode);
+        } else {
+            $qb = $repository->getResourcesByCreator($this->getUser(), $parentNode);
+        }
 
         // 3. Set QueryBuilder to the source.
         $source->initQueryBuilder($qb);
         $grid->setSource($source);
 
-        $courseParams = $this->getCourseParams();
+        $resourceParams = $this->getResourceParams($request);
 
-        $params = $courseParams;
-        $params['tool'] = $tool;
-        $params['type'] = $type;
-        $params['id'] = $id;
-
-        $grid->setRouteUrl($this->generateUrl('chamilo_core_resource_list', $params));
+        $grid->setRouteUrl($this->generateUrl('chamilo_core_resource_list', $resourceParams));
 
         //$grid->hideFilters();
         //$grid->setLimits(20);
@@ -154,9 +171,7 @@ class ResourceController extends AbstractResourceController implements CourseCon
         //$grid->setMaxResults(1);
         //$grid->setLimits(2);
         //$grid->setColumns($columns);
-        $routeParams = $courseParams;
-        $routeParams['tool'] = $tool;
-        $routeParams['type'] = $type;
+        $routeParams = $resourceParams;
         $routeParams['id'] = null;
 
         $titleColumn = $repository->getTitleColumn($grid);
@@ -166,7 +181,6 @@ class ResourceController extends AbstractResourceController implements CourseCon
         $titleColumn->setTitle($this->trans('Name'));
 
         //$repository->formatGrid();
-
         /*if ($grid->hasColumn('filetype')) {
             $grid->getColumn('filetype')->setTitle($this->trans('Type'));
         }*/
@@ -449,9 +463,7 @@ class ResourceController extends AbstractResourceController implements CourseCon
 
         $resourceNodeParentId = $resourceNode->getId();
 
-        $routeParams = $this->getCourseParams();
-        $routeParams['tool'] = $tool;
-        $routeParams['type'] = $type;
+        $routeParams = $this->getResourceParams($request);
         $routeParams['id'] = $resourceNodeParentId;
 
         $form = $repository->getForm($this->container->get('form.factory'), $resource);
@@ -659,9 +671,7 @@ class ResourceController extends AbstractResourceController implements CourseCon
         $this->addFlash('success', $this->trans('Deleted'));
         $em->flush();
 
-        $routeParams = $this->getCourseParams();
-        $routeParams['tool'] = $tool;
-        $routeParams['type'] = $type;
+        $routeParams = $this->getResourceParams($request);
         $routeParams['id'] = $parentId;
 
         return $this->redirectToRoute(
@@ -702,9 +712,7 @@ class ResourceController extends AbstractResourceController implements CourseCon
         $this->addFlash('success', $this->trans('Deleted'));
         $em->flush();
 
-        $routeParams = $this->getCourseParams();
-        $routeParams['tool'] = $tool;
-        $routeParams['type'] = $type;
+        $routeParams = $this->getResourceParams($request);
         $routeParams['id'] = $parentId;
 
         return $this->redirectToRoute('chamilo_core_resource_list', $routeParams);
@@ -859,7 +867,7 @@ class ResourceController extends AbstractResourceController implements CourseCon
 
         $this->setBreadCrumb($request);
 
-        $routeParams = $this->getCourseParams();
+        $routeParams = $this->getResourceParams($request);
         $routeParams['tool'] = $tool;
         $routeParams['type'] = $type;
         $routeParams['id'] = $id;
@@ -876,9 +884,7 @@ class ResourceController extends AbstractResourceController implements CourseCon
         $type = $request->get('type');
         $resourceNodeId = $request->get('id');
 
-        $routeParams = $this->getCourseParams();
-        $routeParams['tool'] = $tool;
-        $routeParams['type'] = $type;
+        $routeParams = $this->getResourceParams($request);
 
         if (!empty($resourceNodeId)) {
             $breadcrumb = $this->getBreadCrumb();
@@ -1039,11 +1045,7 @@ class ResourceController extends AbstractResourceController implements CourseCon
         $course = $this->getCourse();
         $session = $this->getSession();
         // Default parent node is course.
-        $parentNode = $course->getResourceNode();
-        if (!empty($resourceNodeParentId)) {
-            // Get parent node.
-            $parentNode = $repository->getResourceNodeRepository()->find($resourceNodeParentId);
-        }
+        $parentNode = $this->getParentResourceNode($request);
 
         $this->denyAccessUnlessGranted(
             ResourceNodeVoter::CREATE,
@@ -1053,12 +1055,10 @@ class ResourceController extends AbstractResourceController implements CourseCon
 
         $form = $repository->getForm($this->container->get('form.factory'));
 
-        $courseParams = $this->getCourseParams();
+        $courseParams = $this->getResourceParams($request);
 
         if ($fileType === 'file') {
             $params = $courseParams;
-            $params['tool'] = $tool;
-            $params['type'] = $type;
             $params['id'] = $resourceNodeParentId;
 
             $form->add(
@@ -1163,9 +1163,7 @@ class ResourceController extends AbstractResourceController implements CourseCon
             $em->flush();
             $this->addFlash('success', $this->trans('Saved'));
 
-            $params = $this->getCourseParams();
-            $params['tool'] = $tool;
-            $params['type'] = $type;
+            $params = $this->getResourceParams($request);
             $params['id'] = $resourceNodeParentId;
 
             return $this->redirectToRoute(

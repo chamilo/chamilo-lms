@@ -559,6 +559,49 @@ class ResourceRepository extends EntityRepository
     }
 
     /**
+     * @return QueryBuilder
+     */
+    public function getResourcesByCreator(User $user, ResourceNode $parentNode = null)
+    {
+        $repo = $this->getRepository();
+        $className = $repo->getClassName();
+        $checker = $this->getAuthorizationChecker();
+        $reflectionClass = $repo->getClassMetadata()->getReflectionClass();
+        //$isPersonalResource = $reflectionClass->hasProperty('loadPersonalResources');
+
+        $type = $this->getResourceType();
+
+        $qb = $repo->getEntityManager()->createQueryBuilder()
+            ->select('resource')
+            ->from($className, 'resource')
+            ->innerJoin(
+                ResourceNode::class,
+                'node',
+                Join::WITH,
+                'resource.resourceNode = node.id'
+            )
+            //->innerJoin('node.resourceLinks', 'links')
+            //->where('node.resourceType = :type')
+            //->setParameter('type',$type)
+            ;
+            /*$qb
+                ->andWhere('links.visibility = :visibility')
+                ->setParameter('visibility', ResourceLink::VISIBILITY_PUBLISHED)
+            ;*/
+
+        if (null !== $parentNode) {
+            $qb->andWhere('node.parent = :parentNode');
+            $qb->setParameter('parentNode', $parentNode);
+        }
+
+        $qb->andWhere('node.creator = :creator');
+        $qb->setParameter('creator', $user);
+        //var_dump($qb->getQuery()->getSQL(), $type->getId(), $parentNode->getId());exit;
+
+        return $qb;
+    }
+
+    /**
      * @param Session $session
      */
     public function rowCanBeEdited(RowAction $action, Row $row, Session $session = null): ?RowAction

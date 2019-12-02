@@ -88,6 +88,19 @@ abstract class BaseController extends AbstractController
         return $this->getDoctrine()->getManager()->find('ChamiloCoreBundle:Course', $courseId);
     }
 
+    public function hasCourse()
+    {
+        $request = $this->getRequest();
+        if ($request) {
+            $courseId = $request->getSession()->get('cid', 0);
+            if (!empty($courseId)) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
     /**
      * Gets the current Chamilo session based in the "sid" $_SESSION variable.
      *
@@ -126,12 +139,28 @@ abstract class BaseController extends AbstractController
         return $url;
     }
 
-    public function getCourseParams(): array
+    public function getResourceParams(Request $request): array
     {
-        $routeParams = ['cid' => $this->getCourse()->getId()];
-        $session = $this->getCourseSession();
-        $sessionId = $session ? $session->getId() : 0;
-        $routeParams['sid'] = $sessionId;
+        $tool = $request->get('tool');
+        $type = $request->get('type');
+        $id = (int) $request->get('id');
+
+        $courseId = null;
+        $sessionId = null;
+
+        if ($this->hasCourse()) {
+            $courseId = $this->getCourse()->getId();
+            $session = $this->getCourseSession();
+            $sessionId = $session ? $session->getId() : 0;
+        }
+
+        $routeParams = [
+            'id' => $id,
+            'tool' => $tool,
+            'type' => $type,
+            'cid' => $courseId,
+            'sid' => $sessionId,
+        ];
 
         return $routeParams;
     }

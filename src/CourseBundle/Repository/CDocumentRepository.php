@@ -10,12 +10,25 @@ use Chamilo\CoreBundle\Repository\ResourceRepository;
 use Chamilo\CoreBundle\Repository\ResourceRepositoryInterface;
 use Chamilo\CourseBundle\Entity\CDocument;
 use Symfony\Component\Form\FormInterface;
+use Symfony\Component\HttpFoundation\File\UploadedFile;
 
 /**
  * Class CDocumentRepository.
  */
 final class CDocumentRepository extends ResourceRepository implements ResourceRepositoryInterface
 {
+    public function saveUpload(UploadedFile $file)
+    {
+        $resource = new CDocument();
+        $resource
+            ->setFiletype('file')
+            ->setSize($file->getSize())
+            ->setTitle($file->getClientOriginalName())
+        ;
+
+        return $resource;
+    }
+
     public function saveResource(FormInterface $form, $course, $session, $fileType)
     {
         $newResource = $form->getData();

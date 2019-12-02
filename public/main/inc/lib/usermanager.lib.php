@@ -352,7 +352,7 @@ class UserManager
                 $resourceNode = new ResourceNode();
                 $resourceNode
                     ->setSlug($loginName)
-                    ->setCreator($user)
+                    ->setCreator(api_get_user_entity($creatorId))
                     ->setResourceType($repo->getResourceType())
                     ->setParent($url->getResourceNode());
                 $repo->getEntityManager()->persist($resourceNode);

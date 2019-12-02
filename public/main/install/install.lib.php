@@ -3315,8 +3315,8 @@ function finishInstallationWithContainer(
     $admin = $userManager->find($adminId);
     $urlRepo->addResourceNode($accessUrl, $admin);
 
-    $userManager->addUserToResourceNode($adminId, $accessUrl);
-    $userManager->addUserToResourceNode($anonId, $accessUrl);
+    $userManager->addUserToResourceNode($adminId, $adminId, $accessUrl);
+    $userManager->addUserToResourceNode($anonId, $adminId, $accessUrl);
 
     // Set default language
     Database::update(

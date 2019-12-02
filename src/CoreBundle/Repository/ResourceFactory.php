@@ -43,18 +43,17 @@ class ResourceFactory
     {
         $tool = $this->toolChain->getToolFromName($tool);
         $resourceTypeList = $tool->getResourceTypes();
-        //$this->fs = $mountManager->getFilesystem('resources_fs');
-
         if (!isset($resourceTypeList[$type])) {
             throw new InvalidArgumentException("Resource type doesn't exist: $type");
         }
 
-        $type = $resourceTypeList[$type];
-        $repo = $type['repository'];
-        $entity = $type['entity'];
+        $typeConfig = $resourceTypeList[$type];
+
+        $repo = $typeConfig['repository'];
+        $entity = $typeConfig['entity'];
 
         if (class_exists($repo) === false || class_exists($entity) === false) {
-            throw new InvalidArgumentException("Check the configuration of the type: $type");
+            throw new InvalidArgumentException("Check that this classes exists: $repo, $entity");
         }
 
         return new $repo(

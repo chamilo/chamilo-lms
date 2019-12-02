@@ -4,11 +4,11 @@ services:
         public: true
         autoconfigure: false
 
-
     # Tool chain loads the list of tool services with the tag "chamilo_core.tool"
     # Tool chain is filled in file DependencyInjection/Compiler/ToolCompilerClass.php
     Chamilo\CoreBundle\ToolChain: ~
-    # Admin
+
+    # Global
     chamilo_core.tool.global:
         class: Chamilo\CoreBundle\Tool\GlobalTool
         arguments:
@@ -16,7 +16,8 @@ services:
             - ''
             - ''
             - ''
-            -   urls:
+            -
+                urls:
                     entity: Chamilo\CoreBundle\Entity\AccessUrl
                     repository: Chamilo\CoreBundle\Repository\AccessUrlRepository
                 courses:
@@ -33,8 +34,8 @@ services:
         class: Chamilo\CoreBundle\Tool\Asset
         arguments:
             - 'asset'
-            - 'asset'
-            - 'asset'
+            - ''
+            - ''
             - ''
             -
                 illustrations:

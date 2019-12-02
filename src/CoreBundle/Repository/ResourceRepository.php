@@ -70,10 +70,10 @@ class ResourceRepository extends EntityRepository
      */
     protected $authorizationChecker;
 
-    /**
-     * @var MountManager
-     */
+    /** @var MountManager */
     protected $mountManager;
+
+    /** @var SlugifyInterface */
     protected $slugify;
 
     /**

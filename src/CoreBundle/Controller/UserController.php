@@ -3,6 +3,7 @@
 
 namespace Chamilo\CoreBundle\Controller;
 
+use Chamilo\CoreBundle\Repository\IllustrationRepository;
 use Chamilo\ThemeBundle\Model\UserInterface;
 use Chamilo\UserBundle\Repository\UserRepository;
 use Symfony\Component\Routing\Annotation\Route;
@@ -23,7 +24,7 @@ class UserController extends BaseController
      *
      * @param string $username
      */
-    public function profileAction($username, UserRepository $userRepository)
+    public function profileAction($username, UserRepository $userRepository, IllustrationRepository $illustrationRepository)
     {
         $user = $userRepository->findByUsername($username);
 
@@ -31,6 +32,8 @@ class UserController extends BaseController
             throw $this->createAccessDeniedException('This user does not have access to this section');
         }
 
-        return $this->render('@ChamiloCore/User/profile.html.twig', ['user' => $user]);
+        $url = $illustrationRepository->getIllustrationUrlFromNode($user->getResourceNode());
+
+        return $this->render('@ChamiloCore/User/profile.html.twig', ['user' => $user, 'illustration_url' => $url]);
     }
 }

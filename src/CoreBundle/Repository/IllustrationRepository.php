@@ -49,7 +49,7 @@ final class IllustrationRepository extends ResourceRepository implements Resourc
             return null;
         }
 
-        $illustrationNode = $this->getIllustrationNodeFromResource($resource);
+        $illustrationNode = $this->getIllustrationNodeFromParent($resource->getResourceNode());
         $em = $this->getEntityManager();
 
         if ($illustrationNode === null) {
@@ -64,14 +64,35 @@ final class IllustrationRepository extends ResourceRepository implements Resourc
         return $this->addFile($illustration, $uploadFile);
     }
 
-    public function getIllustrationNodeFromResource(AbstractResource $resource): ?ResourceNode
+    public function addIllustrationToUser(User $user, $uploadFile): ?ResourceFile
+    {
+        if (null === $uploadFile) {
+            return null;
+        }
+
+        $illustrationNode = $this->getIllustrationNodeFromParent($user->getResourceNode());
+        $em = $this->getEntityManager();
+
+        if ($illustrationNode === null) {
+            $illustration = new Illustration();
+            $em->persist($illustration);
+            $this->createNodeForResource($illustration, $user, $user->getResourceNode());
+        } else {
+            $illustration = $this->repository->findOneBy(['resourceNode' => $illustrationNode]);
+        }
+
+        //$this->addResourceToEveryone($illustrationNode);
+        return $this->addFile($illustration, $uploadFile);
+    }
+
+    public function getIllustrationNodeFromParent(ResourceNode $resourceNode): ?ResourceNode
     {
         $nodeRepo = $this->getResourceNodeRepository();
         $resourceType = $this->getResourceType();
 
         /** @var ResourceNode $node */
         $node = $nodeRepo->findOneBy(
-            ['parent' => $resource->getResourceNode(), 'resourceType' => $resourceType]
+            ['parent' => $resourceNode, 'resourceType' => $resourceType]
         );
 
         return $node;
@@ -79,7 +100,7 @@ final class IllustrationRepository extends ResourceRepository implements Resourc
 
     public function deleteIllustration(AbstractResource $resource)
     {
-        $node = $this->getIllustrationNodeFromResource($resource);
+        $node = $this->getIllustrationNodeFromParent($resource->getResourceNode());
 
         if ($node !== null) {
             $this->getEntityManager()->remove($node);
@@ -92,9 +113,14 @@ final class IllustrationRepository extends ResourceRepository implements Resourc
      *
      * @return string
      */
-    public function getIllustrationUrl(AbstractResource $resource, $filter = '')
+    public function getIllustrationUrl(AbstractResource $resource, $filter = ''): string
     {
-        $node = $this->getIllustrationNodeFromResource($resource);
+        return $this->getIllustrationUrlFromNode($resource->getResourceNode(), $filter);
+    }
+
+    public function getIllustrationUrlFromNode(ResourceNode $resourceNode, $filter = ''): string
+    {
+        $node = $this->getIllustrationNodeFromParent($resourceNode);
 
         if ($node !== null) {
             $params = [

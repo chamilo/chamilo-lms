@@ -7,8 +7,6 @@ use Symfony\Component\HttpKernel\Bundle\Bundle;
 
 /**
  * Class ChamiloSettingsBundle.
- *
- * @package Chamilo\SettingsBundle
  */
 class ChamiloSettingsBundle extends Bundle
 {

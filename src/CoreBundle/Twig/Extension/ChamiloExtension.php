@@ -3,6 +3,8 @@
 
 namespace Chamilo\CoreBundle\Twig\Extension;
 
+use Chamilo\CoreBundle\Repository\IllustrationRepository;
+use Chamilo\SettingsBundle\Templating\Helper\SettingsHelper;
 use Twig\Extension\AbstractExtension;
 use Twig\TwigFilter;
 
@@ -11,6 +13,16 @@ use Twig\TwigFilter;
  */
 class ChamiloExtension extends AbstractExtension
 {
+    private $illustrationRepository;
+
+    /**
+     * @param SettingsHelper $helper
+     */
+    public function __construct(IllustrationRepository $illustrationRepository)
+    {
+        $this->illustrationRepository = $illustrationRepository;
+    }
+
     public function getFilters(): array
     {
         return [
@@ -26,6 +38,8 @@ class ChamiloExtension extends AbstractExtension
             new TwigFilter('date_to_time_ago', 'Display::dateToStringAgoAndLongDate'),
             new TwigFilter('api_get_configuration_value', 'api_get_configuration_value'),
             new TwigFilter('format_user_full_name', 'UserManager::formatUserFullName'),
+            new TwigFilter('illustration', [$this, 'getIllustration']),
+            new TwigFilter('user_illustration', [$this, 'getUserIllustration']),
         ];
     }
 
@@ -35,6 +49,24 @@ class ChamiloExtension extends AbstractExtension
     public function getFunctions()
     {
         return [];
+    }
+
+    public function getIllustration($node)
+    {
+        $url = $this->illustrationRepository->getIllustrationUrlFromNode($node);
+
+        return $url;
+    }
+
+    public function getUserIllustration($node)
+    {
+        $url = $this->getIllustration($node);
+
+        if (empty($url)) {
+            return 'img/icons/32/unknown.png';
+        }
+
+        return $url;
     }
 
     /**

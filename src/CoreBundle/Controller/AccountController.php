@@ -66,7 +66,7 @@ class AccountController extends BaseController
         if ($form->isSubmitted() && $form->isValid()) {
             $illustration = $form['illustration']->getData();
             if ($illustration) {
-                $file = $illustrationRepository->addIllustration($resource, $this->getUser(), $illustration);
+                $file = $illustrationRepository->addIllustrationToUser($this->getUser(), $illustration);
                 $em = $illustrationRepository->getEntityManager();
                 $em->persist($file);
                 $em->flush();

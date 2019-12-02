@@ -639,7 +639,7 @@ class MutationMap extends ResolverMap implements ContainerAwareInterface
             !empty($userInput['status']) ? $userInput['status'] : $user->getStatus(),
             !empty($userInput['officialCode']) ? $userInput['officialCode'] : $user->getOfficialCode(),
             !empty($userInput['phone']) ? $userInput['phone'] : $user->getPhone(),
-            $user->getPictureUri(),
+            null,
             !empty($userInput['expirationDate']) ? $userInput['expirationDate'] : $user->getExpirationDate(),
             !empty($userInput['isActive']) ? $userInput['isActive'] : $user->isActive()
         );

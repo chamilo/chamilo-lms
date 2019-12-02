@@ -6,7 +6,6 @@ namespace Chamilo\UserBundle\Entity;
 use Chamilo\CoreBundle\Entity\AccessUrl;
 use Chamilo\CoreBundle\Entity\AccessUrlRelUser;
 use Chamilo\CoreBundle\Entity\Course;
-use Chamilo\CoreBundle\Entity\Resource\AbstractResource;
 use Chamilo\CoreBundle\Entity\Resource\ResourceNode;
 use Chamilo\CoreBundle\Entity\Skill;
 use Chamilo\CoreBundle\Entity\UsergroupRelUser;
@@ -1398,30 +1397,6 @@ class User extends BaseUser implements ThemeUser, EquatableInterface //implement
     public function getHrDeptId()
     {
         return $this->hrDeptId;
-    }
-
-    /**
-     * @return Media
-     */
-    public function getAvatar()
-    {
-        return $this->getPictureUri();
-    }
-
-    /**
-     * @param int $size
-     *
-     * @return string
-     */
-    public function getAvatarOrAnonymous($size = 22)
-    {
-        $avatar = $this->getAvatar();
-
-        if (empty($avatar)) {
-            return "img/icons/$size/unknown.png";
-        }
-
-        return $avatar;
     }
 
     /**

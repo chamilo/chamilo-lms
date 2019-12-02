@@ -87,7 +87,6 @@ class ResourceController extends AbstractResourceController implements CourseCon
         if (empty($parentNodeId)) {
             if ($this->hasCourse()) {
                 $parentResourceNode = $this->getCourse()->getResourceNode();
-
             } else {
                 /** @var User $user */
                 $parentResourceNode = $this->getUser()->getResourceNode();
@@ -130,8 +129,6 @@ class ResourceController extends AbstractResourceController implements CourseCon
 
     public function getGrid(Request $request, Grid $grid, $resourceNodeId): Grid
     {
-        $tool = $request->get('tool');
-        $type = $request->get('type');
         $id = (int) $request->get('id');
 
         $repository = $this->getRepositoryFromRequest($request);
@@ -975,7 +972,7 @@ class ResourceController extends AbstractResourceController implements CourseCon
         $resourceFile = $resourceNode->getResourceFile();
 
         if (!$resourceFile) {
-            throw new NotFoundHttpException();
+            throw new NotFoundHttpException($this->trans('File not found for resource'));
         }
 
         //$fileName = $resourceFile->getOriginalName();
@@ -1036,8 +1033,6 @@ class ResourceController extends AbstractResourceController implements CourseCon
      */
     private function createResource(Request $request, $fileType = 'file')
     {
-        $tool = $request->get('tool');
-        $type = $request->get('type');
         $resourceNodeParentId = $request->get('id');
 
         $repository = $this->getRepositoryFromRequest($request);

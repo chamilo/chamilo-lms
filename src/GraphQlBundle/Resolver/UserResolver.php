@@ -36,17 +36,6 @@ class UserResolver implements ContainerAwareInterface
     }
 
     /**
-     * @return string
-     */
-    public function getPicture(User $user, Argument $args)
-    {
-        $assets = $this->container->get('templating.helper.assets');
-        $path = $user->getAvatarOrAnonymous($args['size']);
-
-        return $assets->getUrl($path);
-    }
-
-    /**
      * @return ArrayCollection
      */
     public function getMessages(User $user, Argument $args)

@@ -9,7 +9,7 @@ namespace Chamilo\ThemeBundle\Model;
 
 interface UserInterface
 {
-    public function getAvatar();
+    //public function getAvatar();
 
     public function getUsername();
 

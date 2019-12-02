@@ -276,7 +276,7 @@ class ResourceRepository extends EntityRepository
 
         return $resourceFile;
     }
-
+    //unction createNodeForResource(AbstractResource $resource, User $creator, ResourceNode $parent = null, UploadedFile $file = null): ResourceNode
     public function addResourceNode(AbstractResource $resource, User $creator, AbstractResource $parent = null): ResourceNode
     {
         if (null !== $parent) {
@@ -596,7 +596,7 @@ class ResourceRepository extends EntityRepository
 
         $qb->andWhere('node.creator = :creator');
         $qb->setParameter('creator', $user);
-        //var_dump($qb->getQuery()->getSQL(), $type->getId(), $parentNode->getId());exit;
+        //var_dump($qb->getQuery()->getSQL(), $parentNode->getId());exit;
 
         return $qb;
     }

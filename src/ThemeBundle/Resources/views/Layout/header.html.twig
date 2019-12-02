@@ -140,24 +140,8 @@ $(function () {
             </ul>
         </li>
         <li class="nav-item dropdown">
-            {% set avatar %}
-                {% if app.user.pictureUri is empty %}
-                    <img
-                        class="img-avatar"
-                        src="{{ url('home') ~ app.user.avatarOrAnonymous(32) }}"
-                        alt="{{ app.user.firstname }} {{ app.user.lastname }}"
-                    >
-                {% else %}
-                    <img
-                        class="img-avatar"
-                        src="{{ url('legacy_upload') ~ app.user.getPictureLegacy() }}"
-                        alt="{{ app.user.firstname }} {{ app.user.lastname }}"
-                    >
-                {% endif %}
-            {% endset %}
-
             <a class="nav-link nav-link-user dropdown-toggle d-sm-inline-block mr-2" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">
-                {{ avatar }}
+                <img src="{{ app.user.resourceNode | user_illustration }}?w=32&h=32&fit=crop">
                 <span class="d-none">{{ app.user.firstname }} {{ app.user.lastname }}</span>
             </a>
 

@@ -4,6 +4,11 @@
     {% autoescape false %}
         <h2>{{ 'Profile' | trans }}</h2>
         <h3>{{ user.username }}     {{ user.firstname }}    {{ user.lastname }}</h3>
+
+        <img src="{{ app.user.resourceNode | user_illustration }}?w=300&h=300&fit=crop">
+
+        <br />
+
         <a href="{{ url('chamilo_core_account_edit') }}" class="btn btn-primary">
             {{ 'Edit profile' | trans }}
         </a>

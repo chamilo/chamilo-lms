@@ -152,6 +152,7 @@ class UserManager
      * @param int           $creatorId
      * @param array         $emailTemplate
      * @param string        $redirectToURLAfterLogin
+     * @param bool          $addUserToNode
      *
      * @return mixed new user id - if the new user creation succeeds, false otherwise
      * @desc The function tries to retrieve user id from the session.
@@ -183,7 +184,8 @@ class UserManager
         $form = null,
         $creatorId = 0,
         $emailTemplate = [],
-        $redirectToURLAfterLogin = ''
+        $redirectToURLAfterLogin = '',
+        $addUserToNode = true
     ) {
         $authSource = !empty($authSource) ? $authSource : PLATFORM_AUTH_SOURCE;
         $creatorId = empty($creatorId) ? api_get_user_id() : 0;
@@ -342,21 +344,23 @@ class UserManager
             $factory = Container::$container->get('Chamilo\CoreBundle\Repository\ResourceFactory');
             $repo = $factory->createRepository('global', 'users');
 
-            // Add user as a node:
-            $url = api_get_url_entity($access_url_id);
-            $resourceNode = new ResourceNode();
-            $resourceNode
-                ->setSlug($loginName)
-                ->setCreator(api_get_user_entity($creatorId))
-                ->setResourceType($repo->getResourceType())
-                ->setParent($url->getResourceNode())
-            ;
-            $repo->getEntityManager()->persist($resourceNode);
+            $userManager->updateUser($user);
 
-            $user->setResourceNode($resourceNode);
+            // Add user as a node
+            $url = api_get_url_entity($access_url_id);
+            if ($addUserToNode) {
+                $resourceNode = new ResourceNode();
+                $resourceNode
+                    ->setSlug($loginName)
+                    ->setCreator($user)
+                    ->setResourceType($repo->getResourceType())
+                    ->setParent($url->getResourceNode());
+                $repo->getEntityManager()->persist($resourceNode);
+                $user->setResourceNode($resourceNode);
+            }
+
             $repo->getEntityManager()->persist($user);
 
-            $userManager->updateUser($user);
             $userId = $user->getId();
 
             // Add user to a group

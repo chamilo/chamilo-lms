@@ -560,7 +560,7 @@ class User extends BaseUser implements ThemeUser, EquatableInterface //implement
      */
     public function __toString()
     {
-        return $this->getUsername();
+        return $this->username;
     }
 
     /**

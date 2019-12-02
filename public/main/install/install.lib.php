@@ -3239,6 +3239,7 @@ function finishInstallationWithContainer(
     installSchemas($container, $manager, false);
     installPages($container);
 
+    error_log('Inserting data.sql');
     // Inserting default data
     $data = file_get_contents($sysPath.'main/install/data.sql');
     $result = $manager->getConnection()->prepare($data);
@@ -3246,6 +3247,7 @@ function finishInstallationWithContainer(
     $result->closeCursor();
 
     UserManager::setPasswordEncryption($encryptPassForm);
+
     error_log('user creation - admin');
     // Create admin user.
     $adminId = UserManager::create_user(
@@ -3255,50 +3257,66 @@ function finishInstallationWithContainer(
         $emailForm,
         $loginForm,
         $passForm,
-        'ADMIN', //$official_code = '',
+        'ADMIN',
         $languageForm,
         $adminPhoneForm,
-        '', //$picture_uri = '',
+        '',
         PLATFORM_AUTH_SOURCE,
-        '', //$expirationDate,
+        '',
         1,
         0,
         null,
         '',
-        false, //$send_mail = false,
-        true, //$isAdmin = false
+        false,
+        true,
         '',
         false,
         '',
-        1
+        0,
+        [],
+        '',
+        false
     );
 
     error_log('user creation - anon');
     // Create anonymous user.
-    UserManager::create_user(
+    $anonId = UserManager::create_user(
         'Joe',
         'Anonymous',
         6,
         'anonymous@localhost',
         'anon',
         'anon',
-        'anonymous', //$official_code = '',
+        'anonymous',
         $languageForm,
         '',
-        '', //$picture_uri = '',
+        '',
         PLATFORM_AUTH_SOURCE,
         '',
         1,
         0,
         null,
         '',
-        false, //$send_mail = false,
-        false, //$isAdmin = false
+        false,
+        false,
         '',
         false,
         '',
-        1
+        $adminId,
+        [],
+        '',
+        false
     );
+
+    error_log('Adding access url as a node');
+    $userManager = $container->get('Chamilo\UserBundle\Repository\UserRepository');
+    $urlRepo = $container->get('Chamilo\CoreBundle\Repository\AccessUrlRepository');
+    $accessUrl = $urlRepo->find(1);
+    $admin = $userManager->find($adminId);
+    $urlRepo->addResourceNode($accessUrl, $admin);
+
+    $userManager->addUserToResourceNode($adminId, $accessUrl);
+    $userManager->addUserToResourceNode($anonId, $accessUrl);
 
     // Set default language
     Database::update(
@@ -3306,13 +3324,6 @@ function finishInstallationWithContainer(
         ['available' => 1],
         ['dokeos_folder = ?' => $languageForm]
     );
-
-    error_log('Access url');
-    $userManager = Container::getUserManager();
-    $urlRepo = $container->get('Chamilo\CoreBundle\Repository\AccessUrlRepository');
-    $accessUrl = $urlRepo->find(1);
-    $admin = $userManager->find($adminId);
-    $urlRepo->addResourceNode($accessUrl, $admin);
 
     // Install settings
     installSettings(

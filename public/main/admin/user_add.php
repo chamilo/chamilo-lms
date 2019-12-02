@@ -377,10 +377,9 @@ if ($form->validate()) {
             $password = $user['password']['password_auto'] == '1' ? api_generate_password() : $user['password']['password'];
         }
 
+        $expiration_date = null;
         if ($user['radio_expiration_date'] == '1') {
             $expiration_date = $user['expiration_date'];
-        } else {
-            $expiration_date = null;
         }
 
         $active = (int) $user['active'];

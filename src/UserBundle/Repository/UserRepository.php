@@ -3,12 +3,14 @@
 
 namespace Chamilo\UserBundle\Repository;
 
+use Chamilo\CoreBundle\Entity\AccessUrl;
 use Chamilo\CoreBundle\Entity\AccessUrlRelUser;
 use Chamilo\CoreBundle\Entity\Course;
 use Chamilo\CoreBundle\Entity\CourseRelUser;
 use Chamilo\CoreBundle\Entity\GradebookCertificate;
 use Chamilo\CoreBundle\Entity\GradebookResult;
 use Chamilo\CoreBundle\Entity\Message;
+use Chamilo\CoreBundle\Entity\Resource\ResourceNode;
 use Chamilo\CoreBundle\Entity\Session;
 use Chamilo\CoreBundle\Entity\SessionRelCourseRelUser;
 use Chamilo\CoreBundle\Entity\SkillRelUser;
@@ -83,6 +85,24 @@ class UserRepository extends ResourceRepository
 
         return $user;
     }*/
+
+    public function addUserToResourceNode(int $userId, AccessUrl $url): ResourceNode
+    {
+        /** @var User $user */
+        $user = $this->find($userId);
+
+        $resourceNode = new ResourceNode();
+        $resourceNode
+            ->setSlug($user->getUsername())
+            ->setCreator($user)
+            ->setResourceType($this->getResourceType())
+            ->setParent($url->getResourceNode());
+        $this->getEntityManager()->persist($resourceNode);
+        $user->setResourceNode($resourceNode);
+        $this->getEntityManager()->persist($user);
+
+        return $resourceNode;
+    }
 
     public function findByUsername(string $username): ?User
     {

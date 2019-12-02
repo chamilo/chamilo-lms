@@ -9920,7 +9920,7 @@ class learnpath
                     name="min_'.$item['id'].'" 
                     type="number" 
                     min="0" 
-                    step="1" 
+                    step="any"
                     max="'.$item['max_score'].'" 
                     value="'.$selectedMinScoreValue.'" 
                 />';
@@ -9933,7 +9933,7 @@ class learnpath
                     name="max_'.$item['id'].'" 
                     type="number" 
                     min="0" 
-                    step="1" 
+                    step="any"
                     max="'.$item['max_score'].'" 
                     value="'.$selectedMaxScoreValue.'" 
                 />';
@@ -9948,7 +9948,7 @@ class learnpath
                     name="min_'.$item['id'].'" 
                     type="number" 
                     min="0" 
-                    step="1" 
+                    step="any"
                     max="'.$item['max_score'].'" 
                     value="'.$selectedMinScoreValue.'" 
                 />';
@@ -9960,7 +9960,7 @@ class learnpath
                     name="max_'.$item['id'].'" 
                     type="number" 
                     min="0" 
-                    step="1" 
+                    step="any"
                     max="'.$item['max_score'].'" 
                     value="'.$selectedMaxScoreValue.'" 
                 />';

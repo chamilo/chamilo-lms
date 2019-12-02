@@ -167,7 +167,8 @@
         "vich/uploader-bundle": "~1.0",
         "maennchen/zipstream-php": "^1.2",
         "league/glide-symfony": "^1.0",
-        "cocur/slugify": "^3.2"
+        "cocur/slugify": "^3.2",
+        "knpuniversity/oauth2-client-bundle": "^1.31"
     },
     "config": {
         "component-dir": "public/assets"

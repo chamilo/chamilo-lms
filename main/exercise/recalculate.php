@@ -65,6 +65,11 @@ if ('true' === $pluginEvaluation->get(QuestionOptionsEvaluationPlugin::SETTING_E
 if (!$useEvaluationPlugin) {
     foreach ($questionList as $questionId) {
         $question = Question::read($questionId, api_get_course_info());
+
+        if (false === $question) {
+            continue;
+        }
+
         $totalWeight += $question->selectWeighting();
 
         // We're inside *one* question. Go through each possible answer for this question
@@ -113,12 +118,11 @@ if (!$useEvaluationPlugin) {
     $totalWeight = $pluginEvaluation->getMaxScore();
 }
 
-$table = Database::get_main_table(TABLE_STATISTIC_TRACK_E_EXERCISES);
+$trackedExercise
+    ->setExeResult($totalScore)
+    ->setExeWeighting($totalWeight);
 
-$sql = "UPDATE $table SET
-          exe_result = '$totalScore',
-          exe_weighting = '$totalWeight'
-        WHERE exe_id = $exeId";
-Database::query($sql);
+$em->persist($trackedExercise);
+$em->flush();
 
 echo $totalScore.'/'.$totalWeight;

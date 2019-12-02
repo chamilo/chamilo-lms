@@ -86,15 +86,16 @@ class UserRepository extends ResourceRepository
         return $user;
     }*/
 
-    public function addUserToResourceNode(int $userId, AccessUrl $url): ResourceNode
+    public function addUserToResourceNode(int $userId, int $creatorId, AccessUrl $url): ResourceNode
     {
         /** @var User $user */
         $user = $this->find($userId);
+        $creator = $this->find($creatorId);
 
         $resourceNode = new ResourceNode();
         $resourceNode
             ->setSlug($user->getUsername())
-            ->setCreator($user)
+            ->setCreator($creator)
             ->setResourceType($this->getResourceType())
             ->setParent($url->getResourceNode());
         $this->getEntityManager()->persist($resourceNode);

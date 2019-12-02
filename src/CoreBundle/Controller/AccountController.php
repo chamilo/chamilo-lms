@@ -30,6 +30,22 @@ class AccountController extends BaseController
     }
 
     /**
+     * @Route("/home", methods={"GET"}, name="chamilo_core_account_home")
+     *
+     * @param string $username
+     */
+    public function homeAction()
+    {
+        $user = $this->getUser();
+
+        if (!is_object($user) || !$user instanceof UserInterface) {
+            throw $this->createAccessDeniedException('This user does not have access to this section');
+        }
+
+        return $this->render('@ChamiloCore/Account/home.html.twig', ['user' => $user]);
+    }
+
+    /**
      * @Route("/edit", methods={"GET", "POST"}, name="chamilo_core_account_edit")
      *
      * @param string $username
@@ -59,7 +75,7 @@ class AccountController extends BaseController
             $userManager->updateUser($user);
 
             $this->addFlash('success', $this->trans('Updated'));
-            $url = $this->generateUrl('chamilo_core_user_profile', ['username' => $user->getUsername()]);
+            $url = $this->generateUrl('chamilo_core_account_home', ['username' => $user->getUsername()]);
             $response = new RedirectResponse($url);
 
             return $response;

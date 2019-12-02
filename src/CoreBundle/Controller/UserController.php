@@ -17,6 +17,8 @@ use Symfony\Component\Routing\Annotation\Route;
 class UserController extends BaseController
 {
     /**
+     * Public profile.
+     *
      * @Route("/{username}", methods={"GET"}, name="chamilo_core_user_profile")
      *
      * @param string $username

@@ -279,6 +279,8 @@ define('LOG_USER_DELETE_ACCOUNT_REQUEST', 'user_delete_account_request');
 
 define('LOG_QUESTION_CREATED', 'question_created');
 define('LOG_QUESTION_UPDATED', 'question_updated');
+define('LOG_QUESTION_DELETED', 'question_deleted');
+define('LOG_QUESTION_REMOVED_FROM_QUIZ', 'question_removed_from_quiz');
 
 define('USERNAME_PURIFIER', '/[^0-9A-Za-z_\.-]/');
 

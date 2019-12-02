@@ -1954,6 +1954,7 @@ HOTSPOT;
      * @param array  $userExtraFieldsToAdd
      * @param bool   $useCommaAsDecimalPoint
      * @param bool   $roundValues
+     * @param bool   $getOnyIds
      *
      * @return array
      */
@@ -1970,7 +1971,8 @@ HOTSPOT;
         $showExerciseCategories = false,
         $userExtraFieldsToAdd = [],
         $useCommaAsDecimalPoint = false,
-        $roundValues = false
+        $roundValues = false,
+        $getOnyIds = false
     ) {
         //@todo replace all this globals
         global $filter;
@@ -2244,7 +2246,10 @@ HOTSPOT;
             if (!empty($column)) {
                 $sql .= " ORDER BY $column $direction ";
             }
-            $sql .= " LIMIT $from, $number_of_items";
+
+            if (!$getOnyIds) {
+                $sql .= " LIMIT $from, $number_of_items";
+            }
 
             $results = [];
             $resx = Database::query($sql);

@@ -58,7 +58,7 @@
         "doctrine/doctrine-migrations-bundle": "~2.0",
 
         "erusev/parsedown": "~1.7",
-        "ezyang/htmlpurifier": "~4.10",
+        "ezyang/htmlpurifier": "~4.12",
         "sensio/framework-extra-bundle": "~5.0",
         "sensiolabs/security-checker": "~6.0",
 
@@ -68,7 +68,7 @@
         "symfony/flex": "^1.0",
         "symfony/form": "^4.0",
         "symfony/framework-bundle": "^4.0",
-        "symfony/http-kernel": "4.3.*",
+        "symfony/http-kernel": "^4.0",
         "symfony/monolog-bundle": "^3.1",
         "symfony/polyfill-apcu": "^1.9",
         "symfony/security-bundle": "^4.0",
@@ -152,9 +152,6 @@
         "kigkonsult/icalcreator": "~2.24",
         "essence/essence": "~3.0",
         "paragonie/random-lib": "~2.0",
-        "hwi/oauth-bundle": "~0.6",
-        "php-http/guzzle6-adapter": "^1.1",
-        "php-http/httplug-bundle": "^1.8",
         "knplabs/knp-menu-bundle": "^2.0",
         "symfony/requirements-checker": "^1.1",
         "liip/theme-bundle": "^1.6",

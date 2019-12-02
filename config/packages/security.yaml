@@ -76,13 +76,3 @@ security:
                 path: /logout
                 target: /
             switch_user: false
-            oauth:
-                resource_owners:
-                    facebook: "/login/check-facebook"
-                    google: "/login/check-google"
-                    github: "/login/check-github"
-                login_path: /login
-                failure_path: /login
-                use_forward: false
-                oauth_user_provider:
-                    service: chamilo_user.security.user_provider

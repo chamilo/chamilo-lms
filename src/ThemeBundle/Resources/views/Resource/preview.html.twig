@@ -19,6 +19,17 @@
                          }
                      ) }}"
                 />
+            {% elseif resource.resourceNode.hasEditableContent %}
+                <iframe border="0" frameborder="0" style="width:100%;height:600px" src="{{ url('chamilo_core_resource_view', {
+                    'id': resource.resourceNode.id,
+                    'cid': course.id,
+                    'sid': session.id,
+                    'type' : type,
+                    'tool' : tool
+                }
+                )
+                }}">
+                </iframe>
             {% else %}
             {% endif %}
             <br />

@@ -266,7 +266,7 @@ class ResourceRepository extends EntityRepository
         }
 
         $em = $this->getEntityManager();
-
+        //$resourceFile->setMimeType($file->getMimeType());
         $resourceFile->setFile($file);
         $resourceFile->setName($resource->getResourceName());
         $em->persist($resourceFile);

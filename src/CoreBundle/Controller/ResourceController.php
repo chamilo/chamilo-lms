@@ -437,8 +437,6 @@ class ResourceController extends AbstractResourceController implements CourseCon
      */
     public function editAction(Request $request): Response
     {
-        $tool = $request->get('tool');
-        $type = $request->get('type');
         $resourceNodeId = $request->get('id');
 
         $this->setBreadCrumb($request);
@@ -492,9 +490,10 @@ class ResourceController extends AbstractResourceController implements CourseCon
 
             $this->addFlash('success', $this->trans('Updated'));
 
-            if ($newResource->getResourceNode()->hasResourceFile()) {
-                //$resourceNodeParentId = $newResource->getResourceNode()->getParent()->getId();
-            }
+            //if ($newResource->getResourceNode()->hasResourceFile()) {
+                $resourceNodeParentId = $newResource->getResourceNode()->getParent()->getId();
+            //}
+            $routeParams['id'] = $resourceNodeParentId;
 
             return $this->redirectToRoute('chamilo_core_resource_list', $routeParams);
         }
@@ -1105,7 +1104,7 @@ class ResourceController extends AbstractResourceController implements CourseCon
                 $handle = tmpfile();
                 fwrite($handle, $content);
                 $meta = stream_get_meta_data($handle);
-                $file = new UploadedFile($meta['uri'], $fileName, null, null, true);
+                $file = new UploadedFile($meta['uri'], $fileName, 'text/html', null, true);
                 $em->persist($newResource);
             }
 

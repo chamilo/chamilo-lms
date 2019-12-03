@@ -2,23 +2,22 @@
 
 {% block content %}
     {% if is_granted('CREATE', parent_resource_node) %}
-
         <div class="actions">
-            {% if resource_settings.allowNodeFolderCreation %}
+            {% if resource_settings.allowNodeCreation %}
             <a class="btn btn-secondary"
                 href="{{ url('chamilo_core_resource_new_folder', {'tool': tool, 'type': type, 'cid': course.id, 'sid': session.id, 'id': id }) }}">
                 {{ 'New folder' | trans }}
             </a>
             {% endif %}
 
-            {% if resource_settings.allowResourceContentCreation %}
+            {% if resource_settings.allowResourceCreation %}
             <a class="btn btn-secondary"
                href="{{ url('chamilo_core_resource_new', { 'tool': tool, 'type': type, 'cid': course.id, 'sid': session.id,  'id': id }) }}">
-                {{ 'Create new document' | trans }}
+                {{ 'Create new ' ~ tool | trans }}
             </a>
             {% endif %}
 
-            {% if resource_settings.allowResourceUploadCreation %}
+            {% if resource_settings.allowResourceUpload %}
             <a class="btn btn-secondary"
                 href="{{ url('chamilo_core_resource_upload', { 'tool': tool, 'type': type, 'cid': course.id, 'sid': session.id,  'id': id }) }}">
                 {{ 'Upload' | trans }}

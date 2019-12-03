@@ -759,9 +759,9 @@ class ResourceRepository extends EntityRepository
     {
         $settings = new ResourceSettings();
         $settings
-            ->setAllowNodeFolderCreation(false)
-            ->setAllowResourceContentCreation(false)
-            ->setAllowResourceUploadCreation(false)
+            ->setAllowNodeCreation(false)
+            ->setAllowResourceCreation(false)
+            ->setAllowResourceUpload(false)
         ;
 
         return $settings;

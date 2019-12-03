@@ -80,7 +80,6 @@ class ResourceController extends AbstractResourceController implements CourseCon
         // The base resource node is the course.
         $id = $parentResourceNode->getId();
 
-
         return $grid->getGridResponse(
             '@ChamiloTheme/Resource/index.html.twig',
             [
@@ -133,23 +132,23 @@ class ResourceController extends AbstractResourceController implements CourseCon
         $source = new Entity($class, 'resource');
         $parentNode = $repository->getResourceNodeRepository()->find($resourceNodeId);
 
-        $settings = $repository->getResourceSettings();
-
         $this->denyAccessUnlessGranted(
             ResourceNodeVoter::VIEW,
             $parentNode,
             $this->trans('Unauthorised access to resource')
         );
 
-        $course = null;
-        $session = null;
+        $settings = $repository->getResourceSettings();
+
+        $course = $this->getCourse();
+        $session = $this->getSession();
+
         if ($this->hasCourse()) {
-            $course = $this->getCourse();
-            $session = $this->getSession();
-            $qb = $repository->getResourcesByCourse($course, $session, null, $parentNode);
+            //$qb = $repository->getResourcesByCourse($course, $session, null, $parentNode);
         } else {
-            $qb = $repository->getResourcesByCreator($this->getUser(), $parentNode);
+            //$qb = $repository->getResourcesByCreator($this->getUser(), $parentNode);
         }
+        $qb = $repository->getResources($this->getUser(), $parentNode, $course, $session, null);
 
         // 3. Set QueryBuilder to the source.
         $source->initQueryBuilder($qb);
@@ -371,7 +370,7 @@ class ResourceController extends AbstractResourceController implements CourseCon
             $myRowAction->addManipulateRender($setVisibleParameters);
             $grid->addRowAction($myRowAction);
 
-            if ($settings->isAllowEditResource()) {
+            if ($settings->isAllowResourceEdit()) {
                 // Edit action.
                 $myRowAction = new RowAction(
                     $this->trans('Edit'),

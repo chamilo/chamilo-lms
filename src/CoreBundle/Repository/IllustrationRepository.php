@@ -6,11 +6,15 @@ namespace Chamilo\CoreBundle\Repository;
 use APY\DataGridBundle\Grid\Column\Column;
 use APY\DataGridBundle\Grid\Grid;
 use Chamilo\CoreBundle\Component\Utils\ResourceSettings;
+use Chamilo\CoreBundle\Entity\Course;
 use Chamilo\CoreBundle\Entity\Illustration;
 use Chamilo\CoreBundle\Entity\Resource\AbstractResource;
 use Chamilo\CoreBundle\Entity\Resource\ResourceFile;
 use Chamilo\CoreBundle\Entity\Resource\ResourceNode;
+use Chamilo\CoreBundle\Entity\Session;
+use Chamilo\CourseBundle\Entity\CGroupInfo;
 use Chamilo\UserBundle\Entity\User;
+use Doctrine\ORM\Query\Expr\Join;
 use Symfony\Component\Form\FormInterface;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 
@@ -19,9 +23,43 @@ use Symfony\Component\HttpFoundation\File\UploadedFile;
  */
 final class IllustrationRepository extends ResourceRepository implements ResourceRepositoryInterface
 {
+    public function getResources(User $user, ResourceNode $parentNode, Course $course = null, Session $session = null, CGroupInfo $group = null)
+    {
+        $repo = $this->getRepository();
+        $className = $repo->getClassName();
+
+        $qb = $repo->getEntityManager()->createQueryBuilder()
+            ->select('resource')
+            ->from($className, 'resource')
+            ->innerJoin(
+                ResourceNode::class,
+                'node',
+                Join::WITH,
+                'resource.resourceNode = node.id'
+            )
+            //->innerJoin('node.resourceLinks', 'links')
+            //->where('node.resourceType = :type')
+            //->setParameter('type',$type)
+        ;
+        /*$qb
+            ->andWhere('links.visibility = :visibility')
+            ->setParameter('visibility', ResourceLink::VISIBILITY_PUBLISHED)
+        ;*/
+
+        if (null !== $parentNode) {
+//            $qb->andWhere('node.parent = :parentNode');
+ //           $qb->setParameter('parentNode', $parentNode);
+        }
+
+        $qb->andWhere('node.creator = :creator');
+        $qb->setParameter('creator', $user);
+        //var_dump($qb->getQuery()->getSQL(), $parentNode->getId());exit;
+
+        return $qb;
+    }
+
     public function saveUpload(UploadedFile $file)
     {
-
         /** @var Illustration $resource */
         $resource = $this->create();
         $resource->setName($file->getClientOriginalName());

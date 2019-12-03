@@ -6,38 +6,38 @@ namespace Chamilo\CoreBundle\Component\Utils;
 class ResourceSettings
 {
     /** @var bool */
-    public $allowNodeFolderCreation;
+    public $allowNodeCreation;
     /** @var bool */
-    public $allowResourceContentCreation;
+    public $allowResourceCreation;
     /** @var bool */
-    public $allowResourceUploadCreation;
+    public $allowResourceUpload;
     /** @var bool */
-    public $allowEditResource;
+    public $allowResourceEdit;
 
     public function __construct()
     {
-        $this->allowNodeFolderCreation = true;
-        $this->allowResourceContentCreation = true;
-        $this->allowResourceUploadCreation = true;
-        $this->allowEditResource = true;
+        $this->allowNodeCreation = true;
+        $this->allowResourceCreation = true;
+        $this->allowResourceUpload = true;
+        $this->allowResourceEdit = true;
     }
 
     /**
      * @return bool
      */
-    public function isAllowNodeFolderCreation(): bool
+    public function isAllowNodeCreation(): bool
     {
-        return $this->allowNodeFolderCreation;
+        return $this->allowNodeCreation;
     }
 
     /**
-     * @param bool $allowNodeFolderCreation
+     * @param bool $allowNodeCreation
      *
      * @return ResourceSettings
      */
-    public function setAllowNodeFolderCreation(bool $allowNodeFolderCreation): ResourceSettings
+    public function setAllowNodeCreation(bool $allowNodeCreation): ResourceSettings
     {
-        $this->allowNodeFolderCreation = $allowNodeFolderCreation;
+        $this->allowNodeCreation = $allowNodeCreation;
 
         return $this;
     }
@@ -45,19 +45,19 @@ class ResourceSettings
     /**
      * @return bool
      */
-    public function isAllowResourceContentCreation(): bool
+    public function isAllowResourceCreation(): bool
     {
-        return $this->allowResourceContentCreation;
+        return $this->allowResourceCreation;
     }
 
     /**
-     * @param bool $allowResourceContentCreation
+     * @param bool $allowResourceCreation
      *
      * @return ResourceSettings
      */
-    public function setAllowResourceContentCreation(bool $allowResourceContentCreation): ResourceSettings
+    public function setAllowResourceCreation(bool $allowResourceCreation): ResourceSettings
     {
-        $this->allowResourceContentCreation = $allowResourceContentCreation;
+        $this->allowResourceCreation = $allowResourceCreation;
 
         return $this;
     }
@@ -65,19 +65,19 @@ class ResourceSettings
     /**
      * @return bool
      */
-    public function isAllowResourceUploadCreation(): bool
+    public function isAllowResourceUpload(): bool
     {
-        return $this->allowResourceUploadCreation;
+        return $this->allowResourceUpload;
     }
 
     /**
-     * @param bool $allowResourceUploadCreation
+     * @param bool $allowResourceUpload
      *
      * @return ResourceSettings
      */
-    public function setAllowResourceUploadCreation(bool $allowResourceUploadCreation): ResourceSettings
+    public function setAllowResourceUpload(bool $allowResourceUpload): ResourceSettings
     {
-        $this->allowResourceUploadCreation = $allowResourceUploadCreation;
+        $this->allowResourceUpload = $allowResourceUpload;
 
         return $this;
     }
@@ -85,19 +85,19 @@ class ResourceSettings
     /**
      * @return bool
      */
-    public function isAllowEditResource(): bool
+    public function isAllowResourceEdit(): bool
     {
-        return $this->allowEditResource;
+        return $this->allowResourceEdit;
     }
 
     /**
-     * @param bool $allowEditResource
+     * @param bool $allowResourceEdit
      *
      * @return ResourceSettings
      */
-    public function setAllowEditResource(bool $allowEditResource): ResourceSettings
+    public function setAllowResourceEdit(bool $allowResourceEdit): ResourceSettings
     {
-        $this->allowEditResource = $allowEditResource;
+        $this->allowResourceEdit = $allowResourceEdit;
 
         return $this;
     }

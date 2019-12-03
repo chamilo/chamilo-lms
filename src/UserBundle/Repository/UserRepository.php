@@ -65,27 +65,6 @@ use Symfony\Component\Serializer\Serializer;
  */
 class UserRepository extends ResourceRepository
 {
-    /**
-     * @var EntityRepository
-     */
-    //private $repository;
-
-    /*public function __construct(EntityManagerInterface $entityManager)
-    {
-        $this->repository = $entityManager->getRepository(User::class);
-    }*/
-
-    /*public function find($id)
-    {
-        $user = $this->repository->find($id);
-
-        if (null === $user) {
-            throw new UsernameNotFoundException(sprintf("User '%s' not found.", $id));
-        }
-
-        return $user;
-    }*/
-
     public function addUserToResourceNode(int $userId, int $creatorId, AccessUrl $url): ResourceNode
     {
         /** @var User $user */
@@ -117,6 +96,24 @@ class UserRepository extends ResourceRepository
     }
 
     /**
+     * @param string $role
+     *
+     * @return array
+     */
+    public function findByRole($role)
+    {
+        $em = $this->repository->getEntityManager();
+        $qb = $em->createQueryBuilder();
+
+        $qb->select('u')
+            ->from($this->_entityName, 'u')
+            ->where('u.roles LIKE :roles')
+            ->setParameter('roles', '%"'.$role.'"%');
+
+        return $qb->getQuery()->getResult();
+    }
+
+    /**
      * @param string $keyword
      *
      * @return mixed
@@ -142,23 +139,6 @@ class UserRepository extends ResourceRepository
         return $query->execute();
     }
 
-    /**
-     * @param string $role
-     *
-     * @return array
-     */
-    public function findByRole($role)
-    {
-        $em = $this->repository->getEntityManager();
-        $qb = $em->createQueryBuilder();
-
-        $qb->select('u')
-            ->from($this->_entityName, 'u')
-            ->where('u.roles LIKE :roles')
-            ->setParameter('roles', '%"'.$role.'"%');
-
-        return $qb->getQuery()->getResult();
-    }
 
     /**
      * Get course user relationship based in the course_rel_user table.
@@ -233,7 +213,7 @@ class UserRepository extends ResourceRepository
      *
      * @return array
      */
-    public function searchUsersByStatus($query, $status, $accessUrlId = null)
+    public function findByStatus($query, $status, $accessUrlId = null)
     {
         $accessUrlId = (int) $accessUrlId;
         $queryBuilder = $this->repository->createQueryBuilder('u');

@@ -28,3 +28,9 @@ services:
     Chamilo\CoreBundle\Repository\PersonalFileRepository:
         arguments:
             $className: 'Chamilo\CoreBundle\Entity\PersonalFile'
+
+    Chamilo\UserBundle\Repository\UserRepository:
+        arguments:
+            $className: 'Chamilo\UserBundle\Entity\User'
+
+    Chamilo\UserBundle\Repository\GroupRepository: ~

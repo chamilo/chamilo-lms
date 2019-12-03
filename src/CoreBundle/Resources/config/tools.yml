@@ -18,13 +18,10 @@ services:
             - ''
             -
                 urls:
-                    entity: Chamilo\CoreBundle\Entity\AccessUrl
                     repository: Chamilo\CoreBundle\Repository\AccessUrlRepository
                 courses:
-                    entity: Chamilo\CoreBundle\Entity\Course
                     repository: Chamilo\CoreBundle\Repository\CourseRepository
                 users:
-                    entity: Chamilo\UserBundle\Entity\User
                     repository: Chamilo\UserBundle\Repository\UserRepository
             - 1
         tags:
@@ -39,7 +36,6 @@ services:
             - ''
             -
                 illustrations:
-                    entity: Chamilo\CoreBundle\Entity\Illustration
                     repository: Chamilo\CoreBundle\Repository\IllustrationRepository
             - 1
         tags:
@@ -55,20 +51,12 @@ services:
             - chamilo_course.settings.agenda
             -
                 events:
-                    entity: Chamilo\CourseBundle\Entity\CCalendarEvent
                     repository: Chamilo\CourseBundle\Repository\CCalendarEventRepository
                 event_attachments:
-                    entity: Chamilo\CourseBundle\Entity\CCalendarEventAttachment
                     repository: Chamilo\CourseBundle\Repository\CCalendarEventAttachmentRepository
             - 0
         tags:
             - {name: chamilo_core.tool}
-
-    # Agenda tool settings
-    chamilo_course.settings.agenda:
-        class: Chamilo\CourseBundle\Settings\AgendaCourseSettingsSchema
-        tags:
-            - {name: chamilo_course.settings_schema, alias: chamilo_course.settings.agenda, namespace: agenda}
 
     # Announcement tool
     chamilo_core.tool.announcement:
@@ -77,23 +65,15 @@ services:
             - 'announcement'
             - 'authoring'
             - 'announcements/announcements.php'
-            - chamilo_course.settings.announcement
+            - '@chamilo_course.settings.announcement'
             -
                 announcements:
-                    entity: Chamilo\CourseBundle\Entity\CAnnouncement
                     repository: Chamilo\CourseBundle\Repository\CAnnouncementRepository
                 announcements_attachments:
-                    entity: Chamilo\CourseBundle\Entity\CAnnouncementAttachment
                     repository: Chamilo\CourseBundle\Repository\CAnnouncementAttachmentRepository
             - 0
         tags:
             - {name: chamilo_core.tool}
-
-    # Announcement tool settings
-    chamilo_course.settings.announcement:
-        class: Chamilo\CourseBundle\Settings\AnnouncementCourseSettingsSchema
-        tags:
-            - {name: chamilo_course.settings_schema, alias: chamilo_course.settings.announcement, namespace: announcement}
 
     chamilo_core.tool.assignment:
         class: Chamilo\CoreBundle\Tool\Assignment
@@ -104,20 +84,12 @@ services:
             - chamilo_course.settings.assignment
             -
                 student_publications:
-                    entity: Chamilo\CourseBundle\Entity\CStudentPublication
                     repository: Chamilo\CourseBundle\Repository\CStudentPublicationRepository
                 student_publications_assignments:
-                    entity: Chamilo\CourseBundle\Entity\CStudentPublicationAssignment
                     repository: Chamilo\CourseBundle\Repository\CStudentPublicationAssignmentRepository
             - 0
         tags:
             - {name: chamilo_core.tool}
-
-    # Course settings
-    chamilo_course.settings.assignment:
-        class: Chamilo\CourseBundle\Settings\AssignmentCourseSettingsSchema
-        tags:
-            - {name: chamilo_course.settings_schema, alias: chamilo_course.settings.assignment, namespace: assignment}
 
     chamilo_core.tool.attendance:
         class: Chamilo\CoreBundle\Tool\Attendance
@@ -128,17 +100,10 @@ services:
             - '@chamilo_course.settings.attendance'
             -
                 attendances:
-                    entity: Chamilo\CourseBundle\Entity\CAttendance
                     repository: Chamilo\CourseBundle\Repository\CAttendanceRepository
             - 0
         tags:
             - {name: chamilo_core.tool}
-
-    # Course settings
-    chamilo_course.settings.attendance:
-        class: Chamilo\CourseBundle\Settings\AttendanceCourseSettingsSchema
-        tags:
-            - {name: chamilo_course.settings_schema, alias: chamilo_course.settings.attendance, namespace: attendance}
 
     chamilo_core.tool.blog:
         class: Chamilo\CoreBundle\Tool\Blog
@@ -149,17 +114,10 @@ services:
             - '@chamilo_course.settings.blog'
             -
                 blogs:
-                    entity: Chamilo\CourseBundle\Entity\CBlog
                     repository: Chamilo\CourseBundle\Repository\CBlogRepository
             - 0
         tags:
             - {name: chamilo_core.tool}
-
-    # Course settings
-    chamilo_course.settings.blog:
-        class: Chamilo\CourseBundle\Settings\BlogCourseSettingsSchema
-        tags:
-            - {name: chamilo_course.settings_schema, alias: chamilo_course.settings.blog, namespace: blog}
 
     chamilo_core.tool.course_description:
         class: Chamilo\CoreBundle\Tool\CourseDescription
@@ -170,17 +128,10 @@ services:
             - '@chamilo_course.settings.course_description'
             -
                 course_descriptions:
-                    entity: Chamilo\CourseBundle\Entity\CCourseDescription
                     repository: Chamilo\CourseBundle\Repository\CCourseDescriptionRepository
             - 0
         tags:
             - {name: chamilo_core.tool}
-
-    # Course settings
-    chamilo_course.settings.course_description:
-        class: Chamilo\CourseBundle\Settings\CourseDescriptionCourseSettingsSchema
-        tags:
-            - {name: chamilo_course.settings_schema, alias: chamilo_course.settings.course_description, namespace: course_description}
 
     chamilo_core.tool.chat:
         class: Chamilo\CoreBundle\Tool\Chat
@@ -194,12 +145,6 @@ services:
         tags:
             - {name: chamilo_core.tool}
 
-    # Course settings
-    chamilo_course.settings.chat:
-        class: Chamilo\CourseBundle\Settings\ChatCourseSettingsSchema
-        tags:
-            - {name: chamilo_course.settings_schema, alias: chamilo_course.settings.chat, namespace: chat}
-
     chamilo_core.tool.course_progress:
         class: Chamilo\CoreBundle\Tool\CourseProgress
         arguments:
@@ -209,23 +154,14 @@ services:
             - '@chamilo_course.settings.course_progress'
             -
                 thematics:
-                    entity: Chamilo\CourseBundle\Entity\CThematic
                     repository: Chamilo\CourseBundle\Repository\CThematicRepository
                 thematic_advance:
-                    entity: Chamilo\CourseBundle\Entity\CThematicAdvance
                     repository: Chamilo\CourseBundle\Repository\CThematicAdvanceRepository
                 thematic_plans:
-                    entity: Chamilo\CourseBundle\Entity\CThematicPlan
                     repository: Chamilo\CourseBundle\Repository\CThematicPlanRepository
             - 0
         tags:
             - {name: chamilo_core.tool}
-
-    # Course settings
-    chamilo_course.settings.course_progress:
-        class: Chamilo\CourseBundle\Settings\CourseProgressCourseSettingsSchema
-        tags:
-            - {name: chamilo_course.settings_schema, alias: chamilo_course.settings.course_progress, namespace: course_progress}
 
     chamilo_core.tool.document:
         class: Chamilo\CoreBundle\Tool\Document
@@ -236,17 +172,10 @@ services:
             - '@chamilo_course.settings.document'
             -
                 files:
-                    entity: Chamilo\CourseBundle\Entity\CDocument
                     repository: Chamilo\CourseBundle\Repository\CDocumentRepository
             - 0
         tags:
             - {name: chamilo_core.tool}
-
-    # Course settings
-    chamilo_course.settings.document:
-        class: Chamilo\CourseBundle\Settings\DocumentCourseSettingsSchema
-        tags:
-            - {name: chamilo_course.settings_schema, alias: chamilo_course.settings.document, namespace: document}
 
     chamilo_core.tool.dropbox:
         class: Chamilo\CoreBundle\Tool\Dropbox
@@ -257,17 +186,10 @@ services:
             - '@chamilo_course.settings.dropbox'
             -
                 dropbox:
-                    entity: Chamilo\CourseBundle\Entity\CDropbox
                     repository: Chamilo\CourseBundle\Repository\CDropboxRepository
             - 0
         tags:
             - {name: chamilo_core.tool}
-
-    # Course settings
-    chamilo_course.settings.dropbox:
-        class: Chamilo\CourseBundle\Settings\DropboxCourseSettingsSchema
-        tags:
-            - {name: chamilo_course.settings_schema, alias: chamilo_course.settings.dropbox, namespace: dropbox}
 
     chamilo_core.tool.exercise:
         class: Chamilo\CoreBundle\Tool\Exercise
@@ -278,26 +200,16 @@ services:
             - '@chamilo_course.settings.exercise'
             -
                 exercises:
-                    entity: Chamilo\CourseBundle\Entity\CQuiz
                     repository: Chamilo\CourseBundle\Repository\CQuizRepository
                 questions:
-                    entity: Chamilo\CourseBundle\Entity\CQuizQuestion
                     repository: Chamilo\CourseBundle\Repository\CQuizQuestionRepository
                 question_categories:
-                    entity: Chamilo\CourseBundle\Entity\CQuizQuestionCategory
                     repository: Chamilo\CourseBundle\Repository\CQuizQuestionCategoryRepository
                 exercise_categories:
-                    entity: Chamilo\CourseBundle\Entity\CExerciseCategory
                     repository: Chamilo\CourseBundle\Repository\CExerciseCategoryRepository
             - 0
         tags:
             - {name: chamilo_core.tool}
-
-    # Course settings
-    chamilo_course.settings.exercise:
-        class: Chamilo\CourseBundle\Settings\ExerciseCourseSettingsSchema
-        tags:
-            - {name: chamilo_course.settings_schema, alias: chamilo_course.settings.quiz, namespace: quiz}
 
     chamilo_core.tool.forum:
         class: Chamilo\CoreBundle\Tool\Forum
@@ -308,29 +220,18 @@ services:
             - '@chamilo_course.settings.forum'
             -
                 forums:
-                    entity: Chamilo\CourseBundle\Entity\CForum
                     repository: Chamilo\CourseBundle\Repository\CForumRepository
                 forum_attachments:
-                    entity: Chamilo\CourseBundle\Entity\CForumAttachment
                     repository: Chamilo\CourseBundle\Repository\CForumAttachmentRepository
                 forum_categories:
-                    entity: Chamilo\CourseBundle\Entity\CForumCategory
                     repository: Chamilo\CourseBundle\Repository\CForumCategoryRepository
                 forum_posts:
-                    entity: Chamilo\CourseBundle\Entity\CForumPost
                     repository: Chamilo\CourseBundle\Repository\CForumPostRepository
                 forum_threads:
-                    entity: Chamilo\CourseBundle\Entity\CForumThread
                     repository: Chamilo\CourseBundle\Repository\CForumThreadRepository
             - 0
         tags:
             - {name: chamilo_core.tool}
-
-    # Course settings
-    chamilo_course.settings.forum:
-        class: Chamilo\CourseBundle\Settings\ForumCourseSettingsSchema
-        tags:
-            - {name: chamilo_course.settings_schema, alias: chamilo_course.settings.forum, namespace: forum}
 
     chamilo_core.tool.glossary:
         class: Chamilo\CoreBundle\Tool\Glossary
@@ -341,17 +242,10 @@ services:
             - '@chamilo_course.settings.glossary'
             -
                 glossaries:
-                    entity: Chamilo\CourseBundle\Entity\CGlossary
                     repository: Chamilo\CourseBundle\Repository\CGlossaryRepository
             - 0
         tags:
             - {name: chamilo_core.tool}
-
-    # Course settings
-    chamilo_course.settings.glossary:
-        class: Chamilo\CourseBundle\Settings\GlossaryCourseSettingsSchema
-        tags:
-            - {name: chamilo_course.settings_schema, alias: chamilo_course.settings.glossary, namespace: glossary}
 
     chamilo_core.tool.gradebook:
         class: Chamilo\CoreBundle\Tool\Gradebook
@@ -362,24 +256,15 @@ services:
             - '@chamilo_course.settings.gradebook'
             -
                 gradebook_categories:
-                    entity: Chamilo\CourseBundle\Entity\CGradebookCategory
                     repository: Chamilo\CourseBundle\Repository\CGradebookCategoryRepository
                 gradebook_links:
-                    entity: Chamilo\CourseBundle\Entity\CGradebookLink
                     repository: Chamilo\CourseBundle\Repository\CGradebookLinkRepository
                 gradebook_evaluations:
-                    entity: Chamilo\CourseBundle\Entity\CGradebookEvaluation
                     repository: Chamilo\CourseBundle\Repository\CGradebookEvaluationRepositor
 
             - 0
         tags:
             - {name: chamilo_core.tool}
-
-    # Course settings
-    chamilo_course.settings.gradebook:
-        class: Chamilo\CourseBundle\Settings\GradebookCourseSettingsSchema
-        tags:
-            - {name: chamilo_course.settings_schema, alias: chamilo_course.settings.gradebook, namespace: gradebook}
 
     chamilo_core.tool.group:
         class: Chamilo\CoreBundle\Tool\Group
@@ -390,24 +275,14 @@ services:
             - '@chamilo_course.settings.group'
             -
                 groups:
-                    entity: Chamilo\CourseBundle\Entity\CGroupInfo
                     repository: Chamilo\CourseBundle\Repository\CGroupInfoRepository
                 group_categories:
-                    entity: Chamilo\CourseBundle\Entity\CGroupCategory
                     repository: Chamilo\CourseBundle\Repository\CGroupCategoryRepository
                 gradebook_evaluations:
-                    entity: Chamilo\CourseBundle\Entity\CGradebookEvaluation
                     repository: Chamilo\CourseBundle\Repository\CGradebookEvaluationRepository
-            - {Chamilo\CourseBundle\Entity\CGroupInfo: 'groups', Chamilo\CourseBundle\Entity\CGroupCategory: ''}
             - 0
         tags:
             - {name: chamilo_core.tool}
-
-    # Course settings
-    chamilo_course.settings.group:
-        class: Chamilo\CourseBundle\Settings\GroupCourseSettingsSchema
-        tags:
-            - {name: chamilo_course.settings_schema, alias: chamilo_course.settings.group, namespace: group}
 
     chamilo_core.tool.learning_path:
         class: Chamilo\CoreBundle\Tool\LearningPath
@@ -418,20 +293,12 @@ services:
             - '@chamilo_course.settings.learning_path'
             -
                 lps:
-                    entity: Chamilo\CourseBundle\Entity\CLp
                     repository: Chamilo\CourseBundle\Repository\CLpCategory
                 lp_categories:
-                    entity: Chamilo\CourseBundle\Entity\CLpCategory
                     repository: Chamilo\CourseBundle\Repository\CLpCategoryRepository
             - 0
         tags:
             - {name: chamilo_core.tool}
-
-    # Course settings
-    chamilo_course.settings.learning_path:
-        class: Chamilo\CourseBundle\Settings\LearningPathCourseSettingsSchema
-        tags:
-            - {name: chamilo_course.settings_schema, alias: chamilo_course.settings.learnpath, namespace: learnpath}
 
     chamilo_core.tool.link:
         class: Chamilo\CoreBundle\Tool\Link
@@ -442,19 +309,12 @@ services:
             - '@chamilo_course.settings.link'
             -
                 links:
-                    entity: Chamilo\CourseBundle\Entity\CLink
                     repository: Chamilo\CourseBundle\Repository\CLinkRepository
                 link_categories:
-                    entity: Chamilo\CourseBundle\Entity\CLinkCategory
                     repository: Chamilo\CourseBundle\Repository\CLinkRepository
             - 0
         tags:
             - {name: chamilo_core.tool}
-
-    chamilo_course.settings.link:
-        class: Chamilo\CourseBundle\Settings\LinkCourseSettingsSchema
-        tags:
-            - {name: chamilo_course.settings_schema, alias: chamilo_course.settings.link, namespace: link}
 
     # Maintenance
     chamilo_course.settings.maintenance:
@@ -486,12 +346,6 @@ services:
         tags:
             - {name: chamilo_core.tool}
 
-    # Notebook
-    chamilo_course.settings.notebook:
-        class: Chamilo\CourseBundle\Settings\NotebookCourseSettingsSchema
-        tags:
-            - {name: chamilo_course.settings_schema, alias: chamilo_course.settings.notebook, namespace: notebook}
-
     chamilo_core.tool.notebook:
         class: Chamilo\CoreBundle\Tool\Notebook
         arguments:
@@ -501,7 +355,6 @@ services:
             - '@chamilo_course.settings.notebook'
             -
                 notebooks:
-                    entity: Chamilo\CourseBundle\Entity\CNotebook
                     repository: Chamilo\CourseBundle\Repository\CNotebookRepository
             - 0
         tags:
@@ -519,11 +372,6 @@ services:
         tags:
             - {name: chamilo_core.tool}
 
-    # Course settings
-    chamilo_course.settings.settings:
-        class: Chamilo\CourseBundle\Settings\SettingsCourseSettingsSchema
-        tags:
-            - {name: chamilo_course.settings_schema, alias: chamilo_course.settings.settings, namespace: settings}
     # Survey
     chamilo_core.tool.survey:
         class: Chamilo\CoreBundle\Tool\Survey
@@ -534,19 +382,12 @@ services:
             - '@chamilo_course.settings.survey'
             -
                 surveys:
-                    entity: Chamilo\CourseBundle\Entity\CSurvey
                     repository: Chamilo\CourseBundle\Repository\CSurveyRepository
                 survey_questions:
-                    entity: Chamilo\CourseBundle\Entity\CSurveyQuestion
                     repository: Chamilo\CourseBundle\Repository\CSurveyQuestionRepository
             - 0
         tags:
             - {name: chamilo_core.tool}
-
-    chamilo_course.settings.survey:
-        class: Chamilo\CourseBundle\Settings\SurveyCourseSettingsSchema
-        tags:
-            - {name: chamilo_course.settings_schema, alias: chamilo_course.settings.survey, namespace: survey}
 
     chamilo_core.tool.tracking:
         class: Chamilo\CoreBundle\Tool\Tracking
@@ -560,12 +401,6 @@ services:
         tags:
             - {name: chamilo_core.tool}
 
-    # Course settings
-    chamilo_course.settings.tracking:
-        class: Chamilo\CourseBundle\Settings\TrackingCourseSettingsSchema
-        tags:
-            - {name: chamilo_course.settings_schema, alias: chamilo_course.settings.tracking, namespace: tracking}
-
     chamilo_core.tool.user:
         class: Chamilo\CoreBundle\Tool\User
         arguments:
@@ -575,17 +410,10 @@ services:
             - ~
             -
                 files:
-                    entity: Chamilo\CoreBundle\Entity\PersonalFile
                     repository: Chamilo\CoreBundle\Repository\PersonalFileRepository
             - 0
         tags:
             - {name: chamilo_core.tool}
-
-    # Course settings
-    chamilo_course.settings.user:
-        class: Chamilo\CourseBundle\Settings\UserCourseSettingsSchema
-        tags:
-            - {name: chamilo_course.settings_schema, alias: chamilo_course.settings.user, namespace: user}
 
     chamilo_core.tool.wiki:
         class: Chamilo\CoreBundle\Tool\Wiki
@@ -596,14 +424,7 @@ services:
             - '@chamilo_course.settings.wiki'
             -
                 wikis:
-                    entity: Chamilo\CourseBundle\Entity\CWiki
                     repository: Chamilo\CourseBundle\Repository\CWikiRepository
             - 0
         tags:
             - {name: chamilo_core.tool}
-
-    # Course settings
-    chamilo_course.settings.wiki:
-        class: Chamilo\CourseBundle\Settings\WikiCourseSettingsSchema
-        tags:
-            - {name: chamilo_course.settings_schema, alias: chamilo_course.settings.wiki, namespace: wiki}

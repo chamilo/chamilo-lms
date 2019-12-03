@@ -12,6 +12,8 @@ use Symfony\Component\PropertyAccess\Exception\InvalidArgumentException;
 use Symfony\Component\Routing\RouterInterface;
 use Symfony\Component\Security\Core\Authorization\AuthorizationChecker;
 use Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface;
+use Symfony\Component\DependencyInjection\ContainerInterface as Container;
+
 
 class ResourceFactory
 {
@@ -28,41 +30,45 @@ class ResourceFactory
         SlugifyInterface $slugify,
         AuthorizationCheckerInterface $authorizationChecker,
         EntityManagerInterface $entityManager,
-        RouterInterface $router
+        RouterInterface $router,
+        Container $container
     ) {
         $this->mountManager = $mountManager;
+        // @todo create a service to remove hardcode value of "resources_fs"
         $this->fs = $mountManager->getFilesystem('resources_fs');
         $this->toolChain = $toolChain;
         $this->slugify = $slugify;
         $this->entityManager = $entityManager;
         $this->router = $router;
         $this->authorizationChecker = $authorizationChecker;
+        $this->container = $container;
     }
 
     public function createRepository(string $tool, string $type): ResourceRepository
     {
         $tool = $this->toolChain->getToolFromName($tool);
+
         $resourceTypeList = $tool->getResourceTypes();
         if (!isset($resourceTypeList[$type])) {
             throw new InvalidArgumentException("Resource type doesn't exist: $type");
         }
 
         $typeConfig = $resourceTypeList[$type];
-
         $repo = $typeConfig['repository'];
-        $entity = $typeConfig['entity'];
 
-        if (class_exists($repo) === false || class_exists($entity) === false) {
-            throw new InvalidArgumentException("Check that this classes exists: $repo, $entity");
+        if (class_exists($repo) === false) {
+            throw new InvalidArgumentException("Check that this classes exists: $repo");
         }
 
-        return new $repo(
+        return $this->container->get($repo);
+
+        /*return new $repo(
             $this->authorizationChecker,
             $this->entityManager,
             $this->mountManager,
             $this->router,
             $this->slugify,
             $entity
-        );
+        );*/
     }
 }

@@ -639,9 +639,6 @@ class ResourceController extends AbstractResourceController implements CourseCon
      */
     public function deleteAction(Request $request): Response
     {
-        $tool = $request->get('tool');
-        $type = $request->get('type');
-
         $em = $this->getDoctrine()->getManager();
 
         $id = $request->get('id');
@@ -676,8 +673,6 @@ class ResourceController extends AbstractResourceController implements CourseCon
      */
     public function deleteMassAction($primaryKeys, $allPrimaryKeys, Request $request): Response
     {
-        $tool = $request->get('tool');
-        $type = $request->get('type');
         $em = $this->getDoctrine()->getManager();
         $repo = $this->getRepositoryFromRequest($request);
 
@@ -880,6 +875,8 @@ class ResourceController extends AbstractResourceController implements CourseCon
 
         if (!empty($resourceNodeId)) {
             $breadcrumb = $this->getBreadCrumb();
+            $toolParams = $routeParams;
+            $toolParams['id'] = null;
 
             // Root tool link
             $breadcrumb->addChild(
@@ -887,7 +884,7 @@ class ResourceController extends AbstractResourceController implements CourseCon
                 [
                     'uri' => $this->generateUrl(
                         'chamilo_core_resource_index',
-                        $routeParams
+                        $toolParams
                     ),
                 ]
             );
@@ -1056,10 +1053,9 @@ class ResourceController extends AbstractResourceController implements CourseCon
 
         $repository = $this->getRepositoryFromRequest($request);
 
-        $course = $this->getCourse();
-        $session = $this->getSession();
         // Default parent node is course.
         $parentNode = $this->getParentResourceNode($request);
+        //var_dump($parentNode->getPath());
 
         $this->denyAccessUnlessGranted(
             ResourceNodeVoter::CREATE,
@@ -1067,14 +1063,10 @@ class ResourceController extends AbstractResourceController implements CourseCon
             $this->trans('Unauthorised access to resource')
         );
 
-        $form = $repository->getForm($this->container->get('form.factory'));
-
-        $courseParams = $this->getResourceParams($request);
+        $form = $repository->getForm($this->container->get('form.factory'), null);
 
         if ($fileType === 'file') {
-            $params = $courseParams;
-            $params['id'] = $resourceNodeParentId;
-
+            $resourceParams = $this->getResourceParams($request);
             $form->add(
                 'content',
                 CKEditorType::class,
@@ -1082,7 +1074,7 @@ class ResourceController extends AbstractResourceController implements CourseCon
                     'mapped' => false,
                     'config' => [
                         'filebrowserImageBrowseRoute' => 'resources_filemanager',
-                        'filebrowserImageBrowseRouteParameters' => $params,
+                        'filebrowserImageBrowseRouteParameters' => $resourceParams,
                     ],
                 ]
             );
@@ -1091,6 +1083,9 @@ class ResourceController extends AbstractResourceController implements CourseCon
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
             $em = $this->getDoctrine()->getManager();
+
+            $course = $this->getCourse();
+            $session = $this->getSession();
 
             /** @var AbstractResource $newResource */
             $newResource = $repository->saveResource($form, $course, $session, $fileType);

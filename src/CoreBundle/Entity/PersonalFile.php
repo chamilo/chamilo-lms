@@ -36,12 +36,8 @@ class PersonalFile extends AbstractResource implements ResourceInterface
      */
     protected $name;
 
-    /**
-     * Illustration constructor.
-     */
     public function __construct()
     {
-        $this->name = 'personal_file';
     }
 
     public function __toString(): string

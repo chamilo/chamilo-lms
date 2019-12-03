@@ -133,6 +133,8 @@ class ResourceController extends AbstractResourceController implements CourseCon
         $source = new Entity($class, 'resource');
         $parentNode = $repository->getResourceNodeRepository()->find($resourceNodeId);
 
+        $settings = $repository->getResourceSettings();
+
         $this->denyAccessUnlessGranted(
             ResourceNodeVoter::VIEW,
             $parentNode,
@@ -258,7 +260,7 @@ class ResourceController extends AbstractResourceController implements CourseCon
         }
 
         // Delete mass action.
-        if ($this->isGranted(ResourceNodeVoter::DELETE, $this->getCourse())) {
+        if ($this->isGranted(ResourceNodeVoter::DELETE, $parentNode)) {
             $deleteMassAction = new MassAction(
                 'Delete',
                 'ChamiloCoreBundle:Resource:deleteMass',
@@ -327,7 +329,7 @@ class ResourceController extends AbstractResourceController implements CourseCon
         $myRowAction->addManipulateRender($setNodeParameters);
         $grid->addRowAction($myRowAction);
 
-        if ($this->isGranted(ResourceNodeVoter::EDIT, $this->getCourse())) {
+        if ($this->isGranted(ResourceNodeVoter::EDIT, $parentNode)) {
             // Enable/Disable
             $myRowAction = new RowAction(
                 '',
@@ -342,7 +344,11 @@ class ResourceController extends AbstractResourceController implements CourseCon
                 $id = $resource->getResourceNode()->getId();
 
                 $icon = 'fa-eye-slash';
-                $link = $resource->getCourseSessionResourceLink($this->getCourse(), $this->getSession());
+                if ($this->hasCourse()) {
+                    $link = $resource->getCourseSessionResourceLink($this->getCourse(), $this->getSession());
+                } else {
+                    $link = $resource->getFirstResourceLink();
+                }
 
                 if ($link === null) {
                     return null;
@@ -365,16 +371,19 @@ class ResourceController extends AbstractResourceController implements CourseCon
             $myRowAction->addManipulateRender($setVisibleParameters);
             $grid->addRowAction($myRowAction);
 
-            // Edit action.
-            $myRowAction = new RowAction(
-                $this->trans('Edit'),
-                'chamilo_core_resource_edit',
-                false,
-                '_self',
-                ['class' => 'btn btn-secondary', 'icon' => 'fa fa-pen']
-            );
-            $myRowAction->addManipulateRender($setNodeParameters);
-            $grid->addRowAction($myRowAction);
+            if($settings->isAllowEditResource()) {
+
+                // Edit action.
+                $myRowAction = new RowAction(
+                    $this->trans('Edit'),
+                    'chamilo_core_resource_edit',
+                    false,
+                    '_self',
+                    ['class' => 'btn btn-secondary', 'icon' => 'fa fa-pen']
+                );
+                $myRowAction->addManipulateRender($setNodeParameters);
+                $grid->addRowAction($myRowAction);
+            }
 
             // More action.
             $myRowAction = new RowAction(
@@ -618,7 +627,11 @@ class ResourceController extends AbstractResourceController implements CourseCon
         );
 
         /** @var ResourceLink $link */
-        $link = $resource->getCourseSessionResourceLink($this->getCourse(), $this->getSession());
+        if ($this->hasCourse()) {
+            $link = $resource->getCourseSessionResourceLink($this->getCourse(), $this->getSession());
+        } else {
+            $link = $resource->getFirstResourceLink();
+        }
 
         $icon = 'fa-eye';
         // Use repository to change settings easily.

@@ -113,6 +113,12 @@ class ResourceNodeVoter extends Voter
         // Check if I'm the owner.
         $creator = $resourceNode->getCreator();
 
+        // @todo improve permission handling for always public resource file type.
+        // Illustration are always visible.
+        if ($resourceNode->getResourceType()->getName() === 'illustrations') {
+            return true;
+        }
+
         if ($creator instanceof UserInterface &&
             $user->getUsername() === $creator->getUsername()) {
             return true;
@@ -136,6 +142,7 @@ class ResourceNodeVoter extends Voter
                 $linkFound = false;
                 break;
             }
+
             $linkUser = $link->getUser();
             // Check if resource was sent to the current user.
             if ($linkUser instanceof UserInterface &&
@@ -147,7 +154,7 @@ class ResourceNodeVoter extends Voter
 
             $linkCourse = $link->getCourse();
             $linkSession = $link->getSession();
-            $linkUserGroup = $link->getUserGroup();
+            //$linkUserGroup = $link->getUserGroup();
 
             // @todo Check if resource was sent to a usergroup
             // @todo Check if resource was sent to a group inside a course
@@ -178,6 +185,11 @@ class ResourceNodeVoter extends Voter
                     break;
                 }
             }
+
+            if ($link->getVisibility() === ResourceLink::VISIBILITY_PUBLISHED) {
+                $linkFound = true;
+                break;
+            }
         }
 
         // No link was found or not available
@@ -187,6 +199,8 @@ class ResourceNodeVoter extends Voter
 
         // Getting rights from the link
         $rightFromResourceLink = $link->getResourceRight();
+
+        $rights = [];
         if ($rightFromResourceLink->count() > 0) {
             // Taken rights from the link
             $rights = $rightFromResourceLink;
@@ -200,19 +214,19 @@ class ResourceNodeVoter extends Voter
             $readerMask = self::getReaderMask();
             $editorMask = self::getEditorMask();
 
-            $resourceRight = new ResourceRight();
-            $resourceRight
-                ->setMask($editorMask)
-                ->setRole(self::ROLE_CURRENT_COURSE_TEACHER)
-            ;
-            $rights[] = $resourceRight;
+            if (!empty($courseId)) {
+                $resourceRight = new ResourceRight();
+                $resourceRight
+                    ->setMask($editorMask)
+                    ->setRole(self::ROLE_CURRENT_COURSE_TEACHER);
+                $rights[] = $resourceRight;
 
-            $resourceRight = new ResourceRight();
-            $resourceRight
-                ->setMask($readerMask)
-                ->setRole(self::ROLE_CURRENT_COURSE_STUDENT)
-            ;
-            $rights[] = $resourceRight;
+                $resourceRight = new ResourceRight();
+                $resourceRight
+                    ->setMask($readerMask)
+                    ->setRole(self::ROLE_CURRENT_COURSE_STUDENT);
+                $rights[] = $resourceRight;
+            }
 
             if (!empty($sessionId)) {
                 $resourceRight = new ResourceRight();
@@ -226,6 +240,15 @@ class ResourceNodeVoter extends Voter
                 $resourceRight
                     ->setMask($readerMask)
                     ->setRole(self::ROLE_CURRENT_SESSION_COURSE_STUDENT)
+                ;
+                $rights[] = $resourceRight;
+            }
+            if (empty($rights) && $link->getVisibility() === ResourceLink::VISIBILITY_PUBLISHED) {
+                // Give just read access
+                $resourceRight = new ResourceRight();
+                $resourceRight
+                    ->setMask($readerMask)
+                    ->setRole('ROLE_USER')
                 ;
                 $rights[] = $resourceRight;
             }

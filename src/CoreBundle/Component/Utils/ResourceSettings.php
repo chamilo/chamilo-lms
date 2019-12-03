@@ -11,12 +11,15 @@ class ResourceSettings
     public $allowResourceContentCreation;
     /** @var bool */
     public $allowResourceUploadCreation;
+    /** @var bool */
+    public $allowEditResource;
 
     public function __construct()
     {
         $this->allowNodeFolderCreation = true;
         $this->allowResourceContentCreation = true;
         $this->allowResourceUploadCreation = true;
+        $this->allowEditResource = true;
     }
 
     /**
@@ -79,4 +82,23 @@ class ResourceSettings
         return $this;
     }
 
+    /**
+     * @return bool
+     */
+    public function isAllowEditResource(): bool
+    {
+        return $this->allowEditResource;
+    }
+
+    /**
+     * @param bool $allowEditResource
+     *
+     * @return ResourceSettings
+     */
+    public function setAllowEditResource(bool $allowEditResource): ResourceSettings
+    {
+        $this->allowEditResource = $allowEditResource;
+
+        return $this;
+    }
 }

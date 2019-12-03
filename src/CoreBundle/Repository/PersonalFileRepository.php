@@ -20,6 +20,7 @@ final class PersonalFileRepository extends ResourceRepository implements Resourc
             ->setAllowNodeFolderCreation(true)
             //->setAllowResourceContentCreation(true)
             ->setAllowResourceUploadCreation(true)
+            ->setAllowEditResource(false)
         ;
 
         return $settings;

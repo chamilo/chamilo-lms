@@ -42,12 +42,23 @@ abstract class AbstractResource
         return $this->resourceNode;
     }
 
-    /**
-     * @return ResourceLink
-     */
-    public function getCourseSessionResourceLink(Course $course, Session $session = null)
+    public function getCourseSessionResourceLink(Course $course, Session $session = null): ?ResourceLink
     {
         return $this->getFirstResourceLinkFromCourseSession($course, $session);
+    }
+
+    public function getFirstResourceLink(): ?ResourceLink
+    {
+        $resourceNode = $this->getResourceNode();
+
+        if ($resourceNode && $resourceNode->getResourceLinks()) {
+            $result = $resourceNode->getResourceLinks()->first();
+            if ($result) {
+                return $result;
+            }
+        }
+
+        return null;
     }
 
     /**

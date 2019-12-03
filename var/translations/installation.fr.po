@@ -1,0 +1,15 @@
+msgid "Installation language"
+msgstr "Langue d'installation"
+
+msgid "Database settings"
+msgid "Paramètres de base de données"
+
+msgid "Requirements"
+msgstr "Pré-requis"
+
+msgid "Read the installation guide"
+msgstr "Lire le guide d'installation"
+
+msgid "Please select installation language"
+msgstr "Veuillez sélectionner la langue de l'installateur"
+

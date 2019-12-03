@@ -74,7 +74,7 @@ before_install:
   # Install bundle js/css
   - php bin/console assets:install
   # Permissions
-  - sudo chmod -R 777 var/cache var/log var/courses var/upload public
+  - sudo chmod -R 777 var public
   # Dump js routes
   - php bin/console fos:js-routing:dump --format=json --target=public/js/fos_js_routes.json
   - # Install third party js/css libraries

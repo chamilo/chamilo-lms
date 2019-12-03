@@ -195,6 +195,7 @@
     "scripts": {
         "auto-scripts": {
             "cache:clear": "symfony-cmd",
+            "ckeditor:install %PUBLIC_DIR%/libs/ckeditor --clear=drop ": "symfony-cmd",
             "assets:install %PUBLIC_DIR%": "symfony-cmd",
             "security-checker security:check": "script",
             "requirements-checker": "script"

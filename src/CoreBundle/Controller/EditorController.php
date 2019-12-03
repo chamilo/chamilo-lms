@@ -73,7 +73,6 @@ class EditorController extends BaseController
 
         $course = $this->getCourse();
         $session = $this->getCourseSession();
-        $sessionId = $session ? $session->getId() : 0;
         $parent = $course->getResourceNode();
 
         $repository = $resourceFactory->createRepository($tool, $type);
@@ -216,23 +215,30 @@ class EditorController extends BaseController
      *
      * @return Response
      */
-    public function configEditorAction(SettingsManager $settingsManager)
+    public function configEditorAction(Request $request, SettingsManager $settingsManager)
     {
         $moreButtonsInMaximizedMode = false;
-        //$settingsManager = $this->get('chamilo.settings.manager');
 
         if ($settingsManager->getSetting('editor.more_buttons_maximized_mode') === 'true') {
             $moreButtonsInMaximizedMode = true;
         }
 
-        return $this->render(
-            '@ChamiloTheme/Editor/config_js.html.twig',
-            [
-                // @todo replace api_get_bootstrap_and_font_awesome
-                'bootstrap_css' => api_get_bootstrap_and_font_awesome(true),
-                'css_editor' => ChamiloApi::getEditorBlockStylePath(),
-                'more_buttons_in_max_mode' => $moreButtonsInMaximizedMode,
-            ]
-        );
+        $type = $request->get('type');
+        $tool = $request->get('tool');
+
+        $params = [
+            // @todo replace api_get_bootstrap_and_font_awesome
+            'bootstrap_css' => api_get_bootstrap_and_font_awesome(true),
+            'css_editor' => ChamiloApi::getEditorBlockStylePath(),
+            'more_buttons_in_max_mode' => $moreButtonsInMaximizedMode,
+            'type' => $type,
+            'tool' => $tool,
+        ];
+
+        $renderedView = $this->renderView('@ChamiloTheme/Editor/config_js.html.twig', $params);
+        $response = new Response($renderedView);
+        $response->headers->set('Content-Type', 'text/javascript');
+
+        return $response;
     }
 }

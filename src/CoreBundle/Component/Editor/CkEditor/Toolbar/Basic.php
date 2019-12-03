@@ -19,8 +19,8 @@ class Basic extends Toolbar
      * @var array
      */
     public $defaultPlugins = [
-        'adobeair',
-        'ajax',
+        //'adobeair',
+        //'ajax',
         'audio',
         'image2_chamilo',
         'bidi',
@@ -31,12 +31,12 @@ class Basic extends Toolbar
         'div',
         //if you activate this plugin the html, head tags will not be saved
         //'divarea',
-        'docprops',
+        //'docprops',
         'find',
         'flash',
         'font',
         'iframe',
-        'iframedialog',
+        //'iframedialog',
         'indentblock',
         'justify',
         'language',
@@ -49,20 +49,20 @@ class Basic extends Toolbar
         'print',
         'save',
         'selectall',
-        'sharedspace',
+        //'sharedspace',
         'showblocks',
         'smiley',
-        'sourcedialog',
-        'stylesheetparser',
-        'tableresize',
+        //'sourcedialog',
+        //'stylesheetparser',
+        //'tableresize',
         'templates',
-        'uicolor',
+        //'uicolor',
         'video',
         'widget',
         'wikilink',
         'wordcount',
         'inserthtml',
-        'xml',
+        //'xml',
         'qmarkersrolls',
     ];
 
@@ -152,7 +152,7 @@ class Basic extends Toolbar
             $config['toolbar_maxToolbar'] = $this->getMaximizedToolbar();
         }
 
-        $config['customConfig'] = api_get_path(WEB_PUBLIC_PATH).'editor/config?'.api_get_cidreq();
+        $config['customConfig'] = api_get_path(WEB_PUBLIC_PATH).'editor/config?'.api_get_cidreq().'&tool=document&type=files';
         $config['flash_flvPlayer'] = api_get_path(WEB_LIBRARY_JS_PATH).'ckeditor/plugins/flash/swf/player.swf';
 
         /*filebrowserFlashBrowseUrl
@@ -162,7 +162,7 @@ class Basic extends Toolbar
         filebrowserImageUploadUrl
         filebrowserUploadUrl*/
 
-        $config['extraPlugins'] = $this->getPluginsToString();
+        //$config['extraPlugins'] = $this->getPluginsToString();
 
         //$config['oembed_maxWidth'] = '560';
         //$config['oembed_maxHeight'] = '315';

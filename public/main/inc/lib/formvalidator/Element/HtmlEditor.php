@@ -36,7 +36,6 @@ class HtmlEditor extends HTML_QuickForm_textarea
 
         parent::__construct($name, $label, $attributes);
         $id = $this->getAttribute('id');
-        //var_dump($id);
         $this->_persistantFreeze = true;
         $this->_type = 'html_editor';
 

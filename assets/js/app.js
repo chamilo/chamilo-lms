@@ -566,21 +566,22 @@ if (typeof CKEDITOR !== 'undefined') {
         'audio',
         'ckeditor_wiris',
         'dialogui',
+        'flash',
         'glossary',
+        'image2_chamilo',
+        'inserthtml',
         'leaflet',
         'mapping',
-        'maximize',
         'mathjax',
+        'maximize',
         'oembed',
+        'qmarkersrolls',
         'toolbar',
         'toolbarswitch',
         'video',
         'wikilink',
         'wordcount',
         'youtube',
-        'flash',
-        'inserthtml',
-        'image2_chamilo'
     ];
 
     plugins.forEach(function (plugin) {

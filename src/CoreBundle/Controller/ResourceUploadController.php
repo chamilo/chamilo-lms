@@ -23,7 +23,7 @@ class ResourceUploadController extends BlueimpController
 {
     /**
      * This will upload an image to the selected node id.
-     * This action is listend by the ResourceUploadListener
+     * This action is listend by the ResourceUploadListener.
      *
      * @return JsonResponse
      */

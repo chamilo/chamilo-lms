@@ -16,7 +16,7 @@ class ChamiloExtension extends AbstractExtension
     private $illustrationRepository;
 
     /**
-     * @param SettingsHelper $helper
+     * @param IllustrationRepository $illustrationRepository
      */
     public function __construct(IllustrationRepository $illustrationRepository)
     {

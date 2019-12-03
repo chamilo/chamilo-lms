@@ -39,6 +39,7 @@ use ZipStream\ZipStream;
 
 /**
  * Class ResourceController.
+ *
  * @todo improve/refactor $this->denyAccessUnlessGranted
  * @Route("/resources")
  *
@@ -78,25 +79,6 @@ class ResourceController extends AbstractResourceController implements CourseCon
             '@ChamiloTheme/Resource/index.html.twig',
             ['tool' => $tool, 'type' => $type, 'id' => $id, 'parent_resource_node' => $parentResourceNode]
         );
-    }
-
-    private function getParentResourceNode(Request $request)
-    {
-        $parentNodeId = $request->get('id');
-
-        if (empty($parentNodeId)) {
-            if ($this->hasCourse()) {
-                $parentResourceNode = $this->getCourse()->getResourceNode();
-            } else {
-                /** @var User $user */
-                $parentResourceNode = $this->getUser()->getResourceNode();
-            }
-        } else {
-            $repo = $this->getDoctrine()->getRepository('ChamiloCoreBundle:Resource\ResourceNode');
-            $parentResourceNode = $repo->find($parentNodeId);
-        }
-
-        return $parentResourceNode;
     }
 
     /**
@@ -736,7 +718,7 @@ class ResourceController extends AbstractResourceController implements CourseCon
     }
 
     /**
-     * Gets a document when calling route resources_document_get_file
+     * Gets a document when calling route resources_document_get_file.
      * @deprecated
      *
      * @throws \League\Flysystem\FileNotFoundException
@@ -949,6 +931,25 @@ class ResourceController extends AbstractResourceController implements CourseCon
                 ]
             );
         }
+    }
+
+    private function getParentResourceNode(Request $request)
+    {
+        $parentNodeId = $request->get('id');
+
+        if (empty($parentNodeId)) {
+            if ($this->hasCourse()) {
+                $parentResourceNode = $this->getCourse()->getResourceNode();
+            } else {
+                /** @var User $user */
+                $parentResourceNode = $this->getUser()->getResourceNode();
+            }
+        } else {
+            $repo = $this->getDoctrine()->getRepository('ChamiloCoreBundle:Resource\ResourceNode');
+            $parentResourceNode = $repo->find($parentNodeId);
+        }
+
+        return $parentResourceNode;
     }
 
     /**

@@ -19,9 +19,6 @@ abstract class AbstractResourceController extends BaseController
         $this->resourceRepositoryFactory = $resourceFactory;
     }
 
-    /**
-     * @return ResourceRepository
-     */
     public function getRepositoryFromRequest(Request $request): ResourceRepository
     {
         $tool = $request->get('tool');

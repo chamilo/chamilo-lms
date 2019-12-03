@@ -3,6 +3,7 @@
 
 namespace Chamilo\CoreBundle\Controller;
 
+use CCourseDescription;
 use Chamilo\CoreBundle\Entity\Course;
 use Chamilo\CoreBundle\Entity\ExtraField;
 use Chamilo\CoreBundle\Form\Type\CourseType;
@@ -13,8 +14,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
-use \UserManager;
-use \CCourseDescription;
+use UserManager;
 
 /**
  * Class CourseController.

@@ -2,7 +2,7 @@ msgid "Installation language"
 msgstr "Langue d'installation"
 
 msgid "Database settings"
-msgid "Paramètres de base de données"
+msgstr "Paramètres de base de données"
 
 msgid "Requirements"
 msgstr "Pré-requis"

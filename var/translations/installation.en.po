@@ -5,7 +5,7 @@ msgid "Requirements"
 msgstr "Requirements"
 
 msgid "Database settings"
-msgid "Database settings"
+msgstr "Database settings"
 
 msgid "Read the installation guide"
 msgstr "Read the installation guide"

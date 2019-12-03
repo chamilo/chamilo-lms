@@ -12,13 +12,7 @@ use Symfony\Component\HttpFoundation\File\UploadedFile;
 /**
  * Class ResourceRepositoryInterface.
  */
-interface ResourceRepositoryInterface
+interface ResourceRepositorySettingsInterface
 {
-    public function saveUpload(UploadedFile $file);
-
-    public function saveResource(FormInterface $form, $course, $session, $fileType);
-
-    //public function updateResource(FormInterface $form);
-    public function getTitleColumn(Grid $grid): Column;
-    //public function getResourceSettings(): ResourceSettings;
+    public function getResourceSettings(): ResourceSettings;
 }

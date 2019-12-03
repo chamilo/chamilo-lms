@@ -14,6 +14,7 @@ use Chamilo\CoreBundle\Component\Utils\Glide;
 use Chamilo\CoreBundle\Entity\Resource\AbstractResource;
 use Chamilo\CoreBundle\Entity\Resource\ResourceLink;
 use Chamilo\CoreBundle\Entity\Resource\ResourceNode;
+use Chamilo\CoreBundle\Repository\ResourceRepository;
 use Chamilo\CoreBundle\Security\Authorization\Voter\ResourceNodeVoter;
 use Chamilo\CourseBundle\Controller\CourseControllerInterface;
 use Chamilo\CourseBundle\Controller\CourseControllerTrait;
@@ -63,7 +64,10 @@ class ResourceController extends AbstractResourceController implements CourseCon
         $type = $request->get('type');
 
         $parentResourceNode = $this->getParentResourceNode($request);
-        $grid = $this->getGrid($request, $grid, $parentResourceNode->getId());
+        $repository = $this->getRepositoryFromRequest($request);
+        $settings = $repository->getResourceSettings();
+
+        $grid = $this->getGrid($request, $repository, $grid, $parentResourceNode->getId());
 
         $breadcrumb = $this->getBreadCrumb();
         $breadcrumb->addChild(
@@ -76,9 +80,16 @@ class ResourceController extends AbstractResourceController implements CourseCon
         // The base resource node is the course.
         $id = $parentResourceNode->getId();
 
+
         return $grid->getGridResponse(
             '@ChamiloTheme/Resource/index.html.twig',
-            ['tool' => $tool, 'type' => $type, 'id' => $id, 'parent_resource_node' => $parentResourceNode]
+            [
+                'tool' => $tool,
+                'type' => $type,
+                'id' => $id,
+                'parent_resource_node' => $parentResourceNode,
+                'resource_settings' => $settings,
+            ]
         );
     }
 
@@ -93,7 +104,10 @@ class ResourceController extends AbstractResourceController implements CourseCon
         $type = $request->get('type');
         $resourceNodeId = $request->get('id');
 
-        $grid = $this->getGrid($request, $grid, $resourceNodeId);
+        $repository = $this->getRepositoryFromRequest($request);
+        $settings = $repository->getResourceSettings();
+
+        $grid = $this->getGrid($request, $repository, $grid, $resourceNodeId);
 
         $this->setBreadCrumb($request);
         $parentResourceNode = $this->getParentResourceNode($request);
@@ -106,13 +120,13 @@ class ResourceController extends AbstractResourceController implements CourseCon
                 'type' => $type,
                 'id' => $resourceNodeId,
                 'parent_resource_node' => $parentResourceNode,
+                'resource_settings' => $settings,
             ]
         );
     }
 
-    public function getGrid(Request $request, Grid $grid, $resourceNodeId): Grid
+    public function getGrid(Request $request, ResourceRepository $repository, Grid $grid, $resourceNodeId): Grid
     {
-        $repository = $this->getRepositoryFromRequest($request);
         $class = $repository->getRepository()->getClassName();
 
         // The group 'resource' is set in the @GRID\Source annotation in the entity.

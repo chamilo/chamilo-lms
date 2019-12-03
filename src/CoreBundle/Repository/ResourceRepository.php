@@ -5,6 +5,7 @@ namespace Chamilo\CoreBundle\Repository;
 
 use APY\DataGridBundle\Grid\Action\RowAction;
 use APY\DataGridBundle\Grid\Row;
+use Chamilo\CoreBundle\Component\Utils\ResourceSettings;
 use Chamilo\CoreBundle\Entity\Course;
 use Chamilo\CoreBundle\Entity\Resource\AbstractResource;
 use Chamilo\CoreBundle\Entity\Resource\ResourceFile;
@@ -352,6 +353,7 @@ class ResourceRepository extends EntityRepository
             ['service' => $service]
         );
     }
+
 
     public function addResourceToMe(ResourceNode $resourceNode): ResourceLink
     {
@@ -753,6 +755,18 @@ class ResourceRepository extends EntityRepository
         }
     }
 
+    public function getResourceSettings(): ResourceSettings
+    {
+        $settings = new ResourceSettings();
+        $settings
+            ->setAllowNodeFolderCreation(false)
+            ->setAllowResourceContentCreation(false)
+            ->setAllowResourceUploadCreation(false)
+        ;
+
+        return $settings;
+    }
+
     /**
      * @param string $tool
      *
@@ -819,4 +833,6 @@ class ResourceRepository extends EntityRepository
 
         return true;
     }
+
+
 }

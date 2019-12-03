@@ -5,6 +5,7 @@ namespace Chamilo\CourseBundle\Repository;
 
 use APY\DataGridBundle\Grid\Column\Column;
 use APY\DataGridBundle\Grid\Grid;
+use Chamilo\CoreBundle\Component\Utils\ResourceSettings;
 use Chamilo\CoreBundle\Entity\Resource\ResourceLink;
 use Chamilo\CoreBundle\Repository\ResourceRepository;
 use Chamilo\CoreBundle\Repository\ResourceRepositoryInterface;
@@ -17,6 +18,19 @@ use Symfony\Component\HttpFoundation\File\UploadedFile;
  */
 final class CDocumentRepository extends ResourceRepository implements ResourceRepositoryInterface
 {
+    public function getResourceSettings(): ResourceSettings
+    {
+        $settings = parent::getResourceSettings();
+
+        $settings
+            ->setAllowNodeFolderCreation(true)
+            ->setAllowResourceContentCreation(true)
+            ->setAllowResourceUploadCreation(true)
+        ;
+
+        return $settings;
+    }
+
     public function saveUpload(UploadedFile $file)
     {
         $resource = new CDocument();

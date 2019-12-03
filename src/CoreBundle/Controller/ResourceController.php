@@ -371,8 +371,7 @@ class ResourceController extends AbstractResourceController implements CourseCon
             $myRowAction->addManipulateRender($setVisibleParameters);
             $grid->addRowAction($myRowAction);
 
-            if($settings->isAllowEditResource()) {
-
+            if ($settings->isAllowEditResource()) {
                 // Edit action.
                 $myRowAction = new RowAction(
                     $this->trans('Edit'),
@@ -1088,6 +1087,7 @@ class ResourceController extends AbstractResourceController implements CourseCon
                     'config' => [
                         'filebrowserImageBrowseRoute' => 'resources_filemanager',
                         'filebrowserImageBrowseRouteParameters' => $resourceParams,
+                        'fullPage' => true,
                     ],
                 ]
             );

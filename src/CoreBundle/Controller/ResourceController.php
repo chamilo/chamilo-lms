@@ -33,6 +33,7 @@ use Symfony\Component\HttpFoundation\StreamedResponse;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Routing\Router;
+use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 use Vich\UploaderBundle\Util\Transliterator;
 use ZipStream\Option\Archive;
 use ZipStream\ZipStream;
@@ -933,20 +934,28 @@ class ResourceController extends AbstractResourceController implements CourseCon
         }
     }
 
-    private function getParentResourceNode(Request $request)
+    private function getParentResourceNode(Request $request): ResourceNode
     {
         $parentNodeId = $request->get('id');
+
+        $parentResourceNode = null;
 
         if (empty($parentNodeId)) {
             if ($this->hasCourse()) {
                 $parentResourceNode = $this->getCourse()->getResourceNode();
             } else {
-                /** @var User $user */
-                $parentResourceNode = $this->getUser()->getResourceNode();
+                if ($this->isGranted('IS_AUTHENTICATED_REMEMBERED')) {
+                    /** @var User $user */
+                    $parentResourceNode = $this->getUser()->getResourceNode();
+                }
             }
         } else {
             $repo = $this->getDoctrine()->getRepository('ChamiloCoreBundle:Resource\ResourceNode');
             $parentResourceNode = $repo->find($parentNodeId);
+        }
+
+        if (null === $parentResourceNode) {
+            throw new AccessDeniedException();
         }
 
         return $parentResourceNode;

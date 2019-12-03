@@ -12,6 +12,14 @@ var/cache/*
 var/log/*
 !var/log/.gitkeep
 
+# Courses
+var/courses/*
+!var/courses/.gitkeep
+
+# Upload content
+var/upload/*
+!var/upload/.gitkeep
+
 /node_modules/
 
 # Chamilo configuration
@@ -19,16 +27,8 @@ var/log/*
 
 /main/inc/conf/configuration.php
 
-# Courses
-var/courses/*
-!var/courses/.gitkeep
-
 # Home
 components/*
-
-# Upload content
-var/upload/*
-!var/upload/.gitkeep
 
 # Logs and databases #
 *.log
@@ -43,11 +43,11 @@ var/upload/*
 nbproject/*
 
 # Plugins config files
-plugin/bbb/config.vm.php
+public/plugin/bbb/config.vm.php
 
 # Cron temp files
-main/cron/incoming/*
-plugin/vchamilo/templates/*
+public/main/cron/incoming/*
+public/plugin/vchamilo/templates/*
 
 # Stuff updated through composer - Remove just before release
 vendor
@@ -59,7 +59,6 @@ symfony.lock
 /.env.local.php
 /.env.*.local
 /public/bundles/
-/var/
 /vendor
 ###< symfony/framework-bundle ###
 

@@ -21,13 +21,6 @@ use Symfony\Component\Routing\Annotation\Route;
  */
 class AccountController extends BaseController
 {
-    private $userRepository;
-    private $formFactory;
-
-    public function __construct(UserRepository $userRepository)
-    {
-        $this->userRepository = $userRepository;
-    }
 
     /**
      * @Route("/home", methods={"GET"}, name="chamilo_core_account_home")

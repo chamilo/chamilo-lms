@@ -51,14 +51,14 @@ class ChamiloExtension extends AbstractExtension
         return [];
     }
 
-    public function getIllustration($node)
+    public function getIllustration($node): string
     {
         $url = $this->illustrationRepository->getIllustrationUrlFromNode($node);
 
         return $url;
     }
 
-    public function getUserIllustration($node)
+    public function getUserIllustration($node): string
     {
         $url = $this->getIllustration($node);
 

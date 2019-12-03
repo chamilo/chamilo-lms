@@ -3307,16 +3307,20 @@ function finishInstallationWithContainer(
         '',
         false
     );
-
     error_log('Adding access url as a node');
     $userManager = $container->get('Chamilo\UserBundle\Repository\UserRepository');
     $urlRepo = $container->get('Chamilo\CoreBundle\Repository\AccessUrlRepository');
+    $urlRepo->getEntityManager()->flush();
+
     $accessUrl = $urlRepo->find(1);
     $admin = $userManager->find($adminId);
     $urlRepo->addResourceNode($accessUrl, $admin);
+    $urlRepo->getEntityManager()->flush();
 
     $userManager->addUserToResourceNode($adminId, $adminId, $accessUrl);
     $userManager->addUserToResourceNode($anonId, $adminId, $accessUrl);
+
+    $urlRepo->getEntityManager()->flush();
 
     // Set default language
     Database::update(

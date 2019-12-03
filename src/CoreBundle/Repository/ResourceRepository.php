@@ -181,7 +181,6 @@ class ResourceRepository extends EntityRepository
         $em = $this->getEntityManager();
 
         $resourceType = $this->getResourceType();
-
         $resourceNode = new ResourceNode();
         $resourceName = $resource->getResourceName();
         $extension = $this->slugify->slugify(pathinfo($resourceName, PATHINFO_EXTENSION));
@@ -347,10 +346,10 @@ class ResourceRepository extends EntityRepository
     public function getResourceType()
     {
         $em = $this->getEntityManager();
-        $entityName = $this->getRepository()->getClassName();
+        $service = get_class($this);
 
         return $em->getRepository('ChamiloCoreBundle:Resource\ResourceType')->findOneBy(
-            ['entityName' => $entityName]
+            ['service' => $service]
         );
     }
 

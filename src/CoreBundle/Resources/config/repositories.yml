@@ -12,7 +12,7 @@ services:
         exclude: '../../Repository/{BranchSyncRepository.php,ResourceRepository.php,ResourceNodeRepository.php}'
         tags: ['doctrine.repository_service']
 
-    # Entity repository as a service
+    # Resource repositories
     Chamilo\CoreBundle\Repository\AccessUrlRepository:
         arguments:
             $className: 'Chamilo\CoreBundle\Entity\AccessUrl'

@@ -35,7 +35,7 @@ class ResourceType
      *
      * @Assert\NotBlank()
      */
-    protected $entityName;
+    protected $service;
 
     /**
      * @ORM\ManyToOne(targetEntity="Chamilo\CoreBundle\Entity\Tool", inversedBy="resourceTypes")
@@ -143,19 +143,22 @@ class ResourceType
         return $this;
     }
 
-    public function getEntityName(): string
+    /**
+     * @return mixed
+     */
+    public function getService()
     {
-        return $this->entityName;
+        return $this->service;
     }
 
     /**
-     * @param string $entityName
+     * @param mixed $service
      *
      * @return ResourceType
      */
-    public function setEntityName($entityName)
+    public function setService($service)
     {
-        $this->entityName = $entityName;
+        $this->service = $service;
 
         return $this;
     }

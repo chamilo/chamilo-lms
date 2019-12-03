@@ -112,8 +112,6 @@ class ResourceController extends AbstractResourceController implements CourseCon
 
     public function getGrid(Request $request, Grid $grid, $resourceNodeId): Grid
     {
-        $id = (int) $request->get('id');
-
         $repository = $this->getRepositoryFromRequest($request);
         $class = $repository->getRepository()->getClassName();
 

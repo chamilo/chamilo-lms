@@ -93,7 +93,7 @@ class ToolChain
                 foreach ($types as $name => $data) {
                     $resourceType = new ResourceType();
                     $resourceType->setName($name);
-                    $resourceType->setEntityName($data['repository']);
+                    $resourceType->setService($data['repository']);
                     $resourceType->setTool($toolEntity);
                     $manager->persist($resourceType);
                 }
@@ -126,7 +126,7 @@ class ToolChain
                 foreach ($types as $name => $data) {
                     $resourceType = new ResourceType();
                     $resourceType->setName($name);
-                    $resourceType->setEntityName($data['entity']);
+                    $resourceType->setService($data['entity']);
                     $resourceType->setTool($toolEntity);
                     $manager->persist($resourceType);
                 }

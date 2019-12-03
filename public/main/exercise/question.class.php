@@ -1007,6 +1007,11 @@ abstract class Question
                 'QuizQuestionDeleted',
                 api_get_user_id()
             );*/
+            Event::addEvent(
+                LOG_QUESTION_DELETED,
+                LOG_QUESTION_ID,
+                $this->iid
+            );
             $this->removePicture();
         } else {
             // just removes the exercise from the list
@@ -1023,6 +1028,11 @@ abstract class Question
                 'QuizQuestionDeleted',
                 api_get_user_id()
             );*/
+            Event::addEvent(
+                LOG_QUESTION_REMOVED_FROM_QUIZ,
+                LOG_QUESTION_ID,
+                $this->iid
+            );
         }
 
         return true;

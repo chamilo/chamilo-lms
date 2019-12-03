@@ -1064,30 +1064,6 @@ class User extends BaseUser implements ThemeUser, EquatableInterface //implement
     }
 
     /**
-     * Set pictureUri.
-     *
-     * @param string $pictureUri
-     *
-     * @return User
-     */
-    public function setPictureUri($pictureUri)
-    {
-        $this->pictureUri = $pictureUri;
-
-        return $this;
-    }
-
-    /**
-     * Get pictureUri.
-     *
-     * @return string
-     */
-    public function getPictureUri()
-    {
-        return $this->pictureUri;
-    }
-
-    /**
      * Set creatorId.
      *
      * @param int $creatorId

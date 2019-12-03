@@ -122,11 +122,11 @@ class EditorController extends BaseController
 
         $grid->getColumn('filetype')->setTitle($this->trans('Type'));
 
-        $routeParams = $this->getCourseParams();
+        $routeParams = $this->getResourceParams($request);
         $removePath = $course->getResourceNode()->getPath();
 
         $titleColumn->manipulateRenderCell(
-            function ($value, Row $row, $router) use ($tool, $type, $routeParams, $removePath) {
+            function ($value, Row $row, $router) use ($tool, $type, $routeParams, $removePath, $request) {
                 /** @var AbstractResource $entity */
                 $entity = $row->getEntity();
                 $resourceNode = $entity->getResourceNode();
@@ -135,15 +135,11 @@ class EditorController extends BaseController
                 $myParams = $routeParams;
                 $myParams['id'] = $id;
                 $myParams['parentId'] = $id;
-                $myParams['tool'] = $tool;
-                $myParams['type'] = $type;
 
                 unset($myParams[0]);
                 $icon = $resourceNode->getIcon().' &nbsp;';
                 if ($resourceNode->hasResourceFile()) {
-                    $documentParams = $this->getCourseParams();
-                    $documentParams['tool'] = $tool;
-                    $documentParams['type'] = $type;
+                    $documentParams = $this->getResourceParams($request);
                     //$documentParams['file'] = $resourceNode->getPathForDisplayRemoveBase($removePath);
                     // use id instead of old path (like in Chamilo v1)
                     $documentParams['id'] = $resourceNode->getId();

@@ -187,7 +187,7 @@ switch ($action) {
         ];
 
         $usersRepo = UserManager::getRepository();
-        $users = $usersRepo->searchUsersByStatus($_GET['q'], COURSEMANAGER, api_get_current_access_url_id());
+        $users = $usersRepo->findByStatus($_GET['q'], COURSEMANAGER, api_get_current_access_url_id());
         /** @var User $user */
         foreach ($users as $user) {
             $list['items'][] = [

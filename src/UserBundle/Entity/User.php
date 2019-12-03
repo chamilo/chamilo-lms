@@ -80,6 +80,14 @@ class User extends BaseUser implements ThemeUser, EquatableInterface //implement
     public const ANONYMOUS = 6;
 
     /**
+     * @ORM\OneToOne(
+     *     targetEntity="Chamilo\CoreBundle\Entity\Resource\ResourceNode", cascade={"remove"}, orphanRemoval=true
+     * )
+     * @ORM\JoinColumn(name="resource_node_id", referencedColumnName="id", onDelete="CASCADE")
+     */
+    public $resourceNode;
+
+    /**
      * @var int
      *
      * @ORM\Column(name="id", type="integer")
@@ -498,30 +506,6 @@ class User extends BaseUser implements ThemeUser, EquatableInterface //implement
     protected $receivedMessages;
 
     /**
-     *
-     * @ORM\OneToOne(
-     *     targetEntity="Chamilo\CoreBundle\Entity\Resource\ResourceNode", cascade={"remove"}, orphanRemoval=true
-     * )
-     * @ORM\JoinColumn(name="resource_node_id", referencedColumnName="id", onDelete="CASCADE")
-     */
-    public $resourceNode;
-
-    /**
-     * @return $this
-     */
-    public function setResourceNode(ResourceNode $resourceNode): self
-    {
-        $this->resourceNode = $resourceNode;
-
-        return $this;
-    }
-
-    public function getResourceNode(): ResourceNode
-    {
-        return $this->resourceNode;
-    }
-
-    /**
      * Constructor.
      */
     public function __construct()
@@ -560,6 +544,21 @@ class User extends BaseUser implements ThemeUser, EquatableInterface //implement
     public function __toString()
     {
         return $this->username;
+    }
+
+    /**
+     * @return $this
+     */
+    public function setResourceNode(ResourceNode $resourceNode): self
+    {
+        $this->resourceNode = $resourceNode;
+
+        return $this;
+    }
+
+    public function getResourceNode(): ResourceNode
+    {
+        return $this->resourceNode;
     }
 
     /**

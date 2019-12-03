@@ -12,6 +12,7 @@ use Gedmo\Timestampable\Traits\TimestampableEntity;
 
 /**
  * Illustration.
+ *
  * @ORM\Table(name="illustration")
  * @ORM\Entity
  * @GRID\Source(columns="id, name, resourceNode.createdAt", filterable=false, groups={"resource"})
@@ -45,6 +46,11 @@ class Illustration extends AbstractResource implements ResourceInterface
         $this->name = 'illustration';
     }
 
+    public function __toString(): string
+    {
+        return $this->getName();
+    }
+
     public function getId(): int
     {
         return $this->id;
@@ -75,11 +81,6 @@ class Illustration extends AbstractResource implements ResourceInterface
     }
 
     public function getResourceName(): string
-    {
-        return $this->getName();
-    }
-
-    public function __toString(): string
     {
         return $this->getName();
     }

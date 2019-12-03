@@ -3,7 +3,6 @@
 
 namespace Chamilo\CoreBundle\Tool;
 
-use Sonata\CoreBundle\Model\BaseEntityManager;
 use Sylius\Bundle\SettingsBundle\Schema\SchemaInterface;
 
 /**
@@ -117,11 +116,6 @@ abstract class AbstractTool implements ToolInterface
         return $this->resourceTypes;
     }
 
-    /**
-     * @param array $resourceTypes
-     *
-     * @return AbstractTool
-     */
     public function setResourceTypes(array $resourceTypes): AbstractTool
     {
         $this->resourceTypes = $resourceTypes;

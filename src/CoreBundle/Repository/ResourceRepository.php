@@ -276,6 +276,7 @@ class ResourceRepository extends EntityRepository
 
         return $resourceFile;
     }
+
     //unction createNodeForResource(AbstractResource $resource, User $creator, ResourceNode $parent = null, UploadedFile $file = null): ResourceNode
     public function addResourceNode(AbstractResource $resource, User $creator, AbstractResource $parent = null): ResourceNode
     {
@@ -510,7 +511,7 @@ class ResourceRepository extends EntityRepository
             )
             ->innerJoin('node.resourceLinks', 'links')
             ->where('node.resourceType = :type')
-            ->setParameter('type',$type);
+            ->setParameter('type', $type);
 
         if ($isPersonalResource === false) {
             $qb
@@ -550,7 +551,7 @@ class ResourceRepository extends EntityRepository
         }
 
         if (null === $group) {
-           $qb->andWhere('links.group IS NULL');
+            $qb->andWhere('links.group IS NULL');
         }
 
         ///var_dump($qb->getQuery()->getSQL(), $type->getId(), $parentNode->getId());exit;
@@ -584,10 +585,10 @@ class ResourceRepository extends EntityRepository
             //->where('node.resourceType = :type')
             //->setParameter('type',$type)
             ;
-            /*$qb
-                ->andWhere('links.visibility = :visibility')
-                ->setParameter('visibility', ResourceLink::VISIBILITY_PUBLISHED)
-            ;*/
+        /*$qb
+            ->andWhere('links.visibility = :visibility')
+            ->setParameter('visibility', ResourceLink::VISIBILITY_PUBLISHED)
+        ;*/
 
         if (null !== $parentNode) {
             $qb->andWhere('node.parent = :parentNode');

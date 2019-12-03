@@ -179,9 +179,6 @@ class SessionController extends AbstractController
 
         $courseController = new CoursesController();
 
-
-
-
         $plugin = \BuyCoursesPlugin::create();
         $checker = $plugin->isEnabled();
         $sessionIsPremium = null;

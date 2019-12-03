@@ -720,6 +720,7 @@ class ResourceController extends AbstractResourceController implements CourseCon
 
     /**
      * Gets a document when calling route resources_document_get_file.
+1     *
      * @deprecated
      *
      * @throws \League\Flysystem\FileNotFoundException
@@ -962,11 +963,8 @@ class ResourceController extends AbstractResourceController implements CourseCon
     }
 
     /**
-     * @param Request      $request
-     * @param ResourceNode $resourceNode
-     * @param string       $mode
-     * @param Glide|null   $glide
-     * @param string       $filter
+     * @param string $mode
+     * @param string $filter
      *
      * @return mixed|StreamedResponse
      */

@@ -282,6 +282,11 @@ class CLp extends AbstractResource implements ResourceInterface
         $this->createdOn = new \DateTime();
     }
 
+    public function __toString(): string
+    {
+        return $this->getName();
+    }
+
     /**
      * Set lpType.
      *
@@ -1071,11 +1076,6 @@ class CLp extends AbstractResource implements ResourceInterface
     }
 
     public function getResourceName(): string
-    {
-        return $this->getName();
-    }
-
-    public function __toString(): string
     {
         return $this->getName();
     }

@@ -376,9 +376,6 @@ class Course extends AbstractResource implements ResourceInterface
         $this->sharedSurveys = new ArrayCollection();
     }
 
-    /**
-     * @return string
-     */
     public function __toString(): string
     {
         return $this->getTitle();

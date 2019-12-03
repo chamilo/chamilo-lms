@@ -115,9 +115,6 @@ class CDocument extends AbstractResource implements ResourceInterface
         $this->id = 0;
     }
 
-    /**
-     * @return string
-     */
     public function __toString(): string
     {
         return $this->getTitle();
@@ -333,7 +330,6 @@ class CDocument extends AbstractResource implements ResourceInterface
 
         return $this;
     }
-
 
     public function postPersist(LifecycleEventArgs $args)
     {

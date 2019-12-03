@@ -323,8 +323,6 @@ class CourseListener
      * @param int    $sessionId
      * @param int    $groupId
      * @param string $origin
-     *
-     * @return string
      */
     private function generateCourseUrl($course, $sessionId, $groupId, $origin): string
     {

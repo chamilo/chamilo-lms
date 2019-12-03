@@ -970,9 +970,9 @@ class Version20 extends AbstractMigrationChamilo
         $this->addSql("CREATE UNIQUE INDEX UNIQ_8D93D6491BAD783F ON user (resource_node_id);");
         $this->addSql("ALTER TABLE user_audit ADD resource_node_id INT DEFAULT NULL;");
 
-/*        $this->addSql("");
-        $this->addSql("");
-        $this->addSql("");*/
+        /*        $this->addSql("");
+                $this->addSql("");
+                $this->addSql("");*/
     }
 
     public function down(Schema $schema)

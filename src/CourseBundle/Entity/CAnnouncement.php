@@ -86,6 +86,11 @@ class CAnnouncement extends AbstractResource implements ResourceInterface
      */
     protected $sessionId;
 
+    public function __toString(): string
+    {
+        return $this->getTitle();
+    }
+
     /**
      * Set title.
      *
@@ -297,11 +302,6 @@ class CAnnouncement extends AbstractResource implements ResourceInterface
     }
 
     public function getResourceName(): string
-    {
-        return $this->getTitle();
-    }
-
-    public function __toString(): string
     {
         return $this->getTitle();
     }

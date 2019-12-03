@@ -3,17 +3,15 @@
 
 namespace Chamilo\CoreBundle\Repository;
 
-use Chamilo\CoreBundle\Block\BreadcrumbBlockService;
 use Chamilo\CoreBundle\ToolChain;
 use Cocur\Slugify\SlugifyInterface;
 use Doctrine\ORM\EntityManagerInterface;
 use League\Flysystem\MountManager;
+use Symfony\Component\DependencyInjection\ContainerInterface as Container;
 use Symfony\Component\PropertyAccess\Exception\InvalidArgumentException;
 use Symfony\Component\Routing\RouterInterface;
 use Symfony\Component\Security\Core\Authorization\AuthorizationChecker;
 use Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface;
-use Symfony\Component\DependencyInjection\ContainerInterface as Container;
-
 
 class ResourceFactory
 {

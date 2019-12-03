@@ -1434,7 +1434,6 @@ function create_unexisting_directory(
         return $document;
     }
 
-
     $folderExists = DocumentManager::folderExists(
         $desired_dir_name,
         $_course,

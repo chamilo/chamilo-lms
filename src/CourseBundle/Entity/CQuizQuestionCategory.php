@@ -67,6 +67,11 @@ class CQuizQuestionCategory extends AbstractResource implements ResourceInterfac
      */
     protected $session;
 
+    public function __toString(): string
+    {
+        return $this->getTitle();
+    }
+
     /**
      * @return int
      */
@@ -216,11 +221,6 @@ class CQuizQuestionCategory extends AbstractResource implements ResourceInterfac
     }
 
     public function getResourceName(): string
-    {
-        return $this->getTitle();
-    }
-
-    public function __toString(): string
     {
         return $this->getTitle();
     }

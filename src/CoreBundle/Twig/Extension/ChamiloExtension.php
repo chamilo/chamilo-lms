@@ -4,7 +4,6 @@
 namespace Chamilo\CoreBundle\Twig\Extension;
 
 use Chamilo\CoreBundle\Repository\IllustrationRepository;
-use Chamilo\SettingsBundle\Templating\Helper\SettingsHelper;
 use Twig\Extension\AbstractExtension;
 use Twig\TwigFilter;
 
@@ -15,9 +14,6 @@ class ChamiloExtension extends AbstractExtension
 {
     private $illustrationRepository;
 
-    /**
-     * @param IllustrationRepository $illustrationRepository
-     */
     public function __construct(IllustrationRepository $illustrationRepository)
     {
         $this->illustrationRepository = $illustrationRepository;

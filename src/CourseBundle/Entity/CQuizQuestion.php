@@ -122,6 +122,11 @@ class CQuizQuestion extends AbstractResource implements ResourceInterface
         $this->ponderation = 0.0;
     }
 
+    public function __toString(): string
+    {
+        return $this->getQuestion();
+    }
+
     /**
      * Set question.
      *
@@ -423,11 +428,6 @@ class CQuizQuestion extends AbstractResource implements ResourceInterface
     }
 
     public function getResourceName(): string
-    {
-        return $this->getQuestion();
-    }
-
-    public function __toString(): string
     {
         return $this->getQuestion();
     }

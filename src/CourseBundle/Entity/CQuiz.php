@@ -264,6 +264,11 @@ class CQuiz extends AbstractResource implements ResourceInterface
         $this->autoLaunch = 0;
     }
 
+    public function __toString(): string
+    {
+        return $this->getTitle();
+    }
+
     /**
      * Set title.
      *
@@ -956,11 +961,6 @@ class CQuiz extends AbstractResource implements ResourceInterface
     }
 
     public function getResourceName(): string
-    {
-        return $this->getTitle();
-    }
-
-    public function __toString(): string
     {
         return $this->getTitle();
     }

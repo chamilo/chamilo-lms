@@ -220,6 +220,4 @@ class CourseController extends AbstractController
 
         return $this->render('@ChamiloTheme/Course/about.html.twig', [$params]);
     }
-
-
 }

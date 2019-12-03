@@ -30,7 +30,6 @@ use Chamilo\CoreBundle\Entity\UserCourseCategory;
 use Chamilo\CoreBundle\Entity\UsergroupRelUser;
 use Chamilo\CoreBundle\Entity\UserRelCourseVote;
 use Chamilo\CoreBundle\Repository\ResourceRepository;
-use Chamilo\CoreBundle\Repository\ResourceRepositoryInterface;
 use Chamilo\CourseBundle\Entity\CAttendanceResult;
 use Chamilo\CourseBundle\Entity\CAttendanceSheet;
 use Chamilo\CourseBundle\Entity\CBlogPost;
@@ -48,8 +47,6 @@ use Chamilo\CourseBundle\Entity\CSurveyAnswer;
 use Chamilo\CourseBundle\Entity\CWiki;
 use Chamilo\TicketBundle\Entity\Ticket;
 use Chamilo\UserBundle\Entity\User;
-use Doctrine\ORM\EntityManagerInterface;
-use Doctrine\ORM\EntityRepository;
 use Doctrine\ORM\Query\Expr\Join;
 use Symfony\Component\Finder\Finder;
 use Symfony\Component\Security\Core\Exception\UsernameNotFoundException;
@@ -138,7 +135,6 @@ class UserRepository extends ResourceRepository
 
         return $query->execute();
     }
-
 
     /**
      * Get course user relationship based in the course_rel_user table.

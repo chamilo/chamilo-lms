@@ -7,7 +7,7 @@ use APY\DataGridBundle\Grid\Mapping as GRID;
 use Chamilo\CoreBundle\Entity\Resource\AbstractResource;
 use Chamilo\CoreBundle\Entity\Resource\ResourceInterface;
 use Doctrine\ORM\Mapping as ORM;
-//
+
 /**
  * CLink.
  *
@@ -101,6 +101,11 @@ class CLink extends AbstractResource implements ResourceInterface
      * @ORM\Column(name="session_id", type="integer", nullable=true)
      */
     protected $sessionId;
+
+    public function __toString(): string
+    {
+        return $this->getTitle();
+    }
 
     /**
      * Set url.
@@ -351,11 +356,6 @@ class CLink extends AbstractResource implements ResourceInterface
     }
 
     public function getResourceName(): string
-    {
-        return $this->getTitle();
-    }
-
-    public function __toString(): string
     {
         return $this->getTitle();
     }

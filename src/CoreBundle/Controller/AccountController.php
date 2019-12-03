@@ -6,7 +6,6 @@ namespace Chamilo\CoreBundle\Controller;
 use Chamilo\CoreBundle\Repository\IllustrationRepository;
 use Chamilo\ThemeBundle\Model\UserInterface;
 use Chamilo\UserBundle\Form\ProfileType;
-use Chamilo\UserBundle\Repository\UserRepository;
 use FOS\UserBundle\Model\UserManagerInterface;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -21,7 +20,6 @@ use Symfony\Component\Routing\Annotation\Route;
  */
 class AccountController extends BaseController
 {
-
     /**
      * @Route("/home", methods={"GET"}, name="chamilo_core_account_home")
      *

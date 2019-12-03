@@ -110,8 +110,6 @@ final class IllustrationRepository extends ResourceRepository implements Resourc
 
     /**
      * @param string $filter See: services.yaml parameter "glide_media_filters" to see the list of filters.
-     *
-     * @return string
      */
     public function getIllustrationUrl(AbstractResource $resource, $filter = ''): string
     {

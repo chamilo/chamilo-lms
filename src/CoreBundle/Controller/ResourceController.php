@@ -385,7 +385,7 @@ class ResourceController extends AbstractResourceController implements CourseCon
             }
 
             // More action.
-            $myRowAction = new RowAction(
+            /*$myRowAction = new RowAction(
                 $this->trans('More'),
                 'chamilo_core_resource_preview',
                 false,
@@ -394,7 +394,7 @@ class ResourceController extends AbstractResourceController implements CourseCon
             );
 
             $myRowAction->addManipulateRender($setNodeParameters);
-            $grid->addRowAction($myRowAction);
+            $grid->addRowAction($myRowAction);*/
 
             // Delete action.
             $myRowAction = new RowAction(
@@ -402,7 +402,10 @@ class ResourceController extends AbstractResourceController implements CourseCon
                 'chamilo_core_resource_delete',
                 true,
                 '_self',
-                ['class' => 'btn btn-danger', 'data_hidden' => true]
+                [
+                    'class' => 'btn btn-danger',
+                    //'data_hidden' => true,
+                ]
             );
             $myRowAction->addManipulateRender($setNodeParameters);
             $grid->addRowAction($myRowAction);

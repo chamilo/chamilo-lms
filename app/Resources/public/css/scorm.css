@@ -703,6 +703,42 @@ See https://support.chamilo.org/issues/6976
 .tabs-right{
     text-align: right;
 }
+#learning_path_toc .panel-default{
+    border: none;
+    box-shadow: none;
+}
+.status-heading .panel-heading{
+    padding: 0;
+}
+.status-heading .panel-heading .item-header{
+    padding: 10px 15px 10px 30px;
+    display: inline-block;
+    width: 100%;
+    color: #333333;
+    font-weight: bold;
+    background: url("../../main/img/scorm/folder-item-open.png") #f5f5f5 no-repeat 10px center;
+}
+#learning_path_toc .child_item.lp_item_type_document.scorm_completed{
+    background: url(../../main/img/icons/svg/check-completed.svg) #FFFFFF right center no-repeat;
+}
+#learning_path_toc .child_item.lp_item_type_document.scorm_not_attempted{
+    background: url(../../main/img/icons/svg/check-not-attempted.svg) #FFFFFF right center no-repeat;
+}
+#learning_path_toc .child_item.lp_item_type_document.current_item{
+    background-color: #f1f4f9;
+}
+.status-heading .panel-heading .item-action{
+    padding: 10px 15px;
+    display: inline-block;
+    width: 100%;
+    background-color: transparent;
+    color: #525252;
+    border-left: 1px solid #cdcdcd;
+}
+#learning_path_toc .panel-collapse .panel-body{
+    padding: 10px 0 10px 10px;
+}
+
 /* END LP VIEW COLLAPSE */
 /* Small devices (tablets, 768px and up) */
 @media (min-width: 768px) {

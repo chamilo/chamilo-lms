@@ -191,7 +191,7 @@ class AdminController extends BaseController
             ];
             $items[] = [
                 'url' => $adminUrl.'subscribe_user2course.php',
-                'label' => get_lang('Add a userToACourse'),
+                'label' => get_lang('Add a user to a course'),
             ];
             $items[] = [
                 'url' => $adminUrl.'course_user_import.php',

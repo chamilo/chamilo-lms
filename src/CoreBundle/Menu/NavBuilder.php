@@ -95,7 +95,7 @@ class NavBuilder implements ContainerAwareInterface
             $menu['courses']->addChild(
                 'courses',
                 [
-                    'label' => $translator->trans('All my courses'),
+                    'label' => $translator->trans('My courses'),
                     'route' => 'legacy_main',
                     'routeParameters' => ['name' => 'index/user_portal.php'],
                 ]
@@ -142,7 +142,7 @@ class NavBuilder implements ContainerAwareInterface
 
             if ($checker->isGranted('ROLE_ADMIN')) {
                 $menu['courses']->addChild(
-                    $translator->trans('Add Session'),
+                    $translator->trans('Create session'),
                     [
                         'route' => 'legacy_main',
                         'routeParameters' => ['name' => 'session/session_add.php'],
@@ -181,7 +181,7 @@ class NavBuilder implements ContainerAwareInterface
                     ]
                 );
 
-                $menu['social']->addChild(
+                /*$menu['social']->addChild(
                     $translator->trans('My profile'),
                     [
                         'route' => 'legacy_main',
@@ -194,7 +194,7 @@ class NavBuilder implements ContainerAwareInterface
                         'route' => 'legacy_main',
                         'routeParameters' => ['name' => 'social/profile.php'],
                     ]
-                );
+                );*/
                 $menu['social']->addChild(
                     $translator->trans('Friends'),
                     [
@@ -203,7 +203,7 @@ class NavBuilder implements ContainerAwareInterface
                     ]
                 );
                 $menu['social']->addChild(
-                    $translator->trans('Social Groups'),
+                    $translator->trans('Groups'),
                     [
                         'route' => 'legacy_main',
                         'routeParameters' => ['name' => 'social/groups.php'],
@@ -251,7 +251,7 @@ class NavBuilder implements ContainerAwareInterface
                 $menu['administrator']->addChild(
                     'userlist',
                     [
-                        'label' => $translator->trans('User list'),
+                        'label' => $translator->trans('Users'),
                         'route' => 'legacy_main',
                         'routeParameters' => ['name' => 'admin/user_list.php'],
                     ]
@@ -259,7 +259,7 @@ class NavBuilder implements ContainerAwareInterface
                 $menu['administrator']->addChild(
                     'courselist',
                     [
-                        'label' => $translator->trans('Course list'),
+                        'label' => $translator->trans('Courses'),
                         'route' => 'legacy_main',
                         'routeParameters' => ['name' => 'admin/course_list.php'],
                     ]
@@ -267,19 +267,19 @@ class NavBuilder implements ContainerAwareInterface
                 $menu['administrator']->addChild(
                     'sessionlist',
                     [
-                        'label' => $translator->trans('Session list'),
+                        'label' => $translator->trans('Sessions'),
                         'route' => 'legacy_main',
                         'routeParameters' => ['name' => 'session/session_list.php'],
                     ]
                 );
-                $menu['administrator']->addChild(
+                /*$menu['administrator']->addChild(
                     'languages',
                     [
                         'label' => $translator->trans('Languages'),
                         'route' => 'legacy_main',
                         'routeParameters' => ['name' => 'admin/languages.php'],
                     ]
-                );
+                );*/
                 $menu['administrator']->addChild(
                     'plugins',
                     [
@@ -291,7 +291,7 @@ class NavBuilder implements ContainerAwareInterface
                 $menu['administrator']->addChild(
                     'settings',
                     [
-                        'label' => $translator->trans('Advanced settings'),
+                        'label' => $translator->trans('Settings'),
                         'uri' => $rootWeb.'admin/settings/platform',
                     ]
                 );

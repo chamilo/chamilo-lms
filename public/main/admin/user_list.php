@@ -15,6 +15,8 @@ require_once __DIR__.'/../inc/global.inc.php';
 api_protect_session_admin_list_users();
 
 $urlId = api_get_current_access_url_id();
+$currentUserId = api_get_user_id();
+
 $action = isset($_REQUEST['action']) ? $_REQUEST['action'] : '';
 
 // Login as can be used by different roles
@@ -230,9 +232,9 @@ function prepare_user_sql_query($getCount)
                     u.status AS col7,
                     u.active AS col8,
                     u.registration_date AS col9,
-                    u.last_login as col10,                    
+                    u.last_login as col10,
                     u.id AS col11,
-                    u.expiration_date AS exp,                    
+                    u.expiration_date AS exp,
                     u.password
                 FROM $user_table u";
     }
@@ -240,7 +242,7 @@ function prepare_user_sql_query($getCount)
     // adding the filter to see the user's only of the current access_url
     if ((api_is_platform_admin() || api_is_session_admin()) && api_get_multiple_access_url()) {
         $access_url_rel_user_table = Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_USER);
-        $sql .= " INNER JOIN $access_url_rel_user_table url_rel_user 
+        $sql .= " INNER JOIN $access_url_rel_user_table url_rel_user
                   ON (u.id=url_rel_user.user_id)";
     }
 
@@ -340,7 +342,7 @@ function prepare_user_sql_query($getCount)
 
     $preventSessionAdminsToManageAllUsers = api_get_setting('prevent_session_admins_to_manage_all_users');
     if (api_is_session_admin() && $preventSessionAdminsToManageAllUsers === 'true') {
-        $sql .= ' AND u.creator_id = '.api_get_user_id();
+        $sql .= ' AND u.creator_id = '.$currentUserId;
     }
 
     $variables = Session::read('variables_to_show', []);
@@ -461,9 +463,9 @@ function get_user_data($from, $number_of_items, $column, $direction)
             $user[0],
             USER_IMAGE_SIZE_SMALL
         );
-        $photo = '<img 
-            src="'.$userPicture.'" width="22" height="22" 
-            alt="'.api_get_person_name($user[2], $user[3]).'" 
+        $photo = '<img
+            src="'.$userPicture.'" width="22" height="22"
+            alt="'.api_get_person_name($user[2], $user[3]).'"
             title="'.api_get_person_name($user[2], $user[3]).'" />';
 
         if ($user[7] == 1 && !empty($user['exp'])) {
@@ -539,6 +541,8 @@ function modify_filter($user_id, $url_params, $row)
     $_admins_list = Session::read('admin_list', []);
     $is_admin = in_array($user_id, $_admins_list);
     $statusname = api_get_status_langvars();
+    $currentUserId = api_get_user_id();
+
     $user_is_anonymous = false;
     $current_user_status_label = $row['7'];
 
@@ -716,7 +720,7 @@ function modify_filter($user_id, $url_params, $row)
     $allowDelete = api_get_configuration_value('allow_delete_user_for_session_admin');
 
     if (api_is_session_admin() && $allowDelete) {
-        if ($user_id != api_get_user_id() &&
+        if ($user_id != $currentUserId &&
             !$user_is_anonymous &&
             api_global_admin_can_edit_admin($user_id, null, true)
         ) {
@@ -741,7 +745,7 @@ function modify_filter($user_id, $url_params, $row)
             ).
             '</a>';
 
-        if ($user_id != api_get_user_id() &&
+        if ($user_id != $currentUserId &&
             !$user_is_anonymous &&
             api_global_admin_can_edit_admin($user_id)
         ) {
@@ -757,7 +761,7 @@ function modify_filter($user_id, $url_params, $row)
 
         $deleteAllowed = !api_get_configuration_value('deny_delete_users');
         if ($deleteAllowed) {
-            if ($user_id != api_get_user_id() &&
+            if ($user_id != $currentUserId &&
                 !$user_is_anonymous &&
                 api_global_admin_can_edit_admin($user_id)
             ) {
@@ -890,7 +894,7 @@ if (!empty($action)) {
                     $number_of_affected_users = 0;
                     if (is_array($_POST['id'])) {
                         foreach ($_POST['id'] as $index => $user_id) {
-                            if ($user_id != $_user['user_id']) {
+                            if ($user_id != $currentUserId) {
                                 if (UserManager::delete_user($user_id)) {
                                     $number_of_affected_users++;
                                 }
@@ -916,7 +920,7 @@ if (!empty($action)) {
                     $number_of_affected_users = 0;
                     if (is_array($_POST['id'])) {
                         foreach ($_POST['id'] as $index => $user_id) {
-                            if ($user_id != $_user['user_id']) {
+                            if ($user_id != $currentUserId) {
                                 if (UserManager::disable($user_id)) {
                                     $number_of_affected_users++;
                                 }
@@ -942,7 +946,7 @@ if (!empty($action)) {
                     $number_of_affected_users = 0;
                     if (is_array($_POST['id'])) {
                         foreach ($_POST['id'] as $index => $user_id) {
-                            if ($user_id != $_user['user_id']) {
+                            if ($user_id != $currentUserId) {
                                 if (UserManager::enable($user_id)) {
                                     $number_of_affected_users++;
                                 }
@@ -986,7 +990,7 @@ $form->addText(
 $form->addButtonSearch(get_lang('Search'));
 
 $searchAdvanced = '
-<a id="advanced_params" href="javascript://" 
+<a id="advanced_params" href="javascript://"
     class="btn btn-default advanced_options" onclick="display_advanced_search_form();">
     <span id="img_plus_and_minus">&nbsp;
     '.Display::returnFontAwesomeIcon('arrow-right').' '.get_lang('Advanced search').'

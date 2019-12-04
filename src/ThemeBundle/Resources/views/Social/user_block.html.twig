@@ -22,7 +22,7 @@
             {% endif %}
         {% endif %}
         {% if user_is_group_admin %}
-            <a class="btn btn-light btn-sm" title="{{ 'EditGroup'|get_lang }}" href="{{ _p.web_main ~ 'social/group_edit.php?id=' ~ group.id }}">
+            <a class="btn btn-light btn-sm" title="{{ 'Edit group'|trans }}" href="{{ _p.web_main ~ 'social/group_edit.php?id=' ~ group.id }}">
                <i class="fas fa-pencil-alt"></i>
             </a>
         {% endif %}

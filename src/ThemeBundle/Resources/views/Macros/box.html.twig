@@ -87,7 +87,7 @@
                                         <a href="{{ subitem.url }}" title="{{ subitem.title }}" class="{{ subitem.visibility != '1' ? 'text-muted': '' }}">{{ subitem.title }}</a>
                                         {% if subitem.forum_of_group != 0 %}
                                             <a class="forum-goto" href="../group/group_space.php?{{ _p.web_cid_query }}&gidReq={{ subitem.forum_of_group }}">
-                                                {{ "forum.png"|img(22) }} {{ "GoTo"|get_lang }} {{ subitem.forum_group_title }}
+                                                {{ "forum.png"|img(22) }} {{ "GoTo"|trans }} {{ subitem.forum_group_title }}
                                             </a>
                                         {% endif %}
                                         {{ subitem.icon_session }}
@@ -98,13 +98,13 @@
                                         </div>
                                     </h4>
                                     <ul class="forum-threads">
-                                        <li class="threads">{{ 'ForumThreads'| get_lang }}: {{ subitem.number_threads }} </li>
+                                        <li class="threads">{{ 'ForumThreads'| trans }}: {{ subitem.number_threads }} </li>
                                         {% if subitem.last_poster_id is not empty %}
                                             <li class="date">
                                                 <i class="fa fa-comments" aria-hidden="true"></i>
                                                 {{ subitem.last_poster_date }}
                                                 « {{ subitem.last_post_title }} »
-                                                {{ "By"|get_lang }}
+                                                {{ "By"|trans }}
                                                 {{ subitem.last_poster_user }}
                                             </li>
                                         {% endif %}
@@ -119,7 +119,7 @@
                             {{ subitem.alert }}
                             {% if subitem.moderation is not empty %}
                                 <span class="label label-warning">
-                                    {{ "PostsPendingModeration"|get_lang }}: {{ subitem.moderation }}
+                                    {{ "PostsPendingModeration"|trans }}: {{ subitem.moderation }}
                                 </span>
                             {% endif %}
 
@@ -441,22 +441,22 @@
     <div class="parameters">
         <dl class="dl-horizontal">
             {% if user.status %}
-                <dt>{{ 'Status'|get_lang }}</dt>
+                <dt>{{ 'Status'|trans }}</dt>
                 <dd>{{ user.status }}</dd>
             {% endif %}
 
-            <dt>{{ 'OfficialCode'|get_lang }}</dt>
-            <dd>{{ user.code == '' ? 'NoOfficialCode'|get_lang : user.code }}</dd>
-            <dt>{{ 'OnLine'|get_lang }}</dt>
+            <dt>{{ 'OfficialCode'|trans }}</dt>
+            <dd>{{ user.code == '' ? 'NoOfficialCode'|trans : user.code }}</dd>
+            <dt>{{ 'OnLine'|trans }}</dt>
             <dd>
                 {{ user.user_is_online }}
                 {{ user.online }}
             </dd>
-            <dt>{{ 'Tel'|get_lang }}</dt>
-            <dd>{{ user.phone == '' ? 'NoTel'|get_lang : user.phone }}</dd>
+            <dt>{{ 'Tel'|trans }}</dt>
+            <dd>{{ user.phone == '' ? 'NoTel'|trans : user.phone }}</dd>
 
             {% if user.timezone %}
-                <dt>{{ 'Timezone'|get_lang }}</dt>
+                <dt>{{ 'Timezone'|trans }}</dt>
                 <dd>{{ user.timezone }}</dd>
             {% endif %}
         </dl>

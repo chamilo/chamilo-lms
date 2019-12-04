@@ -23,20 +23,22 @@
             <table align="center" border="0" cellpadding="0" cellspacing="0" width="600" style="border-collapse: collapse;">
                 <tr>
                     <td>
-                        {% include template ~ '/mail/header.html.twig' %}
+                        {% include '@ChamiloTheme/Mailer/Default/header.html.twig' %}
                     </td>
                 </tr>
                 <tr>
                     <td cellpadding="0" cellspacing="0" style="padding: 40px 10px">
+                        {% autoescape false %}
                         {{ automatic_email_text }}
                         <span {{ mail_content_style }}>
                         {{ content }}
                         </span>
+                        {% endautoescape %}
                     </td>
                 </tr>
                 <tr>
                     <td>
-                        {% include template ~ '/mail/footer.html.twig' %}
+                        {% include '@ChamiloTheme/Mailer/Default/footer.html.twig' %}
                     </td>
                 </tr>
             </table>

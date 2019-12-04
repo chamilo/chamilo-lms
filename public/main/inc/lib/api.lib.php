@@ -8747,17 +8747,12 @@ function api_mail_html(
         }
 
         $params = [
-            'content' => '',
             'mail_header_style' => api_get_configuration_value('mail_header_style'),
             'mail_content_style' => api_get_configuration_value('mail_content_style'),
             'link' => $additionalParameters['link'] ?? '',
             'automatic_email_text' => $automaticEmailText,
+            'content' => $body,
         ];
-
-        $paramsHtml = $paramsText = $params;
-
-        $paramsHtml['content'] = $body;
-        //$paramsText['content'] = str_replace('<br />', "\n", api_html_entity_decode($body));
 
         if (!empty($senderEmail)) {
             $message->from(new Address($senderEmail, $senderName));
@@ -8775,9 +8770,8 @@ function api_mail_html(
             ->htmlTemplate('ChamiloThemeBundle:Mailer:Default/default.html.twig')
             ->textTemplate('ChamiloThemeBundle:Mailer:Default/default.text.twig')
         ;
-        $message->context($paramsHtml);
-        $result = Container::getMailer()->send($message);
-        var_dump($result);exit;
+        $message->context($params);
+        Container::getMailer()->send($message);
 
         return true;
     } catch (Exception $e) {

@@ -1,9 +1,13 @@
+{% autoescape false %}
 <table border="0" cellpadding="10" cellspacing="0" width="100%">
     <tr>
         <td width="245" {{ mail_header_style }}>
-            {{ logo }}
+            <img class="navbar-brand-full" width="130"
+                 src="{{ url('home') ~ 'build/css/themes/'~ theme ~'/images/logo_chamilo.svg' }}"
+                 alt="Chamilo"/>
         </td>
         <td width="100%">            &nbsp;
         </td>
     </tr>
 </table>
+{% endautoescape %}

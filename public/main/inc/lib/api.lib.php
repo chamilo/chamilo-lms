@@ -8752,6 +8752,7 @@ function api_mail_html(
             'link' => $additionalParameters['link'] ?? '',
             'automatic_email_text' => $automaticEmailText,
             'content' => $body,
+            'theme' => api_get_visual_theme(),
         ];
 
         if (!empty($senderEmail)) {

@@ -169,10 +169,11 @@ $(function () {
 {#                    <span class="badge badge-success">42</span>#}
 {#                </a>#}
 
-                <a class="dropdown-item" href="#">
+                {% if is_granted('ROLE_ADMIN') %}
+                <a class="dropdown-item" href="{{ url('legacy_main', { 'name' : 'admin/index.php' }) }}">
                     <i class="fa fa-wrench"></i> {{ "Administration"|trans }}
                 </a>
-
+                {% endif %}
                 <a class="dropdown-item" id="logout_button" title="{{ "Logout"|trans }}"
                    href="{{ path('logout') }}">
                     <i class="fa fa-sign-out-alt"></i>

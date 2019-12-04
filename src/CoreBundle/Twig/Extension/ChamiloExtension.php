@@ -59,7 +59,7 @@ class ChamiloExtension extends AbstractExtension
         $url = $this->getIllustration($node);
 
         if (empty($url)) {
-            return 'img/icons/32/unknown.png';
+            return '/img/icons/32/unknown.png';
         }
 
         return $url;

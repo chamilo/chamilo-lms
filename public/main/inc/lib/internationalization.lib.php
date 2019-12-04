@@ -71,28 +71,12 @@ function get_lang($variable)
     $defaultDomain = 'messages';
     $locale = api_get_language_isocode();
 
-    $translated = $translator->trans(
+    return $translator->trans(
         $variable,
         [],
         $defaultDomain,
         $locale
     );
-
-    if ($translated === $variable) {
-        // Check the langVariable for BC
-        $translated = $translator->trans(
-            "lang$variable",
-            [],
-            $defaultDomain,
-            $locale
-        );
-
-        if ($translated === "lang$variable") {
-            return $variable;
-        }
-    }
-
-    return $translated;
 }
 
 /**
@@ -157,8 +141,8 @@ function api_get_language_isocode()
 function api_get_platform_isocodes()
 {
     $list = [];
-    $sql = "SELECT isocode 
-            FROM ".Database::get_main_table(TABLE_MAIN_LANGUAGE)." 
+    $sql = "SELECT isocode
+            FROM ".Database::get_main_table(TABLE_MAIN_LANGUAGE)."
             ORDER BY isocode ";
     $result = Database::query($sql);
     if (Database::num_rows($result)) {

@@ -11,8 +11,11 @@ use Chamilo\CourseBundle\Entity\CItemProperty;
 use Chamilo\ThemeBundle\Controller\ExceptionController;
 use Chamilo\UserBundle\Entity\User;
 use ChamiloSession as Session;
+use Symfony\Bridge\Twig\Mime\TemplatedEmail;
 use Symfony\Component\Debug\Exception\FlattenException;
 use Symfony\Component\Finder\Finder;
+use Symfony\Component\Mime\Address;
+use Symfony\Component\Mime\Email;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 
 /**
@@ -1845,7 +1848,7 @@ function api_get_anonymous_id()
     $ip = Database::escape_string(api_get_real_ip());
     $max = (int) api_get_configuration_value('max_anonymous_users');
     if ($max >= 2) {
-        $sql = "SELECT * FROM $table as TEL 
+        $sql = "SELECT * FROM $table as TEL
                 JOIN $tableU as U
                 ON U.user_id = TEL.login_user_id
                 WHERE TEL.user_ip = '$ip'
@@ -1880,8 +1883,8 @@ function api_get_anonymous_id()
     }
 
     $table = Database::get_main_table(TABLE_MAIN_USER);
-    $sql = "SELECT user_id 
-            FROM $table 
+    $sql = "SELECT user_id
+            FROM $table
             WHERE status = ".ANONYMOUS." ";
     $res = Database::query($sql);
     if (Database::num_rows($res) > 0) {
@@ -4679,7 +4682,7 @@ function api_display_language_form($hide_if_no_choice = false, $showAsButton = f
     } else {
         $html = '
             <a href="'.$url.'" class="dropdown-toggle" data-toggle="dropdown" role="button">
-                <span class="flag-icon flag-icon-'.$countryCode.'"></span> 
+                <span class="flag-icon flag-icon-'.$countryCode.'"></span>
                 '.$currentLanguageInfo['original_name'].'
                 <span class="caret"></span>
             </a>
@@ -4795,7 +4798,7 @@ function languageToCountryIsoCode($languageIsoCode)
 function api_get_languages()
 {
     $table = Database::get_main_table(TABLE_MAIN_LANGUAGE);
-    $sql = "SELECT * FROM $table WHERE available='1' 
+    $sql = "SELECT * FROM $table WHERE available='1'
             ORDER BY original_name ASC";
     $result = Database::query($sql);
     $languages = [];
@@ -8027,8 +8030,8 @@ function api_get_password_checker_js($usernameInputId, $passwordInputId)
     };
 
     $(function() {
-        var lang = ".json_encode($translations).";     
-        var options = {        
+        var lang = ".json_encode($translations).";
+        var options = {
             onLoad : function () {
                 //$('#messages').text('Start typing password');
             },
@@ -8046,7 +8049,7 @@ function api_get_password_checker_js($usernameInputId, $passwordInputId)
         options.i18n = {
             t: function (key) {
                 var result = lang[key];
-                return result === key ? '' : result; // This assumes you return the                
+                return result === key ? '' : result; // This assumes you return the
             }
         };
         $('".$passwordInputId."').pwstrength(options);
@@ -8717,57 +8720,14 @@ function api_mail_html(
         $replyToName = $extra_headers['reply_to']['name'];
     }
 
-    //If the SMTP configuration only accept one sender
-    /*if (isset($platform_email['SMTP_UNIQUE_SENDER']) && $platform_email['SMTP_UNIQUE_SENDER']) {
-        $senderName = $platform_email['SMTP_FROM_NAME'];
-        $senderEmail = $platform_email['SMTP_FROM_EMAIL'];
-        $valid = PHPMailer::validateAddress($senderEmail);
-        if ($valid) {
-            //force-set Sender to $senderEmail, otherwise SetFrom only does it if it is currently empty
-            $mail->Sender = $senderEmail;
-        }
-    }*/
-
-    /*$mail->SetFrom($senderEmail, $senderName);
-    $mail->Subject = $subject;
-    $mail->AltBody = strip_tags(
-        str_replace('<br />', "\n", api_html_entity_decode($message))
-    );*/
-
-    /*if (is_array($extra_headers) && count($extra_headers) > 0) {
-        foreach ($extra_headers as $key => $value) {
-            switch (strtolower($key)) {
-                case 'encoding':
-                case 'content-transfer-encoding':
-                    $mail->Encoding = $value;
-                    break;
-                case 'charset':
-                    $mail->Charset = $value;
-                    break;
-                case 'contenttype':
-                case 'content-type':
-                    $mail->ContentType = $value;
-                    break;
-                default:
-                    $mail->AddCustomHeader($key.':'.$value);
-                    break;
-            }
-        }
-    } else {
-        if (!empty($extra_headers)) {
-            $mail->AddCustomHeader($extra_headers);
-        }
-    }*/
-
-    // WordWrap the html body (phpMailer only fixes AltBody) FS#2988
-    //$mail->Body = $mail->WrapText($mail->Body, $mail->WordWrap);
     try {
-        $message = new \Swift_Message($subject);
+        $message = new TemplatedEmail();
+        $message->subject($subject);
 
         $list = api_get_configuration_value('send_all_emails_to');
         if (!empty($list) && isset($list['emails'])) {
             foreach ($list['emails'] as $email) {
-                $message->addCc($email);
+                $message->cc($email);
             }
         }
 
@@ -8775,10 +8735,7 @@ function api_mail_html(
         if (!empty($data_file)) {
             foreach ($data_file as $file_attach) {
                 if (!empty($file_attach['path']) && !empty($file_attach['filename'])) {
-                    //$message->attach(Swift_Attachment::fromPath($file_attach['path'], $file_attach['filename']);
-                    $message->attach(
-                        Swift_Attachment::fromPath($file_attach['path'])->setFilename($file_attach['filename'])
-                    );
+                    $message->attachFromPath($file_attach['path'], $file_attach['filename']);
                 }
             }
         }
@@ -8800,41 +8757,27 @@ function api_mail_html(
         $paramsHtml = $paramsText = $params;
 
         $paramsHtml['content'] = $body;
-        $paramsText['content'] = str_replace('<br />', "\n", api_html_entity_decode($body));
+        //$paramsText['content'] = str_replace('<br />', "\n", api_html_entity_decode($body));
 
         if (!empty($senderEmail)) {
-            $message->setFrom([$senderEmail => $senderName]);
+            $message->from(new Address($senderEmail, $senderName));
         }
 
         if (!empty($recipientEmail)) {
-            $message->setTo([$recipientEmail => $recipientName]);
+            $message->to(new Address($recipientEmail, $recipientName));
         }
 
         if (!empty($replyToEmail)) {
-            $message->setReplyTo([$replyToEmail => $replyToName]);
+            $message->replyTo(new Address($replyToEmail, $replyToName));
         }
 
         $message
-            ->setBody(
-                Container::getTwig()->render(
-                    'ChamiloThemeBundle:Mailer:Default/default.html.twig',
-                    $paramsHtml
-                ),
-                'text/html'
-            )
-            ->addPart(
-                Container::getTwig()->render(
-                    'ChamiloThemeBundle:Mailer:Default/default.text.twig',
-                    $paramsText
-                ),
-                'text/plain'
-            )
-            //->setEncoder(\Swift_Encoding::get8BitEncoding())
+            ->htmlTemplate('ChamiloThemeBundle:Mailer:Default/default.html.twig')
+            ->textTemplate('ChamiloThemeBundle:Mailer:Default/default.text.twig')
         ;
-
-        $type = $message->getHeaders()->get('Content-Type');
-        $type->setCharset('utf-8');
-        Container::getMailer()->send($message);
+        $message->context($paramsHtml);
+        $result = Container::getMailer()->send($message);
+        var_dump($result);exit;
 
         return true;
     } catch (Exception $e) {
@@ -9325,7 +9268,7 @@ function api_find_template($template)
 function api_get_language_list_for_flag()
 {
     $table = Database::get_main_table(TABLE_MAIN_LANGUAGE);
-    $sql = "SELECT english_name, isocode FROM $table 
+    $sql = "SELECT english_name, isocode FROM $table
             ORDER BY original_name ASC";
     static $languages = [];
     if (empty($languages)) {
@@ -9373,11 +9316,11 @@ function api_get_language_translate_html()
         $hideAll .= '
         $("span:lang('.$language['isocode'].')").filter(
             function(e, val) {
-                // Only find the spans if they have set the lang                
-                if ($(this).attr("lang") == null) {                
+                // Only find the spans if they have set the lang
+                if ($(this).attr("lang") == null) {
                     return false;
                 }
-                
+
                 // Ignore ckeditor classes
                 return !this.className.match(/cke(.*)/);
         }).hide();'."\n";
@@ -9394,32 +9337,32 @@ function api_get_language_translate_html()
 
     return '
             $(function() {
-                '.$hideAll.'                 
-                var defaultLanguageFromUser = "'.$isoCode.'";   
-                                             
+                '.$hideAll.'
+                var defaultLanguageFromUser = "'.$isoCode.'";
+
                 $("span:lang('.$isoCode.')").filter(
                     function() {
                         // Ignore ckeditor classes
                         return !this.className.match(/cke(.*)/);
                 }).show();
-                
+
                 var defaultLanguage = "";
                 var langFromUserFound = false;
-                
+
                 $(this).find("span").filter(
                     function() {
                         // Ignore ckeditor classes
                         return !this.className.match(/cke(.*)/);
                 }).each(function() {
-                    defaultLanguage = $(this).attr("lang");                            
+                    defaultLanguage = $(this).attr("lang");
                     if (defaultLanguage) {
-                        $(this).before().next("br").remove();                
+                        $(this).before().next("br").remove();
                         if (defaultLanguageFromUser == defaultLanguage) {
                             langFromUserFound = true;
                         }
                     }
                 });
-                
+
                 // Show default language
                 if (langFromUserFound == false && defaultLanguage) {
                     $("span:lang("+defaultLanguage+")").filter(

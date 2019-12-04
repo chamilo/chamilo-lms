@@ -229,20 +229,9 @@ class Container
         return false;
     }
 
-    /**
-     * @return AssetsHelper
-     */
-    public static function getAsset()
-    {
-        return self::$container->get('templating.helper.assets');
-    }
-
-    /**
-     * @return \Swift_Mailer
-     */
     public static function getMailer()
     {
-        return self::$container->get('mailer');
+        return self::$container->get('Symfony\Component\Mailer\Mailer');
     }
 
     /**

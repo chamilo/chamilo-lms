@@ -47,7 +47,7 @@ if (!empty($me['email'])) {
 if (empty($userInfo) && !empty($me['email'])) {
     $extraFieldValue = new ExtraFieldValue('user');
     $itemValue = $extraFieldValue->get_item_id_from_field_variable_and_field_value(
-        'organisationemail',
+        AzureActiveDirectory::EXTRA_FIELD_ORGANISATION_EMAIL,
         $me['email']
     );
 
@@ -57,7 +57,7 @@ if (empty($userInfo) && !empty($me['email'])) {
 if (empty($userInfo) && !empty($me['mailNickname'])) {
     $extraFieldValue = new ExtraFieldValue('user');
     $itemValue = $extraFieldValue->get_item_id_from_field_variable_and_field_value(
-        'azure_id',
+        AzureActiveDirectory::EXTRA_FIELD_AZURE_ID,
         $me['mailNickname']
     );
 

@@ -64,11 +64,9 @@ class ResourceNode
 
     /**
      * @ORM\ManyToOne(
-     *     targetEntity="Chamilo\UserBundle\Entity\User",
-     *     inversedBy="resourceNodes",
-     *     cascade={"persist"}
+     *     targetEntity="Chamilo\UserBundle\Entity\User", inversedBy="resourceNodes"
      * )
-     * @ORM\JoinColumn(onDelete="CASCADE", nullable=false)
+     * @ORM\JoinColumn(name="creator_id", referencedColumnName="id", nullable=true, onDelete="SET NULL")
      */
     protected $creator;
 
@@ -153,17 +151,12 @@ class ResourceNode
      *
      * @return User
      */
-    public function getCreator()
+    public function getCreator(): ?User
     {
         return $this->creator;
     }
 
-    /**
-     * Sets the resource creator.
-     *
-     * @return $this
-     */
-    public function setCreator(User $creator)
+    public function setCreator(User $creator = null)
     {
         $this->creator = $creator;
 

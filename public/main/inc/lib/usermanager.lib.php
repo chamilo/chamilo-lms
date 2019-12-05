@@ -194,7 +194,6 @@ class UserManager
         if (!empty($hook)) {
             $hook->notifyCreateUser(HOOK_EVENT_TYPE_PRE);
         }
-
         // First check wether the login already exists
         if (!self::is_username_available($loginName)) {
             Display::addFlash(
@@ -347,14 +346,14 @@ class UserManager
             $userManager->updateUser($user);
 
             // Add user as a node
-            $url = api_get_url_entity($access_url_id);
             if ($addUserToNode) {
                 $resourceNode = new ResourceNode();
                 $resourceNode
                     ->setSlug($loginName)
                     ->setCreator(api_get_user_entity($creatorId))
                     ->setResourceType($repo->getResourceType())
-                    ->setParent($url->getResourceNode());
+                //    ->setParent($url->getResourceNode())
+                ;
                 $repo->getEntityManager()->persist($resourceNode);
                 $user->setResourceNode($resourceNode);
             }
@@ -378,10 +377,11 @@ class UserManager
                 $user->addGroup($group);
                 $userManager->updateUser($user);
             }
+
+            $repo->getEntityManager()->flush();
         } catch (Exception $e) {
             error_log($e->getMessage());
         }
-
         if (!empty($userId)) {
             $return = $userId;
             $sql = "UPDATE $table_user SET user_id = $return WHERE id = $return";
@@ -747,7 +747,6 @@ class UserManager
             return false;
         }
 
-        $table_user = Database::get_main_table(TABLE_MAIN_USER);
         $usergroup_rel_user = Database::get_main_table(TABLE_USERGROUP_REL_USER);
         $table_course_user = Database::get_main_table(TABLE_MAIN_COURSE_USER);
         $table_course = Database::get_main_table(TABLE_MAIN_COURSE);
@@ -758,7 +757,9 @@ class UserManager
         $table_group = Database::get_course_table(TABLE_GROUP_USER);
         $table_work = Database::get_course_table(TABLE_STUDENT_PUBLICATION);
 
-        $user = api_get_user_entity($user_id);
+        $userInfo = api_get_user_info($user_id);
+        /** @var User $user */
+        $user = Container::getUserManager()->find($user_id);
 
         // Unsubscribe the user from all groups in all his courses
         $sql = "SELECT c.id
@@ -808,19 +809,6 @@ class UserManager
             RedirectionPlugin::deleteUserRedirection($user_id);
         }
 
-        // Delete user picture
-        /* TODO: Logic about api_get_setting('split_users_upload_directory') == 'true'
-        a user has 4 different sized photos to be deleted. */
-        $user_info = api_get_user_info($user_id);
-
-        if (strlen($user_info['picture_uri']) > 0) {
-            $path = self::getUserPathById($user_id, 'system');
-            $img_path = $path.$user_info['picture_uri'];
-            if (file_exists($img_path)) {
-                unlink($img_path);
-            }
-        }
-
         // Delete the personal course categories
         $course_cat_table = Database::get_main_table(TABLE_USER_COURSE_CATEGORY);
         $sql = "DELETE FROM $course_cat_table WHERE user_id = '".$user_id."'";
@@ -842,7 +830,7 @@ class UserManager
         $extraFieldValue = new ExtraFieldValue('user');
         $extraFieldValue->deleteValuesByItem($user_id);
 
-        UrlManager::deleteUserFromAllUrls($user_id);
+        //UrlManager::deleteUserFromAllUrls($user_id);
 
         if (api_get_setting('allow_social_tool') === 'true') {
             $userGroup = new UserGroup();
@@ -894,7 +882,6 @@ class UserManager
                 }
                 $em->remove($skill);
             }
-            $em->flush();
         }
 
         // ExtraFieldSavedSearch
@@ -904,7 +891,6 @@ class UserManager
             foreach ($searchList as $search) {
                 $em->remove($search);
             }
-            $em->flush();
         }
 
         $connection = Database::getManager()->getConnection();
@@ -930,35 +916,36 @@ class UserManager
         $app_plugin = new AppPlugin();
         $app_plugin->performActionsWhenDeletingItem('user', $user_id);
 
+        $em->remove($user->getResourceNode());
+
+        foreach ($user->getGroups() as $group) {
+            $user->removeGroup($group);
+        }
+
+//        $em->flush();
         // Delete user from database
         $em->remove($user);
+
         $em->flush();
 
         // Add event to system log
-        $user_id_manager = api_get_user_id();
+        $authorId = api_get_user_id();
 
         Event::addEvent(
             LOG_USER_DELETE,
             LOG_USER_ID,
             $user_id,
             api_get_utc_datetime(),
-            $user_id_manager
+            $authorId
         );
 
         Event::addEvent(
             LOG_USER_DELETE,
             LOG_USER_OBJECT,
-            $user_info,
+            $userInfo,
             api_get_utc_datetime(),
-            $user_id_manager
+            $authorId
         );
-        $cacheAvailable = api_get_configuration_value('apc');
-        if ($cacheAvailable === true) {
-            $apcVar = api_get_configuration_value('apc_prefix').'userinfo_'.$user_id;
-            if (apcu_exists($apcVar)) {
-                apcu_delete($apcVar);
-            }
-        }
 
         return true;
     }
@@ -1208,6 +1195,20 @@ class UserManager
 
         if (!is_null($password)) {
             $user->setPlainPassword($password);
+        }
+
+        $statusToGroup = [
+            COURSEMANAGER => 'TEACHER',
+            STUDENT => 'STUDENT',
+            DRH => 'RRHH',
+            SESSIONADMIN => 'SESSION_ADMIN',
+            STUDENT_BOSS => 'STUDENT_BOSS',
+            INVITEE => 'INVITEE',
+        ];
+
+        $group = Container::$container->get('Chamilo\UserBundle\Repository\GroupRepository')->findOneBy(['code' => $statusToGroup[$status]]);
+        if ($group) {
+            $user->addGroup($group);
         }
 
         $userManager->updateUser($user, true);

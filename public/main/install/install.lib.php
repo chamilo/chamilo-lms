@@ -2,6 +2,7 @@
 /* For licensing terms, see /license.txt */
 
 use Chamilo\CoreBundle\Entity\AccessUrl;
+use Chamilo\CoreBundle\Entity\BranchSync;
 use Chamilo\CoreBundle\Entity\ExtraField;
 use Chamilo\CoreBundle\Framework\Container;
 use Chamilo\CoreBundle\ToolChain;
@@ -2903,9 +2904,9 @@ function installGroups($container, $manager)
                 $group->addRole($role);
             }
             $manager->persist($group);
-            $manager->flush();
         }
     }
+    $manager->flush();
 }
 
 /**
@@ -3146,6 +3147,7 @@ function finishInstallationWithContainer(
 
     $manager = Database::getManager();
     $connection = $manager->getConnection();
+    $trans = $container->get('translator');
     $sql = getVersionTable();
 
     // Add version table
@@ -3159,9 +3161,6 @@ function finishInstallationWithContainer(
         ->setInsertUserId(1);
 
     $manager->persist($ticketProject);
-    $manager->flush();
-
-    $trans = $container->get('translator');
 
     $categories = [
         $trans->trans('Enrollment') => $trans->trans('Tickets about enrollment'),
@@ -3187,8 +3186,6 @@ function finishInstallationWithContainer(
         $ticketCategory->setCourseRequired($isRequired);
 
         $manager->persist($ticketCategory);
-        $manager->flush();
-
         $i++;
     }
 
@@ -3209,9 +3206,9 @@ function finishInstallationWithContainer(
             ->setInsertUserId(1);
 
         $manager->persist($ticketPriority);
-        $manager->flush();
         $i++;
     }
+    $manager->flush();
 
     $table = Database::get_main_table(TABLE_TICKET_STATUS);
 
@@ -3249,6 +3246,7 @@ function finishInstallationWithContainer(
     UserManager::setPasswordEncryption($encryptPassForm);
 
     error_log('user creation - admin');
+
     // Create admin user.
     $adminId = UserManager::create_user(
         $adminFirstName,
@@ -3307,20 +3305,27 @@ function finishInstallationWithContainer(
         '',
         false
     );
+
     error_log('Adding access url as a node');
     $userManager = $container->get('Chamilo\UserBundle\Repository\UserRepository');
     $urlRepo = $container->get('Chamilo\CoreBundle\Repository\AccessUrlRepository');
-    $urlRepo->getEntityManager()->flush();
 
     $accessUrl = $urlRepo->find(1);
+
+    $branch = new BranchSync();
+    $branch->setBranchName('localhost');
+    $branch->setUrl($accessUrl);
+
+    $manager->persist($branch);
+
     $admin = $userManager->find($adminId);
+
+    $userManager->addUserToResourceNode($adminId, $adminId);
+    $userManager->addUserToResourceNode($anonId, $adminId);
+
     $urlRepo->addResourceNode($accessUrl, $admin);
-    $urlRepo->getEntityManager()->flush();
 
-    $userManager->addUserToResourceNode($adminId, $adminId, $accessUrl);
-    $userManager->addUserToResourceNode($anonId, $adminId, $accessUrl);
-
-    $urlRepo->getEntityManager()->flush();
+    $manager->flush();
 
     // Set default language
     Database::update(

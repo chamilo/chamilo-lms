@@ -32,14 +32,12 @@ class AccessUrlRelUser
 
     /**
      * @ORM\ManyToOne(targetEntity="Chamilo\UserBundle\Entity\User", inversedBy="portals")
-     * @ORM\JoinColumn(name="user_id", referencedColumnName="id")
+     * @ORM\JoinColumn(name="user_id", referencedColumnName="id", onDelete="CASCADE")
      */
     protected $user;
 
     /**
-     * @var AccessUrl
-     *
-     * @ORM\ManyToOne(targetEntity="Chamilo\CoreBundle\Entity\AccessUrl")
+     * @ORM\ManyToOne(targetEntity="AccessUrl", inversedBy="user", cascade={"persist"})
      * @ORM\JoinColumn(name="access_url_id", referencedColumnName="id")
      */
     protected $url;

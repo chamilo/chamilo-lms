@@ -80,14 +80,6 @@ class User extends BaseUser implements ThemeUser, EquatableInterface //implement
     public const ANONYMOUS = 6;
 
     /**
-     * @ORM\OneToOne(
-     *     targetEntity="Chamilo\CoreBundle\Entity\Resource\ResourceNode", cascade={"remove"}, orphanRemoval=true
-     * )
-     * @ORM\JoinColumn(name="resource_node_id", referencedColumnName="id", onDelete="CASCADE")
-     */
-    public $resourceNode;
-
-    /**
      * @var int
      *
      * @ORM\Column(name="id", type="integer")
@@ -262,14 +254,17 @@ class User extends BaseUser implements ThemeUser, EquatableInterface //implement
 
     /**
      * @ORM\ManyToMany(targetEntity="Chamilo\UserBundle\Entity\Group", inversedBy="users")
-     * @ORM\JoinTable(name="fos_user_user_group",
-     *      joinColumns={@ORM\JoinColumn(name="user_id", referencedColumnName="id")},
-     *      inverseJoinColumns={@ORM\JoinColumn(name="group_id", referencedColumnName="id")}
+     * @ORM\JoinTable(
+     *      name="fos_user_user_group",
+     *      joinColumns={
+     *          @ORM\JoinColumn(name="user_id", referencedColumnName="id", onDelete="cascade")
+     *      },
+     *      inverseJoinColumns={
+     *          @ORM\JoinColumn(name="group_id", referencedColumnName="id")
+     *      }
      * )
      */
     protected $groups;
-
-    //private $isActive;
 
     /**
      * ORM\OneToMany(targetEntity="Chamilo\CoreBundle\Entity\CurriculumItemRelUser", mappedBy="user").
@@ -294,7 +289,15 @@ class User extends BaseUser implements ThemeUser, EquatableInterface //implement
     protected $sessionAsGeneralCoach;
 
     /**
-     * @ORM\OneToMany(targetEntity="Chamilo\CoreBundle\Entity\Resource\ResourceNode", mappedBy="creator").
+     * @ORM\OneToOne(
+     *     targetEntity="Chamilo\CoreBundle\Entity\Resource\ResourceNode", cascade={"remove"}, orphanRemoval=true
+     * )
+     * @ORM\JoinColumn(name="resource_node_id", referencedColumnName="id", onDelete="CASCADE")
+     */
+    public $resourceNode;
+
+    /**
+     * @ORM\OneToMany(targetEntity="Chamilo\CoreBundle\Entity\Resource\ResourceNode", mappedBy="creator")
      */
     protected $resourceNodes;
 
@@ -559,6 +562,26 @@ class User extends BaseUser implements ThemeUser, EquatableInterface //implement
     public function getResourceNode(): ResourceNode
     {
         return $this->resourceNode;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getResourceNodes()
+    {
+        return $this->resourceNodes;
+    }
+
+    /**
+     * @param mixed $resourceNodes
+     *
+     * @return User
+     */
+    public function setResourceNodes($resourceNodes)
+    {
+        $this->resourceNodes = $resourceNodes;
+
+        return $this;
     }
 
     /**

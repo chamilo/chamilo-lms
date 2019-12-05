@@ -62,7 +62,7 @@ use Symfony\Component\Serializer\Serializer;
  */
 class UserRepository extends ResourceRepository
 {
-    public function addUserToResourceNode(int $userId, int $creatorId, AccessUrl $url): ResourceNode
+    public function addUserToResourceNode(int $userId, int $creatorId): ResourceNode
     {
         /** @var User $user */
         $user = $this->find($userId);
@@ -73,7 +73,8 @@ class UserRepository extends ResourceRepository
             ->setSlug($user->getUsername())
             ->setCreator($creator)
             ->setResourceType($this->getResourceType())
-            ->setParent($url->getResourceNode());
+        //    ->setParent($url->getResourceNode())
+        ;
         $this->getEntityManager()->persist($resourceNode);
         $user->setResourceNode($resourceNode);
         $this->getEntityManager()->persist($user);

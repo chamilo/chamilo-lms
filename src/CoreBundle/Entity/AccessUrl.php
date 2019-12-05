@@ -7,10 +7,11 @@ use Chamilo\CoreBundle\Entity\Resource\AbstractResource;
 use Chamilo\CoreBundle\Entity\Resource\ResourceInterface;
 use Chamilo\CoreBundle\Traits\CourseTrait;
 use Doctrine\ORM\Mapping as ORM;
+use Gedmo\Mapping\Annotation as Gedmo;
 
 /**
  * AccessUrl.
- *
+ * @Gedmo\Tree(type="nested")
  * @ORM\Table(name="access_url")
  * @ORM\Entity
  */
@@ -38,6 +39,11 @@ class AccessUrl extends AbstractResource implements ResourceInterface
     protected $session;
 
     /**
+     * @ORM\OneToMany(targetEntity="AccessUrlRelUser", mappedBy="url", cascade={"persist"}, orphanRemoval=true)
+     */
+    protected $user;
+
+    /**
      * @ORM\OneToMany(targetEntity="Chamilo\CoreBundle\Entity\SettingsCurrent", mappedBy="url", cascade={"persist"}, orphanRemoval=true)
      */
     protected $settings;
@@ -46,6 +52,58 @@ class AccessUrl extends AbstractResource implements ResourceInterface
      * @ORM\OneToMany(targetEntity="Chamilo\CoreBundle\Entity\SessionCategory", mappedBy="url", cascade={"persist"}, orphanRemoval=true)
      */
     protected $sessionCategory;
+
+    /**
+     * @ORM\OneToMany(targetEntity="Chamilo\CoreBundle\Entity\AccessUrlRelCourseCategory", mappedBy="url", cascade={"persist"}, orphanRemoval=true)
+     */
+    protected $courseCategory;
+
+    /**
+     * @Gedmo\TreeParent
+     *
+     * @ORM\ManyToOne(
+     *     targetEntity="Chamilo\CoreBundle\Entity\AccessUrl",
+     *     inversedBy="children"
+     * )
+     * @ORM\JoinColumns({@ORM\JoinColumn(onDelete="CASCADE")})
+     */
+    protected $parent;
+
+    /**
+     * @var AccessUrl[]
+     *
+     * @ORM\OneToMany(
+     *     targetEntity="Chamilo\CoreBundle\Entity\AccessUrl",
+     *     mappedBy="parent"
+     * )
+     * @ORM\OrderBy({"id" = "ASC"})
+     */
+    protected $children;
+
+    /**
+     * @Gedmo\TreeLeft
+     * @ORM\Column(name="lft", type="integer")
+     */
+    protected $lft;
+
+    /**
+     * @Gedmo\TreeLevel
+     * @ORM\Column(name="lvl", type="integer")
+     */
+    protected $lvl;
+
+    /**
+     * @Gedmo\TreeRight
+     * @ORM\Column(name="rgt", type="integer")
+     */
+    protected $rgt;
+
+    /**
+     * @Gedmo\TreeRoot
+     * @ORM\ManyToOne(targetEntity="AccessUrl")
+     * @ORM\JoinColumn(name="tree_root", referencedColumnName="id", onDelete="CASCADE")
+     */
+    protected $root;
 
     /**
      * @var string

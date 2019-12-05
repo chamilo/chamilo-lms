@@ -805,7 +805,7 @@ function api_get_path($path = '', $configuration = [])
         SYS_PLUGIN_PATH => $root_sys.'public/plugin/',
         SYS_ARCHIVE_PATH => $root_sys.'var/cache/',
         SYS_UPLOAD_PATH => 'var/upload/',
-        SYS_TEST_PATH => 'tests/',
+        SYS_TEST_PATH => $root_sys.'tests/',
         SYS_TEMPLATE_PATH => $root_sys.'template/',
         SYS_PUBLIC_PATH => $root_sys.'public/',
         SYS_FONTS_PATH => $root_sys.'public/fonts/',

@@ -52,13 +52,14 @@ class CourseListener
     public function prePersist(Course $course, LifecycleEventArgs $args)
     {
         /** @var AccessUrlRelCourse $urlRelCourse */
+
         if ($course) {
             /*$urlRelCourse = $course->getUrls()->first();
             $url = $urlRelCourse->getUrl();*/
             //$url = $course->getCurrentUrl();
             //$repo = $args->getEntityManager()->getRepository('ChamiloCoreBundle:Course');
             ///$this->checkLimit($repo, $course, $url);
-            $this->toolChain->addToolsInCourse($course, $this->settingsManager);
+            $this->toolChain->addToolsInCourse($args->getEntityManager(), $course, $this->settingsManager);
         }
     }
 

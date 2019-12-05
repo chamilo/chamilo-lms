@@ -12,6 +12,7 @@ use Chamilo\CoreBundle\Tool\AbstractTool;
 use Chamilo\CourseBundle\Entity\CTool;
 use Chamilo\SettingsBundle\Manager\SettingsManager;
 use Doctrine\Common\Persistence\ObjectManager;
+use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\PropertyAccess\Exception\InvalidArgumentException;
 
 /**
@@ -154,26 +155,30 @@ class ToolChain
         $tool->addToolResourceRight($toolResourceRightReader);
     }
 
-    public function addToolsInCourse(Course $course, SettingsManager $settingsManager): Course
+    public function addToolsInCourse(EntityManagerInterface $manager, Course $course, SettingsManager $settingsManager): Course
     {
         $tools = $this->getTools();
 
         $toolVisibility = $settingsManager->getSetting('course.active_tools_on_create');
+
         /** @var AbstractTool $tool */
         foreach ($tools as $tool) {
-            $toolEntity = new CTool();
-            $visibility = in_array($tool->getName(), $toolVisibility);
+            $courseTool = new CTool();
+            $visibility = in_array($tool->getName(), $toolVisibility, true);
+            $criteria = ['name' => $tool->getName()];
+            $toolEntity = $manager->getRepository('ChamiloCoreBundle:Tool')->findOneBy($criteria);
 
-            $toolEntity
+            $courseTool
+                ->setTool($toolEntity)
                 ->setCourse($course)
-                ->setImage($tool->getImage())
-                ->setName($tool->getName())
+                //->setImage($tool->getImage())
+                //->setName($tool->getName())
                 ->setVisibility($visibility)
-                ->setLink($tool->getLink())
-                ->setTarget($tool->getTarget())
+                //->setLink($tool->getLink())
+                //->setTarget($tool->getTarget())
                 ->setCategory($tool->getCategory());
 
-            $course->addTools($toolEntity);
+            $course->addTools($courseTool);
         }
 
         return $course;

@@ -71,14 +71,19 @@
         });
     </script>
 
-    {% if app.user.status != 5 %} <!-- main/template/default/course_home/activity.html.twig -->
+    {% if app.user.status != 5 %}
         <div class="accordion accordion-b4" id="course-tools">
             {% for block in blocks %}
                 <div class="card">
                     <div class="card-header" id="heading-{{ block.class }}">
                         {% if block.title %}
                             <h5 class="card-title">
-                                <a class="{{ ( block.title == 'Authoring') ? ' ' : 'collapse' }}" role="button" data-toggle="collapse" data-target="#collapse-{{ block.class }}" aria-expanded="{{ ( block.title == 'Authoring') ? 'true' : 'false' }}" aria-controls="collapse-{{ block.class }}">
+                                <a class="{{ ( block.title == 'Authoring') ? ' ' : 'collapse' }}"
+                                   role="button" data-toggle="collapse"
+                                   data-target="#collapse-{{ block.class }}"
+                                   aria-expanded="{{ ( block.title == 'Authoring') ? 'true' : 'false' }}"
+                                   aria-controls="collapse-{{ block.class }}"
+                                >
                                     {{ block.title }}
                                 </a>
                             </h5>
@@ -87,36 +92,27 @@
 
                     <div id="collapse-{{ block.class }}" class="collapse show" aria-labelledby="heading-{{ block.class }}" data-parent="#course-tools">
                         <div class="grid-tools">
-                            {% if 'homepage_view'|api_get_setting == 'activity' %}
-                                {% for item in block.content %}
-                                    <div class="col-md-4 course-tool">
-                                        {{ item.extra|raw }}
-                                        {{ item.visibility|raw }}
-                                        {{ item.icon|raw }}
-                                        {{ item.link|raw }}
-                                    </div>
-                                {% endfor %}
-                            {% endif %}
-                            {% if 'homepage_view'|api_get_setting == 'activity_big' %}
-                                {% for item in block.content %}
-                                    <div class="items-tools ">
-                                        <div class="tools mt-3 mb-3">
-                                            <div class="big_icon">
-                                                {{ item.tool.image|raw }}
-                                            </div>
-                                            <div class="content pt-2 pb-2">
-                                                {{ item.extra|raw }}
-                                                {{ item.link|raw }}
-                                                {% if item.visibility is not empty %}
-                                                    <div class="view">
-                                                        {{ item.visibility|raw }}
-                                                    </div>
-                                                {% endif %}
-                                            </div>
+                            {% for item in block.content %}
+                                <div class="items-tools ">
+                                    <div class="tools mt-3 mb-3">
+                                        <div class="big_icon">
+                                            <a href=" {{ item.href|raw }}" >
+                                                <img src="{{ asset('img/tools/' ~ item.tool.tool.name ~ '.png')  }}" />
+                                            </a>
+                                        </div>
+                                        <div class="content pt-2 pb-2">
+                                            <a href=" {{ item.href|raw }}" >
+                                                {{ item.tool.tool.name }}
+                                            </a>
+                                            {% if item.visibility is not empty %}
+                                                <div class="view">
+{#                                                    {{ item.visibility|raw }}#}
+                                                </div>
+                                            {% endif %}
                                         </div>
                                     </div>
-                                {% endfor %}
-                            {% endif %}
+                                </div>
+                            {% endfor %}
                         </div>
                     </div>
                 </div>
@@ -125,29 +121,24 @@
     {% else %}
         <div class="grid-tools">
             {% for block in blocks %}
-                {% if 'homepage_view'|api_get_setting == 'activity_big' %}
-                    {% for item in block.content %}
-                        <div class="items-tools">
-                            <div class="tools mt-3 mb-3">
-                                <div class="big_icon">
-                                    {{ item.tool.image|raw }}
-                                </div>
-                                <div class="content pt-2 pb-2">
-                                    {{ item.extra|raw }}
-                                    {{ item.link|raw }}
-                                    {% if item.visibility is not empty %}
-                                        <div class="view">
-                                            {{ item.visibility|raw }}
-                                        </div>
-                                    {% endif %}
-                                </div>
+                {% for item in block.content %}
+                    <div class="items-tools">
+                        <div class="tools mt-3 mb-3">
+                            <div class="big_icon">
+                                <a href=" {{ item.href|raw }}" >
+                                    <img src="{{ asset('img/tools/' ~ item.tool.tool.name ~ '.png')  }}" />
+                                </a>
+                            </div>
+                            <div class="content pt-2 pb-2">
+                                <a href=" {{ item.href|raw }}" >
+                                    {{ item.tool.tool.name }}
+                                </a>
                             </div>
                         </div>
-                    {% endfor %}
-                {% endif %}
+                    </div>
+                {% endfor %}
             {% endfor %}
         </div>
     {% endif %}
-
 {% endautoescape %}
 {% endblock %}

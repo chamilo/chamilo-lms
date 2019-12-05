@@ -1538,6 +1538,7 @@ class Display
         if (empty($courseInfo)) {
             return '';
         }
+        return '';
 
         $t_track_e_access = Database::get_main_table(TABLE_STATISTIC_TRACK_E_LASTACCESS);
         $course_tool_table = Database::get_course_table(TABLE_TOOL_LIST);
@@ -1567,7 +1568,7 @@ class Display
                     c_id = $course_id AND
                     access_user_id = '$user_id' AND
                     access_session_id ='".$sessionId."'
-                ORDER BY access_date DESC 
+                ORDER BY access_date DESC
                 LIMIT 1
                 ";
         $result = Database::query($sql);
@@ -1588,12 +1589,12 @@ class Display
 
         $hideTools = [TOOL_NOTEBOOK, TOOL_CHAT];
         // Get current tools in course
-        $sql = "SELECT name, link, image 
-                FROM $course_tool_table 
-                WHERE 
-                    c_id = $course_id AND 
+        $sql = "SELECT name
+                FROM $course_tool_table
+                WHERE
+                    c_id = $course_id AND
                     visibility = '1' AND
-                    name NOT IN ('".implode("','", $hideTools)."')
+                    name NOT IN ('".implode("','", $hideTools)." ')
                 ";
         $result = Database::query($sql);
         $tools = Database::store_result($result);
@@ -1613,7 +1614,7 @@ class Display
 
                 $toolName = addslashes($toolName);
 
-                $sql = "SELECT * FROM $tool_edit_table 
+                $sql = "SELECT * FROM $tool_edit_table
                         WHERE
                             c_id = $course_id AND
                             $toolCondition
@@ -2709,12 +2710,12 @@ class Display
             $ariaExpanded = $open ? 'true' : 'false';
 
             $html = <<<HTML
-            
+
                 <div class="card" id="$id">
-                    <div class="card-header">                        
-                        $title                        
-                    </div>                    
-                    <div class="card-body">$content</div>                    
+                    <div class="card-header">
+                        $title
+                    </div>
+                    <div class="card-body">$content</div>
                 </div>
 HTML;
         } else {
@@ -2778,14 +2779,14 @@ HTML;
             $toolbar = '<div class="btn-group pull-right">'.$toolbar.'</div>';
         }
 
-        return '<div id="user_card_'.$userInfo['id'].'" class="card d-flex flex-row">                    
+        return '<div id="user_card_'.$userInfo['id'].'" class="card d-flex flex-row">
                     <img src="'.$userInfo['avatar'].'" class="rounded">
-                    <h3 class="card-title">'.$userInfo['complete_name'].'</h3>                    
-                    <div class="card-body">                       
+                    <h3 class="card-title">'.$userInfo['complete_name'].'</h3>
+                    <div class="card-body">
                        <div class="card-title">
                        '.$status.'
                        '.$toolbar.'
-                       </div> 
+                       </div>
                     </div>
                     <hr />
               </div>';
@@ -2881,7 +2882,7 @@ HTML;
         $.frameReady(function() {
              $(function () {
                 $("video:not(.skip), audio:not(.skip)").mediaelementplayer({
-                    pluginPath: "'.$webPublicPath.'assets/mediaelement/plugins/",            
+                    pluginPath: "'.$webPublicPath.'assets/mediaelement/plugins/",
                     features: [\''.$videoFeatures.'\'],
                     success: function(mediaElement, originalNode, instance) {
                         '.ChamiloApi::getQuizMarkersRollsJS().'
@@ -2889,25 +2890,25 @@ HTML;
                     vrPath: "'.$webPublicPath.'assets/vrview/build/vrview.js"
                 });
             });
-        }, 
+        },
         "'.$frameName.'",
         [
             {type:"script", src:"'.api_get_jquery_web_path().'", deps: [
             {type:"script", src:"'.api_get_path(WEB_LIBRARY_PATH).'javascript/jquery.highlight.js"},
             {type:"script", src:"'.api_get_path(WEB_CODE_PATH).'glossary/glossary.js.php?'.api_get_cidreq().'"},
             {type:"script", src:"'.api_get_jquery_ui_js_web_path().'"},
-            {type:"script", src: "'.$webPublicPath.'build/libs/mediaelement/mediaelement-and-player.min.js", 
+            {type:"script", src: "'.$webPublicPath.'build/libs/mediaelement/mediaelement-and-player.min.js",
                 deps: [
                 {type:"script", src: "'.$webPublicPath.'build/libs/mediaelement/plugins/vrview/vrview.js"},
                 {type:"script", src: "'.$webPublicPath.'build/libs/mediaelement/plugins/markersrolls/markersrolls.js"},
                 '.$videoPluginFiles.'
-            ]},                
+            ]},
             '.$translateHtml.'
             ]},
             '.$videoPluginCssFiles.'
             {type:"script", src:"'.$webPublicPath.'build/libs/mathjax/MathJax.js?config=AM_HTMLorMML"},
             {type:"stylesheet", src:"'.$webPublicPath.'assets/jquery-ui/themes/smoothness/jquery-ui.min.css"},
-            {type:"stylesheet", src:"'.$webPublicPath.'assets/jquery-ui/themes/smoothness/theme.css"},       
+            {type:"stylesheet", src:"'.$webPublicPath.'assets/jquery-ui/themes/smoothness/theme.css"},
         ]);';
 
         return $frameReady;

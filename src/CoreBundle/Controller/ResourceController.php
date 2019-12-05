@@ -130,6 +130,7 @@ class ResourceController extends AbstractResourceController implements CourseCon
 
         // The group 'resource' is set in the @GRID\Source annotation in the entity.
         $source = new Entity($class, 'resource');
+        /** @var ResourceNode $parentNode */
         $parentNode = $repository->getResourceNodeRepository()->find($resourceNodeId);
 
         $this->denyAccessUnlessGranted(

@@ -4,6 +4,8 @@
 namespace Chamilo\CourseBundle\Entity;
 
 use Chamilo\CoreBundle\Entity\Course;
+use Chamilo\CoreBundle\Entity\Session;
+use Chamilo\CoreBundle\Entity\Tool;
 use Doctrine\ORM\Event\LifecycleEventArgs;
 use Doctrine\ORM\Mapping as ORM;
 
@@ -22,8 +24,6 @@ use Doctrine\ORM\Mapping as ORM;
  */
 class CTool
 {
-    protected $originalImage;
-
     /**
      * @var int
      *
@@ -41,27 +41,6 @@ class CTool
     protected $id;
 
     /**
-     * @var string
-     *
-     * @ORM\Column(name="name", type="text", nullable=false)
-     */
-    protected $name;
-
-    /**
-     * @var string
-     *
-     * @ORM\Column(name="link", type="string", length=255, nullable=false)
-     */
-    protected $link;
-
-    /**
-     * @var string
-     *
-     * @ORM\Column(name="image", type="string", length=255, nullable=true)
-     */
-    protected $image;
-
-    /**
      * @var bool
      *
      * @ORM\Column(name="visibility", type="boolean", nullable=true)
@@ -71,51 +50,9 @@ class CTool
     /**
      * @var string
      *
-     * @ORM\Column(name="admin", type="string", length=255, nullable=true)
-     */
-    protected $admin;
-
-    /**
-     * @var string
-     *
-     * @ORM\Column(name="address", type="string", length=255, nullable=true)
-     */
-    protected $address;
-
-    /**
-     * @var bool
-     *
-     * @ORM\Column(name="added_tool", type="boolean", nullable=true)
-     */
-    protected $addedTool;
-
-    /**
-     * @var string
-     *
-     * @ORM\Column(name="target", type="string", length=20, nullable=false)
-     */
-    protected $target;
-
-    /**
-     * @var string
-     *
      * @ORM\Column(name="category", type="string", length=20, nullable=false, options={"default" = "authoring"})
      */
     protected $category;
-
-    /**
-     * @var int
-     *
-     * @ORM\Column(name="session_id", type="integer", nullable=true)
-     */
-    protected $sessionId;
-
-    /**
-     * @var string
-     *
-     * @ORM\Column(name="description", type="text", nullable=true)
-     */
-    protected $description;
 
     /**
      * @var string
@@ -133,14 +70,28 @@ class CTool
     protected $course;
 
     /**
+     * @var Session
+     *
+     * @ORM\ManyToOne(targetEntity="Chamilo\CoreBundle\Entity\Session")
+     * @ORM\JoinColumn(name="session_id", referencedColumnName="id", nullable=true)
+     */
+    protected $session;
+
+    /**
+     * @var Tool
+     *
+     * @ORM\ManyToOne(targetEntity="Chamilo\CoreBundle\Entity\Tool")
+     * @ORM\JoinColumn(name="tool_id", referencedColumnName="id", nullable=false)
+     */
+    protected $tool;
+
+    /**
      * Constructor.
      */
     public function __construct()
     {
         // Default values
         $this->id = 0;
-        $this->sessionId = 0;
-        $this->address = 'squaregrey.gif';
     }
 
     /**
@@ -178,9 +129,29 @@ class CTool
         return $this->course;
     }
 
+    /**
+     * @return Session
+     */
+    public function getSession(): ?Session
+    {
+        return $this->session;
+    }
+
+    /**
+     * @param Session $session
+     *
+     * @return CTool
+     */
+    public function setSession(Session $session = null): CTool
+    {
+        $this->session = $session;
+
+        return $this;
+    }
+
     public static function loadValidatorMetadata(ClassMetadata $metadata)
     {
-        $metadata->addPropertyConstraint(
+        /*$metadata->addPropertyConstraint(
             'customIcon',
             new Assert\File(['mimeTypes' => ['image/png']])
         );
@@ -188,79 +159,7 @@ class CTool
             'customIcon',
             new Assert\Image(['maxWidth' => 64, 'minHeight' => 64])
         );
-        $metadata->addPropertyConstraint('cId', new Assert\NotBlank());
-    }
-
-    /**
-     * Set name.
-     *
-     * @param string $name
-     *
-     * @return CTool
-     */
-    public function setName($name)
-    {
-        $this->name = $name;
-
-        return $this;
-    }
-
-    /**
-     * Get name.
-     *
-     * @return string
-     */
-    public function getName()
-    {
-        return $this->name;
-    }
-
-    /**
-     * Set link.
-     *
-     * @param string $link
-     *
-     * @return CTool
-     */
-    public function setLink($link)
-    {
-        $this->link = $link;
-
-        return $this;
-    }
-
-    /**
-     * Get link.
-     *
-     * @return string
-     */
-    public function getLink()
-    {
-        return $this->link;
-    }
-
-    /**
-     * Set image.
-     *
-     * @param string $image
-     *
-     * @return CTool
-     */
-    public function setImage($image)
-    {
-        $this->image = $image;
-
-        return $this;
-    }
-
-    /**
-     * Get image.
-     *
-     * @return string
-     */
-    public function getImage()
-    {
-        return $this->image;
+        $metadata->addPropertyConstraint('cId', new Assert\NotBlank());*/
     }
 
     /**
@@ -288,102 +187,6 @@ class CTool
     }
 
     /**
-     * Set admin.
-     *
-     * @param string $admin
-     *
-     * @return CTool
-     */
-    public function setAdmin($admin)
-    {
-        $this->admin = $admin;
-
-        return $this;
-    }
-
-    /**
-     * Get admin.
-     *
-     * @return string
-     */
-    public function getAdmin()
-    {
-        return $this->admin;
-    }
-
-    /**
-     * Set address.
-     *
-     * @param string $address
-     *
-     * @return CTool
-     */
-    public function setAddress($address)
-    {
-        $this->address = $address;
-
-        return $this;
-    }
-
-    /**
-     * Get address.
-     *
-     * @return string
-     */
-    public function getAddress()
-    {
-        return $this->address;
-    }
-
-    /**
-     * Set addedTool.
-     *
-     * @param bool $addedTool
-     *
-     * @return CTool
-     */
-    public function setAddedTool($addedTool)
-    {
-        $this->addedTool = $addedTool;
-
-        return $this;
-    }
-
-    /**
-     * Get addedTool.
-     *
-     * @return bool
-     */
-    public function getAddedTool()
-    {
-        return $this->addedTool;
-    }
-
-    /**
-     * Set target.
-     *
-     * @param string $target
-     *
-     * @return CTool
-     */
-    public function setTarget($target)
-    {
-        $this->target = $target;
-
-        return $this;
-    }
-
-    /**
-     * Get target.
-     *
-     * @return string
-     */
-    public function getTarget()
-    {
-        return $this->target;
-    }
-
-    /**
      * Set category.
      *
      * @param string $category
@@ -405,30 +208,6 @@ class CTool
     public function getCategory()
     {
         return $this->category;
-    }
-
-    /**
-     * Set sessionId.
-     *
-     * @param int $sessionId
-     *
-     * @return CTool
-     */
-    public function setSessionId($sessionId)
-    {
-        $this->sessionId = $sessionId;
-
-        return $this;
-    }
-
-    /**
-     * Get sessionId.
-     *
-     * @return int
-     */
-    public function getSessionId()
-    {
-        return $this->sessionId;
     }
 
     /**
@@ -458,26 +237,6 @@ class CTool
     /**
      * @return string
      */
-    public function getDescription()
-    {
-        return $this->description;
-    }
-
-    /**
-     * @param string $description
-     *
-     * @return CTool
-     */
-    public function setDescription($description)
-    {
-        $this->description = $description;
-
-        return $this;
-    }
-
-    /**
-     * @return string
-     */
     public function getCustomIcon()
     {
         return $this->customIcon;
@@ -491,6 +250,26 @@ class CTool
     public function setCustomIcon($customIcon)
     {
         $this->customIcon = $customIcon;
+
+        return $this;
+    }
+
+    /**
+     * @return Tool
+     */
+    public function getTool(): Tool
+    {
+        return $this->tool;
+    }
+
+    /**
+     * @param Tool $tool
+     *
+     * @return CTool
+     */
+    public function setTool(Tool $tool): CTool
+    {
+        $this->tool = $tool;
 
         return $this;
     }

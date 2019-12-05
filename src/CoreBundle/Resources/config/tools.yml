@@ -47,8 +47,8 @@ services:
         arguments:
             - 'agenda'
             - 'authoring'
-            - 'calendar/agenda.php'
-            - chamilo_course.settings.agenda
+            - '/main/calendar/agenda.php'
+            - '@chamilo_course.settings.agenda'
             -
                 events:
                     repository: Chamilo\CourseBundle\Repository\CCalendarEventRepository
@@ -64,7 +64,7 @@ services:
         arguments:
             - 'announcement'
             - 'authoring'
-            - 'announcements/announcements.php'
+            - '/main/announcements/announcements.php'
             - '@chamilo_course.settings.announcement'
             -
                 announcements:
@@ -80,8 +80,8 @@ services:
         arguments:
             - 'student_publication'
             - 'interaction'
-            - 'work/work.php'
-            - chamilo_course.settings.assignment
+            - '/main/work/work.php'
+            - '@chamilo_course.settings.assignment'
             -
                 student_publications:
                     repository: Chamilo\CourseBundle\Repository\CStudentPublicationRepository
@@ -96,7 +96,7 @@ services:
         arguments:
             - 'attendance'
             - 'authoring'
-            - 'attendance/index.php'
+            - '/main/attendance/index.php'
             - '@chamilo_course.settings.attendance'
             -
                 attendances:
@@ -110,7 +110,7 @@ services:
         arguments:
             - 'blog'
             - 'admin'
-            - 'blog/blog_admin.php'
+            - '/main/blog/blog_admin.php'
             - '@chamilo_course.settings.blog'
             -
                 blogs:
@@ -122,9 +122,9 @@ services:
     chamilo_core.tool.course_description:
         class: Chamilo\CoreBundle\Tool\CourseDescription
         arguments:
-            - course_description
-            - authoring
-            - course_description/index.php
+            - 'course_description'
+            - 'authoring'
+            - '/main/course_description/index.php'
             - '@chamilo_course.settings.course_description'
             -
                 course_descriptions:
@@ -136,9 +136,9 @@ services:
     chamilo_core.tool.chat:
         class: Chamilo\CoreBundle\Tool\Chat
         arguments:
-            - chat
-            - interaction
-            - chat/chat.php
+            - 'chat'
+            - 'interaction'
+            - '/main/chat/chat.php'
             - '@chamilo_course.settings.chat'
             - ~
             - 0
@@ -148,9 +148,9 @@ services:
     chamilo_core.tool.course_progress:
         class: Chamilo\CoreBundle\Tool\CourseProgress
         arguments:
-            - course_progress
-            - authoring
-            - course_progress/index.php
+            - 'course_progress'
+            - 'authoring'
+            - '/main/course_progress/index.php'
             - '@chamilo_course.settings.course_progress'
             -
                 thematics:
@@ -166,9 +166,9 @@ services:
     chamilo_core.tool.document:
         class: Chamilo\CoreBundle\Tool\Document
         arguments:
-            - document
-            - authoring
-            - document/document.php
+            - 'document'
+            - 'authoring'
+            - '/resources/document/files'
             - '@chamilo_course.settings.document'
             -
                 files:
@@ -180,9 +180,9 @@ services:
     chamilo_core.tool.dropbox:
         class: Chamilo\CoreBundle\Tool\Dropbox
         arguments:
-            - dropbox
-            - interaction
-            - dropbox/index.php
+            - 'dropbox'
+            - 'interaction'
+            - '/main/dropbox/index.php'
             - '@chamilo_course.settings.dropbox'
             -
                 dropbox:
@@ -194,9 +194,9 @@ services:
     chamilo_core.tool.exercise:
         class: Chamilo\CoreBundle\Tool\Exercise
         arguments:
-            - quiz
-            - authoring
-            - exercise/exercise.php
+            - 'quiz'
+            - 'authoring'
+            - '/main/exercise/exercise.php'
             - '@chamilo_course.settings.exercise'
             -
                 exercises:
@@ -214,9 +214,9 @@ services:
     chamilo_core.tool.forum:
         class: Chamilo\CoreBundle\Tool\Forum
         arguments:
-            - forum
-            - interaction
-            - forum/index.php
+            - 'forum'
+            - 'interaction'
+            - '/main/forum/index.php'
             - '@chamilo_course.settings.forum'
             -
                 forums:
@@ -236,9 +236,9 @@ services:
     chamilo_core.tool.glossary:
         class: Chamilo\CoreBundle\Tool\Glossary
         arguments:
-            - glossary
-            - authoring
-            - glossary/index.php
+            - 'glossary'
+            - 'authoring'
+            - '/main/glossary/index.php'
             - '@chamilo_course.settings.glossary'
             -
                 glossaries:
@@ -250,9 +250,9 @@ services:
     chamilo_core.tool.gradebook:
         class: Chamilo\CoreBundle\Tool\Gradebook
         arguments:
-            - gradebook
-            - authoring
-            - gradebook/index.php
+            - 'gradebook'
+            - 'authoring'
+            - '/main/gradebook/index.php'
             - '@chamilo_course.settings.gradebook'
             -
                 gradebook_categories:
@@ -271,7 +271,7 @@ services:
         arguments:
             - 'group'
             - 'interaction'
-            - 'group/group.php'
+            - '/main/group/group.php'
             - '@chamilo_course.settings.group'
             -
                 groups:
@@ -289,7 +289,7 @@ services:
         arguments:
             - 'learnpath'
             - 'authoring'
-            - 'lp/lp_controller.php'
+            - '/main/lp/lp_controller.php'
             - '@chamilo_course.settings.learning_path'
             -
                 lps:
@@ -305,7 +305,7 @@ services:
         arguments:
             - 'link'
             - 'authoring'
-            - 'link/link.php'
+            - '/main/link/link.php'
             - '@chamilo_course.settings.link'
             -
                 links:
@@ -327,7 +327,7 @@ services:
         arguments:
             - 'member'
             - 'interaction'
-            - 'user/user.php'
+            - '/main/user/user.php'
             - '@chamilo_course.settings.user'
             - ~
             - 0
@@ -339,7 +339,7 @@ services:
         arguments:
             - 'course_maintenance'
             - 'admin'
-            - 'course_info/maintenance.php'
+            - '/main/course_info/maintenance.php'
             - '@chamilo_course.settings.maintenance'
             - ~
             - 0
@@ -351,7 +351,7 @@ services:
         arguments:
             - 'notebook'
             - 'interaction'
-            - 'notebook/index.php'
+            - '/main/notebook/index.php'
             - '@chamilo_course.settings.notebook'
             -
                 notebooks:
@@ -364,8 +364,8 @@ services:
         class: Chamilo\CoreBundle\Tool\Settings
         arguments:
             - 'course_setting'
-            - admin
-            - course_info/infocours.php
+            - 'admin'
+            - '/main/course_info/infocours.php'
             - '@chamilo_course.settings.settings'
             - ~
             - 0
@@ -378,7 +378,7 @@ services:
         arguments:
             - 'survey'
             - 'interaction'
-            - 'survey/survey_list.php'
+            - '/main/survey/survey_list.php'
             - '@chamilo_course.settings.survey'
             -
                 surveys:
@@ -392,9 +392,9 @@ services:
     chamilo_core.tool.tracking:
         class: Chamilo\CoreBundle\Tool\Tracking
         arguments:
-            - tracking
-            - admin
-            - tracking/courseLog.php
+            - 'tracking'
+            - 'admin'
+            - '/main/tracking/courseLog.php'
             - '@chamilo_course.settings.tracking'
             - ~
             - 0
@@ -404,8 +404,8 @@ services:
     chamilo_core.tool.user:
         class: Chamilo\CoreBundle\Tool\User
         arguments:
-            - user
-            - interaction
+            - 'user'
+            - 'interaction'
             - ~
             - ~
             -
@@ -418,9 +418,9 @@ services:
     chamilo_core.tool.wiki:
         class: Chamilo\CoreBundle\Tool\Wiki
         arguments:
-            - wiki
-            - interaction
-            - wiki/index.php
+            - 'wiki'
+            - 'interaction'
+            - '/main/wiki/index.php'
             - '@chamilo_course.settings.wiki'
             -
                 wikis:

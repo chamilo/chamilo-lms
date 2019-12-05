@@ -128,10 +128,10 @@ if ($form->validate()) {
             'day' => $formValues['day'],
             'month' => $formValues['month'],
             'year' => $formValues['year'],
-            'signature_text1' => $formValues['signature_text1'],
+            /*'signature_text1' => $formValues['signature_text1'],
             'signature_text2' => $formValues['signature_text2'],
             'signature_text3' => $formValues['signature_text3'],
-            'signature_text4' => $formValues['signature_text4'],
+            'signature_text4' => $formValues['signature_text4'],*/
             'margin_left' => (int) $formValues['margin_left'],
             'margin_right' => (int) $formValues['margin_right'],
             'certificate_default' => 0,
@@ -151,14 +151,7 @@ if ($form->validate()) {
 
         // Image manager
         $fieldList = [
-            'logo_left',
-            'logo_center',
-            'logo_right',
             'seal',
-            'signature1',
-            'signature2',
-            'signature3',
-            'signature4',
             'background',
         ];
 
@@ -251,15 +244,15 @@ if ($useDefault && $courseId > 0) {
 }
 
 // Student and course section
-$form->addHtml('<fieldset><legend>'.strtoupper(get_lang('StudentCourseInfo')).'</legend>');
-$form->addHtml('<div class="col-sm-8">');
+$form->addHtml('<h4 class="page-header">'.$plugin->get_lang('ContentCertificate').'</h4>');
+$form->addHtml('<div class="col-sm-12">');
 $dir = '/';
 $courseInfo = api_get_course_info();
 $isAllowedToEdit = api_is_allowed_to_edit(null, true);
 $editorConfig = [
     'ToolbarSet' => $isAllowedToEdit ? 'Documents' : 'DocumentsStudent',
     'Width' => '100%',
-    'Height' => '300',
+    'Height' => '400',
     'cols-size' => [0, 12, 0],
     'FullPage' => true,
     'InDocument' => true,
@@ -267,6 +260,7 @@ $editorConfig = [
     'CreateDocumentWebDir' => api_get_path(WEB_COURSE_PATH).$courseInfo['path'].'/document/',
     'BaseHref' => api_get_path(WEB_COURSE_PATH).$courseInfo['path'].'/document'.$dir,
 ];
+
 $form->addHtmlEditor(
     'content_course',
     '',
@@ -275,36 +269,44 @@ $form->addHtmlEditor(
     $editorConfig,
     true
 );
-$form->addHtml('</div>');
-$form->addHtml('<div class="col-sm-4">');
-$strInfo = '((user_firstname))<br />';
-$strInfo .= '((user_lastname))<br />';
-$strInfo .= '((gradebook_institution))<br />';
-$strInfo .= '((gradebook_sitename))<br />';
-$strInfo .= '((teacher_firstname))<br />';
-$strInfo .= '((teacher_lastname))<br />';
-$strInfo .= '((official_code))<br />';
-$strInfo .= '((date_certificate))<br />';
-$strInfo .= '((date_certificate_no_time))<br />';
-$strInfo .= '((course_code))<br />';
-$strInfo .= '((course_title))<br />';
-$strInfo .= '((gradebook_grade))<br />';
-$strInfo .= '((external_style))<br />';
-$strInfo .= '((start_date))<br />';
-$strInfo .= '((end_date))<br />';
-$strInfo .= '((date_expediction))';
 
-$createCertificate = get_lang('CreateCertificateWithTags');
+$listTags = [
+    'user_firstname',
+    'user_lastname',
+    'gradebook_institution',
+    'gradebook_sitename',
+    'teacher_firstname',
+    'teacher_lastname',
+    'official_code',
+    'date_certificate',
+    'date_certificate_no_time',
+    'course_code',
+    'course_title',
+    'gradebook_grade',
+    'external_style',
+    'start_date',
+    'end_date',
+    'date_expediction'
+];
+
+$form->addHtml('</div>');
+$form->addHtml('<div class="col-sm-12">');
+$strInfo = '<ul class="list-tags">';
+foreach ($listTags as $tag){
+    $strInfo.= '<li>(('.$tag.'))</li>';
+}
+$strInfo.='</ul>';
+$createCertificate = '<strong>'.get_lang('CreateCertificateWithTags').'</strong>';
 $form->addElement(
     'html',
-    Display::return_message($createCertificate.': <br />'.$strInfo, 'normal', false)
+    Display::return_message($createCertificate.': '.$strInfo, 'normal', false)
 );
 $form->addHtml('</div>');
 $form->addHtml('</fieldset>');
 $form->addHtml('<div class="clearfix"></div>');
 
 // Contents section
-$form->addHtml('<fieldset><legend>'.strtoupper(get_lang('Contents')).'</legend>');
+$form->addHtml('<fieldset><legend>'.get_lang('Contents').'</legend>');
 $extra = '';
 if (empty($infoCertificate['contents_type'])) {
     $infoCertificate['contents_type'] = 0;
@@ -363,7 +365,7 @@ $form->addGroup(
 
 $form->addHtml('<div id="contents-section">');
 $editorConfig = [
-    'ToolbarSet' => ($isAllowedToEdit ? 'Documents' : 'DocumentsStudent'),
+    'ToolbarSet' => 'Basic',
     'Width' => '100%',
     'Height' => '200',
     'cols-size' => [2, 10, 0],
@@ -588,98 +590,10 @@ $form->addHtml('</fieldset>');
 // Signature section
 $base = api_get_path(WEB_UPLOAD_PATH);
 $path = $base.'certificates/';
-$form->addHtml('<fieldset><legend>'.strtoupper(get_lang('LogosSeal')).'</legend>');
-// Logo 1
+
 $form->addHtml('<div class="col-sm-6">');
-$form->addFile(
-    'logo_left',
-    get_lang('LogoLeft'),
-    [
-        'id' => 'logo_left',
-        'class' => 'picture-form',
-        'crop_image' => true,
-        'crop_scalable' => 'true',
-    ]
-);
-$form->addProgress();
-if (!empty($infoCertificate['logo_left'])) {
-    $form->addElement('checkbox', 'remove_logo_left', null, get_lang('DelImage'));
-    $form->addElement(
-        'html',
-        '<label class="col-sm-2">&nbsp;</label>
-        <img src="'.$path.$infoCertificate['logo_left'].'" width="100"  />
-        <br><br>'
-    );
-}
-$allowedPictureTypes = api_get_supported_image_extensions(false);
-$form->addRule(
-    'logo_left',
-    get_lang('OnlyImagesAllowed').' ('.implode(', ', $allowedPictureTypes).')',
-    'filetype',
-    $allowedPictureTypes
-);
-$form->addHtml('</div>');
-// Logo 2
-$form->addHtml('<div class="col-sm-6">');
-$form->addFile(
-    'logo_center',
-    get_lang('LogoCenter'),
-    [
-        'id' => 'logo_center',
-        'class' => 'picture-form',
-        'crop_image' => true,
-        'crop_scalable' => 'true',
-    ]
-);
-$form->addProgress();
-if (!empty($infoCertificate['logo_center'])) {
-    $form->addElement('checkbox', 'remove_logo_center', null, get_lang('DelImage'));
-    $form->addElement(
-        'html',
-        '<label class="col-sm-2">&nbsp;</label>
-        <img src="'.$path.$infoCertificate['logo_center'].'" width="100"  />
-        <br><br>'
-    );
-}
-$allowedPictureTypes = api_get_supported_image_extensions(false);
-$form->addRule(
-    'logo_center',
-    get_lang('OnlyImagesAllowed').' ('.implode(', ', $allowedPictureTypes).')',
-    'filetype',
-    $allowedPictureTypes
-);
-$form->addHtml('</div><div class="clearfix"></div>');
-// Logo 3
-$form->addHtml('<div class="col-sm-6">');
-$form->addFile(
-    'logo_right',
-    get_lang('LogoRight'),
-    [
-        'id' => 'logo_right',
-        'class' => 'picture-form',
-        'crop_image' => true,
-        'crop_scalable' => 'true',
-    ]
-);
-$form->addProgress();
-if (!empty($infoCertificate['logo_right'])) {
-    $form->addElement('checkbox', 'remove_logo_right', null, get_lang('DelImage'));
-    $form->addElement(
-        'html',
-        '<label class="col-sm-2">&nbsp;</label>
-        <img src="'.$path.$infoCertificate['logo_right'].'" width="100"  />
-        <br><br>'
-    );
-}
-$tblProperty = api_get_supported_image_extensions(false);
-$form->addRule(
-    'logo_right',
-    get_lang('OnlyImagesAllowed').' ('.implode(', ', $allowedPictureTypes).')',
-    'filetype',
-    $allowedPictureTypes
-);
-$form->addHtml('</div>');
-$form->addHtml('<div class="col-sm-6">');
+$form->addHtml('<fieldset><legend>'.strtoupper(get_lang('BackgroundCertificate')).'</legend>');
+//Seal
 $form->addFile(
     'seal',
     get_lang('Seal'),
@@ -707,156 +621,7 @@ $form->addRule(
     'filetype',
     $allowedPictureTypes
 );
-$form->addHtml('</div><div class="clearfix"></div>');
-$form->addHtml('</fieldset>');
-$form->addHtml('<fieldset><legend>'.strtoupper(get_lang('Signatures')).'</legend>');
-// signature 1
-$form->addHtml('<div class="col-sm-6">');
-$form->addText(
-    'signature_text1',
-    get_lang('SignatureText1'),
-    false,
-    ['cols-size' => [2, 10, 0], 'autofocus']
-);
-$form->addFile(
-    'signature1',
-    get_lang('Signature1'),
-    [
-        'id' => 'signature1',
-        'class' => 'picture-form',
-        'crop_image' => true,
-        'crop_scalable' => 'true',
-    ]
-);
-$form->addProgress();
-if (!empty($infoCertificate['signature1'])) {
-    $form->addElement('checkbox', 'remove_signature1', null, get_lang('DelImage'));
-    $form->addElement(
-        'html',
-        '<label class="col-sm-2">&nbsp;</label>
-        <img src="'.$path.$infoCertificate['signature1'].'" width="100"  />
-        <br><br>'
-    );
-}
-$allowedPictureTypes = api_get_supported_image_extensions(false);
-$form->addRule(
-    'signature1',
-    get_lang('OnlyImagesAllowed').' ('.implode(', ', $allowedPictureTypes).')',
-    'filetype',
-    $allowedPictureTypes
-);
-$form->addHtml('</div>');
-// signature 2
-$form->addHtml('<div class="col-sm-6">');
-$form->addText(
-    'signature_text2',
-    get_lang('SignatureText2'),
-    false,
-    ['cols-size' => [2, 10, 0], 'autofocus']
-);
-$form->addFile(
-    'signature2',
-    get_lang('Signature2'),
-    [
-        'id' => 'signature2',
-        'class' => 'picture-form',
-        'crop_image' => true,
-        'crop_scalable' => 'true',
-    ]
-);
-$form->addProgress();
-if (!empty($infoCertificate['signature2'])) {
-    $form->addElement('checkbox', 'remove_signature2', null, get_lang('DelImage'));
-    $form->addElement(
-        'html',
-        '<label class="col-sm-2">&nbsp;</label>
-        <img src="'.$path.$infoCertificate['signature2'].'" width="100"  />
-        <br><br>'
-    );
-}
-$allowedPictureTypes = api_get_supported_image_extensions(false);
-$form->addRule(
-    'signature2',
-    get_lang('OnlyImagesAllowed').' ('.implode(', ', $allowedPictureTypes).')',
-    'filetype',
-    $allowedPictureTypes
-);
-$form->addHtml('</div><div class="clearfix"></div>');
-// signature 3
-$form->addHtml('<div class="col-sm-6">');
-$form->addText(
-    'signature_text3',
-    get_lang('SignatureText3'),
-    false,
-    ['cols-size' => [2, 10, 0], 'autofocus']
-);
-$form->addFile(
-    'signature3',
-    get_lang('Signature3'),
-    [
-        'id' => 'signature3',
-        'class' => 'picture-form',
-        'crop_image' => true,
-        'crop_scalable' => 'true',
-    ]
-);
-$form->addProgress();
-if (!empty($infoCertificate['signature3'])) {
-    $form->addElement('checkbox', 'remove_signature3', null, get_lang('DelImage'));
-    $form->addElement(
-        'html',
-        '<label class="col-sm-2">&nbsp;</label>
-        <img src="'.$path.$infoCertificate['signature3'].'" width="100" />
-        <br><br>'
-    );
-}
-$allowedPictureTypes = api_get_supported_image_extensions(false);
-$form->addRule(
-    'signature3',
-    get_lang('OnlyImagesAllowed').' ('.implode(', ', $allowedPictureTypes).')',
-    'filetype',
-    $allowedPictureTypes
-);
-$form->addHtml('</div>');
-// signature 4
-$form->addHtml('<div class="col-sm-6">');
-$form->addText(
-    'signature_text4',
-    get_lang('SignatureText4'),
-    false,
-    ['cols-size' => [2, 10, 0], 'autofocus']
-);
-$form->addFile(
-    'signature4',
-    get_lang('Signature4'),
-    [
-        'id' => 'signature4',
-        'class' => 'picture-form',
-        'crop_image' => true,
-        'crop_scalable' => 'true',
-    ]
-);
-$form->addProgress();
-if (!empty($infoCertificate['signature4'])) {
-    $form->addElement('checkbox', 'remove_signature4', null, get_lang('DelImage'));
-    $form->addElement(
-        'html',
-        '<label class="col-sm-2">&nbsp;</label>
-        <img src="'.$path.$infoCertificate['signature4'].'" width="100"  />
-        <br><br>'
-    );
-}
-$allowedPictureTypes = api_get_supported_image_extensions(false);
-$form->addRule(
-    'signature4',
-    get_lang('OnlyImagesAllowed').' ('.implode(', ', $allowedPictureTypes).')',
-    'filetype',
-    $allowedPictureTypes
-);
-$form->addHtml('</div><div class="clearfix"></div>');
-$form->addHtml('</fieldset><br>');
-$form->addHtml('<div class="col-sm-6">');
-$form->addHtml('<fieldset><legend>'.strtoupper(get_lang('BackgroundCertificate')).'</legend>');
+
 // background
 $form->addFile(
     'background',

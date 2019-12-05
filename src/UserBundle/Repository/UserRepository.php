@@ -76,19 +76,20 @@ class UserRepository extends ResourceRepository
         $qb->andWhere('r.parent IS NULL');
         $qb->getFirstResult();
 
-        return $qb->getQuery()->getSingleResult();
+        $rootUser = $qb->getQuery()->getSingleResult();
+
+        if (null === $rootUser) {
+            throw new UsernameNotFoundException('Root user not found');
+        }
+
+        return $rootUser;
     }
 
     public function deleteUser(User $user)
     {
         $em = $this->getEntityManager();
         $type = $user->getResourceNode()->getResourceType();
-
         $rootUser = $this->getRootUser();
-
-        if (null === $rootUser) {
-            throw new UsernameNotFoundException('Root user not found');
-        }
 
         // User children will be set to the root user.
         $criteria = Criteria::create()->where(Criteria::expr()->eq('resourceType', $type));

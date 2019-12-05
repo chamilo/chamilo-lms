@@ -5,6 +5,7 @@ namespace Chamilo\CoreBundle\Controller;
 
 use APY\DataGridBundle\Grid\Action\MassAction;
 use APY\DataGridBundle\Grid\Action\RowAction;
+use APY\DataGridBundle\Grid\Column\Column;
 use APY\DataGridBundle\Grid\Export\CSVExport;
 use APY\DataGridBundle\Grid\Export\ExcelExport;
 use APY\DataGridBundle\Grid\Grid;
@@ -144,11 +145,6 @@ class ResourceController extends AbstractResourceController implements CourseCon
         $course = $this->getCourse();
         $session = $this->getSession();
 
-        if ($this->hasCourse()) {
-            //$qb = $repository->getResourcesByCourse($course, $session, null, $parentNode);
-        } else {
-            //$qb = $repository->getResourcesByCreator($this->getUser(), $parentNode);
-        }
         $qb = $repository->getResources($this->getUser(), $parentNode, $course, $session, null);
 
         // 3. Set QueryBuilder to the source.
@@ -168,6 +164,7 @@ class ResourceController extends AbstractResourceController implements CourseCon
         $routeParams = $resourceParams;
         $routeParams['id'] = null;
 
+        /** @var Column $titleColumn */
         $titleColumn = $repository->getTitleColumn($grid);
         $titleColumn->setSafe(false); // allows links in the title
 
@@ -193,10 +190,6 @@ class ResourceController extends AbstractResourceController implements CourseCon
 
                 $icon = $resourceNode->getIcon().' &nbsp;';
                 if ($resourceNode->hasResourceFile()) {
-                    /*$url = $router->generate(
-                        'chamilo_core_resource_show',
-                        $myParams
-                    );*/
                     if ($resourceNode->isResourceFileAnImage()) {
                         $url = $router->generate(
                             'chamilo_core_resource_view',
@@ -312,8 +305,28 @@ class ResourceController extends AbstractResourceController implements CourseCon
             ]
         );
 
+        $setNodeDownloadParameters = function (RowAction $action, Row $row) use ($routeParams) {
+            $id = $row->getEntity()->getResourceNode()->getId();
+            $routeParams['id'] = $id;
+            $action->setRouteParameters($routeParams);
+            $attributes = $action->getAttributes();
+            $action->setAttributes($attributes);
+
+            return $action;
+        };
+        $myRowAction->addManipulateRender($setNodeDownloadParameters);
+        $grid->addRowAction($myRowAction);
+
+        // Set EDIT/DELETE
         $setNodeParameters = function (RowAction $action, Row $row) use ($routeParams) {
             $id = $row->getEntity()->getResourceNode()->getId();
+
+            $allowedEdit = $this->isGranted(ResourceNodeVoter::EDIT, $row->getEntity()->getResourceNode());
+
+            if ($allowedEdit === false) {
+                return null;
+            }
+
             $routeParams['id'] = $id;
 
             $action->setRouteParameters($routeParams);
@@ -325,9 +338,6 @@ class ResourceController extends AbstractResourceController implements CourseCon
 
             return $action;
         };
-
-        $myRowAction->addManipulateRender($setNodeParameters);
-        $grid->addRowAction($myRowAction);
 
         if ($this->isGranted(ResourceNodeVoter::EDIT, $parentNode)) {
             // Enable/Disable
@@ -341,6 +351,12 @@ class ResourceController extends AbstractResourceController implements CourseCon
             $setVisibleParameters = function (RowAction $action, Row $row) use ($routeParams) {
                 /** @var AbstractResource $resource */
                 $resource = $row->getEntity();
+                $allowedEdit = $this->isGranted(ResourceNodeVoter::EDIT, $resource->getResourceNode());
+
+                if ($allowedEdit === false) {
+                    return null;
+                }
+
                 $id = $resource->getResourceNode()->getId();
 
                 $icon = 'fa-eye-slash';

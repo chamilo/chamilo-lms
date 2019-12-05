@@ -123,78 +123,12 @@ class ResourceFile
      */
     protected $resourceNode;
 
-//    /**
-//     * @var string
-//     *
-//     * @Assert\NotBlank()
-//     *
-//     * @ORM\Column(name="hash", type="string", nullable=false)
-//     */
-//    protected $hash;
-
-//    /**
-//     * @Assert\NotBlank()
-//     *
-//     * @var string
-//     *
-//     * @ORM\Column(name="original_filename", type="string", nullable=false)
-//     */
-//    protected $originalFilename;
-//
-//    /**
-//     * @Assert\NotBlank()
-//     *
-//     * @var string
-//     *
-//     * @ORM\Column(name="size", type="string", nullable=false)
-//     */
-//    protected $size;
-//
-//    /**
-//     * @Assert\NotBlank()
-//     *
-//     * @var string
-//     *
-//     * @ORM\Column(name="width", type="string", nullable=true)
-//     */
-//    protected $width;
-
-//    /**
-//     * @Assert\NotBlank()
-//     *
-//     * @var string
-//     *
-//     * @ORM\Column(name="height", type="string", nullable=true)
-//     */
-//    protected $height;
-//
-//    /**
-//     * @var string
-//     *
-//     * @ORM\Column(name="copyright", type="string", nullable=true)
-//     */
-//    protected $copyright;
-
-//    /**
-//     * @var string
-//     *
-//     * @ORM\Column(name="contentType", type="string", nullable=true)
-//     */
-//    protected $contentType;
-//
-//    /**
-//     * @var string
-//     *
-//     * @ORM\Column(name="extension", type="string", nullable=false)
-//     */
-//    protected $extension;
-
     /**
-     * @var bool
+     * @var array
      *
-     * @ORM\Column(name="enabled", type="boolean")
+     * @ORM\Column(type="array", nullable=true)
      */
-    //protected $enabled;
+    protected $metadata;
 
     /**
      * Constructor.
@@ -429,6 +363,26 @@ class ResourceFile
         }
 
         return 0;
+    }
+
+    /**
+     * @return array
+     */
+    public function getMetadata(): array
+    {
+        return $this->metadata;
+    }
+
+    /**
+     * @param array $metadata
+     *
+     * @return ResourceFile
+     */
+    public function setMetadata(array $metadata): ResourceFile
+    {
+        $this->metadata = $metadata;
+
+        return $this;
     }
 
     /**

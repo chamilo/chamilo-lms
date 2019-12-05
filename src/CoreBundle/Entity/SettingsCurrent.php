@@ -70,7 +70,7 @@ class SettingsCurrent
     /**
      * @var string
      *
-     * @ORM\Column(name="selected_value", type="string", length=255, nullable=true)
+     * @ORM\Column(name="selected_value", type="text", nullable=true)
      */
     protected $selectedValue;
 

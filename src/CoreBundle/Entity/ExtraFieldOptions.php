@@ -25,7 +25,7 @@ class ExtraFieldOptions
     protected $id;
 
     /**
-     * @ORM\ManyToOne(targetEntity="Chamilo\CoreBundle\Entity\ExtraField")
+     * @ORM\ManyToOne(targetEntity="Chamilo\CoreBundle\Entity\ExtraField", inversedBy="options")
      * @ORM\JoinColumn(name="field_id", referencedColumnName="id")
      */
     protected $field;

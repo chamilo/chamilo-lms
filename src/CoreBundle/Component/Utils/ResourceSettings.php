@@ -22,19 +22,11 @@ class ResourceSettings
         $this->allowResourceEdit = true;
     }
 
-    /**
-     * @return bool
-     */
     public function isAllowNodeCreation(): bool
     {
         return $this->allowNodeCreation;
     }
 
-    /**
-     * @param bool $allowNodeCreation
-     *
-     * @return ResourceSettings
-     */
     public function setAllowNodeCreation(bool $allowNodeCreation): ResourceSettings
     {
         $this->allowNodeCreation = $allowNodeCreation;
@@ -42,19 +34,11 @@ class ResourceSettings
         return $this;
     }
 
-    /**
-     * @return bool
-     */
     public function isAllowResourceCreation(): bool
     {
         return $this->allowResourceCreation;
     }
 
-    /**
-     * @param bool $allowResourceCreation
-     *
-     * @return ResourceSettings
-     */
     public function setAllowResourceCreation(bool $allowResourceCreation): ResourceSettings
     {
         $this->allowResourceCreation = $allowResourceCreation;
@@ -62,19 +46,11 @@ class ResourceSettings
         return $this;
     }
 
-    /**
-     * @return bool
-     */
     public function isAllowResourceUpload(): bool
     {
         return $this->allowResourceUpload;
     }
 
-    /**
-     * @param bool $allowResourceUpload
-     *
-     * @return ResourceSettings
-     */
     public function setAllowResourceUpload(bool $allowResourceUpload): ResourceSettings
     {
         $this->allowResourceUpload = $allowResourceUpload;
@@ -82,19 +58,11 @@ class ResourceSettings
         return $this;
     }
 
-    /**
-     * @return bool
-     */
     public function isAllowResourceEdit(): bool
     {
         return $this->allowResourceEdit;
     }
 
-    /**
-     * @param bool $allowResourceEdit
-     *
-     * @return ResourceSettings
-     */
     public function setAllowResourceEdit(bool $allowResourceEdit): ResourceSettings
     {
         $this->allowResourceEdit = $allowResourceEdit;

@@ -1538,6 +1538,7 @@ class Display
         if (empty($courseInfo)) {
             return '';
         }
+
         return '';
 
         $t_track_e_access = Database::get_main_table(TABLE_STATISTIC_TRACK_E_LASTACCESS);

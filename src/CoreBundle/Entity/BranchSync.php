@@ -759,19 +759,11 @@ class BranchSync
         return $this;
     }
 
-    /**
-     * @return AccessUrl
-     */
     public function getUrl(): AccessUrl
     {
         return $this->url;
     }
 
-    /**
-     * @param AccessUrl $url
-     *
-     * @return BranchSync
-     */
     public function setUrl(AccessUrl $url): BranchSync
     {
         $this->url = $url;

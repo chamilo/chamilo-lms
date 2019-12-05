@@ -80,6 +80,14 @@ class User extends BaseUser implements ThemeUser, EquatableInterface //implement
     public const ANONYMOUS = 6;
 
     /**
+     * @ORM\OneToOne(
+     *     targetEntity="Chamilo\CoreBundle\Entity\Resource\ResourceNode", cascade={"remove"}, orphanRemoval=true
+     * )
+     * @ORM\JoinColumn(name="resource_node_id", referencedColumnName="id", onDelete="CASCADE")
+     */
+    public $resourceNode;
+
+    /**
      * @var int
      *
      * @ORM\Column(name="id", type="integer")
@@ -287,14 +295,6 @@ class User extends BaseUser implements ThemeUser, EquatableInterface //implement
      * @ORM\OneToMany(targetEntity="Chamilo\CoreBundle\Entity\Session", mappedBy="generalCoach")
      */
     protected $sessionAsGeneralCoach;
-
-    /**
-     * @ORM\OneToOne(
-     *     targetEntity="Chamilo\CoreBundle\Entity\Resource\ResourceNode", cascade={"remove"}, orphanRemoval=true
-     * )
-     * @ORM\JoinColumn(name="resource_node_id", referencedColumnName="id", onDelete="CASCADE")
-     */
-    public $resourceNode;
 
     /**
      * @ORM\OneToMany(targetEntity="Chamilo\CoreBundle\Entity\Resource\ResourceNode", mappedBy="creator")

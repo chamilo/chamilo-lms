@@ -365,19 +365,11 @@ class ResourceFile
         return 0;
     }
 
-    /**
-     * @return array
-     */
     public function getMetadata(): array
     {
         return $this->metadata;
     }
 
-    /**
-     * @param array $metadata
-     *
-     * @return ResourceFile
-     */
     public function setMetadata(array $metadata): ResourceFile
     {
         $this->metadata = $metadata;

@@ -146,7 +146,6 @@ class CourseHome
             }
         }
 
-
         $items = [];
         /** @var CTool $tool */
         foreach ($all_tools_list as $tool) {
@@ -269,7 +268,6 @@ class CourseHome
             );
             $items[] = $item;
         }
-
 
         return $items;
     }

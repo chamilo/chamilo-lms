@@ -668,7 +668,6 @@ class CourseHomeController extends ToolBaseController
         return $this->redirect($url);
     }
 
-
     /**
      * @return array
      */

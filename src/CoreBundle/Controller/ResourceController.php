@@ -518,7 +518,7 @@ class ResourceController extends AbstractResourceController implements CourseCon
             $this->addFlash('success', $this->trans('Updated'));
 
             //if ($newResource->getResourceNode()->hasResourceFile()) {
-                $resourceNodeParentId = $newResource->getResourceNode()->getParent()->getId();
+            $resourceNodeParentId = $newResource->getResourceNode()->getParent()->getId();
             //}
             $routeParams['id'] = $resourceNodeParentId;
 

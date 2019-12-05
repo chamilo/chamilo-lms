@@ -52,7 +52,6 @@ class CourseListener
     public function prePersist(Course $course, LifecycleEventArgs $args)
     {
         /** @var AccessUrlRelCourse $urlRelCourse */
-
         if ($course) {
             /*$urlRelCourse = $course->getUrls()->first();
             $url = $urlRelCourse->getUrl();*/

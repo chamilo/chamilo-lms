@@ -354,7 +354,6 @@ class ResourceRepository extends EntityRepository
         );
     }
 
-
     public function addResourceToMe(ResourceNode $resourceNode): ResourceLink
     {
         $resourceLink = new ResourceLink();
@@ -833,6 +832,4 @@ class ResourceRepository extends EntityRepository
 
         return true;
     }
-
-
 }

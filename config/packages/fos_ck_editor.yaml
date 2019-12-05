@@ -16,9 +16,6 @@ fos_ck_editor:
             filebrowserBrowseRoute: admin_chamilo_media_media_ckeditor_browser
             # adobeair iframedialog,
             #extraPlugins: "ajax,audio,image2_chamilo,bidi,colorbutton,colordialog,dialogui,dialogadvtab, div, docprops, find, flash, font, iframe, indentblock, justify, language, lineutils, liststyle, newpage, oembed, pagebreak, preview, print, save, selectall, sharedspace, showblocks, smiley, sourcedialog, stylesheetparser, tableresize, templates, uicolor, video, widget, wikilink, wordcount, inserthtml, xml, qmarkersrolls"
-
-
-
 #            filebrowserImageBrowseRoute: editor_filemanager
 #            filebrowserImageBrowseRoute: editor_filemanager
 #            filebrowserImageBrowseRouteParameters:

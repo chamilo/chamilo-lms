@@ -11,6 +11,7 @@ use Gedmo\Mapping\Annotation as Gedmo;
 
 /**
  * AccessUrl.
+ *
  * @Gedmo\Tree(type="nested")
  * @ORM\Table(name="access_url")
  * @ORM\Entity

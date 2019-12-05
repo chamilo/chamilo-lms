@@ -132,6 +132,14 @@ class ResourceNode
     }
 
     /**
+     * @return string
+     */
+    public function __toString()
+    {
+        return (string) $this->getPathForDisplay();
+    }
+
+    /**
      * @return Course
      */
     public function getCourse(): ?Course
@@ -147,14 +155,6 @@ class ResourceNode
     public function isIllustrationNode(): bool
     {
         return null !== $this->illustration;
-    }
-
-    /**
-     * @return string
-     */
-    public function __toString()
-    {
-        return (string) $this->getPathForDisplay();
     }
 
     /**

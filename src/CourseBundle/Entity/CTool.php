@@ -139,8 +139,6 @@ class CTool
 
     /**
      * @param Session $session
-     *
-     * @return CTool
      */
     public function setSession(Session $session = null): CTool
     {
@@ -254,19 +252,11 @@ class CTool
         return $this;
     }
 
-    /**
-     * @return Tool
-     */
     public function getTool(): Tool
     {
         return $this->tool;
     }
 
-    /**
-     * @param Tool $tool
-     *
-     * @return CTool
-     */
     public function setTool(Tool $tool): CTool
     {
         $this->tool = $tool;

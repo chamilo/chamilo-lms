@@ -59,8 +59,8 @@ class AddCourse
             $keys_are_unique = true;
 
             // Check whether they are unique.
-            $query = "SELECT 1 FROM $course_table 
-                      WHERE code='".$keys_course_id."' 
+            $query = "SELECT 1 FROM $course_table
+                      WHERE code='".$keys_course_id."'
                       LIMIT 0, 1";
             $result = Database::query($query);
 
@@ -891,16 +891,19 @@ class AddCourse
                 ->setVisualCode($visual_code)
                 ->addUrl($url)
             ;
+            $repo->addResourceNode(
+                $course,
+                api_get_user_entity(api_get_user_id()),
+                $url
+            );
+
+            $repo->getEntityManager()->persist($course);
+
             $repo->getEntityManager()->persist($course);
             $repo->getEntityManager()->flush();
-            $course_id = $course->getId();
 
+            $course_id = $course->getId();
             if ($course_id) {
-                $repo->addResourceNode(
-                    $course,
-                    api_get_user_entity(api_get_user_id()),
-                    $url
-                );
                 $sort = api_max_sort_value('0', api_get_user_id());
                 // Default true
                 $addTeacher = isset($params['add_user_as_teacher']) ? $params['add_user_as_teacher'] : true;

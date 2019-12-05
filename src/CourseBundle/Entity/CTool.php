@@ -288,11 +288,11 @@ class CTool extends AbstractResource implements ResourceInterface
 
     public function getResourceName(): string
     {
-        return $this->iid;
+        return (string) $this->getTool()->getName();
     }
 
     public function __toString(): string
     {
-        return (string) $this->iid;
+        return (string) $this->getTool()->getName();
     }
 }

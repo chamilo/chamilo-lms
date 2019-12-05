@@ -58,7 +58,7 @@ class CourseListener
             //$url = $course->getCurrentUrl();
             //$repo = $args->getEntityManager()->getRepository('ChamiloCoreBundle:Course');
             ///$this->checkLimit($repo, $course, $url);
-           // $this->toolChain->addToolsInCourse($course);
+            $this->toolChain->addToolsInCourse($course);
         }
     }
 
@@ -71,10 +71,9 @@ class CourseListener
             //$url = $course->getCurrentUrl();
             //$repo = $args->getEntityManager()->getRepository('ChamiloCoreBundle:Course');
             ///$this->checkLimit($repo, $course, $url);
-            $this->toolChain->addToolsInCourse($course);
+            //$this->toolChain->addToolsInCourse($course);
         }
     }
-
 
     /**
      * This code is executed when a course is updated.

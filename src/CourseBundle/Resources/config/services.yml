@@ -37,10 +37,6 @@ services:
         arguments:
             $className: 'Chamilo\CourseBundle\Entity\CGroupInfo'
 
-    Chamilo\CourseBundle\Repository\CLinkRepository:
-        arguments:
-            $className: 'Chamilo\CourseBundle\Entity\CLink'
-
     Chamilo\CourseBundle\Repository\CQuizRepository:
         arguments:
             $className: 'Chamilo\CourseBundle\Entity\CQuiz'
@@ -52,6 +48,14 @@ services:
     Chamilo\CourseBundle\Repository\CQuizQuestionRepository:
         arguments:
             $className: 'Chamilo\CourseBundle\Entity\CQuizQuestion'
+
+    Chamilo\CourseBundle\Repository\CLinkRepository:
+        arguments:
+            $className: 'Chamilo\CourseBundle\Entity\CLink'
+
+    Chamilo\CourseBundle\Repository\CToolRepository:
+        arguments:
+            $className: 'Chamilo\CourseBundle\Entity\CTool'
 
     # Event Listeners
     chamilo_course.listener.course:

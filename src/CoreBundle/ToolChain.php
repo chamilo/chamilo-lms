@@ -10,10 +10,11 @@ use Chamilo\CoreBundle\Entity\ToolResourceRight;
 use Chamilo\CoreBundle\Security\Authorization\Voter\ResourceNodeVoter;
 use Chamilo\CoreBundle\Tool\AbstractTool;
 use Chamilo\CourseBundle\Entity\CTool;
+use Chamilo\CourseBundle\Repository\CToolRepository;
 use Chamilo\SettingsBundle\Manager\SettingsManager;
-use Doctrine\Common\Persistence\ObjectManager;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\PropertyAccess\Exception\InvalidArgumentException;
+use Symfony\Component\Security\Core\Security;
 
 /**
  * Class ToolChain.
@@ -51,13 +52,18 @@ class ToolChain
      * @var array
      */
     protected $tools;
+    protected $entityManager;
+    protected $settingsManager;
+    protected $toolRepository;
+    protected $security;
 
-    /**
-     * Construct.
-     */
-    public function __construct()
+    public function __construct(EntityManagerInterface $entityManager, SettingsManager $settingsManager, CToolRepository $toolRepository, Security $security)
     {
         $this->tools = [];
+        $this->entityManager = $entityManager;
+        $this->settingsManager = $settingsManager;
+        $this->toolRepository = $toolRepository;
+        $this->security = $security;
     }
 
     public function addTool(AbstractTool $tool): void
@@ -70,8 +76,10 @@ class ToolChain
         return $this->tools;
     }
 
-    public function createTools(ObjectManager $manager): void
+    public function createTools(): void
     {
+        $manager = $this->entityManager;
+
         $tools = $this->getTools();
 
         /** @var AbstractTool $tool */
@@ -103,8 +111,9 @@ class ToolChain
         }
     }
 
-    public function updateTools(ObjectManager $manager): void
+    public function updateTools(): void
     {
+        $manager = $this->entityManager;
         $tools = $this->getTools();
 
         /** @var AbstractTool $tool */
@@ -155,11 +164,13 @@ class ToolChain
         $tool->addToolResourceRight($toolResourceRightReader);
     }
 
-    public function addToolsInCourse(EntityManagerInterface $manager, Course $course, SettingsManager $settingsManager): Course
+    public function addToolsInCourse(Course $course): Course
     {
         $tools = $this->getTools();
+        $manager = $this->entityManager;
+        $toolVisibility = $this->settingsManager ->getSetting('course.active_tools_on_create');
 
-        $toolVisibility = $settingsManager->getSetting('course.active_tools_on_create');
+        $user = $this->security->getToken()->getUser();
 
         /** @var AbstractTool $tool */
         foreach ($tools as $tool) {
@@ -170,14 +181,16 @@ class ToolChain
 
             $courseTool
                 ->setTool($toolEntity)
-                ->setCourse($course)
+                //->setCourse($course)
                 //->setImage($tool->getImage())
                 //->setName($tool->getName())
                 ->setVisibility($visibility)
                 //->setLink($tool->getLink())
                 //->setTarget($tool->getTarget())
-                ->setCategory($tool->getCategory());
+                ->setCategory($tool->getCategory())
+            ;
 
+            $this->toolRepository->createNodeForResource($courseTool, $user, $course->getResourceNode());
             $course->addTools($courseTool);
         }
 

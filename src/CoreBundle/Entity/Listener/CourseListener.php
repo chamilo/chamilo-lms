@@ -58,9 +58,23 @@ class CourseListener
             //$url = $course->getCurrentUrl();
             //$repo = $args->getEntityManager()->getRepository('ChamiloCoreBundle:Course');
             ///$this->checkLimit($repo, $course, $url);
-            $this->toolChain->addToolsInCourse($args->getEntityManager(), $course, $this->settingsManager);
+           // $this->toolChain->addToolsInCourse($course);
         }
     }
+
+    public function postPersist(Course $course, LifecycleEventArgs $args)
+    {
+        /** @var AccessUrlRelCourse $urlRelCourse */
+        if ($course) {
+            /*$urlRelCourse = $course->getUrls()->first();
+            $url = $urlRelCourse->getUrl();*/
+            //$url = $course->getCurrentUrl();
+            //$repo = $args->getEntityManager()->getRepository('ChamiloCoreBundle:Course');
+            ///$this->checkLimit($repo, $course, $url);
+            $this->toolChain->addToolsInCourse($course);
+        }
+    }
+
 
     /**
      * This code is executed when a course is updated.

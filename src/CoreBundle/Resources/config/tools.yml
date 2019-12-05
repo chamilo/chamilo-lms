@@ -133,6 +133,20 @@ services:
         tags:
             - {name: chamilo_core.tool}
 
+    chamilo_core.tool.course_tool:
+        class: Chamilo\CoreBundle\Tool\CourseTool
+        arguments:
+            - 'course_tool'
+            - 'admin'
+            - '/resources/course_tool/links'
+            - ''
+            -
+                links:
+                    repository: Chamilo\CourseBundle\Repository\CToolRepository
+            - 0
+        tags:
+            - {name: chamilo_core.tool}
+
     chamilo_core.tool.chat:
         class: Chamilo\CoreBundle\Tool\Chat
         arguments:

@@ -4,6 +4,8 @@
 namespace Chamilo\CourseBundle\Entity;
 
 use Chamilo\CoreBundle\Entity\Course;
+use Chamilo\CoreBundle\Entity\Resource\AbstractResource;
+use Chamilo\CoreBundle\Entity\Resource\ResourceInterface;
 use Chamilo\CoreBundle\Entity\Session;
 use Chamilo\CoreBundle\Entity\Tool;
 use Doctrine\ORM\Event\LifecycleEventArgs;
@@ -22,7 +24,7 @@ use Doctrine\ORM\Mapping as ORM;
  * )
  * @ORM\Entity
  */
-class CTool
+class CTool extends AbstractResource implements ResourceInterface
 {
     /**
      * @var int
@@ -274,5 +276,23 @@ class CTool
         $this->setId($this->iid);
         $em->persist($this);
         $em->flush($this);
+    }
+
+    /**
+     * Resource identifier.
+     */
+    public function getResourceIdentifier(): int
+    {
+        return $this->iid;
+    }
+
+    public function getResourceName(): string
+    {
+        return $this->iid;
+    }
+
+    public function __toString(): string
+    {
+        return (string) $this->iid;
     }
 }

@@ -1700,7 +1700,7 @@ class Exercise
                         $exercise,
                         ResourceLink::VISIBILITY_PUBLISHED,
                         api_get_user_entity(api_get_user_id()),
-                        api_get_course_entity(),
+                        api_get_course_entity($this->course_id),
                         api_get_session_entity(),
                         api_get_group_entity()
                     );

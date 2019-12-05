@@ -17,6 +17,7 @@ use Chamilo\CourseBundle\Repository\CQuizQuestionRepository;
 use Chamilo\CourseBundle\Repository\CQuizRepository;
 use Chamilo\PageBundle\Entity\Page;
 use Chamilo\SettingsBundle\Manager\SettingsManager;
+use Chamilo\UserBundle\Repository\UserRepository;
 use Sonata\PageBundle\Entity\SiteManager;
 use Sonata\UserBundle\Entity\UserManager;
 use Symfony\Component\DependencyInjection\ContainerInterface;
@@ -336,6 +337,15 @@ class Container
     {
         return self::$container->get('Chamilo\CoreBundle\Repository\CourseRepository');
     }
+
+    /**
+     * @return UserRepository
+     */
+    public static function getUserRepository()
+    {
+        return self::$container->get('Chamilo\UserBundle\Repository\UserRepository');
+    }
+
 
     /**
      * @return CourseCategoryRepository|object|null

@@ -758,8 +758,13 @@ class UserManager
         $table_work = Database::get_course_table(TABLE_STUDENT_PUBLICATION);
 
         $userInfo = api_get_user_info($user_id);
+        $repository = Container::getUserRepository();
+
         /** @var User $user */
-        $user = Container::getUserManager()->find($user_id);
+        $user = $repository->find($user_id);
+
+        $repository->deleteUser($user);
+
 
         // Unsubscribe the user from all groups in all his courses
         $sql = "SELECT c.id
@@ -916,17 +921,7 @@ class UserManager
         $app_plugin = new AppPlugin();
         $app_plugin->performActionsWhenDeletingItem('user', $user_id);
 
-        $em->remove($user->getResourceNode());
 
-        foreach ($user->getGroups() as $group) {
-            $user->removeGroup($group);
-        }
-
-//        $em->flush();
-        // Delete user from database
-        $em->remove($user);
-
-        $em->flush();
 
         // Add event to system log
         $authorId = api_get_user_id();

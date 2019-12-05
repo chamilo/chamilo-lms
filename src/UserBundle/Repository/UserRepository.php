@@ -47,7 +47,9 @@ use Chamilo\CourseBundle\Entity\CSurveyAnswer;
 use Chamilo\CourseBundle\Entity\CWiki;
 use Chamilo\TicketBundle\Entity\Ticket;
 use Chamilo\UserBundle\Entity\User;
+use Doctrine\Common\Collections\Criteria;
 use Doctrine\ORM\Query\Expr\Join;
+use FOS\UserBundle\Model\UserInterface;
 use Symfony\Component\Finder\Finder;
 use Symfony\Component\Security\Core\Exception\UsernameNotFoundException;
 use Symfony\Component\Serializer\Encoder\JsonEncoder;
@@ -62,6 +64,50 @@ use Symfony\Component\Serializer\Serializer;
  */
 class UserRepository extends ResourceRepository
 {
+    public function getRootUser(): User
+    {
+        $qb = $this->getRepository()->createQueryBuilder('u');
+        $qb
+            ->innerJoin(
+                'u.resourceNode',
+                'r'
+            );
+        $qb->where('r.creator = u');
+        $qb->andWhere('r.parent IS NULL');
+        $qb->getFirstResult();
+
+        return $qb->getQuery()->getSingleResult();
+    }
+
+    public function deleteUser(User $user)
+    {
+        $em = $this->getEntityManager();
+        $type = $user->getResourceNode()->getResourceType();
+
+        $rootUser = $this->getRootUser();
+
+        if (null === $rootUser) {
+            throw new UsernameNotFoundException('Root user not found');
+        }
+
+        // User children will be set to the root user.
+        $criteria = Criteria::create()->where(Criteria::expr()->eq('resourceType', $type));
+        $userNodeCreatedList = $user->getResourceNodes()->matching($criteria);
+        /** @var ResourceNode $userCreated */
+        foreach ($userNodeCreatedList as $userCreated) {
+            $userCreated->setCreator($rootUser);
+        }
+
+        $em->remove($user->getResourceNode());
+
+        foreach ($user->getGroups() as $group) {
+            $user->removeGroup($group);
+        }
+
+        $em->remove($user);
+        $em->flush();
+    }
+
     public function addUserToResourceNode(int $userId, int $creatorId): ResourceNode
     {
         /** @var User $user */

@@ -522,7 +522,7 @@ class SystemAnnouncementManager
         );
         //first delete all group associations for this announcement
         $res = Database::query(
-            "DELETE FROM $tbl_announcement_group 
+            "DELETE FROM $tbl_announcement_group
              WHERE announcement_id=".intval($announcement_id)
         );
 
@@ -809,17 +809,17 @@ class SystemAnnouncementManager
         }
 
         if ($teacher != 0 && $student == 0) {
-            $sql = "SELECT DISTINCT u.user_id FROM $user_table u $urlJoin 
+            $sql = "SELECT DISTINCT u.user_id FROM $user_table u $urlJoin
                     WHERE status = '1' $urlCondition";
         }
 
         if ($teacher == 0 && $student != 0) {
-            $sql = "SELECT DISTINCT u.user_id FROM $user_table u $urlJoin 
+            $sql = "SELECT DISTINCT u.user_id FROM $user_table u $urlJoin
                     WHERE status = '5' $urlCondition";
         }
 
         if ($teacher != 0 && $student != 0) {
-            $sql = "SELECT DISTINCT u.user_id FROM $user_table u $urlJoin 
+            $sql = "SELECT DISTINCT u.user_id FROM $user_table u $urlJoin
                     WHERE 1 = 1 $urlCondition";
         }
 

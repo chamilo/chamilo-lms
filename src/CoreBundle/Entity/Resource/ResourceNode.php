@@ -3,6 +3,7 @@
 
 namespace Chamilo\CoreBundle\Entity\Resource;
 
+use Chamilo\CoreBundle\Entity\Course;
 use Chamilo\CoreBundle\Entity\Session;
 use Chamilo\UserBundle\Entity\User;
 use Doctrine\Common\Collections\ArrayCollection;
@@ -66,7 +67,7 @@ class ResourceNode
      * @ORM\ManyToOne(
      *     targetEntity="Chamilo\UserBundle\Entity\User", inversedBy="resourceNodes"
      * )
-     * @ORM\JoinColumn(name="creator_id", referencedColumnName="id", nullable=true, onDelete="SET NULL")
+     * @ORM\JoinColumn(name="creator_id", referencedColumnName="id", nullable=true, onDelete="CASCADE")
      */
     protected $creator;
 
@@ -106,6 +107,20 @@ class ResourceNode
      */
     protected $path;
 
+    /**
+     * Shortcut to access Course resource from ResourceNode.
+     *
+     * @ORM\OneToOne(targetEntity="Chamilo\CoreBundle\Entity\Course", mappedBy="resourceNode")
+     */
+    protected $course;
+
+    /**
+     * Shortcut to access Course resource from ResourceNode.
+     *
+     * @ORM\OneToOne(targetEntity="Chamilo\CoreBundle\Entity\Illustration", mappedBy="resourceNode")
+     */
+    protected $illustration;
+
     //protected $pathForCreationLog = '';
 
     /**
@@ -114,6 +129,24 @@ class ResourceNode
     public function __construct()
     {
         $this->children = new ArrayCollection();
+    }
+
+    /**
+     * @return Course
+     */
+    public function getCourse(): ?Course
+    {
+        return $this->course;
+    }
+
+    public function isCourseNode(): bool
+    {
+        return null !== $this->course;
+    }
+
+    public function isIllustrationNode(): bool
+    {
+        return null !== $this->illustration;
     }
 
     /**

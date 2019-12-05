@@ -113,9 +113,13 @@ class ResourceNodeVoter extends Voter
         // Check if I'm the owner.
         $creator = $resourceNode->getCreator();
 
-        // @todo improve permission handling for always public resource file type.
-        // Illustration are always visible.
-        if ($resourceNode->getResourceType()->getName() === 'illustrations') {
+        // Illustrations are always visible.
+        if ($resourceNode->isIllustrationNode()) {
+            return true;
+        }
+
+        // Course access are protected using the CourseVoter.
+        if ($resourceNode->isCourseNode()) {
             return true;
         }
 

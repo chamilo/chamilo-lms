@@ -20,7 +20,7 @@ abstract class AbstractResource
      * @GRID\Column(field="resourceNode.createdAt", title="Date added", type="datetime")
      *
      * @ORM\OneToOne(
-     *     targetEntity="Chamilo\CoreBundle\Entity\Resource\ResourceNode", cascade={"remove"}, orphanRemoval=true
+     *     targetEntity="Chamilo\CoreBundle\Entity\Resource\ResourceNode", mappedBy="resource", cascade={"remove"}, orphanRemoval=true
      * )
      * @ORM\JoinColumn(name="resource_node_id", referencedColumnName="id", onDelete="CASCADE")
      */

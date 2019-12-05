@@ -25,11 +25,12 @@ class BranchSync
     protected $id;
 
     /**
-     * @var int
+     * @var AccessUrl
      *
-     * @ORM\Column(name="access_url_id", type="integer", nullable=false, unique=false)
+     * @ORM\ManyToOne(targetEntity="AccessUrl", cascade={"persist"})
+     * @ORM\JoinColumn(name="access_url_id", referencedColumnName="id")
      */
-    protected $accessUrlId;
+    protected $url;
 
     /**
      * @var string
@@ -216,30 +217,6 @@ class BranchSync
     public function getId()
     {
         return $this->id;
-    }
-
-    /**
-     * Set accessUrlId.
-     *
-     * @param int $accessUrlId
-     *
-     * @return BranchSync
-     */
-    public function setAccessUrlId($accessUrlId)
-    {
-        $this->accessUrlId = $accessUrlId;
-
-        return $this;
-    }
-
-    /**
-     * Get accessUrlId.
-     *
-     * @return int
-     */
-    public function getAccessUrlId()
-    {
-        return $this->accessUrlId;
     }
 
     /**
@@ -778,6 +755,26 @@ class BranchSync
     public function setDescription($description)
     {
         $this->description = $description;
+
+        return $this;
+    }
+
+    /**
+     * @return AccessUrl
+     */
+    public function getUrl(): AccessUrl
+    {
+        return $this->url;
+    }
+
+    /**
+     * @param AccessUrl $url
+     *
+     * @return BranchSync
+     */
+    public function setUrl(AccessUrl $url): BranchSync
+    {
+        $this->url = $url;
 
         return $this;
     }

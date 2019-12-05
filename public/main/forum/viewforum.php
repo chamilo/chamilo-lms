@@ -605,7 +605,7 @@ if (is_array($threads)) {
                         $row['visibility'],
                         [
                             'forum' => $my_forum,
-                            'gidReq' => $groupId,
+                            'gid' => $groupId,
                         ]
                     );
                     $iconsEdit .= return_lock_unlock_icon(
@@ -614,7 +614,7 @@ if (is_array($threads)) {
                         $row['locked'],
                         [
                             'forum' => $my_forum,
-                            'gidReq' => api_get_group_id(),
+                            'gid' => api_get_group_id(),
                         ]
                     );
                     $iconsEdit .= '<a href="viewforum.php?'.$cidreq.'&forum='

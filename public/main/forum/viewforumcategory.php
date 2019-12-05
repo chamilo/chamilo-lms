@@ -334,7 +334,7 @@ if ($action != 'add') {
                             : null;
                         $group_title = api_substr($my_all_groups_forum_name, 0, 30);
                         $forum_title_group_addition = ' (<a href="../group/group_space.php?'.api_get_cidreq()
-                            .'&gidReq='.$my_all_groups_forum_id.'" class="forum_group_link">'
+                            .'&gid='.$my_all_groups_forum_id.'" class="forum_group_link">'
                             .get_lang('Go to').' '.$group_title.'</a>)';
                     } else {
                         $forum_title_group_addition = '';
@@ -369,7 +369,7 @@ if ($action != 'add') {
                         'a',
                         $forum['forum_title'].$session_displayed,
                         [
-                            'href' => 'viewforum.php?'.api_get_cidreq(true, false)."&gidReq={$forum['forum_of_group']}&forum={$forum['forum_id']}&search=".Security::remove_XSS(urlencode(isset($_GET['search']) ? $_GET['search'] : '')),
+                            'href' => 'viewforum.php?'.api_get_cidreq(true, false)."&gid={$forum['forum_of_group']}&forum={$forum['forum_id']}&search=".Security::remove_XSS(urlencode(isset($_GET['search']) ? $_GET['search'] : '')),
                             'class' => empty($forum['visibility']) ? 'text-muted' : null,
                         ]
                     );

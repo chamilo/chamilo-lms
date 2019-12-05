@@ -432,7 +432,7 @@ if (is_array($forumCategories)) {
                         //$number_posts = isset($forum['number_of_posts']) ? $forum['number_of_posts'] : 0;
 
                         $linkForum = api_get_path(WEB_CODE_PATH).'forum/viewforum.php?'.api_get_cidreq()
-                            .'&gidReq='.$groupid.'&forum='.$forum['forum_id'];
+                            .'&gid='.$groupid.'&forum='.$forum['forum_id'];
                         $forumInfo['url'] = $linkForum;
 
                         if (!empty($forum['start_time']) && !empty($forum['end_time'])) {

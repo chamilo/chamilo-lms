@@ -228,7 +228,8 @@ if (api_is_allowed_to_edit(false, true) ||
             foreach ($forums_of_groups as $key => $value) {
                 if ($value['forum_group_public_private'] == 'public') {
                     $actions_array[] = [
-                        'url' => api_get_path(WEB_CODE_PATH).'forum/viewforum.php?cidReq='.api_get_course_id().'&forum='.$value['forum_id'].'&gidReq='.Security::remove_XSS($current_group['id']).'&origin=group',
+                        'url' => api_get_path(WEB_CODE_PATH).
+                            'forum/viewforum.php?cid='.api_get_course_int_id().'&forum='.$value['forum_id'].'&gid='.Security::remove_XSS($current_group['id']).'&origin=group',
                         'content' => Display::return_icon(
                             'forum.png',
                             get_lang('Group Forum'),
@@ -344,9 +345,9 @@ $table = new SortableTable(
     (api_is_western_name_order() xor api_sort_by_first_name()) ? 2 : 1
 );
 $origin = api_get_origin();
-$my_cidreq = isset($_GET['cidReq']) ? Security::remove_XSS($_GET['cidReq']) : '';
-$my_gidreq = isset($_GET['gidReq']) ? Security::remove_XSS($_GET['gidReq']) : '';
-$parameters = ['cidReq' => $my_cidreq, 'origin' => $origin, 'gidReq' => $my_gidreq];
+$my_cidreq = isset($_GET['cid']) ? (int) $_GET['cid'] : 0;
+$my_gidreq = isset($_GET['gid']) ? (int) $_GET['gid'] : 0;
+$parameters = ['cid' => $my_cidreq, 'origin' => $origin, 'gid' => $my_gidreq];
 $table->set_additional_parameters($parameters);
 $table->set_header(0, '');
 
@@ -397,8 +398,8 @@ function get_number_of_group_users()
     // Query
     $sql = "SELECT count(iid) AS number_of_users
             FROM $table
-            WHERE 
-                c_id = $course_id AND 
+            WHERE
+                c_id = $course_id AND
                 group_id = '".intval($groupInfo['iid'])."'";
     $result = Database::query($sql);
     $return = Database::fetch_array($result, 'ASSOC');
@@ -447,15 +448,15 @@ function get_group_user_data($from, $number_of_items, $column, $direction)
             )."
 				user.email		AS col3
 				, user.active AS col4
-				FROM $table_user user 
+				FROM $table_user user
 				INNER JOIN $table_group_user group_rel_user
 				ON (group_rel_user.user_id = user.id)
 				INNER JOIN $tableGroup g
 				ON (group_rel_user.group_id = g.iid)
-				WHERE 
-				    group_rel_user.c_id = $course_id AND 
+				WHERE
+				    group_rel_user.c_id = $course_id AND
 				    g.iid = '".$groupInfo['iid']."'
-                ORDER BY col$column $direction 
+                ORDER BY col$column $direction
                 LIMIT $from, $number_of_items";
     } else {
         if (api_is_allowed_to_edit()) {
@@ -469,15 +470,15 @@ function get_group_user_data($from, $number_of_items, $column, $direction)
                         u.firstname 	AS col2,")."
                         u.email		AS col3
                         , u.active AS col4
-                    FROM $table_user u 
-                    INNER JOIN $table_group_user gu 
+                    FROM $table_user u
+                    INNER JOIN $table_group_user gu
                     ON (gu.user_id = u.id)
                     INNER JOIN $tableGroup g
 				    ON (gu.group_id = g.iid)
-                    WHERE 
-                        g.iid = '".$groupInfo['iid']."' AND 
+                    WHERE
+                        g.iid = '".$groupInfo['iid']."' AND
                         gu.c_id = $course_id
-                    ORDER BY col$column $direction 
+                    ORDER BY col$column $direction
                     LIMIT $from, $number_of_items";
         } else {
             $sql = "SELECT DISTINCT
@@ -491,17 +492,17 @@ function get_group_user_data($from, $number_of_items, $column, $direction)
 						user.firstname 	AS col2 "
                     )."
                     , user.active AS col3
-                    FROM $table_user user 
+                    FROM $table_user user
                     INNER JOIN $table_group_user group_rel_user
                     ON (group_rel_user.user_id = user.id)
                     INNER JOIN $tableGroup g
                     ON (group_rel_user.group_id = g.iid)
-                    WHERE 
-                        g.iid = '".$groupInfo['iid']."' AND 
-                        group_rel_user.c_id = $course_id AND  
-                        group_rel_user.user_id = user.id AND 
+                    WHERE
+                        g.iid = '".$groupInfo['iid']."' AND
+                        group_rel_user.c_id = $course_id AND
+                        group_rel_user.user_id = user.id AND
                         g.iid = '".$groupInfo['iid']."'
-                    ORDER BY col$column $direction 
+                    ORDER BY col$column $direction
                     LIMIT $from, $number_of_items";
         }
     }

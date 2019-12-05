@@ -125,8 +125,8 @@ class GroupManager
             $select = ' DISTINCT count(g.iid) as count ';
         }
 
-        $sql = "SELECT 
-                $select    
+        $sql = "SELECT
+                $select
                 FROM $table_group g
                 WHERE 1 = 1 ";
 
@@ -261,7 +261,6 @@ class GroupManager
             Database::query($sql);
 
             $desired_dir_name = '/'.api_replace_dangerous_char($name).'_groupdocs';
-            $my_path = api_get_path(SYS_COURSE_PATH).$currentCourseRepository.'/document';
 
             $newFolderData = create_unexisting_directory(
                 $_course,
@@ -269,9 +268,9 @@ class GroupManager
                 $session_id,
                 $lastId,
                 null,
-                $my_path,
-                $desired_dir_name,
                 null,
+                    $desired_dir_name,
+                $desired_dir_name,
                 1
             );
 
@@ -630,8 +629,8 @@ class GroupManager
 
         $table = Database::get_course_table(TABLE_GROUP);
         $sql = "SELECT * FROM $table
-                WHERE 
-                  c_id = $course_id AND 
+                WHERE
+                  c_id = $course_id AND
                   name = '$name'
                   $sessionCondition
                 LIMIT 1";
@@ -891,7 +890,7 @@ class GroupManager
                 WHERE
                     gc.c_id = $courseId AND
                     g.c_id = $courseId AND
-                    gc.id = g.category_id AND 
+                    gc.id = g.category_id AND
                     g.iid = $group_id
                 LIMIT 1";
         $res = Database::query($sql);
@@ -1224,8 +1223,8 @@ class GroupManager
                 ON (gu.group_id = g.id and g.c_id = gu.c_id)
                 INNER JOIN $user_table u
                 ON (u.id = gu.user_id)
-                WHERE 
-                    gu.c_id = $courseId AND 
+                WHERE
+                    gu.c_id = $courseId AND
                     g.id = $group_id";
 
         if (!empty($column) && !empty($direction)) {
@@ -1269,7 +1268,7 @@ class GroupManager
 
         $course_id = api_get_course_int_id();
         $group_id = intval($group_id);
-        $sql = "SELECT user_id 
+        $sql = "SELECT user_id
                 FROM $group_user_table gu
                 INNER JOIN $groupTable g
                 ON (gu.group_id = g.iid and g.c_id = gu.c_id)
@@ -1281,7 +1280,7 @@ class GroupManager
             $users[] = api_get_user_info($obj->user_id);
         }
 
-        $sql = "SELECT user_id 
+        $sql = "SELECT user_id
                 FROM $tutor_user_table gu
                 INNER JOIN $groupTable g
                 ON (gu.group_id = g.id and g.c_id = gu.c_id)
@@ -1308,7 +1307,7 @@ class GroupManager
         $course_id = api_get_course_int_id();
         $group_id = intval($groupInfo['iid']);
 
-        $sql = "SELECT user_id 
+        $sql = "SELECT user_id
                 FROM $tutor_user_table gu
                 INNER JOIN $groupTable g
                 ON (gu.group_id = g.id and g.c_id = gu.c_id)
@@ -1501,7 +1500,7 @@ class GroupManager
         $table = Database::get_course_table(TABLE_GROUP);
         $group_id = intval($group_id);
         $course_id = api_get_course_int_id();
-        $sql = "SELECT max_student FROM $table 
+        $sql = "SELECT max_student FROM $table
                 WHERE c_id = $course_id AND iid = $group_id";
         $db_result = Database::query($sql);
         $db_object = Database::fetch_object($db_result);
@@ -1534,13 +1533,13 @@ class GroupManager
         }
 
         $sql = "SELECT COUNT(*) AS number_of_groups
-                FROM $table_group_user gu 
+                FROM $table_group_user gu
                 INNER JOIN $table_group g
                 ON (g.iid = gu.group_id AND gu.c_id = g.c_id)
                 WHERE
                     gu.c_id = $course_id AND
                     g.c_id = $course_id AND
-                    gu.user_id = $user_id                       
+                    gu.user_id = $user_id
                     $cat_condition";
 
         $result = Database::query($sql);
@@ -1722,14 +1721,14 @@ class GroupManager
 
         $course_id = api_get_course_int_id();
 
-        $sql = "SELECT 
-                    ug.id, 
-                    u.user_id, 
-                    u.lastname, 
-                    u.firstname, 
-                    u.email, 
+        $sql = "SELECT
+                    ug.id,
+                    u.user_id,
+                    u.lastname,
+                    u.firstname,
+                    u.email,
                     u.username
-                FROM $table_user u 
+                FROM $table_user u
                 INNER JOIN $table_group_user ug
                 ON (ug.user_id = u.user_id)
                 WHERE ug.c_id = $course_id AND
@@ -1783,7 +1782,7 @@ class GroupManager
                 WHERE
                     tg.c_id = $course_id AND
                     tg.group_id = $group_id AND
-                    tg.user_id = u.user_id 
+                    tg.user_id = u.user_id
                 $order_clause
                 ";
         $db_result = Database::query($sql);
@@ -1906,8 +1905,8 @@ class GroupManager
 
         $table_group_user = Database::get_course_table(TABLE_GROUP_USER);
         $sql = "DELETE FROM $table_group_user
-                WHERE 
-                    group_id = $groupId AND 
+                WHERE
+                    group_id = $groupId AND
                     c_id = $course_id";
         $result = Database::query($sql);
 
@@ -1976,9 +1975,9 @@ class GroupManager
         $table = Database::get_course_table(TABLE_GROUP_TUTOR);
 
         $sql = "SELECT * FROM $table
-                WHERE 
-                    c_id = $courseId AND 
-                    user_id = $user_id AND 
+                WHERE
+                    c_id = $courseId AND
+                    user_id = $user_id AND
                     group_id = $group_id";
         $result = Database::query($sql);
         if (Database::num_rows($result) > 0) {
@@ -2227,7 +2226,7 @@ class GroupManager
         $user_id = intval($user_id);
         $course_id = api_get_course_int_id();
         $sql = "SELECT name
-                FROM $table_group g 
+                FROM $table_group g
                 INNER JOIN $table_group_user gu
                 ON (gu.group_id = g.iid)
                 WHERE
@@ -2316,12 +2315,12 @@ class GroupManager
                     $groupNameClass = 'muted';
                 }
 
-                $group_name = '<a class="'.$groupNameClass.'" href="group_space.php?'.api_get_cidreq(true, false).'&gidReq='.$this_group['id'].'">'.
+                $group_name = '<a class="'.$groupNameClass.'" href="group_space.php?'.api_get_cidreq(true, false).'&gid='.$this_group['id'].'">'.
                     Security::remove_XSS($this_group['name']).'</a> ';
 
                 $group_name2 = '';
                 if (api_get_configuration_value('extra')) {
-                    $group_name2 = '<a href="group_space_tracking.php?cidReq='.api_get_course_id().'&gidReq='
+                    $group_name2 = '<a href="group_space_tracking.php?cidReq='.api_get_course_id().'&gid='
                         .$this_group['id'].'">'.get_lang('suivi_de').''.stripslashes($this_group['name']).'</a>';
                 }
 
@@ -2411,7 +2410,7 @@ class GroupManager
             if (api_is_allowed_to_edit(false, true) &&
                 !(api_is_session_general_coach() && intval($this_group['session_id']) != $session_id)
             ) {
-                $edit_actions = '<a href="'.$url.'settings.php?'.api_get_cidreq(true, false).'&gidReq='.$this_group['id'].'"  title="'.get_lang('Edit').'">'.
+                $edit_actions = '<a href="'.$url.'settings.php?'.api_get_cidreq(true, false).'&gid='.$this_group['id'].'"  title="'.get_lang('Edit').'">'.
                     Display::return_icon('edit.png', get_lang('Edit this group'), '', ICON_SIZE_SMALL).'</a>&nbsp;';
 
                 if ($this_group['status'] == 1) {
@@ -2422,7 +2421,7 @@ class GroupManager
                         Display::return_icon('invisible.png', get_lang('Show'), '', ICON_SIZE_SMALL).'</a>&nbsp;';
                 }
 
-                $edit_actions .= '<a href="'.$url.'member_settings.php?'.api_get_cidreq(true, false).'&gidReq='.$this_group['id'].'"  title="'.get_lang('Group members').'">'.
+                $edit_actions .= '<a href="'.$url.'member_settings.php?'.api_get_cidreq(true, false).'&gid='.$this_group['id'].'"  title="'.get_lang('Group members').'">'.
                     Display::return_icon('user.png', get_lang('Group members'), '', ICON_SIZE_SMALL).'</a>&nbsp;';
 
                 $edit_actions .= '<a href="'.$url.'group_overview.php?action=export&type=xls&'.api_get_cidreq(true, false).'&id='.$this_group['id'].'"  title="'.get_lang('Export users list').'">'.

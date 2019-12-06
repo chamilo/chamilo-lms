@@ -63,7 +63,7 @@ $tables = array(
     'track_e_lastaccess' => array('c' => 'access_cours_code', 's' => 'access_session_id'),
     'track_e_links' => array('c' => 'links_cours_id', 's' => 'links_session_id'),
     'track_e_online' => array('c' => 'course', 's' => 'session_id'),
-    'track_e_uploads' => array('c' => 'upload_cours_id', 's' => 'upload_session_id'),
+    'track_e_uploads' => array('c' => 'c_id', 's' => 'upload_session_id'),
     'user_rel_course_vote' => array('c' => 'c_id', 's' => 'session_id'),
 );
 // Users related tables. From those tables above, only a few have data related

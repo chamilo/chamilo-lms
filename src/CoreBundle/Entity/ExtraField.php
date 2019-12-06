@@ -81,6 +81,13 @@ class ExtraField // extends BaseAttribute
     /**
      * @var string
      *
+     * @ORM\Column(name="helper_text", type="text", nullable=true, unique=false)
+     */
+    protected $helperText;
+
+    /**
+     * @var string
+     *
      * @ORM\Column(name="default_value", type="text", nullable=true, unique=false)
      */
     protected $defaultValue;

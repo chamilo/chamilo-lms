@@ -348,18 +348,7 @@ class Version20 extends AbstractMigrationChamilo
                     ADD c_id int(11) NOT NULL,
                     ADD FOREIGN KEY (c_id) REFERENCES course (id) ON DELETE RESTRICT;
                 ");
-
-                $this->addSql("
-                    ALTER TABLE track_e_hotspot
-                    CHANGE c_id c_id int(11) NOT NULL AFTER hotspot_course_code,
-                    ADD FOREIGN KEY (c_id) REFERENCES course (id) ON DELETE RESTRICT;
-                ");
-                $this->addSql("
-                    UPDATE track_e_hotspot teh
-                    SET teh.c_id = (SELECT id FROM course WHERE code = teh.hotspot_course_code)
-                    WHERE teh.hotspot_course_code != NULL OR hotspot_course_code != ''
-                ");
-                $this->addSql("ALTER TABLE personal_agenda DROP hotspot_course_code");*/
+        */
 
         // Update settings variable name
         $settings = [
@@ -884,6 +873,7 @@ class Version20 extends AbstractMigrationChamilo
             'track_e_uploads' => ['columns' => ['upload_cours_id'], 'index' => ['upload_cours_id']],
             'track_e_hotspot' => ['columns' => ['hotspot_course_code'], 'index' => ['hotspot_course_code']],
             'templates' => ['columns' => ['course_code'], 'index' => []],
+            'personal_agenda' => ['columns' => ['hotspot_course_code'], 'index' => []],
         ];
 
         foreach ($dropColumnsAndIndex as $tableName => $data) {

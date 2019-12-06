@@ -1,70 +1,3 @@
-core_tool:
-    resource: '@ChamiloCourseBundle/Controller'
-    type: annotation
-    prefix: /courses/{course}/
-
-resources_document_get_file:
-    path: /courses/{course}/document/{file}
-    defaults:
-        _controller: Chamilo\CoreBundle\Controller\ResourceController::getDocumentAction
-    requirements:
-        file: .+ # allow "/" in {file}
-
-resources_document_list:
-    path: /courses/{course}/resources/document/list
-    defaults:
-        _controller: Chamilo\CourseBundle\Controller\CDocumentController::indexAction
-    requirements:
-        file: .+ # allow "/" in {file}
-
-resources_document_upload:
-    path: /courses/{course}/resources/document/upload
-    defaults:
-        _controller: Chamilo\CourseBundle\Controller\CDocumentController::uploadAction
-    requirements:
-        file: .+ # allow "/" in {file}
-
-resources_document_update:
-    path: /courses/{course}/resources/document/update/{id}
-    defaults:
-        _controller: Chamilo\CourseBundle\Controller\CDocumentController::updateAction
-    requirements:
-        file: .+ # allow "/" in {file}
-
-
-resources_document_delete:
-    path: /courses/{course}/resources/document/delete/{id}
-    defaults:
-        _controller: Chamilo\CourseBundle\Controller\CDocumentController::deleteAction
-    requirements:
-        file: .+ # allow "/" in {file}
-
-resources_document_folder_download:
-    path: /courses/{course}/download_folder/{folderId}
-    defaults:
-        _controller: Chamilo\CoreBundle\Controller\ResourceController::downloadFolderAction
-
-chamilo_course_tool_intro_create:
-    path: /courses/{course}/introduction/{tool}/create/
-    methods: [GET, POST]
-    defaults:
-        _controller: Chamilo\CourseBundle\Controller\CToolIntroController::createAction
-    requirements:
-        tool: "[a-zA-Z_]+"
-
-chamilo_course_tool_intro_update:
-    path: /courses/{course}/introduction/{tool}/update/
-    methods: [GET]
-    defaults:
-        _controller: Chamilo\CourseBundle\Controller\CToolIntroController::updateAction
-
-chamilo_course_tool_list:
-    path: /courses/{course}/introduction
-    methods: [GET]
-    defaults:
-        _controller: Chamilo\CourseBundle\Controller\CToolIntroController::indexAction
-
-
 #chamilo_course.c_tool_intro:
 #    resource: |
 #        alias: chamilo_course.c_tool_intro
@@ -73,14 +6,8 @@ chamilo_course_tool_list:
 #    type: sylius.resource_api
 
 # Course settings
-chamilo_course_settings:
-    path: /courses/{course}/settings/{namespace}
-    defaults:
-        _controller: Chamilo\CourseBundle\Controller\SettingsController::updateAction
-        template: ChamiloCourseBundle:Settings:default.html.twig
-
-chamilo_course_tool_index:
-    path: /courses/{course}/tools
-    methods: [GET, POST, HEAD, DELETE]
-    defaults:
-        _controller: Chamilo\CourseBundle\Controller\CToolIntroController::indexAction
+#chamilo_course_settings:
+#    path: /course/{cid}/settings/{namespace}
+#    defaults:
+#        _controller: Chamilo\CourseBundle\Controller\SettingsController::updateAction
+#        template: ChamiloCourseBundle:Settings:default.html.twig

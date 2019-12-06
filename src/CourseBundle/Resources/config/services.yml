@@ -112,6 +112,7 @@ services:
 
     chamilo_course.settings.form_factory:
         class: Sylius\Bundle\SettingsBundle\Form\Factory\SettingsFormFactory
+        public: true
         arguments:
             - '@chamilo_course.registry.settings_schema'
             - '@form.factory'

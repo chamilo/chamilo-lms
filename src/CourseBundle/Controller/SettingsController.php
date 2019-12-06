@@ -4,8 +4,10 @@
 namespace Chamilo\CourseBundle\Controller;
 
 use Chamilo\CoreBundle\Controller\BaseController;
+use Chamilo\CoreBundle\Entity\Course;
 use Chamilo\CourseBundle\Manager\SettingsManager;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
+use Chamilo\SettingsBundle\Manager\SettingsManager as ChamiloSettingsManager;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Entity;
 use Sylius\Bundle\SettingsBundle\Form\Factory\SettingsFormFactoryInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -18,72 +20,6 @@ use Symfony\Component\Validator\Exception\ValidatorException;
  */
 class SettingsController extends BaseController
 {
-    /**
-     * Edit configuration with given namespace.
-     *
-     * @param string $namespace
-     *
-     * @ParamConverter("course", class="ChamiloCoreBundle:Course", options={"repository_method" = "findOneByCode"})
-     *
-     * @return Response
-     */
-    public function updateAction(Request $request, $namespace, $course)
-    {
-        $manager = $this->getSettingsManager();
-
-        $schemaAlias = $manager->convertNameSpaceToService($namespace);
-        $settings = $manager->load($namespace);
-
-        $form = $this
-            ->getSettingsFormFactory()
-            ->create($schemaAlias);
-
-        $form->setData($settings);
-
-        if ($form->handleRequest($request)->isValid()) {
-            $messageType = 'success';
-            try {
-                $manager->setCourse($course);
-                $manager->saveSettings($namespace, $form->getData());
-                $message = $this->trans(
-                    'sylius.settings.update',
-                    [],
-                    'flashes'
-                );
-            } catch (ValidatorException $exception) {
-                $message = $this->trans(
-                    $exception->getMessage(),
-                    [],
-                    'validators'
-                );
-                $messageType = 'error';
-            }
-            $request->getSession()->getBag('flashes')->add(
-                $messageType,
-                $message
-            );
-
-            if ($request->headers->has('referer')) {
-                return $this->redirect($request->headers->get('referer'));
-            }
-        }
-        $schemas = $manager->getSchemas();
-
-        return $this->render(
-            $request->attributes->get(
-                'template',
-                'ChamiloCourseBundle:Settings:update.html.twig'
-            ),
-            [
-                'course' => $course,
-                'schemas' => $schemas,
-                'settings' => $settings,
-                'form' => $form->createView(),
-                'keyword' => '',
-                'search_form' => '',
-            ]
-        );
-    }
 
     /**
      * Get settings manager.

@@ -220,16 +220,6 @@ class NavBuilder implements ContainerAwareInterface
 
             if ($checker->isGranted('ROLE_ADMIN')) {
                 $menu->addChild(
-                    'dashboard',
-                    [
-                        'label' => $translator->trans('Dashboard'),
-                        'route' => 'legacy_main',
-                        'routeParameters' => ['name' => 'dashboard/index.php'],
-                        'icon' => 'cube',
-                    ]
-                );
-
-                $menu->addChild(
                     'administrator',
                     [
                         'label' => $translator->trans('Administration'),

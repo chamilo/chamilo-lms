@@ -6,8 +6,8 @@ namespace Chamilo\CoreBundle\Controller;
 use Chamilo\CoreBundle\ToolChain;
 use Chamilo\CourseBundle\Controller\ToolBaseController;
 use Chamilo\CourseBundle\Entity\CTool;
+use Chamilo\CourseBundle\Repository\CToolRepository;
 use Chamilosession as Session;
-use CourseHome;
 use CourseManager;
 use Database;
 use Display;
@@ -32,10 +32,11 @@ class CourseHomeController extends ToolBaseController
      *
      * @Entity("course", expr="repository.find(cid)")
      */
-    public function indexAction(Request $request, ToolChain $toolChain)
+    public function indexAction(Request $request, CToolRepository $toolRepository, ToolChain $toolChain)
     {
+        $this->autoLaunch();
         $course = $this->getCourse();
-        $result = $this->autoLaunch();
+
         $js = '<script>'.api_get_language_translate_html().'</script>';
         $htmlHeadXtra[] = $js;
 
@@ -43,7 +44,6 @@ class CourseHomeController extends ToolBaseController
         $courseCode = $course->getCode();
         $courseId = $course->getId();
         $sessionId = $this->getSessionId();
-        $showMessage = '';
 
         if (api_is_invitee()) {
             $isInASession = $sessionId > 0;
@@ -74,7 +74,6 @@ class CourseHomeController extends ToolBaseController
         }
 
         $action = !empty($_GET['action']) ? Security::remove_XSS($_GET['action']) : '';
-
         if ($action == 'subscribe') {
             if (Security::check_token('get')) {
                 Security::clear_token();
@@ -89,9 +88,6 @@ class CourseHomeController extends ToolBaseController
             }
         }
 
-        /*	Is the user allowed here? */
-        api_protect_course_script(true);
-
         /*  STATISTICS */
         if (!isset($coursesAlreadyVisited[$courseCode])) {
             Event::accessCourse();
@@ -105,231 +101,33 @@ class CourseHomeController extends ToolBaseController
         ];
         Event::registerLog($logInfo);
 
-        /* Auto launch code */
-        $autoLaunchWarning = '';
-        $showAutoLaunchLpWarning = false;
-        $course_id = api_get_course_int_id();
-        $lpAutoLaunch = api_get_course_setting('enable_lp_auto_launch');
-        $session_id = api_get_session_id();
-        $allowAutoLaunchForCourseAdmins = api_is_platform_admin() || api_is_allowed_to_edit(true, true) || api_is_coach();
-
-        if (!empty($lpAutoLaunch)) {
-            if ($lpAutoLaunch == 2) {
-                // LP list
-                if ($allowAutoLaunchForCourseAdmins) {
-                    $showAutoLaunchLpWarning = true;
-                } else {
-                    $session_key = 'lp_autolaunch_'.$session_id.'_'.api_get_course_int_id().'_'.api_get_user_id();
-                    if (!isset($_SESSION[$session_key])) {
-                        // Redirecting to the LP
-                        $url = api_get_path(WEB_CODE_PATH).'lp/lp_controller.php?'.api_get_cidreq();
-                        $_SESSION[$session_key] = true;
-                        header("Location: $url");
-                        exit;
-                    }
-                }
-            } else {
-                $lp_table = Database::get_course_table(TABLE_LP_MAIN);
-                $condition = '';
-                if (!empty($session_id)) {
-                    $condition = api_get_session_condition($session_id);
-                    $sql = "SELECT id FROM $lp_table
-                            WHERE c_id = $course_id AND autolaunch = 1 $condition
-                            LIMIT 1";
-                    $result = Database::query($sql);
-                    // If we found nothing in the session we just called the session_id =  0 autolaunch
-                    if (Database::num_rows($result) == 0) {
-                        $condition = '';
-                    }
-                }
-
-                $sql = "SELECT id FROM $lp_table
-                        WHERE c_id = $course_id AND autolaunch = 1 $condition
-                        LIMIT 1";
-                $result = Database::query($sql);
-                if (Database::num_rows($result) > 0) {
-                    $lp_data = Database::fetch_array($result, 'ASSOC');
-                    if (!empty($lp_data['id'])) {
-                        if ($allowAutoLaunchForCourseAdmins) {
-                            $showAutoLaunchLpWarning = true;
-                        } else {
-                            $session_key = 'lp_autolaunch_'.$session_id.'_'.api_get_course_int_id().'_'.api_get_user_id();
-                            if (!isset($_SESSION[$session_key])) {
-                                // Redirecting to the LP
-                                $url = api_get_path(WEB_CODE_PATH).'lp/lp_controller.php?'.api_get_cidreq().'&action=view&lp_id='.$lp_data['id'];
-
-                                $_SESSION[$session_key] = true;
-                                header("Location: $url");
-                                exit;
-                            }
-                        }
-                    }
-                }
-            }
-        }
-
-        if ($showAutoLaunchLpWarning) {
-            $autoLaunchWarning = get_lang('The learning path auto-launch setting is ON. When learners enter this course, they will be automatically redirected to the learning path marked as auto-launch.');
-        }
-
-        $forumAutoLaunch = api_get_course_setting('enable_forum_auto_launch');
-        if ($forumAutoLaunch == 1) {
-            if ($allowAutoLaunchForCourseAdmins) {
-                if (empty($autoLaunchWarning)) {
-                    $autoLaunchWarning = get_lang('The forum\'s auto-launch setting is on. Students will be redirected to the forum tool when entering this course.');
-                }
-            } else {
-                $url = api_get_path(WEB_CODE_PATH).'forum/index.php?'.api_get_cidreq();
-                header("Location: $url");
-                exit;
-            }
-        }
-
-        if (api_get_configuration_value('allow_exercise_auto_launch')) {
-            $exerciseAutoLaunch = (int) api_get_course_setting('enable_exercise_auto_launch');
-            if ($exerciseAutoLaunch == 2) {
-                if ($allowAutoLaunchForCourseAdmins) {
-                    if (empty($autoLaunchWarning)) {
-                        $autoLaunchWarning = get_lang(
-                            'TheExerciseAutoLaunchSettingIsONStudentsWillBeRedirectToTheExerciseList'
-                        );
-                    }
-                } else {
-                    // Redirecting to the document
-                    $url = api_get_path(WEB_CODE_PATH).'exercise/exercise.php?'.api_get_cidreq();
-                    header("Location: $url");
-                    exit;
-                }
-            } elseif ($exerciseAutoLaunch == 1) {
-                if ($allowAutoLaunchForCourseAdmins) {
-                    if (empty($autoLaunchWarning)) {
-                        $autoLaunchWarning = get_lang(
-                            'TheExerciseAutoLaunchSettingIsONStudentsWillBeRedirectToAnSpecificExercise'
-                        );
-                    }
-                } else {
-                    // Redirecting to an exercise
-                    $table = Database::get_course_table(TABLE_QUIZ_TEST);
-                    $condition = '';
-                    if (!empty($session_id)) {
-                        $condition = api_get_session_condition($session_id);
-                        $sql = "SELECT iid FROM $table
-                        WHERE c_id = $course_id AND autolaunch = 1 $condition
-                        LIMIT 1";
-                        $result = Database::query($sql);
-                        // If we found nothing in the session we just called the session_id = 0 autolaunch
-                        if (Database::num_rows($result) == 0) {
-                            $condition = '';
-                        }
-                    }
-
-                    $sql = "SELECT iid FROM $table
-                    WHERE c_id = $course_id AND autolaunch = 1 $condition
-                    LIMIT 1";
-                    $result = Database::query($sql);
-                    if (Database::num_rows($result) > 0) {
-                        $row = Database::fetch_array($result, 'ASSOC');
-                        $exerciseId = $row['iid'];
-                        $url = api_get_path(WEB_CODE_PATH).
-                            'exercise/overview.php?exerciseId='.$exerciseId.'&'.api_get_cidreq();
-                        header("Location: $url");
-                        exit;
-                    }
-                }
-            }
-        }
-
-        $documentAutoLaunch = api_get_course_setting('enable_document_auto_launch');
-        if ($documentAutoLaunch == 1) {
-            if ($allowAutoLaunchForCourseAdmins) {
-                if (empty($autoLaunchWarning)) {
-                    $autoLaunchWarning = get_lang('The document auto-launch feature configuration is enabled. Learners will be automatically redirected to document tool.');
-                }
-            } else {
-                // Redirecting to the document
-                $url = api_get_path(WEB_CODE_PATH).'document/document.php?'.api_get_cidreq();
-                header("Location: $url");
-                exit;
-            }
-        }
-
-        // Used in different pages
-        $tool_table = Database::get_course_table(TABLE_TOOL_LIST);
-
         /*	Introduction section (editable by course admins) */
-        $content = Display::return_introduction_section(
+        /*$introduction = Display::return_introduction_section(
             TOOL_COURSE_HOMEPAGE,
             [
                 'CreateDocumentWebDir' => api_get_path(WEB_COURSE_PATH).api_get_course_path().'/document/',
                 'CreateDocumentDir' => 'document/',
                 'BaseHref' => api_get_path(WEB_COURSE_PATH).api_get_course_path().'/',
             ]
-        );
+        );*/
 
-        /*	SWITCH TO A DIFFERENT HOMEPAGE VIEW
-            the setting homepage_view is adjustable through
-            the platform administration section */
-        if (!empty($autoLaunchWarning)) {
-            $showMessage .= Display::return_message(
-                $autoLaunchWarning,
-                'warning'
-            );
-        }
+        $qb = $toolRepository->getResourcesByCourse($course, $this->getSession());
+        $result = $qb->getQuery()->getResult();
 
-        // Activity start
-        $id = isset($_GET['id']) ? (int) $_GET['id'] : null;
-        $course_id = api_get_course_int_id();
-        $session_id = api_get_session_id();
-
-        // Work with data post askable by admin of course
-        if (api_is_platform_admin()) {
-            // Show message to confirm that a tool it to be hidden from available tools
-            // visibility 0,1->2
-            if (!empty($_GET['askDelete'])) {
-                $content .= '<div id="toolhide">'.get_lang('Do you really want to delete this link?').'<br />&nbsp;&nbsp;&nbsp;
-                    <a href="'.api_get_self().'">'.get_lang('No').'</a>&nbsp;|&nbsp;
-                    <a href="'.api_get_self().'?delete=yes&id='.$id.'">'.get_lang('Yes').'</a>
-                </div>';
-            } elseif (isset($_GET['delete']) && $_GET['delete']) {
-                /*
-                * Process hiding a tools from available tools.
-                */
-                Database::query("DELETE FROM $tool_table WHERE c_id = $course_id AND id='$id' AND added_tool=1");
+        $tools = [];
+        /** @var CTool $item */
+        foreach ($result as $item) {
+            $toolModel = $toolChain->getToolFromName($item->getTool()->getName());
+            // Dont show admin links.
+            if ($toolModel->getAdmin()) {
+                continue;
             }
-        }
 
-        // Course legal
-        $enabled = api_get_plugin_setting('courselegal', 'tool_enable');
-        $pluginExtra = null;
-        if ($enabled === 'true') {
-            require_once api_get_path(SYS_PLUGIN_PATH).'courselegal/config.php';
-            $plugin = \CourseLegalPlugin::create();
-            $pluginExtra = $plugin->getTeacherLink();
-        }
-
-        // Start of tools for CourseAdmins (teachers/tutors)
-        if ($session_id === 0 && api_is_course_admin() && api_is_allowed_to_edit(null, true)) {
-            $content .= '<div class="alert alert-success" style="border:0px; margin-top: 0px;padding:0px;">
-		<div class="normal-message" id="id_normal_message" style="display:none">';
-            $content .= '<img src="'.api_get_path(WEB_PATH).'main/inc/lib/javascript/indicator.gif"/>&nbsp;&nbsp;';
-            $content .= get_lang('Please stand by...');
-            $content .= '</div>
-		<div class="alert alert-success" id="id_confirmation_message" style="display:none"></div>
-	</div>';
-            $content .= $pluginExtra;
-        } elseif (api_is_coach()) {
-            $content .= $pluginExtra;
-            if (api_get_setting('show_session_data') === 'true' && $session_id > 0) {
-                $content .= '<div class="row">
-            <div class="col-xs-12 col-md-12">
-			<span class="viewcaption">'.get_lang('Session\'s data').'</span>
-			<table class="course_activity_home">';
-                $content .= CourseHome::show_session_data($session_id);
-                $content .= '</table></div></div>';
+            if ($toolModel->getCategory() === 'admin' && !$this->isGranted('ROLE_CURRENT_COURSE_TEACHER')) {
+                continue;
             }
+            $tools[$item->getCategory()][] = $item;
         }
-
-        $blocks = CourseHome::getUserBlocks($toolChain);
 
         // Get session-career diagram
         $diagram = '';
@@ -380,8 +178,6 @@ class CourseHomeController extends ToolBaseController
             }
         }
 
-        $content = '<div id="course_tools">'.$diagram.$content.'</div>';
-
         // Deleting the objects
         Session::erase('_gid');
         Session::erase('oLP');
@@ -396,14 +192,29 @@ class CourseHomeController extends ToolBaseController
                 'course' => $course,
                 'diagram' => $diagram,
                // 'session_info' => $sessionInfo,
-                'icons' => $result['content'],
-                'blocks' => $blocks,
+                'tools' => $tools,
                 //'edit_icons' => $editIcons,
                 //'introduction_text' => $introduction,
                 'exercise_warning' => null,
                 'lp_warning' => null,
             ]
         );
+    }
+
+    /**
+     * @Route("/{cid}/tool/{toolId}", name="chamilo_core_course_redirect_tool")
+     *
+     * @Entity("course", expr="repository.find(cid)")
+     */
+    public function redirectTool(Request $request, $toolId, ToolChain $toolChain)
+    {
+        $criteria = ['id' => $toolId];
+        /** @var CTool $tool */
+        $tool = $this->getDoctrine()->getRepository('Chamilo\CourseBundle\Entity\CTool')->findOneBy($criteria);
+        $tool = $toolChain->getToolFromName($tool->getTool()->getName());
+        $url = $tool->getLink().'?'.$this->getCourseUrlQuery();
+
+        return $this->redirect($url);
     }
 
     /**
@@ -417,9 +228,7 @@ class CourseHomeController extends ToolBaseController
     {
         $entityManager = $this->getDoctrine()->getManager();
         $criteria = ['cId' => api_get_course_int_id(), 'id' => $iconId];
-        $tool = $this->getRepository(
-            'Chamilo\CourseBundle\Entity\CTool'
-        )->findOneBy($criteria);
+        $tool = $this->getRepository('Chamilo\CourseBundle\Entity\CTool')->findOneBy($criteria);
         if ($tool) {
             $tool->setVisibility(1);
         }
@@ -673,86 +482,23 @@ class CourseHomeController extends ToolBaseController
      */
     private function autoLaunch()
     {
-        return;
-        $showAutoLaunchExerciseWarning = false;
-
-        // Exercise auto-launch
-        $auto_launch = api_get_course_setting('enable_exercise_auto_launch');
-
-        if (!empty($auto_launch)) {
-            $session_id = api_get_session_id();
-            //Exercise list
-            if ($auto_launch == 2) {
-                if (api_is_platform_admin() || api_is_allowed_to_edit()) {
-                    $showAutoLaunchExerciseWarning = true;
-                } else {
-                    $session_key = 'exercise_autolunch_'.$session_id.'_'.api_get_course_int_id().'_'.api_get_user_id();
-                    $sessionData = Session::read($session_key);
-                    if (!isset($sessionData)) {
-                        //redirecting to the Exercise
-                        $url = api_get_path(WEB_CODE_PATH).'exercise/exercise.php?'.api_get_cidreq();
-                        $_SESSION[$session_key] = true;
-
-                        header("Location: $url");
-                        exit;
-                    }
-                }
-            } else {
-                $table = \Database::get_course_table(TABLE_QUIZ_TEST);
-                $course_id = api_get_course_int_id();
-                $condition = '';
-                if (!empty($session_id)) {
-                    $condition = api_get_session_condition($session_id);
-                    $sql = "SELECT iid FROM $table
-                            WHERE c_id = $course_id AND autolaunch = 1 $condition
-                            LIMIT 1";
-                    $result = \Database::query($sql);
-                    //If we found nothing in the session we just called the session_id =  0 autolaunch
-                    if (\Database::num_rows($result) == 0) {
-                        $condition = '';
-                    } else {
-                        //great, there is an specific auto lunch for this session we leave the $condition
-                    }
-                }
-
-                $sql = "SELECT iid FROM $table
-                        WHERE c_id = $course_id AND autolaunch = 1 $condition
-                        LIMIT 1";
-                $result = \Database::query($sql);
-                if (\Database::num_rows($result) > 0) {
-                    $data = \Database::fetch_array($result, 'ASSOC');
-                    if (!empty($data['iid'])) {
-                        if (api_is_platform_admin() || api_is_allowed_to_edit()) {
-                            $showAutoLaunchExerciseWarning = true;
-                        } else {
-                            $session_key = 'exercise_autolunch_'.$session_id.'_'.api_get_course_int_id().'_'.api_get_user_id();
-                            if (!isset($_SESSION[$session_key])) {
-                                //redirecting to the LP
-                                $url = api_get_path(WEB_CODE_PATH).'exercise/overview.php?'.api_get_cidreq().'&exerciseId='.$data['iid'];
-
-                                $_SESSION[$session_key] = true;
-                                header("Location: $url");
-                                exit;
-                            }
-                        }
-                    }
-                }
-            }
-        }
-
         /* Auto launch code */
+        $autoLaunchWarning = '';
         $showAutoLaunchLpWarning = false;
-        $auto_launch = api_get_course_setting('enable_lp_auto_launch');
-        if (!empty($auto_launch)) {
-            $session_id = api_get_session_id();
-            //LP list
-            if ($auto_launch == 2) {
-                if (api_is_platform_admin() || api_is_allowed_to_edit()) {
+        $course_id = api_get_course_int_id();
+        $lpAutoLaunch = api_get_course_setting('enable_lp_auto_launch');
+        $session_id = api_get_session_id();
+        $allowAutoLaunchForCourseAdmins = api_is_platform_admin() || api_is_allowed_to_edit(true, true) || api_is_coach();
+
+        if (!empty($lpAutoLaunch)) {
+            if ($lpAutoLaunch == 2) {
+                // LP list
+                if ($allowAutoLaunchForCourseAdmins) {
                     $showAutoLaunchLpWarning = true;
                 } else {
-                    $session_key = 'lp_autolunch_'.$session_id.'_'.api_get_course_int_id().'_'.api_get_user_id();
+                    $session_key = 'lp_autolaunch_'.$session_id.'_'.api_get_course_int_id().'_'.api_get_user_id();
                     if (!isset($_SESSION[$session_key])) {
-                        //redirecting to the LP
+                        // Redirecting to the LP
                         $url = api_get_path(WEB_CODE_PATH).'lp/lp_controller.php?'.api_get_cidreq();
                         $_SESSION[$session_key] = true;
                         header("Location: $url");
@@ -760,34 +506,33 @@ class CourseHomeController extends ToolBaseController
                     }
                 }
             } else {
-                $lp_table = \Database::get_course_table(TABLE_LP_MAIN);
-                $course_id = api_get_course_int_id();
+                $lp_table = Database::get_course_table(TABLE_LP_MAIN);
                 $condition = '';
                 if (!empty($session_id)) {
                     $condition = api_get_session_condition($session_id);
-                    $sql = "SELECT id FROM $lp_table WHERE c_id = $course_id AND autolunch = 1 $condition LIMIT 1";
-                    $result = \Database::query($sql);
-                    //If we found nothing in the session we just called the session_id =  0 autolunch
-                    if (\Database::num_rows($result) == 0) {
+                    $sql = "SELECT id FROM $lp_table
+                            WHERE c_id = $course_id AND autolaunch = 1 $condition
+                            LIMIT 1";
+                    $result = Database::query($sql);
+                    // If we found nothing in the session we just called the session_id =  0 autolaunch
+                    if (Database::num_rows($result) == 0) {
                         $condition = '';
-                    } else {
-                        //great, there is an specific auto lunch for this session we leave the $condition
                     }
                 }
 
                 $sql = "SELECT id FROM $lp_table
-                        WHERE c_id = $course_id AND autolunch = 1 $condition
+                        WHERE c_id = $course_id AND autolaunch = 1 $condition
                         LIMIT 1";
-                $result = \Database::query($sql);
-                if (\Database::num_rows($result) > 0) {
-                    $lp_data = \Database::fetch_array($result, 'ASSOC');
+                $result = Database::query($sql);
+                if (Database::num_rows($result) > 0) {
+                    $lp_data = Database::fetch_array($result, 'ASSOC');
                     if (!empty($lp_data['id'])) {
-                        if (api_is_platform_admin() || api_is_allowed_to_edit()) {
+                        if ($allowAutoLaunchForCourseAdmins) {
                             $showAutoLaunchLpWarning = true;
                         } else {
-                            $session_key = 'lp_autolunch_'.$session_id.'_'.api_get_course_int_id().'_'.api_get_user_id();
+                            $session_key = 'lp_autolaunch_'.$session_id.'_'.api_get_course_int_id().'_'.api_get_user_id();
                             if (!isset($_SESSION[$session_key])) {
-                                //redirecting to the LP
+                                // Redirecting to the LP
                                 $url = api_get_path(WEB_CODE_PATH).'lp/lp_controller.php?'.api_get_cidreq().'&action=view&lp_id='.$lp_data['id'];
 
                                 $_SESSION[$session_key] = true;
@@ -800,9 +545,100 @@ class CourseHomeController extends ToolBaseController
             }
         }
 
-        return [
-            'show_autolaunch_exercise_warning' => $showAutoLaunchExerciseWarning,
-            'show_autolaunch_lp_warning' => $showAutoLaunchLpWarning,
-        ];
+        if ($showAutoLaunchLpWarning) {
+            $autoLaunchWarning = get_lang('The learning path auto-launch setting is ON. When learners enter this course, they will be automatically redirected to the learning path marked as auto-launch.');
+        }
+
+        $forumAutoLaunch = api_get_course_setting('enable_forum_auto_launch');
+        if ($forumAutoLaunch == 1) {
+            if ($allowAutoLaunchForCourseAdmins) {
+                if (empty($autoLaunchWarning)) {
+                    $autoLaunchWarning = get_lang('The forum\'s auto-launch setting is on. Students will be redirected to the forum tool when entering this course.');
+                }
+            } else {
+                $url = api_get_path(WEB_CODE_PATH).'forum/index.php?'.api_get_cidreq();
+                header("Location: $url");
+                exit;
+            }
+        }
+
+        if (api_get_configuration_value('allow_exercise_auto_launch')) {
+            $exerciseAutoLaunch = (int) api_get_course_setting('enable_exercise_auto_launch');
+            if ($exerciseAutoLaunch == 2) {
+                if ($allowAutoLaunchForCourseAdmins) {
+                    if (empty($autoLaunchWarning)) {
+                        $autoLaunchWarning = get_lang(
+                            'TheExerciseAutoLaunchSettingIsONStudentsWillBeRedirectToTheExerciseList'
+                        );
+                    }
+                } else {
+                    // Redirecting to the document
+                    $url = api_get_path(WEB_CODE_PATH).'exercise/exercise.php?'.api_get_cidreq();
+                    header("Location: $url");
+                    exit;
+                }
+            } elseif ($exerciseAutoLaunch == 1) {
+                if ($allowAutoLaunchForCourseAdmins) {
+                    if (empty($autoLaunchWarning)) {
+                        $autoLaunchWarning = get_lang(
+                            'TheExerciseAutoLaunchSettingIsONStudentsWillBeRedirectToAnSpecificExercise'
+                        );
+                    }
+                } else {
+                    // Redirecting to an exercise
+                    $table = Database::get_course_table(TABLE_QUIZ_TEST);
+                    $condition = '';
+                    if (!empty($session_id)) {
+                        $condition = api_get_session_condition($session_id);
+                        $sql = "SELECT iid FROM $table
+                        WHERE c_id = $course_id AND autolaunch = 1 $condition
+                        LIMIT 1";
+                        $result = Database::query($sql);
+                        // If we found nothing in the session we just called the session_id = 0 autolaunch
+                        if (Database::num_rows($result) == 0) {
+                            $condition = '';
+                        }
+                    }
+
+                    $sql = "SELECT iid FROM $table
+                    WHERE c_id = $course_id AND autolaunch = 1 $condition
+                    LIMIT 1";
+                    $result = Database::query($sql);
+                    if (Database::num_rows($result) > 0) {
+                        $row = Database::fetch_array($result, 'ASSOC');
+                        $exerciseId = $row['iid'];
+                        $url = api_get_path(WEB_CODE_PATH).
+                            'exercise/overview.php?exerciseId='.$exerciseId.'&'.api_get_cidreq();
+                        header("Location: $url");
+                        exit;
+                    }
+                }
+            }
+        }
+
+        $documentAutoLaunch = api_get_course_setting('enable_document_auto_launch');
+        if ($documentAutoLaunch == 1) {
+            if ($allowAutoLaunchForCourseAdmins) {
+                if (empty($autoLaunchWarning)) {
+                    $autoLaunchWarning = get_lang('The document auto-launch feature configuration is enabled. Learners will be automatically redirected to document tool.');
+                }
+            } else {
+                // Redirecting to the document
+                $url = api_get_path(WEB_CODE_PATH).'document/document.php?'.api_get_cidreq();
+                header("Location: $url");
+                exit;
+            }
+        }
+
+        /*	SWITCH TO A DIFFERENT HOMEPAGE VIEW
+         the setting homepage_view is adjustable through
+         the platform administration section */
+        if (!empty($autoLaunchWarning)) {
+            $this->addFlash(
+            Display::return_message(
+                $autoLaunchWarning,
+                'warning'
+            ));
+        }
     }
 }

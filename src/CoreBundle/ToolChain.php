@@ -4,6 +4,8 @@
 namespace Chamilo\CoreBundle;
 
 use Chamilo\CoreBundle\Entity\Course;
+use Chamilo\CoreBundle\Entity\Resource\AbstractResource;
+use Chamilo\CoreBundle\Entity\Resource\ResourceLink;
 use Chamilo\CoreBundle\Entity\Resource\ResourceType;
 use Chamilo\CoreBundle\Entity\Tool;
 use Chamilo\CoreBundle\Entity\ToolResourceRight;
@@ -12,6 +14,7 @@ use Chamilo\CoreBundle\Tool\AbstractTool;
 use Chamilo\CourseBundle\Entity\CTool;
 use Chamilo\CourseBundle\Repository\CToolRepository;
 use Chamilo\SettingsBundle\Manager\SettingsManager;
+use Chamilo\UserBundle\Entity\User;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\PropertyAccess\Exception\InvalidArgumentException;
 use Symfony\Component\Security\Core\Security;
@@ -181,6 +184,7 @@ class ToolChain
 
             $courseTool
                 ->setTool($toolEntity)
+                ->setName($tool->getName())
                 //->setCourse($course)
                 //->setImage($tool->getImage())
                 //->setName($tool->getName())
@@ -190,7 +194,8 @@ class ToolChain
                 ->setCategory($tool->getCategory())
             ;
 
-            $this->toolRepository->createNodeForResource($courseTool, $user, $course->getResourceNode());
+            //$this->toolRepository->createNodeForResource($courseTool, $user, $course->getResourceNode());
+            $this->toolRepository->addResourceToCourse( $courseTool, ResourceLink::VISIBILITY_PUBLISHED, $user, $course);
             $course->addTools($courseTool);
         }
 

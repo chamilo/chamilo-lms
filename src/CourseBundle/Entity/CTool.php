@@ -3,11 +3,13 @@
 
 namespace Chamilo\CourseBundle\Entity;
 
+use APY\DataGridBundle\Grid\Mapping as GRID;
 use Chamilo\CoreBundle\Entity\Course;
 use Chamilo\CoreBundle\Entity\Resource\AbstractResource;
 use Chamilo\CoreBundle\Entity\Resource\ResourceInterface;
 use Chamilo\CoreBundle\Entity\Session;
 use Chamilo\CoreBundle\Entity\Tool;
+use Chamilo\CoreBundle\ToolChain;
 use Doctrine\ORM\Event\LifecycleEventArgs;
 use Doctrine\ORM\Mapping as ORM;
 
@@ -23,6 +25,7 @@ use Doctrine\ORM\Mapping as ORM;
  *  }
  * )
  * @ORM\Entity
+ * @GRID\Source(columns="iid, name, resourceNode.createdAt", filterable=false, groups={"resource"})
  */
 class CTool extends AbstractResource implements ResourceInterface
 {
@@ -43,6 +46,13 @@ class CTool extends AbstractResource implements ResourceInterface
     protected $id;
 
     /**
+     * @var string
+     *
+     * @ORM\Column(name="name", type="string", length=255, nullable=false)
+     */
+    protected $name;
+
+    /**
      * @var bool
      *
      * @ORM\Column(name="visibility", type="boolean", nullable=true)
@@ -55,13 +65,6 @@ class CTool extends AbstractResource implements ResourceInterface
      * @ORM\Column(name="category", type="string", length=20, nullable=false, options={"default" = "authoring"})
      */
     protected $category;
-
-    /**
-     * @var string
-     *
-     * @ORM\Column(name="custom_icon", type="string", length=255, nullable=true)
-     */
-    protected $customIcon;
 
     /**
      * @var Course
@@ -94,6 +97,23 @@ class CTool extends AbstractResource implements ResourceInterface
     {
         // Default values
         $this->id = 0;
+    }
+
+    public function getName(): string
+    {
+        return $this->name;
+    }
+
+    /**
+     * @param string $name
+     *
+     * @return CTool
+     */
+    public function setName(string $name): CTool
+    {
+        $this->name = $name;
+
+        return $this;
     }
 
     /**
@@ -147,19 +167,6 @@ class CTool extends AbstractResource implements ResourceInterface
         $this->session = $session;
 
         return $this;
-    }
-
-    public static function loadValidatorMetadata(ClassMetadata $metadata)
-    {
-        /*$metadata->addPropertyConstraint(
-            'customIcon',
-            new Assert\File(['mimeTypes' => ['image/png']])
-        );
-        $metadata->addPropertyConstraint(
-            'customIcon',
-            new Assert\Image(['maxWidth' => 64, 'minHeight' => 64])
-        );
-        $metadata->addPropertyConstraint('cId', new Assert\NotBlank());*/
     }
 
     /**
@@ -234,26 +241,6 @@ class CTool extends AbstractResource implements ResourceInterface
         return $this->id;
     }
 
-    /**
-     * @return string
-     */
-    public function getCustomIcon()
-    {
-        return $this->customIcon;
-    }
-
-    /**
-     * @param string $customIcon
-     *
-     * @return CTool
-     */
-    public function setCustomIcon($customIcon)
-    {
-        $this->customIcon = $customIcon;
-
-        return $this;
-    }
-
     public function getTool(): Tool
     {
         return $this->tool;
@@ -288,11 +275,11 @@ class CTool extends AbstractResource implements ResourceInterface
 
     public function getResourceName(): string
     {
-        return (string) $this->getTool()->getName();
+        return (string) $this->getName();
     }
 
     public function __toString(): string
     {
-        return (string) $this->getTool()->getName();
+        return (string) $this->getName();
     }
 }

@@ -277,7 +277,6 @@ class ResourceRepository extends EntityRepository
         return $resourceFile;
     }
 
-    //unction createNodeForResource(AbstractResource $resource, User $creator, ResourceNode $parent = null, UploadedFile $file = null): ResourceNode
     public function addResourceNode(AbstractResource $resource, User $creator, AbstractResource $parent = null): ResourceNode
     {
         if (null !== $parent) {
@@ -496,7 +495,6 @@ class ResourceRepository extends EntityRepository
 
         // Check if this resource type requires to load the base course resources when using a session
         $loadBaseSessionContent = $reflectionClass->hasProperty('loadCourseResourcesInSession');
-        $isPersonalResource = $reflectionClass->hasProperty('loadPersonalResources');
 
         $type = $this->getResourceType();
 
@@ -512,13 +510,10 @@ class ResourceRepository extends EntityRepository
             ->innerJoin('node.resourceLinks', 'links')
             ->where('node.resourceType = :type')
             ->setParameter('type', $type);
-
-        if ($isPersonalResource === false) {
-            $qb
-                ->andWhere('links.course = :course')
-                ->setParameter('course', $course)
-            ;
-        }
+        $qb
+            ->andWhere('links.course = :course')
+            ->setParameter('course', $course)
+        ;
 
         $isAdmin = $checker->isGranted('ROLE_ADMIN') ||
             $checker->isGranted('ROLE_CURRENT_COURSE_TEACHER');

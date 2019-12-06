@@ -73,36 +73,33 @@
 
     {% if app.user.status != 5 %}
         <div class="accordion accordion-b4" id="course-tools">
-            {% for block in blocks %}
+            {% for category, items in tools %}
                 <div class="card">
-                    <div class="card-header" id="heading-{{ block.class }}">
-                        {% if block.title %}
+                    <div class="card-header" id="heading-{{ category }}">
                             <h5 class="card-title">
-                                <a class="{{ ( block.title == 'Authoring') ? ' ' : 'collapse' }}"
+                                <a class="{{ category }}"
                                    role="button" data-toggle="collapse"
-                                   data-target="#collapse-{{ block.class }}"
-                                   aria-expanded="{{ ( block.title == 'Authoring') ? 'true' : 'false' }}"
-                                   aria-controls="collapse-{{ block.class }}"
+                                   data-target="#collapse-{{ category }}"
+                                   aria-expanded="{{ category }}"
+                                   aria-controls="collapse-{{ category }}"
                                 >
-                                    {{ block.title }}
+                                    {{ category }}
                                 </a>
                             </h5>
-                        {% endif %}
                     </div>
-
-                    <div id="collapse-{{ block.class }}" class="collapse show" aria-labelledby="heading-{{ block.class }}" data-parent="#course-tools">
+                    <div id="collapse-{{ category }}" class="collapse show" aria-labelledby="heading-{{ category }}" data-parent="#course-tools">
                         <div class="grid-tools">
-                            {% for item in block.content %}
+                            {% for item in items %}
                                 <div class="items-tools ">
                                     <div class="tools mt-3 mb-3">
                                         <div class="big_icon">
-                                            <a href=" {{ item.href|raw }}" >
-                                                <img src="{{ asset('img/tools/' ~ item.tool.tool.name ~ '.png')  }}" />
+                                            <a href=" {{ url('chamilo_core_course_redirect_tool', { 'toolId': item.id, 'cid': 2 })|raw }}" >
+                                                <img src="{{ asset('img/tools/' ~ item.name ~ '.png')  }}" />
                                             </a>
                                         </div>
                                         <div class="content pt-2 pb-2">
                                             <a href=" {{ item.href|raw }}" >
-                                                {{ item.tool.tool.name }}
+                                                {{ item.name | trans }}
                                             </a>
                                             {% if item.visibility is not empty %}
                                                 <div class="view">
@@ -120,18 +117,18 @@
         </div>
     {% else %}
         <div class="grid-tools">
-            {% for block in blocks %}
-                {% for item in block.content %}
+            {% for category, items in tools %}
+                {% for item in items %}
                     <div class="items-tools">
                         <div class="tools mt-3 mb-3">
                             <div class="big_icon">
-                                <a href=" {{ item.href|raw }}" >
-                                    <img src="{{ asset('img/tools/' ~ item.tool.tool.name ~ '.png')  }}" />
+                                <a href=" {{ url('chamilo_core_course_redirect_tool', { 'toolId': item.id, 'cid': 2 })|raw }}" >
+                                    <img src="{{ asset('img/tools/' ~ item.name ~ '.png')  }}" />
                                 </a>
                             </div>
                             <div class="content pt-2 pb-2">
                                 <a href=" {{ item.href|raw }}" >
-                                    {{ item.tool.tool.name }}
+                                    {{ item.name | trans }}
                                 </a>
                             </div>
                         </div>

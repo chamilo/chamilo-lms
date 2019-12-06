@@ -122,15 +122,15 @@ foreach ($userList as $userInfo) {
     $studentId = $userInfo['user_id'];
 
     if (empty($infoCertificate['background'])) {
-        $htmlText .= '<div class="caraA" style="page-break-before:always; margin:0; padding:0;">';
+        $htmlText .= '<div class="caraA" style="page-break-before:always; margin:0px; padding:0px; width: 1122px; height: 795px;">';
     } else {
         $urlBackground = $path.$infoCertificate['background'];
         $htmlText .= ' <div 
         class = "caraA"
-        style = "background-image:url('.$urlBackground.') no-repeat; background-image-resize:6; margin:0; padding:0;">';
+        style = "background-image:url('.$urlBackground.') no-repeat; background-image-resize:6; margin:0px; padding:0px;" width: 1122px; height: 795px;>';
     }
 
-    $logo = '';
+    /*$logo = '';
     if (!empty($infoCertificate['logo'])) {
         $logo = '
             <img 
@@ -148,7 +148,7 @@ foreach ($userList as $userInfo) {
     $htmlText .= '<tr>';
     $htmlText .= '<td style="width:'.intval($workSpace / 3).'mm; text-align:center;" class="logo">'.$logo.'</td>';
     $htmlText .= '</tr>';
-    $htmlText .= '</table>';
+    $htmlText .= '</table>';*/
 
     $allUserInfo = DocumentManager::get_all_info_to_certificate(
         $studentId,
@@ -270,7 +270,7 @@ foreach ($userList as $userInfo) {
 
     // Rear certificate
     if ($infoCertificate['contents_type'] != 3) {
-        $htmlText .= '<div class="caraB" style="page-break-before:always; margin:0; padding:0;">';
+        $htmlText .= '<div class="caraB" style="page-break-before:always; margin:0px; padding:0px;">';
         if ($infoCertificate['contents_type'] == 0) {
             $courseDescription = new CourseDescription();
             $contentDescription = $courseDescription->get_data_by_description_type(3, $courseId, 0);
@@ -343,7 +343,7 @@ foreach ($userList as $userInfo) {
 
                 if (count($categories) > 1 && count($flat_list) > 0) {
                     if ($item->getName() != $plugin->get_lang('WithOutCategory')) {
-                        $items[] = '<h4 style="margin:0">'.$item->getName().'</h4>';
+                        $items[] = '<h4 style="margin:0px">'.$item->getName().'</h4>';
                     }
                 }
 

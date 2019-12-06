@@ -3,6 +3,7 @@
 
 namespace Chamilo\CoreBundle\Form\Resource;
 
+use Chamilo\CoreBundle\Form\Type\IllustrationType;
 use Chamilo\CourseBundle\Entity\CDocument;
 use FOS\CKEditorBundle\Form\Type\CKEditorType;
 use Symfony\Component\Form\AbstractType;
@@ -52,6 +53,15 @@ class CDocumentType extends AbstractType
             )*/
             //->add('c_id', HiddenType::class)
             ->add('filetype', HiddenType::class)
+            ->add(
+                'illustration',
+                IllustrationType::class,
+                [
+                    'label' => 'Illustration',
+                    'required' => false,
+                    'mapped' => false,
+                ]
+            )
             /*->add(
                 'rights',
                 'collection',

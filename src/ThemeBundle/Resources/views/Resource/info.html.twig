@@ -35,5 +35,10 @@
                 Course: {{ link.course }} {% if link.session %} - Session: {{ link.session }} {% endif %} - Visibility: {{ link.visibilityName | trans }}
             {% endfor %}
         {% endif %}
+
+        {% if illustration %}
+            <img src="{{ illustration }}" />
+        {% endif %}
+
     {% endautoescape %}
 {% endblock %}

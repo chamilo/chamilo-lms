@@ -15,6 +15,7 @@ use Chamilo\CoreBundle\Component\Utils\Glide;
 use Chamilo\CoreBundle\Entity\Resource\AbstractResource;
 use Chamilo\CoreBundle\Entity\Resource\ResourceLink;
 use Chamilo\CoreBundle\Entity\Resource\ResourceNode;
+use Chamilo\CoreBundle\Repository\IllustrationRepository;
 use Chamilo\CoreBundle\Repository\ResourceRepository;
 use Chamilo\CoreBundle\Security\Authorization\Voter\ResourceNodeVoter;
 use Chamilo\CourseBundle\Controller\CourseControllerInterface;
@@ -462,7 +463,7 @@ class ResourceController extends AbstractResourceController implements CourseCon
     /**
      * @Route("/{tool}/{type}/{id}/edit", methods={"GET", "POST"})
      */
-    public function editAction(Request $request): Response
+    public function editAction(Request $request, IllustrationRepository $illustrationRepository): Response
     {
         $resourceNodeId = $request->get('id');
 
@@ -515,6 +516,16 @@ class ResourceController extends AbstractResourceController implements CourseCon
             //$newResource->setTitle($form->get('title')->getData()); // already set in $form->getData()
             $repository->updateNodeForResource($newResource);
 
+            if ($form->has('illustration')) {
+                $illustration = $form->get('illustration')->getData();
+                if ($illustration) {
+                    $file = $illustrationRepository->addIllustration($newResource, $this->getUser(), $illustration);
+                    $em = $illustrationRepository->getEntityManager();
+                    $em->persist($file);
+                    $em->flush();
+                }
+            }
+
             $this->addFlash('success', $this->trans('Updated'));
 
             //if ($newResource->getResourceNode()->hasResourceFile()) {
@@ -539,7 +550,7 @@ class ResourceController extends AbstractResourceController implements CourseCon
      *
      * @Route("/{tool}/{type}/{id}/info", methods={"GET"}, name="chamilo_core_resource_info")
      */
-    public function infoAction(Request $request): Response
+    public function infoAction(Request $request, IllustrationRepository $illustrationRepository): Response
     {
         $this->setBreadCrumb($request);
         $nodeId = $request->get('id');
@@ -568,13 +579,16 @@ class ResourceController extends AbstractResourceController implements CourseCon
         $tool = $request->get('tool');
         $type = $request->get('type');
 
+        $illustration = $illustrationRepository->getIllustrationUrlFromNode($resource->getResourceNode());
+
         $params = [
             'resource' => $resource,
+            'illustration' => $illustration,
             'tool' => $tool,
             'type' => $type,
         ];
 
-        return $this->render('@ChamiloTheme/Resource/show.html.twig', $params);
+        return $this->render('@ChamiloTheme/Resource/info.html.twig', $params);
     }
 
     /**

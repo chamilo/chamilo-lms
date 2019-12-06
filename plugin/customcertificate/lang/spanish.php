@@ -76,4 +76,5 @@ $strings['PrintCertificate'] = "Imprimir certificado";
 $strings['QuestionDelete'] = "¿Desea eliminar el diploma específico y volver a usar el certificado por defecto?";
 $strings['SuccessDelete'] = "Borrado con éxito";
 $strings['ProblemDelete'] = "Hubo un problema al borrar el certificado";
-$strings['ContentCertificate'] = "Contenido textual del certificado";
+$strings['FrontContentCertificate'] = "Diseño frontal del certificado";
+$strings['PostContentCertificate'] = "Diseño posterior del certificado";

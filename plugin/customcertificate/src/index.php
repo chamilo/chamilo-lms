@@ -111,8 +111,13 @@ if ($form->validate()) {
     }
     $check = Security::check_token('post');
     if ($check) {
-        $date_start = str_replace('/', '-', $formValues['date_start']);
-        $date_end = str_replace('/', '-', $formValues['date_end']);
+        $date_start = $date_end = null;
+        if(isset($formValues['date_start'])){
+            $date_start = str_replace('/', '-', $formValues['date_start']);
+        }
+        if(isset($formValues['date_end'])){
+            $date_end = str_replace('/', '-', $formValues['date_end']);
+        }
         $params = [
             'access_url_id' => api_get_current_access_url_id(),
             'c_id' => $formValues['c_id'],
@@ -128,10 +133,6 @@ if ($form->validate()) {
             'day' => $formValues['day'],
             'month' => $formValues['month'],
             'year' => $formValues['year'],
-            /*'signature_text1' => $formValues['signature_text1'],
-            'signature_text2' => $formValues['signature_text2'],
-            'signature_text3' => $formValues['signature_text3'],
-            'signature_text4' => $formValues['signature_text4'],*/
             'margin_left' => (int) $formValues['margin_left'],
             'margin_right' => (int) $formValues['margin_right'],
             'certificate_default' => 0,
@@ -244,7 +245,7 @@ if ($useDefault && $courseId > 0) {
 }
 
 // Student and course section
-$form->addHtml('<h4 class="page-header">'.$plugin->get_lang('ContentCertificate').'</h4>');
+$form->addHtml('<h4 class="page-header">'.$plugin->get_lang('FrontContentCertificate').'</h4>');
 $form->addHtml('<div class="col-sm-12">');
 $dir = '/';
 $courseInfo = api_get_course_info();
@@ -252,7 +253,7 @@ $isAllowedToEdit = api_is_allowed_to_edit(null, true);
 $editorConfig = [
     'ToolbarSet' => $isAllowedToEdit ? 'Documents' : 'DocumentsStudent',
     'Width' => '100%',
-    'Height' => '400',
+    'Height' => '500px',
     'cols-size' => [0, 12, 0],
     'FullPage' => true,
     'InDocument' => true,
@@ -306,7 +307,7 @@ $form->addHtml('</fieldset>');
 $form->addHtml('<div class="clearfix"></div>');
 
 // Contents section
-$form->addHtml('<fieldset><legend>'.get_lang('Contents').'</legend>');
+$form->addHtml('<fieldset><legend>'.$plugin->get_lang('PostContentCertificate').'</legend>');
 $extra = '';
 if (empty($infoCertificate['contents_type'])) {
     $infoCertificate['contents_type'] = 0;
@@ -364,13 +365,13 @@ $form->addGroup(
 );
 
 $form->addHtml('<div id="contents-section">');
-$editorConfig = [
-    'ToolbarSet' => 'Basic',
+$editorConfigText = [
+    'ToolbarSet' => 'Minimal',
     'Width' => '100%',
     'Height' => '200',
     'cols-size' => [2, 10, 0],
-    'FullPage' => true,
-    'InDocument' => true,
+    'FullPage' => false,
+    'InDocument' => false,
     'CreateDocumentDir' => api_get_path(WEB_COURSE_PATH).$courseInfo['path'].'/document/',
     'CreateDocumentWebDir' => api_get_path(WEB_COURSE_PATH).$courseInfo['path'].'/document/',
     'BaseHref' => api_get_path(WEB_COURSE_PATH).$courseInfo['path'].'/document'.$dir,
@@ -381,14 +382,13 @@ $form->addHtmlEditor(
     'contents',
     get_lang('Contents'),
     false,
-    true,
-    $editorConfig,
-    true
+    false,
+    $editorConfigText
 );
 $form->addHtml('</div>');
 
 // Dates section
-$form->addHtml('<fieldset><legend>'.strtoupper(get_lang("Dates")).'</legend>');
+$form->addHtml('<fieldset><legend>'.get_lang("Dates").'</legend>');
 
 $group = [];
 $option1 = &$form->createElement(
@@ -434,8 +434,7 @@ $form->addHtml('<div class="form-group" style="padding-top: 10px;">
         <div class="radio" style="margin-top: -25px;">
             <span style="margin: 0 10px; font-style: italic;">'.get_lang('From').'</span>
             <input 
-                size="20"
-                autofocus="autofocus"
+                size="10"
                 class="form-control-cert text-center datepicker"
                 name="date_start"
                 id="date_start"
@@ -443,11 +442,11 @@ $form->addHtml('<div class="form-group" style="padding-top: 10px;">
                 value="'.(($infoCertificate['date_change'] == '1')
                         ? date("d/m/Y", strtotime($infoCertificate['date_start']))
                         : '').'"
-                '.(($infoCertificate['date_change'] == '') ? 'disabled' : '').'
+                '.(($infoCertificate['date_change'] == "0") ? 'disabled' : '').'
             >
             <span style="margin: 0 10px; font-style: italic;">'.get_lang('Until').'</span>
             <input
-                size="20"
+                size="10"
                 class="form-control-cert text-center datepicker"
                 name="date_end"
                 id="date_end"
@@ -465,7 +464,7 @@ $form->addText(
     'place',
     get_lang('ExpectionPlace'),
     false,
-    ['id' => 'place', 'cols-size' => [2, 5, 5], 'autofocus']
+    ['id' => 'place', 'cols-size' => [2, 5, 5]]
 );
 
 $group = [];
@@ -551,7 +550,6 @@ $form->addHtml(
             <span class="certificado-text-label">a</span>
             <input
                 size="4"
-                autofocus="autofocus"
                 class="form-control-cert text-center"
                 name="day"
                 id="day"
@@ -562,7 +560,6 @@ $form->addHtml(
             <span class="certificado-text-label">de</span>
             <input
                 size="10"
-                autofocus="autofocus"
                 class="form-control-cert text-center"
                 name="month"
                 id="month"
@@ -573,7 +570,6 @@ $form->addHtml(
             <span class="certificado-text-label">de</span>
             <input
                 size="4"
-                autofocus="autofocus"
                 class="form-control-cert text-center"
                 name="year"
                 id="year"
@@ -592,7 +588,7 @@ $base = api_get_path(WEB_UPLOAD_PATH);
 $path = $base.'certificates/';
 
 $form->addHtml('<div class="col-sm-6">');
-$form->addHtml('<fieldset><legend>'.strtoupper(get_lang('BackgroundCertificate')).'</legend>');
+$form->addHtml('<fieldset><legend>'.get_lang('BackgroundCertificate').'</legend>');
 //Seal
 $form->addFile(
     'seal',
@@ -653,7 +649,7 @@ $form->addRule(
 $form->addHtml('</fieldset>');
 $form->addHtml('</div>');
 $form->addHtml('<div class="col-sm-6">');
-$form->addHtml('<fieldset><legend>'.strtoupper(get_lang('OtherOptions')).'</legend>');
+$form->addHtml('<fieldset><legend>'.get_lang('OtherOptions').'</legend>');
 $marginOptions = [];
 $i = 0;
 while ($i < 298) {

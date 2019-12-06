@@ -32,7 +32,7 @@ class CustomCertificatePlugin extends Plugin
     {
         parent::__construct(
             '1.0',
-            'Jose Angel Ruiz - NoSoloRed (original author), Julio Montoya',
+            'Jose Angel Ruiz - NoSoloRed (original author), Julio Montoya, Alex Aragón - BeezNest',
             [
                 'enable_plugin_customcertificate' => 'boolean',
             ]
@@ -120,18 +120,8 @@ class CustomCertificatePlugin extends Plugin
                     'day' => $row['day'],
                     'month' => $row['month'],
                     'year' => $row['year'],
-                    'logo_left' => $row['logo_left'],
-                    'logo_center' => $row['logo_center'],
-                    'logo_right' => $row['logo_right'],
+                    'logo' => $row['logo'],
                     'seal' => $row['seal'],
-                    'signature1' => $row['signature1'],
-                    'signature2' => $row['signature2'],
-                    'signature3' => $row['signature3'],
-                    'signature4' => $row['signature4'],
-                    'signature_text1' => $row['signature_text1'],
-                    'signature_text2' => $row['signature_text2'],
-                    'signature_text3' => $row['signature_text3'],
-                    'signature_text4' => $row['signature_text4'],
                     'background' => $row['background'],
                     'margin_left' => intval($row['margin']),
                     'margin_right' => 0,
@@ -148,14 +138,8 @@ class CustomCertificatePlugin extends Plugin
                 }
 
                 $imgList = [
-                    'logo_left',
-                    'logo_center',
-                    'logo_right',
+                    'logo',
                     'seal',
-                    'signature1',
-                    'signature2',
-                    'signature3',
-                    'signature4',
                     'background',
                 ];
                 foreach ($imgList as $value) {

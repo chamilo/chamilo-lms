@@ -204,9 +204,8 @@ class CourseHomeController extends ToolBaseController
     /**
      * @Route("/{cid}/tool/{toolId}", name="chamilo_core_course_redirect_tool")
      *
-     * @Entity("course", expr="repository.find(cid)")
      */
-    public function redirectTool(Request $request, $toolId, ToolChain $toolChain)
+    public function redirectTool($toolId, ToolChain $toolChain)
     {
         $criteria = ['id' => $toolId];
         /** @var CTool $tool */

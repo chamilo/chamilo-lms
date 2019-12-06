@@ -3,9 +3,11 @@
 
 namespace Chamilo\CoreBundle\Controller;
 
+use Chamilo\CoreBundle\Entity\Course;
 use Chamilo\CoreBundle\ToolChain;
 use Chamilo\CourseBundle\Controller\ToolBaseController;
 use Chamilo\CourseBundle\Entity\CTool;
+use Chamilo\CourseBundle\Manager\SettingsManager;
 use Chamilo\CourseBundle\Repository\CToolRepository;
 use Chamilosession as Session;
 use CourseManager;
@@ -15,16 +17,19 @@ use Event;
 use ExtraFieldValue;
 use Security;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Entity;
+use Sylius\Bundle\SettingsBundle\Form\Factory\SettingsFormFactory;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Validator\Exception\ValidatorException;
 
 /**
  * Class CourseHomeController.
  *
  * @author Julio Montoya <gugli100@gmail.com>
  *
- * @Route("/courses")
+ * @Route("/course")
  */
 class CourseHomeController extends ToolBaseController
 {
@@ -381,4 +386,70 @@ class CourseHomeController extends ToolBaseController
             ));
         }
     }
+
+    /**
+     * Edit configuration with given namespace.
+     *
+     * @param string $namespace
+     * @Route("/{cid}/settings/{namespace}", name="chamilo_core_course_settings")
+
+     * @Entity("course", expr="repository.find(cid)")
+     *
+     *
+     * @return Response
+     */
+    public function updateAction(Request $request, Course $course, $namespace, SettingsManager $manager, SettingsFormFactory $formFactory)
+    {
+        $schemaAlias = $manager->convertNameSpaceToService($namespace);
+        $settings = $manager->load($namespace);
+        $form = $formFactory->create($schemaAlias);
+
+        $form->setData($settings);
+
+        if ($form->handleRequest($request)->isValid()) {
+            $messageType = 'success';
+            try {
+                $manager->setCourse($course);
+                $manager->saveSettings($namespace, $form->getData());
+                $message = $this->trans(
+                    'sylius.settings.update',
+                    [],
+                    'flashes'
+                );
+            } catch (ValidatorException $exception) {
+                $message = $this->trans(
+                    $exception->getMessage(),
+                    [],
+                    'validators'
+                );
+                $messageType = 'error';
+            }
+            $request->getSession()->getBag('flashes')->add(
+                $messageType,
+                $message
+            );
+
+            if ($request->headers->has('referer')) {
+                return $this->redirect($request->headers->get('referer'));
+            }
+        }
+        $schemas = $manager->getSchemas();
+
+        return $this->render(
+            $request->attributes->get(
+                'template',
+                'ChamiloCourseBundle:Settings:update.html.twig'
+            ),
+            [
+                'course' => $course,
+                'schemas' => $schemas,
+                'settings' => $settings,
+                'form' => $form->createView(),
+                'keyword' => '',
+                'search_form' => '',
+            ]
+        );
+    }
+
+
 }

@@ -17,7 +17,7 @@ sonata_page:
         - ^/admin(.*) # chamilo admin
         - ^/api/(.*)
         - ^/contact(.*) # sonata admin
-        - ^/courses/(.*)
+        - ^/course/(.*)
         - ^/connect/(.*)
         - ^/editor/(.*)
         - ^/login/(.*)

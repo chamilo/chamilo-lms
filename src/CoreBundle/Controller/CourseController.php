@@ -19,7 +19,7 @@ use UserManager;
 /**
  * Class CourseController.
  *
- * @Route("/courses")
+ * @Route("/course")
  */
 class CourseController extends AbstractController
 {

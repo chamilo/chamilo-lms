@@ -180,13 +180,6 @@ class BranchSync
     protected $root;
 
     /**
-     * @var int
-     *
-     * @ORM\Column(name="parent_id", type="integer", nullable=true, unique=false)
-     */
-    protected $parentId;
-
-    /**
      * @Gedmo\TreeParent
      * @ORM\ManyToOne(targetEntity="BranchSync", inversedBy="children")
      * @ORM\JoinColumn(name="parent_id", referencedColumnName="id", onDelete="SET NULL")

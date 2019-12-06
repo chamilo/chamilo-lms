@@ -93,7 +93,7 @@
                                 <div class="items-tools ">
                                     <div class="tools mt-3 mb-3">
                                         <div class="big_icon">
-                                            <a href=" {{ url('chamilo_core_course_redirect_tool', { 'toolId': item.id, 'cid': 2 })|raw }}" >
+                                            <a href=" {{ url('chamilo_core_course_redirect_tool', { 'toolId': item.id, 'cid': course.id })|raw }}" >
                                                 <img src="{{ asset('img/tools/' ~ item.name ~ '.png')  }}" />
                                             </a>
                                         </div>
@@ -122,7 +122,7 @@
                     <div class="items-tools">
                         <div class="tools mt-3 mb-3">
                             <div class="big_icon">
-                                <a href=" {{ url('chamilo_core_course_redirect_tool', { 'toolId': item.id, 'cid': 2 })|raw }}" >
+                                <a href=" {{ url('chamilo_core_course_redirect_tool', { 'toolId': item.id, 'cid': course.id })|raw }}" >
                                     <img src="{{ asset('img/tools/' ~ item.name ~ '.png')  }}" />
                                 </a>
                             </div>

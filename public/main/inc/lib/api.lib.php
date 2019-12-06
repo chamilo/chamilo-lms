@@ -795,7 +795,7 @@ function api_get_path($path = '', $configuration = [])
         SYS_PATH => $root_sys.'public/',
         REL_PATH => '',
         CONFIGURATION_PATH => 'app/config/',
-        LIBRARY_PATH => 'inc/lib/',
+        LIBRARY_PATH => $root_sys.'public/inc/lib/',
 
         REL_COURSE_PATH => '',
         REL_CODE_PATH => '/main/',
@@ -804,7 +804,7 @@ function api_get_path($path = '', $configuration = [])
         SYS_CSS_PATH => $root_sys.'public/build/css/',
         SYS_PLUGIN_PATH => $root_sys.'public/plugin/',
         SYS_ARCHIVE_PATH => $root_sys.'var/cache/',
-        SYS_UPLOAD_PATH => 'var/upload/',
+       // SYS_UPLOAD_PATH => 'var/upload/',
         SYS_TEST_PATH => $root_sys.'tests/',
         SYS_TEMPLATE_PATH => $root_sys.'template/',
         SYS_PUBLIC_PATH => $root_sys.'public/',
@@ -819,7 +819,7 @@ function api_get_path($path = '', $configuration = [])
         WEB_LIBRARY_PATH => $root_web.'main/inc/lib/',
         WEB_LIBRARY_JS_PATH => $root_web.'main/inc/lib/javascript/',
         WEB_PLUGIN_PATH => $root_web.'plugin/',
-        WEB_ARCHIVE_PATH => 'var/cache/',
+       // WEB_ARCHIVE_PATH => 'var/cache/',
         //WEB_UPLOAD_PATH => 'var/upload/',
         WEB_PUBLIC_PATH => $root_web,
     ];

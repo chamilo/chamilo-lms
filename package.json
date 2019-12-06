@@ -9,7 +9,7 @@
     "@symfony/webpack-encore": "~0.28",
     "babel-preset-react": "^6.24.1",
     "bootstrap": "^4.3.1",
-    "copy-webpack-plugin": "^4.5",
+    "copy-webpack-plugin": "^5.0",
     "filemanager-webpack-plugin": "^2.0.5",
     "free-jqgrid": "https://github.com/chamilo/jqGrid.git#bs4",
     "jquery": "^3.4",

@@ -3550,89 +3550,6 @@ function migrateSwitch($fromVersion, $manager, $processFiles = true)
     $database->setManager($manager);
 
     switch ($fromVersion) {
-        case '1.9.0':
-        case '1.9.2':
-        case '1.9.4':
-        case '1.9.6':
-        case '1.9.6.1':
-        case '1.9.8':
-        case '1.9.8.1':
-        case '1.9.8.2':
-        case '1.9.10':
-        case '1.9.10.2':
-        case '1.9.10.4':
-        case '1.9.10.6':
-            $database = new Database();
-            $database->setManager($manager);
-
-            // Fix type "enum" before running the migration with Doctrine
-            $connection->executeQuery("ALTER TABLE course_category MODIFY COLUMN auth_course_child VARCHAR(40) DEFAULT 'TRUE'");
-            $connection->executeQuery("ALTER TABLE course_category MODIFY COLUMN auth_cat_child VARCHAR(40) DEFAULT 'TRUE'");
-            $connection->executeQuery('ALTER TABLE c_quiz_answer MODIFY COLUMN hotspot_type varchar(40) default NULL');
-            $connection->executeQuery("ALTER TABLE c_tool MODIFY COLUMN target varchar(20) NOT NULL default '_self'");
-            $connection->executeQuery("ALTER TABLE c_link MODIFY COLUMN on_homepage char(10) NOT NULL default '0'");
-            $connection->executeQuery("ALTER TABLE c_blog_rating MODIFY COLUMN rating_type char(40) NOT NULL default 'post'");
-            $connection->executeQuery("ALTER TABLE c_survey MODIFY COLUMN anonymous char(10) NOT NULL default '0'");
-            $connection->executeQuery("ALTER TABLE c_document MODIFY COLUMN filetype char(10) NOT NULL default 'file'");
-            $connection->executeQuery("ALTER TABLE c_student_publication MODIFY COLUMN filetype char(10) NOT NULL default 'file'");
-
-            // Migrate using the migration files located in:
-            // src/Chamilo/CoreBundle/Migrations/Schema/V110
-            $result = migrate(
-                110,
-                $manager
-            );
-
-            if ($result) {
-                error_log('Migrations files were executed ('.date('Y-m-d H:i:s').')');
-                fixIds($manager);
-                error_log('fixIds finished ('.date('Y-m-d H:i:s').')');
-
-                $connection->executeQuery("UPDATE settings_current SET selected_value = '1.10.0' WHERE variable = 'chamilo_database_version'");
-
-                if ($processFiles) {
-                    $fromVersionShort = '1.9';
-                    include __DIR__.'/update-files-1.9.0-1.10.0.inc.php';
-                    // Only updates the configuration.inc.php with the new version
-                    include __DIR__.'/update-configuration.inc.php';
-                }
-
-                error_log('Upgrade 1.10.x process concluded! ('.date('Y-m-d H:i:s').')');
-            } else {
-                error_log('There was an error during running migrations. Check error.log');
-                break;
-            }
-            // no break
-        case '1.10.0':
-        case '1.10.2':
-        case '1.10.4':
-        case '1.10.6':
-        case '1.10.8':
-            $database = new Database();
-            $database->setManager($manager);
-            // Migrate using the migration files located in:
-            // src/Chamilo/CoreBundle/Migrations/Schema/V111
-            $result = migrate(111, $manager);
-
-            if ($result) {
-                error_log('Migrations files were executed ('.date('Y-m-d H:i:s').')');
-
-                fixPostGroupIds($connection);
-
-                $sql = "UPDATE settings_current SET selected_value = '1.11.0' WHERE variable = 'chamilo_database_version'";
-                $connection->executeQuery($sql);
-                if ($processFiles) {
-                    error_log('Update config files');
-                    $fromVersionShort = '1.10';
-                    include __DIR__.'/update-files-1.10.0-1.11.0.inc.php';
-                    // Only updates the configuration.inc.php with the new version
-                    include __DIR__.'/update-configuration.inc.php';
-                }
-                error_log('Upgrade 1.11.x process concluded!  ('.date('Y-m-d H:i:s').')');
-            } else {
-                error_log('There was an error during running migrations. Check error.log');
-            }
-            // no break
         case '1.11.0':
         case '1.11.1':
         case '1.11.2':
@@ -3640,6 +3557,8 @@ function migrateSwitch($fromVersion, $manager, $processFiles = true)
         case '1.11.6':
         case '1.11.8':
         case '1.11.10':
+        case '1.11.12':
+        case '1.11.14':
             $database = new Database();
             $database->setManager($manager);
             // Migrate using the migration files located in:

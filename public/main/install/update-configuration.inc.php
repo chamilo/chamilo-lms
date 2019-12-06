@@ -13,17 +13,6 @@ if (defined('SYSTEM_INSTALLATION')) {
     $perm = api_get_permissions_for_new_files();
 
     $newConfFile = api_get_path(CONFIGURATION_PATH).'configuration.php';
-    // Check $fromVersionShort, defined in install.lib.php, in the switch
-    // on full version numbers, to know from which version we are upgrading
-    if ($fromVersionShort == '1.9') {
-        $oldConfFile = api_get_path(SYS_CODE_PATH).'inc/conf/configuration.php';
-
-        if (file_exists($oldConfFile)) {
-            copy($oldConfFile, $newConfFile);
-            @chmod($newConfFile, $perm);
-            @rmdir($oldConfFile);
-        }
-    }
 
     // Edit the configuration file.
     $file = file($newConfFile);

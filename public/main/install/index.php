@@ -123,25 +123,8 @@ $installationGuideLink = '../../documentation/installation_guide.html';
 // Setting the error reporting levels.
 error_reporting(E_ALL);
 
-// Upgrading from any subversion of 1.9
+// Upgrading from any subversion of 1.11.x
 $update_from_version_8 = [
-    '1.9.0',
-    '1.9.2',
-    '1.9.4',
-    '1.9.6',
-    '1.9.6.1',
-    '1.9.8',
-    '1.9.8.1',
-    '1.9.8.2',
-    '1.9.10',
-    '1.9.10.2',
-    '1.9.10.4',
-    '1.9.10.6',
-    '1.10.0',
-    '1.10.2',
-    '1.10.4',
-    '1.10.6',
-    '1.10.8',
     '1.11.0',
     '1.11.1',
     '1.11.2',
@@ -811,7 +794,7 @@ $poweredBy = 'Powered by <a href="http://www.chamilo.org" target="_blank"> Chami
     <div class="row">
         <div class="col-md-4">
             <div class="logo-install">
-                <img src="header-logo.png" class="img-fluid" alt="Chamilo" />
+                <img src="../../build/css/themes/chamilo/images/header-logo.png" class="img-fluid" alt="Chamilo" />
             </div>
             <div class="install-steps">
                 <ol class="list-group">
@@ -851,7 +834,6 @@ $poweredBy = 'Powered by <a href="http://www.chamilo.org" target="_blank"> Chami
                 </a>
             </div>
         </div>
-
         <div class="col-md-8">
             <form class="form-horizontal" id="install_form" method="post"
                   action="<?php echo api_get_self(); ?>?running=1&amp;installType=<?php echo $installType; ?>&amp;updateFromConfigFile=<?php echo urlencode($updateFromConfigFile); ?>">

@@ -53,6 +53,10 @@ services:
         arguments:
             $className: 'Chamilo\CourseBundle\Entity\CLink'
 
+    Chamilo\CourseBundle\Repository\CShortcutRepository:
+        arguments:
+            $className: 'Chamilo\CourseBundle\Entity\CShortcut'
+
     Chamilo\CourseBundle\Repository\CToolRepository:
         arguments:
             $className: 'Chamilo\CourseBundle\Entity\CTool'

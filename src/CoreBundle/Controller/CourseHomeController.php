@@ -119,10 +119,6 @@ class CourseHomeController extends ToolBaseController
         /** @var CTool $item */
         foreach ($result as $item) {
             $toolModel = $toolChain->getToolFromName($item->getTool()->getName());
-            // Dont show admin links.
-            if ($toolModel->getAdmin()) {
-                continue;
-            }
 
             if ($toolModel->getCategory() === 'admin' && !$this->isGranted('ROLE_CURRENT_COURSE_TEACHER')) {
                 continue;

@@ -92,9 +92,7 @@ class ToolChain
                 ->setName($tool->getName())
             ;
 
-            if ($tool->getAdmin() === 1) {
-                // Only check ROLE_ADMIN
-            } else {
+            if ($tool->isCourseTool()) {
                 $this->setToolPermissions($toolEntity);
             }
 
@@ -175,16 +173,52 @@ class ToolChain
 
         $user = $this->security->getToken()->getUser();
 
+        // Hardcoded order
+        $toolList = [
+            'course_description',
+            'document',
+            'learnpath',
+            'link',
+            'quiz',
+            'announcement',
+            'gradebook',
+            'glossary',
+            'attendance',
+            'course_progress',
+            'agenda',
+            'forum',
+            'dropbox',
+            'member',
+            'group',
+            'chat',
+            'student_publication',
+            'survey',
+            'wiki',
+            'notebook',
+            'blog',
+            'course_tool',
+            'tracking',
+            'course_setting',
+            'course_maintenance',
+        ];
+        $toolList = array_flip($toolList);
+
         /** @var AbstractTool $tool */
         foreach ($tools as $tool) {
-            $courseTool = new CTool();
             $visibility = in_array($tool->getName(), $toolVisibility, true);
             $criteria = ['name' => $tool->getName()];
+            // Skip global tools.
+            if ($tool->isCourseTool() === false) {
+                continue;
+            }
             $toolEntity = $manager->getRepository('ChamiloCoreBundle:Tool')->findOneBy($criteria);
+            $position = $toolList[$tool->getName()] + 1;
 
+            $courseTool = new CTool();
             $courseTool
                 ->setTool($toolEntity)
                 ->setName($tool->getName())
+                ->setPosition($position)
                 //->setCourse($course)
                 //->setImage($tool->getImage())
                 //->setName($tool->getName())
@@ -195,7 +229,7 @@ class ToolChain
             ;
 
             //$this->toolRepository->createNodeForResource($courseTool, $user, $course->getResourceNode());
-            $this->toolRepository->addResourceToCourse( $courseTool, ResourceLink::VISIBILITY_PUBLISHED, $user, $course);
+            $this->toolRepository->addResourceToCourse($courseTool, ResourceLink::VISIBILITY_PUBLISHED, $user, $course);
             $course->addTools($courseTool);
         }
 

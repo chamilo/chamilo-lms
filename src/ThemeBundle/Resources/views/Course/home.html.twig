@@ -71,71 +71,25 @@
         });
     </script>
 
-    {% if app.user.status != 5 %}
-        <div class="accordion accordion-b4" id="course-tools">
-            {% for category, items in tools %}
-                <div class="card">
-                    <div class="card-header" id="heading-{{ category }}">
-                            <h5 class="card-title">
-                                <a class="{{ category }}"
-                                   role="button" data-toggle="collapse"
-                                   data-target="#collapse-{{ category }}"
-                                   aria-expanded="{{ category }}"
-                                   aria-controls="collapse-{{ category }}"
-                                >
-                                    {{ category }}
-                                </a>
-                            </h5>
-                    </div>
-                    <div id="collapse-{{ category }}" class="collapse show" aria-labelledby="heading-{{ category }}" data-parent="#course-tools">
-                        <div class="grid-tools">
-                            {% for item in items %}
-                                <div class="items-tools ">
-                                    <div class="tools mt-3 mb-3">
-                                        <div class="big_icon">
-                                            <a href=" {{ url('chamilo_core_course_redirect_tool', { 'toolId': item.id, 'cid': course.id })|raw }}" >
-                                                <img src="{{ asset('img/tools/' ~ item.name ~ '.png')  }}" />
-                                            </a>
-                                        </div>
-                                        <div class="content pt-2 pb-2">
-                                            <a href=" {{ item.href|raw }}" >
-                                                {{ item.name | trans }}
-                                            </a>
-                                            {% if item.visibility is not empty %}
-                                                <div class="view">
-{#                                                    {{ item.visibility|raw }}#}
-                                                </div>
-                                            {% endif %}
-                                        </div>
-                                    </div>
-                                </div>
-                            {% endfor %}
+    <div class="grid-tools">
+        {% for category, items in tools %}
+            {% for item in items %}
+                <div class="items-tools">
+                    <div class="tools mt-3 mb-3">
+                        <div class="big_icon">
+                            <a href=" {{ url('chamilo_core_course_redirect_tool', { 'toolId': item.id, 'cid': course.id })|raw }}" >
+                                <img src="{{ asset('img/tools/' ~ item.name ~ '.png')  }}" />
+                            </a>
+                        </div>
+                        <div class="content pt-2 pb-2">
+                            <a href=" {{ item.href|raw }}" >
+                                {{ item.name | trans }}
+                            </a>
                         </div>
                     </div>
                 </div>
             {% endfor %}
-        </div>
-    {% else %}
-        <div class="grid-tools">
-            {% for category, items in tools %}
-                {% for item in items %}
-                    <div class="items-tools">
-                        <div class="tools mt-3 mb-3">
-                            <div class="big_icon">
-                                <a href=" {{ url('chamilo_core_course_redirect_tool', { 'toolId': item.id, 'cid': course.id })|raw }}" >
-                                    <img src="{{ asset('img/tools/' ~ item.name ~ '.png')  }}" />
-                                </a>
-                            </div>
-                            <div class="content pt-2 pb-2">
-                                <a href=" {{ item.href|raw }}" >
-                                    {{ item.name | trans }}
-                                </a>
-                            </div>
-                        </div>
-                    </div>
-                {% endfor %}
-            {% endfor %}
-        </div>
-    {% endif %}
+        {% endfor %}
+    </div>
 {% endautoescape %}
 {% endblock %}

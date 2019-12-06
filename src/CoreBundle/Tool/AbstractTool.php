@@ -19,22 +19,43 @@ abstract class AbstractTool implements ToolInterface
     protected $resourceTypes;
 
     /**
+     * @var string
+     *
+     *  00 disabled tool
+     *  01 course tool
+     *  10 global tool
+     *  11 global or course or both
+     */
+    protected $scope;
+
+    /**
      * @param string $name
      * @param string $category
      * @param string $link
      * @param        $courseSettings
      * @param array  $resourceTypes
-     * @param array  $admin
+     * @param string $scope
      */
-    public function __construct($name, $category, $link, $courseSettings, $resourceTypes, $admin)
+    public function __construct($name, $category, $link, $courseSettings, $resourceTypes, $scope)
     {
         $this->name = $name;
         $this->category = $category;
         $this->link = $link;
         $this->image = $name.'.png';
-        $this->admin = (int) $admin;
         $this->courseSettings = $courseSettings;
         $this->resourceTypes = $resourceTypes;
+        $this->scope = $scope;
+    }
+
+    public function isCourseTool()
+    {
+        $value = bindec($this->scope);
+        return $value === 1 || $value === 3;
+    }
+
+    public function isGlobal()
+    {
+        return bindec($this->scope) === 2;
     }
 
     /**
@@ -75,19 +96,6 @@ abstract class AbstractTool implements ToolInterface
     public function getImage()
     {
         return $this->image;
-    }
-
-    /**
-     * @param int $admin
-     */
-    public function setAdmin($admin)
-    {
-        $this->admin = $admin;
-    }
-
-    public function getAdmin(): int
-    {
-        return (int) $this->admin;
     }
 
     /**

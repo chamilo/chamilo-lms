@@ -9,9 +9,10 @@ use Chamilo\CoreBundle\Entity\Resource\AbstractResource;
 use Chamilo\CoreBundle\Entity\Resource\ResourceInterface;
 use Chamilo\CoreBundle\Entity\Session;
 use Chamilo\CoreBundle\Entity\Tool;
-use Chamilo\CoreBundle\ToolChain;
 use Doctrine\ORM\Event\LifecycleEventArgs;
 use Doctrine\ORM\Mapping as ORM;
+use Gedmo\Mapping\Annotation as Gedmo;
+use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * CTool.
@@ -46,7 +47,7 @@ class CTool extends AbstractResource implements ResourceInterface
     protected $id;
 
     /**
-     * @var string
+     * @Assert\NotBlank
      *
      * @ORM\Column(name="name", type="string", length=255, nullable=false)
      */
@@ -89,6 +90,12 @@ class CTool extends AbstractResource implements ResourceInterface
      * @ORM\JoinColumn(name="tool_id", referencedColumnName="id", nullable=false)
      */
     protected $tool;
+
+    /**
+     * @Gedmo\SortablePosition
+     * @ORM\Column(name="position", type="integer")
+     */
+    private $position;
 
     /**
      * Constructor.
@@ -263,6 +270,26 @@ class CTool extends AbstractResource implements ResourceInterface
         $this->setId($this->iid);
         $em->persist($this);
         $em->flush($this);
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getPosition()
+    {
+        return $this->position;
+    }
+
+    /**
+     * @param mixed $position
+     *
+     * @return CTool
+     */
+    public function setPosition($position)
+    {
+        $this->position = $position;
+
+        return $this;
     }
 
     /**

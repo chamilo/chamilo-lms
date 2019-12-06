@@ -3495,17 +3495,6 @@ class Agenda
                     );
             }
 
-            // if the student has specified a course we a add a link to that course
-            if ($item['course'] != "") {
-                $url = api_get_path(
-                        WEB_CODE_PATH
-                    )."admin/agenda.php?cidReq=".urlencode(
-                        $item['course']
-                    )."&day=$day&month=$month&year=$year#$day"; // RH  //Patrick Cool: to highlight the relevant agenda item
-                $course_link = "<a href=\"$url\" title=\"".$item['course']."\">".$item['course']."</a>";
-            } else {
-                $course_link = "";
-            }
             // Creating the array that will be returned. If we have week or month view we have an array with the date as the key
             // if we have a day_view we use a half hour as index => key 33 = 16h30
             if ($type !== "day_view") {
@@ -3618,17 +3607,6 @@ class Agenda
                 continue;
             }
 
-            // if the student has specified a course we a add a link to that course
-            if ($item['course'] != "") {
-                $url = api_get_path(
-                        WEB_CODE_PATH
-                    )."calendar/agenda.php?cidReq=".urlencode(
-                        $item['course']
-                    )."&day=$day&month=$month&year=$year#$day"; // RH  //Patrick Cool: to highlight the relevant agenda item
-                $course_link = "<a href=\"$url\" title=\"".$item['course']."\">".$item['course']."</a>";
-            } else {
-                $course_link = "";
-            }
             // Creating the array that will be returned. If we have week or month view we have an array with the date as the key
             // if we have a day_view we use a half hour as index => key 33 = 16h30
             if ($type !== "day_view") {

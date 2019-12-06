@@ -18,7 +18,10 @@ class Version20191206150000 extends AbstractMigrationChamilo
         $this->getEntityManager();
 
         $this->addSql('ALTER TABLE extra_field ADD helper_text text DEFAULT NULL AFTER display_text');
-
+        $tableObj = $schema->getTable('personal_agenda');
+        if ($tableObj->hasColumn('course')) {
+            $this->addSql("ALTER TABLE personal_agenda DROP course");
+        }
     }
 
     public function down(Schema $schema)

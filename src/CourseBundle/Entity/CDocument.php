@@ -92,6 +92,13 @@ class CDocument extends AbstractResource implements ResourceInterface
     protected $readonly;
 
     /**
+     * @var bool
+     *
+     * @ORM\Column(name="template", type="boolean", nullable=false)
+     */
+    protected $template;
+
+    /**
      * @var Course
      *
      * @ORM\ManyToOne(targetEntity="Chamilo\CoreBundle\Entity\Course", cascade={"persist"})
@@ -111,6 +118,7 @@ class CDocument extends AbstractResource implements ResourceInterface
     public function __construct()
     {
         $this->readonly = false;
+        $this->template = false;
         $this->size = 0;
         $this->id = 0;
     }
@@ -118,6 +126,26 @@ class CDocument extends AbstractResource implements ResourceInterface
     public function __toString(): string
     {
         return $this->getTitle();
+    }
+
+    /**
+     * @return bool
+     */
+    public function isTemplate(): bool
+    {
+        return $this->template;
+    }
+
+    /**
+     * @param bool $template
+     *
+     * @return CDocument
+     */
+    public function setTemplate(bool $template): CDocument
+    {
+        $this->template = $template;
+
+        return $this;
     }
 
     /**

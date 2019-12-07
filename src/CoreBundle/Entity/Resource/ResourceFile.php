@@ -136,6 +136,7 @@ class ResourceFile
     public function __construct()
     {
         $this->enabled = true;
+        $this->metadata = [];
     }
 
     public function __toString(): string

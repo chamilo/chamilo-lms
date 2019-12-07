@@ -461,6 +461,36 @@ class ResourceController extends AbstractResourceController implements CourseCon
     }
 
     /**
+     * @Route("/{tool}/{type}/{id}/disk_space", methods={"GET", "POST"}, name="chamilo_core_resource_disk_space")
+     */
+    public function diskSpaceAction(Request $request): Response
+    {
+        $this->setBreadCrumb($request);
+
+        $nodeId = $request->get('id');
+
+        $repository = $this->getRepositoryFromRequest($request);
+
+        /** @var ResourceNode $resourceNode */
+        $resourceNode = $repository->getResourceNodeRepository()->find($nodeId);
+        $size = $repository->getResourceNodeRepository()->getSize($resourceNode, $repository->getResourceType());
+
+        $this->denyAccessUnlessGranted(
+            ResourceNodeVoter::VIEW,
+            $resourceNode,
+            $this->trans('Unauthorised access to resource')
+        );
+
+        return $this->render(
+            '@ChamiloTheme/Resource/disk_space.html.twig',
+            [
+                'resourceNode' => $resourceNode,
+                'size' => $size,
+            ]
+        );
+    }
+
+    /**
      * @Route("/{tool}/{type}/{id}/edit", methods={"GET", "POST"})
      */
     public function editAction(Request $request, IllustrationRepository $illustrationRepository): Response

@@ -244,6 +244,8 @@ class OralExpression extends Question
      */
     private function generateDirectory()
     {
+        return null;
+
         $this->storePath = api_get_path(SYS_COURSE_PATH).$this->course['path'].'/exercises/';
 
         if (!is_dir($this->storePath)) {

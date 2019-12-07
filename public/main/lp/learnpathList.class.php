@@ -110,22 +110,22 @@ class LearnpathList
             $link = 'lp/lp_controller.php?action=view&lp_id='.$row->getId().'&id_session='.$session_id;
             $oldLink = 'newscorm/lp_controller.php?action=view&lp_id='.$row->getId().'&id_session='.$session_id;
 
-            $sql2 = "SELECT visibility FROM $tbl_tool
+            /*$sql2 = "SELECT visibility FROM $tbl_tool
                      WHERE
-                        c_id = $course_id AND 
+                        c_id = $course_id AND
                         name = '$name' AND
                         image = 'scormbuilder.gif' AND
                         (
                             link LIKE '$link%' OR
-                            link LIKE '$oldLink%'                                
+                            link LIKE '$oldLink%'
                         )
                       ";
-            $res2 = Database::query($sql2);
+            $res2 = Database::query($sql2);*/
             $pub = 'i';
-            if (Database::num_rows($res2) > 0) {
+            /*if (Database::num_rows($res2) > 0) {
                 $row2 = Database::fetch_array($res2);
                 $pub = $row2['visibility'];
-            }
+            }*/
 
             // Check if visible.
             $visibility = api_get_item_visibility(

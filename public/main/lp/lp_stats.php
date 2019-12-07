@@ -16,7 +16,7 @@ if (!isset($origin)) {
     $origin = 'learnpath';
 }
 
-$sessionId = isset($_GET['id_session']) ? (int) $_GET['id_session'] : api_get_session_id();
+$sessionId = isset($_GET['sid']) ? (int) $_GET['sid'] : api_get_session_id();
 $courseCode = isset($_GET['course']) ? $_GET['course'] : api_get_course_id();
 $userId = isset($_GET['student_id']) ? (int) $_GET['student_id'] : api_get_user_id();
 $lpId = isset($_GET['lp_id']) ? $_GET['lp_id'] : null;

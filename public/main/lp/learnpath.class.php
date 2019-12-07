@@ -201,10 +201,10 @@ class learnpath
 
                 // Selecting by view_count descending allows to get the highest view_count first.
                 $sql = "SELECT * FROM $lp_table
-                        WHERE 
-                            c_id = $course_id AND 
-                            lp_id = $lp_id AND 
-                            user_id = $user_id 
+                        WHERE
+                            c_id = $course_id AND
+                            lp_id = $lp_id AND
+                            user_id = $user_id
                             $session
                         ORDER BY view_count DESC";
                 $res = Database::query($sql);
@@ -602,7 +602,7 @@ class learnpath
 
             if (!empty($next)) {
                 $sql = "UPDATE $tbl_lp_item
-                        SET previous_item_id = $new_item_id 
+                        SET previous_item_id = $new_item_id
                         WHERE c_id = $course_id AND id = $next AND item_type != '".TOOL_LP_FINAL_ITEM."'";
                 Database::query($sql);
             }
@@ -756,7 +756,7 @@ class learnpath
             // There is already one such name, update the current one a bit.
             $i++;
             $name = $name.' - '.$i;
-            $check_name = "SELECT * FROM $tbl_lp 
+            $check_name = "SELECT * FROM $tbl_lp
                            WHERE c_id = $course_id AND name = '".Database::escape_string($name)."' ";
             $res_name = Database::query($check_name);
         }
@@ -782,7 +782,7 @@ class learnpath
                 break;
             case 'manual':
             default:
-                $get_max = "SELECT MAX(display_order) 
+                $get_max = "SELECT MAX(display_order)
                             FROM $tbl_lp WHERE c_id = $course_id";
                 $res_max = Database::query($get_max);
                 if (Database::num_rows($res_max) < 1) {
@@ -831,7 +831,7 @@ class learnpath
                     Database::query($sql);
 
                     // Insert into item_property.
-                    api_item_property_update(
+                    /*api_item_property_update(
                         $courseInfo,
                         TOOL_LEARNPATH,
                         $id,
@@ -845,7 +845,7 @@ class learnpath
                         $courseInfo,
                         $session_id,
                         $userId
-                    );
+                    );*/
 
                     return $id;
                 }
@@ -1027,7 +1027,7 @@ class learnpath
                 WHERE c_id = $course_id AND lp_id = ".$this->lp_id;
         Database::query($sql);
 
-        $sql = "DELETE FROM $lp_view 
+        $sql = "DELETE FROM $lp_view
                 WHERE c_id = $course_id AND lp_id = ".$this->lp_id;
         Database::query($sql);
 
@@ -1042,9 +1042,9 @@ class learnpath
                 $row = Database::fetch_array($res);
                 $path = $row['path'];
                 $sql = "SELECT id FROM $lp
-                        WHERE 
+                        WHERE
                             c_id = $course_id AND
-                            path = '$path' AND 
+                            path = '$path' AND
                             iid != ".$this->lp_id;
                 $res = Database::query($sql);
                 if (Database::num_rows($res) > 0) {
@@ -1079,7 +1079,7 @@ class learnpath
                 WHERE c_id = $course_id AND (link LIKE '$link%' AND image='scormbuilder.gif')";
         Database::query($sql);
 
-        $sql = "DELETE FROM $lp 
+        $sql = "DELETE FROM $lp
                 WHERE iid = ".$this->lp_id;
         Database::query($sql);
         // Updates the display order of all lps.
@@ -1127,12 +1127,12 @@ class learnpath
             return false;
         }
         $lp_item = Database::get_course_table(TABLE_LP_ITEM);
-        $sql = "SELECT * FROM $lp_item 
+        $sql = "SELECT * FROM $lp_item
                 WHERE c_id = $course_id AND parent_item_id = $id";
         $res = Database::query($sql);
         while ($row = Database::fetch_array($res)) {
             $num += $this->delete_children_items($row['iid']);
-            $sql = "DELETE FROM $lp_item 
+            $sql = "DELETE FROM $lp_item
                     WHERE c_id = $course_id AND iid = ".$row['iid'];
             Database::query($sql);
             $num++;
@@ -1185,15 +1185,15 @@ class learnpath
         Database::query($sql_upd);
         // Now update all following items with new display order.
         $sql_all = "UPDATE $lp_item SET display_order = display_order-1
-                    WHERE 
-                        c_id = $course_id AND 
-                        lp_id = $lp AND 
-                        parent_item_id = $parent AND 
+                    WHERE
+                        c_id = $course_id AND
+                        lp_id = $lp AND
+                        parent_item_id = $parent AND
                         display_order > $display";
         Database::query($sql_all);
 
         //Removing prerequisites since the item will not longer exist
-        $sql_all = "UPDATE $lp_item SET prerequisite = '' 
+        $sql_all = "UPDATE $lp_item SET prerequisite = ''
                     WHERE c_id = $course_id AND prerequisite = $id";
         Database::query($sql_all);
 
@@ -1205,8 +1205,8 @@ class learnpath
         // Remove from search engine if enabled.
         if (api_get_setting('search_enabled') === 'true') {
             $tbl_se_ref = Database::get_main_table(TABLE_MAIN_SEARCH_ENGINE_REF);
-            $sql = 'SELECT * FROM %s 
-                    WHERE course_code=\'%s\' AND tool_id=\'%s\' AND ref_id_high_level=%s AND ref_id_second_level=%d 
+            $sql = 'SELECT * FROM %s
+                    WHERE course_code=\'%s\' AND tool_id=\'%s\' AND ref_id_high_level=%s AND ref_id_second_level=%d
                     LIMIT 1';
             $sql = sprintf($sql, $tbl_se_ref, $this->cc, TOOL_LEARNPATH, $lp, $id);
             $res = Database::query($sql);
@@ -1215,8 +1215,8 @@ class learnpath
                 $di = new ChamiloIndexer();
                 $di->remove_document($row2['search_did']);
             }
-            $sql = 'DELETE FROM %s 
-                    WHERE course_code=\'%s\' AND tool_id=\'%s\' AND ref_id_high_level=%s AND ref_id_second_level=%d 
+            $sql = 'DELETE FROM %s
+                    WHERE course_code=\'%s\' AND tool_id=\'%s\' AND ref_id_high_level=%s AND ref_id_second_level=%d
                     LIMIT 1';
             $sql = sprintf($sql, $tbl_se_ref, $this->cc, TOOL_LEARNPATH, $lp, $id);
             Database::query($sql);
@@ -1262,7 +1262,7 @@ class learnpath
         }
 
         $tbl_lp_item = Database::get_course_table(TABLE_LP_ITEM);
-        $sql = "SELECT * FROM $tbl_lp_item 
+        $sql = "SELECT * FROM $tbl_lp_item
                 WHERE iid = $id";
         $res_select = Database::query($sql);
         $row_select = Database::fetch_array($res_select);
@@ -1791,10 +1791,10 @@ class learnpath
         $settings = api_get_configuration_value('lp_view_settings');
         $display = isset($settings['display']) ? $settings['display'] : false;
         $reportingIcon = '
-            <a class="icon-toolbar" 
+            <a class="icon-toolbar"
                 id="stats_link"
-                href="lp_controller.php?action=stats&'.api_get_cidreq(true).'&lp_id='.$lpId.'" 
-                onclick="window.parent.API.save_asset(); return true;" 
+                href="lp_controller.php?action=stats&'.api_get_cidreq(true).'&lp_id='.$lpId.'"
+                onclick="window.parent.API.save_asset(); return true;"
                 target="content_name" title="'.$reportingText.'">
                 <span class="fa fa-info"></span><span class="sr-only">'.$reportingText.'</span>
             </a>';
@@ -1815,13 +1815,13 @@ class learnpath
         $nextIcon = '';
         if ($hideArrows === false) {
             $previousIcon = '
-                <a class="icon-toolbar" id="scorm-previous" href="#" 
+                <a class="icon-toolbar" id="scorm-previous" href="#"
                     onclick="switch_item('.$mycurrentitemid.',\'previous\');return false;" title="'.$previousText.'">
                     <span class="fa fa-chevron-left"></span><span class="sr-only">'.$previousText.'</span>
                 </a>';
 
             $nextIcon = '
-                <a class="icon-toolbar" id="scorm-next" href="#" 
+                <a class="icon-toolbar" id="scorm-next" href="#"
                     onclick="switch_item('.$mycurrentitemid.',\'next\');return false;" title="'.$nextText.'">
                     <span class="fa fa-chevron-right"></span><span class="sr-only">'.$nextText.'</span>
                 </a>';
@@ -1831,9 +1831,9 @@ class learnpath
             $navbar = '
                   <span id="'.$barId.'" class="buttons">
                     '.$reportingIcon.'
-                    '.$previousIcon.'                    
+                    '.$previousIcon.'
                     '.$nextIcon.'
-                    <a class="icon-toolbar" id="view-embedded" 
+                    <a class="icon-toolbar" id="view-embedded"
                         href="lp_controller.php?action=mode&mode=embedded" target="_top" title="'.$fullScreenText.'">
                         <span class="fa fa-columns"></span><span class="sr-only">'.$fullScreenText.'</span>
                     </a>
@@ -1843,7 +1843,7 @@ class learnpath
                  <span id="'.$barId.'" class="buttons text-right">
                     '.$reportingIcon.'
                     '.$previousIcon.'
-                    '.$nextIcon.'               
+                    '.$nextIcon.'
                 </span>';
         }
 
@@ -2052,7 +2052,7 @@ class learnpath
         }
 
         // Getting all the information about the item.
-        $sql = "SELECT lpi.audio, lpi.item_type, lp_view.status 
+        $sql = "SELECT lpi.audio, lpi.item_type, lp_view.status
                 FROM $tbl_lp_item as lpi
                 INNER JOIN $tbl_lp_item_view as lp_view
                 ON (lpi.iid = lp_view.lp_item_id)
@@ -2442,8 +2442,8 @@ class learnpath
     {
         $text = $percentage.$text_add;
         $output = '<div class="progress">
-            <div id="progress_bar_value" 
-                class="progress-bar progress-bar-success" role="progressbar" 
+            <div id="progress_bar_value"
+                class="progress-bar progress-bar-success" role="progressbar"
                 aria-valuenow="'.$percentage.'" aria-valuemin="0" aria-valuemax="100" style="width: '.$text.';">
             '.$text.'
             </div>
@@ -4280,6 +4280,7 @@ class learnpath
         $sql = "SELECT * FROM $tbl_lp
                 WHERE iid = $lp_id";
         $result = Database::query($sql);
+
         if (Database::num_rows($result)) {
             $row = Database::fetch_array($result);
             $name = Database::escape_string($row['name']);
@@ -4562,17 +4563,16 @@ class learnpath
      *
      * @return bool
      */
-    public static function categoryIsPublished(
-        CLpCategory $category,
-        $courseId
-    ) {
+    public static function categoryIsPublished(CLpCategory $category, $courseId)
+    {
+        return false;
         $link = self::getCategoryLinkForTool($category->getId());
         $em = Database::getManager();
 
         $tools = $em
             ->createQuery("
                 SELECT t FROM ChamiloCourseBundle:CTool t
-                WHERE t.course = :course AND 
+                WHERE t.course = :course AND
                     t.name = :name AND
                     t.image LIKE 'lp_category.%' AND
                     t.link LIKE :link
@@ -6106,9 +6106,9 @@ class learnpath
                     );
                 }
 
-                $delete_icon .= ' <a 
-                    href="'.$mainUrl.'&action=delete_item&id='.$arrLP[$i]['id'].'&lp_id='.$this->lp_id.'" 
-                    onclick="return confirmation(\''.addslashes($title).'\');" 
+                $delete_icon .= ' <a
+                    href="'.$mainUrl.'&action=delete_item&id='.$arrLP[$i]['id'].'&lp_id='.$this->lp_id.'"
+                    onclick="return confirmation(\''.addslashes($title).'\');"
                     class="btn btn-default">';
                 $delete_icon .= Display::return_icon(
                     'delete.png',
@@ -6217,14 +6217,14 @@ class learnpath
                     Display::tag(
                         'div',
                         "<div class=\"btn-group btn-group-xs\">
-                                    $previewIcon 
-                                    $audio 
-                                    $edit_icon 
+                                    $previewIcon
+                                    $audio
+                                    $edit_icon
                                     $pluginCalendarIcon
-                                    $forumIcon 
-                                    $prerequisities_icon 
-                                    $move_item_icon 
-                                    $audio_icon 
+                                    $forumIcon
+                                    $prerequisities_icon
+                                    $move_item_icon
+                                    $audio_icon
                                     $orderIcons
                                     $delete_icon
                                 </div>",
@@ -6858,7 +6858,7 @@ class learnpath
             if (empty($documentInfo)) {
                 // Try with iid
                 $table = Database::get_course_table(TABLE_DOCUMENT);
-                $sql = "SELECT id, path FROM $table 
+                $sql = "SELECT id, path FROM $table
                         WHERE c_id = $course_id AND iid = $document_id AND path NOT LIKE '%_DELETED_%' ";
                 $res_doc = Database::query($sql);
                 $row = Database::fetch_array($res_doc);
@@ -8294,7 +8294,7 @@ class learnpath
         if ($action === 'add') {
             if (is_numeric($extra_info)) {
                 $extra_info = (int) $extra_info;
-                $sql_doc = "SELECT path FROM $tbl_doc 
+                $sql_doc = "SELECT path FROM $tbl_doc
                             WHERE c_id = $course_id AND iid = ".$extra_info;
                 $result = Database::query($sql_doc);
                 $path_file = Database::result($result, 0, 0);
@@ -9066,7 +9066,7 @@ class learnpath
             $item_url = stripslashes($extra_info['url']);
         } elseif (is_numeric($extra_info)) {
             $extra_info = (int) $extra_info;
-            $sql = "SELECT title, description, url 
+            $sql = "SELECT title, description, url
                     FROM $tbl_link
                     WHERE c_id = $course_id AND iid = $extra_info";
             $result = Database::query($sql);
@@ -9399,7 +9399,7 @@ class learnpath
 
         $return = '<div class="actions">';
         $tbl_lp_item = Database::get_course_table(TABLE_LP_ITEM);
-        $sql = "SELECT * FROM $tbl_lp_item 
+        $sql = "SELECT * FROM $tbl_lp_item
                 WHERE iid = ".$item_id;
         $result = Database::query($sql);
         $row = Database::fetch_assoc($result);
@@ -9466,9 +9466,9 @@ class learnpath
                 // Try with iid
                 $table = Database::get_course_table(TABLE_DOCUMENT);
                 $sql = "SELECT path FROM $table
-                        WHERE 
-                              c_id = ".api_get_course_int_id()." AND 
-                              iid = ".$row['path']." AND 
+                        WHERE
+                              c_id = ".api_get_course_int_id()." AND
+                              iid = ".$row['path']." AND
                               path NOT LIKE '%_DELETED_%'";
                 $result = Database::query($sql);
                 $documentData = Database::fetch_array($result);
@@ -9505,9 +9505,9 @@ class learnpath
 
         $tbl_lp_item = Database::get_course_table(TABLE_LP_ITEM);
         $sql = "SELECT * FROM ".$tbl_lp_item."
-                WHERE 
-                    c_id = $course_id AND 
-                    lp_id = ".$this->lp_id." AND 
+                WHERE
+                    c_id = $course_id AND
+                    lp_id = ".$this->lp_id." AND
                     parent_item_id = 0
                 ORDER BY display_order ASC";
         $res_zero = Database::query($sql);
@@ -9554,12 +9554,12 @@ class learnpath
                 if (!id) {
                     return false;
                 }
-            
+
                 var cbo = document.getElementById('previous');
                 for(var i = cbo.length - 1; i > 0; i--) {
                     cbo.options[i] = null;
                 }
-            
+
                 var k=0;
                 for(var i = 1; i <= child_name[id].length; i++){
                     var option = new Option(child_name[id][i - 1], child_value[id][i - 1]);
@@ -9567,7 +9567,7 @@ class learnpath
                     cbo.options[i] = option;
                     k = i;
                 }
-            
+
                 cbo.options[k].selected = true;
                 $('#previous').selectpicker('refresh');
             }";
@@ -9757,55 +9757,55 @@ class learnpath
                 }
 
                 $return .= '<td>';
-                $return .= '<input 
-                    class="form-control" 
-                    size="4" maxlength="3" 
-                    name="min_'.$item['id'].'" 
-                    type="number" 
-                    min="0" 
-                    step="1" 
-                    max="'.$item['max_score'].'" 
-                    value="'.$selectedMinScoreValue.'" 
+                $return .= '<input
+                    class="form-control"
+                    size="4" maxlength="3"
+                    name="min_'.$item['id'].'"
+                    type="number"
+                    min="0"
+                    step="1"
+                    max="'.$item['max_score'].'"
+                    value="'.$selectedMinScoreValue.'"
                 />';
                 $return .= '</td>';
                 $return .= '<td>';
-                $return .= '<input 
-                    class="form-control" 
-                    size="4" 
-                    maxlength="3" 
-                    name="max_'.$item['id'].'" 
-                    type="number" 
-                    min="0" 
-                    step="1" 
-                    max="'.$item['max_score'].'" 
-                    value="'.$selectedMaxScoreValue.'" 
+                $return .= '<input
+                    class="form-control"
+                    size="4"
+                    maxlength="3"
+                    name="max_'.$item['id'].'"
+                    type="number"
+                    min="0"
+                    step="1"
+                    max="'.$item['max_score'].'"
+                    value="'.$selectedMaxScoreValue.'"
                 />';
                 $return .= '</td>';
             }
 
             if ($item['item_type'] == TOOL_HOTPOTATOES) {
                 $return .= '<td>';
-                $return .= '<input 
-                    size="4" 
-                    maxlength="3" 
-                    name="min_'.$item['id'].'" 
-                    type="number" 
-                    min="0" 
-                    step="1" 
-                    max="'.$item['max_score'].'" 
-                    value="'.$selectedMinScoreValue.'" 
+                $return .= '<input
+                    size="4"
+                    maxlength="3"
+                    name="min_'.$item['id'].'"
+                    type="number"
+                    min="0"
+                    step="1"
+                    max="'.$item['max_score'].'"
+                    value="'.$selectedMinScoreValue.'"
                 />';
                 $return .= '</td>';
                 $return .= '<td>';
-                $return .= '<input 
-                    size="4" 
-                    maxlength="3" 
-                    name="max_'.$item['id'].'" 
-                    type="number" 
-                    min="0" 
-                    step="1" 
-                    max="'.$item['max_score'].'" 
-                    value="'.$selectedMaxScoreValue.'" 
+                $return .= '<input
+                    size="4"
+                    maxlength="3"
+                    name="max_'.$item['id'].'"
+                    type="number"
+                    min="0"
+                    step="1"
+                    max="'.$item['max_score'].'"
+                    value="'.$selectedMaxScoreValue.'"
                 />';
                 $return .= '</td>';
             }
@@ -10011,10 +10011,10 @@ class learnpath
         }
 
         $sql_quiz = "SELECT * FROM $tbl_quiz
-                     WHERE 
-                            c_id = $course_id AND 
+                     WHERE
+                            c_id = $course_id AND
                             $activeCondition
-                            $condition_session 
+                            $condition_session
                             $categoryCondition
                             $keywordCondition
                      ORDER BY title ASC";
@@ -10172,7 +10172,7 @@ class learnpath
             'link.session_id'
         );
 
-        $sql = "SELECT 
+        $sql = "SELECT
                     link.id as link_id,
                     link.title as link_title,
                     link.session_id as link_session_id,
@@ -11645,9 +11645,9 @@ EOD;
         $max_order = $row_max_order->display_order;
         // Get the previous item ID
         $sql = "SELECT iid as previous FROM $table_lp_item
-                WHERE 
-                    c_id = $course_id AND 
-                    lp_id = ".$this->lp_id." AND 
+                WHERE
+                    c_id = $course_id AND
+                    lp_id = ".$this->lp_id." AND
                     display_order = '$max_order' ";
         $rs_max = Database::query($sql);
         $row_max = Database::fetch_object($rs_max);
@@ -11988,7 +11988,7 @@ EOD;
 
             // Delete link tool
             $tbl_tool = Database::get_course_table(TABLE_TOOL_LIST);
-            $link = 'lp/lp_controller.php?cidReq='.$courseInfo['code'].'&id_session='.$sessionId.'&gidReq=0&gradebook=0&origin=&action=view_category&id='.$id;
+            $link = 'lp/lp_controller.php?cid='.$courseInfo['real_id'].'&sid='.$sessionId.'&gidReq=0&gradebook=0&origin=&action=view_category&id='.$id;
             // Delete tools
             $sql = "DELETE FROM $tbl_tool
                     WHERE c_id = ".$courseId." AND (link LIKE '$link%' AND image='lp_category.gif')";
@@ -12687,7 +12687,7 @@ EOD;
         $this->accumulateScormTime = (int) $value;
         $lp_table = Database::get_course_table(TABLE_LP_MAIN);
         $lp_id = $this->get_id();
-        $sql = "UPDATE $lp_table 
+        $sql = "UPDATE $lp_table
                 SET accumulate_scorm_time = ".$this->accumulateScormTime."
                 WHERE iid = $lp_id";
         Database::query($sql);
@@ -12918,7 +12918,7 @@ EOD;
         $learningPathId = (int) $learningPathId;
         $id_in_path = (int) $id_in_path;
 
-        $sql = "SELECT item_type, title, ref 
+        $sql = "SELECT item_type, title, ref
                 FROM $tbl_lp_item
                 WHERE c_id = $course_id AND lp_id = $learningPathId AND iid = $id_in_path";
         $res_item = Database::query($sql);
@@ -13266,8 +13266,8 @@ EOD;
     public function getAccumulateWorkTimeTotalCourse()
     {
         $table = Database::get_course_table(TABLE_LP_MAIN);
-        $sql = "SELECT SUM(accumulate_work_time) AS total 
-                FROM $table 
+        $sql = "SELECT SUM(accumulate_work_time) AS total
+                FROM $table
                 WHERE c_id = ".$this->course_int_id;
         $result = Database::query($sql);
         $row = Database::fetch_array($result);
@@ -13310,8 +13310,8 @@ EOD;
         $courseId = (int) $courseId;
 
         $table = Database::get_course_table(TABLE_LP_MAIN);
-        $sql = "SELECT accumulate_work_time 
-                FROM $table 
+        $sql = "SELECT accumulate_work_time
+                FROM $table
                 WHERE c_id = $courseId AND id = $lpId";
         $result = Database::query($sql);
         $row = Database::fetch_array($result);
@@ -13437,7 +13437,7 @@ EOD;
         $tbl_lp_item = Database::get_course_table(TABLE_LP_ITEM);
         $course_id = api_get_course_int_id();
 
-        $sql = "SELECT * FROM $tbl_lp_item 
+        $sql = "SELECT * FROM $tbl_lp_item
                 WHERE c_id = $course_id AND lp_id = ".$this->lp_id;
 
         if ($addParentCondition) {

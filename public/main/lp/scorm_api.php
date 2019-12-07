@@ -214,7 +214,7 @@ olms.userfname = '<?php echo addslashes(trim($user['firstname'])); ?>';
 olms.userlname = '<?php echo addslashes(trim($user['lastname'])); ?>';
 olms.execute_stats = false;
 
-var courseUrl = '?cidReq='+olms.lms_course_code+'&id_session='+olms.lms_session_id;
+var courseUrl = '?cid='+olms.lms_course_id+'&sid='+olms.lms_session_id;
 
 /**
  * Add the "addListeners" function to the "onload" event of the window and
@@ -1662,7 +1662,7 @@ function switch_item(current_item, next_item)
     }
 
     var mysrc = '<?php echo api_get_path(WEB_CODE_PATH); ?>lp/lp_controller.php?action=content&lp_id=' + olms.lms_lp_id +
-                '&item_id=' + next_item + '&cidReq=' + olms.lms_course_code + '&id_session=' + olms.lms_session_id;
+                '&item_id=' + next_item + '&cid=' + olms.lms_course_id + '&sid=' + olms.lms_session_id;
     var cont_f = $("#content_id");
 
     <?php if ($oLP->mode == 'fullscreen') {

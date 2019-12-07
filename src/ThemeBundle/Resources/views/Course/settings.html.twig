@@ -1,0 +1,35 @@
+{% extends "@ChamiloTheme/Layout/layout_one_col.html.twig" %}
+{% from '@ChamiloTheme/Admin/Settings/actions.html.twig' import update %}
+{% set namespace = app.request.get('namespace') %}
+
+{% block content %}
+    <div class="row">
+        <div class="col-xs-3 col-md-3">
+            {% include '@ChamiloTheme/Course/settings_menu.html.twig' %}
+        </div>
+        <div class="col-xs-9 col-md-9">
+            {#<div class="page-header">#}
+            {#<h3>{{ namespace }} {{ 'Settings' | trans }}</h3>#}
+            {#</div>#}
+            <hr />
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="box box-primary">
+                        <div class="box-body">
+                            {{ form_errors(form) }}
+                            <form
+                                class="form-horizontal"
+                                action="{{ path('chamilo_core_course_settings', { 'namespace': namespace, 'keyword': keyword, 'cid' : course.id } ) }}"
+                                method="post"
+                                novalidate
+                            >
+                                {{ form_rest(form) }}
+                                {{ update() }}
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}

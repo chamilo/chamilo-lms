@@ -3,6 +3,7 @@
 
 namespace Chamilo\CourseBundle\Settings;
 
+use Chamilo\CoreBundle\Form\Type\YesNoType;
 use Chamilo\CoreBundle\Settings\AbstractSettingsSchema;
 use Sylius\Bundle\SettingsBundle\Schema\AbstractSettingsBuilder;
 use Symfony\Component\Form\FormBuilderInterface;
@@ -36,7 +37,7 @@ class TrackingCourseSettingsSchema extends AbstractSettingsSchema
     public function buildForm(FormBuilderInterface $builder)
     {
         $builder
-            ->add('enabled', 'yes_no')
+            ->add('enabled', YesNoType::class)
         ;
     }
 }

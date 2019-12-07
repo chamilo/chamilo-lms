@@ -1,6 +1,3 @@
-parameters:
-    chamilo_course.settings.manager.class: Chamilo\CourseBundle\Manager\SettingsManager
-
 services:
     _defaults:
         autowire: true
@@ -8,11 +5,62 @@ services:
 
     League\Flysystem\MountManager: '@oneup_flysystem.mount_manager'
 
+    chamilo_course.registry.settings_schema:
+        class: Sylius\Component\Registry\ServiceRegistry
+        arguments:
+            - Sylius\Bundle\SettingsBundle\Schema\SchemaInterface
+            - 'Course settings'
+
+    Chamilo\CourseBundle\Manager\SettingsManager:
+        arguments:
+            - '@chamilo_course.registry.settings_schema'
+            - '@sylius.registry.settings_resolver'
+            - '@doctrine.orm.entity_manager'
+            - '@chamilo_course.repository.parameter'
+            - '@sylius.factory.settings'
+            - '@event_dispatcher'
+
+    Sylius\Bundle\SettingsBundle\Form\Factory\SettingsFormFactory:
+        arguments:
+            - '@chamilo_course.registry.settings_schema'
+            - '@form.factory'
+        public: true
+
+    chamilo_course.repository.parameter:
+        class: Chamilo\CourseBundle\Repository\CCourseSettingRepository
+
+        #    chamilo_settings.repository.parameter:
+        #        class: Chamilo\CoreBundle\Repository\SettingsCurrentRepository
+        #        factory: ["@doctrine", getRepository]
+        #        arguments: [ Chamilo\CoreBundle\Entity\SettingsCurrent ]
+
+
+
+    #    chamilo_course.settings.manager:
+    #        class: '%chamilo_course.settings.manager.class%'
+    #        arguments:
+    #            - '@chamilo_course.registry.settings_schema'
+    #            - '@sylius.registry.settings_resolver'
+    #            - '@doctrine.orm.entity_manager'
+    #            - '@chamilo_course.repository.parameter'
+    #            - '@sylius.factory.settings'
+    #            - '@event_dispatcher'
+    #    chamilo_course.settings.manager:
+    #        class: '%chamilo_course.settings.manager.class%'
+    #        public: true
+    #        arguments:
+    #            - '@sylius.registry.settings_schema'
+    #            - '@sylius.registry.settings_resolver'
+    #            - '@doctrine.orm.entity_manager'
+    #            - '@chamilo_course.repository.parameter'
+    #            - '@sylius.factory.settings'
+    #            - '@event_dispatcher'
+
+
     Chamilo\CourseBundle\Repository\:
         resource: ../../Repository
         exclude: '../../Repository/{CDocumentRepository.php|CQuizRepository.php}'
         tags: ['doctrine.repository_service']
-
 
 #    resources.asset.illustration:
 #        arguments:
@@ -103,50 +151,3 @@ services:
         public: false
         tags:
             - {name: security.voter}
-
-    # Course settings
-    chamilo_course.controller.settings:
-        class: 'Chamilo\CourseBundle\Controller\SettingsController'
-        calls:
-            - [setContainer, ['@service_container']]
-
-    chamilo_course.settings.form_factory:
-        class: Sylius\Bundle\SettingsBundle\Form\Factory\SettingsFormFactory
-        public: true
-        arguments:
-            - '@chamilo_course.registry.settings_schema'
-            - '@form.factory'
-
-    chamilo_course.repository.parameter:
-        class: Chamilo\CourseBundle\Repository\CCourseSettingRepository
-
-#    chamilo_settings.repository.parameter:
-#        class: Chamilo\CoreBundle\Repository\SettingsCurrentRepository
-#        factory: ["@doctrine", getRepository]
-#        arguments: [ Chamilo\CoreBundle\Entity\SettingsCurrent ]
-
-    chamilo_course.registry.settings_schema:
-        class: Sylius\Component\Registry\ServiceRegistry
-        arguments:
-            - Sylius\Bundle\SettingsBundle\Schema\SchemaInterface
-            - 'Course settings'
-
-#    chamilo_course.settings.manager:
-#        class: '%chamilo_course.settings.manager.class%'
-#        arguments:
-#            - '@chamilo_course.registry.settings_schema'
-#            - '@sylius.registry.settings_resolver'
-#            - '@doctrine.orm.entity_manager'
-#            - '@chamilo_course.repository.parameter'
-#            - '@sylius.factory.settings'
-#            - '@event_dispatcher'
-    chamilo_course.settings.manager:
-        class: '%chamilo_course.settings.manager.class%'
-        public: true
-        arguments:
-            - '@sylius.registry.settings_schema'
-            - '@sylius.registry.settings_resolver'
-            - '@doctrine.orm.entity_manager'
-            - '@chamilo_course.repository.parameter'
-            - '@sylius.factory.settings'
-            - '@event_dispatcher'

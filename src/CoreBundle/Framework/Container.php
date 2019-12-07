@@ -263,7 +263,7 @@ class Container
      */
     public static function getCourseSettingsManager()
     {
-        return self::$container->get('chamilo_course.settings.manager');
+        return self::$container->get('Chamilo\CourseBundle\Manager\SettingsManager');
     }
 
     /**
@@ -452,7 +452,7 @@ class Container
         self::setUserManager($container->get('fos_user.user_manager'));
         self::setSiteManager($container->get('sonata.page.manager.site'));
 
-        \CourseManager::setCourseSettingsManager($container->get('chamilo_course.settings.manager'));
+        \CourseManager::setCourseSettingsManager($container->get('Chamilo\CourseBundle\Manager\SettingsManager'));
         // Setting course tool chain (in order to create tools to a course)
         \CourseManager::setToolList($container->get(ToolChain::class));
 

@@ -9,7 +9,7 @@ use Symfony\Component\DependencyInjection\Reference;
 
 /**
  * Register all the course settings schemas in the schema registry.
- * Save the configuration names in parameter for the provider.
+ * The services with the tag: chamilo_course.settings_schema.
  */
 class RegisterSchemasPass implements CompilerPassInterface
 {
@@ -18,20 +18,22 @@ class RegisterSchemasPass implements CompilerPassInterface
      */
     public function process(ContainerBuilder $container)
     {
-        if (!$container->hasDefinition('chamilo_course.settings.schema_registry')) {
+        if (!$container->hasDefinition('chamilo_course.registry.settings_schema')) {
             return;
         }
+        $schemaRegistry = $container->getDefinition('chamilo_course.registry.settings_schema');
+        $taggedServicesIds = $container->findTaggedServiceIds('chamilo_course.settings_schema');
 
-        $schemaRegistry = $container->getDefinition('chamilo_course.settings.schema_registry');
+        foreach ($taggedServicesIds as $id => $tags) {
+            foreach ($tags as $attributes) {
+                if (!isset($attributes['alias'])) {
+                    throw new \InvalidArgumentException(
+                        sprintf('Service "%s" must define the "alias" attribute on "sylius.settings_schema" tags.', $id)
+                    );
+                }
 
-        foreach ($container->findTaggedServiceIds('chamilo_course.settings_schema') as $id => $attributes) {
-            if (!array_key_exists('namespace', $attributes[0])) {
-                throw new \InvalidArgumentException(sprintf('Service "%s" must define the "namespace" attribute on "chamilo_course.settings_schema" tags.', $id));
+                $schemaRegistry->addMethodCall('register', [$attributes['alias'], new Reference($id)]);
             }
-
-            $namespace = $attributes[0]['namespace'];
-
-            $schemaRegistry->addMethodCall('registerSchema', [$namespace, new Reference($id)]);
         }
     }
 }

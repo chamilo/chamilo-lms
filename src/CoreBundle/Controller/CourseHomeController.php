@@ -401,21 +401,19 @@ class CourseHomeController extends ToolBaseController
     public function updateAction(Request $request, Course $course, $namespace, SettingsManager $manager, SettingsFormFactory $formFactory)
     {
         $schemaAlias = $manager->convertNameSpaceToService($namespace);
+
         $settings = $manager->load($namespace);
         $form = $formFactory->create($schemaAlias);
 
         $form->setData($settings);
+        $form->handleRequest($request);
 
-        if ($form->handleRequest($request)->isValid()) {
+        if ($form->isSubmitted() && $form->isValid()) {
             $messageType = 'success';
             try {
                 $manager->setCourse($course);
-                $manager->saveSettings($namespace, $form->getData());
-                $message = $this->trans(
-                    'sylius.settings.update',
-                    [],
-                    'flashes'
-                );
+                $manager->save($form->getData());
+                $message = $this->trans('Update');
             } catch (ValidatorException $exception) {
                 $message = $this->trans(
                     $exception->getMessage(),
@@ -436,20 +434,13 @@ class CourseHomeController extends ToolBaseController
         $schemas = $manager->getSchemas();
 
         return $this->render(
-            $request->attributes->get(
-                'template',
-                'ChamiloCourseBundle:Settings:update.html.twig'
-            ),
+            '@ChamiloTheme/Course/settings.html.twig',
             [
                 'course' => $course,
                 'schemas' => $schemas,
                 'settings' => $settings,
                 'form' => $form->createView(),
-                'keyword' => '',
-                'search_form' => '',
             ]
         );
     }
-
-
 }

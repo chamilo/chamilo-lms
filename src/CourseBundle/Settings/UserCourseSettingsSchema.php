@@ -3,6 +3,7 @@
 
 namespace Chamilo\CourseBundle\Settings;
 
+use Chamilo\CoreBundle\Form\Type\YesNoType;
 use Chamilo\CoreBundle\Settings\AbstractSettingsSchema;
 use Sylius\Bundle\SettingsBundle\Schema\AbstractSettingsBuilder;
 use Symfony\Component\Form\FormBuilderInterface;
@@ -38,8 +39,8 @@ class UserCourseSettingsSchema extends AbstractSettingsSchema
     public function buildForm(FormBuilderInterface $builder)
     {
         $builder
-            ->add('enabled', 'yes_no')
-            ->add('allow_user_view_user_list', 'yes_no')
+            ->add('enabled', YesNoType::class)
+            ->add('allow_user_view_user_list', YesNoType::class)
         ;
     }
 }

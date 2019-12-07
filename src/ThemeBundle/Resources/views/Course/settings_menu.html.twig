@@ -1,0 +1,13 @@
+<div class="list-group">
+{% set current_namespace = app.request.get('namespace') %}
+{% for namespace in schemas|keys %}
+    {% set namespace = namespace | replace({'chamilo_course.settings.' : ''}) %}
+    <a
+        class = "list-group-item list-group-item-action {% if (current_namespace ==  namespace)  %} active {% endif %} "
+        href="{{ path('chamilo_core_course_settings', { 'namespace': namespace, 'cid' : course.id }) }}"
+    >
+        <img src="{{ asset('img/icons/32/' ~ namespace ~'.png') }}" />
+        {{ namespace | capitalize | trans }}
+    </a>
+{% endfor %}
+</div>

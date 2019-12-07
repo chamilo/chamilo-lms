@@ -36,6 +36,7 @@ final class CDocumentRepository extends ResourceRepository implements ResourceRe
             ->setAllowNodeCreation(true)
             ->setAllowResourceCreation(true)
             ->setAllowResourceUpload(true)
+            ->setAllowDownloadAll(true)
         ;
 
         return $settings;

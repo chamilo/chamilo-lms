@@ -13,6 +13,7 @@ class ResourceSettings
     public $allowResourceUpload;
     /** @var bool */
     public $allowResourceEdit;
+    public $allowDownloadAll;
 
     public function __construct()
     {
@@ -20,6 +21,7 @@ class ResourceSettings
         $this->allowResourceCreation = true;
         $this->allowResourceUpload = true;
         $this->allowResourceEdit = true;
+        $this->allowDownloadAll = false;
     }
 
     public function isAllowNodeCreation(): bool
@@ -69,4 +71,26 @@ class ResourceSettings
 
         return $this;
     }
+
+    /**
+     * @return bool
+     */
+    public function isAllowDownloadAll(): bool
+    {
+        return $this->allowDownloadAll;
+    }
+
+    /**
+     * @param bool $allowDownloadAll
+     *
+     * @return ResourceSettings
+     */
+    public function setAllowDownloadAll(bool $allowDownloadAll): ResourceSettings
+    {
+        $this->allowDownloadAll = $allowDownloadAll;
+
+        return $this;
+    }
+
+
 }

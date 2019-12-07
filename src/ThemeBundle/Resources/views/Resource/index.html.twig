@@ -23,6 +23,12 @@
                 {{ 'Upload' | trans }}
             </a>
             {% endif %}
+            {% if resource_settings.allowDownloadAll %}
+                <a class="btn btn-secondary"
+                   href="{{ url('chamilo_core_resource_download', { 'tool': tool, 'type': type, 'cid': course.id, 'sid': session.id,  'id': id }) }}">
+                    {{ 'Download all' | trans }}
+                </a>
+            {% endif %}
         </div>
     {% endif %}
 

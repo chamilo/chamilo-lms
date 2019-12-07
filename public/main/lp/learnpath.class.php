@@ -6623,7 +6623,6 @@ class learnpath
         // Creating LP folder
         $documentId = null;
         if ($folder) {
-            $filepath = api_get_path(SYS_COURSE_PATH).$course['path'].'/document';
             $folderData = create_unexisting_directory(
                 $course,
                 $creatorId,
@@ -6641,7 +6640,7 @@ class learnpath
             $documentId = $folderData->getIid();
             $dir = $dir.'/';
             if ($folder) {
-                $filepath = api_get_path(SYS_COURSE_PATH).$course['path'].'/document'.$dir;
+               // $filepath = api_get_path(SYS_COURSE_PATH).$course['path'].'/document'.$dir;
             }
         }
 

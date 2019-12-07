@@ -581,19 +581,19 @@ class DocumentManager
                     visibility,
                     n.updated_at,
                     n.created_at,
-                    n.creator_id                                     
+                    n.creator_id
                 FROM resource_node AS n
                 INNER JOIN $tblDocument AS docs
                 ON (docs.resource_node_id = n.id)
                 INNER JOIN resource_link l
-                ON (l.resource_node_id = n.id)                
+                ON (l.resource_node_id = n.id)
                 WHERE
-                    docs.c_id = {$courseInfo['real_id']} AND                    
+                    docs.c_id = {$courseInfo['real_id']} AND
                     docs.path LIKE '".Database::escape_string($path.$addedSlash.'%')."' AND
                     docs.path NOT LIKE '".Database::escape_string($path.$addedSlash.'%/%')."' AND
                     docs.path NOT LIKE '%_DELETED_%' AND
                     l.visibility NOT IN ('".ResourceLink::VISIBILITY_DELETED."')
-                    $sharedCondition               
+                    $sharedCondition
                 ";
         //$userGroupFilter AND
         //$conditionSession
@@ -758,13 +758,13 @@ class DocumentManager
                     ON (docs.resource_node_id = n.id)
                     INNER JOIN resource_link l
                     ON (l.resource_node_id = n.id)
-                    WHERE                      
+                    WHERE
                         docs.c_id = $courseId AND
                         docs.filetype = 'folder' AND
                         $groupCondition AND
                         docs.path NOT LIKE '%shared_folder%' AND
                         docs.path NOT LIKE '%_DELETED_%' AND
-                        l.visibility NOT IN ('".ResourceLink::VISIBILITY_DELETED."')                           
+                        l.visibility NOT IN ('".ResourceLink::VISIBILITY_DELETED."')
                         $condition_session ";
 
             if ($groupIid != 0) {
@@ -822,11 +822,11 @@ class DocumentManager
                     INNER JOIN resource_link l
                     ON (l.resource_node_id = n.id)
                     WHERE
-                        $fileType                        
+                        $fileType
                         $groupCondition AND
                         $visibilityCondition
                         $show_users_condition
-                        $condition_session AND                        
+                        $condition_session AND
                         docs.c_id = $courseId ";
             $result = Database::query($sql);
             $visibleFolders = [];
@@ -845,11 +845,11 @@ class DocumentManager
                     ON (docs.resource_node_id = n.id)
                     INNER JOIN resource_link l
                     ON (l.resource_node_id = n.id)
-                    WHERE                        
-                        docs.filetype = 'folder' AND                        
-                        $groupCondition AND                        
-                        l.visibility IN ('".ResourceLink::VISIBILITY_PENDING."') 
-                        $condition_session AND                        
+                    WHERE
+                        docs.filetype = 'folder' AND
+                        $groupCondition AND
+                        l.visibility IN ('".ResourceLink::VISIBILITY_PENDING."')
+                        $condition_session AND
                         docs.c_id = $courseId ";
             $result = Database::query($sql);
             $invisibleFolders = [];
@@ -861,12 +861,12 @@ class DocumentManager
                         ON (docs.resource_node_id = n.id)
                         INNER JOIN resource_link l
                         ON (l.resource_node_id = n.id)
-                        WHERE                            
+                        WHERE
                             docs.path LIKE '".Database::escape_string($row['path'].'/%')."' AND
-                            docs.filetype = 'folder' AND                            
+                            docs.filetype = 'folder' AND
                             $groupCondition AND
-                            l.visibility NOT IN ('".ResourceLink::VISIBILITY_DELETED."') 
-                            $condition_session AND                            
+                            l.visibility NOT IN ('".ResourceLink::VISIBILITY_DELETED."')
+                            $condition_session AND
                             docs.c_id = $courseId ";
                 $folder_in_invisible_result = Database::query($sql);
                 while ($folders_in_invisible_folder = Database::fetch_array($folder_in_invisible_result, 'ASSOC')) {
@@ -1380,7 +1380,7 @@ class DocumentManager
         $sql = "SELECT iid
                 FROM $docTable d
         		WHERE
-        		    d.c_id  = $course_id AND 
+        		    d.c_id  = $course_id AND
         		    $condition AND
         			filetype = '$file_type' AND
         			locate(concat(path,'/'), '$doc_path')=1
@@ -1491,14 +1491,7 @@ class DocumentManager
             $repo = $em->getRepository('ChamiloCourseBundle:CDocument');
             /** @var CDocument $document */
             $document = $repo->find($doc_id);
-            /*
-            if ($document->isVisible()) {
-                return true;
-            }
-
-            return false;*/
-
-            $link = $document->getCourseSessionResourceLink();
+            $link = $document->getCourseSessionResourceLink($course_info['entity']);
             if ($link && $link->getVisibility() == ResourceLink::VISIBILITY_PUBLISHED) {
                 return true;
             }
@@ -1838,7 +1831,7 @@ class DocumentManager
     {
         $tbl_document = Database::get_course_table(TABLE_DOCUMENT);
         $course_id = api_get_course_int_id();
-        $sql = "SELECT id FROM $tbl_document 
+        $sql = "SELECT id FROM $tbl_document
                 WHERE c_id = $course_id AND path='/certificates' ";
         $rs = Database::query($sql);
         $row = Database::fetch_array($rs);
@@ -2783,7 +2776,7 @@ class DocumentManager
                 features: [\'playpause\'],
                 audioWidth: 30,
                 audioHeight: 30,
-                success: function(mediaElement, originalNode, instance) {                
+                success: function(mediaElement, originalNode, instance) {
                 }
             });';
 
@@ -2961,11 +2954,9 @@ class DocumentManager
                 INNER JOIN $tbl_doc AS docs
                 ON (docs.resource_node_id = n.id)
                 INNER JOIN resource_link l
-                ON (l.resource_node_id = n.id)    
-                WHERE                    
-                    docs.path NOT LIKE '%_DELETED_%' AND                    
-                    docs.c_id = {$course_info['real_id']} AND
-                    l.visibility NOT IN ('".ResourceLink::VISIBILITY_DELETED."')                    
+                ON (l.resource_node_id = n.id)
+                WHERE
+                    l.visibility NOT IN ('".ResourceLink::VISIBILITY_DELETED."')
                     $folderCondition
                     $levelCondition
                     $add_folder_filter
@@ -4431,11 +4422,11 @@ class DocumentManager
             }
             $folder_sql = implode("','", $escaped_folders);
 
-            $sql = "SELECT path, title 
+            $sql = "SELECT path, title
                     FROM $doc_table
-                    WHERE 
-                        filetype = 'folder' AND 
-                        c_id = $course_id AND 
+                    WHERE
+                        filetype = 'folder' AND
+                        c_id = $course_id AND
                         path IN ('".$folder_sql."')";
             $res = Database::query($sql);
             $folder_titles = [];
@@ -5671,8 +5662,8 @@ This folder contains all sessions that have been opened in the chat. Although th
 
         // get invisible folders
         $sql = "SELECT DISTINCT d.id, path
-                FROM $documentTable d 
-                WHERE                   
+                FROM $documentTable d
+                WHERE
                     $conditionSession AND
                     d.c_id = $courseId ";
 
@@ -5738,8 +5729,8 @@ This folder contains all sessions that have been opened in the chat. Although th
                 $new_path = Database::escape_string($new_path);
                 $query = "UPDATE $dbTable SET
                             path = CONCAT('".$new_path."', SUBSTRING(path, LENGTH('".$old_path."')+1) )
-                          WHERE 
-                                c_id = $course_id AND 
+                          WHERE
+                                c_id = $course_id AND
                                 (path LIKE BINARY '".$old_path."' OR path LIKE BINARY '".$old_path."/%')";
                 Database::query($query);
                 break;
@@ -5868,12 +5859,12 @@ This folder contains all sessions that have been opened in the chat. Although th
         }
 
         if (!empty($courseId) && !empty($path)) {
-            $sql = "SELECT id FROM $table 
-                    WHERE 
-                        c_id = $courseId AND 
-                        path LIKE BINARY '$path' AND 
-                        comment = '$url' AND 
-                        filetype = 'link' 
+            $sql = "SELECT id FROM $table
+                    WHERE
+                        c_id = $courseId AND
+                        path LIKE BINARY '$path' AND
+                        comment = '$url' AND
+                        filetype = 'link'
                     LIMIT 1";
             $result = Database::query($sql);
             if ($result && Database::num_rows($result)) {
@@ -5968,10 +5959,10 @@ This folder contains all sessions that have been opened in the chat. Although th
                 ON (
                     docs.c_id = c.id
                 )
-                WHERE                                
-                    last.tool = '".TOOL_DOCUMENT."' AND   
+                WHERE
+                    last.tool = '".TOOL_DOCUMENT."' AND
                     last.insert_user_id = $userId AND
-                    docs.path NOT LIKE '%_DELETED_%'                     
+                    docs.path NOT LIKE '%_DELETED_%'
                 ORDER BY c.directory, docs.path
                 ";
         $result = Database::query($sql);

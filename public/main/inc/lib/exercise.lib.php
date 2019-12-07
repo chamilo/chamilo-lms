@@ -1806,7 +1806,7 @@ HOTSPOT;
             return [];
         }
 
-        $documentPath = api_get_path(SYS_COURSE_PATH).$courseInfo['path'].'/document';
+        //$documentPath = api_get_path(SYS_COURSE_PATH).$courseInfo['path'].'/document';
 
         $course_id = $courseInfo['real_id'];
         $sessionId = api_get_session_id();
@@ -1823,7 +1823,6 @@ HOTSPOT;
         $TBL_GROUP_REL_USER = Database::get_course_table(TABLE_GROUP_USER);
         $TBL_GROUP = Database::get_course_table(TABLE_GROUP);
         $TBL_TRACK_EXERCICES = Database::get_main_table(TABLE_STATISTIC_TRACK_E_EXERCISES);
-        $TBL_TRACK_HOTPOTATOES = Database::get_main_table(TABLE_STATISTIC_TRACK_E_HOTPOTATOES);
         $TBL_TRACK_ATTEMPT_RECORDING = Database::get_main_table(TABLE_STATISTIC_TRACK_E_ATTEMPT_RECORDING);
 
         $session_id_and = '';
@@ -1836,12 +1835,6 @@ HOTSPOT;
         $exercise_where = '';
         if (!empty($exercise_id)) {
             $exercise_where .= ' AND te.exe_exo_id = '.$exercise_id.'  ';
-        }
-
-        $hotpotatoe_where = '';
-        if (!empty($_GET['path'])) {
-            $hotpotatoe_path = Database::escape_string($_GET['path']);
-            $hotpotatoe_where .= ' AND exe_name = "'.$hotpotatoe_path.'"  ';
         }
 
         // sql for chamilo-type tests for teacher / tutor view
@@ -2002,33 +1995,6 @@ HOTSPOT;
                     $exercise_where
                     $extra_where_conditions
                 ";
-
-            // sql for hotpotatoes tests for teacher / tutor view
-            if ($get_count) {
-                $hpsql_select = ' SELECT count(username) ';
-            } else {
-                $hpsql_select = " SELECT
-                    $first_and_last_name ,
-                    username,
-                    official_code,
-                    tth.exe_name,
-                    tth.score ,
-                    tth.max_score,
-                    tth.exe_date";
-            }
-
-            $hpsql = " $hpsql_select
-                FROM
-                    $TBL_TRACK_HOTPOTATOES tth,
-                    $TBL_USER user
-                    $sqlFromOption
-                WHERE
-                    user.user_id=tth.exe_user_id
-                    AND tth.c_id = $course_id
-                    $hotpotatoe_where
-                    $sqlWhereOption
-                    AND user.status NOT IN (".api_get_users_status_ignored_in_reports('string').")
-                ORDER BY tth.c_id ASC, tth.exe_date DESC ";
         }
 
         if (empty($sql)) {
@@ -2060,532 +2026,477 @@ HOTSPOT;
         }
 
         $listInfo = [];
-        // Simple exercises
-        if (empty($hotpotatoe_where)) {
-            $column = !empty($column) ? Database::escape_string($column) : null;
-            $from = (int) $from;
-            $number_of_items = (int) $number_of_items;
+        $column = !empty($column) ? Database::escape_string($column) : null;
+        $from = (int) $from;
+        $number_of_items = (int) $number_of_items;
 
-            if (!empty($column)) {
-                $sql .= " ORDER BY $column $direction ";
+        if (!empty($column)) {
+            $sql .= " ORDER BY $column $direction ";
+        }
+        $sql .= " LIMIT $from, $number_of_items";
+
+        $results = [];
+        $resx = Database::query($sql);
+        while ($rowx = Database::fetch_array($resx, 'ASSOC')) {
+            $results[] = $rowx;
+        }
+
+        $group_list = GroupManager::get_group_list(null, $courseInfo);
+        $clean_group_list = [];
+        if (!empty($group_list)) {
+            foreach ($group_list as $group) {
+                $clean_group_list[$group['id']] = $group['name'];
             }
-            $sql .= " LIMIT $from, $number_of_items";
+        }
 
-            $results = [];
-            $resx = Database::query($sql);
-            while ($rowx = Database::fetch_array($resx, 'ASSOC')) {
-                $results[] = $rowx;
+        $lp_list_obj = new LearnpathList(api_get_user_id());
+        $lp_list = $lp_list_obj->get_flat_list();
+        $oldIds = array_column($lp_list, 'lp_old_id', 'iid');
+
+        if (is_array($results)) {
+            $users_array_id = [];
+            $from_gradebook = false;
+            if (isset($_GET['gradebook']) && $_GET['gradebook'] == 'view') {
+                $from_gradebook = true;
             }
+            $sizeof = count($results);
+            $locked = api_resource_is_locked_by_gradebook(
+                $exercise_id,
+                LINK_EXERCISE
+            );
 
-            $group_list = GroupManager::get_group_list(null, $courseInfo);
-            $clean_group_list = [];
-            if (!empty($group_list)) {
-                foreach ($group_list as $group) {
-                    $clean_group_list[$group['id']] = $group['name'];
-                }
-            }
-
-            $lp_list_obj = new LearnpathList(api_get_user_id());
-            $lp_list = $lp_list_obj->get_flat_list();
-            $oldIds = array_column($lp_list, 'lp_old_id', 'iid');
-
-            if (is_array($results)) {
-                $users_array_id = [];
-                $from_gradebook = false;
-                if (isset($_GET['gradebook']) && $_GET['gradebook'] == 'view') {
-                    $from_gradebook = true;
-                }
-                $sizeof = count($results);
-                $locked = api_resource_is_locked_by_gradebook(
-                    $exercise_id,
-                    LINK_EXERCISE
-                );
-
-                $timeNow = strtotime(api_get_utc_datetime());
-                // Looping results
-                for ($i = 0; $i < $sizeof; $i++) {
-                    $revised = $results[$i]['revised'];
-                    if ($results[$i]['completion_status'] == 'incomplete') {
-                        // If the exercise was incomplete, we need to determine
-                        // if it is still into the time allowed, or if its
-                        // allowed time has expired and it can be closed
-                        // (it's "unclosed")
-                        $minutes = $results[$i]['expired_time'];
-                        if ($minutes == 0) {
-                            // There's no time limit, so obviously the attempt
-                            // can still be "ongoing", but the teacher should
-                            // be able to choose to close it, so mark it as
-                            // "unclosed" instead of "ongoing"
-                            $revised = 2;
+            $timeNow = strtotime(api_get_utc_datetime());
+            // Looping results
+            for ($i = 0; $i < $sizeof; $i++) {
+                $revised = $results[$i]['revised'];
+                if ($results[$i]['completion_status'] == 'incomplete') {
+                    // If the exercise was incomplete, we need to determine
+                    // if it is still into the time allowed, or if its
+                    // allowed time has expired and it can be closed
+                    // (it's "unclosed")
+                    $minutes = $results[$i]['expired_time'];
+                    if ($minutes == 0) {
+                        // There's no time limit, so obviously the attempt
+                        // can still be "ongoing", but the teacher should
+                        // be able to choose to close it, so mark it as
+                        // "unclosed" instead of "ongoing"
+                        $revised = 2;
+                    } else {
+                        $allowedSeconds = $minutes * 60;
+                        $timeAttemptStarted = strtotime($results[$i]['start_date']);
+                        $secondsSinceStart = $timeNow - $timeAttemptStarted;
+                        if ($secondsSinceStart > $allowedSeconds) {
+                            $revised = 2; // mark as "unclosed"
                         } else {
-                            $allowedSeconds = $minutes * 60;
-                            $timeAttemptStarted = strtotime($results[$i]['start_date']);
-                            $secondsSinceStart = $timeNow - $timeAttemptStarted;
-                            if ($secondsSinceStart > $allowedSeconds) {
-                                $revised = 2; // mark as "unclosed"
-                            } else {
-                                $revised = 3; // mark as "ongoing"
+                            $revised = 3; // mark as "ongoing"
+                        }
+                    }
+                }
+
+                if ($from_gradebook && ($is_allowedToEdit)) {
+                    if (in_array(
+                        $results[$i]['username'].$results[$i]['firstname'].$results[$i]['lastname'],
+                        $users_array_id
+                    )) {
+                        continue;
+                    }
+                    $users_array_id[] = $results[$i]['username'].$results[$i]['firstname'].$results[$i]['lastname'];
+                }
+
+                $lp_obj = isset($results[$i]['orig_lp_id']) && isset($lp_list[$results[$i]['orig_lp_id']]) ? $lp_list[$results[$i]['orig_lp_id']] : null;
+                if (empty($lp_obj)) {
+                    // Try to get the old id (id instead of iid)
+                    $lpNewId = isset($results[$i]['orig_lp_id']) && isset($oldIds[$results[$i]['orig_lp_id']]) ? $oldIds[$results[$i]['orig_lp_id']] : null;
+                    if ($lpNewId) {
+                        $lp_obj = isset($lp_list[$lpNewId]) ? $lp_list[$lpNewId] : null;
+                    }
+                }
+                $lp_name = null;
+                if ($lp_obj) {
+                    $url = api_get_path(WEB_CODE_PATH).'lp/lp_controller.php?'.api_get_cidreq().'&action=view&lp_id='.$results[$i]['orig_lp_id'];
+                    $lp_name = Display::url(
+                        $lp_obj['lp_name'],
+                        $url,
+                        ['target' => '_blank']
+                    );
+                }
+
+                // Add all groups by user
+                $group_name_list = '';
+                if ($is_empty_sql_inner_join_tbl_user) {
+                    $group_list = GroupManager::get_group_ids(
+                        api_get_course_int_id(),
+                        $results[$i]['user_id']
+                    );
+
+                    foreach ($group_list as $id) {
+                        if (isset($clean_group_list[$id])) {
+                            $group_name_list .= $clean_group_list[$id].'<br/>';
+                        }
+                    }
+                    $results[$i]['group_name'] = $group_name_list;
+                }
+
+                $results[$i]['exe_duration'] = !empty($results[$i]['exe_duration']) ? round($results[$i]['exe_duration'] / 60) : 0;
+                $id = $results[$i]['exe_id'];
+                $dt = api_convert_and_format_date($results[$i]['max_score']);
+
+                // we filter the results if we have the permission to
+                $result_disabled = 0;
+                if (isset($results[$i]['results_disabled'])) {
+                    $result_disabled = (int) $results[$i]['results_disabled'];
+                }
+                if ($result_disabled == 0) {
+                    $my_res = $results[$i]['score'];
+                    $my_total = $results[$i]['max_score'];
+                    $results[$i]['start_date'] = api_get_local_time($results[$i]['start_date']);
+                    $results[$i]['exe_date'] = api_get_local_time($results[$i]['exe_date']);
+
+                    if (!$results[$i]['propagate_neg'] && $my_res < 0) {
+                        $my_res = 0;
+                    }
+
+                    $score = self::show_score(
+                        $my_res,
+                        $my_total,
+                        true,
+                        true,
+                        false,
+                        false,
+                        $decimalSeparator,
+                        $thousandSeparator,
+                        $roundValues
+                    );
+
+                    $actions = '<div class="pull-right">';
+                    if ($is_allowedToEdit) {
+                        if (isset($teacher_id_list)) {
+                            if (in_array(
+                                $results[$i]['exe_user_id'],
+                                $teacher_id_list
+                            )) {
+                                $actions .= Display::return_icon('teacher.png', get_lang('Trainer'));
+                            }
+                        }
+                        $revisedLabel = '';
+                        switch ($revised) {
+                            case 0:
+                                $actions .= "<a href='exercise_show.php?".api_get_cidreq()."&action=qualify&id=$id'>".
+                                    Display:: return_icon(
+                                        'quiz.png',
+                                        get_lang('Grade activity')
+                                    );
+                                $actions .= '</a>';
+                                $revisedLabel = Display::label(
+                                    get_lang('Not validated'),
+                                    'info'
+                                );
+                                break;
+                            case 1:
+                                $actions .= "<a href='exercise_show.php?".api_get_cidreq()."&action=edit&id=$id'>".
+                                    Display:: return_icon(
+                                        'edit.png',
+                                        get_lang('Edit'),
+                                        [],
+                                        ICON_SIZE_SMALL
+                                    );
+                                $actions .= '</a>';
+                                $revisedLabel = Display::label(
+                                    get_lang('Validated'),
+                                    'success'
+                                );
+                                break;
+                            case 2: //finished but not marked as such
+                                $actions .= '<a href="exercise_report.php?'
+                                    .api_get_cidreq()
+                                    .'&exerciseId='
+                                    .$exercise_id
+                                    .'&a=close&id='
+                                    .$id
+                                    .'">'.
+                                    Display:: return_icon(
+                                        'lock.png',
+                                        get_lang('Mark attempt as closed'),
+                                        [],
+                                        ICON_SIZE_SMALL
+                                    );
+                                $actions .= '</a>';
+                                $revisedLabel = Display::label(
+                                    get_lang('Unclosed'),
+                                    'warning'
+                                );
+                                break;
+                            case 3: //still ongoing
+                                $actions .= Display:: return_icon(
+                                    'clock.png',
+                                    get_lang('Attempt still going on. Please wait.'),
+                                    [],
+                                    ICON_SIZE_SMALL
+                                );
+                                $actions .= '';
+                                $revisedLabel = Display::label(
+                                    get_lang('Ongoing'),
+                                    'danger'
+                                );
+                                break;
+                        }
+
+                        if ($filter == 2) {
+                            $actions .= ' <a href="exercise_history.php?'.api_get_cidreq().'&exe_id='.$id.'">'.
+                                Display:: return_icon(
+                                    'history.png',
+                                    get_lang('View changes history')
+                                ).'</a>';
+                        }
+
+                        // Admin can always delete the attempt
+                        if (($locked == false || api_is_platform_admin()) && !api_is_student_boss()) {
+                            $ip = Tracking::get_ip_from_user_event(
+                                $results[$i]['exe_user_id'],
+                                api_get_utc_datetime(),
+                                false
+                            );
+                            $actions .= '<a href="http://www.whatsmyip.org/ip-geo-location/?ip='.$ip.'" target="_blank">'
+                                .Display::return_icon('info.png', $ip)
+                                .'</a>';
+
+                            $recalculateUrl = api_get_path(WEB_CODE_PATH).'exercise/recalculate.php?'.
+                                api_get_cidreq().'&'.
+                                http_build_query([
+                                    'id' => $id,
+                                    'exercise' => $exercise_id,
+                                    'user' => $results[$i]['exe_user_id'],
+                                ]);
+                            $actions .= Display::url(
+                                Display::return_icon('reload.png', get_lang('Recalculate results')),
+                                $recalculateUrl,
+                                [
+                                    'data-exercise' => $exercise_id,
+                                    'data-user' => $results[$i]['exe_user_id'],
+                                    'data-id' => $id,
+                                    'class' => 'exercise-recalculate',
+                                ]
+                            );
+
+                            $filterByUser = isset($_GET['filter_by_user']) ? (int) $_GET['filter_by_user'] : 0;
+                            $delete_link = '<a href="exercise_report.php?'.api_get_cidreq().'&filter_by_user='.$filterByUser.'&filter='.$filter.'&exerciseId='.$exercise_id.'&delete=delete&did='.$id.'"
+                            onclick="javascript:if(!confirm(\''.sprintf(
+                                addslashes(get_lang('Delete attempt?')),
+                                $results[$i]['username'],
+                                $dt
+                            ).'\')) return false;">';
+                            $delete_link .= Display::return_icon(
+                                'delete.png',
+                                    addslashes(get_lang('Delete'))
+                            ).'</a>';
+
+                            if (api_is_drh() && !api_is_platform_admin()) {
+                                $delete_link = null;
+                            }
+                            if (api_is_session_admin()) {
+                                $delete_link = '';
+                            }
+                            if ($revised == 3) {
+                                $delete_link = null;
+                            }
+                            $actions .= $delete_link;
+                        }
+                    } else {
+                        $attempt_url = api_get_path(WEB_CODE_PATH).'exercise/result.php?'.api_get_cidreq().'&id='.$results[$i]['exe_id'].'&id_session='.$sessionId;
+                        $attempt_link = Display::url(
+                            get_lang('Show'),
+                            $attempt_url,
+                            [
+                                'class' => 'ajax btn btn-default',
+                                'data-title' => get_lang('Show'),
+                            ]
+                        );
+                        $actions .= $attempt_link;
+                    }
+                    $actions .= '</div>';
+
+                    if (!empty($userExtraFieldsToAdd)) {
+                        foreach ($userExtraFieldsToAdd as $variable) {
+                            $extraFieldValue = new ExtraFieldValue('user');
+                            $values = $extraFieldValue->get_values_by_handler_and_field_variable(
+                                $results[$i]['user_id'],
+                                $variable
+                            );
+                            if (isset($values['value'])) {
+                                $results[$i][$variable] = $values['value'];
                             }
                         }
                     }
 
-                    if ($from_gradebook && ($is_allowedToEdit)) {
-                        if (in_array(
-                            $results[$i]['username'].$results[$i]['firstname'].$results[$i]['lastname'],
-                            $users_array_id
-                        )) {
-                            continue;
-                        }
-                        $users_array_id[] = $results[$i]['username'].$results[$i]['firstname'].$results[$i]['lastname'];
-                    }
-
-                    $lp_obj = isset($results[$i]['orig_lp_id']) && isset($lp_list[$results[$i]['orig_lp_id']]) ? $lp_list[$results[$i]['orig_lp_id']] : null;
-                    if (empty($lp_obj)) {
-                        // Try to get the old id (id instead of iid)
-                        $lpNewId = isset($results[$i]['orig_lp_id']) && isset($oldIds[$results[$i]['orig_lp_id']]) ? $oldIds[$results[$i]['orig_lp_id']] : null;
-                        if ($lpNewId) {
-                            $lp_obj = isset($lp_list[$lpNewId]) ? $lp_list[$lpNewId] : null;
-                        }
-                    }
-                    $lp_name = null;
-                    if ($lp_obj) {
-                        $url = api_get_path(WEB_CODE_PATH).'lp/lp_controller.php?'.api_get_cidreq().'&action=view&lp_id='.$results[$i]['orig_lp_id'];
-                        $lp_name = Display::url(
-                            $lp_obj['lp_name'],
-                            $url,
-                            ['target' => '_blank']
-                        );
-                    }
-
-                    // Add all groups by user
-                    $group_name_list = '';
-                    if ($is_empty_sql_inner_join_tbl_user) {
-                        $group_list = GroupManager::get_group_ids(
-                            api_get_course_int_id(),
-                            $results[$i]['user_id']
-                        );
-
-                        foreach ($group_list as $id) {
-                            if (isset($clean_group_list[$id])) {
-                                $group_name_list .= $clean_group_list[$id].'<br/>';
+                    $exeId = $results[$i]['exe_id'];
+                    $results[$i]['id'] = $exeId;
+                    $category_list = [];
+                    if ($is_allowedToEdit) {
+                        $sessionName = '';
+                        $sessionStartAccessDate = '';
+                        if (!empty($results[$i]['session_id'])) {
+                            $sessionInfo = api_get_session_info($results[$i]['session_id']);
+                            if (!empty($sessionInfo)) {
+                                $sessionName = $sessionInfo['name'];
+                                $sessionStartAccessDate = api_get_local_time($sessionInfo['access_start_date']);
                             }
                         }
-                        $results[$i]['group_name'] = $group_name_list;
-                    }
 
-                    $results[$i]['exe_duration'] = !empty($results[$i]['exe_duration']) ? round($results[$i]['exe_duration'] / 60) : 0;
-                    $id = $results[$i]['exe_id'];
-                    $dt = api_convert_and_format_date($results[$i]['max_score']);
+                        $objExercise = new Exercise($course_id);
+                        if ($showExerciseCategories) {
+                            // Getting attempt info
+                            $exercise_stat_info = $objExercise->get_stat_track_exercise_info_by_exe_id($exeId);
+                            if (!empty($exercise_stat_info['data_tracking'])) {
+                                $question_list = explode(',', $exercise_stat_info['data_tracking']);
+                                if (!empty($question_list)) {
+                                    foreach ($question_list as $questionId) {
+                                        $objQuestionTmp = Question::read($questionId, $objExercise->course);
+                                        // We're inside *one* question. Go through each possible answer for this question
+                                        $result = $objExercise->manage_answer(
+                                            $exeId,
+                                            $questionId,
+                                            null,
+                                            'exercise_result',
+                                            false,
+                                            false,
+                                            true,
+                                            false,
+                                            $objExercise->selectPropagateNeg(),
+                                            null,
+                                            true
+                                        );
 
-                    // we filter the results if we have the permission to
-                    $result_disabled = 0;
-                    if (isset($results[$i]['results_disabled'])) {
-                        $result_disabled = (int) $results[$i]['results_disabled'];
-                    }
-                    if ($result_disabled == 0) {
-                        $my_res = $results[$i]['score'];
-                        $my_total = $results[$i]['max_score'];
-                        $results[$i]['start_date'] = api_get_local_time($results[$i]['start_date']);
-                        $results[$i]['exe_date'] = api_get_local_time($results[$i]['exe_date']);
+                                        $my_total_score = $result['score'];
+                                        $my_total_weight = $result['weight'];
 
-                        if (!$results[$i]['propagate_neg'] && $my_res < 0) {
-                            $my_res = 0;
+                                        // Category report
+                                        $category_was_added_for_this_test = false;
+                                        if (isset($objQuestionTmp->category) && !empty($objQuestionTmp->category)) {
+                                            if (!isset($category_list[$objQuestionTmp->category]['score'])) {
+                                                $category_list[$objQuestionTmp->category]['score'] = 0;
+                                            }
+                                            if (!isset($category_list[$objQuestionTmp->category]['total'])) {
+                                                $category_list[$objQuestionTmp->category]['total'] = 0;
+                                            }
+                                            $category_list[$objQuestionTmp->category]['score'] += $my_total_score;
+                                            $category_list[$objQuestionTmp->category]['total'] += $my_total_weight;
+                                            $category_was_added_for_this_test = true;
+                                        }
+
+                                        if (isset($objQuestionTmp->category_list) &&
+                                            !empty($objQuestionTmp->category_list)
+                                        ) {
+                                            foreach ($objQuestionTmp->category_list as $category_id) {
+                                                $category_list[$category_id]['score'] += $my_total_score;
+                                                $category_list[$category_id]['total'] += $my_total_weight;
+                                                $category_was_added_for_this_test = true;
+                                            }
+                                        }
+
+                                        // No category for this question!
+                                        if ($category_was_added_for_this_test == false) {
+                                            if (!isset($category_list['none']['score'])) {
+                                                $category_list['none']['score'] = 0;
+                                            }
+                                            if (!isset($category_list['none']['total'])) {
+                                                $category_list['none']['total'] = 0;
+                                            }
+
+                                            $category_list['none']['score'] += $my_total_score;
+                                            $category_list['none']['total'] += $my_total_weight;
+                                        }
+                                    }
+                                }
+                            }
                         }
 
-                        $score = self::show_score(
+                        foreach ($category_list as $categoryId => $result) {
+                            $scoreToDisplay = self::show_score(
+                                $result['score'],
+                                $result['total'],
+                                true,
+                                true,
+                                false,
+                                false,
+                                $decimalSeparator,
+                                $thousandSeparator,
+                                $roundValues
+                            );
+                            $results[$i]['category_'.$categoryId] = $scoreToDisplay;
+                            $results[$i]['category_'.$categoryId.'_score_percentage'] = self::show_score(
+                                $result['score'],
+                                $result['total'],
+                                true,
+                                true,
+                                true, // $show_only_percentage = false
+                                true, // hide % sign
+                                $decimalSeparator,
+                                $thousandSeparator,
+                                $roundValues
+                            );
+                            $results[$i]['category_'.$categoryId.'_only_score'] = $result['score'];
+                            $results[$i]['category_'.$categoryId.'_total'] = $result['total'];
+                        }
+                        $results[$i]['session'] = $sessionName;
+                        $results[$i]['session_access_start_date'] = $sessionStartAccessDate;
+                        $results[$i]['status'] = $revisedLabel;
+                        $results[$i]['score'] = $score;
+                        $results[$i]['score_percentage'] = self::show_score(
                             $my_res,
                             $my_total,
                             true,
                             true,
-                            false,
-                            false,
+                            true,
+                            true,
                             $decimalSeparator,
                             $thousandSeparator,
                             $roundValues
                         );
 
-                        $actions = '<div class="pull-right">';
-                        if ($is_allowedToEdit) {
-                            if (isset($teacher_id_list)) {
-                                if (in_array(
-                                    $results[$i]['exe_user_id'],
-                                    $teacher_id_list
-                                )) {
-                                    $actions .= Display::return_icon('teacher.png', get_lang('Trainer'));
-                                }
-                            }
-                            $revisedLabel = '';
-                            switch ($revised) {
-                                case 0:
-                                    $actions .= "<a href='exercise_show.php?".api_get_cidreq()."&action=qualify&id=$id'>".
-                                        Display:: return_icon(
-                                            'quiz.png',
-                                            get_lang('Grade activity')
-                                        );
-                                    $actions .= '</a>';
-                                    $revisedLabel = Display::label(
-                                        get_lang('Not validated'),
-                                        'info'
-                                    );
-                                    break;
-                                case 1:
-                                    $actions .= "<a href='exercise_show.php?".api_get_cidreq()."&action=edit&id=$id'>".
-                                        Display:: return_icon(
-                                            'edit.png',
-                                            get_lang('Edit'),
-                                            [],
-                                            ICON_SIZE_SMALL
-                                        );
-                                    $actions .= '</a>';
-                                    $revisedLabel = Display::label(
-                                        get_lang('Validated'),
-                                        'success'
-                                    );
-                                    break;
-                                case 2: //finished but not marked as such
-                                    $actions .= '<a href="exercise_report.php?'
-                                        .api_get_cidreq()
-                                        .'&exerciseId='
-                                        .$exercise_id
-                                        .'&a=close&id='
-                                        .$id
-                                        .'">'.
-                                        Display:: return_icon(
-                                            'lock.png',
-                                            get_lang('Mark attempt as closed'),
-                                            [],
-                                            ICON_SIZE_SMALL
-                                        );
-                                    $actions .= '</a>';
-                                    $revisedLabel = Display::label(
-                                        get_lang('Unclosed'),
-                                        'warning'
-                                    );
-                                    break;
-                                case 3: //still ongoing
-                                    $actions .= Display:: return_icon(
-                                        'clock.png',
-                                        get_lang('Attempt still going on. Please wait.'),
-                                        [],
-                                        ICON_SIZE_SMALL
-                                    );
-                                    $actions .= '';
-                                    $revisedLabel = Display::label(
-                                        get_lang('Ongoing'),
-                                        'danger'
-                                    );
-                                    break;
-                            }
-
-                            if ($filter == 2) {
-                                $actions .= ' <a href="exercise_history.php?'.api_get_cidreq().'&exe_id='.$id.'">'.
-                                    Display:: return_icon(
-                                        'history.png',
-                                        get_lang('View changes history')
-                                    ).'</a>';
-                            }
-
-                            // Admin can always delete the attempt
-                            if (($locked == false || api_is_platform_admin()) && !api_is_student_boss()) {
-                                $ip = Tracking::get_ip_from_user_event(
-                                    $results[$i]['exe_user_id'],
-                                    api_get_utc_datetime(),
-                                    false
-                                );
-                                $actions .= '<a href="http://www.whatsmyip.org/ip-geo-location/?ip='.$ip.'" target="_blank">'
-                                    .Display::return_icon('info.png', $ip)
-                                    .'</a>';
-
-                                $recalculateUrl = api_get_path(WEB_CODE_PATH).'exercise/recalculate.php?'.
-                                    api_get_cidreq().'&'.
-                                    http_build_query([
-                                        'id' => $id,
-                                        'exercise' => $exercise_id,
-                                        'user' => $results[$i]['exe_user_id'],
-                                    ]);
-                                $actions .= Display::url(
-                                    Display::return_icon('reload.png', get_lang('Recalculate results')),
-                                    $recalculateUrl,
-                                    [
-                                        'data-exercise' => $exercise_id,
-                                        'data-user' => $results[$i]['exe_user_id'],
-                                        'data-id' => $id,
-                                        'class' => 'exercise-recalculate',
-                                    ]
-                                );
-
-                                $filterByUser = isset($_GET['filter_by_user']) ? (int) $_GET['filter_by_user'] : 0;
-                                $delete_link = '<a href="exercise_report.php?'.api_get_cidreq().'&filter_by_user='.$filterByUser.'&filter='.$filter.'&exerciseId='.$exercise_id.'&delete=delete&did='.$id.'"
-                                onclick="javascript:if(!confirm(\''.sprintf(
-                                    addslashes(get_lang('Delete attempt?')),
-                                    $results[$i]['username'],
-                                    $dt
-                                ).'\')) return false;">';
-                                $delete_link .= Display::return_icon(
-                                    'delete.png',
-                                        addslashes(get_lang('Delete'))
-                                ).'</a>';
-
-                                if (api_is_drh() && !api_is_platform_admin()) {
-                                    $delete_link = null;
-                                }
-                                if (api_is_session_admin()) {
-                                    $delete_link = '';
-                                }
-                                if ($revised == 3) {
-                                    $delete_link = null;
-                                }
-                                $actions .= $delete_link;
+                        if ($roundValues) {
+                            $whole = floor($my_res); // 1
+                            $fraction = $my_res - $whole; // .25
+                            if ($fraction >= 0.5) {
+                                $onlyScore = ceil($my_res);
+                            } else {
+                                $onlyScore = round($my_res);
                             }
                         } else {
-                            $attempt_url = api_get_path(WEB_CODE_PATH).'exercise/result.php?'.api_get_cidreq().'&id='.$results[$i]['exe_id'].'&id_session='.$sessionId;
-                            $attempt_link = Display::url(
-                                get_lang('Show'),
-                                $attempt_url,
-                                [
-                                    'class' => 'ajax btn btn-default',
-                                    'data-title' => get_lang('Show'),
-                                ]
-                            );
-                            $actions .= $attempt_link;
-                        }
-                        $actions .= '</div>';
-
-                        if (!empty($userExtraFieldsToAdd)) {
-                            foreach ($userExtraFieldsToAdd as $variable) {
-                                $extraFieldValue = new ExtraFieldValue('user');
-                                $values = $extraFieldValue->get_values_by_handler_and_field_variable(
-                                    $results[$i]['user_id'],
-                                    $variable
-                                );
-                                if (isset($values['value'])) {
-                                    $results[$i][$variable] = $values['value'];
-                                }
-                            }
-                        }
-
-                        $exeId = $results[$i]['exe_id'];
-                        $results[$i]['id'] = $exeId;
-                        $category_list = [];
-                        if ($is_allowedToEdit) {
-                            $sessionName = '';
-                            $sessionStartAccessDate = '';
-                            if (!empty($results[$i]['session_id'])) {
-                                $sessionInfo = api_get_session_info($results[$i]['session_id']);
-                                if (!empty($sessionInfo)) {
-                                    $sessionName = $sessionInfo['name'];
-                                    $sessionStartAccessDate = api_get_local_time($sessionInfo['access_start_date']);
-                                }
-                            }
-
-                            $objExercise = new Exercise($course_id);
-                            if ($showExerciseCategories) {
-                                // Getting attempt info
-                                $exercise_stat_info = $objExercise->get_stat_track_exercise_info_by_exe_id($exeId);
-                                if (!empty($exercise_stat_info['data_tracking'])) {
-                                    $question_list = explode(',', $exercise_stat_info['data_tracking']);
-                                    if (!empty($question_list)) {
-                                        foreach ($question_list as $questionId) {
-                                            $objQuestionTmp = Question::read($questionId, $objExercise->course);
-                                            // We're inside *one* question. Go through each possible answer for this question
-                                            $result = $objExercise->manage_answer(
-                                                $exeId,
-                                                $questionId,
-                                                null,
-                                                'exercise_result',
-                                                false,
-                                                false,
-                                                true,
-                                                false,
-                                                $objExercise->selectPropagateNeg(),
-                                                null,
-                                                true
-                                            );
-
-                                            $my_total_score = $result['score'];
-                                            $my_total_weight = $result['weight'];
-
-                                            // Category report
-                                            $category_was_added_for_this_test = false;
-                                            if (isset($objQuestionTmp->category) && !empty($objQuestionTmp->category)) {
-                                                if (!isset($category_list[$objQuestionTmp->category]['score'])) {
-                                                    $category_list[$objQuestionTmp->category]['score'] = 0;
-                                                }
-                                                if (!isset($category_list[$objQuestionTmp->category]['total'])) {
-                                                    $category_list[$objQuestionTmp->category]['total'] = 0;
-                                                }
-                                                $category_list[$objQuestionTmp->category]['score'] += $my_total_score;
-                                                $category_list[$objQuestionTmp->category]['total'] += $my_total_weight;
-                                                $category_was_added_for_this_test = true;
-                                            }
-
-                                            if (isset($objQuestionTmp->category_list) &&
-                                                !empty($objQuestionTmp->category_list)
-                                            ) {
-                                                foreach ($objQuestionTmp->category_list as $category_id) {
-                                                    $category_list[$category_id]['score'] += $my_total_score;
-                                                    $category_list[$category_id]['total'] += $my_total_weight;
-                                                    $category_was_added_for_this_test = true;
-                                                }
-                                            }
-
-                                            // No category for this question!
-                                            if ($category_was_added_for_this_test == false) {
-                                                if (!isset($category_list['none']['score'])) {
-                                                    $category_list['none']['score'] = 0;
-                                                }
-                                                if (!isset($category_list['none']['total'])) {
-                                                    $category_list['none']['total'] = 0;
-                                                }
-
-                                                $category_list['none']['score'] += $my_total_score;
-                                                $category_list['none']['total'] += $my_total_weight;
-                                            }
-                                        }
-                                    }
-                                }
-                            }
-
-                            foreach ($category_list as $categoryId => $result) {
-                                $scoreToDisplay = self::show_score(
-                                    $result['score'],
-                                    $result['total'],
-                                    true,
-                                    true,
-                                    false,
-                                    false,
-                                    $decimalSeparator,
-                                    $thousandSeparator,
-                                    $roundValues
-                                );
-                                $results[$i]['category_'.$categoryId] = $scoreToDisplay;
-                                $results[$i]['category_'.$categoryId.'_score_percentage'] = self::show_score(
-                                    $result['score'],
-                                    $result['total'],
-                                    true,
-                                    true,
-                                    true, // $show_only_percentage = false
-                                    true, // hide % sign
-                                    $decimalSeparator,
-                                    $thousandSeparator,
-                                    $roundValues
-                                );
-                                $results[$i]['category_'.$categoryId.'_only_score'] = $result['score'];
-                                $results[$i]['category_'.$categoryId.'_total'] = $result['total'];
-                            }
-                            $results[$i]['session'] = $sessionName;
-                            $results[$i]['session_access_start_date'] = $sessionStartAccessDate;
-                            $results[$i]['status'] = $revisedLabel;
-                            $results[$i]['score'] = $score;
-                            $results[$i]['score_percentage'] = self::show_score(
+                            $onlyScore = $scoreDisplay->format_score(
                                 $my_res,
-                                $my_total,
-                                true,
-                                true,
-                                true,
-                                true,
+                                false,
                                 $decimalSeparator,
-                                $thousandSeparator,
-                                $roundValues
+                                $thousandSeparator
                             );
-
-                            if ($roundValues) {
-                                $whole = floor($my_res); // 1
-                                $fraction = $my_res - $whole; // .25
-                                if ($fraction >= 0.5) {
-                                    $onlyScore = ceil($my_res);
-                                } else {
-                                    $onlyScore = round($my_res);
-                                }
-                            } else {
-                                $onlyScore = $scoreDisplay->format_score(
-                                    $my_res,
-                                    false,
-                                    $decimalSeparator,
-                                    $thousandSeparator
-                                );
-                            }
-
-                            $results[$i]['only_score'] = $onlyScore;
-
-                            if ($roundValues) {
-                                $whole = floor($my_total); // 1
-                                $fraction = $my_total - $whole; // .25
-                                if ($fraction >= 0.5) {
-                                    $onlyTotal = ceil($my_total);
-                                } else {
-                                    $onlyTotal = round($my_total);
-                                }
-                            } else {
-                                $onlyTotal = $scoreDisplay->format_score(
-                                    $my_total,
-                                    false,
-                                    $decimalSeparator,
-                                    $thousandSeparator
-                                );
-                            }
-                            $results[$i]['total'] = $onlyTotal;
-                            $results[$i]['lp'] = $lp_name;
-                            $results[$i]['actions'] = $actions;
-                            $listInfo[] = $results[$i];
-                        } else {
-                            $results[$i]['status'] = $revisedLabel;
-                            $results[$i]['score'] = $score;
-                            $results[$i]['actions'] = $actions;
-                            $listInfo[] = $results[$i];
                         }
-                    }
-                }
-            }
-        } else {
-            $hpresults = [];
-            $res = Database::query($hpsql);
-            if ($res !== false) {
-                $i = 0;
-                while ($resA = Database::fetch_array($res, 'NUM')) {
-                    for ($j = 0; $j < 6; $j++) {
-                        $hpresults[$i][$j] = $resA[$j];
-                    }
-                    $i++;
-                }
-            }
 
-            // Print HotPotatoes test results.
-            if (is_array($hpresults)) {
-                for ($i = 0; $i < count($hpresults); $i++) {
-                    $hp_title = GetQuizName($hpresults[$i][3], $documentPath);
-                    if ($hp_title == '') {
-                        $hp_title = basename($hpresults[$i][3]);
-                    }
+                        $results[$i]['only_score'] = $onlyScore;
 
-                    $hp_date = api_get_local_time(
-                        $hpresults[$i][6],
-                        null,
-                        date_default_timezone_get()
-                    );
-                    $hp_result = round(($hpresults[$i][4] / ($hpresults[$i][5] != 0 ? $hpresults[$i][5] : 1)) * 100, 2);
-                    $hp_result .= '% ('.$hpresults[$i][4].' / '.$hpresults[$i][5].')';
-
-                    if ($is_allowedToEdit) {
-                        $listInfo[] = [
-                            $hpresults[$i][0],
-                            $hpresults[$i][1],
-                            $hpresults[$i][2],
-                            '',
-                            $hp_title,
-                            '-',
-                            $hp_date,
-                            $hp_result,
-                            '-',
-                        ];
+                        if ($roundValues) {
+                            $whole = floor($my_total); // 1
+                            $fraction = $my_total - $whole; // .25
+                            if ($fraction >= 0.5) {
+                                $onlyTotal = ceil($my_total);
+                            } else {
+                                $onlyTotal = round($my_total);
+                            }
+                        } else {
+                            $onlyTotal = $scoreDisplay->format_score(
+                                $my_total,
+                                false,
+                                $decimalSeparator,
+                                $thousandSeparator
+                            );
+                        }
+                        $results[$i]['total'] = $onlyTotal;
+                        $results[$i]['lp'] = $lp_name;
+                        $results[$i]['actions'] = $actions;
+                        $listInfo[] = $results[$i];
                     } else {
-                        $listInfo[] = [
-                            $hp_title,
-                            '-',
-                            $hp_date,
-                            $hp_result,
-                            '-',
-                        ];
+                        $results[$i]['status'] = $revisedLabel;
+                        $results[$i]['score'] = $score;
+                        $results[$i]['actions'] = $actions;
+                        $listInfo[] = $results[$i];
                     }
                 }
             }

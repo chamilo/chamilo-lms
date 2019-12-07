@@ -99,7 +99,7 @@ if ($is_allowedToEdit && !empty($action)) {
         case 'delete':
             $result = $objExerciseTmp->delete();
             if ($result) {
-                Display::addFlash(Display::return_message(get_lang('ExerciseDeleted'), 'confirmation'));
+                Display::addFlash(Display::return_message(get_lang('Deleted'), 'confirmation'));
             }
             break;
         case 'enable':

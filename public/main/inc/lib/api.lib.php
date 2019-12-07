@@ -795,7 +795,7 @@ function api_get_path($path = '', $configuration = [])
         SYS_PATH => $root_sys.'public/',
         REL_PATH => '',
         CONFIGURATION_PATH => 'app/config/',
-        LIBRARY_PATH => $root_sys.'public/inc/lib/',
+        LIBRARY_PATH => $root_sys.'public/main/inc/lib/',
 
         REL_COURSE_PATH => '',
         REL_CODE_PATH => '/main/',

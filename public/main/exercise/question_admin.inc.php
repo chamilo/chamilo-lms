@@ -65,11 +65,11 @@ if (is_object($objQuestion)) {
             if (isset($_GET['editQuestion'])) {
                 if (empty($exerciseId)) {
                     Display::addFlash(Display::return_message(get_lang('Item updated')));
-                    $url = 'admin.php?exerciseId='.$exerciseId.'&'.api_get_cidreq().'&editQuestion='.$objQuestion->id;
+                    $url = 'admin.php?id='.$exerciseId.'&'.api_get_cidreq().'&editQuestion='.$objQuestion->id;
                     echo '<script type="text/javascript">window.location.href="'.$url.'"</script>';
                     exit;
                 }
-                echo '<script type="text/javascript">window.location.href="admin.php?exerciseId='.$exerciseId.'&'.api_get_cidreq().'&page='.$page.'&message=Item updated"</script>';
+                echo '<script type="text/javascript">window.location.href="admin.php?id='.$exerciseId.'&'.api_get_cidreq().'&page='.$page.'&message=Item updated"</script>';
             } else {
                 // New question
                 $page = 1;
@@ -77,10 +77,10 @@ if (is_object($objQuestion)) {
                 if (!empty($length)) {
                     $page = round($objExercise->getQuestionCount() / $length);
                 }
-                echo '<script type="text/javascript">window.location.href="admin.php?exerciseId='.$exerciseId.'&'.api_get_cidreq().'&page='.$page.'&message=ItemAdded"</script>';
+                echo '<script type="text/javascript">window.location.href="admin.php?id='.$exerciseId.'&'.api_get_cidreq().'&page='.$page.'&message=ItemAdded"</script>';
             }
         } else {
-            echo '<script type="text/javascript">window.location.href="admin.php?exerciseId='.$exerciseId.'&page='.$page.'&hotspotadmin='.$objQuestion->id.'&'.api_get_cidreq().'"</script>';
+            echo '<script type="text/javascript">window.location.href="admin.php?id='.$exerciseId.'&page='.$page.'&hotspotadmin='.$objQuestion->id.'&'.api_get_cidreq().'"</script>';
         }
     } else {
         if (isset($questionName)) {

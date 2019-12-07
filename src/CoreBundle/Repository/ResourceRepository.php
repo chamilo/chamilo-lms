@@ -518,6 +518,13 @@ class ResourceRepository extends EntityRepository
         $isAdmin = $checker->isGranted('ROLE_ADMIN') ||
             $checker->isGranted('ROLE_CURRENT_COURSE_TEACHER');
 
+        // Do not show deleted resources
+
+        $qb
+            ->andWhere('links.visibility != :visibilityDeleted')
+            ->setParameter('visibilityDeleted', ResourceLink::VISIBILITY_DELETED)
+        ;
+
         if (false === $isAdmin) {
             $qb
                 ->andWhere('links.visibility = :visibility')

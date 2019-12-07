@@ -22,6 +22,9 @@ parameters:
         #cache: 'var/cache/resource/'
 
     glide_media_filters:
+        editor_thumbnail:
+            w: 64
+            h: 64
         user_picture_small:
             w: 48
             h: 48

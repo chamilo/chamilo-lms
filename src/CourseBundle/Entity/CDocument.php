@@ -27,6 +27,7 @@ use Doctrine\ORM\Mapping as ORM;
  *  }
  * )
  * @GRID\Source(columns="iid, title, filetype, resourceNode.createdAt", filterable=false, groups={"resource"})
+ * @GRID\Source(columns="iid, title", filterable=false, groups={"editor"})
  * @ORM\Entity
  */
 class CDocument extends AbstractResource implements ResourceInterface

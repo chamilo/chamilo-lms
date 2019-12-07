@@ -88,7 +88,7 @@ class EditorController extends BaseController
             $this->trans('Unauthorised access to resource')
         );
 
-        $source = new Entity($class, 'resource');
+        $source = new Entity($class, 'editor');
 
         $qb = $repository->getResourcesByCourse($course, $session, null, $parent);
 
@@ -119,24 +119,29 @@ class EditorController extends BaseController
 
         $titleColumn->setTitle($this->trans('Name'));
 
-        $grid->getColumn('filetype')->setTitle($this->trans('Type'));
-
         $routeParams = $this->getResourceParams($request);
-        $removePath = $course->getResourceNode()->getPath();
 
         $titleColumn->manipulateRenderCell(
-            function ($value, Row $row, $router) use ($tool, $type, $routeParams, $removePath, $request) {
+            function ($value, Row $row, $router) use ($tool, $type, $routeParams, $request) {
                 /** @var AbstractResource $entity */
                 $entity = $row->getEntity();
                 $resourceNode = $entity->getResourceNode();
                 $id = $resourceNode->getId();
+
+                $value = cut($value, 20);
 
                 $myParams = $routeParams;
                 $myParams['id'] = $id;
                 $myParams['parentId'] = $id;
 
                 unset($myParams[0]);
-                $icon = $resourceNode->getIcon().' &nbsp;';
+
+                $url = $router->generate(
+                    'resources_filemanager',
+                    $myParams
+                );
+
+                $class = '';
                 if ($resourceNode->hasResourceFile()) {
                     $documentParams = $this->getResourceParams($request);
                     //$documentParams['file'] = $resourceNode->getPathForDisplayRemoveBase($removePath);
@@ -146,16 +151,12 @@ class EditorController extends BaseController
                         'chamilo_core_resource_view',
                         $documentParams
                     );
-
-                    return $icon.'<a href="'.$url.'" class="select_to_ckeditor">'.$value.'</a>';
+                    $class = 'select_to_ckeditor';
+                    //return $icon.'<a href="'.$url.'" class="select_to_ckeditor">'.$value.'</a>';
                 }
+                $icon = '<div class="big_icon"> <a href="'.$url.'" class="'.$class.'" > '.$resourceNode->getThumbnail($router).'</a></div>';
 
-                $url = $router->generate(
-                    'resources_filemanager',
-                    $myParams
-                );
-
-                return $icon.'<a href="'.$url.'">'.$value.'</a>';
+                return $icon.'<div class="content pt-2 pb-2"><a href="'.$url.'" class="'.$class.'" >'.$value.'</a></div>';
             }
         );
 

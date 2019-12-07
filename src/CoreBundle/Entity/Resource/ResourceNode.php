@@ -11,6 +11,7 @@ use Doctrine\Common\Collections\Criteria;
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Mapping\Annotation as Gedmo;
 use Gedmo\Timestampable\Traits\TimestampableEntity;
+use Symfony\Component\Routing\RouterInterface;
 use Symfony\Component\Validator\Constraints as Assert;
 
 /**
@@ -494,4 +495,39 @@ class ResourceNode
 
         return '<i class="'.$class.'"></i>';
     }
+
+    /**
+     * @return string
+     */
+    public function getThumbnail(RouterInterface $router)
+    {
+        $size = 'fa-3x';
+        $class = "fa fa-folder $size";
+        if ($this->hasResourceFile()) {
+            $class = "far fa-file $size";
+
+            if ($this->isResourceFileAnImage()) {
+                $class = "far fa-file-image $size";
+
+                $params = [
+                    'id' => $this->getId(),
+                    'tool' => $this->getResourceType()->getTool(),
+                    'type' => $this->getResourceType()->getName(),
+                    'filter' => 'editor_thumbnail',
+                ];
+                $url = $router->generate(
+                    'chamilo_core_resource_view',
+                    $params
+                );
+
+                return "<img src='$url'/>";
+            }
+            if ($this->isResourceFileAVideo()) {
+                $class = "far fa-file-video $size";
+            }
+        }
+
+        return '<i class="'.$class.'"></i>';
+    }
+
 }

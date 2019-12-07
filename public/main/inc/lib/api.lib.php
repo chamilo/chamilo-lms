@@ -812,7 +812,7 @@ function api_get_path($path = '', $configuration = [])
 
         WEB_CODE_PATH => $root_web.'main/',
         WEB_PLUGIN_ASSET_PATH => $root_web.'plugins/',
-        WEB_COURSE_PATH => $root_web.'courses/',
+        WEB_COURSE_PATH => $root_web.'course/',
         WEB_IMG_PATH => $root_web.'img/',
         WEB_CSS_PATH => $root_web.'build/css/',
         WEB_AJAX_PATH => $root_web.'main/inc/ajax/',
@@ -2162,32 +2162,16 @@ function api_format_course_array(Course $course)
     $courseData['legal'] = $course->getLegal();
     $courseData['show_score'] = $course->getShowScore(); //used in the work tool
 
-    $webCourseHome = api_get_path(WEB_COURSE_PATH).$courseData['code'];
+    $coursePath = api_get_path(WEB_COURSE_PATH);
+    $webCourseHome = $coursePath.$courseData['real_id'].'/home';
 
     // Course password
     $courseData['registration_code'] = $course->getRegistrationCode();
     $courseData['disk_quota'] = $course->getDiskQuota();
-    $courseData['course_public_url'] = $webCourseHome.'/index.php';
-    //$courseData['course_sys_path'] = $courseSys.'/';
+    $courseData['course_public_url'] = $webCourseHome;
+    $courseData['about_url'] = $coursePath.$courseData['real_id'].'/about';
     $courseData['add_teachers_to_sessions_courses'] = $course->isAddTeachersToSessionsCourses();
     $courseData['entity'] = $course;
-
-    // Course image
-    /*$courseData['course_image_source'] = '';
-    if (file_exists($courseSys.'/course-pic85x85.png')) {
-        $url_image = $webCourseHome.'/course-pic85x85.png';
-        $courseData['course_image_source'] = $courseSys.'/course-pic85x85.png';
-    } else {
-        $url_image = Display::return_icon(
-            'course.png',
-            null,
-            null,
-            ICON_SIZE_BIG,
-            null,
-            true,
-            false
-        );
-    }*/
 
     $image = Display::return_icon(
         'course.png',

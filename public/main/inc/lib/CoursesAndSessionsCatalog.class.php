@@ -137,7 +137,7 @@ class CoursesAndSessionsCatalog
             $accessUrlId = 1;
         }
 
-        $sql = "SELECT count(course.id) 
+        $sql = "SELECT count(course.id)
                 FROM $tableCourse course
                 INNER JOIN $tableCourseRelAccessUrl u
                 ON (course.id = u.c_id)
@@ -321,22 +321,22 @@ class CoursesAndSessionsCatalog
                 $result = Database::query($sql);
                 list($num_records) = Database::fetch_row($result);
 
-                $sql = "SELECT course.id, course.id as real_id 
+                $sql = "SELECT course.id, course.id as real_id
                         FROM $tbl_course course
                         INNER JOIN $tbl_url_rel_course as url_rel_course
                         ON (url_rel_course.c_id = course.id)
                         WHERE
                             $urlCondition AND
                             RAND()*$num_records< $random_value
-                            $avoidCoursesCondition 
+                            $avoidCoursesCondition
                             $visibilityCondition
                         ORDER BY RAND()
                         LIMIT 0, $random_value";
             } else {
                 $sql = "SELECT id, id as real_id FROM $tbl_course course
-                        WHERE 
-                            RAND()*$num_records< $random_value 
-                            $avoidCoursesCondition 
+                        WHERE
+                            RAND()*$num_records< $random_value
+                            $avoidCoursesCondition
                             $visibilityCondition
                         ORDER BY RAND()
                         LIMIT 0, $random_value";
@@ -378,7 +378,7 @@ class CoursesAndSessionsCatalog
             }
 
             if (empty($category_code) || $category_code == 'ALL') {
-                $sql = "SELECT *, id as real_id 
+                $sql = "SELECT *, id as real_id
                         FROM $tbl_course course
                         WHERE
                           1=1
@@ -389,7 +389,7 @@ class CoursesAndSessionsCatalog
                 $sql = "SELECT course.*, id as real_id FROM $tbl_course course
                         $joinCategory
                         WHERE
-                            $conditionCode 
+                            $conditionCode
                             $avoidCoursesCondition
                             $visibilityCondition
                         ORDER BY title $limitFilter ";
@@ -440,7 +440,9 @@ class CoursesAndSessionsCatalog
                 $row['tutor_name'] = get_lang('No administrator');
             }
             $point_info = CourseManager::get_course_ranking($row['id'], 0);
-            $courses[] = [
+            $courseInfo = api_get_course_info_by_id($row['id']);
+
+            $course = [
                 'real_id' => $row['real_id'],
                 'point_info' => $point_info,
                 'code' => $row['code'],
@@ -457,6 +459,10 @@ class CoursesAndSessionsCatalog
                 'count_users' => $count_users,
                 'count_connections' => $count_connections_last_month,
             ];
+
+            $courseInfo = array_merge($courseInfo, $course);
+
+            $courses[] = $courseInfo;
         }
 
         return $courses;
@@ -507,7 +513,7 @@ class CoursesAndSessionsCatalog
                         INNER JOIN $tbl_url_rel_course as url_rel_course
                         ON (url_rel_course.c_id = course.id)
                         WHERE
-                            access_url_id = $urlId AND 
+                            access_url_id = $urlId AND
                             (
                                 code LIKE '%".$search_term_safe."%' OR
                                 title LIKE '%".$search_term_safe."%' OR
@@ -582,9 +588,9 @@ class CoursesAndSessionsCatalog
 
         $dql = "SELECT $select
                 FROM ChamiloCoreBundle:Session s
-                WHERE EXISTS 
+                WHERE EXISTS
                     (
-                        SELECT url.sessionId FROM ChamiloCoreBundle:AccessUrlRelSession url 
+                        SELECT url.sessionId FROM ChamiloCoreBundle:AccessUrlRelSession url
                         WHERE url.sessionId = s.id AND url.accessUrlId = $urlId
                     ) AND
                     s.nbrCourses > 0
@@ -593,16 +599,16 @@ class CoursesAndSessionsCatalog
             $date = Database::escape_string($date);
             $dql .= "
                 AND (
-                    (s.accessEndDate IS NULL) 
+                    (s.accessEndDate IS NULL)
                     OR
-                    ( 
-                    s.accessStartDate IS NOT NULL AND  
-                    s.accessEndDate IS NOT NULL AND
-                    s.accessStartDate >= '$date' AND s.accessEndDate <= '$date')                    
-                    OR 
                     (
-                        s.accessStartDate IS NULL AND 
-                        s.accessEndDate IS NOT NULL AND 
+                    s.accessStartDate IS NOT NULL AND
+                    s.accessEndDate IS NOT NULL AND
+                    s.accessStartDate >= '$date' AND s.accessEndDate <= '$date')
+                    OR
+                    (
+                        s.accessStartDate IS NULL AND
+                        s.accessEndDate IS NOT NULL AND
                         s.accessStartDate >= '$date'
                     )
                 )

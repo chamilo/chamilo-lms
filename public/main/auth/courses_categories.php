@@ -367,13 +367,13 @@ function return_teacher($courseInfo)
 
     $html = '<div class="block-author">';
     if ($length > 6) {
-        $html .= '<a 
-            id="plist" 
-            data-trigger="focus" 
-            tabindex="0" role="button" 
-            class="btn btn-default panel_popover" 
-            data-toggle="popover" 
-            title="'.addslashes(get_lang('Trainers')).'" 
+        $html .= '<a
+            id="plist"
+            data-trigger="focus"
+            tabindex="0" role="button"
+            class="btn btn-default panel_popover"
+            data-toggle="popover"
+            title="'.addslashes(get_lang('Trainers')).'"
             data-html="true"
         >
             <i class="fa fa-graduation-cap" aria-hidden="true"></i>
@@ -414,16 +414,13 @@ function return_teacher($courseInfo)
  * Display the title of a course in course catalog.
  *
  * @param array $course
- * @param bool  $registeredUser
  *
  * @return string HTML string
  */
-function return_title($course, $registeredUser)
+function return_title($course)
 {
-    //$linkCourse = api_get_course_url($course['code']);
-    $linkCourse = api_get_path(WEB_PATH).'courses/'.$course['real_id'].'/about';
     $html = '<div class="block-title"><h4 class="title">';
-    $html .= '<a title="'.$course['title'].'" href="'.$linkCourse.'">'.$course['title'].'</a>';
+    $html .= '<a title="'.$course['title'].'" href="'.$course['about_url'].'">'.$course['title'].'</a>';
     $html .= '</h4></div>';
 
     if (api_get_configuration_value('hide_course_rating') === false) {

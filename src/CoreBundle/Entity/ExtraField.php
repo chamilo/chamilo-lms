@@ -391,4 +391,24 @@ class ExtraField // extends BaseAttribute
                 return 'text';
         }
     }
+
+    /**
+     * @return string
+     */
+    public function getHelperText(): string
+    {
+        return $this->helperText;
+    }
+
+    /**
+     * @param string $helperText
+     *
+     * @return ExtraField
+     */
+    public function setHelperText(string $helperText): ExtraField
+    {
+        $this->helperText = $helperText;
+
+        return $this;
+    }
 }

@@ -283,6 +283,7 @@ class CLp extends AbstractResource implements ResourceInterface
         $this->modifiedOn = new \DateTime();
         $this->defaultEncoding = 'UTF-8';
         $this->defaultViewMod = 'embedded';
+        $this->description = '';
         $this->displayOrder = 0;
         $this->debug = 0;
         $this->forceCommit = 0;
@@ -293,6 +294,7 @@ class CLp extends AbstractResource implements ResourceInterface
         $this->path = '';
         $this->prerequisite = 0;
         $this->previewImage = '';
+        $this->publicatedOn = new \DateTime();
         $this->seriousgameMode = 0;
         $this->subscribeUsers = 0;
         $this->useMaxScore = 1;

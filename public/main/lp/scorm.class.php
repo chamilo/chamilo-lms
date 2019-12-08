@@ -1,6 +1,9 @@
 <?php
 /* For licensing terms, see /license.txt */
 
+use Chamilo\CoreBundle\Entity\Resource\ResourceLink;
+use Chamilo\CoreBundle\Framework\Container;
+use Chamilo\CourseBundle\Entity\CLp;
 use Symfony\Component\DomCrawler\Crawler;
 
 /**
@@ -364,43 +367,42 @@ class scorm extends learnpath
                 $dsp = $row[0] + 1;
             }
             $myname = api_utf8_decode($oOrganization->get_name());
-            $now = api_get_utc_datetime();
+            $lp = new CLp();
+            $lp
+                ->setCId($courseId)
+                ->setLpType(2)
+                ->setName($myname)
+                ->setRef($oOrganization->get_ref())
+                ->setPath($this->subdir)
+                ->setDefaultEncoding($this->manifest_encoding)
+                ->setJsLib('scorm_api.php')
+                ->setDisplayOrder($dsp)
+                ->setUseMaxScore($userMaxScore)
+                ->setSessionId($sessionId)
+            ;
 
-            $params = [
-                'c_id' => $courseId,
-                'lp_type' => 2,
-                'name' => $myname,
-                'ref' => $oOrganization->get_ref(),
-                'description' => '',
-                'path' => $this->subdir,
-                'force_commit' => 0,
-                'default_view_mod' => 'embedded',
-                'default_encoding' => $this->manifest_encoding,
-                'js_lib' => 'scorm_api.php',
-                'display_order' => $dsp,
-                'session_id' => $sessionId,
-                'use_max_score' => $userMaxScore,
-                'content_maker' => '',
-                'content_license' => '',
-                'debug' => 0,
-                'theme' => '',
-                'preview_image' => '',
-                'author' => '',
-                'prerequisite' => 0,
-                'hide_toc_frame' => 0,
-                'seriousgame_mode' => 0,
-                'autolaunch' => 0,
-                'category_id' => 0,
-                'max_attempts' => 0,
-                'subscribe_users' => 0,
-                'created_on' => $now,
-                'modified_on' => $now,
-                'publicated_on' => $now,
-            ];
+            $repo = Container::getLpRepository();
+            $em = $repo->getEntityManager();
+            $em->persist($lp);
+            $courseEntity = api_get_course_entity($courseInfo['real_id']);
 
-            $lp_id = Database::insert($new_lp, $params);
+            $repo->addResourceToCourse(
+                $lp,
+                ResourceLink::VISIBILITY_PUBLISHED,
+                api_get_user_entity(api_get_user_id()),
+                $courseEntity,
+                api_get_session_entity(),
+                api_get_group_entity()
+            );
 
-            if ($lp_id) {
+            $em->flush();
+            if ($lp->getIid()) {
+                $lp_id = $lp->getIid();
+                $sql = "UPDATE $new_lp SET id = iid WHERE iid = $lp_id";
+                Database::query($sql);
+            }
+
+            /*if ($lp_id) {
                 $sql = "UPDATE $new_lp SET id = iid WHERE iid = $lp_id";
                 Database::query($sql);
 
@@ -422,7 +424,7 @@ class scorm extends learnpath
                     'visible',
                     $userId
                 );
-            }
+            }*/
 
             // Now insert all elements from inside that learning path.
             // Make sure we also get the href and sco/asset from the resources.
@@ -809,7 +811,7 @@ class scorm extends learnpath
         $lp = $this->get_id();
         if ($lp != 0) {
             $tbl_lp = Database::get_course_table(TABLE_LP_MAIN);
-            $sql = "UPDATE $tbl_lp SET theme = '$theme' 
+            $sql = "UPDATE $tbl_lp SET theme = '$theme'
                     WHERE iid = $lp";
             $res = Database::query($sql);
 
@@ -834,7 +836,7 @@ class scorm extends learnpath
         $lp = $this->get_id();
         if ($lp != 0) {
             $tbl_lp = Database::get_course_table(TABLE_LP_MAIN);
-            $sql = "UPDATE $tbl_lp SET preview_image = '$preview_image' 
+            $sql = "UPDATE $tbl_lp SET preview_image = '$preview_image'
                     WHERE iid = $lp";
             $res = Database::query($sql);
 
@@ -859,7 +861,7 @@ class scorm extends learnpath
         $lp = $this->get_id();
         if ($lp != 0) {
             $tbl_lp = Database::get_course_table(TABLE_LP_MAIN);
-            $sql = "UPDATE $tbl_lp SET author = '$author' 
+            $sql = "UPDATE $tbl_lp SET author = '$author'
                     WHERE iid = ".$lp;
             $res = Database::query($sql);
 

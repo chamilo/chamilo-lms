@@ -85,9 +85,9 @@ final class CDocumentRepository extends ResourceRepository implements ResourceRe
 
         $params = [
             'course' => $document->getCourse()->getCode(),
-            'file' => ltrim($document->getPath(), '/'),
+            'id' => ltrim($document->getPath(), '/'),
             'tool' => 'document',
-            'type' => 'files',
+            'type' => $document->getResourceNode()->getResourceType()->getName(),
         ];
 
         return $this->getRouter()->generate(

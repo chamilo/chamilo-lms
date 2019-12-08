@@ -30,6 +30,7 @@ use Symfony\Component\Filesystem\Exception\FileNotFoundException;
 use Symfony\Component\Form\FormFactory;
 use Symfony\Component\Form\FormInterface;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
+use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use Symfony\Component\Routing\RouterInterface;
 use Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface;
 
@@ -604,6 +605,13 @@ class ResourceRepository extends EntityRepository
         return $qb;
     }
 
+    public function getResourceFromResourceNode($resourceNodeId): ?AbstractResource
+    {
+        $resource = $this->getRepository()->findOneBy(['resourceNode' => $resourceNodeId]);
+
+        return $resource;
+    }
+
     /**
      * @param Session $session
      */
@@ -706,7 +714,7 @@ class ResourceRepository extends EntityRepository
         }
     }
 
-    public function getResourceFileUrl(AbstractResource $resource, array $extraParams = []): string
+    public function getResourceFileUrl(AbstractResource $resource, array $extraParams = [], $referenceType = null): string
     {
         try {
             $resourceNode = $resource->getResourceNode();
@@ -721,7 +729,9 @@ class ResourceRepository extends EntityRepository
                     $params = array_merge($params, $extraParams);
                 }
 
-                return $this->router->generate('chamilo_core_resource_view', $params);
+                $referenceType = null === $referenceType ? UrlGeneratorInterface::ABSOLUTE_PATH : $referenceType;
+
+                return $this->router->generate('chamilo_core_resource_view', $params, $referenceType);
             }
 
             return '';

@@ -119,8 +119,6 @@ $htmlHeadXtra[] = '
 
                         // We are brothers!
                         if (parentId == myParentId) {
-                            console.log("Brothers");
-                            console.log(subItems.length);
                             if (subItems.length > 0) {
                                 var lastItem = $(jItems[index - 1]).find("li.sub_item");
                                 parentIndex = jItems.index(lastItem);
@@ -258,6 +256,13 @@ $htmlHeadXtra[] = '
                 var title = $(ui.item).attr("title");
                 processReceive = true;
 
+                // Fix to use resource nodes.
+                var itemWithId = $(ui.item).find(".link_with_id")
+                if (itemWithId.length > 0) {
+                    id = $(itemWithId).attr("data_id");
+                    type = "document";
+                }
+
                 if (ui.item.parent()[0]) {
                     var parent_id = $(ui.item.parent()[0]).attr("id");
                     var previous_id = $(ui.item.prev()).attr("id");
@@ -272,6 +277,8 @@ $htmlHeadXtra[] = '
                             "type": type,
                             "title" : title
                         };
+
+                        console.log(params);
 
                         $.ajax({
                             type: "GET",

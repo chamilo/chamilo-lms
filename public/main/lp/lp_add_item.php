@@ -4,9 +4,6 @@
 use ChamiloSession as Session;
 
 /**
- * This is a learning path creation and player tool in Chamilo - previously
- * learnpath_handler.php.
- *
  * @author Patrick Cool
  * @author Denes Nagy
  * @author Roan Embrechts, refactoring and code cleaning
@@ -50,7 +47,7 @@ function load_cbo(id, previousId) {
     if (!id) {
         return false;
     }
-    
+
     previousId = previousId || 'previous';
 
     var cbo = document.getElementById(previousId);
@@ -151,7 +148,7 @@ function confirmation(name) {
 }
 
 $(function() {
-    jQuery('.scrollbar-inner').scrollbar();
+    $('.scrollbar-inner').scrollbar();
 
     $('#subtab ').on('click', 'a:first', function() {
         window.location.reload();
@@ -283,9 +280,9 @@ if (isset($new_item_id) && is_numeric($new_item_id)) {
                 echo $learnPath->display_document_form('add', 0);
             }
             break;
-        case 'hotpotatoes':
+        /*case 'hotpotatoes':
             echo $learnPath->display_hotpotatoes_form('add', 0, $_GET['file']);
-            break;
+            break;*/
         case TOOL_QUIZ:
             echo Display::return_message(
                 get_lang('Exercise can\'t be edited after being added to the Learning Path'),

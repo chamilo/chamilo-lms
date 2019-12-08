@@ -2858,6 +2858,60 @@ class DocumentManager
             return '';
         }
 
+        $repo = Container::getDocumentRepository();
+        $nodeRepository = $repo->getResourceNodeRepository();
+        $options = [
+            'decorate' => true,
+            'rootOpen' => '<ul class="lp_resource">',
+            'rootClose' => '</ul>',
+            'childOpen' => '<li class="doc_resource lp_resource_element ">',
+            'childClose' => '</li>',
+            'nodeDecorator' => function($node) {
+                $link = '<div class="item_data">';
+                if (empty($node['__children'])) {
+                    $link .= '<a id="ki2" class="moved ui-sortable-handle" href="#">';
+                    $link .= '<img src="/img/icons/16/move_everywhere.png" alt="Move" title="Move"></a>';
+                    $link .= '</a>';
+                }
+                $link .= '<a data_id="'.$node['id'].'" class="moved ui-sortable-handle link_with_id">';
+                $link .= $node['slug'];
+                $link .= '</a>';
+
+                $link .= '</div>';
+
+                return $link;
+            },
+        ];
+
+        $type = $repo->getResourceType();
+        $nodeId = $nodeRepository->find($course_info['entity']->getResourceNode()->getId());
+
+        $em = $repo->getEntityManager();
+        $query = $em
+            ->createQueryBuilder()
+            ->select('node')
+            ->from('ChamiloCoreBundle:Resource\ResourceNode', 'node')
+            ->innerJoin('node.resourceType', 'type')
+            ->innerJoin('node.resourceLinks', 'links')
+            //->innerJoin('node.resourceFile', 'file')
+            ->where('type = :type')
+            ->andWhere('links.course = :course')
+            /*  ->where('node.parent = :parent') */
+            ->setParameters(['type' => $type, 'course' => $course_info['entity']])
+            ->orderBy('node.parent', 'ASC')
+            ->getQuery();
+
+        //var_dump($query->getArrayResult());
+        $tree = $nodeRepository->buildTree($query->getArrayResult(), $options);
+
+        return $tree;
+        //$tree = $nodeRepository->childrenHierarchy($node, false,  $options);
+        //echo $tree;
+        /*foreach ($tree as $node) {
+            var_dump($node['path']);
+        }*/
+
+
         $user_id = api_get_user_id();
         $userInfo = api_get_user_info();
         $user_in_course = api_is_platform_admin();

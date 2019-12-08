@@ -94,7 +94,7 @@ function confirmation(name) {
 }
 
 $(function() {
-    jQuery('.scrollbar-inner').scrollbar();
+    $('.scrollbar-inner').scrollbar();
     expandColumnToogle('#hide_bar_template', {
         selector: '#lp_sidebar'
     }, {

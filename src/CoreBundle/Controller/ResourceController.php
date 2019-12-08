@@ -499,8 +499,7 @@ class ResourceController extends AbstractResourceController implements CourseCon
 
         $this->setBreadCrumb($request);
         $repository = $this->getRepositoryFromRequest($request);
-        /** @var AbstractResource $resource */
-        $resource = $repository->getRepository()->findOneBy(['resourceNode' => $resourceNodeId]);
+        $resource = $repository->getResourceFromResourceNode($resourceNodeId);
         $resourceNode = $resource->getResourceNode();
 
         $this->denyAccessUnlessGranted(
@@ -588,7 +587,7 @@ class ResourceController extends AbstractResourceController implements CourseCon
         $repository = $this->getRepositoryFromRequest($request);
 
         /** @var AbstractResource $resource */
-        $resource = $repository->getRepository()->findOneBy(['resourceNode' => $nodeId]);
+        $resource = $repository->getResourceFromResourceNode($nodeId);
 
         if (null === $resource) {
             throw new NotFoundHttpException();
@@ -634,7 +633,7 @@ class ResourceController extends AbstractResourceController implements CourseCon
         $repository = $this->getRepositoryFromRequest($request);
 
         /** @var AbstractResource $resource */
-        $resource = $repository->getRepository()->findOneBy(['resourceNode' => $nodeId]);
+        $resource = $repository->getResourceFromResourceNode($nodeId);
 
         if (null === $resource) {
             throw new NotFoundHttpException();
@@ -674,7 +673,7 @@ class ResourceController extends AbstractResourceController implements CourseCon
         $repository = $this->getRepositoryFromRequest($request);
 
         /** @var AbstractResource $resource */
-        $resource = $repository->getRepository()->findOneBy(['resourceNode' => $id]);
+        $resource = $repository->getResourceFromResourceNode($id);
 
         if (null === $resource) {
             throw new NotFoundHttpException();

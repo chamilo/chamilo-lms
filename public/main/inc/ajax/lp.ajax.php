@@ -49,11 +49,20 @@ switch ($action) {
             /** @var learnpath $learningPath */
             $learningPath = Session::read('oLP');
             if ($learningPath) {
-                // Updating the lp.modified_on
                 $learningPath->set_modified_on();
-                $title = $_REQUEST['title'];
-                if ($_REQUEST['type'] == TOOL_QUIZ) {
-                    $title = Exercise::format_title_variable($title);
+                $title = isset($_REQUEST['title']) ? $_REQUEST['title'] : '';
+                $type = isset($_REQUEST['type']) ? $_REQUEST['type'] : '';
+                $id = isset($_REQUEST['id']) ? $_REQUEST['id'] : 0;
+
+                switch ($type) {
+                    case TOOL_QUIZ:
+                        $title = Exercise::format_title_variable($title);
+                        break;
+                    case TOOL_DOCUMENT:
+                        $repo = \Chamilo\CoreBundle\Framework\Container::getDocumentRepository();
+                        $document = $repo->getResourceFromResourceNode($id);
+                        $title = $document->getTitle();
+                        break;
                 }
 
                 $parentId = isset($_REQUEST['parent_id']) ? $_REQUEST['parent_id'] : '';
@@ -62,8 +71,8 @@ switch ($action) {
                 $itemId = $learningPath->add_item(
                     $parentId,
                     $previousId,
-                    $_REQUEST['type'],
-                    $_REQUEST['id'],
+                    $type,
+                    $id,
                     $title,
                     null
                 );

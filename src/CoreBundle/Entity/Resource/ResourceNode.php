@@ -45,21 +45,20 @@ class ResourceNode
     protected $slug;
 
     /**
-     * @ORM\ManyToOne(targetEntity="Chamilo\CoreBundle\Entity\Resource\ResourceType", inversedBy="resourceNodes")
+     * @ORM\ManyToOne(targetEntity="ResourceType", inversedBy="resourceNodes")
      * @ORM\JoinColumn(name="resource_type_id", referencedColumnName="id", nullable=false)
      */
     protected $resourceType;
 
     /**
-     * @ORM\OneToMany(targetEntity="Chamilo\CoreBundle\Entity\Resource\ResourceLink", mappedBy="resourceNode",
-     *                                                                                cascade={"remove"})
+     * @ORM\OneToMany(targetEntity="ResourceLink", mappedBy="resourceNode", cascade={"remove"})
      */
     protected $resourceLinks;
 
     /**
      * @var ResourceFile
      *
-     * @ORM\OneToOne(targetEntity="Chamilo\CoreBundle\Entity\Resource\ResourceFile", inversedBy="resourceNode", orphanRemoval=true)
+     * @ORM\OneToOne(targetEntity="ResourceFile", inversedBy="resourceNode", orphanRemoval=true)
      * @ORM\JoinColumn(name="resource_file_id", referencedColumnName="id", onDelete="CASCADE")
      */
     protected $resourceFile;
@@ -76,7 +75,7 @@ class ResourceNode
      * @Gedmo\TreeParent
      *
      * @ORM\ManyToOne(
-     *     targetEntity="Chamilo\CoreBundle\Entity\Resource\ResourceNode",
+     *     targetEntity="ResourceNode",
      *     inversedBy="children"
      * )
      * @ORM\JoinColumns({@ORM\JoinColumn(onDelete="CASCADE")})
@@ -94,7 +93,7 @@ class ResourceNode
      * @var ResourceNode[]
      *
      * @ORM\OneToMany(
-     *     targetEntity="Chamilo\CoreBundle\Entity\Resource\ResourceNode",
+     *     targetEntity="ResourceNode",
      *     mappedBy="parent"
      * )
      * @ORM\OrderBy({"id" = "ASC"})

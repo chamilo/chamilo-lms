@@ -17,6 +17,7 @@ use ChamiloSession as Session;
 use Gedmo\Sortable\Entity\Repository\SortableRepository;
 use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\Finder\Finder;
+use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 
 /**
  * Class learnpath
@@ -3418,12 +3419,12 @@ class learnpath
             if (empty($lp_item_params) && strpos($lp_item_path, '?') !== false) {
                 list($lp_item_path, $lp_item_params) = explode('?', $lp_item_path);
             }
-            $sys_course_path = api_get_path(SYS_COURSE_PATH).api_get_course_path();
+            //$sys_course_path = api_get_path(SYS_COURSE_PATH).api_get_course_path();
             if ($type === 'http') {
                 //web path
-                $course_path = api_get_path(WEB_COURSE_PATH).api_get_course_path();
+                //$course_path = api_get_path(WEB_COURSE_PATH).api_get_course_path();
             } else {
-                $course_path = $sys_course_path; //system path
+                //$course_path = $sys_course_path; //system path
             }
 
             // Fixed issue BT#1272 - If the item type is a Chamilo Item (quiz, link, etc),
@@ -3438,6 +3439,7 @@ class learnpath
 
             // Now go through the specific cases to get the end of the path
             // @todo Use constants instead of int values.
+
             switch ($lp_type) {
                 case 1:
                     $file = self::rl_get_resource_link_for_learnpath(
@@ -12749,7 +12751,6 @@ EOD;
             }
         }
 
-        $course_code = $course_info['code'];
         $type = $rowItem->getItemType();
         $id = empty($rowItem->getPath()) ? '0' : $rowItem->getPath();
         $main_dir_path = api_get_path(WEB_CODE_PATH);
@@ -12830,20 +12831,11 @@ EOD;
                 return api_get_path(WEB_CODE_PATH).
                     'lp/readout_text.php?&id='.$id.'&lp_id='.$learningPathId.'&'.$extraParams;
             case TOOL_DOCUMENT:
-                $document = $em
-                    ->getRepository('ChamiloCourseBundle:CDocument')
-                    ->findOneBy(['course' => $course_id, 'iid' => $id]);
+                $repo = Container::getDocumentRepository();
+                $document = $repo->getResourceFromResourceNode($rowItem->getPath());
+                $file = $repo->getResourceFileUrl($document, [], UrlGeneratorInterface::ABSOLUTE_URL);
 
-                if (empty($document)) {
-                    // Try with normal id
-                    $document = $em
-                        ->getRepository('ChamiloCourseBundle:CDocument')
-                        ->findOneBy(['course' => $course_id, 'id' => $id]);
-
-                    if (empty($document)) {
-                        return '';
-                    }
-                }
+                return $file;
 
                 $documentPathInfo = pathinfo($document->getPath());
                 $mediaSupportedFiles = ['mp3', 'mp4', 'ogv', 'ogg', 'flv', 'm4v'];

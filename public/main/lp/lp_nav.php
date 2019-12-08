@@ -55,7 +55,7 @@ if ($myLP) {
         echo $mediaplayer;
         echo "<script>
             $(function() {
-                jQuery('video:not(.skip), audio:not(.skip)').mediaelementplayer();
+                $('video:not(.skip), audio:not(.skip)').mediaelementplayer();
             });
         </script>";
     }

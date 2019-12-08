@@ -124,7 +124,7 @@ var jQueryFrameReadyConfigPath = \''.api_get_jquery_web_path().'\';
 //$htmlHeadXtra[] = api_get_asset('qtip2/jquery.qtip.min.js');
 $htmlHeadXtra[] = '<script type="text/javascript" src="'.api_get_path(WEB_LIBRARY_PATH).'javascript/jquery.frameready.js"></script>';
 $htmlHeadXtra[] = '<script>
-$(function() {   
+$(function() {
     $("div#log_content_cleaner").bind("click", function() {
         $("div#log_content").empty();
     });
@@ -135,34 +135,34 @@ var chamilo_xajax_handler = window.oxajax;
 $allowLpItemTip = api_get_configuration_value('hide_accessibility_label_on_lp_item') === false;
 if ($allowLpItemTip) {
     $htmlHeadXtra[] = '<script>
-    $(function() {   
+    $(function() {
          $(".scorm_item_normal").qtip({
             content: {
                 text: function(event, api) {
-                    var item = $(this);                 
+                    var item = $(this);
                     var itemId = $(this).attr("id");
                     itemId = itemId.replace("toc_", "");
                     var textToShow = "";
                     $.ajax({
                         type: "GET",
-                        url: "'.$ajaxUrl.'&item_id="+ itemId,            
-                        async: false                 
+                        url: "'.$ajaxUrl.'&item_id="+ itemId,
+                        async: false
                     })
-                    .then(function(content) {                    
+                    .then(function(content) {
                         if (content == 1) {
                             textToShow = "'.addslashes(get_lang('Item can be viewed - Prerequisites completed')).'";
-                            api.set("style.classes", "qtip-green qtip-shadow");                        
+                            api.set("style.classes", "qtip-green qtip-shadow");
                         } else {
-                            textToShow = content;                        
+                            textToShow = content;
                             api.set("style.classes", "qtip-red qtip-shadow");
                         }
-                        
+
                         return textToShow;
                     });
-                    return textToShow;                
+                    return textToShow;
                 }
             }
-        }); 
+        });
     });
     </script>';
 }
@@ -192,15 +192,6 @@ if (isset($exerciseResult) || isset($_SESSION['exerciseResult'])) {
 $htmlHeadXtra[] = '<script>
 chamilo_courseCode = "'.$course_code.'";
 </script>';
-// Document API
-//$htmlHeadXtra[] = '<script src="js/documentapi.js" type="text/javascript" language="javascript"></script>';
-// Storage API
-$htmlHeadXtra[] = '<script>
-var sv_user = \''.api_get_user_id().'\';
-var sv_course = chamilo_courseCode;
-var sv_sco = \''.$lp_id.'\';
-</script>'; // FIXME fetch sco and userid from a more reliable source directly in sotrageapi.js
-//$htmlHeadXtra[] = '<script type="text/javascript" src="js/storageapi.js"></script>';
 
 /**
  * Get a link to the corresponding document.

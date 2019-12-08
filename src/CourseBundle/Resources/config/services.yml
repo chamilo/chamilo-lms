@@ -105,6 +105,14 @@ services:
         arguments:
             $className: 'Chamilo\CourseBundle\Entity\CLp'
 
+    Chamilo\CourseBundle\Repository\CStudentPublicationRepository:
+        arguments:
+            $className: 'Chamilo\CourseBundle\Entity\CStudentPublication'
+
+    Chamilo\CourseBundle\Repository\CStudentPublicationAssignmentRepository:
+        arguments:
+            $className: 'Chamilo\CourseBundle\Entity\CStudentPublicationAssignment'
+
     Chamilo\CourseBundle\Repository\CLpCategoryRepository:
         arguments:
             $className: 'Chamilo\CourseBundle\Entity\CLpCategory'

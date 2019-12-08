@@ -24,15 +24,10 @@ $my_folder_data = get_work_data_by_id($work_id);
 $curdirpath = '';
 $htmlHeadXtra[] = api_get_jqgrid_js();
 $htmlHeadXtra[] = to_javascript_work();
-
-/*	Constants and variables */
-
 $tool_name = get_lang('Assignments');
 
 $item_id = isset($_REQUEST['item_id']) ? (int) $_REQUEST['item_id'] : null;
 $origin = api_get_origin();
-$course_dir = api_get_path(SYS_COURSE_PATH).$courseInfo['path'];
-$base_work_dir = $course_dir.'/work';
 $action = isset($_REQUEST['action']) ? $_REQUEST['action'] : 'list';
 
 // Download folder

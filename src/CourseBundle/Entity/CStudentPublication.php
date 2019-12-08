@@ -3,6 +3,8 @@
 
 namespace Chamilo\CourseBundle\Entity;
 
+use Chamilo\CoreBundle\Entity\Resource\AbstractResource;
+use Chamilo\CoreBundle\Entity\Resource\ResourceInterface;
 use Chamilo\CoreBundle\Entity\Session;
 use Doctrine\ORM\Mapping as ORM;
 
@@ -17,9 +19,9 @@ use Doctrine\ORM\Mapping as ORM;
  *      @ORM\Index(name="idx_csp_u", columns={"user_id"})
  *  }
  * )
- * @ORM\Entity(repositoryClass="Chamilo\CourseBundle\Repository\CStudentPublicationRepository")
+ * @ORM\Entity()
  */
-class CStudentPublication
+class CStudentPublication extends AbstractResource implements ResourceInterface
 {
     /**
      * @var int
@@ -211,6 +213,20 @@ class CStudentPublication
      * @ORM\Column(name="filesize", type="integer", nullable=true)
      */
     protected $fileSize;
+
+    public function __construct()
+    {
+        $this->documentId = 0;
+        $this->hasProperties = 0;
+        $this->containsFile = 0;
+        $this->parentId = 0;
+        $this->qualificatorId = 0;
+    }
+
+    public function __toString(): string
+    {
+        return (string) $this->getTitle();
+    }
 
     /**
      * Set url.
@@ -808,5 +824,18 @@ class CStudentPublication
         $this->fileSize = $fileSize;
 
         return $this;
+    }
+
+    /**
+     * Resource identifier.
+     */
+    public function getResourceIdentifier(): int
+    {
+        return $this->getIid();
+    }
+
+    public function getResourceName(): string
+    {
+        return $this->getTitle();
     }
 }

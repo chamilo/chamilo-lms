@@ -1,6 +1,7 @@
 <?php
 /* For licensing terms, see /license.txt */
 
+use Chamilo\CoreBundle\Entity\Resource\ResourceLink;
 use Chamilo\CoreBundle\Framework\Container;
 use Chamilo\CourseBundle\Entity\CStudentPublication;
 use ChamiloSession as Session;
@@ -279,7 +280,7 @@ function getWorkList($id, $my_folder_data, $add_in_where_query = null, $course_i
                     $condition_session AND
                     $active_condition AND
                     (parent_id = 0)
-                    $contains_file_query AND 
+                    $contains_file_query AND
                     post_group_id = $groupIid
                 ORDER BY sent_date DESC";
     } else {
@@ -622,7 +623,7 @@ function showTeacherWorkGrid()
 function build_work_directory_selector($folders, $curdirpath, $group_dir = '')
 {
     $form = '<form name="selector" action="'.api_get_self().'?'.api_get_cidreq().'" method="POST">';
-    $form .= get_lang('Current folder').' 
+    $form .= get_lang('Current folder').'
              <select name="curdirpath" onchange="javascript: document.selector.submit();">';
     //group documents cannot be uploaded in the root
     if ($group_dir == '') {
@@ -769,16 +770,16 @@ function deleteDirWork($id)
     }
 
     $_course = api_get_course_info();
-    $id = intval($id);
+    $id = (int) $id;
     $work_data = get_work_data_by_id($id);
 
     if (empty($work_data)) {
         return false;
     }
 
-    $base_work_dir = api_get_path(SYS_COURSE_PATH).$_course['path'].'/work';
-    $work_data_url = $base_work_dir.$work_data['url'];
-    $check = Security::check_abs_path($work_data_url.'/', $base_work_dir.'/');
+    //$base_work_dir = api_get_path(SYS_COURSE_PATH).$_course['path'].'/work';
+    //$work_data_url = $base_work_dir.$work_data['url'];
+    //$check = Security::check_abs_path($work_data_url.'/', $base_work_dir.'/');
     $table = Database::get_course_table(TABLE_STUDENT_PUBLICATION);
     $TSTDPUBASG = Database::get_course_table(TABLE_STUDENT_PUBLICATION_ASSIGNMENT);
     $t_agenda = Database::get_course_table(TABLE_AGENDA);
@@ -999,19 +1000,19 @@ function updateDirName($work_data, $newPath)
  */
 function to_javascript_work()
 {
-    $js = '<script> 
+    $js = '<script>
         function updateDocumentTitle(value) {
-            var temp = value.indexOf("/");            
+            var temp = value.indexOf("/");
             //linux path
             if(temp != -1){
                 temp=value.split("/");
             } else {
                 temp=value.split("\\\");
             }
-            
+
             var fullFilename = temp[temp.length - 1];
             var baseFilename = fullFilename;
-            
+
             // get file extension
             var fileExtension = "";
             if (fullFilename.match(/\..+/)) {
@@ -1021,9 +1022,9 @@ function to_javascript_work()
                     baseFilename = fileInfo[fileInfo.length - 2];
                 }
             }
-            
+
             document.getElementById("file_upload").value = baseFilename;
-            document.getElementById("file_extension").value = fileExtension;                
+            document.getElementById("file_extension").value = fileExtension;
             $("#contains_file_id").attr("value", 1);
         }
         function setFocus() {
@@ -1034,17 +1035,17 @@ function to_javascript_work()
             setFocus();
             var checked = $("#expiry_date").attr("checked");
             if (checked) {
-                $("#option2").show();                
+                $("#option2").show();
             } else {
-                $("#option2").hide();                
+                $("#option2").hide();
             }
-            
-            var checkedEndDate = $("#end_date").attr("checked");            
-            if (checkedEndDate) {                
+
+            var checkedEndDate = $("#end_date").attr("checked");
+            if (checkedEndDate) {
                 $("#option3").show();
                 $("#ends_on").attr("checked", true);
             } else {
-                $("#option3").hide();                
+                $("#option3").hide();
                 $("#ends_on").attr("checked", false);
             }
 
@@ -1184,7 +1185,7 @@ function get_count_work($work_id, $onlyMeUserId = null, $notMeUserId = null)
                 prop.visibility <> 2 AND
                 work.c_id = $course_id
             )
-            INNER JOIN $user_table u 
+            INNER JOIN $user_table u
             ON (work.user_id = u.user_id)
             WHERE $extra_conditions $where_condition $condition_session";
 
@@ -1524,21 +1525,7 @@ function getWorkListTeacher(
                     '#'
                 );
             }
-            // Remove Delete Work Button from action List
-            // Because removeXSS "removes" the onClick JS Event to do the action (See model.ajax.php - Line 1639)
-            // But still can use the another jqgrid button to remove works (trash icon)
-            //
-            // $deleteUrl = api_get_path(WEB_CODE_PATH).'work/work.php?id='.$workId.'&action=delete_dir&'.api_get_cidreq();
-            // $deleteLink = '<a href="#" onclick="showConfirmationPopup(this, \'' . $deleteUrl . '\' ) " >' .
-            //     Display::return_icon(
-            //         'delete.png',
-            //         get_lang('Delete'),
-            //         [],
-            //         ICON_SIZE_SMALL
-            //     ) . '</a>';
-
             if (!api_is_allowed_to_edit()) {
-                // $deleteLink = null;
                 $editLink = null;
             }
             $work['actions'] = $visibilityLink.$correctionLink.$downloadLink.$editLink;
@@ -1575,31 +1562,31 @@ function get_work_user_list_from_documents(
         $select1 = " SELECT count(u.user_id) as count ";
         $select2 = " SELECT count(u.user_id) as count ";
     } else {
-        $select1 = " SELECT DISTINCT 
-                        u.firstname, 
-                        u.lastname, 
-                        u.user_id, 
+        $select1 = " SELECT DISTINCT
+                        u.firstname,
+                        u.lastname,
+                        u.user_id,
                         w.title,
-                        w.parent_id, 
-                        w.document_id document_id, 
-                        w.id, qualification, 
-                        qualificator_id, 
+                        w.parent_id,
+                        w.document_id document_id,
+                        w.id, qualification,
+                        qualificator_id,
                         w.sent_date,
                         w.contains_file,
                         w.url
                     ";
-        $select2 = " SELECT DISTINCT 
+        $select2 = " SELECT DISTINCT
                         u.firstname, u.lastname,
-                        u.user_id, 
-                        d.title, 
-                        w.parent_id, 
-                        d.id document_id, 
-                        0, 
-                        0, 
+                        u.user_id,
+                        d.title,
+                        w.parent_id,
+                        d.id document_id,
+                        0,
+                        0,
                         0,
                         w.sent_date,
                         w.contains_file,
-                        w.url                        
+                        w.url
                     ";
     }
 
@@ -1918,13 +1905,13 @@ function get_work_user_list(
         }
 
         $sql = " $select
-                FROM $work_table work 
-                INNER JOIN $user_table u  
+                FROM $work_table work
+                INNER JOIN $user_table u
                 ON (work.user_id = u.user_id)
                 WHERE
                     work.c_id = $course_id AND
-                    $extra_conditions 
-                    $whereCondition 
+                    $extra_conditions
+                    $whereCondition
                     $condition_session
                     AND u.status != ".INVITEE."
                 ORDER BY $column $direction";
@@ -2113,7 +2100,7 @@ function get_work_user_list(
 
                     if ($unoconv && empty($work['contains_file'])) {
                         $action .= '<a f
-                            href="'.$url.'work_list_all.php?'.api_get_cidreq().'&id='.$work_id.'&action=export_to_doc&item_id='.$item_id.'" 
+                            href="'.$url.'work_list_all.php?'.api_get_cidreq().'&id='.$work_id.'&action=export_to_doc&item_id='.$item_id.'"
                             title="'.get_lang('Export to .doc').'" >'.
                             Display::return_icon('export_doc.png', get_lang('Export to .doc'), [], ICON_SIZE_SMALL).'</a> ';
                     }
@@ -2715,8 +2702,8 @@ function getDocumentToWorkPerUser($documentId, $workId, $courseId, $sessionId, $
     $active = intval($active);
     $sessionCondition = api_get_session_condition($sessionId);
 
-    $sql = "SELECT w.* FROM $work w 
-            INNER JOIN $workRel rel 
+    $sql = "SELECT w.* FROM $work w
+            INNER JOIN $workRel rel
             ON (w.parent_id = rel.work_id)
             WHERE
                 w.document_id = $documentId AND
@@ -4128,18 +4115,7 @@ function addDir($formValues, $user_id, $courseInfo, $groupId, $sessionId = 0)
         $groupIid = $groupInfo['iid'];
     }
     $session = $em->find('ChamiloCoreBundle:Session', $sessionId);
-
-    $base_work_dir = api_get_path(SYS_COURSE_PATH).$courseInfo['path'].'/work';
     $course_id = $courseInfo['real_id'];
-
-    $directory = api_replace_dangerous_char($formValues['new_dir']);
-    $directory = disable_dangerous_file($directory);
-
-    $created_dir = create_unexisting_work_directory($base_work_dir, $directory);
-
-    if (empty($created_dir)) {
-        return false;
-    }
 
     $enableEndDate = isset($formValues['enableEndDate']) ? true : false;
     $enableExpiryDate = isset($formValues['enableExpiryDate']) ? true : false;
@@ -4157,14 +4133,14 @@ function addDir($formValues, $user_id, $courseInfo, $groupId, $sessionId = 0)
         }
     }
 
-    $dirName = '/'.$created_dir;
+    //$dirName = '/'.$created_dir;
     $today = new DateTime(api_get_utc_datetime(), new DateTimeZone('UTC'));
     $title = isset($formValues['work_title']) ? $formValues['work_title'] : $formValues['new_dir'];
 
-    $workTable = new CStudentPublication();
-    $workTable
+    $studentPublication = new CStudentPublication();
+    $studentPublication
         ->setCId($course_id)
-        ->setUrl($dirName)
+     //   ->setUrl($dirName)
         ->setTitle($title)
         ->setDescription($formValues['description'])
         ->setActive(true)
@@ -4173,42 +4149,51 @@ function addDir($formValues, $user_id, $courseInfo, $groupId, $sessionId = 0)
         ->setPostGroupId($groupIid)
         ->setSentDate($today)
         ->setQualification($formValues['qualification'] != '' ? $formValues['qualification'] : 0)
-        ->setParentId(0)
-        ->setQualificatorId(0)
         ->setWeight(!empty($formValues['weight']) ? $formValues['weight'] : 0)
         ->setSession($session)
         ->setAllowTextAssignment($formValues['allow_text_assignment'])
-        ->setContainsFile(0)
         ->setUserId($user_id)
-        ->setHasProperties(0)
-        ->setDocumentId(0);
+    ;
 
-    $em->persist($workTable);
+    $repo = Container::getStudentPublicationRepository();
+    $em = $repo->getEntityManager();
+    $em->persist($studentPublication);
+    $courseEntity = api_get_course_entity($course_id);
+
+    $repo->addResourceToCourse(
+        $studentPublication,
+        ResourceLink::VISIBILITY_PUBLISHED,
+        api_get_user_entity(api_get_user_id()),
+        $courseEntity,
+        api_get_session_entity(),
+        api_get_group_entity()
+    );
+
     $em->flush();
 
-    $workTable->setId($workTable->getIid());
-    $em->merge($workTable);
+    $studentPublication->setId($studentPublication->getIid());
+    $em->persist($studentPublication);
     $em->flush();
 
     // Folder created
-    api_item_property_update(
+    /*api_item_property_update(
         $courseInfo,
         'work',
-        $workTable->getIid(),
+        $studentPublication->getIid(),
         'DirectoryCreated',
         $user_id,
         $groupInfo
     );
 
     updatePublicationAssignment(
-        $workTable->getIid(),
+        $studentPublication->getIid(),
         $formValues,
         $courseInfo,
         $groupIid
-    );
+    );*/
 
     // Added the new Work ID to the extra field values
-    $formValues['item_id'] = $workTable->getIid();
+    $formValues['item_id'] = $studentPublication->getIid();
 
     $workFieldValue = new ExtraFieldValue('work');
     $workFieldValue->saveFieldValues($formValues);
@@ -4218,21 +4203,21 @@ function addDir($formValues, $user_id, $courseInfo, $groupId, $sessionId = 0)
     switch ($sendEmailAlert) {
         case 1:
             sendEmailToStudentsOnHomeworkCreation(
-                $workTable->getIid(),
+                $studentPublication->getIid(),
                 $course_id,
                 $sessionId
             );
             //no break
         case 2:
             sendEmailToDrhOnHomeworkCreation(
-                $workTable->getIid(),
+                $studentPublication->getIid(),
                 $course_id,
                 $sessionId
             );
             break;
     }
 
-    return $workTable->getIid();
+    return $studentPublication->getIid();
 }
 
 /**
@@ -4526,7 +4511,7 @@ function deleteWorkItem($item_id, $courseInfo)
         )
     ) {
         // We found the current user is the author
-        $sql = "SELECT url, contains_file, user_id, session_id, parent_id 
+        $sql = "SELECT url, contains_file, user_id, session_id, parent_id
                 FROM $work_table
                 WHERE c_id = $course_id AND id = $item_id";
         $result = Database::query($sql);

@@ -1604,12 +1604,9 @@ class Exercise
                 $params,
                 ['c_id = ? AND id = ?' => [$this->course_id, $id]]
             );
-
+            /** @var CQuiz $exerciseEntity */
             $exerciseEntity = $repo->find($id);
-            $node = $exerciseEntity->getResourceNode();
-            $node->setName($exercise);
-            $repo->getEntityManager()->merge($node);
-            $repo->getEntityManager()->flush();
+            $repo->updateNodeForResource($exerciseEntity);
 
             if (api_get_setting('search_enabled') == 'true') {
                 $this->search_engine_edit();

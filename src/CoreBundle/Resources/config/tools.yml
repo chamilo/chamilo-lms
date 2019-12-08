@@ -307,7 +307,7 @@ services:
             - '@chamilo_course.settings.learning_path'
             -
                 lps:
-                    repository: Chamilo\CourseBundle\Repository\CLpCategory
+                    repository: Chamilo\CourseBundle\Repository\CLpRepository
                 lp_categories:
                     repository: Chamilo\CourseBundle\Repository\CLpCategoryRepository
             - '01'

@@ -3,6 +3,8 @@
 
 namespace Chamilo\CourseBundle\Entity;
 
+use Chamilo\CoreBundle\Entity\Resource\AbstractResource;
+use Chamilo\CoreBundle\Entity\Resource\ResourceInterface;
 use Chamilo\UserBundle\Entity\User;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Criteria;
@@ -20,7 +22,7 @@ use Gedmo\Mapping\Annotation as Gedmo;
  * )
  * @ORM\Entity(repositoryClass="Gedmo\Sortable\Entity\Repository\SortableRepository")
  */
-class CLpCategory
+class CLpCategory extends AbstractResource implements ResourceInterface
 {
     /**
      * @var int
@@ -61,6 +63,11 @@ class CLpCategory
     public function __construct()
     {
         $this->users = new ArrayCollection();
+    }
+
+    public function __toString(): string
+    {
+        return $this->getName();
     }
 
     /**
@@ -130,7 +137,7 @@ class CLpCategory
      */
     public function getName()
     {
-        return $this->name;
+        return (string) $this->name;
     }
 
     /**
@@ -228,5 +235,18 @@ class CLpCategory
         $this->users->removeElement($user);
 
         return $this;
+    }
+
+    /**
+     * Resource identifier.
+     */
+    public function getResourceIdentifier(): int
+    {
+        return $this->getId();
+    }
+
+    public function getResourceName(): string
+    {
+        return $this->getName();
     }
 }

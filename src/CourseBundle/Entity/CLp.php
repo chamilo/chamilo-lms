@@ -273,13 +273,30 @@ class CLp extends AbstractResource implements ResourceInterface
      */
     public function __construct()
     {
-        $this->defaultViewMod = 'embedded';
-        $this->defaultEncoding = 'UTF-8';
-        $this->displayOrder = 0;
+        $this->accumulateScormTime = 1;
+        $this->author = '';
+        $this->autolaunch = 0;
         $this->contentLocal = 'local';
-        $this->preventReinit = true;
-        $this->useMaxScore = 1;
+        $this->contentMaker = 'chamilo';
+        $this->contentLicense = '';
         $this->createdOn = new \DateTime();
+        $this->modifiedOn = new \DateTime();
+        $this->defaultEncoding = 'UTF-8';
+        $this->defaultViewMod = 'embedded';
+        $this->displayOrder = 0;
+        $this->debug = 0;
+        $this->forceCommit = 0;
+        $this->hideTocFrame = 0;
+        $this->jsLib = '';
+        $this->maxAttempts = 0;
+        $this->preventReinit = true;
+        $this->path = '';
+        $this->prerequisite = 0;
+        $this->previewImage = '';
+        $this->seriousgameMode = 0;
+        $this->subscribeUsers = 0;
+        $this->useMaxScore = 1;
+        $this->theme = '';
     }
 
     public function __toString(): string

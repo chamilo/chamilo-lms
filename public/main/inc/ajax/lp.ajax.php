@@ -1,6 +1,8 @@
 <?php
 /* For licensing terms, see /license.txt */
 
+use Chamilo\CoreBundle\Framework\Container;
+use Chamilo\CourseBundle\Entity\CDocument;
 use ChamiloSession as Session;
 
 /**
@@ -59,8 +61,10 @@ switch ($action) {
                         $title = Exercise::format_title_variable($title);
                         break;
                     case TOOL_DOCUMENT:
-                        $repo = \Chamilo\CoreBundle\Framework\Container::getDocumentRepository();
+                        $repo = Container::getDocumentRepository();
+                        /** @var CDocument $document */
                         $document = $repo->getResourceFromResourceNode($id);
+                        $id = $document->getIid();
                         $title = $document->getTitle();
                         break;
                 }

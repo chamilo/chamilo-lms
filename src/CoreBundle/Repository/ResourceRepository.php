@@ -729,7 +729,7 @@ class ResourceRepository extends EntityRepository
                     $params = array_merge($params, $extraParams);
                 }
 
-                $referenceType = null === $referenceType ? UrlGeneratorInterface::ABSOLUTE_PATH : $referenceType;
+                $referenceType = $referenceType ?? UrlGeneratorInterface::ABSOLUTE_PATH;
 
                 return $this->router->generate('chamilo_core_resource_view', $params, $referenceType);
             }

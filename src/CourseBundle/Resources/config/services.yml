@@ -101,6 +101,14 @@ services:
         arguments:
             $className: 'Chamilo\CourseBundle\Entity\CLink'
 
+    Chamilo\CourseBundle\Repository\CLpRepository:
+        arguments:
+            $className: 'Chamilo\CourseBundle\Entity\CLp'
+
+    Chamilo\CourseBundle\Repository\CLpCategoryRepository:
+        arguments:
+            $className: 'Chamilo\CourseBundle\Entity\CLpCategory'
+
     Chamilo\CourseBundle\Repository\CShortcutRepository:
         arguments:
             $className: 'Chamilo\CourseBundle\Entity\CShortcut'

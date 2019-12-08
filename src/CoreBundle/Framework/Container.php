@@ -12,6 +12,8 @@ use Chamilo\CoreBundle\Repository\IllustrationRepository;
 use Chamilo\CoreBundle\ToolChain;
 use Chamilo\CourseBundle\Repository\CDocumentRepository;
 use Chamilo\CourseBundle\Repository\CExerciseCategoryRepository;
+use Chamilo\CourseBundle\Repository\CLpCategoryRepository;
+use Chamilo\CourseBundle\Repository\CLpRepository;
 use Chamilo\CourseBundle\Repository\CQuizQuestionCategoryRepository;
 use Chamilo\CourseBundle\Repository\CQuizQuestionRepository;
 use Chamilo\CourseBundle\Repository\CQuizRepository;
@@ -320,6 +322,22 @@ class Container
     public static function getQuestionCategoryRepository()
     {
         return self::$container->get('Chamilo\CourseBundle\Repository\CQuizQuestionCategoryRepository');
+    }
+
+    /**
+     * @return CLpRepository
+     */
+    public static function getLpRepository()
+    {
+        return self::$container->get('Chamilo\CourseBundle\Repository\CLpRepository');
+    }
+
+    /**
+     * @return CLpCategoryRepository
+     */
+    public static function getLpCategoryRepository()
+    {
+        return self::$container->get('Chamilo\CourseBundle\Repository\CLpCategoryRepository');
     }
 
     /**

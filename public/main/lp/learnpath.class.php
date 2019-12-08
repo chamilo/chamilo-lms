@@ -1,6 +1,7 @@
 <?php
 /* For licensing terms, see /license.txt */
 
+use Chamilo\CoreBundle\Entity\Resource\ResourceLink;
 use Chamilo\CoreBundle\Framework\Container;
 use Chamilo\CoreBundle\Repository\CourseRepository;
 use Chamilo\CourseBundle\Component\CourseCopy\CourseArchiver;
@@ -740,13 +741,13 @@ class learnpath
         if (empty($publicated_on)) {
             $publicated_on = null;
         } else {
-            $publicated_on = Database::escape_string(api_get_utc_datetime($publicated_on));
+            $publicated_on = api_get_utc_datetime($publicated_on, true, true);
         }
 
         if (empty($expired_on)) {
             $expired_on = null;
         } else {
-            $expired_on = Database::escape_string(api_get_utc_datetime($expired_on));
+            $expired_on = api_get_utc_datetime($expired_on, true, true);
         }
 
         $check_name = "SELECT * FROM $tbl_lp
@@ -768,15 +769,15 @@ class learnpath
         $type = 1;
         switch ($learnpath) {
             case 'guess':
+            case 'aicc':
                 break;
             case 'dokeos':
             case 'chamilo':
                 $type = 1;
                 break;
-            case 'aicc':
-                break;
         }
 
+        $id = null;
         switch ($origin) {
             case 'zip':
                 // Check zip name string. If empty, we are currently creating a new Chamilo learnpath.
@@ -793,65 +794,61 @@ class learnpath
                     $dsp = $row[0] + 1;
                 }
 
-                $params = [
-                    'c_id' => $course_id,
-                    'lp_type' => $type,
-                    'name' => $name,
-                    'description' => $description,
-                    'path' => '',
-                    'default_view_mod' => 'embedded',
-                    'default_encoding' => 'UTF-8',
-                    'display_order' => $dsp,
-                    'content_maker' => 'Chamilo',
-                    'content_local' => 'local',
-                    'js_lib' => '',
-                    'session_id' => $session_id,
-                    'created_on' => api_get_utc_datetime(),
-                    'modified_on' => api_get_utc_datetime(),
-                    'publicated_on' => $publicated_on,
-                    'expired_on' => $expired_on,
-                    'category_id' => $categoryId,
-                    'force_commit' => 0,
-                    'content_license' => '',
-                    'debug' => 0,
-                    'theme' => '',
-                    'preview_image' => '',
-                    'author' => '',
-                    'prerequisite' => 0,
-                    'hide_toc_frame' => 0,
-                    'seriousgame_mode' => 0,
-                    'autolaunch' => 0,
-                    'max_attempts' => 0,
-                    'subscribe_users' => 0,
-                    'accumulate_scorm_time' => 1,
-                ];
-                $id = Database::insert($tbl_lp, $params);
+                $lp = new CLp();
+                $lp
+                    ->setCId($type)
+                    ->setLpType($course_id)
+                    ->setName($name)
+                    ->setDescription($description)
+                    ->setDisplayOrder($dsp)
+                    ->setSessionId($session_id)
+                    ->setCategoryId($categoryId)
+                    ->setPublicatedOn($publicated_on)
+                    ->setExpiredOn($expired_on)
+                ;
 
-                if ($id > 0) {
+                $repo = Container::getLpRepository();
+                $em = $repo->getEntityManager();
+                $em->persist($lp);
+                $courseEntity = api_get_course_entity($courseInfo['real_id']);
+
+                $repo->addResourceToCourse(
+                    $lp,
+                    ResourceLink::VISIBILITY_PUBLISHED,
+                    api_get_user_entity(api_get_user_id()),
+                    $courseEntity,
+                    api_get_session_entity(),
+                    api_get_group_entity()
+                );
+
+                $em->flush();
+                if ($lp->getIid()) {
+                    $id = $lp->getIid();
                     $sql = "UPDATE $tbl_lp SET id = iid WHERE iid = $id";
                     Database::query($sql);
-
-                    // Insert into item_property.
-                    /*api_item_property_update(
-                        $courseInfo,
-                        TOOL_LEARNPATH,
-                        $id,
-                        'LearnpathAdded',
-                        $userId
-                    );
-                    api_set_default_visibility(
-                        $id,
-                        TOOL_LEARNPATH,
-                        0,
-                        $courseInfo,
-                        $session_id,
-                        $userId
-                    );*/
-
-                    return $id;
                 }
+
+                // Insert into item_property.
+                /*api_item_property_update(
+                    $courseInfo,
+                    TOOL_LEARNPATH,
+                    $id,
+                    'LearnpathAdded',
+                    $userId
+                );
+                api_set_default_visibility(
+                    $id,
+                    TOOL_LEARNPATH,
+                    0,
+                    $courseInfo,
+                    $session_id,
+                    $userId
+                );*/
+
                 break;
         }
+
+        return $id;
     }
 
     /**
@@ -1073,12 +1070,12 @@ class learnpath
             }
         }
 
-        $tbl_tool = Database::get_course_table(TABLE_TOOL_LIST);
+        /*$tbl_tool = Database::get_course_table(TABLE_TOOL_LIST);
         $link = 'lp/lp_controller.php?action=view&lp_id='.$this->lp_id;
         // Delete tools
         $sql = "DELETE FROM $tbl_tool
                 WHERE c_id = $course_id AND (link LIKE '$link%' AND image='scormbuilder.gif')";
-        Database::query($sql);
+        Database::query($sql);*/
 
         $sql = "DELETE FROM $lp
                 WHERE iid = ".$this->lp_id;
@@ -4276,6 +4273,7 @@ class learnpath
      */
     public static function toggle_publish($lp_id, $set_visibility = 'v')
     {
+        return false;
         $course_id = api_get_course_int_id();
         $tbl_lp = Database::get_course_table(TABLE_LP_MAIN);
         $lp_id = (int) $lp_id;
@@ -4922,12 +4920,17 @@ class learnpath
         if (empty($name)) {
             return false;
         }
-        $lp_table = Database::get_course_table(TABLE_LP_MAIN);
-        $name = Database::escape_string($name);
-
         $this->name = $name;
 
         $lp_id = $this->get_id();
+
+        $repo = Container::getLpRepository();
+        /** @var CLp $lp */
+        $lp = $repo->find($lp_id);
+        $lp->setName($name);
+        $repo->updateNodeForResource($lp);
+
+            /*
         $course_id = $this->course_info['real_id'];
         $sql = "UPDATE $lp_table SET
                 name = '$name'
@@ -4943,10 +4946,10 @@ class learnpath
             	    WHERE
             	        c_id = $course_id AND
             	        (link='$link' AND image='scormbuilder.gif' $session_condition)";
-            Database::query($sql);
+            Database::query($sql);*/
 
-            return true;
-        }
+            //return true;
+        //}
 
         return false;
     }
@@ -7278,7 +7281,8 @@ class learnpath
         $course_id = api_get_course_int_id();
         $id = (int) $id;
         $tbl_quiz = Database::get_course_table(TABLE_QUIZ_TEST);
-
+        $item_title = '';
+        $item_description = '';
         if ($id != 0 && is_array($extra_info)) {
             $item_title = $extra_info['title'];
             $item_description = $extra_info['description'];
@@ -7291,9 +7295,6 @@ class learnpath
             $row = Database::fetch_array($result);
             $item_title = $row['title'];
             $item_description = $row['description'];
-        } else {
-            $item_title = '';
-            $item_description = '';
         }
         $item_title = Security::remove_XSS($item_title);
         $item_description = Security::remove_XSS($item_description);
@@ -11803,20 +11804,35 @@ EOD;
      */
     public static function createCategory($params)
     {
-        $em = Database::getManager();
         $item = new CLpCategory();
         $item->setName($params['name']);
         $item->setCId($params['c_id']);
+
+
+        $repo = Container::getLpCategoryRepository();
+        $em = $repo->getEntityManager();
         $em->persist($item);
+        $courseEntity = api_get_course_entity(api_get_course_int_id());
+
+        $repo->addResourceToCourse(
+            $item,
+            ResourceLink::VISIBILITY_PUBLISHED,
+            api_get_user_entity(api_get_user_id()),
+            $courseEntity,
+            api_get_session_entity(),
+            api_get_group_entity()
+        );
+
         $em->flush();
 
-        api_item_property_update(
+
+        /*api_item_property_update(
             api_get_course_info(),
             TOOL_LEARNPATH_CATEGORY,
             $item->getId(),
             'visible',
             api_get_user_id()
-        );
+        );*/
 
         return $item->getId();
     }
@@ -12754,7 +12770,7 @@ EOD;
         $type = $rowItem->getItemType();
         $id = empty($rowItem->getPath()) ? '0' : $rowItem->getPath();
         $main_dir_path = api_get_path(WEB_CODE_PATH);
-        $main_course_path = api_get_path(WEB_COURSE_PATH).$course_info['directory'].'/';
+        //$main_course_path = api_get_path(WEB_COURSE_PATH).$course_info['directory'].'/';
         $link = '';
         $extraParams = api_get_cidreq(true, true, 'learnpath').'&session_id='.$session_id;
 
@@ -12832,7 +12848,7 @@ EOD;
                     'lp/readout_text.php?&id='.$id.'&lp_id='.$learningPathId.'&'.$extraParams;
             case TOOL_DOCUMENT:
                 $repo = Container::getDocumentRepository();
-                $document = $repo->getResourceFromResourceNode($rowItem->getPath());
+                $document = $repo->find($rowItem->getPath());
                 $file = $repo->getResourceFileUrl($document, [], UrlGeneratorInterface::ABSOLUTE_URL);
 
                 return $file;

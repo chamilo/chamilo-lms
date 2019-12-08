@@ -97,7 +97,7 @@ if (api_get_setting('allow_course_theme') === 'true') {
     $mycourselptheme = api_get_course_setting('allow_learning_path_theme');
     if (!empty($mycourselptheme) && $mycourselptheme != -1 && $mycourselptheme == 1) {
         //LP theme picker
-        $theme_select = $form->addElement('SelectGraphical theme', 'lp_theme', get_lang('Graphical theme'));
+        $theme_select = $form->addElement('SelectTheme', 'lp_theme', get_lang('Graphical theme'));
         $form->applyFilter('lp_theme', 'trim');
         $s_theme = $learnPath->get_theme();
         $theme_select->setSelected($s_theme); //default

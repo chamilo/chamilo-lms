@@ -2866,11 +2866,12 @@ class DocumentManager
             'rootClose' => '</ul>',
             'childOpen' => '<li class="doc_resource lp_resource_element ">',
             'childClose' => '</li>',
-            'nodeDecorator' => function($node) {
+            'nodeDecorator' => function ($node) {
                 $link = '<div class="item_data">';
                 if (empty($node['__children'])) {
-                    $link .= '<a id="ki2" class="moved ui-sortable-handle" href="#">';
-                    $link .= '<img src="/img/icons/16/move_everywhere.png" alt="Move" title="Move"></a>';
+                    $move = get_lang('Move');
+                    $link .= '<a class="moved ui-sortable-handle" href="#">';
+                    $link .= '<img src="/img/icons/16/move_everywhere.png" alt="'.$move.'" title="'.$move.'"></a>';
                     $link .= '</a>';
                 }
                 $link .= '<a data_id="'.$node['id'].'" class="moved ui-sortable-handle link_with_id">';
@@ -2884,8 +2885,6 @@ class DocumentManager
         ];
 
         $type = $repo->getResourceType();
-        $nodeId = $nodeRepository->find($course_info['entity']->getResourceNode()->getId());
-
         $em = $repo->getEntityManager();
         $query = $em
             ->createQueryBuilder()
@@ -2901,16 +2900,9 @@ class DocumentManager
             ->orderBy('node.parent', 'ASC')
             ->getQuery();
 
-        //var_dump($query->getArrayResult());
         $tree = $nodeRepository->buildTree($query->getArrayResult(), $options);
 
         return $tree;
-        //$tree = $nodeRepository->childrenHierarchy($node, false,  $options);
-        //echo $tree;
-        /*foreach ($tree as $node) {
-            var_dump($node['path']);
-        }*/
-
 
         $user_id = api_get_user_id();
         $userInfo = api_get_user_info();

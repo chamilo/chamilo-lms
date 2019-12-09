@@ -2122,6 +2122,11 @@ function get_work_user_list(
                             });
                         });
 
+                        $('.getSingleCompilatio').on('click', function () {
+                            var parts = $(this).parent().attr('id').split('id_avancement');
+                            getSingleCompilatio(parts[1]);
+                        });
+
                         $('#file_upload_".$item_id."').fileupload({
                             add: function (e, data) {
                                 $('#progress_$item_id').html();

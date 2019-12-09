@@ -1077,19 +1077,24 @@ class learnpath
                 WHERE c_id = $course_id AND (link LIKE '$link%' AND image='scormbuilder.gif')";
         Database::query($sql);*/
 
-        $sql = "DELETE FROM $lp
+        /*$sql = "DELETE FROM $lp
                 WHERE iid = ".$this->lp_id;
-        Database::query($sql);
+        Database::query($sql);*/
+        $repo = Container::getLpRepository();
+        $lp = $repo->find($this->lp_id);
+        $repo->remove($lp);
+        $repo->getEntityManager()->flush();
+
         // Updates the display order of all lps.
         $this->update_display_order();
 
-        api_item_property_update(
+        /*api_item_property_update(
             api_get_course_info(),
             TOOL_LEARNPATH,
             $this->lp_id,
             'delete',
             api_get_user_id()
-        );
+        );*/
 
         $link_info = GradebookUtils::isResourceInCourseGradebook(
             api_get_course_id(),

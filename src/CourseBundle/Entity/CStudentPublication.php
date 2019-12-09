@@ -91,7 +91,7 @@ class CStudentPublication extends AbstractResource implements ResourceInterface
     /**
      * @var bool
      *
-     * @ORM\Column(name="active", type="boolean", nullable=true)
+     * @ORM\Column(name="active", type="integer", nullable=true)
      */
     protected $active;
 
@@ -327,13 +327,13 @@ class CStudentPublication extends AbstractResource implements ResourceInterface
     /**
      * Set active.
      *
-     * @param bool $active
+     * @param int $active
      *
      * @return CStudentPublication
      */
     public function setActive($active)
     {
-        $this->active = $active;
+        $this->active = (int) $active;
 
         return $this;
     }

@@ -468,7 +468,7 @@ class ResourceNode
         return false;
     }
 
-    public function setResourceFile(ResourceFile $resourceFile): ResourceNode
+    public function setResourceFile(ResourceFile $resourceFile = null): ResourceNode
     {
         $this->resourceFile = $resourceFile;
 

@@ -113,6 +113,10 @@ services:
         arguments:
             $className: 'Chamilo\CourseBundle\Entity\CStudentPublicationAssignment'
 
+    Chamilo\CourseBundle\Repository\CStudentPublicationCommentRepository:
+        arguments:
+            $className: 'Chamilo\CourseBundle\Entity\CStudentPublicationComment'
+
     Chamilo\CourseBundle\Repository\CLpCategoryRepository:
         arguments:
             $className: 'Chamilo\CourseBundle\Entity\CLpCategory'

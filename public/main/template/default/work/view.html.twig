@@ -1,3 +1,4 @@
+{% autoescape false %}
 <div class="page-header">
     <h2>
         {{ work.title }}
@@ -25,3 +26,5 @@
 {% endif %}
 
 {% include template ~ '/work/comments.html.twig' %}
+
+{% endautoescape %}

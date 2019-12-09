@@ -3,6 +3,8 @@
 
 namespace Chamilo\CourseBundle\Entity;
 
+use Chamilo\CoreBundle\Entity\Resource\AbstractResource;
+use Chamilo\CoreBundle\Entity\Resource\ResourceInterface;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -18,7 +20,7 @@ use Doctrine\ORM\Mapping as ORM;
  * )
  * @ORM\Entity
  */
-class CStudentPublicationComment
+class CStudentPublicationComment extends AbstractResource implements ResourceInterface
 {
     /**
      * @var int
@@ -77,6 +79,34 @@ class CStudentPublicationComment
      * @ORM\Column(name="sent_at", type="datetime", nullable=false)
      */
     protected $sentAt;
+
+    public function __construct()
+    {
+        $this->sentAt = new \DateTime();
+    }
+
+    public function __toString(): string
+    {
+        return (string) $this->getIid();
+    }
+
+    /**
+     * @return int
+     */
+    public function getIid()
+    {
+        return $this->iid;
+    }
+
+    /**
+     * @return int
+     */
+    public function setId($id)
+    {
+        $this->id = $id;
+
+        return $this;
+    }
 
     /**
      * Set workId.
@@ -230,5 +260,18 @@ class CStudentPublicationComment
     public function getId()
     {
         return $this->id;
+    }
+
+    /**
+     * Resource identifier.
+     */
+    public function getResourceIdentifier(): int
+    {
+        return $this->getIid();
+    }
+
+    public function getResourceName(): string
+    {
+        return (string) substr($this->getComment(), 0, 80);
     }
 }

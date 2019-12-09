@@ -78,9 +78,17 @@ class CStudentPublicationAssignment extends AbstractResource implements Resource
      */
     protected $publicationId;
 
+    /**
+     * @return int
+     */
+    public function getIid(): int
+    {
+        return $this->iid;
+    }
+
     public function __toString(): string
     {
-        return (string) $this->getId();
+        return (string) $this->getIid();
     }
 
     /**
@@ -256,11 +264,11 @@ class CStudentPublicationAssignment extends AbstractResource implements Resource
      */
     public function getResourceIdentifier(): int
     {
-        return $this->getId();
+        return $this->getIid();
     }
 
     public function getResourceName(): string
     {
-        return (string) $this->getId();
+        return (string) $this->getIid();
     }
 }

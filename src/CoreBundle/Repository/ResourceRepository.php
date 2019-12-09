@@ -295,10 +295,12 @@ class ResourceRepository extends EntityRepository
     }
 
     /**
-     * @param int        $visibility
-     * @param Course     $course
-     * @param Session    $session
-     * @param CGroupInfo $group
+     * @param ResourceNode $resourceNode
+     * @param              $visibility
+     * @param              $course
+     * @param              $session
+     * @param              $group
+     *
      */
     public function addResourceNodeToCourse(ResourceNode $resourceNode, $visibility, $course, $session, $group): void
     {

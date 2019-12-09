@@ -278,7 +278,7 @@ function getWorkList($id, $my_folder_data, $add_in_where_query = null, $course_i
                     $condition_session AND
                     $active_condition AND
                     (parent_id = 0)
-                    $contains_file_query AND 
+                    $contains_file_query AND
                     post_group_id = $groupIid
                 ORDER BY sent_date DESC";
     } else {
@@ -597,7 +597,7 @@ function showTeacherWorkGrid()
 function build_work_directory_selector($folders, $curdirpath, $group_dir = '')
 {
     $form = '<form name="selector" action="'.api_get_self().'?'.api_get_cidreq().'" method="POST">';
-    $form .= get_lang('CurrentDirectory').' 
+    $form .= get_lang('CurrentDirectory').'
              <select name="curdirpath" onchange="javascript: document.selector.submit();">';
     //group documents cannot be uploaded in the root
     if ($group_dir == '') {
@@ -974,19 +974,19 @@ function updateDirName($work_data, $newPath)
  */
 function to_javascript_work()
 {
-    $js = '<script> 
+    $js = '<script>
         function updateDocumentTitle(value) {
-            var temp = value.indexOf("/");            
+            var temp = value.indexOf("/");
             //linux path
             if(temp != -1){
                 temp=value.split("/");
             } else {
                 temp=value.split("\\\");
             }
-            
+
             var fullFilename = temp[temp.length - 1];
             var baseFilename = fullFilename;
-            
+
             // get file extension
             var fileExtension = "";
             if (fullFilename.match(/\..+/)) {
@@ -996,9 +996,9 @@ function to_javascript_work()
                     baseFilename = fileInfo[fileInfo.length - 2];
                 }
             }
-            
+
             document.getElementById("file_upload").value = baseFilename;
-            document.getElementById("file_extension").value = fileExtension;                
+            document.getElementById("file_extension").value = fileExtension;
             $("#contains_file_id").attr("value", 1);
         }
         function setFocus() {
@@ -1009,17 +1009,17 @@ function to_javascript_work()
             setFocus();
             var checked = $("#expiry_date").attr("checked");
             if (checked) {
-                $("#option2").show();                
+                $("#option2").show();
             } else {
-                $("#option2").hide();                
+                $("#option2").hide();
             }
-            
-            var checkedEndDate = $("#end_date").attr("checked");            
-            if (checkedEndDate) {                
+
+            var checkedEndDate = $("#end_date").attr("checked");
+            if (checkedEndDate) {
                 $("#option3").show();
                 $("#ends_on").attr("checked", true);
             } else {
-                $("#option3").hide();                
+                $("#option3").hide();
                 $("#ends_on").attr("checked", false);
             }
 
@@ -1159,7 +1159,7 @@ function get_count_work($work_id, $onlyMeUserId = null, $notMeUserId = null)
                 prop.visibility <> 2 AND
                 work.c_id = $course_id
             )
-            INNER JOIN $user_table u 
+            INNER JOIN $user_table u
             ON (work.user_id = u.user_id)
             WHERE $extra_conditions $where_condition $condition_session";
 
@@ -1550,31 +1550,31 @@ function get_work_user_list_from_documents(
         $select1 = " SELECT count(u.user_id) as count ";
         $select2 = " SELECT count(u.user_id) as count ";
     } else {
-        $select1 = " SELECT DISTINCT 
-                        u.firstname, 
-                        u.lastname, 
-                        u.user_id, 
+        $select1 = " SELECT DISTINCT
+                        u.firstname,
+                        u.lastname,
+                        u.user_id,
                         w.title,
-                        w.parent_id, 
-                        w.document_id document_id, 
-                        w.id, qualification, 
-                        qualificator_id, 
+                        w.parent_id,
+                        w.document_id document_id,
+                        w.id, qualification,
+                        qualificator_id,
                         w.sent_date,
                         w.contains_file,
                         w.url
                     ";
-        $select2 = " SELECT DISTINCT 
+        $select2 = " SELECT DISTINCT
                         u.firstname, u.lastname,
-                        u.user_id, 
-                        d.title, 
-                        w.parent_id, 
-                        d.id document_id, 
-                        0, 
-                        0, 
+                        u.user_id,
+                        d.title,
+                        w.parent_id,
+                        d.id document_id,
+                        0,
+                        0,
                         0,
                         w.sent_date,
                         w.contains_file,
-                        w.url                        
+                        w.url
                     ";
     }
 
@@ -1893,13 +1893,13 @@ function get_work_user_list(
         }
 
         $sql = " $select
-                FROM $work_table work 
-                INNER JOIN $user_table u  
+                FROM $work_table work
+                INNER JOIN $user_table u
                 ON (work.user_id = u.user_id)
                 WHERE
                     work.c_id = $course_id AND
-                    $extra_conditions 
-                    $whereCondition 
+                    $extra_conditions
+                    $whereCondition
                     $condition_session
                     AND u.status != ".INVITEE."
                 ORDER BY $column $direction";
@@ -2089,7 +2089,7 @@ function get_work_user_list(
 
                     if ($unoconv && empty($work['contains_file'])) {
                         $action .= '<a f
-                            href="'.$url.'work_list_all.php?'.api_get_cidreq().'&id='.$work_id.'&action=export_to_doc&item_id='.$item_id.'" 
+                            href="'.$url.'work_list_all.php?'.api_get_cidreq().'&id='.$work_id.'&action=export_to_doc&item_id='.$item_id.'"
                             title="'.get_lang('ExportToDoc').'" >'.
                             Display::return_icon('export_doc.png', get_lang('ExportToDoc'), [], ICON_SIZE_SMALL).'</a> ';
                     }
@@ -2121,6 +2121,7 @@ function get_work_user_list(
                                 dropZone: $(this)
                             });
                         });
+
                         $('#file_upload_".$item_id."').fileupload({
                             add: function (e, data) {
                                 $('#progress_$item_id').html();
@@ -2691,8 +2692,8 @@ function getDocumentToWorkPerUser($documentId, $workId, $courseId, $sessionId, $
     $active = intval($active);
     $sessionCondition = api_get_session_condition($sessionId);
 
-    $sql = "SELECT w.* FROM $work w 
-            INNER JOIN $workRel rel 
+    $sql = "SELECT w.* FROM $work w
+            INNER JOIN $workRel rel
             ON (w.parent_id = rel.work_id)
             WHERE
                 w.document_id = $documentId AND
@@ -4501,7 +4502,7 @@ function deleteWorkItem($item_id, $courseInfo)
         )
     ) {
         // We found the current user is the author
-        $sql = "SELECT url, contains_file, user_id, session_id, parent_id 
+        $sql = "SELECT url, contains_file, user_id, session_id, parent_id
                 FROM $work_table
                 WHERE c_id = $course_id AND id = $item_id";
         $result = Database::query($sql);

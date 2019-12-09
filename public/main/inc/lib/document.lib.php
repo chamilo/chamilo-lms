@@ -6067,7 +6067,6 @@ This folder contains all sessions that have been opened in the chat. Although th
                     $handle = tmpfile();
                     fwrite($handle, $content);
                     $meta = stream_get_meta_data($handle);
-                    //error_log($meta['uri']);
                     $file = new UploadedFile($meta['uri'], $title, null, null, true);
                     $resourceFile->setFile($file);
                 }

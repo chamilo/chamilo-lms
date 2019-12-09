@@ -140,11 +140,6 @@ function get_work_data_by_id($id, $courseId = 0, $sessionId = 0)
         $work['show_content'] = '';
         if ($work['contains_file']) {
             $fileType = '';
-            //$file = api_get_path(SYS_COURSE_PATH).$course->getDirectory().'/'.$work['url'];
-            /*if (file_exists($file)) {
-                $fileType = mime_content_type($file);
-            }*/
-
             if (in_array($fileType, ['image/jpeg', 'image/jpg', 'image/png', 'image/gif'])) {
                 $work['show_content'] = Display::img($work['show_url'], $work['title'], null, false);
             } elseif (false !== strpos($fileType, 'video/')) {
@@ -1603,8 +1598,9 @@ function get_work_user_list_from_documents(
     if (empty($studentId)) {
         $studentId = api_get_user_id();
     }
-    $studentId = intval($studentId);
-    $workId = intval($workId);
+
+    $studentId = (int) $studentId;
+    $workId = (int) $workId;
 
     $userCondition = " AND u.user_id = $studentId ";
     $sessionCondition = api_get_session_condition($sessionId, true, false, 'w.session_id');
@@ -1645,8 +1641,8 @@ function get_work_user_list_from_documents(
                     )
             )";
 
-    $start = intval($start);
-    $limit = intval($limit);
+    $start = (int) $start;
+    $limit = (int) $limit;
 
     $direction = in_array(strtolower($direction), ['desc', 'asc']) ? $direction : 'desc';
     $column = Database::escape_string($column);
@@ -3378,8 +3374,6 @@ function getWorkComment($id, $courseInfo = [])
  */
 function deleteCommentFile($id, $courseInfo = [])
 {
-    $workComment = getWorkComment($id, $courseInfo);
-
     $repo = Container::getStudentPublicationCommentRepository();
     $criteria = [
         'id' => $id,

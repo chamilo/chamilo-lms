@@ -101,7 +101,7 @@ if (empty($infoCertificate)) {
         $useDefault = true;
     }
 }
-
+$seal = $infoCertificate['seal'];
 $workSpace = intval(297 - $infoCertificate['margin_left'] - $infoCertificate['margin_right']);
 $widthCell = intval($workSpace / 6);
 $htmlList = [];
@@ -109,47 +109,19 @@ $htmlList = [];
 $currentLocalTime = api_get_local_time();
 
 foreach ($userList as $userInfo) {
-    $htmlText = '<html>';
-    $htmlText .= '
+    $htmlText = null;
+
+    $linkCertificateCSS = '
     <link rel="stylesheet"
         type="text/css"
         href="'.api_get_path(WEB_PLUGIN_PATH).'customcertificate/resources/css/certificate.css">';
-    $htmlText .= '
+    $linkCertificateCSS.= '
     <link rel="stylesheet"
         type="text/css"
         href="'.api_get_path(WEB_CSS_PATH).'document.css">';
-    $htmlText .= '<body>';
+
     $studentId = $userInfo['user_id'];
-
-    if (empty($infoCertificate['background'])) {
-        $htmlText .= '<div class="caraA" style="page-break-before:always; margin:0px; padding:0px; width: 1122px; height: 795px;">';
-    } else {
-        $urlBackground = $path.$infoCertificate['background'];
-        $htmlText .= ' <div 
-        class = "caraA"
-        style = "background-image:url('.$urlBackground.') no-repeat; background-image-resize:6; margin:0px; padding:0px;" width: 1122px; height: 795px;>';
-    }
-
-    /*$logo = '';
-    if (!empty($infoCertificate['logo'])) {
-        $logo = '
-            <img 
-                style="max-height: 150px; max-width: '.intval($workSpace - (2 * $widthCell)).'mm;"
-                src="'.$path.$infoCertificate['logo'].'" />';
-    }
-
-    $htmlText .= '<table 
-        width="'.$workSpace.'mm"
-        style="
-            margin-left:'.$infoCertificate['margin_left'].'mm;
-            margin-right:'.$infoCertificate['margin_right'].'mm;
-        "
-        border="0">';
-    $htmlText .= '<tr>';
-    $htmlText .= '<td style="width:'.intval($workSpace / 3).'mm; text-align:center;" class="logo">'.$logo.'</td>';
-    $htmlText .= '</tr>';
-    $htmlText .= '</table>';*/
-
+    $urlBackground = $path.$infoCertificate['background'];
     $allUserInfo = DocumentManager::get_all_info_to_certificate(
         $studentId,
         $courseCode,
@@ -242,31 +214,19 @@ foreach ($userList as $userInfo) {
         <dd><dt><dl><br><hr><img><a><div><h1><h2><h3><h4><h5><h6>'
     );
 
-    $htmlText .= '<div style="
-            height: 480px;
-            width:'.$workSpace.'mm;
-            margin-left:'.$infoCertificate['margin_left'].'mm;
-            margin-right:'.$infoCertificate['margin_right'].'mm;
-        ">';
-    $htmlText .= $myContentHtml;
-    $htmlText .= '</div>';
+    $marginLeft = $infoCertificate['margin_left'];
+    $marginRight = $infoCertificate['margin_right'];
 
-    $htmlText .= '<table
-        width="'.$workSpace.'mm"
-        style="
-            margin-left:'.$infoCertificate['margin_left'].'mm;
-            margin-right:'.$infoCertificate['margin_right'].'mm;
-        "
-        border="0">';
-
-    $htmlText .= '<tr>';
-    $htmlText .= '<td colspan="4" class="seals" style="width:'.(2 * $widthCell).'mm">
-                    '.((!empty($infoCertificate['seal'])) ? $plugin->get_lang('Seal') : '').
-                '</td>';
-    $htmlText .= '</tr>';
-
-    $htmlText .= '</table>';
-    $htmlText .= '</div>';
+    $templateName = $plugin->get_lang('ExportCertificate');
+    $template = new Template($templateName);
+    $template->assign('css_certificate', $linkCertificateCSS);
+    $template->assign('background', $urlBackground);
+    $template->assign('margin_left', $marginLeft);
+    $template->assign('margin_right', $marginRight);
+    $template->assign('content_html', $myContentHtml);
+    $template->assign('seal', $seal);
+    $content = $template->fetch('customcertificate/template/certificate.tpl');
+    $htmlText .= $content;
 
     // Rear certificate
     if ($infoCertificate['contents_type'] != 3) {
@@ -404,6 +364,8 @@ foreach ($userList as $userInfo) {
     $htmlList[$fileName] = $htmlText;
 }
 
+
+
 $fileList = [];
 $archivePath = api_get_path(SYS_ARCHIVE_PATH).'certificates/';
 if (!is_dir($archivePath)) {
@@ -418,9 +380,10 @@ foreach ($htmlList as $fileName => $content) {
         'pdf_description' => '',
         'format' => 'A4-L',
         'orientation' => 'L',
-        'left' => 15,
-        'top' => 15,
+        'left' => 0,
+        'top' => 0,
         'bottom' => 0,
+        'right' => 0
     ];
     $pdf = new PDF($params['format'], $params['orientation'], $params);
     if (count($htmlList) == 1) {
@@ -432,6 +395,7 @@ foreach ($htmlList as $fileName => $content) {
         $fileList[] = $filePath;
     }
 }
+
 
 if (!empty($fileList)) {
     $zipFile = $archivePath.'certificates_'.api_get_unique_id().'.zip';
@@ -474,3 +438,4 @@ function getIndexFiltered($index)
 
     return $result;
 }
+

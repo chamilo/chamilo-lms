@@ -3390,8 +3390,9 @@ function deleteCommentFile($id, $courseInfo = [])
     $commentEntity = $repo->findOneBy($criteria);
 
     if ($commentEntity->getResourceNode()->hasResourceFile()) {
-        $commentEntity->getResourceNode()->setResourceFile(null);
         $file = $commentEntity->getResourceNode()->getResourceFile();
+
+        $commentEntity->getResourceNode()->setResourceFile(null);
         $repo->getEntityManager()->remove($file);
         $repo->getEntityManager()->flush();
     }

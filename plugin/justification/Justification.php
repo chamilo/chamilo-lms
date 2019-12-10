@@ -49,10 +49,10 @@ class Justification extends Plugin
         )";
         Database::query($sql);
 
-        $sql = "CREATE TABLE IF NOT EXISTS justification_document_users (
+        $sql = "CREATE TABLE IF NOT EXISTS justification_document_rel_users (
             id INT unsigned NOT NULL auto_increment PRIMARY KEY,
             justification_document_id INT NOT NULL,
-            document_id INT,
+            file_path VARCHAR(255),
             user_id INT,
             date_validity DATE
         )";
@@ -61,10 +61,10 @@ class Justification extends Plugin
 
     public function uninstall()
     {
-        $sql = 'DROP TABLE justification_document';
+        $sql = 'DROP TABLE IF EXISTS justification_document';
         Database::query($sql);
 
-        $sql = 'DROP TABLE justification_document_users';
+        $sql = 'DROP TABLE IF EXISTS justification_document_rel_users';
         Database::query($sql);
     }
 }

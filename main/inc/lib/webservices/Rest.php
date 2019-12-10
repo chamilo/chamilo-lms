@@ -1654,6 +1654,10 @@ class Rest extends WebService
             throw new Exception(get_lang('SessionNotRegistered'));
         }
 
+        if (is_string($newSessionId)) {
+            throw new Exception($newSessionId);
+        }
+
         $promotionId = $modelSession['promotion_id'];
         if ($promotionId) {
             $sessionList = array_keys(SessionManager::get_all_sessions_by_promotion($promotionId));

@@ -1256,7 +1256,7 @@ if (!empty($error)) {
             var my_choice_agree_scale = $(\'*[name*="choice[\'+question_id+\']"]\').serialize();
 
             // 7. Agree reorder choice inputs
-            var my_choice_agree_reorder = $(\'*[name*="choice[\'+question_id+\']"]\').serialize();
+            var my_choice_agree_reorder = $(\'*[name*="choice[\'+question_id+\']*"]\').serialize();
 
             // Checking CkEditor
             if (question_id) {

@@ -7538,8 +7538,16 @@ class TrackingCourseLog
             );
 
             if ($export_csv) {
-                $user['first_connection'] = api_get_local_time($user['first_connection']);
-                $user['last_connection'] = api_get_local_time($user['last_connection']);
+                if (!empty($user['first_connection'])) {
+                    $user['first_connection'] = api_get_local_time($user['first_connection']);
+                } else {
+                    $user['first_connection'] = '-';
+                }
+                if (!empty($user['last_connection'])) {
+                    $user['last_connection'] = api_get_local_time($user['last_connection']);
+                } else {
+                    $user['last_connection'] = '-';
+                }
             }
 
             if (empty($session_id)) {

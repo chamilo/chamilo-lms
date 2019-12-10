@@ -477,6 +477,44 @@ class ExerciseLib
             }
 
             if ($answerType == QUESTION_PT_TYPE_AGREE_OR_DISAGREE) {
+                echo "
+                <script>
+                    $(function() {
+                        $('.slt-choice-agree').change(function(e){
+                            var questionId = $(this).prop('id').substr(13);
+                            var sltValue = $(this).val();
+                            $('#choice-disagree-'+questionId+' option:disabled').removeAttr('disabled');
+                            if (sltValue > 0) {
+                                $('#choice-disagree-'+questionId+' option[value='+sltValue+']').attr('disabled', true);
+                            }
+                        });
+
+                        $('.slt-choice-disagree').change(function(e){
+                            var questionId = $(this).prop('id').substr(16);
+                            var sltValue = $(this).val();
+                            $('#choice-agree-'+questionId+' option:disabled').removeAttr('disabled');
+                            if (sltValue > 0) {
+                                $('#choice-agree-'+questionId+' option[value='+sltValue+']').attr('disabled', true);
+                            }
+                        });
+
+                        $('select.slt-choice-agree').each( function(key, value) {
+                            var questionId = $(this).prop('id').substr(13);
+                            var sltValue = $(this).val();
+                            if (sltValue > 0) {
+                                $('#choice-disagree-'+questionId+' option[value='+sltValue+']').attr('disabled', true);
+                            }
+                        });
+
+                        $('select.slt-choice-disagree').each( function(key, value) {
+                            var questionId = $(this).prop('id').substr(16);
+                            var sltValue = $(this).val();
+                            if (sltValue > 0) {
+                                $('#choice-agree-'+questionId+' option[value='+sltValue+']').attr('disabled', true);
+                            }
+                        });
+                    });
+                </script>";
                 $header = Display::tag(
                     'th',
                     get_lang('Option'),
@@ -520,6 +558,49 @@ class ExerciseLib
             }
 
             if ($answerType == QUESTION_PT_TYPE_AGREE_REORDER) {
+                echo "
+                <script>
+                    $(function() {
+                        $('.slt-choice-reorder').change(function(e) {
+                            var aux = $(this).prop('id').substr(7);
+                            var info = aux.split('-');
+                            var questionId = info[0];
+                            var item = info[1];
+                            var sltValue = $(this).val();
+                            
+                            $('select.slt-choice-reorder').each( function(key, value) {
+                                $('#'+value.id+' option:disabled').removeAttr('disabled');
+                            });
+
+                            $('select.slt-choice-reorder').each( function(key, valueAux) {
+                                var aux = valueAux.value;
+                                if (aux > 0) {
+                                    $('select.slt-choice-reorder').each( function(key2, valueAux2) {
+                                        if (valueAux.id == valueAux2.id) {
+                                            // no action
+                                        } else {
+                                            $('#'+valueAux2.id+' option[value='+aux+']').attr('disabled', true);
+                                        }
+                                    });
+                                }
+                            });
+                        });
+
+                        $('select.slt-choice-reorder').each( function(key, valueAux) {
+                            var aux = valueAux.value;
+                            if (aux > 0) {
+                                $('select.slt-choice-reorder').each( function(key2, valueAux2) {
+                                    if (valueAux.id == valueAux2.id) {
+                                        // no action
+                                    } else {
+                                        $('#'+valueAux2.id+' option[value='+aux+']').attr('disabled', true);
+                                    }
+                                });
+                            }
+                        });
+                    });
+                </script>";
+                
                 $header = Display::tag(
                     'th',
                     get_lang('Option'),
@@ -1448,6 +1529,8 @@ HTML;
 
                         if (isset($user_choice[0]['answer'])) {
                             $answerOption = json_decode($user_choice[0]['answer'], true);
+                            //error_log("answerOption");
+                            //error_log(print_r($answerOption,1));
                             for ($i = 1; $i <= 5; $i++) {
                                 if ($answerOption[$i] == $numAnswer) {
                                     $selectValue[$i] = $numAnswer;
@@ -1487,7 +1570,7 @@ HTML;
                 $s .= '<div class="form-group">';
                 $s .= '<label for="choice-agree-'.$questionId.'" class="col-sm-2 control-label">'.get_lang('MostAgree').': </label>';
                 $s .= '<div class="col-sm-8">';
-                $s .= '<select id="choice-agree-'.$questionId.'" class="selectpicker form-control" name="choice-agree['.$questionId.']">';
+                $s .= '<select id="choice-agree-'.$questionId.'" class="selectpicker form-control slt-choice-agree" name="choice-agree['.$questionId.']">';
                 $s .= '<option value="">'.get_lang('ChooseAnAnswer').'</option>';
                 foreach ($optionsList as $key => $value) {
                     if ($key == $agreeOption) {
@@ -1504,7 +1587,7 @@ HTML;
                 $s .= '<div class="form-group">';
                 $s .= '<label for="choice-disagree-'.$questionId.'" class="col-sm-2 control-label">'.get_lang('LeastAgree').': </label>';
                 $s .= '<div class="col-sm-8">';
-                $s .= '<select id="choice-disagree-'.$questionId.'" class="selectpicker form-control" name="choice-disagree['.$questionId.']">';
+                $s .= '<select id="choice-disagree-'.$questionId.'" class="selectpicker form-control slt-choice-disagree" name="choice-disagree['.$questionId.']">';
                 $s .= '<option value="">'.get_lang('ChooseAnAnswer').'</option>';
                 foreach ($optionsList as $key => $value) {
                     if ($key == $disagreeOption) {
@@ -1526,8 +1609,12 @@ HTML;
                     $s .= '<div class="form-group">';
                     $s .= '<label for="choice-'.$questionId.'-'.$i.'" class="col-sm-2 control-label">'.get_lang('AgreeScale'.$i).': </label>';
                     $s .= '<div class="col-sm-8">';
-                    $s .= '<select id="choice-'.$questionId.'-'.$i.'" class="selectpicker form-control" name="choice['.$questionId.']['.$i.']">';
+                    $s .= '<select id="choice-'.$questionId.'-'.$i.'" class="selectpicker form-control slt-choice-reorder" name="choice['.$questionId.']['.$i.']">';
                     $s .= '<option value="">'.get_lang('ChooseAnAnswer').'</option>';
+                    //error_log("i: ".$i);
+                    //error_log(print_r($selectValue,1));
+                    //error_log(print_r($optionsList,1));
+                    //error_log(print_r($selectValue[$i],1));
                     foreach ($optionsList as $key => $value) {
                         if ($key == $selectValue[$i]) {
                             $s .= '<option value="'.$key.'" selected="selected">'.get_lang('Option').' '.$value.'</option>';

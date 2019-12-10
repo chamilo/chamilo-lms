@@ -112,6 +112,8 @@ function edit_category_form($action)
         $form->addElement('header', get_lang('EditCategory'));
         $form->addElement('hidden', 'category_id');
         $form->addElement('text', 'category_name', get_lang('PtestCategoryName'), ['size' => '95']);
+        $form->addElement('color', 'category_color', get_lang('PtestCategoryColor'), ['size' => '95']);
+        $form->addElement('number', 'category_position', get_lang('PtestCategoryPosition'), ['size' => '95']);
         $form->addHtmlEditor(
                 'category_description',
                 get_lang('PtestCategoryDescription'),
@@ -128,6 +130,8 @@ function edit_category_form($action)
         $defaults = [];
         $defaults['category_id'] = $objcat->id;
         $defaults['category_name'] = $objcat->name;
+        $defaults['category_color'] = $objcat->color;
+        $defaults['category_position'] = $objcat->position;
         $defaults['category_description'] = $objcat->description;
         $form->setDefaults($defaults);
 
@@ -142,6 +146,8 @@ function edit_category_form($action)
                 if ($category) {
                     $category->name = $values['category_name'];
                     $category->description = $values['category_description'];
+                    $category->color = $values['category_color'];
+                    $category->position = $values['category_position'];
                     $category->modifyCategory();
                     Display::addFlash(Display::return_message(get_lang('Updated')));
                 } else {
@@ -194,6 +200,8 @@ function add_category_form($action)
     // Setting the form elements
     $form->addElement('header', get_lang('AddACategory'));
     $form->addElement('text', 'category_name', get_lang('PtestCategoryName'), ['size' => '95']);
+    $form->addElement('color', 'category_color', get_lang('PtestCategoryColor'), ['size' => '95']);
+    $form->addElement('number', 'category_position', get_lang('PtestCategoryPosition'), ['size' => '95']);
     $form->addHtmlEditor(
         'category_description',
         get_lang('PtestCategoryDescription'),
@@ -212,6 +220,8 @@ function add_category_form($action)
             $category = new PTestCategory();
             $category->name = $values['category_name'];
             $category->description = $values['category_description'];
+            $category->color = $values['category_color'];
+            $category->position = $values['category_position'];
             if ($category->save($exerciseId)) {
                 Display::addFlash(Display::return_message(get_lang('AddCategoryDone')));
             } else {

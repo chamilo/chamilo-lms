@@ -6682,6 +6682,7 @@ class Exercise
         foreach ($cList as $item) {
             $categoryList[$item->id]['label'] = $item->name;
             $categoryList[$item->id]['num'] = 0;
+            $categoryList[$item->id]['color'] = $item->color;
         }
 
         $answerTable = Database::get_course_table(TABLE_QUIZ_ANSWER);
@@ -6770,9 +6771,22 @@ class Exercise
 
         $labels =  [];
         $num = [];
+        $backgroundColor = $borderColor = [];
         foreach ($categoryList as $item) {
             $labels[] = $item['label'];
             $data[] = (int) $item['num'];
+            $bgColor = 'rgba(0, 0, 0, 0.1)';
+            $brColor = 'rgba(0, 0, 0, 0.1)';
+
+            if (!empty($item['color'])) {
+                $hex = $item['color'];
+                list($r, $g, $b) = sscanf($hex, "#%02x%02x%02x");
+                $brColor = 'rgb('.$r.', '.$g.', '.$b.')';
+                $bgColor = 'rgba('.$r.', '.$g.', '.$b.', 0.6)';
+            }
+            
+            $backgroundColor[] = $bgColor;
+            $borderColor[] = $brColor;
         }
 
         $html = '';
@@ -6830,7 +6844,10 @@ class Exercise
                       "barThickness": 6,
                       "maxBarThickness": 8,
                       "minBarLength": 2,
-                      "data": '.json_encode($data).'
+                      "data": '.json_encode($data).',
+                      "backgroundColor": '.json_encode($backgroundColor).',
+                      "borderColor": '.json_encode($borderColor).',
+                      "borderWidth":1
                   }
               ]
             }

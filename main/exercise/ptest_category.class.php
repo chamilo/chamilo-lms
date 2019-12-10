@@ -15,6 +15,8 @@ class PTestCategory
     public $name;
     public $description;
     public $exercise_id;
+    public $color;
+    public $position;
 
     /**
      * Constructor of the class Category.
@@ -24,6 +26,8 @@ class PTestCategory
         $this->name = '';
         $this->description = '';
         $this->exercise_id = 0;
+        $this->color = '#000000';
+        $this->position = 0;
     }
 
     /**
@@ -51,6 +55,8 @@ class PTestCategory
             $this->name = $row['title'];
             $this->description = $row['description'];
             $this->exercise_id = $row['exercise_id'];
+            $this->color = $row['color'];
+            $this->position = $row['position'];
 
             return $this;
         }
@@ -93,6 +99,8 @@ class PTestCategory
                 'title' => $this->name,
                 'description' => $this->description,
                 'session_id' => api_get_session_id(),
+                'color' => $this->color,
+                'position' => $this->position,
             ];
             $newId = Database::insert($table, $params);
 
@@ -151,6 +159,8 @@ class PTestCategory
         $id = (int) $this->id;
         $name = Database::escape_string($this->name);
         $description = Database::escape_string($this->description);
+        $color = Database::escape_string($this->color);
+        $position = Database::escape_string($this->position);
         $cat = $this->getCategory($id, $courseId);
         $courseId = empty($courseId) ? api_get_course_int_id() : (int) $courseId;
         $courseInfo = api_get_course_info_by_id($courseId);
@@ -161,7 +171,9 @@ class PTestCategory
         if ($cat) {
             $sql = "UPDATE $table SET
                         title = '$name',
-                        description = '$description'
+                        description = '$description',
+                        color = '$color',
+                        position = $position
                     WHERE id = $id AND c_id = ".$courseId;
             Database::query($sql);
 
@@ -222,7 +234,7 @@ class PTestCategory
         if (empty($field)) {
             $sql = "SELECT id FROM $table
                     WHERE c_id = $courseId AND exercise_id = $exerciseId 
-                    ORDER BY title ASC";
+                    ORDER BY position ASC";
             $res = Database::query($sql);
             while ($row = Database::fetch_array($res)) {
                 $category = new PTestCategory();
@@ -1085,8 +1097,7 @@ class PTestCategory
                     exercise_id = $exerciseId AND
                     c_id = $courseId
                     $sessionCondition
-                ORDER BY title";
-        error_log($sql);
+                ORDER BY position ASC";
         $result = Database::query($sql);
 
         return Database::store_result($result, 'ASSOC');
@@ -1108,8 +1119,32 @@ class PTestCategory
             $tmpobj = new PTestCategory();
             $tmpobj = $tmpobj->getCategory($category['id']);
             $rowname = self::protectJSDialogQuote($category['title']);
+            $content = '';
             $content .= '<div class="sectioncomment">';
-            $content .= $category['description'];
+            $content .= '<table class="table">';
+            $content .= '<tr>';
+            $content .= '<td>'.get_lang('PtestCategoryPosition').'</td>';
+            $content .= '<td>'.$category['position'].'</td>';
+            $content .= '</tr>';
+            $content .= '<tr>';
+            $content .= '<td style="width:1px;white-space:nowrap;vertical-align:middle;">'.get_lang('PtestCategoryColor').'</td>';
+            $content .= '<td>';
+            $content .= Display::tag(
+                'span',
+                null,
+                [
+                    'class' => 'form-control',
+                    'style' => 'background:'.$category['color'].'; width:100px; vertical-align:middle; display:inline-block; margin-right:20px;',
+                ]
+            );
+            $content .= $category['color'];
+            $content .= '</td>';
+            $content .= '</tr>';
+            $content .= '<tr>';
+            $content .= '<td>'.get_lang('Description').'</td>';
+            $content .= '<td>'.$category['description'].'</td>';
+            $content .= '</tr>';
+            $content .= '</table>';
             $content .= '</div>';
             $links = '';
 

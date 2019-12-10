@@ -10,8 +10,8 @@ $fields = [];
 
 $form = new FormValidator('add');
 $form->addText('name', get_lang('Name'));
-$form->addText('code', $plugin->get_lang('Code'));
-$form->addText('validity_duration', $plugin->get_lang('ValidityDuration'));
+$form->addText('code', $plugin->get_lang('JustificationCode'));
+$form->addNumeric('validity_duration', $plugin->get_lang('ValidityDuration'));
 $form->addCheckBox('date_manual_on', $plugin->get_lang('DateManualOn'));
 $form->addTextarea('comment', get_lang('Comment'));
 $form->addButtonSave(get_lang('Save'));

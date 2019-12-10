@@ -39,6 +39,12 @@ if (api_is_platform_admin()) {
         'plus',
         'primary'
     );
+    $actionLinks .= Display::toolbarButton(
+        $plugin->get_lang('Users'),
+        api_get_path(WEB_PLUGIN_PATH).'justification/justification_by_user.php',
+        'user',
+        'primary'
+    );
 
     $tpl->assign(
         'actions',

@@ -719,16 +719,19 @@ if ($allowJustification) {
             $fieldId = $field['id'];
 
             $days = $field['validity_duration'];
-            if (isset($_FILES[$field['code'].'_file'])) {
+            if (isset($_FILES[$field['code'].'_file']) && !empty($_FILES[$field['code'].'_file']['tmp_name'])) {
                 $file = $_FILES[$field['code'].'_file'];
+            } else {
+                continue;
             }
 
-            $date = isset($_REQUEST[$field['code'].'_date']) ? $_REQUEST[$field['code'].'_date'] : api_get_local_time();
+            $date = isset($_REQUEST[$field['code'].'_date']) ? $_REQUEST[$field['code'].'_date'].' 13:00:00' : api_get_local_time();
 
             $startDate = api_get_utc_datetime($date, false, true);
+
             $interval = new \DateInterval('P'.$days.'D');
             $startDate->add($interval);
-            $finalDate = $startDate->format('Y-m-d h:i');
+            $finalDate = $startDate->format('Y-m-d');
 
             $file['name'] = api_replace_dangerous_char($file['name']);
             $fileName = $file['name'];

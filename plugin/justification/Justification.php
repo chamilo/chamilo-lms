@@ -44,6 +44,16 @@ class Justification extends Plugin
         return Database::store_result($query, 'ASSOC');
     }
 
+    public function getUserJustification($id)
+    {
+        $id = (int) $id;
+
+        $sql = "SELECT * FROM justification_document_rel_users WHERE id = $id ";
+        $query = Database::query($sql);
+
+        return Database::fetch_array($query, 'ASSOC');
+    }
+
     public function getAllUserJustificationList()
     {
         $sql = "SELECT * FROM justification_document_rel_users WHERE user_id = $userId ";

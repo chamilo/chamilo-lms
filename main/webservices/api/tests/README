@@ -1,0 +1,2 @@
+Command to run the tests :
+vendor/phpunit/phpunit/phpunit main/webservices/api/tests

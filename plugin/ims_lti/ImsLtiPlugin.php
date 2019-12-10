@@ -29,7 +29,7 @@ class ImsLtiPlugin extends Plugin
      */
     protected function __construct()
     {
-        $version = '1.5.1 (beta)';
+        $version = '1.5.1';
         $author = 'Angel Fernando Quiroz Campos';
 
         parent::__construct($version, $author, ['enabled' => 'boolean']);

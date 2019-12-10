@@ -81,7 +81,8 @@ class ExerciseResult
                     te.exe_duration as duration,
                     te.orig_lp_id as orig_lp_id,
                     tlm.name as lp_name,
-                    user.username
+                    user.username,
+                    te.status as exstatus
                 FROM $TBL_EXERCISES  AS ce
                 INNER JOIN $TBL_TRACK_EXERCISES AS te 
                 ON (te.exe_exo_id = ce.id)
@@ -91,7 +92,6 @@ class ExerciseResult
                 ON (tlm.id = te.orig_lp_id AND tlm.c_id = ce.c_id)
                 WHERE
                     ce.c_id = $course_id AND
-                    te.status != 'incomplete' AND
                     te.c_id = ce.c_id $user_id_and  $session_id_and AND
                     ce.active <>-1";
         } else {
@@ -112,7 +112,8 @@ class ExerciseResult
                         ce.results_disabled as exdisabled,
                         te.orig_lp_id as orig_lp_id,
                         tlm.name as lp_name,
-                        user.username
+                        user.username,
+                        te.status as exstatus
                     FROM $TBL_EXERCISES  AS ce
                     INNER JOIN $TBL_TRACK_EXERCISES AS te 
                     ON (te.exe_exo_id = ce.id)
@@ -122,7 +123,6 @@ class ExerciseResult
                     ON (tlm.id = te.orig_lp_id AND tlm.c_id = ce.c_id)
                     WHERE
                         ce.c_id = $course_id AND
-                        te.status != 'incomplete' AND
                         te.c_id = ce.c_id $user_id_and $session_id_and AND
                         ce.active <>-1 AND
                     ORDER BY userpart2, te.c_id ASC, ce.title ASC, te.exe_date DESC";
@@ -180,25 +180,29 @@ class ExerciseResult
         if (is_array($results)) {
             $i = 0;
             foreach ($results as $result) {
-                $revised = false;
-                //revised or not
-                $sql_exe = "SELECT exe_id 
-                            FROM $TBL_TRACK_ATTEMPT_RECORDING
-                            WHERE 
-                                author != '' AND 
-                                exe_id = ".Database::escape_string($result['exid'])."
-                            LIMIT 1";
-                $query = Database::query($sql_exe);
+                $revised = 0;
+                if ($result['exstatus'] === 'incomplete') {
+                    $revised = -1;
+                } else {
+                    //revised or not
+                    $sql_exe = "SELECT exe_id 
+                                FROM $TBL_TRACK_ATTEMPT_RECORDING
+                                WHERE 
+                                    author != '' AND 
+                                    exe_id = ".intval($result['exid'])."
+                                LIMIT 1";
+                    $query = Database::query($sql_exe);
 
-                if (Database:: num_rows($query) > 0) {
-                    $revised = true;
+                    if (Database:: num_rows($query) > 0) {
+                        $revised = 1;
+                    }
                 }
 
-                if ($filter_by_not_revised && $revised) {
+                if ($filter_by_not_revised && $revised === 1) {
                     continue;
                 }
 
-                if ($filter_by_revised && !$revised) {
+                if ($filter_by_revised && $revised < 1) {
                     continue;
                 }
 
@@ -222,7 +226,8 @@ class ExerciseResult
                 $return[$i]['duration'] = $result['duration'];
                 $return[$i]['result'] = $result['exresult'];
                 $return[$i]['max'] = $result['exweight'];
-                $return[$i]['status'] = $revised ? get_lang('Validated') : get_lang('NotValidated');
+                // Revised: 1 = revised, 0 = not revised, -1 = not even finished by user
+                $return[$i]['status'] = $revised === 1 ? get_lang('Validated') : ($revised === 0 ? get_lang('NotValidated') : get_lang('Unclosed') );
                 $return[$i]['lp_id'] = $result['orig_lp_id'];
                 $return[$i]['lp_name'] = $result['lp_name'];
 

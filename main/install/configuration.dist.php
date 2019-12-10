@@ -364,6 +364,8 @@ $_configuration['tracking_columns'] = [
 */
 // Hide session link of course_block on index/userportal
 //$_configuration['remove_session_url']= false ;
+// Allow foldable block for session list in session category on My courses tab
+//$_configuration['user_portal_foldable_session_category'] = false;
 //
 //
 // ------ AGENDA CONFIGURATION SETTINGS

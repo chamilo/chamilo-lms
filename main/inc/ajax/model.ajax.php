@@ -1429,6 +1429,7 @@ switch ($action) {
             [],
             false,
             false,
+            false,
             true
         );
         break;

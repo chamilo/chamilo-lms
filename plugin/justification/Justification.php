@@ -1,8 +1,6 @@
 <?php
 /* For license terms, see /license.txt */
 
-use ChamiloSession as Session;
-
 class Justification extends Plugin
 {
     protected function __construct()

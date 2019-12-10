@@ -697,7 +697,7 @@ if ($actions) {
 
 SocialManager::setSocialUserBlock($tpl, api_get_user_id(), 'messages');
 
-$allowJustification = api_get_plugin_setting('justification', 'tool_enable');
+$allowJustification = api_get_plugin_setting('justification', 'tool_enable') === 'true';
 
 $justification = '';
 if ($allowJustification) {
@@ -706,9 +706,9 @@ if ($allowJustification) {
     $formValidator = new FormValidator('justification');
     $formValidator->addHeader($plugin->get_lang('Justification'));
     foreach ($fields as $field) {
-        $formValidator->addFile($field['code'].'[file]', [$field['name'], $field['comment']] );
+        $formValidator->addFile($field['code'].'_file', [$field['name'], $field['comment']] );
         if ($field['date_manual_on']) {
-            $formValidator->addDatePicker($field['code'].'date',get_lang('DateValidity') );
+            $formValidator->addDatePicker($field['code'].'_date',$plugin->get_lang('DateValidity') );
         }
         $formValidator->addHtml('<hr>');
     }
@@ -717,13 +717,49 @@ if ($allowJustification) {
     if ($formValidator->validate() && isset($_FILES)) {
         foreach ($fields as $field) {
             $fieldId = $field['id'];
-            if (isset($_FILES[$field['code']])) {
-                $file = $_FILES[$field['code']];
+
+            $days = $field['validity_duration'];
+            if (isset($_FILES[$field['code'].'_file'])) {
+                $file = $_FILES[$field['code'].'_file'];
+            }
+
+            $date = isset($_REQUEST[$field['code'].'_date']) ? $_REQUEST[$field['code'].'_date'] : api_get_local_time();
+
+            $startDate = api_get_utc_datetime($date, false, true);
+            $interval = new \DateInterval('P'.$days.'D');
+            $startDate->add($interval);
+            $finalDate = $startDate->format('Y-m-d h:i');
+
+            $file['name'] = api_replace_dangerous_char($file['name']);
+            $fileName = $file['name'];
+
+            $params = [
+                'file_path' => $fileName,
+                'user_id' => api_get_user_id(),
+                'date_validity' => $finalDate,
+                'justification_document_id' => $fieldId,
+            ];
+            $id = Database::insert('justification_document_rel_users', $params);
+
+            if ($id) {
+                api_upload_file('justification', $file, $id);
+                Display::addFlash(Display::return_message($plugin->get_lang('JustificationSaved')));
             }
         }
     }
 
-    $justification = $formValidator->returnForm();
+    $userJustifications = $plugin->getUserJustificationList(api_get_user_id());
+    $userJustificationList = '';
+    if (!empty($userJustifications)) {
+        $userJustificationList .= Display::page_subheader3($plugin->get_lang('MyJustifications'));
+        foreach ($userJustifications as $userJustification) {
+            $url = api_get_uploaded_web_url('justification', $userJustification['id'], $userJustification['file_path']);
+            $link = Display::url($userJustification['file_path'], $url);
+            $userJustificationList .= $link.'<br/>';
+        }
+    }
+
+    $justification = $formValidator->returnForm().$userJustificationList;
 }
 
 if ($allowSocialTool) {

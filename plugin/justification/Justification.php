@@ -26,6 +26,34 @@ class Justification extends Plugin
         return $result ? $result : $result = new self();
     }
 
+    public function getJustification($id)
+    {
+        $id = (int) $id;
+
+        $sql = 'SELECT * FROM justification_document WHERE id = '.$id;
+        $query = Database::query($sql);
+
+        return Database::fetch_array($query, 'ASSOC');
+    }
+
+    public function getUserJustificationList($userId)
+    {
+        $userId = (int) $userId;
+
+        $sql = "SELECT * FROM justification_document_rel_users WHERE user_id = $userId ";
+        $query = Database::query($sql);
+
+        return Database::store_result($query, 'ASSOC');
+    }
+
+    public function getAllUserJustificationList()
+    {
+        $sql = "SELECT * FROM justification_document_rel_users WHERE user_id = $userId ";
+        $query = Database::query($sql);
+
+        return Database::store_result($query, 'ASSOC');
+    }
+
     public function getList()
     {
         $sql = 'SELECT * FROM justification_document ';
@@ -51,7 +79,6 @@ class Justification extends Plugin
 
         $sql = "CREATE TABLE IF NOT EXISTS justification_document_rel_users (
             id INT unsigned NOT NULL auto_increment PRIMARY KEY,
-            justification_document_id INT NOT NULL,
             file_path VARCHAR(255),
             user_id INT,
             date_validity DATE

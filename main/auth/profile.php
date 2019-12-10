@@ -697,6 +697,35 @@ if ($actions) {
 
 SocialManager::setSocialUserBlock($tpl, api_get_user_id(), 'messages');
 
+$allowJustification = api_get_plugin_setting('justification', 'tool_enable');
+
+$justification = '';
+if ($allowJustification) {
+    $plugin = Justification::create();
+    $fields = $plugin->getList();
+    $formValidator = new FormValidator('justification');
+    $formValidator->addHeader($plugin->get_lang('Justification'));
+    foreach ($fields as $field) {
+        $formValidator->addFile($field['code'].'[file]', [$field['name'], $field['comment']] );
+        if ($field['date_manual_on']) {
+            $formValidator->addDatePicker($field['code'].'date',get_lang('DateValidity') );
+        }
+        $formValidator->addHtml('<hr>');
+    }
+
+    $formValidator->addButtonSend(get_lang('Send'));
+    if ($formValidator->validate() && isset($_FILES)) {
+        foreach ($fields as $field) {
+            $fieldId = $field['id'];
+            if (isset($_FILES[$field['code']])) {
+                $file = $_FILES[$field['code']];
+            }
+        }
+    }
+
+    $justification = $formValidator->returnForm();
+}
+
 if ($allowSocialTool) {
     SocialManager::setSocialUserBlock($tpl, api_get_user_id(), 'home');
     $menu = SocialManager::show_social_menu(
@@ -708,7 +737,7 @@ if ($allowSocialTool) {
     );
 
     $tpl->assign('social_menu_block', $menu);
-    $tpl->assign('social_right_content', $form->returnForm());
+    $tpl->assign('social_right_content', $form->returnForm().$justification);
     $social_layout = $tpl->get_template('social/edit_profile.tpl');
 
     $tpl->display($social_layout);
@@ -720,7 +749,7 @@ if ($allowSocialTool) {
     $imageToShow .= '<a class="expand-image pull-right" href="'.$bigImage.'" /><img src="'.$normalImage.'"></a>';
     $imageToShow .= '</div>';
 
-    $content = $imageToShow.$form->returnForm();
+    $content = $imageToShow.$form->returnForm().$justification;
 
     $tpl->assign('content', $content);
     $tpl->display_one_col_template();

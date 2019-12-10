@@ -46,6 +46,13 @@ if (api_is_platform_admin()) {
         'primary'
     );
 
+    $actionLinks .= Display::toolbarButton(
+        $plugin->get_lang('SetCourse'),
+        api_get_path(WEB_PLUGIN_PATH).'justification/set_course.php',
+        'book',
+        'primary'
+    );
+
     $tpl->assign(
         'actions',
         Display::toolbarAction('toolbar', [$actionLinks])

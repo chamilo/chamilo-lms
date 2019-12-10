@@ -10,6 +10,7 @@ class Justification extends Plugin
             'Julio Montoya',
             [
                 'tool_enable' => 'boolean',
+                'default_course_id' => 'text'
             ]
         );
     }

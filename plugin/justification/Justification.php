@@ -87,6 +87,7 @@ class Justification extends Plugin
 
         $sql = "CREATE TABLE IF NOT EXISTS justification_document_rel_users (
             id INT unsigned NOT NULL auto_increment PRIMARY KEY,
+            justification_document_id INT NOT NULL,
             file_path VARCHAR(255),
             user_id INT,
             date_validity DATE

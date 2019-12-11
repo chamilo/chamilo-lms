@@ -245,8 +245,8 @@ if ($useDefault && $courseId > 0) {
 }
 
 // Student and course section
-$form->addHtml('<h4 class="page-header">'.$plugin->get_lang('FrontContentCertificate').'</h4>');
-$form->addHtml('<div class="col-sm-12">');
+$form->addHeader('');
+$form->addHtml('<fieldset><legend>'.$plugin->get_lang('FrontContentCertificate').'</legend>');
 $dir = '/';
 $courseInfo = api_get_course_info();
 $isAllowedToEdit = api_is_allowed_to_edit(null, true);
@@ -290,8 +290,6 @@ $listTags = [
     'date_expediction'
 ];
 
-$form->addHtml('</div>');
-$form->addHtml('<div class="col-sm-12">');
 $strInfo = '<ul class="list-tags">';
 foreach ($listTags as $tag){
     $strInfo.= '<li>(('.$tag.'))</li>';
@@ -302,17 +300,21 @@ $form->addElement(
     'html',
     Display::return_message($createCertificate.': '.$strInfo, 'normal', false)
 );
-$form->addHtml('</div>');
 $form->addHtml('</fieldset>');
-$form->addHtml('<div class="clearfix"></div>');
 
 // Contents section
 $form->addHtml('<fieldset><legend>'.$plugin->get_lang('PostContentCertificate').'</legend>');
 $extra = '';
+$display = 'none';
 if (empty($infoCertificate['contents_type'])) {
     $infoCertificate['contents_type'] = 0;
     $extra = 'disabled';
+} else {
+    if($infoCertificate['contents_type']==2){
+        $display = 'block';
+    }
 }
+
 
 $group = [];
 $element = &$form->createElement(
@@ -364,7 +366,7 @@ $form->addGroup(
     false
 );
 
-$form->addHtml('<div id="contents-section">');
+$form->addHtml('<div id="contents-section" style="display: '.$display.'">');
 $editorConfigText = [
     'ToolbarSet' => 'Minimal',
     'Width' => '100%',
@@ -386,7 +388,7 @@ $form->addHtmlEditor(
     $editorConfigText
 );
 $form->addHtml('</div>');
-
+$form->addHtml('</fieldset>');
 // Dates section
 $form->addHtml('<fieldset><legend>'.get_lang("Dates").'</legend>');
 
@@ -586,7 +588,6 @@ $form->addHtml('</fieldset>');
 // Signature section
 $base = api_get_path(WEB_UPLOAD_PATH);
 $path = $base.'certificates/';
-
 $form->addHtml('<div class="col-sm-6">');
 $form->addHtml('<fieldset><legend>'.get_lang('BackgroundCertificate').'</legend>');
 //Seal
@@ -672,7 +673,6 @@ $form->addElement(
 );
 $form->addHtml('</fieldset>');
 $form->addHtml('</div>');
-$form->addHtml('<div class="clearfix"></div>');
 
 $form->addButton(
     'submit',
@@ -704,7 +704,7 @@ $form->setConstants(
     ]
 );
 echo '<div class="page-create">';
-echo '<div class="row" style="overflow:hidden">';
+echo '<div class="row">';
 echo '<div id="doc_form" class="col-md-12">';
 echo $form->returnForm();
 echo '</div>';

@@ -223,14 +223,13 @@ foreach ($userList as $userInfo) {
     $template->assign('background', $urlBackground);
     $template->assign('margin_left', $marginLeft);
     $template->assign('margin_right', $marginRight);
-    $template->assign('content_html', $myContentHtml);
+    $template->assign('front_content', $myContentHtml);
     $template->assign('seal', $seal);
-    $content = $template->fetch('customcertificate/template/certificate.tpl');
-    $htmlText .= $content;
 
     // Rear certificate
+    $laterContent = null;
     if ($infoCertificate['contents_type'] != 3) {
-        $htmlText .= '<div class="caraB" style="page-break-before:always; margin:0px; padding:0px;">';
+
         if ($infoCertificate['contents_type'] == 0) {
             $courseDescription = new CourseDescription();
             $contentDescription = $courseDescription->get_data_by_description_type(3, $courseId, 0);
@@ -252,7 +251,7 @@ foreach ($userList as $userInfo) {
             }
 
             $output = $domd->saveHTML();
-            $htmlText .= getIndexFiltered($output);
+            $laterContent .= getIndexFiltered($output);
         }
 
         if ($infoCertificate['contents_type'] == 1) {
@@ -325,9 +324,9 @@ foreach ($userList as $userInfo) {
             }
 
             if (count($items) > 0) {
-                $htmlText .= '<table width="100%" class="contents-learnpath">';
-                $htmlText .= '<tr>';
-                $htmlText .= '<td>';
+                $laterContent .= '<table width="100%" class="contents-learnpath">';
+                $laterContent .= '<tr>';
+                $laterContent .= '<td>';
                 $i = 0;
                 foreach ($items as $value) {
                     if ($i == 50) {
@@ -336,35 +335,36 @@ foreach ($userList as $userInfo) {
                     $htmlText .= $value;
                     $i++;
                 }
-                $htmlText .= '</td>';
-                $htmlText .= '</tr>';
-                $htmlText .= '</table>';
+                $laterContent .= '</td>';
+                $laterContent .= '</tr>';
+                $laterContent .= '</table>';
             }
-            $htmlText .= '</td></table>';
+            $laterContent .= '</td></table>';
         }
 
         if ($infoCertificate['contents_type'] == 2) {
-            $htmlText .= '<table width="100%" class="contents-learnpath">';
-            $htmlText .= '<tr>';
-            $htmlText .= '<td>';
+            $laterContent .= '<table width="100%" class="contents-learnpath">';
+            $laterContent .= '<tr>';
+            $laterContent .= '<td>';
             $myContentHtml = strip_tags(
                 $infoCertificate['contents'],
                 '<p><b><strong><table><tr><td><th><span><i><li><ol><ul>'.
                 '<dd><dt><dl><br><hr><img><a><div><h1><h2><h3><h4><h5><h6>'
             );
-            $htmlText .= $myContentHtml;
-            $htmlText .= '</td>';
-            $htmlText .= '</tr>';
-            $htmlText .= '</table>';
+            $laterContent .= $myContentHtml;
+            $laterContent .= '</td>';
+            $laterContent .= '</tr>';
+            $laterContent .= '</table>';
         }
-        $htmlText .= '</div>';
+
     }
-    $htmlText .= '</body></html>';
+    $template->assign('later_content', $laterContent);
+    $content = $template->fetch('customcertificate/template/certificate.tpl');
+    $htmlText .= $content;
+
     $fileName = 'certificate_'.$courseInfo['code'].'_'.$userInfo['complete_name'].'_'.$currentLocalTime;
     $htmlList[$fileName] = $htmlText;
 }
-
-
 
 $fileList = [];
 $archivePath = api_get_path(SYS_ARCHIVE_PATH).'certificates/';

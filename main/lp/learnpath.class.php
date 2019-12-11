@@ -3235,7 +3235,7 @@ class learnpath
                 $listParent[] = $subtree;
             }
             if (!in_array($subtree['type'], $dirTypes) && $subtree['parent'] == null) {
-                if (isset(self::STATUS_CSS_CLASS_NAME[$subtree['status']])) {
+                if (array_key_exists($subtree['status'], self::STATUS_CSS_CLASS_NAME)) {
                     $cssStatus = self::STATUS_CSS_CLASS_NAME[$subtree['status']];
                 }
 
@@ -3293,7 +3293,7 @@ class learnpath
                 } else {
                     $subtree['current'] = null;
                 }
-                if (isset(self::STATUS_CSS_CLASS_NAME[$subtree['status']])) {
+                if (array_key_exists($subtree['status'], self::STATUS_CSS_CLASS_NAME)) {
                     $cssStatus = self::STATUS_CSS_CLASS_NAME[$subtree['status']];
                 }
 
@@ -3347,7 +3347,7 @@ class learnpath
             $list['status'] = $item['status'];
             $cssStatus = null;
 
-            if (isset(self::STATUS_CSS_CLASS_NAME[$item['status']])) {
+            if (array_key_exists($item['status'], self::STATUS_CSS_CLASS_NAME)) {
                 $cssStatus = self::STATUS_CSS_CLASS_NAME[$item['status']];
             }
 

@@ -1654,6 +1654,10 @@ class Rest extends WebService
             throw new Exception(get_lang('SessionNotRegistered'));
         }
 
+        if (is_string($newSessionId)) {
+            throw new Exception($newSessionId);
+        }
+
         $promotionId = $modelSession['promotion_id'];
         if ($promotionId) {
             $sessionList = array_keys(SessionManager::get_all_sessions_by_promotion($promotionId));
@@ -1670,9 +1674,10 @@ class Rest extends WebService
         }
         $allExtraFields = array_merge($modelExtraFields, $extraFields);
         foreach ($allExtraFields as $name => $value) {
-            if (!SessionManager::update_session_extra_field_value($newSessionId, $name, $value)) {
-                throw new Exception(get_lang('CouldNotUpdateExtraFieldValue'));
-            }
+            // SessionManager::update_session_extra_field_value returns false when no row is changed,
+            // which can happen since extra field values are initialized by SessionManager::create_session
+            // therefore we do not throw an exception when false is returned
+            SessionManager::update_session_extra_field_value($newSessionId, $name, $value);
         }
 
         $courseList = array_keys(SessionManager::get_course_list_by_session_id($modelSessionId));

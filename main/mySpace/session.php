@@ -149,7 +149,6 @@ if ($form->validate()) {
     $extraFields = $extraField->get_all(null, 'option_order');
     $extraFields = array_column($extraFields, 'variable');
     $filter = new stdClass();
-    $filter->groupOp = 'AND';
 
     foreach ($columnModel as $col) {
         if (isset($values[$col['index']]) && !empty($values[$col['index']]) &&

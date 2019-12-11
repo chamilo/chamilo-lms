@@ -9,7 +9,7 @@ $strings['ValidityDuration'] = "Validity Duration";
 $strings['DateManualOn'] = "Date Manual On";
 $strings['JustificationCode'] = "Justification code";
 $strings['NoJustificationFound'] = "No justification found";
-$strings['DateValidity'] = "Date validity";
+$strings['ValidityDate'] = "Validity date";
 $strings['Justification'] = "Justification";
 $strings['MyJustifications'] = "My justifications";
 

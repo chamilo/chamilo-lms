@@ -21,11 +21,12 @@ $form->addButtonSave(get_lang('Save'));
 
 if ($form->validate()) {
     $values = $form->getSubmitValues();
+    $dateManual = isset($values['date_manual_on']) ? 1 : 0;
     $params = [
         'name' => $values['name'],
         'code' => $values['code'],
         'validity_duration' => $values['validity_duration'],
-        'date_manual_on' => (int) $values['date_manual_on'],
+        'date_manual_on' => $dateManual,
         'comment' => $values['comment'],
     ];
     Database::insert('justification_document', $params);

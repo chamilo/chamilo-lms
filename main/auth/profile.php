@@ -750,17 +750,97 @@ if ($allowJustification) {
                 Display::addFlash(Display::return_message($plugin->get_lang('JustificationSaved')));
             }
         }
+
+        header('Location: '.api_get_self());
+        exit;
     }
 
     $userJustifications = $plugin->getUserJustificationList(api_get_user_id());
     $userJustificationList = '';
+    $action = isset($_REQUEST['a']) ? $_REQUEST['a'] : '';
+
+    $justificationContent = '';
+    switch ($action) {
+        case 'edit_justification':
+            $justificationId = isset($_REQUEST['justification_id']) ? (int) $_REQUEST['justification_id'] : '';
+            $userJustification = $plugin->getUserJustification($justificationId);
+            $justification = $plugin->getJustification($userJustification['justification_document_id']);
+            if ($justification['date_manual_on'] == 0) {
+                api_not_allowed(true);
+            }
+            $formEdit = new FormValidator('edit', 'post', api_get_self().'?a=edit_justification&justification_id='.$justificationId);
+            $formEdit->addHeader($justification['name']);
+            $element = $formEdit->addDatePicker('date_validity', $plugin->get_lang('ValidityDate'));
+            $element->setValue($userJustification['date_validity']);
+            $formEdit->addButtonUpdate(get_lang('Update'));
+            $formEdit->setDefaults($userJustification);
+            $justificationContent = $formEdit->returnForm();
+            if ($formEdit->validate()) {
+                $values = $formEdit->getSubmitValues();
+                $date = Database::escape_string($values['date_validity']);
+                $sql = "UPDATE justification_document_rel_users SET date_validity = '$date'
+                        WHERE id = $justificationId AND user_id = ".$user_data['id'];
+                Database::query($sql);
+                Display::addFlash(Display::return_message(get_lang('Updated')));
+                header('Location: '.api_get_self());
+                exit;
+            }
+            break;
+        case 'delete_justification':
+            $justificationId = isset($_REQUEST['justification_id']) ? (int) $_REQUEST['justification_id'] : '';
+            $userJustification = $plugin->getUserJustification($justificationId);
+            if ($userJustification && $userJustification['user_id'] == api_get_user_id()) {
+                api_remove_uploaded_file_by_id('justification', $justificationId, $userJustification['file_path']);
+                $sql = "DELETE FROM justification_document_rel_users
+                        WHERE id = $justificationId AND user_id = ".$user_data['id'];
+                Database::query($sql);
+                Display::addFlash(Display::return_message(get_lang('Deleted')));
+            }
+
+            header('Location: '.api_get_self());
+            exit;
+            break;
+    }
+
     if (!empty($userJustifications)) {
         $userJustificationList .= Display::page_subheader3($plugin->get_lang('MyJustifications'));
+        $table = new HTML_Table(['class' => 'data_table']);
+        $column = 0;
+        $row = 0;
+        $headers = [
+            get_lang('Name'),
+            get_lang('File'),
+            $plugin->get_lang('ValidityDate'),
+            get_lang('Actions'),
+        ];
+        foreach ($headers as $header) {
+            $table->setHeaderContents($row, $column, $header);
+            $column++;
+        }
+        $row = 1;
         foreach ($userJustifications as $userJustification) {
+            $justification = $plugin->getJustification($userJustification['justification_document_id']);
             $url = api_get_uploaded_web_url('justification', $userJustification['id'], $userJustification['file_path']);
             $link = Display::url($userJustification['file_path'], $url);
-            $userJustificationList .= $link.'<br/>';
+            $col = 0;
+            $table->setCellContents($row, $col++, $justification['name']);
+            $table->setCellContents($row, $col++, $link);
+            $date = $userJustification['date_validity'];
+            if ($userJustification['date_validity'] < api_get_local_time()) {
+                $date = Display::label($userJustification['date_validity'], 'warning');
+            }
+            $table->setCellContents($row, $col++, $date);
+            $actions = '';
+
+            if ($justification['date_manual_on'] == 1) {
+                $actions .= Display::url(get_lang('Edit'), api_get_self().'?a=edit_justification&justification_id='.$userJustification['id'], ['class' => 'btn btn-primary']);
+            }
+            $actions .= '&nbsp;'.Display::url(get_lang('Delete'), api_get_self().'?a=delete_justification&justification_id='.$userJustification['id'], ['class' => 'btn btn-danger']);
+            $table->setCellContents($row, $col++, $actions);
+            $row++;
         }
+
+        $userJustificationList .= $justificationContent.$table->toHtml();
     }
 
     $justification = $formValidator->returnForm().$userJustificationList;

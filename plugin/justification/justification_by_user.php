@@ -35,8 +35,10 @@ if ($userId) {
     $list = $plugin->getUserJustificationList($userId);
     if ($list) {
         foreach ($list as &$item) {
+            if ($item['date_validity'] < api_get_local_time()) {
+                $item['date_validity'] = Display::label($item['date_validity'], 'warning');
+            }
             $item['justification'] = $plugin->getJustification($item['justification_document_id']);
-
             $item['file_path'] = Display::url(
                 $item['file_path'],
                 api_get_uploaded_web_url('justification', $item['id'], $item['file_path']),
@@ -50,7 +52,6 @@ if ($userId) {
     $tpl->assign('list', $list);
 }
 
-
 $tpl->assign('user_id', $userId);
 $content = $tpl->fetch('justification/view/justification_user_list.tpl');
 
@@ -60,6 +61,27 @@ $action = isset($_REQUEST['a']) ? $_REQUEST['a'] : '';
 $id = isset($_REQUEST['id']) ? (int) $_REQUEST['id'] : 0;
 
 switch ($action) {
+    case 'edit':
+        $userJustification = $plugin->getUserJustification($id);
+        $userInfo = api_get_user_info($userJustification['user_id']);
+        $form = new FormValidator('edit', 'post', api_get_self().'?a=edit&id='.$id.'&user_id='.$userId);
+        $form->addHeader($userInfo['complete_name']);
+        $element = $form->addDatePicker('date_validity', $plugin->get_lang('ValidityDate'));
+        $element->setValue($userJustification['date_validity']);
+        $form->addButtonUpdate(get_lang('Update'));
+        $form->setDefaults($userJustification);
+        $content = $form->returnForm();
+
+        if ($form->validate()) {
+            $values = $form->getSubmitValues();
+            $date = Database::escape_string($values['date_validity']);
+            $sql = "UPDATE justification_document_rel_users SET date_validity = '$date' WHERE id = $id";
+            Database::query($sql);
+            Display::addFlash(Display::return_message(get_lang('Updated')));
+            header('Location: '.api_get_self().'?user_id='.$userId);
+            exit;
+        }
+        break;
     case 'delete':
         $userJustification = $plugin->getUserJustification($id);
         if ($userJustification) {
@@ -86,7 +108,6 @@ $tpl->assign(
     'actions',
     Display::toolbarAction('toolbar', [$actionLinks])
 );
-
 
 $tpl->assign('content', $content);
 $tpl->display_one_col_template();

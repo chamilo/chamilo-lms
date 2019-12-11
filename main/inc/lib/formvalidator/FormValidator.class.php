@@ -237,7 +237,7 @@ EOT;
      * @param string $label
      * @param array  $attributes
      *
-     * @return mixed
+     * @return DatePicker
      */
     public function addDatePicker($name, $label, $attributes = [])
     {

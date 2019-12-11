@@ -12,7 +12,14 @@ $tpl = new Template($tool);
 $fields = [];
 
 $form = new FormValidator('add');
-$form->addHeader($plugin->get_lang('SetCourse'));
+$form->addHeader($plugin->get_lang('SetNewCourse'));
+$currentCourse = api_get_setting('justification_default_course_id', 'justification');
+
+if (!empty($currentCourse)) {
+    $courseInfo = api_get_course_info_by_id($currentCourse);
+    Display::addFlash(Display::return_message(get_lang('Course').': '.$courseInfo['title']));
+}
+
 $form->addSelectAjax(
     'course_id',
     get_lang('Course'),
@@ -25,7 +32,7 @@ $form->addButtonSave(get_lang('Save'));
 
 if ($form->validate()) {
     $values = $form->getSubmitValues();
-    api_set_setting('justification_default_course_id', $values['course_id'], 'justification');
+    api_set_setting('justification_default_course_id', $values['course_id']);
     Display::addFlash(Display::return_message(get_lang('Saved')));
     $url = api_get_path(WEB_PLUGIN_PATH).'justification/list.php?';
     header('Location: '.$url);

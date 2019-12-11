@@ -35,9 +35,7 @@ $currentDate = api_get_utc_datetime();
 
 foreach ($userList as $user) {
     $userId = $user['id'];
-    if ($userId != 1) {
-        continue;
-    }
+
     echo "Checking user id #$userId".PHP_EOL;
 
     $userJustificationList = $plugin->getUserJustificationList($userId);
@@ -63,7 +61,7 @@ foreach ($userList as $user) {
             subscribeUser($userId, $courseInfo);
             continue;
         } else {
-            echo "User only got $countSuccess justifications out of $totalFields.".PHP_EOL;
+            echo "User #$userId only got $countSuccess justification(s) out of $totalFields.".PHP_EOL;
         }
     }
 

@@ -38,15 +38,8 @@ $(document).ready(function() {
     $("#contents_type_2").click(function(){
         $("#contents-section").show();
     });
-    $("#contents_type_3").click(function(){
+    $("#contents_type_3, #contents_type_1, #contents_type_0").click(function(){
         $("#contents-section").hide();
     });
-    $("#contents_type_1").click(function(){
-        $("#contents-section").hide();
-    });
-    $("#contents_type_0").click(function(){
-        $("#contents-section").hide();
-    });
-
 });
 

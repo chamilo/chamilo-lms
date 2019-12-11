@@ -3,14 +3,14 @@
 
 use Chamilo\CourseBundle\Entity\CLpCategory;
 
-$default = isset($_GET['default']) ? (int) $_GET['default'] : null;
+$default = isset($_GET['default']) ? (int)$_GET['default'] : null;
 
 if ($default === 1) {
     $cidReset = true;
 }
 
 $course_plugin = 'customcertificate';
-require_once __DIR__.'/../config.php';
+require_once __DIR__ . '/../config.php';
 
 api_block_anonymous_users();
 $plugin = CustomCertificatePlugin::create();
@@ -46,7 +46,7 @@ if (empty($courseCode)) {
 }
 
 if (empty($sessionId)) {
-    $sessionId = isset($_REQUEST['session_id']) ? (int) $_REQUEST['session_id'] : 0;
+    $sessionId = isset($_REQUEST['session_id']) ? (int)$_REQUEST['session_id'] : 0;
 }
 
 $accessUrlId = api_get_current_access_url_id();
@@ -80,7 +80,7 @@ if ($sessionId > 0) {
 
 $table = Database::get_main_table(CustomCertificatePlugin::TABLE_CUSTOMCERTIFICATE);
 $useDefault = false;
-$path = api_get_path(SYS_UPLOAD_PATH).'certificates/';
+$path = api_get_path(SYS_UPLOAD_PATH) . 'certificates/';
 
 // Get info certificate
 $infoCertificate = CustomCertificatePlugin::getInfoCertificate($courseId, $sessionId, $accessUrlId);
@@ -114,14 +114,14 @@ foreach ($userList as $userInfo) {
     $linkCertificateCSS = '
     <link rel="stylesheet"
         type="text/css"
-        href="'.api_get_path(WEB_PLUGIN_PATH).'customcertificate/resources/css/certificate.css">';
-    $linkCertificateCSS.= '
+        href="' . api_get_path(WEB_PLUGIN_PATH) . 'customcertificate/resources/css/certificate.css">';
+    $linkCertificateCSS .= '
     <link rel="stylesheet"
         type="text/css"
-        href="'.api_get_path(WEB_CSS_PATH).'document.css">';
+        href="' . api_get_path(WEB_CSS_PATH) . 'document.css">';
 
     $studentId = $userInfo['user_id'];
-    $urlBackground = $path.$infoCertificate['background'];
+    $urlBackground = $path . $infoCertificate['background'];
     $allUserInfo = DocumentManager::get_all_info_to_certificate(
         $studentId,
         $courseCode,
@@ -129,7 +129,7 @@ foreach ($userList as $userInfo) {
     );
 
     $myContentHtml = $infoCertificate['content_course'];
-    $myContentHtml = str_replace(chr(13).chr(10).chr(13).chr(10), chr(13).chr(10), $myContentHtml);
+    $myContentHtml = str_replace(chr(13) . chr(10) . chr(13) . chr(10), chr(13) . chr(10), $myContentHtml);
     $infoToBeReplacedInContentHtml = $allUserInfo[0];
     $infoToReplaceInContentHtml = $allUserInfo[1];
     $myContentHtml = str_replace(
@@ -169,9 +169,9 @@ foreach ($userList as $userInfo) {
 
     $dateExpediction = '';
     if ($infoCertificate['type_date_expediction'] != 3) {
-        $dateExpediction .= $plugin->get_lang('ExpedictionIn').' '.$infoCertificate['place'];
+        $dateExpediction .= $plugin->get_lang('ExpedictionIn') . ' ' . $infoCertificate['place'];
         if ($infoCertificate['type_date_expediction'] == 1) {
-            $dateExpediction .= $plugin->get_lang('to').api_format_date(time(), DATE_FORMAT_LONG);
+            $dateExpediction .= $plugin->get_lang('to') . api_format_date(time(), DATE_FORMAT_LONG);
         } elseif ($infoCertificate['type_date_expediction'] == 2) {
             $dateFormat = $plugin->get_lang('formatDownloadDate');
             if (!empty($infoCertificate['day']) &&
@@ -193,11 +193,11 @@ foreach ($userList as $userInfo) {
                 );
             }
         } elseif ($infoCertificate['type_date_expediction'] == 4) {
-            $dateExpediction .= $plugin->get_lang('to').$infoToReplaceInContentHtml[9]; //date_certificate_no_time
+            $dateExpediction .= $plugin->get_lang('to') . $infoToReplaceInContentHtml[9]; //date_certificate_no_time
         } else {
             if (!empty($sessionInfo)) {
                 $dateInfo = api_get_local_time($sessionInfo['access_end_date']);
-                $dateExpediction .= $plugin->get_lang('to').api_format_date($dateInfo, DATE_FORMAT_LONG);
+                $dateExpediction .= $plugin->get_lang('to') . api_format_date($dateInfo, DATE_FORMAT_LONG);
             }
         }
     }
@@ -302,7 +302,7 @@ foreach ($userList as $userInfo) {
 
                 if (count($categories) > 1 && count($flat_list) > 0) {
                     if ($item->getName() != $plugin->get_lang('WithOutCategory')) {
-                        $items[] = '<h4 style="margin:0px">'.$item->getName().'</h4>';
+                        $items[] = '<h4 style="margin:0px">' . $item->getName() . '</h4>';
                     }
                 }
 
@@ -318,7 +318,7 @@ foreach ($userList as $userInfo) {
                         continue;
                     }
                     $lpName = $learnpath['lp_name'];
-                    $items[] = $lpName.'<br>';
+                    $items[] = $lpName . '<br>';
                 }
                 $items[] = '<br>';
             }
@@ -348,7 +348,7 @@ foreach ($userList as $userInfo) {
             $laterContent .= '<td>';
             $myContentHtml = strip_tags(
                 $infoCertificate['contents'],
-                '<p><b><strong><table><tr><td><th><span><i><li><ol><ul>'.
+                '<p><b><strong><table><tr><td><th><span><i><li><ol><ul>' .
                 '<dd><dt><dl><br><hr><img><a><div><h1><h2><h3><h4><h5><h6>'
             );
             $laterContent .= $myContentHtml;
@@ -362,12 +362,12 @@ foreach ($userList as $userInfo) {
     $content = $template->fetch('customcertificate/template/certificate.tpl');
     $htmlText .= $content;
 
-    $fileName = 'certificate_'.$courseInfo['code'].'_'.$userInfo['complete_name'].'_'.$currentLocalTime;
+    $fileName = 'certificate_' . $courseInfo['code'] . '_' . $userInfo['complete_name'] . '_' . $currentLocalTime;
     $htmlList[$fileName] = $htmlText;
 }
 
 $fileList = [];
-$archivePath = api_get_path(SYS_ARCHIVE_PATH).'certificates/';
+$archivePath = api_get_path(SYS_ARCHIVE_PATH) . 'certificates/';
 if (!is_dir($archivePath)) {
     mkdir($archivePath, api_get_permissions_for_new_directories());
 }
@@ -390,7 +390,7 @@ foreach ($htmlList as $fileName => $content) {
         $pdf->content_to_pdf($content, '', $fileName, null, 'D', false, null, false, false, false);
         exit;
     } else {
-        $filePath = $archivePath.$fileName.'.pdf';
+        $filePath = $archivePath . $fileName . '.pdf';
         $pdf->content_to_pdf($content, '', $fileName, null, 'F', true, $filePath, false, false, false);
         $fileList[] = $filePath;
     }
@@ -398,12 +398,12 @@ foreach ($htmlList as $fileName => $content) {
 
 
 if (!empty($fileList)) {
-    $zipFile = $archivePath.'certificates_'.api_get_unique_id().'.zip';
+    $zipFile = $archivePath . 'certificates_' . api_get_unique_id() . '.zip';
     $zipFolder = new PclZip($zipFile);
     foreach ($fileList as $file) {
         $zipFolder->add($file, PCLZIP_OPT_REMOVE_ALL_PATH);
     }
-    $name = 'certificates_'.$courseInfo['code'].'_'.$currentLocalTime.'.zip';
+    $name = 'certificates_' . $courseInfo['code'] . '_' . $currentLocalTime . '.zip';
     DocumentManager::file_send_for_download($zipFile, true, $name);
     exit;
 }
@@ -411,28 +411,28 @@ if (!empty($fileList)) {
 function getIndexFiltered($index)
 {
     $txt = strip_tags($index, "<b><strong><i>");
-    $txt = str_replace(chr(13).chr(10).chr(13).chr(10), chr(13).chr(10), $txt);
-    $lines = explode(chr(13).chr(10), $txt);
+    $txt = str_replace(chr(13) . chr(10) . chr(13) . chr(10), chr(13) . chr(10), $txt);
+    $lines = explode(chr(13) . chr(10), $txt);
     $text1 = '';
     for ($x = 0; $x < 47; $x++) {
         if (isset($lines[$x])) {
-            $text1 .= $lines[$x].chr(13).chr(10);
+            $text1 .= $lines[$x] . chr(13) . chr(10);
         }
     }
 
     $text2 = '';
     for ($x = 47; $x < 94; $x++) {
         if (isset($lines[$x])) {
-            $text2 .= $lines[$x].chr(13).chr(10);
+            $text2 .= $lines[$x] . chr(13) . chr(10);
         }
     }
 
-    $showLeft = str_replace(chr(13).chr(10), "<br/>", $text1);
-    $showRight = str_replace(chr(13).chr(10), "<br/>", $text2);
+    $showLeft = str_replace(chr(13) . chr(10), "<br/>", $text1);
+    $showRight = str_replace(chr(13) . chr(10), "<br/>", $text2);
     $result = '<table width="100%">';
     $result .= '<tr>';
-    $result .= '<td style="width:50%;vertical-align:top;padding-left:15px; font-size:12px;">'.$showLeft.'</td>';
-    $result .= '<td style="vertical-align:top; font-size:12px;">'.$showRight.'</td>';
+    $result .= '<td style="width:50%;vertical-align:top;padding-left:15px; font-size:12px;">' . $showLeft . '</td>';
+    $result .= '<td style="vertical-align:top; font-size:12px;">' . $showRight . '</td>';
     $result .= '<tr>';
     $result .= '</table>';
 

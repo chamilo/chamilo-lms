@@ -55,7 +55,7 @@ $htmlHeadXtra[] = '
     /*
     Script to manipulate Learning Path items with Drag and drop
      */
-    var newOrderData = "";    
+    var newOrderData = "";
     function buildLPtree(in_elem, in_parent_id) {
         var item_tag = in_elem.get(0).tagName;
         var item_id =  in_elem.attr("id");
@@ -80,7 +80,7 @@ $htmlHeadXtra[] = '
         return in_parent_integer_id;
     }
 
-    $(function() {        
+    $(function() {
         $(".lp_resource").sortable({
             items: ".lp_resource_element ",
             handle: ".moved", //only the class "moved"
@@ -95,15 +95,15 @@ $htmlHeadXtra[] = '
                 $(ui.item).css("width", "100%");
             }
         });
-                
-        $(".li_container .order_items").click(function(e) {            
+
+        $(".li_container .order_items").click(function(e) {
             var dir = $(this).data("dir");
-            var itemId = $(this).data("id");             
-            var jItems = $("#lp_item_list li.li_container");            
-            var jItem = $("#"+ itemId);          
+            var itemId = $(this).data("id");
+            var jItems = $("#lp_item_list li.li_container");
+            var jItem = $("#"+ itemId);
             var index = jItems.index(jItem);
-            var total = jItems.length;     
-               
+            var total = jItems.length;
+
             switch (dir) {
                 case "up":
                     if (index != 0 && jItems[index - 1]) {
@@ -111,58 +111,58 @@ $htmlHeadXtra[] = '
                         if (subItems.length >= 0) {
                             index = index - 1;
                         }*/
-                        var subItems = $(jItems[index - 1]).find("li.sub_item");                        
-                        var parentClass = $(jItems[index - 1]).parent().parent().attr("class");                        
-                        var parentId = $(jItems[index]).parent().parent().attr("id");                        
+                        var subItems = $(jItems[index - 1]).find("li.sub_item");
+                        var parentClass = $(jItems[index - 1]).parent().parent().attr("class");
+                        var parentId = $(jItems[index]).parent().parent().attr("id");
                         var myParentId = $(jItems[index - 1]).parent().parent().attr("id");
                         //console.log(parentId + " - " + myParentId);
-                        
+
                         // We are brothers!
                         if (parentId == myParentId) {
                             console.log("Brothers");
                             console.log(subItems.length);
                             if (subItems.length > 0) {
-                                var lastItem = $(jItems[index - 1]).find("li.sub_item");    
-                                parentIndex = jItems.index(lastItem);                         
+                                var lastItem = $(jItems[index - 1]).find("li.sub_item");
+                                parentIndex = jItems.index(lastItem);
                                 console.log(parentIndex);
-                                jItem.detach().insertAfter(lastItem);    
+                                jItem.detach().insertAfter(lastItem);
                                 //console.log("not classic");
                             } else {
                                 //console.log("classic");
-                                jItem.detach().insertBefore(jItems[index - 1]);  
-                            }                            
+                                jItem.detach().insertBefore(jItems[index - 1]);
+                            }
                             break;
                         }
-                        
+
                         //console.log(parentClass);
                         if (parentClass == "record li_container") {
                             // previous is a chapter
-                            var lastItem = $(jItems[index - 1]).parent().parent().find("li.li_container").last();    
-                            parentIndex = jItems.index(lastItem);                         
+                            var lastItem = $(jItems[index - 1]).parent().parent().find("li.li_container").last();
+                            parentIndex = jItems.index(lastItem);
                             //console.log(parentIndex);
-                            jItem.detach().insertAfter(jItems[parentIndex]);                            
+                            jItem.detach().insertAfter(jItems[parentIndex]);
                         } else {
-                            jItem.detach().insertBefore(jItems[index - 1]);    
-                        }                       
-                    }                                        
+                            jItem.detach().insertBefore(jItems[index - 1]);
+                        }
+                    }
                     break;
                 case "down":
-                     if (index != total - 1) {   
+                     if (index != total - 1) {
                         const originIndex = index;
                         // The element is a chapter with items
-                        var subItems = jItem.find("li.li_container");  
-                        if (subItems.length > 0) { 
+                        var subItems = jItem.find("li.li_container");
+                        if (subItems.length > 0) {
                             index = subItems.length + index;
-                            //console.log("element is a chapter with items");                            
+                            //console.log("element is a chapter with items");
                             //console.log("new index = " + index);
-                        }            
-                        
+                        }
+
                         var subItems = $(jItems[index + 1]).find("li.sub_item");
                         //console.log("next subItems.length: "+subItems.length);
                         // This is an element entering in a chapter
-                        if (subItems.length > 0) {   
+                        if (subItems.length > 0) {
                             // Check if im a child
-                            var parentClass = jItem.parent().parent().attr("class");                            
+                            var parentClass = jItem.parent().parent().attr("class");
                             //console.log(parentClass);
                             if (parentClass == "record li_container") {
                                 // Parent position
@@ -171,29 +171,29 @@ $htmlHeadXtra[] = '
                                 //console.log(parentIndex);
                                 jItem.detach().insertAfter(jItems[parentIndex]);
                             } else {
-                                jItem.detach().insertAfter(subItems);    
-                            }                            
+                                jItem.detach().insertAfter(subItems);
+                            }
                             break;
-                        }     
-                                                                       
+                        }
+
                         var currentSubItems = $(jItems[index]).parent().find("li.sub_item");
                         //console.log("currentSubItems"+currentSubItems.length);
-                        
-                        var parentId = $(jItems[originIndex]).parent().parent().attr("id");                        
+
+                        var parentId = $(jItems[originIndex]).parent().parent().attr("id");
                         var myParentId = $(jItems[index + 1]).parent().parent().attr("id");
                         //console.log("parent ids: "+ parentId + " - " + myParentId);
-                        
+
                         // We are brothers!
                         if (parentId == myParentId) {
                             if ((index + 1) < total) {
                                 //console.log(index + 1);
                                 //console.log("We are brothers");
                                 jItem.detach().insertAfter(jItems[index + 1]);
-                            }                            
+                            }
                             break;
                         }
-                        
-                        if (currentSubItems.length > 0) {                     
+
+                        if (currentSubItems.length > 0) {
                             var parentIndex = jItems.index(jItem.parent().parent());
                             //console.log("has currentSubItems");
                             //console.log("id " + jItem.parent().parent().attr("id"));
@@ -202,14 +202,14 @@ $htmlHeadXtra[] = '
                                 jItem.detach().insertAfter(jItems[parentIndex]);
                                 break;
                             }
-                            //jItem.detach().insertAfter($(jItems[index]).parent().parent());                            
-                        }   
-                        
-                        //var lastItem = $(jItems[index + 1]).parent().parent().find("li.li_container").last();                                              
+                            //jItem.detach().insertAfter($(jItems[index]).parent().parent());
+                        }
+
+                        //var lastItem = $(jItems[index + 1]).parent().parent().find("li.li_container").last();
                         if (subItems.length > 0) {
                             index = originIndex;
                         }
-                        
+
                         if ((index + 1) < total) {
                             //console.log(index + 1);
                             //console.log("changed");
@@ -217,11 +217,11 @@ $htmlHeadXtra[] = '
                         }
                      }
                      break;
-            }   
-            
+            }
+
             //console.log("rebuild");
             buildLPtree($("#lp_item_list"), 0);
-            
+
             var order = "new_order="+ newOrderData + "&a=update_lp_item_order";
             $.post(
                 "'.$ajax_url.'",
@@ -231,7 +231,7 @@ $htmlHeadXtra[] = '
                     order = "";
                     newOrderData = "";
                 }
-            );            
+            );
         });
 
         $("#lp_item_list").sortable({
@@ -272,7 +272,7 @@ $htmlHeadXtra[] = '
                             "type": type,
                             "title" : title
                         };
-                        
+
                         $.ajax({
                             type: "GET",
                             url: "'.$ajax_url.'",
@@ -281,7 +281,7 @@ $htmlHeadXtra[] = '
                             success: function(data) {
                                 $("#lp_item_list").html(data);
                             }
-                        });                        
+                        });
                     }
                 }
             } // End receive

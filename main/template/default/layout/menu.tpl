@@ -55,6 +55,11 @@
                             {{ language_form }}
                         </li>
                     {% endif %}
+
+                    {% if notification_event == 1%}
+                        {% include 'default/layout/notification.tpl' %}
+                    {% endif %}
+
                     {% if _u.status != 6 %}
                         <li class="dropdown avatar-user">
                             <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button"

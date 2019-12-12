@@ -234,6 +234,10 @@ class Template
             $this->assign('language_form', api_display_language_form());
         }
 
+        if (api_get_configuration_value('notification_event')) {
+            $this->assign('notification_event', '1');
+        }
+
         // Chamilo plugins
         if ($this->show_header) {
             if ($this->load_plugins) {
@@ -823,7 +827,7 @@ class Template
                 $courseLogoutCode = "
                 <script>
                 var logOutUrl = '".$ajax."course.ajax.php?a=course_logout&".api_get_cidreq()."';
-                function courseLogout() {                
+                function courseLogout() {
                     $.ajax({
                         async : false,
                         url: logOutUrl,

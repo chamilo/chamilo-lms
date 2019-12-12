@@ -174,7 +174,11 @@ if (($search || $forceSearch) && ($search !== 'false')) {
                 // Extra field.
                 $extraField = new ExtraField($type);
 
-                if (is_object($filters) && property_exists($filters, 'rules') && is_array($filters->rules) && !empty($filters->rules)) {
+                if (is_object($filters)
+                    && property_exists($filters, 'rules')
+                    && is_array($filters->rules)
+                    && !empty($filters->rules)
+                ) {
                     foreach ($filters->rules as $key => $data) {
                         if (empty($data)) {
                             continue;

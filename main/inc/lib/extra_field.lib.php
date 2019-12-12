@@ -2472,7 +2472,11 @@ JAVASCRIPT;
 
         // Getting double select if exists
         $double_select = [];
-        if (is_object($filters) && property_exists($filters, 'rules') && is_array($filters->rules) && !empty($filters->rules)) {
+        if (is_object($filters)
+            && property_exists($filters, 'rules')
+            && is_array($filters->rules)
+            && !empty($filters->rules)
+        ) {
             foreach ($filters->rules as $rule) {
                 if (empty($rule)) {
                     continue;

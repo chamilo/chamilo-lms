@@ -58,10 +58,10 @@ $htmlHeadXtra[] = '<script>
     });
 </script>';
 
-$interbreadcrumb[] = [
+/*$interbreadcrumb[] = [
     'url' => api_get_path(WEB_PATH).'user_portal.php',
     'name' => get_lang('My courses'),
-];
+];*/
 
 // Displaying the header.
 $tool_name = $course_validation_feature ? get_lang('Create a course request') : get_lang('Add a new course');
@@ -341,15 +341,9 @@ if ($form->validate()) {
             $params['gradebook_model_id'] = isset($course_values['gradebook_model_id']) ? $course_values['gradebook_model_id'] : null;
             $params['course_template'] = isset($course_values['course_template']) ? $course_values['course_template'] : '';
 
-            /*include_once api_get_path(SYS_CODE_PATH).'lang/english/trad4all.inc.php';
-            $file_to_include = api_get_path(SYS_CODE_PATH).'lang/'.$course_language.'/trad4all.inc.php';
-
-            if (file_exists($file_to_include)) {
-                include $file_to_include;
-            }*/
             $course_info = CourseManager::create_course($params);
 
-            if (!empty($course_info)) {
+            if (!empty($course_info) && isset($course_info['real_id'])) {
                 $request = Container::getRequest();
 
                 if ($request->files->has('picture')) {

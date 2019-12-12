@@ -8,6 +8,10 @@ api_protect_admin_script();
 
 $plugin = ImsLtiPlugin::create();
 
+if ($plugin->get('enabled') !== 'true') {
+    api_not_allowed(true);
+}
+
 $em = Database::getManager();
 $tools = $em->getRepository('ChamiloPluginBundle:ImsLti\ImsLtiTool')->findAll();
 

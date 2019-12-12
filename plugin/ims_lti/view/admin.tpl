@@ -2,6 +2,9 @@
 
 {% autoescape 'html' %}
     <div class="btn-toolbar">
+        <a href="{{ _p.web_plugin }}ims_lti/platform.php" class="btn btn-primary">
+            <span class="fa fa-cogs fa-fw" aria-hidden="true"></span> {{ 'ConfigurePlatform'|get_plugin_lang('ImsLtiPlugin') }}
+        </a>
         <a href="{{ _p.web_plugin }}ims_lti/create.php" class="btn btn-primary">
             <span class="fa fa-plus fa-fw" aria-hidden="true"></span> {{ 'AddExternalTool'|get_plugin_lang('ImsLtiPlugin') }}
         </a>

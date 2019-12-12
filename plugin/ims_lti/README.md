@@ -55,6 +55,26 @@ external tool.
 
 Run this changes on database:
 
+## To v1.6.0
+```sql
+ALTER TABLE plugin_ims_lti_tool
+    ADD client_id VARCHAR(255) DEFAULT NULL,
+    ADD public_key LONGTEXT DEFAULT NULL,
+    ADD login_url VARCHAR(255) DEFAULT NULL,
+    ADD redirect_url VARCHAR(255) DEFAULT NULL;
+CREATE TABLE plugin_ims_lti_platform (
+    id INT AUTO_INCREMENT NOT NULL,
+    kid VARCHAR(255) NOT NULL,
+    public_key LONGTEXT NOT NULL,
+    private_key LONGTEXT NOT NULL,
+    PRIMARY KEY(id)
+) DEFAULT CHARACTER SET utf8 COLLATE `utf8_unicode_ci` ENGINE = InnoDB;
+CREATE TABLE plugin_ims_lti_deployment (
+    id INT AUTO_INCREMENT NOT NULL,
+    PRIMARY KEY(id)
+) DEFAULT CHARACTER SET utf8 COLLATE `utf8_unicode_ci` ENGINE = InnoDB;
+```
+
 ## To v1.5.1
 ```sql
 ALTER TABLE plugin_ims_lti_tool

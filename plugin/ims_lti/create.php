@@ -37,28 +37,37 @@ if ($form->validate()) {
             isset($formValues['share_picture'])
         );
 
-    if (empty($formValues['consumer_key']) && empty($formValues['shared_secret'])) {
-        try {
-            $launchUrl = $plugin->getLaunchUrlFromCartridge($formValues['launch_url']);
-        } catch (Exception $e) {
-            Display::addFlash(
-                Display::return_message($e->getMessage(), 'error')
-            );
-
-            header('Location: '.api_get_path(WEB_PLUGIN_PATH).'ims_lti/admin.php');
-            exit;
-        }
-
-        $externalTool->setLaunchUrl($launchUrl);
-    } else {
+    if ('1p3' === $formValues['version']) {
         $externalTool
             ->setLaunchUrl($formValues['launch_url'])
-            ->setConsumerKey(
-                empty($formValues['consumer_key']) ? null : $formValues['consumer_key']
-            )
-            ->setSharedSecret(
-                empty($formValues['shared_secret']) ? null : $formValues['shared_secret']
-            );
+            ->setClientId($formValues['client_id'])
+            ->setLoginUrl($formValues['login_url'])
+            ->setRedirectUrl($formValues['redirect_url'])
+            ->publicKey = $formValues['public_key'];
+    } else {
+        if (empty($formValues['consumer_key']) && empty($formValues['shared_secret'])) {
+            try {
+                $launchUrl = $plugin->getLaunchUrlFromCartridge($formValues['launch_url']);
+            } catch (Exception $e) {
+                Display::addFlash(
+                    Display::return_message($e->getMessage(), 'error')
+                );
+
+                header('Location: '.api_get_path(WEB_PLUGIN_PATH).'ims_lti/admin.php');
+                exit;
+            }
+
+            $externalTool->setLaunchUrl($launchUrl);
+        } else {
+            $externalTool
+                ->setLaunchUrl($formValues['launch_url'])
+                ->setConsumerKey(
+                    empty($formValues['consumer_key']) ? null : $formValues['consumer_key']
+                )
+                ->setSharedSecret(
+                    empty($formValues['shared_secret']) ? null : $formValues['shared_secret']
+                );
+        }
     }
 
     $em->persist($externalTool);

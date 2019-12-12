@@ -106,6 +106,34 @@ class ImsLtiTool
     private $children;
 
     /**
+     * @var string
+     *
+     * @ORM\Column(name="client_id", type="string", nullable=true)
+     */
+    private $clientId;
+
+    /**
+     * @var string|null
+     *
+     * @ORM\Column(name="public_key", type="text", nullable=true)
+     */
+    public $publicKey;
+
+    /**
+     * @var string|null
+     *
+     * @ORM\Column(name="login_url", type="string", nullable=true)
+     */
+    private $loginUrl;
+
+    /**
+     * @var string|null
+     *
+     * @ORM\Column(name="redirect_url", type="string", nullable=true)
+     */
+    private $redirectUrl;
+
+    /**
      * ImsLtiTool constructor.
      */
     public function __construct()
@@ -271,6 +299,24 @@ class ImsLtiTool
         return implode("\n", $pairs);
     }
 
+    public function getCustomParamsAsArray()
+    {
+        $params = [];
+        $lines = explode("\n", $this->customParams);
+        $lines = array_filter($lines);
+
+        foreach ($lines as $line) {
+            list($key, $value) = explode('=', $line, 2);
+
+            $key = self::parseCustomKey($key);
+            $value = self::parseCurstomValue($value);
+
+            $params[$key] = $value;
+        }
+
+        return $params;
+    }
+
     /**
      * @return array
      */
@@ -324,6 +370,18 @@ class ImsLtiTool
         }
 
         return $newKey;
+    }
+
+    /**
+     * @param string $value
+     *
+     * @return string
+     */
+    private static function parseCurstomValue($value)
+    {
+        $newValue = preg_replace('/\s+/', ' ', $value);
+
+        return trim($newValue);
     }
 
     /**
@@ -488,6 +546,78 @@ class ImsLtiTool
         $this->sharedSecret = $parent->getSharedSecret();
         $this->consumerKey = $parent->getConsumerKey();
         $this->privacy = $parent->getPrivacy();
+
+        return $this;
+    }
+
+    /**
+     * Get loginUrl.
+     *
+     * @return null|string
+     */
+    public function getLoginUrl()
+    {
+        return $this->loginUrl;
+    }
+
+    /**
+     * Set loginUrl.
+     *
+     * @param string|null $loginUrl
+     *
+     * @return ImsLtiTool
+     */
+    public function setLoginUrl($loginUrl)
+    {
+        $this->loginUrl = $loginUrl;
+
+        return $this;
+    }
+
+    /**
+     * Get redirectUlr.
+     *
+     * @return string|null
+     */
+    public function getRedirectUrl()
+    {
+        return $this->redirectUrl;
+    }
+
+    /**
+     * Set redirectUrl.
+     *
+     * @param string|null $redirectUrl
+     *
+     * @return ImsLtiTool
+     */
+    public function setRedirectUrl($redirectUrl)
+    {
+        $this->redirectUrl = $redirectUrl;
+
+        return $this;
+    }
+
+    /**
+     * Get clientId.
+     *
+     * @return string
+     */
+    public function getClientId()
+    {
+        return $this->clientId;
+    }
+
+    /**
+     * Set clientId.
+     *
+     * @param string $clientId
+     *
+     * @return ImsLtiTool
+     */
+    public function setClientId($clientId)
+    {
+        $this->clientId = $clientId;
 
         return $this;
     }

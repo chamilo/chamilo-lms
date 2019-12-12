@@ -7,6 +7,7 @@ use Chamilo\CoreBundle\Entity\Session;
 use Chamilo\CoreBundle\Entity\SessionRelCourseRelUser;
 use Chamilo\CourseBundle\Entity\CTool;
 use Chamilo\PluginBundle\Entity\ImsLti\ImsLtiTool;
+use Chamilo\PluginBundle\Entity\ImsLti\Platform;
 use Chamilo\UserBundle\Entity\User;
 use Doctrine\DBAL\DBALException;
 use Doctrine\DBAL\Schema\Schema;
@@ -21,6 +22,7 @@ use Symfony\Component\Filesystem\Filesystem;
 class ImsLtiPlugin extends Plugin
 {
     const TABLE_TOOL = 'plugin_ims_lti_tool';
+    const TABLE_PLATFORM = 'plugin_ims_lti_platform';
 
     public $isAdminPlugin = true;
 
@@ -32,7 +34,14 @@ class ImsLtiPlugin extends Plugin
         $version = '1.5.1';
         $author = 'Angel Fernando Quiroz Campos';
 
-        parent::__construct($version, $author, ['enabled' => 'boolean']);
+        $message = Display::return_message($this->get_lang('GenerateKeyPairInfo'));
+
+        $settings = [
+            $message => 'html',
+            'enabled' => 'boolean',
+        ];
+
+        parent::__construct($version, $author, $settings);
 
         $this->setCourseSettings();
     }
@@ -79,6 +88,47 @@ class ImsLtiPlugin extends Plugin
         $fs->mirror(__DIR__.'/Entity/', $pluginEntityPath, null, ['override']);
 
         $this->createPluginTables();
+    }
+
+    /**
+     * Save configuration for plugin.
+     *
+     * Generate a new key pair for platform when enabling plugin.
+     *
+     * @throws \Doctrine\ORM\OptimisticLockException
+     *
+     * @return $this|Plugin
+     */
+    public function performActionsAfterConfigure()
+    {
+        $em = Database::getManager();
+
+        /** @var Platform $platform */
+        $platform = $em
+            ->getRepository('ChamiloPluginBundle:ImsLti\Platform')
+            ->findOneBy([]);
+
+        if ($this->get('enabled') === 'true') {
+            if (!$platform) {
+                $platform = new Platform();
+            }
+
+            $keyPair = self::generatePlatformKeys();
+
+            $platform->setKid($keyPair['kid']);
+            $platform->publicKey = $keyPair['public'];
+            $platform->setPrivateKey($keyPair['private']);
+
+            $em->persist($platform);
+        } else {
+            if ($platform) {
+                $em->remove($platform);
+            }
+        }
+
+        $em->flush();
+
+        return $this;
     }
 
     /**
@@ -289,6 +339,45 @@ class ImsLtiPlugin extends Plugin
     public static function isInstructor()
     {
         api_is_allowed_to_edit(false, true);
+    }
+
+    /**
+     * @param User $user
+     *
+     * @return array
+     */
+    public static function getRoles(User $user)
+    {
+        $roles = ['http://purl.imsglobal.org/vocab/lis/v2/system/person#User'];
+
+        if (DRH === $user->getStatus()) {
+            $roles[] = 'http://purl.imsglobal.org/vocab/lis/v2/membership#Mentor';
+            $roles[] = 'http://purl.imsglobal.org/vocab/lis/v2/institution/person#Mentor';
+
+            return $roles;
+        }
+
+        if (!api_is_allowed_to_edit(false, true)) {
+            $roles[] = 'http://purl.imsglobal.org/vocab/lis/v2/membership#Learner';
+            $roles[] = 'http://purl.imsglobal.org/vocab/lis/v2/institution/person#Student';
+
+            if ($user->getStatus() === INVITEE) {
+                $roles[] = 'http://purl.imsglobal.org/vocab/lis/v2/institution/person#Guest';
+            }
+
+            return $roles;
+        }
+
+        $roles[] = 'http://purl.imsglobal.org/vocab/lis/v2/institution/person#Instructor';
+        $roles[] = 'http://purl.imsglobal.org/vocab/lis/v2/membership#Instructor';
+
+        if (api_is_platform_admin_by_id($user->getId())) {
+            $roles[] = 'http://purl.imsglobal.org/vocab/lis/v2/institution/person#Administrator';
+            $roles[] = 'http://purl.imsglobal.org/vocab/lis/v2/system/person#SysAdmin';
+            $roles[] = 'http://purl.imsglobal.org/vocab/lis/v2/system/person#Administrator';
+        }
+
+        return $roles;
     }
 
     /**
@@ -563,5 +652,47 @@ class ImsLtiPlugin extends Plugin
 
         $em->createQuery('DELETE FROM ChamiloPluginBundle:ImsLti\ImsLtiTool tool WHERE tool.course = :c_id')
             ->execute(['c_id' => (int) $courseId]);
+    }
+
+    /**
+     * Generate a key pair and key id for the platform.
+     *
+     * Rerturn a associative array like ['kid' => '...', 'private' => '...', 'public' => '...'].
+     *
+     * @return array
+     */
+    private static function generatePlatformKeys()
+    {
+        // Create the private and public key
+        $res = openssl_pkey_new(
+            [
+                'digest_alg' => 'sha256',
+                'private_key_bits' => 2048,
+                'private_key_type' => OPENSSL_KEYTYPE_RSA
+            ]
+        );
+
+        // Extract the private key from $res to $privateKey
+        $privateKey = '';
+        openssl_pkey_export($res, $privateKey);
+
+        // Extract the public key from $res to $publicKey
+        $publicKey = openssl_pkey_get_details($res);
+
+        return [
+            'kid' => bin2hex(openssl_random_pseudo_bytes(10)),
+            'private' => $privateKey,
+            'public' => $publicKey["key"],
+        ];
+    }
+
+    /**
+     * @return string
+     */
+    public static function getIssuerUrl()
+    {
+        $webPath = api_get_path(WEB_PATH);
+
+        return trim($webPath, " /");
     }
 }

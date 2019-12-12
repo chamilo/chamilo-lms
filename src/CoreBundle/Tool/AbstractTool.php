@@ -15,7 +15,7 @@ abstract class AbstractTool implements ToolInterface
     protected $link;
     protected $image;
     protected $admin;
-    protected $courseSettings;
+    protected $settings;
     protected $resourceTypes;
 
     /**
@@ -29,33 +29,31 @@ abstract class AbstractTool implements ToolInterface
     protected $scope;
 
     /**
-     * @param string $name
-     * @param string $category
-     * @param string $link
-     * @param        $courseSettings
-     * @param array  $resourceTypes
-     * @param string $scope
+     * @param string          $name
+     * @param string          $category
+     * @param string          $link
+     * @param SchemaInterface $settings
+     * @param array           $resourceTypes
+     * @param string          $scope
      */
-    public function __construct($name, $category, $link, $courseSettings, $resourceTypes, $scope)
+    public function __construct($name, $category, $link, $settings = null, $resourceTypes = null)
     {
         $this->name = $name;
         $this->category = $category;
         $this->link = $link;
         $this->image = $name.'.png';
-        $this->courseSettings = $courseSettings;
+        $this->settings = $settings;
         $this->resourceTypes = $resourceTypes;
-        $this->scope = $scope;
     }
 
     public function isCourseTool()
     {
-        $value = bindec($this->scope);
-        return $value === 1 || $value === 3;
+        return false;
     }
 
     public function isGlobal()
     {
-        return bindec($this->scope) === 2;
+        return true;
     }
 
     /**
@@ -96,24 +94,6 @@ abstract class AbstractTool implements ToolInterface
     public function getImage()
     {
         return $this->image;
-    }
-
-    /**
-     * @param $settings
-     *
-     * @return int
-     */
-    public function setCourseSettings($settings)
-    {
-        $this->courseSettings = $settings;
-    }
-
-    /**
-     * @return SchemaInterface
-     */
-    public function getCourseSettings()
-    {
-        return $this->courseSettings;
     }
 
     /**

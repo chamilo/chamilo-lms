@@ -23,7 +23,6 @@ services:
                     repository: Chamilo\CoreBundle\Repository\CourseRepository
                 users:
                     repository: Chamilo\UserBundle\Repository\UserRepository
-            - '10'
         tags:
             - {name: chamilo_core.tool}
 
@@ -37,7 +36,6 @@ services:
             -
                 illustrations:
                     repository: Chamilo\CoreBundle\Repository\IllustrationRepository
-            - '10'
         tags:
             - {name: chamilo_core.tool}
 
@@ -54,7 +52,6 @@ services:
                     repository: Chamilo\CourseBundle\Repository\CCalendarEventRepository
                 event_attachments:
                     repository: Chamilo\CourseBundle\Repository\CCalendarEventAttachmentRepository
-            - '01'
         tags:
             - {name: chamilo_core.tool}
 
@@ -71,7 +68,6 @@ services:
                     repository: Chamilo\CourseBundle\Repository\CAnnouncementRepository
                 announcements_attachments:
                     repository: Chamilo\CourseBundle\Repository\CAnnouncementAttachmentRepository
-            - '01'
         tags:
             - {name: chamilo_core.tool}
 
@@ -89,7 +85,6 @@ services:
                     repository: Chamilo\CourseBundle\Repository\CStudentPublicationAssignmentRepository
                 student_publications_comments:
                     repository: Chamilo\CourseBundle\Repository\CStudentPublicationCommentRepository
-            - '01'
         tags:
             - {name: chamilo_core.tool}
 
@@ -103,7 +98,6 @@ services:
             -
                 attendances:
                     repository: Chamilo\CourseBundle\Repository\CAttendanceRepository
-            - '01'
         tags:
             - {name: chamilo_core.tool}
 
@@ -117,7 +111,6 @@ services:
             -
                 blogs:
                     repository: Chamilo\CourseBundle\Repository\CBlogRepository
-            - '01'
         tags:
             - {name: chamilo_core.tool}
 
@@ -131,7 +124,6 @@ services:
             -
                 course_descriptions:
                     repository: Chamilo\CourseBundle\Repository\CCourseDescriptionRepository
-            - '01'
         tags:
             - {name: chamilo_core.tool}
 
@@ -145,7 +137,6 @@ services:
             -
                 links:
                     repository: Chamilo\CourseBundle\Repository\CToolRepository
-            - '01'
         tags:
             - {name: chamilo_core.tool}
 
@@ -157,7 +148,6 @@ services:
             - '/main/chat/chat.php'
             - '@chamilo_course.settings.chat'
             - ~
-            - '01'
         tags:
             - {name: chamilo_core.tool}
 
@@ -175,7 +165,6 @@ services:
                     repository: Chamilo\CourseBundle\Repository\CThematicAdvanceRepository
                 thematic_plans:
                     repository: Chamilo\CourseBundle\Repository\CThematicPlanRepository
-            - '01'
         tags:
             - {name: chamilo_core.tool}
 
@@ -189,7 +178,6 @@ services:
             -
                 files:
                     repository: Chamilo\CourseBundle\Repository\CDocumentRepository
-            - '01'
         tags:
             - {name: chamilo_core.tool}
 
@@ -203,7 +191,6 @@ services:
             -
                 dropbox:
                     repository: Chamilo\CourseBundle\Repository\CDropboxRepository
-            - '01'
         tags:
             - {name: chamilo_core.tool}
 
@@ -223,7 +210,6 @@ services:
                     repository: Chamilo\CourseBundle\Repository\CQuizQuestionCategoryRepository
                 exercise_categories:
                     repository: Chamilo\CourseBundle\Repository\CExerciseCategoryRepository
-            - '01'
         tags:
             - {name: chamilo_core.tool}
 
@@ -245,7 +231,6 @@ services:
                     repository: Chamilo\CourseBundle\Repository\CForumPostRepository
                 forum_threads:
                     repository: Chamilo\CourseBundle\Repository\CForumThreadRepository
-            - '01'
         tags:
             - {name: chamilo_core.tool}
 
@@ -259,7 +244,6 @@ services:
             -
                 glossaries:
                     repository: Chamilo\CourseBundle\Repository\CGlossaryRepository
-            - '01'
         tags:
             - {name: chamilo_core.tool}
 
@@ -276,9 +260,7 @@ services:
                 gradebook_links:
                     repository: Chamilo\CourseBundle\Repository\CGradebookLinkRepository
                 gradebook_evaluations:
-                    repository: Chamilo\CourseBundle\Repository\CGradebookEvaluationRepositor
-
-            - '01'
+                    repository: Chamilo\CourseBundle\Repository\CGradebookEvaluationRepository
         tags:
             - {name: chamilo_core.tool}
 
@@ -296,7 +278,6 @@ services:
                     repository: Chamilo\CourseBundle\Repository\CGroupCategoryRepository
                 gradebook_evaluations:
                     repository: Chamilo\CourseBundle\Repository\CGradebookEvaluationRepository
-            - '01'
         tags:
             - {name: chamilo_core.tool}
 
@@ -312,7 +293,6 @@ services:
                     repository: Chamilo\CourseBundle\Repository\CLpRepository
                 lp_categories:
                     repository: Chamilo\CourseBundle\Repository\CLpCategoryRepository
-            - '01'
         tags:
             - {name: chamilo_core.tool}
 
@@ -328,15 +308,8 @@ services:
                     repository: Chamilo\CourseBundle\Repository\CLinkRepository
                 link_categories:
                     repository: Chamilo\CourseBundle\Repository\CLinkRepository
-            - '01'
         tags:
             - {name: chamilo_core.tool}
-
-    # Maintenance
-    chamilo_course.settings.maintenance:
-        class: Chamilo\CourseBundle\Settings\MaintenanceCourseSettingsSchema
-        tags:
-            - {name: chamilo_course.settings_schema, alias: chamilo_course.settings.maintenance, namespace: maintenance}
 
     chamilo_core.tool.member:
         class: Chamilo\CoreBundle\Tool\Member
@@ -346,7 +319,6 @@ services:
             - '/main/user/user.php'
             - '@chamilo_course.settings.user'
             - ~
-            - '01'
         tags:
             - {name: chamilo_core.tool}
 
@@ -358,7 +330,6 @@ services:
             - '/main/course_info/maintenance.php'
             - '@chamilo_course.settings.maintenance'
             - ~
-            - '01'
         tags:
             - {name: chamilo_core.tool}
 
@@ -372,7 +343,6 @@ services:
             -
                 notebooks:
                     repository: Chamilo\CourseBundle\Repository\CNotebookRepository
-            - '01'
         tags:
             - {name: chamilo_core.tool}
 
@@ -383,8 +353,19 @@ services:
             - 'admin'
             - '/main/course_info/infocours.php'
             - '@chamilo_course.settings.settings'
-            - ~
-            - '01'
+        tags:
+            - {name: chamilo_core.tool}
+
+    chamilo_core.tool.shortcut:
+        class: Chamilo\CoreBundle\Tool\Shortcut
+        arguments:
+            - 'shortcut'
+            - ''
+            - ''
+            - ''
+            -
+                shortcuts:
+                    repository: Chamilo\CourseBundle\Repository\CShortcutRepository
         tags:
             - {name: chamilo_core.tool}
 
@@ -401,7 +382,6 @@ services:
                     repository: Chamilo\CourseBundle\Repository\CSurveyRepository
                 survey_questions:
                     repository: Chamilo\CourseBundle\Repository\CSurveyQuestionRepository
-            - '01'
         tags:
             - {name: chamilo_core.tool}
 
@@ -412,8 +392,6 @@ services:
             - 'admin'
             - '/main/tracking/courseLog.php'
             - '@chamilo_course.settings.tracking'
-            - ~
-            - '01'
         tags:
             - {name: chamilo_core.tool}
 
@@ -427,7 +405,6 @@ services:
             -
                 files:
                     repository: Chamilo\CoreBundle\Repository\PersonalFileRepository
-            - '10'
         tags:
             - {name: chamilo_core.tool}
 
@@ -441,6 +418,5 @@ services:
             -
                 wikis:
                     repository: Chamilo\CourseBundle\Repository\CWikiRepository
-            - '01'
         tags:
             - {name: chamilo_core.tool}

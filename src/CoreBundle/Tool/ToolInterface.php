@@ -27,9 +27,4 @@ interface ToolInterface
      * @return string
      */
     public function getCategory();
-
-    /**
-     * @return string
-     */
-    //public function getName();
 }

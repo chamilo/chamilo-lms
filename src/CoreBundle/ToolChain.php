@@ -173,7 +173,7 @@ class ToolChain
 
         $user = $this->security->getToken()->getUser();
 
-        // Hardcoded order
+        // Hardcoded tool list order
         $toolList = [
             'course_description',
             'document',
@@ -208,7 +208,10 @@ class ToolChain
             $visibility = in_array($tool->getName(), $toolVisibility, true);
             $criteria = ['name' => $tool->getName()];
             // Skip global tools.
-            if ($tool->isCourseTool() === false) {
+            /*if ($tool->isCourseTool() === false) {
+                continue;
+            }*/
+            if (!isset($toolList[$tool->getName()])) {
                 continue;
             }
             $toolEntity = $manager->getRepository('ChamiloCoreBundle:Tool')->findOneBy($criteria);

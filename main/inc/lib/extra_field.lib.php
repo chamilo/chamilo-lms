@@ -1303,7 +1303,7 @@ class ExtraField extends Model
                                        </h4>
                                     </div>
                                 </div>
-                            </div>    
+                            </div>
                         ');
                         break;
                     case self::FIELD_TYPE_TAG:
@@ -1666,15 +1666,15 @@ class ExtraField extends Model
                                     $deleteId = $field_details['variable'].'_delete';
                                     $form->addHtml("
                                         <script>
-                                            $(function() {                                     
+                                            $(function() {
                                                 $('#".$deleteId."').on('click', function() {
-                                                    $.ajax({			
+                                                    $.ajax({
                                                         type: 'GET',
-                                                        url: '".$url."',			
-                                                        success: function(result) {		    
+                                                        url: '".$url."',
+                                                        success: function(result) {
                                                             if (result == 1) {
                                                                 $('#".$divItemId."').html('".get_lang('Deleted')."');
-                                                            }			    
+                                                            }
                                                         }
                                                     });
                                                 });
@@ -2141,7 +2141,7 @@ JAVASCRIPT;
             </a>
 JAVASCRIPT;
 
-        return "function action_formatter(cellvalue, options, rowObject) {        
+        return "function action_formatter(cellvalue, options, rowObject) {
             return '$editButton $deleteButton';
         }";
     }
@@ -2370,7 +2370,7 @@ JAVASCRIPT;
                             $inject_joins .= "
                                 INNER JOIN $this->table_field_rel_tag tag_rel$counter
                                 ON (
-                                    tag_rel$counter.field_id = ".$extra_info['id']." AND 
+                                    tag_rel$counter.field_id = ".$extra_info['id']." AND
                                     tag_rel$counter.item_id = s.".$this->primaryKey."
                                 )
                                 INNER JOIN $this->table_field_tag tag$counter
@@ -2468,79 +2468,85 @@ JAVASCRIPT;
     public function getExtraFieldRules($filters, $stringToSearch = 'extra_')
     {
         $extra_fields = [];
+        $condition_array = [];
 
         // Getting double select if exists
         $double_select = [];
-        foreach ($filters->rules as $rule) {
-            if (empty($rule)) {
-                continue;
-            }
-            if (strpos($rule->field, '_second') === false) {
-            } else {
-                $my_field = str_replace('_second', '', $rule->field);
-                $double_select[$my_field] = $rule->data;
-            }
-        }
-
-        $condition_array = [];
-        foreach ($filters->rules as $rule) {
-            if (empty($rule)) {
-                continue;
-            }
-            if (strpos($rule->field, $stringToSearch) === false) {
-                // normal fields
-                $field = $rule->field;
-                if (isset($rule->data) && is_string($rule->data) && $rule->data != -1) {
-                    $condition_array[] = $this->get_where_clause($field, $rule->op, $rule->data);
+        if (is_object($filters)
+            && property_exists($filters, 'rules')
+            && is_array($filters->rules)
+            && !empty($filters->rules)
+        ) {
+            foreach ($filters->rules as $rule) {
+                if (empty($rule)) {
+                    continue;
                 }
-            } else {
-                // Extra fields
                 if (strpos($rule->field, '_second') === false) {
-                    //No _second
-                    $original_field = str_replace($stringToSearch, '', $rule->field);
-                    $field_option = $this->get_handler_field_info_by_field_variable($original_field);
-
-                    if ($field_option['field_type'] == self::FIELD_TYPE_DOUBLE_SELECT) {
-                        if (isset($double_select[$rule->field])) {
-                            $data = explode('#', $rule->data);
-                            $rule->data = $data[1].'::'.$double_select[$rule->field];
-                        } else {
-                            // only was sent 1 select
-                            if (is_string($rule->data)) {
-                                $data = explode('#', $rule->data);
-                                $rule->data = $data[1];
-                            }
-                        }
-
-                        if (!isset($rule->data)) {
-                            $condition_array[] = ' ('
-                                .$this->get_where_clause($rule->field, $rule->op, $rule->data)
-                                .') ';
-                            $extra_fields[] = ['field' => $rule->field, 'id' => $field_option['id']];
-                        }
-                    } else {
-                        if (isset($rule->data)) {
-                            if (isset($rule->data) && is_int($rule->data) && $rule->data == -1) {
-                                continue;
-                            }
-                            $condition_array[] = ' ('
-                                .$this->get_where_clause($rule->field, $rule->op, $rule->data)
-                                .') ';
-                            $extra_fields[] = [
-                                'field' => $rule->field,
-                                'id' => $field_option['id'],
-                                'data' => $rule->data,
-                            ];
-                        }
-                    }
                 } else {
                     $my_field = str_replace('_second', '', $rule->field);
-                    $original_field = str_replace($stringToSearch, '', $my_field);
-                    $field_option = $this->get_handler_field_info_by_field_variable($original_field);
-                    $extra_fields[] = [
-                        'field' => $rule->field,
-                        'id' => $field_option['id'],
-                    ];
+                    $double_select[$my_field] = $rule->data;
+                }
+            }
+
+            foreach ($filters->rules as $rule) {
+                if (empty($rule)) {
+                    continue;
+                }
+                if (strpos($rule->field, $stringToSearch) === false) {
+                    // normal fields
+                    $field = $rule->field;
+                    if (isset($rule->data) && is_string($rule->data) && $rule->data != -1) {
+                        $condition_array[] = $this->get_where_clause($field, $rule->op, $rule->data);
+                    }
+                } else {
+                    // Extra fields
+                    if (strpos($rule->field, '_second') === false) {
+                        //No _second
+                        $original_field = str_replace($stringToSearch, '', $rule->field);
+                        $field_option = $this->get_handler_field_info_by_field_variable($original_field);
+
+                        if ($field_option['field_type'] == self::FIELD_TYPE_DOUBLE_SELECT) {
+                            if (isset($double_select[$rule->field])) {
+                                $data = explode('#', $rule->data);
+                                $rule->data = $data[1].'::'.$double_select[$rule->field];
+                            } else {
+                                // only was sent 1 select
+                                if (is_string($rule->data)) {
+                                    $data = explode('#', $rule->data);
+                                    $rule->data = $data[1];
+                                }
+                            }
+
+                            if (!isset($rule->data)) {
+                                $condition_array[] = ' ('
+                                    .$this->get_where_clause($rule->field, $rule->op, $rule->data)
+                                    .') ';
+                                $extra_fields[] = ['field' => $rule->field, 'id' => $field_option['id']];
+                            }
+                        } else {
+                            if (isset($rule->data)) {
+                                if (isset($rule->data) && is_int($rule->data) && $rule->data == -1) {
+                                    continue;
+                                }
+                                $condition_array[] = ' ('
+                                    .$this->get_where_clause($rule->field, $rule->op, $rule->data)
+                                    .') ';
+                                $extra_fields[] = [
+                                    'field' => $rule->field,
+                                    'id' => $field_option['id'],
+                                    'data' => $rule->data,
+                                ];
+                            }
+                        }
+                    } else {
+                        $my_field = str_replace('_second', '', $rule->field);
+                        $original_field = str_replace($stringToSearch, '', $my_field);
+                        $field_option = $this->get_handler_field_info_by_field_variable($original_field);
+                        $extra_fields[] = [
+                            'field' => $rule->field,
+                            'id' => $field_option['id'],
+                        ];
+                    }
                 }
             }
         }
@@ -2725,9 +2731,9 @@ JAVASCRIPT;
         $tag = Database::escape_string($tag);
         $fieldId = (int) $fieldId;
 
-        $sql = "SELECT user_id 
-                FROM {$this->table_field_tag} f INNER JOIN $tagRelUserTable ft 
-                ON tag_id = f.id 
+        $sql = "SELECT user_id
+                FROM {$this->table_field_tag} f INNER JOIN $tagRelUserTable ft
+                ON tag_id = f.id
                 WHERE tag = '$tag' AND f.field_id = $fieldId;
         ";
 
@@ -2795,14 +2801,14 @@ JAVASCRIPT;
         $optionsTable = Database::get_main_table(TABLE_EXTRA_FIELD_OPTIONS);
 
         $sql = "SELECT DISTINCT t.*, v.value, o.display_text
-                FROM $tagRelExtraTable te 
+                FROM $tagRelExtraTable te
                 INNER JOIN $tagTable t
-                ON (t.id = te.tag_id AND te.field_id = t.field_id AND te.field_id = $tagId) 
+                ON (t.id = te.tag_id AND te.field_id = t.field_id AND te.field_id = $tagId)
                 INNER JOIN $table v
                 ON (te.item_id = v.item_id AND v.field_id = $id)
                 INNER JOIN $optionsTable o
                 ON (o.option_value = v.value)
-                WHERE v.value IN ('".implode("','", $options)."')                           
+                WHERE v.value IN ('".implode("','", $options)."')
                 ORDER BY o.option_order, t.tag
                ";
 
@@ -2826,43 +2832,43 @@ JAVASCRIPT;
                 if (typeof google === 'object') {
                     var address = '$dataValue';
                     initializeGeo{$variable}(address, false);
-    
+
                     $('#geolocalization_extra_{$variable}').on('click', function() {
                         var address = $('#{$variable}').val();
                         initializeGeo{$variable}(address, false);
                         return false;
                     });
-    
+
                     $('#myLocation_extra_{$variable}').on('click', function() {
                         myLocation{$variable}();
                         return false;
                     });
-    
+
                     // When clicking enter
-                    $('#{$variable}').keypress(function(event) {                        
-                        if (event.which == 13) {                            
+                    $('#{$variable}').keypress(function(event) {
+                        if (event.which == 13) {
                             $('#geolocalization_extra_{$variable}').click();
                             return false;
                         }
                     });
-                    
+
                     // On focus out update city
-                    $('#{$variable}').focusout(function() {                                                 
+                    $('#{$variable}').focusout(function() {
                         $('#geolocalization_extra_{$variable}').click();
-                        return false;                        
+                        return false;
                     });
-                    
+
                     return;
                 }
-    
+
                 $('#map_extra_{$variable}')
                     .html('<div class=\"alert alert-info\">"
                 .addslashes(get_lang('YouNeedToActivateTheGoogleMapsPluginInAdminPlatformToSeeTheMap'))
                 ."</div>');
             });
-    
-            function myLocation{$variable}() 
-            {                                                    
+
+            function myLocation{$variable}()
+            {
                 if (navigator.geolocation) {
                     var geoPosition = function(position) {
                         var lat = position.coords.latitude;
@@ -2870,20 +2876,20 @@ JAVASCRIPT;
                         var latLng = new google.maps.LatLng(lat, lng);
                         initializeGeo{$variable}(false, latLng);
                     };
-    
-                    var geoError = function(error) {                        
+
+                    var geoError = function(error) {
                         alert('Geocode ".get_lang('Error').": ' + error);
                     };
-    
+
                     var geoOptions = {
                         enableHighAccuracy: true
                     };
                     navigator.geolocation.getCurrentPosition(geoPosition, geoError, geoOptions);
                 }
             }
-    
+
             function initializeGeo{$variable}(address, latLng)
-            {                
+            {
                 var geocoder = new google.maps.Geocoder();
                 var latlng = new google.maps.LatLng(-34.397, 150.644);
                 var myOptions = {
@@ -2896,25 +2902,25 @@ JAVASCRIPT;
                     navigationControl: true,
                     mapTypeId: google.maps.MapTypeId.ROADMAP
                 };
-    
+
                 map_{$variable} = new google.maps.Map(
                     document.getElementById('map_extra_{$variable}'),
                     myOptions
                 );
-    
+
                 var parameter = address ? {'address': address} : latLng ? {'latLng': latLng} : false;
-    
+
                 if (geocoder && parameter) {
                     geocoder.geocode(parameter, function(results, status) {
                         if (status == google.maps.GeocoderStatus.OK) {
-                            if (status != google.maps.GeocoderStatus.ZERO_RESULTS) {                                
+                            if (status != google.maps.GeocoderStatus.ZERO_RESULTS) {
                                 map_{$variable}.setCenter(results[0].geometry.location);
-                                
-                                // get city and country                                
+
+                                // get city and country
                                 var defaultAddress = results[0].formatted_address;
                                 var city = '';
                                 var country = '';
-                                
+
                                 for (var i=0; i<results[0].address_components.length; i++) {
                                     if (results[0].address_components[i].types[0] == \"locality\") {
                                         //this is the object you are looking for City
@@ -2929,20 +2935,20 @@ JAVASCRIPT;
                                         country = results[0].address_components[i];
                                     }
                                 }
-                        
+
                                 if (city && city.long_name && country && country.long_name) {
                                     defaultAddress = city.long_name + ', ' + country.long_name;
                                 }
-                                $('#{$variable}').val(defaultAddress);                                
+                                $('#{$variable}').val(defaultAddress);
                                 $('#{$variable}_coordinates').val(
                                     results[0].geometry.location.lat()+','+results[0].geometry.location.lng()
                                 );
-                                
+
                                 var infowindow = new google.maps.InfoWindow({
                                     content: '<b>' + $('#extra_{$variable}').val() + '</b>',
                                     size: new google.maps.Size(150, 50)
                                 });
-    
+
                                 var marker = new google.maps.Marker({
                                     position: results[0].geometry.location,
                                     map: map_{$variable},
@@ -2990,7 +2996,7 @@ JAVASCRIPT;
                             <em class="fa fa-crosshairs"></em> '.get_lang('MyLocation').'
                         </button>
                     </div>
-                </div>                   
+                </div>
                 <div class="form-group">
                     <label for="map_extra_'.$variable.'" class="col-sm-2 control-label">
                         '.$text.' - '.get_lang('Map').'
@@ -3186,7 +3192,7 @@ JAVASCRIPT;
 
                 if (!id) {
                     $('#$secondSelectId').empty().selectpicker('refresh');
-                    
+
                     return;
                 }
 
@@ -3360,17 +3366,17 @@ JAVASCRIPT;
                 var slctFirst = $('#$slctFirstId'),
                     slctSecond = $('#$slctSecondId'),
                     slctThird = $('#$slctThirdId');
-                    
+
                 slctFirst.on('change', function () {
                     slctSecond.empty().selectpicker('refresh');
                     slctThird.empty().selectpicker('refresh');
-    
+
                     var level = $(this).val();
-    
+
                     if (!level) {
                         return;
                     }
-    
+
                     $.getJSON(_p.web_ajax + 'extra_field.ajax.php', {
                         'a': 'get_second_select_options',
                         'type': '$this->type',
@@ -3390,19 +3396,19 @@ JAVASCRIPT;
                                     $('<option>', {value: index, text: valueParts.join(''), 'data-value': dataValue})
                                 );
                             });
-    
+
                             slctSecond.selectpicker('refresh');
                         });
                 });
                 slctSecond.on('change', function () {
                     slctThird.empty().selectpicker('refresh');
-    
+
                     var level = $(this).val();
-                    
+
                     if (!level) {
                         return;
                     }
-                    
+
                     $.getJSON(_p.web_ajax + 'extra_field.ajax.php', {
                         'a': 'get_second_select_options',
                         'type': '$this->type',
@@ -3422,7 +3428,7 @@ JAVASCRIPT;
                                     $('<option>', {value: index, text: valueParts.join(''), 'data-value': dataValue})
                                 );
                             });
-    
+
                             slctThird.selectpicker('refresh');
                         });
                 });

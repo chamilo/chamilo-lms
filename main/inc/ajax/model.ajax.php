@@ -174,20 +174,26 @@ if (($search || $forceSearch) && ($search !== 'false')) {
                 // Extra field.
                 $extraField = new ExtraField($type);
 
-                foreach ($filters->rules as $key => $data) {
-                    if (empty($data)) {
-                        continue;
-                    }
-                    if ($data->field === 'extra_access_start_date') {
-                        $accessStartDate = $data->data;
-                    }
+                if (is_object($filters)
+                    && property_exists($filters, 'rules')
+                    && is_array($filters->rules)
+                    && !empty($filters->rules)
+                ) {
+                    foreach ($filters->rules as $key => $data) {
+                        if (empty($data)) {
+                            continue;
+                        }
+                        if ($data->field === 'extra_access_start_date') {
+                            $accessStartDate = $data->data;
+                        }
 
-                    if ($data->field === 'extra_access_end_date') {
-                        $accessEndDate = $data->data;
-                    }
+                        if ($data->field === 'extra_access_end_date') {
+                            $accessEndDate = $data->data;
+                        }
 
-                    if (in_array($data->field, $toRemove)) {
-                        unset($filters->rules[$key]);
+                        if (in_array($data->field, $toRemove)) {
+                            unset($filters->rules[$key]);
+                        }
                     }
                 }
                 $result = $extraField->getExtraFieldRules($filters, 'extra_');

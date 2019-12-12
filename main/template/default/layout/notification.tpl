@@ -27,7 +27,7 @@
     }
     .notification-dropdown-menu {
         padding-bottom: 0;
-        min-width: 528px;
+        min-width: 528px !important;
     }
     .notification-img {
         width: 48px;

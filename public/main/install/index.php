@@ -812,7 +812,7 @@ $poweredBy = 'Powered by <a href="http://www.chamilo.org" target="_blank"> Chami
                     </li>
                     <li class="list-group-item <?php step_active('4'); ?>">
                         <span class="number"> 4 </span>
-                        <?php echo $translator->trans('MySQL database settings'); ?>
+                        <?php echo $translator->trans('Database settings'); ?>
                     </li>
                     <li class="list-group-item <?php step_active('5'); ?>">
                         <span class="number"> 5 </span>

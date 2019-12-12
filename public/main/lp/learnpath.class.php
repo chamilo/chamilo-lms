@@ -4935,25 +4935,25 @@ class learnpath
         $lp->setName($name);
         $repo->updateNodeForResource($lp);
 
-            /*
+        /*
         $course_id = $this->course_info['real_id'];
         $sql = "UPDATE $lp_table SET
-                name = '$name'
-                WHERE iid = $lp_id";
+            name = '$name'
+            WHERE iid = $lp_id";
         $result = Database::query($sql);
         // If the lp is visible on the homepage, change his name there.
         if (Database::affected_rows($result)) {
-            $session_id = api_get_session_id();
-            $session_condition = api_get_session_condition($session_id);
-            $tbl_tool = Database::get_course_table(TABLE_TOOL_LIST);
-            $link = 'lp/lp_controller.php?action=view&lp_id='.$lp_id.'&id_session='.$session_id;
-            $sql = "UPDATE $tbl_tool SET name = '$name'
-            	    WHERE
-            	        c_id = $course_id AND
-            	        (link='$link' AND image='scormbuilder.gif' $session_condition)";
-            Database::query($sql);*/
+        $session_id = api_get_session_id();
+        $session_condition = api_get_session_condition($session_id);
+        $tbl_tool = Database::get_course_table(TABLE_TOOL_LIST);
+        $link = 'lp/lp_controller.php?action=view&lp_id='.$lp_id.'&id_session='.$session_id;
+        $sql = "UPDATE $tbl_tool SET name = '$name'
+        	    WHERE
+        	        c_id = $course_id AND
+        	        (link='$link' AND image='scormbuilder.gif' $session_condition)";
+        Database::query($sql);*/
 
-            //return true;
+        //return true;
         //}
 
         return false;
@@ -6650,7 +6650,7 @@ class learnpath
             $documentId = $folderData->getIid();
             $dir = $dir.'/';
             if ($folder) {
-               // $filepath = api_get_path(SYS_COURSE_PATH).$course['path'].'/document'.$dir;
+                // $filepath = api_get_path(SYS_COURSE_PATH).$course['path'].'/document'.$dir;
             }
         }
 
@@ -11813,7 +11813,6 @@ EOD;
         $item->setName($params['name']);
         $item->setCId($params['c_id']);
 
-
         $repo = Container::getLpCategoryRepository();
         $em = $repo->getEntityManager();
         $em->persist($item);
@@ -11829,7 +11828,6 @@ EOD;
         );
 
         $em->flush();
-
 
         /*api_item_property_update(
             api_get_course_info(),

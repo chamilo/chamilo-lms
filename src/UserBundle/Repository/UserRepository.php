@@ -49,7 +49,6 @@ use Chamilo\TicketBundle\Entity\Ticket;
 use Chamilo\UserBundle\Entity\User;
 use Doctrine\Common\Collections\Criteria;
 use Doctrine\ORM\Query\Expr\Join;
-use FOS\UserBundle\Model\UserInterface;
 use Symfony\Component\Finder\Finder;
 use Symfony\Component\Security\Core\Exception\UsernameNotFoundException;
 use Symfony\Component\Serializer\Encoder\JsonEncoder;

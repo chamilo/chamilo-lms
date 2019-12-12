@@ -4,7 +4,6 @@
 namespace Chamilo\CoreBundle;
 
 use Chamilo\CoreBundle\Entity\Course;
-use Chamilo\CoreBundle\Entity\Resource\AbstractResource;
 use Chamilo\CoreBundle\Entity\Resource\ResourceLink;
 use Chamilo\CoreBundle\Entity\Resource\ResourceType;
 use Chamilo\CoreBundle\Entity\Tool;
@@ -169,7 +168,7 @@ class ToolChain
     {
         $tools = $this->getTools();
         $manager = $this->entityManager;
-        $toolVisibility = $this->settingsManager ->getSetting('course.active_tools_on_create');
+        $toolVisibility = $this->settingsManager->getSetting('course.active_tools_on_create');
 
         $user = $this->security->getToken()->getUser();
 

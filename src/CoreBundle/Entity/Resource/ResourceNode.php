@@ -528,5 +528,4 @@ class ResourceNode
 
         return '<i class="'.$class.'"></i>';
     }
-
 }

@@ -3,10 +3,8 @@
 
 namespace Chamilo\CoreBundle\Repository;
 
-use Chamilo\CoreBundle\Entity\Resource\ResourceFile;
 use Chamilo\CoreBundle\Entity\Resource\ResourceNode;
 use Chamilo\CoreBundle\Entity\Resource\ResourceType;
-use Doctrine\ORM\Query\Expr\Join;
 use Gedmo\Tree\Entity\Repository\MaterializedPathRepository;
 
 /**

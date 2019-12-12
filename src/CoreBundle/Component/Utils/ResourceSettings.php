@@ -72,25 +72,15 @@ class ResourceSettings
         return $this;
     }
 
-    /**
-     * @return bool
-     */
     public function isAllowDownloadAll(): bool
     {
         return $this->allowDownloadAll;
     }
 
-    /**
-     * @param bool $allowDownloadAll
-     *
-     * @return ResourceSettings
-     */
     public function setAllowDownloadAll(bool $allowDownloadAll): ResourceSettings
     {
         $this->allowDownloadAll = $allowDownloadAll;
 
         return $this;
     }
-
-
 }

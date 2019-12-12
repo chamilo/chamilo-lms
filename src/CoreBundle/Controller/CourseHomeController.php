@@ -223,6 +223,62 @@ class CourseHomeController extends ToolBaseController
     }
 
     /**
+     * Edit configuration with given namespace.
+     *
+     * @param string $namespace
+     * @Route("/{cid}/settings/{namespace}", name="chamilo_core_course_settings")
+
+     * @Entity("course", expr="repository.find(cid)")
+     *
+     * @return Response
+     */
+    public function updateAction(Request $request, Course $course, $namespace, SettingsManager $manager, SettingsFormFactory $formFactory)
+    {
+        $schemaAlias = $manager->convertNameSpaceToService($namespace);
+
+        $settings = $manager->load($namespace);
+        $form = $formFactory->create($schemaAlias);
+
+        $form->setData($settings);
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            $messageType = 'success';
+            try {
+                $manager->setCourse($course);
+                $manager->save($form->getData());
+                $message = $this->trans('Update');
+            } catch (ValidatorException $exception) {
+                $message = $this->trans(
+                    $exception->getMessage(),
+                    [],
+                    'validators'
+                );
+                $messageType = 'error';
+            }
+            $request->getSession()->getBag('flashes')->add(
+                $messageType,
+                $message
+            );
+
+            if ($request->headers->has('referer')) {
+                return $this->redirect($request->headers->get('referer'));
+            }
+        }
+        $schemas = $manager->getSchemas();
+
+        return $this->render(
+            '@ChamiloTheme/Course/settings.html.twig',
+            [
+                'course' => $course,
+                'schemas' => $schemas,
+                'settings' => $settings,
+                'form' => $form->createView(),
+            ]
+        );
+    }
+
+    /**
      * @return array
      */
     private function autoLaunch()
@@ -385,62 +441,5 @@ class CourseHomeController extends ToolBaseController
                 'warning'
             ));
         }
-    }
-
-    /**
-     * Edit configuration with given namespace.
-     *
-     * @param string $namespace
-     * @Route("/{cid}/settings/{namespace}", name="chamilo_core_course_settings")
-
-     * @Entity("course", expr="repository.find(cid)")
-     *
-     *
-     * @return Response
-     */
-    public function updateAction(Request $request, Course $course, $namespace, SettingsManager $manager, SettingsFormFactory $formFactory)
-    {
-        $schemaAlias = $manager->convertNameSpaceToService($namespace);
-
-        $settings = $manager->load($namespace);
-        $form = $formFactory->create($schemaAlias);
-
-        $form->setData($settings);
-        $form->handleRequest($request);
-
-        if ($form->isSubmitted() && $form->isValid()) {
-            $messageType = 'success';
-            try {
-                $manager->setCourse($course);
-                $manager->save($form->getData());
-                $message = $this->trans('Update');
-            } catch (ValidatorException $exception) {
-                $message = $this->trans(
-                    $exception->getMessage(),
-                    [],
-                    'validators'
-                );
-                $messageType = 'error';
-            }
-            $request->getSession()->getBag('flashes')->add(
-                $messageType,
-                $message
-            );
-
-            if ($request->headers->has('referer')) {
-                return $this->redirect($request->headers->get('referer'));
-            }
-        }
-        $schemas = $manager->getSchemas();
-
-        return $this->render(
-            '@ChamiloTheme/Course/settings.html.twig',
-            [
-                'course' => $course,
-                'schemas' => $schemas,
-                'settings' => $settings,
-                'form' => $form->createView(),
-            ]
-        );
     }
 }

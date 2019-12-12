@@ -4,7 +4,6 @@
 namespace Chamilo\CourseBundle\Entity;
 
 use APY\DataGridBundle\Grid\Mapping as GRID;
-
 use Chamilo\CoreBundle\Entity\Resource\AbstractResource;
 use Chamilo\CoreBundle\Entity\Resource\ResourceInterface;
 use Doctrine\ORM\Mapping as ORM;
@@ -33,19 +32,16 @@ class CShortcut extends AbstractResource implements ResourceInterface
      */
     protected $name;
 
-    /**
-     * @return string
-     */
+    public function __toString(): string
+    {
+        return $this->getName();
+    }
+
     public function getName(): string
     {
         return $this->name;
     }
 
-    /**
-     * @param string $name
-     *
-     * @return CShortcut
-     */
     public function setName(string $name): CShortcut
     {
         $this->name = $name;
@@ -62,11 +58,6 @@ class CShortcut extends AbstractResource implements ResourceInterface
     }
 
     public function getResourceName(): string
-    {
-        return $this->getName();
-    }
-
-    public function __toString(): string
     {
         return $this->getName();
     }

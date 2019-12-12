@@ -765,7 +765,6 @@ class UserManager
 
         $repository->deleteUser($user);
 
-
         // Unsubscribe the user from all groups in all his courses
         $sql = "SELECT c.id
                 FROM $table_course c
@@ -920,8 +919,6 @@ class UserManager
 
         $app_plugin = new AppPlugin();
         $app_plugin->performActionsWhenDeletingItem('user', $user_id);
-
-
 
         // Add event to system log
         $authorId = api_get_user_id();

@@ -27,9 +27,7 @@ class RegisterSchemasPass implements CompilerPassInterface
         foreach ($taggedServicesIds as $id => $tags) {
             foreach ($tags as $attributes) {
                 if (!isset($attributes['alias'])) {
-                    throw new \InvalidArgumentException(
-                        sprintf('Service "%s" must define the "alias" attribute on "sylius.settings_schema" tags.', $id)
-                    );
+                    throw new \InvalidArgumentException(sprintf('Service "%s" must define the "alias" attribute on "sylius.settings_schema" tags.', $id));
                 }
 
                 $schemaRegistry->addMethodCall('register', [$attributes['alias'], new Reference($id)]);

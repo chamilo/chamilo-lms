@@ -106,16 +106,16 @@ class CTool extends AbstractResource implements ResourceInterface
         $this->id = 0;
     }
 
+    public function __toString(): string
+    {
+        return (string) $this->getName();
+    }
+
     public function getName(): string
     {
         return $this->name;
     }
 
-    /**
-     * @param string $name
-     *
-     * @return CTool
-     */
     public function setName(string $name): CTool
     {
         $this->name = $name;
@@ -301,11 +301,6 @@ class CTool extends AbstractResource implements ResourceInterface
     }
 
     public function getResourceName(): string
-    {
-        return (string) $this->getName();
-    }
-
-    public function __toString(): string
     {
         return (string) $this->getName();
     }

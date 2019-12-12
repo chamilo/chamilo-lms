@@ -129,19 +129,11 @@ class CDocument extends AbstractResource implements ResourceInterface
         return $this->getTitle();
     }
 
-    /**
-     * @return bool
-     */
     public function isTemplate(): bool
     {
         return $this->template;
     }
 
-    /**
-     * @param bool $template
-     *
-     * @return CDocument
-     */
     public function setTemplate(bool $template): CDocument
     {
         $this->template = $template;

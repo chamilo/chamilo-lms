@@ -392,19 +392,11 @@ class ExtraField // extends BaseAttribute
         }
     }
 
-    /**
-     * @return string
-     */
     public function getHelperText(): string
     {
         return $this->helperText;
     }
 
-    /**
-     * @param string $helperText
-     *
-     * @return ExtraField
-     */
     public function setHelperText(string $helperText): ExtraField
     {
         $this->helperText = $helperText;

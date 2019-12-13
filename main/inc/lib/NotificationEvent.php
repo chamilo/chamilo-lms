@@ -120,7 +120,7 @@ class NotificationEvent extends Model
                                 $read = $this->isRead($id, $extraFieldData);
                             }
 
-                            if ($showNotification && $read) {
+                            if ($showNotification && $read === false) {
                                 $notifications[] = [
                                     'id' => $id,
                                     'title' => $event['title'],

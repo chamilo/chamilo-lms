@@ -62,9 +62,9 @@ plugins:
     enabled: false
 
 exclude_patterns:
-  - var/cache/
-  - var/log/
-  - config/
+  - assets/*
+  - bin/*
+  - config/*
   - public/main/admin/db.php
   - public/main/admin/ldap_synchro.php
   - public/main/chat/emoji_strategy.php
@@ -90,18 +90,20 @@ exclude_patterns:
   - public/main/lang/
   - public/libs/
   - public/img/
-  - plugin/buycourses/src/Culqi/
-  - plugin/buycourses/src/Requests/
-  - plugin/buycourses/src/Requests.php
-  - plugin/buycourses/src/paypalfunctions.php
-  - plugin/vchamilo/cli/
-  - plugin/pens/lib
-  - plugin/bbb/lib/bbb_api.php
-  - plugin/ims_lti/OAuthSimple.php
-  - plugin/sepe/src/wsse/
-  - plugin/test2pdf/class/
-  - plugin/jcapture/lib/
-  - plugin/jcapture/src/
+  - public/plugin/buycourses/src/Culqi/
+  - public/plugin/buycourses/src/Requests/
+  - public/plugin/buycourses/src/Requests.php
+  - public/plugin/buycourses/src/paypalfunctions.php
+  - public/plugin/vchamilo/cli/
+  - public/plugin/pens/lib
+  - public/plugin/bbb/lib/bbb_api.php
+  - public/plugin/ims_lti/OAuthSimple.php
+  - public/plugin/sepe/src/wsse/
+  - public/plugin/test2pdf/class/
+  - public/plugin/jcapture/lib/
+  - public/plugin/jcapture/src/
+  - var/cache/
+  - var/log/
   - tests/
   - vendor/
   - web/

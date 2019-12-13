@@ -33,9 +33,6 @@ services:
         #        class: Chamilo\CoreBundle\Repository\SettingsCurrentRepository
         #        factory: ["@doctrine", getRepository]
         #        arguments: [ Chamilo\CoreBundle\Entity\SettingsCurrent ]
-
-
-
     #    chamilo_course.settings.manager:
     #        class: '%chamilo_course.settings.manager.class%'
     #        arguments:

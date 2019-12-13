@@ -87,7 +87,7 @@ class NotificationEvent extends Model
                         break;
                     }
 
-                    $id = 'id_'.self::ACCOUNT_EXPIRATION.'_'.$userInfo['id'];
+                    $id = 'id_'.self::ACCOUNT_EXPIRATION.'_event_'.$event['id'].'_'.$userInfo['id'];
 
                     $read = false;
                     if ($checkIsRead) {
@@ -113,7 +113,7 @@ class NotificationEvent extends Model
                             }
                             $showNotification = $this->showNotification($userJustification['date_validity'], $days);
 
-                            $id = 'id_'.self::JUSTIFICATION_EXPIRATION.'_'.$userJustification['id'];
+                            $id = 'id_'.self::JUSTIFICATION_EXPIRATION.'_event_'.$event['id'].'_'.$userJustification['id'];
 
                             $read = false;
                             if ($checkIsRead) {

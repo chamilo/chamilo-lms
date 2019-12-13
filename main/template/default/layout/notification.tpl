@@ -69,7 +69,7 @@
         var lastCount = 0;
         var notifications = new Array();
         var intervalTime = 180000; // 3 minutes
-        //var intervalTime = 30000; // 30 seconds
+        var intervalTime = 30000; // 30 seconds
 
         $.getJSON('{{ _p.web_main }}inc/ajax/message.ajax.php?a=get_notifications', function(data) {
             $.each(data, function( key, value ) {
@@ -105,6 +105,7 @@
             },
             loadAll: function () {
                 console.log('loadAll');
+                console.log('count : ' + count);
                 if (count !== lastCount || count === 0) {
                     appNotifications.load();
                 }
@@ -153,11 +154,12 @@
                 console.log('loadNumber');
                 $.get('{{ _p.web_main }}inc/ajax/message.ajax.php?a=get_count_notifications', function(data) {
                     count = data;
-                });
-                setTimeout(function () {
+                    console.log(count);
+
                     $("#notificationsBadge").html(count);
+
                     appNotifications.badgeLoadingMask(false);
-                }, 1000);
+                });
             },
             load: function () {
                 appNotifications.loadingMask(true);
@@ -165,10 +167,29 @@
                 lastCount = count;
                 console.log('load');
                 console.log(count);
+
+                $.getJSON('{{ _p.web_main }}inc/ajax/message.ajax.php?a=get_notifications', function(data) {
+                    $.each(data, function(key, value) {
+                        var add = true;
+
+                        $.each(notifications, function(notificationKey, notificationValue) {
+                            if (value.id == notificationValue.id) {
+                                add = false;
+                                return;
+                            }
+                        });
+
+                        if (add == true) {
+                            console.log('adding new element');
+                            notifications.push(value);
+                            count++;
+                        }
+                    });
+                });
+
                 setTimeout(function () {
                     var closeLink = '<div class="notification-read"><i class="fa fa-times" aria-hidden="true"></i></div>';
-
-                    for (i = 0; i < count; i++) {
+                      for (i = 0; i < count; i++) {
                         if (notifications[i]) {
                             var template = $('#notificationTemplate').html();
                             template = template.replace("{id}", notifications[i].id);
@@ -195,13 +216,26 @@
                 event.preventDefault();
                 event.stopPropagation();
 
+                if (document.activeElement) {
+                    document.activeElement.blur();
+                }
+
                 var notificationId = elem.parent().parent().attr('id');
+                console.log('markAsRead id : ' + notificationId);
                 $.ajax({
                     url: '{{ _p.web_main }}inc/ajax/message.ajax.php?a=mark_notification_as_read&id='+notificationId,
                     success: function (data) {
-                        console.log(data);
-                        elem.parent('.dropdown-notification').remove();
+                        notifications = $.grep(notifications, function(value) {
+                            if (notificationId == value.id) {
+                                return false;
+                            }
+                            return true;
+                        });
+
+                        console.log(notifications);
                         count--;
+
+                        console.log('count : ' + count);
                         appNotifications.loadAll();
                     }
                 });

@@ -15,9 +15,9 @@ $strings['MyJustifications'] = "My justifications";
 $strings['JustificationSaved'] = "Justification saved";
 $strings['default_course_id'] = "Course id";
 $strings['SetNewCourse'] = "Set new course";
-
 $strings['SubscribeToASession'] = "Subscribe to a session";
-
+$strings['JustificationName'] = "Justification name";
+$strings['JustificationDate'] = "Justification date";
 
 
 

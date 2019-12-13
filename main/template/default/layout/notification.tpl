@@ -196,6 +196,8 @@
                             template = template.replace("{link}", notifications[i].link);
                             template = template.replace("{title}", notifications[i].title);
                             template = template.replace("{content}", notifications[i].content);
+                            template = template.replace("{event_text}", notifications[i].event_text);
+
                             if (notifications[i].persistent == 1) {
                                 template = template.replace("{close_link}", '');
                             } else {
@@ -296,6 +298,7 @@
             <div class="notifications-body">
                 <p class="notification-title">{title}</p>
                 <p class="notification-content">{content}</p>
+                <p class="notification-event-text">{event_text}</p>
             </div>
         </a>
     </li>

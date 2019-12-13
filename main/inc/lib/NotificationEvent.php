@@ -100,6 +100,7 @@ class NotificationEvent extends Model
                             'id' => $id,
                             'title' => $event['title'],
                             'content' => $event['content'],
+                            'event_text' => get_lang('ExpirationDate').': '.api_get_local_time($userInfo['expiration_date']),
                             'link' => $event['link'],
                             'persistent' => $event['persistent']
                         ];
@@ -115,16 +116,22 @@ class NotificationEvent extends Model
 
                             $id = 'id_'.self::JUSTIFICATION_EXPIRATION.'_event_'.$event['id'].'_'.$userJustification['id'];
 
+                            $fieldData = $plugin->getJustification($userJustification['justification_document_id']);
+
                             $read = false;
                             if ($checkIsRead) {
                                 $read = $this->isRead($id, $extraFieldData);
                             }
+
+                            $eventText = $plugin->get_lang('Justification').': '.$fieldData['name'].' <br />';
+                            $eventText .= $plugin->get_lang('JustificationDate').': '.$userJustification['date_validity'];
 
                             if ($showNotification && $read === false) {
                                 $notifications[] = [
                                     'id' => $id,
                                     'title' => $event['title'],
                                     'content' => $event['content'],
+                                    'event_text' => $eventText,
                                     'link' => $event['link'],
                                     'persistent' => $event['persistent']
                                 ];

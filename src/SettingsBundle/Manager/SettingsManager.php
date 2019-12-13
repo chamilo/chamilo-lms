@@ -8,7 +8,7 @@ use Chamilo\CoreBundle\Entity\Course;
 use Chamilo\CoreBundle\Entity\SettingsCurrent;
 use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\EntityRepository;
-use Sylius\Bundle\ResourceBundle\Controller\EventDispatcherInterface;
+//use Sylius\Bundle\ResourceBundle\Controller\EventDispatcherInterface;
 use Sylius\Bundle\SettingsBundle\Event\SettingsEvent;
 use Sylius\Bundle\SettingsBundle\Manager\SettingsManagerInterface;
 use Sylius\Bundle\SettingsBundle\Model\Settings;

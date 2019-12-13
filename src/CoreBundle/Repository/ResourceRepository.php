@@ -25,7 +25,8 @@ use Doctrine\ORM\Query\Expr\Join;
 use Doctrine\ORM\QueryBuilder;
 use League\Flysystem\FilesystemInterface;
 use League\Flysystem\MountManager;
-use Sylius\Bundle\ResourceBundle\Doctrine\ORM\EntityRepository;
+//use Sylius\Bundle\ResourceBundle\Doctrine\ORM\EntityRepository;
+use Doctrine\ORM\EntityRepository as BaseEntityRepository;
 use Symfony\Component\Filesystem\Exception\FileNotFoundException;
 use Symfony\Component\Form\FormFactory;
 use Symfony\Component\Form\FormInterface;
@@ -38,7 +39,7 @@ use Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface;
  * Class ResourceRepository.
  * Extends EntityRepository is needed to process settings.
  */
-class ResourceRepository extends EntityRepository
+class ResourceRepository extends BaseEntityRepository
 {
     /**
      * @var EntityRepository
@@ -295,12 +296,10 @@ class ResourceRepository extends EntityRepository
     }
 
     /**
-     * @param ResourceNode $resourceNode
-     * @param              $visibility
-     * @param              $course
-     * @param              $session
-     * @param              $group
-     *
+     * @param $visibility
+     * @param $course
+     * @param $session
+     * @param $group
      */
     public function addResourceNodeToCourse(ResourceNode $resourceNode, $visibility, $course, $session, $group): void
     {

@@ -4,15 +4,15 @@ parameters:
 	doctrine    :
 	    objectManagerLoader: '%rootDir%/../../../tests/phpstan/doctrine-orm-bootstrap.php'
 	autoload_files:
-		- %rootDir%/../../../main/work/work.lib.php
+		- %rootDir%/../../../public/main/work/work.lib.php
 	excludes_analyse:
-		- %rootDir%/../../../main/admin/db.php
-		- %rootDir%/../../../main/extra/*
-		- %rootDir%/../../../main/cron/*
-		- %rootDir%/../../../main/inc/lib/pear/*
-		- %rootDir%/../../../main/inc/lib/nusoap/*
-		- %rootDir%/../../../main/inc/lib/search/*
-		- %rootDir%/../../../main/webservices/*
+		- %rootDir%/../../../public/main/admin/db.php
+		- %rootDir%/../../../public/main/extra/*
+		- %rootDir%/../../../public/main/cron/*
+		- %rootDir%/../../../public/main/inc/lib/pear/*
+		- %rootDir%/../../../public/main/inc/lib/nusoap/*
+		- %rootDir%/../../../public/main/inc/lib/search/*
+		- %rootDir%/../../../public/main/webservices/*
 		- %rootDir%/../../../src/CoreBundle/Migrations/Schema/*
 		- %rootDir%/../../../tests/*
 	level: max

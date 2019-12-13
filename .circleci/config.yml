@@ -17,7 +17,7 @@ jobs:
             # - image: circleci/mysql:5.7-ram
             #
             # - image: redis:2.8.19
-
+        resource_class: xlarge
         steps:
             - checkout
 

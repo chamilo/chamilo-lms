@@ -7,7 +7,7 @@ use Firebase\JWT\JWT;
 
 require_once __DIR__.'/../../main/inc/global.inc.php';
 
-//api_protect_course_script(false);
+api_protect_course_script(false);
 api_block_anonymous_users(false);
 
 $scope = empty($_REQUEST['scope']) ? '' : trim($_REQUEST['scope']);
@@ -124,15 +124,6 @@ try {
         ? "{$session->getId()}-{$course->getId()}-{$tool->getId()}"
         : "{$course->getId()}-{$tool->getId()}";
 
-    $jwtContent['https://purl.imsglobal.org/spec/lti/claim/target_link_uri'] = $tool->getLaunchUrl();
-
-    // Resource link
-    $jwtContent['https://purl.imsglobal.org/spec/lti/claim/resource_link'] = [
-        'id' => (string) $tool->getId(),
-        'title' => $tool->getName(),
-        'description' => $tool->getDescription(),
-    ];
-
     // Platform info
     $jwtContent['https://purl.imsglobal.org/spec/lti/claim/tool_platform'] = [
         'guid' => $platformDomain,
@@ -151,13 +142,6 @@ try {
         //'return_url' => api_get_course_url(),
     ];
 
-    // LIS info
-    $jwtContent['https://purl.imsglobal.org/spec/lti/claim/lis'] = [
-        'person_sourcedid' => "$platformDomain:$toolUserId",
-        'course_offering_sourcedid' => "$platformDomain:{$course->getId()}"
-            .($session ? ":{$session->getId()}" : ''),
-    ];
-
     // LTI info
     $jwtContent['https://purl.imsglobal.org/spec/lti/claim/version'] = '1.3.0';
 
@@ -165,7 +149,42 @@ try {
     $jwtContent['https://purl.imsglobal.org/spec/lti/claim/roles'] = ImsLtiPlugin::getRoles($user);
 
     // Message type info
-    $jwtContent['https://purl.imsglobal.org/spec/lti/claim/message_type'] = 'LtiResourceLinkRequest';
+    if ($tool->isActiveDeepLinking()) {
+        $jwtContent['https://purl.imsglobal.org/spec/lti/claim/message_type'] = 'LtiDeepLinkingRequest';
+        $jwtContent['https://purl.imsglobal.org/spec/lti-dl/claim/deep_linking_settings'] = [
+            'accept_types' => ['link', 'file', 'html', 'ltiResourceLink', 'image'],
+            'accept_media_types' => implode(
+                ',',
+                ['*/*', ':::asterisk:::/:::asterisk:::']
+            ),
+            'accept_presentation_document_targets' => ['iframe'],
+            'accept_multiple' => true,
+            'auto_create' => true,
+            'title' => $tool->getName(),
+            'text' => $tool->getDescription(),
+            'data' => "tool:{$tool->getId()}",
+            'deep_link_return_url' => api_get_path(WEB_PLUGIN_PATH).'ims_lti/item_return2.php',
+        ];
+        $jwtContent['https://purl.imsglobal.org/spec/lti/claim/context']['type'] = ['CourseOffering'];
+        $jwtContent['https://purl.imsglobal.org/spec/lti/claim/target_link_uri'] = $tool->getRedirectUrl();
+    } else {
+        $jwtContent['https://purl.imsglobal.org/spec/lti/claim/message_type'] = 'LtiResourceLinkRequest';
+        $jwtContent['https://purl.imsglobal.org/spec/lti/claim/target_link_uri'] = $tool->getLaunchUrl();
+
+        // Resource link
+        $jwtContent['https://purl.imsglobal.org/spec/lti/claim/resource_link'] = [
+            'id' => (string) $tool->getId(),
+            'title' => $tool->getName(),
+            'description' => $tool->getDescription(),
+        ];
+
+        // LIS info
+        $jwtContent['https://purl.imsglobal.org/spec/lti/claim/lis'] = [
+            'person_sourcedid' => "$platformDomain:$toolUserId",
+            'course_offering_sourcedid' => "$platformDomain:{$course->getId()}"
+                .($session ? ":{$session->getId()}" : ''),
+        ];
+    }
 
     // Custom params info
     $customParams = $tool->getCustomParamsAsArray();
@@ -192,10 +211,12 @@ try {
         'error_description' => $authException->getMessage(),
     ];
 }
+
+$formActionUrl = $tool->isActiveDeepLinking() ? $tool->getRedirectUrl() : $tool->getLaunchUrl();
 ?>
 <!DOCTYPE html>
 <html>
-<form action="<?php echo $tool->getLaunchUrl() ?>" name="ltiLaunchForm" method="post">
+<form action="<?php echo $formActionUrl ?>" name="ltiLaunchForm" method="post">
     <input type="hidden" name="id_token" value="<?php echo $jwt ?>">
     <input type="hidden" name="state" value="<?php echo $state ?>">
 </form>

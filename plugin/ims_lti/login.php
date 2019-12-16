@@ -5,8 +5,8 @@ use Chamilo\PluginBundle\Entity\ImsLti\ImsLtiTool;
 
 require_once __DIR__.'/../../main/inc/global.inc.php';
 
-api_protect_course_script(false);
-api_block_anonymous_users(false);
+api_protect_course_script(true);
+api_block_anonymous_users(true);
 
 $em = Database::getManager();
 

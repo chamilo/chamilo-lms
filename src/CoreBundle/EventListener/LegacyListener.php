@@ -109,9 +109,11 @@ class LegacyListener
 
             if (null !== $userObject && !empty($userId)) {
                 $userInfo = api_get_user_info($userId);
-                $userStatus = $userInfo['status'];
-                $isAdmin = $userInfo['is_admin'];
-                $userInfo['is_anonymous'] = false;
+                if ($userInfo) {
+                    $userStatus = $userInfo['status'];
+                    $isAdmin = $userInfo['is_admin'];
+                    $userInfo['is_anonymous'] = false;
+                }
                 $allowedCreateCourse = 1 === $userStatus;
             }
             $session->set('_user', $userInfo);

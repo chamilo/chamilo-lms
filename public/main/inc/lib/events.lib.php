@@ -1,7 +1,6 @@
 <?php
 /* See license terms in /license.txt */
 
-//use Chamilo\UserBundle\Entity\User;
 use Chamilo\CoreBundle\Component\Utils\ChamiloApi;
 use ChamiloSession as Session;
 
@@ -43,9 +42,19 @@ class Event
                 )";
         Database::query($sql);
 
+        $status = 'student';
+        if ($userInfo['status'] == SESSIONADMIN) {
+            $status = 'sessionadmin';
+        }
+        if ($userInfo['status'] == COURSEMANAGER) {
+            $status = 'teacher';
+        }
+        if ($userInfo['status'] == DRH) {
+            $status = 'DRH';
+        }
+
         // Auto subscribe
-        $user_status = $userInfo['status'] == SESSIONADMIN ? 'sessionadmin' : $userInfo['status'] == COURSEMANAGER ? 'teacher' : $userInfo['status'] == DRH ? 'DRH' : 'student';
-        $autoSubscribe = api_get_setting($user_status.'_autosubscribe');
+        $autoSubscribe = api_get_setting($status.'_autosubscribe');
         if ($autoSubscribe) {
             $autoSubscribe = explode('|', $autoSubscribe);
             foreach ($autoSubscribe as $code) {
@@ -113,17 +122,17 @@ class Event
         } else {
             $userId = '0'; // no one
         }
-        $sql = "INSERT INTO $TABLETRACK_ACCESS  (user_ip, access_user_id, c_id, access_date, access_session_id) 
+        $sql = "INSERT INTO $TABLETRACK_ACCESS  (user_ip, access_user_id, c_id, access_date, access_session_id)
                 VALUES ('$ip', $userId, $courseId, '$now', $sessionId)";
 
         Database::query($sql);
 
         // added for "what's new" notification
         $sql = "UPDATE $TABLETRACK_LASTACCESS  SET access_date = '$now'
-                WHERE 
+                WHERE
                   access_user_id = $userId AND
-                  c_id = $courseId AND 
-                  access_tool IS NULL AND 
+                  c_id = $courseId AND
+                  access_tool IS NULL AND
                   access_session_id = $sessionId";
         $result = Database::query($sql);
 
@@ -210,10 +219,10 @@ class Event
         // "what's new" notification
         $sql = "UPDATE $tableLastAccess
                 SET access_date = '$reallyNow'
-                WHERE 
-                    access_user_id = $userId AND 
-                    c_id = $courseId AND 
-                    access_tool = '$tool' AND 
+                WHERE
+                    access_user_id = $userId AND
+                    c_id = $courseId AND
+                    access_tool = '$tool' AND
                     access_session_id = $sessionId";
         $result = Database::query($sql);
 
@@ -1043,9 +1052,9 @@ class Event
 
         if (api_get_configuration_value('lp_minimum_time')) {
             $sql = "DELETE FROM track_e_access_complete
-                    WHERE 
-                        tool = 'learnpath' AND 
-                        c_id = $course_id AND 
+                    WHERE
+                        tool = 'learnpath' AND
+                        c_id = $course_id AND
                         tool_id = $lp_id AND
                         user_id = $user_id AND
                         session_id = $session_id
@@ -1063,7 +1072,7 @@ class Event
         Database::query($sql);
 
         $sql = "SELECT exe_id FROM $track_e_exercises
-                WHERE   
+                WHERE
                     exe_user_id = $user_id AND
                     session_id = $session_id AND
                     c_id = $course_id AND
@@ -1275,7 +1284,7 @@ class Event
         $list = [];
         while ($row = Database::fetch_array($res, 'ASSOC')) {
             $list[$row['exe_id']] = $row;
-            $sql = "SELECT * FROM $table_track_attempt 
+            $sql = "SELECT * FROM $table_track_attempt
                     WHERE exe_id = {$row['exe_id']}";
             $res_question = Database::query($sql);
             while ($row_q = Database::fetch_array($res_question, 'ASSOC')) {
@@ -1313,7 +1322,7 @@ class Event
 
             //Checking if this attempt was revised by a teacher
             $sql_revised = "SELECT exe_id FROM $table_track_attempt_recording
-                            WHERE author != '' AND exe_id = $exe_id 
+                            WHERE author != '' AND exe_id = $exe_id
                             LIMIT 1";
             $res_revised = Database::query($sql_revised);
             $row['attempt_revised'] = 0;
@@ -1322,7 +1331,7 @@ class Event
             }
             $list[$exe_id] = $row;
             $sql = "SELECT * FROM $table_track_attempt
-                    WHERE exe_id = $exe_id 
+                    WHERE exe_id = $exe_id
                     ORDER BY tms ASC";
             $res_question = Database::query($sql);
             while ($row_q = Database::fetch_array($res_question, 'ASSOC')) {
@@ -1427,7 +1436,7 @@ class Event
         $session_id = (int) $session_id;
         $user_id = (int) $user_id;
 
-        $sql = "SELECT count(*) as count 
+        $sql = "SELECT count(*) as count
                 FROM $table
                 WHERE status = ''  AND
                     exe_user_id = $user_id AND
@@ -1492,7 +1501,7 @@ class Event
         while ($row = Database::fetch_array($res, 'ASSOC')) {
             $list[$row['exe_id']] = $row;
             $exeId = $row['exe_id'];
-            $sql = "SELECT * FROM $table_track_attempt 
+            $sql = "SELECT * FROM $table_track_attempt
                     WHERE exe_id = $exeId";
             $res_question = Database::query($sql);
             while ($row_q = Database::fetch_array($res_question, 'ASSOC')) {
@@ -1643,7 +1652,7 @@ class Event
         while ($row = Database::fetch_array($res, 'ASSOC')) {
             $exeId = $row['exe_id'];
             $list[$exeId] = $row;
-            $sql = "SELECT * FROM $table_track_attempt 
+            $sql = "SELECT * FROM $table_track_attempt
                     WHERE exe_id = $exeId";
             $res_question = Database::query($sql);
             while ($row_q = Database::fetch_array($res_question, 'ASSOC')) {
@@ -1696,7 +1705,7 @@ class Event
         $table = Database::get_main_table(TABLE_STATISTIC_TRACK_E_ATTEMPT);
         $exe_id = (int) $exe_id;
         $question_id = (int) $question_id;
-        $sql = "SELECT teacher_comment 
+        $sql = "SELECT teacher_comment
                 FROM $table
                 WHERE
                     exe_id = $exe_id AND
@@ -1800,7 +1809,7 @@ class Event
         }
 
         $sql = "DELETE FROM $table
-                WHERE   
+                WHERE
                     hotspot_exe_id = $exeId AND
                     hotspot_user_id = $user_id AND
                     c_id = $courseId AND
@@ -1900,12 +1909,12 @@ class Event
         $userId = (int) $userId;
 
         $table = Database::get_main_table(TABLE_STATISTIC_TRACK_E_COURSE_ACCESS);
-        $sql = "SELECT course_access_id, logout_course_date 
-                FROM $table 
-                WHERE 
+        $sql = "SELECT course_access_id, logout_course_date
+                FROM $table
+                WHERE
                     c_id = $courseId AND
-                    session_id = $sessionId AND   
-                    user_id = $userId                     
+                    session_id = $sessionId AND
+                    user_id = $userId
                 ORDER BY login_course_date DESC
                 LIMIT 1";
 
@@ -1924,8 +1933,8 @@ class Event
                 $now - $logout < $maxSeconds
             ) {
                 $now = api_get_utc_datetime();
-                $sql = "UPDATE $table SET 
-                            logout_course_date = '$now', 
+                $sql = "UPDATE $table SET
+                            logout_course_date = '$now',
                             counter = counter + 1
                         WHERE course_access_id = $id";
                 Database::query($sql);
@@ -1986,20 +1995,20 @@ class Event
             $time = api_get_utc_datetime($diff);
             $sql = "SELECT course_access_id, logout_course_date
                     FROM $tableCourseAccess
-                    WHERE 
+                    WHERE
                         user_id = $userId AND
                         c_id = $courseId  AND
                         session_id = $sessionId AND
                         login_course_date > '$time'
-                    ORDER BY login_course_date DESC 
+                    ORDER BY login_course_date DESC
                     LIMIT 1";
             $result = Database::query($sql);
             $insert = false;
             if (Database::num_rows($result) > 0) {
                 $row = Database::fetch_array($result, 'ASSOC');
                 $courseAccessId = $row['course_access_id'];
-                $sql = "UPDATE $tableCourseAccess SET 
-                                logout_course_date = '$currentDate', 
+                $sql = "UPDATE $tableCourseAccess SET
+                                logout_course_date = '$currentDate',
                                 counter = counter + 1
                             WHERE course_access_id = $courseAccessId";
                 Database::query($sql);
@@ -2129,7 +2138,7 @@ class Event
             // Found the latest connection
             $row = Database::fetch_row($result);
             $courseAccessId = $row[0];
-            $sql = "DELETE FROM $courseTrackingTable 
+            $sql = "DELETE FROM $courseTrackingTable
                     WHERE course_access_id = $courseAccessId";
             $result = Database::query($sql);
 

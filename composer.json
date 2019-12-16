@@ -166,14 +166,15 @@
         "league/glide-symfony": "^1.0",
         "cocur/slugify": "^3.2",
         "knpuniversity/oauth2-client-bundle": "^1.31",
-        "php-translation/symfony-bundle": "^0.9.1"
+        "php-translation/symfony-bundle": "^0.9.1",
+        "phpstan/phpstan": "^0.12.3"
     },
     "config": {
         "component-dir": "public/assets"
     },
     "require-dev": {
         "symfony/var-dumper": "^4.0",
-        "friendsofphp/php-cs-fixer": "^2.7",
+        "friendsofphp/php-cs-fixer": "^2.16",
         "symfony/browser-kit": "^4.0",
         "symfony/css-selector": "^4.0",
         "symfony/debug-bundle": "^4.0",
@@ -186,14 +187,12 @@
         "behat/mink-extension": "@stable",
         "behat/mink-goutte-driver": "@stable",
         "behat/mink-selenium2-driver": "@stable",
-        "phpstan/phpstan": "^0.11.19",
-        "phpstan/phpstan-symfony": "^0.11.6",
-        "phpstan/phpstan-doctrine": "^0.11.6",
+        "symplify/easy-coding-standard": "^7.1",
         "vimeo/psalm": "^3.7"
     },
     "scripts": {
         "analyse": [
-            "@php vendor/bin/phpstan analyse --ansi -c phpstan.neon -l max src"
+            "@php vendor/bin/ecs check src"
         ],
         "auto-scripts": {
             "cache:clear": "symfony-cmd",

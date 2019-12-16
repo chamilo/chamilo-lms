@@ -21,22 +21,6 @@ class Kernel extends BaseKernel
     public const CONFIG_EXTS = '.{php,xml,yaml,yml}';
 
     /**
-     * @return string
-     */
-    public function getCacheDir()
-    {
-        return $this->getProjectDir().'/var/cache/'.$this->environment;
-    }
-
-    /**
-     * @return string
-     */
-    public function getLogDir()
-    {
-        return $this->getProjectDir().'/var/log';
-    }
-
-    /**
      * @return \Generator|\Symfony\Component\HttpKernel\Bundle\BundleInterface[]
      */
     public function registerBundles()

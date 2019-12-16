@@ -6762,6 +6762,7 @@ $CasMainPortComment = "Der Port, welcher zur Verbindung zum CAS-Hauptserver verw
 $CasMainProtocolTitle = "Protokoll des CAS-Hauptservers";
 $CAS1Text = "CAS 1";
 $CAS2Text = "CAS 2";
+$CAS3Text = "CAS 3";
 $SAMLText = "SAML";
 $CasMainProtocolComment = "Protokoll, das zur Verbindung zum CAS-Hauptserver genutzt wird";
 $CasUserAddActivateTitle = "aktiviere das Hinzufügen neuer Benutzer durch CAS";

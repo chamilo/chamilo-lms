@@ -3,7 +3,8 @@
 /* This file contains all the configuration variable for the cas module
  * In the future, these will be in the database
 */
-require_once 'lib/CAS.php';
+
+require_once __DIR__.'/../../../vendor/apereo/phpcas/source/CAS.php';
 
 global $cas_auth_ver, $cas_auth_server, $cas_auth_port, $cas_auth_uri;
 
@@ -14,15 +15,15 @@ switch (api_get_setting('cas_protocol')) {
     case 'CAS1':
         $cas_auth_ver = CAS_VERSION_1_0;
         break;
-    case 'CAS2':
-        $cas_auth_ver = CAS_VERSION_2_0;
+    case 'CAS3':
+        $cas_auth_ver = CAS_VERSION_3_0;
         break;
     case 'SAML':
         $cas_auth_ver = SAML_VERSION_1_1;
         break;
+    case 'CAS2':
     default:
         $cas_auth_ver = CAS_VERSION_2_0;
-        break;
 }
 
 $cas_auth_uri = api_get_setting('cas_server_uri');

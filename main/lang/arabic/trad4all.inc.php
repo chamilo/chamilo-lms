@@ -6834,6 +6834,7 @@ $CasMainPortComment = "CAS منفد الذي يتم من خلاله الاتصا
 $CasMainProtocolTitle = "CAS بروتوكول الخادم الرئيسي";
 $CAS1Text = "CAS 1";
 $CAS2Text = "CAS 2";
+$CAS3Text = "CAS 3";
 $SAMLText = "SAML";
 $CasMainProtocolComment = "CAS البروتوكول الذي يتم من خلاله الاتصال بالخادم";
 $CasUserAddActivateTitle = "CAS تفعيل اضافة المستخدمين عبر";

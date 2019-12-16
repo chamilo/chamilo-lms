@@ -3141,7 +3141,7 @@ function finishInstallationWithContainer(
     $installationProfile = ''
 ) {
     error_log('finishInstallationWithContainer');
-    $sysPath = !empty($sysPath) ? $sysPath : api_get_path(SYS_PATH);
+    $sysPath = !empty($sysPath) ? $sysPath : api_get_path(SYMFONY_SYS_PATH);
     Container::setContainer($container);
     Container::setLegacyServices($container, false);
 
@@ -3238,7 +3238,7 @@ function finishInstallationWithContainer(
 
     error_log('Inserting data.sql');
     // Inserting default data
-    $data = file_get_contents($sysPath.'main/install/data.sql');
+    $data = file_get_contents($sysPath.'public/main/install/data.sql');
     $result = $manager->getConnection()->prepare($data);
     $result->execute();
     $result->closeCursor();
@@ -3351,20 +3351,6 @@ function finishInstallationWithContainer(
     lockSettings();
     updateDirAndFilesPermissions();
     fixMedia($container);
-
-    // Set the latest version
-    /*$path = $sysPath.'app/Migrations/Schema/V111/';
-    $finder = new \Symfony\Component\Finder\Finder();
-    $files = $finder->files()->in($path);
-
-    // Needed for chash
-    createVersionTable();
-
-    foreach ($files as $version) {
-        $version = str_replace(['Version', '.php'], '', $version->getFilename());
-        $sql = "INSERT INTO version (version) VALUES ('$version')";
-        Database::query($sql);
-    }*/
 }
 
 /**

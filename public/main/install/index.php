@@ -640,7 +640,7 @@ if (isset($_POST['step2'])) {
             // Boot kernel and get the doctrine from Symfony container
             $kernel->boot();
             $containerDatabase = $kernel->getContainer();
-            $sysPath = api_get_path(SYS_PATH);
+            $sysPath = api_get_path(SYMFONY_SYS_PATH);
 
             finishInstallationWithContainer(
                 $containerDatabase,

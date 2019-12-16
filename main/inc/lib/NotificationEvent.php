@@ -126,13 +126,18 @@ class NotificationEvent extends Model
                             $eventText = $plugin->get_lang('Justification').': '.$fieldData['name'].' <br />';
                             $eventText .= $plugin->get_lang('JustificationDate').': '.$userJustification['date_validity'];
 
+                            $url = $event['link'];
+                            if (empty($url)) {
+                                $url = api_get_path(WEB_CODE_PATH).'auth/profile.php#'.$fieldData['code'];
+                            }
+
                             if ($showNotification && $read === false) {
                                 $notifications[] = [
                                     'id' => $id,
                                     'title' => $event['title'],
                                     'content' => $event['content'],
                                     'event_text' => $eventText,
-                                    'link' => $event['link'],
+                                    'link' => $url,
                                     'persistent' => $event['persistent']
                                 ];
                             }

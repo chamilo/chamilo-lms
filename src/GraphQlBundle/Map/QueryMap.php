@@ -1,4 +1,5 @@
 <?php
+
 /* For licensing terms, see /license.txt */
 
 namespace Chamilo\GraphQlBundle\Map;
@@ -26,8 +27,6 @@ use Symfony\Component\DependencyInjection\ContainerAwareInterface;
 
 /**
  * Class QueryMap.
- *
- * @package Chamilo\GraphQlBundle\Map
  */
 class QueryMap extends ResolverMap implements ContainerAwareInterface
 {
@@ -239,9 +238,8 @@ class QueryMap extends ResolverMap implements ContainerAwareInterface
                 },
                 'userPoster' => function (CForumThread $thread) {
                     $userRepo = $this->em->getRepository('ChamiloUserBundle:User');
-                    $user = $userRepo->find($thread->getThreadPosterId());
 
-                    return $user;
+                    return $userRepo->find($thread->getThreadPosterId());
                 },
                 'date' => function (CForumThread $thread) {
                     return $thread->getThreadDate();
@@ -276,18 +274,16 @@ class QueryMap extends ResolverMap implements ContainerAwareInterface
                 },
                 'userPoster' => function (CForumPost $post) {
                     $userRepo = $this->em->getRepository('ChamiloUserBundle:User');
-                    $user = $userRepo->find($post->getPosterId());
 
-                    return $user;
+                    return $userRepo->find($post->getPosterId());
                 },
                 'date' => function (CForumPost $post) {
                     return $post->getPostDate();
                 },
                 'parent' => function (CForumPost $post) {
                     $postRepo = $this->em->getRepository('ChamiloCourseBundle:CForumPost');
-                    $parent = $postRepo->find($post->getPostParentId());
 
-                    return $parent;
+                    return $postRepo->find($post->getPostParentId());
                 },
             ],
             'ToolAgenda' => [
@@ -407,7 +403,7 @@ class QueryMap extends ResolverMap implements ContainerAwareInterface
         $course = $courseRepo->find($courseId);
 
         if (empty($courseId)) {
-            throw new UserError($this->translator->trans("Course not found"));
+            throw new UserError($this->translator->trans('Course not found'));
         }
 
         if (false === $this->securityChecker->isGranted(CourseVoter::VIEW, $course)) {

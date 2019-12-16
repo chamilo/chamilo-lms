@@ -1,4 +1,5 @@
 <?php
+
 /* For licensing terms, see /license.txt */
 
 namespace Chamilo\CourseBundle\Entity;
@@ -606,7 +607,7 @@ class CGroupInfo
         return $this->documentAccess;
     }
 
-    public function setDocumentAccess(int $documentAccess): CGroupInfo
+    public function setDocumentAccess(int $documentAccess): self
     {
         $this->documentAccess = $documentAccess;
 
@@ -618,7 +619,7 @@ class CGroupInfo
         return $this->members;
     }
 
-    public function setMembers(Collection $members): CGroupInfo
+    public function setMembers(Collection $members): self
     {
         $this->members = $members;
 
@@ -630,7 +631,7 @@ class CGroupInfo
         return $this->tutors;
     }
 
-    public function setTutors(Collection $tutors): CGroupInfo
+    public function setTutors(Collection $tutors): self
     {
         $this->tutors = $tutors;
 

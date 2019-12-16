@@ -1,4 +1,5 @@
 <?php
+
 /* For licensing terms, see /license.txt */
 
 namespace Chamilo\ThemeBundle\Theme;
@@ -10,8 +11,6 @@ use Symfony\Component\HttpKernel\Config\FileLocator;
 
 /**
  * Class ThemeManager.
- *
- * @package Chamilo\ThemeBundle\Theme
  */
 class ThemeManager implements ContainerAwareInterface
 {
@@ -33,7 +32,7 @@ class ThemeManager implements ContainerAwareInterface
         $this->resolverClass = $resolverClass ?: 'Chamilo\ThemeBundle\Util\DependencyResolver';
     }
 
-    public function registerScript($id, $src, $deps = [], $location = "bottom")
+    public function registerScript($id, $src, $deps = [], $location = 'bottom')
     {
         if (!isset($this->javascripts[$id])) {
             $this->javascripts[$id] = [

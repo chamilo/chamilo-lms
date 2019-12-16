@@ -1,4 +1,5 @@
 <?php
+
 /* For licensing terms, see /license.txt */
 
 /**
@@ -10,8 +11,6 @@ namespace Chamilo\CoreBundle\Hook\Interfaces;
 
 /**
  * Interface HookSkypeEventInterface.
- *
- * @package Chamilo\CoreBundle\Hook\Interfaces
  */
 interface HookSkypeEventInterface extends HookEventInterface
 {

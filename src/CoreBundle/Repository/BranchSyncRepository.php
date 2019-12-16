@@ -1,4 +1,5 @@
 <?php
+
 /* For licensing terms, see /license.txt */
 
 namespace Chamilo\CoreBundle\Repository;
@@ -7,8 +8,6 @@ use Gedmo\Tree\Entity\Repository\NestedTreeRepository;
 
 /**
  * Class BranchSyncRepository.
- *
- * @package Chamilo\CoreBundle\Repository
  */
 class BranchSyncRepository extends NestedTreeRepository
 {

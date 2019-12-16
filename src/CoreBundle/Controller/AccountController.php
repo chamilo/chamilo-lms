@@ -1,4 +1,5 @@
 <?php
+
 /* For licensing terms, see /license.txt */
 
 namespace Chamilo\CoreBundle\Controller;
@@ -39,7 +40,7 @@ class AccountController extends BaseController
     /**
      * @Route("/edit", methods={"GET", "POST"}, name="chamilo_core_account_edit")
      *
-     * @param string $username
+     * @param string $request
      */
     public function editAction(Request $request, UserManagerInterface $userManager, IllustrationRepository $illustrationRepository)
     {
@@ -67,9 +68,8 @@ class AccountController extends BaseController
 
             $this->addFlash('success', $this->trans('Updated'));
             $url = $this->generateUrl('chamilo_core_account_home', ['username' => $user->getUsername()]);
-            $response = new RedirectResponse($url);
 
-            return $response;
+            return new RedirectResponse($url);
         }
 
         return $this->render('@ChamiloCore/Account/edit.html.twig', ['form' => $form->createView(), 'user' => $user]);

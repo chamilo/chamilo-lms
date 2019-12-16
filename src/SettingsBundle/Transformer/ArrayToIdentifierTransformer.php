@@ -1,4 +1,5 @@
 <?php
+
 /* For licensing terms, see /license.txt */
 
 namespace Chamilo\SettingsBundle\Transformer;
@@ -21,9 +22,7 @@ class ArrayToIdentifierTransformer implements DataTransformerInterface
             return '';
         }
 
-        $value = implode(',', $value);
-
-        return $value;
+        return implode(',', $value);
     }
 
     /**
@@ -35,8 +34,6 @@ class ArrayToIdentifierTransformer implements DataTransformerInterface
             return [];
         }
 
-        $value = explode(',', $value);
-
-        return $value;
+        return explode(',', $value);
     }
 }

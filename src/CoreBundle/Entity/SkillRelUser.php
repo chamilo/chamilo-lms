@@ -1,4 +1,5 @@
 <?php
+
 /* For licensing terms, see /license.txt */
 
 namespace Chamilo\CoreBundle\Entity;
@@ -349,7 +350,7 @@ class SkillRelUser
     {
         $source = '';
 
-        if ($this->session && $this->session->getId() != 0) {
+        if ($this->session && 0 != $this->session->getId()) {
             $source .= "[{$this->session->getName()}] ";
         }
 
@@ -387,7 +388,7 @@ class SkillRelUser
      */
     public function getAssertionUrl()
     {
-        $url = api_get_path(WEB_CODE_PATH)."badge/assertion.php?";
+        $url = api_get_path(WEB_CODE_PATH).'badge/assertion.php?';
 
         $url .= http_build_query([
             'user' => $this->user->getId(),
@@ -436,7 +437,7 @@ class SkillRelUser
             }
 
             $sum += $comment->getFeedbackValue();
-            $countValues++;
+            ++$countValues;
         }
 
         $average = $countValues > 0 ? $sum / $countValues : 0;

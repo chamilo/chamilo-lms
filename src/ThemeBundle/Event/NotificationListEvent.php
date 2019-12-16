@@ -11,8 +11,6 @@ use Chamilo\ThemeBundle\Model\NotificationInterface;
 
 /**
  * Class NotificationListEvent.
- *
- * @package Chamilo\ThemeBundle\Event
  */
 class NotificationListEvent extends ThemeEvent
 {
@@ -54,6 +52,6 @@ class NotificationListEvent extends ThemeEvent
      */
     public function getTotal()
     {
-        return $this->total == 0 ? sizeof($this->notifications) : $this->total;
+        return 0 == $this->total ? sizeof($this->notifications) : $this->total;
     }
 }

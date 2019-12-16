@@ -1,4 +1,5 @@
 <?php
+
 /* For licensing terms, see /license.txt */
 
 namespace Chamilo\CourseBundle\Component\CourseCopy;
@@ -163,10 +164,10 @@ class CourseBuilder
                 $origParseUrl = parse_url($url);
                 $realOrigPath = isset($origParseUrl['path']) ? $origParseUrl['path'] : null;
 
-                if ($scope == 'local') {
-                    if ($type == 'abs' || $type == 'rel') {
+                if ('local' == $scope) {
+                    if ('abs' == $type || 'rel' == $type) {
                         $documentFile = strstr($realOrigPath, 'document');
-                        if (strpos($realOrigPath, $documentFile) !== false) {
+                        if (false !== strpos($realOrigPath, $documentFile)) {
                             $documentFile = str_replace('document', '', $documentFile);
                             $itemDocumentId = \DocumentManager::get_document_id($courseInfo, $documentFile);
                             // Document found! Add it to the list
@@ -241,13 +242,13 @@ class CourseBuilder
             $function_build = 'build_'.$tool;
             $specificIdList = isset($this->specific_id_list[$tool]) ? $this->specific_id_list[$tool] : null;
             $buildOrphanQuestions = true;
-            if ($tool === 'quizzes') {
+            if ('quizzes' === $tool) {
                 if (!isset($toolsFromPost[RESOURCE_QUIZ][-1])) {
                     $buildOrphanQuestions = false;
                 }
 
                 // Force orphan load
-                if ($this->course->type === 'complete') {
+                if ('complete' === $this->course->type) {
                     $buildOrphanQuestions = true;
                 }
 
@@ -296,7 +297,7 @@ class CourseBuilder
             foreach ($resources as $id => $resource) {
                 if ($resource) {
                     $tool = $resource->get_tool();
-                    if ($tool != null) {
+                    if (null != $tool) {
                         $sql = "SELECT * FROM $table
                                 WHERE
                                     c_id = $courseId AND
@@ -362,7 +363,7 @@ class CourseBuilder
                 );
             }
 
-            if (!empty($this->course->type) && $this->course->type == 'partial') {
+            if (!empty($this->course->type) && 'partial' == $this->course->type) {
                 $sql = "SELECT d.iid, d.path, d.comment, d.title, d.filetype, d.size
                         FROM $table_doc d 
                         INNER JOIN $table_prop p
@@ -405,7 +406,7 @@ class CourseBuilder
                 $this->course->add_resource($doc);
             }
         } else {
-            if (!empty($this->course->type) && $this->course->type == 'partial') {
+            if (!empty($this->course->type) && 'partial' == $this->course->type) {
                 $sql = "SELECT d.iid, d.path, d.comment, d.title, d.filetype, d.size
                         FROM $table_doc d 
                         INNER JOIN $table_prop p
@@ -480,7 +481,7 @@ class CourseBuilder
         }
 
         $sql = "SELECT * FROM $table WHERE c_id = $courseId $sessionCondition $idCondition";
-        $sql .= " ORDER BY forum_title, forum_category";
+        $sql .= ' ORDER BY forum_title, forum_category';
         $db_result = Database::query($sql);
         while ($obj = Database::fetch_object($db_result)) {
             $forum = new Forum($obj);
@@ -598,7 +599,7 @@ class CourseBuilder
             $sql .= ' AND iid IN ("'.implode('","', $idList).'") ';
         }
 
-        $sql .= " ORDER BY post_id ASC LIMIT 1";
+        $sql .= ' ORDER BY post_id ASC LIMIT 1';
         $db_result = Database::query($sql);
         while ($obj = Database::fetch_object($db_result)) {
             $forum_post = new ForumPost($obj);
@@ -701,7 +702,7 @@ class CourseBuilder
     /**
      * Build a link category.
      *
-     * @param int $id       Internal link ID
+     * @param int $category Internal link ID
      * @param int $courseId Internal course ID
      *
      * @return int
@@ -877,7 +878,7 @@ class CourseBuilder
                 $this->findAndSetDocumentsInText($obj2->answer);
                 $this->findAndSetDocumentsInText($obj2->comment);
 
-                if ($obj->type == MULTIPLE_ANSWER_TRUE_FALSE) {
+                if (MULTIPLE_ANSWER_TRUE_FALSE == $obj->type) {
                     $table_options = Database::get_course_table(TABLE_QUIZ_QUESTION_OPTION);
                     $sql = 'SELECT * FROM '.$table_options.'
                             WHERE c_id = '.$courseId.' AND question_id = '.$obj->id;
@@ -1122,7 +1123,7 @@ class CourseBuilder
         $sql = 'SELECT * FROM '.$table_survey.'
                 WHERE c_id = '.$courseId.' '.$sessionCondition;
         if ($id_list) {
-            $sql .= " AND iid IN (".implode(', ', $id_list).")";
+            $sql .= ' AND iid IN ('.implode(', ', $id_list).')';
         }
         $db_result = Database::query($sql);
         while ($obj = Database::fetch_object($db_result)) {
@@ -1174,7 +1175,7 @@ class CourseBuilder
         $sql = 'SELECT * FROM '.$table_que.' WHERE c_id = '.$courseId.'  ';
 
         if (!empty($idList)) {
-            $sql .= " AND survey_id IN (".implode(', ', $idList).")";
+            $sql .= ' AND survey_id IN ('.implode(', ', $idList).')';
         }
 
         $db_result = Database::query($sql);
@@ -1450,7 +1451,7 @@ class CourseBuilder
 
         if (!empty($id_list)) {
             $id_list = array_map('intval', $id_list);
-            $sql .= " AND id IN (".implode(', ', $id_list).") ";
+            $sql .= ' AND id IN ('.implode(', ', $id_list).') ';
         }
 
         $result = Database::query($sql);
@@ -1588,7 +1589,7 @@ class CourseBuilder
             }
 
             //@todo check this queries are the same ...
-            if (!empty($this->course->type) && $this->course->type == 'partial') {
+            if (!empty($this->course->type) && 'partial' == $this->course->type) {
                 $sql = 'SELECT * FROM '.$table_glossary.' g
                         WHERE g.c_id = '.$courseId.' '.$sessionCondition;
             } else {
@@ -1598,7 +1599,7 @@ class CourseBuilder
         } else {
             $table_glossary = Database::get_course_table(TABLE_GLOSSARY);
             //@todo check this queries are the same ... ayayay
-            if (!empty($this->course->type) && $this->course->type == 'partial') {
+            if (!empty($this->course->type) && 'partial' == $this->course->type) {
                 $sql = 'SELECT * FROM '.$table_glossary.' g
                         WHERE g.c_id = '.$courseId.' AND (session_id = 0 OR session_id IS NULL)';
             } else {
@@ -1772,7 +1773,7 @@ class CourseBuilder
                             t.c_id = $courseId AND
                             tp.c_id = $courseId AND
                             thematic_id = {$row['id']}  AND
-                            tp.id IN (".implode(', ', $thematic_plan_id_list).") ";
+                            tp.id IN (".implode(', ', $thematic_plan_id_list).') ';
 
                 $result = Database::query($sql);
                 while ($sub_row = Database::fetch_array($result, 'ASSOC')) {

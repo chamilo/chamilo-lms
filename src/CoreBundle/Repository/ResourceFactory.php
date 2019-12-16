@@ -1,4 +1,5 @@
 <?php
+
 /* For licensing terms, see /license.txt */
 
 namespace Chamilo\CoreBundle\Repository;
@@ -54,7 +55,7 @@ class ResourceFactory
         $typeConfig = $resourceTypeList[$type];
         $repo = $typeConfig['repository'];
 
-        if (class_exists($repo) === false) {
+        if (false === class_exists($repo)) {
             throw new InvalidArgumentException("Check that this classes exists: $repo");
         }
 

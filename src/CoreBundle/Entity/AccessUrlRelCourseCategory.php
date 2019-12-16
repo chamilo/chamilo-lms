@@ -1,4 +1,5 @@
 <?php
+
 /* For licensing terms, see /license.txt */
 
 namespace Chamilo\CoreBundle\Entity;
@@ -43,7 +44,7 @@ class AccessUrlRelCourseCategory
         return $this->url;
     }
 
-    public function setUrl(AccessUrl $url): AccessUrlRelCourseCategory
+    public function setUrl(AccessUrl $url): self
     {
         $this->url = $url;
 
@@ -55,7 +56,7 @@ class AccessUrlRelCourseCategory
         return $this->courseCategory;
     }
 
-    public function setCourseCategory(CourseCategory $courseCategory): AccessUrlRelCourseCategory
+    public function setCourseCategory(CourseCategory $courseCategory): self
     {
         $this->courseCategory = $courseCategory;
 

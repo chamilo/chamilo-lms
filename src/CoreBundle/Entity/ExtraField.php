@@ -1,4 +1,5 @@
 <?php
+
 /* For licensing terms, see /license.txt */
 
 namespace Chamilo\CoreBundle\Entity;
@@ -371,7 +372,7 @@ class ExtraField // extends BaseAttribute
         return $this->description;
     }
 
-    public function setDescription(string $description): ExtraField
+    public function setDescription(string $description): self
     {
         $this->description = $description;
 
@@ -397,7 +398,7 @@ class ExtraField // extends BaseAttribute
         return $this->helperText;
     }
 
-    public function setHelperText(string $helperText): ExtraField
+    public function setHelperText(string $helperText): self
     {
         $this->helperText = $helperText;
 

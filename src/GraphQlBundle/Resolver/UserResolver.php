@@ -1,4 +1,5 @@
 <?php
+
 /* For licensing terms, see /license.txt */
 
 namespace Chamilo\GraphQlBundle\Resolver;
@@ -12,8 +13,6 @@ use Symfony\Component\DependencyInjection\ContainerAwareInterface;
 
 /**
  * Class UserResolver.
- *
- * @package Chamilo\GraphQlBundle\Resolver
  */
 class UserResolver implements ContainerAwareInterface
 {
@@ -26,7 +25,7 @@ class UserResolver implements ContainerAwareInterface
     {
         $this->protectCurrentUserData($user);
 
-        $showEmail = $this->settingsManager->getSetting('display.show_email_addresses') === 'true';
+        $showEmail = 'true' === $this->settingsManager->getSetting('display.show_email_addresses');
 
         if (!$showEmail) {
             return '';
@@ -57,9 +56,8 @@ class UserResolver implements ContainerAwareInterface
         }
 
         $usersRepo = $this->em->getRepository('ChamiloUserBundle:User');
-        $users = $usersRepo->findUsersToSendMessage($user->getId(), $args['filter']);
 
-        return $users;
+        return $usersRepo->findUsersToSendMessage($user->getId(), $args['filter']);
     }
 
     /**
@@ -101,7 +99,8 @@ class UserResolver implements ContainerAwareInterface
         }
 
         $qb = $this->em->createQueryBuilder();
-        $result = $qb
+
+        return $qb
             ->select('s')
             ->from('ChamiloCoreBundle:Session', 's')
             ->where(
@@ -109,8 +108,6 @@ class UserResolver implements ContainerAwareInterface
             )
             ->getQuery()
             ->getResult();
-
-        return $result;
     }
 
     /**
@@ -121,7 +118,7 @@ class UserResolver implements ContainerAwareInterface
     private function findUserSessions(User $user)
     {
         $allowOrder = api_get_configuration_value('session_list_order');
-        $showAllSessions = api_get_configuration_value('show_all_sessions_on_my_course_page') === true;
+        $showAllSessions = true === api_get_configuration_value('show_all_sessions_on_my_course_page');
         $orderBySettings = api_get_configuration_value('my_courses_session_order');
 
         $position = '';
@@ -144,14 +141,14 @@ class UserResolver implements ContainerAwareInterface
                 LEFT JOIN ChamiloCoreBundle:SessionCategory AS sc WITH s.category = sc
                 WHERE (scu.user = :user OR s.generalCoach = :user) AND url.url = :url";
 
-        $order = "ORDER BY sc.name, s.name";
+        $order = 'ORDER BY sc.name, s.name';
 
         if ($showAllSessions) {
-            $order = "ORDER BY s.accessStartDate";
+            $order = 'ORDER BY s.accessStartDate';
         }
 
         if ($allowOrder) {
-            $order = "ORDER BY s.position";
+            $order = 'ORDER BY s.position';
         }
 
         if (!empty($orderBySettings) && isset($orderBySettings['field']) && isset($orderBySettings['order'])) {
@@ -161,14 +158,16 @@ class UserResolver implements ContainerAwareInterface
             switch ($field) {
                 case 'start_date':
                     $order = "ORDER BY s.accessStartDate $orderSetting";
+
                     break;
                 case 'end_date':
                     $order = " ORDER BY s.accessEndDate $orderSetting ";
-                    if ($orderSetting == 'asc') {
+                    if ('asc' == $orderSetting) {
                         // Put null values at the end
                         // https://stackoverflow.com/questions/12652034/how-can-i-order-by-null-in-dql
-                        $order = "ORDER BY _isFieldNull asc, s.accessEndDate asc";
+                        $order = 'ORDER BY _isFieldNull asc, s.accessEndDate asc';
                     }
+
                     break;
             }
         }
@@ -214,7 +213,7 @@ class UserResolver implements ContainerAwareInterface
 
             $visibility = api_get_session_visibility($row['id'], null, false);
 
-            if ($visibility != SESSION_VISIBLE) {
+            if (SESSION_VISIBLE != $visibility) {
                 // Course Coach session visibility.
                 $blockedCourseCount = 0;
                 $closedVisibilityList = [COURSE_VISIBILITY_CLOSED, COURSE_VISIBILITY_HIDDEN];
@@ -230,8 +229,8 @@ class UserResolver implements ContainerAwareInterface
 
                     $courseIsVisible = !in_array($course['visibility'], $closedVisibilityList);
 
-                    if ($courseIsVisible === false || $sessionCourseVisibility == SESSION_INVISIBLE) {
-                        $blockedCourseCount++;
+                    if (false === $courseIsVisible || SESSION_INVISIBLE == $sessionCourseVisibility) {
+                        ++$blockedCourseCount;
                     }
                 }
 
@@ -241,7 +240,7 @@ class UserResolver implements ContainerAwareInterface
                 }
             }
 
-            if ($visibility == SESSION_INVISIBLE) {
+            if (SESSION_INVISIBLE == $visibility) {
                 continue;
             }
 

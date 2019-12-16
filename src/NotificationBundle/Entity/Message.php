@@ -8,8 +8,6 @@ use Sonata\NotificationBundle\Entity\BaseMessage;
 
 /**
  * Class Message.
- *
- * @package Chamilo\NotificationBundle\Entity
  */
 class Message extends BaseMessage
 {
@@ -21,7 +19,7 @@ class Message extends BaseMessage
     /**
      * Get id.
      *
-     * @return int $id
+     * @return int
      */
     public function getId()
     {

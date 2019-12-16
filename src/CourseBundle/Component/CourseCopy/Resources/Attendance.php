@@ -1,12 +1,11 @@
 <?php
+
 /* For licensing terms, see /license.txt */
 
 namespace Chamilo\CourseBundle\Component\CourseCopy\Resources;
 
 /**
  * Attendance backup script.
- *
- * @package chamilo.backup
  */
 class Attendance extends Resource
 {

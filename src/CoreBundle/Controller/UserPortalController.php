@@ -1,4 +1,5 @@
 <?php
+
 /* For licensing terms, see /license.txt */
 
 namespace Chamilo\CoreBundle\Controller;
@@ -30,7 +31,7 @@ class UserPortalController extends BaseController
         // true  - the new course is requested only and it is created after approval;
         // false - the new course is created immediately, after filling this form.
         $courseValidation = false;
-        if (api_get_setting('course.course_validation') === 'true' &&
+        if ('true' === api_get_setting('course.course_validation') &&
             !api_is_platform_admin()
         ) {
             $courseValidation = true;
@@ -39,7 +40,7 @@ class UserPortalController extends BaseController
         // Displaying the header.
         $tool_name = $courseValidation ? get_lang('Create a course request') : get_lang('Add a new course');
 
-        if (api_get_setting('course.allow_users_to_create_courses') === 'false' &&
+        if ('false' === api_get_setting('course.allow_users_to_create_courses') &&
             !api_is_platform_admin()
         ) {
             api_not_allowed(true);
@@ -168,7 +169,7 @@ class UserPortalController extends BaseController
             // then we may get the URL from Chamilo's module "Terms and conditions",
             // if it is activated.
             if (empty($terms_and_conditions_url)) {
-                if (api_get_setting('registration.allow_terms_conditions') === 'true') {
+                if ('true' === api_get_setting('registration.allow_terms_conditions')) {
                     $terms_and_conditions_url = api_get_path(WEB_CODE_PATH);
                     $terms_and_conditions_url .= 'auth/inscription.php?legal';
                 }
@@ -208,7 +209,7 @@ class UserPortalController extends BaseController
         $obj = new \GradeModel();
         $obj->fill_grade_model_select_in_form($form);
 
-        if (api_get_setting('course.teacher_can_select_course_template') === 'true') {
+        if ('true' === api_get_setting('course.teacher_can_select_course_template')) {
             $form->addElement(
                 'select_ajax',
                 'course_template',
@@ -231,7 +232,7 @@ class UserPortalController extends BaseController
         );
 
         // Set default values.
-        if (isset($_user['language']) && $_user['language'] != '') {
+        if (isset($_user['language']) && '' != $_user['language']) {
             $values['course_language'] = $_user['language'];
         } else {
             $values['course_language'] = api_get_setting('language.platform_language');
@@ -257,7 +258,7 @@ class UserPortalController extends BaseController
                 $target_audience = $course_values['target_audience'];
             }
 
-            if ($wanted_code == '') {
+            if ('' == $wanted_code) {
                 $wanted_code = \CourseManager::generate_course_code(
                     api_substr(
                         $title,
@@ -425,6 +426,7 @@ class UserPortalController extends BaseController
                         $filter,
                         $page
                     );
+
                     break;
                 case 'sessioncategories':
                     $items = $pageController->returnSessionsCategories(
@@ -432,6 +434,7 @@ class UserPortalController extends BaseController
                         $filter,
                         $page
                     );
+
                     break;
                 case 'courses':
                     $items = $pageController->returnCourses(
@@ -439,6 +442,7 @@ class UserPortalController extends BaseController
                         $filter,
                         $page
                     );
+
                     break;
                 case 'mycoursecategories':
                     $items = $pageController->returnMyCourseCategories(
@@ -446,6 +450,7 @@ class UserPortalController extends BaseController
                         $filter,
                         $page
                     );
+
                     break;
                 case 'specialcourses':
                     $items = $pageController->returnSpecialCourses(
@@ -453,6 +458,7 @@ class UserPortalController extends BaseController
                         $filter,
                         $page
                     );
+
                     break;
             }
         }

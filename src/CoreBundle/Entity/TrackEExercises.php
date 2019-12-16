@@ -1,4 +1,5 @@
 <?php
+
 /* For licensing terms, see /license.txt */
 
 namespace Chamilo\CoreBundle\Entity;
@@ -551,7 +552,7 @@ class TrackEExercises
         return $this->score;
     }
 
-    public function setScore(float $score): TrackEExercises
+    public function setScore(float $score): self
     {
         $this->score = $score;
 
@@ -563,7 +564,7 @@ class TrackEExercises
         return $this->maxScore;
     }
 
-    public function setMaxScore(float $maxScore): TrackEExercises
+    public function setMaxScore(float $maxScore): self
     {
         $this->maxScore = $maxScore;
 

@@ -1,4 +1,5 @@
 <?php
+
 /* For licensing terms, see /license.txt */
 
 namespace Chamilo\CoreBundle\Admin;
@@ -15,8 +16,6 @@ use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 
 /**
  * Class ResourceLinkAdmin.
- *
- * @package Chamilo\CoreBundle\Admin
  */
 class ResourceLinkAdmin extends AbstractAdmin
 {
@@ -44,7 +43,7 @@ class ResourceLinkAdmin extends AbstractAdmin
     }
 
 //    /**
-//     * @param DatagridMapper $datagridMapper
+//     * @param DatagridMapper $listMapper
 //     */
 //    protected function configureDatagridFilters(DatagridMapper $datagridMapper)
 //    {

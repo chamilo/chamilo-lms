@@ -1,4 +1,5 @@
 <?php
+
 /* For licensing terms, see /license.txt */
 
 namespace Chamilo\CoreBundle\EventListener;
@@ -56,7 +57,7 @@ class LogoutSuccessHandler implements LogoutSuccessHandlerInterface
         $row = Database::query($sql);
         $loginId = null;
         if (Database::num_rows($row) > 0) {
-            $loginId = Database::result($row, 0, "login_id");
+            $loginId = Database::result($row, 0, 'login_id');
         }
 
         $loginAs = $this->checker->isGranted('ROLE_PREVIOUS_ADMIN');
@@ -69,15 +70,14 @@ class LogoutSuccessHandler implements LogoutSuccessHandlerInterface
         }
 
         $online_table = Database::get_main_table(TABLE_STATISTIC_TRACK_E_ONLINE);
-        $query = "DELETE FROM ".$online_table." WHERE login_user_id = $userId";
+        $query = 'DELETE FROM '.$online_table." WHERE login_user_id = $userId";
         Database::query($query);
 
         /*require_once api_get_path(SYS_PATH) . 'main/chat/chat_functions.lib.php';
         exit_of_chat($userId);*/
 
         $login = $this->router->generate('home');
-        $response = new RedirectResponse($login);
 
-        return $response;
+        return new RedirectResponse($login);
     }
 }

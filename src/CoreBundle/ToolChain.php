@@ -1,4 +1,5 @@
 <?php
+
 /* For licensing terms, see /license.txt */
 
 namespace Chamilo\CoreBundle;
@@ -123,7 +124,7 @@ class ToolChain
                 ->setName($tool->getName())
             ;
 
-            if ($tool->getAdmin() === 1) {
+            if (1 === $tool->getAdmin()) {
                 // Only check ROLE_ADMIN
             } else {
                 $this->setToolPermissions($toolEntity);

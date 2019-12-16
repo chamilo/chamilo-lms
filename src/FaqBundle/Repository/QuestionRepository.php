@@ -1,4 +1,5 @@
 <?php
+
 /* For licensing terms, see /license.txt */
 
 namespace Chamilo\FaqBundle\Repository;
@@ -8,8 +9,6 @@ use Doctrine\ORM\EntityRepository;
 
 /**
  * Class QuestionRepository.
- *
- * @package Genj\FaqBundle\Entity
  */
 class QuestionRepository extends EntityRepository
 {

@@ -1,4 +1,5 @@
 <?php
+
 /* For licensing terms, see /license.txt */
 
 namespace Chamilo\CoreBundle\Controller;
@@ -153,15 +154,13 @@ abstract class BaseController extends AbstractController
             $sessionId = $session ? $session->getId() : 0;
         }
 
-        $routeParams = [
+        return [
             'id' => $id,
             'tool' => $tool,
             'type' => $type,
             'cid' => $courseId,
             'sid' => $sessionId,
         ];
-
-        return $routeParams;
     }
 
     /**

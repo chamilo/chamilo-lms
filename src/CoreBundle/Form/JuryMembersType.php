@@ -1,4 +1,5 @@
 <?php
+
 /* For licensing terms, see /license.txt */
 
 namespace Chamilo\CoreBundle\Form;
@@ -37,7 +38,7 @@ class JuryMembersType extends AbstractType
         // Fixes issue with the ajax select, waiting this workaround until symfony add ajax search into the core
         $builder->addEventListener(
             FormEvents::PRE_SUBMIT,
-            function ($event) use ($factory, $builder) {
+            function ($event) use ($factory) {
                 $form = $event->getForm();
                 $case = $event->getData();
                 $id = $case['user_id'][0];

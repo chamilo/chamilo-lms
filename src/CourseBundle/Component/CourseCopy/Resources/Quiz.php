@@ -1,4 +1,5 @@
 <?php
+
 /* For licensing terms, see /license.txt */
 
 namespace Chamilo\CourseBundle\Component\CourseCopy\Resources;
@@ -8,15 +9,13 @@ namespace Chamilo\CourseBundle\Component\CourseCopy\Resources;
  * Exercises backup script.
  *
  * @author Bart Mollet <bart.mollet@hogent.be>
- *
- * @package chamilo.backup
  */
 class Quiz extends Resource
 {
     /**
      * Create a new Quiz.
      *
-     * @param string $title
+     * @param string $obj
      * @param string $description
      * @param int    $random
      * @param int    $type

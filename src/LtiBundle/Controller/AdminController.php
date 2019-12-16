@@ -1,4 +1,5 @@
 <?php
+
 /* For licensing terms, see /license.txt */
 
 namespace Chamilo\LtiBundle\Controller;
@@ -13,8 +14,6 @@ use Symfony\Component\Routing\Annotation\Route;
 
 /**
  * Class AdminController.
- *
- * @package Chamilo\LtiBundle\Controller
  */
 class AdminController extends BaseController
 {

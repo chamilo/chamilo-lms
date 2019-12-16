@@ -1,4 +1,5 @@
 <?php
+
 /* For licensing terms, see /license.txt */
 
 namespace Chamilo\CourseBundle\Entity;
@@ -152,7 +153,7 @@ class CExerciseCategory extends AbstractResource implements ResourceInterface
         return $this->course;
     }
 
-    public function setCourse(Course $course): CExerciseCategory
+    public function setCourse(Course $course): self
     {
         $this->course = $course;
 

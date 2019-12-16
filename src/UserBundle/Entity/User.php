@@ -1,4 +1,5 @@
 <?php
+
 /* For licensing terms, see /license.txt */
 
 namespace Chamilo\UserBundle\Entity;
@@ -773,7 +774,7 @@ class User extends BaseUser implements ThemeUser, EquatableInterface //implement
      */
     public function getIsActive()
     {
-        return $this->active == 1;
+        return 1 == $this->active;
     }
 
     /**
@@ -789,7 +790,7 @@ class User extends BaseUser implements ThemeUser, EquatableInterface //implement
      */
     public function isEnabled()
     {
-        return $this->getActive() == 1;
+        return 1 == $this->getActive();
     }
 
     /**
@@ -1805,6 +1806,7 @@ class User extends BaseUser implements ThemeUser, EquatableInterface //implement
         foreach ($urlList as $item) {
             if ($item->getUrl()->getId() === $url->getId()) {
                 $this->currentUrl = $url;
+
                 break;
             }
         }

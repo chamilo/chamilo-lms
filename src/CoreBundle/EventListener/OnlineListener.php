@@ -1,4 +1,5 @@
 <?php
+
 /* For licensing terms, see /license.txt */
 
 namespace Chamilo\CoreBundle\EventListener;
@@ -13,8 +14,6 @@ use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInt
 /**
  * Class OnlineListener
  * Adds objects into the session like the old global.inc.
- *
- * @package Chamilo\CoreBundle\EventListener
  */
 class OnlineListener
 {
@@ -36,7 +35,7 @@ class OnlineListener
             and ignore any subrequest in the process (for example when doing a
             render() in a twig template)*/
 
-        if ($event->getRequestType() !== HttpKernel::MASTER_REQUEST) {
+        if (HttpKernel::MASTER_REQUEST !== $event->getRequestType()) {
             return;
         }
 

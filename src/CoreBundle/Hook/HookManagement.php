@@ -1,4 +1,5 @@
 <?php
+
 /* For licensing terms, see /license.txt */
 
 namespace Chamilo\CoreBundle\Hook;
@@ -9,8 +10,6 @@ use Doctrine\ORM\EntityManager;
 
 /**
  * @TODO: Improve description
- *
- * @package chamilo.hookmanagement
  */
 class HookManagement implements HookManagementInterface
 {
@@ -43,7 +42,7 @@ class HookManagement implements HookManagementInterface
     {
         static $result = null;
 
-        return $result ? $result : $result = new self($entityManager);
+        return $result ?: $result = new self($entityManager);
     }
 
     /**
@@ -61,7 +60,7 @@ class HookManagement implements HookManagementInterface
      */
     public function insertHook($eventName, $observerClassName, $type)
     {
-        if ($type === HOOK_EVENT_TYPE_ALL) {
+        if (HOOK_EVENT_TYPE_ALL === $type) {
             $this->insertHook($eventName, $observerClassName, HOOK_EVENT_TYPE_PRE);
             $this->insertHook($eventName, $observerClassName, HOOK_EVENT_TYPE_POST);
 
@@ -105,7 +104,7 @@ class HookManagement implements HookManagementInterface
      */
     public function deleteHook($eventName, $observerClassName, $type)
     {
-        if ($type === HOOK_EVENT_TYPE_ALL) {
+        if (HOOK_EVENT_TYPE_ALL === $type) {
             $this->deleteHook($eventName, $observerClassName, HOOK_EVENT_TYPE_PRE);
             $this->deleteHook($eventName, $observerClassName, HOOK_EVENT_TYPE_POST);
         } else {
@@ -167,11 +166,11 @@ class HookManagement implements HookManagementInterface
         $rows = $this
             ->entityManager
             ->createQuery(
-                "SELECT ho.className AS class_name, ho.path, ho.pluginName AS plugin_name, hc.enabled
+                'SELECT ho.className AS class_name, ho.path, ho.pluginName AS plugin_name, hc.enabled
                 FROM ChamiloCoreBundle:HookCall hc
                 INNER JOIN ChamiloCoreBundle:HookEvent he WITH hc.hookEventId = he.id
                 INNER JOIN ChamiloCoreBundle:HookObserver ho WITH hc.hookObserverId = ho.id
-                WHERE he.className = :class_name AND hc.enabled = TRUE"
+                WHERE he.className = :class_name AND hc.enabled = TRUE'
             )
             ->setParameter('class_name', $eventName)
             ->getResult();
@@ -236,10 +235,10 @@ class HookManagement implements HookManagementInterface
         $rows = $this
             ->entityManager
             ->createQuery(
-                "SELECT he.className AS event_class_name, ho.className observer_class_name, hc.id, hc.type
+                'SELECT he.className AS event_class_name, ho.className observer_class_name, hc.id, hc.type
                 FROM ChamiloCoreBundle:HookCall hc
                 INNER JOIN ChamiloCoreBundle:HookEvent he WITH hc.hookEventId = he.id
-                INNER JOIN ChamiloCoreBundle:HookObserver ho WITH hc.hookObserverId = ho.id"
+                INNER JOIN ChamiloCoreBundle:HookObserver ho WITH hc.hookObserverId = ho.id'
             )
             ->getResult();
 
@@ -304,8 +303,8 @@ class HookManagement implements HookManagementInterface
             $maxHookOrder = (int) $this
                 ->entityManager
                 ->createQuery(
-                    "SELECT MAX(hc.hookOrder) AS hook_order FROM ChamiloCoreBundle:HookCall hc
-                    WHERE hc.hookEventId = :id AND hc.type = :type"
+                    'SELECT MAX(hc.hookOrder) AS hook_order FROM ChamiloCoreBundle:HookCall hc
+                    WHERE hc.hookEventId = :id AND hc.type = :type'
                 )
                 ->setParameters(['id' => $this->hookEvents[$eventName], 'type' => HOOK_EVENT_TYPE_PRE])
                 ->getSingleScalarResult();
@@ -328,8 +327,8 @@ class HookManagement implements HookManagementInterface
             $maxHookOrder = (int) $this
                 ->entityManager
                 ->createQuery(
-                    "SELECT MAX(hc.hookOrder) AS hook_order FROM ChamiloCoreBundle:HookCall hc
-                    WHERE hc.hookEventId = :id AND hc.type = :type"
+                    'SELECT MAX(hc.hookOrder) AS hook_order FROM ChamiloCoreBundle:HookCall hc
+                    WHERE hc.hookEventId = :id AND hc.type = :type'
                 )
                 ->setParameters(['id' => $this->hookEvents[$eventName], 'type' => HOOK_EVENT_TYPE_POST])
                 ->getSingleScalarResult();

@@ -1,4 +1,5 @@
 <?php
+
 /* For licensing terms, see /license.txt */
 
 namespace Chamilo\CourseBundle\Component\CourseCopy\Resources;
@@ -7,8 +8,6 @@ use Chamilo\CourseBundle\Entity\CLpCategory;
 
 /**
  * Class LearnPathCategory.
- *
- * @package Chamilo\CourseBundle\Component\CourseCopy\Resources
  */
 class LearnPathCategory extends Resource
 {

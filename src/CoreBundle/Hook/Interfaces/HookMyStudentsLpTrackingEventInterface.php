@@ -1,12 +1,11 @@
 <?php
+
 /* For licensing terms, see /license.txt */
 
 namespace Chamilo\CoreBundle\Hook\Interfaces;
 
 /**
  * Interface HookMyStudentsLpTrackingEventInterface.
- *
- * @package Chamilo\CoreBundle\Hook\Interfaces
  */
 interface HookMyStudentsLpTrackingEventInterface extends HookEventInterface
 {

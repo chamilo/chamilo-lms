@@ -1,4 +1,5 @@
 <?php
+
 /* For licensing terms, see /license.txt */
 
 namespace Chamilo\CourseBundle\Settings;
@@ -10,8 +11,6 @@ use Symfony\Component\Form\FormBuilderInterface;
 
 /**
  * Class UserCourseSettingsSchema.
- *
- * @package Chamilo\CourseBundle\Settings
  */
 class UserCourseSettingsSchema extends AbstractSettingsSchema
 {

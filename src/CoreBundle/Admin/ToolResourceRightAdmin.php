@@ -1,4 +1,5 @@
 <?php
+
 /* For licensing terms, see /license.txt */
 
 namespace Chamilo\CoreBundle\Admin;
@@ -11,8 +12,6 @@ use Sonata\AdminBundle\Form\FormMapper;
 
 /**
  * Class ToolResourceRightAdmin.
- *
- * @package Chamilo\CoreBundle\Admin
  */
 class ToolResourceRightAdmin extends AbstractAdmin
 {

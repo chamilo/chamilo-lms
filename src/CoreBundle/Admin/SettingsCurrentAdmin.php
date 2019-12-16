@@ -1,4 +1,5 @@
 <?php
+
 /* For licensing terms, see /license.txt */
 
 namespace Chamilo\CoreBundle\Admin;
@@ -10,8 +11,6 @@ use Sonata\AdminBundle\Form\FormMapper;
 
 /**
  * Class SettingsCurrentAdmin.
- *
- * @package Chamilo\CoreBundle\Admin
  */
 class SettingsCurrentAdmin extends AbstractAdmin
 {

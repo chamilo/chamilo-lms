@@ -1,4 +1,5 @@
 <?php
+
 /* For licensing terms, see /license.txt */
 
 namespace Chamilo\UserBundle\Form;
@@ -18,8 +19,6 @@ use Symfony\Component\OptionsResolver\OptionsResolverInterface;
 /**
  * Class ProfileType
  * Located in web/app_dev.php/profile/edit-profile.
- *
- * @package Chamilo\UserBundle\Form
  */
 class ProfileType extends AbstractType
 {

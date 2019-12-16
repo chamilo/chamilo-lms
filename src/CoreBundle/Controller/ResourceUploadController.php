@@ -1,4 +1,5 @@
 <?php
+
 /* For licensing terms, see /license.txt */
 
 namespace Chamilo\CoreBundle\Controller;
@@ -70,6 +71,7 @@ class ResourceUploadController extends BlueimpController
         //$chunked = null !== $request->headers->get('content-range');
         $response = new EmptyResponse();
         $files = $this->getFiles($request->files);
+
         try {
             /** @var UploadedFile $file */
             foreach ($files as $file) {

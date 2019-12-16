@@ -1,12 +1,11 @@
 <?php
+
 /* For licensing terms, see /license.txt */
 
 namespace Chamilo\CoreBundle\Component\Editor\CkEditor\Toolbar;
 
 /**
  * AgendaStudent toolbar configuration.
- *
- * @package Chamilo\CoreBundle\Component\Editor\CkEditor\Toolbar *
  */
 class AgendaStudent extends Basic
 {
@@ -19,7 +18,7 @@ class AgendaStudent extends Basic
      */
     public function getConfig()
     {
-        if (api_get_setting('more_buttons_maximized_mode') != 'true') {
+        if ('true' != api_get_setting('more_buttons_maximized_mode')) {
             $config['toolbar'] = $this->getNormalToolbar();
         } else {
             $config['toolbar_minToolbar'] = $this->getMinimizedToolbar();
@@ -80,7 +79,7 @@ class AgendaStudent extends Basic
                 'TextColor',
                 'BGColor',
             ],
-            [api_get_setting('allow_spellcheck') == 'true' ? 'Scayt' : ''],
+            ['true' == api_get_setting('allow_spellcheck') ? 'Scayt' : ''],
             ['Styles', 'Format', 'Font', 'FontSize'],
             ['PageBreak', 'ShowBlocks'],
             ['Toolbarswitch'],

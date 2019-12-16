@@ -1,4 +1,5 @@
 <?php
+
 /* For licensing terms, see /license.txt */
 
 namespace Chamilo\SkillBundle\Entity;
@@ -200,8 +201,7 @@ class SkillRelItemRelUser
     public function getUserItemResultUrl($cidReq)
     {
         $resultId = $this->getResultId();
-        $url = $this->getSkillRelItem()->getItemResultUrl($cidReq).'&id='.$resultId;
 
-        return $url;
+        return $this->getSkillRelItem()->getItemResultUrl($cidReq).'&id='.$resultId;
     }
 }

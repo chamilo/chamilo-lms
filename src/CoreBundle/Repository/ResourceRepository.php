@@ -1,4 +1,5 @@
 <?php
+
 /* For licensing terms, see /license.txt */
 
 namespace Chamilo\CoreBundle\Repository;
@@ -21,12 +22,12 @@ use Chamilo\CourseBundle\Entity\CGroupInfo;
 use Chamilo\UserBundle\Entity\User;
 use Cocur\Slugify\SlugifyInterface;
 use Doctrine\ORM\EntityManager;
+use Doctrine\ORM\EntityRepository as BaseEntityRepository;
 use Doctrine\ORM\Query\Expr\Join;
 use Doctrine\ORM\QueryBuilder;
 use League\Flysystem\FilesystemInterface;
-use League\Flysystem\MountManager;
 //use Sylius\Bundle\ResourceBundle\Doctrine\ORM\EntityRepository;
-use Doctrine\ORM\EntityRepository as BaseEntityRepository;
+use League\Flysystem\MountManager;
 use Symfony\Component\Filesystem\Exception\FileNotFoundException;
 use Symfony\Component\Form\FormFactory;
 use Symfony\Component\Form\FormInterface;
@@ -157,7 +158,7 @@ class ResourceRepository extends BaseEntityRepository
 
         // @todo remove hardcode class loading
         $formType = 'Chamilo\CoreBundle\Form\Resource\\'.$shortName.'Type';
-        if ($resource === null) {
+        if (null === $resource) {
             $resource = new $className();
         }
 
@@ -329,6 +330,7 @@ class ResourceRepository extends BaseEntityRepository
                     ->setRole(ResourceNodeVoter::ROLE_CURRENT_COURSE_TEACHER)
                 ;
                 $rights[] = $resourceRight;
+
                 break;
         }
 
@@ -608,9 +610,7 @@ class ResourceRepository extends BaseEntityRepository
 
     public function getResourceFromResourceNode($resourceNodeId): ?AbstractResource
     {
-        $resource = $this->getRepository()->findOneBy(['resourceNode' => $resourceNodeId]);
-
-        return $resource;
+        return $this->getRepository()->findOneBy(['resourceNode' => $resourceNodeId]);
     }
 
     /**

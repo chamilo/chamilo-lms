@@ -1,4 +1,5 @@
 <?php
+
 /* For licensing terms, see /license.txt */
 /**
  * This file contains an abstract Hook observer class

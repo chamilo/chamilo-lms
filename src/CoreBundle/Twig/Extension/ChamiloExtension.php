@@ -1,4 +1,5 @@
 <?php
+
 /* For licensing terms, see /license.txt */
 
 namespace Chamilo\CoreBundle\Twig\Extension;
@@ -49,9 +50,7 @@ class ChamiloExtension extends AbstractExtension
 
     public function getIllustration($node): string
     {
-        $url = $this->illustrationRepository->getIllustrationUrlFromNode($node);
-
-        return $url;
+        return $this->illustrationRepository->getIllustrationUrlFromNode($node);
     }
 
     public function getUserIllustration($node): string

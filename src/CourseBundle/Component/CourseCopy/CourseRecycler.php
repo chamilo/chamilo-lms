@@ -1,4 +1,5 @@
 <?php
+
 /* For licensing terms, see /license.txt */
 
 namespace Chamilo\CourseBundle\Component\CourseCopy;
@@ -78,7 +79,7 @@ class CourseRecycler
                     $sql = "DELETE FROM $table_item_properties
                             WHERE c_id = ".$this->course_id." AND tool ='".$resource->get_tool()."' AND ref=".$id;
                     Database::query($sql);
-                } elseif ($type == RESOURCE_TOOL_INTRO) {
+                } elseif (RESOURCE_TOOL_INTRO == $type) {
                     $sql = "DELETE FROM $table_tool_intro
                             WHERE c_id = ".$this->course_id." AND id='$id'";
                     Database::query($sql);
@@ -95,7 +96,7 @@ class CourseRecycler
         $table = Database::get_course_table(TABLE_DOCUMENT);
         $tableItemProperty = Database::get_course_table(TABLE_ITEM_PROPERTY);
 
-        if ($this->type === 'full_backup') {
+        if ('full_backup' === $this->type) {
             $sql = "DELETE FROM $tableItemProperty
                         WHERE
                             c_id = ".$this->course_id." AND
@@ -116,7 +117,7 @@ class CourseRecycler
                 $ids = implode(',', array_filter(array_keys($this->course->resources[RESOURCE_DOCUMENT])));
                 if (!empty($ids)) {
                     $sql = "DELETE FROM $table
-                            WHERE c_id = ".$this->course_id." AND id IN(".$ids.")";
+                            WHERE c_id = ".$this->course_id.' AND id IN('.$ids.')';
                     Database::query($sql);
                 }
             }
@@ -140,12 +141,12 @@ class CourseRecycler
             if (!empty($wiki_ids)) {
                 $page_ids = implode(',', $pages);
 
-                $sql = "DELETE FROM ".$table_wiki."
-                        WHERE c_id = ".$this->course_id." AND id IN(".$wiki_ids.")";
+                $sql = 'DELETE FROM '.$table_wiki.'
+                        WHERE c_id = '.$this->course_id.' AND id IN('.$wiki_ids.')';
                 Database::query($sql);
 
-                $sql = "DELETE FROM ".$table_wiki_conf."
-                        WHERE c_id = ".$this->course_id." AND page_id IN(".$page_ids.")";
+                $sql = 'DELETE FROM '.$table_wiki_conf.'
+                        WHERE c_id = '.$this->course_id.' AND page_id IN('.$page_ids.')';
                 Database::query($sql);
             }
         }
@@ -161,7 +162,7 @@ class CourseRecycler
             $ids = implode(',', array_filter(array_keys($this->course->resources[RESOURCE_GLOSSARY])));
             if (!empty($ids)) {
                 $sql = "DELETE FROM $table
-                        WHERE c_id = ".$this->course_id." AND glossary_id IN(".$ids.")";
+                        WHERE c_id = ".$this->course_id.' AND glossary_id IN('.$ids.')';
                 Database::query($sql);
             }
         }
@@ -177,7 +178,7 @@ class CourseRecycler
             $ids = implode(',', array_filter(array_keys($this->course->resources[RESOURCE_LINK])));
             if (!empty($ids)) {
                 $sql = "DELETE FROM $table
-                        WHERE c_id = ".$this->course_id." AND id IN(".$ids.")";
+                        WHERE c_id = ".$this->course_id.' AND id IN('.$ids.')';
                 Database::query($sql);
             }
         }
@@ -198,34 +199,34 @@ class CourseRecycler
         $table_thread_qualify = Database::get_course_table(TABLE_FORUM_THREAD_QUALIFY);
         $table_thread_qualify_log = Database::get_course_table(TABLE_FORUM_THREAD_QUALIFY_LOG);
 
-        if ($this->type === 'full_backup') {
-            $sql = "DELETE FROM ".$table_category." WHERE c_id = ".$this->course_id;
+        if ('full_backup' === $this->type) {
+            $sql = 'DELETE FROM '.$table_category.' WHERE c_id = '.$this->course_id;
             Database::query($sql);
-            $sql = "DELETE FROM ".$table_forum." WHERE c_id = ".$this->course_id;
+            $sql = 'DELETE FROM '.$table_forum.' WHERE c_id = '.$this->course_id;
             Database::query($sql);
-            $sql = "DELETE FROM ".$table_thread." WHERE c_id = ".$this->course_id;
+            $sql = 'DELETE FROM '.$table_thread.' WHERE c_id = '.$this->course_id;
             Database::query($sql);
-            $sql = "DELETE FROM ".$table_post." WHERE c_id = ".$this->course_id;
+            $sql = 'DELETE FROM '.$table_post.' WHERE c_id = '.$this->course_id;
             Database::query($sql);
-            $sql = "DELETE FROM ".$table_attachment." WHERE c_id = ".$this->course_id;
+            $sql = 'DELETE FROM '.$table_attachment.' WHERE c_id = '.$this->course_id;
             Database::query($sql);
-            $sql = "DELETE FROM ".$table_notification." WHERE c_id = ".$this->course_id;
+            $sql = 'DELETE FROM '.$table_notification.' WHERE c_id = '.$this->course_id;
             Database::query($sql);
-            $sql = "DELETE FROM ".$table_mail_queue." WHERE c_id = ".$this->course_id;
+            $sql = 'DELETE FROM '.$table_mail_queue.' WHERE c_id = '.$this->course_id;
             Database::query($sql);
-            $sql = "DELETE FROM ".$table_thread_qualify." WHERE c_id = ".$this->course_id;
+            $sql = 'DELETE FROM '.$table_thread_qualify.' WHERE c_id = '.$this->course_id;
             Database::query($sql);
-            $sql = "DELETE FROM ".$table_thread_qualify_log." WHERE c_id = ".$this->course_id;
+            $sql = 'DELETE FROM '.$table_thread_qualify_log.' WHERE c_id = '.$this->course_id;
             Database::query($sql);
-            $sql = "DELETE FROM ".$table_thread_qualify_log." WHERE c_id = ".$this->course_id;
+            $sql = 'DELETE FROM '.$table_thread_qualify_log.' WHERE c_id = '.$this->course_id;
             Database::query($sql);
         }
 
         if ($this->course->has_resources(RESOURCE_FORUMCATEGORY)) {
             $forum_ids = implode(',', array_filter(array_keys($this->course->resources[RESOURCE_FORUMCATEGORY])));
             if (!empty($forum_ids)) {
-                $sql = "DELETE FROM ".$table_category."
-                        WHERE c_id = ".$this->course_id." AND cat_id IN(".$forum_ids.");";
+                $sql = 'DELETE FROM '.$table_category.'
+                        WHERE c_id = '.$this->course_id.' AND cat_id IN('.$forum_ids.');';
                 Database::query($sql);
             }
         }
@@ -239,18 +240,18 @@ class CourseRecycler
 
             $sql = "DELETE FROM $table_attachment USING $table_attachment
                     INNER JOIN $table_post
-                    WHERE   ".$table_post.".c_id = ".$this->course_id." AND
-                            ".$table_attachment.".c_id = ".$this->course_id." AND
-                            ".$table_attachment.".post_id = ".$table_post.".post_id".
-                " AND ".$table_post.".forum_id IN(".$forum_ids.");";
+                    WHERE   ".$table_post.'.c_id = '.$this->course_id.' AND
+                            '.$table_attachment.'.c_id = '.$this->course_id.' AND
+                            '.$table_attachment.'.post_id = '.$table_post.'.post_id'.
+                ' AND '.$table_post.'.forum_id IN('.$forum_ids.');';
             Database::query($sql);
 
-            $sql = "DELETE FROM ".$table_mail_queue." USING ".$table_mail_queue." INNER JOIN $table_post
+            $sql = 'DELETE FROM '.$table_mail_queue.' USING '.$table_mail_queue." INNER JOIN $table_post
                     WHERE
-                        ".$table_post.".c_id = ".$this->course_id." AND
-                        ".$table_mail_queue.".c_id = ".$this->course_id." AND
-                        ".$table_mail_queue.".post_id = ".$table_post.".post_id AND
-                        ".$table_post.".forum_id IN(".$forum_ids.");";
+                        ".$table_post.'.c_id = '.$this->course_id.' AND
+                        '.$table_mail_queue.'.c_id = '.$this->course_id.' AND
+                        '.$table_mail_queue.'.post_id = '.$table_post.'.post_id AND
+                        '.$table_post.'.forum_id IN('.$forum_ids.');';
             Database::query($sql);
 
             // Just in case, deleting in the same table using thread_id as record-linker.
@@ -260,7 +261,7 @@ class CourseRecycler
                         $table_mail_queue.c_id = ".$this->course_id." AND
                         $table_thread.c_id = ".$this->course_id." AND
                         $table_mail_queue.thread_id = ".$table_thread.".thread_id AND
-                        $table_thread.forum_id IN(".$forum_ids.");";
+                        $table_thread.forum_id IN(".$forum_ids.');';
             Database::query($sql);
 
             $sql = "DELETE FROM $table_thread_qualify
@@ -269,32 +270,32 @@ class CourseRecycler
                         $table_thread_qualify.c_id = ".$this->course_id." AND
                         $table_thread.c_id = ".$this->course_id." AND
                         $table_thread_qualify.thread_id = $table_thread.thread_id AND
-                        $table_thread.forum_id IN(".$forum_ids.");";
+                        $table_thread.forum_id IN(".$forum_ids.');';
             Database::query($sql);
 
-            $sql = "DELETE FROM ".$table_thread_qualify_log.
-                " USING ".$table_thread_qualify_log." INNER JOIN ".$table_thread.
+            $sql = 'DELETE FROM '.$table_thread_qualify_log.
+                ' USING '.$table_thread_qualify_log.' INNER JOIN '.$table_thread.
                 " WHERE
                     $table_thread_qualify_log.c_id = ".$this->course_id." AND
-                    $table_thread.c_id = ".$this->course_id." AND
-                    ".$table_thread_qualify_log.".thread_id = ".$table_thread.".thread_id AND
-                    ".$table_thread.".forum_id IN(".$forum_ids.");";
+                    $table_thread.c_id = ".$this->course_id.' AND
+                    '.$table_thread_qualify_log.'.thread_id = '.$table_thread.'.thread_id AND
+                    '.$table_thread.'.forum_id IN('.$forum_ids.');';
             Database::query($sql);
 
-            $sql = "DELETE FROM ".$table_notification."
-                    WHERE c_id = ".$this->course_id." AND forum_id IN(".$forum_ids.")";
+            $sql = 'DELETE FROM '.$table_notification.'
+                    WHERE c_id = '.$this->course_id.' AND forum_id IN('.$forum_ids.')';
             Database::query($sql);
 
-            $sql = "DELETE FROM ".$table_post."
-                    WHERE c_id = ".$this->course_id." AND forum_id IN(".$forum_ids.")";
+            $sql = 'DELETE FROM '.$table_post.'
+                    WHERE c_id = '.$this->course_id.' AND forum_id IN('.$forum_ids.')';
             Database::query($sql);
 
-            $sql = "DELETE FROM ".$table_thread."
-                    WHERE c_id = ".$this->course_id." AND forum_id IN(".$forum_ids.")";
+            $sql = 'DELETE FROM '.$table_thread.'
+                    WHERE c_id = '.$this->course_id.' AND forum_id IN('.$forum_ids.')';
             Database::query($sql);
 
-            $sql = "DELETE FROM ".$table_forum."
-                    WHERE c_id = ".$this->course_id." AND forum_id IN(".$forum_ids.")";
+            $sql = 'DELETE FROM '.$table_forum.'
+                    WHERE c_id = '.$this->course_id.' AND forum_id IN('.$forum_ids.')';
             Database::query($sql);
         }
     }
@@ -363,12 +364,12 @@ class CourseRecycler
 
             $ids = implode(',', array_filter(array_keys($this->course->resources[RESOURCE_EVENT])));
             if (!empty($ids)) {
-                $sql = "DELETE FROM ".$table."
-                        WHERE c_id = ".$this->course_id." AND id IN(".$ids.")";
+                $sql = 'DELETE FROM '.$table.'
+                        WHERE c_id = '.$this->course_id.' AND id IN('.$ids.')';
                 Database::query($sql);
 
-                $sql = "DELETE FROM ".$table_attachment."
-                        WHERE c_id = ".$this->course_id." AND agenda_id IN(".$ids.")";
+                $sql = 'DELETE FROM '.$table_attachment.'
+                        WHERE c_id = '.$this->course_id.' AND agenda_id IN('.$ids.')';
                 Database::query($sql);
             }
         }
@@ -385,12 +386,12 @@ class CourseRecycler
 
             $ids = implode(',', array_filter(array_keys($this->course->resources[RESOURCE_ANNOUNCEMENT])));
             if (!empty($ids)) {
-                $sql = "DELETE FROM ".$table."
-                        WHERE c_id = ".$this->course_id." AND id IN(".$ids.")";
+                $sql = 'DELETE FROM '.$table.'
+                        WHERE c_id = '.$this->course_id.' AND id IN('.$ids.')';
                 Database::query($sql);
 
-                $sql = "DELETE FROM ".$table_attachment."
-                        WHERE c_id = ".$this->course_id." AND announcement_id IN(".$ids.")";
+                $sql = 'DELETE FROM '.$table_attachment.'
+                        WHERE c_id = '.$this->course_id.' AND announcement_id IN('.$ids.')';
                 Database::query($sql);
             }
         }
@@ -421,11 +422,11 @@ class CourseRecycler
             if (!empty($ids)) {
                 // Deletion of the tests first. Questions in these tests are
                 //   not deleted and become orphan at this point
-                $sql = "DELETE FROM ".$table_qui."
-                        WHERE c_id = ".$this->course_id." AND id IN(".$ids.")";
+                $sql = 'DELETE FROM '.$table_qui.'
+                        WHERE c_id = '.$this->course_id.' AND id IN('.$ids.')';
                 Database::query($sql);
-                $sql = "DELETE FROM ".$table_rel."
-                        WHERE c_id = ".$this->course_id." AND exercice_id IN(".$ids.")";
+                $sql = 'DELETE FROM '.$table_rel.'
+                        WHERE c_id = '.$this->course_id.' AND exercice_id IN('.$ids.')';
                 Database::query($sql);
             }
 
@@ -463,14 +464,14 @@ class CourseRecycler
                         $orphan_ids[] = $obj->id;
                     }
                     $orphan_ids = implode(',', $orphan_ids);
-                    $sql = "DELETE FROM ".$table_rel."
-                            WHERE c_id = ".$this->course_id." AND question_id IN(".$orphan_ids.")";
+                    $sql = 'DELETE FROM '.$table_rel.'
+                            WHERE c_id = '.$this->course_id.' AND question_id IN('.$orphan_ids.')';
                     Database::query($sql);
-                    $sql = "DELETE FROM ".$table_qui_ans."
-                            WHERE c_id = ".$this->course_id." AND question_id IN(".$orphan_ids.")";
+                    $sql = 'DELETE FROM '.$table_qui_ans.'
+                            WHERE c_id = '.$this->course_id.' AND question_id IN('.$orphan_ids.')';
                     Database::query($sql);
-                    $sql = "DELETE FROM ".$table_qui_que."
-                            WHERE c_id = ".$this->course_id." AND id IN(".$orphan_ids.")";
+                    $sql = 'DELETE FROM '.$table_qui_que.'
+                            WHERE c_id = '.$this->course_id.' AND id IN('.$orphan_ids.')';
                     Database::query($sql);
                 }
                 // Also delete questions categories and options
@@ -484,7 +485,7 @@ class CourseRecycler
 
             // Quizzes previously deleted are, in fact, kept with a status
             //  (active field) of "-1". Delete those, now.
-            $sql = "DELETE FROM ".$table_qui." WHERE c_id = ".$this->course_id." AND active = -1";
+            $sql = 'DELETE FROM '.$table_qui.' WHERE c_id = '.$this->course_id.' AND active = -1';
             Database::query($sql);
         }
     }
@@ -520,19 +521,19 @@ class CourseRecycler
             $ids = implode(',', array_filter(array_keys($this->course->resources[RESOURCE_SURVEY])));
             if (!empty($ids)) {
                 $sql = "DELETE FROM $table_survey_a
-                        WHERE c_id = ".$this->course_id."  AND survey_id IN(".$ids.")";
+                        WHERE c_id = ".$this->course_id.'  AND survey_id IN('.$ids.')';
                 Database::query($sql);
 
                 $sql = "DELETE FROM $table_survey_q_o
-                        WHERE c_id = ".$this->course_id."  AND survey_id IN(".$ids.")";
+                        WHERE c_id = ".$this->course_id.'  AND survey_id IN('.$ids.')';
                 Database::query($sql);
 
                 $sql = "DELETE FROM $table_survey_q
-                        WHERE c_id = ".$this->course_id."  AND survey_id IN(".$ids.")";
+                        WHERE c_id = ".$this->course_id.'  AND survey_id IN('.$ids.')';
                 Database::query($sql);
 
                 $sql = "DELETE FROM $table_survey
-                        WHERE c_id = ".$this->course_id."  AND survey_id IN(".$ids.")";
+                        WHERE c_id = ".$this->course_id.'  AND survey_id IN('.$ids.')';
                 Database::query($sql);
             }
         }
@@ -553,10 +554,10 @@ class CourseRecycler
 
             foreach ($this->course->resources[RESOURCE_LEARNPATH] as $id => $learnpath) {
                 // See task #875.
-                if ($learnpath->lp_type == 2) {
+                if (2 == $learnpath->lp_type) {
                     // This is a learning path of SCORM type.
                     // A sanity check for avoiding removal of the parent folder scorm/
-                    if (trim($learnpath->path) != '') {
+                    if ('' != trim($learnpath->path)) {
                         // when $learnpath->path value is incorrect for some reason.
                         // The directory trat contains files of the SCORM package is to be deleted.
                         $scorm_package_dir = realpath($this->course->path.'scorm/'.$learnpath->path);
@@ -579,17 +580,17 @@ class CourseRecycler
                 while ($row_item = Database::fetch_array($res_items)) {
                     //get item views
                     $sql_iv = "SELECT id FROM $table_iv
-                               WHERE  c_id = ".$this->course_id."  AND lp_item_id=".$row_item['id'];
+                               WHERE  c_id = ".$this->course_id.'  AND lp_item_id='.$row_item['id'];
                     $res_iv = Database::query($sql_iv);
                     while ($row_iv = Database::fetch_array($res_iv)) {
                         //delete interactions
                         $sql_iv_int_del = "DELETE FROM $table_iv_int
-                                           WHERE c_id = ".$this->course_id."  AND lp_iv_id = ".$row_iv['id'];
+                                           WHERE c_id = ".$this->course_id.'  AND lp_iv_id = '.$row_iv['id'];
                         Database::query($sql_iv_int_del);
                     }
                     //delete item views
                     $sql_iv_del = "DELETE FROM $table_iv
-                                   WHERE c_id = ".$this->course_id."  AND lp_item_id=".$row_item['id'];
+                                   WHERE c_id = ".$this->course_id.'  AND lp_item_id='.$row_item['id'];
                     Database::query($sql_iv_del);
                 }
                 //delete items
@@ -635,7 +636,7 @@ class CourseRecycler
             $ids = implode(',', array_filter(array_keys($this->course->resources[RESOURCE_COURSEDESCRIPTION])));
             if (!empty($ids)) {
                 $sql = "DELETE FROM $table
-                        WHERE  c_id = ".$this->course_id."  AND id IN(".$ids.")";
+                        WHERE  c_id = ".$this->course_id.'  AND id IN('.$ids.')';
                 Database::query($sql);
             }
         }

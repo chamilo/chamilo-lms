@@ -1,4 +1,5 @@
 <?php
+
 /* For licensing terms, see /license.txt */
 
 namespace Chamilo\UserBundle\Security;
@@ -10,8 +11,6 @@ use Symfony\Component\Security\Core\Encoder\PlaintextPasswordEncoder;
 
 /**
  * Class Encoder.
- *
- * @package Chamilo\UserBundle\Security
  */
 class Encoder extends BasePasswordEncoder
 {
@@ -32,9 +31,8 @@ class Encoder extends BasePasswordEncoder
     public function encodePassword($raw, $salt)
     {
         $defaultEncoder = $this->getEncoder();
-        $encoded = $defaultEncoder->encodePassword($raw, $salt);
 
-        return $encoded;
+        return $defaultEncoder->encodePassword($raw, $salt);
     }
 
     /**
@@ -63,13 +61,16 @@ class Encoder extends BasePasswordEncoder
         switch ($this->passwordEncrypt) {
             case 'none':
                 $defaultEncoder = new PlaintextPasswordEncoder();
+
                 break;
             case 'bcrypt':
                 $defaultEncoder = new BCryptPasswordEncoder(4);
+
                 break;
             case 'sha1':
             case 'md5':
                 $defaultEncoder = new MessageDigestPasswordEncoder($this->passwordEncrypt, false, 1);
+
                 break;
         }
 

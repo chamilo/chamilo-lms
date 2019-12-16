@@ -1,4 +1,5 @@
 <?php
+
 /* For licensing terms, see /license.txt */
 
 namespace Chamilo\FaqBundle\Controller;
@@ -146,7 +147,7 @@ class FaqController extends AbstractController
     {
         $selectedQuestion = null;
 
-        if ($questionSlug !== null) {
+        if (null !== $questionSlug) {
             $selectedQuestion = $this->getQuestionRepository()->getQuestionBySlug($questionSlug);
         }
 
@@ -162,7 +163,7 @@ class FaqController extends AbstractController
     {
         $selectedCategory = null;
 
-        if ($categorySlug !== null) {
+        if (null !== $categorySlug) {
             $selectedCategory = $this->getCategoryRepository()->getCategoryActiveBySlug($categorySlug);
         }
 

@@ -1,4 +1,5 @@
 <?php
+
 /* For licensing terms, see /license.txt */
 
 namespace Chamilo\CoreBundle\Migrations\Schema\V111;
@@ -9,8 +10,6 @@ use Doctrine\DBAL\Schema\Schema;
 /**
  * Class Version20160706182000
  * Add new table to save user visibility on courses in the catalogue.
- *
- * @package Chamilo\CoreBundle\Migrations\Schema\V111
  */
 class Version20160706182000 extends AbstractMigrationChamilo
 {

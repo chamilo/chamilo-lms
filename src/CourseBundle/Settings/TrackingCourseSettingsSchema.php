@@ -1,4 +1,5 @@
 <?php
+
 /* For licensing terms, see /license.txt */
 
 namespace Chamilo\CourseBundle\Settings;
@@ -10,8 +11,6 @@ use Symfony\Component\Form\FormBuilderInterface;
 
 /**
  * Class TrackingCourseSettingsSchema.
- *
- * @package Chamilo\CourseBundle\Settings
  */
 class TrackingCourseSettingsSchema extends AbstractSettingsSchema
 {

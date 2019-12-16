@@ -12,8 +12,6 @@ use Symfony\Component\HttpFoundation\Request;
 
 /**
  * Class SidebarMenuEvent.
- *
- * @package Chamilo\ThemeBundle\Event
  */
 class SidebarMenuEvent extends ThemeEvent
 {
@@ -70,7 +68,7 @@ class SidebarMenuEvent extends ThemeEvent
     public function getActive()
     {
         foreach ($this->getItems() as $item) {
-            /** @var $item MenuItemInterface */
+            /** @var MenuItemInterface $item */
             if ($item->isActive()) {
                 return $item;
             }

@@ -1,4 +1,5 @@
 <?php
+
 /* For licensing terms, see /license.txt */
 
 namespace Chamilo\CoreBundle\Entity;
@@ -157,13 +158,13 @@ class CourseCategory
         return $this->children;
     }
 
-    public function addChild(CourseCategory $child)
+    public function addChild(self $child)
     {
         $this->children[] = $child;
         $child->setParent($this);
     }
 
-    public function setParent(CourseCategory $parent)
+    public function setParent(self $parent)
     {
         $this->parent = $parent;
     }
@@ -341,7 +342,7 @@ class CourseCategory
         return $this->image;
     }
 
-    public function setImage(string $image): CourseCategory
+    public function setImage(string $image): self
     {
         $this->image = $image;
 
@@ -353,7 +354,7 @@ class CourseCategory
         return $this->description;
     }
 
-    public function setDescription(string $description): CourseCategory
+    public function setDescription(string $description): self
     {
         $this->description = $description;
 
@@ -365,7 +366,7 @@ class CourseCategory
         return $this->courses;
     }
 
-    public function setCourses(ArrayCollection $courses): CourseCategory
+    public function setCourses(ArrayCollection $courses): self
     {
         $this->courses = $courses;
 

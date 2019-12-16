@@ -1,4 +1,5 @@
 <?php
+
 /* For licensing terms, see /license.txt */
 
 namespace Chamilo\CourseBundle\Entity;
@@ -90,7 +91,7 @@ class CSurveyQuestionOption
         return $this->iid;
     }
 
-    public function setIid(int $iid): CSurveyQuestionOption
+    public function setIid(int $iid): self
     {
         $this->iid = $iid;
 

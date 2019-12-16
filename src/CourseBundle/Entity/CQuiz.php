@@ -1,4 +1,5 @@
 <?php
+
 /* For licensing terms, see /license.txt */
 
 namespace Chamilo\CourseBundle\Entity;
@@ -849,7 +850,7 @@ class CQuiz extends AbstractResource implements ResourceInterface
         return $this->exerciseCategory;
     }
 
-    public function setExerciseCategory(CExerciseCategory $exerciseCategory): CQuiz
+    public function setExerciseCategory(CExerciseCategory $exerciseCategory): self
     {
         $this->exerciseCategory = $exerciseCategory;
 
@@ -901,7 +902,7 @@ class CQuiz extends AbstractResource implements ResourceInterface
         return $this->showPreviousButton;
     }
 
-    public function setShowPreviousButton(bool $showPreviousButton): CQuiz
+    public function setShowPreviousButton(bool $showPreviousButton): self
     {
         $this->showPreviousButton = $showPreviousButton;
 
@@ -913,7 +914,7 @@ class CQuiz extends AbstractResource implements ResourceInterface
         return $this->notifications;
     }
 
-    public function setNotifications(string $notifications): CQuiz
+    public function setNotifications(string $notifications): self
     {
         $this->notifications = $notifications;
 

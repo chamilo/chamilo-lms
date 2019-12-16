@@ -1,4 +1,5 @@
 <?php
+
 /* For licensing terms, see /license.txt */
 
 namespace Chamilo\UserBundle\Form;
@@ -12,8 +13,6 @@ use Symfony\Component\OptionsResolver\OptionsResolverInterface;
  * Class ProfileType.
  *
  * @deprecated is not being used
- *
- * @package Chamilo\UserBundle\Form
  */
 class ProfileFosUserType extends AbstractType
 {

@@ -1,4 +1,5 @@
 <?php
+
 /* For licensing terms, see /license.txt */
 
 namespace Chamilo\ThemeBundle\Controller;
@@ -37,7 +38,7 @@ class BreadcrumbController extends AbstractController
             new SidebarMenuKnpEvent($request)
         )->getActive();
 
-        /** @var $active MenuItemInterface */
+        /** @var MenuItemInterface $active */
         //var_dump($request->get('course'));        exit;
         //$active->addChild()
 

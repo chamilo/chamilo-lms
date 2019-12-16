@@ -1,4 +1,5 @@
 <?php
+
 /* For licensing terms, see /license.txt */
 
 namespace Chamilo\GraphQlBundle\Map;
@@ -12,8 +13,6 @@ use Symfony\Component\DependencyInjection\ContainerAwareInterface;
 
 /**
  * Class ScalarMap.
- *
- * @package Chamilo\GraphQlBundle\Map
  */
 class ScalarMap extends ResolverMap implements ContainerAwareInterface
 {

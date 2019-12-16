@@ -1,4 +1,5 @@
 <?php
+
 /* For licensing terms, see /license.txt */
 
 namespace Chamilo\CourseBundle\Entity;
@@ -402,7 +403,7 @@ class CQuizQuestion extends AbstractResource implements ResourceInterface
     /**
      * @param string $feedback
      */
-    public function setFeedback($feedback): CQuizQuestion
+    public function setFeedback($feedback): self
     {
         $this->feedback = $feedback;
 

@@ -1,4 +1,5 @@
 <?php
+
 /* For licensing terms, see /license.txt */
 
 namespace Chamilo\CourseBundle\Component\CourseCopy\Resources;
@@ -7,8 +8,6 @@ namespace Chamilo\CourseBundle\Component\CourseCopy\Resources;
  * ScormDocument class.
  *
  * @author Olivier Brouckaert <oli.brouckaert@dokeos.com>
- *
- * @package chamilo.backup
  */
 class ScormDocument extends Resource
 {
@@ -38,8 +37,8 @@ class ScormDocument extends Resource
         $path = preg_replace('@^scorm/@', '', $this->path);
         echo $path;
         if (!empty($this->title)) {
-            if (strpos($path, $this->title) === false) {
-                echo " - ".$this->title;
+            if (false === strpos($path, $this->title)) {
+                echo ' - '.$this->title;
             }
         }
     }

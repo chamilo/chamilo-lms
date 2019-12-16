@@ -1,4 +1,5 @@
 <?php
+
 /* For licensing terms, see /license.txt */
 
 namespace Chamilo\CoreBundle\EventListener;
@@ -38,7 +39,7 @@ class LoginSuccessHandler
     }
 
     /**
-     * @param Request        $request
+     * @param Request        $event
      * @param TokenInterface $token
      *
      * @return RedirectResponse|Response|null
@@ -87,12 +88,15 @@ class LoginSuccessHandler
             switch ($pageAfterLogin) {
                 case 'index.php':
                     $url = $legacyIndex;
+
                     break;
                 case 'user_portal.php':
                     $url = $legacyIndex.'user_portal.php';
+
                     break;
                 case 'main/auth/courses.php':
                     $url = $legacyIndex.'/'.$pageAfterLogin;
+
                     break;
             }
         }
@@ -102,7 +106,7 @@ class LoginSuccessHandler
         //$session->set('is_platformAdmin', \UserManager::is_admin($userId));
         //$session->set('is_allowedCreateCourse', $userInfo['status'] === 1);
         // Redirecting to a course or a session.
-        if (api_get_setting('course.go_to_course_after_login') === 'true') {
+        if ('true' === api_get_setting('course.go_to_course_after_login')) {
             // Get the courses list
             $personal_course_list = \UserManager::get_personal_session_course_list($userId);
             $my_session_list = [];
@@ -112,21 +116,21 @@ class LoginSuccessHandler
             foreach ($personal_course_list as $course) {
                 if (!empty($course['session_id'])) {
                     $my_session_list[$course['session_id']] = true;
-                    $count_of_courses_with_sessions++;
+                    ++$count_of_courses_with_sessions;
                 } else {
-                    $count_of_courses_no_sessions++;
+                    ++$count_of_courses_no_sessions;
                 }
             }
 
             $count_of_sessions = count($my_session_list);
-            if ($count_of_sessions == 1 && $count_of_courses_no_sessions == 0) {
+            if (1 == $count_of_sessions && 0 == $count_of_courses_no_sessions) {
                 $key = array_keys($personal_course_list);
                 $course_info = $personal_course_list[$key[0]]['course_info'];
                 $id_session = isset($course_info['session_id']) ? $course_info['session_id'] : 0;
                 $url = api_get_path(WEB_COURSE_PATH).$course_info['directory'].'/index.php?sid='.$id_session;
             }
 
-            if ($count_of_sessions == 0 && $count_of_courses_no_sessions == 1) {
+            if (0 == $count_of_sessions && 1 == $count_of_courses_no_sessions) {
                 $key = array_keys($personal_course_list);
                 $course_info = $personal_course_list[$key[0]]['course_info'];
                 $url = api_get_path(WEB_COURSE_PATH).$course_info['directory'].'/index.php?sid=0';

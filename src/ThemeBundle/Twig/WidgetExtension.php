@@ -1,4 +1,5 @@
 <?php
+
 /* For licensing terms, see /license.txt */
 
 namespace Chamilo\ThemeBundle\Twig;
@@ -7,8 +8,6 @@ use Twig_Environment;
 
 /**
  * Class WidgetExtension.
- *
- * @package Chamilo\ThemeBundle\Twig
  */
 class WidgetExtension extends \Twig_Extension
 {

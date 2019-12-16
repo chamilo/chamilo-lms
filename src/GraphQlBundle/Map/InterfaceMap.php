@@ -1,4 +1,5 @@
 <?php
+
 /* For licensing terms, see /license.txt */
 
 namespace Chamilo\GraphQlBundle\Map;
@@ -11,8 +12,6 @@ use Symfony\Component\DependencyInjection\ContainerAwareInterface;
 
 /**
  * Class InterfaceMap.
- *
- * @package Chamilo\GraphQlBundle\Map
  */
 class InterfaceMap extends ResolverMap implements ContainerAwareInterface
 {

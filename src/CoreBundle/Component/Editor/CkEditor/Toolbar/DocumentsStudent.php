@@ -1,12 +1,11 @@
 <?php
+
 /* For licensing terms, see /license.txt */
 
 namespace Chamilo\CoreBundle\Component\Editor\CkEditor\Toolbar;
 
 /**
  * DocumentsStudent toolbar configuration.
- *
- * @package Chamilo\CoreBundle\Component\Editor\CkEditor\Toolbar *
  */
 class DocumentsStudent extends Basic
 {
@@ -17,7 +16,7 @@ class DocumentsStudent extends Basic
      */
     public function getConfig()
     {
-        if (api_get_setting('more_buttons_maximized_mode') != 'true') {
+        if ('true' != api_get_setting('more_buttons_maximized_mode')) {
             $config['toolbar'] = $this->getNormalToolbar();
         } else {
             $config['toolbar_minToolbar'] = $this->getMinimizedToolbar();
@@ -80,10 +79,10 @@ class DocumentsStudent extends Basic
                 'TextColor',
                 'BGColor',
             ],
-            [api_get_setting('allow_spellcheck') == 'true' ? 'Scayt' : ''],
+            ['true' == api_get_setting('allow_spellcheck') ? 'Scayt' : ''],
             ['Styles', 'Format', 'Font', 'FontSize'],
             ['PageBreak', 'ShowBlocks'],
-            api_get_setting('enabled_wiris') == 'true' ? ['ckeditor_wiris_formulaEditor', 'ckeditor_wiris_CAS'] : [''],
+            'true' == api_get_setting('enabled_wiris') ? ['ckeditor_wiris_formulaEditor', 'ckeditor_wiris_CAS'] : [''],
             ['Toolbarswitch'],
         ];
     }
@@ -122,7 +121,7 @@ class DocumentsStudent extends Basic
             ['Styles', 'Format', 'Font', 'FontSize'],
             ['Bold', 'Italic', 'Underline'],
             ['JustifyLeft', 'JustifyCenter', 'JustifyRight'],
-            api_get_setting('enabled_wiris') == 'true' ? ['ckeditor_wiris_formulaEditor', 'ckeditor_wiris_CAS'] : [''],
+            'true' == api_get_setting('enabled_wiris') ? ['ckeditor_wiris_formulaEditor', 'ckeditor_wiris_CAS'] : [''],
             ['ShowBlocks'],
         ];
     }
@@ -159,7 +158,7 @@ class DocumentsStudent extends Basic
                 'TextColor',
                 'BGColor',
             ],
-            api_get_setting('enabled_wiris') == 'true' ? ['ckeditor_wiris_formulaEditor', 'ckeditor_wiris_CAS'] : [''],
+            'true' == api_get_setting('enabled_wiris') ? ['ckeditor_wiris_formulaEditor', 'ckeditor_wiris_CAS'] : [''],
             ['Toolbarswitch'],
         ];
     }

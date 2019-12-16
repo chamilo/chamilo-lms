@@ -1,4 +1,5 @@
 <?php
+
 /* For licensing terms, see /license.txt */
 
 namespace Chamilo\CoreBundle\Composer;
@@ -56,7 +57,7 @@ class ScriptHandler
      */
     public static function getFoldersToDelete()
     {
-        $paths = [
+        return [
             __DIR__.'/../../../../archive/',
             __DIR__.'/../../../../main/announcements/resources',
             __DIR__.'/../../../../main/conference/',
@@ -110,8 +111,6 @@ class ScriptHandler
             __DIR__.'/../../../../web/assets/bootstrap/docs',
             __DIR__.'/../../../../web/assets/bootstrap/test-infra',
         ];
-
-        return $paths;
     }
 
     /**
@@ -119,7 +118,7 @@ class ScriptHandler
      */
     public static function getFilesToDelete()
     {
-        $files = [
+        return [
             __DIR__.'/../../../../main/admin/statistics/statistics.lib.php',
             __DIR__.'/../../../../main/admin/add_users_to_group.php',
             __DIR__.'/../../../../main/admin/group_add.php',
@@ -228,8 +227,6 @@ class ScriptHandler
             __DIR__.'/../../../../web/assets/bootstrap/package.js',
             __DIR__.'/../../../../web/assets/bootstrap/package.json',
         ];
-
-        return $files;
     }
 
     /**
@@ -277,9 +274,7 @@ class ScriptHandler
         }
         // Simple delete for a file.
         if (is_file($dirname) || is_link($dirname)) {
-            $res = unlink($dirname);
-
-            return $res;
+            return unlink($dirname);
         }
 
         // Loop through the folder.
@@ -289,15 +284,16 @@ class ScriptHandler
         if ($is_object_dir) {
             while (false !== $entry = $dir->read()) {
                 // Skip pointers.
-                if ($entry == '.' || $entry == '..') {
+                if ('.' == $entry || '..' == $entry) {
                     continue;
                 }
 
                 // Recurse.
                 if ($strict) {
                     $result = self::rmdirr("$dirname/$entry");
-                    if ($result == false) {
+                    if (false == $result) {
                         $res = false;
+
                         break;
                     }
                 } else {
@@ -311,7 +307,7 @@ class ScriptHandler
             $dir->close();
         }
 
-        if ($delete_only_content_in_folder == false) {
+        if (false == $delete_only_content_in_folder) {
             $res = rmdir($dirname);
         }
 

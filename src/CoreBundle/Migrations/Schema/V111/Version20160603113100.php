@@ -1,4 +1,5 @@
 <?php
+
 /* For licensing terms, see /license.txt */
 
 namespace Chamilo\CoreBundle\Migrations\Schema\V111;
@@ -10,8 +11,6 @@ use Doctrine\DBAL\Types\Type;
 /**
  * Class Version20160603113100
  * Add association mapping for Language class.
- *
- * @package Chamilo\CoreBundle\Migrations\Schema\V111
  */
 class Version20160603113100 extends AbstractMigrationChamilo
 {

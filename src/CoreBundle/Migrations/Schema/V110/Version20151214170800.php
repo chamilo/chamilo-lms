@@ -1,4 +1,5 @@
 <?php
+
 /* For licensing terms, see /license.txt */
 
 namespace Chamilo\CoreBundle\Migrations\Schema\V110;
@@ -20,9 +21,9 @@ class Version20151214170800 extends AbstractMigrationChamilo
 {
     public function up(Schema $schema)
     {
-        $this->addSql("ALTER TABLE track_e_hotspot ADD c_id INT NULL");
-        $this->addSql("ALTER TABLE track_e_hotspot MODIFY COLUMN hotspot_coordinate LONGTEXT NOT NULL");
-        $this->addSql("UPDATE track_e_hotspot SET c_id = (SELECT id FROM course WHERE code = hotspot_course_code)");
+        $this->addSql('ALTER TABLE track_e_hotspot ADD c_id INT NULL');
+        $this->addSql('ALTER TABLE track_e_hotspot MODIFY COLUMN hotspot_coordinate LONGTEXT NOT NULL');
+        $this->addSql('UPDATE track_e_hotspot SET c_id = (SELECT id FROM course WHERE code = hotspot_course_code)');
 
         $answers = $this->connection->fetchAll("
             SELECT a.iid, a.c_id, a.question_id, a.hotspot_coordinates, a.hotspot_type, q.picture, c.directory
@@ -41,7 +42,8 @@ class Version20151214170800 extends AbstractMigrationChamilo
                 error_log("Migration: Image does not exists: $imagePath");
                 $imagePath = realpath($imagePath);
                 error_log("Hotspot realpath: $imagePath");
-                error_log("api_get_path: SYS_PATH: ".api_get_path(SYS_PATH));
+                error_log('api_get_path: SYS_PATH: '.api_get_path(SYS_PATH));
+
                 continue;
             }
             $imageSize = getimagesize($imagePath);
@@ -67,6 +69,7 @@ class Version20151214170800 extends AbstractMigrationChamilo
                     $newPairedString[] = implode(';', [$newX, $newY]);
                     $newPairedString[] = $newWidth;
                     $newPairedString[] = $newHeight;
+
                     break;
                 case 'circle':
                     $oldCenter = explode(';', $oldPairedString[0]);
@@ -83,6 +86,7 @@ class Version20151214170800 extends AbstractMigrationChamilo
                     $newPairedString[] = implode(';', [$newCenterX, $newCenterY]);
                     $newPairedString[] = $newRadiusX;
                     $newPairedString[] = $newRadiusY;
+
                     break;
                 case 'poly':
                 case 'delineation':
@@ -102,14 +106,15 @@ class Version20151214170800 extends AbstractMigrationChamilo
 
                         $newPairedString[] = implode(';', [$x, $y]);
                     }
+
                     break;
             }
 
-            $stmt = $this->connection->prepare("
+            $stmt = $this->connection->prepare('
                 UPDATE c_quiz_answer
                 SET hotspot_coordinates = :coordinates
                 WHERE iid = :iid AND c_id = :cid
-            ");
+            ');
             $stmt->bindValue('coordinates', implode('|', $newPairedString), Type::TEXT);
             $stmt->bindValue('iid', $answer['iid'], Type::INTEGER);
             $stmt->bindValue('cid', $answer['c_id'], Type::INTEGER);

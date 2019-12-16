@@ -1,12 +1,11 @@
 <?php
+
 /* For licensing terms, see /license.txt */
 
 namespace Chamilo\LtiBundle\Component;
 
 /**
  * Class OutcomeResponse.
- *
- * @package Chamilo\LtiBundle\Component
  */
 abstract class OutcomeResponse
 {

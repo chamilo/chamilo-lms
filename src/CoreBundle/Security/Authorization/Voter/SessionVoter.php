@@ -1,4 +1,5 @@
 <?php
+
 /* For licensing terms, see /license.txt */
 
 namespace Chamilo\CoreBundle\Security\Authorization\Voter;
@@ -188,7 +189,7 @@ class SessionVoter extends Voter
 
         // If there is a session duration but there is no previous
         // access by the user, then the session is still available
-        if (count($courseAccess) == 0) {
+        if (0 == count($courseAccess)) {
             return true;
         }
 
@@ -253,7 +254,7 @@ class SessionVoter extends Voter
         $settingsManager = $this->container->get('chamilo.settings.manager');
         $setting = $settingsManager->getSetting('session.allow_teachers_to_create_sessions');
 
-        if ($authChecker->isGranted('ROLE_TEACHER') && $setting === 'true') {
+        if ($authChecker->isGranted('ROLE_TEACHER') && 'true' === $setting) {
             return true;
         }
 
@@ -285,7 +286,7 @@ class SessionVoter extends Voter
         $settingsManager = $this->container->get('chamilo.settings.manager');
 
         if ($authChecker->isGranted('ROLE_SESSION_MANAGER') &&
-            $settingsManager->getSetting('session.allow_session_admins_to_manage_all_sessions') !== 'true'
+            'true' !== $settingsManager->getSetting('session.allow_session_admins_to_manage_all_sessions')
         ) {
             if ($session->getSessionAdminId() !== $user->getId()) {
                 return false;
@@ -293,7 +294,7 @@ class SessionVoter extends Voter
         }
 
         if ($authChecker->isGranted('ROLE_ADMIN') &&
-            $settingsManager->getSetting('session.allow_teachers_to_create_sessions') === 'true'
+            'true' === $settingsManager->getSetting('session.allow_teachers_to_create_sessions')
         ) {
             if ($session->getGeneralCoach()->getId() !== $user->getId()) {
                 return false;

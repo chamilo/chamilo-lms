@@ -1,4 +1,5 @@
 <?php
+
 /* For licensing terms, see /license.txt */
 
 namespace Chamilo\CoreBundle\Entity;
@@ -76,7 +77,7 @@ class ScheduledAnnouncement
         return $this->id;
     }
 
-    public function setId(int $id): ScheduledAnnouncement
+    public function setId(int $id): self
     {
         $this->id = $id;
 
@@ -88,7 +89,7 @@ class ScheduledAnnouncement
         return $this->subject;
     }
 
-    public function setSubject(string $subject): ScheduledAnnouncement
+    public function setSubject(string $subject): self
     {
         $this->subject = $subject;
 
@@ -100,7 +101,7 @@ class ScheduledAnnouncement
         return $this->message;
     }
 
-    public function setMessage(string $message): ScheduledAnnouncement
+    public function setMessage(string $message): self
     {
         $this->message = $message;
 
@@ -112,7 +113,7 @@ class ScheduledAnnouncement
         return $this->date;
     }
 
-    public function setDate(\DateTime $date): ScheduledAnnouncement
+    public function setDate(\DateTime $date): self
     {
         $this->date = $date;
 
@@ -124,7 +125,7 @@ class ScheduledAnnouncement
         return $this->sent;
     }
 
-    public function setSent(bool $sent): ScheduledAnnouncement
+    public function setSent(bool $sent): self
     {
         $this->sent = $sent;
 
@@ -136,7 +137,7 @@ class ScheduledAnnouncement
         return $this->sessionId;
     }
 
-    public function setSessionId(int $sessionId): ScheduledAnnouncement
+    public function setSessionId(int $sessionId): self
     {
         $this->sessionId = $sessionId;
 
@@ -148,7 +149,7 @@ class ScheduledAnnouncement
         return $this->cId;
     }
 
-    public function setCId(int $cId): ScheduledAnnouncement
+    public function setCId(int $cId): self
     {
         $this->cId = $cId;
 

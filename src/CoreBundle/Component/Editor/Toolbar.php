@@ -1,4 +1,5 @@
 <?php
+
 /* For licensing terms, see /license.txt */
 
 namespace Chamilo\CoreBundle\Component\Editor;
@@ -7,8 +8,6 @@ use Symfony\Component\Routing\RouterInterface;
 
 /**
  * Class Toolbar.
- *
- * @package Chamilo\CoreBundle\Component\Editor
  */
 class Toolbar
 {
@@ -34,17 +33,17 @@ class Toolbar
         $this->urlGenerator = $urlGenerator;
 
         if (!empty($toolbar)) {
-            $class = __NAMESPACE__."\\".$prefix."\\Toolbar\\".$toolbar;
+            $class = __NAMESPACE__.'\\'.$prefix.'\\Toolbar\\'.$toolbar;
             if (class_exists($class)) {
                 $this->setConfig($config);
                 $toolbarObj = new $class($urlGenerator, $toolbar, $config);
                 $config = $toolbarObj->getConfig();
 
                 if (api_get_configuration_value('full_ckeditor_toolbar_set')) {
-                    $basicClass = __NAMESPACE__."\\".$prefix."\\Toolbar\\Basic";
+                    $basicClass = __NAMESPACE__.'\\'.$prefix.'\\Toolbar\\Basic';
                     $basicObj = new $basicClass($urlGenerator, $toolbar, $config);
                     $basicConfig = $basicObj->getConfig();
-                    if (api_get_setting('more_buttons_maximized_mode') === 'true') {
+                    if ('true' === api_get_setting('more_buttons_maximized_mode')) {
                         if (isset($config['toolbar'])) {
                             unset($config['toolbar']);
                         }

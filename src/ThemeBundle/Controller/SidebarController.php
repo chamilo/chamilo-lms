@@ -1,4 +1,5 @@
 <?php
+
 /* For licensing terms, see /license.txt */
 
 namespace Chamilo\ThemeBundle\Controller;
@@ -12,8 +13,6 @@ use Symfony\Component\HttpFoundation\Response;
 
 /**
  * Class SidebarController.
- *
- * @package Chamilo\ThemeBundle\Controller
  */
 class SidebarController extends AbstractController
 {

@@ -1,4 +1,5 @@
 <?php
+
 /* For licensing terms, see /license.txt */
 
 namespace Chamilo\CoreBundle\Repository;
@@ -10,8 +11,6 @@ use Doctrine\ORM\Query\Expr\Join;
 
 /**
  * Class CCourseCategoryRepository.
- *
- * @package Chamilo\CoreBundle\Repository
  */
 class CourseCategoryRepository extends ServiceEntityRepository
 {

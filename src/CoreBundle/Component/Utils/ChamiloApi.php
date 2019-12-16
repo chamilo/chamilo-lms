@@ -1,4 +1,5 @@
 <?php
+
 /* For licensing terms, see /license.txt */
 
 namespace Chamilo\CoreBundle\Component\Utils;
@@ -87,7 +88,7 @@ class ChamiloApi
             return api_get_path(WEB_CSS_PATH).$customLogoPath;
         }
 
-        $originalLogoPath = $themeDir."images/header-logo.png";
+        $originalLogoPath = $themeDir.'images/header-logo.png';
 
         if (file_exists(api_get_path(SYS_CSS_PATH).$originalLogoPath)) {
             if ($getSysPath) {
@@ -117,7 +118,7 @@ class ChamiloApi
         $institutionUrl = api_get_setting('InstitutionUrl');
         $siteName = api_get_setting('siteName');
 
-        if ($logoPath === null) {
+        if (null === $logoPath) {
             $headerLogo = \Display::url($siteName, api_get_path(WEB_PATH).'index.php');
 
             if (!empty($institutionUrl) && !empty($institution)) {
@@ -180,7 +181,7 @@ class ChamiloApi
     {
         $date = new \DateTime($datetime);
         $hours = $minutes = $seconds = 0;
-        sscanf($time, "%d:%d:%d", $hours, $minutes, $seconds);
+        sscanf($time, '%d:%d:%d', $hours, $minutes, $seconds);
         $timeSeconds = isset($seconds) ? $hours * 3600 + $minutes * 60 + $seconds : $hours * 60 + $minutes;
         if ($operation) {
             $date->add(new \DateInterval('PT'.$timeSeconds.'S'));
@@ -228,7 +229,7 @@ class ChamiloApi
     {
         $requestedWith = isset($_SERVER['HTTP_X_REQUESTED_WITH']) ? $_SERVER['HTTP_X_REQUESTED_WITH'] : null;
 
-        return $requestedWith === 'XMLHttpRequest';
+        return 'XMLHttpRequest' === $requestedWith;
     }
 
     /**
@@ -323,7 +324,7 @@ class ChamiloApi
         // If we want more colors, loop through existing colors
         $count = count($palette);
         if (isset($fillUpTo) && $fillUpTo > $count) {
-            for ($i = $count; $i < $fillUpTo; $i++) {
+            for ($i = $count; $i < $fillUpTo; ++$i) {
                 $palette[$i] = $palette[$i % $count];
             }
         }

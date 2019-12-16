@@ -1,4 +1,5 @@
 <?php
+
 /* For licensing terms, see /license.txt */
 
 namespace Chamilo\CourseBundle\Component\CourseCopy\Resources;
@@ -7,8 +8,6 @@ namespace Chamilo\CourseBundle\Component\CourseCopy\Resources;
  * Class CourseCopyLearnpath.
  *
  * @author Bart Mollet <bart.mollet@hogent.be>
- *
- * @package chamilo.backup
  */
 class CourseCopyLearnpath extends Resource
 {
@@ -94,8 +93,8 @@ class CourseCopyLearnpath extends Resource
     /**
      * Create a new learnpath.
      *
-     * @param int ID
-     * @param int Type (1,2,3,...)
+     * @param int    $id                ID
+     * @param int    $type              Type (1,2,3,...)
      * @param string $name
      * @param string $path
      * @param string $ref

@@ -1,4 +1,5 @@
 <?php
+
 /* For licensing terms, see /license.txt */
 
 namespace Chamilo\CoreBundle\Menu;
@@ -13,8 +14,6 @@ use Symfony\Component\DependencyInjection\ContainerAwareTrait;
 
 /**
  * Class NavBuilder.
- *
- * @package Chamilo\CoreBundle\Menu
  */
 class NavBuilder implements ContainerAwareInterface
 {
@@ -126,7 +125,7 @@ class NavBuilder implements ContainerAwareInterface
 
             if (api_is_allowed_to_create_course()) {
                 $lang = $translator->trans('Create course');
-                if ($settingsManager->getSetting('course.course_validation') === 'true') {
+                if ('true' === $settingsManager->getSetting('course.course_validation')) {
                     $lang = $translator->trans('Create course request');
                 }
 
@@ -334,7 +333,7 @@ class NavBuilder implements ContainerAwareInterface
                 }*/
 
                 // Avoid home
-                if ($page->getUrl() === '/') {
+                if ('/' === $page->getUrl()) {
                     continue;
                 }
 
@@ -441,7 +440,7 @@ class NavBuilder implements ContainerAwareInterface
 
             if (api_is_allowed_to_create_course()) {
                 $lang = $translator->trans('CreateCourse');
-                if ($settingsManager->getSetting('course.course_validation') == 'true') {
+                if ('true' == $settingsManager->getSetting('course.course_validation')) {
                     $lang = $translator->trans('CreateCourseRequest');
                 }
                 $menu->addChild(
@@ -461,7 +460,7 @@ class NavBuilder implements ContainerAwareInterface
 
             $browse = $settingsManager->getSetting('display.allow_students_to_browse_courses');
 
-            if ($browse == 'true') {
+            if ('true' == $browse) {
                 if ($checker->isGranted('ROLE_STUDENT') && !api_is_drh() && !api_is_session_admin()
                 ) {
                     $menu->addChild(

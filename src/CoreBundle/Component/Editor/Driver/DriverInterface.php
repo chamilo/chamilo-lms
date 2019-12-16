@@ -1,4 +1,5 @@
 <?php
+
 /* For licensing terms, see /license.txt */
 
 namespace Chamilo\CoreBundle\Component\Editor\Driver;
@@ -7,8 +8,6 @@ use Chamilo\CoreBundle\Component\Editor\Connector;
 
 /**
  * Class DriverInterface.
- *
- * @package Chamilo\CoreBundle\Component\Editor\Driver
  */
 interface DriverInterface
 {

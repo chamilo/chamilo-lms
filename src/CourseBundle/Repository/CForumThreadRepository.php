@@ -1,4 +1,5 @@
 <?php
+
 /* For licensing terms, see /license.txt */
 
 namespace Chamilo\CourseBundle\Repository;
@@ -14,8 +15,6 @@ use Doctrine\Common\Persistence\ManagerRegistry;
 
 /**
  * Class CForumThreadRepository.
- *
- * @package Chamilo\CourseBundle\Repository
  */
 class CForumThreadRepository extends ServiceEntityRepository
 {

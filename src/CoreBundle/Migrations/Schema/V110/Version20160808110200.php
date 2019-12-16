@@ -1,4 +1,5 @@
 <?php
+
 /* For licensing terms, see /license.txt */
 
 namespace Chamilo\CoreBundle\Migrations\Schema\V110;
@@ -13,7 +14,7 @@ class Version20160808110200 extends AbstractMigrationChamilo
 {
     public function up(Schema $schema)
     {
-        $this->addSql("UPDATE c_forum_post SET post_parent_id = NULL WHERE post_parent_id = 0");
+        $this->addSql('UPDATE c_forum_post SET post_parent_id = NULL WHERE post_parent_id = 0');
     }
 
     public function down(Schema $schema)

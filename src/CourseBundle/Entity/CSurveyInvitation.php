@@ -1,4 +1,5 @@
 <?php
+
 /* For licensing terms, see /license.txt */
 
 namespace Chamilo\CourseBundle\Entity;
@@ -351,7 +352,7 @@ class CSurveyInvitation
         return $this->answeredAt;
     }
 
-    public function setAnsweredAt(\DateTime $answeredAt): CSurveyInvitation
+    public function setAnsweredAt(\DateTime $answeredAt): self
     {
         $this->answeredAt = $answeredAt;
 

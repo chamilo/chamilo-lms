@@ -1,4 +1,5 @@
 <?php
+
 /* For licensing terms, see /license.txt */
 
 namespace Chamilo\CoreBundle\Migrations\Schema\V110;
@@ -8,8 +9,6 @@ use Doctrine\DBAL\Schema\Schema;
 
 /**
  * Class Version20150507152600.
- *
- * @package Chamilo\CoreBundle\Migrations\Schema\V110
  */
 class Version20150507152600 extends AbstractMigrationChamilo
 {
@@ -76,7 +75,7 @@ class Version20150507152600 extends AbstractMigrationChamilo
             '',
             'textfield',
             'Course',
-            ($value ? $value : ''),
+            ($value ?: ''),
             'CourseCreationUsesTemplateText',
             'CourseCreationUsesTemplateComment',
             null,
@@ -139,7 +138,7 @@ class Version20150507152600 extends AbstractMigrationChamilo
             '',
             'textfield',
             'Security',
-            ($value ? $value : 5),
+            ($value ?: 5),
             'CaptchaNumberOfMistakesBeforeBlockingAccountText',
             'CaptchaNumberOfMistakesBeforeBlockingAccountComment',
             null,
@@ -156,7 +155,7 @@ class Version20150507152600 extends AbstractMigrationChamilo
             '',
             'textfield',
             'Security',
-            ($value ? $value : 5),
+            ($value ?: 5),
             'CaptchaTimeAccountIsLockedText',
             'CaptchaTimeAccountIsLockedComment',
             null,

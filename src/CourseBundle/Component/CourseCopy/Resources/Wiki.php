@@ -1,4 +1,5 @@
 <?php
+
 /* For licensing terms, see /license.txt */
 
 namespace Chamilo\CourseBundle\Component\CourseCopy\Resources;
@@ -7,7 +8,6 @@ namespace Chamilo\CourseBundle\Component\CourseCopy\Resources;
  * Class for migrating the wiki
  * Wiki backup script.
  *
- * @package chamilo.backup
  *
  * @author Matthias Crauwels <matthias.crauwels@UGent.be>, Ghent University
  */

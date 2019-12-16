@@ -1,4 +1,5 @@
 <?php
+
 /* For licensing terms, see /license.txt */
 
 namespace Chamilo\CoreBundle\Migrations\Schema\V111;
@@ -11,8 +12,6 @@ use Doctrine\DBAL\Schema\Schema;
  *
  * Fix some missing queries for migration from 1.10 to 1.11 (GH#2214)
  * These are minor changes caused by the move from static SQL to ORM entities
- *
- * @package Chamilo\CoreBundle\Migrations\Schema\V111
  */
 class Version20171213092400 extends AbstractMigrationChamilo
 {

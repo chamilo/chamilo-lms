@@ -1,4 +1,5 @@
 <?php
+
 /* For licensing terms, see /license.txt */
 
 namespace Chamilo\CoreBundle\EventListener;
@@ -30,7 +31,7 @@ class LegacyListener
         /** @var ContainerInterface $container */
         $container = $this->container;
 
-        if ($request->get('load_legacy') === true) {
+        if (true === $request->get('load_legacy')) {
             /*$container->get('router.default')->getRouteCollection()->remove('legacy_index');
             $route = new Route('/aaa/');
             $container->get('router')->getRouteCollection()->add('legacy_index', $route);*/
@@ -95,7 +96,7 @@ class LegacyListener
 
             $token = $container->get('security.token_storage')->getToken();
             $userObject = null;
-            if ($token !== null) {
+            if (null !== $token) {
                 $userObject = $container->get('security.token_storage')->getToken()->getUser();
             }
 
@@ -106,12 +107,12 @@ class LegacyListener
             $userStatus = null;
             $userId = $session->get('_uid');
 
-            if ($userObject !== null && !empty($userId)) {
+            if (null !== $userObject && !empty($userId)) {
                 $userInfo = api_get_user_info($userId);
                 $userStatus = $userInfo['status'];
                 $isAdmin = $userInfo['is_admin'];
                 $userInfo['is_anonymous'] = false;
-                $allowedCreateCourse = $userStatus === 1;
+                $allowedCreateCourse = 1 === $userStatus;
             }
             $session->set('_user', $userInfo);
             $session->set('is_platformAdmin', $isAdmin);
@@ -166,8 +167,8 @@ class LegacyListener
                 ICON_SIZE_LARGE
             );
 
-            $allow = $userStatus !== ANONYMOUS;
-            if ($allow && api_get_setting('show_link_bug_notification') === 'true') {
+            $allow = ANONYMOUS !== $userStatus;
+            if ($allow && 'true' === api_get_setting('show_link_bug_notification')) {
                 $rightFloatMenu = '<div class="report">
 		        <a href="https://github.com/chamilo/chamilo-lms/wiki/How-to-report-issues" target="_blank">
                     '.$iconBug.'
@@ -175,7 +176,7 @@ class LegacyListener
 		        </div>';
             }
 
-            if ($allow && api_get_setting('show_link_ticket_notification') === 'true') {
+            if ($allow && 'true' === api_get_setting('show_link_ticket_notification')) {
                 // by default is project_id = 1
                 $defaultProjectId = 1;
                 $allow = \TicketManager::userIsAllowInProject(api_get_user_info(), $defaultProjectId);
@@ -206,7 +207,7 @@ class LegacyListener
 
         // We set cid_reset = true if we enter inside a main/admin url
         // CourseListener check this variable and deletes the course session
-        if (strpos($request->get('name'), 'admin/') !== false) {
+        if (false !== strpos($request->get('name'), 'admin/')) {
             $session->set('cid_reset', true);
         } else {
             $session->set('cid_reset', false);

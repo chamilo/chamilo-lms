@@ -40,7 +40,7 @@ class SidebarSetupMenuDemoListener
 
     protected function activateByRoute($route, $items)
     {
-        foreach ($items as $item) { /** @var $item MenuItemModel */
+        foreach ($items as $item) { /** @var MenuItemModel $item */
             if ($item->hasChildren()) {
                 $this->activateByRoute($route, $item->getChildren());
             } else {

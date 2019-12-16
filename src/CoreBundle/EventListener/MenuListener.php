@@ -1,4 +1,5 @@
 <?php
+
 /* For licensing terms, see /license.txt */
 
 namespace Chamilo\CoreBundle\EventListener;
@@ -9,8 +10,6 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
 /**
  * Class MenuListener
  * This is needed to load theme events to be executed.
- *
- * @package Chamilo\CoreBundle\EventListener
  */
 class MenuListener
 {

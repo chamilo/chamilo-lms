@@ -1,12 +1,11 @@
 <?php
+
 /* For licensing terms, see /license.txt */
 
 namespace Chamilo\CoreBundle\Component\Editor\CkEditor\Toolbar;
 
 /**
  * TestFreeAnswerStrict toolbar configuration.
- *
- * @package Chamilo\CoreBundle\Component\Editor\CkEditor\Toolbar
  */
 class TestFreeAnswerStrict extends Basic
 {
@@ -17,7 +16,7 @@ class TestFreeAnswerStrict extends Basic
      */
     public function getConfig()
     {
-        if (api_get_setting('more_buttons_maximized_mode') != 'true') {
+        if ('true' != api_get_setting('more_buttons_maximized_mode')) {
             $config['toolbar'] = $this->getNormalToolbar();
         } else {
             $config['toolbar_minToolbar'] = $this->getNormalToolbar();

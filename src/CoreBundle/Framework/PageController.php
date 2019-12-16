@@ -1,4 +1,5 @@
 <?php
+
 /* For licensing terms, see /license.txt */
 
 namespace Chamilo\CoreBundle\Framework;
@@ -15,7 +16,6 @@ use UserManager;
  * Class PageController
  * Controller for pages presentation in general.
  *
- * @package chamilo.page.controller
  *
  * @author Julio Montoya <gugli100@gmail.com>
  *
@@ -60,21 +60,21 @@ class PageController
      */
     public function returnSkillsLinks()
     {
-        if (api_get_setting('skill.allow_skills_tool') == 'true') {
+        if ('true' == api_get_setting('skill.allow_skills_tool')) {
             $content = [];
             $content[] = [
                 'title' => get_lang('My skills'),
                 'href' => api_get_path(WEB_CODE_PATH).'social/skills_wheel.php',
             ];
 
-            if (api_get_setting('skill.allow_hr_skills_management') == 'true'
+            if ('true' == api_get_setting('skill.allow_hr_skills_management')
                 || api_is_platform_admin()) {
                 $content[] = [
                     'title' => get_lang('Manage skills'),
                     'href' => api_get_path(WEB_CODE_PATH).'admin/skills_wheel.php',
                 ];
             }
-            $this->show_right_block(get_lang("Skills"), $content, 'skill_block');
+            $this->show_right_block(get_lang('Skills'), $content, 'skill_block');
         }
     }
 
@@ -108,10 +108,10 @@ class PageController
      * Returns the received content packaged in <div> block, with the title as
      * <h4>.
      *
-     * @param string Title to include as h4
-     * @param string Longer content to show (usually a <ul> list)
-     * @param string ID to be added to the HTML attributes for the block
-     * @param array Array of attributes to add to the HTML block
+     * @param string $title   Title to include as h4
+     * @param string $content Longer content to show (usually a <ul> list)
+     * @param string $id      ID to be added to the HTML attributes for the block
+     * @param array  $params  Array of attributes to add to the HTML block
      *
      * @return string HTML <div> block
      *
@@ -142,7 +142,7 @@ class PageController
     public function return_search_block()
     {
         $html = '';
-        if (api_get_setting('search.search_enabled') == 'true') {
+        if ('true' == api_get_setting('search.search_enabled')) {
             $html .= '<div class="searchbox">';
             $search_btn = get_lang('Search');
             $search_content = '<br />
@@ -211,7 +211,7 @@ class PageController
     public function return_classes_block()
     {
         $html = '';
-        if (api_get_setting('show_groups_to_users') == 'true') {
+        if ('true' == api_get_setting('show_groups_to_users')) {
             $usergroup = new Usergroup();
             $usergroup_list = $usergroup->get_usergroup_by_user(api_get_user_id());
             $classes = '';
@@ -243,7 +243,7 @@ class PageController
     /**
      * Prepares a block with all the pending exercises in all courses.
      *
-     * @param array Array of courses (arrays) of the user
+     * @param array $personal_course_list Array of courses (arrays) of the user
      */
     public function return_exercise_block($personal_course_list, $tpl)
     {
@@ -299,7 +299,7 @@ class PageController
         $user_identified = (api_get_user_id() > 0 && !api_is_anonymous());
         $web_course_path = api_get_path(WEB_COURSE_PATH);
         $category = Database::escape_string($_GET['category']);
-        $setting_show_also_closed_courses = api_get_setting('show_closed_courses') == 'true';
+        $setting_show_also_closed_courses = 'true' == api_get_setting('show_closed_courses');
 
         // Database table definitions.
         $main_course_table = Database :: get_main_table(TABLE_MAIN_COURSE);
@@ -322,7 +322,7 @@ class PageController
         // Showing only the courses of the current access_url_id.
         if (api_is_multiple_url_enabled()) {
             $url_access_id = api_get_current_access_url_id();
-            if ($url_access_id != -1) {
+            if (-1 != $url_access_id) {
                 $tbl_url_rel_course = Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_COURSE);
                 $sql_get_course_list = "SELECT * FROM $main_course_table as course INNER JOIN $tbl_url_rel_course as url_rel_course
                         ON (url_rel_course.c_id = course.id)
@@ -357,13 +357,13 @@ class PageController
                     FROM $main_category_table t1
                     LEFT JOIN $main_category_table t2 ON t1.code=t2.parent_id
                     LEFT JOIN $main_course_table t3 ON (t3.category_id = t1.id $platform_visible_courses)
-                    WHERE t1.parent_id ".(empty($category) ? "IS NULL" : "='$category'")."
-                    GROUP BY t1.name,t1.code,t1.parent_id,t1.children_count ORDER BY t1.tree_pos, t1.name";
+                    WHERE t1.parent_id ".(empty($category) ? 'IS NULL' : "='$category'").'
+                    GROUP BY t1.name,t1.code,t1.parent_id,t1.children_count ORDER BY t1.tree_pos, t1.name';
 
         // Showing only the category of courses of the current access_url_id
         if (api_is_multiple_url_enabled()) {
             $url_access_id = api_get_current_access_url_id();
-            if ($url_access_id != -1) {
+            if (-1 != $url_access_id) {
                 $tbl_url_rel_course = Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_COURSE);
                 $sqlGetSubCatList = "
                     SELECT t1.name,t1.code,t1.parent_id,t1.children_count,COUNT(DISTINCT t3.code) AS nbCourse
@@ -372,8 +372,8 @@ class PageController
                     LEFT JOIN $main_course_table t3 ON (t3.category_id = t1.id $platform_visible_courses)
                     INNER JOIN $tbl_url_rel_course as url_rel_course
                         ON (url_rel_course.c_id = t3.id)
-                    WHERE access_url_id = $url_access_id AND t1.parent_id ".(empty($category) ? "IS NULL" : "='$category'")."
-                    GROUP BY t1.name,t1.code,t1.parent_id,t1.children_count ORDER BY t1.tree_pos, t1.name";
+                    WHERE access_url_id = $url_access_id AND t1.parent_id ".(empty($category) ? 'IS NULL' : "='$category'").'
+                    GROUP BY t1.name,t1.code,t1.parent_id,t1.children_count ORDER BY t1.tree_pos, t1.name';
             }
         }
 
@@ -390,46 +390,46 @@ class PageController
                         $htmlListCat .= '<li>';
                         $htmlListCat .= '<a href="'.api_get_self(
                         ).'?category='.$catLine['code'].'">'.$catLine['name'].'</a>';
-                        if (api_get_setting('show_number_of_courses') == 'true') {
+                        if ('true' == api_get_setting('show_number_of_courses')) {
                             $htmlListCat .= ' ('.$catLine['nbCourse'].' '.get_lang('Courses').')';
                         }
-                        $htmlListCat .= "</li>";
+                        $htmlListCat .= '</li>';
                         $thereIsSubCat = true;
                     } elseif ($catLine['children_count'] > 0) {
                         // The category has children, subcategories.
                         $htmlListCat .= '<li>';
                         $htmlListCat .= '<a href="'.api_get_self(
                         ).'?category='.$catLine['code'].'">'.$catLine['name'].'</a>';
-                        $htmlListCat .= "</li>";
+                        $htmlListCat .= '</li>';
                         $thereIsSubCat = true;
-                    } elseif (api_get_setting('show_empty_course_categories') == 'true') {
+                    } elseif ('true' == api_get_setting('show_empty_course_categories')) {
                         /* End changed code to eliminate the (0 courses) after empty categories. */
                         $htmlListCat .= '<li>';
                         $htmlListCat .= $catLine['name'];
-                        $htmlListCat .= "</li>";
+                        $htmlListCat .= '</li>';
                         $thereIsSubCat = true;
                     } // Else don't set thereIsSubCat to true to avoid printing things if not requested.
                 } else {
                     $htmlTitre = '<p>';
-                    if (api_get_setting('show_back_link_on_top_of_tree') == 'true') {
+                    if ('true' == api_get_setting('show_back_link_on_top_of_tree')) {
                         $htmlTitre .= '<a href="'.api_get_self().'">&lt;&lt; '.get_lang('Categories Overview').'</a>';
                     }
                     if (!is_null($catLine['parent_id']) ||
-                        (api_get_setting('show_back_link_on_top_of_tree') != 'true' &&
+                        ('true' != api_get_setting('show_back_link_on_top_of_tree') &&
                         !is_null($catLine['code']))
                     ) {
                         $htmlTitre .= '<a href="'.api_get_self(
                         ).'?category='.$catLine['parent_id'].'">&lt;&lt; '.get_lang('Up').'</a>';
                     }
-                    $htmlTitre .= "</p>";
-                    if ($category != "" && !is_null($catLine['code'])) {
-                        $htmlTitre .= '<h3>'.$catLine['name']."</h3>";
+                    $htmlTitre .= '</p>';
+                    if ('' != $category && !is_null($catLine['code'])) {
+                        $htmlTitre .= '<h3>'.$catLine['name'].'</h3>';
                     } else {
-                        $htmlTitre .= '<h3>'.get_lang('Categories')."</h3>";
+                        $htmlTitre .= '<h3>'.get_lang('Categories').'</h3>';
                     }
                 }
             }
-            $htmlListCat .= "</ul>";
+            $htmlListCat .= '</ul>';
         }
         $result .= $htmlTitre;
         if ($thereIsSubCat) {
@@ -443,7 +443,7 @@ class PageController
         $courses_shown = 0;
         if ($numrows > 0) {
             $courses_list_string .= Display::page_header(get_lang('Course list'));
-            $courses_list_string .= "<ul>";
+            $courses_list_string .= '<ul>';
 
             if (api_get_user_id()) {
                 $courses_of_user = $this->get_courses_of_user(api_get_user_id());
@@ -455,21 +455,21 @@ class PageController
                     // If we do not show the closed courses
                     // we only show the courses that are open to the world (to everybody)
                     // and the courses that are open to the platform (if the current user is a registered user.
-                    if (($user_identified && $course['visibility'] == COURSE_VISIBILITY_OPEN_PLATFORM) || ($course['visibility'] == COURSE_VISIBILITY_OPEN_WORLD)) {
-                        $courses_shown++;
+                    if (($user_identified && COURSE_VISIBILITY_OPEN_PLATFORM == $course['visibility']) || (COURSE_VISIBILITY_OPEN_WORLD == $course['visibility'])) {
+                        ++$courses_shown;
                         $courses_list_string .= "<li>\n";
                         $courses_list_string .= '<a href="'.$web_course_path.$course['directory'].'/">'.$course['title'].'</a><br />';
                         $course_details = [];
-                        if (api_get_setting('course.display_coursecode_in_courselist') ==
-                            'true') {
+                        if ('true' ==
+                            api_get_setting('course.display_coursecode_in_courselist')) {
                             $course_details[] = $course['visual_code'];
                         }
-                        if (api_get_setting('course.display_teacher_in_courselist') ==
-                            'true') {
+                        if ('true' ==
+                            api_get_setting('course.display_teacher_in_courselist')) {
                             $course_details[] = $course['tutor_name'];
                         }
-                        if (api_get_setting('display.show_different_course_language') ==
-                            'true' && $course['course_language'] != api_get_setting(
+                        if ('true' ==
+                            api_get_setting('display.show_different_course_language') && $course['course_language'] != api_get_setting(
                                 'language.platform_language'
                             )
                         ) {
@@ -487,49 +487,49 @@ class PageController
                     // 4. the user is logged in and the user is course admin of te course (regardless of the course visibility setting);
                     // 5. the user is the platform admin api_is_platform_admin().
                     //
-                    $courses_shown++;
+                    ++$courses_shown;
                     $courses_list_string .= "<li>\n";
-                    if ($course['visibility'] == COURSE_VISIBILITY_OPEN_WORLD
-                        || ($user_identified && $course['visibility'] == COURSE_VISIBILITY_OPEN_PLATFORM)
+                    if (COURSE_VISIBILITY_OPEN_WORLD == $course['visibility']
+                        || ($user_identified && COURSE_VISIBILITY_OPEN_PLATFORM == $course['visibility'])
                         || ($user_identified && key_exists(
                             $course['code'],
                             $courses_of_user
-                        ) && $course['visibility'] != COURSE_VISIBILITY_CLOSED)
-                        || $courses_of_user[$course['code']]['status'] == '1'
+                        ) && COURSE_VISIBILITY_CLOSED != $course['visibility'])
+                        || '1' == $courses_of_user[$course['code']]['status']
                         || api_is_platform_admin()
                     ) {
                         $courses_list_string .= '<a href="'.$web_course_path.$course['directory'].'/">';
                     }
                     $courses_list_string .= $course['title'];
-                    if ($course['visibility'] == COURSE_VISIBILITY_OPEN_WORLD
-                        || ($user_identified && $course['visibility'] == COURSE_VISIBILITY_OPEN_PLATFORM)
+                    if (COURSE_VISIBILITY_OPEN_WORLD == $course['visibility']
+                        || ($user_identified && COURSE_VISIBILITY_OPEN_PLATFORM == $course['visibility'])
                         || ($user_identified && key_exists(
                             $course['code'],
                             $courses_of_user
-                        ) && $course['visibility'] != COURSE_VISIBILITY_CLOSED)
-                        || $courses_of_user[$course['code']]['status'] == '1'
+                        ) && COURSE_VISIBILITY_CLOSED != $course['visibility'])
+                        || '1' == $courses_of_user[$course['code']]['status']
                         || api_is_platform_admin()
                     ) {
                         $courses_list_string .= '</a><br />';
                     }
                     $course_details = [];
-                    if (api_get_setting('course.display_coursecode_in_courselist') == 'true') {
+                    if ('true' == api_get_setting('course.display_coursecode_in_courselist')) {
                         $course_details[] = $course['visual_code'];
                     }
-                    if (api_get_setting('course.display_teacher_in_courselist') == 'true') {
+                    if ('true' == api_get_setting('course.display_teacher_in_courselist')) {
                         $course_details[] = $course['tutor_name'];
                     }
-                    if (api_get_setting(
+                    if ('true' == api_get_setting(
                             'display.show_different_course_language'
-                        ) == 'true' && $course['course_language'] != api_get_setting(
+                        ) && $course['course_language'] != api_get_setting(
                             'language.platform_language'
                         )
                     ) {
                         $course_details[] = $course['course_language'];
                     }
-                    if (api_get_setting(
+                    if ('true' == api_get_setting(
                         'show_different_course_language'
-                        ) == 'true' && $course['course_language'] != api_get_setting(
+                        ) && $course['course_language'] != api_get_setting(
                             'language.platform_language'
                         )
                     ) {
@@ -541,7 +541,7 @@ class PageController
                     // 1. it is allowed to register for the course and if the course is not already in the courselist of the user and if the user is identiefied
                     // 2.
                     if ($user_identified && !array_key_exists($course['code'], $courses_of_user)) {
-                        if ($course['subscribe'] == '1') {
+                        if ('1' == $course['subscribe']) {
                             $courses_list_string .= '<form action="main/auth/courses.php?action=subscribe&category='.Security::remove_XSS(
                                 $_GET['category']
                             ).'" method="post">';
@@ -553,17 +553,17 @@ class PageController
                             $courses_list_string .= '<br />'.get_lang('Subscribing not allowed');
                         }
                     }
-                    $courses_list_string .= "</li>";
+                    $courses_list_string .= '</li>';
                 } //end else
             } // end foreach
-            $courses_list_string .= "</ul>";
+            $courses_list_string .= '</ul>';
         }
         if ($courses_shown > 0) {
             // Only display the list of courses and categories if there was more than
             // 0 courses visible to the world (we're in the anonymous list here).
             $result .= $courses_list_string;
         }
-        if ($category != '') {
+        if ('' != $category) {
             $result .= '<p><a href="'.api_get_self().'"> '.Display :: return_icon('back.png', get_lang('Categories Overview')).get_lang('Categories Overview').'</a></p>';
         }
 
@@ -582,7 +582,7 @@ class PageController
         if (empty($user_id)) {
             return false;
         }
-        $loadDirs = api_get_setting('document.show_documents_preview') == 'true' ? true : false;
+        $loadDirs = 'true' == api_get_setting('document.show_documents_preview') ? true : false;
         $start = ($page - 1) * $this->maxPerPage;
 
         $nbResults = (int) CourseManager::displayPersonalCourseCategories($user_id, $filter, $loadDirs, true);
@@ -618,7 +618,7 @@ class PageController
             return false;
         }
 
-        $loadDirs = api_get_setting('document.show_documents_preview') == 'true' ? true : false;
+        $loadDirs = 'true' == api_get_setting('document.show_documents_preview') ? true : false;
         $start = ($page - 1) * $this->maxPerPage;
 
         $nbResults = CourseManager::displaySpecialCourses($user_id, $filter, $loadDirs, true);
@@ -656,7 +656,7 @@ class PageController
             return false;
         }
 
-        $loadDirs = api_get_setting('document.show_documents_preview') == 'true' ? true : false;
+        $loadDirs = 'true' == api_get_setting('document.show_documents_preview') ? true : false;
         $start = ($page - 1) * $this->maxPerPage;
 
         return;
@@ -716,7 +716,7 @@ class PageController
             return false;
         }
 
-        $load_history = (isset($filter) && $filter == 'history') ? true : false;
+        $load_history = isset($filter) && 'history' == $filter ? true : false;
 
         $start = ($page - 1) * $this->maxPerPage;
 
@@ -739,7 +739,7 @@ class PageController
             }
         }
 
-        $load_directories_preview = api_get_setting('document.show_documents_preview') == 'true' ? true : false;
+        $load_directories_preview = 'true' == api_get_setting('document.show_documents_preview') ? true : false;
         $sessions_with_category = $html;
 
         if (isset($session_categories) && !empty($session_categories)) {
@@ -760,11 +760,11 @@ class PageController
                     $html_courses_session = '';
                     $count = 0;
                     foreach ($session['courses'] as $course) {
-                        if (api_get_setting('session.hide_courses_in_sessions') == 'false') {
+                        if ('false' == api_get_setting('session.hide_courses_in_sessions')) {
                             $html_courses_session .= CourseManager::get_logged_user_course_html($course, $session_id);
                         }
-                        $count_courses_session++;
-                        $count++;
+                        ++$count_courses_session;
+                        ++$count;
                     }
 
                     $params = [];
@@ -780,7 +780,7 @@ class PageController
                         $session_link = $session['session_name'];
                         $params['link'] = null;
 
-                        if (api_get_setting('session.session_page_enabled') == 'true' && !api_is_drh()) {
+                        if ('true' == api_get_setting('session.session_page_enabled') && !api_is_drh()) {
                             //session name with link
                             $session_link = Display::tag(
                                 'a',
@@ -845,17 +845,17 @@ class PageController
                     $session_category_start_date = $session_category['session_category']['date_start'];
                     $session_category_end_date = $session_category['session_category']['date_end'];
 
-                    if (!empty($session_category_start_date) && $session_category_start_date != '0000-00-00' && !empty($session_category_end_date) && $session_category_end_date != '0000-00-00') {
+                    if (!empty($session_category_start_date) && '0000-00-00' != $session_category_start_date && !empty($session_category_end_date) && '0000-00-00' != $session_category_end_date) {
                         $params['subtitle'] = sprintf(
                             get_lang('From %s to %s'),
                             $session_category['session_category']['date_start'],
                             $session_category['session_category']['date_end']
                         );
                     } else {
-                        if (!empty($session_category_start_date) && $session_category_start_date != '0000-00-00') {
+                        if (!empty($session_category_start_date) && '0000-00-00' != $session_category_start_date) {
                             $params['subtitle'] = get_lang('From').' '.$session_category_start_date;
                         }
-                        if (!empty($session_category_end_date) && $session_category_end_date != '0000-00-00') {
+                        if (!empty($session_category_end_date) && '0000-00-00' != $session_category_end_date) {
                             $params['subtitle'] = get_lang('Until').' '.$session_category_end_date;
                         }
                     }
@@ -897,7 +897,7 @@ class PageController
             return false;
         }
 
-        $loadHistory = (isset($filter) && $filter == 'history') ? true : false;
+        $loadHistory = isset($filter) && 'history' == $filter ? true : false;
 
         /*$app['session_menu'] = function ($app) use ($loadHistory) {
             $menu = $app['knp_menu.factory']->createItem(
@@ -999,7 +999,7 @@ class PageController
             }
         }
 
-        $load_directories_preview = api_get_setting('document.show_documents_preview') === 'true' ? true : false;
+        $load_directories_preview = 'true' === api_get_setting('document.show_documents_preview') ? true : false;
         $sessions_with_no_category = $html;
 
         if (isset($session_categories) && !empty($session_categories)) {
@@ -1007,7 +1007,7 @@ class PageController
                 $session_category_id = $session_category['session_category']['id'];
 
                 // Sessions does not belong to a session category
-                if ($session_category_id == 0) {
+                if (0 == $session_category_id) {
                     // Independent sessions
                     if (isset($session_category['sessions'])) {
                         foreach ($session_category['sessions'] as $session) {
@@ -1037,7 +1037,7 @@ class PageController
                                 $allowed_time = 0;
 
                                 // Read only and accessible
-                                if (api_get_setting('session.hide_courses_in_sessions') == 'false') {
+                                if ('false' == api_get_setting('session.hide_courses_in_sessions')) {
                                     $courseUserHtml = CourseManager::get_logged_user_course_html(
                                         $course,
                                         $session_id,
@@ -1050,7 +1050,7 @@ class PageController
                                         $html_courses_session[] = $course_session;
                                     }
                                 }
-                                $count_courses_session++;
+                                ++$count_courses_session;
                             }
 
                             if ($count_courses_session > 0) {
@@ -1067,7 +1067,7 @@ class PageController
                                 $session_link = $session['session_name'];
                                 $params['link'] = null;
 
-                                if (api_get_setting('session.session_page_enabled') == 'true' && !api_is_drh()) {
+                                if ('true' == api_get_setting('session.session_page_enabled') && !api_is_drh()) {
                                     //session name with link
                                     $session_link = Display::tag(
                                         'a',
@@ -1104,7 +1104,7 @@ class PageController
                                         );
                                 }
 
-                                if (api_get_setting('session.hide_courses_in_sessions') == 'false') {
+                                if ('false' == api_get_setting('session.hide_courses_in_sessions')) {
                                     //    $params['extra'] .=  $html_courses_session;
                                 }
                                 $courseDataToString = CourseManager::parseCourseListData($html_courses_session);
@@ -1136,7 +1136,7 @@ class PageController
     }
 
     /**
-     * @param array
+     * @param array $items
      */
     public function returnNavigationLinks($items)
     {

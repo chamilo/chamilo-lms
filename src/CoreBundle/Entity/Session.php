@@ -1,4 +1,5 @@
 <?php
+
 /* For licensing terms, see /license.txt */
 
 namespace Chamilo\CoreBundle\Entity;
@@ -494,7 +495,7 @@ class Session
         foreach ($this->userCourseSubscriptions as $i => $courseSubscription) {
             if ($courseSubscription->getCourse()->getId() === $course->getId() &&
                 $courseSubscription->getUser()->getId() === $user->getId()) {
-                if ($this->userCourseSubscriptions[$i]->getStatus() === self::STUDENT) {
+                if (self::STUDENT === $this->userCourseSubscriptions[$i]->getStatus()) {
                     $sessionCourse = $this->getCourseSubscription($course);
 
                     $sessionCourse->setNbrUsers(
@@ -1029,11 +1030,9 @@ class Session
         );
 
         /** @var SessionRelCourse $sessionCourse */
-        $sessionCourse = $this->courses
+        return $this->courses
             ->matching($criteria)
             ->current();
-
-        return $sessionCourse;
     }
 
     /**
@@ -1051,7 +1050,7 @@ class Session
         $userRelCourseRelSession->setStatus($status);
         $this->addUserCourseSubscription($userRelCourseRelSession);
 
-        if ($status === self::STUDENT) {
+        if (self::STUDENT === $status) {
             $sessionCourse = $this->getCourseSubscription($course);
 
             $sessionCourse->setNbrUsers(
@@ -1211,6 +1210,7 @@ class Session
         foreach ($urlList as $item) {
             if ($item->getUrl()->getId() == $url->getId()) {
                 $this->currentUrl = $url;
+
                 break;
             }
         }

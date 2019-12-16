@@ -1,4 +1,5 @@
 <?php
+
 /* For licensing terms, see /license.txt */
 
 /**
@@ -9,8 +10,6 @@ namespace Chamilo\CoreBundle\Hook\Interfaces;
 
 /**
  * Interface HookNotificationTitleEventInterface.
- *
- * @package Chamilo\CoreBundle\Hook\Interfaces
  */
 interface HookNotificationTitleEventInterface extends HookEventInterface
 {

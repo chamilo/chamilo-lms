@@ -1,4 +1,5 @@
 <?php
+
 /* For licensing terms, see /license.txt */
 
 namespace Chamilo\CoreBundle\Migrations\Schema\V110;
@@ -13,8 +14,8 @@ class Version20150603142550 extends AbstractMigrationChamilo
 {
     public function preUp(Schema $schema)
     {
-        $this->addSql("ALTER TABLE c_calendar_event ENGINE=InnoDB");
-        $this->addSql("ALTER TABLE c_thematic_advance ENGINE=InnoDB");
+        $this->addSql('ALTER TABLE c_calendar_event ENGINE=InnoDB');
+        $this->addSql('ALTER TABLE c_thematic_advance ENGINE=InnoDB');
     }
 
     public function up(Schema $schema)

@@ -1,4 +1,5 @@
 <?php
+
 /* For licensing terms, see /license.txt */
 
 namespace Chamilo\CourseBundle\Repository;
@@ -12,8 +13,6 @@ use Doctrine\Common\Persistence\ManagerRegistry;
 
 /**
  * Class CNotebookRepository.
- *
- * @package Chamilo\CourseBundle\Repository
  */
 class CNotebookRepository extends ServiceEntityRepository
 {
@@ -43,12 +42,15 @@ class CNotebookRepository extends ServiceEntityRepository
         switch ($orderField) {
             case 'creation_date':
                 $orderField = 'N.creationDate';
+
                 break;
             case 'update_date':
                 $orderField = 'N.updateDate';
+
                 break;
             case 'title':
                 $orderField = 'N.title';
+
                 break;
         }
 
@@ -74,7 +76,7 @@ class CNotebookRepository extends ServiceEntityRepository
             );
         }
 
-        if ($orderField === 'N.updateDate') {
+        if ('N.updateDate' === $orderField) {
             $qb->andWhere(
                 $qb->expr()->orX(
                     $qb->expr()->neq('N.updateDate', ''),

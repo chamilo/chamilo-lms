@@ -1,4 +1,5 @@
 <?php
+
 /* For licensing terms, see /license.txt */
 
 namespace Chamilo\LtiBundle\Component;
@@ -8,8 +9,6 @@ use Chamilo\UserBundle\Entity\User;
 
 /**
  * Class OutcomeDeleteRequest.
- *
- * @package Chamilo\LtiBundle\Component
  */
 class OutcomeDeleteRequest extends OutcomeRequest
 {

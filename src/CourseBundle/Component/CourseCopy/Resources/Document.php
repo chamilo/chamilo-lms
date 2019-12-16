@@ -1,4 +1,5 @@
 <?php
+
 /* For licensing terms, see /license.txt */
 
 namespace Chamilo\CourseBundle\Component\CourseCopy\Resources;
@@ -7,8 +8,6 @@ namespace Chamilo\CourseBundle\Component\CourseCopy\Resources;
  * Class Document.
  *
  * @author Bart Mollet <bart.mollet@hogent.be>
- *
- * @package chamilo.backup
  */
 class Document extends Resource
 {
@@ -46,8 +45,8 @@ class Document extends Resource
         parent::show();
         echo preg_replace('@^document@', '', $this->path);
         if (!empty($this->title)) {
-            if (strpos($this->path, $this->title) === false) {
-                echo " - ".$this->title;
+            if (false === strpos($this->path, $this->title)) {
+                echo ' - '.$this->title;
             }
         }
     }

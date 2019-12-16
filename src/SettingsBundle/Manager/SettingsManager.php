@@ -1,4 +1,5 @@
 <?php
+
 /* For licensing terms, see /license.txt */
 
 namespace Chamilo\SettingsBundle\Manager;
@@ -22,8 +23,6 @@ use Symfony\Component\Validator\Exception\ValidatorException;
 
 /**
  * Class SettingsManager.
- *
- * @package Chamilo\SettingsBundle\Manager
  */
 class SettingsManager implements SettingsManagerInterface
 {
@@ -145,7 +144,7 @@ class SettingsManager implements SettingsManagerInterface
      */
     public function getVariablesAndCategories()
     {
-        $oldItems = [
+        return [
             'Institution' => 'Platform',
             'InstitutionUrl' => 'Platform',
             'siteName' => 'Platform',
@@ -437,8 +436,6 @@ class SettingsManager implements SettingsManagerInterface
             'gradebook_show_percentage_in_reports' => 'gradebook',
             'course_creation_splash_screen' => 'Course',
         ];
-
-        return $oldItems;
     }
 
     /**
@@ -722,7 +719,7 @@ class SettingsManager implements SettingsManagerInterface
 
         foreach ($settingsBuilder->getTransformers() as $parameter => $transformer) {
             if (array_key_exists($parameter, $parameters)) {
-                if ($parameter === 'course_creation_use_template') {
+                if ('course_creation_use_template' === $parameter) {
                     if (empty($parameters[$parameter])) {
                         $parameters[$parameter] = null;
                     }
@@ -795,7 +792,7 @@ class SettingsManager implements SettingsManagerInterface
                     ->setAccessUrlLocked(1)
                 ;
 
-                /* @var $errors ConstraintViolationListInterface */
+                /** @var ConstraintViolationListInterface $errors */
                 /*$errors = $this->validator->validate($parameter);
                 if (0 < $errors->count()) {
                     throw new ValidatorException($errors->get(0)->getMessage());
@@ -868,7 +865,7 @@ class SettingsManager implements SettingsManagerInterface
                     ->setAccessUrlLocked(1)
                 ;
 
-                /* @var $errors ConstraintViolationListInterface */
+                /** @var ConstraintViolationListInterface $errors */
                 /*$errors = $this->validator->validate($parameter);
                 if (0 < $errors->count()) {
                     throw new ValidatorException($errors->get(0)->getMessage());
@@ -928,7 +925,7 @@ class SettingsManager implements SettingsManagerInterface
                     ->setAccessUrlChangeable(1)
                 ;
 
-                /* @var $errors ConstraintViolationListInterface */
+                /** @var ConstraintViolationListInterface $errors */
                 /*$errors = $this->->validate($parameter);
                 if (0 < $errors->count()) {
                     throw new ValidatorException($errors->get(0)->getMessage());

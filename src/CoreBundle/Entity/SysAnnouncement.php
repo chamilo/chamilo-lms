@@ -1,4 +1,5 @@
 <?php
+
 /* For licensing terms, see /license.txt */
 
 namespace Chamilo\CoreBundle\Entity;
@@ -350,7 +351,7 @@ class SysAnnouncement
         return $this->visibleDrh;
     }
 
-    public function setVisibleDrh(bool $visibleDrh): SysAnnouncement
+    public function setVisibleDrh(bool $visibleDrh): self
     {
         $this->visibleDrh = $visibleDrh;
 
@@ -364,7 +365,7 @@ class SysAnnouncement
 
     public function setVisibleSessionAdmin(
         bool $visibleSessionAdmin
-    ): SysAnnouncement {
+    ): self {
         $this->visibleSessionAdmin = $visibleSessionAdmin;
 
         return $this;
@@ -375,7 +376,7 @@ class SysAnnouncement
         return $this->visibleBoss;
     }
 
-    public function setVisibleBoss(bool $visibleBoss): SysAnnouncement
+    public function setVisibleBoss(bool $visibleBoss): self
     {
         $this->visibleBoss = $visibleBoss;
 

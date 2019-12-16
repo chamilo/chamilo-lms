@@ -1,12 +1,11 @@
 <?php
+
 /* For licensing terms, see /license.txt */
 
 namespace Chamilo\CoreBundle\Component\Editor\CkEditor\Toolbar;
 
 /**
  * CKEditor Minimal toolbar.
- *
- * @package Chamilo\CoreBundle\Component\Editor\CkEditor\Toolbar *
  */
 class Minimal extends Basic
 {

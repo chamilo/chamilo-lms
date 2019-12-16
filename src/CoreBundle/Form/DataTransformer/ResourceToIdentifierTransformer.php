@@ -34,7 +34,7 @@ final class ResourceToIdentifierTransformer implements DataTransformerInterface
             return null;
         }
 
-        /** @psalm-suppress ArgumentTypeCoercion */
+        /* @psalm-suppress ArgumentTypeCoercion */
         Assert::isInstanceOf($value, $this->repository->getClassName());
 
         return PropertyAccess::createPropertyAccessor()->getValue($value, $this->identifier);

@@ -1,4 +1,5 @@
 <?php
+
 /* For licensing terms, see /license.txt */
 
 namespace Chamilo\UserBundle\Admin;
@@ -12,8 +13,6 @@ use Symfony\Component\Form\Extension\Core\Type\TextType;
 
 /**
  * Class UserAdmin.
- *
- * @package Chamilo\UserBundle\Admin
  */
 class UserAdmin extends BaseUserAdmin
 {

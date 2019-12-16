@@ -1,12 +1,11 @@
 <?php
+
 /* For licensing terms, see /license.txt */
 
 namespace Chamilo\ThemeBundle\Util;
 
 /**
  * Interface DependencyResolverInterface.
- *
- * @package Chamilo\ThemeBundle\Util
  */
 interface DependencyResolverInterface
 {

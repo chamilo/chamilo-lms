@@ -1,4 +1,5 @@
 <?php
+
 /* For licensing terms, see /license.txt */
 
 namespace Chamilo\LtiBundle\Controller;
@@ -14,8 +15,6 @@ use Symfony\Component\Routing\Annotation\Route;
 
 /**
  * Class ServicesController.
- *
- * @package Chamilo\LtiBundle\Controller
  */
 class ServiceController extends BaseController
 {
@@ -108,17 +107,21 @@ class ServiceController extends BaseController
         switch ($name) {
             case 'replaceResultRequest':
                 $serviceRequest = new OutcomeReplaceRequest($xml);
+
                 break;
             case 'readResultRequest':
                 $serviceRequest = new OutcomeReadRequest($xml);
+
                 break;
             case 'deleteResultRequest':
                 $serviceRequest = new OutcomeDeleteRequest($xml);
+
                 break;
             default:
                 $name = str_replace(['ResultRequest', 'Request'], '', $name);
 
                 $serviceRequest = new OutcomeUnsupportedRequest($xml, $name);
+
                 break;
         }
 

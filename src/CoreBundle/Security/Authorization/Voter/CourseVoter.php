@@ -1,4 +1,5 @@
 <?php
+
 /* For licensing terms, see /license.txt */
 
 namespace Chamilo\CoreBundle\Security\Authorization\Voter;
@@ -113,7 +114,7 @@ class CourseVoter extends Voter
         switch ($attribute) {
             case self::VIEW:
                 // Course is hidden then is not visible for nobody expect admins.
-                if ($course->getVisibility() === Course::HIDDEN) {
+                if (Course::HIDDEN === $course->getVisibility()) {
                     return false;
                 }
 
@@ -132,7 +133,7 @@ class CourseVoter extends Voter
                 }
 
                 // If user is logged in and is open platform, allow access.
-                if ($course->getVisibility() === Course::OPEN_PLATFORM) {
+                if (Course::OPEN_PLATFORM === $course->getVisibility()) {
                     $user->addRole(ResourceNodeVoter::ROLE_CURRENT_COURSE_STUDENT);
 
                     if ($course->hasTeacher($user)) {
@@ -157,6 +158,7 @@ class CourseVoter extends Voter
 
                     return true;
                 }
+
                 break;
             case self::EDIT:
             case self::DELETE:
@@ -167,6 +169,7 @@ class CourseVoter extends Voter
 
                     return true;
                 }
+
                 break;
         }
 

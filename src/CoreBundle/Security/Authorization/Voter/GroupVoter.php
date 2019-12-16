@@ -1,4 +1,5 @@
 <?php
+
 /* For licensing terms, see /license.txt */
 
 namespace Chamilo\CoreBundle\Security\Authorization\Voter;
@@ -110,7 +111,7 @@ class GroupVoter extends Voter
             return false;
         }
 
-        if ($group == false) {
+        if (false == $group) {
             return false;
         }
 
@@ -146,6 +147,7 @@ class GroupVoter extends Voter
 
                     return true;
                 }
+
                 break;
         }
         dump("You don't have access to this group!!");

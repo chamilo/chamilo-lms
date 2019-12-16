@@ -1,4 +1,5 @@
 <?php
+
 /* For licensing terms, see /license.txt */
 
 namespace Chamilo\CoreBundle\Migrations\Schema\V200;
@@ -63,7 +64,7 @@ class Version20 extends AbstractMigrationChamilo
         $this->addSql('CREATE UNIQUE INDEX UNIQ_4B019DDB5E237E06 ON fos_group (name);');
 
         $this->addSql('ALTER TABLE gradebook_evaluation ADD c_id INT DEFAULT NULL');
-        $this->addSql("UPDATE gradebook_evaluation SET c_id = (SELECT id FROM course WHERE code = course_code)");
+        $this->addSql('UPDATE gradebook_evaluation SET c_id = (SELECT id FROM course WHERE code = course_code)');
         $this->addSql('ALTER TABLE gradebook_evaluation DROP course_code');
         $this->addSql('ALTER TABLE gradebook_evaluation ADD CONSTRAINT FK_DDDED80491D79BD3 FOREIGN KEY (c_id) REFERENCES course (id);');
         $this->addSql('CREATE INDEX IDX_DDDED80491D79BD3 ON gradebook_evaluation (c_id)');
@@ -242,10 +243,10 @@ class Version20 extends AbstractMigrationChamilo
         }
 
         // Update iso
-        $sql = "UPDATE course SET course_language = (SELECT isocode FROM language WHERE english_name = course_language);";
+        $sql = 'UPDATE course SET course_language = (SELECT isocode FROM language WHERE english_name = course_language);';
         $this->addSql($sql);
 
-        $sql = "UPDATE sys_announcement SET lang = (SELECT isocode FROM language WHERE english_name = lang);";
+        $sql = 'UPDATE sys_announcement SET lang = (SELECT isocode FROM language WHERE english_name = lang);';
         $this->addSql($sql);
         //$this->addSql('ALTER TABLE c_tool_intro CHANGE id tool VARCHAR(255) NOT NULL');
 
@@ -273,7 +274,7 @@ class Version20 extends AbstractMigrationChamilo
         $this->addSql('UPDATE c_survey_invitation SET reminder_date = NULL WHERE CAST(reminder_date AS CHAR(20)) = "0000-00-00 00:00:00"');
 
         $table = $schema->hasTable('message_feedback');
-        if ($table === false) {
+        if (false === $table) {
             $this->addSql(
                 'CREATE TABLE message_feedback (id BIGINT AUTO_INCREMENT NOT NULL, message_id BIGINT NOT NULL, user_id INT NOT NULL, liked TINYINT(1) DEFAULT 0 NOT NULL, disliked TINYINT(1) DEFAULT 0 NOT NULL, updated_at DATETIME NOT NULL, INDEX IDX_DB0F8049537A1329 (message_id), INDEX IDX_DB0F8049A76ED395 (user_id), INDEX idx_message_feedback_uid_mid (message_id, user_id), PRIMARY KEY(id)) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci ENGINE = InnoDB ROW_FORMAT = DYNAMIC;'
             );
@@ -286,14 +287,14 @@ class Version20 extends AbstractMigrationChamilo
         }
 
         $table = $schema->hasTable('gradebook_result_attempt');
-        if ($table === false) {
+        if (false === $table) {
             $this->addSql(
                 'CREATE TABLE gradebook_result_attempt (id INT AUTO_INCREMENT NOT NULL, comment LONGTEXT DEFAULT NULL, score DOUBLE PRECISION DEFAULT NULL, result_id INT NOT NULL, created_at DATETIME NOT NULL, updated_at DATETIME NOT NULL, PRIMARY KEY(id)) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci ENGINE = InnoDB ROW_FORMAT = DYNAMIC;'
             );
         }
 
         $table = $schema->hasTable('track_e_access_complete');
-        if ($table === false) {
+        if (false === $table) {
             $this->addSql(
                 'CREATE TABLE track_e_access_complete (id INT AUTO_INCREMENT NOT NULL, user_id INT NOT NULL, date_reg DATETIME NOT NULL, tool VARCHAR(255) NOT NULL, tool_id INT NOT NULL, tool_id_detail INT NOT NULL, action VARCHAR(255) NOT NULL, action_details VARCHAR(255) NOT NULL, current_id INT NOT NULL, ip_user VARCHAR(255) NOT NULL, user_agent VARCHAR(255) NOT NULL, session_id INT NOT NULL, c_id INT NOT NULL, ch_sid VARCHAR(255) NOT NULL, login_as INT NOT NULL, info LONGTEXT NOT NULL, url LONGTEXT NOT NULL, PRIMARY KEY(id)) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci ENGINE = InnoDB ROW_FORMAT = DYNAMIC;'
             );
@@ -587,27 +588,27 @@ class Version20 extends AbstractMigrationChamilo
         }
 
         $this->addSql('UPDATE settings_current SET category = LOWER(category)');
-        $this->addSql("ALTER TABLE c_quiz_question_category CHANGE description description LONGTEXT DEFAULT NULL;");
-        $this->addSql("ALTER TABLE c_survey_invitation ADD answered_at DATETIME DEFAULT NULL;");
+        $this->addSql('ALTER TABLE c_quiz_question_category CHANGE description description LONGTEXT DEFAULT NULL;');
+        $this->addSql('ALTER TABLE c_survey_invitation ADD answered_at DATETIME DEFAULT NULL;');
 
         $this->addSql('CREATE TABLE IF NOT EXISTS scheduled_announcements (id INT AUTO_INCREMENT NOT NULL, subject VARCHAR(255) NOT NULL, message LONGTEXT NOT NULL, date DATETIME DEFAULT NULL, sent TINYINT(1) NOT NULL, session_id INT NOT NULL, c_id INT DEFAULT NULL, PRIMARY KEY(id)) DEFAULT CHARACTER SET utf8 COLLATE utf8_unicode_ci ENGINE = InnoDB;');
         $this->addSql('ALTER TABLE gradebook_certificate ADD downloaded_at DATETIME DEFAULT NULL;');
         $this->addSql('UPDATE gradebook_certificate gc SET downloaded_at = (select value from extra_field e inner join extra_field_values v on v.field_id = e.id where variable = "downloaded_at" and extra_field_type = 11 and item_id = gc.id)');
 
         $table = $schema->getTable('c_quiz');
-        if ($table->hasColumn('show_previous_button') === false) {
+        if (false === $table->hasColumn('show_previous_button')) {
             $this->addSql(
                 'ALTER TABLE c_quiz ADD COLUMN show_previous_button TINYINT(1) DEFAULT 1;'
             );
         }
 
-        if ($table->hasColumn('notifications') === false) {
+        if (false === $table->hasColumn('notifications')) {
             $this->addSql(
                 'ALTER TABLE c_quiz ADD COLUMN notifications VARCHAR(255) NULL DEFAULT NULL;'
             );
         }
 
-        if ($table->hasColumn('page_result_configuration') === false) {
+        if (false === $table->hasColumn('page_result_configuration')) {
             $this->addSql(
                 "ALTER TABLE c_quiz ADD page_result_configuration LONGTEXT DEFAULT NULL COMMENT '(DC2Type:array)'"
             );
@@ -616,7 +617,7 @@ class Version20 extends AbstractMigrationChamilo
         $this->addSql('ALTER TABLE c_quiz MODIFY COLUMN save_correct_answers INT NULL DEFAULT NULL');
 
         $table = $schema->getTable('c_lp_item_view');
-        if ($table->hasIndex('idx_c_lp_item_view_cid_id_view_count') == false) {
+        if (false == $table->hasIndex('idx_c_lp_item_view_cid_id_view_count')) {
             $this->addSql(
                 'CREATE INDEX idx_c_lp_item_view_cid_id_view_count ON c_lp_item_view (c_id, id, view_count)'
             );
@@ -930,35 +931,35 @@ class Version20 extends AbstractMigrationChamilo
             $this->addSql("INSERT INTO settings_options (variable, value, display_text) VALUES ('configure_exercise_visibility_in_course','false','No')");
         }
 
-        $this->addSql("CREATE TABLE illustration (id INT AUTO_INCREMENT NOT NULL, resource_node_id INT DEFAULT NULL, name VARCHAR(255) NOT NULL, created_at DATETIME NOT NULL, updated_at DATETIME NOT NULL, UNIQUE INDEX UNIQ_D67B9A421BAD783F (resource_node_id), PRIMARY KEY(id)) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci ENGINE = InnoDB ROW_FORMAT = DYNAMIC;");
-        $this->addSql("ALTER TABLE illustration ADD CONSTRAINT FK_D67B9A421BAD783F FOREIGN KEY (resource_node_id) REFERENCES resource_node (id) ON DELETE CASCADE;");
-        $this->addSql("ALTER TABLE c_quiz_question ADD resource_node_id INT DEFAULT NULL;");
-        $this->addSql("ALTER TABLE c_quiz_question ADD CONSTRAINT FK_9A48A59F1BAD783F FOREIGN KEY (resource_node_id) REFERENCES resource_node (id) ON DELETE CASCADE;");
-        $this->addSql("CREATE UNIQUE INDEX UNIQ_9A48A59F1BAD783F ON c_quiz_question (resource_node_id);");
+        $this->addSql('CREATE TABLE illustration (id INT AUTO_INCREMENT NOT NULL, resource_node_id INT DEFAULT NULL, name VARCHAR(255) NOT NULL, created_at DATETIME NOT NULL, updated_at DATETIME NOT NULL, UNIQUE INDEX UNIQ_D67B9A421BAD783F (resource_node_id), PRIMARY KEY(id)) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci ENGINE = InnoDB ROW_FORMAT = DYNAMIC;');
+        $this->addSql('ALTER TABLE illustration ADD CONSTRAINT FK_D67B9A421BAD783F FOREIGN KEY (resource_node_id) REFERENCES resource_node (id) ON DELETE CASCADE;');
+        $this->addSql('ALTER TABLE c_quiz_question ADD resource_node_id INT DEFAULT NULL;');
+        $this->addSql('ALTER TABLE c_quiz_question ADD CONSTRAINT FK_9A48A59F1BAD783F FOREIGN KEY (resource_node_id) REFERENCES resource_node (id) ON DELETE CASCADE;');
+        $this->addSql('CREATE UNIQUE INDEX UNIQ_9A48A59F1BAD783F ON c_quiz_question (resource_node_id);');
 
-        $this->addSql("ALTER TABLE c_quiz CHANGE exercise_category_id exercise_category_id BIGINT DEFAULT NULL;");
-        $this->addSql("ALTER TABLE c_quiz ADD CONSTRAINT FK_B7A1C35FB48D66 FOREIGN KEY (exercise_category_id) REFERENCES c_exercise_category (id);");
-        $this->addSql("CREATE INDEX IDX_B7A1C35FB48D66 ON c_quiz (exercise_category_id);");
-        $this->addSql("ALTER TABLE c_quiz_question_category ADD CONSTRAINT FK_1414369D91D79BD3 FOREIGN KEY (c_id) REFERENCES course (id);");
-        $this->addSql("ALTER TABLE c_document CHANGE path path VARCHAR(255) DEFAULT NULL;");
+        $this->addSql('ALTER TABLE c_quiz CHANGE exercise_category_id exercise_category_id BIGINT DEFAULT NULL;');
+        $this->addSql('ALTER TABLE c_quiz ADD CONSTRAINT FK_B7A1C35FB48D66 FOREIGN KEY (exercise_category_id) REFERENCES c_exercise_category (id);');
+        $this->addSql('CREATE INDEX IDX_B7A1C35FB48D66 ON c_quiz (exercise_category_id);');
+        $this->addSql('ALTER TABLE c_quiz_question_category ADD CONSTRAINT FK_1414369D91D79BD3 FOREIGN KEY (c_id) REFERENCES course (id);');
+        $this->addSql('ALTER TABLE c_document CHANGE path path VARCHAR(255) DEFAULT NULL;');
 
-        $this->addSql("ALTER TABLE c_lp ADD resource_node_id INT DEFAULT NULL;");
-        $this->addSql("ALTER TABLE c_lp ADD CONSTRAINT FK_F67ABBEB1BAD783F FOREIGN KEY (resource_node_id) REFERENCES resource_node (id) ON DELETE CASCADE;");
-        $this->addSql("CREATE UNIQUE INDEX UNIQ_F67ABBEB1BAD783F ON c_lp (resource_node_id);");
-        $this->addSql("ALTER TABLE c_announcement ADD resource_node_id INT DEFAULT NULL;");
-        $this->addSql("ALTER TABLE c_announcement ADD CONSTRAINT FK_39912E021BAD783F FOREIGN KEY (resource_node_id) REFERENCES resource_node (id) ON DELETE CASCADE;");
-        $this->addSql("CREATE UNIQUE INDEX UNIQ_39912E021BAD783F ON c_announcement (resource_node_id);");
+        $this->addSql('ALTER TABLE c_lp ADD resource_node_id INT DEFAULT NULL;');
+        $this->addSql('ALTER TABLE c_lp ADD CONSTRAINT FK_F67ABBEB1BAD783F FOREIGN KEY (resource_node_id) REFERENCES resource_node (id) ON DELETE CASCADE;');
+        $this->addSql('CREATE UNIQUE INDEX UNIQ_F67ABBEB1BAD783F ON c_lp (resource_node_id);');
+        $this->addSql('ALTER TABLE c_announcement ADD resource_node_id INT DEFAULT NULL;');
+        $this->addSql('ALTER TABLE c_announcement ADD CONSTRAINT FK_39912E021BAD783F FOREIGN KEY (resource_node_id) REFERENCES resource_node (id) ON DELETE CASCADE;');
+        $this->addSql('CREATE UNIQUE INDEX UNIQ_39912E021BAD783F ON c_announcement (resource_node_id);');
 
-        $this->addSql("ALTER TABLE c_quiz_question ADD feedback LONGTEXT DEFAULT NULL;");
+        $this->addSql('ALTER TABLE c_quiz_question ADD feedback LONGTEXT DEFAULT NULL;');
 
-        $this->addSql("ALTER TABLE c_link ADD resource_node_id INT DEFAULT NULL;");
-        $this->addSql("ALTER TABLE c_link ADD CONSTRAINT FK_9209C2A01BAD783F FOREIGN KEY (resource_node_id) REFERENCES resource_node (id) ON DELETE CASCADE;");
-        $this->addSql("CREATE UNIQUE INDEX UNIQ_9209C2A01BAD783F ON c_link (resource_node_id);");
+        $this->addSql('ALTER TABLE c_link ADD resource_node_id INT DEFAULT NULL;');
+        $this->addSql('ALTER TABLE c_link ADD CONSTRAINT FK_9209C2A01BAD783F FOREIGN KEY (resource_node_id) REFERENCES resource_node (id) ON DELETE CASCADE;');
+        $this->addSql('CREATE UNIQUE INDEX UNIQ_9209C2A01BAD783F ON c_link (resource_node_id);');
 
-        $this->addSql("ALTER TABLE user ADD resource_node_id INT DEFAULT NULL;");
-        $this->addSql("ALTER TABLE user ADD CONSTRAINT FK_8D93D6491BAD783F FOREIGN KEY (resource_node_id) REFERENCES resource_node (id) ON DELETE CASCADE;");
-        $this->addSql("CREATE UNIQUE INDEX UNIQ_8D93D6491BAD783F ON user (resource_node_id);");
-        $this->addSql("ALTER TABLE user_audit ADD resource_node_id INT DEFAULT NULL;");
+        $this->addSql('ALTER TABLE user ADD resource_node_id INT DEFAULT NULL;');
+        $this->addSql('ALTER TABLE user ADD CONSTRAINT FK_8D93D6491BAD783F FOREIGN KEY (resource_node_id) REFERENCES resource_node (id) ON DELETE CASCADE;');
+        $this->addSql('CREATE UNIQUE INDEX UNIQ_8D93D6491BAD783F ON user (resource_node_id);');
+        $this->addSql('ALTER TABLE user_audit ADD resource_node_id INT DEFAULT NULL;');
 
         /*        $this->addSql("");
                 $this->addSql("");

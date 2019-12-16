@@ -1,4 +1,5 @@
 <?php
+
 /* For licensing terms, see /license.txt */
 
 namespace Chamilo\CourseBundle\Entity;
@@ -142,7 +143,7 @@ class CSurveyQuestion
         return $this->iid;
     }
 
-    public function setIid(int $iid): CSurveyQuestion
+    public function setIid(int $iid): self
     {
         $this->iid = $iid;
 
@@ -472,7 +473,7 @@ class CSurveyQuestion
     /**
      * Get isMandatory.
      */
-    public function setIsMandatory(bool $isMandatory): CSurveyQuestion
+    public function setIsMandatory(bool $isMandatory): self
     {
         $this->isMandatory = $isMandatory;
 

@@ -1,4 +1,5 @@
 <?php
+
 /* For licensing terms, see /license.txt */
 
 namespace Chamilo\ThemeBundle\Controller;
@@ -8,8 +9,6 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 
 /**
  * Class DefaultController.
- *
- * @package Chamilo\ThemeBundle\Controller
  */
 class DefaultController extends AbstractController
 {

@@ -1,4 +1,5 @@
 <?php
+
 /* For licensing terms, see /license.txt */
 
 namespace Chamilo\CoreBundle\Repository;
@@ -9,8 +10,6 @@ use Doctrine\Common\Persistence\ManagerRegistry;
 
 /**
  * Class LanguageRepository.
- *
- * @package Chamilo\CoreBundle\Repository
  */
 class LanguageRepository extends ServiceEntityRepository
 {

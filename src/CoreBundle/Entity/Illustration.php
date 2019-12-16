@@ -1,4 +1,5 @@
 <?php
+
 /* For licensing terms, see /license.txt */
 
 namespace Chamilo\CoreBundle\Entity;
@@ -56,7 +57,7 @@ class Illustration extends AbstractResource implements ResourceInterface
         return $this->id;
     }
 
-    public function setId(int $id): Illustration
+    public function setId(int $id): self
     {
         $this->id = $id;
 
@@ -68,7 +69,7 @@ class Illustration extends AbstractResource implements ResourceInterface
         return (string) $this->name;
     }
 
-    public function setName(string $name): Illustration
+    public function setName(string $name): self
     {
         $this->name = $name;
 

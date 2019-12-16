@@ -1,4 +1,5 @@
 <?php
+
 /* For licensing terms, see /license.txt */
 
 namespace Chamilo\GraphQlBundle\Traits;
@@ -19,8 +20,6 @@ use Symfony\Contracts\Translation\TranslatorInterface;
 
 /**
  * Trait GraphQLTrait.
- *
- * @package Chamilo\GraphQlBundle\Traits
  */
 trait GraphQLTrait
 {
@@ -127,9 +126,7 @@ trait GraphQLTrait
         try {
             $jwt = JWT::decode($token, $secret, ['HS256']);
 
-            $data = (array) $jwt->data;
-
-            return $data;
+            return (array) $jwt->data;
         } catch (\Exception $exception) {
             throw new UserError($exception->getMessage());
         }

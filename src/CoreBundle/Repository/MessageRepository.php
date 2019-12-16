@@ -1,4 +1,5 @@
 <?php
+
 /* For licensing terms, see /license.txt */
 
 namespace Chamilo\CoreBundle\Repository;
@@ -10,8 +11,6 @@ use Doctrine\Common\Persistence\ManagerRegistry;
 
 /**
  * Class MessageRepository.
- *
- * @package Chamilo\CoreBundle\Repository
  */
 class MessageRepository extends ServiceEntityRepository
 {

@@ -1,4 +1,5 @@
 <?php
+
 /* For licensing terms, see /license.txt */
 
 namespace Chamilo\LtiBundle\Util;
@@ -9,8 +10,6 @@ use Chamilo\UserBundle\Entity\User;
 
 /**
  * Class Utils.
- *
- * @package Chamilo\LtiBundle\Util
  */
 class Utils
 {

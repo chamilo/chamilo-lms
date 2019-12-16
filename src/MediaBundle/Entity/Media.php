@@ -1,4 +1,5 @@
 <?php
+
 /* For licensing terms, see /license.txt */
 
 namespace Chamilo\MediaBundle\Entity;
@@ -7,8 +8,6 @@ use Sonata\MediaBundle\Entity\BaseMedia;
 
 /**
  * Class Media.
- *
- * @package Chamilo\MediaBundle\Entity
  */
 class Media extends BaseMedia
 {
@@ -20,7 +19,7 @@ class Media extends BaseMedia
     /**
      * Get id.
      *
-     * @return int $id
+     * @return int
      */
     public function getId()
     {

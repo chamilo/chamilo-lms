@@ -1,4 +1,5 @@
 <?php
+
 /* For licensing terms, see /license.txt */
 
 namespace Chamilo\CoreBundle\Admin;
@@ -12,8 +13,6 @@ use Sonata\AdminBundle\Show\ShowMapper;
 
 /**
  * Class ResourceRightAdmin.
- *
- * @package Chamilo\CoreBundle\Admin
  */
 class ResourceRightAdmin extends AbstractAdmin
 {
@@ -37,7 +36,7 @@ class ResourceRightAdmin extends AbstractAdmin
     }
 
 //    /**
-//     * @param DatagridMapper $datagridMapper
+//     * @param DatagridMapper $listMapper
 //     */
 //    protected function configureDatagridFilters(DatagridMapper $datagridMapper)
 //    {

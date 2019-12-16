@@ -1,12 +1,11 @@
 <?php
+
 /* For licensing terms, see /license.txt */
 
 namespace Chamilo\CoreBundle\Component\Editor\CkEditor\Toolbar;
 
 /**
  * WikiStudent toolbar configuration.
- *
- * @package Chamilo\CoreBundle\Component\Editor\CkEditor\Toolbar
  */
 class WikiStudent extends Basic
 {
@@ -17,7 +16,7 @@ class WikiStudent extends Basic
      */
     public function getConfig()
     {
-        if (api_get_setting('more_buttons_maximized_mode') != 'true') {
+        if ('true' != api_get_setting('more_buttons_maximized_mode')) {
             $config['toolbar'] = $this->getNormalToolbar();
         } else {
             $config['toolbar_minToolbar'] = $this->getMinimizedToolbar();
@@ -26,7 +25,7 @@ class WikiStudent extends Basic
 
         $config['forcePasteAsPlainText'] = false;
 
-        if (api_get_setting('force_wiki_paste_as_plain_text') == 'true') {
+        if ('true' == api_get_setting('force_wiki_paste_as_plain_text')) {
             $config['forcePasteAsPlainText'] = true;
         }
 
@@ -64,10 +63,10 @@ class WikiStudent extends Basic
             ['BulletedList', 'NumberedList', 'HorizontalRule', '-', 'Outdent', 'Indent', 'Blockquote'],
             ['JustifyLeft', 'JustifyCenter', 'JustifyRight', 'JustifyBlock'],
             ['Bold', 'Italic', 'Underline', 'Strike', '-', 'Subscript', 'Superscript', '-', 'TextColor', 'BGColor'],
-            [api_get_setting('allow_spellcheck') == 'true' ? 'Scayt' : ''],
+            ['true' == api_get_setting('allow_spellcheck') ? 'Scayt' : ''],
             ['Styles', 'Format', 'Font', 'FontSize'],
             ['PageBreak', 'ShowBlocks'],
-            api_get_setting('enabled_wiris') == 'true' ? ['ckeditor_wiris_formulaEditor', 'ckeditor_wiris_CAS'] : [''],
+            'true' == api_get_setting('enabled_wiris') ? ['ckeditor_wiris_formulaEditor', 'ckeditor_wiris_CAS'] : [''],
             ['Toolbarswitch'],
         ];
     }
@@ -118,7 +117,7 @@ class WikiStudent extends Basic
                 'TextColor',
                 'BGColor',
             ],
-            api_get_setting('enabled_wiris') == 'true' ? ['ckeditor_wiris_formulaEditor', 'ckeditor_wiris_CAS'] : [''],
+            'true' == api_get_setting('enabled_wiris') ? ['ckeditor_wiris_formulaEditor', 'ckeditor_wiris_CAS'] : [''],
             ['ShowBlocks'],
         ];
     }
@@ -137,7 +136,7 @@ class WikiStudent extends Basic
             ['BulletedList', 'NumberedList', 'HorizontalRule'],
             ['JustifyLeft', 'JustifyCenter', 'JustifyRight'],
             ['Format', 'Font', 'FontSize', 'Bold', 'Italic', 'Underline', 'TextColor', 'BGColor'],
-            api_get_setting('enabled_wiris') == 'true' ? ['ckeditor_wiris_formulaEditor', 'ckeditor_wiris_CAS'] : [''],
+            'true' == api_get_setting('enabled_wiris') ? ['ckeditor_wiris_formulaEditor', 'ckeditor_wiris_CAS'] : [''],
             ['Toolbarswitch'],
         ];
     }

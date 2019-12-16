@@ -1,4 +1,5 @@
 <?php
+
 /* For licensing terms, see /license.txt */
 
 namespace Chamilo\GraphQlBundle\Resolver;
@@ -74,12 +75,11 @@ class CourseResolver implements ContainerAwareInterface
         }
 
         $courseRepo = $this->em->getRepository('ChamiloCoreBundle:Course');
-        $teachers = $courseRepo
+
+        return $courseRepo
             ->getSubscribedTeachers($course)
             ->getQuery()
             ->getResult();
-
-        return $teachers;
     }
 
     public function getTools(Course $course, Argument $args, \ArrayObject $context): Collection
@@ -146,8 +146,8 @@ class CourseResolver implements ContainerAwareInterface
             $tool->getCourse(),
             null,
             $context->offsetGet('session'),
-            api_get_course_setting('allow_user_edit_announcement') === 'true',
-            api_get_configuration_value('hide_base_course_announcements_in_group') === true
+            'true' === api_get_course_setting('allow_user_edit_announcement'),
+            true === api_get_configuration_value('hide_base_course_announcements_in_group')
         );
 
         $announcements = [];
@@ -183,13 +183,12 @@ class CourseResolver implements ContainerAwareInterface
     {
         /** @var CNotebookRepository $notebooksRepo */
         $notebooksRepo = $this->em->getRepository('ChamiloCourseBundle:CNotebook');
-        $notebooks = $notebooksRepo->findByUser(
+
+        return $notebooksRepo->findByUser(
             $this->getCurrentUser(),
             $context->offsetGet('course'),
             $context->offsetGet('session')
         );
-
-        return $notebooks;
     }
 
     public function getForumCategories(\ArrayObject $context): array
@@ -200,9 +199,8 @@ class CourseResolver implements ContainerAwareInterface
         $session = $context->offsetGet('session');
 
         $catRepo = $this->em->getRepository('ChamiloCourseBundle:CForumCategory');
-        $cats = $catRepo->findAllInCourse(false, $course, $session);
 
-        return $cats;
+        return $catRepo->findAllInCourse(false, $course, $session);
     }
 
     public function getForums(CForumCategory $category, \ArrayObject $context): array
@@ -213,9 +211,8 @@ class CourseResolver implements ContainerAwareInterface
         $session = $context->offsetGet('session');
 
         $forumRepo = $this->em->getRepository('ChamiloCourseBundle:CForumForum');
-        $forums = $forumRepo->findAllInCourseByCategory(false, $category, $course, $session);
 
-        return $forums;
+        return $forumRepo->findAllInCourseByCategory(false, $category, $course, $session);
     }
 
     /**
@@ -246,9 +243,8 @@ class CourseResolver implements ContainerAwareInterface
         $session = $context->offsetGet('session');
 
         $threadRepo = $this->em->getRepository('ChamiloCourseBundle:CForumThread');
-        $threads = $threadRepo->findAllInCourseByForum(false, $forum, $course, $session);
 
-        return $threads;
+        return $threadRepo->findAllInCourseByForum(false, $forum, $course, $session);
     }
 
     /**
@@ -282,15 +278,14 @@ class CourseResolver implements ContainerAwareInterface
         $course = $context->offsetGet('course');
 
         $postRepo = $this->em->getRepository('ChamiloCourseBundle:CForumPost');
-        $posts = $postRepo->findAllInCourseByThread(
+
+        return $postRepo->findAllInCourseByThread(
             api_is_allowed_to_edit(false, true),
             api_is_allowed_to_edit(),
             $thread,
             $course,
             $this->getCurrentUser()
         );
-
-        return $posts;
     }
 
     public function getAgenda(\ArrayObject $context): array
@@ -317,7 +312,7 @@ class CourseResolver implements ContainerAwareInterface
         $groupId = current($result['groups']);
         $userId = current($result['users']);
 
-        $events = $agenda->getEvents(
+        return $agenda->getEvents(
             $firstDay->getTimestamp(),
             $lastDay->getTimestamp(),
             $course->getId(),
@@ -325,8 +320,6 @@ class CourseResolver implements ContainerAwareInterface
             $userId,
             'array'
         );
-
-        return $events;
     }
 
     /**
@@ -375,9 +368,9 @@ class CourseResolver implements ContainerAwareInterface
 
         $webPath = api_get_path(WEB_CODE_PATH).'document/document.php?';
 
-        $results = array_map(
+        return array_map(
             function ($documentInfo) use ($webPath, $course, $session) {
-                $icon = $documentInfo['filetype'] == 'file'
+                $icon = 'file' == $documentInfo['filetype']
                     ? choose_image($documentInfo['path'])
                     : chooseFolderIcon($documentInfo['path']);
 
@@ -406,8 +399,6 @@ class CourseResolver implements ContainerAwareInterface
             },
             $documents
         );
-
-        return $results;
     }
 
     public function getLearnpathCategories(\ArrayObject $context): array

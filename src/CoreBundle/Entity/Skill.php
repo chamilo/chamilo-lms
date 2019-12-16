@@ -1,4 +1,5 @@
 <?php
+
 /* For licensing terms, see /license.txt */
 
 namespace Chamilo\CoreBundle\Entity;
@@ -408,6 +409,7 @@ class Skill
             foreach ($this->getItems() as $item) {
                 if ($item->getItemId() == $itemId && $item->getItemType() == $typeId) {
                     $found = true;
+
                     break;
                 }
             }
@@ -465,6 +467,7 @@ class Skill
                     $sessionPassFilter
                 ) {
                     $found = true;
+
                     break;
                 }
             }

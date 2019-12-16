@@ -1,4 +1,5 @@
 <?php
+
 /* For licensing terms, see /license.txt */
 
 namespace Chamilo\CoreBundle\Migrations\Schema\V111;
@@ -9,8 +10,6 @@ use Doctrine\DBAL\Schema\Schema;
 /**
  * Class Version20160929120000
  * Change tables engine to InnoDB.
- *
- * @package Chamilo\CoreBundle\Migrations\Schema\V111
  */
 class Version20160929120000 extends AbstractMigrationChamilo
 {
@@ -21,7 +20,7 @@ class Version20160929120000 extends AbstractMigrationChamilo
     public function up(Schema $schema)
     {
         error_log('Version20160929120000');
-        $this->addSql("ALTER TABLE c_tool ADD INDEX idx_ctool_name (name(20))");
+        $this->addSql('ALTER TABLE c_tool ADD INDEX idx_ctool_name (name(20))');
     }
 
     /**
@@ -35,7 +34,7 @@ class Version20160929120000 extends AbstractMigrationChamilo
                 continue;
             }
 
-            $this->addSql("ALTER TABLE c_tool DROP INDEX idx_ctool_name");
+            $this->addSql('ALTER TABLE c_tool DROP INDEX idx_ctool_name');
         }
     }
 }

@@ -1,4 +1,5 @@
 <?php
+
 /* For licensing terms, see /license.txt */
 
 namespace Chamilo\CoreBundle\Entity\Manager;
@@ -107,6 +108,7 @@ class SessionManager extends BaseEntityManager
                         if ($user->hasRole('ROLE_RRHH')) {
                             $session->addUserInSession(Session::DRH, $user);
                         }
+
                         break;
                     case Session::STUDENT:
                         $session->addUserInSession(Session::STUDENT, $user);
@@ -115,6 +117,7 @@ class SessionManager extends BaseEntityManager
                             $user,
                             $course
                         );
+
                         break;
                     case Session::COACH:
                         if ($user->hasRole('ROLE_TEACHER')) {
@@ -124,6 +127,7 @@ class SessionManager extends BaseEntityManager
                                 $course
                             );
                         }
+
                         break;
                 }
             }

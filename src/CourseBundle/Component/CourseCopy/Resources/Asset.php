@@ -1,12 +1,11 @@
 <?php
+
 /* For licensing terms, see /license.txt */
 
 namespace Chamilo\CourseBundle\Component\CourseCopy\Resources;
 
 /**
  * Class Asset.
- *
- * @package chamilo.backup
  */
 class Asset extends Resource
 {

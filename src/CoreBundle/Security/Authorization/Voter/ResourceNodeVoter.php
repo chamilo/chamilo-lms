@@ -1,4 +1,5 @@
 <?php
+
 /* For licensing terms, see /license.txt */
 
 namespace Chamilo\CoreBundle\Security\Authorization\Voter;
@@ -142,8 +143,9 @@ class ResourceNodeVoter extends Voter
         /** @var ResourceLink $link */
         foreach ($links as $link) {
             // Block access if visibility is deleted.
-            if ($link->getVisibility() === ResourceLink::VISIBILITY_DELETED) {
+            if (ResourceLink::VISIBILITY_DELETED === $link->getVisibility()) {
                 $linkFound = false;
+
                 break;
             }
 
@@ -153,6 +155,7 @@ class ResourceNodeVoter extends Voter
                 $linkUser->getUsername() === $creator->getUsername()
             ) {
                 $linkFound = true;
+
                 break;
             }
 
@@ -174,6 +177,7 @@ class ResourceNodeVoter extends Voter
                     $linkSession->getId() === $session->getId()
                 ) {
                     $linkFound = true;
+
                     break;
                 }
             }
@@ -186,12 +190,14 @@ class ResourceNodeVoter extends Voter
                     $linkCourse->getCode() === $course->getCode()
                 ) {
                     $linkFound = true;
+
                     break;
                 }
             }
 
-            if ($link->getVisibility() === ResourceLink::VISIBILITY_PUBLISHED) {
+            if (ResourceLink::VISIBILITY_PUBLISHED === $link->getVisibility()) {
                 $linkFound = true;
+
                 break;
             }
         }
@@ -247,7 +253,7 @@ class ResourceNodeVoter extends Voter
                 ;
                 $rights[] = $resourceRight;
             }
-            if (empty($rights) && $link->getVisibility() === ResourceLink::VISIBILITY_PUBLISHED) {
+            if (empty($rights) && ResourceLink::VISIBILITY_PUBLISHED === $link->getVisibility()) {
                 // Give just read access
                 $resourceRight = new ResourceRight();
                 $resourceRight

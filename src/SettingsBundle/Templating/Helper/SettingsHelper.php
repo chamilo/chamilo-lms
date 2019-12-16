@@ -1,4 +1,5 @@
 <?php
+
 /* For licensing terms, see /license.txt */
 
 namespace Chamilo\SettingsBundle\Templating\Helper;
@@ -10,8 +11,6 @@ use Symfony\Component\Templating\Helper\Helper;
 
 /**
  * Class SettingsHelper.
- *
- * @package Chamilo\SettingsBundle\Templating\Helper
  */
 class SettingsHelper extends Helper implements SettingsHelperInterface
 {

@@ -1,4 +1,5 @@
 <?php
+
 /* For licensing terms, see /license.txt */
 
 namespace Chamilo\CourseBundle\Manager;
@@ -15,8 +16,6 @@ use Symfony\Component\Validator\Exception\ValidatorException;
 /**
  * Class SettingsManager
  * Course settings manager.
- *
- * @package Chamilo\CourseBundle\Manager
  */
 class SettingsManager extends ChamiloSettingsManager
 {
@@ -181,7 +180,7 @@ class SettingsManager extends ChamiloSettingsManager
                     ->setCId($this->getCourse()->getId())
                 ;
 
-                /* @var $errors ConstraintViolationListInterface */
+                /** @var ConstraintViolationListInterface $errors */
                 $errors = $this->validator->validate($parameter);
                 if (0 < $errors->count()) {
                     throw new ValidatorException($errors->get(0)->getMessage());

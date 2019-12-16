@@ -1,4 +1,5 @@
 <?php
+
 /* For licensing terms, see /license.txt */
 
 namespace Chamilo\CourseBundle\Entity;
@@ -196,9 +197,9 @@ class CLpCategory extends AbstractResource implements ResourceInterface
     {
         if ($this->getUsers()->count()) {
             $criteria = Criteria::create()->where(
-                Criteria::expr()->eq("user", $categoryUser->getUser())
+                Criteria::expr()->eq('user', $categoryUser->getUser())
             )->andWhere(
-                Criteria::expr()->eq("category", $categoryUser->getCategory())
+                Criteria::expr()->eq('category', $categoryUser->getCategory())
             );
 
             $relation = $this->getUsers()->matching($criteria);

@@ -1,4 +1,5 @@
 <?php
+
 /* For licensing terms, see /license.txt */
 
 namespace Chamilo\CoreBundle\Controller;
@@ -233,7 +234,7 @@ class ResourceController extends AbstractResourceController implements CourseCon
 
         if ($grid->hasColumn('filetype')) {
             $grid->getColumn('filetype')->manipulateRenderCell(
-                function ($value, Row $row, $router) use ($routeParams) {
+                function ($value, Row $row, $router) {
                     /** @var AbstractResource $entity */
                     $entity = $row->getEntity();
                     $resourceNode = $entity->getResourceNode();
@@ -324,7 +325,7 @@ class ResourceController extends AbstractResourceController implements CourseCon
 
             $allowedEdit = $this->isGranted(ResourceNodeVoter::EDIT, $row->getEntity()->getResourceNode());
 
-            if ($allowedEdit === false) {
+            if (false === $allowedEdit) {
                 return null;
             }
 
@@ -354,7 +355,7 @@ class ResourceController extends AbstractResourceController implements CourseCon
                 $resource = $row->getEntity();
                 $allowedEdit = $this->isGranted(ResourceNodeVoter::EDIT, $resource->getResourceNode());
 
-                if ($allowedEdit === false) {
+                if (false === $allowedEdit) {
                     return null;
                 }
 
@@ -367,10 +368,10 @@ class ResourceController extends AbstractResourceController implements CourseCon
                     $link = $resource->getFirstResourceLink();
                 }
 
-                if ($link === null) {
+                if (null === $link) {
                     return null;
                 }
-                if ($link->getVisibility() === ResourceLink::VISIBILITY_PUBLISHED) {
+                if (ResourceLink::VISIBILITY_PUBLISHED === $link->getVisibility()) {
                     $icon = 'fa-eye';
                 }
                 $routeParams['id'] = $id;
@@ -696,7 +697,7 @@ class ResourceController extends AbstractResourceController implements CourseCon
 
         $icon = 'fa-eye';
         // Use repository to change settings easily.
-        if ($link && $link->getVisibility() === ResourceLink::VISIBILITY_PUBLISHED) {
+        if ($link && ResourceLink::VISIBILITY_PUBLISHED === $link->getVisibility()) {
             $repository->setVisibilityDraft($resource);
             $icon = 'fa-eye-slash';
         } else {
@@ -791,7 +792,7 @@ class ResourceController extends AbstractResourceController implements CourseCon
         $em = $this->getDoctrine();
         $resourceNode = $em->getRepository('ChamiloCoreBundle:Resource\ResourceNode')->find($id);
 
-        if ($resourceNode === null) {
+        if (null === $resourceNode) {
             throw new FileNotFoundException('Resource not found');
         }
 
@@ -967,13 +968,13 @@ class ResourceController extends AbstractResourceController implements CourseCon
 
             /** @var AbstractResource $parent */
             $originalResource = $repo->findOneBy(['resourceNode' => $resourceNodeId]);
-            if ($originalResource === null) {
+            if (null === $originalResource) {
                 return;
             }
             $parent = $originalParent = $originalResource->getResourceNode();
 
             $parentList = [];
-            while ($parent !== null) {
+            while (null !== $parent) {
                 if ($type !== $parent->getResourceType()->getName()) {
                     break;
                 }
@@ -1073,12 +1074,13 @@ class ResourceController extends AbstractResourceController implements CourseCon
         switch ($mode) {
             case 'download':
                 $forceDownload = true;
+
                 break;
             case 'show':
             default:
                 $forceDownload = false;
                 // If it's an image then send it to Glide.
-                if (strpos($mimeType, 'image') !== false) {
+                if (false !== strpos($mimeType, 'image')) {
                     $server = $glide->getServer();
                     $params = $request->query->all();
 
@@ -1096,6 +1098,7 @@ class ResourceController extends AbstractResourceController implements CourseCon
 
                     return $server->getImageResponse($filePath, $params);
                 }
+
                 break;
         }
 
@@ -1139,7 +1142,7 @@ class ResourceController extends AbstractResourceController implements CourseCon
 
         $form = $repository->getForm($this->container->get('form.factory'), null);
 
-        if ($fileType === 'file') {
+        if ('file' === $fileType) {
             $resourceParams = $this->getResourceParams($request);
             $form->add(
                 'content',
@@ -1166,7 +1169,7 @@ class ResourceController extends AbstractResourceController implements CourseCon
             $newResource = $repository->saveResource($form, $course, $session, $fileType);
 
             $file = null;
-            if ($fileType === 'file') {
+            if ('file' === $fileType) {
                 $content = $form->get('content')->getViewData();
                 $newResource->setTitle($newResource->getTitle().'.html');
                 $fileName = $newResource->getTitle();
@@ -1259,9 +1262,11 @@ class ResourceController extends AbstractResourceController implements CourseCon
         switch ($fileType) {
             case 'folder':
                 $template = '@ChamiloTheme/Resource/new_folder.html.twig';
+
                 break;
             case 'file':
                 $template = '@ChamiloTheme/Resource/new.html.twig';
+
                 break;
         }
 

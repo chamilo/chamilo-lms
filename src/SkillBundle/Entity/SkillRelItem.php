@@ -1,4 +1,5 @@
 <?php
+
 /* For licensing terms, see /license.txt */
 
 namespace Chamilo\SkillBundle\Entity;
@@ -389,9 +390,11 @@ class SkillRelItem
         switch ($this->getItemType()) {
             case ITEM_TYPE_EXERCISE:
                 $url = 'exercise/exercise_show.php?action=qualify&'.$cidReq;
+
                 break;
             case ITEM_TYPE_STUDENT_PUBLICATION:
                 $url = 'work/view.php?'.$cidReq;
+
                 break;
         }
 
@@ -409,9 +412,11 @@ class SkillRelItem
         switch ($this->getItemType()) {
             case ITEM_TYPE_EXERCISE:
                 $url = 'exercise/exercise_report.php?'.$cidReq.'&exerciseId='.$this->getItemId();
+
                 break;
             case ITEM_TYPE_STUDENT_PUBLICATION:
                 $url = 'work/work_list_all.php?'.$cidReq.'&id='.$this->getItemId();
+
                 break;
         }
 

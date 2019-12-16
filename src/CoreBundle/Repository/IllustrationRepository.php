@@ -1,4 +1,5 @@
 <?php
+
 /* For licensing terms, see /license.txt */
 
 namespace Chamilo\CoreBundle\Repository;
@@ -91,7 +92,7 @@ final class IllustrationRepository extends ResourceRepository implements Resourc
         $illustrationNode = $this->getIllustrationNodeFromParent($resource->getResourceNode());
         $em = $this->getEntityManager();
 
-        if ($illustrationNode === null) {
+        if (null === $illustrationNode) {
             $illustration = new Illustration();
             $em->persist($illustration);
             $this->addResourceNode($illustration, $user, $resource);
@@ -112,7 +113,7 @@ final class IllustrationRepository extends ResourceRepository implements Resourc
         $illustrationNode = $this->getIllustrationNodeFromParent($user->getResourceNode());
         $em = $this->getEntityManager();
 
-        if ($illustrationNode === null) {
+        if (null === $illustrationNode) {
             $illustration = new Illustration();
             $em->persist($illustration);
             $this->createNodeForResource($illustration, $user, $user->getResourceNode());
@@ -130,18 +131,16 @@ final class IllustrationRepository extends ResourceRepository implements Resourc
         $resourceType = $this->getResourceType();
 
         /** @var ResourceNode $node */
-        $node = $nodeRepo->findOneBy(
+        return $nodeRepo->findOneBy(
             ['parent' => $resourceNode, 'resourceType' => $resourceType]
         );
-
-        return $node;
     }
 
     public function deleteIllustration(AbstractResource $resource)
     {
         $node = $this->getIllustrationNodeFromParent($resource->getResourceNode());
 
-        if ($node !== null) {
+        if (null !== $node) {
             $this->getEntityManager()->remove($node);
             $this->getEntityManager()->flush();
         }
@@ -159,7 +158,7 @@ final class IllustrationRepository extends ResourceRepository implements Resourc
     {
         $node = $this->getIllustrationNodeFromParent($resourceNode);
 
-        if ($node !== null) {
+        if (null !== $node) {
             $params = [
                 'id' => $node->getId(),
                 'tool' => $node->getResourceType()->getTool(),

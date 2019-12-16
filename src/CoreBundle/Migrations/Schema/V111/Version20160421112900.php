@@ -1,4 +1,5 @@
 <?php
+
 /* For licensing terms, see /license.txt */
 
 namespace Chamilo\CoreBundle\Migrations\Schema\V111;
@@ -9,8 +10,6 @@ use Doctrine\DBAL\Schema\Schema;
 /**
  * Class Version_a
  * Remove enable_nanogong and enable_wami_record settings and create enable_record_audio.
- *
- * @package Chamilo\CoreBundle\Migrations\Schema\V111
  */
 class Version20160421112900 extends AbstractMigrationChamilo
 {
@@ -31,7 +30,7 @@ class Version20160421112900 extends AbstractMigrationChamilo
 
         $enableRecordAudioValue = 'true';
 
-        if ($enableNanogong->getSelectedValue() === 'false' && $enableWami->getSelectedValue() === 'false') {
+        if ('false' === $enableNanogong->getSelectedValue() && 'false' === $enableWami->getSelectedValue()) {
             $enableRecordAudioValue = 'false';
         }
 

@@ -1,4 +1,5 @@
 <?php
+
 /* For licensing terms, see /license.txt */
 
 namespace Chamilo\UserBundle\Security;
@@ -52,7 +53,7 @@ class LoginFormAuthenticator extends AbstractFormLoginAuthenticator
 
     public function supports(Request $request): bool
     {
-        if ($request->getPathInfo() !== '/login' || $request->getMethod() != 'POST') {
+        if ('/login' !== $request->getPathInfo() || 'POST' != $request->getMethod()) {
             return false;
         }
 
@@ -115,7 +116,7 @@ class LoginFormAuthenticator extends AbstractFormLoginAuthenticator
 
     public function getCredentials(Request $request): array
     {
-        if ($request->getPathInfo() !== '/login' || !$request->isMethod('POST')) {
+        if ('/login' !== $request->getPathInfo() || !$request->isMethod('POST')) {
             return false;
         }
 

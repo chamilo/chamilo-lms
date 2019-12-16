@@ -1,4 +1,5 @@
 <?php
+
 /* For licensing terms, see /license.txt */
 
 namespace Chamilo\CoreBundle\Migrations\Schema\V110;
@@ -8,8 +9,6 @@ use Doctrine\DBAL\Schema\Schema;
 
 /**
  * Class Version20150522222222.
- *
- * @package Chamilo\CoreBundle\Migrations\Schema\V11010
  */
 class Version20150522222222 extends AbstractMigrationChamilo
 {
@@ -18,9 +17,9 @@ class Version20150522222222 extends AbstractMigrationChamilo
         // The first ALTER queries here requires a check because the field might already exist
         $connection = $this->connection;
         $fieldExists = false;
-        $sql = "SELECT *
+        $sql = 'SELECT *
                 FROM user
-                LIMIT 1";
+                LIMIT 1';
         $result = $connection->executeQuery($sql);
         $dataList = $result->fetchAll();
         if (!empty($dataList)) {
@@ -35,9 +34,9 @@ class Version20150522222222 extends AbstractMigrationChamilo
         }
         // calendar events comments
         $fieldExists = false;
-        $sql = "SELECT *
+        $sql = 'SELECT *
                 FROM c_calendar_event
-                LIMIT 1";
+                LIMIT 1';
         $result = $connection->executeQuery($sql);
         $dataList = $result->fetchAll();
         if (!empty($dataList)) {
@@ -48,7 +47,7 @@ class Version20150522222222 extends AbstractMigrationChamilo
             }
         }
         if (!$fieldExists) {
-            $this->addSql("ALTER TABLE c_calendar_event ADD COLUMN comment TEXT");
+            $this->addSql('ALTER TABLE c_calendar_event ADD COLUMN comment TEXT');
         }
 
         // Move some settings from configuration.php to the database
@@ -64,7 +63,7 @@ class Version20150522222222 extends AbstractMigrationChamilo
             '',
             'radio',
             'Course',
-            ($value ? $value : 'true'),
+            ($value ?: 'true'),
             'AllowLearningPathReturnLinkTitle',
             'AllowLearningPathReturnLinkComment',
             null,
@@ -82,7 +81,7 @@ class Version20150522222222 extends AbstractMigrationChamilo
             '',
             'radio',
             'Course',
-            ($value ? $value : 'false'),
+            ($value ?: 'false'),
             'HideScormExportLinkTitle',
             'HideScormExportLinkComment',
             null,
@@ -101,7 +100,7 @@ class Version20150522222222 extends AbstractMigrationChamilo
             '',
             'radio',
             'Course',
-            ($value ? $value : 'false'),
+            ($value ?: 'false'),
             'HideScormCopyLinkTitle',
             'HideScormCopyLinkComment',
             null,
@@ -120,7 +119,7 @@ class Version20150522222222 extends AbstractMigrationChamilo
             '',
             'radio',
             'Course',
-            ($value ? $value : 'false'),
+            ($value ?: 'false'),
             'HideScormPdfLinkTitle',
             'HideScormPdfLinkComment',
             null,
@@ -139,7 +138,7 @@ class Version20150522222222 extends AbstractMigrationChamilo
             '',
             'textfield',
             'Session',
-            ($value ? $value : '0'),
+            ($value ?: '0'),
             'SessionDaysBeforeCoachAccessTitle',
             'SessionDaysBeforeCoachAccessComment',
             null,
@@ -157,7 +156,7 @@ class Version20150522222222 extends AbstractMigrationChamilo
             '',
             'textfield',
             'Session',
-            ($value ? $value : '0'),
+            ($value ?: '0'),
             'SessionDaysAfterCoachAccessTitle',
             'SessionDaysAfterCoachAccessComment',
             null,
@@ -175,7 +174,7 @@ class Version20150522222222 extends AbstractMigrationChamilo
             '',
             'radio',
             'Course',
-            ($value ? $value : 'false'),
+            ($value ?: 'false'),
             'PdfLogoHeaderTitle',
             'PdfLogoHeaderComment',
             null,
@@ -194,7 +193,7 @@ class Version20150522222222 extends AbstractMigrationChamilo
             '',
             'radio',
             'Platform',
-            ($value ? $value : 'false'),
+            ($value ?: 'false'),
             'OrderUserListByOfficialCodeTitle',
             'OrderUserListByOfficialCodeComment',
             null,
@@ -213,7 +212,7 @@ class Version20150522222222 extends AbstractMigrationChamilo
             '',
             'radio',
             'Course',
-            ($value ? $value : 'true'),
+            ($value ?: 'true'),
             'AlertManagerOnNewQuizTitle',
             'AlertManagerOnNewQuizComment',
             null,
@@ -232,7 +231,7 @@ class Version20150522222222 extends AbstractMigrationChamilo
             '',
             'radio',
             'Tools',
-            ($value ? $value : 'false'),
+            ($value ?: 'false'),
             'ShowOfficialCodeInExerciseResultListTitle',
             'ShowOfficialCodeInExerciseResultListComment',
             null,
@@ -251,7 +250,7 @@ class Version20150522222222 extends AbstractMigrationChamilo
             '',
             'radio',
             'Platform',
-            ($value ? $value : 'false'),
+            ($value ?: 'false'),
             'HidePrivateCoursesFromCourseCatalogTitle',
             'HidePrivateCoursesFromCourseCatalogComment',
             null,
@@ -271,7 +270,7 @@ class Version20150522222222 extends AbstractMigrationChamilo
             '',
             'radio',
             'Platform',
-            ($value ? $value : '0'),
+            ($value ?: '0'),
             'CoursesCatalogueShowSessionsTitle',
             'CoursesCatalogueShowSessionsComment',
             null,
@@ -290,7 +289,7 @@ class Version20150522222222 extends AbstractMigrationChamilo
             '',
             'radio',
             'Platform',
-            ($value ? $value : 'true'),
+            ($value ?: 'true'),
             'AutoDetectLanguageCustomPagesTitle',
             'AutoDetectLanguageCustomPagesComment',
             null,
@@ -309,7 +308,7 @@ class Version20150522222222 extends AbstractMigrationChamilo
             '',
             'radio',
             'Tools',
-            ($value ? $value : 'false'),
+            ($value ?: 'false'),
             'LearningPathShowReducedReportTitle',
             'LearningPathShowReducedReportComment',
             null,
@@ -328,7 +327,7 @@ class Version20150522222222 extends AbstractMigrationChamilo
             '',
             'radio',
             'Session',
-            ($value ? $value : 'false'),
+            ($value ?: 'false'),
             'AllowSessionCourseCopyForTeachersTitle',
             'AllowSessionCourseCopyForTeachersComment',
             null,
@@ -347,7 +346,7 @@ class Version20150522222222 extends AbstractMigrationChamilo
             '',
             'radio',
             'Security',
-            ($value ? $value : 'false'),
+            ($value ?: 'false'),
             'HideLogoutButtonTitle',
             'HideLogoutButtonComment',
             null,
@@ -366,7 +365,7 @@ class Version20150522222222 extends AbstractMigrationChamilo
             '',
             'radio',
             'Platform',
-            ($value ? $value : 'false'),
+            ($value ?: 'false'),
             'RedirectAdminToCoursesListTitle',
             'RedirectAdminToCoursesListComment',
             null,
@@ -385,7 +384,7 @@ class Version20150522222222 extends AbstractMigrationChamilo
             '',
             'radio',
             'Course',
-            ($value ? $value : 'false'),
+            ($value ?: 'false'),
             'CourseImagesInCoursesListTitle',
             'CourseImagesInCoursesListComment',
             null,
@@ -404,7 +403,7 @@ class Version20150522222222 extends AbstractMigrationChamilo
             '',
             'radio',
             'Gradebook',
-            ($value ? $value : 'first'),
+            ($value ?: 'first'),
             'StudentPublicationSelectionForGradebookTitle',
             'StudentPublicationSelectionForGradebookComment',
             null,
@@ -423,7 +422,7 @@ class Version20150522222222 extends AbstractMigrationChamilo
             '',
             'radio',
             'Gradebook',
-            ($value ? $value : 'false'),
+            ($value ?: 'false'),
             'FilterCertificateByOfficialCodeTitle',
             'FilterCertificateByOfficialCodeComment',
             null,
@@ -443,7 +442,7 @@ class Version20150522222222 extends AbstractMigrationChamilo
             '',
             'textfield',
             'Tools',
-            ($value ? $value : '0'),
+            ($value ?: '0'),
             'MaxCKeditorsOnExerciseResultsPageTitle',
             'MaxCKeditorsOnExerciseResultsPageComment',
             null,
@@ -462,7 +461,7 @@ class Version20150522222222 extends AbstractMigrationChamilo
             '',
             'radio',
             'Tools',
-            ($value ? $value : 'rename'),
+            ($value ?: 'rename'),
             'DocumentDefaultOptionIfFileExistsTitle',
             'DocumentDefaultOptionIfFileExistsComment',
             null,
@@ -480,7 +479,7 @@ class Version20150522222222 extends AbstractMigrationChamilo
             '',
             'radio',
             'Tools',
-            ($value ? $value : 'false'),
+            ($value ?: 'false'),
             'GradebookCronTaskGenerationTitle',
             'GradebookCronTaskGenerationComment',
             null,
@@ -499,7 +498,7 @@ class Version20150522222222 extends AbstractMigrationChamilo
             '',
             'textfield',
             'Gradebook',
-            ($value ? $value : 'https://backpack.openbadges.org/'),
+            ($value ?: 'https://backpack.openbadges.org/'),
             'OpenBadgesBackpackUrlTitle',
             'OpenBadgesBackpackUrlComment',
             null,
@@ -518,7 +517,7 @@ class Version20150522222222 extends AbstractMigrationChamilo
             '',
             'radio',
             'Tools',
-            ($value ? $value : 'false'),
+            ($value ?: 'false'),
             'CookieWarningTitle',
             'CookieWarningComment',
             null,
@@ -537,7 +536,7 @@ class Version20150522222222 extends AbstractMigrationChamilo
             '',
             'radio',
             'Tools',
-            ($value ? $value : 'false'),
+            ($value ?: 'false'),
             'HideCourseGroupIfNoToolAvailableTitle',
             'HideCourseGroupIfNoToolAvailableComment',
             null,
@@ -556,7 +555,7 @@ class Version20150522222222 extends AbstractMigrationChamilo
             '',
             'radio',
             'Session',
-            ($value ? $value : 'false'),
+            ($value ?: 'false'),
             'CatalogueAllowSessionAutoSubscriptionTitle',
             'CatalogueAllowSessionAutoSubscriptionComment',
             null,
@@ -575,7 +574,7 @@ class Version20150522222222 extends AbstractMigrationChamilo
             '',
             'radio',
             'Platform',
-            ($value ? $value : 'false'),
+            ($value ?: 'false'),
             'SoapRegistrationDecodeUtf8Title',
             'SoapRegistrationDecodeUtf8Comment',
             null,
@@ -594,7 +593,7 @@ class Version20150522222222 extends AbstractMigrationChamilo
             '',
             'radio',
             'Tools',
-            ($value ? $value : 'false'),
+            ($value ?: 'false'),
             'AttendanceDeletionEnableTitle',
             'AttendanceDeletionEnableComment',
             null,
@@ -613,7 +612,7 @@ class Version20150522222222 extends AbstractMigrationChamilo
             '',
             'radio',
             'Platform',
-            ($value ? $value : 'false'),
+            ($value ?: 'false'),
             'GravatarPicturesTitle',
             'GravatarPicturesComment',
             null,
@@ -633,7 +632,7 @@ class Version20150522222222 extends AbstractMigrationChamilo
             '',
             'radio',
             'Platform',
-            ($value ? $value : 'mm'),
+            ($value ?: 'mm'),
             'GravatarPicturesTypeTitle',
             'GravatarPicturesTypeComment',
             null,
@@ -678,7 +677,7 @@ class Version20150522222222 extends AbstractMigrationChamilo
             '',
             'radio',
             'Session',
-            ($value ? $value : 'false'),
+            ($value ?: 'false'),
             'ShowSessionDescriptionTitle',
             'ShowSessionDescriptionComment',
             null,
@@ -697,7 +696,7 @@ class Version20150522222222 extends AbstractMigrationChamilo
             '',
             'radio',
             'Gradebook',
-            ($value ? $value : 'false'),
+            ($value ?: 'false'),
             'CertificateHideExportLinkStudentTitle',
             'CertificateHideExportLinkStudentComment',
             null,
@@ -716,7 +715,7 @@ class Version20150522222222 extends AbstractMigrationChamilo
             '',
             'radio',
             'Gradebook',
-            ($value ? $value : 'false'),
+            ($value ?: 'false'),
             'CertificateHideExportLinkTitle',
             'CertificateHideExportLinkComment',
             null,
@@ -735,7 +734,7 @@ class Version20150522222222 extends AbstractMigrationChamilo
             '',
             'radio',
             'Tools',
-            ($value ? $value : 'false'),
+            ($value ?: 'false'),
             'DropboxHideCourseCoachTitle',
             'DropboxHideCourseCoachComment',
             null,
@@ -752,7 +751,7 @@ class Version20150522222222 extends AbstractMigrationChamilo
             '',
             'radio',
             'Tools',
-            ($value ? $value : 'false'),
+            ($value ?: 'false'),
             'DropboxHideGeneralCoachTitle',
             'DropboxHideGeneralCoachComment',
             null,
@@ -771,7 +770,7 @@ class Version20150522222222 extends AbstractMigrationChamilo
             '',
             'radio',
             'Security',
-            ($value ? $value : 'false'),
+            ($value ?: 'false'),
             'SSOForceRedirectTitle',
             'SSOForceRedirectComment',
             null,
@@ -792,7 +791,7 @@ class Version20150522222222 extends AbstractMigrationChamilo
             '',
             'radio',
             'Session',
-            ($value ? $value : 'false'),
+            ($value ?: 'false'),
             'SessionCourseOrderingTitle',
             'SessionCourseOrderingComment',
             null,

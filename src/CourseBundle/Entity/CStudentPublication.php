@@ -1,4 +1,5 @@
 <?php
+
 /* For licensing terms, see /license.txt */
 
 namespace Chamilo\CourseBundle\Entity;
@@ -819,7 +820,7 @@ class CStudentPublication extends AbstractResource implements ResourceInterface
         return $this->fileSize;
     }
 
-    public function setFileSize(int $fileSize): CStudentPublication
+    public function setFileSize(int $fileSize): self
     {
         $this->fileSize = $fileSize;
 

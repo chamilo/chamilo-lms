@@ -1,4 +1,5 @@
 <?php
+
 /* For licensing terms, see /license.txt */
 
 namespace Chamilo\ClassificationBundle\Entity;
@@ -18,7 +19,7 @@ class Tag extends BaseTag
     /**
      * Get id.
      *
-     * @return int $id
+     * @return int
      */
     public function getId(): int
     {

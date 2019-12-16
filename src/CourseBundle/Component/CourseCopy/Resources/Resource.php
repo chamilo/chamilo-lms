@@ -1,4 +1,5 @@
 <?php
+
 /* For licensing terms, see /license.txt */
 
 namespace Chamilo\CourseBundle\Component\CourseCopy\Resources;
@@ -10,8 +11,6 @@ namespace Chamilo\CourseBundle\Component\CourseCopy\Resources;
  * Documents,...) should be derived.
  *
  * @author Bart Mollet <bart.mollet@hogent.be>s
- *
- * @package  chamilo.backup
  *
  * @todo Use the globally defined constants voor tools and remove the RESOURCE_*
  * constants
@@ -231,7 +230,7 @@ class Resource
         $class = get_class($resource);
         switch ($class) {
             case 'Event':
-                /** @var $resource CalendarEvent */
+                /** @var CalendarEvent $resource */
                 $newResource = new CalendarEvent(
                     $resource->source_id,
                     $resource->title,
@@ -245,6 +244,7 @@ class Resource
                     $resource->all_day
                 );
                 $resource = $newResource;
+
                 break;
             case 'CourseDescription':
                 if (!method_exists($resource, 'show')) {

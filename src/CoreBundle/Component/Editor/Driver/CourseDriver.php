@@ -1,4 +1,5 @@
 <?php
+
 /* For licensing terms, see /license.txt */
 
 namespace Chamilo\CoreBundle\Component\Editor\Driver;
@@ -8,8 +9,6 @@ use Symfony\Component\HttpFoundation\File\UploadedFile;
 
 /**
  * Class CourseDriver.
- *
- * @package Chamilo\CoreBundle\Component\Editor\Driver
  */
 class CourseDriver extends Driver implements DriverInterface
 {
@@ -341,12 +340,10 @@ class CourseDriver extends Driver implements DriverInterface
 
     public function getCourseInfoArray(): array
     {
-        $courseInfo = [
+        return [
             'real_id' => $this->connector->course->getId(),
             'code' => $this->connector->course->getCode(),
         ];
-
-        return $courseInfo;
     }
 
     /**
@@ -391,7 +388,7 @@ class CourseDriver extends Driver implements DriverInterface
         // Needed to load course information in elfinder
         $this->setConnectorFromPlugin();
 
-        if ($this->allowToEdit() === false) {
+        if (false === $this->allowToEdit()) {
             return false;
         }
 
@@ -453,7 +450,7 @@ class CourseDriver extends Driver implements DriverInterface
 
     protected function _path($path)
     {
-        if (($file = $this->stat($path)) == false) {
+        if (false == ($file = $this->stat($path))) {
             return '';
         }
 
@@ -467,7 +464,7 @@ class CourseDriver extends Driver implements DriverInterface
         return $path.$file['name'];
     }
 
-    /**
+    /*
      * @param string $attr
      * @param string $path
      * @param $data

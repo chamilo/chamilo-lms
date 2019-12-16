@@ -1,4 +1,5 @@
 <?php
+
 /* For licensing terms, see /license.txt */
 
 namespace Chamilo\CoreBundle\Component\Editor\CkEditor\Toolbar;
@@ -7,8 +8,6 @@ use Chamilo\CoreBundle\Component\Editor\Toolbar;
 
 /**
  * Class Basic.
- *
- * @package Chamilo\CoreBundle\Component\Editor\CkEditor\Toolbar
  */
 class Basic extends Toolbar
 {
@@ -85,11 +84,11 @@ class Basic extends Toolbar
         // Adding plugins depending of platform conditions
         $plugins = [];
 
-        if (api_get_setting('show_glossary_in_documents') == 'ismanual') {
+        if ('ismanual' == api_get_setting('show_glossary_in_documents')) {
             $plugins[] = 'glossary';
         }
 
-        if (api_get_setting('youtube_for_students') == 'true') {
+        if ('true' == api_get_setting('youtube_for_students')) {
             $plugins[] = 'youtube';
         } else {
             if (api_is_allowed_to_edit() || api_is_platform_admin()) {
@@ -97,29 +96,29 @@ class Basic extends Toolbar
             }
         }
 
-        if (api_get_setting('enabled_googlemaps') == 'true') {
+        if ('true' == api_get_setting('enabled_googlemaps')) {
             $plugins[] = 'leaflet';
         }
 
-        if (api_get_setting('math_asciimathML') == 'true') {
+        if ('true' == api_get_setting('math_asciimathML')) {
             $plugins[] = 'asciimath';
         }
 
-        if (api_get_setting('enabled_mathjax') == 'true') {
+        if ('true' == api_get_setting('enabled_mathjax')) {
             $plugins[] = 'mathjax';
             $config['mathJaxLib'] = api_get_path(WEB_PUBLIC_PATH).'assets/MathJax/MathJax.js?config=TeX-MML-AM_HTMLorMML';
         }
 
-        if (api_get_setting('enabled_asciisvg') == 'true') {
+        if ('true' == api_get_setting('enabled_asciisvg')) {
             $plugins[] = 'asciisvg';
         }
 
-        if (api_get_setting('enabled_wiris') == 'true') {
+        if ('true' == api_get_setting('enabled_wiris')) {
             // Commercial plugin
             $plugins[] = 'ckeditor_wiris';
         }
 
-        if (api_get_setting('enabled_imgmap') == 'true') {
+        if ('true' == api_get_setting('enabled_imgmap')) {
             $plugins[] = 'mapping';
         }
 
@@ -127,11 +126,11 @@ class Basic extends Toolbar
             // Missing
         }*/
 
-        if (api_get_setting('more_buttons_maximized_mode') == 'true') {
+        if ('true' == api_get_setting('more_buttons_maximized_mode')) {
             $plugins[] = 'toolbarswitch';
         }
 
-        if (api_get_setting('allow_spellcheck') == 'true') {
+        if ('true' == api_get_setting('allow_spellcheck')) {
             $plugins[] = 'scayt';
         }
 
@@ -147,7 +146,7 @@ class Basic extends Toolbar
     public function getConfig()
     {
         $config = [];
-        if (api_get_setting('more_buttons_maximized_mode') === 'true') {
+        if ('true' === api_get_setting('more_buttons_maximized_mode')) {
             $config['toolbar_minToolbar'] = $this->getMinimizedToolbar();
             $config['toolbar_maxToolbar'] = $this->getMaximizedToolbar();
         }
@@ -193,7 +192,7 @@ class Basic extends Toolbar
             'img-va-text-top',
             'img-va-text-bottom',
         ];
-        $config['startupOutlineBlocks'] = api_get_configuration_value('ckeditor_startup_outline_blocks') === true;
+        $config['startupOutlineBlocks'] = true === api_get_configuration_value('ckeditor_startup_outline_blocks');
 
         if (isset($this->config)) {
             $this->config = array_merge($config, $this->config);
@@ -238,7 +237,7 @@ class Basic extends Toolbar
             ['BulletedList', 'NumberedList', 'HorizontalRule'],
             ['JustifyLeft', 'JustifyCenter', 'JustifyRight', 'JustifyBlock'],
             ['Styles', 'Format', 'Font', 'FontSize', 'Bold', 'Italic', 'Underline', 'TextColor', 'BGColor'],
-            api_get_setting('enabled_wiris') == 'true' ? ['ckeditor_wiris_formulaEditor', 'ckeditor_wiris_CAS'] : [''],
+            'true' == api_get_setting('enabled_wiris') ? ['ckeditor_wiris_formulaEditor', 'ckeditor_wiris_CAS'] : [''],
             ['Toolbarswitch', 'Source'],
         ];
     }
@@ -274,10 +273,10 @@ class Basic extends Toolbar
             ['BulletedList', 'NumberedList', 'HorizontalRule', '-', 'Outdent', 'Indent', 'Blockquote'],
             ['JustifyLeft', 'JustifyCenter', 'JustifyRight', 'JustifyBlock'],
             ['Bold', 'Italic', 'Underline', 'Strike', '-', 'Subscript', 'Superscript', '-', 'TextColor', 'BGColor'],
-            [api_get_setting('allow_spellcheck') == 'true' ? 'Scayt' : ''],
+            ['true' == api_get_setting('allow_spellcheck') ? 'Scayt' : ''],
             ['Styles', 'Format', 'Font', 'FontSize'],
             ['PageBreak', 'ShowBlocks'],
-            api_get_setting('enabled_wiris') == 'true' ? ['ckeditor_wiris_formulaEditor', 'ckeditor_wiris_CAS'] : [''],
+            'true' == api_get_setting('enabled_wiris') ? ['ckeditor_wiris_formulaEditor', 'ckeditor_wiris_CAS'] : [''],
             ['Toolbarswitch', 'Source'],
         ];
     }

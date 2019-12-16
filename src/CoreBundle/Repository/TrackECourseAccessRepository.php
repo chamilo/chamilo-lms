@@ -1,4 +1,5 @@
 <?php
+
 /* For licensing terms, see /license.txt */
 
 namespace Chamilo\CoreBundle\Repository;
@@ -11,7 +12,6 @@ use Doctrine\Common\Persistence\ManagerRegistry;
 /**
  * TrackECourseAccessRepository.
  *
- * @package Chamilo\CoreBundle\Repository
  *
  * @author Angel Fernando Quiroz Campos <angel.quiroz@beeznest.com>
  */

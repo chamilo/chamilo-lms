@@ -1,4 +1,5 @@
 <?php
+
 /* For licensing terms, see /license.txt */
 
 namespace Chamilo\UserBundle\Repository;
@@ -484,11 +485,11 @@ class UserRepository extends ResourceRepository
         $allowSendMessageToAllUsers = api_get_setting('allow_send_message_to_all_platform_users');
         $accessUrlId = api_get_multiple_access_url() ? api_get_current_access_url_id() : 1;
 
-        if (api_get_setting('allow_social_tool') === 'true' &&
-            api_get_setting('allow_message_tool') === 'true'
+        if ('true' === api_get_setting('allow_social_tool') &&
+            'true' === api_get_setting('allow_message_tool')
         ) {
             // All users
-            if ($allowSendMessageToAllUsers === 'true' || api_is_platform_admin()) {
+            if ('true' === $allowSendMessageToAllUsers || api_is_platform_admin()) {
                 $dql = "SELECT DISTINCT U
                         FROM ChamiloUserBundle:User U
                         LEFT JOIN ChamiloCoreBundle:AccessUrlRelUser R
@@ -499,24 +500,24 @@ class UserRepository extends ResourceRepository
                             U.id != $currentUserId AND
                             R.url = $accessUrlId";
             } else {
-                $dql = "SELECT DISTINCT U
+                $dql = 'SELECT DISTINCT U
                         FROM ChamiloCoreBundle:AccessUrlRelUser R, ChamiloCoreBundle:UserRelUser UF
                         INNER JOIN ChamiloUserBundle:User AS U
                         WITH UF.friendUserId = U
                         WHERE
                             U.active = 1 AND
                             U.status != 6 AND
-                            UF.relationType NOT IN(".USER_RELATION_TYPE_DELETED.", ".USER_RELATION_TYPE_RRHH.") AND
+                            UF.relationType NOT IN('.USER_RELATION_TYPE_DELETED.', '.USER_RELATION_TYPE_RRHH.") AND
                             UF.userId = $currentUserId AND
                             UF.friendUserId != $currentUserId AND
                             U = R.user AND
                             R.url = $accessUrlId";
             }
         } elseif (
-            api_get_setting('allow_social_tool') === 'false' &&
-            api_get_setting('allow_message_tool') === 'true'
+            'false' === api_get_setting('allow_social_tool') &&
+            'true' === api_get_setting('allow_message_tool')
         ) {
-            if ($allowSendMessageToAllUsers === 'true') {
+            if ('true' === $allowSendMessageToAllUsers) {
                 $dql = "SELECT DISTINCT U
                         FROM ChamiloUserBundle:User U
                         LEFT JOIN ChamiloCoreBundle:AccessUrlRelUser R
@@ -566,7 +567,7 @@ class UserRepository extends ResourceRepository
     {
         $qb = $this->repository->createQueryBuilder('user');
 
-        $hrmList = $qb
+        return $qb
             ->select('uru')
             ->innerJoin('ChamiloCoreBundle:UserRelUser', 'uru', Join::WITH, 'uru.userId = user.id')
             ->innerJoin('ChamiloCoreBundle:AccessUrlRelUser', 'auru', Join::WITH, 'auru.user = uru.friendUserId')
@@ -581,8 +582,6 @@ class UserRepository extends ResourceRepository
             )
             ->getQuery()
             ->getResult();
-
-        return $hrmList;
     }
 
     /**
@@ -1431,9 +1430,7 @@ class UserRepository extends ResourceRepository
         $normalizers = [$dateNormalizer];
         $serializer = new Serializer($normalizers, [new JsonEncoder()]);
 
-        $jsonContent = $serializer->serialize($user, 'json');
-
-        return $jsonContent;
+        return $serializer->serialize($user, 'json');
     }
 
     /**
@@ -1451,7 +1448,7 @@ class UserRepository extends ResourceRepository
         $repo = $this->getEntityManager()->getRepository('ChamiloCoreBundle:TrackELogin');
         $qb = $repo->createQueryBuilder('l');
 
-        $login = $qb
+        return $qb
             ->select('l')
             ->where(
                 $qb->expr()->eq('l.loginUserId', $user->getId())
@@ -1460,7 +1457,5 @@ class UserRepository extends ResourceRepository
             ->orderBy('l.loginDate', 'DESC')
             ->getQuery()
             ->getOneOrNullResult();
-
-        return $login;
     }
 }

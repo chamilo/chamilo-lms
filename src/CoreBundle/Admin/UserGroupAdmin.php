@@ -1,4 +1,5 @@
 <?php
+
 /* For licensing terms, see /license.txt */
 
 namespace Chamilo\CoreBundle\Admin;
@@ -12,8 +13,6 @@ use Sonata\AdminBundle\Show\ShowMapper;
 
 /**
  * Class UserGroupAdmin.
- *
- * @package Chamilo\CoreBundle\Admin
  */
 class UserGroupAdmin extends AbstractAdmin
 {

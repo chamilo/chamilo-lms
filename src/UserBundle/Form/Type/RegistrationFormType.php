@@ -1,4 +1,5 @@
 <?php
+
 /* For licensing terms, see /license.txt */
 
 namespace Chamilo\UserBundle\Form\Type;
@@ -14,8 +15,6 @@ use Symfony\Component\OptionsResolver\OptionsResolverInterface;
 /**
  * Class RegistrationFormType
  * Form located in web/app_dev.php/register/.
- *
- * @package Chamilo\UserBundle\Form\Type
  */
 class RegistrationFormType extends AbstractType
 {

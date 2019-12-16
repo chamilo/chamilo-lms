@@ -1,4 +1,5 @@
 <?php
+
 /* For licensing terms, see /license.txt */
 
 namespace Chamilo\CourseBundle\Component\CourseCopy\Resources;
@@ -7,8 +8,6 @@ namespace Chamilo\CourseBundle\Component\CourseCopy\Resources;
  * Add resource glossary.
  *
  * @author Isaac flores
- *
- * @package chamilo.backup
  */
 class Glossary extends Resource
 {

@@ -1,4 +1,5 @@
 <?php
+
 /* For licensing terms, see /license.txt */
 
 namespace Chamilo\CoreBundle\Entity;
@@ -580,12 +581,12 @@ class Course extends AbstractResource implements ResourceInterface
 
     public function addTeacher(User $user)
     {
-        $this->addUser($user, 0, "Trainer", User::COURSE_MANAGER);
+        $this->addUser($user, 0, 'Trainer', User::COURSE_MANAGER);
     }
 
     public function addStudent(User $user)
     {
-        $this->addUser($user, 0, "", User::STUDENT);
+        $this->addUser($user, 0, '', User::STUDENT);
     }
 
     /**
@@ -743,7 +744,7 @@ class Course extends AbstractResource implements ResourceInterface
      *
      * @param CourseCategory $category
      */
-    public function setCategory(CourseCategory $category = null): Course
+    public function setCategory(CourseCategory $category = null): self
     {
         $this->category = $category;
 
@@ -1155,7 +1156,7 @@ class Course extends AbstractResource implements ResourceInterface
     /**
      * @param bool $addTeachersToSessionsCourses
      */
-    public function setAddTeachersToSessionsCourses($addTeachersToSessionsCourses): Course
+    public function setAddTeachersToSessionsCourses($addTeachersToSessionsCourses): self
     {
         $this->addTeachersToSessionsCourses = $addTeachersToSessionsCourses;
 
@@ -1227,7 +1228,7 @@ class Course extends AbstractResource implements ResourceInterface
      */
     public function isPublic()
     {
-        return $this->visibility == self::OPEN_WORLD;
+        return self::OPEN_WORLD == $this->visibility;
     }
 
     /**
@@ -1267,6 +1268,7 @@ class Course extends AbstractResource implements ResourceInterface
         foreach ($list as $item) {
             if ($item->getSession()->getId() == $session->getId()) {
                 $this->currentSession = $session;
+
                 break;
             }
         }
@@ -1284,6 +1286,7 @@ class Course extends AbstractResource implements ResourceInterface
         foreach ($urlList as $item) {
             if ($item->getUrl()->getId() == $url->getId()) {
                 $this->currentUrl = $url;
+
                 break;
             }
         }

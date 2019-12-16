@@ -1,4 +1,5 @@
 <?php
+
 /* For licensing terms, see /license.txt */
 
 namespace Chamilo\CoreBundle\Migrations\Schema\V110;
@@ -8,8 +9,6 @@ use Doctrine\DBAL\Schema\Schema;
 
 /**
  * Class Version20150504182600.
- *
- * @package Chamilo\CoreBundle\Migrations\Schema\V110
  */
 class Version20150504182600 extends AbstractMigrationChamilo
 {
@@ -33,32 +32,32 @@ class Version20150504182600 extends AbstractMigrationChamilo
                 $languages[$data['english_name']] = $data['id'];
             }
         }
-        $this->addSql("
-            UPDATE language SET parent_id = ".$languages['spanish']." WHERE english_name = 'quechua_cusco'
+        $this->addSql('
+            UPDATE language SET parent_id = '.$languages['spanish']." WHERE english_name = 'quechua_cusco'
         ");
-        $this->addSql("
-            UPDATE language SET parent_id = ".$languages['spanish']." WHERE english_name = 'galician'
+        $this->addSql('
+            UPDATE language SET parent_id = '.$languages['spanish']." WHERE english_name = 'galician'
         ");
-        $this->addSql("
-            UPDATE language SET parent_id = ".$languages['spanish']." WHERE english_name = 'esperanto'
+        $this->addSql('
+            UPDATE language SET parent_id = '.$languages['spanish']." WHERE english_name = 'esperanto'
         ");
-        $this->addSql("
-            UPDATE language SET parent_id = ".$languages['spanish']." WHERE english_name = 'catalan'
+        $this->addSql('
+            UPDATE language SET parent_id = '.$languages['spanish']." WHERE english_name = 'catalan'
         ");
-        $this->addSql("
-            UPDATE language SET parent_id = ".$languages['spanish']." WHERE english_name = 'asturian'
+        $this->addSql('
+            UPDATE language SET parent_id = '.$languages['spanish']." WHERE english_name = 'asturian'
         ");
-        $this->addSql("
-            UPDATE language SET parent_id = ".$languages['spanish']." WHERE english_name = 'friulian'
+        $this->addSql('
+            UPDATE language SET parent_id = '.$languages['spanish']." WHERE english_name = 'friulian'
         ");
-        $this->addSql("
-            UPDATE language SET parent_id = ".$languages['french']." WHERE english_name = 'occitan'
+        $this->addSql('
+            UPDATE language SET parent_id = '.$languages['french']." WHERE english_name = 'occitan'
         ");
-        $this->addSql("
-            UPDATE language SET parent_id = ".$languages['portuguese']." WHERE english_name = 'brazilian'
+        $this->addSql('
+            UPDATE language SET parent_id = '.$languages['portuguese']." WHERE english_name = 'brazilian'
         ");
-        $this->addSql("
-            UPDATE language SET parent_id = ".$languages['simpl_chinese']." WHERE english_name = 'trad_chinese'
+        $this->addSql('
+            UPDATE language SET parent_id = '.$languages['simpl_chinese']." WHERE english_name = 'trad_chinese'
         ");
     }
 

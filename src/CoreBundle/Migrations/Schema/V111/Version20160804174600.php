@@ -1,4 +1,5 @@
 <?php
+
 /* For licensing terms, see /license.txt */
 
 namespace Chamilo\CoreBundle\Migrations\Schema\V111;
@@ -10,8 +11,6 @@ use Doctrine\DBAL\Schema\Schema;
 /**
  * Class Version20160804174600
  * Set doctype html5 for system templates.
- *
- * @package Chamilo\CoreBundle\Migrations\Schema\V111
  */
 class Version20160804174600 extends AbstractMigrationChamilo
 {

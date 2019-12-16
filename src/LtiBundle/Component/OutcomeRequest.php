@@ -1,4 +1,5 @@
 <?php
+
 /* For licensing terms, see /license.txt */
 
 namespace Chamilo\LtiBundle\Component;
@@ -8,8 +9,6 @@ use Symfony\Bundle\FrameworkBundle\Translation\Translator;
 
 /**
  * Class OutcomeRequest.
- *
- * @package Chamilo\LtiBundle\Component
  */
 abstract class OutcomeRequest
 {

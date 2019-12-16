@@ -1,4 +1,5 @@
 <?php
+
 /* For licensing terms, see /license.txt */
 
 namespace Chamilo\CoreBundle\Entity\Resource;
@@ -189,7 +190,7 @@ class ResourceFile
         return $this->hash;
     }
 
-    public function setHash(string $hash): ResourceFile
+    public function setHash(string $hash): self
     {
         $this->hash = $hash;
 
@@ -204,7 +205,7 @@ class ResourceFile
     /**
      * @param int $size
      */
-    public function setSize($size): ResourceFile
+    public function setSize($size): self
     {
         $this->size = $size;
 
@@ -221,7 +222,7 @@ class ResourceFile
         return (string) $this->contentType;
     }
 
-    public function setContentType(string $contentType): ResourceFile
+    public function setContentType(string $contentType): self
     {
         $this->contentType = $contentType;
 
@@ -233,7 +234,7 @@ class ResourceFile
         return $this->extension;
     }
 
-    public function setExtension(string $extension): ResourceFile
+    public function setExtension(string $extension): self
     {
         $this->extension = $extension;
 
@@ -245,7 +246,7 @@ class ResourceFile
         return $this->resourceNode;
     }
 
-    public function setResourceNode(ResourceNode $resourceNode): ResourceFile
+    public function setResourceNode(ResourceNode $resourceNode): self
     {
         $this->resourceNode = $resourceNode;
 
@@ -257,7 +258,7 @@ class ResourceFile
         return $this->enabled;
     }
 
-    public function setEnabled(bool $enabled): ResourceFile
+    public function setEnabled(bool $enabled): self
     {
         $this->enabled = $enabled;
 
@@ -289,7 +290,7 @@ class ResourceFile
         return $this->description;
     }
 
-    public function setDescription(string $description): ResourceFile
+    public function setDescription(string $description): self
     {
         $this->description = $description;
 
@@ -304,7 +305,7 @@ class ResourceFile
     /**
      * @param string $mimeType
      */
-    public function setMimeType($mimeType): ResourceFile
+    public function setMimeType($mimeType): self
     {
         $this->mimeType = $mimeType;
 
@@ -319,7 +320,7 @@ class ResourceFile
     /**
      * @param $originalName
      */
-    public function setOriginalName($originalName): ResourceFile
+    public function setOriginalName($originalName): self
     {
         $this->originalName = $originalName;
 
@@ -334,7 +335,7 @@ class ResourceFile
     /**
      * @param $dimensions
      */
-    public function setDimensions($dimensions): ResourceFile
+    public function setDimensions($dimensions): self
     {
         $this->dimensions = $dimensions;
 
@@ -371,7 +372,7 @@ class ResourceFile
         return $this->metadata;
     }
 
-    public function setMetadata(array $metadata): ResourceFile
+    public function setMetadata(array $metadata): self
     {
         $this->metadata = $metadata;
 

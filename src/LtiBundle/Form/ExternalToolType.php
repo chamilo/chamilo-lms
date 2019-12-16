@@ -1,4 +1,5 @@
 <?php
+
 /* For licensing terms, see /license.txt */
 
 namespace Chamilo\LtiBundle\Form;
@@ -17,8 +18,6 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
 
 /**
  * Class ExternalToolType.
- *
- * @package Chamilo\LtiBundle\Form
  */
 class ExternalToolType extends AbstractType
 {
@@ -141,7 +140,7 @@ class ExternalToolType extends AbstractType
         $errno = curl_errno($ch);
         curl_close($ch);
 
-        if ($errno !== 0) {
+        if (0 !== $errno) {
             return null;
         }
 

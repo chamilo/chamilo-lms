@@ -1,4 +1,5 @@
 <?php
+
 /* For licensing terms, see /license.txt */
 
 namespace Chamilo\CoreBundle\Repository;
@@ -103,9 +104,7 @@ class CourseRepository extends ResourceRepository
      */
     public function getSubscribedCoaches(Course $course)
     {
-        $queryBuilder = $this->getSubscribedUsers($course);
-        //@todo add criterias
-        return $queryBuilder;
+        return $this->getSubscribedUsers($course);
     }
 
     /**
@@ -162,7 +161,7 @@ class CourseRepository extends ResourceRepository
         $courseList = [];
         /** @var Course $course */
         foreach ($courses as $course) {
-            if (empty($course->getSessions()->count() == 0)) {
+            if (empty(0 == $course->getSessions()->count())) {
                 $courseList[] = $course;
             }
         }

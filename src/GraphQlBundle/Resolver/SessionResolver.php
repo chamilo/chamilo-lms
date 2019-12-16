@@ -1,4 +1,5 @@
 <?php
+
 /* For licensing terms, see /license.txt */
 
 namespace Chamilo\GraphQlBundle\Resolver;
@@ -11,8 +12,6 @@ use Symfony\Component\DependencyInjection\ContainerAwareInterface;
 
 /**
  * Class SessionResolver.
- *
- * @package Chamilo\GraphQlBundle\Resolver
  */
 class SessionResolver implements ContainerAwareInterface
 {

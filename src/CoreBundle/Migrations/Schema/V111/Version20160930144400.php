@@ -1,4 +1,5 @@
 <?php
+
 /* For licensing terms, see /license.txt */
 
 namespace Chamilo\CoreBundle\Migrations\Schema\V111;
@@ -9,8 +10,6 @@ use Doctrine\DBAL\Schema\Schema;
 /**
  * Class Version20160930144400
  * Fix track_e_hotspot ussing c_quiz_answer iid.
- *
- * @package Chamilo\CoreBundle\Migrations\Schema\V111
  */
 class Version20160930144400 extends AbstractMigrationChamilo
 {

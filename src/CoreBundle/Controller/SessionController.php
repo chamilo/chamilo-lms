@@ -1,4 +1,5 @@
 <?php
+
 /* For licensing terms, see /license.txt */
 
 namespace Chamilo\CoreBundle\Controller;
@@ -105,27 +106,35 @@ class SessionController extends AbstractController
                     switch ($descriptionInfo['description_type']) {
                         case CCourseDescription::TYPE_DESCRIPTION:
                             $courseDescription[] = $descriptionInfo;
+
                             break;
                         case CCourseDescription::TYPE_OBJECTIVES:
                             $courseObjectives[] = $descriptionInfo;
+
                             break;
                         case CCourseDescription::TYPE_TOPICS:
                             $courseTopics[] = $descriptionInfo;
+
                             break;
                         case CCourseDescription::TYPE_METHODOLOGY:
                             $courseMethodology[] = $descriptionInfo;
+
                             break;
                         case CCourseDescription::TYPE_COURSE_MATERIAL:
                             $courseMaterial[] = $descriptionInfo;
+
                             break;
                         case CCourseDescription::TYPE_RESOURCES:
                             $courseResources[] = $descriptionInfo;
+
                             break;
                         case CCourseDescription::TYPE_ASSESSMENT:
                             $courseAssessment[] = $descriptionInfo;
+
                             break;
                         case CCourseDescription::TYPE_CUSTOM:
                             $courseCustom[] = $descriptionInfo;
+
                             break;
                     }
                 }
@@ -173,6 +182,7 @@ class SessionController extends AbstractController
         foreach ($sessionRequirements as $sequence) {
             if (!empty($sequence['requirements'])) {
                 $hasRequirements = true;
+
                 break;
             }
         }
@@ -198,7 +208,7 @@ class SessionController extends AbstractController
 
         $coursesInThisSession = \SessionManager::get_course_list_by_session_id($sessionId);
         $coursesCount = count($coursesInThisSession);
-        $redirectToSession = $coursesCount == 1 && $redirectToSession
+        $redirectToSession = 1 == $coursesCount && $redirectToSession
             ? ($redirectToSession.'&cr='.array_values($coursesInThisSession)[0]['directory'])
             : $redirectToSession;
 
@@ -213,7 +223,7 @@ class SessionController extends AbstractController
             'has_requirements' => $hasRequirements,
             'sequences' => $sessionRequirements,
             'is_premium' => $sessionIsPremium,
-            'show_tutor' => api_get_setting('show_session_coach') === 'true' ? true : false,
+            'show_tutor' => 'true' === api_get_setting('show_session_coach') ? true : false,
             'page_url' => api_get_path(WEB_PATH)."sessions/{$session->getId()}/about/",
             'session_date' => $sessionDates,
             'is_subscribed' => SessionManager::isUserSubscribedAsStudent(

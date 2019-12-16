@@ -1,4 +1,5 @@
 <?php
+
 /* For licensing terms, see /license.txt */
 
 namespace Chamilo\CoreBundle\Migrations\Schema\V200;
@@ -10,8 +11,6 @@ use Doctrine\DBAL\Schema\Schema;
  * Class Version20180319145700.
  *
  * Add indexes related to course surveys
- *
- * @package Chamilo\CoreBundle\Migrations\Schema\V200
  */
 class Version20180319145700 extends AbstractMigrationChamilo
 {

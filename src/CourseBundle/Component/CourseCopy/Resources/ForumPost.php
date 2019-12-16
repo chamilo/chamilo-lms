@@ -1,4 +1,5 @@
 <?php
+
 /* For licensing terms, see /license.txt */
 
 namespace Chamilo\CourseBundle\Component\CourseCopy\Resources;
@@ -7,8 +8,6 @@ namespace Chamilo\CourseBundle\Component\CourseCopy\Resources;
  * A forum-post.
  *
  * @author Bart Mollet <bart.mollet@hogent.be>
- *
- * @package chamilo.backup
  */
 class ForumPost extends Resource
 {

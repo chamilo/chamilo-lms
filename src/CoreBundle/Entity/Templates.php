@@ -1,4 +1,5 @@
 <?php
+
 /* For licensing terms, see /license.txt */
 
 namespace Chamilo\CoreBundle\Entity;
@@ -200,7 +201,7 @@ class Templates
         return $this->course;
     }
 
-    public function setCourse(Course $course): Templates
+    public function setCourse(Course $course): self
     {
         $this->course = $course;
 

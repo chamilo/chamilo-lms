@@ -1,4 +1,5 @@
 <?php
+
 /* For licensing terms, see /license.txt */
 
 namespace Chamilo\CoreBundle\EventListener;
@@ -8,8 +9,6 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
  * Class MessageListener.
- *
- * @package Chamilo\CoreBundle\EventListener
  */
 class MessageListener
 {

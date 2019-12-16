@@ -1,4 +1,5 @@
 <?php
+
 /* For licensing terms, see /license.txt */
 
 namespace Chamilo\CoreBundle\Component\Editor\Driver;
@@ -7,8 +8,6 @@ use Chamilo\CoreBundle\Component\Editor\Connector;
 
 /**
  * Class Driver.
- *
- * @package Chamilo\CoreBundle\Component\Editor\Driver
  */
 class Driver extends \elFinderVolumeLocalFileSystem
 {
@@ -93,7 +92,7 @@ class Driver extends \elFinderVolumeLocalFileSystem
             return $this->setError(\elFinder::ERROR_EXISTS, $name);
         }
 
-        if (!$this->allowCreate($dir, $name, ($file['mime'] === 'directory'))) {
+        if (!$this->allowCreate($dir, $name, ('directory' === $file['mime']))) {
             return $this->setError(\elFinder::ERROR_PERM_DENIED);
         }
 

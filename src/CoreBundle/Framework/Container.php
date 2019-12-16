@@ -1,4 +1,5 @@
 <?php
+
 /* For licensing terms, see /license.txt */
 
 namespace Chamilo\CoreBundle\Framework;
@@ -171,7 +172,7 @@ class Container
      */
     public static function getRequest()
     {
-        if (self::$container === null) {
+        if (null === self::$container) {
             return null;
         }
 
@@ -408,7 +409,7 @@ class Container
     }
 
     /**
-     * @param $manager UserManager
+     * @param UserManager $manager
      */
     public static function setUserManager($manager)
     {
@@ -424,7 +425,7 @@ class Container
     }
 
     /**
-     * @param $manager UserManager
+     * @param UserManager $manager
      */
     public static function setSiteManager($manager)
     {
@@ -518,7 +519,7 @@ class Container
         /*$siteSelector = $container->get('sonata.page.site.selector');
         $site = $siteSelector->retrieve();*/
         $siteManager = $container->get('sonata.page.manager.site');
-        $request = Container::getRequest();
+        $request = self::getRequest();
         $page = null;
         if ($request) {
             $host = $request->getHost();
@@ -532,9 +533,7 @@ class Container
             // Parents only of homepage
             $criteria = ['site' => $site, 'enabled' => true, 'slug' => $slug];
             /** @var Page $page */
-            $page = $pageManager->findOneBy($criteria);
-
-            return $page;
+            return $pageManager->findOneBy($criteria);
         }
 
         return $page;

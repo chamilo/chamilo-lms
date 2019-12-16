@@ -1,4 +1,5 @@
 <?php
+
 /* For licensing terms, see /license.txt */
 
 namespace Chamilo\CoreBundle\Form;
@@ -31,9 +32,7 @@ class CurriculumCategoryType extends AbstractType
             'entity',
             [
                 'class' => 'Entity\CurriculumCategory',
-                'query_builder' => function ($repository) use (
-                    $entity,
-                    $course,
+                'query_builder' => function ($repository) use ($course,
                     $session
                 ) {
                     $qb = $repository->createQueryBuilder('c')

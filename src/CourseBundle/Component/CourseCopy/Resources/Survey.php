@@ -1,4 +1,5 @@
 <?php
+
 /* For licensing terms, see /license.txt */
 
 namespace Chamilo\CourseBundle\Component\CourseCopy\Resources;
@@ -7,8 +8,6 @@ namespace Chamilo\CourseBundle\Component\CourseCopy\Resources;
  * Survey.
  *
  * @author Yannick Warnier <yannick.warnier@beeznest.com>
- *
- * @package chamilo.backup
  */
 class Survey extends Resource
 {

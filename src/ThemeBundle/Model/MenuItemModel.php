@@ -9,8 +9,6 @@ namespace Chamilo\ThemeBundle\Model;
 
 /**
  * Class MenuItemModel.
- *
- * @package Chamilo\ThemeBundle\Model
  */
 class MenuItemModel implements MenuItemInterface
 {

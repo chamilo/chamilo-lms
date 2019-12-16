@@ -10,8 +10,6 @@ use Sonata\AdminBundle\Show\ShowMapper;
 
 /**
  * Class SessionRelCourseAdmin.
- *
- * @package Chamilo\CoreBundle\Admin
  */
 class SessionRelCourseAdmin extends AbstractAdmin
 {

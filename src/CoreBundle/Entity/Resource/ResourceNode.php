@@ -1,4 +1,5 @@
 <?php
+
 /* For licensing terms, see /license.txt */
 
 namespace Chamilo\CoreBundle\Entity\Resource;
@@ -213,7 +214,7 @@ class ResourceNode
      *
      * @return $this
      */
-    public function setParent(ResourceNode $parent = null)
+    public function setParent(self $parent = null)
     {
         $this->parent = $parent;
 
@@ -288,7 +289,7 @@ class ResourceNode
      */
     public function setSlug($slug)
     {
-        if (strpos(self::PATH_SEPARATOR, $slug) !== false) {
+        if (false !== strpos(self::PATH_SEPARATOR, $slug)) {
             throw new \InvalidArgumentException('Invalid character "'.self::PATH_SEPARATOR.'" in resource name.');
         }
 
@@ -321,7 +322,7 @@ class ResourceNode
             $path
         );
 
-        if ($pathForDisplay !== null && strlen($pathForDisplay) > 0) {
+        if (null !== $pathForDisplay && strlen($pathForDisplay) > 0) {
             $pathForDisplay = substr_replace($pathForDisplay, '', -1);
         }
 
@@ -402,9 +403,7 @@ class ResourceNode
             Criteria::expr()->eq('session', $session)
         );
 
-        $result = $links->matching($criteria);
-
-        return $result;
+        return $links->matching($criteria);
     }
 
     /**
@@ -412,7 +411,7 @@ class ResourceNode
      */
     public function hasResourceFile()
     {
-        return $this->resourceFile !== null;
+        return null !== $this->resourceFile;
     }
 
     /**
@@ -430,7 +429,7 @@ class ResourceNode
     {
         if ($this->hasResourceFile()) {
             $mimeType = $this->getResourceFile()->getMimeType();
-            if (strpos($mimeType, 'text') !== false) {
+            if (false !== strpos($mimeType, 'text')) {
                 return true;
             }
         }
@@ -445,7 +444,7 @@ class ResourceNode
     {
         if ($this->hasResourceFile()) {
             $mimeType = $this->getResourceFile()->getMimeType();
-            if (strpos($mimeType, 'image') !== false) {
+            if (false !== strpos($mimeType, 'image')) {
                 return true;
             }
         }
@@ -460,7 +459,7 @@ class ResourceNode
     {
         if ($this->hasResourceFile()) {
             $mimeType = $this->getResourceFile()->getMimeType();
-            if (strpos($mimeType, 'video') !== false) {
+            if (false !== strpos($mimeType, 'video')) {
                 return true;
             }
         }
@@ -468,7 +467,7 @@ class ResourceNode
         return false;
     }
 
-    public function setResourceFile(ResourceFile $resourceFile = null): ResourceNode
+    public function setResourceFile(ResourceFile $resourceFile = null): self
     {
         $this->resourceFile = $resourceFile;
 

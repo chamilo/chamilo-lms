@@ -1,4 +1,5 @@
 <?php
+
 /* For licensing terms, see /license.txt */
 
 namespace Chamilo\CourseBundle\Repository;
@@ -13,8 +14,6 @@ use Doctrine\Common\Persistence\ManagerRegistry;
 
 /**
  * Class CForumForumRepository.
- *
- * @package Chamilo\CourseBundle\Repository
  */
 class CForumForumRepository extends ServiceEntityRepository
 {
@@ -91,7 +90,7 @@ class CForumForumRepository extends ServiceEntityRepository
      */
     public function findOneInCourse($id, Course $course)
     {
-        $dql = "SELECT f, ip
+        $dql = 'SELECT f, ip
             FROM ChamiloCourseBundle:CForumForum AS f
             INNER JOIN ChamiloCourseBundle:CItemProperty AS ip
                 WITH (f.iid = ip.ref AND f.cId = ip.course)
@@ -99,7 +98,7 @@ class CForumForumRepository extends ServiceEntityRepository
                 f.iid = :id AND
                 ip.tool = :tool AND
                 f.cId = :course AND
-                ip.visibility != 2";
+                ip.visibility != 2';
 
         $result = $this
             ->_em

@@ -1,4 +1,5 @@
 <?php
+
 /* For licensing terms, see /license.txt */
 
 namespace Chamilo\CourseBundle\Repository;
@@ -74,12 +75,12 @@ final class CDocumentRepository extends ResourceRepository implements ResourceRe
     public function getDocumentUrl(CDocument $document)
     {
         // There are no URL for folders.
-        if ($document->getFiletype() === 'folder') {
+        if ('folder' === $document->getFiletype()) {
             return '';
         }
         $file = $document->getResourceNode()->getResourceFile();
 
-        if ($file === null) {
+        if (null === $file) {
             return '';
         }
 
@@ -103,7 +104,7 @@ final class CDocumentRepository extends ResourceRepository implements ResourceRe
     {
         $resourceParent = $document->getResourceNode()->getParent();
 
-        if ($resourceParent !== null) {
+        if (null !== $resourceParent) {
             $resourceParentId = $resourceParent->getId();
             $criteria = [
                 'resourceNode' => $resourceParentId,
@@ -126,7 +127,7 @@ final class CDocumentRepository extends ResourceRepository implements ResourceRe
     public function getFolderSize($courseId, $path)
     {
         $path = str_replace('_', '\_', $path);
-        $addedSlash = $path === '/' ? '' : '/';
+        $addedSlash = '/' === $path ? '' : '/';
 
         $repo = $this->getRepository();
         $qb = $repo->createQueryBuilder('d');

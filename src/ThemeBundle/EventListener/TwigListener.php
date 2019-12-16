@@ -1,4 +1,5 @@
 <?php
+
 /* For licensing terms, see /license.txt */
 
 namespace Chamilo\ThemeBundle\EventListener;
@@ -49,7 +50,7 @@ class TwigListener implements EventSubscriberInterface
 
         $twig->addGlobal('favico', \Template::getPortalIcon($theme));
 
-        if ($settingsManager->getSetting('display.show_administrator_data') === 'true') {
+        if ('true' === $settingsManager->getSetting('display.show_administrator_data')) {
             $firstName = $settingsManager->getSetting('admin.administrator_name');
             $lastName = $settingsManager->getSetting('admin.administrator_surname');
             $email = $settingsManager->getSetting('admin.administrator_email');
@@ -88,14 +89,14 @@ class TwigListener implements EventSubscriberInterface
         $extraHeader = trim($settingsManager->getSetting('tracking.header_extra_content'));
         $twig->addGlobal('header_extra_content', $extraHeader);
 
-        if ($settingsManager->getSetting('display.show_tutor_data') === 'true') {
+        if ('true' === $settingsManager->getSetting('display.show_tutor_data')) {
             // Course manager
             $courseId = api_get_course_int_id();
             $sessionId = api_get_session_id();
 
             if (!empty($courseId)) {
                 $tutorData = '';
-                if ($sessionId !== 0) {
+                if (0 !== $sessionId) {
                     $users = SessionManager::getCoachesByCourseSession($sessionId, $courseId);
                     $links = [];
                     if (!empty($users)) {
@@ -109,10 +110,10 @@ class TwigListener implements EventSubscriberInterface
                     if ($count > 1) {
                         $tutorData .= get_lang('Coachs').' : ';
                         $tutorData .= array_to_string($links, CourseManager::USER_SEPARATOR);
-                    } elseif ($count === 1) {
+                    } elseif (1 === $count) {
                         $tutorData .= get_lang('Coach').' : ';
                         $tutorData .= array_to_string($links, CourseManager::USER_SEPARATOR);
-                    } elseif ($count === 0) {
+                    } elseif (0 === $count) {
                         $tutorData .= '';
                     }
                 }
@@ -143,7 +144,7 @@ class TwigListener implements EventSubscriberInterface
         $pluginConfiguration = api_get_settings('Plugins', 'list', 1);
         $pluginRegionList = [];
         foreach ($pluginConfiguration as $plugin) {
-            if ($plugin['type'] === 'region') {
+            if ('region' === $plugin['type']) {
                 $pluginRegionList[$plugin['variable']][] = $plugin['subkey'];
             }
         }

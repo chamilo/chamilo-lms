@@ -1,4 +1,5 @@
 <?php
+
 /* For licensing terms, see /license.txt */
 
 namespace Chamilo\CoreBundle\Migrations;
@@ -10,8 +11,6 @@ use Doctrine\ORM\EntityManager;
 
 /**
  * Class AbstractMigrationChamilo.
- *
- * @package Chamilo\CoreBundle\Migrations
  */
 abstract class AbstractMigrationChamilo extends AbstractMigration
 {
@@ -102,7 +101,7 @@ abstract class AbstractMigrationChamilo extends AbstractMigration
         if (count($options) > 0) {
             foreach ($options as $option) {
                 if (empty($option['text'])) {
-                    if ($option['value'] == 'true') {
+                    if ('true' == $option['value']) {
                         $option['text'] = 'Yes';
                     } else {
                         $option['text'] = 'No';

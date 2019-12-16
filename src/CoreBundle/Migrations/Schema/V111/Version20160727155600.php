@@ -1,4 +1,5 @@
 <?php
+
 /* For licensing terms, see /license.txt */
 
 namespace Chamilo\CoreBundle\Migrations\Schema\V111;
@@ -9,14 +10,12 @@ use Doctrine\DBAL\Schema\Schema;
 /**
  * Class Version20160727155600
  * Add an initial branch_sync.
- *
- * @package Chamilo\CoreBundle\Migrations\Schema\V111
  */
 class Version20160727155600 extends AbstractMigrationChamilo
 {
     public function up(Schema $schema)
     {
-        $sql = "SELECT COUNT(id) as count FROM branch_sync";
+        $sql = 'SELECT COUNT(id) as count FROM branch_sync';
         $result = $this->connection->executeQuery($sql)->fetch();
         $count = $result['count'];
 

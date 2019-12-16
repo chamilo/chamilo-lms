@@ -1,4 +1,5 @@
 <?php
+
 /* For licensing terms, see /license.txt */
 
 namespace Chamilo\CoreBundle\Controller;
@@ -42,7 +43,7 @@ class IndexController extends BaseController
             return '';
         }
         $studentView = $request->getSession()->get('studentview');
-        if (empty($studentView) || $studentView === 'studentview') {
+        if (empty($studentView) || 'studentview' === $studentView) {
             $request->getSession()->set('studentview', 'teacherview');
 
             return 'teacherview';

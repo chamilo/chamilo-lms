@@ -1,4 +1,5 @@
 <?php
+
 /* For licensing terms, see /license.txt */
 
 namespace Chamilo\CoreBundle\Entity;
@@ -518,7 +519,7 @@ class GradebookCategory
         return $this->gradeBooksToValidateInDependence;
     }
 
-    public function setGradeBooksToValidateInDependence(int $value): GradebookCategory
+    public function setGradeBooksToValidateInDependence(int $value): self
     {
         $this->gradeBooksToValidateInDependence = $value;
 
@@ -530,7 +531,7 @@ class GradebookCategory
         return $this->user;
     }
 
-    public function setUser(User $user): GradebookCategory
+    public function setUser(User $user): self
     {
         $this->user = $user;
 

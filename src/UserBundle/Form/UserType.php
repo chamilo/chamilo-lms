@@ -1,4 +1,5 @@
 <?php
+
 /* For licensing terms, see /license.txt */
 
 namespace Chamilo\UserBundle\Form;
@@ -15,8 +16,6 @@ use Symfony\Component\Security\Core\SecurityContext;
  * Class UserType.
  *
  * @deprecated
- *
- * @package Chamilo\UserBundle\Form
  */
 class UserType extends AbstractType
 {

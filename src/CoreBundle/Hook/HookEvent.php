@@ -1,4 +1,5 @@
 <?php
+
 /* For licensing terms, see /license.txt */
 
 /**
@@ -17,8 +18,6 @@ use Doctrine\ORM\EntityManager;
  *
  * This abstract class implements Hook Event Interface to build the base
  * for Hook Events. This class have some public static method, e.g for create Hook Events.
- *
- * @package Chamilo\CoreBundle\Hook
  */
 abstract class HookEvent implements HookEventInterface
 {
@@ -106,7 +105,7 @@ abstract class HookEvent implements HookEventInterface
      *
      * @see http://php.net/manual/en/splsubject.attach.php
      *
-     * @param HookObserverInterface $observer The HookObserver to attach.
+     * @param HookObserverInterface $observer the HookObserver to attach
      */
     public function attach(HookObserverInterface $observer)
     {

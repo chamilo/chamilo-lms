@@ -1,4 +1,5 @@
 <?php
+
 /* For licensing terms, see /license.txt */
 
 namespace Chamilo\CoreBundle\Entity;
@@ -208,7 +209,7 @@ class Language
      *
      * @return Language
      */
-    public function setParent(Language $parent)
+    public function setParent(self $parent)
     {
         $this->parent = $parent;
 

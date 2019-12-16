@@ -1,4 +1,5 @@
 <?php
+
 /* For licensing terms, see /license.txt */
 
 namespace Chamilo\LtiBundle\Entity;
@@ -10,7 +11,6 @@ use Doctrine\ORM\Mapping as ORM;
 /**
  * Class ExternalTool.
  *
- * @package Chamilo\LtiBundle\Entity
  *
  * @ORM\Table(name="lti_external_tool")
  * @ORM\Entity()
@@ -268,7 +268,7 @@ class ExternalTool
      */
     public function isGlobal()
     {
-        return $this->course === null;
+        return null === $this->course;
     }
 
     /**
@@ -461,7 +461,7 @@ class ExternalTool
     /**
      * @return ExternalTool
      */
-    public function setParent(ExternalTool $parent)
+    public function setParent(self $parent)
     {
         $this->parent = $parent;
         $this->sharedSecret = $parent->getSharedSecret();
@@ -488,6 +488,7 @@ class ExternalTool
                 ($char >= 'a' && $char <= 'z') || ($char >= '0' && $char <= '9')
             ) {
                 $newKey .= $char;
+
                 continue;
             }
             $newKey .= '_';

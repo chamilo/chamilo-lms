@@ -1,4 +1,5 @@
 <?php
+
 /* For licensing terms, see /license.txt */
 
 namespace Chamilo\CoreBundle\Component\Editor;
@@ -134,24 +135,30 @@ class Editor
                 switch ($key) {
                     case 'ToolbarSet':
                         $this->toolbarSet = $value;
+
                         break;
                     case 'Config':
                         $this->processConfig($value);
+
                         break;
                     case 'width':
                     case 'Width':
                         $this->setConfigAttribute('width', $value);
+
                         break;
                     case 'height':
                     case 'Height':
                         $this->setConfigAttribute('height', $value);
+
                         break;
                     case 'FullPage':
                     case 'fullPage':
                         $this->setConfigAttribute('fullPage', $value);
+
                         break;
                     default:
                         $this->setConfigAttribute($key, $value);
+
                         break;
                 }
             }
@@ -189,10 +196,11 @@ class Editor
             case 'resource':
             case 'string':
                 return '"'.str_replace(
-                    ["\r", "\n", "<", ">", "&"],
+                    ["\r", "\n", '<', '>', '&'],
                     ['\r', '\n', '\x3c', '\x3e', '\x26'],
                     addslashes($var)
                 ).'"';
+
                 break;
             case 'array':
                 // Arrays in JSON can't be associative. If the array is empty or if it
@@ -215,6 +223,7 @@ class Editor
                 }
 
                 return '{ '.implode(', ', $output).' }';
+
                 break;
             default:
                 return 'null';

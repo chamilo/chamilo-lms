@@ -1,4 +1,5 @@
 <?php
+
 /* For licensing terms, see /license.txt */
 
 namespace Chamilo\CoreBundle\Entity;
@@ -50,7 +51,7 @@ class PersonalFile extends AbstractResource implements ResourceInterface
         return $this->id;
     }
 
-    public function setId(int $id): PersonalFile
+    public function setId(int $id): self
     {
         $this->id = $id;
 
@@ -62,7 +63,7 @@ class PersonalFile extends AbstractResource implements ResourceInterface
         return (string) $this->name;
     }
 
-    public function setName(string $name): PersonalFile
+    public function setName(string $name): self
     {
         $this->name = $name;
 

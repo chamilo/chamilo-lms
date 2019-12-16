@@ -1,4 +1,5 @@
 <?php
+
 /* For licensing terms, see /license.txt */
 
 namespace Chamilo\CourseBundle\Component\CourseCopy\Resources;
@@ -8,8 +9,6 @@ namespace Chamilo\CourseBundle\Component\CourseCopy\Resources;
  * A WWW-link from the Links-module in a Chamilo-course.
  *
  * @author Bart Mollet <bart.mollet@hogent.be>
- *
- * @package chamilo.backup
  */
 class Link extends Resource
 {

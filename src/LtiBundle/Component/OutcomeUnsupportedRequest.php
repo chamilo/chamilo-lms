@@ -1,12 +1,11 @@
 <?php
+
 /* For licensing terms, see /license.txt */
 
 namespace Chamilo\LtiBundle\Component;
 
 /**
  * Class OutcomeUnsupportedRequest.
- *
- * @package Chamilo\LtiBundle\Component
  */
 class OutcomeUnsupportedRequest extends OutcomeRequest
 {

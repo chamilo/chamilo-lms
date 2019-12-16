@@ -1,12 +1,11 @@
 <?php
+
 /* For licensing terms, see /license.txt */
 
 namespace Chamilo\CoreBundle\Component\Editor\CkEditor\Toolbar;
 
 /**
  * Wiki toolbar configuration.
- *
- * @package Chamilo\CoreBundle\Component\Editor\CkEditor\Toolbar
  */
 class Wiki extends Basic
 {
@@ -17,7 +16,7 @@ class Wiki extends Basic
      */
     public function getConfig()
     {
-        if (api_get_setting('more_buttons_maximized_mode') != 'true') {
+        if ('true' != api_get_setting('more_buttons_maximized_mode')) {
             $config['toolbar'] = $this->getNormalToolbar();
         } else {
             $config['toolbar_minToolbar'] = $this->getMinimizedToolbar();
@@ -25,7 +24,7 @@ class Wiki extends Basic
 
         $config['forcePasteAsPlainText'] = false;
 
-        if (api_get_setting('force_wiki_paste_as_plain_text') == 'true') {
+        if ('true' == api_get_setting('force_wiki_paste_as_plain_text')) {
             $config['forcePasteAsPlainText'] = true;
         }
 
@@ -79,9 +78,9 @@ class Wiki extends Basic
                 '-',
                 'TextColor',
                 'BGColor',
-                api_get_setting('allow_spellcheck') == 'true' ? 'Scayt' : '',
+                'true' == api_get_setting('allow_spellcheck') ? 'Scayt' : '',
             ],
-            api_get_setting('enabled_wiris') == 'true' ? ['ckeditor_wiris_formulaEditor', 'ckeditor_wiris_CAS'] : [''],
+            'true' == api_get_setting('enabled_wiris') ? ['ckeditor_wiris_formulaEditor', 'ckeditor_wiris_CAS'] : [''],
             ['Source'],
         ];
     }
@@ -100,7 +99,7 @@ class Wiki extends Basic
             ['BulletedList', 'NumberedList', 'HorizontalRule'],
             ['JustifyLeft', 'JustifyCenter', 'JustifyRight', 'JustifyBlock'],
             ['Styles', 'Format', 'Font', 'FontSize', 'Bold', 'Italic', 'Underline', 'TextColor', 'BGColor', 'Source'],
-            api_get_setting('enabled_wiris') == 'true' ? ['ckeditor_wiris_formulaEditor', 'ckeditor_wiris_CAS'] : [''],
+            'true' == api_get_setting('enabled_wiris') ? ['ckeditor_wiris_formulaEditor', 'ckeditor_wiris_CAS'] : [''],
             ['Toolbarswitch'],
         ];
     }

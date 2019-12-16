@@ -9,8 +9,6 @@ namespace Chamilo\ThemeBundle\Model;
 
 /**
  * Interface MenuItemInterface.
- *
- * @package Chamilo\ThemeBundle\Model
  */
 interface MenuItemInterface
 {
@@ -54,12 +52,12 @@ interface MenuItemInterface
     /**
      * @return MenuItemModel
      */
-    public function addChild(MenuItemInterface $child);
+    public function addChild(self $child);
 
     /**
      * @return MenuItemModel
      */
-    public function removeChild(MenuItemInterface $child);
+    public function removeChild(self $child);
 
     /**
      * @return mixed
@@ -91,7 +89,7 @@ interface MenuItemInterface
      *
      * @return MenuItemModel
      */
-    public function setParent(MenuItemInterface $parent = null);
+    public function setParent(self $parent = null);
 
     /**
      * @return MenuItemInterface|null

@@ -1,4 +1,5 @@
 <?php
+
 /* For licensing terms, see /license.txt */
 
 namespace Chamilo\CoreBundle\Migrations\Schema\V111;
@@ -9,8 +10,6 @@ use Doctrine\DBAL\Schema\Schema;
 /**
  * Class Version20160727122700
  * Add missing index to c_lp.
- *
- * @package Chamilo\CoreBundle\Migrations\Schema\V111
  */
 class Version20160727122700 extends AbstractMigrationChamilo
 {

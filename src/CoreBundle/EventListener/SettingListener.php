@@ -1,4 +1,5 @@
 <?php
+
 /* For licensing terms, see /license.txt */
 
 namespace Chamilo\CoreBundle\EventListener;
@@ -9,8 +10,6 @@ use Symfony\Component\HttpFoundation\Request;
 
 /**
  * Class SettingListener.
- *
- * @package Chamilo\CoreBundle\EventListener
  */
 class SettingListener
 {

@@ -1,4 +1,5 @@
 <?php
+
 /* For licensing terms, see /license.txt */
 
 namespace Chamilo\CourseBundle\Entity;
@@ -535,7 +536,7 @@ class CGroupCategory
         return $this->documentAccess;
     }
 
-    public function setDocumentAccess(int $documentAccess): CGroupCategory
+    public function setDocumentAccess(int $documentAccess): self
     {
         $this->documentAccess = $documentAccess;
 

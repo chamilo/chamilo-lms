@@ -1,4 +1,5 @@
 <?php
+
 /* For licensing terms, see /license.txt */
 
 namespace Chamilo\CoreBundle\EventListener;
@@ -110,6 +111,7 @@ class LocaleListener implements EventSubscriberInterface
                 $priority = $settings->getSetting("language.$setting");
                 if (!empty($priority) && isset($localeList[$priority])) {
                     $locale = $localeList[$priority];
+
                     break;
                 }
             }

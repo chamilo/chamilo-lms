@@ -1,4 +1,5 @@
 <?php
+
 /* For licensing terms, see /license.txt */
 
 namespace Chamilo\CoreBundle\Migrations\Schema\V111;
@@ -10,8 +11,6 @@ use Doctrine\DBAL\Types\Type;
 /**
  * Class Version20160418093800
  * Add save_correct_answers column to c_quiz table.
- *
- * @package Chamilo\CoreBundle\Migrations\Schema\V111
  */
 class Version20160418093800 extends AbstractMigrationChamilo
 {

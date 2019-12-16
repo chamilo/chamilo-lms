@@ -1,4 +1,5 @@
 <?php
+
 /* For licensing terms, see /license.txt */
 
 namespace Chamilo\CoreBundle\Hook;
@@ -9,8 +10,6 @@ use Doctrine\ORM\EntityManager;
 /**
  * Class HookNotificationContent
  * Hook Event class for Content format of Notifications.
- *
- * @package chamilo.library.hook
  */
 class HookNotificationContent extends HookEvent implements HookNotificationContentEventInterface
 {

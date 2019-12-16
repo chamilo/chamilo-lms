@@ -1,4 +1,5 @@
 <?php
+
 /* For licensing terms, see /license.txt */
 
 namespace Chamilo\CourseBundle\Entity;
@@ -116,7 +117,7 @@ class CTool extends AbstractResource implements ResourceInterface
         return $this->name;
     }
 
-    public function setName(string $name): CTool
+    public function setName(string $name): self
     {
         $this->name = $name;
 
@@ -169,7 +170,7 @@ class CTool extends AbstractResource implements ResourceInterface
     /**
      * @param Session $session
      */
-    public function setSession(Session $session = null): CTool
+    public function setSession(Session $session = null): self
     {
         $this->session = $session;
 
@@ -253,7 +254,7 @@ class CTool extends AbstractResource implements ResourceInterface
         return $this->tool;
     }
 
-    public function setTool(Tool $tool): CTool
+    public function setTool(Tool $tool): self
     {
         $this->tool = $tool;
 

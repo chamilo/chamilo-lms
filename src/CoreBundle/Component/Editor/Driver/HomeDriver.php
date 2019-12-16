@@ -1,12 +1,11 @@
 <?php
+
 /* For licensing terms, see /license.txt */
 
 namespace Chamilo\CoreBundle\Component\Editor\Driver;
 
 /**
  * Class HomeDriver.
- *
- * @package Chamilo\CoreBundle\Component\Editor\Driver
  */
 class HomeDriver extends Driver implements DriverInterface
 {

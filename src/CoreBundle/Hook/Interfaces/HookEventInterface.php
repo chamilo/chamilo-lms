@@ -1,4 +1,5 @@
 <?php
+
 /* For licensing terms, see /license.txt */
 
 /**
@@ -12,8 +13,6 @@ use Doctrine\ORM\EntityManager;
 
 /**
  * Interface HookEventInterface.
- *
- * @package Chamilo\CoreBundle\Hook\Interfaces
  */
 interface HookEventInterface
 {
@@ -54,7 +53,7 @@ interface HookEventInterface
     /**
      * Set an array with data needed by hooks.
      */
-    public function setEventData(array $data): HookEventInterface;
+    public function setEventData(array $data): self;
 
     /**
      * Return the event name refer to where hook is used.
@@ -71,7 +70,7 @@ interface HookEventInterface
     /**
      * Detach all hook observers.
      */
-    public function detachAll(): HookEventInterface;
+    public function detachAll(): self;
 
     /**
      * Get the entity manager used.

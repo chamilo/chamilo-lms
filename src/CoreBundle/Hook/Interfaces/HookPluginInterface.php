@@ -1,4 +1,5 @@
 <?php
+
 /* For licensing terms, see /license.txt */
 
 /**
@@ -12,8 +13,6 @@ namespace Chamilo\CoreBundle\Hook\Interfaces;
  * Interface HookPluginInterface.
  *
  * This interface should be implemented by plugins to implements Hook Observer.
- *
- * @package Chamilo\CoreBundle\Hook
  */
 interface HookPluginInterface
 {

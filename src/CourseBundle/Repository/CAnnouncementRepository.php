@@ -1,4 +1,5 @@
 <?php
+
 /* For licensing terms, see /license.txt */
 
 namespace Chamilo\CourseBundle\Repository;
@@ -59,11 +60,11 @@ final class CAnnouncementRepository extends ResourceRepository
 
         if (!empty($titleToSearch)) {
             $parameters['search_title'] = "%$titleToSearch%";
-            $searchCondition .= " AND (title LIKE :search_title) ";
+            $searchCondition .= ' AND (title LIKE :search_title) ';
         }
 
         if (!empty($userToSearch)) {
-            $searchCondition .= " AND (ip.insertUser = ".$userToSearch->getId().") ";
+            $searchCondition .= ' AND (ip.insertUser = '.$userToSearch->getId().') ';
         }
 
         $extraGroupCondition = '';
@@ -75,11 +76,11 @@ final class CAnnouncementRepository extends ResourceRepository
         if (api_is_allowed_to_edit(false, true)
             || ($allowUserEditSetting && !api_is_anonymous())
         ) {
-            $dqlCondition = "AND (ip.visibility = 0 OR ip.visibility = 1)";
+            $dqlCondition = 'AND (ip.visibility = 0 OR ip.visibility = 1)';
 
             if (!empty($group)) {
-                $dqlCondition = "AND ip.visibility != 2 AND
-                    (ip.group = ".$group->getId()." OR ip.group IS NULL )
+                $dqlCondition = 'AND ip.visibility != 2 AND
+                    (ip.group = '.$group->getId()." OR ip.group IS NULL )
                     $extraGroupCondition";
             }
         } else {
@@ -90,64 +91,64 @@ final class CAnnouncementRepository extends ResourceRepository
             if (!empty($memberships)) {
                 if ($allowUserEditSetting && !api_is_anonymous()) {
                     $parameters['memberships'] = $memberships;
-                    $condUserId = " AND (
-                            ip.lasteditUserId = ".$user->getId()." OR(
-                                (ip.toUser = ".$user->getId()." OR ip.toUser IS NULL) OR
+                    $condUserId = ' AND (
+                            ip.lasteditUserId = '.$user->getId().' OR(
+                                (ip.toUser = '.$user->getId().' OR ip.toUser IS NULL) OR
                                 (ip.group IS NULL OR ip.group = 0 OR ip.group IN :memberships)
                             )
-                        ) ";
+                        ) ';
 
                     if (!empty($group)) {
                         unset($parameters['memberships']);
-                        $condUserId = " AND (
-                                ip.lasteditUserId = ".$user->getId()." OR ip.group IS NULL OR ip.group IN (0, ".$group->getId()
-                            .")
-                            ) ".$extraGroupCondition;
+                        $condUserId = ' AND (
+                                ip.lasteditUserId = '.$user->getId().' OR ip.group IS NULL OR ip.group IN (0, '.$group->getId()
+                            .')
+                            ) '.$extraGroupCondition;
                     }
                 } else {
                     $parameters['memberships'] = $memberships;
-                    $condUserId = " AND (
-                            (ip.toUser = ".$user->getId().") OR ip.toUser IS NULL) AND
+                    $condUserId = ' AND (
+                            (ip.toUser = '.$user->getId().') OR ip.toUser IS NULL) AND
                             (ip.group IS NULL OR ip.group = 0 OR ip.group IN :memberships)
-                        ) ";
+                        ) ';
 
                     if (!empty($group)) {
                         unset($parameters['memberships']);
-                        $condUserId = " AND (
-                            (ip.toUser = ".$user->getId().") OR ip.toUser IS NULL) AND
-                            (ip.group IS NULL OR ip.group IN (0, ".$group->getId()."))
-                        ) ".$extraGroupCondition;
+                        $condUserId = ' AND (
+                            (ip.toUser = '.$user->getId().') OR ip.toUser IS NULL) AND
+                            (ip.group IS NULL OR ip.group IN (0, '.$group->getId().'))
+                        ) '.$extraGroupCondition;
                     }
                 }
 
                 $dqlCondition = "$condUserId AND ip.visibility = 1";
             } else {
                 if (!empty($user->getId())) {
-                    $condUserId = " AND (
-                            (ip.toUser = ".$user->getId()." OR ip.toUser IS NULL) AND
+                    $condUserId = ' AND (
+                            (ip.toUser = '.$user->getId().' OR ip.toUser IS NULL) AND
                             (ip.group = 0 OR ip.group IS NULL)
-                        ) ";
+                        ) ';
 
                     if ($allowUserEditSetting && !api_is_anonymous()) {
-                        $condUserId = " AND (
-                                ip.lasteditUserId = ".$user->getId()." OR
+                        $condUserId = ' AND (
+                                ip.lasteditUserId = '.$user->getId().' OR
                                 (
-                                    (ip.toUser = ".$user->getId()." OR ip.toUser IS NULL) AND
+                                    (ip.toUser = '.$user->getId().' OR ip.toUser IS NULL) AND
                                     (ip.group = 0 OR ip.group IS NULL)
                                 )
-                            ) ";
+                            ) ';
                     }
 
                     $dqlCondition = "$condUserId
                         AND ip.visibility = 1
                         AND announcement.sessionId IN (0, $sessionId)";
                 } else {
-                    $condUserId = " AND ip.group = 0 OR ip.group IS NULL ";
+                    $condUserId = ' AND ip.group = 0 OR ip.group IS NULL ';
 
                     if ($allowUserEditSetting && !api_is_anonymous()) {
-                        $condUserId = " AND (
-                                ip.lastEditUserId = ".$user->getId()." OR ip.group = 0 OR ip.group IS NULL
-                            ) ";
+                        $condUserId = ' AND (
+                                ip.lastEditUserId = '.$user->getId().' OR ip.group = 0 OR ip.group IS NULL
+                            ) ';
                     }
 
                     $dqlCondition = "$condUserId

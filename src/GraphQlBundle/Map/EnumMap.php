@@ -1,4 +1,5 @@
 <?php
+
 /* For licensing terms, see /license.txt */
 
 namespace Chamilo\GraphQlBundle\Map;
@@ -10,8 +11,6 @@ use Symfony\Component\DependencyInjection\ContainerAwareInterface;
 
 /**
  * Class EnumMap.
- *
- * @package Chamilo\GraphQlBundle\Map
  */
 class EnumMap extends ResolverMap implements ContainerAwareInterface
 {

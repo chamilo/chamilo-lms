@@ -1,4 +1,5 @@
 <?php
+
 /* For licensing terms, see /license.txt */
 
 namespace Chamilo\CoreBundle\Entity\Listener;
@@ -107,7 +108,7 @@ class CourseListener
             }
         }
 
-        if ($course->getVisibility() != COURSE_VISIBILITY_HIDDEN) {
+        if (COURSE_VISIBILITY_HIDDEN != $course->getVisibility()) {
             $limit = $url->getLimitActiveCourses();
 
             if (!empty($limit)) {

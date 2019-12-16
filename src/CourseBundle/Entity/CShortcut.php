@@ -1,4 +1,5 @@
 <?php
+
 /* For licensing terms, see /license.txt */
 
 namespace Chamilo\CourseBundle\Entity;
@@ -42,7 +43,7 @@ class CShortcut extends AbstractResource implements ResourceInterface
         return $this->name;
     }
 
-    public function setName(string $name): CShortcut
+    public function setName(string $name): self
     {
         $this->name = $name;
 

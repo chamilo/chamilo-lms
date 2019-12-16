@@ -1,4 +1,5 @@
 <?php
+
 /* For licensing terms, see /license.txt */
 
 namespace Chamilo\CoreBundle\Migrations\Schema\V111;
@@ -9,8 +10,6 @@ use Doctrine\DBAL\Schema\Schema;
 /**
  * Class Version20160705192000
  * Add accumulate scorm time to c_lp table.
- *
- * @package Chamilo\CoreBundle\Migrations\Schema\V111
  */
 class Version20160705192000 extends AbstractMigrationChamilo
 {
@@ -27,7 +26,7 @@ class Version20160705192000 extends AbstractMigrationChamilo
             ->findOneBy(['variable' => 'scorm_cumulative_session_time']);
 
         $cumulativeScormTime = 1;
-        if ($result->getSelectedValue() === 'false') {
+        if ('false' === $result->getSelectedValue()) {
             $cumulativeScormTime = 0;
         }
         $this->addSql("UPDATE c_lp SET accumulate_scorm_time = $cumulativeScormTime");

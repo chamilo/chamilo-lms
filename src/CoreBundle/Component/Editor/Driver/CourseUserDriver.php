@@ -1,12 +1,11 @@
 <?php
+
 /* For licensing terms, see /license.txt */
 
 namespace Chamilo\CoreBundle\Component\Editor\Driver;
 
 /**
  * Class CourseUserDriver.
- *
- * @package Chamilo\CoreBundle\Component\Editor\Driver
  */
 class CourseUserDriver extends CourseDriver
 {

@@ -1,4 +1,5 @@
 <?php
+
 /* For licensing terms, see /license.txt */
 
 namespace Chamilo\CoreBundle\Entity;
@@ -558,8 +559,6 @@ class AccessUrl extends AbstractResource implements ResourceInterface
         $url = $this->getUrl();
         $url = parse_url($url);
 
-        $url = $url['host'];
-
-        return $url;
+        return $url['host'];
     }
 }

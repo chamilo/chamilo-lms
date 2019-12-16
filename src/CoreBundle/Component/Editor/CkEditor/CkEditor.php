@@ -1,4 +1,5 @@
 <?php
+
 /* For licensing terms, see /license.txt */
 
 namespace Chamilo\CoreBundle\Component\Editor\CkEditor;
@@ -39,7 +40,7 @@ class CkEditor extends Editor
 
         $value = trim($value);
 
-        if ($value === '' || $value === '<html><head><title></title></head><body></body></html>') {
+        if ('' === $value || '<html><head><title></title></head><body></body></html>' === $value) {
             $style = api_get_bootstrap_and_font_awesome();
             $style .= api_get_css(ChamiloApi::getEditorDocStylePath());
         }
@@ -68,13 +69,11 @@ class CkEditor extends Editor
         $config = $toolbar->getConfig();
         $javascript = $this->toJavascript($config);
 
-        $html = "<script>
+        return "<script>
            CKEDITOR.replace('".$this->getTextareaId()."',
                $javascript
            );
            </script>";
-
-        return $html;
     }
 
     /**

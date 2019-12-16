@@ -1,12 +1,11 @@
 <?php
+
 /* For licensing terms, see /license.txt */
 
 namespace Chamilo\CoreBundle\Component\Editor\CkEditor\Toolbar;
 
 /**
  * TestQuestionDescription toolbar configuration.
- *
- * @package Chamilo\CoreBundle\Component\Editor\CkEditor\Toolbar
  */
 class TestQuestionDescription extends Basic
 {
@@ -36,7 +35,7 @@ class TestQuestionDescription extends Basic
         ];
 
         $config['extraPlugins'] = $this->getPluginsToString();
-        if (api_get_setting('more_buttons_maximized_mode') != 'true') {
+        if ('true' != api_get_setting('more_buttons_maximized_mode')) {
             $config['toolbar'] = $this->getNormalToolbar();
         } else {
             $config['toolbar_minToolbar'] = $this->getMinimizedToolbar();
@@ -52,7 +51,7 @@ class TestQuestionDescription extends Basic
     public function getConditionalPlugins()
     {
         $plugins = [];
-        if (api_get_setting('show_glossary_in_documents') === 'ismanual') {
+        if ('ismanual' === api_get_setting('show_glossary_in_documents')) {
             $plugins[] = 'glossary';
         }
 
@@ -102,7 +101,7 @@ class TestQuestionDescription extends Basic
                 'BGColor',
                 api_get_configuration_value('translate_html') ? 'Language' : '',
             ],
-            [api_get_setting('allow_spellcheck') == 'true' ? 'Scayt' : ''],
+            ['true' == api_get_setting('allow_spellcheck') ? 'Scayt' : ''],
             ['Styles', 'Format', 'Font', 'FontSize'],
             ['PageBreak', 'ShowBlocks'],
             ['Toolbarswitch', 'Source'],

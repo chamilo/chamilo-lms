@@ -271,7 +271,7 @@ class CourseSelectForm
             $course->resources['document'] = null;
         }
 
-        if ($avoidCourseInForm === false) {
+        if (false === $avoidCourseInForm) {
             /** @var Course $course */
             $courseSerialized = base64_encode(Course::serialize($course));
             echo '<input type="hidden" name="course" value="'.$courseSerialized.'"/>';
@@ -292,7 +292,7 @@ class CourseSelectForm
                       <button 
                         class="save" 
                         type="submit" 
-                        onclick="javascript:if(!confirm('."'".addslashes(api_htmlentities(get_lang("Please confirm your choice"), ENT_QUOTES, $charset))."'".')) return false;" >'.
+                        onclick="javascript:if(!confirm('."'".addslashes(api_htmlentities(get_lang('Please confirm your choice'), ENT_QUOTES, $charset))."'".')) return false;" >'.
                     get_lang('Validate').'</button>';
             } else {
                 if ($recycleOption) {
@@ -338,19 +338,22 @@ class CourseSelectForm
                         foreach ($resources as $id => $resource) {
                             $forum_categories[$id] = $resource;
                         }
-                        $element_count++;
+                        ++$element_count;
+
                         break;
                     case RESOURCE_FORUM:
                         foreach ($resources as $id => $resource) {
                             $forums[$resource->obj->forum_category][$id] = $resource;
                         }
-                        $element_count++;
+                        ++$element_count;
+
                         break;
                     case RESOURCE_FORUMTOPIC:
                         foreach ($resources as $id => $resource) {
                             $forum_topics[$resource->obj->forum_id][$id] = $resource;
                         }
-                        $element_count++;
+                        ++$element_count;
+
                         break;
                     case RESOURCE_LINKCATEGORY:
                     case RESOURCE_FORUMPOST:
@@ -368,7 +371,7 @@ class CourseSelectForm
                             echo '<div class="item-content" id="div_'.$type.'">';
                         }
 
-                        if ($type == RESOURCE_LEARNPATH) {
+                        if (RESOURCE_LEARNPATH == $type) {
                             echo Display::return_message(
                                 get_lang(
                                     'ToExportCoursesWithQuizYouHaveToSelectQuiz'
@@ -383,8 +386,8 @@ class CourseSelectForm
                             );
                         }
 
-                        if ($type == RESOURCE_DOCUMENT) {
-                            if (api_get_setting('show_glossary_in_documents') != 'none') {
+                        if (RESOURCE_DOCUMENT == $type) {
+                            if ('none' != api_get_setting('show_glossary_in_documents')) {
                                 echo Display::return_message(
                                     get_lang(
                                         'ToExportDocumentsWithGlossaryYouHaveToSelectGlossary'
@@ -399,10 +402,10 @@ class CourseSelectForm
                             echo '<div class="btn-group">';
                             echo "<a class=\"btn btn-default\" 
                                         href=\"javascript: void(0);\" 
-                                        onclick=\"javascript: setCheckbox('$type',true);\" >".get_lang('All')."</a>";
+                                        onclick=\"javascript: setCheckbox('$type',true);\" >".get_lang('All').'</a>';
                             echo "<a class=\"btn btn-default\" 
                                         href=\"javascript: void(0);\" 
-                                        onclick=\"javascript:setCheckbox('$type',false);\" >".get_lang('none')."</a>";
+                                        onclick=\"javascript:setCheckbox('$type',false);\" >".get_lang('none').'</a>';
                             echo '</div>';
                             echo '<ul class="list-backups-options">';
                             foreach ($resources as $id => $resource) {
@@ -428,7 +431,7 @@ class CourseSelectForm
                             echo '</div>';
                             echo '<script language="javascript">exp('."'$type'".')</script>';
                         }
-                        $element_count++;
+                        ++$element_count;
                 }
             }
         }
@@ -452,6 +455,7 @@ class CourseSelectForm
                                     name="resource['.RESOURCE_QUIZQUESTION.']['.$id.']" 
                                     id="resource['.RESOURCE_QUIZQUESTION.']['.$id.']" value="On" />';
                             }
+
                             break;
                     }
                 }
@@ -475,6 +479,7 @@ class CourseSelectForm
                                     name="resource['.RESOURCE_SCORM.']['.$id.']" 
                                     id="resource['.RESOURCE_SCORM.']['.$id.']" value="On" />';
                             }
+
                             break;
                     }
                 }
@@ -518,7 +523,7 @@ class CourseSelectForm
 
         /* Searching the documents resource that have been set to null because
         $avoidSerialize is true in the display_form() function*/
-        if ($from === 'copy_course') {
+        if ('copy_course' === $from) {
             if (is_array($resource)) {
                 $resource = array_keys($resource);
                 foreach ($resource as $resource_item) {
@@ -581,16 +586,18 @@ class CourseSelectForm
                                 unset($course->resources[$type][$id]);
                             }
                         }
+
                         break;
                     case RESOURCE_FORUMTOPIC:
                     case RESOURCE_FORUMPOST:
                        //Add post from topic
-                        if ($type == RESOURCE_FORUMTOPIC) {
+                        if (RESOURCE_FORUMTOPIC == $type) {
                             $posts_to_save = [];
                             $posts = $course->resources[RESOURCE_FORUMPOST];
                             foreach ($resources as $thread_id => $obj) {
                                 if (!isset($_POST['resource'][RESOURCE_FORUMTOPIC][$thread_id])) {
                                     unset($course->resources[RESOURCE_FORUMTOPIC][$thread_id]);
+
                                     continue;
                                 }
                                 $forum_id = $obj->obj->forum_id;
@@ -612,6 +619,7 @@ class CourseSelectForm
                                 }
                             }
                         }
+
                         break;
                     case RESOURCE_LEARNPATH:
                         $lps = isset($_POST['resource'][RESOURCE_LEARNPATH]) ? $_POST['resource'][RESOURCE_LEARNPATH] : null;
@@ -626,6 +634,7 @@ class CourseSelectForm
                                             //Add links added in a LP see #5760
                                             case 'link':
                                                 $_POST['resource'][RESOURCE_LINK][$item['path']] = 1;
+
                                                 break;
                                         }
                                     }
@@ -642,7 +651,7 @@ class CourseSelectForm
                         $documents = isset($_POST['resource'][RESOURCE_DOCUMENT]) ? $_POST['resource'][RESOURCE_DOCUMENT] : null;
                         if (!empty($resources) && is_array($resources)) {
                             foreach ($resources as $id => $obj) {
-                                if (isset($obj->file_type) && $obj->file_type === 'folder' &&
+                                if (isset($obj->file_type) && 'folder' === $obj->file_type &&
                                     !isset($_POST['resource'][RESOURCE_DOCUMENT][$id]) &&
                                     is_array($documents)
                                 ) {
@@ -656,6 +665,7 @@ class CourseSelectForm
                                             );
                                             if ($id_to_check != $id && $obj->path == $shared_path_part) {
                                                 $_POST['resource'][RESOURCE_DOCUMENT][$id] = 1;
+
                                                 break;
                                             }
                                         }
@@ -669,7 +679,7 @@ class CourseSelectForm
                             foreach ($resources as $id => $obj) {
                                 $resource_is_used_elsewhere = $course->is_linked_resource($obj);
                                 // check if document is in a quiz (audio/video)
-                                if ($type == RESOURCE_DOCUMENT && $course->has_resources(RESOURCE_QUIZ)) {
+                                if (RESOURCE_DOCUMENT == $type && $course->has_resources(RESOURCE_QUIZ)) {
                                     foreach ($course->resources[RESOURCE_QUIZ] as $quiz) {
                                         $quiz = $quiz->obj;
                                         if (isset($quiz->media) && $quiz->media == $id) {
@@ -678,7 +688,7 @@ class CourseSelectForm
                                     }
                                 }
                                 // quiz question can be, not attached to an exercise
-                                if ($type != RESOURCE_QUIZQUESTION) {
+                                if (RESOURCE_QUIZQUESTION != $type) {
                                     if (!isset($_POST['resource'][$type][$id]) && !$resource_is_used_elsewhere) {
                                         unset($course->resources[$type][$id]);
                                     }
@@ -775,8 +785,8 @@ class CourseSelectForm
                     echo '<blockquote>';
 
                     echo '<div class="btn-group">';
-                    echo "<a class=\"btn\" href=\"#\" onclick=\"javascript:setCheckbox('".$course->code."',true);\" >".get_lang('All')."</a>";
-                    echo "<a class=\"btn\" href=\"#\" onclick=\"javascript:setCheckbox('".$course->code."',false);\" >".get_lang('none')."</a>";
+                    echo "<a class=\"btn\" href=\"#\" onclick=\"javascript:setCheckbox('".$course->code."',true);\" >".get_lang('All').'</a>';
+                    echo "<a class=\"btn\" href=\"#\" onclick=\"javascript:setCheckbox('".$course->code."',false);\" >".get_lang('none').'</a>';
                     echo '</div>';
 
                     foreach ($resources as $id => $resource) {

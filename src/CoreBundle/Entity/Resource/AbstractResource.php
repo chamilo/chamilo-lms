@@ -1,4 +1,5 @@
 <?php
+
 /* For licensing terms, see /license.txt */
 
 namespace Chamilo\CoreBundle\Entity\Resource;
@@ -73,7 +74,7 @@ abstract class AbstractResource
 
     public function isVisible(Course $course, Session $session = null): bool
     {
-        return $this->getCourseSessionResourceLink($course, $session) === ResourceLink::VISIBILITY_PUBLISHED;
+        return ResourceLink::VISIBILITY_PUBLISHED === $this->getCourseSessionResourceLink($course, $session);
     }
 
     public function getFirstResourceLinkFromCourseSession(Course $course, Session $session = null): ?ResourceLink

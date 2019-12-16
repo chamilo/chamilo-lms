@@ -1,4 +1,5 @@
 <?php
+
 /* For licensing terms, see /license.txt */
 
 namespace Chamilo\CoreBundle\Repository;
@@ -28,8 +29,6 @@ class ResourceNodeRepository extends MaterializedPathRepository
             ->andWhere('file IS NOT NULL')
         ;
 
-        $result = $qb->getQuery()->getSingleScalarResult();
-
-        return $result;
+        return $qb->getQuery()->getSingleScalarResult();
     }
 }

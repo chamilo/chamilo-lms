@@ -1,4 +1,5 @@
 <?php
+
 /* For licensing terms, see /license.txt */
 
 namespace Chamilo\CoreBundle\Menu;
@@ -9,8 +10,6 @@ use Symfony\Component\HttpFoundation\RequestStack;
 
 /**
  * Class NavBuilder.
- *
- * @package Chamilo\CoreBundle\Menu
  */
 class MenuVoter implements VoterInterface
 {
@@ -33,19 +32,19 @@ class MenuVoter implements VoterInterface
         $currentUri = $item->getUri();
         $currentUrl = $request->getUri();
 
-        if ($item->getExtra('routes') !== null &&
+        if (null !== $item->getExtra('routes') &&
             in_array($request->attributes->get('_route'), $item->getExtra('routes'))
         ) {
             return true;
         }
 
-        if (strpos($currentUri, 'user_portal.php') !== false &&
-            strpos($currentUrl, 'user_portal.php') !== false
+        if (false !== strpos($currentUri, 'user_portal.php') &&
+            false !== strpos($currentUrl, 'user_portal.php')
         ) {
             return true;
         }
 
-        if (strpos($currentUri, '/main/') !== false) {
+        if (false !== strpos($currentUri, '/main/')) {
             $pos = strpos($currentUri, '/main/');
             $partSelected = substr($currentUri, $pos);
             $partSelected = str_replace('/%2E%2E/', '', $partSelected);

@@ -1,4 +1,5 @@
 <?php
+
 /* For licensing terms, see /license.txt */
 
 namespace Chamilo\LtiBundle\Controller;
@@ -19,8 +20,6 @@ use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 
 /**
  * Class CourseController.
- *
- * @package Chamilo\LtiBundle\Controller
  */
 class CourseController extends BaseController
 {

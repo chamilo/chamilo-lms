@@ -1,4 +1,5 @@
 <?php
+
 /* For licensing terms, see /license.txt */
 
 namespace Chamilo\CoreBundle\Migrations\Schema\V111;
@@ -8,8 +9,6 @@ use Doctrine\DBAL\Schema\Schema;
 
 /**
  * Class Version20160330103045.
- *
- * @package Chamilo\CoreBundle\Migrations\Schema\V111
  */
 class Version20160330103045 extends AbstractMigrationChamilo
 {
@@ -143,7 +142,7 @@ class Version20160330103045 extends AbstractMigrationChamilo
         $this->addSql('ALTER TABLE user CHANGE username_canonical username_canonical VARCHAR(100) NOT NULL');
         $this->addSql('ALTER TABLE user CHANGE email email VARCHAR(100) NOT NULL');
 
-        $sql = "UPDATE user SET email_canonical = email";
+        $sql = 'UPDATE user SET email_canonical = email';
         $this->addSql($sql);
 
         $sql = "ALTER TABLE user ADD roles LONGTEXT NOT NULL COMMENT '(DC2Type:array)'";
@@ -155,16 +154,16 @@ class Version20160330103045 extends AbstractMigrationChamilo
         $sql = "UPDATE user SET enabled = '1' WHERE active = 1";
         $this->addSql($sql);
 
-        $sql = "ALTER TABLE user ADD created_at DATETIME DEFAULT NULL, ADD updated_at DATETIME DEFAULT NULL;";
+        $sql = 'ALTER TABLE user ADD created_at DATETIME DEFAULT NULL, ADD updated_at DATETIME DEFAULT NULL;';
         $this->addSql($sql);
 
-        $sql = "UPDATE user SET username_canonical = username";
+        $sql = 'UPDATE user SET username_canonical = username';
         $this->addSql($sql);
 
-        $this->addSql("CREATE TABLE fos_group(id INT AUTO_INCREMENT NOT NULL, code VARCHAR(40) NOT NULL, UNIQUE INDEX UNIQ_4B019DDB77153098 (code), PRIMARY KEY(id)) DEFAULT CHARACTER SET utf8 COLLATE utf8_unicode_ci ENGINE = InnoDB");
-        $this->addSql("CREATE TABLE fos_user_user_group (user_id INT NOT NULL, group_id INT NOT NULL, INDEX IDX_B3C77447A76ED395 (user_id), INDEX IDX_B3C77447FE54D947 (group_id), PRIMARY KEY(user_id, group_id)) DEFAULT CHARACTER SET utf8 COLLATE utf8_unicode_ci ENGINE = InnoDB");
-        $this->addSql("ALTER TABLE fos_user_user_group ADD CONSTRAINT FK_B3C77447A76ED395 FOREIGN KEY (user_id) REFERENCES user (id)");
-        $this->addSql("ALTER TABLE fos_user_user_group ADD CONSTRAINT FK_B3C77447FE54D947 FOREIGN KEY (group_id) REFERENCES fos_group (id)");
+        $this->addSql('CREATE TABLE fos_group(id INT AUTO_INCREMENT NOT NULL, code VARCHAR(40) NOT NULL, UNIQUE INDEX UNIQ_4B019DDB77153098 (code), PRIMARY KEY(id)) DEFAULT CHARACTER SET utf8 COLLATE utf8_unicode_ci ENGINE = InnoDB');
+        $this->addSql('CREATE TABLE fos_user_user_group (user_id INT NOT NULL, group_id INT NOT NULL, INDEX IDX_B3C77447A76ED395 (user_id), INDEX IDX_B3C77447FE54D947 (group_id), PRIMARY KEY(user_id, group_id)) DEFAULT CHARACTER SET utf8 COLLATE utf8_unicode_ci ENGINE = InnoDB');
+        $this->addSql('ALTER TABLE fos_user_user_group ADD CONSTRAINT FK_B3C77447A76ED395 FOREIGN KEY (user_id) REFERENCES user (id)');
+        $this->addSql('ALTER TABLE fos_user_user_group ADD CONSTRAINT FK_B3C77447FE54D947 FOREIGN KEY (group_id) REFERENCES fos_group (id)');
     }
 
     public function down(Schema $schema)

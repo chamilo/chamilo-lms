@@ -1,4 +1,5 @@
 <?php
+
 /* For licensing terms, see /license.txt */
 
 namespace Chamilo\ThemeBundle\EventListener;
@@ -9,8 +10,6 @@ use Symfony\Component\HttpKernel\Event\GetResponseEvent;
 
 /**
  * Class ContextListener.
- *
- * @package Chamilo\ThemeBundle\EventListener
  */
 class ContextListener
 {

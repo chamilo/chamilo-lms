@@ -1,4 +1,5 @@
 <?php
+
 /* For licensing terms, see /license.txt */
 
 namespace Chamilo\CoreBundle\Entity;
@@ -697,7 +698,7 @@ class BranchSync
      *
      * @return $this
      */
-    public function setParent(BranchSync $parent = null)
+    public function setParent(self $parent = null)
     {
         $this->parent = $parent;
 
@@ -757,7 +758,7 @@ class BranchSync
         return $this->url;
     }
 
-    public function setUrl(AccessUrl $url): BranchSync
+    public function setUrl(AccessUrl $url): self
     {
         $this->url = $url;
 

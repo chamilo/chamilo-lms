@@ -1,4 +1,5 @@
 <?php
+
 /* For licensing terms, see /license.txt */
 
 namespace Chamilo\CoreBundle\Controller\Admin;
@@ -15,8 +16,6 @@ use Symfony\Component\Validator\Exception\ValidatorException;
 
 /**
  * Class SettingsController.
- *
- * @package Chamilo\SettingsBundle\Controller
  */
 class SettingsController extends SyliusSettingsController
 {
@@ -157,6 +156,7 @@ class SettingsController extends SyliusSettingsController
 
         if ($form->isSubmitted() && $form->isValid()) {
             $messageType = 'success';
+
             try {
                 $manager->save($form->getData());
                 $message = $this->getTranslator()->trans('Update');
@@ -213,8 +213,7 @@ class SettingsController extends SyliusSettingsController
         $builder = $this->container->get('form.factory')->createNamedBuilder('search');
         $builder->add('keyword', TextType::class);
         $builder->add('search', SubmitType::class);
-        $searchForm = $builder->getForm();
 
-        return $searchForm;
+        return $builder->getForm();
     }
 }

@@ -1,4 +1,5 @@
 <?php
+
 /* For licensing terms, see /license.txt */
 
 namespace Chamilo\CoreBundle\Component\Editor;
@@ -115,7 +116,7 @@ class Finder extends \elFinder
             }
         }
         $this->maxArcFilesSize = isset($opts['maxArcFilesSize']) ? intval($opts['maxArcFilesSize']) : 0;
-        $this->optionsNetVolumes = (isset($opts['optionsNetVolumes']) && is_array($opts['optionsNetVolumes'])) ? $opts['optionsNetVolumes'] : [];
+        $this->optionsNetVolumes = isset($opts['optionsNetVolumes']) && is_array($opts['optionsNetVolumes']) ? $opts['optionsNetVolumes'] : [];
         if (isset($opts['itemLockExpire'])) {
             $this->itemLockExpire = intval($opts['itemLockExpire']);
         }
@@ -141,10 +142,10 @@ class Finder extends \elFinder
 
         // bind events listeners
         if (!empty($opts['bind']) && is_array($opts['bind'])) {
-            $_req = $_SERVER["REQUEST_METHOD"] == 'POST' ? $_POST : $_GET;
+            $_req = 'POST' == $_SERVER['REQUEST_METHOD'] ? $_POST : $_GET;
             $_reqCmd = isset($_req['cmd']) ? $_req['cmd'] : '';
             foreach ($opts['bind'] as $cmd => $handlers) {
-                $doRegist = (strpos($cmd, '*') !== false);
+                $doRegist = (false !== strpos($cmd, '*'));
                 if (!$doRegist) {
                     $_getcmd = create_function('$cmd', 'list($ret) = explode(\'.\', $cmd);return trim($ret);');
                     $doRegist = ($_reqCmd && in_array($_reqCmd, array_map($_getcmd, explode(' ', $cmd))));
@@ -154,7 +155,7 @@ class Finder extends \elFinder
                     if (!is_array($handlers)) {
                         $handlers = [$handlers];
                     } else {
-                        if (count($handlers) === 2 && is_object($handlers[0])) {
+                        if (2 === count($handlers) && is_object($handlers[0])) {
                             $handlers = [$handlers];
                         }
                     }
@@ -162,7 +163,7 @@ class Finder extends \elFinder
                         if ($handler) {
                             if (is_string($handler) && strpos($handler, '.')) {
                                 list($_domain, $_name, $_method) = array_pad(explode('.', $handler), 3, '');
-                                if (strcasecmp($_domain, 'plugin') === 0) {
+                                if (0 === strcasecmp($_domain, 'plugin')) {
                                     if ($plugin = $this->getPluginInstance($_name, isset($opts['plugin'][$_name]) ? $opts['plugin'][$_name] : [])
                                             and method_exists($plugin, $_method)) {
                                         $this->bind($cmd, [$plugin, $_method]);
@@ -188,6 +189,7 @@ class Finder extends \elFinder
                 // given fixed unique id
                 if (!$root['id'] = $this->getNetVolumeUniqueId($netVolumes)) {
                     $this->mountErrors[] = 'Netmount Driver "'.$root['driver'].'" : Could\'t given volume id.';
+
                     continue;
                 }
             }

@@ -1,4 +1,5 @@
 <?php
+
 /* For licensing terms, see /license.txt */
 
 namespace Chamilo\CourseBundle\Entity;
@@ -197,7 +198,7 @@ class CQuizQuestionCategory extends AbstractResource implements ResourceInterfac
      */
     public function hasSession()
     {
-        return $this->session !== null;
+        return null !== $this->session;
     }
 
     /**

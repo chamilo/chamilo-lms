@@ -1,4 +1,5 @@
 <?php
+
 /* For licensing terms, see /license.txt */
 
 namespace Chamilo\CoreBundle\Entity;
@@ -168,7 +169,7 @@ class GradebookResultLog
         return $this->resultId;
     }
 
-    public function setResultId(int $resultId): GradebookResultLog
+    public function setResultId(int $resultId): self
     {
         $this->resultId = $resultId;
 

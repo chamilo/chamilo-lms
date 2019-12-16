@@ -1,4 +1,5 @@
 <?php
+
 /* For licensing terms, see /license.txt */
 
 namespace Chamilo\CoreBundle\Component\Utils;
@@ -29,7 +30,7 @@ class ResourceSettings
         return $this->allowNodeCreation;
     }
 
-    public function setAllowNodeCreation(bool $allowNodeCreation): ResourceSettings
+    public function setAllowNodeCreation(bool $allowNodeCreation): self
     {
         $this->allowNodeCreation = $allowNodeCreation;
 
@@ -41,7 +42,7 @@ class ResourceSettings
         return $this->allowResourceCreation;
     }
 
-    public function setAllowResourceCreation(bool $allowResourceCreation): ResourceSettings
+    public function setAllowResourceCreation(bool $allowResourceCreation): self
     {
         $this->allowResourceCreation = $allowResourceCreation;
 
@@ -53,7 +54,7 @@ class ResourceSettings
         return $this->allowResourceUpload;
     }
 
-    public function setAllowResourceUpload(bool $allowResourceUpload): ResourceSettings
+    public function setAllowResourceUpload(bool $allowResourceUpload): self
     {
         $this->allowResourceUpload = $allowResourceUpload;
 
@@ -65,7 +66,7 @@ class ResourceSettings
         return $this->allowResourceEdit;
     }
 
-    public function setAllowResourceEdit(bool $allowResourceEdit): ResourceSettings
+    public function setAllowResourceEdit(bool $allowResourceEdit): self
     {
         $this->allowResourceEdit = $allowResourceEdit;
 
@@ -77,7 +78,7 @@ class ResourceSettings
         return $this->allowDownloadAll;
     }
 
-    public function setAllowDownloadAll(bool $allowDownloadAll): ResourceSettings
+    public function setAllowDownloadAll(bool $allowDownloadAll): self
     {
         $this->allowDownloadAll = $allowDownloadAll;
 

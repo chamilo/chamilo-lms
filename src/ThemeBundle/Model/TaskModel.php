@@ -9,8 +9,6 @@ namespace Chamilo\ThemeBundle\Model;
 
 /**
  * Class TaskModel.
- *
- * @package Chamilo\ThemeBundle\Model
  */
 class TaskModel implements TaskInterface
 {

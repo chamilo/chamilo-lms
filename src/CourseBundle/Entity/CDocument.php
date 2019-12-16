@@ -1,4 +1,5 @@
 <?php
+
 /* For licensing terms, see /license.txt */
 
 namespace Chamilo\CourseBundle\Entity;
@@ -134,7 +135,7 @@ class CDocument extends AbstractResource implements ResourceInterface
         return $this->template;
     }
 
-    public function setTemplate(bool $template): CDocument
+    public function setTemplate(bool $template): self
     {
         $this->template = $template;
 

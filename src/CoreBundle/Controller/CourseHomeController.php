@@ -1,4 +1,5 @@
 <?php
+
 /* For licensing terms, see /license.txt */
 
 namespace Chamilo\CoreBundle\Controller;
@@ -72,7 +73,7 @@ class CourseHomeController extends ToolBaseController
         $isSpecialCourse = CourseManager::isSpecialCourse($courseId);
 
         if ($isSpecialCourse) {
-            if (isset($_GET['autoreg']) && $_GET['autoreg'] == 1) {
+            if (isset($_GET['autoreg']) && 1 == $_GET['autoreg']) {
                 if (CourseManager::subscribeUser($userId, $courseCode, STUDENT)) {
                     Session::write('is_allowed_in_course', true);
                 }
@@ -80,7 +81,7 @@ class CourseHomeController extends ToolBaseController
         }
 
         $action = !empty($_GET['action']) ? Security::remove_XSS($_GET['action']) : '';
-        if ($action == 'subscribe') {
+        if ('subscribe' == $action) {
             if (Security::check_token('get')) {
                 Security::clear_token();
                 $result = CourseManager::autoSubscribeToCourse($courseCode);
@@ -125,7 +126,7 @@ class CourseHomeController extends ToolBaseController
         foreach ($result as $item) {
             $toolModel = $toolChain->getToolFromName($item->getTool()->getName());
 
-            if ($toolModel->getCategory() === 'admin' && !$this->isGranted('ROLE_CURRENT_COURSE_TEACHER')) {
+            if ('admin' === $toolModel->getCategory() && !$this->isGranted('ROLE_CURRENT_COURSE_TEACHER')) {
                 continue;
             }
             $tools[$item->getCategory()][] = $item;
@@ -134,7 +135,7 @@ class CourseHomeController extends ToolBaseController
         // Get session-career diagram
         $diagram = '';
         $allow = api_get_configuration_value('allow_career_diagram');
-        if ($allow === true) {
+        if (true === $allow) {
             $htmlHeadXtra[] = api_get_js('jsplumb2.js');
             $extra = new ExtraFieldValue('session');
             $value = $extra->get_values_by_handler_and_field_variable(
@@ -244,6 +245,7 @@ class CourseHomeController extends ToolBaseController
 
         if ($form->isSubmitted() && $form->isValid()) {
             $messageType = 'success';
+
             try {
                 $manager->setCourse($course);
                 $manager->save($form->getData());
@@ -292,7 +294,7 @@ class CourseHomeController extends ToolBaseController
         $allowAutoLaunchForCourseAdmins = api_is_platform_admin() || api_is_allowed_to_edit(true, true) || api_is_coach();
 
         if (!empty($lpAutoLaunch)) {
-            if ($lpAutoLaunch == 2) {
+            if (2 == $lpAutoLaunch) {
                 // LP list
                 if ($allowAutoLaunchForCourseAdmins) {
                     $showAutoLaunchLpWarning = true;
@@ -316,7 +318,7 @@ class CourseHomeController extends ToolBaseController
                             LIMIT 1";
                     $result = Database::query($sql);
                     // If we found nothing in the session we just called the session_id =  0 autolaunch
-                    if (Database::num_rows($result) == 0) {
+                    if (0 == Database::num_rows($result)) {
                         $condition = '';
                     }
                 }
@@ -351,7 +353,7 @@ class CourseHomeController extends ToolBaseController
         }
 
         $forumAutoLaunch = api_get_course_setting('enable_forum_auto_launch');
-        if ($forumAutoLaunch == 1) {
+        if (1 == $forumAutoLaunch) {
             if ($allowAutoLaunchForCourseAdmins) {
                 if (empty($autoLaunchWarning)) {
                     $autoLaunchWarning = get_lang('The forum\'s auto-launch setting is on. Students will be redirected to the forum tool when entering this course.');
@@ -365,7 +367,7 @@ class CourseHomeController extends ToolBaseController
 
         if (api_get_configuration_value('allow_exercise_auto_launch')) {
             $exerciseAutoLaunch = (int) api_get_course_setting('enable_exercise_auto_launch');
-            if ($exerciseAutoLaunch == 2) {
+            if (2 == $exerciseAutoLaunch) {
                 if ($allowAutoLaunchForCourseAdmins) {
                     if (empty($autoLaunchWarning)) {
                         $autoLaunchWarning = get_lang(
@@ -378,7 +380,7 @@ class CourseHomeController extends ToolBaseController
                     header("Location: $url");
                     exit;
                 }
-            } elseif ($exerciseAutoLaunch == 1) {
+            } elseif (1 == $exerciseAutoLaunch) {
                 if ($allowAutoLaunchForCourseAdmins) {
                     if (empty($autoLaunchWarning)) {
                         $autoLaunchWarning = get_lang(
@@ -396,7 +398,7 @@ class CourseHomeController extends ToolBaseController
                         LIMIT 1";
                         $result = Database::query($sql);
                         // If we found nothing in the session we just called the session_id = 0 autolaunch
-                        if (Database::num_rows($result) == 0) {
+                        if (0 == Database::num_rows($result)) {
                             $condition = '';
                         }
                     }
@@ -418,7 +420,7 @@ class CourseHomeController extends ToolBaseController
         }
 
         $documentAutoLaunch = api_get_course_setting('enable_document_auto_launch');
-        if ($documentAutoLaunch == 1) {
+        if (1 == $documentAutoLaunch) {
             if ($allowAutoLaunchForCourseAdmins) {
                 if (empty($autoLaunchWarning)) {
                     $autoLaunchWarning = get_lang('The document auto-launch feature configuration is enabled. Learners will be automatically redirected to document tool.');

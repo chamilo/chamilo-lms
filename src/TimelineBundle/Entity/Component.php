@@ -1,4 +1,5 @@
 <?php
+
 /* For licensing terms, see /license.txt */
 
 namespace Chamilo\TimelineBundle\Entity;
@@ -7,8 +8,6 @@ use Sonata\TimelineBundle\Entity\Component as BaseComponent;
 
 /**
  * Class Component.
- *
- * @package Chamilo\TimelineBundle\Entity
  */
 class Component extends BaseComponent
 {
@@ -20,7 +19,7 @@ class Component extends BaseComponent
     /**
      * Get id.
      *
-     * @return int $id
+     * @return int
      */
     public function getId()
     {

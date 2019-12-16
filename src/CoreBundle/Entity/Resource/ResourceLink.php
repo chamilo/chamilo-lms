@@ -1,4 +1,5 @@
 <?php
+
 /* For licensing terms, see /license.txt */
 
 namespace Chamilo\CoreBundle\Entity\Resource;
@@ -318,7 +319,7 @@ class ResourceLink
         return $this->visibility;
     }
 
-    public function setVisibility(int $visibility): ResourceLink
+    public function setVisibility(int $visibility): self
     {
         if (!in_array($visibility, self::getVisibilityList())) {
             throw new \LogicException('The visibility is not valid');
@@ -334,7 +335,7 @@ class ResourceLink
      */
     public function isPublished()
     {
-        return $this->getVisibility() === self::VISIBILITY_PUBLISHED;
+        return self::VISIBILITY_PUBLISHED === $this->getVisibility();
     }
 
     /**
@@ -342,7 +343,7 @@ class ResourceLink
      */
     public function isPending()
     {
-        return $this->getVisibility() === self::VISIBILITY_PENDING;
+        return self::VISIBILITY_PENDING === $this->getVisibility();
     }
 
     /**
@@ -350,7 +351,7 @@ class ResourceLink
      */
     public function isDraft()
     {
-        return $this->getVisibility() === self::VISIBILITY_DRAFT;
+        return self::VISIBILITY_DRAFT === $this->getVisibility();
     }
 
     /**

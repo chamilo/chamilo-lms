@@ -1,4 +1,5 @@
 <?php
+
 /* For licensing terms, see /license.txt */
 
 namespace Chamilo\CoreBundle\Controller\Admin;
@@ -13,7 +14,6 @@ use Symfony\Component\Routing\Annotation\Route;
 /**
  * Class Administrator.
  *
- * @package Chamilo\CoreBundle\Controller
  *
  * @author Julio Montoya <gugli100@gmail.com>
  */
@@ -157,7 +157,7 @@ class AdminController extends BaseController
                 'label' => get_lang('Course list'),
             ];
 
-            if (api_get_setting('course.course_validation') != 'true') {
+            if ('true' != api_get_setting('course.course_validation')) {
                 $items[] = [
                     'url' => $adminUrl.'course_add.php',
                     'label' => get_lang('Create a course'),
@@ -293,8 +293,8 @@ class AdminController extends BaseController
                 }
             }
 
-            if (api_get_setting('registration.allow_terms_conditions') ==
-                'true'
+            if ('true' ==
+                api_get_setting('registration.allow_terms_conditions')
             ) {
                 $items[] = [
                     'url' => $adminUrl.'legal_add.php',
@@ -429,7 +429,7 @@ class AdminController extends BaseController
             $blocks['settings']['search_form'] = null;
 
             //Skills
-            if (api_get_setting('skill.allow_skills_tool') == 'true') {
+            if ('true' == api_get_setting('skill.allow_skills_tool')) {
                 $blocks['skills']['icon'] = \Display::return_icon(
                     'skill-badges.png',
                     get_lang('Skills'),
@@ -465,7 +465,7 @@ class AdminController extends BaseController
                 $blocks['skills']['search_form'] = null;
             }
 
-            /** Chamilo.org */
+            /* Chamilo.org */
             $blocks['chamilo']['icon'] = \Display::return_icon(
                 'platform.png',
                 'Chamilo.org',

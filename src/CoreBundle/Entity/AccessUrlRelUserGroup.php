@@ -1,4 +1,5 @@
 <?php
+
 /* For licensing terms, see /license.txt */
 
 namespace Chamilo\CoreBundle\Entity;
@@ -82,7 +83,7 @@ class AccessUrlRelUserGroup
         return $this->url;
     }
 
-    public function setUrl(AccessUrl $url): AccessUrlRelUserGroup
+    public function setUrl(AccessUrl $url): self
     {
         $this->url = $url;
 

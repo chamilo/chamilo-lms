@@ -11,8 +11,6 @@ use Chamilo\ThemeBundle\Model\UserInterface;
 
 /**
  * Class ShowUserEvent.
- *
- * @package Chamilo\ThemeBundle\Event
  */
 class ShowUserEvent extends ThemeEvent
 {

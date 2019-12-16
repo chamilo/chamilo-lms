@@ -1,10 +1,9 @@
 <?php
+
 /* For licensing terms, see /license.txt */
 
 /**
  * This file contains a Hook Event class for Admin Block.
- *
- * @package chamilo.library.hook
  */
 
 namespace Chamilo\CoreBundle\Hook;

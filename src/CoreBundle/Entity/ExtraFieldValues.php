@@ -1,4 +1,5 @@
 <?php
+
 /* For licensing terms, see /license.txt */
 
 namespace Chamilo\CoreBundle\Entity;
@@ -144,7 +145,7 @@ class ExtraFieldValues // extends BaseAttributeValue
         return $this->value;
     }
 
-    public function setValue(string $value): ExtraFieldValues
+    public function setValue(string $value): self
     {
         $this->value = $value;
 

@@ -1,4 +1,5 @@
 <?php
+
 /* For licensing terms, see /license.txt */
 
 namespace Chamilo\CoreBundle\Repository;
@@ -12,8 +13,6 @@ use Fhaculty\Graph\Vertex;
 /**
  * Class SequenceRepository
  * The functions inside this class should return an instance of QueryBuilder.
- *
- * @package Chamilo\CoreBundle\Repository
  */
 class SequenceRepository extends ServiceEntityRepository
 {
@@ -156,6 +155,7 @@ class SequenceRepository extends ServiceEntityRepository
                         }
 
                         $sequenceInfo['requirements'][$vertexId] = $session;
+
                         break;
                 }
             }
@@ -202,6 +202,7 @@ class SequenceRepository extends ServiceEntityRepository
                 case SequenceResource::SESSION_TYPE:
                     $requirements = $this->findSessionFromVerticesEdges($from);
                     $dependencies = $this->findSessionFromVerticesEdges($to);
+
                     break;
             }
 

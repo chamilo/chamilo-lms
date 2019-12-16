@@ -1,4 +1,5 @@
 <?php
+
 /* For licensing terms, see /license.txt */
 
 namespace Chamilo\ThemeBundle\Controller;
@@ -8,8 +9,6 @@ use Symfony\Component\HttpFoundation\Request;
 
 /**
  * Class ExceptionController.
- *
- * @package Chamilo\ThemeBundle\Controller
  */
 class ExceptionController extends BaseExceptionController
 {

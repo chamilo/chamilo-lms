@@ -1,4 +1,5 @@
 <?php
+
 /* For licensing terms, see /license.txt */
 
 namespace Chamilo\CoreBundle\Admin;
@@ -32,7 +33,7 @@ class ResourceTypeAdmin extends AbstractAdmin
     }
 
 //    /**
-//     * @param DatagridMapper $datagridMapper
+//     * @param DatagridMapper $listMapper
 //     */
 //    protected function configureDatagridFilters(DatagridMapper $datagridMapper)
 //    {

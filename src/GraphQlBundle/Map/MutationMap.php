@@ -1,4 +1,5 @@
 <?php
+
 /* For licensing terms, see /license.txt */
 
 namespace Chamilo\GraphQlBundle\Map;
@@ -18,8 +19,6 @@ use Symfony\Component\DependencyInjection\ContainerAwareInterface;
 
 /**
  * Class MutationMap.
- *
- * @package Chamilo\GraphQlBundle\Map
  */
 class MutationMap extends ResolverMap implements ContainerAwareInterface
 {
@@ -350,9 +349,7 @@ class MutationMap extends ResolverMap implements ContainerAwareInterface
             throw new UserError($this->translator->trans('Course not registered in this URL'));
         }
 
-        $isSubscribed = \CourseManager::subscribeUser($user->getId(), $course->getCode());
-
-        return $isSubscribed;
+        return \CourseManager::subscribeUser($user->getId(), $course->getCode());
     }
 
     /**
@@ -440,9 +437,8 @@ class MutationMap extends ResolverMap implements ContainerAwareInterface
         );
 
         $threadRepo = $this->em->getRepository('ChamiloCourseBundle:CForumThread');
-        $thread = $threadRepo->findOneInCourse($threadId, $course, $session);
 
-        return $thread;
+        return $threadRepo->findOneInCourse($threadId, $course, $session);
     }
 
     /**

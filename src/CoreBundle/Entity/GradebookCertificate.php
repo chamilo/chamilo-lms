@@ -1,4 +1,5 @@
 <?php
+
 /* For licensing terms, see /license.txt */
 
 namespace Chamilo\CoreBundle\Entity;
@@ -205,7 +206,7 @@ class GradebookCertificate
         return $this->downloadedAt;
     }
 
-    public function setDownloadedAt(\DateTime $downloadedAt): GradebookCertificate
+    public function setDownloadedAt(\DateTime $downloadedAt): self
     {
         $this->downloadedAt = $downloadedAt;
 

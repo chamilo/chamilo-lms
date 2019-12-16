@@ -1,4 +1,5 @@
 <?php
+
 /* For licensing terms, see /license.txt */
 
 namespace Chamilo\CoreBundle\Tool;
@@ -69,7 +70,7 @@ abstract class AbstractTool implements ToolInterface
      */
     public function getLink()
     {
-        return $this->link ? $this->link : '';
+        return $this->link ?: '';
     }
 
     /**
@@ -104,7 +105,7 @@ abstract class AbstractTool implements ToolInterface
         return $this->resourceTypes;
     }
 
-    public function setResourceTypes(array $resourceTypes): AbstractTool
+    public function setResourceTypes(array $resourceTypes): self
     {
         $this->resourceTypes = $resourceTypes;
 

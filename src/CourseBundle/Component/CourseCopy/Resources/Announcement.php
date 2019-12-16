@@ -1,4 +1,5 @@
 <?php
+
 /* For licensing terms, see /license.txt */
 
 namespace Chamilo\CourseBundle\Component\CourseCopy\Resources;
@@ -46,7 +47,7 @@ class Announcement extends Resource
      * @param string $title
      * @param string $content
      * @param string $date
-     * @param int display_order
+     * @param int    $display_order
      */
     public function __construct(
         $id,

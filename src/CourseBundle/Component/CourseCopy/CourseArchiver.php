@@ -1,4 +1,5 @@
 <?php
+
 /* For licensing terms, see /license.txt */
 
 namespace Chamilo\CourseBundle\Component\CourseCopy;
@@ -46,9 +47,9 @@ class CourseArchiver
         $dir = self::getBackupDir();
         if (is_dir($dir)) {
             if ($handle = @opendir($dir)) {
-                while (($file = readdir($handle)) !== false) {
-                    if ($file != "." && $file != ".." &&
-                        strpos($file, 'CourseArchiver_') === 0 &&
+                while (false !== ($file = readdir($handle))) {
+                    if ('.' != $file && '..' != $file &&
+                        0 === strpos($file, 'CourseArchiver_') &&
                         is_dir($dir.'/'.$file)
                     ) {
                         rmdirr($dir.'/'.$file);
@@ -85,24 +86,24 @@ class CourseArchiver
 
         $php_errormsg = '';
         $res = @mkdir($backup_dir, $perm_dirs);
-        if ($res === false) {
+        if (false === $res) {
             //TODO set and handle an error message telling the user to review the permissions on the archive directory
-            error_log(__FILE__.' line '.__LINE__.': '.(ini_get('track_errors') != false ? $php_errormsg : 'error not recorded because track_errors is off in your php.ini').' - This error, occuring because your archive directory will not let this script write data into it, will prevent courses backups to be created', 0);
+            error_log(__FILE__.' line '.__LINE__.': '.(false != ini_get('track_errors') ? $php_errormsg : 'error not recorded because track_errors is off in your php.ini').' - This error, occuring because your archive directory will not let this script write data into it, will prevent courses backups to be created', 0);
         }
         // Write the course-object to the file
         $fp = @fopen($course_info_file, 'w');
-        if ($fp === false) {
-            error_log(__FILE__.' line '.__LINE__.': '.(ini_get('track_errors') != false ? $php_errormsg : 'error not recorded because track_errors is off in your php.ini'), 0);
+        if (false === $fp) {
+            error_log(__FILE__.' line '.__LINE__.': '.(false != ini_get('track_errors') ? $php_errormsg : 'error not recorded because track_errors is off in your php.ini'), 0);
         }
 
         $res = @fwrite($fp, base64_encode(serialize($course)));
-        if ($res === false) {
-            error_log(__FILE__.' line '.__LINE__.': '.(ini_get('track_errors') != false ? $php_errormsg : 'error not recorded because track_errors is off in your php.ini'), 0);
+        if (false === $res) {
+            error_log(__FILE__.' line '.__LINE__.': '.(false != ini_get('track_errors') ? $php_errormsg : 'error not recorded because track_errors is off in your php.ini'), 0);
         }
 
         $res = @fclose($fp);
-        if ($res === false) {
-            error_log(__FILE__.' line '.__LINE__.': '.(ini_get('track_errors') != false ? $php_errormsg : 'error not recorded because track_errors is off in your php.ini'), 0);
+        if (false === $res) {
+            error_log(__FILE__.' line '.__LINE__.': '.(false != ini_get('track_errors') ? $php_errormsg : 'error not recorded because track_errors is off in your php.ini'), 0);
         }
 
         // Copy all documents to the temp-dir
@@ -110,7 +111,7 @@ class CourseArchiver
             $webEditorCss = api_get_path(WEB_CSS_PATH).'editor.css';
             /** @var Document $document */
             foreach ($course->resources[RESOURCE_DOCUMENT] as $document) {
-                if ($document->file_type == DOCUMENT) {
+                if (DOCUMENT == $document->file_type) {
                     $doc_dir = $backup_dir.$document->path;
                     @mkdir(dirname($doc_dir), $perm_dirs, true);
                     if (file_exists($course->path.$document->path)) {
@@ -127,6 +128,7 @@ class CourseArchiver
                                     $contents
                                 );
                                 file_put_contents($doc_dir, $contents);
+
                                 break;
                         }
                     }
@@ -184,6 +186,7 @@ class CourseArchiver
 
                 if (is_dir($course->path.$asset->path)) {
                     copyDirTo($course->path.$asset->path, $doc_dir, false);
+
                     continue;
                 }
                 copy($course->path.$asset->path, $doc_dir);
@@ -215,15 +218,15 @@ class CourseArchiver
         }
 
         if ($dir = opendir($dirname)) {
-            while (($file = readdir($dir)) !== false) {
+            while (false !== ($file = readdir($dir))) {
                 $file_parts = explode('_', $file);
-                if (count($file_parts) == 3) {
+                if (3 == count($file_parts)) {
                     $owner_id = $file_parts[0];
                     $course_code = $file_parts[1];
                     $file_parts = explode('.', $file_parts[2]);
                     $date = $file_parts[0];
                     $ext = isset($file_parts[1]) ? $file_parts[1] : null;
-                    if ($ext == 'zip' && ($user_id != null && $owner_id == $user_id || $user_id == null)) {
+                    if ('zip' == $ext && (null != $user_id && $owner_id == $user_id || null == $user_id)) {
                         $date =
                             substr($date, 0, 4).'-'.substr($date, 4, 2).'-'.
                             substr($date, 6, 2).' '.substr($date, 9, 2).':'.
@@ -308,7 +311,7 @@ class CourseArchiver
             return new Course();
         }
 
-        $fp = @fopen('course_info.dat', "r");
+        $fp = @fopen('course_info.dat', 'r');
         $contents = @fread($fp, filesize('course_info.dat'));
         @fclose($fp);
 

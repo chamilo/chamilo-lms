@@ -8,8 +8,6 @@ use Symfony\Component\HttpFoundation\Request;
 
 /**
  * Class SidebarMenuKnpEvent.
- *
- * @package Chamilo\ThemeBundle\Event
  */
 class SidebarMenuKnpEvent extends ThemeEvent
 {

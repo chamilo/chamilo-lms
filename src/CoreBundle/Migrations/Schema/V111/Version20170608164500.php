@@ -1,4 +1,5 @@
 <?php
+
 /* For licensing terms, see /license.txt */
 
 namespace Chamilo\CoreBundle\Migrations\Schema\V111;
@@ -11,8 +12,6 @@ use Doctrine\DBAL\Types\Type;
  * Class Version20170608164500.
  *
  * Fix c_quiz_question changing data type of type field to integer
- *
- * @package Chamilo\CoreBundle\Migrations\Schema\V111
  */
 class Version20170608164500 extends AbstractMigrationChamilo
 {

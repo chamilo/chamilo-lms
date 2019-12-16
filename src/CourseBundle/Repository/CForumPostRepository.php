@@ -1,4 +1,5 @@
 <?php
+
 /* For licensing terms, see /license.txt */
 
 namespace Chamilo\CourseBundle\Repository;
@@ -13,8 +14,6 @@ use Doctrine\Common\Persistence\ManagerRegistry;
 
 /**
  * Class CForumPostRepository.
- *
- * @package Chamilo\CourseBundle\Repository
  */
 class CForumPostRepository extends ServiceEntityRepository
 {
@@ -57,8 +56,8 @@ class CForumPostRepository extends ServiceEntityRepository
         if ($filterModerated && $thread->getForum()->isModerated() && $onlyVisibles) {
             $userId = $currentUser ? $currentUser->getId() : 0;
 
-            $conditionModetared = "AND p.status = 1 OR
-                (p.status = ".CForumPost::STATUS_WAITING_MODERATION." AND p.posterId = $userId) OR
+            $conditionModetared = 'AND p.status = 1 OR
+                (p.status = '.CForumPost::STATUS_WAITING_MODERATION." AND p.posterId = $userId) OR
                 (p.status = ".CForumPost::STATUS_REJECTED." AND p.poster = $userId) OR
                 (p.status IS NULL AND p.posterId = $userId)";
         }
@@ -72,12 +71,10 @@ class CForumPostRepository extends ServiceEntityRepository
                 $conditionModetared
             ORDER BY p.iid $orderDirection";
 
-        $result = $this
+        return $this
             ->_em
             ->createQuery($dql)
             ->setParameters(['thread' => $thread, 'course' => $course])
             ->getResult();
-
-        return $result;
     }
 }

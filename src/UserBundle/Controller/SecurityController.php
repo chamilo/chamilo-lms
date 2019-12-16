@@ -1,4 +1,5 @@
 <?php
+
 /* For licensing terms, see /license.txt */
 
 namespace Chamilo\UserBundle\Controller;
@@ -11,8 +12,6 @@ use Symfony\Component\Security\Http\Authentication\AuthenticationUtils;
 
 /**
  * Class SecurityController.
- *
- * @package Chamilo\UserBundle\Controller
  */
 class SecurityController extends AbstractController
 {

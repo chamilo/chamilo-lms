@@ -1,4 +1,5 @@
 <?php
+
 /* For licensing terms, see /license.txt */
 
 namespace Chamilo\CoreBundle\Controller;
@@ -142,27 +143,35 @@ class CourseController extends AbstractController
             switch ($descriptionTool->getDescriptionType()) {
                 case CCourseDescription::TYPE_DESCRIPTION:
                     $courseDescription = $descriptionTool->getContent();
+
                     break;
                 case CCourseDescription::TYPE_OBJECTIVES:
                     $courseObjectives = $descriptionTool;
+
                     break;
                 case CCourseDescription::TYPE_TOPICS:
                     $courseTopics = $descriptionTool;
+
                     break;
                 case CCourseDescription::TYPE_METHODOLOGY:
                     $courseMethodology = $descriptionTool;
+
                     break;
                 case CCourseDescription::TYPE_COURSE_MATERIAL:
                     $courseMaterial = $descriptionTool;
+
                     break;
                 case CCourseDescription::TYPE_RESOURCES:
                     $courseResources = $descriptionTool;
+
                     break;
                 case CCourseDescription::TYPE_ASSESSMENT:
                     $courseAssessment = $descriptionTool;
+
                     break;
                 case CCourseDescription::TYPE_CUSTOM:
                     $courseCustom[] = $descriptionTool;
+
                     break;
             }
         }

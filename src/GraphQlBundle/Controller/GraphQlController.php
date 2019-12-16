@@ -1,4 +1,5 @@
 <?php
+
 /* For licensing terms, see /license.txt */
 
 namespace Chamilo\GraphQlBundle\Controller;
@@ -13,8 +14,6 @@ use Symfony\Component\Security\Core\Authentication\Token\UsernamePasswordToken;
 
 /**
  * Class GraphQlController.
- *
- * @package Chamilo\GraphQlBundle\Controller
  */
 class GraphQlController extends AbstractController
 {

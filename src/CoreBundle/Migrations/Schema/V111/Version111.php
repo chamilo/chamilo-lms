@@ -1,4 +1,5 @@
 <?php
+
 /* For licensing terms, see /license.txt */
 
 namespace Chamilo\CoreBundle\Migrations\Schema\V111;
@@ -22,7 +23,7 @@ class Version111 extends AbstractMigrationChamilo
         // In case this one didn't work, also try this
         $this->addSql('SET SESSION sql_mode = ""');
 
-        $this->addSql("ALTER TABLE extra_field ENGINE=InnoDB");
+        $this->addSql('ALTER TABLE extra_field ENGINE=InnoDB');
         $this->addSql('CREATE TABLE extra_field_saved_search (id INT AUTO_INCREMENT NOT NULL, field_id INT DEFAULT NULL, user_id INT DEFAULT NULL, value LONGTEXT DEFAULT NULL COLLATE utf8_unicode_ci, created_at DATETIME NOT NULL, updated_at DATETIME NOT NULL, INDEX IDX_16ABE32A443707B0 (field_id), INDEX IDX_16ABE32AA76ED395 (user_id), PRIMARY KEY(id)) DEFAULT CHARACTER SET utf8 COLLATE utf8_unicode_ci ENGINE = InnoDB');
         $this->addSql('ALTER TABLE extra_field_saved_search ADD CONSTRAINT FK_16ABE32A443707B0 FOREIGN KEY (field_id) REFERENCES extra_field (id)');
         $this->addSql('ALTER TABLE extra_field_saved_search ADD CONSTRAINT FK_16ABE32AA76ED395 FOREIGN KEY (user_id) REFERENCES user (id)');
@@ -45,28 +46,28 @@ class Version111 extends AbstractMigrationChamilo
         $this->addSql("INSERT INTO settings_current (variable, subkey, type, category, selected_value, title, comment, scope, subkeytext, access_url_changeable) VALUES ('configure_exercise_visibility_in_course',NULL,'radio','Session','false','ConfigureExerciseVisibilityInCourseTitle','ConfigureExerciseVisibilityInCourseComment','',NULL, 1)");
         $this->addSql("INSERT INTO settings_options (variable, value, display_text) VALUES ('configure_exercise_visibility_in_course','true','Yes') ");
         $this->addSql("INSERT INTO settings_options (variable, value, display_text) VALUES ('configure_exercise_visibility_in_course','false','No') ");
-        $this->addSql("ALTER TABLE c_forum_forum ADD moderated TINYINT(1) DEFAULT NULL");
-        $this->addSql("ALTER TABLE c_forum_post ADD status INT DEFAULT NULL");
-        $this->addSql("CREATE TABLE IF NOT EXISTS c_quiz_rel_category (iid BIGINT AUTO_INCREMENT NOT NULL, c_id INT NOT NULL, category_id INT NOT NULL, exercise_id INT NOT NULL, count_questions INT NOT NULL, PRIMARY KEY(iid))");
+        $this->addSql('ALTER TABLE c_forum_forum ADD moderated TINYINT(1) DEFAULT NULL');
+        $this->addSql('ALTER TABLE c_forum_post ADD status INT DEFAULT NULL');
+        $this->addSql('CREATE TABLE IF NOT EXISTS c_quiz_rel_category (iid BIGINT AUTO_INCREMENT NOT NULL, c_id INT NOT NULL, category_id INT NOT NULL, exercise_id INT NOT NULL, count_questions INT NOT NULL, PRIMARY KEY(iid))');
 
         $table = $schema->getTable('c_quiz');
         if (!$table->hasColumn('question_selection_type')) {
-            $this->addSql("ALTER TABLE c_quiz ADD COLUMN question_selection_type INT");
+            $this->addSql('ALTER TABLE c_quiz ADD COLUMN question_selection_type INT');
         }
 
-        $this->addSql("ALTER TABLE c_quiz ADD hide_question_title TINYINT(1) DEFAULT 0");
-        $this->addSql("CREATE TABLE faq_question_translation (id INT AUTO_INCREMENT NOT NULL, translatable_id INT DEFAULT NULL, headline VARCHAR(255) NOT NULL, body LONGTEXT DEFAULT NULL, slug VARCHAR(50) NOT NULL, locale VARCHAR(255) NOT NULL, INDEX IDX_C2D1A2C2AC5D3 (translatable_id), UNIQUE INDEX faq_question_translation_unique_translation (translatable_id, locale), PRIMARY KEY(id)) DEFAULT CHARACTER SET utf8 COLLATE utf8_unicode_ci ENGINE = InnoDB;");
-        $this->addSql("CREATE TABLE faq_category_translation (id INT AUTO_INCREMENT NOT NULL, translatable_id INT DEFAULT NULL, headline VARCHAR(255) NOT NULL, body LONGTEXT DEFAULT NULL, slug VARCHAR(50) NOT NULL, locale VARCHAR(255) NOT NULL, INDEX IDX_5493B0FC2C2AC5D3 (translatable_id), UNIQUE INDEX faq_category_translation_unique_translation (translatable_id, locale), PRIMARY KEY(id)) DEFAULT CHARACTER SET utf8 COLLATE utf8_unicode_ci ENGINE = InnoDB;");
-        $this->addSql("CREATE TABLE faq_category (id INT AUTO_INCREMENT NOT NULL, rank INT NOT NULL, is_active TINYINT(1) NOT NULL, created_at DATETIME NOT NULL, updated_at DATETIME NOT NULL, INDEX is_active_idx (is_active), PRIMARY KEY(id)) DEFAULT CHARACTER SET utf8 COLLATE utf8_unicode_ci ENGINE = InnoDB;");
-        $this->addSql("CREATE TABLE faq_question (id INT AUTO_INCREMENT NOT NULL, category_id INT DEFAULT NULL, is_active TINYINT(1) NOT NULL, rank INT NOT NULL, created_at DATETIME NOT NULL, updated_at DATETIME NOT NULL, only_auth_users TINYINT(1) NOT NULL, INDEX IDX_4A55B05912469DE2 (category_id), PRIMARY KEY(id)) DEFAULT CHARACTER SET utf8 COLLATE utf8_unicode_ci ENGINE = InnoDB;");
-        $this->addSql("ALTER TABLE faq_question_translation ADD CONSTRAINT FK_C2D1A2C2AC5D3 FOREIGN KEY (translatable_id) REFERENCES faq_question (id) ON DELETE CASCADE;");
-        $this->addSql("ALTER TABLE faq_category_translation ADD CONSTRAINT FK_5493B0FC2C2AC5D3 FOREIGN KEY (translatable_id) REFERENCES faq_category (id) ON DELETE CASCADE;");
-        $this->addSql("ALTER TABLE faq_question ADD CONSTRAINT FK_4A55B05912469DE2 FOREIGN KEY (category_id) REFERENCES faq_category (id);");
+        $this->addSql('ALTER TABLE c_quiz ADD hide_question_title TINYINT(1) DEFAULT 0');
+        $this->addSql('CREATE TABLE faq_question_translation (id INT AUTO_INCREMENT NOT NULL, translatable_id INT DEFAULT NULL, headline VARCHAR(255) NOT NULL, body LONGTEXT DEFAULT NULL, slug VARCHAR(50) NOT NULL, locale VARCHAR(255) NOT NULL, INDEX IDX_C2D1A2C2AC5D3 (translatable_id), UNIQUE INDEX faq_question_translation_unique_translation (translatable_id, locale), PRIMARY KEY(id)) DEFAULT CHARACTER SET utf8 COLLATE utf8_unicode_ci ENGINE = InnoDB;');
+        $this->addSql('CREATE TABLE faq_category_translation (id INT AUTO_INCREMENT NOT NULL, translatable_id INT DEFAULT NULL, headline VARCHAR(255) NOT NULL, body LONGTEXT DEFAULT NULL, slug VARCHAR(50) NOT NULL, locale VARCHAR(255) NOT NULL, INDEX IDX_5493B0FC2C2AC5D3 (translatable_id), UNIQUE INDEX faq_category_translation_unique_translation (translatable_id, locale), PRIMARY KEY(id)) DEFAULT CHARACTER SET utf8 COLLATE utf8_unicode_ci ENGINE = InnoDB;');
+        $this->addSql('CREATE TABLE faq_category (id INT AUTO_INCREMENT NOT NULL, rank INT NOT NULL, is_active TINYINT(1) NOT NULL, created_at DATETIME NOT NULL, updated_at DATETIME NOT NULL, INDEX is_active_idx (is_active), PRIMARY KEY(id)) DEFAULT CHARACTER SET utf8 COLLATE utf8_unicode_ci ENGINE = InnoDB;');
+        $this->addSql('CREATE TABLE faq_question (id INT AUTO_INCREMENT NOT NULL, category_id INT DEFAULT NULL, is_active TINYINT(1) NOT NULL, rank INT NOT NULL, created_at DATETIME NOT NULL, updated_at DATETIME NOT NULL, only_auth_users TINYINT(1) NOT NULL, INDEX IDX_4A55B05912469DE2 (category_id), PRIMARY KEY(id)) DEFAULT CHARACTER SET utf8 COLLATE utf8_unicode_ci ENGINE = InnoDB;');
+        $this->addSql('ALTER TABLE faq_question_translation ADD CONSTRAINT FK_C2D1A2C2AC5D3 FOREIGN KEY (translatable_id) REFERENCES faq_question (id) ON DELETE CASCADE;');
+        $this->addSql('ALTER TABLE faq_category_translation ADD CONSTRAINT FK_5493B0FC2C2AC5D3 FOREIGN KEY (translatable_id) REFERENCES faq_category (id) ON DELETE CASCADE;');
+        $this->addSql('ALTER TABLE faq_question ADD CONSTRAINT FK_4A55B05912469DE2 FOREIGN KEY (category_id) REFERENCES faq_category (id);');
 
-        $this->addSql("CREATE TABLE contact_category (id INT AUTO_INCREMENT NOT NULL, name VARCHAR(255) NOT NULL, email VARCHAR(255) NOT NULL, PRIMARY KEY(id)) DEFAULT CHARACTER SET utf8 COLLATE utf8_unicode_ci ENGINE = InnoDB;");
+        $this->addSql('CREATE TABLE contact_category (id INT AUTO_INCREMENT NOT NULL, name VARCHAR(255) NOT NULL, email VARCHAR(255) NOT NULL, PRIMARY KEY(id)) DEFAULT CHARACTER SET utf8 COLLATE utf8_unicode_ci ENGINE = InnoDB;');
         $table = $schema->getTable('session_rel_user');
         if (!$table->hasColumn('duration')) {
-            $this->addSql("ALTER TABLE session_rel_user ADD duration INT DEFAULT NULL");
+            $this->addSql('ALTER TABLE session_rel_user ADD duration INT DEFAULT NULL');
         }
 
         $this->addSql('CREATE TABLE access_url_rel_course_category (id INT AUTO_INCREMENT NOT NULL, access_url_id INT NOT NULL, course_category_id INT NOT NULL, PRIMARY KEY(id)) DEFAULT CHARACTER SET utf8 COLLATE utf8_unicode_ci ENGINE = InnoDB');
@@ -383,15 +384,15 @@ class Version111 extends AbstractMigrationChamilo
 
         $table = $schema->getTable('c_quiz_question_rel_category');
         if (!$table->hasIndex('idx_qqrc_qid')) {
-            $this->addSql("ALTER TABLE c_quiz_question_rel_category ADD INDEX idx_qqrc_qid (question_id)");
+            $this->addSql('ALTER TABLE c_quiz_question_rel_category ADD INDEX idx_qqrc_qid (question_id)');
         }
 
         $table = $schema->getTable('c_quiz_answer');
         $hasIndex = $table->hasIndex('idx_cqa_q');
         if (!$hasIndex) {
-            $this->addSql("ALTER TABLE c_quiz_answer ADD INDEX idx_cqa_q (question_id)");
+            $this->addSql('ALTER TABLE c_quiz_answer ADD INDEX idx_cqa_q (question_id)');
         }
-        $this->addSql("ALTER TABLE c_student_publication ADD INDEX idx_csp_u (user_id)");
+        $this->addSql('ALTER TABLE c_student_publication ADD INDEX idx_csp_u (user_id)');
 
         $this->addSql('ALTER TABLE legal MODIFY COLUMN language_id INT NOT NULL');
         $this->addSql('ALTER TABLE legal MODIFY COLUMN legal_id INT NOT NULL');
@@ -437,10 +438,10 @@ class Version111 extends AbstractMigrationChamilo
         if ($schema->hasTable('promotion')) {
             $table = $schema->getTable('promotion');
             $this->addSql('ALTER TABLE promotion CHANGE name name VARCHAR(255) NOT NULL, CHANGE description description LONGTEXT NOT NULL, CHANGE career_id career_id INT DEFAULT NULL, CHANGE status status INT');
-            if ($table->hasForeignKey('FK_C11D7DD1B58CDA09') == false) {
+            if (false == $table->hasForeignKey('FK_C11D7DD1B58CDA09')) {
                 $this->addSql('ALTER TABLE promotion ADD CONSTRAINT FK_C11D7DD1B58CDA09 FOREIGN KEY (career_id) REFERENCES career (id);');
             }
-            if ($table->hasIndex('IDX_C11D7DD1B58CDA09') == false) {
+            if (false == $table->hasIndex('IDX_C11D7DD1B58CDA09')) {
                 $this->addSql('CREATE INDEX IDX_C11D7DD1B58CDA09 ON promotion (career_id);');
             }
         }
@@ -453,23 +454,23 @@ class Version111 extends AbstractMigrationChamilo
         if ($schema->hasTable('skill_rel_user_comment')) {
             $table = $schema->getTable('skill_rel_user_comment');
             $this->addSql('ALTER TABLE skill_rel_user_comment CHANGE skill_rel_user_id skill_rel_user_id INT DEFAULT NULL, CHANGE feedback_giver_id feedback_giver_id INT DEFAULT NULL, CHANGE feedback_text feedback_text LONGTEXT NOT NULL, CHANGE feedback_value feedback_value INT DEFAULT 1, CHANGE feedback_datetime feedback_datetime DATETIME NOT NULL;');
-            if ($table->hasForeignKey('FK_7AE9F6B6484A9317') == false) {
+            if (false == $table->hasForeignKey('FK_7AE9F6B6484A9317')) {
                 $this->addSql('ALTER TABLE skill_rel_user_comment ADD CONSTRAINT FK_7AE9F6B6484A9317 FOREIGN KEY (skill_rel_user_id) REFERENCES skill_rel_user (id);');
             }
 
-            if ($table->hasForeignKey('FK_7AE9F6B63AF3B65B') == false) {
+            if (false == $table->hasForeignKey('FK_7AE9F6B63AF3B65B')) {
                 $this->addSql('ALTER TABLE skill_rel_user_comment ADD CONSTRAINT FK_7AE9F6B63AF3B65B FOREIGN KEY (feedback_giver_id) REFERENCES user (id);');
             }
 
-            if ($table->hasIndex('IDX_7AE9F6B6484A9317') == false) {
+            if (false == $table->hasIndex('IDX_7AE9F6B6484A9317')) {
                 $this->addSql('CREATE INDEX IDX_7AE9F6B6484A9317 ON skill_rel_user_comment (skill_rel_user_id);');
             }
 
-            if ($table->hasIndex('IDX_7AE9F6B63AF3B65B') == false) {
+            if (false == $table->hasIndex('IDX_7AE9F6B63AF3B65B')) {
                 $this->addSql('CREATE INDEX IDX_7AE9F6B63AF3B65B ON skill_rel_user_comment (feedback_giver_id);');
             }
 
-            if ($table->hasIndex('idx_select_su_giver') == false) {
+            if (false == $table->hasIndex('idx_select_su_giver')) {
                 $this->addSql('CREATE INDEX idx_select_su_giver ON skill_rel_user_comment (skill_rel_user_id, feedback_giver_id);');
             }
         }
@@ -480,10 +481,10 @@ class Version111 extends AbstractMigrationChamilo
         if ($schema->hasTable('access_url_rel_user')) {
             $table = $schema->getTable('access_url_rel_user');
             $this->addSql('ALTER TABLE access_url_rel_user CHANGE access_url_id access_url_id INT NOT NULL, CHANGE user_id user_id INT NOT NULL;');
-            if ($table->hasForeignKey('FK_85574263A76ED395') == false) {
+            if (false == $table->hasForeignKey('FK_85574263A76ED395')) {
                 $this->addSql('ALTER TABLE access_url_rel_user ADD CONSTRAINT FK_85574263A76ED395 FOREIGN KEY (user_id) REFERENCES user (id);');
             }
-            if ($table->hasForeignKey('FK_8557426373444FD5') == false) {
+            if (false == $table->hasForeignKey('FK_8557426373444FD5')) {
                 $this->addSql('ALTER TABLE access_url_rel_user ADD CONSTRAINT FK_8557426373444FD5 FOREIGN KEY (access_url_id) REFERENCES access_url (id);');
             }
         }
@@ -515,24 +516,24 @@ class Version111 extends AbstractMigrationChamilo
                 $this->addSql('ALTER TABLE course_rel_user_catalogue DROP FOREIGN KEY course_rel_user_catalogue_ibfk_2;');
             }
 
-            if ($table->hasForeignKey('FK_79CA412EA76ED395') == false) {
+            if (false == $table->hasForeignKey('FK_79CA412EA76ED395')) {
                 $this->addSql('ALTER TABLE course_rel_user_catalogue ADD CONSTRAINT FK_79CA412EA76ED395 FOREIGN KEY (user_id) REFERENCES user (id);');
             }
-            if ($table->hasForeignKey('FK_79CA412E91D79BD3') == false) {
+            if (false == $table->hasForeignKey('FK_79CA412E91D79BD3')) {
                 $this->addSql('ALTER TABLE course_rel_user_catalogue ADD CONSTRAINT FK_79CA412E91D79BD3 FOREIGN KEY (c_id) REFERENCES course (id);');
             }
         }
 
         if ($schema->hasTable('extra_field_values')) {
             $table = $schema->getTable('extra_field_values');
-            if ($table->hasForeignKey('FK_171DF924443707B0') == false) {
+            if (false == $table->hasForeignKey('FK_171DF924443707B0')) {
                 $this->addSql('ALTER TABLE extra_field_values ADD CONSTRAINT FK_171DF924443707B0 FOREIGN KEY (field_id) REFERENCES extra_field (id);');
             }
         }
 
         if ($schema->hasTable('extra_field_options')) {
             $table = $schema->getTable('extra_field_options');
-            if ($table->hasForeignKey('FK_A572E3AE443707B0') == false) {
+            if (false == $table->hasForeignKey('FK_A572E3AE443707B0')) {
                 $this->addSql('ALTER TABLE extra_field_options ADD CONSTRAINT FK_A572E3AE443707B0 FOREIGN KEY (field_id) REFERENCES extra_field (id);');
             }
         }

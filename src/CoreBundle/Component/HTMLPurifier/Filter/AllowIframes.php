@@ -1,4 +1,5 @@
 <?php
+
 /* For licensing terms, see /license.txt */
 
 namespace Chamilo\CoreBundle\Component\HTMLPurifier\Filter;
@@ -9,8 +10,6 @@ use HTMLPurifier_Filter;
 
 /**
  * Class definition for HTMLPurifier that allows (but controls) iframes.
- *
- * @package chamilo.lib
  */
 /**
  * Based on: http://stackoverflow.com/questions/4739284/htmlpurifier-iframe-vimeo-and-youtube-video
@@ -30,9 +29,8 @@ class AllowIframes extends HTMLPurifier_Filter
     public function preFilter($html, $config, $context)
     {
         $html = preg_replace('#<iframe#i', '<img class="MyIframe"', $html);
-        $html = preg_replace('#</iframe>#i', '</img>', $html);
 
-        return $html;
+        return preg_replace('#</iframe>#i', '</img>', $html);
     }
 
     /**

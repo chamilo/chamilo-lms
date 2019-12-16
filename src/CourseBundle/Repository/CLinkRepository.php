@@ -1,4 +1,5 @@
 <?php
+
 /* For licensing terms, see /license.txt */
 
 namespace Chamilo\CourseBundle\Repository;
@@ -42,14 +43,7 @@ final class CLinkRepository extends ResourceRepository implements ResourceReposi
 
     public function saveUpload(UploadedFile $file)
     {
-        $resource = new CLink();
-        /*$resource
-            ->setFiletype('file')
-            ->setSize($file->getSize())
-            ->setTitle($file->getClientOriginalName())
-        ;*/
-
-        return $resource;
+        return new CLink();
     }
 
     public function saveResource(FormInterface $form, $course, $session, $fileType)

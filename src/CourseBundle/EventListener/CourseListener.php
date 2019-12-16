@@ -1,4 +1,5 @@
 <?php
+
 /* For licensing terms, see /license.txt */
 
 namespace Chamilo\CourseBundle\EventListener;
@@ -46,12 +47,12 @@ class CourseListener
         }
 
         // Ignore debug
-        if ($request->attributes->get('_route') === '_wdt') {
+        if ('_wdt' === $request->attributes->get('_route')) {
             return;
         }
 
         // Ignore toolbar
-        if ($request->attributes->get('_profiler') === '_wdt') {
+        if ('_wdt' === $request->attributes->get('_profiler')) {
             return;
         }
 
@@ -76,7 +77,7 @@ class CourseListener
         }
 
         global $cidReset;
-        if ($cidReset === true) {
+        if (true === $cidReset) {
             $this->removeCourseFromSession($request);
 
             return;
@@ -111,7 +112,7 @@ class CourseListener
             } else {
                 $session = $em->getRepository('ChamiloCoreBundle:Session')->find($sessionId);
                 if ($session) {
-                    if ($session->hasCourse($course) === false) {
+                    if (false === $session->hasCourse($course)) {
                         throw new AccessDeniedException($translator->trans('Course is not registered in the Session'));
                     }
 
@@ -219,7 +220,7 @@ class CourseListener
         }*/
 
         $courseId = (int) $request->get('cid');
-        $groupId = (int) $request->get('gid');
+        //$groupId = (int) $request->get('gid');
         $sessionId = (int) $request->get('sid');
 
         // cidReset is set in the global.inc.php files

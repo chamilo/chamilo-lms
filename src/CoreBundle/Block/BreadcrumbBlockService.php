@@ -1,4 +1,5 @@
 <?php
+
 /* For licensing terms, see /license.txt */
 
 namespace Chamilo\CoreBundle\Block;
@@ -103,7 +104,7 @@ class BreadcrumbBlockService extends BaseBreadcrumbMenuBlockService
                     continue;
                 }
                 $url = $data['url'];
-                if ($url === '#') {
+                if ('#' === $url) {
                     $menu->addChild($data['name']);
                 } else {
                     $menu->addChild($data['name'], ['uri' => $url]);

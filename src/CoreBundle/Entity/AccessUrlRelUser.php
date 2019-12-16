@@ -1,4 +1,5 @@
 <?php
+
 /* For licensing terms, see /license.txt */
 
 namespace Chamilo\CoreBundle\Entity;
@@ -55,7 +56,7 @@ class AccessUrlRelUser
         return $this->id;
     }
 
-    public function setId(int $id): AccessUrlRelUser
+    public function setId(int $id): self
     {
         $this->id = $id;
 
@@ -84,7 +85,7 @@ class AccessUrlRelUser
         return $this->url;
     }
 
-    public function setUrl(AccessUrl $url): AccessUrlRelUser
+    public function setUrl(AccessUrl $url): self
     {
         $this->url = $url;
 

@@ -1,4 +1,5 @@
 <?php
+
 /* For licensing terms, see /license.txt */
 
 namespace Chamilo\CoreBundle\Controller\Admin;
@@ -10,8 +11,6 @@ use Symfony\Component\Routing\Annotation\Route;
 
 /**
  * Class SettingsController.
- *
- * @package Chamilo\SettingsBundle\Controller
  */
 class PluginsController extends SyliusSettingsController
 {

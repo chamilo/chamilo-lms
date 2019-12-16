@@ -1,4 +1,5 @@
 <?php
+
 /* For licensing terms, see /license.txt */
 
 namespace Chamilo\UserBundle\Form\EventListener;
@@ -9,8 +10,6 @@ use Symfony\Component\Form\FormEvent;
 
 /**
  * Class BuildAttributeValueFormListener.
- *
- * @package Chamilo\UserBundle\Form\EventListener
  */
 class BuildAttributeValueFormListener implements EventSubscriberInterface
 {

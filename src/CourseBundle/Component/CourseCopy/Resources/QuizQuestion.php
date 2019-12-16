@@ -1,4 +1,5 @@
 <?php
+
 /* For licensing terms, see /license.txt */
 
 namespace Chamilo\CourseBundle\Component\CourseCopy\Resources;
@@ -10,8 +11,6 @@ use Chamilo\CourseBundle\Component\CourseCopy\CourseBuilder;
  * Class QuizQuestion.
  *
  * @author Bart Mollet <bart.mollet@hogent.be>
- *
- * @package chamilo.backup
  */
 class QuizQuestion extends Resource
 {

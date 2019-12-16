@@ -1,4 +1,5 @@
 <?php
+
 /* For licensing terms, see /license.txt */
 
 namespace Chamilo\CoreBundle\Migrations\Schema\V200;
@@ -10,8 +11,6 @@ use Doctrine\DBAL\Schema\Schema;
  * Class Version20180927172830.
  *
  * Add foreing keys between forum category - forum - forum thread - forum post
- *
- * @package Chamilo\CoreBundle\Migrations\Schema\V200
  */
 class Version20180927172830 extends AbstractMigrationChamilo
 {

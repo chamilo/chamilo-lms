@@ -1,4 +1,5 @@
 <?php
+
 /* For licensing terms, see /license.txt */
 
 namespace Chamilo\PageBundle\Controller;
@@ -21,8 +22,6 @@ use Symfony\Component\Routing\Annotation\Route;
 
 /**
  * Class PageController.
- *
- * @package Chamilo\PageBundle\Controller
  */
 class PageController extends BaseController
 {
@@ -43,7 +42,7 @@ class PageController extends BaseController
         /** @var Page $page */
         foreach ($pages as $page) {
             // Skip homepage
-            if ($page->getUrl() === '/') {
+            if ('/' === $page->getUrl()) {
                 continue;
             }
             $criteria = ['pageId' => $page];
@@ -147,14 +146,15 @@ class PageController extends BaseController
                 $blocks = $page->getBlocks();
                 /** @var Block $block */
                 foreach ($blocks as $block) {
-                    if ($block->getName() === 'Main content') {
+                    if ('Main content' === $block->getName()) {
                         $code = $block->getSetting('code');
-                        if ($code === 'content') {
+                        if ('content' === $code) {
                             $children = $block->getChildren();
                             /** @var Block $child */
                             foreach ($children as $child) {
-                                if ($child->getType() === 'sonata.formatter.block.formatter') {
+                                if ('sonata.formatter.block.formatter' === $child->getType()) {
                                     $blockToEdit = $child;
+
                                     break 2;
                                 }
                             }
@@ -191,7 +191,7 @@ class PageController extends BaseController
                 // Create blocks for this page
                 $parentBlock = null;
                 foreach ($containers as $id => $area) {
-                    if (false === $area['block'] && $templateContainers[$id]['shared'] === false) {
+                    if (false === $area['block'] && false === $templateContainers[$id]['shared']) {
                         $block = $blockInteractor->createNewContainer(
                             [
                                 'page' => $page,
@@ -200,7 +200,7 @@ class PageController extends BaseController
                             ]
                         );
 
-                        if ($id === 'content' && $templateContainers[$id]['name'] === 'Main content') {
+                        if ('content' === $id && 'Main content' === $templateContainers[$id]['name']) {
                             $parentBlock = $block;
                         }
                     }
@@ -312,13 +312,13 @@ class PageController extends BaseController
             $blocks = $page->getBlocks();
 
             foreach ($blocks as $block) {
-                if ($block->getName() !== 'Main content') {
+                if ('Main content' !== $block->getName()) {
                     continue;
                 }
 
                 $code = $block->getSetting('code');
 
-                if ($code !== 'content') {
+                if ('content' !== $code) {
                     continue;
                 }
 
@@ -326,11 +326,12 @@ class PageController extends BaseController
 
                 /** @var Block $child */
                 foreach ($children as $child) {
-                    if ($child->getType() !== 'sonata.formatter.block.formatter') {
+                    if ('sonata.formatter.block.formatter' !== $child->getType()) {
                         continue;
                     }
 
                     $contentText = $child->getSetting('content');
+
                     break 2;
                 }
             }

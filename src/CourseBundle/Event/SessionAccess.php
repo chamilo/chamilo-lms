@@ -1,4 +1,5 @@
 <?php
+
 /* For licensing terms, see /license.txt */
 
 namespace Chamilo\CourseBundle\Event;
@@ -10,8 +11,6 @@ use Symfony\Component\EventDispatcher\Event;
 
 /**
  * Class SessionAccess.
- *
- * @package Chamilo\CourseBundle\Event
  */
 class SessionAccess extends Event
 {

@@ -1,4 +1,5 @@
 <?php
+
 /* For licensing terms, see /license.txt */
 
 namespace Chamilo\CoreBundle\Component\Editor\Driver;
@@ -10,8 +11,6 @@ use Chamilo\CoreBundle\Entity\CDropboxFile;
  * Class DropBoxDriver.
  *
  * @todo finish implementation
- *
- * @package Chamilo\CoreBundle\Component\Editor\Driver
  */
 class DropBoxDriver extends \elFinderVolumeMySQL implements DriverInterface
 {
@@ -50,7 +49,7 @@ class DropBoxDriver extends \elFinderVolumeMySQL implements DriverInterface
     /**
      * Gets driver name.
      *
-     * @param string
+     * @param string $name
      */
     public function setName($name)
     {
@@ -216,7 +215,7 @@ class DropBoxDriver extends \elFinderVolumeMySQL implements DriverInterface
         $criteria = [];
         $criteria['uploaderId'] = $userId;
 
-        if ($path != 1) {
+        if (1 != $path) {
             $criteria['filename'] = $path;
             $criteria = ['filename' => $path];
         } else {
@@ -226,9 +225,7 @@ class DropBoxDriver extends \elFinderVolumeMySQL implements DriverInterface
         $file = $this->connector->entityManager->getRepository('Chamilo\CoreBundle\Entity\CDropboxFile')->findOneBy($criteria);
 
         if ($file) {
-            $stat = $this->transformFileInStat($file);
-
-            return $stat;
+            return $this->transformFileInStat($file);
         }
 
         return [];
@@ -308,7 +305,7 @@ class DropBoxDriver extends \elFinderVolumeMySQL implements DriverInterface
      */
     protected function _dirname($path)
     {
-        return ($stat = $this->stat($path)) ? ($stat['phash'] ? $this->decode($stat['phash']) : $this->root) : false;
+        return $stat = $this->stat($path) ? ($stat['phash'] ? $this->decode($stat['phash']) : $this->root) : false;
     }
 
     /**
@@ -322,7 +319,7 @@ class DropBoxDriver extends \elFinderVolumeMySQL implements DriverInterface
      */
     protected function _basename($path)
     {
-        return ($stat = $this->stat($path)) ? $stat['name'] : false;
+        return $stat = $this->stat($path) ? $stat['name'] : false;
     }
 
     /**
@@ -378,7 +375,7 @@ class DropBoxDriver extends \elFinderVolumeMySQL implements DriverInterface
      */
     protected function _path($path)
     {
-        if (($file = $this->stat($path)) == false) {
+        if (false == ($file = $this->stat($path))) {
             return '';
         }
 
@@ -692,7 +689,7 @@ class DropBoxDriver extends \elFinderVolumeMySQL implements DriverInterface
      */
     private function transformFileInStat(CDropboxFile $file)
     {
-        $stat = [
+        return [
             'id' => $file->getId().$file->getCId(),
             'name' => $file->getFilename(),
             'ts' => $file->getUploadDate(),
@@ -705,8 +702,6 @@ class DropBoxDriver extends \elFinderVolumeMySQL implements DriverInterface
             'height' => 100,
             'dirs' => 0,
         ];
-
-        return $stat;
 
         /*
         if ($stat['parent_id']) {

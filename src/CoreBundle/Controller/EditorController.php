@@ -1,4 +1,5 @@
 <?php
+
 /* For licensing terms, see /license.txt */
 
 namespace Chamilo\CoreBundle\Controller;
@@ -122,7 +123,7 @@ class EditorController extends BaseController
         $routeParams = $this->getResourceParams($request);
 
         $titleColumn->manipulateRenderCell(
-            function ($value, Row $row, $router) use ($tool, $type, $routeParams, $request) {
+            function ($value, Row $row, $router) use ($routeParams, $request) {
                 /** @var AbstractResource $entity */
                 $entity = $row->getEntity();
                 $resourceNode = $entity->getResourceNode();
@@ -220,7 +221,7 @@ class EditorController extends BaseController
     {
         $moreButtonsInMaximizedMode = false;
 
-        if ($settingsManager->getSetting('editor.more_buttons_maximized_mode') === 'true') {
+        if ('true' === $settingsManager->getSetting('editor.more_buttons_maximized_mode')) {
             $moreButtonsInMaximizedMode = true;
         }
 

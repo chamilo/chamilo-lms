@@ -10,8 +10,6 @@ use Sonata\AdminBundle\Show\ShowMapper;
 
 /**
  * Class UserAdmin.
- *
- * @package Chamilo\UserBundle\Admin
  */
 class UserFieldValuesAdmin extends AbstractAdmin
 {

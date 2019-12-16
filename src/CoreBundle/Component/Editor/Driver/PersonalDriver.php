@@ -1,4 +1,5 @@
 <?php
+
 /* For licensing terms, see /license.txt */
 
 namespace Chamilo\CoreBundle\Component\Editor\Driver;
@@ -7,8 +8,6 @@ namespace Chamilo\CoreBundle\Component\Editor\Driver;
  * Class PersonalDriver.
  *
  * @todo add more checks in upload/rm
- *
- * @package Chamilo\CoreBundle\Component\Editor\Driver
  */
 class PersonalDriver extends Driver implements DriverInterface
 {
@@ -47,7 +46,7 @@ class PersonalDriver extends Driver implements DriverInterface
                 $dir = \UserManager::getUserPathById($userId, 'system');
                 $dirWeb = \UserManager::getUserPathById($userId, 'web');
 
-                $driver = [
+                return [
                     'driver' => 'PersonalDriver',
                     'alias' => get_lang('My files'),
                     'path' => $dir.'my_files',
@@ -71,8 +70,6 @@ class PersonalDriver extends Driver implements DriverInterface
                         'resize',
                     ],
                 ];
-
-                return $driver;
             }
         }
 

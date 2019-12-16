@@ -1,4 +1,5 @@
 <?php
+
 /* For licensing terms, see /license.txt */
 
 namespace Chamilo\CoreBundle\Migrations\Schema\V200;
@@ -9,8 +10,6 @@ use Doctrine\DBAL\Types\Type;
 
 /**
  * Class Version20170904173000.
- *
- * @package Chamilo\CoreBundle\Migrations\Schema\V200
  */
 class Version20170904173000 extends AbstractMigrationChamilo
 {

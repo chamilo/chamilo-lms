@@ -420,6 +420,14 @@ if (api_is_platform_admin()) {
 
     if (api_get_configuration_value('notification_event')) {
         $items[] = [
+            'url' => api_get_path(WEB_CODE_PATH).'notification_event/list.php',
+            'label' => get_lang('Notifications'),
+        ];
+    }
+
+    $allowJustification = api_get_plugin_setting('justification', 'tool_enable') === 'true';
+    if ($allowJustification) {
+        $items[] = [
             'url' => api_get_path(WEB_PLUGIN_PATH).'justification/list.php',
             'label' => get_lang('Justification'),
         ];

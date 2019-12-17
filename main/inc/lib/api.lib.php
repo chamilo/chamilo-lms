@@ -9559,7 +9559,7 @@ function api_set_noreply_and_from_address_to_mailer(PHPMailer $mailer, array $se
             PHPMailer::ValidateAddress($replyToAddress['mail'])
         ) {
             $mailer->AddReplyTo($replyToAddress['mail'], $replyToAddress['name']);
-            $mailer->Sender = $replyToAddress['mail'];
+            //$mailer->Sender = $replyToAddress['mail'];
         }
     }
 

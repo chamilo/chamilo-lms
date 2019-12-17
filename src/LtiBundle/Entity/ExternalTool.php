@@ -496,4 +496,24 @@ class ExternalTool
 
         return $newKey;
     }
+
+    /**
+     * @return ArrayCollection
+     */
+    public function getChildren(): ArrayCollection
+    {
+        return $this->children;
+    }
+
+    /**
+     * @param ArrayCollection $children
+     *
+     * @return ExternalTool
+     */
+    public function setChildren(ArrayCollection $children): self
+    {
+        $this->children = $children;
+
+        return $this;
+    }
 }

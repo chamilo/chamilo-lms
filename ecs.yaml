@@ -2,3 +2,5 @@ parameters:
     sets:
         - 'clean-code'
         - 'symfony'
+    skip:
+        SlevomatCodingStandard\Sniffs\Variables\UnusedVariableSniff: ~

@@ -18,15 +18,15 @@ class ResourceUploadListener
     /**
      * @var ObjectManager
      */
-    private $om;
+    //private $om;
     private $router;
 
     /**
      * ResourceUploadListener constructor.
      */
-    public function __construct(ObjectManager $om, RouterInterface $router)
+    public function __construct(RouterInterface $router)
     {
-        $this->om = $om;
+        //$this->om = $om;
         $this->router = $router;
     }
 

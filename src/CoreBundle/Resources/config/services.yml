@@ -62,7 +62,6 @@ services:
             - '@doctrine.orm.entity_manager'
             - '@Chamilo\CoreBundle\Repository\CourseRepository'
             - '@security.authorization_checker'
-            - '@service_container'
         public: false
         tags:
             - {name: security.voter}
@@ -76,7 +75,6 @@ services:
             - '@doctrine.orm.entity_manager'
             - '@Chamilo\CoreBundle\Repository\CourseRepository'
             - '@security.authorization_checker'
-            - '@service_container'
         public: false
         tags:
             - {name: security.voter}
@@ -173,9 +171,7 @@ services:
             - {name: kernel.event_subscriber, priority: 15}
 
     # User locale listener
-    chamilo_core.listener.user_locale_listener:
-        class: Chamilo\CoreBundle\EventListener\UserLocaleListener
-        arguments: ['@session', '@chamilo.settings.manager']
+    Chamilo\CoreBundle\EventListener\UserLocaleListener:
         tags:
             - {name: kernel.event_listener, event: security.interactive_login, method: onInteractiveLogin, priority: 15}
 
@@ -211,7 +207,7 @@ services:
     # Course upload listener
     chamilo_core.listener.resource_upload_listener:
         class: Chamilo\CoreBundle\EventListener\ResourceUploadListener
-        arguments: ['@doctrine.orm.entity_manager', '@router']
+        arguments: ['@router']
         tags:
             - {name: kernel.event_listener, event: oneup_uploader.post_persist, method: onUpload}
 
@@ -221,7 +217,6 @@ services:
 
     chamilo_core.menu.nav_builder:
         class: Chamilo\CoreBundle\Menu\NavBuilder
-        arguments: ['@menu.voter.regex']
         calls:
             - [setContainer, ['@service_container']]
         tags:

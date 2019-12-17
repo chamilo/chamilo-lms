@@ -145,7 +145,7 @@ class Finder extends \elFinder
             $_req = 'POST' == $_SERVER['REQUEST_METHOD'] ? $_POST : $_GET;
             $_reqCmd = isset($_req['cmd']) ? $_req['cmd'] : '';
             foreach ($opts['bind'] as $cmd => $handlers) {
-                $doRegist = (false !== strpos($cmd, '*'));
+                $doRegist = false !== strpos($cmd, '*');
                 if (!$doRegist) {
                     $_getcmd = create_function('$cmd', 'list($ret) = explode(\'.\', $cmd);return trim($ret);');
                     $doRegist = ($_reqCmd && in_array($_reqCmd, array_map($_getcmd, explode(' ', $cmd))));

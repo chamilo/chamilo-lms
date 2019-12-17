@@ -5,12 +5,10 @@
 namespace Chamilo\CoreBundle\Security\Authorization\Voter;
 
 use Chamilo\CoreBundle\Entity\Course;
-use Chamilo\CoreBundle\Entity\Manager\CourseManager;
 use Chamilo\CoreBundle\Repository\CourseRepository;
 use Chamilo\UserBundle\Entity\User;
 use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\EntityManagerInterface;
-use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
 use Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface;
 use Symfony\Component\Security\Core\Authorization\Voter\Voter;
@@ -28,18 +26,15 @@ class CourseVoter extends Voter
     private $entityManager;
     private $courseManager;
     private $authorizationChecker;
-    private $container;
 
     public function __construct(
         EntityManagerInterface $entityManager,
         CourseRepository $courseManager,
-        AuthorizationCheckerInterface $authorizationChecker,
-        ContainerInterface $container
+        AuthorizationCheckerInterface $authorizationChecker
     ) {
         $this->entityManager = $entityManager;
         $this->courseManager = $courseManager;
         $this->authorizationChecker = $authorizationChecker;
-        $this->container = $container;
     }
 
     /**

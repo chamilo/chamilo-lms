@@ -8,7 +8,6 @@ use Chamilo\CoreBundle\Repository\CourseRepository;
 use Chamilo\CourseBundle\Entity\CGroupInfo;
 use Chamilo\CourseBundle\Repository\CGroupInfoRepository;
 use Doctrine\ORM\EntityManager;
-use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
 use Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface;
 use Symfony\Component\Security\Core\Authorization\Voter\Voter;
@@ -27,20 +26,17 @@ class GroupVoter extends Voter
     private $courseManager;
     private $groupManager;
     private $authorizationChecker;
-    private $container;
 
     public function __construct(
         EntityManager $entityManager,
         CourseRepository $courseManager,
         CGroupInfoRepository $groupManager,
-        AuthorizationCheckerInterface $authorizationChecker,
-        ContainerInterface $container
+        AuthorizationCheckerInterface $authorizationChecker
     ) {
         $this->entityManager = $entityManager;
         $this->courseManager = $courseManager;
         $this->groupManager = $groupManager;
         $this->authorizationChecker = $authorizationChecker;
-        $this->container = $container;
     }
 
     /**

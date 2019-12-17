@@ -19,12 +19,10 @@ class NavBuilder implements ContainerAwareInterface
 {
     use ContainerAwareTrait;
 
-    private $regexVoter;
     private $factory;
 
-    public function __construct(MenuVoter $regexVoter, FactoryInterface $factory)
+    public function __construct(FactoryInterface $factory)
     {
-        $this->regexVoter = $regexVoter;
         $this->factory = $factory;
     }
 

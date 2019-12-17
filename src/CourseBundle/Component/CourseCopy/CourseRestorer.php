@@ -1481,7 +1481,7 @@ class CourseRestorer
 
                 $params = [
                     'c_id' => $this->destination_course_id,
-                    'id' => (false === $tool_intro->id ? '' : self::DBUTF8($tool_intro->id)),
+                    'id' => false === $tool_intro->id ? '' : self::DBUTF8($tool_intro->id),
                     'intro_text' => self::DBUTF8($tool_intro->intro_text),
                     'session_id' => $sessionId,
                 ];
@@ -1522,7 +1522,7 @@ class CourseRestorer
                 $params = [
                     'c_id' => $this->destination_course_id,
                     'title' => self::DBUTF8($event->title),
-                    'content' => (false === $event->content ? '' : self::DBUTF8($event->content)),
+                    'content' => false === $event->content ? '' : self::DBUTF8($event->content),
                     'all_day' => $event->all_day,
                     'start_date' => $event->start_date,
                     'end_date' => $event->end_date,
@@ -1646,7 +1646,7 @@ class CourseRestorer
                 $params['c_id'] = $this->destination_course_id;
                 $params['description_type'] = self::DBUTF8($descriptionType);
                 $params['title'] = self::DBUTF8($title);
-                $params['content'] = (false === $description_content ? '' : self::DBUTF8($description_content));
+                $params['content'] = false === $description_content ? '' : self::DBUTF8($description_content);
                 $params['progress'] = 0;
 
                 $id = Database::insert($table, $params);
@@ -1687,7 +1687,7 @@ class CourseRestorer
                 $params = [
                     'c_id' => $this->destination_course_id,
                     'title' => self::DBUTF8($announcement->title),
-                    'content' => (false === $announcement->content ? '' : self::DBUTF8($announcement->content)),
+                    'content' => false === $announcement->content ? '' : self::DBUTF8($announcement->content),
                     'end_date' => $announcement->date,
                     'display_order' => $announcement->display_order,
                     'email_sent' => $announcement->email_sent,
@@ -1846,7 +1846,7 @@ class CourseRestorer
                     $params = [
                         'c_id' => $this->destination_course_id,
                         'title' => self::DBUTF8($quiz->title),
-                        'description' => (false === $quiz->description ? '' : self::DBUTF8($quiz->description)),
+                        'description' => false === $quiz->description ? '' : self::DBUTF8($quiz->description),
                         'type' => isset($quiz->quiz_type) ? (int) $quiz->quiz_type : $quiz->type,
                         'random' => (int) $quiz->random,
                         'active' => $quiz->active,
@@ -1968,7 +1968,7 @@ class CourseRestorer
             $params = [
                 'c_id' => $this->destination_course_id,
                 'question' => self::DBUTF8($question->question),
-                'description' => (false === $question->description ? '' : self::DBUTF8($question->description)),
+                'description' => false === $question->description ? '' : self::DBUTF8($question->description),
                 'ponderation' => self::DBUTF8($question->ponderation),
                 'position' => self::DBUTF8($question->position),
                 'type' => self::DBUTF8($question->quiz_type),
@@ -2081,7 +2081,7 @@ class CourseRestorer
                         'question_id' => $new_id,
                         'answer' => self::DBUTF8($answer['answer']),
                         'correct' => $answer['correct'],
-                        'comment' => (false === $answer['comment'] ? '' : self::DBUTF8($answer['comment'])),
+                        'comment' => false === $answer['comment'] ? '' : self::DBUTF8($answer['comment']),
                         'ponderation' => $answer['ponderation'],
                         'position' => $answer['position'],
                         'hotspot_coordinates' => $answer['hotspot_coordinates'],
@@ -2378,8 +2378,8 @@ class CourseRestorer
                 $params = [
                     'c_id' => $this->destination_course_id,
                     'code' => self::DBUTF8($survey->code),
-                    'title' => (false === $survey->title ? '' : self::DBUTF8($survey->title)),
-                    'subtitle' => (false === $survey->subtitle ? '' : self::DBUTF8($survey->subtitle)),
+                    'title' => false === $survey->title ? '' : self::DBUTF8($survey->title),
+                    'subtitle' => false === $survey->subtitle ? '' : self::DBUTF8($survey->subtitle),
                     'author' => self::DBUTF8($survey->author),
                     'lang' => self::DBUTF8($survey->lang),
                     'avail_from' => self::DBUTF8($survey->avail_from),
@@ -2563,7 +2563,7 @@ class CourseRestorer
             $params = [
                 'c_id' => $this->destination_course_id,
                 'survey_id' => self::DBUTF8($survey_id),
-                'survey_question' => (false === $question->survey_question ? '' : self::DBUTF8($question->survey_question)),
+                'survey_question' => false === $question->survey_question ? '' : self::DBUTF8($question->survey_question),
                 'survey_question_comment' => self::DBUTF8($question->survey_question_comment),
                 'type' => self::DBUTF8($question->survey_question_type),
                 'display' => self::DBUTF8($question->display),
@@ -2595,7 +2595,7 @@ class CourseRestorer
                     $params = [
                         'c_id' => $this->destination_course_id,
                         'question_id' => $new_id,
-                        'option_text' => (false === $answer['option_text'] ? '' : self::DBUTF8($answer['option_text'])),
+                        'option_text' => false === $answer['option_text'] ? '' : self::DBUTF8($answer['option_text']),
                         'sort' => $answer['sort'],
                         'survey_id' => self::DBUTF8($survey_id),
                     ];
@@ -3081,7 +3081,7 @@ class CourseRestorer
                 );
 
                 $params['c_id'] = $this->destination_course_id;
-                $params['description'] = (false === $glossary->description ? '' : self::DBUTF8($glossary->description));
+                $params['description'] = false === $glossary->description ? '' : self::DBUTF8($glossary->description);
                 $params['display_order'] = $glossary->display_order;
                 $params['name'] = self::DBUTF8($glossary->name);
                 $params['glossary_id'] = 0;
@@ -3137,7 +3137,7 @@ class CourseRestorer
                     'page_id' => self::DBUTF8($wiki->page_id),
                     'reflink' => self::DBUTF8($wiki->reflink),
                     'title' => self::DBUTF8($wiki->title),
-                    'content' => (false === $wiki->content ? '' : self::DBUTF8($wiki->content)),
+                    'content' => false === $wiki->content ? '' : self::DBUTF8($wiki->content),
                     'user_id' => intval($wiki->user_id),
                     'group_id' => intval($wiki->group_id),
                     'dtime' => self::DBUTF8($wiki->dtime),

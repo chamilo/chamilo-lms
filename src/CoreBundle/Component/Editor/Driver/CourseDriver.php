@@ -14,7 +14,6 @@ class CourseDriver extends Driver implements DriverInterface
 {
     public $name = 'CourseDriver';
     public $visibleFiles = [];
-    private $coursePath;
 
     /**
      * Setups the folder.
@@ -30,7 +29,6 @@ class CourseDriver extends Driver implements DriverInterface
             $coursePath = api_get_path(SYS_COURSE_PATH);
             $courseDir = $course->getDirectory().'/document';
             $baseDir = $coursePath.$courseDir;
-            $this->coursePath = $baseDir;
             $courseInfo = $this->getCourseInfoArray();
 
             // Creates shared folder

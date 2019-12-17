@@ -1,11 +1,6 @@
 <?php
 
 /* For licensing terms, see /license.txt */
-/**
- * This file contains an abstract Hook observer class
- * Used for Hook Observers in plugins, called when a hook event happens
- * (e.g Create user, Webservice registration).
- */
 
 namespace Chamilo\CoreBundle\Hook;
 
@@ -17,12 +12,14 @@ use Doctrine\ORM\EntityManager;
  * This abstract class implements Hook Observer Interface to build the base
  * for Hook Observer. This class have some public static method,
  * e.g for create Hook Observers.
+ * This file contains an abstract Hook observer class
+ * Used for Hook Observers in plugins, called when a hook event happens
+ * (e.g Create user, Webservice registration).
  */
 abstract class HookObserver implements HookObserverInterface
 {
     public $path;
     public $pluginName;
-
     private $entityManager;
 
     /**
@@ -37,6 +34,11 @@ abstract class HookObserver implements HookObserverInterface
     {
         $this->path = $path;
         $this->pluginName = $pluginName;
+    }
+
+    public function getEntityManager()
+    {
+        return $this->entityManager;
     }
 
     public function setEntityManager(EntityManager $entityManager)

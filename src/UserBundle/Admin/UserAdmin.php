@@ -38,8 +38,6 @@ class UserAdmin extends BaseUserAdmin
             ->with('ExtraFields', ['class' => 'col-md-4'])->end()
             ->end();
 
-        $now = new \DateTime();
-
         $formMapper
             ->tab('User')
             ->with('General')

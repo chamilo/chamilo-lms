@@ -15,7 +15,6 @@ use Chamilo\CoreBundle\Entity\Resource\ResourceNode;
 use Chamilo\CoreBundle\Entity\Resource\ResourceRight;
 use Chamilo\CoreBundle\Entity\Resource\ResourceType;
 use Chamilo\CoreBundle\Entity\Session;
-use Chamilo\CoreBundle\Entity\Tool;
 use Chamilo\CoreBundle\Entity\Usergroup;
 use Chamilo\CoreBundle\Security\Authorization\Voter\ResourceNodeVoter;
 use Chamilo\CourseBundle\Entity\CGroupInfo;
@@ -777,19 +776,6 @@ class ResourceRepository extends BaseEntityRepository
         ;
 
         return $settings;
-    }
-
-    /**
-     * @param string $tool
-     *
-     * @return Tool|null
-     */
-    private function getTool($tool)
-    {
-        return $this
-            ->getEntityManager()
-            ->getRepository('ChamiloCoreBundle:Tool')
-            ->findOneBy(['name' => $tool]);
     }
 
     private function setLinkVisibility(AbstractResource $resource, int $visibility, bool $recursive = true): bool

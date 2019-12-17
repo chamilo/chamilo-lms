@@ -1368,9 +1368,6 @@ class UserRepository extends ResourceRepository
         $user->setCommentedUserSkills([]);
 
         $extraFieldValues = new \ExtraFieldValue('user');
-        $items = $extraFieldValues->getAllValuesByItem($userId);
-        //$user->setExtraFields($items);
-        //$user->setExtraFields([]);
 
         $lastLogin = $user->getLastLogin();
         if (empty($lastLogin)) {

@@ -109,24 +109,6 @@ class AttributeValueType extends AbstractResourceType
      */
     public function getName()
     {
-        //return sprintf('sylius_%s_attribute_value', $this->subjectName);
         return sprintf('chamilo_%s_extra_field_value', $this->subjectName);
-    }
-
-    /**
-     * Get attributes.
-     *
-     * @return AttributeInterface[]
-     */
-    private function getAttributes(FormBuilderInterface $builder)
-    {
-        /** @var \Symfony\Component\Form\FormBuilder $extraField */
-        $extraField = $builder->get('extraField');
-
-        if ($extraField->hasOption('choice_list')) {
-            return $extraField->getOption('choice_list')->getChoices();
-        }
-
-        return [];
     }
 }

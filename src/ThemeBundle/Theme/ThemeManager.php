@@ -57,7 +57,6 @@ class ThemeManager implements ContainerAwareInterface
     {
         $unsorted = [];
         $srcList = [];
-        $assetList = [];
         foreach ($this->javascripts as $id => $scriptDefinition) {
             if ($scriptDefinition['location'] == $location) {
                 $unsorted[$id] = $scriptDefinition;

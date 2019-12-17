@@ -1016,7 +1016,7 @@ class SettingsManager implements SettingsManagerInterface
         return $parameters;
     }
 
-    private function transformParameters(SettingsBuilder $settingsBuilder, array $parameters)
+    /*private function transformParameters(SettingsBuilder $settingsBuilder, array $parameters)
     {
         $transformedParameters = $parameters;
 
@@ -1027,5 +1027,5 @@ class SettingsManager implements SettingsManagerInterface
         }
 
         return $transformedParameters;
-    }
+    }*/
 }

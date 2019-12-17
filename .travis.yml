@@ -46,7 +46,7 @@ before_install:
   - sleep 10
 
   # Apache & php-fpm configuration
-  - sudo apt-get install -y --force-yes apache2 php php-gd php-intl php-intl
+  - sudo apt-get install -y --force-yes apache2 php php-curl php-gd php-intl php-intl
   - phpenv config-add tests/travis/php-config.ini
   - bash tests/travis/setup-php-fpm.sh
   - bash tests/travis/setup-apache.sh

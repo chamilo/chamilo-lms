@@ -47,6 +47,7 @@ before_install:
 
   # Apache & php-fpm configuration
   - sudo apt-get install -y --force-yes apache2 php php-gd php-intl php-intl
+  - phpenv config-add tests/travis/php-config.ini
   - bash tests/travis/setup-php-fpm.sh
   - bash tests/travis/setup-apache.sh
   - curl $VHOST_URL

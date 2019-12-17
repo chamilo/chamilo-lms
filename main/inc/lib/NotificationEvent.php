@@ -128,7 +128,7 @@ class NotificationEvent extends Model
 
                             $url = $event['link'];
                             if (empty($url)) {
-                                $url = api_get_path(WEB_CODE_PATH).'auth/profile.php#'.$fieldData['code'];
+                                $url = api_get_path(WEB_CODE_PATH).'auth/justification.php#'.$fieldData['code'];
                             }
 
                             if ($showNotification && $read === false) {

@@ -46,7 +46,7 @@ before_install:
   - sleep 10
 
   # Apache & php-fpm configuration
-  - sudo apt-get install -y --force-yes apache2 php php-curl php-gd php-intl php-iconv php-mbstring php-xml php-soap
+  - sudo apt-get install -y --force-yes apache2 php php-curl php-gd php-intl php-iconv php-mbstring php-xml php-soap php-mysql
   - phpenv config-add tests/travis/php-config.ini
   - bash tests/travis/setup-php-fpm.sh
   - bash tests/travis/setup-apache.sh
@@ -72,7 +72,7 @@ before_install:
   - cd $TRAVIS_BUILD_DIR
   - pwd
   # Install vendors
-  - travis_wait 45 composer install
+  - travis_wait 45 composer update
   - composer analyse
   # Install chamilo
   - php -d date.timezone="Europe/Paris" $TRAVIS_BUILD_DIR/chash/bin/console chash:chamilo_install $CHAMILO_VERSION $TRAVIS_BUILD_DIR --no-interaction --sitename="Chamilo" --site_url="http://$VHOST_URL/" --institution="Chamilo" --institution_url="https://chamilo.org" --encrypt_method="sha1" --firstname="John" --lastname="Doe" --language="english" --driver="pdo_mysql" --host="localhost" --port="3306" --dbname="chamilo" --dbuser="root" --permissions_for_new_directories="0777" --permissions_for_new_files="0666" --linux-user="www-data" --linux-group="www-data" --username="admin" --password="admin" --email="admin@example.com" --phone="555-5555"
@@ -104,8 +104,9 @@ script:
   - cd tests/behat
   - pwd
   #  - travis_wait 45 ../../vendor/behat/behat/bin/behat -v
-  - ../../vendor/behat/behat/bin/behat features/accessCompanyReports.feature
   - ../../vendor/behat/behat/bin/behat features/adminFillUsers.feature
+  - ../../vendor/behat/behat/bin/behat features/course.feature
+  - ../../vendor/behat/behat/bin/behat features/createUser.feature
 
   # - sudo cat /var/log/apache2/$VHOST_URL-access.log
 

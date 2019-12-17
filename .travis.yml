@@ -1,4 +1,4 @@
-dist: bionic
+dist: trusty
 sudo: required
 language: php
 
@@ -7,12 +7,13 @@ addons:
         packages:
         - apache2
         - postfix
+        - libapache2-mod-fastcgi
         - libappindicator1
         - fonts-liberation
 
 services:
     - mysql
-    - xvfb
+
 cache:
   yarn: true
   directories:
@@ -31,30 +32,34 @@ before_install:
   # Fix travis error https://github.com/travis-ci/travis-ci/issues/8607
   - sudo rm -vf /etc/apt/sources.list.d/*riak*
   # Get Chrome
+  #- wget -q -O - https://dl-ssl.google.com/linux/linux_signing_key.pub | sudo apt-key add -
+  #- sudo apt-get update
+  #- sudo apt-get install google-chrome-stable
   - google-chrome-stable --headless --disable-gpu --remote-debugging-port=9222 http://localhost &
   # Get Chrome driver
   - wget https://chromedriver.storage.googleapis.com/2.35/chromedriver_linux64.zip && unzip chromedriver_linux64.zip
   - sudo mv chromedriver /usr/bin
   - sudo chmod +x /usr/bin/chromedriver
-
+  # Setup display for Selenium
+  - sh -e /etc/init.d/xvfb start
+  - export DISPLAY=:99.0
+  - sleep 3
   # Get Selenium
   - wget http://selenium-release.storage.googleapis.com/3.1/selenium-server-standalone-3.1.0.jar
   # Check java
+  - java -version
+  - sudo apt-get install oracle-java8-installer
   - java -version
   - java -jar selenium-server-standalone-3.1.0.jar -log selenium.log  > /dev/null &
   - nohup bash -c "webdriver-manager start 2>&1 &"
   - sleep 10
 
   # Apache & php-fpm configuration
-  - sudo apt-get install -y --force-yes apache2 php php-curl php-gd php-intl php-iconv php-mbstring php-xml php-soap php-mysql
-  - phpenv config-add tests/travis/php-config.ini
   - bash tests/travis/setup-php-fpm.sh
   - bash tests/travis/setup-apache.sh
-  - curl $VHOST_URL
 
   - mysqld --version
   - apache2 -v
-  - php -v
   - php -m
   - php -ini | grep memory_limit
   - sudo cat /etc/hosts
@@ -91,7 +96,6 @@ before_install:
   - sudo chown -R www-data:www-data $TRAVIS_BUILD_DIR
   - sudo chown -R 775 $TRAVIS_BUILD_DIR
   - sudo chmod +x /home/travis/build
-  - sudo service apache2 restart
   - curl $VHOST_URL
   - curl $VHOST_URL/login
   - ls -la public/build

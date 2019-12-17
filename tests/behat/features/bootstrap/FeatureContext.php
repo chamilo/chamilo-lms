@@ -116,9 +116,8 @@ class FeatureContext extends MinkContext
      */
     public function iAmLoggedAs($username)
     {
-        $this->visit('/public/logout');
-
-        $this->visit('/public/login');
+        $this->visit('/logout');
+        $this->visit('/login');
         $this->fillField('login__username', $username);
         $this->fillField('login__password', $username);
         $this->pressButton('_submit');
@@ -286,7 +285,7 @@ class FeatureContext extends MinkContext
         $this->getSession()->executeScript(
             "
                 var textarea = $('textarea');
-                var id = textarea.attr('id'); 
+                var id = textarea.attr('id');
                 CKEDITOR.instances[id].setData(\"$value\");
                 "
         );
@@ -380,7 +379,7 @@ class FeatureContext extends MinkContext
            $('$field > option').each(function(index, option) {
                 if (option.text == '$value') {
                     $('$field').selectpicker('val', option.value);
-                }                
+                }
             });
         ");
     }
@@ -394,7 +393,7 @@ class FeatureContext extends MinkContext
         $this->getSession()->executeScript("
             var input = $('$field').filter('$class');
             var id = input.attr('id');
-            var input = $('#'+id);            
+            var input = $('#'+id);
             input.val($value);
         ");
     }

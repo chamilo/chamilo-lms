@@ -13,11 +13,3 @@ cat /etc/apache2/sites-available/000-default.conf
 
 # Starting Apache
 sudo service apache2 restart
-
-echo "* Apache restarted";
-
-sudo cat /var/log/apache2/error.log
-
-sudo journalctl | tail
-
-echo "* End setup-apache.sh ...";

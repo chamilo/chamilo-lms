@@ -7,7 +7,6 @@ addons:
         packages:
         - apache2
         - postfix
-        - libapache2-mod-fastcgi
         - libappindicator1
         - fonts-liberation
 
@@ -47,6 +46,7 @@ before_install:
   - sleep 10
 
   # Apache & php-fpm configuration
+  - sudo apt-get install -y --force-yes apache2 libapache2-mod-fastcgi
   - bash tests/travis/setup-php-fpm.sh
   - bash tests/travis/setup-apache.sh
   - curl $VHOST_URL

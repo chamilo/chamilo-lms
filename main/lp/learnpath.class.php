@@ -4611,12 +4611,10 @@ class learnpath
         }
 
         $users = $category->getUsers();
-
+        $response = false;
         if (empty($users) || !$users->count()) {
-            return true;
-        }
-
-        if ($category->hasUserAdded($user)) {
+            $response = true;
+        } elseif ($category->hasUserAdded($user)) {
             return true;
         }
 
@@ -4657,7 +4655,7 @@ class learnpath
             }
         }
 
-        return false;
+        return $response;
     }
 
     /**

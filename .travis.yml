@@ -7,6 +7,7 @@ addons:
         packages:
         - apache2
         - postfix
+        - libapache2-mod-fastcgi
         - libappindicator1
         - fonts-liberation
 
@@ -90,8 +91,7 @@ before_install:
   - sudo chmod +x /home/travis/build
   - sudo service apache2 restart
   - curl $VHOST_URL
-  - curl $VHOST_URL/public
-  - curl $VHOST_URL/public/login
+  - curl $VHOST_URL/login
   - ls -la public/build
 
 script:
@@ -101,7 +101,9 @@ script:
   - chromedriver --version
   - cd tests/behat
   - pwd
-  - travis_wait 45 ../../vendor/behat/behat/bin/behat -v
+  #  - travis_wait 45 ../../vendor/behat/behat/bin/behat -v
+  - ../../vendor/behat/behat/bin/behat features/accessCompanyReports.feature
+  - ../../vendor/behat/behat/bin/behat features/adminFillUsers.feature
 
   # - sudo cat /var/log/apache2/$VHOST_URL-access.log
 

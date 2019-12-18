@@ -79,7 +79,7 @@ class ResourceRepository extends BaseEntityRepository
 
     /** @var SlugifyInterface */
     protected $slugify;
-    /** @var ToolChain  */
+    /** @var ToolChain */
     protected $toolChain;
 
     /**

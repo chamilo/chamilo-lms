@@ -5,6 +5,7 @@
 namespace Chamilo\CoreBundle\Hook;
 
 use Chamilo\CoreBundle\Hook\Interfaces\HookCreateUserEventInterface;
+use Chamilo\CoreBundle\Hook\Interfaces\HookCreateUserObserverInterface;
 use Doctrine\ORM\EntityManager;
 
 /**

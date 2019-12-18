@@ -54,7 +54,7 @@ class CourseVoter extends Voter
     }
 
     /**
-     * @return CourseManager
+     * @return CourseRepository
      */
     public function getCourseManager()
     {

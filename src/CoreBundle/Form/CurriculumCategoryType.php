@@ -13,7 +13,6 @@ class CurriculumCategoryType extends AbstractType
 {
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
-        /** @var CurriculumCategory $entity */
         $entity = $builder->getData();
 
         $builder->add('title', 'text');

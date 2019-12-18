@@ -5,6 +5,7 @@
 namespace Chamilo\CoreBundle\Hook;
 
 use Chamilo\CoreBundle\Hook\Interfaces\HookCreateCourseEventInterface;
+use Chamilo\CoreBundle\Hook\Interfaces\HookCreateCourseObserverInterface;
 use Doctrine\ORM\EntityManager;
 
 /**

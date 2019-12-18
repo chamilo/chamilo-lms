@@ -242,14 +242,6 @@ class Container
     }
 
     /**
-     * @return \Elao\WebProfilerExtraBundle\TwigProfilerEngine
-     */
-    public static function getTemplate()
-    {
-        return self::$container->get('templating');
-    }
-
-    /**
      * @return SettingsManager
      */
     public static function getSettingsManager()

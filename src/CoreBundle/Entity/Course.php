@@ -1345,7 +1345,7 @@ class Course extends AbstractResource implements ResourceInterface
         $courseRelUser->setCourse($this);
         $courseRelUser->setUser($user);
         $courseRelUser->setRelationType($relationType);
-        $courseRelUser->setRole($role);
+        //$courseRelUser->setRole($role);
         $courseRelUser->setStatus($status);
         $this->addUsers($courseRelUser);
     }

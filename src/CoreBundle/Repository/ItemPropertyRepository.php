@@ -110,7 +110,6 @@ class ItemPropertyRepository extends ServiceEntityRepository
 
         $alreadyAdded = [];
         if ($groupsSubscribedToItem) {
-            /** @var CItemProperty $itemProperty */
             foreach ($groupsSubscribedToItem as $itemProperty) {
                 $alreadyAdded[] = $itemProperty->getGroup()->getId();
             }

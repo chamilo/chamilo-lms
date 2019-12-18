@@ -18,6 +18,7 @@ use Chamilo\CoreBundle\Entity\Session;
 use Chamilo\CoreBundle\Entity\Usergroup;
 use Chamilo\CoreBundle\Security\Authorization\Voter\ResourceNodeVoter;
 use Chamilo\CoreBundle\ToolChain;
+use Chamilo\CourseBundle\Entity\CDocument;
 use Chamilo\CourseBundle\Entity\CGroupInfo;
 use Chamilo\UserBundle\Entity\User;
 use Cocur\Slugify\SlugifyInterface;
@@ -396,7 +397,7 @@ class ResourceRepository extends BaseEntityRepository
         return $resourceLink;
     }
 
-    public function addResourceToSession(
+    /*public function addResourceToSession(
         ResourceNode $resourceNode,
         Course $course,
         Session $session,
@@ -411,12 +412,9 @@ class ResourceRepository extends BaseEntityRepository
         $this->getEntityManager()->persist($resourceLink);
 
         return $resourceLink;
-    }
+    }*/
 
-    /**
-     * @return ResourceLink
-     */
-    public function addResourceToCourseGroup(
+    /*public function addResourceToCourseGroup(
         ResourceNode $resourceNode,
         Course $course,
         CGroupInfo $group,
@@ -431,7 +429,7 @@ class ResourceRepository extends BaseEntityRepository
         $this->getEntityManager()->persist($resourceLink);
 
         return $resourceLink;
-    }
+    }*/
 
     /**
      * @return ResourceLink
@@ -730,7 +728,9 @@ class ResourceRepository extends BaseEntityRepository
                     $fileName = $resourceFile->getFile()->getPathname();
                     $this->fs->update($fileName, $content);
                     $size = $this->fs->getSize($fileName);
-                    $resource->setSize($size);
+                    if ($resource instanceof CDocument) {
+                        $resource->setSize($size);
+                    }
                     $this->entityManager->persist($resource);
 
                     return true;

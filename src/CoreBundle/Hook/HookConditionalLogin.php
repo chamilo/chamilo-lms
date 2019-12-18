@@ -5,6 +5,7 @@
 namespace Chamilo\CoreBundle\Hook;
 
 use Chamilo\CoreBundle\Hook\Interfaces\HookConditionalLoginEventInterface;
+use Chamilo\CoreBundle\Hook\Interfaces\HookConditionalLoginObserverInterface;
 use Doctrine\ORM\EntityManager;
 
 /**

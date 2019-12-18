@@ -60,7 +60,7 @@ class NotificationEvent extends Model
     {
         $data = UserManager::get_extra_user_data_by_field($userId, $this->extraFieldName);
 
-        return $data['notification_event'];
+        return isset($data['notification_event']) ? $data['notification_event'] : '';
     }
 
     public function getNotificationsByUser($userId)

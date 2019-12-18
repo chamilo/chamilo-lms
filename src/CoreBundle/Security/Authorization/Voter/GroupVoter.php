@@ -56,6 +56,46 @@ class GroupVoter extends Voter
     }
 
     /**
+     * @return CourseRepository
+     */
+    public function getCourseManager(): CourseRepository
+    {
+        return $this->courseManager;
+    }
+
+    /**
+     * @param CourseRepository $courseManager
+     *
+     * @return GroupVoter
+     */
+    public function setCourseManager(CourseRepository $courseManager): self
+    {
+        $this->courseManager = $courseManager;
+
+        return $this;
+    }
+
+    /**
+     * @return CGroupInfoRepository
+     */
+    public function getGroupManager(): CGroupInfoRepository
+    {
+        return $this->groupManager;
+    }
+
+    /**
+     * @param CGroupInfoRepository $groupManager
+     *
+     * @return GroupVoter
+     */
+    public function setGroupManager(CGroupInfoRepository $groupManager): self
+    {
+        $this->groupManager = $groupManager;
+
+        return $this;
+    }
+
+    /**
      * {@inheritdoc}
      */
     protected function supports($attribute, $subject): bool

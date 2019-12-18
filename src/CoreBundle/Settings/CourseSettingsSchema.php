@@ -5,7 +5,6 @@
 namespace Chamilo\CoreBundle\Settings;
 
 use Chamilo\CoreBundle\Entity\Course;
-use Chamilo\CoreBundle\Entity\Manager\CourseManager;
 use Chamilo\CoreBundle\Form\DataTransformer\ResourceToIdentifierTransformer;
 use Chamilo\CoreBundle\Form\Type\YesNoType;
 use Chamilo\CoreBundle\Tool\AbstractTool;
@@ -40,6 +39,11 @@ class CourseSettingsSchema extends AbstractSettingsSchema
         }
 
         return $tools;
+    }
+
+    public function setToolChain(ToolChain $tools): void
+    {
+        $this->toolChain = $tools;
     }
 
     /**

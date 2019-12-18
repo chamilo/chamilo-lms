@@ -84,6 +84,7 @@ install:
 
 script:
   - composer analyse
+  - cd tests/behat
   #  - travis_wait 45 ../../vendor/behat/behat/bin/behat -v
   - ../../vendor/behat/behat/bin/behat features/actionInstall.feature
   - ../../vendor/behat/behat/bin/behat features/adminFillUsers.feature

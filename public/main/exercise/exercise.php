@@ -88,6 +88,18 @@ if ($is_allowedToEdit && !empty($action)) {
     }
 
     switch ($action) {
+        case 'add_shortcut':
+            $repo = Container::getShortcutRepository();
+            $shortCut = new \Chamilo\CourseBundle\Entity\CShortcut();
+            $shortCut->setName($objExerciseTmp->get_formated_title());
+            $shortCut->setShortCutNode($exerciseEntity->getResourceNode());
+
+            $courseEntity = api_get_course_entity(api_get_course_int_id());
+            $repo->addResourceNode($shortCut, api_get_user_entity(api_get_user_id()), $courseEntity);
+            $repo->getEntityManager()->flush();
+
+            Display::addFlash(Display::return_message(get_lang('Updated')));
+            break;
         case 'enable_launch':
             $objExerciseTmp->cleanCourseLaunchSettings();
             $objExerciseTmp->enableAutoLaunch();

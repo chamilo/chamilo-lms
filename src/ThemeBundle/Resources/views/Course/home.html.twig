@@ -90,6 +90,25 @@
                 </div>
             {% endfor %}
         {% endfor %}
+
+        {% for shortcut in shortcuts %}
+            <div class="items-tools">
+                <div class="tools mt-3 mb-3">
+                    <div class="big_icon">
+{#                        <a href=" {{ url('chamilo_core_course_redirect_tool', { 'toolId': item.id, 'cid': course.id })|raw }}" >#}
+{#                            <img src="{{ asset('img/tools/' ~ item.name ~ '.png')  }}" />#}
+{#                        </a>#}
+                    </div>
+                    <div class="content pt-2 pb-2">
+                        {{ shortcut.link }}
+{#                        <a href=" {{ item.href|raw }}" >#}
+{#                            {{ item.name | trans }}#}
+{#                        </a>#}
+                    </div>
+                </div>
+            </div>
+        {% endfor %}
+
     </div>
 {% endautoescape %}
 {% endblock %}

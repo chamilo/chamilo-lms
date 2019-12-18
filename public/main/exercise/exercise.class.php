@@ -6010,7 +6010,7 @@ class Exercise
             '#student_complete_name#' => $user_info['complete_name'],
             '#course#' => Display::url(
                 $courseInfo['title'],
-                $courseInfo['course_public_url'].'?id_session='.$sessionId
+                $courseInfo['course_public_url'].'?sid='.$sessionId
             ),
         ];
 
@@ -8415,8 +8415,8 @@ class Exercise
                     'legacy_main',
                     [
                         'name' => 'exercise/overview.php',
-                        'cidReq' => $course->getCode(),
-                        'id_session' => $sessionId,
+                        'cid' => $course->getId(),
+                        'sid' => $sessionId,
                         'exerciseId' => $row->getField('id'),
                     ]
                 );
@@ -8440,8 +8440,8 @@ class Exercise
                 [
                     'id',
                     'name' => 'exercise/exercise_admin.php',
-                    'cidReq' => $course->getCode(),
-                    'id_session' => $sessionId,
+                    'cid' => $course->getId(),
+                    'sid' => $sessionId,
                 ]
             );
             $grid->addRowAction($myRowAction);
@@ -8458,8 +8458,32 @@ class Exercise
                 [
                     'id',
                     'name' => 'exercise/admin.php',
-                    'cidReq' => $course->getCode(),
-                    'id_session' => $sessionId,
+                    'cid' => $course->getId(),
+                    'sid' => $sessionId,
+                ]
+            );
+            $myRowAction->addManipulateRender(
+                function (RowAction $action, Row $row) use ($session, $repo) {
+                    return $repo->rowCanBeEdited($action, $row, $session);
+                }
+            );
+            $grid->addRowAction($myRowAction);
+
+            // Shortcut
+            $myRowAction = new RowAction(
+                get_lang('Add shortcut'),
+                'legacy_main',
+                false,
+                '_self',
+                ['class' => 'btn btn-secondary']
+            );
+            $myRowAction->setRouteParameters(
+                [
+                    'id',
+                    'name' => 'exercise/exercise.php',
+                    'action' => 'add_shortcut',
+                    'cid' => $course->getId(),
+                    'sid' => $sessionId,
                 ]
             );
             $myRowAction->addManipulateRender(
@@ -8481,8 +8505,8 @@ class Exercise
                 [
                     'id',
                     'name' => 'exercise/exercise_report.php',
-                    'cidReq' => $course->getCode(),
-                    'id_session' => $sessionId,
+                    'cid' => $course->getId(),
+                    'sid' => $sessionId,
                 ]
             );
             $myRowAction->addManipulateRender(
@@ -8522,8 +8546,8 @@ class Exercise
                         $params = [
                             'id' => $exercise->getIid(),
                             'name' => 'exercise/exercise.php',
-                            'cidReq' => $course->getCode(),
-                            'id_session' => $sessionId,
+                            'cid' => $course->getId(),
+                            'sid' => $sessionId,
                             'action' => $visibleChoice,
                         ];
 
@@ -8552,8 +8576,8 @@ class Exercise
                 [
                     'id',
                     'name' => 'exercise/exercise.php',
-                    'cidReq' => $course->getCode(),
-                    'id_session' => $sessionId,
+                    'cid' => $course->getId(),
+                    'sid' => $sessionId,
                     'action' => 'delete',
                 ]
             );
@@ -9081,7 +9105,7 @@ class Exercise
             $msg = str_replace('#mail#', $user_info['email'], $msg);
             $msg = str_replace(
                 '#course#',
-                Display::url($courseInfo['title'], $courseInfo['course_public_url'].'?id_session='.$sessionId),
+                Display::url($courseInfo['title'], $courseInfo['course_public_url'].'?sid='.$sessionId),
                 $msg
             );
 

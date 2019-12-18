@@ -9,6 +9,7 @@ use Chamilo\CoreBundle\ToolChain;
 use Chamilo\CourseBundle\Controller\ToolBaseController;
 use Chamilo\CourseBundle\Entity\CTool;
 use Chamilo\CourseBundle\Manager\SettingsManager;
+use Chamilo\CourseBundle\Repository\CShortcutRepository;
 use Chamilo\CourseBundle\Repository\CToolRepository;
 use Chamilosession as Session;
 use CourseManager;
@@ -39,7 +40,7 @@ class CourseHomeController extends ToolBaseController
      *
      * @Entity("course", expr="repository.find(cid)")
      */
-    public function indexAction(Request $request, CToolRepository $toolRepository, ToolChain $toolChain)
+    public function indexAction(Request $request, CToolRepository $toolRepository, CShortcutRepository $shortcutRepository, ToolChain $toolChain)
     {
         $this->autoLaunch();
         $course = $this->getCourse();
@@ -121,9 +122,16 @@ class CourseHomeController extends ToolBaseController
         $qb = $toolRepository->getResourcesByCourse($course, $this->getSession());
         $result = $qb->getQuery()->getResult();
 
+        $shortcutQuery = $shortcutRepository->getResources($this->getUser(), $course->getResourceNode(), $course);
+        $shortcuts = $shortcutQuery->getQuery()->getResult();
+
         $tools = [];
         /** @var CTool $item */
         foreach ($result as $item) {
+            if ('course_tool' === $item->getTool()->getName()) {
+                continue;
+            }
+
             $toolModel = $toolChain->getToolFromName($item->getTool()->getName());
 
             if ('admin' === $toolModel->getCategory() && !$this->isGranted('ROLE_CURRENT_COURSE_TEACHER')) {
@@ -193,13 +201,9 @@ class CourseHomeController extends ToolBaseController
             '@ChamiloTheme/Course/home.html.twig',
             [
                 'course' => $course,
+                'shortcuts' => $shortcuts,
                 'diagram' => $diagram,
-               // 'session_info' => $sessionInfo,
                 'tools' => $tools,
-                //'edit_icons' => $editIcons,
-                //'introduction_text' => $introduction,
-                'exercise_warning' => null,
-                'lp_warning' => null,
             ]
         );
     }

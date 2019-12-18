@@ -18,6 +18,7 @@ use Chamilo\CourseBundle\Repository\CLpRepository;
 use Chamilo\CourseBundle\Repository\CQuizQuestionCategoryRepository;
 use Chamilo\CourseBundle\Repository\CQuizQuestionRepository;
 use Chamilo\CourseBundle\Repository\CQuizRepository;
+use Chamilo\CourseBundle\Repository\CShortcutRepository;
 use Chamilo\CourseBundle\Repository\CStudentPublicationAssignmentRepository;
 use Chamilo\CourseBundle\Repository\CStudentPublicationCommentRepository;
 use Chamilo\CourseBundle\Repository\CStudentPublicationRepository;
@@ -382,6 +383,14 @@ class Container
     public static function getIllustrationRepository()
     {
         return self::$container->get('Chamilo\CoreBundle\Repository\IllustrationRepository');
+    }
+
+    /**
+     * @return CShortcutRepository
+     */
+    public static function getShortcutRepository()
+    {
+        return self::$container->get('Chamilo\CourseBundle\Repository\CShortcutRepository');
     }
 
     /**

@@ -33,6 +33,14 @@ class CShortcut extends AbstractResource implements ResourceInterface
      */
     protected $name;
 
+    /**
+     * @ORM\OneToOne(
+     *     targetEntity="Chamilo\CoreBundle\Entity\Resource\ResourceNode", mappedBy="resource", cascade={"remove"}, orphanRemoval=true
+     * )
+     * @ORM\JoinColumn(name="shortcut_node_id", referencedColumnName="id", onDelete="CASCADE")
+     */
+    public $shortCutNode;
+
     public function __toString(): string
     {
         return $this->getName();
@@ -61,5 +69,25 @@ class CShortcut extends AbstractResource implements ResourceInterface
     public function getResourceName(): string
     {
         return $this->getName();
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getShortCutNode()
+    {
+        return $this->shortCutNode;
+    }
+
+    /**
+     * @param mixed $shortCutNode
+     *
+     * @return CShortcut
+     */
+    public function setShortCutNode($shortCutNode)
+    {
+        $this->shortCutNode = $shortCutNode;
+
+        return $this;
     }
 }

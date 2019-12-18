@@ -351,19 +351,6 @@ class ResourceRepository extends BaseEntityRepository
         $em->persist($link);
     }
 
-    /**
-     * @return ResourceType
-     */
-    public function getResourceType()
-    {
-        $em = $this->getEntityManager();
-        $service = get_class($this);
-        $name = $this->toolChain->getResourceTypeNameFromRepository($service);
-        $repo = $em->getRepository('ChamiloCoreBundle:Resource\ResourceType');
-
-        return $repo->findOneBy(['name' => $name]);
-    }
-
     public function addResourceToMe(ResourceNode $resourceNode): ResourceLink
     {
         $resourceLink = new ResourceLink();
@@ -385,19 +372,6 @@ class ResourceRepository extends BaseEntityRepository
             ->addResourceRight($right)
         ;
 
-        $this->getEntityManager()->persist($resourceLink);
-        $this->getEntityManager()->flush();
-
-        return $resourceLink;
-    }
-
-    public function addResourceToCourse2(ResourceNode $resourceNode, Course $course, ResourceRight $right): ResourceLink
-    {
-        $resourceLink = new ResourceLink();
-        $resourceLink
-            ->setResourceNode($resourceNode)
-            ->setCourse($course)
-            ->addResourceRight($right);
         $this->getEntityManager()->persist($resourceLink);
         $this->getEntityManager()->flush();
 
@@ -494,6 +468,19 @@ class ResourceRepository extends BaseEntityRepository
     }
 
     /**
+     * @return ResourceType
+     */
+    public function getResourceType()
+    {
+        $em = $this->getEntityManager();
+        $service = get_class($this);
+        $name = $this->toolChain->getResourceTypeNameFromRepository($service);
+        $repo = $em->getRepository('ChamiloCoreBundle:Resource\ResourceType');
+
+        return $repo->findOneBy(['name' => $name]);
+    }
+
+    /**
      * @return QueryBuilder
      */
     public function getResourcesByCourse(Course $course, Session $session = null, CGroupInfo $group = null, ResourceNode $parentNode = null)
@@ -501,7 +488,6 @@ class ResourceRepository extends BaseEntityRepository
         $repo = $this->getRepository();
         $className = $repo->getClassName();
         $checker = $this->getAuthorizationChecker();
-
         $reflectionClass = $repo->getClassMetadata()->getReflectionClass();
 
         // Check if this resource type requires to load the base course resources when using a session
@@ -579,11 +565,6 @@ class ResourceRepository extends BaseEntityRepository
     {
         $repo = $this->getRepository();
         $className = $repo->getClassName();
-        $checker = $this->getAuthorizationChecker();
-        $reflectionClass = $repo->getClassMetadata()->getReflectionClass();
-        //$isPersonalResource = $reflectionClass->hasProperty('loadPersonalResources');
-
-        $type = $this->getResourceType();
 
         $qb = $repo->getEntityManager()->createQueryBuilder()
             ->select('resource')
@@ -620,9 +601,6 @@ class ResourceRepository extends BaseEntityRepository
         return $this->getRepository()->findOneBy(['resourceNode' => $resourceNodeId]);
     }
 
-    /**
-     * @param Session $session
-     */
     public function rowCanBeEdited(RowAction $action, Row $row, Session $session = null): ?RowAction
     {
         if (null !== $session) {
@@ -648,29 +626,6 @@ class ResourceRepository extends BaseEntityRepository
         $em = $this->getEntityManager();
         $em->remove($resource);
         $em->flush();
-    }
-
-    /**
-     * Change all links visibility to DELETED.
-     */
-    public function softDelete(AbstractResource $resource)
-    {
-        $this->setLinkVisibility($resource, ResourceLink::VISIBILITY_DELETED);
-    }
-
-    public function setVisibilityPublished(AbstractResource $resource)
-    {
-        $this->setLinkVisibility($resource, ResourceLink::VISIBILITY_PUBLISHED);
-    }
-
-    public function setVisibilityDraft(AbstractResource $resource)
-    {
-        $this->setLinkVisibility($resource, ResourceLink::VISIBILITY_DRAFT);
-    }
-
-    public function setVisibilityPending(AbstractResource $resource)
-    {
-        $this->setLinkVisibility($resource, ResourceLink::VISIBILITY_PENDING);
     }
 
     public function getResourceFileContent(AbstractResource $resource): string
@@ -748,6 +703,18 @@ class ResourceRepository extends BaseEntityRepository
         }
     }
 
+    public function getResourceSettings(): ResourceSettings
+    {
+        $settings = new ResourceSettings();
+        $settings
+            ->setAllowNodeCreation(false)
+            ->setAllowResourceCreation(false)
+            ->setAllowResourceUpload(false)
+        ;
+
+        return $settings;
+    }
+
     /**
      * @param string $content
      *
@@ -774,16 +741,27 @@ class ResourceRepository extends BaseEntityRepository
         }
     }
 
-    public function getResourceSettings(): ResourceSettings
+    /**
+     * Change all links visibility to DELETED.
+     */
+    public function softDelete(AbstractResource $resource)
     {
-        $settings = new ResourceSettings();
-        $settings
-            ->setAllowNodeCreation(false)
-            ->setAllowResourceCreation(false)
-            ->setAllowResourceUpload(false)
-        ;
+        $this->setLinkVisibility($resource, ResourceLink::VISIBILITY_DELETED);
+    }
 
-        return $settings;
+    public function setVisibilityPublished(AbstractResource $resource)
+    {
+        $this->setLinkVisibility($resource, ResourceLink::VISIBILITY_PUBLISHED);
+    }
+
+    public function setVisibilityDraft(AbstractResource $resource)
+    {
+        $this->setLinkVisibility($resource, ResourceLink::VISIBILITY_DRAFT);
+    }
+
+    public function setVisibilityPending(AbstractResource $resource)
+    {
+        $this->setLinkVisibility($resource, ResourceLink::VISIBILITY_PENDING);
     }
 
     private function setLinkVisibility(AbstractResource $resource, int $visibility, bool $recursive = true): bool

@@ -16,12 +16,11 @@ if (empty($id)) {
 $manager = new NotificationEvent();
 
 $notification = $manager->get($id);
-
 $tpl = new Template($tool);
 $fields = [];
 
 $form = new FormValidator('edit', 'post', api_get_self().'?id='.$id);
-$form = $manager->getForm($form);
+$form = $manager->getForm($form, $notification);
 
 $form->setDefaults($notification);
 $form->addButtonSave(get_lang('Update'));

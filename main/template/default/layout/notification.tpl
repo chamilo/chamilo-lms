@@ -161,6 +161,34 @@
                     appNotifications.badgeLoadingMask(false);
                 });
             },
+            loadNotificationArray: function () {
+                $('#notificationsContainer').html("");
+
+                var closeLink = '<div class="notification-read"><i class="fa fa-times" aria-hidden="true"></i></div>';
+                for (i = 0; i < count; i++) {
+                    if (notifications[i]) {
+                        var template = $('#notificationTemplate').html();
+                        template = template.replace("{id}", notifications[i].id);
+                        template = template.replace("{link}", notifications[i].link);
+                        template = template.replace("{title}", notifications[i].title);
+                        template = template.replace("{content}", notifications[i].content);
+                        template = template.replace("{event_text}", notifications[i].event_text);
+
+                        if (notifications[i].persistent == 1) {
+                            template = template.replace("{close_link}", '');
+                        } else {
+                            template = template.replace("{close_link}", closeLink);
+                        }
+                        $('#notificationsContainer').append(template);
+                    }
+                }
+
+                $('.notification-read').on('click', function (event) {
+                    appNotifications.markAsRead(event, $(this));
+                });
+                appNotifications.loadingMask(false);
+                $("#notifications-dropdown").prop("disabled", false);
+            },
             load: function () {
                 appNotifications.loadingMask(true);
                 $('#notificationsContainer').html("");
@@ -188,30 +216,7 @@
                 });
 
                 setTimeout(function () {
-                    var closeLink = '<div class="notification-read"><i class="fa fa-times" aria-hidden="true"></i></div>';
-                      for (i = 0; i < count; i++) {
-                        if (notifications[i]) {
-                            var template = $('#notificationTemplate').html();
-                            template = template.replace("{id}", notifications[i].id);
-                            template = template.replace("{link}", notifications[i].link);
-                            template = template.replace("{title}", notifications[i].title);
-                            template = template.replace("{content}", notifications[i].content);
-                            template = template.replace("{event_text}", notifications[i].event_text);
-
-                            if (notifications[i].persistent == 1) {
-                                template = template.replace("{close_link}", '');
-                            } else {
-                                template = template.replace("{close_link}", closeLink);
-                            }
-                            $('#notificationsContainer').append(template);
-                        }
-                    }
-
-                    $('.notification-read').on('click', function (event) {
-                        appNotifications.markAsRead(event, $(this));
-                    });
-                    appNotifications.loadingMask(false);
-                    $("#notifications-dropdown").prop("disabled", false);
+                    appNotifications.loadNotificationArray();
                 }, 1000);
             },
             markAsRead: function (event, elem) {
@@ -227,6 +232,7 @@
                 $.ajax({
                     url: '{{ _p.web_main }}inc/ajax/message.ajax.php?a=mark_notification_as_read&id='+notificationId,
                     success: function (data) {
+                        console.log(notifications);
                         notifications = $.grep(notifications, function(value) {
                             if (notificationId == value.id) {
                                 return false;
@@ -238,7 +244,8 @@
                         count--;
 
                         console.log('count : ' + count);
-                        appNotifications.loadAll();
+                        //appNotifications.loadAll();
+                        appNotifications.loadNotificationArray();
                     }
                 });
             },

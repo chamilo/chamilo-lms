@@ -12,6 +12,7 @@ class NotificationEvent extends Model
         'persistent',
         'day_diff',
         'event_type',
+        'event_id',
     ];
 
     const ACCOUNT_EXPIRATION = 1;
@@ -43,15 +44,67 @@ class NotificationEvent extends Model
         ];
     }
 
-    public function getForm(FormValidator $form)
+    public function getForm(FormValidator $form, $data = [])
     {
+        $options = $this->getEventsForSelect();
+        $form->addSelect('event_type', get_lang('EventType'), $options);
+        $form->freeze('event_type');
+
+        $eventType = $data['event_type'];
+        switch ($eventType) {
+            case self::JUSTIFICATION_EXPIRATION:
+                $plugin = Justification::create();
+                $list = $plugin->getList();
+                $list = array_column($list, 'name', 'id');
+                $form->addSelect('event_id', get_lang('JustificationType'), $list);
+                break;
+            default:
+                break;
+        }
+        $form->freeze('event_id');
+
+
         $form->addText('title', get_lang('Title'));
         $form->addTextarea('content', get_lang('Content'));
         $form->addText('link', get_lang('Link'), false);
         $form->addCheckBox('persistent', get_lang('Persistent'));
         $form->addNumeric('day_diff', get_lang('DayDiff'), false);
+
+        return $form;
+    }
+
+    public function getAddForm(FormValidator $form)
+    {
         $options = $this->getEventsForSelect();
-        $form->addSelect('event_type', get_lang('EventType'), $options);
+        $eventType = $form->getSubmitValue('event_type');
+
+        $form->addSelect(
+            'event_type',
+            get_lang('EventType'),
+            $options,
+            ['placeholder' => get_lang('SelectAnOption'), 'onchange' => 'document.add.submit()']
+        );
+
+        if (!empty($eventType)) {
+            $form->freeze('event_type');
+            $form->addText('title', get_lang('Title'));
+            $form->addTextarea('content', get_lang('Content'));
+            $form->addText('link', get_lang('Link'), false);
+            $form->addCheckBox('persistent', get_lang('Persistent'));
+            $form->addNumeric('day_diff', get_lang('DayDiff'), false);
+
+            switch ($eventType) {
+                case self::JUSTIFICATION_EXPIRATION:
+                    $plugin = Justification::create();
+                    $list = $plugin->getList();
+                    $list = array_column($list, 'name', 'id');
+                    $form->addSelect('event_id', get_lang('JustificationType'), $list);
+                    break;
+                default:
+                    break;
+            }
+            $form->addButtonSave(get_lang('Save'));
+        }
 
         return $form;
     }
@@ -80,6 +133,7 @@ class NotificationEvent extends Model
         foreach ($events as $event) {
             $days = (int) $event['day_diff'];
             $checkIsRead = $event['persistent'] == 0 ? true : false;
+            $eventItemId = $event['event_id'];
 
             switch ($event['event_type']) {
                 case self::ACCOUNT_EXPIRATION:
@@ -112,6 +166,11 @@ class NotificationEvent extends Model
                             if (empty($userJustification['date_validity'])) {
                                 continue;
                             }
+
+                            if ($eventItemId != $userJustification['justification_document_id']) {
+                                continue;
+                            }
+
                             $showNotification = $this->showNotification($userJustification['date_validity'], $days);
 
                             $id = 'id_'.self::JUSTIFICATION_EXPIRATION.'_event_'.$event['id'].'_'.$userJustification['id'];

@@ -13,7 +13,7 @@ Feature: Install portal
     Then I should see "Step4 – Database settings"
     Then I fill in the following:
       | dbUsernameForm | root |
-      | dbPassForm | root |
+      | dbPassForm |  |
       | dbNameForm | master |
     Then I press "step3"
     Then I should see "Database driver: pdo_mysql"

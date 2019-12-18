@@ -280,8 +280,6 @@ class FeatureContext extends MinkContext
     {
         // Just in case wait that ckeditor is loaded
         $this->getSession()->wait(2000);
-
-
         $this->getSession()->executeScript(
             "
                 var textarea = $('textarea');

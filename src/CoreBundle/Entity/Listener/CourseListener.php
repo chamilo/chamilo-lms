@@ -9,6 +9,7 @@ use Chamilo\CoreBundle\Entity\AccessUrlRelCourse;
 use Chamilo\CoreBundle\Entity\Course;
 use Chamilo\CoreBundle\Repository\CourseRepository;
 use Chamilo\CoreBundle\ToolChain;
+use Chamilo\CourseBundle\Repository\CToolRepository;
 use Chamilo\SettingsBundle\Manager\SettingsManager;
 use Doctrine\ORM\Event\LifecycleEventArgs;
 
@@ -33,10 +34,11 @@ class CourseListener
     /**
      * CourseListener constructor.
      */
-    public function __construct(ToolChain $toolChain, SettingsManager $settingsManager)
+    public function __construct(CToolRepository $toolRepository, ToolChain $toolChain, SettingsManager $settingsManager)
     {
         $this->toolChain = $toolChain;
         $this->settingsManager = $settingsManager;
+        $this->toolRepository = $toolRepository;
     }
 
     /**
@@ -59,7 +61,7 @@ class CourseListener
             //$url = $course->getCurrentUrl();
             //$repo = $args->getEntityManager()->getRepository('ChamiloCoreBundle:Course');
             ///$this->checkLimit($repo, $course, $url);
-            $this->toolChain->addToolsInCourse($course);
+            $this->toolChain->addToolsInCourse($this->toolRepository, $course);
         }
     }
 

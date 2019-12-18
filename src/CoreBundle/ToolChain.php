@@ -51,27 +51,30 @@ use Symfony\Component\Security\Core\Security;
  */
 class ToolChain
 {
-    /**
-     * @var array
-     */
     protected $tools;
+    protected $typeList;
     protected $entityManager;
     protected $settingsManager;
     protected $toolRepository;
     protected $security;
 
-    public function __construct(EntityManagerInterface $entityManager, SettingsManager $settingsManager, CToolRepository $toolRepository, Security $security)
+    public function __construct(EntityManagerInterface $entityManager, SettingsManager $settingsManager, Security $security)
     {
         $this->tools = [];
+        $this->typeList = [];
         $this->entityManager = $entityManager;
         $this->settingsManager = $settingsManager;
-        $this->toolRepository = $toolRepository;
         $this->security = $security;
     }
 
     public function addTool(AbstractTool $tool): void
     {
         $this->tools[$tool->getName()] = $tool;
+        if ($tool->getResourceTypes()) {
+            foreach ($tool->getResourceTypes() as $key => $type) {
+                $this->typeList[$type['repository']] = $key;
+            }
+        }
     }
 
     public function getTools(): array
@@ -103,7 +106,7 @@ class ToolChain
                 foreach ($types as $name => $data) {
                     $resourceType = new ResourceType();
                     $resourceType->setName($name);
-                    $resourceType->setService($data['repository']);
+                    //$resourceType->setService($data['repository']);
                     $resourceType->setTool($toolEntity);
                     $manager->persist($resourceType);
                 }
@@ -137,7 +140,7 @@ class ToolChain
                 foreach ($types as $name => $data) {
                     $resourceType = new ResourceType();
                     $resourceType->setName($name);
-                    $resourceType->setService($data['entity']);
+                    //$resourceType->setService($data['entity']);
                     $resourceType->setTool($toolEntity);
                     $manager->persist($resourceType);
                 }
@@ -165,7 +168,7 @@ class ToolChain
         $tool->addToolResourceRight($toolResourceRightReader);
     }
 
-    public function addToolsInCourse(Course $course): Course
+    public function addToolsInCourse(CToolRepository $toolRepository, Course $course): Course
     {
         $tools = $this->getTools();
         $manager = $this->entityManager;
@@ -232,7 +235,7 @@ class ToolChain
             ;
 
             //$this->toolRepository->createNodeForResource($courseTool, $user, $course->getResourceNode());
-            $this->toolRepository->addResourceToCourse($courseTool, ResourceLink::VISIBILITY_PUBLISHED, $user, $course);
+            $toolRepository->addResourceToCourse($courseTool, ResourceLink::VISIBILITY_PUBLISHED, $user, $course);
             $course->addTools($courseTool);
         }
 
@@ -253,5 +256,14 @@ class ToolChain
         }
 
         throw new InvalidArgumentException(sprintf("The Tool '%s' doesn't exist.", $name));
+    }
+
+    public function getResourceTypeNameFromRepository($repo)
+    {
+        if (isset($this->typeList[$repo]) && !empty($this->typeList[$repo])) {
+            return $this->typeList[$repo];
+        }
+
+        throw new InvalidArgumentException(sprintf("The Resource type '%s' doesn't exist.", $repo));
     }
 }

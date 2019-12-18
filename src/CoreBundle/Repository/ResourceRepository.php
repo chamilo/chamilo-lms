@@ -17,15 +17,16 @@ use Chamilo\CoreBundle\Entity\Resource\ResourceType;
 use Chamilo\CoreBundle\Entity\Session;
 use Chamilo\CoreBundle\Entity\Usergroup;
 use Chamilo\CoreBundle\Security\Authorization\Voter\ResourceNodeVoter;
+use Chamilo\CoreBundle\ToolChain;
 use Chamilo\CourseBundle\Entity\CGroupInfo;
 use Chamilo\UserBundle\Entity\User;
 use Cocur\Slugify\SlugifyInterface;
 use Doctrine\ORM\EntityManager;
+use Doctrine\ORM\EntityRepository;
 use Doctrine\ORM\EntityRepository as BaseEntityRepository;
 use Doctrine\ORM\Query\Expr\Join;
 use Doctrine\ORM\QueryBuilder;
 use League\Flysystem\FilesystemInterface;
-//use Sylius\Bundle\ResourceBundle\Doctrine\ORM\EntityRepository;
 use League\Flysystem\MountManager;
 use Symfony\Component\Filesystem\Exception\FileNotFoundException;
 use Symfony\Component\Form\FormFactory;
@@ -78,6 +79,8 @@ class ResourceRepository extends BaseEntityRepository
 
     /** @var SlugifyInterface */
     protected $slugify;
+    /** @var ToolChain  */
+    protected $toolChain;
 
     /**
      * ResourceRepository constructor.
@@ -88,16 +91,19 @@ class ResourceRepository extends BaseEntityRepository
         MountManager $mountManager,
         RouterInterface $router,
         SlugifyInterface $slugify,
+        ToolChain $toolChain,
         string $className
     ) {
         $this->authorizationChecker = $authorizationChecker;
         $this->repository = $entityManager->getRepository($className);
+
         // Flysystem mount name is saved in config/packages/oneup_flysystem.yaml @todo add it as a service.
         $this->fs = $mountManager->getFilesystem('resources_fs');
         $this->mountManager = $mountManager;
         $this->router = $router;
         $this->resourceNodeRepository = $entityManager->getRepository('ChamiloCoreBundle:Resource\ResourceNode');
         $this->slugify = $slugify;
+        $this->toolChain = $toolChain;
     }
 
     public function getAuthorizationChecker(): AuthorizationCheckerInterface
@@ -226,20 +232,22 @@ class ResourceRepository extends BaseEntityRepository
 
         if ($resourceNode->hasResourceFile()) {
             $resourceFile = $resourceNode->getResourceFile();
-            $originalName = $resourceFile->getOriginalName();
-            $originalExtension = pathinfo($originalName, PATHINFO_EXTENSION);
+            if ($resourceFile) {
+                $originalName = $resourceFile->getOriginalName();
+                $originalExtension = pathinfo($originalName, PATHINFO_EXTENSION);
 
-            $originalBasename = \basename($resourceName, $originalExtension);
-            $slug = sprintf(
-                '%s.%s',
-                $this->slugify->slugify($originalBasename),
-                $this->slugify->slugify($originalExtension)
-            );
+                $originalBasename = \basename($resourceName, $originalExtension);
+                $slug = sprintf(
+                    '%s.%s',
+                    $this->slugify->slugify($originalBasename),
+                    $this->slugify->slugify($originalExtension)
+                );
 
-            $newOriginalName = sprintf('%s.%s', $resourceName, $originalExtension);
-            $resourceFile->setOriginalName($newOriginalName);
+                $newOriginalName = sprintf('%s.%s', $resourceName, $originalExtension);
+                $resourceFile->setOriginalName($newOriginalName);
 
-            $em->persist($resourceFile);
+                $em->persist($resourceFile);
+            }
         } else {
             $slug = $this->slugify->slugify($resourceName);
         }
@@ -350,10 +358,10 @@ class ResourceRepository extends BaseEntityRepository
     {
         $em = $this->getEntityManager();
         $service = get_class($this);
+        $name = $this->toolChain->getResourceTypeNameFromRepository($service);
+        $repo = $em->getRepository('ChamiloCoreBundle:Resource\ResourceType');
 
-        return $em->getRepository('ChamiloCoreBundle:Resource\ResourceType')->findOneBy(
-            ['service' => $service]
-        );
+        return $repo->findOneBy(['name' => $name]);
     }
 
     public function addResourceToMe(ResourceNode $resourceNode): ResourceLink

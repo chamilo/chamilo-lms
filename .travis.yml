@@ -83,6 +83,7 @@ before_install:
   - sudo chown -R 775 $TRAVIS_BUILD_DIR
   - sudo chmod +x /home/travis/build
   - ls -la public/build
+  - curl $VHOST_URL
 
 script:
   - whereis google-chrome-stable

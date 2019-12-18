@@ -118,7 +118,7 @@ $(function() {
         $(this).addClass("view_children");
         $(this).find("img").attr("src", show_icon);
     });
-    
+
 	for (i=0;i<$(".actions").length;i++) {
 		if ($(".actions:eq("+i+")").html()=="<table border=\"0\"></table>" || $(".actions:eq("+i+")").html()=="" || $(".actions:eq("+i+")").html()==null || $(".actions:eq("+i+")").html().split("<TBODY></TBODY>").length==2) {
 			$(".actions:eq("+i+")").hide();
@@ -794,11 +794,7 @@ if (isset($_GET['studentoverview'])) {
     $addparams['studentoverview'] = '';
 }
 
-if (isset($_GET['cidReq']) && $_GET['cidReq'] != '') {
-    $addparams['cidReq'] = Security::remove_XSS($_GET['cidReq']);
-} else {
-    $addparams['cidReq'] = '';
-}
+$addparams['cid'] = api_get_course_int_id();
 
 $no_qualification = false;
 

@@ -58,13 +58,13 @@ class ExerciseLink extends AbstractLink
         $sql = 'SELECT iid, title FROM '.$exerciseTable.'
 				WHERE c_id = '.$this->course_id.' AND active=1  '.$session_condition;
 
-        $sqlLp = "SELECT e.iid, e.title 
-                  FROM $exerciseTable e 
+        $sqlLp = "SELECT e.iid, e.title
+                  FROM $exerciseTable e
                   INNER JOIN $lpItemTable i
                   ON (e.c_id = i.c_id AND e.id = i.path)
-				  WHERE 
-				    e.c_id = $this->course_id AND 
-				    active = 0 AND 
+				  WHERE
+				    e.c_id = $this->course_id AND
+				    active = 0 AND
 				    item_type = 'quiz'
 				  $session_condition";
 
@@ -102,7 +102,7 @@ class ExerciseLink extends AbstractLink
         $tbl_stats = Database::get_main_table(TABLE_STATISTIC_TRACK_E_EXERCISES);
         $sessionId = $this->get_session_id();
         $course_id = api_get_course_int_id($this->get_course_code());
-        $sql = "SELECT count(exe_id) AS number 
+        $sql = "SELECT count(exe_id) AS number
                 FROM $tbl_stats
                 WHERE
                     session_id = $sessionId AND
@@ -230,7 +230,7 @@ class ExerciseLink extends AbstractLink
                     $lpId = $lpId['lp_id'];
                 }
 
-                $sql = "SELECT * 
+                $sql = "SELECT *
                         FROM $tblStats
                         WHERE
                             exe_exo_id = $exerciseId AND
@@ -245,11 +245,11 @@ class ExerciseLink extends AbstractLink
             }
             $sql .= ' ORDER BY exe_id DESC';
         } else {
-            $sql = "SELECT * FROM $tblHp hp 
+            $sql = "SELECT * FROM $tblHp hp
                     INNER JOIN $tblDoc doc
                     ON (hp.exe_name = doc.path AND doc.c_id = hp.c_id)
                     WHERE
-                        hp.c_id = $courseId AND                        
+                        hp.c_id = $courseId AND
                         doc.id = $exerciseId";
 
             if (!empty($stud_id)) {
@@ -391,8 +391,8 @@ class ExerciseLink extends AbstractLink
             .http_build_query(
                 [
                     'path' => $path,
-                    'session_id' => $sessionId,
-                    'cidReq' => $this->get_course_code(),
+                    'sid' => $sessionId,
+                    'cid' => $this->getCourseId(),
                     'gradebook' => 'view',
                     'exerciseId' => $exerciseId,
                     'type' => $this->get_type(),

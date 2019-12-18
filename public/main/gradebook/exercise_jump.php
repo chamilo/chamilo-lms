@@ -18,6 +18,7 @@ $this_section = SECTION_COURSES;
 
 $gradebook = Security::remove_XSS($_GET['gradebook']);
 $session_id = api_get_session_id();
+$courseId = api_get_course_int_id();
 $cidReq = Security::remove_XSS($_GET['cidReq']);
 $type = Security::remove_XSS($_GET['type']);
 $doExerciseUrl = '';
@@ -44,7 +45,7 @@ if (!empty($doExerciseUrl)) {
     exit;
 } else {
     $url = api_get_path(WEB_CODE_PATH).'exercise/overview.php?'
-        .http_build_query(['session_id' => $session_id, 'cidReq' => $cidReq]);
+        .http_build_query(['sid' => $session_id, 'cid' => $courseId]);
     if (isset($_GET['gradebook'])) {
         $url .= '&gradebook=view&exerciseId='.((int) $_GET['exerciseId']);
 

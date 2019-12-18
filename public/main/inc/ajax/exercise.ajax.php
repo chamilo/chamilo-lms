@@ -20,7 +20,6 @@ if ($debug) {
 
 $course_id = api_get_course_int_id();
 $session_id = isset($_REQUEST['session_id']) ? (int) $_REQUEST['session_id'] : api_get_session_id();
-$course_code = isset($_REQUEST['cidReq']) ? $_REQUEST['cidReq'] : api_get_course_id();
 
 switch ($action) {
     case 'update_duration':

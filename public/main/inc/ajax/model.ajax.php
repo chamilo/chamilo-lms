@@ -627,9 +627,9 @@ switch ($action) {
         if (!empty($courseId)) {
             $courseInfo = api_get_course_info_by_id($courseId);
         } else {
-            $courseCode = isset($_REQUEST['cidReq']) ? $_REQUEST['cidReq'] : '';
-            if (!empty($courseCode)) {
-                $courseInfo = api_get_course_info($courseCode);
+            $courseId= isset($_REQUEST['cid']) ? $_REQUEST['cid'] : '';
+            if (!empty($courseId)) {
+                $courseInfo = api_get_course_info_by_id($courseId);
             }
         }
 

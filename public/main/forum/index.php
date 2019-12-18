@@ -226,8 +226,8 @@ $searchFilter = '';
 $translate = api_get_configuration_value('translate_html');
 if ($translate) {
     $form = new FormValidator('search_simple', 'get', api_get_self().'?'.api_get_cidreq(), null, null, 'inline');
-    $form->addHidden('cidReq', api_get_course_id());
-    $form->addHidden('id_session', api_get_session_id());
+    $form->addHidden('cid', api_get_course_int_id());
+    $form->addHidden('sid', api_get_session_id());
 
     $extraField = new ExtraField('forum_category');
     $returnParams = $extraField->addElements(

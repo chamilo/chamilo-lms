@@ -263,7 +263,7 @@ class TestCategory
         $courseId = (int) $courseId;
         $categoryId = self::getCategoryForQuestion($questionId, $courseId);
         $table = Database::get_course_table(TABLE_QUIZ_QUESTION_CATEGORY);
-        $sql = "SELECT title 
+        $sql = "SELECT title
                 FROM $table
                 WHERE id = $categoryId AND c_id = $courseId";
         $res = Database::query($sql);
@@ -1134,7 +1134,7 @@ class TestCategory
                 [
                     'id',
                     'name' => 'exercise/tests_category.php',
-                    'cidReq' => $course->getCode(),
+                    'cid' => $course->getId(),
                     'action' => 'editcategory',
                 ]
             );
@@ -1158,7 +1158,7 @@ class TestCategory
                 [
                     'id',
                     'name' => 'exercise/tests_category.php',
-                    'cidReq' => $course->getCode(),
+                    'cid' => $course->getId(),
                     'action' => 'deletecategory',
                 ]
             );

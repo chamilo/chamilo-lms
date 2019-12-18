@@ -496,7 +496,7 @@ foreach ($questionList as $questionId) {
                                     $(function() {
                                         new HotspotQuestion({
                                             questionId: $questionId,
-                                            exerciseId: {$objExercise->id},                                            
+                                            exerciseId: {$objExercise->id},
                                             exeId: $id,
                                             selector: '#hotspot-solution-$questionId-$id',
                                             for: 'solution',
@@ -978,7 +978,6 @@ if ($isFeedbackAllowed && $origin != 'learnpath' && $origin != 'student_progress
             'exeid' => $id,
             'origin' => $origin,
             'details' => 'true',
-            'course' => Security::remove_XSS($_GET['cidReq']),
         ]);
 
         $emailForm = new FormValidator('form-email', 'post', $formUrl, '', ['id' => 'form-email']);

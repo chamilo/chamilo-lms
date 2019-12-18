@@ -26,7 +26,6 @@ use Chamilo\CoreBundle\Entity\TrackELastaccess;
 use Chamilo\CoreBundle\Entity\TrackELogin;
 use Chamilo\CoreBundle\Entity\TrackEOnline;
 use Chamilo\CoreBundle\Entity\TrackEUploads;
-use Chamilo\CoreBundle\Entity\UserApiKey;
 use Chamilo\CoreBundle\Entity\UserCourseCategory;
 use Chamilo\CoreBundle\Entity\UsergroupRelUser;
 use Chamilo\CoreBundle\Entity\UserRelCourseVote;
@@ -1262,29 +1261,6 @@ class UserRepository extends ResourceRepository
             $userRelCourseVote[] = implode(', ', $list);
         }
 
-        // UserApiKey
-        $criteria = [
-            'userId' => $userId,
-        ];
-        $result = $em->getRepository('ChamiloCoreBundle:UserApiKey')->findBy($criteria);
-        $userApiKey = [];
-        /** @var UserApiKey $item */
-        foreach ($result as $item) {
-            $validityStart = $item->getValidityStartDate() ? $item->getValidityStartDate()->format($dateFormat) : '';
-            $validityEnd = $item->getValidityEndDate() ? $item->getValidityEndDate()->format($dateFormat) : '';
-            $created = $item->getCreatedDate() ? $item->getCreatedDate()->format($dateFormat) : '';
-
-            $list = [
-                'ApiKey #'.$item->getApiKey(),
-                'Service: '.$item->getApiService(),
-                'EndPoint: '.$item->getApiEndPoint(),
-                'Validity start date: '.$validityStart,
-                'Validity enddate: '.$validityEnd,
-                'Created at: '.$created,
-            ];
-            $userApiKey[] = implode(', ', $list);
-        }
-
         $user->setDropBoxSentFiles(
             [
                 'Friends' => $friendList,
@@ -1303,7 +1279,6 @@ class UserRepository extends ResourceRepository
                 'UserCourseCategory' => $userCourseCategory,
                 'SkillRelUserComment' => $skillRelUserComment,
                 'UserRelCourseVote' => $userRelCourseVote,
-                'UserApiKey' => $userApiKey,
 
                 // courses
                 'AttendanceResult' => $cAttendanceResult,

@@ -56,22 +56,6 @@ class GroupVoter extends Voter
     }
 
     /**
-     * @return CourseManager
-     */
-    public function getCourseManager()
-    {
-        return $this->courseManager;
-    }
-
-    /**
-     * @return GroupManager
-     */
-    public function getGroupManager()
-    {
-        return $this->groupManager;
-    }
-
-    /**
      * {@inheritdoc}
      */
     protected function supports($attribute, $subject): bool

@@ -95,7 +95,7 @@ abstract class HookEvent implements HookEventInterface
             $class = get_called_class();
 
             return new $class($entityManager);
-        } catch (Exception $e) {
+        } catch (\Exception $e) {
             return null;
         }
     }

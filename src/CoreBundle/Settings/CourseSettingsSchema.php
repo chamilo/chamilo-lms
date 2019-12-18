@@ -28,25 +28,7 @@ class CourseSettingsSchema extends AbstractSettingsSchema
      */
     protected $toolChain;
 
-    /**
-     * @var CourseManager
-     */
-    protected $courseManager;
-
     protected $repository;
-
-    public function setToolChain(ToolChain $tools): void
-    {
-        $this->toolChain = $tools;
-    }
-
-    /**
-     * @param CourseManager $manager
-     */
-    public function setCourseManager($manager): void
-    {
-        $this->courseManager = $manager;
-    }
 
     public function getProcessedToolChain(): array
     {

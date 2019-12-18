@@ -115,41 +115,6 @@ class ToolChain
         }
     }
 
-    public function updateTools(): void
-    {
-        $manager = $this->entityManager;
-        $tools = $this->getTools();
-
-        /** @var AbstractTool $tool */
-        foreach ($tools as $tool) {
-            $toolEntity = new Tool();
-            $toolEntity
-                ->setName($tool->getName())
-            ;
-
-            if (1 === $tool->getAdmin()) {
-                // Only check ROLE_ADMIN
-            } else {
-                $this->setToolPermissions($toolEntity);
-            }
-
-            $manager->persist($toolEntity);
-
-            $types = $tool->getResourceTypes();
-            if (!empty($types)) {
-                foreach ($types as $name => $data) {
-                    $resourceType = new ResourceType();
-                    $resourceType->setName($name);
-                    //$resourceType->setService($data['entity']);
-                    $resourceType->setTool($toolEntity);
-                    $manager->persist($resourceType);
-                }
-            }
-
-            $manager->flush();
-        }
-    }
-
     public function setToolPermissions(Tool $tool): void
     {
         $toolResourceRight = new ToolResourceRight();

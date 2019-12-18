@@ -86,22 +86,19 @@ class CourseAdmin extends AbstractAdmin
             }
         }
 
-        foreach ($tools as $tool) {
+        /*foreach ($tools as $tool) {
             $toolName = $tool->getName();
             if (!in_array($toolName, $addedTools)) {
                 $toolEntity = new CTool();
                 $toolEntity
-                    ->setCId($course->getId())
-                    ->setImage($tool->getImage())
+                    ->setCourse($course)
                     ->setName($tool->getName())
-                    ->setLink($tool->getLink())
-                    ->setTarget($tool->getTarget())
                     ->setCategory($tool->getCategory())
                 ;
 
                 $course->addTools($toolEntity);
             }
-        }
+        }*/
     }
 
     public function setToolChain(ToolChain $chainTool)

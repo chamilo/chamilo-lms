@@ -1431,7 +1431,7 @@ class User extends BaseUser implements ThemeUser, EquatableInterface //implement
     }
 
     /**
-     * @param $slug
+     * @param string $slug
      *
      * @return User
      */

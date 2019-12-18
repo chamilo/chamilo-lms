@@ -5,6 +5,7 @@
 namespace Chamilo\CoreBundle\Hook;
 
 use Chamilo\CoreBundle\Hook\Interfaces\HookMyStudentsLpTrackingEventInterface;
+use Chamilo\CoreBundle\Hook\Interfaces\HookMyStudentsLpTrackingObserverInterface;
 use Doctrine\ORM\EntityManager;
 
 /**

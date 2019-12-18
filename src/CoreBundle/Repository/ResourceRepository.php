@@ -356,7 +356,7 @@ class ResourceRepository extends BaseEntityRepository
         $resourceLink = new ResourceLink();
         $resourceLink
             ->setResourceNode($resourceNode)
-            ->setPrivate(true);
+        ;
 
         $this->getEntityManager()->persist($resourceLink);
         $this->getEntityManager()->flush();
@@ -726,14 +726,15 @@ class ResourceRepository extends BaseEntityRepository
             $resourceNode = $resource->getResourceNode();
             if ($resourceNode->hasResourceFile()) {
                 $resourceFile = $resourceNode->getResourceFile();
-                $fileName = $resourceFile->getFile()->getPathname();
+                if ($resourceFile) {
+                    $fileName = $resourceFile->getFile()->getPathname();
+                    $this->fs->update($fileName, $content);
+                    $size = $this->fs->getSize($fileName);
+                    $resource->setSize($size);
+                    $this->entityManager->persist($resource);
 
-                $this->fs->update($fileName, $content);
-                $size = $this->fs->getSize($fileName);
-                $resource->setSize($size);
-                $this->entityManager->persist($resource);
-
-                return true;
+                    return true;
+                }
             }
 
             return false;

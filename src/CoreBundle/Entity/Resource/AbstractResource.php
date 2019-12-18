@@ -26,7 +26,8 @@ abstract class AbstractResource
      * @ORM\JoinColumn(name="resource_node_id", referencedColumnName="id", onDelete="CASCADE")
      */
     public $resourceNode;
-    //abstract public function getResourceName(): string;
+
+    abstract public function getResourceName(): string;
 
     /**
      * @return $this

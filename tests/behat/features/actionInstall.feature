@@ -13,7 +13,7 @@ Feature: Install portal
     Then I should see "Step4 – Database settings"
     Then I fill in the following:
       | dbUsernameForm | root |
-      | dbPassForm |  |
+      | dbPassForm | |
       | dbNameForm | master |
     Then I press "step3"
     Then I should see "Database driver: pdo_mysql"
@@ -23,10 +23,10 @@ Feature: Install portal
       | passForm | admin |
     Then I press "step5"
     Then I should see "Last check before install"
+    Then wait very long for the page to be loaded
+    Then wait very long for the page to be loaded
+    Then wait very long for the page to be loaded
     Then I press "Install chamilo"
-    Then wait very long for the page to be loaded
-    Then wait very long for the page to be loaded
-    Then wait very long for the page to be loaded
     Then wait very long for the page to be loaded
     Then wait very long for the page to be loaded
     Then wait very long for the page to be loaded

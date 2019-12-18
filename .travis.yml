@@ -52,7 +52,7 @@ before_install:
   - java -version
   - java -jar selenium-server-standalone-3.1.0.jar -log selenium.log  > /dev/null &
   - nohup bash -c "webdriver-manager start 2>&1 &"
-  - sleep 10
+  - sleep 5
 
   # Apache & php-fpm configuration
   - bash tests/travis/setup-php-fpm.sh
@@ -67,7 +67,7 @@ before_install:
   - cd $TRAVIS_BUILD_DIR
   - pwd
   # Install vendors
-  - composer install --prefer-source --no-interaction --dev
+  - composer install --prefer-source --no-interaction
   # Install bundle js/css
   - php bin/console assets:install
   # Permissions
@@ -82,8 +82,6 @@ before_install:
   - sudo chown -R www-data:www-data $TRAVIS_BUILD_DIR
   - sudo chown -R 775 $TRAVIS_BUILD_DIR
   - sudo chmod +x /home/travis/build
-  - curl $VHOST_URL
-  - curl $VHOST_URL/login
   - ls -la public/build
 
 script:

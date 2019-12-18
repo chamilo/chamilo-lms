@@ -31,15 +31,28 @@ $form->setDefaults($justification);
 
 if ($form->validate()) {
     $values = $form->getSubmitValues();
-    $params = [
-        'name' => $values['name'],
-        'code' => $values['code'],
-        'validity_duration' => $values['validity_duration'],
-        'date_manual_on' => (int) $values['date_manual_on'],
-        'comment' => $values['comment'],
-    ];
-    Database::update('justification_document', $params, ['id = ?' => $id]);
-    Display::addFlash(get_lang('Saved'));
+    $cleanedCode = api_replace_dangerous_char($values['code']);
+    $code = Database::escape_string($cleanedCode);
+
+    $sql = "SELECT * FROM justification_document WHERE code = '$code' AND id <> $id";
+    $result = Database::query($sql);
+    $data = Database::fetch_array($result);
+    $message = Display::return_message(get_lang('ThisCodeAlradyExists'), 'warning');
+    if (empty($data)) {
+        $params = [
+            'name' => $values['name'],
+            'code' => $cleanedCode,
+            'validity_duration' => $values['validity_duration'],
+            'date_manual_on' => (int) $values['date_manual_on'],
+            'comment' => $values['comment'],
+        ];
+
+        Database::update('justification_document', $params, ['id = ?' => $id]);
+        $message = Display::return_message(get_lang('Saved'));
+    }
+
+    Display::addFlash($message);
+
     $url = api_get_path(WEB_PLUGIN_PATH).'justification/list.php?';
     header('Location: '.$url);
     exit;

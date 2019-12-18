@@ -1351,6 +1351,7 @@ id INT unsigned NOT NULL auto_increment PRIMARY KEY,
         day_diff INT,
         event_type VARCHAR(255)
     );
+ALTER TABLE notification_event ADD COLUMN event_id INT NULL;
 */
 // create new user text extra field called 'notification_event' to save the persistent settings.
 // $_configuration['notification_event'] = false;

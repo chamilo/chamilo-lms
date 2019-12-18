@@ -30,5 +30,12 @@ Feature: Install portal
     Then wait very long for the page to be loaded
     Then wait very long for the page to be loaded
     Then wait very long for the page to be loaded
+    Then wait very long for the page to be loaded
+    Then wait very long for the page to be loaded
+    Then wait very long for the page to be loaded
+    Then wait very long for the page to be loaded
+    Then wait very long for the page to be loaded
+    Then wait very long for the page to be loaded
+    Then wait very long for the page to be loaded
     Then I should see "Installation process execution"
 

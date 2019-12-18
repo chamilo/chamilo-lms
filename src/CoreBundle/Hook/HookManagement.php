@@ -6,8 +6,8 @@ namespace Chamilo\CoreBundle\Hook;
 
 use Chamilo\CoreBundle\Entity\HookCall;
 use Chamilo\CoreBundle\Hook\Interfaces\HookManagementInterface;
-use Doctrine\ORM\EntityManager;
 use Database;
+use Doctrine\ORM\EntityManager;
 
 /**
  * @TODO: Improve description

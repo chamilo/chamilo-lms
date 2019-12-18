@@ -67,7 +67,7 @@ before_install:
   - cd $TRAVIS_BUILD_DIR
   - pwd
   # Install vendors
-  - composer install --prefer-source --no-interaction
+  - composer update --prefer-source --no-interaction
   # Install bundle js/css
   - php bin/console assets:install
   # Permissions
@@ -83,7 +83,6 @@ before_install:
   - sudo chown -R 775 $TRAVIS_BUILD_DIR
   - sudo chmod +x /home/travis/build
   - ls -la public/build
-  - curl $VHOST_URL
 
 script:
   - whereis google-chrome-stable

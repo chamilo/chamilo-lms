@@ -39,8 +39,6 @@ class AccountController extends BaseController
 
     /**
      * @Route("/edit", methods={"GET", "POST"}, name="chamilo_core_account_edit")
-     *
-     * @param string $request
      */
     public function editAction(Request $request, UserManagerInterface $userManager, IllustrationRepository $illustrationRepository)
     {

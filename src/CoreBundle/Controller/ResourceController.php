@@ -21,6 +21,7 @@ use Chamilo\CoreBundle\Repository\ResourceRepository;
 use Chamilo\CoreBundle\Security\Authorization\Voter\ResourceNodeVoter;
 use Chamilo\CourseBundle\Controller\CourseControllerInterface;
 use Chamilo\CourseBundle\Controller\CourseControllerTrait;
+use Chamilo\CourseBundle\Entity\CDocument;
 use Chamilo\UserBundle\Entity\User;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Criteria;
@@ -1169,7 +1170,7 @@ class ResourceController extends AbstractResourceController implements CourseCon
             $newResource = $repository->saveResource($form, $course, $session, $fileType);
 
             $file = null;
-            if ('file' === $fileType) {
+            if ('file' === $fileType && $newResource instanceof CDocument) {
                 $content = $form->get('content')->getViewData();
                 $newResource->setTitle($newResource->getTitle().'.html');
                 $fileName = $newResource->getTitle();

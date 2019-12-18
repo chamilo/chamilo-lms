@@ -4,11 +4,12 @@
 
 namespace Chamilo\CoreBundle\Framework;
 
-use Exporter\Source\SourceIteratorInterface;
-use Exporter\Writer\CsvWriter;
-use Exporter\Writer\JsonWriter;
-use Exporter\Writer\XlsWriter;
-use Exporter\Writer\XmlWriter;
+use Sonata\Exporter\Handler;
+use Sonata\Exporter\Source\SourceIteratorInterface;
+use Sonata\Exporter\Writer\CsvWriter;
+use Sonata\Exporter\Writer\JsonWriter;
+use Sonata\Exporter\Writer\XlsWriter;
+use Sonata\Exporter\Writer\XmlWriter;
 use Symfony\Component\HttpFoundation\StreamedResponse;
 
 /**
@@ -52,7 +53,7 @@ class Exporter
         }
 
         $callback = function () use ($source, $writer) {
-            $handler = \Exporter\Handler::create($source, $writer);
+            $handler = Handler::create($source, $writer);
             $handler->export();
         };
 

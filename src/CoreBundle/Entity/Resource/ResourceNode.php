@@ -342,7 +342,7 @@ class ResourceNode
      * This is required for logging the resource path at the creation.
      * Do not use this function otherwise.
      *
-     * @return type
+     * @return string
      */
     public function getPathForCreationLog()
     {

@@ -178,7 +178,7 @@ class EditorController extends BaseController
         $session = $this->getCourseSession();
 
         /** @var Connector $connector */
-        $connector = new Connector(
+        /*$connector = new Connector(
             $this->getDoctrine()->getManager(),
             [],
             $router,
@@ -209,7 +209,7 @@ class EditorController extends BaseController
         return $this->render(
             '@ChamiloTheme/layout_empty.html.twig',
             ['content' => $content]
-        );
+        );*/
     }
 
     /**

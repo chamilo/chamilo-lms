@@ -97,15 +97,6 @@ class AdminController extends BaseController
                     'label' => get_lang('ImportUser listXMLCSV'),
                 ],
             ];
-            if (isset($extAuthSource) && isset($extAuthSource['ldap']) && count(
-                    $extAuthSource['ldap']
-                ) > 0
-            ) {
-                $items[] = [
-                    'url' => $adminUrl.'ldap_users_list.php',
-                    'label' => get_lang('Import LDAP users into the platform'),
-                ];
-            }
             $items[] = [
                 'url' => $adminUrl.'extra_fields.php?type=user',
                 'label' => get_lang('Profiling'),
@@ -212,16 +203,6 @@ class AdminController extends BaseController
                     'label' => get_lang('Grading model'),
                 );
             }*/
-
-            if (isset($extAuthSource) &&
-                isset($extAuthSource['ldap']) &&
-                count($extAuthSource['ldap']) > 0
-            ) {
-                $items[] = [
-                    'url' => $adminUrl.'ldap_import_students.php',
-                    'label' => get_lang('Import LDAP users into a course'),
-                ];
-            }
             $blocks['courses']['items'] = $items;
             $blocks['courses']['extra'] = null;
 
@@ -339,15 +320,7 @@ class AdminController extends BaseController
             'url' => api_get_path(WEB_CODE_PATH).'session/session_import.php',
             'label' => get_lang('Import sessions list'),
         ];
-        if (isset($extAuthSource) && isset($extAuthSource['ldap']) && count(
-                $extAuthSource['ldap']
-            ) > 0
-        ) {
-            $items[] = [
-                'url' => $adminUrl.'ldap_import_students_to_session.php',
-                'label' => get_lang('Import LDAP users into a session'),
-            ];
-        }
+
         $items[] = [
             'url' => api_get_path(WEB_CODE_PATH).'session/session_export.php',
             'label' => get_lang('Export sessions list'),

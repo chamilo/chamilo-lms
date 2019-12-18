@@ -10,7 +10,6 @@ use Webmozart\Assert\Assert;
 
 final class ResourceToIdentifierTransformer implements DataTransformerInterface
 {
-    /** @var RepositoryInterface */
     private $repository;
 
     /** @var string */

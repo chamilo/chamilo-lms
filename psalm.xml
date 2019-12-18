@@ -15,6 +15,7 @@
             <directory name="src/ContactBundle" />
 <!--            <directory name="src/CoreBundle" />-->
             <directory name="src/CoreBundle/Migrations" />
+            <directory name="src/CoreBundle/Component/Editor" />
             <directory name="src/CourseBundle" />
             <directory name="src/FaqBundle" />
             <directory name="src/GraphQlBundle" />

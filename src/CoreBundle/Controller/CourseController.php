@@ -110,7 +110,6 @@ class CourseController extends AbstractController
         $courseTeachers = $course->getTeachers();
         $teachersData = [];
 
-        /** @var CourseRelUser $teacherSubscription */
         foreach ($courseTeachers as $teacherSubscription) {
             $teacher = $teacherSubscription->getUser();
             $userData = [

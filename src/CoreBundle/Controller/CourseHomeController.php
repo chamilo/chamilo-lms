@@ -12,12 +12,12 @@ use Chamilo\CourseBundle\Entity\CTool;
 use Chamilo\CourseBundle\Manager\SettingsManager;
 use Chamilo\CourseBundle\Repository\CShortcutRepository;
 use Chamilo\CourseBundle\Repository\CToolRepository;
-use Chamilosession as Session;
 use CourseManager;
 use Database;
 use Display;
 use Event;
 use ExtraFieldValue;
+use Fhaculty\Graph\Graph;
 use Security;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Entity;
 use Sylius\Bundle\SettingsBundle\Form\Factory\SettingsFormFactory;
@@ -46,6 +46,7 @@ class CourseHomeController extends ToolBaseController
     {
         $this->autoLaunch();
         $course = $this->getCourse();
+        $session = $this->getRequest()->getSession();
 
         $js = '<script>'.api_get_language_translate_html().'</script>';
         $htmlHeadXtra[] = $js;
@@ -70,15 +71,15 @@ class CourseHomeController extends ToolBaseController
         }
 
         // Deleting group session
-        Session::erase('toolgroup');
-        Session::erase('_gid');
+        $session->remove('toolgroup');
+        $session->remove('_gid');
 
         $isSpecialCourse = CourseManager::isSpecialCourse($courseId);
 
         if ($isSpecialCourse) {
             if (isset($_GET['autoreg']) && 1 == $_GET['autoreg']) {
                 if (CourseManager::subscribeUser($userId, $courseCode, STUDENT)) {
-                    Session::write('is_allowed_in_course', true);
+                    $session->set('is_allowed_in_course', true);
                 }
             }
         }
@@ -90,19 +91,12 @@ class CourseHomeController extends ToolBaseController
                 $result = CourseManager::autoSubscribeToCourse($courseCode);
                 if ($result) {
                     if (CourseManager::is_user_subscribed_in_course($userId, $courseCode)) {
-                        Session::write('is_allowed_in_course', true);
+                        $session->set('is_allowed_in_course', true);
                     }
                 }
                 header('Location: '.api_get_self());
                 exit;
             }
-        }
-
-        /*  STATISTICS */
-        if (!isset($coursesAlreadyVisited[$courseCode])) {
-            Event::accessCourse();
-            $coursesAlreadyVisited[$courseCode] = 1;
-            Session::write('coursesAlreadyVisited', $coursesAlreadyVisited);
         }
 
         $logInfo = [
@@ -192,9 +186,9 @@ class CourseHomeController extends ToolBaseController
         }
 
         // Deleting the objects
-        Session::erase('_gid');
-        Session::erase('oLP');
-        Session::erase('lpobject');
+        $session->remove('_gid');
+        $session->remove('oLP');
+        $session->remove('lpobject');
         api_remove_in_gradebook();
         \Exercise::cleanSessionVariables();
         \DocumentManager::removeGeneratedAudioTempFile();
@@ -444,10 +438,12 @@ class CourseHomeController extends ToolBaseController
          the platform administration section */
         if (!empty($autoLaunchWarning)) {
             $this->addFlash(
-            Display::return_message(
-                $autoLaunchWarning,
-                'warning'
-            ));
+                'warning',
+                Display::return_message(
+                    $autoLaunchWarning,
+                    'warning'
+                )
+            );
         }
     }
 }

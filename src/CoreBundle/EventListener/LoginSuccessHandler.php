@@ -8,9 +8,7 @@ use Chamilo\SettingsBundle\Manager\SettingsManager;
 use Chamilo\UserBundle\Entity\User;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
-use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
 use Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface;
 use Symfony\Component\Security\Http\Authentication\AuthenticationSuccessHandlerInterface;
 use Symfony\Component\Security\Http\Event\InteractiveLoginEvent;
@@ -39,10 +37,9 @@ class LoginSuccessHandler
     }
 
     /**
-     * @param Request        $event
-     * @param TokenInterface $token
+     * @param InteractiveLoginEvent $event
      *
-     * @return RedirectResponse|Response|null
+     * @return RedirectResponse|null
      */
     public function onSecurityInteractiveLogin(InteractiveLoginEvent $event)
     {

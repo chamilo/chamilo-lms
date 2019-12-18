@@ -7,14 +7,18 @@ namespace Chamilo\CoreBundle\Controller;
 use Chamilo\CoreBundle\Entity\ExtraField;
 use Chamilo\CoreBundle\Entity\SequenceResource;
 use Chamilo\CoreBundle\Entity\Session;
+use Chamilo\CoreBundle\Entity\SessionRelCourse;
 use Chamilo\CoreBundle\Framework\Container;
+use Chamilo\CoreBundle\Repository\SequenceRepository;
 use Chamilo\CourseBundle\Entity\CCourseDescription;
+use Chamilo\UserBundle\Entity\User;
 use CoursesController;
 use Essence\Essence;
 use ExtraFieldValue;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Entity;
 use SessionManager;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use UserManager;
@@ -31,8 +35,10 @@ class SessionController extends AbstractController
      *
      * @Entity("session", expr="repository.find(sid)")
      */
-    public function aboutAction(Session $session): Response
+    public function aboutAction(Request $request, Session $session): Response
     {
+        $requestSession = $request->getSession();
+
         $htmlHeadXtra[] = api_get_asset('readmore-js/readmore.js');
         $em = $this->getDoctrine()->getManager();
 
@@ -198,8 +204,8 @@ class SessionController extends AbstractController
                 \BuyCoursesPlugin::PRODUCT_TYPE_SESSION
             );
             if ($sessionIsPremium) {
-                ChamiloSession::write('SessionIsPremium', true);
-                ChamiloSession::write('sessionId', $sessionId);
+                $requestSession->set('SessionIsPremium', true);
+                $requestSession->set('sessionId', $sessionId);
             }
         }
 

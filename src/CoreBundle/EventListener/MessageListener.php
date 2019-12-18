@@ -31,15 +31,13 @@ class MessageListener
      */
     protected function getMessages()
     {
-        $threads = $this->container->get('fos_message.provider')->getInboxThreads();
+        /*$threads = $this->container->get('fos_message.provider')->getInboxThreads();
         $security = $this->container->get('security.token_storage');
         $token = $security->getToken();
         $user = $token->getUser();
 
         if (!empty($user)) {
             $messages = [];
-
-            /** @var \Chamilo\CoreBundle\Entity\Thread $thread */
             foreach ($threads as $thread) {
                 if (!$thread->isReadByParticipant($user)) {
                     foreach ($thread->getMessages() as $message) {
@@ -49,6 +47,6 @@ class MessageListener
             }
 
             return $messages;
-        }
+        }*/
     }
 }

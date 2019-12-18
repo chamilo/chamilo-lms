@@ -4,6 +4,7 @@
 
 namespace Chamilo\CoreBundle\Controller;
 
+use Career;
 use Chamilo\CoreBundle\Entity\Course;
 use Chamilo\CoreBundle\ToolChain;
 use Chamilo\CourseBundle\Controller\ToolBaseController;
@@ -25,6 +26,7 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Validator\Exception\ValidatorException;
+use UnserializeApi;
 
 /**
  * Class CourseHomeController.

@@ -2,13 +2,10 @@
 
 /* For licensing terms, see /license.txt */
 
-/**
- * This file contains a Hook Event class for Admin Block.
- */
-
 namespace Chamilo\CoreBundle\Hook;
 
 use Chamilo\CoreBundle\Hook\Interfaces\HookAdminBlockEventInterface;
+use Chamilo\CoreBundle\Hook\Interfaces\HookAdminBlockObserverInterface;
 use Doctrine\ORM\EntityManager;
 
 /**
@@ -21,7 +18,7 @@ class HookAdminBlock extends HookEvent implements HookAdminBlockEventInterface
     /**
      * Constructor.
      *
-     * @throws Exception
+     * @throws \Exception
      */
     protected function __construct(EntityManager $entityManager)
     {
@@ -38,7 +35,7 @@ class HookAdminBlock extends HookEvent implements HookAdminBlockEventInterface
      */
     public function notifyAdminBlock($type)
     {
-        /** @var \HookAdminBlockObserverInterface $observer */
+        /** @var HookAdminBlockObserverInterface $observer */
         // Save data
         if (isset($this->eventData['blocks'])) {
             $this->eventData['type'] = $type;

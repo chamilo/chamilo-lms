@@ -20,7 +20,7 @@ class PromotionAdmin extends AbstractAdmin
         $formMapper
             ->add('name')
             ->add('description', 'ckeditor')
-            ->add('status', 'choice', ['choices' => Promotion::getStatusList()])
+            //->add('status', 'choice', ['choices' => Promotion::getStatusList()])
             ->add('career')
         ;
     }

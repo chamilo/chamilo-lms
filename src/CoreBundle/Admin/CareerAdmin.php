@@ -20,7 +20,7 @@ class CareerAdmin extends AbstractAdmin
         $formMapper
             ->add('name')
             ->add('description', 'ckeditor')
-            ->add('status', 'choice', ['choices' => Career::getStatusList()])
+            //->add('status', 'choice', ['choices' => Career::getStatusList()])
         ;
     }
 

@@ -36,7 +36,6 @@ class Connector
     /** @var Router */
     public $urlGenerator;
 
-    /** @var SecurityContext */
     public $security;
 
     public $paths;
@@ -59,7 +58,7 @@ class Connector
         $this->paths = [
             //'root_sys' => api_get_path(SYS_PATH),
             //'sys_root' => api_get_path(SYS_PATH), // just an alias
-            'sys_course_path' => api_get_path(SYS_COURSE_PATH),
+            //'sys_course_path' => api_get_path(SYS_COURSE_PATH),
             //   'sys_config_path' => $app['path.config'],
             'path.temp' => api_get_path(SYS_ARCHIVE_PATH),
             //'sys_log_path' => $app['path.logs']

@@ -94,7 +94,7 @@ class CkEditor extends Editor
             $cssTheme,
             api_get_path(REL_CODE_PATH).'img/',
             api_get_path(REL_PATH),
-            api_get_path(REL_DEFAULT_COURSE_DOCUMENT_PATH),
+            //api_get_path(REL_DEFAULT_COURSE_DOCUMENT_PATH),
             '',
         ];
 
@@ -237,8 +237,8 @@ class CkEditor extends Editor
             $templateItem['title'] = $template->getTitle();
             $templateItem['description'] = $template->getDescription();
             $templateItem['image'] = api_get_path(WEB_PUBLIC_PATH).'img/template_thumb/noimage.gif';
-            $templateItem['html'] = file_get_contents(api_get_path(SYS_COURSE_PATH)
-                .$courseDirectory.'/document'.$templateData['path']);
+            /*$templateItem['html'] = file_get_contents(api_get_path(SYS_COURSE_PATH)
+                .$courseDirectory.'/document'.$templateData['path']);*/
 
             $image = $template->getImage();
             if (!empty($image)) {

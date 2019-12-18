@@ -85,7 +85,6 @@
 
         "symfony/apache-pack": "^1.0",
         "apy/datagrid-bundle" : "dev-master",
-        "white-october/pagerfanta-bundle": "^1.1",
         "chamilo/settings-bundle": "dev-master",
         "sonata-project/admin-bundle": "~3.0",
         "sonata-project/block-bundle": "~3.0",
@@ -107,7 +106,7 @@
         "sonata-project/formatter-bundle": "~4.0",
 
         "stephpy/timeline-bundle": "~3.0",
-        "stof/doctrine-extensions-bundle": "~1.3",
+        "antishov/doctrine-extensions-bundle": "~1.4",
         "sunra/php-simple-html-dom-parser": "~1.5.0",
         "friendsofsymfony/jsrouting-bundle": "~2.0",
         "gregwar/captcha-bundle": "^2.0",

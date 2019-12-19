@@ -3,27 +3,37 @@ name: PHP Composer
 on: [push]
 
 jobs:
-  build:
-        
+  build:        
+    name: PHP ${{ matrix.php-versions }} Test on ${{ matrix.operating-system }}    
     runs-on: ${{ matrix.operating-system }}
-    strategy:      
+    
+    strategy:
+      fail-fast: false
       matrix:
         operating-system: [ubuntu-latest]
         php-versions: ['7.2', '7.3', '7.4']
-    name: PHP ${{ matrix.php-versions }} Test on ${{ matrix.operating-system }}    
+        
+    services:
+      mysql:
+        image: mysql:5.7
+        env:
+          MYSQL_ALLOW_EMPTY_PASSWORD: false
+          MYSQL_ROOT_PASSWORD: root
+          MYSQL_DATABASE: master
+        ports:
+          - 3306
+        options: --health-cmd="mysqladmin ping" --health-interval=10s --health-timeout=5s --health-retries=3   
 
     steps:
-    - uses: actions/checkout@v1
+    - name: Checkout
+      uses: actions/checkout@v1
       
     - name: Setup PHP Action
       uses: shivammathur/setup-php@1.6.1
       with:
         php-version: ${{ matrix.php-versions }}
-        extensions: mbstring, intl, gd 
-
-    - name: Validate composer.json and composer.lock
-      run: composer validate
-
+        extensions: mbstring, xml, ctype, iconv, mysql, gd, soap, intl, zip, bcmath
+    
     - name: Install dependencies
       run: composer install --prefer-dist --no-progress --no-suggest
       

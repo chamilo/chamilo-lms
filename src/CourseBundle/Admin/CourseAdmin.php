@@ -72,8 +72,8 @@ class CourseAdmin extends AbstractAdmin
      */
     public function updateTools($course)
     {
-        $toolChain = $this->getToolChain();
-        $tools = $toolChain->getTools();
+        //$toolChain = $this->getToolChain();
+        //$tools = $toolChain->getTools();
         $currentTools = $course->getTools();
 
         // @todo use

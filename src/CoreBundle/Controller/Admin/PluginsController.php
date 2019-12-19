@@ -58,9 +58,8 @@ class PluginsController extends SyliusSettingsController
         }
 
         $installedPlugins = $appPlugin->get_installed_plugins();
-
-        $manager = $this->getSettingsManager();
-        $schemas = $manager->getSchemas();
+        //$manager = $this->getSettingsManager();
+        //$schemas = $manager->getSchemas();
 
         return $this->render(
             '@ChamiloTheme/Admin/Settings/pluginsAdd.html.twig',

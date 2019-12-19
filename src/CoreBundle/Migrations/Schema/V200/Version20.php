@@ -325,7 +325,7 @@ class Version20 extends AbstractMigrationChamilo
         ];
 
         foreach ($tables as $table) {
-            $tableObj = $schema->getTable($table);
+            //$tableObj = $schema->getTable($table);
             /*if (!$tableObj->hasColumn('c_id')) {
                 $this->addSql("ALTER TABLE $table ADD c_id int NOT NULL");
 

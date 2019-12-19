@@ -114,8 +114,7 @@ class SettingsManager extends ChamiloSettingsManager
 
         /** @var \Chamilo\CoreBundle\Entity\SettingsCurrent $url */
         //$url = $event->getArgument('url');
-        $url = $this->getUrl();
-
+        //$url = $this->getUrl();
         $simpleCategoryName = str_replace('chamilo_course.settings.', '', $namespace);
 
         foreach ($parameters as $name => $value) {

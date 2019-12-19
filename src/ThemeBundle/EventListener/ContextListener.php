@@ -25,9 +25,9 @@ class ContextListener
             return;
         }
 
-        if (false == ($user = $this->getUser())) {
+        /*if (false == ($user = $this->getUser())) {
             return;
-        }
+        }*/
     }
 
     public function getUser()

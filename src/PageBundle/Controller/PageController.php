@@ -301,7 +301,6 @@ class PageController extends BaseController
         $site = $siteManager->findOneBy($criteria);
 
         $page = null;
-        $blockToEdit = null;
         $contentText = null;
 
         if ($site) {

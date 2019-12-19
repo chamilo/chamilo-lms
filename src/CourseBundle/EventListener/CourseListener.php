@@ -207,7 +207,7 @@ class CourseListener
         $sessionHandler = $request->getSession();
 
         /** @var ContainerInterface $container */
-        $container = $this->container;
+        //$container = $this->container;
 
         /*if ($course) {
             $courseLanguage = $course->getCourseLanguage();
@@ -221,7 +221,7 @@ class CourseListener
 
         $courseId = (int) $request->get('cid');
         //$groupId = (int) $request->get('gid');
-        $sessionId = (int) $request->get('sid');
+        //$sessionId = (int) $request->get('sid');
 
         // cidReset is set in the global.inc.php files
         global $cidReset;
@@ -246,9 +246,8 @@ class CourseListener
                 // $this->getCourse() $this->getSession() in controllers
                 if ($course) {
                     $controller->setCourse($course);
-
                     // Legacy code
-                    $courseCode = $course->getCode();
+                    //$courseCode = $course->getCode();
                     //$courseInfo = api_get_course_info($courseCode);
                     //$container->get('twig')->addGlobal('course', $course);
                     //$sessionHandler->set('_real_cid', $course->getId());

@@ -495,7 +495,6 @@ class CourseController extends BaseController
 
         if (!empty($catId)) {
             $evaladd->set_category_id($catId);
-            $cat = \Category::load($catId);
             $evaladd->set_course_code($course->getCode());
         } else {
             $evaladd->set_category_id(0);

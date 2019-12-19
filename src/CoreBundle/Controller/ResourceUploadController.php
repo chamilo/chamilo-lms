@@ -76,8 +76,7 @@ class ResourceUploadController extends BlueimpController
             /** @var UploadedFile $file */
             foreach ($files as $file) {
                 try {
-                    $title = $file->getClientOriginalName();
-
+                    //$title = $file->getClientOriginalName();
                     if (!($file instanceof FileInterface)) {
                         $file = new FilesystemFile($file);
                     }

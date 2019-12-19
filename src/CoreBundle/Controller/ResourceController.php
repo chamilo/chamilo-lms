@@ -848,8 +848,6 @@ class ResourceController extends AbstractResourceController implements CourseCon
             $resourceNode = $repo->getResourceNodeRepository()->find($resourceNodeId);
         }
 
-        $type = $repo->getResourceType();
-
         if (null === $resourceNode) {
             throw new NotFoundHttpException();
         }
@@ -891,8 +889,8 @@ class ResourceController extends AbstractResourceController implements CourseCon
 
             /** @var ResourceNode $node */
             foreach ($children as $node) {
-                $resourceFile = $node->getResourceFile();
-                $systemName = $resourceFile->getFile()->getPathname();
+                //$resourceFile = $node->getResourceFile();
+                //$systemName = $resourceFile->getFile()->getPathname();
                 $stream = $repo->getResourceNodeFileStream($node);
                 //error_log($node->getPathForDisplay());
                 $fileToDisplay = str_replace($rootNodePath, '', $node->getPathForDisplay());

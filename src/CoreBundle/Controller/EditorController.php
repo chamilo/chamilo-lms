@@ -174,8 +174,8 @@ class EditorController extends BaseController
      */
     public function editorConnector(TranslatorInterface $translator, RouterInterface $router)
     {
-        $course = $this->getCourse();
-        $session = $this->getCourseSession();
+        //$course = $this->getCourse();
+        //$session = $this->getCourseSession();
 
         /** @var Connector $connector */
         /*$connector = new Connector(

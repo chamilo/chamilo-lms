@@ -6,7 +6,6 @@ namespace Chamilo\CoreBundle\Repository;
 
 use Chamilo\CoreBundle\Entity\Course;
 use Chamilo\CoreBundle\Entity\Resource\ResourceNode;
-use Doctrine\Common\Collections\Criteria;
 use Doctrine\ORM\Query\Expr\Join;
 use Doctrine\ORM\QueryBuilder;
 
@@ -136,7 +135,6 @@ class CourseRepository extends ResourceRepository
     public function getCoursesWithNoSession($urlId)
     {
         $queryBuilder = $this->getRepository()->createQueryBuilder('c');
-        $criteria = Criteria::create();
         $queryBuilder = $queryBuilder
             ->select('c')
             ->leftJoin('c.urls', 'u')

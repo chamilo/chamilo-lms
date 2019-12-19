@@ -6,13 +6,10 @@ namespace Chamilo\CoreBundle\Controller;
 
 use Chamilo\CoreBundle\Entity\Course;
 use Chamilo\CoreBundle\Entity\ExtraField;
-use Chamilo\CoreBundle\Form\Type\CourseType;
 use Chamilo\CoreBundle\Framework\Container;
 use Chamilo\CourseBundle\Entity\CCourseDescription;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Entity;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use UserManager;
@@ -24,36 +21,6 @@ use UserManager;
  */
 class CourseController extends AbstractController
 {
-    /**
-     * @Route("/add")
-     *
-     * @Security("has_role('ROLE_TEACHER')")
-     *
-     * @return Response
-     */
-    public function addAction(Request $request)
-    {
-        exit;
-        $form = $this->createForm(CourseType::class);
-
-        $form->handleRequest($request);
-
-        if ($form->isSubmitted() && $form->isValid()) {
-            $em = $this->getDoctrine()->getManager();
-            $course = $form->getData();
-            /*$em->persist($course);
-            $em->flush();*/
-            $this->addFlash('sonata_flash_success', 'Course created');
-
-            return $this->redirectToRoute(
-                'chamilo_core_course_welcome',
-                ['cid' => $course->getId()]
-            );
-        }
-
-        return $this->render('ChamiloThemeBundle:Course:add.html.twig', ['form' => $form->createView()]);
-    }
-
     /**
      * Redirects legacy /courses/ABC/index.php to /courses/1/ (where 1 is the course id) see CourseHomeController.
      *
@@ -187,7 +154,7 @@ class CourseController extends AbstractController
 
         $subscriptionUser = \CourseManager::is_user_subscribed_in_course($userId, $course->getCode());
 
-        $allowSubscribe = false;
+        /*$allowSubscribe = false;
         if ($course->getSubscribe() || api_is_platform_admin()) {
             $allowSubscribe = true;
         }
@@ -199,7 +166,7 @@ class CourseController extends AbstractController
                 $courseId,
                 \BuyCoursesPlugin::PRODUCT_TYPE_COURSE
             );
-        }
+        }*/
 
         $image = Container::getIllustrationRepository()->getIllustrationUrl($course, 'course_picture_medium');
         $params = [

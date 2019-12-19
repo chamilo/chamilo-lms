@@ -326,7 +326,7 @@ class Course
         if (function_exists('gzdeflate')) {
             $deflated = gzdeflate($serialized, 9);
             if (false !== $deflated) {
-                $deflated = $serialized;
+                //$deflated = $serialized;
             }
         }
 

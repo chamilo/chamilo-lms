@@ -24,25 +24,6 @@ Feature: Install portal
     Then I press "step5"
     Then I should see "Last check before install"
     Then I press "Install chamilo"
-    Then wait very long for the page to be loaded
-    Then wait very long for the page to be loaded
-    Then wait very long for the page to be loaded
-    Then wait very long for the page to be loaded
-    Then wait very long for the page to be loaded
-    Then wait very long for the page to be loaded
-    Then wait very long for the page to be loaded
-    Then wait very long for the page to be loaded
-    Then wait very long for the page to be loaded
-    Then wait very long for the page to be loaded
-    Then wait very long for the page to be loaded
-    Then wait very long for the page to be loaded
-    Then wait very long for the page to be loaded
-    Then wait very long for the page to be loaded
-    Then wait very long for the page to be loaded
-    Then wait very long for the page to be loaded
-    Then wait very long for the page to be loaded
-    Then wait very long for the page to be loaded
-    Then wait very long for the page to be loaded
-    Then wait very long for the page to be loaded
+    Then wait the page to be loaded when ready
     Then I should see "Step7"
 

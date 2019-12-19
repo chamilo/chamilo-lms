@@ -414,6 +414,14 @@ class FeatureContext extends MinkContext
     }
 
     /**
+     * @When /^wait the page to be loaded when ready$/
+     */
+    public function waitVeryLongForThePageToBeLoadedWhenReady()
+    {
+        $this->getSession()->wait(10000, "document.readyState === 'complete'");
+    }
+
+    /**
      * @When /^I check the "([^"]*)" radio button$/
      */
     public function iCheckTheRadioButton($radioLabel)

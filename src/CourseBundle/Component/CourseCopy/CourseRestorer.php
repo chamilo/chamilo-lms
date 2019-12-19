@@ -878,7 +878,7 @@ class CourseRestorer
                     if (is_file($this->course->backup_path.'/'.$document->path) &&
                         is_readable($this->course->backup_path.'/'.$document->path) &&
                         is_dir(dirname($path.$document->path)) &&
-                        is_writeable(dirname($path.$document->path))
+                        is_writable(dirname($path.$document->path))
                     ) {
                         copy(
                             $this->course->backup_path.'/'.$document->path,
@@ -970,7 +970,7 @@ class CourseRestorer
                                 dirname($path.$document->path).': destination directory not found'
                             );
                         }
-                        if (!is_writeable(dirname($path.$document->path))) {
+                        if (!is_writable(dirname($path.$document->path))) {
                             error_log(
                                 'Course copy generated an ignorable error while trying to copy '.
                                 $this->course->backup_path.'/'.$document->path.' to '.
@@ -1188,7 +1188,7 @@ class CourseRestorer
                         $this->course->backup_path,
                         $this->course->info['path']
                     );
-                    $params['session_id'] = intval($sessionId);
+                    $params['session_id'] = (int) $sessionId;
                     $params['cat_id'] = 0;
                     unset($params['iid']);
 
@@ -1239,7 +1239,7 @@ class CourseRestorer
         $params['thread_last_post'] = 0;
         $params['thread_replies'] = 0;
         $params['thread_views'] = 0;
-        $params['session_id'] = intval($sessionId);
+        $params['session_id'] = (int) $sessionId;
         $params['thread_id'] = 0;
 
         unset($params['iid']);
@@ -1348,7 +1348,7 @@ class CourseRestorer
                         FROM $link_table
                         WHERE
                             c_id = ".$this->destination_course_id." AND
-                            category_id='".intval($cat_id)."'";
+                            category_id='".(int) $cat_id."'";
                 $result = Database::query($sql);
                 list($max_order) = Database::fetch_array($result);
 
@@ -3138,12 +3138,12 @@ class CourseRestorer
                     'reflink' => self::DBUTF8($wiki->reflink),
                     'title' => self::DBUTF8($wiki->title),
                     'content' => false === $wiki->content ? '' : self::DBUTF8($wiki->content),
-                    'user_id' => intval($wiki->user_id),
-                    'group_id' => intval($wiki->group_id),
+                    'user_id' => (int) ($wiki->user_id),
+                    'group_id' => (int) ($wiki->group_id),
                     'dtime' => self::DBUTF8($wiki->dtime),
                     'progress' => self::DBUTF8($wiki->progress),
-                    'version' => intval($wiki->version),
-                    'session_id' => !empty($session_id) ? intval($session_id) : 0,
+                    'version' => (int) ($wiki->version),
+                    'session_id' => !empty($session_id) ? (int) $session_id : 0,
                     'addlock' => 0,
                     'editlock' => 0,
                     'visibility' => 0,
@@ -3585,7 +3585,7 @@ class CourseRestorer
                 if (is_file($this->course->backup_path.'/'.$asset->path) &&
                     is_readable($this->course->backup_path.'/'.$asset->path) &&
                     is_dir(dirname($path.$asset->path)) &&
-                    is_writeable(dirname($path.$asset->path))
+                    is_writable(dirname($path.$asset->path))
                 ) {
                     switch ($this->file_option) {
                         case FILE_SKIP:

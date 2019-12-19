@@ -58,6 +58,6 @@ class MessageListEvent extends ThemeEvent
      */
     public function getTotal()
     {
-        return 0 == $this->totalMessages ? sizeof($this->messages) : $this->totalMessages;
+        return 0 == $this->totalMessages ? count($this->messages) : $this->totalMessages;
     }
 }

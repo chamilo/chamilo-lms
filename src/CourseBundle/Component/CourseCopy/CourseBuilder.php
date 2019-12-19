@@ -589,8 +589,8 @@ class CourseBuilder
         $courseId = (int) $courseId;
         $sql = "SELECT * FROM $table WHERE c_id = $courseId ";
         if (!empty($thread_id) && !empty($forum_id)) {
-            $forum_id = intval($forum_id);
-            $thread_id = intval($thread_id);
+            $forum_id = (int) $forum_id;
+            $thread_id = (int) $thread_id;
             $sql .= " AND thread_id = $thread_id AND forum_id = $forum_id ";
         }
 
@@ -1349,7 +1349,7 @@ class CourseBuilder
         $courseId = (int) $courseId;
 
         if (!empty($session_id) && !empty($courseId)) {
-            $session_id = intval($session_id);
+            $session_id = (int) $session_id;
             if ($withBaseContent) {
                 $sessionCondition = api_get_session_condition(
                     $session_id,
@@ -1573,7 +1573,7 @@ class CourseBuilder
         $courseId = (int) $courseId;
 
         if (!empty($session_id) && !empty($courseId)) {
-            $session_id = intval($session_id);
+            $session_id = (int) $session_id;
             if ($withBaseContent) {
                 $sessionCondition = api_get_session_condition(
                     $session_id,
@@ -1670,7 +1670,7 @@ class CourseBuilder
         $courseId = (int) $courseId;
 
         if (!empty($session_id) && !empty($courseId)) {
-            $session_id = intval($session_id);
+            $session_id = (int) $session_id;
             if ($withBaseContent) {
                 $sessionCondition = api_get_session_condition(
                     $session_id,
@@ -1728,7 +1728,7 @@ class CourseBuilder
         $courseId = (int) $courseId;
 
         $courseInfo = api_get_course_info_by_id($courseId);
-        $session_id = intval($session_id);
+        $session_id = (int) $session_id;
         if ($withBaseContent) {
             $sessionCondition = api_get_session_condition(
                 $session_id,

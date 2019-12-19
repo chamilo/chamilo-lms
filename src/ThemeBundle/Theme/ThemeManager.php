@@ -54,36 +54,33 @@ class ThemeManager implements ContainerAwareInterface
 
     public function getScripts($location = 'bottom')
     {
-        $unsorted = [];
+        /*$unsorted = [];
         $srcList = [];
         foreach ($this->javascripts as $id => $scriptDefinition) {
             if ($scriptDefinition['location'] == $location) {
                 $unsorted[$id] = $scriptDefinition;
             }
         }
-
         $queue = $this->getResolver()->register($unsorted)->resolveAll();
         foreach ($queue as $def) {
             $srcList[] = $def['src'];
         }
 
-        return $srcList;
+        return $srcList;*/
     }
 
     public function getStyles()
     {
+        /*
         $srcList = [];
         $queue = $this->getResolver()->register($this->stylesheets)->resolveAll();
         foreach ($queue as $def) {
             $srcList[] = $def['src'];
         }
 
-        return $srcList;
+        return $srcList;*/
     }
 
-    /**
-     * @return DependencyResolverInterface
-     */
     protected function getResolver()
     {
         $class = $this->resolverClass;

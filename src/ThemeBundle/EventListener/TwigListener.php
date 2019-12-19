@@ -170,7 +170,7 @@ class TwigListener implements EventSubscriberInterface
                     foreach ($courseRegions as $subRegion) {
                         if (!empty($courseInfo)) {
                             if (isset($pluginInfo['obj']) && $pluginInfo['obj'] instanceof \Plugin) {
-                                /** @var Plugin $plugin */
+                                /** @var \Plugin $plugin */
                                 $plugin = $pluginInfo['obj'];
                                 $regionListContent[$subRegion][] = $plugin->renderRegion($subRegion);
                             }

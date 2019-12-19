@@ -460,9 +460,9 @@ class UserRepository extends ResourceRepository
         return $qb
             ->select('COUNT(a)')
             ->innerJoin('a.portals', 'u')
-            ->where('u.portal = :u and u.group = :g')
+            ->where('u.portal = :u')
             ->andWhere($qb->expr()->in('a.roles', ['ROLE_TEACHER']))
-            ->setParameters(['u' => $url, 'g' => $group])
+            ->setParameters(['u' => $url])
             ->getQuery()
             ->getSingleScalarResult()
         ;
@@ -625,17 +625,6 @@ class UserRepository extends ResourceRepository
         /** @var CourseRelUser $course */
         foreach ($courses as $course) {
             $list[] = $course->getCourse()->getCode();
-            $courseDir = api_get_path(SYS_COURSE_PATH).$course->getCourse()->getDirectory();
-            $documentDir = $courseDir.'/document/chat_files/';
-            if (is_dir($documentDir)) {
-                $fs = new Finder();
-                $fs->files()->in($documentDir);
-                foreach ($fs as $file) {
-                    $chatFiles[] =
-                        $course->getCourse()->getDirectory().'/document/chat_files/'.$file->getFilename().' - '.
-                        get_lang('This content is not accessible to you directly because of course-related access rules. If you require access to that data, please contact the Data Privacy Officer as defined in our privacy terms.');
-                }
-            }
         }
 
         $user->setCourses($list);

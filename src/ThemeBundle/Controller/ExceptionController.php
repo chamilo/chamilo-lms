@@ -6,6 +6,7 @@ namespace Chamilo\ThemeBundle\Controller;
 
 use Symfony\Bundle\TwigBundle\Controller\ExceptionController as BaseExceptionController;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\Templating\TemplateReference;
 
 /**
  * Class ExceptionController.

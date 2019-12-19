@@ -173,7 +173,7 @@ final class CAnnouncementRepository extends ResourceRepository
             ->createQuery($dql)
             ->setParameters($parameters);
 
-        if (!is_null($start) && !is_null($limit)) {
+        if (null !== $start && null !== $limit) {
             $query
                 ->setFirstResult($start)
                 ->setMaxResults($limit);

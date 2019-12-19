@@ -52,6 +52,6 @@ class NotificationListEvent extends ThemeEvent
      */
     public function getTotal()
     {
-        return 0 == $this->total ? sizeof($this->notifications) : $this->total;
+        return 0 == $this->total ? count($this->notifications) : $this->total;
     }
 }

@@ -9,6 +9,8 @@ use Chamilo\ContactBundle\Form\Type\ContactType;
 use Chamilo\UserBundle\Entity\User;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\Mailer\MailerInterface;
+use Symfony\Component\Mime\Email;
 use Symfony\Component\Routing\Annotation\Route;
 
 /**
@@ -21,7 +23,7 @@ class ContactController extends AbstractController
     /**
      * @Route("/", name="contact")
      */
-    public function indexAction(Request $request)
+    public function indexAction(Request $request, MailerInterface $mailer)
     {
         /** @var User $user */
         $user = $this->getUser();
@@ -47,10 +49,10 @@ class ContactController extends AbstractController
             $category = $em->getRepository('ChamiloContactBundle:Category')->find($category);
 
             if ($form->isValid()) {
-                $message = \Swift_Message::newInstance()
-                    ->setSubject($form->get('subject')->getData())
-                    ->setFrom($form->get('email')->getData())
-                    ->setTo($category->getEmail())
+                $message = new Email();
+                $message->subject($form->get('subject')->getData())
+                    ->from($form->get('email')->getData())
+                    ->to($category->getEmail())
                     ->setBody(
                         $this->renderView(
                             '@ChamiloContact/contact.html.twig',
@@ -65,7 +67,8 @@ class ContactController extends AbstractController
                         )
                     );
 
-                $this->get('mailer')->send($message);
+                $mailer->send($message);
+
                 $this->addFlash(
                     'success',
                     $this->get('translator')->trans('Your email has been sent! Thanks!')

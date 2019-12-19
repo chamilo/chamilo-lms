@@ -10,7 +10,8 @@ addons:
         - libapache2-mod-fastcgi
         - libappindicator1
         - fonts-liberation
-
+        - oracle-java8-installer
+        - oracle-java8-set-default
 services:
     - mysql
 
@@ -32,15 +33,9 @@ env:
 before_install:
   # Fix travis error https://github.com/travis-ci/travis-ci/issues/8607
   - sudo rm -vf /etc/apt/sources.list.d/*riak*
-  # Get Chrome
-  #- wget -q -O - https://dl-ssl.google.com/linux/linux_signing_key.pub | sudo apt-key add -
-  #- sudo apt-get update
-  #- sudo apt-get install google-chrome-stable
   - google-chrome-stable --headless --disable-gpu --remote-debugging-port=9222 http://localhost &
   # Get Chrome driver
-  - wget https://chromedriver.storage.googleapis.com/79.0.3945.36/chromedriver_linux64.zip && unzip chromedriver_linux64.zip
-  - sudo mv chromedriver /usr/bin
-  - sudo chmod +x /usr/bin/chromedriver
+  - chromedriver --version
   # Setup display for Selenium
   - sh -e /etc/init.d/xvfb start
   - export DISPLAY=:99.0
@@ -48,8 +43,6 @@ before_install:
   # Get Selenium
   - wget http://selenium-release.storage.googleapis.com/3.141/selenium-server-standalone-3.141.59.jar
   # Check java
-  - java -version
-  - sudo apt-get install oracle-java8-installer
   - java -version
   - java -jar selenium-server-standalone-3.141.59.jar -log selenium.log  > /dev/null &
   - nohup bash -c "webdriver-manager start 2>&1 &"

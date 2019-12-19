@@ -430,19 +430,37 @@ class ImsLtiPlugin extends Plugin
      */
     public static function getRoleScopeMentor(User $currentUser)
     {
-        if (DRH !== $currentUser->getStatus()) {
-            return '';
+        $scope = self::getRoleScopeMentorAsArray($currentUser, true);
+
+        return implode(',', $scope);
+    }
+
+    /**
+     * Tool User IDs which the user DRH can access as a mentor.
+     *
+     * @param User $user
+     * @param bool $generateIdForTool. Optional. Set TRUE for LTI 1.x.
+     *
+     * @return array
+     */
+    public static function getRoleScopeMentorAsArray(User $user, $generateIdForTool = false)
+    {
+        if (DRH !== $user->getStatus()) {
+            return [];
         }
 
-        $followedUsers = UserManager::get_users_followed_by_drh($currentUser->getId());
+        $followedUsers = UserManager::get_users_followed_by_drh($user->getId());
 
         $scope = [];
 
+        /** @var array $userInfo */
         foreach ($followedUsers as $userInfo) {
-            $scope[] = self::generateToolUserId($userInfo['user_id']);
+            $scope[] = $generateIdForTool
+                ? self::generateToolUserId($userInfo['user_id'])
+                : (string) $userInfo['user_id'];
         }
 
-        return implode(',', $scope);
+        return $scope;
     }
 
     /**
@@ -668,7 +686,7 @@ class ImsLtiPlugin extends Plugin
             [
                 'digest_alg' => 'sha256',
                 'private_key_bits' => 2048,
-                'private_key_type' => OPENSSL_KEYTYPE_RSA
+                'private_key_type' => OPENSSL_KEYTYPE_RSA,
             ]
         );
 

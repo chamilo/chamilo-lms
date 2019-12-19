@@ -103,6 +103,12 @@ try {
         $jwtContent['family_name'] = $user->getLastname();
     }
 
+    if (DRH === $user->getStatus()) {
+        $roleScopeMentor = ImsLtiPlugin::getRoleScopeMentor($user);
+
+        $jwtContent['https://purl.imsglobal.org/spec/lti/claim/role_scope_mentor'] = $roleScopeMentor;
+    }
+
     if ($tool->isSharingPicture()) {
         $jwtContent['picture'] = UserManager::getUserPicture($user->getId());
     }
@@ -179,17 +185,48 @@ try {
         ];
 
         // LIS info
-        $jwtContent['https://purl.imsglobal.org/spec/lti/claim/lis'] = [
-            'person_sourcedid' => "$platformDomain:$toolUserId",
-            'course_offering_sourcedid' => "$platformDomain:{$course->getId()}"
-                .($session ? ":{$session->getId()}" : ''),
-        ];
+        $toolEval = $tool->getGradebookEval();
+
+        if (!empty($toolEval)) {
+            $jwtContent['https://purl.imsglobal.org/spec/lti-ags/claim/endpoint'] = [
+                'lineitem' => api_get_path(WEB_PATH).'lti/ags_endpoint/'.$toolEval->getId(),
+            ];
+
+            $jwtContent['https://purl.imsglobal.org/spec/lti/claim/lis'] = [
+                'person_sourcedid' => "$platformDomain:{$user->getId()}",
+                'course_offering_sourcedid' => "$platformDomain:{$course->getId()}"
+                    .($session ? ":{$session->getId()}" : ''),
+            ];
+        }
     }
 
     // Custom params info
     $customParams = $tool->getCustomParamsAsArray();
 
     if (!empty($customParams)) {
+        $substitutables = ImsLti::getSubstitutableParams($user, $course, $session);
+        $variables = array_keys($substitutables);
+
+        foreach ($customParams as $customKey => $customValue) {
+            if (in_array($customValue, $variables)) {
+                $substitutableValue = $substitutables[$customValue];
+
+                $substitutedValue = '';
+
+                if (is_array($substitutableValue)) {
+                    $substitutableValue = current($substitutableValue);
+
+                    if (array_key_exists($substitutableValue, $jwtContent)) {
+                        $substitutedValue = $jwtContent[$substitutableValue];
+                    }
+                } elseif ($substitutableValue !== false) {
+                    $substitutedValue = $substitutableValue;
+                }
+
+                $customParams[$customKey] = $substitutedValue;
+            }
+        }
+
         $jwtContent['https://purl.imsglobal.org/spec/lti/claim/custom'] = $customParams;
     }
 

@@ -12,15 +12,15 @@
 use Symfony\Requirements\SymfonyRequirements;
 
 if (!isset($_SERVER['HTTP_HOST'])) {
-    exit("This script cannot be run from the CLI. Run it from a browser.\n");
+   // exit("This script cannot be run from the CLI. Run it from a browser.\n");
 }
 
 if (!in_array(@$_SERVER['REMOTE_ADDR'], array(
     '127.0.0.1',
     '::1',
 ))) {
-    header('HTTP/1.0 403 Forbidden');
-    exit('This script is only accessible from localhost.');
+    //header('HTTP/1.0 403 Forbidden');
+    //exit('This script is only accessible from localhost.');
 }
 
 if (file_exists($autoloader = __DIR__.'/../../../autoload.php')) {
@@ -32,10 +32,7 @@ if (file_exists($autoloader = __DIR__.'/../../../autoload.php')) {
 }
 
 $symfonyVersion = class_exists('\Symfony\Component\HttpKernel\Kernel') ? \Symfony\Component\HttpKernel\Kernel::VERSION : null;
-
 $symfonyRequirements = new SymfonyRequirements(dirname(dirname(realpath($autoloader))), $symfonyVersion);
-
-$symfonyRequirements->addPhpConfigRequirement();
 
 $majorProblems = $symfonyRequirements->getFailedRequirements();
 $minorProblems = $symfonyRequirements->getFailedRecommendations();

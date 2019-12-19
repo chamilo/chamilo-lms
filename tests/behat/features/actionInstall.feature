@@ -23,9 +23,6 @@ Feature: Install portal
       | passForm | admin |
     Then I press "step5"
     Then I should see "Last check before install"
-    Then wait very long for the page to be loaded
-    Then wait very long for the page to be loaded
-    Then wait very long for the page to be loaded
     Then I press "Install chamilo"
     Then wait very long for the page to be loaded
     Then wait very long for the page to be loaded
@@ -37,5 +34,15 @@ Feature: Install portal
     Then wait very long for the page to be loaded
     Then wait very long for the page to be loaded
     Then wait very long for the page to be loaded
-    Then I should see "Installation process execution"
+    Then wait very long for the page to be loaded
+    Then wait very long for the page to be loaded
+    Then wait very long for the page to be loaded
+    Then wait very long for the page to be loaded
+    Then wait very long for the page to be loaded
+    Then wait very long for the page to be loaded
+    Then wait very long for the page to be loaded
+    Then wait very long for the page to be loaded
+    Then wait very long for the page to be loaded
+    Then wait very long for the page to be loaded
+    Then I should see "Step7"
 

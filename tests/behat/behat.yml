@@ -7,6 +7,10 @@ default:
             selenium2:
                 wd_host: "http://127.0.0.1:4444/wd/hub"
                 browser: chrome
+                capabilities:
+                    extra_capabilities:
+                        chromeOptions:
+                            w3c: false
             default_session: selenium2
             javascript_session: selenium2
             files_path: "%paths.base%/../../"

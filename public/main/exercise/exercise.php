@@ -100,6 +100,17 @@ if ($is_allowedToEdit && !empty($action)) {
 
             Display::addFlash(Display::return_message(get_lang('Updated')));
             break;
+        case 'remove_shortcut':
+            $repo = Container::getShortcutRepository();
+            $shortCut = $repo->getShortcutFromResource($exerciseEntity);
+            if (null !== $shortCut) {
+                $repo->addResourceNode($shortCut, api_get_user_entity(api_get_user_id()), $courseEntity);
+                $repo->getEntityManager()->remove($shortCut);
+                $repo->getEntityManager()->flush();
+            }
+
+            Display::addFlash(Display::return_message(get_lang('Deleted')));
+            break;
         case 'enable_launch':
             $objExerciseTmp->cleanCourseLaunchSettings();
             $objExerciseTmp->enableAutoLaunch();

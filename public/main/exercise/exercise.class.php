@@ -8486,8 +8486,25 @@ class Exercise
                     'sid' => $sessionId,
                 ]
             );
+            $shortcutRepository = Container::getShortcutRepository();
             $myRowAction->addManipulateRender(
-                function (RowAction $action, Row $row) use ($session, $repo) {
+                function (RowAction $action, Row $row) use ($session, $course, $repo, $shortcutRepository, $sessionId) {
+                    /** @var CQuiz $exercise */
+                    $exercise = $row->getEntity();
+
+                    $shortcut = $shortcutRepository->getShortcutFromResource($exercise);
+                    if ($shortcut) {
+                        $action->setTitle(get_lang('Remove shortcut'));
+                        $action->setRouteParameters(
+                            [
+                                'id',
+                                'name' => 'exercise/exercise.php',
+                                'action' => 'remove_shortcut',
+                                'cid' => $course->getId(),
+                                'sid' => $sessionId,
+                            ]
+                        );
+                    }
                     return $repo->rowCanBeEdited($action, $row, $session);
                 }
             );

@@ -8,11 +8,13 @@ use APY\DataGridBundle\Grid\Column\Column;
 use APY\DataGridBundle\Grid\Grid;
 use Chamilo\CoreBundle\Component\Utils\ResourceSettings;
 use Chamilo\CoreBundle\Entity\Course;
+use Chamilo\CoreBundle\Entity\Resource\AbstractResource;
 use Chamilo\CoreBundle\Entity\Resource\ResourceNode;
 use Chamilo\CoreBundle\Entity\Session;
 use Chamilo\CoreBundle\Repository\ResourceRepository;
 use Chamilo\CoreBundle\Repository\ResourceRepositoryInterface;
 use Chamilo\CourseBundle\Entity\CGroupInfo;
+use Chamilo\CourseBundle\Entity\CShortcut;
 use Chamilo\UserBundle\Entity\User;
 use Doctrine\ORM\Query\Expr\Join;
 use Symfony\Component\Form\FormInterface;
@@ -23,6 +25,14 @@ use Symfony\Component\HttpFoundation\File\UploadedFile;
  */
 final class CShortcutRepository extends ResourceRepository implements ResourceRepositoryInterface
 {
+    public function getShortcutFromResource(AbstractResource $resource): ?CShortcut
+    {
+        $repo = $this->getRepository();
+        $criteria = ['shortCutNode' => $resource->getResourceNode()];
+
+        return $repo->findOneBy($criteria);
+    }
+
     public function getResources(User $user, ResourceNode $parentNode, Course $course = null, Session $session = null, CGroupInfo $group = null)
     {
         $repo = $this->getRepository();

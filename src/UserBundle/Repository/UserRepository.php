@@ -1386,7 +1386,11 @@ class UserRepository extends ResourceRepository
         ];
 
         $normalizer = new GetSetMethodNormalizer(null, null, null, null, null, $defaultContext);
-        $serializer = new Serializer( [$normalizer], [new JsonEncoder()], [AbstractNormalizer::IGNORED_ATTRIBUTES => $ignore]);
+        $serializer = new Serializer(
+            [$normalizer],
+            [new JsonEncoder()],
+            [AbstractNormalizer::IGNORED_ATTRIBUTES => $ignore]
+        );
 
         return $serializer->serialize($user, 'json');
     }

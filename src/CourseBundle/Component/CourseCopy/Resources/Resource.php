@@ -265,5 +265,7 @@ class Resource
 
                 break;
         }
+
+        return $resource;
     }
 }

@@ -86,7 +86,7 @@ script:
   - ../../vendor/behat/behat/bin/behat features/adminFillUsers.feature
   - ../../vendor/behat/behat/bin/behat features/course.feature
   - ../../vendor/behat/behat/bin/behat features/createUser.feature
-
+  - curl $VHOST_URL
   # - sudo cat /var/log/apache2/$VHOST_URL-access.log
 
 after_failure:

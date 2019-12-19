@@ -11,7 +11,7 @@ addons:
         - libappindicator1
         - fonts-liberation
         - oracle-java8-installer
-        - oracle-java8-set-default
+
 services:
     - mysql
 

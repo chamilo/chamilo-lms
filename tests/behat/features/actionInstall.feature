@@ -23,7 +23,8 @@ Feature: Install portal
       | passForm | admin |
     Then I press "step5"
     Then I should see "Last check before install"
-    Then I press "Install chamilo"
+    Then wait the page to be loaded when ready
+    Then I press "button_step6"
     Then wait the page to be loaded when ready
     Then I should see "Step7"
 

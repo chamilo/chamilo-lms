@@ -269,6 +269,8 @@ if (!$_POST) {
     $current_step = 7;
 }
 
+error_log("Step: $current_step");
+
 // Managing the $encryptPassForm
 if ($encryptPassForm == '1') {
     $encryptPassForm = 'bcrypt';
@@ -582,6 +584,8 @@ if (isset($_POST['step2'])) {
         error_log('Set upgradeWithContainer');
     } else {
         set_file_folder_permissions();
+        error_log("connectToDatabase as user $dbUsernameForm");
+
         $database = connectToDatabase(
             $dbHostForm,
             $dbUsernameForm,
@@ -593,7 +597,11 @@ if (isset($_POST['step2'])) {
         $dbNameForm = preg_replace('/[^a-zA-Z0-9_\-]/', '', $dbNameForm);
 
         // Drop and create the database anyways
+        error_log("Drop database $dbNameForm");
+
         $manager->getConnection()->getSchemaManager()->dropAndCreateDatabase($dbNameForm);
+
+        error_log("Connect to database $dbNameForm with user $dbUsernameForm");
 
         $database = connectToDatabase(
             $dbHostForm,
@@ -622,11 +630,13 @@ if (isset($_POST['step2'])) {
         updateEnvFile($distFile, $envFile, $params);
         (new Dotenv())->load($envFile);
 
+        error_log("Boot kernel");
         // Load Symfony Kernel
         $kernel = new Kernel('dev', true);
         $application = new Application($kernel);
 
         // Create database
+        error_log("Create database");
         $input = new ArrayInput([]);
         $command = $application->find('doctrine:schema:create');
         $result = $command->run($input, new ConsoleOutput());

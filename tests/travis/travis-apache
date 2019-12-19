@@ -8,10 +8,6 @@
         Require all granted
     </Directory>
 
-    #ErrorLog ${APACHE_LOG_DIR}/%VHOST_URL%-error.log
-    LogLevel notice
-    #CustomLog ${APACHE_LOG_DIR}/%VHOST_URL%-access.log combined
-
     <IfModule mod_fastcgi.c>
         AddHandler php5-fcgi .php
         Action php5-fcgi /php5-fcgi

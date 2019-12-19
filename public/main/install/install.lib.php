@@ -2840,6 +2840,7 @@ function updateEnvFile($distFile, $envFile, $params)
     $contents = file_get_contents($distFile);
     $contents = str_replace(array_keys($params), array_values($params), $contents);
     file_put_contents($envFile, $contents);
+    error_log("File env saved here: $envFile");
 }
 
 /**

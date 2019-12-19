@@ -1,6 +1,6 @@
 <VirtualHost *:80>
     DocumentRoot %TRAVIS_BUILD_DIR%/public
-    ServerName %VHOST_URL%
+    ServerName localhost
 
     <Directory "%TRAVIS_BUILD_DIR%/public">
         Options Indexes FollowSymLinks

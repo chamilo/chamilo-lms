@@ -87,7 +87,6 @@ script:
   - ../../vendor/behat/behat/bin/behat features/course.feature
   - ../../vendor/behat/behat/bin/behat features/createUser.feature
   - sudo apachectl -S
-  - sudo cat /var/log/apache2/error.log
 
 after_failure:
   - sudo cat /var/log/apache2/error.log

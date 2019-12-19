@@ -23,8 +23,6 @@ class NotificationModel implements NotificationInterface
     }
 
     /**
-     * @param mixed $message
-     *
      * @return $this
      */
     public function setMessage($message)
@@ -34,17 +32,12 @@ class NotificationModel implements NotificationInterface
         return $this;
     }
 
-    /**
-     * @return mixed
-     */
     public function getMessage()
     {
         return $this->message;
     }
 
     /**
-     * @param mixed $type
-     *
      * @return $this
      */
     public function setType($type)
@@ -54,9 +47,6 @@ class NotificationModel implements NotificationInterface
         return $this;
     }
 
-    /**
-     * @return mixed
-     */
     public function getType()
     {
         return $this->type;

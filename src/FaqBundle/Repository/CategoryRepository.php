@@ -12,9 +12,6 @@ use Doctrine\ORM\EntityRepository;
  */
 class CategoryRepository extends EntityRepository
 {
-    /**
-     * @return mixed
-     */
     public function retrieveActive()
     {
         $query = $this->createQueryBuilder('c')
@@ -29,8 +26,6 @@ class CategoryRepository extends EntityRepository
 
     /**
      * @param string $slug
-     *
-     * @return mixed
      */
     public function retrieveActiveBySlug($slug)
     {
@@ -48,8 +43,6 @@ class CategoryRepository extends EntityRepository
 
     /**
      * @param string $slug
-     *
-     * @return mixed
      */
     public function getCategoryActiveBySlug($slug)
     {

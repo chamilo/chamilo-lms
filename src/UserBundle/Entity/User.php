@@ -574,8 +574,6 @@ class User extends BaseUser implements ThemeUser, EquatableInterface //implement
     }
 
     /**
-     * @param mixed $resourceNodes
-     *
      * @return User
      */
     public function setResourceNodes($resourceNodes)
@@ -785,9 +783,6 @@ class User extends BaseUser implements ThemeUser, EquatableInterface //implement
         return $this->getIsActive();
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function isEnabled()
     {
         return 1 == $this->getActive();
@@ -1515,8 +1510,6 @@ class User extends BaseUser implements ThemeUser, EquatableInterface //implement
     }
 
     /**
-     * @param int $ttl
-     *
      * @return bool
      */
     /*public function isPasswordRequestNonExpired($ttl)
@@ -1783,8 +1776,6 @@ class User extends BaseUser implements ThemeUser, EquatableInterface //implement
     }
 
     /**
-     * @param mixed $profileCompleted
-     *
      * @return User
      */
     public function setProfileCompleted($profileCompleted)
@@ -1846,17 +1837,12 @@ class User extends BaseUser implements ThemeUser, EquatableInterface //implement
         return $this;
     }
 
-    /**
-     * @return mixed
-     */
     public function getCommentedUserSkills()
     {
         return $this->commentedUserSkills;
     }
 
     /**
-     * @param mixed $commentedUserSkills
-     *
      * @return User
      */
     public function setCommentedUserSkills($commentedUserSkills)

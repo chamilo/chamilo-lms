@@ -148,8 +148,6 @@ class SkillRelItem
     }
 
     /**
-     * @param mixed $skill
-     *
      * @return SkillRelItem
      */
     public function setSkill($skill)

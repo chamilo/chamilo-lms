@@ -153,17 +153,12 @@ class CQuizQuestionCategory extends AbstractResource implements ResourceInterfac
         return $this->id;
     }
 
-    /**
-     * @return mixed
-     */
     public function getCourse()
     {
         return $this->course;
     }
 
     /**
-     * @param mixed $course
-     *
      * @return CQuizQuestionCategory
      */
     public function setCourse($course)
@@ -173,9 +168,6 @@ class CQuizQuestionCategory extends AbstractResource implements ResourceInterfac
         return $this;
     }
 
-    /**
-     * @return mixed
-     */
     public function getSession()
     {
         return $this->session;

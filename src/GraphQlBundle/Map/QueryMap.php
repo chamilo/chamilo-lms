@@ -464,8 +464,6 @@ class QueryMap extends ResolverMap implements ContainerAwareInterface
      * @param string      $fieldName
      * @param object      $object
      * @param object|null $resolver
-     *
-     * @return mixed
      */
     private function resolveField(
         $fieldName,

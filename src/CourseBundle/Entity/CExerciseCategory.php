@@ -160,17 +160,12 @@ class CExerciseCategory extends AbstractResource implements ResourceInterface
         return $this;
     }
 
-    /**
-     * @return mixed
-     */
     public function getPosition()
     {
         return $this->position;
     }
 
     /**
-     * @param mixed $position
-     *
      * @return CExerciseCategory
      */
     public function setPosition($position)

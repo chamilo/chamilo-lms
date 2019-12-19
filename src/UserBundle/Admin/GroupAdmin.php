@@ -7,9 +7,6 @@ use Sonata\UserBundle\Admin\Model\GroupAdmin as BaseGroupAdmin;
 
 class GroupAdmin extends BaseGroupAdmin
 {
-    /**
-     * {@inheritdoc}
-     */
     protected function configureListFields(ListMapper $listMapper): void
     {
         $listMapper

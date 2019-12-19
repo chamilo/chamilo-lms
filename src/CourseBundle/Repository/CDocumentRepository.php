@@ -121,8 +121,6 @@ final class CDocumentRepository extends ResourceRepository implements ResourceRe
      * @param string $path
      *
      * @throws \Doctrine\ORM\NonUniqueResultException
-     *
-     * @return mixed
      */
     public function getFolderSize($courseId, $path)
     {
@@ -158,8 +156,6 @@ final class CDocumentRepository extends ResourceRepository implements ResourceRe
      * @param int $sessionId
      *
      * @throws \Doctrine\ORM\NonUniqueResultException
-     *
-     * @return mixed
      */
     public function getTotalSpace($courseId, $groupId = null, $sessionId = null)
     {

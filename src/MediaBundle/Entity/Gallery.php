@@ -19,8 +19,6 @@ class Gallery extends BaseGallery
 
     /**
      * Get id.
-     *
-     * @return int
      */
     public function getId(): int
     {

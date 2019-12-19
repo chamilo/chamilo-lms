@@ -273,17 +273,12 @@ class CTool extends AbstractResource implements ResourceInterface
         $em->flush($this);
     }
 
-    /**
-     * @return mixed
-     */
     public function getPosition()
     {
         return $this->position;
     }
 
     /**
-     * @param mixed $position
-     *
      * @return CTool
      */
     public function setPosition($position)

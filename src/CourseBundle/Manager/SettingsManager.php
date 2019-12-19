@@ -34,9 +34,6 @@ class SettingsManager extends ChamiloSettingsManager
         $this->course = $course;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function load($schemaAlias, $namespace = null, $ignoreUnknown = true)
     {
         $schemaAliasNoPrefix = $schemaAlias;
@@ -79,9 +76,6 @@ class SettingsManager extends ChamiloSettingsManager
         return $settings;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function save(SettingsInterface $settings)
     {
         $namespace = $settings->getSchemaAlias();

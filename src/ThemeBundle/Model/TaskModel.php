@@ -68,8 +68,6 @@ class TaskModel implements TaskInterface
     }
 
     /**
-     * @param mixed $progress
-     *
      * @return $this
      */
     public function setProgress($progress)
@@ -79,17 +77,12 @@ class TaskModel implements TaskInterface
         return $this;
     }
 
-    /**
-     * @return mixed
-     */
     public function getProgress()
     {
         return $this->progress;
     }
 
     /**
-     * @param mixed $title
-     *
      * @return $this
      */
     public function setTitle($title)
@@ -99,9 +92,6 @@ class TaskModel implements TaskInterface
         return $this;
     }
 
-    /**
-     * @return mixed
-     */
     public function getTitle()
     {
         return $this->title;

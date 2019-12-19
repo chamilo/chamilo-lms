@@ -14,9 +14,6 @@ use Symfony\Component\Form\FormBuilderInterface;
  */
 class UserCourseSettingsSchema extends AbstractSettingsSchema
 {
-    /**
-     * {@inheritdoc}
-     */
     public function buildSettings(AbstractSettingsBuilder $builder)
     {
         $builder
@@ -32,9 +29,6 @@ class UserCourseSettingsSchema extends AbstractSettingsSchema
         $this->setMultipleAllowedTypes($allowedTypes, $builder);
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function buildForm(FormBuilderInterface $builder)
     {
         $builder

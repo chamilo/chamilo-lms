@@ -16,9 +16,6 @@ trait CourseControllerTrait
     protected $course;
     protected $session;
 
-    /**
-     * @return mixed
-     */
     public function setCourse(Course $course)
     {
         $this->course = $course;
@@ -45,9 +42,6 @@ trait CourseControllerTrait
         return $this->session;
     }
 
-    /**
-     * @return mixed
-     */
     public function setSession(Session $session)
     {
         $this->session = $session;

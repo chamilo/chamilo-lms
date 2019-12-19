@@ -442,8 +442,6 @@ class SettingsManager implements SettingsManagerInterface
      * Rename old variable with variable used in Chamilo 2.0.
      *
      * @param string $variable
-     *
-     * @return mixed
      */
     public function renameVariable($variable)
     {
@@ -480,8 +478,6 @@ class SettingsManager implements SettingsManagerInterface
      *
      * @param string $variable
      * @param string $defaultCategory
-     *
-     * @return mixed
      */
     public function fixCategory($variable, $defaultCategory)
     {
@@ -628,8 +624,6 @@ class SettingsManager implements SettingsManagerInterface
      * @param string $name
      *
      * @throws \InvalidArgumentException
-     *
-     * @return mixed
      */
     public function getSetting($name)
     {
@@ -684,9 +678,6 @@ class SettingsManager implements SettingsManagerInterface
         return str_replace('chamilo_core.settings.', '', $category);
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function load($schemaAlias, $namespace = null, $ignoreUnknown = true)
     {
         $schemaAliasNoPrefix = $schemaAlias;
@@ -805,8 +796,6 @@ class SettingsManager implements SettingsManagerInterface
     }
 
     /**
-     * {@inheritdoc}
-     *
      * @throws ValidatorException
      */
     public function save(SettingsInterface $settings)

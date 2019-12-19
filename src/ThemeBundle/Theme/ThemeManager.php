@@ -24,7 +24,6 @@ class ThemeManager implements ContainerAwareInterface
     /**
      * ThemeManager constructor.
      *
-     * @param $container
      * @param null $resolverClass
      */
     public function __construct($resolverClass = null)

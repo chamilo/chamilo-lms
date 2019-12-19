@@ -13,9 +13,6 @@ use Symfony\Component\Form\DataTransformerInterface;
  */
 class ArrayToIdentifierTransformer implements DataTransformerInterface
 {
-    /**
-     * {@inheritdoc}
-     */
     public function transform($value)
     {
         if (!is_array($value)) {
@@ -25,9 +22,6 @@ class ArrayToIdentifierTransformer implements DataTransformerInterface
         return implode(',', $value);
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function reverseTransform($value)
     {
         if (empty($value)) {

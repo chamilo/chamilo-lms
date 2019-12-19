@@ -24,9 +24,6 @@ class SettingsHelper extends Helper implements SettingsHelperInterface
         $this->settingsManager = $settingsManager;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function getName()
     {
         return 'chamilo_settings';
@@ -44,8 +41,6 @@ class SettingsHelper extends Helper implements SettingsHelperInterface
 
     /**
      * @param string $parameter Example: admin.administrator_name
-     *
-     * @return mixed
      */
     public function getSettingsParameter($parameter)
     {

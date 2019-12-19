@@ -89,17 +89,12 @@ class Profile
         return $this;
     }
 
-    /**
-     * @return mixed
-     */
     public function getSkills()
     {
         return $this->skills;
     }
 
     /**
-     * @param mixed $skills
-     *
      * @return Profile
      */
     public function setSkills($skills)
@@ -109,17 +104,12 @@ class Profile
         return $this;
     }
 
-    /**
-     * @return mixed
-     */
     public function getLevels()
     {
         return $this->levels;
     }
 
     /**
-     * @param mixed $levels
-     *
      * @return Profile
      */
     public function setLevels($levels)

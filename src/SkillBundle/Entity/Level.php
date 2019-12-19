@@ -101,17 +101,12 @@ class Level
         return $this;
     }
 
-    /**
-     * @return mixed
-     */
     public function getPosition()
     {
         return $this->position;
     }
 
     /**
-     * @param mixed $position
-     *
      * @return Level
      */
     public function setPosition($position)
@@ -121,17 +116,12 @@ class Level
         return $this;
     }
 
-    /**
-     * @return mixed
-     */
     public function getShortName()
     {
         return $this->shortName;
     }
 
     /**
-     * @param mixed $shortName
-     *
      * @return Level
      */
     public function setShortName($shortName)
@@ -150,8 +140,6 @@ class Level
     }
 
     /**
-     * @param mixed $profile
-     *
      * @return Level
      */
     public function setProfile($profile)

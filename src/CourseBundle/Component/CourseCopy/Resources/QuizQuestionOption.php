@@ -15,8 +15,6 @@ class QuizQuestionOption extends Resource
 
     /**
      * QuizQuestionOption constructor.
-     *
-     * @param mixed $obj
      */
     public function __construct($obj)
     {

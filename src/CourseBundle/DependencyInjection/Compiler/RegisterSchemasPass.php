@@ -14,9 +14,6 @@ use Symfony\Component\DependencyInjection\Reference;
  */
 class RegisterSchemasPass implements CompilerPassInterface
 {
-    /**
-     * {@inheritdoc}
-     */
     public function process(ContainerBuilder $container)
     {
         if (!$container->hasDefinition('chamilo_course.registry.settings_schema')) {

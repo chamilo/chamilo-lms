@@ -75,17 +75,12 @@ class MenuItemModel implements MenuItemInterface
         $this->badgeColor = $badgeColor;
     }
 
-    /**
-     * @return mixed
-     */
     public function getBadge()
     {
         return $this->badge;
     }
 
     /**
-     * @param mixed $badge
-     *
      * @return $this
      */
     public function setBadge($badge)
@@ -111,17 +106,12 @@ class MenuItemModel implements MenuItemInterface
         $this->children = $children;
     }
 
-    /**
-     * @return mixed
-     */
     public function getIcon()
     {
         return $this->icon;
     }
 
     /**
-     * @param mixed $icon
-     *
      * @return $this
      */
     public function setIcon($icon)
@@ -131,17 +121,12 @@ class MenuItemModel implements MenuItemInterface
         return $this;
     }
 
-    /**
-     * @return mixed
-     */
     public function getIdentifier()
     {
         return $this->identifier;
     }
 
     /**
-     * @param mixed $identifier
-     *
      * @return $this
      */
     public function setIdentifier($identifier)

@@ -14,9 +14,6 @@ use Symfony\Component\Form\FormBuilderInterface;
  */
 class LinkCourseSettingsSchema extends AbstractSettingsSchema
 {
-    /**
-     * {@inheritdoc}
-     */
     public function buildSettings(AbstractSettingsBuilder $builder)
     {
         $builder
@@ -30,9 +27,6 @@ class LinkCourseSettingsSchema extends AbstractSettingsSchema
         $this->setMultipleAllowedTypes($allowedTypes, $builder);
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function buildForm(FormBuilderInterface $builder)
     {
         $builder

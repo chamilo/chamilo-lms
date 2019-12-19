@@ -24,7 +24,6 @@ class ProfileType extends AbstractType
 {
     /**
      * @todo replace hardcode values of locale.preferred_choices
-     * {@inheritdoc}
      */
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
@@ -160,8 +159,6 @@ class ProfileType extends AbstractType
     }
 
     /**
-     * {@inheritdoc}
-     *
      * @deprecated Remove it when bumping requirements to Symfony 2.7+
      */
     /*public function setDefaultOptions(OptionsResolverInterface $resolver)
@@ -169,9 +166,6 @@ class ProfileType extends AbstractType
         $this->configureOptions($resolver);
     }*/
 
-    /**
-     * {@inheritdoc}
-     */
     public function configureOptions(OptionsResolver $resolver)
     {
         $resolver->setDefaults(

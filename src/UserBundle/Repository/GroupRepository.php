@@ -23,9 +23,6 @@ class GroupRepository
         $this->repository = $entityManager->getRepository(Group::class);
     }
 
-    /**
-     * @return mixed
-     */
     public function getAdmins()
     {
         $criteria = ['name' => 'admins'];

@@ -16,14 +16,8 @@ use Chamilo\CoreBundle\Entity\Session;
  */
 interface CourseControllerInterface
 {
-    /**
-     * @return mixed
-     */
     public function setCourse(Course $course);
 
-    /**
-     * @return mixed
-     */
     public function setSession(Session $session);
 
     /**

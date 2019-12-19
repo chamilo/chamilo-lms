@@ -23,9 +23,6 @@ class Attendance extends Resource
         $this->params = $params;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function show()
     {
         parent::show();

@@ -16,9 +16,6 @@ use Symfony\Component\Form\Extension\Core\Type\TextType;
  */
 class UserAdmin extends BaseUserAdmin
 {
-    /**
-     * {@inheritdoc}
-     */
     protected function configureFormFields(FormMapper $formMapper): void
     {
         // define group zoning

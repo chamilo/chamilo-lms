@@ -62,8 +62,6 @@ class LoginFormAuthenticator extends AbstractFormLoginAuthenticator
     }
 
     /**
-     * @param mixed $credentials
-     *
      * @throws \Exception
      *
      * @return bool

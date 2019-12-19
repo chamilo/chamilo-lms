@@ -16,9 +16,6 @@ use Symfony\Component\OptionsResolver\OptionsResolverInterface;
  */
 class ProfileFosUserType extends AbstractType
 {
-    /**
-     * {@inheritdoc}
-     */
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
@@ -28,8 +25,6 @@ class ProfileFosUserType extends AbstractType
     }
 
     /**
-     * {@inheritdoc}
-     *
      * @deprecated Remove it when bumping requirements to Symfony 2.7+
      */
     public function setDefaultOptions(OptionsResolverInterface $resolver)
@@ -37,9 +32,6 @@ class ProfileFosUserType extends AbstractType
         $this->configureOptions($resolver);
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function configureOptions(OptionsResolver $resolver)
     {
         $resolver->setDefaults(

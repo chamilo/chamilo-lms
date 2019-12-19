@@ -12,9 +12,6 @@ namespace Chamilo\ThemeBundle\Model;
  */
 interface MenuItemInterface
 {
-    /**
-     * @return mixed
-     */
     public function getIdentifier();
 
     /**
@@ -44,9 +41,6 @@ interface MenuItemInterface
      */
     public function hasChildren();
 
-    /**
-     * @return mixed
-     */
     public function getChildren();
 
     /**
@@ -59,14 +53,8 @@ interface MenuItemInterface
      */
     public function removeChild(self $child);
 
-    /**
-     * @return mixed
-     */
     public function getIcon();
 
-    /**
-     * @return mixed
-     */
     public function getBadge();
 
     /**

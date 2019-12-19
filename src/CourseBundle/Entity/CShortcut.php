@@ -71,17 +71,12 @@ class CShortcut extends AbstractResource implements ResourceInterface
         return $this->getName();
     }
 
-    /**
-     * @return mixed
-     */
     public function getShortCutNode()
     {
         return $this->shortCutNode;
     }
 
     /**
-     * @param mixed $shortCutNode
-     *
      * @return CShortcut
      */
     public function setShortCutNode($shortCutNode)

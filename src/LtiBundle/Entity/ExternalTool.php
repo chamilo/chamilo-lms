@@ -422,9 +422,6 @@ class ExternalTool
         return (bool) $unserialize['share_name'];
     }
 
-    /**
-     * @return mixed
-     */
     public function unserializePrivacy()
     {
         return unserialize($this->privacy);
@@ -497,17 +494,12 @@ class ExternalTool
         return $newKey;
     }
 
-    /**
-     * @return ArrayCollection
-     */
     public function getChildren(): ArrayCollection
     {
         return $this->children;
     }
 
     /**
-     * @param ArrayCollection $children
-     *
      * @return ExternalTool
      */
     public function setChildren(ArrayCollection $children): self

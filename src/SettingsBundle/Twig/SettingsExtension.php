@@ -29,9 +29,6 @@ class SettingsExtension extends AbstractExtension
         $this->helper = $helper;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function getFunctions()
     {
         return [
@@ -41,9 +38,6 @@ class SettingsExtension extends AbstractExtension
         ];
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function getFilters()
     {
         return [
@@ -68,17 +62,12 @@ class SettingsExtension extends AbstractExtension
 
     /**
      * @param $name
-     *
-     * @return mixed
      */
     public function getSettingsParameter($name)
     {
         return $this->helper->getSettingsParameter($name);
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function getName()
     {
         return 'chamilo_settings';

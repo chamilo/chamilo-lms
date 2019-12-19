@@ -22,8 +22,6 @@ final class CGroupInfoRepository extends ResourceRepository
 
     /**
      * @param string $code
-     *
-     * @return mixed
      */
     public function findOneByCode($code)
     {
@@ -32,8 +30,6 @@ final class CGroupInfoRepository extends ResourceRepository
 
     /**
      * @param string $name
-     *
-     * @return mixed
      */
     public function findOneByTitle($name)
     {

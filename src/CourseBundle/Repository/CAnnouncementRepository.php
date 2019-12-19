@@ -22,8 +22,6 @@ final class CAnnouncementRepository extends ResourceRepository
      * @param int|null $start
      * @param int|null $limit
      * @param string   $titleToSearch
-     *
-     * @return mixed
      */
     public function getAnnouncements(
         User $user,

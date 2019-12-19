@@ -62,17 +62,12 @@ class CategoryTranslation
         return (string) $this->headline;
     }
 
-    /**
-     * @return mixed
-     */
     public function getHeadline()
     {
         return $this->headline;
     }
 
     /**
-     * @param mixed $headline
-     *
      * @return CategoryTranslation
      */
     public function setHeadline($headline)
@@ -82,17 +77,12 @@ class CategoryTranslation
         return $this;
     }
 
-    /**
-     * @return mixed
-     */
     public function getBody()
     {
         return $this->body;
     }
 
     /**
-     * @param mixed $body
-     *
      * @return CategoryTranslation
      */
     public function setBody($body)
@@ -102,17 +92,12 @@ class CategoryTranslation
         return $this;
     }
 
-    /**
-     * @return mixed
-     */
     public function getSlug()
     {
         return $this->slug;
     }
 
     /**
-     * @param mixed $slug
-     *
      * @return CategoryTranslation
      */
     public function setSlug($slug)

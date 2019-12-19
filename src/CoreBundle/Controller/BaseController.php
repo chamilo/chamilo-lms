@@ -139,6 +139,24 @@ abstract class BaseController extends AbstractController
         return $url;
     }
 
+    public function getCourseUrlQueryToArray(): array
+    {
+        $url = [];
+        $course = $this->getCourse();
+        $url['cid'] = 0;
+        if ($course) {
+            $url['cid'] = $course->getId();
+        }
+        $session = $this->getCourseSession();
+
+        $url['sid'] = 0;
+        if ($session) {
+            $url['sid'] = $session->getId();
+        }
+
+        return $url;
+    }
+
     public function getResourceParams(Request $request): array
     {
         $tool = $request->get('tool');

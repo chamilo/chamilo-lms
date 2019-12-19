@@ -46,7 +46,7 @@ class CourseHomeController extends ToolBaseController
     {
         $this->autoLaunch();
         $course = $this->getCourse();
-        $session = $this->getRequest()->getSession();
+        $session = $request->getSession();
 
         $js = '<script>'.api_get_language_translate_html().'</script>';
         $htmlHeadXtra[] = $js;

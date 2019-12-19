@@ -33,7 +33,7 @@ class CourseAdmin extends AbstractAdmin
     {
         $instance = parent::getNewInstance();
         $instance->setVisibility('2');
-        $instance->setCourseLanguage($this->getTranslator()->getLocale());
+        //$instance->setCourseLanguage($this->getLabelTranslatorStrategy()->getLocale());
 
         return $instance;
     }

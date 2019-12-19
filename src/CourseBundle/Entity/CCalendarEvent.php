@@ -4,6 +4,7 @@
 
 namespace Chamilo\CourseBundle\Entity;
 
+use Chamilo\CoreBundle\Entity\Room;
 use Doctrine\ORM\Mapping as ORM;
 
 /**

@@ -230,8 +230,8 @@ class CourseListener
         // This controller implements ToolInterface? Then set the course/session
         if (is_array($controllerList) &&
             (
-                $controllerList[0] instanceof CourseControllerInterface ||
-                $controllerList[0] instanceof ResourceController
+                $controllerList[0] instanceof CourseControllerInterface
+                //$controllerList[0] instanceof ResourceController
 
                 //|| $controllerList[0] instanceof LegacyController
             )

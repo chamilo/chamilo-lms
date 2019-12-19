@@ -5,6 +5,7 @@
 namespace Chamilo\CourseBundle\Entity;
 
 use Chamilo\CoreBundle\Entity\Course;
+use Chamilo\CoreBundle\Entity\Session;
 use Chamilo\UserBundle\Entity\User;
 use Doctrine\ORM\Mapping as ORM;
 
@@ -421,7 +422,7 @@ class CItemProperty
     }
 
     /**
-     * @return CgroupInfo
+     * @return CGroupInfo
      */
     public function getGroup()
     {
@@ -429,7 +430,7 @@ class CItemProperty
     }
 
     /**
-     * @param CgroupInfo $group
+     * @param CGroupInfo $group
      *
      * @return CItemProperty
      */

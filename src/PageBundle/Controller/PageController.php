@@ -231,7 +231,7 @@ class PageController extends BaseController
             /** @var Block $blockToEdit */
             $blockToEdit->setSetting('rawContent', $content);
             $blockToEdit->setSetting('content', $content);
-            $em->merge($blockToEdit);
+            $em->persist($blockToEdit);
             $em->flush();
             $this->addFlash('success', $this->trans('Updated'));
 

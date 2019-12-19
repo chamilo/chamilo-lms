@@ -10,12 +10,13 @@
         <directory name="src" />
         <ignoreFiles>
             <directory name="vendor" />
-            <directory name="src/AdminBundle" />
-            <directory name="src/ClassificationBundle" />
+<!--            <directory name="src/AdminBundle" />-->
+<!--            <directory name="src/ClassificationBundle" />-->
 <!--            <directory name="src/CoreBundle" />-->
             <directory name="src/CoreBundle/Migrations" />
             <directory name="src/CoreBundle/Component/Editor" />
-            <directory name="src/CourseBundle" />
+<!--            <directory name="src/CourseBundle" />-->
+            <directory name="src/CourseBundle/Component/CourseCopy" />
             <directory name="src/FaqBundle" />
             <directory name="src/GraphQlBundle" />
             <directory name="src/LtiBundle" />
@@ -23,7 +24,7 @@
 <!--            <directory name="src/NotificationBundle" />-->
 <!--            <directory name="src/PageBundle" />-->
 <!--            <directory name="src/SettingsBundle" />-->
-            <directory name="src/SkillBundle" />
+<!--            <directory name="src/SkillBundle" />-->
 <!--            <directory name="src/ThemeBundle" />-->
 <!--            <directory name="src/TicketBundle" />-->
 <!--            <directory name="src/TimelineBundle" />-->
@@ -38,17 +39,8 @@
 
         <!-- level 3 issues - slightly lazy code writing, but provably low false-negatives -->
 
-        <DeprecatedMethod errorLevel="info" />
-        <DeprecatedProperty errorLevel="info" />
         <DeprecatedClass errorLevel="info" />
-        <DeprecatedConstant errorLevel="info" />
-        <DeprecatedFunction errorLevel="info" />
         <DeprecatedInterface errorLevel="info" />
-        <DeprecatedTrait errorLevel="info" />
-
-        <InternalMethod errorLevel="info" />
-        <InternalProperty errorLevel="info" />
-        <InternalClass errorLevel="info" />
 
         <MissingClosureReturnType errorLevel="info" />
         <MissingReturnType errorLevel="info" />

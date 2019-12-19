@@ -111,7 +111,7 @@ class CourseArchiver
             $webEditorCss = api_get_path(WEB_CSS_PATH).'editor.css';
             /** @var Document $document */
             foreach ($course->resources[RESOURCE_DOCUMENT] as $document) {
-                if (DOCUMENT == $document->file_type) {
+                if ('document' === $document->file_type) {
                     $doc_dir = $backup_dir.$document->path;
                     @mkdir(dirname($doc_dir), $perm_dirs, true);
                     if (file_exists($course->path.$document->path)) {
@@ -273,7 +273,7 @@ class CourseArchiver
      * @param string $filename
      * @param bool   $delete   Delete the file after reading the course?
      *
-     * @return course The course
+     * @return Course The course
      *
      * @todo Check if the archive is a correct Chamilo-export
      */

@@ -770,7 +770,7 @@ class SettingsManager implements SettingsManagerInterface
                 $parameter = $persistedParametersMap[$name];
                 $parameter->setSelectedValue($value);
                 $parameter->setCategory($simpleCategoryName);
-                $this->manager->merge($parameter);
+                $this->manager->persist($parameter);
             } else {
                 $parameter = new SettingsCurrent();
                 $parameter

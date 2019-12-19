@@ -51,6 +51,7 @@ use Doctrine\Common\Collections\Criteria;
 use Doctrine\ORM\Query\Expr\Join;
 use Symfony\Component\Security\Core\Exception\UsernameNotFoundException;
 use Symfony\Component\Serializer\Encoder\JsonEncoder;
+use Symfony\Component\Serializer\Normalizer\AbstractNormalizer;
 use Symfony\Component\Serializer\Normalizer\GetSetMethodNormalizer;
 use Symfony\Component\Serializer\Serializer;
 
@@ -1337,10 +1338,10 @@ class UserRepository extends ResourceRepository
         }
         $user->setLastLogin($lastLogin);
 
-        $dateNormalizer = new GetSetMethodNormalizer();
+        /*$dateNormalizer = new GetSetMethodNormalizer();
         $dateNormalizer->setCircularReferenceHandler(function ($object) {
             return get_class($object);
-        });
+        });*/
 
         $ignore = [
             'twoStepVerificationCode',
@@ -1368,23 +1369,24 @@ class UserRepository extends ResourceRepository
             'salt',
         ];
 
-        $dateNormalizer->setIgnoredAttributes($ignore);
-
         $callback = function ($dateTime) {
             return $dateTime instanceof \DateTime ? $dateTime->format(\DateTime::ATOM) : '';
         };
 
-        $dateNormalizer->setCallbacks(
-            [
+        $defaultContext = [
+            AbstractNormalizer::CALLBACKS => [
                 'createdAt' => $callback,
                 'lastLogin' => $callback,
                 'registrationDate' => $callback,
                 'memberSince' => $callback,
-            ]
-        );
+            ],
+            AbstractNormalizer::CIRCULAR_REFERENCE_HANDLER => function ($object, $format, $context) {
+                return get_class($object);
+            },
+        ];
 
-        $normalizers = [$dateNormalizer];
-        $serializer = new Serializer($normalizers, [new JsonEncoder()]);
+        $normalizer = new GetSetMethodNormalizer(null, null, null, null, null, $defaultContext);
+        $serializer = new Serializer( [$normalizer], [new JsonEncoder()], [AbstractNormalizer::IGNORED_ATTRIBUTES => $ignore]);
 
         return $serializer->serialize($user, 'json');
     }

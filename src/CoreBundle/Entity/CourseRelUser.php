@@ -46,9 +46,6 @@ class CourseRelUser
     /**
      * @var int
      *
-     * @todo use status instead of this
-     *
-     * @deprecated
      * @ORM\Column(name="relation_type", type="integer", nullable=false, unique=false)
      */
     protected $relationType;
@@ -300,8 +297,6 @@ class CourseRelUser
 
     /**
      * Get relation_type list.
-     *
-     * @deprecated
      *
      * @return array
      */

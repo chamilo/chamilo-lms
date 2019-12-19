@@ -225,7 +225,7 @@ class Resource
      *
      * @param resource $resource
      */
-    public static function setClassType(&$resource)
+    public static function setClassType($resource)
     {
         $class = get_class($resource);
         switch ($class) {

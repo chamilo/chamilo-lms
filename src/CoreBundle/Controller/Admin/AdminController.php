@@ -77,7 +77,7 @@ class AdminController extends BaseController
         $blocks['users']['label'] = api_ucfirst(get_lang('Users'));
 
         if (api_is_platform_admin()) {
-            $search_form = $this->getSearchForm($adminUrl.'user_list.php')->return_form();
+            $search_form = $this->getSearchForm($adminUrl.'user_list.php')->returnForm();
             $blocks['users']['search_form'] = $search_form;
             $items = [
                 [
@@ -139,7 +139,7 @@ class AdminController extends BaseController
 
             $search_form = $this->getSearchForm(
                 $adminUrl.'course_list.php'
-            )->return_form();
+            )->returnForm();
             $blocks['courses']['search_form'] = $search_form;
 
             $items = [];
@@ -218,7 +218,7 @@ class AdminController extends BaseController
 
             $form = $this->getSearchForm($adminUrl.'settings.php');
             $form->addElement('hidden', 'category', 'search_setting');
-            $search_form = $form->return_form();
+            $search_form = $form->returnForm();
             $blocks['platform']['search_form'] = $search_form;
 
             $items = [];
@@ -297,7 +297,7 @@ class AdminController extends BaseController
         $blocks['sessions']['label'] = api_ucfirst(get_lang('Course sessions'));
         $search_form = $this->getSearchForm(
             api_get_path(WEB_CODE_PATH).'session/session_list.php'
-        )->return_form();
+        )->returnForm();
         $blocks['sessions']['search_form'] = $search_form;
         $items = [];
         $items[] = [

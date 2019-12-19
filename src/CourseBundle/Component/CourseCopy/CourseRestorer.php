@@ -296,7 +296,7 @@ class CourseRestorer
         $webEditorCss = api_get_path(WEB_CSS_PATH).'editor.css';
         $table = Database::get_course_table(TABLE_DOCUMENT);
         $resources = $this->course->resources;
-        $path = api_get_path(SYS_COURSE_PATH).$this->course->destination_path.'/';
+        //$path = api_get_path(SYS_COURSE_PATH).$this->course->destination_path.'/';
 
         foreach ($resources[RESOURCE_DOCUMENT] as $id => $document) {
             $my_session_id = empty($document->item_properties[0]['id_session']) ? 0 : $session_id;
@@ -311,7 +311,8 @@ class CourseRestorer
                 // Check if the parent path exists.
                 foreach ($folderList as $folder) {
                     $folderToCreate = $tempFolder.$folder;
-                    $sysFolderPath = $path.'document'.$folderToCreate;
+                    //$sysFolderPath = $path.'document'.$folderToCreate;
+                    $sysFolderPath = null;
                     $tempFolder .= $folder.'/';
 
                     if (empty($folderToCreate)) {
@@ -1007,7 +1008,7 @@ class CourseRestorer
      */
     public function restore_scorm_documents()
     {
-        $perm = api_get_permissions_for_new_directories();
+        /*$perm = api_get_permissions_for_new_directories();
         if ($this->course->has_resources(RESOURCE_SCORM)) {
             $resources = $this->course->resources;
             foreach ($resources[RESOURCE_SCORM] as $document) {
@@ -1072,7 +1073,7 @@ class CourseRestorer
                     );
                 }
             } // end for each
-        }
+        }*/
     }
 
     /**
@@ -1424,8 +1425,8 @@ class CourseRestorer
             $new_id = Database::insert($link_cat_table, $params);
 
             if ($new_id) {
-                $sql = "UPDATE $link_cat_table 
-                        SET id = iid 
+                $sql = "UPDATE $link_cat_table
+                        SET id = iid
                         WHERE iid = $new_id";
                 Database::query($sql);
 
@@ -2982,43 +2983,6 @@ class CourseRestorer
                     $this->course->resources[RESOURCE_LEARNPATH][$id]->destination_id = $new_lp_id;
                 }
             }
-        }
-    }
-
-    /**
-     * Copy all directory and sub directory.
-     *
-     * @param string $source    The path origin
-     * @param string $dest      The path destination
-     * @param bool   $overwrite Option Overwrite
-     *
-     * @deprecated
-     */
-    public function allow_create_all_directory($source, $dest, $overwrite = false)
-    {
-        if (!is_dir($dest)) {
-            mkdir($dest, api_get_permissions_for_new_directories());
-        }
-        if ($handle = opendir($source)) {
-            // if the folder exploration is sucsessful, continue
-            while (false !== ($file = readdir($handle))) {
-                // as long as storing the next file to $file is successful, continue
-                if ('.' != $file && '..' != $file) {
-                    $path = $source.'/'.$file;
-                    if (is_file($path)) {
-                        /* if (!is_file($dest . '/' . $file) || $overwrite)
-                         if (!@copy($path, $dest . '/' . $file)) {
-                             echo '<font color="red">File ('.$path.') '.get_lang('The user doesn't have permissions to do the requested operation.').'</font>';
-                         }*/
-                    } elseif (is_dir($path)) {
-                        if (!is_dir($dest.'/'.$file)) {
-                            mkdir($dest.'/'.$file);
-                        }
-                        self:: allow_create_all_directory($path, $dest.'/'.$file, $overwrite);
-                    }
-                }
-            }
-            closedir($handle);
         }
     }
 

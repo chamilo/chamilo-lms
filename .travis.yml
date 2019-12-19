@@ -83,6 +83,7 @@ script:
   - cd tests/behat
   #  - travis_wait 45 ../../vendor/behat/behat/bin/behat -v
   - ../../vendor/behat/behat/bin/behat features/actionInstall.feature
+  - sudo cat /var/log/apache2/error.log
   - ../../vendor/behat/behat/bin/behat features/adminFillUsers.feature
   - ../../vendor/behat/behat/bin/behat features/course.feature
   - ../../vendor/behat/behat/bin/behat features/createUser.feature

@@ -86,10 +86,10 @@ script:
   - ../../vendor/behat/behat/bin/behat features/adminFillUsers.feature
   - ../../vendor/behat/behat/bin/behat features/course.feature
   - ../../vendor/behat/behat/bin/behat features/createUser.feature
-  # - sudo cat /var/log/apache2/$VHOST_URL-access.log
+  - sudo apachectl -S
+  - sudo cat /var/log/apache2/error.log
 
 after_failure:
-  - sudo apache2ctl -M
   - sudo cat /var/log/apache2/error.log
 
 # configure notifications (email, IRC, campfire etc)

@@ -9,3 +9,4 @@ parameters:
     sets:
         - 'clean-code'
         - 'symfony'
+        - 'symfony-risky'

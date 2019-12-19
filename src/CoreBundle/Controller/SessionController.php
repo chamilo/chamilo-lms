@@ -67,7 +67,7 @@ class SessionController extends AbstractController
             $sessionCourse = $sessionRelCourse->getCourse();
             $courseTags = [];
 
-            if (!is_null($tagField)) {
+            if (null !== $tagField) {
                 $courseTags = $fieldTagsRepo->getTags($tagField, $sessionCourse->getId());
             }
 

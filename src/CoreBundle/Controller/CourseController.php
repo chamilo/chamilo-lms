@@ -99,7 +99,7 @@ class CourseController extends AbstractController
 
         $courseTags = [];
 
-        if (!is_null($tagField)) {
+        if (null !== $tagField) {
             $courseTags = $fieldTagsRepo->getTags($tagField, $courseId);
         }
 

@@ -56,10 +56,10 @@ class Version20151214170800 extends AbstractMigrationChamilo
             switch ($answer['hotspot_type']) {
                 case 'square':
                     $oldCenter = explode(';', $oldPairedString[0]);
-                    $oldCenterX = intval($oldCenter[0]);
-                    $oldCenterY = intval($oldCenter[1]);
-                    $oldWidth = intval($oldPairedString[1]);
-                    $oldHeight = intval($oldPairedString[2]);
+                    $oldCenterX = (int) ($oldCenter[0]);
+                    $oldCenterY = (int) ($oldCenter[1]);
+                    $oldWidth = (int) ($oldPairedString[1]);
+                    $oldHeight = (int) ($oldPairedString[2]);
 
                     $newX = floor(($oldCenterX - $oldWidth / 2) * $widthRatio) + ceil($widthRatio);
                     $newY = floor(($oldCenterY - $oldHeight / 2) * $heightRatio) + ceil($heightRatio);
@@ -73,10 +73,10 @@ class Version20151214170800 extends AbstractMigrationChamilo
                     break;
                 case 'circle':
                     $oldCenter = explode(';', $oldPairedString[0]);
-                    $oldCenterX = intval($oldCenter[0]);
-                    $oldCenterY = intval($oldCenter[1]);
-                    $oldRadiusX = intval($oldPairedString[1]) / 2;
-                    $oldRadiusY = intval($oldPairedString[2]) / 2;
+                    $oldCenterX = (int) ($oldCenter[0]);
+                    $oldCenterY = (int) ($oldCenter[1]);
+                    $oldRadiusX = (int) ($oldPairedString[1]) / 2;
+                    $oldRadiusY = (int) ($oldPairedString[2]) / 2;
 
                     $newCenterX = floor($oldCenterX * $widthRatio) + ceil($widthRatio);
                     $newCenterY = floor($oldCenterY * $heightRatio) + ceil($heightRatio);
@@ -94,8 +94,8 @@ class Version20151214170800 extends AbstractMigrationChamilo
                     $paired = [];
                     foreach ($oldPairedString as $pairString) {
                         $pair = explode(';', $pairString);
-                        $x = isset($pair[0]) ? intval($pair[0]) : 0;
-                        $y = isset($pair[1]) ? intval($pair[1]) : 0;
+                        $x = isset($pair[0]) ? (int) ($pair[0]) : 0;
+                        $y = isset($pair[1]) ? (int) ($pair[1]) : 0;
 
                         $paired[] = [$x, $y];
                     }

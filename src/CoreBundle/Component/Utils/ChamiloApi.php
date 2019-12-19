@@ -312,7 +312,7 @@ class ChamiloApi
             foreach ($palette as $index => $color) {
                 $components = preg_split('/,/', trim($color));
                 $components[3] = round($components[3] / 100, 1);
-                $palette[$index] = join(',', $components);
+                $palette[$index] = implode(',', $components);
             }
         }
         if ($wrapInRGBA) {

@@ -46,8 +46,8 @@ class ExtraFieldValuesRepository extends ServiceEntityRepository
             )
             ->where(
                 $queryBuilder->expr()->andX(
-                    $queryBuilder->expr()->eq('f.extraFieldType', intval($extraFieldType)),
-                    $queryBuilder->expr()->eq('fv.itemId', intval($itemId)),
+                    $queryBuilder->expr()->eq('f.extraFieldType', (int) $extraFieldType),
+                    $queryBuilder->expr()->eq('fv.itemId', (int) $itemId),
                     $queryBuilder->expr()->eq('f.visibleToSelf', true)
                 )
             )

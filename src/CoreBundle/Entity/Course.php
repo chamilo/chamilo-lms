@@ -913,7 +913,7 @@ class Course extends AbstractResource implements ResourceInterface
      */
     public function setDiskQuota($diskQuota)
     {
-        $this->diskQuota = intval($diskQuota);
+        $this->diskQuota = (int) $diskQuota;
 
         return $this;
     }

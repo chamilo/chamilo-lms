@@ -46,12 +46,12 @@ before_install:
   - export DISPLAY=:99.0
   - sleep 10
   # Get Selenium
-  - wget http://selenium-release.storage.googleapis.com/3.1/selenium-server-standalone-3.1.0.jar
+  - wget http://selenium-release.storage.googleapis.com/3.141/selenium-server-standalone-3.141.59.jar
   # Check java
   - java -version
   - sudo apt-get install oracle-java8-installer
   - java -version
-  - java -jar selenium-server-standalone-3.1.0.jar -log selenium.log  > /dev/null &
+  - java -jar selenium-server-standalone-3.141.59.jar -log selenium.log  > /dev/null &
   - nohup bash -c "webdriver-manager start 2>&1 &"
   - sleep 10
 

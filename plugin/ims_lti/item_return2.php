@@ -74,5 +74,5 @@ Display::addFlash(
 ?>
 <!DOCTYPE html>
 <body>
-<script>window.parent.localtion.href = '<?php echo api_get_course_url(); ?>';</script>
+<script>window.parent.location.href = '<?php echo api_get_course_url(); ?>';</script>
 </body>

@@ -29,8 +29,6 @@ class MenuListener
     /**
      * @param $route
      * @param $items
-     *
-     * @return mixed
      */
     protected function activateByRoute($route, $items)
     {

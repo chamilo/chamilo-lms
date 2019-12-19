@@ -13,9 +13,6 @@ use Doctrine\DBAL\Types\Type;
  */
 class Version20170904173000 extends AbstractMigrationChamilo
 {
-    /**
-     * {@inheritdoc}
-     */
     public function getOrder()
     {
         return 3;

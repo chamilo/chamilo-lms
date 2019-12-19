@@ -14,9 +14,6 @@ use Symfony\Component\Form\FormBuilderInterface;
  */
 class SurveySettingsSchema extends AbstractSettingsSchema
 {
-    /**
-     * {@inheritdoc}
-     */
     public function buildSettings(AbstractSettingsBuilder $builder)
     {
         $builder
@@ -33,9 +30,6 @@ class SurveySettingsSchema extends AbstractSettingsSchema
 //            );
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function buildForm(FormBuilderInterface $builder)
     {
         $builder

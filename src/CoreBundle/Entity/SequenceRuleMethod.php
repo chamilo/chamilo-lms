@@ -68,33 +68,21 @@ class SequenceRuleMethod
         $this->methodOrder = $methodOrder;
     }
 
-    /**
-     * @return mixed
-     */
     public function getRule()
     {
         return $this->rule;
     }
 
-    /**
-     * @param mixed $rule
-     */
     public function setRule($rule)
     {
         $this->rule = $rule;
     }
 
-    /**
-     * @return mixed
-     */
     public function getMethod()
     {
         return $this->method;
     }
 
-    /**
-     * @param mixed $method
-     */
     public function setMethod($method)
     {
         $this->method = $method;

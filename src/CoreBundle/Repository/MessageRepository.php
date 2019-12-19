@@ -24,8 +24,6 @@ class MessageRepository extends ServiceEntityRepository
 
     /**
      * @param int $lastMessageId
-     *
-     * @return mixed
      */
     public function getFromLastOneReceived(User $user, $lastMessageId = 0)
     {

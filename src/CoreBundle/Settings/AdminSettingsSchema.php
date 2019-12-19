@@ -15,9 +15,6 @@ use Symfony\Component\Form\FormBuilderInterface;
  */
 class AdminSettingsSchema extends AbstractSettingsSchema
 {
-    /**
-     * {@inheritdoc}
-     */
     public function buildSettings(AbstractSettingsBuilder $builder)
     {
         $builder
@@ -39,9 +36,6 @@ class AdminSettingsSchema extends AbstractSettingsSchema
 //            );
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function buildForm(FormBuilderInterface $builder)
     {
         $builder

@@ -23,9 +23,6 @@ abstract class AbstractSettingsSchema implements SchemaInterface
         }
     }
 
-    /**
-     * @return mixed
-     */
     public function getRepository()
     {
         return $this->repository;

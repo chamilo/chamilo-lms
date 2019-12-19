@@ -101,8 +101,6 @@ class ToolResourceRight
     }
 
     /**
-     * @param mixed $mask
-     *
      * @return $this
      */
     public function setMask($mask)

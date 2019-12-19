@@ -15,9 +15,6 @@ use Sonata\AdminBundle\Form\FormMapper;
  */
 class ToolResourceRightAdmin extends AbstractAdmin
 {
-    /**
-     * {@inheritdoc}
-     */
     protected function configureFormFields(FormMapper $formMapper)
     {
         $formMapper
@@ -35,9 +32,6 @@ class ToolResourceRightAdmin extends AbstractAdmin
         ;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     protected function configureDatagridFilters(DatagridMapper $datagridMapper)
     {
         $datagridMapper
@@ -45,9 +39,6 @@ class ToolResourceRightAdmin extends AbstractAdmin
         ;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     protected function configureListFields(ListMapper $listMapper)
     {
         $listMapper

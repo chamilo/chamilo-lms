@@ -486,17 +486,12 @@ class AccessUrl extends AbstractResource implements ResourceInterface
         return $this;
     }
 
-    /**
-     * @return mixed
-     */
     public function getSettings()
     {
         return $this->settings;
     }
 
     /**
-     * @param mixed $settings
-     *
      * @return AccessUrl
      */
     public function setSettings($settings)
@@ -506,17 +501,12 @@ class AccessUrl extends AbstractResource implements ResourceInterface
         return $this;
     }
 
-    /**
-     * @return mixed
-     */
     public function getSessionCategory()
     {
         return $this->sessionCategory;
     }
 
     /**
-     * @param mixed $sessionCategory
-     *
      * @return AccessUrl
      */
     public function setSessionCategory($sessionCategory)

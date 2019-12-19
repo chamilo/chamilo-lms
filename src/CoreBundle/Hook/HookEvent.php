@@ -44,9 +44,6 @@ abstract class HookEvent implements HookEventInterface
         $this->loadAttachments();
     }
 
-    /**
-     * @return EntityManager
-     */
     public function getEntityManager(): EntityManager
     {
         return $this->entityManager;
@@ -188,8 +185,6 @@ abstract class HookEvent implements HookEventInterface
 
     /**
      * Clear all hookObservers without detach them.
-     *
-     * @return mixed
      */
     public function clearAttachments()
     {

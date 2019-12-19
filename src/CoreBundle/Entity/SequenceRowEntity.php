@@ -147,17 +147,12 @@ class SequenceRowEntity
         return $this;
     }
 
-    /**
-     * @return mixed
-     */
     public function getType()
     {
         return $this->type;
     }
 
     /**
-     * @param mixed $type
-     *
      * @return SequenceRowEntity
      */
     public function setType($type)

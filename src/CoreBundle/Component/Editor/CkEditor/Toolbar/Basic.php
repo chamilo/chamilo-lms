@@ -72,9 +72,6 @@ class Basic extends Toolbar
      */
     public $plugins = [];
 
-    /**
-     * {@inheritdoc}
-     */
     public function __construct(
         $router,
         $toolbar = null,

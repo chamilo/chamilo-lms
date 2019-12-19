@@ -18,9 +18,6 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
  */
 class CDocumentType extends AbstractType
 {
-    /**
-     * {@inheritdoc}
-     */
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
@@ -76,9 +73,6 @@ class CDocumentType extends AbstractType
             ->add('save', SubmitType::class);
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function configureOptions(OptionsResolver $resolver)
     {
         $resolver->setDefaults(
@@ -88,9 +82,6 @@ class CDocumentType extends AbstractType
         );
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function getName()
     {
         return 'chamilo_document';

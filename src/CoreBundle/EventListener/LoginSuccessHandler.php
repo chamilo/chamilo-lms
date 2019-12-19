@@ -37,8 +37,6 @@ class LoginSuccessHandler
     }
 
     /**
-     * @param InteractiveLoginEvent $event
-     *
      * @return RedirectResponse|null
      */
     public function onSecurityInteractiveLogin(InteractiveLoginEvent $event)

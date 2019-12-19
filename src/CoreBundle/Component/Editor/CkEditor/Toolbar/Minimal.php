@@ -9,9 +9,6 @@ namespace Chamilo\CoreBundle\Component\Editor\CkEditor\Toolbar;
  */
 class Minimal extends Basic
 {
-    /**
-     * @return mixed
-     */
     public function getConfig()
     {
         $config['toolbar'] = [

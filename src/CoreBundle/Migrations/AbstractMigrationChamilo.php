@@ -122,8 +122,6 @@ abstract class AbstractMigrationChamilo extends AbstractMigration
 
     /**
      * @param string $variable
-     *
-     * @return mixed
      */
     public function getConfigurationValue($variable)
     {

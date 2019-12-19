@@ -13,9 +13,6 @@ use Sonata\AdminBundle\Show\ShowMapper;
  */
 class SessionRelCourseAdmin extends AbstractAdmin
 {
-    /**
-     * {@inheritdoc}
-     */
     protected function configureShowField(ShowMapper $showMapper)
     {
         $showMapper
@@ -23,9 +20,6 @@ class SessionRelCourseAdmin extends AbstractAdmin
         ;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     protected function configureFormFields(FormMapper $formMapper)
     {
         $formMapper
@@ -35,9 +29,6 @@ class SessionRelCourseAdmin extends AbstractAdmin
         ;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     protected function configureDatagridFilters(DatagridMapper $datagridMapper)
     {
         $datagridMapper
@@ -45,9 +36,6 @@ class SessionRelCourseAdmin extends AbstractAdmin
         ;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     protected function configureListFields(ListMapper $listMapper)
     {
         $listMapper

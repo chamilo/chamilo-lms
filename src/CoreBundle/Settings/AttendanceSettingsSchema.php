@@ -13,9 +13,6 @@ use Symfony\Component\Form\FormBuilderInterface;
  */
 class AttendanceSettingsSchema extends AbstractSettingsSchema
 {
-    /**
-     * {@inheritdoc}
-     */
     public function buildSettings(AbstractSettingsBuilder $builder)
     {
         $builder
@@ -30,9 +27,6 @@ class AttendanceSettingsSchema extends AbstractSettingsSchema
         ;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function buildForm(FormBuilderInterface $builder)
     {
         $builder

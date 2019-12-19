@@ -2,6 +2,9 @@ services:
     SlevomatCodingStandard\Sniffs\Variables\UnusedVariableSniff:
         ignoreUnusedValuesWhenOnlyKeysAreUsedInForeach: 'true'
 
+    PhpCsFixer\Fixer\Phpdoc\NoSuperfluousPhpdocTagsFixer:
+        remove_inheritdoc: true
+
 parameters:
     sets:
         - 'clean-code'

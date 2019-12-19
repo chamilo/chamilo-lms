@@ -18,8 +18,6 @@ class Collection extends BaseCollection
 
     /**
      * Get id.
-     *
-     * @return int
      */
     public function getId(): int
     {

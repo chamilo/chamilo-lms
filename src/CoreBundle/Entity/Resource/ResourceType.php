@@ -57,17 +57,12 @@ class ResourceType
         return (string) $this->name;
     }
 
-    /**
-     * @return mixed
-     */
     public function getId()
     {
         return $this->id;
     }
 
     /**
-     * @param mixed $id
-     *
      * @return ResourceType
      */
     public function setId($id)
@@ -117,17 +112,12 @@ class ResourceType
         return $this;
     }
 
-    /**
-     * @return mixed
-     */
     public function getResourceNodes()
     {
         return $this->resourceNodes;
     }
 
     /**
-     * @param mixed $resourceNodes
-     *
      * @return ResourceType
      */
     public function setResourceNodes($resourceNodes)

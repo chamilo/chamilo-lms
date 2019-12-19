@@ -25,9 +25,6 @@ class IllustrationType extends AbstractType
         );*/
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function getParent()
     {
         return FileType::class;

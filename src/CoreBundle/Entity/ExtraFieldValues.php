@@ -75,8 +75,6 @@ class ExtraFieldValues // extends BaseAttributeValue
     }
 
     /**
-     * @param mixed $field
-     *
      * @return ExtraFieldValues
      */
     public function setField($field)

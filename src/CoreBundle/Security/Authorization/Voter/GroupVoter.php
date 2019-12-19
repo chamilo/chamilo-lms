@@ -55,17 +55,12 @@ class GroupVoter extends Voter
         return $this->entityManager;
     }
 
-    /**
-     * @return CourseRepository
-     */
     public function getCourseManager(): CourseRepository
     {
         return $this->courseManager;
     }
 
     /**
-     * @param CourseRepository $courseManager
-     *
      * @return GroupVoter
      */
     public function setCourseManager(CourseRepository $courseManager): self
@@ -75,17 +70,12 @@ class GroupVoter extends Voter
         return $this;
     }
 
-    /**
-     * @return CGroupInfoRepository
-     */
     public function getGroupManager(): CGroupInfoRepository
     {
         return $this->groupManager;
     }
 
     /**
-     * @param CGroupInfoRepository $groupManager
-     *
      * @return GroupVoter
      */
     public function setGroupManager(CGroupInfoRepository $groupManager): self
@@ -95,9 +85,6 @@ class GroupVoter extends Voter
         return $this;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     protected function supports($attribute, $subject): bool
     {
         $options = [
@@ -119,9 +106,6 @@ class GroupVoter extends Voter
         return true;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     protected function voteOnAttribute($attribute, $group, TokenInterface $token): bool
     {
         $user = $token->getUser();

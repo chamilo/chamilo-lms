@@ -62,8 +62,6 @@ interface HookEventInterface
 
     /**
      * Clear all hookObservers without detach them.
-     *
-     * @return mixed
      */
     public function clearAttachments();
 

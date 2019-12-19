@@ -27,9 +27,6 @@ class ShowUserListener
         }
     }
 
-    /**
-     * @return mixed
-     */
     public function getUser()
     {
         $security = $this->container->get('security.token_storage');

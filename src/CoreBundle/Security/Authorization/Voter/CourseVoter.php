@@ -61,9 +61,6 @@ class CourseVoter extends Voter
         return $this->courseManager;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     protected function supports($attribute, $subject): bool
     {
         $options = [
@@ -85,9 +82,6 @@ class CourseVoter extends Voter
         return true;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     protected function voteOnAttribute($attribute, $course, TokenInterface $token): bool
     {
         /** @var User $user */

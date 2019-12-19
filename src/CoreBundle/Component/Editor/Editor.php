@@ -108,7 +108,6 @@ class Editor
 
     /**
      * @param string $key
-     * @param mixed  $value
      */
     public function setConfigAttribute($key, $value)
     {
@@ -117,8 +116,6 @@ class Editor
 
     /**
      * @param string $key
-     *
-     * @return mixed
      */
     public function getConfigAttribute($key)
     {

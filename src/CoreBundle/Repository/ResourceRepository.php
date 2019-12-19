@@ -112,9 +112,6 @@ class ResourceRepository extends BaseEntityRepository
         return $this->authorizationChecker;
     }
 
-    /**
-     * @return mixed
-     */
     public function create()
     {
         return new $this->className();
@@ -172,9 +169,8 @@ class ResourceRepository extends BaseEntityRepository
     }
 
     /**
-     * @param mixed $id
-     * @param null  $lockMode
-     * @param null  $lockVersion
+     * @param null $lockMode
+     * @param null $lockVersion
      */
     public function find($id, $lockMode = null, $lockVersion = null) //: ?AbstractResource
     {

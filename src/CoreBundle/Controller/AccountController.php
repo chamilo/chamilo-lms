@@ -23,8 +23,6 @@ class AccountController extends BaseController
 {
     /**
      * @Route("/home", methods={"GET"}, name="chamilo_core_account_home")
-     *
-     * @param string $username
      */
     public function homeAction()
     {

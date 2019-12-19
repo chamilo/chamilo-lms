@@ -43,8 +43,6 @@ class Category
     /**
      * @param $method
      * @param $arguments
-     *
-     * @return mixed
      */
     public function __call($method, $arguments)
     {

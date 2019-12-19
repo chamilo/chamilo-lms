@@ -20,8 +20,6 @@ class ContactController extends AbstractController
 {
     /**
      * @Route("/", name="contact")
-     *
-     * @return mixed
      */
     public function indexAction(Request $request)
     {

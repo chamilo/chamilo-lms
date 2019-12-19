@@ -24,9 +24,6 @@ final class ResourceToIdentifierTransformer implements DataTransformerInterface
         $this->identifier = $identifier ?? 'id';
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function transform($value)
     {
         if (null === $value) {
@@ -39,9 +36,6 @@ final class ResourceToIdentifierTransformer implements DataTransformerInterface
         return PropertyAccess::createPropertyAccessor()->getValue($value, $this->identifier);
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function reverseTransform($value)
     {
         if (null === $value) {

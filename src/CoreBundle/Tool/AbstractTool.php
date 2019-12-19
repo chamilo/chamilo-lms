@@ -35,7 +35,6 @@ abstract class AbstractTool implements ToolInterface
      * @param string          $link
      * @param SchemaInterface $settings
      * @param array           $resourceTypes
-     * @param string          $scope
      */
     public function __construct($name, $category, $link, $settings = null, $resourceTypes = null)
     {
@@ -57,41 +56,26 @@ abstract class AbstractTool implements ToolInterface
         return true;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function getName()
     {
         return $this->name;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function getLink()
     {
         return $this->link ?: '';
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function getCategory()
     {
         return $this->category;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function getTarget()
     {
         return '_self';
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function getImage()
     {
         return $this->image;

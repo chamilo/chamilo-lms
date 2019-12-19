@@ -77,17 +77,12 @@ class Tool
         return $this;
     }
 
-    /**
-     * @return mixed
-     */
     public function getResourceNodes()
     {
         return $this->resourceNodes;
     }
 
     /**
-     * @param mixed $resourceNodes
-     *
      * @return $this
      */
     public function setResourceNodes($resourceNodes)
@@ -138,8 +133,6 @@ class Tool
     }
 
     /**
-     * @param mixed $resourceTypes
-     *
      * @return Tool
      */
     public function setResourceTypes($resourceTypes)

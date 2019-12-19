@@ -3633,8 +3633,6 @@ class CourseRestorer
 
     /**
      * @param array $array
-     *
-     * @return mixed
      */
     public function DBUTF8_array($array)
     {

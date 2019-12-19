@@ -61,9 +61,6 @@ class SessionVoter extends Voter
         return $this->courseManager;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function supports($attribute, $subject): bool
     {
         $options = [

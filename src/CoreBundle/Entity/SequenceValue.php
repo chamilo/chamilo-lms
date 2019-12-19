@@ -122,17 +122,12 @@ class SequenceValue
         return $this;
     }
 
-    /**
-     * @return mixed
-     */
     public function getEntity()
     {
         return $this->entity;
     }
 
     /**
-     * @param mixed $entity
-     *
      * @return SequenceValue
      */
     public function setEntity($entity)

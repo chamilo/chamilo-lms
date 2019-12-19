@@ -11,9 +11,6 @@ use Symfony\Component\OptionsResolver\OptionsResolverInterface;
 
 class SessionType extends AbstractType
 {
-    /**
-     * {@inheritdoc}
-     */
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder

@@ -45,17 +45,12 @@ class SequenceFormula
         return $this->id;
     }
 
-    /**
-     * @return mixed
-     */
     public function getMethod()
     {
         return $this->method;
     }
 
     /**
-     * @param mixed $method
-     *
      * @return SequenceFormula
      */
     public function setMethod($method)
@@ -65,17 +60,12 @@ class SequenceFormula
         return $this;
     }
 
-    /**
-     * @return mixed
-     */
     public function getVariable()
     {
         return $this->variable;
     }
 
     /**
-     * @param mixed $variable
-     *
      * @return SequenceFormula
      */
     public function setVariable($variable)

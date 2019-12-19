@@ -13,9 +13,6 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
  */
 class ResourceNodeType extends AbstractType
 {
-    /**
-     * {@inheritdoc}
-     */
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
@@ -29,9 +26,6 @@ class ResourceNodeType extends AbstractType
             );
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function configureOptions(OptionsResolver $resolver)
     {
         $resolver->setDefaults(
@@ -41,9 +35,6 @@ class ResourceNodeType extends AbstractType
         );
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function getName()
     {
         return 'chamilo_resource_node_type';

@@ -918,7 +918,6 @@ class Session
     }
 
     /**
-     * @return mixed
      * @return SessionCategory
      */
     public function getCategory()

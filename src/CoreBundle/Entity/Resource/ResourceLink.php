@@ -107,17 +107,12 @@ class ResourceLink
         return (string) $this->getId();
     }
 
-    /**
-     * @return mixed
-     */
     public function getStartVisibilityAt()
     {
         return $this->startVisibilityAt;
     }
 
     /**
-     * @param mixed $startVisibilityAt
-     *
      * @return ResourceLink
      */
     public function setStartVisibilityAt($startVisibilityAt)
@@ -127,17 +122,12 @@ class ResourceLink
         return $this;
     }
 
-    /**
-     * @return mixed
-     */
     public function getEndVisibilityAt()
     {
         return $this->endVisibilityAt;
     }
 
     /**
-     * @param mixed $endVisibilityAt
-     *
      * @return ResourceLink
      */
     public function setEndVisibilityAt($endVisibilityAt)

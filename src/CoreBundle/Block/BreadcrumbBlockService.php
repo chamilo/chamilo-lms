@@ -17,17 +17,11 @@ class BreadcrumbBlockService extends BaseBreadcrumbMenuBlockService
 {
     protected $extraChildren;
 
-    /**
-     * {@inheritdoc}
-     */
     public function getName()
     {
         return 'chamilo_core.block.breadcrumb';
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function configureSettings(OptionsResolver $resolver)
     {
         parent::configureSettings($resolver);
@@ -49,9 +43,6 @@ class BreadcrumbBlockService extends BaseBreadcrumbMenuBlockService
         $this->extraChildren[] = ['title' => $title, 'params' => $params];
     }
 
-    /**
-     * {@inheritdoc}
-     */
     protected function getMenu(BlockContextInterface $blockContext)
     {
         $menu = $this->getRootMenu($blockContext);

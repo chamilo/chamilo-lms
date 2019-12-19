@@ -80,8 +80,6 @@ class Container
 
     /**
      * @param string $parameter
-     *
-     * @return mixed
      */
     public static function getParameter($parameter)
     {

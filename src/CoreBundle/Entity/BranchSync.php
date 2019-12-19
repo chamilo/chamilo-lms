@@ -705,9 +705,6 @@ class BranchSync
         return $this;
     }
 
-    /**
-     * @return mixed
-     */
     public function getParent()
     {
         return $this->parent;

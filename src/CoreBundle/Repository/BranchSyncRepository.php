@@ -13,8 +13,6 @@ class BranchSyncRepository extends NestedTreeRepository
 {
     /**
      * @param string $keyword
-     *
-     * @return mixed
      */
     public function searchByKeyword($keyword)
     {
@@ -39,8 +37,6 @@ class BranchSyncRepository extends NestedTreeRepository
 
     /**
      * Gets the first branch with parent_id = NULL.
-     *
-     * @return mixed
      */
     public function getTopBranch()
     {

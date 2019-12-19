@@ -154,8 +154,6 @@ class ResourceFile
     }
 
     /**
-     * @param mixed $name
-     *
      * @return ResourceFile
      */
     public function setName($name)
@@ -274,8 +272,6 @@ class ResourceFile
     }
 
     /**
-     * @param mixed $id
-     *
      * @return ResourceFile
      */
     public function setId($id)

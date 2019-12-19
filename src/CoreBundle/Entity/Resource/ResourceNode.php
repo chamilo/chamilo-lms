@@ -274,17 +274,12 @@ class ResourceNode
         return self::convertPathForDisplay($path);
     }
 
-    /**
-     * @return mixed
-     */
     public function getSlug()
     {
         return $this->slug;
     }
 
     /**
-     * @param mixed $slug
-     *
      * @return ResourceNode
      */
     public function setSlug($slug)
@@ -378,8 +373,6 @@ class ResourceNode
     }
 
     /**
-     * @param mixed $resourceLinks
-     *
      * @return ResourceNode
      */
     public function setResourceLinks($resourceLinks)

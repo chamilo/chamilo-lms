@@ -12,9 +12,6 @@ use Sylius\Bundle\SettingsBundle\Resolver\SettingsResolverInterface;
  */
 class SettingsResolver implements SettingsResolverInterface
 {
-    /**
-     * {@inheritdoc}
-     */
     public function resolve($schemaAlias, $namespace = null)
     {
         try {

@@ -65,9 +65,6 @@ class ResourceNodeVoter extends Voter
         return $builder->get();
     }
 
-    /**
-     * {@inheritdoc}
-     */
     protected function supports($attribute, $subject): bool
     {
         $options = [

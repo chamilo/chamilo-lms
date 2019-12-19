@@ -18,8 +18,6 @@ class Tag extends BaseTag
 
     /**
      * Get id.
-     *
-     * @return int
      */
     public function getId(): int
     {

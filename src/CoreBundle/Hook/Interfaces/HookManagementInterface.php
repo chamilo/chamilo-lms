@@ -73,8 +73,6 @@ interface HookManagementInterface
      * @param string $eventName
      * @param string $observerClassName
      * @param int    $type
-     *
-     * @return mixed
      */
     public function getHookCallId($eventName, $observerClassName, $type);
 }

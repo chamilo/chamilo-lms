@@ -12,8 +12,6 @@ class AccessUrlRepository extends ResourceRepository
     /**
      * Select the first access_url ID in the list as a default setting for
      * the creation of new users.
-     *
-     * @return mixed
      */
     public function getFirstId()
     {

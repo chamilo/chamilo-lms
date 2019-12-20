@@ -318,6 +318,10 @@ try {
             $data = $restApi->updateUserFromUserName($_POST);
             $restResponse->setData([$data]);
             break;
+        case Rest::USERNAME_EXIST:
+            $data = $restApi->usernameExist($_POST['loginname']);
+            $restResponse->setData([$data]);
+            break;
         default:
             throw new Exception(get_lang('InvalidAction'));
     }

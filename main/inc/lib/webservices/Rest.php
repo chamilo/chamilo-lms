@@ -62,6 +62,7 @@ class Rest extends WebService
     const SUBSCRIBE_USER_TO_SESSION_FROM_USERNAME = 'subscribe_user_to_session_from_username';
     const GET_SESSION_FROM_EXTRA_FIELD = 'get_session_from_extra_field';
     const UPDATE_USER_FROM_USERNAME = 'update_user_from_username';
+    const USERNAME_EXIST = 'username_exist';
 
     /**
      * @var Session
@@ -1956,5 +1957,15 @@ class Rest extends WebService
         }
 
         return true;
+    }
+
+    /**
+     * Returns whether a user login name exists
+     *
+     * @param string $loginname the user login name
+     * @return bool whether the user login name exists
+     */
+    public function usernameExist($loginname) {
+        return false !== api_get_user_info_from_username($loginname);
     }
 }

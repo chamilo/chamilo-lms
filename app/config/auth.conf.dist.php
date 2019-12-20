@@ -94,11 +94,13 @@ $extldap_user_correspondance = array(
     'language' => '!english',
     'password' => '!PLACEHOLDER',
     'extra' => array(
-    'title' => 'title',
-    'globalid' => 'employeeID',
-    'department' => 'department',
-    'country' => 'co',
-    'bu' => 'Company')
+        'title' => 'title',
+        'globalid' => 'employeeID',
+        'department' => 'department',
+        'country' => 'co',
+        'bu' => 'Company',
+        'casUser' => 'uid',
+    )
 );
 
 /**
@@ -113,4 +115,9 @@ $langMainInfoDetail .= '<p>More information on OpenID is available at <a href="h
 /**
  * CAS
  */
-//$cas = ...;
+$cas = [
+    'force_redirect' => false,
+    // 'verbose' => false,
+    // 'debug' => '/var/log/cas_debug.log',
+    'noCasServerValidation' => true, // set to false in production
+];

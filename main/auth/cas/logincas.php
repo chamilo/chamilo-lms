@@ -16,7 +16,6 @@ require '../../inc/global.inc.php';
 require_once 'authcas.php';
 use ChamiloSession as Session;
 
-global $cas_auth_ver, $cas_auth_server, $cas_auth_port, $cas_auth_uri;
 // phpCAS
 
 /*
@@ -39,15 +38,6 @@ if (cas_configured()) {
     if (isset($_GET['firstpage'])) {
         $firstpage = $_GET['firstpage'];
         setcookie("GotoCourse", $firstpage);
-    }
-    if (!is_object($PHPCAS_CLIENT)) {
-        phpCAS::client(
-            $cas_auth_ver,
-            $cas_auth_server,
-            $cas_auth_port,
-            $cas_auth_uri
-        );
-        phpCAS::setNoCasServerValidation();
     }
     phpCAS::forceAuthentication();
     header('Location: '.api_get_path(WEB_PATH).api_get_setting('page_after_login'));

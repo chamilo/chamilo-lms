@@ -188,9 +188,12 @@ try {
         $toolEval = $tool->getGradebookEval();
 
         if (!empty($toolEval)) {
-            $jwtContent['https://purl.imsglobal.org/spec/lti-ags/claim/endpoint'] = [
-                'lineitem' => api_get_path(WEB_PATH).'lti/ags_endpoint/'.$toolEval->getId(),
-            ];
+            //$jwtContent['https://purl.imsglobal.org/spec/lti-bo/claim/basicoutcome'] = [
+            //    'lis_result_sourcedid' => json_encode(
+            //        ['e' => $toolEval->getId(), 'u' => $user->getId(), 'l' => uniqid(), 'lt' => time()]
+            //    ),
+            //    'lis_outcome_service_url' => api_get_path(WEB_PATH).'lti/os',
+            //];
 
             $jwtContent['https://purl.imsglobal.org/spec/lti/claim/lis'] = [
                 'person_sourcedid' => ImsLti::getPersonSourcedId($platformDomain, $user),

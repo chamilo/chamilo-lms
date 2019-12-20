@@ -471,29 +471,6 @@ if (!CustomPages::enabled()) {
     }
 }
 
-$home = api_get_path(SYS_APP_PATH).'home/';
-if (api_is_multiple_url_enabled()) {
-    $access_url_id = api_get_current_access_url_id();
-    if ($access_url_id != -1) {
-        $url_info = api_get_access_url($access_url_id);
-        $url = api_remove_trailing_slash(preg_replace('/https?:\/\//i', '', $url_info['url']));
-        $clean_url = api_replace_dangerous_char($url);
-        $clean_url = str_replace('/', '-', $clean_url);
-        $clean_url .= '/';
-        $home_old = api_get_path(SYS_APP_PATH).'home/';
-        $home = api_get_path(SYS_APP_PATH).'home/'.$clean_url;
-    }
-}
-
-if (file_exists($home.'register_top_'.$user_selected_language.'.html')) {
-    $home_top_temp = @(string) file_get_contents($home.'register_top_'.$user_selected_language.'.html');
-    $open = str_replace('{rel_path}', api_get_path(REL_PATH), $home_top_temp);
-    $open = api_to_system_encoding($open, api_detect_encoding(strip_tags($open)));
-    if (!empty($open)) {
-        $content = '<div class="well well-sm help-registration">'.$open.'</div>';
-    }
-}
-
 // Forbidden to self-register
 if ($isNotAllowedHere) {
     api_not_allowed(true, get_lang('Sorry, you are trying to access the registration page for this portal, but registration is currently disabled. Please contact the administrator (see contact information in the footer). If you already have an account on this site.'));

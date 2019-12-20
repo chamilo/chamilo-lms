@@ -308,8 +308,8 @@ class ImsLtiTool
         foreach ($lines as $line) {
             list($key, $value) = explode('=', $line, 2);
 
-            $key = self::parseCustomKey($key);
-            $value = self::parseCurstomValue($value);
+            $key = self::filterSpecialChars($key);
+            $value = self::filterSpaces($value);
 
             $params[$key] = $value;
         }
@@ -335,7 +335,7 @@ class ImsLtiTool
             }
 
             $pairs = explode('=', $string, 2);
-            $key = self::parseCustomKey($pairs[0]);
+            $key = self::filterSpecialChars($pairs[0]);
             $value = $pairs[1];
 
             $params['custom_'.$key] = $value;
@@ -351,7 +351,7 @@ class ImsLtiTool
      *
      * @return string
      */
-    private static function parseCustomKey($key)
+    private static function filterSpecialChars($key)
     {
         $newKey = '';
         $key = strtolower($key);
@@ -377,7 +377,7 @@ class ImsLtiTool
      *
      * @return string
      */
-    private static function parseCurstomValue($value)
+    private static function filterSpaces($value)
     {
         $newValue = preg_replace('/\s+/', ' ', $value);
 

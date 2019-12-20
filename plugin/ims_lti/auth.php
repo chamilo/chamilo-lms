@@ -137,6 +137,7 @@ try {
         'name' => api_get_setting('siteName'),
         'family_code' => 'Chamilo LMS',
         'version' => api_get_version(),
+        'url' => api_get_path(WEB_PATH),
     ];
 
     // Launch info
@@ -171,7 +172,6 @@ try {
             'data' => "tool:{$tool->getId()}",
             'deep_link_return_url' => api_get_path(WEB_PLUGIN_PATH).'ims_lti/item_return2.php',
         ];
-        $jwtContent['https://purl.imsglobal.org/spec/lti/claim/context']['type'] = ['CourseOffering'];
         $jwtContent['https://purl.imsglobal.org/spec/lti/claim/target_link_uri'] = $tool->getRedirectUrl();
     } else {
         $jwtContent['https://purl.imsglobal.org/spec/lti/claim/message_type'] = 'LtiResourceLinkRequest';
@@ -193,9 +193,8 @@ try {
             ];
 
             $jwtContent['https://purl.imsglobal.org/spec/lti/claim/lis'] = [
-                'person_sourcedid' => "$platformDomain:{$user->getId()}",
-                'course_offering_sourcedid' => "$platformDomain:{$course->getId()}"
-                    .($session ? ":{$session->getId()}" : ''),
+                'person_sourcedid' => ImsLti::getPersonSourcedId($platformDomain, $user),
+                'course_section_sourcedid' => ImsLti::getCourseSectionSourcedId($platformDomain, $course, $session),
             ];
         }
     }
@@ -204,31 +203,24 @@ try {
     $customParams = $tool->getCustomParamsAsArray();
 
     if (!empty($customParams)) {
-        $substitutables = ImsLti::getSubstitutableParams($user, $course, $session);
-        $variables = array_keys($substitutables);
-
-        foreach ($customParams as $customKey => $customValue) {
-            if (in_array($customValue, $variables)) {
-                $substitutableValue = $substitutables[$customValue];
-
-                $substitutedValue = '';
-
-                if (is_array($substitutableValue)) {
-                    $substitutableValue = current($substitutableValue);
-
-                    if (array_key_exists($substitutableValue, $jwtContent)) {
-                        $substitutedValue = $jwtContent[$substitutableValue];
-                    }
-                } elseif ($substitutableValue !== false) {
-                    $substitutedValue = $substitutableValue;
-                }
-
-                $customParams[$customKey] = $substitutedValue;
-            }
-        }
-
-        $jwtContent['https://purl.imsglobal.org/spec/lti/claim/custom'] = $customParams;
+        $jwtContent['https://purl.imsglobal.org/spec/lti/claim/custom'] = ImsLti::substituteVariablesInCustomParams(
+            $jwtContent,
+            $customParams,
+            $user,
+            $course,
+            $session,
+            $platformDomain,
+            ImsLti::V_1P3
+        );
     }
+
+    array_walk_recursive(
+        $jwtContent,
+        function (&$value) {
+            $value = preg_replace('/\s+/', ' ', $value);
+            $value = trim($value);
+        }
+    );
 
     // Sign
     $jwt = JWT::encode(

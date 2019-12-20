@@ -11,6 +11,7 @@ use Chamilo\CourseBundle\Entity\CLp;
 use Chamilo\CourseBundle\Entity\CLpCategory;
 use Chamilo\CourseBundle\Entity\CLpItem;
 use Chamilo\CourseBundle\Entity\CLpItemView;
+use Chamilo\CourseBundle\Entity\CQuiz;
 use Chamilo\CourseBundle\Entity\CTool;
 use Chamilo\UserBundle\Entity\User;
 use ChamiloSession as Session;
@@ -9985,8 +9986,6 @@ class learnpath
         $session_id = api_get_session_id();
         $userInfo = api_get_user_info();
 
-        // New for hotpotatoes.
-        //$uploadPath = DIR_HOTPOTATOES; //defined in main_api
         $tbl_doc = Database::get_course_table(TABLE_DOCUMENT);
         $tbl_quiz = Database::get_course_table(TABLE_QUIZ_TEST);
         $condition_session = api_get_session_condition($session_id, true, true);
@@ -10020,16 +10019,6 @@ class learnpath
                             $keywordCondition
                      ORDER BY title ASC";
         $res_quiz = Database::query($sql_quiz);
-
-        /*$sql_hot = "SELECT * FROM $tbl_doc
-                    WHERE
-                        c_id = $course_id AND
-                        path LIKE '".$uploadPath."/%/%htm%'
-                        $condition_session
-                     ORDER BY id ASC";
-
-        $res_quiz = Database::query($sql_quiz);
-        $res_hot = Database::query($sql_hot);*/
 
         $currentUrl = api_get_self().'?'.api_get_cidreq().'&action=add_item&type=step&lp_id='.$this->lp_id.'#resource_tab-2';
 
@@ -10067,7 +10056,6 @@ class learnpath
         $return = $form->returnForm();
 
         $return .= '<ul class="lp_resource">';
-
         $return .= '<li class="lp_resource_element">';
         $return .= Display::return_icon('new_exercice.png');
         $return .= '<a href="'.api_get_path(WEB_CODE_PATH).'exercise/exercise_admin.php?'.api_get_cidreq().'&lp_id='.$this->lp_id.'">'.
@@ -10080,41 +10068,25 @@ class learnpath
         );
         $quizIcon = Display::return_icon('quiz.png', '', [], ICON_SIZE_TINY);
         $moveIcon = Display::return_icon('move_everywhere.png', get_lang('Move'), [], ICON_SIZE_TINY);
-        //$exerciseUrl = api_get_path(WEB_CODE_PATH).'exercise/showinframes.php?'.api_get_cidreq();
-        // Display hotpotatoes
-        /*while ($row_hot = Database::fetch_array($res_hot)) {
-            $link = Display::url(
-                $previewIcon,
-                $exerciseUrl.'&file='.$row_hot['path'],
-                ['target' => '_blank']
-            );
-            $return .= '<li class="lp_resource_element" data_id="'.$row_hot['id'].'" data_type="hotpotatoes" title="'.$row_hot['title'].'" >';
-            $return .= '<a class="moved" href="#">';
-            $return .= Display::return_icon(
-                'move_everywhere.png',
-                get_lang('Move'),
-                [],
-                ICON_SIZE_TINY
-            );
-            $return .= '</a> ';
-            $return .= Display::return_icon('hotpotatoes_s.png');
-            $return .= '<a href="'.api_get_self().'?'.api_get_cidreq().'&action=add_item&type='.TOOL_HOTPOTATOES.'&file='.$row_hot['id'].'&lp_id='.$this->lp_id.'">'.
-                ((!empty($row_hot['comment'])) ? $row_hot['comment'] : Security::remove_XSS($row_hot['title'])).$link.'</a>';
-            $return .= '</li>';
-        }*/
 
         $exerciseUrl = api_get_path(WEB_CODE_PATH).'exercise/overview.php?'.api_get_cidreq();
+        $repo = Container::getExerciseRepository();
+        $courseEntity = api_get_course_entity();
+        $sessionEntity = api_get_session_entity();
         while ($row_quiz = Database::fetch_array($res_quiz)) {
+            /** @var CQuiz $exercise */
+            $exercise = $repo->find($row_quiz['id']);
             $title = strip_tags(
                 api_html_entity_decode($row_quiz['title'])
             );
 
-            $visibility = api_get_item_visibility(
+            $visibility = $exercise->isVisible($courseEntity, $sessionEntity);
+            /*$visibility = api_get_item_visibility(
                 ['real_id' => $course_id],
                 TOOL_QUIZ,
                 $row_quiz['iid'],
                 $session_id
-            );
+            );*/
 
             $link = Display::url(
                 $previewIcon,
@@ -10132,7 +10104,7 @@ class learnpath
                 Security::remove_XSS(cut($title, 80)).$link.$sessionStar,
                 api_get_self().'?'.api_get_cidreq().'&action=add_item&type='.TOOL_QUIZ.'&file='.$row_quiz['id'].'&lp_id='.$this->lp_id,
                 [
-                    'class' => $visibility == 0 ? 'moved text-muted' : 'moved',
+                    'class' => $visibility === false ? 'moved text-muted' : 'moved',
                 ]
             );
             $return .= '</li>';
@@ -12459,52 +12431,18 @@ EOD;
      *
      * @param int $sessionId
      *
-     * @return bool
+     * @return array
      */
     public function getForum($sessionId = 0)
     {
-        $forumTable = Database::get_course_table(TABLE_FORUM);
-        $itemProperty = Database::get_course_table(TABLE_ITEM_PROPERTY);
+        $repo = Container::getForumRepository();
 
-        $fakeFrom = "$forumTable f
-            INNER JOIN $itemProperty ip ";
+        $course = api_get_course_entity();
+        $session = api_get_session_entity($sessionId);
 
-        if ($this->lp_session_id == 0) {
-            $fakeFrom .= "
-                ON (
-                    f.forum_id = ip.ref AND f.c_id = ip.c_id AND (
-                        f.session_id = ip.session_id OR ip.session_id IS NULL
-                    )
-                )
-            ";
-        } else {
-            $fakeFrom .= "
-                ON (
-                    f.forum_id = ip.ref AND f.c_id = ip.c_id AND f.session_id = ip.session_id
-                )
-            ";
-        }
+        $qb = $repo->getResourcesByCourse($course, $session);
 
-        $resultData = Database::select(
-            'f.*',
-            $fakeFrom,
-            [
-                'where' => [
-                    'ip.visibility != ? AND ' => 2,
-                    'ip.tool = ? AND ' => TOOL_FORUM,
-                    'f.session_id = ? AND ' => $sessionId,
-                    'f.c_id = ? AND ' => intval($this->course_int_id),
-                    'f.lp_id = ?' => intval($this->lp_id),
-                ],
-            ],
-            'first'
-        );
-
-        if (empty($resultData)) {
-            return false;
-        }
-
-        return $resultData;
+        return $qb->getQuery()->getResult();
     }
 
     /**

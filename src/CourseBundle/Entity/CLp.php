@@ -1075,20 +1075,12 @@ class CLp extends AbstractResource implements ResourceInterface
         return $this;
     }
 
-    /**
-     * @return int
-     */
     public function getAccumulateWorkTime(): int
     {
         return $this->accumulateWorkTime;
     }
 
-    /**
-     * @param int $accumulateWorkTime
-     *
-     * @return CLp
-     */
-    public function setAccumulateWorkTime(int $accumulateWorkTime): CLp
+    public function setAccumulateWorkTime(int $accumulateWorkTime): self
     {
         $this->accumulateWorkTime = $accumulateWorkTime;
 

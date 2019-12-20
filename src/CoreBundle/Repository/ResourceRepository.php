@@ -10,6 +10,7 @@ use Chamilo\CoreBundle\Component\Utils\ResourceSettings;
 use Chamilo\CoreBundle\Entity\Course;
 use Chamilo\CoreBundle\Entity\Resource\AbstractResource;
 use Chamilo\CoreBundle\Entity\Resource\ResourceFile;
+use Chamilo\CoreBundle\Entity\Resource\ResourceInterface;
 use Chamilo\CoreBundle\Entity\Resource\ResourceLink;
 use Chamilo\CoreBundle\Entity\Resource\ResourceNode;
 use Chamilo\CoreBundle\Entity\Resource\ResourceRight;
@@ -172,17 +173,17 @@ class ResourceRepository extends BaseEntityRepository
      * @param null $lockMode
      * @param null $lockVersion
      */
-    public function find($id, $lockMode = null, $lockVersion = null) //: ?AbstractResource
+    public function find($id, $lockMode = null, $lockVersion = null)
     {
         return $this->getRepository()->find($id);
     }
 
-    public function findOneBy(array $criteria, array $orderBy = null): ?AbstractResource
+    public function findOneBy(array $criteria, array $orderBy = null): ?ResourceInterface
     {
         return $this->getRepository()->findOneBy($criteria, $orderBy);
     }
 
-    public function createNodeForResource(AbstractResource $resource, User $creator, ResourceNode $parent = null, UploadedFile $file = null): ResourceNode
+    public function createNodeForResource(ResourceInterface $resource, User $creator, ResourceNode $parent = null, UploadedFile $file = null): ResourceNode
     {
         $em = $this->getEntityManager();
 
@@ -220,7 +221,7 @@ class ResourceRepository extends BaseEntityRepository
         return $resourceNode;
     }
 
-    public function updateNodeForResource(AbstractResource $resource): ResourceNode
+    public function updateNodeForResource(ResourceInterface $resource): ResourceNode
     {
         $em = $this->getEntityManager();
 
@@ -259,7 +260,7 @@ class ResourceRepository extends BaseEntityRepository
         return $resourceNode;
     }
 
-    public function addFile(AbstractResource $resource, UploadedFile $file): ?ResourceFile
+    public function addFile(ResourceInterface $resource, UploadedFile $file): ?ResourceFile
     {
         $resourceNode = $resource->getResourceNode();
 

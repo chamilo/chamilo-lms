@@ -14,6 +14,7 @@ use APY\DataGridBundle\Grid\Row;
 use APY\DataGridBundle\Grid\Source\Entity;
 use Chamilo\CoreBundle\Component\Utils\Glide;
 use Chamilo\CoreBundle\Entity\Resource\AbstractResource;
+use Chamilo\CoreBundle\Entity\Resource\ResourceInterface;
 use Chamilo\CoreBundle\Entity\Resource\ResourceLink;
 use Chamilo\CoreBundle\Entity\Resource\ResourceNode;
 use Chamilo\CoreBundle\Repository\IllustrationRepository;
@@ -184,7 +185,7 @@ class ResourceController extends AbstractResourceController implements CourseCon
         $titleColumn->manipulateRenderCell(
             function ($value, Row $row, $router) use ($routeParams) {
                 /** @var Router $router */
-                /** @var AbstractResource $entity */
+                /** @var ResourceInterface $entity */
                 $entity = $row->getEntity();
                 $resourceNode = $entity->getResourceNode();
                 $id = $resourceNode->getId();
@@ -977,7 +978,7 @@ class ResourceController extends AbstractResourceController implements CourseCon
 
             $repo = $this->getRepositoryFromRequest($request);
 
-            /** @var AbstractResource $parent */
+            /** @var ResourceInterface $parent */
             $originalResource = $repo->findOneBy(['resourceNode' => $resourceNodeId]);
             if (null === $originalResource) {
                 return;
@@ -999,7 +1000,7 @@ class ResourceController extends AbstractResourceController implements CourseCon
             }
 
             $parentList = array_reverse($parentList);
-            /** @var AbstractResource $item */
+            /** @var ResourceInterface $item */
             foreach ($parentList as $item) {
                 $params = $routeParams;
                 $params['id'] = $item->getResourceNode()->getId();

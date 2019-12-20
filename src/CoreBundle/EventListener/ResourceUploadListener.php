@@ -4,7 +4,7 @@
 
 namespace Chamilo\CoreBundle\EventListener;
 
-use Chamilo\CoreBundle\Entity\Resource\AbstractResource;
+use Chamilo\CoreBundle\Entity\Resource\ResourceInterface;
 use Doctrine\Common\Persistence\ObjectManager;
 use Oneup\UploaderBundle\Event\PostPersistEvent;
 use Oneup\UploaderBundle\Uploader\Response\ResponseInterface;
@@ -35,7 +35,7 @@ class ResourceUploadListener
      */
     public function onUpload(PostPersistEvent $event)
     {
-        /** @var AbstractResource $resource */
+        /** @var ResourceInterface $resource */
         $resource = $event->getFile();
         $courseId = $event->getRequest()->get('cid');
         $sessionId = $event->getRequest()->get('sid');

@@ -103,22 +103,8 @@ class EditorController extends BaseController
         $grid->setLimits(20);
         $grid->setHiddenColumns(['iid']);
 
-        /*$grid->setRouteUrl(
-            $this->generateUrl(
-                'chamilo_core_resource_list',
-                [
-                    'tool' => 'document',
-                    'type' => 'files',
-                    'cidReq' => $this->getCourse()->getCode(),
-                    'sid' => $sessionId,
-                    'id' => $id,
-                ]
-            )
-        );*/
-
         $titleColumn = $repository->getTitleColumn($grid);
-
-        $titleColumn->setTitle($this->trans('Name'));
+        //$titleColumn->setTitle($this->trans('Name'));
 
         $routeParams = $this->getResourceParams($request);
 
@@ -145,7 +131,6 @@ class EditorController extends BaseController
                 $class = '';
                 if ($resourceNode->hasResourceFile()) {
                     $documentParams = $this->getResourceParams($request);
-                    //$documentParams['file'] = $resourceNode->getPathForDisplayRemoveBase($removePath);
                     // use id instead of old path (like in Chamilo v1)
                     $documentParams['id'] = $resourceNode->getId();
                     $url = $router->generate(
@@ -163,7 +148,7 @@ class EditorController extends BaseController
 
         return $grid->getGridResponse(
             '@ChamiloTheme/Editor/custom.html.twig',
-            ['id' => $id, 'grid' => $grid, 'tool' => $tool, 'type' => $type]
+            ['id' => $id, 'tool' => $tool, 'type' => $type]
         );
     }
 

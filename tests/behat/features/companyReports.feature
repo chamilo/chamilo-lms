@@ -22,7 +22,7 @@ Feature: Access to portal reports as admin
   Scenario: See the company reports link on the admin page
     Given I am a platform administrator
     And I am on "/main/admin/teacher_time_report.php"
-    Then I should see "Teachers time report"
+    Then I should see "Trainers time report"
 
   Scenario: See the company reports link on the admin page
     Given I am a platform administrator

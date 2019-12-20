@@ -159,7 +159,7 @@ class SettingsController extends SyliusSettingsController
 
             try {
                 $manager->save($form->getData());
-                $message = $this->getTranslator()->trans('Update');
+                $message = $this->getTranslator()->trans('Settings have been successfully updated');
             } catch (ValidatorException $exception) {
                 $message = $this->getTranslator()->trans($exception->getMessage(), [], 'validators');
                 $messageType = 'error';

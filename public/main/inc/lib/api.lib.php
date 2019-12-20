@@ -5414,12 +5414,12 @@ function api_status_key($status)
 function api_get_status_langvars()
 {
     return [
-        COURSEMANAGER => get_lang('Teacher', ''),
-        SESSIONADMIN => get_lang('SessionsAdmin', ''),
-        DRH => get_lang('Drh', ''),
-        STUDENT => get_lang('Student', ''),
-        ANONYMOUS => get_lang('Anonymous', ''),
-        STUDENT_BOSS => get_lang('RoleStudentBoss', ''),
+        COURSEMANAGER => get_lang('Teacher'),
+        SESSIONADMIN => get_lang('SessionsAdmin'),
+        DRH => get_lang('Human Resources Manager'),
+        STUDENT => get_lang('Learner'),
+        ANONYMOUS => get_lang('Anonymous'),
+        STUDENT_BOSS => get_lang('RoleStudentBoss'),
         INVITEE => get_lang('Invited'),
     ];
 }

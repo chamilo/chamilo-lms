@@ -15,7 +15,7 @@ Feature: Course tools basic testing
 
   Scenario: See the course creation link on the admin page
     Given I am on "/main/admin/index.php"
-    Then I should see "Create a course"
+    Then I should see "Add course"
 
   Scenario: Access the course creation page
     Given I am on "/main/admin/course_add.php"

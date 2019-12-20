@@ -57,14 +57,6 @@ define('STUDENT_BOSS', 17); // student is boss
 define('INVITEE', 20);
 define('HRM_REQUEST', 21); //HRM has request for vinculation with user
 
-// Table of status
-$_status_list[COURSEMANAGER] = 'teacher'; // 1
-$_status_list[SESSIONADMIN] = 'session_admin'; // 3
-$_status_list[DRH] = 'drh'; // 4
-$_status_list[STUDENT] = 'user'; // 5
-$_status_list[ANONYMOUS] = 'anonymous'; // 6
-$_status_list[INVITEE] = 'invited'; // 20
-
 // COURSE VISIBILITY CONSTANTS
 /** only visible for course admin */
 define('COURSE_VISIBILITY_CLOSED', 0);
@@ -5375,6 +5367,20 @@ function api_get_software_name()
     }
 }
 
+function api_get_status_list()
+{
+    $list = [];
+    // Table of status
+    $list[COURSEMANAGER] = 'teacher'; // 1
+    $list[SESSIONADMIN] = 'session_admin'; // 3
+    $list[DRH] = 'drh'; // 4
+    $list[STUDENT] = 'user'; // 5
+    $list[ANONYMOUS] = 'anonymous'; // 6
+    $list[INVITEE] = 'invited'; // 20
+
+    return $list;
+}
+
 /**
  * Checks whether status given in parameter exists in the platform.
  *
@@ -5384,9 +5390,9 @@ function api_get_software_name()
  */
 function api_status_exists($status_asked)
 {
-    global $_status_list;
+    $list = api_get_status_list();
 
-    return in_array($status_asked, $_status_list) ? true : isset($_status_list[$status_asked]);
+    return in_array($status_asked, $list) ? true : isset($list[$status_asked]);
 }
 
 /**
@@ -5401,9 +5407,9 @@ function api_status_exists($status_asked)
  */
 function api_status_key($status)
 {
-    global $_status_list;
+    $list = api_get_status_list();
 
-    return isset($_status_list[$status]) ? $status : array_search($status, $_status_list);
+    return isset($list[$status]) ? $status : array_search($status, $list);
 }
 
 /**

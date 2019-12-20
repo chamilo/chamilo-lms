@@ -53,7 +53,7 @@ Feature: Document tool
     Given I am on "/main/document/upload.php?cid=1"
     Then I should see "Upload documents"
     Then I follow "Upload (Simple)"
-    Then I attach the file "web/css/base.css" to "file"
+    Then I attach the file "/public/favicon.ico" to "file"
     When I press "Upload file"
     And wait for the page to be loaded
     Then I should see "File upload succeeded"

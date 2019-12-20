@@ -79,7 +79,7 @@ Feature: Group tool
     Then I follow "Upload documents"
     Then I follow "Upload (Simple)"
     # File path is located in behat.yml
-    Then I attach the file "build/css/base.css" to "file"
+    Then I attach the file "/public/favicon.ico" to "file"
     Then wait for the page to be loaded
     Then I press "upload_submitDocument"
     Then wait for the page to be loaded

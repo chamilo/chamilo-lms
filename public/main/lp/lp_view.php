@@ -39,10 +39,17 @@ $course_code = api_get_course_id();
 $course_id = api_get_course_int_id();
 $user_id = api_get_user_id();
 
+/** @var learnpath $lp */
+$lp = Session::read('oLP');
+
+if (empty($lp)) {
+    api_not_allowed(true);
+}
+
 // Check if the learning path is visible for student - (LP requisites)
 if (!api_is_platform_admin()) {
     if (!api_is_allowed_to_edit(null, true, false, false) &&
-        !learnpath::is_lp_visible_for_student($lp_id, api_get_user_id())
+        !learnpath::is_lp_visible_for_student($lp->getEntity(), api_get_user_id())
     ) {
         api_not_allowed(true);
     }
@@ -62,18 +69,6 @@ if ($visibility === 0 &&
     !api_is_allowed_to_edit(false, true, false, false)
 ) {
     api_not_allowed(true);
-}
-
-/** @var learnpath $lp */
-$lp = Session::read('oLP');
-
-if (empty($lp)) {
-    api_not_allowed(true);
-}
-
-$debug = 0;
-if ($debug) {
-    error_log('------ Entering lp_view.php -------');
 }
 
 $lp_item_id = $lp->get_current_item_id();

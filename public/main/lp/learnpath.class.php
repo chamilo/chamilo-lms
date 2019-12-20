@@ -7,7 +7,6 @@ use Chamilo\CoreBundle\Repository\CourseRepository;
 use Chamilo\CourseBundle\Component\CourseCopy\CourseArchiver;
 use Chamilo\CourseBundle\Component\CourseCopy\CourseBuilder;
 use Chamilo\CourseBundle\Component\CourseCopy\CourseRestorer;
-use Chamilo\CourseBundle\Entity\CItemProperty;
 use Chamilo\CourseBundle\Entity\CLp;
 use Chamilo\CourseBundle\Entity\CLpCategory;
 use Chamilo\CourseBundle\Entity\CLpItem;
@@ -97,6 +96,7 @@ class learnpath
     public $course_int_id;
     public $course_info = [];
     public $categoryId;
+    public $entity;
 
     /**
      * Constructor.
@@ -111,9 +111,6 @@ class learnpath
     {
         $debug = $this->debug;
         $this->encoding = api_get_system_encoding();
-        if ($debug) {
-            error_log('In learnpath::__construct('.$course.','.$lp_id.','.$user_id.')');
-        }
         if (empty($course)) {
             $course = api_get_course_id();
         }
@@ -133,54 +130,48 @@ class learnpath
         if (empty($lp_id) || empty($course_id)) {
             $this->error = "Parameter is empty: LpId:'$lp_id', courseId: '$lp_id'";
         } else {
-            // TODO: Make it flexible to use any course_code (still using env course code here).
-            $lp_table = Database::get_course_table(TABLE_LP_MAIN);
-            $sql = "SELECT * FROM $lp_table
-                    WHERE iid = $lp_id";
-            if ($debug) {
-                error_log('learnpath::__construct() '.__LINE__.' - Querying lp: '.$sql, 0);
-            }
-            $res = Database::query($sql);
-            if (Database::num_rows($res) > 0) {
+            $repo = Container::getLpRepository();
+            /** @var CLp $entity */
+            $entity = $repo->find($lp_id);
+            if ($entity) {
+                $this->entity = $entity;
                 $this->lp_id = $lp_id;
-                $row = Database::fetch_array($res);
-                $this->type = $row['lp_type'];
-                $this->name = stripslashes($row['name']);
-                $this->proximity = $row['content_local'];
-                $this->theme = $row['theme'];
-                $this->maker = $row['content_maker'];
-                $this->prevent_reinit = $row['prevent_reinit'];
-                $this->seriousgame_mode = $row['seriousgame_mode'];
-                $this->license = $row['content_license'];
-                $this->scorm_debug = $row['debug'];
-                $this->js_lib = $row['js_lib'];
-                $this->path = $row['path'];
-                $this->preview_image = $row['preview_image'];
-                $this->author = $row['author'];
-                $this->hide_toc_frame = $row['hide_toc_frame'];
-                $this->lp_session_id = $row['session_id'];
-                $this->use_max_score = $row['use_max_score'];
-                $this->subscribeUsers = $row['subscribe_users'];
-                $this->created_on = $row['created_on'];
-                $this->modified_on = $row['modified_on'];
-                $this->ref = $row['ref'];
-                $this->categoryId = $row['category_id'];
-                $this->accumulateScormTime = isset($row['accumulate_scorm_time']) ? $row['accumulate_scorm_time'] : 'true';
-                $this->accumulateWorkTime = isset($row['accumulate_work_time']) ? $row['accumulate_work_time'] : 0;
+                $this->type = $entity->getLpType();
+                $this->name = stripslashes($entity->getName());
+                $this->proximity = $entity->getContentLocal();
+                $this->theme = $entity->getTheme();
+                $this->maker = $entity->getContentLocal();
+                $this->prevent_reinit = $entity->getPreventReinit();
+                $this->seriousgame_mode = $entity->getSeriousgameMode();
+                $this->license = $entity->getContentLicense();
+                $this->scorm_debug = $entity->getDebug();
+                $this->js_lib = $entity->getJsLib();
+                $this->path = $entity->getPath();
+                $this->preview_image = $entity->getPreviewImage();
+                $this->author = $entity->getAuthor();
+                $this->hide_toc_frame = $entity->getHideTocFrame();
+                $this->lp_session_id = $entity->getSessionId();
+                $this->use_max_score = $entity->getUseMaxScore();
+                $this->subscribeUsers = $entity->getSubscribeUsers();
+                $this->created_on = $entity->getCreatedOn()->format('Y-m-d H:i:s');
+                $this->modified_on = $entity->getModifiedOn()->format('Y-m-d H:i:s');
+                $this->ref = $entity->getRef();
+                $this->categoryId = $entity->getCategoryId();
+                $this->accumulateScormTime = $entity->getAccumulateWorkTime();
 
-                if (!empty($row['publicated_on'])) {
-                    $this->publicated_on = $row['publicated_on'];
+                if (!empty($entity->getPublicatedOn())) {
+                    $this->publicated_on = $entity->getPublicatedOn()->format('Y-m-d H:i:s');
                 }
 
-                if (!empty($row['expired_on'])) {
-                    $this->expired_on = $row['expired_on'];
+                if (!empty($entity->getExpiredOn())) {
+                    $this->expired_on = $entity->getExpiredOn()->format('Y-m-d H:i:s');
                 }
                 if ($this->type == 2) {
-                    if ($row['force_commit'] == 1) {
+                    if ($entity->getForceCommit() == 1) {
                         $this->force_commit = true;
                     }
                 }
-                $this->mode = $row['default_view_mod'];
+                $this->mode = $entity->getDefaultViewMod();
 
                 // Check user ID.
                 if (empty($user_id)) {
@@ -225,9 +216,6 @@ class learnpath
                     $this->progress_db = $row['progress'];
                     $this->lp_view_session_id = $row['session_id'];
                 } elseif (!api_is_invitee()) {
-                    if ($debug) {
-                        error_log('learnpath::__construct() '.__LINE__.' - NOT Found previous view');
-                    }
                     $this->attempt = 1;
                     $params = [
                         'c_id' => $course_id,
@@ -429,6 +417,11 @@ class learnpath
                 $this->error = 'Learnpath ID does not exist in database ('.$sql.')';
             }
         }
+    }
+
+    public function getEntity(): CLp
+    {
+        return $this->entity;
     }
 
     /**
@@ -2216,13 +2209,12 @@ class learnpath
      * @return bool
      */
     public static function is_lp_visible_for_student(
-        $lp_id,
+        CLp $lp,
         $student_id,
         $courseInfo = [],
         $sessionId = 0
     ) {
         $courseInfo = empty($courseInfo) ? api_get_course_info() : $courseInfo;
-        $lp_id = (int) $lp_id;
         $sessionId = (int) $sessionId;
 
         if (empty($courseInfo)) {
@@ -2235,18 +2227,20 @@ class learnpath
 
         $courseId = $courseInfo['real_id'];
 
-        $itemInfo = api_get_item_property_info(
+        /*$itemInfo = api_get_item_property_info(
             $courseId,
             TOOL_LEARNPATH,
             $lp_id,
             $sessionId
-        );
+        );*/
 
+        $visibility = $lp->isVisible($courseInfo['entity'], api_get_session_entity($sessionId));
         // If the item was deleted.
-        if (isset($itemInfo['visibility']) && $itemInfo['visibility'] == 2) {
+        if ($visibility === false) {
             return false;
         }
 
+        $lp_id = $lp->getIid();
         // @todo remove this query and load the row info as a parameter
         $table = Database::get_course_table(TABLE_LP_MAIN);
         // Get current prerequisite

@@ -257,7 +257,7 @@ foreach ($categories as $item) {
                 continue;
             }
 
-            $lpVisibility = learnpath::is_lp_visible_for_student($id, $userId, $courseInfo);
+            $lpVisibility = learnpath::is_lp_visible_for_student($details['entity'], $userId, $courseInfo);
 
             // Check if the learnpath is visible for student.
             if (!$is_allowed_to_edit) {

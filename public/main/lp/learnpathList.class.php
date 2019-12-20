@@ -104,11 +104,13 @@ class LearnpathList
         $showBlockedPrerequisite = api_get_configuration_value('show_prerequisite_as_blocked');
         $names = [];
         $isAllowToEdit = api_is_allowed_to_edit();
+        $courseEntity = api_get_course_entity($course_id);
+        $sessionEntity = api_get_session_entity($session_id);
         /** @var CLp $row */
         foreach ($learningPaths as $row) {
-            $name = Database::escape_string($row->getName());
-            $link = 'lp/lp_controller.php?action=view&lp_id='.$row->getId().'&id_session='.$session_id;
-            $oldLink = 'newscorm/lp_controller.php?action=view&lp_id='.$row->getId().'&id_session='.$session_id;
+            //$name = Database::escape_string($row->getName());
+            //$link = 'lp/lp_controller.php?action=view&lp_id='.$row->getId().'&id_session='.$session_id;
+            //$oldLink = 'newscorm/lp_controller.php?action=view&lp_id='.$row->getId().'&id_session='.$session_id;
 
             /*$sql2 = "SELECT visibility FROM $tbl_tool
                      WHERE
@@ -128,18 +130,19 @@ class LearnpathList
             }*/
 
             // Check if visible.
-            $visibility = api_get_item_visibility(
+            /*$visibility = api_get_item_visibility(
                 $courseInfo,
                 'learnpath',
                 $row->getId(),
                 $session_id
-            );
+            );*/
+            $visibility = $row->isVisible($courseEntity, $sessionEntity);
 
             // If option is not true then don't show invisible LP to user
             if ($ignoreLpVisibility === false) {
                 if ($showBlockedPrerequisite !== true && !$isAllowToEdit) {
                     $lpVisibility = learnpath::is_lp_visible_for_student(
-                        $row->getId(),
+                        $row,
                         $user_id,
                         $courseInfo
                     );
@@ -178,6 +181,7 @@ class LearnpathList
                 'lp_old_id' => $row->getId(),
                 'iid' => $row->getIid(),
                 'prerequisite' => $row->getPrerequisite(),
+                'entity' => $row,
             ];
             $names[$row->getName()] = $row->getIid();
         }

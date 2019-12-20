@@ -29,7 +29,7 @@ if (empty($obj)) {
 }
 
 // If is visible for the current user
-if (!learnpath::is_lp_visible_for_student($obj->get_id(), api_get_user_id(), $_course)) {
+if (!learnpath::is_lp_visible_for_student($obj->getEntity(), api_get_user_id(), $_course)) {
     api_not_allowed();
 }
 

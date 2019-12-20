@@ -2050,12 +2050,16 @@ function api_get_course_entity($courseId = 0)
 /**
  * @param int $id
  *
- * @return SessionEntity
+ * @return SessionEntity|null
  */
 function api_get_session_entity($id = 0)
 {
     if (empty($id)) {
         $id = api_get_session_id();
+    }
+
+    if (empty($id)) {
+        return null;
     }
 
     return Database::getManager()->getRepository('ChamiloCoreBundle:Session')->find($id);
@@ -3717,6 +3721,16 @@ function api_get_item_visibility(
 ) {
     if (!is_array($_course) || count($_course) == 0 || empty($tool) || empty($id)) {
         return -1;
+    }
+
+    // 0 visible
+    // 1 visible
+    // 2 deleted
+
+    switch ($tool) {
+        case 'learnpath':
+
+            break;
     }
 
     $tool = Database::escape_string($tool);

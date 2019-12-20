@@ -1031,7 +1031,7 @@ switch ($action) {
 
         // Teachers can export to PDF
         if (!$is_allowed_to_edit) {
-            if (!learnpath::is_lp_visible_for_student($_SESSION['oLP']->lp_id, api_get_user_id(), $_course)) {
+            if (!learnpath::is_lp_visible_for_student($_SESSION['oLP']->getEntity(), api_get_user_id(), $_course)) {
                 api_not_allowed();
             }
         }

@@ -6232,9 +6232,10 @@ class Exercise
                 ];
             }
         } else {
+            $lp = Container::getLpRepository()->find($lpId);
             // 2.1 LP is loaded
-            if ($this->active == 0 &&
-                !learnpath::is_lp_visible_for_student($lpId, api_get_user_id())
+            if ($lp && $this->active == 0 &&
+                !learnpath::is_lp_visible_for_student($lp, api_get_user_id())
             ) {
                 return [
                     'value' => false,

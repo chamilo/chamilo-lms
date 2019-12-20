@@ -27,11 +27,6 @@ abstract class AbstractResource
      */
     public $resourceNode;
 
-    abstract public function getResourceName(): string;
-
-    /**
-     * @return $this
-     */
     public function setResourceNode(ResourceNode $resourceNode): self
     {
         $this->resourceNode = $resourceNode;

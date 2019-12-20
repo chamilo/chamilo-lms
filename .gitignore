@@ -72,10 +72,6 @@ symfony.lock
 .phpunit
 /phpunit.xml
 ###< symfony/phpunit-bridge ###
-
-###> symfony/web-server-bundle ###
-.web-server-pid
-###< symfony/web-server-bundle ###
 ###> symfony/webpack-encore-bundle ###
 /node_modules/
 /public/assets/

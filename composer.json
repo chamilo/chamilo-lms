@@ -34,7 +34,7 @@
         ]
     },
     "require": {
-        "php": "^7.2.0",
+        "php": "^7.2.5",
         "ext-bcmath": "*",
         "ext-curl": "*",
         "ext-dom": "*",
@@ -72,6 +72,7 @@
         "symfony/monolog-bundle": "^3.1",
         "symfony/mailer": "^4.0",
         "symfony/polyfill-apcu": "^1.9",
+        "symfony/requirements-checker": "^1.1",
         "symfony/security-bundle": "^4.0",
         "symfony/templating" : "^4.0",
         "symfony/translation": "^4.0",
@@ -110,7 +111,6 @@
         "sunra/php-simple-html-dom-parser": "~1.5.0",
         "friendsofsymfony/jsrouting-bundle": "~2.0",
         "gregwar/captcha-bundle": "^2.0",
-        "helios-ag/fm-elfinder-bundle": "~9.0",
 
         "knplabs/gaufrette": "~0.7",
         "knplabs/doctrine-behaviors": "~1.6",
@@ -119,8 +119,6 @@
         "michelf/php-markdown": "~1.8",
         "mopa/bootstrap-bundle": "~3.2",
         "sabre/vobject": "~4.2",
-
-        "emojione/emojione": "1.3.0",
 
         "zendframework/zend-config": "~3.2",
         "zendframework/zend-feed": "~2.10",
@@ -133,7 +131,6 @@
         "endroid/qr-code": "~3.4",
         "mpdf/mpdf": "~8.0",
         "oneup/flysystem-bundle": "~3.0",
-        "studio-42/elfinder": "2.1.*",
         "jbroadway/urlify": "~1.1",
         "patchwork/utf8": "~1.3",
         "phpoffice/phpspreadsheet": "~1.9",
@@ -149,7 +146,6 @@
         "essence/essence": "~3.0",
         "paragonie/random-lib": "~2.0",
         "knplabs/knp-menu-bundle": "^2.0",
-        "symfony/requirements-checker": "^1.1",
         "liip/theme-bundle": "^1.6",
         "liip/imagine-bundle": "^2.1",
         "a2lix/translation-form-bundle": "^3.0",
@@ -164,30 +160,27 @@
         "maennchen/zipstream-php": "^1.2",
         "league/glide-symfony": "^1.0",
         "cocur/slugify": "^3.2",
-        "knpuniversity/oauth2-client-bundle": "^1.31",
-        "php-translation/symfony-bundle": "^0.9.1",
-        "phpstan/phpstan": "^0.12.3"
+        "knpuniversity/oauth2-client-bundle": "^1.31"
     },
     "config": {
         "component-dir": "public/assets"
     },
     "require-dev": {
-        "symfony/var-dumper": "^4.0",
-        "friendsofphp/php-cs-fixer": "^2.16",
         "symfony/browser-kit": "^4.0",
         "symfony/css-selector": "^4.0",
-        "symfony/debug-bundle": "^4.0",
         "symfony/phpunit-bridge": "^4.0",
-        "symfony/stopwatch": "^4.0",
-        "symfony/web-profiler-bundle": "^4.0",
-        "symfony/web-server-bundle": "^4.0",
+        "symfony/debug-pack": "*",
+        "symfony/profiler-pack": "*",
+        "symfony/test-pack": "*",
         "behat/behat": "@stable",
         "behat/mink": "dev-master",
         "behat/mink-extension": "@stable",
         "behat/mink-goutte-driver": "@stable",
         "behat/mink-selenium2-driver": "@stable",
         "symplify/easy-coding-standard": "^7.1",
-        "vimeo/psalm": "^3.7"
+        "vimeo/psalm": "^3.7",
+        "phpstan/phpstan": "^0.12.3",
+        "php-translation/symfony-bundle": "^0.9.1"
     },
     "scripts": {
         "analyse": [

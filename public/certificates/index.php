@@ -1,9 +1,8 @@
 <?php
+
 /* For licensing terms, see /license.txt */
 /**
  * Show specified user certificate.
- *
- * @package chamilo.certificate
  */
 require_once '../main/inc/global.inc.php';
 
@@ -18,8 +17,8 @@ switch ($action) {
     case 'export':
         $hideExportLink = api_get_setting('hide_certificate_export_link');
         $hideExportLinkStudent = api_get_setting('hide_certificate_export_link_students');
-        if ($hideExportLink === 'true' ||
-            (api_is_student() && $hideExportLinkStudent === 'true')
+        if ('true' === $hideExportLink ||
+            (api_is_student() && 'true' === $hideExportLinkStudent)
         ) {
             api_not_allowed(true);
         }
@@ -42,7 +41,7 @@ switch ($action) {
                 $pdfParams['orientation'] = $orientation;
             }
 
-            $pageFormat = $pdfParams['orientation'] === 'landscape' ? 'A4-L' : 'A4';
+            $pageFormat = 'landscape' === $pdfParams['orientation'] ? 'A4-L' : 'A4';
             $userInfo = api_get_user_info($certificate->user_id);
             $pdfName = api_replace_dangerous_char(
                 get_lang('Certificate').' '.$userInfo['username']
@@ -57,6 +56,7 @@ switch ($action) {
                 false
             );
         }
+
         break;
     default:
         // Special rules for anonymous users
@@ -67,6 +67,7 @@ switch ($action) {
                 'warning'
             );
             Display::display_reduced_footer();
+
             break;
         }
 
@@ -77,10 +78,12 @@ switch ($action) {
                 'error'
             );
             Display::display_reduced_footer();
+
             break;
         }
 
         // Show certificate HTML
         $certificate->show();
+
         break;
 }

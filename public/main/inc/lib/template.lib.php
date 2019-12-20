@@ -74,6 +74,8 @@ class Template
     ) {
         // Page title
         $this->title = $title;
+        global $interbreadcrumb;
+        $interbreadcrumb[] = ['url' => '#', 'name' => $title];
         $this->show_learnpath = $show_learnpath;
         //$this->setResponseCode($responseCode);
 
@@ -738,7 +740,7 @@ class Template
                 $courseLogoutCode = "
                 <script>
                 var logOutUrl = '".$ajax."course.ajax.php?a=course_logout&".api_get_cidreq()."';
-                function courseLogout() {                
+                function courseLogout() {
                     $.ajax({
                         async : false,
                         url: logOutUrl,

@@ -22,6 +22,9 @@ require('./main');
 require('webpack-jquery-ui');
 require('webpack-jquery-ui/css');
 
+import Swal from 'sweetalert2';
+window.Swal = Swal;
+
 // @todo rework url naming
 const homePublicUrl = Routing.generate('home');
 const mainUrl = homePublicUrl + 'main/';

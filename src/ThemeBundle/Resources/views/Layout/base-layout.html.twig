@@ -15,7 +15,6 @@
 {% include "@ChamiloTheme/Layout/head.html.twig" %}
 </head>
 {% endblock %}
-
 <body
     class="{{ section_name }} app header-fixed sidebar-fixed aside-menu-fixed sidebar-lg-show"
     {{ sonata_seo_html_attributes() }}
@@ -24,15 +23,13 @@
     data-session-id="{{ session ? session.id : '' }}"
 >
 <noscript> {{ "NoJavascript" | trans }} </noscript>
-
-<!-- PAGE -->
 {% block chamilo_wrap %}
-    <!-- HEADER -->
+    <!-- PAGE -->
     {% block page_header %}
+        <!-- HEADER -->
         {% include '@ChamiloTheme/Layout/header.html.twig' %}
+        <!-- END HEADER -->
     {% endblock %}
-    <!-- END HEADER -->
-
     <div class="app-body">
         <!-- SIDEBAR -->
         {% block page_sidebar %}
@@ -51,14 +48,14 @@
             <!-- END CONTENT -->
         </main>
     </div>
+    <!-- END PAGE -->
 {% endblock %}
-<!-- END PAGE -->
 
-<!-- FOOTER -->
 {% block chamilo_footer %}
+    <!-- FOOTER -->
     {% include '@ChamiloTheme/Layout/footer.html.twig' %}
+    <!-- END FOOTER -->
 {% endblock %}
-<!-- END FOOTER -->
 
 <div class="modal fade" id="expand-image-modal" tabindex="-1" role="dialog" aria-labelledby="expand-image-modal-title" aria-hidden="true">
     <div class="modal-dialog modal-lg">
@@ -97,23 +94,29 @@
     // MODAL DELETE CONFIRM
     $('.delete-swal').click(function (e) {
         e.preventDefault(); // Prevent the href from redirecting directly
-        var linkURL = $(this).attr("href");
+        var url = $(this).attr("href");
         var title = $(this).attr("title");
-        deleteConfirm(linkURL, title);
-    });
-    function deleteConfirm(linkURL, title) {
-        swal({
-            //title: '{{ 'Warning'|trans }}',
-            text: title,
-            icon: "warning",
-            buttons: true,
-            dangerMode: true,
-        }).then((willDelete) => {
-            if (willDelete) {
-                window.location.href = linkURL;
+
+        Swal.fire({
+            title: title,
+            text: '',
+            icon: 'warning',
+            showCancelButton: true,
+            cancelButtonText: '{{ 'Cancel' | trans }}',
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#d33',
+            confirmButtonText: '{{ 'Yes' | trans }}',
+        }).then((result) => {
+            if (result.value) {
+                /*Swal.fire(
+                    'Deleted!',
+                    'Your file has been deleted.',
+                    'success'
+                )*/
+                window.location.href = url;
             }
         });
-    }
+    });
 </script>
 
 </body>

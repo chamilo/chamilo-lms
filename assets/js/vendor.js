@@ -23,7 +23,7 @@ require('jquery.scrollbar');
 require('blueimp-file-upload');
 require('select2');
 require('timeago');
-require('sweetalert/dist/sweetalert.min');
+require('sweetalert2');
 require('bootstrap-select/dist/js/bootstrap-select.js');
 require('bootstrap-daterangepicker');
 require('fullcalendar/dist/fullcalendar.js');

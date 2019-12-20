@@ -17,7 +17,7 @@ Feature: Agenda tool
     Then I should see "Event added"
 
   Scenario: Create an event inside course TEMP
-    Given I am on "/main/calendar/agenda.php?action=add&type=course&cidReq=TEMP"
+    Given I am on "/main/calendar/agenda.php?action=add&type=course&cid=1"
     When I fill in the following:
       | title | Event in course |
     Then I fill in ckeditor field "content" with "Description event"

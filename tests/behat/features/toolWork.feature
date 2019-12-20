@@ -5,7 +5,7 @@ Feature: Work tool
   Scenario: Create a work
     Given I am a platform administrator
     And I am on course "TEMP" homepage
-    And I am on "/main/work/work.php?action=create_dir&cidReq=TEMP"
+    And I am on "/main/work/work.php?action=create_dir&cid=1"
     When I fill in the following:
       | new_dir | Work 1 |
     And I fill in ckeditor field "description" with "Work description"
@@ -15,7 +15,7 @@ Feature: Work tool
   Scenario: Edit a work
     Given I am a platform administrator
     And I am on course "TEMP" homepage
-    And I am on "/main/work/work.php?cidReq=TEMP"
+    And I am on "/main/work/work.php?cid=1"
     And wait for the page to be loaded
     And I follow "Work 1"
     Then I should see "Work description"
@@ -27,7 +27,7 @@ Feature: Work tool
 
   Scenario: Send work as student
     Given I am a student
-    And I am on "/main/work/work.php?cidReq=TEMP"
+    And I am on "/main/work/work.php?cid=1"
     And wait for the page to be loaded
     And I follow "Work 1"
     Then I should see "Work 1"
@@ -42,7 +42,7 @@ Feature: Work tool
 
   Scenario: Check that work previously uploaded by student is available for the teacher.
     Given I am a platform administrator
-    And I am on "/main/work/work.php?cidReq=TEMP"
+    And I am on "/main/work/work.php?cid=1"
     And wait for the page to be loaded
     And I follow "Work 1"
     And wait for the page to be loaded
@@ -52,7 +52,7 @@ Feature: Work tool
 
 #  Scenario: Add a comment and a attachment to the work previously uploaded by student
 #    Given I am a platform administrator
-#    And I am on "/main/work/work.php?cidReq=TEMP"
+#    And I am on "/main/work/work.php?cid=1"
 #    And wait for the page to be loaded
 #    And I follow "Work 1"
 #    Then I should see "Work description"

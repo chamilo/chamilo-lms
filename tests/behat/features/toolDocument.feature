@@ -6,7 +6,7 @@ Feature: Document tool
     Given I am a platform administrator
 
   Scenario: Create a folder
-    Given I am on "/main/document/document.php?cidReq=TEMP&createdir=1"
+    Given I am on "/main/document/document.php?cid=1&createdir=1"
     Then I should see "Create folder"
     And I fill in the following:
       | dirname | My new directory |
@@ -14,7 +14,7 @@ Feature: Document tool
     Then I should see "Folder created"
 
   Scenario: Create a folder that already exists
-    Given I am on "/main/document/document.php?cidReq=TEMP&createdir=1"
+    Given I am on "/main/document/document.php?cid=1&createdir=1"
     Then I should see "Create folder"
     And I fill in the following:
       | dirname | My new directory |
@@ -22,7 +22,7 @@ Feature: Document tool
     Then I should see "Unable to create the folder"
 
   Scenario: Create a simple document
-    Given I am on "/main/document/create_document.php?cidReq=TEMP"
+    Given I am on "/main/document/create_document.php?cid=1"
     Then I should see "Create a rich media page / activity"
     Then I fill in the following:
       | create_document_title   | My first document                       |
@@ -35,7 +35,7 @@ Feature: Document tool
     Then I should see "My first document"
 
   Scenario: Create a HTML document
-    Given I am on "/main/document/create_document.php?cidReq=TEMP"
+    Given I am on "/main/document/create_document.php?cid=1"
     Then I should see "Create a rich media page / activity"
     Then I fill in the following:
       | create_document_title   | My second document                       |
@@ -50,7 +50,7 @@ Feature: Document tool
     And I should not see "www.chamilo.org"
 
   Scenario: Upload a document
-    Given I am on "/main/document/upload.php?cidReq=TEMP"
+    Given I am on "/main/document/upload.php?cid=1"
     Then I should see "Upload documents"
     Then I follow "Upload (Simple)"
     Then I attach the file "web/css/base.css" to "file"
@@ -59,7 +59,7 @@ Feature: Document tool
     Then I should see "File upload succeeded"
 
 #  Scenario: Create cloud link
-#    Given I am on "/main/document/add_link.php?cidReq=TEMP"
+#    Given I am on "/main/document/add_link.php?cid=1"
 #    Then I should see "Add a link"
 #    And I fill in the following:
 #      | name | My dropbox link |

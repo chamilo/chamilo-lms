@@ -7,21 +7,21 @@ Feature: Group tool
     And I am on course "TEMP" homepage
 
   Scenario: Delete default category
-    Given I am on "/main/group/group.php?cidReq=TEMP&id_session=0"
+    Given I am on "/main/group/group.php?cid=1&sid=0"
     Then I should see "Default groups"
     Then I follow "Delete"
     Then I confirm the popup
     Then I should see "The category has been deleted"
 
   Scenario: Create a group directory
-    Given I am on "/main/group/group_category.php?cidReq=TEMP&id_session=0&action=add_category"
+    Given I am on "/main/group/group_category.php?cid=1&sid=0&action=add_category"
     When I fill in the following:
       | title | Group category 1 |
     And I press "group_category_submit"
     Then I should see "Category created"
 
   Scenario: Create 4 groups
-    Given I am on "/main/group/group_creation.php?cidReq=TEMP&id_session=0"
+    Given I am on "/main/group/group_creation.php?cid=1&sid=0"
     When I fill in the following:
       | number_of_groups | 5 |
     And I press "submit"
@@ -42,7 +42,7 @@ Feature: Group tool
 
 
   Scenario: Create document folder in group
-    Given I am on "/main/group/group.php?cidReq=TEMP&id_session=0"
+    Given I am on "/main/group/group.php?cid=1&sid=0"
     And I follow "Group 0001"
     Then I should see "Group 0001"
     And I follow "Documents"
@@ -55,7 +55,7 @@ Feature: Group tool
     Then I should see "Folder created"
 
   Scenario: Create document inside folder in group
-    Given I am on "/main/group/group.php?cidReq=TEMP&id_session=0"
+    Given I am on "/main/group/group.php?cid=1&sid=0"
     And I follow "Group 0001"
     Then I should see "Group 0001"
     And I follow "Documents"
@@ -70,7 +70,7 @@ Feature: Group tool
     Then I should see "Item added"
 
   Scenario: Upload a document inside folder in group
-    Given I am on "/main/group/group.php?cidReq=TEMP&id_session=0"
+    Given I am on "/main/group/group.php?cid=1&sid=0"
     And I follow "Group 0001"
     Then I should see "Group 0001"
     And I follow "Documents"
@@ -86,7 +86,7 @@ Feature: Group tool
     Then I should see "File upload succeeded"
 
   Scenario: Delete 2 uploaded files
-    Given I am on "/main/group/group.php?cidReq=TEMP&id_session=0"
+    Given I am on "/main/group/group.php?cid=1&sid=0"
     And I follow "Group 0001"
     Then I should see "Group 0001"
     And I follow "Documents"
@@ -98,7 +98,7 @@ Feature: Group tool
     Then I follow "delete_item"
 
   Scenario: Delete directory
-    Given I am on "/main/group/group.php?cidReq=TEMP&id_session=0"
+    Given I am on "/main/group/group.php?cid=1&sid=0"
     And I follow "Group 0001"
     Then I should see "Group 0001"
     And I follow "Documents"
@@ -109,7 +109,7 @@ Feature: Group tool
     Then I follow "delete_item"
 
   Scenario: Add fapple to the Group 0001
-    Given I am on "/main/group/group.php?cidReq=TEMP&id_session=0"
+    Given I am on "/main/group/group.php?cid=1&sid=0"
     And I follow "Group 0001"
     Then I should see "Group 0001"
     Then I follow "Edit this group"
@@ -125,7 +125,7 @@ Feature: Group tool
     Then I should see "Fiona"
 
   Scenario: Add fapple to the Group 0003 not allowed because group category allows 1 user per group
-    Given I am on "/main/group/group.php?cidReq=TEMP&id_session=0"
+    Given I am on "/main/group/group.php?cid=1&sid=0"
     And I follow "Group 0003"
     Then I should see "Group 0003"
     Then I follow "Edit this group"
@@ -142,7 +142,7 @@ Feature: Group tool
 
  # Group category overwrites all other groups settings.
   Scenario: Change Group category to allow multiple inscription of the user
-    Given I am on "/main/group/group.php?cidReq=TEMP&id_session=0"
+    Given I am on "/main/group/group.php?cid=1&sid=0"
     And I follow "Edit this category"
     Then I should see "Edit group category: Group category 1"
     Then I fill in select bootstrap static by text "#groups_per_user" select "10"
@@ -150,7 +150,7 @@ Feature: Group tool
     Then I should see "Group settings have been modified"
 
   Scenario: Change Group 0003 settings to make announcements private
-    Given I am on "/main/group/group.php?cidReq=TEMP&id_session=0"
+    Given I am on "/main/group/group.php?cid=1&sid=0"
     And I follow "Group 0003"
     Then I should see "Group 0003"
     Then I follow "Edit this group"
@@ -159,7 +159,7 @@ Feature: Group tool
     Then I should see "Group settings modified"
 
   Scenario: Change Group 0004 settings to make it private
-    Given I am on "/main/group/group.php?cidReq=TEMP&id_session=0"
+    Given I am on "/main/group/group.php?cid=1&sid=0"
     And I follow "Group 0004"
     Then I should see "Group 0004"
     Then I follow "Edit this group"
@@ -168,7 +168,7 @@ Feature: Group tool
     Then I should see "Group settings modified"
 
   Scenario: Change Group 0005 settings to make announcements private between users
-    Given I am on "/main/group/group.php?cidReq=TEMP&id_session=0"
+    Given I am on "/main/group/group.php?cid=1&sid=0"
     And I follow "Group 0005"
     Then I should see "Group 0005"
     Then I follow "Edit this group"
@@ -177,7 +177,7 @@ Feature: Group tool
     Then I should see "Group settings modified"
 
   Scenario: Add fapple and acostea to Group 0005
-    Given I am on "/main/group/group.php?cidReq=TEMP&id_session=0"
+    Given I am on "/main/group/group.php?cid=1&sid=0"
     And I follow "Group 0005"
     Then I should see "Group 0005"
     Then I follow "Edit this group"
@@ -195,7 +195,7 @@ Feature: Group tool
     Then I should see "Andrea"
 
   Scenario: Add fapple to the Group 0003
-    Given I am on "/main/group/group.php?cidReq=TEMP&id_session=0"
+    Given I am on "/main/group/group.php?cid=1&sid=0"
     And I follow "Group 0003"
     Then I should see "Group 0003"
     Then I follow "Edit this group"
@@ -211,7 +211,7 @@ Feature: Group tool
     Then I should see "Fiona"
 
   Scenario: Add acostea to the Group 0002
-    Given I am on "/main/group/group.php?cidReq=TEMP&id_session=0"
+    Given I am on "/main/group/group.php?cid=1&sid=0"
     And I follow "Group 0002"
     Then I should see "Group 0002"
     Then I follow "Edit this group"
@@ -227,7 +227,7 @@ Feature: Group tool
     Then I should see "Andrea"
 
   Scenario: Create an announcement for everybody inside Group 0001
-    Given I am on "/main/group/group.php?cidReq=TEMP&id_session=0"
+    Given I am on "/main/group/group.php?cid=1&sid=0"
     And I follow "Group 0001"
     Then I should see "Group 0001"
     And I follow "Announcements"
@@ -245,7 +245,7 @@ Feature: Group tool
     Then I should see "Announcement has been added"
 
   Scenario: Create an announcement for fapple inside Group 0001
-    Given I am on "/main/group/group.php?cidReq=TEMP&id_session=0"
+    Given I am on "/main/group/group.php?cid=1&sid=0"
     And I follow "Group 0001"
     Then I should see "Group 0001"
     And I follow "Announcements"
@@ -266,7 +266,7 @@ Feature: Group tool
     Then I should see "Announcement has been added"
 
   Scenario: Create an announcement for everybody inside Group 0003 (private)
-    Given I am on "/main/group/group.php?cidReq=TEMP&id_session=0"
+    Given I am on "/main/group/group.php?cid=1&sid=0"
     And I follow "Group 0003"
     Then I should see "Group 0003"
     And I follow "Announcements"
@@ -284,7 +284,7 @@ Feature: Group tool
     Then I should see "Announcement has been added"
 
   Scenario: Create an announcement for fapple inside Group 0003
-    Given I am on "/main/group/group.php?cidReq=TEMP&id_session=0"
+    Given I am on "/main/group/group.php?cid=1&sid=0"
     And I follow "Group 0003"
     Then I should see "Group 0003"
     And I follow "Announcements"
@@ -306,7 +306,7 @@ Feature: Group tool
 
   Scenario: Create an announcement as acostea and send only to fapple
     Given I am logged as "acostea"
-    Given I am on "/main/group/group.php?cidReq=TEMP&id_session=0"
+    Given I am on "/main/group/group.php?cid=1&sid=0"
     And I follow "Group 0005"
     Then I should see "Group 0005"
     And I follow "Announcements"
@@ -329,7 +329,7 @@ Feature: Group tool
   Scenario: Check fapple/acostea access of announcements
     Given I am logged as "fapple"
     And I am on course "TEMP" homepage
-    And I am on "/main/group/group.php?cidReq=TEMP&id_session=0"
+    And I am on "/main/group/group.php?cid=1&sid=0"
     And I follow "Group 0001"
     Then I should see "Group 0001"
     Then I follow "Announcements"
@@ -345,7 +345,7 @@ Feature: Group tool
     Then I follow "Announcement for all users inside Group 0001"
     Then I save current URL with name "announcement_for_all_users_group_0001_public"
     Then I should see "Announcement description in Group 0001"
-    And I am on "/main/group/group.php?cidReq=TEMP&id_session=0"
+    And I am on "/main/group/group.php?cid=1&sid=0"
     And I follow "Group 0003"
     Then I should see "Group 0003"
     Then I follow "Announcements"
@@ -361,7 +361,7 @@ Feature: Group tool
     Then I follow "Announcement for all users inside Group 0003"
     Then I should see "Announcement description in Group 0003"
     Then I save current URL with name "announcement_for_all_users_group_0003_private"
-    And I am on "/main/group/group.php?cidReq=TEMP&id_session=0"
+    And I am on "/main/group/group.php?cid=1&sid=0"
     And I follow "Group 0005"
     Then I should see "Group 0005"
     Then I follow "Announcements"
@@ -373,7 +373,7 @@ Feature: Group tool
     ## Finish tests with fapple now check access with acostea ##
     Given I am logged as "acostea"
     And I am on course "TEMP" homepage
-    Given I am on "/main/group/group.php?cidReq=TEMP&id_session=0"
+    Given I am on "/main/group/group.php?cid=1&sid=0"
     Then I should see "Group 0001"
     And I should see "Group 0002"
     And I should see "Group 0003"
@@ -387,7 +387,7 @@ Feature: Group tool
 
     Given I am logged as "acostea"
     And I am on course "TEMP" homepage
-    Given I am on "/main/group/group.php?cidReq=TEMP&id_session=0"
+    Given I am on "/main/group/group.php?cid=1&sid=0"
     Then I should see "Group 0001"
     And I should see "Group 0002"
     And I should see "Group 0003"

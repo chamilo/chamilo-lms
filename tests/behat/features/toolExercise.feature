@@ -7,7 +7,7 @@ Feature: Exercise tool
     And I am on course "TEMP" homepage
 
   Scenario: Create a question category
-    Given I am on "/main/exercise/tests_category.php?action=addcategory&cidReq=TEMP"
+    Given I am on "/main/exercise/tests_category.php?action=addcategory&cid=1"
     And wait for the page to be loaded
     When I fill in the following:
       | category_name | Category 1 |
@@ -16,7 +16,7 @@ Feature: Exercise tool
     Then I should see "Category added"
 
   Scenario: Create a second question category
-    Given I am on "/main/exercise/tests_category.php?action=addcategory&cidReq=TEMP"
+    Given I am on "/main/exercise/tests_category.php?action=addcategory&cid=1"
     And wait for the page to be loaded
     When I fill in the following:
       | category_name | Category 2 |
@@ -25,7 +25,7 @@ Feature: Exercise tool
     Then I should see "Category added"
 
   Scenario: Create an exercise
-    Given I am on "/main/exercise/exercise_admin.php?cidReq=TEMP"
+    Given I am on "/main/exercise/exercise_admin.php?cid=1"
     And I press advanced settings
     When I fill in the following:
       | exercise_title | Exercise 1 |
@@ -34,7 +34,7 @@ Feature: Exercise tool
     Then I should see "Exercise added"
 
   Scenario: Edit an exercise
-    Given I am on "/main/exercise/exercise.php?cidReq=TEMP"
+    Given I am on "/main/exercise/exercise.php?cid=1"
     And I follow "Exercise 1"
     And I follow "Edit"
     And I follow "Edit test name and settings"
@@ -42,7 +42,7 @@ Feature: Exercise tool
     Then I should see "Test name and settings have been saved."
 
   Scenario: Add question "Multiple choice" to exercise created "Exercise 1"
-    Given I am on "/main/exercise/exercise.php?cidReq=TEMP"
+    Given I am on "/main/exercise/exercise.php?cid=1"
     And I follow "Exercise 1"
     And I follow "Edit"
     And I follow "Multiple choice"
@@ -62,7 +62,7 @@ Feature: Exercise tool
     Then I should see "Item added"
 
   Scenario: Add question "Multiple answer" to exercise created "Exercise 1"
-    Given I am on "/main/exercise/exercise.php?cidReq=TEMP"
+    Given I am on "/main/exercise/exercise.php?cid=1"
     And I follow "Exercise 1"
     And I follow "Edit"
     And I follow "Multiple answer"
@@ -83,7 +83,7 @@ Feature: Exercise tool
     Then I should see "Item added"
 
   Scenario: Add question "Fill in blanks" to "Exercise 1"
-    Given I am on "/main/exercise/exercise.php?cidReq=TEMP"
+    Given I am on "/main/exercise/exercise.php?cid=1"
     And I follow "Exercise 1"
     And I follow "Edit"
     And I follow "Fill blanks or form"
@@ -94,7 +94,7 @@ Feature: Exercise tool
     Then I should see "Item added"
 
   Scenario: Add question "Matching" to exercise created "Exercise 1"
-    Given I am on "/main/exercise/exercise.php?cidReq=TEMP"
+    Given I am on "/main/exercise/exercise.php?cid=1"
     And I follow "Exercise 1"
     And I follow "Edit"
     And I follow "Matching"
@@ -109,7 +109,7 @@ Feature: Exercise tool
     Then I should see "Item added"
 
     Scenario: Add question "Open" to exercise created "Exercise 1"
-    Given I am on "/main/exercise/exercise.php?cidReq=TEMP"
+    Given I am on "/main/exercise/exercise.php?cid=1"
     And I follow "Exercise 1"
     And I follow "Edit"
     And I follow "Open"
@@ -120,7 +120,7 @@ Feature: Exercise tool
     Then I should see "Item added"
 
     Scenario: Add question "Oral expression" to exercise created "Exercise 1"
-    Given I am on "/main/exercise/exercise.php?cidReq=TEMP"
+    Given I am on "/main/exercise/exercise.php?cid=1"
     And I follow "Exercise 1"
     And I follow "Edit"
     And I follow "Oral expression"
@@ -131,7 +131,7 @@ Feature: Exercise tool
     Then I should see "Item added"
 
   Scenario: Add question "Exact answers combination" to exercise created "Exercise 1"
-    Given I am on "/main/exercise/exercise.php?cidReq=TEMP"
+    Given I am on "/main/exercise/exercise.php?cid=1"
     And I follow "Exercise 1"
     And I follow "Edit"
     And I follow "Exact Selection"
@@ -147,7 +147,7 @@ Feature: Exercise tool
     Then I should see "Item added"
 
     Scenario: Add question "Unique answer with unknown" to exercise created "Exercise 1"
-      Given I am on "/main/exercise/exercise.php?cidReq=TEMP"
+      Given I am on "/main/exercise/exercise.php?cid=1"
       And I follow "Exercise 1"
       And I follow "Edit"
       And I follow "Unique answer with unknown"
@@ -166,7 +166,7 @@ Feature: Exercise tool
       Then I should see "Item added"
 
   Scenario: Add question "Multiple answer true/false/don't know" to exercise created "Exercise 1"
-    Given I am on "/main/exercise/exercise.php?cidReq=TEMP"
+    Given I am on "/main/exercise/exercise.php?cid=1"
     And I follow "Exercise 1"
     And I follow "Edit"
     And I follow "Multiple answer true/false/don't know"
@@ -191,7 +191,7 @@ Feature: Exercise tool
     Then I should see "Item added"
 
   Scenario: Add question "Combination true/false/don't-know" to exercise created "Exercise 1"
-    Given I am on "/main/exercise/exercise.php?cidReq=TEMP"
+    Given I am on "/main/exercise/exercise.php?cid=1"
     And I follow "Exercise 1"
     And I follow "Edit"
     And I follow "Combination true/false/don't-know"
@@ -209,7 +209,7 @@ Feature: Exercise tool
     Then I should see "Item added"
 
   Scenario: Add question "Global multiple answer" to exercise created "Exercise 1"
-    Given I am on "/main/exercise/exercise.php?cidReq=TEMP"
+    Given I am on "/main/exercise/exercise.php?cid=1"
     And I follow "Exercise 1"
     And I follow "Edit"
     And I follow "Global multiple answer"
@@ -233,14 +233,14 @@ Feature: Exercise tool
     Then I should see "Item added"
 
   Scenario: Duplicate exercise
-    Given I am on "/main/exercise/exercise.php?cidReq=TEMP"
+    Given I am on "/main/exercise/exercise.php?cid=1"
     And I follow "Copy this exercise as a new one"
     And I confirm the popup
     Then I should see "Exercise copied"
     And I should see "Exercise 1 - Copy"
 
   Scenario: Import exercise to test questions categories
-    Given I am on "/main/exercise/upload_exercise.php?cidReq=TEMP"
+    Given I am on "/main/exercise/upload_exercise.php?cid=1"
     And I should see "Import quiz from Excel"
     And I attach the file "/tests/behat/uploadable_files/exercise.xls" to "user_upload_quiz"
     When I press "Upload"
@@ -248,7 +248,7 @@ Feature: Exercise tool
     Then I should see "Exercise for Behat test"
 
     Scenario: Import exercise from excel
-    Given I am on "/main/exercise/upload_exercise.php?cidReq=TEMP"
+    Given I am on "/main/exercise/upload_exercise.php?cid=1"
     Then I should see "Import quiz from Excel"
     Then I attach the file "/main/exercise/quiz_template.xls" to "user_upload_quiz"
     And I press "Upload"
@@ -256,7 +256,7 @@ Feature: Exercise tool
     Then I should see "Definition of oligarchy"
 
   Scenario: Try exercise "Exercise 1"
-    Given I am on "/main/exercise/exercise.php?cidReq=TEMP"
+    Given I am on "/main/exercise/exercise.php?cid=1"
     And I follow "Exercise 1"
     And I follow "Start test"
     # Question 1
@@ -319,7 +319,7 @@ Feature: Exercise tool
     Then I should see "Score for the test: 83 / 117"
 
   Scenario: Check exercise result
-    Given I am on "/main/exercise/exercise.php?cidReq=TEMP"
+    Given I am on "/main/exercise/exercise.php?cid=1"
     And I follow "Exercise 1"
     And I follow "Edit"
     And I follow "Results and feedback"
@@ -359,7 +359,7 @@ Feature: Exercise tool
     Given I am a student
     And I am on course "TEMP" homepage in session "Session Exercise"
     Then I should see "TEMP (Session Exercise)"
-    And I am on "/main/exercise/exercise.php?cidReq=TEMP"
+    And I am on "/main/exercise/exercise.php?cid=1"
     And I follow "Exercise for Behat test"
     And I follow "Start test"
     When wait for the page to be loaded
@@ -401,7 +401,7 @@ Feature: Exercise tool
     Given I am on "/user_portal.php"
     And I am on course "TEMP" homepage in session "Session Exercise"
     Then I should see "TEMP (Session Exercise)"
-    And I am on "/main/exercise/exercise.php?cidReq=TEMP"
+    And I am on "/main/exercise/exercise.php?cid=1"
     And I follow "Exercise for Behat test"
     And I follow "Results and feedback"
     Then I should see "Learner score"
@@ -416,18 +416,18 @@ Feature: Exercise tool
       | Total         | 190 / 190      | 100%           |
 
   Scenario: Delete an exercise
-    Given I am on "/main/exercise/exercise.php?cidReq=TEMP"
+    Given I am on "/main/exercise/exercise.php?cid=1"
     And I follow "Delete"
     And I confirm the popup
     Then I should see "The test has been deleted"
 
   Scenario: Delete an exercise category
-    Given I am on "/main/exercise/tests_category.php?cidReq=TEMP"
+    Given I am on "/main/exercise/tests_category.php?cid=1"
     And I follow "Delete"
     Then I should see "Category deleted"
 
   Scenario: Delete an exercise category
-    Given I am on "/main/exercise/tests_category.php?cidReq=TEMP"
+    Given I am on "/main/exercise/tests_category.php?cid=1"
     And I follow "Delete"
     Then I should see "Category deleted"
 

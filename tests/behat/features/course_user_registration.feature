@@ -13,7 +13,7 @@ Feature: Subscribe users to the course
     Given I am on "/main/user/user.php?cid=1"
     Then I should see "Aimee"
     Then I follow "Unsubscribe"
-    And I confirm the popup
+    And I press "Yes"
     Then I should see "User is now unsubscribed"
 
   Scenario: Subscribe "acostea" as student to the course "TEMP" (leave it subscribed for further tests)

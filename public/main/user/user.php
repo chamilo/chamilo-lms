@@ -423,35 +423,10 @@ if (api_is_allowed_to_edit(null, true)) {
         if (isset($_GET['user_id']) && is_numeric($_GET['user_id']) &&
             ($_GET['user_id'] != $_user['user_id'] || api_is_platform_admin())
         ) {
-            $user_id = (int) $_GET['user_id'];
-            $tbl_user = Database::get_main_table(TABLE_MAIN_USER);
-            $tbl_session_rel_course = Database::get_main_table(TABLE_MAIN_SESSION_COURSE);
-            $tbl_session_rel_user = Database::get_main_table(TABLE_MAIN_SESSION_USER);
-
-            $sql = "SELECT user.user_id
-					FROM $tbl_user user
-					INNER JOIN $tbl_session_rel_user reluser
-					ON user.user_id = reluser.user_id AND reluser.relation_type <> ".SESSION_RELATION_TYPE_RRHH."
-					INNER JOIN $tbl_session_rel_course rel_course
-					ON rel_course.session_id = reluser.session_id
-					WHERE
-					    user.user_id = $user_id AND
-					    rel_course.c_id = $courseId ";
-
-            $result = Database::query($sql);
-            $row = Database::fetch_array($result, 'ASSOC');
-            if ($row['user_id'] == $user_id || $row['user_id'] == "") {
-                CourseManager::unsubscribe_user($_GET['user_id'], $courseCode);
-                Display::addFlash(
-                    Display::return_message(get_lang('User is now unsubscribed'))
-                );
-            } else {
-                Display::addFlash(
-                    Display::return_message(
-                        get_lang('This learner is subscribed in this training through a training session. You cannot edit his information')
-                    )
-                );
-            }
+            CourseManager::unsubscribe_user($_GET['user_id'], $courseCode, 0);
+            Display::addFlash(
+                Display::return_message(get_lang('User is now unsubscribed'))
+            );
         }
     }
 } else {

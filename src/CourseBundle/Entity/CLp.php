@@ -263,11 +263,18 @@ class CLp extends AbstractResource implements ResourceInterface
     protected $expiredOn;
 
     /**
-     * @var string
+     * @var int
      *
      * @ORM\Column(name="accumulate_scorm_time", type="integer", nullable=false, options={"default":1})
      */
     protected $accumulateScormTime;
+
+    /**
+     * @var int
+     *
+     * @ORM\Column(name="accumulate_work_time", type="integer", nullable=false, options={"default":0})
+     */
+    protected $accumulateWorkTime;
 
     /**
      * Constructor.
@@ -275,6 +282,7 @@ class CLp extends AbstractResource implements ResourceInterface
     public function __construct()
     {
         $this->accumulateScormTime = 1;
+        $this->accumulateWorkTime = 0;
         $this->author = '';
         $this->autolaunch = 0;
         $this->contentLocal = 'local';
@@ -1048,7 +1056,7 @@ class CLp extends AbstractResource implements ResourceInterface
     }
 
     /**
-     * @return string
+     * @return int
      */
     public function getAccumulateScormTime()
     {
@@ -1056,13 +1064,33 @@ class CLp extends AbstractResource implements ResourceInterface
     }
 
     /**
-     * @param string $accumulateScormTime
+     * @param int $accumulateScormTime
      *
      * @return CLp
      */
     public function setAccumulateScormTime($accumulateScormTime)
     {
         $this->accumulateScormTime = $accumulateScormTime;
+
+        return $this;
+    }
+
+    /**
+     * @return int
+     */
+    public function getAccumulateWorkTime(): int
+    {
+        return $this->accumulateWorkTime;
+    }
+
+    /**
+     * @param int $accumulateWorkTime
+     *
+     * @return CLp
+     */
+    public function setAccumulateWorkTime(int $accumulateWorkTime): CLp
+    {
+        $this->accumulateWorkTime = $accumulateWorkTime;
 
         return $this;
     }

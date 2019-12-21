@@ -13,7 +13,7 @@ require_once __DIR__.'/../../../../vendor/autoload.php';
  */
 class SaveUserTest extends V2TestCase
 {
-    protected function action()
+    public function action()
     {
         return 'save_user';
     }

@@ -13,14 +13,14 @@ require_once __DIR__.'/../../../../vendor/autoload.php';
  */
 class UsernameExistTest extends V2TestCase
 {
-    protected function action()
+    public function action()
     {
         return 'username_exist';
     }
 
     /**
-     * test existence of a username which does not exist
-     * assert that false is returned
+     * test nonexistence of a username which does not exist
+     * assert that the webservice returns false
      */
     public function testUsernameWhichDoesNotExist()
     {
@@ -33,6 +33,10 @@ class UsernameExistTest extends V2TestCase
         $this->assertFalse($this->boolean(['loginname' => $loginName]));
     }
 
+    /**
+     * test existence of a username which does exist
+     * assert that the webservice returns true
+     */
     public function testUsernameWhichDoesExist()
     {
         // generate a random name which does not exist in the database

@@ -1965,7 +1965,8 @@ class Rest extends WebService
      * @param string $loginname the user login name
      * @return bool whether the user login name exists
      */
-    public function usernameExist($loginname) {
+    public function usernameExist($loginname)
+    {
         return false !== api_get_user_info_from_username($loginname);
     }
 }

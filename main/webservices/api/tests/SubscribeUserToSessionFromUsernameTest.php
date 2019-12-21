@@ -13,7 +13,7 @@ require_once __DIR__.'/../../../../vendor/autoload.php';
  */
 class SubscribeUserToSessionFromUsernameTest extends V2TestCase
 {
-    protected function action()
+    public function action()
     {
         return 'subscribe_user_to_session_from_username';
     }

@@ -4,6 +4,8 @@
 
 namespace Chamilo\CourseBundle\Entity;
 
+use Chamilo\CoreBundle\Entity\Resource\AbstractResource;
+use Chamilo\CoreBundle\Entity\Resource\ResourceInterface;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -20,13 +22,13 @@ use Doctrine\ORM\Mapping as ORM;
  *      @ORM\Index(name="c_id_visible_post_date", columns={"c_id", "visible", "post_date"})
  *  }
  * )
- * @ORM\Entity(repositoryClass="Chamilo\CourseBundle\Repository\CForumPostRepository")
+ * @ORM\Entity()
  */
-class CForumPost
+class CForumPost extends AbstractResource implements ResourceInterface
 {
-    const STATUS_VALIDATED = 1;
-    const STATUS_WAITING_MODERATION = 2;
-    const STATUS_REJECTED = 3;
+    public const STATUS_VALIDATED = 1;
+    public const STATUS_WAITING_MODERATION = 2;
+    public const STATUS_REJECTED = 3;
 
     /**
      * @var int
@@ -128,6 +130,15 @@ class CForumPost
      * @ORM\Column(name="status", type="integer", nullable=true)
      */
     protected $status;
+
+    public function __construct()
+    {
+    }
+
+    public function __toString(): string
+    {
+        return (string) $this->getPostTitle();
+    }
 
     /**
      * Set postTitle.
@@ -443,5 +454,18 @@ class CForumPost
     public function getIid()
     {
         return $this->iid;
+    }
+
+    /**
+     * Resource identifier.
+     */
+    public function getResourceIdentifier(): int
+    {
+        return $this->getIid();
+    }
+
+    public function getResourceName(): string
+    {
+        return $this->getPostTitle();
     }
 }

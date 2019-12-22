@@ -2094,14 +2094,23 @@ function get_last_post_information($forum_id, $show_invisibles = false, $course_
  * @param int|null $courseId  Optional If is null then it is considered the current course
  * @param int|null $sessionId Optional. If is null then it is considered the current session
  *
- * @return array containing all the information about the threads
- *
- * @author Patrick Cool <patrick.cool@UGent.be>, Ghent University
- *
- * @version february 2006, dokeos 1.8
  */
 function get_threads($forum_id, $courseId = null, $sessionId = null)
 {
+    $repo = Container::getForumRepository();
+    $courseId = empty($courseId) ? api_get_course_int_id() : $courseId;
+    $course = api_get_course_entity($courseId);
+    $session = api_get_session_entity($sessionId);
+
+    $qb = $repo->getResourcesByCourse($course, $session);
+
+    /*$qb->andWhere('resource.forumCategory = :catId')
+        ->setParameter('catId', $cat_id);
+    */
+    return $qb->getQuery()->getResult();
+
+
+
     $groupId = api_get_group_id();
     $sessionId = $sessionId !== null ? (int) $sessionId : api_get_session_id();
     $table_item_property = Database::get_course_table(TABLE_ITEM_PROPERTY);

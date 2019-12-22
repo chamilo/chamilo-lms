@@ -15,6 +15,8 @@ use Chamilo\CourseBundle\Repository\CDocumentRepository;
 use Chamilo\CourseBundle\Repository\CExerciseCategoryRepository;
 use Chamilo\CourseBundle\Repository\CForumCategoryRepository;
 use Chamilo\CourseBundle\Repository\CForumForumRepository;
+use Chamilo\CourseBundle\Repository\CForumPostRepository;
+use Chamilo\CourseBundle\Repository\CForumThreadRepository;
 use Chamilo\CourseBundle\Repository\CLpCategoryRepository;
 use Chamilo\CourseBundle\Repository\CLpRepository;
 use Chamilo\CourseBundle\Repository\CQuizQuestionCategoryRepository;
@@ -319,6 +321,22 @@ class Container
     public static function getForumCategoryRepository()
     {
         return self::$container->get('Chamilo\CourseBundle\Repository\CForumCategoryRepository');
+    }
+
+    /**
+     * @return CForumPostRepository
+     */
+    public static function getForumPostRepository()
+    {
+        return self::$container->get('Chamilo\CourseBundle\Repository\CForumPostRepository');
+    }
+
+    /**
+     * @return CForumThreadRepository
+     */
+    public static function getForumThreadRepository()
+    {
+        return self::$container->get('Chamilo\CourseBundle\Repository\CForumThreadRepository');
     }
 
     /**

@@ -10308,14 +10308,10 @@ class learnpath
         $a_forums = [];
         foreach ($forumCategories as $forumCategory) {
             // The forums in this category.
-            $forumsInCategory = get_forums_in_category($forumCategory['cat_id']);
+            $forumsInCategory = get_forums_in_category($forumCategory->getIid());
             if (!empty($forumsInCategory)) {
                 foreach ($forumList as $forum) {
-                    if (isset($forum['forum_category']) &&
-                        $forum['forum_category'] == $forumCategory['cat_id']
-                    ) {
-                        $a_forums[] = $forum;
-                    }
+                    $a_forums[] = $forum;
                 }
             }
         }
@@ -10349,48 +10345,48 @@ class learnpath
         </script>';
 
         foreach ($a_forums as $forum) {
-            if (!empty($forum['forum_id'])) {
-                $link = Display::url(
-                    Display::return_icon('preview_view.png', get_lang('Preview')),
-                    api_get_path(WEB_CODE_PATH).'forum/viewforum.php?'.api_get_cidreq().'&forum='.$forum['forum_id'],
-                    ['target' => '_blank']
-                );
+            $forumId = $forum->getIid();
+            $title = Security::remove_XSS($forum->getForumTitle());
+            $link = Display::url(
+                Display::return_icon('preview_view.png', get_lang('Preview')),
+                api_get_path(WEB_CODE_PATH).'forum/viewforum.php?'.api_get_cidreq().'&forum='.$forumId,
+                ['target' => '_blank']
+            );
 
-                $return .= '<li class="lp_resource_element" data_id="'.$forum['forum_id'].'" data_type="'.TOOL_FORUM.'" title="'.$forum['forum_title'].'" >';
-                $return .= '<a class="moved" href="#">';
-                $return .= Display::return_icon('move_everywhere.png', get_lang('Move'), [], ICON_SIZE_TINY);
-                $return .= ' </a>';
-                $return .= Display::return_icon('forum.png', '', [], ICON_SIZE_TINY);
-                $return .= '<a onclick="javascript:toggle_forum('.$forum['forum_id'].');" style="cursor:hand; vertical-align:middle">
-                                <img src="'.Display::returnIconPath('add.png').'" id="forum_'.$forum['forum_id'].'_opener" align="absbottom" />
-                            </a>
-                            <a class="moved" href="'.api_get_self().'?'.api_get_cidreq().'&action=add_item&type='.TOOL_FORUM.'&forum_id='.$forum['forum_id'].'&lp_id='.$this->lp_id.'" style="vertical-align:middle">'.
-                    Security::remove_XSS($forum['forum_title']).' '.$link.'</a>';
+            $return .= '<li class="lp_resource_element" data_id="'.$forumId.'" data_type="'.TOOL_FORUM.'" title="'.$title.'" >';
+            $return .= '<a class="moved" href="#">';
+            $return .= Display::return_icon('move_everywhere.png', get_lang('Move'), [], ICON_SIZE_TINY);
+            $return .= ' </a>';
+            $return .= Display::return_icon('forum.png', '', [], ICON_SIZE_TINY);
+            $return .= '<a onclick="javascript:toggle_forum('.$forumId.');" style="cursor:hand; vertical-align:middle">
+                            <img src="'.Display::returnIconPath('add.png').'" id="forum_'.$forumId.'_opener" align="absbottom" />
+                        </a>
+                        <a class="moved" href="'.api_get_self().'?'.api_get_cidreq().'&action=add_item&type='.TOOL_FORUM.'&forum_id='.$forumId.'&lp_id='.$this->lp_id.'" style="vertical-align:middle">'.
+                $title.' '.$link.'</a>';
 
-                $return .= '</li>';
+            $return .= '</li>';
 
-                $return .= '<div style="display:none" id="forum_'.$forum['forum_id'].'_content">';
-                $a_threads = get_threads($forum['forum_id']);
-                if (is_array($a_threads)) {
-                    foreach ($a_threads as $thread) {
-                        $link = Display::url(
-                            Display::return_icon('preview_view.png', get_lang('Preview')),
-                            api_get_path(WEB_CODE_PATH).'forum/viewthread.php?'.api_get_cidreq().'&forum='.$forum['forum_id'].'&thread='.$thread['thread_id'],
-                            ['target' => '_blank']
-                        );
+            $return .= '<div style="display:none" id="forum_'.$forumId.'_content">';
+            $a_threads = get_threads($forumId);
+            if (is_array($a_threads)) {
+                foreach ($a_threads as $thread) {
+                    $link = Display::url(
+                        Display::return_icon('preview_view.png', get_lang('Preview')),
+                        api_get_path(WEB_CODE_PATH).'forum/viewthread.php?'.api_get_cidreq().'&forum='.$forum['forum_id'].'&thread='.$thread['thread_id'],
+                        ['target' => '_blank']
+                    );
 
-                        $return .= '<li class="lp_resource_element" data_id="'.$thread['thread_id'].'" data_type="'.TOOL_THREAD.'" title="'.$thread['thread_title'].'" >';
-                        $return .= '&nbsp;<a class="moved" href="#">';
-                        $return .= Display::return_icon('move_everywhere.png', get_lang('Move'), [], ICON_SIZE_TINY);
-                        $return .= ' </a>';
-                        $return .= Display::return_icon('forumthread.png', get_lang('Thread'), [], ICON_SIZE_TINY);
-                        $return .= '<a class="moved" href="'.api_get_self().'?'.api_get_cidreq().'&action=add_item&type='.TOOL_THREAD.'&thread_id='.$thread['thread_id'].'&lp_id='.$this->lp_id.'">'.
-                            Security::remove_XSS($thread['thread_title']).' '.$link.'</a>';
-                        $return .= '</li>';
-                    }
+                    $return .= '<li class="lp_resource_element" data_id="'.$thread['thread_id'].'" data_type="'.TOOL_THREAD.'" title="'.$thread['thread_title'].'" >';
+                    $return .= '&nbsp;<a class="moved" href="#">';
+                    $return .= Display::return_icon('move_everywhere.png', get_lang('Move'), [], ICON_SIZE_TINY);
+                    $return .= ' </a>';
+                    $return .= Display::return_icon('forumthread.png', get_lang('Thread'), [], ICON_SIZE_TINY);
+                    $return .= '<a class="moved" href="'.api_get_self().'?'.api_get_cidreq().'&action=add_item&type='.TOOL_THREAD.'&thread_id='.$thread['thread_id'].'&lp_id='.$this->lp_id.'">'.
+                        Security::remove_XSS($thread['thread_title']).' '.$link.'</a>';
+                    $return .= '</li>';
                 }
-                $return .= '</div>';
             }
+            $return .= '</div>';
         }
         $return .= '</ul>';
 

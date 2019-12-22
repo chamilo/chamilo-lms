@@ -138,7 +138,7 @@ class LearnpathList
                 $session_id
             );*/
             $visibility = $row->isVisible($courseEntity, $sessionEntity);
-var_dump($visibility);
+
             // If option is not true then don't show invisible LP to user
             if ($ignoreLpVisibility === false) {
                 if ($showBlockedPrerequisite !== true && !$isAllowToEdit) {

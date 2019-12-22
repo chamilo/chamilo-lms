@@ -4,6 +4,8 @@
 
 namespace Chamilo\CourseBundle\Entity;
 
+use Chamilo\CoreBundle\Entity\Resource\AbstractResource;
+use Chamilo\CoreBundle\Entity\Resource\ResourceInterface;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
 
@@ -17,9 +19,9 @@ use Doctrine\ORM\Mapping as ORM;
  *      @ORM\Index(name="idx_forum_thread_forum_id", columns={"forum_id"})
  *  }
  * )
- * @ORM\Entity(repositoryClass="Chamilo\CourseBundle\Repository\CForumThreadRepository")
+ * @ORM\Entity()
  */
-class CForumThread
+class CForumThread extends AbstractResource implements ResourceInterface
 {
     /**
      * @var int
@@ -184,6 +186,11 @@ class CForumThread
         $this->threadPeerQualify = false;
         $this->threadReplies = 0;
         $this->threadViews = 0;
+    }
+
+    public function __toString(): string
+    {
+        return (string) $this->getThreadTitle();
     }
 
     /**
@@ -672,5 +679,18 @@ class CForumThread
     public function getItemProperty()
     {
         return $this->itemProperty;
+    }
+
+    /**
+     * Resource identifier.
+     */
+    public function getResourceIdentifier(): int
+    {
+        return $this->getIid();
+    }
+
+    public function getResourceName(): string
+    {
+        return $this->getThreadTitle();
     }
 }

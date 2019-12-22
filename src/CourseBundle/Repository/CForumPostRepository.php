@@ -5,26 +5,17 @@
 namespace Chamilo\CourseBundle\Repository;
 
 use Chamilo\CoreBundle\Entity\Course;
+use Chamilo\CoreBundle\Repository\ResourceRepository;
 use Chamilo\CourseBundle\Entity\CForumPost;
 use Chamilo\CourseBundle\Entity\CForumThread;
 use Chamilo\CourseBundle\Entity\CGroupInfo;
 use Chamilo\UserBundle\Entity\User;
-use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
-use Doctrine\Common\Persistence\ManagerRegistry;
 
 /**
  * Class CForumPostRepository.
  */
-class CForumPostRepository extends ServiceEntityRepository
+class CForumPostRepository extends ResourceRepository
 {
-    /**
-     * CForumPostRepository constructor.
-     */
-    public function __construct(ManagerRegistry $registry)
-    {
-        parent::__construct($registry, CForumPost::class);
-    }
-
     /**
      * @param bool   $onlyVisibles
      * @param bool   $isAllowedToEdit

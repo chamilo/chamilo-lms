@@ -1,8 +1,15 @@
 <?php
 /* For licensing terms, see /license.txt */
 
+use Chamilo\CoreBundle\Entity\Course;
+use Chamilo\CoreBundle\Entity\Resource\AbstractResource;
+use Chamilo\CoreBundle\Entity\Resource\ResourceLink;
+use Chamilo\CoreBundle\Framework\Container;
+use Chamilo\CourseBundle\Entity\CForumCategory;
+use Chamilo\CourseBundle\Entity\CForumForum;
 use Chamilo\CourseBundle\Entity\CForumPost;
 use Chamilo\CourseBundle\Entity\CForumThread;
+use Chamilo\CourseBundle\Entity\CGroupInfo;
 use Chamilo\UserBundle\Entity\User;
 use ChamiloSession as Session;
 use Doctrine\Common\Collections\Criteria;
@@ -292,8 +299,9 @@ function show_add_forum_form($inputvalues = [], $lp_id)
 
     // Dropdown list: Forum categories
     $forum_categories = get_forum_categories();
-    foreach ($forum_categories as $key => $value) {
-        $forum_categories_titles[$value['cat_id']] = $value['cat_title'];
+    $forum_categories_titles = [];
+    foreach ($forum_categories as $value) {
+        $forum_categories_titles[$value->getCatId()] = $value->getCatTitle();
     }
     $form->addElement(
         'select',
@@ -587,10 +595,6 @@ function show_edit_forumcategory_form($inputvalues = [])
  * @param array $values
  * @param array $courseInfo
  * @param bool  $showMessage
- *
- * @author Patrick Cool <patrick.cool@UGent.be>, Ghent University
- *
- * @version february 2006, dokeos 1.8
  */
 function store_forumcategory($values, $courseInfo = [], $showMessage = true)
 {
@@ -608,6 +612,8 @@ function store_forumcategory($values, $courseInfo = [], $showMessage = true)
     $session_id = api_get_session_id();
     $clean_cat_title = $values['forum_category_title'];
     $last_id = null;
+
+    $repo = Container::getForumCategoryRepository();
 
     if (isset($values['forum_category_id'])) {
         // Storing after edition.
@@ -648,22 +654,30 @@ function store_forumcategory($values, $courseInfo = [], $showMessage = true)
 
         $values['item_id'] = $values['forum_category_id'];
     } else {
-        $params = [
-            'c_id' => $course_id,
-            'cat_title' => $clean_cat_title,
-            'cat_comment' => isset($values['forum_category_comment']) ? $values['forum_category_comment'] : '',
-            'cat_order' => $new_max,
-            'session_id' => $session_id,
-            'locked' => 0,
-            'cat_id' => 0,
-        ];
-        $last_id = Database::insert($table_categories, $params);
+
+        $category = new CForumCategory();
+        $category
+            ->setCatTitle($clean_cat_title)
+            ->setCatComment(isset($values['forum_category_comment']) ? $values['forum_category_comment'] : '')
+            ->setCatOrder($new_max)
+            ->setCId($course_id)
+            ->setSessionId($session_id)
+        ;
+        $user = api_get_user_entity(api_get_user_id());
+        $course = api_get_course_entity($course_id);
+        $session = api_get_session_entity($session_id);
+
+        $repo->addResourceToCourse($category, ResourceLink::VISIBILITY_PUBLISHED, $user, $course, $session);
+        $repo->getEntityManager()->persist($category);
+        $repo->getEntityManager()->flush();
+
+        $last_id = $category->getIid();
 
         if ($last_id > 0) {
             $sql = "UPDATE $table_categories SET cat_id = $last_id WHERE iid = $last_id";
             Database::query($sql);
 
-            api_item_property_update(
+            /*api_item_property_update(
                 $courseInfo,
                 TOOL_FORUM_CATEGORY,
                 $last_id,
@@ -675,7 +689,7 @@ function store_forumcategory($values, $courseInfo = [], $showMessage = true)
                 TOOL_FORUM_CATEGORY,
                 0,
                 $courseInfo
-            );
+            );*/
         }
         $return_message = get_lang('The forum category has been added');
 
@@ -710,10 +724,6 @@ function store_forumcategory($values, $courseInfo = [], $showMessage = true)
  * @param bool  $returnId
  *
  * @return string language variable
- *
- * @author Patrick Cool <patrick.cool@UGent.be>, Ghent University
- *
- * @version february 2006, dokeos 1.8
  */
 function store_forum($values, $courseInfo = [], $returnId = false)
 {
@@ -786,40 +796,65 @@ function store_forum($values, $courseInfo = [], $returnId = false)
         }
     }
 
+    $repo = Container::getForumRepository();
+
+    if (!isset($values['forum_id'])) {
+        $forum = new CForumForum();
+        $forum
+            ->setCId($courseId)
+            ->setSessionId($session_id)
+            ->setForumOrder(isset($new_max) ? $new_max : null)
+        ;
+    } else {
+        $forum = $repo->find($values['forum_id']);
+    }
+
+    $forumCategory = null;
+    if (!empty($values['forum_category'])) {
+        $repoForumCategory = Container::getForumCategoryRepository();
+        $forumCategory = $repoForumCategory->find($values['forum_category']);
+    }
+    //'forum_image' => $new_file_name,
+    $forum
+        ->setForumTitle($values['forum_title'])
+        ->setForumComment($values['forum_comment'] ?? null)
+        ->setForumCategory($forumCategory)
+        ->setAllowAnonymous($values['allow_anonymous_group']['allow_anonymous'] ?? null)
+        ->setAllowEdit($values['students_can_edit_group']['students_can_edit'] ?? null)
+        ->setApprovalDirectPost($values['approval_direct_group']['approval_direct'] ?? null)
+        ->setAllowAttachments($values['allow_attachments_group']['allow_attachments'] ?? null)
+        ->setAllowNewThreads($values['allow_new_threads_group']['allow_new_threads'] ?? null)
+        ->setDefaultView($values['default_view_type_group']['default_view_type'] ?? null)
+        ->setForumOfGroup($values['group_forum'] ?? null)
+        ->setForumGroupPublicPrivate($values['public_private_group_forum_group']['public_private_group_forum'] ?? null)
+        ->setModerated($values['moderated']['moderated'] ?? null)
+        ->setStartTime(!empty($values['start_time']) ? api_get_utc_datetime($values['start_time']) : null)
+        ->setEndTime(!empty($values['end_time']) ? api_get_utc_datetime($values['end_time']) : null)
+        ->setSessionId($session_id)
+        ->setLpId($values['lp_id'] ?? 0)
+    ;
+
+    $user = api_get_user_entity(api_get_user_id());
+    $course = api_get_course_entity($courseId);
+    $session = api_get_session_entity($session_id);
+
     if (isset($values['forum_id'])) {
-        // Storing after edition.
-        $params = [
-            'forum_title' => $values['forum_title'],
-            'forum_comment' => isset($values['forum_comment']) ? $values['forum_comment'] : null,
-            'forum_category' => isset($values['forum_category']) ? $values['forum_category'] : null,
-            'allow_anonymous' => isset($values['allow_anonymous_group']['allow_anonymous']) ? $values['allow_anonymous_group']['allow_anonymous'] : null,
-            'allow_edit' => isset($values['students_can_edit_group']['students_can_edit']) ? $values['students_can_edit_group']['students_can_edit'] : null,
-            'approval_direct_post' => isset($values['approval_direct_group']['approval_direct']) ? $values['approval_direct_group']['approval_direct'] : null,
-            'allow_attachments' => isset($values['allow_attachments_group']['allow_attachments']) ? $values['allow_attachments_group']['allow_attachments'] : null,
-            'allow_new_threads' => isset($values['allow_new_threads_group']['allow_new_threads']) ? $values['allow_new_threads_group']['allow_new_threads'] : null,
-            'default_view' => isset($values['default_view_type_group']['default_view_type']) ? $values['default_view_type_group']['default_view_type'] : null,
-            'forum_of_group' => isset($values['group_forum']) ? $values['group_forum'] : null,
-            'forum_group_public_private' => isset($values['public_private_group_forum_group']['public_private_group_forum']) ? $values['public_private_group_forum_group']['public_private_group_forum'] : null,
-            'moderated' => $values['moderated']['moderated'],
-            'start_time' => !empty($values['start_time']) ? api_get_utc_datetime($values['start_time']) : null,
-            'end_time' => !empty($values['end_time']) ? api_get_utc_datetime($values['end_time']) : null,
-            'session_id' => $session_id,
-            'lp_id' => isset($values['lp_id']) ? intval($values['lp_id']) : 0,
-        ];
+        $repo->getEntityManager()->persist($forum);
+        $repo->getEntityManager()->flush();
 
         if (isset($upload_ok)) {
             if ($has_attachment) {
-                $params['forum_image'] = $new_file_name;
+                //$params['forum_image'] = $new_file_name;
             }
         }
 
         if (isset($values['remove_picture']) && $values['remove_picture'] == 1) {
-            $params['forum_image'] = '';
-            delete_forum_image($values['forum_id']);
+            /*$params['forum_image'] = '';
+            delete_forum_image($values['forum_id']);*/
         }
 
         // Move groups from one group to another
-        if (isset($values['group_forum'])) {
+        if (isset($values['group_forum']) && false) {
             $forumData = get_forums($values['forum_id']);
             $currentGroupId = $forumData['forum_of_group'];
             if ($currentGroupId != $values['group_forum']) {
@@ -870,12 +905,7 @@ function store_forum($values, $courseInfo = [], $returnId = false)
             }
         }
 
-        Database::update(
-            $table_forums,
-            $params,
-            ['c_id = ? AND forum_id = ?' => [$courseId, $values['forum_id']]]
-        );
-
+        /*
         api_item_property_update(
             $courseInfo,
             TOOL_FORUM,
@@ -883,10 +913,10 @@ function store_forum($values, $courseInfo = [], $returnId = false)
             'ForumUpdated',
             api_get_user_id(),
             $groupInfo
-        );
+        );*/
 
         $return_message = get_lang('The forum has been modified');
-        $forumId = $values['forum_id'];
+        $forumId = $forum->getIid();
 
         $logInfo = [
             'tool' => TOOL_FORUM,
@@ -900,31 +930,12 @@ function store_forum($values, $courseInfo = [], $returnId = false)
         if ($image_moved) {
             $new_file_name = isset($new_file_name) ? $new_file_name : '';
         }
-        $params = [
-            'c_id' => $courseId,
-            'forum_title' => $values['forum_title'],
-            'forum_image' => $new_file_name,
-            'forum_comment' => isset($values['forum_comment']) ? $values['forum_comment'] : null,
-            'forum_category' => isset($values['forum_category']) ? $values['forum_category'] : null,
-            'allow_anonymous' => isset($values['allow_anonymous_group']['allow_anonymous']) ? $values['allow_anonymous_group']['allow_anonymous'] : null,
-            'allow_edit' => isset($values['students_can_edit_group']['students_can_edit']) ? $values['students_can_edit_group']['students_can_edit'] : null,
-            'approval_direct_post' => isset($values['approval_direct_group']['approval_direct']) ? $values['approval_direct_group']['approval_direct'] : null,
-            'allow_attachments' => isset($values['allow_attachments_group']['allow_attachments']) ? $values['allow_attachments_group']['allow_attachments'] : null,
-            'allow_new_threads' => isset($values['allow_new_threads_group']['allow_new_threads']) ? $values['allow_new_threads_group']['allow_new_threads'] : null,
-            'default_view' => isset($values['default_view_type_group']['default_view_type']) ? $values['default_view_type_group']['default_view_type'] : null,
-            'forum_of_group' => isset($values['group_forum']) ? $values['group_forum'] : null,
-            'forum_group_public_private' => isset($values['public_private_group_forum_group']['public_private_group_forum']) ? $values['public_private_group_forum_group']['public_private_group_forum'] : null,
-            'moderated' => isset($values['moderated']['moderated']) ? (int) $values['moderated']['moderated'] : 0,
-            'start_time' => !empty($values['start_time']) ? api_get_utc_datetime($values['start_time']) : null,
-            'end_time' => !empty($values['end_time']) ? api_get_utc_datetime($values['end_time']) : null,
-            'forum_order' => isset($new_max) ? $new_max : null,
-            'session_id' => $session_id,
-            'lp_id' => isset($values['lp_id']) ? (int) $values['lp_id'] : 0,
-            'locked' => 0,
-            'forum_id' => 0,
-        ];
 
-        $forumId = Database::insert($table_forums, $params);
+        $repo->addResourceToCourse($forum, ResourceLink::VISIBILITY_PUBLISHED, $user, $course, $session);
+        $repo->getEntityManager()->persist($forum);
+        $repo->getEntityManager()->flush();
+
+        $forumId = $forum->getIid();
         if ($forumId > 0) {
             $sql = "UPDATE $table_forums SET forum_id = iid WHERE iid = $forumId";
             Database::query($sql);
@@ -948,7 +959,7 @@ function store_forum($values, $courseInfo = [], $returnId = false)
                 }
             }
 
-            api_item_property_update(
+            /*api_item_property_update(
                 $courseInfo,
                 TOOL_FORUM,
                 $forumId,
@@ -962,7 +973,7 @@ function store_forum($values, $courseInfo = [], $returnId = false)
                 TOOL_FORUM,
                 $group_id,
                 $courseInfo
-            );
+            );*/
 
             $logInfo = [
                 'tool' => TOOL_FORUM,
@@ -1553,14 +1564,19 @@ function move_up_down($content, $direction, $id)
  * @param int        $courseId  Optional. The course ID
  * @param int        $sessionId Optional. The session ID
  *
- * @return array containing all the information about all the forum categories
- *
- * @author Patrick Cool <patrick.cool@UGent.be>, Ghent University
- *
- * @version february 2006, dokeos 1.8
+ * @return CForumCategory[]
  */
-function get_forum_categories($id = '', $courseId = 0, $sessionId = 0)
+function get_forum_categories($id = 0, $courseId = 0, $sessionId = 0)
 {
+    $repo = Container::getForumCategoryRepository();
+
+    $course = api_get_course_entity($courseId);
+    $session = api_get_session_entity($sessionId);
+
+    $qb = $repo->getResources(api_get_user_entity(api_get_user_id()), $course->getResourceNode(), $course, $session);
+
+    return $qb->getQuery()->getResult();
+
     $table_categories = Database::get_course_table(TABLE_FORUM_CATEGORY);
     $table_item_property = Database::get_course_table(TABLE_ITEM_PROPERTY);
 
@@ -1648,6 +1664,16 @@ function get_forum_categories($id = '', $courseId = 0, $sessionId = 0)
  */
 function get_forums_in_category($cat_id, $courseId = 0)
 {
+    $repo = Container::getForumRepository();
+    $course = api_get_course_entity($courseId);
+
+    $qb = $repo->getResourcesByCourse($course, null);
+
+    $qb->andWhere('resource.forumCategory = :catId')
+        ->setParameter('catId', $cat_id);
+
+    return $qb->getQuery()->getResult();
+
     $table_forums = Database::get_course_table(TABLE_FORUM);
     $table_item_property = Database::get_course_table(TABLE_ITEM_PROPERTY);
 
@@ -1696,20 +1722,27 @@ function get_forums_in_category($cat_id, $courseId = 0)
  * @param bool   $includeGroupsForum
  * @param int    $sessionId
  *
- * @return array an array containing all the information about the forums (regardless of their category)
- *
- * @todo check $sql4 because this one really looks fishy.
- *
- * @author Patrick Cool <patrick.cool@UGent.be>, Ghent University
- *
- * @version february 2006, dokeos 1.8
+ * @return CForumForum[]
  */
 function get_forums(
     $id = 0,
-    $course_code = '',
+    $courseId = '',
     $includeGroupsForum = true,
     $sessionId = 0
 ) {
+    $repo = Container::getForumRepository();
+    $courseId = empty($courseId) ? api_get_course_int_id() : $courseId;
+    $course = api_get_course_entity($courseId);
+    $session = api_get_session_entity($sessionId);
+
+    $qb = $repo->getResourcesByCourse($course, $session);
+
+    /*$qb->andWhere('resource.forumCategory = :catId')
+        ->setParameter('catId', $cat_id);
+    */
+    return $qb->getQuery()->getResult();
+
+
     $id = (int) $id;
     $course_info = api_get_course_info($course_code);
 

@@ -232,7 +232,7 @@ class CForumCategory extends AbstractResource implements ResourceInterface
      */
     public function getSessionId()
     {
-        return $this->sessionId;
+        return (int) $this->sessionId;
     }
 
     /**

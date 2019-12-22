@@ -217,6 +217,10 @@ class CForumForum extends AbstractResource implements ResourceInterface
      */
     public function __construct()
     {
+        $this->forumId = 0;
+        $this->locked = 0;
+        $this->forumImage = '';
+        $this->forumOfGroup = 0;
     }
 
     public function __toString(): string

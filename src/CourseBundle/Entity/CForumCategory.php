@@ -4,6 +4,8 @@
 
 namespace Chamilo\CourseBundle\Entity;
 
+use Chamilo\CoreBundle\Entity\Resource\AbstractResource;
+use Chamilo\CoreBundle\Entity\Resource\ResourceInterface;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
 
@@ -17,9 +19,9 @@ use Doctrine\ORM\Mapping as ORM;
  *      @ORM\Index(name="session_id", columns={"session_id"})
  *  }
  * )
- * @ORM\Entity(repositoryClass="Chamilo\CourseBundle\Repository\CForumCategoryRepository")
+ * @ORM\Entity()
  */
-class CForumCategory
+class CForumCategory extends AbstractResource implements ResourceInterface
 {
     /**
      * @var int
@@ -82,14 +84,26 @@ class CForumCategory
     /**
      * @var CItemProperty
      */
-    private $itemProperty;
+    protected $itemProperty;
 
     /**
      * @var ArrayCollection
      *
      * @ORM\OneToMany(targetEntity="Chamilo\CourseBundle\Entity\CForumForum", mappedBy="forumCategory")
      */
-    private $forums;
+    protected $forums;
+
+    public function __construct()
+    {
+        $this->locked = 0;
+
+        $this->catId= 0;
+    }
+
+    public function __toString(): string
+    {
+        return $this->getCatTitle();
+    }
 
     /**
      * Get iid.
@@ -295,5 +309,18 @@ class CForumCategory
     public function getItemProperty()
     {
         return $this->itemProperty;
+    }
+
+    /**
+     * Resource identifier.
+     */
+    public function getResourceIdentifier(): int
+    {
+        return $this->getIid();
+    }
+
+    public function getResourceName(): string
+    {
+        return $this->getCatTitle();
     }
 }

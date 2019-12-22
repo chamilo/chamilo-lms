@@ -5,13 +5,21 @@
 namespace Chamilo\CourseBundle\Repository;
 
 use Chamilo\CoreBundle\Entity\Course;
+use Chamilo\CoreBundle\Entity\Resource\ResourceNode;
 use Chamilo\CoreBundle\Entity\Session;
 use Chamilo\CoreBundle\Repository\ResourceRepository;
 use Chamilo\CourseBundle\Entity\CForumCategory;
+use Chamilo\CourseBundle\Entity\CGroupInfo;
 use Chamilo\CourseBundle\Entity\CItemProperty;
+use Chamilo\UserBundle\Entity\User;
 
 class CForumCategoryRepository extends ResourceRepository
 {
+    public function getResources(User $user, ResourceNode $parentNode, Course $course = null, Session $session = null, CGroupInfo $group = null)
+    {
+        return $this->getResourcesByCourse($course, $session, $group, $parentNode);
+    }
+
     /**
      * @param bool $isAllowedToEdit
      *

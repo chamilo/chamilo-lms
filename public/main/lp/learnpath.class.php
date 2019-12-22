@@ -790,8 +790,8 @@ class learnpath
 
                 $lp = new CLp();
                 $lp
-                    ->setCId($type)
-                    ->setLpType($course_id)
+                    ->setCId($course_id)
+                    ->setLpType($type)
                     ->setName($name)
                     ->setDescription($description)
                     ->setDisplayOrder($dsp)

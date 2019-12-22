@@ -1,6 +1,7 @@
 <?php
 /* For licensing terms, see /license.txt */
 
+use Chamilo\CoreBundle\Framework\Container;
 use Chamilo\CourseBundle\Entity\CLp;
 
 /**
@@ -63,12 +64,12 @@ class LearnpathList
             'lp.sessionId'
         );
 
-        $tbl_tool = Database::get_course_table(TABLE_TOOL_LIST);
-
         $order = ' ORDER BY lp.displayOrder ASC, lp.name ASC';
         if (isset($order_by)) {
             $order = Database::parse_conditions(['order' => $order_by]);
         }
+
+        $repo = Container::getLpRepository();
 
         $now = api_get_utc_datetime();
 
@@ -137,7 +138,7 @@ class LearnpathList
                 $session_id
             );*/
             $visibility = $row->isVisible($courseEntity, $sessionEntity);
-
+var_dump($visibility);
             // If option is not true then don't show invisible LP to user
             if ($ignoreLpVisibility === false) {
                 if ($showBlockedPrerequisite !== true && !$isAllowToEdit) {

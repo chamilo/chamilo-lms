@@ -347,9 +347,10 @@ class DocumentManager
      * This function streams a file to the client.
      *
      * @param string $full_file_name
-     * @param bool   $forced
+     * @param bool   $forced Whether to force the browser to download the file
      * @param string $name
      * @param bool   $fixLinksHttpToHttps change file content from http to https
+     * @param array  $extraHeaders Additional headers to be sent
      *
      * @return false if file doesn't exist, true if stream succeeded
      */
@@ -357,7 +358,8 @@ class DocumentManager
         $full_file_name,
         $forced = false,
         $name = '',
-        $fixLinksHttpToHttps = false
+        $fixLinksHttpToHttps = false,
+        $extraHeaders = []
     ) {
         session_write_close(); //we do not need write access to session anymore
         if (!is_file($full_file_name)) {
@@ -371,6 +373,12 @@ class DocumentManager
 
         // Allows chrome to make videos and audios seekable
         header('Accept-Ranges: bytes');
+        if (!empty($extraHeaders)) {
+            foreach ($extraHeaders as $name => $value) {
+                //TODO: add restrictions to allowed headers?
+                header($name.': '.$value);
+            }
+        }
 
         if ($forced) {
             // Force the browser to save the file instead of opening it

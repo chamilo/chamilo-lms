@@ -207,5 +207,11 @@
             "Chamilo\\CoreBundle\\Composer\\ScriptHandler::deleteOldFilesFrom19x"
         ],
         "phpcs": "phpcs --standard=.php_cs.dist"
+    },
+    "extra": {
+        "symfony": {
+            "allow-contrib": true,
+            "require": "4.4.*"
+        }
     }
 }

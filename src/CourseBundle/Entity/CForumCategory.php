@@ -97,7 +97,7 @@ class CForumCategory extends AbstractResource implements ResourceInterface
     {
         $this->locked = 0;
 
-        $this->catId= 0;
+        $this->catId = 0;
     }
 
     public function __toString(): string

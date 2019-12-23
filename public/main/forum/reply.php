@@ -1,5 +1,10 @@
 <?php
+
 /* For licensing terms, see /license.txt */
+
+use Chamilo\CoreBundle\Framework\Container;
+use Chamilo\CourseBundle\Entity\CForumForum;
+use Chamilo\CourseBundle\Entity\CForumThread;
 
 /**
  * These files are a complete rework of the forum. The database structure is
@@ -14,9 +19,8 @@
  * - sticky messages
  * - new view option: nested view
  * - quoting a message.
- *
- * @package chamilo.forum
  */
+
 require_once __DIR__.'/../inc/global.inc.php';
 
 $this_section = SECTION_COURSES;
@@ -32,7 +36,22 @@ require_once 'forumfunction.inc.php';
 $forumId = isset($_GET['forum']) ? (int) $_GET['forum'] : 0;
 $threadId = isset($_GET['thread']) ? (int) $_GET['thread'] : 0;
 
-/* MAIN DISPLAY SECTION */
+$repo = Container::getForumRepository();
+$forumEntity = null;
+if (!empty($forumId)) {
+    /** @var CForumForum $forumEntity */
+    $forumEntity = $repo->find($forumId);
+}
+
+$repoThread = Container::getForumThreadRepository();
+$threadEntity = null;
+if (!empty($threadId)) {
+    /** @var CForumThread $threadEntity */
+    $threadEntity = $repoThread->find($threadId);
+}
+
+$courseEntity = api_get_course_entity(api_get_course_int_id());
+$sessionEntity = api_get_session_entity(api_get_session_id());
 
 /* Retrieving forum and forum categorie information */
 // We are getting all the information about the current forum and forum category.
@@ -42,7 +61,7 @@ $threadId = isset($_GET['thread']) ? (int) $_GET['thread'] : 0;
 $current_thread = get_thread_information($forumId, $threadId);
 // Note: This has to be validated that it is an existing forum.
 $current_forum = get_forum_information($current_thread['forum_id']);
-$current_forum_category = get_forumcategory_information($current_forum['forum_category']);
+$current_forum_category = $forumEntity->getForumCategory();
 
 /* Is the user allowed here? */
 // The user is not allowed here if
@@ -52,24 +71,25 @@ $current_forum_category = get_forumcategory_information($current_forum['forum_ca
 // The only exception is the course manager
 // I have split this is several pieces for clarity.
 if (!api_is_allowed_to_edit(false, true) &&
-    (($current_forum_category && $current_forum_category['visibility'] == 0) || $current_forum['visibility'] == 0)
+    (($current_forum_category && !$current_forum_category->isVisible($courseEntity, $sessionEntity)) ||
+        !$forumEntity->isVisible($courseEntity, $sessionEntity))
 ) {
     api_not_allowed(true);
 }
 if (!api_is_allowed_to_edit(false, true) &&
-    (($current_forum_category && $current_forum_category['locked'] != 0) ||
-        $current_forum['locked'] != 0 || $current_thread['locked'] != 0)
+    (($current_forum_category && $current_forum_category->getLocked()!= 0) ||
+        $forumEntity->getLocked() != 0 || $threadEntity->getLocked() != 0)
 ) {
     api_not_allowed(true);
 }
-if (!$_user['user_id'] && $current_forum['allow_anonymous'] == 0) {
+if (!$_user['user_id'] && $forumEntity->getAllowAnonymous() == 0) {
     api_not_allowed(true);
 }
 
-if ($current_forum['forum_of_group'] != 0) {
+if ($forumEntity->getForumOfGroup() != 0) {
     $show_forum = GroupManager::user_has_access(
         api_get_user_id(),
-        $current_forum['forum_of_group'],
+        $forumEntity->getForumOfGroup() ,
         GroupManager::GROUP_TOOL_FORUM
     );
     if (!$show_forum) {
@@ -98,11 +118,11 @@ if (!empty($groupId)) {
 
     $interbreadcrumb[] = [
         'url' => api_get_path(WEB_CODE_PATH).'forum/viewforum.php?forum='.$forumId.'&'.api_get_cidreq(),
-        'name' => $current_forum['forum_title'],
+        'name' => $forumEntity->getForumTitle(),
     ];
     $interbreadcrumb[] = [
         'url' => api_get_path(WEB_CODE_PATH).'forum/viewthread.php?forum='.$forumId.'&thread='.$threadId.'&'.api_get_cidreq(),
-        'name' => $current_thread['thread_title'],
+        'name' => $threadEntity->getThreadTitle(),
     ];
 
     $interbreadcrumb[] = [
@@ -115,16 +135,16 @@ if (!empty($groupId)) {
         'name' => $nameTools,
     ];
     $interbreadcrumb[] = [
-        'url' => api_get_path(WEB_CODE_PATH).'forum/viewforumcategory.php?forumcategory='.$current_forum_category['cat_id'].'&'.api_get_cidreq(),
-        'name' => $current_forum_category['cat_title'],
+        'url' => api_get_path(WEB_CODE_PATH).'forum/viewforumcategory.php?forumcategory='.$current_forum_category->getIid().'&'.api_get_cidreq(),
+        'name' => $current_forum_category->getCatTitle(),
     ];
     $interbreadcrumb[] = [
         'url' => api_get_path(WEB_CODE_PATH).'forum/viewforum.php?forum='.$forumId.'&'.api_get_cidreq(),
-        'name' => $current_forum['forum_title'],
+        'name' => $forumEntity->getForumTitle(),
     ];
     $interbreadcrumb[] = [
         'url' => api_get_path(WEB_CODE_PATH).'forum/viewthread.php?forum='.$forumId.'&thread='.$threadId.'&'.api_get_cidreq(),
-        'name' => $current_thread['thread_title'],
+        'name' => $threadEntity->getThreadTitle(),
     ];
     $interbreadcrumb[] = ['url' => '#', 'name' => get_lang('Reply')];
 }
@@ -162,7 +182,8 @@ $logInfo = [
 Event::registerLog($logInfo);
 
 $form = show_add_post_form(
-    $current_forum,
+    $forumEntity,
+    $threadEntity,
     $my_action,
     $my_elements
 );
@@ -173,7 +194,6 @@ if ($origin == 'learnpath') {
     // The last element of the breadcrumb navigation is already set in interbreadcrumb, so give an empty string.
     Display::display_header();
 }
-/* Action links */
 
 if ($origin != 'learnpath') {
     echo '<div class="actions">';
@@ -191,12 +211,12 @@ if ($origin != 'learnpath') {
 echo '<div class="forum_title">';
 echo '<h1>';
 echo Display::url(
-    prepare4display($current_forum['forum_title']),
-    'viewforum.php?'.api_get_cidreq().'&'.http_build_query(['forum' => $current_forum['forum_id']]),
-    ['class' => empty($current_forum['visibility']) ? 'text-muted' : null]
+    prepare4display($forumEntity->getForumTitle()),
+    'viewforum.php?'.api_get_cidreq().'&'.http_build_query(['forum' => $forumId]),
+    ['class' => empty($forumEntity->isVisible($courseEntity, $sessionEntity)) ? 'text-muted' : null]
 );
 echo '</h1>';
-echo '<p class="forum_description">'.prepare4display($current_forum['forum_comment']).'</p>';
+echo '<p class="forum_description">'.prepare4display($forumEntity->getForumComment()).'</p>';
 echo '</div>';
 if ($form) {
     $form->display();

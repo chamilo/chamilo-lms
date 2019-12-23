@@ -19,7 +19,7 @@ use Doctrine\ORM\Mapping as ORM;
  *      @ORM\Index(name="session_id", columns={"session_id"})
  *  }
  * )
- * @ORM\Entity()
+ * @ORM\Entity
  */
 class CForumCategory extends AbstractResource implements ResourceInterface
 {

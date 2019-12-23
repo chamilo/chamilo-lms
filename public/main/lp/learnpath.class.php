@@ -10370,19 +10370,20 @@ class learnpath
             $a_threads = get_threads($forumId);
             if (is_array($a_threads)) {
                 foreach ($a_threads as $thread) {
+                    $threadId = $thread->getIid();
                     $link = Display::url(
                         Display::return_icon('preview_view.png', get_lang('Preview')),
-                        api_get_path(WEB_CODE_PATH).'forum/viewthread.php?'.api_get_cidreq().'&forum='.$forum['forum_id'].'&thread='.$thread['thread_id'],
+                        api_get_path(WEB_CODE_PATH).'forum/viewthread.php?'.api_get_cidreq().'&forum='.$forumId.'&thread='.$threadId,
                         ['target' => '_blank']
                     );
 
-                    $return .= '<li class="lp_resource_element" data_id="'.$thread['thread_id'].'" data_type="'.TOOL_THREAD.'" title="'.$thread['thread_title'].'" >';
+                    $return .= '<li class="lp_resource_element" data_id="'.$thread->getIid().'" data_type="'.TOOL_THREAD.'" title="'.$thread->getThreadTitle().'" >';
                     $return .= '&nbsp;<a class="moved" href="#">';
                     $return .= Display::return_icon('move_everywhere.png', get_lang('Move'), [], ICON_SIZE_TINY);
                     $return .= ' </a>';
                     $return .= Display::return_icon('forumthread.png', get_lang('Thread'), [], ICON_SIZE_TINY);
-                    $return .= '<a class="moved" href="'.api_get_self().'?'.api_get_cidreq().'&action=add_item&type='.TOOL_THREAD.'&thread_id='.$thread['thread_id'].'&lp_id='.$this->lp_id.'">'.
-                        Security::remove_XSS($thread['thread_title']).' '.$link.'</a>';
+                    $return .= '<a class="moved" href="'.api_get_self().'?'.api_get_cidreq().'&action=add_item&type='.TOOL_THREAD.'&thread_id='.$threadId.'&lp_id='.$this->lp_id.'">'.
+                        Security::remove_XSS($thread->getThreadTitle()).' '.$link.'</a>';
                     $return .= '</li>';
                 }
             }

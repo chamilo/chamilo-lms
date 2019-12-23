@@ -19,7 +19,7 @@ use Doctrine\ORM\Mapping as ORM;
  *      @ORM\Index(name="idx_forum_thread_forum_id", columns={"forum_id"})
  *  }
  * )
- * @ORM\Entity()
+ * @ORM\Entity
  */
 class CForumThread extends AbstractResource implements ResourceInterface
 {
@@ -178,14 +178,13 @@ class CForumThread extends AbstractResource implements ResourceInterface
      */
     protected $itemProperty;
 
-    /**
-     * Constructor.
-     */
     public function __construct()
     {
         $this->threadPeerQualify = false;
         $this->threadReplies = 0;
         $this->threadViews = 0;
+        $this->locked = 0;
+        $this->threadId = 0;
     }
 
     public function __toString(): string

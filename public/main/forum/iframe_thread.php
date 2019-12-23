@@ -1,5 +1,10 @@
 <?php
+
 /* For licensing terms, see /license.txt */
+
+use Chamilo\CoreBundle\Framework\Container;
+use Chamilo\CourseBundle\Entity\CForumForum;
+use Chamilo\CourseBundle\Entity\CForumThread;
 
 /**
  * These files are a complete rework of the forum. The database structure is
@@ -17,8 +22,6 @@
  *
  * @author Patrick Cool <patrick.cool@UGent.be>, Ghent University
  * @copyright Ghent University
- *
- * @package chamilo.forum
  */
 require_once __DIR__.'/../inc/global.inc.php';
 
@@ -29,27 +32,31 @@ $nameTools = get_lang('Forums');
 
 require_once 'forumfunction.inc.php';
 
-/* Retrieving forum and forum categorie information */
+$forumId = isset($_GET['forum']) ? (int) $_GET['forum'] : 0;
+$threadId = isset($_GET['thread']) ? (int) $_GET['thread'] : 0;
 
-// We are getting all the information about the current forum and forum category.
-// Note pcool: I tried to use only one sql statement (and function) for this,
-// but the problem is that the visibility of the forum AND forum cateogory are stored in the item_property table.
-$current_thread = get_thread_information(
-    $_GET['forum'],
-    $_GET['thread']
-); // Note: this has to be validated that it is an existing thread.
-$current_forum = get_forum_information($current_thread['forum_id']);
-// Note: this has to be validated that it is an existing forum.
-$current_forum_category = get_forumcategory_information(
-    $current_forum['forum_category']
-);
+$repo = Container::getForumRepository();
+$forumEntity = null;
+if (!empty($forumId)) {
+    /** @var CForumForum $forumEntity */
+    $forumEntity = $repo->find($forumId);
+}
+
+$repoThread = Container::getForumThreadRepository();
+$threadEntity = null;
+if (!empty($threadId)) {
+    /** @var CForumThread $threadEntity */
+    $threadEntity = $repoThread->find($threadId);
+}
+
+$courseEntity = api_get_course_entity(api_get_course_int_id());
+$sessionEntity = api_get_session_entity(api_get_session_id());
 
 /* Is the user allowed here? */
-
 // if the user is not a course administrator and the forum is hidden
 // then the user is not allowed here.
 if (!api_is_allowed_to_edit(false, true) &&
-    ($current_forum['visibility'] == 0 || $current_thread['visibility'] == 0)
+    ($forumEntity->isVisible($courseEntity, $sessionEntity) == false || $threadEntity->isVisible($courseEntity, $sessionEntity) == false)
 ) {
     api_not_allowed(false);
 }
@@ -64,12 +71,12 @@ $table_users = Database::get_main_table(TABLE_MAIN_USER);
 // We are getting all the information about the current forum and forum category.
 // Note pcool: I tried to use only one sql statement (and function) for this,
 // but the problem is that the visibility of the forum AND forum cateogory are stored in the item_property table.
-$sql = "SELECT * FROM $table_posts posts 
+$sql = "SELECT * FROM $table_posts posts
         INNER JOIN $table_users users
         ON (posts.poster_id = users.user_id)
         WHERE
             posts.c_id = $course_id AND
-            posts.thread_id='".$current_thread['thread_id']."'            
+            posts.thread_id='".$threadEntity->getIid()."'
         ORDER BY posts.post_id ASC";
 $result = Database::query($sql);
 

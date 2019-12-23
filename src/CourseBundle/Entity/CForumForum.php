@@ -18,7 +18,7 @@ use Doctrine\ORM\Mapping as ORM;
  *      @ORM\Index(name="course", columns={"c_id"})
  *  }
  * )
- * @ORM\Entity()
+ * @ORM\Entity
  */
 class CForumForum extends AbstractResource implements ResourceInterface
 {

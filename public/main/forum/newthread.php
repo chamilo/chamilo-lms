@@ -1,5 +1,9 @@
 <?php
+
 /* For licensing terms, see /license.txt */
+
+use Chamilo\CoreBundle\Framework\Container;
+use Chamilo\CourseBundle\Entity\CForumForum;
 
 /**
  * These files are a complete rework of the forum. The database structure is
@@ -18,9 +22,8 @@
  * @Author Patrick Cool <patrick.cool@UGent.be>, Ghent University
  * @Copyright Ghent University
  * @Copyright Patrick Cool
- *
- * @package chamilo.forum
  */
+
 require_once __DIR__.'/../inc/global.inc.php';
 
 // The section (tabs).
@@ -38,13 +41,24 @@ require_once 'forumfunction.inc.php';
 
 // Are we in a lp ?
 $origin = api_get_origin();
-/* MAIN DISPLAY SECTION */
+
+$forumId = isset($_GET['forum']) ? (int) $_GET['forum'] : 0;
+$repo = Container::getForumRepository();
+
+$forumEntity = null;
+if (!empty($forumId)) {
+    /** @var CForumForum $forumEntity */
+    $forumEntity = $repo->find($forumId);
+}
+
+$courseEntity = api_get_course_entity(api_get_course_int_id());
+$sessionEntity = api_get_session_entity(api_get_session_id());
 $current_forum = get_forum_information($_GET['forum']);
-$current_forum_category = get_forumcategory_information($current_forum['forum_category']);
+$current_forum_category = $forumEntity->getForumCategory();
 
 $logInfo = [
     'tool' => TOOL_FORUM,
-    'tool_id' => (int) $_GET['forum'],
+    'tool_id' => $forumId,
     'tool_id_detail' => 0,
     'action' => 'add-thread',
     'action_details' => '',
@@ -59,39 +73,41 @@ if (api_is_in_gradebook()) {
 }
 
 /* Is the user allowed here? */
-
 // The user is not allowed here if:
-
 // 1. the forumcategory or forum is invisible (visibility==0) and the user is not a course manager
-if (!api_is_allowed_to_edit(false, true) &&
-    (($current_forum_category && $current_forum_category['visibility'] == 0) || $current_forum['visibility'] == 0)
+if (!api_is_allowed_to_edit(false, true) && //is a student
+    (
+        ($current_forum_category && false == $current_forum_category->isVisible($courseEntity, $sessionEntity)) ||
+        false == $current_forum_category->isVisible($courseEntity, $sessionEntity)
+    )
 ) {
-    api_not_allowed();
+    api_not_allowed(true);
 }
 
 // 2. the forumcategory or forum is locked (locked <>0) and the user is not a course manager
 if (!api_is_allowed_to_edit(false, true) &&
-    (($current_forum_category['visibility'] && $current_forum_category['locked'] != 0) || $current_forum['locked'] != 0)
+    (($current_forum_category->isVisible($courseEntity, $sessionEntity) &&
+        $current_forum_category->getLocked() != 0) || $forumEntity->getLocked() != 0)
 ) {
     api_not_allowed();
 }
 
 // 3. new threads are not allowed and the user is not a course manager
 if (!api_is_allowed_to_edit(false, true) &&
-    $current_forum['allow_new_threads'] != 1
+    $forumEntity->getAllowNewThreads() != 1
 ) {
     api_not_allowed();
 }
 // 4. anonymous posts are not allowed and the user is not logged in
-if (!$_user['user_id'] && $current_forum['allow_anonymous'] != 1) {
+if (!$_user['user_id'] && $forumEntity->getAllowAnonymous() != 1) {
     api_not_allowed();
 }
 
 // 5. Check user access
-if ($current_forum['forum_of_group'] != 0) {
+if ($forumEntity->getForumOfGroup() != 0) {
     $show_forum = GroupManager::user_has_access(
         api_get_user_id(),
-        $current_forum['forum_of_group'],
+        $forumEntity->getForumOfGroup(),
         GroupManager::GROUP_TOOL_FORUM
     );
     if (!$show_forum) {
@@ -125,13 +141,15 @@ if (!empty($groupId)) {
     ];
 } else {
     $interbreadcrumb[] = ['url' => api_get_path(WEB_CODE_PATH).'forum/index.php?'.$cidreq, 'name' => $nameTools];
+    if ($current_forum_category) {
+        $interbreadcrumb[] = [
+            'url' => api_get_path(WEB_CODE_PATH).'forum/viewforumcategory.php?'.$cidreq.'&forumcategory='.$current_forum_category->getIid(),
+            'name' => $current_forum_category->getCatTitle(),
+        ];
+    }
     $interbreadcrumb[] = [
-        'url' => api_get_path(WEB_CODE_PATH).'forum/viewforumcategory.php?'.$cidreq.'&forumcategory='.$current_forum_category['cat_id'],
-        'name' => $current_forum_category['cat_title'],
-    ];
-    $interbreadcrumb[] = [
-        'url' => api_get_path(WEB_CODE_PATH).'forum/viewforum.php?'.$cidreq.'&forum='.intval($_GET['forum']),
-        'name' => $current_forum['forum_title'],
+        'url' => api_get_path(WEB_CODE_PATH).'forum/viewforum.php?'.$cidreq.'&forum='.$forumId,
+        'name' => $forumEntity->getForumTitle(),
     ];
     $interbreadcrumb[] = ['url' => '#', 'name' => get_lang('Create thread')];
 }
@@ -141,7 +159,6 @@ $htmlHeadXtra[] = "
         $(function() {
             $('#reply-add-attachment').on('click', function(e) {
                 e.preventDefault();
-    
                 var newInputFile = $('<input>', {
                     type: 'file',
                     name: 'user_upload[]'
@@ -152,9 +169,8 @@ $htmlHeadXtra[] = "
     </script>
 ";
 
-$form = show_add_post_form(
-    $current_forum,
-    'newthread',
+$form = newThread(
+    $forumEntity,
     isset($_SESSION['formelements']) ? $_SESSION['formelements'] : null
 );
 
@@ -173,7 +189,7 @@ echo '<a href="viewforum.php?forum='.intval($_GET['forum']).'&'.$cidreq.'">'.
 echo '</div>';
 
 // Set forum attachment data into $_SESSION
-getAttachedFiles($current_forum['forum_id'], 0, 0);
+getAttachedFiles($forumEntity->getIid(), 0, 0);
 
 if ($form) {
     $form->display();

@@ -22,7 +22,7 @@ use Doctrine\ORM\Mapping as ORM;
  *      @ORM\Index(name="c_id_visible_post_date", columns={"c_id", "visible", "post_date"})
  *  }
  * )
- * @ORM\Entity()
+ * @ORM\Entity
  */
 class CForumPost extends AbstractResource implements ResourceInterface
 {
@@ -133,6 +133,7 @@ class CForumPost extends AbstractResource implements ResourceInterface
 
     public function __construct()
     {
+        $this->postId = 0;
     }
 
     public function __toString(): string

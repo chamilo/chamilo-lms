@@ -1,23 +1,20 @@
 <?php
+
 /* For licensing terms, see /license.txt */
 
+use Chamilo\CoreBundle\Framework\Container;
+use Chamilo\CourseBundle\Entity\CForumForum;
 use Chamilo\CourseBundle\Entity\CForumPost;
+use Chamilo\CourseBundle\Entity\CForumThread;
 
 /**
  * @author Julio Montoya <gugli100@gmail.com> UI Improvements + lots of bugfixes
- *
- * @package chamilo.forum
  */
 require_once __DIR__.'/../inc/global.inc.php';
 $current_course_tool = TOOL_FORUM;
-
 $this_section = SECTION_COURSES;
-
-// Notification for unauthorized people.
 api_protect_course_script(true);
-
 require_once 'forumfunction.inc.php';
-
 $nameTools = get_lang('Forum');
 $forumUrl = api_get_path(WEB_CODE_PATH).'forum/';
 
@@ -29,9 +26,25 @@ $my_search = null;
 $forumId = isset($_GET['forum']) ? (int) $_GET['forum'] : 0;
 $threadId = isset($_GET['thread']) ? (int) $_GET['thread'] : 0;
 
+$repo = Container::getForumRepository();
+$forumEntity = null;
+if (!empty($forumId)) {
+    /** @var CForumForum $forumEntity */
+    $forumEntity = $repo->find($forumId);
+}
+
+$repoThread = Container::getForumThreadRepository();
+$threadEntity = null;
+if (!empty($threadId)) {
+    /** @var CForumThread $threadEntity */
+    $threadEntity = $repoThread->find($threadId);
+}
+
+$courseEntity = api_get_course_entity(api_get_course_int_id());
+$sessionEntity = api_get_session_entity(api_get_session_id());
+
 /* MAIN DISPLAY SECTION */
 /* Retrieving forum and forum category information */
-
 // We are getting all the information about the current forum and forum category.
 // Note pcool: I tried to use only one sql statement (and function) for this,
 // but the problem is that the visibility of the forum AND forum category are stored in the item_property table.
@@ -39,7 +52,7 @@ $threadId = isset($_GET['thread']) ? (int) $_GET['thread'] : 0;
 $current_thread = get_thread_information($forumId, $threadId);
 // Note: This has to be validated that it is an existing forum.
 $current_forum = get_forum_information($current_thread['forum_id']);
-$current_forum_category = get_forumcategory_information($current_forum['forum_category']);
+$current_forum_category = $forumEntity->getForumCategory();
 $whatsnew_post_info = isset($_SESSION['whatsnew_post_info']) ? $_SESSION['whatsnew_post_info'] : null;
 
 if (api_is_in_gradebook()) {
@@ -59,17 +72,17 @@ $(function() {
     $("span").on("click", ".change_post_status", function() {
         var updateDiv = $(this).parent();
         var postId = updateDiv.attr("id");
-                
+
         $.ajax({
             url: "'.$ajaxURL.'&post_id="+postId,
             type: "GET",
             success: function(data) {
                 updateDiv.html(data);
-            }                
+            }
         });
-    });  
+    });
 });
-    
+
 </script>';
 
 /* Actions */
@@ -150,15 +163,15 @@ if (!empty($groupId)) {
     ];
     $interbreadcrumb[] = [
         'url' => api_get_path(WEB_CODE_PATH).'forum/viewforum.php?forum='.$forumId.'&'.api_get_cidreq()."&search=".Security::remove_XSS(urlencode($my_search)),
-        'name' => Security::remove_XSS($current_forum['forum_title']),
+        'name' => Security::remove_XSS($forumEntity->getForumTitle()),
     ];
     $interbreadcrumb[] = [
         'url' => api_get_path(WEB_CODE_PATH).'forum/viewthread.php?forum='.$forumId.'&'.api_get_cidreq().'&thread='.$threadId,
-        'name' => Security::remove_XSS($current_thread['thread_title']),
+        'name' => Security::remove_XSS($threadEntity->getThreadTitle()),
     ];
 } else {
     $my_search = isset($_GET['search']) ? $_GET['search'] : '';
-    if ($origin != 'learnpath') {
+    if ('learnpath' != $origin) {
         $interbreadcrumb[] = [
             'url' => api_get_path(WEB_CODE_PATH).'forum/index.php?'.api_get_cidreq().'&search='.Security::remove_XSS(
                     urlencode($my_search)
@@ -168,14 +181,14 @@ if (!empty($groupId)) {
         $interbreadcrumb[] = [
             'url' => api_get_path(
                     WEB_CODE_PATH
-                ).'forum/viewforumcategory.php?forumcategory='.$current_forum_category['cat_id']."&search=".Security::remove_XSS(
+                ).'forum/viewforumcategory.php?forumcategory='.$current_forum_category->getIid()."&search=".Security::remove_XSS(
                     urlencode($my_search)
                 ),
-            'name' => Security::remove_XSS($current_forum_category['cat_title']),
+            'name' => Security::remove_XSS($current_forum_category->getCatTitle()),
         ];
         $interbreadcrumb[] = [
             'url' => api_get_path(WEB_CODE_PATH).'forum/viewforum.php?'.api_get_cidreq().'&forum='.$forumId."&search=".Security::remove_XSS(urlencode($my_search)),
-            'name' => Security::remove_XSS($current_forum['forum_title']),
+            'name' => Security::remove_XSS($forumEntity->getForumTitle()),
         ];
         $interbreadcrumb[] = [
             'url' => '#',
@@ -187,21 +200,21 @@ if (!empty($groupId)) {
 // If the user is not a course administrator and the forum is hidden
 // then the user is not allowed here.
 if (!api_is_allowed_to_edit(false, true) &&
-    ($current_forum['visibility'] == 0 || $current_thread['visibility'] == 0)
+    (0 == $current_forum['visibility'] || 0 == $current_thread['visibility'])
 ) {
     api_not_allowed();
 }
 // this increases the number of times the thread has been viewed
 increase_thread_view($threadId);
 
-if ($origin == 'learnpath') {
+if ('learnpath' == $origin) {
     $template = new Template('', false, false, true, true, false);
 } else {
     $template = new Template();
 }
 
 $actions = '<span style="float:right;">'.search_link().'</span>';
-if ($origin != 'learnpath') {
+if ('learnpath' != $origin) {
     $actions .= '<a href="'.$forumUrl.'viewforum.php?forum='.$forumId.'&'.api_get_cidreq().'">'
         .Display::return_icon('back.png', get_lang('Back to forum'), '', ICON_SIZE_MEDIUM).'</a>';
 }
@@ -210,13 +223,13 @@ if ($origin != 'learnpath') {
 // not locked AND the forum is not locked AND the thread is not locked.
 // If one of the three levels is locked then the link should not be displayed.
 if (($current_forum_category &&
-    $current_forum_category['locked'] == 0) &&
-    $current_forum['locked'] == 0 &&
-    $current_thread['locked'] == 0 ||
+    0 == $current_forum_category->getLocked()) &&
+    0 == $forumEntity->getLocked() &&
+    0 == $threadEntity->getLocked() ||
     api_is_allowed_to_edit(false, true)
 ) {
     // The link should only appear when the user is logged in or when anonymous posts are allowed.
-    if ($_user['user_id'] || ($current_forum['allow_anonymous'] == 1 && !$_user['user_id'])) {
+    if ($_user['user_id'] || (1 == $forumEntity->getAllowAnonymous() && !$_user['user_id'])) {
         // reply link
         if (!api_is_anonymous() && api_is_allowed_to_session_edit(false, true)) {
             $actions .= '<a href="'.$forumUrl.'reply.php?'.api_get_cidreq().'&forum='.$forumId.'&thread='
@@ -228,10 +241,10 @@ if (($current_forum_category &&
         if ((
             api_is_allowed_to_edit(false, true) &&
             !(api_is_session_general_coach() && $current_forum['session_id'] != $sessionId)) ||
-            ($current_forum['allow_new_threads'] == 1 && isset($_user['user_id'])) ||
-            ($current_forum['allow_new_threads'] == 1 && !isset($_user['user_id']) && $current_forum['allow_anonymous'] == 1)
+            (1 == $forumEntity->getAllowNewThreads() && isset($_user['user_id'])) ||
+            (1 == $forumEntity->getAllowNewThreads() && !isset($_user['user_id']) && 1 == $forumEntity->getAllowAnonymous())
         ) {
-            if ($current_forum['locked'] != 1 && $current_forum['locked'] != 1) {
+            if (1 != $forumEntity->getLocked() && 1 != $forumEntity->getLocked()) {
                 $actions .= '&nbsp;&nbsp;';
             } else {
                 $actions .= get_lang('Forum blocked');
@@ -245,7 +258,7 @@ $template->assign('origin', api_get_origin());
 
 /* Display Forum Category and the Forum information */
 if (!isset($_SESSION['view'])) {
-    $viewMode = $current_forum['default_view'];
+    $viewMode = $forumEntity->getDefaultView();
 } else {
     $viewMode = $_SESSION['view'];
 }
@@ -260,7 +273,7 @@ if (empty($viewMode)) {
     $viewMode = 'flat';
 }
 
-if ($current_thread['thread_peer_qualify'] == 1) {
+if (1 == $current_thread['thread_peer_qualify']) {
     Display::addFlash(Display::return_message(get_lang('To get the expected score in this forum, your contribution will have to be scored by another student, and you will have to score at least 2 other student\'s contributions. Until you reach this objective, even if scored, your contribution will show as a 0 score in the global grades for this course.'), 'info'));
 }
 
@@ -270,7 +283,7 @@ $allowReport = reportAvailable();
 $origin = api_get_origin();
 //delete attachment file
 if (isset($_GET['action']) &&
-    $_GET['action'] == 'delete_attach' &&
+    'delete_attach' == $_GET['action'] &&
     isset($_GET['id_attach'])
 ) {
     delete_attachment(0, $_GET['id_attach']);
@@ -283,8 +296,8 @@ $userId = api_get_user_id();
 $groupId = api_get_group_id();
 
 // Decide whether we show the latest post first
-$sortDirection = isset($_GET['posts_order']) && $_GET['posts_order'] === 'desc' ? 'DESC' : ($origin != 'learnpath' ? 'ASC' : 'DESC');
-$posts = getPosts($current_forum, $threadId, $sortDirection, true);
+$sortDirection = isset($_GET['posts_order']) && 'desc' === $_GET['posts_order'] ? 'DESC' : ('learnpath' != $origin ? 'ASC' : 'DESC');
+$posts = getPosts($forumEntity, $threadId, $sortDirection, true);
 $count = 0;
 $group_id = api_get_group_id();
 $locked = api_resource_is_locked_by_gradebook($threadId, LINK_FORUM_THREAD);
@@ -314,7 +327,7 @@ foreach ($posts as $post) {
     }
 
     $post['user_data'] = '';
-    if ($origin != 'learnpath') {
+    if ('learnpath' != $origin) {
         if ($allowUserImageForum) {
             $post['user_data'] = '<div class="thumbnail">'.
                 display_user_image($posterId, $name, $origin).'</div>';
@@ -345,7 +358,7 @@ foreach ($posts as $post) {
         );
     }
 
-    if ($origin != 'learnpath') {
+    if ('learnpath' != $origin) {
         $post['user_data'] .= Display::tag(
             'p',
             Display::dateToStringAgoAndLongDate($post['post_date']),
@@ -368,11 +381,11 @@ foreach ($posts as $post) {
     $askForRevision = '';
 
     if ((isset($groupInfo['iid']) && $tutorGroup) ||
-        ($current_forum['allow_edit'] == 1 && $posterId == $userId) ||
+        (1 == $forumEntity->getAllowEdit() && $posterId == $userId) ||
         (api_is_allowed_to_edit(false, true) &&
-        !(api_is_session_general_coach() && $current_forum['session_id'] != $sessionId))
+        !(api_is_session_general_coach() && $forumEntity->getSessionId() != $sessionId))
     ) {
-        if ($locked == false && postIsEditableByStudent($current_forum, $post)) {
+        if (false == $locked && postIsEditableByStudent($current_forum, $post)) {
             $editUrl = api_get_path(WEB_CODE_PATH).'forum/editpost.php?'.api_get_cidreq();
             $editUrl .= "&forum=$forumId&thread=$threadId&post={$post['post_id']}&id_attach=$id_attach";
             $iconEdit .= "<a href='".$editUrl."'>"
@@ -392,7 +405,7 @@ foreach ($posts as $post) {
         api_is_allowed_to_edit(false, true) &&
         !(api_is_session_general_coach() && $current_forum['session_id'] != $sessionId)
     ) {
-        if ($locked == false) {
+        if (false == $locked) {
             $deleteUrl = api_get_self().'?'.api_get_cidreq().'&'.http_build_query(
                 [
                     'forum' => $forumId,
@@ -438,7 +451,7 @@ foreach ($posts as $post) {
         }
     }
 
-    $userCanQualify = $currentThread['thread_peer_qualify'] == 1 && $post['poster_id'] != $userId;
+    $userCanQualify = 1 == $currentThread['thread_peer_qualify'] && $post['poster_id'] != $userId;
     if (api_is_allowed_to_edit(null, true)) {
         $userCanQualify = true;
     }
@@ -490,7 +503,7 @@ foreach ($posts as $post) {
                 $posterId,
                 $threadId
             );
-            if ($locked == false) {
+            if (false == $locked) {
                 $iconEdit .= "<a href=\"forumqualify.php?".api_get_cidreq()
                     ."&forum=$forumId&thread=$threadId&action=list&post={$post['post_id']}"
                     ."&user={$post['user_id']}&user_id={$post['user_id']}"
@@ -505,7 +518,7 @@ foreach ($posts as $post) {
         $reportButton = getReportButton($post['post_id'], $current_thread);
     }
 
-    $statusIcon = getPostStatus($current_forum, $post);
+    $statusIcon = getPostStatus($forumEntity, $post);
     if (!empty($iconEdit)) {
         $post['user_data'] .= "<div class='tools-icons'> $iconEdit $statusIcon </div>";
     } else {
@@ -518,10 +531,10 @@ foreach ($posts as $post) {
     $buttonQuote = '';
     $waitingValidation = '';
 
-    if (($current_forum_category && $current_forum_category['locked'] == 0) &&
-        $current_forum['locked'] == 0 && $current_thread['locked'] == 0 || api_is_allowed_to_edit(false, true)
+    if (($current_forum_category && 0 == $current_forum_category->getLocked()) &&
+        0 == $forumEntity->getLocked() && 0 == $threadEntity->getLocked() || api_is_allowed_to_edit(false, true)
     ) {
-        if ($userId || ($current_forum['allow_anonymous'] == 1 && !$userId)) {
+        if ($userId || (1 == $forumEntity->getAllowAnonymous() && !$userId)) {
             if (!api_is_anonymous() && api_is_allowed_to_session_edit(false, true)) {
                 $buttonReply = Display::toolbarButton(
                     get_lang('Reply to this message'),
@@ -549,8 +562,8 @@ foreach ($posts as $post) {
                     ['id' => "quote-post-{$post['post_id']}"]
                 );
 
-                if ($current_forum['moderated'] && !api_is_allowed_to_edit(false, true)) {
-                    if (empty($post['status']) || $post['status'] == CForumPost::STATUS_WAITING_MODERATION) {
+                if ($forumEntity->isModerated() && !api_is_allowed_to_edit(false, true)) {
+                    if (empty($post['status']) || CForumPost::STATUS_WAITING_MODERATION == $post['status']) {
                         $buttonReply = '';
                         $buttonQuote = '';
                     }
@@ -559,21 +572,21 @@ foreach ($posts as $post) {
         }
     } else {
         $closedPost = '';
-        if ($current_forum_category && $current_forum_category['locked'] == 1) {
+        if ($current_forum_category && 1 == $current_forum_category->getLocked()) {
             $closedPost = Display::tag(
                 'div',
                 '<em class="fa fa-exclamation-triangle"></em> '.get_lang('Forum category Locked'),
                 ['class' => 'alert alert-warning post-closed']
             );
         }
-        if ($current_forum['locked'] == 1) {
+        if (1 == $forumEntity->getLocked()) {
             $closedPost = Display::tag(
                 'div',
                 '<em class="fa fa-exclamation-triangle"></em> '.get_lang('Forum blocked'),
                 ['class' => 'alert alert-warning post-closed']
             );
         }
-        if ($current_thread['locked'] == 1) {
+        if (1 == $threadEntity->getLocked()) {
             $closedPost = Display::tag(
                 'div',
                 '<em class="fa fa-exclamation-triangle"></em> '.get_lang('Thread is locked.'),
@@ -585,8 +598,8 @@ foreach ($posts as $post) {
     }
 
     // note: this can be removed here because it will be displayed in the tree
-    if (isset($whatsnew_post_info[$current_forum['forum_id']][$current_thread['thread_id']][$post['post_id']]) &&
-        !empty($whatsnew_post_info[$current_forum['forum_id']][$current_thread['thread_id']][$post['post_id']]) &&
+    /*if (isset($whatsnew_post_info[$forumId][$threadId][$post['post_id']]) &&
+        !empty($whatsnew_post_info[$forumId][$threadId][$post['post_id']]) &&
         !empty($whatsnew_post_info[$forumId][$post['thread_id']])
     ) {
         $post_image = Display::return_icon('forumpostnew.gif');
@@ -594,12 +607,12 @@ foreach ($posts as $post) {
         $post_image = Display::return_icon('forumpost.gif');
     }
 
-    if ($post['post_notification'] == '1' && $post['poster_id'] == $userId) {
+    if ('1' == $post['post_notification'] && $post['poster_id'] == $userId) {
         $post_image .= Display::return_icon(
             'forumnotification.gif',
             get_lang('You will be notified')
         );
-    }
+    }*/
 
     $post['current'] = false;
     if (isset($_GET['post_id']) && $_GET['post_id'] == $post['post_id']) {
@@ -636,7 +649,7 @@ foreach ($posts as $post) {
             $post['post_attachments'] .= $attachment['path'];
             $post['post_attachments'] .= ' "> '.$user_filename.' </a>';
             $post['post_attachments'] .= '<span class="forum_attach_comment" >'.$attachment['comment'].'</span>';
-            if (($current_forum['allow_edit'] == 1 && $post['user_id'] == $userId) ||
+            if ((1 == $current_forum['allow_edit'] && $post['user_id'] == $userId) ||
                 (api_is_allowed_to_edit(false, true) && !(api_is_session_general_coach() && $current_forum['session_id'] != $sessionId))
             ) {
                 $post['post_attachments'] .= '&nbsp;&nbsp;<a href="'.api_get_self().'?'.api_get_cidreq().'&action=delete_attach&id_attach='
@@ -652,8 +665,8 @@ foreach ($posts as $post) {
     $postList[] = $post;
 
     // The post has been displayed => it can be removed from the what's new array
-    unset($whatsnew_post_info[$current_forum['forum_id']][$current_thread['thread_id']][$post['post_id']]);
-    unset($_SESSION['whatsnew_post_info'][$current_forum['forum_id']][$current_thread['thread_id']][$post['post_id']]);
+    //unset($whatsnew_post_info[$current_forum['forum_id']][$current_thread['thread_id']][$post['post_id']]);
+    //unset($_SESSION['whatsnew_post_info'][$current_forum['forum_id']][$current_thread['thread_id']][$post['post_id']]);
     $count++;
 }
 
@@ -662,28 +675,28 @@ $template->assign('posts', $postList);
 $formToString = '';
 $showForm = true;
 if (!api_is_allowed_to_edit(false, true) &&
-    (($current_forum_category && $current_forum_category['visibility'] == 0) || $current_forum['visibility'] == 0)
+    (($current_forum_category && 0 == $current_forum_category['visibility']) || 0 == $current_forum['visibility'])
 ) {
     $showForm = false;
 }
 
 if (!api_is_allowed_to_edit(false, true) &&
     (
-        ($current_forum_category && $current_forum_category['locked'] != 0) ||
-            $current_forum['locked'] != 0 || $current_thread['locked'] != 0
+        ($current_forum_category && 0 != $current_forum_category->getLocked()) ||
+            0 != $forumEntity->getLocked() || 0 != $threadEntity->getLocked()
     )
 ) {
     $showForm = false;
 }
 
-if (!$_user['user_id'] && $current_forum['allow_anonymous'] == 0) {
+if (!$_user['user_id'] && 0 == $forumEntity->getAllowAnonymous()) {
     $showForm = false;
 }
 
-if ($current_forum['forum_of_group'] != 0) {
+if (0 != $forumEntity->getForumOfGroup()) {
     $show_forum = GroupManager::user_has_access(
         api_get_user_id(),
-        $current_forum['forum_of_group'],
+        $forumEntity->getForumOfGroup(),
         GroupManager::GROUP_TOOL_FORUM
     );
     if (!$show_forum) {
@@ -693,8 +706,8 @@ if ($current_forum['forum_of_group'] != 0) {
 
 if ($showForm) {
     $form = show_add_post_form(
-        $current_forum,
-        'replythread',
+        $forumEntity,
+        $threadEntity,
         null,
         false
     );

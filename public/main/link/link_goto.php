@@ -1,4 +1,5 @@
 <?php
+
 /* For licensing terms, see /license.txt */
 
 /**
@@ -13,12 +14,8 @@
  * url is given to avoid a new select
  *
  * @author Thomas Depraetere, Hugues Peeters, Christophe Gesch� - original versions
- *
- * @package chamilo.link
  */
 require_once __DIR__.'/../inc/global.inc.php';
-$this_section = SECTION_COURSES;
-
 $linkId = isset($_GET['link_id']) ? $_GET['link_id'] : 0;
 
 $linkInfo = Link::getLinkInfo($linkId);
@@ -27,9 +24,9 @@ if ($linkInfo) {
     // Launch event
     Event::event_link($linkId);
 
-    header("Cache-Control: no-store, no-cache, must-revalidate"); // HTTP/1.1
-    header("Cache-Control: post-check=0, pre-check=0", false);
-    header("Pragma: no-cache"); // HTTP/1.0
+    header('Cache-Control: no-store, no-cache, must-revalidate'); // HTTP/1.1
+    header('Cache-Control: post-check=0, pre-check=0', false);
+    header('Pragma: no-cache'); // HTTP/1.0
     header("Location: $linkUrl");
     exit;
 }

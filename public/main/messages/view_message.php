@@ -1,15 +1,13 @@
 <?php
+
 /* For licensing terms, see /license.txt */
 
-/**
- * @package chamilo.messages
- */
 $cidReset = true;
 require_once __DIR__.'/../inc/global.inc.php';
 api_block_anonymous_users();
 
-$allowSocial = api_get_setting('allow_social_tool') === 'true';
-$allowMessage = api_get_setting('allow_message_tool') === 'true';
+$allowSocial = 'true' === api_get_setting('allow_social_tool');
+$allowMessage = 'true' === api_get_setting('allow_message_tool');
 
 if (!$allowMessage) {
     api_not_allowed(true);
@@ -43,7 +41,7 @@ $social_right_content .= '</div>';
 $type = isset($_GET['type']) ? (int) $_GET['type'] : MessageManager::MESSAGE_TYPE_INBOX;
 
 $show_menu = 'messages_inbox';
-if ($type === MessageManager::MESSAGE_TYPE_OUTBOX) {
+if (MessageManager::MESSAGE_TYPE_OUTBOX === $type) {
     $show_menu = 'messages_outbox';
 }
 
@@ -57,7 +55,7 @@ $logInfo = [
 Event::registerLog($logInfo);
 
 // LEFT COLUMN
-if (api_get_setting('allow_social_tool') === 'true') {
+if ('true' === api_get_setting('allow_social_tool')) {
     // Block Social Menu
     $social_menu_block = SocialManager::show_social_menu($show_menu);
 }
@@ -73,7 +71,7 @@ $tpl = new Template(get_lang('View'));
 // Block Social Avatar
 SocialManager::setSocialUserBlock($tpl, api_get_user_id(), $show_menu);
 
-if (api_get_setting('allow_social_tool') === 'true') {
+if ('true' === api_get_setting('allow_social_tool')) {
     $tpl->assign('social_menu_block', $social_menu_block);
     $tpl->assign('social_right_content', $social_right_content);
     $social_layout = $tpl->get_template('social/inbox.tpl');

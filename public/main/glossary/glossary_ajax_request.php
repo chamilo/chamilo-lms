@@ -1,11 +1,10 @@
 <?php
+
 /* For licensing terms, see /license.txt */
 
 /* @todo move this file in the inc/ajax/ folder */
 /**
  * Glossary ajax request code.
- *
- * @package chamilo.glossary
  */
 require_once __DIR__.'/../inc/global.inc.php';
 
@@ -25,7 +24,7 @@ $description = get_lang('No results found');
 if (!empty($glossaryId)) {
     $description = GlossaryManager::get_glossary_term_by_glossary_id($glossaryId);
     $description = str_replace($path_image_search, $path_image, $description);
-} elseif (isset($_POST['glossary_data']) && $_POST['glossary_data'] == 'true') {
+} elseif (isset($_POST['glossary_data']) && 'true' == $_POST['glossary_data']) {
     // get_glossary_terms
     $glossary_data = GlossaryManager::get_glossary_terms();
     $glossary_all_data = [];
@@ -53,7 +52,7 @@ if (!empty($glossaryId)) {
             $glossaryInfo['description']
         );
 
-        if (is_null($description) || strlen(trim($description)) == 0) {
+        if (null === $description || 0 == strlen(trim($description))) {
             $description = get_lang('No results found');
         } else {
             $description = str_replace('class="glossary"', '', $description);

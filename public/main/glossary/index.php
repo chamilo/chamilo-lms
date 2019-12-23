@@ -1,20 +1,16 @@
 <?php
+
 /* For licensing terms, see /license.txt */
 
 use ChamiloSession as Session;
 
 /**
- * @package chamilo.glossary
- *
  * @author Christian Fasanando, initial version
  * @author Bas Wijnen import/export to CSV
  */
 require_once __DIR__.'/../inc/global.inc.php';
 
 $current_course_tool = TOOL_GLOSSARY;
-
-// The section (tabs).
-$this_section = SECTION_COURSES;
 
 // Notification for unauthorized people.
 api_protect_course_script(true);
@@ -37,7 +33,7 @@ $(function() {
         modal: true
     });
     $("#export_opener").click(function() {
-        var targetUrl = $(this).attr("href");        
+        var targetUrl = $(this).attr("href");
         $( "#dialog-confirm" ).dialog({
             width:400,
             height:300,
@@ -134,6 +130,7 @@ switch ($action) {
             );
             $content .= $form->returnForm();
         }
+
         break;
     case 'edit_glossary':
         if (!api_is_allowed_to_edit(null, true)) {
@@ -222,6 +219,7 @@ switch ($action) {
                 $content .= $form->returnForm();
             }
         }
+
         break;
     case 'delete_glossary':
         if (!api_is_allowed_to_edit(null, true)) {
@@ -231,14 +229,17 @@ switch ($action) {
         Security::clear_token();
         header('Location: '.$currentUrl);
         exit;
+
         break;
     case 'moveup':
         //GlossaryManager::move_glossary('up',$_GET['glossary_id']); //actions not available
         GlossaryManager::display_glossary();
+
         break;
     case 'movedown':
         //GlossaryManager::move_glossary('down',$_GET['glossary_id']); //actions not available
         GlossaryManager::display_glossary();
+
         break;
     case 'import':
         if (!api_is_allowed_to_edit(null, true)) {
@@ -304,18 +305,18 @@ switch ($action) {
             switch ($format) {
                 case 'csv':
                     $data = Import::csvToArray($_FILES['file']['tmp_name']);
+
                     break;
                 case 'xls':
                     $data = Import::xlsToArray($_FILES['file']['tmp_name']);
+
                     break;
             }
 
-            $goodList = [];
             $updatedList = [];
             $addedList = [];
             $badList = [];
             $doubles = [];
-            $added = [];
             $termsPerKey = [];
 
             if ($data) {
@@ -417,6 +418,7 @@ switch ($action) {
             header('Location: '.$currentUrl);
             exit;
         }
+
         break;
     case 'export':
         if (!api_is_allowed_to_edit(null, true)) {
@@ -424,6 +426,7 @@ switch ($action) {
         }
         $format = isset($_GET['export_format']) ? $_GET['export_format'] : 'csv';
         GlossaryManager::exportToFormat($format);
+
         break;
     case 'changeview':
         if (in_array($_GET['view'], ['list', 'table'])) {
@@ -440,17 +443,20 @@ switch ($action) {
         }
         header('Location: '.$currentUrl);
         exit;
+
         break;
     case 'export_documents':
         GlossaryManager::movePdfToDocuments();
         header('Location: '.$currentUrl);
         exit;
+
         break;
     default:
         $tool_name = get_lang('List');
         $htmlHeadXtra[] = '<script type="text/javascript" src="'.api_get_path(WEB_CODE_PATH).'glossary/glossary.js.php?add_ready=1&'.api_get_cidreq().'"></script>';
         $htmlHeadXtra[] = api_get_js('jquery.highlight.js');
         $content = GlossaryManager::display_glossary();
+
         break;
 }
 

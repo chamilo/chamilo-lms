@@ -1,4 +1,5 @@
 <?php
+
 /* For licensing terms, see /license.txt */
 
 /**
@@ -6,8 +7,6 @@
  * Html files are parsed to fix a few problems with URLs,
  * but this code will hopefully be replaced soon by an Apache URL
  * rewrite mechanism.
- *
- * @package chamilo.messages
  */
 session_cache_limiter('public');
 
@@ -56,9 +55,11 @@ $message_uid = '';
 switch ($type) {
     case MessageManager::MESSAGE_TYPE_INBOX:
         $message_uid = $row_users['user_receiver_id'];
+
         break;
     case MessageManager::MESSAGE_TYPE_OUTBOX:
         $message_uid = $row_users['user_sender_id'];
+
         break;
 }
 
@@ -103,7 +104,7 @@ if (Security::check_abs_path($full_file_name, $path_user_info['dir'].'message_at
         true,
         $title
     );
-    if ($result === false) {
+    if (false === $result) {
         api_not_allowed(true);
     }
 }

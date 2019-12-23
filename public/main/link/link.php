@@ -16,8 +16,6 @@
  * @author Julio Montoya code rewritten
  * @author Patrick Cool
  * @author René Haentjens, added CSV file import (October 2004)
- *
- * @package chamilo.link
  */
 require_once __DIR__.'/../inc/global.inc.php';
 $current_course_tool = TOOL_LINK;
@@ -41,47 +39,30 @@ $htmlHeadXtra[] = '<script>
      }
 </script>';
 
-// @todo change the $_REQUEST into $_POST or $_GET
-// @todo remove this code
-$link_submitted = isset($_POST['submitLink']);
-$category_submitted = isset($_POST['submitCategory']);
-$urlview = !empty($_GET['urlview']) ? $_GET['urlview'] : '';
-$submit_import = !empty($_POST['submitImport']) ? $_POST['submitImport'] : '';
 $down = !empty($_GET['down']) ? $_GET['down'] : '';
 $up = !empty($_GET['up']) ? $_GET['up'] : '';
-$catmove = !empty($_GET['catmove']) ? $_GET['catmove'] : '';
-$editlink = !empty($_REQUEST['editlink']) ? $_REQUEST['editlink'] : '';
 $id = !empty($_REQUEST['id']) ? $_REQUEST['id'] : '';
-$urllink = !empty($_REQUEST['urllink']) ? $_REQUEST['urllink'] : '';
-$title = !empty($_REQUEST['title']) ? $_REQUEST['title'] : '';
-$description = !empty($_REQUEST['description']) ? $_REQUEST['description'] : '';
-$selectcategory = !empty($_REQUEST['selectcategory']) ? $_REQUEST['selectcategory'] : '';
-$submit_link = isset($_REQUEST['submitLink']);
 $action = !empty($_REQUEST['action']) ? $_REQUEST['action'] : '';
-$category_title = !empty($_REQUEST['category_title']) ? $_REQUEST['category_title'] : '';
-$submit_category = isset($_POST['submitCategory']);
-$target_link = !empty($_REQUEST['target_link']) ? $_REQUEST['target_link'] : '_self';
 
 $nameTools = get_lang('Links');
 
 $course_id = api_get_course_int_id();
 // Condition for the session
 $session_id = api_get_session_id();
-$condition_session = api_get_session_condition($session_id, true, true);
 
-if ($action === 'addlink') {
+if ('addlink' === $action) {
     $nameTools = '';
     $interbreadcrumb[] = ['url' => 'link.php', 'name' => get_lang('Links')];
     $interbreadcrumb[] = ['url' => '#', 'name' => get_lang('Add a link')];
 }
 
-if ($action === 'addcategory') {
+if ('addcategory' === $action) {
     $nameTools = '';
     $interbreadcrumb[] = ['url' => 'link.php', 'name' => get_lang('Links')];
     $interbreadcrumb[] = ['url' => '#', 'name' => get_lang('Add category')];
 }
 
-if ($action === 'editlink') {
+if ('editlink' === $action) {
     $nameTools = get_lang('Edit link');
     $interbreadcrumb[] = ['url' => 'link.php', 'name' => get_lang('Links')];
 }
@@ -133,6 +114,7 @@ switch ($action) {
             exit;
         }
         $content = $form->returnForm();
+
         break;
     case 'editlink':
         $form = Link::getLinkForm($id, 'editlink');
@@ -143,6 +125,7 @@ switch ($action) {
             exit;
         }
         $content = $form->returnForm();
+
         break;
     case 'addcategory':
         $form = Link::getCategoryForm(null, 'addcategory');
@@ -154,6 +137,7 @@ switch ($action) {
             exit;
         }
         $content = $form->returnForm();
+
         break;
     case 'editcategory':
         $form = Link::getCategoryForm($id, 'editcategory');
@@ -173,51 +157,59 @@ switch ($action) {
         Link::deletelinkcategory($id, 'link');
         header('Location: '.$linkListUrl);
         exit;
+
         break;
     case 'deletecategory':
         // Here we delete a category
         Link::deletelinkcategory($id, 'category');
         header('Location: '.$linkListUrl);
         exit;
+
         break;
     case 'visible':
         // Here we edit a category
         Link::change_visibility_link($id, $scope);
         header('Location: '.$linkListUrl);
         exit;
+
         break;
     case 'invisible':
         // Here we edit a category
         Link::change_visibility_link($id, $scope);
         header('Location: '.$linkListUrl);
         exit;
+
         break;
     case 'up':
         Link::movecatlink('up', $up);
         header('Location: '.$linkListUrl);
         exit;
+
         break;
     case 'down':
         Link::movecatlink('down', $down);
         header('Location: '.$linkListUrl);
         exit;
+
         break;
     case 'move_link_up':
         Link::moveLinkUp($id);
         header('Location: '.$linkListUrl);
         exit;
+
         break;
     case 'move_link_down':
         Link::moveLinkDown($id);
         header('Location: '.$linkListUrl);
         exit;
+
         break;
     case 'export':
         $content = Link::listLinksAndCategories($course_id, $session_id, $categoryId, $show, null, false, true);
         $courseInfo = api_get_course_info_by_id($course_id);
         if (!empty($session_id)) {
             $sessionInfo = api_get_session_info($session_id);
-            $courseInfo['title'] = $courseInfo['title'].' '.$sessionInfo['name'];
+            $courseInfo['title'] .= ' '.$sessionInfo['name'];
         }
         $pdf = new PDF();
         $pdf->content_to_pdf(
@@ -231,10 +223,12 @@ switch ($action) {
             false,
             true
         );
+
         break;
     case 'list':
     default:
         $content = Link::listLinksAndCategories($course_id, $session_id, $categoryId, $show);
+
         break;
 }
 

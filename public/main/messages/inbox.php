@@ -1,16 +1,14 @@
 <?php
+
 /* For licensing terms, see /license.txt */
 
-/**
- * @package chamilo.messages
- */
 $cidReset = true;
 
 require_once __DIR__.'/../inc/global.inc.php';
 
 api_block_anonymous_users();
 
-if (api_get_setting('allow_message_tool') != 'true') {
+if ('true' != api_get_setting('allow_message_tool')) {
     api_not_allowed(true);
 }
 
@@ -20,8 +18,8 @@ $logInfo = [
 ];
 Event::registerLog($logInfo);
 
-$allowSocial = api_get_setting('allow_social_tool') == 'true';
-$allowMessage = api_get_setting('allow_message_tool') == 'true';
+$allowSocial = 'true' == api_get_setting('allow_social_tool');
+$allowMessage = 'true' == api_get_setting('allow_message_tool');
 
 if ($allowSocial) {
     $this_section = SECTION_SOCIAL;
@@ -45,7 +43,7 @@ $interbreadcrumb[] = ['url' => '#', 'name' => get_lang('Inbox')];
 
 $actions = '';
 // Comes from normal profile
-if ($allowSocial === false && $allowMessage) {
+if (false === $allowSocial && $allowMessage) {
     $actions .= '<a href="'.api_get_path(WEB_PATH).'main/messages/new_message.php">'.
         Display::return_icon('message_new.png', get_lang('Compose message')).'</a>';
     $actions .= '<a href="'.api_get_path(WEB_PATH).'main/messages/inbox.php">'.

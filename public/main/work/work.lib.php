@@ -153,7 +153,7 @@ function get_work_data_by_id($id, $courseId = 0, $sessionId = 0)
                 [
                     'id' => $studentPublication->getResourceNode()->getId(),
                     'tool' => 'student_publication',
-                    'type' => 'student_publications'
+                    'type' => 'student_publications',
                 ]
             ).'?'.api_get_cidreq();
 
@@ -5189,11 +5189,11 @@ function downloadFile($id, $course_info, $isCorrection)
 function getFile($id, $course_info, $download = true, $isCorrection = false, $forceAccessForCourseAdmins = false)
 {
     $file = getFileContents($id, $course_info, 0, $isCorrection, $forceAccessForCourseAdmins);
-    var_dump($file);exit;
+    var_dump($file);
+    exit;
     if (!empty($file) && isset($file['entity'])) {
         /** @var CStudentPublication $studentPublication */
         $studentPublication = $file['entity'];
-
     }
 
     return false;
@@ -5327,7 +5327,6 @@ function getFileContents($id, $courseInfo, $sessionId = 0, $correction = false, 
             'title_correction' => $studentPublication->getTitleCorrection(),
             'entity' => $studentPublication,
         ];
-
     }
 
     return false;

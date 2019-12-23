@@ -1,9 +1,6 @@
 <?php
-/* For licensing terms, see /license.txt */
 
-/**
- * @package chamilo.messages
- */
+/* For licensing terms, see /license.txt */
 
 /**
  * This script shows a compose area (wysiwyg editor if supported, otherwise
@@ -18,7 +15,7 @@ require_once __DIR__.'/../inc/global.inc.php';
 
 api_block_anonymous_users();
 
-if (api_get_setting('allow_message_tool') !== 'true') {
+if ('true' !== api_get_setting('allow_message_tool')) {
     api_not_allowed(true);
 }
 
@@ -29,7 +26,7 @@ $logInfo = [
 ];
 Event::registerLog($logInfo);
 
-$allowSocial = api_get_setting('allow_social_tool') === 'true';
+$allowSocial = 'true' === api_get_setting('allow_social_tool');
 $nameTools = api_xml_http_response_encode(get_lang('Messages'));
 
 $htmlHeadXtra[] = '<script>
@@ -65,9 +62,8 @@ $tpl = new Template(get_lang('Compose message'));
 function show_compose_to_any($tpl)
 {
     $default['user_list'] = 0;
-    $html = manageForm($default, null, null, $tpl);
 
-    return $html;
+    return manageForm($default, null, null, $tpl);
 }
 
 function show_compose_reply_to_message($message_id, $receiver_id, $tpl)
@@ -78,20 +74,17 @@ function show_compose_reply_to_message($message_id, $receiver_id, $tpl)
 
     $query = "SELECT user_sender_id
               FROM $table
-              WHERE user_receiver_id = ".$receiver_id." AND id = ".$message_id;
+              WHERE user_receiver_id = ".$receiver_id.' AND id = '.$message_id;
     $result = Database::query($query);
     $row = Database::fetch_array($result, 'ASSOC');
     $userInfo = api_get_user_info($row['user_sender_id']);
     if (empty($row['user_sender_id']) || empty($userInfo)) {
-        $html = get_lang('The id of the message to reply to is not valid.');
-
-        return $html;
+        return get_lang('The id of the message to reply to is not valid.');
     }
 
     $default['users'] = [$row['user_sender_id']];
-    $html = manageForm($default, null, $userInfo['complete_name_with_username'], $tpl);
 
-    return $html;
+    return manageForm($default, null, $userInfo['complete_name_with_username'], $tpl);
 }
 
 function show_compose_to_user($receiver_id, $tpl)
@@ -100,9 +93,8 @@ function show_compose_to_user($receiver_id, $tpl)
     $html = get_lang('To').':&nbsp;<strong>'.$userInfo['complete_name'].'</strong>';
     $default['title'] = api_xml_http_response_encode(get_lang('Please enter a title'));
     $default['users'] = [$receiver_id];
-    $html .= manageForm($default, null, '', $tpl);
 
-    return $html;
+    return $html.manageForm($default, null, '', $tpl);
 }
 
 /**
@@ -202,7 +194,7 @@ function manageForm($default, $select_from_user_list = null, $sent_to = '', $tpl
             $fileListToString = !empty($attachments) ? implode('<br />', $attachments) : '';
             $form->addLabel('', $fileListToString);
         }
-        $default['title'] = '['.get_lang('Fwd').": ".Security::remove_XSS($message_reply_info['title']).']';
+        $default['title'] = '['.get_lang('Fwd').': '.Security::remove_XSS($message_reply_info['title']).']';
         $form->addHidden('forward_id', $forwardId);
         $form->addHidden('save_form', 'save_form');
         $receiverInfo = api_get_user_info($message_reply_info['user_receiver_id']);
@@ -257,7 +249,7 @@ function manageForm($default, $select_from_user_list = null, $sent_to = '', $tpl
 
     if (!empty($group_id) && !empty($message_id)) {
         $message_info = MessageManager::get_message_by_id($message_id);
-        $default['title'] = get_lang('RE:')." ".$message_info['title'];
+        $default['title'] = get_lang('RE:').' '.$message_info['title'];
     }
     $form->setDefaults($default);
     $html = '';
@@ -300,7 +292,7 @@ function manageForm($default, $select_from_user_list = null, $sent_to = '', $tpl
                     if ($res) {
                         $userInfo = api_get_user_info($userId);
                         Display::addFlash(Display::return_message(
-                            get_lang('The message has been sent to')."&nbsp;<b>".$userInfo['complete_name_with_username']."</b>",
+                            get_lang('The message has been sent to').'&nbsp;<b>'.$userInfo['complete_name_with_username'].'</b>',
                             'confirmation',
                             false
                         ));
@@ -345,7 +337,7 @@ $interbreadcrumb[] = [
 
 $group_id = isset($_REQUEST['group_id']) ? (int) $_REQUEST['group_id'] : 0;
 $social_right_content = null;
-if ($group_id != 0) {
+if (0 != $group_id) {
     $social_right_content .= '<div class=actions>';
     $social_right_content .= '<a href="'.api_get_path(WEB_CODE_PATH).'social/group_view.php?id='.$group_id.'">'.
         Display::return_icon('back.png', api_xml_http_response_encode(get_lang('Compose message'))).'</a>';
@@ -356,7 +348,7 @@ if ($group_id != 0) {
     if ($allowSocial) {
     } else {
         $social_right_content .= '<div class=actions>';
-        if (api_get_setting('allow_message_tool') === 'true') {
+        if ('true' === api_get_setting('allow_message_tool')) {
             $social_right_content .= '<a href="'.api_get_path(WEB_CODE_PATH).'messages/new_message.php">'.
                 Display::return_icon('message_new.png', get_lang('Compose message')).'</a>';
             $social_right_content .= '<a href="'.api_get_path(WEB_CODE_PATH).'messages/inbox.php">'.

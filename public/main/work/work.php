@@ -1,9 +1,7 @@
 <?php
+
 /* For licensing terms, see /license.txt */
 
-/**
- * @package chamilo.work
- */
 require_once __DIR__.'/../inc/global.inc.php';
 $current_course_tool = TOOL_STUDENTPUBLICATION;
 
@@ -31,12 +29,12 @@ $origin = api_get_origin();
 $action = isset($_REQUEST['action']) ? $_REQUEST['action'] : 'list';
 
 // Download folder
-if ($action === 'downloadfolder') {
+if ('downloadfolder' === $action) {
     require 'downloadfolder.inc.php';
 }
 
 $display_upload_form = false;
-if ($action === 'upload_form') {
+if ('upload_form' === $action) {
     $display_upload_form = true;
 }
 
@@ -69,23 +67,23 @@ if (!empty($groupId)) {
         $interbreadcrumb[] = ['url' => $url_dir, 'name' => $my_folder_data['title']];
     }
 
-    if ($action == 'upload_form') {
+    if ('upload_form' == $action) {
         $interbreadcrumb[] = [
             'url' => api_get_path(WEB_CODE_PATH).'work/work.php?'.api_get_cidreq(),
             'name' => get_lang('Upload a document'),
         ];
     }
 
-    if ($action == 'create_dir') {
+    if ('create_dir' == $action) {
         $interbreadcrumb[] = [
             'url' => api_get_path(WEB_CODE_PATH).'work/work.php?'.api_get_cidreq(),
             'name' => get_lang('Create assignment'),
         ];
     }
 } else {
-    if ($origin != 'learnpath') {
+    if ('learnpath' != $origin) {
         if (isset($_GET['id']) &&
-            !empty($_GET['id']) || $display_upload_form || $action == 'create_dir'
+            !empty($_GET['id']) || $display_upload_form || 'create_dir' == $action
         ) {
             $interbreadcrumb[] = [
                 'url' => api_get_path(WEB_CODE_PATH).'work/work.php?'.api_get_cidreq(),
@@ -102,11 +100,11 @@ if (!empty($groupId)) {
             ];
         }
 
-        if ($action === 'upload_form') {
+        if ('upload_form' === $action) {
             $interbreadcrumb[] = ['url' => '#', 'name' => get_lang('Upload a document')];
         }
 
-        if ($action === 'create_dir') {
+        if ('create_dir' === $action) {
             $interbreadcrumb[] = ['url' => '#', 'name' => get_lang('Create assignment')];
         }
     }
@@ -189,6 +187,7 @@ switch ($action) {
         } else {
             $content = $form->returnForm();
         }
+
         break;
     case 'delete_dir':
         if ($is_allowed_to_edit) {
@@ -204,6 +203,7 @@ switch ($action) {
             header('Location: '.$currentUrl);
             exit;
         }
+
         break;
     case 'move':
         // Move file form request
@@ -218,16 +218,17 @@ switch ($action) {
                 );
             }
         }
+
         break;
     case 'move_to':
         /* Move file command */
         if ($is_allowed_to_edit) {
             $move_to_path = get_work_path($_REQUEST['move_to_id']);
 
-            if ($move_to_path == -1) {
+            if (-1 == $move_to_path) {
                 $move_to_path = '/';
-            } elseif (substr($move_to_path, -1, 1) != '/') {
-                $move_to_path = $move_to_path.'/';
+            } elseif ('/' != substr($move_to_path, -1, 1)) {
+                $move_to_path .= '/';
             }
 
             // Security fix: make sure they can't move files that are not in the document table
@@ -259,6 +260,7 @@ switch ($action) {
             header('Location: '.$currentUrl);
             exit;
         }
+
         break;
     case 'visible':
         if (!$is_allowed_to_edit) {
@@ -342,13 +344,14 @@ switch ($action) {
         } else {
             $content .= Display::panel(showStudentWorkGrid());
         }
+
         break;
 }
 
 Display::display_header(null);
 Display::display_introduction_section(TOOL_STUDENTPUBLICATION);
 
-if ($origin === 'learnpath') {
+if ('learnpath' === $origin) {
     echo '<div style="height:15px">&nbsp;</div>';
 }
 

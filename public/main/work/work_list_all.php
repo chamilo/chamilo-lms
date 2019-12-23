@@ -89,6 +89,7 @@ switch ($action) {
                 }
             }
         }
+
         break;
     case 'delete':
         /*	Delete document */
@@ -104,6 +105,7 @@ switch ($action) {
                 );
             }
         }
+
         break;
     case 'delete_correction':
         $result = get_work_user_list(null, null, null, null, $workId);
@@ -118,12 +120,13 @@ switch ($action) {
         }
         header('Location: '.api_get_self().'?'.api_get_cidreq().'&id='.$workId);
         exit;
+
         break;
     case 'make_visible':
         /* Visible */
         if ($is_allowed_to_edit) {
             if (!empty($itemId)) {
-                if (isset($itemId) && $itemId == 'all') {
+                if (isset($itemId) && 'all' == $itemId) {
                 } else {
                     makeVisible($itemId, $courseInfo);
                     Display::addFlash(
@@ -132,11 +135,12 @@ switch ($action) {
                 }
             }
         }
+
         break;
     case 'make_invisible':
         /* Invisible */
         if (!empty($itemId)) {
-            if (isset($itemId) && $itemId == 'all') {
+            if (isset($itemId) && 'all' == $itemId) {
             } else {
                 makeInvisible($itemId, $courseInfo);
                 Display::addFlash(
@@ -144,6 +148,7 @@ switch ($action) {
                 );
             }
         }
+
         break;
     case 'export_pdf':
         exportAllStudentWorkFromPublication(
@@ -152,6 +157,7 @@ switch ($action) {
             $sessionId,
             'pdf'
         );
+
         break;
 }
 
@@ -179,7 +185,7 @@ if (api_is_allowed_to_session_edit(false, true) && !empty($workId) && !$isDrhOfC
     $actionsLeft .= Display::return_icon('pdf.png', get_lang('Export'), '', ICON_SIZE_MEDIUM).'</a>';
 
     $display_output = '<a href="'.api_get_path(WEB_CODE_PATH).'work/work_missing.php?'.api_get_cidreq().'&amp;id='.$workId.'&amp;list=without">'.
-    Display::return_icon('exercice_uncheck.png', get_lang('View missing assignments'), '', ICON_SIZE_MEDIUM)."</a>";
+    Display::return_icon('exercice_uncheck.png', get_lang('View missing assignments'), '', ICON_SIZE_MEDIUM).'</a>';
 
     $editLink = '<a href="'.api_get_path(WEB_CODE_PATH).'work/edit_work.php?'.api_get_cidreq().'&id='.$workId.'">';
     $editLink .= Display::return_icon('edit.png', get_lang('Edit'), '', ICON_SIZE_MEDIUM).'</a>';
@@ -488,13 +494,13 @@ if ($allowAntiPlagiarism) {
     $html .= '<div class="btn-toolbar">';
     $html .= '<div class="btn-group">';
     $html .= '<a class="btn btn-default" href="?'
-        .'&amp;'."gbox_results".'&amp;'.'selectall=1" onclick="javascript: setCheckbox(true, \''
-        ."gbox_results".'\'); return false;">'
+        .'&amp;'.'gbox_results'.'&amp;'.'selectall=1" onclick="javascript: setCheckbox(true, \''
+        .'gbox_results'.'\'); return false;">'
         .get_lang('Select all')
         .'</a>';
     $html .= '<a class="btn btn-default" href="?'
         .'" onclick="javascript: setCheckbox(false, \''
-        ."gbox_results"
+        .'gbox_results'
         .'\'); return false;">'
         .get_lang('UnSelect all')
         .'</a> ';

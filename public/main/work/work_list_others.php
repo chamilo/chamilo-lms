@@ -10,7 +10,7 @@ api_protect_course_script(true);
 require_once 'work.lib.php';
 $this_section = SECTION_COURSES;
 
-$workId = isset($_GET['id']) ? intval($_GET['id']) : null;
+$workId = isset($_GET['id']) ? (int) ($_GET['id']) : null;
 
 if (empty($workId)) {
     api_not_allowed(true);
@@ -28,7 +28,7 @@ $group_id = api_get_group_id();
 $courseInfo = api_get_course_info();
 
 // not all users
-if ($courseInfo['show_score'] == 1) {
+if (1 == $courseInfo['show_score']) {
     api_not_allowed(true);
 }
 
@@ -86,7 +86,7 @@ if (!empty($my_folder_data['description'])) {
         Security::remove_XSS($my_folder_data['description']).'</p></div></p>';
 }
 
-$check_qualification = intval($my_folder_data['qualification']);
+$check_qualification = (int) ($my_folder_data['qualification']);
 
 if (!empty($work_data['enable_qualification']) && !empty($check_qualification)) {
     $type = 'simple';
@@ -177,7 +177,7 @@ if (!empty($work_data['enable_qualification']) && !empty($check_qualification)) 
             'width' => '40',
             'align' => 'left',
             'search' => 'false',
-            'wrap_cell' => "true",
+            'wrap_cell' => 'true',
         ],
         [
             'name' => 'sent_date',

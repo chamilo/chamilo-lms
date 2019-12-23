@@ -1,4 +1,5 @@
 <?php
+
 /* For licensing terms, see /license.txt */
 
 use Chamilo\CourseBundle\Entity\CStudentPublication;
@@ -20,7 +21,7 @@ if (empty($workId) || empty($courseInfo)) {
 
 // Student publications are saved with the iid in a LP
 $origin = api_get_origin();
-if ($origin === 'learnpath') {
+if ('learnpath' === $origin) {
     $em = Database::getManager();
     /** @var CStudentPublication $work */
     $work = $em->getRepository('ChamiloCourseBundle:CStudentPublication')->findOneBy(
@@ -144,6 +145,7 @@ switch ($action) {
         } else {
             Display::addFlash(Display::return_message(get_lang('The document has been deleted.')));
         }
+
         break;
 }
 

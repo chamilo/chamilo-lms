@@ -1,4 +1,5 @@
 <?php
+
 /* For licensing terms, see /license.txt */
 
 /**
@@ -6,8 +7,6 @@
  * Html files are parsed to fix a few problems with URLs,
  * but this code will hopefully be replaced soon by an Apache URL
  * rewrite mechanism.
- *
- * @package chamilo.work
  */
 require_once __DIR__.'/../inc/global.inc.php';
 require_once 'work.lib.php';
@@ -27,7 +26,7 @@ if (empty($courseInfo) || empty($id)) {
 
 $correction = isset($_REQUEST['correction']) ? true : false;
 $result = downloadFile($id, $courseInfo, $correction);
-if ($result === false) {
+if (false === $result) {
     api_not_allowed(true);
 }
 

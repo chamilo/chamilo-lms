@@ -1,4 +1,5 @@
 <?php
+
 /* For licensing terms, see /license.txt */
 
 require_once __DIR__.'/../inc/global.inc.php';
@@ -10,7 +11,7 @@ api_protect_course_script(true);
 require_once 'work.lib.php';
 $this_section = SECTION_COURSES;
 
-$workId = isset($_GET['id']) ? intval($_GET['id']) : null;
+$workId = isset($_GET['id']) ? (int) ($_GET['id']) : null;
 $group_id = api_get_group_id();
 $user_id = api_get_user_id();
 
@@ -48,6 +49,7 @@ switch ($action) {
             }
             Security::clear_token();
         }
+
         break;
 }
 
@@ -91,7 +93,7 @@ $interbreadcrumb[] = [
     'name' => $my_folder_data['title'],
 ];
 
-if (isset($_GET['list']) && $_GET['list'] == 'with') {
+if (isset($_GET['list']) && 'with' == $_GET['list']) {
     $interbreadcrumb[] = ['url' => '#', 'name' => get_lang('Learners who sent their work')];
 } else {
     $interbreadcrumb[] = ['url' => '#', 'name' => get_lang('Learners who didn\'t send their work')];
@@ -104,15 +106,15 @@ echo '<a href="'.api_get_path(WEB_CODE_PATH).'work/work_list_all.php?id='.$workI
     Display::return_icon('back.png', get_lang('Back to Assignments list'), '', ICON_SIZE_MEDIUM).'</a>';
 $output = '';
 if (!empty($workId)) {
-    if (empty($_GET['list']) or Security::remove_XSS($_GET['list']) == 'with') {
+    if (empty($_GET['list']) or 'with' == Security::remove_XSS($_GET['list'])) {
         $output .= '<a href="'.api_get_self().'?'.api_get_cidreq().'&id='.$workId.'&list=without">'.
             Display::return_icon('exercice_uncheck.png', get_lang('ViewLearners who didn\'t send their work'), '', ICON_SIZE_MEDIUM).
-            "</a>";
+            '</a>';
     } else {
-        if (!isset($_GET['action']) || (isset($_GET['action']) && $_GET['action'] != 'send_mail')) {
+        if (!isset($_GET['action']) || (isset($_GET['action']) && 'send_mail' != $_GET['action'])) {
             $output .= '<a href="'.api_get_self().'?'.api_get_cidreq().'&id='.$workId.'&list=without&action=send_mail&sec_token='.$token.'">'.
                 Display::return_icon('mail_send.png', get_lang('Send a reminder'), '', ICON_SIZE_MEDIUM).
-                "</a>";
+                '</a>';
         } else {
             $output .= Display::return_icon('mail_send_na.png', get_lang('Send a reminder'), '', ICON_SIZE_MEDIUM);
         }

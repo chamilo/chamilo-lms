@@ -1,4 +1,5 @@
 <?php
+
 /* For licensing terms, see /license.txt */
 
 use Symfony\Component\Finder\Finder;
@@ -55,9 +56,9 @@ $downloadLink = api_get_path(WEB_CODE_PATH).'work/downloadfolder.inc.php?id='.$w
 $form = new FormValidator(
     'form',
     'POST',
-    api_get_self()."?".api_get_cidreq()."&id=".$workId,
+    api_get_self().'?'.api_get_cidreq().'&id='.$workId,
     '',
-    ['enctype' => "multipart/form-data"]
+    ['enctype' => 'multipart/form-data']
 );
 
 $form->addElement('header', get_lang('Upload corrections'));

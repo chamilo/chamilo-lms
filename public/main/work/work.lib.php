@@ -22,13 +22,13 @@ use ChamiloSession as Session;
 /**
  * Displays action links (for admins, authorized groups members and authorized students).
  *
- * @param   int Whether to show tool options
- * @param   int Whether to show upload form option
+ * @param int  $id      Whether to show tool options
+ * @param int  $action  Whether to show upload form option
  * @param bool $isTutor
  */
 function displayWorkActionLinks($id, $action, $isTutor)
 {
-    $id = $my_back_id = intval($id);
+    $id = $my_back_id = (int) $id;
     if ('list' == $action) {
         $my_back_id = 0;
     }
@@ -85,7 +85,7 @@ function displayWorkActionLinks($id, $action, $isTutor)
 function get_work_data_by_path($path, $courseId = 0)
 {
     $path = Database::escape_string($path);
-    $courseId = intval($courseId);
+    $courseId = (int) $courseId;
     if (empty($courseId)) {
         $courseId = api_get_course_int_id();
     }
@@ -112,7 +112,7 @@ function get_work_data_by_path($path, $courseId = 0)
 function get_work_data_by_id($id, $courseId = 0, $sessionId = 0)
 {
     $id = (int) $id;
-    $courseId = ((int) $courseId) ?: api_get_course_int_id();
+    $courseId = (int) $courseId ?: api_get_course_int_id();
     $course = api_get_course_entity($courseId);
     $table = Database::get_course_table(TABLE_STUDENT_PUBLICATION);
 
@@ -166,8 +166,8 @@ function get_work_data_by_id($id, $courseId = 0, $sessionId = 0)
  */
 function get_work_count_by_student($user_id, $work_id)
 {
-    $user_id = intval($user_id);
-    $work_id = intval($work_id);
+    $user_id = (int) $user_id;
+    $work_id = (int) $work_id;
     $course_id = api_get_course_int_id();
     $session_id = api_get_session_id();
     $sessionCondition = api_get_session_condition($session_id);
@@ -185,7 +185,7 @@ function get_work_count_by_student($user_id, $work_id)
     $return = 0;
     if (Database::num_rows($result)) {
         $return = Database::fetch_row($result, 'ASSOC');
-        $return = intval($return[0]);
+        $return = (int) ($return[0]);
     }
 
     return $return;
@@ -199,11 +199,11 @@ function get_work_count_by_student($user_id, $work_id)
  */
 function get_work_assignment_by_id($id, $courseId = 0)
 {
-    $courseId = intval($courseId);
+    $courseId = (int) $courseId;
     if (empty($courseId)) {
         $courseId = api_get_course_int_id();
     }
-    $id = intval($id);
+    $id = (int) $id;
     $table = Database::get_course_table(TABLE_STUDENT_PUBLICATION_ASSIGNMENT);
     $sql = "SELECT * FROM $table
             WHERE c_id = $courseId AND publication_id = $id";
@@ -229,8 +229,8 @@ function getWorkList($id, $my_folder_data, $add_in_where_query = null, $course_i
 {
     $work_table = Database::get_course_table(TABLE_STUDENT_PUBLICATION);
 
-    $course_id = $course_id ? $course_id : api_get_course_int_id();
-    $session_id = $session_id ? $session_id : api_get_session_id();
+    $course_id = $course_id ?: api_get_course_int_id();
+    $session_id = $session_id ?: api_get_session_id();
     $condition_session = api_get_session_condition($session_id);
     $group_id = api_get_group_id();
 
@@ -254,7 +254,7 @@ function getWorkList($id, $my_folder_data, $add_in_where_query = null, $course_i
         $workInGradeBookLinkId = $linkInfo['id'];
         if ($workInGradeBookLinkId) {
             if ($is_allowed_to_edit) {
-                if (0 == intval($my_folder_data['qualification'])) {
+                if (0 == (int) ($my_folder_data['qualification'])) {
                     echo Display::return_message(
                         get_lang('Max weight need to be provided'),
                         'warning'
@@ -350,17 +350,15 @@ function getWorkPerUser($userId, $courseId = 0, $sessionId = 0)
  * @param int $groupId
  * @param int $course_id
  * @param int $sessionId
- *
- * @return mixed
  */
 function getUniqueStudentAttemptsTotal($workId, $groupId, $course_id, $sessionId)
 {
     $work_table = Database::get_course_table(TABLE_STUDENT_PUBLICATION);
     $user_table = Database::get_main_table(TABLE_MAIN_USER);
-    $course_id = intval($course_id);
-    $workId = intval($workId);
-    $sessionId = intval($sessionId);
-    $groupId = intval($groupId);
+    $course_id = (int) $course_id;
+    $workId = (int) $workId;
+    $sessionId = (int) $sessionId;
+    $groupId = (int) $groupId;
     $sessionCondition = api_get_session_condition(
         $sessionId,
         true,
@@ -393,14 +391,11 @@ function getUniqueStudentAttemptsTotal($workId, $groupId, $course_id, $sessionId
 }
 
 /**
- * @param mixed $workId
  * @param int   $groupId
  * @param int   $course_id
  * @param int   $sessionId
  * @param int   $userId       user id to filter
  * @param array $onlyUserList only parse this user list
- *
- * @return mixed
  */
 function getUniqueStudentAttempts(
     $workId,
@@ -413,19 +408,19 @@ function getUniqueStudentAttempts(
     $work_table = Database::get_course_table(TABLE_STUDENT_PUBLICATION);
     $user_table = Database::get_main_table(TABLE_MAIN_USER);
 
-    $course_id = intval($course_id);
+    $course_id = (int) $course_id;
     $workCondition = null;
     if (is_array($workId)) {
         $workId = array_map('intval', $workId);
         $workId = implode("','", $workId);
         $workCondition = " w.parent_id IN ('".$workId."') AND";
     } else {
-        $workId = intval($workId);
+        $workId = (int) $workId;
         $workCondition = ' w.parent_id = '.$workId.' AND';
     }
 
-    $sessionId = intval($sessionId);
-    $groupId = intval($groupId);
+    $sessionId = (int) $sessionId;
+    $groupId = (int) $groupId;
     $studentCondition = null;
 
     if (!empty($onlyUserList)) {
@@ -464,7 +459,7 @@ function getUniqueStudentAttempts(
                     w.active IN (0, 1) $studentCondition
                 ";
     if (!empty($userId)) {
-        $userId = intval($userId);
+        $userId = (int) $userId;
         $sql .= ' AND u.user_id = '.$userId;
     }
     $sql .= ' GROUP BY u.user_id, w.parent_id) as t';
@@ -625,15 +620,15 @@ function build_work_directory_selector($folders, $curdirpath, $group_dir = '')
         $form .= '<option value="/">/ ('.get_lang('root').')</option>';
         if (is_array($folders)) {
             foreach ($folders as $folder) {
-                $selected = ($curdirpath == $folder) ? ' selected="selected"' : '';
+                $selected = $curdirpath == $folder ? ' selected="selected"' : '';
                 $form .= '<option'.$selected.' value="'.$folder.'">'.$folder.'</option>'."\n";
             }
         }
     } else {
         foreach ($folders as $folder) {
-            $selected = ($curdirpath == $folder) ? ' selected="selected"' : '';
+            $selected = $curdirpath == $folder ? ' selected="selected"' : '';
             $display_folder = substr($folder, strlen($group_dir));
-            $display_folder = ('' == $display_folder) ? '/ ('.get_lang('root').')' : $display_folder;
+            $display_folder = '' == $display_folder ? '/ ('.get_lang('root').')' : $display_folder;
             $form .= '<option'.$selected.' value="'.$folder.'">'.$display_folder.'</option>'."\n";
         }
     }
@@ -660,7 +655,7 @@ function build_work_directory_selector($folders, $curdirpath, $group_dir = '')
 function build_work_move_to_selector($folders, $curdirpath, $move_file, $group_dir = '')
 {
     $course_id = api_get_course_int_id();
-    $move_file = intval($move_file);
+    $move_file = (int) $move_file;
     $tbl_work = Database::get_course_table(TABLE_STUDENT_PUBLICATION);
     $sql = "SELECT title, url FROM $tbl_work
             WHERE c_id = $course_id AND id ='".$move_file."'";
@@ -704,7 +699,7 @@ function build_work_move_to_selector($folders, $curdirpath, $move_file, $group_d
             ) {
                 //cannot copy dir into his own subdir
                 $display_folder = substr($folder, strlen($group_dir));
-                $display_folder = ('' == $display_folder) ? '/ ('.get_lang('root').')' : $display_folder;
+                $display_folder = '' == $display_folder ? '/ ('.get_lang('root').')' : $display_folder;
                 //$form .= '<option value="'.$fid.'">'.$display_folder.'</option>'."\n";
                 $options[$fid] = $display_folder;
             }
@@ -904,7 +899,7 @@ function get_work_path($id)
     $table = Database::get_course_table(TABLE_STUDENT_PUBLICATION);
     $course_id = api_get_course_int_id();
     $sql = 'SELECT url FROM '.$table.'
-            WHERE c_id = '.$course_id.' AND id='.intval($id);
+            WHERE c_id = '.$course_id.' AND id='.(int) $id;
     $res = Database::query($sql);
     if (Database::num_rows($res)) {
         $row = Database::fetch_array($res);
@@ -931,8 +926,8 @@ function updateWorkUrl($id, $new_path, $parent_id)
     }
     $table = Database::get_course_table(TABLE_STUDENT_PUBLICATION);
     $course_id = api_get_course_int_id();
-    $id = intval($id);
-    $parent_id = intval($parent_id);
+    $id = (int) $id;
+    $parent_id = (int) $parent_id;
 
     $sql = "SELECT * FROM $table
             WHERE c_id = $course_id AND id = $id";
@@ -949,9 +944,8 @@ function updateWorkUrl($id, $new_path, $parent_id)
                    url = '$new_url',
                    parent_id = '$parent_id'
                 WHERE c_id = $course_id AND id = $id";
-        $res = Database::query($sql);
 
-        return $res;
+        return Database::query($sql);
     }
 }
 
@@ -966,7 +960,7 @@ function updateWorkUrl($id, $new_path, $parent_id)
 function updateDirName($work_data, $newPath)
 {
     $course_id = $work_data['c_id'];
-    $work_id = intval($work_data['iid']);
+    $work_id = (int) ($work_data['iid']);
     $oldPath = $work_data['url'];
     $originalNewPath = Database::escape_string($newPath);
     $newPath = Database::escape_string($newPath);
@@ -995,7 +989,7 @@ function updateDirName($work_data, $newPath)
  */
 function to_javascript_work()
 {
-    $js = '<script>
+    return '<script>
         function updateDocumentTitle(value) {
             var temp = value.indexOf("/");
             //linux path
@@ -1053,8 +1047,6 @@ function to_javascript_work()
             });
         });
     </script>';
-
-    return $js;
 }
 
 /**
@@ -1162,11 +1154,11 @@ function get_count_work($work_id, $onlyMeUserId = null, $notMeUserId = null)
     $extra_conditions .= ' AND work.parent_id  = '.$work_id.'  ';
     $where_condition = null;
     if (!empty($notMeUserId)) {
-        $where_condition .= ' AND u.user_id <> '.intval($notMeUserId);
+        $where_condition .= ' AND u.user_id <> '.(int) $notMeUserId;
     }
 
     if (!empty($onlyMeUserId)) {
-        $where_condition .= ' AND u.user_id =  '.intval($onlyMeUserId);
+        $where_condition .= ' AND u.user_id =  '.(int) $onlyMeUserId;
     }
 
     $repo = Container::getStudentPublicationRepository();
@@ -1329,7 +1321,7 @@ function getWorkListStudent(
         $count = getTotalWorkComment($workList, $courseInfo);
         $lastWork = getLastWorkStudentFromParentByUser($userId, $work, $courseInfo);
 
-        if (!is_null($count) && !empty($count)) {
+        if (null !== $count && !empty($count)) {
             $urlView = api_get_path(WEB_CODE_PATH).'work/view.php?id='.$lastWork['id'].'&'.api_get_cidreq();
 
             $feedback = '&nbsp;'.Display::url(
@@ -1342,7 +1334,7 @@ function getWorkListStudent(
         }
 
         if (!empty($lastWork)) {
-            $work['last_upload'] = (!empty($lastWork['qualification'])) ? $lastWork['qualification_rounded'].' - ' : '';
+            $work['last_upload'] = !empty($lastWork['qualification']) ? $lastWork['qualification_rounded'].' - ' : '';
             $work['last_upload'] .= api_get_local_time($lastWork['sent_date']);
         }
 
@@ -1399,8 +1391,8 @@ function getWorkListTeacher(
     }
 
     $column = !empty($column) ? Database::escape_string($column) : 'sent_date';
-    $start = intval($start);
-    $limit = intval($limit);
+    $start = (int) $start;
+    $limit = (int) $limit;
     $works = [];
 
     // Get list from database
@@ -1663,7 +1655,7 @@ function get_work_user_list_from_documents(
     $work_data = get_work_data_by_id($workId);
     $qualificationExists = false;
 
-    if (!empty($work_data['qualification']) && intval($work_data['qualification']) > 0) {
+    if (!empty($work_data['qualification']) && (int) ($work_data['qualification']) > 0) {
         $qualificationExists = true;
     }
 
@@ -1797,7 +1789,7 @@ function get_work_user_list(
     $work_table = Database::get_course_table(TABLE_STUDENT_PUBLICATION);
     $user_table = Database::get_main_table(TABLE_MAIN_USER);
 
-    $session_id = $sessionId ? $sessionId : api_get_session_id();
+    $session_id = $sessionId ?: api_get_session_id();
     $group_id = api_get_group_id();
     $course_info = api_get_course_info();
     $course_info = empty($course_info) ? api_get_course_info_by_id($courseId) : $course_info;
@@ -1988,7 +1980,7 @@ function get_work_user_list(
 
             $qualification_exists = false;
             if (!empty($work_data['qualification']) &&
-                intval($work_data['qualification']) > 0
+                (int) ($work_data['qualification']) > 0
             ) {
                 $qualification_exists = true;
             }
@@ -2048,7 +2040,7 @@ function get_work_user_list(
 
                 $feedback = '';
                 $count = getWorkCommentCount($item_id, $course_info);
-                if (!is_null($count) && !empty($count)) {
+                if (null !== $count && !empty($count)) {
                     if ($qualification_exists) {
                         $feedback .= ' ';
                     }
@@ -2282,7 +2274,7 @@ function get_work_user_list(
 /**
  * Send reminder to users who have not given the task.
  *
- * @param int
+ * @param int $task_data
  *
  * @return array
  *
@@ -2502,8 +2494,8 @@ function user_is_author($itemId, $userId = null, $courseId = 0, $sessionId = 0)
 /**
  * Get list of users who have not given the task.
  *
- * @param int
- * @param int
+ * @param int $task_id
+ * @param int $studentId
  *
  * @return array
  *
@@ -2523,7 +2515,7 @@ function get_list_users_without_publication($task_id, $studentId = 0)
     // Condition for the session
     $session_id = api_get_session_id();
     $course_id = api_get_course_int_id();
-    $task_id = intval($task_id);
+    $task_id = (int) $task_id;
     $sessionCondition = api_get_session_condition($session_id);
 
     if (0 == $session_id) {
@@ -2561,7 +2553,7 @@ function get_list_users_without_publication($task_id, $studentId = 0)
     }
 
     if (!empty($studentId)) {
-        $sql_users .= ' AND u.user_id = '.intval($studentId);
+        $sql_users .= ' AND u.user_id = '.(int) $studentId;
     }
 
     $group_id = api_get_group_id();
@@ -2609,7 +2601,7 @@ function get_list_users_without_publication($task_id, $studentId = 0)
 /**
  * Display list of users who have not given the task.
  *
- * @param int task id
+ * @param int $task_id   task id
  * @param int $studentId
  *
  * @author cvargas carlos.vargas@beeznest.com cfasanando, christian.fasanado@beeznest.com
@@ -2636,7 +2628,7 @@ function display_list_users_without_publication($task_id, $studentId = null)
         $my_params['list'] = Security::remove_XSS($_GET['list']);
     }
     $my_params['origin'] = $origin;
-    $my_params['id'] = intval($_GET['id']);
+    $my_params['id'] = (int) ($_GET['id']);
 
     //$column_show
     $column_show[] = 1;
@@ -2701,12 +2693,12 @@ function getDocumentToWorkPerUser($documentId, $workId, $courseId, $sessionId, $
     $workRel = Database::get_course_table(TABLE_STUDENT_PUBLICATION_REL_DOCUMENT);
     $work = Database::get_course_table(TABLE_STUDENT_PUBLICATION);
 
-    $documentId = intval($documentId);
-    $workId = intval($workId);
-    $courseId = intval($courseId);
-    $userId = intval($userId);
-    $sessionId = intval($sessionId);
-    $active = intval($active);
+    $documentId = (int) $documentId;
+    $workId = (int) $workId;
+    $courseId = (int) $courseId;
+    $userId = (int) $userId;
+    $sessionId = (int) $sessionId;
+    $active = (int) $active;
     $sessionCondition = api_get_session_condition($sessionId);
 
     $sql = "SELECT w.* FROM $work w
@@ -2815,7 +2807,7 @@ function getAllUserToWork($workId, $courseId, $getCount = false)
             'simple'
         );
         if (!empty($result)) {
-            $count = intval($result['count']);
+            $count = (int) ($result['count']);
         }
 
         return $count;
@@ -3109,7 +3101,7 @@ function getWorkCommentCount($id, $courseInfo = [])
     }
 
     $commentTable = Database::get_course_table(TABLE_STUDENT_PUBLICATION_ASSIGNMENT_COMMENT);
-    $id = intval($id);
+    $id = (int) $id;
 
     $sql = "SELECT count(*) as count
             FROM $commentTable
@@ -3146,12 +3138,12 @@ function getWorkCommentCountFromParent(
     if (empty($sessionId)) {
         $sessionId = api_get_session_id();
     } else {
-        $sessionId = intval($sessionId);
+        $sessionId = (int) $sessionId;
     }
 
     $work = Database::get_course_table(TABLE_STUDENT_PUBLICATION);
     $commentTable = Database::get_course_table(TABLE_STUDENT_PUBLICATION_ASSIGNMENT_COMMENT);
-    $parentId = intval($parentId);
+    $parentId = (int) $parentId;
     $sessionCondition = api_get_session_condition($sessionId, false, false, 'w.session_id');
 
     $sql = "SELECT count(*) as count
@@ -3193,13 +3185,13 @@ function getLastWorkStudentFromParent(
     if (empty($sessionId)) {
         $sessionId = api_get_session_id();
     } else {
-        $sessionId = intval($sessionId);
+        $sessionId = (int) $sessionId;
     }
 
     $work = Database::get_course_table(TABLE_STUDENT_PUBLICATION);
     $sessionCondition = api_get_session_condition($sessionId, false);
     $commentTable = Database::get_course_table(TABLE_STUDENT_PUBLICATION_ASSIGNMENT_COMMENT);
-    $parentId = intval($parentId);
+    $parentId = (int) $parentId;
 
     $sql = "SELECT w.*
             FROM $commentTable c INNER JOIN $work w
@@ -3214,9 +3206,7 @@ function getLastWorkStudentFromParent(
 
     $result = Database::query($sql);
     if (Database::num_rows($result)) {
-        $comment = Database::fetch_array($result, 'ASSOC');
-
-        return $comment;
+        return Database::fetch_array($result, 'ASSOC');
     }
 
     return [];
@@ -3245,10 +3235,10 @@ function getLastWorkStudentFromParentByUser(
     if (empty($sessionId)) {
         $sessionId = api_get_session_id();
     } else {
-        $sessionId = intval($sessionId);
+        $sessionId = (int) $sessionId;
     }
 
-    $userId = intval($userId);
+    $userId = (int) $userId;
     $work = Database::get_course_table(TABLE_STUDENT_PUBLICATION);
     if (empty($parentInfo)) {
         return false;
@@ -3308,9 +3298,7 @@ function formatWorkScore($score, $weight)
             $label
         );
     } else {
-        $finalScore = $scoreBasedInModel;
-
-        return $finalScore;
+        return $scoreBasedInModel;
     }
 }
 
@@ -3558,7 +3546,7 @@ function getWorkCommentForm($work, $workParent)
     $qualification = $workParent['qualification'];
 
     if (api_is_allowed_to_edit()) {
-        if (!empty($qualification) && intval($qualification) > 0) {
+        if (!empty($qualification) && (int) $qualification > 0) {
             $model = ExerciseLib::getCourseScoreModel();
             if (empty($model)) {
                 $form->addFloat(
@@ -3688,11 +3676,13 @@ function setWorkUploadForm($form, $uploadFormType = 0)
             );
             $form->addProgress();
             $form->addHtmlEditor('description', get_lang('Description'), false, false, getWorkDescriptionToolbar());
+
             break;
         case 1:
             // Only text.
             $form->addHtmlEditor('description', get_lang('Description'), false, false, getWorkDescriptionToolbar());
             $form->addRule('description', get_lang('Required field'), 'required');
+
             break;
         case 2:
             // Only file.
@@ -3704,6 +3694,7 @@ function setWorkUploadForm($form, $uploadFormType = 0)
             );
             $form->addProgress();
             $form->addRule('file', get_lang('Required field'), 'required');
+
             break;
     }
 
@@ -3779,7 +3770,7 @@ function uploadWork($my_folder_data, $_course, $isCorrection = false, $workInfo 
         if (!empty($workInfo['url'])) {
             $new_file_name = basename($workInfo['url']).'_correction';
         } else {
-            $new_file_name = $new_file_name.'_correction';
+            $new_file_name .= '_correction';
         }
     }
 
@@ -4136,7 +4127,7 @@ function processWorkForm(
         if ($showFlashMessage) {
             Display::addFlash(
                 Display::return_message(
-                    $message ? $message : get_lang('Impossible to save the document'),
+                    $message ?: get_lang('Impossible to save the document'),
                     'error'
                 )
             );
@@ -4277,6 +4268,7 @@ function addDir($formValues, $user_id, $courseInfo, $groupId, $sessionId = 0)
                 $course_id,
                 $sessionId
             );
+
             break;
     }
 
@@ -4293,7 +4285,7 @@ function agendaExistsForWork($workId, $courseInfo)
 {
     $workTable = Database::get_course_table(TABLE_STUDENT_PUBLICATION_ASSIGNMENT);
     $courseId = $courseInfo['real_id'];
-    $workId = intval($workId);
+    $workId = (int) $workId;
 
     $sql = "SELECT add_to_calendar FROM $workTable
             WHERE c_id = $courseId AND publication_id = ".$workId;
@@ -4351,7 +4343,7 @@ function updatePublicationAssignment($workId, $params, $courseInfo, $groupId)
 {
     $table = Database::get_course_table(TABLE_STUDENT_PUBLICATION_ASSIGNMENT);
     $workTable = Database::get_course_table(TABLE_STUDENT_PUBLICATION);
-    $workId = intval($workId);
+    $workId = (int) $workId;
     $now = api_get_utc_datetime();
     $course_id = $courseInfo['real_id'];
 
@@ -4542,8 +4534,8 @@ function deleteAllWorkPerUser($userId, $courseInfo)
 }
 
 /**
- * @param int $item_id
- * @param array course info
+ * @param int   $item_id
+ * @param array $courseInfo course info
  *
  * @return bool
  */
@@ -4736,7 +4728,7 @@ function getFormWork($form, $defaults = [], $workId = 0)
     // ScoreOfAssignment
     $form->addElement('text', 'qualification', get_lang('ScoreNumeric'));
 
-    if ((0 != $sessionId && Gradebook::is_active()) || 0 == $sessionId) {
+    if (0 != $sessionId && Gradebook::is_active() || 0 == $sessionId) {
         $form->addElement(
             'checkbox',
             'make_calification',
@@ -5013,8 +5005,8 @@ function getWorkUserList($courseCode, $sessionId, $groupId, $start, $limit, $sid
     } else {
         $limitString = null;
         if (!empty($start) && !empty($limit)) {
-            $start = intval($start);
-            $limit = intval($limit);
+            $start = (int) $start;
+            $limit = (int) $limit;
             $limitString = " LIMIT $start, $limit";
         }
 
@@ -5351,6 +5343,7 @@ function exportAllWork($userId, $courseInfo, $format = 'pdf')
                     );
                 }
             }
+
             break;
     }
 }
@@ -5485,6 +5478,7 @@ function exportAllStudentWorkFromPublication(
                 }
                 exit;
             }
+
             break;
     }
 }

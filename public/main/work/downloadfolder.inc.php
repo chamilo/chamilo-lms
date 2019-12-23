@@ -1,12 +1,11 @@
 <?php
+
 /* For licensing terms, see /license.txt */
 
 /**
  * Functions and main code for the download folder feature.
  *
  * @todo use ids instead of the path like the document tool
- *
- * @package chamilo.work
  */
 require_once __DIR__.'/../inc/global.inc.php';
 
@@ -62,7 +61,7 @@ $sessionCondition = api_get_session_condition($sessionId, true, false, 'props.se
 
 $filenameCondition = null;
 if (array_key_exists('filename', $work_data)) {
-    $filenameCondition = ", filename";
+    $filenameCondition = ', filename';
 }
 
 $groupIid = 0;
@@ -105,11 +104,11 @@ if (api_is_allowed_to_edit() || api_is_coach()) {
     $userCondition = '';
 
     // All users
-    if ($courseInfo['show_score'] == 0) {
+    if (0 == $courseInfo['show_score']) {
         // Do another filter
     } else {
         // Only teachers
-        $userCondition = " AND props.insert_user_id = ".api_get_user_id();
+        $userCondition = ' AND props.insert_user_id = '.api_get_user_id();
     }
 
     //for other users, we need to create a zipfile with only visible files and folders
@@ -170,7 +169,7 @@ while ($not_deleted_file = Database::fetch_assoc($query)) {
         );
     } else {
         // Convert texts in html files
-        $filename = trim($filename).".html";
+        $filename = trim($filename).'.html';
         $work_temp = api_get_path(SYS_ARCHIVE_PATH).api_get_unique_id().'_'.$filename;
         file_put_contents($work_temp, $not_deleted_file['description']);
         $files[basename($work_temp)] = $filename;
@@ -231,7 +230,7 @@ function diff($arr1, $arr2)
     foreach ($arr1 as $av) {
         if (!in_array($av, $arr2)) {
             $res[$r] = $av;
-            $r++;
+            ++$r;
         }
     }
 

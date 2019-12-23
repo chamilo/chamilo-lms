@@ -1,4 +1,5 @@
 <?php
+
 /* For licensing terms, see /license.txt */
 
 require_once __DIR__.'/../inc/global.inc.php';
@@ -13,7 +14,7 @@ if (empty($id) || empty($work)) {
     api_not_allowed(true);
 }
 
-if ($work['active'] != 1) {
+if (1 != $work['active']) {
     api_not_allowed(true);
 }
 $work['title'] = isset($work['title']) ? Security::remove_XSS($work['title']) : '';
@@ -43,9 +44,9 @@ $isDrhOfCourse = CourseManager::isUserSubscribedInCourseAsDrh(
 
 if ((user_is_author($id) || $isDrhOfCourse || (api_is_allowed_to_edit() || api_is_coach())) ||
     (
-        $courseInfo['show_score'] == 0 &&
-        $work['active'] == 1 &&
-        $work['accepted'] == 1
+        0 == $courseInfo['show_score'] &&
+        1 == $work['active'] &&
+        1 == $work['accepted']
     )
 ) {
     if ((api_is_allowed_to_edit() || api_is_coach()) || api_is_drh()) {
@@ -60,16 +61,16 @@ if ((user_is_author($id) || $isDrhOfCourse || (api_is_allowed_to_edit() || api_i
     $interbreadcrumb[] = ['url' => '#', 'name' => $work['title']];
 
     if ((
-        $courseInfo['show_score'] == 0 &&
-        $work['active'] == 1 &&
-        $work['accepted'] == 1
+        0 == $courseInfo['show_score'] &&
+        1 == $work['active'] &&
+        1 == $work['accepted']
         ) ||
         (api_is_allowed_to_edit() || api_is_coach()) || user_is_author($id) || $isDrhOfCourse
     ) {
         $action = isset($_REQUEST['action']) ? $_REQUEST['action'] : null;
         $page = isset($_REQUEST['page']) ? $_REQUEST['page'] : null;
 
-        if ($page == 'edit') {
+        if ('edit' == $page) {
             $url = api_get_path(WEB_CODE_PATH).'work/edit.php?id='.$my_folder_data['id'].'&item_id='.$work['id'].'&'.api_get_cidreq();
         } else {
             $url = api_get_path(WEB_CODE_PATH).'work/view.php?id='.$work['id'].'&'.api_get_cidreq();
@@ -141,6 +142,7 @@ if ((user_is_author($id) || $isDrhOfCourse || (api_is_allowed_to_edit() || api_i
                 }
                 header('Location: '.$url);
                 exit;
+
                 break;
             case 'delete_attachment':
                 deleteCommentFile(
@@ -151,6 +153,7 @@ if ((user_is_author($id) || $isDrhOfCourse || (api_is_allowed_to_edit() || api_i
                 Display::addFlash(Display::return_message(get_lang('Document deleted')));
                 header('Location: '.$url);
                 exit;
+
                 break;
             case 'delete_correction':
                 if (isset($work['url_correction']) && !empty($work['url_correction'])) {
@@ -164,6 +167,7 @@ if ((user_is_author($id) || $isDrhOfCourse || (api_is_allowed_to_edit() || api_i
 
                 header('Location: '.$url);
                 exit;
+
                 break;
         }
 

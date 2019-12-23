@@ -1,4 +1,5 @@
 <?php
+
 /* For licensing terms, see /license.txt */
 
 require_once __DIR__.'/../inc/global.inc.php';
@@ -35,7 +36,7 @@ $is_course_member = CourseManager::is_user_subscribed_in_real_or_linked_course(
 );
 $is_course_member = $is_course_member || api_is_platform_admin();
 
-if ($is_course_member == false || api_is_invitee()) {
+if (false == $is_course_member || api_is_invitee()) {
     api_not_allowed(true);
 }
 
@@ -69,9 +70,9 @@ $interbreadcrumb[] = ['url' => '#', 'name' => get_lang('Upload a document')];
 $form = new FormValidator(
     'form-work',
     'POST',
-    api_get_self()."?".api_get_cidreq()."&id=".$work_id,
+    api_get_self().'?'.api_get_cidreq().'&id='.$work_id,
     '',
-    ['enctype' => "multipart/form-data"]
+    ['enctype' => 'multipart/form-data']
 );
 
 setWorkUploadForm($form, $workInfo['allow_text_assignment']);
@@ -127,7 +128,7 @@ $htmlHeadXtra[] = to_javascript_work();
 Display::display_header(null);
 
 // Only text
-if ($workInfo['allow_text_assignment'] == 1) {
+if (1 == $workInfo['allow_text_assignment']) {
     $tabs = $form->returnForm();
 } else {
     $headers = [
@@ -153,7 +154,7 @@ if (!empty($work_id)) {
         } else {
             echo $tabs;
         }
-    } elseif ($student_can_edit_in_session && $validationStatus['has_ended'] == false) {
+    } elseif ($student_can_edit_in_session && false == $validationStatus['has_ended']) {
         echo $tabs;
     } else {
         Display::addFlash(Display::return_message(get_lang('Action not allowed'), 'error'));

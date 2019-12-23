@@ -1,4 +1,5 @@
 <?php
+
 /* For licensing terms, see /license.txt */
 
 require_once __DIR__.'/../inc/global.inc.php';
@@ -51,6 +52,7 @@ switch ($action) {
             header('Location: '.$url);
             exit;
         }
+
         break;
 }
 

@@ -1,4 +1,5 @@
 <?php
+
 /* For licensing terms, see /license.txt */
 
 require_once __DIR__.'/../inc/global.inc.php';
@@ -17,8 +18,8 @@ require_once 'work.lib.php';
 
 $this_section = SECTION_COURSES;
 
-$work_id = isset($_REQUEST['id']) ? intval($_REQUEST['id']) : null;
-$item_id = isset($_REQUEST['item_id']) ? intval($_REQUEST['item_id']) : null;
+$work_id = isset($_REQUEST['id']) ? (int) ($_REQUEST['id']) : null;
+$item_id = isset($_REQUEST['item_id']) ? (int) ($_REQUEST['item_id']) : null;
 $work_table = Database::get_course_table(TABLE_STUDENT_PUBLICATION);
 
 $is_allowed_to_edit = api_is_allowed_to_edit();
@@ -46,7 +47,7 @@ $is_course_member = CourseManager::is_user_subscribed_in_real_or_linked_course(
 
 $is_course_member = $is_course_member || api_is_platform_admin();
 
-if ($is_course_member == false) {
+if (false == $is_course_member) {
     api_not_allowed(true);
 }
 
@@ -67,7 +68,7 @@ if (!$is_author) {
 
 // Student's can't edit work only if he can delete his docs.
 if (!api_is_allowed_to_edit()) {
-    if (api_get_course_setting('student_delete_own_publication') != 1) {
+    if (1 != api_get_course_setting('student_delete_own_publication')) {
         api_not_allowed(true);
     }
 }
@@ -130,9 +131,9 @@ $interbreadcrumb[] = ['url' => '#', 'name' => $form_title];
 $form = new FormValidator(
     'form',
     'POST',
-    api_get_self()."?".api_get_cidreq()."&id=".$work_id,
+    api_get_self().'?'.api_get_cidreq().'&id='.$work_id,
     '',
-    ['enctype' => "multipart/form-data"]
+    ['enctype' => 'multipart/form-data']
 );
 $form->addElement('header', $form_title);
 $show_progress_bar = false;
@@ -144,7 +145,7 @@ if ($is_allowed_to_edit && !empty($item_id)) {
             FROM $work_table
             WHERE c_id = $course_id AND id ='$item_id' ";
     $result = Database::query($sql);
-    if ($result !== false && Database::num_rows($result) > 0) {
+    if (false !== $result && Database::num_rows($result) > 0) {
         $row = Database::fetch_array($result);
         if ($row['contains_file'] || !empty($row['url'])) {
             $form->addLabel(
@@ -165,7 +166,7 @@ $form->addHtmlEditor(
 );
 
 $defaults['title'] = $work_item['title'];
-$defaults["description"] = $work_item['description'];
+$defaults['description'] = $work_item['description'];
 $defaults['qualification'] = $work_item['qualification'];
 
 if ($is_allowed_to_edit && !empty($item_id)) {
@@ -219,7 +220,7 @@ if ($form->validate()) {
          * SPECIAL CASE ! For a work edited
         */
         //Get the author ID for that document from the item_property table
-        $item_to_edit_id = intval($_POST['item_to_edit']);
+        $item_to_edit_id = (int) ($_POST['item_to_edit']);
         $is_author = user_is_author($item_to_edit_id);
 
         if ($is_author) {
@@ -231,7 +232,7 @@ if ($form->validate()) {
             $description = isset($_POST['description']) ? $_POST['description'] : $work_data['description'];
 
             $add_to_update = null;
-            if ($is_allowed_to_edit && ($_POST['qualification'] != '')) {
+            if ($is_allowed_to_edit && ('' != $_POST['qualification'])) {
                 /*$add_to_update = ', qualificator_id ='."'".api_get_user_id()."', ";
                 $add_to_update .= ' qualification = '."'".api_float_val($_POST['qualification'])."',";
                 $add_to_update .= ' date_of_qualification = '."'".api_get_utc_datetime()."'";*/
@@ -257,7 +258,7 @@ if ($form->validate()) {
                     'error'
                 ));
             } else {
-                $sql = "UPDATE  ".$work_table."
+                $sql = 'UPDATE  '.$work_table."
                         SET	title = '".Database::escape_string($title)."',
                             description = '".Database::escape_string($description)."'
                             ".$add_to_update."
@@ -302,12 +303,12 @@ if (!empty($work_id)) {
             $content .= $form->returnForm();
         }
     } elseif ($is_author) {
-        if (empty($work_item['qualificator_id']) || $work_item['qualificator_id'] == 0) {
+        if (empty($work_item['qualificator_id']) || 0 == $work_item['qualificator_id']) {
             $content .= $form->returnForm();
         } else {
             $content .= Display::return_message(get_lang('Action not allowed'), 'error');
         }
-    } elseif ($student_can_edit_in_session && $has_ended == false) {
+    } elseif ($student_can_edit_in_session && false == $has_ended) {
         $content .= $form->returnForm();
     } else {
         $content .= Display::return_message(get_lang('Action not allowed'), 'error');

@@ -1,4 +1,5 @@
 <?php
+
 /* For licensing terms, see /license.txt */
 
 require_once __DIR__.'/../inc/global.inc.php';
@@ -48,6 +49,7 @@ switch ($action) {
         Display::addFlash(Display::return_message(get_lang('Added')));
         header('Location: '.$url);
         exit;
+
         break;
     case 'delete':
         if (!empty($workId) && !empty($userId)) {
@@ -58,6 +60,7 @@ switch ($action) {
             header('Location: '.$url);
             exit;
         }
+
         break;
 }
 

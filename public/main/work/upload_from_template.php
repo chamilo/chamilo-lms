@@ -1,4 +1,5 @@
 <?php
+
 /* For licensing terms, see /license.txt */
 
 require_once __DIR__.'/../inc/global.inc.php';
@@ -11,8 +12,8 @@ require_once 'work.lib.php';
 
 $this_section = SECTION_COURSES;
 
-$work_id = isset($_REQUEST['id']) ? intval($_REQUEST['id']) : null;
-$documentId = isset($_REQUEST['document_id']) ? intval($_REQUEST['document_id']) : null;
+$work_id = isset($_REQUEST['id']) ? (int) ($_REQUEST['id']) : null;
+$documentId = isset($_REQUEST['document_id']) ? (int) ($_REQUEST['document_id']) : null;
 
 $is_allowed_to_edit = api_is_allowed_to_edit();
 $course_id = api_get_course_int_id();
@@ -40,7 +41,7 @@ $is_course_member = CourseManager::is_user_subscribed_in_real_or_linked_course(
 
 $is_course_member = $is_course_member || api_is_platform_admin();
 
-if ($is_course_member == false) {
+if (false == $is_course_member) {
     api_not_allowed(true);
 }
 
@@ -65,9 +66,9 @@ $interbreadcrumb[] = ['url' => '#', 'name' => get_lang('Upload from template')];
 $form = new FormValidator(
     'form',
     'POST',
-    api_get_self()."?".api_get_cidreq()."&id=".$work_id,
+    api_get_self().'?'.api_get_cidreq().'&id='.$work_id,
     '',
-    ['enctype' => "multipart/form-data"]
+    ['enctype' => 'multipart/form-data']
 );
 setWorkUploadForm($form, $workInfo['allow_text_assignment']);
 $form->addElement('hidden', 'document_id', $documentId);
@@ -124,7 +125,7 @@ if (!empty($work_id)) {
         } else {
             $form->display();
         }
-    } elseif ($student_can_edit_in_session && $validationStatus['has_ended'] == false) {
+    } elseif ($student_can_edit_in_session && false == $validationStatus['has_ended']) {
         $form->display();
     } else {
         api_not_allowed();

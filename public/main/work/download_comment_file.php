@@ -1,4 +1,5 @@
 <?php
+
 /* For licensing terms, see /license.txt */
 
 /**
@@ -6,8 +7,6 @@
  *  Html files are parsed to fix a few problems with URLs,
  *  but this code will hopefully be replaced soon by an Apache URL
  *  rewrite mechanism.
- *
- * @package chamilo.work
  */
 require_once __DIR__.'/../inc/global.inc.php';
 require_once 'work.lib.php';
@@ -15,7 +14,7 @@ require_once 'work.lib.php';
 // Course protection
 api_protect_course_script(true);
 
-$commentId = isset($_GET['comment_id']) ? intval($_GET['comment_id']) : null;
+$commentId = isset($_GET['comment_id']) ? (int) ($_GET['comment_id']) : null;
 if (empty($commentId)) {
     api_not_allowed(true);
 }
@@ -34,9 +33,9 @@ if (!empty($workData)) {
     protectWork($courseInfo, $work['parent_id']);
 
     if (user_is_author($workData['work_id']) ||
-        $courseInfo['show_score'] == 0 &&
-        $work['active'] == 1 &&
-        $work['accepted'] == 1
+        0 == $courseInfo['show_score'] &&
+        1 == $work['active'] &&
+        1 == $work['accepted']
     ) {
         if (Security::check_abs_path(
             $workData['file_path'],

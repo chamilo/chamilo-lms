@@ -1,4 +1,5 @@
 <?php
+
 /* For licensing terms, see /license.txt */
 
 require_once __DIR__.'/../inc/global.inc.php';
@@ -10,7 +11,7 @@ api_protect_course_group(GroupManager::GROUP_TOOL_WORK);
 require_once 'work.lib.php';
 $this_section = SECTION_COURSES;
 
-$studentId = isset($_GET['studentId']) ? intval($_GET['studentId']) : null;
+$studentId = isset($_GET['studentId']) ? (int) ($_GET['studentId']) : null;
 
 if (empty($studentId)) {
     api_not_allowed(true);
@@ -49,11 +50,13 @@ switch ($action) {
     case 'export_to_pdf':
         exportAllWork($studentId, $courseInfo, 'pdf');
         exit;
+
         break;
     case 'download':
         if (api_is_allowed_to_edit()) {
             downloadAllFilesPerUser($studentId, $courseInfo);
         }
+
         break;
     case 'delete_all':
         if (api_is_allowed_to_edit()) {
@@ -69,6 +72,7 @@ switch ($action) {
             header('Location: '.api_get_self().'?studentId='.$studentId.'&'.api_get_cidreq());
             exit;
         }
+
         break;
 }
 
@@ -116,15 +120,15 @@ $headers = [
 ];
 foreach ($headers as $header) {
     $table->setHeaderContents($row, $column, $header);
-    $column++;
+    ++$column;
 }
-$row++;
+++$row;
 $column = 0;
 $url = api_get_path(WEB_CODE_PATH).'work/';
 
 foreach ($workPerUser as $work) {
     $work = $work['work'];
-    $scoreWeight = intval($work->qualification) == 0 ? null : $work->qualification;
+    $scoreWeight = 0 == (int) ($work->qualification) ? null : $work->qualification;
     $workId = $work->id;
     $workExtraData = get_work_assignment_by_id($workId);
 
@@ -132,17 +136,17 @@ foreach ($workPerUser as $work) {
         $itemId = $userResult['id'];
         $table->setCellContents($row, $column, $work->title.' ['.trim(strip_tags($userResult['title'])).']');
         $table->setCellAttributes($row, $column, ['width' => '300px']);
-        $column++;
+        ++$column;
         $table->setCellContents($row, $column, $userResult['sent_date']);
-        $column++;
+        ++$column;
         $dateQualification = !empty($workExtraData['expires_on']) ? api_get_local_time($workExtraData['expires_on']) : '-';
         $table->setCellContents($row, $column, $dateQualification);
-        $column++;
+        ++$column;
 
         $score = null;
         $score = $userResult['qualification'];
         $table->setCellContents($row, $column, $score);
-        $column++;
+        ++$column;
 
         // Detail
         $links = null;
@@ -166,7 +170,7 @@ foreach ($workPerUser as $work) {
 
         $table->setCellContents($row, $column, $links);
 
-        $row++;
+        ++$row;
         $column = 0;
     }
 }

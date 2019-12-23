@@ -23,7 +23,6 @@ use Chamilo\CourseBundle\Entity\CForumForum;
  * @Copyright Ghent University
  * @Copyright Patrick Cool
  */
-
 require_once __DIR__.'/../inc/global.inc.php';
 
 // The section (tabs).
@@ -87,24 +86,24 @@ if (!api_is_allowed_to_edit(false, true) && //is a student
 // 2. the forumcategory or forum is locked (locked <>0) and the user is not a course manager
 if (!api_is_allowed_to_edit(false, true) &&
     (($current_forum_category->isVisible($courseEntity, $sessionEntity) &&
-        $current_forum_category->getLocked() != 0) || $forumEntity->getLocked() != 0)
+        0 != $current_forum_category->getLocked()) || 0 != $forumEntity->getLocked())
 ) {
     api_not_allowed();
 }
 
 // 3. new threads are not allowed and the user is not a course manager
 if (!api_is_allowed_to_edit(false, true) &&
-    $forumEntity->getAllowNewThreads() != 1
+    1 != $forumEntity->getAllowNewThreads()
 ) {
     api_not_allowed();
 }
 // 4. anonymous posts are not allowed and the user is not logged in
-if (!$_user['user_id'] && $forumEntity->getAllowAnonymous() != 1) {
+if (!$_user['user_id'] && 1 != $forumEntity->getAllowAnonymous()) {
     api_not_allowed();
 }
 
 // 5. Check user access
-if ($forumEntity->getForumOfGroup() != 0) {
+if (0 != $forumEntity->getForumOfGroup()) {
     $show_forum = GroupManager::user_has_access(
         api_get_user_id(),
         $forumEntity->getForumOfGroup(),
@@ -132,11 +131,11 @@ if (!empty($groupId)) {
         'name' => get_lang('Group area').' '.$groupProperties['name'],
     ];
     $interbreadcrumb[] = [
-        'url' => api_get_path(WEB_CODE_PATH).'forum/viewforum.php?'.$cidreq.'&forum='.intval($_GET['forum']),
+        'url' => api_get_path(WEB_CODE_PATH).'forum/viewforum.php?'.$cidreq.'&forum='.(int) ($_GET['forum']),
         'name' => $current_forum['forum_title'],
     ];
     $interbreadcrumb[] = [
-        'url' => api_get_path(WEB_CODE_PATH).'forum/newthread.php?'.$cidreq.'&forum='.intval($_GET['forum']),
+        'url' => api_get_path(WEB_CODE_PATH).'forum/newthread.php?'.$cidreq.'&forum='.(int) ($_GET['forum']),
         'name' => get_lang('Create thread'),
     ];
 } else {
@@ -174,7 +173,7 @@ $form = newThread(
     isset($_SESSION['formelements']) ? $_SESSION['formelements'] : null
 );
 
-if ($origin == 'learnpath') {
+if ('learnpath' == $origin) {
     Display::display_reduced_header();
 } else {
     Display::display_header();
@@ -184,7 +183,7 @@ handle_forum_and_forumcategories();
 // Action links
 echo '<div class="actions">';
 echo '<span style="float:right;">'.search_link().'</span>';
-echo '<a href="viewforum.php?forum='.intval($_GET['forum']).'&'.$cidreq.'">'.
+echo '<a href="viewforum.php?forum='.(int) ($_GET['forum']).'&'.$cidreq.'">'.
     Display::return_icon('back.png', get_lang('Back to forum'), '', ICON_SIZE_MEDIUM).'</a>';
 echo '</div>';
 
@@ -195,7 +194,7 @@ if ($form) {
     $form->display();
 }
 
-if ($origin == 'learnpath') {
+if ('learnpath' == $origin) {
     Display::display_reduced_footer();
 } else {
     Display::display_footer();

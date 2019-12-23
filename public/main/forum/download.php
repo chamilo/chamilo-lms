@@ -1,4 +1,5 @@
 <?php
+
 /* For licensing terms, see /license.txt */
 
 /**
@@ -6,8 +7,6 @@
  * Html files are parsed to fix a few problems with URLs,
  * but this code will hopefully be replaced soon by an Apache URL
  * rewrite mechanism.
- *
- * @package chamilo.document
  */
 session_cache_limiter('public');
 
@@ -64,7 +63,7 @@ $forum_forum_visibility = api_get_item_visibility(
     api_get_session_id()
 );
 
-if ($forum_thread_visibility == 1 && $forum_forum_visibility == 1) {
+if (1 == $forum_thread_visibility && 1 == $forum_forum_visibility) {
     $full_file_name = api_get_path(SYS_COURSE_PATH).api_get_course_path().'/upload/forum/'.$doc_url;
     if (Security::check_abs_path(
         $full_file_name,
@@ -79,7 +78,7 @@ if ($forum_thread_visibility == 1 && $forum_forum_visibility == 1) {
             $row['filename']
         );
 
-        if ($result === false) {
+        if (false === $result) {
             api_not_allowed(true);
         }
     }

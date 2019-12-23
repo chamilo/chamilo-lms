@@ -1,12 +1,11 @@
 <?php
+
 /* For licensing terms, see /license.txt */
 
 /**
  * Edit a Forum Thread.
  *
  * @Author José Loguercio <jose.loguercio@beeznest.com>
- *
- * @package chamilo.forum
  */
 require_once __DIR__.'/../inc/global.inc.php';
 
@@ -36,10 +35,10 @@ if (api_is_in_gradebook()) {
     ];
 }
 
-$threadId = isset($_GET['thread']) ? intval($_GET['thread']) : 0;
+$threadId = isset($_GET['thread']) ? (int) ($_GET['thread']) : 0;
 $courseInfo = isset($_GET['cidReq']) ? api_get_course_info($_GET['cidReq']) : 0;
-$cId = isset($courseInfo['real_id']) ? intval($courseInfo['real_id']) : 0;
-$gradebookId = intval(api_is_in_gradebook());
+$cId = isset($courseInfo['real_id']) ? (int) ($courseInfo['real_id']) : 0;
+$gradebookId = (int) (api_is_in_gradebook());
 
 /* Is the user allowed here? */
 
@@ -47,31 +46,31 @@ $gradebookId = intval(api_is_in_gradebook());
 
 // 1. the forumcategory or forum is invisible (visibility==0) and the user is not a course manager
 if (!api_is_allowed_to_edit(false, true) &&
-    (($currentForumCategory['visibility'] && $currentForumCategory['visibility'] == 0) || $currentForum['visibility'] == 0)
+    (($currentForumCategory['visibility'] && 0 == $currentForumCategory['visibility']) || 0 == $currentForum['visibility'])
 ) {
     api_not_allowed();
 }
 
 // 2. the forumcategory or forum is locked (locked <>0) and the user is not a course manager
 if (!api_is_allowed_to_edit(false, true) &&
-    (($currentForumCategory['visibility'] && $currentForumCategory['locked'] != 0) || $currentForum['locked'] != 0)
+    (($currentForumCategory['visibility'] && 0 != $currentForumCategory['locked']) || 0 != $currentForum['locked'])
 ) {
     api_not_allowed();
 }
 
 // 3. new threads are not allowed and the user is not a course manager
 if (!api_is_allowed_to_edit(false, true) &&
-    $currentForum['allow_new_threads'] != 1
+    1 != $currentForum['allow_new_threads']
 ) {
     api_not_allowed();
 }
 // 4. anonymous posts are not allowed and the user is not logged in
-if (!$_user['user_id'] && $currentForum['allow_anonymous'] != 1) {
+if (!$_user['user_id'] && 1 != $currentForum['allow_anonymous']) {
     api_not_allowed();
 }
 
 // 5. Check user access
-if ($currentForum['forum_of_group'] != 0) {
+if (0 != $currentForum['forum_of_group']) {
     $show_forum = GroupManager::user_has_access(
         api_get_user_id(),
         $currentForum['forum_of_group'],
@@ -220,8 +219,8 @@ $skillList = Skill::addSkillsToForm($form, ITEM_TYPE_FORUM_THREAD, $threadId);
 if (!empty($threadData)) {
     $defaults['thread_qualify_gradebook'] = $gradeThisThread;
     $defaults['thread_title'] = prepare4display($threadData['threadTitle']);
-    $defaults['thread_sticky'] = strval(intval($threadData['threadSticky']));
-    $defaults['thread_peer_qualify'] = intval($threadData['threadPeerQualify']);
+    $defaults['thread_sticky'] = (string) ((int) ($threadData['threadSticky']));
+    $defaults['thread_peer_qualify'] = (int) ($threadData['threadPeerQualify']);
     $defaults['numeric_calification'] = $threadData['threadQualifyMax'];
     $defaults['calification_notebook_title'] = $threadData['threadTitleQualify'];
     $defaults['weight_calification'] = $threadData['threadWeight'];
@@ -254,7 +253,7 @@ $form->setDefaults(isset($defaults) ? $defaults : null);
 $token = Security::get_token();
 $form->addElement('hidden', 'sec_token');
 $form->setConstants(['sec_token' => $token]);
-$originIsLearnPath = $origin == 'learnpath';
+$originIsLearnPath = 'learnpath' == $origin;
 
 $view = new Template(
     '',

@@ -20,7 +20,6 @@ use Chamilo\CourseBundle\Entity\CForumThread;
  * - new view option: nested view
  * - quoting a message.
  */
-
 require_once __DIR__.'/../inc/global.inc.php';
 
 $this_section = SECTION_COURSES;
@@ -77,19 +76,19 @@ if (!api_is_allowed_to_edit(false, true) &&
     api_not_allowed(true);
 }
 if (!api_is_allowed_to_edit(false, true) &&
-    (($current_forum_category && $current_forum_category->getLocked()!= 0) ||
-        $forumEntity->getLocked() != 0 || $threadEntity->getLocked() != 0)
+    (($current_forum_category && 0 != $current_forum_category->getLocked()) ||
+        0 != $forumEntity->getLocked() || 0 != $threadEntity->getLocked())
 ) {
     api_not_allowed(true);
 }
-if (!$_user['user_id'] && $forumEntity->getAllowAnonymous() == 0) {
+if (!$_user['user_id'] && 0 == $forumEntity->getAllowAnonymous()) {
     api_not_allowed(true);
 }
 
-if ($forumEntity->getForumOfGroup() != 0) {
+if (0 != $forumEntity->getForumOfGroup()) {
     $show_forum = GroupManager::user_has_access(
         api_get_user_id(),
-        $forumEntity->getForumOfGroup() ,
+        $forumEntity->getForumOfGroup(),
         GroupManager::GROUP_TOOL_FORUM
     );
     if (!$show_forum) {
@@ -188,14 +187,14 @@ $form = show_add_post_form(
     $my_elements
 );
 
-if ($origin == 'learnpath') {
+if ('learnpath' == $origin) {
     Display::display_reduced_header();
 } else {
     // The last element of the breadcrumb navigation is already set in interbreadcrumb, so give an empty string.
     Display::display_header();
 }
 
-if ($origin != 'learnpath') {
+if ('learnpath' != $origin) {
     echo '<div class="actions">';
     echo '<span style="float:right;">'.search_link().'</span>';
     echo '<a href="viewthread.php?'.api_get_cidreq().'&forum='.$forumId.'&thread='.$threadId.'">';
@@ -222,7 +221,7 @@ if ($form) {
     $form->display();
 }
 
-if ($origin == 'learnpath') {
+if ('learnpath' == $origin) {
     Display::display_reduced_footer();
 } else {
     Display::display_footer();

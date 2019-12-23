@@ -112,6 +112,7 @@ switch ($my_action) {
         }
         header('Location: '.$currentUrl);
         exit;
+
         break;
     case 'invisible':
     case 'visible':
@@ -124,6 +125,7 @@ switch ($my_action) {
         }
         header('Location: '.$currentUrl);
         exit;
+
         break;
     case 'move':
         if (isset($_GET['post'])) {
@@ -132,6 +134,7 @@ switch ($my_action) {
         }
         header('Location: '.$currentUrl);
         exit;
+
         break;
     case 'report':
         $postId = isset($_GET['post_id']) ? $_GET['post_id'] : 0;
@@ -140,6 +143,7 @@ switch ($my_action) {
         Display::addFlash(Display::return_message(get_lang('Reported')));
         header('Location: '.$currentUrl);
         exit;
+
         break;
     case 'ask_revision':
         if (api_get_configuration_value('allow_forum_post_revisions')) {
@@ -149,6 +153,7 @@ switch ($my_action) {
         }
         header('Location: '.$currentUrl);
         exit;
+
         break;
 }
 
@@ -162,7 +167,7 @@ if (!empty($groupId)) {
         'name' => get_lang('Group area').' '.$group_properties['name'],
     ];
     $interbreadcrumb[] = [
-        'url' => api_get_path(WEB_CODE_PATH).'forum/viewforum.php?forum='.$forumId.'&'.api_get_cidreq()."&search=".Security::remove_XSS(urlencode($my_search)),
+        'url' => api_get_path(WEB_CODE_PATH).'forum/viewforum.php?forum='.$forumId.'&'.api_get_cidreq().'&search='.Security::remove_XSS(urlencode($my_search)),
         'name' => Security::remove_XSS($forumEntity->getForumTitle()),
     ];
     $interbreadcrumb[] = [
@@ -181,13 +186,13 @@ if (!empty($groupId)) {
         $interbreadcrumb[] = [
             'url' => api_get_path(
                     WEB_CODE_PATH
-                ).'forum/viewforumcategory.php?forumcategory='.$current_forum_category->getIid()."&search=".Security::remove_XSS(
+                ).'forum/viewforumcategory.php?forumcategory='.$current_forum_category->getIid().'&search='.Security::remove_XSS(
                     urlencode($my_search)
                 ),
             'name' => Security::remove_XSS($current_forum_category->getCatTitle()),
         ];
         $interbreadcrumb[] = [
-            'url' => api_get_path(WEB_CODE_PATH).'forum/viewforum.php?'.api_get_cidreq().'&forum='.$forumId."&search=".Security::remove_XSS(urlencode($my_search)),
+            'url' => api_get_path(WEB_CODE_PATH).'forum/viewforum.php?'.api_get_cidreq().'&forum='.$forumId.'&search='.Security::remove_XSS(urlencode($my_search)),
             'name' => Security::remove_XSS($forumEntity->getForumTitle()),
         ];
         $interbreadcrumb[] = [
@@ -390,7 +395,7 @@ foreach ($posts as $post) {
             $editUrl .= "&forum=$forumId&thread=$threadId&post={$post['post_id']}&id_attach=$id_attach";
             $iconEdit .= "<a href='".$editUrl."'>"
                 .Display::return_icon('edit.png', get_lang('Edit'), [], ICON_SIZE_SMALL)
-                ."</a>";
+                .'</a>';
 
             $editButton = Display::toolbarButton(
                 get_lang('Edit'),
@@ -445,9 +450,9 @@ foreach ($posts as $post) {
         );
 
         if ($count > 0) {
-            $iconEdit .= "<a href=\"viewthread.php?".api_get_cidreq()
+            $iconEdit .= '<a href="viewthread.php?'.api_get_cidreq()
                 ."&forum=$forumId&thread=$threadId&action=move&post={$post['post_id']}"
-                ."\">".Display::return_icon('move.png', get_lang('Move post'), [], ICON_SIZE_SMALL)."</a>";
+                .'">'.Display::return_icon('move.png', get_lang('Move post'), [], ICON_SIZE_SMALL).'</a>';
         }
     }
 
@@ -504,11 +509,11 @@ foreach ($posts as $post) {
                 $threadId
             );
             if (false == $locked) {
-                $iconEdit .= "<a href=\"forumqualify.php?".api_get_cidreq()
+                $iconEdit .= '<a href="forumqualify.php?'.api_get_cidreq()
                     ."&forum=$forumId&thread=$threadId&action=list&post={$post['post_id']}"
                     ."&user={$post['user_id']}&user_id={$post['user_id']}"
                     ."&idtextqualify=$current_qualify_thread"
-                    ."\" >".Display::return_icon('quiz.png', get_lang('Grade activity'))."</a>";
+                    .'" >'.Display::return_icon('quiz.png', get_lang('Grade activity')).'</a>';
             }
         }
     }
@@ -667,7 +672,7 @@ foreach ($posts as $post) {
     // The post has been displayed => it can be removed from the what's new array
     //unset($whatsnew_post_info[$current_forum['forum_id']][$current_thread['thread_id']][$post['post_id']]);
     //unset($_SESSION['whatsnew_post_info'][$current_forum['forum_id']][$current_thread['thread_id']][$post['post_id']]);
-    $count++;
+    ++$count;
 }
 
 $template->assign('posts', $postList);

@@ -1,4 +1,5 @@
 <?php
+
 /* For licensing terms, see /license.txt */
 
 /**
@@ -18,8 +19,6 @@
  * @Author Patrick Cool <patrick.cool@UGent.be>, Ghent University
  * @Copyright Ghent University
  * @Copyright Patrick Cool
- *
- *  @package chamilo.forum
  */
 require_once __DIR__.'/../inc/global.inc.php';
 
@@ -70,7 +69,7 @@ if (api_is_in_gradebook()) {
 }
 
 $group_properties = GroupManager::get_group_properties(api_get_group_id());
-if ($origin == 'group') {
+if ('group' == $origin) {
     $_clean['toolgroup'] = api_get_group_id();
     $interbreadcrumb[] = [
         'url' => api_get_path(WEB_CODE_PATH).'group/group.php?'.api_get_cidreq(),
@@ -99,7 +98,7 @@ if ($origin == 'group') {
         'name' => prepare4display($current_forum['forum_title']),
     ];
     $interbreadcrumb[] = [
-        'url' => api_get_path(WEB_CODE_PATH).'forum/viewthread.php?'.api_get_cidreq().'&forum='.$forumId.'&thread='.intval($_GET['thread']),
+        'url' => api_get_path(WEB_CODE_PATH).'forum/viewthread.php?'.api_get_cidreq().'&forum='.$forumId.'&thread='.(int) ($_GET['thread']),
         'name' => prepare4display($current_thread['thread_title']),
     ];
     $interbreadcrumb[] = ['url' => 'javascript: void (0);', 'name' => get_lang('Edit a post')];
@@ -136,8 +135,8 @@ JS;
 // I have split this is several pieces for clarity.
 if (!api_is_allowed_to_edit(null, true) &&
     (
-        ($current_forum_category && $current_forum_category['visibility'] == 0) ||
-        $current_forum['visibility'] == 0
+        ($current_forum_category && 0 == $current_forum_category['visibility']) ||
+        0 == $current_forum['visibility']
     )
 ) {
     api_not_allowed(true);
@@ -145,38 +144,38 @@ if (!api_is_allowed_to_edit(null, true) &&
 
 if (!api_is_allowed_to_edit(null, true) &&
     (
-        ($current_forum_category && $current_forum_category['locked'] != 0) ||
-        $current_forum['locked'] != 0 ||
-        $current_thread['locked'] != 0
+        ($current_forum_category && 0 != $current_forum_category['locked']) ||
+        0 != $current_forum['locked'] ||
+        0 != $current_thread['locked']
     )
 ) {
     api_not_allowed(true);
 }
 
-if (!$_user['user_id'] && $current_forum['allow_anonymous'] == 0) {
+if (!$_user['user_id'] && 0 == $current_forum['allow_anonymous']) {
     api_not_allowed(true);
 }
 
 $group_id = api_get_group_id();
 
 if (!api_is_allowed_to_edit(null, true) &&
-    $current_forum['allow_edit'] == 0 &&
+    0 == $current_forum['allow_edit'] &&
     !GroupManager::is_tutor_of_group(api_get_user_id(), $group_properties)
 ) {
     api_not_allowed(true);
 }
 
-if ($origin == 'learnpath') {
+if ('learnpath' == $origin) {
     Display::display_reduced_header();
 } else {
     Display::display_header();
 }
 
 // Action links
-if ($origin != 'learnpath') {
+if ('learnpath' != $origin) {
     echo '<div class="actions">';
     echo '<span style="float:right;">'.search_link().'</span>';
-    if ($origin == 'group') {
+    if ('group' == $origin) {
         echo '<a href="../group/group_space.php?'.api_get_cidreq().'">'.
             Display::return_icon(
                 'back.png',
@@ -239,7 +238,7 @@ show_edit_post_form(
 );
 
 // Footer
-if (isset($origin) && $origin == 'learnpath') {
+if (isset($origin) && 'learnpath' == $origin) {
     Display::display_reduced_footer();
 } else {
     Display::display_footer();

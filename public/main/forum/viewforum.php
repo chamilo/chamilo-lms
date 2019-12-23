@@ -231,16 +231,19 @@ if ('liststd' == $my_action &&
             $student_list = get_thread_users_qualify($_GET['id']);
             $nrorow3 = -2;
             $active = 2;
+
             break;
         case 'notqualify':
             $student_list = get_thread_users_not_qualify($_GET['id']);
             $nrorow3 = -2;
             $active = 3;
+
             break;
         default:
             $student_list = get_thread_users_details($_GET['id']);
             $nrorow3 = Database::num_rows($student_list);
             $active = 1;
+
             break;
     }
 
@@ -249,7 +252,7 @@ if ('liststd' == $my_action &&
     if ($nrorow3 > 0 || -2 == $nrorow3) {
         $url = api_get_cidreq().'&forum='.$my_forum.'&action='
             .Security::remove_XSS($_GET['action']).'&content='
-            .Security::remove_XSS($_GET['content'], STUDENT).'&id='.intval($_GET['id']);
+            .Security::remove_XSS($_GET['content'], STUDENT).'&id='.(int) ($_GET['id']);
         $tabs = [
             [
                 'content' => get_lang('All learners'),
@@ -305,8 +308,8 @@ if ('liststd' == $my_action &&
                     );
                     $table_list .= '<td>
                         <a href="'.$forumUrl.'forumqualify.php?'.api_get_cidreq()
-                        .'&forum='.intval($my_forum).'&thread='
-                        .intval($_GET['id']).'&user='.$row_student_list['id']
+                        .'&forum='.(int) $my_forum.'&thread='
+                        .(int) ($_GET['id']).'&user='.$row_student_list['id']
                         .'&user_id='.$row_student_list['id'].'&idtextqualify='
                         .$current_qualify_thread.'">'
                         .Display::return_icon($icon_qualify, get_lang('Grade activity')).'</a></td></tr>';
@@ -362,13 +365,13 @@ if (api_is_allowed_to_edit(false, true) ||
 ) {
     if (1 != $forumEntity->getLocked() && 1 != $forumEntity->getLocked()) {
         if (!api_is_anonymous() && !api_is_invitee()) {
-            if ($my_forum == strval(intval($my_forum))) {
+            if ($my_forum == (string) ((int) $my_forum)) {
                 echo '<a href="'.$forumUrl.'newthread.php?'.api_get_cidreq().'&forum='
                     .Security::remove_XSS($my_forum).'">'
                     .Display::return_icon('new_thread.png', get_lang('Create thread'), '', ICON_SIZE_MEDIUM)
                     .'</a>';
             } else {
-                $my_forum = strval(intval($my_forum));
+                $my_forum = (string) ((int) $my_forum);
                 echo '<a href="'.$forumUrl.'newthread.php?'.api_get_cidreq()
                     .'&forum='.$my_forum.'">'
                     .Display::return_icon('new_thread.png', get_lang('Create thread'), '', ICON_SIZE_MEDIUM)
@@ -659,7 +662,7 @@ if (is_array($threads)) {
 
             echo $html;
         }
-        $count++;
+        ++$count;
     }
 }
 

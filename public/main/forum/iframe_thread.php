@@ -56,7 +56,7 @@ $sessionEntity = api_get_session_entity(api_get_session_id());
 // if the user is not a course administrator and the forum is hidden
 // then the user is not allowed here.
 if (!api_is_allowed_to_edit(false, true) &&
-    ($forumEntity->isVisible($courseEntity, $sessionEntity) == false || $threadEntity->isVisible($courseEntity, $sessionEntity) == false)
+    (false == $forumEntity->isVisible($courseEntity, $sessionEntity) || false == $threadEntity->isVisible($courseEntity, $sessionEntity))
 ) {
     api_not_allowed(false);
 }
@@ -82,12 +82,12 @@ $result = Database::query($sql);
 
 $template = new Template('', false, false);
 
-$content = "<table width=\"100%\" height=\"100%\" cellspacing=\"5\" border=\"0\">";
+$content = '<table width="100%" height="100%" cellspacing="5" border="0">';
 while ($row = Database::fetch_array($result)) {
-    $content .= "<tr>";
-    $content .= "<td rowspan=\"2\" class=\"forum_message_left\">";
+    $content .= '<tr>';
+    $content .= '<td rowspan="2" class="forum_message_left">';
     $username = api_htmlentities(sprintf(get_lang('Login: %s'), $row['username']), ENT_QUOTES);
-    if ($row['user_id'] == '0') {
+    if ('0' == $row['user_id']) {
         $name = $row['poster_name'];
     } else {
         $name = api_get_person_name($row['firstname'], $row['lastname']);
@@ -95,15 +95,15 @@ while ($row = Database::fetch_array($result)) {
     $content .= Display::tag('span', $name, ['title' => $username]).'<br />';
     $content .= api_convert_and_format_date($row['post_date']).'<br /><br />';
 
-    $content .= "</td>";
-    $content .= "<td class=\"forum_message_post_title\">".Security::remove_XSS($row['post_title'])."</td>";
-    $content .= "</tr>";
+    $content .= '</td>';
+    $content .= '<td class="forum_message_post_title">'.Security::remove_XSS($row['post_title']).'</td>';
+    $content .= '</tr>';
 
-    $content .= "<tr>";
-    $content .= "<td class=\"forum_message_post_text\">".Security::remove_XSS($row['post_text'], STUDENT)."</td>";
-    $content .= "</tr>";
+    $content .= '<tr>';
+    $content .= '<td class="forum_message_post_text">'.Security::remove_XSS($row['post_text'], STUDENT).'</td>';
+    $content .= '</tr>';
 }
-$content .= "</table>";
+$content .= '</table>';
 
 $template->assign('content', $content);
 $template->display_no_layout_template();

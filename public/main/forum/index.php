@@ -22,8 +22,6 @@ use ChamiloSession as Session;
  * @author Patrick Cool <patrick.cool@UGent.be>, Ghent University
  * @copyright Ghent University
  * @copyright Patrick Cool
- *
- * @package chamilo.forum
  */
 require_once __DIR__.'/../inc/global.inc.php';
 
@@ -51,7 +49,7 @@ $sessionEntity = api_get_session_entity($sessionId);
 $_user = api_get_user_info();
 
 $hideNotifications = api_get_course_setting('hide_forum_notifications');
-$hideNotifications = $hideNotifications == 1;
+$hideNotifications = 1 == $hideNotifications;
 
 require_once 'forumfunction.inc.php';
 
@@ -67,7 +65,7 @@ $search_forum = isset($_GET['search']) ? Security::remove_XSS($_GET['search']) :
 /* ACTIONS */
 $action = isset($_GET['action']) ? $_GET['action'] : '';
 
-if ($action === 'add') {
+if ('add' === $action) {
     switch ($_GET['content']) {
         case 'forum':
             $interbreadcrumb[] = [
@@ -78,6 +76,7 @@ if ($action === 'add') {
                 'url' => '#',
                 'name' => get_lang('Add a forum'),
             ];
+
             break;
         case 'forumcategory':
             $interbreadcrumb[] = [
@@ -88,6 +87,7 @@ if ($action === 'add') {
                 'url' => '#',
                 'name' => get_lang('Add a forumCategory'),
             ];
+
             break;
         default:
             break;
@@ -110,9 +110,9 @@ if (api_is_allowed_to_edit(false, true)) {
 }
 
 // Notification
-if ($action == 'notify' && isset($_GET['content']) && isset($_GET['id'])) {
-    if (api_get_session_id() != 0 &&
-        api_is_allowed_to_session_edit(false, true) == false
+if ('notify' == $action && isset($_GET['content']) && isset($_GET['id'])) {
+    if (0 != api_get_session_id() &&
+        false == api_is_allowed_to_session_edit(false, true)
     ) {
         api_not_allowed();
     }
@@ -145,7 +145,7 @@ $forumCategories = get_forum_categories();
 // display group forum in general forum tool depending to configuration option
 $setting = api_get_setting('display_groups_forum_in_general_tool');
 
-$allCourseForums = get_forums('', '', $setting === 'true');
+$allCourseForums = get_forums('', '', 'true' === $setting);
 $user_id = api_get_user_id();
 
 /* RETRIEVING ALL GROUPS AND THOSE OF THE USER */
@@ -168,12 +168,12 @@ if (!api_is_anonymous()) {
 $actionLeft = null;
 //if is called from learning path
 if (!empty($_GET['lp_id']) || !empty($_POST['lp_id'])) {
-    $url = "../lp/lp_controller.php?".api_get_cidreq()
+    $url = '../lp/lp_controller.php?'.api_get_cidreq()
         ."&gradebook=&action=add_item&type=step&lp_id='.$lp_id.'#resource_tab-5";
     $actionLeft .= Display::url(
         Display::return_icon(
             'back.png',
-            get_lang("Back to").' '.get_lang("Learning paths"),
+            get_lang('Back to').' '.get_lang('Learning paths'),
             null,
             ICON_SIZE_MEDIUM
         ),
@@ -303,7 +303,7 @@ if (is_array($forumCategories)) {
 
         if (!empty($idCategory)) {
             if (api_is_allowed_to_edit(false, true) &&
-                !($categorySessionId == 0 && $sessionId != 0)
+                !(0 == $categorySessionId && 0 != $sessionId)
             ) {
                 $tools .= '<a href="'.api_get_self().'?'.api_get_cidreq()
                     .'&action=edit&content=forumcategory&id='.$categoryId
@@ -379,7 +379,7 @@ if (is_array($forumCategories)) {
                 // Note: This can be speed up if we transform the $allCourseForums
                 // to an array that uses the forum_category as the key.
                 if (true) {
-                //if (isset($forum['forum_category']) && $forum['forum_category'] == $forumCategory['cat_id']) {
+                    //if (isset($forum['forum_category']) && $forum['forum_category'] == $forumCategory['cat_id']) {
                     $show_forum = false;
                     // SHOULD WE SHOW THIS PARTICULAR FORUM
                     // you are teacher => show forum
@@ -389,7 +389,7 @@ if (is_array($forumCategories)) {
                         // you are not a teacher
                         // it is not a group forum => show forum
                         // (invisible forums are already left out see get_forums function)
-                        if ($forum['forum_of_group'] == '0') {
+                        if ('0' == $forum['forum_of_group']) {
                             $show_forum = true;
                         } else {
                             $show_forum = GroupManager::user_has_access(
@@ -401,7 +401,7 @@ if (is_array($forumCategories)) {
                     }
 
                     if ($show_forum) {
-                        $form_count++;
+                        ++$form_count;
                         /*$mywhatsnew_post_info = isset($whatsnew_post_info[$forum['forum_id']])
                             ? $whatsnew_post_info[$forum['forum_id']]
                             : null;*/
@@ -424,7 +424,7 @@ if (is_array($forumCategories)) {
                             $forum->getSessionId(),
                             $_user['status']
                         );
-                        if ($forum->getForumOfGroup() != '0') {
+                        if ('0' != $forum->getForumOfGroup()) {
                             $my_all_groups_forum_name = isset($all_groups[$forum['forum_of_group']]['name'])
                                 ? $all_groups[$forum['forum_of_group']]['name']
                                 : null;
@@ -466,7 +466,7 @@ if (is_array($forumCategories)) {
                         $toolActions = null;
                         $forumInfo['alert'] = null;
                         // The number of topics and posts.
-                        if ($hideNotifications == false) {
+                        if (false == $hideNotifications) {
                             // The number of topics and posts.
                             /*
                             if ($forum->getForumOfGroup() !== '0') {
@@ -519,7 +519,7 @@ if (is_array($forumCategories)) {
                         }*/
 
                         if (api_is_allowed_to_edit(false, true)
-                            && !($forum->getSessionId() == 0 && $sessionId != 0)
+                            && !(0 == $forum->getSessionId() && 0 != $sessionId)
                         ) {
                             $toolActions .= '<a href="'.api_get_self().'?'.api_get_cidreq()
                                 .'&action=edit&content=forum&id='.$forumId.'">'
@@ -599,7 +599,7 @@ $tpl->assign('languages', $languages);
 $tpl->assign('is_allowed_to_edit', $isTeacher);
 $extraFieldValue = new ExtraFieldValue('course');
 $value = $extraFieldValue->get_values_by_handler_and_field_variable(api_get_course_int_id(), 'global_forum');
-if ($value && isset($value['value']) && $value['value'] == 1) {
+if ($value && isset($value['value']) && 1 == $value['value']) {
     $layout = $tpl->get_template('forum/global_list.tpl');
 } else {
     $layout = $tpl->get_template('forum/list.tpl');

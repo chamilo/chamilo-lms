@@ -1,4 +1,5 @@
 <?php
+
 /* For licensing terms, see /license.txt */
 
 /**
@@ -17,8 +18,6 @@
  *
  * @author Patrick Cool <patrick.cool@UGent.be>, Ghent University
  * @copyright Ghent University
- *
- *  @package chamilo.forum
  */
 require_once __DIR__.'/../inc/global.inc.php';
 
@@ -46,7 +45,7 @@ if (api_is_in_gradebook()) {
 
 $groupId = api_get_group_id();
 
-if ($origin == 'group') {
+if ('group' == $origin) {
     $group_properties = GroupManager:: get_group_properties($groupId);
     $interbreadcrumb[] = [
         'url' => api_get_path(WEB_CODE_PATH).'group/group.php?'.api_get_cidreq(),
@@ -57,7 +56,7 @@ if ($origin == 'group') {
         'name' => get_lang('Group area').' ('.$group_properties['name'].')',
     ];
     $interbreadcrumb[] = [
-        'url' => api_get_path(WEB_CODE_PATH).'forum/viewforum.php?origin='.$origin.'&forum='.intval($_GET['forum']).'&'.api_get_cidreq(),
+        'url' => api_get_path(WEB_CODE_PATH).'forum/viewforum.php?origin='.$origin.'&forum='.(int) ($_GET['forum']).'&'.api_get_cidreq(),
         'name' => prepare4display($current_forum['forum_title']),
     ];
     $interbreadcrumb[] = [
@@ -73,7 +72,7 @@ if ($origin == 'group') {
 }
 
 // Display the header.
-if ($origin == 'learnpath') {
+if ('learnpath' == $origin) {
     Display::display_reduced_header();
 } else {
     Display::display_header($nameTools);
@@ -89,6 +88,6 @@ Event::event_access_tool(TOOL_FORUM);
 forum_search();
 
 // Footer
-if ($origin != 'learnpath') {
+if ('learnpath' != $origin) {
     Display :: display_footer();
 }

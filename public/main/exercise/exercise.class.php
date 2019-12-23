@@ -1,4 +1,5 @@
 <?php
+
 /* For licensing terms, see /license.txt */
 
 use APY\DataGridBundle\Grid\Action\MassAction;
@@ -2378,17 +2379,17 @@ class Exercise
 
         // submit
         if (isset($_GET['exerciseId'])) {
-            $form->addButtonSave(get_lang('Edit test name and settings'), 'submitTest');
+            $form->addButtonSave(get_lang('Edit test name and settings'), 'submitExercise');
         } else {
-            $form->addButtonUpdate(get_lang('Proceed to questions'), 'submitTest');
+            $form->addButtonUpdate(get_lang('Proceed to questions'), 'submitExercise');
         }
 
-        $form->addRule('exerciseTitle', get_lang('GiveTest name'), 'required');
+        $form->addRule('exerciseTitle', get_lang('Name'), 'required');
 
         // defaults
         if ($type == 'full') {
             // rules
-            $form->addRule('exerciseAttempts', get_lang('Numericalal'), 'numeric');
+            $form->addRule('exerciseAttempts', get_lang('Numeric'), 'numeric');
             $form->addRule('start_time', get_lang('Invalid date'), 'datetime');
             $form->addRule('end_time', get_lang('Invalid date'), 'datetime');
 

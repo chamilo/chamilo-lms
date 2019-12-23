@@ -1076,7 +1076,7 @@ class learnpath
         Database::query($sql);*/
         $repo = Container::getLpRepository();
         $lp = $repo->find($this->lp_id);
-        $repo->remove($lp);
+        $repo->getEntityManager()->remove($lp);
         $repo->getEntityManager()->flush();
 
         // Updates the display order of all lps.

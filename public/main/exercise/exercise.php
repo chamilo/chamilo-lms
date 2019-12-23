@@ -103,6 +103,7 @@ if ($is_allowedToEdit && !empty($action)) {
         case 'remove_shortcut':
             $repo = Container::getShortcutRepository();
             $shortCut = $repo->getShortcutFromResource($exerciseEntity);
+            $courseEntity = api_get_course_entity(api_get_course_int_id());
             if (null !== $shortCut) {
                 $repo->addResourceNode($shortCut, api_get_user_entity(api_get_user_id()), $courseEntity);
                 $repo->getEntityManager()->remove($shortCut);

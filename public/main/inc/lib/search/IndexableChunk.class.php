@@ -1,28 +1,9 @@
 <?php
+
 /* For licensing terms, see /license.txt */
 
 /**
- * @package chamilo.include.search
- */
-
-// some constants to avoid serialize string keys on serialized data array
-define('SE_COURSE_ID', 0);
-define('SE_TOOL_ID', 1);
-define('SE_DATA', 2);
-define('SE_USER', 3);
-
-// in some cases we need top differenciate xapian documents of the same tool
-define('SE_DOCTYPE_EXERCISE_EXERCISE', 0);
-define('SE_DOCTYPE_EXERCISE_QUESTION', 1);
-
-// xapian prefixes
-define('XAPIAN_PREFIX_COURSEID', 'C');
-define('XAPIAN_PREFIX_TOOLID', 'O');
-
-/**
- * Class.
- *
- * @package chamilo.include.search
+ * Class _IndexableChunk.
  */
 abstract class _IndexableChunk
 {
@@ -33,7 +14,6 @@ abstract class _IndexableChunk
      *     string ids;  <- los flags a guardar "cidReq:lp_id:path"
      * }
      */
-
     public $data;
 
     /**

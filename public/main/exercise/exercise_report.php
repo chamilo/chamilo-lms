@@ -119,7 +119,7 @@ if (!empty($_REQUEST['export_report']) && $_REQUEST['export_report'] == '1') {
         switch ($_GET['export_format']) {
             case 'xls':
                 $export->exportCompleteReportXLS(
-                    $documentPath,
+                    '',
                     null,
                     $loadExtraData,
                     null,
@@ -130,7 +130,7 @@ if (!empty($_REQUEST['export_report']) && $_REQUEST['export_report'] == '1') {
             case 'csv':
             default:
                 $export->exportCompleteReportCSV(
-                    $documentPath,
+                    '',
                     null,
                     $loadExtraData,
                     null,

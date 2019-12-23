@@ -500,7 +500,7 @@ class UniqueAnswer extends Question
             $quizAnswer
                 ->setId($id);
 
-            $em->merge($quizAnswer);
+            $em->persist($quizAnswer);
             $em->flush();
         }
 

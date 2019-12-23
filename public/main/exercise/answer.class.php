@@ -655,7 +655,7 @@ class Answer
                 ->setHotspotCoordinates($hotSpotCoordinates)
                 ->setHotspotType($hotSpotType);
 
-            $em->merge($quizAnswer);
+            $em->persist($quizAnswer);
             $em->flush();
 
             return $quizAnswer;
@@ -734,7 +734,7 @@ class Answer
                         $quizAnswer->setCorrect($correctAnswerAutoId ? $correctAnswerAutoId : 0);
                     }
 
-                    $em->merge($quizAnswer);
+                    $em->persist($quizAnswer);
                     $em->flush();
                 }
             } else {
@@ -937,7 +937,7 @@ class Answer
                             ->setId($answerId)
                             ->setIdAuto($answerId);
 
-                        $em->merge($quizAnswer);
+                        $em->persist($quizAnswer);
                         $em->flush();
 
                         $correctAnswers[$answerId] = $answer['correct'];
@@ -987,7 +987,7 @@ class Answer
                         ->setId($answerId)
                         ->setIdAuto($answerId);
 
-                    $em->merge($quizAnswer);
+                    $em->persist($quizAnswer);
                     $em->flush();
 
                     $correctAnswers[$answerId] = $correct;

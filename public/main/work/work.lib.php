@@ -113,7 +113,6 @@ function get_work_data_by_id($id, $courseId = 0, $sessionId = 0)
 {
     $id = (int) $id;
     $courseId = (int) $courseId ?: api_get_course_int_id();
-    $course = api_get_course_entity($courseId);
     $table = Database::get_course_table(TABLE_STUDENT_PUBLICATION);
 
     $sessionCondition = '';
@@ -123,30 +122,53 @@ function get_work_data_by_id($id, $courseId = 0, $sessionId = 0)
 
     $webCodePath = api_get_path(WEB_CODE_PATH);
 
-    $sql = "SELECT * FROM $table
-            WHERE
-                id = $id AND c_id = $courseId
-                $sessionCondition";
-    $result = Database::query($sql);
+    $repo = Container::getStudentPublicationRepository();
+    /** @var CStudentPublication $studentPublication */
+    $studentPublication = $repo->find($id);
+
+    if (empty($studentPublication)) {
+        return [];
+    }
+
+    $router = Container::getRouter();
+
     $work = [];
-    if (Database::num_rows($result)) {
-        $work = Database::fetch_array($result, 'ASSOC');
-        if (empty($work['title'])) {
-            $work['title'] = basename($work['url']);
+    if ($studentPublication) {
+        $workId = $studentPublication->getIid();
+        $work['id'] = $workId;
+        $work['active'] = $studentPublication->getActive();
+        $work['allow_text_assignment'] = $studentPublication->getAllowTextAssignment();
+        $work['c_id'] = $studentPublication->getCId();
+        $work['user_id'] = $studentPublication->getUserId();
+        $work['parent_id'] = $studentPublication->getParentId();
+        $work['qualification'] = $studentPublication->getQualification();
+        $work['contains_file'] = $studentPublication->getContainsFile();
+
+        $work['title'] = $studentPublication->getTitle();
+        if (empty($studentPublication->getTitle())) {
+            $work['title'] = basename($studentPublication->getUrl());
         }
-        $work['download_url'] = $webCodePath.'work/download.php?id='.$work['id'].'&'.api_get_cidreq();
-        $work['view_url'] = $webCodePath.'work/view.php?id='.$work['id'].'&'.api_get_cidreq();
-        $work['show_url'] = $webCodePath.'work/show_file.php?id='.$work['id'].'&'.api_get_cidreq();
+        $work['download_url'] = $router->generate(
+                'chamilo_core_resource_download',
+                [
+                    'id' => $studentPublication->getResourceNode()->getId(),
+                    'tool' => 'student_publication',
+                    'type' => 'student_publications'
+                ]
+            ).'?'.api_get_cidreq();
+
+        $work['view_url'] = $webCodePath.'work/view.php?id='.$workId.'&'.api_get_cidreq();
+        $showUrl = $work['show_url'] = $webCodePath.'work/show_file.php?id='.$workId.'&'.api_get_cidreq();
         $work['show_content'] = '';
-        if ($work['contains_file']) {
+        if ($studentPublication->getContainsFile()) {
             $fileType = '';
             if (in_array($fileType, ['image/jpeg', 'image/jpg', 'image/png', 'image/gif'])) {
-                $work['show_content'] = Display::img($work['show_url'], $work['title'], null, false);
+                $work['show_content'] = Display::img($showUrl, $studentPublication->getTitle(), null, false);
             } elseif (false !== strpos($fileType, 'video/')) {
                 $work['show_content'] = Display::tag(
                     'video',
                     get_lang('File format not supported'),
-                    ['src' => $work['show_url']]
+                    ['src' => $showUrl]
                 );
             }
         }
@@ -1960,7 +1982,13 @@ function get_work_user_list(
         $blockEdition = api_get_configuration_value('block_student_publication_edition');
         $blockScoreEdition = api_get_configuration_value('block_student_publication_score_edition');
         $loading = Display::returnFontAwesomeIcon('spinner', null, true, 'fa-spin');
+
+        $router = Container::getRouter();
+        $repo = Container::getStudentPublicationRepository();
         while ($work = Database::fetch_array($result, 'ASSOC')) {
+            /** @var CStudentPublication $studentPublication */
+            $studentPublication = $repo->find($work['id']);
+
             $item_id = $work['id'];
             $dbTitle = $work['title'];
             // Get the author ID for that document from the item_property table
@@ -2034,8 +2062,15 @@ function get_work_user_list(
                 // File name.
                 $linkToDownload = '';
                 // If URL is present then there's a file to download keep BC.
-                if ($work['contains_file'] || !empty($work['url'])) {
-                    $linkToDownload = '<a href="'.$url.'download.php?id='.$item_id.'&'.api_get_cidreq().'">'.$saveIcon.'</a> ';
+                if ($work['contains_file']) {
+                    $downloadUrl = $router->generate('chamilo_core_resource_download',
+                            [
+                                'id' => $studentPublication->getResourceNode()->getId(),
+                                'tool' => 'student_publication',
+                                'type' => 'student_publications',
+                            ]
+                        ).'?'.api_get_cidreq();
+                    $linkToDownload = '<a href="'.$downloadUrl.'">'.$saveIcon.'</a> ';
                 }
 
                 $feedback = '';
@@ -2053,9 +2088,16 @@ function get_work_user_list(
                 $correction = '';
                 $hasCorrection = '';
                 if (!empty($work['url_correction'])) {
+                    $downloadUrl = $router->generate('chamilo_core_resource_download',
+                            [
+                                'id' => $studentPublication->getResourceNode()->getId(),
+                                'tool' => 'student_publication',
+                                'type' => 'student_publications',
+                            ]
+                        ).'?'.api_get_cidreq();
                     $hasCorrection = Display::url(
                         $correctionIcon,
-                        api_get_path(WEB_CODE_PATH).'work/download.php?id='.$item_id.'&'.api_get_cidreq().'&correction=1'
+                        $downloadUrl
                     );
                 }
 
@@ -2089,7 +2131,7 @@ function get_work_user_list(
                     $action .= $rateLink;
 
                     if ($unoconv && empty($work['contains_file'])) {
-                        $action .= '<a f
+                        $action .= '<a
                             href="'.$url.'work_list_all.php?'.api_get_cidreq().'&id='.$work_id.'&action=export_to_doc&item_id='.$item_id.'"
                             title="'.get_lang('Export to .doc').'" >'.
                             Display::return_icon('export_doc.png', get_lang('Export to .doc'), [], ICON_SIZE_SMALL).'</a> ';
@@ -3774,8 +3816,7 @@ function uploadWork($my_folder_data, $_course, $isCorrection = false, $workInfo 
         }
     }
 
-    $curdirpath = basename($my_folder_data['url']);
-
+    //$curdirpath = basename($my_folder_data['url']);
     // If we come from the group tools the groupid will be saved in $work_table
     /*if (is_dir($updir.$curdirpath) || empty($curdirpath)) {
         $result = move_uploaded_file(
@@ -4023,7 +4064,6 @@ function processWorkForm(
             ->setParentId($workInfo['id'])
             ->setSession(api_get_session_entity($sessionId))
             ->setFilesize($filesize)
-            ->setQualification(0)
             ->setUserId($userId)
             ->setDocumentId($documentId)
         ;
@@ -4032,9 +4072,7 @@ function processWorkForm(
         $parentResource = $repo->find($workInfo['id']);
 
         $em = $repo->getEntityManager();
-        $em->persist($studentPublication);
         $courseEntity = api_get_course_entity($courseId);
-
         $userEntity = api_get_user_entity(api_get_user_id());
 
         $resourceNode = $repo->addResourceNode($studentPublication, $userEntity, $parentResource);
@@ -4053,6 +4091,7 @@ function processWorkForm(
         $em->flush();
 
         $repo->addFile($studentPublication, $content);
+        $em->flush();
 
         $workId = $studentPublication->getIid();
 
@@ -4170,7 +4209,7 @@ function addDir($formValues, $user_id, $courseInfo, $groupId, $sessionId = 0)
         $groupInfo = GroupManager::get_group_properties($groupId);
         $groupIid = $groupInfo['iid'];
     }
-    $session = $em->find('ChamiloCoreBundle:Session', $sessionId);
+    $session = api_get_session_entity($sessionId);
     $course_id = $courseInfo['real_id'];
 
     $enableEndDate = isset($formValues['enableEndDate']) ? true : false;
@@ -5150,12 +5189,11 @@ function downloadFile($id, $course_info, $isCorrection)
 function getFile($id, $course_info, $download = true, $isCorrection = false, $forceAccessForCourseAdmins = false)
 {
     $file = getFileContents($id, $course_info, 0, $isCorrection, $forceAccessForCourseAdmins);
-    if (!empty($file) && is_array($file)) {
-        return DocumentManager::file_send_for_download(
-            $file['path'],
-            $download,
-            $file['title']
-        );
+    var_dump($file);exit;
+    if (!empty($file) && isset($file['entity'])) {
+        /** @var CStudentPublication $studentPublication */
+        $studentPublication = $file['entity'];
+
     }
 
     return false;
@@ -5175,6 +5213,7 @@ function getFile($id, $course_info, $download = true, $isCorrection = false, $fo
 function getFileContents($id, $courseInfo, $sessionId = 0, $correction = false, $forceAccessForCourseAdmins = false)
 {
     $id = (int) $id;
+
     if (empty($courseInfo) || empty($id)) {
         return false;
     }
@@ -5182,120 +5221,113 @@ function getFileContents($id, $courseInfo, $sessionId = 0, $correction = false, 
         $sessionId = api_get_session_id();
     }
 
-    $table = Database::get_course_table(TABLE_STUDENT_PUBLICATION);
-    if (!empty($courseInfo['real_id'])) {
-        $sql = "SELECT *
-                FROM $table
-                WHERE c_id = ".$courseInfo['real_id']." AND id = $id";
+    $courseEntity = api_get_course_entity($courseInfo['real_id']);
+    $sessionEntity = api_get_session_entity($sessionId);
 
-        $result = Database::query($sql);
-        if ($result && Database::num_rows($result)) {
-            $row = Database::fetch_array($result, 'ASSOC');
+    $repo = Container::getStudentPublicationRepository();
+    /** @var CStudentPublication $studentPublication */
+    $studentPublication = $repo->find($id);
 
-            if ($correction) {
-                $row['url'] = $row['url_correction'];
-            }
+    if (empty($studentPublication)) {
+        return false;
+    }
 
-            if (empty($row['url'])) {
-                return false;
-            }
+    if ($correction) {
+        //$row['url'] = $row['url_correction'];
+    }
+    $hasFile = $studentPublication->getResourceNode()->hasResourceFile();
+    if (!$hasFile) {
+        return false;
+    }
 
-            $full_file_name = api_get_path(SYS_COURSE_PATH).api_get_course_path().'/'.$row['url'];
+    /*
+    $item_info = api_get_item_property_info(
+        api_get_course_int_id(),
+        'work',
+        $row['id'],
+        $sessionId
+    );
 
-            $item_info = api_get_item_property_info(
-                api_get_course_int_id(),
-                'work',
-                $row['id'],
-                $sessionId
-            );
+    if (empty($item_info)) {
+        return false;
+    }*/
 
-            if (empty($item_info)) {
-                return false;
-            }
+    $isAllow = allowOnlySubscribedUser(
+        api_get_user_id(),
+        $studentPublication->getParentId(),
+        $courseInfo['real_id'],
+        $forceAccessForCourseAdmins
+    );
 
-            $isAllow = allowOnlySubscribedUser(
-                api_get_user_id(),
-                $row['parent_id'],
-                $courseInfo['real_id'],
-                $forceAccessForCourseAdmins
-            );
+    if (empty($isAllow)) {
+        return false;
+    }
 
-            if (empty($isAllow)) {
-                return false;
-            }
+    /*
+    field show_score in table course :
+        0 =>    New documents are visible for all users
+        1 =>    New documents are only visible for the teacher(s)
+    field visibility in table item_property :
+        0 => eye closed, invisible for all students
+        1 => eye open
+    field accepted in table c_student_publication :
+        0 => eye closed, invisible for all students
+        1 => eye open
+    ( We should have visibility == accepted, otherwise there is an
+    inconsistency in the Database)
+    field value in table c_course_setting :
+        0 => Allow learners to delete their own publications = NO
+        1 => Allow learners to delete their own publications = YES
 
-            /*
-            field show_score in table course :
-                0 =>    New documents are visible for all users
-                1 =>    New documents are only visible for the teacher(s)
-            field visibility in table item_property :
-                0 => eye closed, invisible for all students
-                1 => eye open
-            field accepted in table c_student_publication :
-                0 => eye closed, invisible for all students
-                1 => eye open
-            ( We should have visibility == accepted, otherwise there is an
-            inconsistency in the Database)
-            field value in table c_course_setting :
-                0 => Allow learners to delete their own publications = NO
-                1 => Allow learners to delete their own publications = YES
+    +------------------+-------------------------+------------------------+
+    |Can download work?| doc visible for all = 0 | doc visible for all = 1|
+    +------------------+-------------------------+------------------------+
+    |  visibility = 0  | editor only             | editor only            |
+    |                  |                         |                        |
+    +------------------+-------------------------+------------------------+
+    |  visibility = 1  | editor                  | editor                 |
+    |                  | + owner of the work     | + any student          |
+    +------------------+-------------------------+------------------------+
+    (editor = teacher + admin + anybody with right api_is_allowed_to_edit)
+    */
 
-            +------------------+-------------------------+------------------------+
-            |Can download work?| doc visible for all = 0 | doc visible for all = 1|
-            +------------------+-------------------------+------------------------+
-            |  visibility = 0  | editor only             | editor only            |
-            |                  |                         |                        |
-            +------------------+-------------------------+------------------------+
-            |  visibility = 1  | editor                  | editor                 |
-            |                  | + owner of the work     | + any student          |
-            +------------------+-------------------------+------------------------+
-            (editor = teacher + admin + anybody with right api_is_allowed_to_edit)
-            */
+    $work_is_visible = $studentPublication->isVisible($courseEntity, $sessionEntity) && $studentPublication->getAccepted();
+    $doc_visible_for_all = 0 === (int) $courseInfo['show_score'];
 
-            $work_is_visible = 1 == $item_info['visibility'] && 1 == $row['accepted'];
-            $doc_visible_for_all = 0 === (int) $courseInfo['show_score'];
+    $is_editor = api_is_allowed_to_edit(true, true, true);
+    $student_is_owner_of_work = user_is_author($studentPublication->getIid(), api_get_user_id());
 
-            $is_editor = api_is_allowed_to_edit(true, true, true);
-            $student_is_owner_of_work = user_is_author($row['id'], api_get_user_id());
+    if (($forceAccessForCourseAdmins && $isAllow) ||
+        $is_editor ||
+        $student_is_owner_of_work ||
+        ($doc_visible_for_all && $work_is_visible)
+    ) {
+        $title = $studentPublication->getTitle();
+        if ($correction) {
+            $title = $studentPublication->getTitleCorrection();
+        }
+        if ($hasFile) {
+            $title = $studentPublication->getResourceNode()->getResourceFile()->getName();
+        }
 
-            if (($forceAccessForCourseAdmins && $isAllow) ||
-                $is_editor ||
-                $student_is_owner_of_work ||
-                ($doc_visible_for_all && $work_is_visible)
-            ) {
-                $title = $row['title'];
-                if ($correction) {
-                    $title = $row['title_correction'];
-                }
-                if (array_key_exists('filename', $row) && !empty($row['filename'])) {
-                    $title = $row['filename'];
-                }
+        $title = str_replace(' ', '_', $title);
 
-                $title = str_replace(' ', '_', $title);
-
-                if (false == $correction) {
-                    $userInfo = api_get_user_info($row['user_id']);
-                    if ($userInfo) {
-                        $date = api_get_local_time($row['sent_date']);
-                        $date = str_replace([':', '-', ' '], '_', $date);
-                        $title = $date.'_'.$userInfo['username'].'_'.$title;
-                    }
-                }
-
-                if (Security::check_abs_path(
-                    $full_file_name,
-                    api_get_path(SYS_COURSE_PATH).api_get_course_path().'/'
-                )) {
-                    Event::event_download($title);
-
-                    return [
-                        'path' => $full_file_name,
-                        'title' => $title,
-                        'title_correction' => $row['title_correction'],
-                    ];
-                }
+        if (false == $correction) {
+            $userInfo = api_get_user_info($studentPublication->getUserId());
+            if ($userInfo) {
+                $date = api_get_local_time($studentPublication->getSentDate()->format('Y-m-d H:i:s'));
+                $date = str_replace([':', '-', ' '], '_', $date);
+                $title = $date.'_'.$userInfo['username'].'_'.$title;
             }
         }
+
+        return [
+            //'path' => $full_file_name,
+            'title' => $title,
+            'title_correction' => $studentPublication->getTitleCorrection(),
+            'entity' => $studentPublication,
+        ];
+
     }
 
     return false;

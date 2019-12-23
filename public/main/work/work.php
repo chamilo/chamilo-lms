@@ -83,7 +83,7 @@ if (!empty($groupId)) {
 } else {
     if ('learnpath' != $origin) {
         if (isset($_GET['id']) &&
-            !empty($_GET['id']) || $display_upload_form || 'create_dir' == $action
+            !empty($_GET['id']) || $display_upload_form || 'create_dir' === $action
         ) {
             $interbreadcrumb[] = [
                 'url' => api_get_path(WEB_CODE_PATH).'work/work.php?'.api_get_cidreq(),

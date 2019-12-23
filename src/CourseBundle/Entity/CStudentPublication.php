@@ -222,6 +222,7 @@ class CStudentPublication extends AbstractResource implements ResourceInterface
         $this->containsFile = 0;
         $this->parentId = 0;
         $this->qualificatorId = 0;
+        $this->qualification = 0;
     }
 
     public function __toString(): string

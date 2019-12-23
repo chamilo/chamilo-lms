@@ -120,7 +120,9 @@ class ImsLti
                         ? $substitute['claim']
                         : "https://purl.imsglobal.org/spec/lti{$substitute['claim']}";
 
-                    $substitute = $launchParams[$claim][$substitute['property']];
+                    $substitute = empty($substitute['property'])
+                        ? $launchParams[$claim]
+                        : $launchParams[$claim][$substitute['property']];
                 } else {
                     continue;
                 }
@@ -129,12 +131,16 @@ class ImsLti
             $customParams[$customKey] = $substitute;
         }
 
-        return array_map(
-            function ($value) {
-                return (string) $value;
-            },
-            $customParams
+        array_walk_recursive(
+            $customParams,
+            function (&$value) {
+                if (gettype($value) !== 'array') {
+                    $value = (string) $value;
+                }
+            }
         );
+
+        return $customParams;
     }
 
     /**

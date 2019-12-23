@@ -220,8 +220,10 @@ try {
     array_walk_recursive(
         $jwtContent,
         function (&$value) {
-            $value = preg_replace('/\s+/', ' ', $value);
-            $value = trim($value);
+            if (gettype($value) === 'string') {
+                $value = preg_replace('/\s+/', ' ', $value);
+                $value = trim($value);
+            }
         }
     );
 

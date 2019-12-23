@@ -21,10 +21,10 @@ try {
         throw new Exception('invalid_request');
     }
 
-    $clientAssertion = empty($_POST['client_assertion']) ? $_POST['client_assertion'] : '';
-    $clientAssertionType = empty($_POST['client_assertion_type']) ? $_POST['client_assertion_type'] : '';
-    $grantType = empty($_POST['grant_type']) ? $_POST['grant_type'] : '';
-    $scope = empty($_POST['scope']) ? $_POST['scope'] : '';
+    $clientAssertion = !empty($_POST['client_assertion']) ? $_POST['client_assertion'] : '';
+    $clientAssertionType = !empty($_POST['client_assertion_type']) ? $_POST['client_assertion_type'] : '';
+    $grantType = !empty($_POST['grant_type']) ? $_POST['grant_type'] : '';
+    $scope = !empty($_POST['scope']) ? $_POST['scope'] : '';
 
     if (empty($clientAssertion) || empty($clientAssertionType) || empty($grantType) || empty($scope)) {
         throw new Exception('invalid_request');

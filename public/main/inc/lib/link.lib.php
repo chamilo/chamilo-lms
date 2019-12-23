@@ -1690,7 +1690,7 @@ Do you really want to delete this category and its links ?')."')) return false;\
 
         $skillList = Skill::addSkillsToForm($form, ITEM_TYPE_LINK, $linkId);
         $form->addHidden('lp_id', $lpId);
-        $form->addButtonSave(get_lang('Save links'), 'submitLinks');
+        $form->addButtonSave(get_lang('Save links'), 'submitLink');
         $defaults['skills'] = array_keys($skillList);
         $form->setDefaults($defaults);
 

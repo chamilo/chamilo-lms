@@ -8,6 +8,7 @@ Feature: Link tool
 
   Scenario: Create a link category
     Given I am on "/main/link/link.php?action=addcategory&cid=1"
+    And wait for the page to be loaded
     When I fill in the following:
       | category_title | Category 1 |
       | description    | Category description |

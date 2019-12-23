@@ -330,7 +330,7 @@ class UniqueAnswerNoOption extends Question
             $goodAnswer = ($correct == $i) ? true : false;
 
             if ($goodAnswer) {
-                $nbrGoodAnswers++;
+                //$nbrGoodAnswers++;
                 $weighting = abs($weighting);
                 if ($weighting > 0) {
                     $questionWeighting += $weighting;

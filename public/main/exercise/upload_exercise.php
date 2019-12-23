@@ -6,13 +6,11 @@ use ChamiloSession as Session;
 /**
  * Upload quiz: This script shows the upload quiz feature.
  */
-$help_content = 'exercise_upload';
 require_once __DIR__.'/../inc/global.inc.php';
 
 api_protect_course_script(true);
 
 $is_allowed_to_edit = api_is_allowed_to_edit(null, true);
-$debug = false;
 $origin = api_get_origin();
 if (!$is_allowed_to_edit) {
     api_not_allowed(true);
@@ -158,7 +156,7 @@ function lp_upload_quiz_action_handling()
     $objPHPExcel->setActiveSheetIndex(0);
     $worksheet = $objPHPExcel->getActiveSheet();
     $highestRow = $worksheet->getHighestRow(); // e.g. 10
-    $highestColumn = $worksheet->getHighestColumn(); // e.g 'F'
+    //  $highestColumn = $worksheet->getHighestColumn(); // e.g 'F'
 
     $correctScore = isset($_POST['correct_score']) ? $_POST['correct_score'] : null;
     $incorrectScore = isset($_POST['incorrect_score']) ? $_POST['incorrect_score'] : null;

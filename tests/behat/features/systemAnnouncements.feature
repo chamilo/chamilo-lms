@@ -18,5 +18,5 @@ Feature: System Announcements
   Scenario: Delete system announcement
     Given I am on "/main/admin/system_announcements.php"
     When I follow "Delete"
-    And I confirm the popup
+    Then I follow "Yes"
     Then I should see "Announcement has been deleted"

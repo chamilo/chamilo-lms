@@ -64,7 +64,7 @@ Feature: Session access
   Scenario: mmosquera connect to Session 1
     Given I am logged as "mmosquera"
     Then I am on course "TEMPPRIVATE" homepage in session "Session1"
-    Then I should see "You are not allowed"
+    Then I should see "Unauthorised access to course"
 
   Scenario: mmosquera connect to Session 2
     Given I am logged as "mmosquera"

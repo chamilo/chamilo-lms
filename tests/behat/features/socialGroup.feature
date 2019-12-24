@@ -8,7 +8,7 @@ Feature: Social Group
       And I am on "/main/social/group_add.php"
       When I fill in the following:
           | name          | Behat Test Group                  |
-          | description   | This is a group created by Behat  |
+      Then I fill in ckeditor field "description" with "This is a group created by Beha"
       And I press "submit"
       Then I should see "Group added"
 

@@ -64,6 +64,9 @@ class Display
         $help = null,
         $page_header = null
     ) {
+        global $interbreadcrumb;
+        $interbreadcrumb[] = ['url' => '#', 'name' => $tool_name];
+
         ob_start();
 
         return true;

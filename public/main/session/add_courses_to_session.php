@@ -1,9 +1,8 @@
 <?php
+
 /* For licensing terms, see /license.txt */
 
 /**
- * @package chamilo.admin
- *
  * @todo use formvalidator
  */
 $cidReset = true;
@@ -80,7 +79,7 @@ function remove_item(origin)
 $CourseList = $SessionList = [];
 $courses = $sessions = [];
 
-if (isset($_POST['formSent']) && $_POST['formSent']) {
+if (isset($_POST['formSent']) && $_POST['formSent'] && isset($_POST['SessionCoursesList'])) {
     $courseList = $_POST['SessionCoursesList'];
     $copyEvaluation = isset($_POST['copy_evaluation']);
     $copyCourseTeachersAsCoach = isset($_POST['import_teachers_as_course_coach']);

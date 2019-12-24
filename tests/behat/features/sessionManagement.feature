@@ -43,7 +43,7 @@ Feature: Session management tool
     Then I should see "Update successful"
 
   Scenario: Check session description is not present
-    Given I am on "/user_portal.php?nosession=true"
+    Given I am on "/main/index/user_portal.php"
     Then I should see "Temp Session"
     And I should not see "Description for Temp Session"
 
@@ -58,10 +58,10 @@ Feature: Session management tool
 
   Scenario: Check session description with platform setting off
     Given I am a platform administrator
-    And I am on "/main/admin/settings.php?search_field=show_session_description&category=search_setting"
-    And I check the "show_session_description" radio button with "false" value
-    And I press "Save settings"
-    Then I am on "/user_portal.php?nosession=true"
+    And I am on "/admin/settings/search_settings?keyword=show_session_description"
+    And I select "yes" from "form_show_session_description"
+    And I press "Save"
+    Then I am on "/main/index/user_portal.php"
     Then I should see "Temp Session"
     And I should not see "Description for Temp Session"
 
@@ -71,7 +71,7 @@ Feature: Session management tool
     And I check the "show_session_description" radio button with "true" value
     And I press "Save settings"
     Then I should see "Update successful"
-    Then I am on "/user_portal.php?nosession=true"
+    Then I am on "/main/index/user_portal.php"
     Then I should see "Temp Session"
     And I should see "Description for Temp Session"
 

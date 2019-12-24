@@ -2,12 +2,11 @@
 
 {% block content %}
     {% autoescape false %}
-        <h2> {{ 'Edit profile' | trans }}</h2>
         <h3>{{ user.username }}</h3>
         {{ form_start(form, { 'action': path('chamilo_core_account_edit'), 'attr': { 'class': 'edit' } }) }}
         {{ form_widget(form) }}
         <div>
-            <input class="btn btn-primary" type="submit" value="{{ 'Save'|trans }}" />
+            <input class="btn btn-primary" type="submit" value="{{ 'Update profile'|trans }}" />
         </div>
         {{ form_end(form) }}
     {% endautoescape %}

@@ -398,7 +398,7 @@ Feature: Exercise tool
       | Total         | 190 / 190      | 100%           |
 
   Scenario: Teacher looks at exercise results by categories
-    Given I am on "/user_portal.php"
+    Given I am on "/main/index/user_portal.php"
     And I am on course "TEMP" homepage in session "Session Exercise"
     Then I should see "TEMP (Session Exercise)"
     And I am on "/main/exercise/exercise.php?cid=1"

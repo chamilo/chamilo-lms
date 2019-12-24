@@ -3662,7 +3662,7 @@ function api_not_allowed(
 
     // Default code is 403 forbidden
     $responseCode = empty($responseCode) ? 403 : $responseCode;
-    $message = empty($message) ? get_lang('Not authorized') : $message;
+    $message = empty($message) ? get_lang('You are not allowed') : $message;
 
     // Create new exception rendered by template:
     // src/ThemeBundle/Resources/views/Exception/error.html.twig

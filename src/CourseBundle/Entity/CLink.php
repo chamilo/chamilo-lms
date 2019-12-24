@@ -329,20 +329,12 @@ class CLink extends AbstractResource implements ResourceInterface
         return $this->id;
     }
 
-    /**
-     * @return int
-     */
     public function getIid(): int
     {
         return $this->iid;
     }
 
-    /**
-     * @param int $iid
-     *
-     * @return CLink
-     */
-    public function setIid(int $iid): CLink
+    public function setIid(int $iid): self
     {
         $this->iid = $iid;
 

@@ -82,20 +82,12 @@ class CLinkCategory extends AbstractResource implements ResourceInterface
         return $this->getCategoryTitle();
     }
 
-    /**
-     * @return int
-     */
     public function getIid(): int
     {
         return $this->iid;
     }
 
-    /**
-     * @param int $iid
-     *
-     * @return CLinkCategory
-     */
-    public function setIid(int $iid): CLinkCategory
+    public function setIid(int $iid): self
     {
         $this->iid = $iid;
 

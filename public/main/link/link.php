@@ -18,8 +18,7 @@
  * @author René Haentjens, added CSV file import (October 2004)
  */
 require_once __DIR__.'/../inc/global.inc.php';
-$current_course_tool = TOOL_LINK;
-$this_section = SECTION_COURSES;
+
 api_protect_course_script(true);
 
 $htmlHeadXtra[] = '<script>

@@ -11,7 +11,6 @@ use Chamilo\CoreBundle\Repository\CourseCategoryRepository;
 use Chamilo\CoreBundle\Repository\CourseRepository;
 use Chamilo\CoreBundle\Repository\IllustrationRepository;
 use Chamilo\CoreBundle\ToolChain;
-use Chamilo\CourseBundle\Entity\CLinkCategory;
 use Chamilo\CourseBundle\Repository\CDocumentRepository;
 use Chamilo\CourseBundle\Repository\CExerciseCategoryRepository;
 use Chamilo\CourseBundle\Repository\CForumCategoryRepository;

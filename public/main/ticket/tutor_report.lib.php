@@ -1,10 +1,9 @@
 <?php
+
 /* For licensing terms, see /license.txt */
 
 /**
  * Helper library for weekly reports.
- *
- * @package chamilo.plugin.ticket
  */
 
 /**
@@ -28,16 +27,16 @@ function initializeReport($course_code)
     $resWeeks = Database::query($sqlWeeks);
     $weeks = Database::fetch_object($resWeeks);
     $obj = Database::fetch_object($res);
-    $weeksCount = (!isset($_POST['weeksNumber'])) ? (($weeks->semanas == 0) ? 7 : $weeks->semanas) : (int) $_POST['weeksNumber'];
+    $weeksCount = !isset($_POST['weeksNumber']) ? (0 == $weeks->semanas ? 7 : $weeks->semanas) : (int) $_POST['weeksNumber'];
     $weeksCount = Database::escape_string($weeksCount);
     Database::query("REPLACE INTO $table_semanas_curso (course_code , semanas) VALUES ('$course_code','$weeksCount')");
-    if (intval($obj->cant) != $weeksCount) {
-        if (intval($obj->cant) > $weeksCount) {
+    if ((int) ($obj->cant) != $weeksCount) {
+        if ((int) ($obj->cant) > $weeksCount) {
             $sql = "DELETE FROM $table_reporte_semanas
                     WHERE  week_id > $weeksCount AND course_code = '$course_code'";
             Database::query($sql);
         } else {
-            for ($i = $obj->cant + 1; $i <= $weeksCount; $i++) {
+            for ($i = $obj->cant + 1; $i <= $weeksCount; ++$i) {
                 if (!Database::query("INSERT INTO $table_reporte_semanas (week_id, course_code, forum_id, work_id, quiz_id, pc_id)
 						VALUES ($i, '$course_code', '0', '0', '0', '0' )")) {
                     return false;
@@ -57,7 +56,7 @@ function initializeReport($course_code)
     if (!Database::query($sql)) {
         return false;
     } else {
-        $page = (!isset($_GET['page'])) ? 1 : (int) $_GET['page'];
+        $page = !isset($_GET['page']) ? 1 : (int) $_GET['page'];
 
         Database::query("UPDATE $table_students_report sr SET sr.work_ok = 1
 		WHERE CONCAT (sr.user_id,',',sr.week_report_id)
@@ -82,8 +81,8 @@ function initializeReport($course_code)
 function showResults($courseInfo, $weeksCount, $page)
 {
     $course_code = $courseInfo['code'];
-    $page = intval($page);
-    $weeksCount = intval($weeksCount);
+    $page = (int) $page;
+    $weeksCount = (int) $weeksCount;
 
     $tableWeeklyReport = Database::get_main_table('rp_reporte_semanas');
     $tableStudentsReport = Database::get_main_table('rp_students_report');
@@ -116,7 +115,7 @@ function showResults($courseInfo, $weeksCount, $page)
         //$fila_export_encabezado2[] = utf8_decode($rowe['eval_title']);
         //$fila_export_encabezado2[] = utf8_decode($rowe['pc_title']);
         $fila_export = ['Work'.$rowe['week_id'], 'Forum'.$rowe['week_id'], 'Eval'.$rowe['week_id'], 'PC'.$rowe['week_id']];
-        if ($rowe['week_id'] > (($page - 1) * 7) && $rowe['week_id'] <= (7 * $page)) {
+        if ($rowe['week_id'] > (($page - 1) * 7) && $rowe['week_id'] <= 7 * $page) {
             $ids[$rowe['week_id']] = $rowe['id'];
             $line .= '<th>
                 <a href="#" onClick="showContent('."'tarea".$rowe['week_id']."'".');">Work'.$rowe['week_id'].'
@@ -137,12 +136,12 @@ function showResults($courseInfo, $weeksCount, $page)
             <div class="row">
             '.get_lang('Select the timespan in weeks').'
             <select name="weeksNumber" id="weeksNumber" onChange="submit();">
-            <option value="7" '.(($weeksCount == 7) ? 'selected="selected"' : "").'>7 weeks</option>
-            <option value="14" '.(($weeksCount == 14) ? 'selected="selected"' : "").'>14 weeks</option>
+            <option value="7" '.(7 == $weeksCount ? 'selected="selected"' : '').'>7 weeks</option>
+            <option value="14" '.(14 == $weeksCount ? 'selected="selected"' : '').'>14 weeks</option>
             </select>';
 
-    if ($weeksCount == 14) {
-        $html .= '<span style="float:right;"><a href="tutor.php?page='.(($page == 1) ? 2 : 1).'">'.(($page == 1) ? "Siguiente" : "Anterior").'</a></span>';
+    if (14 == $weeksCount) {
+        $html .= '<span style="float:right;"><a href="tutor.php?page='.(1 == $page ? 2 : 1).'">'.(1 == $page ? 'Siguiente' : 'Anterior').'</a></span>';
     }
     $html .= '<span style="float:right;"><a href="'.api_get_self().'?action=export'.$get_parameter.$get_parameter2.'">'.Display::return_icon('export_excel.png', get_lang('Export'), '', '32').'</a></span>';
 
@@ -150,7 +149,7 @@ function showResults($courseInfo, $weeksCount, $page)
     $html .= '<table class="reports">';
     $html .= '<tr>
             <th ></th>';
-    for ($i = (7 * $page - 6); $i <= $page * 7; $i++) {
+    for ($i = 7 * $page - 6; $i <= $page * 7; ++$i) {
         $html .= '<th colspan="2">Week '.$i.'<a href="assign_tickets.php?id='.$ids[$i].'" class="ajax">'.Display::return_icon('edit.png', get_lang('Edit'), ['width' => '16', 'height' => '16'], 22).'</a></th>';
     }
     $html .= '</tr>';
@@ -165,9 +164,9 @@ function showResults($courseInfo, $weeksCount, $page)
     $result = Database::query($sql);
     while ($row = Database::fetch_assoc($result)) {
         $resultadose[$row['username']][$row['week_id']] = $row;
-        if ($row['week_id'] > (($page - 1) * 7) && $row['week_id'] <= (7 * $page)) {
+        if ($row['week_id'] > (($page - 1) * 7) && $row['week_id'] <= 7 * $page) {
             $results[$row['username']][$row['week_id']] = $row;
-            if (count($results[$row['username']]) == 7) {
+            if (7 == count($results[$row['username']])) {
                 $html .= showStudentResult($results[$row['username']], $page);
             }
         }
@@ -189,13 +188,13 @@ function showResults($courseInfo, $weeksCount, $page)
  */
 function showStudentResult($datos, $pagina)
 {
-    $inicio = (7 * $pagina - 6);
+    $inicio = 7 * $pagina - 6;
     $fila = '<tr>';
 
     $fila .= '<td><a href="'.api_get_path(WEB_CODE_PATH).'user/userInfo.php?'.api_get_cidreq().'&uInfo='.$datos[$inicio]['user_id'].'">'.$datos[$inicio]['username'].'</a></td>';
     foreach ($datos as $dato) {
-        $fila .= '<td align="center">'.(($dato['work_ok'] == 1) ? Display::return_icon('check.png') : Display::return_icon('aspa.png')).'</td>';
-        $fila .= '<td align="center">'.(($dato['thread_ok'] == 1) ? Display::return_icon('check.png') : Display::return_icon('aspa.png')).'</td>';
+        $fila .= '<td align="center">'.(1 == $dato['work_ok'] ? Display::return_icon('check.png') : Display::return_icon('aspa.png')).'</td>';
+        $fila .= '<td align="center">'.(1 == $dato['thread_ok'] ? Display::return_icon('check.png') : Display::return_icon('aspa.png')).'</td>';
     }
     $fila .= '</tr>';
 
@@ -214,8 +213,8 @@ function showStudentResultExport($data, $numero_semanas)
     $fila[] = utf8_decode($data[1]['username']);
     $fila[] = utf8_decode($data[1]['fullname']);
     foreach ($data as $line) {
-        $fila[] = ($line['work_ok'] == 1) ? get_lang('Yes') : get_lang('No');
-        $fila[] = ($line['thread_ok'] == 1) ? get_lang('Yes') : get_lang('No');
+        $fila[] = 1 == $line['work_ok'] ? get_lang('Yes') : get_lang('No');
+        $fila[] = 1 == $line['thread_ok'] ? get_lang('Yes') : get_lang('No');
     }
 
     return $fila;

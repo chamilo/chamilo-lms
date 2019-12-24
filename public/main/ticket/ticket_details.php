@@ -1,4 +1,5 @@
 <?php
+
 /* For licensing terms, see /license.txt */
 
 $cidReset = true;
@@ -205,13 +206,13 @@ foreach ($messages as $message) {
             ['class' => 'well']
         );
     }
-    $counter++;
+    ++$counter;
 }
 
 $subject = get_lang('Re:').': '.Security::remove_XSS($ticket['ticket']['subject']);
 
-if ($ticket['ticket']['status_id'] != TicketManager::STATUS_FORWARDED &&
-    $ticket['ticket']['status_id'] != TicketManager::STATUS_CLOSE
+if (TicketManager::STATUS_FORWARDED != $ticket['ticket']['status_id'] &&
+    TicketManager::STATUS_CLOSE != $ticket['ticket']['status_id']
 ) {
     if ($ticket['ticket']['assigned_last_user'] == $user_id ||
         $ticket['ticket']['sys_insert_user_id'] == $user_id ||
@@ -330,7 +331,7 @@ if ($ticket['ticket']['status_id'] != TicketManager::STATUS_FORWARDED &&
             );
 
             Display::addFlash(Display::return_message(get_lang('Saved.')));
-            header("Location:".api_get_self()."?ticket_id=".$ticket_id);
+            header('Location:'.api_get_self().'?ticket_id='.$ticket_id);
             exit;
         }
     }
@@ -344,7 +345,7 @@ echo Display::url(
 );
 echo '</div>';
 $bold = '';
-if ($ticket['ticket']['status_id'] == TicketManager::STATUS_CLOSE) {
+if (TicketManager::STATUS_CLOSE == $ticket['ticket']['status_id']) {
     $bold = 'style = "font-weight: bold;"';
 }
 $senderData = get_lang('added by').' '.$ticket['usuario']['complete_name_with_message_link'];
@@ -391,7 +392,7 @@ if (!empty($ticket['ticket']['assigned_last_user'])) {
             <td><p><b>'.get_lang('Assigned to').': </b>-<p></td>
         </tr>';
 }
-if ($ticket['ticket']['course_url'] != null) {
+if (null != $ticket['ticket']['course_url']) {
     if (!empty($ticket['ticket']['session_id'])) {
         $sessionInfo = api_get_session_info($ticket['ticket']['session_id']);
         echo '<tr>

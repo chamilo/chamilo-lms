@@ -1,12 +1,11 @@
 <?php
+
 /* For licensing terms, see /license.txt */
 
 use ChamiloSession as Session;
 
 /**
  * This script is the Tickets plugin main entry point.
- *
- * @package chamilo.plugin.ticket
  */
 $cidReset = true;
 
@@ -27,7 +26,7 @@ $table = new SortableTable(
     1
 );
 
-if ($table->per_page == 0) {
+if (0 == $table->per_page) {
     $table->per_page = 20;
 }
 
@@ -54,8 +53,9 @@ switch ($action) {
             Display::addFlash(Display::return_message(get_lang('This item is related to other tickets.'), 'warning'));
         }
 
-        header("Location: ".api_get_self());
+        header('Location: '.api_get_self());
         exit;
+
         break;
     case 'add':
         $toolName = get_lang('Add');
@@ -76,9 +76,10 @@ switch ($action) {
             TicketManager::addStatus($params);
             Display::addFlash(Display::return_message(get_lang('Added')));
 
-            header("Location: ".api_get_self());
+            header('Location: '.api_get_self());
             exit;
         }
+
         break;
     case 'edit':
         $toolName = get_lang('Edit');
@@ -104,9 +105,10 @@ switch ($action) {
             ];
             $cat = TicketManager::updateStatus($id, $params);
             Display::addFlash(Display::return_message(get_lang('Update successful')));
-            header("Location: ".api_get_self());
+            header('Location: '.api_get_self());
             exit;
         }
+
         break;
     default:
         break;
@@ -118,9 +120,9 @@ $isAdmin = api_is_platform_admin();
 /**
  * Build the modify-column of the table.
  *
- * @param   int     The user id
- * @param   string  URL params to add to table links
- * @param   array   Row of elements to alter
+ * @param int    $id     The user id
+ * @param string $params URL params to add to table links
+ * @param array  $row    Row of elements to alter
  *
  * @return string Some HTML-code with modify-buttons
  */
@@ -146,7 +148,7 @@ function modify_filter($id, $params, $row)
 
 $table->set_header(0, '', false);
 $table->set_header(1, get_lang('Title'), false);
-$table->set_header(2, get_lang('Description'), true, ["style" => "width:200px"]);
+$table->set_header(2, get_lang('Description'), true, ['style' => 'width:200px']);
 $table->set_header(3, get_lang('Detail'), true);
 $table->set_column_filter('3', 'modify_filter');
 

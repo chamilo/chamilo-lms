@@ -1,4 +1,5 @@
 <?php
+
 /* For licensing terms, see /license.txt */
 
 require_once __DIR__.'/../inc/global.inc.php';
@@ -34,7 +35,7 @@ if (!api_is_platform_admin()) {
     $rs = Database::query($sql);
     $row_users = Database::fetch_array($rs, 'ASSOC');
     $user_request_id = $row_users['request_user'];
-    if (intval($user_request_id) != $user_id) {
+    if ((int) $user_request_id != $user_id) {
         api_not_allowed(true);
     }
 }

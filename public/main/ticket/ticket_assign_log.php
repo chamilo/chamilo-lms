@@ -14,7 +14,7 @@ $history = TicketManager::get_assign_log($ticket_id);
 ?>
 <table width="200px" border="0" cellspacing="2" cellpadding="2">
 <?php
-if (count($history) == 0) {
+if (0 == count($history)) {
     ?>
     <tr>
         <td colspan="2"><?php echo api_ucfirst(get_lang('No history')); ?></td>

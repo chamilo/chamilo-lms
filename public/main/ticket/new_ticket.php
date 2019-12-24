@@ -1,12 +1,10 @@
 <?php
+
 /* For licensing terms, see /license.txt */
 
-/**
- * @package chamilo.ticket
- */
 require_once __DIR__.'/../inc/global.inc.php';
 
-if (!api_is_platform_admin() && api_get_setting('ticket_allow_student_add') !== 'true') {
+if (!api_is_platform_admin() && 'true' !== api_get_setting('ticket_allow_student_add')) {
     header('Location:'.api_get_path(WEB_CODE_PATH).'ticket/tickets.php');
     exit;
 }
@@ -17,7 +15,7 @@ $courseId = api_get_course_int_id();
 $htmlHeadXtra[] = '<script>
 function updateCourseList(sessionId) {
     $selectCourse = $("select#course_id");
-    $selectCourse.empty();        
+    $selectCourse.empty();
     $.get("'.api_get_path(WEB_AJAX_PATH).'session.ajax.php", {
         a: "get_courses_inside_session",
         session_id : sessionId
@@ -26,8 +24,8 @@ function updateCourseList(sessionId) {
             value: 0,
             text: "'.get_lang('Select').'"
         }).appendTo($selectCourse);
-        
-        if (courseList.length > 0) {            
+
+        if (courseList.length > 0) {
             $.each(courseList, function (index, course) {
                 $("<option>", {
                     value: course.id,
@@ -36,16 +34,16 @@ function updateCourseList(sessionId) {
             });
             $("select#course_id option[value=\''.$courseId.'\']").attr("selected",true);
             $("select#course_id").selectpicker("refresh");
-        }        
-    }, "json");    
+        }
+    }, "json");
 }
 
-$(function() {  
-    $("select#session_id").on("change", function () {        
+$(function() {
+    $("select#session_id").on("change", function () {
         var sessionId = parseInt(this.value, 10);
         updateCourseList(sessionId);
-    });    
-            
+    });
+
     var sessionId = $("select#session_id").val();
     updateCourseList(sessionId);
 });
@@ -122,7 +120,7 @@ $htmlHeadXtra[] = '<script>
  */
 function js_array($array, $name, $key)
 {
-    $return = "new Array(); ";
+    $return = 'new Array(); ';
     foreach ($array as $value) {
         $return .= $name."['".$value['category_id']."'] ='".$value[$key]."'; ";
     }

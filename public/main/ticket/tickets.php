@@ -1,12 +1,11 @@
 <?php
+
 /* For licensing terms, see /license.txt */
 
 use ChamiloSession as Session;
 
 /**
  * This script is the Tickets plugin main entry point.
- *
- * @package chamilo.plugin.ticket
  */
 require_once __DIR__.'/../inc/global.inc.php';
 
@@ -68,7 +67,7 @@ $table = new SortableTable(
 
 $table->set_additional_parameters(['project_id' => $projectId]);
 
-if ($table->per_page == 0) {
+if (0 == $table->per_page) {
     $table->per_page = 20;
 }
 
@@ -77,6 +76,7 @@ switch ($action) {
         if (!$isAdmin && isset($_GET['ticket_id'])) {
             TicketManager::send_alert($_GET['ticket_id'], $user_id);
         }
+
         break;
     case 'export':
         $data = [
@@ -109,9 +109,11 @@ switch ($action) {
         }
         Export::arrayToXls($data, get_lang('Tickets'));
         exit;
+
         break;
     case 'close_tickets':
         TicketManager::close_old_tickets();
+
         break;
     default:
         break;
@@ -167,10 +169,10 @@ if (!empty($projectId)) {
     }
 
     if (isset($_GET['submit_advanced'])) {
-        $get_parameter .= "&submit_advanced=";
+        $get_parameter .= '&submit_advanced=';
     }
     if (isset($_GET['submit_simple'])) {
-        $get_parameter .= "&submit_simple=";
+        $get_parameter .= '&submit_simple=';
     }
 
     // Select categories
@@ -228,7 +230,7 @@ if (!empty($projectId)) {
     );
 
     // Add link
-    if (api_get_setting('ticket_allow_student_add') == 'true' || api_is_platform_admin()) {
+    if ('true' == api_get_setting('ticket_allow_student_add') || api_is_platform_admin()) {
         $actionRight = Display::url(
             Display::return_icon(
                 'add.png',
@@ -355,7 +357,7 @@ if (!empty($projectId)) {
     $advancedSearchForm->addButtonSearch(get_lang('Advanced search'), 'submit_advanced');
     $advancedSearchForm->display();
 } else {
-    if (api_get_setting('ticket_allow_student_add') === 'true') {
+    if ('true' === api_get_setting('ticket_allow_student_add')) {
         echo '<div class="actions">';
         echo '<a href="'.api_get_path(WEB_CODE_PATH).'ticket/new_ticket.php?project_id='.$projectId.'">'.
                 Display::return_icon('add.png', get_lang('Add'), '', '32').
@@ -374,7 +376,7 @@ if ($isAdmin) {
     $table->set_header(6, get_lang('Assigned to'), true);
     $table->set_header(7, get_lang('Message'), true);
 } else {
-    if ($isAllow == false) {
+    if (false == $isAllow) {
         echo Display::page_subheader(get_lang('My tickets'));
         echo Display::return_message(get_lang('Welcome to YOUR tickets section. Here, you\'ll be able to track the state of all the tickets you created in the main tickets section.'));
     }

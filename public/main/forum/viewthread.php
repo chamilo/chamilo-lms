@@ -11,8 +11,7 @@ use Chamilo\CourseBundle\Entity\CForumThread;
  * @author Julio Montoya <gugli100@gmail.com> UI Improvements + lots of bugfixes
  */
 require_once __DIR__.'/../inc/global.inc.php';
-$current_course_tool = TOOL_FORUM;
-$this_section = SECTION_COURSES;
+
 api_protect_course_script(true);
 require_once 'forumfunction.inc.php';
 $nameTools = get_lang('Forum');
@@ -43,15 +42,6 @@ if (!empty($threadId)) {
 $courseEntity = api_get_course_entity(api_get_course_int_id());
 $sessionEntity = api_get_session_entity(api_get_session_id());
 
-/* MAIN DISPLAY SECTION */
-/* Retrieving forum and forum category information */
-// We are getting all the information about the current forum and forum category.
-// Note pcool: I tried to use only one sql statement (and function) for this,
-// but the problem is that the visibility of the forum AND forum category are stored in the item_property table.
-// Note: This has to be validated that it is an existing thread
-$current_thread = get_thread_information($forumId, $threadId);
-// Note: This has to be validated that it is an existing forum.
-$current_forum = get_forum_information($current_thread['forum_id']);
 $current_forum_category = $forumEntity->getForumCategory();
 $whatsnew_post_info = isset($_SESSION['whatsnew_post_info']) ? $_SESSION['whatsnew_post_info'] : null;
 
@@ -139,7 +129,7 @@ switch ($my_action) {
     case 'report':
         $postId = isset($_GET['post_id']) ? $_GET['post_id'] : 0;
 
-        $result = reportPost($postId, $current_forum, $current_thread);
+        $result = reportPost($postId, $forumEntity, $threadEntity);
         Display::addFlash(Display::return_message(get_lang('Reported')));
         header('Location: '.$currentUrl);
         exit;
@@ -197,7 +187,7 @@ if (!empty($groupId)) {
         ];
         $interbreadcrumb[] = [
             'url' => '#',
-            'name' => Security::remove_XSS($current_thread['thread_title']),
+            'name' => Security::remove_XSS($threadEntity->getThreadTitle()),
         ];
     }
 }
@@ -205,7 +195,7 @@ if (!empty($groupId)) {
 // If the user is not a course administrator and the forum is hidden
 // then the user is not allowed here.
 if (!api_is_allowed_to_edit(false, true) &&
-    (0 == $current_forum['visibility'] || 0 == $current_thread['visibility'])
+    (!$forumEntity->isVisible($courseEntity, $sessionEntity) || !$threadEntity->isVisible($courseEntity, $sessionEntity))
 ) {
     api_not_allowed();
 }
@@ -245,7 +235,7 @@ if (($current_forum_category &&
         // new thread link
         if ((
             api_is_allowed_to_edit(false, true) &&
-            !(api_is_session_general_coach() && $current_forum['session_id'] != $sessionId)) ||
+            !(api_is_session_general_coach() && $forumEntity->getSessionId() != $sessionId)) ||
             (1 == $forumEntity->getAllowNewThreads() && isset($_user['user_id'])) ||
             (1 == $forumEntity->getAllowNewThreads() && !isset($_user['user_id']) && 1 == $forumEntity->getAllowAnonymous())
         ) {
@@ -278,7 +268,7 @@ if (empty($viewMode)) {
     $viewMode = 'flat';
 }
 
-if (1 == $current_thread['thread_peer_qualify']) {
+if ($threadEntity->isThreadPeerQualify()) {
     Display::addFlash(Display::return_message(get_lang('To get the expected score in this forum, your contribution will have to be scored by another student, and you will have to score at least 2 other student\'s contributions. Until you reach this objective, even if scored, your contribution will show as a 0 score in the global grades for this course.'), 'info'));
 }
 
@@ -307,7 +297,6 @@ $count = 0;
 $group_id = api_get_group_id();
 $locked = api_resource_is_locked_by_gradebook($threadId, LINK_FORUM_THREAD);
 $sessionId = api_get_session_id();
-$currentThread = get_thread_information($forumId, $threadId);
 $userId = api_get_user_id();
 $groupInfo = GroupManager::get_group_properties($group_id);
 $postCount = 1;
@@ -390,7 +379,7 @@ foreach ($posts as $post) {
         (api_is_allowed_to_edit(false, true) &&
         !(api_is_session_general_coach() && $forumEntity->getSessionId() != $sessionId))
     ) {
-        if (false == $locked && postIsEditableByStudent($current_forum, $post)) {
+        if (false == $locked && postIsEditableByStudent($forumEntity, $post)) {
             $editUrl = api_get_path(WEB_CODE_PATH).'forum/editpost.php?'.api_get_cidreq();
             $editUrl .= "&forum=$forumId&thread=$threadId&post={$post['post_id']}&id_attach=$id_attach";
             $iconEdit .= "<a href='".$editUrl."'>"
@@ -408,7 +397,7 @@ foreach ($posts as $post) {
 
     if ((isset($groupInfo['iid']) && $tutorGroup) ||
         api_is_allowed_to_edit(false, true) &&
-        !(api_is_session_general_coach() && $current_forum['session_id'] != $sessionId)
+        !(api_is_session_general_coach() && $forumEntity->getSessionId() != $sessionId)
     ) {
         if (false == $locked) {
             $deleteUrl = api_get_self().'?'.api_get_cidreq().'&'.http_build_query(
@@ -436,7 +425,7 @@ foreach ($posts as $post) {
     if (api_is_allowed_to_edit(false, true) &&
         !(
             api_is_session_general_coach() &&
-            $current_forum['session_id'] != $sessionId
+            $forumEntity->getSessionId() != $sessionId
         )
     ) {
         $iconEdit .= return_visible_invisible_icon(
@@ -456,7 +445,7 @@ foreach ($posts as $post) {
         }
     }
 
-    $userCanQualify = 1 == $currentThread['thread_peer_qualify'] && $post['poster_id'] != $userId;
+    $userCanQualify = 1 == $threadEntity->isThreadPeerQualify() && $post['poster_id'] != $userId;
     if (api_is_allowed_to_edit(null, true)) {
         $userCanQualify = true;
     }
@@ -467,7 +456,7 @@ foreach ($posts as $post) {
     if ($post['poster_id'] == $userId) {
         $revision = getPostRevision($post['post_id']);
         if (empty($revision)) {
-            $askForRevision = getAskRevisionButton($post['post_id'], $current_thread);
+            $askForRevision = getAskRevisionButton($post['post_id'], $threadEntity);
         } else {
             $postIsARevision = true;
             $languageId = api_get_language_id(strtolower($revision));
@@ -479,7 +468,7 @@ foreach ($posts as $post) {
         }
     } else {
         if (postNeedsRevision($post['post_id'])) {
-            $askForRevision = giveRevisionButton($post['post_id'], $current_thread);
+            $askForRevision = giveRevisionButton($post['post_id'], $threadEntity);
         } else {
             $revision = getPostRevision($post['post_id']);
             if (!empty($revision)) {
@@ -497,7 +486,7 @@ foreach ($posts as $post) {
     $post['is_a_revision'] = $postIsARevision;
     $post['flag_revision'] = $flagRevision;
 
-    if (empty($currentThread['thread_qualify_max'])) {
+    if (empty($threadEntity->getThreadQualifyMax())) {
         $userCanQualify = false;
     }
 
@@ -520,7 +509,7 @@ foreach ($posts as $post) {
 
     $reportButton = '';
     if ($allowReport) {
-        $reportButton = getReportButton($post['post_id'], $current_thread);
+        $reportButton = getReportButton($post['post_id'], $threadEntity);
     }
 
     $statusIcon = getPostStatus($forumEntity, $post);
@@ -654,8 +643,9 @@ foreach ($posts as $post) {
             $post['post_attachments'] .= $attachment['path'];
             $post['post_attachments'] .= ' "> '.$user_filename.' </a>';
             $post['post_attachments'] .= '<span class="forum_attach_comment" >'.$attachment['comment'].'</span>';
-            if ((1 == $current_forum['allow_edit'] && $post['user_id'] == $userId) ||
-                (api_is_allowed_to_edit(false, true) && !(api_is_session_general_coach() && $current_forum['session_id'] != $sessionId))
+            if ((1 == $forumEntity->getAllowEdit() && $post['user_id'] == $userId) ||
+                (api_is_allowed_to_edit(false, true) &&
+                !(api_is_session_general_coach() && $forumEntity->getSessionId() != $sessionId))
             ) {
                 $post['post_attachments'] .= '&nbsp;&nbsp;<a href="'.api_get_self().'?'.api_get_cidreq().'&action=delete_attach&id_attach='
                     .$attachment['iid'].'&forum='.$forumId.'&thread='.$threadId
@@ -680,7 +670,7 @@ $template->assign('posts', $postList);
 $formToString = '';
 $showForm = true;
 if (!api_is_allowed_to_edit(false, true) &&
-    (($current_forum_category && 0 == $current_forum_category['visibility']) || 0 == $current_forum['visibility'])
+    (($current_forum_category && 0 == !$current_forum_category->isVisible($courseEntity, $sessionEntity)) || !$forumEntity->isVisible($courseEntity, $sessionEntity))
 ) {
     $showForm = false;
 }

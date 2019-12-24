@@ -2393,7 +2393,7 @@ function get_post_information($post_id)
  * @param int|null $sessionId Optional. If is null then it is considered the current session
  *
  * @return array returns
- *
+ * @deprecated
  * @author Patrick Cool <patrick.cool@UGent.be>, Ghent University
  *
  * @version february 2006, dokeos 1.8
@@ -3468,6 +3468,7 @@ function newThread(CForumForum $current_forum, $form_values = '', $showPreview =
     $forumId = $current_forum->getIid();
     $my_post = isset($_GET['post']) ? (int) $_GET['post'] : '';
     $giveRevision = isset($_GET['give_revision']) && 1 == $_GET['give_revision'];
+    $action = 'new_thread';
 
     $url = api_get_self().'?'.http_build_query(
             [
@@ -6868,17 +6869,17 @@ function getPostStatus(CForumForum $forum, $row, $addWrapper = true)
 }
 
 /**
- * @param array $forumInfo
+ * @param CForumForum $forum
  * @param int   $threadId
  * @param int   $status
  */
-function getCountPostsWithStatus($status, $forumInfo, $threadId = null)
+function getCountPostsWithStatus($status, $forum, $threadId = null)
 {
     $em = Database::getManager();
     $criteria = Criteria::create();
     $criteria
         ->where(Criteria::expr()->eq('status', $status))
-        ->andWhere(Criteria::expr()->eq('cId', $forumInfo['c_id']))
+        ->andWhere(Criteria::expr()->eq('cId', $forum->getCId()))
         ->andWhere(Criteria::expr()->eq('visible', 1))
     ;
 

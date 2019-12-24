@@ -25,9 +25,6 @@ use Chamilo\CourseBundle\Entity\CForumForum;
  */
 require_once __DIR__.'/../inc/global.inc.php';
 
-// The section (tabs).
-$this_section = SECTION_COURSES;
-
 // Notification for unauthorized people.
 api_protect_course_script(true);
 
@@ -52,7 +49,6 @@ if (!empty($forumId)) {
 
 $courseEntity = api_get_course_entity(api_get_course_int_id());
 $sessionEntity = api_get_session_entity(api_get_session_id());
-$current_forum = get_forum_information($_GET['forum']);
 $current_forum_category = $forumEntity->getForumCategory();
 
 $logInfo = [
@@ -132,7 +128,7 @@ if (!empty($groupId)) {
     ];
     $interbreadcrumb[] = [
         'url' => api_get_path(WEB_CODE_PATH).'forum/viewforum.php?'.$cidreq.'&forum='.(int) ($_GET['forum']),
-        'name' => $current_forum['forum_title'],
+        'name' => $forumEntity->getForumTitle(),
     ];
     $interbreadcrumb[] = [
         'url' => api_get_path(WEB_CODE_PATH).'forum/newthread.php?'.$cidreq.'&forum='.(int) ($_GET['forum']),

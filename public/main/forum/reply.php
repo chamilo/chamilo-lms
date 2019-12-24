@@ -22,8 +22,6 @@ use Chamilo\CourseBundle\Entity\CForumThread;
  */
 require_once __DIR__.'/../inc/global.inc.php';
 
-$this_section = SECTION_COURSES;
-
 api_protect_course_script(true);
 
 $nameTools = get_lang('Forum Categories');
@@ -51,15 +49,6 @@ if (!empty($threadId)) {
 
 $courseEntity = api_get_course_entity(api_get_course_int_id());
 $sessionEntity = api_get_session_entity(api_get_session_id());
-
-/* Retrieving forum and forum categorie information */
-// We are getting all the information about the current forum and forum category.
-// Note pcool: I tried to use only one sql statement (and function) for this,
-// but the problem is that the visibility of the forum AND forum category are stored in the item_property table.
-// Note: This has to be validated that it is an existing thread.
-$current_thread = get_thread_information($forumId, $threadId);
-// Note: This has to be validated that it is an existing forum.
-$current_forum = get_forum_information($current_thread['forum_id']);
 $current_forum_category = $forumEntity->getForumCategory();
 
 /* Is the user allowed here? */

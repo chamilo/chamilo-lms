@@ -25,12 +25,10 @@ use Chamilo\CourseBundle\Entity\CForumPost;
  * @Copyright Patrick Cool
  */
 require_once __DIR__.'/../inc/global.inc.php';
-$current_course_tool = TOOL_FORUM;
 
 api_protect_course_script(true);
 api_protect_course_group(GroupManager::GROUP_TOOL_FORUM);
 
-$this_section = SECTION_COURSES;
 $nameTools = get_lang('Forums');
 $origin = api_get_origin();
 
@@ -54,9 +52,6 @@ if (!empty($my_forum)) {
 
 $courseEntity = api_get_course_entity(api_get_course_int_id());
 $sessionEntity = api_get_session_entity(api_get_session_id());
-
-// Note: This has to be validated that it is an existing forum.
-$current_forum = get_forum_information($my_forum);
 $isForumOpenByDateAccess = api_is_date_in_date_range($forumEntity->getStartTime(), $forumEntity->getEndTime());
 
 if (!$isForumOpenByDateAccess && !$isAllowedToEdit) {
@@ -65,10 +60,6 @@ if (!$isForumOpenByDateAccess && !$isAllowedToEdit) {
     } else {
         api_not_allowed(true);
     }
-}
-
-if (empty($current_forum)) {
-    api_not_allowed();
 }
 
 $current_forum_category = $forumEntity->getForumCategory();
@@ -136,7 +127,7 @@ if (!empty($groupId)) {
     ];
     $interbreadcrumb[] = [
         'url' => '#',
-        'name' => get_lang('Forum').' '.Security::remove_XSS($current_forum['forum_title']),
+        'name' => get_lang('Forum').' '.Security::remove_XSS($forumEntity->getForumTitle()),
     ];
 } else {
     $interbreadcrumb[] = [
@@ -360,8 +351,8 @@ if ('learnpath' != $origin) {
 // 2. the course member is here and new threads are allowed
 // 3. a visitor is here and new threads AND allowed AND  anonymous posts are allowed
 if (api_is_allowed_to_edit(false, true) ||
-    (1 == $current_forum['allow_new_threads'] && isset($_user['user_id'])) ||
-    (1 == $current_forum['allow_new_threads'] && !isset($_user['user_id']) && 1 == $current_forum['allow_anonymous'])
+    (1 == $forumEntity->getAllowNewThreads() && isset($_user['user_id'])) ||
+    (1 == $forumEntity->getAllowNewThreads() && !isset($_user['user_id']) && 1 == $forumEntity->getAllowAnonymous())
 ) {
     if (1 != $forumEntity->getLocked() && 1 != $forumEntity->getLocked()) {
         if (!api_is_anonymous() && !api_is_invitee()) {
@@ -516,7 +507,7 @@ if (is_array($threads)) {
             if (1 == $forumEntity->isModerated() && api_is_allowed_to_edit(false, true)) {
                 $waitingCount = getCountPostsWithStatus(
                     CForumPost::STATUS_WAITING_MODERATION,
-                    $current_forum,
+                    $forumEntity,
                     $thread['thread_id']
                 );
                 if (!empty($waitingCount)) {

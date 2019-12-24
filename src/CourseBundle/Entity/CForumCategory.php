@@ -82,11 +82,6 @@ class CForumCategory extends AbstractResource implements ResourceInterface
     protected $catId;
 
     /**
-     * @var CItemProperty
-     */
-    protected $itemProperty;
-
-    /**
      * @var ArrayCollection
      *
      * @ORM\OneToMany(targetEntity="Chamilo\CourseBundle\Entity\CForumForum", mappedBy="forumCategory")
@@ -291,24 +286,6 @@ class CForumCategory extends AbstractResource implements ResourceInterface
     public function getForums()
     {
         return $this->forums;
-    }
-
-    /**
-     * @return CForumCategory
-     */
-    public function setItemProperty(CItemProperty $itemProperty)
-    {
-        $this->itemProperty = $itemProperty;
-
-        return $this;
-    }
-
-    /**
-     * @return CItemProperty
-     */
-    public function getItemProperty()
-    {
-        return $this->itemProperty;
     }
 
     /**

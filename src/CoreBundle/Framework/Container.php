@@ -37,6 +37,7 @@ use Symfony\Component\HttpFoundation\Session\Session;
 use Symfony\Component\Security\Core\Authorization\AuthorizationChecker;
 use Symfony\Component\Security\Core\Role\RoleHierarchy;
 use Symfony\Contracts\Translation\TranslatorInterface;
+use Twig\Environment;
 
 /**
  * Class Container
@@ -147,7 +148,7 @@ class Container
     }
 
     /**
-     * @return \Twig_Environment
+     * @return Environment
      */
     public static function getTwig()
     {

@@ -837,9 +837,7 @@ class Template
      */
     public function fetch($template = null)
     {
-        $template = $this->twig->loadTemplate($template);
-
-        return $template->render($this->params);
+        return $this->twig->render($template, $this->params);
     }
 
     /**

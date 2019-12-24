@@ -41,8 +41,6 @@ use ChamiloSession as Session;
  * - $cancelAnswers : ask to cancel answer modifications
  * - $buttonBack : ask to go back to the previous page in answers of type "Fill in blanks"
  *
- * @package chamilo.exercise
- *
  * @author Olivier Brouckaert
  * Modified by Hubert Borderiou 21-10-2011 Question by category
  */
@@ -298,7 +296,7 @@ $htmlHeadXtra[] = '<script src="'.api_get_path(WEB_LIBRARY_JS_PATH).'hotspot/js/
 
 if (isset($_GET['message'])) {
     if (in_array($_GET['message'], ['ExerciseStored', 'ItemUpdated', 'ItemAdded'])) {
-        Display::addFlash(Display::return_message(get_lang($_GET['message']), 'confirmation'));
+      //  Display::addFlash(Display::return_message(get_lang($_GET['message']), 'confirmation'));
     }
 }
 

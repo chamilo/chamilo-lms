@@ -1448,10 +1448,10 @@ abstract class Question
             /** @var Question $type */
             $type = new $type[1]();
             $img = $type->getTypePicture();
-            $explanation = get_lang($type->getExplanation());
+            $explanation = $type->getExplanation();
             echo '<li>';
             echo '<div class="icon-image">';
-            $icon = '<a href="admin.php?'.api_get_cidreq().'&newQuestion=yes&answerType='.$i.'">'.
+            $icon = '<a href="admin.php?'.api_get_cidreq().'&newQuestion=yes&answerType='.$i.'&id='.$exerciseId.'">'.
                 Display::return_icon($img, $explanation, null, ICON_SIZE_BIG).'</a>';
 
             if ($objExercise->force_edit_exercise_in_lp === false) {

@@ -1884,7 +1884,7 @@ class Exercise
 
         // Form title
         $form_title = get_lang('Create a new test');
-        if (!empty($_GET['exerciseId'])) {
+        if (!empty($_GET['id'])) {
             $form_title = get_lang('Edit test name and settings');
         }
 
@@ -2378,7 +2378,7 @@ class Exercise
         }
 
         // submit
-        if (isset($_GET['exerciseId'])) {
+        if (isset($_GET['id'])) {
             $form->addButtonSave(get_lang('Edit test name and settings'), 'submitExercise');
         } else {
             $form->addButtonUpdate(get_lang('Proceed to questions'), 'submitExercise');

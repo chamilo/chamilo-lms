@@ -1,4 +1,5 @@
 <?php
+
 /* For licensing terms, see /license.txt */
 
 /**
@@ -110,7 +111,6 @@ if (!empty($users)) {
     Display::addFlash(Display::return_message(get_lang('No user added'), 'warning'));
 }
 
-// View
 $interbreadcrumb[] = [
     'url' => api_get_path(WEB_CODE_PATH).'lp/lp_controller.php?'.api_get_cidreq(),
     'name' => get_lang('Learning paths'),
@@ -145,16 +145,13 @@ $template->assign('course_code', api_get_course_id());
 $template->assign('lp_id', $lpId);
 $template->assign('show_email', $showEmail === 'true');
 $template->assign('export', (int) $export);
-
-$layout = $template->get_template('learnpath/report.tpl');
-
 $template->assign('header', $lpInfo['name']);
 $template->assign(
     'actions',
     Display::toolbarAction('lp_actions', [$actions])
 );
 
-$result = $template->fetch($layout);
+$result = $template->fetch('@ChamiloTheme/LearnPath/report.html.twig');
 $template->assign('content', $result);
 
 if ($export) {

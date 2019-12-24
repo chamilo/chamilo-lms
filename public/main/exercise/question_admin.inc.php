@@ -19,18 +19,15 @@ if (isset($_GET['editQuestion'])) {
 if (is_object($objQuestion)) {
     // FORM CREATION
     $form = new FormValidator('question_admin_form', 'post', $action);
+
+    $class = 'btn btn-default';
     if (isset($_GET['editQuestion'])) {
-        $class = 'btn btn-default';
         $text = get_lang('Save the question');
         $type = isset($_GET['type']) ? Security::remove_XSS($_GET['type']) : null;
     } else {
-        $class = 'btn btn-default';
         $text = get_lang('Add this question to the test');
         $type = $_REQUEST['answerType'];
     }
-
-    $typesInformation = Question::getQuestionTypeList();
-    $form_title_extra = isset($typesInformation[$type][1]) ? get_lang($typesInformation[$type][1]) : null;
 
     $code = '';
     if (isset($objQuestion->code) && !empty($objQuestion->code)) {
@@ -38,7 +35,7 @@ if (is_object($objQuestion)) {
     }
 
     // form title
-    $form->addHeader($text.': '.$form_title_extra.$code);
+    $form->addHeader($text.': '.$objQuestion->getExplanation().$code);
 
     // question form elements
     $objQuestion->createForm($form, $objExercise);
@@ -64,11 +61,15 @@ if (is_object($objQuestion)) {
             if (isset($_GET['editQuestion'])) {
                 if (empty($exerciseId)) {
                     Display::addFlash(Display::return_message(get_lang('Item updated')));
-                    $url = 'admin.php?id='.$exerciseId.'&'.api_get_cidreq().'&editQuestion='.$objQuestion->id;
-                    echo '<script type="text/javascript">window.location.href="'.$url.'"</script>';
+                    $url = api_get_path(WEB_CODE_PATH).'exercise/admin.php?id='.$exerciseId.'&'.api_get_cidreq().'&editQuestion='.$objQuestion->id;
+                    header("Location: $url");
                     exit;
                 }
-                echo '<script type="text/javascript">window.location.href="admin.php?id='.$exerciseId.'&'.api_get_cidreq().'&page='.$page.'&message=Item updated"</script>';
+
+                Display::addFlash(Display::return_message(get_lang('Item updated')));
+                $url = api_get_path(WEB_CODE_PATH).'exercise/admin.php?id='.$exerciseId.'&'.api_get_cidreq().'&page='.$page;
+                header("Location: $url");
+                exit;
             } else {
                 // New question
                 $page = 1;
@@ -76,7 +77,10 @@ if (is_object($objQuestion)) {
                 if (!empty($length)) {
                     $page = round($objExercise->getQuestionCount() / $length);
                 }
-                echo '<script type="text/javascript">window.location.href="admin.php?id='.$exerciseId.'&'.api_get_cidreq().'&page='.$page.'&message=ItemAdded"</script>';
+                Display::addFlash(Display::return_message(get_lang('Item added')));
+                $url = api_get_path(WEB_CODE_PATH).'exercise/admin.php?id='.$exerciseId.'&'.api_get_cidreq().'&page='.$page;
+                header("Location: $url");
+                exit;
             }
         } else {
             echo '<script type="text/javascript">window.location.href="admin.php?id='.$exerciseId.'&page='.$page.'&hotspotadmin='.$objQuestion->id.'&'.api_get_cidreq().'"</script>';

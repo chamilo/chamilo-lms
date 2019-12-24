@@ -813,7 +813,7 @@ function api_get_path($path = '', $configuration = [])
         SYS_ARCHIVE_PATH => $root_sys.'var/cache/',
        // SYS_UPLOAD_PATH => 'var/upload/',
         SYS_TEST_PATH => $root_sys.'tests/',
-        SYS_TEMPLATE_PATH => $root_sys.'template/',
+        SYS_TEMPLATE_PATH => $root_sys.'public/main/template/',
         SYS_PUBLIC_PATH => $root_sys.'public/',
         SYS_FONTS_PATH => $root_sys.'public/fonts/',
 

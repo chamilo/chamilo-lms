@@ -45,9 +45,7 @@ $id = !empty($_REQUEST['id']) ? $_REQUEST['id'] : '';
 $action = !empty($_REQUEST['action']) ? $_REQUEST['action'] : '';
 
 $nameTools = get_lang('Links');
-
 $course_id = api_get_course_int_id();
-// Condition for the session
 $session_id = api_get_session_id();
 
 if ('addlink' === $action) {

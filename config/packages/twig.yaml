@@ -1,6 +1,9 @@
 twig:
     debug: '%kernel.debug%'
-    paths: ['%kernel.project_dir%/var/templates', '%kernel.project_dir%/public/main/template/', '%kernel.project_dir%/public/plugin/']
+    paths:
+        - '%kernel.project_dir%/var/templates'
+        - '%kernel.project_dir%/public/main/template'
+        - '%kernel.project_dir%/public/plugin'
     form_themes:
         - 'bootstrap_4_layout.html.twig'
         - '@SonataFormatter/Form/formatter.html.twig'

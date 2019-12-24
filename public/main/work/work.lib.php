@@ -136,6 +136,10 @@ function get_work_data_by_id($id, $courseId = 0, $sessionId = 0)
     if ($studentPublication) {
         $workId = $studentPublication->getIid();
         $work['id'] = $workId;
+        $work['iid'] = $workId;
+
+        $work['description'] = $studentPublication->getDescription();
+        $work['url'] = $studentPublication->getUrl();
         $work['active'] = $studentPublication->getActive();
         $work['allow_text_assignment'] = $studentPublication->getAllowTextAssignment();
         $work['c_id'] = $studentPublication->getCId();
@@ -143,7 +147,6 @@ function get_work_data_by_id($id, $courseId = 0, $sessionId = 0)
         $work['parent_id'] = $studentPublication->getParentId();
         $work['qualification'] = $studentPublication->getQualification();
         $work['contains_file'] = $studentPublication->getContainsFile();
-
         $work['title'] = $studentPublication->getTitle();
         if (empty($studentPublication->getTitle())) {
             $work['title'] = basename($studentPublication->getUrl());
@@ -4353,7 +4356,7 @@ function updateWork($workId, $params, $courseInfo, $sessionId = 0)
     $filteredParams = [
         'description' => $params['description'],
         'qualification' => $params['qualification'],
-        'weight' => $params['weight'],
+        'weight' => (float) $params['weight'],
         'allow_text_assignment' => $params['allow_text_assignment'],
     ];
 

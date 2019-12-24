@@ -1,4 +1,5 @@
 <?php
+
 /* For licensing terms, see /license.txt */
 
 use Chamilo\CourseBundle\Entity\CLink;
@@ -17,8 +18,6 @@ use Chamilo\CourseBundle\Entity\CLink;
  *
  * @author Patrick Cool, complete remake (December 2003 - January 2004)
  * @author René Haentjens, CSV file import (October 2004)
- *
- * @package chamilo.link
  */
 class Link extends Model
 {
@@ -579,7 +578,6 @@ class Link extends Model
             'display_order' => $max_display_order,
             'on_homepage' => $values['on_homepage'],
             'target' => $values['target'],
-            'category_id' => $values['category_id'],
         ];
 
         Database::update(
@@ -747,7 +745,7 @@ class Link extends Model
     {
         $table = Database::get_course_table(TABLE_LINK_CATEGORY);
         $course_id = api_get_course_int_id();
-        $id = intval($id);
+        $id = (int) $id;
 
         // This is used to put the modified info of the category-form into the database.
         $params = [
@@ -1623,7 +1621,7 @@ Do you really want to delete this category and its links ?')."')) return false;\
         $form->addText('url', 'URL');
         $form->addRule('url', get_lang('Please give the link URL, it should be valid.'), 'url');
         $form->addText('title', get_lang('LinksName'));
-        $form->addHtmlEditor('description', get_lang('Description'), true, false, ['ToolbarSet' => 'Profile', 'Width' => '100%', 'Height' => '130']);
+        $form->addHtmlEditor('description', get_lang('Description'), false, false, ['ToolbarSet' => 'Profile', 'Width' => '100%', 'Height' => '130']);
 
         $resultcategories = self::getLinkCategories($course_id, $session_id);
         $options = ['0' => '--'];

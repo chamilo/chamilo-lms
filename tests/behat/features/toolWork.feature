@@ -34,8 +34,8 @@ Feature: Work tool
     Then I follow "Upload my assignment"
     Then I should see "Upload a document"
     Then I follow "Upload (Simple)"
-    Then I should see "File extension"
-    Then I attach the file "/public/favicon.ico" to "file"
+    #Then I should see "File extension"
+    Then I attach the file "/public/favicon.ico" to "file_upload"
     And I press "Upload"
     And wait for the page to be loaded
     Then I should see "The file has been added to the list of publications"

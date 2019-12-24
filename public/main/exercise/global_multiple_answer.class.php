@@ -1,4 +1,5 @@
 <?php
+
 /* For licensing terms, see /license.txt */
 
 use ChamiloSession as Session;
@@ -9,7 +10,7 @@ use ChamiloSession as Session;
 class GlobalMultipleAnswer extends Question
 {
     public $typePicture = 'mcmagl.png';
-    public $explanationLangVar = 'GlobalMultipleAnswer';
+    public $explanationLangVar = 'Combination true/false/don\'t-know';
 
     /**
      * GlobalMultipleAnswer constructor.

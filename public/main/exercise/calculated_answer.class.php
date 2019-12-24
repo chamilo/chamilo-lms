@@ -1,4 +1,5 @@
 <?php
+
 /* For licensing terms, see /license.txt */
 
 use Webit\Util\EvalMath\EvalMath;
@@ -12,7 +13,7 @@ use Webit\Util\EvalMath\EvalMath;
 class CalculatedAnswer extends Question
 {
     public $typePicture = 'calculated_answer.png';
-    public $explanationLangVar = 'CalculatedAnswer';
+    public $explanationLangVar = 'Calculated question';
 
     /**
      * Constructor.

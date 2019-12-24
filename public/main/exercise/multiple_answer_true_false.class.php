@@ -1,4 +1,5 @@
 <?php
+
 /* For licensing terms, see /license.txt */
 
 use ChamiloSession as Session;
@@ -13,7 +14,7 @@ use ChamiloSession as Session;
 class MultipleAnswerTrueFalse extends Question
 {
     public $typePicture = 'mcmao.png';
-    public $explanationLangVar = 'MultipleAnswerTrueFalse';
+    public $explanationLangVar = 'Multiple answer true/false/don\'t know';
     public $options;
 
     /**

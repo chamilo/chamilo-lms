@@ -1,4 +1,5 @@
 <?php
+
 /* For licensing terms, see /license.txt */
 
 use ChamiloSession as Session;
@@ -7,8 +8,6 @@ use ChamiloSession as Session;
  * Class MultipleAnswerTrueFalseDegreeCertainty
  * This class allows to instantiate an object of type MULTIPLE_ANSWER
  * (MULTIPLE CHOICE, MULTIPLE ANSWER), extending the class question.
- *
- * @package chamilo.exercise
  */
 class MultipleAnswerTrueFalseDegreeCertainty extends Question
 {
@@ -19,7 +18,7 @@ class MultipleAnswerTrueFalseDegreeCertainty extends Question
     const LEVEL_DARKRED = 5;
 
     public $typePicture = 'mccert.png';
-    public $explanationLangVar = 'MultipleAnswerTrueFalseDegreeCertainty';
+    public $explanationLangVar = 'Multiple answer true/false/degree of certainty';
     public $optionsTitle;
     public $options;
 
@@ -831,17 +830,17 @@ class MultipleAnswerTrueFalseDegreeCertainty extends Question
         $colWidth = $widthTable / 5;
 
         $html .= '<tr>
-                <td class="firstLine borderRight '.$classGlobalChart.'" 
-                    colspan="2" 
+                <td class="firstLine borderRight '.$classGlobalChart.'"
+                    colspan="2"
                     style="width:'.($colWidth * 2).'px; line-height: 15px; font-size:'.$textSize.'%;">'.
             sprintf(get_lang('Incorrect answers: %s'), $nbResponsesInc).'
                 </td>
-                <td class="firstLine borderRight '.$classGlobalChart.'" 
+                <td class="firstLine borderRight '.$classGlobalChart.'"
                     style="width:'.$colWidth.'px; line-height: 15px; font-size :'.$textSize.'%;">'.
             sprintf(get_lang('Ignorance: %s'), $nbResponsesIng).'
                 </td>
-                <td class="firstLine '.$classGlobalChart.'" 
-                    colspan="2" 
+                <td class="firstLine '.$classGlobalChart.'"
+                    colspan="2"
                     style="width:'.($colWidth * 2).'px; line-height: 15px; font-size:'.$textSize.'%;">'.
             sprintf(get_lang('Correct answers: %s'), $nbResponsesCor).'
                 </td>
@@ -1147,8 +1146,8 @@ class MultipleAnswerTrueFalseDegreeCertainty extends Question
         $tblAnswerOption = Database::get_course_table(TABLE_QUIZ_QUESTION_OPTION);
         $courseId = api_get_course_int_id();
         $optionId = (int) $optionId;
-        $sql = "SELECT position 
-                FROM $tblAnswerOption 
+        $sql = "SELECT position
+                FROM $tblAnswerOption
                 WHERE c_id = $courseId AND id = $optionId";
         $res = Database::query($sql);
 
@@ -1232,7 +1231,7 @@ class MultipleAnswerTrueFalseDegreeCertainty extends Question
         $tableTrackEExercise = Database::get_main_table(TABLE_STATISTIC_TRACK_E_EXERCISES);
         $exeId = (int) $exeId;
 
-        $sql = "SELECT exe_exo_id 
+        $sql = "SELECT exe_exo_id
                 FROM $tableTrackEExercise
                 WHERE exe_id=".$exeId;
         $res = Database::query($sql);

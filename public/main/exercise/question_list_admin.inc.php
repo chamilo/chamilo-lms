@@ -4,8 +4,6 @@
 use ChamiloSession as Session;
 
 /**
- * @package chamilo.exercise
- *
  * @author Olivier Brouckaert & Julio Montoya & Hubert Borderiou 21-10-2011 (Question by category)
  *    QUESTION LIST ADMINISTRATION
  *
@@ -175,7 +173,6 @@ if (!$inATest) {
             $questionList = $objExercise->getQuestionForTeacher($start, $length);
             $paginator = new Knp\Component\Pager\Paginator();
             $pagination = $paginator->paginate([]);
-
             $pagination->setTotalItemCount($nbrQuestions);
             $pagination->setItemNumberPerPage($length);
             $pagination->setCurrentPageNumber($page);
@@ -305,18 +302,17 @@ if (!$inATest) {
                         '.$move.' '.cut($title, 42).'
                     </a>';
 
-                // Question type
-                $typeImg = $objQuestionTmp->getTypePicture();
-                $typeExpl = $objQuestionTmp->getExplanation();
-
-                $questionType = Display::return_icon($typeImg, $typeExpl);
+                $questionType = Display::return_icon(
+                    $objQuestionTmp->getTypePicture(),
+                    $objQuestionTmp->getExplanation()
+                );
 
                 // Question category
-                $txtQuestionCat = Security::remove_XSS(
+                $questionCategory = Security::remove_XSS(
                     TestCategory::getCategoryNameForQuestion($objQuestionTmp->id)
                 );
-                if (empty($txtQuestionCat)) {
-                    $txtQuestionCat = '-';
+                if (empty($questionCategory)) {
+                    $questionCategory = '-';
                 }
 
                 // Question level
@@ -340,9 +336,9 @@ if (!$inATest) {
                                     <span class="visible-xs-inline">'.get_lang('Type').' </span>'
                                     .$questionType.'
                                 </div>
-                                <div class="category col-sm-2 col-xs-12" title="'.$txtQuestionCat.'">
+                                <div class="category col-sm-2 col-xs-12" title="'.$questionCategory.'">
                                     <span class="visible-xs-inline">'.get_lang('Category').' </span>'
-                                    .cut($txtQuestionCat, 42).'
+                                    .cut($questionCategory, 42).'
                                 </div>
                                 <div class="level text-right col-sm-1 col-xs-6">
                                     <span class="visible-xs-inline">'.get_lang('Difficulty').' </span>'

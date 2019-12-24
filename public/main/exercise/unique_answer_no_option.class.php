@@ -1,4 +1,5 @@
 <?php
+
 /* For licensing terms, see /license.txt */
 
 use ChamiloSession as Session;
@@ -14,7 +15,7 @@ use ChamiloSession as Session;
 class UniqueAnswerNoOption extends Question
 {
     public $typePicture = 'mcuao.png';
-    public $explanationLangVar = 'UniqueAnswerNoOption';
+    public $explanationLangVar = 'Unique answer with unknown';
 
     /**
      * Constructor.

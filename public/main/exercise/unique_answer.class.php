@@ -18,7 +18,7 @@ use ChamiloSession as Session;
 class UniqueAnswer extends Question
 {
     public $typePicture = 'mcua.png';
-    public $explanationLangVar = 'UniqueSelect';
+    public $explanationLangVar = 'Multiple choice';
 
     /**
      * Constructor.

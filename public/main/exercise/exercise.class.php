@@ -8435,7 +8435,7 @@ class Exercise
                 'legacy_main',
                 false,
                 '_self',
-                ['class' => 'btn btn-secondary', 'icon' => 'fa fa-pen']
+                ['class' => 'btn btn-secondary', 'icon' => 'fa fa-pen', 'title' => get_lang('Edit')]
             );
 
             $myRowAction->setRouteParameters(

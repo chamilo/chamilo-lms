@@ -1,4 +1,5 @@
 <?php
+
 /* For licensing terms, see /license.txt */
 
 /**
@@ -8,8 +9,6 @@
  *  extending the class question
  *
  * @author Eric Marguin
- *
- * @package chamilo.exercise
  */
 class MultipleAnswerCombinationTrueFalse extends MultipleAnswerCombination
 {

@@ -1,4 +1,5 @@
 <?php
+
 /* For licensing terms, see /license.txt */
 
 /**
@@ -7,13 +8,11 @@
  * extending the class question.
  *
  * @author Eric Marguin
- *
- * @package chamilo.exercise
  */
 class OralExpression extends Question
 {
     public $typePicture = 'audio_question.png';
-    public $explanationLangVar = 'OralExpression';
+    public $explanationLangVar = 'Oral expression';
     public $available_extensions = ['wav', 'ogg'];
     private $sessionId;
     private $userId;

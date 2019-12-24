@@ -1,4 +1,5 @@
 <?php
+
 /* For licensing terms, see /license.txt */
 
 /**
@@ -9,7 +10,7 @@
 class Draggable extends Question
 {
     public $typePicture = 'ordering.png';
-    public $explanationLangVar = 'Draggable';
+    public $explanationLangVar = 'Sequence ordering';
 
     /**
      * Class constructor.

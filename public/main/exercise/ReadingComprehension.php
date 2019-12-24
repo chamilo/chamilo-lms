@@ -1,4 +1,5 @@
 <?php
+
 /* For licensing terms, see /license.txt */
 
 /**
@@ -6,13 +7,11 @@
  *
  * This class allows to instantiate an object of type READING_COMPREHENSION
  * extending the class question
- *
- * @package chamilo.exercise
  */
 class ReadingComprehension extends UniqueAnswer
 {
     public $typePicture = 'reading-comprehension.png';
-    public $explanationLangVar = 'ReadingComprehension';
+    public $explanationLangVar = 'Reading comprehension';
 
     /**
      * Defines the different speeds of scrolling for the reading window,

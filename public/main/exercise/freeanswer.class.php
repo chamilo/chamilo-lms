@@ -1,4 +1,5 @@
 <?php
+
 /* For licensing terms, see /license.txt */
 
 /**
@@ -6,14 +7,12 @@
  * This class allows to instantiate an object of type FREE_ANSWER,
  * extending the class question.
  *
- * @package chamilo.exercise
- *
  * @author Eric Marguin
  */
 class FreeAnswer extends Question
 {
     public $typePicture = 'open_answer.png';
-    public $explanationLangVar = 'FreeAnswer';
+    public $explanationLangVar = 'Open question';
 
     /**
      * Constructor.

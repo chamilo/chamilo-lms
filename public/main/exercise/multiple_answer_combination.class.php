@@ -1,4 +1,5 @@
 <?php
+
 /* For licensing terms, see /license.txt */
 
 use ChamiloSession as Session;
@@ -15,7 +16,7 @@ use ChamiloSession as Session;
 class MultipleAnswerCombination extends Question
 {
     public $typePicture = 'mcmac.png';
-    public $explanationLangVar = 'MultipleSelectCombination';
+    public $explanationLangVar = 'Exact Selection';
 
     /**
      * Constructor.

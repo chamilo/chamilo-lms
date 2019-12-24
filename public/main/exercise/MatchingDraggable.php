@@ -1,4 +1,5 @@
 <?php
+
 /* For licensing terms, see /license.txt */
 
 /**
@@ -9,7 +10,7 @@
 class MatchingDraggable extends Question
 {
     public $typePicture = 'matchingdrag.png';
-    public $explanationLangVar = 'MatchingDraggable';
+    public $explanationLangVar = 'Match by dragging';
 
     /**
      * Class constructor.

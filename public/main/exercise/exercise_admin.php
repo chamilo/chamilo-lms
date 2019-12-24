@@ -200,7 +200,7 @@ if ($form->validate()) {
                 Display::return_icon('back.png', get_lang("Back to").' '.get_lang('Learning paths'), '', ICON_SIZE_MEDIUM)."</a>";
         } else {
             echo '<a href="exercise.php?'.api_get_cidreq().'">'.
-                Display::return_icon('back.png', get_lang('Back toTestsList'), '', ICON_SIZE_MEDIUM).
+                Display::return_icon('back.png', get_lang('Back to test list'), '', ICON_SIZE_MEDIUM).
                 '</a>';
         }
     }

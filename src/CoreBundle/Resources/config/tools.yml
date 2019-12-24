@@ -307,7 +307,7 @@ services:
                 links:
                     repository: Chamilo\CourseBundle\Repository\CLinkRepository
                 link_categories:
-                    repository: Chamilo\CourseBundle\Repository\CLinkRepository
+                    repository: Chamilo\CourseBundle\Repository\CLinkCategoryRepository
         tags:
             - {name: chamilo_core.tool}
 

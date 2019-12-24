@@ -103,6 +103,11 @@ class CLink extends AbstractResource implements ResourceInterface
      */
     protected $sessionId;
 
+    public function __construct()
+    {
+        $this->displayOrder = 0;
+    }
+
     public function __toString(): string
     {
         return $this->getTitle();
@@ -322,6 +327,26 @@ class CLink extends AbstractResource implements ResourceInterface
     public function getId()
     {
         return $this->id;
+    }
+
+    /**
+     * @return int
+     */
+    public function getIid(): int
+    {
+        return $this->iid;
+    }
+
+    /**
+     * @param int $iid
+     *
+     * @return CLink
+     */
+    public function setIid(int $iid): CLink
+    {
+        $this->iid = $iid;
+
+        return $this;
     }
 
     /**

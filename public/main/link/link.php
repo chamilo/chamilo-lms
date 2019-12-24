@@ -104,7 +104,7 @@ switch ($action) {
         $form = Link::getLinkForm(null, 'addlink', $token);
         if ($form->validate() && Security::check_token('get')) {
             // Here we add a link
-            $linkId = Link::addlinkcategory('link');
+            $linkId = Link::addLink();
             Skill::saveSkills($form, ITEM_TYPE_LINK, $linkId);
 
             Security::clear_token();
@@ -130,7 +130,7 @@ switch ($action) {
 
         if ($form->validate()) {
             // Here we add a category
-            Link::addlinkcategory('category');
+            Link::addCategory();
             header('Location: '.$linkListUrl);
             exit;
         }
@@ -152,14 +152,14 @@ switch ($action) {
         break;
     case 'deletelink':
         // Here we delete a link
-        Link::deletelinkcategory($id, 'link');
+        Link::deleteLink($id);
         header('Location: '.$linkListUrl);
         exit;
 
         break;
     case 'deletecategory':
         // Here we delete a category
-        Link::deletelinkcategory($id, 'category');
+        Link::deleteCategory($id);
         header('Location: '.$linkListUrl);
         exit;
 

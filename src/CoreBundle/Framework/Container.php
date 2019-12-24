@@ -11,12 +11,15 @@ use Chamilo\CoreBundle\Repository\CourseCategoryRepository;
 use Chamilo\CoreBundle\Repository\CourseRepository;
 use Chamilo\CoreBundle\Repository\IllustrationRepository;
 use Chamilo\CoreBundle\ToolChain;
+use Chamilo\CourseBundle\Entity\CLinkCategory;
 use Chamilo\CourseBundle\Repository\CDocumentRepository;
 use Chamilo\CourseBundle\Repository\CExerciseCategoryRepository;
 use Chamilo\CourseBundle\Repository\CForumCategoryRepository;
 use Chamilo\CourseBundle\Repository\CForumForumRepository;
 use Chamilo\CourseBundle\Repository\CForumPostRepository;
 use Chamilo\CourseBundle\Repository\CForumThreadRepository;
+use Chamilo\CourseBundle\Repository\CLinkCategoryRepository;
+use Chamilo\CourseBundle\Repository\CLinkRepository;
 use Chamilo\CourseBundle\Repository\CLpCategoryRepository;
 use Chamilo\CourseBundle\Repository\CLpRepository;
 use Chamilo\CourseBundle\Repository\CQuizQuestionCategoryRepository;
@@ -354,6 +357,22 @@ class Container
     public static function getQuestionCategoryRepository()
     {
         return self::$container->get('Chamilo\CourseBundle\Repository\CQuizQuestionCategoryRepository');
+    }
+
+    /**
+     * @return CLinkRepository
+     */
+    public static function getLinkRepository()
+    {
+        return self::$container->get('Chamilo\CourseBundle\Repository\CLinkRepository');
+    }
+
+    /**
+     * @return CLinkCategoryRepository
+     */
+    public static function getLinkCategoryRepository()
+    {
+        return self::$container->get('Chamilo\CourseBundle\Repository\CLinkCategoryRepository');
     }
 
     /**

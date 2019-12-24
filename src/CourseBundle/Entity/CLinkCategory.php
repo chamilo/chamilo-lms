@@ -4,6 +4,8 @@
 
 namespace Chamilo\CourseBundle\Entity;
 
+use Chamilo\CoreBundle\Entity\Resource\AbstractResource;
+use Chamilo\CoreBundle\Entity\Resource\ResourceInterface;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -18,7 +20,7 @@ use Doctrine\ORM\Mapping as ORM;
  * )
  * @ORM\Entity
  */
-class CLinkCategory
+class CLinkCategory extends AbstractResource implements ResourceInterface
 {
     /**
      * @var int
@@ -71,6 +73,35 @@ class CLinkCategory
      */
     protected $sessionId;
 
+    public function __construct()
+    {
+    }
+
+    public function __toString(): string
+    {
+        return $this->getCategoryTitle();
+    }
+
+    /**
+     * @return int
+     */
+    public function getIid(): int
+    {
+        return $this->iid;
+    }
+
+    /**
+     * @param int $iid
+     *
+     * @return CLinkCategory
+     */
+    public function setIid(int $iid): CLinkCategory
+    {
+        $this->iid = $iid;
+
+        return $this;
+    }
+
     /**
      * Set categoryTitle.
      *
@@ -92,7 +123,7 @@ class CLinkCategory
      */
     public function getCategoryTitle()
     {
-        return $this->categoryTitle;
+        return (string) $this->categoryTitle;
     }
 
     /**
@@ -213,5 +244,18 @@ class CLinkCategory
     public function getCId()
     {
         return $this->cId;
+    }
+
+    /**
+     * Resource identifier.
+     */
+    public function getResourceIdentifier(): int
+    {
+        return $this->iid;
+    }
+
+    public function getResourceName(): string
+    {
+        return $this->getCategoryTitle();
     }
 }

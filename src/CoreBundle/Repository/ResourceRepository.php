@@ -301,6 +301,13 @@ class ResourceRepository extends BaseEntityRepository
         $this->addResourceNodeToCourse($node, $visibility, $course, $session, $group);
     }
 
+    public function addResourceToCourseWithParent(AbstractResource $resource, ResourceNode $parentNode, int $visibility, User $creator, Course $course, Session $session = null, CGroupInfo $group = null)
+    {
+        $node = $this->createNodeForResource($resource, $creator, $parentNode);
+
+        $this->addResourceNodeToCourse($node, $visibility, $course, $session, $group);
+    }
+
     /**
      * @param $visibility
      * @param $course

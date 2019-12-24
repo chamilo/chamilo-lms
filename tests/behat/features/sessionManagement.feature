@@ -60,15 +60,15 @@ Feature: Session management tool
     Given I am a platform administrator
     And I am on "/admin/settings/search_settings?keyword=show_session_description"
     And I select "yes" from "form_show_session_description"
-    And I press "Save"
+    And I press "Save settings"
     Then I am on "/main/index/user_portal.php"
     Then I should see "Temp Session"
     And I should not see "Description for Temp Session"
 
   Scenario: Check session description with platform setting on
     Given I am a platform administrator
-    And I am on "/main/admin/settings.php?search_field=show_session_description&category=search_setting"
-    And I check the "show_session_description" radio button with "true" value
+    And I am on "/admin/settings/search_settings?keyword=show_session_description"
+    And I select "yes" from "form_show_session_description"
     And I press "Save settings"
     Then I should see "Update successful"
     Then I am on "/main/index/user_portal.php"

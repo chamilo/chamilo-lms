@@ -7,7 +7,7 @@ Feature: Document tool
 
   Scenario: Create a folder
     Given I am on "/resources/document/files?cid=1&sid=0"
-    Then I press "New folder"
+    Then I follow "New folder"
     And I fill in the following:
       | c_document_title | My new directory |
     And I press "Save"
@@ -15,7 +15,7 @@ Feature: Document tool
 
   Scenario: Create a folder that already exists
     Given I am on "/resources/document/files?cid=1&sid=0"
-    Then I press "New folder"
+    Then I follow "New folder"
     And I fill in the following:
       | c_document_title | My new directory |
     And I press "Save"

@@ -44,7 +44,7 @@ Feature: Exercise tool
   Scenario: Add question "Multiple choice" to exercise created "Exercise 1"
     Given I am on "/main/exercise/exercise.php?cid=1"
     And I follow "Exercise 1"
-    And I follow "Add questions"
+    And I follow "Edit"
     And I follow "Multiple choice"
     When I fill in the following:
       | questionName | Multiple choice |

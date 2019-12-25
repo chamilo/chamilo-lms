@@ -6,7 +6,7 @@
         {{ form_start(form, { 'action': path('chamilo_core_account_edit'), 'attr': { 'class': 'edit' } }) }}
         {{ form_widget(form) }}
         <div>
-            <input class="btn btn-primary" type="submit" value="{{ 'Update profile'|trans }}" />
+            <input class="btn btn-primary" name="update_profile" type="submit" value="{{ 'Update profile'|trans }}" />
         </div>
         {{ form_end(form) }}
     {% endautoescape %}

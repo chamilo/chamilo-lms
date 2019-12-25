@@ -7,11 +7,13 @@ use Chamilo\CoreBundle\Repository\CourseRepository;
 use Chamilo\CourseBundle\Component\CourseCopy\CourseArchiver;
 use Chamilo\CourseBundle\Component\CourseCopy\CourseBuilder;
 use Chamilo\CourseBundle\Component\CourseCopy\CourseRestorer;
+use Chamilo\CourseBundle\Entity\CLink;
 use Chamilo\CourseBundle\Entity\CLp;
 use Chamilo\CourseBundle\Entity\CLpCategory;
 use Chamilo\CourseBundle\Entity\CLpItem;
 use Chamilo\CourseBundle\Entity\CLpItemView;
 use Chamilo\CourseBundle\Entity\CQuiz;
+use Chamilo\CourseBundle\Entity\CShortcut;
 use Chamilo\CourseBundle\Entity\CTool;
 use Chamilo\UserBundle\Entity\User;
 use ChamiloSession as Session;
@@ -1023,7 +1025,7 @@ class learnpath
                 WHERE c_id = $course_id AND lp_id = ".$this->lp_id;
         Database::query($sql);
 
-        self::toggle_publish($this->lp_id, 'i');
+        //self::toggle_publish($this->lp_id, 'i');
 
         if ($this->type == 2 || $this->type == 3) {
             // This is a scorm learning path, delete the files as well.
@@ -4271,9 +4273,32 @@ class learnpath
      *
      * @return bool
      */
-    public static function toggle_publish($lp_id, $set_visibility = 'v')
+    public static function toggle_publish($id, $setVisibility = 'v')
     {
-        return false;
+        $addShortcut = false;
+        if ($setVisibility == 'v') {
+            $addShortcut = true;
+        }
+        $repo = Container::getLpRepository();
+        /** @var CLp $lp */
+        $lp = $repo->find($id);
+        $repoShortcut = Container::getShortcutRepository();
+        if ($addShortcut) {
+            $shortcut = new CShortcut();
+            $shortcut->setName($lp->getName());
+            $shortcut->setShortCutNode($lp->getResourceNode());
+
+            $courseEntity = api_get_course_entity(api_get_course_int_id());
+            $repoShortcut->addResourceNode($shortcut, api_get_user_entity(api_get_user_id()), $courseEntity);
+            $repoShortcut->getEntityManager()->flush();
+        } else {
+            $shortcut = $repoShortcut->getShortcutFromResource($lp);
+            $repoShortcut->getEntityManager()->remove($shortcut);
+            $repoShortcut->getEntityManager()->flush();
+        }
+
+        return true;
+        /*
         $course_id = api_get_course_int_id();
         $tbl_lp = Database::get_course_table(TABLE_LP_MAIN);
         $lp_id = (int) $lp_id;
@@ -4353,7 +4378,7 @@ class learnpath
             }
         } else {
             return false;
-        }
+        }*/
     }
 
     /**
@@ -9986,7 +10011,6 @@ class learnpath
         $session_id = api_get_session_id();
         $userInfo = api_get_user_info();
 
-        $tbl_doc = Database::get_course_table(TABLE_DOCUMENT);
         $tbl_quiz = Database::get_course_table(TABLE_QUIZ_TEST);
         $condition_session = api_get_session_condition($session_id, true, true);
         $setting = api_get_setting('lp.show_invisible_exercise_in_lp_toc') === 'true';
@@ -10122,14 +10146,19 @@ class learnpath
      */
     public function get_links()
     {
+        $sessionId = api_get_session_id();
+        $repo = Container::getLinkRepository();
+
+        $course = api_get_course_entity();
+        $session = api_get_session_entity($sessionId);
+        $qb = $repo->getResourcesByCourse($course, $session);
+        /** @var CLink[] $links */
+        $links = $qb->getQuery()->getResult();
+
         $selfUrl = api_get_self();
         $courseIdReq = api_get_cidreq();
-        $course = api_get_course_info();
         $userInfo = api_get_user_info();
 
-        $course_id = $course['real_id'];
-        $tbl_link = Database::get_course_table(TABLE_LINK);
-        $linkCategoryTable = Database::get_course_table(TABLE_LINK_CATEGORY);
         $moveEverywhereIcon = Display::return_icon(
             'move_everywhere.png',
             get_lang('Move'),
@@ -10137,8 +10166,7 @@ class learnpath
             ICON_SIZE_TINY
         );
 
-        $session_id = api_get_session_id();
-        $condition_session = api_get_session_condition(
+        /*$condition_session = api_get_session_condition(
             $session_id,
             true,
             true,
@@ -10156,16 +10184,20 @@ class learnpath
                 ON (link.category_id = link_category.id AND link.c_id = link_category.c_id)
                 WHERE link.c_id = $course_id $condition_session
                 ORDER BY link_category.category_title ASC, link.title ASC";
-        $result = Database::query($sql);
+        $result = Database::query($sql);*/
         $categorizedLinks = [];
         $categories = [];
 
-        while ($link = Database::fetch_array($result)) {
-            if (!$link['category_id']) {
-                $link['category_title'] = get_lang('Uncategorized');
+        foreach ($links as $link) {
+            $categoryId = $link->getCategory() !== null ? $link->getCategory()->getIid() : 0;
+
+            if (empty($categoryId)) {
+                $categories[0] = get_lang('Uncategorized');
+            } else {
+                $category = $link->getCategory();
+                $categories[$categoryId] = $category->getCategoryTitle();
             }
-            $categories[$link['category_id']] = $link['category_title'];
-            $categorizedLinks[$link['category_id']][$link['link_id']] = $link;
+            $categorizedLinks[$categoryId][$link->getIid()] = $link;
         }
 
         $linksHtmlCode =
@@ -10191,17 +10223,18 @@ class learnpath
 
         foreach ($categorizedLinks as $categoryId => $links) {
             $linkNodes = null;
-            foreach ($links as $key => $linkInfo) {
-                $title = $linkInfo['link_title'];
-                $linkSessionId = $linkInfo['link_session_id'];
+            /** @var CLink $link */
+            foreach ($links as $key => $link) {
+                $title = $link->getTitle();
+                $linkSessionId = $link->getSessionId();
 
-                $link = Display::url(
+                $linkUrl = Display::url(
                     Display::return_icon('preview_view.png', get_lang('Preview')),
                     api_get_path(WEB_CODE_PATH).'link/link_goto.php?'.api_get_cidreq().'&link_id='.$key,
                     ['target' => '_blank']
                 );
 
-                if (api_get_item_visibility($course, TOOL_LINK, $key, $session_id) != 2) {
+                if ($link->isVisible($course, $session)) {
                     $sessionStar = api_get_session_image($linkSessionId, $userInfo['status']);
                     $linkNodes .=
                         '<li class="lp_resource_element" data_id="'.$key.'" data_type="'.TOOL_LINK.'" title="'.$title.'" >
@@ -10211,7 +10244,7 @@ class learnpath
                         '.Display::return_icon('links.png', '', [], ICON_SIZE_TINY).'
                         <a class="moved" href="'.$selfUrl.'?'.$courseIdReq.'&action=add_item&type='.
                         TOOL_LINK.'&file='.$key.'&lp_id='.$this->lp_id.'">'.
-                        Security::remove_XSS($title).$sessionStar.$link.
+                        Security::remove_XSS($title).$sessionStar.$linkUrl.
                         '</a>
                     </li>';
                 }
@@ -12436,7 +12469,6 @@ EOD;
 
         $course = api_get_course_entity();
         $session = api_get_session_entity($sessionId);
-
         $qb = $repo->getResourcesByCourse($course, $session);
 
         return $qb->getQuery()->getResult();

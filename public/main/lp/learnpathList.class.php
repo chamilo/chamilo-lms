@@ -1,4 +1,5 @@
 <?php
+
 /* For licensing terms, see /license.txt */
 
 use Chamilo\CoreBundle\Framework\Container;
@@ -107,11 +108,13 @@ class LearnpathList
         $isAllowToEdit = api_is_allowed_to_edit();
         $courseEntity = api_get_course_entity($course_id);
         $sessionEntity = api_get_session_entity($session_id);
-        /** @var CLp $row */
-        foreach ($learningPaths as $row) {
-            //$name = Database::escape_string($row->getName());
-            //$link = 'lp/lp_controller.php?action=view&lp_id='.$row->getId().'&id_session='.$session_id;
-            //$oldLink = 'newscorm/lp_controller.php?action=view&lp_id='.$row->getId().'&id_session='.$session_id;
+        $shortcutRepository = Container::getShortcutRepository();
+
+        /** @var CLp $lp */
+        foreach ($learningPaths as $lp) {
+            //$name = Database::escape_string($lp->getName());
+            //$link = 'lp/lp_controller.php?action=view&lp_id='.$lp->getId().'&id_session='.$session_id;
+            //$oldLink = 'newscorm/lp_controller.php?action=view&lp_id='.$lp->getId().'&id_session='.$session_id;
 
             /*$sql2 = "SELECT visibility FROM $tbl_tool
                      WHERE
@@ -125,25 +128,29 @@ class LearnpathList
                       ";
             $res2 = Database::query($sql2);*/
             $pub = 'i';
+            $shortcut = $shortcutRepository->getShortcutFromResource($lp);
+            if ($shortcut) {
+                $pub = 'v';
+            }
             /*if (Database::num_rows($res2) > 0) {
-                $row2 = Database::fetch_array($res2);
-                $pub = $row2['visibility'];
+                $lp2 = Database::fetch_array($res2);
+                $pub = $lp2['visibility'];
             }*/
 
             // Check if visible.
             /*$visibility = api_get_item_visibility(
                 $courseInfo,
                 'learnpath',
-                $row->getId(),
+                $lp->getId(),
                 $session_id
             );*/
-            $visibility = $row->isVisible($courseEntity, $sessionEntity);
+            $visibility = $lp->isVisible($courseEntity, $sessionEntity);
 
             // If option is not true then don't show invisible LP to user
             if ($ignoreLpVisibility === false) {
                 if ($showBlockedPrerequisite !== true && !$isAllowToEdit) {
                     $lpVisibility = learnpath::is_lp_visible_for_student(
-                        $row,
+                        $lp,
                         $user_id,
                         $courseInfo
                     );
@@ -153,38 +160,38 @@ class LearnpathList
                 }
             }
 
-            $this->list[$row->getIid()] = [
-                'lp_type' => $row->getLpType(),
-                'lp_session' => $row->getSessionId(),
-                'lp_name' => stripslashes($row->getName()),
-                'lp_desc' => stripslashes($row->getDescription()),
-                'lp_path' => $row->getPath(),
-                'lp_view_mode' => $row->getDefaultViewMod(),
-                'lp_force_commit' => $row->getForceCommit(),
-                'lp_maker' => stripslashes($row->getContentMaker()),
-                'lp_proximity' => $row->getContentLocal(),
+            $this->list[$lp->getIid()] = [
+                'lp_type' => $lp->getLpType(),
+                'lp_session' => $lp->getSessionId(),
+                'lp_name' => stripslashes($lp->getName()),
+                'lp_desc' => stripslashes($lp->getDescription()),
+                'lp_path' => $lp->getPath(),
+                'lp_view_mode' => $lp->getDefaultViewMod(),
+                'lp_force_commit' => $lp->getForceCommit(),
+                'lp_maker' => stripslashes($lp->getContentMaker()),
+                'lp_proximity' => $lp->getContentLocal(),
                 'lp_encoding' => api_get_system_encoding(),
                 'lp_visibility' => $visibility,
                 'lp_published' => $pub,
-                'lp_prevent_reinit' => $row->getPreventReinit(),
-                'seriousgame_mode' => $row->getSeriousgameMode(),
-                'lp_scorm_debug' => $row->getDebug(),
-                'lp_display_order' => $row->getDisplayOrder(),
-                'lp_preview_image' => stripslashes($row->getPreviewImage()),
-                'autolaunch' => $row->getAutolaunch(),
-                'session_id' => $row->getSessionId(),
-                'created_on' => $row->getCreatedOn() ? $row->getCreatedOn()->format('Y-m-d H:i:s') : null,
-                'modified_on' => $row->getModifiedOn() ? $row->getModifiedOn()->format('Y-m-d H:i:s') : null,
-                'publicated_on' => $row->getPublicatedOn() ? $row->getPublicatedOn()->format('Y-m-d H:i:s') : null,
-                'expired_on' => $row->getExpiredOn() ? $row->getExpiredOn()->format('Y-m-d H:i:s') : null,
-                //'category_id'       => $row['category_id'],
-                'subscribe_users' => $row->getSubscribeUsers(),
-                'lp_old_id' => $row->getId(),
-                'iid' => $row->getIid(),
-                'prerequisite' => $row->getPrerequisite(),
-                'entity' => $row,
+                'lp_prevent_reinit' => $lp->getPreventReinit(),
+                'seriousgame_mode' => $lp->getSeriousgameMode(),
+                'lp_scorm_debug' => $lp->getDebug(),
+                'lp_display_order' => $lp->getDisplayOrder(),
+                'lp_preview_image' => stripslashes($lp->getPreviewImage()),
+                'autolaunch' => $lp->getAutolaunch(),
+                'session_id' => $lp->getSessionId(),
+                'created_on' => $lp->getCreatedOn() ? $lp->getCreatedOn()->format('Y-m-d H:i:s') : null,
+                'modified_on' => $lp->getModifiedOn() ? $lp->getModifiedOn()->format('Y-m-d H:i:s') : null,
+                'publicated_on' => $lp->getPublicatedOn() ? $lp->getPublicatedOn()->format('Y-m-d H:i:s') : null,
+                'expired_on' => $lp->getExpiredOn() ? $lp->getExpiredOn()->format('Y-m-d H:i:s') : null,
+                //'category_id'       => $lp['category_id'],
+                'subscribe_users' => $lp->getSubscribeUsers(),
+                'lp_old_id' => $lp->getId(),
+                'iid' => $lp->getIid(),
+                'prerequisite' => $lp->getPrerequisite(),
+                'entity' => $lp,
             ];
-            $names[$row->getName()] = $row->getIid();
+            $names[$lp->getName()] = $lp->getIid();
         }
         asort($names);
         $this->alpha_list = $names;

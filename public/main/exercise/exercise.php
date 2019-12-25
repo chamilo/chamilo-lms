@@ -4,6 +4,7 @@
 use Chamilo\CoreBundle\Framework\Container;
 use Chamilo\CourseBundle\Entity\CExerciseCategory;
 use Chamilo\CourseBundle\Entity\CQuiz;
+use Chamilo\CourseBundle\Entity\CShortcut;
 
 /**
  * Exercise list: This script shows the list of exercises for administrators and students.
@@ -90,23 +91,23 @@ if ($is_allowedToEdit && !empty($action)) {
     switch ($action) {
         case 'add_shortcut':
             $repo = Container::getShortcutRepository();
-            $shortCut = new \Chamilo\CourseBundle\Entity\CShortcut();
-            $shortCut->setName($objExerciseTmp->get_formated_title());
-            $shortCut->setShortCutNode($exerciseEntity->getResourceNode());
+            $shortcut = new CShortcut();
+            $shortcut->setName($objExerciseTmp->get_formated_title());
+            $shortcut->setShortCutNode($exerciseEntity->getResourceNode());
 
             $courseEntity = api_get_course_entity(api_get_course_int_id());
-            $repo->addResourceNode($shortCut, api_get_user_entity(api_get_user_id()), $courseEntity);
+            $repo->addResourceNode($shortcut, api_get_user_entity(api_get_user_id()), $courseEntity);
             $repo->getEntityManager()->flush();
 
             Display::addFlash(Display::return_message(get_lang('Updated')));
             break;
         case 'remove_shortcut':
             $repo = Container::getShortcutRepository();
-            $shortCut = $repo->getShortcutFromResource($exerciseEntity);
+            $shortcut = $repo->getShortcutFromResource($exerciseEntity);
             $courseEntity = api_get_course_entity(api_get_course_int_id());
-            if (null !== $shortCut) {
-                $repo->addResourceNode($shortCut, api_get_user_entity(api_get_user_id()), $courseEntity);
-                $repo->getEntityManager()->remove($shortCut);
+            if (null !== $shortcut) {
+                $repo->addResourceNode($shortcut, api_get_user_entity(api_get_user_id()), $courseEntity);
+                $repo->getEntityManager()->remove($shortcut);
                 $repo->getEntityManager()->flush();
             }
 

@@ -1,9 +1,8 @@
 <?php
+
 /* See license terms in /license.txt */
 
 require_once __DIR__.'/../inc/global.inc.php';
-
-$this_section = SECTION_COURSES;
 
 api_protect_course_script(true, false, true);
 
@@ -77,7 +76,7 @@ if (!empty($question_list)) {
         );
 
         $data[$question_id]['name'] = cut($questionObj->question, 100);
-        $data[$question_id]['type'] = $questionObj->get_question_type_name();
+        $data[$question_id]['type'] = $questionObj->getExplanation();
         $percentage = 0;
         if ($count_students) {
             $percentage = $count_users / $count_students * 100;

@@ -248,7 +248,7 @@ class CourseResolver implements ContainerAwareInterface
 
         $threadRepo = $this->em->getRepository('ChamiloCourseBundle:CForumThread');
 
-        return $threadRepo->findAllInCourseByForum(false, $forum, $course, $session);
+        return $threadRepo->getResourcesByCourse($course, $session, null, $forum->getResourceNode());
     }
 
     /**
@@ -264,9 +264,13 @@ class CourseResolver implements ContainerAwareInterface
         $session = $context->offsetGet('session');
 
         $threadRepo = $this->em->getRepository('ChamiloCourseBundle:CForumThread');
-        $thread = $threadRepo->findOneInCourse($id, $course, $session);
+        $thread = $threadRepo->find($id);
 
         if (empty($thread)) {
+            throw new UserError($this->translator->trans('Forum thread not found in this course.'));
+        }
+
+        if ($thread->getCId() !== $course->getId()) {
             throw new UserError($this->translator->trans('Forum thread not found in this course.'));
         }
 

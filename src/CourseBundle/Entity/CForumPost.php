@@ -6,6 +6,7 @@ namespace Chamilo\CourseBundle\Entity;
 
 use Chamilo\CoreBundle\Entity\Resource\AbstractResource;
 use Chamilo\CoreBundle\Entity\Resource\ResourceInterface;
+use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -132,7 +133,7 @@ class CForumPost extends AbstractResource implements ResourceInterface
     protected $status;
 
     /**
-     * @var CForumAttachment[]
+     * @var ArrayCollection|CForumAttachment[]
      *
      * @ORM\OneToMany(targetEntity="Chamilo\CourseBundle\Entity\CForumAttachment", mappedBy="post")
      */

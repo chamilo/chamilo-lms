@@ -243,9 +243,6 @@ class CForumAttachment extends AbstractResource implements ResourceInterface
         return $this->cId;
     }
 
-    /**
-     * @return CForumPost
-     */
     public function getPost(): CForumPost
     {
         return $this->post;

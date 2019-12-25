@@ -23,6 +23,9 @@ $ltiMessageHint = empty($_REQUEST['lti_message_hint']) ? '' : trim($_REQUEST['lt
 
 $em = Database::getManager();
 
+$webPath = api_get_path(WEB_PATH);
+$webPluginPath = api_get_path(WEB_PLUGIN_PATH);
+
 try {
     if (empty($scope) || empty($responseType) || empty($clientId) || empty($redirectUri) || empty($loginHint) ||
         empty($nonce)
@@ -137,7 +140,7 @@ try {
         'name' => api_get_setting('siteName'),
         'family_code' => 'Chamilo LMS',
         'version' => api_get_version(),
-        'url' => api_get_path(WEB_PATH),
+        'url' => $webPath,
     ];
 
     // Launch info
@@ -170,7 +173,7 @@ try {
             'title' => $tool->getName(),
             'text' => $tool->getDescription(),
             'data' => "tool:{$tool->getId()}",
-            'deep_link_return_url' => api_get_path(WEB_PLUGIN_PATH).'ims_lti/item_return2.php',
+            'deep_link_return_url' => $webPluginPath.'ims_lti/item_return2.php',
         ];
         $jwtContent['https://purl.imsglobal.org/spec/lti/claim/target_link_uri'] = $tool->getRedirectUrl();
     } else {
@@ -192,13 +195,34 @@ try {
             //    'lis_result_sourcedid' => json_encode(
             //        ['e' => $toolEval->getId(), 'u' => $user->getId(), 'l' => uniqid(), 'lt' => time()]
             //    ),
-            //    'lis_outcome_service_url' => api_get_path(WEB_PATH).'lti/os',
+            //    'lis_outcome_service_url' => $webPath.'lti/os',
             //];
 
             $jwtContent['https://purl.imsglobal.org/spec/lti/claim/lis'] = [
                 'person_sourcedid' => ImsLti::getPersonSourcedId($platformDomain, $user),
                 'course_section_sourcedid' => ImsLti::getCourseSectionSourcedId($platformDomain, $course, $session),
             ];
+        }
+
+        $advServices = $tool->getAdvantageServices();
+
+        if (!empty($advServices)) {
+            if (!empty($advServices['ags'])) {
+                $agsClaim = [
+                    'scope' => [
+                        'https://purl.imsglobal.org/spec/lti-ags/scope/lineitem',
+                        'https://purl.imsglobal.org/spec/lti-ags/scope/result.readonly',
+                        'https://purl.imsglobal.org/spec/lti-ags/scope/score',
+                    ],
+                    'lineitems' => $webPluginPath."ims_lti/gradebook/service/lineitems.php?c=".$tool->getId(),
+                ];
+
+                if (LtiAssignmentGradesService::AGS_FULL === $advServices['ags']) {
+                    $agsClaim['lineitem'] = $webPluginPath."ims_lti/gradebook/service/lineitem.php?c=".$tool->getId();
+                }
+
+                $jwtContent['https://purl.imsglobal.org/spec/lti-ags/claim/endpoint'] = $agsClaim;
+            }
         }
     }
 

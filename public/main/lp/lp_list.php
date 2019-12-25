@@ -12,7 +12,6 @@ use ChamiloSession as Session;
  *
  * @author  Yannick Warnier <ywarnier@beeznest.org>
  */
-$this_section = SECTION_COURSES;
 //@todo who turns on $lp_controller_touched?
 if (empty($lp_controller_touched) || $lp_controller_touched != 1) {
     header('Location: lp_controller.php?action=list&'.api_get_cidreq());
@@ -22,9 +21,6 @@ if (empty($lp_controller_touched) || $lp_controller_touched != 1) {
 require_once __DIR__.'/../inc/global.inc.php';
 
 api_protect_course_script();
-
-$courseDir = api_get_course_path().'/scorm';
-$baseWordDir = $courseDir;
 
 /**
  * Display initialisation and security checks.
@@ -51,6 +47,8 @@ $courseId = api_get_course_int_id();
 $sessionId = api_get_session_id();
 $is_allowed_to_edit = api_is_allowed_to_edit(null, true);
 $courseInfo = api_get_course_info();
+$courseEntity = api_get_course_entity($courseId);
+$sessionEntity = api_get_session_entity($sessionId);
 
 $subscriptionSettings = learnpath::getSubscriptionSettings();
 
@@ -189,25 +187,29 @@ $enableAutoLaunch = api_get_course_setting('enable_lp_auto_launch');
 $gameMode = api_get_setting('gamification_mode');
 
 $data = [];
-/** @var CLpCategory $item */
-foreach ($categories as $item) {
-    $categoryId = $item->getId();
+/** @var CLpCategory $category */
+foreach ($categories as $category) {
+    $categoryId = $category->getId();
+    $visibility = true;
+    if ($categoryId !== 0) {
+        $visibility = $category->isVisible($courseEntity, $sessionEntity);
+    }
     if ($categoryId !== 0 && $subscriptionSettings['allow_add_users_to_lp_category'] == true) {
         // "Without category" has id = 0
-        $categoryVisibility = api_get_item_visibility(
+        /*$categoryVisibility = api_get_item_visibility(
             $courseInfo,
             TOOL_LEARNPATH_CATEGORY,
             $categoryId,
             $sessionId
-        );
+        );*/
 
         if (!$is_allowed_to_edit) {
-            if ($categoryVisibility !== 1 && $categoryVisibility != -1) {
+            if (!$visibility) {
                 continue;
             }
         }
 
-        if ($user && !learnpath::categoryIsVisibleForStudent($item, $user)) {
+        if ($user && !learnpath::categoryIsVisibleForStudent($category, $user)) {
             continue;
         }
     }
@@ -910,15 +912,10 @@ foreach ($categories as $item) {
     }
 
     $data[] = [
-        'category' => $item,
-        'category_visibility' => api_get_item_visibility(
-            $courseInfo,
-            TOOL_LEARNPATH_CATEGORY,
-            $item->getId(),
-            $sessionId
-        ),
+        'category' => $category,
+        'category_visibility' => $visibility,
         'category_is_published' => learnpath::categoryIsPublished(
-            $item,
+            $category,
             $courseInfo['real_id']
         ),
         'lp_list' => $listData,

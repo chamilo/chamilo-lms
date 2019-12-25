@@ -4276,7 +4276,7 @@ class learnpath
     public static function toggle_publish($id, $setVisibility = 'v')
     {
         $addShortcut = false;
-        if ($setVisibility == 'v') {
+        if ($setVisibility === 'v') {
             $addShortcut = true;
         }
         $repo = Container::getLpRepository();
@@ -4293,8 +4293,10 @@ class learnpath
             $repoShortcut->getEntityManager()->flush();
         } else {
             $shortcut = $repoShortcut->getShortcutFromResource($lp);
-            $repoShortcut->getEntityManager()->remove($shortcut);
-            $repoShortcut->getEntityManager()->flush();
+            if (null !== $shortcut) {
+                $repoShortcut->getEntityManager()->remove($shortcut);
+                $repoShortcut->getEntityManager()->flush();
+            }
         }
 
         return true;

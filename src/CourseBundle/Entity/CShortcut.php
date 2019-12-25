@@ -35,9 +35,9 @@ class CShortcut extends AbstractResource implements ResourceInterface
 
     /**
      * @ORM\OneToOne(
-     *     targetEntity="Chamilo\CoreBundle\Entity\Resource\ResourceNode", mappedBy="resource", cascade={"remove"}, orphanRemoval=true
+     *     targetEntity="Chamilo\CoreBundle\Entity\Resource\ResourceNode", mappedBy="resource"
      * )
-     * @ORM\JoinColumn(name="shortcut_node_id", referencedColumnName="id", onDelete="CASCADE")
+     * @ORM\JoinColumn(name="shortcut_node_id", referencedColumnName="id")
      */
     public $shortCutNode;
 

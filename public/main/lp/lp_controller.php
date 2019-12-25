@@ -48,6 +48,7 @@ $(window).on("load", function () {
 });
 </script>';
 $ajax_url = api_get_path(WEB_AJAX_PATH).'lp.ajax.php?'.api_get_cidreq();
+$listUrl = api_get_self().'?action=list&'.api_get_cidreq();
 $htmlHeadXtra[] = '
 <script>
     /*
@@ -554,8 +555,7 @@ switch ($action) {
             );
         }
         Display::addFlash(Display::return_message(get_lang('Message Sent')));
-        $url = api_get_self().'?action=list&'.api_get_cidreq();
-        header('Location: '.$url);
+        header('Location: '.$listUrl);
         exit;
         break;
     case 'add_item':
@@ -1081,21 +1081,23 @@ switch ($action) {
 
         learnpath::toggleCategoryVisibility($_REQUEST['id'], $_REQUEST['new_status']);
         Display::addFlash(Display::return_message(get_lang('Update successful')));
-        header('Location: '.api_get_self().'?'.api_get_cidreq());
+        header('Location: '.$listUrl);
         exit;
+
+        break;
     case 'toggle_visible':
         // Change lp visibility (inside lp tool).
         if (!$is_allowed_to_edit) {
             api_not_allowed(true);
         }
 
-        if (!$lp_found) {
-            require 'lp_list.php';
-        } else {
+        if ($lp_found) {
             learnpath::toggle_visibility($_REQUEST['lp_id'], $_REQUEST['new_status']);
             Display::addFlash(Display::return_message(get_lang('Update successful')));
-            require 'lp_list.php';
         }
+        header('Location: '.$listUrl);
+        exit;
+
         break;
     case 'toggle_category_publish':
         if (!$is_allowed_to_edit) {
@@ -1104,46 +1106,48 @@ switch ($action) {
 
         learnpath::toggleCategoryPublish($_REQUEST['id'], $_REQUEST['new_status']);
         Display::addFlash(Display::return_message(get_lang('Update successful')));
-        require 'lp_list.php';
+        header('Location: '.$listUrl);
+        exit;
+
         break;
     case 'toggle_publish':
         // Change lp published status (visibility on homepage).
         if (!$is_allowed_to_edit) {
             api_not_allowed(true);
         }
-        if (!$lp_found) {
-            require 'lp_list.php';
-        } else {
+        if ($lp_found) {
             learnpath::toggle_publish($_REQUEST['lp_id'], $_REQUEST['new_status']);
             Display::addFlash(Display::return_message(get_lang('Update successful')));
-            require 'lp_list.php';
         }
+        header('Location: '.$listUrl);
+        exit;
+
         break;
     case 'move_lp_up':
         // Change lp published status (visibility on homepage)
         if (!$is_allowed_to_edit) {
             api_not_allowed(true);
         }
-        if (!$lp_found) {
-            require 'lp_list.php';
-        } else {
+        if ($lp_found) {
             learnpath::move_up($_REQUEST['lp_id'], $_REQUEST['category_id']);
             Display::addFlash(Display::return_message(get_lang('Update successful')));
-            require 'lp_list.php';
         }
+        header('Location: '.$listUrl);
+        exit;
+
         break;
     case 'move_lp_down':
         // Change lp published status (visibility on homepage)
         if (!$is_allowed_to_edit) {
             api_not_allowed(true);
         }
-        if (!$lp_found) {
-            require 'lp_list.php';
-        } else {
+        if ($lp_found) {
             learnpath::move_down($_REQUEST['lp_id'], $_REQUEST['category_id']);
             Display::addFlash(Display::return_message(get_lang('Update successful')));
-            require 'lp_list.php';
         }
+        header('Location: '.$listUrl);
+        exit;
+
         break;
     case 'edit':
         if (!$is_allowed_to_edit) {

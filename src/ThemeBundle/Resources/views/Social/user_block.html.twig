@@ -2,17 +2,13 @@
 
 {% autoescape false %}
 <div class="profile">
-
-
     {{ social_avatar_block }}
-
-
     <div class="btn-toolbar justify-content-center">
         {% if group is empty %}
             <a href="{{ _p.web }}main/messages/new_message.php" title="{{ "Message" | trans }}" class="btn btn-primary btn-sm">
                 <i class="fas fa-envelope"></i>
             </a>
-            <a href="{{ vcard_user_link }}" title="{{ "BusinessCard" | trans }}" class="btn btn-success btn-sm">
+            <a href="{{ vcard_user_link }}" title="{{ "Business card" | trans }}" class="btn btn-success btn-sm">
                 <i class="fas fa-address-card"></i>
             </a>
             {% if is_granted('ROLE_ADMIN') %}
@@ -31,9 +27,6 @@
     <div class="group-info">
         {{ group.description }}
     </div>
-
-
-
     <ul class="list-user-data">
         {% if show_full_profile %}
             {% set skype_account = '' %}
@@ -59,7 +52,7 @@
             {% if 'allow_show_linkedin_url'|api_get_setting == 'true' and not linkedin_url is empty %}
                 <li class="item">
                     <a href="{{ linkedin_url }}" target="_blank">
-                        <span class="fa fa-linkedin fa-fw" aria-hidden="true"></span> {{ 'LinkedIn'|trans }}
+                        <span class="fa fa-linkedin fa-fw" aria-hidden="true"></span> {{ 'LinkedIn profile URL'|trans }}
                     </a>
                 </li>
             {% endif %}

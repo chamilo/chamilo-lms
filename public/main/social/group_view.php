@@ -1,8 +1,8 @@
 <?php
+
 /* For licensing terms, see /license.txt */
+
 /**
- * @package chamilo.social
- *
  * @author Julio Montoya <gugli100@gmail.com>
  */
 $cidReset = true;
@@ -102,7 +102,7 @@ if (isset($_GET['view']) && in_array($_GET['view'], $allowed_views)) {
 }
 
 // getting group information
-$group_id = isset($_GET['id']) ? intval($_GET['id']) : null;
+$group_id = isset($_GET['id']) ? (int) $_GET['id'] : null;
 $relation_group_title = '';
 $role = 0;
 
@@ -159,7 +159,7 @@ $groupInfo['name'] = Security::remove_XSS($groupInfo['name']);
 $groupInfo['description'] = Security::remove_XSS($groupInfo['description']);
 
 //Loading group information
-if (isset($_GET['status']) && $_GET['status'] == 'sent') {
+if (isset($_GET['status']) && $_GET['status'] === 'sent') {
     $social_right_content .= Display::return_message(get_lang('Your message has been sent.'), 'confirmation', false);
 }
 

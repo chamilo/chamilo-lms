@@ -10,7 +10,7 @@ use ChamiloSession as Session;
 class GlobalMultipleAnswer extends Question
 {
     public $typePicture = 'mcmagl.png';
-    public $explanationLangVar = 'Combination true/false/don\'t-know';
+    public $explanationLangVar = 'Global multiple answer';
 
     /**
      * GlobalMultipleAnswer constructor.

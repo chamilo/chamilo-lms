@@ -27,6 +27,7 @@ Feature: Document tool
     Then I fill in the following:
       | c_document_title   | My first document |
     And I fill in ckeditor field "c_document_content" with "This is my first document!!!"
+    And wait for the page to be loaded
     And I press "c_document_save"
     Then I should see "Saved"
     And I should see "My first document.html"

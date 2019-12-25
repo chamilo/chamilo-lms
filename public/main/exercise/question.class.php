@@ -15,8 +15,6 @@ use Chamilo\CourseBundle\Entity\CQuizQuestion;
  * @author Patrick Cool, LaTeX support
  * @author Julio Montoya <gugli100@gmail.com> lot of bug fixes
  * @author hubert.borderiou@grenet.fr - add question categories
- *
- * @package chamilo.exercise
  */
 abstract class Question
 {
@@ -116,7 +114,7 @@ abstract class Question
     {
         $isContent = null;
         if (isset($_REQUEST['isContent'])) {
-            $isContent = intval($_REQUEST['isContent']);
+            $isContent = (int) $_REQUEST['isContent'];
         }
 
         return $this->isContent = $isContent;
@@ -141,7 +139,7 @@ abstract class Question
         }
         $course_id = $course_info['real_id'];
 
-        if (empty($course_id) || $course_id == -1) {
+        if (empty($course_id) || -1 == $course_id) {
             return false;
         }
 
@@ -560,7 +558,7 @@ abstract class Question
                 $this->iid
             );
             $this->saveCategory($categoryId);
-            if (api_get_setting('search_enabled') === 'true') {
+            if ('true' === api_get_setting('search_enabled')) {
                 $this->search_engine_edit($exerciseId);
             }
         } else {
@@ -624,7 +622,7 @@ abstract class Question
                 }
 
                 // If hotspot, create first answer
-                if ($type == HOT_SPOT || $type == HOT_SPOT_ORDER) {
+                if (HOT_SPOT == $type || HOT_SPOT_ORDER == $type) {
                     $quizAnswer = new CQuizAnswer();
                     $quizAnswer
                         ->setCId($c_id)
@@ -650,7 +648,7 @@ abstract class Question
                     }
                 }
 
-                if ($type == HOT_SPOT_DELINEATION) {
+                if (HOT_SPOT_DELINEATION == $type) {
                     $quizAnswer = new CQuizAnswer();
                     $quizAnswer
                         ->setCId($c_id)
@@ -676,7 +674,7 @@ abstract class Question
                     }
                 }
 
-                if (api_get_setting('search_enabled') === 'true') {
+                if ('true' === api_get_setting('search_enabled')) {
                     $this->search_engine_edit($exerciseId, true);
                 }
             }
@@ -700,7 +698,7 @@ abstract class Question
         $rmQs = false
     ) {
         // update search engine and its values table if enabled
-        if (!empty($exerciseId) && api_get_setting('search_enabled') == 'true' &&
+        if (!empty($exerciseId) && 'true' == api_get_setting('search_enabled') &&
             extension_loaded('xapian')
         ) {
             $course_id = api_get_course_id();
@@ -732,14 +730,14 @@ abstract class Question
                 // retrieve others exercise ids
                 $se_ref = Database::fetch_array($res);
                 $se_doc = $di->get_document((int) $se_ref['search_did']);
-                if ($se_doc !== false) {
-                    if (($se_doc_data = $di->get_document_data($se_doc)) !== false) {
+                if (false !== $se_doc) {
+                    if (false !== ($se_doc_data = $di->get_document_data($se_doc))) {
                         $se_doc_data = UnserializeApi::unserialize(
                             'not_allowed_classes',
                             $se_doc_data
                         );
                         if (isset($se_doc_data[SE_DATA]['type']) &&
-                            $se_doc_data[SE_DATA]['type'] == SE_DOCTYPE_EXERCISE_QUESTION
+                            SE_DOCTYPE_EXERCISE_QUESTION == $se_doc_data[SE_DATA]['type']
                         ) {
                             if (isset($se_doc_data[SE_DATA]['exercise_ids']) &&
                                 is_array($se_doc_data[SE_DATA]['exercise_ids'])
@@ -754,7 +752,7 @@ abstract class Question
                     }
                 }
                 if ($rmQs) {
-                    while (($key = array_search($exerciseId, $question_exercises)) !== false) {
+                    while (false !== ($key = array_search($exerciseId, $question_exercises))) {
                         unset($question_exercises[$key]);
                     }
                 }
@@ -859,7 +857,7 @@ abstract class Question
             $newExercise = new Exercise($courseId);
             $newExercise->read($exerciseId, false);
             $count = $newExercise->getQuestionCount();
-            $count++;
+            ++$count;
             $sql = "INSERT INTO $exerciseRelQuestionTable (c_id, question_id, exercice_id, question_order)
                     VALUES ({$this->course['real_id']}, ".$id.", ".$exerciseId.", '$count')";
             Database::query($sql);
@@ -892,7 +890,7 @@ abstract class Question
         $courseId = empty($courseId) ? api_get_course_int_id() : (int) $courseId;
 
         // exercise not found
-        if ($pos === false) {
+        if (false === $pos) {
             return false;
         } else {
             // deletes the position in the array containing the wanted exercise ID
@@ -1016,7 +1014,7 @@ abstract class Question
         } else {
             // just removes the exercise from the list
             $this->removeFromList($deleteFromEx, $courseId);
-            if (api_get_setting('search_enabled') == 'true' && extension_loaded('xapian')) {
+            if ('true' == api_get_setting('search_enabled') && extension_loaded('xapian')) {
                 // disassociate question with this exercise
                 $this->search_engine_edit($deleteFromEx, false, true);
             }
@@ -1142,7 +1140,7 @@ abstract class Question
      */
     public static function get_question_type($type)
     {
-        if ($type == ORAL_EXPRESSION && api_get_setting('enable_record_audio') !== 'true') {
+        if (ORAL_EXPRESSION == $type && 'true' !== api_get_setting('enable_record_audio')) {
             return null;
         }
 
@@ -1154,11 +1152,11 @@ abstract class Question
      */
     public static function getQuestionTypeList()
     {
-        if (api_get_setting('enable_record_audio') !== 'true') {
+        if ('true' !== api_get_setting('enable_record_audio')) {
             self::$questionTypes[ORAL_EXPRESSION] = null;
             unset(self::$questionTypes[ORAL_EXPRESSION]);
         }
-        if (api_get_setting('enable_quiz_scenario') !== 'true') {
+        if ('true' !== api_get_setting('enable_quiz_scenario')) {
             self::$questionTypes[HOT_SPOT_DELINEATION] = null;
             unset(self::$questionTypes[HOT_SPOT_DELINEATION]);
         }
@@ -1246,7 +1244,7 @@ abstract class Question
             $editorConfig
         );
 
-        if ($this->type != MEDIA_QUESTION) {
+        if (MEDIA_QUESTION != $this->type) {
             // Advanced parameters
             $select_level = self::get_default_levels();
             $form->addElement(
@@ -1382,7 +1380,7 @@ abstract class Question
         $this->setFeedback($form->getSubmitValue('feedback'));
 
         //Save normal question if NOT media
-        if ($this->type != MEDIA_QUESTION) {
+        if (MEDIA_QUESTION != $this->type) {
             $this->save($exercise);
             // modify the exercise
             $exercise->addToList($this->id);
@@ -1454,8 +1452,8 @@ abstract class Question
             $icon = '<a href="admin.php?'.api_get_cidreq().'&newQuestion=yes&answerType='.$i.'&id='.$exerciseId.'">'.
                 Display::return_icon($img, $explanation, null, ICON_SIZE_BIG).'</a>';
 
-            if ($objExercise->force_edit_exercise_in_lp === false) {
-                if ($objExercise->exercise_was_added_in_lp == true) {
+            if (false === $objExercise->force_edit_exercise_in_lp) {
+                if (true == $objExercise->exercise_was_added_in_lp) {
                     $img = pathinfo($img);
                     $img = $img['filename'].'_na.'.$img['extension'];
                     $icon = Display::return_icon($img, $explanation, null, ICON_SIZE_BIG);
@@ -1468,7 +1466,7 @@ abstract class Question
 
         echo '<li>';
         echo '<div class="icon_image_content">';
-        if ($objExercise->exercise_was_added_in_lp == true) {
+        if (true == $objExercise->exercise_was_added_in_lp) {
             echo Display::return_icon(
                 'database_na.png',
                 get_lang('Recycle existing questions'),
@@ -1609,7 +1607,7 @@ abstract class Question
         }
 
         $class = 'error';
-        if (isset($score['pass']) && $score['pass'] == true) {
+        if (isset($score['pass']) && true == $score['pass']) {
             $scoreLabel = get_lang('Correct');
 
             if (in_array($exercise->results_disabled, [
@@ -1627,7 +1625,7 @@ abstract class Question
             case ORAL_EXPRESSION:
             case ANNOTATION:
                 $score['revised'] = isset($score['revised']) ? $score['revised'] : false;
-                if ($score['revised'] == true) {
+                if (true == $score['revised']) {
                     $scoreLabel = get_lang('Revised');
                     $class = '';
                 } else {
@@ -1643,7 +1641,7 @@ abstract class Question
                     }
 
                     $hide = api_get_configuration_value('hide_free_question_score');
-                    if ($hide === true) {
+                    if (true === $hide) {
                         $score['result'] = '-';
                     }
                 }
@@ -1655,7 +1653,7 @@ abstract class Question
                 ])
                 ) {
                     if (isset($score['user_answered'])) {
-                        if ($score['user_answered'] === false) {
+                        if (false === $score['user_answered']) {
                             $scoreLabel = get_lang('Unanswered');
                             $class = 'info';
                         }
@@ -1681,7 +1679,7 @@ abstract class Question
         $header .= Display::page_subheader2($counterLabel.'. '.$this->question);
 
         // dont display score for certainty degree questions
-        if ($this->type != MULTIPLE_ANSWER_TRUE_FALSE_DEGREE_CERTAINTY) {
+        if (MULTIPLE_ANSWER_TRUE_FALSE_DEGREE_CERTAINTY != $this->type) {
             if (isset($score['result'])) {
                 if (in_array($exercise->results_disabled, [
                     RESULT_DISABLE_SHOW_ONLY_IN_CORRECT_ANSWER,
@@ -1694,14 +1692,14 @@ abstract class Question
             }
         }
 
-        if ($this->type != READING_COMPREHENSION) {
+        if (READING_COMPREHENSION != $this->type) {
             // Do not show the description (the text to read) if the question is of type READING_COMPREHENSION
             $header .= Display::div(
                 $this->description,
                 ['class' => 'question_description']
             );
         } else {
-            if ($score['pass'] == true) {
+            if (true == $score['pass']) {
                 $message = Display::div(
                     sprintf(
                         get_lang('Congratulations, you have reached and correctly understood, at a speed of %s words per minute, a text of a total %s words.'),
@@ -1721,7 +1719,7 @@ abstract class Question
             $header .= $message.'<br />';
         }
 
-        if (isset($score['pass']) && $score['pass'] === false) {
+        if (isset($score['pass']) && false === $score['pass']) {
             if ($this->showFeedback($exercise)) {
                 $header .= $this->returnFormatFeedback();
             }
@@ -1927,7 +1925,7 @@ abstract class Question
     public function show_media_content()
     {
         $html = '';
-        if ($this->parent_id != 0) {
+        if (0 != $this->parent_id) {
             $parent_question = self::read($this->parent_id);
             $html = $parent_question->show_media_content();
         } else {
@@ -2001,7 +1999,7 @@ abstract class Question
     {
         return
             in_array($this->type, $this->questionTypeWithFeedback) &&
-            $exercise->getFeedbackType() != EXERCISE_FEEDBACK_TYPE_EXAM;
+            EXERCISE_FEEDBACK_TYPE_EXAM != $exercise->getFeedbackType();
     }
 
     /**

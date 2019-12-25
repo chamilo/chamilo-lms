@@ -70,7 +70,12 @@ abstract class AbstractResource
 
     public function isVisible(Course $course, Session $session = null): bool
     {
-        return ResourceLink::VISIBILITY_PUBLISHED === $this->getCourseSessionResourceLink($course, $session);
+        $link = $this->getCourseSessionResourceLink($course, $session);
+        if (null === $link) {
+            return false;
+        }
+
+        return ResourceLink::VISIBILITY_PUBLISHED === $link->getVisibility();
     }
 
     public function getFirstResourceLinkFromCourseSession(Course $course, Session $session = null): ?ResourceLink

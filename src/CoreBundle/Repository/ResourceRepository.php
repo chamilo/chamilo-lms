@@ -413,7 +413,7 @@ class ResourceRepository extends BaseEntityRepository
             }
         });
 
-        if ($exists === false) {
+        if (false === $exists) {
             $resourceLink = new ResourceLink();
             $resourceLink
                 ->setResourceNode($resourceNode)
@@ -441,7 +441,6 @@ class ResourceRepository extends BaseEntityRepository
 
         return $resourceLink;
     }*/
-
 
     /**
      * @return ResourceLink

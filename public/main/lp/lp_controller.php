@@ -1410,41 +1410,46 @@ switch ($action) {
         require 'lp_view.php';
         break;
     case 'switch_view_mode':
-        if (!$lp_found) {
-            require 'lp_list.php';
+        if ($lp_found) {
+            if (Security::check_token('get')) {
+                Session::write('refresh', 1);
+                $_SESSION['oLP']->update_default_view_mode();
+            }
         }
-        if (Security::check_token('get')) {
-            Session::write('refresh', 1);
-            $_SESSION['oLP']->update_default_view_mode();
-        }
-        require 'lp_list.php';
+
+        header('Location: '.$listUrl);
+        exit;
+
         break;
     case 'switch_force_commit':
-        if (!$lp_found) {
-            require 'lp_list.php';
+        if ($lp_found) {
+            Session::write('refresh', 1);
+            $_SESSION['oLP']->update_default_scorm_commit();
+            Display::addFlash(Display::return_message(get_lang('Updated')));
         }
-        Session::write('refresh', 1);
-        $_SESSION['oLP']->update_default_scorm_commit();
-        require 'lp_list.php';
+        header('Location: '.$listUrl);
+        exit;
+
         break;
     case 'switch_attempt_mode':
-        if (!$lp_found) {
-            require 'lp_list.php';
+        if ($lp_found) {
+            Session::write('refresh', 1);
+            $_SESSION['oLP']->switch_attempt_mode();
+            Display::addFlash(Display::return_message(get_lang('Updated')));
         }
-        Session::write('refresh', 1);
-        $_SESSION['oLP']->switch_attempt_mode();
-        require 'lp_list.php';
+        header('Location: '.$listUrl);
+        exit;
+
         break;
     case 'switch_scorm_debug':
-        if (!$lp_found) {
-            require 'lp_list.php';
+        if ($lp_found) {
+            Session::write('refresh', 1);
+            $_SESSION['oLP']->update_scorm_debug();
+            Display::addFlash(Display::return_message(get_lang('Updated')));
         }
-        Session::write('refresh', 1);
-        $_SESSION['oLP']->update_scorm_debug();
-        require 'lp_list.php';
-        break;
-    case 'intro_cmdAdd':
-        // Add introduction section page.
+        header('Location: '.$listUrl);
+        exit;
+
         break;
     case 'return_to_course_homepage':
         if (!$lp_found) {

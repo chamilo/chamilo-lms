@@ -1,4 +1,5 @@
 <?php
+
 /* For licensing terms, see /license.txt */
 
 use Chamilo\CourseBundle\Entity\CLpCategory;
@@ -9,15 +10,12 @@ use ChamiloSession as Session;
  * the direct file view is not needed anymore, if the user uploads a scorm zip file, a directory
  * will be automatically created for it, and the files will be uncompressed there for example ;.
  *
- * @package chamilo.learnpath
- *
  * @author Yannick Warnier <ywarnier@beeznest.org> - redesign
  * @author Denes Nagy, principal author
  * @author Isthvan Mandak, several new features
  * @author Roan Embrechts, code improvements and refactoring
  */
 $use_anonymous = true;
-$this_section = SECTION_COURSES;
 
 if ($lp_controller_touched != 1) {
     header('Location: lp_controller.php?action=view&item_id='.intval($_REQUEST['item_id']));
@@ -38,6 +36,8 @@ $sessionId = api_get_session_id();
 $course_code = api_get_course_id();
 $course_id = api_get_course_int_id();
 $user_id = api_get_user_id();
+$courseEntity = api_get_course_entity($course_id);
+$sessionEntity = api_get_session_entity($sessionId);
 
 /** @var learnpath $lp */
 $lp = Session::read('oLP');
@@ -56,16 +56,9 @@ if (!api_is_platform_admin()) {
 }
 
 // Checking visibility (eye icon)
-$visibility = api_get_item_visibility(
-    api_get_course_info(),
-    TOOL_LEARNPATH,
-    $lp_id,
-    $action,
-    api_get_user_id(),
-    $sessionId
-);
+$visibility = $lp->getEntity()->isVisible($courseEntity, $sessionEntity);
 
-if ($visibility === 0 &&
+if ($visibility === false &&
     !api_is_allowed_to_edit(false, true, false, false)
 ) {
     api_not_allowed(true);

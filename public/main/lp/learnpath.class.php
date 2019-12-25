@@ -1,4 +1,5 @@
 <?php
+
 /* For licensing terms, see /license.txt */
 
 use Chamilo\CoreBundle\Entity\Resource\ResourceLink;
@@ -28,9 +29,7 @@ use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
  * and SCORM learnpaths. It is used by the scorm class.
  *
  * @todo decouple class
- *
- * @package chamilo.learnpath
- *
+ * *
  * @author  Yannick Warnier <ywarnier@beeznest.org>
  * @author  Julio Montoya   <gugli100@gmail.com> Several improvements and fixes
  */

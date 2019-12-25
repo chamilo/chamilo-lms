@@ -1,8 +1,7 @@
 <?php
 /* For licensing terms, see /license.txt */
 
-use Chamilo\CoreBundle\Repository\CourseRepository;
-use Chamilo\CoreBundle\Repository\ItemPropertyRepository;
+use Chamilo\CoreBundle\Framework\Container;
 use Chamilo\CourseBundle\Entity\CLpCategory;
 use Chamilo\CourseBundle\Entity\CLpCategoryUser;
 use Chamilo\UserBundle\Entity\User;
@@ -17,14 +16,14 @@ if (!$is_allowed_to_edit) {
     api_not_allowed(true);
 }
 
-$categoryId = isset($_GET['id']) ? intval($_GET['id']) : 0;
+$categoryId = isset($_GET['id']) ? (int) $_GET['id'] : 0;
 
 if (empty($categoryId)) {
     api_not_allowed(true);
 }
 
 $subscriptionSettings = learnpath::getSubscriptionSettings();
-if ($subscriptionSettings['allow_add_users_to_lp_category'] == false) {
+if (false == $subscriptionSettings['allow_add_users_to_lp_category']) {
     api_not_allowed(true);
 }
 
@@ -34,7 +33,8 @@ $courseCode = api_get_course_id();
 $em = Database::getManager();
 
 /** @var CLpCategory $category */
-$category = $em->getRepository('ChamiloCourseBundle:CLpCategory')->find($categoryId);
+$repo = Container::getLpCategoryRepository();
+$category = $repo->find($categoryId);
 
 if (!$category) {
     api_not_allowed(true);
@@ -63,31 +63,21 @@ $groupList = \CourseManager::get_group_list_of_course(
 );
 $groupChoices = array_column($groupList, 'name', 'id');
 
-/** @var Session $session */
 $session = null;
 if (!empty($sessionId)) {
-    $session = $em->getRepository('ChamiloCoreBundle:Session')->find($sessionId);
+    $session = api_get_session_entity($sessionId);
 }
-
-/** @var CourseRepository $courseRepo */
-$courseRepo = $em->getRepository('ChamiloCoreBundle:Course');
-/** @var ItemPropertyRepository $itemRepo */
-$itemRepo = $em->getRepository('ChamiloCourseBundle:CItemProperty');
-
-$course = $courseRepo->find($courseId);
+$courseRepo = Container::getCourseRepository();
+$course = api_get_course_entity($courseId);
 
 // Subscribed groups to a LP
-$subscribedGroupsInLp = $itemRepo->getGroupsSubscribedToItem(
-    'learnpath_category',
-    $categoryId,
-    $course,
-    $session
-);
+$links = $category->getResourceNode()->getResourceLinks();
 
 $selectedGroupChoices = [];
-/** @var CItemProperty $itemProperty */
-foreach ($subscribedGroupsInLp as $itemProperty) {
-    $selectedGroupChoices[] = $itemProperty->getGroup()->getId();
+foreach ($links as $link) {
+    if (null !== $link->getGroup()) {
+        $selectedGroupChoices[] = $link->getGroup()->getId();
+    }
 }
 
 $groupMultiSelect = $form->addElement(
@@ -154,8 +144,9 @@ if ($formUsers->validate()) {
     $values = $formUsers->getSubmitValues();
 
     // Subscribing users
-    $users = isset($values['users']) ? $values['users'] : [];
-    $userForm = isset($values['user_form']) ? $values['user_form'] : [];
+    $users = $values['users'] ?? [];
+    $userForm = $values['user_form'] ?? [];
+
     if (!empty($userForm)) {
         $deleteUsers = [];
         if ($subscribedUsersInCategory) {
@@ -163,7 +154,7 @@ if ($formUsers->validate()) {
             foreach ($subscribedUsersInCategory as $user) {
                 $userId = $user->getUser()->getId();
 
-                if (!in_array($userId, $users)) {
+                if (!in_array($userId, $users, true)) {
                     $category->removeUsers($user);
                 }
             }
@@ -176,24 +167,36 @@ if ($formUsers->validate()) {
             $category->addUser($categoryUser);
         }
 
-        $em->merge($category);
+        $em->persist($category);
         $em->flush();
         Display::addFlash(Display::return_message(get_lang('Update successful')));
     }
 
     // Subscribing groups
-    $groups = isset($values['groups']) ? $values['groups'] : [];
-    $groupForm = isset($values['group_form']) ? $values['group_form'] : [];
+    $groups = $values['groups'] ?? [];
+    $groupForm = $values['group_form'] ?? [];
 
     if (!empty($groupForm)) {
-        $itemRepo->subscribeGroupsToItem(
-            $currentUser,
-            'learnpath_category',
-            $course,
-            $session,
-            $categoryId,
-            $groups
-        );
+        if (!empty($selectedGroupChoices)) {
+            $diff = array_diff($selectedGroupChoices, $groups);
+            if (!empty($diff)) {
+                foreach ($diff as $groupIdToDelete) {
+                    foreach ($links as $link) {
+                        if ($link->getGroup() && $link->getGroup()->getIid()) {
+                            $repo->getEntityManager()->remove($link);
+                        }
+                    }
+                }
+                $repo->getEntityManager()->flush();
+            }
+        }
+
+        foreach ($groups as $groupId) {
+            $group = api_get_group_entity($groupId);
+            $repo->addResourceToCourseGroup($category->getResourceNode(), $group);
+        }
+        $repo->getEntityManager()->flush();
+
         Display::addFlash(Display::return_message(get_lang('Update successful')));
     }
 

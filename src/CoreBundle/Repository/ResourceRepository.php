@@ -403,6 +403,28 @@ class ResourceRepository extends BaseEntityRepository
         return $resourceLink;
     }
 
+    public function addResourceToCourseGroup(
+        ResourceNode $resourceNode,
+        CGroupInfo $group
+    ) {
+        $exists = $resourceNode->getResourceLinks()->exists(function ($key, $element) use ($group) {
+            if ($element->getGroup()) {
+                return $group->getIid() == $element->getGroup()->getIid();
+            }
+        });
+
+        if ($exists === false) {
+            $resourceLink = new ResourceLink();
+            $resourceLink
+                ->setResourceNode($resourceNode)
+                ->setGroup($group)
+                ->setVisibility(ResourceLink::VISIBILITY_PUBLISHED);
+            $this->getEntityManager()->persist($resourceLink);
+
+            return $resourceLink;
+        }
+    }
+
     /*public function addResourceToSession(
         ResourceNode $resourceNode,
         Course $course,
@@ -420,22 +442,6 @@ class ResourceRepository extends BaseEntityRepository
         return $resourceLink;
     }*/
 
-    /*public function addResourceToCourseGroup(
-        ResourceNode $resourceNode,
-        Course $course,
-        CGroupInfo $group,
-        ResourceRight $right
-    ) {
-        $resourceLink = $this->addResourceToCourse(
-            $resourceNode,
-            $course,
-            $right
-        );
-        $resourceLink->setGroup($group);
-        $this->getEntityManager()->persist($resourceLink);
-
-        return $resourceLink;
-    }*/
 
     /**
      * @return ResourceLink

@@ -1,11 +1,10 @@
 <?php
+
 /* For licensing terms, see /license.txt */
 
 use Chamilo\CoreBundle\Entity\Session;
 use Chamilo\CoreBundle\Entity\SessionRelCourseRelUser;
 use Chamilo\CoreBundle\Repository\CourseRepository;
-use Chamilo\CoreBundle\Repository\ItemPropertyRepository;
-use Chamilo\CourseBundle\Entity\CItemProperty;
 use Chamilo\UserBundle\Entity\User;
 
 require_once __DIR__.'/../inc/global.inc.php';
@@ -50,16 +49,14 @@ $lp = new learnpath($courseCode, $lpId, api_get_user_id());
 $em = Database::getManager();
 /** @var CourseRepository $courseRepo */
 $courseRepo = $em->getRepository('ChamiloCoreBundle:Course');
-/** @var ItemPropertyRepository $itemRepo */
-$itemRepo = $em->getRepository('ChamiloCourseBundle:CItemProperty');
 
 /** @var Session $session */
 $session = null;
 if (!empty($sessionId)) {
-    $session = $em->getRepository('ChamiloCoreBundle:Session')->find($sessionId);
+    $session = api_get_session_entity($sessionId);
 }
 
-$course = $courseRepo->find($courseId);
+$course = api_get_course_entity($courseId);
 $subscribedUsers = [];
 
 // Getting subscribe users to the course.

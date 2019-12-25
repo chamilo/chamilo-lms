@@ -1,4 +1,5 @@
 <?php
+
 /* For licensing terms, see /license.txt */
 
 /**
@@ -7,8 +8,6 @@
  *
  * @author various contributors
  * @author Roan Embrechts (VUB), partial code cleanup, initial virtual course support
- *
- * @package chamilo.group
  *
  * @todo course admin functionality to create groups based on who is in which course (or class).
  */
@@ -39,13 +38,13 @@ if (!api_is_allowed_to_edit(false, true) && !$is_group_member) {
 function sort_users($user_a, $user_b)
 {
     $orderListByOfficialCode = api_get_setting('order_user_list_by_official_code');
-    if ($orderListByOfficialCode === 'true') {
+    if ('true' === $orderListByOfficialCode) {
         $cmp = api_strcmp($user_a['official_code'], $user_b['official_code']);
-        if ($cmp !== 0) {
+        if (0 !== $cmp) {
             return $cmp;
         } else {
             $cmp = api_strcmp($user_a['lastname'], $user_b['lastname']);
-            if ($cmp !== 0) {
+            if (0 !== $cmp) {
                 return $cmp;
             } else {
                 return api_strcmp($user_a['username'], $user_b['username']);
@@ -55,11 +54,11 @@ function sort_users($user_a, $user_b)
 
     if (api_sort_by_first_name()) {
         $cmp = api_strcmp($user_a['firstname'], $user_b['firstname']);
-        if ($cmp !== 0) {
+        if (0 !== $cmp) {
             return $cmp;
         } else {
             $cmp = api_strcmp($user_a['lastname'], $user_b['lastname']);
-            if ($cmp !== 0) {
+            if (0 !== $cmp) {
                 return $cmp;
             } else {
                 return api_strcmp($user_a['username'], $user_b['username']);
@@ -67,11 +66,11 @@ function sort_users($user_a, $user_b)
         }
     } else {
         $cmp = api_strcmp($user_a['lastname'], $user_b['lastname']);
-        if ($cmp !== 0) {
+        if (0 !== $cmp) {
             return $cmp;
         } else {
             $cmp = api_strcmp($user_a['firstname'], $user_b['firstname']);
-            if ($cmp !== 0) {
+            if (0 !== $cmp) {
                 return $cmp;
             } else {
                 return api_strcmp($user_a['username'], $user_b['username']);
@@ -85,7 +84,7 @@ function sort_users($user_a, $user_b)
  */
 function check_group_members($value)
 {
-    if ($value['max_student'] == GroupManager::MEMBER_PER_GROUP_NO_LIMIT) {
+    if (GroupManager::MEMBER_PER_GROUP_NO_LIMIT == $value['max_student']) {
         return true;
     }
     if (isset($value['max_student']) &&
@@ -136,7 +135,7 @@ if (!empty($complete_user_list)) {
             continue;
         }
         //prevent invitee users add to groups or tutors - see #8091
-        if ($user['status'] != INVITEE) {
+        if (INVITEE != $user['status']) {
             $officialCode = !empty($user['official_code']) ? ' - '.$user['official_code'] : null;
 
             $groups = $userGroup->getUserGroupListByUser($user['user_id']);
@@ -149,8 +148,8 @@ if (!empty($complete_user_list)) {
             $name = api_get_person_name($user['firstname'], $user['lastname']).
                     ' ('.$user['username'].')'.$officialCode;
 
-            if ($orderUserListByOfficialCode === 'true') {
-                $officialCode = !empty($user['official_code']) ? $user['official_code']." - " : '? - ';
+            if ('true' === $orderUserListByOfficialCode) {
+                $officialCode = !empty($user['official_code']) ? $user['official_code'].' - ' : '? - ';
                 $name = $officialCode.' '.api_get_person_name($user['firstname'], $user['lastname']).' ('.$user['username'].')';
             }
             $possible_users[$user['user_id']] = $name.$groupNameListToString;
@@ -197,7 +196,7 @@ if ($form->validate()) {
 
     if (isset($_POST['group_members']) &&
         count($_POST['group_members']) > $max_member &&
-        $max_member != GroupManager::MEMBER_PER_GROUP_NO_LIMIT
+        GroupManager::MEMBER_PER_GROUP_NO_LIMIT != $max_member
     ) {
         Display::addFlash(Display::return_message(get_lang('Number proposed exceeds max. that you allowed (you can modify in the group settings). Group composition has not been modified'), 'warning'));
         header('Location: group.php?'.api_get_cidreq(true, false));
@@ -215,6 +214,7 @@ switch ($action) {
             GroupManager:: unsubscribe_all_users($current_group);
             echo Display::return_message(get_lang('The group is now empty'), 'confirm');
         }
+
         break;
 }
 

@@ -1,16 +1,14 @@
 <?php
+
 /* For licensing terms, see /license.txt */
 
 /**
  * This script shows the group space for one specific group, possibly displaying
  * a list of users in the group, subscribe or unsubscribe option, tutors...
  *
- * @package chamilo.group
- *
  * @todo    Display error message if no group ID specified
  */
 require_once __DIR__.'/../inc/global.inc.php';
-$current_course_tool = TOOL_GROUP;
 
 // Notice for unauthorized people.
 api_protect_course_script(true, false, 'group');
@@ -85,7 +83,7 @@ echo '<a href="'.api_get_path(WEB_CODE_PATH).'group/group.php?'.api_get_cidreq()
  */
 $subscribe_group = '';
 if (GroupManager::is_self_registration_allowed($user_id, $current_group)) {
-    $subscribe_group = '<a class="btn btn-default" href="'.api_get_self().'?selfReg=1&group_id='.$current_group['id'].'" onclick="javascript: if(!confirm('."'".addslashes(api_htmlentities(get_lang("Please confirm your choice"), ENT_QUOTES))."'".')) return false;">'.
+    $subscribe_group = '<a class="btn btn-default" href="'.api_get_self().'?selfReg=1&group_id='.$current_group['id'].'" onclick="javascript: if(!confirm('."'".addslashes(api_htmlentities(get_lang('Please confirm your choice'), ENT_QUOTES))."'".')) return false;">'.
         get_lang('Add me to this group').'</a>';
 }
 
@@ -94,7 +92,7 @@ if (GroupManager::is_self_registration_allowed($user_id, $current_group)) {
  */
 $unsubscribe_group = '';
 if (GroupManager :: is_self_unregistration_allowed($user_id, $current_group)) {
-    $unsubscribe_group = '<a class="btn btn-default" href="'.api_get_self().'?selfUnReg=1" onclick="javascript: if(!confirm('."'".addslashes(api_htmlentities(get_lang("Please confirm your choice"), ENT_QUOTES))."'".')) return false;">'.
+    $unsubscribe_group = '<a class="btn btn-default" href="'.api_get_self().'?selfUnReg=1" onclick="javascript: if(!confirm('."'".addslashes(api_htmlentities(get_lang('Please confirm your choice'), ENT_QUOTES))."'".')) return false;">'.
         get_lang('Unsubscribe me from this group.').'</a>';
 }
 echo '&nbsp;</div>';
@@ -125,10 +123,10 @@ if (api_is_allowed_to_edit(false, true) ||
 ) {
     $actions_array = [];
     if (is_array($forums_of_groups)) {
-        if ($current_group['forum_state'] != GroupManager::TOOL_NOT_AVAILABLE) {
+        if (GroupManager::TOOL_NOT_AVAILABLE != $current_group['forum_state']) {
             foreach ($forums_of_groups as $key => $value) {
-                if ($value['forum_group_public_private'] == 'public' ||
-                    ($value['forum_group_public_private'] == 'private') ||
+                if ('public' == $value['forum_group_public_private'] ||
+                    ('private' == $value['forum_group_public_private']) ||
                     !empty($user_is_tutor) ||
                     api_is_allowed_to_edit(false, true)
                 ) {
@@ -146,7 +144,7 @@ if (api_is_allowed_to_edit(false, true) ||
         }
     }
 
-    if ($current_group['doc_state'] != GroupManager::TOOL_NOT_AVAILABLE) {
+    if (GroupManager::TOOL_NOT_AVAILABLE != $current_group['doc_state']) {
         // Link to the documents area of this group
         $actions_array[] = [
             'url' => api_get_path(WEB_CODE_PATH).'document/document.php?'.api_get_cidreq(),
@@ -154,7 +152,7 @@ if (api_is_allowed_to_edit(false, true) ||
         ];
     }
 
-    if ($current_group['calendar_state'] != GroupManager::TOOL_NOT_AVAILABLE) {
+    if (GroupManager::TOOL_NOT_AVAILABLE != $current_group['calendar_state']) {
         $groupFilter = '';
         if (!empty($group_id)) {
             $groupFilter = "&type=course&user_id=GROUP:$group_id";
@@ -166,14 +164,14 @@ if (api_is_allowed_to_edit(false, true) ||
         ];
     }
 
-    if ($current_group['work_state'] != GroupManager::TOOL_NOT_AVAILABLE) {
+    if (GroupManager::TOOL_NOT_AVAILABLE != $current_group['work_state']) {
         // Link to the works area of this group
         $actions_array[] = [
             'url' => api_get_path(WEB_CODE_PATH).'work/work.php?'.api_get_cidreq(),
             'content' => Display::return_icon('work.png', get_lang('Assignments'), [], 32),
         ];
     }
-    if ($current_group['announcements_state'] != GroupManager::TOOL_NOT_AVAILABLE) {
+    if (GroupManager::TOOL_NOT_AVAILABLE != $current_group['announcements_state']) {
         // Link to a group-specific part of announcements
         $actions_array[] = [
             'url' => api_get_path(WEB_CODE_PATH).'announcements/announcements.php?'.api_get_cidreq(),
@@ -181,7 +179,7 @@ if (api_is_allowed_to_edit(false, true) ||
         ];
     }
 
-    if ($current_group['wiki_state'] != GroupManager::TOOL_NOT_AVAILABLE) {
+    if (GroupManager::TOOL_NOT_AVAILABLE != $current_group['wiki_state']) {
         // Link to the wiki area of this group
         $actions_array[] = [
             'url' => api_get_path(WEB_CODE_PATH).'wiki/index.php?'.api_get_cidreq().'&action=show&title=index&session_id='.api_get_session_id().'&group_id='.$current_group['id'],
@@ -189,30 +187,30 @@ if (api_is_allowed_to_edit(false, true) ||
         ];
     }
 
-    if ($current_group['chat_state'] != GroupManager::TOOL_NOT_AVAILABLE) {
+    if (GroupManager::TOOL_NOT_AVAILABLE != $current_group['chat_state']) {
         // Link to the chat area of this group
         if (api_get_course_setting('allow_open_chat_window')) {
             $actions_array[] = [
-                'url' => "javascript: void(0);",
+                'url' => 'javascript: void(0);',
                 'content' => Display::return_icon('chat.png', get_lang('Chat'), [], 32),
                 'url_attributes' => [
-                    'onclick' => " window.open('../chat/chat.php?".api_get_cidreq()."&toolgroup=".$current_group['id']."','window_chat_group_".api_get_course_id()."_".api_get_group_id()."','height=380, width=625, left=2, top=2, toolbar=no, menubar=no, scrollbars=yes, resizable=yes, location=no, directories=no, status=no')",
+                    'onclick' => " window.open('../chat/chat.php?".api_get_cidreq().'&toolgroup='.$current_group['id']."','window_chat_group_".api_get_course_id().'_'.api_get_group_id()."','height=380, width=625, left=2, top=2, toolbar=no, menubar=no, scrollbars=yes, resizable=yes, location=no, directories=no, status=no')",
                 ],
             ];
         } else {
             $actions_array[] = [
-                'url' => api_get_path(WEB_CODE_PATH)."chat/chat.php?".api_get_cidreq()."&toolgroup=".$current_group['id'],
+                'url' => api_get_path(WEB_CODE_PATH).'chat/chat.php?'.api_get_cidreq().'&toolgroup='.$current_group['id'],
                 'content' => Display::return_icon('chat.png', get_lang('Chat'), [], 32),
             ];
         }
     }
 
     $enabled = api_get_plugin_setting('bbb', 'tool_enable');
-    if ($enabled === 'true') {
+    if ('true' === $enabled) {
         $bbb = new bbb();
         if ($bbb->hasGroupSupport()) {
             $actions_array[] = [
-                'url' => api_get_path(WEB_PLUGIN_PATH)."bbb/start.php?".api_get_cidreq(),
+                'url' => api_get_path(WEB_PLUGIN_PATH).'bbb/start.php?'.api_get_cidreq(),
                 'content' => Display::return_icon('bbb.png', get_lang('Videoconference'), [], 32),
             ];
         }
@@ -224,9 +222,9 @@ if (api_is_allowed_to_edit(false, true) ||
 } else {
     $actions_array = [];
     if (is_array($forums_of_groups)) {
-        if ($current_group['forum_state'] == GroupManager::TOOL_PUBLIC) {
+        if (GroupManager::TOOL_PUBLIC == $current_group['forum_state']) {
             foreach ($forums_of_groups as $key => $value) {
-                if ($value['forum_group_public_private'] == 'public') {
+                if ('public' == $value['forum_group_public_private']) {
                     $actions_array[] = [
                         'url' => api_get_path(WEB_CODE_PATH).
                             'forum/viewforum.php?cid='.api_get_course_int_id().'&forum='.$value['forum_id'].'&gid='.Security::remove_XSS($current_group['id']).'&origin=group',
@@ -242,7 +240,7 @@ if (api_is_allowed_to_edit(false, true) ||
         }
     }
 
-    if ($current_group['doc_state'] == GroupManager::TOOL_PUBLIC) {
+    if (GroupManager::TOOL_PUBLIC == $current_group['doc_state']) {
         // Link to the documents area of this group
         $actions_array[] = [
             'url' => api_get_path(WEB_CODE_PATH).'document/document.php?'.api_get_cidreq(),
@@ -250,7 +248,7 @@ if (api_is_allowed_to_edit(false, true) ||
         ];
     }
 
-    if ($current_group['calendar_state'] == GroupManager::TOOL_PUBLIC) {
+    if (GroupManager::TOOL_PUBLIC == $current_group['calendar_state']) {
         $groupFilter = '';
         if (!empty($group_id)) {
             $groupFilter = "&type=course&user_id=GROUP:$group_id";
@@ -262,7 +260,7 @@ if (api_is_allowed_to_edit(false, true) ||
         ];
     }
 
-    if ($current_group['work_state'] == GroupManager::TOOL_PUBLIC) {
+    if (GroupManager::TOOL_PUBLIC == $current_group['work_state']) {
         // Link to the works area of this group
         $actions_array[] = [
             'url' => api_get_path(WEB_CODE_PATH).'work/work.php?'.api_get_cidreq(),
@@ -270,7 +268,7 @@ if (api_is_allowed_to_edit(false, true) ||
         ];
     }
 
-    if ($current_group['announcements_state'] == GroupManager::TOOL_PUBLIC) {
+    if (GroupManager::TOOL_PUBLIC == $current_group['announcements_state']) {
         // Link to a group-specific part of announcements
         $actions_array[] = [
             'url' => api_get_path(WEB_CODE_PATH).'announcements/announcements.php?'.api_get_cidreq(),
@@ -278,7 +276,7 @@ if (api_is_allowed_to_edit(false, true) ||
         ];
     }
 
-    if ($current_group['wiki_state'] == GroupManager::TOOL_PUBLIC) {
+    if (GroupManager::TOOL_PUBLIC == $current_group['wiki_state']) {
         // Link to the wiki area of this group
         $actions_array[] = [
             'url' => api_get_path(WEB_CODE_PATH).'wiki/index.php?'.api_get_cidreq().'&action=show&title=index&session_id='.api_get_session_id().'&group_id='.$current_group['id'],
@@ -286,16 +284,16 @@ if (api_is_allowed_to_edit(false, true) ||
         ];
     }
 
-    if ($current_group['chat_state'] == GroupManager::TOOL_PUBLIC) {
+    if (GroupManager::TOOL_PUBLIC == $current_group['chat_state']) {
         // Link to the chat area of this group
         if (api_get_course_setting('allow_open_chat_window')) {
             $actions_array[] = [
-                'url' => "javascript: void(0);\" onclick=\"window.open('../chat/chat.php?".api_get_cidreq()."&toolgroup=".$current_group['id']."','window_chat_group_".api_get_course_id()."_".api_get_group_id()."','height=380, width=625, left=2, top=2, toolbar=no, menubar=no, scrollbars=yes, resizable=yes, location=no, directories=no, status=no') \"",
+                'url' => "javascript: void(0);\" onclick=\"window.open('../chat/chat.php?".api_get_cidreq().'&toolgroup='.$current_group['id']."','window_chat_group_".api_get_course_id().'_'.api_get_group_id()."','height=380, width=625, left=2, top=2, toolbar=no, menubar=no, scrollbars=yes, resizable=yes, location=no, directories=no, status=no') \"",
                 'content' => Display::return_icon('chat.png', get_lang('Chat'), [], 32),
             ];
         } else {
             $actions_array[] = [
-                'url' => api_get_path(WEB_CODE_PATH)."chat/chat.php?".api_get_cidreq()."&toolgroup=".$current_group['id'],
+                'url' => api_get_path(WEB_CODE_PATH).'chat/chat.php?'.api_get_cidreq().'&toolgroup='.$current_group['id'],
                 'content' => Display::return_icon('chat.png', get_lang('Chat'), [], 32),
             ];
         }
@@ -311,7 +309,7 @@ if (api_is_allowed_to_edit(false, true) ||
  */
 $tutors = GroupManager::get_subscribed_tutors($current_group);
 $tutor_info = '';
-if (count($tutors) == 0) {
+if (0 == count($tutors)) {
     $tutor_info = get_lang('(none)');
 } else {
     $tutor_info .= '<ul class="thumbnails">';
@@ -342,7 +340,7 @@ $table = new SortableTable(
     'group_users',
     'get_number_of_group_users',
     'get_group_user_data',
-    (api_is_western_name_order() xor api_sort_by_first_name()) ? 2 : 1
+    api_is_western_name_order() xor api_sort_by_first_name() ? 2 : 1
 );
 $origin = api_get_origin();
 $my_cidreq = isset($_GET['cid']) ? (int) $_GET['cid'] : 0;
@@ -359,7 +357,7 @@ if (api_is_western_name_order()) {
     $table->set_header(2, get_lang('First name'));
 }
 
-if (api_get_setting('show_email_addresses') == 'true' || api_is_allowed_to_edit() == 'true') {
+if ('true' == api_get_setting('show_email_addresses') || 'true' == api_is_allowed_to_edit()) {
     $table->set_header(3, get_lang('e-mail'));
     $table->set_column_filter(3, 'email_filter');
     $table->set_header(4, get_lang('active'));
@@ -400,7 +398,7 @@ function get_number_of_group_users()
             FROM $table
             WHERE
                 c_id = $course_id AND
-                group_id = '".intval($groupInfo['iid'])."'";
+                group_id = '".(int) ($groupInfo['iid'])."'";
     $result = Database::query($sql);
     $return = Database::fetch_array($result, 'ASSOC');
 
@@ -436,15 +434,15 @@ function get_group_user_data($from, $number_of_items, $column, $direction)
     $tableGroup = Database::get_course_table(TABLE_GROUP);
 
     // Query
-    if (api_get_setting('show_email_addresses') === 'true') {
-        $sql = "SELECT user.id 	AS col0,
-				".(
+    if ('true' === api_get_setting('show_email_addresses')) {
+        $sql = 'SELECT user.id 	AS col0,
+				'.(
             api_is_western_name_order() ?
-                "user.firstname 	AS col1,
-				user.lastname 	AS col2,"
+                'user.firstname 	AS col1,
+				user.lastname 	AS col2,'
                 :
-                "user.lastname 	AS col1,
-				user.firstname 	AS col2,"
+                'user.lastname 	AS col1,
+				user.firstname 	AS col2,'
             )."
 				user.email		AS col3
 				, user.active AS col4
@@ -460,14 +458,14 @@ function get_group_user_data($from, $number_of_items, $column, $direction)
                 LIMIT $from, $number_of_items";
     } else {
         if (api_is_allowed_to_edit()) {
-            $sql = "SELECT DISTINCT
+            $sql = 'SELECT DISTINCT
                         u.id AS col0,
-                        ".(api_is_western_name_order() ?
-                        "u.firstname 	AS col1,
-                            u.lastname 	AS col2,"
+                        '.(api_is_western_name_order() ?
+                        'u.firstname 	AS col1,
+                            u.lastname 	AS col2,'
                         :
-                        "u.lastname 	AS col1,
-                        u.firstname 	AS col2,")."
+                        'u.lastname 	AS col1,
+                        u.firstname 	AS col2,')."
                         u.email		AS col3
                         , u.active AS col4
                     FROM $table_user u
@@ -481,15 +479,15 @@ function get_group_user_data($from, $number_of_items, $column, $direction)
                     ORDER BY col$column $direction
                     LIMIT $from, $number_of_items";
         } else {
-            $sql = "SELECT DISTINCT
+            $sql = 'SELECT DISTINCT
 						user.id 	AS col0,
-						".(
+						'.(
                 api_is_western_name_order() ?
-                    "user.firstname 	AS col1,
-						user.lastname 	AS col2 "
+                    'user.firstname 	AS col1,
+						user.lastname 	AS col2 '
                     :
-                    "user.lastname 	AS col1,
-						user.firstname 	AS col2 "
+                    'user.lastname 	AS col1,
+						user.firstname 	AS col2 '
                     )."
                     , user.active AS col3
                     FROM $table_user user
@@ -562,9 +560,9 @@ function user_icon_filter($user_id)
  * The parameters use a trick of the sorteable table, where the first param is
  * the original value of the column
  *
- * @param   string  User name (value of the column at the time of calling)
- * @param   string  URL parameters
- * @param   array   Row of the "sortable table" as it is at the time of function call - we extract the user ID from there
+ * @param string $name       User name (value of the column at the time of calling)
+ * @param string $url_params URL parameters
+ * @param array  $row        Row of the "sortable table" as it is at the time of function call - we extract the user ID from there
  *
  * @return string HTML link
  */
@@ -575,6 +573,6 @@ function user_name_filter($name, $url_params, $row)
     return UserManager::getUserProfileLink($userInfo);
 }
 
-if ($origin != 'learnpath') {
+if ('learnpath' != $origin) {
     Display::display_footer();
 }

@@ -1,4 +1,5 @@
 <?php
+
 /* For licensing terms, see /license.txt */
 
 use ChamiloSession as Session;
@@ -14,8 +15,6 @@ use ChamiloSession as Session;
  * @author Roan Embrechts, initial self-unsubscribe code, code cleaning, virtual course support
  * @author Bart Mollet, code cleaning, use of Display-library, list of courseAdmin-tools, use of GroupManager
  * @author Isaac Flores, code cleaning and improvements
- *
- * @package chamilo.group
  */
 require_once __DIR__.'/../inc/global.inc.php';
 
@@ -62,6 +61,7 @@ if (isset($_GET['action']) && $is_allowed_in_course) {
                 header("Location: $currentUrl");
                 exit;
             }
+
             break;
         case 'set_invisible':
             if (api_is_allowed_to_edit()) {
@@ -70,6 +70,7 @@ if (isset($_GET['action']) && $is_allowed_in_course) {
                 header("Location: $currentUrl");
                 exit;
             }
+
             break;
         case 'self_reg':
             if (GroupManager::is_self_registration_allowed($userId, $groupInfo)) {
@@ -82,6 +83,7 @@ if (isset($_GET['action']) && $is_allowed_in_course) {
                 header("Location: $currentUrl");
                 exit;
             }
+
             break;
         case 'self_unreg':
             if (GroupManager::is_self_unregistration_allowed($userId, $groupInfo)) {
@@ -90,6 +92,7 @@ if (isset($_GET['action']) && $is_allowed_in_course) {
                 header("Location: $currentUrl");
                 exit;
             }
+
             break;
     }
 }
@@ -112,6 +115,7 @@ if (api_is_allowed_to_edit(false, true)) {
                     header("Location: $currentUrl");
                     exit;
                 }
+
                 break;
             case 'empty_selected':
                 if (is_array($_POST['group'])) {
@@ -124,6 +128,7 @@ if (api_is_allowed_to_edit(false, true)) {
                     header("Location: $currentUrl");
                     exit;
                 }
+
                 break;
             case 'fill_selected':
                 if (is_array($_POST['group'])) {
@@ -135,6 +140,7 @@ if (api_is_allowed_to_edit(false, true)) {
                     header("Location: $currentUrl");
                     exit;
                 }
+
                 break;
         }
     }
@@ -147,6 +153,7 @@ if (api_is_allowed_to_edit(false, true)) {
                 Display::addFlash(Display::return_message(get_lang('The category order was changed')));
                 header("Location: $currentUrl");
                 exit;
+
                 break;
             case 'delete_one':
                 $groupInfo = GroupManager::get_group_properties($my_get_id);
@@ -154,6 +161,7 @@ if (api_is_allowed_to_edit(false, true)) {
                 Display::addFlash(Display::return_message(get_lang('Group deleted')));
                 header("Location: $currentUrl");
                 exit;
+
                 break;
             case 'fill_one':
                 $groupInfo = GroupManager::get_group_properties($my_get_id);
@@ -161,6 +169,7 @@ if (api_is_allowed_to_edit(false, true)) {
                 Display::addFlash(Display::return_message(get_lang('Groups have been filled (or completed) by users present in the \'Users\' list.')));
                 header("Location: $currentUrl");
                 exit;
+
                 break;
             case 'delete_category':
                 if (empty($sessionId)) {
@@ -171,6 +180,7 @@ if (api_is_allowed_to_edit(false, true)) {
                     header("Location: $currentUrl");
                     exit;
                 }
+
                 break;
         }
     }
@@ -188,7 +198,7 @@ if (api_is_allowed_to_edit(false, true)) {
     $actionsLeft .= '<a href="group_creation.php?'.api_get_cidreq().'">'.
         Display::return_icon('add-groups.png', get_lang('Create new group(s)'), '', ICON_SIZE_MEDIUM).'</a>';
 
-    if (api_get_setting('allow_group_categories') === 'true' && empty($sessionId)) {
+    if ('true' === api_get_setting('allow_group_categories') && empty($sessionId)) {
         $actionsLeft .= '<a href="group_category.php?'.api_get_cidreq().'&action=add_category">'.
             Display::return_icon('new_folder.png', get_lang('Add category'), '', ICON_SIZE_MEDIUM).'</a>';
     } else {
@@ -219,7 +229,7 @@ echo $toolbar;
 echo UserManager::getUserSubscriptionTab(3);
 
 /*  List all categories */
-if (api_get_setting('allow_group_categories') === 'true') {
+if ('true' === api_get_setting('allow_group_categories')) {
     $defaultCategory = [
         'id' => 0,
         'iid' => 0,
@@ -257,7 +267,7 @@ if (api_get_setting('allow_group_categories') === 'true') {
                 ]
             );
             // Move
-            if ($index != 0) {
+            if (0 != $index) {
                 $actions .= ' <a href="group.php?'.api_get_cidreq().'&action=swap_cat_order&id1='.$categoryId.'&id2='.$group_cats[$index - 1]['id'].'">'.
                     Display::return_icon('up.png', '&nbsp;', '', ICON_SIZE_SMALL).'</a>';
             }
@@ -282,7 +292,7 @@ if (api_get_setting('allow_group_categories') === 'true') {
     echo GroupManager::process_groups($group_list);
 }
 
-if (!isset($_GET['origin']) || $_GET['origin'] != 'learnpath') {
+if (!isset($_GET['origin']) || 'learnpath' != $_GET['origin']) {
     Display::display_footer();
 }
 

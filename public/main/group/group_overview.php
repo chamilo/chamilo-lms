@@ -1,4 +1,5 @@
 <?php
+
 /* For licensing terms, see /license.txt */
 
 /**
@@ -11,8 +12,6 @@
  * @author Patrick Cool, show group comment under the group name
  * @author Roan Embrechts, initial self-unsubscribe code, code cleaning, virtual course support
  * @author Bart Mollet, code cleaning, use of Display-library, list of courseAdmin-tools, use of GroupManager
- *
- * @package chamilo.group
  */
 require_once __DIR__.'/../inc/global.inc.php';
 $this_section = SECTION_COURSES;
@@ -33,6 +32,7 @@ if (isset($_GET['action'])) {
             $data = GroupManager::exportCategoriesAndGroupsToArray(null, true);
             Export::arrayToCsv($data);
             exit;
+
             break;
         case 'export_pdf':
             $content = GroupManager::getOverview($courseId, $keyword);
@@ -42,22 +42,26 @@ if (isset($_GET['action'])) {
 
             $content = $extra.$content;
             $pdf->content_to_pdf($content, null, null, api_get_course_id());
+
             break;
         case 'export':
-            $groupId = isset($_GET['id']) ? intval($_GET['id']) : null;
+            $groupId = isset($_GET['id']) ? (int) ($_GET['id']) : null;
             $data = GroupManager::exportCategoriesAndGroupsToArray($groupId, true);
             switch ($_GET['type']) {
                 case 'csv':
                     Export::arrayToCsv($data);
                     exit;
+
                     break;
                 case 'xls':
                     if (!empty($data)) {
                         Export::arrayToXls($data);
                         exit;
                     }
+
                     break;
             }
+
             break;
     }
 }
@@ -65,7 +69,7 @@ if (isset($_GET['action'])) {
 /*	Header */
 $interbreadcrumb[] = ['url' => 'group.php?'.api_get_cidreq(), 'name' => get_lang('Groups')];
 $origin = api_get_origin();
-if ($origin != 'learnpath') {
+if ('learnpath' != $origin) {
     // So we are not in learnpath tool
     if (!api_is_allowed_in_course()) {
         api_not_allowed(true);
@@ -84,7 +88,7 @@ if ($origin != 'learnpath') {
 $actions = '<a href="group_creation.php?'.api_get_cidreq().'">'.
         Display::return_icon('add.png', get_lang('Create new group(s)'), '', ICON_SIZE_MEDIUM).'</a>';
 
-if (api_get_setting('allow_group_categories') === 'true') {
+if ('true' === api_get_setting('allow_group_categories')) {
     $actions .= '<a href="group_category.php?'.api_get_cidreq().'&action=add_category">'.
         Display::return_icon('new_folder.png', get_lang('Add category'), '', ICON_SIZE_MEDIUM).'</a>';
 } else {
@@ -113,6 +117,6 @@ Display::return_icon('user.png', get_lang('Go to').' '.get_lang('Users'), '', IC
 echo Display::toolbarAction('actions', [$actions, GroupManager::getSearchForm()]);
 echo GroupManager::getOverview($courseId, $keyword);
 
-if ($origin != 'learnpath') {
+if ('learnpath' != $origin) {
     Display::display_footer();
 }

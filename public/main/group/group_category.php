@@ -1,9 +1,7 @@
 <?php
+
 /* For licensing terms, see /license.txt */
 
-/**
- * @package chamilo.group
- */
 require_once __DIR__.'/../inc/global.inc.php';
 $this_section = SECTION_COURSES;
 $current_course_tool = TOOL_GROUP;
@@ -11,7 +9,7 @@ $current_course_tool = TOOL_GROUP;
 // Notice for unauthorized people.
 api_protect_course_script(true);
 
-if (api_get_setting('allow_group_categories') == 'false') {
+if ('false' == api_get_setting('allow_group_categories')) {
     api_not_allowed(true);
 }
 
@@ -36,7 +34,7 @@ if (!empty($sessionId)) {
 function check_max_number_of_members($value)
 {
     $max_member_no_limit = $value['max_member_no_limit'];
-    if ($max_member_no_limit == GroupManager::MEMBER_PER_GROUP_NO_LIMIT) {
+    if (GroupManager::MEMBER_PER_GROUP_NO_LIMIT == $max_member_no_limit) {
         return true;
     }
     $max_member = $value['max_member'];
@@ -55,7 +53,7 @@ function check_groups_per_user($value)
 {
     $groups_per_user = (int) $value['groups_per_user'];
     if (isset($_POST['id']) &&
-        $groups_per_user != GroupManager::GROUP_PER_MEMBER_NO_LIMIT &&
+        GroupManager::GROUP_PER_MEMBER_NO_LIMIT != $groups_per_user &&
         GroupManager::get_current_max_groups_per_user($_POST['id']) > $groups_per_user) {
         return false;
     }
@@ -123,14 +121,14 @@ $form->addText('title', get_lang('Title'));
 
 // Groups per user
 $possible_values = [];
-for ($i = 1; $i <= 10; $i++) {
+for ($i = 1; $i <= 10; ++$i) {
     $possible_values[$i] = $i;
 }
 $possible_values[GroupManager::GROUP_PER_MEMBER_NO_LIMIT] = get_lang('All');
 
 $group = [
     $form->createElement('select', 'groups_per_user', null, $possible_values, ['id' => 'groups_per_user']),
-    $form->createElement('static', null, null, get_lang(' groups')),
+    $form->createElement('static', null, null, get_lang(' groups')),
 ];
 $form->addGroup($group, 'limit_group', get_lang('A user can be member of maximum'), null, false);
 $form->addRule('limit_group', get_lang('The maximum number of groups per user you submitted is invalid. There are now users who are subscribed in more groups than the number you propose.'), 'callback', 'check_groups_per_user');
@@ -386,7 +384,7 @@ $currentUrl = api_get_path(WEB_CODE_PATH).'group/group.php?'.api_get_cidreq();
 // If form validates -> save data
 if ($form->validate()) {
     $values = $form->exportValues();
-    if ($values['max_member_no_limit'] == GroupManager::MEMBER_PER_GROUP_NO_LIMIT) {
+    if (GroupManager::MEMBER_PER_GROUP_NO_LIMIT == $values['max_member_no_limit']) {
         $max_member = GroupManager::MEMBER_PER_GROUP_NO_LIMIT;
     } else {
         $max_member = $values['max_member'];
@@ -415,7 +413,7 @@ if ($form->validate()) {
                 isset($values['document_access']) ? $values['document_access'] : 0
             );
             Display::addFlash(Display::return_message(get_lang('Group settings have been modified')));
-            header("Location: ".$currentUrl."&category=".$values['id']);
+            header('Location: '.$currentUrl.'&category='.$values['id']);
             exit;
         case 'add_category':
             GroupManager::create_category(
@@ -435,8 +433,9 @@ if ($form->validate()) {
                 isset($values['document_access']) ? $values['document_access'] : 0
             );
             Display::addFlash(Display::return_message(get_lang('Category created')));
-            header("Location: ".$currentUrl);
+            header('Location: '.$currentUrl);
             exit;
+
             break;
     }
 }
@@ -452,7 +451,7 @@ echo '</div>';
 
 $defaults = $category;
 $defaults['action'] = $action;
-if ($defaults['max_student'] == GroupManager::MEMBER_PER_GROUP_NO_LIMIT) {
+if (GroupManager::MEMBER_PER_GROUP_NO_LIMIT == $defaults['max_student']) {
     $defaults['max_member_no_limit'] = GroupManager::MEMBER_PER_GROUP_NO_LIMIT;
 } else {
     $defaults['max_member_no_limit'] = 1;

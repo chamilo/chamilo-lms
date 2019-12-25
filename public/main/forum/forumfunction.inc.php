@@ -830,6 +830,7 @@ function store_forum($values, $courseInfo = [], $returnId = false)
         ->setEndTime(!empty($values['end_time']) ? api_get_utc_datetime($values['end_time']) : null)
         ->setSessionId($session_id)
         ->setLpId($values['lp_id'] ?? 0)
+
     ;
 
     $user = api_get_user_entity(api_get_user_id());
@@ -2354,84 +2355,6 @@ function getPosts(
 }
 
 /**
- * This function retrieves all the information of a post.
- *
- * @param int $post_id integer that indicates the forum
- *
- * @return array returns
- *
- * @author Patrick Cool <patrick.cool@UGent.be>, Ghent University
- *
- * @version february 2006, dokeos 1.8
- */
-function get_post_information($post_id)
-{
-    $table_posts = Database::get_course_table(TABLE_FORUM_POST);
-    $table_users = Database::get_main_table(TABLE_MAIN_USER);
-    $course_id = api_get_course_int_id();
-    $post_id = (int) $post_id;
-
-    if (empty($post_id)) {
-        return [];
-    }
-
-    $sql = 'SELECT posts.*, email FROM '.$table_posts.' posts, '.$table_users." users
-            WHERE
-                c_id = $course_id AND
-                posts.poster_id=users.user_id AND
-                posts.post_id = ".$post_id;
-    $result = Database::query($sql);
-
-    return Database::fetch_array($result, 'ASSOC');
-}
-
-/**
- * This function retrieves all the information of a thread.
- *
- * @param int      $forumId
- * @param integer  $thread_id that indicates the forum
- * @param int|null $sessionId Optional. If is null then it is considered the current session
- *
- * @return array returns
- * @deprecated
- * @author Patrick Cool <patrick.cool@UGent.be>, Ghent University
- *
- * @version february 2006, dokeos 1.8
- */
-function get_thread_information($forumId, $thread_id, $sessionId = null)
-{
-    $table_item_property = Database::get_course_table(TABLE_ITEM_PROPERTY);
-    $table_threads = Database::get_course_table(TABLE_FORUM_THREAD);
-    $thread_id = (int) $thread_id;
-    $sessionId = null !== $sessionId ? (int) $sessionId : api_get_session_id();
-    $sessionCondition = api_get_session_condition(
-        $sessionId,
-        true,
-        false,
-        'threads.session_id'
-    );
-    $forumCondition = '';
-    if (!empty($forumId)) {
-        $forumId = (int) $forumId;
-        $forumCondition = " threads.forum_id = $forumId AND ";
-    }
-    $sql = "SELECT * FROM $table_item_property item_properties
-            INNER JOIN
-            $table_threads threads
-            ON (item_properties.ref = threads.thread_id AND threads.c_id = item_properties.c_id)
-            WHERE
-                $forumCondition
-                item_properties.tool= '".TOOL_FORUM_THREAD."' AND
-                threads.thread_id = $thread_id
-                $sessionCondition
-            ";
-
-    $result = Database::query($sql);
-
-    return Database::fetch_assoc($result);
-}
-
-/**
  * This function retrieves forum thread users details.
  *
  * @param int $thread_id Thread ID
@@ -2632,45 +2555,6 @@ function get_thread_users_not_qualify($thread_id)
     }
 
     return Database::query($sql);
-}
-
-/**
- * This function retrieves all the information of a given forum_id.
- *
- * @param integer $forum_id that indicates the forum
- *
- * @return array returns
- *
- * @author Patrick Cool <patrick.cool@UGent.be>, Ghent University
- *
- * @version february 2006, dokeos 1.8
- *
- * @deprecated this functionality is now moved to get_forums($forum_id)
- */
-function get_forum_information($forum_id, $courseId = 0)
-{
-    $table_forums = Database::get_course_table(TABLE_FORUM);
-    $table_item_property = Database::get_course_table(TABLE_ITEM_PROPERTY);
-    $courseId = empty($courseId) ? api_get_course_int_id() : (int) $courseId;
-    $forum_id = (int) $forum_id;
-
-    $sql = "SELECT *
-            FROM $table_forums forums
-            INNER JOIN $table_item_property item_properties
-            ON (forums.c_id = item_properties.c_id)
-            WHERE
-                item_properties.tool = '".TOOL_FORUM."' AND
-                item_properties.ref = '".$forum_id."' AND
-                forums.forum_id = '".$forum_id."' AND
-                forums.c_id = ".$courseId.'
-            ';
-
-    $result = Database::query($sql);
-    $row = Database::fetch_array($result, 'ASSOC');
-    $row['approval_direct_post'] = 0;
-    // We can't anymore change this option, so it should always be activated.
-
-    return $row;
 }
 
 /**

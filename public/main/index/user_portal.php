@@ -22,13 +22,7 @@ use ChamiloSession as Session;
 /* Flag forcing the 'current course' reset, as we're not inside a course anymore */
 $cidReset = true;
 
-/* Included libraries */
 require_once '../../main/inc/global.inc.php';
-
-// For HTML editor repository.
-Session::erase('this_section');
-
-$this_section = SECTION_COURSES;
 
 api_block_anonymous_users(); // Only users who are logged in can proceed.
 
@@ -36,8 +30,6 @@ $logInfo = [
     'tool' => SECTION_COURSES,
     'tool_id' => 0,
     'tool_id_detail' => 0,
-    'action' => '',
-    'info' => '',
 ];
 Event::registerLog($logInfo);
 
@@ -78,16 +70,16 @@ if ($loadNotificationsByAjax) {
     $(function() {
         $(".course_notification").each(function(index) {
             var div = $(this);
-            var id = $(this).attr("id");       
+            var id = $(this).attr("id");
             var idList = id.split("_");
             var courseId = idList[1];
             var sessionId = idList[2];
             var status = idList[3];
-            $.ajax({			
+            $.ajax({
                 type: "GET",
-                url: "'.api_get_path(WEB_AJAX_PATH).'course_home.ajax.php?a=get_notification&course_id="+courseId+"&session_id="+sessionId+"&status="+status,			
-                success: function(data) {			    
-                    div.append(data);			    
+                url: "'.api_get_path(WEB_AJAX_PATH).'course_home.ajax.php?a=get_notification&course_id="+courseId+"&session_id="+sessionId+"&status="+status,
+                success: function(data) {
+                    div.append(data);
                 }
             });
         });
@@ -139,7 +131,7 @@ if ($displayMyCourseViewBySessionLink) {
         $(document).ready(function() {
             changeMyCoursesView($.cookie("defaultMyCourseView" + userId));
         });
-    
+
         /**
         * Keep in cookie the last teacher view for the My Courses Tab. default view, or view by session
         * @param inView

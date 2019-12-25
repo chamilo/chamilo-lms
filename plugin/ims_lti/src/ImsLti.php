@@ -3,6 +3,7 @@
 
 use Chamilo\CoreBundle\Entity\Course;
 use Chamilo\CoreBundle\Entity\Session;
+use Chamilo\PluginBundle\Entity\ImsLti\ImsLtiTool;
 use Chamilo\UserBundle\Entity\User;
 
 /**
@@ -176,5 +177,19 @@ class ImsLti
         }
 
         return implode(':', $sourceId);
+    }
+
+    /**
+     * Get instances for LTI Advantage services.
+     *
+     * @param ImsLtiTool $tool
+     *
+     * @return array
+     */
+    public static function getAdvantageServices(ImsLtiTool $tool)
+    {
+        return [
+            new LtiAssignmentGradesService($tool),
+        ];
     }
 }

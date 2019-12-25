@@ -2,6 +2,7 @@
 /* For licensing terms, see /license.txt */
 
 use Chamilo\PluginBundle\Entity\ImsLti\ImsLtiTool;
+use Chamilo\PluginBundle\Entity\ImsLti\Token;
 use Firebase\JWT\JWT;
 
 $cidReset = true;
@@ -10,14 +11,17 @@ require_once __DIR__.'/../../main/inc/global.inc.php';
 
 $plugin = ImsLtiPlugin::create();
 
+$tokenRequest = new LtiTokenRequest();
+
 try {
     if ($plugin->get('enabled') !== 'true') {
         throw new Exception('unsupported');
     }
 
-    $contenttype = isset($_SERVER['CONTENT_TYPE']) ? explode(';', $_SERVER['CONTENT_TYPE'], 2)[0] : '';
-
-    if ('POST' !== $_SERVER['REQUEST_METHOD'] || $contenttype !== 'application/x-www-form-urlencoded') {
+    if ('POST' !== $_SERVER['REQUEST_METHOD'] ||
+        empty($_SERVER['CONTENT_TYPE']) ||
+        $_SERVER['CONTENT_TYPE'] !== 'application/x-www-form-urlencoded'
+    ) {
         throw new Exception('invalid_request');
     }
 
@@ -26,7 +30,7 @@ try {
     $grantType = !empty($_POST['grant_type']) ? $_POST['grant_type'] : '';
     $scope = !empty($_POST['scope']) ? $_POST['scope'] : '';
 
-    if (empty($clientAssertion) || empty($clientAssertionType) || empty($grantType) || empty($scope)) {
+    if (empty($clientAssertionType) || empty($grantType)) {
         throw new Exception('invalid_request');
     }
 
@@ -36,29 +40,7 @@ try {
         throw new Exception('unsupported_grant_type');
     }
 
-    $parts = explode('.', $clientAssertion);
-
-    if (count($parts) !== 3) {
-        throw new Exception('invalid_request');
-    }
-
-    $payload = JWT::urlsafeB64Decode($parts[1]);
-    $claims = json_decode($payload, true);
-
-    if (empty($claims) || empty($claims['sub'])) {
-        throw new Exception('invalid_request');
-    }
-
-    $em = Database::getManager();
-
-    /** @var ImsLtiTool $tool */
-    $tool = $em
-        ->getRepository('ChamiloPluginBundle:ImsLti\ImsLtiTool')
-        ->findOneBy(['clientId' => $claims['sub']]);
-
-    if (!$tool || empty($tool->publicKey)) {
-        throw new Exception('invalid_client');
-    }
+    $tool = $tokenRequest->validateClientAssertion($clientAssertion);
 
     try {
         $jwt = JWT::decode($clientAssertion, $tool->publicKey, ['RS256']);
@@ -66,18 +48,27 @@ try {
         throw new Exception('invalid_client');
     }
 
-    $requestedScopes = explode(' ', $scope);
-    $scopes = $requestedScopes;
+    $allowedScopes = $tokenRequest->validateScope($scope, $tool);
 
-    if (empty($scopes)) {
-        throw new Exception('invalid_scope');
-    }
+    $now = time();
+
+    $token = new Token();
+    $token
+        ->generateHash()
+        ->setTool($tool)
+        ->setScope($allowedScopes)
+        ->setCreatedAt($now)
+        ->setExpiresAt($now + Token::TOKEN_LIFETIME);
+
+    $em = Database::getManager();
+    $em->persist($token);
+    $em->flush();
 
     $json = [
-        'access_token' => '',
+        'access_token' => $token->getHash(),
         'token_type' => 'Bearer',
-        'expires_in' => '',
-        'scope' => implode(' ', $scopes),
+        'expires_in' => Token::TOKEN_LIFETIME,
+        'scope' => $token->getScopeInString(),
     ];
 } catch (Exception $exception) {
     header("HTTP/1.0 400 Bad Request");

@@ -134,6 +134,13 @@ class ImsLtiTool
     private $redirectUrl;
 
     /**
+     * @var array
+     *
+     * @ORM\Column(name="advantage_services", type="json", nullable=true)
+     */
+    private $advantageServices;
+
+    /**
      * ImsLtiTool constructor.
      */
     public function __construct()
@@ -620,5 +627,22 @@ class ImsLtiTool
         $this->clientId = $clientId;
 
         return $this;
+    }
+
+    /**
+     * @return array
+     */
+    public function getAdvantageServices()
+    {
+        if (empty($this->advantageServices)) {
+            return [];
+        }
+
+        return array_merge(
+            [
+                'ags' => \LtiAdvantageService::AGS_SIMPLE,
+            ],
+            $this->advantageServices
+        );
     }
 }

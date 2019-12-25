@@ -12,6 +12,10 @@ class FrmAdd extends FormValidator
      * @var ImsLtiTool|null
      */
     private $baseTool;
+    /**
+     * @var bool
+     */
+    private $toolIsV1p3 = false;
 
     /**
      * FrmAdd constructor.
@@ -28,6 +32,9 @@ class FrmAdd extends FormValidator
         parent::__construct($name, 'POST', '', '', $attributes, self::LAYOUT_HORIZONTAL, true);
 
         $this->baseTool = $tool;
+        $this->toolIsV1p3 = $this->baseTool &&
+            !empty($this->baseTool->publicKey) && !empty($this->baseTool->getClientId()) &&
+            !empty($this->baseTool->getLoginUrl()) && !empty($this->baseTool->getRedirectUrl());
     }
 
     /**
@@ -88,6 +95,7 @@ class FrmAdd extends FormValidator
             '1p3_ags',
             $plugin->get_lang('AssigmentAndGradesService'),
             [
+                LtiAssignmentGradesService::AGS_NONE => $plugin->get_lang('DontUseService'),
                 LtiAssignmentGradesService::AGS_SIMPLE => $plugin->get_lang('AGServiceSimple'),
                 LtiAssignmentGradesService::AGS_FULL => $plugin->get_lang('AGServiceFull'),
             ]
@@ -110,7 +118,7 @@ class FrmAdd extends FormValidator
         $defaults = [];
         $defaults['version'] = ImsLti::V_1P1;
 
-        if (null !== $this->baseTool) {
+        if ($this->baseTool) {
             $defaults['name'] = $this->baseTool->getName();
             $defaults['description'] = $this->baseTool->getDescription();
             $defaults['custom_params'] = $this->baseTool->getCustomParams();
@@ -120,6 +128,12 @@ class FrmAdd extends FormValidator
             $defaults['public_key'] = $this->baseTool->publicKey;
             $defaults['login_url'] = $this->baseTool->getLoginUrl();
             $defaults['redirect_url'] = $this->baseTool->getRedirectUrl();
+
+            if ($this->toolIsV1p3) {
+                $advServices = $this->baseTool->getAdvantageServices();
+
+                $defaults['1p3_ags'] = $advServices['ags'];
+            }
         }
 
         $this->setDefaults($defaults);

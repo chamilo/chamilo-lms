@@ -210,15 +210,22 @@ try {
             if (!empty($advServices['ags'])) {
                 $agsClaim = [
                     'scope' => [
-                        'https://purl.imsglobal.org/spec/lti-ags/scope/lineitem',
-                        'https://purl.imsglobal.org/spec/lti-ags/scope/result.readonly',
-                        'https://purl.imsglobal.org/spec/lti-ags/scope/score',
+                        LtiAssignmentGradesService::SCOPE_LINE_ITEM,
+                        LtiAssignmentGradesService::SCOPE_LINE_ITEM_READ,
                     ],
-                    'lineitems' => $webPluginPath."ims_lti/gradebook/service/lineitems.php?c=".$tool->getId(),
+                    'lineitems' => $webPluginPath."ims_lti/gradebook/service/lineitems.php?"
+                        .http_build_query(['c' => $course->getId(), 't' => $tool->getId()]),
                 ];
 
-                if (LtiAssignmentGradesService::AGS_FULL === $advServices['ags']) {
-                    $agsClaim['lineitem'] = $webPluginPath."ims_lti/gradebook/service/lineitem.php?c=".$tool->getId();
+                if ($tool->getGradebookEval()) {
+                    $agsClaim['lineitem'] = $webPluginPath."ims_lti/gradebook/service/lineitems.php?"
+                        .http_build_query(
+                            [
+                                'c' => $course->getId(),
+                                'l' => $tool->getGradebookEval()->getId(),
+                                't' => $tool->getId(),
+                            ]
+                        );
                 }
 
                 $jwtContent['https://purl.imsglobal.org/spec/lti-ags/claim/endpoint'] = $agsClaim;

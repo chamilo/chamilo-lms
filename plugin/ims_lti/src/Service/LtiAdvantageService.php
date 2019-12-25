@@ -8,13 +8,20 @@ use Chamilo\PluginBundle\Entity\ImsLti\ImsLtiTool;
  */
 abstract class LtiAdvantageService
 {
-    const AGS_SIMPLE = 'simple';
-    const AGS_FULL = 'full';
-
     /**
      * @var ImsLtiTool
      */
     protected $tool;
+
+    /**
+     * LtiAdvantageService constructor.
+     *
+     * @param ImsLtiTool $tool
+     */
+    public function __construct(ImsLtiTool $tool)
+    {
+        $this->tool = $tool;
+    }
 
     /**
      * @param ImsLtiTool $tool

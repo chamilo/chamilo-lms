@@ -656,7 +656,7 @@ class ImsLtiTool
 
         return array_merge(
             [
-                'ags' => \LtiAdvantageService::AGS_SIMPLE,
+                'ags' => \LtiAssignmentGradesService::AGS_NONE,
             ],
             $this->advantageServices
         );

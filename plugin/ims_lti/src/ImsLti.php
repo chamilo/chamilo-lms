@@ -164,11 +164,11 @@ class ImsLti
      *
      * @param string  $domain
      * @param Course  $course
-     * @param Session $session
+     * @param Session $session Optional.
      *
      * @return string
      */
-    public static function getCourseSectionSourcedId($domain, Course $course, Session $session)
+    public static function getCourseSectionSourcedId($domain, Course $course, Session $session = null)
     {
         $sourceId = [$domain, $course->getId()];
 

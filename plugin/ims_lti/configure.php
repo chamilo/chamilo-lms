@@ -31,6 +31,8 @@ if ($baseTool && !$baseTool->isGlobal()) {
     exit;
 }
 
+$categories = Category::load(null, null, $course->getCode());
+
 switch ($action) {
     case 'add':
         $form = new FrmAdd('ims_lti_add_tool', [], $baseTool);
@@ -44,6 +46,12 @@ switch ($action) {
             $formValues = $form->getSubmitValues();
 
             $tool = new ImsLtiTool();
+
+            if ($baseTool) {
+                $tool = clone $baseTool;
+                $tool->setParent($baseTool);
+            }
+
             $tool
                 ->setName($formValues['name'])
                 ->setDescription(
@@ -53,19 +61,13 @@ switch ($action) {
                     empty($formValues['custom_params']) ? null : $formValues['custom_params']
                 )
                 ->setCourse($course)
-                ->setActiveDeepLinking(!empty($formValues['deep_linking']))
                 ->setPrivacy(
                     !empty($formValues['share_name']),
                     !empty($formValues['share_email']),
                     !empty($formValues['share_picture'])
                 );
 
-            if ($baseTool) {
-                $tool
-                    ->setLaunchUrl($baseTool->getLaunchUrl())
-                    ->setConsumerKey($baseTool->getConsumerKey())
-                    ->setSharedSecret($baseTool->getSharedSecret());
-            } else {
+            if (!$baseTool) {
                 if (empty($formValues['consumer_key']) && empty($formValues['shared_secret'])) {
                     try {
                         $launchUrl = $plugin->getLaunchUrlFromCartridge($formValues['launch_url']);
@@ -96,8 +98,15 @@ switch ($action) {
                     );
             }
 
-            if ($baseTool) {
-                $tool->setParent($baseTool);
+            $toolIsV1p3 = !empty($tool->publicKey) && !empty($tool->getClientId()) &&
+                !empty($tool->getLoginUrl()) && !empty($tool->getRedirectUrl());
+
+            if ($toolIsV1p3) {
+                $advServices = $tool->getAdvantageServices();
+
+                if (LtiAssignmentGradesService::AGS_NONE !== $advServices['ags']) {
+                    createEvaluation($tool, $categories[0]);
+                }
             }
 
             $em->persist($tool);
@@ -187,8 +196,6 @@ switch ($action) {
         break;
 }
 
-$categories = Category::load(null, null, $course->getCode());
-
 $template = new Template($plugin->get_lang('AddExternalTool'));
 $template->assign('type', $baseTool ? $baseTool->getId() : null);
 $template->assign('added_tools', $addedTools);
@@ -212,3 +219,47 @@ if (!empty($categories)) {
 $template->assign('actions', Display::toolbarAction('lti_toolbar', [$actions]));
 $template->assign('content', $content);
 $template->display_one_col_template();
+
+/**
+ * @param ImsLtiTool $tool
+ * @param Category   $gradebookCategory
+ *
+ * @throws \Doctrine\ORM\ORMException
+ * @throws \Doctrine\ORM\OptimisticLockException
+ * @throws \Doctrine\ORM\TransactionRequiredException
+ */
+function createEvaluation(ImsLtiTool $tool, Category $gradebookCategory)
+{
+    $plugin = ImsLtiPlugin::create();
+
+    $weight = $gradebookCategory->getRemainingWeight();
+
+    $userId = api_get_user_id();
+    $courseCode = api_get_course_id();
+
+    $evaluation = new Evaluation();
+    $evaluation->set_user_id($userId);
+    $evaluation->set_category_id($gradebookCategory->get_id());
+    $evaluation->set_course_code($courseCode);
+    $evaluation->set_name($tool->getName());
+    $evaluation->set_description($tool->getDescription());
+    $evaluation->set_weight($weight);
+    $evaluation->set_max(100);
+    $evaluation->set_visible(1);
+    $evaluation->add();
+
+    $gradebookEvaluation = Database::getManager()
+        ->find('ChamiloCoreBundle:GradebookEvaluation', $evaluation->get_id());
+
+    $tool->setGradebookEval($gradebookEvaluation);
+
+    Display::addFlash(
+        Display::return_message($plugin->get_lang('GradebookEvaluationCreated'), 'success')
+    );
+
+    if (empty($weight)) {
+        Display::addFlash(
+            Display::return_message($plugin->get_lang('GradebookEvaluationWithEmptyWeight'), 'warning')
+        );
+    }
+}

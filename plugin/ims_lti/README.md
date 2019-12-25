@@ -57,11 +57,10 @@ Run this changes on database:
 
 ## To v1.6.0
 ```sql
-ALTER TABLE plugin_ims_lti_tool
-    ADD client_id VARCHAR(255) DEFAULT NULL,
-    ADD public_key LONGTEXT DEFAULT NULL,
-    ADD login_url VARCHAR(255) DEFAULT NULL,
-    ADD redirect_url VARCHAR(255) DEFAULT NULL;
+CREATE TABLE plugin_ims_lti_deployment (
+    id INT AUTO_INCREMENT NOT NULL,
+    PRIMARY KEY(id)
+) DEFAULT CHARACTER SET utf8 COLLATE `utf8_unicode_ci` ENGINE = InnoDB;
 CREATE TABLE plugin_ims_lti_platform (
     id INT AUTO_INCREMENT NOT NULL,
     kid VARCHAR(255) NOT NULL,
@@ -69,10 +68,25 @@ CREATE TABLE plugin_ims_lti_platform (
     private_key LONGTEXT NOT NULL,
     PRIMARY KEY(id)
 ) DEFAULT CHARACTER SET utf8 COLLATE `utf8_unicode_ci` ENGINE = InnoDB;
-CREATE TABLE plugin_ims_lti_deployment (
+CREATE TABLE plugin_ims_lti_token (
     id INT AUTO_INCREMENT NOT NULL,
+    tool_id INT DEFAULT NULL,
+    scope LONGTEXT NOT NULL COMMENT '(DC2Type:json)',
+    hash VARCHAR(255) NOT NULL,
+    created_at INT NOT NULL,
+    expires_at INT NOT NULL,
+    INDEX IDX_F7B5692F8F7B22CC (tool_id),
     PRIMARY KEY(id)
 ) DEFAULT CHARACTER SET utf8 COLLATE `utf8_unicode_ci` ENGINE = InnoDB;
+ALTER TABLE plugin_ims_lti_token
+    ADD CONSTRAINT FK_F7B5692F8F7B22CC FOREIGN KEY (tool_id)
+    REFERENCES plugin_ims_lti_tool (id);
+ALTER TABLE plugin_ims_lti_tool
+    ADD client_id VARCHAR(255) DEFAULT NULL,
+    ADD public_key LONGTEXT DEFAULT NULL,
+    ADD login_url VARCHAR(255) DEFAULT NULL,
+    ADD redirect_url VARCHAR(255) DEFAULT NULL,
+    ADD advantage_services LONGTEXT DEFAULT NULL COMMENT '(DC2Type:json)';
 ```
 
 ## To v1.5.1

@@ -1,4 +1,5 @@
 <?php
+
 /* For licensing terms, see /license.txt */
 
 use Chamilo\CoreBundle\Entity\TrackEExercises;
@@ -18,7 +19,6 @@ if (!isset($_REQUEST['user'], $_REQUEST['exercise'], $_REQUEST['id'])) {
 }
 
 $courseId = api_get_course_int_id();
-$sessionId = api_get_session_id();
 $em = Database::getManager();
 
 /** @var TrackEExercises $trackedExercise */
@@ -32,8 +32,8 @@ $studentId = $trackedExercise->getExeUserId();
 $exerciseId = $trackedExercise->getExeExoId();
 $exeId = $trackedExercise->getExeId();
 
-if ($studentId != intval($_REQUEST['user']) ||
-    $exerciseId != intval($_REQUEST['exercise'])
+if ($studentId != (int) ($_REQUEST['user']) ||
+    $exerciseId != (int) ($_REQUEST['exercise'])
 ) {
     exit;
 }
@@ -68,7 +68,7 @@ if (!$useEvaluationPlugin) {
         $totalWeight += $question->selectWeighting();
 
         // We're inside *one* question. Go through each possible answer for this question
-        if ($question->type === MULTIPLE_ANSWER_TRUE_FALSE_DEGREE_CERTAINTY) {
+        if (MULTIPLE_ANSWER_TRUE_FALSE_DEGREE_CERTAINTY === $question->type) {
             $result = $exercise->manage_answer(
                 $exeId,
                 $questionId,

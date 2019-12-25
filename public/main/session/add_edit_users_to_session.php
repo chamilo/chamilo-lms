@@ -1,14 +1,11 @@
 <?php
+
 /* For licensing terms, see /license.txt */
 
-/**
- * @package chamilo.admin
- */
-// resetting the course id
 $cidReset = true;
 
-// including some necessary files
 require_once __DIR__.'/../inc/global.inc.php';
+
 $xajax = new xajax();
 $xajax->registerFunction('search_users');
 
@@ -250,7 +247,6 @@ function search_users($needle, $type)
 
             $xajax_response->addAssign('ajax_list_users_single', 'innerHTML', api_utf8_encode($return));
         } else {
-            global $nosessionUsersList;
             $return .= '<select id="origin_users" name="nosessionUsersList[]" multiple="multiple" size="15" style="width:360px;">';
             while ($user = Database:: fetch_array($rs)) {
                 $person_name =

@@ -75,7 +75,7 @@ class MultipleAnswerTrueFalseDegreeCertainty extends Question
             .'</th>';
 
         // show column comment when feedback is enable
-        if ($objEx->getFeedbackType() != EXERCISE_FEEDBACK_TYPE_EXAM) {
+        if (EXERCISE_FEEDBACK_TYPE_EXAM != $objEx->getFeedbackType()) {
             $html .= '<th>'.get_lang('Comment').'</th>';
         }
         $html .= '</tr>';
@@ -102,7 +102,7 @@ class MultipleAnswerTrueFalseDegreeCertainty extends Question
         // Can be more options
         $optionData = Question::readQuestionOption($this->id, $courseId);
 
-        for ($i = 1; $i <= $nbAnswers; $i++) {
+        for ($i = 1; $i <= $nbAnswers; ++$i) {
             $renderer->setElementTemplate(
                 '<td><!-- BEGIN error --><span class="form_error">{error}</span><!-- END error --><br/>{element}</td>',
                 'correct['.$i.']'
@@ -149,8 +149,8 @@ class MultipleAnswerTrueFalseDegreeCertainty extends Question
                 if (!empty($optionData)) {
                     foreach ($optionData as $id => $data) {
                         $form->addElement('radio', 'correct['.$i.']', null, null, $id);
-                        $j++;
-                        if ($j == 3) {
+                        ++$j;
+                        if (3 == $j) {
                             break;
                         }
                     }
@@ -171,7 +171,7 @@ class MultipleAnswerTrueFalseDegreeCertainty extends Question
             $form->addRule('answer['.$i.']', get_lang('Required field'), 'required');
 
             // show comment when feedback is enable
-            if ($objEx->getFeedbackType() != EXERCISE_FEEDBACK_TYPE_EXAM) {
+            if (EXERCISE_FEEDBACK_TYPE_EXAM != $objEx->getFeedbackType()) {
                 $form->addElement(
                     'html_editor',
                     'comment['.$i.']',
@@ -203,13 +203,13 @@ class MultipleAnswerTrueFalseDegreeCertainty extends Question
         if (!empty($this->extra)) {
             $scores = explode(':', $this->extra);
             if (!empty($scores)) {
-                for ($i = 1; $i <= 3; $i++) {
+                for ($i = 1; $i <= 3; ++$i) {
                     $defaults['option['.$i.']'] = $scores[$i - 1];
                 }
             }
         }
 
-        if ($objEx->edit_exercise_in_lp === true ||
+        if (true === $objEx->edit_exercise_in_lp ||
             (empty($this->exerciseList) && empty($objEx->id))
         ) {
             $form->addElement('submit', 'lessAnswers', get_lang('Remove answer option'), 'class="btn btn-danger minus"');
@@ -253,7 +253,7 @@ class MultipleAnswerTrueFalseDegreeCertainty extends Question
                 Question::updateQuestionOption($id, $optionData, $courseId);
             }
         } else {
-            for ($i = 1; $i <= 8; $i++) {
+            for ($i = 1; $i <= 8; ++$i) {
                 $lastId = Question::saveQuestionOption($this->id, $this->options[$i], $courseId, $i);
                 $correct[$i] = $lastId;
             }
@@ -271,13 +271,13 @@ class MultipleAnswerTrueFalseDegreeCertainty extends Question
           the true, false, doubt options registered in this format
           XX:YY:ZZZ where XX is a float score value. */
         $extraValues = [];
-        for ($i = 1; $i <= 3; $i++) {
+        for ($i = 1; $i <= 3; ++$i) {
             $score = trim($form->getSubmitValue('option['.$i.']'));
             $extraValues[] = $score;
         }
         $this->setExtra(implode(':', $extraValues));
 
-        for ($i = 1; $i <= $nbAnswers; $i++) {
+        for ($i = 1; $i <= $nbAnswers; ++$i) {
             $answer = trim($form->getSubmitValue('answer['.$i.']'));
             $comment = trim($form->getSubmitValue('comment['.$i.']'));
             $goodAnswer = trim($form->getSubmitValue('correct['.$i.']'));
@@ -298,9 +298,6 @@ class MultipleAnswerTrueFalseDegreeCertainty extends Question
         $this->save($exercise);
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function return_header(Exercise $exercise, $counter = null, $score = [])
     {
         $header = parent::return_header($exercise, $counter, $score);
@@ -317,7 +314,7 @@ class MultipleAnswerTrueFalseDegreeCertainty extends Question
             .get_lang('Your degree of certainty')
             .'</th>'
         ;
-        if ($exercise->getFeedbackType() != EXERCISE_FEEDBACK_TYPE_EXAM) {
+        if (EXERCISE_FEEDBACK_TYPE_EXAM != $exercise->getFeedbackType()) {
             $header .= '<th>'.get_lang('Comment').'</th>';
         } else {
             $header .= '<th>&nbsp;</th>';
@@ -339,7 +336,7 @@ class MultipleAnswerTrueFalseDegreeCertainty extends Question
     public function getResponseDegreeInfo($studentAnswer, $expectedAnswer, $studentDegreeChoicePosition)
     {
         $result = [];
-        if ($studentDegreeChoicePosition == 3) {
+        if (3 == $studentDegreeChoicePosition) {
             $result = [
                 'color' => '#000000',
                 'background-color' => '#F6BA2A',
@@ -552,7 +549,7 @@ class MultipleAnswerTrueFalseDegreeCertainty extends Question
                 $categoryQuestionName = $category->name;
             }
 
-            if ($categoryQuestionName === '') {
+            if ('' === $categoryQuestionName) {
                 $categoryName = get_lang('Without category');
             } else {
                 $categoryName = $categoryQuestionName;
@@ -571,11 +568,11 @@ class MultipleAnswerTrueFalseDegreeCertainty extends Question
             );
             $html .= '</div>';
 
-            if ($i == 2) {
+            if (2 == $i) {
                 $html .= '<div style="clear:both; height: 10px;">&nbsp;</div>';
                 $i = 0;
             } else {
-                $i++;
+                ++$i;
             }
         }
         $html .= '</div>';
@@ -637,17 +634,15 @@ class MultipleAnswerTrueFalseDegreeCertainty extends Question
         $html = '';
 
         if ($groupCategoriesByBracket) {
-            $title = api_preg_replace("/[^]]*$/", '', $title);
+            $title = api_preg_replace('/[^]]*$/', '', $title);
             $title = ucfirst(api_preg_replace("/[\[\]]/", '', $title));
         }
 
-        $titleDisplay = (strpos($title, "ensemble") > 0) ?
+        $titleDisplay = strpos($title, 'ensemble') > 0 ?
             $title."<br/>($totalAttemptNumber questions)" :
             $title;
-        $textSize = (
-            strpos($title, 'ensemble') > 0 ||
-            strpos($title, 'votre dernier résultat à ce test') > 0
-        ) ? 100 : 80;
+        $textSize = strpos($title, 'ensemble') > 0 ||
+            strpos($title, 'votre dernier résultat à ce test') > 0 ? 100 : 80;
 
         $html .= '<div class="row-chart">';
         $html .= '<h4 class="chart-title">'.$titleDisplay.'</h4>';
@@ -696,17 +691,17 @@ class MultipleAnswerTrueFalseDegreeCertainty extends Question
             }
             $sizeBar = ($scoreOnBottom * $sizeRatio * 2).'px;';
 
-            if ($i == 0) {
+            if (0 == $i) {
                 $html .= '<div class="item">';
                 $html .= '<div class="panel-certaint" style="min-height:'.$verticalLineHeight.'px; position: relative;">';
                 $html .= '<div class="answers-title">'.$IncorrectAnswers.'</div>';
                 $html .= '<ul class="certaint-list-two">';
-            } elseif ($i == 3) {
+            } elseif (3 == $i) {
                 $html .= '<div class="item">';
                 $html .= '<div class="panel-certaint" style="height:'.$verticalLineHeight.'px;  position: relative;">';
                 $html .= '<div class="answers-title">'.$CorrectAnswers.'</div>';
                 $html .= '<ul class="certaint-list-two">';
-            } elseif ($i == 2) {
+            } elseif (2 == $i) {
                 $html .= '<div class="item">';
                 $html .= '<div class="panel-certaint" style="height:'.$verticalLineHeight.'px;  position: relative;">';
                 $html .= '<div class="answers-title">'.$IgnoranceAnswers.'</div>';
@@ -720,7 +715,7 @@ class MultipleAnswerTrueFalseDegreeCertainty extends Question
             $html .= '<div class="certaint-text">'.get_lang($explainHistoList[$i]).'</div>';
             $html .= '</li>';
 
-            if ($i == 1 || $i == 2 || $i == 4) {
+            if (1 == $i || 2 == $i || 4 == $i) {
                 $html .= '</ul>';
                 $html .= '</div>';
                 $html .= '</div>';
@@ -791,7 +786,7 @@ class MultipleAnswerTrueFalseDegreeCertainty extends Question
         $html = '';
 
         if ($groupCategoriesByBracket) {
-            $title = api_preg_replace("/[^]]*$/", '', $title);
+            $title = api_preg_replace('/[^]]*$/', '', $title);
             $title = ucfirst(api_preg_replace("/[\[\]]/", '', $title));
         }
 
@@ -854,7 +849,7 @@ class MultipleAnswerTrueFalseDegreeCertainty extends Question
                 $scoreOnBottom = 0;
             }
             $sizeOnBottom = $scoreOnBottom * $sizeRatio * 2;
-            if ($i == 1 || $i == 2) {
+            if (1 == $i || 2 == $i) {
                 $html .= '<td width="'
                     .$colWidth
                     .'px" style="border-right: 1px dotted #7FC5FF; vertical-align: bottom;font-size: '
@@ -894,7 +889,7 @@ class MultipleAnswerTrueFalseDegreeCertainty extends Question
             $html .= '<tr>';
             $i = 0;
             foreach ($explainHistoList as $explain) {
-                if ($i == 1 || $i == 2) {
+                if (1 == $i || 2 == $i) {
                     $class = 'borderRight';
                 } else {
                     $class = '';
@@ -911,7 +906,7 @@ class MultipleAnswerTrueFalseDegreeCertainty extends Question
                 ;
                 $html .= get_lang($explain);
                 $html .= '</td>';
-                $i++;
+                ++$i;
             }
             $html .= '</tr>';
         }
@@ -950,7 +945,7 @@ class MultipleAnswerTrueFalseDegreeCertainty extends Question
         $userId = $data['exe_user_id'];
         $attemptDate = $data['exe_date'];
 
-        if ($attemptDate == '0000-00-00 00:00:00') {
+        if ('0000-00-00 00:00:00' == $attemptDate) {
             // incomplete attempt, close it before continue
             return 0;
         }
@@ -970,7 +965,7 @@ class MultipleAnswerTrueFalseDegreeCertainty extends Question
 
         $res = Database::query($sql);
 
-        if (Database::num_rows($res) == 0) {
+        if (0 == Database::num_rows($res)) {
             // no previous attempt
             return 0;
         }
@@ -1003,12 +998,12 @@ class MultipleAnswerTrueFalseDegreeCertainty extends Question
         $attemptInfoList = self::getExerciseAttemptInfo($exeId);
 
         foreach ($attemptInfoList as $attemptInfo) {
-            $oQuestion = new MultipleAnswerTrueFalseDegreeCertainty();
+            $oQuestion = new self();
             $oQuestion->read($attemptInfo['question_id']);
-            if ($oQuestion->type == MULTIPLE_ANSWER_TRUE_FALSE_DEGREE_CERTAINTY) {
+            if (MULTIPLE_ANSWER_TRUE_FALSE_DEGREE_CERTAINTY == $oQuestion->type) {
                 $answerColor = self::getAnswerColor($exeId, $attemptInfo['question_id'], $attemptInfo['position']);
                 if ($answerColor) {
-                    $result[$answerColor]++;
+                    ++$result[$answerColor];
                 }
             }
         }
@@ -1041,9 +1036,9 @@ class MultipleAnswerTrueFalseDegreeCertainty extends Question
         $attemptInfoList = self::getExerciseAttemptInfo($exeId);
 
         foreach ($attemptInfoList as $attemptInfo) {
-            $oQuestion = new MultipleAnswerTrueFalseDegreeCertainty();
+            $oQuestion = new self();
             $oQuestion->read($attemptInfo['question_id']);
-            if ($oQuestion->type == MULTIPLE_ANSWER_TRUE_FALSE_DEGREE_CERTAINTY) {
+            if (MULTIPLE_ANSWER_TRUE_FALSE_DEGREE_CERTAINTY == $oQuestion->type) {
                 $questionCategory = Testcategory::getCategoryForQuestion($attemptInfo['question_id']);
 
                 if (!array_key_exists($questionCategory, $result)) {
@@ -1055,7 +1050,7 @@ class MultipleAnswerTrueFalseDegreeCertainty extends Question
                     if (!isset($result[$questionCategory][$answerColor])) {
                         $result[$questionCategory][$answerColor] = 0;
                     }
-                    $result[$questionCategory][$answerColor]++;
+                    ++$result[$questionCategory][$answerColor];
                 }
             }
         }
@@ -1076,7 +1071,7 @@ class MultipleAnswerTrueFalseDegreeCertainty extends Question
     {
         $attemptInfoList = self::getExerciseAttemptInfo($exeId, $questionId, $position);
 
-        if (count($attemptInfoList) != 1) {
+        if (1 != count($attemptInfoList)) {
             // havent got the answer
             return 0;
         }
@@ -1084,10 +1079,10 @@ class MultipleAnswerTrueFalseDegreeCertainty extends Question
         $answerCodes = $attemptInfoList[0]['answer'];
 
         // student answer
-        $splitAnswer = preg_split("/:/", $answerCodes);
+        $splitAnswer = preg_split('/:/', $answerCodes);
         // get correct answer option id
         $correctAnswerOptionId = self::getCorrectAnswerOptionId($splitAnswer[0]);
-        if ($correctAnswerOptionId == 0) {
+        if (0 == $correctAnswerOptionId) {
             // error returning the correct answer option id
             return 0;
         }
@@ -1151,7 +1146,7 @@ class MultipleAnswerTrueFalseDegreeCertainty extends Question
                 WHERE c_id = $courseId AND id = $optionId";
         $res = Database::query($sql);
 
-        if (Database::num_rows($res) == 0) {
+        if (0 == Database::num_rows($res)) {
             return 0;
         }
 
@@ -1314,12 +1309,12 @@ class MultipleAnswerTrueFalseDegreeCertainty extends Question
             null,
             PERSON_NAME_EMAIL_ADDRESS
         );
-        $subject = "[".get_lang('Please do not reply')."] "
-            .html_entity_decode(get_lang('Results for the accomplished test')." \"".$objExercise->title."\"");
+        $subject = '['.get_lang('Please do not reply').'] '
+            .html_entity_decode(get_lang('Results for the accomplished test').' "'.$objExercise->title.'"');
 
         // message sended to the student
-        $message = get_lang('Dear').' '.$recipientName.",<br /><br />";
-        $exerciseLink = "<a href='".api_get_path(WEB_CODE_PATH)."/exercise/result.php?show_headers=1&"
+        $message = get_lang('Dear').' '.$recipientName.',<br /><br />';
+        $exerciseLink = "<a href='".api_get_path(WEB_CODE_PATH).'/exercise/result.php?show_headers=1&'
             .api_get_cidreq()
             ."&id=$exeId'>";
         $exerciseTitle = $objExercise->title;

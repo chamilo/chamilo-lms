@@ -1,4 +1,5 @@
 <?php
+
 /* For licensing terms, see /license.txt */
 
 use ChamiloSession as Session;
@@ -41,7 +42,7 @@ $clock_expired_time = ExerciseLib::get_session_time_control_key(
     $learnpath_item_id
 );
 
-if ($objExercise->expired_time != 0 && !empty($clock_expired_time)) {
+if (0 != $objExercise->expired_time && !empty($clock_expired_time)) {
     $time_control = true;
 }
 
@@ -177,13 +178,15 @@ foreach ($attempt_list as $question_id => $options) {
         switch ($question_obj->type) {
             case FILL_IN_BLANKS:
                 $item['answer'] = $objExercise->fill_in_blank_answer_to_string($item['answer']);
+
                 break;
             case HOT_SPOT:
                 break;
         }
 
-        if ($item['answer'] != '0' && !empty($item['answer'])) {
+        if ('0' != $item['answer'] && !empty($item['answer'])) {
             $exercise_result[] = $question_id;
+
             break;
         }
     }
@@ -219,7 +222,7 @@ foreach ($question_list as $questionId) {
         </div>
     </div>';
 
-    $counter++;
+    ++$counter;
     $questionTitle = $counter.'. '.strip_tags($objQuestionTmp->selectTitle());
     // Check if the question doesn't have an answer
     if (!in_array($questionId, $exercise_result)) {

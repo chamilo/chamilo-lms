@@ -92,8 +92,6 @@ if ($allowSocial) {
     $social_layout = $tpl->get_template('social/inbox.tpl');
     $tpl->display($social_layout);
 } else {
-    $content = $social_right_content;
-    $tpl->assign('message', $show_message);
-    $tpl->assign('content', $content);
+    $tpl->assign('content', $social_right_content);
     $tpl->display_one_col_template();
 }

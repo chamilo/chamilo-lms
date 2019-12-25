@@ -171,6 +171,7 @@ if ($form->validate()) {
 
     // Returning to the group area (note: this is inconsistent with the rest of chamilo)
     $cat = GroupManager::get_category_from_group($current_group['iid']);
+    $max_member = $cat['max_student'];
 
     if (isset($_POST['group_members']) &&
         count($_POST['group_members']) > $max_member &&

@@ -27,9 +27,6 @@ class Annotation extends Question
     {
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function createForm(&$form, $exercise)
     {
         parent::createForm($form, $exercise);
@@ -44,7 +41,7 @@ class Annotation extends Question
         if (!empty($this->id)) {
             $form->setDefaults(['weighting' => float_format($this->weighting, 1)]);
         } else {
-            if ($this->isContent == 1) {
+            if (1 == $this->isContent) {
                 $form->setDefaults(['weighting' => '10']);
             }
         }
@@ -84,9 +81,6 @@ class Annotation extends Question
         $form->addRule('imageUpload', get_lang('Please select an image'), 'uploadedfile');
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function processCreation($form, $exercise)
     {
         $fileInfo = $form->getSubmitValue('imageUpload');
@@ -109,18 +103,12 @@ class Annotation extends Question
     {
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function processAnswersCreation($form, $exercise)
     {
         $this->weighting = $form->getSubmitValue('weighting');
         $this->save($exercise);
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function return_header(Exercise $exercise, $counter = null, $score = [])
     {
         $score['revised'] = $this->isQuestionWaitingReview($score);

@@ -1,4 +1,5 @@
 <?php
+
 /* For licensing terms, see /license.txt */
 
 use Chamilo\CoreBundle\Entity\TrackEHotspot;
@@ -9,7 +10,6 @@ use Chamilo\CourseBundle\Entity\CQuizQuestion;
 /**
  * This file generates a json answer to the question preview.
  *
- * @package chamilo.exercise
  *
  * @author Toon Keppens, Julio Montoya adding hotspot "medical" support
  */
@@ -129,8 +129,8 @@ if (in_array(
 }
 
 $hideExpectedAnswer = false;
-if ($objExercise->getFeedbackType() == 0 &&
-    $objExercise->selectResultsDisabled() == RESULT_DISABLE_SHOW_SCORE_ONLY
+if (0 == $objExercise->getFeedbackType() &&
+    RESULT_DISABLE_SHOW_SCORE_ONLY == $objExercise->selectResultsDisabled()
 ) {
     $hideExpectedAnswer = true;
 }
@@ -151,7 +151,7 @@ if (!$hideExpectedAnswer) {
         ->select('a')
         ->from('ChamiloCourseBundle:CQuizAnswer', 'a');
 
-    if ($objQuestion->getType() == HOT_SPOT_DELINEATION) {
+    if (HOT_SPOT_DELINEATION == $objQuestion->getType()) {
         $qb
             ->where($qb->expr()->eq('a.cId', $courseId))
             ->andWhere($qb->expr()->eq('a.questionId', $questionId))
@@ -175,18 +175,23 @@ if (!$hideExpectedAnswer) {
         switch ($hotSpotAnswer->getHotspotType()) {
             case 'square':
                 $hotSpot['type'] = 'square';
+
                 break;
             case 'circle':
                 $hotSpot['type'] = 'circle';
+
                 break;
             case 'poly':
                 $hotSpot['type'] = 'poly';
+
                 break;
             case 'delineation':
                 $hotSpot['type'] = 'delineation';
+
                 break;
             case 'oar':
                 $hotSpot['type'] = 'delineation';
+
                 break;
         }
         $hotSpot['coord'] = $hotSpotAnswer->getHotspotCoordinates();
@@ -218,5 +223,5 @@ header('Content-Type: application/json');
 echo json_encode($data);
 
 if ($debug) {
-    error_log("---------- End call to hotspot_answers.as.php------------");
+    error_log('---------- End call to hotspot_answers.as.php------------');
 }

@@ -1,10 +1,9 @@
 <?php
+
 /* For licensing terms, see /license.txt */
 
 /**
  * This class handles the SCORM export of fill-in-the-blanks questions.
- *
- * @package chamilo.exercise.scorm
  */
 class ScormAnswerFillInBlanks extends Answer
 {
@@ -30,7 +29,7 @@ class ScormAnswerFillInBlanks extends Answer
         // display empty [input] with the right width for student to fill it
         $answer = '';
         $answerList = [];
-        for ($i = 0; $i < count($listAnswerInfo['common_words']) - 1; $i++) {
+        for ($i = 0; $i < count($listAnswerInfo['common_words']) - 1; ++$i) {
             // display the common words
             $answer .= $listAnswerInfo['common_words'][$i];
             // display the blank word

@@ -4,7 +4,7 @@
 require_once __DIR__.'/../inc/global.inc.php';
 
 $this_section = SECTION_COURSES;
-$exercise_id = (isset($_GET['exerciseId']) && !empty($_GET['exerciseId'])) ? intval($_GET['exerciseId']) : 0;
+$exercise_id = isset($_GET['exerciseId']) && !empty($_GET['exerciseId']) ? (int) ($_GET['exerciseId']) : 0;
 
 api_protect_course_script(true);
 
@@ -20,12 +20,12 @@ if (!$result) {
 }
 
 $interbreadcrumb[] = [
-    "url" => "exercise.php?".api_get_cidreq(),
-    "name" => get_lang('Tests'),
+    'url' => 'exercise.php?'.api_get_cidreq(),
+    'name' => get_lang('Tests'),
 ];
 $interbreadcrumb[] = [
-    "url" => "admin.php?exerciseId=$exercise_id&".api_get_cidreq(),
-    "name" => $objExercise->selectTitle(true),
+    'url' => "admin.php?exerciseId=$exercise_id&".api_get_cidreq(),
+    'name' => $objExercise->selectTitle(true),
 ];
 
 //Add the JS needed to use the jqgrid
@@ -108,7 +108,7 @@ $(function() {
 </script>
 <?php
 
-$actions = '<a href="exercise_report.php?id='.intval($_GET['exerciseId']).'&'.api_get_cidreq().'">'.
+$actions = '<a href="exercise_report.php?id='.(int) ($_GET['exerciseId']).'&'.api_get_cidreq().'">'.
     Display::return_icon('back.png', get_lang('Go back to the questions list'), '', ICON_SIZE_MEDIUM).'</a>';
 echo $actions = Display::div($actions, ['class' => 'actions']);
 

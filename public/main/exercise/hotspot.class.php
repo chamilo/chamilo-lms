@@ -29,9 +29,6 @@ class HotSpot extends Question
     {
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function createForm(&$form, $exercise)
     {
         parent::createForm($form, $exercise);
@@ -71,9 +68,6 @@ class HotSpot extends Question
         }
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function processCreation($form, $exercise)
     {
         $fileInfo = $form->getSubmitValue('imageUpload');
@@ -91,9 +85,6 @@ class HotSpot extends Question
         // nothing
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function processAnswersCreation($form, $exercise)
     {
         // nothing

@@ -1,4 +1,5 @@
 <?php
+
 /* For licensing terms, see /license.txt */
 
 use Chamilo\CoreBundle\Framework\Container;
@@ -60,12 +61,14 @@ if (!empty($attemptList) && isset($attemptList[$questionId])) {
                         $points[] = Geometry::decodePoint($partPoint);
                     }
                     $data['answers']['paths'][] = $points;
+
                     break;
                 case 'T':
                     $text = [
                         'text' => array_shift($parts),
                     ];
                     $data['answers']['texts'][] = $text + Geometry::decodePoint($parts[0]);
+
                     break;
             }
         }

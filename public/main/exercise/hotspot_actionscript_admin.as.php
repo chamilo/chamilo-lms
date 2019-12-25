@@ -1,4 +1,5 @@
 <?php
+
 /* For licensing terms, see /license.txt */
 
 use Chamilo\CoreBundle\Framework\Container;
@@ -8,7 +9,6 @@ use ChamiloSession as Session;
 /**
  * This file generates the ActionScript variables code used by the HotSpot .swf.
  *
- * @package chamilo.exercise
  *
  * @author Toon Keppens
  */
@@ -67,30 +67,30 @@ $answer_type = $objQuestion->getType();
 $answers = Session::read('tmp_answers');
 $nbrAnswers = count($answers['answer']);
 
-for ($i = 1; $i <= $nbrAnswers; $i++) {
+for ($i = 1; $i <= $nbrAnswers; ++$i) {
     $hotSpot = [];
     $hotSpot['id'] = null;
     $hotSpot['answer'] = $answers['answer'][$i];
 
-    if ($answer_type == HOT_SPOT_DELINEATION) {
-        if ($i == 1) {
+    if (HOT_SPOT_DELINEATION == $answer_type) {
+        if (1 == $i) {
             $hotSpot['type'] = 'delineation';
         } else {
             $hotSpot['type'] = 'oar';
         }
     } else {
         // Square or rectancle
-        if ($answers['hotspot_type'][$i] == 'square') {
+        if ('square' == $answers['hotspot_type'][$i]) {
             $hotSpot['type'] = 'square';
         }
 
         // Circle or ovale
-        if ($answers['hotspot_type'][$i] == 'circle') {
+        if ('circle' == $answers['hotspot_type'][$i]) {
             $hotSpot['type'] = 'circle';
         }
 
         // Polygon
-        if ($answers['hotspot_type'][$i] == 'poly') {
+        if ('poly' == $answers['hotspot_type'][$i]) {
             $hotSpot['type'] = 'poly';
         }
         /*// Delineation
@@ -102,7 +102,7 @@ for ($i = 1; $i <= $nbrAnswers; $i++) {
 
     // This is a good answer, count + 1 for nmbr of clicks
     if ($answers['weighting'][$i] > 0) {
-        $nmbrTries++;
+        ++$nmbrTries;
     }
 
     $hotSpot['coord'] = $answers['hotspot_coordinates'][$i];

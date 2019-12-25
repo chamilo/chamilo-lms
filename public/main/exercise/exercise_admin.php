@@ -151,7 +151,7 @@ $objExercise->createForm($form);
 // VALIDATE FORM
 if ($form->validate()) {
     $objExercise->processCreation($form);
-    if ($form->getSubmitValue('edit') === 'true') {
+    if ('true' === $form->getSubmitValue('edit')) {
         Display::addFlash(
             Display::return_message(get_lang('Test name and settings have been saved.'), 'success')
         );
@@ -184,7 +184,7 @@ if ($form->validate()) {
     Display::display_header($nameTools, get_lang('Test'));
 
     echo '<div class="actions">';
-    if ($objExercise->id != 0) {
+    if (0 != $objExercise->id) {
         echo '<a href="admin.php?'.api_get_cidreq().'&id='.$objExercise->id.'">'.
             Display::return_icon('back.png', get_lang('Go back to the questions list'), '', ICON_SIZE_MEDIUM).'</a>';
     } else {
@@ -196,8 +196,8 @@ if ($form->validate()) {
                 $lp_id = $_GET['lp_id'];
             }
             $lp_id = (int) $lp_id;
-            echo "<a href=\"../lp/lp_controller.php?".api_get_cidreq()."&gradebook=&action=add_item&type=step&lp_id=".$lp_id."#resource_tab-2\">".
-                Display::return_icon('back.png', get_lang("Back to").' '.get_lang('Learning paths'), '', ICON_SIZE_MEDIUM)."</a>";
+            echo '<a href="../lp/lp_controller.php?'.api_get_cidreq().'&gradebook=&action=add_item&type=step&lp_id='.$lp_id.'#resource_tab-2">'.
+                Display::return_icon('back.png', get_lang('Back to').' '.get_lang('Learning paths'), '', ICON_SIZE_MEDIUM).'</a>';
         } else {
             echo '<a href="exercise.php?'.api_get_cidreq().'">'.
                 Display::return_icon('back.png', get_lang('Back to test list'), '', ICON_SIZE_MEDIUM).
@@ -210,7 +210,7 @@ if ($form->validate()) {
         echo Display::return_message(get_lang('The test type cannot be modified since it was set to self evaluation. Self evaluation gives you the possibility to give direct feedback to the user, but this is not compatible with all question types and, so this type quiz cannot be changed afterward.'));
     }
 
-    if (api_get_setting('search_enabled') === 'true' &&
+    if ('true' === api_get_setting('search_enabled') &&
         !extension_loaded('xapian')
     ) {
         echo Display::return_message(get_lang('The Xapian search module is not installed'), 'error');

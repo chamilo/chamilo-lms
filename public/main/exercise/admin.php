@@ -1,4 +1,5 @@
 <?php
+
 /* For licensing terms, see /license.txt */
 
 use ChamiloSession as Session;
@@ -63,7 +64,7 @@ if (!$is_allowedToEdit) {
 $exerciseId = isset($_GET['id']) ? (int) $_GET['id'] : 0;
 
 /*  stripslashes POST data  */
-if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+if ('POST' == $_SERVER['REQUEST_METHOD']) {
     foreach ($_POST as $key => $val) {
         if (is_string($val)) {
             $_POST[$key] = stripslashes($val);
@@ -117,7 +118,7 @@ $objAnswer = Session::read('objAnswer');
 $_course = api_get_course_info();
 
 // tables used in the exercise tool
-if (!empty($_GET['action']) && $_GET['action'] == 'exportqti2' && !empty($_GET['questionId'])) {
+if (!empty($_GET['action']) && 'exportqti2' == $_GET['action'] && !empty($_GET['questionId'])) {
     require_once 'export/qti2/qti2_export.php';
     $export = export_question_qti($_GET['questionId'], true);
     $qid = (int) $_GET['questionId'];
@@ -210,7 +211,7 @@ if ($cancelQuestion) {
 
 if (!empty($clone_question) && !empty($objExercise->id)) {
     $old_question_obj = Question::read($clone_question);
-    $old_question_obj->question = $old_question_obj->question.' - '.get_lang('Copy');
+    $old_question_obj->question .= ' - '.get_lang('Copy');
 
     $new_id = $old_question_obj->duplicate(api_get_course_info());
     $new_question_obj = Question::read($new_id);
@@ -277,7 +278,7 @@ if (!$exerciseId && $nameTools != get_lang('Tests management')) {
 }
 
 // if the question is duplicated, disable the link of tool name
-if ($modifyIn === 'thisExercise') {
+if ('thisExercise' === $modifyIn) {
     if ($buttonBack) {
         $modifyIn = 'allExercises';
     }
@@ -296,7 +297,7 @@ $htmlHeadXtra[] = '<script src="'.api_get_path(WEB_LIBRARY_JS_PATH).'hotspot/js/
 
 if (isset($_GET['message'])) {
     if (in_array($_GET['message'], ['ExerciseStored', 'ItemUpdated', 'ItemAdded'])) {
-      //  Display::addFlash(Display::return_message(get_lang($_GET['message']), 'confirmation'));
+        //  Display::addFlash(Display::return_message(get_lang($_GET['message']), 'confirmation'));
     }
 }
 
@@ -328,7 +329,7 @@ if ($inATest) {
         Display::return_icon('settings.png', get_lang('Edit test name and settings'), '', ICON_SIZE_MEDIUM).'</a>';
 
     $maxScoreAllQuestions = 0;
-    if ($showPagination === false) {
+    if (false === $showPagination) {
         $questionList = $objExercise->selectQuestionList(true, true);
         if (!empty($questionList)) {
             foreach ($questionList as $questionItemId) {
@@ -359,7 +360,7 @@ if ($inATest) {
     }
 
     $alert = '';
-    if ($showPagination === false) {
+    if (false === $showPagination) {
         $alert .= sprintf(
             get_lang('%d questions, for a total score (all questions) of %s.'),
             $nbrQuestions,
@@ -390,7 +391,7 @@ if ($newQuestion || $editQuestion) {
     $type = isset($_REQUEST['answerType']) ? Security::remove_XSS($_REQUEST['answerType']) : null;
     echo '<input type="hidden" name="Type" value="'.$type.'" />';
 
-    if ($newQuestion === 'yes') {
+    if ('yes' === $newQuestion) {
         $objExercise->edit_exercise_in_lp = true;
         require 'question_admin.inc.php';
     }
@@ -435,7 +436,7 @@ if (!$newQuestion && !$modifyQuestion && !$editQuestion && !isset($_GET['hotspot
 
 // if we are in question authoring, display warning to user is feedback not shown at the end of the test -ref #6619
 // this test to display only message in the question authoring page and not in the question list page too
-if ($objExercise->getFeedbackType() == EXERCISE_FEEDBACK_TYPE_EXAM) {
+if (EXERCISE_FEEDBACK_TYPE_EXAM == $objExercise->getFeedbackType()) {
     echo Display::return_message(get_lang('This test is configured not to display feedback to learners. Comments will not be seen at the end of the test, but may be useful for you, as teacher, when reviewing the question details.'), 'normal');
 }
 

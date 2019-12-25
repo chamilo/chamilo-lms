@@ -24,8 +24,6 @@ $nameTools = '';
 
 require_once __DIR__.'/../inc/global.inc.php';
 
-$this_section = SECTION_COURSES;
-
 api_protect_course_script(true);
 
 if (!api_is_allowed_to_edit()) {
@@ -48,12 +46,15 @@ $content = '';
 switch ($action) {
     case 'addcategory':
         $content = add_category_form('addcategory');
+
         break;
     case 'editcategory':
         $content = edit_category_form('editcategory');
+
         break;
     case 'deletecategory':
         delete_category_form();
+
         break;
     case 'export_category':
         $archiveFile = 'export_exercise_categories_'.api_get_course_id().'_'.api_get_local_time();
@@ -69,6 +70,7 @@ switch ($action) {
 
         Export::arrayToCsv($export, $archiveFile);
         exit;
+
         break;
     case 'import_category':
         $form = importCategoryForm();
@@ -85,6 +87,7 @@ switch ($action) {
             }
         }
         $content = $form->returnForm();
+
         break;
 }
 
@@ -267,6 +270,6 @@ function displayActionBar()
     );
 
     echo '</div>';
-    echo "<br/>";
-    echo "<fieldset><legend>".get_lang('Questions category')."</legend></fieldset>";
+    echo '<br/>';
+    echo '<fieldset><legend>'.get_lang('Questions category').'</legend></fieldset>';
 }

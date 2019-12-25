@@ -25,13 +25,10 @@ class CalculatedAnswer extends Question
         $this->isContent = $this->getIsContent();
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function createAnswersForm($form)
     {
         $defaults = [];
-        //$defaults['answer'] = get_lang('<table cellspacing="0" cellpadding="10" border="1" width="720" style="" height:="">    <tbody>        <tr>            <td colspan="2">            <h3>Example fill the form activity : calculate the Body Mass Index</h3>            </td>        </tr>        <tr>            <td style="text-align: right;"><strong>Age</strong></td>            <td width="75%" style="">[25] years old</td>        </tr>        <tr>            <td style="text-align: right;"><strong>Sex</strong></td>            <td style="" text-align:="">[M] (M or F)</td>        </tr>        <tr>            <td style="text-align: right;"><strong>Weight</strong></td>            <td style="" text-align:="">95 Kg</td>        </tr>        <tr>            <td style="vertical-align: top; text-align: right;"><strong>Height</strong></td>            <td style="vertical-align: top;">1.81 m</td>        </tr>        <tr>            <td style="vertical-align: top; text-align: right;"><strong>Body Mass Index</strong></td>            <td style="vertical-align: top;">[29] BMI =Weight/Size<sup>2</sup> (Cf.<a href="http://en.wikipedia.org/wiki/Body_mass_index" onclick="window.open(this.href,'','resizable=yes,location=yes,menubar=no,scrollbars=yes,status=yes,toolbar=no,fullscreen=no,dependent=no,width=800,height=600,left=40,top=40,status'); return false"> Wikipedia article</a>)</td>        </tr>    </tbody></table>');
+        //$defaults['answer'] = get_lang('<table cellspacing="0" cellpadding="10" border="1" width="720" style="" height:="">    <tbody>        <tr>            <td colspan="2">            <h3>Example fill the form activity : calculate the Body Mass Index</h3>            </td>        </tr>        <tr>            <td style="text-align: right;"><strong>Age</strong></td>            <td width="75%" style="">[25] years old</td>        </tr>        <tr>            <td style="text-align: right;"><strong>Sex</strong></td>            <td style="" text-align:="">[M] (M or F)</td>        </tr>        <tr>            <td style="text-align: right;"><strong>Weight</strong></td>            <td style="" text-align:="">95 Kg</td>        </tr>        <tr>            <td style="vertical-align: top; text-align: right;"><strong>Height</strong></td>            <td style="vertical-align: top;">1.81 m</td>        </tr>        <tr>            <td style="vertical-align: top; text-align: right;"><strong>Body Mass Index</strong></td>            <td style="vertical-align: top;">[29] BMI =Weight/Size<sup>2</sup> (Cf.<a href="http://en.wikipedia.org/wiki/Body_mass_index" onclick="window.open(this.href,'','resizable=yes,location=yes,menubar=no,scrollbars=yes,status=yes,toolbar=no,fullscreen=no,dependent=no,width=800,height=600,left=40,top=40,status'); return false"> Wikipedia article</a>)</td>        </tr>    </tbody></table>');
         $defaults['answer'] = get_lang('DefaultTextInBlanks');
         if (!empty($this->id)) {
             $objAnswer = new Answer($this->id);
@@ -68,7 +65,7 @@ class CalculatedAnswer extends Question
                 } else {
                     result = parseInt(result);
                 }
-                document.getElementById("randomValue"+index).innerHTML = "'.get_lang("Range value").': " + result;
+                document.getElementById("randomValue"+index).innerHTML = "'.get_lang('Range value').': " + result;
            }
 
             CKEDITOR.on("instanceCreated", function(e) {
@@ -174,15 +171,12 @@ class CalculatedAnswer extends Question
         if (!empty($this->id)) {
             $form->setDefaults($defaults);
         } else {
-            if ($this->isContent == 1) {
+            if (1 == $this->isContent) {
                 $form->setDefaults($defaults);
             }
         }
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function processAnswersCreation($form, $exercise)
     {
         if (!self::isAnswered()) {
@@ -204,18 +198,18 @@ class CalculatedAnswer extends Question
             $this->weighting = $form->getSubmitValue('weighting');
 
             // Create as many answers as $answerVariations
-            for ($j = 0; $j < $answerVariations; $j++) {
+            for ($j = 0; $j < $answerVariations; ++$j) {
                 $auxAnswer = $answer;
                 $auxFormula = $formula;
                 $nb = preg_match_all('/\[[^\]]*\]/', $auxAnswer, $blanks);
                 if ($nb > 0) {
-                    for ($i = 0; $i < $nb; $i++) {
+                    for ($i = 0; $i < $nb; ++$i) {
                         $blankItem = $blanks[0][$i];
 
                         // take random float values when one or both edge values have a decimal point
                         $randomValue =
-                            (strpos($lowestValues[$i], '.') !== false ||
-                            strpos($highestValues[$i], '.') !== false) ?
+                            false !== strpos($lowestValues[$i], '.') ||
+                            false !== strpos($highestValues[$i], '.') ?
                             mt_rand($lowestValues[$i] * 100, $highestValues[$i] * 100) / 100 : mt_rand($lowestValues[$i], $highestValues[$i]);
 
                         $auxAnswer = str_replace($blankItem, $randomValue, $auxAnswer);
@@ -227,11 +221,11 @@ class CalculatedAnswer extends Question
                     // Remove decimal trailing zeros
                     $result = rtrim($result, '0');
                     // If it is an integer (ends in .00) remove the decimal point
-                    if (mb_substr($result, -1) === '.') {
+                    if ('.' === mb_substr($result, -1)) {
                         $result = str_replace('.', '', $result);
                     }
                     // Attach formula
-                    $auxAnswer .= " [".$result."]@@".$formula;
+                    $auxAnswer .= ' ['.$result.']@@'.$formula;
                 }
                 $this->save($exercise);
                 $objAnswer = new Answer($this->id);
@@ -242,9 +236,6 @@ class CalculatedAnswer extends Question
         }
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function return_header(Exercise $exercise, $counter = null, $score = [])
     {
         $header = parent::return_header($exercise, $counter, $score);

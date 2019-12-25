@@ -1,11 +1,11 @@
 <?php
+
 /* For licensing terms, see /license.txt */
 
 /**
  * Class ExerciseResult
  * which allows you to export exercises results in multiple presentation forms.
  *
- * @package chamilo.exercise
  *
  * @author Yannick Warnier
  */
@@ -34,10 +34,9 @@ class ExerciseResult
     /**
      * Gets the results of all students (or just one student if access is limited).
      *
-     * @param string $document_path The document path (for HotPotatoes retrieval)
-     * @param int    $user_id       User ID. Optional. If no user ID is provided, we take all the results. Defauts to null
-     * @param int    $filter
-     * @param int    $exercise_id
+     * @param int $user_id     User ID. Optional. If no user ID is provided, we take all the results. Defauts to null
+     * @param int $filter
+     * @param int $exercise_id
      *
      * @return bool
      */
@@ -55,10 +54,10 @@ class ExerciseResult
 
         $cid = api_get_course_id();
         $course_id = api_get_course_int_id();
-        $user_id = intval($user_id);
+        $user_id = (int) $user_id;
         $sessionId = api_get_session_id();
         $session_id_and = ' AND te.session_id = '.$sessionId.' ';
-        $exercise_id = intval($exercise_id);
+        $exercise_id = (int) $exercise_id;
 
         if (!empty($exercise_id)) {
             $session_id_and .= " AND exe_exo_id = $exercise_id ";
@@ -66,7 +65,7 @@ class ExerciseResult
 
         if (empty($user_id)) {
             $user_id_and = null;
-            $sql = "SELECT ".(api_is_western_name_order() ? "firstname as userpart1, lastname userpart2" : "lastname as userpart1, firstname as userpart2").",
+            $sql = 'SELECT '.(api_is_western_name_order() ? 'firstname as userpart1, lastname userpart2' : 'lastname as userpart1, firstname as userpart2').",
                     official_code,
                     ce.title as extitle,
                     te.score as exresult ,
@@ -96,7 +95,7 @@ class ExerciseResult
         } else {
             $user_id_and = ' AND te.exe_user_id = '.api_get_user_id().' ';
             // get only this user's results
-            $sql = "SELECT ".(api_is_western_name_order() ? "firstname as userpart1, lastname userpart2" : "lastname as userpart1, firstname as userpart2").",
+            $sql = 'SELECT '.(api_is_western_name_order() ? 'firstname as userpart1, lastname userpart2' : 'lastname as userpart1, firstname as userpart2').",
                         official_code,
                         ce.title as extitle,
                         te.score as exresult,
@@ -158,9 +157,11 @@ class ExerciseResult
             switch ($filter) {
                 case 1:
                     $filter_by_not_revised = true;
+
                     break;
                 case 2:
                     $filter_by_revised = true;
+
                     break;
                 default:
                     null;
@@ -180,7 +181,7 @@ class ExerciseResult
             $i = 0;
             foreach ($results as $result) {
                 $revised = 0;
-                if ($result['exstatus'] === 'incomplete') {
+                if ('incomplete' === $result['exstatus']) {
                     $revised = -1;
                 } else {
                     //revised or not
@@ -188,8 +189,8 @@ class ExerciseResult
                                 FROM $TBL_TRACK_ATTEMPT_RECORDING
                                 WHERE 
                                     author != '' AND 
-                                    exe_id = ".intval($result['exid'])."
-                                LIMIT 1";
+                                    exe_id = ".(int) ($result['exid']).'
+                                LIMIT 1';
                     $query = Database::query($sql_exe);
 
                     if (Database:: num_rows($query) > 0) {
@@ -197,7 +198,7 @@ class ExerciseResult
                     }
                 }
 
-                if ($filter_by_not_revised && $revised === 1) {
+                if ($filter_by_not_revised && 1 === $revised) {
                     continue;
                 }
 
@@ -226,7 +227,7 @@ class ExerciseResult
                 $return[$i]['result'] = $result['exresult'];
                 $return[$i]['max'] = $result['exweight'];
                 // Revised: 1 = revised, 0 = not revised, -1 = not even finished by user
-                $return[$i]['status'] = $revised === 1 ? get_lang('Validated') : ($revised === 0 ? get_lang('NotValidated') : get_lang('Unclosed'));
+                $return[$i]['status'] = 1 === $revised ? get_lang('Validated') : (0 === $revised ? get_lang('NotValidated') : get_lang('Unclosed'));
                 $return[$i]['lp_id'] = $result['orig_lp_id'];
                 $return[$i]['lp_name'] = $result['lp_name'];
 
@@ -237,7 +238,7 @@ class ExerciseResult
                 }
 
                 $userWithResults[$result['excruid']] = 1;
-                $i++;
+                ++$i;
             }
         }
 
@@ -276,7 +277,7 @@ class ExerciseResult
                         $return[$i]['lp_name'] = null;
                         $return[$i]['is_user_subscribed'] = get_lang('Yes');
 
-                        $latestId++;
+                        ++$latestId;
                     }
                 }
             }
@@ -335,7 +336,7 @@ class ExerciseResult
             }
         }
         $officialCodeInList = api_get_setting('show_official_code_exercise_result_list');
-        if ($officialCodeInList === 'true') {
+        if ('true' === $officialCodeInList) {
             $data .= get_lang('Code').';';
         }
 
@@ -382,14 +383,14 @@ class ExerciseResult
             }
 
             // Official code
-            if ($officialCodeInList === 'true') {
+            if ('true' === $officialCodeInList) {
                 $data .= $row['official_code'].';';
             }
 
             // e-mail
             $data .= str_replace("\r\n", '  ', api_html_entity_decode(strip_tags($row['username']), ENT_QUOTES, $charset)).';';
             $data .= str_replace("\r\n", '  ', api_html_entity_decode(strip_tags($row['email']), ENT_QUOTES, $charset)).';';
-            $data .= str_replace("\r\n", '  ', implode(", ", GroupManager::get_user_group_name($row['user_id']))).';';
+            $data .= str_replace("\r\n", '  ', implode(', ', GroupManager::get_user_group_name($row['user_id']))).';';
 
             if ($export_user_fields) {
                 //show user fields data, if any, for this user
@@ -425,7 +426,7 @@ class ExerciseResult
         header('Content-type: application/octet-stream');
         header('Content-Type: application/force-download');
         header('Content-length: '.$len);
-        if (preg_match("/MSIE 5.5/", $_SERVER['HTTP_USER_AGENT'])) {
+        if (preg_match('/MSIE 5.5/', $_SERVER['HTTP_USER_AGENT'])) {
             header('Content-Disposition: filename= '.$filename);
         } else {
             header('Content-Disposition: attachment; filename= '.$filename);
@@ -480,6 +481,7 @@ class ExerciseResult
         foreach ($this->results as $result) {
             if (!empty($result['last_name']) && !empty($result['first_name'])) {
                 $withColumnUser = true;
+
                 break;
             }
         }
@@ -495,7 +497,7 @@ class ExerciseResult
                 $list[0][] = get_lang('First name');
             }
 
-            if ($officialCodeInList === 'true') {
+            if ('true' === $officialCodeInList) {
                 $list[0][] = get_lang('Code');
             }
 
@@ -562,7 +564,7 @@ class ExerciseResult
                     );
                 }
 
-                if ($officialCodeInList === 'true') {
+                if ('true' === $officialCodeInList) {
                     $list[$column][] = api_html_entity_decode(
                         strip_tags($row['official_code']),
                         ENT_QUOTES,
@@ -626,7 +628,7 @@ class ExerciseResult
             $list[$column][] = $row['status'];
             $list[$column][] = $row['lp_name'];
             $list[$column][] = $row['is_user_subscribed'];
-            $column++;
+            ++$column;
         }
         Export::arrayToXls($list, $filename);
 

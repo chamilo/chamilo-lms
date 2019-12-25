@@ -1,11 +1,10 @@
 <?php
+
 /* For licensing terms, see /license.txt */
 
 use ChamiloSession as Session;
 
 /**
- * @package chamilo.exercise
- *
  * @author Julio Montoya <gugli100@gmail.com>
  */
 require_once __DIR__.'/../inc/global.inc.php';
@@ -86,7 +85,7 @@ if (empty($choiceValue) && empty($hotSpot) && $loaded) {
     $links = '<a onclick="tryAgain();" href="#">'.get_lang('Try again').'</a>&nbsp;'.$icon.'&nbsp;';
 
     // the link to finish the test
-    if ($destinationId == -1) {
+    if (-1 == $destinationId) {
         $links .= Display::return_icon(
                 'finish.gif',
                 '',
@@ -189,7 +188,7 @@ $answerType = $objQuestionTmp->selectType();
 $showResult = false;
 
 $objAnswerTmp = new Answer($questionId, api_get_course_int_id());
-if ($objExercise->getFeedbackType() === EXERCISE_FEEDBACK_TYPE_DIRECT) {
+if (EXERCISE_FEEDBACK_TYPE_DIRECT === $objExercise->getFeedbackType()) {
     $showResult = true;
 }
 
@@ -198,11 +197,13 @@ switch ($answerType) {
         if (is_array($choiceValue)) {
             $choiceValue = array_combine(array_values($choiceValue), array_values($choiceValue));
         }
+
         break;
     case UNIQUE_ANSWER:
         if (is_array($choiceValue) && isset($choiceValue[0])) {
             $choiceValue = $choiceValue[0];
         }
+
         break;
     case DRAGGABLE:
         break;
@@ -216,6 +217,7 @@ switch ($answerType) {
             $_SESSION['hotspot_coord'][$questionId][1] = $delineation_cord;
             $_SESSION['hotspot_dest'][$questionId][1] = $answer_delineation_destination;
         }
+
         break;
     case CALCULATED_ANSWER:
         /*$_SESSION['calculatedAnswerId'][$questionId] = mt_rand(
@@ -255,11 +257,12 @@ if (!empty($result)) {
             if ($result['score'] == $result['weight']) {
                 $answerCorrect = true;
             }
+
             break;
     }
 }
 
-if ($objExercise->getFeedbackType() === EXERCISE_FEEDBACK_TYPE_DIRECT) {
+if (EXERCISE_FEEDBACK_TYPE_DIRECT === $objExercise->getFeedbackType()) {
     if (isset($result['correct_answer_id'])) {
         /** @var Answer $answer */
         $answerId = $result['correct_answer_id'];
@@ -272,13 +275,13 @@ if ($objExercise->getFeedbackType() === EXERCISE_FEEDBACK_TYPE_DIRECT) {
     }
 }
 
-if ($answerType === HOT_SPOT_DELINEATION) {
+if (HOT_SPOT_DELINEATION === $answerType) {
     $contents = $manageAnswerHtmlContent;
 }
 $links = '';
-if ($objExercise->getFeedbackType() === EXERCISE_FEEDBACK_TYPE_DIRECT) {
-    if (isset($choiceValue) && $choiceValue == -1) {
-        if ($answerType != HOT_SPOT_DELINEATION) {
+if (EXERCISE_FEEDBACK_TYPE_DIRECT === $objExercise->getFeedbackType()) {
+    if (isset($choiceValue) && -1 == $choiceValue) {
+        if (HOT_SPOT_DELINEATION != $answerType) {
             $links .= '<a href="#" onclick="tb_remove();">'.get_lang('Choose an answer').'</a><br />';
         }
     }
@@ -294,7 +297,7 @@ if (isset($result['answer_destination'])) {
 }
 
 // the link to retry the question
-if (isset($try) && $try == 1) {
+if (isset($try) && 1 == $try) {
     $num_value_array = array_keys($questionList, $questionId);
     $links .= Display:: return_icon(
         'reload.gif',
@@ -316,7 +319,7 @@ if (!empty($lp)) {
 $links .= '<br />';
 
 // the link to an external website or link
-if (!empty($url) && $url != -1) {
+if (!empty($url) && -1 != $url) {
     $links .= Display:: return_icon(
         'link.gif',
         '',
@@ -328,7 +331,7 @@ $nextQuestion = $questionNum + 1;
 $destinationId = isset($questionList[$nextQuestion]) ? $questionList[$nextQuestion] : -1;
 
 // the link to finish the test
-if ($destinationId == -1) {
+if (-1 == $destinationId) {
     $links .= Display:: return_icon(
         'finish.gif',
         '',
@@ -354,7 +357,7 @@ if (!empty($links)) {
     echo '<div style="padding-left: 450px"><h5>'.$links.'</h5></div>';
     echo '</div>';
 } else {
-    $questionNum++;
+    ++$questionNum;
     echo '<script>
             window.location.href = "exercise_submit.php?exerciseId='.$exerciseId.'&num='.$questionNum.'&'.api_get_cidreq().'";
         </script>';

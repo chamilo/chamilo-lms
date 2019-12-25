@@ -25,8 +25,6 @@ class UniqueAnswerImage extends UniqueAnswer
     }
 
     /**
-     * {@inheritdoc}
-     *
      * @throws Exception
      */
     public function createAnswersForm($form)
@@ -49,12 +47,15 @@ class UniqueAnswerImage extends UniqueAnswer
                 // Scenario
                 $commentTitle = '<th width="20%">'.get_lang('Comment').'</th>';
                 $feedbackTitle = '<th width="20%">'.get_lang('Scenario').'</th>';
+
                 break;
             case EXERCISE_FEEDBACK_TYPE_POPUP:
                 $commentTitle = '<th width="20%">'.get_lang('Comment').'</th>';
+
                 break;
             default:
                 $commentTitle = '<th width="40%">'.get_lang('Comment').'</th>';
+
                 break;
         }
 
@@ -125,7 +126,7 @@ class UniqueAnswerImage extends UniqueAnswer
             echo Display::return_message(get_lang('You have to create at least one answer'));
         }
 
-        for ($i = 1; $i <= $numberAnswers; $i++) {
+        for ($i = 1; $i <= $numberAnswers; ++$i) {
             $form->addHtml('<tr>');
             if (isset($answer) && is_object($answer)) {
                 if ($answer->correct[$i]) {
@@ -147,12 +148,12 @@ class UniqueAnswerImage extends UniqueAnswer
                 $url = $itemList[3];
 
                 $tryResult = 0;
-                if ($try != 0) {
+                if (0 != $try) {
                     $tryResult = 1;
                 }
 
                 $urlResult = '';
-                if ($url != 0) {
+                if (0 != $url) {
                     $urlResult = $url;
                 }
 
@@ -204,10 +205,12 @@ class UniqueAnswerImage extends UniqueAnswer
             switch ($objExercise->getFeedbackType()) {
                 case EXERCISE_FEEDBACK_TYPE_DIRECT:
                     $this->setDirectOptions($i, $form, $renderer, $selectLpId, $selectQuestion);
+
                     break;
                 case EXERCISE_FEEDBACK_TYPE_POPUP:
                 default:
                     $form->addHtmlEditor('comment['.$i.']', null, null, false, $editorConfig);
+
                     break;
             }
 
@@ -220,7 +223,7 @@ class UniqueAnswerImage extends UniqueAnswer
 
         global $text;
         $buttonGroup = [];
-        if ($objExercise->edit_exercise_in_lp == true ||
+        if (true == $objExercise->edit_exercise_in_lp ||
             (empty($this->exerciseList) && empty($objExercise->id))
         ) {
             //setting the save button here and not in the question class.php
@@ -231,7 +234,7 @@ class UniqueAnswerImage extends UniqueAnswer
         }
 
         // We check the first radio button to be sure a radio button will be check
-        if ($correct == 0) {
+        if (0 == $correct) {
             $correct = 1;
         }
 
@@ -240,7 +243,7 @@ class UniqueAnswerImage extends UniqueAnswer
         if (!empty($this->id)) {
             $form->setDefaults($defaults);
         } else {
-            if ($this->isContent == 1) {
+            if (1 == $this->isContent) {
                 // Default sample content.
                 $form->setDefaults($defaults);
             } else {
@@ -251,9 +254,6 @@ class UniqueAnswerImage extends UniqueAnswer
         $form->setConstants(['nb_answers' => $numberAnswers]);
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function processAnswersCreation($form, $exercise)
     {
         $questionWeighting = $nbrGoodAnswers = 0;
@@ -261,7 +261,7 @@ class UniqueAnswerImage extends UniqueAnswer
         $objAnswer = new Answer($this->id);
         $numberAnswers = $form->getSubmitValue('nb_answers');
 
-        for ($i = 1; $i <= $numberAnswers; $i++) {
+        for ($i = 1; $i <= $numberAnswers; ++$i) {
             $answer = trim(str_replace(['<p>', '</p>'], '', $form->getSubmitValue('answer['.$i.']')));
             $comment = trim(str_replace(['<p>', '</p>'], '', $form->getSubmitValue('comment['.$i.']')));
             $weighting = trim($form->getSubmitValue('weighting['.$i.']'));
@@ -296,7 +296,7 @@ class UniqueAnswerImage extends UniqueAnswer
               } */
             $goodAnswer = $correct == $i ? true : false;
             if ($goodAnswer) {
-                $nbrGoodAnswers++;
+                ++$nbrGoodAnswers;
                 $weighting = abs($weighting);
 
                 if ($weighting > 0) {
@@ -316,7 +316,7 @@ class UniqueAnswerImage extends UniqueAnswer
                 $destination = 0;
             }
 
-            if ($url == '') {
+            if ('' == $url) {
                 $url = 0;
             }
 
@@ -343,9 +343,6 @@ class UniqueAnswerImage extends UniqueAnswer
         $this->save($exercise);
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function return_header(Exercise $exercise, $counter = null, $score = [])
     {
         if ($exercise->showExpectedChoice()) {

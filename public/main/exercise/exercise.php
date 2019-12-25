@@ -1,4 +1,5 @@
 <?php
+
 /* For licensing terms, see /license.txt */
 
 use Chamilo\CoreBundle\Framework\Container;
@@ -100,6 +101,7 @@ if ($is_allowedToEdit && !empty($action)) {
             $repo->getEntityManager()->flush();
 
             Display::addFlash(Display::return_message(get_lang('Updated')));
+
             break;
         case 'remove_shortcut':
             $repo = Container::getShortcutRepository();
@@ -110,20 +112,24 @@ if ($is_allowedToEdit && !empty($action)) {
             }
 
             Display::addFlash(Display::return_message(get_lang('Deleted')));
+
             break;
         case 'enable_launch':
             $objExerciseTmp->cleanCourseLaunchSettings();
             $objExerciseTmp->enableAutoLaunch();
             Display::addFlash(Display::return_message(get_lang('Updated')));
+
             break;
         case 'disable_launch':
             $objExerciseTmp->cleanCourseLaunchSettings();
+
             break;
         case 'delete':
             $result = $objExerciseTmp->delete();
             if ($result) {
                 Display::addFlash(Display::return_message(get_lang('Deleted'), 'confirmation'));
             }
+
             break;
         case 'enable':
             if ($limitTeacherAccess && !api_is_platform_admin()) {
@@ -132,6 +138,7 @@ if ($is_allowedToEdit && !empty($action)) {
             }
             $exerciseRepo->setVisibilityPublished($exerciseEntity);
             Display::addFlash(Display::return_message(get_lang('The visibility has been changed.'), 'confirmation'));
+
             break;
         case 'disable':
             if ($limitTeacherAccess && !api_is_platform_admin()) {
@@ -141,18 +148,21 @@ if ($is_allowedToEdit && !empty($action)) {
 
             $exerciseRepo->setVisibilityDraft($exerciseEntity);
             Display::addFlash(Display::return_message(get_lang('The visibility has been changed.'), 'confirmation'));
+
             break;
         case 'disable_results':
             //disable the results for the learners
             $objExerciseTmp->disable_results();
             $objExerciseTmp->save();
             Display::addFlash(Display::return_message(get_lang('Results disabled for learners'), 'confirmation'));
+
             break;
         case 'enable_results':
             //disable the results for the learners
             $objExerciseTmp->enable_results();
             $objExerciseTmp->save();
             Display::addFlash(Display::return_message(get_lang('Results enabled for learners'), 'confirmation'));
+
             break;
         case 'clean_results':
             if ($limitTeacherAccess && !api_is_platform_admin()) {
@@ -161,7 +171,7 @@ if ($is_allowedToEdit && !empty($action)) {
             }
 
             // Clean student results
-            if ($exercise_action_locked == false) {
+            if (false == $exercise_action_locked) {
                 $quantity_results_deleted = $objExerciseTmp->cleanResults(true);
                 $title = $objExerciseTmp->selectTitle();
 
@@ -175,6 +185,7 @@ if ($is_allowedToEdit && !empty($action)) {
                     )
                 );
             }
+
             break;
         case 'copy_exercise': //copy an exercise
             api_set_more_memory_and_time_limits();
@@ -183,6 +194,7 @@ if ($is_allowedToEdit && !empty($action)) {
                 get_lang('Test copied'),
                 'confirmation'
             ));
+
             break;
         case 'clean_all_test':
             if ($check) {
@@ -203,7 +215,7 @@ if ($is_allowedToEdit && !empty($action)) {
                 foreach ($exerciseList as $exeItem) {
                     // delete result for test, if not in a gradebook
                     $exercise_action_locked = api_resource_is_locked_by_gradebook($exeItem['id'], LINK_EXERCISE);
-                    if ($exercise_action_locked == false) {
+                    if (false == $exercise_action_locked) {
                         $objExerciseTmp = new Exercise();
                         if ($objExerciseTmp->read($exeItem['id'])) {
                             $quantity_results_deleted += $objExerciseTmp->cleanResults(true);
@@ -222,6 +234,7 @@ if ($is_allowedToEdit && !empty($action)) {
                 header('Location: '.$currentUrl);
                 exit;
             }
+
             break;
         case 'exportqti2':
             if ($limitTeacherAccess && !api_is_platform_admin()) {
@@ -246,6 +259,7 @@ if ($is_allowedToEdit && !empty($action)) {
                 header('Location: '.$currentUrl);
                 exit;
             }
+
             break;
         case 'up_category':
         case 'down_category':
@@ -255,10 +269,10 @@ if ($is_allowedToEdit && !empty($action)) {
             $category = $repo->find($categoryIdFromGet);
             $currentPosition = $category->getPosition();
 
-            if ($action === 'up_category') {
-                $currentPosition--;
+            if ('up_category' === $action) {
+                --$currentPosition;
             } else {
-                $currentPosition++;
+                ++$currentPosition;
             }
             $category->setPosition($currentPosition);
             $em->persist($category);
@@ -288,7 +302,7 @@ $logInfo = [
 ];
 Event::registerLog($logInfo);
 
-if ($origin !== 'learnpath') {
+if ('learnpath' !== $origin) {
     //so we are not in learnpath tool
     Display::display_header($nameTools, get_lang('Test'));
     if (isset($_GET['message']) && in_array($_GET['message'], ['ExerciseEdited'])) {
@@ -304,7 +318,7 @@ Display::display_introduction_section(TOOL_QUIZ);
 $limit = Exercise::PAGINATION_ITEMS_PER_PAGE;
 
 $token = Security::get_token();
-if ($is_allowedToEdit && $origin !== 'learnpath') {
+if ($is_allowedToEdit && 'learnpath' !== $origin) {
     $actionsLeft = '<a href="'.api_get_path(WEB_CODE_PATH).'exercise/exercise_admin.php?'.api_get_cidreq().'">'.
         Display::return_icon('new_exercice.png', get_lang('Create a new test'), '', ICON_SIZE_MEDIUM).'</a>';
     $actionsLeft .= '<a href="'.api_get_path(WEB_CODE_PATH).'exercise/question_create.php?'.api_get_cidreq().'">'.
@@ -370,7 +384,7 @@ if ($is_allowedToEdit) {
     );
 }
 
-if (api_get_configuration_value('allow_exercise_categories') === false) {
+if (false === api_get_configuration_value('allow_exercise_categories')) {
     echo Exercise::exerciseGridResource(0, $keyword);
 } else {
     if (empty($categoryId)) {
@@ -390,11 +404,11 @@ if (api_get_configuration_value('allow_exercise_categories') === false) {
             $down = '';
             if ($is_allowedToEdit) {
                 $up = Display::url($upIcon, $modifyUrl.'&action=up_category&category_id_edit='.$categoryIdItem);
-                if ($counter === 0) {
+                if (0 === $counter) {
                     $up = Display::url(Display::return_icon('up_na.png'), '#');
                 }
                 $down = Display::url($downIcon, $modifyUrl.'&action=down_category&category_id_edit='.$categoryIdItem);
-                $counter++;
+                ++$counter;
                 if ($total === $counter) {
                     $down = Display::url(Display::return_icon('down_na.png'), '#');
                 }
@@ -411,7 +425,7 @@ if (api_get_configuration_value('allow_exercise_categories') === false) {
     }
 }
 
-if ($origin !== 'learnpath') {
+if ('learnpath' !== $origin) {
     // We are not in learnpath tool
     Display::display_footer();
 }

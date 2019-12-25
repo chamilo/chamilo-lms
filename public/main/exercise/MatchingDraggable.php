@@ -22,9 +22,6 @@ class MatchingDraggable extends Question
         $this->isContent = $this->getIsContent();
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function createAnswersForm($form)
     {
         $defaults = [];
@@ -37,11 +34,11 @@ class MatchingDraggable extends Question
             $answer->read();
 
             if ($answer->nbrAnswers > 0) {
-                for ($i = 1; $i <= $answer->nbrAnswers; $i++) {
+                for ($i = 1; $i <= $answer->nbrAnswers; ++$i) {
                     $correct = $answer->isCorrect($i);
                     if (empty($correct)) {
                         $matches[$answer->selectAutoId($i)] = chr(64 + $counter);
-                        $counter++;
+                        ++$counter;
                     }
                 }
             }
@@ -51,24 +48,24 @@ class MatchingDraggable extends Question
             $nb_matches = $form->getSubmitValue('nb_matches');
             $nb_options = $form->getSubmitValue('nb_options');
             if (isset($_POST['lessOptions'])) {
-                $nb_matches--;
-                $nb_options--;
+                --$nb_matches;
+                --$nb_options;
             }
             if (isset($_POST['moreOptions'])) {
-                $nb_matches++;
-                $nb_options++;
+                ++$nb_matches;
+                ++$nb_options;
             }
         } elseif (!empty($this->id)) {
             if ($answer->nbrAnswers > 0) {
                 $nb_matches = $nb_options = 0;
-                for ($i = 1; $i <= $answer->nbrAnswers; $i++) {
+                for ($i = 1; $i <= $answer->nbrAnswers; ++$i) {
                     if ($answer->isCorrect($i)) {
-                        $nb_matches++;
+                        ++$nb_matches;
                         $defaults['answer['.$nb_matches.']'] = $answer->selectAnswer($i);
                         $defaults['weighting['.$nb_matches.']'] = float_format($answer->selectWeighting($i), 1);
                         $defaults['matches['.$nb_matches.']'] = $answer->correct[$i];
                     } else {
-                        $nb_options++;
+                        ++$nb_options;
                         $defaults['option['.$nb_options.']'] = $answer->selectAnswer($i);
                     }
                 }
@@ -82,12 +79,12 @@ class MatchingDraggable extends Question
         }
 
         if (empty($matches)) {
-            for ($i = 1; $i <= $nb_options; $i++) {
+            for ($i = 1; $i <= $nb_options; ++$i) {
                 // fill the array with A, B, C.....
                 $matches[$i] = chr(64 + $i);
             }
         } else {
-            for ($i = $counter; $i <= $nb_options; $i++) {
+            for ($i = $counter; $i <= $nb_options; ++$i) {
                 // fill the array with A, B, C.....
                 $matches[$i] = chr(64 + $i);
             }
@@ -122,7 +119,7 @@ class MatchingDraggable extends Question
             'Height' => '125',
         ];
 
-        for ($i = 1; $i <= $nb_matches; $i++) {
+        for ($i = 1; $i <= $nb_matches; ++$i) {
             $renderer = &$form->defaultRenderer();
             $renderer->setElementTemplate(
                 '<td><!-- BEGIN error --><span class="form_error">{error}</span><!-- END error -->{element}</td>',
@@ -175,7 +172,7 @@ class MatchingDraggable extends Question
             echo Display::return_message(get_lang('You have to create at least one answer'), 'normal');
         }
 
-        for ($i = 1; $i <= $nb_options; $i++) {
+        for ($i = 1; $i <= $nb_options; ++$i) {
             $renderer = &$form->defaultRenderer();
 
             $renderer->setElementTemplate(
@@ -207,7 +204,7 @@ class MatchingDraggable extends Question
         if (!empty($this->id)) {
             $form->setDefaults($defaults);
         } else {
-            if ($this->isContent == 1) {
+            if (1 == $this->isContent) {
                 $form->setDefaults($defaults);
             }
         }
@@ -220,9 +217,6 @@ class MatchingDraggable extends Question
         );
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function processAnswersCreation($form, $exercise)
     {
         $nb_matches = $form->getSubmitValue('nb_matches');
@@ -232,15 +226,15 @@ class MatchingDraggable extends Question
         $objAnswer = new Answer($this->id);
 
         // Insert the options
-        for ($i = 1; $i <= $nb_options; $i++) {
-            $position++;
+        for ($i = 1; $i <= $nb_options; ++$i) {
+            ++$position;
             $option = $form->getSubmitValue("option[$i]");
             $objAnswer->createAnswer($option, 0, '', 0, $position);
         }
 
         // Insert the answers
-        for ($i = 1; $i <= $nb_matches; $i++) {
-            $position++;
+        for ($i = 1; $i <= $nb_matches; ++$i) {
+            ++$position;
             $answer = $form->getSubmitValue("answer[$i]");
             $matches = $form->getSubmitValue("matches[$i]");
             $weighting = $form->getSubmitValue("weighting[$i]");
@@ -258,9 +252,6 @@ class MatchingDraggable extends Question
         $this->save($exercise);
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function return_header(Exercise $exercise, $counter = null, $score = [])
     {
         $header = parent::return_header($exercise, $counter, $score);

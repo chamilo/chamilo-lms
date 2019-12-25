@@ -17,7 +17,7 @@ require_once __DIR__.'/../inc/global.inc.php';
 
 $origin = api_get_origin();
 $currentUserId = api_get_user_id();
-$printHeaders = $origin === 'learnpath';
+$printHeaders = 'learnpath' === $origin;
 $id = isset($_REQUEST['id']) ? (int) $_REQUEST['id'] : 0; //exe id
 
 if (empty($id)) {
@@ -110,7 +110,7 @@ if (!empty($sessionId) && !$is_allowedToEdit) {
     }
 }
 
-$allowCoachFeedbackExercises = api_get_setting('allow_coach_feedback_exercises') === 'true';
+$allowCoachFeedbackExercises = 'true' === api_get_setting('allow_coach_feedback_exercises');
 $maxEditors = (int) api_get_setting('exercise_max_ckeditors_in_page');
 $isCoachAllowedToEdit = api_is_allowed_to_edit(false, true);
 $isFeedbackAllowed = false;
@@ -134,8 +134,8 @@ if (!$is_allowedToEdit) {
     }
 }
 
-$allowRecordAudio = api_get_setting('enable_record_audio') === 'true';
-$allowTeacherCommentAudio = api_get_configuration_value('allow_teacher_comment_audio') === true;
+$allowRecordAudio = 'true' === api_get_setting('enable_record_audio');
+$allowTeacherCommentAudio = true === api_get_configuration_value('allow_teacher_comment_audio');
 
 $js = '<script>'.api_get_language_translate_html().'</script>';
 $htmlHeadXtra[] = $js;
@@ -171,12 +171,12 @@ if ($allowRecordAudio && $allowTeacherCommentAudio) {
     $htmlHeadXtra[] = api_get_js('record_audio/record_audio.js');
 }
 
-if ($action != 'export') {
+if ('export' != $action) {
     $scoreJsCode = ExerciseLib::getJsCode();
-    if ($origin != 'learnpath') {
+    if ('learnpath' != $origin) {
         Display::display_header('');
     } else {
-        $htmlHeadXtra[] = "<style>body { background: none; } </style>";
+        $htmlHeadXtra[] = '<style>body { background: none; } </style>';
         Display::display_reduced_header();
     }
 
@@ -249,11 +249,12 @@ if (!empty($track_exercise_info)) {
     switch ($result_disabled) {
         case RESULT_DISABLE_NO_SCORE_AND_EXPECTED_ANSWERS:
             $show_results = false;
+
             break;
         case RESULT_DISABLE_SHOW_SCORE_ONLY:
             $show_results = false;
             $show_only_total_score = true;
-            if ($origin != 'learnpath') {
+            if ('learnpath' != $origin) {
                 if ($currentUserId == $student_id) {
                     echo Display::return_message(
                         get_lang('Thank you for passing the test'),
@@ -262,6 +263,7 @@ if (!empty($track_exercise_info)) {
                     );
                 }
             }
+
             break;
         case RESULT_DISABLE_DONT_SHOW_SCORE_ONLY_IF_USER_FINISHES_ATTEMPTS_SHOW_ALWAYS_FEEDBACK:
         case RESULT_DISABLE_SHOW_SCORE_ATTEMPT_SHOW_ANSWERS_LAST_ATTEMPT:
@@ -286,6 +288,7 @@ if (!empty($track_exercise_info)) {
                 // Last attempt not reach don't show score/feedback
                 $showTotalScoreAndUserChoicesInLastAttempt = false;
             }
+
             break;
     }
 } else {
@@ -293,7 +296,7 @@ if (!empty($track_exercise_info)) {
     $show_results = false;
 }
 
-if ($origin == 'learnpath' && !isset($_GET['fb_type'])) {
+if ('learnpath' == $origin && !isset($_GET['fb_type'])) {
     $show_results = false;
 }
 
@@ -301,7 +304,7 @@ if ($is_allowedToEdit && in_array($action, ['qualify', 'edit', 'export'])) {
     $show_results = true;
 }
 
-if ($action == 'export') {
+if ('export' == $action) {
     ob_start();
 }
 
@@ -360,7 +363,7 @@ if (!empty($track_exercise_info['data_tracking'])) {
 
 // Display the text when finished message if we are on a LP #4227
 $end_of_message = $objExercise->getTextWhenFinished();
-if (!empty($end_of_message) && ($origin === 'learnpath')) {
+if (!empty($end_of_message) && ('learnpath' === $origin)) {
     echo Display::return_message($end_of_message, 'normal', false);
     echo "<div class='clear'>&nbsp;</div>";
 }
@@ -383,7 +386,7 @@ if (!empty($maxEditors) && count($questionList) > $maxEditors) {
     $useAdvancedEditor = false;
 }
 
-$objExercise->export = $action === 'export';
+$objExercise->export = 'export' === $action;
 $arrid = [];
 $arrmarks = [];
 $strids = '';
@@ -407,7 +410,7 @@ foreach ($questionList as $questionId) {
 
     // Start buffer
     ob_start();
-    if ($answerType == MULTIPLE_ANSWER_COMBINATION_TRUE_FALSE) {
+    if (MULTIPLE_ANSWER_COMBINATION_TRUE_FALSE == $answerType) {
         $choice = [];
     }
 
@@ -444,6 +447,7 @@ foreach ($questionList as $questionId) {
             );
             $questionScore = $question_result['score'];
             $totalScore += $question_result['score'];
+
             break;
         case MULTIPLE_ANSWER_TRUE_FALSE_DEGREE_CERTAINTY:
             $choiceTmp = [];
@@ -463,6 +467,7 @@ foreach ($questionList as $questionId) {
             );
             $questionScore = $questionResult['score'];
             $totalScore += $questionResult['score'];
+
             break;
         case HOT_SPOT:
             if ($show_results || $showTotalScoreAndUserChoicesInLastAttempt) {
@@ -510,6 +515,7 @@ foreach ($questionList as $questionId) {
                     <br>
                 ";
             }
+
             break;
         case HOT_SPOT_DELINEATION:
             $question_result = $objExercise->manage_answer(
@@ -532,6 +538,7 @@ foreach ($questionList as $questionId) {
 
             //$organs_at_risk_hit
             echo $objExercise->getDelineationResult($objQuestionTmp, $questionId, $show_results, $question_result);
+
             break;
         case ANNOTATION:
             $question_result = $objExercise->manage_answer(
@@ -563,20 +570,21 @@ foreach ($questionList as $questionId) {
                     </script>
                 ';
             }
+
             break;
     }
 
-    if ($answerType == MULTIPLE_ANSWER_TRUE_FALSE) {
+    if (MULTIPLE_ANSWER_TRUE_FALSE == $answerType) {
         echo '</table>';
     }
 
-    if ($show_results && $answerType != HOT_SPOT) {
+    if ($show_results && HOT_SPOT != $answerType) {
         echo '</table>';
     }
 
     $comnt = null;
     if ($show_results) {
-        if ($is_allowedToEdit && $locked == false && !api_is_drh() && $isCoachAllowedToEdit) {
+        if ($is_allowedToEdit && false == $locked && !api_is_drh() && $isCoachAllowedToEdit) {
             $isFeedbackAllowed = true;
         } elseif (!$isCoachAllowedToEdit && $allowCoachFeedbackExercises) {
             $isFeedbackAllowed = true;
@@ -586,14 +594,14 @@ foreach ($questionList as $questionId) {
             $isFeedbackAllowed = false;
         }
         $marksname = '';
-        if ($isFeedbackAllowed && $action != 'export') {
+        if ($isFeedbackAllowed && 'export' != $action) {
             $name = 'fckdiv'.$questionId;
             $marksname = 'marksName'.$questionId;
             if (in_array($answerType, [FREE_ANSWER, ORAL_EXPRESSION, ANNOTATION])) {
                 $url_name = get_lang('Edit individual feedback and grade the open question');
             } else {
                 $url_name = get_lang('Add individual feedback');
-                if ($action === 'edit') {
+                if ('edit' === $action) {
                     $url_name = get_lang('Edit individual feedback');
                 }
             }
@@ -666,7 +674,7 @@ foreach ($questionList as $questionId) {
             }
         }
 
-        if ($is_allowedToEdit && $isFeedbackAllowed && $action != 'export') {
+        if ($is_allowedToEdit && $isFeedbackAllowed && 'export' != $action) {
             if (in_array($answerType, [FREE_ANSWER, ORAL_EXPRESSION, ANNOTATION])) {
                 $marksname = 'marksName'.$questionId;
                 $arrmarks[] = $questionId;
@@ -708,7 +716,7 @@ foreach ($questionList as $questionId) {
                     );
 
                     if (empty($model)) {
-                        for ($i = 0; $i <= $questionWeighting; $i++) {
+                        for ($i = 0; $i <= $questionWeighting; ++$i) {
                             $attributes = [];
                             if ($questionScore == $i) {
                                 $attributes['selected'] = 'selected';
@@ -731,7 +739,7 @@ foreach ($questionList as $questionId) {
 
                 $formMark->display();
                 echo '</div>';
-                if ($questionScore == -1) {
+                if (-1 == $questionScore) {
                     $questionScore = 0;
                     echo ExerciseLib::getNotCorrectedYetText();
                 }
@@ -749,7 +757,7 @@ foreach ($questionList as $questionId) {
                 ';
             }
         } else {
-            if ($questionScore == -1) {
+            if (-1 == $questionScore) {
                 $questionScore = 0;
             }
         }
@@ -791,12 +799,12 @@ foreach ($questionList as $questionId) {
         $category_list['none']['total'] = 0;
     }
 
-    if ($category_was_added_for_this_test == false) {
+    if (false == $category_was_added_for_this_test) {
         $category_list['none']['score'] += $my_total_score;
         $category_list['none']['total'] += $my_total_weight;
     }
 
-    if ($objExercise->selectPropagateNeg() == 0 && $my_total_score < 0) {
+    if (0 == $objExercise->selectPropagateNeg() && $my_total_score < 0) {
         $my_total_score = 0;
     }
 
@@ -805,7 +813,7 @@ foreach ($questionList as $questionId) {
         $scorePassed = $my_total_score >= $my_total_weight;
         if (function_exists('bccomp')) {
             $compareResult = bccomp($my_total_score, $my_total_weight, 3);
-            $scorePassed = $compareResult === 1 || $compareResult === 0;
+            $scorePassed = 1 === $compareResult || 0 === $compareResult;
         }
         $score['result'] = ExerciseLib::show_score(
             $my_total_score,
@@ -830,18 +838,18 @@ foreach ($questionList as $questionId) {
             'comments' => isset($comnt) ? $comnt : null,
         ];
         $check = $objQuestionTmp->isQuestionWaitingReview($scoreToReview);
-        if ($check === false) {
-            $countPendingQuestions++;
+        if (false === $check) {
+            ++$countPendingQuestions;
         }
     }
 
     unset($objAnswerTmp);
-    $i++;
+    ++$i;
 
     $contents = ob_get_clean();
     $question_content = '<div class="question_row">';
     if ($show_results && $objQuestionTmp) {
-        $objQuestionTmp->export = $action == 'export';
+        $objQuestionTmp->export = 'export' == $action;
         // Shows question title an description
         $question_content .= $objQuestionTmp->return_header(
             $objExercise,
@@ -849,7 +857,7 @@ foreach ($questionList as $questionId) {
             $score
         );
     }
-    $counter++;
+    ++$counter;
     $question_content .= $contents;
     $question_content .= '</div>';
     $exercise_content .= Display::panel($question_content);
@@ -857,7 +865,7 @@ foreach ($questionList as $questionId) {
 
 $totalScoreText = '';
 
-if ($answerType != MULTIPLE_ANSWER_TRUE_FALSE_DEGREE_CERTAINTY) {
+if (MULTIPLE_ANSWER_TRUE_FALSE_DEGREE_CERTAINTY != $answerType) {
     $pluginEvaluation = QuestionOptionsEvaluationPlugin::create();
 
     if ('true' === $pluginEvaluation->get(QuestionOptionsEvaluationPlugin::SETTING_ENABLE)) {
@@ -872,14 +880,14 @@ if ($answerType != MULTIPLE_ANSWER_TRUE_FALSE_DEGREE_CERTAINTY) {
 
 // Total score
 $myTotalScoreTemp = $totalScore;
-if ($origin != 'learnpath' || ($origin == 'learnpath' && isset($_GET['fb_type']))) {
+if ('learnpath' != $origin || ('learnpath' == $origin && isset($_GET['fb_type']))) {
     if ($show_results || $show_only_total_score || $showTotalScoreAndUserChoicesInLastAttempt) {
         $totalScoreText .= '<div class="question_row">';
-        if ($objExercise->selectPropagateNeg() == 0 && $myTotalScoreTemp < 0) {
+        if (0 == $objExercise->selectPropagateNeg() && $myTotalScoreTemp < 0) {
             $myTotalScoreTemp = 0;
         }
 
-        if ($answerType == MULTIPLE_ANSWER_TRUE_FALSE_DEGREE_CERTAINTY) {
+        if (MULTIPLE_ANSWER_TRUE_FALSE_DEGREE_CERTAINTY == $answerType) {
             $totalScoreText .= ExerciseLib::getQuestionDiagnosisRibbon(
                 $objExercise,
                 $myTotalScoreTemp,
@@ -899,7 +907,7 @@ if ($origin != 'learnpath' || ($origin == 'learnpath' && isset($_GET['fb_type'])
         $totalScoreText .= '</div>';
     }
 }
-if ($answerType == MULTIPLE_ANSWER_TRUE_FALSE_DEGREE_CERTAINTY) {
+if (MULTIPLE_ANSWER_TRUE_FALSE_DEGREE_CERTAINTY == $answerType) {
     $chartMultiAnswer = MultipleAnswerTrueFalseDegreeCertainty::displayStudentsChartResults($id, $objExercise);
     echo $chartMultiAnswer;
 }
@@ -937,7 +945,7 @@ if ($show_results) {
     echo $totalScoreText;
 }
 
-if ($action === 'export') {
+if ('export' === $action) {
     $content = ob_get_clean();
     // needed in order to mpdf to work
     ob_clean();
@@ -968,7 +976,7 @@ if ($isFeedbackAllowed) {
     }
 }
 
-if ($isFeedbackAllowed && $origin != 'learnpath' && $origin != 'student_progress') {
+if ($isFeedbackAllowed && 'learnpath' != $origin && 'student_progress' != $origin) {
     if (in_array($origin, ['tracking_course', 'user_course', 'correct_exercise_in_lp'])) {
         $formUrl = api_get_path(WEB_CODE_PATH).'exercise/exercise_report.php?'.api_get_cidreq().'&';
         $formUrl .= http_build_query([
@@ -1004,7 +1012,7 @@ if ($isFeedbackAllowed && $origin != 'learnpath' && $origin != 'student_progress
         );
     }
 
-    if ($objExercise->results_disabled != RESULT_DISABLE_NO_SCORE_AND_EXPECTED_ANSWERS) {
+    if (RESULT_DISABLE_NO_SCORE_AND_EXPECTED_ANSWERS != $objExercise->results_disabled) {
         $emailForm->addCheckBox(
             'send_notification',
             get_lang('Send email'),
@@ -1057,13 +1065,13 @@ if ($isFeedbackAllowed && $origin != 'learnpath' && $origin != 'student_progress
 }
 
 //Came from lpstats in a lp
-if ($origin == 'student_progress') {
+if ('student_progress' == $origin) {
     ?>
     <button type="button" class="back" onclick="window.history.go(-1);" value="<?php echo get_lang('Back'); ?>">
         <?php echo get_lang('Back'); ?>
     </button>
     <?php
-} elseif ($origin == 'myprogress') {
+} elseif ('myprogress' == $origin) {
         ?>
     <button type="button" class="save"
             onclick="top.location.href='../auth/my_progress.php?course=<?php echo api_get_course_id(); ?>'"
@@ -1073,7 +1081,7 @@ if ($origin == 'student_progress') {
     <?php
     }
 
-if ($origin != 'learnpath') {
+if ('learnpath' != $origin) {
     //we are not in learnpath tool
     Display::display_footer();
 } else {
@@ -1087,7 +1095,7 @@ if ($origin != 'learnpath') {
             'exeId' => $id,
             'fb_type' => $feedback_type,
         ]);
-        $href = ($lp_mode == 'fullscreen')
+        $href = 'fullscreen' == $lp_mode
             ? ' window.opener.location.href="'.$url.'" '
             : ' top.location.href="'.$url.'" ';
         echo '<script type="text/javascript">'.$href.'</script>';

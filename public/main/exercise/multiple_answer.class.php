@@ -1,4 +1,5 @@
 <?php
+
 /* For licensing terms, see /license.txt */
 
 use ChamiloSession as Session;
@@ -26,9 +27,6 @@ class MultipleAnswer extends Question
         $this->isContent = $this->getIsContent();
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function createAnswersForm($form)
     {
         $editorConfig = [
@@ -78,7 +76,7 @@ class MultipleAnswer extends Question
             echo Display::return_message(get_lang('You have to create at least one answer'));
         }
 
-        for ($i = 1; $i <= $nb_answers; $i++) {
+        for ($i = 1; $i <= $nb_answers; ++$i) {
             $form->addHtml('<tr>');
             if (is_object($answer)) {
                 $defaults['answer['.$i.']'] = $answer->answer[$i];
@@ -136,7 +134,7 @@ class MultipleAnswer extends Question
 
             $form->addHtmlEditor("comment[$i]", null, null, false, $editorConfig);
 
-            $form->addElement('text', 'weighting['.$i.']', null, ['style' => "width: 60px;", 'value' => '0']);
+            $form->addElement('text', 'weighting['.$i.']', null, ['style' => 'width: 60px;', 'value' => '0']);
             $form->addHtml('</tr>');
         }
 
@@ -151,7 +149,7 @@ class MultipleAnswer extends Question
 
         $buttonGroup = [];
         global $text;
-        if ($obj_ex->edit_exercise_in_lp == true ||
+        if (true == $obj_ex->edit_exercise_in_lp ||
             (empty($this->exerciseList) && empty($obj_ex->id))
         ) {
             // setting the save button here and not in the question class.php
@@ -176,23 +174,20 @@ class MultipleAnswer extends Question
         if (!empty($this->id)) {
             $form->setDefaults($defaults);
         } else {
-            if ($this->isContent == 1) {
+            if (1 == $this->isContent) {
                 $form->setDefaults($defaults);
             }
         }
         $form->setConstants(['nb_answers' => $nb_answers]);
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function processAnswersCreation($form, $exercise)
     {
         $questionWeighting = 0;
         $objAnswer = new Answer($this->id);
         $nb_answers = $form->getSubmitValue('nb_answers');
 
-        for ($i = 1; $i <= $nb_answers; $i++) {
+        for ($i = 1; $i <= $nb_answers; ++$i) {
             $answer = trim(str_replace(['<p>', '</p>'], '', $form->getSubmitValue('answer['.$i.']')));
             $comment = trim(str_replace(['<p>', '</p>'], '', $form->getSubmitValue('comment['.$i.']')));
             $weighting = trim($form->getSubmitValue('weighting['.$i.']'));
@@ -224,9 +219,6 @@ class MultipleAnswer extends Question
         $this->save($exercise);
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function return_header(Exercise $exercise, $counter = null, $score = [])
     {
         $header = parent::return_header($exercise, $counter, $score);

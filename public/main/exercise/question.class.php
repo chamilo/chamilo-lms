@@ -1,4 +1,5 @@
 <?php
+
 /* For licensing terms, see /license.txt */
 
 use Chamilo\CoreBundle\Entity\Resource\ResourceLink;
@@ -467,7 +468,7 @@ abstract class Question
             ) {
                 // removes old answers
                 $sql = "DELETE FROM $table
-                        WHERE c_id = $course_id AND question_id = ".intval($this->id);
+                        WHERE c_id = $course_id AND question_id = ".(int) ($this->id);
                 Database::query($sql);
             }
 
@@ -759,7 +760,7 @@ abstract class Question
 
                 // build the chunk to index
                 $ic_slide = new IndexableChunk();
-                $ic_slide->addValue("title", $this->question);
+                $ic_slide->addValue('title', $this->question);
                 $ic_slide->addCourseId($course_id);
                 $ic_slide->addToolId(TOOL_QUIZ);
                 $xapian_data = [
@@ -773,7 +774,7 @@ abstract class Question
                     SE_USER => (int) api_get_user_id(),
                 ];
                 $ic_slide->xapian_data = serialize($xapian_data);
-                $ic_slide->addValue("content", $this->description);
+                $ic_slide->addValue('content', $this->description);
 
                 //TODO: index answers, see also form validation on question_admin.inc.php
 
@@ -859,7 +860,7 @@ abstract class Question
             $count = $newExercise->getQuestionCount();
             ++$count;
             $sql = "INSERT INTO $exerciseRelQuestionTable (c_id, question_id, exercice_id, question_order)
-                    VALUES ({$this->course['real_id']}, ".$id.", ".$exerciseId.", '$count')";
+                    VALUES ({$this->course['real_id']}, ".$id.', '.$exerciseId.", '$count')";
             Database::query($sql);
 
             // we do not want to reindex if we had just saved adnd indexed the question
@@ -972,8 +973,8 @@ abstract class Question
                                 SET question_order = question_order-1
                                 WHERE
                                     c_id = $courseId AND
-                                    exercice_id = ".intval($row['exercice_id'])." AND
-                                    question_order > ".$row['question_order'];
+                                    exercice_id = ".(int) ($row['exercice_id']).' AND
+                                    question_order > '.$row['question_order'];
                         Database::query($sql);
                     }
                 }
@@ -1173,7 +1174,7 @@ abstract class Question
      */
     public static function getInstance($type)
     {
-        if (!is_null($type)) {
+        if (null !== $type) {
             list($fileName, $className) = self::get_question_type($type);
             if (!empty($fileName)) {
                 if (class_exists($className)) {
@@ -1285,6 +1286,7 @@ abstract class Question
                         true
                     );
                     $form->addGroup($buttonGroup);
+
                     break;
                 case MULTIPLE_ANSWER:
                     $buttonGroup = [];
@@ -1304,6 +1306,7 @@ abstract class Question
                         true
                     );
                     $form->addGroup($buttonGroup);
+
                     break;
             }
             //Medias
@@ -1317,26 +1320,32 @@ abstract class Question
             switch ($answerType) {
                 case 1:
                     $this->question = get_lang('Select the good reasoning');
+
                     break;
                 case 2:
                     $this->question = get_lang('The marasmus is a consequence of');
+
                     break;
                 case 3:
                     $this->question = get_lang('Calculate the Body Mass Index');
+
                     break;
                 case 4:
                     $this->question = get_lang('Order the operations');
+
                     break;
                 case 5:
                     $this->question = get_lang('List what you consider the 10 top qualities of a good project manager?');
+
                     break;
                 case 9:
                     $this->question = get_lang('The marasmus is a consequence of');
+
                     break;
             }
         }
 
-        if (!is_null($exercise)) {
+        if (null !== $exercise) {
             if ($exercise->questionFeedbackEnabled && $this->showFeedback($exercise)) {
                 $form->addTextarea('feedback', get_lang('Feedback if not correct'));
             }
@@ -1424,6 +1433,7 @@ abstract class Question
                     UNIQUE_ANSWER => self::$questionTypes[UNIQUE_ANSWER],
                     HOT_SPOT_DELINEATION => self::$questionTypes[HOT_SPOT_DELINEATION],
                 ];
+
                 break;
             case EXERCISE_FEEDBACK_TYPE_POPUP:
                 $questionTypeList = [
@@ -1433,9 +1443,11 @@ abstract class Question
                     HOT_SPOT_DELINEATION => self::$questionTypes[HOT_SPOT_DELINEATION],
                     CALCULATED_ANSWER => self::$questionTypes[CALCULATED_ANSWER],
                 ];
+
                 break;
             default:
                 unset($questionTypeList[HOT_SPOT_DELINEATION]);
+
                 break;
         }
 
@@ -1475,7 +1487,7 @@ abstract class Question
             );
         } else {
             if (in_array($feedbackType, [EXERCISE_FEEDBACK_TYPE_DIRECT, EXERCISE_FEEDBACK_TYPE_POPUP])) {
-                echo $url = "<a href=\"question_pool.php?".api_get_cidreq()."&type=1&fromExercise=$exerciseId\">";
+                echo $url = '<a href="question_pool.php?'.api_get_cidreq()."&type=1&fromExercise=$exerciseId\">";
             } else {
                 echo $url = '<a href="question_pool.php?'.api_get_cidreq().'&fromExercise='.$exerciseId.'">';
             }
@@ -1546,13 +1558,12 @@ abstract class Question
     public static function updateQuestionOption($id, $params, $course_id)
     {
         $table = Database::get_course_table(TABLE_QUIZ_QUESTION_OPTION);
-        $result = Database::update(
+
+        return Database::update(
             $table,
             $params,
             ['c_id = ? AND id = ?' => [$course_id, $id]]
         );
-
-        return $result;
     }
 
     /**
@@ -1564,7 +1575,8 @@ abstract class Question
     public static function readQuestionOption($question_id, $course_id)
     {
         $table = Database::get_course_table(TABLE_QUIZ_QUESTION_OPTION);
-        $result = Database::select(
+
+        return Database::select(
             '*',
             $table,
             [
@@ -1577,8 +1589,6 @@ abstract class Question
                 'order' => 'id ASC',
             ]
         );
-
-        return $result;
     }
 
     /**
@@ -1645,6 +1655,7 @@ abstract class Question
                         $score['result'] = '-';
                     }
                 }
+
                 break;
             case UNIQUE_ANSWER:
                 if (in_array($exercise->results_disabled, [
@@ -1659,6 +1670,7 @@ abstract class Question
                         }
                     }
                 }
+
                 break;
         }
 
@@ -1730,13 +1742,13 @@ abstract class Question
 
     /**
      * @deprecated
-     * Create a question from a set of parameters.
+     * Create a question from a set of parameters
      *
-     * @param   int     Quiz ID
-     * @param   string  Question name
-     * @param   int     Maximum result for the question
-     * @param   int     Type of question (see constants at beginning of question.class.php)
-     * @param   int     Question level/category
+     * @param int    $question_name        Quiz ID
+     * @param string $question_description Question name
+     * @param int    $max_score            Maximum result for the question
+     * @param int    $type                 Type of question (see constants at beginning of question.class.php)
+     * @param int    $level                Question level/category
      * @param string $quiz_id
      */
     public function create_question(
@@ -1751,10 +1763,10 @@ abstract class Question
         $tbl_quiz_question = Database::get_course_table(TABLE_QUIZ_QUESTION);
         $tbl_quiz_rel_question = Database::get_course_table(TABLE_QUIZ_TEST_QUESTION);
 
-        $quiz_id = intval($quiz_id);
+        $quiz_id = (int) $quiz_id;
         $max_score = (float) $max_score;
-        $type = intval($type);
-        $level = intval($level);
+        $type = (int) $type;
+        $level = (int) $level;
 
         // Get the max position
         $sql = "SELECT max(position) as max_position
@@ -1828,8 +1840,8 @@ abstract class Question
         $course_id,
         $start = 0,
         $limit = 100,
-        $sidx = "question",
-        $sord = "ASC",
+        $sidx = 'question',
+        $sord = 'ASC',
         $where_condition = []
     ) {
         $table_question = Database::get_course_table(TABLE_QUIZ_QUESTION);
@@ -1839,7 +1851,8 @@ abstract class Question
                 MEDIA_QUESTION,
             ],
         ];
-        $result = Database::select(
+
+        return Database::select(
             '*',
             $table_question,
             [
@@ -1848,14 +1861,12 @@ abstract class Question
                 'order' => "$sidx $sord",
             ]
         );
-
-        return $result;
     }
 
     /**
      * Get count course medias.
      *
-     * @param int course id
+     * @param int $course_id course id
      *
      * @return int
      */
@@ -1908,15 +1919,13 @@ abstract class Question
      */
     public static function get_default_levels()
     {
-        $levels = [
+        return [
             1 => 1,
             2 => 2,
             3 => 3,
             4 => 4,
             5 => 5,
         ];
-
-        return $levels;
     }
 
     /**
@@ -2048,14 +2057,12 @@ abstract class Question
      * Check if this question exists in another exercise.
      *
      * @throws \Doctrine\ORM\Query\QueryException
-     *
-     * @return mixed
      */
     public function getExerciseListWhereQuestionExists()
     {
         $em = Database::getManager();
 
-        $result = $em
+        return $em
             ->createQuery('
                 SELECT e
                 FROM ChamiloCourseBundle:CQuizRelQuestion qq
@@ -2064,8 +2071,6 @@ abstract class Question
             ')
             ->setParameters(['id' => (int) $this->id])
             ->getResult();
-
-        return $result;
     }
 
     public function getHotSpotData()

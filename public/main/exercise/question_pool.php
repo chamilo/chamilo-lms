@@ -64,7 +64,7 @@ if (!empty($objExercise->id)) {
 $displayMessage = '';
 if ($is_allowedToEdit) {
     // Duplicating a Question
-    if (!isset($_POST['recup']) && $question_copy != 0 && isset($fromExercise)) {
+    if (!isset($_POST['recup']) && 0 != $question_copy && isset($fromExercise)) {
         $origin_course_id = (int) $_GET['course_id'];
         $origin_course_info = api_get_course_info_by_id($origin_course_id);
         $current_course = api_get_course_info();
@@ -185,7 +185,7 @@ if (!$is_allowedToEdit) {
     api_not_allowed(true);
 }
 
-$confirmYourChoice = addslashes(api_htmlentities(get_lang('Please confirm your choice'), ENT_QUOTES, $charset));
+$confirmYourChoice = addslashes(api_htmlentities(get_lang('Please confirm your choice'), ENT_QUOTES));
 $htmlHeadXtra[] = "
 <script>
     function submit_form(obj) {
@@ -235,7 +235,7 @@ if (isset($_REQUEST['action'])) {
                         $objQuestionTmp = Question::read($questionId);
                         // if the question exists
                         if ($objQuestionTmp) {
-                            if ($objExercise->hasQuestion($questionId) === false) {
+                            if (false === $objExercise->hasQuestion($questionId)) {
                                 $objExercise->addToList($questionId);
                                 $objQuestionTmp->addToList($fromExercise);
                             }
@@ -247,6 +247,7 @@ if (isset($_REQUEST['action'])) {
                 header('Location: '.$url);
                 exit;
             }
+
             break;
         case 'clone':
             if (!empty($_REQUEST['questions']) && !empty($fromExercise)) {
@@ -287,6 +288,7 @@ if (isset($_REQUEST['action'])) {
                 header('Location: '.$url);
                 exit;
             }
+
             break;
     }
 }
@@ -308,7 +310,7 @@ if (isset($fromExercise) && $fromExercise > 0) {
 }
 echo '</div>';
 
-if ($displayMessage != '') {
+if ('' != $displayMessage) {
     echo Display::return_message($displayMessage, 'confirm');
 }
 
@@ -333,7 +335,7 @@ $sessionListToString = Display::select(
 echo Display::form_row(get_lang('Session'), $sessionListToString);
 
 // Course list, get course list of session, or for course where user is admin
-if (!empty($session_id) && $session_id != '-1' && !empty($sessionList)) {
+if (!empty($session_id) && '-1' != $session_id && !empty($sessionList)) {
     $sessionInfo = [];
     foreach ($sessionList as $session) {
         if ($session['session_id'] == $session_id) {
@@ -367,7 +369,7 @@ foreach ($course_list as $item) {
     $courseInfo = api_get_course_info_by_id($courseItemId);
     $course_select_list[$courseItemId] = '';
     if ($courseItemId == api_get_course_int_id()) {
-        $course_select_list[$courseItemId] = ">&nbsp;&nbsp;&nbsp;&nbsp;";
+        $course_select_list[$courseItemId] = '>&nbsp;&nbsp;&nbsp;&nbsp;';
     }
     $course_select_list[$courseItemId] .= $courseInfo['title'];
 }
@@ -381,7 +383,7 @@ $courseListToString = Display::select(
 
 echo Display::form_row(get_lang('Course'), $courseListToString);
 
-if (empty($selected_course) || $selected_course == '-1') {
+if (empty($selected_course) || '-1' == $selected_course) {
     $course_info = api_get_course_info();
     // no course selected, reset menu test / difficult� / type de reponse
     reset_menu_exo_lvl_type();
@@ -412,7 +414,7 @@ $exercise_list = ExerciseLib::get_all_exercises_for_course_id(
     false
 );
 
-if ($exercise_id_changed == 1) {
+if (1 == $exercise_id_changed) {
     reset_menu_lvl_type();
 }
 
@@ -425,7 +427,7 @@ if (is_array($exercise_list)) {
     foreach ($exercise_list as $row) {
         $my_exercise_list[$row['id']] = '';
         if ($row['id'] == $fromExercise && $selected_course == api_get_course_int_id()) {
-            $my_exercise_list[$row['id']] = ">&nbsp;&nbsp;&nbsp;&nbsp;";
+            $my_exercise_list[$row['id']] = '>&nbsp;&nbsp;&nbsp;&nbsp;';
         }
 
         $exerciseTitle = $row['title'];
@@ -482,7 +484,7 @@ if (!empty($_course)) {
             }
             $new_question_list[$key] = get_lang($item[1]);
         } else {
-            if ($key == HOT_SPOT_DELINEATION) {
+            if (HOT_SPOT_DELINEATION == $key) {
                 continue;
             }
             $new_question_list[$key] = get_lang($item[1]);
@@ -568,7 +570,7 @@ function getQuestions(
                     crc.question_id = qu.id AND
                     crc.category_id = $courseCategoryId";
         }
-        if (isset($exerciseLevel) && $exerciseLevel != -1) {
+        if (isset($exerciseLevel) && -1 != $exerciseLevel) {
             $where .= ' AND level='.$exerciseLevel;
         }
         if (isset($answerType) && $answerType > 0) {
@@ -605,7 +607,7 @@ function getQuestions(
                     $where
                     $currentExerciseCondition
                 ORDER BY question_order";
-    } elseif ($exerciseId == -1) {
+    } elseif (-1 == $exerciseId) {
         // If we have selected the option 'Orphan questions' in the list-box 'Filter'
         $level_where = '';
         $from = '';
@@ -616,7 +618,7 @@ function getQuestions(
                     crc.c_id = $selected_course AND
                     crc.category_id = $courseCategoryId";
         }
-        if (isset($exerciseLevel) && $exerciseLevel != -1) {
+        if (isset($exerciseLevel) && -1 != $exerciseLevel) {
             $level_where = ' AND level='.$exerciseLevel;
         }
         $answer_where = '';
@@ -694,7 +696,7 @@ function getQuestions(
                         crc.question_id = qu.id AND
                         crc.category_id = $courseCategoryId";
         }
-        if (isset($exerciseLevel) && $exerciseLevel != -1) {
+        if (isset($exerciseLevel) && -1 != $exerciseLevel) {
             $filter .= ' AND level='.$exerciseLevel.' ';
         }
         if (isset($answerType) && $answerType > 0) {
@@ -709,7 +711,7 @@ function getQuestions(
             $filter .= " AND qu.description LIKE '%$description%'";
         }
 
-        if ($session_id == -1 || empty($session_id)) {
+        if (-1 == $session_id || empty($session_id)) {
             $session_id = 0;
         }
         $sessionCondition = api_get_session_condition($session_id, true, 'q.session_id');
@@ -792,7 +794,7 @@ $pagination->renderer = function ($data) use ($url) {
     $render = '';
     if ($data['pageCount'] > 1) {
         $render = '<ul class="pagination">';
-        for ($i = 1; $i <= $data['pageCount']; $i++) {
+        for ($i = 1; $i <= $data['pageCount']; ++$i) {
             $pageContent = '<li><a href="'.$url.'&page='.$i.'">'.$i.'</a></li>';
             if ($data['current'] == $i) {
                 $pageContent = '<li class="active"><a href="#" >'.$i.'</a></li>';
@@ -1087,7 +1089,7 @@ function getLinkForQuestion(
     $result = $questionName;
     if ($in_addA) {
         $sessionIcon = '';
-        if (!empty($sessionId) && $sessionId != -1) {
+        if (!empty($sessionId) && -1 != $sessionId) {
             $sessionIcon = ' '.Display::return_icon('star.png', get_lang('Session'));
         }
         $exerciseId = (int) $exerciseId;
@@ -1141,10 +1143,11 @@ function get_action_icon_for_question(
             if ($limitTeacherAccess && !api_is_platform_admin()) {
                 break;
             }
-            $res = "<a href='".api_get_self()."?".
+            $res = "<a href='".api_get_self().'?'.
                 api_get_cidreq().$getParams."&delete=$in_questionid' onclick='return confirm_your_choice()'>";
             $res .= Display::return_icon('delete.png', get_lang('Delete'));
-            $res .= "</a>";
+            $res .= '</a>';
+
             break;
         case 'edit':
             $res = getLinkForQuestion(
@@ -1156,15 +1159,17 @@ function get_action_icon_for_question(
                 $in_session_id,
                 $in_exercise_id
             );
+
             break;
         case 'add':
             $res = '-';
             if (!$myObjEx->hasQuestion($in_questionid)) {
-                $res = "<a href='".api_get_self()."?".
+                $res = "<a href='".api_get_self().'?'.
                     api_get_cidreq().$getParams."&recup=$in_questionid&fromExercise=$from_exercise'>";
                 $res .= Display::return_icon('view_more_stats.gif', get_lang('InsertALinkToThisQuestionInTheExercise'));
                 $res .= '</a>';
             }
+
             break;
         case 'clone':
             $url = api_get_self().'?'.api_get_cidreq().$getParams.
@@ -1173,9 +1178,11 @@ function get_action_icon_for_question(
                 Display::return_icon('cd.png', get_lang('Re-use a copy inside the current test')),
                 $url
             );
+
             break;
         default:
             $res = $in_action;
+
             break;
     }
 

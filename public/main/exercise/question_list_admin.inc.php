@@ -25,13 +25,13 @@ if ($deleteQuestion) {
 
         // if the question has been removed from the exercise
         if ($objExercise->removeFromList($deleteQuestion)) {
-            $nbrQuestions--;
+            --$nbrQuestions;
         }
     }
     // destruction of the Question object
     unset($objQuestionTmp);
 }
-$ajax_url = api_get_path(WEB_AJAX_PATH).'exercise.ajax.php?'.api_get_cidreq().'&exercise_id='.intval($exerciseId);
+$ajax_url = api_get_path(WEB_AJAX_PATH).'exercise.ajax.php?'.api_get_cidreq().'&exercise_id='.(int) $exerciseId;
 ?>
 <div id="dialog-confirm"
      title="<?php echo get_lang('Please confirm your choice'); ?>"
@@ -179,7 +179,7 @@ if (!$inATest) {
             $pagination->setCurrentPageNumber($page);
             $pagination->renderer = function ($data) use ($url) {
                 $render = '<ul class="pagination">';
-                for ($i = 1; $i <= $data['pageCount']; $i++) {
+                for ($i = 1; $i <= $data['pageCount']; ++$i) {
                     $pageContent = '<li><a href="'.$url.'&page='.$i.'">'.$i.'</a></li>';
                     if ($data['current'] == $i) {
                         $pageContent = '<li class="active"><a href="#" >'.$i.'</a></li>';
@@ -234,7 +234,7 @@ if (!$inATest) {
                     ['class' => 'btn btn-default btn-sm']
                 );
 
-                $edit_link = $objQuestionTmp->selectType() == CALCULATED_ANSWER && $objQuestionTmp->isAnswered()
+                $edit_link = CALCULATED_ANSWER == $objQuestionTmp->selectType() && $objQuestionTmp->isAnswered()
                     ? Display::span(
                         Display::return_icon(
                             'edit_na.png',
@@ -260,7 +260,7 @@ if (!$inATest) {
                         ['class' => 'btn btn-default btn-sm']
                     );
                 $delete_link = null;
-                if ($objExercise->edit_exercise_in_lp == true) {
+                if (true == $objExercise->edit_exercise_in_lp) {
                     $delete_link = Display::url(
                         Display::return_icon(
                             'delete.png',

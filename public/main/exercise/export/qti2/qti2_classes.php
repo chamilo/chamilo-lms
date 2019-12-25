@@ -1,4 +1,5 @@
 <?php
+
 /* For licensing terms, see /license.txt */
 
 /**
@@ -9,15 +10,11 @@ interface ImsAnswerInterface
     /**
      * @param $questionIdent
      * @param $questionStatment
-     *
-     * @return mixed
      */
     public function imsExportResponses($questionIdent, $questionStatment);
 
     /**
      * @param $questionIdent
-     *
-     * @return mixed
      */
     public function imsExportResponsesDeclaration($questionIdent, Question $question = null);
 }
@@ -26,8 +23,6 @@ interface ImsAnswerInterface
  * @author Claro Team <cvs@claroline.net>
  * @author Yannick Warnier <yannick.warnier@beeznest.com> -
  * updated ImsAnswerHotspot to match QTI norms
- *
- * @package chamilo.exercise
  */
 class Ims2Question extends Question
 {
@@ -70,6 +65,7 @@ class Ims2Question extends Question
                 return $answer;
             default:
                 $answer = null;
+
                 break;
         }
 
@@ -81,9 +77,6 @@ class Ims2Question extends Question
         return true;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function processAnswersCreation($form, $exercise)
     {
         return true;
@@ -92,8 +85,6 @@ class Ims2Question extends Question
 
 /**
  * Class.
- *
- * @package chamilo.exercise
  */
 class ImsAnswerMultipleChoice extends Answer implements ImsAnswerInterface
 {
@@ -110,7 +101,7 @@ class ImsAnswerMultipleChoice extends Answer implements ImsAnswerInterface
             foreach ($this->answerList as $current_answer) {
                 $out .= '<simpleChoice identifier="answer_'.$current_answer['id'].'" fixed="false">
                          <![CDATA['.formatExerciseQtiText($current_answer['answer']).']]>';
-                if (isset($current_answer['comment']) && $current_answer['comment'] != '') {
+                if (isset($current_answer['comment']) && '' != $current_answer['comment']) {
                     $out .= '<feedbackInline identifier="answer_'.$current_answer['id'].'">
                              <![CDATA['.formatExerciseQtiText($current_answer['comment']).']]>
                              </feedbackInline>';
@@ -130,7 +121,7 @@ class ImsAnswerMultipleChoice extends Answer implements ImsAnswerInterface
     {
         $this->answerList = $this->getAnswersList(true);
         $type = $this->getQuestionType();
-        if ($type == MCMA) {
+        if (MCMA == $type) {
             $cardinality = 'multiple';
         } else {
             $cardinality = 'single';
@@ -168,8 +159,6 @@ class ImsAnswerMultipleChoice extends Answer implements ImsAnswerInterface
 
 /**
  * Class.
- *
- * @package chamilo.exercise
  */
 class ImsAnswerFillInBlanks extends Answer implements ImsAnswerInterface
 {
@@ -224,8 +213,6 @@ class ImsAnswerFillInBlanks extends Answer implements ImsAnswerInterface
 
 /**
  * Class.
- *
- * @package chamilo.exercise
  */
 class ImsAnswerMatching extends Answer implements ImsAnswerInterface
 {
@@ -266,7 +253,7 @@ class ImsAnswerMatching extends Answer implements ImsAnswerInterface
                 $out .= '<simpleAssociableChoice identifier="right_'.$i.'" >
                         <![CDATA['.formatExerciseQtiText($rightElement['answer']).']]>
                         </simpleAssociableChoice>'."\n";
-                $i++;
+                ++$i;
             }
         }
         $out .= '  </simpleMatchSet>'."\n";
@@ -290,7 +277,7 @@ class ImsAnswerMatching extends Answer implements ImsAnswerInterface
                         $out .= '      <value>left_'.$leftKey.' right_'.$i.'</value>'."\n";
                         $gradeArray['left_'.$leftKey.' right_'.$i] = $leftElement['grade'];
                     }
-                    $i++;
+                    ++$i;
                 }
             }
         }
@@ -312,8 +299,6 @@ class ImsAnswerMatching extends Answer implements ImsAnswerInterface
 
 /**
  * Class.
- *
- * @package chamilo.exercise
  */
 class ImsAnswerHotspot extends Answer implements ImsAnswerInterface
 {
@@ -352,21 +337,25 @@ class ImsAnswerHotspot extends Answer implements ImsAnswerInterface
                         $type = 'rect';
                         $res = [];
                         $coords = preg_match('/^\s*(\d+);(\d+)\|(\d+)\|(\d+)\s*$/', $answer['hotspot_coord'], $res);
-                        $coords = $res[1].','.$res[2].','.((int) $res[1] + (int) $res[3]).",".((int) $res[2] + (int) $res[4]);
+                        $coords = $res[1].','.$res[2].','.((int) $res[1] + (int) $res[3]).','.((int) $res[2] + (int) $res[4]);
+
                         break;
                     case 'circle':
                         $type = 'circle';
                         $res = [];
                         $coords = preg_match('/^\s*(\d+);(\d+)\|(\d+)\|(\d+)\s*$/', $answer['hotspot_coord'], $res);
-                        $coords = $res[1].','.$res[2].','.sqrt(pow(($res[1] - $res[3]), 2) + pow(($res[2] - $res[4])));
+                        $coords = $res[1].','.$res[2].','.sqrt(pow($res[1] - $res[3], 2) + pow($res[2] - $res[4]));
+
                         break;
                     case 'poly':
                         $type = 'poly';
                         $coords = str_replace([';', '|'], [',', ','], $answer['hotspot_coord']);
+
                         break;
                     case 'delineation':
                         $type = 'delineation';
                         $coords = str_replace([';', '|'], [',', ','], $answer['hotspot_coord']);
+
                         break;
                 }
                 $text .= '        <hotspotChoice shape="'.$type.'" coords="'.$coords.'" identifier="'.$key.'"/>'."\n";
@@ -399,8 +388,6 @@ class ImsAnswerHotspot extends Answer implements ImsAnswerInterface
 
 /**
  * Class.
- *
- * @package chamilo.exercise
  */
 class ImsAnswerFree extends Answer implements ImsAnswerInterface
 {

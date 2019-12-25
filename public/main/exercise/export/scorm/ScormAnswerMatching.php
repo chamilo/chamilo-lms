@@ -1,10 +1,9 @@
 <?php
+
 /* For licensing terms, see /license.txt */
 
 /**
  * This class handles the SCORM export of matching questions.
- *
- * @package chamilo.exercise.scorm
  */
 class ScormAnswerMatching extends Answer
 {
@@ -30,7 +29,7 @@ class ScormAnswerMatching extends Answer
         // Options (A, B, C, ...) that will be put into the list-box
         $options = [];
         $letter = 'A';
-        for ($answerId = 1; $answerId <= $nbrAnswers; $answerId++) {
+        for ($answerId = 1; $answerId <= $nbrAnswers; ++$answerId) {
             $answerCorrect = $this->isCorrect($answerId);
             $answer = $this->selectAnswer($answerId);
             $realAnswerId = $this->selectAutoId($answerId);
@@ -38,7 +37,7 @@ class ScormAnswerMatching extends Answer
                 $options[$realAnswerId]['Lettre'] = $letter;
                 // answers that will be shown at the right side
                 $options[$realAnswerId]['Reponse'] = $answer;
-                $letter++;
+                ++$letter;
             }
         }
 
@@ -47,7 +46,7 @@ class ScormAnswerMatching extends Answer
         $jstmpc = '';
 
         // Answers
-        for ($answerId = 1; $answerId <= $nbrAnswers; $answerId++) {
+        for ($answerId = 1; $answerId <= $nbrAnswers; ++$answerId) {
             $identifier = 'question_'.$questionId.'_matching_';
             $answer = $this->selectAnswer($answerId);
             $answerCorrect = $this->isCorrect($answerId);
@@ -56,7 +55,7 @@ class ScormAnswerMatching extends Answer
 
             if ($answerCorrect) {
                 $html[] = '<tr class="option_row">';
-                $html[] = '<td width="40%" valign="top">&nbsp;'.$answer."</td>";
+                $html[] = '<td width="40%" valign="top">&nbsp;'.$answer.'</td>';
                 $html[] = '<td width="20%" align="center">&nbsp;&nbsp;';
                 $html[] = '<select name="'.$identifier.$counter.'" id="'.$identifier.$counter.'">';
                 $html[] = ' <option value="0">--</option>';
@@ -75,13 +74,13 @@ class ScormAnswerMatching extends Answer
                 $jstmpc .= '['.$answerCorrect.','.$counter.'],';
 
                 $myWeight = explode('@', $weight);
-                if (count($myWeight) == 2) {
+                if (2 == count($myWeight)) {
                     $weight = $myWeight[0];
                 } else {
                     $weight = $myWeight[0];
                 }
                 $jstmpw .= 'questions_answers_ponderation['.$questionId.']['.$counter.'] = '.$weight.";\n";
-                $counter++;
+                ++$counter;
             }
         }
 

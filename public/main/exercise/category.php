@@ -1,9 +1,10 @@
 <?php
+
 /* For licensing terms, see /license.txt */
 
 require_once __DIR__.'/../inc/global.inc.php';
 
-if (api_get_configuration_value('allow_exercise_categories') === false) {
+if (false === api_get_configuration_value('allow_exercise_categories')) {
     api_not_allowed();
 }
 
@@ -54,11 +55,12 @@ switch ($action) {
             $form->setConstants(['sec_token' => $token]);
             $content .= $form->returnForm();
         }
+
         break;
     case 'edit':
         $interbreadcrumb[] = ['url' => $url, 'name' => get_lang('Categories')];
         $interbreadcrumb[] = ['url' => '#', 'name' => get_lang('Edit')];
-        $form = $obj->return_form($url.'&action=edit&id='.intval($_GET['id']), 'edit');
+        $form = $obj->return_form($url.'&action=edit&id='.(int) ($_GET['id']), 'edit');
 
         // The validation or display
         if ($form->validate()) {
@@ -78,6 +80,7 @@ switch ($action) {
             $form->setConstants(['sec_token' => $token]);
             $content .= $form->returnForm();
         }
+
         break;
     case 'delete':
         $res = $obj->delete($_GET['id']);
@@ -86,9 +89,11 @@ switch ($action) {
         }
         header('Location: '.$url);
         exit;
+
         break;
     default:
         $content = $obj->display();
+
         break;
 }
 

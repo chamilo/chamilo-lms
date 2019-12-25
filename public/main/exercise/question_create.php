@@ -1,4 +1,5 @@
 <?php
+
 /* For licensing terms, see /license.txt */
 
 /**
@@ -19,7 +20,7 @@ if (!$allow) {
 }
 
 // breadcrumbs
-$interbreadcrumb[] = ["url" => "exercise.php", "name" => get_lang('Tests')];
+$interbreadcrumb[] = ['url' => 'exercise.php', 'name' => get_lang('Tests')];
 
 // Tool name
 $nameTools = get_lang('Add this question to the test');
@@ -51,8 +52,8 @@ $course_id = api_get_course_int_id();
 
 $sql = "SELECT id,title,type,description, results_disabled
         FROM $tbl_exercises
-        WHERE c_id = $course_id AND active<>'-1' AND session_id=".$session_id."
-        ORDER BY title ASC";
+        WHERE c_id = $course_id AND active<>'-1' AND session_id=".$session_id.'
+        ORDER BY title ASC';
 $result = Database::query($sql);
 $exercises['-'] = '-'.get_lang('Select exercise').'-';
 while ($row = Database :: fetch_array($result)) {
@@ -84,15 +85,15 @@ if ($form->validate()) {
     $answer_type = $values['question_type_hidden'];
 
     // check feedback_type from current exercise for type of question delineation
-    $exercise_id = intval($values['exercise']);
+    $exercise_id = (int) ($values['exercise']);
     $sql = "SELECT feedback_type FROM $tbl_exercises WHERE c_id = $course_id AND id = '$exercise_id'";
     $rs_feedback_type = Database::query($sql);
     $row_feedback_type = Database::fetch_row($rs_feedback_type);
     $feedback_type = $row_feedback_type[0];
 
     // if question type does not belong to self-evaluation (immediate feedback) it'll send an error
-    if (($answer_type == HOT_SPOT_DELINEATION && $feedback_type != 1) ||
-        ($feedback_type == 1 && ($answer_type != HOT_SPOT_DELINEATION && $answer_type != UNIQUE_ANSWER))) {
+    if ((HOT_SPOT_DELINEATION == $answer_type && 1 != $feedback_type) ||
+        (1 == $feedback_type && (HOT_SPOT_DELINEATION != $answer_type && UNIQUE_ANSWER != $answer_type))) {
         header('Location: question_create.php?'.api_get_cidreq().'&error=true');
         exit;
     }

@@ -1,4 +1,5 @@
 <?php
+
 /* For licensing terms, see /license.txt */
 
 use ChamiloSession as Session;
@@ -16,7 +17,6 @@ if (!$is_allowed_to_edit) {
     api_not_allowed(true);
 }
 
-$this_section = SECTION_COURSES;
 $htmlHeadXtra[] = "<script>
 $(function(){
     $('#user_custom_score').click(function() {
@@ -44,15 +44,13 @@ lp_upload_quiz_main();
 
 function lp_upload_quiz_actions()
 {
-    $return = '<a href="exercise.php?'.api_get_cidreq().'">'.
+    return '<a href="exercise.php?'.api_get_cidreq().'">'.
         Display::return_icon(
             'back.png',
             get_lang('BackToTestsList'),
             '',
             ICON_SIZE_MEDIUM
         ).'</a>';
-
-    return $return;
 }
 
 function lp_upload_quiz_main()
@@ -91,7 +89,7 @@ function lp_upload_quiz_main()
     foreach ($tableList as $key => $label) {
         $table->setCellContents($row, 0, $label);
         $table->setCellContents($row, 1, $key);
-        $row++;
+        ++$row;
     }
     $table = $table->toHtml();
 
@@ -151,7 +149,6 @@ function lp_upload_quiz_action_handling()
     $questionTypeList = [];
     $answerList = [];
     $quizTitle = '';
-
     $objPHPExcel = PHPExcel_IOFactory::load($_FILES['user_upload_quiz']['tmp_name']);
     $objPHPExcel->setActiveSheetIndex(0);
     $worksheet = $objPHPExcel->getActiveSheet();
@@ -162,7 +159,7 @@ function lp_upload_quiz_action_handling()
     $incorrectScore = isset($_POST['incorrect_score']) ? $_POST['incorrect_score'] : null;
     $useCustomScore = isset($_POST['user_custom_score']) ? true : false;
 
-    for ($row = 1; $row <= $highestRow; $row++) {
+    for ($row = 1; $row <= $highestRow; ++$row) {
         $cellTitleInfo = $worksheet->getCellByColumnAndRow(0, $row);
         $cellDataInfo = $worksheet->getCellByColumnAndRow(1, $row);
         $cellScoreInfo = $worksheet->getCellByColumnAndRow(2, $row);
@@ -171,6 +168,7 @@ function lp_upload_quiz_action_handling()
         switch ($title) {
             case 'Quiz':
                 $quizTitle = $cellDataInfo->getValue();
+
                 break;
             case 'Question':
                 $question[] = $cellDataInfo->getValue();
@@ -179,18 +177,18 @@ function lp_upload_quiz_action_handling()
                 $continue = true;
                 $answerIndex = 0;
                 while ($continue) {
-                    $answerRow++;
+                    ++$answerRow;
                     $answerInfoTitle = $worksheet->getCellByColumnAndRow(0, $answerRow);
                     $answerInfoData = $worksheet->getCellByColumnAndRow(1, $answerRow);
                     $answerInfoExtra = $worksheet->getCellByColumnAndRow(2, $answerRow);
                     $answerInfoTitle = $answerInfoTitle->getValue();
-                    if (strpos($answerInfoTitle, 'Answer') !== false) {
+                    if (false !== strpos($answerInfoTitle, 'Answer')) {
                         $answerList[$numberQuestions][$answerIndex]['data'] = $answerInfoData->getValue();
                         $answerList[$numberQuestions][$answerIndex]['extra'] = $answerInfoExtra->getValue();
                     } else {
                         $continue = false;
                     }
-                    $answerIndex++;
+                    ++$answerIndex;
 
                     // To avoid loops
                     if ($answerIndex > 60) {
@@ -203,44 +201,51 @@ function lp_upload_quiz_action_handling()
                 $continue = true;
                 $questionTypeIndex = 0;
                 while ($continue) {
-                    $answerRow++;
+                    ++$answerRow;
                     $questionTypeTitle = $worksheet->getCellByColumnAndRow(0, $answerRow);
                     $questionTypeExtra = $worksheet->getCellByColumnAndRow(2, $answerRow);
                     $title = $questionTypeTitle->getValue();
-                    if ($title == 'QuestionType') {
+                    if ('QuestionType' == $title) {
                         $questionTypeList[$numberQuestions] = $questionTypeExtra->getValue();
                         $continue = false;
                     }
-                    if ($title == 'Question') {
+                    if ('Question' == $title) {
                         $continue = false;
                     }
                     // To avoid loops
                     if ($questionTypeIndex > 60) {
                         $continue = false;
                     }
-                    $questionTypeIndex++;
+                    ++$questionTypeIndex;
                 }
 
                 // Detect answers
-                $numberQuestions++;
+                ++$numberQuestions;
+
                 break;
             case 'Score':
                 $scoreList[] = $cellScoreInfo->getValue();
+
                 break;
             case 'NoNegativeScore':
                 $noNegativeScoreList[] = $cellScoreInfo->getValue();
+
                 break;
             case 'Category':
                 $categoryList[] = $cellDataInfo->getValue();
+
                 break;
             case 'FeedbackTrue':
                 $feedbackTrueList[] = $cellDataInfo->getValue();
+
                 break;
             case 'FeedbackFalse':
                 $feedbackFalseList[] = $cellDataInfo->getValue();
+
                 break;
             case 'EnrichQuestion':
                 $questionDescriptionList[] = $cellDataInfo->getValue();
+
                 break;
         }
     }
@@ -252,7 +257,7 @@ function lp_upload_quiz_action_handling()
         }
     }
 
-    if ($quizTitle != '') {
+    if ('' != $quizTitle) {
         // Variables
         $type = 2;
         $random = $active = $results = $max_attempt = $expired_time = 0;
@@ -275,7 +280,7 @@ function lp_upload_quiz_action_handling()
 
         if ($quiz_id) {
             // Import questions.
-            for ($i = 0; $i < $numberQuestions; $i++) {
+            for ($i = 0; $i < $numberQuestions; ++$i) {
                 // Question name
                 $questionTitle = $question[$i];
                 $myAnswerList = isset($answerList[$i]) ? $answerList[$i] : [];
@@ -300,7 +305,7 @@ function lp_upload_quiz_action_handling()
                 // Unique answers are the only question types available for now
                 // through xls-format import
                 $question_id = null;
-                if (isset($questionTypeList[$i]) && $questionTypeList[$i] != '') {
+                if (isset($questionTypeList[$i]) && '' != $questionTypeList[$i]) {
                     $detectQuestionType = (int) $questionTypeList[$i];
                 } else {
                     $detectQuestionType = detectQuestionType($myAnswerList);
@@ -310,27 +315,33 @@ function lp_upload_quiz_action_handling()
                 switch ($detectQuestionType) {
                     case FREE_ANSWER:
                         $answer = new FreeAnswer();
+
                         break;
                     case GLOBAL_MULTIPLE_ANSWER:
                         $answer = new GlobalMultipleAnswer();
+
                         break;
                     case MULTIPLE_ANSWER:
                         $answer = new MultipleAnswer();
+
                         break;
                     case FILL_IN_BLANKS:
                         $answer = new FillBlanks();
                         $question_description_text = '';
+
                         break;
                     case MATCHING:
                         $answer = new Matching();
+
                         break;
                     case UNIQUE_ANSWER:
                     default:
                         $answer = new UniqueAnswer();
+
                         break;
                 }
 
-                if ($questionTitle != '') {
+                if ('' != $questionTitle) {
                     $question_id = $answer->create_question(
                         $quiz_id,
                         $questionTitle,
@@ -361,8 +372,8 @@ function lp_upload_quiz_action_handling()
                             // score between them when importing from CSV
                             $numberRightAnswers = 0;
                             foreach ($myAnswerList as $answer_data) {
-                                if (strtolower($answer_data['extra']) == 'x') {
-                                    $numberRightAnswers++;
+                                if ('x' == strtolower($answer_data['extra'])) {
+                                    ++$numberRightAnswers;
                                 }
                             }
 
@@ -370,7 +381,7 @@ function lp_upload_quiz_action_handling()
                                 $answerValue = $answer_data['data'];
                                 $correct = 0;
                                 $score = 0;
-                                if (strtolower($answer_data['extra']) == 'x') {
+                                if ('x' == strtolower($answer_data['extra'])) {
                                     $correct = 1;
                                     $score = isset($scoreList[$i]) ? $scoreList[$i] : 0;
                                     $comment = isset($feedbackTrueList[$i]) ? $feedbackTrueList[$i] : '';
@@ -396,13 +407,14 @@ function lp_upload_quiz_action_handling()
                                         if ($correct) {
                                             $score = abs($scoreList[$i]);
                                         } else {
-                                            if (isset($noNegativeScoreList[$i]) && $noNegativeScoreList[$i] == 'x') {
+                                            if (isset($noNegativeScoreList[$i]) && 'x' == $noNegativeScoreList[$i]) {
                                                 $score = 0;
                                             } else {
                                                 $score = -abs($scoreList[$i]);
                                             }
                                         }
                                         $score /= $numberRightAnswers;
+
                                         break;
                                     case UNIQUE_ANSWER:
                                         break;
@@ -410,6 +422,7 @@ function lp_upload_quiz_action_handling()
                                         if (!$correct) {
                                             //$total = $total - $score;
                                         }
+
                                         break;
                                 }
 
@@ -422,7 +435,7 @@ function lp_upload_quiz_action_handling()
                                 );
 
                                 $total += (float) $score;
-                                $id++;
+                                ++$id;
                             }
 
                             $objAnswer->save();
@@ -436,16 +449,19 @@ function lp_upload_quiz_action_handling()
                                 switch ($detectQuestionType) {
                                     case GLOBAL_MULTIPLE_ANSWER:
                                         $questionObj->updateWeighting($globalScore);
+
                                         break;
                                     case UNIQUE_ANSWER:
                                     case MULTIPLE_ANSWER:
                                     default:
                                         $questionObj->updateWeighting($total);
+
                                         break;
                                 }
                                 $questionObj->save($exercise);
                             }
                         }
+
                         break;
                     case FREE_ANSWER:
                         $globalScore = isset($scoreList[$i]) ? $scoreList[$i] : null;
@@ -454,6 +470,7 @@ function lp_upload_quiz_action_handling()
                             $questionObj->updateWeighting($globalScore);
                             $questionObj->save($exercise);
                         }
+
                         break;
                     case FILL_IN_BLANKS:
                         $fillInScoreList = [];
@@ -487,6 +504,7 @@ function lp_upload_quiz_action_handling()
                             $questionObj->updateWeighting($globalScore);
                             $questionObj->save($exercise);
                         }
+
                         break;
                     case MATCHING:
                         $globalScore = isset($scoreList[$i]) ? $scoreList[$i] : null;
@@ -496,13 +514,13 @@ function lp_upload_quiz_action_handling()
                         foreach ($myAnswerList as $data) {
                             $option = isset($data['extra']) ? $data['extra'] : '';
                             $objAnswer->createAnswer($option, 0, '', 0, $position);
-                            $position++;
+                            ++$position;
                         }
 
                         $counter = 1;
                         foreach ($myAnswerList as $data) {
                             $value = isset($data['data']) ? $data['data'] : '';
-                            $position++;
+                            ++$position;
                             $objAnswer->createAnswer(
                                 $value,
                                 $counter,
@@ -510,7 +528,7 @@ function lp_upload_quiz_action_handling()
                                 $globalScore,
                                 $position
                             );
-                            $counter++;
+                            ++$counter;
                         }
                         $objAnswer->save();
                         $questionObj = Question::read($question_id, $_course);
@@ -518,6 +536,7 @@ function lp_upload_quiz_action_handling()
                             $questionObj->updateWeighting($globalScore);
                             $questionObj->save($exercise);
                         }
+
                         break;
                 }
             }
@@ -529,7 +548,7 @@ function lp_upload_quiz_action_handling()
             /** @var learnpath $oLP */
             $oLP = UnserializeApi::unserialize('lp', $lpObject);
             if (is_object($oLP)) {
-                if ((empty($oLP->cc)) || $oLP->cc != api_get_course_id()) {
+                if (empty($oLP->cc) || $oLP->cc != api_get_course_id()) {
                     $oLP = null;
                     Session::erase('oLP');
                     Session::erase('lpobject');
@@ -552,7 +571,7 @@ function lp_upload_quiz_action_handling()
                 ''
             );
             // Redirect to home page for add more content
-            header('Location: ../lp/lp_controller.php?'.api_get_cidreq().'&action=add_item&type=step&lp_id='.intval($_GET['lp_id']));
+            header('Location: ../lp/lp_controller.php?'.api_get_cidreq().'&action=add_item&type=step&lp_id='.(int) ($_GET['lp_id']));
             exit;
         } else {
             //  header('location: exercise.php?' . api_get_cidreq());
@@ -576,8 +595,8 @@ function detectQuestionType($answers_data)
     }
 
     foreach ($answers_data as $answer_data) {
-        if (strtolower($answer_data['extra']) == 'x') {
-            $correct++;
+        if ('x' == strtolower($answer_data['extra'])) {
+            ++$correct;
         } else {
             if (is_numeric($answer_data['extra'])) {
                 $isNumeric = true;
@@ -585,7 +604,7 @@ function detectQuestionType($answers_data)
         }
     }
 
-    if ($correct == 1) {
+    if (1 == $correct) {
         $type = UNIQUE_ANSWER;
     } else {
         if ($correct > 1) {
@@ -595,7 +614,7 @@ function detectQuestionType($answers_data)
         }
     }
 
-    if ($type == MULTIPLE_ANSWER) {
+    if (MULTIPLE_ANSWER == $type) {
         if ($isNumeric) {
             $type = MULTIPLE_ANSWER;
         } else {
@@ -606,7 +625,7 @@ function detectQuestionType($answers_data)
     return $type;
 }
 
-if ($origin != 'learnpath') {
+if ('learnpath' != $origin) {
     //so we are not in learnpath tool
     Display::display_footer();
 }

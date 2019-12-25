@@ -27,9 +27,6 @@ class UniqueAnswerNoOption extends Question
         $this->isContent = $this->getIsContent();
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function createAnswersForm($form)
     {
         // getting the exercise list
@@ -53,7 +50,7 @@ class UniqueAnswerNoOption extends Question
          */
 
         $feedback_title = '';
-        if ($obj_ex->getFeedbackType() == 1) {
+        if (1 == $obj_ex->getFeedbackType()) {
             $editor_config['Width'] = '250';
             $editor_config['Height'] = '110';
             $comment_title = '<th width="50%" >'.get_lang('Comment').'</th>';
@@ -101,17 +98,17 @@ class UniqueAnswerNoOption extends Question
             if (isset($_POST['lessAnswers'])) {
                 if (!isset($_SESSION['less_answer'])) {
                     $_SESSION['less_answer'] = $this->id;
-                    $nb_answers--;
+                    --$nb_answers;
                 }
             }
-            for ($k = 1; $k <= $nb_answers; $k++) {
-                if ($answer->position[$k] != '666') {
+            for ($k = 1; $k <= $nb_answers; ++$k) {
+                if ('666' != $answer->position[$k]) {
                     $new_list[$count] = $count;
-                    $count++;
+                    ++$count;
                 }
             }
         } else {
-            for ($k = 1; $k <= $nb_answers; $k++) {
+            for ($k = 1; $k <= $nb_answers; ++$k) {
                 $new_list[$k] = $k;
             }
         }
@@ -120,7 +117,7 @@ class UniqueAnswerNoOption extends Question
             $i = $key;
             $form->addElement('html', '<tr>');
             if (is_object($answer)) {
-                if ($answer->position[$i] == 666) {
+                if (666 == $answer->position[$i]) {
                     //we set nothing
                 } else {
                     if ($answer->correct[$i]) {
@@ -143,13 +140,13 @@ class UniqueAnswerNoOption extends Question
                     $list_dest = $item_list[2];
                     $url = $item_list[3];
 
-                    if ($try == 0) {
+                    if (0 == $try) {
                         $try_result = 0;
                     } else {
                         $try_result = 1;
                     }
 
-                    if ($url == 0) {
+                    if (0 == $url) {
                         $url_result = '';
                     } else {
                         $url_result = $url;
@@ -195,7 +192,7 @@ class UniqueAnswerNoOption extends Question
             $form->addElement('html_editor', 'comment['.$i.']', null, [], $editor_config);
             $form->addElement('text', 'weighting['.$i.']', null, ['style' => 'width: 60px;', 'value' => '0']);
             $form->addElement('html', '</tr>');
-            $i++;
+            ++$i;
         }
 
         if (empty($this->id)) {
@@ -253,7 +250,7 @@ class UniqueAnswerNoOption extends Question
 
         global $text;
         //ie6 fix
-        if ($obj_ex->edit_exercise_in_lp == true ||
+        if (true == $obj_ex->edit_exercise_in_lp ||
             (empty($this->exerciseList) && empty($obj_ex->id))
         ) {
             //setting the save button here and not in the question class.php
@@ -265,7 +262,7 @@ class UniqueAnswerNoOption extends Question
         }
 
         //We check the first radio button to be sure a radio button will be check
-        if ($correct == 0) {
+        if (0 == $correct) {
             $correct = 1;
         }
         $defaults['correct'] = $correct;
@@ -280,9 +277,6 @@ class UniqueAnswerNoOption extends Question
         $form->setConstants(['nb_answers' => $nb_answers]);
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function processAnswersCreation($form, $exercise)
     {
         $questionWeighting = $nbrGoodAnswers = 0;
@@ -294,16 +288,11 @@ class UniqueAnswerNoOption extends Question
             $minus = 0;
         }
 
-        for ($i = 1; $i <= $nb_answers - $minus; $i++) {
-            $position = trim($form->getSubmitValue('position['.$i.']'));
+        for ($i = 1; $i <= $nb_answers - $minus; ++$i) {
             $answer = trim($form->getSubmitValue('answer['.$i.']'));
             $comment = trim($form->getSubmitValue('comment['.$i.']'));
             $weighting = trim($form->getSubmitValue('weighting['.$i.']'));
             $scenario = $form->getSubmitValue('scenario');
-
-            //$list_destination = $form -> getSubmitValue('destination'.$i);
-            //$destination_str = $form -> getSubmitValue('destination'.$i);
-
             $try = $scenario['try'.$i];
             $lp = $scenario['lp'.$i];
             $destination = $scenario['destination'.$i];
@@ -328,7 +317,7 @@ class UniqueAnswerNoOption extends Question
             {
                 $destination_str.=$destination_id.';';
             }*/
-            $goodAnswer = ($correct == $i) ? true : false;
+            $goodAnswer = $correct == $i ? true : false;
 
             if ($goodAnswer) {
                 //$nbrGoodAnswers++;
@@ -350,7 +339,7 @@ class UniqueAnswerNoOption extends Question
                 $destination = 0;
             }
 
-            if ($url == '') {
+            if ('' == $url) {
                 $url = 0;
             }
 
@@ -395,9 +384,6 @@ class UniqueAnswerNoOption extends Question
         $this->save($exercise);
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function return_header(Exercise $exercise, $counter = null, $score = [])
     {
         $header = parent::return_header($exercise, $counter, $score);

@@ -1,4 +1,5 @@
 <?php
+
 /* For licensing terms, see /license.txt */
 
 use ChamiloSession as Session;
@@ -6,10 +7,9 @@ use ChamiloSession as Session;
 /**
  *   Session view.
  *
- *   @package chamilo.session
- *
  *   @author Julio Montoya <gugli100@gmail.com>  Beeznest
  */
+
 $cidReset = true;
 require_once __DIR__.'/../inc/global.inc.php';
 
@@ -43,7 +43,7 @@ Session::erase('duration_time');
 
 $userId = api_get_user_id();
 $session_info = SessionManager::fetch($session_id);
-$session_list = SessionManager::get_sessions_by_coach(api_get_user_id());
+$session_list = SessionManager::get_sessions_by_general_coach(api_get_user_id());
 $courseList = SessionManager::get_course_list_by_session_id($session_id);
 $userIsGeneralCoach = SessionManager::user_is_general_coach($userId, $session_id);
 

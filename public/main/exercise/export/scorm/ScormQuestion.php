@@ -1,4 +1,5 @@
 <?php
+
 /* For licensing terms, see /license.txt */
 
 /**
@@ -12,8 +13,6 @@
  *
  * @author Claro Team <cvs@claroline.net>
  * @author Yannick Warnier <yannick.warnier@beeznest.com>
- *
- * @package chamilo.exercise.scorm
  */
 class ScormQuestion extends Question
 {
@@ -31,11 +30,10 @@ class ScormQuestion extends Question
     /**
      * Returns the HTML + JS flow corresponding to one question.
      *
-     * @param int  $questionId The question ID
-     * @param bool $standalone (ie including XML tag, DTD declaration, etc)
-     * @param int  $jsId       The JavaScript ID for this question.
-     *                         Due to the nature of interactions, we must have a natural sequence for
-     *                         questions in the generated JavaScript.
+     * @param int $questionId The question ID
+     * @param int $jsId       The JavaScript ID for this question.
+     *                        Due to the nature of interactions, we must have a natural sequence for
+     *                        questions in the generated JavaScript.
      *
      * @return string|array
      */
@@ -69,46 +67,56 @@ class ScormQuestion extends Question
             case MCUA:
                 $this->answer = new ScormAnswerMultipleChoice($this->id);
                 $this->answer->questionJSId = $this->js_id;
+
                 break;
             case MCMA:
             case GLOBAL_MULTIPLE_ANSWER:
                 $this->answer = new ScormAnswerMultipleChoice($this->id);
                 $this->answer->questionJSId = $this->js_id;
+
                 break;
             case TF:
                 $this->answer = new ScormAnswerTrueFalse($this->id);
                 $this->answer->questionJSId = $this->js_id;
+
                 break;
             case FIB:
                 $this->answer = new ScormAnswerFillInBlanks($this->id);
                 $this->answer->questionJSId = $this->js_id;
+
                 break;
             case MATCHING:
             case MATCHING_DRAGGABLE:
             case DRAGGABLE:
                 $this->answer = new ScormAnswerMatching($this->id);
                 $this->answer->questionJSId = $this->js_id;
+
                 break;
             case ORAL_EXPRESSION:
             case FREE_ANSWER:
                 $this->answer = new ScormAnswerFree($this->id);
                 $this->answer->questionJSId = $this->js_id;
+
                 break;
             case HOT_SPOT:
                 $this->answer = new ScormAnswerHotspot($this->id);
                 $this->answer->questionJSId = $this->js_id;
+
                 break;
             case MULTIPLE_ANSWER_COMBINATION:
                 $this->answer = new ScormAnswerMultipleChoice($this->id);
                 $this->answer->questionJSId = $this->js_id;
+
                 break;
             case HOT_SPOT_ORDER:
                 $this->answer = new ScormAnswerHotspot($this->id);
                 $this->answer->questionJSId = $this->js_id;
+
                 break;
             case HOT_SPOT_DELINEATION:
                 $this->answer = new ScormAnswerHotspot($this->id);
                 $this->answer->questionJSId = $this->js_id;
+
                 break;
             // not supported
             case UNIQUE_ANSWER_NO_OPTION:
@@ -118,10 +126,12 @@ class ScormQuestion extends Question
             case CALCULATED_ANSWER:
                 $this->answer = new ScormAnswerMultipleChoice($this->id);
                 $this->answer->questionJSId = $this->js_id;
+
                 break;
             default:
                 $this->answer = new stdClass();
                 $this->answer->questionJSId = $this->js_id;
+
                 break;
         }
 
@@ -149,17 +159,11 @@ class ScormQuestion extends Question
         return [$js, $html];
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function createAnswersForm($form)
     {
         return true;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function processAnswersCreation($form, $exercise)
     {
         return true;
@@ -173,7 +177,8 @@ class ScormQuestion extends Question
         $title = $this->selectTitle();
         $description = $this->selectDescription();
         $cols = 2;
-        $s = '<tr>
+
+        return '<tr>
             <td colspan="'.$cols.'" id="question_'.$this->id.'_title" valign="middle" style="background-color:#d6d6d6;">
             '.$title.'
             </td>
@@ -183,8 +188,6 @@ class ScormQuestion extends Question
             <i>'.$description.'</i>
             </td>
             </tr>';
-
-        return $s;
     }
 
     /**
@@ -213,9 +216,10 @@ class ScormQuestion extends Question
                 //put the max score to 0 to avoid discounting the points of
                 //non-exported quiz types in the SCORM
                 $weight = 0;
+
                 break;
         }
-        $js .= 'questions_score_max['.$this->js_id.'] = '.$weight.";";
+        $js .= 'questions_score_max['.$this->js_id.'] = '.$weight.';';
 
         return $js;
     }

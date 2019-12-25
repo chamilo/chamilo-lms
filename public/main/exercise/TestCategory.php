@@ -1,4 +1,5 @@
 <?php
+
 /* For licensing terms, see /license.txt */
 
 use APY\DataGridBundle\Grid\Action\MassAction;
@@ -335,8 +336,8 @@ class TestCategory
     /**
      * Return the list of different categories NAME for a test.
      *
-     * @param int $exerciseId
-     * @param bool
+     * @param int  $exerciseId
+     * @param bool $grouped_by_category
      *
      * @return array
      *
@@ -370,7 +371,7 @@ class TestCategory
         $result = [];
         $categories = self::getListOfCategoriesIDForTestObject($exercise);
         foreach ($categories as $cat_id) {
-            $cat = new TestCategory();
+            $cat = new self();
             $cat = (array) $cat->getCategory($cat_id);
             $cat['iid'] = $cat['id'];
             $cat['title'] = $cat['name'];
@@ -397,9 +398,9 @@ class TestCategory
         $quiz->read($exerciseId);
         $questionList = $quiz->selectQuestionList();
         // the array given by selectQuestionList start at indice 1 and not at indice 0 !!! ? ? ?
-        for ($i = 1; $i <= count($questionList); $i++) {
+        for ($i = 1; $i <= count($questionList); ++$i) {
             if (self::getCategoryForQuestion($questionList[$i]) == $categoryId) {
-                $nbCatResult++;
+                ++$nbCatResult;
             }
         }
 
@@ -526,6 +527,7 @@ class TestCategory
                 if (empty($category['category_id'])) {
                     // Check
                     $checkQuestionsWithNoCategory = true;
+
                     break;
                 }
             }
@@ -588,12 +590,12 @@ class TestCategory
             $in_display_category_name = $objExercise->display_category_name;
         }
         $content = null;
-        if (self::getCategoryNameForQuestion($questionId) != '' &&
-            ($in_display_category_name == 1 || !$is_student)
+        if ('' != self::getCategoryNameForQuestion($questionId) &&
+            (1 == $in_display_category_name || !$is_student)
         ) {
             $content .= '<div class="page-header">';
-            $content .= '<h4>'.get_lang('Category').": ".self::getCategoryNameForQuestion($questionId).'</h4>';
-            $content .= "</div>";
+            $content .= '<h4>'.get_lang('Category').': '.self::getCategoryNameForQuestion($questionId).'</h4>';
+            $content .= '</div>';
         }
 
         return $content;
@@ -610,7 +612,7 @@ class TestCategory
         $tabResult = [];
         $tabCatName = []; // tab of category name
         foreach ($in_tab as $cat_id => $tabquestion) {
-            $category = new TestCategory();
+            $category = new self();
             $category = $category->getCategory($cat_id);
             $tabCatName[$cat_id] = $category->name;
         }
@@ -717,7 +719,7 @@ class TestCategory
                         true
                     )
                 );
-                $row++;
+                ++$row;
             }
 
             if (!empty($none_category)) {
@@ -742,7 +744,7 @@ class TestCategory
                         true
                     )
                 );
-                $row++;
+                ++$row;
             }
             if (!empty($total)) {
                 $table->setCellContents($row, 0, get_lang('Total'));
@@ -814,7 +816,7 @@ class TestCategory
         if (Database::num_rows($result)) {
             while ($row = Database::fetch_array($result, 'ASSOC')) {
                 if ($excludeCategoryWithNoQuestions) {
-                    if ($row['count_questions'] == 0) {
+                    if (0 == $row['count_questions']) {
                         continue;
                     }
                 }
@@ -842,10 +844,12 @@ class TestCategory
             case 'new':
                 $header = get_lang('Add category');
                 $submit = get_lang('Add test category');
+
                 break;
             case 'edit':
                 $header = get_lang('Edit this category');
                 $submit = get_lang('Edit category');
+
                 break;
         }
 
@@ -883,7 +887,7 @@ class TestCategory
         );
         $script = null;
         if (!empty($this->parent_id)) {
-            $parent_cat = new TestCategory();
+            $parent_cat = new self();
             $parent_cat = $parent_cat->getCategory($this->parent_id);
             $category_parent_list = [$parent_cat->id => $parent_cat->name];
             $script .= '<script>$(function() { $("#parent_id").trigger("addItem",[{"title": "'.$parent_cat->name.'", "value": "'.$parent_cat->id.'"}]); });</script>';
@@ -895,11 +899,11 @@ class TestCategory
 
         // setting the defaults
         $defaults = [];
-        $defaults["category_id"] = $this->id;
-        $defaults["category_name"] = $this->name;
-        $defaults["category_description"] = $this->description;
-        $defaults["parent_id"] = $this->parent_id;
-        $defaults["visibility"] = $this->visibility;
+        $defaults['category_id'] = $this->id;
+        $defaults['category_name'] = $this->name;
+        $defaults['category_description'] = $this->description;
+        $defaults['parent_id'] = $this->parent_id;
+        $defaults['visibility'] = $this->visibility;
         $form->setDefaults($defaults);
 
         // setting the rules
@@ -1026,16 +1030,15 @@ class TestCategory
         $table = Database::get_course_table(TABLE_QUIZ_QUESTION_REL_CATEGORY);
         // if question doesn't have a category
         // @todo change for 1.10 when a question can have several categories
-        if (self::getCategoryForQuestion($questionId, $courseId) == 0 &&
+        if (0 == self::getCategoryForQuestion($questionId, $courseId) &&
             $questionId > 0 &&
             $courseId > 0
         ) {
             $sql = "INSERT INTO $table (c_id, question_id, category_id)
-                    VALUES (".intval($courseId).", ".intval($questionId).", ".intval($categoryId).")";
+                    VALUES (".(int) $courseId.', '.(int) $questionId.', '.(int) $categoryId.')';
             Database::query($sql);
-            $id = Database::insert_id();
 
-            return $id;
+            return Database::insert_id();
         }
 
         return false;
@@ -1190,11 +1193,9 @@ class TestCategory
             ->handleRequest(Container::getRequest())
         ;
 
-        $html = Container::$container->get('twig')->render(
+        return Container::$container->get('twig')->render(
             '@ChamiloTheme/Resource/grid.html.twig',
             ['grid' => $grid]
         );
-
-        return $html;
     }
 }

@@ -30,9 +30,6 @@ class UniqueAnswer extends Question
         $this->isContent = $this->getIsContent();
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function createAnswersForm($form)
     {
         // Getting the exercise list
@@ -56,12 +53,15 @@ class UniqueAnswer extends Question
                 // Scenario
                 $comment_title = '<th width="20%">'.get_lang('Comment').'</th>';
                 $feedback_title = '<th width="20%">'.get_lang('Scenario').'</th>';
+
                 break;
             case EXERCISE_FEEDBACK_TYPE_POPUP:
                 $comment_title = '<th width="20%">'.get_lang('Comment').'</th>';
+
                 break;
             default:
                 $comment_title = '<th width="40%">'.get_lang('Comment').'</th>';
+
                 break;
         }
 
@@ -126,7 +126,7 @@ class UniqueAnswer extends Question
             );
         }
 
-        for ($i = 1; $i <= $nb_answers; $i++) {
+        for ($i = 1; $i <= $nb_answers; ++$i) {
             $form->addHtml('<tr>');
             if (isset($answer) && is_object($answer)) {
                 if (isset($answer->correct[$i]) && $answer->correct[$i]) {
@@ -144,12 +144,12 @@ class UniqueAnswer extends Question
                 $list_dest = isset($item_list[2]) ? $item_list[2] : '';
                 $url = isset($item_list[3]) ? $item_list[3] : '';
 
-                if ($try == 0) {
+                if (0 == $try) {
                     $try_result = 0;
                 } else {
                     $try_result = 1;
                 }
-                if ($url == 0) {
+                if (0 == $url) {
                     $url_result = '';
                 } else {
                     $url_result = $url;
@@ -220,10 +220,12 @@ class UniqueAnswer extends Question
             switch ($obj_ex->getFeedbackType()) {
                 case EXERCISE_FEEDBACK_TYPE_DIRECT:
                     $this->setDirectOptions($i, $form, $renderer, $select_lp_id, $select_question);
+
                     break;
                 case EXERCISE_FEEDBACK_TYPE_POPUP:
                 default:
                     $form->addHtmlEditor('comment['.$i.']', null, null, false, $editor_config);
+
                     break;
             }
             $form->addText('weighting['.$i.']', null, null, ['value' => '0']);
@@ -236,7 +238,7 @@ class UniqueAnswer extends Question
         global $text;
         $buttonGroup = [];
 
-        if ($obj_ex->edit_exercise_in_lp == true ||
+        if (true == $obj_ex->edit_exercise_in_lp ||
             (empty($this->exerciseList) && empty($obj_ex->id))
         ) {
             //setting the save button here and not in the question class.php
@@ -256,7 +258,7 @@ class UniqueAnswer extends Question
         }
 
         // We check the first radio button to be sure a radio button will be check
-        if ($correct == 0) {
+        if (0 == $correct) {
             $correct = 1;
         }
 
@@ -265,7 +267,7 @@ class UniqueAnswer extends Question
         if (!empty($this->id)) {
             $form->setDefaults($defaults);
         } else {
-            if ($this->isContent == 1) {
+            if (1 == $this->isContent) {
                 // Default sample content.
                 $form->setDefaults($defaults);
             } else {
@@ -328,17 +330,14 @@ class UniqueAnswer extends Question
         );
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function processAnswersCreation($form, $exercise)
     {
-        $questionWeighting = $nbrGoodAnswers = 0;
+        $questionWeighting = 0;
         $correct = $form->getSubmitValue('correct');
         $objAnswer = new Answer($this->id);
         $nb_answers = $form->getSubmitValue('nb_answers');
 
-        for ($i = 1; $i <= $nb_answers; $i++) {
+        for ($i = 1; $i <= $nb_answers; ++$i) {
             $answer = trim($form->getSubmitValue('answer['.$i.']'));
             $comment = trim($form->getSubmitValue('comment['.$i.']'));
             $weighting = trim($form->getSubmitValue('weighting['.$i.']'));
@@ -374,7 +373,6 @@ class UniqueAnswer extends Question
             $goodAnswer = $correct == $i ? true : false;
 
             if ($goodAnswer) {
-                $nbrGoodAnswers++;
                 $weighting = abs($weighting);
                 if ($weighting > 0) {
                     $questionWeighting += $weighting;
@@ -393,7 +391,7 @@ class UniqueAnswer extends Question
                 $destination = 0;
             }
 
-            if ($url == '') {
+            if ('' == $url) {
                 $url = 0;
             }
 
@@ -419,9 +417,6 @@ class UniqueAnswer extends Question
         $this->save($exercise);
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function return_header(Exercise $exercise, $counter = null, $score = [])
     {
         $header = parent::return_header($exercise, $counter, $score);
@@ -464,9 +459,9 @@ class UniqueAnswer extends Question
         $tbl_quiz_answer = Database::get_course_table(TABLE_QUIZ_ANSWER);
         $tbl_quiz_question = Database::get_course_table(TABLE_QUIZ_QUESTION);
         $course_id = api_get_course_int_id();
-        $question_id = intval($question_id);
-        $score = floatval($score);
-        $correct = intval($correct);
+        $question_id = (int) $question_id;
+        $score = (float) $score;
+        $correct = (int) $correct;
         $title = Database::escape_string($title);
         $comment = Database::escape_string($comment);
         // Get the max position.

@@ -24,9 +24,6 @@ class FreeAnswer extends Question
         $this->isContent = $this->getIsContent();
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function createAnswersForm($form)
     {
         $form->addElement('text', 'weighting', get_lang('Score'));
@@ -36,24 +33,18 @@ class FreeAnswer extends Question
         if (!empty($this->id)) {
             $form->setDefaults(['weighting' => float_format($this->weighting, 1)]);
         } else {
-            if ($this->isContent == 1) {
+            if (1 == $this->isContent) {
                 $form->setDefaults(['weighting' => '10']);
             }
         }
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function processAnswersCreation($form, $exercise)
     {
         $this->weighting = $form->getSubmitValue('weighting');
         $this->save($exercise);
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function return_header(Exercise $exercise, $counter = null, $score = [])
     {
         $score['revised'] = $this->isQuestionWaitingReview($score);

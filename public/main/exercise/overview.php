@@ -28,9 +28,9 @@ if (!$result) {
     api_not_allowed(true);
 }
 
-$learnpath_id = isset($_REQUEST['learnpath_id']) ? intval($_REQUEST['learnpath_id']) : null;
-$learnpath_item_id = isset($_REQUEST['learnpath_item_id']) ? intval($_REQUEST['learnpath_item_id']) : null;
-$learnpathItemViewId = isset($_REQUEST['learnpath_item_view_id']) ? intval($_REQUEST['learnpath_item_view_id']) : null;
+$learnpath_id = isset($_REQUEST['learnpath_id']) ? (int) ($_REQUEST['learnpath_id']) : null;
+$learnpath_item_id = isset($_REQUEST['learnpath_item_id']) ? (int) ($_REQUEST['learnpath_item_id']) : null;
+$learnpathItemViewId = isset($_REQUEST['learnpath_item_view_id']) ? (int) ($_REQUEST['learnpath_item_view_id']) : null;
 $origin = api_get_origin();
 
 $logInfo = [
@@ -51,7 +51,7 @@ $interbreadcrumb[] = ['url' => '#', 'name' => $objExercise->selectTitle(true)];
 $time_control = false;
 $clock_expired_time = ExerciseLib::get_session_time_control_key($objExercise->id, $learnpath_id, $learnpath_item_id);
 
-if ($objExercise->expired_time != 0 && !empty($clock_expired_time)) {
+if (0 != $objExercise->expired_time && !empty($clock_expired_time)) {
     $time_control = true;
 }
 
@@ -70,11 +70,11 @@ if ($time_control) {
 if (!in_array($origin, ['learnpath', 'embeddable'])) {
     Display::display_header();
 } else {
-    $htmlHeadXtra[] = "
+    $htmlHeadXtra[] = '
     <style>
     body { background: none;}
     </style>
-    ";
+    ';
     Display::display_reduced_header();
 }
 
@@ -154,7 +154,7 @@ $visible_return = $objExercise->is_visible(
 );
 
 // Exercise is not visible remove the button
-if ($visible_return['value'] == false) {
+if (false == $visible_return['value']) {
     if ($is_allowed_to_edit) {
         $message = Display::return_message(get_lang('This item is invisible for learner but you have access as teacher.'), 'warning');
     } else {
@@ -228,7 +228,7 @@ if (!empty($attempts)) {
         );
 
         $teacher_revised = Display::label(get_lang('Validated'), 'success');
-        if ($attempt_result['attempt_revised'] == 0) {
+        if (0 == $attempt_result['attempt_revised']) {
             $teacher_revised = Display::label(get_lang('Not validated'), 'info');
         }
         $row = [
@@ -269,17 +269,17 @@ if (!empty($attempts)) {
                 RESULT_DISABLE_SHOW_ONLY_IN_CORRECT_ANSWER,
             ]
         ) || (
-            $objExercise->results_disabled == RESULT_DISABLE_SHOW_SCORE_ONLY &&
-            $objExercise->getFeedbackType() == EXERCISE_FEEDBACK_TYPE_END
+            RESULT_DISABLE_SHOW_SCORE_ONLY == $objExercise->results_disabled &&
+            EXERCISE_FEEDBACK_TYPE_END == $objExercise->getFeedbackType()
         )
         ) {
             if ($blockShowAnswers &&
-                $objExercise->results_disabled != RESULT_DISABLE_DONT_SHOW_SCORE_ONLY_IF_USER_FINISHES_ATTEMPTS_SHOW_ALWAYS_FEEDBACK
+                RESULT_DISABLE_DONT_SHOW_SCORE_ONLY_IF_USER_FINISHES_ATTEMPTS_SHOW_ALWAYS_FEEDBACK != $objExercise->results_disabled
             ) {
                 $attempt_link = '';
             }
-            if ($blockShowAnswers == true &&
-                $objExercise->results_disabled == RESULT_DISABLE_DONT_SHOW_SCORE_ONLY_IF_USER_FINISHES_ATTEMPTS_SHOW_ALWAYS_FEEDBACK
+            if (true == $blockShowAnswers &&
+                RESULT_DISABLE_DONT_SHOW_SCORE_ONLY_IF_USER_FINISHES_ATTEMPTS_SHOW_ALWAYS_FEEDBACK == $objExercise->results_disabled
             ) {
                 if (isset($row['result'])) {
                     unset($row['result']);
@@ -294,7 +294,7 @@ if (!empty($attempts)) {
             $row['attempt_link'] = $attempt_link;
         }
         $my_attempt_array[] = $row;
-        $i--;
+        --$i;
     }
 
     $header_names = [];
@@ -314,6 +314,7 @@ if (!empty($attempts)) {
                     get_lang('Details'),
                 ];
             }
+
             break;
         case RESULT_DISABLE_SHOW_SCORE_ATTEMPT_SHOW_ANSWERS_LAST_ATTEMPT:
             if ($blockShowAnswers) {
@@ -327,6 +328,7 @@ if (!empty($attempts)) {
                     get_lang('Details'),
                 ];
             }
+
             break;
         case RESULT_DISABLE_SHOW_SCORE_AND_EXPECTED_ANSWERS:
         case RESULT_DISABLE_SHOW_SCORE_AND_EXPECTED_ANSWERS_AND_RANKING:
@@ -339,12 +341,14 @@ if (!empty($attempts)) {
                 get_lang('Score'),
                 get_lang('Details'),
             ];
+
             break;
         case RESULT_DISABLE_NO_SCORE_AND_EXPECTED_ANSWERS:
             $header_names = [get_lang('Attempt'), get_lang('Start Date'), get_lang('IP')];
+
             break;
         case RESULT_DISABLE_SHOW_SCORE_ONLY:
-            if ($objExercise->getFeedbackType() != EXERCISE_FEEDBACK_TYPE_END) {
+            if (EXERCISE_FEEDBACK_TYPE_END != $objExercise->getFeedbackType()) {
                 $header_names = [get_lang('Attempt'), get_lang('Start Date'), get_lang('IP'), get_lang('Score')];
             } else {
                 $header_names = [
@@ -355,12 +359,13 @@ if (!empty($attempts)) {
                     get_lang('Details'),
                 ];
             }
+
             break;
     }
     $column = 0;
     foreach ($header_names as $item) {
         $table->setHeaderContents(0, $column, $item);
-        $column++;
+        ++$column;
     }
     $row = 1;
     if (!empty($my_attempt_array)) {
@@ -368,8 +373,8 @@ if (!empty($attempts)) {
             $column = 0;
             $table->setCellContents($row, $column, $data);
             $table->setRowAttributes($row, null, true);
-            $column++;
-            $row++;
+            ++$column;
+            ++$row;
         }
     }
     $table_content = $table->toHtml();
@@ -384,7 +389,7 @@ if ($selectAttempts) {
     } else {
         $attempt_message = Display::return_message($attempt_message, 'info');
     }
-    if ($visible_return['value'] == true) {
+    if (true == $visible_return['value']) {
         $message .= $attempt_message;
     }
 }

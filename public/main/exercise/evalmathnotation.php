@@ -1,9 +1,10 @@
 <?php
+
 /* For licensing terms, see /license.txt */
 
-require_once "../inc/global.inc.php";
+require_once '../inc/global.inc.php';
 
-echo "<pre>".
+echo '<pre>'.
 get_lang('Summation:			+')."\n".
 get_lang('Substraction:			-')."\n".
 get_lang('Multiplication:			*')."\n".
@@ -48,4 +49,4 @@ get_lang('HyperbolicCosecant:				csc(x)h')."\n".
 get_lang('Arccosecant:			arccsc(x)')."\n".
 get_lang('HyperbolicArccosecant:			arccsc(x)h')."\n".
 "\n".
-"</pre>";
+'</pre>';

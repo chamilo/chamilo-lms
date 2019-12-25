@@ -873,7 +873,7 @@ class GroupManager
         $table_group = Database::get_course_table(TABLE_GROUP);
         $table_group_cat = Database::get_course_table(TABLE_GROUP_CATEGORY);
 
-        $group_id = intval($group_id);
+        $group_id = (int) $group_id;
 
         if (empty($group_id)) {
             return [];

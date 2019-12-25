@@ -1,9 +1,9 @@
 <?php
+
 /* For licensing terms, see /license.txt */
+
 /**
  * List sessions categories.
- *
- * @package chamilo.admin
  */
 $cidReset = true;
 
@@ -90,7 +90,7 @@ if (isset($_GET['search']) && $_GET['search'] === 'advanced') {
 	 			ORDER BY $sort $order
 	 			LIMIT $from,".($limit + 1);
 
-    $query_rows = "SELECT count(*) as total_rows 
+    $query_rows = "SELECT count(*) as total_rows
                   FROM $tbl_session_category sc $where ";
     $order = ($order == 'ASC') ? 'DESC' : 'ASC';
     $result_rows = Database::query($query_rows);
@@ -145,7 +145,7 @@ if (isset($_GET['search']) && $_GET['search'] === 'advanced') {
                         <a href="<?php echo api_get_self(); ?>?page=<?php echo $page
                             - 1; ?>&sort=<?php echo $sort; ?>&order=<?php echo Security::remove_XSS(
                             $order
-                        ); ?>&keyword=<?php echo $keyword; ?><?php echo @$cond_url; ?>"><?php echo get_lang(
+                        ); ?>&keyword=<?php echo $keyword; ?>"><?php echo get_lang(
                                 'Previous'
                             ); ?></a>
                         <?php
@@ -159,7 +159,7 @@ if (isset($_GET['search']) && $_GET['search'] === 'advanced') {
                         <a href="<?php echo api_get_self(); ?>?page=<?php echo $page
                             + 1; ?>&sort=<?php echo $sort; ?>&order=<?php echo Security::remove_XSS(
                             $order
-                        ); ?>&keyword=<?php echo $keyword; ?><?php echo @$cond_url; ?>"><?php echo get_lang(
+                        ); ?>&keyword=<?php echo $keyword; ?>"><?php echo get_lang(
                                 'Next'
                             ); ?></a>
                         <?php
@@ -192,11 +192,11 @@ if (isset($_GET['search']) && $_GET['search'] === 'advanced') {
                     break;
                 }
                 $sql = 'SELECT COUNT(session_category_id)
-                        FROM '.$tbl_session.' s 
-                        INNER JOIN '.$table_access_url_rel_session.'  us 
+                        FROM '.$tbl_session.' s
+                        INNER JOIN '.$table_access_url_rel_session.'  us
                         ON (s.id = us.session_id)
-                        WHERE 
-                            s.session_category_id = '.intval($enreg['id']).' AND 
+                        WHERE
+                            s.session_category_id = '.intval($enreg['id']).' AND
                             us.access_url_id = '.api_get_current_access_url_id();
 
                 $rs = Database::query($sql);
@@ -244,7 +244,7 @@ if (isset($_GET['search']) && $_GET['search'] === 'advanced') {
                         <a href="<?php echo api_get_self(); ?>?page=<?php echo $page
                             - 1; ?>&sort=<?php echo $sort; ?>&order=<?php echo Security::remove_XSS(
                             $_REQUEST['order']
-                        ); ?>&keyword=<?php echo $_REQUEST['keyword']; ?><?php echo @$cond_url; ?>">
+                        ); ?>&keyword=<?php echo $_REQUEST['keyword']; ?>">
                             <?php echo get_lang('Previous'); ?></a>
                         <?php
                     } else {
@@ -254,11 +254,10 @@ if (isset($_GET['search']) && $_GET['search'] === 'advanced') {
                     <?php
                     if ($nbr_results > $limit) {
                         ?>
-
                         <a href="<?php echo api_get_self(); ?>?page=<?php echo $page
                             + 1; ?>&sort=<?php echo $sort; ?>&order=<?php echo Security::remove_XSS(
                             $_REQUEST['order']
-                        ); ?>&keyword=<?php echo $_REQUEST['keyword']; ?><?php echo @$cond_url; ?>">
+                        ); ?>&keyword=<?php echo $_REQUEST['keyword']; ?>">
                             <?php echo get_lang('Next'); ?></a>
 
                         <?php

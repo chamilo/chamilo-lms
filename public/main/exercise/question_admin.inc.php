@@ -44,7 +44,7 @@ if (is_object($objQuestion)) {
     $objQuestion->createAnswersForm($form);
 
     // this variable  $show_quiz_edition comes from admin.php blocks the exercise/quiz modifications
-    if (!empty($objExercise->id) && $objExercise->edit_exercise_in_lp == false) {
+    if (!empty($objExercise->id) && false == $objExercise->edit_exercise_in_lp) {
         $form->freeze();
     }
 
@@ -55,8 +55,8 @@ if (is_object($objQuestion)) {
         $objQuestion->processAnswersCreation($form, $objExercise);
         // TODO: maybe here is the better place to index this tool, including answers text
         // redirect
-        if ($objQuestion->type != HOT_SPOT &&
-            $objQuestion->type != HOT_SPOT_DELINEATION
+        if (HOT_SPOT != $objQuestion->type &&
+            HOT_SPOT_DELINEATION != $objQuestion->type
         ) {
             if (isset($_GET['editQuestion'])) {
                 if (empty($exerciseId)) {

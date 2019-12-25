@@ -1,4 +1,5 @@
 <?php
+
 /* For licensing terms, see /license.txt */
 
 use ChamiloSession as Session;
@@ -6,7 +7,6 @@ use ChamiloSession as Session;
 /**
  *	This file saves every click in the hotspot tool into track_e_hotspots.
  *
- *	@package chamilo.exercise
  *
  * 	@author Toon Keppens
  *
@@ -22,7 +22,7 @@ $coordinates = $_GET['coord'];
 $objExercise = Session::read('objExercise');
 $hotspotId = $_GET['hotspotId'];
 $exerciseId = $objExercise->selectId();
-if ($_GET['answerId'] == "0") { // click is NOT on a hotspot
+if ('0' == $_GET['answerId']) { // click is NOT on a hotspot
     $hit = 0;
     $answerId = $hotspotId;
 
@@ -51,6 +51,6 @@ $TBL_TRACK_E_HOTSPOT = Database::get_main_table(TABLE_STATISTIC_TRACK_E_HOTSPOT)
 $update_id = $_SESSION['exerciseResult'][$questionId]['ids'][$answerId];
 $sql = "UPDATE $TBL_TRACK_E_HOTSPOT 
         SET coordinate = '".Database::escape_string($coordinates)."'
-        WHERE id = ".intval($update_id)." 
-        LIMIT 1";
+        WHERE id = ".(int) $update_id.' 
+        LIMIT 1';
 $result = Database::query($sql);

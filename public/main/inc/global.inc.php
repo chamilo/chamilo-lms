@@ -69,11 +69,6 @@ try {
         throw new Exception('Chamilo is not installed');
     }
 
-    //$kernel->setApi($_configuration);
-    if (!isset($GLOBALS['_configuration'])) {
-        $GLOBALS['_configuration'] = $_configuration;
-    }
-
     // Do not over-use this variable. It is only for this script's local use.
     $libraryPath = __DIR__.'/lib/';
     $container = $kernel->getContainer();

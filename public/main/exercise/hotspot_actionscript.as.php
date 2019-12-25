@@ -1,11 +1,12 @@
 <?php
+
 /* For licensing terms, see /license.txt */
 
 use Chamilo\CoreBundle\Framework\Container;
 use Chamilo\CourseBundle\Entity\CQuizQuestion;
 use ChamiloSession as Session;
 
-/**
+/*
  * This file generates the ActionScript variables code used by the HotSpot .swf.
  *
  * @package chamilo.exercise
@@ -41,7 +42,7 @@ $imagePath = $questionRepo->getHotSpotImageUrl($objQuestion);
 $course_id = api_get_course_int_id();
 
 // Query db for answers
-if ($answer_type == HOT_SPOT_DELINEATION) {
+if (HOT_SPOT_DELINEATION == $answer_type) {
     $sql = "SELECT iid, id, answer, hotspot_coordinates, hotspot_type, ponderation 
 	        FROM $TBL_ANSWERS
 	        WHERE 
@@ -94,29 +95,29 @@ while ($hotspot = Database::fetch_assoc($result)) {
     $hotSpot['answer'] = $hotspot['answer'];
 
     // Square or rectancle
-    if ($hotspot['hotspot_type'] == 'square') {
+    if ('square' == $hotspot['hotspot_type']) {
         $hotSpot['type'] = 'square';
     }
     // Circle or ovale
-    if ($hotspot['hotspot_type'] == 'circle') {
+    if ('circle' == $hotspot['hotspot_type']) {
         $hotSpot['type'] = 'circle';
     }
     // Polygon
-    if ($hotspot['hotspot_type'] == 'poly') {
+    if ('poly' == $hotspot['hotspot_type']) {
         $hotSpot['type'] = 'poly';
     }
     // Delineation
-    if ($hotspot['hotspot_type'] == 'delineation') {
+    if ('delineation' == $hotspot['hotspot_type']) {
         $hotSpot['type'] = 'delineation';
     }
     // No error
-    if ($hotspot['hotspot_type'] == 'noerror') {
+    if ('noerror' == $hotspot['hotspot_type']) {
         $hotSpot['type'] = 'noerror';
     }
 
     // This is a good answer, count + 1 for nmbr of clicks
     if ($hotspot['hotspot_type'] > 0) {
-        $nmbrTries++;
+        ++$nmbrTries;
     }
 
     $hotSpot['coord'] = $hotspot['hotspot_coordinates'];

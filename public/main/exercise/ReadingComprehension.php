@@ -72,7 +72,7 @@ class ReadingComprehension extends UniqueAnswer
     {
         // Refresh is set to 5s, but speed is in words per minute
         $wordsPerSecond = self::$speeds[$this->level] / 60;
-        $this->expectedWordsPerRefresh = intval($wordsPerSecond * $this->refreshTime);
+        $this->expectedWordsPerRefresh = (int) ($wordsPerSecond * $this->refreshTime);
 
         if (empty($text)) {
             // We have an issue here... how do we treat this case?
@@ -92,7 +92,7 @@ class ReadingComprehension extends UniqueAnswer
 
         $firstIndex = $indexes[0];
 
-        for ($i = 1; $i <= $turns; $i++) {
+        for ($i = 1; $i <= $turns; ++$i) {
             $text = substr_replace($text, $tagStart, $firstIndex, 0);
 
             if ($i * $this->expectedWordsPerRefresh <= count($words)) {
@@ -125,9 +125,6 @@ class ReadingComprehension extends UniqueAnswer
         return $this->wordsCount;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function createForm(&$form, $exercise)
     {
         // Categories
@@ -174,20 +171,15 @@ class ReadingComprehension extends UniqueAnswer
         }
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public static function get_default_levels()
     {
-        $select_level = [
+        return [
             1 => sprintf(get_lang('%s words per minute'), self::$speeds[1]),
             2 => sprintf(get_lang('%s words per minute'), self::$speeds[2]),
             3 => sprintf(get_lang('%s words per minute'), self::$speeds[3]),
             4 => sprintf(get_lang('%s words per minute'), self::$speeds[4]),
             5 => sprintf(get_lang('%s words per minute'), self::$speeds[5]),
         ];
-
-        return $select_level;
     }
 
     /**

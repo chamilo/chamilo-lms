@@ -22,9 +22,6 @@ class GlobalMultipleAnswer extends Question
         $this->isContent = $this->getIsContent();
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function createAnswersForm($form)
     {
         $nb_answers = isset($_POST['nb_answers']) ? $_POST['nb_answers'] : 4;
@@ -79,7 +76,7 @@ class GlobalMultipleAnswer extends Question
         $scoreG = 0; //Global
 
         /* boucle pour sauvegarder les donn�es dans le tableau defaults */
-        for ($i = 1; $i <= $nb_answers; $i++) {
+        for ($i = 1; $i <= $nb_answers; ++$i) {
             /* si la reponse est de type objet */
             if (is_object($answer)) {
                 $defaults['answer['.$i.']'] = $answer->answer[$i];
@@ -90,11 +87,11 @@ class GlobalMultipleAnswer extends Question
                 $scoreA = $answer->weighting[$i];
             }
             if ($scoreA > 0) {
-                $scoreG = $scoreG + $scoreA;
+                $scoreG += $scoreA;
             }
             //------------- Fin
             //------------- Debut si un des scores par reponse est egal � 0 : la coche vaut 1 (coch�)
-            if ($scoreA == 0) {
+            if (0 == $scoreA) {
                 $defaults['pts'] = 1;
             }
 
@@ -155,7 +152,7 @@ class GlobalMultipleAnswer extends Question
             $form->addElement('html', '</tr>');
         }
         //--------- Mise en variable du score global lors d'une modification de la question/r�ponse
-        $defaults['weighting[1]'] = (round($scoreG));
+        $defaults['weighting[1]'] = round($scoreG);
         $form->addElement('html', '</div></div></table>');
         $form->add_multiple_required_rule(
             $boxes_names,
@@ -195,16 +192,13 @@ class GlobalMultipleAnswer extends Question
         if (!empty($this->id)) {
             $form->setDefaults($defaults);
         } else {
-            if ($this->isContent == 1) {
+            if (1 == $this->isContent) {
                 $form->setDefaults($defaults);
             }
         }
         $form->setConstants(['nb_answers' => $nb_answers]);
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function processAnswersCreation($form, $exercise)
     {
         $objAnswer = new Answer($this->id);
@@ -215,26 +209,26 @@ class GlobalMultipleAnswer extends Question
 
         // Reponses correctes
         $nbr_corrects = 0;
-        for ($i = 1; $i <= $nb_answers; $i++) {
+        for ($i = 1; $i <= $nb_answers; ++$i) {
             $goodAnswer = trim($form->getSubmitValue('correct['.$i.']'));
             if ($goodAnswer) {
-                $nbr_corrects++;
+                ++$nbr_corrects;
             }
         }
         // Set question weighting (score total)
         $questionWeighting = $answer_score;
 
         // Set score per answer
-        $nbr_corrects = $nbr_corrects == 0 ? 1 : $nbr_corrects;
-        $answer_score = $nbr_corrects == 0 ? 0 : $answer_score;
+        $nbr_corrects = 0 == $nbr_corrects ? 1 : $nbr_corrects;
+        $answer_score = 0 == $nbr_corrects ? 0 : $answer_score;
 
-        $answer_score = $answer_score / $nbr_corrects;
+        $answer_score /= $nbr_corrects;
 
         //$answer_score �quivaut � la valeur d'une bonne r�ponse
         // cr�ation variable pour r�cuperer la valeur de la coche pour la prise en compte des n�gatifs
         $test = $form->getSubmitValue('pts');
 
-        for ($i = 1; $i <= $nb_answers; $i++) {
+        for ($i = 1; $i <= $nb_answers; ++$i) {
             $answer = trim($form->getSubmitValue('answer['.$i.']'));
             $comment = trim($form->getSubmitValue('comment['.$i.']'));
             $goodAnswer = trim($form->getSubmitValue('correct['.$i.']'));
@@ -242,7 +236,7 @@ class GlobalMultipleAnswer extends Question
             if ($goodAnswer) {
                 $weighting = abs($answer_score);
             } else {
-                if ($test == 1) {
+                if (1 == $test) {
                     $weighting = 0;
                 } else {
                     $weighting = -abs($answer_score);
@@ -259,9 +253,6 @@ class GlobalMultipleAnswer extends Question
         $this->save($exercise);
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function return_header(Exercise $exercise, $counter = null, $score = [])
     {
         $header = parent::return_header($exercise, $counter, $score);

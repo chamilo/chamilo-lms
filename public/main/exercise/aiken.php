@@ -1,10 +1,10 @@
 <?php
+
 /* For licensing terms, see /license.txt */
 
 /**
  * Code for Aiken import integration.
  *
- * @package chamilo.exercise
  *
  * @author Ronny Velasquez <ronny.velasquez@beeznest.com>
  * @author César Perales <cesar.perales@gmail.com> Updated function names and import files for Aiken format support
@@ -35,7 +35,7 @@ $interbreadcrumb[] = [
 ];
 $is_allowedToEdit = api_is_allowed_to_edit(null, true);
 // import file
-if ((api_is_allowed_to_edit(null, true))) {
+if (api_is_allowed_to_edit(null, true)) {
     if (isset($_POST['submit'])) {
         $id = aiken_import_file($_FILES['userFile']);
         if (is_numeric($id) && !empty($id)) {

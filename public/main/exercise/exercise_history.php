@@ -12,7 +12,7 @@ require_once __DIR__.'/../inc/global.inc.php';
 $this_section = SECTION_COURSES;
 api_protect_course_script(true);
 
-$show = isset($_GET['show']) && $_GET['show'] === 'result' ? 'result' : 'test';
+$show = isset($_GET['show']) && 'result' === $_GET['show'] ? 'result' : 'test';
 
 /* 	Constants and variables */
 $is_allowedToEdit = api_is_allowed_to_edit(null, true);
@@ -32,7 +32,7 @@ $interbreadcrumb[] = [
     'name' => get_lang('Learner score'),
 ];
 $interbreadcrumb[] = [
-    'url' => 'exercise_history.php?exe_id='.intval($_GET['exe_id']).'&'.api_get_cidreq(),
+    'url' => 'exercise_history.php?exe_id='.(int) ($_GET['exe_id']).'&'.api_get_cidreq(),
     'name' => get_lang('Details'),
 ];
 
@@ -77,7 +77,7 @@ $sql = "SELECT *, quiz_question.question, firstname, lastname
 $query = Database::query($sql);
 while ($row = Database::fetch_array($query)) {
     echo '<tr';
-    if ($i % 2 == 0) {
+    if (0 == $i % 2) {
         echo 'class="row_odd"';
     } else {
         echo 'class="row_even"';

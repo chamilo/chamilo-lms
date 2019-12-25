@@ -100,18 +100,18 @@ $row = 0;
 $column = 0;
 foreach ($headers as $header) {
     $table->setHeaderContents($row, $column, $header);
-    $column++;
+    ++$column;
 }
-$row++;
+++$row;
 foreach ($data as $row_table) {
     $column = 0;
     foreach ($row_table as $cell) {
         $table->setCellContents($row, $column, $cell);
         $table->updateCellAttributes($row, $column, 'align="center"');
-        $column++;
+        ++$column;
     }
     $table->updateRowAttributes($row, $row % 2 ? 'class="row_even"' : 'class="row_odd"', true);
-    $row++;
+    ++$row;
 }
 $content = $table->toHtml();
 
@@ -139,22 +139,21 @@ if (!empty($question_list)) {
         $answer = new Answer($question_id);
         $answer_count = $answer->selectNbrAnswers();
 
-        for ($answer_id = 1; $answer_id <= $answer_count; $answer_id++) {
+        for ($answer_id = 1; $answer_id <= $answer_count; ++$answer_id) {
             $answer_info = $answer->selectAnswer($answer_id);
             $is_correct = $answer->isCorrect($answer_id);
-            $correct_answer = $is_correct == 1 ? get_lang('Yes') : get_lang('No');
+            $correct_answer = 1 == $is_correct ? get_lang('Yes') : get_lang('No');
             $real_answer_id = $answer->selectAutoId($answer_id);
 
             // Overwriting values depending of the question
             switch ($questionObj->type) {
                 case FILL_IN_BLANKS:
-                    $answer_info_db = $answer_info;
                     $answer_info = substr($answer_info, 0, strpos($answer_info, '::'));
                     $correct_answer = $is_correct;
                     $answers = $objExercise->fill_in_blank_answer_to_array($answer_info);
                     $counter = 0;
                     foreach ($answers as $answer_item) {
-                        if ($counter == 0) {
+                        if (0 == $counter) {
                             $data[$id]['name'] = cut($questionObj->question, 100);
                         } else {
                             $data[$id]['name'] = '-';
@@ -179,23 +178,25 @@ if (!empty($question_list)) {
                             false,
                             $count.' / '.$count_students
                         );
-                        $id++;
-                        $counter++;
+                        ++$id;
+                        ++$counter;
                     }
+
                     break;
                 case MATCHING:
                 case MATCHING_DRAGGABLE:
-                    if ($is_correct == 0) {
-                        if ($answer_id == 1) {
+                    if (0 == $is_correct) {
+                        if (1 == $answer_id) {
                             $data[$id]['name'] = cut($questionObj->question, 100);
                         } else {
                             $data[$id]['name'] = '-';
                         }
                         $correct = '';
-                        for ($i = 1; $i <= $answer_count; $i++) {
+                        for ($i = 1; $i <= $answer_count; ++$i) {
                             $is_correct_i = $answer->isCorrect($i);
-                            if ($is_correct_i != 0 && $is_correct_i == $answer_id) {
+                            if (0 != $is_correct_i && $is_correct_i == $answer_id) {
                                 $correct = $answer->selectAnswer($i);
+
                                 break;
                             }
                         }
@@ -220,9 +221,10 @@ if (!empty($question_list)) {
                             $count.' / '.$count_students
                         );
                     }
+
                     break;
                 case HOT_SPOT:
-                    if ($answer_id == 1) {
+                    if (1 == $answer_id) {
                         $data[$id]['name'] = cut($questionObj->question, 100);
                     } else {
                         $data[$id]['name'] = '-';
@@ -246,9 +248,10 @@ if (!empty($question_list)) {
                         false,
                         $count.' / '.$count_students
                     );
+
                     break;
                 default:
-                    if ($answer_id == 1) {
+                    if (1 == $answer_id) {
                         $data[$id]['name'] = cut($questionObj->question, 100);
                     } else {
                         $data[$id]['name'] = '-';
@@ -273,7 +276,7 @@ if (!empty($question_list)) {
                         $count.' / '.$count_students
                     );
             }
-            $id++;
+            ++$id;
         }
     }
 }
@@ -284,28 +287,28 @@ $row = 0;
 $column = 0;
 foreach ($headers as $header) {
     $table->setHeaderContents($row, $column, $header);
-    $column++;
+    ++$column;
 }
-$row++;
+++$row;
 foreach ($data as $row_table) {
     $column = 0;
     foreach ($row_table as $cell) {
         $table->setCellContents($row, $column, $cell);
         $table->updateCellAttributes($row, $column, 'align="center"');
-        $column++;
+        ++$column;
     }
     $table->updateRowAttributes($row, $row % 2 ? 'class="row_even"' : 'class="row_odd"', true);
-    $row++;
+    ++$row;
 }
 $content .= $table->toHtml();
 
 $interbreadcrumb[] = [
-    "url" => "exercise.php?".api_get_cidreq(),
-    "name" => get_lang('Tests'),
+    'url' => 'exercise.php?'.api_get_cidreq(),
+    'name' => get_lang('Tests'),
 ];
 $interbreadcrumb[] = [
-    "url" => "admin.php?exerciseId=$exerciseId&".api_get_cidreq(),
-    "name" => $objExercise->selectTitle(true),
+    'url' => "admin.php?exerciseId=$exerciseId&".api_get_cidreq(),
+    'name' => $objExercise->selectTitle(true),
 ];
 
 $tpl = new Template(get_lang('Report by question'));

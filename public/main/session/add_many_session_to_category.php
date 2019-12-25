@@ -1,8 +1,8 @@
 <?php
+
 /* For licensing terms, see /license.txt */
+
 /**
- * @package chamilo.admin
- *
  * @todo use formvalidator
  */
 // resetting the course id
@@ -224,7 +224,6 @@ if (!empty($OkMsg)) {
     <?php
     } ?>
     </select></div>
-<?php unset($nosessionCourses); ?>
   </td>
   <td width="10%" valign="middle" align="center">
       <button class="btn btn-default" type="button" onclick="moveItem(document.getElementById('origin'), document.getElementById('destination'))" onclick="moveItem(document.getElementById('origin'), document.getElementById('destination'))">

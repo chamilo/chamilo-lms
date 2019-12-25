@@ -1,4 +1,5 @@
 <?php
+
 /* For licensing terms, see /license.txt */
 
 /**
@@ -9,8 +10,6 @@
  * Every start_*() and corresponding end_*(), as well as export_*() methods return a string.
  *
  * Attached files are NOT exported.
- *
- * @package chamilo.exercise.scorm
  */
 class ScormAssessmentItem
 {
@@ -37,14 +36,7 @@ class ScormAssessmentItem
      */
     public function start_page()
     {
-        $head = '';
-        /*if ($this->standalone) {
-            $charset = 'UTF-8';
-            $head = '<?xml version="1.0" encoding="'.$charset.'" standalone="no"?>';
-            $head .= '<html>';
-        }*/
-
-        return $head;
+        return '';
     }
 
     /**
@@ -76,19 +68,7 @@ class ScormAssessmentItem
      */
     public function css()
     {
-        $css = '';
-//        if ($this->standalone) {
-//            $css = '<style type="text/css" media="screen, projection">';
-//            $css .= '/*<![CDATA[*/'."\n";
-//            $css .= '/*]]>*/'."\n";
-//            $css .= '</style>'."\n";
-//            $css .= '<style type="text/css" media="print">';
-//            $css .= '/*<![CDATA[*/'."\n";
-//            $css .= '/*]]>*/'."\n";
-//            $css .= '</style>';
-//        }
-
-        return $css;
+        return '';
     }
 
     /**
@@ -108,12 +88,7 @@ class ScormAssessmentItem
      */
     public function start_js()
     {
-        $js = '<script type="text/javascript" src="assets/api_wrapper.js"></script>';
-//        if ($this->standalone) {
-//            return '<script>';
-//        }
-
-        return $js;
+        return '<script type="text/javascript" src="assets/api_wrapper.js"></script>';
     }
 
     /**

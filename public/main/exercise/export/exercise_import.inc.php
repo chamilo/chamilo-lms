@@ -1,4 +1,5 @@
 <?php
+
 /* For licensing terms, see /license.txt */
 
 use Chamilo\CoreBundle\Component\Utils\ChamiloApi;
@@ -6,9 +7,6 @@ use Symfony\Component\DomCrawler\Crawler;
 
 /**
  * @copyright (c) 2001-2006 Universite catholique de Louvain (UCL)
- *
- * @package chamilo.exercise
- *
  * @author claro team <cvs@claroline.net>
  * @author Guillaume Lederer <guillaume@claroline.net>
  * @author Yannick Warnier <yannick.warnier@beeznest.com>
@@ -34,7 +32,7 @@ function get_and_unzip_uploaded_exercise($baseWorkDir, $uploadPath)
     }
 
     if (preg_match('/.zip$/i', $_FILES['userFile']['name'])) {
-        $result = handle_uploaded_document(
+        return handle_uploaded_document(
             $_course,
             $_FILES['userFile'],
             $baseWorkDir,
@@ -50,8 +48,6 @@ function get_and_unzip_uploaded_exercise($baseWorkDir, $uploadPath)
             null,
             false
         );
-
-        return $result;
     }
 
     return false;
@@ -95,7 +91,7 @@ function import_exercise($file)
         return 'UplZipCorrupt';
     }
 
-    $baseWorkDir = $baseWorkDir.$uploadPath;
+    $baseWorkDir .= $uploadPath;
 
     // find the different manifests for each question and parse them.
     $exerciseHandle = opendir($baseWorkDir);
@@ -108,7 +104,7 @@ function import_exercise($file)
     // The assets-related code is a bit fragile as it has to deal with files renamed by Chamilo and it only works if
     // the imsmanifest.xml file is read.
     while (false !== ($file = readdir($exerciseHandle))) {
-        if (is_dir($baseWorkDir.'/'.$file) && $file != "." && $file != "..") {
+        if (is_dir($baseWorkDir.'/'.$file) && '.' != $file && '..' != $file) {
             // Find each manifest for each question repository found
             $questionHandle = opendir($baseWorkDir.'/'.$file);
             // Only analyse one level of subdirectory - no recursivity here
@@ -146,7 +142,7 @@ function import_exercise($file)
         return 'NoXMLFileFoundInTheZip';
     }
 
-    if ($result == false) {
+    if (false == $result) {
         return false;
     }
     // 1. Create exercise.
@@ -155,7 +151,7 @@ function import_exercise($file)
 
     // Random QTI support
     if (isset($exerciseInfo['order_type'])) {
-        if ($exerciseInfo['order_type'] == 'Random') {
+        if ('Random' == $exerciseInfo['order_type']) {
             $exercise->setQuestionSelectionType(2);
             $exercise->random = -1;
         }
@@ -229,7 +225,7 @@ function import_exercise($file)
                         $i = $split[1];
                     } else {
                         $i = $j;
-                        $j++;
+                        ++$j;
                         $matchAnswerIds[$key] = $j;
                     }
 
@@ -256,7 +252,7 @@ function import_exercise($file)
                 }
             }
 
-            if ($question->type == FREE_ANSWER) {
+            if (FREE_ANSWER == $question->type) {
                 $totalCorrectWeight = $question_array['weighting'][0];
             }
 
@@ -323,7 +319,7 @@ function qti_parse_file($exercisePath, $file, $questionFile)
     //used global variable start values declaration:
     $record_item_body = false;
 
-    if ($qtiMainVersion != 2) {
+    if (2 != $qtiMainVersion) {
         Display::addFlash(
             Display::return_message(
                 get_lang('UnsupportedQtiVersion'),
@@ -392,6 +388,7 @@ function parseQti2($xmlData)
                     'type' => '',
                     'tempdir' => $questionTempDir,
                 ];
+
                 break;
             case 'section':
                 $title = $node->getAttribute('title');
@@ -399,6 +396,7 @@ function parseQti2($xmlData)
                 if (!empty($title)) {
                     $exerciseInfo['name'] = $title;
                 }
+
                 break;
             case 'responseDeclaration':
                 if ('multiple' === $node->getAttribute('cardinality')) {
@@ -412,19 +410,21 @@ function parseQti2($xmlData)
                 }
 
                 $currentAnswerId = $node->getAttribute('identifier');
+
                 break;
             case 'inlineChoiceInteraction':
                 $exerciseInfo['question'][$currentQuestionIdent]['type'] = FIB;
                 $exerciseInfo['question'][$currentQuestionIdent]['subtype'] = 'LISTBOX_FILL';
                 $currentAnswerId = $node->getAttribute('responseIdentifier');
+
                 break;
             case 'inlineChoice':
                 $answerIdentifier = $exerciseInfo['question'][$currentQuestionIdent]['correct_answers'][$currentAnswerId];
 
                 if ($node->getAttribute('identifier') == $answerIdentifier) {
                     $currentQuestionItemBody = str_replace(
-                        "**claroline_start**".$currentAnswerId."**claroline_end**",
-                        "[".$node->nodeValue."]",
+                        '**claroline_start**'.$currentAnswerId.'**claroline_end**',
+                        '['.$node->nodeValue.']',
                         $currentQuestionItemBody
                     );
                 } else {
@@ -434,31 +434,37 @@ function parseQti2($xmlData)
 
                     $exerciseInfo['question'][$currentQuestionIdent]['wrong_answers'][] = $node->nodeValue;
                 }
+
                 break;
             case 'textEntryInteraction':
                 $exerciseInfo['question'][$currentQuestionIdent]['type'] = FIB;
                 $exerciseInfo['question'][$currentQuestionIdent]['subtype'] = 'TEXTFIELD_FILL';
                 $exerciseInfo['question'][$currentQuestionIdent]['response_text'] = $currentQuestionItemBody;
+
                 break;
             case 'matchInteraction':
                 $exerciseInfo['question'][$currentQuestionIdent]['type'] = MATCHING;
+
                 break;
             case 'extendedTextInteraction':
                 $exerciseInfo['question'][$currentQuestionIdent]['type'] = FREE_ANSWER;
                 $exerciseInfo['question'][$currentQuestionIdent]['description'] = $node->nodeValue;
+
                 break;
             case 'simpleMatchSet':
                 if (!isset($currentMatchSet)) {
                     $currentMatchSet = 1;
                 } else {
-                    $currentMatchSet++;
+                    ++$currentMatchSet;
                 }
                 $exerciseInfo['question'][$currentQuestionIdent]['answer'][$currentMatchSet] = [];
+
                 break;
             case 'simpleAssociableChoice':
                 $currentAssociableChoice = $node->getAttribute('identifier');
 
                 $exerciseInfo['question'][$currentQuestionIdent]['answer'][$currentMatchSet][$currentAssociableChoice] = trim($node->nodeValue);
+
                 break;
             case 'simpleChoice':
                 $currentAnswerId = $node->getAttribute('identifier');
@@ -481,6 +487,7 @@ function parseQti2($xmlData)
                 } else {
                     $exerciseInfo['question'][$currentQuestionIdent]['answer'][$currentAnswerId]['value'] .= $simpleChoiceValue;
                 }
+
                 break;
             case 'mapEntry':
                 if (in_array($node->parentNode->nodeName, ['mapping', 'mapEntry'])) {
@@ -494,6 +501,7 @@ function parseQti2($xmlData)
                         'mappedValue'
                     );
                 }
+
                 break;
             case 'mapping':
                 $defaultValue = $node->getAttribute('defaultValue');
@@ -526,14 +534,15 @@ function parseQti2($xmlData)
                     }
 
                     if ('inlineChoiceInteraction' === $childNode->nodeName) {
-                        $currentQuestionItemBody .= "**claroline_start**".$childNode->attr('responseIdentifier')
-                            ."**claroline_end**";
+                        $currentQuestionItemBody .= '**claroline_start**'.$childNode->attr('responseIdentifier')
+                            .'**claroline_end**';
+
                         continue;
                     }
 
                     if ('textEntryInteraction' === $childNode->nodeName) {
                         $correct_answer_value = $exerciseInfo['question'][$currentQuestionIdent]['correct_answers'][$currentAnswerId];
-                        $currentQuestionItemBody .= "[".$correct_answer_value."]";
+                        $currentQuestionItemBody .= '['.$correct_answer_value.']';
 
                         continue;
                     }
@@ -553,10 +562,10 @@ function parseQti2($xmlData)
 
                 $currentQuestionItemBody .= $node->firstChild->nodeValue;
 
-                if ($exerciseInfo['question'][$currentQuestionIdent]['type'] == FIB) {
+                if (FIB == $exerciseInfo['question'][$currentQuestionIdent]['type']) {
                     $exerciseInfo['question'][$currentQuestionIdent]['response_text'] = $currentQuestionItemBody;
                 } else {
-                    if ($exerciseInfo['question'][$currentQuestionIdent]['type'] == FREE_ANSWER) {
+                    if (FREE_ANSWER == $exerciseInfo['question'][$currentQuestionIdent]['type']) {
                         $currentQuestionItemBody = trim($currentQuestionItemBody);
 
                         if (!empty($currentQuestionItemBody)) {
@@ -566,9 +575,11 @@ function parseQti2($xmlData)
                         $exerciseInfo['question'][$currentQuestionIdent]['statement'] = $currentQuestionItemBody;
                     }
                 }
+
                 break;
             case 'img':
                 $exerciseInfo['question'][$currentQuestionIdent]['attached_file_url'] = $node->getAttribute('src');
+
                 break;
             case 'order':
                 $orderType = $node->getAttribute('order_type');
@@ -576,6 +587,7 @@ function parseQti2($xmlData)
                 if (!empty($orderType)) {
                     $exerciseInfo['order_type'] = $orderType;
                 }
+
                 break;
             case 'feedbackInline':
                 if (!isset($exerciseInfo['question'][$currentQuestionIdent]['answer'][$currentAnswerId]['feedback'])) {
@@ -587,6 +599,7 @@ function parseQti2($xmlData)
                         $node->nodeValue
                     );
                 }
+
                 break;
             case 'value':
                 if ('correctResponse' === $node->parentNode->nodeName) {
@@ -606,6 +619,7 @@ function parseQti2($xmlData)
                         $exerciseInfo['question'][$currentQuestionIdent]['weighting'][0] = $nodeValue;
                     }
                 }
+
                 break;
             case 'mattext':
                 if ('flow_mat' === $node->parentNode->parentNode->nodeName &&
@@ -619,6 +633,7 @@ function parseQti2($xmlData)
                         $exerciseInfo['description'] = $node->nodeValue;
                     }
                 }
+
                 break;
         }
     }
@@ -672,7 +687,6 @@ function isQtiManifest($filePath)
  * to be able to transform them into the questions text.
  *
  * @param string $filePath The absolute filepath
- * @param array  $links    List of filepaths changes
  *
  * @return bool
  */
@@ -693,12 +707,12 @@ function qtiProcessManifest($filePath)
     ];
     $tableDocuments = Database::get_course_table(TABLE_DOCUMENT);
     $countResources = count($xml->resources->resource->file);
-    for ($i = 0; $i < $countResources; $i++) {
+    for ($i = 0; $i < $countResources; ++$i) {
         $file = $xml->resources->resource->file[$i];
         $href = '';
         foreach ($file->attributes() as $key => $value) {
-            if ($key == 'href') {
-                if (substr($value, -3, 3) != 'xml') {
+            if ('href' == $key) {
+                if ('xml' != substr($value, -3, 3)) {
                     $href = $value;
                 }
             }

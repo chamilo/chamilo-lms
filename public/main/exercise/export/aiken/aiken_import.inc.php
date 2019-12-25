@@ -1,4 +1,5 @@
 <?php
+
 /* For licensing terms, see /license.txt */
 /**
  * Library for the import of Aiken format.
@@ -6,8 +7,6 @@
  * @author claro team <cvs@claroline.net>
  * @author Guillaume Lederer <guillaume@claroline.net>
  * @author César Perales <cesar.perales@gmail.com> Parse function for Aiken format
- *
- * @package chamilo.exercise
  */
 
 /**
@@ -30,7 +29,7 @@ function aiken_display_form()
     $form_validator = new FormValidator(
         'aiken_upload',
         'post',
-        api_get_self()."?".api_get_cidreq(),
+        api_get_self().'?'.api_get_cidreq(),
         null,
         ['enctype' => 'multipart/form-data']
     );
@@ -146,7 +145,7 @@ function aiken_import_exercise($file)
 
     // Parse every subdirectory to search txt question files
     while (false !== ($file = readdir($exerciseHandle))) {
-        if (is_dir($baseWorkDir.'/'.$uploadPath.$file) && $file != "." && $file != "..") {
+        if (is_dir($baseWorkDir.'/'.$uploadPath.$file) && '.' != $file && '..' != $file) {
             //find each manifest for each question repository found
             $questionHandle = opendir($baseWorkDir.'/'.$uploadPath.$file);
             while (false !== ($questionFile = readdir($questionHandle))) {
@@ -170,7 +169,7 @@ function aiken_import_exercise($file)
         $result = 'NoTxtFileFoundInTheZip';
     }
 
-    if ($result !== true) {
+    if (true !== $result) {
         return $result;
     }
 
@@ -210,7 +209,7 @@ function aiken_import_exercise($file)
             }
 
             foreach ($question_array['answer'] as $key => $answers) {
-                $key++;
+                ++$key;
                 $answer->new_answer[$key] = $answers['value'];
                 $answer->new_position[$key] = $key;
                 $answer->new_comment[$key] = '';
@@ -281,7 +280,7 @@ function aiken_import_exercise($file)
  * Parses an Aiken file and builds an array of exercise + questions to be
  * imported by the import_exercise() function.
  *
- * @param array The reference to the array in which to store the questions
+ * @param array $exercise_info The reference to the array in which to store the questions
  * @param string Path to the directory with the file to be parsed (without final /)
  * @param string Name of the last directory part for the file (without /)
  * @param string Name of the file to be parsed (including extension)
@@ -306,7 +305,7 @@ function aiken_parse_file(&$exercise_info, $exercisePath, $file, $questionFile)
     $answers_array = [];
     $new_question = true;
     foreach ($data as $line => $info) {
-        if ($question_index > 0 && $new_question == true && preg_match('/^(\r)?\n/', $info)) {
+        if ($question_index > 0 && true == $new_question && preg_match('/^(\r)?\n/', $info)) {
             // double empty line
             continue;
         }
@@ -360,7 +359,7 @@ function aiken_parse_file(&$exercise_info, $exercisePath, $file, $questionFile)
 
                 return 'ExerciseAikenErrorNoAnswerOptionGiven';
             }
-            $question_index++;
+            ++$question_index;
             //emptying answers array when moving to next question
             $answers_array = [];
             $new_question = true;
@@ -371,7 +370,7 @@ function aiken_parse_file(&$exercise_info, $exercisePath, $file, $questionFile)
         }
     }
     $total_questions = count($exercise_info['question']);
-    $total_weight = (!empty($_POST['total_weight'])) ? intval($_POST['total_weight']) : 20;
+    $total_weight = !empty($_POST['total_weight']) ? (int) ($_POST['total_weight']) : 20;
     foreach ($exercise_info['question'] as $key => $question) {
         $exercise_info['question'][$key]['weighting'][current(array_keys($exercise_info['question'][$key]['weighting']))] = $total_weight / $total_questions;
     }
@@ -395,7 +394,7 @@ function aiken_import_file($array_file)
         $unzip = 1;
     }
 
-    if ($process && $unzip == 1) {
+    if ($process && 1 == $unzip) {
         $imported = aiken_import_exercise($array_file['name']);
         if (is_numeric($imported) && !empty($imported)) {
             Display::addFlash(Display::return_message(get_lang('Uploaded.')));

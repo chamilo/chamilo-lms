@@ -48,7 +48,7 @@ $TBL_TRACK_EXERCISES = Database::get_main_table(TABLE_STATISTIC_TRACK_E_EXERCISE
 $TBL_TRACK_ATTEMPT = Database::get_main_table(TABLE_STATISTIC_TRACK_E_ATTEMPT);
 $TBL_TRACK_ATTEMPT_RECORDING = Database::get_main_table(TABLE_STATISTIC_TRACK_E_ATTEMPT_RECORDING);
 $TBL_LP_ITEM_VIEW = Database::get_course_table(TABLE_LP_ITEM_VIEW);
-$allowCoachFeedbackExercises = api_get_setting('allow_coach_feedback_exercises') === 'true';
+$allowCoachFeedbackExercises = 'true' === api_get_setting('allow_coach_feedback_exercises');
 $course_id = api_get_course_int_id();
 $exercise_id = isset($_REQUEST['id']) ? (int) $_REQUEST['id'] : 0;
 $locked = api_resource_is_locked_by_gradebook($exercise_id, LINK_EXERCISE);
@@ -85,25 +85,25 @@ if (!empty($_GET['path'])) {
     $parameters['path'] = Security::remove_XSS($_GET['path']);
 }
 
-if (!empty($_REQUEST['export_report']) && $_REQUEST['export_report'] == '1') {
+if (!empty($_REQUEST['export_report']) && '1' == $_REQUEST['export_report']) {
     if (api_is_platform_admin() || api_is_course_admin() ||
         api_is_course_tutor() || api_is_session_general_coach()
     ) {
         $loadExtraData = false;
-        if (isset($_REQUEST['extra_data']) && $_REQUEST['extra_data'] == 1) {
+        if (isset($_REQUEST['extra_data']) && 1 == $_REQUEST['extra_data']) {
             $loadExtraData = true;
         }
 
         $includeAllUsers = false;
         if (isset($_REQUEST['include_all_users']) &&
-            $_REQUEST['include_all_users'] == 1
+            1 == $_REQUEST['include_all_users']
         ) {
             $includeAllUsers = true;
         }
 
         $onlyBestAttempts = false;
         if (isset($_REQUEST['only_best_attempts']) &&
-            $_REQUEST['only_best_attempts'] == 1
+            1 == $_REQUEST['only_best_attempts']
         ) {
             $onlyBestAttempts = true;
         }
@@ -123,6 +123,7 @@ if (!empty($_REQUEST['export_report']) && $_REQUEST['export_report'] == '1') {
                     $exercise_id
                 );
                 exit;
+
                 break;
             case 'csv':
             default:
@@ -134,6 +135,7 @@ if (!empty($_REQUEST['export_report']) && $_REQUEST['export_report'] == '1') {
                     $exercise_id
                 );
                 exit;
+
                 break;
         }
     } else {
@@ -146,7 +148,7 @@ $exerciseExists = $objExerciseTmp->read($exercise_id);
 
 //Send student email @todo move this code in a class, library
 if (isset($_REQUEST['comments']) &&
-    $_REQUEST['comments'] === 'update' &&
+    'update' === $_REQUEST['comments'] &&
     ($is_allowedToEdit || $is_tutor || $allowCoachFeedbackExercises)
 ) {
     // Filtered by post-condition
@@ -170,19 +172,19 @@ if (isset($_REQUEST['comments']) &&
         $my_post_info = explode('_', $key_index);
         $post_content_id[] = isset($my_post_info[1]) ? $my_post_info[1] : null;
 
-        if ($my_post_info[0] === 'comments') {
+        if ('comments' === $my_post_info[0]) {
             $comments_exist = true;
         }
     }
 
-    $loop_in_track = $comments_exist === true ? (count($_POST) / 2) : count($_POST);
-    if ($comments_exist === true) {
+    $loop_in_track = true === $comments_exist ? count($_POST) / 2 : count($_POST);
+    if (true === $comments_exist) {
         $array_content_id_exe = array_slice($post_content_id, $loop_in_track);
     } else {
         $array_content_id_exe = $post_content_id;
     }
 
-    for ($i = 0; $i < $loop_in_track; $i++) {
+    for ($i = 0; $i < $loop_in_track; ++$i) {
         $my_marks = isset($_POST['marks_'.$array_content_id_exe[$i]]) ? $_POST['marks_'.$array_content_id_exe[$i]] : '';
         $my_comments = '';
         if (isset($_POST['comments_'.$array_content_id_exe[$i]])) {
@@ -236,7 +238,7 @@ if (isset($_REQUEST['comments']) &&
     }
 
     $sql = "UPDATE $TBL_TRACK_EXERCISES
-            SET score = '".floatval($tot)."'
+            SET score = '".(float) $tot."'
             WHERE exe_id = ".$id;
     Database::query($sql);
 
@@ -275,7 +277,7 @@ if (isset($_REQUEST['comments']) &&
             if ($prereqCheck) {
                 $passed = true;
             }
-            if ($passed === false) {
+            if (false === $passed) {
                 if (!empty($objExerciseTmp->pass_percentage)) {
                     $passed = ExerciseLib::isSuccessExerciseResult(
                         $tot,
@@ -296,9 +298,9 @@ if (isset($_REQUEST['comments']) &&
         }
 
         $sql = "UPDATE $TBL_LP_ITEM_VIEW
-                SET score = '".floatval($tot)."'
+                SET score = '".(float) $tot."'
                 $statusCondition
-                WHERE c_id = ".$course_id." AND id = ".$lp_item_view_id;
+                WHERE c_id = ".$course_id.' AND id = '.$lp_item_view_id;
         Database::query($sql);
 
         if (empty($origin)) {
@@ -306,7 +308,7 @@ if (isset($_REQUEST['comments']) &&
             exit;
         }
 
-        if ($origin === 'tracking_course') {
+        if ('tracking_course' === $origin) {
             //Redirect to the course detail in lp
             header('Location: '.api_get_path(WEB_CODE_PATH).'exercise/exercise.php?course='.Security::remove_XSS($_GET['course']));
             exit;
@@ -322,7 +324,7 @@ if (isset($_REQUEST['comments']) &&
 }
 
 $actions = null;
-if ($is_allowedToEdit && $origin != 'learnpath') {
+if ($is_allowedToEdit && 'learnpath' != $origin) {
     // the form
     if (api_is_platform_admin() || api_is_course_admin() ||
         api_is_course_tutor() || api_is_session_general_coach()
@@ -380,8 +382,8 @@ if ($is_allowedToEdit && $origin != 'learnpath') {
 
 // Deleting an attempt
 if (($is_allowedToEdit || $is_tutor || api_is_coach()) &&
-    isset($_GET['delete']) && $_GET['delete'] === 'delete' &&
-    !empty($_GET['did']) && $locked == false
+    isset($_GET['delete']) && 'delete' === $_GET['delete'] &&
+    !empty($_GET['did']) && false == $locked
 ) {
     $exe_id = (int) $_GET['did'];
     if (!empty($exe_id)) {
@@ -425,8 +427,8 @@ if ($is_allowedToEdit || $is_tutor) {
 }
 
 if (($is_allowedToEdit || $is_tutor || api_is_coach()) &&
-    isset($_GET['a']) && $_GET['a'] === 'close' &&
-    !empty($_GET['id']) && $locked == false
+    isset($_GET['a']) && 'close' === $_GET['a'] &&
+    !empty($_GET['id']) && false == $locked
 ) {
     // Close the user attempt otherwise left pending
     $exe_id = (int) $_GET['id'];
@@ -439,7 +441,7 @@ Display::display_header($nameTools);
 
 // Clean all results for this test before the selected date
 if (($is_allowedToEdit || $is_tutor || api_is_coach()) &&
-    isset($_GET['delete_before_date']) && $locked == false
+    isset($_GET['delete_before_date']) && false == $locked
 ) {
     // ask for the date
     $check = Security::check_token('get');
@@ -585,7 +587,7 @@ if ($is_allowedToEdit || $is_tutor) {
         get_lang('Detail'),
     ];
 
-    if ($officialCodeInList === 'true') {
+    if ('true' === $officialCodeInList) {
         $columns = array_merge([get_lang('Code')], $columns);
     }
 
@@ -644,7 +646,7 @@ if ($is_allowedToEdit || $is_tutor) {
         ['name' => 'actions', 'index' => 'actions', 'width' => '60', 'align' => 'left', 'search' => 'false', 'sortable' => 'false'],
     ];
 
-    if ($officialCodeInList === 'true') {
+    if ('true' === $officialCodeInList) {
         $officialCodeRow = ['name' => 'official_code', 'index' => 'official_code', 'width' => '50', 'align' => 'left', 'search' => 'true'];
         $column_model = array_merge([$officialCodeRow], $column_model);
     }

@@ -958,7 +958,7 @@ function api_to_system_encoding($string, $from_encoding = null, $check_utf8_vali
  *
  * @see http://php.net/manual/en/function.htmlentities
  */
-function api_htmlentities($string, $quote_style = ENT_COMPAT, $encoding = 'UTF-8')
+function api_htmlentities($string, $quote_style = ENT_COMPAT)
 {
     switch ($quote_style) {
         case ENT_COMPAT:

@@ -28,9 +28,6 @@ class MultipleAnswerTrueFalse extends Question
         $this->options = [1 => 'True', 2 => 'False', 3 => 'DoubtScore'];
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function createAnswersForm($form)
     {
         $nb_answers = isset($_POST['nb_answers']) ? $_POST['nb_answers'] : 4;
@@ -51,7 +48,7 @@ class MultipleAnswerTrueFalse extends Question
         $html .= '<th>'.get_lang('Answer').'</th>';
 
         // show column comment when feedback is enable
-        if ($obj_ex->getFeedbackType() != EXERCISE_FEEDBACK_TYPE_EXAM) {
+        if (EXERCISE_FEEDBACK_TYPE_EXAM != $obj_ex->getFeedbackType()) {
             $html .= '<th>'.get_lang('Comment').'</th>';
         }
 
@@ -82,7 +79,7 @@ class MultipleAnswerTrueFalse extends Question
         // Can be more options
         $optionData = Question::readQuestionOption($this->id, $course_id);
 
-        for ($i = 1; $i <= $nb_answers; $i++) {
+        for ($i = 1; $i <= $nb_answers; ++$i) {
             $form->addHtml('<tr>');
 
             $renderer->setElementTemplate(
@@ -121,8 +118,8 @@ class MultipleAnswerTrueFalse extends Question
                 if (!empty($optionData)) {
                     foreach ($optionData as $id => $data) {
                         $form->addElement('radio', 'correct['.$i.']', null, null, $id);
-                        $j++;
-                        if ($j == 3) {
+                        ++$j;
+                        if (3 == $j) {
                             break;
                         }
                     }
@@ -145,7 +142,7 @@ class MultipleAnswerTrueFalse extends Question
             );
 
             // show comment when feedback is enable
-            if ($obj_ex->getFeedbackType() != EXERCISE_FEEDBACK_TYPE_EXAM) {
+            if (EXERCISE_FEEDBACK_TYPE_EXAM != $obj_ex->getFeedbackType()) {
                 $form->addElement(
                     'html_editor',
                     'comment['.$i.']',
@@ -209,14 +206,14 @@ class MultipleAnswerTrueFalse extends Question
             $scores = explode(':', $this->extra);
 
             if (!empty($scores)) {
-                for ($i = 1; $i <= 3; $i++) {
+                for ($i = 1; $i <= 3; ++$i) {
                     $defaults['option['.$i.']'] = $scores[$i - 1];
                 }
             }
         }
 
         global $text;
-        if ($obj_ex->edit_exercise_in_lp == true ||
+        if (true == $obj_ex->edit_exercise_in_lp ||
             (empty($this->exerciseList) && empty($obj_ex->id))
         ) {
             // setting the save button here and not in the question class.php
@@ -235,9 +232,6 @@ class MultipleAnswerTrueFalse extends Question
         $form->setConstants(['nb_answers' => $nb_answers]);
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function processAnswersCreation($form, $exercise)
     {
         $questionWeighting = 0;
@@ -255,7 +249,7 @@ class MultipleAnswerTrueFalse extends Question
                 Question::updateQuestionOption($id, $optionData, $course_id);
             }
         } else {
-            for ($i = 1; $i <= 3; $i++) {
+            for ($i = 1; $i <= 3; ++$i) {
                 $last_id = Question::saveQuestionOption(
                     $this->id,
                     $this->options[$i],
@@ -278,13 +272,13 @@ class MultipleAnswerTrueFalse extends Question
         the true, false, doubt options registered in this format
         XX:YY:ZZZ where XX is a float score value.*/
         $extra_values = [];
-        for ($i = 1; $i <= 3; $i++) {
+        for ($i = 1; $i <= 3; ++$i) {
             $score = trim($form->getSubmitValue('option['.$i.']'));
             $extra_values[] = $score;
         }
         $this->setExtra(implode(':', $extra_values));
 
-        for ($i = 1; $i <= $nb_answers; $i++) {
+        for ($i = 1; $i <= $nb_answers; ++$i) {
             $answer = trim($form->getSubmitValue('answer['.$i.']'));
             $comment = trim($form->getSubmitValue('comment['.$i.']'));
             $goodAnswer = trim($form->getSubmitValue('correct['.$i.']'));
@@ -304,9 +298,6 @@ class MultipleAnswerTrueFalse extends Question
         $this->save($exercise);
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function return_header(Exercise $exercise, $counter = null, $score = [])
     {
         $header = parent::return_header($exercise, $counter, $score);
@@ -327,7 +318,7 @@ class MultipleAnswerTrueFalse extends Question
         if ($exercise->showExpectedChoice()) {
             $header .= '<th>'.get_lang('Status').'</th>';
         }
-        if ($exercise->getFeedbackType() != EXERCISE_FEEDBACK_TYPE_EXAM ||
+        if (EXERCISE_FEEDBACK_TYPE_EXAM != $exercise->getFeedbackType() ||
             in_array(
                 $exercise->results_disabled,
                 [

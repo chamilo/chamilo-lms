@@ -8,9 +8,16 @@
 >
     <projectFiles>
         <directory name="src" />
-        <ignoreFiles>
-            <directory name="vendor" />
-<!--            <directory name="src/AdminBundle" />-->
+
+        <directory name="public/main/group" />
+        <directory name="public/main/link" />
+        <!-- <directory name="public/main/session" /> -->
+
+        <!--  <directory name="public/main/exercise"/> -->
+
+            <ignoreFiles>
+                <directory name="vendor" />
+    <!--            <directory name="src/AdminBundle" /> -->
 <!--            <directory name="src/ClassificationBundle" />-->
 <!--            <directory name="src/CoreBundle" />-->
             <directory name="src/CoreBundle/Migrations" />
@@ -20,6 +27,7 @@
             <directory name="src/FaqBundle" />
             <directory name="src/GraphQlBundle" />
             <directory name="src/LtiBundle" />
+            <file name="public/main/admin/db.php" />
 <!--            <directory name="src/MediaBundle" />-->
 <!--            <directory name="src/NotificationBundle" />-->
 <!--            <directory name="src/PageBundle" />-->
@@ -33,6 +41,11 @@
     </projectFiles>
 
     <issueHandlers>
+
+
+        <InvalidClass errorLevel="info" />
+
+
         <LessSpecificReturnType errorLevel="info" />
 
         <LessSpecificReturnType errorLevel="info" />

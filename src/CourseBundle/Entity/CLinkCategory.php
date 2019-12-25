@@ -6,6 +6,7 @@ namespace Chamilo\CourseBundle\Entity;
 
 use Chamilo\CoreBundle\Entity\Resource\AbstractResource;
 use Chamilo\CoreBundle\Entity\Resource\ResourceInterface;
+use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -72,6 +73,13 @@ class CLinkCategory extends AbstractResource implements ResourceInterface
      * @ORM\Column(name="session_id", type="integer", nullable=true)
      */
     protected $sessionId;
+
+    /**
+     * @var ArrayCollection|CLink[]
+     *
+     * @ORM\OneToMany(targetEntity="Chamilo\CourseBundle\Entity\CLink", mappedBy="category")
+     */
+    protected $links;
 
     public function __construct()
     {

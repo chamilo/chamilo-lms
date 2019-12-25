@@ -165,14 +165,14 @@ switch ($action) {
         break;
     case 'visible':
         // Here we edit a category
-        Link::change_visibility_link($id, $scope);
+        Link::setVisible($id, $scope);
         header('Location: '.$linkListUrl);
         exit;
 
         break;
     case 'invisible':
         // Here we edit a category
-        Link::change_visibility_link($id, $scope);
+        Link::setInvisible($id, $scope);
         header('Location: '.$linkListUrl);
         exit;
 

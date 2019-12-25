@@ -69,11 +69,12 @@ class CLink extends AbstractResource implements ResourceInterface
     protected $description;
 
     /**
-     * @var int
+     * @var CLinkCategory|null
      *
-     * @ORM\Column(name="category_id", type="integer", nullable=true)
+     * @ORM\ManyToOne(targetEntity="Chamilo\CourseBundle\Entity\CLinkCategory", inversedBy="links")
+     * @ORM\JoinColumn(name="category_id", referencedColumnName="iid")
      */
-    protected $categoryId;
+    protected $category;
 
     /**
      * @var int
@@ -183,30 +184,6 @@ class CLink extends AbstractResource implements ResourceInterface
     public function getDescription()
     {
         return $this->description;
-    }
-
-    /**
-     * Set categoryId.
-     *
-     * @param int $categoryId
-     *
-     * @return CLink
-     */
-    public function setCategoryId($categoryId)
-    {
-        $this->categoryId = $categoryId;
-
-        return $this;
-    }
-
-    /**
-     * Get categoryId.
-     *
-     * @return int
-     */
-    public function getCategoryId()
-    {
-        return $this->categoryId;
     }
 
     /**
@@ -363,6 +340,18 @@ class CLink extends AbstractResource implements ResourceInterface
     public function getCId()
     {
         return $this->cId;
+    }
+
+    public function getCategory(): ?CLinkCategory
+    {
+        return $this->category;
+    }
+
+    public function setCategory(?CLinkCategory $category): self
+    {
+        $this->category = $category;
+
+        return $this;
     }
 
     /**

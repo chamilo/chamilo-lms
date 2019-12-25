@@ -234,7 +234,7 @@ class Link extends Model
         $title = Security::remove_XSS(stripslashes($_POST['title']));
         $urllink = Security::remove_XSS($_POST['url']);
         $description = Security::remove_XSS($_POST['description']);
-        $selectcategory = Security::remove_XSS($_POST['category_id']);
+        $categoryId = (int) $_POST['category_id'];
 
         $onhomepage = 0;
         if (isset($_POST['on_homepage'])) {
@@ -267,6 +267,13 @@ class Link extends Model
 
             return false;
         } else {
+            $category = null;
+            $repoCategory = Container::getLinkCategoryRepository();
+            if (!empty($categoryId)) {
+                /** @var CLinkCategory $category */
+                $category = $repoCategory->find($categoryId);
+            }
+
             // Looking for the largest order number for this category.
             $link = new CLink();
             $link
@@ -277,14 +284,14 @@ class Link extends Model
                 ->setOnHomepage($onhomepage)
                 ->setTarget($target)
                 ->setSessionId($session_id)
-                ->setCategoryId($selectcategory)
+                ->setCategory($category)
             ;
 
             $repo = Container::getLinkRepository();
 
             $courseEntity = api_get_course_entity($course_id);
 
-            if (empty($selectcategory)) {
+            if (empty($category)) {
                 $repo->addResourceToCourse(
                     $link,
                     ResourceLink::VISIBILITY_PUBLISHED,
@@ -294,9 +301,6 @@ class Link extends Model
                     api_get_group_entity()
                 );
             } else {
-                $repoCategory = Container::getLinkCategoryRepository();
-                /** @var CLinkCategory $category */
-                $category = $repoCategory->find($selectcategory);
                 $repo->addResourceToCourseWithParent(
                     $link,
                     $category->getResourceNode(),
@@ -363,7 +367,7 @@ class Link extends Model
                 $ic_slide->addValue('content', $description);
 
                 // Add category name if set.
-                if (isset($selectcategory) && $selectcategory > 0) {
+                if (isset($categoryId) && $categoryId > 0) {
                     $table_link_category = Database::get_course_table(
                         TABLE_LINK_CATEGORY
                     );
@@ -371,7 +375,7 @@ class Link extends Model
                     $sql_cat = sprintf(
                         $sql_cat,
                         $table_link_category,
-                        (int) $selectcategory,
+                        (int) $categoryId,
                         $course_int_id
                     );
                     $result = Database:: query($sql_cat);
@@ -817,34 +821,58 @@ class Link extends Model
 
     /**
      * Changes the visibility of a link.
-     *
-     * @todo add the changing of the visibility of a course
-     *
-     * @author Patrick Cool <patrick.cool@UGent.be>, Ghent University
      */
-    public static function change_visibility_link($id, $scope)
+    public static function setVisible($id, $scope)
     {
-        $_course = api_get_course_info();
-        $_user = api_get_user_info();
         if ($scope == TOOL_LINK) {
-            api_item_property_update(
+            /*api_item_property_update(
                 $_course,
                 TOOL_LINK,
                 $id,
                 $_GET['action'],
                 $_user['user_id']
-            );
-            Display::addFlash(Display::return_message(get_lang('The visibility has been changed.')));
+            );*/
+            $repo = Container::getLinkRepository();
+            /** @var CLink $link */
+            $link = $repo->find($id);
+            if ($link) {
+                $repo->setVisibilityPublished($link);
+            }
         } elseif ($scope == TOOL_LINK_CATEGORY) {
-            api_item_property_update(
+            $repo = Container::getLinkCategoryRepository();
+            /** @var CLink $link */
+            $link = $repo->find($id);
+            if ($link) {
+                $repo->setVisibilityPublished($link);
+            }
+            /*api_item_property_update(
                 $_course,
                 TOOL_LINK_CATEGORY,
                 $id,
                 $_GET['action'],
                 $_user['user_id']
-            );
-            Display::addFlash(Display::return_message(get_lang('The visibility has been changed.')));
+            );*/
         }
+        Display::addFlash(Display::return_message(get_lang('The visibility has been changed.')));
+    }
+    public static function setInvisible($id, $scope)
+    {
+        if ($scope == TOOL_LINK) {
+            $repo = Container::getLinkRepository();
+            /** @var CLink $link */
+            $link = $repo->find($id);
+            if ($link) {
+                $repo->setVisibilityDraft($link);
+            }
+        } elseif ($scope == TOOL_LINK_CATEGORY) {
+            $repo = Container::getLinkCategoryRepository();
+            /** @var CLinkCategory $link */
+            $link = $repo->find($id);
+            if ($link) {
+                $repo->setVisibilityDraft($link);
+            }
+        }
+        Display::addFlash(Display::return_message(get_lang('The visibility has been changed.')));
     }
 
     /**
@@ -956,6 +984,7 @@ class Link extends Model
     ) {
         $courseEntity = api_get_course_entity($courseId);
         $sessionEntity = api_get_session_entity($sessionId);
+
         if (empty($categoryId)) {
             $repo = Container::getLinkRepository();
             $qb = $repo->getResourcesByCourse($courseEntity, $sessionEntity, null, $courseEntity->getResourceNode());
@@ -1046,26 +1075,24 @@ class Link extends Model
     /**
      * Displays all the links of a given category.
      *
-     * @param int  $catid
+     * @param int  $categoryId
      * @param int  $courseId
      * @param int  $sessionId
      * @param bool $showActionLinks
      *
      * @return string
      */
-    public static function showLinksPerCategory($catid, $courseId, $sessionId, $showActionLinks = true)
+    public static function showLinksPerCategory($categoryId, $courseId, $sessionId, $showActionLinks = true)
     {
         global $token;
-        $_user = api_get_user_info();
-        $catid = (int) $catid;
-
-        $links = self::getLinksPerCategory($catid, $courseId, $sessionId);
+        $links = self::getLinksPerCategory($categoryId, $courseId, $sessionId);
         $content = '';
         $numberOfLinks = count($links);
-
-        $courseEntity = api_get_course_entity($courseId);
-        $sessionEntity = api_get_session_entity($sessionId);
         if (!empty($links)) {
+            $courseEntity = api_get_course_entity($courseId);
+            $sessionEntity = api_get_session_entity($sessionId);
+            $_user = api_get_user_info();
+
             $content .= '<div class="link list-group">';
             $i = 1;
             $linksAdded = [];
@@ -1079,7 +1106,10 @@ class Link extends Model
                 $visibility = (int) $link->isVisible($courseEntity, $sessionEntity);
 
                 $linksAdded[] = $linkId;
-                $categoryId = $link->getCategoryId();
+                $categoryId = 0;
+                if ($link->getCategory()) {
+                    $categoryId = $link->getCategory()->getIid();
+                }
 
                 // Validation when belongs to a session.
                 $session_img = api_get_session_image(
@@ -1932,7 +1962,7 @@ Do you really want to delete this category and its links ?')."')) return false;\
             ->findBy(
                 [
                     'cId' => $link->getCId(),
-                    'categoryId' => $link->getCategoryId(),
+                    'categoryId' => $link->getCategory() ? $link->getCategory()->getIid() : 0,
                 ],
                 ['displayOrder' => $direction]
             );

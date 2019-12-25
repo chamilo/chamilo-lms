@@ -167,16 +167,11 @@ class CForumThread extends AbstractResource implements ResourceInterface
     protected $lpItemId;
 
     /**
-     * @var ArrayCollection
+     * @var CForumPost[]
      *
      * @ORM\OneToMany(targetEntity="Chamilo\CourseBundle\Entity\CForumPost", mappedBy="thread")
      */
     protected $posts;
-
-    /**
-     * @var CItemProperty
-     */
-    protected $itemProperty;
 
     public function __construct()
     {
@@ -660,24 +655,6 @@ class CForumThread extends AbstractResource implements ResourceInterface
     public function getPosts()
     {
         return $this->posts;
-    }
-
-    /**
-     * @return CForumThread
-     */
-    public function setItemProperty(CItemProperty $itemProperty)
-    {
-        $this->itemProperty = $itemProperty;
-
-        return $this;
-    }
-
-    /**
-     * @return CItemProperty
-     */
-    public function getItemProperty()
-    {
-        return $this->itemProperty;
     }
 
     /**

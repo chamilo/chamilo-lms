@@ -10,7 +10,6 @@ use Chamilo\CoreBundle\Repository\ResourceRepository;
 use Chamilo\CourseBundle\Entity\CForumForum;
 use Chamilo\CourseBundle\Entity\CForumThread;
 use Chamilo\CourseBundle\Entity\CGroupInfo;
-use Chamilo\CourseBundle\Entity\CItemProperty;
 
 /**
  * Class CForumThreadRepository.

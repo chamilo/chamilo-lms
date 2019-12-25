@@ -11,7 +11,10 @@ use Chamilo\CoreBundle\Repository\ResourceRepository;
 use Chamilo\CourseBundle\Entity\CGroupInfo;
 use Chamilo\UserBundle\Entity\User;
 
-class CForumCategoryRepository extends ResourceRepository
+/**
+ * Class CForumAttachmentRepository.
+ */
+class CForumAttachmentRepository extends ResourceRepository
 {
     public function getResources(User $user, ResourceNode $parentNode, Course $course = null, Session $session = null, CGroupInfo $group = null)
     {

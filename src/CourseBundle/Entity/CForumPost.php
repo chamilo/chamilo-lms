@@ -131,6 +131,13 @@ class CForumPost extends AbstractResource implements ResourceInterface
      */
     protected $status;
 
+    /**
+     * @var CForumAttachment[]
+     *
+     * @ORM\OneToMany(targetEntity="Chamilo\CourseBundle\Entity\CForumAttachment", mappedBy="post")
+     */
+    protected $attachments;
+
     public function __construct()
     {
         $this->postId = 0;
@@ -455,6 +462,19 @@ class CForumPost extends AbstractResource implements ResourceInterface
     public function getIid()
     {
         return $this->iid;
+    }
+
+    /**
+     * @return CForumAttachment[]
+     */
+    public function getAttachments(): array
+    {
+        return $this->attachments;
+    }
+
+    public function removeAttachment(CForumAttachment $attachment)
+    {
+        $this->attachments->removeElement($attachment);
     }
 
     /**

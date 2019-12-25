@@ -172,6 +172,8 @@ class ResourceRepository extends BaseEntityRepository
     /**
      * @param null $lockMode
      * @param null $lockVersion
+     *
+     * @return ResourceInterface
      */
     public function find($id, $lockMode = null, $lockVersion = null)
     {

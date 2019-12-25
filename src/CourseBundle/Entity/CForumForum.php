@@ -201,11 +201,6 @@ class CForumForum extends AbstractResource implements ResourceInterface
     protected $moderated;
 
     /**
-     * @var CItemProperty
-     */
-    protected $itemProperty;
-
-    /**
      * @var ArrayCollection
      *
      * @ORM\OneToMany(targetEntity="Chamilo\CourseBundle\Entity\CForumThread", mappedBy="forum")
@@ -807,26 +802,6 @@ class CForumForum extends AbstractResource implements ResourceInterface
     public function getThreads()
     {
         return $this->threads;
-    }
-
-    /**
-     * Set itemProperty.
-     *
-     * @return CForumForum
-     */
-    public function setItemProperty(CItemProperty $itemProperty)
-    {
-        $this->itemProperty = $itemProperty;
-
-        return $this;
-    }
-
-    /**
-     * @return CItemProperty
-     */
-    public function getItemProperty()
-    {
-        return $this->itemProperty;
     }
 
     /**

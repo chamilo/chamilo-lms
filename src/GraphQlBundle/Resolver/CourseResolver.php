@@ -200,7 +200,7 @@ class CourseResolver implements ContainerAwareInterface
 
         $catRepo = $this->em->getRepository('ChamiloCourseBundle:CForumCategory');
 
-        return $catRepo->findAllInCourse(false, $course, $session);
+        return $catRepo->getResourcesByCourse($course, $session, $course->getResourceNode());
     }
 
     public function getForums(CForumCategory $category, \ArrayObject $context): array
@@ -226,9 +226,13 @@ class CourseResolver implements ContainerAwareInterface
         $course = $context->offsetGet('course');
 
         $forumRepo = $this->em->getRepository('ChamiloCourseBundle:CForumForum');
-        $forum = $forumRepo->findOneInCourse($id, $course);
+        $forum = $forumRepo->find($id);
 
         if (empty($forum)) {
+            throw new UserError($this->translator->trans('Forum not found in this course.'));
+        }
+
+        if ($forum->getCId() !== $course->getId()) {
             throw new UserError($this->translator->trans('Forum not found in this course.'));
         }
 

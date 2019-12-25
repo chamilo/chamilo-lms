@@ -13,6 +13,7 @@ use Chamilo\CoreBundle\Repository\IllustrationRepository;
 use Chamilo\CoreBundle\ToolChain;
 use Chamilo\CourseBundle\Repository\CDocumentRepository;
 use Chamilo\CourseBundle\Repository\CExerciseCategoryRepository;
+use Chamilo\CourseBundle\Repository\CForumAttachmentRepository;
 use Chamilo\CourseBundle\Repository\CForumCategoryRepository;
 use Chamilo\CourseBundle\Repository\CForumForumRepository;
 use Chamilo\CourseBundle\Repository\CForumPostRepository;
@@ -332,6 +333,14 @@ class Container
     public static function getForumPostRepository()
     {
         return self::$container->get('Chamilo\CourseBundle\Repository\CForumPostRepository');
+    }
+
+    /**
+     * @return CForumAttachmentRepository
+     */
+    public static function getForumAttachmentRepository()
+    {
+        return self::$container->get('Chamilo\CourseBundle\Repository\CForumAttachmentRepository');
     }
 
     /**

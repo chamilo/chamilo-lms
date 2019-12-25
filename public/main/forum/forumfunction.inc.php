@@ -5669,15 +5669,26 @@ function getAllAttachment($postId)
  * @param int $post_id
  * @param int $id_attach
  *
- * @return int
+ * @return bool
  *
- * @author Julio Montoya
- *
- * @version october 2014, chamilo 1.9.8
  */
-function delete_attachment($post_id, $id_attach = 0)
+function delete_attachment($postId, $id_attach = 0)
 {
     $_course = api_get_course_info();
+
+    $repo = Container::getForumPostRepository();
+    /** @var CForumPost $post */
+    $post = $repo->find($postId);
+
+    $repoAttachment = Container::getForumAttachmentRepository();
+    $attachment = $repoAttachment->find($id_attach);
+    $post->removeAttachment($attachment);
+    $repo->getEntityManager()->persist($post);
+    $repo->getEntityManager()->flush();
+
+    Display::addFlash(Display::return_message(get_lang('The attached file has been deleted'), 'confirmation'));
+
+    return true;
 
     $forum_table_attachment = Database::get_course_table(TABLE_FORUM_ATTACHMENT);
     $course_id = api_get_course_int_id();

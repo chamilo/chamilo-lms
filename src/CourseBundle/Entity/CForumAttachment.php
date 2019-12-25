@@ -4,6 +4,8 @@
 
 namespace Chamilo\CourseBundle\Entity;
 
+use Chamilo\CoreBundle\Entity\Resource\AbstractResource;
+use Chamilo\CoreBundle\Entity\Resource\ResourceInterface;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -17,7 +19,7 @@ use Doctrine\ORM\Mapping as ORM;
  * )
  * @ORM\Entity
  */
-class CForumAttachment
+class CForumAttachment extends AbstractResource implements ResourceInterface
 {
     /**
      * @var int
@@ -64,11 +66,12 @@ class CForumAttachment
     protected $size;
 
     /**
-     * @var int
+     * @var CForumPost
      *
-     * @ORM\Column(name="post_id", type="integer", nullable=false)
+     * @ORM\ManyToOne(targetEntity="Chamilo\CourseBundle\Entity\CForumPost", inversedBy="attachments")
+     * @ORM\JoinColumn(name="post_id", referencedColumnName="iid")
      */
-    protected $postId;
+    protected $post;
 
     /**
      * @var string
@@ -76,6 +79,25 @@ class CForumAttachment
      * @ORM\Column(name="filename", type="string", length=255, nullable=false)
      */
     protected $filename;
+
+    public function __construct()
+    {
+    }
+
+    public function __toString(): string
+    {
+        return (string) $this->getFilename();
+    }
+
+    /**
+     * Get iid.
+     *
+     * @return int
+     */
+    public function getIid()
+    {
+        return $this->iid;
+    }
 
     /**
      * Set path.
@@ -150,30 +172,6 @@ class CForumAttachment
     }
 
     /**
-     * Set postId.
-     *
-     * @param int $postId
-     *
-     * @return CForumAttachment
-     */
-    public function setPostId($postId)
-    {
-        $this->postId = $postId;
-
-        return $this;
-    }
-
-    /**
-     * Get postId.
-     *
-     * @return int
-     */
-    public function getPostId()
-    {
-        return $this->postId;
-    }
-
-    /**
      * Set filename.
      *
      * @param string $filename
@@ -243,5 +241,26 @@ class CForumAttachment
     public function getCId()
     {
         return $this->cId;
+    }
+
+    /**
+     * @return CForumPost
+     */
+    public function getPost(): CForumPost
+    {
+        return $this->post;
+    }
+
+    /**
+     * Resource identifier.
+     */
+    public function getResourceIdentifier(): int
+    {
+        return $this->getIid();
+    }
+
+    public function getResourceName(): string
+    {
+        return $this->getFilename();
     }
 }

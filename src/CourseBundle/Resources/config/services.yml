@@ -78,6 +78,10 @@ services:
         arguments:
             $className: 'Chamilo\CourseBundle\Entity\CExerciseCategory'
 
+    Chamilo\CourseBundle\Repository\CForumAttachmentRepository:
+        arguments:
+            $className: 'Chamilo\CourseBundle\Entity\CForumAttachment'
+
     Chamilo\CourseBundle\Repository\CForumForumRepository:
         arguments:
             $className: 'Chamilo\CourseBundle\Entity\CForumForum'

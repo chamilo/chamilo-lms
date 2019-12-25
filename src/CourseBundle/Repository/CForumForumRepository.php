@@ -9,7 +9,6 @@ use Chamilo\CoreBundle\Entity\Session;
 use Chamilo\CoreBundle\Repository\ResourceRepository;
 use Chamilo\CourseBundle\Entity\CForumCategory;
 use Chamilo\CourseBundle\Entity\CForumForum;
-use Chamilo\CourseBundle\Entity\CItemProperty;
 
 final class CForumForumRepository extends ResourceRepository
 {

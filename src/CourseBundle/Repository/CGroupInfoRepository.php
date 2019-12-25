@@ -13,17 +13,9 @@ use Chamilo\CourseBundle\Entity\CGroupInfo;
 final class CGroupInfoRepository extends ResourceRepository
 {
     /**
-     * @return CGroupInfo
-     */
-    public function createGroup()
-    {
-        return $this->create();
-    }
-
-    /**
      * @param string $code
      */
-    public function findOneByCode($code)
+    public function findOneByCode($code): ?CGroupInfo
     {
         return $this->getRepository()->findOneByCode($code);
     }
@@ -31,7 +23,7 @@ final class CGroupInfoRepository extends ResourceRepository
     /**
      * @param string $name
      */
-    public function findOneByTitle($name)
+    public function findOneByTitle($name): ?CGroupInfo
     {
         return $this->getRepository()->findOneByTitle($name);
     }

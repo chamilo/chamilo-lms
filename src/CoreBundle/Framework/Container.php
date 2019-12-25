@@ -11,6 +11,7 @@ use Chamilo\CoreBundle\Repository\CourseCategoryRepository;
 use Chamilo\CoreBundle\Repository\CourseRepository;
 use Chamilo\CoreBundle\Repository\IllustrationRepository;
 use Chamilo\CoreBundle\ToolChain;
+use Chamilo\CourseBundle\Entity\CGroupInfo;
 use Chamilo\CourseBundle\Repository\CDocumentRepository;
 use Chamilo\CourseBundle\Repository\CExerciseCategoryRepository;
 use Chamilo\CourseBundle\Repository\CForumAttachmentRepository;
@@ -18,6 +19,7 @@ use Chamilo\CourseBundle\Repository\CForumCategoryRepository;
 use Chamilo\CourseBundle\Repository\CForumForumRepository;
 use Chamilo\CourseBundle\Repository\CForumPostRepository;
 use Chamilo\CourseBundle\Repository\CForumThreadRepository;
+use Chamilo\CourseBundle\Repository\CGroupInfoRepository;
 use Chamilo\CourseBundle\Repository\CLinkCategoryRepository;
 use Chamilo\CourseBundle\Repository\CLinkRepository;
 use Chamilo\CourseBundle\Repository\CLpCategoryRepository;
@@ -349,6 +351,14 @@ class Container
     public static function getForumThreadRepository()
     {
         return self::$container->get('Chamilo\CourseBundle\Repository\CForumThreadRepository');
+    }
+
+    /**
+     * @return CGroupInfoRepository
+     */
+    public static function getGroupInfoRepository()
+    {
+        return self::$container->get('Chamilo\CourseBundle\Repository\CGroupInfoRepository');
     }
 
     /**

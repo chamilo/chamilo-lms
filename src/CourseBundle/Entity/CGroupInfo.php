@@ -5,6 +5,8 @@
 namespace Chamilo\CourseBundle\Entity;
 
 use Chamilo\CoreBundle\Entity\Course;
+use Chamilo\CoreBundle\Entity\Resource\AbstractResource;
+use Chamilo\CoreBundle\Entity\Resource\ResourceInterface;
 use Chamilo\CoreBundle\Traits\CourseTrait;
 use Chamilo\UserBundle\Entity\User;
 use Doctrine\Common\Collections\Collection;
@@ -23,7 +25,7 @@ use Doctrine\ORM\Mapping as ORM;
  * )
  * @ORM\Entity
  */
-class CGroupInfo
+class CGroupInfo extends AbstractResource implements ResourceInterface
 {
     use CourseTrait;
 
@@ -184,6 +186,15 @@ class CGroupInfo
      */
     protected $tutors;
 
+    public function __construct()
+    {
+        $this->status = 1;
+    }
+
+    public function __toString(): string
+    {
+        return $this->getName();
+    }
     /**
      * Get iid.
      *
@@ -215,7 +226,7 @@ class CGroupInfo
      */
     public function getName()
     {
-        return $this->name;
+        return (string) $this->name;
     }
 
     /**
@@ -659,5 +670,19 @@ class CGroupInfo
         $relation = $this->tutors->matching($criteria);
 
         return $relation->count() > 0;
+    }
+
+
+    /**
+     * Resource identifier.
+     */
+    public function getResourceIdentifier(): int
+    {
+        return $this->iid;
+    }
+
+    public function getResourceName(): string
+    {
+        return $this->getName();
     }
 }

@@ -1,6 +1,9 @@
 <?php
 /* For licensing terms, see /license.txt */
 
+use Chamilo\CoreBundle\Entity\Resource\ResourceLink;
+use Chamilo\CoreBundle\Framework\Container;
+use Chamilo\CourseBundle\Entity\CGroupInfo;
 use Chamilo\CourseBundle\Entity\CGroupRelUser;
 
 /**
@@ -191,7 +194,6 @@ class GroupManager
         $_course = api_get_course_info();
         $session_id = api_get_session_id();
         $course_id = $_course['real_id'];
-        $currentCourseRepository = $_course['path'];
         $category = self::get_category($category_id);
         $places = (int) $places;
 
@@ -228,39 +230,48 @@ class GroupManager
             $documentAccess = isset($category['document_access']) ? $category['document_access'] : 0;
         }
 
-        $allowDocumentAccess = api_get_configuration_value('group_document_access');
-        $documentCondition = '';
-        if ($allowDocumentAccess) {
-            $documentAccess = (int) $documentAccess;
-            $documentCondition = " document_access = $documentAccess, ";
-        }
-
         $table_group = Database::get_course_table(TABLE_GROUP);
-        $sql = "INSERT INTO $table_group SET
-                c_id = $course_id,
-                status = 1,
-                category_id='".Database::escape_string($category_id)."',
-                max_student = '".$places."',
-                doc_state = '".$docState."',
-                calendar_state = '".$calendarState."',
-                work_state = '".$workState."',
-                announcements_state = '".$anonuncementState."',
-                forum_state = '".$forumState."',
-                wiki_state = '".$wikiState."',
-                chat_state = '".$chatState."',
-                self_registration_allowed = '".$selfRegAllowed."',
-                self_unregistration_allowed = '".$selfUnregAllwoed."',
-                $documentCondition
-                session_id='".$session_id."'";
+        $user = api_get_user_entity(api_get_user_id());
+        $course = api_get_course_entity($course_id);
+        $session = api_get_session_entity($session_id);
 
-        Database::query($sql);
-        $lastId = Database::insert_id();
+        $group = new CGroupInfo();
+        $group
+            ->setName($name)
+            ->setCourse($course)
+            ->setCategoryId($category_id)
+            ->setMaxStudent($places)
+            ->setDocState($docState)
+            ->setCalendarState($calendarState)
+            ->setWorkState($workState)
+            ->setForumState($forumState)
+            ->setWikiState($wikiState)
+            ->setAnnouncementsState($anonuncementState)
+            ->setChatState($chatState)
+            ->setSelfRegistrationAllowed($selfRegAllowed)
+            ->setSelfUnregistrationAllowed($selfUnregAllwoed)
+            ->setSessionId($session_id)
+            ->setDocumentAccess($documentAccess)
+        ;
+
+        $repo = Container::getGroupInfoRepository();
+
+        $repo->addResourceToCourse(
+            $group,
+            ResourceLink::VISIBILITY_PUBLISHED,
+            $user,
+            $course,
+            $session
+        );
+        $repo->getEntityManager()->flush();
+
+        $lastId = $group->getIid();
 
         if ($lastId) {
             $sql = "UPDATE $table_group SET id = iid WHERE iid = $lastId";
             Database::query($sql);
 
-            $desired_dir_name = '/'.api_replace_dangerous_char($name).'_groupdocs';
+            /*$desired_dir_name = '/'.api_replace_dangerous_char($name).'_groupdocs';
 
             $newFolderData = create_unexisting_directory(
                 $_course,
@@ -272,47 +283,40 @@ class GroupManager
                     $desired_dir_name,
                 $desired_dir_name,
                 1
-            );
+            );*/
 
-            $unique_name = $newFolderData->getPath();
+            //$unique_name = $newFolderData->getPath();
 
             /* Stores the directory path into the group table */
-            $sql = "UPDATE $table_group SET
+            /*$sql = "UPDATE $table_group SET
                         name = '".Database::escape_string($name)."',
                         secret_directory = '".$unique_name."'
                     WHERE c_id = $course_id AND id ='".$lastId."'";
 
-            Database::query($sql);
+            Database::query($sql);*/
 
             // create a forum if needed
             if ($forumState >= 0) {
                 require_once api_get_path(SYS_CODE_PATH).'forum/forumfunction.inc.php';
 
-                $forum_categories = get_forum_categories();
-                if (empty($forum_categories)) {
-                    $categoryParam = [
-                        'forum_category_title' => get_lang('Group forums'),
-                    ];
-                    store_forumcategory($categoryParam);
-                    $forum_categories = get_forum_categories();
-                }
+                $forumName = get_lang('Group forums');
+                $repo = Container::getForumCategoryRepository();
+                $criteria = ['cId' => $course_id, 'catTitle' => $forumName];
+                $category = $repo->findOneBy($criteria);
 
-                $counter = 0;
-                foreach ($forum_categories as $key => $value) {
-                    if ($counter == 0) {
-                        $forum_category_id = $key;
-                    }
-                    $counter++;
-                }
-                // A sanity check.
-                if (empty($forum_category_id)) {
-                    $forum_category_id = 0;
+                if (empty($category)) {
+                    $categoryParam = [
+                        'forum_category_title' => $forumName,
+                    ];
+                    $categoryId = store_forumcategory($categoryParam);
+                } else {
+                    $categoryId = $category->getIid();
                 }
 
                 $values = [];
                 $values['forum_title'] = $name;
                 $values['group_id'] = $lastId;
-                $values['forum_category'] = $forum_category_id;
+                $values['forum_category'] = $categoryId;
                 $values['allow_anonymous_group']['allow_anonymous'] = 0;
                 $values['students_can_edit_group']['students_can_edit'] = 0;
                 $values['approval_direct_group']['approval_direct'] = 0;
@@ -443,11 +447,7 @@ class GroupManager
         }
 
         $course_id = $course_info['real_id'];
-
-        // Database table definitions
         $em = Database::getManager();
-        $group_table = Database::get_course_table(TABLE_GROUP);
-        $forum_table = Database::get_course_table(TABLE_FORUM);
         $groupInfo = self::get_group_properties($groupInfo['iid'], true);
         if ($groupInfo) {
             $groupIid = $groupInfo['iid'];
@@ -488,12 +488,12 @@ class GroupManager
 
             // Delete item properties of this group.
             // to_group_id is related to c_group_info.iid
-            $em
+            /*$em
                 ->createQuery(
                     'DELETE FROM ChamiloCourseBundle:CItemProperty ci WHERE ci.course = :course AND ci.group = :group'
                 )
                 ->execute(['course' => $course_id, 'group' => $groupId]);
-
+            */
             // delete the groups
             $em
                 ->createQuery(

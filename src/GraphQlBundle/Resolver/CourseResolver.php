@@ -261,7 +261,7 @@ class CourseResolver implements ContainerAwareInterface
         /** @var Course $course */
         $course = $context->offsetGet('course');
         /** @var Session $session */
-        $session = $context->offsetGet('session');
+        //$session = $context->offsetGet('session');
 
         $threadRepo = $this->em->getRepository('ChamiloCourseBundle:CForumThread');
         $thread = $threadRepo->find($id);

@@ -195,6 +195,7 @@ class CGroupInfo extends AbstractResource implements ResourceInterface
     {
         return $this->getName();
     }
+
     /**
      * Get iid.
      *
@@ -671,7 +672,6 @@ class CGroupInfo extends AbstractResource implements ResourceInterface
 
         return $relation->count() > 0;
     }
-
 
     /**
      * Resource identifier.

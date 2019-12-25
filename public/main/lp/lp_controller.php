@@ -1,4 +1,5 @@
 <?php
+
 /* For licensing terms, see /license.txt */
 
 use ChamiloSession as Session;
@@ -8,8 +9,6 @@ use ChamiloSession as Session;
  * the requested action.
  *
  * @todo remove repeated if $lp_found redirect
- *
- * @package chamilo.learnpath
  *
  * @author Yannick Warnier <ywarnier@beeznest.org>
  */
@@ -22,7 +21,6 @@ require_once __DIR__.'/../inc/global.inc.php';
 
 api_protect_course_script(true);
 
-$current_course_tool = TOOL_LEARNPATH;
 $_course = api_get_course_info();
 
 $glossaryExtraTools = api_get_setting('show_glossary_in_extra_tools');

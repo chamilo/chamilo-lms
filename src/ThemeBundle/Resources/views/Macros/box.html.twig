@@ -86,8 +86,8 @@
                                     <h4 class="title">
                                         <a href="{{ subitem.url }}" title="{{ subitem.title }}" class="{{ subitem.visibility != '1' ? 'text-muted': '' }}">{{ subitem.title }}</a>
                                         {% if subitem.forum_of_group != 0 %}
-                                            <a class="forum-goto" href="../group/group_space.php?{{ _p.web_cid_query }}&gidReq={{ subitem.forum_of_group }}">
-                                                {{ "forum.png"|img(22) }} {{ "GoTo"|trans }} {{ subitem.forum_group_title }}
+                                            <a class="forum-goto" href="../group/group_space.php?{{ course_url_params }}&gidReq={{ subitem.forum_of_group }}">
+                                                {{ "forum.png"|img(22) }} {{ "Go to"|trans }} {{ subitem.forum_group_title }}
                                             </a>
                                         {% endif %}
                                         {{ subitem.icon_session }}
@@ -98,7 +98,7 @@
                                         </div>
                                     </h4>
                                     <ul class="forum-threads">
-                                        <li class="threads">{{ 'ForumThreads'| trans }}: {{ subitem.number_threads }} </li>
+                                        <li class="threads">{{ 'Forum threads'| trans }}: {{ subitem.number_threads }} </li>
                                         {% if subitem.last_poster_id is not empty %}
                                             <li class="date">
                                                 <i class="fa fa-comments" aria-hidden="true"></i>

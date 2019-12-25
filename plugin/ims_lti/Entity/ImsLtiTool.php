@@ -630,6 +630,22 @@ class ImsLtiTool
     }
 
     /**
+     * Set advantageServices.
+     *
+     * @param array $advantageServices
+     *
+     * @return ImsLtiTool
+     */
+    public function setAdvantageServices($advantageServices)
+    {
+        $this->advantageServices = $advantageServices;
+
+        return $this;
+    }
+
+    /**
+     * Get advantageServices.
+     *
      * @return array
      */
     public function getAdvantageServices()

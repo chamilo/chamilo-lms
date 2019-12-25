@@ -37,12 +37,17 @@ if ($form->validate()) {
             isset($formValues['share_picture'])
         );
 
-    if ('1p3' === $formValues['version']) {
+    if (ImsLti::V_1P3 === $formValues['version']) {
         $externalTool
             ->setLaunchUrl($formValues['launch_url'])
             ->setClientId($formValues['client_id'])
             ->setLoginUrl($formValues['login_url'])
             ->setRedirectUrl($formValues['redirect_url'])
+            ->setAdvantageServices(
+                [
+                    'ags' => $formValues['1p3_ags'],
+                ]
+            )
             ->publicKey = $formValues['public_key'];
     } else {
         if (empty($formValues['consumer_key']) && empty($formValues['shared_secret'])) {

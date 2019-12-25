@@ -46,13 +46,16 @@ class FrmAdd extends FormValidator
             $this->addRadio(
                 'version',
                 $plugin->get_lang('LtiVersion'),
-                ['1p0' => 'LTI 1.0 / 1.1', '1p3' => 'LTI 1.3.0']
+                [
+                    ImsLti::V_1P1 => 'LTI 1.0 / 1.1',
+                    ImsLti::V_1P3 => 'LTI 1.3.0',
+                ]
             );
-            $this->addHtml('<div id="lti_1p0" style="display: block;">');
+            $this->addHtml('<div class="'.ImsLti::V_1P1.'" style="display: block;">');
             $this->addText('consumer_key', $plugin->get_lang('ConsumerKey'), false);
             $this->addText('shared_secret', $plugin->get_lang('SharedSecret'), false);
             $this->addHtml('</div>');
-            $this->addHtml('<div id="lti_1p3" style="display: none;">');
+            $this->addHtml('<div class="'.ImsLti::V_1P3.'" style="display: none;">');
             $this->addTextarea(
                 'public_key',
                 $plugin->get_lang('PublicKey'),
@@ -80,6 +83,17 @@ class FrmAdd extends FormValidator
             );
         }
 
+        $this->addHtml('<div class="'.ImsLti::V_1P3.'" style="display: none;">');
+        $this->addRadio(
+            '1p3_ags',
+            $plugin->get_lang('AssigmentAndGradesService'),
+            [
+                LtiAssignmentGradesService::AGS_SIMPLE => $plugin->get_lang('AGServiceSimple'),
+                LtiAssignmentGradesService::AGS_FULL => $plugin->get_lang('AGServiceFull'),
+            ]
+        );
+        $this->addHtml('</div>');
+
         $this->addHtml('</div>');
         $this->addButtonAdvancedSettings('lti_privacy', get_lang('Privacy'));
         $this->addHtml('<div id="lti_privacy_options" style="display:none;">');
@@ -94,12 +108,11 @@ class FrmAdd extends FormValidator
     public function setDefaultValues()
     {
         $defaults = [];
-        $defaults['version'] = '1p0';
+        $defaults['version'] = ImsLti::V_1P1;
 
         if (null !== $this->baseTool) {
             $defaults['name'] = $this->baseTool->getName();
             $defaults['description'] = $this->baseTool->getDescription();
-            $defaults['version'] = '1p0';
             $defaults['custom_params'] = $this->baseTool->getCustomParams();
             $defaults['share_name'] = $this->baseTool->isSharingName();
             $defaults['share_email'] = $this->baseTool->isSharingEmail();
@@ -117,9 +130,9 @@ class FrmAdd extends FormValidator
         $js = "<script>
                 \$(function () {
                     \$('[name=\"version\"]').on('change', function () {
-                        $('#lti_1p0, #lti_1p3').hide();
+                        $('.".ImsLti::V_1P1.", .".ImsLti::V_1P3."').hide();
 
-                        $('#lti_' + this.value).show();
+                        $('.' + this.value).show();
                     })
                 });
             </script>";

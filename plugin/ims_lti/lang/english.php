@@ -50,3 +50,6 @@ $strings['PlatformDateUpdated'] = 'Platform data updated';
 $strings['LtiVersion'] = 'LTI Version';
 $strings['LoginUrl'] = 'Login URL';
 $strings['RedirectUrl'] = 'Redirect URL';
+$strings['AssigmentAndGradesService'] = 'Assigment and Grades Service';
+$strings['AGServiceSimple'] = 'Synchronize grades only';
+$strings['AGServiceFull'] = 'Synchronize grades and column management';

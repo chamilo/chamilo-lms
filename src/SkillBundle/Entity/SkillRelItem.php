@@ -409,7 +409,7 @@ class SkillRelItem
         $url = '';
         switch ($this->getItemType()) {
             case ITEM_TYPE_EXERCISE:
-                $url = 'exercise/exercise_report.php?'.$cidReq.'&exerciseId='.$this->getItemId();
+                $url = 'exercise/exercise_report.php?'.$cidReq.'&id='.$this->getItemId();
 
                 break;
             case ITEM_TYPE_STUDENT_PUBLICATION:

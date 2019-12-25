@@ -1632,12 +1632,12 @@ if (empty($details)) {
             'quiz.session_id'
         );
 
-        $sql = "SELECT quiz.title, id 
+        $sql = "SELECT quiz.title, id
                 FROM $t_quiz AS quiz
                 WHERE
                     quiz.c_id = ".$courseInfo['real_id']." AND
                     active IN (0, 1)
-                    $sessionCondition                    
+                    $sessionCondition
                 ORDER BY quiz.title ASC ";
 
         $result_exercices = Database::query($sql);
@@ -1736,7 +1736,7 @@ if (empty($details)) {
 
                 echo '<td>';
                 if ($count_attempts > 0) {
-                    $all_attempt_url = "../exercise/exercise_report.php?exerciseId=$exercise_id&"
+                    $all_attempt_url = "../exercise/exercise_report.php?id=$exercise_id&"
                         ."cidReq=$course_code&filter_by_user=$student_id&id_session=$sessionId";
                     echo Display::url(
                         Display::return_icon(

@@ -1,10 +1,9 @@
 <?php
+
 /* For licensing terms, see /license.txt */
 
 /**
  * Exercise list: This script shows the list of exercises for administrators and students.
- *
- * @package chamilo.exercise
  *
  * @author Julio Montoya <gugli100@gmail.com> jqgrid integration
  * Modified by hubert.borderiou (question category)
@@ -13,8 +12,6 @@
  */
 require_once __DIR__.'/../inc/global.inc.php';
 
-// Setting the tabs
-$this_section = SECTION_COURSES;
 $htmlHeadXtra[] = api_get_jqgrid_js();
 
 $filter_user = isset($_REQUEST['filter_by_user']) ? (int) $_REQUEST['filter_by_user'] : null;
@@ -305,7 +302,7 @@ if (isset($_REQUEST['comments']) &&
         Database::query($sql);
 
         if (empty($origin)) {
-            header('Location: '.api_get_path(WEB_CODE_PATH).'exercise/exercise_report.php?exerciseId='.$exercise_id.'&'.api_get_cidreq());
+            header('Location: '.api_get_path(WEB_CODE_PATH).'exercise/exercise_report.php?id='.$exercise_id.'&'.api_get_cidreq());
             exit;
         }
 
@@ -399,7 +396,7 @@ if (($is_allowedToEdit || $is_tutor || api_is_coach()) &&
             $exe_id,
             api_get_utc_datetime()
         );
-        header('Location: exercise_report.php?'.api_get_cidreq().'&exerciseId='.$exercise_id);
+        header('Location: exercise_report.php?'.api_get_cidreq().'&id='.$exercise_id);
         exit;
     }
 }
@@ -833,7 +830,7 @@ $gridJs = Display::grid_js(
             var dateFormat = $( "#datepicker_start" ).datepicker( "option", "dateFormat" );
             var selectedDate = $.datepicker.formatDate(dateFormat, dateTypeVar);
             if (confirm("<?php echo convert_double_quote_to_single(get_lang('Are you sure you want to clean results for this test before the selected date ?')).' '; ?>" + selectedDate)) {
-                self.location.href = "exercise_report.php?<?php echo api_get_cidreq(); ?>&exerciseId=<?php echo $exercise_id; ?>&delete_before_date="+dateForBDD+"&sec_token=<?php echo $token; ?>";
+                self.location.href = "exercise_report.php?<?php echo api_get_cidreq(); ?>&id=<?php echo $exercise_id; ?>&delete_before_date="+dateForBDD+"&sec_token=<?php echo $token; ?>";
             }
         }
     }

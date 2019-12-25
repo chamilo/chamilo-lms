@@ -1121,7 +1121,7 @@ if (!empty($studentId)) {
                             WHERE
                                 quiz.c_id = ".$courseInfo['real_id']." AND
                                 active IN (0, 1)
-                                $sessionCondition                    
+                                $sessionCondition
                             ORDER BY quiz.title ASC ";
 
             $result_exercices = Database::query($sql);
@@ -1217,7 +1217,7 @@ if (!empty($studentId)) {
                     }
                     echo '</td>';
                     echo '<td>';
-                    $all_attempt_url = "../exercise/exercise_report.php?exerciseId=$exercise_id&cidReq=$course_code&filter_by_user=$studentId&id_session=$sessionId";
+                    $all_attempt_url = "../exercise/exercise_report.php?id=$exercise_id&cidReq=$course_code&filter_by_user=$studentId&id_session=$sessionId";
                     echo Display::url(
                                 Display::return_icon(
                                     'test_results.png',
@@ -1404,8 +1404,8 @@ $nom_hor = $horaire_id['official_code'];
 $course_code_real = $_course['real_id'];
 //avec le nom d'horaire= official code, on trouve le nombre de jour a faire
 $sql = "SELECT * FROM $TABLECALHORAIRE
-        where 
-          name = '$nom_hor' and 
+        where
+          name = '$nom_hor' and
           c_id = $course_code_real ";
 
 $res = Database::query($sql);
@@ -1460,10 +1460,10 @@ while ($a_courses = Database::fetch_array($result2)) {
             $lp_item_id = $resulta['id'];
             $Req3 = "SELECT MAX(id)
                       FROM c_lp_item_view
-                      WHERE  
-                        lp_item_id =  $lp_item_id AND 
-                        lp_view_id =  $lp_id_view AND 
-                        c_id = $c_id_view AND 
+                      WHERE
+                        lp_item_id =  $lp_item_id AND
+                        lp_view_id =  $lp_id_view AND
+                        c_id = $c_id_view AND
                         status =  'completed'
                       ";
             $res3 = Database::query($Req3);
@@ -1471,8 +1471,8 @@ while ($a_courses = Database::fetch_array($result2)) {
                 $max = $resul['0'];
                 $Req4 = "SELECT COUNT( id )
                          FROM  c_lp_item_view
-                         WHERE  
-                            id = $max AND 
+                         WHERE
+                            id = $max AND
                             c_id = $c_id_view";
                 $res4 = Database::query($Req4);
                 while ($resultat = Database::fetch_array($res4)) {
@@ -1504,9 +1504,9 @@ while ($jour_agenda == '') {
     $tour++;
     $date = date("Y-m-d", mktime(0, 0, 0, date("m"), date("d") - $tour, date("Y")));
     $sql4 = "SELECT *  FROM $tbl_personal_agenda
-             WHERE 
-              user = $studentId AND  
-                text='Pour le calendrier, ne pas effacer' AND 
+             WHERE
+              user = $studentId AND
+                text='Pour le calendrier, ne pas effacer' AND
                 date like '".$date." %:%' ";
     $result4 = Database::query($sql4);
     $res4 = Database::fetch_array($result4);
@@ -1531,7 +1531,7 @@ $goto = $num_days + $diff2;
 $goto = number_format($goto);
 $sqlgo = "SELECT *  FROM $tbl_personal_agenda
          WHERE user = $studentId
-            AND title = '".$goto."'  
+            AND title = '".$goto."'
          ";
 $result7 = Database::query($sqlgo);
 $res7 = Database::fetch_array($result7);
@@ -1684,10 +1684,10 @@ if ($end_date < '2010-01-01') {
         $tbl_stats_exercices = Database:: get_main_table(TABLE_STATISTIC_TRACK_E_EXERCISES);
         $sqlinter = "SELECT *
                      FROM $tbl_stats_exercices
-                     WHERE 
-                        exe_user_id = $studentId AND 
+                     WHERE
+                        exe_user_id = $studentId AND
                         level != 0
-                     ORDER BY exe_date ASC, level ASC 
+                     ORDER BY exe_date ASC, level ASC
                              ";
         $resultinter = Database::query($sqlinter);
         $mod_no = null;
@@ -1703,8 +1703,8 @@ if ($end_date < '2010-01-01') {
                 <td>
                      $inter_date
                     </td>
-                
-                    <td>$inter_coment 
+
+                    <td>$inter_coment
                 </td>
                 ";
             $exe_id = $a_inter['exe_id']; ?>
@@ -1823,7 +1823,7 @@ if (empty($_GET['details'])) {
 
                     //  firts connection date
                     $sql2 = 'SELECT STR_TO_DATE(access_date,"%Y-%m-%d")
-                              FROM '.$tbl_stats_access.' 
+                              FROM '.$tbl_stats_access.'
                                 WHERE access_user_id = '.$studentId.'
                                 AND c_id = '.$c_id.'
                                     ORDER BY access_id ASC LIMIT 0,1
@@ -1860,9 +1860,9 @@ if (empty($_GET['details'])) {
                     $nombre_jours_module = number_format($nombre_jours_module, 0);
                     //on trouve la date de fin de chaque module AND date = date_format('$first_connection_date_to_module','%Y-%m-%d')
                     $sql = "SELECT * FROM `c_cal_dates`
-                            WHERE 
-                                horaire_name = '$nom_hor' AND 
-                                c_id = '$course_code_real' AND 
+                            WHERE
+                                horaire_name = '$nom_hor' AND
+                                c_id = '$course_code_real' AND
                                 STR_TO_DATE(date,'%Y-%m-%d') >= STR_TO_DATE('$first_connection_date_to_module','%Y-%m-%d')
                             ORDER BY STR_TO_DATE(date, '%Y-%m-%d') ASC ";
                     $res = Database::query($sql);
@@ -2041,7 +2041,7 @@ if (empty($_GET['details'])) {
 
         //  firts connection date
         $sql2 = 'SELECT access_date
-                FROM '.$tbl_stats_access.' 
+                FROM '.$tbl_stats_access.'
                 WHERE access_user_id = '.$studentId.'
                 AND c_id = '.$c_id.'
                 ORDER BY access_id ASC LIMIT 0,1
@@ -2324,7 +2324,7 @@ if (empty($_GET['details'])) {
             echo '</td>';
 
             echo '<td>';
-            $all_attempt_url = "../exercice/exercise_report.php?exerciseId=$exercise_id&cidReq=$course_code&filter_by_user=$studentId&id_session=$session_id";
+            $all_attempt_url = "../exercice/exercise_report.php?id=$exercise_id&cidReq=$course_code&filter_by_user=$studentId&id_session=$session_id";
             echo Display::url(
                     Display::return_icon('test_results.png', get_lang('All attempts'), [], ICON_SIZE_SMALL),
                     $all_attempt_url
@@ -2607,7 +2607,7 @@ if ($export_csv) {
 </form>
 <strong><?php echo get_lang('imprime_sommaire'); ?> </strong>
 <?php
-echo '<a target="_blank" 
+echo '<a target="_blank"
     href="print_myStudents.php?student='.$studentId.'&details=true&course='.$course_code.'&origin=tracking_course">
 <img src="'.api_get_path(WEB_IMG_PATH).'printmgr.gif" border="0" /></a>';
 // tableau pour date de fin prévue pour chaque module

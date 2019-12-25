@@ -310,7 +310,7 @@ $interbreadcrumb[] = [
 ];
 
 $tpl = new Template(get_lang('Report by question'));
-$actions = '<a href="exercise_report.php?exerciseId='.$exerciseId.'&'.api_get_cidreq().'">'.
+$actions = '<a href="exercise_report.php?id='.$exerciseId.'&'.api_get_cidreq().'">'.
     Display:: return_icon(
         'back.png',
         get_lang('Go back to the questions list'),

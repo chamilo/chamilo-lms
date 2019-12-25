@@ -1,23 +1,16 @@
 <?php
-/* For licensing terms, see /license.txt */
 
-use ChamiloSession as Session;
+/* For licensing terms, see /license.txt */
 
 /**
  * Exercise preview.
- *
- * @package chamilo.exercise
  *
  * @author Julio Montoya <gugli100@gmail.com>
  */
 require_once __DIR__.'/../inc/global.inc.php';
 
-$current_course_tool = TOOL_QUIZ;
-
 // Clear the exercise session just in case
 Exercise::cleanSessionVariables();
-
-$this_section = SECTION_COURSES;
 
 $js = '<script>'.api_get_language_translate_html().'</script>';
 $htmlHeadXtra[] = $js;
@@ -99,7 +92,7 @@ if ($is_allowed_to_edit) {
     }
     $editLink .= Display::url(
         Display::return_icon('test_results.png', get_lang('Results and feedback and feedback'), [], ICON_SIZE_SMALL),
-        api_get_path(WEB_CODE_PATH).'exercise/exercise_report.php?'.api_get_cidreq().'&exerciseId='.$objExercise->id,
+        api_get_path(WEB_CODE_PATH).'exercise/exercise_report.php?'.api_get_cidreq().'&id='.$objExercise->id,
         ['title' => get_lang('Results and feedback and feedback')]
     );
 }

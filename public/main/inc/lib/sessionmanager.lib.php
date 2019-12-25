@@ -1793,7 +1793,7 @@ class SessionManager
         Database::query("DELETE FROM $tbl_session_rel_course WHERE session_id = $sessionId");
         Database::query("DELETE FROM $tbl_session_rel_course_rel_user WHERE session_id = $sessionId");
         Database::query("DELETE FROM $tbl_session_rel_user WHERE session_id = $sessionId");
-        Database::query("DELETE FROM $tbl_item_properties WHERE session_id = $sessionId");
+        //Database::query("DELETE FROM $tbl_item_properties WHERE session_id = $sessionId");
         Database::query("DELETE FROM $tbl_url_session WHERE session_id = $sessionId");
         Database::query("DELETE FROM $trackCourseAccess WHERE session_id = $sessionId");
         Database::query("DELETE FROM $trackAccess WHERE access_session_id = $sessionId");

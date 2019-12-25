@@ -25,9 +25,9 @@ Feature: Document tool
     Given I am on "/resources/document/files?cid=1&sid=0"
     Then I follow "Create new document"
     Then I fill in the following:
-      | c_document_title   | My first document                       |
+      | c_document_title   | My first document |
     And I fill in ckeditor field "c_document_content" with "This is my first document!!!"
-    And I press "Save"
+    And I press "c_document_save"
     Then I should see "Saved"
     And I should see "My first document.html"
     Then I follow "My first document.html"
@@ -38,9 +38,9 @@ Feature: Document tool
     Given I am on "/resources/document/files?cid=1&sid=0"
     Then I follow "Create new document"
     Then I fill in the following:
-      | c_document_title   | My second document                       |                      |
+      | c_document_title   | My second document |
     And I fill in ckeditor field "c_document_content" with "<a href='www.chamilo.org'>Click here</a><span><strong>This is my second document!!!</strong></span>"
-    And I press "Save"
+    And I press "c_document_save"
     Then I should see "Saved"
     And I should see "My second document.html"
     Then I follow "My second document.html"

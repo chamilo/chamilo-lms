@@ -1,4 +1,5 @@
 <?php
+
 /* For licensing terms, see /license.txt */
 
 /**
@@ -1392,8 +1393,8 @@ class Agenda
                 case 'course':
                     $sql = "UPDATE $this->tbl_course_agenda SET
                             end_date = DATE_ADD(end_date, INTERVAL $delta MINUTE)
-							WHERE 
-							    c_id = ".$this->course['real_id']." AND 
+							WHERE
+							    c_id = ".$this->course['real_id']." AND
 							    id = ".$id;
                     Database::query($sql);
                     break;
@@ -1440,11 +1441,11 @@ class Agenda
                     break;
                 case 'course':
                     $sql = "UPDATE $this->tbl_course_agenda SET
-                            all_day = $allDay, 
+                            all_day = $allDay,
                             start_date = DATE_ADD(start_date, INTERVAL $delta MINUTE),
                             end_date = DATE_ADD(end_date, INTERVAL $delta MINUTE)
-							WHERE 
-							    c_id = ".$this->course['real_id']." AND 
+							WHERE
+							    c_id = ".$this->course['real_id']." AND
 							    id=".$id;
                     Database::query($sql);
                     break;
@@ -1898,8 +1899,8 @@ class Agenda
                 FROM $tlb_course_agenda agenda
                 INNER JOIN $tbl_property ip
                 ON (
-                    agenda.id = ip.ref AND 
-                    agenda.c_id = ip.c_id AND 
+                    agenda.id = ip.ref AND
+                    agenda.c_id = ip.c_id AND
                     ip.tool = '".TOOL_CALENDAR_EVENT."'
                 )
                 WHERE
@@ -2491,14 +2492,14 @@ class Agenda
             $form->addLabel(
                 get_lang('Files attachments'),
                 '<div id="filepaths" class="file-upload-event">
-                        
+
                         <div id="filepath_1">
                             <input type="file" name="attach_1"/>
-                            
+
                             <label>'.get_lang('Description').'</label>
                             <input class="form-control" type="text" name="legend[]" />
                         </div>
-                        
+
                     </div>'
             );
 

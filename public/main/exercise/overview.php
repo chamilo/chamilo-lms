@@ -87,7 +87,7 @@ if ($is_allowed_to_edit) {
     if ($objExercise->sessionId == $sessionId) {
         $editLink = Display::url(
             Display::return_icon('edit.png', get_lang('Edit'), [], ICON_SIZE_SMALL),
-            api_get_path(WEB_CODE_PATH).'exercise/admin.php?'.api_get_cidreq().'&exerciseId='.$objExercise->id
+            api_get_path(WEB_CODE_PATH).'exercise/admin.php?'.api_get_cidreq().'&id='.$objExercise->id
         );
     }
     $editLink .= Display::url(

@@ -1,4 +1,5 @@
 <?php
+
 /* For licensing terms, see /license.txt */
 
 /**
@@ -43,7 +44,7 @@ class AttendanceController
     {
         $attendance = new Attendance();
         $data = [];
-        if (strtoupper($_SERVER['REQUEST_METHOD']) == 'POST') {
+        if ('POST' == strtoupper($_SERVER['REQUEST_METHOD'])) {
             if (!empty($_POST['title'])) {
                 $check = Security::check_token();
                 $attendanceId = 0;
@@ -54,7 +55,7 @@ class AttendanceController
                     $attendance->set_attendance_weight($_POST['attendance_weight']);
                     $link_to_gradebook = false;
                     if (isset($_POST['attendance_qualify_gradebook']) &&
-                        $_POST['attendance_qualify_gradebook'] == 1
+                        1 == $_POST['attendance_qualify_gradebook']
                     ) {
                         $link_to_gradebook = true;
                     }
@@ -94,9 +95,9 @@ class AttendanceController
     {
         $attendance = new Attendance();
         $data = [];
-        $attendance_id = intval($attendance_id);
+        $attendance_id = (int) $attendance_id;
 
-        if (strtoupper($_SERVER['REQUEST_METHOD']) == 'POST') {
+        if ('POST' == strtoupper($_SERVER['REQUEST_METHOD'])) {
             if (!empty($_POST['title'])) {
                 $check = Security::check_token();
                 if ($check) {
@@ -117,7 +118,7 @@ class AttendanceController
                     $attendance->category_id = isset($_POST['category_id']) ? $_POST['category_id'] : '';
                     $link_to_gradebook = false;
                     if (isset($_POST['attendance_qualify_gradebook']) &&
-                        $_POST['attendance_qualify_gradebook'] == 1
+                        1 == $_POST['attendance_qualify_gradebook']
                     ) {
                         $link_to_gradebook = true;
                     }
@@ -168,7 +169,7 @@ class AttendanceController
     public function attendance_delete($attendance_id)
     {
         $allowDeleteAttendance = api_get_setting('allow_delete_attendance');
-        if ($allowDeleteAttendance !== 'true') {
+        if ('true' !== $allowDeleteAttendance) {
             $this->attendance_list();
 
             return false;
@@ -254,9 +255,9 @@ class AttendanceController
     public function lock_attendance($action, $attendance_id)
     {
         $attendance = new Attendance();
-        $attendance_id = intval($attendance_id);
+        $attendance_id = (int) $attendance_id;
 
-        if ($action == 'lock_attendance') {
+        if ('lock_attendance' == $action) {
             $result = $attendance->lock_attendance($attendance_id);
         } else {
             $result = $attendance->lock_attendance($attendance_id, false);
@@ -303,7 +304,7 @@ class AttendanceController
             api_get_course_info()
         ) || api_is_drh();
 
-        if ($edit == true) {
+        if (true == $edit) {
             if (api_is_allowed_to_edit(null, true) || $isDrhOfCourse) {
                 $data['users_presence'] = $attendance->get_users_attendance_sheet(
                     $attendance_id,
@@ -313,7 +314,7 @@ class AttendanceController
             }
         } else {
             if (!empty($student_id)) {
-                $user_id = intval($student_id);
+                $user_id = (int) $student_id;
             } else {
                 $user_id = api_get_user_id();
             }
@@ -346,7 +347,7 @@ class AttendanceController
             $attendance_id
         );
 
-        if (strtoupper($_SERVER['REQUEST_METHOD']) == 'POST') {
+        if ('POST' == strtoupper($_SERVER['REQUEST_METHOD'])) {
             if (isset($_POST['hidden_input'])) {
                 foreach ($_POST['hidden_input'] as $cal_id) {
                     $users_present = [];
@@ -397,7 +398,7 @@ class AttendanceController
             );
         }
 
-        $data['edit_table'] = intval($edit);
+        $data['edit_table'] = (int) $edit;
         $data['is_locked_attendance'] = $attendance->is_locked_attendance($attendance_id);
         $this->view->set_data($data);
         $this->view->set_layout('layout');
@@ -416,14 +417,14 @@ class AttendanceController
     public function attendance_calendar($action = 'calendar_list', $attendance_id = 0, $calendar_id = 0)
     {
         $attendance = new Attendance();
-        $calendar_id = intval($calendar_id);
+        $calendar_id = (int) $calendar_id;
         $data = [];
         $data['attendance_id'] = $attendance_id;
-        $attendance_id = intval($attendance_id);
+        $attendance_id = (int) $attendance_id;
         $groupList = isset($_POST['groups']) ? [$_POST['groups']] : [];
 
-        if ($action == 'calendar_add') {
-            if (strtoupper($_SERVER['REQUEST_METHOD']) == "POST") {
+        if ('calendar_add' == $action) {
+            if ('POST' == strtoupper($_SERVER['REQUEST_METHOD'])) {
                 if (!isset($_POST['cancel'])) {
                     if (isset($_POST['repeat'])) {
                         //@todo  check this error_logs
@@ -470,9 +471,9 @@ class AttendanceController
                     $action = 'calendar_list';
                 }
             }
-        } elseif ($action === 'calendar_edit') {
+        } elseif ('calendar_edit' === $action) {
             $data['calendar_id'] = $calendar_id;
-            if (strtoupper($_SERVER['REQUEST_METHOD']) == "POST") {
+            if ('POST' == strtoupper($_SERVER['REQUEST_METHOD'])) {
                 if (!isset($_POST['cancel'])) {
                     $datetime = $_POST['date_time'];
                     $datetimezone = api_get_utc_datetime($datetime);
@@ -484,10 +485,10 @@ class AttendanceController
                     $action = 'calendar_list';
                 }
             }
-        } elseif ($action == 'calendar_delete') {
+        } elseif ('calendar_delete' == $action) {
             $attendance->attendance_calendar_delete($calendar_id, $attendance_id);
             $action = 'calendar_list';
-        } elseif ($action == 'calendar_all_delete') {
+        } elseif ('calendar_all_delete' == $action) {
             $attendance->attendance_calendar_delete(0, $attendance_id, true);
             $action = 'calendar_list';
         }
@@ -551,7 +552,7 @@ class AttendanceController
             $data_array['users_presence'] = $attendance->get_users_attendance_sheet($attendance_id, 0, $groupId);
         } else {
             if (!empty($student_id)) {
-                $user_id = intval($student_id);
+                $user_id = (int) $student_id;
             } else {
                 $user_id = api_get_user_id();
             }
@@ -567,8 +568,8 @@ class AttendanceController
         $teacherInfo = CourseManager::get_teacher_list_from_course_code($courseInfo['code']);
         $teacherName = null;
         foreach ($teacherInfo as $teacherData) {
-            if ($teacherName != null) {
-                $teacherName = $teacherName." / ";
+            if (null != $teacherName) {
+                $teacherName .= ' / ';
             }
             $teacherName .= api_get_person_name($teacherData['firstname'], $teacherData['lastname']);
         }
@@ -593,8 +594,8 @@ class AttendanceController
                 $result['count'] = $count;
                 $result['full_name'] = api_get_person_name($user['firstname'], $user['lastname']);
                 foreach ($data_array['attendant_calendar'] as $class_day) {
-                    if ($class_day['done_attendance'] == 1) {
-                        if ($data_users_presence[$user['user_id']][$class_day['id']]['presence'] == 1) {
+                    if (1 == $class_day['done_attendance']) {
+                        if (1 == $data_users_presence[$user['user_id']][$class_day['id']]['presence']) {
                             $result[$class_day['id']] = get_lang('P');
                         } else {
                             $result[$class_day['id']] = '<span style="color:red">'.get_lang('NP').'</span>';
@@ -602,9 +603,9 @@ class AttendanceController
                     } else {
                         $result[$class_day['id']] = ' ';
                     }
-                    $cols++;
+                    ++$cols;
                 }
-                $count++;
+                ++$count;
                 $data_table[] = $result;
             }
         }
@@ -619,7 +620,7 @@ class AttendanceController
             $tables = [];
             $changed = 1;
 
-            for ($i = 0; $i <= $rows; $i++) {
+            for ($i = 0; $i <= $rows; ++$i) {
                 $row = isset($data_table[$i]) ? $data_table[$i] : null;
                 $key = 1;
                 $max_dates_per_page = 10;
@@ -629,14 +630,14 @@ class AttendanceController
                 if (!empty($item)) {
                     foreach ($item as $value) {
                         if ($count_j >= $max_dates_per_page) {
-                            $key++;
+                            ++$key;
                             $max_dates_per_page = $max_dates_per_page_original * $key;
                             //magic hack
                             $tables[$key][$i][] = $tables[1][$i][0];
                             $tables[$key][$i][] = $tables[1][$i][1];
                         }
                         $tables[$key][$i][] = $value;
-                        $count_j++;
+                        ++$count_j;
                     }
                 }
             }

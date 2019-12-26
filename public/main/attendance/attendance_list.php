@@ -1,12 +1,11 @@
 <?php
+
 /* For licensing terms, see /license.txt */
 
 /**
  * View (MVC patter) for listing attendances.
  *
  * @author Christian Fasanando <christian1827@gmail.com>
- *
- * @package chamilo.attendance
  */
 
 // protect a course script
@@ -19,7 +18,7 @@ if (api_is_allowed_to_edit(null, true)) {
     echo '</div>';
 }
 $attendance = new Attendance();
-if ($attendance->getNumberOfAttendances() == 0) {
+if (0 == $attendance->getNumberOfAttendances()) {
     $attendance->set_name(get_lang('Attendances'));
     $attendance->set_description(get_lang('Attendances'));
     $attendance->attendance_add();
@@ -46,7 +45,7 @@ if (api_is_allowed_to_edit(null, true)) {
     ];
 
     $allow = api_get_setting('allow_delete_attendance');
-    if ($allow === 'true') {
+    if ('true' === $allow) {
         $actions['attendance_delete_select'] = get_lang('Delete all selected attendances');
     }
     $table->set_form_actions($actions);

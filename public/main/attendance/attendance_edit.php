@@ -1,12 +1,11 @@
 <?php
+
 /* For licensing terms, see /license.txt */
 
 /**
  * View (MVC patter) for editing an attendance.
  *
  * @author Christian Fasanando <christian1827@gmail.com>
- *
- * @package chamilo.attendance
  */
 
 // protect a course script

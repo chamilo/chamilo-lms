@@ -1,4 +1,5 @@
 <?php
+
 /* For licensing terms, see /license.txt */
 
 /**
@@ -7,8 +8,6 @@
  *
  * @author Christian Fasanando <christian1827@gmail.com>
  * @author Julio Montoya <gugli100@gmail.com> Bug fixing, sql improvements
- *
- * @package chamilo.attendance
  */
 require_once __DIR__.'/../inc/global.inc.php';
 require_once 'attendance_controller.php';
@@ -61,20 +60,20 @@ if (isset($_GET['action']) &&
 ) {
     $action = $_GET['action'];
 }
-if (isset($_GET['isStudentView']) && $_GET['isStudentView'] == 'true') {
+if (isset($_GET['isStudentView']) && 'true' == $_GET['isStudentView']) {
     $action = 'attendance_list';
 }
 
 // get attendance id
 $attendance_id = 0;
 if (isset($_GET['attendance_id'])) {
-    $attendance_id = intval($_GET['attendance_id']);
+    $attendance_id = (int) ($_GET['attendance_id']);
 }
 
 // get calendar id
 $calendar_id = '';
 if (isset($_GET['calendar_id'])) {
-    $calendar_id = intval($_GET['calendar_id']);
+    $calendar_id = (int) ($_GET['calendar_id']);
 }
 
 // instance attendance object for using like library here
@@ -189,7 +188,7 @@ $student_param = '';
 $student_id = null;
 
 if (api_is_drh() && isset($_GET['student_id'])) {
-    $student_id = intval($_GET['student_id']);
+    $student_id = (int) ($_GET['student_id']);
     $student_param = '&student_id='.$student_id;
     $student_info = api_get_user_info($student_id);
     $interbreadcrumb[] = [
@@ -207,17 +206,17 @@ $interbreadcrumb[] = [
     'url' => 'index.php?'.api_get_cidreq().'&action=attendance_list&'.$student_param,
     'name' => get_lang('Attendances'),
 ];
-if ($action == 'attendance_add') {
+if ('attendance_add' == $action) {
     $interbreadcrumb[] = ['url' => '#', 'name' => get_lang('Create a new attendance list')];
 }
-if ($action == 'attendance_edit') {
+if ('attendance_edit' == $action) {
     $interbreadcrumb[] = ['url' => '#', 'name' => get_lang('Edit')];
 }
-if ($action == 'attendance_sheet_list' || $action == 'attendance_sheet_add') {
+if ('attendance_sheet_list' == $action || 'attendance_sheet_add' == $action) {
     $interbreadcrumb[] = ['url' => '#', 'name' => $attendance_data['name']];
 }
-if ($action == 'calendar_list' || $action == 'calendar_edit' || $action == 'calendar_delete' ||
-    $action == 'calendar_all_delete'
+if ('calendar_list' == $action || 'calendar_edit' == $action || 'calendar_delete' == $action ||
+    'calendar_all_delete' == $action
 ) {
     $interbreadcrumb[] = [
         'url' => 'index.php?'.api_get_cidreq().'&action=attendance_sheet_list&attendance_id='.$attendance_id,
@@ -225,7 +224,7 @@ if ($action == 'calendar_list' || $action == 'calendar_edit' || $action == 'cale
     ];
     $interbreadcrumb[] = ['url' => '#', 'name' => get_lang('Attendance calendar')];
 }
-if ($action == 'calendar_add') {
+if ('calendar_add' == $action) {
     $interbreadcrumb[] = [
         'url' => 'index.php?'.api_get_cidreq().'&action=attendance_sheet_list&attendance_id='.$attendance_id,
         'name' => $attendance_data['name'],
@@ -236,21 +235,22 @@ if ($action == 'calendar_add') {
 $allowToEdit = api_is_allowed_to_edit(null, true);
 
 // Delete selected attendance
-if (isset($_POST['action']) && $_POST['action'] == 'attendance_delete_select' && $allowToEdit) {
+if (isset($_POST['action']) && 'attendance_delete_select' == $_POST['action'] && $allowToEdit) {
     $attendanceController->attendance_delete($_POST['id']);
 }
 
-if (isset($_POST['action']) && $_POST['action'] == 'attendance_set_invisible_select' && $allowToEdit) {
+if (isset($_POST['action']) && 'attendance_set_invisible_select' == $_POST['action'] && $allowToEdit) {
     $attendanceController->attendanceSetInvisible($_POST['id']);
 }
 
-if (isset($_POST['action']) && $_POST['action'] == 'attendance_set_visible_select' && $allowToEdit) {
+if (isset($_POST['action']) && 'attendance_set_visible_select' == $_POST['action'] && $allowToEdit) {
     $attendanceController->attendanceSetVisible($_POST['id']);
 }
 
 switch ($action) {
     case 'attendance_list':
         $attendanceController->attendance_list();
+
         break;
     case 'attendance_add':
         if ($allowToEdit) {
@@ -258,6 +258,7 @@ switch ($action) {
         } else {
             api_not_allowed(true);
         }
+
         break;
     case 'attendance_edit':
         if ($allowToEdit) {
@@ -265,6 +266,7 @@ switch ($action) {
         } else {
             api_not_allowed(true);
         }
+
         break;
     case 'attendance_delete':
         if ($allowToEdit) {
@@ -273,6 +275,7 @@ switch ($action) {
         } else {
             api_not_allowed(true);
         }
+
         break;
     case 'attendance_set_invisible':
         if ($allowToEdit) {
@@ -280,6 +283,7 @@ switch ($action) {
         } else {
             api_not_allowed(true);
         }
+
         break;
     case 'attendance_set_visible':
         if ($allowToEdit) {
@@ -287,6 +291,7 @@ switch ($action) {
         } else {
             api_not_allowed(true);
         }
+
         break;
     /*case 'attendance_restore':
         if ($allowToEdit) {
@@ -302,6 +307,7 @@ switch ($action) {
             $student_id,
             true
         );
+
         break;
     case 'attendance_sheet_list_no_edit':
         $attendanceController->attendance_sheet(
@@ -310,6 +316,7 @@ switch ($action) {
             $student_id,
             false
         );
+
         break;
     case 'attendance_sheet_export_to_pdf':
         $attendanceController->attendance_sheet_export_to_pdf(
@@ -318,6 +325,7 @@ switch ($action) {
             $student_id,
             $course_id
         );
+
         break;
     case 'attendance_sheet_add':
         if ($allowToEdit) {
@@ -325,6 +333,7 @@ switch ($action) {
         } else {
             api_not_allowed(true);
         }
+
         break;
     case 'lock_attendance':
     case 'unlock_attendance':
@@ -333,6 +342,7 @@ switch ($action) {
         } else {
             api_not_allowed(true);
         }
+
         break;
     case 'calendar_add':
     case 'calendar_edit':
@@ -348,11 +358,13 @@ switch ($action) {
             $attendance_id,
             $calendar_id
         );
+
         break;
     case 'calendar_logins':
         if (api_is_course_admin() || api_is_drh()) {
             $attendanceController->getAttendanceBaseInLogin(false, true);
         }
+
         break;
     default:
         $attendanceController->attendance_list();

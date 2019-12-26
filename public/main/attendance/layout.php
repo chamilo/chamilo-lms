@@ -1,12 +1,11 @@
 <?php
+
 /* For licensing terms, see /license.txt */
 
 /**
  * Layout (principal view) used for structuring other views.
  *
  * @author Christian Fasanando <christian1827@gmail.com>
- *
- * @package chamilo.attendace
  */
 
 // protect a course script

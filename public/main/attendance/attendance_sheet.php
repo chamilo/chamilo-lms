@@ -6,8 +6,6 @@
  *
  * @author Christian Fasanando <christian1827@gmail.com>
  * @author Julio Montoya reworked 2010
- *
- * @package chamilo.attendance
  */
 
 // Protect a course script
@@ -22,7 +20,7 @@ if (api_is_allowed_to_edit(null, true) ||
     api_is_coach(api_get_session_id(), api_get_course_int_id()) ||
     $isDrhOfCourse
 ) {
-    $groupId = isset($_REQUEST['group_id']) ? intval($_REQUEST['group_id']) : null;
+    $groupId = isset($_REQUEST['group_id']) ? (int) ($_REQUEST['group_id']) : null;
     $form = new FormValidator(
         'filter',
         'post',
@@ -49,6 +47,7 @@ if (api_is_allowed_to_edit(null, true) ||
                 foreach ($attendance_date['groups'] as $group) {
                     if ($groupId == $group['group_id']) {
                         $includeCalendar = true;
+
                         break;
                     } else {
                         $includeCalendar = false;
@@ -231,7 +230,7 @@ if (api_is_allowed_to_edit(null, true) ||
         $class = '';
         foreach ($users_in_course as $data) {
             $faults = 0;
-            if ($i % 2 == 0) {
+            if (0 == $i % 2) {
                 $class = 'row_odd';
             } else {
                 $class = 'row_even';
@@ -252,7 +251,7 @@ if (api_is_allowed_to_edit(null, true) ||
                                 </td>
                             </tr>
                             <?php
-                            $i++;
+                            ++$i;
         } ?>
                         </tbody>
                     </table>
@@ -292,7 +291,7 @@ if (api_is_allowed_to_edit(null, true) ||
                     $result .= '<span id="attendance_lock" style="cursor:pointer">'.(!$is_locked_attendance || api_is_platform_admin() ? $img_lock : '').'</span>';
                 }
 
-                if ($is_locked_attendance == false) {
+                if (false == $is_locked_attendance) {
                     if (api_is_allowed_to_edit(null, true)) {
                         $result .= '<input type="checkbox" class="checkbox_head_'.$calendar['id'].'" id="checkbox_head_'.$calendar['id'].'" '.$disabled_check.' checked="checked" />'.$input_hidden.'</div></th>';
                     }
@@ -314,7 +313,7 @@ if (api_is_allowed_to_edit(null, true) ||
         $i = 0;
         foreach ($users_in_course as $user) {
             $class = '';
-            if ($i % 2 == 0) {
+            if (0 == $i % 2) {
                 $class = 'row_even';
             } else {
                 $class = 'row_odd';
@@ -328,14 +327,14 @@ if (api_is_allowed_to_edit(null, true) ||
 
                     if (isset($users_presence[$user['user_id']][$calendar['id']]['presence'])) {
                         $presence = $users_presence[$user['user_id']][$calendar['id']]['presence'];
-                        if (intval($presence) == 1) {
+                        if (1 == (int) $presence) {
                             $checked = 'checked';
                         } else {
                             $checked = '';
                         }
                     } else {
                         //if the user wasn't registered at that time, consider unchecked
-                        if ($next_attendance_calendar_datetime == 0 ||
+                        if (0 == $next_attendance_calendar_datetime ||
                                     $calendar['date_time'] < $next_attendance_calendar_datetime
                                 ) {
                             $checked = '';
@@ -345,7 +344,7 @@ if (api_is_allowed_to_edit(null, true) ||
                     $style_td = '';
 
                     if ($next_attendance_calendar_id == $calendar['id']) {
-                        if ($i % 2 == 0) {
+                        if (0 == $i % 2) {
                             $style_td = 'background-color:#eee;';
                         } else {
                             $style_td = 'background-color:#dcdcdc;';
@@ -367,9 +366,11 @@ if (api_is_allowed_to_edit(null, true) ||
                         switch ($presence) {
                                     case 1:
                                         echo Display::return_icon('accept.png', get_lang('Attended'));
+
                                         break;
                                     case 0:
                                         echo Display::return_icon('exclamation.png', get_lang('Not attended'));
+
                                         break;
                                     case -1:
                                         //echo Display::return_icon('warning.png',get_lang('Not attended'));
@@ -383,7 +384,7 @@ if (api_is_allowed_to_edit(null, true) ||
             } else {
                 $calendarClass = null;
                 if (isset($calendar)) {
-                    $calendarClass = "checkboxes_col_".$calendar['id'];
+                    $calendarClass = 'checkboxes_col_'.$calendar['id'];
                 }
                 echo '<td class="'.$calendarClass.'">';
                 echo '<div>';
@@ -392,7 +393,7 @@ if (api_is_allowed_to_edit(null, true) ||
                         </td>';
             }
             echo '</tr>';
-            $i++;
+            ++$i;
         }
         echo '</tbody></table>';
         echo '</div></div>'; ?>
@@ -446,7 +447,7 @@ if (api_is_allowed_to_edit(null, true) ||
             $i = 0;
             foreach ($users_presence[$user_id] as $presence) {
                 $class = '';
-                if ($i % 2 == 0) {
+                if (0 == $i % 2) {
                     $class = 'row_even';
                 } else {
                     $class = 'row_odd';
@@ -454,7 +455,7 @@ if (api_is_allowed_to_edit(null, true) ||
                 <tr class="<?php echo $class; ?>">
                     <td>
                         <?php echo $presence['presence'] ? Display::return_icon('checkbox_on.png', get_lang('Assistance'), null, ICON_SIZE_TINY) : Display::return_icon('checkbox_off.png', get_lang('Assistance'), null, ICON_SIZE_TINY); ?>
-                        <?php echo "&nbsp; ".$presence['date_time']; ?>
+                        <?php echo '&nbsp; '.$presence['date_time']; ?>
                     </td>
                 </tr>
             <?php

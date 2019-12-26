@@ -1,4 +1,5 @@
 <?php
+
 /* For licensing terms, see /license.txt */
 
 /**
@@ -12,7 +13,7 @@ api_protect_course_script(true);
 
 if (!$is_locked_attendance || api_is_platform_admin()) {
     echo '<div class="actions">';
-    if ($action == 'calendar_add') {
+    if ('calendar_add' == $action) {
         echo '<a href="index.php?'.api_get_cidreq().'&action=calendar_list&attendance_id='.$attendance_id.'">'.
             Display::return_icon('back.png', get_lang('Attendance calendar'), '', ICON_SIZE_MEDIUM).'</a>';
     } else {
@@ -45,7 +46,7 @@ if (isset($error_checkdate) && $error_checkdate) {
     echo Display::return_message($message, 'error', false);
 }
 
-if (isset($action) && $action == 'calendar_add') {
+if (isset($action) && 'calendar_add' == $action) {
     $groupList = GroupManager::get_group_list(null, null, 1);
     $groupIdList = ['--'];
     foreach ($groupList as $group) {
@@ -123,7 +124,7 @@ if (isset($action) && $action == 'calendar_add') {
     if (!empty($attendance_calendar)) {
         foreach ($attendance_calendar as $calendar) {
             echo '<li class="list-group-item">';
-            if ((isset($action) && $action === 'calendar_edit') &&
+            if ((isset($action) && 'calendar_edit' === $action) &&
                 (isset($calendar_id) && $calendar_id == $calendar['id'])
             ) {
                 // calendar edit form
@@ -169,9 +170,9 @@ if (isset($action) && $action == 'calendar_add') {
                 if (!$is_locked_attendance || api_is_platform_admin()) {
                     if (api_is_allowed_to_edit()) {
                         echo '<div class="pull-right">';
-                        echo '<a href="index.php?'.api_get_cidreq().'&action=calendar_edit&calendar_id='.intval($calendar['id']).'&attendance_id='.$attendance_id.'">'.
+                        echo '<a href="index.php?'.api_get_cidreq().'&action=calendar_edit&calendar_id='.(int) ($calendar['id']).'&attendance_id='.$attendance_id.'">'.
                             Display::return_icon('edit.png', get_lang('Edit'), ['style' => 'vertical-align:middle'], ICON_SIZE_SMALL).'</a>&nbsp;';
-                        echo '<a onclick="javascript:if(!confirm(\''.get_lang('Are you sure you want to delete').'\')) return false;" href="index.php?'.api_get_cidreq().'&action=calendar_delete&calendar_id='.intval($calendar['id']).'&attendance_id='.$attendance_id.'">'.
+                        echo '<a onclick="javascript:if(!confirm(\''.get_lang('Are you sure you want to delete').'\')) return false;" href="index.php?'.api_get_cidreq().'&action=calendar_delete&calendar_id='.(int) ($calendar['id']).'&attendance_id='.$attendance_id.'">'.
                             Display::return_icon('delete.png', get_lang('Delete'), ['style' => 'vertical-align:middle'], ICON_SIZE_SMALL).'</a>';
                         echo '</div>';
                     }

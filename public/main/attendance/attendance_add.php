@@ -1,12 +1,11 @@
 <?php
+
 /* For licensing terms, see /license.txt */
 
 /**
  * View (MVC patter) for adding a attendance.
  *
  * @author Christian Fasanando <christian1827@gmail.com>
- *
- * @package chamilo.attendance
  */
 
 // protect a course script
@@ -40,7 +39,7 @@ $form->addHtmlEditor(
 );
 
 // Advanced Parameters
-if ((api_get_session_id() != 0 && Gradebook::is_active()) || api_get_session_id() == 0) {
+if ((0 != api_get_session_id() && Gradebook::is_active()) || 0 == api_get_session_id()) {
     $form->addButtonAdvancedSettings('id_qualify');
 
     $form->addElement('html', '<div id="id_qualify_options" style="display:none">');

@@ -1,10 +1,6 @@
 {% extends "@ChamiloTheme/Layout/layout_one_col.html.twig" %}
 
 {% block content %}
-
-  <form method="post"
-        action=""
-  >
     <div class="box-body">
       {{ form_start(form) }}
 
@@ -13,12 +9,6 @@
       {{ form_row(form.title) }}
       {{ form_row(form.content) }}
 
-      {#<ul id="rights" class="tags"#}
-      {#data-prototype="{{ form_widget(form.rights.vars.prototype)|e }}">#}
-      {#</ul>#}
-{#      --commented already#}
-
       {{ form_end(form) }}
     </div>
-  </form>
 {% endblock %}

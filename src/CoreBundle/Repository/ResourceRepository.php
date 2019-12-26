@@ -177,12 +177,12 @@ class ResourceRepository extends BaseEntityRepository
      *
      * @return ResourceInterface
      */
-    public function find($id, $lockMode = null, $lockVersion = null): ?ResourceInterface
+    public function find($id, $lockMode = null, $lockVersion = null)
     {
         return $this->getRepository()->find($id);
     }
 
-    public function findOneBy(array $criteria, array $orderBy = null): ?ResourceInterface
+    public function findOneBy(array $criteria, array $orderBy = null)
     {
         return $this->getRepository()->findOneBy($criteria, $orderBy);
     }
@@ -274,15 +274,8 @@ class ResourceRepository extends BaseEntityRepository
         $this->addResourceNodeToCourse($node, $visibility, $course, $session, $group);
     }
 
-    /**
-     * @param $visibility
-     * @param $course
-     * @param $session
-     * @param $group
-     */
-    public function addResourceNodeToCourse(ResourceNode $resourceNode, $visibility, $course, $session, $group): void
+    public function addResourceNodeToCourse(ResourceNode $resourceNode, int $visibility, Course $course, Session $session = null, CGroupInfo $group = null, User $toUser = null): void
     {
-        $visibility = (int) $visibility;
         if (empty($visibility)) {
             $visibility = ResourceLink::VISIBILITY_PUBLISHED;
         }
@@ -292,7 +285,7 @@ class ResourceRepository extends BaseEntityRepository
             ->setCourse($course)
             ->setSession($session)
             ->setGroup($group)
-            //->setUser($toUser)
+            ->setUser($toUser)
             ->setResourceNode($resourceNode)
             ->setVisibility($visibility)
         ;
@@ -740,7 +733,7 @@ class ResourceRepository extends BaseEntityRepository
         $this->setLinkVisibility($resource, ResourceLink::VISIBILITY_PENDING);
     }
 
-    public function createNodeForResource(ResourceInterface $resource, User $creator, ResourceNode $parent = null, UploadedFile $file = null): ResourceNode
+    public function createNodeForResource(ResourceInterface $resource, User $creator, ResourceNode $parentNode = null, UploadedFile $file = null): ResourceNode
     {
         $em = $this->getEntityManager();
 
@@ -763,8 +756,8 @@ class ResourceRepository extends BaseEntityRepository
             ->setResourceType($resourceType)
         ;
 
-        if (null !== $parent) {
-            $resourceNode->setParent($parent);
+        if (null !== $parentNode) {
+            $resourceNode->setParent($parentNode);
         }
 
         $resource->setResourceNode($resourceNode);

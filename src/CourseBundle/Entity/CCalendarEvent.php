@@ -4,6 +4,8 @@
 
 namespace Chamilo\CourseBundle\Entity;
 
+use Chamilo\CoreBundle\Entity\Resource\AbstractResource;
+use Chamilo\CoreBundle\Entity\Resource\ResourceInterface;
 use Chamilo\CoreBundle\Entity\Room;
 use Doctrine\ORM\Mapping as ORM;
 
@@ -19,7 +21,7 @@ use Doctrine\ORM\Mapping as ORM;
  * )
  * @ORM\Entity
  */
-class CCalendarEvent
+class CCalendarEvent extends AbstractResource implements ResourceInterface
 {
     /**
      * @var int
@@ -114,6 +116,15 @@ class CCalendarEvent
      * @ORM\JoinColumn(name="room_id", referencedColumnName="id")
      */
     protected $room;
+
+    public function __construct()
+    {
+    }
+
+    public function __toString(): string
+    {
+        return $this->getTitle();
+    }
 
     /**
      * Set title.
@@ -409,5 +420,18 @@ class CCalendarEvent
         $this->iid = $iid;
 
         return $this;
+    }
+
+    /**
+     * Resource identifier.
+     */
+    public function getResourceIdentifier(): int
+    {
+        return $this->getIid();
+    }
+
+    public function getResourceName(): string
+    {
+        return $this->getTitle();
     }
 }

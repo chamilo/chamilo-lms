@@ -70,6 +70,10 @@ services:
         arguments:
             $className: 'Chamilo\CourseBundle\Entity\CAnnouncement'
 
+    Chamilo\CourseBundle\Repository\CCalendarEventRepository:
+        arguments:
+            $className: 'Chamilo\CourseBundle\Entity\CCalendarEvent'
+
     Chamilo\CourseBundle\Repository\CDocumentRepository:
         arguments:
             $className: 'Chamilo\CourseBundle\Entity\CDocument'

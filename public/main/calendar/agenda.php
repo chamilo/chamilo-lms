@@ -1,9 +1,6 @@
 <?php
-/* For licensing terms, see /license.txt */
 
-/**
- * @package chamilo.calendar
- */
+/* For licensing terms, see /license.txt */
 
 // use anonymous mode when accessing this course tool
 $use_anonymous = true;
@@ -34,7 +31,6 @@ $logInfo = [
     'tool_id' => 0,
     'tool_id_detail' => 0,
     'action' => $action,
-    'info' => '',
 ];
 Event::registerLog($logInfo);
 
@@ -71,7 +67,7 @@ function add_image_form() {
 	}
 	var elem1 = document.createElement("div");
 	elem1.setAttribute("id","filepath_"+counter_image);
-	
+
 	filepaths.appendChild(elem1);
 	id_elem1 = "filepath_"+counter_image;
 	id_elem1 = "\'"+id_elem1+"\'";

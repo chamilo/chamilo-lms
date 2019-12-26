@@ -57,7 +57,7 @@ class PersonalAgenda
      *
      * @ORM\Column(name="enddate", type="datetime", nullable=true)
      */
-    protected $enddate;
+    protected $endDate;
 
     /**
      * @var int
@@ -179,25 +179,23 @@ class PersonalAgenda
     /**
      * Set enddate.
      *
-     * @param \DateTime $enddate
+     * @param \DateTime $value
      *
      * @return PersonalAgenda
      */
-    public function setEnddate($enddate)
+    public function setEndDate($value)
     {
-        $this->enddate = $enddate;
+        $this->endDate = $value;
 
         return $this;
     }
 
     /**
-     * Get enddate.
-     *
      * @return \DateTime
      */
-    public function getEnddate()
+    public function getEndDate()
     {
-        return $this->enddate;
+        return $this->endDate;
     }
 
     /**

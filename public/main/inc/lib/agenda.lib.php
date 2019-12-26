@@ -2,6 +2,12 @@
 
 /* For licensing terms, see /license.txt */
 
+use Chamilo\CoreBundle\Entity\PersonalAgenda;
+use Chamilo\CoreBundle\Entity\Resource\ResourceLink;
+use Chamilo\CoreBundle\Entity\SysCalendar;
+use Chamilo\CoreBundle\Framework\Container;
+use Chamilo\CourseBundle\Entity\CCalendarEvent;
+
 /**
  * Class Agenda.
  *
@@ -245,159 +251,189 @@ class Agenda
         $eventComment = null,
         $color = ''
     ) {
-        $start = api_get_utc_datetime($start);
-        $end = api_get_utc_datetime($end);
+        $start = api_get_utc_datetime($start, false, true);
+        $end = api_get_utc_datetime($end, false, true);
         $allDay = isset($allDay) && $allDay === 'true' ? 1 : 0;
         $id = null;
-
+        //$user = api_get_user_entity(api_get_user_id());
+        $em = Database::getManager();
         switch ($this->type) {
             case 'personal':
-                $attributes = [
-                    'user' => api_get_user_id(),
-                    'title' => $title,
-                    'text' => $content,
-                    'date' => $start,
-                    'enddate' => $end,
-                    'all_day' => $allDay,
-                    'color' => $color,
-                ];
-
-                $id = Database::insert(
-                    $this->tbl_personal_agenda,
-                    $attributes
-                );
+                $event = new PersonalAgenda();
+                $event
+                    ->setTitle($title)
+                    ->setText($content)
+                    ->setDate($start)
+                    ->setEndDate($end)
+                    ->setAllDay($allDay)
+                    ->setColor($color)
+                    ->setUser(api_get_user_id())
+                ;
+                $em->persist($event);
+                $em->flush();
+                $id = $event->getId();
                 break;
             case 'course':
-                $attributes = [
-                    'title' => $title,
-                    'content' => $content,
-                    'start_date' => $start,
-                    'end_date' => $end,
-                    'all_day' => $allDay,
-                    'session_id' => $this->getSessionId(),
-                    'c_id' => $this->course['real_id'],
-                    'comment' => $eventComment,
-                    'color' => $color,
-                ];
-
-                if (!empty($parentEventId)) {
-                    $attributes['parent_event_id'] = $parentEventId;
-                }
-
                 $senderId = $this->getSenderId();
                 $sessionId = $this->getSessionId();
+                $userEntity = api_get_user_entity(api_get_user_id());
+                $sessionEntity = api_get_session_entity($sessionId);
+                $courseEntity = api_get_course_entity($this->course['real_id']);
+                $groupEntity = api_get_group_entity(api_get_group_id());
 
-                // Simple course event.
-                $id = Database::insert($this->tbl_course_agenda, $attributes);
+                $event = new CCalendarEvent();
+                $event
+                    ->setTitle($title)
+                    ->setContent($content)
+                    ->setStartDate($start)
+                    ->setEndDate($end)
+                    ->setAllDay($allDay)
+                    ->setColor($color)
+                    ->setComment($eventComment)
+                    ->setCId($this->course['real_id'])
+                    ->setSessionId($this->getSessionId())
+                ;
+
+                if (!empty($parentEventId)) {
+                    $event->setParentEventId($parentEventId);
+                }
+
+                $repo = Container::getCalendarEventRepository();
+
+                // Node added.
+                $resourceNode = $repo->createNodeForResource(
+                    $event,
+                    $userEntity,
+                    $courseEntity->getResourceNode()
+                );
+
+                if (!empty($usersToSend)) {
+                    $sendTo = $this->parseSendToArray($usersToSend);
+                    if ($sendTo['everyone']) {
+                        $repo->addResourceNodeToCourse(
+                            $resourceNode,
+                            ResourceLink::VISIBILITY_PUBLISHED,
+                            $courseEntity,
+                            $sessionEntity,
+                            $groupEntity
+                        );
+
+                        /*api_item_property_update(
+                            $this->course,
+                            TOOL_CALENDAR_EVENT,
+                            $id,
+                            'AgendaAdded',
+                            $senderId,
+                            $groupInfo,
+                            '',
+                            $start,
+                            $end,
+                            $sessionId
+                        );
+                        api_item_property_update(
+                            $this->course,
+                            TOOL_CALENDAR_EVENT,
+                            $id,
+                            'visible',
+                            $senderId,
+                            $groupInfo,
+                            '',
+                            $start,
+                            $end,
+                            $sessionId
+                        );*/
+                    } else {
+                        // Storing the selected groups
+                        if (!empty($sendTo['groups'])) {
+                            foreach ($sendTo['groups'] as $group) {
+                                $groupInfo = null;
+                                if ($group) {
+                                    $groupInfo = api_get_group_entity($group);
+                                }
+
+                                $repo->addResourceNodeToCourse(
+                                    $resourceNode,
+                                    ResourceLink::VISIBILITY_PUBLISHED,
+                                    $courseEntity,
+                                    $sessionEntity,
+                                    $groupInfo
+                                );
+
+                                /*api_item_property_update(
+                                    $this->course,
+                                    TOOL_CALENDAR_EVENT,
+                                    $id,
+                                    'AgendaAdded',
+                                    $senderId,
+                                    $groupInfoItem,
+                                    0,
+                                    $start,
+                                    $end,
+                                    $sessionId
+                                );
+
+                                api_item_property_update(
+                                    $this->course,
+                                    TOOL_CALENDAR_EVENT,
+                                    $id,
+                                    'visible',
+                                    $senderId,
+                                    $groupInfoItem,
+                                    0,
+                                    $start,
+                                    $end,
+                                    $sessionId
+                                );*/
+                            }
+                        }
+
+                        // storing the selected users
+                        if (!empty($sendTo['users'])) {
+                            foreach ($sendTo['users'] as $userId) {
+                                $repo->addResourceNodeToCourse(
+                                    $resourceNode,
+                                    ResourceLink::VISIBILITY_PUBLISHED,
+                                    $courseEntity,
+                                    $sessionEntity,
+                                    $groupEntity,
+                                        api_get_user_entity($userId)
+                                );
+                                /*api_item_property_update(
+                                    $this->course,
+                                    TOOL_CALENDAR_EVENT,
+                                    $id,
+                                    'AgendaAdded',
+                                    $senderId,
+                                    $groupInfo,
+                                    $userId,
+                                    $start,
+                                    $end,
+                                    $sessionId
+                                );
+
+                                api_item_property_update(
+                                    $this->course,
+                                    TOOL_CALENDAR_EVENT,
+                                    $id,
+                                    'visible',
+                                    $senderId,
+                                    $groupInfo,
+                                    $userId,
+                                    $start,
+                                    $end,
+                                    $sessionId
+                                );*/
+                            }
+                        }
+                    }
+                }
+
+                $em->flush();
+                $id = $event->getId();
 
                 if ($id) {
                     $sql = "UPDATE ".$this->tbl_course_agenda." SET id = iid WHERE iid = $id";
                     Database::query($sql);
-
-                    $groupId = api_get_group_id();
-                    $groupInfo = [];
-                    if ($groupId) {
-                        $groupInfo = GroupManager::get_group_properties(
-                            $groupId
-                        );
-                    }
-
-                    if (!empty($usersToSend)) {
-                        $sendTo = $this->parseSendToArray($usersToSend);
-                        if ($sendTo['everyone']) {
-                            api_item_property_update(
-                                $this->course,
-                                TOOL_CALENDAR_EVENT,
-                                $id,
-                                'AgendaAdded',
-                                $senderId,
-                                $groupInfo,
-                                '',
-                                $start,
-                                $end,
-                                $sessionId
-                            );
-                            api_item_property_update(
-                                $this->course,
-                                TOOL_CALENDAR_EVENT,
-                                $id,
-                                'visible',
-                                $senderId,
-                                $groupInfo,
-                                '',
-                                $start,
-                                $end,
-                                $sessionId
-                            );
-                        } else {
-                            // Storing the selected groups
-                            if (!empty($sendTo['groups'])) {
-                                foreach ($sendTo['groups'] as $group) {
-                                    $groupInfoItem = [];
-                                    if ($group) {
-                                        $groupInfoItem = GroupManager::get_group_properties($group);
-                                    }
-
-                                    api_item_property_update(
-                                        $this->course,
-                                        TOOL_CALENDAR_EVENT,
-                                        $id,
-                                        'AgendaAdded',
-                                        $senderId,
-                                        $groupInfoItem,
-                                        0,
-                                        $start,
-                                        $end,
-                                        $sessionId
-                                    );
-
-                                    api_item_property_update(
-                                        $this->course,
-                                        TOOL_CALENDAR_EVENT,
-                                        $id,
-                                        'visible',
-                                        $senderId,
-                                        $groupInfoItem,
-                                        0,
-                                        $start,
-                                        $end,
-                                        $sessionId
-                                    );
-                                }
-                            }
-
-                            // storing the selected users
-                            if (!empty($sendTo['users'])) {
-                                foreach ($sendTo['users'] as $userId) {
-                                    api_item_property_update(
-                                        $this->course,
-                                        TOOL_CALENDAR_EVENT,
-                                        $id,
-                                        'AgendaAdded',
-                                        $senderId,
-                                        $groupInfo,
-                                        $userId,
-                                        $start,
-                                        $end,
-                                        $sessionId
-                                    );
-
-                                    api_item_property_update(
-                                        $this->course,
-                                        TOOL_CALENDAR_EVENT,
-                                        $id,
-                                        'visible',
-                                        $senderId,
-                                        $groupInfo,
-                                        $userId,
-                                        $start,
-                                        $end,
-                                        $sessionId
-                                    );
-                                }
-                            }
-                        }
-                    }
 
                     // Add announcement.
                     if ($addAsAnnouncement) {
@@ -424,19 +460,18 @@ class Agenda
                 break;
             case 'admin':
                 if (api_is_platform_admin()) {
-                    $attributes = [
-                        'title' => $title,
-                        'content' => $content,
-                        'start_date' => $start,
-                        'end_date' => $end,
-                        'all_day' => $allDay,
-                        'access_url_id' => api_get_current_access_url_id(),
-                    ];
-
-                    $id = Database::insert(
-                        $this->tbl_global_agenda,
-                        $attributes
-                    );
+                    $event = new SysCalendar();
+                    $event
+                        ->setTitle($title)
+                        ->setContent($content)
+                        ->setStartDate($start)
+                        ->setEndDate($end)
+                        ->setAllDay($allDay)
+                        ->setAccessUrlId(api_get_current_access_url_id())
+                    ;
+                    $em->persist($event);
+                    $em->flush();
+                    $id = $event->getId();
                 }
                 break;
         }

@@ -146,9 +146,8 @@ if (!empty($groupId)) {
     ];
 }
 
-if ('learnpath' == $origin) {
-    //Display::display_reduced_header();
-    Display::display_no_header();
+if ('learnpath' === $origin) {
+    Display::display_reduced_header();
 } else {
     // The last element of the breadcrumb navigation is already set in interbreadcrumb, so give empty string.
     Display::display_header();
@@ -661,6 +660,4 @@ if (is_array($threads)) {
 echo '</div>';
 echo isset($table_list) ? $table_list : '';
 
-if ('learnpath' != $origin) {
-    Display::display_footer();
-}
+Display::display_footer();

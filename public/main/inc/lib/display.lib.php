@@ -1,4 +1,5 @@
 <?php
+
 /* For licensing terms, see /license.txt */
 
 use Chamilo\CoreBundle\Component\Utils\ChamiloApi;
@@ -18,14 +19,13 @@ use Symfony\Component\HttpFoundation\Response;
  * All public functions static public functions inside a class called Display,
  * so you use them like this: e.g.
  * Display::return_message($message)
- *
- * @package chamilo.library
  */
 class Display
 {
     /** @var Template */
     public static $global_template;
     public static $preview_style = null;
+    public static $legacyTemplate;
 
     /**
      * Constructor.
@@ -70,51 +70,6 @@ class Display
         ob_start();
 
         return true;
-
-        $origin = api_get_origin();
-        $showHeader = true;
-        if (isset($origin) && $origin == 'learnpath') {
-            $showHeader = false;
-        }
-
-        /* USER_IN_ANON_SURVEY is defined in fillsurvey.php when survey is marked as anonymous survey */
-        $userInAnonSurvey = defined('USER_IN_ANON_SURVEY') && USER_IN_ANON_SURVEY;
-
-        self::$global_template = new Template($tool_name, $showHeader, $showHeader, false, $userInAnonSurvey);
-        self::$global_template->assign('user_in_anon_survey', $userInAnonSurvey);
-
-        // Fixing tools with any help it takes xxx part of main/xxx/index.php
-        if (empty($help)) {
-            $currentURL = api_get_self();
-            preg_match('/main\/([^*\/]+)/', $currentURL, $matches);
-            $toolList = self::toolList();
-            if (!empty($matches)) {
-                foreach ($matches as $match) {
-                    if (in_array($match, $toolList)) {
-                        $help = explode('_', $match);
-                        $help = array_map('ucfirst', $help);
-                        $help = implode('', $help);
-                        break;
-                    }
-                }
-            }
-        }
-
-        self::$global_template->setHelp($help);
-
-        if (!empty(self::$preview_style)) {
-            self::$global_template->preview_theme = self::$preview_style;
-            self::$global_template->set_system_parameters();
-            self::$global_template->setCssFiles();
-            self::$global_template->set_js_files();
-            self::$global_template->setCssCustomFiles();
-        }
-
-        if (!empty($page_header)) {
-            self::$global_template->assign('header', $page_header);
-        }
-
-        echo self::$global_template->show_header_template();
     }
 
     /**
@@ -122,6 +77,10 @@ class Display
      */
     public static function display_reduced_header()
     {
+        ob_start();
+        self::$legacyTemplate = '@ChamiloTheme/Layout/no_layout.html.twig';
+        return true;
+
         global $show_learnpath, $tool_name;
         self::$global_template = new Template(
             $tool_name,
@@ -129,7 +88,6 @@ class Display
             false,
             $show_learnpath
         );
-        echo self::$global_template->show_header_template();
     }
 
     /**
@@ -138,7 +96,6 @@ class Display
     public static function display_no_header()
     {
         global $tool_name, $show_learnpath;
-        $disable_js_and_css_files = true;
         self::$global_template = new Template(
             $tool_name,
             false,
@@ -157,6 +114,9 @@ class Display
             ob_end_clean();
         }
         $tpl = '@ChamiloTheme/Layout/layout_one_col.html.twig';
+        if (!empty(self::$legacyTemplate)) {
+            $tpl = self::$legacyTemplate;
+        }
         $response = new Response();
         $params['content'] = $contents;
         global $interbreadcrumb, $htmlHeadXtra;

@@ -127,34 +127,6 @@ class Template
     }
 
     /**
-     * Return the item's url key:.
-     *
-     *      c_id=xx&id=xx
-     *
-     * @param object $item
-     *
-     * @return string
-     */
-    public static function key($item)
-    {
-        $id = isset($item->id) ? $item->id : null;
-        $c_id = isset($item->c_id) ? $item->c_id : null;
-        $result = '';
-        if ($c_id) {
-            $result = "c_id=$c_id";
-        }
-        if ($id) {
-            if ($result) {
-                $result .= "&amp;id=$id";
-            } else {
-                $result .= "&amp;id=$id";
-            }
-        }
-
-        return $result;
-    }
-
-    /**
      * @param string $helpInput
      */
     public function setHelp($helpInput = null)
@@ -240,6 +212,10 @@ class Template
     {
         $this->loadLegacyParams();
         $template = '@ChamiloTheme/Layout/layout_one_col.html.twig';
+        $origin = api_get_origin();
+        if ('learnpath' === $origin) {
+            $template = '@ChamiloTheme/Layout/no_layout.html.twig';
+        }
         $this->returnResponse($this->params, $template);
     }
 

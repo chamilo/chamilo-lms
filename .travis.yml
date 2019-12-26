@@ -105,7 +105,22 @@ script:
   - ../../vendor/behat/behat/bin/behat features/createUserViaCSV.feature -v
   - ../../vendor/behat/behat/bin/behat features/extraFieldUser.feature -v
   - ../../vendor/behat/behat/bin/behat features/profile.feature -v
-
+  - ../../vendor/behat/behat/bin/behat features/promotion.feature -v
+  - ../../vendor/behat/behat/bin/behat features/registration.feature -v
+  - ../../vendor/behat/behat/bin/behat features/sessionAccess.feature -v
+  - ../../vendor/behat/behat/bin/behat features/sessionManagement.feature -v
+  - ../../vendor/behat/behat/bin/behat features/socialGroup.feature -v
+  - ../../vendor/behat/behat/bin/behat features/systemAnnouncements.feature -v
+  - ../../vendor/behat/behat/bin/behat features/ticket.feature -v
+  - ../../vendor/behat/behat/bin/behat features/toolAgenda.feature -v
+  - ../../vendor/behat/behat/bin/behat features/toolAnnouncement.feature -v
+  - ../../vendor/behat/behat/bin/behat features/toolDocument.feature -v
+  - ../../vendor/behat/behat/bin/behat features/toolExercise.feature -v
+  - ../../vendor/behat/behat/bin/behat features/toolForum.feature -v
+  - ../../vendor/behat/behat/bin/behat features/toolGroup.feature -v
+  - ../../vendor/behat/behat/bin/behat features/toolLink.feature -v
+  - ../../vendor/behat/behat/bin/behat features/toolLp.feature -v
+  - ../../vendor/behat/behat/bin/behat features/toolWork.feature -v
 after_failure:
   - sudo cat /var/log/apache2/error.log
 

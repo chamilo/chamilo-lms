@@ -1,4 +1,5 @@
 <?php
+
 /* For licensing terms, see /license.txt */
 
 /**
@@ -6,7 +7,7 @@
  */
 $type = isset($_REQUEST['type']) && in_array($_REQUEST['type'], ['personal', 'course', 'admin']) ? $_REQUEST['type'] : 'personal';
 
-if ($type == 'personal') {
+if ($type === 'personal') {
     $cidReset = true; // fixes #5162
 }
 
@@ -15,16 +16,13 @@ require_once __DIR__.'/../global.inc.php';
 $action = isset($_REQUEST['a']) ? $_REQUEST['a'] : null;
 $group_id = api_get_group_id();
 
-if ($type == 'course') {
+if ($type === 'course') {
     api_protect_course_script(true);
 }
 
 $logInfo = [
     'tool' => TOOL_CALENDAR_EVENT,
-    'tool_id' => 0,
-    'tool_id_detail' => 0,
     'action' => $action,
-    'info' => '',
 ];
 Event::registerLog($logInfo);
 
@@ -37,11 +35,11 @@ switch ($action) {
         if (!$agenda->getIsAllowedToEdit()) {
             break;
         }
-        $add_as_announcement = isset($_REQUEST['add_as_annonuncement']) ? $_REQUEST['add_as_annonuncement'] : null;
-        $title = isset($_REQUEST['title']) ? $_REQUEST['title'] : null;
-        $content = isset($_REQUEST['content']) ? $_REQUEST['content'] : null;
-        $comment = isset($_REQUEST['comment']) ? $_REQUEST['comment'] : null;
-        $userToSend = isset($_REQUEST['users_to_send']) ? $_REQUEST['users_to_send'] : [];
+        $add_as_announcement = $_REQUEST['add_as_annonuncement'] ?? null;
+        $title = $_REQUEST['title'] ?? null;
+        $content = $_REQUEST['content'] ?? null;
+        $comment = $_REQUEST['comment'] ?? null;
+        $userToSend = $_REQUEST['users_to_send'] ?? [];
 
         echo $agenda->addEvent(
             $_REQUEST['start'],

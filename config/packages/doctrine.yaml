@@ -22,12 +22,6 @@ doctrine:
         mappings:
             SonataUserBundle: ~
             FOSUserBundle: ~
-#            App:
-#                is_bundle: false
-#                type: annotation
-#                dir: '%kernel.project_dir%/src/Entity'
-#                prefix: 'App\Entity'
-#                alias: App
             gedmo_translatable:
                 type: annotation
                 prefix: ChamiloCore\Entity\Translation
@@ -53,3 +47,7 @@ doctrine:
                 dir: "%kernel.root_dir%/../vendor/gedmo/doctrine-extensions/lib/Gedmo/Tree/Entity"
                 alias: GedmoTree # (optional) it will default to the name set for the mapping
                 is_bundle: false
+        dql:
+            string_functions:
+                MONTH: DoctrineExtensions\Query\Mysql\Month
+                YEAR: DoctrineExtensions\Query\Mysql\Year

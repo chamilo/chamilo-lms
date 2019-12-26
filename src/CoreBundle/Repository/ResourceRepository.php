@@ -424,9 +424,9 @@ class ResourceRepository extends BaseEntityRepository
         $em = $this->getEntityManager();
 
         if (!empty($userList)) {
+            $userRepo = $em->getRepository('ChamiloUserBundle:User');
             foreach ($userList as $userId) {
-                $toUser = $em->getRepository('ChamiloUserBundle:User')->find($userId);
-
+                $toUser = $userRepo->find($userId);
                 $resourceLink = $this->addResourceNodeToUser($resourceNode, $toUser);
                 $em->persist($resourceLink);
             }
@@ -482,7 +482,6 @@ class ResourceRepository extends BaseEntityRepository
             $checker->isGranted('ROLE_CURRENT_COURSE_TEACHER');
 
         // Do not show deleted resources
-
         $qb
             ->andWhere('links.visibility != :visibilityDeleted')
             ->setParameter('visibilityDeleted', ResourceLink::VISIBILITY_DELETED)
@@ -519,7 +518,54 @@ class ResourceRepository extends BaseEntityRepository
             $qb->andWhere('links.group IS NULL');
         }
 
-        ///var_dump($qb->getQuery()->getSQL(), $type->getId(), $parentNode->getId());exit;
+        return $qb;
+    }
+
+    public function getResourcesByCourseOnly(Course $course, ResourceNode $parentNode = null)
+    {
+        $repo = $this->getRepository();
+        $className = $repo->getClassName();
+        $checker = $this->getAuthorizationChecker();
+        $type = $this->getResourceType();
+
+        $qb = $repo->getEntityManager()->createQueryBuilder()
+            ->select('resource')
+            ->from($className, 'resource')
+            ->innerJoin(
+                ResourceNode::class,
+                'node',
+                Join::WITH,
+                'resource.resourceNode = node.id'
+            )
+            ->innerJoin('node.resourceLinks', 'links')
+            ->where('node.resourceType = :type')
+            ->setParameter('type', $type);
+        $qb
+            ->andWhere('links.course = :course')
+            ->setParameter('course', $course)
+        ;
+
+        $isAdmin = $checker->isGranted('ROLE_ADMIN') ||
+            $checker->isGranted('ROLE_CURRENT_COURSE_TEACHER');
+
+        // Do not show deleted resources
+        $qb
+            ->andWhere('links.visibility != :visibilityDeleted')
+            ->setParameter('visibilityDeleted', ResourceLink::VISIBILITY_DELETED)
+        ;
+
+        if (false === $isAdmin) {
+            $qb
+                ->andWhere('links.visibility = :visibility')
+                ->setParameter('visibility', ResourceLink::VISIBILITY_PUBLISHED)
+            ;
+            // @todo Add start/end visibility restrictrions
+        }
+
+        if (null !== $parentNode) {
+            $qb->andWhere('node.parent = :parentNode');
+            $qb->setParameter('parentNode', $parentNode);
+        }
 
         return $qb;
     }

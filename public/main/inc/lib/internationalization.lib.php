@@ -288,7 +288,12 @@ function api_get_utc_datetime(
     if (is_numeric($time)) {
         $time = (int) $time;
 
-        return gmdate('Y-m-d H:i:s', $time);
+        $time = gmdate('Y-m-d H:i:s', $time);
+        if ($returnObj) {
+            return new DateTime($time, new DateTimeZone('UTC'));
+        }
+
+        return $time;
     }
     try {
         $fromTimezone = api_get_timezone();

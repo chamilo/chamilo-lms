@@ -291,7 +291,7 @@ class CCalendarEvent extends AbstractResource implements ResourceInterface
      */
     public function getAllDay()
     {
-        return $this->allDay;
+        return (int) $this->allDay;
     }
 
     /**

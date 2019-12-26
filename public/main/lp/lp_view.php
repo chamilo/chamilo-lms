@@ -17,11 +17,6 @@ use ChamiloSession as Session;
  */
 $use_anonymous = true;
 
-if ($lp_controller_touched != 1) {
-    header('Location: lp_controller.php?action=view&item_id='.intval($_REQUEST['item_id']));
-    exit;
-}
-
 require_once __DIR__.'/../inc/global.inc.php';
 
 api_protect_course_script();
@@ -32,6 +27,9 @@ if (isset($_REQUEST['origin']) && $_REQUEST['origin'] === 'learnpath') {
 
 // To prevent the template class
 $lp_id = !empty($_GET['lp_id']) ? (int) $_GET['lp_id'] : 0;
+if (empty($lp_id)) {
+    api_not_allowed();
+}
 $sessionId = api_get_session_id();
 $course_code = api_get_course_id();
 $course_id = api_get_course_int_id();

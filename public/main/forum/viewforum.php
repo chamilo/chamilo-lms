@@ -95,15 +95,15 @@ if (!empty($groupId)) {
 }
 
 /* Header and Breadcrumbs */
-$my_search = isset($_GET['search']) ? $_GET['search'] : '';
-$my_action = isset($_GET['action']) ? $_GET['action'] : '';
+$my_search = $_GET['search'] ?? '';
+$my_action = $_GET['action'] ?? '';
 
 $logInfo = [
     'tool' => TOOL_FORUM,
     'tool_id' => $my_forum,
     'tool_id_detail' => 0,
     'action' => !empty($my_action) ? $my_action : 'list-threads',
-    'action_details' => isset($_GET['content']) ? $_GET['content'] : '',
+    'action_details' => $_GET['content'] ?? '',
 ];
 Event::registerLog($logInfo);
 
@@ -147,7 +147,8 @@ if (!empty($groupId)) {
 }
 
 if ('learnpath' == $origin) {
-    Display::display_reduced_header();
+    //Display::display_reduced_header();
+    Display::display_no_header();
 } else {
     // The last element of the breadcrumb navigation is already set in interbreadcrumb, so give empty string.
     Display::display_header();

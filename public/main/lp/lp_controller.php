@@ -47,8 +47,10 @@ $(window).on("load", function () {
     setFocus();
 });
 </script>';
-$ajax_url = api_get_path(WEB_AJAX_PATH).'lp.ajax.php?'.api_get_cidreq();
-$listUrl = api_get_self().'?action=list&'.api_get_cidreq();
+$cidReq = api_get_cidreq();
+
+$ajax_url = api_get_path(WEB_AJAX_PATH).'lp.ajax.php?'.$cidReq;
+$listUrl = api_get_self().'?action=list&'.$cidReq;
 $htmlHeadXtra[] = '
 <script>
     /*
@@ -277,8 +279,6 @@ $htmlHeadXtra[] = '
                             "title" : title
                         };
 
-                        console.log(params);
-
                         $.ajax({
                             type: "GET",
                             url: "'.$ajax_url.'",
@@ -309,24 +309,14 @@ if ($refresh == 1) {
     $myrefresh = 1;
 }
 
-if ($debug > 0) {
-    error_log(' $refresh: '.$refresh);
-    error_log(' $myrefresh: '.$myrefresh);
-}
-
 $lp_controller_touched = 1;
 $lp_found = false;
-$lpObject = Session::read('lpobject');
-if (!empty($lpObject)) {
-    if ($debug) {
-        error_log(' SESSION[lpobject] is defined');
-    }
+$oLP = Session::read('oLP');
+if (!empty($oLP)) {
+    /*var_dump(get_class($lpObject));
     /** @var learnpath $oLP */
-    $oLP = UnserializeApi::unserialize('lp', $lpObject);
+    //$oLP = UnserializeApi::unserialize('lp', $lpObject);
     if (isset($oLP) && is_object($oLP)) {
-        if ($debug) {
-            error_log(' oLP is object');
-        }
         if ($myrefresh == 1 ||
             empty($oLP->cc) ||
             $oLP->cc != api_get_course_id() ||
@@ -359,7 +349,7 @@ if ($debug) {
 
 $course_id = api_get_course_int_id();
 
-if (!$lp_found || (!empty($_REQUEST['lp_id']) && $_SESSION['oLP']->get_id() != $_REQUEST['lp_id'])) {
+if (!$lp_found || (!empty($_REQUEST['lp_id']) && $oLP->get_id() != $_REQUEST['lp_id'])) {
     if ($debug > 0) {
         error_log(' oLP is not object, has changed or refresh been asked, getting new');
     }
@@ -377,22 +367,13 @@ if (!$lp_found || (!empty($_REQUEST['lp_id']) && $_SESSION['oLP']->get_id() != $
         $lp_table = Database::get_course_table(TABLE_LP_MAIN);
         if (!empty($lp_id)) {
             $sel = "SELECT iid, lp_type FROM $lp_table WHERE c_id = $course_id AND id = $lp_id";
-            if ($debug > 0) {
-                error_log(' querying '.$sel);
-            }
             $res = Database::query($sel);
             if (Database::num_rows($res)) {
                 $row = Database::fetch_array($res);
                 $lpIid = $row['iid'];
                 $type = $row['lp_type'];
-                if ($debug > 0) {
-                    error_log('Found row type '.$type);
-                    error_log('Calling constructor: '.api_get_course_id().' - '.$lp_id.' - '.api_get_user_id());
-                }
                 $logInfo = [
                     'tool' => TOOL_LEARNPATH,
-                    'tool_id' => 0,
-                    'tool_id_detail' => 0,
                     'action' => 'lp_load',
                 ];
                 Event::registerLog($logInfo);
@@ -424,30 +405,19 @@ if (!$lp_found || (!empty($_REQUEST['lp_id']) && $_SESSION['oLP']->get_id() != $
                         break;
                 }
             }
-        } else {
-            if ($debug > 0) {
-                error_log(' Request[lp_id] is not numeric');
-            }
-        }
-    } else {
-        if ($debug > 0) {
-            error_log(' Request[lp_id] and refresh_id were empty');
         }
     }
+
     if ($lp_found) {
         Session::write('oLP', $oLP);
     }
 }
 
-if ($debug > 0) {
-    error_log('Passed oLP creation check');
-}
-
 $is_allowed_to_edit = api_is_allowed_to_edit(false, true, false, false);
 
-if (isset($_SESSION['oLP'])) {
+if (!empty($oLP)) {
     // Reinitialises array used by javascript to update items in the TOC.
-    $_SESSION['oLP']->update_queue = [];
+    $oLP->update_queue = [];
 }
 
 $action = !empty($_REQUEST['action']) ? $_REQUEST['action'] : '';
@@ -458,8 +428,8 @@ if ($debug) {
 
 $eventLpId = $lp_id = !empty($_REQUEST['lp_id']) ? (int) $_REQUEST['lp_id'] : 0;
 if (empty($lp_id)) {
-    if (isset($_SESSION['oLP'])) {
-        $eventLpId = $_SESSION['oLP']->get_id();
+    if (!empty($oLP)) {
+        $eventLpId = $oLP->get_id();
     }
 }
 
@@ -572,7 +542,7 @@ switch ($action) {
                 // If a title was submitted:
 
                 // Updating the lp.modified_on
-                $_SESSION['oLP']->set_modified_on();
+                $oLP->set_modified_on();
 
                 if (isset($_SESSION['post_time']) && $_SESSION['post_time'] == $_POST['post_time']) {
                     // Check post_time to ensure ??? (counter-hacking measure?)
@@ -582,7 +552,7 @@ switch ($action) {
                     $directoryParentId = isset($_POST['directory_parent_id']) ? $_POST['directory_parent_id'] : 0;
                     $courseInfo = api_get_course_info();
                     if (empty($directoryParentId)) {
-                        $_SESSION['oLP']->generate_lp_folder($courseInfo);
+                        $oLP->generate_lp_folder($courseInfo);
                     }
 
                     $parent = isset($_POST['parent']) ? $_POST['parent'] : '';
@@ -598,7 +568,7 @@ switch ($action) {
                             $document_id = $_POST['path'];
                         } else {
                             if ($_POST['content_lp']) {
-                                $document_id = $_SESSION['oLP']->create_document(
+                                $document_id = $oLP->create_document(
                                     $_course,
                                     $_POST['content_lp'],
                                     $_POST['title'],
@@ -608,7 +578,7 @@ switch ($action) {
                             }
                         }
 
-                        $_SESSION['oLP']->add_item(
+                        $oLP->add_item(
                             $parent,
                             $previous,
                             $type,
@@ -621,7 +591,7 @@ switch ($action) {
                         if (isset($_POST['path']) && $_GET['edit'] != 'true') {
                             $document_id = $_POST['path'];
                         } else {
-                            $document_id = $_SESSION['oLP']->createReadOutText(
+                            $document_id = $oLP->createReadOutText(
                                 $_course,
                                 $_POST['content_lp'],
                                 $_POST['title'],
@@ -629,7 +599,7 @@ switch ($action) {
                             );
                         }
 
-                        $_SESSION['oLP']->add_item(
+                        $oLP->add_item(
                             $parent,
                             $previous,
                             TOOL_READOUT_TEXT,
@@ -652,7 +622,7 @@ switch ($action) {
                             $maxTimeAllowed
                         );
                     }
-                    $url = api_get_self().'?action=add_item&type=step&lp_id='.intval($_SESSION['oLP']->lp_id).'&'.api_get_cidreq();
+                    $url = api_get_self().'?action=add_item&type=step&lp_id='.$oLP->lp_id.'&'.$cidReq;
                     header('Location: '.$url);
                     exit;
                 }
@@ -684,7 +654,7 @@ switch ($action) {
                 if (isset($_GET['delete_file']) && $_GET['delete_file'] == 1) {
                     $lp_item_obj->remove_audio();
 
-                    $url = api_get_self().'?action=add_audio&lp_id='.intval($_SESSION['oLP']->lp_id).'&id='.$lp_item_obj->get_id().'&'.api_get_cidreq();
+                    $url = api_get_self().'?action=add_audio&lp_id='.intval($_SESSION['oLP']->lp_id).'&id='.$lp_item_obj->get_id().'&'.$cidReq;
                     header('Location: '.$url);
                     exit;
                 }
@@ -804,7 +774,7 @@ switch ($action) {
                     $accumulateScormTime = isset($_REQUEST['accumulate_scorm_time']) ? $_REQUEST['accumulate_scorm_time'] : 'true';
                     $_SESSION['oLP']->setAccumulateScormTime($accumulateScormTime);
 
-                    $url = api_get_self().'?action=add_item&type=step&lp_id='.intval($new_lp_id).'&'.api_get_cidreq();
+                    $url = api_get_self().'?action=add_item&type=step&lp_id='.intval($new_lp_id).'&'.$cidReq;
                     header("Location: $url&isStudentView=false");
                     exit;
                 }
@@ -847,7 +817,7 @@ switch ($action) {
             require 'lp_list.php';
         } else {
             Session::write('refresh', 1);
-            $url = api_get_self().'?action=add_item&type=step&lp_id='.intval($_SESSION['oLP']->lp_id).'&'.api_get_cidreq();
+            $url = api_get_self().'?action=add_item&type=step&lp_id='.intval($_SESSION['oLP']->lp_id).'&'.$cidReq;
             header('Location: '.$url);
             exit;
         }
@@ -891,7 +861,7 @@ switch ($action) {
                     $_SESSION['oLP']->edit_document($_course);
                 }
                 Display::addFlash(Display::return_message(get_lang('Update successful')));
-                $url = api_get_self().'?action=add_item&type=step&lp_id='.intval($_SESSION['oLP']->lp_id).'&'.api_get_cidreq();
+                $url = api_get_self().'?action=add_item&type=step&lp_id='.intval($_SESSION['oLP']->lp_id).'&'.$cidReq;
                 header('Location: '.$url);
                 exit;
             }
@@ -924,7 +894,7 @@ switch ($action) {
                 );
 
                 Display::addFlash(Display::return_message(get_lang('Update successful')));
-                $url = api_get_self().'?action=add_item&type=step&lp_id='.intval($_SESSION['oLP']->lp_id).'&'.api_get_cidreq();
+                $url = api_get_self().'?action=add_item&type=step&lp_id='.intval($_SESSION['oLP']->lp_id).'&'.$cidReq;
                 header('Location: '.$url);
                 exit;
             } else {
@@ -951,7 +921,7 @@ switch ($action) {
                     $post_title,
                     $_POST['description']
                 );
-                $url = api_get_self().'?action=add_item&type=step&lp_id='.intval($_SESSION['oLP']->lp_id).'&'.api_get_cidreq();
+                $url = api_get_self().'?action=add_item&type=step&lp_id='.intval($_SESSION['oLP']->lp_id).'&'.$cidReq;
                 header('Location: '.$url);
                 exit;
             }
@@ -1271,7 +1241,7 @@ switch ($action) {
                 }
             }
             Display::addFlash(Display::return_message(get_lang('Update successful')));
-            $url = api_get_self().'?action=add_item&type=step&lp_id='.intval($_SESSION['oLP']->lp_id).'&'.api_get_cidreq();
+            $url = api_get_self().'?action=add_item&type=step&lp_id='.intval($_SESSION['oLP']->lp_id).'&'.$cidReq;
             header('Location: '.$url);
             exit;
         }
@@ -1305,7 +1275,7 @@ switch ($action) {
             if (!empty($_REQUEST['id'])) {
                 $_SESSION['oLP']->delete_item($_REQUEST['id']);
             }
-            $url = api_get_self().'?action=add_item&type=step&lp_id='.intval($_REQUEST['lp_id']).'&'.api_get_cidreq();
+            $url = api_get_self().'?action=add_item&type=step&lp_id='.intval($_REQUEST['lp_id']).'&'.$cidReq;
             header('Location: '.$url);
             exit;
         }
@@ -1465,7 +1435,7 @@ switch ($action) {
             $redirectTo = isset($_GET['redirectTo']) ? $_GET['redirectTo'] : '';
             switch ($redirectTo) {
                 case 'lp_list':
-                    $url = 'lp_controller.php?'.api_get_cidreq();
+                    $url = 'lp_controller.php?'.$cidReq;
                     break;
                 case 'my_courses':
                     $url = api_get_path(WEB_PATH).'user_portal.php';
@@ -1496,14 +1466,14 @@ switch ($action) {
         break;
     case 'set_previous_step_as_prerequisite':
         $_SESSION['oLP']->set_previous_step_as_prerequisite_for_all_items();
-        $url = api_get_self().'?action=add_item&type=step&lp_id='.intval($_SESSION['oLP']->lp_id)."&".api_get_cidreq();
+        $url = api_get_self().'?action=add_item&type=step&lp_id='.intval($_SESSION['oLP']->lp_id)."&".$cidReq;
         Display::addFlash(Display::return_message(get_lang('ItemUpdate successful')));
         header('Location: '.$url);
         exit;
         break;
     case 'clear_prerequisites':
         $_SESSION['oLP']->clear_prerequisites();
-        $url = api_get_self().'?action=add_item&type=step&lp_id='.intval($_SESSION['oLP']->lp_id)."&".api_get_cidreq();
+        $url = api_get_self().'?action=add_item&type=step&lp_id='.intval($_SESSION['oLP']->lp_id)."&".$cidReq;
         Display::addFlash(Display::return_message(get_lang('ItemUpdate successful')));
         header('Location: '.$url);
         exit;
@@ -1612,7 +1582,7 @@ switch ($action) {
             );
 
             if (!empty($forumThread)) {
-                $dissociated = $selectedItem->dissociateForumThread($forumThread['iid']);
+                $dissociated = $selectedItem->dissociateForumThread($forumThread->getIid());
 
                 if ($dissociated) {
                     Display::addFlash(
@@ -1643,7 +1613,7 @@ switch ($action) {
         }
 
         $_SESSION['oLP']->getFinalItemForm();
-        $redirectTo = api_get_self().'?'.api_get_cidreq().'&'.http_build_query([
+        $redirectTo = api_get_self().'?'.$cidReq.'&'.http_build_query([
             'action' => 'add_item',
             'type' => 'step',
             'lp_id' => intval($_SESSION['oLP']->lp_id),

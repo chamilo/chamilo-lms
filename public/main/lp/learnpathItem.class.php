@@ -1,6 +1,8 @@
 <?php
 /* For licensing terms, see /license.txt */
 
+use Chamilo\CoreBundle\Framework\Container;
+
 /**
  * Class learnpathItem
  * lp_item defines items belonging to a learnpath. Each item has a name,
@@ -171,10 +173,10 @@ class learnpathItem
                 $tbl_se_ref = Database::get_main_table(TABLE_MAIN_SEARCH_ENGINE_REF);
                 $sql = 'SELECT *
                         FROM %s
-                        WHERE 
-                            course_code=\'%s\' AND 
-                            tool_id=\'%s\' AND 
-                            ref_id_high_level=%s AND 
+                        WHERE
+                            course_code=\'%s\' AND
+                            tool_id=\'%s\' AND
+                            ref_id_high_level=%s AND
                             ref_id_second_level=%d
                         LIMIT 1';
                 // TODO: Verify if it's possible to assume the actual course instead
@@ -2415,7 +2417,7 @@ class learnpathItem
                                             $sql = 'SELECT score, max_score
                                                     FROM '.Database::get_main_table(TABLE_STATISTIC_TRACK_E_EXERCISES).'
                                                     WHERE
-                                                        c_id = '.$course_id.' AND 
+                                                        c_id = '.$course_id.' AND
                                                         exe_exo_id = '.$items[$refs_list[$prereqs_string]]->path.' AND
                                                         exe_user_id = '.$user_id.' AND
                                                         orig_lp_id = '.$this->lp_id.' AND
@@ -3403,12 +3405,12 @@ class learnpathItem
         $item_view_table = Database::get_course_table(TABLE_LP_ITEM_VIEW);
         $course_id = api_get_course_int_id();
 
-        $sql = 'SELECT total_time, status 
+        $sql = 'SELECT total_time, status
                 FROM '.$item_view_table.'
-                WHERE 
-                    c_id = '.$course_id.' AND 
-                    lp_item_id = "'.$this->db_id.'" AND 
-                    lp_view_id = "'.$this->view_id.'" AND 
+                WHERE
+                    c_id = '.$course_id.' AND
+                    lp_item_id = "'.$this->db_id.'" AND
+                    lp_view_id = "'.$this->view_id.'" AND
                     view_count = "'.$this->get_attempt_id().'"';
         $result = Database::query($sql);
         $row = Database::fetch_array($result);
@@ -3474,10 +3476,10 @@ class learnpathItem
         ) {
             $sql = "UPDATE $item_view_table
                       SET total_time = '$total_time'
-                    WHERE 
-                        c_id = $course_id AND 
-                        lp_item_id = {$this->db_id} AND 
-                        lp_view_id = {$this->view_id} AND 
+                    WHERE
+                        c_id = $course_id AND
+                        lp_item_id = {$this->db_id} AND
+                        lp_view_id = {$this->view_id} AND
                         view_count = {$this->get_attempt_id()}";
             if ($debug) {
                 error_log('-------------total_time updated ------------------------');
@@ -3496,12 +3498,12 @@ class learnpathItem
         $table = Database::get_course_table(TABLE_LP_ITEM_VIEW);
         $course_id = api_get_course_int_id();
         $sql = 'UPDATE '.$table.'
-                SET total_time = 0, 
+                SET total_time = 0,
                     start_time = '.time().'
-                WHERE 
-                    c_id = '.$course_id.' AND 
-                    lp_item_id = "'.$this->db_id.'" AND 
-                    lp_view_id = "'.$this->view_id.'" AND 
+                WHERE
+                    c_id = '.$course_id.' AND
+                    lp_item_id = "'.$this->db_id.'" AND
+                    lp_view_id = "'.$this->view_id.'" AND
                     view_count = "'.$this->attempt_id.'"';
         Database::query($sql);
     }
@@ -3583,7 +3585,7 @@ class learnpathItem
 
                         $insertId = Database::insert($iva_table, $params);
                         if ($insertId) {
-                            $sql = "UPDATE $iva_table SET id = iid 
+                            $sql = "UPDATE $iva_table SET id = iid
                                     WHERE iid = $insertId";
                             Database::query($sql);
                         }
@@ -4314,13 +4316,19 @@ class learnpathItem
     /**
      * Get the forum thread info.
      *
-     * @param int $lpCourseId  The course ID from the learning path
-     * @param int $lpSessionId Optional. The session ID from the learning path
+     * @param int $courseId  The course ID from the learning path
+     * @param int $sessionId Optional. The session ID from the learning path
      *
-     * @return bool
+     * @return \Chamilo\CourseBundle\Entity\CForumThread
      */
-    public function getForumThread($lpCourseId, $lpSessionId = 0)
+    public function getForumThread($courseId, $sessionId = 0)
     {
+        $repo = Container::getForumThreadRepository();
+        $qb = $repo->getResourcesByCourse(api_get_course_entity($courseId), api_get_session_entity($sessionId));
+        $qb->andWhere('resource.threadTitle = :title')->setParameter('title', "{$this->title} - {$this->db_id}");
+
+        return $qb->getQuery()->getFirstResult();
+
         $lpSessionId = (int) $lpSessionId;
         $lpCourseId = (int) $lpCourseId;
 
@@ -4392,8 +4400,8 @@ class learnpathItem
         ]);
 
         if (!$forumThread) {
-            $forumInfo = get_forum_information($currentForumId);
-
+            $repo = Container::getForumRepository();
+            $forumInfo = $repo->find($currentForumId);
             store_thread(
                 $forumInfo,
                 [

@@ -89,11 +89,6 @@ class Course extends AbstractResource implements ResourceInterface
     protected $groups;
 
     /**
-     * @ORM\OneToMany(targetEntity="Chamilo\CourseBundle\Entity\CItemProperty", mappedBy="course")
-     */
-    //protected $items;
-
-    /**
      * @var ArrayCollection
      *
      * @ORM\OneToMany(targetEntity="Chamilo\CourseBundle\Entity\CTool", mappedBy="course", cascade={"persist", "remove"})

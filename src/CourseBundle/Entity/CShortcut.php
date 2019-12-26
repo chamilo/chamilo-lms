@@ -39,7 +39,7 @@ class CShortcut extends AbstractResource implements ResourceInterface
      * )
      * @ORM\JoinColumn(name="shortcut_node_id", referencedColumnName="id")
      */
-    public $shortCutNode;
+    protected $shortCutNode;
 
     public function __toString(): string
     {

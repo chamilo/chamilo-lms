@@ -5,6 +5,7 @@
 namespace Chamilo\LtiBundle\Entity;
 
 use Chamilo\CoreBundle\Entity\Course;
+use Chamilo\CoreBundle\Entity\GradebookEvaluation;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
 
@@ -25,81 +26,93 @@ class ExternalTool
      * @ORM\GeneratedValue
      */
     protected $id;
+
     /**
      * @var string
      *
      * @ORM\Column(name="name", type="string")
      */
-    private $name = '';
+    protected $name;
+
     /**
      * @var string|null
      *
      * @ORM\Column(name="description", type="text", nullable=true)
      */
-    private $description = null;
+    protected $description;
+
     /**
      * @var string
      *
      * @ORM\Column(name="launch_url", type="string")
      */
-    private $launchUrl = '';
+    protected $launchUrl;
+
     /**
      * @var string
      *
      * @ORM\Column(name="consumer_key", type="string", nullable=true)
      */
-    private $consumerKey = '';
+    protected $consumerKey;
+
     /**
      * @var string
      *
      * @ORM\Column(name="shared_secret", type="string", nullable=true)
      */
-    private $sharedSecret = '';
+    protected $sharedSecret;
+
     /**
      * @var string|null
      *
      * @ORM\Column(name="custom_params", type="text", nullable=true)
      */
-    private $customParams = null;
+    protected $customParams;
+
     /**
      * @var bool
      *
      * @ORM\Column(name="active_deep_linking", type="boolean", nullable=false, options={"default": false})
      */
-    private $activeDeepLinking = false;
+    protected $activeDeepLinking;
+
     /**
      * @var string|null
      *
      * @ORM\Column(name="privacy", type="text", nullable=true, options={"default": null})
      */
-    private $privacy = null;
+    protected $privacy;
+
     /**
      * @var Course|null
      *
      * @ORM\ManyToOne(targetEntity="Chamilo\CoreBundle\Entity\Course")
      * @ORM\JoinColumn(name="c_id", referencedColumnName="id")
      */
-    private $course = null;
+    protected $course;
+
     /**
      * @var GradebookEvaluation|null
      *
      * @ORM\ManyToOne(targetEntity="Chamilo\CoreBundle\Entity\GradebookEvaluation")
      * @ORM\JoinColumn(name="gradebook_eval_id", referencedColumnName="id", onDelete="SET NULL")
      */
-    private $gradebookEval = null;
+    protected $gradebookEval = null;
+
     /**
      * @var ExternalTool|null
      *
      * @ORM\ManyToOne(targetEntity="Chamilo\LtiBundle\Entity\ExternalTool", inversedBy="children")
      * @ORM\JoinColumn(name="parent_id", referencedColumnName="id")
      */
-    private $parent;
+    protected $parent;
+
     /**
      * @var ArrayCollection
      *
      * @ORM\OneToMany(targetEntity="Chamilo\LtiBundle\Entity\ExternalTool", mappedBy="parent")
      */
-    private $children;
+    protected $children;
 
     /**
      * ExternalTool constructor.

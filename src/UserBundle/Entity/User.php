@@ -217,11 +217,6 @@ class User extends BaseUser implements ThemeUser, EquatableInterface //implement
     protected $courses;
 
     /**
-     * @ORM\OneToMany(targetEntity="Chamilo\CourseBundle\Entity\CItemProperty", mappedBy="user")
-     */
-    //protected $items;
-
-    /**
      * @ORM\OneToMany(targetEntity="Chamilo\CoreBundle\Entity\UsergroupRelUser", mappedBy="user")
      */
     protected $classes;

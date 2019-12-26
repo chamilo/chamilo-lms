@@ -8,7 +8,6 @@ namespace Chamilo\CourseBundle\Component\CourseCopy\Resources;
  * Class for migrating the wiki
  * Wiki backup script.
  *
- *
  * @author Matthias Crauwels <matthias.crauwels@UGent.be>, Ghent University
  */
 class Wiki extends Resource

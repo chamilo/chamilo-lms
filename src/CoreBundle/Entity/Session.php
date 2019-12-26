@@ -232,11 +232,6 @@ class Session
     protected $position;
 
     /**
-     * @ORM\OneToMany(targetEntity="Chamilo\CourseBundle\Entity\CItemProperty", mappedBy="session")
-     */
-    //protected $items;
-
-    /**
      * @ORM\ManyToOne(targetEntity="Chamilo\UserBundle\Entity\User", inversedBy="sessionAsGeneralCoach")
      * @ORM\JoinColumn(name="id_coach", referencedColumnName="id")
      */

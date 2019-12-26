@@ -290,7 +290,7 @@ class ResourceController extends AbstractResourceController implements CourseCon
             $attributes['data-action'] = $action->getRoute();
             $attributes['data-action-id'] = $action->getRoute().'_'.$id;
             $attributes['data-node-id'] = $id;
-
+            $attributes['title'] = $this->trans('Info').' '.$row->getEntity()->getResourceName();
             $action->setAttributes($attributes);
 
             return $action;
@@ -308,6 +308,7 @@ class ResourceController extends AbstractResourceController implements CourseCon
             [
                 'class' => 'btn btn-secondary download_action',
                 'icon' => 'fa-download',
+                'title' => $this->trans('Download')
             ]
         );
 

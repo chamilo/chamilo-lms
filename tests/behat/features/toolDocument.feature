@@ -57,3 +57,13 @@ Feature: Document tool
     Then I attach the file "/public/favicon.ico" to "fileupload"
     And wait for the page to be loaded
     Then I should see "File upload succeeded"
+    Then I am on "/resources/document/files?cid=1&sid=0"
+    Then I should see "favicon.ico"
+
+  Scenario: Delete simple document
+    Given I am on "/resources/document/files?cid=1&sid=0"
+    Then I follow "Info My first document.html"
+    Then I should see "Created at"
+    Then I follow "Delete"
+    Then I should see "Deleted"
+    And I should not see "My first document.html"

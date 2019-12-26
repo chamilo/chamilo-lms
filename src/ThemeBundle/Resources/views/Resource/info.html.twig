@@ -1,4 +1,4 @@
-{% extends "@ChamiloTheme/Layout/no_layout.html.twig" %}
+{% extends "@ChamiloTheme/Layout/layout_one_col.html.twig" %}
 
 {% block content %}
     {% autoescape false %}
@@ -38,6 +38,20 @@
 
         {% if illustration %}
             <img src="{{ illustration }}" />
+        {% endif %}
+
+
+        {% if is_granted('DELETE', resource.resourceNode) %}
+            <a class="btn btn-danger" href="{{ url('chamilo_core_resource_delete', {
+                'id': resource.resourceNode.id,
+                'cid': course.id,
+                'sid': session.id,
+                'type' : type,
+                'tool' : tool,
+            })
+            }}">
+                {{ 'Delete'|trans }}
+            </a>
         {% endif %}
 
     {% endautoescape %}

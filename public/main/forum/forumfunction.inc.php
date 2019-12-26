@@ -2925,7 +2925,7 @@ function store_thread(
     $repo = Container::getForumPostRepository();
     $em = $repo->getEntityManager();
     $repo->addResourceToCourseWithParent(
-        $resourceNode,
+        $post,
         $thread->getResourceNode(),
         ResourceLink::VISIBILITY_PUBLISHED,
         $user,
@@ -3280,15 +3280,9 @@ function show_add_post_form(CForumForum $current_forum, CForumThread $thread, $a
             }
 
             if ($postId) {
-                $postInfo = get_post_information($postId);
-                if ($postInfo) {
-                    $threadId = $postInfo['thread_id'];
-                }
-
                 if (isset($values['give_revision']) && 1 == $values['give_revision']) {
                     $extraFieldValues = new ExtraFieldValue('forum_post');
                     $revisionLanguage = isset($values['extra_revision_language']) ? $values['extra_revision_language'] : '';
-
                     $params = [
                         'item_id' => $postId,
                         'extra_revision_language' => $revisionLanguage,
@@ -3320,7 +3314,7 @@ function show_add_post_form(CForumForum $current_forum, CForumThread $thread, $a
             $url = api_get_path(WEB_CODE_PATH).'forum/viewthread.php?'.api_get_cidreq().'&'.http_build_query(
                 [
                     'forum' => $forumId,
-                    'thread' => $threadId,
+                    'thread' => $thread->getIid(),
                 ]
             );
 
@@ -3535,11 +3529,6 @@ function newThread(CForumForum $current_forum, $form_values = '', $showPreview =
                 $postId = $newThread->getThreadLastPost();
 
                 if ($postId) {
-                    $postInfo = get_post_information($postId);
-                    if ($postInfo) {
-                        $threadId = $postInfo['thread_id'];
-                    }
-
                     if (isset($values['give_revision']) && 1 == $values['give_revision']) {
                         $extraFieldValues = new ExtraFieldValue('forum_post');
                         $revisionLanguage = isset($values['extra_revision_language']) ? $values['extra_revision_language'] : '';
@@ -3573,7 +3562,7 @@ function newThread(CForumForum $current_forum, $form_values = '', $showPreview =
             $url = api_get_path(WEB_CODE_PATH).'forum/viewthread.php?'.api_get_cidreq().'&'.http_build_query(
                 [
                     'forum' => $forumId,
-                    'thread' => $threadId,
+                    'thread' => $newThread->getIid(),
                 ]
             );
 
@@ -3953,7 +3942,7 @@ function store_reply(CForumForum $current_forum, CForumThread $thread, $values, 
         $em = $repo->getEntityManager();
 
         $repo->addResourceToCourseWithParent(
-            $resourceNode,
+            $post,
             $thread->getResourceNode(),
             ResourceLink::VISIBILITY_PUBLISHED,
             $user,
@@ -4701,11 +4690,8 @@ function handle_mail_cue($content, $id)
 
 /**
  * This function sends the mails for the mail notification.
- *
- * @param array $userInfo
- * @param array $forum
  */
-function send_mail($userInfo, CForumForum $forum, CForumThread $thread, $postInfo = [])
+function send_mail($userInfo, CForumForum $forum, CForumThread $thread, CForumPost $postInfo = null)
 {
     if (empty($userInfo) || empty($forum) || empty($thread)) {
         return false;
@@ -4732,8 +4718,8 @@ function send_mail($userInfo, CForumForum $forum, CForumThread $thread, $postInf
     }
     $email_body .= $courseInfoTitle;
 
-    if (!empty($postInfo) && isset($postInfo['post_text'])) {
-        $text = cut(strip_tags($postInfo['post_text']), 100);
+    if (!empty($postInfo)) {
+        $text = cut(strip_tags($postInfo->getPostText()), 100);
         if (!empty($text)) {
             $email_body .= get_lang('Message').": <br />\n ";
             $email_body .= $text;
@@ -5904,13 +5890,14 @@ function send_notifications(CForumForum $forum, CForumThread $thread, $post_id =
     $users_to_be_notified_by_forum = get_notifications('forum', $forum->getIid());
 
     // User who subscribed to the thread
+    $users_to_be_notified_by_thread = [];
     if (!$thread) {
         $users_to_be_notified_by_thread = get_notifications('thread', $thread->getIid());
     }
 
-    $postInfo = [];
+    $postInfo = null;
     if (!empty($post_id)) {
-        $postInfo = get_post_information($post_id);
+        $postInfo = Container::getForumPostRepository()->find($post_id);
     }
 
     // Merging the two

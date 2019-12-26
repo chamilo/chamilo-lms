@@ -425,12 +425,9 @@ if (is_array($forumCategories)) {
                             $_user['status']
                         );
                         if ('0' != $forum->getForumOfGroup()) {
-                            $my_all_groups_forum_name = isset($all_groups[$forum['forum_of_group']]['name'])
-                                ? $all_groups[$forum['forum_of_group']]['name']
-                                : null;
-                            $my_all_groups_forum_id = isset($all_groups[$forum['forum_of_group']]['id'])
-                                ? $all_groups[$forum['forum_of_group']]['id']
-                                : null;
+                            $forumOfGroup = $forum->getForumOfGroup();
+                            $my_all_groups_forum_name = $all_groups[$forumOfGroup]['name'] ?? null;
+                            $my_all_groups_forum_id = $all_groups[$forumOfGroup]['id'] ?? null;
                             $group_title = api_substr($my_all_groups_forum_name, 0, 30);
                             $forumInfo['forum_group_title'] = $group_title;
                         }

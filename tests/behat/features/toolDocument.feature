@@ -32,7 +32,7 @@ Feature: Document tool
     Then I should see "Saved"
     And I should see "My first document.html"
     Then I follow "My first document.html"
-    And wait for the page to be loaded
+    And wait the page to be loaded when ready
     Then I should see "This is my first document"
 
   Scenario: Create a HTML document
@@ -45,10 +45,11 @@ Feature: Document tool
     Then I should see "Saved"
     And I should see "My second document.html"
     Then I follow "My second document.html"
-    And wait for the page to be loaded
+    And wait the page to be loaded when ready
     Then I should see "This is my second document"
     And I should not see "<strong>"
     And I should not see "www.chamilo.org"
+    And I should see "Click here"
 
   Scenario: Upload a document
     Given I am on "/resources/document/files?cid=1&sid=0"

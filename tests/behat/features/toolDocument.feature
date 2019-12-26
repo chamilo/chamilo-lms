@@ -47,7 +47,6 @@ Feature: Document tool
     And I should see "My second document.html"
     Then I follow "Info My second document.html"
     And wait the page to be loaded when ready
-    Then I should see "This is my second document"
     Then I follow "View"
     And I should not see "<strong>"
     And I should not see "www.chamilo.org"

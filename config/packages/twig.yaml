@@ -26,3 +26,13 @@ twig:
         message:
         show_media_element: 1
         footer_extra_content:
+        legacy_javascript:
+        section_name:
+        course:
+        session:
+        plugin_main_top:
+        plugin_content_top:
+        plugin_content_bottom:
+        plugin_main_bottom:
+        flash_messages:
+        shuffle_answers:

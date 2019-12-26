@@ -37,66 +37,66 @@
                 <span class="badge badge-pill badge-success">1</span>
             </a>
         </li>#}
-        {% if language_form %}
+        {#{% if language_form %}
             <li class="nav-item d-md-down-none">
                 {{ language_form }}
             </li>
-        {% endif %}
-        <li class="nav-item d-md-down-none">
-            <a id="list_notifications_friends" class="nav-link" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">
-                <i class="far fa-bell"></i>
-                <span id="notifications-social" class="badge badge-pill badge-danger"></span>
-            </a>
-            <ul id="list_friends" class="dropdown-menu dropdown-menu-right">
-                <a class="dropdown-item">
-                    {{ "Your recent notifications"|trans }}
-                    <span class="badge badge-pill badge-warning float-right">{{ "View all"|trans }}</span>
+        {% endif %}#}
+            <li class="nav-item d-md-down-none">
+                <a id="list_notifications_friends" class="nav-link" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">
+                    <i class="far fa-bell"></i>
+                    <span id="notifications-social" class="badge badge-pill badge-danger"></span>
                 </a>
-                <div class="content">
-                    <div class="spinner"></div>
-                </div>
-            </ul>
-        </li>
-        <li class="nav-item d-md-down-none">
-            <a id="list_notifications_inbox" class="nav-link" href="#" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">
-                <i class="far fa-envelope"></i>
-                <span id="notifications-inbox" class="badge badge-pill badge-info"></span>
-            </a>
-            <ul id="list_inbox" class="dropdown-menu dropdown-menu-right">
-                <a class="dropdown-item">
-                    {{ "Recent messages"|trans }}
-                    <span class="badge badge-pill badge-warning float-right">{{ "View all"|trans }}</span>
+                <ul id="list_friends" class="dropdown-menu dropdown-menu-right">
+                    <a class="dropdown-item">
+                        {{ "Your recent notifications"|trans }}
+                        <span class="badge badge-pill badge-warning float-right">{{ "View all"|trans }}</span>
+                    </a>
+                    <div class="content">
+                        <div class="spinner"></div>
+                    </div>
+                </ul>
+            </li>
+            <li class="nav-item d-md-down-none">
+                <a id="list_notifications_inbox" class="nav-link" href="#" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">
+                    <i class="far fa-envelope"></i>
+                    <span id="notifications-inbox" class="badge badge-pill badge-info"></span>
                 </a>
-                <div class="content">
-                    <div class="spinner"></div>
-                </div>
-            </ul>
-        </li>
-        <li class="nav-item dropdown">
-            <a class="nav-link nav-link-user dropdown-toggle d-sm-inline-block mr-2" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">
-                <img src="{{ app.user.resourceNode | user_illustration }}?w=32&h=32&fit=crop">
-                <span class="d-none">{{ app.user.firstname }} {{ app.user.lastname }}</span>
-            </a>
-
-            <div class="dropdown-menu dropdown-menu-right">
-                <div class="dropdown-header text-center">
-                    <strong>{{ app.user.username }}</strong>
-                </div>
-
-                <a class="dropdown-item" href="{{ url('chamilo_core_account_home') }}">
-                    <i class="fa fa-user"></i>
-                    {{ "My profile"|trans }}
+                <ul id="list_inbox" class="dropdown-menu dropdown-menu-right">
+                    <a class="dropdown-item">
+                        {{ "Recent messages"|trans }}
+                        <span class="badge badge-pill badge-warning float-right">{{ "View all"|trans }}</span>
+                    </a>
+                    <div class="content">
+                        <div class="spinner"></div>
+                    </div>
+                </ul>
+            </li>
+            <li class="nav-item dropdown">
+                <a class="nav-link nav-link-user dropdown-toggle d-sm-inline-block mr-2" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">
+                    <img src="{{ app.user.resourceNode | user_illustration }}?w=32&h=32&fit=crop">
+                    <span class="d-none">{{ app.user.firstname }} {{ app.user.lastname }}</span>
                 </a>
 
-                <a class="dropdown-item" href="{{ url('legacy_main', { 'name' : 'survey/pending.php' }) }}">
-                    <i class="fa fa-chart-pie"></i> {{ 'Pending surveys'|trans }}
-                </a>
-                <a class="dropdown-item" title="{{ "My certificates"|trans }}"
-                   href="{{ url('legacy_main', { 'name' : 'gradebook/my_certificates.php' }) }}">
-                    <i class="fa fa-graduation-cap" aria-hidden="true"></i>
-                     {{ "My certificates"|trans }}
-                </a>
-{#                <a class="dropdown-item" href="{{ url('legacy_main', { 'name' : 'messages/inbox.php' }) }}">#}
+                <div class="dropdown-menu dropdown-menu-right">
+                    <div class="dropdown-header text-center">
+                        <strong>{{ app.user.username }}</strong>
+                    </div>
+
+                    <a class="dropdown-item" href="{{ url('chamilo_core_account_home') }}">
+                        <i class="fa fa-user"></i>
+                        {{ "My profile"|trans }}
+                    </a>
+
+                    <a class="dropdown-item" href="{{ url('legacy_main', { 'name' : 'survey/pending.php' }) }}">
+                        <i class="fa fa-chart-pie"></i> {{ 'Pending surveys'|trans }}
+                    </a>
+                    <a class="dropdown-item" title="{{ "My certificates"|trans }}"
+                       href="{{ url('legacy_main', { 'name' : 'gradebook/my_certificates.php' }) }}">
+                        <i class="fa fa-graduation-cap" aria-hidden="true"></i>
+                         {{ "My certificates"|trans }}
+                    </a>
+    {#                <a class="dropdown-item" href="{{ url('legacy_main', { 'name' : 'messages/inbox.php' }) }}">#}
 {#                    <i class="fa fa-envelope" aria-hidden="true"></i>#}
 {#                     {{ "Inbox"|trans }}#}
 {#                    <span class="badge badge-success">42</span>#}

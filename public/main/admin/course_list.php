@@ -1,4 +1,5 @@
 <?php
+
 /* For licensing terms, see /license.txt */
 
 /**
@@ -27,7 +28,7 @@ function get_number_of_courses()
     $sql = "SELECT COUNT(c.id) AS total_number_of_items FROM $course_table c";
 
     if ((api_is_platform_admin() || api_is_session_admin()) &&
-        api_is_multiple_url_enabled() && api_get_current_access_url_id() != -1
+        api_is_multiple_url_enabled() && -1 != api_get_current_access_url_id()
     ) {
         $access_url_rel_course_table = Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_COURSE);
         $sql .= " INNER JOIN $access_url_rel_course_table url_rel_course
@@ -37,7 +38,7 @@ function get_number_of_courses()
     $sql .= " LEFT JOIN $tblCourseCategory ON c.category_id = course_category.id ";
 
     if (isset($_GET['keyword'])) {
-        $keyword = Database::escape_string("%".$_GET['keyword']."%");
+        $keyword = Database::escape_string('%'.$_GET['keyword'].'%');
         $sql .= " WHERE (
                         c.title LIKE '".$keyword."' OR
                         c.code LIKE '".$keyword."' OR
@@ -45,13 +46,13 @@ function get_number_of_courses()
                 )
         ";
     } elseif (isset($_GET['keyword_code'])) {
-        $keyword_code = Database::escape_string("%".$_GET['keyword_code']."%");
-        $keyword_title = Database::escape_string("%".$_GET['keyword_title']."%");
+        $keyword_code = Database::escape_string('%'.$_GET['keyword_code'].'%');
+        $keyword_title = Database::escape_string('%'.$_GET['keyword_title'].'%');
         $keyword_category = isset($_GET['keyword_category'])
-            ? Database::escape_string("%".$_GET['keyword_category']."%")
+            ? Database::escape_string('%'.$_GET['keyword_category'].'%')
             : null;
-        $keyword_language = Database::escape_string("%".$_GET['keyword_language']."%");
-        $keyword_visibility = Database::escape_string("%".$_GET['keyword_visibility']."%");
+        $keyword_language = Database::escape_string('%'.$_GET['keyword_language'].'%');
+        $keyword_visibility = Database::escape_string('%'.$_GET['keyword_visibility'].'%');
         $keyword_subscribe = Database::escape_string($_GET['keyword_subscribe']);
         $keyword_unsubscribe = Database::escape_string($_GET['keyword_unsubscribe']);
 
@@ -71,9 +72,9 @@ function get_number_of_courses()
 
     // adding the filter to see the user's only of the current access_url
     if ((api_is_platform_admin() || api_is_session_admin()) &&
-        api_is_multiple_url_enabled() && api_get_current_access_url_id() != -1
+        api_is_multiple_url_enabled() && -1 != api_get_current_access_url_id()
     ) {
-        $sql .= " AND url_rel_course.access_url_id = ".api_get_current_access_url_id();
+        $sql .= ' AND url_rel_course.access_url_id = '.api_get_current_access_url_id();
     }
 
     $res = Database::query($sql);
@@ -117,7 +118,7 @@ function get_course_data($from, $number_of_items, $column, $direction)
     		LEFT JOIN $tblCourseCategory category ON course.category_id = category.id ";
 
     if ((api_is_platform_admin() || api_is_session_admin()) &&
-        api_is_multiple_url_enabled() && api_get_current_access_url_id() != -1
+        api_is_multiple_url_enabled() && -1 != api_get_current_access_url_id()
     ) {
         $access_url_rel_course_table = Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_COURSE);
         $sql .= " INNER JOIN $access_url_rel_course_table url_rel_course
@@ -125,7 +126,7 @@ function get_course_data($from, $number_of_items, $column, $direction)
     }
 
     if (isset($_GET['keyword'])) {
-        $keyword = Database::escape_string("%".trim($_GET['keyword'])."%");
+        $keyword = Database::escape_string('%'.trim($_GET['keyword']).'%');
         $sql .= " WHERE (
             title LIKE '".$keyword."' OR
             course.code LIKE '".$keyword."' OR
@@ -133,13 +134,13 @@ function get_course_data($from, $number_of_items, $column, $direction)
         )
         ";
     } elseif (isset($_GET['keyword_code'])) {
-        $keyword_code = Database::escape_string("%".$_GET['keyword_code']."%");
-        $keyword_title = Database::escape_string("%".$_GET['keyword_title']."%");
+        $keyword_code = Database::escape_string('%'.$_GET['keyword_code'].'%');
+        $keyword_title = Database::escape_string('%'.$_GET['keyword_title'].'%');
         $keyword_category = isset($_GET['keyword_category'])
-            ? Database::escape_string("%".$_GET['keyword_category']."%")
+            ? Database::escape_string('%'.$_GET['keyword_category'].'%')
             : null;
-        $keyword_language = Database::escape_string("%".$_GET['keyword_language']."%");
-        $keyword_visibility = Database::escape_string("%".$_GET['keyword_visibility']."%");
+        $keyword_language = Database::escape_string('%'.$_GET['keyword_language'].'%');
+        $keyword_visibility = Database::escape_string('%'.$_GET['keyword_visibility'].'%');
         $keyword_subscribe = Database::escape_string($_GET['keyword_subscribe']);
         $keyword_unsubscribe = Database::escape_string($_GET['keyword_unsubscribe']);
 
@@ -158,9 +159,9 @@ function get_course_data($from, $number_of_items, $column, $direction)
 
     // Adding the filter to see the user's only of the current access_url.
     if ((api_is_platform_admin() || api_is_session_admin()) &&
-        api_is_multiple_url_enabled() && api_get_current_access_url_id() != -1
+        api_is_multiple_url_enabled() && -1 != api_get_current_access_url_id()
     ) {
-        $sql .= " AND url_rel_course.access_url_id=".api_get_current_access_url_id();
+        $sql .= ' AND url_rel_course.access_url_id='.api_get_current_access_url_id();
     }
 
     $sql .= " ORDER BY col$column $direction ";
@@ -179,8 +180,8 @@ function get_course_data($from, $number_of_items, $column, $direction)
         $course[1] = get_course_visibility_icon($course[8]).PHP_EOL
             .Display::url(Security::remove_XSS($course[1]), $coursePath.$course[9].'/index.php').PHP_EOL
             .$show_visual_code;
-        $course[5] = $course[5] == SUBSCRIBE_ALLOWED ? get_lang('Yes') : get_lang('No');
-        $course[6] = $course[6] == UNSUBSCRIBE_ALLOWED ? get_lang('Yes') : get_lang('No');
+        $course[5] = SUBSCRIBE_ALLOWED == $course[5] ? get_lang('Yes') : get_lang('No');
+        $course[6] = UNSUBSCRIBE_ALLOWED == $course[6] ? get_lang('Yes') : get_lang('No');
         $language = isset($languages[$course[3]]) ? $languages[$course[3]] : $course[3];
 
         $courseCode = $course[0];
@@ -272,8 +273,8 @@ function get_course_data_by_session($from, $number_of_items, $column, $direction
             ";
 
     if (isset($_GET['session_id']) && !empty($_GET['session_id'])) {
-        $sessionId = intval($_GET['session_id']);
-        $sql .= " WHERE s.id = ".$sessionId;
+        $sessionId = (int) ($_GET['session_id']);
+        $sql .= ' WHERE s.id = '.$sessionId;
     }
 
     $sql .= " ORDER BY col$column $direction ";
@@ -290,8 +291,8 @@ function get_course_data_by_session($from, $number_of_items, $column, $direction
             $course[1].
             '</a> '.
             $showVisualCode;
-        $course[5] = $course[5] == SUBSCRIBE_ALLOWED ? get_lang('Yes') : get_lang('No');
-        $course[6] = $course[6] == UNSUBSCRIBE_ALLOWED ? get_lang('Yes') : get_lang('No');
+        $course[5] = SUBSCRIBE_ALLOWED == $course[5] ? get_lang('Yes') : get_lang('No');
+        $course[6] = UNSUBSCRIBE_ALLOWED == $course[6] ? get_lang('Yes') : get_lang('No');
         $row = [
             $course[0],
             $course[1],
@@ -325,6 +326,7 @@ function get_course_visibility_icon($visibility)
                 get_lang('Closed - the course is only accessible to the teachers'),
                 ['style' => $style]
             );
+
             break;
         case 1:
             return Display::return_icon(
@@ -332,6 +334,7 @@ function get_course_visibility_icon($visibility)
                 get_lang('Private access (access authorized to group members only) access (access authorized to group members only)'),
                 ['style' => $style]
             );
+
             break;
         case 2:
             return Display::return_icon(
@@ -339,6 +342,7 @@ function get_course_visibility_icon($visibility)
                 get_lang(' Open - access allowed for users registered on the platform'),
                 ['style' => $style]
             );
+
             break;
         case 3:
             return Display::return_icon(
@@ -346,6 +350,7 @@ function get_course_visibility_icon($visibility)
                 get_lang('Public - access allowed for the whole world'),
                 ['style' => $style]
             );
+
             break;
         case 4:
             return Display::return_icon(
@@ -353,6 +358,7 @@ function get_course_visibility_icon($visibility)
                 get_lang('Hidden - Completely hidden to all users except the administrators'),
                 ['style' => $style]
             );
+
             break;
         default:
             return '';
@@ -373,6 +379,7 @@ if (isset($_POST['action'])) {
 
                 Display::addFlash(Display::return_message(get_lang('Deleted')));
             }
+
             break;
     }
 }
@@ -380,7 +387,7 @@ $content = '';
 $message = '';
 $actions = '';
 
-if (isset($_GET['search']) && $_GET['search'] === 'advanced') {
+if (isset($_GET['search']) && 'advanced' === $_GET['search']) {
     // Get all course categories
     $interbreadcrumb[] = [
         'url' => 'index.php',
@@ -411,7 +418,7 @@ if (isset($_GET['search']) && $_GET['search'] === 'advanced') {
 
     $el = $form->addSelectLanguage('keyword_language', get_lang('Course language'));
     $el->addOption(get_lang('All'), '%');
-    $form->addElement('radio', 'keyword_visibility', get_lang("Course access"), get_lang('Public - access allowed for the whole world'), COURSE_VISIBILITY_OPEN_WORLD);
+    $form->addElement('radio', 'keyword_visibility', get_lang('Course access'), get_lang('Public - access allowed for the whole world'), COURSE_VISIBILITY_OPEN_WORLD);
     $form->addElement('radio', 'keyword_visibility', null, get_lang(' Open - access allowed for users registered on the platform'), COURSE_VISIBILITY_OPEN_PLATFORM);
     $form->addElement('radio', 'keyword_visibility', null, get_lang('Private access (access authorized to group members only) access (access authorized to group members only)'), COURSE_VISIBILITY_REGISTERED);
     $form->addElement('radio', 'keyword_visibility', null, get_lang('Closed - the course is only accessible to the teachers'), COURSE_VISIBILITY_CLOSED);
@@ -498,7 +505,7 @@ if (isset($_GET['search']) && $_GET['search'] === 'advanced') {
         api_get_path(WEB_CODE_PATH).'admin/course_add.php'
     );
 
-    if (api_get_setting('course_validation') === 'true') {
+    if ('true' === api_get_setting('course_validation')) {
         $actions1 .= Display::url(
             Display::return_icon(
                 'course_request_pending.png',

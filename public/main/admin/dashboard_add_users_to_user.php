@@ -3,8 +3,6 @@
 
 /**
  *  Interface for assigning users to Human Resources Manager.
- *
- *  @package chamilo.admin
  */
 
 // resetting the course id
@@ -46,16 +44,16 @@ $isAdmin = UserManager::is_admin($user_id);
 if ($isAdmin) {
     $userStatus = PLATFORM_ADMIN;
     $tool_name = get_lang('AssignUsersToAdministrationistrator');
-} elseif ($user_info['status'] == SESSIONADMIN) {
+} elseif (SESSIONADMIN == $user_info['status']) {
     $tool_name = get_lang('Assign users to sessions administrator');
-} elseif ($user_info['status'] == STUDENT_BOSS) {
+} elseif (STUDENT_BOSS == $user_info['status']) {
     $tool_name = get_lang('Assign users to superior');
 } else {
     $tool_name = get_lang('Assign users to Human Resources manager');
 }
 
 $add_type = 'multiple';
-if (isset($_GET['add_type']) && $_GET['add_type'] != '') {
+if (isset($_GET['add_type']) && '' != $_GET['add_type']) {
     $add_type = Security::remove_XSS($_REQUEST['add_type']);
 }
 
@@ -76,9 +74,11 @@ function search_users($needle, $type = 'multiple')
             case DRH:
             case PLATFORM_ADMIN:
                 $assigned_users_to_hrm = UserManager::get_users_followed_by_drh($user_id);
+
                 break;
             case STUDENT_BOSS:
                 $assigned_users_to_hrm = UserManager::getUsersFollowedByStudentBoss($user_id);
+
                 break;
         }
 
@@ -87,13 +87,13 @@ function search_users($needle, $type = 'multiple')
 
         $westernOrder = api_is_western_name_order();
         if ($westernOrder) {
-            $order_clause = " ORDER BY firstname, lastname";
+            $order_clause = ' ORDER BY firstname, lastname';
         } else {
-            $order_clause = " ORDER BY lastname, firstname";
+            $order_clause = ' ORDER BY lastname, firstname';
         }
 
         if (count($assigned_users_id) > 0) {
-            $without_assigned_users = " AND user.user_id NOT IN(".implode(',', $assigned_users_id).")";
+            $without_assigned_users = ' AND user.user_id NOT IN('.implode(',', $assigned_users_id).')';
         }
 
         if (api_is_multiple_url_enabled()) {
@@ -102,7 +102,7 @@ function search_users($needle, $type = 'multiple')
                     LEFT JOIN $tbl_access_url_rel_user au ON (au.user_id = user.user_id)
                     WHERE
                         ".(api_sort_by_first_name() ? 'firstname' : 'lastname')." LIKE '$needle%' AND
-                        status NOT IN(".DRH.", ".SESSIONADMIN.", ".STUDENT_BOSS.") AND
+                        status NOT IN(".DRH.', '.SESSIONADMIN.', '.STUDENT_BOSS.") AND
                         user.user_id NOT IN ($user_anonymous, $current_user_id, $user_id)
                         $without_assigned_users AND
                         access_url_id = ".api_get_current_access_url_id()."
@@ -113,7 +113,7 @@ function search_users($needle, $type = 'multiple')
                     FROM $tbl_user user
                     WHERE
                         ".(api_sort_by_first_name() ? 'firstname' : 'lastname')." LIKE '$needle%' AND
-                        status NOT IN(".DRH.", ".SESSIONADMIN.", ".STUDENT_BOSS.") AND
+                        status NOT IN(".DRH.', '.SESSIONADMIN.', '.STUDENT_BOSS.") AND
                         user_id NOT IN ($user_anonymous, $current_user_id, $user_id)
                     $without_assigned_users
                     $order_clause
@@ -122,7 +122,7 @@ function search_users($needle, $type = 'multiple')
         $rs = Database::query($sql);
         $xajax_response->addAssign('ajax_list_users_multiple', 'innerHTML', api_utf8_encode($return));
 
-        if ($type == 'single') {
+        if ('single' == $type) {
             $tbl_user_rel_access_url = Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_USER);
             $access_url_id = api_get_current_access_url_id();
 
@@ -139,10 +139,12 @@ function search_users($needle, $type = 'multiple')
 
             switch ($userStatus) {
                 case DRH:
-                    $sql .= " user.status <> 6 AND user.status <> ".DRH;
+                    $sql .= ' user.status <> 6 AND user.status <> '.DRH;
+
                     break;
                 case STUDENT_BOSS:
-                    $sql .= " user.status <> 6 AND user.status <> ".STUDENT_BOSS;
+                    $sql .= ' user.status <> 6 AND user.status <> '.STUDENT_BOSS;
+
                     break;
             }
 
@@ -151,7 +153,7 @@ function search_users($needle, $type = 'multiple')
             $rs = Database::query($sql);
             $i = 0;
             while ($user = Database :: fetch_array($rs)) {
-                $i++;
+                ++$i;
                 if ($i <= 10) {
                     $person_name = api_get_person_name($user['firstname'], $user['lastname']);
                     $return .= '<a href="javascript: void(0);" onclick="javascript: add_user_to_user(\''.$user['user_id'].'\',\''.$person_name.' ('.$user['username'].')'.'\')">'.$person_name.' ('.$user['username'].')</a><br />';
@@ -285,15 +287,17 @@ if (!empty($filters) && !empty($filterData)) {
     }
 }
 
-if (isset($_POST['formSent']) && intval($_POST['formSent']) == 1) {
+if (isset($_POST['formSent']) && 1 == (int) ($_POST['formSent'])) {
     $user_list = isset($_POST['UsersList']) ? $_POST['UsersList'] : null;
     switch ($userStatus) {
         case DRH:
         case PLATFORM_ADMIN:
             $affected_rows = UserManager::subscribeUsersToHRManager($user_id, $user_list);
+
             break;
         case STUDENT_BOSS:
             $affected_rows = UserManager::subscribeBossToUsers($user_id, $user_list);
+
             break;
         default:
             $affected_rows = 0;
@@ -312,7 +316,7 @@ Display::display_header($tool_name);
 
 // actions
 $actionsLeft = '';
-if ($userStatus != STUDENT_BOSS) {
+if (STUDENT_BOSS != $userStatus) {
     $actionsLeft = Display::url(
         Display::return_icon('course-add.png', get_lang('Assign courses'), null, ICON_SIZE_MEDIUM),
         "dashboard_add_courses_to_user.php?user=$user_id"
@@ -352,23 +356,25 @@ switch ($userStatus) {
     case DRH:
     case PLATFORM_ADMIN:
         $assigned_users_to_hrm = UserManager::get_users_followed_by_drh($user_id);
+
         break;
     case STUDENT_BOSS:
         $assigned_users_to_hrm = UserManager::getUsersFollowedByStudentBoss($user_id);
+
         break;
 }
 
 $assigned_users_id = array_keys($assigned_users_to_hrm);
 $without_assigned_users = '';
 if (count($assigned_users_id) > 0) {
-    $without_assigned_users = " user.user_id NOT IN(".implode(',', $assigned_users_id).") AND ";
+    $without_assigned_users = ' user.user_id NOT IN('.implode(',', $assigned_users_id).') AND ';
 }
 
 $search_user = '';
 $needle = '';
 if (!empty($firstLetterUser)) {
     $needle = Database::escape_string($firstLetterUser);
-    $search_user = "AND ".(api_sort_by_first_name() ? 'firstname' : 'lastname')." LIKE '$needle%'";
+    $search_user = 'AND '.(api_sort_by_first_name() ? 'firstname' : 'lastname')." LIKE '$needle%'";
 }
 
 $sqlConditions = null;
@@ -395,7 +401,7 @@ if (api_is_multiple_url_enabled()) {
             WHERE
                 $without_assigned_users
                 user.user_id NOT IN ($user_anonymous, $current_user_id, $user_id) AND
-                status NOT IN(".DRH.", ".SESSIONADMIN.", ".ANONYMOUS.") $search_user AND
+                status NOT IN(".DRH.', '.SESSIONADMIN.', '.ANONYMOUS.") $search_user AND
                 access_url_id = ".api_get_current_access_url_id()."
                 $sqlConditions
             ORDER BY firstname";
@@ -405,7 +411,7 @@ if (api_is_multiple_url_enabled()) {
             WHERE
                 $without_assigned_users
                 user_id NOT IN ($user_anonymous, $current_user_id, $user_id) AND
-                status NOT IN(".DRH.", ".SESSIONADMIN.", ".ANONYMOUS.")
+                status NOT IN(".DRH.', '.SESSIONADMIN.', '.ANONYMOUS.")
                 $search_user
                 $sqlConditions
             ORDER BY firstname ";
@@ -438,7 +444,7 @@ $result = Database::query($sql);
     </div>
     <div class="col-md-4">
         <div class="code-course">
-            <?php if ($add_type == 'multiple') {
+            <?php if ('multiple' == $add_type) {
                             ?>
                 <p><?php echo get_lang('First letter (last name)'); ?></p>
                 <select class="selectpicker show-tick form-control" name="firstLetterUser" onchange = "xajax_search_users(this.value,'multiple')">
@@ -481,10 +487,10 @@ $result = Database::query($sql);
     if (UserManager::is_admin($user_id)) {
         echo get_lang('AssignedUsersListToAdministrationistrator');
     } else {
-        if ($user_info['status'] == SESSIONADMIN) {
+        if (SESSIONADMIN == $user_info['status']) {
             echo get_lang('Assign a users list to the sessions administrator');
         } else {
-            if ($user_info['status'] == STUDENT_BOSS) {
+            if (STUDENT_BOSS == $user_info['status']) {
                 echo get_lang('Users assigned to their superior');
             } else {
                 echo get_lang('List of users assigned to Human Resources manager');

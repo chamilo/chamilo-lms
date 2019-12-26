@@ -1,4 +1,5 @@
 <?php
+
 /* For licensing terms, see /license.txt */
 
 use Chamilo\CoreBundle\Entity\CourseCategory;
@@ -35,8 +36,8 @@ if (empty($courseInfo)) {
 }
 
 $tool_name = get_lang('Edit course information');
-$interbreadcrumb[] = ["url" => 'index.php', "name" => get_lang('Administration')];
-$interbreadcrumb[] = ["url" => "course_list.php", "name" => get_lang('Course list')];
+$interbreadcrumb[] = ['url' => 'index.php', 'name' => get_lang('Administration')];
+$interbreadcrumb[] = ['url' => 'course_list.php', 'name' => get_lang('Course list')];
 
 // Get all course categories
 $table_user = Database::get_main_table(TABLE_MAIN_USER);
@@ -95,7 +96,7 @@ while ($obj = Database::fetch_object($res)) {
 }
 
 // Case where there is no teacher in the course
-if (count($course_teachers) == 0) {
+if (0 == count($course_teachers)) {
     $sql = 'SELECT tutor_name FROM '.$course_table.' WHERE code="'.$course_code.'"';
     $res = Database::query($sql);
     $tutor_name = Database::result($res, 0, 0);
@@ -206,7 +207,7 @@ if (array_key_exists('add_teachers_to_sessions_courses', $courseInfo)) {
     );
 }
 
-$allowEditSessionCoaches = api_get_configuration_value('disabled_edit_session_coaches_course_editing_course') === false;
+$allowEditSessionCoaches = false === api_get_configuration_value('disabled_edit_session_coaches_course_editing_course');
 $coursesInSession = SessionManager::get_session_by_course($courseInfo['real_id']);
 if (!empty($coursesInSession) && $allowEditSessionCoaches) {
     foreach ($coursesInSession as $session) {
@@ -253,7 +254,7 @@ $form->applyFilter('department_url', 'trim');
 $form->addSelectLanguage('course_language', get_lang('Course language'));
 
 $group = [];
-$group[] = $form->createElement('radio', 'visibility', get_lang("Course access"), get_lang('Public - access allowed for the whole world'), COURSE_VISIBILITY_OPEN_WORLD);
+$group[] = $form->createElement('radio', 'visibility', get_lang('Course access'), get_lang('Public - access allowed for the whole world'), COURSE_VISIBILITY_OPEN_WORLD);
 $group[] = $form->createElement('radio', 'visibility', null, get_lang(' Open - access allowed for users registered on the platform'), COURSE_VISIBILITY_OPEN_PLATFORM);
 $group[] = $form->createElement('radio', 'visibility', null, get_lang('Private access (access authorized to group members only)'), COURSE_VISIBILITY_REGISTERED);
 $group[] = $form->createElement('radio', 'visibility', null, get_lang('Closed - the course is only accessible to the teachers'), COURSE_VISIBILITY_CLOSED);
@@ -317,7 +318,7 @@ if ($form->validate()) {
         $_configuration[$urlId]['hosting_limit_active_courses'] > 0
     ) {
         // Check if
-        if ($courseInfo['visibility'] == COURSE_VISIBILITY_HIDDEN &&
+        if (COURSE_VISIBILITY_HIDDEN == $courseInfo['visibility'] &&
             $visibility != $courseInfo['visibility']
         ) {
             $num = CourseManager::countActiveCourses($urlId);

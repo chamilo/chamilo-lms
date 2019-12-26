@@ -1,10 +1,10 @@
 <?php
+
 /* For licensing terms, see /license.txt */
 
 /**
  * Frontend script for multiple access urls.
  *
- * @package chamilo.admin
  *
  * @author Julio Montoya <gugli100@gmail.com>
  * @author Yannick Warnier <yannick.warnier@beeznest.com>
@@ -41,19 +41,22 @@ if (isset($_GET['action'])) {
             } else {
                 echo Display::return_message(get_lang('Cannot delete this URL.'), 'error');
             }
+
             break;
         case 'lock':
             UrlManager::set_url_status('lock', $url_id);
             echo Display::return_message(get_lang('The URL has been disabled'), 'normal');
+
             break;
         case 'unlock':
             UrlManager::set_url_status('unlock', $url_id);
             echo Display::return_message(get_lang('The URL has been enabled'), 'normal');
+
             break;
         case 'register':
             // we are going to register the admin
             if (api_is_platform_admin()) {
-                if ($current_access_url_id != -1) {
+                if (-1 != $current_access_url_id) {
                     $url_str = '';
                     foreach ($url_list as $my_url) {
                         if (!in_array($my_url['id'], $my_user_url_list)) {
@@ -68,6 +71,7 @@ if (isset($_GET['action'])) {
                     );
                 }
             }
+
             break;
     }
 }
@@ -91,7 +95,7 @@ if (!empty($url_string)) {
 }
 
 // checking the current installation
-if ($current_access_url_id == -1) {
+if (-1 == $current_access_url_id) {
     echo Display::return_message(
         get_lang('URL not configured yet, please add this URL :').': '.api_get_path(WEB_PATH),
         'warning'
@@ -101,7 +105,7 @@ if ($current_access_url_id == -1) {
         api_get_user_id(),
         $current_access_url_id
     );
-    if ($quant == 0) {
+    if (0 == $quant) {
         echo Display::return_message(
             '<a href="'.api_get_self().'?action=register&sec_token='.$parameters['sec_token'].'">'.
             get_lang('Click here to register the admin into all sites').'</a>',
@@ -153,12 +157,12 @@ foreach ($data as $row) {
     $active = $row['active'];
     $action = 'unlock';
     $image = 'wrong';
-    if ($active == '1') {
+    if ('1' == $active) {
         $action = 'lock';
         $image = 'right';
     }
     // you cannot lock the default
-    if ($row['id'] == '1') {
+    if ('1' == $row['id']) {
         $status = Display::return_icon($image.'.gif', get_lang(ucfirst($action)));
     } else {
         $status = '<a href="access_urls.php?action='.$action.'&amp;url_id='.$row['id'].'">'.
@@ -170,8 +174,8 @@ foreach ($data as $row) {
         Display::return_icon('edit.png', get_lang('Edit'), [], ICON_SIZE_SMALL),
         "access_url_edit.php?url_id=$url_id"
     );
-    if ($url_id != '1') {
-        $actions .= '<a href="access_urls.php?action=delete_url&amp;url_id='.$url_id.'" onclick="javascript:if(!confirm('."'".addslashes(api_htmlentities(get_lang("Please confirm your choice"), ENT_QUOTES, $charset))."'".')) return false;">'.
+    if ('1' != $url_id) {
+        $actions .= '<a href="access_urls.php?action=delete_url&amp;url_id='.$url_id.'" onclick="javascript:if(!confirm('."'".addslashes(api_htmlentities(get_lang('Please confirm your choice'), ENT_QUOTES, $charset))."'".')) return false;">'.
             Display::return_icon('delete.png', get_lang('Delete'), [], ICON_SIZE_SMALL).'</a>';
     }
     $urls[] = [$url, $description, $status, $createdAt, $actions];

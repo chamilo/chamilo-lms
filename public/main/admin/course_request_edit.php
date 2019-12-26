@@ -1,10 +1,10 @@
 <?php
+
 /* For licensing terms, see /license.txt */
 
 /**
  * A page for detailed preview or edition of a given course request.
  *
- * @package chamilo.admin
  *
  * @author Ivan Tcholakov <ivantcholakov@gmail.com>, 2010
  */
@@ -16,11 +16,11 @@ $tool_name = get_lang('Edit a course request');
 api_protect_admin_script();
 
 // A check whether the course validation feature is enabled.
-$course_validation_feature = api_get_setting('course_validation') == 'true';
+$course_validation_feature = 'true' == api_get_setting('course_validation');
 
 // Filtering passed to this page parameters.
-$id = intval($_GET['id']);
-$caller = intval($_GET['caller']);
+$id = (int) ($_GET['id']);
+$caller = (int) ($_GET['caller']);
 
 if ($course_validation_feature) {
     // Retrieve request's data from the corresponding database record.
@@ -103,15 +103,15 @@ if ($course_validation_feature) {
 
         // Submit buttons.
         $submit_buttons[] = $form->addButtonSave(get_lang('Save'), 'save_button', true);
-        if ($course_request_info['status'] != COURSE_REQUEST_ACCEPTED) {
+        if (COURSE_REQUEST_ACCEPTED != $course_request_info['status']) {
             $submit_buttons[] = $form->addButtonSave(get_lang('Accept'), 'accept_button', true);
         }
-        if ($course_request_info['status'] != COURSE_REQUEST_ACCEPTED &&
-            $course_request_info['status'] != COURSE_REQUEST_REJECTED
+        if (COURSE_REQUEST_ACCEPTED != $course_request_info['status'] &&
+            COURSE_REQUEST_REJECTED != $course_request_info['status']
         ) {
             $submit_buttons[] = $form->addButtonCancel(get_lang('Reject'), 'reject_button', true);
         }
-        if ($course_request_info['status'] != COURSE_REQUEST_ACCEPTED && intval($course_request_info['info']) <= 0) {
+        if (COURSE_REQUEST_ACCEPTED != $course_request_info['status'] && (int) ($course_request_info['info']) <= 0) {
             $submit_buttons[] = $form->addButtonPreview(get_lang('Ask for additional information'), 'ask_info_button', true);
         }
         $form->addGroup($submit_buttons);
@@ -213,6 +213,7 @@ if ($course_validation_feature) {
                                     false
                                 );
                             }
+
                             break;
                         case 'reject_button':
                             if (CourseRequestManager::reject_course_request($id)) {
@@ -238,6 +239,7 @@ if ($course_validation_feature) {
                                     false
                                 );
                             }
+
                             break;
                         case 'ask_info_button':
                             if (CourseRequestManager::ask_for_additional_info($id)) {
@@ -263,6 +265,7 @@ if ($course_validation_feature) {
                                     false
                                 );
                             }
+
                             break;
                     }
                 } else {

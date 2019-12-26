@@ -4,8 +4,6 @@ exit;
 /**
  * This tool allows platform admins to update course-user relations by uploading
  * a CSV file.
- *
- * @package chamilo.admin
  */
 /**
  * Validates the imported data.
@@ -19,14 +17,14 @@ function validate_data($users_courses)
         // 1. Check whether mandatory fields are set.
         $mandatory_fields = ['Email', 'CourseCode', 'Status'];
         foreach ($mandatory_fields as $key => $field) {
-            if (!isset($user_course[$field]) || strlen($user_course[$field]) == 0) {
+            if (!isset($user_course[$field]) || 0 == strlen($user_course[$field])) {
                 $user_course['error'] = get_lang($field.'Mandatory');
                 $errors[] = $user_course;
             }
         }
 
         // 2. Check whether coursecode exists.
-        if (isset($user_course['CourseCode']) && strlen($user_course['CourseCode']) != 0) {
+        if (isset($user_course['CourseCode']) && 0 != strlen($user_course['CourseCode'])) {
             // 2.1 Check whethher code has been allready used by this CVS-file.
             if (!isset($coursecodes[$user_course['CourseCode']])) {
                 // 2.1.1 Check whether course with this code exists in the system.
@@ -34,7 +32,7 @@ function validate_data($users_courses)
                 $sql = "SELECT * FROM $course_table
                         WHERE code = '".Database::escape_string($user_course['CourseCode'])."'";
                 $res = Database::query($sql);
-                if (Database::num_rows($res) == 0) {
+                if (0 == Database::num_rows($res)) {
                     $user_course['error'] = get_lang('This code does not exist');
                     $errors[] = $user_course;
                 } else {
@@ -44,7 +42,7 @@ function validate_data($users_courses)
         }
 
         // 3. Check whether Email exists.
-        if (isset($user_course['Email']) && strlen($user_course['Email']) != 0) {
+        if (isset($user_course['Email']) && 0 != strlen($user_course['Email'])) {
             $user = api_get_user_info_from_email($user_course['Email']);
             if (empty($user)) {
                 $user_course['error'] = get_lang('Unknown user');
@@ -53,8 +51,8 @@ function validate_data($users_courses)
         }
 
         // 4. Check whether status is valid.
-        if (isset($user_course['Status']) && strlen($user_course['Status']) != 0) {
-            if ($user_course['Status'] != COURSEMANAGER && $user_course['Status'] != STUDENT) {
+        if (isset($user_course['Status']) && 0 != strlen($user_course['Status'])) {
+            if (COURSEMANAGER != $user_course['Status'] && STUDENT != $user_course['Status']) {
                 $user_course['error'] = get_lang('Unknown status');
                 $errors[] = $user_course;
             }
@@ -86,7 +84,7 @@ function save_data($users_courses)
         $obj = Database::fetch_object($res);
         $user_id = $obj->user_id;
         $sql = "SELECT * FROM $course_user_table cu
-                WHERE cu.user_id = $user_id AND cu.relation_type <> ".COURSE_RELATION_TYPE_RRHH." ";
+                WHERE cu.user_id = $user_id AND cu.relation_type <> ".COURSE_RELATION_TYPE_RRHH.' ';
         $res = Database::query($sql);
         $db_subscriptions = [];
         while ($obj = Database::fetch_object($res)) {
@@ -140,9 +138,7 @@ function save_data($users_courses)
  */
 function parse_csv_data($file)
 {
-    $courses = Import::csv_reader($file);
-
-    return $courses;
+    return Import::csv_reader($file);
 }
 
 $cidReset = true;
@@ -174,7 +170,7 @@ $errors = [];
 if ($form->validate()) {
     $users_courses = parse_csv_data($_FILES['import_file']['tmp_name']);
     $errors = validate_data($users_courses);
-    if (count($errors) == 0) {
+    if (0 == count($errors)) {
         $inserted_in_course = save_data($users_courses);
         // Build the alert message in case there were visual codes subscribed to.
         if ($_POST['subscribe']) {
@@ -184,7 +180,7 @@ if ($form->validate()) {
         }
 
         if (!empty($inserted_in_course)) {
-            $warn = $warn.' '.get_lang('File imported');
+            $warn .= ' '.get_lang('File imported');
             // The users have been inserted in more than one course.
             foreach ($inserted_in_course as $code => $info) {
                 $warn .= ' '.$info.' ('.$code.') ';
@@ -204,7 +200,7 @@ if ($form->validate()) {
 // Displaying the header.
 Display::display_header($tool_name);
 
-if (count($errors) != 0) {
+if (0 != count($errors)) {
     $error_message = '<ul>';
     foreach ($errors as $index => $error_course) {
         $error_message .= '<li>'.get_lang('Line').' '.$error_course['line'].': <strong>'.$error_course['error'].'</strong>: ';

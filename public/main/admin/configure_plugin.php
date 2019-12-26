@@ -1,11 +1,10 @@
 <?php
+
 /* For licensing terms, see /license.txt */
 
 /**
  * @author Julio Montoya <gugli100@gmail.com> BeezNest 2012
  * @author Angel Fernando Quiroz Campos <angel.quiroz@beeznest.com>
- *
- * @package chamilo.admin
  */
 $cidReset = true;
 require_once __DIR__.'/../inc/global.inc.php';
@@ -49,7 +48,7 @@ if (isset($form)) {
         $values = $form->getSubmitValues();
 
         // Fix only for bbb
-        if ($pluginName == 'bbb') {
+        if ('bbb' == $pluginName) {
             if (!isset($values['global_conference_allow_roles'])) {
                 $values['global_conference_allow_roles'] = [];
             }

@@ -2,8 +2,6 @@
 /* For licensing terms, see /license.txt */
 
 /**
- * @package chamilo.admin
- *
  * @author Julio Montoya <gugli100@gmail.com>
  */
 // resetting the course id
@@ -31,12 +29,12 @@ $interbreadcrumb[] = ['url' => 'index.php', 'name' => get_lang('Administration')
 $interbreadcrumb[] = ['url' => 'access_urls.php', 'name' => get_lang('Multiple access URL / Branding')];
 
 $add_type = 'multiple';
-if (isset($_REQUEST['add_type']) && $_REQUEST['add_type'] != '') {
+if (isset($_REQUEST['add_type']) && '' != $_REQUEST['add_type']) {
     $add_type = Security::remove_XSS($_REQUEST['add_type']);
 }
 
 $access_url_id = 1;
-if (isset($_REQUEST['access_url_id']) && $_REQUEST['access_url_id'] != '') {
+if (isset($_REQUEST['access_url_id']) && '' != $_REQUEST['access_url_id']) {
     $access_url_id = Security::remove_XSS($_REQUEST['access_url_id']);
 }
 
@@ -80,8 +78,8 @@ if (isset($_POST['form_sent']) && $_POST['form_sent']) {
         $course_list = [];
     }
 
-    if ($form_sent == 1) {
-        if ($access_url_id == 0) {
+    if (1 == $form_sent) {
+        if (0 == $access_url_id) {
             Display::addFlash(Display::return_message(get_lang('Select a URL')));
             header('Location: access_url_edit_users_to_url.php');
         } elseif (is_array($course_list)) {
@@ -105,7 +103,7 @@ echo '</div>';
 api_display_tool_title($tool_name);
 
 $noUserGroupList = $userGroupList = [];
-$ajax_search = $add_type === 'unique' ? true : false;
+$ajax_search = 'unique' === $add_type ? true : false;
 
 if ($ajax_search) {
     $userGroups = UrlManager::get_url_rel_usergroup_data($access_url_id);
@@ -126,7 +124,7 @@ if ($ajax_search) {
 $link_add_type_unique = ['class' => 'disabled'];
 $link_add_type_multiple = [];
 
-if ($add_type === 'multiple') {
+if ('multiple' === $add_type) {
     $link_add_type_unique = [];
     $link_add_type_multiple = ['class' => 'disabled'];
 }
@@ -185,7 +183,7 @@ $url_list = UrlManager::get_url_data();
                                 $url_selected = $url_obj[1];
                             }
                         }
-                        if ($url_obj['active'] == 1) {
+                        if (1 == $url_obj['active']) {
                             ?>
                             <option <?php echo $checked; ?>
                                 value="<?php echo $url_obj[0]; ?>"> <?php echo $url_obj[1]; ?>

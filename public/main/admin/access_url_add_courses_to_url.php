@@ -5,7 +5,6 @@
  * It displays a list of users and a list of courses;
  * you can select multiple users and courses and then click on.
  *
- * @package chamilo.admin
  *
  * @author Julio Montoya <gugli100@gmail.com>
  */
@@ -48,8 +47,8 @@ if (isset($_POST['form_sent']) && $_POST['form_sent']) {
     $url_list = is_array($_POST['url_list']) ? $_POST['url_list'] : [];
     $first_letter_course = $_POST['first_letter_course'];
 
-    if ($form_sent == 1) {
-        if (count($courses) == 0 || count($url_list) == 0) {
+    if (1 == $form_sent) {
+        if (0 == count($courses) || 0 == count($url_list)) {
             echo Display::return_message(get_lang('At least one course and one URL'), 'error');
         } else {
             UrlManager::add_courses_to_urls($courses, $url_list);

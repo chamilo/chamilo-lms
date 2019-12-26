@@ -1,9 +1,6 @@
 <?php
-/* For licensing terms, see /license.txt */
 
-/**
- *  @package chamilo.admin
- */
+/* For licensing terms, see /license.txt */
 
 /*
  *
@@ -17,7 +14,7 @@ ALTER TABLE extra_field_values modify column value longtext null;
 $cidReset = true;
 require_once __DIR__.'/../inc/global.inc.php';
 
-if (api_get_configuration_value('allow_career_diagram') == false) {
+if (false == api_get_configuration_value('allow_career_diagram')) {
     api_not_allowed(true);
 }
 
@@ -56,10 +53,10 @@ $interbreadcrumb[] = [
 
 $action = isset($_GET['action']) ? $_GET['action'] : '';
 
-if ($action == 'add') {
+if ('add' == $action) {
     $interbreadcrumb[] = ['url' => 'careers.php', 'name' => get_lang('Careers')];
     $toolName = get_lang('Add');
-} elseif ($action == 'edit') {
+} elseif ('edit' == $action) {
     $interbreadcrumb[] = ['url' => 'careers.php', 'name' => get_lang('Careers')];
     $interbreadcrumb[] = ['url' => '#', 'name' => get_lang('Edit')];
     $toolName = get_lang('Edit');

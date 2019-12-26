@@ -1,10 +1,9 @@
 <?php
+
 /* For licensing terms, see /license.txt */
 
 /**
  * This tool allows platform admins to export courses to CSV file.
- *
- * @package chamilo.admin
  */
 $cidReset = true;
 
@@ -24,10 +23,10 @@ $courses = $selected_courses = [];
 
 if (isset($_POST['formSent']) && $_POST['formSent']) {
     $formSent = $_POST['formSent'];
-    $select_type = intval($_POST['select_type']);
+    $select_type = (int) ($_POST['select_type']);
     $file_type = $_POST['file_type'];
 
-    if ($select_type == 2) {
+    if (2 == $select_type) {
         // Get selected courses from courses list in form sent
         $selected_courses = $_POST['course_code'];
         if (is_array($selected_courses)) {
@@ -75,7 +74,7 @@ if (isset($_POST['formSent']) && $_POST['formSent']) {
 
             if (is_array($usersInCourse) && !empty($usersInCourse)) {
                 foreach ($usersInCourse as $user) {
-                    if ($user['status_rel'] == COURSEMANAGER) {
+                    if (COURSEMANAGER == $user['status_rel']) {
                         $dataToExport['teachers'] .= $user['username'].'|';
                     } else {
                         $dataToExport['students'] .= $user['username'].'|';
@@ -93,12 +92,15 @@ if (isset($_POST['formSent']) && $_POST['formSent']) {
                 // Remove header
                 unset($listToExport[0]);
                 Export::arrayToXml($listToExport, $archiveFile);
+
                 break;
             case 'csv':
                 Export::arrayToCsv($listToExport, $archiveFile);
+
                 break;
             case 'xls':
                 Export::arrayToXls($listToExport, $archiveFile);
+
                 break;
         }
     } else {

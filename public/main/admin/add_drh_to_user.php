@@ -1,4 +1,5 @@
 <?php
+
 /* For licensing terms, see /license.txt */
 
 use Chamilo\CoreBundle\Entity\UserRelUser;
@@ -19,7 +20,7 @@ $userRepository = UserManager::getRepository();
 /** @var UserEntity $user */
 $user = UserManager::getManager()->find($_REQUEST['u']);
 
-if ($user === null) {
+if (null === $user) {
     api_not_allowed(true);
 }
 
@@ -34,7 +35,7 @@ foreach ($subscribedUsers as $subscribedUser) {
     /** @var UserEntity $hrm */
     $hrm = UserManager::getManager()->find($subscribedUser->getFriendUserId());
 
-    if ($hrm === null) {
+    if (null === $hrm) {
         continue;
     }
 
@@ -68,11 +69,11 @@ if ($form->validate()) {
         /** @var UserEntity $hrm */
         $hrm = UserManager::getManager()->find($hrmId);
 
-        if ($hrm === null) {
+        if (null === $hrm) {
             continue;
         }
 
-        if ($hrm->getStatus() !== DRH) {
+        if (DRH !== $hrm->getStatus()) {
             continue;
         }
 

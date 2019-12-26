@@ -1,8 +1,6 @@
 <?php
 /* For licensing terms, see /license.txt */
-/**
- *   @package chamilo.admin
- */
+
 // resetting the course id
 $cidReset = true;
 
@@ -28,7 +26,7 @@ $interbreadcrumb[] = ['url' => 'usergroups.php', 'name' => get_lang('Classes')];
 $tool_name = get_lang('Subscribe class to sessions');
 
 $add_type = 'multiple';
-if (isset($_REQUEST['add_type']) && $_REQUEST['add_type'] != '') {
+if (isset($_REQUEST['add_type']) && '' != $_REQUEST['add_type']) {
     $add_type = Security::remove_XSS($_REQUEST['add_type']);
 }
 
@@ -80,7 +78,7 @@ if (isset($_POST['form_sent']) && $_POST['form_sent']) {
     if (!is_array($elements_posted)) {
         $elements_posted = [];
     }
-    if ($form_sent == 1) {
+    if (1 == $form_sent) {
         //added a parameter to send emails when registering a user
         $usergroup->subscribe_sessions_to_usergroup($id, $elements_posted);
         header('Location: usergroups.php');
@@ -110,7 +108,7 @@ if (!empty($session_list)) {
     }
 }
 
-$ajax_search = $add_type === 'unique' ? true : false;
+$ajax_search = 'unique' === $add_type ? true : false;
 
 // checking for extra field with filter on
 function search_usergroup_sessions($needle, $type)
@@ -119,16 +117,16 @@ function search_usergroup_sessions($needle, $type)
     $xajax_response = new xajaxResponse();
     $return = '';
     if (!empty($needle) && !empty($type)) {
-        if ($type == 'searchbox') {
+        if ('searchbox' == $type) {
             $session_list = SessionManager::get_sessions_list(
                 ['s.name' => ['operator' => 'LIKE', 'value' => "%$needle%"]]
             );
-        } elseif ($type != 'single') {
+        } elseif ('single' != $type) {
             $session_list = SessionManager::get_sessions_list(
                 ['s.name' => ['operator' => 'LIKE', 'value' => "$needle%"]]
             );
         }
-        if ($type != 'single') {
+        if ('single' != $type) {
             $return .= '<select id="elements_not_in" name="elements_not_in_name[]" multiple="multiple" size="15" style="width:360px;">';
             foreach ($session_list as $row) {
                 if (!in_array($row['id'], array_keys($elements_in))) {
@@ -151,7 +149,7 @@ $xajax->processRequests();
 Display::display_header($tool_name);
 
 $add = (empty($_GET['add']) ? '' : Security::remove_XSS($_GET['add']));
-if ($add_type == 'multiple') {
+if ('multiple' == $add_type) {
     $link_add_type_unique = '<a href="'.api_get_self().'?add='.$add.'&add_type=unique">'.
         Display::return_icon('single.gif').get_lang('Single registration').'</a>';
     $link_add_type_multiple = Display::return_icon('multiple.gif').get_lang('Multiple registration');
@@ -193,7 +191,7 @@ if (!empty($errorMsg)) {
   <td align="center"><b><?php echo get_lang('Sessions in group'); ?> :</b></td>
 </tr>
 
-<?php if ($add_type == 'multiple') {
+<?php if ('multiple' == $add_type) {
     ?>
 <tr>
 <td align="center">
@@ -213,7 +211,7 @@ if (!empty($errorMsg)) {
   <td align="center">
   <div id="content_source">
       <?php
-      if (!($add_type == 'multiple')) {
+      if (!('multiple' == $add_type)) {
           ?>
         <input type="text" id="user_to_add" onkeyup="xajax_search_users(this.value,'single')" />
         <div id="ajax_list_users_single"></div>

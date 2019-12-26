@@ -1,8 +1,7 @@
 <?php
+
 /* For licensing terms, see /license.txt */
-/**
- *   @package chamilo.admin
- */
+
 // resetting the course id
 $cidReset = true;
 
@@ -55,6 +54,7 @@ if ($form->validate()) {
     } else {
         Display::addFlash(Display::return_message(get_lang('The app/cache/ directory cleanup has been executed successfully.')));
     }
+
     try {
         \Chamilo\CoreBundle\Composer\ScriptHandler::dumpCssFiles();
         Display::addFlash(Display::return_message(get_lang('The styles and assets in the web/ folder have been refreshed.')));

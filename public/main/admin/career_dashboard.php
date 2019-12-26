@@ -1,10 +1,9 @@
 <?php
+
 /* For licensing terms, see /license.txt */
 
 /**
  * Careers dashboard.
- *
- * @package chamilo.admin.career
  */
 $cidReset = true;
 require_once __DIR__.'/../inc/global.inc.php';
@@ -111,7 +110,7 @@ if (!empty($careers)) {
         $promotion_array = [];
         if (!empty($promotions)) {
             foreach ($promotions as $promotion_item) {
-                if ($promotion_item['status'] == 0) {
+                if (0 == $promotion_item['status']) {
                     continue; //avoid status = 0
                 }
 

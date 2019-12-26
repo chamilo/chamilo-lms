@@ -1,12 +1,10 @@
 <?php
+
 /* For licensing terms, see /license.txt */
 
 use Chamilo\CoreBundle\Entity\CourseCategory;
 use Chamilo\CoreBundle\Repository\CourseCategoryRepository;
 
-/**
- * @package chamilo.admin
- */
 $cidReset = true;
 require_once __DIR__.'/../inc/global.inc.php';
 $this_section = SECTION_PLATFORM_ADMIN;
@@ -133,7 +131,7 @@ $form->applyFilter('department_url', 'html_filter');
 
 // Course language.
 $languages = api_get_languages();
-if (count($languages) === 1) {
+if (1 === count($languages)) {
     // If there's only one language available, there's no point in asking
     $form->addElement('hidden', 'course_language', $languages[0]);
 } else {
@@ -145,7 +143,7 @@ if (count($languages) === 1) {
     );
 }
 
-if (api_get_setting('teacher_can_select_course_template') === 'true') {
+if ('true' === api_get_setting('teacher_can_select_course_template')) {
     $form->addElement(
         'select_ajax',
         'course_template',

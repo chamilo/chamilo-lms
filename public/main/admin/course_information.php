@@ -4,8 +4,6 @@
  * This script gives information about a course.
  *
  * @author Bart Mollet
- *
- * @package chamilo.admin
  */
 $cidReset = true;
 require_once __DIR__.'/../inc/global.inc.php';
@@ -70,8 +68,8 @@ function get_course_usage($course, $session_id = 0)
 
     $usage = [];
     $conditionSession = '';
-    if ($session_id !== '') {
-        $session_id = intval($session_id);
+    if ('' !== $session_id) {
+        $session_id = (int) $session_id;
         $conditionSession = " AND session_id = '$session_id' ";
     }
 
@@ -92,8 +90,8 @@ function get_course_usage($course, $session_id = 0)
     return $usage;
 }
 
-$interbreadcrumb[] = ["url" => 'index.php', "name" => get_lang('Administration')];
-$interbreadcrumb[] = ["url" => 'course_list.php', "name" => get_lang('Courses')];
+$interbreadcrumb[] = ['url' => 'index.php', 'name' => get_lang('Administration')];
+$interbreadcrumb[] = ['url' => 'course_list.php', 'name' => get_lang('Courses')];
 $courseId = $courseInfo['real_id'];
 $tool_name = $courseInfo['title'].' ('.$courseInfo['visual_code'].')';
 Display::display_header($tool_name);
@@ -119,7 +117,7 @@ $table->set_header(0, get_lang('tool'), true);
 $table->set_header(1, get_lang('number of items'), true);
 $table->display();
 
-/**
+/*
  * Show all users subscribed in this course.
  */
 echo Display::page_header(get_lang('Users'));
@@ -129,10 +127,10 @@ $table_user = Database::get_main_table(TABLE_MAIN_USER);
 $sql = "SELECT *, cu.status as course_status
         FROM $table_course_user cu, $table_user u";
 if (api_is_multiple_url_enabled()) {
-    $sql .= " INNER JOIN ".Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_USER)." url_rel_user
+    $sql .= ' INNER JOIN '.Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_USER).' url_rel_user
         ON 
             u.user_id = url_rel_user.user_id AND 
-            url_rel_user.access_url_id = ".api_get_current_access_url_id();
+            url_rel_user.access_url_id = '.api_get_current_access_url_id();
 }
 $sql .= " WHERE
             cu.user_id = u.user_id AND
@@ -153,7 +151,7 @@ if (Database::num_rows($res) > 0) {
             $user[] = $obj->firstname;
         }
         $user[] = Display:: encrypted_mailto_link($obj->email, $obj->email);
-        $user[] = $obj->course_status == 5 ? get_lang('Learner') : get_lang('Trainer');
+        $user[] = 5 == $obj->course_status ? get_lang('Learner') : get_lang('Trainer');
         $user[] = '<a href="user_information.php?user_id='.$obj->user_id.'">'.
             Display::return_icon('info2.png', get_lang('user information')).'</a>';
         $users[] = $user;

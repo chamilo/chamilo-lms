@@ -3,9 +3,6 @@
 
 use ChamiloSession as Session;
 
-/**
- *  @package chamilo.admin
- */
 $cidReset = true;
 require_once __DIR__.'/../inc/global.inc.php';
 
@@ -32,10 +29,10 @@ $action = isset($_GET['action']) ? $_GET['action'] : null;
 $check = Security::check_token('request');
 $token = Security::get_token();
 
-if ($action == 'add') {
+if ('add' == $action) {
     $interbreadcrumb[] = ['url' => 'careers.php', 'name' => get_lang('Careers')];
     $tool_name = get_lang('Add');
-} elseif ($action == 'edit') {
+} elseif ('edit' == $action) {
     $interbreadcrumb[] = ['url' => 'careers.php', 'name' => get_lang('Careers')];
     $interbreadcrumb[] = ['url' => '#', 'name' => get_lang('Edit')];
     $tool_name = get_lang('Edit');
@@ -88,8 +85,8 @@ if (api_is_platform_admin()) {
     $actionLinks = 'function action_formatter(cellvalue, options, rowObject) {
         return \'<a href="?action=edit&id=\'+options.rowId+\'">'.Display::return_icon('edit.png', get_lang('Edit'), '', ICON_SIZE_SMALL).'</a>'.
             $diagramLink.
-            '&nbsp;<a onclick="javascript:if(!confirm('."\'".addslashes(api_htmlentities(get_lang("Please confirm your choice"), ENT_QUOTES))."\'".')) return false;"  href="?sec_token='.$token.'&action=copy&id=\'+options.rowId+\'">'.Display::return_icon('copy.png', get_lang('Copy'), '', ICON_SIZE_SMALL).'</a>'.
-            '&nbsp;<a onclick="javascript:if(!confirm('."\'".addslashes(api_htmlentities(get_lang("Please confirm your choice"), ENT_QUOTES))."\'".')) return false;"  href="?sec_token='.$token.'&action=delete&id=\'+options.rowId+\'">'.Display::return_icon('delete.png', get_lang('Delete'), '', ICON_SIZE_SMALL).'</a>'.
+            '&nbsp;<a onclick="javascript:if(!confirm('."\'".addslashes(api_htmlentities(get_lang('Please confirm your choice'), ENT_QUOTES))."\'".')) return false;"  href="?sec_token='.$token.'&action=copy&id=\'+options.rowId+\'">'.Display::return_icon('copy.png', get_lang('Copy'), '', ICON_SIZE_SMALL).'</a>'.
+            '&nbsp;<a onclick="javascript:if(!confirm('."\'".addslashes(api_htmlentities(get_lang('Please confirm your choice'), ENT_QUOTES))."\'".')) return false;"  href="?sec_token='.$token.'&action=delete&id=\'+options.rowId+\'">'.Display::return_icon('delete.png', get_lang('Delete'), '', ICON_SIZE_SMALL).'</a>'.
             '\';
     }';
 } else {
@@ -108,7 +105,7 @@ switch ($action) {
     case 'add':
         api_protect_admin_script();
 
-        if (api_get_session_id() != 0 &&
+        if (0 != api_get_session_id() &&
             !api_is_allowed_to_session_edit(false, true)
         ) {
             api_not_allowed();
@@ -140,6 +137,7 @@ switch ($action) {
             $form->setConstants(['sec_token' => $token]);
             $content .= $form->returnForm();
         }
+
         break;
     case 'edit':
         api_protect_admin_script();
@@ -197,6 +195,7 @@ switch ($action) {
             $form->setConstants(['sec_token' => $token]);
             $content .= $form->returnForm();
         }
+
         break;
     case 'delete':
         api_protect_admin_script();
@@ -211,10 +210,11 @@ switch ($action) {
         }
         header('Location: '.$listUrl);
         exit;
+
         break;
     case 'copy':
         api_protect_admin_script();
-        if (api_get_session_id() != 0 && !api_is_allowed_to_session_edit(false, true)) {
+        if (0 != api_get_session_id() && !api_is_allowed_to_session_edit(false, true)) {
             api_not_allowed(true);
         }
         if ($check) {
@@ -228,9 +228,11 @@ switch ($action) {
 
         header('Location: '.$listUrl);
         exit;
+
         break;
     default:
         $content = $career->display();
+
         break;
 }
 

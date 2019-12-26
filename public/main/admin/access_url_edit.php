@@ -1,9 +1,8 @@
 <?php
+
 /* For licensing terms, see /license.txt */
 
 /**
- * @package chamilo.admin
- *
  * @author Julio Montoya <gugli100@gmail.com>
  */
 $cidReset = true;
@@ -31,12 +30,12 @@ if ($form->validate()) {
         $url_to_go = 'access_urls.php';
         if (!empty($url_id)) {
             //we can't change the status of the url with id=1
-            if ($url_id == 1) {
+            if (1 == $url_id) {
                 $active = 1;
             }
 
             // Checking url
-            if (substr($url, strlen($url) - 1, strlen($url)) == '/') {
+            if ('/' == substr($url, strlen($url) - 1, strlen($url))) {
                 UrlManager::update($url_id, $url, $description, $active);
             } else {
                 UrlManager::update($url_id, $url.'/', $description, $active);
@@ -45,10 +44,10 @@ if ($form->validate()) {
             $url_images_dir = api_get_path(SYS_PATH).'custompages/url-images/';
             $image_fields = ['url_image_1', 'url_image_2', 'url_image_3'];
             foreach ($image_fields as $image_field) {
-                if ($_FILES[$image_field]['error'] == 0) {
+                if (0 == $_FILES[$image_field]['error']) {
                     // Hardcoded: only PNG files allowed
                     $fileFields = explode('.', $_FILES[$image_field]['name']);
-                    if (end($fileFields) === 'png') {
+                    if ('png' === end($fileFields)) {
                         if (file_exists($url_images_dir.$url_id.'_'.$image_field.'.png')) {
                             // if the file exists, we have to remove it before move_uploaded_file
                             unlink($url_images_dir.$url_id.'_'.$image_field.'.png');
@@ -64,9 +63,9 @@ if ($form->validate()) {
             $message = get_lang('The URL has been edited');
         } else {
             $num = UrlManager::url_exist($url);
-            if ($num == 0) {
+            if (0 == $num) {
                 // checking url
-                if (substr($url, strlen($url) - 1, strlen($url)) == '/') {
+                if ('/' == substr($url, strlen($url) - 1, strlen($url))) {
                     UrlManager::add($url, $description, $active);
                 } else {
                     //create
@@ -79,15 +78,15 @@ if ($form->validate()) {
                 $message = get_lang('This URL already exists, please select another URL');
             }
             // URL Images
-            $url .= (substr($url, strlen($url) - 1, strlen($url)) == '/') ? '' : '/';
+            $url .= '/' == substr($url, strlen($url) - 1, strlen($url)) ? '' : '/';
             $url_id = UrlManager::get_url_id($url);
             $url_images_dir = api_get_path(SYS_PATH).'custompages/url-images/';
-            $image_fields = ["url_image_1", "url_image_2", "url_image_3"];
+            $image_fields = ['url_image_1', 'url_image_2', 'url_image_3'];
             foreach ($image_fields as $image_field) {
-                if ($_FILES[$image_field]['error'] == 0) {
+                if (0 == $_FILES[$image_field]['error']) {
                     // Hardcoded: only PNG files allowed
                     $fileFields = explode('.', $_FILES[$image_field]['name']);
-                    if (end($fileFields) == 'png') {
+                    if ('png' == end($fileFields)) {
                         move_uploaded_file(
                             $_FILES[$image_field]['tmp_name'],
                             $url_images_dir.$url_id.'_'.$image_field.'.png'
@@ -117,7 +116,7 @@ $form->addRule('url', '', 'maxlength', 254);
 $form->addElement('textarea', 'description', get_lang('Description'));
 
 //the first url with id = 1 will be always active
-if (isset($_GET['url_id']) && $_GET['url_id'] != 1) {
+if (isset($_GET['url_id']) && 1 != $_GET['url_id']) {
     $form->addElement('checkbox', 'active', null, get_lang('active'));
 }
 
@@ -128,7 +127,7 @@ $submit_name = get_lang('Add URL');
 if (isset($_GET['url_id'])) {
     $url_id = (int) $_GET['url_id'];
     $num_url_id = UrlManager::url_id_exist($url_id);
-    if ($num_url_id != 1) {
+    if (1 != $num_url_id) {
         header('Location: access_urls.php');
         exit();
     }

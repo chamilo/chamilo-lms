@@ -3,8 +3,6 @@
 
 /**
  *  Interface for assigning sessions to Human Resources Manager.
- *
- *  @package chamilo.admin
  */
 // resetting the course id
 $cidReset = true;
@@ -31,7 +29,7 @@ $tbl_session_rel_user = Database::get_main_table(TABLE_MAIN_SESSION_USER);
 $tbl_session_rel_access_url = Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_SESSION);
 
 // Initializing variables
-$user_id = isset($_GET['user']) ? intval($_GET['user']) : null;
+$user_id = isset($_GET['user']) ? (int) ($_GET['user']) : null;
 $user_info = api_get_user_info($user_id);
 $user_anonymous = api_get_anonymous_id();
 $current_user_id = api_get_user_id();
@@ -40,14 +38,14 @@ $ajax_search = false;
 // Setting the name of the tool
 if (UserManager::is_admin($user_id)) {
     $tool_name = get_lang('AssignSessionsToAdministrationistrator');
-} elseif ($user_info['status'] == SESSIONADMIN) {
+} elseif (SESSIONADMIN == $user_info['status']) {
     $tool_name = get_lang('assign sessions to sessions administrator');
 } else {
     $tool_name = get_lang('Assign sessions to Human Resources manager');
 }
 
 $add_type = 'multiple';
-if (isset($_GET['add_type']) && $_GET['add_type'] != '') {
+if (isset($_GET['add_type']) && '' != $_GET['add_type']) {
     $add_type = Security::remove_XSS($_REQUEST['add_type']);
 }
 
@@ -69,7 +67,7 @@ function search_sessions($needle, $type)
 
         $without_assigned_sessions = '';
         if (count($assigned_sessions_id) > 0) {
-            $without_assigned_sessions = " AND s.id NOT IN(".implode(',', $assigned_sessions_id).")";
+            $without_assigned_sessions = ' AND s.id NOT IN('.implode(',', $assigned_sessions_id).')';
         }
 
         if (api_is_multiple_url_enabled()) {
@@ -156,7 +154,7 @@ $firstLetterSession = isset($_POST['firstLetterSession']) ? $_POST['firstLetterS
 $errorMsg = '';
 $UserList = [];
 
-if (isset($_POST['formSent']) && intval($_POST['formSent']) == 1) {
+if (isset($_POST['formSent']) && 1 == (int) ($_POST['formSent'])) {
     $sessions_list = $_POST['SessionsList'];
     $userInfo = api_get_user_info($user_id);
     $affected_rows = SessionManager::subscribeSessionsToDrh(
@@ -174,7 +172,7 @@ if (isset($_POST['formSent']) && intval($_POST['formSent']) == 1) {
 Display::display_header($tool_name);
 
 // Actions
-if ($user_info['status'] != SESSIONADMIN) {
+if (SESSIONADMIN != $user_info['status']) {
     $actionsLeft = '<a href="dashboard_add_users_to_user.php?user='.$user_id.'">'.
         Display::return_icon('add-user.png', get_lang('Assign users'), null, ICON_SIZE_MEDIUM).'</a>';
     $actionsLeft .= '<a href="dashboard_add_courses_to_user.php?user='.$user_id.'">'.
@@ -194,7 +192,7 @@ $assigned_sessions_id = array_keys($assigned_sessions_to_hrm);
 
 $without_assigned_sessions = '';
 if (count($assigned_sessions_id) > 0) {
-    $without_assigned_sessions = " AND s.id NOT IN (".implode(',', $assigned_sessions_id).") ";
+    $without_assigned_sessions = ' AND s.id NOT IN ('.implode(',', $assigned_sessions_id).') ';
 }
 
 $needle = '%';
@@ -208,8 +206,8 @@ if (api_is_multiple_url_enabled()) {
             LEFT JOIN $tbl_session_rel_access_url a ON (s.id = a.session_id)
             WHERE
                 s.name LIKE '$needle%' $without_assigned_sessions AND
-                access_url_id = ".api_get_current_access_url_id()."
-            ORDER BY s.name";
+                access_url_id = ".api_get_current_access_url_id().'
+            ORDER BY s.name';
 } else {
     $sql = "SELECT s.id, s.name FROM $tbl_session s
 		    WHERE  s.name LIKE '$needle%' $without_assigned_sessions
@@ -240,7 +238,7 @@ $result = Database::query($sql);
         </div>
         <div class="col-md-4">
             <div class="code-course">
-                <?php if ($add_type == 'multiple') {
+                <?php if ('multiple' == $add_type) {
                         ?>
                 <p><?php echo get_lang('Session title\'s first letter'); ?> :</p>
                 <select class="selectpicker form-control" name="firstLetterSession" onchange = "xajax_search_sessions(this.value, 'multiple')">
@@ -284,7 +282,7 @@ $result = Database::query($sql);
                 <?php
                 if (UserManager::is_admin($user_id)) {
                     echo get_lang('AssignedSessionsListToAdministrationistrator');
-                } elseif ($user_info['status'] == SESSIONADMIN) {
+                } elseif (SESSIONADMIN == $user_info['status']) {
                     echo get_lang('Assigned sessions list to sessions administrator');
                 } else {
                     echo get_lang('List of sessions assigned to the Human Resources manager');

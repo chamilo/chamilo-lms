@@ -1,8 +1,6 @@
 <?php
 /* For licensing terms, see /license.txt */
-/**
- *   @package chamilo.admin
- */
+
 // resetting the course id
 $cidReset = true;
 
@@ -25,7 +23,7 @@ $interbreadcrumb[] = ['url' => 'career_dashboard.php', 'name' => get_lang('Caree
 // Setting the name of the tool
 $tool_name = get_lang('Subscribe sessions to promotions');
 $add_type = 'multiple';
-if (isset($_REQUEST['add_type']) && $_REQUEST['add_type'] != '') {
+if (isset($_REQUEST['add_type']) && '' != $_REQUEST['add_type']) {
     $add_type = Security::remove_XSS($_REQUEST['add_type']);
 }
 
@@ -68,14 +66,14 @@ $form_sent = 0;
 $errorMsg = '';
 $users = $sessions = [];
 $promotion = new Promotion();
-$id = intval($_GET['id']);
+$id = (int) ($_GET['id']);
 if (isset($_POST['form_sent']) && $_POST['form_sent']) {
     $form_sent = $_POST['form_sent'];
     $session_in_promotion_posted = $_POST['session_in_promotion_name'];
     if (!is_array($session_in_promotion_posted)) {
         $session_in_promotion_posted = [$session_in_promotion_posted];
     }
-    if ($form_sent == 1) {
+    if (1 == $form_sent) {
         // Added a parameter to send emails when registering a user
         SessionManager::subscribe_sessions_to_promotion($id, $session_in_promotion_posted);
         header('Location: promotions.php');
@@ -101,7 +99,7 @@ if (!empty($session_list)) {
         }
     }
 }
-$ajax_search = $add_type == 'unique' ? true : false;
+$ajax_search = 'unique' == $add_type ? true : false;
 
 // Checking for extra field with filter on
 
@@ -109,7 +107,7 @@ $xajax->processRequests();
 
 Display::display_header($tool_name);
 
-if ($add_type == 'multiple') {
+if ('multiple' == $add_type) {
     $link_add_type_unique = '<a href="'.api_get_self().'?id='.$id.'&add_type=unique">'.Display::return_icon('single.gif').get_lang('Single registration').'</a>';
     $link_add_type_multiple = Display::return_icon('multiple.gif').get_lang('Multiple registration');
 } else {
@@ -129,7 +127,7 @@ echo '</div>';
 }?>>
 <?php echo '<legend>'.$tool_name.' '.$promotion_data['name'].'</legend>';
 
-if ($add_type == 'multiple') {
+if ('multiple' == $add_type) {
     $extraField = new \ExtraField('session');
     $extra_field_list = $extraField->get_all_extra_field_by_type(ExtraField::FIELD_TYPE_SELECT);
     $new_field_list = [];
@@ -172,7 +170,7 @@ if (!empty($errorMsg)) {
   <td align="center"><b><?php echo get_lang('Sessions in this promotion'); ?> :</b></td>
 </tr>
 
-<?php if ($add_type == 'multiple') {
+<?php if ('multiple' == $add_type) {
     ?>
 <tr>
 <td align="center">
@@ -191,7 +189,7 @@ if (!empty($errorMsg)) {
   <td align="center">
   <div id="content_source">
       <?php
-      if (!($add_type == 'multiple')) {
+      if (!('multiple' == $add_type)) {
           ?>
         <input type="text" id="user_to_add" onkeyup="xajax_search_users(this.value,'single')" />
         <div id="ajax_list_users_single"></div>

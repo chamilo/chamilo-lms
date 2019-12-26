@@ -1,8 +1,5 @@
 <?php
 /* For licensing terms, see /license.txt */
-/**
- *   @package chamilo.admin
- */
 
 // Resetting the course id.
 $cidReset = true;
@@ -29,7 +26,7 @@ $interbreadcrumb[] = ['url' => 'usergroups.php', 'name' => get_lang('Classes')];
 $tool_name = get_lang('Subscribe class to courses');
 
 $add_type = 'multiple';
-if (isset($_REQUEST['add_type']) && $_REQUEST['add_type'] != '') {
+if (isset($_REQUEST['add_type']) && '' != $_REQUEST['add_type']) {
     $add_type = Security::remove_XSS($_REQUEST['add_type']);
 }
 
@@ -54,7 +51,7 @@ if (isset($_POST['form_sent']) && $_POST['form_sent']) {
     if (!is_array($elements_posted)) {
         $elements_posted = [];
     }
-    if ($form_sent == 1) {
+    if (1 == $form_sent) {
         $usergroup->subscribe_courses_to_usergroup($id, $elements_posted);
         Display::addFlash(Display::return_message(get_lang('Update successful')));
         header('Location: usergroups.php');
@@ -120,7 +117,7 @@ $course_list = CourseManager::get_courses_list(
 
 $elements_not_in = $elements_in = [];
 foreach ($course_list_in as $course) {
-    $elements_in[$course['id']] = $course['title']." (".$course['visual_code'].")";
+    $elements_in[$course['id']] = $course['title'].' ('.$course['visual_code'].')';
 }
 
 if (!empty($course_list)) {
@@ -128,11 +125,11 @@ if (!empty($course_list)) {
         if (isset($elements_in[$item['id']])) {
             continue;
         }
-        $elements_not_in[$item['id']] = $item['title']." (".$item['visual_code'].")";
+        $elements_not_in[$item['id']] = $item['title'].' ('.$item['visual_code'].')';
     }
 }
 
-$ajax_search = $add_type == 'unique' ? true : false;
+$ajax_search = 'unique' == $add_type ? true : false;
 
 // checking for extra field with filter on
 function search($needle, $type)
@@ -141,7 +138,7 @@ function search($needle, $type)
     $xajax_response = new xajaxResponse();
     $return = '';
     if (!empty($needle) && !empty($type)) {
-        if ($type != 'single') {
+        if ('single' != $type) {
             $list = CourseManager::get_courses_list(
                 0,
                 0,
@@ -151,7 +148,7 @@ function search($needle, $type)
                 $needle
             );
         }
-        if ($type != 'single') {
+        if ('single' != $type) {
             $return .= '<select id="elements_not_in" name="elements_not_in_name[]" multiple="multiple" size="15" style="width:360px;">';
 
             foreach ($list as $row) {
@@ -170,7 +167,7 @@ function search($needle, $type)
 $xajax->processRequests();
 Display::display_header($tool_name);
 
-if ($add_type == 'multiple') {
+if ('multiple' == $add_type) {
     $link_add_type_unique = '<a href="'.api_get_self().'?add='.$add.'&add_type=unique">'.
         Display::return_icon('single.gif').get_lang('Single registration').'</a>';
     $link_add_type_multiple = Display::return_icon('multiple.gif').get_lang('Multiple registration');
@@ -212,7 +209,7 @@ if (!empty($errorMsg)) {
   <td align="center"><b><?php echo get_lang('Courses in group'); ?> :</b></td>
 </tr>
 
-<?php if ($add_type == 'multiple') {
+<?php if ('multiple' == $add_type) {
     ?>
 <tr>
 <td align="center">
@@ -231,7 +228,7 @@ if (!empty($errorMsg)) {
   <td align="center">
   <div id="content_source">
       <?php
-      if (!($add_type == 'multiple')) {
+      if (!('multiple' == $add_type)) {
           ?>
         <input type="text" id="user_to_add" onkeyup="xajax_search_users(this.value,'single')" />
         <div id="ajax_list_users_single"></div>

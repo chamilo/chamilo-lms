@@ -1,9 +1,8 @@
 <?php
+
 /* For licensing terms, see /license.txt */
 /**
  * @author Bart Mollet, Julio Montoya lot of fixes
- *
- * @package chamilo.admin
  */
 $cidReset = true;
 require_once __DIR__.'/../inc/global.inc.php';
@@ -39,6 +38,7 @@ switch ($action) {
                 'confirm'
             );
         }
+
         break;
 }
 
@@ -53,7 +53,7 @@ $order_clause = api_sort_by_first_name() ? ' ORDER BY firstname, lastname' : ' O
 $session_list = SessionManager::get_sessions_list();
 
 $html = '';
-$show_users_with_problems = isset($_REQUEST['show_users_with_problems']) && $_REQUEST['show_users_with_problems'] == 1 ? true : false;
+$show_users_with_problems = isset($_REQUEST['show_users_with_problems']) && 1 == $_REQUEST['show_users_with_problems'] ? true : false;
 if ($show_users_with_problems) {
     $html .= '<a href="'.api_get_self().'?show_users_with_problems=0">'.get_lang('Show all users').'</a>';
 } else {
@@ -65,7 +65,7 @@ foreach ($session_list as $session_item) {
     $html .= '<h3>'.$session_item['name'].'</h3>';
     $access_where = "(access_url_id = $url_id OR access_url_id is null )";
     if ($show_users_with_problems) {
-        $access_where = "(access_url_id is null)";
+        $access_where = '(access_url_id is null)';
     }
 
     $sql = "SELECT u.user_id, lastname, firstname, username, access_url_id
@@ -86,7 +86,7 @@ foreach ($session_list as $session_item) {
         foreach ($users as $user) {
             $user_link = '';
             if (!empty($user['user_id'])) {
-                $user_link = '<a href="'.api_get_path(WEB_CODE_PATH).'admin/user_information.php?user_id='.intval($user['user_id']).'">'.Security::remove_XSS(api_get_person_name($user['firstname'], $user['lastname'])).' ('.$user['username'].')</a>';
+                $user_link = '<a href="'.api_get_path(WEB_CODE_PATH).'admin/user_information.php?user_id='.(int) ($user['user_id']).'">'.Security::remove_XSS(api_get_person_name($user['firstname'], $user['lastname'])).' ('.$user['username'].')</a>';
             }
 
             $link_to_add_user_in_url = '';

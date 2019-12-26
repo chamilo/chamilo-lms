@@ -1,10 +1,10 @@
 <?php
+
 /* For licensing terms, see /license.txt */
 
 /**
  * A list containing the pending course requests.
  *
- * @package chamilo.admin
  *
  * @author José Manuel Abuin Mosquera <chema@cesga.es>, 2010
  * Centro de Supercomputacion de Galicia (CESGA)
@@ -21,19 +21,19 @@ api_protect_admin_script();
 // see DELETE_ACTION_ENABLED constant in main_api.lib.php
 
 // A check whether the course validation feature is enabled.
-$course_validation_feature = api_get_setting('course_validation') == 'true';
+$course_validation_feature = 'true' == api_get_setting('course_validation');
 
 // Filltering passed to this page parameters.
-$accept_course_request = isset($_GET['accept_course_request']) ? intval($_GET['accept_course_request']) : '';
-$reject_course_request = isset($_GET['reject_course_request']) ? intval($_GET['reject_course_request']) : '';
-$request_info = isset($_GET['request_info']) ? intval($_GET['request_info']) : '';
-$delete_course_request = isset($_GET['delete_course_request']) ? intval($_GET['delete_course_request']) : '';
+$accept_course_request = isset($_GET['accept_course_request']) ? (int) ($_GET['accept_course_request']) : '';
+$reject_course_request = isset($_GET['reject_course_request']) ? (int) ($_GET['reject_course_request']) : '';
+$request_info = isset($_GET['request_info']) ? (int) ($_GET['request_info']) : '';
+$delete_course_request = isset($_GET['delete_course_request']) ? (int) ($_GET['delete_course_request']) : '';
 $message = isset($_GET['message']) ? trim(Security::remove_XSS(stripslashes(urldecode($_GET['message'])))) : '';
 $is_error_message = isset($_GET['is_error_message']) ? !empty($_GET['is_error_message']) : '';
 $keyword = isset($_GET['keyword']) ? Database::escape_string(trim($_GET['keyword'])) : '';
 
 if ($course_validation_feature) {
-    /**
+    /*
      * Course acceptance and creation.
      */
     if (!empty($accept_course_request)) {
@@ -87,7 +87,7 @@ if ($course_validation_feature) {
             $is_error_message = true;
         }
     } elseif (DELETE_ACTION_ENABLED && isset($_POST['action'])) {
-        /**
+        /*
          * Form actions: delete.
          */
         switch ($_POST['action']) {
@@ -102,6 +102,7 @@ if ($course_validation_feature) {
                     $message = $success ? get_lang('The selected course requests have been deleted.') : get_lang('Some of the selected course requests have not been deleted due to internal error.');
                     $is_error_message = !$success;
                 }
+
                 break;
         }
     }
@@ -152,7 +153,7 @@ function get_request_data($from, $number_of_items, $column, $direction)
                WHERE status = ".COURSE_REQUEST_PENDING;
     }
 
-    if ($keyword != '') {
+    if ('' != $keyword) {
         $sql .= " AND (title LIKE '%".$keyword."%' OR code LIKE '%".$keyword."%' OR visual_code LIKE '%".$keyword."%')";
     }
     $sql .= " ORDER BY col$column $direction ";
@@ -178,7 +179,7 @@ function get_request_data($from, $number_of_items, $column, $direction)
 function email_filter($teacher)
 {
     $teacher = Database::escape_string($teacher);
-    $sql = "SELECT user_id FROM ".Database::get_main_table(TABLE_MAIN_COURSE_REQUEST)." 
+    $sql = 'SELECT user_id FROM '.Database::get_main_table(TABLE_MAIN_COURSE_REQUEST)." 
             WHERE tutor_name LIKE '".$teacher."'";
     $res = Database::query($sql);
     $info = Database::fetch_array($res);

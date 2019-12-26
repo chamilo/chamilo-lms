@@ -5,7 +5,6 @@
  *    It displays a list of users and a list of courses;
  *    you can select multiple users and courses and then click on.
  *
- * @package chamilo.admin
  *
  * @author Julio Montoya <gugli100@gmail.com>
  */
@@ -48,11 +47,11 @@ if ($_POST['form_sent']) {
     $url_list = is_array($_POST['url_list']) ? $_POST['url_list'] : [];
     $first_letter_user = $_POST['first_letter_user'];
     foreach ($users as $key => $value) {
-        $users[$key] = intval($value);
+        $users[$key] = (int) $value;
     }
 
-    if ($form_sent == 1) {
-        if (count($users) == 0 || count($url_list) == 0) {
+    if (1 == $form_sent) {
+        if (0 == count($users) || 0 == count($url_list)) {
             echo Display::return_message(
                 get_lang('You must select at least one user and one URL'),
                 'error'
@@ -82,7 +81,7 @@ $target_name = api_sort_by_first_name() ? 'firstname' : 'lastname';
 $target_name = 'lastname';
 $sql = "SELECT user_id,lastname,firstname,username FROM $tbl_user
 	    WHERE ".$target_name." LIKE '".$first_letter_user_lower."%' OR ".$target_name." LIKE '".$first_letter_user_lower."%'
-		ORDER BY ".(count($users) > 0 ? "(user_id IN(".implode(',', $users).")) DESC," : "")." ".$target_name;
+		ORDER BY ".(count($users) > 0 ? '(user_id IN('.implode(',', $users).')) DESC,' : '').' '.$target_name;
 $result = Database::query($sql);
 $db_users = Database::store_result($result);
 unset($result);
@@ -100,7 +99,7 @@ unset($result);
     <td width="40%" align="center">
      <b><?php echo get_lang('User list'); ?></b>
      <br/><br/>
-     <?php echo get_lang('Select').' '; echo $target_name == 'firstname' ? get_lang('First name') : get_lang('Last name'); ?>
+     <?php echo get_lang('Select').' '; echo 'firstname' == $target_name ? get_lang('First name') : get_lang('Last name'); ?>
      <select name="first_letter_user" onchange="javascript:document.formulaire.form_sent.value='2'; document.formulaire.submit();">
       <option value="">--</option>
       <?php

@@ -11,7 +11,7 @@
  *
  * @param array $courses
  *
- * @return array $errors
+ * @return array
  */
 function validate_courses_data($courses)
 {
@@ -64,7 +64,7 @@ function validate_courses_data($courses)
             if (empty($categoryInfo)) {
                 CourseCategory::addNode(
                     $course['CourseCategory'],
-                    $course['CourseCategoryName'] ? $course['CourseCategoryName'] : $course['CourseCategory'],
+                    $course['CourseCategoryName'] ?: $course['CourseCategory'],
                     'TRUE',
                     null
                 );
@@ -157,9 +157,7 @@ function save_courses_data($courses)
  */
 function parse_csv_courses_data($file)
 {
-    $courses = Import::csv_reader($file);
-
-    return $courses;
+    return Import::csv_reader($file);
 }
 
 $cidReset = true;
@@ -189,7 +187,7 @@ if (isset($_POST['formSent']) && $_POST['formSent']) {
     } else {
         $allowed_file_mimetype = ['csv'];
 
-        $ext_import_file = substr($_FILES['import_file']['name'], (strrpos($_FILES['import_file']['name'], '.') + 1));
+        $ext_import_file = substr($_FILES['import_file']['name'], strrpos($_FILES['import_file']['name'], '.') + 1);
 
         if (!in_array($ext_import_file, $allowed_file_mimetype)) {
             echo Display::return_message(get_lang('You must import a file corresponding to the selected format'), 'error');
@@ -197,14 +195,14 @@ if (isset($_POST['formSent']) && $_POST['formSent']) {
             $courses = parse_csv_courses_data($_FILES['import_file']['tmp_name']);
 
             $errors = validate_courses_data($courses);
-            if (count($errors) == 0) {
+            if (0 == count($errors)) {
                 save_courses_data($courses);
             }
         }
     }
 }
 
-if (isset($errors) && count($errors) != 0) {
+if (isset($errors) && 0 != count($errors)) {
     $error_message = '<ul>';
     foreach ($errors as $index => $error_course) {
         $error_message .= '<li>'.get_lang('Line').' '.$error_course['line'].': <strong>'.$error_course['error'].'</strong>: ';

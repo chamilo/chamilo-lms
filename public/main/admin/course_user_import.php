@@ -4,8 +4,6 @@
 /**
  * This tool allows platform admins to update course-user relations by uploading
  * a CSV file.
- *
- * @package chamilo.admin
  */
 
 /**
@@ -20,14 +18,14 @@ function validate_data($users_courses)
         // 1. Check whether mandatory fields are set.
         $mandatory_fields = ['UserName', 'CourseCode', 'Status'];
         foreach ($mandatory_fields as $key => $field) {
-            if (!isset($user_course[$field]) || strlen($user_course[$field]) == 0) {
+            if (!isset($user_course[$field]) || 0 == strlen($user_course[$field])) {
                 $user_course['error'] = get_lang($field.'Mandatory');
                 $errors[] = $user_course;
             }
         }
 
         // 2. Check whether coursecode exists.
-        if (isset($user_course['CourseCode']) && strlen($user_course['CourseCode']) != 0) {
+        if (isset($user_course['CourseCode']) && 0 != strlen($user_course['CourseCode'])) {
             // 2.1 Check whethher code has been allready used by this CVS-file.
             if (!isset($coursecodes[$user_course['CourseCode']])) {
                 // 2.1.1 Check whether course with this code exists in the system.
@@ -42,7 +40,7 @@ function validate_data($users_courses)
         }
 
         // 3. Check whether username exists.
-        if (isset($user_course['UserName']) && strlen($user_course['UserName']) != 0) {
+        if (isset($user_course['UserName']) && 0 != strlen($user_course['UserName'])) {
             if (UserManager::is_username_available($user_course['UserName'])) {
                 $user_course['error'] = get_lang('Unknown user');
                 $errors[] = $user_course;
@@ -50,8 +48,8 @@ function validate_data($users_courses)
         }
 
         // 4. Check whether status is valid.
-        if (isset($user_course['Status']) && strlen($user_course['Status']) != 0) {
-            if ($user_course['Status'] != COURSEMANAGER && $user_course['Status'] != STUDENT) {
+        if (isset($user_course['Status']) && 0 != strlen($user_course['Status'])) {
+            if (COURSEMANAGER != $user_course['Status'] && STUDENT != $user_course['Status']) {
                 $user_course['error'] = get_lang('Unknown status');
                 $errors[] = $user_course;
             }
@@ -92,7 +90,7 @@ function save_data($users_courses)
 
         $user_id = $userInfo['user_id'];
         $sql = "SELECT * FROM $course_user_table cu
-                WHERE cu.user_id = $user_id AND cu.relation_type <> ".COURSE_RELATION_TYPE_RRHH." ";
+                WHERE cu.user_id = $user_id AND cu.relation_type <> ".COURSE_RELATION_TYPE_RRHH.' ';
         $res = Database::query($sql);
         $db_subscriptions = [];
         while ($obj = Database::fetch_object($res)) {
@@ -142,9 +140,7 @@ function save_data($users_courses)
  */
 function parse_csv_data($file)
 {
-    $courses = Import::csvToArray($file);
-
-    return $courses;
+    return Import::csvToArray($file);
 }
 
 $cidReset = true;
@@ -176,7 +172,7 @@ $errors = [];
 if ($form->validate()) {
     $users_courses = parse_csv_data($_FILES['import_file']['tmp_name']);
     $errors = validate_data($users_courses);
-    if (count($errors) == 0) {
+    if (0 == count($errors)) {
         $inserted_in_course = save_data($users_courses);
         // Build the alert message in case there were visual codes subscribed to.
         if ($_POST['subscribe']) {
@@ -203,7 +199,7 @@ if ($form->validate()) {
 // Displaying the header.
 Display :: display_header($tool_name);
 
-if (count($errors) != 0) {
+if (0 != count($errors)) {
     $error_message = '<ul>';
     foreach ($errors as $index => $error_course) {
         $error_message .= '<li>'.get_lang('Line').' '.$error_course['line'].': <strong>'.$error_course['error'].'</strong>: ';

@@ -1,10 +1,10 @@
 <?php
+
 /* For licensing terms, see /license.txt */
 
 /**
  * A list containig the accepted course requests.
  *
- * @package chamilo.admin
  *
  * @author José Manuel Abuin Mosquera <chema@cesga.es>, 2010
  * @author Bruno Rubio Gayo <brubio@cesga.es>, 2010
@@ -18,15 +18,15 @@ $this_section = SECTION_PLATFORM_ADMIN;
 api_protect_admin_script();
 
 // A check whether the course validation feature is enabled.
-$course_validation_feature = api_get_setting('course_validation') == 'true';
+$course_validation_feature = 'true' == api_get_setting('course_validation');
 
 // Filltering passed to this page parameters.
-$delete_course_request = isset($_GET['delete_course_request']) ? intval($_GET['delete_course_request']) : '';
+$delete_course_request = isset($_GET['delete_course_request']) ? (int) ($_GET['delete_course_request']) : '';
 $message = isset($_GET['message']) ? trim(Security::remove_XSS(stripslashes(urldecode($_GET['message'])))) : '';
 $is_error_message = !empty($_GET['is_error_message']);
 
 if ($course_validation_feature) {
-    /**
+    /*
      * Deletion of a course request.
      */
     if (!empty($delete_course_request)) {
@@ -40,7 +40,7 @@ if ($course_validation_feature) {
             $is_error_message = true;
         }
     } elseif (isset($_POST['action'])) {
-        /**
+        /*
          * Form actions: delete.
          */
         switch ($_POST['action']) {
@@ -55,6 +55,7 @@ if ($course_validation_feature) {
                     $message = $success ? get_lang('The selected course requests have been deleted.') : get_lang('Some of the selected course requests have not been deleted due to internal error.');
                     $is_error_message = !$success;
                 }
+
                 break;
         }
     }
@@ -84,9 +85,9 @@ function get_request_data($from, $number_of_items, $column, $direction)
     $course_request_table = Database::get_main_table(TABLE_MAIN_COURSE_REQUEST);
     $tblCourseCategory = Database::get_main_table(TABLE_MAIN_CATEGORY);
 
-    $from = intval($from);
-    $number_of_items = intval($number_of_items);
-    $column = intval($column);
+    $from = (int) $from;
+    $number_of_items = (int) $number_of_items;
+    $column = (int) $column;
     $direction = !in_array(strtolower(trim($direction)), ['asc', 'desc']) ? 'asc' : $direction;
 
     $sql = "SELECT
@@ -101,7 +102,7 @@ function get_request_data($from, $number_of_items, $column, $direction)
            LEFT JOIN $tblCourseCategory on course.category_id = course_category.id
            WHERE status = ".COURSE_REQUEST_ACCEPTED;
 
-    if ($keyword != '') {
+    if ('' != $keyword) {
         $sql .= " AND (
                 title LIKE '%".$keyword."%' OR
                 code LIKE '%".$keyword."%' OR
@@ -127,7 +128,8 @@ function get_request_data($from, $number_of_items, $column, $direction)
 function modify_filter($id)
 {
     $code = CourseRequestManager::get_course_request_code($id);
-    $result = '<a href="course_request_edit.php?id='.$id.'&caller=1">'.
+
+    return '<a href="course_request_edit.php?id='.$id.'&caller=1">'.
         Display::return_icon('edit.png', get_lang('Edit'), ['style' => 'vertical-align: middle;']).'</a>'.
         '&nbsp;<a href="?delete_course_request='.$id.'">'.
         Display::return_icon(
@@ -139,8 +141,6 @@ function modify_filter($id)
             ]
         ).
         '</a>';
-
-    return $result;
 }
 
 $interbreadcrumb[] = ['url' => 'index.php', 'name' => get_lang('Administration')];

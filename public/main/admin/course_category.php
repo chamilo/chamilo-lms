@@ -1,9 +1,7 @@
 <?php
+
 /* For licensing terms, see /license.txt */
 
-/**
- * @package chamilo.admin
- */
 $cidReset = true;
 require_once __DIR__.'/../inc/global.inc.php';
 $this_section = SECTION_PLATFORM_ADMIN;
@@ -25,13 +23,13 @@ $action = isset($_GET['action']) ? $_GET['action'] : null;
 $myCourseListAsCategory = api_get_configuration_value('my_courses_list_as_category');
 
 if (!empty($action)) {
-    if ($action == 'delete') {
+    if ('delete' == $action) {
         CourseCategory::deleteNode($categoryId);
         Display::addFlash(Display::return_message(get_lang('Deleted')));
         header('Location: '.api_get_self().'?category='.Security::remove_XSS($category));
         exit();
-    } elseif (($action == 'add' || $action == 'edit') && isset($_POST['formSent']) && $_POST['formSent']) {
-        if ($action == 'add') {
+    } elseif (('add' == $action || 'edit' == $action) && isset($_POST['formSent']) && $_POST['formSent']) {
+        if ('add' == $action) {
             $ret = CourseCategory::addNode(
                 $_POST['code'],
                 $_POST['name'],
@@ -72,7 +70,7 @@ if (!empty($action)) {
         Display::addFlash($errorMsg);
         header('Location: '.api_get_path(WEB_CODE_PATH).'admin/course_category.php');
         exit;
-    } elseif ($action == 'moveUp') {
+    } elseif ('moveUp' == $action) {
         CourseCategory::moveNodeUp($categoryId, $_GET['tree_pos'], $category);
         header('Location: '.api_get_self().'?category='.Security::remove_XSS($category));
         Display::addFlash(Display::return_message(get_lang('Update successful')));
@@ -89,7 +87,7 @@ $interbreadcrumb[] = [
 Display::display_header($tool_name);
 $urlId = api_get_current_access_url_id();
 
-if ($action == 'add' || $action == 'edit') {
+if ('add' == $action || 'edit' == $action) {
     echo '<div class="actions">';
     echo Display::url(
         Display::return_icon('folder_up.png', get_lang('Back'), '', ICON_SIZE_MEDIUM),
@@ -97,7 +95,7 @@ if ($action == 'add' || $action == 'edit') {
     );
     echo '</div>';
 
-    $form_title = ($action == 'add') ? get_lang('Add category') : get_lang('Edit this category');
+    $form_title = 'add' == $action ? get_lang('Add category') : get_lang('Edit this category');
     if (!empty($category)) {
         $form_title .= ' '.get_lang('Into').' '.Security::remove_XSS($category);
     }
@@ -105,7 +103,7 @@ if ($action == 'add' || $action == 'edit') {
     $form = new FormValidator('course_category', 'post', $url);
     $form->addElement('header', '', $form_title);
     $form->addElement('hidden', 'formSent', 1);
-    $form->addElement('text', 'code', get_lang("Category code"));
+    $form->addElement('text', 'code', get_lang('Category code'));
 
     if (api_get_configuration_value('save_titles_as_html')) {
         $form->addHtmlEditor(
@@ -116,7 +114,7 @@ if ($action == 'add' || $action == 'edit') {
             ['ToolbarSet' => 'TitleAsHtml']
         );
     } else {
-        $form->addElement('text', 'name', get_lang("Category name"));
+        $form->addElement('text', 'name', get_lang('Category name'));
         $form->addRule('name', get_lang('Please enter a code and a name for the category'), 'required');
     }
 
@@ -149,7 +147,7 @@ if ($action == 'add' || $action == 'edit') {
         );
         $form->addFile('image', get_lang('Image'), ['id' => 'picture', 'class' => 'picture-form', 'accept' => 'image/*', 'crop_image' => true]);
 
-        if ($action == 'edit' && !empty($categoryInfo['image'])) {
+        if ('edit' == $action && !empty($categoryInfo['image'])) {
             $form->addElement('checkbox', 'delete_picture', null, get_lang('Delete picture'));
             $form->addHtml('
                 <div class="form-group row">
@@ -178,7 +176,7 @@ if ($action == 'add' || $action == 'edit') {
     $form->display();
 } else {
     // If multiple URLs and not main URL, prevent deletion and inform user
-    if ($action == 'delete' && api_get_multiple_access_url() && $urlId != 1) {
+    if ('delete' == $action && api_get_multiple_access_url() && 1 != $urlId) {
         echo Display::return_message(get_lang('Course categories are global over multiple portals configurations. Changes are only allowed in the main administrative portal.'), 'warning');
     }
     echo '<div class="actions">';
@@ -193,7 +191,7 @@ if ($action == 'add' || $action == 'edit') {
         );
     }
 
-    if (empty($parentInfo) || $parentInfo['auth_cat_child'] == 'TRUE') {
+    if (empty($parentInfo) || 'TRUE' == $parentInfo['auth_cat_child']) {
         $newCategoryLink = Display::url(
             Display::return_icon('new_folder.png', get_lang('Add category'), '', ICON_SIZE_MEDIUM),
             api_get_path(WEB_CODE_PATH).'admin/course_category.php?action=add&category='.Security::remove_XSS($category)

@@ -5,8 +5,6 @@ use Chamilo\CoreBundle\Component\Utils\ChamiloApi;
 
 /**
  * Edition of extensions configuration.
- *
- * @package chamilo.admin
  */
 $cidReset = true;
 require_once __DIR__.'/../inc/global.inc.php';
@@ -66,6 +64,7 @@ if (isset($_POST['activeExtension'])) {
                     WHERE variable="service_ppt2lp"
                     AND subkey="size"';
             Database::query($sql);
+
             break;
     }
 }

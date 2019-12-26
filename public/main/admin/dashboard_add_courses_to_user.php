@@ -3,8 +3,6 @@
 
 /**
  * Interface for assigning courses to Human Resources Manager.
- *
- * @package chamilo.admin
  */
 // resetting the course id
 $cidReset = true;
@@ -30,7 +28,7 @@ $tbl_course_rel_user = Database::get_main_table(TABLE_MAIN_COURSE_USER);
 $tbl_course_rel_access_url = Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_COURSE);
 
 // initializing variables
-$user_id = intval($_GET['user']);
+$user_id = (int) ($_GET['user']);
 $user_info = api_get_user_info($user_id);
 $user_anonymous = api_get_anonymous_id();
 $current_user_id = api_get_user_id();
@@ -38,14 +36,14 @@ $current_user_id = api_get_user_id();
 // setting the name of the tool
 if (UserManager::is_admin($user_id)) {
     $tool_name = get_lang('AssignCoursesToAdministrationistrator');
-} elseif ($user_info['status'] == SESSIONADMIN) {
+} elseif (SESSIONADMIN == $user_info['status']) {
     $tool_name = get_lang('Assign courses to session\'s administrator');
 } else {
     $tool_name = get_lang('Assign courses to HR manager');
 }
 
 $add_type = 'multiple';
-if (isset($_GET['add_type']) && $_GET['add_type'] != '') {
+if (isset($_GET['add_type']) && '' != $_GET['add_type']) {
     $add_type = Security::remove_XSS($_REQUEST['add_type']);
 }
 
@@ -69,7 +67,7 @@ function search_courses($needle, $type)
         }
         $without_assigned_courses = '';
         if (count($assigned_courses_code) > 0) {
-            $without_assigned_courses = " AND c.code NOT IN(".implode(',', $assigned_courses_code).")";
+            $without_assigned_courses = ' AND c.code NOT IN('.implode(',', $assigned_courses_code).')';
         }
 
         if (api_is_multiple_url_enabled()) {
@@ -158,7 +156,7 @@ $errorMsg = $firstLetterCourse = '';
 $UserList = [];
 
 $msg = '';
-if (isset($_POST['formSent']) && intval($_POST['formSent']) == 1) {
+if (isset($_POST['formSent']) && 1 == (int) ($_POST['formSent'])) {
     $courses_list = isset($_POST['CoursesList']) ? $_POST['CoursesList'] : [];
     $affected_rows = CourseManager::subscribeCoursesToDrhManager($user_id, $courses_list);
     if ($affected_rows) {
@@ -191,7 +189,7 @@ foreach ($assigned_courses_code as &$value) {
 
 $without_assigned_courses = '';
 if (count($assigned_courses_code) > 0) {
-    $without_assigned_courses = " AND c.code NOT IN(".implode(',', $assigned_courses_code).")";
+    $without_assigned_courses = ' AND c.code NOT IN('.implode(',', $assigned_courses_code).')';
 }
 
 $needle = '%';
@@ -208,8 +206,8 @@ if (api_is_multiple_url_enabled()) {
             ON (a.c_id = c.id)
             WHERE
                 c.code LIKE '$needle' $without_assigned_courses AND
-                access_url_id = ".api_get_current_access_url_id()."
-            ORDER BY c.title";
+                access_url_id = ".api_get_current_access_url_id().'
+            ORDER BY c.title';
 } else {
     $sql = " SELECT c.code, c.title
             FROM $tbl_course c
@@ -245,7 +243,7 @@ if (!empty($msg)) {
     </div>
     <div class="col-md-4">
         <div class="code-course">
-        <?php if ($add_type == 'multiple') {
+        <?php if ('multiple' == $add_type) {
         ?>
         <p><?php echo get_lang('First letter (code)'); ?> :</p>
         <select name="firstLetterCourse" class="selectpicker form-control" onchange = "xajax_search_courses(this.value,'multiple')">
@@ -275,7 +273,7 @@ if (!empty($msg)) {
         <h5><?php
         if (UserManager::is_admin($user_id)) {
             echo get_lang('AssignedCoursesListToAdministrationistrator');
-        } elseif ($user_info['status'] == SESSIONADMIN) {
+        } elseif (SESSIONADMIN == $user_info['status']) {
             echo get_lang('Assigned courses list to sessions administrator');
         } else {
             echo get_lang('Courses assigned to the HR manager');

@@ -40,6 +40,18 @@
             <img src="{{ illustration }}" />
         {% endif %}
 
+        {% if resource.resourceNode.resourceFile %}
+            <a class="btn btn-default"  href="{{ url('chamilo_core_resource_view', {
+                'id': resource.resourceNode.id,
+                'cid': course.id,
+                'sid': session.id,
+                'type' : type,
+                'tool' : tool
+            })
+            }}">
+                {{ 'View'|trans }}
+            </a>
+        {% endif %}
 
         {% if is_granted('DELETE', resource.resourceNode) %}
             <a class="btn btn-danger" href="{{ url('chamilo_core_resource_delete', {
@@ -53,6 +65,5 @@
                 {{ 'Delete'|trans }}
             </a>
         {% endif %}
-
     {% endautoescape %}
 {% endblock %}

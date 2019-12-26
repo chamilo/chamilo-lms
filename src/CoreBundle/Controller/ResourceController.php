@@ -308,7 +308,7 @@ class ResourceController extends AbstractResourceController implements CourseCon
             [
                 'class' => 'btn btn-secondary download_action',
                 'icon' => 'fa-download',
-                'title' => $this->trans('Download')
+                'title' => $this->trans('Download'),
             ]
         );
 

@@ -31,8 +31,9 @@ Feature: Document tool
     And I press "c_document_save"
     Then I should see "Saved"
     And I should see "My first document.html"
-    Then I follow "My first document.html"
+    Then I follow "Info My first document.html"
     And wait the page to be loaded when ready
+    Then I follow "View"
     Then I should see "This is my first document"
 
   Scenario: Create a HTML document
@@ -44,9 +45,10 @@ Feature: Document tool
     And I press "c_document_save"
     Then I should see "Saved"
     And I should see "My second document.html"
-    Then I follow "My second document.html"
+    Then I follow "Info My second document.html"
     And wait the page to be loaded when ready
     Then I should see "This is my second document"
+    Then I follow "View"
     And I should not see "<strong>"
     And I should not see "www.chamilo.org"
     And I should see "Click here"

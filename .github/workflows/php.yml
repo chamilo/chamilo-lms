@@ -3,45 +3,45 @@ name: PHP Composer
 on: [push]
 
 jobs:
-  build:        
-    name: PHP ${{ matrix.php-versions }} Test on ${{ matrix.operating-system }}    
-    runs-on: ${{ matrix.operating-system }}
-    
-    strategy:
-      fail-fast: false
-      matrix:
-        operating-system: [ubuntu-latest]
-        php-versions: ['7.2', '7.3', '7.4']
-        
-    services:
-      mysql:
-        image: mysql:5.7
-        env:
-          MYSQL_ALLOW_EMPTY_PASSWORD: false
-          MYSQL_ROOT_PASSWORD: root
-          MYSQL_DATABASE: master
-        ports:
-          - 3306
-        options: --health-cmd="mysqladmin ping" --health-interval=10s --health-timeout=5s --health-retries=3   
+    build:
+        name: PHP ${{ matrix.php-versions }} Test on ${{ matrix.operating-system }}
+        runs-on: ${{ matrix.operating-system }}
 
-    steps:
-    - name: Checkout
-      uses: actions/checkout@v1
-      
-    - name: Setup PHP Action
-      uses: shivammathur/setup-php@1.6.1
-      with:
-        php-version: ${{ matrix.php-versions }}
-        extensions: mbstring, xml, ctype, iconv, mysql, gd, soap, intl, zip, bcmath
-    
-    - name: Install dependencies
-      run: composer install --prefer-dist --no-progress --no-suggest
-      
-    - name: Composer analyse
-      run: composer analyse
-      
-    # Add a test script to composer.json, for instance: "test": "vendor/bin/phpunit"
-    # Docs: https://getcomposer.org/doc/articles/scripts.md
+        strategy:
+            fail-fast: false
+            matrix:
+                operating-system: [ubuntu-latest]
+                php-versions: ['7.2', '7.3', '7.4']
 
-    # - name: Run test suite
-    #   run: composer run-script test
+        services:
+            mysql:
+                image: mysql:5.7
+                env:
+                    MYSQL_ALLOW_EMPTY_PASSWORD: false
+                    MYSQL_ROOT_PASSWORD: root
+                    MYSQL_DATABASE: master
+                ports:
+                    - 3306
+                options: --health-cmd="mysqladmin ping" --health-interval=10s --health-timeout=5s --health-retries=3
+
+        steps:
+            -   name: Checkout
+                uses: actions/checkout@v1
+
+            -   name: Setup PHP Action
+                uses: shivammathur/setup-php@1.6.1
+                with:
+                    php-version: ${{ matrix.php-versions }}
+                    extensions: mbstring, xml, ctype, iconv, mysql, gd, soap, intl, zip, bcmath
+
+            -   name: Install dependencies
+                run: composer install --prefer-dist --no-progress --no-suggest
+
+            -   name: Composer analyse
+                run: composer analyse
+
+        # Add a test script to composer.json, for instance: "test": "vendor/bin/phpunit"
+        # Docs: https://getcomposer.org/doc/articles/scripts.md
+
+        # - name: Run test suite
+        #   run: composer run-script test

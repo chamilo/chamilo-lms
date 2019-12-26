@@ -84,14 +84,14 @@ install:
   - sudo chown -R 775 $TRAVIS_BUILD_DIR
   - sudo chmod +x /home/travis/build
   - ls -la public/build
-  # Set to APP_ENV to test
-  - sed -i "s/APP_ENV='dev'/APP_ENV='test'/g" .env
 
 script:
   - cd tests/behat
   #  - travis_wait 45 ../../vendor/behat/behat/bin/behat -v
-  - ../../vendor/behat/behat/bin/behat -v features/actionInstall.feature
-#  - ../../vendor/behat/behat/bin/behat -v features/adminFillUsers.feature
+  - ../../vendor/behat/behat/bin/behat features/actionInstall.feature -v
+  # Set to APP_ENV to test
+  - sed -i "s/APP_ENV='dev'/APP_ENV='test'/g" .env.local
+ - ../../vendor/behat/behat/bin/behat features/adminFillUsers.feature -v
 #  - ../../vendor/behat/behat/bin/behat -v features/course.feature
 #  - ../../vendor/behat/behat/bin/behat -v features/createUser.feature
 

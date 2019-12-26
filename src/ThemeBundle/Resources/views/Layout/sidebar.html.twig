@@ -1,9 +1,11 @@
 {% autoescape false %}
-<div class="sidebar">
-    <nav class="sidebar-nav">
-        {% set menu = knp_menu_get('menuApp') %}
-        {{ knp_menu_render(menu, {'ancestorClass': 'current_open open', 'template': '@ChamiloTheme/Menu/left_menu.html.twig'}) }}
-    </nav>
-    {#<button class="sidebar-minimizer brand-minimizer" type="button"></button>#}
-</div>
+{% if app.environment != 'test' %}
+    <div class="sidebar">
+        <nav class="sidebar-nav">
+            {% set menu = knp_menu_get('menuApp') %}
+            {{ knp_menu_render(menu, {'ancestorClass': 'current_open open', 'template': '@ChamiloTheme/Menu/left_menu.html.twig'}) }}
+        </nav>
+        {#<button class="sidebar-minimizer brand-minimizer" type="button"></button>#}
+    </div>
+{% endif %}
 {% endautoescape %}

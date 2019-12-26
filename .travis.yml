@@ -84,6 +84,8 @@ install:
   - sudo chown -R 775 $TRAVIS_BUILD_DIR
   - sudo chmod +x /home/travis/build
   - ls -la public/build
+  # Set to APP_ENV to test
+  - sed -i "s/APP_ENV='dev'/APP_ENV='test'/g" .env
 
 script:
   - cd tests/behat

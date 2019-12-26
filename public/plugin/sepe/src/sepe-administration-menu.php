@@ -1,4 +1,5 @@
 <?php
+
 /* For licensing terms, see /license.txt */
 
 /**
@@ -7,7 +8,7 @@
 require_once '../config.php';
 
 $plugin = SepePlugin::create();
-$enable = $plugin->get('sepe_enable') == 'true';
+$enable = 'true' == $plugin->get('sepe_enable');
 
 $title = $plugin->get_lang('AdministratorSepe');
 $pluginPath = api_get_path(WEB_PLUGIN_PATH).'sepe/src/';
@@ -45,7 +46,7 @@ if (api_is_platform_admin() && $enable) {
     $htmlText .= '</div>';
 
     $templateName = $plugin->get_lang('MenuSepeAdministrator');
-    $interbreadcrumb[] = ["url" => "/main/admin/index.php", "name" => get_lang('Administration')];
+    $interbreadcrumb[] = ['url' => '/main/admin/index.php', 'name' => get_lang('Administration')];
     $tpl = new Template($templateName);
     $tpl->assign('html_text', $htmlText);
 

@@ -5,13 +5,12 @@
  * These settings will be used in the administration interface for plugins
  * (Chamilo configuration settings->Plugins).
  *
- * @package chamilo.plugin
  *
  * @author Julio Montoya <gugli100@gmail.com>
  */
 global $_configuration;
 
-/**
+/*
  * Plugin details (must be present).
  */
 
@@ -20,7 +19,7 @@ global $_configuration;
 //the plugin title
 $plugin_info['title'] = 'Chamilo Virtualization';
 //the comments that go with the plugin
-$plugin_info['comment'] = "Holds chamilo virtualisation tools";
+$plugin_info['comment'] = 'Holds chamilo virtualisation tools';
 //the plugin version
 $plugin_info['version'] = '1.2';
 //the plugin author

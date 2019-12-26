@@ -1,4 +1,5 @@
 <?php
+
 /* For licensing terms, see /license.txt */
 
 use Chamilo\CoreBundle\Entity\SessionRelCourseRelUser;
@@ -32,7 +33,7 @@ class StudentFollowUpPlugin extends Plugin
     {
         static $result = null;
 
-        return $result ? $result : $result = new self();
+        return $result ?: $result = new self();
     }
 
     public function install()
@@ -52,14 +53,14 @@ class StudentFollowUpPlugin extends Plugin
         $fs->mirror(__DIR__.'/Entity/', $pluginEntityPath, null, ['override']);
         $schema = Database::getManager()->getConnection()->getSchemaManager();
 
-        if ($schema->tablesExist('sfu_post') === false) {
+        if (false === $schema->tablesExist('sfu_post')) {
             $sql = "CREATE TABLE IF NOT EXISTS sfu_post (id INT AUTO_INCREMENT NOT NULL, insert_user_id INT NOT NULL, user_id INT NOT NULL, parent_id INT DEFAULT NULL, title VARCHAR(255) NOT NULL, content LONGTEXT DEFAULT NULL, external_care_id VARCHAR(255) DEFAULT NULL, created_at DATETIME DEFAULT NULL, updated_at DATETIME DEFAULT NULL, private TINYINT(1) NOT NULL, external_source TINYINT(1) NOT NULL, tags LONGTEXT NOT NULL COMMENT '(DC2Type:array)', attachment VARCHAR(255) NOT NULL, lft INT DEFAULT NULL, rgt INT DEFAULT NULL, lvl INT DEFAULT NULL, root INT DEFAULT NULL, INDEX IDX_35F9473C9C859CC3 (insert_user_id), INDEX IDX_35F9473CA76ED395 (user_id), INDEX IDX_35F9473C727ACA70 (parent_id), PRIMARY KEY(id)) DEFAULT CHARACTER SET utf8 COLLATE utf8_unicode_ci ENGINE = InnoDB;";
             Database::query($sql);
-            $sql = "ALTER TABLE sfu_post ADD CONSTRAINT FK_35F9473C9C859CC3 FOREIGN KEY (insert_user_id) REFERENCES user (id);";
+            $sql = 'ALTER TABLE sfu_post ADD CONSTRAINT FK_35F9473C9C859CC3 FOREIGN KEY (insert_user_id) REFERENCES user (id);';
             Database::query($sql);
-            $sql = "ALTER TABLE sfu_post ADD CONSTRAINT FK_35F9473CA76ED395 FOREIGN KEY (user_id) REFERENCES user (id);";
+            $sql = 'ALTER TABLE sfu_post ADD CONSTRAINT FK_35F9473CA76ED395 FOREIGN KEY (user_id) REFERENCES user (id);';
             Database::query($sql);
-            $sql = "ALTER TABLE sfu_post ADD CONSTRAINT FK_35F9473C727ACA70 FOREIGN KEY (parent_id) REFERENCES sfu_post (id) ON DELETE SET NULL;";
+            $sql = 'ALTER TABLE sfu_post ADD CONSTRAINT FK_35F9473C727ACA70 FOREIGN KEY (parent_id) REFERENCES sfu_post (id) ON DELETE SET NULL;';
             Database::query($sql);
         }
     }
@@ -93,7 +94,7 @@ class StudentFollowUpPlugin extends Plugin
     public static function getPermissions($studentId, $currentUserId)
     {
         $installed = AppPlugin::getInstance()->isInstalled('studentfollowup');
-        if ($installed === false) {
+        if (false === $installed) {
             return [
                 'is_allow' => false,
                 'show_private' => false,
@@ -137,6 +138,7 @@ class StudentFollowUpPlugin extends Plugin
                     );
                     if (!empty($sessionDrhInfo)) {
                         $isDrhRelatedToSession = true;
+
                         break;
                     }
                     foreach ($session['courses'] as $course) {
@@ -146,6 +148,7 @@ class StudentFollowUpPlugin extends Plugin
                         );
                         if (!empty($coachList) && in_array($currentUserId, $coachList)) {
                             $isCourseCoach = true;
+
                             break 2;
                         }
                     }
@@ -193,6 +196,7 @@ class StudentFollowUpPlugin extends Plugin
                 foreach ($courseList as $courseItem) {
                     $courses[] = $courseItem->getCourse()->getId();
                 }
+
                 break;
             case DRH:
                 $sessionsFull = SessionManager::get_sessions_followed_by_drh($currentUserId);
@@ -211,6 +215,7 @@ class StudentFollowUpPlugin extends Plugin
                         $courses = array_merge($courses, array_column($sessionDrhInfo['course_list'], 'id'));
                     }
                 }
+
                 break;
         }
 

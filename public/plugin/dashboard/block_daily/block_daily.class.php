@@ -3,7 +3,6 @@
  * This file is part of course block plugin for dashboard,
  * it should be required inside dashboard controller for showing it into dashboard interface from plattform.
  *
- * @package chamilo.dashboard
  *
  * @author Marco Sousa original code
  * @author Julio Montoya class named was changed of name, and some minor changes
@@ -17,8 +16,6 @@
  * This class is used like controller for this course block plugin,
  * the class name must be registered inside path.info file
  * (e.g: controller = "BlockDiario"), so dashboard controller will be instantiate it.
- *
- * @package chamilo.dashboard
  */
 class BlockDaily extends Block
 {
@@ -43,7 +40,7 @@ class BlockDaily extends Block
     /**
      * This method check if a user is allowed to see the block inside dashboard interface.
      *
-     * @param    int        User id
+     * @param int $user_id User id
      *
      * @return bool Is block visible for user
      */
@@ -105,7 +102,7 @@ class BlockDaily extends Block
 	    					</tr>';
             $i = 1;
             foreach ($course_data as $course) {
-                if ($i % 2 == 0) {
+                if (0 == $i % 2) {
                     $class_tr = 'row_odd';
                 } else {
                     $class_tr = 'row_even';
@@ -118,7 +115,7 @@ class BlockDaily extends Block
                     $data_table .= '<td align="right">'.$cell.'</td>';
                 }
                 $data_table .= '</tr>';
-                $i++;
+                ++$i;
             }
             $data_table .= '</table>';
         } else {
@@ -167,7 +164,7 @@ class BlockDaily extends Block
             $table_course = Database::get_course_table(TABLE_ATTENDANCE);
 
             $sql = "SELECT id, name, attendance_qualify_max FROM $table_course
-                    WHERE c_id = ".$course_info['real_id']." AND active = 1 AND session_id = 0";
+                    WHERE c_id = ".$course_info['real_id'].' AND active = 1 AND session_id = 0';
             $rs = Database::query($sql);
             $attendance = [];
             $attendances = [];
@@ -178,14 +175,14 @@ class BlockDaily extends Block
                 //$attendance['name'] = $row['name'];
                 $attendance['course_code'] = $course_info['code'];
 
-                if ($attendance['done'] != '0') {
+                if ('0' != $attendance['done']) {
                     $attendances[] = '<a href="'.api_get_path(WEB_PATH).'main/attendance/index.php?cidReq='.$attendance['course_code'].'&action=attendance_sheet_print&attendance_id='.$attendance['id'].'">'.Display::return_icon('printmgr.gif', get_lang('Print')).'</a>';
                 } else {
-                    $attendances[] = get_lang("Not available");
+                    $attendances[] = get_lang('Not available');
                 }
             }
-            if (count($attendances) == 0) {
-                $attendances[] = get_lang("Not available");
+            if (0 == count($attendances)) {
+                $attendances[] = get_lang('Not available');
             }
 
             // Number of students
@@ -215,7 +212,7 @@ class BlockDaily extends Block
             $tbl_grade_categories = Database::get_main_table(
                 TABLE_MAIN_GRADEBOOK_CATEGORY
             );
-            $sql = "SELECT id from ".$tbl_grade_categories."
+            $sql = 'SELECT id from '.$tbl_grade_categories."
                     WHERE course_code ='".$course_code."'";
             $rs = Database::query($sql);
             $category = null;
@@ -233,13 +230,13 @@ class BlockDaily extends Block
                         if (count($eval) - 1 != $i) {
                             $score .= ', ';
                         }
-                        $i++;
+                        ++$i;
                     }
                 } else {
-                    $score = get_lang("Not available");
+                    $score = get_lang('Not available');
                 }
             } else {
-                $score = get_lang("Not available");
+                $score = get_lang('Not available');
             }
 
             $table_row = [];

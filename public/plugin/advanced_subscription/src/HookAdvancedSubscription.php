@@ -1,4 +1,5 @@
 <?php
+
 /* For licensing terms, see /license.txt */
 
 use Chamilo\CoreBundle\Hook\HookObserver;
@@ -44,7 +45,7 @@ class HookAdvancedSubscription extends HookObserver implements HookAdminBlockObs
     {
         $data = $hook->getEventData();
         // if ($data['type'] === HOOK_EVENT_TYPE_PRE) // Nothing to do
-        if ($data['type'] === HOOK_EVENT_TYPE_POST) {
+        if (HOOK_EVENT_TYPE_POST === $data['type']) {
             if (isset($data['blocks'])) {
                 $data['blocks']['sessions']['items'][] = [
                     'url' => '../../plugin/advanced_subscription/src/admin_view.php',
@@ -65,11 +66,11 @@ class HookAdvancedSubscription extends HookObserver implements HookAdminBlockObs
     {
         $data = $hook->getEventData();
         //if ($data['type'] === HOOK_EVENT_TYPE_PRE) // nothing to do
-        if ($data['type'] === HOOK_EVENT_TYPE_POST) {
+        if (HOOK_EVENT_TYPE_POST === $data['type']) {
             /** @var \nusoap_server $server */
             $server = &$data['server'];
 
-            /** WSSessionListInCategory */
+            /* WSSessionListInCategory */
 
             // Output params for sessionBriefList WSSessionListInCategory
             $server->wsdl->addComplexType(
@@ -187,7 +188,7 @@ class HookAdvancedSubscription extends HookObserver implements HookAdminBlockObs
                 ]
             );
 
-            /** WSListSessionsDetailsByCategory */
+            /* WSListSessionsDetailsByCategory */
 
             // Input params for WSListSessionsDetailsByCategory
             $server->wsdl->addComplexType(
@@ -447,14 +448,13 @@ class HookAdvancedSubscription extends HookObserver implements HookAdminBlockObs
             'schedule',
         ];
         $datePub = new DateTime();
-        $sessionList = SessionManager::getShortSessionListAndExtraByCategory(
+
+        return SessionManager::getShortSessionListAndExtraByCategory(
             $sessionCategoryId,
             $params['target'],
             $fields,
             $datePub
         );
-
-        return $sessionList;
     }
 
     /**
@@ -508,24 +508,24 @@ class HookAdvancedSubscription extends HookObserver implements HookAdminBlockObs
                                 $data['message'] = $e->getMessage();
                             }
                             $params['action'] = 'subscribe';
-                            $params['sessionId'] = intval($sessionId);
+                            $params['sessionId'] = (int) $sessionId;
                             $params['currentUserId'] = 0; // No needed
-                            $params['studentUserId'] = intval($userId);
+                            $params['studentUserId'] = (int) $userId;
                             $params['queueId'] = 0; // No needed
                             $params['newStatus'] = ADVANCED_SUBSCRIPTION_QUEUE_STATUS_START;
                             if ($vacancy > 0) {
                                 // Check conditions
-                                if ($status == ADVANCED_SUBSCRIPTION_QUEUE_STATUS_NO_QUEUE) {
+                                if (ADVANCED_SUBSCRIPTION_QUEUE_STATUS_NO_QUEUE == $status) {
                                     // No in Queue, require queue subscription url action
                                     $data['action_url'] = self::$plugin->getTermsUrl($params);
-                                } elseif ($status == ADVANCED_SUBSCRIPTION_QUEUE_STATUS_ADMIN_APPROVED) {
+                                } elseif (ADVANCED_SUBSCRIPTION_QUEUE_STATUS_ADMIN_APPROVED == $status) {
                                     // send url action
                                     $data['action_url'] = self::$plugin->getSessionUrl($sessionId);
                                 } // Else: In queue, output status message, no more info.
                             } else {
-                                if ($status == ADVANCED_SUBSCRIPTION_QUEUE_STATUS_ADMIN_APPROVED) {
+                                if (ADVANCED_SUBSCRIPTION_QUEUE_STATUS_ADMIN_APPROVED == $status) {
                                     $data['action_url'] = self::$plugin->getSessionUrl($sessionId);
-                                } elseif ($status == ADVANCED_SUBSCRIPTION_QUEUE_STATUS_NO_QUEUE) {
+                                } elseif (ADVANCED_SUBSCRIPTION_QUEUE_STATUS_NO_QUEUE == $status) {
                                     // in Queue or not, cannot be subscribed to session
                                     $data['action_url'] = self::$plugin->getTermsUrl($params);
                                 } // Else: In queue, output status message, no more info.
@@ -635,11 +635,11 @@ class HookAdvancedSubscription extends HookObserver implements HookAdminBlockObs
     public function hookNotificationContent(HookNotificationContentEventInterface $hook)
     {
         $data = $hook->getEventData();
-        if ($data['type'] === HOOK_EVENT_TYPE_PRE) {
+        if (HOOK_EVENT_TYPE_PRE === $data['type']) {
             $data['advanced_subscription_pre_content'] = $data['content'];
 
             return $data;
-        } elseif ($data['type'] === HOOK_EVENT_TYPE_POST) {
+        } elseif (HOOK_EVENT_TYPE_POST === $data['type']) {
             if (isset($data['content']) &&
                 !empty($data['content']) &&
                 isset($data['advanced_subscription_pre_content']) &&
@@ -669,11 +669,11 @@ class HookAdvancedSubscription extends HookObserver implements HookAdminBlockObs
     public function hookNotificationTitle(HookNotificationTitleEventInterface $hook)
     {
         $data = $hook->getEventData();
-        if ($data['type'] === HOOK_EVENT_TYPE_PRE) {
+        if (HOOK_EVENT_TYPE_PRE === $data['type']) {
             $data['advanced_subscription_pre_title'] = $data['title'];
 
             return $data;
-        } elseif ($data['type'] === HOOK_EVENT_TYPE_POST) {
+        } elseif (HOOK_EVENT_TYPE_POST === $data['type']) {
             if (isset($data['advanced_subscription_pre_title']) &&
                 !empty($data['advanced_subscription_pre_title'])
             ) {

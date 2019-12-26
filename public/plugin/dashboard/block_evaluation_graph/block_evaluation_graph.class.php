@@ -1,4 +1,5 @@
 <?php
+
 /* For licensing terms, see /license.txt */
 
 use CpChart\Cache as pCache;
@@ -16,7 +17,6 @@ use CpChart\Image as pImage;
  * it should be required inside dashboard controller for showing it
  * into dashboard interface from platform
  *
- * @package chamilo.dashboard
  *
  * @author Christian Fasanando
  */
@@ -47,7 +47,7 @@ class BlockEvaluationGraph extends Block
     /**
      * This method check if a user is allowed to see the block inside dashboard interface.
      *
-     * @param int        User id
+     * @param int $user_id User id
      *
      * @return bool Is block visible for user
      */

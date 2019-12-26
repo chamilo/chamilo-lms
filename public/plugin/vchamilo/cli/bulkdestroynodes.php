@@ -1,6 +1,7 @@
 <?php
+
 exit;
-/**
+/*
  * This script is to be used from PHP command line and will create a set
  * of Virtual VChamilo automatically from a CSV nodelist description.
  * The standard structure of the nodelist is given by the nodelist-dest.csv file.
@@ -18,28 +19,28 @@ define('CHAMILO_INTERNAL', true);
 echo "Starting tool\n";
 echo "Chamilo Bulk Nodes Creation v.1.0\n";
 echo "=================================\n";
-require_once('../../../main/inc/global.inc.php');
-require_once('clilib.php'); // cli only functions
+require_once '../../../main/inc/global.inc.php';
+require_once 'clilib.php'; // cli only functions
 // Ensure errors are well explained
 ini_set('debug_display', 1);
 ini_set('debug_level', E_ALL);
 
 // Now get cli options.
 list($options, $unrecognized) = cli_get_params(
-    array(
+    [
         'interactive' => false,
-        'help'        => false,
-        'config'      => false,
-        'nodes'       => '',
-        'lint'        => false
-    ),
-    array(
+        'help' => false,
+        'config' => false,
+        'nodes' => '',
+        'lint' => false,
+    ],
+    [
         'h' => 'help',
         'c' => 'config',
         'n' => 'nodes',
         'i' => 'interactive',
-        'l' => 'lint'
-    )
+        'l' => 'lint',
+    ]
 );
 
 $interactive = !empty($options['interactive']);
@@ -51,7 +52,7 @@ if ($unrecognized) {
 
 if ($options['help']) {
     $help =
-"Command line VMoodle Generator.
+'Command line VMoodle Generator.
 Please note you must execute this script with the same uid as apache!
 
 Options:
@@ -62,8 +63,8 @@ Options:
 -l, --lint            Decodes node file and give a report on nodes to be created.
 
 Example:
-\$sudo -u www-data /usr/bin/php /var/www/chamilo19/plugin/vchamilo/cli/bulkdestroynodes.php --nodes=<node-file-path>
-"; //TODO: localize - to be translated later when everything is finished
+$sudo -u www-data /usr/bin/php /var/www/chamilo19/plugin/vchamilo/cli/bulkdestroynodes.php --nodes=<node-file-path>
+'; //TODO: localize - to be translated later when everything is finished
 
     echo $help;
     die;
@@ -71,7 +72,7 @@ Example:
 
 // Get all options from config file.
 if (!empty($options['config'])) {
-    echo "Loading config : ".$options['config'];
+    echo 'Loading config : '.$options['config'];
     if (!file_exists($options['config'])) {
         cli_error(get_string('confignotfound', 'block_vmoodle'));
     }
@@ -91,19 +92,19 @@ if (!empty($options['config'])) {
     }
 }
 
-require_once($_configuration['root_sys'].'local/classes/database.class.php'); // cli only functions
+require_once $_configuration['root_sys'].'local/classes/database.class.php'; // cli only functions
 if ($options['verbose']) {
     echo "loaded dbclass\n";
 }
-require_once($_configuration['root_sys'].'local/classes/textlib.class.php'); // cli only functions
+require_once $_configuration['root_sys'].'local/classes/textlib.class.php'; // cli only functions
 if ($options['verbose']) {
     echo "loaded textlib\n";
 }
-require_once($_configuration['root_sys'].'local/classes/mootochamlib.php'); // moodle like API
+require_once $_configuration['root_sys'].'local/classes/mootochamlib.php'; // moodle like API
 if ($options['verbose']) {
     echo "loaded moodle wrapping\n";
 }
-require_once($_configuration['root_sys'].'/plugin/vchamilo/lib/vchamilo_plugin.class.php');
+require_once $_configuration['root_sys'].'/plugin/vchamilo/lib/vchamilo_plugin.class.php';
 if ($options['verbose']) {
     echo "loaded vchamilo plugin\n";
 }
@@ -140,11 +141,11 @@ if (empty($nodes)) {
 ctrace('Starting CLI processing');
 
 foreach ($nodes as $n) {
-
     ctrace('Destroying node :'.$n->vhostname);
 
-    if (!$DB->get_record('vchamilo', array('root_web' => $n->root_web))) {
+    if (!$DB->get_record('vchamilo', ['root_web' => $n->root_web])) {
         ctrace('Node does not exist. Skipping');
+
         continue;
     }
 
@@ -152,19 +153,19 @@ foreach ($nodes as $n) {
      * This launches automatically all steps of the controller.management.php script several times
      * with the "doadd" action and progressing in steps.
      */
-    $action = "fulldeleteinstances";
+    $action = 'fulldeleteinstances';
 
     $automation = true;
 
-    $return = include($_configuration['root_sys'].'/plugin/vchamilo/views/manage.controller.php');
+    $return = include $_configuration['root_sys'].'/plugin/vchamilo/views/manage.controller.php';
     if ($interactive) {
         $input = readline("Continue (y/n|r) ?\n");
-        if ($input == 'r' || $input == 'R') {
-            $vmoodlestep--;
-        } elseif ($input == 'n' || $input == 'N') {
+        if ('r' == $input || 'R' == $input) {
+            --$vmoodlestep;
+        } elseif ('n' == $input || 'N' == $input) {
             echo "finishing\n";
             exit(0);
         }
     }
 }
-exit (0);
+exit(0);

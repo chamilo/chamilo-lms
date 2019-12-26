@@ -1,11 +1,11 @@
 <?php
+
 /* For licensing terms, see /license.txt */
 
 /**
  * This file is part of teacher block plugin for dashboard,
  * it should be required inside dashboard controller for showing it into dashboard interface from plattform.
  *
- * @package chamilo.dashboard
  *
  * @author Christian Fasanando
  */
@@ -14,8 +14,6 @@
  * This class is used like controller for teacher block plugin,
  * the class name must be registered inside path.info file
  * (e.g: controller = "BlockTeacher"), so dashboard controller will be instantiate it.
- *
- * @package chamilo.dashboard
  */
 class BlockTeacher extends Block
 {
@@ -38,7 +36,7 @@ class BlockTeacher extends Block
     /**
      * This method check if a user is allowed to see the block inside dashboard interface.
      *
-     * @param int        User id
+     * @param int $user_id User id
      *
      * @return bool Is block visible for user
      */
@@ -105,7 +103,7 @@ class BlockTeacher extends Block
                 $time_on_platform = api_time_to_hms(Tracking::get_time_spent_on_the_platform($teacher_id));
                 $last_connection = Tracking::get_last_connection_date($teacher_id);
 
-                if ($i % 2 == 0) {
+                if (0 == $i % 2) {
                     $class_tr = 'row_odd';
                 } else {
                     $class_tr = 'row_even';
@@ -117,7 +115,7 @@ class BlockTeacher extends Block
                                         <td align="right">'.$last_connection.'</td>
                                     </tr>
                                     ';
-                $i++;
+                ++$i;
             }
             $teachers_table .= '</table>';
         } else {
@@ -164,7 +162,7 @@ class BlockTeacher extends Block
                     Tracking::get_time_spent_on_the_platform($teacher_id, true)
                 );
 
-                if ($i % 2 == 0) {
+                if (0 == $i % 2) {
                     $class_tr = 'row_odd';
                 } else {
                     $class_tr = 'row_even';
@@ -174,7 +172,7 @@ class BlockTeacher extends Block
                                         <td align="right">'.$time_on_platform.'</td>
                                     </tr>';
 
-                $i++;
+                ++$i;
             }
             $teachers_table .= '</table>';
         } else {

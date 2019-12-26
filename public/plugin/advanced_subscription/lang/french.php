@@ -26,16 +26,16 @@ $strings['terms_and_conditions'] = 'Conditions d\'utilisation';
 $strings['AdvancedSubscriptionNotConnected'] = "Vous n'êtes pas connecté à la plateforme. Merci d'introduire votre nom d'utilisateur / mot de passe afin de vous inscrire";
 $strings['AdvancedSubscriptionProfileIncomplete'] = "Vous devez d'abord compléter votre profil <strong>à %d pourcents</strong> ou plus. Pour l'instant vous n'avez complété que <strong>%d pourcents</strong>";
 $strings['AdvancedSubscriptionIncompleteInduction'] = "Vous n'avez pas encore passé le cours d'induction. Merci de commencer par cette étape.";
-$strings['AdvancedSubscriptionCostXLimitReached'] = "Désolé, vous avez déjà atteint la limite de %s unités de taxe pour les cours que vous avez suivi cette année";
-$strings['AdvancedSubscriptionTimeXLimitReached'] = "Désolé, vous avez déjà atteint la limite annuelle du nombre de %s heures pour les cours que vous avez suivi cette année";
-$strings['AdvancedSubscriptionCourseXLimitReached'] = "Désolé, vous avez déjà atteint la limite annuelle du nombre de cours (%s) à suivre cette année";
+$strings['AdvancedSubscriptionCostXLimitReached'] = 'Désolé, vous avez déjà atteint la limite de %s unités de taxe pour les cours que vous avez suivi cette année';
+$strings['AdvancedSubscriptionTimeXLimitReached'] = 'Désolé, vous avez déjà atteint la limite annuelle du nombre de %s heures pour les cours que vous avez suivi cette année';
+$strings['AdvancedSubscriptionCourseXLimitReached'] = 'Désolé, vous avez déjà atteint la limite annuelle du nombre de cours (%s) à suivre cette année';
 $strings['AdvancedSubscriptionNotMoreAble'] = "Désolé, vous ne répondez plus aux conditions d'utilisation minimum pour l'inscription à un cours";
-$strings['AdvancedSubscriptionIncompleteParams'] = "Les paramètres envoyés ne sont pas complets ou sont incorrects.";
+$strings['AdvancedSubscriptionIncompleteParams'] = 'Les paramètres envoyés ne sont pas complets ou sont incorrects.';
 $strings['AdvancedSubscriptionIsNotEnabled'] = "L'inscription avancée n'est pas activée";
 $strings['AdvancedSubscriptionNoQueue'] = "Vous n'êtes pas inscrit dans ce cours";
 $strings['AdvancedSubscriptionNoQueueIsAble'] = "Vous n'êtes pas inscrit mais vous qualifiez pour ce cours";
 $strings['AdvancedSubscriptionQueueStart'] = "Votre demande d'inscription est en attente de l'approbation de votre supérieur(e). Merci de patienter.";
-$strings['AdvancedSubscriptionQueueBossDisapproved'] = "Désolé, votre inscription a été déclinée par votre supérieur(e).";
+$strings['AdvancedSubscriptionQueueBossDisapproved'] = 'Désolé, votre inscription a été déclinée par votre supérieur(e).';
 $strings['AdvancedSubscriptionQueueBossApproved'] = "Votre demande d'inscription a été acceptée par votre supérieur(e), mais est en attente de places libres.";
 $strings['AdvancedSubscriptionQueueAdminDisapproved'] = "Désolé, votre inscription a été déclinée par l'administrateur.";
 $strings['AdvancedSubscriptionQueueAdminApproved'] = "Félicitations! Votre inscription a été acceptée par l'administrateur.";
@@ -54,11 +54,11 @@ $strings['MailRemindSuperior'] = 'Demandes d\'inscription en attente de votre ap
 $strings['MailRemindAdmin'] = 'Inscriptions en attente de votre approbation';
 
 // TPL translations
-$strings['SessionXWithoutVacancies'] = "Le cours \"%s\" ne dispose plus de places libres.";
-$strings['SuccessSubscriptionToSessionX'] = "<h4>Félicitations!</h4> Votre inscription au cours \"%s\" est en ordre.";
-$strings['SubscriptionToOpenSession'] = "Inscription à cours ouvert";
-$strings['GoToSessionX'] = "Aller dans le cours \"%s\"";
-$strings['YouAreAlreadySubscribedToSessionX'] = "Vous êtes déjà inscrit(e) au cours \"%s\".";
+$strings['SessionXWithoutVacancies'] = 'Le cours "%s" ne dispose plus de places libres.';
+$strings['SuccessSubscriptionToSessionX'] = '<h4>Félicitations!</h4> Votre inscription au cours "%s" est en ordre.';
+$strings['SubscriptionToOpenSession'] = 'Inscription à cours ouvert';
+$strings['GoToSessionX'] = 'Aller dans le cours "%s"';
+$strings['YouAreAlreadySubscribedToSessionX'] = 'Vous êtes déjà inscrit(e) au cours "%s".';
 
 // Admin view
 $strings['SelectASession'] = 'Sélectionnez une session de formation';

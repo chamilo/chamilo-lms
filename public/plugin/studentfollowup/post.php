@@ -1,4 +1,5 @@
 <?php
+
 /* For licensing terms, see /license.txt */
 
 use Chamilo\PluginBundle\Entity\StudentFollowUp\CarePost;
@@ -23,7 +24,7 @@ $permissions = StudentFollowUpPlugin::getPermissions($studentId, $currentUserId)
 $isAllow = $permissions['is_allow'];
 $showPrivate = $permissions['show_private'];
 
-if ($isAllow === false) {
+if (false === $isAllow) {
     api_not_allowed(true);
 }
 
@@ -32,7 +33,7 @@ $qb = $em->createQueryBuilder();
 $criteria = Criteria::create();
 $criteria->where(Criteria::expr()->eq('user', $studentId));
 
-if ($showPrivate == false) {
+if (false == $showPrivate) {
     $criteria->andWhere(Criteria::expr()->eq('private', false));
 }
 
@@ -51,7 +52,7 @@ $post = $query->getOneOrNullResult();
 // Get related posts (post with same parent)
 $relatedPosts = [];
 if ($post) {
-    if ($action == 'download') {
+    if ('download' == $action) {
         $attachment = $post->getAttachment();
         $attachmentUrlData = parse_url($attachment);
         if (!empty($attachment) && !empty($attachmentUrlData)) {
@@ -98,7 +99,7 @@ if ($post) {
         $criteria->where(Criteria::expr()->eq('parent', $post->getId()));
     }
 
-    if ($showPrivate == false) {
+    if (false == $showPrivate) {
         $criteria->andWhere(Criteria::expr()->eq('private', false));
     }
 

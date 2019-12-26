@@ -1,8 +1,9 @@
 <?php
+
 /* For licensing terms, see /license.txt */
 
 /**
- * Class AbstractVM
+ * Class AbstractVM.
  */
 abstract class AbstractVM
 {
@@ -14,7 +15,7 @@ abstract class AbstractVM
     public $vmMaxSize;
     public $apiKey;
     public $vmClientId;
-    public $messages = array();
+    public $messages = [];
     protected $connector;
 
     /**

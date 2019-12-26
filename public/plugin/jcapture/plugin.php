@@ -6,7 +6,7 @@
  */
 $plugin_info = [
     'title' => 'Jcapture Screencast',
-    'comment' => "Screencast widget",
+    'comment' => 'Screencast widget',
     'version' => '1.0',
     'author' => 'Julio Montoya',
 ];

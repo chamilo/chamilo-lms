@@ -1,4 +1,5 @@
 <?php
+
 /* For licensing terms, see /license.txt */
 
 use Chamilo\CoreBundle\Hook\HookObserver;
@@ -10,8 +11,6 @@ use Chamilo\CoreBundle\Hook\Interfaces\HookCreateUserObserverInterface;
  * Hook to create an user in Drupal website.
  *
  * @author Angel Fernando Quiroz Campos <angel.quiroz@beeznest.com>
- *
- * @package chamilo.plugin.createDrupalUser
  */
 class HookCreateDrupalUser extends HookObserver implements HookCreateUserObserverInterface
 {
@@ -42,7 +41,7 @@ class HookCreateDrupalUser extends HookObserver implements HookCreateUserObserve
         $drupalDomain = CreateDrupalUser::create()->get('drupal_domain');
         $drupalDomain = rtrim($drupalDomain, '/').'/';
 
-        if ($data['type'] === HOOK_EVENT_TYPE_POST) {
+        if (HOOK_EVENT_TYPE_POST === $data['type']) {
             $return = $data['return'];
             $originalPassword = $data['originalPassword'];
 
@@ -74,11 +73,11 @@ class HookCreateDrupalUser extends HookObserver implements HookCreateUserObserve
                 return true;
             }
 
-            if ($drupalUserId === false) {
+            if (false === $drupalUserId) {
                 $drupalUserId = $client->addUser($fields, $extraFields);
             }
 
-            if ($drupalUserId !== false) {
+            if (false !== $drupalUserId) {
                 UserManager::update_extra_field_value($return, 'drupal_user_id', $drupalUserId);
             }
         }

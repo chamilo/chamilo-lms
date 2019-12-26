@@ -1,11 +1,11 @@
 <?php
+
 /* For licensing terms, see /license.txt */
 
 /**
  * This file is part of student graph block plugin for dashboard,
  * it should be required inside dashboard controller for showing it into dashboard interface from plattform.
  *
- * @package chamilo.dashboard
  *
  * @author Christian Fasanando
  * @author Julio Montoya <gugli100@gmail.com>
@@ -18,8 +18,6 @@ use CpChart\Image as pImage;
  * This class is used like controller for student graph block plugin,
  * the class name must be registered inside path.info file
  * (e.g: controller = "BlockStudentGraph"), so dashboard controller will be instantiate it.
- *
- * @package chamilo.dashboard
  */
 class BlockStudentGraph extends Block
 {
@@ -46,7 +44,7 @@ class BlockStudentGraph extends Block
     /**
      * This method check if a user is allowed to see the block inside dashboard interface.
      *
-     * @param int        User id
+     * @param int $user_id User id
      *
      * @return bool Is block visible for user
      */

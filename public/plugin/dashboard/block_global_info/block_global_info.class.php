@@ -1,4 +1,5 @@
 <?php
+
 /* See license terms in /license.txt */
 
 /**
@@ -6,7 +7,6 @@
  * it should be required inside the dashboard controller for
  * showing it into the dashboard interface.
  *
- * @package chamilo.dashboard
  *
  * @author Yannick Warnier
  */
@@ -16,8 +16,6 @@
  * the class name must be registered inside path.info file
  * (e.g: controller = "BlockGlobalInfo"), so dashboard controller can
  * instantiate it.
- *
- * @package chamilo.dashboard
  */
 class BlockGlobalInfo extends Block
 {
@@ -39,7 +37,7 @@ class BlockGlobalInfo extends Block
     /**
      * This method check if a user is allowed to see the block inside dashboard interface.
      *
-     * @param int        User id
+     * @param int $user_id User id
      *
      * @return bool Is block visible for user
      */
@@ -89,7 +87,7 @@ class BlockGlobalInfo extends Block
             $data_table = '<table class="table table-bordered">';
             $i = 1;
             foreach ($global_data as $data) {
-                if ($i % 2 == 0) {
+                if (0 == $i % 2) {
                     $class_tr = 'row_odd';
                 } else {
                     $class_tr = 'row_even';
@@ -99,7 +97,7 @@ class BlockGlobalInfo extends Block
                     $data_table .= '<td align="right">'.$cell.'</td>';
                 }
                 $data_table .= '</tr>';
-                $i++;
+                ++$i;
             }
             $data_table .= '</table>';
         } else {
@@ -119,7 +117,7 @@ class BlockGlobalInfo extends Block
         // Two-dimensional array with data about the system
         $path = api_get_path(WEB_CODE_PATH);
         // Check total number of users
-        $global_info = [
+        return [
             [get_lang('Number of users'), '<a href="'.$path.'admin/user_list.php">'.Statistics::countUsers().'</a>'],
             // Check only active users
             [get_lang('Number of active users'), '<a href="'.$path.'admin/user_list.php?keyword_firstname=&amp;keyword_lastname=&amp;keyword_username=&amp;keyword_email=&amp;keyword_officialcode=&amp;keyword_status=%25&amp;keyword_active=1&amp;submit=&amp;_qf__advanced_search=">'.Statistics::countUsers(null, null, null, true).'</a>'],
@@ -131,7 +129,5 @@ class BlockGlobalInfo extends Block
             [get_lang('Number of closed courses'), '<a href="'.$path.'admin/course_list.php?keyword_code=&amp;keyword_title=&amp;keyword_language=%25&amp;keyword_category=&amp;keyword_visibility='.COURSE_VISIBILITY_CLOSED.'&amp;keyword_subscribe=%25&amp;keyword_unsubscribe=%25&amp;submit=&amp;_qf__advanced_course_search=">'.Statistics::countCoursesByVisibility(COURSE_VISIBILITY_CLOSED).'</a>'],
             [get_lang('Number of hidden courses'), '<a href="'.$path.'admin/course_list.php?keyword_code=&amp;keyword_title=&amp;keyword_language=%25&amp;keyword_category=&amp;keyword_visibility='.COURSE_VISIBILITY_HIDDEN.'&amp;keyword_subscribe=%25&amp;keyword_unsubscribe=%25&amp;submit=&amp;_qf__advanced_course_search=">'.Statistics::countCoursesByVisibility(COURSE_VISIBILITY_HIDDEN).'</a>'],
         ];
-
-        return $global_info;
     }
 }

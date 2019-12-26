@@ -1,4 +1,5 @@
 <?php
+
 /* For license terms, see /license.txt */
 /**
  * @copyright (c) 2011 University of Geneva

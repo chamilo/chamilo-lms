@@ -1,11 +1,10 @@
 <?php
+
 /* For licensing terms, see /license.txt */
 /**
  * The Tour class allows a guided tour in HTML5 of the Chamilo interface.
  *
  * @author Angel Fernando Quiroz Campos <angel.quiroz@beeznest.com>
- *
- * @package chamilo.plugin.tour
  */
 class Tour extends Plugin
 {
@@ -33,7 +32,7 @@ class Tour extends Plugin
     {
         static $result = null;
 
-        return $result ? $result : $result = new self();
+        return $result ?: $result = new self();
     }
 
     /**
@@ -67,10 +66,10 @@ class Tour extends Plugin
         $checkResult = Database::select('count(1) as qty', $pluginTourLogTable, [
                     'where' => [
                         "page_class = '?' AND " => $currentPageClass,
-                        "user_id = ?" => intval($userId),
+                        'user_id = ?' => (int) $userId,
                     ], ], 'first');
 
-        if ($checkResult !== false) {
+        if (false !== $checkResult) {
             if ($checkResult['qty'] > 0) {
                 return false;
             }
@@ -91,7 +90,7 @@ class Tour extends Plugin
 
         Database::insert($pluginTourLogTable, [
             'page_class' => $currentPageClass,
-            'user_id' => intval($userId),
+            'user_id' => (int) $userId,
             'visualization_datetime' => api_get_utc_datetime(),
         ]);
     }
@@ -105,9 +104,8 @@ class Tour extends Plugin
     {
         $pluginPath = api_get_path(SYS_PLUGIN_PATH).'tour/';
         $jsonContent = file_get_contents($pluginPath.'config/tour.json');
-        $jsonData = json_decode($jsonContent, true);
 
-        return $jsonData;
+        return json_decode($jsonContent, true);
     }
 
     /**
@@ -118,11 +116,11 @@ class Tour extends Plugin
         $pluginTourLogTable = Database::get_main_table(TABLE_TOUR_LOG);
 
         $sql = "CREATE TABLE IF NOT EXISTS $pluginTourLogTable ("
-                ."id int UNSIGNED NOT NULL AUTO_INCREMENT, "
-                ."page_class varchar(255) NOT NULL, "
-                ."user_id int UNSIGNED NOT NULL, "
-                ."visualization_datetime datetime NOT NULL, "
-                ."PRIMARY KEY PK_tour_log (id))";
+                .'id int UNSIGNED NOT NULL AUTO_INCREMENT, '
+                .'page_class varchar(255) NOT NULL, '
+                .'user_id int UNSIGNED NOT NULL, '
+                .'visualization_datetime datetime NOT NULL, '
+                .'PRIMARY KEY PK_tour_log (id))';
 
         Database::query($sql);
     }

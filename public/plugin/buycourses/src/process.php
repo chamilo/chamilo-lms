@@ -1,12 +1,11 @@
 <?php
+
 /* For license terms, see /license.txt */
 
 use ChamiloSession as Session;
 
 /**
  * Process payments for the Buy Courses plugin.
- *
- * @package chamilo.plugin.buycourses
  */
 require_once '../config.php';
 
@@ -16,10 +15,10 @@ $htmlHeadXtra[] = '<link rel="stylesheet" type="text/css" href="'.api_get_path(
         WEB_PLUGIN_PATH
     ).'buycourses/resources/css/style.css"/>';
 $plugin = BuyCoursesPlugin::create();
-$includeSession = $plugin->get('include_sessions') === 'true';
-$paypalEnabled = $plugin->get('paypal_enable') === 'true';
-$transferEnabled = $plugin->get('transfer_enable') === 'true';
-$culqiEnabled = $plugin->get('culqi_enable') === 'true';
+$includeSession = 'true' === $plugin->get('include_sessions');
+$paypalEnabled = 'true' === $plugin->get('paypal_enable');
+$transferEnabled = 'true' === $plugin->get('transfer_enable');
+$culqiEnabled = 'true' === $plugin->get('culqi_enable');
 
 if (!$paypalEnabled && !$transferEnabled && !$culqiEnabled) {
     api_not_allowed(true);
@@ -29,9 +28,9 @@ if (!isset($_REQUEST['t'], $_REQUEST['i'])) {
     api_not_allowed(true);
 }
 
-$buyingCourse = intval($_REQUEST['t']) === BuyCoursesPlugin::PRODUCT_TYPE_COURSE;
-$buyingSession = intval($_REQUEST['t']) === BuyCoursesPlugin::PRODUCT_TYPE_SESSION;
-$queryString = 'i='.intval($_REQUEST['i']).'&t='.intval($_REQUEST['t']);
+$buyingCourse = BuyCoursesPlugin::PRODUCT_TYPE_COURSE === (int) ($_REQUEST['t']);
+$buyingSession = BuyCoursesPlugin::PRODUCT_TYPE_SESSION === (int) ($_REQUEST['t']);
+$queryString = 'i='.(int) ($_REQUEST['i']).'&t='.(int) ($_REQUEST['t']);
 
 if (empty($currentUserId)) {
     Session::write('buy_course_redirect', api_get_self().'?'.$queryString);
@@ -61,7 +60,7 @@ if ($form->validate()) {
 
     $saleId = $plugin->registerSale($item['id'], $formValues['payment_type']);
 
-    if ($saleId !== false) {
+    if (false !== $saleId) {
         $_SESSION['bc_sale_id'] = $saleId;
         header('Location: '.api_get_path(WEB_PLUGIN_PATH).'buycourses/src/process_confirm.php');
     }
@@ -84,11 +83,11 @@ if (!$culqiEnabled) {
 }
 
 $count = count($paymentTypesOptions);
-if ($count === 0) {
+if (0 === $count) {
     $form->addHtml($plugin->get_lang('NoPaymentOptionAvailable'));
     $form->addHtml('<br />');
     $form->addHtml('<br />');
-} elseif ($count === 1) {
+} elseif (1 === $count) {
     // get the only array item
     foreach ($paymentTypesOptions as $type => $value) {
         $form->addHtml(sprintf($plugin->get_lang('XIsOnlyPaymentMethodAvailable'), $value));
@@ -106,8 +105,8 @@ if ($count === 0) {
     $form->addRadio('payment_type', null, $paymentTypesOptions);
 }
 
-$form->addHidden('t', intval($_GET['t']));
-$form->addHidden('i', intval($_GET['i']));
+$form->addHidden('t', (int) ($_GET['t']));
+$form->addHidden('i', (int) ($_GET['i']));
 $form->addButton('submit', $plugin->get_lang('ConfirmOrder'), 'check', 'success', 'btn-lg pull-right');
 
 // View

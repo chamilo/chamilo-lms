@@ -1,4 +1,5 @@
 <?php
+
 /* For license terms, see /license.txt */
 
 /**
@@ -99,16 +100,16 @@ class LearningCalendarPlugin extends Plugin
         ";
         Database::query($sql);
 
-        $sql = "
+        $sql = '
             CREATE TABLE IF NOT EXISTS learning_calendar_user(
               id int not null AUTO_INCREMENT primary key,
               user_id int(11) not null,
               calendar_id int not null
             )
-        ";
+        ';
         Database::query($sql);
 
-        $sql = "
+        $sql = '
             CREATE TABLE IF NOT EXISTS learning_calendar_control_point(
               id int not null AUTO_INCREMENT primary key,
               user_id int(11) not null,
@@ -117,7 +118,7 @@ class LearningCalendarPlugin extends Plugin
               created_at datetime not null,
               updated_at datetime not null
             )
-        ";
+        ';
         Database::query($sql);
 
         $extraField = new ExtraField('lp_item');
@@ -268,11 +269,11 @@ class LearningCalendarPlugin extends Plugin
         $endCondition = '';
         $typeCondition = '';
 
-        if ($start !== 0) {
+        if (0 !== $start) {
             $start = api_get_utc_datetime($start);
             $startCondition = "AND start_date >= '".$start."'";
         }
-        if ($end !== 0) {
+        if (0 !== $end) {
             $end = api_get_utc_datetime($end);
             $endCondition = "AND (end_date <= '".$end."' OR end_date IS NULL)";
         }
@@ -404,7 +405,7 @@ class LearningCalendarPlugin extends Plugin
                 ];
                 $extraField->save($params);
             } else {
-                $newValue = (int) $itemInfo['value'] === 1 ? 0 : 1;
+                $newValue = 1 === (int) $itemInfo['value'] ? 0 : 1;
                 $extraField = new ExtraFieldValue('lp_item');
                 $params = [
                     'id' => $itemInfo['id'],
@@ -442,9 +443,8 @@ class LearningCalendarPlugin extends Plugin
         $calendarId = (int) $calendarId;
         $sql = "SELECT * FROM learning_calendar WHERE id = $calendarId";
         $result = Database::query($sql);
-        $item = Database::fetch_array($result, 'ASSOC');
 
-        return $item;
+        return Database::fetch_array($result, 'ASSOC');
     }
 
     /**
@@ -457,9 +457,8 @@ class LearningCalendarPlugin extends Plugin
         $userId = (int) $userId;
         $sql = "SELECT * FROM learning_calendar_user WHERE user_id = $userId";
         $result = Database::query($sql);
-        $item = Database::fetch_array($result, 'ASSOC');
 
-        return $item;
+        return Database::fetch_array($result, 'ASSOC');
     }
 
     /**
@@ -840,26 +839,26 @@ class LearningCalendarPlugin extends Plugin
             $html .= '<div id="control_point_chart"></div>';
             $html .= '<script>
                 $(document).ready(function(){
-                    var cosPoints = '.$listToString.';
-                    var plot1 = $.jqplot(\'control_point_chart\', [cosPoints], {  
+                    var cosPoints = '.$listToString.';
+                    var plot1 = $.jqplot(\'control_point_chart\', [cosPoints], {  
                         //animate: !$.jqplot.use_excanvas,                      
-                        series:[{
+                        series:[{
                             showMarker:true,
-                            pointLabels: { show:true },
+                            pointLabels: { show:true },
                         }],
-                        axes:{
-                            xaxis:{
-                                label: "'.$date.'",
+                        axes:{
+                            xaxis:{
+                                label: "'.$date.'",
                                 renderer: $.jqplot.DateAxisRenderer,
                                 tickOptions:{formatString: "%Y-%m-%d"},
                                 tickInterval: \'30 day\',                                
-                            },
+                            },
                             yaxis:{
-                                label: "'.$controlPoint.'",
+                                label: "'.$controlPoint.'",
                                 max: 20,
                                 min: -20,    
-                            }
-                        },
+                            }
+                        },
                         canvasOverlay: {
                             show: true,
                             objects: [{
@@ -872,14 +871,12 @@ class LearningCalendarPlugin extends Plugin
                                 }
                             }]
                         },                     
-                  });
+                  });
                 });
             </script>';
         }
 
-        $html = Display::panel($html, $this->get_lang('Learning calendar'));
-
-        return $html;
+        return Display::panel($html, $this->get_lang('Learning calendar'));
     }
 
     /**
@@ -995,7 +992,7 @@ class LearningCalendarPlugin extends Plugin
         if (Database::num_rows($result)) {
             $row = Database::fetch_array($result, 'ASSOC');
             $currentType = $row['type'];
-            $currentType++;
+            ++$currentType;
             if ($currentType > count($eventTypeList)) {
                 Database::delete(
                     'learning_calendar_events',
@@ -1079,9 +1076,8 @@ class LearningCalendarPlugin extends Plugin
                 WHERE user_id = $userId 
                 ORDER BY control_date";
         $result = Database::query($sql);
-        $list = Database::store_result($result, 'ASSOC');
 
-        return $list;
+        return Database::store_result($result, 'ASSOC');
     }
 
     /**

@@ -62,7 +62,7 @@ class RegisterCourseWidget
     public function action_subscribe_user()
     {
         $action = self::get('action');
-        if ($action != self::ACTION_SUBSCRIBE) {
+        if (self::ACTION_SUBSCRIBE != $action) {
             return false;
         }
 
@@ -127,7 +127,7 @@ class RegisterCourseWidget
         $course_code = $course['code'];
         $course_visual_code = $course['visual_code'];
         $course_title = $course['title'];
-        $submit_registration_code_label = get_lang("Submit registration code");
+        $submit_registration_code_label = get_lang('Submit registration code');
         $course_requires_password_label = get_lang('This course requires a password');
 
         $result = <<<EOT

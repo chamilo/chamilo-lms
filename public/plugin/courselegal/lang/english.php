@@ -1,7 +1,7 @@
 <?php
 
-$strings['plugin_title'] = "Course legal agreement";
-$strings['plugin_comment'] = "Add a legal agreement per course (also works with courses in sessions)";
+$strings['plugin_title'] = 'Course legal agreement';
+$strings['plugin_comment'] = 'Add a legal agreement per course (also works with courses in sessions)';
 $strings['tool_enable'] = 'Enable plugin';
 $strings['tool_enable_help'] = 'Once enabled, you will have to configure the plugin inside the course configuration, then from the course homepage (a button will appear there only for the teacher)';
 

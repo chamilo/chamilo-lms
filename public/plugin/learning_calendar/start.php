@@ -1,4 +1,5 @@
 <?php
+
 /* For license terms, see /license.txt */
 
 require_once __DIR__.'/../../main/inc/global.inc.php';
@@ -35,6 +36,7 @@ switch ($action) {
             header('Location: start.php');
             exit;
         }
+
         break;
     case 'edit':
         $form = new FormValidator('calendar', 'post', api_get_self().'?action=edit&id='.$calendarId);
@@ -63,6 +65,7 @@ switch ($action) {
             header('Location: start.php');
             exit;
         }
+
         break;
     case 'copy':
         $result = $plugin->copyCalendar($calendarId);
@@ -80,6 +83,7 @@ switch ($action) {
         }
         header('Location: start.php');
         exit;
+
         break;
     case 'toggle_visibility':
         $itemId = isset($_REQUEST['lp_item_id']) ? $_REQUEST['lp_item_id'] : 0;
@@ -90,6 +94,7 @@ switch ($action) {
             'lp/lp_controller.php?action=add_item&type=step&lp_id='.$lpId.'&'.api_get_cidreq();
         header("Location: $url");
         exit;
+
         break;
 }
 

@@ -1,16 +1,14 @@
 <?php
 /**
  * List of services.
- *
- * @package chamilo.plugin.buycourses
  */
 $cidReset = true;
 
 require_once '../../../main/inc/global.inc.php';
 
 $plugin = BuyCoursesPlugin::create();
-$includeSessions = $plugin->get('include_sessions') === 'true';
-$includeServices = $plugin->get('include_services') === 'true';
+$includeSessions = 'true' === $plugin->get('include_sessions');
+$includeServices = 'true' === $plugin->get('include_services');
 
 $nameFilter = null;
 $minFilter = 0;

@@ -1,9 +1,8 @@
 <?php
+
 /* For license terms, see /license.txt */
 /**
  * Functions.
- *
- * @package chamilo.plugin.test2pdf
  */
 $letters = [
     'a',
@@ -81,9 +80,8 @@ function getInfoQuiz($courseId, $id)
     $tableQuiz = Database::get_course_table(TABLE_QUIZ_TEST);
     $sql = "SELECT * FROM $tableQuiz WHERE c_id = $courseId AND iid = $id";
     $res = Database::query($sql);
-    $row = Database::fetch_assoc($res);
 
-    return $row;
+    return Database::fetch_assoc($res);
 }
 
 /**
@@ -138,9 +136,8 @@ function getInfoQuestion($courseId, $id)
             AND iid = $id
             AND (type IN (1, 2, 9, 10, 11, 12, 14))";
     $res = Database::query($sql);
-    $row = Database::fetch_assoc($res);
 
-    return $row;
+    return Database::fetch_assoc($res);
 }
 
 /**
@@ -176,47 +173,46 @@ function getAnswers($courseId, $id)
  */
 function removeHtml($string)
 {
-    $txt = str_replace("<html>", "", $string);
-    $txt = str_replace("<head>", "", $txt);
-    $txt = str_replace("<title>", "", $txt);
-    $txt = str_replace("</title>", "", $txt);
-    $txt = str_replace("</head>", "", $txt);
-    $txt = str_replace("<body>", "", $txt);
-    $txt = str_replace("</body>", "", $txt);
-    $txt = str_replace("</html>", "", $txt);
+    $txt = str_replace('<html>', '', $string);
+    $txt = str_replace('<head>', '', $txt);
+    $txt = str_replace('<title>', '', $txt);
+    $txt = str_replace('</title>', '', $txt);
+    $txt = str_replace('</head>', '', $txt);
+    $txt = str_replace('<body>', '', $txt);
+    $txt = str_replace('</body>', '', $txt);
+    $txt = str_replace('</html>', '', $txt);
     $txt = strip_tags($txt);
-    $txt = str_replace(chr(13).chr(10), "", $txt);
-    $txt = str_replace("&nbsp;", " ", $txt);
-    $txt = str_replace("&Aacute;", "Á", $txt);
-    $txt = str_replace("&aacute;", "á", $txt);
-    $txt = str_replace("&Eacute;", "É", $txt);
-    $txt = str_replace("&eacute;", "é", $txt);
-    $txt = str_replace("&Iacute;", "Í", $txt);
-    $txt = str_replace("&iacute;", "í", $txt);
-    $txt = str_replace("&Oacute;", "Ó", $txt);
-    $txt = str_replace("&oacute;", "ó", $txt);
-    $txt = str_replace("&Uacute;", "Ú", $txt);
-    $txt = str_replace("&uacute;", "ú", $txt);
-    $txt = str_replace("&Ntilde;", "Ñ", $txt);
-    $txt = str_replace("&ntilde;", "ñ", $txt);
-    $txt = str_replace("&agrave;", "à", $txt);
-    $txt = str_replace("&Agrave;", "À", $txt);
-    $txt = str_replace("&iexcl;", "¡", $txt);
-    $txt = str_replace("&middot;", "·", $txt);
-    $txt = str_replace("&Ccedil;", "Ç", $txt);
-    $txt = str_replace("&ccedil;", "ç", $txt);
-    $txt = str_replace("&quot;", '"', $txt);
-    $txt = str_replace("&ordf;", 'ª', $txt);
-    $txt = str_replace("&ordm;", 'º', $txt);
-    $txt = str_replace("&amp;", '&', $txt);
-    $txt = str_replace("&bull;", '•', $txt);
-    $txt = str_replace("&iquest;", '¿', $txt);
-    $txt = str_replace("&euro;", 'EUR', $txt);
-    $txt = str_replace("&uuml;", 'ü', $txt);
-    $txt = str_replace("&Uuml;", 'Ü', $txt);
-    $txt = str_replace("&uml;", '¨', $txt);
+    $txt = str_replace(chr(13).chr(10), '', $txt);
+    $txt = str_replace('&nbsp;', ' ', $txt);
+    $txt = str_replace('&Aacute;', 'Á', $txt);
+    $txt = str_replace('&aacute;', 'á', $txt);
+    $txt = str_replace('&Eacute;', 'É', $txt);
+    $txt = str_replace('&eacute;', 'é', $txt);
+    $txt = str_replace('&Iacute;', 'Í', $txt);
+    $txt = str_replace('&iacute;', 'í', $txt);
+    $txt = str_replace('&Oacute;', 'Ó', $txt);
+    $txt = str_replace('&oacute;', 'ó', $txt);
+    $txt = str_replace('&Uacute;', 'Ú', $txt);
+    $txt = str_replace('&uacute;', 'ú', $txt);
+    $txt = str_replace('&Ntilde;', 'Ñ', $txt);
+    $txt = str_replace('&ntilde;', 'ñ', $txt);
+    $txt = str_replace('&agrave;', 'à', $txt);
+    $txt = str_replace('&Agrave;', 'À', $txt);
+    $txt = str_replace('&iexcl;', '¡', $txt);
+    $txt = str_replace('&middot;', '·', $txt);
+    $txt = str_replace('&Ccedil;', 'Ç', $txt);
+    $txt = str_replace('&ccedil;', 'ç', $txt);
+    $txt = str_replace('&quot;', '"', $txt);
+    $txt = str_replace('&ordf;', 'ª', $txt);
+    $txt = str_replace('&ordm;', 'º', $txt);
+    $txt = str_replace('&amp;', '&', $txt);
+    $txt = str_replace('&bull;', '•', $txt);
+    $txt = str_replace('&iquest;', '¿', $txt);
+    $txt = str_replace('&euro;', 'EUR', $txt);
+    $txt = str_replace('&uuml;', 'ü', $txt);
+    $txt = str_replace('&Uuml;', 'Ü', $txt);
 
-    return $txt;
+    return str_replace('&uml;', '¨', $txt);
 }
 
 /**
@@ -228,35 +224,34 @@ function removeHtml($string)
  */
 function removeQuotes($string)
 {
-    $txt = str_replace("&nbsp;", " ", $string);
-    $txt = str_replace("&Aacute;", "Á", $txt);
-    $txt = str_replace("&aacute;", "á", $txt);
-    $txt = str_replace("&Eacute;", "É", $txt);
-    $txt = str_replace("&eacute;", "é", $txt);
-    $txt = str_replace("&Iacute;", "Í", $txt);
-    $txt = str_replace("&iacute;", "í", $txt);
-    $txt = str_replace("&Oacute;", "Ó", $txt);
-    $txt = str_replace("&oacute;", "ó", $txt);
-    $txt = str_replace("&Uacute;", "Ú", $txt);
-    $txt = str_replace("&uacute;", "ú", $txt);
-    $txt = str_replace("&Ntilde;", "Ñ", $txt);
-    $txt = str_replace("&ntilde;", "ñ", $txt);
-    $txt = str_replace("&quot;", '"', $txt);
-    $txt = str_replace("&ordf;", 'ª', $txt);
-    $txt = str_replace("&ordm;", 'º', $txt);
-    $txt = str_replace("&amp;", '&', $txt);
-    $txt = str_replace("&bull;", '•', $txt);
-    $txt = str_replace("&iquest; &", '¿', $txt);
-    $txt = str_replace("&agrave;", "à", $txt);
-    $txt = str_replace("&Agrave;", "À", $txt);
-    $txt = str_replace("&iexcl;", "¡", $txt);
-    $txt = str_replace("&middot;", "·", $txt);
-    $txt = str_replace("&Ccedil;", "Ç", $txt);
-    $txt = str_replace("&ccedil;", "ç", $txt);
-    $txt = str_replace("&euro;", 'EUR', $txt);
-    $txt = str_replace("&uuml;", 'ü', $txt);
-    $txt = str_replace("&Uuml;", 'Ü', $txt);
-    $txt = str_replace("uml;", '¨', $txt);
+    $txt = str_replace('&nbsp;', ' ', $string);
+    $txt = str_replace('&Aacute;', 'Á', $txt);
+    $txt = str_replace('&aacute;', 'á', $txt);
+    $txt = str_replace('&Eacute;', 'É', $txt);
+    $txt = str_replace('&eacute;', 'é', $txt);
+    $txt = str_replace('&Iacute;', 'Í', $txt);
+    $txt = str_replace('&iacute;', 'í', $txt);
+    $txt = str_replace('&Oacute;', 'Ó', $txt);
+    $txt = str_replace('&oacute;', 'ó', $txt);
+    $txt = str_replace('&Uacute;', 'Ú', $txt);
+    $txt = str_replace('&uacute;', 'ú', $txt);
+    $txt = str_replace('&Ntilde;', 'Ñ', $txt);
+    $txt = str_replace('&ntilde;', 'ñ', $txt);
+    $txt = str_replace('&quot;', '"', $txt);
+    $txt = str_replace('&ordf;', 'ª', $txt);
+    $txt = str_replace('&ordm;', 'º', $txt);
+    $txt = str_replace('&amp;', '&', $txt);
+    $txt = str_replace('&bull;', '•', $txt);
+    $txt = str_replace('&iquest; &', '¿', $txt);
+    $txt = str_replace('&agrave;', 'à', $txt);
+    $txt = str_replace('&Agrave;', 'À', $txt);
+    $txt = str_replace('&iexcl;', '¡', $txt);
+    $txt = str_replace('&middot;', '·', $txt);
+    $txt = str_replace('&Ccedil;', 'Ç', $txt);
+    $txt = str_replace('&ccedil;', 'ç', $txt);
+    $txt = str_replace('&euro;', 'EUR', $txt);
+    $txt = str_replace('&uuml;', 'ü', $txt);
+    $txt = str_replace('&Uuml;', 'Ü', $txt);
 
-    return $txt;
+    return str_replace('uml;', '¨', $txt);
 }

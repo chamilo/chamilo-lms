@@ -1,11 +1,10 @@
 <?php
+
 /* For licensing terms, see /license.txt */
 /**
  * Strings to english L10n.
  *
  * @author Angel Fernando Quiroz Campos <angel.quiroz@beeznest.com>
- *
- * @package chamilo.plugin.tour
  */
 $strings['plugin_title'] = 'Tour guidé';
 $strings['plugin_comment'] = 'Ce plugin montre aux utilisateurs comment utiliser votre portail Chamilo. Vous devez activer une région (p.ex. "header-right") afin d\'afficher le bouton qui permet de démarrer le processus.';
@@ -16,7 +15,7 @@ $strings['show_tour'] = 'Activer le tour guidé';
 $showTourHelpLine01 = 'La configuration nécessaire à l\'affichage du bloc d\'aide, au format JSON, se situe dans le fichier %splugin/tour/config/tour.json%s.';
 $showTourHelpLine02 = 'Voir fichier README pour plus d\'info.';
 
-$strings['show_tour_help'] = sprintf("$showTourHelpLine01 %s $showTourHelpLine02", "<strong>", "</strong>", "<br>");
+$strings['show_tour_help'] = sprintf("$showTourHelpLine01 %s $showTourHelpLine02", '<strong>', '</strong>', '<br>');
 
 $strings['theme'] = 'Thème';
 $strings['theme_help'] = 'Choisissez entre <i>nassim</i>, <i>nazanin</i> et <i>royal</i>. Vide pour utiliser le thème par défaut.';

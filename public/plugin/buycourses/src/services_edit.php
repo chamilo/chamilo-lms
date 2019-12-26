@@ -1,10 +1,9 @@
 <?php
+
 /* For license terms, see /license.txt */
 
 /**
  * Create new Services for the Buy Courses plugin.
- *
- * @package chamilo.plugin.buycourses
  */
 $cidReset = true;
 
@@ -46,9 +45,9 @@ $formDefaultValues = [
     'price' => $service['price'],
     'tax_perc' => $service['tax_perc'],
     'duration_days' => $service['duration_days'],
-    'owner_id' => intval($service['owner_id']),
-    'applies_to' => intval($service['applies_to']),
-    'visibility' => ($service['visibility'] == 1) ? true : false,
+    'owner_id' => (int) ($service['owner_id']),
+    'applies_to' => (int) ($service['applies_to']),
+    'visibility' => 1 == $service['visibility'] ? true : false,
     'image' => is_file(api_get_path(SYS_PLUGIN_PATH).'buycourses/uploads/services/images/simg-'.$serviceId.'.png')
             ? api_get_path(WEB_PLUGIN_PATH).'buycourses/uploads/services/images/simg-'.$serviceId.'.png'
             : api_get_path(WEB_CODE_PATH).'img/session_default.png',
@@ -120,7 +119,7 @@ $form->addSelect(
 $form->addCheckBox('visibility', $plugin->get_lang('VisibleInCatalog'));
 $form->addFile(
     'picture',
-    $formDefaultValues['image'] != '' ? get_lang('Update Image') : get_lang('Add image'),
+    '' != $formDefaultValues['image'] ? get_lang('Update Image') : get_lang('Add image'),
     ['id' => 'picture', 'class' => 'picture-form', 'crop_image' => true, 'crop_ratio' => '16 / 9']
 );
 $form->addText('video_url', get_lang('Video URL'), false);

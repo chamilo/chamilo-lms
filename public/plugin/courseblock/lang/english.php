@@ -1,7 +1,7 @@
 <?php
 
-$strings['plugin_title'] = "Course block";
-$strings['plugin_comment'] = "Add header and footer in a course";
+$strings['plugin_title'] = 'Course block';
+$strings['plugin_comment'] = 'Add header and footer in a course';
 $strings['tool_enable'] = 'Enable plugin';
 $strings['tool_enable_help'] = 'Once enabled, you will have to configure the plugin inside the course configuration, then from the course homepage (a button will appear there only for the teacher)';
 

@@ -1,4 +1,5 @@
 <?php
+
 /* For licensing terms, see /license.txt */
 
 $strings['plugin_title'] = 'Authenticación de voz con Whispeak';

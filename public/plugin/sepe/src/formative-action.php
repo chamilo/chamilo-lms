@@ -1,4 +1,5 @@
 <?php
+
 /* For licensing terms, see /license.txt */
 
 /**
@@ -13,18 +14,18 @@ $_cid = 0;
 if (api_is_platform_admin()) {
     $actionId = getActionId($_GET['cid']);
     $info = getActionInfo($actionId);
-    if ($info === false) {
-        header("Location: formative-actions-list.php");
+    if (false === $info) {
+        header('Location: formative-actions-list.php');
         exit;
     }
     $templateName = $plugin->get_lang('FormativeActionData');
     $interbreadcrumb[] = [
-        "url" => "/plugin/sepe/src/sepe-administration-menu.php",
-        "name" => $plugin->get_lang('MenuSepe'),
+        'url' => '/plugin/sepe/src/sepe-administration-menu.php',
+        'name' => $plugin->get_lang('MenuSepe'),
     ];
     $interbreadcrumb[] = [
-        "url" => "formative-actions-list.php",
-        "name" => $plugin->get_lang('FormativesActionsList'),
+        'url' => 'formative-actions-list.php',
+        'name' => $plugin->get_lang('FormativesActionsList'),
     ];
     $tpl = new Template($templateName);
 
@@ -38,8 +39,8 @@ if (api_is_platform_admin()) {
     }
 
     $tpl->assign('info', $info);
-    $tpl->assign('start_date', date("d/m/Y", strtotime($info['start_date'])));
-    $tpl->assign('end_date', date("d/m/Y", strtotime($info['end_date'])));
+    $tpl->assign('start_date', date('d/m/Y', strtotime($info['start_date'])));
+    $tpl->assign('end_date', date('d/m/Y', strtotime($info['end_date'])));
     $tpl->assign('action_id', $actionId);
     $listSpecialty = specialtyList($actionId);
     $tpl->assign('listSpecialty', $listSpecialty);

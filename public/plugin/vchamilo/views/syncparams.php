@@ -1,4 +1,5 @@
 <?php
+
 /* For licensing terms, see /license.txt */
 
 $cidReset = true;
@@ -33,7 +34,7 @@ $attrs = ['center' => 'left'];
 $table->addRow($headers, $attrs, 'th');
 
 foreach ($settings as $param) {
-    if ($param['subkey'] == 'vchamilo') {
+    if ('vchamilo' == $param['subkey']) {
         continue;
     }
     $check = '';

@@ -75,12 +75,12 @@ class BigBlueButtonBN
 			else
 				return false;
 		}
-		return (simplexml_load_file($url));
+		return simplexml_load_file($url);
 	}
 
 	private function _requiredParam($param) {
 		/* Process required params and throw errors if we don't get values */
-		if ((isset($param)) && ($param != '')) {
+		if (isset($param) && ($param != '')) {
 			return $param;
 		}
 		elseif (!isset($param)) {
@@ -94,12 +94,11 @@ class BigBlueButtonBN
 	private function _optionalParam($param) {
 		/* Pass most optional params through as set value, or set to '' */
 		/* Don't know if we'll use this one, but let's build it in case. */
-		if ((isset($param)) && ($param != '')) {
+		if (isset($param) && ($param != '')) {
 			return $param;
 		}
 		else {
-			$param = '';
-			return $param;
+			return '';
 		}
 	}
 
@@ -215,7 +214,7 @@ class BigBlueButtonBN
 		'&userID='.urlencode($joinParams['userID']).
 		'&webVoiceConf='.urlencode($joinParams['webVoiceConf']);
 		// Only use createTime if we really want to use it. If it's '', then don't pass it:
-		if (((isset($joinParams['createTime'])) && ($joinParams['createTime'] != ''))) {
+		if ((isset($joinParams['createTime']) && ($joinParams['createTime'] != ''))) {
 			$params .= '&createTime='.urlencode($joinParams['createTime']);
 		}
 
@@ -307,8 +306,7 @@ class BigBlueButtonBN
 		We do this in a separate function so we have the option to just get this
 		URL and print it if we want for some reason.
 		*/
-		$getMeetingsUrl = $this->_bbbServerBaseUrl."api/getMeetings?checksum=".sha1("getMeetings".$this->_securitySalt);
-		return $getMeetingsUrl;
+		return $this->_bbbServerBaseUrl."api/getMeetings?checksum=".sha1("getMeetings".$this->_securitySalt);
 	}
 
 	public function getMeetingsWithXmlResponseArray() {
@@ -320,19 +318,17 @@ class BigBlueButtonBN
 		if($xml) {
 			// If we don't get a success code, stop processing and return just the returncode:
 			if ($xml->returncode != 'SUCCESS') {
-				$result = array(
+				return array(
 					'returncode' => $xml->returncode->__toString()
 				);
-				return $result;
 			}
 			elseif ($xml->messageKey == 'noMeetings') {
 				/* No meetings on server, so return just this info: */
-				$result = array(
+				return array(
 					'returncode' => $xml->returncode->__toString(),
 					'messageKey' => $xml->messageKey->__toString(),
 					'message' => $xml->message->__toString()
 				);
-				return $result;
 			}
 			else {
 				// In this case, we have success and meetings. First return general response:
@@ -389,12 +385,11 @@ class BigBlueButtonBN
 		if($xml) {
 			// If we don't get a success code or messageKey, find out why:
 			if (($xml->returncode != 'SUCCESS') || ($xml->messageKey == null)) {
-				$result = array(
+				return array(
 					'returncode' => $xml->returncode->__toString(),
 					'messageKey' => $xml->messageKey->__toString(),
 					'message' => $xml->message->__toString()
 				);
-				return $result;
 			} else {
 				// In this case, we have success and meeting info:
 				$result = array(
@@ -465,12 +460,11 @@ class BigBlueButtonBN
 		if($xml) {
 			// If we don't get a success code or messageKey, find out why:
 			if (($xml->returncode != 'SUCCESS') || ($xml->messageKey == null)) {
-				$result = array(
+				return array(
 					'returncode' => $xml->returncode->__toString(),
 					'messageKey' => $xml->messageKey->__toString(),
 					'message' => $xml->message->__toString()
 				);
-				return $result;
 			}
 			else {
 				// In this case, we have success and recording info:
@@ -528,12 +522,11 @@ class BigBlueButtonBN
 		if($xml) {
 			// If we don't get a success code or messageKey, find out why:
 			if (($xml->returncode != 'SUCCESS') || ($xml->messageKey == null)) {
-				$result = array(
+				return array(
 					'returncode' => $xml->returncode->__toString(),
 					'messageKey' => $xml->messageKey->__toString(),
 					'message' => $xml->message->__toString()
 				);
-				return $result;
 			}
 			else {
 				// In this case, we have success and recording info:

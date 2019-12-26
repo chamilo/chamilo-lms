@@ -1,9 +1,8 @@
 <?php
+
 /* For license terms, see /license.txt */
 /**
  * Index of the Advanced subscription plugin courses list.
- *
- * @package chamilo.plugin.advanced_subscription
  */
 /**
  * Init.
@@ -14,7 +13,7 @@ api_protect_admin_script();
 // start plugin
 $plugin = AdvancedSubscriptionPlugin::create();
 // Session ID
-$sessionId = isset($_REQUEST['s']) ? intval($_REQUEST['s']) : null;
+$sessionId = isset($_REQUEST['s']) ? (int) ($_REQUEST['s']) : null;
 
 // Init template
 $tpl = new Template($plugin->get_lang('plugin_title'));
@@ -66,20 +65,20 @@ if (!empty($sessionId)) {
     $isWesternNameOrder = api_is_western_name_order();
 
     foreach ($studentList['students'] as &$student) {
-        $studentId = intval($student['user_id']);
+        $studentId = (int) ($student['user_id']);
         $data['studentUserId'] = $studentId;
 
         $fieldValue = new ExtraFieldValue('user');
         $areaField = $fieldValue->get_values_by_handler_and_field_variable($studentId, 'area', true);
 
         $student['area'] = $areaField['value'];
-        if (substr($student['area'], 0, 6) == 'MINEDU') {
+        if ('MINEDU' == substr($student['area'], 0, 6)) {
             $student['institution'] = 'Minedu';
         } else {
             $student['institution'] = 'Regiones';
         }
         $student['userLink'] = api_get_path(WEB_CODE_PATH).'social/profile.php?u='.$studentId;
-        $data['queueId'] = intval($student['queue_id']);
+        $data['queueId'] = (int) ($student['queue_id']);
         $data['newStatus'] = ADVANCED_SUBSCRIPTION_QUEUE_STATUS_ADMIN_APPROVED;
         $data['profile_completed'] = 100;
         $student['acceptUrl'] = $plugin->getQueueUrl($data);

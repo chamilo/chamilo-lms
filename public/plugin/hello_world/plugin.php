@@ -4,7 +4,6 @@
  * You can use it as a master for other platform plugins (course plugins are slightly different).
  * These settings will be used in the administration interface for plugins (Chamilo configuration settings->Plugins).
  *
- * @package chamilo.plugin
  *
  * @author Julio Montoya <gugli100@gmail.com>
  */
@@ -17,7 +16,7 @@
 //the plugin title
 $plugin_info['title'] = 'Hello world';
 //the comments that go with the plugin
-$plugin_info['comment'] = "Shows a hello world message";
+$plugin_info['comment'] = 'Shows a hello world message';
 //the plugin version
 $plugin_info['version'] = '1.0';
 //the plugin author

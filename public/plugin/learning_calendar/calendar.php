@@ -1,4 +1,5 @@
 <?php
+
 /* For license terms, see /license.txt */
 
 require_once __DIR__.'/../../main/inc/global.inc.php';
@@ -11,7 +12,7 @@ $plugin->protectCalendar($item);
 $isoCode = api_get_language_isocode();
 $htmlHeadXtra[] = api_get_asset('bootstrap-year-calendar/js/bootstrap-year-calendar.js');
 $calendarLanguage = 'en';
-if ($isoCode !== 'en') {
+if ('en' !== $isoCode) {
     $file = 'bootstrap-year-calendar/js/languages/bootstrap-year-calendar.'.$isoCode.'.js';
     $path = api_get_path(SYS_PUBLIC_PATH).'assets/'.$file;
     if (file_exists($path)) {

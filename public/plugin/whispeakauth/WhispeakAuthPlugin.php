@@ -1,4 +1,5 @@
 <?php
+
 /* For licensing terms, see /license.txt */
 
 use Chamilo\CoreBundle\Entity\ExtraField;
@@ -41,7 +42,7 @@ class WhispeakAuthPlugin extends Plugin
     {
         static $result = null;
 
-        return $result ? $result : $result = new self();
+        return $result ?: $result = new self();
     }
 
     public function install()
@@ -80,14 +81,12 @@ class WhispeakAuthPlugin extends Plugin
         $efRepo = $em->getRepository('ChamiloCoreBundle:ExtraField');
 
         /** @var ExtraField $extraField */
-        $extraField = $efRepo->findOneBy(
+        return $efRepo->findOneBy(
             [
                 'variable' => self::EXTRAFIELD_AUTH_UID,
                 'extraFieldType' => ExtraField::USER_FIELD_TYPE,
             ]
         );
-
-        return $extraField;
     }
 
     /**
@@ -102,9 +101,7 @@ class WhispeakAuthPlugin extends Plugin
         $efvRepo = $em->getRepository('ChamiloCoreBundle:ExtraFieldValues');
 
         /** @var ExtraFieldValues $value */
-        $value = $efvRepo->findOneBy(['field' => $extraField, 'itemId' => $userId]);
-
-        return $value;
+        return $efvRepo->findOneBy(['field' => $extraField, 'itemId' => $userId]);
     }
 
     /**
@@ -207,7 +204,7 @@ class WhispeakAuthPlugin extends Plugin
     {
         $phrases = [];
 
-        for ($i = 1; $i <= 6; $i++) {
+        for ($i = 1; $i <= 6; ++$i) {
             $phrases[] = $this->get_lang("AuthentifySampleText$i");
         }
 
@@ -260,7 +257,7 @@ class WhispeakAuthPlugin extends Plugin
         $apiUrl = $this->getApiUrl()."/$endPoint";
         $headers = [
             //"Content-Type: application/x-www-form-urlencoded",
-            "Authorization: Bearer ".$this->get(self::SETTING_TOKEN),
+            'Authorization: Bearer '.$this->get(self::SETTING_TOKEN),
         ];
         $post = [
             'metadata' => json_encode($metadata),

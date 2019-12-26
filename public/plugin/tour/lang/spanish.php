@@ -1,11 +1,10 @@
 <?php
+
 /* For licensing terms, see /license.txt */
 /**
  * Strings to spanish L10n.
  *
  * @author Angel Fernando Quiroz Campos <angel.quiroz@beeznest.com>
- *
- * @package chamilo.plugin.tour
  */
 $strings['plugin_title'] = 'Tour';
 $strings['plugin_comment'] = 'Este plugin muestra a la gente cómo usar tu LMS. Es necesario activar una región (ej. header-right) para que aparezca el botón que le da inicio.';
@@ -16,7 +15,7 @@ $strings['show_tour'] = 'Mostrar el tour';
 $showTourHelpLine01 = 'La configuración necesaria para mostrar los bloques de ayuda, en formato JSON, están localizadas en el archivo %splugin/tour/config/tour.json%s.';
 $showTourHelpLine02 = 'Ver el archivo README para más información.';
 
-$strings['show_tour_help'] = sprintf("$showTourHelpLine01 %s $showTourHelpLine02", "<strong>", "</strong>", "<br>");
+$strings['show_tour_help'] = sprintf("$showTourHelpLine01 %s $showTourHelpLine02", '<strong>', '</strong>', '<br>');
 
 $strings['theme'] = 'Tema';
 $strings['theme_help'] = 'Elegir entre <i>nassim</i>, <i>nazanin</i>, <i>royal</i>. Vacío para usar el tema por defecto.';

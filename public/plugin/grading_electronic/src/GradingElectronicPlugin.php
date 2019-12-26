@@ -1,4 +1,5 @@
 <?php
+
 /* For licensing terms, see /license.txt */
 
 /**
@@ -11,9 +12,6 @@ class GradingElectronicPlugin extends Plugin
     const EXTRAFIELD_COURSE_ID = 'plugin_gradingelectronic_course_id';
     const EXTRAFIELD_COURSE_HOURS = 'plugin_gradingelectronic_coursehours';
 
-    /**
-     * {@inheritdoc}
-     */
     protected function __construct()
     {
         parent::__construct(
@@ -32,12 +30,9 @@ class GradingElectronicPlugin extends Plugin
     {
         static $result = null;
 
-        return $result ? $result : $result = new self();
+        return $result ?: $result = new self();
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function get_name()
     {
         return 'grading_electronic';
@@ -114,7 +109,7 @@ class GradingElectronicPlugin extends Plugin
             return false;
         }
 
-        $toolIsEnabled = $this->get('tool_enable') === 'true';
+        $toolIsEnabled = 'true' === $this->get('tool_enable');
 
         if (!$toolIsEnabled) {
             return false;

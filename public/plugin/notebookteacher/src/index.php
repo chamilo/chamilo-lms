@@ -1,4 +1,5 @@
 <?php
+
 /* For licensing terms, see /license.txt */
 
 use ChamiloSession as Session;
@@ -12,7 +13,7 @@ api_protect_course_script(true);
 $_setting['student_view_enabled'] = 'false';
 
 $plugin = NotebookTeacherPlugin::create();
-$enable = $plugin->get('enable_plugin_notebookteacher') == 'true';
+$enable = 'true' == $plugin->get('enable_plugin_notebookteacher');
 
 if (!$enable) {
     api_not_allowed(true, $plugin->get_lang('ToolDisabled'));
@@ -62,7 +63,7 @@ switch ($action) {
             'name' => $noteBookTeacher,
         ];
 
-        if ((api_get_session_id() != 0 &&
+        if ((0 != api_get_session_id() &&
             !api_is_allowed_to_session_edit(false, true) || api_is_drh())) {
             api_not_allowed();
         }
@@ -107,6 +108,7 @@ switch ($action) {
             $form->setConstants(['sec_token' => $token]);
             $form->display();
         }
+
         break;
     case 'editnote':
         $tool = 'Edit my personal note';
@@ -165,6 +167,7 @@ switch ($action) {
             $form->setConstants(['sec_token' => $token]);
             $form->display();
         }
+
         break;
     case 'deletenote':
         $res = NotebookTeacher::deleteNote($notebookId);
@@ -173,12 +176,13 @@ switch ($action) {
         }
         header('Location: '.$currentUrl);
         exit;
+
         break;
     case 'changeview':
         if (in_array($_GET['view'], ['creation_date', 'update_date', 'title'])) {
             switch ($_GET['view']) {
                 case 'creation_date':
-                    if (!$_GET['direction'] || $_GET['direction'] == 'ASC') {
+                    if (!$_GET['direction'] || 'ASC' == $_GET['direction']) {
                         Display::addFlash(
                             Display::return_message(get_lang('Notes sorted by creation date ascendant'), 'confirmation')
                         );
@@ -187,9 +191,10 @@ switch ($action) {
                             Display::return_message(get_lang('Notes sorted by creation date downward'), 'confirmation')
                         );
                     }
+
                     break;
                 case 'update_date':
-                    if (!$_GET['direction'] || $_GET['direction'] == 'ASC') {
+                    if (!$_GET['direction'] || 'ASC' == $_GET['direction']) {
                         Display::addFlash(
                             Display::return_message(get_lang('Notes sorted by update date ascendant'), 'confirmation')
                         );
@@ -198,19 +203,22 @@ switch ($action) {
                             Display::return_message(get_lang('Notes sorted by update date downward'), 'confirmation')
                         );
                     }
+
                     break;
                 case 'title':
-                    if (!$_GET['direction'] || $_GET['direction'] == 'ASC') {
+                    if (!$_GET['direction'] || 'ASC' == $_GET['direction']) {
                         Display::addFlash(Display::return_message(get_lang('Notes sorted by title ascendant'), 'confirmation'));
                     } else {
                         Display::addFlash(Display::return_message(get_lang('Notes sorted by title downward'), 'confirmation'));
                     }
+
                     break;
             }
             Session::write('notebook_view', Security::remove_XSS($_GET['view']));
             header('Location: '.$currentUrl);
             exit;
         }
+
         break;
     default:
         // Displaying the header
@@ -219,6 +227,7 @@ switch ($action) {
         // Tool introduction
         Display::display_introduction_section($noteBookTeacher);
         NotebookTeacher::displayNotes();
+
         break;
 }
 

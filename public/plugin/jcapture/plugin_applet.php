@@ -22,10 +22,10 @@ function getSecurityToken()
 session_write_close();
 
 header('Content-Type: text/html; charset=utf-8');
-$imageFormat = "PNG";
+$imageFormat = 'PNG';
 $cookies = null;
 foreach (array_keys($_COOKIE) as $cookieName) {
-    $cookies .= bin2hex($cookieName)."=".bin2hex($_COOKIE[$cookieName]).";";
+    $cookies .= bin2hex($cookieName).'='.bin2hex($_COOKIE[$cookieName]).';';
 }
 
 $pageName = 'file';

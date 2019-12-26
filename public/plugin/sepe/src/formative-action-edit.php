@@ -1,4 +1,5 @@
 <?php
+
 /* For licensing terms, see /license.txt */
 
 /**
@@ -28,19 +29,19 @@ if (!empty($_POST)) {
         $yearEnd = Database::escape_string(trim($_POST['year_end']));
         $fullItineraryIndicator = Database::escape_string(trim($_POST['full_itinerary_indicator']));
         $financingType = Database::escape_string(trim($_POST['financing_type']));
-        $attendeesCount = intval($_POST['attendees_count']);
+        $attendeesCount = (int) ($_POST['attendees_count']);
         $actionName = Database::escape_string(trim($_POST['action_name']));
         $globalInfo = Database::escape_string(trim($_POST['global_info']));
         $schedule = Database::escape_string(trim($_POST['schedule']));
         $requirements = Database::escape_string(trim($_POST['requirements']));
         $contactAction = Database::escape_string(trim($_POST['contact_action']));
-        $actionId = intval($_POST['action_id']);
-        $courseId = intval($_POST['course_id']);
+        $actionId = (int) ($_POST['action_id']);
+        $courseId = (int) ($_POST['course_id']);
 
-        $startDate = $yearStart."-".$monthStart."-".$dayStart;
-        $endDate = $yearEnd."-".$monthEnd."-".$dayEnd;
+        $startDate = $yearStart.'-'.$monthStart.'-'.$dayStart;
+        $endDate = $yearEnd.'-'.$monthEnd.'-'.$dayEnd;
 
-        if (!empty($actionId) && $actionId != '0') {
+        if (!empty($actionId) && '0' != $actionId) {
             $sql = "UPDATE plugin_sepe_actions SET 
                         action_origin='".$actionOrigin."', 
                         action_code='".$actionCode."', 
@@ -103,12 +104,12 @@ if (!empty($_POST)) {
         if (!$res) {
             $_SESSION['sepe_message_error'] = $plugin->get_lang('NoSaveChange');
         } else {
-            if ($actionId == '0') {
+            if ('0' == $actionId) {
                 //Sync formative action and course
                 $actionId = Database::insert_id();
                 $sql = "SELECT 1 FROM course WHERE id='".$courseId."';";
                 $rs = Database::query($sql);
-                if (Database::num_rows($rs) == 0) {
+                if (0 == Database::num_rows($rs)) {
                     $sepe_message_error .= $plugin->get_lang('NoExistsCourse');
                     error_log($sepe_message_error);
                 } else {
@@ -124,18 +125,18 @@ if (!empty($_POST)) {
             }
         }
         $courseId = getCourse($actionId);
-        header("Location: formative-action.php?cid=".$courseId);
+        header('Location: formative-action.php?cid='.$courseId);
     } else {
         Security::clear_token();
         $token = Security::get_token();
         $_SESSION['sepe_message_error'] = $plugin->get_lang('ProblemToken');
         session_write_close();
-        $actionId = intval($_POST['action_id']);
-        if ($actionId == '0') {
-            $courseId = intval($_POST['course_id']);
-            header("Location: formative-action-edit.php?new_action=1&cid=".$courseId);
+        $actionId = (int) ($_POST['action_id']);
+        if ('0' == $actionId) {
+            $courseId = (int) ($_POST['course_id']);
+            header('Location: formative-action-edit.php?new_action=1&cid='.$courseId);
         } else {
-            header("Location: formative-action-edit.php?action_id=".$actionId);
+            header('Location: formative-action-edit.php?action_id='.$actionId);
         }
     }
 } else {
@@ -143,44 +144,44 @@ if (!empty($_POST)) {
 }
 
 if (api_is_platform_admin()) {
-    if (isset($_GET['new_action']) && intval($_GET['new_action']) == 1) {
+    if (isset($_GET['new_action']) && 1 == (int) ($_GET['new_action'])) {
         $info = [];
-        $interbreadcrumb[] = ["url" => "/plugin/sepe/src/sepe-administration-menu.php", "name" => $plugin->get_lang('MenuSepe')];
-        $interbreadcrumb[] = ["url" => "formative-actions-list.php", "name" => $plugin->get_lang('FormativesActionsList')];
+        $interbreadcrumb[] = ['url' => '/plugin/sepe/src/sepe-administration-menu.php', 'name' => $plugin->get_lang('MenuSepe')];
+        $interbreadcrumb[] = ['url' => 'formative-actions-list.php', 'name' => $plugin->get_lang('FormativesActionsList')];
         $templateName = $plugin->get_lang('formativeActionNew');
         $tpl = new Template($templateName);
-        $yearStart = $yearEnd = date("Y");
+        $yearStart = $yearEnd = date('Y');
         $tpl->assign('info', $info);
         $tpl->assign('new_action', '1');
-        $tpl->assign('course_id', intval($_GET['cid']));
+        $tpl->assign('course_id', (int) ($_GET['cid']));
     } else {
         $courseId = getCourse($_GET['action_id']);
-        $interbreadcrumb[] = ["url" => "/plugin/sepe/src/sepe-administration-menu.php", "name" => $plugin->get_lang('MenuSepe')];
-        $interbreadcrumb[] = ["url" => "formative-actions-list.php", "name" => $plugin->get_lang('FormativesActionsList')];
-        $interbreadcrumb[] = ["url" => "formative-action.php?cid=".$courseId, "name" => $plugin->get_lang('FormativeAction')];
+        $interbreadcrumb[] = ['url' => '/plugin/sepe/src/sepe-administration-menu.php', 'name' => $plugin->get_lang('MenuSepe')];
+        $interbreadcrumb[] = ['url' => 'formative-actions-list.php', 'name' => $plugin->get_lang('FormativesActionsList')];
+        $interbreadcrumb[] = ['url' => 'formative-action.php?cid='.$courseId, 'name' => $plugin->get_lang('FormativeAction')];
         $info = getActionInfo($_GET['action_id']);
         $templateName = $plugin->get_lang('formativeActionEdit');
         $tpl = new Template($templateName);
         $tpl->assign('info', $info);
-        if ($info['start_date'] != "0000-00-00" && $info['start_date'] != null) {
-            $tpl->assign('day_start', date("j", strtotime($info['start_date'])));
-            $tpl->assign('month_start', date("n", strtotime($info['start_date'])));
-            $tpl->assign('year_start', date("Y", strtotime($info['start_date'])));
-            $yearStart = date("Y", strtotime($info['start_date']));
-        } elseif (strpos($info['start_date'], '0000') === false) {
-            $yearStart = date("Y", strtotime($info['start_date']));
+        if ('0000-00-00' != $info['start_date'] && null != $info['start_date']) {
+            $tpl->assign('day_start', date('j', strtotime($info['start_date'])));
+            $tpl->assign('month_start', date('n', strtotime($info['start_date'])));
+            $tpl->assign('year_start', date('Y', strtotime($info['start_date'])));
+            $yearStart = date('Y', strtotime($info['start_date']));
+        } elseif (false === strpos($info['start_date'], '0000')) {
+            $yearStart = date('Y', strtotime($info['start_date']));
         } else {
-            $yearStart = date("Y");
+            $yearStart = date('Y');
         }
-        if ($info['end_date'] != "0000-00-00" && $info['end_date'] != null) {
-            $tpl->assign('day_end', date("j", strtotime($info['end_date'])));
-            $tpl->assign('month_end', date("n", strtotime($info['end_date'])));
-            $tpl->assign('year_end', date("Y", strtotime($info['end_date'])));
-            $yearEnd = date("Y", strtotime($info['end_date']));
-        } elseif (strpos($info['end_date'], '0000') === false) {
-            $yearEnd = date("Y", strtotime($info['end_date']));
+        if ('0000-00-00' != $info['end_date'] && null != $info['end_date']) {
+            $tpl->assign('day_end', date('j', strtotime($info['end_date'])));
+            $tpl->assign('month_end', date('n', strtotime($info['end_date'])));
+            $tpl->assign('year_end', date('Y', strtotime($info['end_date'])));
+            $yearEnd = date('Y', strtotime($info['end_date']));
+        } elseif (false === strpos($info['end_date'], '0000')) {
+            $yearEnd = date('Y', strtotime($info['end_date']));
         } else {
-            $yearEnd = date("Y");
+            $yearEnd = date('Y');
         }
         $tpl->assign('new_action', '0');
     }
@@ -193,10 +194,10 @@ if (api_is_platform_admin()) {
     }
     $yearStart -= 5;
     $yearEnd += 5;
-    $fin_rango_anio = (($yearStart + 15) < $yearEnd) ? ($yearEnd + 1) : ($yearStart + 15);
+    $fin_rango_anio = $yearStart + 15 < $yearEnd ? $yearEnd + 1 : $yearStart + 15;
     while ($yearStart <= $fin_rango_anio) {
         $yearList[] = $yearStart;
-        $yearStart++;
+        ++$yearStart;
     }
     $tpl->assign('list_year', $yearList);
     if (isset($_SESSION['sepe_message_info'])) {

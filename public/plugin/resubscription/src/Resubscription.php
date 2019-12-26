@@ -1,4 +1,5 @@
 <?php
+
 /* For licensing terms, see /license.txt */
 
 use Chamilo\CoreBundle\Framework\Container;
@@ -9,8 +10,6 @@ use Chamilo\CoreBundle\Hook\Interfaces\HookPluginInterface;
  * Limit session resubscriptions.
  *
  * @author Imanol Losada Oriol <imanol.losada@beeznest.com>
- *
- * @package chamilo.plugin.resubscription
  */
 class Resubscription extends Plugin implements HookPluginInterface
 {
@@ -43,7 +42,7 @@ class Resubscription extends Plugin implements HookPluginInterface
     {
         static $result = null;
 
-        return $result ? $result : $result = new self();
+        return $result ?: $result = new self();
     }
 
     /**

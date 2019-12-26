@@ -4,7 +4,6 @@
  * These settings will be used in the administration interface for plugins
  * (Chamilo configuration settings->Plugins).
  *
- * @package chamilo.plugin
  *
  * @author Julio Montoya <gugli100@gmail.com>
  */
@@ -14,7 +13,7 @@
 // The plugin title.
 $plugin_info['title'] = 'Show HTML before login';
 // The comments that go with the plugin.
-$plugin_info['comment'] = "Show a content before loading the login page.";
+$plugin_info['comment'] = 'Show a content before loading the login page.';
 // The plugin version.
 $plugin_info['version'] = '1.0';
 // The plugin author.

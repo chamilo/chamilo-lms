@@ -1,4 +1,5 @@
 <?php
+
 /* For licensing terms, see /license.txt */
 
 /**
@@ -27,7 +28,7 @@ class DictionaryPlugin extends Plugin
     {
         static $result = null;
 
-        return $result ? $result : $result = new self();
+        return $result ?: $result = new self();
     }
 
     /**
@@ -35,12 +36,12 @@ class DictionaryPlugin extends Plugin
      */
     public function install()
     {
-        $sql = "CREATE TABLE IF NOT EXISTS plugin_dictionary (
+        $sql = 'CREATE TABLE IF NOT EXISTS plugin_dictionary (
                 id INT NOT NULL AUTO_INCREMENT,
                 term VARCHAR(255) NOT NULL,
                 definition LONGTEXT NOT NULL,
                 PRIMARY KEY (id));
-        ";
+        ';
         Database::query($sql);
     }
 
@@ -49,7 +50,7 @@ class DictionaryPlugin extends Plugin
      */
     public function uninstall()
     {
-        $sql = "DROP TABLE IF EXISTS plugin_dictionary";
+        $sql = 'DROP TABLE IF EXISTS plugin_dictionary';
         Database::query($sql);
     }
 }

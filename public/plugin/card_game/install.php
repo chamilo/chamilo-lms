@@ -1,4 +1,5 @@
 <?php
+
 /* For license terms, see /license.txt */
 
 require_once 'card_game.php';

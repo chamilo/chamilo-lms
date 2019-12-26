@@ -1,10 +1,9 @@
 <?php
+
 /* For license terms, see /license.txt */
 
 /**
  * List of pending payments of the Buy Courses plugin.
- *
- * @package chamilo.plugin.buycourses
  */
 $cidReset = true;
 
@@ -17,7 +16,7 @@ $plugin = BuyCoursesPlugin::create();
 $paypalEnable = $plugin->get('paypal_enable');
 $commissionsEnable = $plugin->get('commissions_enable');
 $includeServices = $plugin->get('include_services');
-$invoicingEnable = $plugin->get('invoicing_enable') === 'true';
+$invoicingEnable = 'true' === $plugin->get('invoicing_enable');
 
 if (isset($_GET['order'])) {
     $sale = $plugin->getSale($_GET['order']);
@@ -40,6 +39,7 @@ if (isset($_GET['order'])) {
                 'status' => BuyCoursesPlugin::SALE_STATUS_COMPLETED,
                 'sale' => $sale['id'],
             ]);
+
             break;
         case 'cancel':
             $plugin->cancelSale($sale['id']);
@@ -55,6 +55,7 @@ if (isset($_GET['order'])) {
                 'status' => BuyCoursesPlugin::SALE_STATUS_CANCELED,
                 'sale' => $sale['id'],
             ]);
+
             break;
     }
 
@@ -68,7 +69,7 @@ $paymentTypes = $plugin->getPaymentTypes();
 
 $selectedFilterType = '0';
 $selectedStatus = isset($_GET['status']) ? $_GET['status'] : BuyCoursesPlugin::SALE_STATUS_PENDING;
-$selectedSale = isset($_GET['sale']) ? intval($_GET['sale']) : 0;
+$selectedSale = isset($_GET['sale']) ? (int) ($_GET['sale']) : 0;
 $searchTerm = '';
 
 $form = new FormValidator('search', 'get');
@@ -78,11 +79,11 @@ if ($form->validate()) {
     $selectedStatus = $form->getSubmitValue('status');
     $searchTerm = $form->getSubmitValue('user');
 
-    if ($selectedStatus === false) {
+    if (false === $selectedStatus) {
         $selectedStatus = BuyCoursesPlugin::SALE_STATUS_PENDING;
     }
 
-    if ($selectedFilterType === false) {
+    if (false === $selectedFilterType) {
         $selectedFilterType = '0';
     }
 }
@@ -92,10 +93,10 @@ $form->addRadio(
     get_lang('Filter'),
     [$plugin->get_lang('ByStatus'), $plugin->get_lang('ByUser')]
 );
-$form->addHtml('<div id="report-by-status" '.($selectedFilterType !== '0' ? 'style="display:none"' : '').'>');
+$form->addHtml('<div id="report-by-status" '.('0' !== $selectedFilterType ? 'style="display:none"' : '').'>');
 $form->addSelect('status', $plugin->get_lang('OrderStatus'), $saleStatuses);
 $form->addHtml('</div>');
-$form->addHtml('<div id="report-by-user" '.($selectedFilterType !== '1' ? 'style="display:none"' : '').'>');
+$form->addHtml('<div id="report-by-user" '.('1' !== $selectedFilterType ? 'style="display:none"' : '').'>');
 $form->addText('user', get_lang('Username'), false);
 $form->addHtml('</div>');
 $form->addButtonFilter(get_lang('Search'));
@@ -107,9 +108,11 @@ $form->setDefaults([
 switch ($selectedFilterType) {
     case '0':
         $sales = $plugin->getSaleListByStatus($selectedStatus);
+
         break;
     case '1':
         $sales = $plugin->getSaleListByUser($searchTerm);
+
         break;
 }
 
@@ -125,7 +128,7 @@ $interbreadcrumb[] = ['url' => '../index.php', 'name' => $plugin->get_lang('plug
 $templateName = $plugin->get_lang('SalesReport');
 $template = new Template($templateName);
 $toolbar = '';
-if ($paypalEnable === 'true' && $commissionsEnable === 'true') {
+if ('true' === $paypalEnable && 'true' === $commissionsEnable) {
     $toolbar .= Display::toolbarButton(
         $plugin->get_lang('PaypalPayoutCommissions'),
         api_get_path(WEB_PLUGIN_PATH).'buycourses/src/paypal_payout.php',
@@ -140,7 +143,7 @@ if ($paypalEnable === 'true' && $commissionsEnable === 'true') {
     );
 }
 
-if ($commissionsEnable === 'true') {
+if ('true' === $commissionsEnable) {
     $toolbar .= Display::toolbarButton(
         $plugin->get_lang('PayoutReport'),
         api_get_path(WEB_PLUGIN_PATH).'buycourses/src/payout_report.php',

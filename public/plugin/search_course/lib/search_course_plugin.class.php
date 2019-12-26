@@ -21,7 +21,7 @@ class SearchCoursePlugin extends Plugin
     {
         static $result = null;
 
-        return $result ? $result : $result = new self();
+        return $result ?: $result = new self();
     }
 
     public function get_name()

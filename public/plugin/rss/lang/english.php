@@ -5,12 +5,12 @@
  * @license GNU General Public License - http://www.gnu.org/copyleft/gpl.html
  * @author Laurent Opprecht <laurent@opprecht.info>
  */
-$strings['plugin_title'] = "RSS";
-$strings['plugin_comment'] = "Display RSS content.";
+$strings['plugin_title'] = 'RSS';
+$strings['plugin_comment'] = 'Display RSS content.';
 
-$strings['rss'] = "RSS";
-$strings['block_title'] = "Block title";
+$strings['rss'] = 'RSS';
+$strings['block_title'] = 'Block title';
 
-$strings['title'] = "Title";
-$strings['no_rss'] = "There is no RSS configured. Please add a RSS";
-$strings['no_valid_rss'] = "Please check if the URL contains a valid RSS URL";
+$strings['title'] = 'Title';
+$strings['no_rss'] = 'There is no RSS configured. Please add a RSS';
+$strings['no_valid_rss'] = 'Please check if the URL contains a valid RSS URL';

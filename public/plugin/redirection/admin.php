@@ -1,12 +1,11 @@
 <?php
+
 /* For licensing terms, see /license.txt */
 
 /**
  * Admin interface for the plugin configuration.
  *
  * @author Enrique Alcaraz Lopez
- *
- * @package chamilo.plugin.redirection
  */
 require_once __DIR__.'/config.php';
 

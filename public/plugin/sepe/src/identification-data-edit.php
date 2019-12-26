@@ -1,4 +1,5 @@
 <?php
+
 /* For licensing terms, see /license.txt */
 
 /**
@@ -17,7 +18,7 @@ if (!empty($_POST)) {
         $trackingUrl = Database::escape_string(trim($_POST['tracking_url']));
         $phone = Database::escape_string(trim($_POST['phone']));
         $mail = Database::escape_string(trim($_POST['mail']));
-        $id = intval($_POST['id']);
+        $id = (int) ($_POST['id']);
 
         if (checkIdentificationData()) {
             $sql = "UPDATE $tableSepeCenter SET 
@@ -56,7 +57,7 @@ if (!empty($_POST)) {
         } else {
             $_SESSION['sepe_message_info'] = $plugin->get_lang('SaveChange');
         }
-        header("Location: identification-data.php");
+        header('Location: identification-data.php');
     } else {
         $_SESSION['sepe_message_error'] = $plugin->get_lang('ProblemToken');
         Security::clear_token();
@@ -68,10 +69,10 @@ if (!empty($_POST)) {
 
 if (api_is_platform_admin()) {
     $interbreadcrumb[] = [
-        "url" => "/plugin/sepe/src/sepe-administration-menu.php",
-        "name" => $plugin->get_lang('MenuSepe'),
+        'url' => '/plugin/sepe/src/sepe-administration-menu.php',
+        'name' => $plugin->get_lang('MenuSepe'),
     ];
-    $interbreadcrumb[] = ["url" => "identification-data.php", "name" => $plugin->get_lang('DataCenter')];
+    $interbreadcrumb[] = ['url' => 'identification-data.php', 'name' => $plugin->get_lang('DataCenter')];
     $templateName = $plugin->get_lang('DataCenterEdit');
     $tpl = new Template($templateName);
     $info = getInfoIdentificationData();

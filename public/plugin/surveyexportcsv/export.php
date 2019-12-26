@@ -1,4 +1,5 @@
 <?php
+
 /* For licensing terms, see /license.txt */
 
 use Chamilo\CourseBundle\Entity\CSurveyAnswer;
@@ -20,7 +21,7 @@ if (empty($surveyData)) {
 $plugin = SurveyExportCsvPlugin::create();
 $allowExportIncomplete = 'true' === $plugin->get('export_incomplete');
 
-if ($plugin->get('enabled') !== 'true') {
+if ('true' !== $plugin->get('enabled')) {
     api_not_allowed(true);
 }
 
@@ -62,7 +63,7 @@ foreach ($surveyAnswers as $answer) {
     array_unshift($row, $i);
 
     $content[] = $row;
-    $i++;
+    ++$i;
 }
 
 // Generate file
@@ -85,7 +86,7 @@ function firstRow($questions)
     $row = ['DATID'];
 
     foreach ($positions as $position) {
-        $row[] = sprintf("P%02d", $position + 1);
+        $row[] = sprintf('P%02d', $position + 1);
     }
 
     $row[] = 'DATOBS';
@@ -103,7 +104,7 @@ function firstRow($questions)
  */
 function getSurveyAnswers($courseId, $surveyId)
 {
-    $surveyAnswers = Database::getManager()
+    return Database::getManager()
         ->createQuery(
             'SELECT sa.user, MIN(sa.iid) AS id FROM ChamiloCourseBundle:CSurveyAnswer sa
             WHERE sa.cId = :course AND sa.surveyId = :survey
@@ -111,8 +112,6 @@ function getSurveyAnswers($courseId, $surveyId)
         )
         ->setParameters(['course' => $courseId, 'survey' => $surveyId])
         ->getResult();
-
-    return $surveyAnswers;
 }
 
 /**
@@ -125,7 +124,7 @@ function getSurveyAnswers($courseId, $surveyId)
  */
 function getQuestionOptions($user, $courseId, $surveyId, $questionId)
 {
-    $options = Database::getManager()
+    return Database::getManager()
         ->createQuery(
             'SELECT sqo FROM ChamiloCourseBundle:CSurveyQuestionOption sqo
             INNER JOIN ChamiloCourseBundle:CSurveyAnswer sa
@@ -146,8 +145,6 @@ function getQuestionOptions($user, $courseId, $surveyId, $questionId)
             ]
         )
         ->getResult();
-
-    return $options;
 }
 
 /**
@@ -162,15 +159,13 @@ function getQuestionOptions($user, $courseId, $surveyId, $questionId)
  */
 function getOpenAnswer($questionId, $surveyId, $courseId, $user)
 {
-    $answer = Database::getManager()
+    return Database::getManager()
         ->createQuery(
             'SELECT sa FROM ChamiloCourseBundle:CSurveyAnswer sa
             WHERE sa.cId = :course AND sa.surveyId = :survey AND sa.questionId = :question AND sa.user = :user'
         )
         ->setParameters(['course' => $courseId, 'survey' => $surveyId, 'question' => $questionId, 'user' => $user])
         ->getOneOrNullResult();
-
-    return $answer;
 }
 
 /**

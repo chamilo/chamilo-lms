@@ -1,6 +1,5 @@
 <?php
 
-
 /// Copyright 2006 Rudy Desjardins
 
 /// This program is free software; you can redistribute it and/or modify
@@ -16,7 +15,6 @@
 /// You should have received a copy of the GNU General Public License
 /// along with this program; if not, write to the Free Software
 /// Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
-
 
 ///
 /// This file defines constants for use as regular expressions for validating
@@ -109,5 +107,3 @@ define('ABSOLUTEURI_2396', '(?:'.SCHEME_2396.'\\x3A(?:'.HIER_PART_2396.'|'.OPAQU
 define('URI_REFERENCE_2396', '(?:(?:'.ABSOLUTEURI_2396.'|'.RELATIVEURI_2396.')(?:\\x23'.FRAGMENT_2396.')?)');
 
 define('URI_2396', URI_REFERENCE_2396);
-
-?>

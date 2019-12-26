@@ -1,11 +1,10 @@
 <?php
+
 /* For licensing terms, see /license.txt */
 /**
  * Strings para o português brasileiro L10n.
  *
  * @author Igor Oliveira Souza <igor@igoroliveira.eng.br>
- *
- * @package chamilo.plugin.tour
  */
 $strings['plugin_title'] = 'Tour';
 $strings['plugin_comment'] = 'Este plugin demonstra aos usuários como usar o ambiente Chamilo LMS. Você deve ativar uma região (por exemplo, "header_right") para mostrar um botão que permita ao usuário começar o tour.';
@@ -16,7 +15,7 @@ $strings['show_tour'] = 'Mostrar o tour';
 $showTourHelpLine01 = 'As configurações necessárias para mostrar o bloco de ajuda, no formato JSON, está localizada no arquivo %plugin/tour/config/tour.json%s.';
 $showTourHelpLine02 = 'Veja o arquivo README para mais informações.';
 
-$strings['show_tour_help'] = sprintf("$showTourHelpLine01 %s $showTourHelpLine02", "<strong>", "</strong>", "<br>");
+$strings['show_tour_help'] = sprintf("$showTourHelpLine01 %s $showTourHelpLine02", '<strong>', '</strong>', '<br>');
 
 $strings['theme'] = 'Tema';
 $strings['theme_help'] = 'Escolha <i>nassim</i>, <i>nazanin</i>, <i>royal</i>. Deixe em branco para usar o tema padrão.';

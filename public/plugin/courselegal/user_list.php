@@ -1,4 +1,5 @@
 <?php
+
 /* For license terms, see /license.txt */
 
 require_once __DIR__.'/config.php';
@@ -6,7 +7,7 @@ require_once __DIR__.'/config.php';
 // Course legal
 $enabled = api_get_plugin_setting('courselegal', 'tool_enable');
 
-if ($enabled != 'true') {
+if ('true' != $enabled) {
     api_not_allowed(true);
 }
 
@@ -27,6 +28,7 @@ switch ($action) {
             header('Location: '.$url);
             exit;
         }
+
         break;
     case 'delete':
         if (isset($_GET['user_id'])) {
@@ -34,10 +36,11 @@ switch ($action) {
             header('Location: '.$url);
             exit;
         }
+
         break;
 }
 
-$order = " ORDER BY firstname, lastname";
+$order = ' ORDER BY firstname, lastname';
 $userList = $legal->getUserAgreementList($courseId, $sessionId, $order);
 $table = new HTML_Table(['class' => 'data_table']);
 $table->setHeaderContents(0, 0, get_lang('User'));
@@ -68,12 +71,12 @@ if (!empty($userList)) {
         $table->setCellContents($row, 1, $webDate);
         $table->setCellContents($row, 2, $mailDate);
         $table->setCellContents($row, 3, $link.' '.$deleteLink);
-        $row++;
+        ++$row;
     }
 }
 $url = $pluginPath.'start.php?'.api_get_cidreq();
 
-$interbreadcrumb[] = ["url" => $url, "name" => $legal->get_lang('CourseLegal')];
+$interbreadcrumb[] = ['url' => $url, 'name' => $legal->get_lang('CourseLegal')];
 Display::display_header($legal->get_lang('User list'));
 
 $table->display();

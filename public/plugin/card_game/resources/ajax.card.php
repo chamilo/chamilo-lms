@@ -1,4 +1,5 @@
 <?php
+
 /* For license terms, see /license.txt */
 
 use ChamiloSession as Session;
@@ -8,15 +9,13 @@ use ChamiloSession as Session;
  * in the plugin_card_game table.
  *
  * @author Damien Renou
- *
- * @package chamilo.plugin.card_game
  */
 require_once __DIR__.'/../../../main/inc/global.inc.php';
 
 $cardGameSession = Session::read('cardgame');
 
 if (!empty($cardGameSession)) {
-    if ($cardGameSession == 'havedeck') {
+    if ('havedeck' == $cardGameSession) {
         $part = '1';
         if (isset($_GET['part'])) {
             $part = (int) $_GET['part'];

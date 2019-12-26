@@ -1,10 +1,9 @@
 <?php
+
 /* For licensing terms, see /license.txt */
 
 /**
  * StudentFollowUpPlugin.
- *
- * @package chamilo.plugin
  */
 $plugin = StudentFollowUpPlugin::create();
 $plugin_info = $plugin->get_info();

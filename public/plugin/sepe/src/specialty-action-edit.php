@@ -1,4 +1,5 @@
 <?php
+
 /* For licensing terms, see /license.txt */
 
 /**
@@ -26,28 +27,28 @@ if (!empty($_POST)) {
         $yearEnd = Database::escape_string(trim($_POST['year_end']));
         $modality_impartition = Database::escape_string(trim($_POST['modality_impartition']));
         $classroomHours = Database::escape_string(trim($_POST['classroom_hours']));
-        $distanceHours = intval($_POST['distance_hours']);
-        $morningsParticipantsNumber = intval($_POST['mornings_participants_number']);
-        $morningsAccessNumber = intval($_POST['mornings_access_number']);
-        $morningTotalDuration = intval($_POST['morning_total_duration']);
-        $afternoonParticipantsNumber = intval($_POST['afternoon_participants_number']);
-        $afternoonAccessNumber = intval($_POST['afternoon_access_number']);
-        $afternoonTotalDuration = intval($_POST['afternoon_total_duration']);
-        $nightParticipantsNumber = intval($_POST['night_participants_number']);
-        $nightAccessNumber = intval($_POST['night_access_number']);
-        $nightTotalDuration = intval($_POST['night_total_duration']);
-        $attendeesCount = intval($_POST['attendees_count']);
-        $learningActivityCount = intval($_POST['learning_activity_count']);
-        $attemptCount = intval($_POST['attempt_count']);
-        $evaluationActivityCount = intval($_POST['evaluation_activity_count']);
-        $actionId = intval($_POST['action_id']);
-        $specialtyId = intval($_POST['specialty_id']);
-        $newSpecialty = intval($_POST['new_specialty']);
+        $distanceHours = (int) ($_POST['distance_hours']);
+        $morningsParticipantsNumber = (int) ($_POST['mornings_participants_number']);
+        $morningsAccessNumber = (int) ($_POST['mornings_access_number']);
+        $morningTotalDuration = (int) ($_POST['morning_total_duration']);
+        $afternoonParticipantsNumber = (int) ($_POST['afternoon_participants_number']);
+        $afternoonAccessNumber = (int) ($_POST['afternoon_access_number']);
+        $afternoonTotalDuration = (int) ($_POST['afternoon_total_duration']);
+        $nightParticipantsNumber = (int) ($_POST['night_participants_number']);
+        $nightAccessNumber = (int) ($_POST['night_access_number']);
+        $nightTotalDuration = (int) ($_POST['night_total_duration']);
+        $attendeesCount = (int) ($_POST['attendees_count']);
+        $learningActivityCount = (int) ($_POST['learning_activity_count']);
+        $attemptCount = (int) ($_POST['attempt_count']);
+        $evaluationActivityCount = (int) ($_POST['evaluation_activity_count']);
+        $actionId = (int) ($_POST['action_id']);
+        $specialtyId = (int) ($_POST['specialty_id']);
+        $newSpecialty = (int) ($_POST['new_specialty']);
 
-        $startDate = $yearStart."-".$monthStart."-".$dayStart;
-        $endDate = $yearEnd."-".$monthEnd."-".$dayEnd;
+        $startDate = $yearStart.'-'.$monthStart.'-'.$dayStart;
+        $endDate = $yearEnd.'-'.$monthEnd.'-'.$dayEnd;
 
-        if (isset($newSpecialty) && $newSpecialty != 1) {
+        if (isset($newSpecialty) && 1 != $newSpecialty) {
             $sql = "UPDATE plugin_sepe_specialty SET 
             specialty_origin='".$specialtyOrigin."', 
             professional_area='".$professionalArea."', 
@@ -130,81 +131,81 @@ if (!empty($_POST)) {
         if (!$res) {
             $_SESSION['sepe_message_error'] = $plugin->get_lang('NoSaveChange');
         } else {
-            if ($newSpecialty == 1) {
+            if (1 == $newSpecialty) {
                 $specialtyId = Database::insert_id();
                 $_SESSION['sepe_message_info'] = $plugin->get_lang('SaveChange');
             }
         }
         session_write_close();
-        header("Location: specialty-action-edit.php?new_specialty=0&specialty_id=".$specialtyId."&action_id=".$actionId);
+        header('Location: specialty-action-edit.php?new_specialty=0&specialty_id='.$specialtyId.'&action_id='.$actionId);
     } else {
-        $actionId = intval($_POST['action_id']);
-        $specialtyId = intval($_POST['specialty_id']);
-        $newSpecialty = intval($_POST['new_specialty']);
+        $actionId = (int) ($_POST['action_id']);
+        $specialtyId = (int) ($_POST['specialty_id']);
+        $newSpecialty = (int) ($_POST['new_specialty']);
         Security::clear_token();
         $token = Security::get_token();
         $_SESSION['sepe_message_error'] = $plugin->get_lang('ProblemToken');
         session_write_close();
-        header("Location: specialty-action-edit.php?new_specialty=".$newSpecialty."&specialty_id=".$specialtyId."&action_id=".$actionId);
+        header('Location: specialty-action-edit.php?new_specialty='.$newSpecialty.'&specialty_id='.$specialtyId.'&action_id='.$actionId);
     }
 } else {
     $token = Security::get_token();
 }
 
 if (api_is_platform_admin()) {
-    $id_course = getCourse(intval($_GET['action_id']));
+    $id_course = getCourse((int) ($_GET['action_id']));
     $interbreadcrumb[] = [
-        "url" => "/plugin/sepe/src/sepe-administration-menu.php",
-        "name" => $plugin->get_lang('MenuSepe'),
+        'url' => '/plugin/sepe/src/sepe-administration-menu.php',
+        'name' => $plugin->get_lang('MenuSepe'),
     ];
     $interbreadcrumb[] = [
-        "url" => "formative-actions-list.php",
-        "name" => $plugin->get_lang('FormativesActionsList'),
+        'url' => 'formative-actions-list.php',
+        'name' => $plugin->get_lang('FormativesActionsList'),
     ];
     $interbreadcrumb[] = [
-        "url" => "formative-action.php?cid=".$id_course,
-        "name" => $plugin->get_lang('FormativeAction'),
+        'url' => 'formative-action.php?cid='.$id_course,
+        'name' => $plugin->get_lang('FormativeAction'),
     ];
-    if (isset($_GET['new_specialty']) && intval($_GET['new_specialty']) == 1) {
+    if (isset($_GET['new_specialty']) && 1 == (int) ($_GET['new_specialty'])) {
         $templateName = $plugin->get_lang('NewSpecialtyAccion');
         $tpl = new Template($templateName);
-        $tpl->assign('action_id', intval($_GET['action_id']));
+        $tpl->assign('action_id', (int) ($_GET['action_id']));
         $info = [];
         $tpl->assign('info', $info);
         $tpl->assign('new_action', '1');
-        $yearStart = $yearEnd = date("Y");
+        $yearStart = $yearEnd = date('Y');
     } else {
         $templateName = $plugin->get_lang('EditSpecialtyAccion');
         $tpl = new Template($templateName);
-        $tpl->assign('action_id', intval($_GET['action_id']));
-        $info = getSpecialtActionInfo(intval($_GET['specialty_id']));
+        $tpl->assign('action_id', (int) ($_GET['action_id']));
+        $info = getSpecialtActionInfo((int) ($_GET['specialty_id']));
         $tpl->assign('info', $info);
-        if ($info['start_date'] != '0000-00-00' && $info['start_date'] != null) {
-            $tpl->assign('day_start', date("j", strtotime($info['start_date'])));
-            $tpl->assign('month_start', date("n", strtotime($info['start_date'])));
-            $tpl->assign('year_start', date("Y", strtotime($info['start_date'])));
-            $yearStart = date("Y", strtotime($info['start_date']));
-        } elseif (strpos($info['start_date'], '0000') === false) {
-            $yearStart = date("Y", strtotime($info['start_date']));
+        if ('0000-00-00' != $info['start_date'] && null != $info['start_date']) {
+            $tpl->assign('day_start', date('j', strtotime($info['start_date'])));
+            $tpl->assign('month_start', date('n', strtotime($info['start_date'])));
+            $tpl->assign('year_start', date('Y', strtotime($info['start_date'])));
+            $yearStart = date('Y', strtotime($info['start_date']));
+        } elseif (false === strpos($info['start_date'], '0000')) {
+            $yearStart = date('Y', strtotime($info['start_date']));
         } else {
-            $yearStart = date("Y");
+            $yearStart = date('Y');
         }
-        if ($info['end_date'] != '0000-00-00' && $info['end_date'] != null) {
-            $tpl->assign('day_end', date("j", strtotime($info['end_date'])));
-            $tpl->assign('month_end', date("n", strtotime($info['end_date'])));
-            $tpl->assign('year_end', date("Y", strtotime($info['end_date'])));
-            $yearEnd = date("Y", strtotime($info['end_date']));
-        } elseif (strpos($info['end_date'], '0000') === false) {
-            $yearEnd = date("Y", strtotime($info['end_date']));
+        if ('0000-00-00' != $info['end_date'] && null != $info['end_date']) {
+            $tpl->assign('day_end', date('j', strtotime($info['end_date'])));
+            $tpl->assign('month_end', date('n', strtotime($info['end_date'])));
+            $tpl->assign('year_end', date('Y', strtotime($info['end_date'])));
+            $yearEnd = date('Y', strtotime($info['end_date']));
+        } elseif (false === strpos($info['end_date'], '0000')) {
+            $yearEnd = date('Y', strtotime($info['end_date']));
         } else {
-            $yearEnd = date("Y");
+            $yearEnd = date('Y');
         }
         $tpl->assign('new_action', '0');
-        $tpl->assign('specialty_id', intval($_GET['specialty_id']));
+        $tpl->assign('specialty_id', (int) ($_GET['specialty_id']));
 
-        $listClassroom = classroomList(intval($_GET['specialty_id']));
+        $listClassroom = classroomList((int) ($_GET['specialty_id']));
         $tpl->assign('listClassroom', $listClassroom);
-        $listTutors = tutorsList(intval($_GET['specialty_id']));
+        $listTutors = tutorsList((int) ($_GET['specialty_id']));
         $tpl->assign('listTutors', $listTutors);
     }
 
@@ -216,10 +217,10 @@ if (api_is_platform_admin()) {
     }
     $yearStart -= 5;
     $yearEnd += 5;
-    $fin_rango_anio = (($yearStart + 15) < $yearEnd) ? ($yearEnd + 1) : ($yearStart + 15);
+    $fin_rango_anio = $yearStart + 15 < $yearEnd ? $yearEnd + 1 : $yearStart + 15;
     while ($yearStart <= $fin_rango_anio) {
         $yearList[] = $yearStart;
-        $yearStart++;
+        ++$yearStart;
     }
     $tpl->assign('list_year', $yearList);
     if (isset($_SESSION['sepe_message_info'])) {

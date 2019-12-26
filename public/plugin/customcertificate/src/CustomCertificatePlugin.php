@@ -1,10 +1,10 @@
 <?php
+
 /* For license terms, see /license.txt */
 
 /**
  * Plugin class for the CustomCertificate plugin.
  *
- * @package chamilo.plugin.customcertificate
  *
  * @author Jose Angel Ruiz <desarrollo@nosolored.com>
  */
@@ -52,7 +52,7 @@ class CustomCertificatePlugin extends Plugin
     {
         static $result = null;
 
-        return $result ? $result : $result = new self();
+        return $result ?: $result = new self();
     }
 
     /**
@@ -100,7 +100,7 @@ class CustomCertificatePlugin extends Plugin
     {
         $oldCertificateTable = 'gradebook_certificate_alternative';
         $base = api_get_path(WEB_UPLOAD_PATH);
-        if (Database::num_rows(Database::query("SHOW TABLES LIKE '$oldCertificateTable'")) == 1) {
+        if (1 == Database::num_rows(Database::query("SHOW TABLES LIKE '$oldCertificateTable'"))) {
             $sql = "SELECT * FROM $oldCertificateTable";
             $res = Database::query($sql);
             while ($row = Database::fetch_assoc($res)) {
@@ -110,13 +110,13 @@ class CustomCertificatePlugin extends Plugin
                     'c_id' => $row['c_id'],
                     'session_id' => $row['session_id'],
                     'content_course' => $row['content_course'],
-                    'contents_type' => intval($row['contents_type']),
+                    'contents_type' => (int) ($row['contents_type']),
                     'contents' => $row['contents'],
-                    'date_change' => intval($row['date_change']),
+                    'date_change' => (int) ($row['date_change']),
                     'date_start' => $row['date_start'],
                     'date_end' => $row['date_end'],
                     'place' => $row['place'],
-                    'type_date_expediction' => intval($row['type_date_expediction']),
+                    'type_date_expediction' => (int) ($row['type_date_expediction']),
                     'day' => $row['day'],
                     'month' => $row['month'],
                     'year' => $row['year'],
@@ -133,7 +133,7 @@ class CustomCertificatePlugin extends Plugin
                     'signature_text3' => $row['signature_text3'],
                     'signature_text4' => $row['signature_text4'],
                     'background' => $row['background'],
-                    'margin_left' => intval($row['margin']),
+                    'margin_left' => (int) ($row['margin']),
                     'margin_right' => 0,
                     'certificate_default' => 0,
                 ];
@@ -167,7 +167,7 @@ class CustomCertificatePlugin extends Plugin
                     }
                 }
 
-                if ($row['certificate_default'] == 1) {
+                if (1 == $row['certificate_default']) {
                     $params['c_id'] = 0;
                     $params['session_id'] = 0;
                     $params['certificate_default'] = 1;
@@ -233,7 +233,7 @@ class CustomCertificatePlugin extends Plugin
             $courseCode = $row['course_code'];
             $sessionId = $row['session_id'];
             $userId = $row['user_id'];
-            if (api_get_course_setting('customcertificate_course_enable', api_get_course_info($courseCode)) == 1) {
+            if (1 == api_get_course_setting('customcertificate_course_enable', api_get_course_info($courseCode))) {
                 return [
                     'course_code' => $courseCode,
                     'session_id' => $sessionId,
@@ -257,7 +257,7 @@ class CustomCertificatePlugin extends Plugin
         $certId = (int) $certId;
         $userId = !empty($userId) ? $userId : api_get_user_id();
 
-        if (api_get_plugin_setting('customcertificate', 'enable_plugin_customcertificate') === 'true') {
+        if ('true' === api_get_plugin_setting('customcertificate', 'enable_plugin_customcertificate')) {
             $infoCertificate = self::getCertificateData($certId, $userId);
             if (!empty($infoCertificate)) {
                 if ($certificate->user_id == api_get_user_id() && !empty($certificate->certificate_data)) {

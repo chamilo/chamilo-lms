@@ -1,4 +1,5 @@
 <?php
+
 /* For licensing terms, see /license.txt */
 
 use Chamilo\CoreBundle\Entity\TrackEAttempt;
@@ -38,7 +39,7 @@ class QuestionOptionsEvaluationPlugin extends Plugin
     {
         static $result = null;
 
-        return $result ? $result : $result = new self();
+        return $result ?: $result = new self();
     }
 
     /**
@@ -173,25 +174,28 @@ class QuestionOptionsEvaluationPlugin extends Plugin
         /** @var TrackEAttempt $qTrack */
         foreach ($qTracks as $qTrack) {
             if ($qTrack->getMarks() > 0) {
-                $counts['correct']++;
+                ++$counts['correct'];
             } elseif ($qTrack->getMarks() < 0) {
-                $counts['incorrect']++;
+                ++$counts['incorrect'];
             }
         }
 
         switch ($formula) {
             case 1:
                 $result = $counts['correct'] - $counts['incorrect'];
+
                 break;
             case 2:
                 $result = $counts['correct'] - $counts['incorrect'] / 2;
+
                 break;
             case 3:
                 $result = $counts['correct'] - $counts['incorrect'] / 3;
+
                 break;
         }
 
-        $score = ($result / count($qTracks)) * $this->getMaxScore();
+        $score = $result / count($qTracks) * $this->getMaxScore();
 
         return $score >= 0 ? $score : 0;
     }
@@ -222,7 +226,7 @@ class QuestionOptionsEvaluationPlugin extends Plugin
 
                 $iid = $questionAnswers->iid[$i];
 
-                if ($question->selectType() == MULTIPLE_ANSWER || 0 === $formula) {
+                if (MULTIPLE_ANSWER == $question->selectType() || 0 === $formula) {
                     $ponderation = 1 == $isCorrect ? 1 / $counts[1] : -1 / $counts[0];
                 } else {
                     $ponderation = 1 == $isCorrect ? 1 : -1 / $formula;

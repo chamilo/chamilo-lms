@@ -1,8 +1,9 @@
 <?php
+
 /* For licensing terms, see /license.txt */
 
 /**
- * Class VM
+ * Class VM.
  */
 class VM
 {
@@ -11,6 +12,7 @@ class VM
 
     /**
      * VM constructor.
+     *
      * @param $config
      */
     public function __construct($config)
@@ -34,7 +36,6 @@ class VM
         $config = $this->getConfig();
 
         if (!isset($config)) {
-            
             return false;
         }
 
@@ -43,7 +44,6 @@ class VM
         }
 
         if (isset($config['enabled']) && $config['enabled']) {
-
             return true;
         }
 
@@ -58,9 +58,6 @@ class VM
         return $this->virtualMachine;
     }
 
-    /**
-     * @param VirtualMachineInterface $virtualMachine
-     */
     public function setVirtualMachine(VirtualMachineInterface $virtualMachine)
     {
         $this->virtualMachine = $virtualMachine;
@@ -74,10 +71,11 @@ class VM
         $vmList = $this->config['vms'];
 
         foreach ($vmList as $vm) {
-            if (isset($vm['enabled']) && $vm['enabled'] == true) {
+            if (isset($vm['enabled']) && true == $vm['enabled']) {
                 $className = $vm['name'].'VM';
 
                 return new $className($vm);
+
                 break;
             }
         }
@@ -86,7 +84,7 @@ class VM
     }
 
     /**
-     * Resize the VM to the max size
+     * Resize the VM to the max size.
      */
     public function resizeToMaxLimit()
     {
@@ -96,7 +94,7 @@ class VM
     }
 
     /**
-     * Resize the VM to the min size
+     * Resize the VM to the min size.
      */
     public function resizeToMinLimit()
     {

@@ -1,4 +1,5 @@
 <?php
+
 /* For licensing terms, see /license.txt */
 
 use Chamilo\CoreBundle\Entity\Course;
@@ -19,7 +20,7 @@ try {
         throw new Exception(get_lang('You are not allowed to see this page. Either your connection has expired or you are trying to access a page for which you do not have the sufficient privileges.'));
     }
 
-    $toolIsEnabled = $gradingElectronic->get('tool_enable') === 'true';
+    $toolIsEnabled = 'true' === $gradingElectronic->get('tool_enable');
 
     if (!$toolIsEnabled) {
         throw new Exception($gradingElectronic->get_lang('PluginDisabled'));
@@ -155,7 +156,7 @@ try {
             SCORE_SIMPLE
         );
 
-        /** old method to get the score
+        /* old method to get the score
 
                 $score = Category::getCurrentScore(
                     $student->getId(),
@@ -164,7 +165,7 @@ try {
                 );
          */
         $fileData[] = sprintf(
-            "2 %sPASS%s %s %s",
+            '2 %sPASS%s %s %s',
             $fieldStudent ? $fieldStudent['value'] : null,
             $fieldHours ? $fieldHours['value'] : null,
             $score,

@@ -1,3 +1,3 @@
 <?php
 
-$strings['HelloPlugin'] = "Hola chaval!";
+$strings['HelloPlugin'] = 'Hola chaval!';

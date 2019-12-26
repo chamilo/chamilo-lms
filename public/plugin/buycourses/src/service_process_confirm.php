@@ -1,12 +1,11 @@
 <?php
+
 /* For license terms, see /license.txt */
 
 use ChamiloSession as Session;
 
 /**
  * Process purchase confirmation script for the Buy Courses plugin.
- *
- * @package chamilo.plugin.buycourses
  */
 require_once '../config.php';
 
@@ -31,7 +30,7 @@ switch ($serviceSale['payment_type']) {
     case BuyCoursesPlugin::PAYMENT_TYPE_PAYPAL:
         $paypalParams = $plugin->getPaypalParams();
 
-        $pruebas = $paypalParams['sandbox'] == 1;
+        $pruebas = 1 == $paypalParams['sandbox'];
         $paypalUsername = $paypalParams['username'];
         $paypalPassword = $paypalParams['password'];
         $paypalSignature = $paypalParams['signature'];
@@ -49,7 +48,7 @@ switch ($serviceSale['payment_type']) {
         require_once 'paypalfunctions.php';
 
         $extra .= "&L_PAYMENTREQUEST_0_NAME0={$serviceSale['service']['name']}";
-        $extra .= "&L_PAYMENTREQUEST_0_QTY0=1";
+        $extra .= '&L_PAYMENTREQUEST_0_QTY0=1';
         $extra .= "&L_PAYMENTREQUEST_0_AMT0=$itemPrice";
 
         // Full Checkout express
@@ -62,7 +61,7 @@ switch ($serviceSale['payment_type']) {
             $extra
         );
 
-        if ($expressCheckout['ACK'] !== 'Success') {
+        if ('Success' !== $expressCheckout['ACK']) {
             $erroMessage = vsprintf(
                 $plugin->get_lang('An error occurred.'),
                 [$expressCheckout['L_ERRORCODE0'], $expressCheckout['L_LONGMESSAGE0']]
@@ -99,6 +98,7 @@ switch ($serviceSale['payment_type']) {
         }
 
         RedirectToPayPal($expressCheckout['TOKEN']);
+
         break;
     case BuyCoursesPlugin::PAYMENT_TYPE_TRANSFER:
         $transferAccounts = $plugin->getTransferAccounts();
@@ -222,6 +222,7 @@ switch ($serviceSale['payment_type']) {
 
         $template->assign('content', $content);
         $template->display_one_col_template();
+
         break;
     case BuyCoursesPlugin::PAYMENT_TYPE_CULQI:
         // We need to include the main online script, acording to the Culqi documentation the JS needs to be loeaded
@@ -278,7 +279,7 @@ switch ($serviceSale['payment_type']) {
         $template = new Template();
         $template->assign('terms', $globalParameters['terms_and_conditions']);
         $template->assign('title', $serviceSale['service']['name']);
-        $template->assign('price', floatval($serviceSale['price']));
+        $template->assign('price', (float) ($serviceSale['price']));
         $template->assign('currency', $plugin->getSelectedCurrency());
         $template->assign('buying_service', $serviceSale);
         $template->assign('user', $userInfo);
@@ -290,5 +291,6 @@ switch ($serviceSale['payment_type']) {
         $content = $template->fetch('buycourses/view/process_confirm.tpl');
         $template->assign('content', $content);
         $template->display_one_col_template();
+
         break;
 }

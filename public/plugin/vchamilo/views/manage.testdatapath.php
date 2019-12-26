@@ -1,10 +1,10 @@
 <?php
+
 /* For licensing terms, see /license.txt */
 
 /**
  * Tests presence of course directories.
  *
- * @package vchamilo
  * @category plugin
  *
  * @license http://www.gnu.org/copyleft/gpl.html GNU GPL
@@ -34,7 +34,7 @@ if (is_dir($coursedir)) {
     $cpt = 0;
     $hasfiles = false;
     while (($file = readdir($DIR)) && !$hasfiles) {
-        if (!preg_match("/^\\./", $file)) {
+        if (!preg_match('/^\\./', $file)) {
             $hasfiles = true;
         }
     }
@@ -55,9 +55,9 @@ if (is_dir($coursedir)) {
     echo stripslashes($coursedir);
 }
 
-echo "</p>";
+echo '</p>';
 
 $closestr = $plugin->get_lang('closewindow');
-echo "<center>";
+echo '<center>';
 echo "<input class='btn' type=\"button\" name=\"close\" value=\"$closestr\" onclick=\"self.close();\" />";
-echo "</center>";
+echo '</center>';

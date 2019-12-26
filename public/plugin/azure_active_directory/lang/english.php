@@ -1,11 +1,10 @@
 <?php
+
 /* For licensing terms, see /license.txt */
 /**
  * Strings to english L10n.
  *
  * @author Angel Fernando Quiroz Campos <angel.quiroz@beeznest.com>
- *
- * @package chamilo.plugin.azure_active_directory
  */
 $strings['plugin_title'] = 'Azure Active Directory';
 $strings['plugin_comment'] = 'Allow authentication with Microsoft\'s Azure Active Directory';

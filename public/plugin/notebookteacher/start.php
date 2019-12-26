@@ -1,14 +1,12 @@
 <?php
 /**
  * This script initiates a notebookteacher plugin.
- *
- * @package chamilo.plugin.notebookteacher
  */
 $course_plugin = 'notebookteacher';
 require_once __DIR__.'/config.php';
 
 $plugin = NotebookTeacherPlugin::create();
-$enable = $plugin->get('enable_plugin_notebookteacher') == 'true';
+$enable = 'true' == $plugin->get('enable_plugin_notebookteacher');
 
 if ($enable) {
     if (api_is_teacher() || api_is_drh()) {

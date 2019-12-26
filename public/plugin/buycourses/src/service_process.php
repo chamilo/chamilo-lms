@@ -1,4 +1,5 @@
 <?php
+
 /* For license terms, see /license.txt */
 
 use Chamilo\CoreBundle\Entity\Session;
@@ -7,8 +8,6 @@ use Chamilo\UserBundle\Entity\User;
 
 /**
  * Process payments for the Buy Courses plugin.
- *
- * @package chamilo.plugin.buycourses
  */
 $cidReset = true;
 
@@ -32,18 +31,18 @@ $htmlHeadXtra[] = '<link rel="stylesheet" type="text/css" href="'.api_get_path(
 $em = Database::getManager();
 $plugin = BuyCoursesPlugin::create();
 $includeServices = $plugin->get('include_services');
-$paypalEnabled = $plugin->get('paypal_enable') === 'true';
-$transferEnabled = $plugin->get('transfer_enable') === 'true';
-$culqiEnabled = $plugin->get('culqi_enable') === 'true';
+$paypalEnabled = 'true' === $plugin->get('paypal_enable');
+$transferEnabled = 'true' === $plugin->get('transfer_enable');
+$culqiEnabled = 'true' === $plugin->get('culqi_enable');
 $additionalQueryString = '';
-if ($includeServices !== 'true') {
+if ('true' !== $includeServices) {
     api_not_allowed(true);
 }
 
-$typeUser = $type === BuyCoursesPlugin::SERVICE_TYPE_USER;
-$typeCourse = $type === BuyCoursesPlugin::SERVICE_TYPE_COURSE;
-$typeSession = $type === BuyCoursesPlugin::SERVICE_TYPE_SESSION;
-$typeFinalLp = $type === BuyCoursesPlugin::SERVICE_TYPE_LP_FINAL_ITEM;
+$typeUser = BuyCoursesPlugin::SERVICE_TYPE_USER === $type;
+$typeCourse = BuyCoursesPlugin::SERVICE_TYPE_COURSE === $type;
+$typeSession = BuyCoursesPlugin::SERVICE_TYPE_SESSION === $type;
+$typeFinalLp = BuyCoursesPlugin::SERVICE_TYPE_LP_FINAL_ITEM === $type;
 $queryString = 'i='.$serviceId.'&t='.$type.$additionalQueryString;
 
 $serviceInfo = $plugin->getService($serviceId);
@@ -97,7 +96,7 @@ if ($typeUser) {
     if (!empty($users)) {
         /** @var User $user */
         foreach ($users as $user) {
-            if (intval($userInfo['user_id']) !== intval($user->getId())) {
+            if ((int) ($userInfo['user_id']) !== (int) ($user->getId())) {
                 $selectOptions[$user->getId()] = UserManager::formatUserFullName($user, true);
             }
         }
@@ -173,7 +172,7 @@ if ($typeUser) {
 
             foreach ($thisLpItems as $item) {
                 //Now only we need the final item and return the current LP
-                if ($item->getItemType() == TOOL_LP_FINAL_ITEM) {
+                if (TOOL_LP_FINAL_ITEM == $item->getItemType()) {
                     $checker = true;
                     $sessionLpList[$lp->getCId()] = $lp->getName().' ('.$session->getSession()->getName().')';
                 }
@@ -187,7 +186,7 @@ if ($typeUser) {
             $thisLpItems = $em->getRepository('ChamiloCourseBundle:CLpItem')->findBy(['lpId' => $lp->getId()]);
             foreach ($thisLpItems as $item) {
                 //Now only we need the final item and return the current LP
-                if ($item->getItemType() == TOOL_LP_FINAL_ITEM) {
+                if (TOOL_LP_FINAL_ITEM == $item->getItemType()) {
                     $checker = true;
                     $sessionLpList[$lp->getCId()] = $lp->getName().' ('.$session->getSession()->getName().')';
                 }
@@ -207,8 +206,8 @@ if ($typeUser) {
     $form->addSelect('info_select', get_lang('Learning paths'), $selectOptions);
 }
 
-$form->addHidden('t', intval($_GET['t']));
-$form->addHidden('i', intval($_GET['i']));
+$form->addHidden('t', (int) ($_GET['t']));
+$form->addHidden('i', (int) ($_GET['i']));
 $form->addButton('submit', $plugin->get_lang('ConfirmOrder'), 'check', 'success');
 
 if ($form->validate()) {
@@ -241,7 +240,7 @@ if ($form->validate()) {
         $infoSelected
     );
 
-    if ($serviceSaleId !== false) {
+    if (false !== $serviceSaleId) {
         $_SESSION['bc_service_sale_id'] = $serviceSaleId;
         header('Location: '.api_get_path(WEB_PLUGIN_PATH).'buycourses/src/service_process_confirm.php');
     }

@@ -1,9 +1,8 @@
 <?php
+
 /* For license terms, see /license.txt */
 /**
  * This script generates session fields needed for this plugin.
- *
- * @package chamilo.plugin.advanced_subscription
  */
 
 //exit;

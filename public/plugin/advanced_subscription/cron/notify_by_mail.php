@@ -1,9 +1,8 @@
 <?php
+
 /* For license terms, see /license.txt */
 /**
  * This script generates four session categories.
- *
- * @package chamilo.plugin.advanced_subscription
  */
 
 /**
@@ -54,6 +53,7 @@ foreach ($queueList as $queueItem) {
             $data['session'] = api_get_session_info($queueItem['session_id']);
             $data['student'] = api_get_user_info($queueItem['student_id']);
             $plugin->sendMail($data, ADVANCED_SUBSCRIPTION_ACTION_REMINDER_STUDENT);
+
             break;
         default:
             break;
@@ -99,7 +99,7 @@ foreach ($queueBySuperior as $sessionId => $superiorStudents) {
         // Check if superior has at least one student
         if (count($students) > 0) {
             foreach ($students as $studentId => $studentInfo) {
-                if ($studentInfo['status'] == ADVANCED_SUBSCRIPTION_QUEUE_STATUS_START) {
+                if (ADVANCED_SUBSCRIPTION_QUEUE_STATUS_START == $studentInfo['status']) {
                     $data['students'][$studentId] = api_get_user_info($studentId);
                     $dataUrl['studentUserId'] = $studentId;
                     $dataUrl['newStatus'] = ADVANCED_SUBSCRIPTION_QUEUE_STATUS_BOSS_APPROVED;
@@ -136,7 +136,7 @@ foreach ($admins as &$admin) {
 unset($admin);
 $queueByAdmin = [];
 foreach ($queueList as $queueItem) {
-    if ($queueItem['status'] == ADVANCED_SUBSCRIPTION_QUEUE_STATUS_BOSS_APPROVED) {
+    if (ADVANCED_SUBSCRIPTION_QUEUE_STATUS_BOSS_APPROVED == $queueItem['status']) {
         $queueByAdmin[$queueItem['session_id']]['students'][$queueItem['student_id']]['user_id'] = $queueItem['student_id'];
     }
 }

@@ -1,26 +1,21 @@
 <?php
+
 /* For licensing terms, see /license.txt */
 
-use DigitalOcean\DigitalOcean;
 use DigitalOcean\Credentials;
+use DigitalOcean\DigitalOcean;
 
 /**
- * Class DigitalOceanVM
+ * Class DigitalOceanVM.
  */
 class DigitalOceanVM extends AbstractVM implements VirtualMachineInterface
 {
-    /**
-     *
-     */
     public function __construct($settings)
     {
         parent::__construct($settings);
         $this->connect();
     }
 
-    /**
-     * @inheritdoc
-     */
     public function connect()
     {
         // Set up your credentials.
@@ -50,8 +45,7 @@ class DigitalOceanVM extends AbstractVM implements VirtualMachineInterface
             $sizes = $this->getConnector()->sizes();
             $availableSizes = $sizes->getAll();
 
-            if (isset($availableSizes->status) && $availableSizes->status == 'OK') {
-
+            if (isset($availableSizes->status) && 'OK' == $availableSizes->status) {
                 $minSizeIdExists = false;
                 $maxSizeIdExists = false;
 
@@ -75,7 +69,7 @@ class DigitalOceanVM extends AbstractVM implements VirtualMachineInterface
 
             $dropletInfo = $droplets->show($this->vmId);
 
-            if ($dropletInfo->status == 'OK') {
+            if ('OK' == $dropletInfo->status) {
                 switch ($type) {
                     case 'min':
                         if ($dropletInfo->droplet->size_id == $this->vmMinSize) {
@@ -97,10 +91,11 @@ class DigitalOceanVM extends AbstractVM implements VirtualMachineInterface
                         } else {
                             $this->resize($this->vmMaxSize);
                         }
+
                         break;
                 }
             } else {
-                throw new \Exception(" Id ".$this->vmId." doesn't exists.");
+                throw new \Exception(' Id '.$this->vmId." doesn't exists.");
             }
         } catch (Exception $e) {
             die($e->getMessage());
@@ -108,7 +103,8 @@ class DigitalOceanVM extends AbstractVM implements VirtualMachineInterface
     }
 
     /**
-     * Turns off / resize / turns on
+     * Turns off / resize / turns on.
+     *
      * @param int $sizeId
      */
     public function resize($sizeId)
@@ -126,7 +122,7 @@ class DigitalOceanVM extends AbstractVM implements VirtualMachineInterface
 
         $resizeDroplet = $droplets->resize(
             $this->vmId,
-            array('size_id' => intval($sizeId))
+            ['size_id' => (int) $sizeId]
         );
         $this->addMessage('Resize droplet to size id: '.$sizeId);
         $this->waitForEvent($resizeDroplet->event_id);
@@ -134,45 +130,36 @@ class DigitalOceanVM extends AbstractVM implements VirtualMachineInterface
         $powerOn = $droplets->powerOn($this->vmId);
         $this->waitForEvent($powerOn->event_id);
         $this->addMessage('Power on droplet #'.$this->vmId);
-
     }
 
     /**
-     * Loops until an event answer 100 percentage
+     * Loops until an event answer 100 percentage.
+     *
      * @param int $eventId
      */
     public function waitForEvent($eventId)
     {
         $events = $this->getConnector()->events();
         $status = false;
-        while ($status == false) {
+        while (false == $status) {
             $infoStatus = $events->show($eventId);
-            if ($infoStatus->status == 'OK' && $infoStatus->event->percentage == 100) {
+            if ('OK' == $infoStatus->status && 100 == $infoStatus->event->percentage) {
                 $status = true;
             }
         }
     }
 
-    /**
-     * @inheritdoc
-     */
     public function runCron()
     {
         $this->resizeToMinLimit();
         echo $this->getMessageToString();
     }
 
-    /**
-     * @inheritdoc
-     */
     public function resizeToMaxLimit()
     {
         $this->resizeTo('max');
     }
 
-    /**
-     * @inheritdoc
-     */
     public function resizeToMinLimit()
     {
         $this->resizeTo('min');

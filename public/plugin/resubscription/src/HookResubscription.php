@@ -1,4 +1,5 @@
 <?php
+
 /* For licensing terms, see /license.txt */
 
 use Chamilo\CoreBundle\Hook\HookObserver;
@@ -9,8 +10,6 @@ use Chamilo\CoreBundle\Hook\Interfaces\HookResubscribeObserverInterface;
  * Hook to limit session resubscriptions.
  *
  * @author Imanol Losada Oriol <imanol.losada@beeznest.com>
- *
- * @package chamilo.plugin.resubscription
  */
 class HookResubscription extends HookObserver implements HookResubscribeObserverInterface
 {
@@ -35,23 +34,23 @@ class HookResubscription extends HookObserver implements HookResubscribeObserver
     public function hookResubscribe(HookResubscribeEventInterface $hook)
     {
         $data = $hook->getEventData();
-        if ($data['type'] === HOOK_EVENT_TYPE_PRE) {
+        if (HOOK_EVENT_TYPE_PRE === $data['type']) {
             $resubscriptionLimit = Resubscription::create()->get('resubscription_limit');
 
             // Initialize variables as a calendar year by default
             $limitDateFormat = 'Y-01-01';
             $limitDate = gmdate($limitDateFormat);
-            $resubscriptionOffset = "1 year";
+            $resubscriptionOffset = '1 year';
 
             // No need to use a 'switch' with only two options so an 'if' is enough.
             // However this could change if the number of options increases
-            if ($resubscriptionLimit === 'natural_year') {
+            if ('natural_year' === $resubscriptionLimit) {
                 $limitDateFormat = 'Y-m-d';
                 $limitDate = gmdate($limitDateFormat);
                 $limitDate = gmdate($limitDateFormat, strtotime("$limitDate -$resubscriptionOffset"));
             }
 
-            $join = " INNER JOIN ".Database::get_main_table(TABLE_MAIN_SESSION)."ON id = session_id";
+            $join = ' INNER JOIN '.Database::get_main_table(TABLE_MAIN_SESSION).'ON id = session_id';
 
             // User sessions and courses
             $userSessions = Database::select(
@@ -110,7 +109,8 @@ class HookResubscription extends HookObserver implements HookResubscribeObserver
                         get_plugin_lang('CanResubscribeFromX', 'resubscription'),
                         $resubscriptionDate
                     );
-                    throw new Exception(Display::label($icon.' '.$canResubscribeFrom, "info"));
+
+                    throw new Exception(Display::label($icon.' '.$canResubscribeFrom, 'info'));
                 }
             }
         }

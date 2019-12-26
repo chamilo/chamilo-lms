@@ -1,12 +1,11 @@
 <?php
+
 /* For license terms, see /license.txt */
 
 use Chamilo\CoreBundle\Component\Utils\ChamiloApi;
 
 /**
  * Print invoice of the Buy Courses plugin.
- *
- * @package chamilo.plugin.buycourses
  */
 $cidReset = true;
 
@@ -16,7 +15,7 @@ api_protect_admin_script();
 
 $plugin = BuyCoursesPlugin::create();
 
-$invoicingEnable = $plugin->get('invoicing_enable') === 'true';
+$invoicingEnable = 'true' === $plugin->get('invoicing_enable');
 if (!$invoicingEnable) {
     api_not_allowed(true, $plugin->get_lang('NoInvoiceEnable'));
 }
@@ -31,10 +30,10 @@ $extraUserInfoData = UserManager::get_extra_user_data($infoSale['user_id']);
 $infoInvoice = $plugin->getDataInvoice($saleId, $isService);
 
 $taxAppliesTo = $globalParameters['tax_applies_to'];
-$taxEnable = $plugin->get('tax_enable') === 'true' &&
-    ($taxAppliesTo == BuyCoursesPlugin::TAX_APPLIES_TO_ALL ||
-    ($taxAppliesTo == BuyCoursesPlugin::TAX_APPLIES_TO_ONLY_COURSE && !$isService) ||
-    ($taxAppliesTo == BuyCoursesPlugin::TAX_APPLIES_TO_ONLY_SESSION && $isService));
+$taxEnable = 'true' === $plugin->get('tax_enable') &&
+    (BuyCoursesPlugin::TAX_APPLIES_TO_ALL == $taxAppliesTo ||
+    (BuyCoursesPlugin::TAX_APPLIES_TO_ONLY_COURSE == $taxAppliesTo && !$isService) ||
+    (BuyCoursesPlugin::TAX_APPLIES_TO_ONLY_SESSION == $taxAppliesTo && $isService));
 
 $htmlText = '<html>';
 $htmlText .= '<link rel="stylesheet" type="text/css" href="plugin.css">';
@@ -44,7 +43,7 @@ $htmlText .= '<body>';
 $organization = ChamiloApi::getPlatformLogo('', [], true);
 // Use custom logo image.
 $pdfLogo = api_get_setting('pdf_logo_header');
-if ($pdfLogo === 'true') {
+if ('true' === $pdfLogo) {
     $visualTheme = api_get_visual_theme();
     $img = api_get_path(SYS_CSS_PATH).'themes/'.$visualTheme.'/images/pdf_logo_header.png';
     if (file_exists($img)) {

@@ -16,8 +16,8 @@ class Sepe
         $tableLog = Database::get_main_table('plugin_sepe_log');
         $paramsLog = [
             'ip' => $_SERVER['REMOTE_ADDR'],
-            'action' => "crearCentro",
-            'fecha' => date("Y-m-d H:i:s"),
+            'action' => 'crearCentro',
+            'fecha' => date('Y-m-d H:i:s'),
         ];
         Database::insert($tableLog, $paramsLog);
         /* End tracking log */
@@ -43,10 +43,10 @@ class Sepe
             error_log('no data');
 
             return [
-                "RESPUESTA_DATOS_CENTRO" => [
-                    "CODIGO_RETORNO" => "2",
-                    "ETIQUETA_ERROR" => "Error en parametro",
-                    "DATOS_IDENTIFICATIVOS" => $crearCentroInput,
+                'RESPUESTA_DATOS_CENTRO' => [
+                    'CODIGO_RETORNO' => '2',
+                    'ETIQUETA_ERROR' => 'Error en parametro',
+                    'DATOS_IDENTIFICATIVOS' => $crearCentroInput,
                 ],
             ];
         }
@@ -59,10 +59,10 @@ class Sepe
             $table_actions = Database::get_main_table('plugin_sepe_actions');
             if (Database::count_rows($table_actions) > 0) {
                 return [
-                    "RESPUESTA_DATOS_CENTRO" => [
-                        "CODIGO_RETORNO" => "1",
-                        "ETIQUETA_ERROR" => "Centro con acciones",
-                        "DATOS_IDENTIFICATIVOS" => $crearCentroInput,
+                    'RESPUESTA_DATOS_CENTRO' => [
+                        'CODIGO_RETORNO' => '1',
+                        'ETIQUETA_ERROR' => 'Centro con acciones',
+                        'DATOS_IDENTIFICATIVOS' => $crearCentroInput,
                     ],
                 ];
             } else {
@@ -85,18 +85,18 @@ class Sepe
 
         if (empty($id)) {
             return [
-                "RESPUESTA_DATOS_CENTRO" => [
-                    "CODIGO_RETORNO" => "-1",
-                    "ETIQUETA_ERROR" => "Problema base de datos",
-                    "DATOS_IDENTIFICATIVOS" => $crearCentroInput,
+                'RESPUESTA_DATOS_CENTRO' => [
+                    'CODIGO_RETORNO' => '-1',
+                    'ETIQUETA_ERROR' => 'Problema base de datos',
+                    'DATOS_IDENTIFICATIVOS' => $crearCentroInput,
                 ],
             ];
         } else {
             return [
-                "RESPUESTA_DATOS_CENTRO" => [
-                    "CODIGO_RETORNO" => "0",
-                    "ETIQUETA_ERROR" => "Correcto",
-                    "DATOS_IDENTIFICATIVOS" => $crearCentroInput,
+                'RESPUESTA_DATOS_CENTRO' => [
+                    'CODIGO_RETORNO' => '0',
+                    'ETIQUETA_ERROR' => 'Correcto',
+                    'DATOS_IDENTIFICATIVOS' => $crearCentroInput,
                 ],
             ];
         }
@@ -111,8 +111,8 @@ class Sepe
         $tableLog = Database::get_main_table('plugin_sepe_log');
         $paramsLog = [
             'ip' => $_SERVER['REMOTE_ADDR'],
-            'action' => "obtenerDatosCentro",
-            'fecha' => date("Y-m-d H:i:s"),
+            'action' => 'obtenerDatosCentro',
+            'fecha' => date('Y-m-d H:i:s'),
         ];
         Database::insert($tableLog, $paramsLog);
         /* End tracking log */
@@ -127,9 +127,9 @@ class Sepe
             $rs = Database::query($sql);
             if (!$rs) {
                 return [
-                    "CODIGO_RETORNO" => "-1",
-                    "ETIQUETA_ERROR" => "Problema acceso base de datos",
-                    "DATOS_IDENTIFICATIVOS" => '',
+                    'CODIGO_RETORNO' => '-1',
+                    'ETIQUETA_ERROR' => 'Problema acceso base de datos',
+                    'DATOS_IDENTIFICATIVOS' => '',
                 ];
             } else {
                 $row = Database::fetch_assoc($rs);
@@ -205,8 +205,8 @@ class Sepe
         $tableLog = Database::get_main_table('plugin_sepe_log');
         $paramsLog = [
             'ip' => $_SERVER['REMOTE_ADDR'],
-            'action' => "crearAccion",
-            'fecha' => date("Y-m-d H:i:s"),
+            'action' => 'crearAccion',
+            'fecha' => date('Y-m-d H:i:s'),
         ];
         Database::insert($tableLog, $paramsLog);
         /* End tracking log */
@@ -236,10 +236,10 @@ class Sepe
             error_log('2 - error en parametros - l244');
 
             return [
-                "RESPUESTA_OBT_ACCION" => [
-                    "CODIGO_RETORNO" => "2",
-                    "ETIQUETA_ERROR" => "Error en parametro",
-                    "ACCION_FORMATIVA" => $crearAccionInputArray['ACCION_FORMATIVA'],
+                'RESPUESTA_OBT_ACCION' => [
+                    'CODIGO_RETORNO' => '2',
+                    'ETIQUETA_ERROR' => 'Error en parametro',
+                    'ACCION_FORMATIVA' => $crearAccionInputArray['ACCION_FORMATIVA'],
                 ],
             ];
         }
@@ -252,10 +252,10 @@ class Sepe
 
         if (Database::num_rows($rs) > 0) {
             return [
-                "RESPUESTA_OBT_ACCION" => [
-                    "CODIGO_RETORNO" => "1",
-                    "ETIQUETA_ERROR" => "Acción existente",
-                    "ACCION_FORMATIVA" => $crearAccionInputArray['ACCION_FORMATIVA'],
+                'RESPUESTA_OBT_ACCION' => [
+                    'CODIGO_RETORNO' => '1',
+                    'ETIQUETA_ERROR' => 'Acción existente',
+                    'ACCION_FORMATIVA' => $crearAccionInputArray['ACCION_FORMATIVA'],
                 ],
             ];
         }
@@ -269,10 +269,10 @@ class Sepe
         $rs = Database::query($sql);
         if (!$rs) {
             return [
-                "RESPUESTA_OBT_ACCION" => [
-                    "CODIGO_RETORNO" => "-1",
-                    "ETIQUETA_ERROR" => "Problema base de datos - insertando acciones formativas",
-                    "ACCION_FORMATIVA" => $crearAccionInputArray['ACCION_FORMATIVA'],
+                'RESPUESTA_OBT_ACCION' => [
+                    'CODIGO_RETORNO' => '-1',
+                    'ETIQUETA_ERROR' => 'Problema base de datos - insertando acciones formativas',
+                    'ACCION_FORMATIVA' => $crearAccionInputArray['ACCION_FORMATIVA'],
                 ],
             ];
         }
@@ -377,10 +377,10 @@ class Sepe
 
                 if (empty($specialtyId)) {
                     return [
-                        "RESPUESTA_OBT_ACCION" => [
-                            "CODIGO_RETORNO" => "-1",
-                            "ETIQUETA_ERROR" => "Problema base de datos - insertando datos de especialidad de la accion",
-                            "ACCION_FORMATIVA" => $crearAccionInputArray['ACCION_FORMATIVA'],
+                        'RESPUESTA_OBT_ACCION' => [
+                            'CODIGO_RETORNO' => '-1',
+                            'ETIQUETA_ERROR' => 'Problema base de datos - insertando datos de especialidad de la accion',
+                            'ACCION_FORMATIVA' => $crearAccionInputArray['ACCION_FORMATIVA'],
                         ],
                     ];
                 }
@@ -416,10 +416,10 @@ class Sepe
 
                             if (empty($id)) {
                                 return [
-                                    "RESPUESTA_OBT_ACCION" => [
-                                        "CODIGO_RETORNO" => "-1",
-                                        "ETIQUETA_ERROR" => "Problema base de datos - insertando centro presenciales",
-                                        "ACCION_FORMATIVA" => $crearAccionInputArray['ACCION_FORMATIVA'],
+                                    'RESPUESTA_OBT_ACCION' => [
+                                        'CODIGO_RETORNO' => '-1',
+                                        'ETIQUETA_ERROR' => 'Problema base de datos - insertando centro presenciales',
+                                        'ACCION_FORMATIVA' => $crearAccionInputArray['ACCION_FORMATIVA'],
                                     ],
                                 ];
                             }
@@ -463,10 +463,10 @@ class Sepe
                                 }
                                 if (empty($tutorId)) {
                                     return [
-                                        "RESPUESTA_OBT_ACCION" => [
-                                            "CODIGO_RETORNO" => "-1",
-                                            "ETIQUETA_ERROR" => "Problema base de datos - insertando tutores",
-                                            "ACCION_FORMATIVA" => $crearAccionInputArray['ACCION_FORMATIVA'],
+                                        'RESPUESTA_OBT_ACCION' => [
+                                            'CODIGO_RETORNO' => '-1',
+                                            'ETIQUETA_ERROR' => 'Problema base de datos - insertando tutores',
+                                            'ACCION_FORMATIVA' => $crearAccionInputArray['ACCION_FORMATIVA'],
                                         ],
                                     ];
                                 }
@@ -570,10 +570,10 @@ class Sepe
                 $participantId = Database::insert($tableParticipants, $params);
                 if (empty($participantId)) {
                     return [
-                        "RESPUESTA_OBT_ACCION" => [
-                            "CODIGO_RETORNO" => "-1",
-                            "ETIQUETA_ERROR" => "Problema base de datos - insertando participantes",
-                            "ACCION_FORMATIVA" => $crearAccionInputArray['ACCION_FORMATIVA'],
+                        'RESPUESTA_OBT_ACCION' => [
+                            'CODIGO_RETORNO' => '-1',
+                            'ETIQUETA_ERROR' => 'Problema base de datos - insertando participantes',
+                            'ACCION_FORMATIVA' => $crearAccionInputArray['ACCION_FORMATIVA'],
                         ],
                     ];
                 }
@@ -637,10 +637,10 @@ class Sepe
                         $participantSpecialtyId = Database::insert_id();
                         if (empty($participantSpecialtyId)) {
                             return [
-                                "RESPUESTA_OBT_ACCION" => [
-                                    "CODIGO_RETORNO" => "-1",
-                                    "ETIQUETA_ERROR" => "Problema base de datos - insertando especialidad participante",
-                                    "ACCION_FORMATIVA" => $crearAccionInputArray['ACCION_FORMATIVA'],
+                                'RESPUESTA_OBT_ACCION' => [
+                                    'CODIGO_RETORNO' => '-1',
+                                    'ETIQUETA_ERROR' => 'Problema base de datos - insertando especialidad participante',
+                                    'ACCION_FORMATIVA' => $crearAccionInputArray['ACCION_FORMATIVA'],
                                 ],
                             ];
                         }
@@ -666,10 +666,10 @@ class Sepe
                                 $rs = Database::query($sql);
                                 if (!$rs) {
                                     return [
-                                        "RESPUESTA_OBT_ACCION" => [
-                                            "CODIGO_RETORNO" => "-1",
-                                            "ETIQUETA_ERROR" => "Problema base de datos - insertando tutorias presenciales participante",
-                                            "ACCION_FORMATIVA" => $crearAccionInputArray['ACCION_FORMATIVA'],
+                                        'RESPUESTA_OBT_ACCION' => [
+                                            'CODIGO_RETORNO' => '-1',
+                                            'ETIQUETA_ERROR' => 'Problema base de datos - insertando tutorias presenciales participante',
+                                            'ACCION_FORMATIVA' => $crearAccionInputArray['ACCION_FORMATIVA'],
                                         ],
                                     ];
                                 }
@@ -685,9 +685,7 @@ class Sepe
         $obtenerAccionInput->ID_ACCION->ORIGEN_ACCION = $actionOrigin;
         $obtenerAccionInput->ID_ACCION->CODIGO_ACCION = $actionCode;
 
-        $result = self::obtenerAccion($obtenerAccionInput);
-
-        return $result;
+        return self::obtenerAccion($obtenerAccionInput);
     }
 
     public function obtenerAccion($obtenerAccionInput)
@@ -696,8 +694,8 @@ class Sepe
         $tableLog = Database::get_main_table('plugin_sepe_log');
         $paramsLog = [
             'ip' => $_SERVER['REMOTE_ADDR'],
-            'action' => "obtenerAccion",
-            'fecha' => date("Y-m-d H:i:s"),
+            'action' => 'obtenerAccion',
+            'fecha' => date('Y-m-d H:i:s'),
         ];
         Database::insert($tableLog, $paramsLog);
 
@@ -708,10 +706,10 @@ class Sepe
 
         if (empty($actionOrigin) || empty($actionCode)) {
             return [
-                "RESPUESTA_OBT_ACCION" => [
-                    "CODIGO_RETORNO" => "2",
-                    "ETIQUETA_ERROR" => "Error en parametro",
-                    "ACCION_FORMATIVA" => "",
+                'RESPUESTA_OBT_ACCION' => [
+                    'CODIGO_RETORNO' => '2',
+                    'ETIQUETA_ERROR' => 'Error en parametro',
+                    'ACCION_FORMATIVA' => '',
                 ],
             ];
         }
@@ -759,12 +757,12 @@ class Sepe
                     $sql = "SELECT * FROM $classRoomTable
                             WHERE specialty_id='".$specialtyId."'";
                     $resultClassroom = Database::query($sql);
-                    if (Database::num_rows($resultClassroom) === 0) {
+                    if (0 === Database::num_rows($resultClassroom)) {
                         return [
-                            "RESPUESTA_OBT_ACCION" => [
-                                "CODIGO_RETORNO" => "-1",
-                                "ETIQUETA_ERROR" => "Problema base de datos - consulta de centros presenciales",
-                                "ACCION_FORMATIVA" => '',
+                            'RESPUESTA_OBT_ACCION' => [
+                                'CODIGO_RETORNO' => '-1',
+                                'ETIQUETA_ERROR' => 'Problema base de datos - consulta de centros presenciales',
+                                'ACCION_FORMATIVA' => '',
                             ],
                         ];
                     }
@@ -962,10 +960,10 @@ class Sepe
                 }
             } else {
                 return [
-                    "RESPUESTA_OBT_ACCION" => [
-                        "CODIGO_RETORNO" => "-1",
-                        "ETIQUETA_ERROR" => "Problema base de datos - consulta especialidad de accion",
-                        "ACCION_FORMATIVA" => '',
+                    'RESPUESTA_OBT_ACCION' => [
+                        'CODIGO_RETORNO' => '-1',
+                        'ETIQUETA_ERROR' => 'Problema base de datos - consulta especialidad de accion',
+                        'ACCION_FORMATIVA' => '',
                     ],
                 ];
             }
@@ -1062,14 +1060,14 @@ class Sepe
 
                         $obj->RESULTADOS = new stdClass();
 
-                        if (isset($tmp['final_result']) && $tmp['final_result'] != '') {
+                        if (isset($tmp['final_result']) && '' != $tmp['final_result']) {
                             $obj->RESULTADOS->RESULTADO_FINAL = $tmp['final_result'];
                         }
-                        if (isset($tmp['final_qualification']) && $tmp['final_qualification'] != '') {
+                        if (isset($tmp['final_qualification']) && '' != $tmp['final_qualification']) {
                             $obj->RESULTADOS->CALIFICACION_FINAL = $tmp['final_qualification'];
                         }
 
-                        if (isset($tmp['final_score']) && $tmp['final_score'] != '') {
+                        if (isset($tmp['final_score']) && '' != $tmp['final_score']) {
                             $obj->RESULTADOS->PUNTUACION_FINAL = $tmp['final_score'];
                         }
                         $specialtyParticipant[] = new SoapVar(
@@ -1170,10 +1168,10 @@ class Sepe
         } else {
             // Existe la accion
             return [
-                "RESPUESTA_OBT_ACCION" => [
-                    "CODIGO_RETORNO" => "1",
-                    "ETIQUETA_ERROR" => "Acción inexistente",
-                    "ACCION_FORMATIVA" => "",
+                'RESPUESTA_OBT_ACCION' => [
+                    'CODIGO_RETORNO' => '1',
+                    'ETIQUETA_ERROR' => 'Acción inexistente',
+                    'ACCION_FORMATIVA' => '',
                 ],
             ];
         }
@@ -1185,8 +1183,8 @@ class Sepe
         $tableLog = Database::get_main_table('plugin_sepe_log');
         $paramsLog = [
             'ip' => $_SERVER['REMOTE_ADDR'],
-            'action' => "obtenerListaAcciones",
-            'fecha' => date("Y-m-d H:i:s"),
+            'action' => 'obtenerListaAcciones',
+            'fecha' => date('Y-m-d H:i:s'),
         ];
         Database::insert($tableLog, $paramsLog);
         /* End tracking log */
@@ -1200,10 +1198,10 @@ class Sepe
             error_log('Problema base de datos ');
 
             return [
-                "RESPUESTA_OBT_LISTA_ACCIONES" => [
-                    "CODIGO_RETORNO" => "-1",
-                    "ETIQUETA_ERROR" => "Problema base de datos - consulta acciones disponible",
-                    "LISTA_ACCIONES" => '',
+                'RESPUESTA_OBT_LISTA_ACCIONES' => [
+                    'CODIGO_RETORNO' => '-1',
+                    'ETIQUETA_ERROR' => 'Problema base de datos - consulta acciones disponible',
+                    'LISTA_ACCIONES' => '',
                 ],
             ];
         }
@@ -1237,8 +1235,8 @@ class Sepe
         $tableLog = Database::get_main_table('plugin_sepe_log');
         $paramsLog = [
             'ip' => $_SERVER['REMOTE_ADDR'],
-            'action' => "eliminarAccion",
-            'fecha' => date("Y-m-d H:i:s"),
+            'action' => 'eliminarAccion',
+            'fecha' => date('Y-m-d H:i:s'),
         ];
         Database::insert($tableLog, $paramsLog);
         /* End tracking log */
@@ -1248,9 +1246,9 @@ class Sepe
 
         if (empty($actionOrigin) || empty($actionCode)) {
             return [
-                "RESPUESTA_ELIMINAR_ACCION" => [
-                    "CODIGO_RETORNO" => "2",
-                    "ETIQUETA_ERROR" => "Error en parametro",
+                'RESPUESTA_ELIMINAR_ACCION' => [
+                    'CODIGO_RETORNO' => '2',
+                    'ETIQUETA_ERROR' => 'Error en parametro',
                 ],
             ];
         }
@@ -1262,17 +1260,17 @@ class Sepe
         $rs = Database::query($sql);
         if (!$rs) {
             return [
-                "RESPUESTA_ELIMINAR_ACCION" => [
-                    "CODIGO_RETORNO" => "-1",
-                    "ETIQUETA_ERROR" => "Problema base de datos - consulta acciones disponible",
+                'RESPUESTA_ELIMINAR_ACCION' => [
+                    'CODIGO_RETORNO' => '-1',
+                    'ETIQUETA_ERROR' => 'Problema base de datos - consulta acciones disponible',
                 ],
             ];
         }
 
         return [
-            "RESPUESTA_ELIMINAR_ACCION" => [
-                "CODIGO_RETORNO" => "0",
-                "ETIQUETA_ERROR" => "Correcto",
+            'RESPUESTA_ELIMINAR_ACCION' => [
+                'CODIGO_RETORNO' => '0',
+                'ETIQUETA_ERROR' => 'Correcto',
             ],
         ];
     }
@@ -1280,29 +1278,25 @@ class Sepe
     // yyyy-mm-dd to dd/mm/yyyy
     public static function undoFixDate($date)
     {
-        if ($date == '0000-00-00' || empty($date)) {
+        if ('0000-00-00' == $date || empty($date)) {
             return null;
         }
 
         $date = explode('-', $date);
 
-        $date = $date[2].'/'.$date[1].'/'.$date[0];
-
-        return $date;
+        return $date[2].'/'.$date[1].'/'.$date[0];
     }
 
     // dd/mm/yyyy to yyyy-mm-dd
     public static function fixDate($date)
     {
-        if ($date == '00/00/0000' || empty($date)) {
+        if ('00/00/0000' == $date || empty($date)) {
             return null;
         }
 
         $date = explode('/', $date);
         // Year-month-day
-        $date = $date[2].'-'.$date[1].'-'.$date[0];
-
-        return $date;
+        return $date[2].'-'.$date[1].'-'.$date[0];
     }
 
     protected function checkAuth()

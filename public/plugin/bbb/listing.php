@@ -1,10 +1,9 @@
 <?php
+
 /* For license terms, see /license.txt */
 
 /**
  * This script initiates a video conference session, calling the BigBlueButton API.
- *
- * @package chamilo.plugin.bigbluebutton
  */
 $course_plugin = 'bbb'; //needed in order to load the plugin lang variables
 require_once __DIR__.'/config.php';
@@ -56,6 +55,7 @@ if ($conferenceManager) {
             } else {
                 $message = Display::return_message(get_lang('Error'), 'error');
             }
+
             break;
         case 'copy_record_to_link_tool':
             $result = $bbb->copyRecordingToLinkTool($_GET['id']);
@@ -64,9 +64,10 @@ if ($conferenceManager) {
             } else {
                 $message = Display::return_message(get_lang('Error'), 'error');
             }
+
             break;
         case 'regenerate_record':
-            if ($plugin->get('allow_regenerate_recording') !== 'true') {
+            if ('true' !== $plugin->get('allow_regenerate_recording')) {
                 api_not_allowed(true);
             }
             $recordId = isset($_GET['record_id']) ? $_GET['record_id'] : '';
@@ -80,6 +81,7 @@ if ($conferenceManager) {
             Display::addFlash($message);
             header('Location: '.$bbb->getListingUrl());
             exit;
+
             break;
         case 'delete_record':
             $result = $bbb->deleteRecording($_GET['id']);
@@ -92,6 +94,7 @@ if ($conferenceManager) {
             Display::addFlash($message);
             header('Location: '.$bbb->getListingUrl());
             exit;
+
             break;
         case 'end':
             $bbb->endMeeting($_GET['id']);
@@ -116,24 +119,27 @@ if ($conferenceManager) {
             Display::addFlash($message);
             header('Location: '.$bbb->getListingUrl());
             exit;
+
             break;
         case 'publish':
             $bbb->publishMeeting($_GET['id']);
             Display::addFlash(Display::return_message(get_lang('Update successful')));
             header('Location: '.$bbb->getListingUrl());
             exit;
+
             break;
         case 'unpublish':
             $bbb->unpublishMeeting($_GET['id']);
             Display::addFlash(Display::return_message(get_lang('Update successful')));
             header('Location: '.$bbb->getListingUrl());
             exit;
+
             break;
         case 'logout':
-            if ($plugin->get('allow_regenerate_recording') !== 'true') {
+            if ('true' !== $plugin->get('allow_regenerate_recording')) {
                 api_not_allowed(true);
             }
-            $allow = api_get_course_setting('bbb_force_record_generation', $courseInfo) == 1 ? true : false;
+            $allow = 1 == api_get_course_setting('bbb_force_record_generation', $courseInfo) ? true : false;
             if ($allow) {
                 $result = $bbb->getMeetingByRemoteId($_GET['remote_id']);
                 if (!empty($result)) {
@@ -147,6 +153,7 @@ if ($conferenceManager) {
             }
             header('Location: '.$bbb->getListingUrl());
             exit;
+
             break;
         default:
             break;
@@ -175,17 +182,17 @@ if ($bbb->isGlobalConference() && $bbb->isGlobalConferencePerUserEnabled()) {
     $userCanSeeJoinButton = true;
 }
 
-if (($meetingExists || $userCanSeeJoinButton) && ($maxUsers == 0 || $maxUsers > $usersOnline)) {
+if (($meetingExists || $userCanSeeJoinButton) && (0 == $maxUsers || $maxUsers > $usersOnline)) {
     $showJoinButton = true;
 }
 $conferenceUrl = $bbb->getConferenceUrl();
 $courseInfo = api_get_course_info();
 $formToString = '';
 
-if ($bbb->isGlobalConference() === false &&
+if (false === $bbb->isGlobalConference() &&
     $conferenceManager &&
     !empty($courseInfo) &&
-    $plugin->get('enable_conference_in_course_groups') === 'true'
+    'true' === $plugin->get('enable_conference_in_course_groups')
 ) {
     $url = api_get_self().'?'.api_get_cidreq(true, false).'&gidReq=';
     $htmlHeadXtra[] = '<script>        
@@ -207,7 +214,7 @@ if ($bbb->isGlobalConference() === false &&
 
         foreach ($groups as &$groupData) {
             $itemGroupId = $groupData['id'];
-            if (isset($meetingsGroup[$itemGroupId]) && $meetingsGroup[$itemGroupId] == 1) {
+            if (isset($meetingsGroup[$itemGroupId]) && 1 == $meetingsGroup[$itemGroupId]) {
                 $groupData['name'] .= ' ('.get_lang('active').')';
             }
         }
@@ -240,6 +247,7 @@ switch ($type) {
             $conferenceUrl.'&interface='.$plugin->get('interface'),
             ['target' => '_blank', 'class' => 'btn btn-primary btn-large']
         );
+
         break;
     case BBBPlugin::LAUNCH_TYPE_SET_BY_TEACHER:
         if ($conferenceManager) {
@@ -251,12 +259,15 @@ switch ($type) {
             switch ($meetingInfo['interface']) {
                 case BBBPlugin::INTERFACE_FLASH:
                     $url = $plugin->getFlashUrl($conferenceUrl);
+
                     break;
                 case BBBPlugin::INTERFACE_HTML5:
                     $url = $plugin->getHtmlUrl($conferenceUrl);
+
                     break;
             }
         }
+
         break;
     case BBBPlugin::LAUNCH_TYPE_SET_BY_STUDENT:
         if ($conferenceManager) {

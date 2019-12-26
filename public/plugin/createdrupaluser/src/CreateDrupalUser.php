@@ -1,4 +1,5 @@
 <?php
+
 /* For licensing terms, see /license.txt */
 
 use Chamilo\CoreBundle\Framework\Container;
@@ -9,8 +10,6 @@ use Chamilo\CoreBundle\Hook\Interfaces\HookPluginInterface;
  * Create a user in Drupal website when a user is registered in Chamilo LMS.
  *
  * @author Angel Fernando Quiroz Campos <angel.quiroz@beeznest.com>
- *
- * @package chamilo.plugin.createDrupalUser
  */
 class CreateDrupalUser extends Plugin implements HookPluginInterface
 {
@@ -39,7 +38,7 @@ class CreateDrupalUser extends Plugin implements HookPluginInterface
     {
         static $result = null;
 
-        return $result ? $result : $result = new self();
+        return $result ?: $result = new self();
     }
 
     /**
@@ -94,11 +93,10 @@ class CreateDrupalUser extends Plugin implements HookPluginInterface
     private function getExtraFieldInfo()
     {
         $extraField = new ExtraField('user');
-        $extraFieldHandler = $extraField->get_handler_field_info_by_field_variable(
+
+        return $extraField->get_handler_field_info_by_field_variable(
             self::EXTRAFIELD_VARIABLE_NAME
         );
-
-        return $extraFieldHandler;
     }
 
     /**
@@ -106,7 +104,7 @@ class CreateDrupalUser extends Plugin implements HookPluginInterface
      */
     private function createExtraField()
     {
-        $extraFieldExists = $this->getExtraFieldInfo() !== false;
+        $extraFieldExists = false !== $this->getExtraFieldInfo();
 
         if (!$extraFieldExists) {
             $extraField = new ExtraField('user');
@@ -131,7 +129,7 @@ class CreateDrupalUser extends Plugin implements HookPluginInterface
     private function deleteExtraField()
     {
         $extraFieldInfo = $this->getExtraFieldInfo();
-        $extraFieldExists = $extraFieldInfo !== false;
+        $extraFieldExists = false !== $extraFieldInfo;
 
         if ($extraFieldExists) {
             $extraField = new ExtraField('user');

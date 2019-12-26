@@ -1,4 +1,5 @@
 <?php
+
 /* For licensing terms, see /license.txt */
 
 $cidReset = true;
@@ -37,6 +38,7 @@ if ($data = $form->get_data()) {
             Virtual::addInstance($data);
             echo '<a class="btn btn-primary" href="'.api_get_path(WEB_PLUGIN_PATH).'vchamilo/views/manage.php'.'">Continue</a>';
             exit;
+
             break;
         case 'updateinstance':
             unset($data->what);
@@ -55,6 +57,7 @@ if ($data = $form->get_data()) {
             Database::update('vchamilo', (array) $data, ['id = ?' => $id], false);
             Display::addFlash(Display::return_message(get_lang('Update successful')));
             Virtual::redirect(api_get_path(WEB_PLUGIN_PATH).'vchamilo/views/manage.php');
+
             break;
     }
 }

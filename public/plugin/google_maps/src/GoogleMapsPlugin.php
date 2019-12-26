@@ -1,12 +1,11 @@
 <?php
+
 /* For licensing terms, see /license.txt */
 
 /**
  * The google maps class allows to use.
  *
  * @author José Loguercio Silva <jose.loguercio@beeznest.com>
- *
- * @package chamilo.plugin.google_maps
  */
 class GoogleMapsPlugin extends Plugin
 {
@@ -49,7 +48,7 @@ class GoogleMapsPlugin extends Plugin
     {
         static $result = null;
 
-        return $result ? $result : $result = new self();
+        return $result ?: $result = new self();
     }
 
     /**

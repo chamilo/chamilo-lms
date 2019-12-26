@@ -1,12 +1,11 @@
 <?php
+
 /* For licensing terms, see /license.txt */
 
 /**
  * Show the map coordinates of all users geo extra field.
  *
  * @author José Loguercio Silva <jose.loguercio@beeznest.com>
- *
- * @package chamilo.plugin.google_maps
  */
 $cidReset = true;
 
@@ -16,7 +15,7 @@ api_protect_admin_script();
 
 $plugin = GoogleMapsPlugin::create();
 
-$apiIsEnable = $plugin->get('enable_api') === 'true';
+$apiIsEnable = 'true' === $plugin->get('enable_api');
 $extraFieldName = $plugin->get('extra_field_name');
 
 $extraFieldName = array_map('trim', explode(',', $extraFieldName));

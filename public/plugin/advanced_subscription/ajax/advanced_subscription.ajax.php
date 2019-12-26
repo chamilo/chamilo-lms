@@ -1,11 +1,10 @@
 <?php
+
 /* For licensing terms, see /license.txt */
 /**
  * Script to receipt request to subscribe and confirmation action to queue.
  *
  * @author Daniel Alejandro Barreto Alva <daniel.barreto@beeznest.com>
- *
- * @package chamilo.plugin.advanced_subscription
  */
 /**
  * Init.
@@ -17,22 +16,22 @@ $plugin = AdvancedSubscriptionPlugin::create();
 $hash = Security::remove_XSS($_REQUEST['v']);
 // Get data from request (GET or POST)
 $data['action'] = Security::remove_XSS($_REQUEST['a']);
-$data['sessionId'] = intval($_REQUEST['s']);
-$data['currentUserId'] = intval($_REQUEST['current_user_id']);
-$data['studentUserId'] = intval($_REQUEST['u']);
-$data['queueId'] = intval($_REQUEST['q']);
-$data['newStatus'] = intval($_REQUEST['e']);
+$data['sessionId'] = (int) ($_REQUEST['s']);
+$data['currentUserId'] = (int) ($_REQUEST['current_user_id']);
+$data['studentUserId'] = (int) ($_REQUEST['u']);
+$data['queueId'] = (int) ($_REQUEST['q']);
+$data['newStatus'] = (int) ($_REQUEST['e']);
 // Student always is connected
 // $data['is_connected'] = isset($_REQUEST['is_connected']) ? boolval($_REQUEST['is_connected']) : false;
 $data['is_connected'] = true;
-$data['profile_completed'] = isset($_REQUEST['profile_completed']) ? floatval($_REQUEST['profile_completed']) : 0;
-$data['accept_terms'] = isset($_REQUEST['accept_terms']) ? intval($_REQUEST['accept_terms']) : 0;
-$data['courseId'] = isset($_REQUEST['c']) ? intval($_REQUEST['c']) : 0;
+$data['profile_completed'] = isset($_REQUEST['profile_completed']) ? (float) ($_REQUEST['profile_completed']) : 0;
+$data['accept_terms'] = isset($_REQUEST['accept_terms']) ? (int) ($_REQUEST['accept_terms']) : 0;
+$data['courseId'] = isset($_REQUEST['c']) ? (int) ($_REQUEST['c']) : 0;
 // Init result array
 $result = ['error' => true, 'errorMessage' => get_lang('There was an error.')];
 $showJSON = true;
 // Check if data is valid or is for start subscription
-$verified = $plugin->checkHash($data, $hash) || $data['action'] == 'subscribe';
+$verified = $plugin->checkHash($data, $hash) || 'subscribe' == $data['action'];
 if ($verified) {
     switch ($data['action']) {
         case 'check': // Check minimum requirements
@@ -49,6 +48,7 @@ if ($verified) {
             } catch (\Exception $e) {
                 $result['errorMessage'] = $e->getMessage();
             }
+
             break;
         case 'subscribe': // Subscription
             // Start subscription to queue
@@ -58,7 +58,7 @@ if ($verified) {
                 $data
             );
             // Check if queue subscription was successful
-            if ($res === true) {
+            if (true === $res) {
                 $legalEnabled = api_get_plugin_setting('courselegal', 'tool_enable');
                 if ($legalEnabled) {
                     // Save terms confirmation
@@ -188,7 +188,7 @@ if ($verified) {
                 }
             } else {
                 $lastMessageId = $plugin->getLastMessageId($data['studentUserId'], $data['sessionId']);
-                if ($lastMessageId !== false) {
+                if (false !== $lastMessageId) {
                     // Render mail
                     $url = $plugin->getRenderMailUrl(['queueId' => $lastMessageId]);
                     header('Location: '.$url);
@@ -210,7 +210,7 @@ if ($verified) {
         case 'confirm':
             // Check if new status is set
             if (isset($data['newStatus'])) {
-                if ($data['newStatus'] === ADVANCED_SUBSCRIPTION_QUEUE_STATUS_ADMIN_APPROVED) {
+                if (ADVANCED_SUBSCRIPTION_QUEUE_STATUS_ADMIN_APPROVED === $data['newStatus']) {
                     try {
                         $isAllowToDoRequest = $plugin->isAllowedToDoRequest($data['studentUserId'], $data);
                     } catch (Exception $ex) {
@@ -221,13 +221,14 @@ if ($verified) {
                         );
                         $messageTemplate->display_no_layout_template();
                         $showJSON = false;
+
                         break;
                     }
                 }
 
                 // Update queue status
                 $res = $plugin->updateQueueStatus($data, $data['newStatus']);
-                if ($res === true) {
+                if (true === $res) {
                     // Prepare data
                     // Prepare session data
                     $fieldsArray = [
@@ -295,15 +296,19 @@ if ($verified) {
                         switch ($data['newStatus']) {
                             case ADVANCED_SUBSCRIPTION_QUEUE_STATUS_BOSS_APPROVED:
                                 $data['mailAction'] = ADVANCED_SUBSCRIPTION_ACTION_SUPERIOR_APPROVE;
+
                                 break;
                             case ADVANCED_SUBSCRIPTION_QUEUE_STATUS_BOSS_DISAPPROVED:
                                 $data['mailAction'] = ADVANCED_SUBSCRIPTION_ACTION_SUPERIOR_DISAPPROVE;
+
                                 break;
                             case ADVANCED_SUBSCRIPTION_QUEUE_STATUS_ADMIN_APPROVED:
                                 $data['mailAction'] = ADVANCED_SUBSCRIPTION_ACTION_ADMIN_APPROVE;
+
                                 break;
                             case ADVANCED_SUBSCRIPTION_QUEUE_STATUS_ADMIN_DISAPPROVED:
                                 $data['mailAction'] = ADVANCED_SUBSCRIPTION_ACTION_ADMIN_DISAPPROVE;
+
                                 break;
                             default:
                                 break;
@@ -311,7 +316,7 @@ if ($verified) {
                     }
 
                     // Student Session inscription
-                    if ($data['newStatus'] == ADVANCED_SUBSCRIPTION_QUEUE_STATUS_ADMIN_APPROVED) {
+                    if (ADVANCED_SUBSCRIPTION_QUEUE_STATUS_ADMIN_APPROVED == $data['newStatus']) {
                         SessionManager::subscribeUsersToSession(
                             $data['sessionId'],
                             [$data['studentUserId']],
@@ -338,6 +343,7 @@ if ($verified) {
                     $result['errorMessage'] = 'User queue can not be updated';
                 }
             }
+
             break;
         default:
             $result['errorMessage'] = 'This action does not exist!';

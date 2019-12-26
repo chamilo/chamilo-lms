@@ -1,29 +1,17 @@
 <?php
+
 /* For licensing terms, see /license.txt */
 
 /**
- * Interface VirtualMachineInterface
+ * Interface VirtualMachineInterface.
  */
 interface VirtualMachineInterface
 {
-    /**
-     * @return mixed
-     */
-    function connect();
+    public function connect();
 
-    /**
-     * @return mixed
-     */
-    function runCron();
+    public function runCron();
 
-    /**
-     * @return mixed
-     */
-    function resizeToMaxLimit();
+    public function resizeToMaxLimit();
 
-    /**
-     * @return mixed
-     */
-    function resizeToMinLimit();
+    public function resizeToMinLimit();
 }
-

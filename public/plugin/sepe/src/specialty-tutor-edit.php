@@ -1,4 +1,5 @@
 <?php
+
 /* For licensing terms, see /license.txt */
 
 /**
@@ -13,23 +14,23 @@ $_cid = 0;
 if (!empty($_POST)) {
     $check = Security::check_token('post');
     if ($check) {
-        $sltUserExists = intval($_POST['slt_user_exists']);
-        $existingTutor = intval($_POST['existingTutor']);
-        $specialtyId = intval($_POST['specialty_id']);
+        $sltUserExists = (int) ($_POST['slt_user_exists']);
+        $existingTutor = (int) ($_POST['existingTutor']);
+        $specialtyId = (int) ($_POST['specialty_id']);
         $tutorAccreditation = Database::escape_string(trim($_POST['tutor_accreditation']));
-        $professionalExperience = intval($_POST['professional_experience']);
+        $professionalExperience = (int) ($_POST['professional_experience']);
         $teachingCompetence = Database::escape_string(trim($_POST['teaching_competence']));
-        $experienceTeleforming = intval($_POST['experience_teleforming']);
+        $experienceTeleforming = (int) ($_POST['experience_teleforming']);
         $trainingTeleforming = Database::escape_string(trim($_POST['training_teleforming']));
-        $specialtyTutorId = intval($_POST['specialtyTutorId']);
+        $specialtyTutorId = (int) ($_POST['specialtyTutorId']);
         $documentType = Database::escape_string(trim($_POST['document_type']));
         $documentNumber = Database::escape_string(trim($_POST['document_number']));
         $documentLetter = Database::escape_string(trim($_POST['document_letter']));
-        $actionId = intval($_POST['action_id']);
-        $newTutor = intval($_POST['new_tutor']);
-        $platformUserId = intval($_POST['platform_user_id']);
+        $actionId = (int) ($_POST['action_id']);
+        $newTutor = (int) ($_POST['new_tutor']);
+        $platformUserId = (int) ($_POST['platform_user_id']);
 
-        if ($sltUserExists == 1) {
+        if (1 == $sltUserExists) {
             $sql = "SELECT * FROM $tableSepeTutors WHERE id = $existingTutor;";
             $rs = Database::query($sql);
             $tmp = Database::fetch_assoc($rs);
@@ -111,7 +112,7 @@ if (!empty($_POST)) {
                 }
             }
 
-            if (isset($newTutor) && $newTutor != 1) {
+            if (isset($newTutor) && 1 != $newTutor) {
                 $sql = "UPDATE $tableSepeSpecialtyTutors SET 
                         tutor_id = $tutorId, 
                         tutor_accreditation = '".$tutorAccreditation."', 
@@ -143,25 +144,25 @@ if (!empty($_POST)) {
             if (!$res) {
                 $_SESSION['sepe_message_error'] = $plugin->get_lang('NoSaveChange');
             } else {
-                if ($newTutor == 1) {
+                if (1 == $newTutor) {
                     $tutorId = Database::insert_id();
                 }
                 $_SESSION['sepe_message_info'] = $plugin->get_lang('SaveChange');
             }
         }
         session_write_close();
-        header("Location: specialty-action-edit.php?new_specialty=0&specialty_id=".$specialtyId."&action_id=".$actionId);
+        header('Location: specialty-action-edit.php?new_specialty=0&specialty_id='.$specialtyId.'&action_id='.$actionId);
         exit;
     } else {
-        $actionId = intval($_POST['action_id']);
-        $newTutor = intval($_POST['new_tutor']);
-        $specialtyId = intval($_POST['specialty_id']);
-        $specialtyTutorId = intval($_POST['specialtyTutorId']);
+        $actionId = (int) ($_POST['action_id']);
+        $newTutor = (int) ($_POST['new_tutor']);
+        $specialtyId = (int) ($_POST['specialty_id']);
+        $specialtyTutorId = (int) ($_POST['specialtyTutorId']);
         Security::clear_token();
         $token = Security::get_token();
         $_SESSION['sepe_message_error'] = $plugin->get_lang('ProblemToken');
         session_write_close();
-        header("Location: specialty-tutor-edit.php?new_tutor=".$newTutor."&specialty_id=".$specialtyId."&tutor_id=".$specialtyTutorId."&action_id=".$actionId);
+        header('Location: specialty-tutor-edit.php?new_tutor='.$newTutor.'&specialty_id='.$specialtyId.'&tutor_id='.$specialtyTutorId.'&action_id='.$actionId);
         exit;
     }
 } else {
@@ -169,16 +170,16 @@ if (!empty($_POST)) {
 }
 
 if (api_is_platform_admin()) {
-    $courseId = getCourse(intval($_GET['action_id']));
-    $interbreadcrumb[] = ["url" => "/plugin/sepe/src/sepe-administration-menu.php", "name" => $plugin->get_lang('MenuSepe')];
-    $interbreadcrumb[] = ["url" => "formative-actions-list.php", "name" => $plugin->get_lang('FormativesActionsList')];
-    $interbreadcrumb[] = ["url" => "formative-action.php?cid=".$courseId, "name" => $plugin->get_lang('FormativeAction')];
-    $interbreadcrumb[] = ["url" => "specialty-action-edit.php?new_specialty=0&specialty_id=".intval($_GET['specialty_id'])."&action_id=".$_GET['action_id'], "name" => $plugin->get_lang('SpecialtyFormativeAction')];
-    if (isset($_GET['new_tutor']) && intval($_GET['new_tutor']) == 1) {
+    $courseId = getCourse((int) ($_GET['action_id']));
+    $interbreadcrumb[] = ['url' => '/plugin/sepe/src/sepe-administration-menu.php', 'name' => $plugin->get_lang('MenuSepe')];
+    $interbreadcrumb[] = ['url' => 'formative-actions-list.php', 'name' => $plugin->get_lang('FormativesActionsList')];
+    $interbreadcrumb[] = ['url' => 'formative-action.php?cid='.$courseId, 'name' => $plugin->get_lang('FormativeAction')];
+    $interbreadcrumb[] = ['url' => 'specialty-action-edit.php?new_specialty=0&specialty_id='.(int) ($_GET['specialty_id']).'&action_id='.$_GET['action_id'], 'name' => $plugin->get_lang('SpecialtyFormativeAction')];
+    if (isset($_GET['new_tutor']) && 1 == (int) ($_GET['new_tutor'])) {
         $templateName = $plugin->get_lang('NewSpecialtyTutor');
         $tpl = new Template($templateName);
-        $tpl->assign('action_id', intval($_GET['action_id']));
-        $tpl->assign('specialty_id', intval($_GET['specialty_id']));
+        $tpl->assign('action_id', (int) ($_GET['action_id']));
+        $tpl->assign('specialty_id', (int) ($_GET['specialty_id']));
         $info = [];
         $tpl->assign('info', $info);
         $tpl->assign('new_tutor', '1');
@@ -186,9 +187,9 @@ if (api_is_platform_admin()) {
     } else {
         $templateName = $plugin->get_lang('EditSpecialtyTutor');
         $tpl = new Template($templateName);
-        $tpl->assign('action_id', intval($_GET['action_id']));
-        $tpl->assign('specialty_id', intval($_GET['specialty_id']));
-        $tpl->assign('tutor_id', intval($_GET['tutor_id']));
+        $tpl->assign('action_id', (int) ($_GET['action_id']));
+        $tpl->assign('specialty_id', (int) ($_GET['specialty_id']));
+        $tpl->assign('tutor_id', (int) ($_GET['tutor_id']));
         $info = getInfoSpecialtyTutor($_GET['tutor_id']);
         $tpl->assign('info', $info);
         $tpl->assign('new_tutor', '0');

@@ -1,4 +1,5 @@
 <?php
+
 /* For license terms, see /license.txt */
 
 require_once __DIR__.'/../../main/inc/global.inc.php';
@@ -27,7 +28,7 @@ switch ($action) {
             $diff = $startDateTime->diff($endDateTime);
             $countDays = $diff->format('%a');
             $dayList[] = $startDate;
-            for ($i = 0; $i < $countDays; $i++) {
+            for ($i = 0; $i < $countDays; ++$i) {
                 $startDateTime->modify('+1 day');
                 $dayList[] = $startDateTime->format('Y-m-d');
             }
@@ -35,9 +36,11 @@ switch ($action) {
                 $plugin->toogleDayType($calendarId, $day);
             }
         }
+
         break;
     case 'get_events':
         $list = $plugin->getEvents($calendarId);
         echo json_encode($list);
+
         break;
 }

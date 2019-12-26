@@ -1,4 +1,5 @@
 <?php
+
 /* For licensing terms, see /license.txt */
 
 /* To show the plugin course icons you need to add these icons:
@@ -7,11 +8,11 @@
  * main/img/icons/64/plugin_name_na.png
 */
 /**
- * Videoconference plugin with BBB
+ * Videoconference plugin with BBB.
  */
 
 /**
- * Class BBBPlugin
+ * Class BBBPlugin.
  */
 class BBBPlugin extends Plugin
 {
@@ -37,7 +38,7 @@ class BBBPlugin extends Plugin
         [
             'name' => 'bbb_force_record_generation',
             'type' => 'checkbox',
-        ]
+        ],
     ];
 
     /**
@@ -64,16 +65,16 @@ class BBBPlugin extends Plugin
                         PLATFORM_ADMIN => get_lang('Administrator'),
                         COURSEMANAGER => get_lang('Trainer'),
                         STUDENT => get_lang('Learner'),
-                        STUDENT_BOSS => get_lang('LearnerBoss')
+                        STUDENT_BOSS => get_lang('LearnerBoss'),
                     ],
-                    'attributes' => ['multiple' => 'multiple']
+                    'attributes' => ['multiple' => 'multiple'],
                 ],
                 'interface' => [
                     'type' => 'select',
                     'options' => [
                         self::INTERFACE_FLASH => 'Flash',
                         self::INTERFACE_HTML5 => 'HTML5',
-                    ]
+                    ],
                 ],
                 'launch_type' => [
                     'type' => 'select',
@@ -93,12 +94,13 @@ class BBBPlugin extends Plugin
 
     /**
      * @param string $variable
+     *
      * @return bool
      */
     public function validateCourseSetting($variable)
     {
-        if ($variable === 'bbb_enable_conference_in_groups') {
-            if ($this->get('enable_conference_in_course_groups') === 'true') {
+        if ('bbb_enable_conference_in_groups' === $variable) {
+            if ('true' === $this->get('enable_conference_in_course_groups')) {
                 return true;
             }
 
@@ -114,11 +116,12 @@ class BBBPlugin extends Plugin
     public static function create()
     {
         static $result = null;
-        return $result ? $result : $result = new self();
+
+        return $result ?: $result = new self();
     }
 
     /**
-     * Install
+     * Install.
      */
     public function install()
     {
@@ -149,14 +152,14 @@ class BBBPlugin extends Plugin
         Database::query($sql);
 
         Database::query(
-            "CREATE TABLE IF NOT EXISTS plugin_bbb_room (
+            'CREATE TABLE IF NOT EXISTS plugin_bbb_room (
                 id int NOT NULL AUTO_INCREMENT PRIMARY KEY,
                 meeting_id int NOT NULL,
                 participant_id int(11) NOT NULL,
                 in_at datetime,
                 out_at datetime,
                 interface int NOT NULL DEFAULT 0
-            );"
+            );'
         );
         $fieldLabel = 'plugin_bbb_course_users_limit';
         $fieldType = ExtraField::FIELD_TYPE_INTEGER;
@@ -176,7 +179,7 @@ class BBBPlugin extends Plugin
                 'variable' => 'plugin_bbb_course_users_limit',
                 'changeable' => 1,
                 'visible_to_self' => 1,
-                'visible_to_others' => 0
+                'visible_to_others' => 0,
             ]
         );
         $fieldLabel = 'plugin_bbb_session_users_limit';
@@ -194,7 +197,7 @@ class BBBPlugin extends Plugin
                 'variable' => 'plugin_bbb_session_users_limit',
                 'changeable' => 1,
                 'visible_to_self' => 1,
-                'visible_to_others' => 0
+                'visible_to_others' => 0,
             ]
         );
 
@@ -203,7 +206,7 @@ class BBBPlugin extends Plugin
     }
 
     /**
-     * Uninstall
+     * Uninstall.
      */
     public function uninstall()
     {
@@ -263,7 +266,7 @@ class BBBPlugin extends Plugin
     }
 
     /**
-     * Return an array with URL
+     * Return an array with URL.
      *
      * @param string $conferenceUrl
      *
@@ -284,12 +287,11 @@ class BBBPlugin extends Plugin
      */
     public function getFlashUrl($conferenceUrl)
     {
-        $data = [
+        return [
             'text' => $this->get_lang('EnterConferenceFlash'),
             'url' => $conferenceUrl.'&interface='.self::INTERFACE_FLASH,
-            'icon' => 'resources/img/64/videoconference_flash.png'
+            'icon' => 'resources/img/64/videoconference_flash.png',
         ];
-        return $data;
     }
 
     /**
@@ -299,11 +301,10 @@ class BBBPlugin extends Plugin
      */
     public function getHtmlUrl($conferenceUrl)
     {
-        $data = [
+        return [
             'text' => $this->get_lang('EnterConferenceHTML5'),
             'url' => $conferenceUrl.'&interface='.self::INTERFACE_HTML5,
             'icon' => 'resources/img/64/videoconference_html5.png',
         ];
-        return $data;
     }
 }

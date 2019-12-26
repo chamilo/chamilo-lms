@@ -1,16 +1,14 @@
 <?php
 /**
  * User Panel.
- *
- * @package chamilo.plugin.buycourses
  */
 $cidReset = true;
 
 require_once '../../../main/inc/global.inc.php';
 $plugin = BuyCoursesPlugin::create();
-$includeServices = $plugin->get('include_services') === 'true';
-$includeSessions = $plugin->get('include_sessions') === 'true';
-$servicesOnly = $plugin->get('show_services_only') === 'true';
+$includeServices = 'true' === $plugin->get('include_services');
+$includeSessions = 'true' === $plugin->get('include_sessions');
+$servicesOnly = 'true' === $plugin->get('show_services_only');
 
 $userInfo = api_get_user_info();
 

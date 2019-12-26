@@ -1,4 +1,5 @@
 <?php
+
 /* For licensing terms, see /license.txt */
 
 /**
@@ -27,7 +28,7 @@ abstract class ChamiloForm
         $this->_cancelurl = $cancelurl;
         $this->_customdata = $customdata;
 
-        $attributes = ['style' => 'width: 60%; float: '.($text_dir == 'rtl' ? 'right;' : 'left;')];
+        $attributes = ['style' => 'width: 60%; float: '.('rtl' == $text_dir ? 'right;' : 'left;')];
         $this->_form = new FormValidator(
             $mode.'_instance',
             'post',
@@ -62,7 +63,7 @@ abstract class ChamiloForm
 
     public function is_in_add_mode()
     {
-        return $this->_mode == 'add';
+        return 'add' == $this->_mode;
     }
 
     /**
@@ -185,12 +186,12 @@ abstract class ChamiloForm
 
         if ($this->no_submit_button_pressed() && empty($validateonnosubmit)) {
             return false;
-        } elseif ($validated === null) {
+        } elseif (null === $validated) {
             $internal_val = $cform->validate();
 
             $files = [];
             $file_val = $this->_validate_files($files);
-            if ($file_val !== true) {
+            if (true !== $file_val) {
                 if (!empty($file_val)) {
                     foreach ($file_val as $element => $msg) {
                         $cform->setElementError($element, $msg);
@@ -201,7 +202,7 @@ abstract class ChamiloForm
 
             $data = $cform->exportValues(null, true);
             $chamilo_val = $this->validation($data, $files);
-            if ((is_array($chamilo_val) && count($chamilo_val) !== 0)) {
+            if ((is_array($chamilo_val) && 0 !== count($chamilo_val))) {
                 // non-empty array means errors
                 foreach ($chamilo_val as $element => $msg) {
                     $cform->setElementError($element, $msg);
@@ -222,7 +223,7 @@ abstract class ChamiloForm
     {
         static $nosubmit = null; // one check is enough
 
-        if (!is_null($nosubmit)) {
+        if (null !== $nosubmit) {
             return $nosubmit;
         }
 
@@ -282,12 +283,12 @@ abstract class ChamiloForm
 
         // now check that we really want each file
         foreach ($_FILES as $elname => $file) {
-            if ($mform->elementExists($elname) and $mform->getElementType($elname) == 'file') {
+            if ($mform->elementExists($elname) and 'file' == $mform->getElementType($elname)) {
                 $required = $mform->isElementRequired($elname);
                 if (!empty($this->_upload_manager->files[$elname]['uploadlog']) &&
                     empty($this->_upload_manager->files[$elname]['clear'])
                 ) {
-                    if (!$required and $file['error'] == UPLOAD_ERR_NO_FILE) {
+                    if (!$required and UPLOAD_ERR_NO_FILE == $file['error']) {
                         // file not uploaded and not required - ignore it
                         continue;
                     }
@@ -332,8 +333,8 @@ class InstanceForm extends ChamiloForm
 
         $this->_plugin = $plugin;
         $returnUrl = $_configuration['root_web'].'plugin/vchamilo/views/editinstance.php';
-        if ($mode == 'update') {
-            $returnUrl = $_configuration['root_web'].'plugin/vchamilo/views/editinstance.php?vid='.intval($_GET['vid']);
+        if ('update' == $mode) {
+            $returnUrl = $_configuration['root_web'].'plugin/vchamilo/views/editinstance.php?vid='.(int) ($_GET['vid']);
         }
 
         $cancelurl = $_configuration['root_web'].'plugin/vchamilo/views/manage.php';
@@ -385,7 +386,7 @@ class InstanceForm extends ChamiloForm
             ['url_append', $plugin->get_lang('UrlAppendExample')]
         );
 
-        if ($this->_mode == 'update') {
+        if ('update' == $this->_mode) {
             $encryptList = Virtual::getEncryptList();
             $encryptMethod = $form->addElement(
                 'select',
@@ -462,7 +463,7 @@ class InstanceForm extends ChamiloForm
         );
         //$form->addText('course_url', $this->_plugin->get_lang('CourseUrl'));
 
-        /**
+        /*
          * Template selection.
          */
         if ($this->is_in_add_mode()) {

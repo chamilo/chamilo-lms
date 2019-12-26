@@ -1,5 +1,5 @@
 <?php
 
-abstract class PENSMessage {
-
+abstract class PENSMessage
+{
 }

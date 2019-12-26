@@ -1,15 +1,14 @@
 <?php
+
 /* For license terms, see /license.txt */
 
 /**
  * Success page for the purchase of a course in the Buy Courses plugin.
- *
- * @package chamilo.plugin.buycourses
  */
 require_once '../config.php';
 
 $plugin = BuyCoursesPlugin::create();
-$paypalEnabled = $plugin->get('paypal_enable') === 'true';
+$paypalEnabled = 'true' === $plugin->get('paypal_enable');
 
 if (!$paypalEnabled) {
     api_not_allowed(true);
@@ -28,20 +27,22 @@ switch ($sale['product_type']) {
     case BuyCoursesPlugin::PRODUCT_TYPE_COURSE:
         $buyingCourse = true;
         $course = $plugin->getCourseInfo($sale['product_id']);
+
         break;
     case BuyCoursesPlugin::PRODUCT_TYPE_SESSION:
         $buyingSession = true;
         $session = $plugin->getSessionInfo($sale['product_id']);
+
         break;
 }
 
 $paypalParams = $plugin->getPaypalParams();
-$pruebas = $paypalParams['sandbox'] == 1;
+$pruebas = 1 == $paypalParams['sandbox'];
 $paypalUsername = $paypalParams['username'];
 $paypalPassword = $paypalParams['password'];
 $paypalSignature = $paypalParams['signature'];
 
-require_once "paypalfunctions.php";
+require_once 'paypalfunctions.php';
 
 $form = new FormValidator(
     'success',
@@ -65,7 +66,7 @@ if ($form->validate()) {
 
     $confirmPayments = ConfirmPayment($sale['price']);
 
-    if ($confirmPayments['ACK'] !== 'Success') {
+    if ('Success' !== $confirmPayments['ACK']) {
         $erroMessage = vsprintf(
             $plugin->get_lang('An error occurred.'),
             [$expressCheckout['L_ERRORCODE0'], $confirmPayments['L_LONGMESSAGE0']]
@@ -88,51 +89,65 @@ if ($form->validate()) {
                     $plugin->getSubscriptionSuccessMessage($sale)
                 );
                 $plugin->storePayouts($sale['id']);
+
                 break;
             }
 
             Display::addFlash(
                 Display::return_message($plugin->get_lang('There happened an unknown error. Please contact the platform administrator.'), 'error')
             );
+
             break;
         case 'Pending':
-            switch ($confirmPayments["PAYMENTINFO_0_PENDINGREASON"]) {
+            switch ($confirmPayments['PAYMENTINFO_0_PENDINGREASON']) {
                 case 'address':
                     $purchaseStatus = $plugin->get_lang('PendingReasonByAddress');
+
                     break;
                 case 'authorization':
                     $purchaseStatus = $plugin->get_lang('PendingReasonByAuthorization');
+
                     break;
                 case 'echeck':
                     $purchaseStatus = $plugin->get_lang('PendingReasonByEcheck');
+
                     break;
                 case 'intl':
                     $purchaseStatus = $plugin->get_lang('PendingReasonByIntl');
+
                     break;
                 case 'multicurrency':
                     $purchaseStatus = $plugin->get_lang('PendingReasonByMulticurrency');
+
                     break;
                 case 'order':
                     $purchaseStatus = $plugin->get_lang('PendingReasonByOrder');
+
                     break;
                 case 'paymentreview':
                     $purchaseStatus = $plugin->get_lang('PendingReasonByPaymentReview');
+
                     break;
                 case 'regulatoryreview':
                     $purchaseStatus = $plugin->get_lang('PendingReasonByRegulatoryReview');
+
                     break;
                 case 'unilateral':
                     $purchaseStatus = $plugin->get_lang('PendingReasonByUnilateral');
+
                     break;
                 case 'upgrade':
                     $purchaseStatus = $plugin->get_lang('PendingReasonByUpgrade');
+
                     break;
                 case 'verify':
                     $purchaseStatus = $plugin->get_lang('PendingReasonByVerify');
+
                     break;
                 case 'other':
                 default:
                     $purchaseStatus = $plugin->get_lang('PendingReasonByOther');
+
                     break;
             }
 
@@ -143,11 +158,13 @@ if ($form->validate()) {
                     false
                 )
             );
+
             break;
         default:
             Display::addFlash(
                 Display::return_message($plugin->get_lang('There happened an unknown error. Please contact the platform administrator.'), 'error')
             );
+
             break;
     }
 
@@ -164,7 +181,7 @@ if (empty($token)) {
 
 $shippingDetails = GetShippingDetails($token);
 
-if ($shippingDetails['ACK'] !== 'Success') {
+if ('Success' !== $shippingDetails['ACK']) {
     $erroMessage = vsprintf(
         $plugin->get_lang('An error occurred.'),
         [$expressCheckout['L_ERRORCODE0'], $shippingDetails['L_LONGMESSAGE0']]
@@ -176,7 +193,7 @@ if ($shippingDetails['ACK'] !== 'Success') {
     exit;
 }
 
-$interbreadcrumb[] = ["url" => "course_catalog.php", "name" => $plugin->get_lang('CourseListOnSale')];
+$interbreadcrumb[] = ['url' => 'course_catalog.php', 'name' => $plugin->get_lang('CourseListOnSale')];
 
 $templateName = $plugin->get_lang('PaymentMethods');
 $tpl = new Template($templateName);

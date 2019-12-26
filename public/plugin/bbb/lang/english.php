@@ -1,33 +1,34 @@
 <?php
+
 /* License: see /license.txt */
 // Needed in order to show the plugin title
-$strings['plugin_title'] = "Videoconference";
-$strings['plugin_comment'] = "Add a videoconference room in a Chamilo course using BigBlueButton (BBB)";
+$strings['plugin_title'] = 'Videoconference';
+$strings['plugin_comment'] = 'Add a videoconference room in a Chamilo course using BigBlueButton (BBB)';
 
-$strings['Videoconference'] = "Videoconference";
-$strings['MeetingOpened'] = "Meeting opened";
-$strings['MeetingClosed'] = "Meeting closed";
-$strings['MeetingClosedComment'] = "If you have asked for your sessions to be recorded, the recording will be available in the list below when it has been completely generated.";
-$strings['CloseMeeting'] = "Close meeting";
+$strings['Videoconference'] = 'Videoconference';
+$strings['MeetingOpened'] = 'Meeting opened';
+$strings['MeetingClosed'] = 'Meeting closed';
+$strings['MeetingClosedComment'] = 'If you have asked for your sessions to be recorded, the recording will be available in the list below when it has been completely generated.';
+$strings['CloseMeeting'] = 'Close meeting';
 
-$strings['VideoConferenceXCourseX'] = "Videoconference #%s course %s";
-$strings['VideoConferenceAddedToTheCalendar'] = "Videoconference added to the calendar";
-$strings['VideoConferenceAddedToTheLinkTool'] = "Videoconference added to the link tool";
+$strings['VideoConferenceXCourseX'] = 'Videoconference #%s course %s';
+$strings['VideoConferenceAddedToTheCalendar'] = 'Videoconference added to the calendar';
+$strings['VideoConferenceAddedToTheLinkTool'] = 'Videoconference added to the link tool';
 
-$strings['GoToTheVideoConference'] = "Go to the videoconference";
+$strings['GoToTheVideoConference'] = 'Go to the videoconference';
 
-$strings['Records'] = "Recording";
-$strings['Meeting'] = "Meeting";
+$strings['Records'] = 'Recording';
+$strings['Meeting'] = 'Meeting';
 
-$strings['ViewRecord'] = "View recording";
-$strings['CopyToLinkTool'] = "Copy to link tool";
+$strings['ViewRecord'] = 'View recording';
+$strings['CopyToLinkTool'] = 'Copy to link tool';
 
-$strings['EnterConference'] = "Enter the videoconference";
-$strings['RecordList'] = "Recording list";
-$strings['ServerIsNotRunning'] = "Videoconference server is not running";
-$strings['ServerIsNotConfigured'] = "Videoconference server is not configured";
+$strings['EnterConference'] = 'Enter the videoconference';
+$strings['RecordList'] = 'Recording list';
+$strings['ServerIsNotRunning'] = 'Videoconference server is not running';
+$strings['ServerIsNotConfigured'] = 'Videoconference server is not configured';
 
-$strings['XUsersOnLine'] = "%s user(s) online";
+$strings['XUsersOnLine'] = '%s user(s) online';
 
 $strings['host'] = 'BigBlueButton host';
 $strings['host_help'] = 'This is the name of the server where your BigBlueButton server is running. 
@@ -64,7 +65,7 @@ $strings['MaxXUsersWarning'] = 'This conference room has a maximum number of %s 
 $strings['MaxXUsersReached'] = 'The limit of %s simultaneous users has been reached for this conference room. Please wait for one seat to be freed or for another conference to start in order to join.';
 $strings['MaxXUsersReachedManager'] = 'The limit of %s simultaneous users has been reached for this conference room. To increase this limit, please contact the platform administrator.';
 $strings['MaxUsersInConferenceRoom'] = 'Max simultaneous users in a conference room';
-$strings['global_conference_allow_roles'] = "Global conference link only visible for this user roles";
+$strings['global_conference_allow_roles'] = 'Global conference link only visible for this user roles';
 $strings['CreatedAt'] = 'Created at';
 
 $strings['interface'] = 'Default Interface';

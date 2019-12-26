@@ -1,9 +1,8 @@
 <?php
+
 /* For license terms, see /license.txt */
 /**
  * A script to render all mails templates.
- *
- * @package chamilo.plugin.advanced_subscription
  */
 require_once __DIR__.'/../config.php';
 
@@ -123,7 +122,7 @@ foreach ($files as $k => &$file) {
     if (
         is_file($dir.$file) &&
         strpos($file, '.tpl') &&
-        $file != 'admin_view.tpl'
+        'admin_view.tpl' != $file
     ) {
         echo '<pre>', $file, '</pre>';
         echo $tpl->fetch('/advanced_subscription/views/'.$file);

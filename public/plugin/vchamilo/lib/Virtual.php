@@ -1,4 +1,5 @@
 <?php
+
 /* For licensing terms, see /license.txt */
 
 use Cocur\Slugify\Slugify;
@@ -56,18 +57,23 @@ class Virtual
                 switch ($setting['variable']) {
                     case 'vchamilo_upload_real_root':
                         $uploadPath = $setting['selected_value'];
+
                         break;
                     case 'vchamilo_home_real_root':
                         $homePath = $setting['selected_value'];
+
                         break;
                     case 'vchamilo_course_real_root':
                         $coursePath = $setting['selected_value'];
+
                         break;
                     case 'vchamilo_archive_real_root':
                         $archivePath = $setting['selected_value'];
+
                         break;
                     case 'vchamilo_password_encryption':
                         $passwordEncryption = $setting['selected_value'];
+
                         break;
                 }
             }
@@ -78,11 +84,11 @@ class Virtual
             }
 
             // Only load if is visible
-            if ($data && $data['visible'] === '1') {
+            if ($data && '1' === $data['visible']) {
                 foreach ($data as $key => $value) {
                     if (!in_array($key, $excludes)) {
                         // Avoid empty password_encryption
-                        if ($key == 'password_encryption' && empty($value)) {
+                        if ('password_encryption' == $key && empty($value)) {
                             continue;
                         }
                         $_configuration[$key] = $value;
@@ -111,7 +117,7 @@ class Virtual
                 }
                 $virtualChamilo = $data;
             } else {
-                exit("This portal is disabled. Please contact your administrator");
+                exit('This portal is disabled. Please contact your administrator');
             }
         } // otherwise it means the plugin was not configured yet
     }
@@ -122,7 +128,7 @@ class Virtual
     public static function getHostName(&$_configuration)
     {
         if (!empty($_SERVER['HTTP_X_FORWARDED_PROTO']) &&
-            $_SERVER['HTTP_X_FORWARDED_PROTO'] == 'https' || !empty($_configuration['force_https_forwarded_proto'])
+            'https' == $_SERVER['HTTP_X_FORWARDED_PROTO'] || !empty($_configuration['force_https_forwarded_proto'])
         ) {
             $protocol = 'https';
         } else {
@@ -156,9 +162,9 @@ class Virtual
             // Getting url_append from URL
             if (isset($_SERVER['REQUEST_URI'])) {
                 $requestUri = $_SERVER['REQUEST_URI'];
-                if (strpos($requestUri, '/courses/') !== false) {
+                if (false !== strpos($requestUri, '/courses/')) {
                     $result = substr($requestUri, 0, strpos($requestUri, '/courses/'));
-                    if (!empty($result) && $result != '/') {
+                    if (!empty($result) && '/' != $result) {
                         $contentPrefix = $result;
                     }
                 }
@@ -170,7 +176,7 @@ class Virtual
         $_configuration['vchamilo_name'] = @$_SERVER['HTTP_HOST'];
         if (empty($_configuration['vchamilo_name'])) { // try again with another source if has failed
             $_configuration['vchamilo_name'] = "{$protocol}://".$_SERVER['SERVER_NAME'];
-            if ($_SERVER['SERVER_PORT'] != 80) {
+            if (80 != $_SERVER['SERVER_PORT']) {
                 $_configuration['vchamilo_name'] .= ':'.$_SERVER['SERVER_PORT'];
             }
             $_configuration['vchamilo_name'] = $_SERVER['SERVER_NAME'];
@@ -184,7 +190,7 @@ class Virtual
      */
     public static function addTrailingSlash($path)
     {
-        return substr($path, -1) == '/' ? $path : $path.'/';
+        return '/' == substr($path, -1) ? $path : $path.'/';
     }
 
     /**
@@ -244,7 +250,7 @@ class Virtual
      */
     public static function getHtaccessFragment($course_folder)
     {
-        $str = "
+        return "
         # Change this file to fit your configuration and save it as .htaccess in the courses folder #
         # Chamilo mod rewrite
         # Comment lines start with # and are not processed
@@ -272,8 +278,6 @@ class Virtual
         RewriteRule ([^/]+)/work/(.*)$ /main/work/download.php?file=work/$2&cDir=$1 [QSA,L]
         </IfModule>
         ";
-
-        return $str;
     }
 
     /**
@@ -281,7 +285,7 @@ class Virtual
      */
     public static function getDefaultCourseIndexFragment()
     {
-        return "<html><head></head><body></body></html>";
+        return '<html><head></head><body></body></html>';
     }
 
     /**
@@ -369,11 +373,11 @@ class Virtual
             if (!in_array($databaseName, $databaseList)) {
                 $connection->getSchemaManager()->createDatabase($databaseName);
                 Display::addFlash(
-                    Display::return_message("Creating DB ".$databaseName)
+                    Display::return_message('Creating DB '.$databaseName)
                 );
             } else {
                 Display::addFlash(
-                    Display::return_message("DB already exists: ".$databaseName)
+                    Display::return_message('DB already exists: '.$databaseName)
                 );
             }
 
@@ -398,9 +402,9 @@ class Virtual
             $pgm = '/usr/bin/mysql';
         }
 
-        $phppgm = str_replace("\\", '/', $pgm);
-        $phppgm = str_replace("\"", '', $phppgm);
-        $pgm = str_replace("/", DIRECTORY_SEPARATOR, $pgm);
+        $phppgm = str_replace('\\', '/', $pgm);
+        $phppgm = str_replace('"', '', $phppgm);
+        $pgm = str_replace('/', DIRECTORY_SEPARATOR, $pgm);
 
         if (!is_executable($phppgm)) {
             throw new Exception('databasecommanddoesnotmatchanexecutablefile');
@@ -408,7 +412,7 @@ class Virtual
 
         // Retrieves the host configuration (more secure).
         $vchamilodata = empty($vchamilodata) ? self::makeThis() : $vchamilodata;
-        if (strstr($vchamilodata->db_host, ':') !== false) {
+        if (false !== strstr($vchamilodata->db_host, ':')) {
             list($vchamilodata->db_host, $vchamilodata->db_port) = explode(
                 ':',
                 $vchamilodata->db_host
@@ -473,15 +477,15 @@ class Virtual
     /**
      * Backups a database for having a snapshot.
      *
-     * @param $vchamilo      object        The Vchamilo object
-     * @param $outputfilerad string        The output SQL file radical
+     * @param object $vchamilo      The Vchamilo object
+     * @param string $outputfilerad The output SQL file radical
      *
      * @return bool if TRUE, dumping database was a success, otherwise FALSE
      */
     public static function backupDatabase($vchamilo, $outputfilerad)
     {
         // Separating host and port, if sticked.
-        if (strstr($vchamilo->db_host, ':') !== false) {
+        if (false !== strstr($vchamilo->db_host, ':')) {
             list($host, $port) = explode(':', $vchamilo->db_host);
         } else {
             $host = $vchamilo->db_host;
@@ -497,7 +501,7 @@ class Virtual
 
         // Password.
         if (!empty($vchamilo->db_password)) {
-            $pass = "-p".escapeshellarg($vchamilo->db_password);
+            $pass = '-p'.escapeshellarg($vchamilo->db_password);
         }
 
         // Making the commands for each database.
@@ -516,15 +520,15 @@ class Virtual
         $pgm = !empty($mysqldumpcmd) ? stripslashes($mysqldumpcmd) : false;
 
         if (!$pgm) {
-            $message = "Database dump command not available check here: ";
+            $message = 'Database dump command not available check here: ';
             $url = api_get_path(WEB_CODE_PATH).'admin/configure_plugin.php?name=vchamilo';
             $message .= Display::url($url, $url);
             Display::addFlash(Display::return_message($message));
 
             return false;
         } else {
-            $phppgm = str_replace("\\", '/', $pgm);
-            $phppgm = str_replace("\"", '', $phppgm);
+            $phppgm = str_replace('\\', '/', $pgm);
+            $phppgm = str_replace('"', '', $phppgm);
             $pgm = str_replace('/', DIRECTORY_SEPARATOR, $pgm);
 
             if (!is_executable($phppgm)) {
@@ -719,8 +723,6 @@ class Virtual
 
     /**
      * @param string $path
-     *
-     * @return mixed
      */
     public static function chopLastSlash($path)
     {
@@ -759,7 +761,7 @@ class Virtual
         $root_web = preg_replace('#//$#', '/', $root_web);
 
         $str = '<script type="text/javascript" src="'.$root_web.$path.$component.'/js/'.$file.'"></script>'."\n";
-        if ($return === 'head') {
+        if ('head' === $return) {
             $htmlHeadXtra[] = $str;
         }
 
@@ -792,7 +794,7 @@ class Virtual
         $root_web = preg_replace('#//$#', '/', $root_web);
 
         $str = '<link rel="stylesheet" type="text/css" href="'.$root_web.$path.$component.'/'.$file.'.css" />'."\n";
-        if ($return === 'head') {
+        if ('head' === $return) {
             $htmlHeadXtra[] = $str;
         }
         if ($return) {
@@ -811,7 +813,7 @@ class Virtual
         $slugify = new Slugify();
         $urlInfo = parse_url($url);
         if (isset($urlInfo['host'])) {
-            $path = $urlInfo['path'] != '/' ? '_'.$urlInfo['path'] : '';
+            $path = '/' != $urlInfo['path'] ? '_'.$urlInfo['path'] : '';
 
             return $slugify->slugify($urlInfo['host'].$path);
         }
@@ -989,7 +991,7 @@ class Virtual
         $data->upload_url = api_add_trailing_slash($data->upload_url);
         $data->course_url = api_add_trailing_slash($data->course_url);
 
-        if (substr($data->root_web, 0, 4) != 'http') {
+        if ('http' != substr($data->root_web, 0, 4)) {
             $data->root_web = api_get_protocol().'://'.$data->root_web;
         }
 
@@ -1026,7 +1028,7 @@ class Virtual
 
         if (!$template) {
             // Create empty database for install
-            self::ctrace("Creating database");
+            self::ctrace('Creating database');
             self::createDatabase($data);
         } else {
             // Deploy template database
@@ -1057,7 +1059,7 @@ class Virtual
             Database::query($sql);
         }
 
-        self::ctrace("Finished");
+        self::ctrace('Finished');
     }
 
     /**
@@ -1262,7 +1264,7 @@ class Virtual
             false
         );
 
-        self::ctrace("Finished");
+        self::ctrace('Finished');
     }
 
     /**

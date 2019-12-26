@@ -1,4 +1,5 @@
 <?php
+
 /* For license terms, see /license.txt */
 
 require __DIR__.'/../../main/inc/global.inc.php';
@@ -16,7 +17,7 @@ if ('true' !== $pluginEnabled || 'true' !== $managementLoginEnabled) {
 
 $userId = api_get_user_id();
 
-if (!($userId) || api_is_anonymous($userId)) {
+if (!$userId || api_is_anonymous($userId)) {
     $managementLoginName = $plugin->get(AzureActiveDirectory::SETTING_MANAGEMENT_LOGIN_NAME);
 
     if (empty($managementLoginName)) {

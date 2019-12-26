@@ -3,7 +3,6 @@
  * This plugin allows you to configure a footer note to plug some additional features. In a way, it works a bit like
  * any block plugin to be added in a region.
  *
- * @package chamilo.plugin
  *
  * @author Julio Montoya <gugli100@gmail.com>
  */
@@ -18,7 +17,7 @@ $plugin_info = CustomFooterPlugin::create()->get_info();
 //the plugin title
 $plugin_info['title'] = 'Custom Footer';
 //the comments that go with the plugin
-$plugin_info['comment'] = "Drives configuration parameters that plugs custom footer notes";
+$plugin_info['comment'] = 'Drives configuration parameters that plugs custom footer notes';
 //the plugin version
 $plugin_info['version'] = '1.0';
 //the plugin author

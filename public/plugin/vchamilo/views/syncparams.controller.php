@@ -1,9 +1,10 @@
 <?php
+
 /* For licensing terms, see /license.txt */
 
 api_protect_admin_script();
 
-$sql = "SELECT * FROM vchamilo";
+$sql = 'SELECT * FROM vchamilo';
 $result = Database::query($sql);
 $vchamilos = Database::store_result($result, 'ASSOC');
 
@@ -33,7 +34,7 @@ switch ($action) {
             ];
 
             foreach ($vchamilos as $chm) {
-                $table = $chm['main_database'].".settings_current ";
+                $table = $chm['main_database'].'.settings_current ';
                 $sql = " SELECT * FROM $table 
                      WHERE 
                         variable = '{{$setting['variable']}}' AND 
@@ -49,6 +50,7 @@ switch ($action) {
                 }
             }
         }
+
         break;
     case 'syncthis':
         $settingId = isset($_GET['settingid']) ? (int) $_GET['settingid'] : '';
@@ -85,6 +87,7 @@ switch ($action) {
                     'driver' => 'pdo_mysql',
                 ];
                 $connection = \Doctrine\DBAL\DriverManager::getConnection($connectionParams, $config);
+
                 try {
                     $variable = $setting['variable'];
                     $subKey = $setting['subkey'];
@@ -129,8 +132,9 @@ switch ($action) {
 
             return $errors;
         } else {
-            return "Bad ID. Non numeric";
+            return 'Bad ID. Non numeric';
         }
+
         break;
 }
 

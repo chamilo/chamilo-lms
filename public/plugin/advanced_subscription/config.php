@@ -1,11 +1,10 @@
 <?php
+
 /* For licensing terms, see /license.txt */
 /**
  * Config the plugin.
  *
  * @author Daniel Alejandro Barreto Alva <daniel.barreto@beeznest.com>
- *
- * @package chamilo.plugin.advanced_subscription
  */
 define('TABLE_ADVANCED_SUBSCRIPTION_QUEUE', 'plugin_advanced_subscription_queue');
 

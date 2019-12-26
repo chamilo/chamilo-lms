@@ -8,39 +8,39 @@ $strings['ws_url_help'] = 'La URL de la cual se solicitará información para el
 $strings['check_induction'] = 'Activar requerimiento de curso inducción';
 $strings['check_induction_help'] = 'Escoja si se requiere que se complete los cursos de inducción';
 $strings['yearly_cost_limit'] = 'Límite de UITs';
-$strings['yearly_cost_limit_help'] = "El límite de UITs de cursos que se pueden llevar en un año calendario del año actual.";
+$strings['yearly_cost_limit_help'] = 'El límite de UITs de cursos que se pueden llevar en un año calendario del año actual.';
 $strings['yearly_hours_limit'] = 'Límite de horas lectivas';
-$strings['yearly_hours_limit_help'] = "El límite de horas lectivas de cursos que se pueden llevar en un año calendario del año actual.";
+$strings['yearly_hours_limit_help'] = 'El límite de horas lectivas de cursos que se pueden llevar en un año calendario del año actual.';
 $strings['yearly_cost_unit_converter'] = 'Valor de un UIT';
-$strings['yearly_cost_unit_converter_help'] = "El valor en Soles de un UIT del año actual.";
+$strings['yearly_cost_unit_converter_help'] = 'El valor en Soles de un UIT del año actual.';
 $strings['courses_count_limit'] = 'Límite de sesiones';
-$strings['courses_count_limit_help'] = "El límite de cantidad de cursos (sesiones) que se pueden llevar en un año calendario del año actual y que <strong>no</strong> sean el curso de inducción";
+$strings['courses_count_limit_help'] = 'El límite de cantidad de cursos (sesiones) que se pueden llevar en un año calendario del año actual y que <strong>no</strong> sean el curso de inducción';
 $strings['course_session_credit_year_start_date'] = 'Fecha de inicio';
-$strings['course_session_credit_year_start_date_help'] = "Fecha de inicio del año (día/mes)";
+$strings['course_session_credit_year_start_date_help'] = 'Fecha de inicio del año (día/mes)';
 $strings['min_profile_percentage'] = 'Porcentage de perfil completado mínimo requerido';
 $strings['min_profile_percentage_help'] = 'Número porcentage ( > 0.00 y < 100.00)';
 $strings['secret_key'] = 'LLave secreta';
 $strings['terms_and_conditions'] = 'Términos y condiciones';
 
 /* String for error message about requirements */
-$strings['AdvancedSubscriptionNotConnected'] = "Usted no está conectado en la plataforma. Por favor ingrese su usuario / constraseña para poder inscribirse";
-$strings['AdvancedSubscriptionProfileIncomplete'] = "Debe llenar el <strong>%d porciento</strong> de tu perfil como mínimo. Por ahora has llenado el <strong>%d porciento</strong>";
-$strings['AdvancedSubscriptionIncompleteInduction'] = "Usted aún no ha completado el curso de inducción. Por favor complete el curso inducción";
-$strings['AdvancedSubscriptionCostXLimitReached'] = "Lo sentimos, usted ya ha alcanzado el límite anual de %s UIT para los cursos que ha seguido este año";
-$strings['AdvancedSubscriptionTimeXLimitReached'] = "Lo sentimos, usted ya ha alcanzado el límite anual de %s horas para los cursos que ha seguido este año";
-$strings['AdvancedSubscriptionCourseXLimitReached'] = "Lo sentimos, usted ya ha alcanzado el límite anual de %s cursos que ha seguido este año";
-$strings['AdvancedSubscriptionNotMoreAble'] = "Lo sentimos, usted ya no cumple con las condiciones iniciales para poder inscribirse al curso";
-$strings['AdvancedSubscriptionIncompleteParams'] = "Los parámetros enviados no están completos o no son los correctos.";
-$strings['AdvancedSubscriptionIsNotEnabled'] = "La inscripción avanzada no está activada";
+$strings['AdvancedSubscriptionNotConnected'] = 'Usted no está conectado en la plataforma. Por favor ingrese su usuario / constraseña para poder inscribirse';
+$strings['AdvancedSubscriptionProfileIncomplete'] = 'Debe llenar el <strong>%d porciento</strong> de tu perfil como mínimo. Por ahora has llenado el <strong>%d porciento</strong>';
+$strings['AdvancedSubscriptionIncompleteInduction'] = 'Usted aún no ha completado el curso de inducción. Por favor complete el curso inducción';
+$strings['AdvancedSubscriptionCostXLimitReached'] = 'Lo sentimos, usted ya ha alcanzado el límite anual de %s UIT para los cursos que ha seguido este año';
+$strings['AdvancedSubscriptionTimeXLimitReached'] = 'Lo sentimos, usted ya ha alcanzado el límite anual de %s horas para los cursos que ha seguido este año';
+$strings['AdvancedSubscriptionCourseXLimitReached'] = 'Lo sentimos, usted ya ha alcanzado el límite anual de %s cursos que ha seguido este año';
+$strings['AdvancedSubscriptionNotMoreAble'] = 'Lo sentimos, usted ya no cumple con las condiciones iniciales para poder inscribirse al curso';
+$strings['AdvancedSubscriptionIncompleteParams'] = 'Los parámetros enviados no están completos o no son los correctos.';
+$strings['AdvancedSubscriptionIsNotEnabled'] = 'La inscripción avanzada no está activada';
 
-$strings['AdvancedSubscriptionNoQueue'] = "Usted no está inscrito para este curso.";
-$strings['AdvancedSubscriptionNoQueueIsAble'] = "Usted no está inscrito, pero está calificado para este curso.";
-$strings['AdvancedSubscriptionQueueStart'] = "Su solicitud de inscripción está pendiente de la aprobación de su jefe, por favor espere atentamente.";
-$strings['AdvancedSubscriptionQueueBossDisapproved'] = "Lo sentimos, tu inscripción fue rechazada por tu jefe.";
-$strings['AdvancedSubscriptionQueueBossApproved'] = "Tu solicitud de inscripción ha sido aceptado por tu jefe, ahora está en espera de vacantes.";
-$strings['AdvancedSubscriptionQueueAdminDisapproved'] = "Lo sentimos, Tu inscripción ha sido rechazada por el administrador.";
-$strings['AdvancedSubscriptionQueueAdminApproved'] = "¡Felicitaciones! Tu inscripción ha sido aceptada por el administrador.";
-$strings['AdvancedSubscriptionQueueDefaultX'] = "Hubo un error el estado en cola %d no está definido en el sistema.";
+$strings['AdvancedSubscriptionNoQueue'] = 'Usted no está inscrito para este curso.';
+$strings['AdvancedSubscriptionNoQueueIsAble'] = 'Usted no está inscrito, pero está calificado para este curso.';
+$strings['AdvancedSubscriptionQueueStart'] = 'Su solicitud de inscripción está pendiente de la aprobación de su jefe, por favor espere atentamente.';
+$strings['AdvancedSubscriptionQueueBossDisapproved'] = 'Lo sentimos, tu inscripción fue rechazada por tu jefe.';
+$strings['AdvancedSubscriptionQueueBossApproved'] = 'Tu solicitud de inscripción ha sido aceptado por tu jefe, ahora está en espera de vacantes.';
+$strings['AdvancedSubscriptionQueueAdminDisapproved'] = 'Lo sentimos, Tu inscripción ha sido rechazada por el administrador.';
+$strings['AdvancedSubscriptionQueueAdminApproved'] = '¡Felicitaciones! Tu inscripción ha sido aceptada por el administrador.';
+$strings['AdvancedSubscriptionQueueDefaultX'] = 'Hubo un error el estado en cola %d no está definido en el sistema.';
 
 // Mail translations
 $strings['MailStudentRequest'] = 'Solicitud de registro de estudiante';
@@ -55,11 +55,11 @@ $strings['MailRemindSuperior'] = 'Solicitudes de inscripción estan pendientes d
 $strings['MailRemindAdmin'] = 'Inscripciones de cursos estan pendientes de tu aprobación';
 
 // TPL translations
-$strings['SessionXWithoutVacancies'] = "El curso \"%s\" no tiene cupos disponibles.";
-$strings['SuccessSubscriptionToSessionX'] = "<h4>¡Felicitaciones!</h4> Tu inscripción al curso \"%s\" se realizó correctamente.";
-$strings['SubscriptionToOpenSession'] = "Inscripcion a curso abierto";
-$strings['GoToSessionX'] = "Ir al curso \"%s\"";
-$strings['YouAreAlreadySubscribedToSessionX'] = "Usted ya está inscrito al curso \"%s\".";
+$strings['SessionXWithoutVacancies'] = 'El curso "%s" no tiene cupos disponibles.';
+$strings['SuccessSubscriptionToSessionX'] = '<h4>¡Felicitaciones!</h4> Tu inscripción al curso "%s" se realizó correctamente.';
+$strings['SubscriptionToOpenSession'] = 'Inscripcion a curso abierto';
+$strings['GoToSessionX'] = 'Ir al curso "%s"';
+$strings['YouAreAlreadySubscribedToSessionX'] = 'Usted ya está inscrito al curso "%s".';
 
 // Admin view
 $strings['SelectASession'] = 'Elija una sesión de formación';

@@ -1,10 +1,9 @@
 <?php
+
 /* For license terms, see /license.txt */
 
 /**
  * This script initiates a test2pdf plugin.
- *
- * @package chamilo.plugin.test2pdf
  */
 require_once __DIR__.'/../../vendor/autoload.php';
 
@@ -14,7 +13,7 @@ require_once __DIR__.'/config.php';
 $tool_name = get_lang('Test2pdf');
 
 $plugin = Test2pdfPlugin::create();
-$enable = $plugin->get('enable_plugin') == 'true';
+$enable = 'true' == $plugin->get('enable_plugin');
 
 if ($enable) {
     $url = 'src/view-pdf.php?'.api_get_cidreq();

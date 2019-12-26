@@ -1,10 +1,9 @@
 <?php
+
 /* For license terms, see /license.txt */
 /**
  * Plugin database installation script. Can only be executed if included
  * inside another script loading global.inc.php.
- *
- * @package chamilo.plugin.sepe
  */
 
 /**
@@ -814,7 +813,7 @@ $i = 1;
 foreach ($list_provinces as $value) {
     $sql = "INSERT INTO extra_field_options (field_id, option_value, display_text, option_order) VALUES ('".$field_id."', '".$i."', '".$value."','".$i."');";
     Database::query($sql);
-    $i++;
+    ++$i;
 }
 
 $fieldlabel = 'comunidad_residencia';
@@ -828,7 +827,7 @@ $i = 1;
 foreach ($list_ccaa as $value) {
     $sql = "INSERT INTO extra_field_options (field_id, option_value, display_text, option_order) VALUES ('".$field_id."', '".$i."', '".$value."','".$i."');";
     Database::query($sql);
-    $i++;
+    ++$i;
 }
 
 $fieldlabel = 'provincia_trabajo';
@@ -841,7 +840,7 @@ $i = 1;
 foreach ($list_provinces as $value) {
     $sql = "INSERT INTO extra_field_options (field_id, option_value, display_text, option_order) VALUES ('".$field_id."', '".$i."', '".$value."','".$i."');";
     Database::query($sql);
-    $i++;
+    ++$i;
 }
 
 $fieldlabel = 'comunidad_trabajo';
@@ -854,7 +853,7 @@ $i = 1;
 foreach ($list_ccaa as $value) {
     $sql = "INSERT INTO extra_field_options (field_id, option_value, display_text, option_order) VALUES ('".$field_id."', '".$i."', '".$value."','".$i."');";
     Database::query($sql);
-    $i++;
+    ++$i;
 }
 
 $fieldlabel = 'medio_conocimiento';

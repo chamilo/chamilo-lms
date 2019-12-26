@@ -1,4 +1,5 @@
 <?php
+
 /* PHP code to uninstall the plugin */
 
 api_protect_admin_script();

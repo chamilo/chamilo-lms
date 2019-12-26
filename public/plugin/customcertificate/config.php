@@ -1,10 +1,10 @@
 <?php
+
 /* For licensing terms, see /license.txt */
 
 /**
  * Config the plugin.
  *
- * @package chamilo.plugin.customcertificate
  *
  * @author Jose Angel Ruiz <desarrollo@nosolored.com>
  */

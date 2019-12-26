@@ -1,9 +1,6 @@
 <?php
-/* For licensing terms, see /license.txt */
 
-/**
- * @package chamilo.plugin
- */
+/* For licensing terms, see /license.txt */
 
 /** @var \NoSearchIndex $plugin */
 $plugin = NoSearchIndex::create();
@@ -54,7 +51,7 @@ if ($isPlatformAdmin) {
         if ($continue) {
             $contents = file_get_contents($originalFile);
             $noFollow = '<meta name="robots" content="noindex" />';
-            if (isset($values['tool_enable']) && $values['tool_enable'] == 'true') {
+            if (isset($values['tool_enable']) && 'true' == $values['tool_enable']) {
                 $result = file_put_contents($file, $contents."\nDisallow: /\n");
                 $value = '';
                 if (file_exists($extraContentFile)) {

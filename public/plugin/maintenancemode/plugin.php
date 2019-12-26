@@ -1,10 +1,9 @@
 <?php
+
 /* For licensing terms, see /license.txt */
 
 /**
  * Maintenance mode facilitator plugin.
- *
- * @package chamilo.plugin
  */
 
 /** @var \MaintenanceModePlugin $plugin */
@@ -115,7 +114,7 @@ if ($editFile && $isPlatformAdmin) {
     $isactive = api_get_plugin_setting('maintenancemode', 'active');
 
     $ip = api_get_real_ip();
-    if ($ip == '::1') {
+    if ('::1' == $ip) {
         $ip = '127.0.0.1';
     }
     $ipSubList = explode('.', $ip);
@@ -168,7 +167,7 @@ RewriteRule \.*$ '.$append.'/maintenance.html [R=302,L]
 
         if (in_array($httpCode, $statusOkList)) {
             $result = file_put_contents($maintenanceHtml, $content);
-            if ($result === false) {
+            if (false === $result) {
                 Display::addFlash(
                     Display::return_message(
                         sprintf($plugin->get_lang('MaintenanceFileNotPresent'), $maintenanceHtml),
@@ -188,7 +187,7 @@ RewriteRule \.*$ '.$append.'/maintenance.html [R=302,L]
             file_put_contents($file, $originalContent);
         }
 
-        if ($active == false) {
+        if (false == $active) {
             $message = $plugin->get_lang('MaintenanceModeIsOff');
             $contentNoBlock = str_replace("\x0D", '', $contentNoBlock);
             file_put_contents($file, $contentNoBlock);

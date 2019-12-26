@@ -1,10 +1,9 @@
 <?php
+
 /* For license terms, see /license.txt */
 
 /**
  * This script initiates a video conference session, calling the BigBlueButton API.
- *
- * @package chamilo.plugin.bigbluebutton
  */
 require_once __DIR__.'/../../vendor/autoload.php';
 
@@ -37,7 +36,7 @@ if ($bbb->isGlobalConference()) {
 
 if ($bbb->pluginEnabled) {
     if ($bbb->isServerRunning()) {
-        if (isset($_GET['launch']) && $_GET['launch'] == 1) {
+        if (isset($_GET['launch']) && 1 == $_GET['launch']) {
             if (file_exists(__DIR__.'/config.vm.php')) {
                 $config = require __DIR__.'/config.vm.php';
                 $vmIsEnabled = true;

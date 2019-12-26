@@ -1,4 +1,5 @@
 <?php
+
 /* For licensing terms, see /license.txt */
 
 /**
@@ -11,8 +12,8 @@ $plugin = SepePlugin::create();
 if (api_is_platform_admin()) {
     $templateName = $plugin->get_lang('FormativesActionsList');
     $interbreadcrumb[] = [
-        "url" => "/plugin/sepe/src/sepe-administration-menu.php",
-        "name" => $plugin->get_lang('MenuSepe'),
+        'url' => '/plugin/sepe/src/sepe-administration-menu.php',
+        'name' => $plugin->get_lang('MenuSepe'),
     ];
     $tpl = new Template($templateName);
 

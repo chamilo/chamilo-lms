@@ -1,4 +1,5 @@
 <?php
+
 /* For license terms, see /license.txt */
 
 require __DIR__.'/../../../main/inc/global.inc.php';
@@ -33,7 +34,7 @@ $token = $provider->getAccessToken('authorization_code', [
 $me = null;
 
 try {
-    $me = $provider->get("me", $token);
+    $me = $provider->get('me', $token);
 } catch (Exception $e) {
     exit;
 }

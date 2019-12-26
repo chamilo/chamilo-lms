@@ -1,4 +1,5 @@
 <?php
+
 /* For license terms, see /license.txt */
 
 /**
@@ -211,8 +212,8 @@ EOT;
         }
 
         $user_courses = $this->retrieve_user_courses();
-        $display_coursecode = api_get_setting('display_coursecode_in_courselist') == 'true';
-        $display_teacher = api_get_setting('display_teacher_in_courselist') == 'true';
+        $display_coursecode = 'true' == api_get_setting('display_coursecode_in_courselist');
+        $display_teacher = 'true' == api_get_setting('display_teacher_in_courselist');
 
         echo '<table cellpadding="4">';
         foreach ($courses as $key => $course) {
@@ -269,7 +270,7 @@ EOT;
         }
 
         //Not authorized to subscribe
-        if ($current_course['subscribe'] != SUBSCRIBE_ALLOWED) {
+        if (SUBSCRIBE_ALLOWED != $current_course['subscribe']) {
             echo self::get_lang('Subscribing not allowed');
 
             return false;
@@ -360,14 +361,14 @@ EOT;
      */
     public function retrieve_user_courses($user_id = null)
     {
-        if (is_null($user_id)) {
+        if (null === $user_id) {
             global $_user;
             $user_id = $_user['user_id'];
         }
         $course_table = Database::get_main_table(TABLE_MAIN_COURSE);
         $user_course_table = Database::get_main_table(TABLE_MAIN_COURSE_USER);
 
-        $user_id = intval($user_id);
+        $user_id = (int) $user_id;
         $sql_select_courses = "SELECT course.code k, course.visual_code  vc, course.subscribe subscr, course.unsubscribe unsubscr,
                                       course.title i, course.tutor_name t, course.directory dir, course_rel_user.status status,
                       course_rel_user.sort sort, course_rel_user.user_course_cat user_course_cat

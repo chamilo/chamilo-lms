@@ -40,7 +40,7 @@ class ChamiloPens extends Plugin
     /**
      * Database table to be used.
      */
-    const TABLE_NAME = "plugin_pens";
+    const TABLE_NAME = 'plugin_pens';
 
     /**
      * Id of the object.
@@ -176,13 +176,13 @@ class ChamiloPens extends Plugin
             "'".$clean_vendor_data."', ".
             "'".$this->_package_name."', ".
             "'".$created_at."') ON DUPLICATE KEY UPDATE ".
-            "pens_version = VALUES(pens_version), ".
-            "package_type = VALUES(package_type), ".
-            "package_type_version = VALUES(package_type_version), ".
-            "package_format = VALUES(package_format), ".
-            "client = VALUES(client), ".
-            "vendor_data = VALUES(vendor_data), ".
-            "package_name = VALUES(package_name), ".
+            'pens_version = VALUES(pens_version), '.
+            'package_type = VALUES(package_type), '.
+            'package_type_version = VALUES(package_type_version), '.
+            'package_format = VALUES(package_format), '.
+            'client = VALUES(client), '.
+            'vendor_data = VALUES(vendor_data), '.
+            'package_name = VALUES(package_name), '.
             "updated_at = '".$created_at."';";
         Database::query($sql_query);
     }
@@ -200,10 +200,10 @@ class ChamiloPens extends Plugin
         $sql_query = "SELECT * FROM $table WHERE package_id = '".$package_id."';";
         $results = Database::query($sql_query);
         $number = Database::num_rows($results);
-        if ($number == 1) {
+        if (1 == $number) {
             $obj = Database::fetch_assoc($results);
 
-            return new ChamiloPens($obj);
+            return new self($obj);
         } else {
             return null;
         }
@@ -221,7 +221,7 @@ class ChamiloPens extends Plugin
         $results = Database::query($sql_query);
         $return = [];
         while ($assoc = Database::fetch_assoc($results)) {
-            $return[] = new ChamiloPens($assoc);
+            $return[] = new self($assoc);
         }
 
         return $return;

@@ -1,10 +1,9 @@
 <?php
+
 /* For license terms, see /license.txt */
 /**
  * Plugin database installation script. Can only be executed if included
  * inside another script loading global.inc.php.
- *
- * @package chamilo.plugin.buycourses
  */
 /**
  * Check if script can be called.
@@ -379,7 +378,7 @@ $culqiTable = Database::get_main_table(BuyCoursesPlugin::TABLE_CULQI);
 $globalTable = Database::get_main_table(BuyCoursesPlugin::TABLE_GLOBAL_CONFIG);
 
 $paypalExtraField = Database::select(
-    "*",
+    '*',
     $extraFieldTable,
     [
         'where' => ['variable = ?' => 'paypal'],

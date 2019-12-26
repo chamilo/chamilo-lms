@@ -1,9 +1,8 @@
 <?php
+
 /* For license terms, see /license.txt */
 /**
  * Render an email from data.
- *
- * @package chamilo.plugin.advanced_subscription
  */
 
 /**
@@ -15,7 +14,7 @@ $plugin = AdvancedSubscriptionPlugin::create();
 // Get validation hash
 $hash = Security::remove_XSS($_REQUEST['v']);
 // Get data from request (GET or POST)
-$data['queueId'] = intval($_REQUEST['q']);
+$data['queueId'] = (int) ($_REQUEST['q']);
 // Check if data is valid or is for start subscription
 $verified = $plugin->checkHash($data, $hash);
 if ($verified) {

@@ -1,4 +1,5 @@
 <?php
+
 /* For licensing terms, see /license.txt */
 
 /**
@@ -26,7 +27,7 @@ class SurveyExportCsvPlugin extends Plugin
     {
         static $result = null;
 
-        return $result ? $result : $result = new self();
+        return $result ?: $result = new self();
     }
 
     /**
@@ -52,7 +53,7 @@ class SurveyExportCsvPlugin extends Plugin
     {
         $enabled = api_get_plugin_setting('surveyexportcsv', 'enabled');
 
-        if ($enabled !== 'true') {
+        if ('true' !== $enabled) {
             return '';
         }
 

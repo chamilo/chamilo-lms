@@ -1,15 +1,14 @@
 <?php
+
 /* For license terms, see /license.txt */
 /**
  * Configuration script for the Test to Pdf plugin.
- *
- * @package chamilo.plugin.test2pdf
  */
 require_once '../config.php';
 api_protect_course_script(true);
 
 $plugin = Test2pdfPlugin::create();
-$enable = $plugin->get('enable_plugin') == 'true';
+$enable = 'true' == $plugin->get('enable_plugin');
 
 if ($enable) {
     $templateName = $plugin->get_lang('ViewExercises');

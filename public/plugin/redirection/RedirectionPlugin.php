@@ -1,12 +1,11 @@
 <?php
+
 /* For licensing terms, see /license.txt */
 
 /**
  * Redirection plugin. Allows the configuration of redirection of specific users right after they login.
  *
  * @author Enrique Alcaraz Lopez
- *
- * @package chamilo.plugin.redirection
  */
 class RedirectionPlugin extends Plugin
 {
@@ -30,7 +29,7 @@ class RedirectionPlugin extends Plugin
     {
         static $result = null;
 
-        return $result ? $result : $result = new self();
+        return $result ?: $result = new self();
     }
 
     /**

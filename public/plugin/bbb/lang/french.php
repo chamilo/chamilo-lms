@@ -1,33 +1,34 @@
 <?php
+
 /* License: see /license.txt */
 //Needed in order to show the plugin title
-$strings['plugin_title'] = "Vidéoconférence";
-$strings['plugin_comment'] = "Ajoutez un espace de vidéoconférences aux cours de Chamilo avec BigBlueButton (BBB)";
+$strings['plugin_title'] = 'Vidéoconférence';
+$strings['plugin_comment'] = 'Ajoutez un espace de vidéoconférences aux cours de Chamilo avec BigBlueButton (BBB)';
 
-$strings['Videoconference'] = "Vidéoconférence";
-$strings['MeetingOpened'] = "Session ouverte";
-$strings['MeetingClosed'] = "Session fermée";
+$strings['Videoconference'] = 'Vidéoconférence';
+$strings['MeetingOpened'] = 'Session ouverte';
+$strings['MeetingClosed'] = 'Session fermée';
 $strings['MeetingClosedComment'] = "Si vous avez demandé l'enregistrement des sessions de conférence, cet enregistrement apparaîtra dans la liste ci-dessous dans quelques instants.";
-$strings['CloseMeeting'] = "Fermer la session";
+$strings['CloseMeeting'] = 'Fermer la session';
 
-$strings['VideoConferenceXCourseX'] = "Vidéoconférence #%s, cours %s";
-$strings['VideoConferenceAddedToTheCalendar'] = "Vidéoconférence ajoutée au calendrier";
+$strings['VideoConferenceXCourseX'] = 'Vidéoconférence #%s, cours %s';
+$strings['VideoConferenceAddedToTheCalendar'] = 'Vidéoconférence ajoutée au calendrier';
 $strings['VideoConferenceAddedToTheLinkTool'] = "Vidéoconférence ajoutée comme lien. Vous pouvez éditer et publier le lien sur la page principale du cours depuis l'outil liens.";
 
-$strings['GoToTheVideoConference'] = "Entrer dans la salle de conférence";
+$strings['GoToTheVideoConference'] = 'Entrer dans la salle de conférence';
 
-$strings['Records'] = "Enregistrement";
-$strings['Meeting'] = "Salle de conférence";
+$strings['Records'] = 'Enregistrement';
+$strings['Meeting'] = 'Salle de conférence';
 
 $strings['ViewRecord'] = "Voir l'enregistrement";
-$strings['CopyToLinkTool'] = "Ajouter comme lien du cours";
+$strings['CopyToLinkTool'] = 'Ajouter comme lien du cours';
 
-$strings['EnterConference'] = "Entrer dans la salle de conférence";
-$strings['RecordList'] = "Liste des enregistrements";
-$strings['ServerIsNotRunning'] = "Le serveur de vidéoconférence ne fonctionne pas";
+$strings['EnterConference'] = 'Entrer dans la salle de conférence';
+$strings['RecordList'] = 'Liste des enregistrements';
+$strings['ServerIsNotRunning'] = 'Le serveur de vidéoconférence ne fonctionne pas';
 $strings['ServerIsNotConfigured'] = "Le serveur de vidéoconférence n'est pas configuré correctement";
 
-$strings['XUsersOnLine'] = "%s utilisateurs dans la salle";
+$strings['XUsersOnLine'] = '%s utilisateurs dans la salle';
 
 $strings['host'] = 'Hôte de BigBlueButton';
 $strings['host_help'] = "C'est le nom du serveur où le serveur de vidéoconférence a été habilité. 
@@ -62,8 +63,8 @@ $strings['MaxXUsersWarning'] = 'Cette salle de conférence est limitée à %s ut
 $strings['MaxXUsersReached'] = 'La limite de %s utilisateurs simultanés a été atteinte dans cette salle de conférence. Veuillez rafraîchir dans quelque minutes pour voir si un siège s\'est libéré, ou attendre l\'ouverture d\'une nouvelle salle de conférence pour participer.';
 $strings['MaxXUsersReachedManager'] = 'La limite de %s utilisateurs simultanés a été atteinte dans cette salle de conférence. Pour augmenter la limite, prenez contact avec l\'administrateur du portail.';
 $strings['MaxUsersInConferenceRoom'] = 'Nombre max d\'utilisateurs simultanés dans une salle de conférence';
-$strings['global_conference_allow_roles'] = "Visibilité du lien de vidéo conférence global pour les profils suivant";
-$strings['CreatedAt'] = "Créé à";
+$strings['global_conference_allow_roles'] = 'Visibilité du lien de vidéo conférence global pour les profils suivant';
+$strings['CreatedAt'] = 'Créé à';
 
 $strings['interface'] = 'Interface par défaut';
 $strings['launch_type'] = 'Type d\'interface au lancement';

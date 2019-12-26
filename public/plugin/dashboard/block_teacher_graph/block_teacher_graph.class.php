@@ -8,7 +8,6 @@ use CpChart\Image as pImage;
  * This file is part of teacher graph block plugin for dashboard,
  * it should be required inside dashboard controller for showing it into dashboard interface from plattform.
  *
- * @package chamilo.dashboard
  *
  * @author Christian Fasanando
  */
@@ -21,8 +20,6 @@ use CpChart\Image as pImage;
  * This class is used like controller for teacher graph block plugin,
  * the class name must be registered inside path.info file (e.g: controller = "BlockTeacherGraph"),
  * so dashboard controller will be instantiate it.
- *
- * @package chamilo.dashboard
  */
 class BlockTeacherGraph extends Block
 {
@@ -45,7 +42,7 @@ class BlockTeacherGraph extends Block
     /**
      * This method check if a user is allowed to see the block inside dashboard interface.
      *
-     * @param int        User id
+     * @param int $user_id User id
      *
      * @return bool Is block visible for user
      */

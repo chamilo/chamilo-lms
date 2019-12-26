@@ -1,4 +1,5 @@
 <?php
+
 /* For licensing terms, see /license.txt */
 
 use Chamilo\CourseBundle\Entity\CSurveyQuestionOption;
@@ -19,7 +20,7 @@ if (empty($surveyData)) {
 $plugin = SurveyExportTxtPlugin::create();
 $allowExportIncomplete = 'true' === $plugin->get('export_incomplete');
 
-if ($plugin->get('enabled') !== 'true') {
+if ('true' !== $plugin->get('enabled')) {
     api_not_allowed(true);
 }
 
@@ -51,12 +52,12 @@ foreach ($questionsData as $questionData) {
     }
 
     if ('pagebreak' === $questionData['type']) {
-        $indexPart++;
+        ++$indexPart;
 
         continue;
     }
 
-    $numberOfQuestions++;
+    ++$numberOfQuestions;
 
     if (0 === $indexPart) {
         $parts[0][] = $questionData;
@@ -149,7 +150,7 @@ foreach ($surveyAnswers as $answer) {
     }
 
     $content[] = '"'.$i.'","'.$surveyLine;
-    $i++;
+    ++$i;
 }
 
 // Add EOL to lines
@@ -177,7 +178,7 @@ DocumentManager::file_send_for_download($fileName, true);
  */
 function getQuestionOptions($user, $courseId, $surveyId, $questionId)
 {
-    $options = Database::getManager()
+    return Database::getManager()
         ->createQuery(
             'SELECT sqo FROM ChamiloCourseBundle:CSurveyQuestionOption sqo
             INNER JOIN ChamiloCourseBundle:CSurveyAnswer sa
@@ -198,6 +199,4 @@ function getQuestionOptions($user, $courseId, $surveyId, $questionId)
             ]
         )
         ->getResult();
-
-    return $options;
 }

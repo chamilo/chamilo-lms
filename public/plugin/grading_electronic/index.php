@@ -1,7 +1,8 @@
 <?php
+
 /* For licensing terms, see /license.txt */
 
-if (strpos($_SERVER['SCRIPT_NAME'], 'gradebook/index.php') === false) {
+if (false === strpos($_SERVER['SCRIPT_NAME'], 'gradebook/index.php')) {
     return;
 }
 

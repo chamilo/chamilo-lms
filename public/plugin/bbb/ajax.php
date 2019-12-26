@@ -1,8 +1,6 @@
 <?php
 /**
  * This script initiates a video conference session, calling the BigBlueButton API.
- *
- * @package chamilo.plugin.bigbluebutton
  */
 $course_plugin = 'bbb'; //needed in order to load the plugin lang variables
 $cidReset = true;
@@ -10,7 +8,7 @@ $cidReset = true;
 require_once __DIR__.'/../../main/inc/global.inc.php';
 
 $action = isset($_REQUEST['a']) ? $_REQUEST['a'] : null;
-$meetingId = isset($_REQUEST['meeting']) ? intval($_REQUEST['meeting']) : 0;
+$meetingId = isset($_REQUEST['meeting']) ? (int) ($_REQUEST['meeting']) : 0;
 
 $bbb = new bbb('', '');
 
@@ -29,7 +27,7 @@ switch ($action) {
             $meetingInfo = Database::select(
                 '*',
                 'plugin_bbb_meeting',
-                ['where' => ['id = ?' => intval($meetingId)]],
+                ['where' => ['id = ?' => (int) $meetingId]],
                 'first'
             );
 
@@ -43,5 +41,6 @@ switch ($action) {
             header('Content-Type: application/json');
             echo json_encode(['url' => $url, 'link' => $link]);
         }
+
         break;
 }

@@ -1,4 +1,5 @@
 <?php
+
 /* For licensing terms, see /license.txt */
 
 $plugin_info = GradingElectronicPlugin::create()->get_info();

@@ -1,4 +1,5 @@
 <?php
+
 /* For licensing terms, see /license.txt */
 
 /**
@@ -47,7 +48,7 @@ class CourseBlockPlugin extends Plugin
     {
         static $result = null;
 
-        return $result ? $result : $result = new self();
+        return $result ?: $result = new self();
     }
 
     public function install()
@@ -73,19 +74,23 @@ class CourseBlockPlugin extends Plugin
         switch ($region) {
             case 'footer_left':
                 $content = api_get_course_setting('course_block_footer_left');
-                $content = $content === -1 ? '' : $content;
+                $content = -1 === $content ? '' : $content;
+
                 break;
             case 'footer_center':
                 $content = api_get_course_setting('course_block_footer_center');
-                $content = $content === -1 ? '' : $content;
+                $content = -1 === $content ? '' : $content;
+
                 break;
             case 'footer_right':
                 $content = api_get_course_setting('course_block_footer_right');
-                $content = $content === -1 ? '' : $content;
+                $content = -1 === $content ? '' : $content;
+
                 break;
             case 'pre_footer':
                 $content = api_get_course_setting('course_block_pre_footer');
-                $content = $content === -1 ? '' : $content;
+                $content = -1 === $content ? '' : $content;
+
                 break;
         }
 

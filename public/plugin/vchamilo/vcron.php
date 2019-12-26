@@ -1,7 +1,8 @@
 <?php
+
 /* For license terms, see /license.txt */
 exit;
-/**
+/*
  * This file is a cron microclock script.
  * It will be used as replacement of setting individual
  * cron lines for all virtual instances.
@@ -68,7 +69,7 @@ function fire_vhost_cron($vhost)
     curl_setopt($ch, CURLOPT_POST, true);
     curl_setopt($ch, CURLOPT_USERAGENT, 'Chamilo');
     curl_setopt($ch, CURLOPT_POSTFIELDS, '');
-    curl_setopt($ch, CURLOPT_HTTPHEADER, ["Content-Type: text/xml charset=UTF-8"]);
+    curl_setopt($ch, CURLOPT_HTTPHEADER, ['Content-Type: text/xml charset=UTF-8']);
     curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
     curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, 0);
 
@@ -97,13 +98,13 @@ function fire_vhost_cron($vhost)
     $rawresponse = curl_exec($ch);
     $timestamp_receive = time();
 
-    if ($rawresponse === false) {
+    if (false === $rawresponse) {
         $error = curl_errno($ch).':'.curl_error($ch);
         if ($VCRON->TRACE_ENABLE) {
             if ($CRONTRACE) {
-                fputs($CRONTRACE, "VCron start on $vhost->root_web : ".api_time_to_hms($timestamp_send)."\n");
-                fputs($CRONTRACE, "VCron Error : $error \n");
-                fputs($CRONTRACE, "VCron stop on $vhost->root_web : $timestamp_receive\n#################\n\n");
+                fwrite($CRONTRACE, "VCron start on $vhost->root_web : ".api_time_to_hms($timestamp_send)."\n");
+                fwrite($CRONTRACE, "VCron Error : $error \n");
+                fwrite($CRONTRACE, "VCron stop on $vhost->root_web : $timestamp_receive\n#################\n\n");
                 fclose($CRONTRACE);
             }
         }
@@ -116,9 +117,9 @@ function fire_vhost_cron($vhost)
 
     if ($VCRON->TRACE_ENABLE) {
         if ($CRONTRACE) {
-            fputs($CRONTRACE, "VCron start on $vhost->vhostname : ".api_time_to_hms($timestamp_send)."\n");
-            fputs($CRONTRACE, $rawresponse."\n");
-            fputs($CRONTRACE, "VCron stop on $vhost->vhostname : ".api_time_to_hms($timestamp_receive)."\n#################\n\n");
+            fwrite($CRONTRACE, "VCron start on $vhost->vhostname : ".api_time_to_hms($timestamp_send)."\n");
+            fwrite($CRONTRACE, $rawresponse."\n");
+            fwrite($CRONTRACE, "VCron stop on $vhost->vhostname : ".api_time_to_hms($timestamp_receive)."\n#################\n\n");
             fclose($CRONTRACE);
         }
     }
@@ -127,7 +128,7 @@ function fire_vhost_cron($vhost)
     echo "VCron stop on $vhost->root_web : ".api_time_to_hms($timestamp_receive)."\n#################\n\n";
     $vhost->lastcrongap = time() - $vhost->lastcron;
     $vhost->lastcron = $timestamp_send;
-    $vhost->croncount++;
+    ++$vhost->croncount;
 
     $vhostid = $vhost->id;
     unset($vhost->id);
@@ -154,9 +155,9 @@ function exec_vhost_cron($vhost)
 
     if ($VCRON->TRACE_ENABLE) {
         if ($CRONTRACE) {
-            fputs($CRONTRACE, "VCron start on $vhost->root_web : $timestamp_send\n");
-            fputs($CRONTRACE, $rawresponse."\n");
-            fputs($CRONTRACE, "VCron stop on $vhost->root_web : $timestamp_receive\n#################\n\n");
+            fwrite($CRONTRACE, "VCron start on $vhost->root_web : $timestamp_send\n");
+            fwrite($CRONTRACE, $rawresponse."\n");
+            fwrite($CRONTRACE, "VCron stop on $vhost->root_web : $timestamp_receive\n#################\n\n");
             fclose($CRONTRACE);
         }
     }
@@ -167,7 +168,7 @@ function exec_vhost_cron($vhost)
 
     $vhost->lastcrongap = time() - $vhost->lastcron;
     $vhost->lastcron = $timestamp_send;
-    $vhost->croncount++;
+    ++$vhost->croncount;
 
     $DB->update_record('vchamilo', $vhost, 'id');
 }
@@ -211,13 +212,13 @@ function is_proxybypass($url)
 
         // try for IP match (Left side)
         $lhs = substr($host, 0, strlen($match));
-        if (strcasecmp($match, $lhs) == 0) {
+        if (0 == strcasecmp($match, $lhs)) {
             return true;
         }
 
         // try for host match (Right side)
         $rhs = substr($host, -strlen($match));
-        if (strcasecmp($match, $rhs) == 0) {
+        if (0 == strcasecmp($match, $rhs)) {
             return true;
         }
     }
@@ -229,23 +230,23 @@ function is_proxybypass($url)
 // Main execution sequence
 
 if (!$vchamilos = Database::select('*', 'vchamilo', [], 'all')) {
-    die("Nothing to do. No Vhosts");
+    die('Nothing to do. No Vhosts');
 }
 
 $allvhosts = array_values($vchamilos);
 
-echo "<pre>";
+echo '<pre>';
 echo "Chamilo VCron... start\n";
-echo "Last croned : ".api_get_setting('vchamilo_cron_lasthost', 'vchamilo')."\n";
+echo 'Last croned : '.api_get_setting('vchamilo_cron_lasthost', 'vchamilo')."\n";
 
-if ($VCRON->STRATEGY == ROUND_ROBIN) {
+if (ROUND_ROBIN == $VCRON->STRATEGY) {
     $rr = 0;
     foreach ($allvhosts as $vhostassoc) {
         $vhost = (object) $vhostassoc;
-        if ($rr == 1) {
+        if (1 == $rr) {
             api_set_setting('vchamilo_cron_lasthost', $vhost->id);
-            echo "Round Robin : ".$vhost->root_web."\n";
-            if ($VCRON->ACTIVATION == 'cli') {
+            echo 'Round Robin : '.$vhost->root_web."\n";
+            if ('cli' == $VCRON->ACTIVATION) {
                 exec_vhost_cron($vhost);
             } else {
                 fire_vhost_cron($vhost);
@@ -261,13 +262,13 @@ if ($VCRON->STRATEGY == ROUND_ROBIN) {
     // We were at last. Loop back and take first.
     $firsthost = (object) $allvhosts[0];
     api_set_setting('vchamilo_cron_lasthost', $firsthost->id, 'vchamilo');
-    echo "Round Robin : ".$firsthost->root_web."\n";
-    if ($VCRON->ACTIVATION == 'cli') {
+    echo 'Round Robin : '.$firsthost->root_web."\n";
+    if ('cli' == $VCRON->ACTIVATION) {
         exec_vhost_cron($firsthost);
     } else {
         fire_vhost_cron($firsthost);
     }
-} elseif ($VCRON->STRATEGY == LOWEST_POSSIBLE_GAP) {
+} elseif (LOWEST_POSSIBLE_GAP == $VCRON->STRATEGY) {
     // First make measurement of cron period.
     if (api_get_setting('vcrontickperiod', 'vchamilo')) {
         api_set_setting('vcrontime', time(), 'vchamilo');
@@ -279,13 +280,13 @@ if ($VCRON->STRATEGY == ROUND_ROBIN) {
     $i = 0;
     foreach ($allvhosts as $vhostassoc) {
         $vhost = (object) $vhostassoc;
-        if ((time() - $vhost->lastcron) > $VCRON->PERIOD) {
-            if ($VCRON->ACTIVATION == 'cli') {
+        if (time() - $vhost->lastcron > $VCRON->PERIOD) {
+            if ('cli' == $VCRON->ACTIVATION) {
                 exec_vhost_cron($vhost);
             } else {
                 fire_vhost_cron($vhost);
             }
-            $i++;
+            ++$i;
             if ($i >= $hostsperturn) {
                 return;
             }

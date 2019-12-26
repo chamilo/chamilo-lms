@@ -1,4 +1,5 @@
 <?php
+
 /* For licensing terms, see /license.txt */
 
 use Zend\Feed\Reader\Feed\FeedInterface;
@@ -16,6 +17,7 @@ if (empty($url)) {
 
     return;
 }
+
 try {
     $channel = Reader::import($url);
     if (!empty($channel)) {

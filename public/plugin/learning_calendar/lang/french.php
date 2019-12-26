@@ -1,4 +1,5 @@
 <?php
+
 /* For license terms, see /license.txt */
 
 $strings['plugin_title'] = 'Learning calendar';

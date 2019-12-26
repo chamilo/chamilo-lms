@@ -1,11 +1,12 @@
 <?php
+
 /* For license terms, see /license.txt */
 
 /**
  * Index of the Sepe plugin.
  */
 $plugin = SepePlugin::create();
-$enable = $plugin->get('sepe_enable') == 'true';
+$enable = 'true' == $plugin->get('sepe_enable');
 $title = $plugin->get_lang('AdministratorSepe');
 $pluginPath = api_get_path(WEB_PLUGIN_PATH).'sepe/src/';
 if (api_is_platform_admin() && $enable) {

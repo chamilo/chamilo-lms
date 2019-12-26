@@ -1,10 +1,9 @@
 <?php
+
 /* For license terms, see /license.txt */
 
 /**
  * List of pending payments of the Buy Courses plugin.
- *
- * @package chamilo.plugin.buycourses
  */
 $cidReset = true;
 
@@ -17,7 +16,7 @@ $plugin = BuyCoursesPlugin::create();
 $paypalEnable = $plugin->get('paypal_enable');
 $commissionsEnable = $plugin->get('commissions_enable');
 $includeServices = $plugin->get('include_services');
-$invoicingEnable = $plugin->get('invoicing_enable') === 'true';
+$invoicingEnable = 'true' === $plugin->get('invoicing_enable');
 
 $saleStatuses = $plugin->getServiceSaleStatuses();
 $selectedStatus = isset($_GET['status']) ? $_GET['status'] : BuyCoursesPlugin::SALE_STATUS_PENDING;
@@ -25,7 +24,7 @@ $form = new FormValidator('search', 'get');
 
 if ($form->validate()) {
     $selectedStatus = $form->getSubmitValue('status');
-    if ($selectedStatus === false) {
+    if (false === $selectedStatus) {
         $selectedStatus = BuyCoursesPlugin::SALE_STATUS_PENDING;
     }
 }
@@ -41,7 +40,7 @@ $templateName = $plugin->get_lang('SalesReport');
 
 $template = new Template($templateName);
 
-if ($paypalEnable == 'true' && $commissionsEnable == 'true') {
+if ('true' == $paypalEnable && 'true' == $commissionsEnable) {
     $toolbar = Display::toolbarButton(
         $plugin->get_lang('PaypalPayoutCommissions'),
         api_get_path(WEB_PLUGIN_PATH).'buycourses/src/paypal_payout.php',
@@ -56,7 +55,7 @@ if ($paypalEnable == 'true' && $commissionsEnable == 'true') {
     );
 }
 
-if ($commissionsEnable == 'true') {
+if ('true' == $commissionsEnable) {
     $toolbar = Display::toolbarButton(
         $plugin->get_lang('PayoutReport'),
         api_get_path(WEB_PLUGIN_PATH).'buycourses/src/payout_report.php',

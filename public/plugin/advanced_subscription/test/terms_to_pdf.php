@@ -1,9 +1,8 @@
 <?php
+
 /* For license terms, see /license.txt */
 /**
  * A script to render all mails templates.
- *
- * @package chamilo.plugin.advanced_subscription
  */
 require_once __DIR__.'/../config.php';
 
@@ -15,8 +14,8 @@ $data['currentUserId'] = 1;
 $data['queueId'] = 0;
 $data['is_connected'] = true;
 $data['profile_completed'] = 90.0;
-$data['sessionId'] = intval($_REQUEST['s']);
-$data['studentUserId'] = intval($_REQUEST['u']);
+$data['sessionId'] = (int) ($_REQUEST['s']);
+$data['studentUserId'] = (int) ($_REQUEST['u']);
 $data['student'] = api_get_user_info($data['studentUserId']);
 $data['session'] = api_get_session_info($data['sessionId']);
 

@@ -1,4 +1,5 @@
 <?php
+
 /* For licensing terms, see /license.txt */
 
 /**
@@ -21,14 +22,14 @@ if (!empty($_POST)) {
         $dayEnd = Database::escape_string(trim($_POST['day_end']));
         $monthEnd = Database::escape_string(trim($_POST['month_end']));
         $yearEnd = Database::escape_string(trim($_POST['year_end']));
-        $tutorialId = intval($_POST['tutorial_id']);
-        $actionId = intval($_POST['action_id']);
-        $specialtyId = intval($_POST['specialty_id']);
-        $newTutorial = intval($_POST['new_tutorial']);
-        $starDate = $yearStart."-".$monthStart."-".$dayStart;
-        $endDate = $yearEnd."-".$monthEnd."-".$dayEnd;
+        $tutorialId = (int) ($_POST['tutorial_id']);
+        $actionId = (int) ($_POST['action_id']);
+        $specialtyId = (int) ($_POST['specialty_id']);
+        $newTutorial = (int) ($_POST['new_tutorial']);
+        $starDate = $yearStart.'-'.$monthStart.'-'.$dayStart;
+        $endDate = $yearEnd.'-'.$monthEnd.'-'.$dayEnd;
 
-        if (isset($newTutorial) && $newTutorial != 1) {
+        if (isset($newTutorial) && 1 != $newTutorial) {
             $sql = "UPDATE $tableSepeParticipantsSpecialtyTutorials SET 
                         center_origin='".$centerOrigin."', 
                         center_code='".$centerCode."', 
@@ -59,18 +60,18 @@ if (!empty($_POST)) {
 
         session_write_close();
         $participantId = getParticipantId($specialtyId);
-        header("Location: participant-specialty-edit.php?new_specialty=0&participant_id=".$participantId."&specialty_id=".$specialtyId."&action_id=".$actionId);
+        header('Location: participant-specialty-edit.php?new_specialty=0&participant_id='.$participantId.'&specialty_id='.$specialtyId.'&action_id='.$actionId);
         exit;
     } else {
-        $tutorialId = intval($_POST['tutorial_id']);
-        $actionId = intval($_POST['action_id']);
-        $specialtyId = intval($_POST['specialty_id']);
-        $newTutorial = intval($_POST['new_tutorial']);
+        $tutorialId = (int) ($_POST['tutorial_id']);
+        $actionId = (int) ($_POST['action_id']);
+        $specialtyId = (int) ($_POST['specialty_id']);
+        $newTutorial = (int) ($_POST['new_tutorial']);
         Security::clear_token();
         $token = Security::get_token();
         $_SESSION['sepe_message_error'] = $plugin->get_lang('ProblemToken');
         session_write_close();
-        header("Location: specialty-tutorial-edit.php?new_tutorial=".$newTutorial."&specialty_id=".$specialtyId."&tutorial_id=".$tutorialId."&action_id=".$actionId);
+        header('Location: specialty-tutorial-edit.php?new_tutorial='.$newTutorial.'&specialty_id='.$specialtyId.'&tutorial_id='.$tutorialId.'&action_id='.$actionId);
         exit;
     }
 } else {
@@ -78,49 +79,49 @@ if (!empty($_POST)) {
 }
 
 if (api_is_platform_admin()) {
-    $courseId = getCourse(intval($_GET['action_id']));
-    $participantId = getParticipantId(intval($_GET['specialty_id']));
-    $interbreadcrumb[] = ["url" => "/plugin/sepe/src/sepe-administration-menu.php", "name" => $plugin->get_lang('MenuSepe')];
-    $interbreadcrumb[] = ["url" => "formative-actions-list.php", "name" => $plugin->get_lang('FormativesActionsList')];
-    $interbreadcrumb[] = ["url" => "formative-action.php?cid=".$courseId, "name" => $plugin->get_lang('FormativeAction')];
-    $interbreadcrumb[] = ["url" => "participant-specialty-edit.php?new_specialty=0&participant_id=".$participantId."&specialty_id=".intval($_GET['specialty_id'])."&action_id=".intval($_GET['action_id']), "name" => $plugin->get_lang('SpecialtyFormativeParcipant')];
-    if (isset($_GET['new_tutorial']) && intval($_GET['new_tutorial']) == 1) {
+    $courseId = getCourse((int) ($_GET['action_id']));
+    $participantId = getParticipantId((int) ($_GET['specialty_id']));
+    $interbreadcrumb[] = ['url' => '/plugin/sepe/src/sepe-administration-menu.php', 'name' => $plugin->get_lang('MenuSepe')];
+    $interbreadcrumb[] = ['url' => 'formative-actions-list.php', 'name' => $plugin->get_lang('FormativesActionsList')];
+    $interbreadcrumb[] = ['url' => 'formative-action.php?cid='.$courseId, 'name' => $plugin->get_lang('FormativeAction')];
+    $interbreadcrumb[] = ['url' => 'participant-specialty-edit.php?new_specialty=0&participant_id='.$participantId.'&specialty_id='.(int) ($_GET['specialty_id']).'&action_id='.(int) ($_GET['action_id']), 'name' => $plugin->get_lang('SpecialtyFormativeParcipant')];
+    if (isset($_GET['new_tutorial']) && 1 == (int) ($_GET['new_tutorial'])) {
         $templateName = $plugin->get_lang('new_tutorial');
         $tpl = new Template($templateName);
-        $tpl->assign('action_id', intval($_GET['action_id']));
-        $tpl->assign('specialty_id', intval($_GET['specialty_id']));
+        $tpl->assign('action_id', (int) ($_GET['action_id']));
+        $tpl->assign('specialty_id', (int) ($_GET['specialty_id']));
         $info = [];
         $tpl->assign('info', $info);
         $tpl->assign('new_tutorial', '1');
-        $startYear = $endYear = date("Y");
+        $startYear = $endYear = date('Y');
     } else {
         $templateName = $plugin->get_lang('edit_tutorial');
         $tpl = new Template($templateName);
-        $tpl->assign('action_id', intval($_GET['action_id']));
-        $tpl->assign('specialty_id', intval($_GET['specialty_id']));
-        $tpl->assign('tutorial_id', intval($_GET['tutorial_id']));
-        $info = getInfoSpecialtyTutorial(intval($_GET['tutorial_id']));
+        $tpl->assign('action_id', (int) ($_GET['action_id']));
+        $tpl->assign('specialty_id', (int) ($_GET['specialty_id']));
+        $tpl->assign('tutorial_id', (int) ($_GET['tutorial_id']));
+        $info = getInfoSpecialtyTutorial((int) ($_GET['tutorial_id']));
         $tpl->assign('info', $info);
         $tpl->assign('new_tutorial', '0');
-        if ($info['start_date'] != '0000-00-00' && $info['start_date'] != null) {
-            $tpl->assign('day_start', date("j", strtotime($info['start_date'])));
-            $tpl->assign('month_start', date("n", strtotime($info['start_date'])));
-            $tpl->assign('year_start', date("Y", strtotime($info['start_date'])));
-            $startYear = date("Y", strtotime($info['start_date']));
-        } elseif (strpos($info['end_date'], '0000') === false) {
-            $startYear = date("Y", strtotime($info['start_date']));
+        if ('0000-00-00' != $info['start_date'] && null != $info['start_date']) {
+            $tpl->assign('day_start', date('j', strtotime($info['start_date'])));
+            $tpl->assign('month_start', date('n', strtotime($info['start_date'])));
+            $tpl->assign('year_start', date('Y', strtotime($info['start_date'])));
+            $startYear = date('Y', strtotime($info['start_date']));
+        } elseif (false === strpos($info['end_date'], '0000')) {
+            $startYear = date('Y', strtotime($info['start_date']));
         } else {
-            $startYear = date("Y");
+            $startYear = date('Y');
         }
-        if ($info['end_date'] != '0000-00-00' && $info['end_date'] != null) {
-            $tpl->assign('day_end', date("j", strtotime($info['end_date'])));
-            $tpl->assign('month_end', date("n", strtotime($info['end_date'])));
-            $tpl->assign('year_end', date("Y", strtotime($info['end_date'])));
-            $endYear = date("Y", strtotime($info['end_date']));
-        } elseif (strpos($info['end_date'], '0000') === false) {
-            $endYear = date("Y", strtotime($info['end_date']));
+        if ('0000-00-00' != $info['end_date'] && null != $info['end_date']) {
+            $tpl->assign('day_end', date('j', strtotime($info['end_date'])));
+            $tpl->assign('month_end', date('n', strtotime($info['end_date'])));
+            $tpl->assign('year_end', date('Y', strtotime($info['end_date'])));
+            $endYear = date('Y', strtotime($info['end_date']));
+        } elseif (false === strpos($info['end_date'], '0000')) {
+            $endYear = date('Y', strtotime($info['end_date']));
         } else {
-            $endYear = date("Y");
+            $endYear = date('Y');
         }
     }
     $listYears = [];
@@ -131,10 +132,10 @@ if (api_is_platform_admin()) {
     }
     $startYear -= 5;
     $endYear += 5;
-    $endRangeYear = (($startYear + 15) < $endYear) ? ($endYear + 1) : ($startYear + 15);
+    $endRangeYear = $startYear + 15 < $endYear ? $endYear + 1 : $startYear + 15;
     while ($startYear <= $endRangeYear) {
         $listYears[] = $startYear;
-        $startYear++;
+        ++$startYear;
     }
     $tpl->assign('list_year', $listYears);
 

@@ -1,4 +1,5 @@
 <?php
+
 /* For license terms, see /license.txt */
 
 use Chamilo\CoreBundle\Framework\Container;
@@ -17,9 +18,9 @@ $hookPlugin = Container::instantiateHook(HookAdvancedSubscription::class);
 // Get params from request (GET or POST)
 $params = [];
 // Init result array
-$params['user_id'] = intval($_REQUEST['u']);
+$params['user_id'] = (int) ($_REQUEST['u']);
 $params['user_field'] = 'drupal_user_id';
-$params['session_id'] = intval($_REQUEST['s']);
+$params['session_id'] = (int) ($_REQUEST['s']);
 $params['profile_completed'] = 100;
 $params['is_connected'] = true;
 
@@ -35,7 +36,7 @@ $ip = trim($_SERVER['REMOTE_ADDR']);
 // if we are behind a reverse proxy, assume it will send the
 // HTTP_X_FORWARDED_FOR header and use this IP instead
 if (!empty($_SERVER['HTTP_X_FORWARDED_FOR'])) {
-    list($ip1, $ip2) = split(',', $_SERVER['HTTP_X_FORWARDED_FOR']);
+    list($ip1, $ip2) = preg_split('/,/D', $_SERVER['HTTP_X_FORWARDED_FOR']);
     $ip = trim($ip1);
 }
 // Check if a file that limits access from webservices exists and contains
@@ -54,7 +55,7 @@ if ($check_ip) {
     $security_key = $ip.$_configuration['security_key'];
     //error_log($secret_key.'-'.$security_key);
 }
-/**
+/*
  * End WSHelperVerifyKey.
  */
 $params['secret_key'] = sha1($security_key);
@@ -66,7 +67,7 @@ $options = [
     'uri' => $wsUrl,
 ];
 
-/**
+/*
  * WS test.
  */
 try {
@@ -76,7 +77,7 @@ try {
     $result = $client->__soapCall('HookAdvancedSubscription..WSSessionGetDetailsByUser', [$params]);
     if (is_object($result) && isset($result->action_url)) {
         echo '<br />';
-        echo Display::url("message".$result->message, $result->action_url);
+        echo Display::url('message'.$result->message, $result->action_url);
     }
 } catch (\Exception $e) {
     var_dump($e);

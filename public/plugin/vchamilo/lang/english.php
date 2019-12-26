@@ -79,17 +79,17 @@ $strings['mysqlcmds'] = 'Mysql commands location';
 $strings['mysqlcmd'] = 'Full path to mysql client command';
 $strings['mysqldumpcms'] = 'Full path to mysqldump command';
 
-$strings['sitenameinputerror'] = "Site Name is empty or invalid";
-$strings['institutioninputerror'] = "Institution is empty or invalid";
-$strings['rootwebinputerror'] = "Root web is empty or invalid";
-$strings['databaseinputerror'] = "Database empty";
-$strings['coursefolderinputerror'] = "Data location is empty";
+$strings['sitenameinputerror'] = 'Site Name is empty or invalid';
+$strings['institutioninputerror'] = 'Institution is empty or invalid';
+$strings['rootwebinputerror'] = 'Root web is empty or invalid';
+$strings['databaseinputerror'] = 'Database empty';
+$strings['coursefolderinputerror'] = 'Data location is empty';
 
-$strings['httpproxyhost'] = "HTTP proxy host";
-$strings['httpproxyport'] = "HTTP proxy port";
-$strings['httpproxybypass'] = "HTTP proxy URL bypass";
-$strings['httpproxyuser'] = "HTTP proxy user";
-$strings['httpproxypassword'] = "HTTP proxy password";
+$strings['httpproxyhost'] = 'HTTP proxy host';
+$strings['httpproxyport'] = 'HTTP proxy port';
+$strings['httpproxybypass'] = 'HTTP proxy URL bypass';
+$strings['httpproxyuser'] = 'HTTP proxy user';
+$strings['httpproxypassword'] = 'HTTP proxy password';
 
 $strings['variable'] = 'Variable';
 $strings['subkey'] = 'Subkey';

@@ -1,4 +1,5 @@
 <?php
+
 /* For licensing terms, see /license.txt */
 
 use Chamilo\CoreBundle\Hook\Interfaces\HookPluginInterface;
@@ -6,8 +7,7 @@ use Chamilo\CoreBundle\Hook\Interfaces\HookPluginInterface;
 /**
  * Class PENSPlugin
  * This class is used to add an advanced subscription allowing the admin to
- * create user queues requesting a subscribe to a session
- * @package chamilo.plugin.pens
+ * create user queues requesting a subscribe to a session.
  */
 class PENSPlugin extends Plugin implements HookPluginInterface
 {
@@ -15,35 +15,35 @@ class PENSPlugin extends Plugin implements HookPluginInterface
     private $errorMessages;
     const TABLE_PENS = 'plugin_pens';
 
-
     /**
-     * Constructor
+     * Constructor.
      */
     public function __construct()
     {
-        $parameters = array(
-        );
+        $parameters = [
+        ];
 
         parent::__construct($this->get_version(), $this->get_author(), $parameters);
 
-        $this->errorMessages = array();
+        $this->errorMessages = [];
     }
 
     /**
-     * Instance the plugin
+     * Instance the plugin.
+     *
      * @staticvar null $result
+     *
      * @return AdvancedSubscriptionPlugin
      */
     public static function create()
     {
         static $result = null;
 
-        return $result ? $result : $result = new self();
+        return $result ?: $result = new self();
     }
 
     /**
-     * Install the plugin
-     * @return void
+     * Install the plugin.
      */
     public function install()
     {
@@ -52,8 +52,7 @@ class PENSPlugin extends Plugin implements HookPluginInterface
     }
 
     /**
-     * Uninstall the plugin
-     * @return void
+     * Uninstall the plugin.
      */
     public function uninstall()
     {
@@ -66,12 +65,11 @@ class PENSPlugin extends Plugin implements HookPluginInterface
     }
 
     /**
-     * Create the database tables for the plugin
-     * @return void
+     * Create the database tables for the plugin.
      */
     private function installDatabase()
     {
-        $pensTable = Database::get_main_table(PENSPlugin::TABLE_PENS);
+        $pensTable = Database::get_main_table(self::TABLE_PENS);
 
         $sql = "CREATE TABLE $pensTable (
 	        id int unsigned NOT NULL auto_increment,
@@ -92,13 +90,12 @@ class PENSPlugin extends Plugin implements HookPluginInterface
     }
 
     /**
-     * Drop the database tables for the plugin
-     * @return void
+     * Drop the database tables for the plugin.
      */
     private function uninstallDatabase()
     {
         /* Drop plugin tables */
-        $pensTable = Database::get_main_table(PENSPlugin::TABLE_PENS);
+        $pensTable = Database::get_main_table(self::TABLE_PENS);
 
         $sql = "DROP TABLE IF EXISTS $pensTable; ";
         Database::query($sql);
@@ -109,7 +106,8 @@ class PENSPlugin extends Plugin implements HookPluginInterface
     }
 
     /**
-     * Get the error messages list
+     * Get the error messages list.
+     *
      * @return array The message list
      */
     public function getErrorMessages()
@@ -118,7 +116,8 @@ class PENSPlugin extends Plugin implements HookPluginInterface
     }
 
     /**
-     * This method will call the Hook management insertHook to add Hook observer from this plugin
+     * This method will call the Hook management insertHook to add Hook observer from this plugin.
+     *
      * @return int
      */
     public function installHook()
@@ -126,7 +125,8 @@ class PENSPlugin extends Plugin implements HookPluginInterface
     }
 
     /**
-     * This method will call the Hook management deleteHook to disable Hook observer from this plugin
+     * This method will call the Hook management deleteHook to disable Hook observer from this plugin.
+     *
      * @return int
      */
     public function uninstallHook()
@@ -135,7 +135,8 @@ class PENSPlugin extends Plugin implements HookPluginInterface
 
     /**
      * Copied and fixed from plugin.class.php
-     * Returns the "system" name of the plugin in lowercase letters
+     * Returns the "system" name of the plugin in lowercase letters.
+     *
      * @return string
      */
     public function get_name()
@@ -144,7 +145,8 @@ class PENSPlugin extends Plugin implements HookPluginInterface
     }
 
     /**
-     * Get author(s)
+     * Get author(s).
+     *
      * @return string
      */
     public function get_author()
@@ -153,20 +155,23 @@ class PENSPlugin extends Plugin implements HookPluginInterface
     }
 
     /**
-     * Returns the plugin version
+     * Returns the plugin version.
+     *
      * @return string
      */
     public function get_version()
     {
         return '1.1';
     }
+
     /**
-     * Get generic plugin info
+     * Get generic plugin info.
+     *
      * @return array
      */
     public function get_info()
     {
-        $result = array();
+        $result = [];
         $result['title'] = $this->get_name();
         $result['comment'] = 'Provides support for the PENS course exchange standard. Read the readme.txt file in the plugin/pens/ folder for a complete installation.';
         $result['version'] = $this->get_version();
@@ -174,6 +179,7 @@ class PENSPlugin extends Plugin implements HookPluginInterface
         $result['plugin_class'] = get_class($this);
         $result['is_course_plugin'] = false;
         $result['is_mail_plugin'] = false;
+
         return $result;
     }
 }

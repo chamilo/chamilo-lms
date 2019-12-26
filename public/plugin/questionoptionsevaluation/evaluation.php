@@ -1,4 +1,5 @@
 <?php
+
 /* For licensing terms, see /license.txt */
 
 require_once __DIR__.'/../../main/inc/global.inc.php';
@@ -24,7 +25,7 @@ if (!$exercise->read($exerciseId, false)) {
 
 $plugin = QuestionOptionsEvaluationPlugin::create();
 
-if ($plugin->get('enable') !== 'true') {
+if ('true' !== $plugin->get('enable')) {
     echo Display::return_message(get_lang('You are not allowed to see this page. Either your connection has expired or you are trying to access a page for which you do not have the sufficient privileges.'), 'error');
 
     exit;

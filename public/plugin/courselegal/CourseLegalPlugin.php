@@ -1,4 +1,5 @@
 <?php
+
 /* For licensing terms, see /license.txt */
 
 /**
@@ -34,7 +35,7 @@ class CourseLegalPlugin extends Plugin
     {
         static $result = null;
 
-        return $result ? $result : $result = new self();
+        return $result ?: $result = new self();
     }
 
     /**
@@ -64,9 +65,9 @@ class CourseLegalPlugin extends Plugin
      */
     public function getUserAcceptedLegal($userId, $courseId, $sessionId)
     {
-        $userId = intval($userId);
-        $courseId = intval($courseId);
-        $sessionId = intval($sessionId);
+        $userId = (int) $userId;
+        $courseId = (int) $courseId;
+        $sessionId = (int) $sessionId;
 
         $table = Database::get_main_table('session_rel_course_rel_user_legal');
         $sql = "SELECT *
@@ -95,8 +96,8 @@ class CourseLegalPlugin extends Plugin
         $result = $this->getUserAcceptedLegal($userId, $courseId, $sessionId);
 
         if (!empty($result)) {
-            if ($result['mail_agreement'] == 1 &&
-                $result['web_agreement'] == 1
+            if (1 == $result['mail_agreement'] &&
+                1 == $result['web_agreement']
             ) {
                 return true;
             }
@@ -110,8 +111,6 @@ class CourseLegalPlugin extends Plugin
      * @param int  $courseCode
      * @param int  $sessionId
      * @param bool $sendEmail  Optional. Indicate whether the mail must be sent. Default is true
-     *
-     * @return mixed
      */
     public function saveUserLegal($userId, $courseCode, $sessionId, $sendEmail = true)
     {
@@ -206,8 +205,8 @@ class CourseLegalPlugin extends Plugin
 
         $courseTitle = $courseInfo['title'].$sesstionTitle;
 
-        $subject = $this->get_lang("MailAgreement");
-        $message = sprintf($this->get_lang("MailAgreementWasSentWithClickX"), $courseTitle, $courseUrl);
+        $subject = $this->get_lang('MailAgreement');
+        $message = sprintf($this->get_lang('MailAgreementWasSentWithClickX'), $courseTitle, $courseUrl);
         MessageManager::send_message_simple($userId, $subject, $message);
     }
 
@@ -257,8 +256,8 @@ class CourseLegalPlugin extends Plugin
         $url = api_get_course_url($courseCode, $sessionId);
         $url = Display::url($url, $url);
 
-        $subject = $this->get_lang("AgreementUpdated");
-        $message = sprintf($this->get_lang("AgreementWasUpdatedClickHere"), $url);
+        $subject = $this->get_lang('AgreementUpdated');
+        $message = sprintf($this->get_lang('AgreementWasUpdatedClickHere'), $url);
 
         $dataFile = [];
         if (!empty($filePath)) {
@@ -266,8 +265,8 @@ class CourseLegalPlugin extends Plugin
                 'path' => $filePath,
                 'filename' => basename($filePath),
             ];
-            $message = sprintf($this->get_lang("AgreementWasUpdatedClickHere"), $url)." \n";
-            $message .= $this->get_lang("TheAgreementIsAttachedInThisEmail");
+            $message = sprintf($this->get_lang('AgreementWasUpdatedClickHere'), $url)." \n";
+            $message .= $this->get_lang('TheAgreementIsAttachedInThisEmail');
         }
 
         if (!empty($students)) {
@@ -297,8 +296,8 @@ class CourseLegalPlugin extends Plugin
      */
     public function getUserAgreementList($courseId, $sessionId, $order = null)
     {
-        $courseId = intval($courseId);
-        $sessionId = intval($sessionId);
+        $courseId = (int) $courseId;
+        $sessionId = (int) $sessionId;
 
         $table = Database::get_main_table('session_rel_course_rel_user_legal');
         $userTable = Database::get_main_table(TABLE_MAIN_USER);
@@ -326,8 +325,8 @@ class CourseLegalPlugin extends Plugin
     public function removePreviousAgreements($courseId, $sessionId)
     {
         $table = Database::get_main_table('session_rel_course_rel_user_legal');
-        $sessionId = intval($sessionId);
-        $courseId = intval($courseId);
+        $sessionId = (int) $sessionId;
+        $courseId = (int) $courseId;
         $sql = "DELETE FROM $table
                 WHERE c_id = '$courseId' AND session_id = $sessionId ";
         Database::query($sql);
@@ -443,6 +442,7 @@ class CourseLegalPlugin extends Plugin
             case '2':
                 // Send mail
                 $this->warnUsersByEmail($courseId, $sessionId);
+
                 break;
             case '3':
                 // Send mail + attachment if exists.
@@ -453,6 +453,7 @@ class CourseLegalPlugin extends Plugin
                         $uploadResult
                     );
                 }
+
                 break;
         }
     }
@@ -474,9 +475,8 @@ class CourseLegalPlugin extends Plugin
         ];
 
         $result = Database::select('*', $table, ['where' => $conditions]);
-        $legalData = isset($result) && !empty($result) ? current($result) : [];
 
-        return $legalData;
+        return isset($result) && !empty($result) ? current($result) : [];
     }
 
     /**

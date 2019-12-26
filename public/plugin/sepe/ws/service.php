@@ -1,8 +1,7 @@
 <?php
+
 /* For licensing terms, see /license.txt */
-/**
- * @package chamilo.webservices
- */
+
 ini_set('log_errors_max_len', 0);
 ini_set('soap.wsdl_cache_enabled', '0');
 ini_set('soap.wsdl_cache_ttl', '0');
@@ -10,7 +9,7 @@ ini_set('soap.wsdl_cache_ttl', '0');
 require_once '../../../main/inc/global.inc.php';
 require_once '../../../vendor/autoload.php';
 
-ini_set("soap.wsdl_cache_enabled", 0);
+ini_set('soap.wsdl_cache_enabled', 0);
 $libpath = api_get_path(LIBRARY_PATH);
 require_once api_get_path(SYS_PLUGIN_PATH).'sepe/ws/Sepe.php';
 
@@ -18,8 +17,8 @@ require_once $libpath.'nusoap/class.nusoap_base.php';
 require_once api_get_path(SYS_PLUGIN_PATH).'sepe/src/wsse/soap-server-wsse.php';
 //require_once api_get_path(SYS_PLUGIN_PATH).'sepe/src/wsse/soap-wsse.php';
 
-$ns = api_get_path(WEB_PLUGIN_PATH)."sepe/ws/ProveedorCentroTFWS.wsdl";
-$wsdl = api_get_path(SYS_PLUGIN_PATH)."sepe/ws/ProveedorCentroTFWS.wsdl";
+$ns = api_get_path(WEB_PLUGIN_PATH).'sepe/ws/ProveedorCentroTFWS.wsdl';
+$wsdl = api_get_path(SYS_PLUGIN_PATH).'sepe/ws/ProveedorCentroTFWS.wsdl';
 $serviceUrl = api_get_path(WEB_PLUGIN_PATH).'sepe/ws/service.php';
 
 /**
@@ -27,9 +26,6 @@ $serviceUrl = api_get_path(WEB_PLUGIN_PATH).'sepe/ws/service.php';
  */
 class CustomServer extends Zend\Soap\Server
 {
-    /**
-     * {@inheritdoc}
-     */
     public function __construct($wsdl = null, array $options = null)
     {
         parent::__construct($wsdl, $options);
@@ -79,7 +75,7 @@ class CustomServer extends Zend\Soap\Server
     {
         return str_replace(
             $tag,
-            $namespace.":".$tag,
+            $namespace.':'.$tag,
             $response
         );
     }
@@ -100,7 +96,7 @@ function authenticate($WSUser, $WSKey)
 
     if (Database::num_rows($result) > 0) {
         $row = Database::fetch_row($result);
-        if ($row[1] == '4') { //UserManager::is_admin($row[0])) {
+        if ('4' == $row[1]) { //UserManager::is_admin($row[0])) {
             return true;
         } else {
             return false;

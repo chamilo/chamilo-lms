@@ -1,7 +1,5 @@
 <?php
-/**
- * @package chamilo.plugin.before_login
- */
+
 if (api_is_anonymous()) {
     // Only available in the index.php page
     $loginAccepted = isset($_SESSION['before_login_accepted']) ? $_SESSION['before_login_accepted'] : null;

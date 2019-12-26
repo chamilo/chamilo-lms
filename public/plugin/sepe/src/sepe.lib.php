@@ -1,8 +1,6 @@
 <?php
 /**
  * Functions.
- *
- * @package chamilo.plugin.sepe
  */
 $tableSepeCenter = Database::get_main_table(SepePlugin::TABLE_SEPE_CENTER);
 $tableSepeActions = Database::get_main_table(SepePlugin::TABLE_SEPE_ACTIONS);
@@ -205,13 +203,13 @@ function listTutorType($condition)
 {
     global $tableTutorCompany;
     $condition = Database::escape_string($condition);
-    $sql = "SELECT * FROM $tableTutorCompany WHERE ".$condition." ORDER BY alias ASC, document_number ASC;";
+    $sql = "SELECT * FROM $tableTutorCompany WHERE ".$condition.' ORDER BY alias ASC, document_number ASC;';
     $res = Database::query($sql);
     $aux = [];
     while ($row = Database::fetch_assoc($res)) {
         $tmp = [];
         $tmp['id'] = $row['id'];
-        if (trim($row['alias']) != '') {
+        if ('' != trim($row['alias'])) {
             $tmp['alias'] = $row['alias'].' - '.$row['document_type'].' '.$row['document_number'].' '.$row['document_letter'];
         } else {
             $tmp['alias'] = $row['document_type'].' '.$row['document_number'].' '.$row['document_letter'];
@@ -244,7 +242,7 @@ function getTutorsSpecialty($specialtyId)
         if (!in_array($row['id'], $tutorsList)) {
             $tutor = [];
             $tutor['id'] = $row['id'];
-            if (trim($row['firstname']) != '' || trim($row['lastname']) != '') {
+            if ('' != trim($row['firstname']) || '' != trim($row['lastname'])) {
                 $tutor['data'] = $row['firstname'].' '.$row['lastname'].' ('.$row['document_type'].' '.$row['document_number'].' '.$row['document_letter'].' )';
             } else {
                 $tutor['data'] = $row['document_type'].' '.$row['document_number'].' '.$row['document_letter'];
@@ -295,10 +293,11 @@ function freeTeacherList($teacherList, $specialtyId, $platform_user_id)
             $res = Database::query($sql);
             if (Database::num_rows($res) > 0) {
                 $tmp = Database::fetch_assoc($res);
-                if ($tmp['platform_user_id'] != 0 && $tmp['platform_user_id'] != $platform_user_id) {
+                if (0 != $tmp['platform_user_id'] && $tmp['platform_user_id'] != $platform_user_id) {
                     foreach ($teacherList as $key => $value) {
                         if ($value['id'] == $tmp['platform_user_id']) {
                             unset($teacherList[$key]);
+
                             break;
                         }
                     }
@@ -575,7 +574,7 @@ function getUserPlatformFromParticipant($participantId)
     $sql = "SELECT * FROM $tableSepeParticipants WHERE id = $participantId";
     $res = Database::query($sql);
     $row = Database::fetch_assoc($res);
-    if ($row['platform_user_id'] == 0 || $row['platform_user_id'] == '') {
+    if (0 == $row['platform_user_id'] || '' == $row['platform_user_id']) {
         return false;
     } else {
         return $row['platform_user_id'];

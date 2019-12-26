@@ -1,4 +1,5 @@
 <?php
+
 /* For licensing terms, see /license.txt */
 
 /**
@@ -13,8 +14,8 @@ if (api_is_platform_admin()) {
     $info = getInfoIdentificationData();
     $templateName = $plugin->get_lang('DataCenter');
     $interbreadcrumb[] = [
-        "url" => "/plugin/sepe/src/sepe-administration-menu.php",
-        "name" => $plugin->get_lang('MenuSepe'),
+        'url' => '/plugin/sepe/src/sepe-administration-menu.php',
+        'name' => $plugin->get_lang('MenuSepe'),
     ];
     $tpl = new Template($templateName);
 

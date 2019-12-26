@@ -1,4 +1,5 @@
 <?php
+
 /* For licensing terms, see /license.txt */
 
 /**
@@ -13,8 +14,8 @@ $_cid = 0;
 if (!empty($_POST)) {
     $check = Security::check_token('post');
     if ($check) {
-        $companyTutorId = (!empty($_POST['company_tutor_id']) ? intval($_POST['company_tutor_id']) : null);
-        $trainingTutorId = (!empty($_POST['training_tutor_id']) ? intval($_POST['training_tutor_id']) : null);
+        $companyTutorId = (!empty($_POST['company_tutor_id']) ? (int) ($_POST['company_tutor_id']) : null);
+        $trainingTutorId = (!empty($_POST['training_tutor_id']) ? (int) ($_POST['training_tutor_id']) : null);
         $tutorCompanyDocumentType = Database::escape_string(trim($_POST['tutor_company_document_type']));
         $tutorCompanyDocumentNumber = Database::escape_string(trim($_POST['tutor_company_document_number']));
         $tutorCompanyDocumentLetter = Database::escape_string(trim($_POST['tutor_company_document_letter']));
@@ -23,18 +24,18 @@ if (!empty($_POST)) {
         $tutorTrainingDocumentNumber = Database::escape_string(trim($_POST['tutor_training_document_number']));
         $tutorTrainingDocumentLetter = Database::escape_string(trim($_POST['tutor_training_document_letter']));
         $tutorTrainingAlias = Database::escape_string(trim($_POST['tutor_training_alias']));
-        $newParticipant = intval($_POST['new_participant']);
-        $platformUserId = intval($_POST['platform_user_id']);
+        $newParticipant = (int) ($_POST['new_participant']);
+        $platformUserId = (int) ($_POST['platform_user_id']);
         $documentType = Database::escape_string(trim($_POST['document_type']));
         $documentNumber = Database::escape_string(trim($_POST['document_number']));
         $documentLetter = Database::escape_string(trim($_POST['document_letter']));
         $keyCompetence = Database::escape_string(trim($_POST['key_competence']));
         $contractId = Database::escape_string(trim($_POST['contract_id']));
         $companyFiscalNumber = Database::escape_string(trim($_POST['company_fiscal_number']));
-        $participantId = intval($_POST['participant_id']);
-        $actionId = intval($_POST['action_id']);
+        $participantId = (int) ($_POST['participant_id']);
+        $actionId = (int) ($_POST['action_id']);
 
-        if (isset($companyTutorId) && $companyTutorId == 0) {
+        if (isset($companyTutorId) && 0 == $companyTutorId) {
             $sql = "SELECT * FROM $tableTutorCompany 
                     WHERE document_type = '".$tutorCompanyDocumentType."' 
                     AND document_number = '".$tutorCompanyDocumentNumber."' 
@@ -56,7 +57,7 @@ if (!empty($_POST)) {
             }
         }
 
-        if (isset($trainingTutorId) && $trainingTutorId == 0) {
+        if (isset($trainingTutorId) && 0 == $trainingTutorId) {
             $sql = "SELECT * FROM $tableTutorCompany 
                     WHERE 
                         document_type = '".$tutorTrainingDocumentType."' AND 
@@ -80,7 +81,7 @@ if (!empty($_POST)) {
             }
         }
 
-        if (isset($newParticipant) && $newParticipant != 1) {
+        if (isset($newParticipant) && 1 != $newParticipant) {
             $sql = "UPDATE $tableSepeParticipants SET 
                         platform_user_id = '".$platformUserId."', 
                         document_type = '".$documentType."', 
@@ -115,17 +116,17 @@ if (!empty($_POST)) {
         if (!$res) {
             $_SESSION['sepe_message_error'] = $plugin->get_lang('NoSaveChange');
         } else {
-            if ($newParticipant == 1) {
+            if (1 == $newParticipant) {
                 $participantId = Database::insert_id();
             }
             // Update tutors
-            if (is_null($companyTutorId)) {
+            if (null === $companyTutorId) {
                 $sql = "UPDATE $tableSepeParticipants SET company_tutor_id = NULL WHERE id = $participantId";
             } else {
                 $sql = "UPDATE $tableSepeParticipants SET company_tutor_id = $companyTutorId WHERE id = $participantId";
             }
             Database::query($sql);
-            if (is_null($trainingTutorId)) {
+            if (null === $trainingTutorId) {
                 $sql = "UPDATE $tableSepeParticipants SET training_tutor_id = NULL WHERE id = $participantId";
             } else {
                 $sql = "UPDATE $tableSepeParticipants SET training_tutor_id = $trainingTutorId WHERE id = $participantId";
@@ -141,7 +142,7 @@ if (!empty($_POST)) {
                         ) VALUES (
                             '".$platformUserId."',
                             '".$actionId."',
-                            '".date("Y-m-d H:i:s")."'
+                            '".date('Y-m-d H:i:s')."'
                         );";
             } else {
                 $sql = "INSERT INTO $tableSepeLogChangeParticipant (
@@ -151,24 +152,24 @@ if (!empty($_POST)) {
                         ) VALUES (
                             '".$platformUserId."',
                             '".$actionId."',
-                            '".date("Y-m-d H:i:s")."'
+                            '".date('Y-m-d H:i:s')."'
                         );";
             }
             $res = Database::query($sql);
             $_SESSION['sepe_message_info'] = $plugin->get_lang('SaveChange');
         }
         session_write_close();
-        header("Location: participant-action-edit.php?new_participant=0&participant_id=".$participantId."&action_id=".$actionId);
+        header('Location: participant-action-edit.php?new_participant=0&participant_id='.$participantId.'&action_id='.$actionId);
         exit;
     } else {
-        $participantId = intval($_POST['participant_id']);
-        $actionId = intval($_POST['action_id']);
-        $newParticipant = intval($_POST['new_participant']);
+        $participantId = (int) ($_POST['participant_id']);
+        $actionId = (int) ($_POST['action_id']);
+        $newParticipant = (int) ($_POST['new_participant']);
         Security::clear_token();
         $token = Security::get_token();
         $_SESSION['sepe_message_error'] = $plugin->get_lang('ProblemToken');
         session_write_close();
-        header("Location: participant-action-edit.php?new_participant=".$newParticipant."&participant_id=".$participantId."&action_id=".$actionId);
+        header('Location: participant-action-edit.php?new_participant='.$newParticipant.'&participant_id='.$participantId.'&action_id='.$actionId);
         exit;
     }
 } else {
@@ -176,21 +177,21 @@ if (!empty($_POST)) {
 }
 
 if (api_is_platform_admin()) {
-    $actionId = intval($_GET['action_id']);
+    $actionId = (int) ($_GET['action_id']);
     $courseId = getCourse($actionId);
     $interbreadcrumb[] = [
-        "url" => "/plugin/sepe/src/sepe-administration-menu.php",
-        "name" => $plugin->get_lang('MenuSepe'),
+        'url' => '/plugin/sepe/src/sepe-administration-menu.php',
+        'name' => $plugin->get_lang('MenuSepe'),
     ];
     $interbreadcrumb[] = [
-        "url" => "formative-actions-list.php",
-        "name" => $plugin->get_lang('FormativesActionsList'),
+        'url' => 'formative-actions-list.php',
+        'name' => $plugin->get_lang('FormativesActionsList'),
     ];
     $interbreadcrumb[] = [
-        "url" => "formative-action.php?cid=".$courseId,
-        "name" => $plugin->get_lang('FormativeAction'),
+        'url' => 'formative-action.php?cid='.$courseId,
+        'name' => $plugin->get_lang('FormativeAction'),
     ];
-    if (isset($_GET['new_participant']) && intval($_GET['new_participant']) == 1) {
+    if (isset($_GET['new_participant']) && 1 == (int) ($_GET['new_participant'])) {
         $templateName = $plugin->get_lang('NewParticipantAction');
         $tpl = new Template($templateName);
         $tpl->assign('action_id', $actionId);
@@ -206,11 +207,11 @@ if (api_is_platform_admin()) {
         $tpl->assign('new_participant', '0');
         $tpl->assign('participant_id', (int) $_GET['participant_id']);
 
-        if ($info['platform_user_id'] != 0) {
+        if (0 != $info['platform_user_id']) {
             $infoUserPlatform = api_get_user_info($info['platform_user_id']);
             $tpl->assign('info_user_platform', $infoUserPlatform);
         }
-        $listParticipantSpecialty = listParticipantSpecialty(intval($_GET['participant_id']));
+        $listParticipantSpecialty = listParticipantSpecialty((int) ($_GET['participant_id']));
         $tpl->assign('listParticipantSpecialty', $listParticipantSpecialty);
     }
     $courseCode = getCourseCode($actionId);
@@ -220,7 +221,7 @@ if (api_is_platform_admin()) {
     foreach ($listStudent as $value) {
         $sql = "SELECT 1 FROM $tableSepeParticipants WHERE platform_user_id = '".$value['user_id']."';";
         $res = Database::query($sql);
-        if (Database::num_rows($res) == 0) {
+        if (0 == Database::num_rows($res)) {
             $listStudentInfo[] = api_get_user_info($value['user_id']);
         }
     }

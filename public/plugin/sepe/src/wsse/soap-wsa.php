@@ -1,6 +1,6 @@
 <?php
 /**
- * soap-wsa.php
+ * soap-wsa.php.
  *
  * Copyright (c) 2007, Robert Richards <rrichards@ctindustries.net>.
  * All rights reserved.
@@ -37,17 +37,19 @@
  * @author     Robert Richards <rrichards@ctindustries.net>
  * @copyright  2007 Robert Richards <rrichards@ctindustries.net>
  * @license    http://www.opensource.org/licenses/bsd-license.php  BSD License
+ *
  * @version    1.0.0
  */
 
 /**
- * Class WSASoap
+ * Class WSASoap.
  */
 class WSASoap
 {
     const WSANS = 'http://schemas.xmlsoap.org/ws/2004/08/addressing';
     const WSAPFX = 'wsa';
-    private $soapNS, $soapPFX;
+    private $soapNS;
+    private $soapPFX;
     private $soapDoc = null;
     private $envelope = null;
     private $SOAPXPath = null;
@@ -56,7 +58,7 @@ class WSASoap
 
     private function locateHeader()
     {
-        if ($this->header == null) {
+        if (null == $this->header) {
             $headers = $this->SOAPXPath->query('//wssoap:Envelope/wssoap:Header');
             $header = $headers->item(0);
             if (!$header) {
@@ -79,7 +81,7 @@ class WSASoap
         $this->SOAPXPath->registerNamespace('wssoap', $this->soapNS);
         $this->SOAPXPath->registerNamespace('wswsa', self::WSANS);
 
-        $this->envelope->setAttributeNS("http://www.w3.org/2000/xmlns/", 'xmlns:'.self::WSAPFX, self::WSANS);
+        $this->envelope->setAttributeNS('http://www.w3.org/2000/xmlns/', 'xmlns:'.self::WSAPFX, self::WSANS);
         $this->locateHeader();
     }
 
@@ -97,26 +99,25 @@ class WSASoap
         /* Add the WSA To */
         $header = $this->locateHeader();
 
-        $nodeTo = $this->soapDoc->createElementNS(WSASoap::WSANS, WSASoap::WSAPFX.':To', $location);
+        $nodeTo = $this->soapDoc->createElementNS(self::WSANS, self::WSAPFX.':To', $location);
         $header->appendChild($nodeTo);
     }
 
     private function createID()
     {
         $uuid = md5(uniqid(rand(), true));
-        $guid = 'uudi:'.substr($uuid, 0, 8)."-".
-            substr($uuid, 8, 4)."-".
-            substr($uuid, 12, 4)."-".
-            substr($uuid, 16, 4)."-".
-            substr($uuid, 20, 12);
 
-        return $guid;
+        return 'uudi:'.substr($uuid, 0, 8).'-'.
+            substr($uuid, 8, 4).'-'.
+            substr($uuid, 12, 4).'-'.
+            substr($uuid, 16, 4).'-'.
+            substr($uuid, 20, 12);
     }
 
     public function addMessageID($id = null)
     {
         /* Add the WSA MessageID or return existing ID */
-        if (!is_null($this->messageID)) {
+        if (null !== $this->messageID) {
             return $this->messageID;
         }
 
@@ -134,7 +135,7 @@ class WSASoap
     public function addReplyTo($address = null)
     {
         /* Create Message ID is not already added - required for ReplyTo */
-        if (is_null($this->messageID)) {
+        if (null === $this->messageID) {
             $this->addMessageID();
         }
         /* Add the WSA ReplyTo */
@@ -165,4 +166,3 @@ class WSASoap
         return $this->soapDoc->save($file);
     }
 }
-

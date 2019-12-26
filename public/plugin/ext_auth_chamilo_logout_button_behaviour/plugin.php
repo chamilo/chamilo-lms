@@ -3,7 +3,6 @@
  * This script is a configuration file for the date plugin. You can use it as a master for other platform plugins (course plugins are slightly different).
  * These settings will be used in the administration interface for plugins (Chamilo configuration settings->Plugins).
  *
- * @package chamilo.plugin
  *
  * @author Julio Montoya <gugli100@gmail.com>
  */
@@ -15,7 +14,7 @@
 $plugin_info['title'] = 'Enable or disable logout button';
 
 //the comments that go with the plugin
-$plugin_info['comment'] = "If you use some other authentication than local Chamilo authentication, you may have to disable the Chamilo logout button and give users information about your SSO logout.";
+$plugin_info['comment'] = 'If you use some other authentication than local Chamilo authentication, you may have to disable the Chamilo logout button and give users information about your SSO logout.';
 //the plugin version
 $plugin_info['version'] = '1.0';
 //the plugin author
@@ -25,12 +24,12 @@ return;
 
 //the plugin configuration
 $form = new FormValidator('eaclbb_form');
-$form->addElement("html", "<div class='normal-message'>Fill the text boxes below to overwrite the default values used in this plugin</div>");
+$form->addElement('html', "<div class='normal-message'>Fill the text boxes below to overwrite the default values used in this plugin</div>");
 $form->addElement('text', 'eaclbb_form_link_url', 'Page to load when clicking on the logout button');
 $form->addElement('text', 'eaclbb_form_link_infobulle', 'Tooltip text for the logout button (displayed on mouseover)');
-$form->addElement('checkbox', 'eaclbb_form_link_image', "Display the logout button disabled (black and white)", "", ['checked' => true]);
-$form->addElement('checkbox', 'eaclbb_form_alert_onoff', "Display an alert when clicking on the logout button", "", ['checked' => true]);
-$form->addElement('text', 'eaclbb_form_alert_text', "Text displayed in the alert box when clickng on the logout button (if checkbox above has been checked).");
+$form->addElement('checkbox', 'eaclbb_form_link_image', 'Display the logout button disabled (black and white)', '', ['checked' => true]);
+$form->addElement('checkbox', 'eaclbb_form_alert_onoff', 'Display an alert when clicking on the logout button', '', ['checked' => true]);
+$form->addElement('text', 'eaclbb_form_alert_text', 'Text displayed in the alert box when clickng on the logout button (if checkbox above has been checked).');
 
 $form->addButtonSave(get_lang('Save'), 'submit_button');
 //get default value for form

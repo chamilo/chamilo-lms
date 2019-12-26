@@ -1,6 +1,6 @@
 <?php
 /**
- * soap-server-wsse.php
+ * soap-server-wsse.php.
  *
  * Copyright (c) 2007, Robert Richards <rrichards@ctindustries.net>.
  * All rights reserved.
@@ -37,14 +37,13 @@
  * @author     Robert Richards <rrichards@ctindustries.net>
  * @copyright  2007 Robert Richards <rrichards@ctindustries.net>
  * @license    http://www.opensource.org/licenses/bsd-license.php  BSD License
+ *
  * @version    1.0.0
  */
-
 use RobRichards\XMLSecLibs\XMLSecurityDSig;
-use RobRichards\XMLSecLibs\XMLSecurityKey;
 
 /**
- * Class WSSESoapServer
+ * Class WSSESoapServer.
  */
 class WSSESoapServer
 {
@@ -53,7 +52,8 @@ class WSSESoapServer
     const WSUNS = 'http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-wssecurity-utility-1.0.xsd';
     const WSSEPFX = 'wsse';
     const WSUPFX = 'wsu';
-    private $soapNS, $soapPFX;
+    private $soapNS;
+    private $soapPFX;
     private $soapDoc = null;
     private $envelope = null;
     private $SOAPXPath = null;
@@ -63,7 +63,7 @@ class WSSESoapServer
     private function locateSecurityHeader($setActor = null)
     {
         $wsNamespace = null;
-        if ($this->secNode == null) {
+        if (null == $this->secNode) {
             $secnode = null;
             $headers = $this->SOAPXPath->query('//wssoap:Envelope/wssoap:Header');
             if ($header = $headers->item(0)) {
@@ -71,11 +71,12 @@ class WSSESoapServer
 
                 foreach ($secnodes as $node) {
                     $nsURI = $node->namespaceURI;
-                    if (($nsURI == self::WSSENS) || ($nsURI == self::WSSENS_2003)) {
+                    if ((self::WSSENS == $nsURI) || (self::WSSENS_2003 == $nsURI)) {
                         $actor = $node->getAttributeNS($this->soapNS, 'actor');
                         if (empty($actor) || ($actor == $setActor)) {
                             $secnode = $node;
                             $wsNamespace = $nsURI;
+
                             break;
                         }
                     }
@@ -116,7 +117,7 @@ class WSSESoapServer
         $retVal = $objXMLSecDSig->validateReference();
 
         if (!$retVal) {
-            throw new Exception("Validation Failed");
+            throw new Exception('Validation Failed');
         }
 
         $key = null;
@@ -129,15 +130,15 @@ class WSSESoapServer
         }
 
         if (empty($objKey)) {
-            throw new Exception("Error loading key to handle Signature");
+            throw new Exception('Error loading key to handle Signature');
         }
         do {
             if (empty($objKey->key)) {
                 $this->SOAPXPath->registerNamespace('xmlsecdsig', XMLSecurityDSig::XMLDSIGNS);
-                $query = "./xmlsecdsig:KeyInfo/wswsse:SecurityTokenReference/wswsse:Reference";
+                $query = './xmlsecdsig:KeyInfo/wswsse:SecurityTokenReference/wswsse:Reference';
                 $nodeset = $this->SOAPXPath->query($query, $refNode);
                 if ($encmeth = $nodeset->item(0)) {
-                    if ($uri = $encmeth->getAttribute("URI")) {
+                    if ($uri = $encmeth->getAttribute('URI')) {
                         $arUrl = parse_url($uri);
 
                         if (empty($arUrl['path']) && ($identifier = $arUrl['fragment'])) {
@@ -145,21 +146,23 @@ class WSSESoapServer
                             $nodeset = $this->SOAPXPath->query($query);
                             if ($encmeth = $nodeset->item(0)) {
                                 $x509cert = $encmeth->textContent;
-                                $x509cert = str_replace(array("\r", "\n"), "", $x509cert);
+                                $x509cert = str_replace(["\r", "\n"], '', $x509cert);
                                 $x509cert = "-----BEGIN CERTIFICATE-----\n".chunk_split($x509cert, 64, "\n")."-----END CERTIFICATE-----\n";
 
                                 $objKey->loadKey($x509cert);
+
                                 break;
                             }
                         }
                     }
                 }
-                throw new Exception("Error loading key to handle Signature");
-            }
-        } while(0);
 
-        if (! $objXMLSecDSig->verify($objKey)) {
-            throw new Exception("Unable to validate Signature");
+                throw new Exception('Error loading key to handle Signature');
+            }
+        } while (0);
+
+        if (!$objXMLSecDSig->verify($objKey)) {
+            throw new Exception('Unable to validate Signature');
         }
 
         return true;
@@ -174,7 +177,7 @@ class WSSESoapServer
         while ($node) {
             $nextNode = $node->nextSibling;
             switch ($node->localName) {
-                case "Signature":
+                case 'Signature':
                     if ($this->processSignature($node)) {
                         if ($node->parentNode) {
                             $node->parentNode->removeChild($node);

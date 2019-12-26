@@ -122,7 +122,10 @@ final class IllustrationRepository extends ResourceRepository implements Resourc
         }
 
         //$this->addResourceToEveryone($illustrationNode);
-        return $this->addFile($illustration, $uploadFile);
+        $file = $this->addFile($illustration, $uploadFile);
+        $em->flush();
+
+        return $file;
     }
 
     public function getIllustrationNodeFromParent(ResourceNode $resourceNode): ?ResourceNode

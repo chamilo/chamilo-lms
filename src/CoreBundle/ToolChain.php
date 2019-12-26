@@ -14,7 +14,6 @@ use Chamilo\CoreBundle\Tool\AbstractTool;
 use Chamilo\CourseBundle\Entity\CTool;
 use Chamilo\CourseBundle\Repository\CToolRepository;
 use Chamilo\SettingsBundle\Manager\SettingsManager;
-use Chamilo\UserBundle\Entity\User;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\PropertyAccess\Exception\InvalidArgumentException;
 use Symfony\Component\Security\Core\Security;
@@ -199,7 +198,6 @@ class ToolChain
                 ->setCategory($tool->getCategory())
             ;
 
-            //$this->toolRepository->createNodeForResource($courseTool, $user, $course->getResourceNode());
             $toolRepository->addResourceToCourse($courseTool, ResourceLink::VISIBILITY_PUBLISHED, $user, $course);
             $course->addTools($courseTool);
         }

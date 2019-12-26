@@ -2810,11 +2810,11 @@ function store_thread(
 
     $repo = Container::getForumThreadRepository();
     $em = $repo->getEntityManager();
-    //$em->persist($thread);
-    $resourceNode = $repo->createNodeForResource($thread, $user, $forum->getResourceNode());
-    $repo->addResourceNodeToCourse(
-        $resourceNode,
+    $repo->addResourceToCourseWithParent(
+        $thread,
+        $forum->getResourceNode(),
         ResourceLink::VISIBILITY_PUBLISHED,
+        $user,
         $course,
         $session,
         null
@@ -2924,16 +2924,15 @@ function store_thread(
 
     $repo = Container::getForumPostRepository();
     $em = $repo->getEntityManager();
-    $resourceNode = $repo->createNodeForResource($post, $user, $thread->getResourceNode());
-    $em->persist($resourceNode);
-    $repo->addResourceNodeToCourse(
+    $repo->addResourceToCourseWithParent(
         $resourceNode,
+        $thread->getResourceNode(),
         ResourceLink::VISIBILITY_PUBLISHED,
+        $user,
         $course,
         $session,
         null
     );
-    $em->persist($post);
     $em->flush();
 
     $postId = $post->getIid();
@@ -3952,11 +3951,12 @@ function store_reply(CForumForum $current_forum, CForumThread $thread, $values, 
         $session = api_get_session_entity();
 
         $em = $repo->getEntityManager();
-        //$em->persist($thread);
-        $resourceNode = $repo->createNodeForResource($post, $user, $thread->getResourceNode());
-        $repo->addResourceNodeToCourse(
+
+        $repo->addResourceToCourseWithParent(
             $resourceNode,
+            $thread->getResourceNode(),
             ResourceLink::VISIBILITY_PUBLISHED,
+            $user,
             $course,
             $session,
             null

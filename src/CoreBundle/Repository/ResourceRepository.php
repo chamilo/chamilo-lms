@@ -69,6 +69,7 @@ class ResourceRepository extends BaseEntityRepository
     /** @var RouterInterface */
     protected $router;
 
+    /** @var ResourceNodeRepository */
     protected $resourceNodeRepository;
 
     /**
@@ -81,6 +82,7 @@ class ResourceRepository extends BaseEntityRepository
 
     /** @var SlugifyInterface */
     protected $slugify;
+
     /** @var ToolChain */
     protected $toolChain;
 
@@ -175,7 +177,7 @@ class ResourceRepository extends BaseEntityRepository
      *
      * @return ResourceInterface
      */
-    public function find($id, $lockMode = null, $lockVersion = null)
+    public function find($id, $lockMode = null, $lockVersion = null): ?ResourceInterface
     {
         return $this->getRepository()->find($id);
     }
@@ -183,44 +185,6 @@ class ResourceRepository extends BaseEntityRepository
     public function findOneBy(array $criteria, array $orderBy = null): ?ResourceInterface
     {
         return $this->getRepository()->findOneBy($criteria, $orderBy);
-    }
-
-    public function createNodeForResource(ResourceInterface $resource, User $creator, ResourceNode $parent = null, UploadedFile $file = null): ResourceNode
-    {
-        $em = $this->getEntityManager();
-
-        $resourceType = $this->getResourceType();
-        $resourceNode = new ResourceNode();
-        $resourceName = $resource->getResourceName();
-        $extension = $this->slugify->slugify(pathinfo($resourceName, PATHINFO_EXTENSION));
-
-        if (empty($extension)) {
-            $slug = $this->slugify->slugify($resourceName);
-        } else {
-            $originalExtension = pathinfo($resourceName, PATHINFO_EXTENSION);
-            $originalBasename = \basename($resourceName, $originalExtension);
-            $slug = sprintf('%s.%s', $this->slugify->slugify($originalBasename), $originalExtension);
-        }
-
-        $resourceNode
-            ->setSlug($slug)
-            ->setCreator($creator)
-            ->setResourceType($resourceType)
-        ;
-
-        if (null !== $parent) {
-            $resourceNode->setParent($parent);
-        }
-
-        $resource->setResourceNode($resourceNode);
-        $em->persist($resourceNode);
-        $em->persist($resource);
-
-        if (null !== $file) {
-            $this->addFile($resource, $file);
-        }
-
-        return $resourceNode;
     }
 
     public function updateNodeForResource(ResourceInterface $resource): ResourceNode
@@ -296,16 +260,16 @@ class ResourceRepository extends BaseEntityRepository
         return $this->createNodeForResource($resource, $creator, $parent);
     }
 
-    public function addResourceToCourse(AbstractResource $resource, int $visibility, User $creator, Course $course, Session $session = null, CGroupInfo $group = null)
+    public function addResourceToCourse(AbstractResource $resource, int $visibility, User $creator, Course $course, Session $session = null, CGroupInfo $group = null, UploadedFile $file = null)
     {
-        $node = $this->createNodeForResource($resource, $creator, $course->getResourceNode());
+        $node = $this->createNodeForResource($resource, $creator, $course->getResourceNode(), $file);
 
         $this->addResourceNodeToCourse($node, $visibility, $course, $session, $group);
     }
 
-    public function addResourceToCourseWithParent(AbstractResource $resource, ResourceNode $parentNode, int $visibility, User $creator, Course $course, Session $session = null, CGroupInfo $group = null)
+    public function addResourceToCourseWithParent(AbstractResource $resource, ResourceNode $parentNode, int $visibility, User $creator, Course $course, Session $session = null, CGroupInfo $group = null, UploadedFile $file = null)
     {
-        $node = $this->createNodeForResource($resource, $creator, $parentNode);
+        $node = $this->createNodeForResource($resource, $creator, $parentNode, $file);
 
         $this->addResourceNodeToCourse($node, $visibility, $course, $session, $group);
     }
@@ -774,6 +738,44 @@ class ResourceRepository extends BaseEntityRepository
     public function setVisibilityPending(AbstractResource $resource)
     {
         $this->setLinkVisibility($resource, ResourceLink::VISIBILITY_PENDING);
+    }
+
+    public function createNodeForResource(ResourceInterface $resource, User $creator, ResourceNode $parent = null, UploadedFile $file = null): ResourceNode
+    {
+        $em = $this->getEntityManager();
+
+        $resourceType = $this->getResourceType();
+        $resourceNode = new ResourceNode();
+        $resourceName = $resource->getResourceName();
+        $extension = $this->slugify->slugify(pathinfo($resourceName, PATHINFO_EXTENSION));
+
+        if (empty($extension)) {
+            $slug = $this->slugify->slugify($resourceName);
+        } else {
+            $originalExtension = pathinfo($resourceName, PATHINFO_EXTENSION);
+            $originalBasename = \basename($resourceName, $originalExtension);
+            $slug = sprintf('%s.%s', $this->slugify->slugify($originalBasename), $originalExtension);
+        }
+
+        $resourceNode
+            ->setSlug($slug)
+            ->setCreator($creator)
+            ->setResourceType($resourceType)
+        ;
+
+        if (null !== $parent) {
+            $resourceNode->setParent($parent);
+        }
+
+        $resource->setResourceNode($resourceNode);
+        $em->persist($resourceNode);
+        $em->persist($resource);
+
+        if (null !== $file) {
+            $this->addFile($resource, $file);
+        }
+
+        return $resourceNode;
     }
 
     private function setLinkVisibility(AbstractResource $resource, int $visibility, bool $recursive = true): bool

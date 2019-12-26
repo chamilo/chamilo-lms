@@ -1193,15 +1193,15 @@ class ResourceController extends AbstractResourceController implements CourseCon
                 $em->persist($newResource);
             }
 
-            $resourceNode = $repository->createNodeForResource($newResource, $this->getUser(), $parentNode, $file);
-            $em->persist($resourceNode);
-
-            $repository->addResourceNodeToCourse(
-                $resourceNode,
+            $repository->addResourceToCourseWithParent(
+                $newResource,
+                $parentNode,
                 ResourceLink::VISIBILITY_PUBLISHED,
+                $this->getUser(),
                 $course,
                 $session,
-                null
+                null,
+                $file
             );
 
             $em->flush();

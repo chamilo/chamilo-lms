@@ -95,15 +95,15 @@ class ResourceUploadController extends BlueimpController
                         ->setSize($file->getSize())
                     ;*/
 
-                    $em->persist($resource);
-                    $resourceNode = $repo->createNodeForResource($resource, $user, $parent, $file);
-
-                    $repo->addResourceNodeToCourse(
-                        $resourceNode,
+                    $repo->addResourceToCourseWithParent(
+                        $resource,
+                        $parent,
                         ResourceLink::VISIBILITY_PUBLISHED,
+                        $user,
                         $course,
                         $session,
-                        null
+                        null,
+                        $file
                     );
                     $em->flush();
                     // Finish uploading.

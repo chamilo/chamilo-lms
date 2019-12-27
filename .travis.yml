@@ -54,7 +54,8 @@ before_install:
 
   # Use default config
   - sudo apt-get update
-  - sudo apt-get install php php-mysql php-xml php-gd php-intl php-soap php-bcmath
+  #- sudo apt-get install php php-mysql php-xml php-gd php-intl php-soap php-bcmath
+  - sudo apt-get install php7.3 php7.3-mysql php7.3-xml php7.3-gd php7.3-intl php7.3-soap php7.3-bcmath
   #- sudo a2enmod rewrite actions fastcgi alias
 
   # Apache & php-fpm configuration

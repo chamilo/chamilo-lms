@@ -104,7 +104,7 @@ hr{
 }
 .download-app .links li {
     display: inline-block;
-    padding: 1rem;
+    padding: 0 .5rem;
 }
 #form-login label{
     display:none;
@@ -115,23 +115,24 @@ hr{
 }
 #demo-home{
     text-align: center;
-    margin-top: 1rem;
-    margin-bottom: 1rem;
-    padding: 1rem 0;
 }
 #demo-home .btn-demo{
-    background-color: #96BD0D;
-    border-color:  #96BD0D;
+    background-color: #162a83;
+    border-color:  #162a83;
     text-transform: uppercase;
     font-weight: bold;
     width: 250px;
-    margin-top: 1.5rem;
     padding: 1rem 2rem;
     font-size: 1.6rem;
 }
 #demo-home .btn-demo:hover{
     background-color: #6B1D82;
     border-color: #6B1D82;
+}
+#interaction .panel-default{
+    background-color: #ECECEC;
+    border-radius: 0;
+    border: none;
 }
 #carousel-announcement {
     min-height: auto;
@@ -343,7 +344,7 @@ footer #footer_right{
     border: 1px solid #19BF69;
 }
 .demostration{
-    text-align: left;
+    text-align: center;
 }
 .section-title{
     font-size: 18px;

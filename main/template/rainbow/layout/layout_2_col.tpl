@@ -191,27 +191,36 @@
                             <div class="col-md-6">
                                 <div id="demo-home">
                                     <h2 class="section-title">{{ 'TestDemoTitle' | get_lang  }}  </h2>
-                                    <div class="demostration">
-                                        <a href="{{ _p.web }}web/page-de-dmo-francais" class="btn btn-primary btn-demo">
-                                            {{ 'demo' | get_lang }}
-                                        </a>
+                                    <div class="panel panel-default">
+                                        <div class="panel-body">
+                                            <div class="demostration">
+                                                <a href="{{ _p.web }}web/page-de-dmo-francais" class="btn btn-primary btn-demo">
+                                                    {{ 'demo' | get_lang }}
+                                                </a>
+                                            </div>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
                             <div class="col-md-6">
                                 <div id="download-app" class="download-app">
-                                    <ul class="links">
-                                        <li>
-                                            <a href="https://play.google.com/store/apps/details?id=org.ofaj.parkur" target="_blank">
-                                                <img width="150px" src="{{ _p.web_css_theme }}images/googleplaystore.svg">
-                                            </a>
-                                        </li>
-                                        <li>
-                                            <a href="https://www.apple.com/fr/ios/app-store/" target="_blank">
-                                                <img width="150px" src="{{ _p.web_css_theme }}images/applestore.svg">
-                                            </a>
-                                        </li>
-                                    </ul>
+                                    <h2 class="section-title">{{ 'TestDemoTitle' | get_lang  }}  </h2>
+                                    <div class="panel panel-default">
+                                        <div class="panel-body">
+                                            <ul class="links">
+                                                <li>
+                                                    <a href="https://play.google.com/store/apps/details?id=org.ofaj.parkur" target="_blank">
+                                                        <img width="150px" src="{{ _p.web_css_theme }}images/googleplaystore.svg">
+                                                    </a>
+                                                </li>
+                                                <li>
+                                                    <a href="https://www.apple.com/fr/ios/app-store/" target="_blank">
+                                                        <img width="150px" src="{{ _p.web_css_theme }}images/applestore.svg">
+                                                    </a>
+                                                </li>
+                                            </ul>
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
                         </div>

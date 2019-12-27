@@ -217,6 +217,9 @@ services:
 
     chamilo_core.menu.nav_builder:
         class: Chamilo\CoreBundle\Menu\NavBuilder
+        arguments:
+            - '@knp_menu.factory'
+            - '@security.authorization_checker'
         calls:
             - [setContainer, ['@service_container']]
         tags:

@@ -63,14 +63,14 @@
         "sensiolabs/security-checker": "~6.0",
 
         "symfony/asset": "^4.0",
-        "symfony/dotenv": "^4.0",
+        "symfony/dotenv": "^5.0",
         "symfony/expression-language": "^4.0",
-        "symfony/flex": "^1.0",
+        "symfony/flex": "^1.6",
         "symfony/form": "^4.0",
         "symfony/framework-bundle": "^4.0",
         "symfony/http-kernel": "^4.0",
         "symfony/monolog-bundle": "^3.1",
-        "symfony/mailer": "^4.0",
+        "symfony/mailer": "^5.0",
         "symfony/polyfill-apcu": "^1.9",
         "symfony/requirements-checker": "^1.1",
         "symfony/security-bundle": "^4.0",
@@ -78,7 +78,7 @@
         "symfony/translation": "^4.0",
         "symfony/twig-bundle": "^4.0",
         "symfony/validator": "^4.0",
-        "symfony/webpack-encore-bundle": "^1.1",
+        "symfony/webpack-encore-bundle": "^1.7",
         "symfony/yaml": "^4.0",
 
         "tgalopin/html-sanitizer-bundle": "^1.1",
@@ -212,7 +212,7 @@
     "extra": {
         "symfony": {
             "allow-contrib": true,
-            "require": "4.4.*"
+            "require": "5.0.*"
         }
     }
 }

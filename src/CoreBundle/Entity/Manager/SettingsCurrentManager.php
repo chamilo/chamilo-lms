@@ -4,7 +4,7 @@
 
 namespace Chamilo\CoreBundle\Entity\Manager;
 
-use Sonata\CoreBundle\Model\BaseEntityManager;
+use Sonata\Doctrine\Entity\BaseEntityManager;
 
 /**
  * Class SettingsCurrentRepository.

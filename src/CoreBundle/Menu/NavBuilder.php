@@ -11,6 +11,7 @@ use Knp\Menu\FactoryInterface;
 use Knp\Menu\ItemInterface;
 use Symfony\Component\DependencyInjection\ContainerAwareInterface;
 use Symfony\Component\DependencyInjection\ContainerAwareTrait;
+use Symfony\Component\Security\Core\Authorization\AuthorizationChecker;
 
 /**
  * Class NavBuilder.
@@ -20,10 +21,12 @@ class NavBuilder implements ContainerAwareInterface
     use ContainerAwareTrait;
 
     private $factory;
+    private $checker;
 
-    public function __construct(FactoryInterface $factory)
+    public function __construct(FactoryInterface $factory, AuthorizationChecker $checker)
     {
         $this->factory = $factory;
+        $this->checker = $checker;
     }
 
     /**
@@ -60,7 +63,7 @@ class NavBuilder implements ContainerAwareInterface
     public function menuApp(array $options): ItemInterface
     {
         $container = $this->container;
-        $checker = $container->get('security.authorization_checker');
+        $checker = $this->checker;
         $translator = $container->get('translator');
         $router = $container->get('router');
         $factory = $this->factory;

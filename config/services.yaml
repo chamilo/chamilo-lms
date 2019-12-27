@@ -1,6 +1,7 @@
 # Put parameters here that don't need to change on each machine where the app is deployed
 # https://symfony.com/doc/current/best_practices/configuration.html#application-related-configuration
 parameters:
+    app_env: '%env(APP_ENV)%'
     password_encryption: '%env(APP_ENCRYPT_METHOD)%'
     secret: '%env(APP_SECRET)%'
     locale: '%env(APP_LOCALE)%'
@@ -19,7 +20,6 @@ parameters:
     glide_config:
         source: 'oneup_flysystem.resources_filesystem'
         cache: 'oneup_flysystem.cache_resources_filesystem'
-        #cache: 'var/cache/resource/'
 
     glide_media_filters:
         editor_thumbnail:
@@ -86,11 +86,6 @@ services:
         resource: '../src/ThemeBundle/*'
         exclude: '../src/ThemeBundle/{Entity,Migrations,Tests}'
         public: true
-
-    Chamilo\ThemeBundle\Controller\ExceptionController:
-        public: true
-        arguments:
-            $debug: '%kernel.debug%'
 
     Doctrine\ORM\EntityManager: "@doctrine.orm.default_entity_manager"
 
@@ -170,17 +165,10 @@ gregwar_captcha:
     height: 50
     length: 6
 
+cocur_slugify:
+    lowercase: true
+
 imports:
     - {resource: ../src/CoreBundle/Resources/config/services.yml}
     - {resource: ../src/PageBundle/Resources/config/services.yml}
     - {resource: ../vendor/knplabs/doctrine-behaviors/config/orm-services.yml}
-
-#sylius_resource:
-#    resources:
-#        app.exercise_category:
-#            driver: 'doctrine/orm'
-#            classes:
-#                model: 'Chamilo\CourseBundle\Entity\CExerciseCategory'
-
-cocur_slugify:
-    lowercase: true

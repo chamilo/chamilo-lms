@@ -7,15 +7,12 @@ use Chamilo\CoreBundle\Entity\Session as SessionEntity;
 use Chamilo\CoreBundle\Entity\SettingsCurrent;
 use Chamilo\CoreBundle\Framework\Container;
 use Chamilo\CourseBundle\Entity\CGroupInfo;
-use Chamilo\CourseBundle\Entity\CItemProperty;
 use Chamilo\ThemeBundle\Controller\ExceptionController;
 use Chamilo\UserBundle\Entity\User;
 use ChamiloSession as Session;
 use Symfony\Bridge\Twig\Mime\TemplatedEmail;
-use Symfony\Component\Debug\Exception\FlattenException;
 use Symfony\Component\Finder\Finder;
 use Symfony\Component\Mime\Address;
-use Symfony\Component\Mime\Email;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 
 /**
@@ -3658,23 +3655,10 @@ function api_not_allowed(
     $message = null,
     $responseCode = 0
 ) {
-    $debug = api_get_setting('server_type') === 'test';
-
-    // Default code is 403 forbidden
-    $responseCode = empty($responseCode) ? 403 : $responseCode;
     $message = empty($message) ? get_lang('You are not allowed') : $message;
+    Session::write('error_message', $message);
 
-    // Create new exception rendered by template:
-    // src/ThemeBundle/Resources/views/Exception/error.html.twig
-
-    // if error is 404 then the template is:
-    // src/ThemeBundle/Resources/views/Exception/error404.html.twig
-    $exception = new Exception($message);
-    $request = Container::getRequest();
-    $exception = FlattenException::create($exception, $responseCode);
-    $controller = new ExceptionController(Container::getTwig(), $debug);
-    $response = $controller->showAction($request, $exception);
-    $response->send();
+    header('Location: '.api_get_path(WEB_PUBLIC_PATH).'error');
     exit;
 }
 

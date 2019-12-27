@@ -21,17 +21,9 @@ sonata_page:
         - ^/connect/(.*)
         - ^/editor/(.*)
         - ^/login/(.*)
-        - ^/main(.*)
-        - ^/plugin(.*)
+        - ^/error
         - ^/packages/(.*)
         - ^/package/(.*)
-        - ^install
-        - ^/install/(.*)
-        - install.php
-        - install.php/(.*)
-        - install.php/packages/(.*)
-        - install.php/package/(.*)
-        - install.php/(.*)/(.*)
         - ^/bundles/(.*)
         - ^/_wdt/(.*)
         - ^/_profiler/(.*)

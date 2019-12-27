@@ -240,13 +240,16 @@ class GradebookDataGenerator
                                 }
                                 $score = AbstractLink::getCurrentUserRanking($userId, $rankingStudentList);
                             }
-                            //$score = AbstractLink::getCurrentUserRanking($userId, $item->entity->getUserScoreList());
                         } else {
                             if (!empty($studentList)) {
                                 $session_id = api_get_session_id();
                                 //$cats = $item->get_subcategories(null);
-                                $evals = $item->get_evaluations(null);
-                                $links = $item->get_links(null);
+                                $evals = [];
+                                $links = [];
+                                if ('C' === $item->get_item_type()) {
+                                    $evals = $item->get_evaluations(null);
+                                    $links = $item->get_links(null);
+                                }
                                 foreach ($studentList as $user) {
                                     $ressum = 0;
                                     $weightsum = 0;
@@ -304,16 +307,6 @@ class GradebookDataGenerator
                                         }
                                     }
 
-                                    /*$score = $this->build_result_column(
-                                        $user['user_id'],
-                                        $item,
-                                        $ignore_score_color,
-                                        true
-                                    );
-                                    if (!empty($score['score'][0])) {
-                                        $invalidateResults = false;
-                                    }*/
-
                                     if (!empty($ressum)) {
                                         $invalidateResults = false;
                                     }
@@ -321,9 +314,7 @@ class GradebookDataGenerator
                                     $rankingStudentList[$user['user_id']] = $ressum;
                                 }
                             }
-                            //error_log($item->get_id());
                             $score = AbstractLink::getCurrentUserRanking($userId, $rankingStudentList);
-                            //error_log(print_r($score, 1));
                         }
 
                         $row['ranking'] = $scoreDisplay->display_score(

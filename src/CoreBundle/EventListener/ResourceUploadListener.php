@@ -5,7 +5,6 @@
 namespace Chamilo\CoreBundle\EventListener;
 
 use Chamilo\CoreBundle\Entity\Resource\ResourceInterface;
-use Doctrine\Common\Persistence\ObjectManager;
 use Oneup\UploaderBundle\Event\PostPersistEvent;
 use Oneup\UploaderBundle\Uploader\Response\ResponseInterface;
 use Symfony\Component\Routing\RouterInterface;
@@ -15,10 +14,6 @@ use Symfony\Component\Routing\RouterInterface;
  */
 class ResourceUploadListener
 {
-    /**
-     * @var ObjectManager
-     */
-    //private $om;
     private $router;
 
     /**

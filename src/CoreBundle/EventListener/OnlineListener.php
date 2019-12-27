@@ -6,8 +6,8 @@ namespace Chamilo\CoreBundle\EventListener;
 
 use Chamilo\UserBundle\Entity\User;
 use DateTime;
-use Doctrine\Common\Persistence\ObjectManager;
-use Symfony\Component\HttpKernel\Event\FilterControllerEvent;
+use Doctrine\ORM\EntityManagerInterface;
+use Symfony\Component\HttpKernel\Event\ControllerEvent;
 use Symfony\Component\HttpKernel\HttpKernel;
 use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface;
 
@@ -20,7 +20,7 @@ class OnlineListener
     protected $context;
     protected $em;
 
-    public function __construct(TokenStorageInterface $context, ObjectManager $em)
+    public function __construct(TokenStorageInterface $context, EntityManagerInterface $em)
     {
         $this->em = $em;
         $this->context = $context;
@@ -29,7 +29,7 @@ class OnlineListener
     /**
      * Update the user "lastActivity" on each request.
      */
-    public function onCoreController(FilterControllerEvent $event)
+    public function onCoreController(ControllerEvent $event)
     {
         /*  Here we are checking that the current request is a "MASTER_REQUEST",
             and ignore any subrequest in the process (for example when doing a

@@ -3,7 +3,7 @@ translation:
     edit_in_place:
         enabled: true
         config_name: app
-        activator: php_translation.edit_in_place.activator
+        #activator: php_translation.edit_in_place.activator
     configs:
         app:
             dirs: ["%kernel.project_dir%/var/templates", "%kernel.project_dir%/src"]

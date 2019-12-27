@@ -63,7 +63,7 @@
         "sensiolabs/security-checker": "~6.0",
 
         "symfony/asset": "^4.0",
-        "symfony/dotenv": "^5.0",
+        "symfony/dotenv": "^4.0|^5.0",
         "symfony/expression-language": "^4.0",
         "symfony/flex": "^1.6",
         "symfony/form": "^4.0",
@@ -212,7 +212,7 @@
     "extra": {
         "symfony": {
             "allow-contrib": true,
-            "require": "5.0.*"
+            "require": "4.4.*"
         }
     }
 }

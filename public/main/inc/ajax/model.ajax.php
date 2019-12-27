@@ -511,7 +511,7 @@ switch ($action) {
         $count = $skill->getUserListSkillRankingCount();
         break;
     case 'get_course_announcements':
-        $count = AnnouncementManager::getAnnouncements(null, null, true);
+        $count = AnnouncementManager::getNumberAnnouncements();
         break;
     case 'get_work_teacher':
         require_once api_get_path(SYS_CODE_PATH).'work/work.lib.php';

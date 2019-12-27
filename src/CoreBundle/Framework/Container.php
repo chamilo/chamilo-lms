@@ -11,6 +11,7 @@ use Chamilo\CoreBundle\Repository\CourseCategoryRepository;
 use Chamilo\CoreBundle\Repository\CourseRepository;
 use Chamilo\CoreBundle\Repository\IllustrationRepository;
 use Chamilo\CoreBundle\ToolChain;
+use Chamilo\CourseBundle\Repository\CAnnouncementRepository;
 use Chamilo\CourseBundle\Repository\CCalendarEventRepository;
 use Chamilo\CourseBundle\Repository\CDocumentRepository;
 use Chamilo\CourseBundle\Repository\CExerciseCategoryRepository;
@@ -287,6 +288,14 @@ class Container
     public static function getUserManager()
     {
         return self::$userManager;
+    }
+
+    /**
+     * @return CAnnouncementRepository
+     */
+    public static function getAnnouncementRepository()
+    {
+        return self::$container->get('Chamilo\CourseBundle\Repository\CAnnouncementRepository');
     }
 
     /**

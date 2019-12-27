@@ -1,8 +1,7 @@
 dist: bionic
 language: php
 php:
-  7.2
-  #    7.3
+  7.3
 
 addons:
   apt:
@@ -24,7 +23,7 @@ cache:
 matrix:
   fast_finish: false
   include:
-    - php: 7.2
+    - php: 7.3
     #- php: 7.3
 
 env:

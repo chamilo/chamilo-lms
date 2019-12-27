@@ -13,9 +13,9 @@
     <div class="carousel-inner" role="listbox">
     {% for announcement in announcements %}
         <div class="item {% if loop.index0 == 0 %} active {% endif %}">
-<!--            <div class="carousel-caption">
+            <div class="carousel-caption">
                 {{ announcement.title }}
-            </div> -->
+            </div>
             <div class="carousel-content">
                 {% if announcement.readMore %}
                 <div class="block-text">
@@ -31,8 +31,7 @@
         </div>
     {% endfor %}
     </div>
-
-    <!-- Controls -->
+    <!-- Controls
     <a class="left carousel-control" href="#carousel-announcement" role="button" data-slide="prev">
         <span class="glyphicon glyphicon-chevron-left" aria-hidden="true"></span>
         <span class="sr-only">Previous</span>
@@ -41,4 +40,5 @@
         <span class="glyphicon glyphicon-chevron-right" aria-hidden="true"></span>
         <span class="sr-only">Next</span>
     </a>
+    -->
 </div>

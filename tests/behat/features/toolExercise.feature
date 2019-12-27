@@ -119,16 +119,16 @@ Feature: Exercise tool
     And I press "submitQuestion"
     Then I should see "Item added"
 
-    Scenario: Add question "Oral expression" to exercise created "Exercise 1"
-    Given I am on "/main/exercise/exercise.php?cid=1"
-    And I follow "Exercise 1"
-    And I follow "Edit"
-    And I follow "Oral expression"
-    When I fill in the following:
-      | questionName | Oral expression question |
-      | weighting | 10 |
-    And I press "submitQuestion"
-    Then I should see "Item added"
+#    Scenario: Add question "Oral expression" to exercise created "Exercise 1"
+#    Given I am on "/main/exercise/exercise.php?cid=1"
+#    And I follow "Exercise 1"
+#    And I follow "Edit"
+#    And I follow "Oral expression"
+#    When I fill in the following:
+#      | questionName | Oral expression question |
+#      | weighting | 10 |
+#    And I press "submitQuestion"
+#    Then I should see "Item added"
 
   Scenario: Add question "Exact answers combination" to exercise created "Exercise 1"
     Given I am on "/main/exercise/exercise.php?cid=1"

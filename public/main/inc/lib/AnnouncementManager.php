@@ -1,4 +1,5 @@
 <?php
+
 /* For licensing terms, see /license.txt */
 
 use Chamilo\CoreBundle\Entity\ExtraField as ExtraFieldEntity;
@@ -12,8 +13,6 @@ use Chamilo\CourseBundle\Entity\CItemProperty;
  * Include file with functions for the announcements module.
  *
  * @author jmontoya
- *
- * @package chamilo.announcements
  *
  * @todo use OOP
  */
@@ -321,7 +320,7 @@ class AnnouncementManager
      * @param int $userId
      * @param int $groupId
      *
-     * @return array
+     * @return CAnnouncement
      */
     public static function getAnnouncementInfoById(
         $announcementId,
@@ -330,6 +329,10 @@ class AnnouncementManager
         $groupId = 0
     ) {
         $announcementId = (int) $announcementId;
+
+        $repo = Container::getAnnouncementRepository();
+        return $repo->find($announcementId);
+
         $courseId = (int) $courseId;
         $userId = (int) $userId;
         $groupId = (int) $groupId;
@@ -425,26 +428,18 @@ class AnnouncementManager
             return '';
         }
 
-        global $charset;
-
         $html = '';
-        $result = self::getAnnouncementInfoById(
+        $course = api_get_course_entity(api_get_course_int_id());
+        $session = api_get_session_entity(api_get_session_id());
+
+        $announcement = self::getAnnouncementInfoById(
             $id,
             api_get_course_int_id(),
             api_get_user_id(),
             api_get_group_id()
         );
 
-        if (empty($result)) {
-            return '';
-        }
-
-        /** @var CAnnouncement $announcement */
-        $announcement = $result['announcement'];
-        /** @var CItemProperty $itemProperty */
-        $itemProperty = $result['item_property'];
-
-        if (empty($announcement) || empty($itemProperty)) {
+        if (empty($announcement)) {
             return '';
         }
 
@@ -462,7 +457,7 @@ class AnnouncementManager
 
             $image_visibility = 'invisible';
             $alt_visibility = get_lang('Visible');
-            if ($itemProperty->getVisibility() === 1) {
+            if ($announcement->isVisible($course, $session)) {
                 $image_visibility = 'visible';
                 $alt_visibility = get_lang('Hide');
             }
@@ -471,7 +466,7 @@ class AnnouncementManager
                 Display::return_icon($image_visibility.'.png', $alt_visibility, '', ICON_SIZE_SMALL)."</a>";
 
             if (api_is_allowed_to_edit(false, true)) {
-                $modify_icons .= "<a href=\"".api_get_self()."?".api_get_cidreq()."&action=delete&id=".$id."&sec_token=".$stok."\" onclick=\"javascript:if(!confirm('".addslashes(api_htmlentities(get_lang('Please confirm your choice'), ENT_QUOTES, $charset))."')) return false;\">".
+                $modify_icons .= "<a href=\"".api_get_self()."?".api_get_cidreq()."&action=delete&id=".$id."&sec_token=".$stok."\" onclick=\"javascript:if(!confirm('".addslashes(api_htmlentities(get_lang('Please confirm your choice'), ENT_QUOTES))."')) return false;\">".
                     Display::return_icon('delete.png', get_lang('Delete'), '', ICON_SIZE_SMALL).
                     "</a>";
             }
@@ -490,7 +485,7 @@ class AnnouncementManager
         $html .= "<tr><td>$content</td></tr>";
         $html .= "<tr>";
         $html .= "<td class=\"announcements_datum\">".get_lang('Latest update')." : ";
-        $lastEdit = $itemProperty->getLasteditDate();
+        $lastEdit = $announcement->getResourceNode()->getUpdatedAt();
         $html .= Display::dateToStringAgoAndLongDate($lastEdit);
         $html .= "</td></tr>";
 
@@ -1311,6 +1306,8 @@ class AnnouncementManager
      */
     public static function sent_to($tool, $id)
     {
+        return [];
+
         $table = Database::get_course_table(TABLE_ITEM_PROPERTY);
         $tool = Database::escape_string($tool);
         $id = (int) $id;

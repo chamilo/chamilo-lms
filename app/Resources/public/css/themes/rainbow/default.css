@@ -61,10 +61,9 @@ hr{
     color: #FFF;
 }
 .home-information .item-icon .circle{
-    width: 75px;
+    width: 100%;
     height: 75px;
     line-height: 90px;
-    border-radius: 50%;
     background: #162A83;
     display: inline-block;
 }
@@ -514,11 +513,7 @@ footer #footer_right{
     background: #FFF;
 }
 .carousel-indicators {
-    bottom: 0;
-    display: none;
-}
-.carousel-content{
-    padding: 0 7rem;
+    bottom: -40px;
 }
 .navbar-inverse li a{
     line-height: 30px;
@@ -2344,4 +2339,22 @@ blockquote:before {
 
 .exercise_overview_options {
     background-color: white;
+}
+#carousel-announcement .carousel-caption{
+    color: #96bd0d;
+    font-weight: bold;
+    font-size: 2rem;
+    padding: 1rem;
+    margin: auto;
+}
+#carousel-announcement .carousel-content{
+    padding: 2rem 1rem;
+    margin: auto;
+    background-color: #ECECEC;
+}
+.carousel-control .glyphicon-chevron-left,
+.carousel-control .glyphicon-chevron-right,
+.carousel-control .icon-next,
+.carousel-control .icon-prev{
+    font-size: 20px;
 }

@@ -54,6 +54,9 @@ $interbreadcrumb[] = [
     'name' => get_lang('SurveyList'),
 ];
 
+Session::erase('answer_count');
+Session::erase('answer_list');
+
 // Getting the survey information
 if (!empty($_GET['survey_id'])) {
     $course_code = api_get_course_id();

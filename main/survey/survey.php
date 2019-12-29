@@ -277,6 +277,8 @@ while ($row = Database::fetch_array($result, 'ASSOC')) {
         $tool_name = get_lang('YesNo');
     } elseif ($row['type'] == 'multiplechoice') {
         $tool_name = get_lang('UniqueSelect');
+    } elseif ($row['type'] == 'multipleresponse') {
+        $tool_name = get_lang('MultipleChoiceMultipleAnswers');
     } else {
         $tool_name = get_lang(api_ucfirst(Security::remove_XSS($row['type'])));
     }

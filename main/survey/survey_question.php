@@ -366,19 +366,21 @@ class survey_question
         }
 
         if (!isset($_POST['delete_answer'])) {
+            // Make sure we have an array of answers
+            if (!isset($formData['answers'])) {
+                $formData['answers'] = [];
+            }
             // Check if no deleted answer remains at the end of the answers
             // array and add empty answers if the array is too short
-            if (isset($formData['answers'])) {
-                foreach ($formData['answers'] as $index => $data) {
-                    if ($index > $counter) {
-                        unset($formData['answers'][$index]);
-                    }
+            foreach ($formData['answers'] as $index => $data) {
+                if ($index > $counter) {
+                    unset($formData['answers'][$index]);
                 }
+            }
 
-                for ($i = 0; $i <= $counter; $i++) {
-                    if (!isset($formData['answers'][$i])) {
-                        $formData['answers'][$i] = '';
-                    }
+            for ($i = 0; $i <= $counter; $i++) {
+                if (!isset($formData['answers'][$i])) {
+                    $formData['answers'][$i] = '';
                 }
             }
         }

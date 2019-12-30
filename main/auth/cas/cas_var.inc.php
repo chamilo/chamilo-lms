@@ -47,15 +47,22 @@ if (api_is_cas_activated()) {
             phpCAS::setNoCasServerValidation();
         }
 
-        global $_configuration;
-        if (is_array($_configuration)
-            && array_key_exists('proxy_settings', $_configuration)) {
-            $proxySettings = $_configuration['proxy_settings'];
+        $proxySettings = api_get_configuration_value('proxy_settings');
+        if (false !== $proxySettings) {
             if (is_array($proxySettings) && array_key_exists('https', $proxySettings)) {
                 $https = $proxySettings['https'];
                 if (is_string($https) && !empty($https)) {
                     phpCAS::setExtraCurlOption(CURLOPT_PROXY, $https);
                 }
+            }
+        }
+
+        if (is_array($cas) && array_key_exists('fixedServiceURL', $cas)) {
+            $fixedServiceURL = $cas['fixedServiceURL'];
+            if (is_string($fixedServiceURL)) {
+                phpCAS::setFixedServiceURL($fixedServiceURL);
+            } else if (is_bool($fixedServiceURL) && $fixedServiceURL) {
+                phpCAS::setFixedServiceURL(api_get_configuration_value('root_web'));
             }
         }
     }

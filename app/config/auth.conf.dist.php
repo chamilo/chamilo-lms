@@ -120,4 +120,6 @@ $cas = [
     // 'verbose' => false,
     // 'debug' => '/var/log/cas_debug.log',
     'noCasServerValidation' => true, // set to false in production
+    // 'fixedServiceURL' => false, // false by default, set to either true or to the service URL string if needed
+    // sites might also need proxy_settings in configuration.php
 ];

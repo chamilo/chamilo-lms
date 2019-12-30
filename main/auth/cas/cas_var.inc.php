@@ -46,5 +46,17 @@ if (api_is_cas_activated()) {
         if (is_array($cas) && array_key_exists('noCasServerValidation', $cas) && $cas['noCasServerValidation']) {
             phpCAS::setNoCasServerValidation();
         }
+
+        global $_configuration;
+        if (is_array($_configuration)
+            && array_key_exists('proxy_settings', $_configuration)) {
+            $proxySettings = $_configuration['proxy_settings'];
+            if (is_array($proxySettings) && array_key_exists('https', $proxySettings)) {
+                $https = $proxySettings['https'];
+                if (is_string($https) && !empty($https)) {
+                    phpCAS::setExtraCurlOption(CURLOPT_PROXY, $https);
+                }
+            }
+        }
     }
 }

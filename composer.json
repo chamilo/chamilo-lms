@@ -86,7 +86,7 @@
 
         "symfony/apache-pack": "^1.0",
         "apy/datagrid-bundle" : "dev-master",
-        "chamilo/settings-bundle": "dev-master",
+        "chamilo/settings-bundle": "1.*",
         "sonata-project/admin-bundle": "~3.0",
         "sonata-project/block-bundle": "~3.0",
         "sonata-project/cache-bundle": "~2.0",

@@ -99,7 +99,7 @@ $extldap_user_correspondance = array(
         'department' => 'department',
         'country' => 'co',
         'bu' => 'Company',
-        'casUser' => 'uid',
+        'cas_user' => 'uid',
     )
 );
 

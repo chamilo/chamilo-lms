@@ -51,8 +51,11 @@ if (api_is_cas_activated()) {
         if (false !== $proxySettings) {
             if (is_array($proxySettings) && array_key_exists('https', $proxySettings)) {
                 $https = $proxySettings['https'];
-                if (is_string($https) && !empty($https)) {
-                    phpCAS::setExtraCurlOption(CURLOPT_PROXY, $https);
+                if (is_array($https) && array_key_exists('proxy', $https)) {
+                    $proxy = $https['proxy'];
+                    if (is_string($proxy) && !empty($proxy)) {
+                        phpCAS::setExtraCurlOption(CURLOPT_PROXY, $proxy);
+                    }
                 }
             }
         }

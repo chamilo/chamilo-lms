@@ -105,7 +105,18 @@ switch ($action) {
                 $advServices = $tool->getAdvantageServices();
 
                 if (LtiAssignmentGradesService::AGS_NONE !== $advServices['ags']) {
-                    createEvaluation($tool, $categories[0]);
+                    $agService = new LtiAssignmentGradesService($tool);
+                    $agService->createLineItem(
+                        [
+                            'label' => $tool->getName(),
+                            'scoreMaximum' => 100,
+                        ],
+                        $tool
+                    );
+
+                    Display::addFlash(
+                        Display::return_message($plugin->get_lang('GradebookEvaluationCreated'), 'success')
+                    );
                 }
             }
 
@@ -219,47 +230,3 @@ if (!empty($categories)) {
 $template->assign('actions', Display::toolbarAction('lti_toolbar', [$actions]));
 $template->assign('content', $content);
 $template->display_one_col_template();
-
-/**
- * @param ImsLtiTool $tool
- * @param Category   $gradebookCategory
- *
- * @throws \Doctrine\ORM\ORMException
- * @throws \Doctrine\ORM\OptimisticLockException
- * @throws \Doctrine\ORM\TransactionRequiredException
- */
-function createEvaluation(ImsLtiTool $tool, Category $gradebookCategory)
-{
-    $plugin = ImsLtiPlugin::create();
-
-    $weight = $gradebookCategory->getRemainingWeight();
-
-    $userId = api_get_user_id();
-    $courseCode = api_get_course_id();
-
-    $evaluation = new Evaluation();
-    $evaluation->set_user_id($userId);
-    $evaluation->set_category_id($gradebookCategory->get_id());
-    $evaluation->set_course_code($courseCode);
-    $evaluation->set_name($tool->getName());
-    $evaluation->set_description($tool->getDescription());
-    $evaluation->set_weight($weight);
-    $evaluation->set_max(100);
-    $evaluation->set_visible(1);
-    $evaluation->add();
-
-    $gradebookEvaluation = Database::getManager()
-        ->find('ChamiloCoreBundle:GradebookEvaluation', $evaluation->get_id());
-
-    $tool->setGradebookEval($gradebookEvaluation);
-
-    Display::addFlash(
-        Display::return_message($plugin->get_lang('GradebookEvaluationCreated'), 'success')
-    );
-
-    if (empty($weight)) {
-        Display::addFlash(
-            Display::return_message($plugin->get_lang('GradebookEvaluationWithEmptyWeight'), 'warning')
-        );
-    }
-}

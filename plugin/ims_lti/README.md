@@ -87,6 +87,22 @@ ALTER TABLE plugin_ims_lti_tool
     ADD login_url VARCHAR(255) DEFAULT NULL,
     ADD redirect_url VARCHAR(255) DEFAULT NULL,
     ADD advantage_services LONGTEXT DEFAULT NULL COMMENT '(DC2Type:json)';
+CREATE TABLE plugin_ims_lti_lineitem (
+    id INT AUTO_INCREMENT NOT NULL,
+    tool_id INT NOT NULL,
+    evaluation INT NOT NULL,
+    resource_id VARCHAR(255) DEFAULT NULL,
+    tag VARCHAR(255) DEFAULT NULL,
+    start_date DATETIME DEFAULT NULL,
+    end_date DATETIME DEFAULT NULL,
+    INDEX IDX_BA81BBF08F7B22CC (tool_id),
+    UNIQUE INDEX UNIQ_BA81BBF01323A575 (evaluation),
+    PRIMARY KEY(id)
+) DEFAULT CHARACTER SET utf8 COLLATE `utf8_unicode_ci` ENGINE = InnoDB;
+ALTER TABLE plugin_ims_lti_lineitem
+    ADD CONSTRAINT FK_BA81BBF08F7B22CC FOREIGN KEY (tool_id) REFERENCES plugin_ims_lti_tool (id);
+ALTER TABLE plugin_ims_lti_lineitem
+    ADD CONSTRAINT FK_BA81BBF01323A575 FOREIGN KEY (evaluation) REFERENCES gradebook_evaluation (id);
 ```
 
 ## To v1.5.1

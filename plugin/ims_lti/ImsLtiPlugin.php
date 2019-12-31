@@ -221,6 +221,20 @@ class ImsLtiPlugin extends Plugin
                 REFERENCES plugin_ims_lti_tool (id) ON DELETE CASCADE",
             "ALTER TABLE plugin_ims_lti_token
                 ADD CONSTRAINT FK_F7B5692F8F7B22CC FOREIGN KEY (tool_id) REFERENCES plugin_ims_lti_tool (id)",
+            "CREATE TABLE plugin_ims_lti_lineitem (
+                    id INT AUTO_INCREMENT NOT NULL,
+                    tool_id INT NOT NULL,
+                    evaluation INT NOT NULL,
+                    resource_id VARCHAR(255) DEFAULT NULL,
+                    tag VARCHAR(255) DEFAULT NULL,
+                    start_date DATETIME DEFAULT NULL,
+                    end_date DATETIME DEFAULT NULL,
+                    INDEX IDX_BA81BBF08F7B22CC (tool_id),
+                    UNIQUE INDEX UNIQ_BA81BBF01323A575 (evaluation),
+                    PRIMARY KEY(id)
+                ) DEFAULT CHARACTER SET utf8 COLLATE `utf8_unicode_ci` ENGINE = InnoDB",
+            "ALTER TABLE plugin_ims_lti_lineitem ADD CONSTRAINT FK_BA81BBF08F7B22CC FOREIGN KEY (tool_id) REFERENCES plugin_ims_lti_tool (id)",
+            "ALTER TABLE plugin_ims_lti_lineitem ADD CONSTRAINT FK_BA81BBF01323A575 FOREIGN KEY (evaluation) REFERENCES gradebook_evaluation (id)"
         ];
 
         foreach ($queries as $query) {
@@ -237,6 +251,7 @@ class ImsLtiPlugin extends Plugin
      */
     private function dropPluginTables()
     {
+        Database::query("DROP TABLE IF EXISTS plugin_ims_lti_lineitem");
         Database::query("DROP TABLE IF EXISTS plugin_ims_lti_token");
         Database::query("DROP TABLE IF EXISTS plugin_ims_lti_platform");
         Database::query("DROP TABLE IF EXISTS plugin_ims_lti_deployment");

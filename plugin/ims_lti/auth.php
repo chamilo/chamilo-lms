@@ -218,7 +218,7 @@ try {
                 ];
 
                 if ($tool->getGradebookEval()) {
-                    $agsClaim['lineitem'] = $webPluginPath."ims_lti/gradebook/service/lineitems.php?"
+                    $agsClaim['lineitem'] = $webPluginPath."ims_lti/gradebook/service/lineitem.php?"
                         .http_build_query(
                             [
                                 'c' => $course->getId(),

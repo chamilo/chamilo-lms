@@ -2,131 +2,130 @@
 /* For licensing terms, see /license.txt */
 
 use Chamilo\PluginBundle\Entity\ImsLti\ImsLtiTool;
+use Chamilo\PluginBundle\Entity\ImsLti\LineItem;
 
 require_once __DIR__.'/../../../../main/inc/global.inc.php';
 
 $httpAccept = $_SERVER['HTTP_ACCEPT'];
 $requestMethod = $_SERVER['REQUEST_METHOD'];
-$rawContent = file_get_contents('php://input');
+$requestUri = $_SERVER['REQUEST_URI'];
+$phpInput = file_get_contents('php://input');
 
-$cId = isset($_REQUEST['c']) ? (int) $_REQUEST['c'] : 0;
-$evalId = isset($_REQUEST['l']) ? (int) $_REQUEST['l'] : 0;
-$baseToolId = isset($_REQUEST['t']) ? (int) $_REQUEST['t'] : 0;
+$webPluginPath = api_get_path(WEB_PLUGIN_PATH);
 
 $em = Database::getManager();
-
-$course = api_get_course_entity($cId);
-
-if (!$course) {
-    exit();
-}
-
-$evaluation = $em
-    ->getRepository('ChamiloCoreBundle:GradebookEvaluation')
-    ->findOneBy(['id' => $evalId, 'courseCode' => $course->getCode()]);
-
 $ltiToolRepo = $em->getRepository('ChamiloPluginBundle:ImsLti\ImsLtiTool');
+
+$course = isset($_REQUEST['c']) ? api_get_course_entity($_REQUEST['c']) : null;
 /** @var ImsLtiTool $tool */
-$baseTool = $ltiToolRepo->find($baseToolId);
+$tool = isset($_REQUEST['t']) ? $ltiToolRepo->find($_REQUEST['t']) : null;
+$baseTool = null;
 
-if (!$baseTool) {
-    exit();
+if ($tool) {
+    $baseTool = $tool->getParent() ?: $tool;
 }
 
-$tool = $ltiToolRepo->findOneBy(['parent' => $baseTool, 'course' => $course]);
+$responseHeaders = [];
+$responseData = [];
+$jsonOptions = 0;
 
-if (!$tool) {
-    $tool = $ltiToolRepo->findOneBy(['course' => $course, 'id' => $baseTool->getId()]);
-}
+$service = new LtiAssignmentGradesService($tool);
 
-if (!$tool) {
-    exit();
-}
+try {
+    LtiAssignmentGradesService::validateLineItemsRequest($course, $tool, $httpAccept);
 
-$result = [];
-
-if ('application/vnd.ims.lis.v2.lineitemcontainer+json' === $httpAccept) {
-    switch ($requestMethod) {
-        case 'GET':
-            $lineItem = getLineItem($tool);
-
-            $result = [$lineItem];
-            break;
-    }
-} elseif ('application/vnd.ims.lis.v2.lineitem+json' === $httpAccept) {
     switch ($requestMethod) {
         case 'POST':
-            $requestData = json_decode($rawContent, true);
+            $requestData = json_decode($phpInput, true);
 
-            $lineItem = postLineItem($tool, $requestData['scoreMaximum'], $requestData['label']);
-            $result = $lineItem;
+            $lineItem = $service->createLineItem($requestData);
+
+            $requestData['id'] = $webPluginPath."ims_lti/gradebook/service/lineitem.php?"
+                .http_build_query(
+                    ['c' => $course->getId(), 'l' => $lineItem->getEvaluation()->getId(), 't' => $tool->getId()]
+                );
+
+            $responseData = $requestData;
+            $jsonOptions = JSON_UNESCAPED_SLASHES;
+            $responseHeaders['Content-Type'] = LtiAssignmentGradesService::TYPE_LINE_ITEM;
+            break;
+        case 'GET':
+        default:
+            $resourceLinkId = isset($_GET['resource_link_id']) ? $_GET['resource_link_id'] : '';
+            $resourceId = isset($_GET['resource_id']) ? $_GET['resource_id'] : '';
+            $tag = isset($_GET['tag']) ? $_GET['tag'] : '';
+            $page = isset($_GET['page']) ? (int) $_GET['page'] : 0;
+            $limit = isset($_GET['limit']) ? (int) $_GET['limit'] : 0;
+
+            $queryData = [
+                'c' => $course->getId(),
+                't' => $tool->getId(),
+                'resource_link_id' => $resourceLinkId,
+                'resource_id' => $resourceId,
+                'tag' => $tag,
+                'limit' => $limit,
+                'page' => $page,
+            ];
+
+            $lineItems = $tool->getLineItems($resourceLinkId, $resourceId, $tag, $limit, $page);
+
+            $headerLinks = [];
+
+            if ($limit > 0) {
+                $headerLinks['first'] = 1;
+
+                if ($page > 1) {
+                    $headerLinks['prev'] = $page - 1;
+                }
+
+                if ($page < $lineItems->count() / $limit) {
+                    $headerLinks['next'] = $page + 1;
+                }
+
+                $headerLinks['last'] = $lineItems->count() / $limit;
+
+                array_walk(
+                    $headerLinks,
+                    function (&$linkPage, $rel) use ($queryData, $webPluginPath) {
+                        $queryData['page'] = $rel;
+
+                        $url = "{$webPluginPath}ims_lti/gradebook/service/lineitems.php?"
+                            .http_build_query($queryData);
+
+                        $linkPage = '<'.$url.'>; rel="'.$rel.'"';
+                    }
+                );
+
+                $responseHeaders['Link'] = implode(', ', $headerLinks);
+            }
+
+            $responseData = [];
+
+            /** @var LineItem $lineItem */
+            foreach ($lineItems as $lineItem) {
+                $responseData[] = $service->getLineItemAsArray($lineItem);
+            }
+
+            $responseHeaders['Content-Type'] = LtiAssignmentGradesService::TYPE_LINE_ITEM_CONTAINER;
+
+            header("HTTP/1.0 201 Created");
             break;
     }
-}
+} catch (Exception $exception) {
+    $responseHeaders['Content-Type'] = 'application/json';
 
-header("Content-Type: $httpAccept");
-echo json_encode($result);
-
-/**
- * @param ImsLtiTool $tool
- *
- * @return array
- */
-function getLineItem(ImsLtiTool $tool)
-{
-    $evaluation = $tool->getGradebookEval();
-
-    if (!$evaluation) {
-        return [];
-    }
-
-    $webPluginPath = api_get_path(WEB_PLUGIN_PATH);
-
-    return [
-        'id' => "{$webPluginPath}ims_lti/gradebook/service/lineitems.php?"
-            .http_build_query(
-                [
-                    'c' => $tool->getCourse(),
-                    'l' => $evaluation->getId(),
-                    't' => $tool->getId(),
-                ]
-            ),
-        'scoreMaximum' => $evaluation->getMax(),
-        'label' => $evaluation->getName(),
-        'resourceId' => "eval-{$evaluation->getId()}",
-        'tag' => 'evaluation',
+    $responseData = [
+        'status' => $exception->getCode(),
+        'request' => [
+            'method' => $requestMethod,
+            'url' => $requestUri,
+            'accept' => $httpAccept,
+        ],
     ];
 }
 
-function postLineItem(ImsLtiTool $tool, $max, $label, $resourceId = '', $tag = '')
-{
-    $categories = Category::load(null, null, $tool->getCourse()->getCode());
-    $gradebookCategory = $categories[0];
-
-    $weight = $gradebookCategory->getRemainingWeight();
-
-    $em = Database::getManager();
-
-    $userId = api_get_user_id();
-    $courseCode = api_get_course_id();
-
-    $evaluation = new Evaluation();
-    $evaluation->set_user_id($userId);
-    $evaluation->set_category_id($gradebookCategory->get_id());
-    $evaluation->set_course_code($courseCode);
-    $evaluation->set_name($label);
-    $evaluation->set_description(null);
-    $evaluation->set_weight($weight);
-    $evaluation->set_max($max);
-    $evaluation->set_visible(1);
-    $evaluation->add();
-
-    $gradebookEvaluation = $em->find('ChamiloCoreBundle:GradebookEvaluation', $evaluation->get_id());
-
-    $tool->setGradebookEval($gradebookEvaluation);
-
-    $em->persist($tool);
-    $em->flush();
-
-    return getLineItem($tool);
+foreach ($responseHeaders as $headerName => $headerValue) {
+    header("$headerName: $headerValue");
 }
+
+echo json_encode($responseData, $jsonOptions);

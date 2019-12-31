@@ -6,6 +6,7 @@ namespace Chamilo\PluginBundle\Entity\ImsLti;
 use Chamilo\CoreBundle\Entity\Course;
 use Chamilo\CoreBundle\Entity\GradebookEvaluation;
 use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Criteria;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -141,6 +142,13 @@ class ImsLtiTool
     private $advantageServices;
 
     /**
+     * @var ArrayCollection
+     *
+     * @ORM\OneToMany(targetEntity="Chamilo\PluginBundle\Entity\ImsLti\LineItem", mappedBy="tool")
+     */
+    private $lineItems;
+
+    /**
      * ImsLtiTool constructor.
      */
     public function __construct()
@@ -154,6 +162,7 @@ class ImsLtiTool
         $this->children = new ArrayCollection();
         $this->consumerKey = null;
         $this->sharedSecret = null;
+        $this->lineItems = new ArrayCollection();
     }
 
     /**
@@ -660,5 +669,71 @@ class ImsLtiTool
             ],
             $this->advantageServices
         );
+    }
+
+    /**
+     * Add LineItem to lineItems.
+     *
+     * @param LineItem $lineItem
+     *
+     * @return $this
+     */
+    public function addLineItem(LineItem $lineItem)
+    {
+        $lineItem->setTool($this);
+
+        $this->lineItems[] = $lineItem;
+
+        return $this;
+    }
+
+    /**
+     * Set lineItems.
+     *
+     * @param ArrayCollection $lineItems
+     *
+     * @return $this
+     */
+    public function setLineItems(ArrayCollection $lineItems)
+    {
+        $this->lineItems = $lineItems;
+
+        return $this;
+    }
+
+    /**
+     * @param int    $resourceLinkId
+     * @param int    $resourceId
+     * @param string $tag
+     * @param int    $limit
+     * @param int    $page
+     *
+     * @return ArrayCollection
+     */
+    public function getLineItems($resourceLinkId = 0, $resourceId = 0, $tag = '', $limit = 0, $page = 1)
+    {
+        $criteria = Criteria::create();
+
+        if ($resourceLinkId) {
+            $criteria->andWhere(Criteria::expr()->eq('tool', $resourceId));
+        }
+
+        if ($resourceId) {
+            $criteria->andWhere(Criteria::expr()->eq('tool', $resourceId));
+        }
+
+        if (!empty($tag)) {
+            $criteria->andWhere(Criteria::expr()->eq('tag', $tag));
+        }
+
+        if ($limit > 0) {
+            $criteria->setMaxResults($limit);
+
+            if ($page > 0) {
+                $criteria->setFirstResult($page * $limit - 1);
+            }
+        }
+
+        return $this->lineItems->matching($criteria);
     }
 }

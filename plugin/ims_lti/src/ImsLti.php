@@ -192,4 +192,32 @@ class ImsLti
             new LtiAssignmentGradesService($tool),
         ];
     }
+
+    /**
+     * @param int $length
+     *
+     * @return string
+     */
+    public static function generateClientId($length = 20)
+    {
+        $hash = md5(mt_rand().time());
+
+        $clientId = '';
+
+        for ($p = 0; $p < $length; $p++) {
+            $op = mt_rand(1, 3);
+
+            if ($op === 1) {
+                $char = chr(mt_rand(97, 97 + 25));
+            } elseif ($op === 2) {
+                $char = chr(mt_rand(65, 65 + 25));
+            } else {
+                $char = substr($hash, mt_rand(0, strlen($hash) - 1), 1);
+            }
+
+            $clientId .= $char;
+        }
+
+        return $clientId;
+    }
 }

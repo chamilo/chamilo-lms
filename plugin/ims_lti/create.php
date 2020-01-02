@@ -40,7 +40,9 @@ if ($form->validate()) {
     if (ImsLti::V_1P3 === $formValues['version']) {
         $externalTool
             ->setLaunchUrl($formValues['launch_url'])
-            ->setClientId($formValues['client_id'])
+            ->setClientId(
+                ImsLti::generateClientId()
+            )
             ->setLoginUrl($formValues['login_url'])
             ->setRedirectUrl($formValues['redirect_url'])
             ->setAdvantageServices(

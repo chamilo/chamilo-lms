@@ -1,0 +1,12 @@
+# Ignore any file or directory in this directory
+/*
+!/.gitignore
+
+# Explicitly include modules that ship with simplesamlphp
+!/admin/
+!/core/
+!/cron/
+!/exampleauth/
+!/multiauth/
+!/portal/
+!/saml/

@@ -122,7 +122,7 @@ if (api_is_facebook_auth_activated() && !api_get_user_id()) {
 }
 
 // okta connection, if activated
-if (api_is_okta_auth_activated() && !api_get_user_id() && !empty($_GET['action']) && $_GET['action'] == 'oktaconnect') {
+if (api_is_okta_auth_activated() && !api_get_user_id() && !empty($_GET['saml_sso']) && $_GET['saml_sso'] == $GLOBALS['okta_config']['integration_name']) {
     require_once api_get_path(SYS_PATH)  . 'main/auth/external_login/okta.inc.php';
     if (isset($okta_config['client_id']) && isset($okta_config['client_secret'])) {
         oktaConnect();
@@ -1266,7 +1266,7 @@ if ((isset($uidReset) && $uidReset) || $cidReset) {
                     $is_sessionAdmin = true;
                 } else {
                     // Am I a session coach for this session?
-                    $sql = "SELECT session.id, session.id_coach 
+                    $sql = "SELECT session.id, session.id_coach
                             FROM $tbl_session session
                             INNER JOIN $tbl_session_course sc
                             ON sc.session_id = session.id

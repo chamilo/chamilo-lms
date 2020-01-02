@@ -1,0 +1,121 @@
+
+body {
+    font-size: 12px;
+    color: #000;
+    margin: 0;
+    padding: 0;
+    background-color: #fff;
+}
+
+img {
+    border: none;
+}
+
+/*****************************************************
+ *  DATA TABLE STYLES                                *
+ *****************************************************/
+.cell_header {
+    background-color: #EEEEFF;
+    font-weight:bold;
+    text-align:left;
+    padding-left:5px;
+}   /* header cell in data table in tools */
+
+.data_table tr.row_even {
+    background-color: #fff;
+}
+
+.data_table td .highlight {
+    font-weight: bold;
+}
+
+.data_table td {
+    padding: 5px;
+    border-bottom: 1px solid #b0b0b0;
+    border-right: 1px dotted #e1e1e1;
+    border-left: 1px dotted #e1e1e1;
+    text-align: left;
+}
+
+/* admin page tool list definitions */
+.tool_list dt {
+    font-weight: bold;
+}
+.tool_list dd {
+    margin: 0;
+    padding: 4px 0 0 10px;
+}
+
+label.left {
+    float: left;
+    width: 15em;
+    margin: 0 0 0.5em 0;
+}
+form br {
+    clear: both;
+}
+/* Fix for alignment problem in IE-Win browsers  */
+/*  Hide from IE5-mac. Only IE-win sees this. \*/
+* html .label {
+    margin-right: 10px;
+}
+* html .data {
+    height: 1%;
+    margin-left: 0;
+}
+/* End hide from IE5/mac */
+
+.radio, .checkbox {
+    margin: 0;
+    padding: 0;
+    border: none;
+    background-color: transparent;
+}
+
+.required {
+    color: #f00;
+    font-weight: bold;
+}
+
+.user_course_category {
+    background-color: #efefef;
+    border: 1px solid #666;
+    font-weight: bold;
+    color: #666;
+    list-style-type: none;
+    margin: 5px;
+    padding: 5px;
+}
+
+/* Styles for the Dokeos Config Settings of the platform admin section*/
+.sectiontitle {
+    background-color: #EFEFEF;
+    border: 1px solid #cccccc;
+    font-weight: bold;
+    color: #666666;
+    list-style-type: none;
+    margin: 5px;
+    padding: 5px;
+    font-size: 11px;
+}
+
+.sectioncomment {
+    color: #000000;
+    margin: 5px;
+    padding: 5px;
+    font-size: 11px;
+}
+
+/* New Announcements Tool */
+.announcements_datum {
+    font-size: 12px;
+    font-style: italic;
+    color: #666666;
+}
+
+table.table,
+table.table th,
+table.table td {
+    border: 1px solid #555;
+    border-collapse: collapse;
+}

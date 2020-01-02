@@ -1,8 +1,11 @@
 <?php
 if (php_sapi_name() !== 'cli') die('this script is supposed to be run from the command-line');
-
-require __DIR__.'/../../main/inc/global-min.inc.php';
+require __DIR__.'/../../cli-config.php';
 require_once __DIR__.'/../../app/config/auth.conf.php';
+require_once __DIR__.'/../../main/inc/lib/api.lib.php';
+require_once __DIR__.'/../../main/inc/lib/database.constants.inc.php';
+require_once __DIR__.'/../../main/inc/lib/internationalization.lib.php';
+require_once __DIR__.'/../../main/inc/lib/text.lib.php';
 
 
 // Bind to LDAP server
@@ -99,12 +102,15 @@ print count($existingCasUserValues)." users have their cas_user value set alread
 
 $userRepository = Database::getManager()->getRepository('ChamiloUserBundle:User');
 $databaseUsers = $userRepository->findAll();
-print count($databaseUsers)." users are registered in the internal database.\n";
+$count = count($databaseUsers);
+print "$count users are registered in the internal database.\n";
 
 $usersMissingCasCode = [];
 $usersWithWrongCASCode = [];
+$checked = 0;
 foreach($databaseUsers as $user) {
     $username = $user->getUsername();
+    print "Checked $checked / $count users - now checking '$username'…\r";
     $filter = '(&(' . join(')(', array_merge($filters, ["$ldapUsernameAttribute=$username"])). '))';
     $searchResult = ldap_search($ldap, $baseDn, $filter, [$ldapCASUserAttribute]);
     if (false === $searchResult) die('ldap_search() failed: '.ldap_error($ldap));
@@ -133,40 +139,37 @@ foreach($databaseUsers as $user) {
             }
             break;
         default:
-            die("more than one entries for username '$username' in the LDAP directory");
+            print "more than one entries for username '$username' in the LDAP directory, skipping.\n";
     }
+    $checked ++;
 }
 
 
 // ask for confirmation and write changes to the database
 
-if (!empty($usersMissingCasCode) > 0) {
-    if ('y' === readline(
-            "Write missing CAS codes for " . count($usersMissingCasCode) . " users and set their auth source to 'cas' ?"
-            . " (type 'y' to confirm) "
-        )
-    ) {
-        foreach ($usersMissingCasCode as [$user, $casUser]) {
-            UserManager::update_extra_field_value($user->getId(), 'cas_user', $casUser);
-            $user->setAuthSource(CAS_AUTH_SOURCE);
-            UserManager::getManager()->save($user);
-            print "Done.\n";
+foreach ([ 'missing CAS codes' => $usersMissingCasCode,
+             'wrong CAS codes' => $usersWithWrongCASCode ] as $title => $list) {
+    if (!empty($list)) {
+        $count = count($list);
+        if ('y' === readline(
+                "Fix $title for $count users and set their auth source to 'cas' ?"
+                . " (type 'y' to confirm) "
+            )
+        ) {
+            $done = 0;
+            foreach ($list as $userAndCasCode) {
+                $user = $userAndCasCode[0];
+                $casUser = $userAndCasCode[1];
+                UserManager::update_extra_field_value($user->getId(), 'cas_user', $casUser);
+                $user->setAuthSource(CAS_AUTH_SOURCE);
+                UserManager::getManager()->save($user);
+                $done ++;
+                print "Fixed $done / $count users\r";
+            }
+        } else {
+            print "Not fixing $title.\n";
         }
-    } else {
-        print 'Not writing the missing CAS codes.';
     }
 }
-if (!empty($usersWithWrongCASCode)) {
-    if ('y' === readline(
-            "Fix wrong CAS codes for " . count($usersWithWrongCASCode) . " users and set their auth source to 'cas' ?"
-            . " (type 'y' to confirm) ")) {
-        foreach ($usersWithWrongCASCode as [$user, $casUser]) {
-            UserManager::update_extra_field_value($user->getId(), 'cas_user', $casUser);
-            $user->setAuthSource(CAS_AUTH_SOURCE);
-            UserManager::getManager()->save($user);
-        }
-        print "Done.\n";
-    } else {
-        print 'Not updating the wrong CAS codes.';
-    }
-}
+
+print "End of script.\n";

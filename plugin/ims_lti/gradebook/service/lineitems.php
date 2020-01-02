@@ -112,6 +112,8 @@ try {
             break;
     }
 } catch (Exception $exception) {
+    header("HTTP/1.0 {$exception->getCode()} {$exception->getMessage()}");
+
     $responseHeaders['Content-Type'] = 'application/json';
 
     $responseData = [

@@ -59,6 +59,27 @@ class LtiAssignmentGradesService extends LtiAdvantageService
     }
 
     /**
+     * @param Course     $course
+     * @param ImsLtiTool $tool
+     * @param LineItem   $lineItem
+     * @param string     $httpAccept
+     *
+     * @throws Exception
+     */
+    public static function validateLineItemRequest(Course $course, ImsLtiTool $tool, LineItem $lineItem, $httpAccept)
+    {
+        self::validateLineItemsRequest($course, $tool, $httpAccept);
+
+        if (!$lineItem) {
+            throw new Exception('Line item not found.', 404);
+        }
+
+        if ($lineItem->getTool()->getId() !== $tool->getId()) {
+            throw new Exception("Line item not allowed in this context.", 403);
+        }
+    }
+
+    /**
      * @return array
      */
     public function getAllowedScopes()
@@ -148,7 +169,7 @@ class LtiAssignmentGradesService extends LtiAdvantageService
         $data['id'] = api_get_path(WEB_PLUGIN_PATH)
             ."ims_lti/gradebook/service/lineitem.php?"
             .http_build_query(
-                ['c' => $tool->getCourse()->getId(), 'l' => $lineItem->getEvaluation()->getId(), 't' => $tool->getId()]
+                ['c' => $tool->getCourse()->getId(), 'l' => $lineItem->getId(), 't' => $tool->getId()]
             );
 
         return $data;

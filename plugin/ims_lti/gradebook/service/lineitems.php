@@ -47,7 +47,10 @@ try {
 
             $responseData = $requestData;
             $jsonOptions = JSON_UNESCAPED_SLASHES;
+
             $responseHeaders['Content-Type'] = LtiAssignmentGradesService::TYPE_LINE_ITEM;
+
+            header("HTTP/1.0 201 Created");
             break;
         case 'GET':
         default:
@@ -107,8 +110,6 @@ try {
             }
 
             $responseHeaders['Content-Type'] = LtiAssignmentGradesService::TYPE_LINE_ITEM_CONTAINER;
-
-            header("HTTP/1.0 201 Created");
             break;
     }
 } catch (Exception $exception) {

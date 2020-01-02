@@ -21,7 +21,7 @@ $ltiToolRepo = $em->getRepository('ChamiloPluginBundle:ImsLti\ImsLtiTool');
 $course = isset($_REQUEST['c']) ? api_get_course_entity($_REQUEST['c']) : null;
 /** @var ImsLtiTool|null $tool */
 $tool = isset($_REQUEST['t']) ? $ltiToolRepo->find($_REQUEST['t']) : null;
-/** @var LineItem|null $lineItemId */
+/** @var LineItem|null $lineItem */
 $lineItem = isset($_REQUEST['l']) ? $em->find('ChamiloPluginBundle:ImsLti\LineItem', $_REQUEST['l']) : null;
 $baseTool = null;
 
@@ -40,6 +40,20 @@ try {
 
     switch ($requestMethod) {
         case 'PUT':
+            $requestData = json_decode($phpInput, true);
+
+            $lineItem = $service->updateLineItem($lineItem, $requestData);
+
+            $requestData['id'] = $webPluginPath."ims_lti/gradebook/service/lineitem.php?"
+                .http_build_query(
+                    ['c' => $course->getId(), 'l' => $lineItem->getEvaluation()->getId(), 't' => $tool->getId()]
+                );
+            $requestData['scoreMaximum'] = $lineItem->getEvaluation()->getMax();
+
+            $responseData = $requestData;
+            $jsonOptions = JSON_UNESCAPED_SLASHES;
+
+            $responseHeaders['Content-Type'] = LtiAssignmentGradesService::TYPE_LINE_ITEM;
             break;
         case 'DELETE':
             break;

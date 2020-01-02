@@ -158,6 +158,61 @@ class LtiAssignmentGradesService extends LtiAdvantageService
 
     /**
      * @param LineItem $lineItem
+     * @param array    $newLineItemData
+     *
+     * @return LineItem
+     * @throws \Doctrine\ORM\OptimisticLockException
+     */
+    public function updateLineItem(LineItem $lineItem, array $newLineItemData)
+    {
+        if (empty($newLineItemData) || empty($newLineItemData['label']) || empty($newLineItemData['scoreMaximum'])) {
+            throw new Exception('Missing data to update line item.', 400);
+        }
+
+        $lineItemEvaluation = $lineItem->getEvaluation();
+        $evaluations = Evaluation::load($lineItemEvaluation->getId());
+        /** @var Evaluation $evaluation */
+        $evaluation = $evaluations[0];
+
+        $lineItemEvaluation->setName($newLineItemData['label']);
+
+        if (isset($newLineItemData['resourceId'])) {
+            $lineItem->setResourceId($newLineItemData['resourceId']);
+        }
+
+        if (isset($newLineItemData['tag'])) {
+            $lineItem->setTag($newLineItemData['tag']);
+        }
+
+        if (!empty($newLineItemData['startDateTime'])) {
+            $lineItem->setStartDate(
+                new DateTime($newLineItemData['startDateTime'])
+            );
+        }
+
+        if (!empty($newLineItemData['endDateTime'])) {
+            $lineItem->setEndDate(
+                new DateTime($newLineItemData['endDateTime'])
+            );
+        }
+
+        if (!$evaluation->has_results()) {
+            $lineItemEvaluation->setMax(
+                $newLineItemData['scoreMaximum']
+            );
+        }
+
+        $em = Database::getManager();
+        $em->persist($lineItem);
+        $em->persist($lineItemEvaluation);
+
+        $em->flush();
+
+        return $lineItem;
+    }
+
+    /**
+     * @param LineItem $lineItem
      *
      * @return array
      */

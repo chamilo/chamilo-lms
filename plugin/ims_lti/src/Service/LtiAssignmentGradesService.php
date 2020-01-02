@@ -214,6 +214,26 @@ class LtiAssignmentGradesService extends LtiAdvantageService
     /**
      * @param LineItem $lineItem
      *
+     * @throws \Doctrine\ORM\OptimisticLockException
+     */
+    public function deleteLineItem(LineItem $lineItem)
+    {
+        $lineItemEvaluation = $lineItem->getEvaluation();
+        $evaluations = Evaluation::load($lineItemEvaluation->getId());
+        /** @var Evaluation $evaluation */
+        $evaluation = $evaluations[0];
+
+        $em = Database::getManager();
+
+        $em->remove($lineItem);
+        $em->flush();
+
+        $evaluation->delete_with_results();
+    }
+
+    /**
+     * @param LineItem $lineItem
+     *
      * @return array
      */
     public function getLineItemAsArray(LineItem $lineItem)

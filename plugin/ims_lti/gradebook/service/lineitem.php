@@ -56,6 +56,9 @@ try {
             $responseHeaders['Content-Type'] = LtiAssignmentGradesService::TYPE_LINE_ITEM;
             break;
         case 'DELETE':
+            $service->deleteLineItem($lineItem);
+
+            header("HTTP/1.0 204 No content");
             break;
         case 'GET':
         default:
@@ -83,4 +86,6 @@ foreach ($responseHeaders as $headerName => $headerValue) {
     header("$headerName: $headerValue");
 }
 
-echo json_encode($responseData, $jsonOptions);
+if (!empty($responseData)) {
+    echo json_encode($responseData, $jsonOptions);
+}

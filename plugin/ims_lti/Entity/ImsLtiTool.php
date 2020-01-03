@@ -8,6 +8,7 @@ use Chamilo\CoreBundle\Entity\GradebookEvaluation;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Criteria;
 use Doctrine\ORM\Mapping as ORM;
+use PHPExiftool\Driver\Tag\MXF\ViewportAspectRatio;
 
 /**
  * Class ImsLtiTool
@@ -726,11 +727,14 @@ class ImsLtiTool
             $criteria->andWhere(Criteria::expr()->eq('tag', $tag));
         }
 
+        $limit = (int) $limit;
+        $page = (int) $page;
+
         if ($limit > 0) {
             $criteria->setMaxResults($limit);
 
             if ($page > 0) {
-                $criteria->setFirstResult($page * $limit - 1);
+                $criteria->setFirstResult($page * $limit);
             }
         }
 

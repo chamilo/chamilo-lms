@@ -40,7 +40,7 @@ class LtiLineItemResource extends LtiAgsResource
     {
         parent::__construct($toolId, $courseId);
 
-        $this->lineItem = Database::getManager()->find('ChamiloPluginBundle:ImsLti\LineItem', (int)$lineItemId);
+        $this->lineItem = Database::getManager()->find('ChamiloPluginBundle:ImsLti\LineItem', (int) $lineItemId);
     }
 
     /**
@@ -50,22 +50,13 @@ class LtiLineItemResource extends LtiAgsResource
     {
         switch ($this->request->getMethod()) {
             case Request::METHOD_GET:
-                $data = $this->processGet();
-
-                $this->response->headers->set('content-type', LtiAssignmentGradesService::TYPE_LINE_ITEM);
-                $this->response->setData($data);
+                $this->processGet();
                 break;
             case Request::METHOD_PUT:
-                $data = $this->processPut();
-
-                $this->response->headers->set('content-type', LtiAssignmentGradesService::TYPE_LINE_ITEM);
-                $this->response->setEncodingOptions(JSON_UNESCAPED_SLASHES);
-                $this->response->setData($data);
+                $this->processPut();
                 break;
             case Request::METHOD_DELETE:
                 $this->processDelete();
-
-                $this->response->setStatusCode(Response::HTTP_NO_CONTENT);
                 break;
             default:
                 throw new MethodNotAllowedHttpException(
@@ -78,9 +69,6 @@ class LtiLineItemResource extends LtiAgsResource
         }
     }
 
-    /**
-     * @return array
-     */
     private function processGet()
     {
         $data = $this->lineItem->toArray();
@@ -90,13 +78,12 @@ class LtiLineItemResource extends LtiAgsResource
             $this->tool->getId()
         );
 
-        return $data;
+        $this->response->headers->set('Content-Type', LtiAssignmentGradesService::TYPE_LINE_ITEM);
+        $this->response->setData($data);
     }
 
     /**
-     * @return array
      * @throws OptimisticLockException
-     *
      */
     private function processPut()
     {
@@ -106,6 +93,27 @@ class LtiLineItemResource extends LtiAgsResource
             throw new BadRequestHttpException('Missing data to update line item.');
         }
 
+        $this->updateLineItem($data);
+
+        $data['id'] = LtiAssignmentGradesService::getLineItemUrl(
+            $this->course->getId(),
+            $this->lineItem->getId(),
+            $this->tool->getId()
+        );
+        $data['scoreMaximum'] = $this->lineItem->getEvaluation()->getMax();
+
+        $this->response->headers->set('Content-Type', LtiAssignmentGradesService::TYPE_LINE_ITEM);
+        $this->response->setEncodingOptions(JSON_UNESCAPED_SLASHES);
+        $this->response->setData($data);
+    }
+
+    /**
+     * @param array $data
+     *
+     * @throws OptimisticLockException
+     */
+    private function updateLineItem(array $data)
+    {
         $lineItemEvaluation = $this->lineItem->getEvaluation();
         $evaluations = Evaluation::load($lineItemEvaluation->getId());
         /** @var Evaluation $evaluation */
@@ -122,15 +130,13 @@ class LtiLineItemResource extends LtiAgsResource
         }
 
         if (!empty($data['startDateTime'])) {
-            $this->lineItem->setStartDate(
-                new DateTime($data['startDateTime'])
-            );
+            $startDate = new DateTime($data['startDateTime']);
+            $this->lineItem->setStartDate($startDate);
         }
 
         if (!empty($data['endDateTime'])) {
-            $this->lineItem->setEndDate(
-                new DateTime($data['endDateTime'])
-            );
+            $endDate = new DateTime($data['endDateTime']);
+            $this->lineItem->setEndDate($endDate);
         }
 
         if (!$evaluation->has_results()) {
@@ -142,21 +148,22 @@ class LtiLineItemResource extends LtiAgsResource
         $em->persist($lineItemEvaluation);
 
         $em->flush();
-
-        $data['id'] = LtiAssignmentGradesService::getLineItemUrl(
-            $this->course->getId(),
-            $this->lineItem->getId(),
-            $this->tool->getId()
-        );
-        $data['scoreMaximum'] = $this->lineItem->getEvaluation()->getMax();
-
-        return $data;
     }
 
     /**
      * @throws OptimisticLockException
      */
     private function processDelete()
+    {
+        $this->deleteLineItem();
+
+        $this->response->setStatusCode(Response::HTTP_NO_CONTENT);
+    }
+
+    /**
+     * @throws OptimisticLockException
+     */
+    private function deleteLineItem()
     {
         $lineItemEvaluation = $this->lineItem->getEvaluation();
         $evaluations = Evaluation::load($lineItemEvaluation->getId());

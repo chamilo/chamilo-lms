@@ -103,11 +103,11 @@ class LtiLineItemsResource extends LtiAgsResource
     /**
      * @param array $data
      *
-     * @return LineItem
+     * @throws ORMException
      * @throws OptimisticLockException
      * @throws TransactionRequiredException
      *
-     * @throws ORMException
+     * @return LineItem
      */
     private function createLineItem(array $data)
     {

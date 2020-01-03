@@ -19,9 +19,11 @@ class LtiAssignmentGradesService extends LtiAdvantageService
 
     const SCOPE_LINE_ITEM = 'https://purl.imsglobal.org/spec/lti-ags/scope/lineitem';
     const SCOPE_LINE_ITEM_READ = 'https://purl.imsglobal.org/spec/lti-ags/scope/lineitem.readonly';
+    const SCOPE_RESULT_READ = 'https://purl.imsglobal.org/spec/lti-ags/scope/result.readonly';
 
     const TYPE_LINE_ITEM_CONTAINER = 'application/vnd.ims.lis.v2.lineitemcontainer+json';
     const TYPE_LINE_ITEM = 'application/vnd.ims.lis.v2.lineitem+json';
+    const TYPE_RESULT_CONTAINER = 'application/vnd.ims.lis.v2.resultcontainer+json';
 
     /**
      * @return array
@@ -30,6 +32,7 @@ class LtiAssignmentGradesService extends LtiAdvantageService
     {
         $scopes = [
             self::SCOPE_LINE_ITEM_READ,
+            self::SCOPE_RESULT_READ,
         ];
 
         $toolServices = $this->tool->getAdvantageServices();
@@ -74,7 +77,11 @@ class LtiAssignmentGradesService extends LtiAdvantageService
         }
 
         if (isset($parts[4]) && 'results' === $parts[4]) {
-            $resource = new LtiResultsResource($parts[1], $parts[3]);
+            $resource = new LtiResultsResource(
+                $request->query->get('t'),
+                $parts[1],
+                $parts[3]
+            );
         }
 
         if (!$resource) {
@@ -125,5 +132,21 @@ class LtiAssignmentGradesService extends LtiAdvantageService
         $query = http_build_query(['t' => $toolId]);
 
         return "$base$resource?$query";
+    }
+
+    /**
+     * @param int   $contextId
+     * @param int   $lineItemId
+     * @param int   $toolId
+     * @param array $extraParams
+     *
+     * @return string
+     */
+    public static function getResultsUrl($contextId, $lineItemId, $toolId, array $extraParams = [])
+    {
+        $lineItemUrl = self::getLineItemUrl($contextId, $lineItemId, $toolId);
+        $query = http_build_query($extraParams);
+
+        return "$lineItemUrl/results?$query";
     }
 }

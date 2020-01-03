@@ -182,13 +182,11 @@ class LtiLineItemsResource extends LtiAgsResource
      * @param int             $tag
      * @param int             $limit
      * @param int             $page
-     *
-     * @return string
      */
     private function setLinkHeaderToGet(ArrayCollection $lineItems, $resourceLinkId, $resourceId, $tag, $limit, $page)
     {
         if (!$limit) {
-            return '';
+            return;
         }
 
         $links = [];

@@ -105,13 +105,12 @@ switch ($action) {
                 $advServices = $tool->getAdvantageServices();
 
                 if (LtiAssignmentGradesService::AGS_NONE !== $advServices['ags']) {
-                    $agService = new LtiAssignmentGradesService($tool);
-                    $agService->createLineItem(
-                        [
-                            'label' => $tool->getName(),
-                            'scoreMaximum' => 100,
-                        ],
-                        $tool
+                    $lineItemResource = new LtiLineItemsResource(
+                        $tool->getId(),
+                        $course->getId()
+                    );
+                    $lineItemResource->createLineItem(
+                        ['label' => $tool->getName(), 'scoreMaximum' => 100]
                     );
 
                     Display::addFlash(

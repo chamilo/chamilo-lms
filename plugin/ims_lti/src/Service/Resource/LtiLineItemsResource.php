@@ -109,7 +109,7 @@ class LtiLineItemsResource extends LtiAgsResource
      *
      * @return LineItem
      */
-    private function createLineItem(array $data)
+    public function createLineItem(array $data)
     {
         $caterories = Category::load(null, null, $this->course->getCode());
         /** @var Category $gradebookCategory */

@@ -213,19 +213,18 @@ try {
                         LtiAssignmentGradesService::SCOPE_LINE_ITEM,
                         LtiAssignmentGradesService::SCOPE_LINE_ITEM_READ,
                     ],
-                    'lineitems' => $webPluginPath."ims_lti/gradebook/service/lineitems.php?"
-                        .http_build_query(['c' => $course->getId(), 't' => $tool->getId()]),
+                    'lineitems' => LtiAssignmentGradesService::getLineItemsUrl(
+                        $course->getId(),
+                        $tool->getId()
+                    ),
                 ];
 
                 if ($tool->getGradebookEval()) {
-                    $agsClaim['lineitem'] = $webPluginPath."ims_lti/gradebook/service/lineitem.php?"
-                        .http_build_query(
-                            [
-                                'c' => $course->getId(),
-                                'l' => $tool->getGradebookEval()->getId(),
-                                't' => $tool->getId(),
-                            ]
-                        );
+                    $agsClaim['lineitem'] = LtiAssignmentGradesService::getLineItemUrl(
+                        $course->getId(),
+                        $tool->getLineItems()->first()->getId(),
+                        $tool->getId()
+                    );
                 }
 
                 $jwtContent['https://purl.imsglobal.org/spec/lti-ags/claim/endpoint'] = $agsClaim;

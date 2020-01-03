@@ -18,7 +18,7 @@
 //require_once __DIR__ . '/../../auth/external_login/okta.init.php';
 //require_once __DIR__ . '/../../auth/external_login/okta.inc.php';
 //require_once __DIR__ . '/../external_login/functions.inc.php';
-require_once __DIR__ . '/../../../app/config/auth.conf.php';
+require __DIR__ . '/../../../app/config/auth.conf.php';
 
 /*
  * metadata_url_for contains PER APPLICATION configuration settings.
@@ -32,14 +32,15 @@ require_once __DIR__ . '/../../../app/config/auth.conf.php';
  *   This should also be stored in your production datastore.
  */
 
-$oktaConfig = $GLOBALS['okta_config'];
-if (!empty($okta_config)) {
-    $oktaConfig = $okta_config;
+$oktaConfig = $okta_config;
+if (!empty($GLOBALS['okta_config'])) {
+    $oktaConfig = $GLOBALS['okta_config'];
 }
 
 if (empty($oktaConfig)) {
-    //var_dump('<pre>', $GLOBALS['okta_config'], $okta_config, $_SESSION);
-    //exit;
+    echo 'Error detected';
+    //var_dump('saml-autoconfig <pre>', $GLOBALS, $GLOBALS['okta_config'], $okta_config, $_SESSION);
+    exit;
 }
 $metadata_url_for = array(
     /* WARNING WARNING WARNING

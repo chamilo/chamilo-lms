@@ -1,11 +1,12 @@
 <?php
 
-use ChamiloSession as Session;
-
 require_once __DIR__ . '/../../inc/global.inc.php';
 require_once __DIR__ . '/okta.init.php';
 require_once __DIR__ . '/functions.inc.php';
 require_once __DIR__ . '/../simplesamlphp/lib/_autoload.php';
+
+use ChamiloSession as Session;
+
 
 /**
  * This function connect to okta and retrieves the user info
@@ -15,11 +16,13 @@ require_once __DIR__ . '/../simplesamlphp/lib/_autoload.php';
 function oktaConnect()
 {
     $samlSso = 'saml_sso';
+    $user = array();
     // If the user is logging in.
     if (isset($_REQUEST[$samlSso])) {
         $sp = $_REQUEST[$samlSso];
+        $chamiloSession = $_SESSION;
+        SimpleSAML_Session::getSessionFromRequest()->cleanup();
         $as = new SimpleSAML_Auth_Simple($sp);
-
         $as->requireAuth();
         $user = array(
             'sp'         => $sp,
@@ -28,6 +31,9 @@ function oktaConnect()
             'nameId'     => $as->getAuthData('saml:sp:NameID')->value,
             'attributes' => $as->getAttributes(),
         );
+        $simpleSamlSes = $_SESSION['SimpleSAMLphp_SESSION'];
+        $_SESSION = $chamiloSession;
+        $_SESSION['SimpleSAMLphp_SESSION'] = $simpleSamlSes;
     }
 
     if (!empty($user['attributes'])) {

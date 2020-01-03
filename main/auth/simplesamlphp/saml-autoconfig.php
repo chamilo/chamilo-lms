@@ -14,10 +14,11 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-require_once __DIR__ . '/../../inc/global.inc.php';
-require_once __DIR__ . '/../../auth/external_login/okta.init.php';
-require_once __DIR__ . '/../../auth/external_login/okta.inc.php';
-require_once __DIR__ . '/../external_login/functions.inc.php';
+//require_once __DIR__ . '/../../inc/global.inc.php';
+//require_once __DIR__ . '/../../auth/external_login/okta.init.php';
+//require_once __DIR__ . '/../../auth/external_login/okta.inc.php';
+//require_once __DIR__ . '/../external_login/functions.inc.php';
+require_once __DIR__ . '/../../../app/config/auth.conf.php';
 
 /*
  * metadata_url_for contains PER APPLICATION configuration settings.
@@ -31,6 +32,15 @@ require_once __DIR__ . '/../external_login/functions.inc.php';
  *   This should also be stored in your production datastore.
  */
 
+$oktaConfig = $GLOBALS['okta_config'];
+if (!empty($okta_config)) {
+    $oktaConfig = $okta_config;
+}
+
+if (empty($oktaConfig)) {
+    //var_dump('<pre>', $GLOBALS['okta_config'], $okta_config, $_SESSION);
+    //exit;
+}
 $metadata_url_for = array(
     /* WARNING WARNING WARNING
      *   You MUST remove the testing IdP (idp.oktadev.com) from a production system,
@@ -38,7 +48,8 @@ $metadata_url_for = array(
      * WARNING WARNING WARNING
      * For testing with http://saml.oktadev.com use the line below:
      */
-    $GLOBALS['okta_config']['integration_name'] => $GLOBALS['okta_config']['idp_metadata'],
+    //'chamilo-okta-com' => 'https://dev-645246.okta.com/app/exk2debikvzohBZAI357/sso/saml/metadata',
+    $oktaConfig['integration_name'] => $oktaConfig['idp_metadata'],
 );
 
 foreach($metadata_url_for as $idp_name => $metadata_url) {

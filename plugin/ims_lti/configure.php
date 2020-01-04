@@ -101,6 +101,9 @@ switch ($action) {
             $toolIsV1p3 = !empty($tool->publicKey) && !empty($tool->getClientId()) &&
                 !empty($tool->getLoginUrl()) && !empty($tool->getRedirectUrl());
 
+            $em->persist($tool);
+            $em->flush();
+
             if ($toolIsV1p3) {
                 $advServices = $tool->getAdvantageServices();
 
@@ -118,9 +121,6 @@ switch ($action) {
                     );
                 }
             }
-
-            $em->persist($tool);
-            $em->flush();
 
             if (!$tool->isActiveDeepLinking()) {
                 $plugin->addCourseTool($course, $tool);

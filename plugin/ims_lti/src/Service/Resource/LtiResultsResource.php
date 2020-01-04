@@ -117,9 +117,15 @@ class LtiResultsResource extends LtiAgsResource
         $limit = (int) $limit;
         $page = (int) $page;
 
-        $query = $em->createQuery(
-            'SELECT r FROM ChamiloCoreBundle:GradebookResult r WHERE r.evaluationId = :id'
-        );
+        $dql = 'SELECT r FROM ChamiloCoreBundle:GradebookResult r WHERE r.evaluationId = :id';
+        $parameters = ['id' => $this->lineItem->getEvaluation()->getId()];
+
+        if ($userId) {
+            $dql .= ' AND r.userId = :user';
+            $parameters['user'] = (int) $userId;
+        }
+
+        $query = $em->createQuery($dql);
 
         if ($limit > 0) {
             $query->setMaxResults($limit);
@@ -130,7 +136,7 @@ class LtiResultsResource extends LtiAgsResource
         }
 
         return $query
-            ->setParameters(['id' => $this->lineItem->getEvaluation()->getId()])
+            ->setParameters($parameters)
             ->getResult();
     }
 
@@ -181,11 +187,17 @@ class LtiResultsResource extends LtiAgsResource
 
         $em = Database::getManager();
 
+        $dql = 'SELECT COUNT(r) FROM ChamiloCoreBundle:GradebookResult r WHERE r.evaluationId = :id';
+        $parameters = ['id' => $this->lineItem->getEvaluation()->getId()];
+
+        if ($userId) {
+            $dql .= ' AND r.userId = :user';
+            $parameters['user'] = (int) $userId;
+        }
+
         $count = $em
-            ->createQuery(
-                'SELECT COUNT(r) FROM ChamiloCoreBundle:GradebookResult r WHERE r.evaluationId = :id'
-            )
-            ->setParameters(['id' => $this->lineItem->getEvaluation()->getId()])
+            ->createQuery($dql)
+            ->setParameters($parameters)
             ->getSingleScalarResult();
 
         $links = [];

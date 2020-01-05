@@ -159,7 +159,7 @@ class LtiResultsResource extends LtiAgsResource
             $data[] = [
                 'id' => "$lineItemEndPoint/results/{$result->getId()}",
                 'scoreOf' => $lineItemEndPoint,
-                'userId' => $result->getUserId(),
+                'userId' => (string) $result->getUserId(),
                 'resultScore' => $result->getScore(),
                 'resultMaximum' => $this->lineItem->getEvaluation()->getMax(),
                 'comment' => null,

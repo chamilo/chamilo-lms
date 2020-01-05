@@ -20,10 +20,12 @@ class LtiAssignmentGradesService extends LtiAdvantageService
     const SCOPE_LINE_ITEM = 'https://purl.imsglobal.org/spec/lti-ags/scope/lineitem';
     const SCOPE_LINE_ITEM_READ = 'https://purl.imsglobal.org/spec/lti-ags/scope/lineitem.readonly';
     const SCOPE_RESULT_READ = 'https://purl.imsglobal.org/spec/lti-ags/scope/result.readonly';
+    const SCOPE_SCORE_WRITE = 'https://purl.imsglobal.org/spec/lti-ags/scope/score';
 
     const TYPE_LINE_ITEM_CONTAINER = 'application/vnd.ims.lis.v2.lineitemcontainer+json';
     const TYPE_LINE_ITEM = 'application/vnd.ims.lis.v2.lineitem+json';
     const TYPE_RESULT_CONTAINER = 'application/vnd.ims.lis.v2.resultcontainer+json';
+    const TYPE_SCORE = 'application/vnd.ims.lis.v1.score+json';
 
     /**
      * @return array
@@ -33,6 +35,7 @@ class LtiAssignmentGradesService extends LtiAdvantageService
         $scopes = [
             self::SCOPE_LINE_ITEM_READ,
             self::SCOPE_RESULT_READ,
+            self::SCOPE_SCORE_WRITE,
         ];
 
         $toolServices = $this->tool->getAdvantageServices();
@@ -78,6 +81,14 @@ class LtiAssignmentGradesService extends LtiAdvantageService
 
         if (isset($parts[4]) && 'results' === $parts[4]) {
             $resource = new LtiResultsResource(
+                $request->query->get('t'),
+                $parts[1],
+                $parts[3]
+            );
+        }
+
+        if (isset($parts[4]) && 'scores' === $parts[4]) {
+            $resource = new LtiScoresResource(
                 $request->query->get('t'),
                 $parts[1],
                 $parts[3]

@@ -60,7 +60,7 @@ class LtiResultsResource extends LtiAgsResource
             throw new AccessDeniedHttpException('Tool not found in course.');
         }
 
-        if ($this->request->server->get('HTTP_ACCEPT') !== LtiAssignmentGradesService::TYPE_LINE_ITEM) {
+        if ($this->request->server->get('HTTP_ACCEPT') !== LtiAssignmentGradesService::TYPE_RESULT_CONTAINER) {
             throw new UnsupportedMediaTypeHttpException('Unsupported media type.');
         }
 

@@ -88,7 +88,6 @@ try {
     $session = api_get_session_entity(api_get_session_id());
     $course = api_get_course_entity(api_get_course_int_id());
 
-    $toolUserId = ImsLtiPlugin::generateToolUserId($user->getId());
     $platformDomain = str_replace(['https://', 'http://'], '', api_get_setting('InstitutionUrl'));
 
     $jwtContent = [];
@@ -129,9 +128,9 @@ try {
     ];
 
     // Deployment info
-    $jwtContent['https://purl.imsglobal.org/spec/lti/claim/deployment_id'] = $session
-        ? "{$session->getId()}-{$course->getId()}-{$tool->getId()}"
-        : "{$course->getId()}-{$tool->getId()}";
+    $jwtContent['https://purl.imsglobal.org/spec/lti/claim/deployment_id'] = $tool->getParent()
+        ? $tool->getParent()->getId()
+        : $tool->getId();
 
     // Platform info
     $jwtContent['https://purl.imsglobal.org/spec/lti/claim/tool_platform'] = [
@@ -188,26 +187,15 @@ try {
         ];
 
         // LIS info
-        $toolEval = $tool->getGradebookEval();
-
-        if (!empty($toolEval)) {
-            //$jwtContent['https://purl.imsglobal.org/spec/lti-bo/claim/basicoutcome'] = [
-            //    'lis_result_sourcedid' => json_encode(
-            //        ['e' => $toolEval->getId(), 'u' => $user->getId(), 'l' => uniqid(), 'lt' => time()]
-            //    ),
-            //    'lis_outcome_service_url' => $webPath.'lti/os',
-            //];
-
-            $jwtContent['https://purl.imsglobal.org/spec/lti/claim/lis'] = [
-                'person_sourcedid' => ImsLti::getPersonSourcedId($platformDomain, $user),
-                'course_section_sourcedid' => ImsLti::getCourseSectionSourcedId($platformDomain, $course, $session),
-            ];
-        }
+        $jwtContent['https://purl.imsglobal.org/spec/lti/claim/lis'] = [
+            'person_sourcedid' => ImsLti::getPersonSourcedId($platformDomain, $user),
+            'course_section_sourcedid' => ImsLti::getCourseSectionSourcedId($platformDomain, $course, $session),
+        ];
 
         $advServices = $tool->getAdvantageServices();
 
         if (!empty($advServices)) {
-            if (!empty($advServices['ags'])) {
+            if (LtiAssignmentGradesService::AGS_NONE !== $advServices['ags']) {
                 $agsClaim = [
                     'scope' => [
                         LtiAssignmentGradesService::SCOPE_LINE_ITEM,
@@ -219,7 +207,7 @@ try {
                     ),
                 ];
 
-                if ($tool->getGradebookEval()) {
+                if ($tool->getLineItems()->count() === 1) {
                     $agsClaim['lineitem'] = LtiAssignmentGradesService::getLineItemUrl(
                         $course->getId(),
                         $tool->getLineItems()->first()->getId(),

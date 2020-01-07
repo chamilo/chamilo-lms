@@ -150,6 +150,13 @@ class ImsLtiTool
     private $lineItems;
 
     /**
+     * @var string
+     *
+     * @ORM\Column(name="version", type="string", options={"default": "lti1p1"})
+     */
+    private $version;
+
+    /**
      * ImsLtiTool constructor.
      */
     public function __construct()
@@ -164,6 +171,7 @@ class ImsLtiTool
         $this->consumerKey = null;
         $this->sharedSecret = null;
         $this->lineItems = new ArrayCollection();
+        $this->version = \ImsLti::V_1P1;
     }
 
     /**
@@ -739,5 +747,46 @@ class ImsLtiTool
         }
 
         return $this->lineItems->matching($criteria);
+    }
+
+    /**
+     * Get version.
+     *
+     * @return string
+     */
+    public function getVersion()
+    {
+        return $this->version;
+    }
+
+    public function getVersionName()
+    {
+        if (\ImsLti::V_1P1 === $this->version) {
+            return 'LTI 1.0 / 1.1';
+        }
+
+        return 'LTI 1.3';
+    }
+
+    /**
+     * Set version.
+     *
+     * @param string $version
+     *
+     * @return ImsLtiTool
+     */
+    public function setVersion($version)
+    {
+        $this->version = $version;
+
+        return $this;
+    }
+
+    /**
+     * @return ArrayCollection
+     */
+    public function getChildren()
+    {
+        return $this->children;
     }
 }

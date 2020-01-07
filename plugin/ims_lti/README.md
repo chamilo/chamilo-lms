@@ -86,7 +86,8 @@ ALTER TABLE plugin_ims_lti_tool
     ADD public_key LONGTEXT DEFAULT NULL,
     ADD login_url VARCHAR(255) DEFAULT NULL,
     ADD redirect_url VARCHAR(255) DEFAULT NULL,
-    ADD advantage_services LONGTEXT DEFAULT NULL COMMENT '(DC2Type:json)';
+    ADD advantage_services LONGTEXT DEFAULT NULL COMMENT '(DC2Type:json)',
+    ADD version VARCHAR(255) DEFAULT 'lti1p1' NOT NULL;
 CREATE TABLE plugin_ims_lti_lineitem (
     id INT AUTO_INCREMENT NOT NULL,
     tool_id INT NOT NULL,

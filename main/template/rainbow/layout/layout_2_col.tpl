@@ -251,7 +251,6 @@
                         });
                     });
                     </script>
-                    <div id="latest_pages"></div>
                     <!-- END CSS -->
                 {% endif %}
             </div>

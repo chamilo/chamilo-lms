@@ -39,6 +39,7 @@ if ($form->validate()) {
 
     if (ImsLti::V_1P3 === $formValues['version']) {
         $externalTool
+            ->setVersion(ImsLti::V_1P3)
             ->setLaunchUrl($formValues['launch_url'])
             ->setClientId(
                 ImsLti::generateClientId()

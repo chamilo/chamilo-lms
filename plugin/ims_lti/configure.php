@@ -68,24 +68,40 @@ switch ($action) {
                 );
 
             if (!$baseTool) {
-                if (empty($formValues['consumer_key']) && empty($formValues['shared_secret'])) {
-                    try {
-                        $launchUrl = $plugin->getLaunchUrlFromCartridge($formValues['launch_url']);
-                    } catch (Exception $e) {
-                        Display::addFlash(
-                            Display::return_message($e->getMessage(), 'error')
-                        );
-
-                        header('Location: '.api_get_self().'?'.api_get_cidreq());
-                        exit;
-                    }
-
-                    $tool->setLaunchUrl($launchUrl);
-                } else {
+                if (ImsLti::V_1P3 === $formValues['version']) {
                     $tool
+                        ->setVersion(ImsLti::V_1P3)
                         ->setLaunchUrl($formValues['launch_url'])
-                        ->setConsumerKey($formValues['consumer_key'])
-                        ->setSharedSecret($formValues['shared_secret']);
+                        ->setClientId(
+                            ImsLti::generateClientId()
+                        )
+                        ->setLoginUrl($formValues['login_url'])
+                        ->setRedirectUrl($formValues['redirect_url'])
+                        ->setAdvantageServices(
+                            [
+                                'ags' => $formValues['1p3_ags'],
+                            ]
+                        );
+                } elseif (ImsLti::V_1P1 === $formValues['version']) {
+                    if (empty($formValues['consumer_key']) && empty($formValues['shared_secret'])) {
+                        try {
+                            $launchUrl = $plugin->getLaunchUrlFromCartridge($formValues['launch_url']);
+                        } catch (Exception $e) {
+                            Display::addFlash(
+                                Display::return_message($e->getMessage(), 'error')
+                            );
+
+                            header('Location: '.api_get_self().'?'.api_get_cidreq());
+                            exit;
+                        }
+
+                        $tool->setLaunchUrl($launchUrl);
+                    } else {
+                        $tool
+                            ->setLaunchUrl($formValues['launch_url'])
+                            ->setConsumerKey($formValues['consumer_key'])
+                            ->setSharedSecret($formValues['shared_secret']);
+                    }
                 }
             }
 

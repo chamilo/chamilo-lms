@@ -42,6 +42,7 @@ $strings['NoAccessToUrl'] = 'No access to URL';
 $strings['LaunchUrlNotFound'] = 'Launch URL not found';
 $strings['GenerateKeyPairInfo'] = 'A new private and public key pair will be created when enabling.';
 $strings['PlatformKeys'] = 'Platform keys';
+$strings['ClientId'] = 'Client ID';
 $strings['Keys'] = 'Keys';
 $strings['KeyId'] = 'Key ID';
 $strings['PublicKey'] = 'Public key';

@@ -4634,13 +4634,15 @@ class learnpath
 
         $course = $courseRepo->find($courseId);
 
-        // Subscribed groups to a LP
-        $subscribedGroupsInLp = $itemRepo->getGroupsSubscribedToItem(
-            TOOL_LEARNPATH_CATEGORY,
-            $category->getId(),
-            $course,
-            $session
-        );
+	if ($courseId!=0) {
+            // Subscribed groups to a LP
+            $subscribedGroupsInLp = $itemRepo->getGroupsSubscribedToItem(
+                TOOL_LEARNPATH_CATEGORY,
+                $category->getId(),
+                $course,
+                $session
+            );
+        }
 
 	if (!empty($subscribedGroupsInLp)) {
             $noGroupSubscribed = false;

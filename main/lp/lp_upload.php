@@ -96,9 +96,7 @@ if (isset($_POST) && $is_error) {
             );
             if (!empty($manifest)) {
                 $oScorm->parse_manifest($manifest);
-                if (!empty($_REQUEST['use_max_score'])) {
-                    $oScorm->import_manifest(api_get_course_id(), $_REQUEST['use_max_score']);
-                }
+                $oScorm->import_manifest(api_get_course_id(), $_REQUEST['use_max_score']);
                 Display::addFlash(Display::return_message(get_lang('UplUploadSucceeded')));
             }
             $oScorm->set_proximity($proximity);

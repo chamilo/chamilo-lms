@@ -1,6 +1,7 @@
 {% import _self as table_tool %}
 
 {% macro row_tool(tool, is_child, _p) %}
+    {% set url_params = {'id': tool.id}|url_encode() %}
     <tr class="{{ is_child ? 'child' : '' }}">
         <td {% if is_child %} colspan="2" {% endif %}>
             {{ tool.name }}
@@ -17,10 +18,16 @@
             {% endif %}
         </td>
         <td class="text-right">
-            <a href="{{ _p.web_plugin }}ims_lti/edit.php?{{ {'id': tool.id}|url_encode() }}">
+            {% if not is_child and tool.version == 'lti1p3' %}
+                <a href="{{ _p.web_plugin }}ims_lti/tool_settings.php?{{ url_params }}" class="ajax"
+                   data-title="{{ 'ConfigSettingsForTool'|get_plugin_lang('ImsLtiPlugin') }}">
+                    {{ 'webservices.png'|img(22, 'ConfigSettingsForTool'|get_plugin_lang('ImsLtiPlugin')) }}
+                </a>
+            {% endif %}
+            <a href="{{ _p.web_plugin }}ims_lti/edit.php?{{ url_params }}">
                 {{ 'edit.png'|img(22, 'Edit'|get_lang) }}
             </a>
-            <a href="{{ _p.web_plugin }}ims_lti/delete.php?{{ {'id': tool.id}|url_encode() }}">
+            <a href="{{ _p.web_plugin }}ims_lti/delete.php?{{ url_params }}">
                 {{ 'delete.png'|img(22, 'Delete'|get_lang) }}
             </a>
         </td>

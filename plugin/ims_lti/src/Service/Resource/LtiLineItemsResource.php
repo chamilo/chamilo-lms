@@ -16,7 +16,7 @@ use Symfony\Component\HttpKernel\Exception\UnsupportedMediaTypeHttpException;
 /**
  * Class LtiLineItemsResource.
  */
-class LtiLineItemsResource extends LtiAgsResource
+class LtiLineItemsResource extends LtiAdvantageServiceResource
 {
     const URL_TEMPLATE = '/context_id/lineitems';
 
@@ -57,6 +57,12 @@ class LtiLineItemsResource extends LtiAgsResource
         }
     }
 
+    /**
+     * @throws ORMException
+     * @throws OptimisticLockException
+     * @throws TransactionRequiredException
+     * @throws MethodNotAllowedHttpException
+     */
     public function process()
     {
         switch ($this->request->getMethod()) {
@@ -72,11 +78,9 @@ class LtiLineItemsResource extends LtiAgsResource
     }
 
     /**
-     * @return array
+     * @throws ORMException
      * @throws OptimisticLockException
      * @throws TransactionRequiredException
-     *
-     * @throws ORMException
      */
     private function processPost()
     {

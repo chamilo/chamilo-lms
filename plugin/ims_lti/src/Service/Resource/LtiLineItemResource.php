@@ -16,7 +16,7 @@ use Symfony\Component\HttpKernel\Exception\UnsupportedMediaTypeHttpException;
 /**
  * Class LtiLineItemResource.
  */
-class LtiLineItemResource extends LtiAgsResource
+class LtiLineItemResource extends LtiAdvantageServiceResource
 {
     const URL_TEMPLATE = '/context_id/lineitems/line_item_id';
 

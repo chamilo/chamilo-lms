@@ -9,11 +9,12 @@ use Doctrine\ORM\TransactionRequiredException;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Exception\HttpExceptionInterface;
+use Symfony\Component\HttpKernel\Exception\MethodNotAllowedHttpException;
 
 /**
- * Class LtiAgsResource
+ * Class LtiAdvantageServiceResource.
  */
-abstract class LtiAgsResource
+abstract class LtiAdvantageServiceResource
 {
     const URL_TEMPLATE = '/';
 
@@ -35,7 +36,7 @@ abstract class LtiAgsResource
     protected $tool;
 
     /**
-     * LtiAgsResource constructor.
+     * LtiAdvantageServiceResource constructor.
      *
      * @param int $toolId
      * @param int $courseId
@@ -53,7 +54,7 @@ abstract class LtiAgsResource
     /**
      * @param Request $request
      *
-     * @return LtiAgsResource
+     * @return LtiAdvantageServiceResource
      */
     public function setRequest(Request $request)
     {
@@ -65,7 +66,7 @@ abstract class LtiAgsResource
     /**
      * @param JsonResponse $response
      *
-     * @return LtiAgsResource
+     * @return LtiAdvantageServiceResource
      */
     public function setResponse(JsonResponse $response)
     {
@@ -79,5 +80,8 @@ abstract class LtiAgsResource
      */
     abstract public function validate();
 
+    /**
+     * @throws MethodNotAllowedHttpException
+     */
     abstract public function process();
 }

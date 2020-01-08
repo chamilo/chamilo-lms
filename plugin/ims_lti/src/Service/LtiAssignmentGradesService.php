@@ -1,9 +1,6 @@
 <?php
 /* For licensing terms, see /license.txt */
 
-use Chamilo\CoreBundle\Entity\Course;
-use Chamilo\PluginBundle\Entity\ImsLti\ImsLtiTool;
-use Chamilo\PluginBundle\Entity\ImsLti\LineItem;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
@@ -55,7 +52,7 @@ class LtiAssignmentGradesService extends LtiAdvantageService
      * @throws \Doctrine\ORM\OptimisticLockException
      * @throws \Doctrine\ORM\TransactionRequiredException
      *
-     * @return LtiAgsResource
+     * @return LtiAdvantageServiceResource
      */
     public static function getResource(Request $request, JsonResponse $response)
     {

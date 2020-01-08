@@ -20,7 +20,7 @@ use Symfony\Component\HttpKernel\Exception\UnsupportedMediaTypeHttpException;
 /**
  * Class LtiScoresResource.
  */
-class LtiScoresResource extends LtiAgsResource
+class LtiScoresResource extends LtiAdvantageServiceResource
 {
     const URL_TEMPLATE = '/context_id/lineitems/line_item_id/results';
 

@@ -190,6 +190,7 @@ class ImsLti
     {
         return [
             new LtiAssignmentGradesService($tool),
+            new LtiNamesRoleProvisioningService($tool),
         ];
     }
 

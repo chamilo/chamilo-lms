@@ -129,8 +129,8 @@ try {
 
     // Deployment info
     $jwtContent['https://purl.imsglobal.org/spec/lti/claim/deployment_id'] = $tool->getParent()
-        ? $tool->getParent()->getId()
-        : $tool->getId();
+        ? (string) $tool->getParent()->getId()
+        : (string) $tool->getId();
 
     // Platform info
     $jwtContent['https://purl.imsglobal.org/spec/lti/claim/tool_platform'] = [

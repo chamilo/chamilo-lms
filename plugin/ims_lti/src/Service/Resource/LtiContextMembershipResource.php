@@ -177,22 +177,36 @@ class LtiContextMembershipResource extends LtiAdvantageServiceResource
         $platformDomain = str_replace(['https://', 'http://'], '', api_get_setting('InstitutionUrl'));
         $dataMembers = [];
 
+        $isSharingName = $this->tool->isSharingName();
+        $isSharingEmail = $this->tool->isSharingEmail();
+        $isSharingPicture = $this->tool->isSharingPicture();
+
         foreach ($members as $member) {
+            /** @var User $user */
             $user = $member->getUser();
 
             $dataMember = [
                 'status' => $user->isActive()
                     ? LtiNamesRoleProvisioningService::USER_STATUS_ACTIVE
                     : LtiNamesRoleProvisioningService::USER_STATUS_INACTIVE,
-                'name' => $user->getFullname(),
-                'picture' => UserManager::getUserPicture($user->getId()),
-                'given_name' => $user->getFirstname(),
-                'family_name' => $user->getLastname(),
-                'email' => $user->getEmail(),
                 'user_id' => (string) $user->getId(),
                 'lis_person_sourcedid' => ImsLti::getPersonSourcedId($platformDomain, $user),
                 'lti11_legacy_user_id' => ImsLtiPlugin::generateToolUserId($user->getId()),
             ];
+
+            if ($isSharingName) {
+                $dataMember['name'] = $user->getFullname();
+                $dataMember['given_name'] = $user->getFirstname();
+                $dataMember['family_name'] = $user->getLastname();
+            }
+
+            if ($isSharingEmail) {
+                $dataMember['email'] = $user->getEmail();
+            }
+
+            if ($isSharingPicture) {
+                $dataMember['picture'] = UserManager::getUserPicture($user->getId());
+            }
 
             if ($member instanceof CourseRelUser) {
                 $dataMember['roles'] = $member->getStatus() === User::COURSE_MANAGER

@@ -165,7 +165,8 @@ foreach ([ 'missing CAS codes' => $usersMissingCasCode,
                 UserManager::getManager()->save($user);
                 $done ++;
                 print "Fixed $done / $count users\r";
-            }
+	    }
+	    print "\n";
         } else {
             print "Not fixing $title.\n";
         }

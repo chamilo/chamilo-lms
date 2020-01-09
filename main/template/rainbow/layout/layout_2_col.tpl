@@ -204,7 +204,7 @@
                             </div>
                             <div class="col-md-6">
                                 <div id="download-app" class="download-app">
-                                    <h2 class="section-title">{{ 'TestDemoTitle' | get_lang  }}  </h2>
+                                    <h2 class="section-title">{{ 'DownloadAppParkur' | get_lang  }}  </h2>
                                     <div class="panel panel-default">
                                         <div class="panel-body">
                                             <ul class="links">
@@ -251,7 +251,6 @@
                         });
                     });
                     </script>
-                    <div id="latest_pages"></div>
                     <!-- END CSS -->
                 {% endif %}
             </div>

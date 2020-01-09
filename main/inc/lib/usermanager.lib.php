@@ -772,25 +772,21 @@ class UserManager
 
         $loginName = 'cas_user_'.$casUser;
         $defaultValue = get_lang("EditInProfile");
-        $userId = UserManager::create_user(
-            $defaultValue,
-            $defaultValue,
-            STUDENT,
-            $defaultValue,
-            $loginName,
-            'casplaceholder',
-            '',
-            '',
-            '',
-            '',
-            CAS_AUTH_SOURCE,
-            $expirationDate = null,
-            $active = 1,
-            $hr_dept_id = 0,
-            $extra = [ 'extra_cas_user' => $casUser ]
+        require_once(__DIR__.'/../../auth/external_login/functions.inc.php');
+        $userId = external_add_user(
+            [
+                'username' => $loginName,
+                'auth_source' => CAS_AUTH_SOURCE,
+                'firstname' => $defaultValue,
+                'lastname' => $defaultValue,
+                'email' => $defaultValue,
+            ]
         );
         if (false === $userId) {
             throw new Exception(get_lang('FailedUserCreation'));
+        }
+        if (!self::update_extra_field_value($userId, 'cas_user', $casUser)) {
+            throw new Exception('Could not set the "cas_user" extra field value for the new user '.$loginName);
         }
         return $loginName;
     }
@@ -815,10 +811,13 @@ class UserManager
                 $user = extldap_get_chamilo_user($ldapUser);
                 $user['username'] = $login;
                 $user['auth_source'] = CAS_AUTH_SOURCE;
-                $user['extra'] = [ 'extra_cas_user' => $casUser ];
                 $uid = external_add_user($user);
                 if (false !== $uid) {
-                    return $login;
+                    if (self::update_extra_field_value($uid, 'cas_user', $casUser)) {
+                        return $login;
+                    } else {
+                        throw new Exception('Could not set the "cas_user" extra field value for the new user '.$login);
+                    }
                 } else {
                     throw new Exception('Could not create the new user '.$login);
                 }

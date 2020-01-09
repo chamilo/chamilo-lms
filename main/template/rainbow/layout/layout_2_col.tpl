@@ -159,7 +159,7 @@
         </div>
     </div>
 
-    <div class="container">
+
         <div class="row">
             <div class="col-md-12">
 
@@ -256,7 +256,7 @@
                 {% endif %}
             </div>
         </div>
-    </div>
+
 
     {% if plugin_main_bottom %}
         {{ display.pluginPanel('main-bottom', plugin_main_bottom) }}

@@ -80,6 +80,7 @@ switch ($action) {
                         ->setAdvantageServices(
                             [
                                 'ags' => $formValues['1p3_ags'],
+                                'nrps' => $formValues['1p3_nrps'],
                             ]
                         );
                 } elseif (ImsLti::V_1P1 === $formValues['version']) {
@@ -176,6 +177,7 @@ switch ($action) {
 
         if ($form->validate()) {
             $formValues = $form->getSubmitValues();
+            var_dump($formValues);die;
 
             $tool
                 ->setName($formValues['name'])
@@ -195,10 +197,23 @@ switch ($action) {
                 );
 
             if (null === $tool->getParent()) {
-                $tool
-                    ->setLaunchUrl($formValues['launch_url'])
-                    ->setConsumerKey($formValues['consumer_key'])
-                    ->setSharedSecret($formValues['shared_secret']);
+                if ($tool->getVersion() === ImsLti::V_1P3) {
+                    $tool
+                        ->setLaunchUrl($formValues['launch_url'])
+                        ->setLoginUrl($formValues['login_url'])
+                        ->setRedirectUrl($formValues['redirect_url'])
+                        ->setAdvantageServices(
+                            [
+                                'ags' => $formValues['1p3_ags'],
+                                'nrps' => $formValues['1p3_nrps'],
+                            ]
+                        );
+                } elseif ($tool->getVersion() === ImsLti::V_1P1) {
+                    $tool
+                        ->setLaunchUrl($formValues['launch_url'])
+                        ->setConsumerKey($formValues['consumer_key'])
+                        ->setSharedSecret($formValues['shared_secret']);
+                }
             }
 
             $em->persist($tool);

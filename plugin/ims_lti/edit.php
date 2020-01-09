@@ -64,6 +64,12 @@ if ($form->validate()) {
             $tool
                 ->setLoginUrl($formValues['login_url'])
                 ->setRedirectUrl($formValues['redirect_url'])
+                ->setAdvantageServices(
+                    [
+                        'ags' => $formValues['1p3_ags'],
+                        'nrps' => $formValues['1p3_nrps'],
+                    ]
+                )
                 ->publicKey = $formValues['public_key'];
         }
     }
@@ -81,6 +87,9 @@ if ($form->validate()) {
                 ->setLaunchUrl($tool->getLaunchUrl())
                 ->setLoginUrl($tool->getLoginUrl())
                 ->setRedirectUrl($tool->getRedirectUrl())
+                ->setAdvantageServices(
+                    $tool->getAdvantageServices()
+                )
                 ->publicKey = $tool->publicKey;
 
             $em->persist($child);

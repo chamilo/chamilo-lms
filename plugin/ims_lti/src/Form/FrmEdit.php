@@ -113,6 +113,14 @@ class FrmEdit extends FormValidator
                     LtiAssignmentGradesService::AGS_FULL => $plugin->get_lang('AGServiceFull'),
                 ]
             );
+            $this->addRadio(
+                '1p3_nrps',
+                $plugin->get_lang('NamesAndRoleProvisioningService'),
+                [
+                    LtiNamesRoleProvisioningService::NRPS_NONE => $plugin->get_lang('DontUseService'),
+                    LtiNamesRoleProvisioningService::NRPS_CONTEXT_MEMBERSHIP => $plugin->get_lang('UseService')
+                ]
+            );
         }
 
         $this->addHtml('</div>');
@@ -149,7 +157,8 @@ class FrmEdit extends FormValidator
                 'public_key' => $this->tool->publicKey,
                 'login_url' => $this->tool->getLoginUrl(),
                 'redirect_url' => $this->tool->getRedirectUrl(),
-                '1p3_ags' => $advServices['ags']
+                '1p3_ags' => $advServices['ags'],
+                '1p3_nrps' => $advServices['nrps'],
             ]
         );
     }

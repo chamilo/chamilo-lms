@@ -1138,6 +1138,21 @@ class Session
     }
 
     /**
+     * @param Course $course
+     *
+     * @return ArrayCollection
+     */
+    public function getUsersSubscriptionsInCourse(Course $course)
+    {
+        $criteria = Criteria::create()
+            ->where(
+                Criteria::expr()->eq('course', $course)
+            );
+
+        return $this->userCourseSubscriptions->matching($criteria);
+    }
+
+    /**
      * @return int
      */
     /*public function getPosition()

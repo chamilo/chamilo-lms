@@ -675,6 +675,7 @@ class ImsLtiTool
         return array_merge(
             [
                 'ags' => \LtiAssignmentGradesService::AGS_NONE,
+                'nrps' => \LtiNamesRoleProvisioningService::NRPS_NONE,
             ],
             $this->advantageServices
         );

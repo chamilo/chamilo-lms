@@ -217,6 +217,21 @@ try {
 
                 $jwtContent['https://purl.imsglobal.org/spec/lti-ags/claim/endpoint'] = $agsClaim;
             }
+
+            if (LtiNamesRoleProvisioningService::NRPS_NONE !== $advServices['nrps'] &&
+                api_is_allowed_to_edit(false, false, true)
+            ) {
+                $nrpsClaim = [
+                    'context_memberships_url' => LtiNamesRoleProvisioningService::getUrl(
+                        $tool->getId(),
+                        $course->getId(),
+                        $session ? $session->getId() : 0
+                    ),
+                    'service_versions' => ['2.0'],
+                ];
+
+                $jwtContent['https://purl.imsglobal.org/spec/lti-nrps/claim/namesroleservice'] = $nrpsClaim;
+            }
         }
     }
 

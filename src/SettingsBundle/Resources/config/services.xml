@@ -20,14 +20,21 @@
 
         <service id="chamilo.settings.manager" class="%chamilo_settings.settings.manager.class%" public="true" >
             <argument type="service" id="sylius.registry.settings_schema" />
-            <argument type="service" id="sylius.registry.settings_resolver" />
             <argument type="service" id="doctrine.orm.entity_manager" />
             <argument type="service" id="chamilo_settings.repository" />
-            <argument type="service" id="sylius.factory.settings" />
             <argument type="service" id="event_dispatcher" />
         </service>
 
         <service id="%chamilo_settings.settings.manager.class%" alias="chamilo.settings.manager">
+        </service>
+
+
+        <service id="chamilo_settings.form_factory.settings" public="true" class="Sylius\Bundle\SettingsBundle\Form\Factory\SettingsFormFactory">
+            <argument type="service" id="sylius.registry.settings_schema" />
+            <argument type="service" id="form.factory" />
+        </service>
+
+        <service id="Sylius\Bundle\SettingsBundle\Form\Factory\SettingsFormFactory" alias="chamilo_settings.form_factory.settings">
         </service>
 
         <service id="chamilo_settings.templating.helper.settings" class="%chamilo_settings.templating.helper.settings.class%" public="true">

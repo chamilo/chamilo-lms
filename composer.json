@@ -33,6 +33,12 @@
             "public/main/survey"
         ]
     },
+    "repositories": [
+        {
+            "type": "vcs",
+            "url":  "https://github.com/jmontoyaa/APYDataGridBundle.git"
+        }
+    ],
     "require": {
         "php": "^7.2.5",
         "ext-bcmath": "*",
@@ -62,31 +68,31 @@
         "sensio/framework-extra-bundle": "~5.0",
         "sensiolabs/security-checker": "~6.0",
 
-        "symfony/asset": "^4.0",
+        "symfony/asset": "^4.0|^5.0",
         "symfony/dotenv": "^4.0|^5.0",
         "symfony/expression-language": "^4.0",
         "symfony/flex": "^1.6",
-        "symfony/form": "^4.0",
-        "symfony/framework-bundle": "^4.0",
-        "symfony/http-kernel": "^4.0",
+        "symfony/form": "^4.0|^5.0",
+        "symfony/framework-bundle": "^4.0|^5.0",
+        "symfony/http-kernel": "^4.0|^5.0",
         "symfony/monolog-bundle": "^3.1",
         "symfony/mailer": "^4.0|^5.0",
         "symfony/polyfill-apcu": "^1.9",
         "symfony/requirements-checker": "^1.1",
-        "symfony/security-bundle": "^4.0",
+        "symfony/security-bundle": "^4.0|^5.0",
         "symfony/templating" : "^4.0",
         "symfony/translation": "^4.0",
-        "symfony/twig-bundle": "^4.0",
+        "symfony/twig-bundle": "^4.0|^5.0",
         "symfony/validator": "^4.0",
         "symfony/webpack-encore-bundle": "^1.7",
-        "symfony/yaml": "^4.0",
+        "symfony/yaml": "^4.0|^5.0",
 
         "tgalopin/html-sanitizer-bundle": "^1.1",
         "twig/extensions": "^1.5",
 
         "symfony/apache-pack": "^1.0",
         "apy/datagrid-bundle" : "dev-master",
-        "chamilo/settings-bundle": "1.*",
+        "chamilo/settings-bundle": "dev-master",
         "sonata-project/admin-bundle": "~3.0",
         "sonata-project/block-bundle": "~3.0",
         "sonata-project/cache-bundle": "~2.0",
@@ -110,7 +116,7 @@
         "antishov/doctrine-extensions-bundle": "~1.4",
         "sunra/php-simple-html-dom-parser": "~1.5.0",
         "friendsofsymfony/jsrouting-bundle": "~2.0",
-        "gregwar/captcha-bundle": "^2.0",
+        "gregwar/captcha-bundle": "dev-master",
 
         "knplabs/gaufrette": "~0.7",
         "knplabs/doctrine-behaviors": "~1.6",
@@ -147,7 +153,7 @@
         "paragonie/random-lib": "~2.0",
         "knplabs/knp-menu-bundle": "^2.0",
         "liip/theme-bundle": "^1.6",
-        "liip/imagine-bundle": "^2.1",
+        "liip/imagine-bundle": "dev-master",
         "a2lix/translation-form-bundle": "^3.0",
         "oneup/uploader-bundle": "dev-master",
         "overblog/graphql-bundle": "~0.11",
@@ -208,11 +214,5 @@
             "Chamilo\\CoreBundle\\Composer\\ScriptHandler::deleteOldFilesFrom19x"
         ],
         "phpcs": "phpcs --standard=.php_cs.dist"
-    },
-    "extra": {
-        "symfony": {
-            "allow-contrib": true,
-            "require": "4.4.*"
-        }
     }
 }

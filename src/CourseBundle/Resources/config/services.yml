@@ -14,13 +14,11 @@ services:
     Chamilo\CourseBundle\Manager\SettingsManager:
         arguments:
             - '@chamilo_course.registry.settings_schema'
-            - '@sylius.registry.settings_resolver'
             - '@doctrine.orm.entity_manager'
             - '@chamilo_course.repository.parameter'
-            - '@sylius.factory.settings'
             - '@event_dispatcher'
 
-    Sylius\Bundle\SettingsBundle\Form\Factory\SettingsFormFactory:
+    Chamilo\CourseBundle\Manager\SettingsFormFactory:
         arguments:
             - '@chamilo_course.registry.settings_schema'
             - '@form.factory'

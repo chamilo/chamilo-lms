@@ -16,7 +16,6 @@ use Sylius\Bundle\SettingsBundle\Model\SettingsInterface;
 use Sylius\Bundle\SettingsBundle\Schema\SchemaInterface;
 use Sylius\Bundle\SettingsBundle\Schema\SettingsBuilder;
 use Sylius\Component\Registry\ServiceRegistryInterface;
-use Sylius\Component\Resource\Factory\FactoryInterface;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\Validator\ConstraintViolationListInterface;
 use Symfony\Component\Validator\Exception\ValidatorException;
@@ -72,17 +71,15 @@ class SettingsManager implements SettingsManagerInterface
      */
     public function __construct(
         ServiceRegistryInterface $schemaRegistry,
-        ServiceRegistryInterface $resolverRegistry,
         EntityManager $manager,
         EntityRepository $repository,
-        FactoryInterface $settingsFactory,
         $eventDispatcher
     ) {
         $this->schemaRegistry = $schemaRegistry;
-        $this->resolverRegistry = $resolverRegistry;
+        //$this->resolverRegistry = $resolverRegistry;
         $this->manager = $manager;
         $this->repository = $repository;
-        $this->settingsFactory = $settingsFactory;
+        //$this->settingsFactory = $settingsFactory;
         $this->eventDispatcher = $eventDispatcher;
     }
 
@@ -682,7 +679,6 @@ class SettingsManager implements SettingsManagerInterface
     {
         $schemaAliasNoPrefix = $schemaAlias;
         $schemaAlias = 'chamilo_core.settings.'.$schemaAlias;
-
         if ($this->schemaRegistry->has($schemaAlias)) {
             /** @var SchemaInterface $schema */
             $schema = $this->schemaRegistry->get($schemaAlias);
@@ -690,8 +686,7 @@ class SettingsManager implements SettingsManagerInterface
             return [];
         }
 
-        /** @var \Sylius\Bundle\SettingsBundle\Model\Settings $settings */
-        $settings = $this->settingsFactory->createNew();
+        $settings = new Settings();
         $settings->setSchemaAlias($schemaAlias);
 
         // We need to get a plain parameters array since we use the options resolver on it
@@ -901,8 +896,7 @@ class SettingsManager implements SettingsManagerInterface
                 }
                 $persistedParametersMap[$name]->setValue($value);
             } else {
-                /** @var SettingsCurrent $setting */
-                $setting = $this->settingsFactory->createNew();
+                $setting = new Settings();
                 $setting->setSchemaAlias($schemaAlias);
 
                 $setting

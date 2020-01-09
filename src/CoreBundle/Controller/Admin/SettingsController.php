@@ -7,18 +7,31 @@ namespace Chamilo\CoreBundle\Controller\Admin;
 use Chamilo\SettingsBundle\Manager\SettingsManager;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 use Sylius\Bundle\SettingsBundle\Controller\SettingsController as SyliusSettingsController;
+use Sylius\Bundle\SettingsBundle\Form\Factory\SettingsFormFactory;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Translation\Translator;
 use Symfony\Component\Validator\Exception\ValidatorException;
+use Symfony\Contracts\Translation\TranslatorInterface;
 
 /**
  * Class SettingsController.
  */
 class SettingsController extends SyliusSettingsController
 {
+    public static function getSubscribedServices(): array
+    {
+        $services = parent::getSubscribedServices();
+        $services['chamilo.settings.manager'] = SettingsManager::class;
+        $services['chamilo_settings.form_factory.settings'] = SettingsFormFactory::class;
+        $services['translator'] = TranslatorInterface::class;
+
+        return $services;
+    }
+
     /**
      * @Security("has_role('ROLE_ADMIN')")
      *
@@ -203,6 +216,11 @@ class SettingsController extends SyliusSettingsController
     protected function getSettingsManager()
     {
         return $this->get('chamilo.settings.manager');
+    }
+
+    protected function getSettingsFormFactory()
+    {
+        return $this->get('chamilo_settings.form_factory.settings');
     }
 
     /**

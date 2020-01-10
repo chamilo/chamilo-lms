@@ -1356,6 +1356,9 @@ ALTER TABLE notification_event ADD COLUMN event_id INT NULL;
 // create new user text extra field called 'notification_event' to save the persistent settings.
 // $_configuration['notification_event'] = false;
 
+//Add help text to put 2 names in registration form
+//$_configuration['registration_add_helptext_for_2_names'] = false;
+
 // KEEP THIS AT THE END
 // -------- Custom DB changes
 // Add user activation by confirmation email

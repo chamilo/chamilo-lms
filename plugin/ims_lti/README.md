@@ -75,8 +75,7 @@ CREATE TABLE plugin_ims_lti_token (
     PRIMARY KEY(id)
 ) DEFAULT CHARACTER SET utf8 COLLATE `utf8_unicode_ci` ENGINE = InnoDB;
 ALTER TABLE plugin_ims_lti_token
-    ADD CONSTRAINT FK_F7B5692F8F7B22CC FOREIGN KEY (tool_id)
-    REFERENCES plugin_ims_lti_tool (id);
+    ADD CONSTRAINT FK_F7B5692F8F7B22CC FOREIGN KEY (tool_id) REFERENCES plugin_ims_lti_tool (id) ON DELETE CASCADE;
 ALTER TABLE plugin_ims_lti_tool
     ADD client_id VARCHAR(255) DEFAULT NULL,
     ADD public_key LONGTEXT DEFAULT NULL,
@@ -97,9 +96,9 @@ CREATE TABLE plugin_ims_lti_lineitem (
     PRIMARY KEY(id)
 ) DEFAULT CHARACTER SET utf8 COLLATE `utf8_unicode_ci` ENGINE = InnoDB;
 ALTER TABLE plugin_ims_lti_lineitem
-    ADD CONSTRAINT FK_BA81BBF08F7B22CC FOREIGN KEY (tool_id) REFERENCES plugin_ims_lti_tool (id);
+    ADD CONSTRAINT FK_BA81BBF08F7B22CC FOREIGN KEY (tool_id) REFERENCES plugin_ims_lti_tool (id) ON DELETE CASCADE;
 ALTER TABLE plugin_ims_lti_lineitem
-    ADD CONSTRAINT FK_BA81BBF01323A575 FOREIGN KEY (evaluation) REFERENCES gradebook_evaluation (id);
+    ADD CONSTRAINT FK_BA81BBF01323A575 FOREIGN KEY (evaluation) REFERENCES gradebook_evaluation (id) ON DELETE CASCADE;
 ```
 
 ## To v1.5.1

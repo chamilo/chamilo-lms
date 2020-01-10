@@ -28,14 +28,14 @@ class LineItem
      * @var ImsLtiTool
      *
      * @ORM\ManyToOne(targetEntity="Chamilo\PluginBundle\Entity\ImsLti\ImsLtiTool", inversedBy="lineItems")
-     * @ORM\JoinColumn(name="tool_id", referencedColumnName="id", nullable=false)
+     * @ORM\JoinColumn(name="tool_id", referencedColumnName="id", nullable=false, onDelete="CASCADE")
      */
     private $tool;
     /**
      * @var GradebookEvaluation
      *
      * @ORM\OneToOne(targetEntity="Chamilo\CoreBundle\Entity\GradebookEvaluation")
-     * @ORM\JoinColumn(name="evaluation", referencedColumnName="id", nullable=false)
+     * @ORM\JoinColumn(name="evaluation", referencedColumnName="id", nullable=false, onDelete="CASCADE")
      */
     private $evaluation;
     /**

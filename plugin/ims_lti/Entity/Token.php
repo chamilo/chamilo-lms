@@ -29,7 +29,7 @@ class Token
      * @var ImsLtiTool
      *
      * @ORM\ManyToOne(targetEntity="Chamilo\PluginBundle\Entity\ImsLti\ImsLtiTool")
-     * @ORM\JoinColumn(name="tool_id", referencedColumnName="id")
+     * @ORM\JoinColumn(name="tool_id", referencedColumnName="id", onDelete="CASCADE")
      */
     private $tool;
     /**

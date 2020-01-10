@@ -191,10 +191,6 @@ class ImsLtiPlugin extends Plugin
                     INDEX IDX_C5E47F7C727ACA70 (parent_id),
                     PRIMARY KEY(id)
                 ) DEFAULT CHARACTER SET utf8 COLLATE `utf8_unicode_ci` ENGINE = InnoDB",
-            "CREATE TABLE plugin_ims_lti_deployment (
-                    id INT AUTO_INCREMENT NOT NULL,
-                    PRIMARY KEY(id)
-                ) DEFAULT CHARACTER SET utf8 COLLATE `utf8_unicode_ci` ENGINE = InnoDB",
             "CREATE TABLE plugin_ims_lti_platform (
                     id INT AUTO_INCREMENT NOT NULL,
                     kid VARCHAR(255) NOT NULL,
@@ -255,7 +251,6 @@ class ImsLtiPlugin extends Plugin
         Database::query("DROP TABLE IF EXISTS plugin_ims_lti_lineitem");
         Database::query("DROP TABLE IF EXISTS plugin_ims_lti_token");
         Database::query("DROP TABLE IF EXISTS plugin_ims_lti_platform");
-        Database::query("DROP TABLE IF EXISTS plugin_ims_lti_deployment");
         Database::query("DROP TABLE IF EXISTS plugin_ims_lti_tool");
 
         return true;

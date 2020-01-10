@@ -214,7 +214,7 @@ class LtiLineItemsResource extends LtiAdvantageServiceResource
             $links['prev'] = $page - 1;
         }
 
-        if ($page <= $lineItems->count() / $limit) {
+        if ($page + 1  <= $lineItems->count() / $limit) {
             $links['next'] = $page + 1;
         }
 

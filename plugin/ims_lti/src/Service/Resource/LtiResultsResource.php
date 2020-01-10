@@ -212,7 +212,7 @@ class LtiResultsResource extends LtiAdvantageServiceResource
             $links['prev'] = $page - 1;
         }
 
-        if ($page < $links['last']) {
+        if ($page +1 < $links['last']) {
             $links['next'] = $page + 1;
         }
 

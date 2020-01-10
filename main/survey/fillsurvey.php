@@ -551,13 +551,15 @@ if ($survey_data['form_fields'] != '' &&
     $form->setDefaults($user_data);
 }
 
+$htmlHeadXtra[] = '<script>'.api_get_language_translate_html().'</script>';
+
 Display::display_header(get_lang('ToolSurvey'));
 
 // Displaying the survey title and subtitle (appears on every page)
 echo '<div class="survey-block">';
 echo '<div class="page-header">';
 echo '<h2>';
-echo strip_tags($survey_data['survey_title']).'</h2></div>';
+echo strip_tags($survey_data['survey_title'], '<span>').'</h2></div>';
 if (!empty($survey_data['survey_subtitle'])) {
     echo '<div class="survey_subtitle"><p>'.strip_tags($survey_data['survey_subtitle']).'</p></div>';
 }

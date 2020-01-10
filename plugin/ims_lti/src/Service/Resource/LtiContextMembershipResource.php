@@ -116,7 +116,7 @@ class LtiContextMembershipResource extends LtiAdvantageServiceResource
 
         $members = $this->getMembers($status, $limit, $page);
 
-        $data = $this->getGetData($members, $role);
+        $data = $this->getGetData($members);
 
         $this->setLinkHeaderToGet($status, $limit, $page);
 
@@ -171,11 +171,10 @@ class LtiContextMembershipResource extends LtiAdvantageServiceResource
 
     /**
      * @param array  $members
-     * @param string $role
      *
      * @return array
      */
-    private function getGetData(array $members, $role ='')
+    private function getGetData(array $members)
     {
         $platformDomain = str_replace(['https://', 'http://'], '', api_get_setting('InstitutionUrl'));
         $dataMembers = [];

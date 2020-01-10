@@ -1,9 +1,10 @@
 <?php
 /* For licensing terms, see /license.txt */
 
-use Chamilo\PluginBundle\Entity\ImsLti\ImsLtiTool;
 use Chamilo\PluginBundle\Entity\ImsLti\Token;
-use Firebase\JWT\JWT;
+use Symfony\Component\HttpFoundation\JsonResponse;
+use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
 
 $cidReset = true;
 
@@ -11,71 +12,61 @@ require_once __DIR__.'/../../main/inc/global.inc.php';
 
 $plugin = ImsLtiPlugin::create();
 
-$tokenRequest = new LtiTokenRequest();
+$request = Request::createFromGlobals();
+
+$response = new JsonResponse();
 
 try {
-    if ($plugin->get('enabled') !== 'true') {
-        throw new Exception('unsupported');
-    }
-
-    if ('POST' !== $_SERVER['REQUEST_METHOD'] ||
-        empty($_SERVER['CONTENT_TYPE']) ||
-        $_SERVER['CONTENT_TYPE'] !== 'application/x-www-form-urlencoded'
+    if ($plugin->get('enabled') !== 'true' ||
+        $request->getMethod() !== Request::METHOD_POST ||
+        $request->server->get('CONTENT_TYPE') !== 'application/x-www-form-urlencoded'
     ) {
         throw new Exception('invalid_request');
     }
 
-    $clientAssertion = !empty($_POST['client_assertion']) ? $_POST['client_assertion'] : '';
-    $clientAssertionType = !empty($_POST['client_assertion_type']) ? $_POST['client_assertion_type'] : '';
-    $grantType = !empty($_POST['grant_type']) ? $_POST['grant_type'] : '';
-    $scope = !empty($_POST['scope']) ? $_POST['scope'] : '';
+    $clientAssertion = $request->request->get('client_assertion');
+    $clientAssertionType = $request->request->get('client_assertion_type');
+    $grantType = $request->request->get('grant_type');
+    $scope = $request->request->get('scope');
 
-    if (empty($clientAssertionType) || empty($grantType)) {
-        throw new Exception('invalid_request');
-    }
-
-    if ('urn:ietf:params:oauth:client-assertion-type:jwt-bearer' !== $clientAssertionType ||
-        $grantType !== 'client_credentials'
+    if ('urn:ietf:params:oauth:client-assertion-type:jwt-bearer' !== $clientAssertionType
+        || $grantType !== 'client_credentials'
     ) {
         throw new Exception('unsupported_grant_type');
     }
 
-    $tool = $tokenRequest->validateClientAssertion($clientAssertion);
+    $tokenRequest = new LtiTokenRequest();
 
     try {
-        $jwt = JWT::decode($clientAssertion, $tool->publicKey, ['RS256']);
+        $tokenRequest->validateClientAssertion($clientAssertion);
+        $tokenRequest->decodeJwt($clientAssertion);
     } catch (Exception $exception) {
         throw new Exception('invalid_client');
     }
 
-    $allowedScopes = $tokenRequest->validateScope($scope, $tool);
+    try {
+        $allowedScopes = $tokenRequest->validateScope($scope);
+    } catch (Exception $exception) {
+        throw new Exception('invalid_scope');
+    }
 
-    $now = time();
-
-    $token = new Token();
-    $token
-        ->generateHash()
-        ->setTool($tool)
-        ->setScope($allowedScopes)
-        ->setCreatedAt($now)
-        ->setExpiresAt($now + Token::TOKEN_LIFETIME);
+    $token = $tokenRequest->generateToken($allowedScopes);
 
     $em = Database::getManager();
     $em->persist($token);
     $em->flush();
 
-    $json = [
+    $data = [
         'access_token' => $token->getHash(),
         'token_type' => 'Bearer',
         'expires_in' => Token::TOKEN_LIFETIME,
         'scope' => $token->getScopeInString(),
     ];
 } catch (Exception $exception) {
-    header("HTTP/1.0 400 Bad Request");
+    $response->setStatusCode(Response::HTTP_BAD_REQUEST);
 
-    $json = ['error' => $exception->getMessage()];
+    $data = ['error' => $exception->getMessage()];
 }
 
-header('Content-Type: application/json');
-
-echo json_encode($json);
+$response->setData($data);
+$response->send();

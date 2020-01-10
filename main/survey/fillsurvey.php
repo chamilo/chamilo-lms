@@ -71,7 +71,7 @@ $surveyCode = isset($_GET['scode']) ? Database::escape_string($_GET['scode']) : 
 if ($surveyCode != '') {
     // Firstly we check if this survey is ready for anonymous use:
     $sql = "SELECT anonymous FROM $table_survey
-            WHERE c_id = $course_id AND code ='".$surveyCode."'";
+            WHERE c_id = $course_id AND code ='$surveyCode'";
     $resultAnonymous = Database::query($sql);
     $rowAnonymous = Database::fetch_array($resultAnonymous, 'ASSOC');
     // If is anonymous and is not allowed to take the survey to anonymous users, forbid access:
@@ -686,8 +686,8 @@ if ((isset($_GET['show']) && $_GET['show'] != '') ||
         if (empty($paged_questions)) {
             $sql = "SELECT * FROM $table_survey_question
                     WHERE
-                        survey_question NOT LIKE '%{{%' AND 
-                        c_id = $course_id AND 
+                        survey_question NOT LIKE '%{{%' AND
+                        c_id = $course_id AND
                         survey_id = '".intval($survey_invitation['survey_id'])."'
                     ORDER BY sort ASC";
             $result = Database::query($sql);
@@ -767,7 +767,7 @@ if ((isset($_GET['show']) && $_GET['show'] != '') ||
                         LEFT JOIN $table_survey_question_option survey_question_option
                         ON survey_question.question_id = survey_question_option.question_id AND
                             survey_question_option.c_id = $course_id
-                        WHERE                        
+                        WHERE
                             survey_question NOT LIKE '%{{%' AND
                             survey_question.survey_id = '".intval($survey_invitation['survey_id'])."' AND
                             survey_question.question_id IN (".implode(',', $paged_questions[$_GET['show']]).") AND
@@ -810,9 +810,9 @@ if ((isset($_GET['show']) && $_GET['show'] != '') ||
             $answer_list = [];
             // Get current user results
             $results = [];
-            $sql = "SELECT 
-                      survey_group_pri, 
-                      user, 
+            $sql = "SELECT
+                      survey_group_pri,
+                      user,
                       SUM(value) as value
                     FROM $table_survey_answer as survey_answer
                     INNER JOIN $table_survey_question as survey_question
@@ -1049,7 +1049,7 @@ if ((isset($_GET['show']) && $_GET['show'] != '') ||
                                 ON survey_question.question_id = survey_question_option.question_id AND
                                 survey_question_option.c_id = $course_id
                                 WHERE
-                                    survey_question NOT LIKE '%{{%' AND 
+                                    survey_question NOT LIKE '%{{%' AND
                                     survey_question.survey_id = '".$my_survey_id."' AND
                                     survey_question.c_id = $course_id AND
                                     survey_question.question_id IN (".implode(',', $paged_questions_sec[$val]).")
@@ -1160,7 +1160,7 @@ if ((isset($_GET['show']) && $_GET['show'] != '') ||
                             ON survey_question.question_id = survey_question_option.question_id AND
                             survey_question_option.c_id = $course_id
                             WHERE
-                                survey_question NOT LIKE '%{{%' AND 
+                                survey_question NOT LIKE '%{{%' AND
                                 survey_question.survey_id = '".intval($survey_invitation['survey_id'])."' AND
                                 survey_question.c_id = $course_id  AND
                                 survey_question.question_id IN (".$imploded.")

@@ -115,13 +115,10 @@ switch ($action) {
                     );
             }
 
-            $toolIsV1p3 = !empty($tool->publicKey) && !empty($tool->getClientId()) &&
-                !empty($tool->getLoginUrl()) && !empty($tool->getRedirectUrl());
-
             $em->persist($tool);
             $em->flush();
 
-            if ($toolIsV1p3) {
+            if ($tool->getVersion() === ImsLti::V_1P3) {
                 $advServices = $tool->getAdvantageServices();
 
                 if (LtiAssignmentGradesService::AGS_NONE !== $advServices['ags']) {
@@ -177,7 +174,6 @@ switch ($action) {
 
         if ($form->validate()) {
             $formValues = $form->getSubmitValues();
-            var_dump($formValues);die;
 
             $tool
                 ->setName($formValues['name'])

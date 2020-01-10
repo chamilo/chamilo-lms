@@ -3,6 +3,7 @@
 
 use Chamilo\CoreBundle\Entity\Course;
 use Chamilo\PluginBundle\Entity\ImsLti\ImsLtiTool;
+use Doctrine\ORM\OptimisticLockException;
 
 /**
  * Class LtiContentItemType.
@@ -17,27 +18,10 @@ abstract class LtiContentItemType
     abstract public function __construct(stdClass $itemData);
 
     /**
-     * @param stdClass $itemData
-     *
-     * @throws Exception
-     */
-    abstract protected function validateItemData(stdClass $itemData);
-
-    /**
      * @param ImsLtiTool $baseTool
      * @param Course     $course
      *
-     * @throws Exception
-     *
-     * @return ImsLtiTool
-     */
-    abstract protected function createTool(ImsLtiTool $baseTool);
-
-    /**
-     * @param ImsLtiTool $baseTool
-     * @param Course     $course
-     *
-     * @throws \Doctrine\ORM\OptimisticLockException
+     * @throws OptimisticLockException
      *
      * @return ImsLtiTool
      */
@@ -55,4 +39,21 @@ abstract class LtiContentItemType
 
         return $newTool;
     }
+
+    /**
+     * @param ImsLtiTool $baseTool
+     * @param Course     $course
+     *
+     * @return ImsLtiTool
+     * @throws Exception
+     *
+     */
+    abstract protected function createTool(ImsLtiTool $baseTool);
+
+    /**
+     * @param stdClass $itemData
+     *
+     * @throws Exception
+     */
+    abstract protected function validateItemData(stdClass $itemData);
 }

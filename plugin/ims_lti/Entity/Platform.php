@@ -16,6 +16,12 @@ use Doctrine\ORM\Mapping as ORM;
 class Platform
 {
     /**
+     * @var string
+     *
+     * @ORM\Column(name="public_key", type="text")
+     */
+    public $publicKey;
+    /**
      * @var int
      *
      * @ORM\Column(name="id", type="integer")
@@ -29,12 +35,6 @@ class Platform
      * @ORM\Column(name="kid", type="string")
      */
     private $kid;
-    /**
-     * @var string
-     *
-     * @ORM\Column(name="public_key", type="text")
-     */
-    public $publicKey;
     /**
      * @var string
      *

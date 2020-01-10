@@ -19,6 +19,12 @@ use PHPExiftool\Driver\Tag\MXF\ViewportAspectRatio;
 class ImsLtiTool
 {
     /**
+     * @var string|null
+     *
+     * @ORM\Column(name="public_key", type="text", nullable=true)
+     */
+    public $publicKey;
+    /**
      * @var integer
      *
      * @ORM\Column(name="id", type="integer")
@@ -68,14 +74,12 @@ class ImsLtiTool
      * @ORM\Column(name="active_deep_linking", type="boolean", nullable=false, options={"default": false})
      */
     private $activeDeepLinking = false;
-
     /**
      * @var null|string
      *
      * @ORM\Column(name="privacy", type="text", nullable=true, options={"default": null})
      */
     private $privacy = null;
-
     /**
      * @var Course|null
      *
@@ -83,7 +87,6 @@ class ImsLtiTool
      * @ORM\JoinColumn(name="c_id", referencedColumnName="id")
      */
     private $course = null;
-
     /**
      * @var GradebookEvaluation|null
      *
@@ -91,7 +94,6 @@ class ImsLtiTool
      * @ORM\JoinColumn(name="gradebook_eval_id", referencedColumnName="id", onDelete="SET NULL")
      */
     private $gradebookEval = null;
-
     /**
      * @var ImsLtiTool|null
      *
@@ -99,28 +101,18 @@ class ImsLtiTool
      * @ORM\JoinColumn(name="parent_id", referencedColumnName="id", onDelete="CASCADE")
      */
     private $parent;
-
     /**
      * @var ArrayCollection
      *
      * @ORM\OneToMany(targetEntity="Chamilo\PluginBundle\Entity\ImsLti\ImsLtiTool", mappedBy="parent")
      */
     private $children;
-
     /**
      * @var string
      *
      * @ORM\Column(name="client_id", type="string", nullable=true)
      */
     private $clientId;
-
-    /**
-     * @var string|null
-     *
-     * @ORM\Column(name="public_key", type="text", nullable=true)
-     */
-    public $publicKey;
-
     /**
      * @var string|null
      *
@@ -165,7 +157,7 @@ class ImsLtiTool
         $this->customParams = null;
         $this->activeDeepLinking = false;
         $this->course = null;
-        $this->gradebookEval =null;
+        $this->gradebookEval = null;
         $this->privacy = null;
         $this->children = new ArrayCollection();
         $this->consumerKey = null;
@@ -192,6 +184,7 @@ class ImsLtiTool
 
     /**
      * @param string $name
+     *
      * @return ImsLtiTool
      */
     public function setName($name)
@@ -211,6 +204,7 @@ class ImsLtiTool
 
     /**
      * @param null|string $description
+     *
      * @return ImsLtiTool
      */
     public function setDescription($description)
@@ -230,49 +224,12 @@ class ImsLtiTool
 
     /**
      * @param string $launchUrl
+     *
      * @return ImsLtiTool
      */
     public function setLaunchUrl($launchUrl)
     {
         $this->launchUrl = $launchUrl;
-
-        return $this;
-    }
-
-    /**
-     * @return string
-     */
-    public function getConsumerKey()
-    {
-        return $this->consumerKey;
-    }
-
-    /**
-     * @param string $consumerKey
-     * @return ImsLtiTool
-     */
-    public function setConsumerKey($consumerKey)
-    {
-        $this->consumerKey = $consumerKey;
-
-        return $this;
-    }
-
-    /**
-     * @return string
-     */
-    public function getSharedSecret()
-    {
-        return $this->sharedSecret;
-    }
-
-    /**
-     * @param string $sharedSecret
-     * @return ImsLtiTool
-     */
-    public function setSharedSecret($sharedSecret)
-    {
-        $this->sharedSecret = $sharedSecret;
 
         return $this;
     }
@@ -287,6 +244,7 @@ class ImsLtiTool
 
     /**
      * @param null|string $customParams
+     *
      * @return ImsLtiTool
      */
     public function setCustomParams($customParams)
@@ -324,6 +282,9 @@ class ImsLtiTool
         return implode("\n", $pairs);
     }
 
+    /**
+     * @return array
+     */
     public function getCustomParamsAsArray()
     {
         $params = [];
@@ -337,33 +298,6 @@ class ImsLtiTool
             $value = self::filterSpaces($value);
 
             $params[$key] = $value;
-        }
-
-        return $params;
-    }
-
-    /**
-     * @return array
-     */
-    public function parseCustomParams()
-    {
-        if (empty($this->customParams)) {
-            return [];
-        }
-
-        $params = [];
-        $strings = explode("\n", $this->customParams);
-
-        foreach ($strings as $string) {
-            if (empty($string)) {
-                continue;
-            }
-
-            $pairs = explode('=', $string, 2);
-            $key = self::filterSpecialChars($pairs[0]);
-            $value = $pairs[1];
-
-            $params['custom_'.$key] = $value;
         }
 
         return $params;
@@ -410,6 +344,43 @@ class ImsLtiTool
     }
 
     /**
+     * @return array
+     */
+    public function parseCustomParams()
+    {
+        if (empty($this->customParams)) {
+            return [];
+        }
+
+        $params = [];
+        $strings = explode("\n", $this->customParams);
+
+        foreach ($strings as $string) {
+            if (empty($string)) {
+                continue;
+            }
+
+            $pairs = explode('=', $string, 2);
+            $key = self::filterSpecialChars($pairs[0]);
+            $value = $pairs[1];
+
+            $params['custom_'.$key] = $value;
+        }
+
+        return $params;
+    }
+
+    /**
+     * Get activeDeepLinking.
+     *
+     * @return bool
+     */
+    public function isActiveDeepLinking()
+    {
+        return $this->activeDeepLinking;
+    }
+
+    /**
      * Set activeDeepLinking.
      *
      * @param bool $activeDeepLinking
@@ -421,16 +392,6 @@ class ImsLtiTool
         $this->activeDeepLinking = $activeDeepLinking;
 
         return $this;
-    }
-
-    /**
-     * Get activeDeepLinking.
-     *
-     * @return bool
-     */
-    public function isActiveDeepLinking()
-    {
-        return $this->activeDeepLinking;
     }
 
     /**
@@ -482,6 +443,108 @@ class ImsLtiTool
     }
 
     /**
+     * @return bool
+     */
+    public function isSharingName()
+    {
+        $unserialize = $this->unserializePrivacy();
+
+        return (bool) $unserialize['share_name'];
+    }
+
+    /**
+     * @return mixed
+     */
+    public function unserializePrivacy()
+    {
+        return \UnserializeApi::unserialize('not_allowed_classes', $this->privacy);
+    }
+
+    /**
+     * @return bool
+     */
+    public function isSharingEmail()
+    {
+        $unserialize = $this->unserializePrivacy();
+
+        return (bool) $unserialize['share_email'];
+    }
+
+    /**
+     * @return bool
+     */
+    public function isSharingPicture()
+    {
+        $unserialize = $this->unserializePrivacy();
+
+        return (bool) $unserialize['share_picture'];
+    }
+
+    /**
+     * @return ImsLtiTool|null
+     */
+    public function getParent()
+    {
+        return $this->parent;
+    }
+
+    /**
+     * @param ImsLtiTool $parent
+     *
+     * @return ImsLtiTool
+     */
+    public function setParent(ImsLtiTool $parent)
+    {
+        $this->parent = $parent;
+
+        $this->sharedSecret = $parent->getSharedSecret();
+        $this->consumerKey = $parent->getConsumerKey();
+        $this->privacy = $parent->getPrivacy();
+
+        return $this;
+    }
+
+    /**
+     * @return string
+     */
+    public function getSharedSecret()
+    {
+        return $this->sharedSecret;
+    }
+
+    /**
+     * @param string $sharedSecret
+     *
+     * @return ImsLtiTool
+     */
+    public function setSharedSecret($sharedSecret)
+    {
+        $this->sharedSecret = $sharedSecret;
+
+        return $this;
+    }
+
+    /**
+     * @return string
+     */
+    public function getConsumerKey()
+    {
+        return $this->consumerKey;
+    }
+
+    /**
+     * @param string $consumerKey
+     *
+     * @return ImsLtiTool
+     */
+    public function setConsumerKey($consumerKey)
+    {
+        $this->consumerKey = $consumerKey;
+
+        return $this;
+    }
+
+    /**
      * Get privacy.
      *
      * @return null|string
@@ -509,68 +572,6 @@ class ImsLtiTool
                 'share_picture' => $sharePicture,
             ]
         );
-
-        return $this;
-    }
-
-    /**
-     * @return bool
-     */
-    public function isSharingName()
-    {
-        $unserialize = $this->unserializePrivacy();
-
-        return (bool) $unserialize['share_name'];
-    }
-
-    /**
-     * @return bool
-     */
-    public function isSharingEmail()
-    {
-        $unserialize = $this->unserializePrivacy();
-
-        return (bool) $unserialize['share_email'];
-    }
-
-    /**
-     * @return bool
-     */
-    public function isSharingPicture()
-    {
-        $unserialize = $this->unserializePrivacy();
-
-        return (bool) $unserialize['share_picture'];
-    }
-
-    /**
-     * @return mixed
-     */
-    public function unserializePrivacy()
-    {
-        return \UnserializeApi::unserialize('not_allowed_classes', $this->privacy);
-    }
-
-    /**
-     * @return ImsLtiTool|null
-     */
-    public function getParent()
-    {
-        return $this->parent;
-    }
-
-    /**
-     * @param ImsLtiTool $parent
-     *
-     * @return ImsLtiTool
-     */
-    public function setParent(ImsLtiTool $parent)
-    {
-        $this->parent = $parent;
-
-        $this->sharedSecret = $parent->getSharedSecret();
-        $this->consumerKey = $parent->getConsumerKey();
-        $this->privacy = $parent->getPrivacy();
 
         return $this;
     }
@@ -648,20 +649,6 @@ class ImsLtiTool
     }
 
     /**
-     * Set advantageServices.
-     *
-     * @param array $advantageServices
-     *
-     * @return ImsLtiTool
-     */
-    public function setAdvantageServices($advantageServices)
-    {
-        $this->advantageServices = $advantageServices;
-
-        return $this;
-    }
-
-    /**
      * Get advantageServices.
      *
      * @return array
@@ -682,6 +669,20 @@ class ImsLtiTool
     }
 
     /**
+     * Set advantageServices.
+     *
+     * @param array $advantageServices
+     *
+     * @return ImsLtiTool
+     */
+    public function setAdvantageServices($advantageServices)
+    {
+        $this->advantageServices = $advantageServices;
+
+        return $this;
+    }
+
+    /**
      * Add LineItem to lineItems.
      *
      * @param LineItem $lineItem
@@ -693,20 +694,6 @@ class ImsLtiTool
         $lineItem->setTool($this);
 
         $this->lineItems[] = $lineItem;
-
-        return $this;
-    }
-
-    /**
-     * Set lineItems.
-     *
-     * @param ArrayCollection $lineItems
-     *
-     * @return $this
-     */
-    public function setLineItems(ArrayCollection $lineItems)
-    {
-        $this->lineItems = $lineItems;
 
         return $this;
     }
@@ -751,6 +738,20 @@ class ImsLtiTool
     }
 
     /**
+     * Set lineItems.
+     *
+     * @param ArrayCollection $lineItems
+     *
+     * @return $this
+     */
+    public function setLineItems(ArrayCollection $lineItems)
+    {
+        $this->lineItems = $lineItems;
+
+        return $this;
+    }
+
+    /**
      * Get version.
      *
      * @return string
@@ -758,15 +759,6 @@ class ImsLtiTool
     public function getVersion()
     {
         return $this->version;
-    }
-
-    public function getVersionName()
-    {
-        if (\ImsLti::V_1P1 === $this->version) {
-            return 'LTI 1.0 / 1.1';
-        }
-
-        return 'LTI 1.3';
     }
 
     /**
@@ -781,6 +773,18 @@ class ImsLtiTool
         $this->version = $version;
 
         return $this;
+    }
+
+    /**
+     * @return string
+     */
+    public function getVersionName()
+    {
+        if (\ImsLti::V_1P1 === $this->version) {
+            return 'LTI 1.0 / 1.1';
+        }
+
+        return 'LTI 1.3';
     }
 
     /**

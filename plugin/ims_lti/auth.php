@@ -27,7 +27,12 @@ $webPath = api_get_path(WEB_PATH);
 $webPluginPath = api_get_path(WEB_PLUGIN_PATH);
 
 try {
-    if (empty($scope) || empty($responseType) || empty($clientId) || empty($redirectUri) || empty($loginHint) ||
+    if (
+        empty($scope) ||
+        empty($responseType) ||
+        empty($clientId) ||
+        empty($redirectUri) ||
+        empty($loginHint) ||
         empty($nonce)
     ) {
         throw LtiAuthException::invalidRequest();

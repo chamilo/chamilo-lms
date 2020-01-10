@@ -1,7 +1,6 @@
 <?php
 /* For licensing terms, see /license.txt */
 
-use Chamilo\CoreBundle\Entity\Course;
 use Chamilo\PluginBundle\Entity\ImsLti\ImsLtiTool;
 
 /**
@@ -72,12 +71,12 @@ class LtiResourceLink extends LtiContentItemType
         $this->url = empty($itemData->url) ? '' : $itemData->url;
         $this->title = empty($itemData->title) ? '' : $itemData->title;
         $this->text = empty($itemData->text) ? '' : $itemData->text;
-        $this->custom = empty($itemData->custom) || !is_array($itemData->custom) ? [] : (array) $itemData->custom;
+        $this->custom = empty($itemData->custom) || !is_array($itemData->custom) ? [] : (array)$itemData->custom;
 
         $this->icon = empty($itemData->icon) ? null : $itemData->icon;
 
-        if ($this->icon &&
-            (empty($this->icon->url) || empty($this->icon->width) || empty($this->icon->height))
+        if ($this->icon
+            && (empty($this->icon->url) || empty($this->icon->width) || empty($this->icon->height))
         ) {
             throw new Exception(
                 sprintf("Icon properties are missing in data form content item: %s", print_r($itemData, true))
@@ -86,8 +85,8 @@ class LtiResourceLink extends LtiContentItemType
 
         $this->thumbnail = empty($itemData->thumbnail) ? null : $itemData->thumbnail;
 
-        if ($this->thumbnail &&
-            (empty($this->thumbnail->url) || empty($this->thumbnail->width) || empty($this->thumbnail->height))
+        if ($this->thumbnail
+            && (empty($this->thumbnail->url) || empty($this->thumbnail->width) || empty($this->thumbnail->height))
         ) {
             throw new Exception(
                 sprintf("Thumbnail URL is missing in data form content item: %s", print_r($itemData, true))

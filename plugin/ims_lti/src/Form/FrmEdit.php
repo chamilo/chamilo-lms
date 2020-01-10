@@ -118,7 +118,7 @@ class FrmEdit extends FormValidator
                 $plugin->get_lang('NamesAndRoleProvisioningService'),
                 [
                     LtiNamesRoleProvisioningService::NRPS_NONE => $plugin->get_lang('DontUseService'),
-                    LtiNamesRoleProvisioningService::NRPS_CONTEXT_MEMBERSHIP => $plugin->get_lang('UseService')
+                    LtiNamesRoleProvisioningService::NRPS_CONTEXT_MEMBERSHIP => $plugin->get_lang('UseService'),
                 ]
             );
         }
@@ -136,6 +136,9 @@ class FrmEdit extends FormValidator
         $this->applyFilter('__ALL__', 'trim');
     }
 
+    /**
+     * @throws Exception
+     */
     public function setDefaultValues()
     {
         $advServices = $this->tool->getAdvantageServices();

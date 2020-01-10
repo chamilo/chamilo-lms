@@ -33,8 +33,10 @@ class FrmAdd extends FormValidator
 
         $this->baseTool = $tool;
         $this->toolIsV1p3 = $this->baseTool &&
-            !empty($this->baseTool->publicKey) && !empty($this->baseTool->getClientId()) &&
-            !empty($this->baseTool->getLoginUrl()) && !empty($this->baseTool->getRedirectUrl());
+            !empty($this->baseTool->publicKey) &&
+            !empty($this->baseTool->getClientId()) &&
+            !empty($this->baseTool->getLoginUrl()) &&
+            !empty($this->baseTool->getRedirectUrl());
     }
 
     /**
@@ -105,7 +107,7 @@ class FrmAdd extends FormValidator
             $plugin->get_lang('NamesAndRoleProvisioningService'),
             [
                 LtiNamesRoleProvisioningService::NRPS_NONE => $plugin->get_lang('DontUseService'),
-                LtiNamesRoleProvisioningService::NRPS_CONTEXT_MEMBERSHIP => $plugin->get_lang('UseService')
+                LtiNamesRoleProvisioningService::NRPS_CONTEXT_MEMBERSHIP => $plugin->get_lang('UseService'),
             ]
         );
         $this->addHtml('</div>');

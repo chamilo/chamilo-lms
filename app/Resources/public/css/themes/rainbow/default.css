@@ -1278,7 +1278,7 @@ svg circle{
     background-position: 0 -200px;
 }
 .mejs__container.mejs__video{
-    margin: 20px auto;
+    margin: 0 auto 20px auto;
 }
 .exercise_description .mejs__container.mejs__video {
     margin: inherit;

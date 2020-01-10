@@ -87,6 +87,9 @@ class LtiResultsResource extends LtiAdvantageServiceResource
     {
         switch ($this->request->getMethod()) {
             case Request::METHOD_GET:
+                $this->validateToken(
+                    [LtiAssignmentGradesService::SCOPE_RESULT_READ]
+                );
                 $this->processGet();
                 break;
             default:

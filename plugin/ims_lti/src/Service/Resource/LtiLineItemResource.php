@@ -50,12 +50,21 @@ class LtiLineItemResource extends LtiAdvantageServiceResource
     {
         switch ($this->request->getMethod()) {
             case Request::METHOD_GET:
+                $this->validateToken(
+                    [LtiAssignmentGradesService::SCOPE_LINE_ITEM]
+                );
                 $this->processGet();
                 break;
             case Request::METHOD_PUT:
+                $this->validateToken(
+                    [LtiAssignmentGradesService::SCOPE_LINE_ITEM]
+                );
                 $this->processPut();
                 break;
             case Request::METHOD_DELETE:
+                $this->validateToken(
+                    [LtiAssignmentGradesService::SCOPE_LINE_ITEM]
+                );
                 $this->processDelete();
                 break;
             default:

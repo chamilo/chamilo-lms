@@ -3,11 +3,14 @@
 
 use Chamilo\CoreBundle\Entity\Course;
 use Chamilo\PluginBundle\Entity\ImsLti\ImsLtiTool;
+use Chamilo\PluginBundle\Entity\ImsLti\Token;
 use Doctrine\ORM\OptimisticLockException;
 use Doctrine\ORM\ORMException;
 use Doctrine\ORM\TransactionRequiredException;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
+use Symfony\Component\HttpKernel\Exception\HttpException;
 use Symfony\Component\HttpKernel\Exception\HttpExceptionInterface;
 use Symfony\Component\HttpKernel\Exception\MethodNotAllowedHttpException;
 
@@ -84,4 +87,43 @@ abstract class LtiAdvantageServiceResource
      * @throws MethodNotAllowedHttpException
      */
     abstract public function process();
+
+    /**
+     * @param array $allowedScopes
+     *
+     * @throws HttpException
+     */
+    protected function validateToken(array $allowedScopes)
+    {
+        $headers = getallheaders();
+        $authorization = isset($headers['Authorization']) ? $headers['Authorization'] : '';
+
+        if (substr($authorization, 0, 7) !== 'Bearer ') {
+            throw new BadRequestHttpException('Authorization is missing.');
+        }
+
+        $hash = trim(substr($authorization, 7));
+
+        /** @var Token $token */
+        $token = Database::getManager()
+            ->getRepository('ChamiloPluginBundle:ImsLti\Token')
+            ->findOneBy(['hash' => $hash]);
+
+        if (!$token) {
+            throw new BadRequestHttpException('Authorization token invalid.');
+        }
+
+        if ($token->getExpiresAt() < api_get_utc_datetime(null, false, true)->getTimestamp()) {
+            throw new BadRequestHttpException('Authorization token expired.');
+        }
+
+        $intersect = array_intersect(
+            $token->getScope(),
+            $allowedScopes
+        );
+
+        if (empty($intersect)) {
+            throw new BadRequestHttpException('Authorization token invalid for the scope.');
+        }
+    }
 }

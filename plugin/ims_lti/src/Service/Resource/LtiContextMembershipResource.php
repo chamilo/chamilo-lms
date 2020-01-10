@@ -87,6 +87,9 @@ class LtiContextMembershipResource extends LtiAdvantageServiceResource
     {
         switch ($this->request->getMethod()) {
             case Request::METHOD_GET:
+                $this->validateToken(
+                    [LtiNamesRoleProvisioningService::SCOPE_CONTEXT_MEMBERSHIP_READ]
+                );
                 $this->processGet();
                 break;
             default:

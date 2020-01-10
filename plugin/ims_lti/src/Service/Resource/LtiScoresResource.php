@@ -103,6 +103,9 @@ class LtiScoresResource extends LtiAdvantageServiceResource
     {
         switch ($this->request->getMethod()) {
             case Request::METHOD_POST:
+                $this->validateToken(
+                    [LtiAssignmentGradesService::SCOPE_SCORE_WRITE]
+                );
                 $this->processPost();
                 break;
             default:

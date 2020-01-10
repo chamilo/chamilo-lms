@@ -3552,8 +3552,8 @@ class SurveyUtil
                     $_course
                 );
                 $icon = Display::return_icon(
-                    'statistics_na.png',
-                    get_lang('Survey'),
+                    'survey_na.png',
+                    get_lang('SurveysDone'),
                     [],
                     ICON_SIZE_TINY
                 );

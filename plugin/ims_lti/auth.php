@@ -163,10 +163,12 @@ try {
     $jwtContent['https://purl.imsglobal.org/spec/lti/claim/roles'] = ImsLtiPlugin::getRoles($user);
 
     // Message type info
+    $jwtContent['https://purl.imsglobal.org/spec/lti/claim/target_link_uri'] = $tool->getLaunchUrl();
+
     if ($tool->isActiveDeepLinking()) {
         $jwtContent['https://purl.imsglobal.org/spec/lti/claim/message_type'] = 'LtiDeepLinkingRequest';
         $jwtContent['https://purl.imsglobal.org/spec/lti-dl/claim/deep_linking_settings'] = [
-            'accept_types' => ['link', 'file', 'html', 'ltiResourceLink', 'image'],
+            'accept_types' => ['ltiResourceLink'],
             'accept_media_types' => implode(
                 ',',
                 ['*/*', ':::asterisk:::/:::asterisk:::']
@@ -179,10 +181,9 @@ try {
             'data' => "tool:{$tool->getId()}",
             'deep_link_return_url' => $webPluginPath.'ims_lti/item_return2.php',
         ];
-        $jwtContent['https://purl.imsglobal.org/spec/lti/claim/target_link_uri'] = $tool->getRedirectUrl();
+
     } else {
         $jwtContent['https://purl.imsglobal.org/spec/lti/claim/message_type'] = 'LtiResourceLinkRequest';
-        $jwtContent['https://purl.imsglobal.org/spec/lti/claim/target_link_uri'] = $tool->getLaunchUrl();
 
         // Resource link
         $jwtContent['https://purl.imsglobal.org/spec/lti/claim/resource_link'] = [
@@ -289,8 +290,9 @@ $formActionUrl = $tool->isActiveDeepLinking() ? $tool->getRedirectUrl() : $tool-
 <!DOCTYPE html>
 <html>
 <form action="<?php echo $formActionUrl ?>" name="ltiLaunchForm" method="post">
-    <input type="hidden" name="id_token" value="<?php echo $jwt ?>">
-    <input type="hidden" name="state" value="<?php echo $state ?>">
+    <?php foreach ($params as $name => $value) { ?>
+    <input type="hidden" name="<?php echo $name ?>" value="<?php echo $value ?>">
+    <?php } ?>
 </form>
 <script>document.ltiLaunchForm.submit();</script>
 </html>

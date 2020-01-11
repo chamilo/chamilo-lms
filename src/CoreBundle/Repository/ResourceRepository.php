@@ -177,7 +177,7 @@ class ResourceRepository extends BaseEntityRepository
      *
      * @return ResourceInterface
      */
-    public function find(int $id, $lockMode = null, $lockVersion = null)
+    public function find($id, $lockMode = null, $lockVersion = null)
     {
         return $this->getRepository()->find($id);
     }

@@ -7,6 +7,7 @@ namespace Chamilo\CourseBundle\Manager;
 use Chamilo\CoreBundle\Entity\Course;
 use Chamilo\CourseBundle\Entity\CCourseSetting;
 use Chamilo\SettingsBundle\Manager\SettingsManager as ChamiloSettingsManager;
+use Sylius\Bundle\SettingsBundle\Model\Settings;
 use Sylius\Bundle\SettingsBundle\Model\SettingsInterface;
 use Sylius\Bundle\SettingsBundle\Schema\SchemaInterface;
 use Sylius\Bundle\SettingsBundle\Schema\SettingsBuilder;
@@ -46,8 +47,7 @@ class SettingsManager extends ChamiloSettingsManager
             return [];
         }
 
-        /** @var \Sylius\Bundle\SettingsBundle\Model\Settings $settings */
-        $settings = $this->settingsFactory->createNew();
+        $settings = new Settings();
         $settings->setSchemaAlias($schemaAlias);
 
         // We need to get a plain parameters array since we use the options resolver on it

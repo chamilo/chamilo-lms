@@ -48,11 +48,6 @@ class SettingsManager implements SettingsManagerInterface
     protected $repository;
 
     /**
-     * @var FactoryInterface
-     */
-    protected $settingsFactory;
-
-    /**
      * @var EventDispatcherInterface
      */
     protected $eventDispatcher;

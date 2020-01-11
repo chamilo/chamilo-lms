@@ -4,7 +4,6 @@
 
 namespace Chamilo\CoreBundle\Controller\Admin;
 
-use Chamilo\SettingsBundle\Manager\SettingsManager;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 use Sylius\Bundle\SettingsBundle\Controller\SettingsController as SyliusSettingsController;
 use Symfony\Component\Routing\Annotation\Route;

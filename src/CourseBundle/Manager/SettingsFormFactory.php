@@ -21,19 +21,12 @@ final class SettingsFormFactory implements SettingsFormFactoryInterface
      */
     private $formFactory;
 
-    /**
-     * @param ServiceRegistryInterface $schemaRegistry
-     * @param FormFactoryInterface     $formFactory
-     */
     public function __construct(ServiceRegistryInterface $schemaRegistry, FormFactoryInterface $formFactory)
     {
         $this->schemaRegistry = $schemaRegistry;
         $this->formFactory = $formFactory;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function create($schemaAlias, $data = null, array $options = [])
     {
         /** @var SchemaInterface $schema */

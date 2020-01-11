@@ -45,7 +45,7 @@
         "apy/datagrid-bundle" : "dev-master",
         "beberlei/doctrineextensions": "^1.2",
         "brumann/polyfill-unserialize": "^1.0",
-        "chamilo/settings-bundle": "1.*",
+        "chamilo/settings-bundle": "dev-master",
         "clue/graph": "~0.9.0",
         "cocur/slugify": "^3.2",
         "doctrine/data-fixtures": "~1.0@dev",

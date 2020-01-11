@@ -69,7 +69,7 @@ if (!empty($_GET['survey_id'])) {
     api_not_allowed(true);
 }
 
-$tool_name = strip_tags($survey_data['title']);
+$tool_name = strip_tags($survey_data['title'], '<span>');
 $is_survey_type_1 = $survey_data['survey_type'] == 1;
 
 if (api_strlen(strip_tags($survey_data['title'])) > 40) {

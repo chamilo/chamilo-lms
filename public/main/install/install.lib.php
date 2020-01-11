@@ -542,7 +542,7 @@ function get_config_param($param, $updatePath = '')
         !is_dir($updatePath.$updateFromConfigFile)
     ) {
         require $updatePath.$updateFromConfigFile;
-        $config = new Zend\Config\Config($_configuration);
+        $config = new Laminas\Config\Config($_configuration);
 
         return $config->get($param);
     }

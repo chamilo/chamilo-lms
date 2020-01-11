@@ -4,8 +4,8 @@
 use Chamilo\CourseBundle\Entity\CForumPost;
 use Chamilo\CourseBundle\Entity\CForumThread;
 use ChamiloSession as Session;
-use Zend\Feed\Reader\Entry\Rss;
-use Zend\Feed\Reader\Reader;
+use Laminas\Feed\Reader\Entry\Rss;
+use Laminas\Feed\Reader\Reader;
 
 /**
  * Class SocialManager.

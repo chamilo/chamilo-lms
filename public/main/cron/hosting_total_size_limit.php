@@ -59,7 +59,7 @@ function isTotalPortalSizeBiggerThanLimit($debug = true)
         $hostingData['updated_at'] = time();
         $hostingData['size'] = $totalSize;
 
-        $writer = new Zend\Config\Writer\PhpArray();
+        $writer = new Laminas\Config\Writer\PhpArray();
         $phpCode = $writer->toString($hostingData);
         file_put_contents($file, $phpCode);
         $log .= "File saved in $file \n";

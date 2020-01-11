@@ -87,6 +87,12 @@
         "knplabs/knp-components": "~2.0",
         "knplabs/knp-menu-bundle": "^2.0",
         "knpuniversity/oauth2-client-bundle": "^1.31",
+        "laminas/laminas-config": "~3.2",
+        "laminas/laminas-feed": "~2.10",
+        "laminas/laminas-filter": "~2.9",
+        "laminas/laminas-http": "~2.10",
+        "laminas/laminas-permissions-acl": "~2.7",
+        "laminas/laminas-soap": "~2.8",
         "league/csv": "^9.1",
         "league/glide-symfony": "^1.0",
         "liip/imagine-bundle": "^2.1",
@@ -149,17 +155,10 @@
         "symfony/validator": "^4.0",
         "symfony/webpack-encore-bundle": "^1.7",
         "symfony/yaml": "^4.0|^5.0",
-
         "tgalopin/html-sanitizer-bundle": "^1.1",
         "twig/extensions": "^1.5",
         "vich/uploader-bundle": "~1.0",
-        "webit/eval-math": "~1.0",
-        "zendframework/zend-config": "~3.2",
-        "zendframework/zend-feed": "~2.10",
-        "zendframework/zend-filter": "~2.9",
-        "zendframework/zend-http": "~2.10",
-        "zendframework/zend-permissions-acl": "~2.7",
-        "zendframework/zend-soap": "~2.8"
+        "webit/eval-math": "~1.0"
     },
     "config": {
         "component-dir": "public/assets"
@@ -206,11 +205,5 @@
             "Chamilo\\CoreBundle\\Composer\\ScriptHandler::deleteOldFilesFrom19x"
         ],
         "phpcs": "phpcs --standard=.php_cs.dist"
-    },
-    "extra": {
-        "symfony": {
-            "allow-contrib": true,
-            "require": "4.4.*"
-        }
     }
 }

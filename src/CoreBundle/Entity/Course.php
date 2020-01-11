@@ -432,7 +432,7 @@ class Course extends AbstractResource implements ResourceInterface
     /**
      * @param $urls
      */
-    public function setUrls($urls)
+    public function setUrls(ArrayCollection $urls)
     {
         $this->urls = new ArrayCollection();
         foreach ($urls as $url) {

@@ -41,7 +41,10 @@ class ThemeManager implements ContainerAwareInterface
         }
     }
 
-    public function registerStyle($id, $src, $deps = [])
+    /**
+     * @param string[] $deps
+     */
+    public function registerStyle(string $id, string $src, array $deps = [])
     {
         if (!isset($this->stylesheets[$id])) {
             $this->stylesheets[$id] = [

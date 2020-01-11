@@ -38,7 +38,10 @@ class SidebarSetupMenuDemoListener
         return $this->activateByRoute($request->get('_route'), $rootItems);
     }
 
-    protected function activateByRoute($route, $items)
+    /**
+     * @param MenuItemModel[] $items
+     */
+    protected function activateByRoute($route, array $items)
     {
         foreach ($items as $item) { /** @var MenuItemModel $item */
             if ($item->hasChildren()) {

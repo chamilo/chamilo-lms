@@ -434,7 +434,7 @@ class Session
     /**
      * @param $courses
      */
-    public function setCourses($courses)
+    public function setCourses(ArrayCollection $courses)
     {
         $this->courses = new ArrayCollection();
 

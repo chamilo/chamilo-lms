@@ -221,7 +221,7 @@ class ToolChain
         throw new InvalidArgumentException(sprintf("The Tool '%s' doesn't exist.", $name));
     }
 
-    public function getResourceTypeNameFromRepository($repo)
+    public function getResourceTypeNameFromRepository(string $repo)
     {
         if (isset($this->typeList[$repo]) && !empty($this->typeList[$repo])) {
             return $this->typeList[$repo];

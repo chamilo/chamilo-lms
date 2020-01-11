@@ -8,18 +8,12 @@
 >
     <projectFiles>
         <directory name="src" />
-
-        <directory name="public/main/group" />
-        <directory name="public/main/link" />
-        <!-- <directory name="public/main/session" /> -->
-
+        <!--<directory name="public/main/group" />-->
+        <!--<directory name="public/main/link" />-->
+       <!-- <directory name="public/main/session" /> -->
         <!--  <directory name="public/main/exercise"/> -->
-
-            <ignoreFiles>
-                <directory name="vendor" />
-    <!--            <directory name="src/AdminBundle" /> -->
-<!--            <directory name="src/ClassificationBundle" />-->
-<!--            <directory name="src/CoreBundle" />-->
+        <ignoreFiles>
+            <directory name="vendor/*" />
             <directory name="src/CoreBundle/Migrations" />
             <directory name="src/CoreBundle/Component/Editor" />
 <!--            <directory name="src/CourseBundle" />-->

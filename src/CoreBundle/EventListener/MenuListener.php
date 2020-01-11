@@ -29,8 +29,9 @@ class MenuListener
     /**
      * @param $route
      * @param $items
+     * @param \Knp\Menu\ItemInterface[] $items
      */
-    protected function activateByRoute($route, $items)
+    protected function activateByRoute($route, array $items)
     {
         /** @var \Knp\Menu\MenuItem $item */
         foreach ($items as $item) {

@@ -103,7 +103,7 @@ class ToolResourceRight
     /**
      * @return $this
      */
-    public function setMask($mask)
+    public function setMask(int $mask)
     {
         $this->mask = $mask;
 

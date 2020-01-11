@@ -101,7 +101,7 @@ class SessionRelCourseRelUser
      *
      * @return $this
      */
-    public function setUser($user)
+    public function setUser(User $user)
     {
         $this->user = $user;
 

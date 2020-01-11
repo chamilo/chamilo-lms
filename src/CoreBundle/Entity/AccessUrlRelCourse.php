@@ -63,7 +63,7 @@ class AccessUrlRelCourse
      *
      * @return AccessUrlRelCourse
      */
-    public function setUrl($url)
+    public function setUrl(AccessUrl $url)
     {
         $this->url = $url;
 

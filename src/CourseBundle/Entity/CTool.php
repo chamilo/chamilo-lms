@@ -281,7 +281,7 @@ class CTool extends AbstractResource implements ResourceInterface
     /**
      * @return CTool
      */
-    public function setPosition($position)
+    public function setPosition(int $position)
     {
         $this->position = $position;
 

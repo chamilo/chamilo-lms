@@ -70,7 +70,7 @@ class CourseAdmin extends AbstractAdmin
      * Generate tool inside the course
      * @param Course $course
      */
-    public function updateTools($course)
+    public function updateTools(Course $course)
     {
         //$toolChain = $this->getToolChain();
         //$tools = $toolChain->getTools();

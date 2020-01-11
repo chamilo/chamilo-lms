@@ -93,7 +93,7 @@ class SessionManager extends BaseEntityManager
      * @param $status
      */
     protected function addUserInCourse(
-        $status,
+        int $status,
         User $user,
         Course $course,
         Session $session

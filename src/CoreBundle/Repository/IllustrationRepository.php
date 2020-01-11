@@ -157,7 +157,7 @@ final class IllustrationRepository extends ResourceRepository implements Resourc
         return $this->getIllustrationUrlFromNode($resource->getResourceNode(), $filter);
     }
 
-    public function getIllustrationUrlFromNode(ResourceNode $resourceNode, $filter = ''): string
+    public function getIllustrationUrlFromNode(ResourceNode $resourceNode, string $filter = ''): string
     {
         $node = $this->getIllustrationNodeFromParent($resourceNode);
 

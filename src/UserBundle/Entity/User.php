@@ -736,8 +736,9 @@ class User extends BaseUser implements ThemeUser, EquatableInterface //implement
 
     /**
      * @param $value
+     * @param (mixed|string|string[])[] $value
      */
-    public function setPortals($value)
+    public function setPortals(array $value)
     {
         $this->portals = $value;
     }
@@ -755,7 +756,7 @@ class User extends BaseUser implements ThemeUser, EquatableInterface //implement
      *
      * @return $this
      */
-    public function setCurriculumItems($items)
+    public function setCurriculumItems(array $items)
     {
         $this->curriculumItems = $items;
 
@@ -1466,10 +1467,11 @@ class User extends BaseUser implements ThemeUser, EquatableInterface //implement
 
     /**
      * @param $value
+     * @param string[][] $value
      *
      * @return $this
      */
-    public function setSessionCourseSubscriptions($value)
+    public function setSessionCourseSubscriptions(array $value)
     {
         $this->sessionCourseSubscriptions = $value;
 
@@ -1732,10 +1734,11 @@ class User extends BaseUser implements ThemeUser, EquatableInterface //implement
 
     /**
      * @param $value
+     * @param string[] $value
      *
      * @return $this
      */
-    public function setAchievedSkills($value)
+    public function setAchievedSkills(array $value)
     {
         $this->achievedSkills = $value;
 
@@ -1840,7 +1843,7 @@ class User extends BaseUser implements ThemeUser, EquatableInterface //implement
     /**
      * @return User
      */
-    public function setCommentedUserSkills($commentedUserSkills)
+    public function setCommentedUserSkills(array $commentedUserSkills)
     {
         $this->commentedUserSkills = $commentedUserSkills;
 

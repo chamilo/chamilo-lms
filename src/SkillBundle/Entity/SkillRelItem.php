@@ -150,7 +150,7 @@ class SkillRelItem
     /**
      * @return SkillRelItem
      */
-    public function setSkill($skill)
+    public function setSkill(Skill $skill)
     {
         $this->skill = $skill;
 

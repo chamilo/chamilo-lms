@@ -23281,3 +23281,9 @@ msgstr "AJAX communication with the Compilatio server impossible. Please retry l
 
 msgid "Information: The list of classes below contains the list of classes you have already registered in your course. If this list is empty, use the + green above to add classes."
 msgstr "Information: The list of classes below contains the list of classes you have already registered in your course. If this list is empty, use the + green above to add classes."
+
+msgid "Insert your two names"
+msgstr "Insert your two names"
+
+msgid "Add right logo"
+msgstr "Add right logo"

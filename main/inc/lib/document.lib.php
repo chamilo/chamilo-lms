@@ -610,8 +610,8 @@ class DocumentManager
                     docs.id = last.ref AND
                     docs.c_id = last.c_id
                 )
-                WHERE                                
-                    last.tool = '".TOOL_DOCUMENT."' AND 
+                WHERE
+                    last.tool = '".TOOL_DOCUMENT."' AND
                     docs.c_id = {$courseInfo['real_id']} AND
                     last.c_id = {$courseInfo['real_id']} AND
                     docs.path LIKE '".Database::escape_string($path.$addedSlash.'%')."' AND
@@ -786,7 +786,7 @@ class DocumentManager
                             docs.id = last.ref AND
                             docs.c_id = last.c_id
                        )
-                       WHERE                       
+                       WHERE
                             last.tool = '".TOOL_DOCUMENT."' AND
                             last.c_id = {$_course['real_id']} AND
                             docs.c_id = {$_course['real_id']} AND
@@ -794,7 +794,7 @@ class DocumentManager
                             $groupCondition AND
                             docs.path NOT LIKE '%shared_folder%' AND
                             docs.path NOT LIKE '%_DELETED_%' AND
-                            last.visibility <> 2                            
+                            last.visibility <> 2
                             $condition_session ";
             } else {
                 $sql = "SELECT DISTINCT docs.id, path
@@ -802,7 +802,7 @@ class DocumentManager
                         INNER JOIN $TABLE_DOCUMENT  AS docs
                         ON (
                             docs.id = last.ref AND
-                            docs.c_id = last.c_id                          
+                            docs.c_id = last.c_id
                         )
                         WHERE
                             last.tool = '".TOOL_DOCUMENT."' AND
@@ -812,8 +812,8 @@ class DocumentManager
                             docs.path NOT LIKE '%_DELETED_%' AND
                             $groupCondition AND
                             last.visibility <> 2
-                            $show_users_condition 
-                            $condition_session 
+                            $show_users_condition
+                            $condition_session
                         ";
             }
             $result = Database::query($sql);
@@ -862,7 +862,7 @@ class DocumentManager
             //get visible folders
             $sql = "SELECT DISTINCT docs.id, path
                     FROM
-                    $TABLE_ITEMPROPERTY AS last 
+                    $TABLE_ITEMPROPERTY AS last
                     INNER JOIN $TABLE_DOCUMENT AS docs
                     ON (docs.id = last.ref AND last.c_id = docs.c_id)
                     WHERE
@@ -888,10 +888,10 @@ class DocumentManager
 
             //get invisible folders
             $sql = "SELECT DISTINCT docs.id, path
-                    FROM $TABLE_ITEMPROPERTY AS last 
+                    FROM $TABLE_ITEMPROPERTY AS last
                     INNER JOIN $TABLE_DOCUMENT AS docs
                     ON (docs.id = last.ref AND last.c_id = docs.c_id)
-                    WHERE                        
+                    WHERE
                         docs.filetype = 'folder' AND
                         last.tool = '".TOOL_DOCUMENT."' AND
                         $groupCondition AND
@@ -903,10 +903,10 @@ class DocumentManager
             while ($row = Database::fetch_array($result, 'ASSOC')) {
                 //get visible folders in the invisible ones -> they are invisible too
                 $sql = "SELECT DISTINCT docs.id, path
-                        FROM $TABLE_ITEMPROPERTY AS last 
+                        FROM $TABLE_ITEMPROPERTY AS last
                         INNER JOIN $TABLE_DOCUMENT AS docs
                         ON (docs.id = last.ref AND docs.c_id = last.c_id)
-                        WHERE                            
+                        WHERE
                             docs.path LIKE '".Database::escape_string($row['path'].'/%')."' AND
                             docs.filetype = 'folder' AND
                             last.tool = '".TOOL_DOCUMENT."' AND
@@ -982,13 +982,13 @@ class DocumentManager
                     $path = Database::escape_string($file);
                     // Check
                     $sql = "SELECT td.id, readonly, tp.insert_user_id
-                            FROM $TABLE_DOCUMENT td 
+                            FROM $TABLE_DOCUMENT td
                             INNER JOIN $TABLE_PROPERTY tp
                             ON (td.c_id = tp.c_id AND tp.ref= td.id)
                             WHERE
                                 td.c_id = $course_id AND
                                 tp.c_id = $course_id AND
-                                td.session_id = $sessionId AND                                
+                                td.session_id = $sessionId AND
                                 (path='".$path."' OR path LIKE BINARY '".$path."/%' ) ";
                     // Get all id's of documents that are deleted
                     $what_to_check_result = Database::query($sql);
@@ -1018,13 +1018,13 @@ class DocumentManager
 
         if (!empty($document_id)) {
             $sql = "SELECT a.insert_user_id, b.readonly
-                   FROM $TABLE_PROPERTY a 
+                   FROM $TABLE_PROPERTY a
                    INNER JOIN $TABLE_DOCUMENT b
                    ON (a.c_id = b.c_id AND a.ref= b.id)
                    WHERE
             			a.c_id = $course_id AND
                         b.c_id = $course_id AND
-            			a.ref = $document_id 
+            			a.ref = $document_id
                     LIMIT 1";
             $result = Database::query($sql);
             $doc_details = Database::fetch_array($result, 'ASSOC');
@@ -1640,7 +1640,7 @@ class DocumentManager
                 INNER JOIN $propTable ip
                 ON (d.id = ip.ref AND d.c_id = ip.c_id)
         		WHERE
-        		    d.c_id  = $course_id AND 
+        		    d.c_id  = $course_id AND
         		    ip.c_id = $course_id AND
         		    ip.tool = '".TOOL_DOCUMENT."' $condition AND
         			filetype = '$file_type' AND
@@ -1976,9 +1976,14 @@ class DocumentManager
 
         // info gradebook certificate
         $info_grade_certificate = UserManager::get_info_gradebook_certificate($courseCode, $user_id);
-        $date_certificate = $info_grade_certificate['created_at'];
-        $date_long_certificate = '';
 
+        $date_long_certificate = '';
+        $date_certificate = '';
+        $url = '';
+        if ($info_grade_certificate) {
+            $date_certificate = $info_grade_certificate['created_at'];
+            $url = api_get_path(WEB_PATH).'certificates/index.php?id='.$info_grade_certificate['id'];
+        }
         $date_no_time = api_convert_and_format_date(api_get_utc_datetime(), DATE_FORMAT_LONG_NO_DAY);
         if (!empty($date_certificate)) {
             $date_long_certificate = api_convert_and_format_date($date_certificate);
@@ -1990,7 +1995,6 @@ class DocumentManager
             $date_no_time = api_convert_and_format_date(api_get_utc_datetime(), DATE_FORMAT_LONG_NO_DAY);
         }
 
-        $url = api_get_path(WEB_PATH).'certificates/index.php?id='.$info_grade_certificate['id'];
         $externalStyleFile = api_get_path(SYS_CSS_PATH).'themes/'.api_get_visual_theme().'/certificate.css';
         $externalStyle = '';
         if (is_file($externalStyleFile)) {
@@ -2037,7 +2041,7 @@ class DocumentManager
             $date_no_time,
             $courseCode,
             $course_info['name'],
-            $info_grade_certificate['grade'],
+            isset($info_grade_certificate['grade']) ? $info_grade_certificate['grade'] : '',
             $url,
             '<a href="'.$url.'" target="_blank">'.get_lang('CertificateOnlineLink').'</a>',
             '((certificate_barcode))',
@@ -2193,7 +2197,7 @@ class DocumentManager
     {
         $tbl_document = Database::get_course_table(TABLE_DOCUMENT);
         $course_id = api_get_course_int_id();
-        $sql = "SELECT id FROM $tbl_document 
+        $sql = "SELECT id FROM $tbl_document
                 WHERE c_id = $course_id AND path='/certificates' ";
         $rs = Database::query($sql);
         $row = Database::fetch_array($rs);
@@ -3230,7 +3234,7 @@ class DocumentManager
                 features: [\'playpause\'],
                 audioWidth: 30,
                 audioHeight: 30,
-                success: function(mediaElement, originalNode, instance) {                
+                success: function(mediaElement, originalNode, instance) {
                 }
             });';
 
@@ -3406,7 +3410,7 @@ class DocumentManager
         }
 
         $sql = "SELECT DISTINCT last.visibility, docs.*
-                FROM $tbl_item_prop AS last 
+                FROM $tbl_item_prop AS last
                 INNER JOIN $tbl_doc AS docs
                 ON (docs.id = last.ref AND docs.c_id = last.c_id)
                 WHERE
@@ -4946,11 +4950,11 @@ class DocumentManager
             }
             $folder_sql = implode("','", $escaped_folders);
 
-            $sql = "SELECT path, title 
+            $sql = "SELECT path, title
                     FROM $doc_table
-                    WHERE 
-                        filetype = 'folder' AND 
-                        c_id = $course_id AND 
+                    WHERE
+                        filetype = 'folder' AND
+                        c_id = $course_id AND
                         path IN ('".$folder_sql."')";
             $res = Database::query($sql);
             $folder_titles = [];
@@ -6242,8 +6246,8 @@ class DocumentManager
                 $new_path = Database::escape_string($new_path);
                 $query = "UPDATE $dbTable SET
                             path = CONCAT('".$new_path."', SUBSTRING(path, LENGTH('".$old_path."')+1) )
-                          WHERE 
-                                c_id = $course_id AND 
+                          WHERE
+                                c_id = $course_id AND
                                 (path LIKE BINARY '".$old_path."' OR path LIKE BINARY '".$old_path."/%')";
                 Database::query($query);
                 break;
@@ -6321,11 +6325,11 @@ class DocumentManager
 
         $sql = "SELECT SUM(table1.size) FROM (
                 SELECT props.ref, size
-                FROM $table_itemproperty AS props 
+                FROM $table_itemproperty AS props
                 INNER JOIN $table_document AS docs
                 ON (docs.id = props.ref AND docs.c_id = props.c_id)
                 WHERE
-                    docs.c_id = $course_id AND                    
+                    docs.c_id = $course_id AND
                     docs.path LIKE '$path/%' AND
                     props.c_id = $course_id AND
                     props.tool = '$tool_document' AND
@@ -6446,12 +6450,12 @@ class DocumentManager
         }
 
         if (!empty($courseId) && !empty($path)) {
-            $sql = "SELECT id FROM $table 
-                    WHERE 
-                        c_id = $courseId AND 
-                        path LIKE BINARY '$path' AND 
-                        comment = '$url' AND 
-                        filetype = 'link' 
+            $sql = "SELECT id FROM $table
+                    WHERE
+                        c_id = $courseId AND
+                        path LIKE BINARY '$path' AND
+                        comment = '$url' AND
+                        filetype = 'link'
                     LIMIT 1";
             $result = Database::query($sql);
             if ($result && Database::num_rows($result)) {
@@ -6546,10 +6550,10 @@ class DocumentManager
                 ON (
                     docs.c_id = c.id
                 )
-                WHERE                                
-                    last.tool = '".TOOL_DOCUMENT."' AND   
+                WHERE
+                    last.tool = '".TOOL_DOCUMENT."' AND
                     last.insert_user_id = $userId AND
-                    docs.path NOT LIKE '%_DELETED_%'                     
+                    docs.path NOT LIKE '%_DELETED_%'
                 ORDER BY c.directory, docs.path
                 ";
         $result = Database::query($sql);

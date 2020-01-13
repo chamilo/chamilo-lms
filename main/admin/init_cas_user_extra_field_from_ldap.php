@@ -129,7 +129,7 @@ foreach($databaseUsers as $user) {
     print "$username ($userId): ";
     switch (ldap_count_entries($ldap, $searchResult)) {
         case 0:
-            print "does not exist in the LDAP directory, skipping.";
+            print "does not exist in the LDAP directory, skipping.\n";
             break;
         case 1:
             $entry = ldap_first_entry($ldap, $searchResult);
@@ -138,14 +138,18 @@ foreach($databaseUsers as $user) {
             if (false === $ldapCASUser) die('cannot read CAS user code from LDAP entry: '.ldap_error($ldap)."\n");
             $ldapUsername = ldap_get_values($ldap, $entry, $ldapUsernameAttribute)[0];
             if (false === $ldapUsername) die('cannot read username from LDAP entry: '.ldap_error($ldap)."\n");
-            print "$ldapUsernameAttribute: $ldapUsername, $ldapCASUserAttribute: $ldapCASUser, ";
+            print "\033[2K\r$ldapUsernameAttribute: $ldapUsername, $ldapCASUserAttribute: $ldapCASUser, ";
             $problems = [];
             if ($username === $ldapUsername) {
                 // fine
-            } else if (strtolower(trim($username)) == strtolower(trim($ldapUsername))
-            || strtolower(trim($username)) == strtolower(trim($ldapCASUser))) {
+            } else if (
+                strtolower(trim($username)) === strtolower(trim($ldapUsername))
+                ||
+                strtolower(trim($username)) === strtolower(trim($ldapCASUser))
+            ) {
                 if (array_key_exists($ldapUsername, $userNamesInUse)) {
-                    $problems[] = "wrong username but '$ldapUsername' is already taken";
+                    print "wrong username but '$ldapUsername' is already taken, skipping.\n";
+                    break;
                 } else {
                     $problems[] = "wrong username";
                     $wrongUserNames[$userId] = $ldapUsername;
@@ -169,14 +173,14 @@ foreach($databaseUsers as $user) {
                 $problems[] = "wrong auth source '$currentAuthSource'";
                 $wrongAuthSources[$userId] = true;
             }
-            print (empty($problems) ? 'ok' : join(', ', $problems));
+            print (empty($problems) ? "ok\r" : (join(', ', $problems)."\n"));
             break;
         default:
-            print "more than one entries for username '$username' in the LDAP directory for user id=$userId, skipping.";
+            print "more than one entries for username '$username' in the LDAP directory for user id=$userId, skipping.\n";
     }
-    print "\n";
     $checked ++;
 }
+print "\033[2K\r";
 
 
 // ask for confirmation and write changes to the database

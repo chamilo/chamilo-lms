@@ -2002,9 +2002,18 @@ class DocumentManager
         }
 
         $sessionId = api_get_session_id();
-
         $timeInCourse = Tracking::get_time_spent_on_the_course($user_id, $course_info['real_id'], $sessionId);
         $timeInCourse = api_time_to_hms($timeInCourse, ':', false, true);
+
+        $timeInCourseInAllSessions = 0;
+        $sessions = SessionManager::get_session_by_course($course_info['real_id']);
+
+        if (!empty($sessions)) {
+            foreach ($sessions as $session) {
+                $timeInCourseInAllSessions += Tracking::get_time_spent_on_the_course($user_id, $course_info['real_id'], $session['id']);
+            }
+        }
+        $timeInCourseInAllSessions = api_time_to_hms($timeInCourseInAllSessions, ':', false, true);
 
         $first = Tracking::get_first_connection_date_on_the_course($user_id, $course_info['real_id'], $sessionId, false);
         $first = substr($first, 0, 10);
@@ -2047,6 +2056,7 @@ class DocumentManager
             '((certificate_barcode))',
             $externalStyle,
             $timeInCourse,
+            $timeInCourseInAllSessions,
             $startDateAndEndDate,
             $courseObjectives,
         ];
@@ -2070,6 +2080,7 @@ class DocumentManager
             '((certificate_barcode))',
             '((external_style))',
             '((time_in_course))',
+            '((time_in_course_in_all_sessions))',
             '((start_date_and_end_date))',
             '((course_objectives))',
         ];

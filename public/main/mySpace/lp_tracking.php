@@ -73,7 +73,7 @@ $interbreadcrumb[] = [
     'name' => get_lang('Learner details in course'),
 ];
 $nameTools = get_lang('Learnpath details');
-$sql = 'SELECT name	FROM '.Database::get_course_table(TABLE_LP_MAIN).' 
+$sql = 'SELECT name	FROM '.Database::get_course_table(TABLE_LP_MAIN).'
         WHERE c_id = '.$courseInfo['real_id'].' AND id='.$lp_id;
 $rs = Database::query($sql);
 $lp_title = Database::result($rs, 0, 0);
@@ -239,7 +239,7 @@ switch ($action) {
 
         $table = new HTML_Table(['class' => 'table', 'style' => 'display: block; margin-bottom: 50px;']);
         $logo = ChamiloApi::getPlatformLogo(
-            $theme,
+            api_get_visual_theme(),
             [
                 'title' => '',
                 'style' => 'max-width:180px, margin-bottom: 100px;',
@@ -248,9 +248,13 @@ switch ($action) {
         );
         $table->setCellContents(0, 0, $logo);
 
-        $secondLogo = api_get_path(SYS_PATH).'custompages/url-images/'.api_get_current_access_url_id().'_url_image_2.png';
-        $logo2 = Display::img($secondLogo, null, ['style' => 'height:70px;']);
-        $table->setCellContents(0, 1, $logo2);
+        $addLogo = (isset($_GET['add_logo']) && (int) $_GET['add_logo'] === 1);
+        if ($addLogo) {
+            $secondLogo = api_get_path(SYS_PATH).'custompages/url-images/'.api_get_current_access_url_id().'_url_image_2.png';
+            $logo2 = Display::img($secondLogo, null, ['style' => 'height:70px;']);
+            $table->setCellContents(0, 1, $logo2);
+        }
+
         $table->setCellAttributes(0, 1, ['style' => 'display:block;float:right;text-align:right']);
         $pdf->set_custom_header($table->toHtml());
 

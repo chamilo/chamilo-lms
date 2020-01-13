@@ -22,6 +22,7 @@ sonata_media:
             formats:
                 small: { width: 100, quality: 100}
                 big:   { width: 970 , quality: 100}
+                block_preview:   { width: 268 , quality: 100}
 
         course:
             providers:

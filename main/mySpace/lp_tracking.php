@@ -248,16 +248,20 @@ switch ($action) {
         );
         $table->setCellContents(0, 0, $logo);
 
-        $secondLogo = api_get_path(SYS_PATH).'custompages/url-images/'.api_get_current_access_url_id().'_url_image_2.png';
-        $logo2 = Display::img($secondLogo, null, ['style' => 'height:70px;']);
-        $table->setCellContents(0, 1, $logo2);
+        $addLogo = (isset($_GET['add_logo']) && (int) $_GET['add_logo'] === 1);
+        if ($addLogo) {
+            $secondLogo = api_get_path(SYS_PATH).'custompages/url-images/'.api_get_current_access_url_id().'_url_image_2.png';
+            $logo2 = Display::img($secondLogo, null, ['style' => 'height:70px;']);
+            $table->setCellContents(0, 1, $logo2);
+        }
+
         $table->setCellAttributes(0, 1, ['style' => 'display:block;float:right;text-align:right']);
         $pdf->set_custom_header($table->toHtml());
 
         $background = api_get_path(SYS_PATH).'custompages/url-images/'.api_get_current_access_url_id().'_pdf_background.png';
         $content = '<html><body style="background-image-resize: 5; background-position: top left; background-image: url('.$background.');">'.$content.'</body></html>';
 
-        $pdf->content_to_pdf(
+        @$pdf->content_to_pdf(
             $content,
             null,
             $courseInfo['code'].'_'.$lp->getName().'_'.api_get_local_time(),

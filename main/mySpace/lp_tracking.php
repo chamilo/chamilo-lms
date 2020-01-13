@@ -73,7 +73,7 @@ $interbreadcrumb[] = [
     'name' => get_lang('DetailsStudentInCourse'),
 ];
 $nameTools = get_lang('LearningPathDetails');
-$sql = 'SELECT name	FROM '.Database::get_course_table(TABLE_LP_MAIN).' 
+$sql = 'SELECT name	FROM '.Database::get_course_table(TABLE_LP_MAIN).'
         WHERE c_id = '.$courseInfo['real_id'].' AND id='.$lp_id;
 $rs = Database::query($sql);
 $lp_title = Database::result($rs, 0, 0);
@@ -239,7 +239,7 @@ switch ($action) {
 
         $table = new HTML_Table(['class' => 'table', 'style' => 'display: block; margin-bottom: 50px;']);
         $logo = ChamiloApi::getPlatformLogo(
-            $theme,
+            api_get_visual_theme(),
             [
                 'title' => '',
                 'style' => 'max-width:180px, margin-bottom: 100px;',

@@ -887,11 +887,11 @@ legend{
 .legend .panel-body{
     font-size: 13px;
 }
-.items .sonata-media-block-media-container{
-    float: left;
-    padding-right: 10px;
-    padding-top: 5px;
-}
+/*.items .sonata-media-block-media-container{*/
+/*    float: left;*/
+/*    padding-right: 10px;*/
+/*    padding-top: 5px;*/
+/*}*/
 #carousel-announcement .carousel-indicators li{
     border: 1px solid #162A83;
 }

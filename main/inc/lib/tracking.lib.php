@@ -220,7 +220,7 @@ class Tracking
 
         $extra .= '<div id="dialog-confirm" title="'.get_lang('ConfirmYourChoice').'">';
         $form = new FormValidator('report', 'post', null, null, ['class' => 'form-vertical']);
-        $form->addCheckBox('add_logo', '' , get_lang('AddLogo'), ['id' => 'export_format_csv_label']);
+        $form->addCheckBox('add_logo', '' , get_lang('AddRightLogo'), ['id' => 'export_format_csv_label']);
         $extra .= $form->returnForm();
         $extra .= '</div>';
 

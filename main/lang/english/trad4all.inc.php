@@ -8446,4 +8446,6 @@ $CompilatioSeeReport = "See report";
 $CompilatioNonToAnalyse = "Your selection contains no jobs to analyze. Only jobs managed by Compilatio and not already scanned can be sent.";
 $CompilatioComunicationAjaxImpossible = "AJAX communication with the Compilatio server impossible. Please retry later.";
 $UserClassExplanation = "Information: The list of classes below contains the list of classes you have already registered in your course. If this list is empty, use the + green above to add classes.";
+$InsertTwoNames = "Insert your two names";
+$AddRightLogo = "Add right logo";
 ?>

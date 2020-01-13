@@ -656,7 +656,7 @@ class ImsLtiTool
     public function getAdvantageServices()
     {
         if (empty($this->advantageServices)) {
-            return [];
+            $this->advantageServices = [];
         }
 
         return array_merge(

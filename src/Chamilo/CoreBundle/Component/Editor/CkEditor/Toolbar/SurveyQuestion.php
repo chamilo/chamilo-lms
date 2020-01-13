@@ -76,4 +76,36 @@ class SurveyQuestion extends Basic
             ['Toolbarswitch', 'Source'],
         ];
     }
+
+    /**
+     * Get the toolbar configuration when CKEditor is minimized.
+     *
+     * @return array
+     */
+    protected function getMinimizedToolbar()
+    {
+        return [
+            $this->getNewPageBlock(),
+            ['Undo', 'Redo'],
+            ['Link', 'Image', 'Video', 'Oembed', 'Flash', 'Youtube', 'Audio', 'Table', 'Asciimath', 'Asciisvg'],
+            ['BulletedList', 'NumberedList', 'HorizontalRule'],
+            ['JustifyLeft', 'JustifyCenter', 'JustifyRight', 'JustifyBlock'],
+            [
+                'Styles',
+                'Format',
+                'Font',
+                'FontSize',
+                'Bold',
+                'Italic',
+                'Underline',
+                'TextColor',
+                'BGColor',
+                api_get_configuration_value('translate_html') ? 'Language' : '',
+            ],
+            api_get_setting('enabled_wiris') == 'true' ? ['ckeditor_wiris_formulaEditor', 'ckeditor_wiris_CAS'] : [''],
+            ['Toolbarswitch', 'Source'],
+        ];
+    }
+
+
 }

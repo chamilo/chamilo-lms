@@ -472,7 +472,7 @@ class Certificate extends Model
         ) {
             $table = Database::get_main_table(TABLE_MAIN_GRADEBOOK_CERTIFICATE);
             $now = api_get_utc_datetime();
-            $sql = 'UPDATE '.$table.' SET 
+            $sql = 'UPDATE '.$table.' SET
                         path_certificate="'.Database::escape_string($path_certificate).'",
                         created_at = "'.$now.'"
                     WHERE cat_id = "'.$categoryId.'" AND user_id="'.$user_id.'" ';
@@ -787,7 +787,9 @@ class Certificate extends Model
                 null,
                 null,
                 false,
-                false
+                false,
+                false,
+                'd-m-Y'
             )
         );
         $tplContent->assign(
@@ -797,7 +799,9 @@ class Certificate extends Model
                 null,
                 null,
                 false,
-                false
+                false,
+                false,
+                'd-m-Y'
             )
         );
         $tplContent->assign('skills', $skills);
@@ -805,6 +809,7 @@ class Certificate extends Model
         $tplContent->assign('courses', $coursesApproved);
         $tplContent->assign('time_spent_in_lps', api_time_to_hms($totalTimeInLearningPaths));
         $tplContent->assign('time_spent_in_lps_in_hours', round($totalTimeInLearningPaths / 3600, 1));
+
         $layoutContent = $tplContent->get_template('gradebook/custom_certificate.tpl');
         $content = $tplContent->fetch($layoutContent);
 

@@ -707,6 +707,7 @@ class Certificate extends Model
         $totalTimeInLearningPaths = 0;
         $sessionsApproved = [];
         $coursesApproved = [];
+
         if ($sessions) {
             foreach ($sessions as $session) {
                 $allCoursesApproved = [];
@@ -731,25 +732,42 @@ class Certificate extends Model
                             true
                         );
 
+
+                        // Find time spent in LP
+                        $timeSpent = Tracking::get_time_spent_in_lp(
+                            $this->user_id,
+                            $courseCode,
+                            [],
+                            $session['session_id']
+                        );
+
+                        if (!isset($courseList[$course['real_id']])) {
+                            $courseList[$course['real_id']]['approved'] = false;
+                            $courseList[$course['real_id']]['time_spent'] = 0;
+                        }
+
                         if ($result) {
+                            $courseList[$course['real_id']]['approved'] = true;
                             $coursesApproved[$course['real_id']] = $courseInfo['title'];
 
                             // Find time spent in LP
-                            $totalTimeInLearningPaths += Tracking::get_time_spent_in_lp(
-                                $this->user_id,
-                                $courseCode,
-                                [],
-                                $session['session_id']
-                            );
-
+                            //$totalTimeInLearningPaths += $timeSpent;
                             $allCoursesApproved[] = true;
                         }
+                        $courseList[$course['real_id']]['time_spent'] += $timeSpent;
                     }
                 }
 
                 if (count($allCoursesApproved) == count($session['courses'])) {
                     $sessionsApproved[] = $session;
                 }
+            }
+        }
+
+        $totalTimeInLearningPaths = 0;
+        foreach ($courseList as $courseId => $courseData) {
+            if ($courseData['approved'] === true) {
+                $totalTimeInLearningPaths += $courseData['time_spent'];
             }
         }
 
@@ -766,7 +784,7 @@ class Certificate extends Model
 
         // variables for the default template
         $tplContent->assign('complete_name', $userInfo['complete_name']);
-        $tplContent->assign('time_in_platform', $timeFormatted);
+        $tplContent->assign('time_in_platform', $time);
         $tplContent->assign('certificate_generated_date', api_get_local_time($myCertificate['created_at']));
         if (!empty($termsValidationDate)) {
             $termsValidationDate = api_get_local_time($termsValidationDate);

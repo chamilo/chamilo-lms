@@ -71,7 +71,7 @@ switch ($action) {
                             FROM $table
                             WHERE
                                 relation_type = 0 AND
-                                registered_at >= '$start' AND  
+                                registered_at >= '$start' AND
                                 registered_at <= '$end' AND
                                 session_id = '$sessionId' ";
                 $result = Database::query($sql);
@@ -211,6 +211,35 @@ switch ($action) {
                 array_push($palette, $item);
             }
         }
+        foreach ($all as $tick => $tock) {
+            $list['labels'][] = $tick;
+        }
+
+        $list['datasets'][0]['label'] = get_lang($statsName);
+        $list['datasets'][0]['borderColor'] = 'rgba(255,255,255,1)';
+
+        $i = 0;
+        foreach ($all as $tick => $tock) {
+            $j = $i % count($palette);
+            $list['datasets'][0]['data'][] = $tock;
+            $list['datasets'][0]['backgroundColor'][] = $palette[$j];
+            $i++;
+        }
+
+        echo json_encode($list);
+        break;
+    case 'users_active':
+        header('Content-type: application/json');
+        $list = [];
+        $palette = ChamiloApi::getColorPalette(true, true);
+
+        $statsName = 'NumberOfUsers';
+        $active = Statistics::countUsers(STUDENT, null, false, true);
+        $all = [
+            get_lang('Active') => $active,
+            get_lang('Inactive') => Statistics::countUsers(STUDENT, null, false, false) - $active,
+        ];
+
         foreach ($all as $tick => $tock) {
             $list['labels'][] = $tick;
         }

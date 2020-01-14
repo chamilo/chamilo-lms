@@ -19,7 +19,7 @@ $sessionDuration = isset($_GET['session_duration']) ? (int) $_GET['session_durat
 if (
     in_array(
         $report,
-        ['recentlogins', 'tools', 'courses', 'coursebylanguage', 'users']
+        ['recentlogins', 'tools', 'courses', 'coursebylanguage', 'users', 'users_active']
     )
    ) {
     $htmlHeadXtra[] = api_get_js('chartjs/Chart.min.js');
@@ -123,6 +123,31 @@ if (
                 'canvas3'
             );
             break;
+        case 'users_active':
+            $urlBase = api_get_path(WEB_CODE_PATH).'inc/ajax/statistics.ajax.php?';
+            $url1 = $urlBase.'a=users_active';
+
+            $reportName1 = get_lang('NumberOfUsers');
+            $reportType = 'pie';
+            $reportOptions = '
+                legend: {
+                    position: "left"
+                },
+                title: {
+                    text: "%s",
+                    display: true
+                },
+                cutoutPercentage: 25
+                ';
+            $reportOptions1 = sprintf($reportOptions, $reportName1);
+
+            $htmlHeadXtra[] = Statistics::getJSChartTemplate(
+                $url1,
+                $reportType,
+                $reportOptions1,
+                'canvas1'
+            );
+            break;
     }
 }
 
@@ -160,6 +185,7 @@ $tools[$strUsers]['report=pictures'] = get_lang('CountUsers').' ('.get_lang('Use
 $tools[$strUsers]['report=logins_by_date'] = get_lang('LoginsByDate');
 $tools[$strUsers]['report=no_login_users'] = get_lang('StatsUsersDidNotLoginInLastPeriods');
 $tools[$strUsers]['report=zombies'] = get_lang('Zombies');
+$tools[$strUsers]['report=users_active'] = get_lang('UserStats');
 
 // system ...
 $tools[$strSystem]['report=activities'] = get_lang('ImportantActivities');
@@ -307,6 +333,88 @@ switch ($report) {
         break;
     case 'courselastvisit':
         Statistics::printCourseLastVisit();
+        break;
+    case 'users_active':
+        /*$form = new FormValidator('users_active', 'get', api_get_self().'?report=users_active');
+        $form->addDateRangePicker(
+            'daterange',
+            get_lang('DateRange'),
+            true,
+            ['format' => 'YYYY-MM-DD', 'timePicker' => 'false', 'validate_format' => 'Y-m-d']
+        );
+        $form->addHidden('report', 'users_active');
+        $form->addButtonFilter(get_lang('Search'));
+
+        if ($form->validate()) {
+            $values = $form->exportValues();
+            $startDate = $values['daterange_start'];
+            $endDate = $values['daterange_end'];*/
+
+            echo '<div class="row">';
+            echo '<div class="col-md-4"><canvas id="canvas1" style="margin-bottom: 20px"></canvas></div>';
+            echo '</div>';
+            $students = [];
+
+            $conditions = ['status' => STUDENT];
+
+            $users = UserManager::get_user_list($conditions);
+
+            $table = new HTML_Table(['class' => 'table table-responsive']);
+            $headers = [
+                get_lang('FirstName'),
+                get_lang('LastName'),
+                get_lang('RegistrationDate'),
+                get_lang('UserNativeLanguage'),
+                get_lang('LangueCible'),
+                get_lang('ApprenticeshipContract'),
+                get_lang('UserResidenceCountry'),
+                get_lang('Career'),
+                get_lang('Active'),
+                //get_lang('Certificate'),
+                get_lang('UserBirthday'),
+            ];
+            $row = 0;
+            $column = 0;
+            foreach ($headers as $header) {
+                $table->setHeaderContents($row, $column, $header);
+                $column++;
+            }
+            $row++;
+            $extraFieldValueUser = new ExtraFieldValue('user');
+            foreach ($users as $user) {
+                $userId = $user['user_id'];
+                $extraDataList = $extraFieldValueUser->getAllValuesByItem($userId);
+                $extraFields = [];
+                foreach ($extraDataList as $extraData) {
+                    $extraFields[$extraData['variable']] = $extraData['value'];
+                }
+
+                $language = isset($extraFields['langue_cible']) ? $extraFields['langue_cible'] : '';
+                $contract = isset($extraFields['termactivated']) ? $extraFields['termactivated'] : '';
+                $residence = isset($extraFields['terms_paysresidence']) ? $extraFields['terms_paysresidence'] : '';
+                $career = isset($extraFields['filiere_user']) ? $extraFields['filiere_user'] : '';
+                $birthDate = isset($extraFields['terms_datedenaissance']) ? $extraFields['terms_datedenaissance'] : '';
+
+                $column = 0;
+                $table->setCellContents($row, $column++, $user['firstname']);
+                $table->setCellContents($row, $column++, $user['lastname']);
+                $table->setCellContents($row, $column++, $user['registration_date']);
+                $table->setCellContents($row, $column++, $user['language']);
+                $table->setCellContents($row, $column++, $language);
+                $table->setCellContents($row, $column++, $contract);
+                $table->setCellContents($row, $column++, $residence);
+                $table->setCellContents($row, $column++, $career);
+                $table->setCellContents($row, $column++, $user['active']);
+                //$table->setCellContents($row, $column++, $certificate);
+                $table->setCellContents($row, $column++, $birthDate);
+
+                $row++;
+            }
+
+            echo $table->toHtml();
+       /* }
+
+        echo $form->returnForm();*/
         break;
     case 'users':
         echo '<div class="row">';

@@ -83,8 +83,18 @@ class Event
         Database::query($sql);
 
         // Auto subscribe
-        $user_status = $userInfo['status'] == SESSIONADMIN ? 'sessionadmin' : $userInfo['status'] == COURSEMANAGER ? 'teacher' : $userInfo['status'] == DRH ? 'DRH' : 'student';
-        $autoSubscribe = api_get_setting($user_status.'_autosubscribe');
+        $status = 'student';
+        if ($userInfo['status'] == SESSIONADMIN) {
+            $status = 'sessionadmin';
+        }
+        if ($userInfo['status'] == COURSEMANAGER) {
+            $status = 'teacher';
+        }
+        if ($userInfo['status'] == DRH) {
+            $status = 'DRH';
+        }
+
+        $autoSubscribe = api_get_setting($status.'_autosubscribe');
         if ($autoSubscribe) {
             $autoSubscribe = explode('|', $autoSubscribe);
             foreach ($autoSubscribe as $code) {

@@ -57,6 +57,10 @@ class MySpace
                 'url' => api_get_path(WEB_CODE_PATH).'mySpace/survey_report.php',
                 'content' => get_lang('SurveyReport'),
             ],
+            [
+                'url' => api_get_path(WEB_CODE_PATH).'mySpace/tc_report.php',
+                'content' => get_lang('TCReport'),
+            ],
         ];
 
         return Display::actions($actions, null);
@@ -176,7 +180,7 @@ class MySpace
                 FROM '.$table.'
                 WHERE
                     user_id = '.$userId.' AND
-                    c_id = '.$courseId.' 
+                    c_id = '.$courseId.'
                     '.$sessionCondition.'
                 ORDER BY login_course_date ASC';
         $rs = Database::query($sql);
@@ -1804,8 +1808,8 @@ class MySpace
 
         $sql = "SELECT exe_result, exe_weighting
                 FROM $table
-                WHERE 
-                    c_id = $courseId AND 
+                WHERE
+                    c_id = $courseId AND
                     exe_user_id = $user_id";
 
         $session_id = (int) $session_id;
@@ -2724,7 +2728,7 @@ class MySpace
             [
                 'placeholder' => get_lang('All'),
                 'url_function' => "
-                    function () {                    
+                    function () {
                         var params = $.param({
                             a: 'search_user_by_course',
                             session_id: $('#access_overview_session_id').val(),
@@ -2961,9 +2965,9 @@ class MySpace
             $start_date = Database::escape_string($start_date);
             $end_date = Database::escape_string($end_date);
             $sessionCondition = api_get_session_condition($sessionId);
-            $sql = "SELECT 
-                        login_course_date, 
-                        logout_course_date, 
+            $sql = "SELECT
+                        login_course_date,
+                        logout_course_date,
                         TIMESTAMPDIFF(SECOND, login_course_date, logout_course_date) duration
                     FROM $table
                     WHERE
@@ -3023,8 +3027,8 @@ function get_stats($user_id, $course_info, $sessionId, $start_date = null, $end_
                 FROM $table
                 WHERE
                     user_id = $user_id AND
-                    c_id = $courseId $stringStartDate $stringEndDate 
-                    $sessionCondition                    
+                    c_id = $courseId $stringStartDate $stringEndDate
+                    $sessionCondition
                 ORDER BY login_course_date ASC";
 
         $rs = Database::query($sql);

@@ -171,8 +171,8 @@ switch ($action) {
 
             if (!empty($user_id)) {
                 $user_table = Database::get_main_table(TABLE_MAIN_USER);
-                $sql = "UPDATE $user_table 
-                        SET active = '".$status."' 
+                $sql = "UPDATE $user_table
+                        SET active = '".$status."'
                         WHERE user_id = '".$user_id."'";
                 $result = Database::query($sql);
 
@@ -252,6 +252,8 @@ switch ($action) {
     case 'user_by_role':
         api_block_anonymous_users(false);
 
+        $status = isset($_REQUEST['status']) ? (int) $_REQUEST['status'] : DRH;
+
         $criteria = new Criteria();
         $criteria
             ->where(
@@ -262,7 +264,7 @@ switch ($action) {
                 )
             )
             ->andWhere(
-                Criteria::expr()->eq('status', DRH)
+                Criteria::expr()->eq('status', $status)
             );
 
         $users = UserManager::getRepository()->matching($criteria);

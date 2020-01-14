@@ -116,7 +116,7 @@
         "zendframework/zend-soap": "~2.6",
         "robrichards/xmlseclibs": "3.0.*",
 
-        "ezyang/htmlpurifier": "4.9.*",
+        "ezyang/htmlpurifier": "~4.9",
         "szymach/c-pchart": "3.0.6",
         "aferrandini/phpqrcode": "1.0.1",
         "mpdf/mpdf": "6.1.*",

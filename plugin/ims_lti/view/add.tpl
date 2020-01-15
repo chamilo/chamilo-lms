@@ -16,6 +16,13 @@
                                         </a>
                                     {% endif %}
 
+                                    {% if tool.version == 'lti1p3' %}
+                                        <a href="{{ _p.web_plugin }}ims_lti/tool_settings.php?{{ {'id': tool.id}|url_encode }}" class="ajax"
+                                           data-title="{{ 'ConfigSettingsForTool'|get_plugin_lang('ImsLtiPlugin') }}">
+                                            {{ 'webservices.png'|img(22, 'ConfigSettingsForTool'|get_plugin_lang('ImsLtiPlugin')) }}
+                                        </a>
+                                    {% endif %}
+
                                     <a href="{{ _p.web_plugin }}ims_lti/configure.php?action=edit&id={{ tool.id }}&{{ _p.web_cid_query }}">
                                         {{ 'edit.png'|img(22, 'Edit'|get_lang) }}
                                     </a>

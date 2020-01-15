@@ -67,7 +67,7 @@ if ($form->validate()) {
 
     $first = DateTime::createFromFormat('Y-m-d', $startDate);
     $second = DateTime::createFromFormat('Y-m-d', $endDate);
-    $numberOfWeeks = floor($first->diff($second)->days/7);
+    $numberOfWeeks = floor($first->diff($second)->days / 7);
 
     $sql = " SELECT id_coach, id as session_id, display_start_date, display_end_date
              FROM session

@@ -240,23 +240,148 @@ echo '<br/><br/>';
 switch ($report) {
     case 'session_by_date':
         $form = new FormValidator('session_by_date', 'get');
-        $form->addDateRangePicker('range', get_lang('DateRange'), true);
+        $form->addDateRangePicker(
+            'range',
+            get_lang('DateRange'),
+            true,
+            ['format' => 'YYYY-MM-DD', 'timePicker' => 'false', 'validate_format' => 'Y-m-d']
+        );
+
         $form->addHidden('report', 'session_by_date');
         $form->addButtonSearch(get_lang('Search'));
 
-        $date = new DateTime($now);
-        $startDate = $date->format('Y-m-d').' 00:00:00';
-        $endDate = $date->format('Y-m-d').' 23:59:59';
-        $start = $startDate;
-        $end = $endDate;
+        $content = '';
 
         if ($form->validate()) {
             $values = $form->getSubmitValues();
-            $start = $values['range_start'];
-            $end = $values['range_end'];
+            $start = Database::escape_string($values['range_start']);
+            $end = Database::escape_string($values['range_end']);
 
+            $first = DateTime::createFromFormat('Y-m-d', $start);
+            $second = DateTime::createFromFormat('Y-m-d', $end);
+
+            $numberOfWeeks = floor($first->diff($second)->days / 7);
+
+            // User count
+            $table = Database::get_main_table(TABLE_MAIN_SESSION);
+            $sql = "SELECT id, name, display_start_date, display_end_date, nbr_users FROM $table
+                    WHERE
+                        display_start_date BETWEEN '$start' AND '$end' OR
+                        display_end_date BETWEEN '$start' AND '$end' ";
+            $result = Database::query($sql);
+
+            $sessionCount = 0;
+            $numberUsers = 0;
+            $sessions = [];
+            while ($row = Database::fetch_array($result, 'ASSOC')) {
+                $sessions[] = $row;
+                $numberUsers += $row['nbr_users'];
+                $sessionCount++;
+            }
+
+            // Coach
+            $sql = "SELECT count(DISTINCT(id_coach)) count FROM $table
+                    WHERE
+                        display_start_date BETWEEN '$start' AND '$end' OR
+                        display_end_date BETWEEN '$start' AND '$end' ";
+            $result = Database::query($sql);
+            $row = Database::fetch_array($result);
+            $uniqueCoaches = $row['count'];
+
+            // Categories
+            $sql = "SELECT count(id) count, session_category_id FROM $table
+                    WHERE
+                        display_start_date BETWEEN '$start' AND '$end' OR
+                        display_end_date BETWEEN '$start' AND '$end'
+                    GROUP BY session_category_id
+                    ";
+
+            $result = Database::query($sql);
+            $sessionPerCategories = [];
+            while ($row = Database::fetch_array($result)) {
+                $sessionPerCategories[$row['session_category_id']] = $row['count'];
+            }
+
+            $sessionAverage = $sessionCount/$numberOfWeeks;
+            $averageUser = $sessionCount/$numberUsers;
+            $averageCoach = $sessionCount/$uniqueCoaches;
+
+            $table = new HTML_Table(['class' => 'table table-responsive']);
+            $row = 0;
+            $table->setCellContents($row, 0, get_lang('Weeks'));
+            $table->setCellContents($row, 1, $numberOfWeeks);
+            $row++;
+
+            $table->setCellContents($row, 0, get_lang('SessionCount'));
+            $table->setCellContents($row, 1, $sessionCount);
+            $row++;
+
+            $table->setCellContents($row, 0, get_lang('SessionsPerWeek'));
+            $table->setCellContents($row, 1, $sessionAverage);
+            $row++;
+
+            $table->setCellContents($row, 0, get_lang('AverageUserPerWeek'));
+            $table->setCellContents($row, 1, $averageUser);
+            $row++;
+
+            $table->setCellContents($row, 0, get_lang('AverageSessionPerGeneralCoach'));
+            $table->setCellContents($row, 1, $averageCoach);
+            $row++;
+
+            $content .= $table->toHtml();
+
+            $table = new HTML_Table(['class' => 'table table-responsive']);
+            $headers = [
+                get_lang('SessionCategory'),
+                get_lang('Count'),
+            ];
+            $row = 0;
+            $column = 0;
+            foreach ($headers as $header) {
+                $table->setHeaderContents($row, $column, $header);
+                $column++;
+            }
+            $row++;
+
+            foreach ($sessionPerCategories as $categoryId => $count) {
+                $categoryData = SessionManager::get_session_category($categoryId);
+                $label = get_lang('NoCategory');
+                if ($categoryData) {
+                    $label = $categoryData['name'];
+                }
+                $table->setCellContents($row, 0, $label);
+                $table->setCellContents($row, 1, $count);
+
+                $row++;
+            }
+
+            $content .= $table->toHtml();
+
+            $table = new HTML_Table(['class' => 'table table-responsive']);
+            $headers = [
+                get_lang('Name'),
+                get_lang('StartDate'),
+                get_lang('EndDate'),
+            ];
+            $row = 0;
+            $column = 0;
+            foreach ($headers as $header) {
+                $table->setHeaderContents($row, $column, $header);
+                $column++;
+            }
+            $row++;
+
+            foreach ($sessions as $session) {
+                $table->setCellContents($row, 0, $session['name']);
+                $table->setCellContents($row, 1, api_get_local_time($session['display_start_date']));
+                $table->setCellContents($row, 2, api_get_local_time($session['display_end_date']));
+                $row++;
+            }
+
+            $content .= $table->toHtml();
         }
         echo $form->returnForm();
+        echo $content;
 
         break;
     case 'user_session':

@@ -69,8 +69,6 @@ if ($form->validate()) {
     $second = DateTime::createFromFormat('Y-m-d', $endDate);
     $numberOfWeeks = floor($first->diff($second)->days/7);
 
-    echo $content;
-    //SessionManager::get_sessions_by_general_coach()
     $sql = " SELECT id_coach, id as session_id, display_start_date, display_end_date
              FROM session
              WHERE display_start_date BETWEEN '$startDate' AND '$endDate'

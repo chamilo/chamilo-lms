@@ -214,7 +214,7 @@
                                                     </a>
                                                 </li>
                                                 <li>
-                                                    <a href="https://www.apple.com/fr/ios/app-store/" target="_blank">
+                                                    <a href="https://apps.apple.com/app/id1493855067" target="_blank">
                                                         <img width="150px" src="{{ _p.web_css_theme }}images/applestore.svg">
                                                     </a>
                                                 </li>

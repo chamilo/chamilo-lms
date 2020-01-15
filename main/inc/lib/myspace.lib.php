@@ -61,6 +61,10 @@ class MySpace
                 'url' => api_get_path(WEB_CODE_PATH).'mySpace/tc_report.php',
                 'content' => get_lang('TCReport'),
             ],
+            [
+                'url' => api_get_path(WEB_CODE_PATH).'mySpace/ti_report.php',
+                'content' => get_lang('TIReport'),
+            ],
         ];
 
         return Display::actions($actions, null);

@@ -98,8 +98,10 @@ if ($form->validate()) {
     ];
 
     $i = $weekStart;
-    for ($i; $i <= $weekEnd; $i++) {
-        $headers[] = substr($weekStart,0,4).' - '.substr($i,4,6);
+    $date = new DateTime($startDate);
+    for ($i = 0; $i <= $numberOfWeeks; $i++) {
+        $date->add(new DateInterval('P1W'));
+        $headers[] = $date->format('Y-W');
     }
 
     $row = 0;

@@ -108,7 +108,7 @@ print "$count users are registered in the internal database.\n";
 
 $userNamesInUse = [];
 foreach($databaseUsers as $user) {
-    $userNamesInUse[$user->getUsername()] = true;
+    $userNamesInUse[$user->getUsername()] = $user->getId();
 }
 
 $missingCASCodes = [];
@@ -153,6 +153,7 @@ foreach($databaseUsers as $user) {
                 } else {
                     $problems[] = "wrong username";
                     $wrongUserNames[$userId] = $ldapUsername;
+                    $userNamesInUse[$ldapUsername] = $userId;
                 }
             } else {
                 die("LDAP search result does not match username; our filter is wrong: $filter\n");

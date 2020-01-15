@@ -153,7 +153,6 @@ switch ($action) {
     case 'users_students':
         // Give a JSON array to the stats page main/admin/statistics/index.php
         // for global tools usage (number of clicks)
-        header('Content-type: application/json');
         $list = [];
         $palette = ChamiloApi::getColorPalette(true, true);
         if ($action == 'tools_usage') {
@@ -226,6 +225,7 @@ switch ($action) {
             $i++;
         }
 
+        header('Content-type: application/json');
         echo json_encode($list);
         break;
     case 'users_active':
@@ -271,6 +271,105 @@ switch ($action) {
                     get_lang('Inactive') => $noActive,
                 ];
 
+                break;
+            case 'status':
+                $conditions = ['status' => STUDENT];
+                $students = UserManager::getUserListExtraConditions(
+                    $conditions,
+                    [],
+                    false,
+                    false,
+                    null,
+                    $extraConditions,
+                    true
+                );
+                $conditions = ['status' => COURSEMANAGER];
+                $teachers = UserManager::getUserListExtraConditions(
+                    $conditions,
+                    [],
+                    false,
+                    false,
+                    null,
+                    $extraConditions,
+                    true
+                );
+                $all = [
+                    get_lang('Students') => $students,
+                    get_lang('Teachers') => $teachers,
+                ];
+                break;
+            case 'language':
+                $languages = api_get_languages();
+                $all = [];
+                foreach ($languages['folder'] as $language) {
+                    $conditions = ['language' => $language];
+                    $all[$language] = UserManager::getUserListExtraConditions(
+                        $conditions,
+                        [],
+                        false,
+                        false,
+                        null,
+                        $extraConditions,
+                        true
+                    );
+                }
+                break;
+        }
+
+        foreach ($all as $tick => $tock) {
+            $list['labels'][] = $tick;
+        }
+
+        $list['datasets'][0]['label'] = get_lang($statsName);
+        $list['datasets'][0]['borderColor'] = 'rgba(255,255,255,1)';
+
+        $i = 0;
+        foreach ($all as $tick => $tock) {
+            $j = $i % count($palette);
+            $list['datasets'][0]['data'][] = $tock;
+            $list['datasets'][0]['backgroundColor'][] = $palette[$j];
+            $i++;
+        }
+
+        header('Content-type: application/json');
+        echo json_encode($list);
+        break;
+
+    case 'session_by_date':
+        $list = [];
+        $palette = ChamiloApi::getColorPalette(true, true);
+
+        $statsName = 'NumberOfUsers';
+        $filter = $_REQUEST['filter'];
+
+        $startDate = Database::escape_string($_REQUEST['date_start']);
+        $endDate = Database::escape_string($_REQUEST['date_end']);
+
+        /*$extraConditions = '';
+        if (!empty($startDate) && !empty($endDate)) {
+            $extraConditions .= " AND registration_date BETWEEN '$startDate' AND '$endDate' ";
+        }*/
+        $table = Database::get_main_table(TABLE_MAIN_SESSION);
+
+        switch ($filter) {
+            case 'category':
+                $sql = "SELECT count(id) count, session_category_id FROM $table
+                        WHERE
+                            display_start_date BETWEEN '$startDate' AND '$endDate' OR
+                            display_end_date BETWEEN '$startDate' AND '$endDate'
+                        GROUP BY session_category_id
+                    ";
+
+                $result = Database::query($sql);
+                $all = [];
+                while ($row = Database::fetch_array($result)) {
+                    $categoryData = SessionManager::get_session_category($row['session_category_id']);
+                    $label = get_lang('NoCategory');
+                    if ($categoryData) {
+                        $label = $categoryData['name'];
+                    }
+                    $all[$label] = $row['count'];
+                }
                 break;
             case 'status':
                 $conditions = ['status' => STUDENT];

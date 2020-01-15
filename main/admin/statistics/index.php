@@ -18,7 +18,7 @@ $sessionDuration = isset($_GET['session_duration']) ? (int) $_GET['session_durat
 if (
     in_array(
         $report,
-        ['recentlogins', 'tools', 'courses', 'coursebylanguage', 'users', 'users_active']
+        ['recentlogins', 'tools', 'courses', 'coursebylanguage', 'users', 'users_active', 'session_by_date']
     )
    ) {
     $htmlHeadXtra[] = api_get_js('chartjs/Chart.min.js');
@@ -170,6 +170,55 @@ if (
             );
 
             break;
+        case 'session_by_date':
+            $urlBase = api_get_path(WEB_CODE_PATH).'inc/ajax/statistics.ajax.php?';
+
+            $dateStart = Security::remove_XSS($_REQUEST['range_start']);
+            $dateEnd = Security::remove_XSS($_REQUEST['range_end']);
+
+            $url1 = $urlBase.'a=session_by_date&filter=category&date_start='.$dateStart.'&date_end='.$dateEnd;
+            $url2 = $urlBase.'a=users_active&filter=status&date_start='.$dateStart.'&date_end='.$dateEnd;
+            $url3 = $urlBase.'a=users_active&filter=language&date_start='.$dateStart.'&date_end='.$dateEnd;
+
+            $reportName1 = get_lang('SessionsPerCategory');
+            $reportName2 = get_lang('UserByStatus');
+            $reportName3 = get_lang('UserByLanguage');
+
+            $reportType = 'pie';
+            $reportOptions = '
+                legend: {
+                    position: "left"
+                },
+                title: {
+                    text: "%s",
+                    display: true
+                },
+                cutoutPercentage: 25
+                ';
+            $reportOptions1 = sprintf($reportOptions, $reportName1);
+            $reportOptions2 = sprintf($reportOptions, $reportName2);
+            $reportOptions3 = sprintf($reportOptions, $reportName3);
+
+            $htmlHeadXtra[] = Statistics::getJSChartTemplate(
+                $url1,
+                $reportType,
+                $reportOptions1,
+                'canvas1'
+            );
+            /*$htmlHeadXtra[] = Statistics::getJSChartTemplate(
+                $url2,
+                $reportType,
+                $reportOptions2,
+                'canvas2'
+            );
+            $htmlHeadXtra[] = Statistics::getJSChartTemplate(
+                $url3,
+                $reportType,
+                $reportOptions3,
+                'canvas3'
+            );*/
+
+            break;
     }
 }
 
@@ -193,8 +242,8 @@ $tools = [
         'report=coursebylanguage' => get_lang('CountCourseByLanguage'),
     ],
     get_lang('Users') => [
-        'report=users' =>get_lang('CountUsers'),
-        'report=recentlogins' =>get_lang('Logins'),
+        'report=users' => get_lang('CountUsers'),
+        'report=recentlogins' => get_lang('Logins'),
         'report=logins&amp;type=month' => get_lang('Logins').' ('.get_lang('PeriodMonth').')',
         'report=logins&amp;type=day' => get_lang('Logins').' ('.get_lang('PeriodDay').')',
         'report=logins&amp;type=hour' => get_lang('Logins').' ('.get_lang('PeriodHour').')',
@@ -259,8 +308,15 @@ switch ($report) {
 
             $first = DateTime::createFromFormat('Y-m-d', $start);
             $second = DateTime::createFromFormat('Y-m-d', $end);
-
             $numberOfWeeks = floor($first->diff($second)->days / 7);
+
+
+            $content .= '<div class="row">';
+            $content .= '<div class="col-md-4"><canvas id="canvas1" style="margin-bottom: 20px"></canvas></div>';
+            //$content .= '<div class="col-md-4"><canvas id="canvas2" style="margin-bottom: 20px"></canvas></div>';
+            //$content .= '<div class="col-md-4"><canvas id="canvas3" style="margin-bottom: 20px"></canvas></div>';
+            $content .= '</div>';
+
 
             // User count
             $table = Database::get_main_table(TABLE_MAIN_SESSION);

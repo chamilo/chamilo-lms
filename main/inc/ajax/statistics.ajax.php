@@ -229,16 +229,92 @@ switch ($action) {
         echo json_encode($list);
         break;
     case 'users_active':
-        header('Content-type: application/json');
         $list = [];
         $palette = ChamiloApi::getColorPalette(true, true);
 
         $statsName = 'NumberOfUsers';
-        $active = Statistics::countUsers(STUDENT, null, false, true);
-        $all = [
-            get_lang('Active') => $active,
-            get_lang('Inactive') => Statistics::countUsers(STUDENT, null, false, false) - $active,
-        ];
+        $filter = $_REQUEST['filter'];
+
+        $startDate = $_REQUEST['date_start'];
+        $endDate = $_REQUEST['date_end'];
+
+        $extraConditions = '';
+        if (!empty($startDate) && !empty($endDate)) {
+            $extraConditions .= " AND registration_date BETWEEN '$startDate' AND '$endDate' ";
+        }
+
+        switch ($filter) {
+            case 'active':
+                $conditions = ['status' => STUDENT, 'active' => 1];
+                $active = UserManager::getUserListExtraConditions(
+                    $conditions,
+                    [],
+                    false,
+                    false,
+                    null,
+                    $extraConditions,
+                    true
+                );
+                $conditions = ['status' => STUDENT, 'active' => 0];
+                $noActive = UserManager::getUserListExtraConditions(
+                    $conditions,
+                    [],
+                    false,
+                    false,
+                    null,
+                    $extraConditions,
+                    true
+                );
+
+                $all = [
+                    get_lang('Active') => $active,
+                    get_lang('Inactive') => $noActive,
+                ];
+
+                break;
+            case 'status':
+                $conditions = ['status' => STUDENT];
+                $students = UserManager::getUserListExtraConditions(
+                    $conditions,
+                    [],
+                    false,
+                    false,
+                    null,
+                    $extraConditions,
+                    true
+                );
+                $conditions = ['status' => COURSEMANAGER];
+                $teachers = UserManager::getUserListExtraConditions(
+                    $conditions,
+                    [],
+                    false,
+                    false,
+                    null,
+                    $extraConditions,
+                    true
+                );
+                $all = [
+                    get_lang('Students') => $students,
+                    get_lang('Teachers') => $teachers,
+                ];
+                break;
+            case 'language':
+                $languages = api_get_languages();
+                $all = [];
+                foreach ($languages['folder'] as $language) {
+                    $conditions = ['language' => $language];
+                    $all[$language] = UserManager::getUserListExtraConditions(
+                        $conditions,
+                        [],
+                        false,
+                        false,
+                        null,
+                        $extraConditions,
+                        true
+                    );
+                }
+                break;
+        }
 
         foreach ($all as $tick => $tock) {
             $list['labels'][] = $tick;
@@ -255,6 +331,7 @@ switch ($action) {
             $i++;
         }
 
+        header('Content-type: application/json');
         echo json_encode($list);
         break;
 }

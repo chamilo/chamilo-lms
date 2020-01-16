@@ -14,6 +14,7 @@ $interbreadcrumb[] = ['url' => '../index.php', 'name' => get_lang('PlatformAdmin
 
 $report = isset($_REQUEST['report']) ? $_REQUEST['report'] : '';
 $sessionDuration = isset($_GET['session_duration']) ? (int) $_GET['session_duration'] : '';
+$validated = false;
 
 if (
     in_array(
@@ -123,17 +124,26 @@ if (
             );
             break;
         case 'users_active':
+            $form = new FormValidator('users_active', 'get', api_get_self().'?report=users_active');
+            $form->addDateRangePicker(
+                'daterange',
+                get_lang('DateRange'),
+                true,
+                ['format' => 'YYYY-MM-DD', 'timePicker' => 'false', 'validate_format' => 'Y-m-d']
+            );
+            $form->addHidden('report', 'users_active');
+            $form->addButtonFilter(get_lang('Search'));
+
+            $validated = $form->validate();
+
             $urlBase = api_get_path(WEB_CODE_PATH).'inc/ajax/statistics.ajax.php?';
-            $dateStart = Security::remove_XSS($_REQUEST['daterange_start']);
-            $dateEnd = Security::remove_XSS($_REQUEST['daterange_end']);
-
-            $url1 = $urlBase.'a=users_active&filter=active&date_start='.$dateStart.'&date_end='.$dateEnd;
-            $url2 = $urlBase.'a=users_active&filter=status&date_start='.$dateStart.'&date_end='.$dateEnd;
-            $url3 = $urlBase.'a=users_active&filter=language&date_start='.$dateStart.'&date_end='.$dateEnd;
-
-            $reportName1 = get_lang('ActiveUsers');
-            $reportName2 = get_lang('UserByStatus');
-            $reportName3 = get_lang('UserByLanguage');
+            $dateStart = '';
+            $dateEnd = '';
+            if ($validated) {
+                $values = $form->getSubmitValues();
+                $dateStart = Security::remove_XSS($values['daterange_start']);
+                $dateEnd = Security::remove_XSS($values['daterange_end']);
+            }
 
             $reportType = 'pie';
             $reportOptions = '
@@ -146,9 +156,24 @@ if (
                 },
                 cutoutPercentage: 25
                 ';
+
+            $url1 = $urlBase.'a=users_active&filter=active&date_start='.$dateStart.'&date_end='.$dateEnd;
+            $url2 = $urlBase.'a=users_active&filter=status&date_start='.$dateStart.'&date_end='.$dateEnd;
+            $url3 = $urlBase.'a=users_active&filter=language&date_start='.$dateStart.'&date_end='.$dateEnd;
+            $url4 = $urlBase.'a=users_active&filter=language_cible&date_start='.$dateStart.'&date_end='.$dateEnd;
+            $url5 = $urlBase.'a=users_active&filter=career&date_start='.$dateStart.'&date_end='.$dateEnd;
+
+            $reportName1 = get_lang('ActiveUsers');
+            $reportName2 = get_lang('UserByStatus');
+            $reportName3 = get_lang('UserByLanguage');
+            $reportName4 = get_lang('UserByLanguageCible');
+            $reportName5 = get_lang('UserByCareer');
+
             $reportOptions1 = sprintf($reportOptions, $reportName1);
             $reportOptions2 = sprintf($reportOptions, $reportName2);
             $reportOptions3 = sprintf($reportOptions, $reportName3);
+            $reportOptions4 = sprintf($reportOptions, $reportName4);
+            $reportOptions5 = sprintf($reportOptions, $reportName5);
 
             $htmlHeadXtra[] = Statistics::getJSChartTemplate(
                 $url1,
@@ -169,6 +194,20 @@ if (
                 'canvas3'
             );
 
+            $htmlHeadXtra[] = Statistics::getJSChartTemplate(
+                $url4,
+                $reportType,
+                $reportOptions4,
+                'canvas4'
+            );
+
+            $htmlHeadXtra[] = Statistics::getJSChartTemplate(
+                $url5,
+                $reportType,
+                $reportOptions5,
+                'canvas5'
+            );
+
             break;
         case 'session_by_date':
             $urlBase = api_get_path(WEB_CODE_PATH).'inc/ajax/statistics.ajax.php?';
@@ -179,10 +218,12 @@ if (
             $url1 = $urlBase.'a=session_by_date&filter=category&date_start='.$dateStart.'&date_end='.$dateEnd;
             $url2 = $urlBase.'a=users_active&filter=status&date_start='.$dateStart.'&date_end='.$dateEnd;
             $url3 = $urlBase.'a=users_active&filter=language&date_start='.$dateStart.'&date_end='.$dateEnd;
+            $url4 = $urlBase.'a=users_active&filter=language&date_start='.$dateStart.'&date_end='.$dateEnd;
 
             $reportName1 = get_lang('SessionsPerCategory');
             $reportName2 = get_lang('UserByStatus');
             $reportName3 = get_lang('UserByLanguage');
+            $reportName4 = get_lang('UserByCareer');
 
             $reportType = 'pie';
             $reportOptions = '
@@ -198,6 +239,7 @@ if (
             $reportOptions1 = sprintf($reportOptions, $reportName1);
             $reportOptions2 = sprintf($reportOptions, $reportName2);
             $reportOptions3 = sprintf($reportOptions, $reportName3);
+            $reportOptions4 = sprintf($reportOptions, $reportName4);
 
             $htmlHeadXtra[] = Statistics::getJSChartTemplate(
                 $url1,
@@ -558,18 +600,9 @@ switch ($report) {
         Statistics::printCourseLastVisit();
         break;
     case 'users_active':
-        $form = new FormValidator('users_active', 'get', api_get_self().'?report=users_active');
-        $form->addDateRangePicker(
-            'daterange',
-            get_lang('DateRange'),
-            true,
-            ['format' => 'YYYY-MM-DD', 'timePicker' => 'false', 'validate_format' => 'Y-m-d']
-        );
-        $form->addHidden('report', 'users_active');
-        $form->addButtonFilter(get_lang('Search'));
+
         $content = '';
-        if ($form->validate()) {
-            $values = $form->exportValues();
+        if ($validated) {
             $startDate = $values['daterange_start'];
             $endDate = $values['daterange_end'];
 
@@ -577,6 +610,10 @@ switch ($report) {
             echo '<div class="col-md-4"><canvas id="canvas1" style="margin-bottom: 20px"></canvas></div>';
             echo '<div class="col-md-4"><canvas id="canvas2" style="margin-bottom: 20px"></canvas></div>';
             echo '<div class="col-md-4"><canvas id="canvas3" style="margin-bottom: 20px"></canvas></div>';
+            echo '</div>';
+            echo '<div class="row">';
+            echo '<div class="col-md-6"><canvas id="canvas4" style="margin-bottom: 20px"></canvas></div>';
+            echo '<div class="col-md-6"><canvas id="canvas5" style="margin-bottom: 20px"></canvas></div>';
             echo '</div>';
             $conditions = ['status' => STUDENT];
 
@@ -593,7 +630,7 @@ switch ($report) {
                 $extraConditions
             );
 
-            $table = new HTML_Table(['class' => 'table table-responsive']);
+            $table = new HTML_Table(['class' => 'table table-responsive', 'id' => 'user_report']);
             $headers = [
                 get_lang('FirstName'),
                 get_lang('LastName'),

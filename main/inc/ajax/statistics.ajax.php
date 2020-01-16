@@ -273,37 +273,12 @@ switch ($action) {
 
                 break;
             case 'status':
-                $conditions = ['status' => STUDENT];
-                $students = UserManager::getUserListExtraConditions(
-                    $conditions,
-                    [],
-                    false,
-                    false,
-                    null,
-                    $extraConditions,
-                    true
-                );
-                $conditions = ['status' => COURSEMANAGER];
-                $teachers = UserManager::getUserListExtraConditions(
-                    $conditions,
-                    [],
-                    false,
-                    false,
-                    null,
-                    $extraConditions,
-                    true
-                );
-                $all = [
-                    get_lang('Students') => $students,
-                    get_lang('Teachers') => $teachers,
-                ];
-                break;
-            case 'language':
-                $languages = api_get_languages();
-                $all = [];
-                foreach ($languages['folder'] as $language) {
-                    $conditions = ['language' => $language];
-                    $all[$language] = UserManager::getUserListExtraConditions(
+                $statusList = api_get_status_langvars();
+                unset($statusList[ANONYMOUS]);
+
+                foreach ($statusList as $status => $name) {
+                    $conditions = ['status' => $status];
+                    $count = UserManager::getUserListExtraConditions(
                         $conditions,
                         [],
                         false,
@@ -312,6 +287,95 @@ switch ($action) {
                         $extraConditions,
                         true
                     );
+                    $all[$name] = $count;
+                }
+                break;
+            case 'language':
+                $languages = api_get_languages();
+                $all = [];
+                foreach ($languages['folder'] as $language) {
+                    $conditions = ['language' => $language];
+                    $key = $language;
+                    if (substr($language, -1) === '2') {
+                        $key = str_replace(2, '', $language);
+                    }
+                    $all[$key] = UserManager::getUserListExtraConditions(
+                        $conditions,
+                        [],
+                        false,
+                        false,
+                        null,
+                        $extraConditions,
+                        true
+                    );
+                }
+
+                break;
+            case 'language_cible':
+                $extraFieldValueUser = new ExtraField('user');
+                $extraField = $extraFieldValueUser->get_handler_field_info_by_field_variable('langue_cible');
+
+                $all = [];
+                $users = UserManager::getUserListExtraConditions(
+                    [],
+                    [],
+                    false,
+                    false,
+                    null,
+                    $extraConditions,
+                    false
+                );
+
+                $userIdList = array_column($users, 'user_id');
+                $userIdListToString = implode("', '", $userIdList);
+                foreach ($extraField['options'] as $item) {
+                    $value = Database::escape_string($item['option_value']);
+                    $count = 0;
+                    $sql = "SELECT count(id) count
+                            FROM $extraFieldValueUser->table_field_values
+                            WHERE
+                            value = '$value' AND
+                            item_id IN ('$userIdListToString') AND
+                            field_id = ".$extraField['id'];
+                    $query = Database::query($sql);
+                    $result = Database::fetch_array($query);
+                    $count = $result['count'];
+                    //$item['display_text'] = str_replace('2', '', $item['display_text']);
+                    $all[$item['display_text']] = $count;
+                }
+
+                break;
+
+            case 'career':
+                $extraFieldValueUser = new ExtraField('user');
+                $extraField = $extraFieldValueUser->get_handler_field_info_by_field_variable('filiere_user');
+
+                $all = [];
+                $users = UserManager::getUserListExtraConditions(
+                    [],
+                    [],
+                    false,
+                    false,
+                    null,
+                    $extraConditions,
+                    false
+                );
+
+                $userIdList = array_column($users, 'user_id');
+                $userIdListToString = implode("', '", $userIdList);
+                foreach ($extraField['options'] as $item) {
+                    $value = Database::escape_string($item['option_value']);
+                    $count = 0;
+                    $sql = "SELECT count(id) count
+                            FROM $extraFieldValueUser->table_field_values
+                            WHERE
+                            value = '$value' AND
+                            item_id IN ('$userIdListToString') AND
+                            field_id = ".$extraField['id'];
+                    $query = Database::query($sql);
+                    $result = Database::fetch_array($query);
+                    $count = $result['count'];
+                    $all[$item['display_text']] = $count;
                 }
                 break;
         }

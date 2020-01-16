@@ -7215,4 +7215,8 @@ $DataTableSearch = "Bilatu";
 $HideColumn = "Ezkutatu zutabea";
 $DisplayColumn = "Erakutsi zutabea";
 $LegalAgreementAccepted = "Lege hitzarmena onartu da";
+$TimeSpentInLp = "Ikasgaian emandako denbora";
+$IHaveFinishedTheLessonsNotifyTheTeacher = "Bukatu ditut ikastaroko ikasgaiak. Irakasleari jakinaraztea";
+$TimeSpentTimeRequired = "Erabilitako denbora / Behar izandako denbora";
+$ProgressSpentInLp = "Aurrerapena edukietan";
 ?>

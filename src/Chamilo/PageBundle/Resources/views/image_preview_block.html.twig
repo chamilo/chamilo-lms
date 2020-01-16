@@ -1,0 +1,9 @@
+{% extends '@SonataMedia/Block/block_media.html.twig' %}
+
+{% block block %}
+    {% for child in block.children %}
+        {% block block_child_render %}
+            {{ sonata_block_render(child, {'template': '@ChamiloPage/simple_image_block.twig'}) }}
+        {% endblock %}
+    {% endfor %}
+{% endblock %}

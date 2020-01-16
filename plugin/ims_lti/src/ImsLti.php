@@ -3,6 +3,7 @@
 
 use Chamilo\CoreBundle\Entity\Course;
 use Chamilo\CoreBundle\Entity\Session;
+use Chamilo\PluginBundle\Entity\ImsLti\ImsLtiTool;
 use Chamilo\UserBundle\Entity\User;
 
 /**
@@ -10,123 +11,234 @@ use Chamilo\UserBundle\Entity\User;
  */
 class ImsLti
 {
+    const V_1P1 = 'lti1p1';
+    const V_1P3 = 'lti1p3';
+
     /**
      * @param User         $user
      * @param Course       $course
-     * @param Session|null $session
+     * @param Session|null $session    Optional.
+     * @param string       $domain     Optional. Institution domain.
+     * @param string       $ltiVersion Optional. Default is lti1p1.
      *
      * @return array
      */
-    public static function getSubstitutableParams(User $user, Course $course, Session $session = null)
-    {
+    public static function getSubstitutableVariables(
+        User $user,
+        Course $course,
+        Session $session = null,
+        $domain = '',
+        $ltiVersion = self::V_1P1
+    ) {
+        $isLti1p3 = $ltiVersion === self::V_1P3;
+
         return [
             '$User.id' => $user->getId(),
-            '$User.image' => ['user_image'],
+            '$User.image' => $isLti1p3 ? ['claim' => 'sub'] : ['user_image'],
             '$User.username' => $user->getUsername(),
+            '$User.org' => false,
+            'User.scope.mentor' => $isLti1p3 ? ['claim' => '/claim/role_scope_mentor'] : ['role_scope_mentor'],
 
-            '$Person.sourcedId' => false,
+            '$Person.sourcedId' => $isLti1p3
+                ? self::getPersonSourcedId($domain, $user)
+                : "$domain:".ImsLtiPlugin::generateToolUserId($user->getId()),
             '$Person.name.full' => $user->getFullname(),
             '$Person.name.family' => $user->getLastname(),
             '$Person.name.given' => $user->getFirstname(),
-            '$Person.name.middle' => false,
-            '$Person.name.prefix' => false,
-            '$Person.name.suffix' => false,
             '$Person.address.street1' => $user->getAddress(),
-            '$Person.address.street2' => false,
-            '$Person.address.street3' => false,
-            '$Person.address.street4' => false,
-            '$Person.address.locality' => false,
-            '$Person.address.statepr' => false,
-            '$Person.address.country' => false,
-            '$Person.address.postcode' => false,
-            '$Person.address.timezone' => false, //$user->getTimezone(),
-            '$Person.phone.mobile' => false,
             '$Person.phone.primary' => $user->getPhone(),
-            '$Person.phone.home' => false,
-            '$Person.phone.work' => false,
             '$Person.email.primary' => $user->getEmail(),
-            '$Person.email.personal' => false,
-            '$Person.webaddress' => false, //$user->getWebsite(),
-            '$Person.sms' => false,
 
-            '$CourseTemplate.sourcedId' => false,
-            '$CourseTemplate.label' => false,
-            '$CourseTemplate.title' => false,
-            '$CourseTemplate.shortDescription' => false,
-            '$CourseTemplate.longDescription' => false,
-            '$CourseTemplate.courseNumber' => false,
-            '$CourseTemplate.credits' => false,
-
-            '$CourseOffering.sourcedId' => false,
-            '$CourseOffering.label' => false,
-            '$CourseOffering.title' => false,
-            '$CourseOffering.shortDescription' => false,
-            '$CourseOffering.longDescription' => false,
-            '$CourseOffering.courseNumber' => false,
-            '$CourseOffering.credits' => false,
-            '$CourseOffering.academicSession' => false,
-
-            '$CourseSection.sourcedId' => ['lis_course_section_sourcedid'],
+            '$CourseSection.sourcedId' => $isLti1p3
+                ? ['claim' => '/claim/lis', 'property' => 'course_section_sourcedid']
+                : ['lis_course_section_sourcedid'],
             '$CourseSection.label' => $course->getCode(),
             '$CourseSection.title' => $course->getTitle(),
-            '$CourseSection.shortDescription' => false,
             '$CourseSection.longDescription' => $session && $session->getShowDescription()
                 ? $session->getDescription()
                 : false,
-            '$CourseSection.courseNumber' => false,
-            '$CourseSection.credits' => false,
-            '$CourseSection.maxNumberofStudents' => false,
-            '$CourseSection.numberofStudents' => false,
-            '$CourseSection.dept' => false,
             '$CourseSection.timeFrame.begin' => $session && $session->getDisplayStartDate()
                 ? $session->getDisplayStartDate()->format(DateTime::ATOM)
-                : false,
+                : '$CourseSection.timeFrame.begin',
             '$CourseSection.timeFrame.end' => $session && $session->getDisplayEndDate()
                 ? $session->getDisplayEndDate()->format(DateTime::ATOM)
-                : false,
-            '$CourseSection.enrollControl.accept' => false,
-            '$CourseSection.enrollControl.allowed' => false,
-            '$CourseSection.dataSource' => false,
-            '$CourseSection.sourceSectionId' => false,
+                : '$CourseSection.timeFrame.end',
 
-            '$Group.sourcedId' => false,
-            '$Group.grouptype.scheme' => false,
-            '$Group.grouptype.typevalue' => false,
-            '$Group.grouptype.level' => false,
-            '$Group.email' => false,
-            '$Group.url' => false,
-            '$Group.timeFrame.begin' => false,
-            '$Group.timeFrame.end' => false,
-            '$Group.enrollControl.accept' => false,
-            '$Group.enrollControl.allowed' => false,
-            '$Group.shortDescription' => false,
-            '$Group.longDescription' => false,
-            '$Group.parentId' => false,
+            '$Membership.role' => $isLti1p3 ? ['claim' => '/claim/roles'] : ['roles'],
 
-            '$Membership.sourcedId' => false,
-            '$Membership.collectionSourcedId' => false,
-            '$Membership.personSourcedId' => false,
-            '$Membership.status' => false,
-            '$Membership.role' => ['roles'],
-            '$Membership.createdTimestamp' => false,
-            '$Membership.dataSource' => false,
+            '$Result.sourcedGUID' => $isLti1p3 ? ['claim' => 'sub'] : ['lis_result_sourcedid'],
+            '$Result.sourcedId' => $isLti1p3 ? ['claim' => 'sub'] : ['lis_result_sourcedid'],
 
-            '$LineItem.sourcedId' => false,
-            '$LineItem.type' => false,
-            '$LineItem.type.displayName' => false,
-            '$LineItem.resultValue.max' => false,
-            '$LineItem.resultValue.list' => false,
-            '$LineItem.dataSource' => false,
-
-            '$Result.sourcedGUID' => ['lis_result_sourcedid'],
-            '$Result.sourcedId' => ['lis_result_sourcedid'],
-            '$Result.createdTimestamp' => false,
-            '$Result.status' => false,
-            '$Result.resultScore' => false,
-            '$Result.dataSource' => false,
-
-            '$ResourceLink.title' => ['resource_link_title'],
-            '$ResourceLink.description' => ['resource_link_description'],
+            '$ResourceLink.id' => $isLti1p3
+                ? ['claim' => '/claim/resource_link', 'property' => 'id']
+                : ['resource_link_id'],
+            '$ResourceLink.title' => $isLti1p3
+                ? ['claim' => '/claim/resource_link', 'property' => 'title']
+                : ['resource_link_title'],
+            '$ResourceLink.description' => $isLti1p3
+                ? ['claim' => '/claim/resource_link', 'property' => 'description']
+                : ['resource_link_description'],
         ];
+    }
+
+    /**
+     * @param array        $launchParams All params for launch.
+     * @param array        $customParams Custom params where search variables to substitute.
+     * @param User         $user
+     * @param Course       $course
+     * @param Session|null $session      Optional.
+     * @param string       $domain       Optional. Institution domain.
+     * @param string       $ltiVersion   Optional. Default is lti1p1.
+     *
+     * @return array
+     */
+    public static function substituteVariablesInCustomParams(
+        array $launchParams,
+        array $customParams,
+        User $user,
+        Course $course,
+        Session $session = null,
+        $domain = '',
+        $ltiVersion = self::V_1P1
+    ) {
+        $substitutables = self::getSubstitutableVariables($user, $course, $session, $domain, $ltiVersion);
+        $variables = array_keys($substitutables);
+
+        foreach ($customParams as $customKey => $customValue) {
+            if (!in_array($customValue, $variables)) {
+                continue;
+            }
+
+            $substitute = $substitutables[$customValue];
+
+            if (is_array($substitute)) {
+                if ($ltiVersion === self::V_1P1) {
+                    $substitute = current($substitute);
+
+                    $substitute = $launchParams[$substitute];
+                } elseif ($ltiVersion === self::V_1P3) {
+                    $claim = array_key_exists($substitute['claim'], $launchParams)
+                        ? $substitute['claim']
+                        : "https://purl.imsglobal.org/spec/lti{$substitute['claim']}";
+
+                    $substitute = empty($substitute['property'])
+                        ? $launchParams[$claim]
+                        : $launchParams[$claim][$substitute['property']];
+                } else {
+                    continue;
+                }
+            }
+
+            $customParams[$customKey] = $substitute;
+        }
+
+        array_walk_recursive(
+            $customParams,
+            function (&$value) {
+                if (gettype($value) !== 'array') {
+                    $value = (string) $value;
+                }
+            }
+        );
+
+        return $customParams;
+    }
+
+    /**
+     * Generate a user sourced ID for LIS.
+     *
+     * @param string $domain
+     * @param User   $user
+     *
+     * @return string
+     */
+    public static function getPersonSourcedId($domain, User $user)
+    {
+        $sourceId = [$domain, $user->getId()];
+
+        return implode(':', $sourceId);
+    }
+
+    /**
+     * Generate a course sourced ID for LIS.
+     *
+     * @param string  $domain
+     * @param Course  $course
+     * @param Session $session Optional.
+     *
+     * @return string
+     */
+    public static function getCourseSectionSourcedId($domain, Course $course, Session $session = null)
+    {
+        $sourceId = [$domain, $course->getId()];
+
+        if ($session) {
+            $sourceId[] = $session->getId();
+        }
+
+        return implode(':', $sourceId);
+    }
+
+    /**
+     * Get instances for LTI Advantage services.
+     *
+     * @param ImsLtiTool $tool
+     *
+     * @return array
+     */
+    public static function getAdvantageServices(ImsLtiTool $tool)
+    {
+        return [
+            new LtiAssignmentGradesService($tool),
+            new LtiNamesRoleProvisioningService($tool),
+        ];
+    }
+
+    /**
+     * @param int $length
+     *
+     * @return string
+     */
+    public static function generateClientId($length = 20)
+    {
+        $hash = md5(mt_rand().time());
+
+        $clientId = '';
+
+        for ($p = 0; $p < $length; $p++) {
+            $op = mt_rand(1, 3);
+
+            if ($op === 1) {
+                $char = chr(mt_rand(97, 97 + 25));
+            } elseif ($op === 2) {
+                $char = chr(mt_rand(65, 65 + 25));
+            } else {
+                $char = substr($hash, mt_rand(0, strlen($hash) - 1), 1);
+            }
+
+            $clientId .= $char;
+        }
+
+        return $clientId;
+    }
+
+    /**
+     * Validate the format ISO 8601 for date strings coming from JSON or JavaScript.
+     *
+     * @link https://www.myintervals.com/blog/2009/05/20/iso-8601-date-validation-that-doesnt-suck/ Pattern source.
+     *
+     * @param string $strDate
+     *
+     * @return bool
+     */
+    public static function validateFormatDateIso8601($strDate)
+    {
+        $pattern = '/^([\+-]?\d{4}(?!\d{2}\b))((-?)('
+            .'(0[1-9]|1[0-2])(\3([12]\d|0[1-9]|3[01]))?|W'
+            .'([0-4]\d|5[0-2])(-?[1-7])?|(00[1-9]|0[1-9]\d|[12]\d{2}|3([0-5]\d|6[1-6])))('
+            .'[T\s]((([01]\d|2[0-3])((:?)[0-5]\d)?|24\:?00)([\.,]\d+(?!:))?)?(\17[0-5]\d([\.,]\d+)?)?'
+            .'([zZ]|([\+-])([01]\d|2[0-3]):?([0-5]\d)?)?)?)?$/';
+
+        return preg_match($pattern, $strDate) !== false;
     }
 }

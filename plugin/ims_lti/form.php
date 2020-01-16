@@ -64,11 +64,7 @@ if ($tool->isActiveDeepLinking()) {
         );
         $params['lis_outcome_service_url'] = api_get_path(WEB_PATH).'lti/os';
         $params['lis_person_sourcedid'] = "$platformDomain:$toolUserId";
-        $params['lis_course_section_sourcedid'] = "$platformDomain:".$course->getId();
-
-        if ($session) {
-            $params['lis_course_section_sourcedid'] .= ':'.$session->getId();
-        }
+        $params['lis_course_section_sourcedid'] = ImsLti::getCourseSectionSourcedId($platformDomain, $course, $session);
     }
 }
 
@@ -115,36 +111,14 @@ $params['oauth_callback'] = 'about:blank';
 $customParams = $tool->parseCustomParams();
 $imsLtiPlugin->trimParams($customParams);
 
-$substitutables = ImsLti::getSubstitutableParams($user, $course, $session);
-$variables = array_keys($substitutables);
-
-foreach ($customParams as $customKey => $customValue) {
-    if (in_array($customValue, $variables)) {
-        $val = $substitutables[$customValue];
-
-        if (is_array($val)) {
-            $val = current($val);
-
-            if (array_key_exists($val, $params)) {
-                $customParams[$customKey] = $params[$val];
-
-                continue;
-            } else {
-                $val = false;
-            }
-        }
-
-        if (false === $val) {
-            $customParams[$customKey] = $customValue;
-
-            continue;
-        }
-
-        $customParams[$customKey] = $substitutables[$customValue];
-    }
-}
-
-$params += $customParams;
+$params += ImsLti::substituteVariablesInCustomParams(
+    $params,
+    $customParams,
+    $user,
+    $course,
+    $session,
+    $platformDomain
+);
 
 $imsLtiPlugin->trimParams($params);
 

@@ -57,7 +57,7 @@
         "ext-xml": "*",
         "ext-zip": "*",
         "ext-zlib": "*",
-        "ezyang/htmlpurifier": "4.9.*",
+        "ezyang/htmlpurifier": "~4.9",
         "facebook/php-sdk-v4": "~5.0",
         "friendsofsymfony/user-bundle": "~1.3",
         "graphp/algorithms": "~0.8.0",

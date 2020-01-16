@@ -75,16 +75,18 @@
                                             </ul>
                                         {% endif %}
                                     <br />
-                                    <h4 style="color: #672290; font-size: 16px;">{{ complete_name }}</h4>
-                                    <p style="color:#40ad49; font-size: 16px;">{{ 'SkillsValidated' | get_lang }}:</p>
-                                        {% if skills %}
-                                            <ul style="color: #672290; font-size: 16px;">
-                                            {% for skill in skills %}
-                                                <li>{{ skill.name }}</li>
-                                            {% endfor %}
-                                            </ul>
-                                        {% endif %}
+
+                                    {% if skills %}
+                                        <h4 style="color: #672290; font-size: 16px;">{{ complete_name }}</h4>
+                                        <p style="color:#40ad49; font-size: 16px;">{{ 'SkillsValidated' | get_lang }}:</p>
+                                        <ul style="color: #672290; font-size: 16px;">
+                                        {% for skill in skills %}
+                                            <li>{{ skill.name }}</li>
+                                        {% endfor %}
+                                        </ul>
                                         <br />
+                                    {% endif %}
+
                                     <p style="color:#40ad49; font-size: 16px;">Berlin/Paris, {{ 'The' | get_lang }} <span style="font-weight: bold; color: #672290;">{{ certificate_generated_date_no_time }}</span><br />
                                         {{ 'ThePlatformTeam' | get_lang }}</p>
                                     <br />

@@ -704,7 +704,7 @@ class Certificate extends Model
         }
 
         $sessions = SessionManager::get_sessions_by_user($this->user_id, false, true);
-        $totalTimeInLearningPaths = 0;
+
         $sessionsApproved = [];
         $coursesApproved = [];
 
@@ -723,6 +723,19 @@ class Certificate extends Model
                         $session['session_id']
                     );
 
+                    // Find time spent in LP
+                    $timeSpent = Tracking::get_time_spent_in_lp(
+                        $this->user_id,
+                        $courseCode,
+                        [],
+                        $session['session_id']
+                    );
+
+                    if (!isset($courseList[$course['real_id']])) {
+                        $courseList[$course['real_id']]['approved'] = false;
+                        $courseList[$course['real_id']]['time_spent'] = 0;
+                    }
+
                     if (isset($gradebookCategories[0])) {
                         /** @var Category $category */
                         $category = $gradebookCategories[0];
@@ -732,20 +745,6 @@ class Certificate extends Model
                             true
                         );
 
-
-                        // Find time spent in LP
-                        $timeSpent = Tracking::get_time_spent_in_lp(
-                            $this->user_id,
-                            $courseCode,
-                            [],
-                            $session['session_id']
-                        );
-
-                        if (!isset($courseList[$course['real_id']])) {
-                            $courseList[$course['real_id']]['approved'] = false;
-                            $courseList[$course['real_id']]['time_spent'] = 0;
-                        }
-
                         if ($result) {
                             $courseList[$course['real_id']]['approved'] = true;
                             $coursesApproved[$course['real_id']] = $courseInfo['title'];
@@ -754,9 +753,10 @@ class Certificate extends Model
                             //$totalTimeInLearningPaths += $timeSpent;
                             $allCoursesApproved[] = true;
                         }
-                        $courseList[$course['real_id']]['time_spent'] += $timeSpent;
                     }
                 }
+
+                $courseList[$course['real_id']]['time_spent'] += $timeSpent;
 
                 if (count($allCoursesApproved) == count($session['courses'])) {
                     $sessionsApproved[] = $session;

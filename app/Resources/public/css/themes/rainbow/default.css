@@ -2345,7 +2345,15 @@ blockquote:before {
     color: #96bd0d;
     font-weight: bold;
     font-size: 2rem;
-    padding: 1rem;
+    padding: 1rem 0;
+    margin: auto;
+    display: none;
+}
+.page-header-announcement{
+    color: #96bd0d;
+    font-weight: bold;
+    font-size: 2rem;
+    padding: 1rem 0;
     margin: auto;
 }
 #carousel-announcement .carousel-content{

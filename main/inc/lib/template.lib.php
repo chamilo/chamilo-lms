@@ -1077,10 +1077,13 @@ class Template
 
     public static function displayCASLoginButton($label = null)
     {
+        $course = api_get_course_id();
         $form = new FormValidator(
             'form-cas-login',
             'POST',
-            api_get_path(WEB_PATH).api_get_setting('page_after_login'),
+            $course
+                ? api_get_path(WEB_COURSE_PATH).$course.'/'
+                : api_get_path(WEB_PATH).api_get_setting('page_after_login'),
             null,
             null,
             FormValidator::LAYOUT_BOX_NO_LABEL

@@ -124,6 +124,10 @@ $menu = [
         'action' => 'questions_true_false',
         'parent' => 24,
     ],
+    28 => [
+        'action' => 'efc_users',
+        'parent' => 0,
+    ],
 ];
 
 Display::display_header($plugin->get_title());

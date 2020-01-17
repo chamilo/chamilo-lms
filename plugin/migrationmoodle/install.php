@@ -7,7 +7,7 @@ try {
     UserManager::create_extra_field(
         'moodle_password',
         ExtraField::FIELD_TYPE_TEXT,
-        $this->get_lang('MoodlePassword'),
+        $plugin->get_lang('MoodlePassword'),
         ''
     );
 } catch (Exception $exception) {

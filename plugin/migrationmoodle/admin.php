@@ -149,7 +149,10 @@ if (!empty($action) && isAllowedAction($action, $menu)) {
 
     /** @var BaseTask $task */
     $task = new $taskName();
+
+    echo '<div style="overflow: auto;height: 820px;">';
     $task->execute();
+    echo '</div>';
 }
 
 echo '</div>';

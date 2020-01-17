@@ -1771,6 +1771,8 @@ class UserManager
             $sql .= " WHERE 1=1 ";
         }
 
+        $sql .= " AND status <> ".ANONYMOUS." ";
+
         if (count($conditions) > 0) {
             foreach ($conditions as $field => $value) {
                 $field = Database::escape_string($field);

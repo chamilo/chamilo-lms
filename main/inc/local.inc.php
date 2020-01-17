@@ -328,6 +328,7 @@ if (!empty($_SESSION['_user']['user_id']) && !($login || $logout)) {
 
             $_user = api_get_user_info_from_username($login);
             Session::write('_user', $_user);
+            $doNotRedirectToCourse = true; // we should already be on the right page, no need to redirect
 
         } else {
             // not CAS authenticated
@@ -1633,7 +1634,8 @@ if (isset($_cid)) {
 }
 
 // direct login to course
-if ($logging_in && exist_firstpage_parameter()) {
+if (isset($doNotRedirectToCourse)) {
+} elseif ($logging_in && exist_firstpage_parameter()) {
     $redirectCourseDir = api_get_firstpage_parameter();
     api_delete_firstpage_parameter(); // delete the cookie
 

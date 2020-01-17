@@ -3,7 +3,7 @@
 
 namespace Chamilo\PluginBundle\MigrationMoodle\Task;
 
-use Chamilo\PluginBundle\MigrationMoodle\Extractor\UsersExtractor;
+use Chamilo\PluginBundle\MigrationMoodle\Extractor\BaseExtractor;
 use Chamilo\PluginBundle\MigrationMoodle\Loader\UsersLoader;
 use Chamilo\PluginBundle\MigrationMoodle\Transformer\BaseTransformer;
 use Chamilo\PluginBundle\MigrationMoodle\Transformer\Property\AuthLookup;
@@ -26,8 +26,8 @@ class UsersTask extends BaseTask
     public function getExtractConfiguration()
     {
         return [
-            'class' => UsersExtractor::class,
-            'query' => 'SELECT * FROM mdl_user',
+            'class' => BaseExtractor::class,
+            'query' => "SELECT * FROM mdl_user WHERE username NOT IN ('admin', 'guest')",
         ];
     }
 

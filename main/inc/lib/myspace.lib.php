@@ -369,7 +369,12 @@ class MySpace
             $is_western_name_order = api_is_western_name_order();
         }
         $sort_by_first_name = api_sort_by_first_name();
-        $tracking_column = isset($_GET['tracking_list_coaches_column']) ? $_GET['tracking_list_coaches_column'] : ($is_western_name_order xor $sort_by_first_name) ? 1 : 0;
+        if (isset($_GET['tracking_list_coaches_column'])) {
+            $tracking_column = (int) $_GET['tracking_list_coaches_column'];
+        } else {
+            $tracking_column = ($is_western_name_order xor $sort_by_first_name) ? 1 : 0;
+        }
+
         $tracking_direction = (isset($_GET['tracking_list_coaches_direction']) && in_array(strtoupper($_GET['tracking_list_coaches_direction']), ['ASC', 'DESC', 'ASCENDING', 'DESCENDING', '0', '1'])) ? $_GET['tracking_list_coaches_direction'] : 'DESC';
         // Prepare array for column order - when impossible, use some of user names.
         if ($is_western_name_order) {

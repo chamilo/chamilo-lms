@@ -1,5 +1,5 @@
 <div class="page-header-announcement">
-    {{ "HomePageAnnouceSliderTitle" | get_lang }}
+    <h2 class="section-title">{{ "HomePageAnnouceSliderTitle" | get_lang }}</h2>
 </div>
 <div id="carousel-announcement" class="carousel slide" data-ride="carousel">
     <!-- Indicators -->

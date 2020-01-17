@@ -9,7 +9,7 @@
             <div class='cas_plugin_clear'>&nbsp;</div>
         {% endif %}
         <div class='cas_plugin_comm'>{{add_cas_logout_button.logout_comment}}</div>
-        <button class="btn btn-default" onclick="javascript:self.location.href='main/auth/cas/logout.php'">{{"Logout"|get_lang}}</button>
+        {{ add_cas_logout_button.form }}
         
     </div>
 {% endif %}

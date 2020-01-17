@@ -20,6 +20,7 @@ if (!api_is_anonymous() &&
     $logout_image_url = $plugin_info['settings']['add_cas_logout_button_cas_logout_image_url'];
 
     $_template['logout_label'] = $logout_label;
+    $_template['form'] = Template::displayCASLogoutButton(get_lang('Logout'));
     $_template['logout_comment'] = $logout_comment;
     $_template['logout_image_url'] = $logout_image_url;
 }

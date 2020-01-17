@@ -9,7 +9,6 @@
  * Author : hubert.borderiou@grenet.fr
  */
 require_once __DIR__.'/../inc/global.inc.php';
-require_once api_get_path(SYS_PATH).'main/auth/cas/authcas.php';
 $msg = null;
 if (isset($_GET['firstpage'])) {
     $firstpage = $_GET['firstpage'];
@@ -53,9 +52,8 @@ if (isset($_GET['firstpage'])) {
     $form->addButtonNext(get_lang('LoginEnter'), 'submitAuth');
     // see same text in main_api.lib.php function api_not_allowed
     if (api_is_cas_activated()) {
-        require_once api_get_path(SYS_PATH).'main/auth/cas/authcas.php';
         $msg .= Display::return_message(sprintf(get_lang('YouHaveAnInstitutionalAccount'), api_get_setting("Institution")), '', false);
-        $msg .= Display::div("<br/><a href='".get_cas_direct_URL(api_get_course_id())."'>".getCASLogoHTML()." ".sprintf(get_lang('LoginWithYourAccount'), api_get_setting("Institution"))."</a><br/><br/>", ['align' => 'center']);
+        $msg .= Display::div(Template::displayCASLoginButton(), ['align' => 'center']);
         $msg .= Display::return_message(get_lang('YouDontHaveAnInstitutionAccount'));
         $msg .= "<p style='text-align:center'><a href='#' onclick='$(this).parent().next().toggle()'>".get_lang('LoginWithExternalAccount')."</a></p>";
         $msg .= "<div style='display:none;'>";

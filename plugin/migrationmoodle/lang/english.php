@@ -9,8 +9,10 @@ $strings['UninstallError'] = 'An error ocurred while the plugin was uninstalled.
 
 // Tasks
 $strings['UsersTask'] = 'Users';
+$strings['EfcUsersTask'] = 'Users (filtered with username efc*)';
 $strings['CourseCategoriesTask'] = 'Course categories';
 $strings['CoursesTask'] = 'Courses';
+$strings['EfcCoursesTask'] = 'Courses (filtered for efc* users)';
 $strings['CourseSectionsTask'] = 'Course sections';
 $strings['CourseModulesLessonTask'] = 'Course modules: Lessons';
 $strings['LessonPagesTask'] = 'Lesson pages';

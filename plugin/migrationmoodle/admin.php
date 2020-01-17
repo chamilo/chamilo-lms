@@ -17,7 +17,8 @@ if ('true' != $plugin->get('active')) {
 
 $menu = [
     1 => [
-        'action' => 'users',
+        //'action' => 'users',
+        'action' => 'efc_users',
         'parent' => 0,
     ],
     2 => [
@@ -25,7 +26,8 @@ $menu = [
         'parent' => 0,
     ],
     3 => [
-        'action' => 'courses',
+        //'action' => 'courses',
+        'action' => 'efc_courses',
         'parent' => 0,
     ],
     4 => [
@@ -123,10 +125,6 @@ $menu = [
     27 => [
         'action' => 'questions_true_false',
         'parent' => 24,
-    ],
-    28 => [
-        'action' => 'efc_users',
-        'parent' => 0,
     ],
 ];
 

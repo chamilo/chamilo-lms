@@ -326,7 +326,6 @@ switch ($action) {
                 $extraFieldValueUser = new ExtraField('user');
                 $extraField = $extraFieldValueUser->get_handler_field_info_by_field_variable('langue_cible');
 
-                $all = [];
                 $users = UserManager::getUserListExtraConditions(
                     [],
                     [],
@@ -339,6 +338,8 @@ switch ($action) {
 
                 $userIdList = array_column($users, 'user_id');
                 $userIdListToString = implode("', '", $userIdList);
+
+                $all = [];
                 foreach ($extraField['options'] as $item) {
                     $value = Database::escape_string($item['option_value']);
                     $count = 0;
@@ -447,45 +448,48 @@ switch ($action) {
                 }
                 break;
             case 'status':
-                $conditions = ['status' => STUDENT];
-                $students = UserManager::getUserListExtraConditions(
-                    $conditions,
-                    [],
-                    false,
-                    false,
-                    null,
-                    $extraConditions,
-                    true
-                );
-                $conditions = ['status' => COURSEMANAGER];
-                $teachers = UserManager::getUserListExtraConditions(
-                    $conditions,
-                    [],
-                    false,
-                    false,
-                    null,
-                    $extraConditions,
-                    true
-                );
-                $all = [
-                    get_lang('Students') => $students,
-                    get_lang('Teachers') => $teachers,
-                ];
+                $sessionStatusAllowed = api_get_configuration_value('allow_session_status');
+                if (!$sessionStatusAllowed) {
+                    exit;
+                }
+
+                $sql = "SELECT count(id) count, status FROM $table
+                        WHERE
+                            display_start_date BETWEEN '$startDate' AND '$endDate' OR
+                            display_end_date BETWEEN '$startDate' AND '$endDate'
+                        GROUP BY status
+                    ";
+                $result = Database::query($sql);
+                $all = [];
+                while ($row = Database::fetch_array($result)) {
+                    $row['status'] = SessionManager::getStatusLabel($row['status']);
+                    $all[$row['status']] = $row['count'];
+                }
+
                 break;
             case 'language':
-                $languages = api_get_languages();
+                $sql = "SELECT id FROM $table
+                        WHERE
+                            display_start_date BETWEEN '$startDate' AND '$endDate' OR
+                            display_end_date BETWEEN '$startDate' AND '$endDate'
+                    ";
+
+                $result = Database::query($sql);
                 $all = [];
-                foreach ($languages['folder'] as $language) {
-                    $conditions = ['language' => $language];
-                    $all[$language] = UserManager::getUserListExtraConditions(
-                        $conditions,
-                        [],
-                        false,
-                        false,
-                        null,
-                        $extraConditions,
-                        true
-                    );
+                while ($row = Database::fetch_array($result)) {
+                    $courses = SessionManager::getCoursesInSession($row['id']);
+                    $language = get_lang('Nothing');
+                    if (!empty($courses)) {
+                        $courseId = $courses[0];
+                        $courseInfo = api_get_course_info_by_id($courseId);
+                        $language = $courseInfo['language'];
+                        $language = str_replace('2', '', $language);
+                    }
+
+                    if (!isset($all[$language])) {
+                        $all[$language] = 0;
+                    }
+                    $all[$language] += 1;
                 }
                 break;
         }

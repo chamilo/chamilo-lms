@@ -210,56 +210,70 @@ if (
 
             break;
         case 'session_by_date':
-            $urlBase = api_get_path(WEB_CODE_PATH).'inc/ajax/statistics.ajax.php?';
+            $form = new FormValidator('session_by_date', 'get');
+            $form->addDateRangePicker(
+                'range',
+                get_lang('DateRange'),
+                true,
+                ['format' => 'YYYY-MM-DD', 'timePicker' => 'false', 'validate_format' => 'Y-m-d']
+            );
 
-            $dateStart = Security::remove_XSS($_REQUEST['range_start']);
-            $dateEnd = Security::remove_XSS($_REQUEST['range_end']);
+            $form->addHidden('report', 'session_by_date');
+            $form->addButtonSearch(get_lang('Search'));
 
-            $url1 = $urlBase.'a=session_by_date&filter=category&date_start='.$dateStart.'&date_end='.$dateEnd;
-            $url2 = $urlBase.'a=users_active&filter=status&date_start='.$dateStart.'&date_end='.$dateEnd;
-            $url3 = $urlBase.'a=users_active&filter=language&date_start='.$dateStart.'&date_end='.$dateEnd;
-            $url4 = $urlBase.'a=users_active&filter=language&date_start='.$dateStart.'&date_end='.$dateEnd;
+            $validated = $form->validate();
+            if ($validated) {
+                $urlBase = api_get_path(WEB_CODE_PATH).'inc/ajax/statistics.ajax.php?';
 
-            $reportName1 = get_lang('SessionsPerCategory');
-            $reportName2 = get_lang('UserByStatus');
-            $reportName3 = get_lang('UserByLanguage');
-            $reportName4 = get_lang('UserByCareer');
+                $dateStart = Security::remove_XSS($_REQUEST['range_start']);
+                $dateEnd = Security::remove_XSS($_REQUEST['range_end']);
 
-            $reportType = 'pie';
-            $reportOptions = '
-                legend: {
-                    position: "left"
-                },
-                title: {
-                    text: "%s",
-                    display: true
-                },
-                cutoutPercentage: 25
+                $url1 = $urlBase.'a=session_by_date&filter=category&date_start='.$dateStart.'&date_end='.$dateEnd;
+                $url2 = $urlBase.'a=session_by_date&filter=language&date_start='.$dateStart.'&date_end='.$dateEnd;
+                $url3 = $urlBase.'a=session_by_date&filter=status&date_start='.$dateStart.'&date_end='.$dateEnd;
+
+                $url4 = $urlBase.'a=users_active&filter=language&date_start='.$dateStart.'&date_end='.$dateEnd;
+
+                $reportName1 = get_lang('SessionsPerCategory');
+                $reportName2 = get_lang('SessionsPerLanguage');
+                $reportName3 = get_lang('SessionsPerStatus');
+                $reportName4 = get_lang('UserByCareer');
+
+                $reportType = 'pie';
+                $reportOptions = '
+                    legend: {
+                        position: "left"
+                    },
+                    title: {
+                        text: "%s",
+                        display: true
+                    },
+                    cutoutPercentage: 25
                 ';
-            $reportOptions1 = sprintf($reportOptions, $reportName1);
-            $reportOptions2 = sprintf($reportOptions, $reportName2);
-            $reportOptions3 = sprintf($reportOptions, $reportName3);
-            $reportOptions4 = sprintf($reportOptions, $reportName4);
+                $reportOptions1 = sprintf($reportOptions, $reportName1);
+                $reportOptions2 = sprintf($reportOptions, $reportName2);
+                $reportOptions3 = sprintf($reportOptions, $reportName3);
+                $reportOptions4 = sprintf($reportOptions, $reportName4);
 
-            $htmlHeadXtra[] = Statistics::getJSChartTemplate(
-                $url1,
-                $reportType,
-                $reportOptions1,
-                'canvas1'
-            );
-            /*$htmlHeadXtra[] = Statistics::getJSChartTemplate(
-                $url2,
-                $reportType,
-                $reportOptions2,
-                'canvas2'
-            );
-            $htmlHeadXtra[] = Statistics::getJSChartTemplate(
-                $url3,
-                $reportType,
-                $reportOptions3,
-                'canvas3'
-            );*/
-
+                $htmlHeadXtra[] = Statistics::getJSChartTemplate(
+                    $url1,
+                    $reportType,
+                    $reportOptions1,
+                    'canvas1'
+                );
+                $htmlHeadXtra[] = Statistics::getJSChartTemplate(
+                    $url2,
+                    $reportType,
+                    $reportOptions2,
+                    'canvas2'
+                );
+                $htmlHeadXtra[] = Statistics::getJSChartTemplate(
+                    $url3,
+                    $reportType,
+                    $reportOptions3,
+                    'canvas3'
+                );
+            }
             break;
     }
 }
@@ -330,20 +344,8 @@ echo '<br/><br/>';
 
 switch ($report) {
     case 'session_by_date':
-        $form = new FormValidator('session_by_date', 'get');
-        $form->addDateRangePicker(
-            'range',
-            get_lang('DateRange'),
-            true,
-            ['format' => 'YYYY-MM-DD', 'timePicker' => 'false', 'validate_format' => 'Y-m-d']
-        );
-
-        $form->addHidden('report', 'session_by_date');
-        $form->addButtonSearch(get_lang('Search'));
-
         $content = '';
-
-        if ($form->validate()) {
+        if ($validated) {
             $values = $form->getSubmitValues();
             $start = Database::escape_string($values['range_start']);
             $end = Database::escape_string($values['range_end']);
@@ -352,17 +354,19 @@ switch ($report) {
             $second = DateTime::createFromFormat('Y-m-d', $end);
             $numberOfWeeks = floor($first->diff($second)->days / 7);
 
-
             $content .= '<div class="row">';
             $content .= '<div class="col-md-4"><canvas id="canvas1" style="margin-bottom: 20px"></canvas></div>';
-            //$content .= '<div class="col-md-4"><canvas id="canvas2" style="margin-bottom: 20px"></canvas></div>';
-            //$content .= '<div class="col-md-4"><canvas id="canvas3" style="margin-bottom: 20px"></canvas></div>';
-            $content .= '</div>';
+            $content .= '<div class="col-md-4"><canvas id="canvas2" style="margin-bottom: 20px"></canvas></div>';
 
+            $sessionStatusAllowed = api_get_configuration_value('allow_session_status');
+            if ($sessionStatusAllowed) {
+                $content .= '<div class="col-md-4"><canvas id="canvas3" style="margin-bottom: 20px"></canvas></div>';
+            }
+            $content .= '</div>';
 
             // User count
             $table = Database::get_main_table(TABLE_MAIN_SESSION);
-            $sql = "SELECT id, name, display_start_date, display_end_date, nbr_users FROM $table
+            $sql = "SELECT * FROM $table
                     WHERE
                         display_start_date BETWEEN '$start' AND '$end' OR
                         display_end_date BETWEEN '$start' AND '$end' ";
@@ -400,9 +404,18 @@ switch ($report) {
                 $sessionPerCategories[$row['session_category_id']] = $row['count'];
             }
 
-            $sessionAverage = $sessionCount/$numberOfWeeks;
-            $averageUser = $sessionCount/$numberUsers;
-            $averageCoach = $sessionCount/$uniqueCoaches;
+            $sessionAverage = 0;
+            $averageUser = 0;
+            $averageCoach = 0;
+            if (!empty($numberOfWeeks)) {
+                $sessionAverage = api_number_format($sessionCount/$numberOfWeeks, 2);
+            }
+            if (!empty($numberUsers)) {
+                $averageUser = api_number_format($sessionCount/$numberUsers, 2);
+            }
+            if (!empty($uniqueCoaches)) {
+                $averageCoach = api_number_format($sessionCount/$uniqueCoaches, 2);
+            }
 
             $table = new HTML_Table(['class' => 'table table-responsive']);
             $row = 0;
@@ -433,6 +446,7 @@ switch ($report) {
                 get_lang('SessionCategory'),
                 get_lang('Count'),
             ];
+
             $row = 0;
             $column = 0;
             foreach ($headers as $header) {
@@ -449,7 +463,6 @@ switch ($report) {
                 }
                 $table->setCellContents($row, 0, $label);
                 $table->setCellContents($row, 1, $count);
-
                 $row++;
             }
 
@@ -460,7 +473,11 @@ switch ($report) {
                 get_lang('Name'),
                 get_lang('StartDate'),
                 get_lang('EndDate'),
+                get_lang('Language'),
             ];
+            if ($sessionStatusAllowed) {
+                $headers[] = get_lang('Status');
+            }
             $row = 0;
             $column = 0;
             foreach ($headers as $header) {
@@ -473,6 +490,21 @@ switch ($report) {
                 $table->setCellContents($row, 0, $session['name']);
                 $table->setCellContents($row, 1, api_get_local_time($session['display_start_date']));
                 $table->setCellContents($row, 2, api_get_local_time($session['display_end_date']));
+
+                // Get first language.
+                $language = '';
+                $courses = SessionManager::getCoursesInSession($session['id']);
+                if (!empty($courses)) {
+                    $courseId = $courses[0];
+                    $courseInfo = api_get_course_info_by_id($courseId);
+                    $language = $courseInfo['language'];
+                    $language = str_replace('2', '', $language);
+                }
+                $table->setCellContents($row, 3, $language);
+
+                if ($sessionStatusAllowed) {
+                    $table->setCellContents($row, 4, SessionManager::getStatusLabel($session['status']));
+                }
                 $row++;
             }
 
@@ -702,6 +734,7 @@ switch ($report) {
         echo '<div class="col-md-4"><canvas id="canvas1" style="margin-bottom: 20px"></canvas></div>';
         echo '<div class="col-md-4"><canvas id="canvas2" style="margin-bottom: 20px"></canvas></div>';
         echo '<div class="col-md-4"><canvas id="canvas3" style="margin-bottom: 20px"></canvas></div>';
+
         echo '</div>';
         // total amount of users
         $teachers = $students = [];

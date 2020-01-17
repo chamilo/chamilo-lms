@@ -97,7 +97,7 @@ if ($form->validate()) {
         $column++;
     }
     $row++;
-
+    $url = api_get_path(WEB_CODE_PATH).'session/resume_session.php?';
     foreach ($coachList as $coachData) {
         $column = 0;
         $table->setCellContents($row, $column++, $coachData['complete_name']);
@@ -110,8 +110,11 @@ if ($form->validate()) {
                 $sessionArray = [];
                 foreach ($coachData['week'][$dateWeekToCheck]['sessions'] as $session) {
                     $date2 = new DateTime($session['display_start_date']);
-                    //$sessionArray[] = $session['name'].'-'.$session['display_start_date'].'-'.$date2->format($weekFormat).'/'.$dateWeekToCheck;
-                    $sessionArray[] = $session['name'];
+                    $sessionArray[] = Display::url(
+                        $session['name'],
+                        $url.'id_session='.$session['session_id'],
+                        ['class' => 'label label-success', 'target' => '_blank']
+                    );
                 }
                 $table->setCellContents($row, $i, implode('<br /><br />', $sessionArray));
                 $table->updateCellAttributes(

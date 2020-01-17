@@ -16,28 +16,9 @@ if (!$allowToTrack) {
     api_not_allowed(true);
 }
 
-
-/*$form = new FormValidator('survey');
-$form->addSelectAjax(
-    'user_id',
-    get_lang('User'),
-    [],
-    [
-        'url' => api_get_path(WEB_AJAX_PATH).'user_manager.ajax.php?a=get_user_like',
-    ]
-);
-$form->addButtonSearch();*/
-
 $userInfo = [];
-/*if ($form->validate()) {
-    $userId = $form->exportValue('user_id');
-    $userInfo = api_get_user_info($userId);
-}*/
-//$form->display();
-
 $action = isset($_REQUEST['a']) ? $_REQUEST['a'] : null;
 $languageFilter = isset($_REQUEST['language']) ? $_REQUEST['language'] : '';
-
 $content = '';
 
 switch ($action) {
@@ -71,6 +52,46 @@ switch ($action) {
         break;
 }
 
+$url = api_get_path(WEB_AJAX_PATH).'statistics.ajax.php?a=add_student_to_boss';
+
+$htmlHeadXtra[] = '<script>
+$(function() {
+    $(".boss_column").on("mouseover", function() {
+        //$(this).find(".add_user").show();
+    });
+
+     $(".boss_column").on("mouseleave", function() {
+        //$(this).find(".add_user").hide();
+    });
+
+    $(".add_user form").on("submit", function(e) {
+        e.preventDefault();
+        var id = $(this).attr("id");
+        console.log(id);
+        var data = $("#" + id ).serializeArray();
+        var bossId = id.replace("add_user_to_", "") ;
+
+        for (i=0; i<data.length; i += 1) {
+            if (data[i].name === "user_id") {
+                var userId = data[i].value;
+                var params = "boss_id="+ bossId + "&student_id="+ userId + "&";
+
+                $.get(
+                    "'.$url.'",
+                    params,
+                    function(response) {
+                        $("#table_" + bossId ).html("'.addslashes(Display::label(get_lang('Added'), 'success')).'");
+                        $("#table_" + bossId ).append(response);
+                    }
+                );
+            }
+        }
+    });
+});
+
+</script>';
+
+
 Display::display_header($nameTools);
 echo '<div class="actions">';
 echo MySpace::getTopMenu();
@@ -91,6 +112,36 @@ if ($action !== 'add_user') {
 }
 
 echo $content;
+$style = '<style>
+    .boss_column {
+        display: block;
+    }
+    .row .col-md-1 {
+        display:flex;
+        flex: 0 0 20%;
+    }
+
+    .flex-nowrap {
+        -webkit-flex-wrap: nowrap!important;
+        -ms-flex-wrap: nowrap!important;
+        flex-wrap: nowrap!important;
+    }
+    .flex-row {
+        display:flex;
+        -webkit-box-orient: horizontal!important;
+        -webkit-box-direction: normal!important;
+        -webkit-flex-direction: row!important;
+        -ms-flex-direction: row!important;
+        flex-direction: row!important;
+    }
+
+    .add_user {
+        //display:none;
+    }
+</style>';
+echo $style;
+
+$tableContent = '';
 
 if ($action !== 'add_user') {
     $conditions = ['status' => STUDENT_BOSS];
@@ -98,39 +149,43 @@ if ($action !== 'add_user') {
         $conditions['language'] = $languageFilter;
     }
     $bossList = UserManager::get_user_list($conditions);
-
+    $tableContent .= '<div class="container-fluid"><div class="row flex-row flex-nowrap">';
     foreach ($bossList as $boss) {
         $bossId = $boss['id'];
-        echo Display::page_subheader2(api_get_person_name($boss['firstname'], $boss['lastname']));
-        $students = UserManager::getUsersFollowedByStudentBoss($bossId);
+        $tableContent .= '<div class="col-md-1">';
+        $tableContent .= '<div class="boss_column">';
 
-        if (!empty($students)) {
-            $table = new HTML_Table(['class' => 'table table-responsive']);
-            $headers = [
-                get_lang('FirstName'),
-                get_lang('LastName'),
-            ];
-            $row = 0;
-            $column = 0;
-            foreach ($headers as $header) {
-                $table->setHeaderContents($row, $column, $header);
-                $column++;
-            }
-            $row++;
-            foreach ($students as $student) {
-                $column = 0;
-                $table->setCellContents($row, $column++, $student['firstname']);
-                $table->setCellContents($row, $column++, $student['lastname']);
-                $row++;
-            }
+        $tableContent .= '<h5><strong>'.api_get_person_name($boss['firstname'], $boss['lastname']).'</strong></h5>';
 
-            echo $table->toHtml();
-        }
+        $tableContent .= Statistics::getBossTable($bossId);
 
         $url = api_get_self().'?a=add_user&boss_id='.$bossId;
 
-        echo Display::url(get_lang('AddUser'), $url, ['class' => 'btn btn-primary']);
+        $tableContent .= '<div class="add_user">';
+        $tableContent .= '<strong>'.get_lang('AddStudent').'</strong>';
+        $addUserForm = new FormValidator('add_user_to_'.$bossId, 'post', '', '', [], FormValidator::LAYOUT_BOX_NO_LABEL);
+        //$addUserForm->addHeader(get_lang('Add'));
+        $addUserForm->addSelectAjax(
+            'user_id',
+            '',
+            [],
+            [
+                //'multiple' => 'multiple',
+                'url' => api_get_path(WEB_AJAX_PATH).'user_manager.ajax.php?a=user_by_role&status='.STUDENT,
+            ]
+        );
+        $addUserForm->addButtonSave(get_lang('Add'));
+        $tableContent .= $addUserForm->returnForm();
+
+        //$tableContent .= Display::url(get_lang('AddUser'), $url, ['class' => 'btn btn-primary']);
+        $tableContent .= '</div>';
+
+        $tableContent .= '</div>';
+        $tableContent .= '</div>';
     }
+    $tableContent .= '</div></div>';
 }
+
+echo $tableContent;
 
 Display::display_footer();

@@ -1,10 +1,9 @@
 <?php
+
 /* For licensing terms, see /license.txt */
 
 /**
  * This class provides some functions for statistics.
- *
- * @package chamilo.statistics
  */
 class Statistics
 {
@@ -198,9 +197,9 @@ class Statistics
         if (isset($_GET['keyword'])) {
             $keyword = Database::escape_string(trim($_GET['keyword']));
             $sql .= " AND (
-                        user.username LIKE '%".$keyword."%' OR 
-                        default_event_type LIKE '%".$keyword."%' OR 
-                        default_value_type LIKE '%".$keyword."%' OR 
+                        user.username LIKE '%".$keyword."%' OR
+                        default_event_type LIKE '%".$keyword."%' OR
+                        default_value_type LIKE '%".$keyword."%' OR
                         default_value LIKE '%".$keyword."%') ";
         }
 
@@ -371,7 +370,7 @@ class Statistics
     public static function getCourseCategories()
     {
         $categoryTable = Database::get_main_table(TABLE_MAIN_CATEGORY);
-        $sql = "SELECT code, name 
+        $sql = "SELECT code, name
                 FROM $categoryTable
                 ORDER BY tree_pos";
         $res = Database::query($sql);
@@ -482,8 +481,8 @@ class Statistics
 
         $period = get_lang('PeriodMonth');
         $periodCollection = api_get_months_long();
-        $sql = "SELECT 
-                DATE_FORMAT( login_date, '%Y-%m' ) AS stat_date , 
+        $sql = "SELECT
+                DATE_FORMAT( login_date, '%Y-%m' ) AS stat_date ,
                 count( login_id ) AS number_of_logins
                 FROM $table $table_url $where_url
                 GROUP BY stat_date
@@ -493,32 +492,32 @@ class Statistics
         switch ($type) {
             case 'hour':
                 $period = get_lang('PeriodHour');
-                $sql = "SELECT 
-                          DATE_FORMAT( login_date, '%H') AS stat_date, 
-                          count( login_id ) AS number_of_logins 
-                        FROM $table $table_url $where_url 
-                        GROUP BY stat_date 
+                $sql = "SELECT
+                          DATE_FORMAT( login_date, '%H') AS stat_date,
+                          count( login_id ) AS number_of_logins
+                        FROM $table $table_url $where_url
+                        GROUP BY stat_date
                         ORDER BY stat_date ";
-                $sql_last_x = "SELECT 
-                                DATE_FORMAT( login_date, '%H' ) AS stat_date, 
-                                count( login_id ) AS number_of_logins 
-                               FROM $table $table_url $where_url ".sprintf($where_url_last, 'DAY')." 
-                               GROUP BY stat_date 
+                $sql_last_x = "SELECT
+                                DATE_FORMAT( login_date, '%H' ) AS stat_date,
+                                count( login_id ) AS number_of_logins
+                               FROM $table $table_url $where_url ".sprintf($where_url_last, 'DAY')."
+                               GROUP BY stat_date
                                ORDER BY stat_date ";
                 break;
             case 'day':
                 $periodCollection = api_get_week_days_long();
                 $period = get_lang('PeriodDay');
-                $sql = "SELECT DATE_FORMAT( login_date, '%w' ) AS stat_date , 
-                        count( login_id ) AS number_of_logins 
-                        FROM  $table $table_url $where_url 
-                        GROUP BY stat_date 
+                $sql = "SELECT DATE_FORMAT( login_date, '%w' ) AS stat_date ,
+                        count( login_id ) AS number_of_logins
+                        FROM  $table $table_url $where_url
+                        GROUP BY stat_date
                         ORDER BY DATE_FORMAT( login_date, '%w' ) ";
-                $sql_last_x = "SELECT 
-                                DATE_FORMAT( login_date, '%w' ) AS stat_date, 
-                                count( login_id ) AS number_of_logins 
-                               FROM $table $table_url $where_url ".sprintf($where_url_last, 'WEEK')." 
-                               GROUP BY stat_date 
+                $sql_last_x = "SELECT
+                                DATE_FORMAT( login_date, '%w' ) AS stat_date,
+                                count( login_id ) AS number_of_logins
+                               FROM $table $table_url $where_url ".sprintf($where_url_last, 'WEEK')."
+                               GROUP BY stat_date
                                ORDER BY DATE_FORMAT( login_date, '%w' ) ";
                 break;
         }
@@ -599,17 +598,17 @@ class Statistics
                 $label = get_lang('Today');
             }
             $label .= " <br /> $localDate - $localEndDate";
-            $sql = "SELECT count($field) AS number 
-                    FROM $table $table_url 
-                    WHERE 
+            $sql = "SELECT count($field) AS number
+                    FROM $table $table_url
+                    WHERE
                         UNIX_TIMESTAMP(logout_date) - UNIX_TIMESTAMP(login_date) > $sessionDuration AND
-                        login_date BETWEEN '$startDate' AND '$endDate'  
+                        login_date BETWEEN '$startDate' AND '$endDate'
                         $where_url";
             $sqlList[$label] = $sql;
         }
 
-        $sql = "SELECT count($field) AS number 
-                FROM $table $table_url                
+        $sql = "SELECT count($field) AS number
+                FROM $table $table_url
                 WHERE UNIX_TIMESTAMP(logout_date) - UNIX_TIMESTAMP(login_date) > $sessionDuration $where_url
                ";
         $sqlList[get_lang('Total')] = $sql;
@@ -660,10 +659,10 @@ class Statistics
         $sessionDuration = (int) $sessionDuration;
 
         $sql = "SELECT count($field) AS number, date(login_date) as login_date
-                FROM $table $table_url 
-                WHERE 
+                FROM $table $table_url
+                WHERE
                 UNIX_TIMESTAMP(logout_date) - UNIX_TIMESTAMP(login_date) > $sessionDuration AND
-                login_date >= '$newDate' $where_url 
+                login_date >= '$newDate' $where_url
                 GROUP BY date(login_date)";
 
         $res = Database::query($sql);
@@ -959,16 +958,16 @@ class Statistics
         }
 
         if (api_is_multiple_url_enabled()) {
-            $sql = "SELECT lastname, firstname, username, COUNT($field) AS count_message 
-                FROM $access_url_rel_user_table as url, $message_table m 
-                LEFT JOIN $user_table u ON m.$field = u.user_id 
-                WHERE  url.user_id = m.$field AND  access_url_id='".$urlId."' 
-                GROUP BY m.$field 
+            $sql = "SELECT lastname, firstname, username, COUNT($field) AS count_message
+                FROM $access_url_rel_user_table as url, $message_table m
+                LEFT JOIN $user_table u ON m.$field = u.user_id
+                WHERE  url.user_id = m.$field AND  access_url_id='".$urlId."'
+                GROUP BY m.$field
                 ORDER BY count_message DESC ";
         } else {
-            $sql = "SELECT lastname, firstname, username, COUNT($field) AS count_message 
-                FROM $message_table m 
-                LEFT JOIN $user_table u ON m.$field = u.user_id 
+            $sql = "SELECT lastname, firstname, username, COUNT($field) AS count_message
+                FROM $message_table m
+                LEFT JOIN $user_table u ON m.$field = u.user_id
                 GROUP BY m.$field ORDER BY count_message DESC ";
         }
         $res = Database::query($sql);
@@ -998,23 +997,23 @@ class Statistics
         $urlId = api_get_current_access_url_id();
 
         if (api_is_multiple_url_enabled()) {
-            $sql = "SELECT lastname, firstname, username, COUNT(friend_user_id) AS count_friend 
-                    FROM $access_url_rel_user_table as url, $user_friend_table uf 
-                    LEFT JOIN $user_table u 
-                    ON (uf.user_id = u.user_id) 
-                    WHERE 
-                        uf.relation_type <> '".USER_RELATION_TYPE_RRHH."' AND 
-                        uf.user_id = url.user_id AND  
-                        access_url_id = '".$urlId."' 
-                    GROUP BY uf.user_id 
+            $sql = "SELECT lastname, firstname, username, COUNT(friend_user_id) AS count_friend
+                    FROM $access_url_rel_user_table as url, $user_friend_table uf
+                    LEFT JOIN $user_table u
+                    ON (uf.user_id = u.user_id)
+                    WHERE
+                        uf.relation_type <> '".USER_RELATION_TYPE_RRHH."' AND
+                        uf.user_id = url.user_id AND
+                        access_url_id = '".$urlId."'
+                    GROUP BY uf.user_id
                     ORDER BY count_friend DESC ";
         } else {
-            $sql = "SELECT lastname, firstname, username, COUNT(friend_user_id) AS count_friend 
-                    FROM $user_friend_table uf 
-                    LEFT JOIN $user_table u 
-                    ON (uf.user_id = u.user_id) 
-                    WHERE uf.relation_type <> '".USER_RELATION_TYPE_RRHH."' 
-                    GROUP BY uf.user_id 
+            $sql = "SELECT lastname, firstname, username, COUNT(friend_user_id) AS count_friend
+                    FROM $user_friend_table uf
+                    LEFT JOIN $user_table u
+                    ON (uf.user_id = u.user_id)
+                    WHERE uf.relation_type <> '".USER_RELATION_TYPE_RRHH."'
+                    GROUP BY uf.user_id
                     ORDER BY count_friend DESC ";
         }
         $res = Database::query($sql);
@@ -1279,5 +1278,39 @@ class Statistics
         $result = Database::store_result($stmt, 'ASSOC');
 
         return $result;
+    }
+
+    public static function getBossTable($bossId)
+    {
+        $students = UserManager::getUsersFollowedByStudentBoss($bossId);
+
+        if (!empty($students)) {
+            $table = new HTML_Table(['class' => 'table table-responsive', 'id' => 'table_'.$bossId]);
+            $headers = [
+                get_lang('Name'),
+                //get_lang('LastName'),
+            ];
+            $row = 0;
+            $column = 0;
+            foreach ($headers as $header) {
+                $table->setHeaderContents($row, $column, $header);
+                $column++;
+            }
+            $row++;
+            foreach ($students as $student) {
+                $column = 0;
+                $table->setCellContents(
+                    $row,
+                    $column++,
+                    api_get_person_name($student['firstname'], $student['lastname'])
+                );
+                //$table->setCellContents($row, $column++, $student['lastname']);
+                $row++;
+            }
+
+            return $table->toHtml();
+        }
+
+        return '<table id="table_'.$bossId.'"></table>';
     }
 }

@@ -5657,15 +5657,18 @@ class UserManager
      *
      * @param int   $bossId  The boss id
      * @param array $usersId The users array
+     * @param bool  $deleteOtherAssignedUsers
      *
      * @return int Affected rows
      */
-    public static function subscribeBossToUsers($bossId, $usersId)
+    public static function subscribeBossToUsers($bossId, $usersId, $deleteOtherAssignedUsers = true)
     {
         return self::subscribeUsersToUser(
             $bossId,
             $usersId,
-            USER_RELATION_TYPE_BOSS
+            USER_RELATION_TYPE_BOSS,
+            false,
+            $deleteOtherAssignedUsers
         );
     }
 

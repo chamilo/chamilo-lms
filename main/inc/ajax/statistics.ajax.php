@@ -17,6 +17,17 @@ $operation = isset($_REQUEST['oper']) ? $_REQUEST['oper'] : false;
 $order = isset($_REQUEST['sord']) && in_array($_REQUEST['sord'], ['asc', 'desc']) ? $_REQUEST['sord'] : 'asc';
 
 switch ($action) {
+    case 'add_student_to_boss':
+        $studentId =  isset($_GET['student_id']) ? (int) $_GET['student_id'] : 0;
+        $bossId =  isset($_GET['boss_id']) ? (int) $_GET['boss_id'] : 0;
+
+        if ($studentId && $bossId) {
+            UserManager::subscribeBossToUsers($bossId, [$studentId], false);
+        }
+
+        echo Statistics::getBossTable($bossId);
+        exit;
+        break;
     case 'get_user_session':
         $list = [];
 

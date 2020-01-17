@@ -16,23 +16,9 @@ if (!$allowToTrack) {
     api_not_allowed(true);
 }
 
-/*$form = new FormValidator('survey');
-$form->addSelectAjax(
-    'user_id',
-    get_lang('User'),
-    [],
-    [
-        'url' => api_get_path(WEB_AJAX_PATH).'user_manager.ajax.php?a=get_user_like',
-    ]
-);
-$form->addButtonSearch();*/
-
 $userInfo = [];
-
 $action = isset($_REQUEST['a']) ? $_REQUEST['a'] : null;
-
 $content = '';
-
 switch ($action) {
     case 'add_user':
         break;
@@ -54,22 +40,23 @@ $form->addDateRangePicker(
 $form->addHidden('a', 'users_active');
 $form->addButtonFilter(get_lang('Search'));
 
+$weekFormat = 'oW';
 
 if ($form->validate()) {
-    $startDate = $_REQUEST['daterange_start'];
-    $endDate = $_REQUEST['daterange_end'];
+    $startDate = Database::escape_string($_REQUEST['daterange_start']);
+    $endDate = Database::escape_string($_REQUEST['daterange_end']);
 
     $date = new DateTime($startDate);
-    $weekStart = $date->format('YW');
+    $weekStart = $date->format($weekFormat);
 
     $date = new DateTime($endDate);
-    $weekEnd = $date->format('YW');
+    $weekEnd = $date->format($weekFormat);
 
     $first = DateTime::createFromFormat('Y-m-d', $startDate);
     $second = DateTime::createFromFormat('Y-m-d', $endDate);
     $numberOfWeeks = floor($first->diff($second)->days / 7);
 
-    $sql = " SELECT id_coach, id as session_id, display_start_date, display_end_date
+    $sql = " SELECT id_coach, name, id as session_id, display_start_date, display_end_date
              FROM session
              WHERE display_start_date BETWEEN '$startDate' AND '$endDate'
              ORDER BY id_coach";
@@ -78,7 +65,6 @@ if ($form->validate()) {
     $coachList = [];
     while ($row = Database::fetch_array($result, 'ASSOC')) {
         $coachId = $row['id_coach'];
-
         if (!isset($coachList[$coachId])) {
             $userInfo = api_get_user_info($coachId);
             $coachList[$coachId]['complete_name'] = $userInfo['complete_name'];
@@ -86,9 +72,10 @@ if ($form->validate()) {
         }
 
         $date = new DateTime($row['display_start_date']);
-        $week = $date->format('YW');
-        $coachList[$coachId]['week'][$week] = $week;
+        $week = $date->format($weekFormat);
+        $coachList[$coachId]['week'][$week]['sessions'][] = $row;
         $coachList[$coachId]['session_count'] += 1;
+        $coachList[$coachId]['data'] = $row;
     }
 
     $table = new HTML_Table(['class' => 'table table-responsive']);
@@ -97,11 +84,10 @@ if ($form->validate()) {
         get_lang('Sessions'),
     ];
 
-    $i = $weekStart;
     $date = new DateTime($startDate);
     for ($i = 0; $i <= $numberOfWeeks; $i++) {
+        $headers[] = $date->format('o-W');
         $date->add(new DateInterval('P1W'));
-        $headers[] = $date->format('Y-W');
     }
 
     $row = 0;
@@ -117,23 +103,30 @@ if ($form->validate()) {
         $table->setCellContents($row, $column++, $coachData['complete_name']);
         $table->setCellContents($row, $column++, $coachData['session_count']);
 
-        $i = $weekStart;
-        for ($i; $i <= $weekEnd; $i++) {
-            if (isset($coachData['week'][$i])) {
-                $table->setCellContents($row, $column++, '');
+        $date = new DateTime($startDate);
+        for ($i = 2; $i <= $numberOfWeeks; $i++) {
+            $dateWeekToCheck = $date->format($weekFormat);
+            if (isset($coachData['week'][$dateWeekToCheck])) {
+                $sessionArray = [];
+                foreach ($coachData['week'][$dateWeekToCheck]['sessions'] as $session) {
+                    $date2 = new DateTime($session['display_start_date']);
+                    //$sessionArray[] = $session['name'].'-'.$session['display_start_date'].'-'.$date2->format($weekFormat).'/'.$dateWeekToCheck;
+                    $sessionArray[] = $session['name'];
+                }
+                $table->setCellContents($row, $i, implode('<br /><br />', $sessionArray));
                 $table->updateCellAttributes(
                     $row,
-                    $column,
+                    $i,
                     'style="background:green"'
                 );
             }
+            $date->add(new DateInterval('P1W'));
         }
         $row++;
     }
 
     $content = $table->toHtml();
 }
-
 
 echo $form->returnForm();
 echo $content;

@@ -176,7 +176,7 @@ class MySpace
                 FROM '.$table.'
                 WHERE
                     user_id = '.$userId.' AND
-                    c_id = '.$courseId.' 
+                    c_id = '.$courseId.'
                     '.$sessionCondition.'
                 ORDER BY login_course_date ASC';
         $rs = Database::query($sql);
@@ -401,7 +401,13 @@ class MySpace
             $is_western_name_order = api_is_western_name_order();
         }
         $sort_by_first_name = api_sort_by_first_name();
-        $tracking_column = isset($_GET['tracking_list_coaches_column']) ? $_GET['tracking_list_coaches_column'] : ($is_western_name_order xor $sort_by_first_name) ? 1 : 0;
+
+        if (isset($_GET['tracking_list_coaches_column'])) {
+            $tracking_column = (int) $_GET['tracking_list_coaches_column'];
+        } else {
+            $tracking_column = ($is_western_name_order xor $sort_by_first_name) ? 1 : 0;
+        }
+
         $tracking_direction = (isset($_GET['tracking_list_coaches_direction']) && in_array(strtoupper($_GET['tracking_list_coaches_direction']), ['ASC', 'DESC', 'ASCENDING', 'DESCENDING', '0', '1'])) ? $_GET['tracking_list_coaches_direction'] : 'DESC';
         // Prepare array for column order - when impossible, use some of user names.
         if ($is_western_name_order) {
@@ -1844,8 +1850,8 @@ class MySpace
 
         $sql = "SELECT exe_result, exe_weighting
                 FROM $table
-                WHERE 
-                    c_id = $courseId AND 
+                WHERE
+                    c_id = $courseId AND
                     exe_user_id = $user_id";
 
         $session_id = (int) $session_id;
@@ -2738,7 +2744,7 @@ class MySpace
             [
                 'placeholder' => get_lang('All'),
                 'url_function' => "
-                    function () {                    
+                    function () {
                         var params = $.param({
                             a: 'search_user_by_course',
                             session_id: $('#access_overview_session_id').val(),
@@ -2975,9 +2981,9 @@ class MySpace
             $start_date = Database::escape_string($start_date);
             $end_date = Database::escape_string($end_date);
             $sessionCondition = api_get_session_condition($sessionId);
-            $sql = "SELECT 
-                        login_course_date, 
-                        logout_course_date, 
+            $sql = "SELECT
+                        login_course_date,
+                        logout_course_date,
                         TIMESTAMPDIFF(SECOND, login_course_date, logout_course_date) duration
                     FROM $table
                     WHERE
@@ -3037,8 +3043,8 @@ function get_stats($user_id, $course_info, $sessionId, $start_date = null, $end_
                 FROM $table
                 WHERE
                     user_id = $user_id AND
-                    c_id = $courseId $stringStartDate $stringEndDate 
-                    $sessionCondition                    
+                    c_id = $courseId $stringStartDate $stringEndDate
+                    $sessionCondition
                 ORDER BY login_course_date ASC";
 
         $rs = Database::query($sql);

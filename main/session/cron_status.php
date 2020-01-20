@@ -6,6 +6,7 @@ require_once __DIR__.'/../inc/global.inc.php';
 
 $sessionStatusAllowed = api_get_configuration_value('allow_session_status');
 if (!$sessionStatusAllowed) {
+    echo '"allow_session_status" setting is not activated.';
     exit;
 }
 
@@ -19,7 +20,7 @@ while ($session = Database::fetch_array($result, 'ASSOC')) {
     $id = $session['id'];
     $start = $session['display_start_date'];
     $end = $session['display_end_date'];
-    $userCount = (int)$session['nbr_users'];
+    $userCount = (int) $session['nbr_users'];
 
     // 1. Si une session a lieu dans le futur, c’est à dire que la date de début est inférieur à la date du
     //jour alors elle est prévue
@@ -56,5 +57,8 @@ while ($session = Database::fetch_array($result, 'ASSOC')) {
         'status' => $status,
     ];
     Database::update($table, $params, ['id = ?' => $id]);
+
+    $line = PHP_SAPI === 'cli' ? PHP_EOL : '<br />';
+    echo "Session #$id updated with status = $status ".$line;
 }
 

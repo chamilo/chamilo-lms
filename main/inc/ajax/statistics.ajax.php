@@ -256,7 +256,7 @@ switch ($action) {
 
         switch ($filter) {
             case 'active':
-                $conditions = ['status' => STUDENT, 'active' => 1];
+                $conditions = ['active' => 1];
                 $active = UserManager::getUserListExtraConditions(
                     $conditions,
                     [],
@@ -266,7 +266,7 @@ switch ($action) {
                     $extraConditions,
                     true
                 );
-                $conditions = ['status' => STUDENT, 'active' => 0];
+                $conditions = ['active' => 0];
                 $noActive = UserManager::getUserListExtraConditions(
                     $conditions,
                     [],
@@ -310,7 +310,10 @@ switch ($action) {
                     if (substr($language, -1) === '2') {
                         $key = str_replace(2, '', $language);
                     }
-                    $all[$key] = UserManager::getUserListExtraConditions(
+                    if (!isset($all[$key])) {
+                        $all[$key] = 0;
+                    }
+                    $all[$key] += UserManager::getUserListExtraConditions(
                         $conditions,
                         [],
                         false,
@@ -340,6 +343,9 @@ switch ($action) {
                 $userIdListToString = implode("', '", $userIdList);
 
                 $all = [];
+                //$extraField['options'][] = ['option_value' => '', 'display_text' => get_lang('N/A')];
+                $total = count($users);
+                $usersFound = 0;
                 foreach ($extraField['options'] as $item) {
                     $value = Database::escape_string($item['option_value']);
                     $count = 0;
@@ -353,9 +359,10 @@ switch ($action) {
                     $result = Database::fetch_array($query);
                     $count = $result['count'];
                     //$item['display_text'] = str_replace('2', '', $item['display_text']);
+                    $usersFound += $count;
                     $all[$item['display_text']] = $count;
                 }
-
+                $all[get_lang('N/A')] = $total - $usersFound;
                 break;
 
             case 'career':
@@ -375,6 +382,9 @@ switch ($action) {
 
                 $userIdList = array_column($users, 'user_id');
                 $userIdListToString = implode("', '", $userIdList);
+                $usersFound = 0;
+
+                $total = count($users);
                 foreach ($extraField['options'] as $item) {
                     $value = Database::escape_string($item['option_value']);
                     $count = 0;
@@ -388,7 +398,10 @@ switch ($action) {
                     $result = Database::fetch_array($query);
                     $count = $result['count'];
                     $all[$item['display_text']] = $count;
+                    $usersFound += $count;
                 }
+
+                $all[get_lang('N/A')] = $total - $usersFound;
                 break;
         }
 

@@ -646,8 +646,7 @@ switch ($report) {
             echo '<div class="col-md-6"><canvas id="canvas4" style="margin-bottom: 20px"></canvas></div>';
             echo '<div class="col-md-6"><canvas id="canvas5" style="margin-bottom: 20px"></canvas></div>';
             echo '</div>';
-            $conditions = ['status' => STUDENT];
-
+            $conditions = [];
             $extraConditions = '';
             if (!empty($startDate) && !empty($endDate)) {
                 $extraConditions .= " AND registration_date BETWEEN '$startDate' AND '$endDate' ";

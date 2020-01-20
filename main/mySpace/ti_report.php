@@ -30,6 +30,19 @@ echo MySpace::getTopMenu();
 echo '</div>';
 echo MySpace::getAdminActions();
 
+echo '<style>
+    .session_block {
+        width: 120px;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        color:#fff;
+    }
+
+   .session_block .label {
+        width: 120px;
+    }
+</style>';
+
 $form = new FormValidator('users', 'get', api_get_self().'?a=users_active');
 $form->addDateRangePicker(
     'daterange',
@@ -71,9 +84,25 @@ if ($form->validate()) {
             $coachList[$coachId]['session_count'] = 0;
         }
 
+        // Start
         $date = new DateTime($row['display_start_date']);
         $week = $date->format($weekFormat);
         $coachList[$coachId]['week'][$week]['sessions'][] = $row;
+
+        // End
+        $endDate = new DateTime($row['display_end_date']);
+        $endWeek = $endDate->format($weekFormat);
+
+        $numberOfWeeksBetween = floor($date->diff($endDate)->days / 7);
+
+        for ($i = 0; $i < $numberOfWeeksBetween; $i++) {
+            $date->add(new DateInterval('P1W'));
+            $week = $date->format($weekFormat);
+            $coachList[$coachId]['week'][$week]['sessions'][] = $row;
+        }
+
+        //$coachList[$coachId]['week'][$endWeek]['sessions'][] = $row;
+
         $coachList[$coachId]['session_count'] += 1;
         $coachList[$coachId]['data'] = $row;
     }
@@ -113,10 +142,12 @@ if ($form->validate()) {
                     $sessionArray[] = Display::url(
                         $session['name'],
                         $url.'id_session='.$session['session_id'],
-                        ['class' => 'label label-success', 'target' => '_blank']
+                        ['class' => 'label label-success', 'target' => '_blank', 'title' => addslashes($session['name'])]
                     );
                 }
-                $table->setCellContents($row, $i, implode('<br /><br />', $sessionArray));
+                $value = implode('<br /><br />', $sessionArray);
+                $value = "<div class='session_block'> $value </div>";
+                $table->setCellContents($row, $i, $value);
                 $table->updateCellAttributes(
                     $row,
                     $i,

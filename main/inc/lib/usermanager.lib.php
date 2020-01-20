@@ -3185,6 +3185,9 @@ class UserManager
                         $order = ' ORDER BY _isFieldNull asc, s.accessEndDate asc';
                     }
                     break;
+                case 'name':
+                    $order = " ORDER BY s.name $orderSetting ";
+                    break;
             }
         }
 
@@ -3733,6 +3736,13 @@ class UserManager
 
         if (!empty($myCourseList)) {
             ksort($myCourseList);
+            $checkPosition = array_filter(array_column($myCourseList, 'position'));
+            if (empty($checkPosition)) {
+                // The session course list doesn't have any position,
+                // then order the course list by course code
+                $list = array_column($myCourseList, 'course_code');
+                array_multisort($myCourseList, SORT_ASC, $list);
+            }
         }
 
         return $myCourseList;
@@ -4028,12 +4038,13 @@ class UserManager
     /**
      * Get the total count of users.
      *
-     * @param   int     Status of users to be counted
-     * @param   int     Access URL ID (optional)
+     * @param int $status        Status of users to be counted
+     * @param int $access_url_id Access URL ID (optional)
+     * @param int $active
      *
      * @return mixed Number of users or false on error
      */
-    public static function get_number_of_users($status = 0, $access_url_id = 1)
+    public static function get_number_of_users($status = 0, $access_url_id = 1, $active = null)
     {
         $t_u = Database::get_main_table(TABLE_MAIN_USER);
         $t_a = Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_USER);
@@ -4050,9 +4061,17 @@ class UserManager
                     FROM $t_u u
                     WHERE 1 = 1 ";
         }
+
         if (is_int($status) && $status > 0) {
+            $status = (int) $status;
             $sql .= " AND u.status = $status ";
         }
+
+        if ($active !== null) {
+            $active = (int) $active;
+            $sql .= " AND u.active = $active ";
+        }
+
         $res = Database::query($sql);
         if (Database::num_rows($res) === 1) {
             return (int) Database::result($res, 0, 0);
@@ -6797,6 +6816,107 @@ SQL;
         }
 
         return $fullName;
+    }
+
+    /**
+     * @param int $userId
+     *
+     * @return array
+     */
+    public static function getUserCareers($userId)
+    {
+        $table = Database::get_main_table(TABLE_MAIN_USER_CAREER);
+        $tableCareer = Database::get_main_table(TABLE_CAREER);
+        $userId = (int) $userId;
+
+        $sql = "SELECT c.id, c.name
+                FROM $table uc
+                INNER JOIN $tableCareer c
+                ON uc.career_id = c.id
+                WHERE user_id = $userId
+                ORDER BY uc.created_at
+                ";
+        $result = Database::query($sql);
+
+        return Database::store_result($result, 'ASSOC');
+    }
+
+    /**
+     * @param int $userId
+     * @param int $careerId
+     */
+    public static function addUserCareer($userId, $careerId)
+    {
+        if (!api_get_configuration_value('allow_career_users')) {
+            return false;
+        }
+
+        if (self::userHasCareer($userId, $careerId) === false) {
+            $params = ['user_id' => $userId, 'career_id' => $careerId, 'created_at' => api_get_utc_datetime(), 'updated_at' => api_get_utc_datetime()];
+            $table = Database::get_main_table(TABLE_MAIN_USER_CAREER);
+            Database::insert($table, $params);
+        }
+
+        return true;
+    }
+
+    /**
+     * @param int   $userCareerId
+     * @param array $data
+     *
+     * @return bool
+     */
+    public static function updateUserCareer($userCareerId, $data)
+    {
+        if (!api_get_configuration_value('allow_career_users')) {
+            return false;
+        }
+
+        $params = ['extra_data' => $data, 'updated_at' => api_get_utc_datetime()];
+        $table = Database::get_main_table(TABLE_MAIN_USER_CAREER);
+        Database::update(
+            $table,
+            $params,
+            ['id = ?' => (int) $userCareerId]
+        );
+
+        return true;
+    }
+
+    /**
+     * @param int $userId
+     * @param int $careerId
+     *
+     * @return array
+     */
+    public static function getUserCareer($userId, $careerId)
+    {
+        $userId = (int) $userId;
+        $careerId = (int) $careerId;
+        $table = Database::get_main_table(TABLE_MAIN_USER_CAREER);
+
+        $sql = "SELECT * FROM $table WHERE user_id = $userId AND career_id = $careerId";
+        $result = Database::query($sql);
+
+        return Database::fetch_array($result, 'ASSOC');
+    }
+
+    /**
+     * @param int $userId
+     * @param int $careerId
+     *
+     * @return bool
+     */
+    public static function userHasCareer($userId, $careerId)
+    {
+        $userId = (int) $userId;
+        $careerId = (int) $careerId;
+        $table = Database::get_main_table(TABLE_MAIN_USER_CAREER);
+
+        $sql = "SELECT id FROM $table WHERE user_id = $userId AND career_id = $careerId";
+        $result = Database::query($sql);
+
+        return Database::num_rows($result) > 0;
     }
 
     /**

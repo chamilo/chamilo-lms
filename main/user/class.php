@@ -7,7 +7,7 @@
 require_once __DIR__.'/../inc/global.inc.php';
 $this_section = SECTION_COURSES;
 
-api_protect_course_script(true);
+api_protect_course_script(true, false, 'user');
 
 if (api_get_setting('allow_user_course_subscription_by_course_admin') == 'false') {
     if (!api_is_platform_admin()) {
@@ -21,12 +21,13 @@ $htmlHeadXtra[] = api_get_jqgrid_js();
 
 // Extra entries in breadcrumb
 $interbreadcrumb[] = [
-    "url" => "user.php?".api_get_cidreq(),
-    "name" => get_lang('ToolUser'),
+    'url' => 'user.php?'.api_get_cidreq(),
+    'name' => get_lang('ToolUser'),
 ];
 
 $type = isset($_GET['type']) ? Security::remove_XSS($_GET['type']) : 'registered';
-$groupFilter = isset($_GET['group_filter']) ? intval($_GET['group_filter']) : 0;
+$groupFilter = isset($_GET['group_filter']) ? (int) $_GET['group_filter'] : 0;
+$keyword = isset($_GET['keyword']) ? Security::remove_XSS($_GET['keyword']) : '';
 
 $htmlHeadXtra[] = '
 <script>

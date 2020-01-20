@@ -508,7 +508,6 @@ function mysort(a, b) {
 
 function valide() {
     // Checking all multiple
-
     $('select').filter(function() {
         if ($(this).attr('multiple')) {
             $(this).find('option').each(function() {
@@ -516,7 +515,6 @@ function valide() {
             });
         }
     });
-	//document.update_course.submit();
 }
 </script>";
 

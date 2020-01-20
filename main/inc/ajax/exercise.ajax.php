@@ -560,8 +560,7 @@ switch ($action) {
                         false,
                         true,
                         false,
-                        $objExercise->selectPropagateNeg(),
-                        []
+                        $objExercise->selectPropagateNeg()
                     );
                     // Removing old score.
                     $total_score = $total_score - $old_result['score'];

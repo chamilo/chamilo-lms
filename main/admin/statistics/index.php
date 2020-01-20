@@ -507,7 +507,6 @@ switch ($report) {
                 }
                 $row++;
             }
-
             $content .= $table->toHtml();
         }
         echo $form->returnForm();

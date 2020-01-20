@@ -128,7 +128,7 @@ class Career extends Model
             $header = get_lang('Modify');
         }
 
-        $id = isset($_GET['id']) ? intval($_GET['id']) : '';
+        $id = isset($_GET['id']) ? (int) $_GET['id'] : '';
         $form->addHeader($header);
         $form->addHidden('id', $id);
         $form->addElement('text', 'name', get_lang('Name'), ['size' => '70']);
@@ -145,14 +145,16 @@ class Career extends Model
         );
         $status_list = $this->get_status_list();
         $form->addElement('select', 'status', get_lang('Status'), $status_list);
+
         if ($action == 'edit') {
+            $extraField = new ExtraField('career');
+            $extraField->addElements($form, $id);
+
             $form->addElement('text', 'created_at', get_lang('CreatedAt'));
             $form->freeze('created_at');
-        }
-        if ($action == 'edit') {
-            $form->addButtonSave(get_lang('Modify'), 'submit');
+            $form->addButtonSave(get_lang('Modify'));
         } else {
-            $form->addButtonCreate(get_lang('Add'), 'submit');
+            $form->addButtonCreate(get_lang('Add'));
         }
 
         // Setting the defaults

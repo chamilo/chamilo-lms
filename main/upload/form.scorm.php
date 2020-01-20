@@ -84,9 +84,7 @@ if (api_get_setting('search_enabled') == 'true') {
     }
 }
 
-if (api_is_platform_admin()) {
-    $form->addElement('checkbox', 'use_max_score', null, get_lang('UseMaxScore100'));
-}
+$form->addElement('checkbox', 'use_max_score', null, get_lang('UseMaxScore100'));
 
 if (api_get_configuration_value('allow_htaccess_import_from_scorm')) {
     $form->addElement('checkbox', 'allow_htaccess', null, get_lang('AllowHtaccessScormImport'));

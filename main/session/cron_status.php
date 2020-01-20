@@ -26,7 +26,7 @@ while ($session = Database::fetch_array($result, 'ASSOC')) {
     //jour alors elle est prévue
     $status = 0;
     if ($start < $now) {
-        $status = SessionManager::STATUS_PREVIEW;
+        $status = SessionManager::STATUS_PLANNED;
     }
 
     // 2. Si une session a plus de 2 apprenants et que la date de début est supérieur ou égale à la date

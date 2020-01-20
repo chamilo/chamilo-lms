@@ -24,7 +24,7 @@ use Monolog\Logger;
  */
 class SessionManager
 {
-    const STATUS_PREVIEW = 1;
+    const STATUS_PLANNED = 1;
     const STATUS_PROGRESS = 2;
     const STATUS_FINISHED = 3;
     const STATUS_CANCELLED = 4;
@@ -9751,7 +9751,7 @@ SQL;
     public static function getStatusList()
     {
         return [
-            self::STATUS_PREVIEW => get_lang('Preview'),
+            self::STATUS_PLANNED => get_lang('Planned'),
             self::STATUS_PROGRESS => get_lang('InProgress'),
             self::STATUS_FINISHED => get_lang('Finished'),
             self::STATUS_CANCELLED => get_lang('Cancelled'),

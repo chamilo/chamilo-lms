@@ -59,6 +59,6 @@ while ($session = Database::fetch_array($result, 'ASSOC')) {
     Database::update($table, $params, ['id = ?' => $id]);
 
     $line = PHP_SAPI === 'cli' ? PHP_EOL : '<br />';
-    echo "Session #$id updated with status = $status ".$line;
+    echo "Session #$id updated. Status = $status. User count= $userCount ".$line;
 }
 

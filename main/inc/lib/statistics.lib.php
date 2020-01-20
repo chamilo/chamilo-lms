@@ -1299,12 +1299,13 @@ class Statistics
             $row++;
             foreach ($students as $student) {
                 $column = 0;
+                $content = api_get_person_name($student['firstname'], $student['lastname']). '';
+                $content = '<div style="width: 200px; overflow-wrap: break-word;">'.$content.'</div>';
                 $table->setCellContents(
                     $row,
                     $column++,
-                    api_get_person_name($student['firstname'], $student['lastname'])
+                    $content
                 );
-                //$table->setCellContents($row, $column++, $student['lastname']);
                 $row++;
             }
 

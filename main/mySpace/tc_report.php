@@ -56,14 +56,6 @@ $url = api_get_path(WEB_AJAX_PATH).'statistics.ajax.php?a=add_student_to_boss';
 
 $htmlHeadXtra[] = '<script>
 $(function() {
-    $(".boss_column").on("mouseover", function() {
-        //$(this).find(".add_user").show();
-    });
-
-     $(".boss_column").on("mouseleave", function() {
-        //$(this).find(".add_user").hide();
-    });
-
     $(".add_user form").on("submit", function(e) {
         e.preventDefault();
         var id = $(this).attr("id");
@@ -80,8 +72,9 @@ $(function() {
                     "'.$url.'",
                     params,
                     function(response) {
-                        $("#table_" + bossId ).html("'.addslashes(Display::label(get_lang('Added'), 'success')).'");
-                        $("#table_" + bossId ).append(response);
+                        $("#table_" + bossId ).html(response);
+                        $("#table_" + bossId ).append("'.addslashes(Display::label(get_lang('Added'), 'success')).'");
+                        $("#add_user_to_" + bossId + "_user_id").val(null).trigger("change");
                     }
                 );
             }
@@ -164,20 +157,17 @@ if ($action !== 'add_user') {
         $tableContent .= '<div class="add_user">';
         $tableContent .= '<strong>'.get_lang('AddStudent').'</strong>';
         $addUserForm = new FormValidator('add_user_to_'.$bossId, 'post', '', '', [], FormValidator::LAYOUT_BOX_NO_LABEL);
-        //$addUserForm->addHeader(get_lang('Add'));
         $addUserForm->addSelectAjax(
             'user_id',
             '',
             [],
             [
-                //'multiple' => 'multiple',
+                'width' => '200px',
                 'url' => api_get_path(WEB_AJAX_PATH).'user_manager.ajax.php?a=user_by_role&status='.STUDENT,
             ]
         );
         $addUserForm->addButtonSave(get_lang('Add'));
         $tableContent .= $addUserForm->returnForm();
-
-        //$tableContent .= Display::url(get_lang('AddUser'), $url, ['class' => 'btn btn-primary']);
         $tableContent .= '</div>';
 
         $tableContent .= '</div>';

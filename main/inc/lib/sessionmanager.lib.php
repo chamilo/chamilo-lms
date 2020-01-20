@@ -95,6 +95,15 @@ class SessionManager
             'send_subscription_notification' => $session->getSendSubscriptionNotification(),
         ];
 
+        if (api_get_configuration_value('allow_session_status')) {
+            $table = Database::get_main_table(TABLE_MAIN_SESSION);
+            $sql = "SELECT status FROM $table WHERE id = $id";
+            $resultQuery = Database::query($sql);
+            $row = Database::fetch_array($resultQuery);
+            $result['status'] = $row['status'];
+            $result['status_label'] = self::getStatusLabel($row['status']);
+        }
+
         // Converted to local values
         $variables = [
             'display_start_date',
@@ -139,7 +148,8 @@ class SessionManager
      * @param int      $sessionAdminId               Optional. If this sessions was created by a session admin, assign it to him
      * @param bool     $sendSubscriptionNotification Optional.
      *                                               Whether send a mail notification to users being subscribed
-     * @param int|null $accessUrlId                  Optional.
+     * @param int      $accessUrlId                  Optional.
+     * @param int      $status
      *
      * @return mixed Session ID on success, error message otherwise
      *
@@ -163,7 +173,8 @@ class SessionManager
         $extraFields = [],
         $sessionAdminId = 0,
         $sendSubscriptionNotification = false,
-        $accessUrlId = null
+        $accessUrlId = 0,
+        $status = 0
     ) {
         global $_configuration;
 
@@ -270,6 +281,10 @@ class SessionManager
 
                 if (!empty($sessionCategoryId)) {
                     $values['session_category_id'] = $sessionCategoryId;
+                }
+
+                if (api_get_configuration_value('allow_session_status')) {
+                    $values['status'] = $status;
                 }
 
                 $session_id = Database::insert($tbl_session, $values);
@@ -681,6 +696,10 @@ class SessionManager
             if ($showCountUsers) {
                 $select .= ', count(su.user_id) users';
             }
+
+            if (api_get_configuration_value('allow_session_status')) {
+                $select .= ', status';
+            }
             if (isset($options['order'])) {
                 $isMakingOrder = strpos($options['order'], 'category_name') === 0;
             }
@@ -872,6 +891,10 @@ class SessionManager
 
                 $categoryName = isset($orderedCategories[$session['session_category_id']]) ? $orderedCategories[$session['session_category_id']] : '';
                 $session['category_name'] = $categoryName;
+                if (isset($session['status'])) {
+                    $session['status'] = self::getStatusLabel($session['status']);
+                }
+
                 $formatted_sessions[] = $session;
             }
         }
@@ -1840,8 +1863,8 @@ class SessionManager
      * @param int    $duration
      * @param array  $extraFields
      * @param int    $sessionAdminId
-     * @param bool   $sendSubscriptionNotification Optional.
-     *                                             Whether send a mail notification to users being subscribed
+     * @param bool   $sendSubscriptionNotification Optional. Whether send a mail notification to users being subscribed
+     * @param int    $status
      *
      * @return mixed
      */
@@ -1862,8 +1885,10 @@ class SessionManager
         $duration = null,
         $extraFields = [],
         $sessionAdminId = 0,
-        $sendSubscriptionNotification = false
+        $sendSubscriptionNotification = false,
+        $status = 0
     ) {
+        $status = (int) $status;
         $coachId = (int) $coachId;
         $sessionCategoryId = (int) $sessionCategoryId;
         $visibility = (int) $visibility;
@@ -1965,10 +1990,13 @@ class SessionManager
                     $values['coach_access_end_date'] = api_get_utc_datetime($coachEndDate);
                 }
 
+                $values['session_category_id'] = null;
                 if (!empty($sessionCategoryId)) {
                     $values['session_category_id'] = $sessionCategoryId;
-                } else {
-                    $values['session_category_id'] = null;
+                }
+
+                if (api_get_configuration_value('allow_session_status')) {
+                    $values['status'] = $status;
                 }
 
                 Database::update(
@@ -8147,6 +8175,18 @@ SQL;
             ]
         );
 
+        if (api_get_configuration_value('allow_session_status')) {
+            $statusList = self::getStatusList();
+            $form->addSelect(
+                'status',
+                get_lang('SessionStatus'),
+                $statusList,
+                [
+                    'id' => 'status',
+                ]
+            );
+        }
+
         $form->addHtmlEditor(
             'description',
             get_lang('Description'),
@@ -8413,7 +8453,8 @@ SQL;
      */
     public static function getGridColumns(
         $listType = 'simple',
-        $extraFields = []
+        $extraFields = [],
+        $addExtraFields = true
     ) {
         $showCount = api_get_configuration_value('session_list_show_count_users');
         // Column config
@@ -8534,6 +8575,11 @@ SQL;
                         'search' => 'false',
                     ];
                 }
+
+                if (api_get_configuration_value('allow_session_status')) {
+                    $columns[] = get_lang('SessionStatus');
+                    $columnModel[] = ['name' => 'status', 'index' => 'status', 'width' => '40', 'align' => 'left', 'search' => 'true'];
+                }
                 break;
             case 'complete':
                 $columns = [
@@ -8561,6 +8607,97 @@ SQL;
                     ['name' => 'visibility', 'index' => 'visibility', 'width' => '40', 'align' => 'left', 'search' => 'false'],
                     ['name' => 'course_title', 'index' => 'course_title', 'width' => '50', 'hidden' => 'true', 'search' => 'true', 'searchoptions' => ['searchhidden' => 'true', 'sopt' => $operators]],
                 ];
+
+                break;
+            case 'custom':
+                $columns = [
+                    '#',
+                    get_lang('Name'),
+                    get_lang('Category'),
+                    get_lang('SessionDisplayStartDate'),
+                    get_lang('SessionDisplayEndDate'),
+                    get_lang('Visibility'),
+                ];
+                $columnModel = [
+                    [
+                        'name' => 'id',
+                        'index' => 's.id',
+                        'width' => '160',
+                        'hidden' => 'true',
+                    ],
+                    [
+                        'name' => 'name',
+                        'index' => 's.name',
+                        'width' => '160',
+                        'align' => 'left',
+                        'search' => 'true',
+                        'searchoptions' => ['sopt' => $operators],
+                    ],
+                    [
+                        'name' => 'category_name',
+                        'index' => 'category_name',
+                        'width' => '40',
+                        'align' => 'left',
+                        'search' => 'true',
+                        'searchoptions' => ['sopt' => $operators],
+                    ],
+                    [
+                        'name' => 'display_start_date',
+                        'index' => 'display_start_date',
+                        'width' => '50',
+                        'align' => 'left',
+                        'search' => 'true',
+                        'searchoptions' => [
+                            'dataInit' => 'date_pick_today',
+                            'sopt' => $date_operators,
+                        ],
+                    ],
+                    [
+                        'name' => 'display_end_date',
+                        'index' => 'display_end_date',
+                        'width' => '50',
+                        'align' => 'left',
+                        'search' => 'true',
+                        'searchoptions' => [
+                            'dataInit' => 'date_pick_one_month',
+                            'sopt' => $date_operators,
+                        ],
+                    ],
+                    [
+                        'name' => 'visibility',
+                        'index' => 'visibility',
+                        'width' => '40',
+                        'align' => 'left',
+                        'search' => 'false',
+                    ],
+                ];
+
+                if ($showCount) {
+                    $columns[] = get_lang('Users');
+                    $columnModel[] = [
+                        'name' => 'users',
+                        'index' => 'users',
+                        'width' => '20',
+                        'align' => 'left',
+                        'search' => 'false',
+                    ];
+
+                    // ofaj
+                    $columns[] = get_lang('Teachers');
+                    $columnModel[] = [
+                        'name' => 'teachers',
+                        'index' => 'teachers',
+                        'width' => '20',
+                        'align' => 'left',
+                        'search' => 'false',
+                    ];
+                }
+
+                if (api_get_configuration_value('allow_session_status')) {
+                    $columns[] = get_lang('SessionStatus');
+                    $columnModel[] = ['name' => 'status', 'index' => 'status', 'width' => '40', 'align' => 'left', 'search' => 'true'];
+                }
+
                 break;
         }
 
@@ -8578,8 +8715,11 @@ SQL;
         }
 
         // Inject extra session fields
-        $sessionField = new ExtraFieldModel('session');
-        $rules = $sessionField->getRules($columns, $columnModel);
+        $rules = [];
+        if ($addExtraFields) {
+            $sessionField = new ExtraFieldModel('session');
+            $rules = $sessionField->getRules($columns, $columnModel);
+        }
 
         if (!in_array('actions', array_column($columnModel, 'name'))) {
             $columnModel[] = [

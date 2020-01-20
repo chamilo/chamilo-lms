@@ -14,12 +14,21 @@
         <td>{{ 'GeneralCoach' | get_lang}} :</td>
         <td>{{ general_coach.complete_name_with_message_link }}</td>
     </tr>
-    {% if session_category  %}
+
+    {% if session.status_label  %}
     <tr>
-        <td>{{ 'SessionCategory' | get_lang}} </td>
-        <td>{{ session_category }}</td>
+        <td>{{ 'SessionStatus' | get_lang}} </td>
+        <td>{{ session.status_label }}</td>
     </tr>
     {% endif %}
+
+    {% if session_category  %}
+        <tr>
+            <td>{{ 'SessionCategory' | get_lang}} </td>
+            <td>{{ session_category }}</td>
+        </tr>
+    {% endif %}
+
 
     {% if session.duration > 0 %}
     <tr>

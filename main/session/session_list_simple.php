@@ -17,7 +17,7 @@ $htmlHeadXtra[] = api_get_jqgrid_js();
 
 $action = isset($_REQUEST['action']) ? $_REQUEST['action'] : null;
 $idChecked = isset($_REQUEST['idChecked']) ? $_REQUEST['idChecked'] : null;
-$list_type = isset($_REQUEST['list_type']) ? $_REQUEST['list_type'] : 'simple';
+$list_type = isset($_REQUEST['list_type']) ? $_REQUEST['list_type'] : 'custom';
 
 $tool_name = get_lang('SessionList');
 Display::display_header($tool_name);
@@ -43,6 +43,7 @@ $courseSelect = $sessionFilter->addElement(
 if (!empty($courseId)) {
     $courseInfo = api_get_course_info_by_id($courseId);
     $parents = CourseCategory::getParentsToString($courseInfo['categoryCode']);
+
     $courseSelect->addOption($parents.$courseInfo['title'], $courseInfo['code'], ['selected' => 'selected']);
 }
 
@@ -104,10 +105,6 @@ $extra_params['autowidth'] = 'true';
 
 // height auto
 $extra_params['height'] = 'auto';
-
-// Custom params
-$extra_params['sortname'] = 'display_end_date';
-$extra_params['sortorder'] = 'desc';
 
 if (!isset($_GET['keyword'])) {
     $extra_params['postData'] = [
@@ -371,7 +368,7 @@ $tabs = [
     ],
 ];
 
-echo Display::tabsOnlyLink($tabs, 1);
+echo Display::tabsOnlyLink($tabs, 2);
 echo '<div id="session-table" class="table-responsive">';
 echo Display::grid_html('sessions');
 echo '</div>';

@@ -31,27 +31,27 @@ while ($session = Database::fetch_array($result, 'ASSOC')) {
 
     // 2. Si une session a plus de 2 apprenants et que la date de début est supérieur ou égale à la date
     // du jour et que la date de fin n'est pas passée alors mettre le statut en cours
-    if (empty($status)) {
+    //if (empty($status)) {
         if ($userCount > 2 && $start >= $now && $end < $now) {
             $status = SessionManager::STATUS_PROGRESS;
         }
-    }
+    //}
 
     // 3. Si une session n’a pas d’apprenant et que la date de début est passée alors mettre le statut à
     //annulée.
-    if (empty($status)) {
+    //if (empty($status)) {
         if ($userCount === 0 && $start >= $now) {
             $status = SessionManager::STATUS_CANCELLED;
         }
-    }
+    //}
 
     // 4. Si la date de fin d'une session est dépassée et qu'elle a plus de 2 apprenants alors passer le
     //statut à terminée
-    if (empty($status)) {
+    //if (empty($status)) {
         if ($end >= $now && $userCount > 2) {
             $status = SessionManager::STATUS_FINISHED;
         }
-    }
+    //}
 
     $params = [
         'status' => $status,

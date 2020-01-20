@@ -20,7 +20,8 @@ while ($session = Database::fetch_array($result, 'ASSOC')) {
     $id = $session['id'];
     $start = $session['display_start_date'];
     $end = $session['display_end_date'];
-    $userCount = (int) $session['nbr_users'];
+    //$userCount = (int) $session['nbr_users'];
+    $userCount = SessionManager::get_users_by_session($id, 0, true);
 
     // 1. Si une session a lieu dans le futur, c’est à dire que la date de début est inférieur à la date du
     //jour alors elle est prévue

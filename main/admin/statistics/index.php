@@ -134,13 +134,14 @@ if (
             $form->addHidden('report', 'users_active');
             $form->addButtonFilter(get_lang('Search'));
 
-            $validated = $form->validate();
+            $validated = $form->validate() || isset($_REQUEST['daterange']);
 
             $urlBase = api_get_path(WEB_CODE_PATH).'inc/ajax/statistics.ajax.php?';
             $dateStart = '';
             $dateEnd = '';
             if ($validated) {
-                $values = $form->getSubmitValues();
+                $values = $_REQUEST;
+                $form->setDefaults(['daterange' => Security::remove_XSS($values['daterange'])]);
                 $dateStart = Security::remove_XSS($values['daterange_start']);
                 $dateEnd = Security::remove_XSS($values['daterange_end']);
             }
@@ -278,7 +279,7 @@ if (
     }
 }
 
-if ($report == 'user_session') {
+if ($report === 'user_session') {
     $htmlHeadXtra[] = api_get_jqgrid_js();
 }
 
@@ -631,7 +632,6 @@ switch ($report) {
         Statistics::printCourseLastVisit();
         break;
     case 'users_active':
-
         $content = '';
         if ($validated) {
             $startDate = $values['daterange_start'];
@@ -647,10 +647,22 @@ switch ($report) {
             echo '<div class="col-md-6"><canvas id="canvas5" style="margin-bottom: 20px"></canvas></div>';
             echo '</div>';
             $conditions = [];
+
             $extraConditions = '';
             if (!empty($startDate) && !empty($endDate)) {
                 $extraConditions .= " AND registration_date BETWEEN '$startDate' AND '$endDate' ";
             }
+
+            $totalCount = UserManager::getUserListExtraConditions(
+                $conditions,
+                [],
+                false,
+                false,
+                null,
+                $extraConditions,
+                true
+            );
+
             $users = UserManager::getUserListExtraConditions(
                 $conditions,
                 [],
@@ -660,7 +672,6 @@ switch ($report) {
                 $extraConditions
             );
 
-            $table = new HTML_Table(['class' => 'table table-responsive', 'id' => 'user_report']);
             $headers = [
                 get_lang('FirstName'),
                 get_lang('LastName'),
@@ -675,15 +686,18 @@ switch ($report) {
                 get_lang('Certificate'),
                 get_lang('UserBirthday'),
             ];
+
+            /*$table = new HTML_Table(['class' => 'table table-responsive', 'id' => 'user_report']);
             $row = 0;
             $column = 0;
             foreach ($headers as $header) {
                 $table->setHeaderContents($row, $column, $header);
                 $column++;
             }
-            $row++;
+            $row++;*/
             $extraFieldValueUser = new ExtraFieldValue('user');
             $statusList = api_get_status_langvars();
+            $data = [];
             foreach ($users as $user) {
                 $userId = $user['user_id'];
                 $extraDataList = $extraFieldValueUser->getAllValuesByItem($userId);
@@ -703,7 +717,7 @@ switch ($report) {
                 $career = isset($extraFields['filiere_user']) ? $extraFields['filiere_user'] : '';
                 $birthDate = isset($extraFields['terms_datedenaissance']) ? $extraFields['terms_datedenaissance'] : '';
 
-                $column = 0;
+                /*$column = 0;
                 $table->setCellContents($row, $column++, $user['firstname']);
                 $table->setCellContents($row, $column++, $user['lastname']);
                 $table->setCellContents($row, $column++, api_get_local_time($user['registration_date']));
@@ -715,12 +729,45 @@ switch ($report) {
                 $table->setCellContents($row, $column++, $statusList[$user['status']]);
                 $table->setCellContents($row, $column++, $user['active'] == 1 ? get_lang('Yes') : get_lang('No'));
                 $table->setCellContents($row, $column++, $certificate ? get_lang('Yes') : get_lang('No'));
-                $table->setCellContents($row, $column++, $birthDate);
+                $table->setCellContents($row, $column++, $birthDate);*/
 
+                $item = [];
+                $item[] = $user['firstname'];
+                $item[] = $user['lastname'];
+                $item[] = api_get_local_time($user['registration_date']);
+                $item[] = $user['language'];
+                $item[] = $language;
+                $item[] = $contract ? get_lang('Yes') : get_lang('No');
+                $item[] = $residence;
+                $item[] = $career;
+                $item[] = $statusList[$user['status']];
+                $item[] = $user['active'] == 1 ? get_lang('Yes') : get_lang('No');
+                $item[] = $certificate ? get_lang('Yes') : get_lang('No');
+                $item[] = $birthDate;
+                $data[] = $item;
                 $row++;
             }
 
-            $content = $table->toHtml();
+            $table = new SortableTableFromArray(
+                $data,
+                0,
+                10,
+                'table_users_active',
+            null,
+                'table_users_active'
+            );
+            $table->total_number_of_items = $totalCount;
+
+            unset($values['submit']);
+            $table->set_additional_parameters($values);
+
+            $row = 0;
+            $column = 0;
+            foreach ($headers as $header) {
+                $table->set_header($column, $header, false);
+                $column++;
+            }
+            $content = $table->return_table();
         }
 
         echo $form->returnForm();

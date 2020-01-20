@@ -13,8 +13,6 @@ use ChamiloSession as Session;
  * - click on the table header to sort the data
  * - choose how many items you see per page
  * - navigate through all data-pages.
- *
- * @package chamilo.library
  */
 class SortableTable extends HTML_Table
 {
@@ -95,11 +93,20 @@ class SortableTable extends HTML_Table
     public $use_jqgrid = false;
     public $table_id = null;
     public $headers = [];
+
+    /**
+     * The array containing all data for this table.
+     */
+    public $table_data;
+    public $hideItemSelector;
+
     /**
      * @var array Columns to hide
      */
     private $columnsToHide = [];
     private $dataFunctionParams;
+    private $defaultColumn;
+    private $defaultItemsPerPage;
 
     /**
      * Create a new SortableTable.
@@ -140,16 +147,41 @@ class SortableTable extends HTML_Table
         $this->table_name = $table_name;
         $this->additional_parameters = [];
         $this->param_prefix = $table_name.'_';
-
-        $this->page_nr = Session::read($this->param_prefix.'page_nr', 1);
-        $this->page_nr = isset($_GET[$this->param_prefix.'page_nr']) ? (int) $_GET[$this->param_prefix.'page_nr'] : $this->page_nr;
-        $this->column = Session::read($this->param_prefix.'column', $default_column);
-        $this->column = isset($_GET[$this->param_prefix.'column']) ? (int) $_GET[$this->param_prefix.'column'] : $this->column;
+        $this->defaultColumn = (int) $default_column;
+        $this->defaultItemsPerPage = $default_items_per_page;
+        $this->hideItemSelector = false;
 
         $defaultRow = api_get_configuration_value('table_default_row');
         if (!empty($defaultRow)) {
-            $default_items_per_page = $defaultRow;
+            $this->defaultItemsPerPage = $default_items_per_page = $defaultRow;
         }
+
+        $cleanSessionData = Session::read('clean_sortable_table');
+        if ($cleanSessionData === true) {
+            $this->cleanUrlSessionParams();
+        }
+
+        // Allow to change paginate in multiples tabs
+        //Session::erase($this->param_prefix.'per_page');
+        $this->per_page = Session::read($this->param_prefix.'per_page', $default_items_per_page);
+
+        // If per page changed, then reset the page to 1
+        if (!empty($this->per_page) && isset($_GET[$this->param_prefix.'per_page']) && $this->per_page != $_GET[$this->param_prefix.'per_page']) {
+            Session::erase($this->param_prefix.'page_nr');
+            $_GET[$this->param_prefix.'page_nr'] = 1;
+        }
+
+        $this->per_page = isset($_GET[$this->param_prefix.'per_page']) ? (int) $_GET[$this->param_prefix.'per_page'] : $this->per_page;
+
+        if (isset($_GET[$this->param_prefix.'per_page'])) {
+            Session::erase($this->param_prefix.'page_nr');
+        }
+
+        $this->page_nr = Session::read($this->param_prefix.'page_nr', 1);
+        $this->page_nr = isset($_GET[$this->param_prefix.'page_nr']) ? (int) $_GET[$this->param_prefix.'page_nr'] : $this->page_nr;
+
+        $this->column = Session::read($this->param_prefix.'column', $default_column);
+        $this->column = isset($_GET[$this->param_prefix.'column']) ? (int) $_GET[$this->param_prefix.'column'] : $this->column;
 
         // Default direction.
         if (in_array(strtoupper($default_order_direction), ['ASC', 'DESC'])) {
@@ -182,12 +214,6 @@ class SortableTable extends HTML_Table
             }
         }
 
-        // Allow to change paginate in multiples tabs
-        Session::erase($this->param_prefix.'per_page');
-
-        $this->per_page = Session::read($this->param_prefix.'per_page', $default_items_per_page);
-        $this->per_page = isset($_GET[$this->param_prefix.'per_page']) ? (int) $_GET[$this->param_prefix.'per_page'] : $this->per_page;
-
         Session::write($this->param_prefix.'per_page', $this->per_page);
         Session::write($this->param_prefix.'direction', $this->direction);
         Session::write($this->param_prefix.'page_nr', $this->page_nr);
@@ -205,6 +231,26 @@ class SortableTable extends HTML_Table
         $this->th_attributes = [];
         $this->other_tables = [];
         $this->dataFunctionParams = [];
+    }
+
+    /**
+     * Clean URL params when changing student view.
+     */
+    public function cleanUrlSessionParams()
+    {
+        Session::erase('clean_sortable_table');
+
+        $prefix = $this->param_prefix;
+
+        Session::erase($prefix.'page_nr');
+        Session::erase($prefix.'column');
+        Session::erase($prefix.'direction');
+        Session::erase($prefix.'per_page');
+
+        $_GET[$this->param_prefix.'per_page'] = $this->default_items_per_page;
+        $_GET[$this->param_prefix.'page_nr'] = 1;
+        $_GET[$this->param_prefix.'column'] = $this->defaultColumn;
+        $_GET[$this->param_prefix.'direction'] = $this->direction;
     }
 
     /**
@@ -303,6 +349,7 @@ class SortableTable extends HTML_Table
     {
         $empty_table = false;
         $content = $this->get_table_html();
+
         if ($this->get_total_number_of_items() == 0) {
             $cols = $this->getColCount();
             $this->setCellAttributes(
@@ -314,6 +361,7 @@ class SortableTable extends HTML_Table
             $this->setCellContents(1, 0, $message_empty);
             $empty_table = true;
         }
+
         $html = '';
         if (!$empty_table) {
             $table_id = 'form_'.$this->table_name.'_id';
@@ -341,7 +389,7 @@ class SortableTable extends HTML_Table
 
             if (count($this->form_actions) > 0) {
                 $params = $this->get_sortable_table_param_string().'&amp;'.$this->get_additional_url_paramstring();
-                $html .= '<form id ="'.$table_id.'" class="form-search" method="post" action="'.api_get_self().'?'.$params.'" name="form_'.$this->table_name.'">';
+                $html .= '<form id ="'.$table_id.'" name="form_'.$this->table_name.'" class="form-search" method="post" action="'.api_get_self().'?'.$params.'" >';
             }
         }
 
@@ -695,6 +743,11 @@ class SortableTable extends HTML_Table
         if ($total_number_of_items <= $this->default_items_per_page) {
             return '';
         }
+
+        if ($this->hideItemSelector === true) {
+            return '';
+        }
+
         $result[] = '<form method="GET" action="'.api_get_self().'" style="display:inline;">';
         $param[$this->param_prefix.'direction'] = $this->direction;
         $param[$this->param_prefix.'page_nr'] = $this->page_nr;
@@ -898,7 +951,7 @@ class SortableTable extends HTML_Table
     }
 
     /**
-     * Add a filter to a column. If another filter was allready defined for the
+     * Add a filter to a column. If another filter was already defined for the
      * given column, it will be overwritten.
      *
      * @param int    $column   The number of the column
@@ -1059,5 +1112,13 @@ class SortableTable extends HTML_Table
         }
 
         return $data;
+    }
+
+    /**
+     * @param array $data
+     */
+    public function setTableData($data)
+    {
+        $this->table_data = $data;
     }
 }

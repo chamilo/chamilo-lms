@@ -17,7 +17,7 @@ $htmlHeadXtra[] = api_get_jqgrid_js();
 
 $action = isset($_REQUEST['action']) ? $_REQUEST['action'] : null;
 $idChecked = isset($_REQUEST['idChecked']) ? $_REQUEST['idChecked'] : null;
-$list_type = isset($_REQUEST['list_type']) ? $_REQUEST['list_type'] : 'simple';
+$list_type = isset($_REQUEST['list_type']) ? $_REQUEST['list_type'] : 'custom';
 
 $tool_name = get_lang('SessionList');
 Display::display_header($tool_name);
@@ -137,8 +137,7 @@ $orderUrl = api_get_path(WEB_AJAX_PATH).'session.ajax.php?a=order';
 ?>
     <script>
         function setSearchSelect(columnName) {
-            $("#sessions").jqGrid('setColProp', columnName, {
-            });
+            $("#sessions").jqGrid('setColProp', columnName, {});
         }
         var added_cols = [];
         var original_cols = [];
@@ -147,7 +146,7 @@ $orderUrl = api_get_path(WEB_AJAX_PATH).'session.ajax.php?a=order';
             // Cleaning
             for (key in added_cols) {
                 grid.hideCol(key);
-            };
+            }
             grid.showCol('name');
             grid.showCol('display_start_date');
             grid.showCol('display_end_date');
@@ -273,14 +272,13 @@ $orderUrl = api_get_path(WEB_AJAX_PATH).'session.ajax.php?a=order';
 
             // Sortable rows
             grid.jqGrid('sortableRows', options);
-            <?php
-            } ?>
+            <?php } ?>
 
-            grid.jqGrid('navGrid','#sessions_pager',
-                {edit:false,add:false,del:false},
-                {height:280,reloadAfterSubmit:false}, // edit options
-                {height:280,reloadAfterSubmit:false}, // add options
-                {reloadAfterSubmit:false},// del options
+            grid.jqGrid('navGrid', '#sessions_pager',
+                {edit: false, add: false, del: false},
+                {height: 280, reloadAfterSubmit: false}, // edit options
+                {height: 280, reloadAfterSubmit: false}, // add options
+                {reloadAfterSubmit: false},// del options
                 prmSearch
             );
 
@@ -296,7 +294,7 @@ $orderUrl = api_get_path(WEB_AJAX_PATH).'session.ajax.php?a=order';
             searchDialogAll.addClass("table");
             var searchDialog = $("#searchmodfbox_"+grid[0].id);
             searchDialog.addClass("ui-jqgrid ui-widget ui-widget-content ui-corner-all");
-            searchDialog.css({position:"adsolute", "z-index":"100", "float":"left", "top":"55%", "left" : "25%", "padding" : "5px", "border": "1px solid #CCC"})
+            searchDialog.css({position:"absolute", "z-index":"100", "float":"left", "top":"55%", "left" : "25%", "padding" : "5px", "border": "1px solid #CCC"})
             var gbox = $("#gbox_"+grid[0].id);
             gbox.before(searchDialog);
             gbox.css({clear:"left"});

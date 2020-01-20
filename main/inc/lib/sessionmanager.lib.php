@@ -8695,7 +8695,36 @@ SQL;
 
                 if (api_get_configuration_value('allow_session_status')) {
                     $columns[] = get_lang('SessionStatus');
-                    $columnModel[] = ['name' => 'status', 'index' => 'status', 'width' => '40', 'align' => 'left', 'search' => 'true'];
+                    $list = self::getStatusList();
+                    $listToString = '';
+                    foreach ($list as $statusId => $status) {
+                        $listToString .= $statusId.':'.$status.';';
+                    }
+
+                    $columnModel[] = ['name' => 'status', 'index' => 'status', 'width' => '25', 'align' => 'left', 'search' => 'true', 'stype' => 'select',
+                        // for the bottom bar
+                        'searchoptions' => [
+                            'defaultValue' => '1',
+                            //'value' => '1:'.get_lang('Active').';0:'.get_lang('Inactive'), ],
+                             'value' => $listToString,
+                        // for the top bar
+                        //'editoptions' => ['value' => '" ":'.get_lang('All').';1:'.get_lang('Active').';0:'.get_lang('Inactive')
+                        ],
+                    ];
+
+                    /*$columnModel[] = [
+                        'name' => 'status',
+                        'index' => 'status',
+                        'width' => '40',
+                        'align' => 'left',
+                        'search' => 'true',
+                        'stype' => 'select',
+                        'searchoptions' => [
+                            'defaultValue' => '1',
+                            'value' => '1:'.get_lang('Active').';0:'.get_lang('Inactive'), ],
+                        // for the top bar
+                        'editoptions' => ['value' => '" ":'.get_lang('All').';1:'.get_lang('Active').';0:'.get_lang('Inactive')],
+                    ];*/
                 }
 
                 break;

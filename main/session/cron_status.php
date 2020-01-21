@@ -56,6 +56,6 @@ while ($session = Database::fetch_array($result, 'ASSOC')) {
     ];
     Database::update($table, $params, ['id = ?' => $id]);
 
-    echo "Session #$id updated. Status = $status. User count= $userCount: Start date: $start - End date: $end".$line;
+    echo "Session #$id updated. Status = ".SessionManager::getStatusLabel($status)."($status) User count= $userCount: Start date: $start - End date: $end".$line;
 }
 

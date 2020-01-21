@@ -59,6 +59,10 @@ foreach ($students as $student) {
 
     if ($date6Months > $lastDate) {
         $disabledUser = api_get_user_info($studentId);
+        if (empty($disabledUser)) {
+            continue;
+        }
+
         if ($disabledUser['active'] != 1) {
             continue;
         }

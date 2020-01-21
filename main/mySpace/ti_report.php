@@ -41,6 +41,12 @@ echo '<style>
    .session_block .label {
         width: 120px;
     }
+
+    table th{
+        text-align: center;
+        width: 300px;
+    }
+
 </style>';
 
 $form = new FormValidator('users', 'get', api_get_self().'?a=users_active');
@@ -101,13 +107,12 @@ if ($form->validate()) {
             $coachList[$coachId]['week'][$week]['sessions'][] = $row;
         }
 
-        //$coachList[$coachId]['week'][$endWeek]['sessions'][] = $row;
-
         $coachList[$coachId]['session_count'] += 1;
         $coachList[$coachId]['data'] = $row;
     }
 
     $table = new HTML_Table(['class' => 'table table-responsive']);
+    //$table = new HTML_Table();
     $headers = [
         get_lang('Coach'),
         get_lang('Sessions'),
@@ -119,28 +124,58 @@ if ($form->validate()) {
         $date->add(new DateInterval('P1W'));
     }
 
+    $width = ' width:300px;';
     $row = 0;
     $column = 0;
     foreach ($headers as $header) {
         $table->setHeaderContents($row, $column, $header);
+        $table->updateCellAttributes(
+            $row,
+            $column,
+            'style="'.$width.'"'
+        );
         $column++;
     }
     $row++;
     $url = api_get_path(WEB_CODE_PATH).'session/resume_session.php?';
     foreach ($coachList as $coachData) {
         $column = 0;
+        $table->updateCellAttributes(
+            $row,
+            $column,
+            'style="'.$width.'"'
+        );
         $table->setCellContents($row, $column++, $coachData['complete_name']);
+
+        $table->updateCellAttributes(
+            $row,
+            $column,
+            'style="'.$width.'"'
+        );
         $table->setCellContents($row, $column++, $coachData['session_count']);
 
         $date = new DateTime($startDate);
+        $sessionAdded = [];
         for ($i = 2; $i <= $numberOfWeeks; $i++) {
             $dateWeekToCheck = $date->format($weekFormat);
             if (isset($coachData['week'][$dateWeekToCheck])) {
                 $sessionArray = [];
                 foreach ($coachData['week'][$dateWeekToCheck]['sessions'] as $session) {
                     $date2 = new DateTime($session['display_start_date']);
+                    $name = $session['name'];
+
+                    $showName = true;
+                    if (in_array($session['session_id'], $sessionAdded)) {
+                        $showName = false;
+                    } else {
+                        $sessionAdded[] = $session['session_id'];
+                    }
+
+                    if ($showName === false) {
+                        $name = '';
+                    }
                     $sessionArray[] = Display::url(
-                        $session['name'],
+                        $name,
                         $url.'id_session='.$session['session_id'],
                         ['class' => 'label label-success', 'target' => '_blank', 'title' => addslashes($session['name'])]
                     );
@@ -151,7 +186,14 @@ if ($form->validate()) {
                 $table->updateCellAttributes(
                     $row,
                     $i,
-                    'style="background:green"'
+                    'style="background:green; '.$width.'"'
+                );
+            } else {
+                $table->setCellContents($row, $i, '<div class="session_block"></div>');
+                $table->updateCellAttributes(
+                    $row,
+                    $i,
+                    'style="'.$width.'"'
                 );
             }
             $date->add(new DateInterval('P1W'));

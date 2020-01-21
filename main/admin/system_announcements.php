@@ -1,4 +1,5 @@
 <?php
+
 /* For licensing terms, see /license.txt */
 
 /**
@@ -25,8 +26,8 @@ api_protect_admin_script(true);
 
 // Setting breadcrumbs.
 $interbreadcrumb[] = [
-    "url" => 'index.php',
-    "name" => get_lang('PlatformAdmin'),
+    'url' => 'index.php',
+    'name' => get_lang('PlatformAdmin'),
 ];
 
 $visibleList = SystemAnnouncementManager::getVisibilityList();
@@ -38,17 +39,17 @@ if (empty($_GET['lang'])) {
 
 if (!empty($action)) {
     $interbreadcrumb[] = [
-        "url" => "system_announcements.php",
-        "name" => get_lang('SystemAnnouncements'),
+        'url' => 'system_announcements.php',
+        'name' => get_lang('SystemAnnouncements'),
     ];
     if ($action == 'add') {
         $interbreadcrumb[] = [
-            "url" => '#',
-            "name" => get_lang('AddAnnouncement'),
+            'url' => '#',
+            'name' => get_lang('AddAnnouncement'),
         ];
     }
     if ($action == 'edit') {
-        $interbreadcrumb[] = ["url" => '#', "name" => get_lang('Edit')];
+        $interbreadcrumb[] = ['url' => '#', 'name' => get_lang('Edit')];
     }
 } else {
     $tool_name = get_lang('SystemAnnouncements');
@@ -144,7 +145,7 @@ if ($action_todo) {
         $url = api_get_self().'?id='.intval($_GET['id']);
     }
     $form = new FormValidator('system_announcement', 'post', $url);
-    $form->addElement('header', '', $form_title);
+    $form->addHeader($form_title);
     $form->addText('title', get_lang('Title'), true);
 
     $extraOption = [];

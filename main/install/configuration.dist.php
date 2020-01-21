@@ -1356,8 +1356,13 @@ ALTER TABLE notification_event ADD COLUMN event_id INT NULL;
 // create new user text extra field called 'notification_event' to save the persistent settings.
 // $_configuration['notification_event'] = false;
 
-//Add help text to put 2 names in registration form
+// Add help text to put 2 names in registration form
 //$_configuration['registration_add_helptext_for_2_names'] = false;
+
+// Allow career/promotions in global announcements
+// ALTER TABLE sys_announcement ADD COLUMN career_id INT DEFAULT 0;
+// ALTER TABLE sys_announcement ADD COLUMN promotion_id INT DEFAULT 0;
+//$_configuration['allow_careers_in_global_announcements'] = false;
 
 // KEEP THIS AT THE END
 // -------- Custom DB changes

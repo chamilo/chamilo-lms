@@ -252,6 +252,8 @@ switch ($action) {
     case 'user_by_role':
         api_block_anonymous_users(false);
 
+        $status = isset($_REQUEST['status']) ? (int) $_REQUEST['status'] : DRH;
+
         $criteria = new Criteria();
         $criteria
             ->where(
@@ -262,7 +264,7 @@ switch ($action) {
                 )
             )
             ->andWhere(
-                Criteria::expr()->eq('status', DRH)
+                Criteria::expr()->eq('status', $status)
             );
 
         $users = UserManager::getRepository()->matching($criteria);

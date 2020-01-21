@@ -158,23 +158,29 @@ if (
                 cutoutPercentage: 25
                 ';
 
-            $url1 = $urlBase.'a=users_active&filter=active&date_start='.$dateStart.'&date_end='.$dateEnd;
-            $url2 = $urlBase.'a=users_active&filter=status&date_start='.$dateStart.'&date_end='.$dateEnd;
-            $url3 = $urlBase.'a=users_active&filter=language&date_start='.$dateStart.'&date_end='.$dateEnd;
-            $url4 = $urlBase.'a=users_active&filter=language_cible&date_start='.$dateStart.'&date_end='.$dateEnd;
-            $url5 = $urlBase.'a=users_active&filter=career&date_start='.$dateStart.'&date_end='.$dateEnd;
-
             $reportName1 = get_lang('ActiveUsers');
             $reportName2 = get_lang('UserByStatus');
             $reportName3 = get_lang('UserByLanguage');
             $reportName4 = get_lang('UserByLanguageCible');
             $reportName5 = get_lang('UserByCareer');
+            $reportName6 = get_lang('UserByContract');
+            $reportName7 = get_lang('UserByCertificate');
+
+            $url1 = $urlBase.'a=users_active&filter=active&date_start='.$dateStart.'&date_end='.$dateEnd;
+            $url2 = $urlBase.'a=users_active&filter=status&date_start='.$dateStart.'&date_end='.$dateEnd;
+            $url3 = $urlBase.'a=users_active&filter=language&date_start='.$dateStart.'&date_end='.$dateEnd;
+            $url4 = $urlBase.'a=users_active&filter=language_cible&date_start='.$dateStart.'&date_end='.$dateEnd;
+            $url5 = $urlBase.'a=users_active&filter=career&date_start='.$dateStart.'&date_end='.$dateEnd;
+            $url6 = $urlBase.'a=users_active&filter=contract&date_start='.$dateStart.'&date_end='.$dateEnd;
+            $url7 = $urlBase.'a=users_active&filter=certificate&date_start='.$dateStart.'&date_end='.$dateEnd;
 
             $reportOptions1 = sprintf($reportOptions, $reportName1);
             $reportOptions2 = sprintf($reportOptions, $reportName2);
             $reportOptions3 = sprintf($reportOptions, $reportName3);
             $reportOptions4 = sprintf($reportOptions, $reportName4);
             $reportOptions5 = sprintf($reportOptions, $reportName5);
+            $reportOptions6 = sprintf($reportOptions, $reportName6);
+            $reportOptions7 = sprintf($reportOptions, $reportName7);
 
             $htmlHeadXtra[] = Statistics::getJSChartTemplate(
                 $url1,
@@ -194,19 +200,29 @@ if (
                 $reportOptions3,
                 'canvas3'
             );
-
             $htmlHeadXtra[] = Statistics::getJSChartTemplate(
                 $url4,
                 $reportType,
                 $reportOptions4,
                 'canvas4'
             );
-
             $htmlHeadXtra[] = Statistics::getJSChartTemplate(
                 $url5,
                 $reportType,
                 $reportOptions5,
                 'canvas5'
+            );
+            $htmlHeadXtra[] = Statistics::getJSChartTemplate(
+                $url6,
+                $reportType,
+                $reportOptions6,
+                'canvas6'
+            );
+            $htmlHeadXtra[] = Statistics::getJSChartTemplate(
+                $url7,
+                $reportType,
+                $reportOptions7,
+                'canvas7'
             );
 
             break;
@@ -642,12 +658,18 @@ switch ($report) {
             echo '<div class="col-md-4"><canvas id="canvas2" style="margin-bottom: 20px"></canvas></div>';
             echo '<div class="col-md-4"><canvas id="canvas3" style="margin-bottom: 20px"></canvas></div>';
             echo '</div>';
+
             echo '<div class="row">';
             echo '<div class="col-md-6"><canvas id="canvas4" style="margin-bottom: 20px"></canvas></div>';
             echo '<div class="col-md-6"><canvas id="canvas5" style="margin-bottom: 20px"></canvas></div>';
             echo '</div>';
-            $conditions = [];
 
+            echo '<div class="row">';
+            echo '<div class="col-md-6"><canvas id="canvas6" style="margin-bottom: 20px"></canvas></div>';
+            echo '<div class="col-md-6"><canvas id="canvas7" style="margin-bottom: 20px"></canvas></div>';
+            echo '</div>';
+
+            $conditions = [];
             $extraConditions = '';
             if (!empty($startDate) && !empty($endDate)) {
                 $extraConditions .= " AND registration_date BETWEEN '$startDate' AND '$endDate' ";

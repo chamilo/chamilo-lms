@@ -343,7 +343,6 @@ switch ($action) {
                 $userIdListToString = implode("', '", $userIdList);
 
                 $all = [];
-                //$extraField['options'][] = ['option_value' => '', 'display_text' => get_lang('N/A')];
                 $total = count($users);
                 $usersFound = 0;
                 foreach ($extraField['options'] as $item) {
@@ -402,6 +401,70 @@ switch ($action) {
                 }
 
                 $all[get_lang('N/A')] = $total - $usersFound;
+                break;
+
+            case 'contract':
+                $extraFieldValueUser = new ExtraField('user');
+                $extraField = $extraFieldValueUser->get_handler_field_info_by_field_variable('termactivated');
+
+                $users = UserManager::getUserListExtraConditions(
+                    [],
+                    [],
+                    false,
+                    false,
+                    null,
+                    $extraConditions,
+                    false
+                );
+
+                $userIdList = array_column($users, 'user_id');
+                $userIdListToString = implode("', '", $userIdList);
+
+                $all = [];
+                $total = count($users);
+                $sql = "SELECT count(id) count
+                        FROM $extraFieldValueUser->table_field_values
+                        WHERE
+                        value = 1 AND
+                        item_id IN ('$userIdListToString') AND
+                        field_id = ".$extraField['id'];
+                $query = Database::query($sql);
+                $result = Database::fetch_array($query);
+                $count = $result['count'];
+
+                $all[get_lang('Yes')] = $count;
+                $all[get_lang('No')] = $total - $count;
+                break;
+            case 'certificate':
+                $extraFieldValueUser = new ExtraField('user');
+                $extraField = $extraFieldValueUser->get_handler_field_info_by_field_variable('langue_cible');
+
+                $users = UserManager::getUserListExtraConditions(
+                    [],
+                    [],
+                    false,
+                    false,
+                    null,
+                    $extraConditions,
+                    false
+                );
+
+                $total = count($users);
+                $userIdList = array_column($users, 'user_id');
+                $certificateCount = 0;
+                foreach ($userIdList as $userId) {
+                    $certificate = GradebookUtils::get_certificate_by_user_id(
+                        0,
+                        $userId
+                    );
+
+                    if (!empty($certificate)) {
+                        $certificateCount++;
+                    }
+                }
+
+                $all[get_lang('Yes')] = $certificateCount;
+                $all[get_lang('No')] = $total - $certificateCount;
                 break;
         }
 

@@ -752,10 +752,10 @@ if (api_get_configuration_value('plugin_redirection_enabled')) {
 <p><?php echo get_lang('CSVMustLookLike').' ('.get_lang('MandatoryFields').')'; ?> :</p>
 <blockquote>
 <pre>
-<b>LastName</b>;<b>FirstName</b>;<b>Email</b>;UserName;Password;AuthSource;OfficialCode;PhoneNumber;Status;ExpiryDate;<span style="color:red;"><?php if (count($list) > 0) {
+<b>LastName</b>;<b>FirstName</b>;<b>Email</b>;UserName;Password;AuthSource;OfficialCode;language;PhoneNumber;Status;ExpiryDate;<span style="color:red;"><?php if (count($list) > 0) {
     echo implode(';', $list).';';
 } ?></span>Courses;Sessions;ClassId;
-<b>xxx</b>;<b>xxx</b>;<b>xxx</b>;xxx;xxx;<?php echo implode('/', $defined_auth_sources); ?>;xxx;xxx;user/teacher/drh;0000-00-00 00:00:00;<span style="color:red;"><?php if (count($list_reponse) > 0) {
+<b>xxx</b>;<b>xxx</b>;<b>xxx</b>;xxx;xxx;<?php echo implode('/', $defined_auth_sources); ?>;xxx;english/spanish/(other);xxx;user/teacher/drh;0000-00-00 00:00:00;<span style="color:red;"><?php if (count($list_reponse) > 0) {
     echo implode(';', $list_reponse).';';
 } ?></span>xxx1|xxx2|xxx3;sessionId|sessionId|sessionId;1;<br />
 </pre>
@@ -773,17 +773,18 @@ if (api_get_configuration_value('plugin_redirection_enabled')) {
         &lt;AuthSource&gt;<?php echo implode('/', $defined_auth_sources); ?>&lt;/AuthSource&gt;
         <b>&lt;Email&gt;xxx&lt;/Email&gt;</b>
         &lt;OfficialCode&gt;xxx&lt;/OfficialCode&gt;
+        &lt;language&gt;english/spanish/(other)&lt;/language&gt;
         &lt;PhoneNumber&gt;xxx&lt;/PhoneNumber&gt;
-        &lt;Status&gt;user/teacher/drh<?php if ($result_xml != '') {
+        &lt;Status&gt;user/teacher/drh&lt;/Status&gt;<?php if ($result_xml != '') {
     echo '<br /><span style="color:red;">', $result_xml;
-    echo '</span>';
-} ?>&lt;/Status&gt;
+    echo '</span><br />';
+} ?>
         &lt;Courses&gt;xxx1|xxx2|xxx3&lt;/Courses&gt;
         &lt;Sessions&gt;sessionId|sessionId|sessionId&lt;/Sessions&gt;
         &lt;ClassId&gt;1&lt;/ClassId&gt;
-        &lt;/Contact&gt;
+    &lt;/Contact&gt;
 &lt;/Contacts&gt;
 </pre>
-    </blockquote>
+</blockquote>
 <?php
 Display::display_footer();

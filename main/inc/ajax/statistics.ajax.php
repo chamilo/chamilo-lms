@@ -82,7 +82,7 @@ switch ($action) {
                             FROM $table
                             WHERE
                                 relation_type = 0 AND
-                                registered_at >= '$start' AND
+                                registered_at >= '$start' AND  
                                 registered_at <= '$end' AND
                                 session_id = '$sessionId' ";
                 $result = Database::query($sql);

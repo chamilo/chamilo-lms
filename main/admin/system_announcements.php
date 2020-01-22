@@ -1,4 +1,5 @@
 <?php
+
 /* For licensing terms, see /license.txt */
 
 /**
@@ -23,10 +24,12 @@ $action_todo = false;
 // Access restrictions
 api_protect_admin_script(true);
 
+$allowCareers = api_get_configuration_value('allow_careers_in_global_announcements');
+
 // Setting breadcrumbs.
 $interbreadcrumb[] = [
-    "url" => 'index.php',
-    "name" => get_lang('PlatformAdmin'),
+    'url' => 'index.php',
+    'name' => get_lang('PlatformAdmin'),
 ];
 
 $visibleList = SystemAnnouncementManager::getVisibilityList();
@@ -38,24 +41,24 @@ if (empty($_GET['lang'])) {
 
 if (!empty($action)) {
     $interbreadcrumb[] = [
-        "url" => "system_announcements.php",
-        "name" => get_lang('SystemAnnouncements'),
+        'url' => 'system_announcements.php',
+        'name' => get_lang('SystemAnnouncements'),
     ];
     if ($action == 'add') {
         $interbreadcrumb[] = [
-            "url" => '#',
-            "name" => get_lang('AddAnnouncement'),
+            'url' => '#',
+            'name' => get_lang('AddAnnouncement'),
         ];
     }
     if ($action == 'edit') {
-        $interbreadcrumb[] = ["url" => '#', "name" => get_lang('Edit')];
+        $interbreadcrumb[] = ['url' => '#', 'name' => get_lang('Edit')];
     }
 } else {
     $tool_name = get_lang('SystemAnnouncements');
 }
 
 // Displaying the header.
-Display :: display_header($tool_name);
+Display::display_header($tool_name);
 if ($action != 'add' && $action != 'edit') {
     echo '<div class="actions">';
     echo '<a href="?action=add">'.Display::return_icon('add.png', get_lang('AddAnnouncement'), [], 32).'</a>';
@@ -79,6 +82,7 @@ switch ($action) {
         if ($action == 'make_visible') {
             $status = true;
         }
+
         SystemAnnouncementManager::set_visibility(
             $_GET['id'],
             $_GET['person'],
@@ -144,7 +148,7 @@ if ($action_todo) {
         $url = api_get_self().'?id='.intval($_GET['id']);
     }
     $form = new FormValidator('system_announcement', 'post', $url);
-    $form->addElement('header', '', $form_title);
+    $form->addHeader($form_title);
     $form->addText('title', get_lang('Title'), true);
 
     $extraOption = [];

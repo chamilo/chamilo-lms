@@ -8,7 +8,7 @@
  */
 session_cache_limiter('none');
 
-require_once __DIR__.'/../inc/global.inc.php';
+require_once __DIR__.'/../inc/global-min.inc.php';
 $this_section = SECTION_COURSES;
 
 // Protection
@@ -52,7 +52,10 @@ $refer_script = isset($_SERVER["HTTP_REFERER"]) ? strrchr($_SERVER["HTTP_REFERER
 $sys_course_path = api_get_path(SYS_COURSE_PATH).$_course['path'].'/document';
 
 if (substr($refer_script, 0, 15) == '/fillsurvey.php') {
-    $invitation = substr(strstr($refer_script, 'invitationcode='), 15);
+    list($part1, $part2) = preg_split('/invitationcode=/', $refer_script);
+    list($invitation, $part1) = preg_split('/&/', $part2);
+    unset($part1);
+    unset($part2);
     $course = strstr($refer_script, 'course=');
     $course = substr($course, 7, strpos($course, '&') - 7);
     include '../survey/survey.download.inc.php';

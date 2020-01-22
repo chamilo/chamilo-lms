@@ -6749,12 +6749,8 @@ SQL;
         $calendar = [];
 
         foreach ($sessionsList as $sessionId => $sessionInfo) {
-            $startDate = $sessionInfo['access_start_date']
-                ? new DateTime(api_get_local_time($sessionInfo['access_start_date']), $timezone)
-                : null;
-            $endDate = $sessionInfo['access_end_date']
-                ? new DateTime(api_get_local_time($sessionInfo['access_end_date']), $timezone)
-                : null;
+            $startDate = $sessionInfo['access_start_date'] ? new DateTime(api_get_local_time($sessionInfo['access_start_date']), $timezone): null;
+            $endDate = $sessionInfo['access_end_date'] ? new DateTime(api_get_local_time($sessionInfo['access_end_date']), $timezone): null;
 
             $startYear = $startDate ? (int) $startDate->format('Y') : 0;
             $startWeekYear = $startDate ? (int) $startDate->format('o') : 0;

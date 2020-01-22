@@ -1,4 +1,53 @@
 <?php
+/* For licensing terms, see /license.txt */
+/*
+User account CASification script, to be used to move from LDAP auth to CAS auth.
+Copies over the CAS identifier to each user's "cas_user" extra field
+and sets its "auth_source" to CAS_AUTH_SOURCE.
+
+This script is interactive, to be run from a terminal.
+It does not read any parameter from the command line, but uses the global configuration arrays
+ $extldap_config
+and
+ $extldap_user_correspondance
+defined in app/config/auth.conf.php.
+
+It creates the "cas_user" extra field if missing.
+
+For each user account,
+it looks for its username in the LDAP directory, in both
+$extldap_user_correspondance['username']
+and
+$extldap_user_correspondance['extra']['cas_user'].
+
+Skips the user account if no match is found or more than one matches are found.
+
+Fix the username if it is not exactly as in the LDAP directory.
+
+Sets or fixes extra field "cas_user" value if not set or wrong, with the correct CAS identification code read from LDAP.
+
+Changes the auth source to CAS_AUTH_SOURCE.
+
+All these corrections are only applied in phase 2, and take time.
+
+Phase 1 only builds a TO-DO list.
+
+Phase 2 starts with the script asking the operator confirmation for each modification category :
+- fix usernames
+- add missing CAS identifiers
+- fix wrong CAS identifiers
+- fix auth source
+
+Planned modifications and progress are displayed.
+
+Diagnostics and modifications can be saved using command script(1).
+
+This script does not need to be run more than once,
+but can be run several times.
+In case phase 2 is stopped before the end, one should run this script again.
+If this script is run after all user accounts were CASified, it just stops after Phase 1.
+This can be used to check whether no work is left to do.
+ */
 if (php_sapi_name() !== 'cli') die("this script is supposed to be run from the command-line\n");
 require __DIR__.'/../../cli-config.php';
 require_once __DIR__.'/../../app/config/auth.conf.php';

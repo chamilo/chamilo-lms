@@ -243,10 +243,26 @@ if (
 
             $validated = $form->validate() || isset($_REQUEST['range']);
             if ($validated) {
+                $values = $form->getSubmitValues();
                 $urlBase = api_get_path(WEB_CODE_PATH).'inc/ajax/statistics.ajax.php?';
+                $dateStart = null;
+                $dateEnd = null;
 
-                $dateStart = Security::remove_XSS($_REQUEST['range_start']);
-                $dateEnd = Security::remove_XSS($_REQUEST['range_end']);
+                if (isset($values['range_start'])) {
+                    $dateStart = Security::remove_XSS($values['range_start']);
+                }
+                if (isset($values['range_end'])) {
+                    $dateEnd = Security::remove_XSS($values['range_end']);
+                }
+
+                if (isset($_REQUEST['range_start'])) {
+                    $dateStart = Security::remove_XSS($_REQUEST['range_start']);
+                }
+
+                if (isset($_REQUEST['range_end'])) {
+                    $dateEnd = Security::remove_XSS($_REQUEST['range_end']);
+                }
+
                 $statusId = (int) $_REQUEST['status_id'];
 
                 $conditions = "&date_start=$dateStart&date_end=$dateEnd&status=$statusId";
@@ -336,8 +352,8 @@ $tools = [
     ],
     get_lang('Session') => [
         'report=session_by_date' => get_lang('SessionsByDate'),
-        'report=session_by_week' => get_lang('SessionsByWeek'),
-        'report=session_by_user' => get_lang('SessionsByUser'),
+        //'report=session_by_week' => get_lang('SessionsByWeek'),
+        //'report=session_by_user' => get_lang('SessionsByUser'),
     ],
 ];
 
@@ -349,11 +365,11 @@ switch ($report) {
         if ($validated) {
             $values = $form->getSubmitValues();
 
-            $start = Security::remove_XSS($_REQUEST['range_start']);
-            $end = Security::remove_XSS($_REQUEST['range_end']);
-
-            $first = DateTime::createFromFormat('Y-m-d', $start);
-            $second = DateTime::createFromFormat('Y-m-d', $end);
+            /*$start = Security::remove_XSS($_REQUEST['range_start']);
+            $end = Security::remove_XSS($_REQUEST['range_end']);*/
+            //var_dump($dateStart);
+            $first = DateTime::createFromFormat('Y-m-d', $dateStart);
+            $second = DateTime::createFromFormat('Y-m-d', $dateEnd);
             $numberOfWeeks = floor($first->diff($second)->days / 7);
 
             $content .= '<div class="row">';
@@ -370,6 +386,9 @@ switch ($report) {
             if (!empty($statusId)) {
                 $statusCondition .= " AND status = $statusId ";
             }
+
+            $start = Database::escape_string($dateStart);
+            $end = Database::escape_string($dateEnd);
 
             // User count
             $table = Database::get_main_table(TABLE_MAIN_SESSION);
@@ -528,16 +547,21 @@ switch ($report) {
             exit;
         }
 
-        $url = api_get_self().'?report=session_by_date&action=export';
-        foreach ($values as $index => $value) {
-            $url .= '&'.$index.'='.$value;
+        $link = '';
+        if ($validated) {
+            $url = api_get_self().'?report=session_by_date&action=export';
+            if (!empty($values)) {
+                foreach ($values as $index => $value) {
+                    $url .= '&'.$index.'='.$value;
+                }
+            }
+            $link = Display::url(
+                Display::return_icon('excel.png').'&nbsp;'.get_lang('ExportAsXLS'),
+                $url,
+                ['class' => 'btn btn-default']
+            );
         }
 
-        $link = Display::url(
-            Display::return_icon('excel.png').'&nbsp;'.get_lang('ExportAsXLS'),
-            $url,
-            ['class' => 'btn btn-default']
-        );
         $content = $form->returnForm().$link.$content;
 
         break;

@@ -50,6 +50,10 @@ class UsersLoader implements LoaderInterface
             []
         );
 
+        if (empty($userId)) {
+            throw new \Exception('Users not created');
+        }
+
         /** @var User $user */
         $user = api_get_user_entity($userId);
         $user->setRegistrationDate($incomingData['registration_date']);

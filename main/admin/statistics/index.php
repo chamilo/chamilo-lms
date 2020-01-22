@@ -698,11 +698,10 @@ switch ($report) {
                 get_lang('UserBirthday'),
             ];
 
-
             if (isset($_REQUEST['action_table']) && $_REQUEST['action_table'] === 'export') {
                 $first = 0;
                 $limit = $totalCount;
-                $data = $headers;
+                $data[] = $headers;
             }
 
             $users = UserManager::getUserListExtraConditions(

@@ -52,10 +52,10 @@
                         {% endif %}
 
                         <td class="col-week text-center {{ session.start_in_last_year or session.no_start ? 'in_last_year' : '' }} {{ session.end_in_next_year or session.no_end ? 'in_next_year' : '' }}"
-                            colspan="{{ session.duration }}" title="{{ session.human_date }}"
+                            colspan="{{ session.duration }}" title="{{ session.name | e('html') }} - {{ session.human_date }}"
                             style="background-color: {{ session.color }}">
                             <span>
-                                <span class="sr-only">{{ session.human_date }}</span>
+                                <span class="sr-only">{{ session.name | e('html') }} - {{ session.human_date }}</span>
                             </span>
                         </td>
 

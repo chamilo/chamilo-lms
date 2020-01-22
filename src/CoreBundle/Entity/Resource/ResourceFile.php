@@ -156,7 +156,7 @@ class ResourceFile
     /**
      * @return ResourceFile
      */
-    public function setName(string $name)
+    public function setName($name)
     {
         $this->name = $name;
 
@@ -314,9 +314,9 @@ class ResourceFile
     }
 
     /**
-     * @param $originalName
+     * @param string $originalName
      */
-    public function setOriginalName(string $originalName): self
+    public function setOriginalName($originalName): self
     {
         $this->originalName = $originalName;
 

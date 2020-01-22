@@ -17,6 +17,10 @@ abstract class BaseTask
     use MapTrait;
 
     /**
+     * @var int
+     */
+    protected $taskId;
+    /**
      * @var ExtractorInterface
      */
     protected $extractor;
@@ -104,12 +108,18 @@ abstract class BaseTask
      */
     private function initMapLog()
     {
-        $filePath = $this->getMapFilePath();
-        $dirPath = dirname($filePath);
+        $taskName = $this->getTaskName();
 
-        $fileSystem = new Filesystem();
-        $fileSystem->mkdir($dirPath);
-        $fileSystem->touch($filePath);
+        $id = \Database::insert(
+            'plugin_migrationmoodle_task',
+            ['name' => $taskName]
+        );
+
+        if (empty($id)) {
+            throw new \Exception("Failed to save task ($taskName).");
+        }
+
+        $this->taskId = $id;
     }
 
     /**
@@ -143,13 +153,15 @@ abstract class BaseTask
     {
         $hash = md5("$extractedId@@$loadedId");
 
-        $filePath = $this->getMapFilePath();
-
-        $mapLog = $this->parseMapFile();
-        $mapLog[] = ['hash' => $hash, 'extracted' => $extractedId, 'loaded' => $loadedId];
-
-        $fileSystem = new Filesystem();
-        $fileSystem->dumpFile($filePath, json_encode($mapLog));
+        \Database::insert(
+            'plugin_migrationmoodle_item',
+            [
+                'hash' => $hash,
+                'extracted_id' => $extractedId,
+                'loaded_id' => $loadedId,
+                'task_id' => $this->taskId,
+            ]
+        );
 
         return $hash;
     }

@@ -26,32 +26,37 @@ abstract class LoadedKeyLookup implements TransformPropertyInterface
     {
         $id = current($data);
 
-        $mapLog = $this->parseMapFile();
+        $migration = $this->search($id);
 
-        $migration = $this->search($mapLog, $id);
-
-        return $migration['loaded'];
+        return $migration['loaded_id'];
     }
 
     /**
-     * @param array $mapLog
-     * @param int   $searchedId
+     * @param int $searchedId
+     *
+     * @throws \Exception
      *
      * @return array
      */
-    private function search(array $mapLog, $searchedId)
+    private function search($searchedId)
     {
-        if (empty($searchedId) || empty($mapLog)) {
+        if (empty($searchedId)) {
             return null;
         }
 
-        $filtered = array_filter(
-            $mapLog,
-            function (array $item) use ($searchedId) {
-                return $item['extracted'] == $searchedId;
-            }
+        $taskName = $this->getTaskName();
+
+        $itemInfo = \Database::select(
+            'i.*',
+            'plugin_migrationmoodle_item i INNER JOIN plugin_migrationmoodle_task t ON i.task_id = t.id',
+            [
+                'where' => [
+                    't.name = ? AND i.extracted_id = ?' => [$taskName, $searchedId],
+                ],
+            ],
+            'first'
         );
 
-        return current($filtered) ?: null;
+        return $itemInfo ?: null;
     }
 }

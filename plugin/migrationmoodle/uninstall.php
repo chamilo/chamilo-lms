@@ -42,3 +42,17 @@ function removeExtraField()
     $em->remove($extraField);
     $em->flush();
 }
+
+/**
+ * Drop database table created by this plugin.
+ */
+function removePluginTables()
+{
+    $queries = [];
+    $queries[] = "DROP TABLE IF EXISTS plugin_migrationmoodle_item";
+    $queries[] = "DROP TABLE IF EXISTS plugin_migrationmoodle_task";
+
+    foreach ($queries as $query) {
+        Database::query($query);
+    }
+}

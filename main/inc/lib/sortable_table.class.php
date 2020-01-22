@@ -93,6 +93,7 @@ class SortableTable extends HTML_Table
     public $use_jqgrid = false;
     public $table_id = null;
     public $headers = [];
+    public $actionButtons = [];
 
     /**
      * The array containing all data for this table.
@@ -363,11 +364,12 @@ class SortableTable extends HTML_Table
         }
 
         $html = '';
+
+        $params = $this->get_sortable_table_param_string().'&amp;'.$this->get_additional_url_paramstring();
         if (!$empty_table) {
             $table_id = 'form_'.$this->table_name.'_id';
             $form = $this->get_page_select_form();
             $nav = $this->get_navigation_html();
-
             // Only show pagination info when there are items to paginate
             if ($this->get_total_number_of_items() > $this->default_items_per_page) {
                 $html = '<div class="table-well">';
@@ -388,7 +390,6 @@ class SortableTable extends HTML_Table
             }
 
             if (count($this->form_actions) > 0) {
-                $params = $this->get_sortable_table_param_string().'&amp;'.$this->get_additional_url_paramstring();
                 $html .= '<form id ="'.$table_id.'" name="form_'.$this->table_name.'" class="form-search" method="post" action="'.api_get_self().'?'.$params.'" >';
             }
         }
@@ -402,9 +403,23 @@ class SortableTable extends HTML_Table
                 }
             }
             $html .= '<input type="hidden" name="action">';
-            $html .= '<table style="width:100%;">';
+            $html .= '<div class="table-well">';
+            $html .= '<table class="data_table_pagination">';
             $html .= '<tr>';
             $html .= '<td>';
+
+            if (count($this->actionButtons) > 0) {
+                $html .= '<div class="btn-toolbar">';
+                $html .= '<div class="btn-group">';
+
+                foreach ($this->actionButtons as $action => $data) {
+                    $label = $data['label'];
+                    $icon = $data['icon'];
+                    $html .= '<a class="btn btn-default" href="?'.$params.'&action_table='.$action.'" >'.$icon.'&nbsp;'.$label.'</a>';
+                }
+                $html .= '</div>'; //btn-group
+                $html .= '</div>'; //toolbar
+            }
 
             if (count($this->form_actions) > 0) {
                 $html .= '<div class="btn-toolbar">';
@@ -425,7 +440,7 @@ class SortableTable extends HTML_Table
                 $html .= '</div>'; //btn-group
                 $html .= '</div>'; //toolbar
             } else {
-                $html .= $form;
+                //$html .= $form;
             }
 
             $html .= '</td>';
@@ -438,9 +453,10 @@ class SortableTable extends HTML_Table
                 $html .= '<td> ';
                 $html .= '</td>';
             }
-
             $html .= '</tr>';
             $html .= '</table>';
+
+            $html .= '</div>'; //toolbar
             if (count($this->form_actions) > 0) {
                 $html .= '</form>';
             }
@@ -659,9 +675,8 @@ class SortableTable extends HTML_Table
         $pager = $this->get_pager();
         $offset = $pager->getOffsetByPageId();
         $from = $offset[0] - 1;
-        $table_data = $this->get_table_data($from);
+        $table_data = $this->get_table_data($from, $this->per_page, $this->column);
         $this->processHeaders();
-
         if (is_array($table_data)) {
             $count = 1;
             foreach ($table_data as &$row) {

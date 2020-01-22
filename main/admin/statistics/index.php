@@ -304,9 +304,6 @@ if (isset($_GET['export'])) {
 }
 
 $tool_name = get_lang('Statistics');
-Display::display_header($tool_name);
-echo Display::page_header($tool_name);
-
 $tools = [
     get_lang('Courses') => [
         'report=courses' => get_lang('CountCours'),
@@ -342,22 +339,8 @@ $tools = [
     ],
 ];
 
-echo '<table><tr>';
-foreach ($tools as $section => $items) {
-    echo '<td style="vertical-align:top;">';
-    echo '<h3>'.$section.'</h3>';
-    echo '<ul>';
-    foreach ($items as $key => $value) {
-        echo '<li><a href="index.php?'.$key.'">'.$value.'</a></li>';
-    }
-    echo '</ul>';
-    echo '</td>';
-}
-echo '</tr></table>';
-
 $course_categories = Statistics::getCourseCategories();
-//@todo: spaces between elements should be handled in the css, br should be removed if only there for presentation
-echo '<br/><br/>';
+$content = '';
 
 switch ($report) {
     case 'session_by_date':
@@ -526,8 +509,7 @@ switch ($report) {
             }
             $content .= $table->toHtml();
         }
-        echo $form->returnForm();
-        echo $content;
+        $content .= $form->returnForm();
 
         break;
     case 'user_session':
@@ -547,7 +529,7 @@ switch ($report) {
             $start = $values['range_start'];
             $end = $values['range_end'];
         }
-        echo $form->returnForm();
+        $content .= $form->returnForm();
 
         $url = api_get_path(WEB_AJAX_PATH).'statistics.ajax.php?a=get_user_session&start='.$start.'&end='.$end;
         $columns = [
@@ -589,11 +571,11 @@ switch ($report) {
         $extraParams['autowidth'] = 'true'; //use the width of the parent
         $extraParams['height'] = 'auto'; //use the width of the parent
         $actionLinks = '';
-        ?>
+
+        $content .= '
         <script>
             $(function() {
-                <?php
-                echo Display::grid_js(
+                '.Display::grid_js(
                     'user_session_grid',
                     $url,
                     $columns,
@@ -602,8 +584,7 @@ switch ($report) {
                     [],
                     $actionLinks,
                     true
-                );
-                ?>
+                ).'
 
                 jQuery("#user_session_grid").jqGrid("navGrid","#user_session_grid_pager",{
                     view:false,
@@ -621,31 +602,31 @@ switch ($report) {
                     }
                 });
             });
-        </script>
-        <?php
-        echo Display::grid_html('user_session_grid');
+        </script>';
+
+        $content .= Display::grid_html('user_session_grid');
 
         break;
     case 'courses':
-        echo '<canvas class="col-md-12" id="canvas" height="300px" style="margin-bottom: 20px"></canvas>';
+        $content .= '<canvas class="col-md-12" id="canvas" height="300px" style="margin-bottom: 20px"></canvas>';
         // total amount of courses
         foreach ($course_categories as $code => $name) {
             $courses[$name] = Statistics::countCourses($code);
         }
         // courses for each course category
-        Statistics::printStats(get_lang('CountCours'), $courses);
+        $content .= Statistics::printStats(get_lang('CountCours'), $courses);
         break;
     case 'tools':
-        echo '<canvas class="col-md-12" id="canvas" height="300px" style="margin-bottom: 20px"></canvas>';
-        Statistics::printToolStats();
+        $content .= '<canvas class="col-md-12" id="canvas" height="300px" style="margin-bottom: 20px"></canvas>';
+        $content .= Statistics::printToolStats();
         break;
     case 'coursebylanguage':
-        echo '<canvas class="col-md-12" id="canvas" height="300px" style="margin-bottom: 20px"></canvas>';
+        $content .=  '<canvas class="col-md-12" id="canvas" height="300px" style="margin-bottom: 20px"></canvas>';
         $result = Statistics::printCourseByLanguageStats();
-        Statistics::printStats(get_lang('CountCourseByLanguage'), $result, true);
+        $content .= Statistics::printStats(get_lang('CountCourseByLanguage'), $result, true);
         break;
     case 'courselastvisit':
-        Statistics::printCourseLastVisit();
+        $content .= Statistics::printCourseLastVisit();
         break;
     case 'users_active':
         $content = '';
@@ -653,21 +634,21 @@ switch ($report) {
             $startDate = $values['daterange_start'];
             $endDate = $values['daterange_end'];
 
-            echo '<div class="row">';
-            echo '<div class="col-md-4"><canvas id="canvas1" style="margin-bottom: 20px"></canvas></div>';
-            echo '<div class="col-md-4"><canvas id="canvas2" style="margin-bottom: 20px"></canvas></div>';
-            echo '<div class="col-md-4"><canvas id="canvas3" style="margin-bottom: 20px"></canvas></div>';
-            echo '</div>';
+            $content .=  '<div class="row">';
+            $content .=  '<div class="col-md-4"><canvas id="canvas1" style="margin-bottom: 20px"></canvas></div>';
+            $content .=  '<div class="col-md-4"><canvas id="canvas2" style="margin-bottom: 20px"></canvas></div>';
+            $content .=  '<div class="col-md-4"><canvas id="canvas3" style="margin-bottom: 20px"></canvas></div>';
+            $content .=  '</div>';
 
-            echo '<div class="row">';
-            echo '<div class="col-md-6"><canvas id="canvas4" style="margin-bottom: 20px"></canvas></div>';
-            echo '<div class="col-md-6"><canvas id="canvas5" style="margin-bottom: 20px"></canvas></div>';
-            echo '</div>';
+            $content .=  '<div class="row">';
+            $content .=  '<div class="col-md-6"><canvas id="canvas4" style="margin-bottom: 20px"></canvas></div>';
+            $content .=  '<div class="col-md-6"><canvas id="canvas5" style="margin-bottom: 20px"></canvas></div>';
+            $content .=  '</div>';
 
-            echo '<div class="row">';
-            echo '<div class="col-md-6"><canvas id="canvas6" style="margin-bottom: 20px"></canvas></div>';
-            echo '<div class="col-md-6"><canvas id="canvas7" style="margin-bottom: 20px"></canvas></div>';
-            echo '</div>';
+            $content .=  '<div class="row">';
+            $content .=  '<div class="col-md-6"><canvas id="canvas6" style="margin-bottom: 20px"></canvas></div>';
+            $content .=  '<div class="col-md-6"><canvas id="canvas7" style="margin-bottom: 20px"></canvas></div>';
+            $content .=  '</div>';
 
             $conditions = [];
             $extraConditions = '';
@@ -685,11 +666,32 @@ switch ($report) {
                 true
             );
 
+            $pagination = 10;
+
+            $table = new SortableTableFromArray(
+                [],
+                0,
+                $pagination,
+                'table_users_active',
+                null,
+                'table_users_active'
+            );
+
+            $table->actionButtons = ['export' => ['label' => get_lang('ExportToXls'), 'icon' => Display::return_icon('excel.png')]];
+
+            $first = ($table->page_nr - 1) * $pagination;
+            $limit = $table->page_nr * $pagination;
+
+            if (isset($_REQUEST['action_table']) && $_REQUEST['action_table'] === 'export') {
+                $first = 0;
+                $limit = $totalCount;
+            }
+
             $users = UserManager::getUserListExtraConditions(
                 $conditions,
                 [],
-                false,
-                false,
+                $first,
+                $limit,
                 null,
                 $extraConditions
             );
@@ -709,14 +711,6 @@ switch ($report) {
                 get_lang('UserBirthday'),
             ];
 
-            /*$table = new HTML_Table(['class' => 'table table-responsive', 'id' => 'user_report']);
-            $row = 0;
-            $column = 0;
-            foreach ($headers as $header) {
-                $table->setHeaderContents($row, $column, $header);
-                $column++;
-            }
-            $row++;*/
             $extraFieldValueUser = new ExtraFieldValue('user');
             $statusList = api_get_status_langvars();
             $data = [];
@@ -739,20 +733,6 @@ switch ($report) {
                 $career = isset($extraFields['filiere_user']) ? $extraFields['filiere_user'] : '';
                 $birthDate = isset($extraFields['terms_datedenaissance']) ? $extraFields['terms_datedenaissance'] : '';
 
-                /*$column = 0;
-                $table->setCellContents($row, $column++, $user['firstname']);
-                $table->setCellContents($row, $column++, $user['lastname']);
-                $table->setCellContents($row, $column++, api_get_local_time($user['registration_date']));
-                $table->setCellContents($row, $column++, $user['language']);
-                $table->setCellContents($row, $column++, $language);
-                $table->setCellContents($row, $column++, $contract? get_lang('Yes') : get_lang('No'));
-                $table->setCellContents($row, $column++, $residence);
-                $table->setCellContents($row, $column++, $career);
-                $table->setCellContents($row, $column++, $statusList[$user['status']]);
-                $table->setCellContents($row, $column++, $user['active'] == 1 ? get_lang('Yes') : get_lang('No'));
-                $table->setCellContents($row, $column++, $certificate ? get_lang('Yes') : get_lang('No'));
-                $table->setCellContents($row, $column++, $birthDate);*/
-
                 $item = [];
                 $item[] = $user['firstname'];
                 $item[] = $user['lastname'];
@@ -770,16 +750,13 @@ switch ($report) {
                 $row++;
             }
 
-            $table = new SortableTableFromArray(
-                $data,
-                0,
-                10,
-                'table_users_active',
-            null,
-                'table_users_active'
-            );
-            $table->total_number_of_items = $totalCount;
+            if (isset($_REQUEST['action_table']) && $_REQUEST['action_table'] === 'export') {
+                Export::arrayToXls($data);
+                exit;
+            }
 
+            $table->total_number_of_items = $totalCount;
+            $table->table_data = $data;
             unset($values['submit']);
             $table->set_additional_parameters($values);
 
@@ -789,24 +766,23 @@ switch ($report) {
                 $table->set_header($column, $header, false);
                 $column++;
             }
-            $content = $table->return_table();
+            $content .=  $table->return_table();
         }
 
-        echo $form->returnForm();
-        echo $content;
+        $content =  $form->returnForm().$content;
 
         break;
     case 'users':
-        echo '<div class="row">';
-        echo '<div class="col-md-4"><canvas id="canvas1" style="margin-bottom: 20px"></canvas></div>';
-        echo '<div class="col-md-4"><canvas id="canvas2" style="margin-bottom: 20px"></canvas></div>';
-        echo '<div class="col-md-4"><canvas id="canvas3" style="margin-bottom: 20px"></canvas></div>';
+        $content .= '<div class="row">';
+        $content .= '<div class="col-md-4"><canvas id="canvas1" style="margin-bottom: 20px"></canvas></div>';
+        $content .= '<div class="col-md-4"><canvas id="canvas2" style="margin-bottom: 20px"></canvas></div>';
+        $content .= '<div class="col-md-4"><canvas id="canvas3" style="margin-bottom: 20px"></canvas></div>';
 
-        echo '</div>';
+        $content .= '</div>';
         // total amount of users
         $teachers = $students = [];
         $countInvisible = isset($_GET['count_invisible_courses']) ? intval($_GET['count_invisible_courses']) : null;
-        Statistics::printStats(
+        $content .= Statistics::printStats(
             get_lang('NumberOfUsers'),
             [
                 get_lang('Teachers') => Statistics::countUsers(COURSEMANAGER, null, $countInvisible),
@@ -819,55 +795,75 @@ switch ($report) {
             $students[$name] = Statistics::countUsers(STUDENT, $code, $countInvisible);
         }
         // docents for each course category
-        Statistics::printStats(get_lang('Teachers'), $teachers);
+        $content .= Statistics::printStats(get_lang('Teachers'), $teachers);
         // students for each course category
-        Statistics::printStats(get_lang('Students'), $students);
+        $content .= Statistics::printStats(get_lang('Students'), $students);
         break;
     case 'recentlogins':
-        echo '<h2>'.sprintf(get_lang('LastXDays'), '15').'</h2>';
+        $content .= '<h2>'.sprintf(get_lang('LastXDays'), '15').'</h2>';
         $form = new FormValidator('session_time', 'get', api_get_self().'?report=recentlogins&session_duration='.$sessionDuration);
         $sessionTimeList = ['', 5 => 5, 15 => 15, 30 => 30, 60 => 60];
         $form->addSelect('session_duration', [get_lang('SessionMinDuration'), get_lang('Minutes')], $sessionTimeList);
         $form->addButtonSend(get_lang('Filter'));
         $form->addHidden('report', 'recentlogins');
-        $form->display();
+        $content .= $form->returnForm();
 
-        echo '<canvas class="col-md-12" id="canvas" height="200px" style="margin-bottom: 20px"></canvas>';
-        Statistics::printRecentLoginStats(false, $sessionDuration);
-        Statistics::printRecentLoginStats(true, $sessionDuration);
+        $content .= '<canvas class="col-md-12" id="canvas" height="200px" style="margin-bottom: 20px"></canvas>';
+        $content .= Statistics::printRecentLoginStats(false, $sessionDuration);
+        $content .= Statistics::printRecentLoginStats(true, $sessionDuration);
         break;
     case 'logins':
-        Statistics::printLoginStats($_GET['type']);
+        $content .= Statistics::printLoginStats($_GET['type']);
         break;
     case 'pictures':
-        Statistics::printUserPicturesStats();
+        $content .= Statistics::printUserPicturesStats();
         break;
     case 'no_login_users':
-        Statistics::printUsersNotLoggedInStats();
+        $content .= Statistics::printUsersNotLoggedInStats();
         break;
     case 'zombies':
-        ZombieReport::create(['report' => 'zombies'])->display();
+        $content .= ZombieReport::create(['report' => 'zombies'])->display(true);
         break;
     case 'activities':
-        Statistics::printActivitiesStats();
+        $content .=Statistics::printActivitiesStats();
         break;
     case 'messagesent':
         $messages_sent = Statistics::getMessages('sent');
-        Statistics::printStats(get_lang('MessagesSent'), $messages_sent);
+        $content .= Statistics::printStats(get_lang('MessagesSent'), $messages_sent);
         break;
     case 'messagereceived':
         $messages_received = Statistics::getMessages('received');
-        Statistics::printStats(get_lang('MessagesReceived'), $messages_received);
+        $content .= Statistics::printStats(get_lang('MessagesReceived'), $messages_received);
         break;
     case 'friends':
         // total amount of friends
         $friends = Statistics::getFriends();
-        Statistics::printStats(get_lang('CountFriends'), $friends);
+        $content .= Statistics::printStats(get_lang('CountFriends'), $friends);
         break;
     case 'logins_by_date':
-        Statistics::printLoginsByDate();
+        $content .= Statistics::printLoginsByDate();
         break;
 }
+
+Display::display_header($tool_name);
+echo Display::page_header($tool_name);
+echo '<table><tr>';
+foreach ($tools as $section => $items) {
+    echo '<td style="vertical-align:top;">';
+    echo '<h3>'.$section.'</h3>';
+    echo '<ul>';
+    foreach ($items as $key => $value) {
+        echo '<li><a href="index.php?'.$key.'">'.$value.'</a></li>';
+    }
+    echo '</ul>';
+    echo '</td>';
+}
+echo '</tr></table>';
+
+//@todo: spaces between elements should be handled in the css, br should be removed if only there for presentation
+echo '<br/><br/>';
+
+echo $content;
 
 Display::display_footer();
 

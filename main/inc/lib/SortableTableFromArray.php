@@ -65,7 +65,11 @@ class SortableTableFromArray extends SortableTable
             $content = $this->table_data;
         }
 
-        return array_slice($content, $from, $this->per_page);
+        if ($this->total_number_of_items === count($this->table_data) ) {
+            return array_slice($content, $from, $this->per_page);
+        }
+
+        return array_slice($content, 1, $this->per_page);
     }
 
     /**

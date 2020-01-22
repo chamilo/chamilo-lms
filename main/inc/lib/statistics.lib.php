@@ -421,8 +421,7 @@ class Statistics
         $isFileSize = false
     ) {
         $total = 0;
-        $data = self::rescale($stats);
-        echo '<table class="data_table" cellspacing="0" cellpadding="3">
+        $content = '<table class="data_table" cellspacing="0" cellpadding="3">
                 <tr><th colspan="'.($showTotal ? '4' : '3').'">'.$title.'</th></tr>';
         $i = 0;
         foreach ($stats as $subtitle => $number) {
@@ -437,14 +436,14 @@ class Statistics
             }
             $percentage = ($total > 0 ? number_format(100 * $number / $total, 1, ',', '.') : '0');
 
-            echo '<tr class="row_'.($i % 2 == 0 ? 'odd' : 'even').'">
+            $content .= '<tr class="row_'.($i % 2 == 0 ? 'odd' : 'even').'">
                     <td width="150">'.$subtitle.'</td>
                     <td width="550">'.Display::bar_progress($percentage, false).'</td>
                     <td align="right">'.$number_label.'</td>';
             if ($showTotal) {
-                echo '<td align="right"> '.$percentage.'%</td>';
+                $content .= '<td align="right"> '.$percentage.'%</td>';
             }
-            echo '</tr>';
+            $content .= '</tr>';
             $i++;
         }
         if ($showTotal) {
@@ -453,9 +452,11 @@ class Statistics
             } else {
                 $total_label = self::makeSizeString($total);
             }
-            echo '<tr><th colspan="4" align="right">'.get_lang('Total').': '.$total_label.'</td></tr>';
+            $content .= '<tr><th colspan="4" align="right">'.get_lang('Total').': '.$total_label.'</td></tr>';
         }
-        echo '</table>';
+        $content .= '</table>';
+
+        return $content;
     }
 
     /**
@@ -522,6 +523,7 @@ class Statistics
                 break;
         }
 
+        $content = '';
         if ($sql_last_x) {
             $res_last_x = Database::query($sql_last_x);
             $result_last_x = [];
@@ -529,9 +531,9 @@ class Statistics
                 $stat_date = ($type === 'day') ? $periodCollection[$obj->stat_date] : $obj->stat_date;
                 $result_last_x[$stat_date] = $obj->number_of_logins;
             }
-            self::printStats(get_lang('LastLogins').' ('.$period.')', $result_last_x, true);
+            $content .= self::printStats(get_lang('LastLogins').' ('.$period.')', $result_last_x, true);
             flush(); //flush web request at this point to see something already while the full data set is loading
-            echo '<br />';
+            $content .=  '<br />';
         }
         $res = Database::query($sql);
         $result = [];
@@ -549,7 +551,9 @@ class Statistics
             }
             $result[$stat_date] = $obj->number_of_logins;
         }
-        self::printStats(get_lang('AllLogins').' ('.$period.')', $result, true);
+        $content .= self::printStats(get_lang('AllLogins').' ('.$period.')', $result, true);
+
+        return $content;
     }
 
     /**
@@ -618,11 +622,15 @@ class Statistics
             $obj = Database::fetch_object($res);
             $totalLogin[$label] = $obj->number;
         }
+
         if ($distinct) {
-            self::printStats(get_lang('DistinctUsersLogins'), $totalLogin, false);
+            $content = self::printStats(get_lang('DistinctUsersLogins'), $totalLogin, false);
         } else {
-            self::printStats(get_lang('Logins'), $totalLogin, false);
+            $content = self::printStats(get_lang('Logins'), $totalLogin, false);
         }
+
+        return $content;
+
     }
 
     /**
@@ -796,7 +804,7 @@ class Statistics
         $result[get_lang('No')] = $count1->n - $count2->n;
         $result[get_lang('Yes')] = $count2->n; // #users with picture
 
-        self::printStats(get_lang('CountUsers').' ('.get_lang('UserPicture').')', $result, true);
+        return self::printStats(get_lang('CountUsers').' ('.get_lang('UserPicture').')', $result, true);
     }
 
     /**
@@ -804,7 +812,7 @@ class Statistics
      */
     public static function printActivitiesStats()
     {
-        echo '<h4>'.get_lang('ImportantActivities').'</h4>';
+        $content = '<h4>'.get_lang('ImportantActivities').'</h4>';
         // Create a search-box
         $form = new FormValidator(
             'search_simple',
@@ -821,9 +829,9 @@ class Statistics
         $form->addHidden('activities_column', '4');
         $form->addElement('text', 'keyword', get_lang('Keyword'));
         $form->addButtonSearch(get_lang('Search'), 'submit');
-        echo '<div class="actions">';
-        $form->display();
-        echo '</div>';
+        $content .= '<div class="actions">';
+        $content .= $form->returnForm();
+        $content .= '</div>';
 
         $table = new SortableTable(
             'activities',
@@ -849,7 +857,9 @@ class Statistics
         $table->set_header(5, get_lang('UserName'));
         $table->set_header(6, get_lang('IPAddress'));
         $table->set_header(7, get_lang('Date'));
-        $table->display();
+        $content = $table->toHtml();
+
+        return $content;
     }
 
     /**
@@ -883,7 +893,8 @@ class Statistics
             $defaults['date_diff'] = Security::remove_XSS($_GET['date_diff']);
         }
         $form->setDefaults($defaults);
-        $form->display();
+        $content = $form->returnForm();
+
         $values = $form->exportValues();
         $date_diff = $values['date_diff'];
         $table = Database::get_main_table(TABLE_STATISTIC_TRACK_E_LASTACCESS);
@@ -905,7 +916,7 @@ class Statistics
         $from = ($page_nr - 1) * $per_page;
         $sql .= ' LIMIT '.$from.','.$per_page;
 
-        echo '<p>'.get_lang('LastAccess').' &gt;= '.$date_diff.' '.get_lang('Days').'</p>';
+        $content .= '<p>'.get_lang('LastAccess').' &gt;= '.$date_diff.' '.get_lang('Days').'</p>';
         $res = Database::query($sql);
         if (Database::num_rows($res) > 0) {
             $courses = [];
@@ -921,6 +932,8 @@ class Statistics
             $parameters['report'] = 'courselastvisit';
             $table_header[] = [get_lang("CourseCode"), true];
             $table_header[] = [get_lang("LastAccess"), true];
+
+            ob_start();
             Display:: display_sortable_table(
                 $table_header,
                 $courses,
@@ -928,9 +941,13 @@ class Statistics
                 [],
                 $parameters
             );
+            $content .= ob_get_contents();
+            ob_end_clean();
         } else {
-            echo get_lang('NoSearchResults');
+            $content = get_lang('NoSearchResults');
         }
+
+        return $content;
     }
 
     /**
@@ -1069,7 +1086,7 @@ class Statistics
             $r = $total - $obj->number;
             $totalLogin[$index] = $r < 0 ? 0 : $r;
         }
-        self::printStats(
+        return self::printStats(
             get_lang('StatsUsersDidNotLoginInLastPeriods'),
             $totalLogin,
             false
@@ -1168,15 +1185,12 @@ class Statistics
             }
 
             Export::arrayToXls($data);
-
             exit;
         }
 
-        echo Display::page_header(get_lang('LoginsByDate'));
+        $content = Display::page_header(get_lang('LoginsByDate'));
 
         $actions = '';
-        $content = '';
-
         $form = new FormValidator('frm_logins_by_date', 'get');
         $form->addDateRangePicker(
             'daterange',
@@ -1224,13 +1238,13 @@ class Statistics
             $content = $table->toHtml();
         }
 
-        $form->display();
+        $content.= $form->returnForm();
 
         if (!empty($actions)) {
-            echo  Display::toolbarAction('logins_by_date_toolbar', [$actions]);
+            $content.=  Display::toolbarAction('logins_by_date_toolbar', [$actions]);
         }
 
-        echo $content;
+        return $content;
     }
 
     /**

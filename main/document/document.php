@@ -674,10 +674,12 @@ if (isset($document_id) && empty($action)) {
         true
     );
 
-    $parent_id = $document_data['parent_id'];
+    if (isset($document_data['parent_id'])) {
+        $parent_id = $document_data['parent_id'];
+    }
 }
 
-if (isset($document_data) && $document_data['path'] == '/certificates') {
+if (isset($document_data) && isset($document_data['path']) && $document_data['path'] == '/certificates') {
     $is_certificate_mode = true;
 }
 
@@ -2170,7 +2172,7 @@ if (count($documentAndFolders) > 1) {
     $ajaxURL = api_get_path(WEB_AJAX_PATH).'document.ajax.php?a=get_document_quota&'.api_get_cidreq();
     if ($isAllowedToEdit) {
         echo '<script>
-        $(function() {        
+        $(function() {
             $.ajax({
                 url:"'.$ajaxURL.'",
                 success:function(data){
@@ -2182,17 +2184,17 @@ if (count($documentAndFolders) > 1) {
     }
 
     echo '<script>
-    $(function() {        
+    $(function() {
         $(".document_size").each(function(i, obj) {
             var path = obj.getAttribute("data-path");
-                            
+
             $.ajax({
                 url:"'.$getSizeURL.'&path="+path,
                 success:function(data){
                     $(obj).html(data);
                 }
-            });            
-        });    
+            });
+        });
     });
     </script>';
 

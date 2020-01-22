@@ -677,25 +677,12 @@ switch ($report) {
                 'table_users_active'
             );
 
-            $table->actionButtons = ['export' => ['label' => get_lang('ExportToXls'), 'icon' => Display::return_icon('excel.png')]];
+            $table->actionButtons = ['export' => ['label' => get_lang('ExportAsXLS'), 'icon' => Display::return_icon('excel.png')]];
 
             $first = ($table->page_nr - 1) * $pagination;
             $limit = $table->page_nr * $pagination;
 
-            if (isset($_REQUEST['action_table']) && $_REQUEST['action_table'] === 'export') {
-                $first = 0;
-                $limit = $totalCount;
-            }
-
-            $users = UserManager::getUserListExtraConditions(
-                $conditions,
-                [],
-                $first,
-                $limit,
-                null,
-                $extraConditions
-            );
-
+            $data = [];
             $headers = [
                 get_lang('FirstName'),
                 get_lang('LastName'),
@@ -711,9 +698,25 @@ switch ($report) {
                 get_lang('UserBirthday'),
             ];
 
+
+            if (isset($_REQUEST['action_table']) && $_REQUEST['action_table'] === 'export') {
+                $first = 0;
+                $limit = $totalCount;
+                $data = $headers;
+            }
+
+            $users = UserManager::getUserListExtraConditions(
+                $conditions,
+                [],
+                $first,
+                $limit,
+                null,
+                $extraConditions
+            );
+
             $extraFieldValueUser = new ExtraFieldValue('user');
             $statusList = api_get_status_langvars();
-            $data = [];
+
             foreach ($users as $user) {
                 $userId = $user['user_id'];
                 $extraDataList = $extraFieldValueUser->getAllValuesByItem($userId);

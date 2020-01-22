@@ -131,6 +131,7 @@ if (
                 true,
                 ['format' => 'YYYY-MM-DD', 'timePicker' => 'false', 'validate_format' => 'Y-m-d']
             );
+
             $form->addHidden('report', 'users_active');
             $form->addButtonFilter(get_lang('Search'));
 
@@ -234,27 +235,29 @@ if (
                 true,
                 ['format' => 'YYYY-MM-DD', 'timePicker' => 'false', 'validate_format' => 'Y-m-d']
             );
+            $options = SessionManager::getStatusList();
+            $form->addSelect('status_id', get_lang('SessionStatus'), $options, ['placeholder' => get_lang('All')]);
 
             $form->addHidden('report', 'session_by_date');
             $form->addButtonSearch(get_lang('Search'));
 
-            $validated = $form->validate();
+            $validated = $form->validate() || isset($_REQUEST['range']);
             if ($validated) {
                 $urlBase = api_get_path(WEB_CODE_PATH).'inc/ajax/statistics.ajax.php?';
 
                 $dateStart = Security::remove_XSS($_REQUEST['range_start']);
                 $dateEnd = Security::remove_XSS($_REQUEST['range_end']);
+                $statusId = (int) $_REQUEST['status_id'];
 
-                $url1 = $urlBase.'a=session_by_date&filter=category&date_start='.$dateStart.'&date_end='.$dateEnd;
-                $url2 = $urlBase.'a=session_by_date&filter=language&date_start='.$dateStart.'&date_end='.$dateEnd;
-                $url3 = $urlBase.'a=session_by_date&filter=status&date_start='.$dateStart.'&date_end='.$dateEnd;
+                $conditions = "&date_start=$dateStart&date_end=$dateEnd&status=$statusId";
 
-                $url4 = $urlBase.'a=users_active&filter=language&date_start='.$dateStart.'&date_end='.$dateEnd;
+                $url1 = $urlBase.'a=session_by_date&filter=category'.$conditions;
+                $url2 = $urlBase.'a=session_by_date&filter=language'.$conditions;
+                $url3 = $urlBase.'a=session_by_date&filter=status'.$conditions;
 
                 $reportName1 = get_lang('SessionsPerCategory');
                 $reportName2 = get_lang('SessionsPerLanguage');
                 $reportName3 = get_lang('SessionsPerStatus');
-                $reportName4 = get_lang('UserByCareer');
 
                 $reportType = 'pie';
                 $reportOptions = '
@@ -270,7 +273,6 @@ if (
                 $reportOptions1 = sprintf($reportOptions, $reportName1);
                 $reportOptions2 = sprintf($reportOptions, $reportName2);
                 $reportOptions3 = sprintf($reportOptions, $reportName3);
-                $reportOptions4 = sprintf($reportOptions, $reportName4);
 
                 $htmlHeadXtra[] = Statistics::getJSChartTemplate(
                     $url1,
@@ -344,11 +346,11 @@ $content = '';
 
 switch ($report) {
     case 'session_by_date':
-        $content = '';
         if ($validated) {
             $values = $form->getSubmitValues();
-            $start = Database::escape_string($values['range_start']);
-            $end = Database::escape_string($values['range_end']);
+
+            $start = Security::remove_XSS($_REQUEST['range_start']);
+            $end = Security::remove_XSS($_REQUEST['range_end']);
 
             $first = DateTime::createFromFormat('Y-m-d', $start);
             $second = DateTime::createFromFormat('Y-m-d', $end);
@@ -364,12 +366,19 @@ switch ($report) {
             }
             $content .= '</div>';
 
+            $statusCondition = '';
+            if (!empty($statusId)) {
+                $statusCondition .= " AND status = $statusId ";
+            }
+
             // User count
             $table = Database::get_main_table(TABLE_MAIN_SESSION);
             $sql = "SELECT * FROM $table
                     WHERE
-                        display_start_date BETWEEN '$start' AND '$end' OR
-                        display_end_date BETWEEN '$start' AND '$end' ";
+                        (display_start_date BETWEEN '$start' AND '$end' OR
+                        display_end_date BETWEEN '$start' AND '$end')
+                        $statusCondition
+                    ";
             $result = Database::query($sql);
 
             $sessionCount = 0;
@@ -384,8 +393,10 @@ switch ($report) {
             // Coach
             $sql = "SELECT count(DISTINCT(id_coach)) count FROM $table
                     WHERE
-                        display_start_date BETWEEN '$start' AND '$end' OR
-                        display_end_date BETWEEN '$start' AND '$end' ";
+                        (display_start_date BETWEEN '$start' AND '$end' OR
+                        display_end_date BETWEEN '$start' AND '$end')
+                        $statusCondition
+                     ";
             $result = Database::query($sql);
             $row = Database::fetch_array($result);
             $uniqueCoaches = $row['count'];
@@ -393,8 +404,9 @@ switch ($report) {
             // Categories
             $sql = "SELECT count(id) count, session_category_id FROM $table
                     WHERE
-                        display_start_date BETWEEN '$start' AND '$end' OR
-                        display_end_date BETWEEN '$start' AND '$end'
+                        (display_start_date BETWEEN '$start' AND '$end' OR
+                        display_end_date BETWEEN '$start' AND '$end')
+                        $statusCondition;
                     GROUP BY session_category_id
                     ";
 
@@ -509,7 +521,24 @@ switch ($report) {
             }
             $content .= $table->toHtml();
         }
-        $content .= $form->returnForm();
+
+        if (isset($_REQUEST['action']) && $_REQUEST['action'] === 'export') {
+            $data = $table->toArray();
+            Export::arrayToXls($data);
+            exit;
+        }
+
+        $url = api_get_self().'?report=session_by_date&action=export';
+        foreach ($values as $index => $value) {
+            $url .= '&'.$index.'='.$value;
+        }
+
+        $link = Display::url(
+            Display::return_icon('excel.png').'&nbsp;'.get_lang('ExportAsXLS'),
+            $url,
+            ['class' => 'btn btn-default']
+        );
+        $content = $form->returnForm().$link.$content;
 
         break;
     case 'user_session':

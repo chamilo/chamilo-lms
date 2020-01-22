@@ -496,6 +496,7 @@ switch ($action) {
 
         $startDate = Database::escape_string($_REQUEST['date_start']);
         $endDate = Database::escape_string($_REQUEST['date_end']);
+        $statusId = (int) $_REQUEST['status'];
 
         /*$extraConditions = '';
         if (!empty($startDate) && !empty($endDate)) {
@@ -503,12 +504,18 @@ switch ($action) {
         }*/
         $table = Database::get_main_table(TABLE_MAIN_SESSION);
 
+        $statusCondition = '';
+        if (!empty($statusId)) {
+            $statusCondition .= " AND status = $statusId ";
+        }
+
         switch ($filter) {
             case 'category':
                 $sql = "SELECT count(id) count, session_category_id FROM $table
                         WHERE
-                            display_start_date BETWEEN '$startDate' AND '$endDate' OR
-                            display_end_date BETWEEN '$startDate' AND '$endDate'
+                            (display_start_date BETWEEN '$startDate' AND '$endDate' OR
+                            display_end_date BETWEEN '$startDate' AND '$endDate')
+                            $statusCondition
                         GROUP BY session_category_id
                     ";
 
@@ -531,8 +538,11 @@ switch ($action) {
 
                 $sql = "SELECT count(id) count, status FROM $table
                         WHERE
-                            display_start_date BETWEEN '$startDate' AND '$endDate' OR
-                            display_end_date BETWEEN '$startDate' AND '$endDate'
+                            (
+                                display_start_date BETWEEN '$startDate' AND '$endDate' OR
+                                display_end_date BETWEEN '$startDate' AND '$endDate'
+                            )
+                            $statusCondition
                         GROUP BY status
                     ";
                 $result = Database::query($sql);
@@ -546,8 +556,9 @@ switch ($action) {
             case 'language':
                 $sql = "SELECT id FROM $table
                         WHERE
-                            display_start_date BETWEEN '$startDate' AND '$endDate' OR
-                            display_end_date BETWEEN '$startDate' AND '$endDate'
+                            (display_start_date BETWEEN '$startDate' AND '$endDate' OR
+                            display_end_date BETWEEN '$startDate' AND '$endDate')
+                            $statusCondition
                     ";
 
                 $result = Database::query($sql);

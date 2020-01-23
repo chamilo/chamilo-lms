@@ -270,32 +270,6 @@
         //appNotifications.init();
     });
 </script>
-<li class="dropdown notification_event">
-    <a class="btn btn-secondary dropdown-toggle" href="#"
-       id="notifications-dropdown" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-        <i id="notificationsIcon" class="fa fa-bell-o" aria-hidden="true"></i>
-        {# hide red button loading #}
-        <span id="notificationsBadge" class="label label-danger">
-            <i class="fa fa-spinner fa-pulse fa-fw" aria-hidden="true"></i>
-        </span>
-    </a>
-    <div class="dropdown-menu notification-dropdown-menu" aria-labelledby="notifications-dropdown">
-        <h6 class="dropdown-header">Notifications</h6>
-        <a id="notificationsLoader" class="dropdown-item dropdown-notification" href="#">
-            <p class="notification-solo text-center">
-                <i id="notificationsIcon" class="fa fa-spinner fa-pulse fa-fw" aria-hidden="true"></i>
-                {{ 'Loading' | get_lang }}
-            </p>
-        </a>
-        <ul id="notificationsContainer" class="notifications-container"></ul>
-        <a id="notificationEmpty" class="dropdown-item dropdown-notification" href="#">
-            <p class="notification-solo text-center"> {{ 'NoNewNotification' | get_lang }}</p>
-        </a>
-{#        <a class="dropdown-item dropdown-notification-all" href="#">#}
-{#           {{ 'SeeAllNotifications' | get_lang }}#}
-{#        </a>#}
-    </div>
-</li>
 
 <!-- template -->
 <script id="notificationTemplate" type="text/html">

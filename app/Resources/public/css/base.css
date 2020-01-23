@@ -8577,6 +8577,17 @@ main[dir="rtl"] .radio-inline input[type=radio]{
 .key-login{
     display: none;
 }
+
+#user-dropdown {
+    padding:3px;
+}
+
+.menu-dropdown {
+    border: none;
+}
+
+
+
 /* CSS Responsive */
 @media (min-width: 1025px) and (max-width: 1200px) {
     .sidebar-scorm {
@@ -8589,6 +8600,25 @@ main[dir="rtl"] .radio-inline input[type=radio]{
 }
 
 @media (min-width: 1024px) {
+    .navbar-header {
+        float: right !important;
+        margin-right: 50px;
+    }
+
+    #notification-menu {
+        float: right !important;
+    }
+
+    #notifications-dropdown {
+        display: block;
+        float:right !important;
+    }
+
+    #user-dropdown{
+        display: block;
+        float:right !important;
+    }
+
     .sidebar-scorm {
         width: 25.66666667%;
     }
@@ -8635,7 +8665,14 @@ main[dir="rtl"] .radio-inline input[type=radio]{
 
 /* Landscape phones and down */
 @media only screen and (min-device-width: 320px) and (max-device-width: 480px) {
+    #notification-menu{
+        width: 250px !important;
+        min-width : 250px !important;
+    }
 
+    #notification-dropdown-menu{
+        width: 200px !important;
+    }
     #learning_path_breadcrumb_zone {
     }
 
@@ -8717,10 +8754,16 @@ main[dir="rtl"] .radio-inline input[type=radio]{
     #show_graph {
         text-align: center;
     }
-
 }
 
 @media (min-width: 480px) and (max-width: 767px) {
+    #user-dropdown {
+        display: none;
+    }
+    #notification-menu{
+        width: 300px !important;
+        min-width : 300px !important;
+    }
     #touch-button {
         top: 5px;
     }
@@ -8775,7 +8818,6 @@ main[dir="rtl"] .radio-inline input[type=radio]{
 
 @media (min-width: 320px) and (max-width: 479px) {
     footer {
-
         padding-top: 15px;
     }
 
@@ -10269,4 +10311,3 @@ ul.dropdown-menu.inner > li > a {
     }
 }
 
-/*-------------------------------------------------------------------------------------*/

@@ -7,7 +7,7 @@ namespace Chamilo\FaqBundle\Entity;
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Mapping\Annotation as Gedmo;
 use Gedmo\Timestampable\Traits\TimestampableEntity;
-use Knp\DoctrineBehaviors\Model as ORMBehaviors;
+use Knp\DoctrineBehaviors\Model\Translatable\TranslationTrait;
 
 /**
  * Class Question.
@@ -17,7 +17,7 @@ use Knp\DoctrineBehaviors\Model as ORMBehaviors;
  */
 class Question
 {
-    use ORMBehaviors\Translatable\Translatable;
+    use TranslationTrait;
     use TimestampableEntity;
 
     /**

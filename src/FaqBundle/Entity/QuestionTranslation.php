@@ -6,7 +6,7 @@ namespace Chamilo\FaqBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Mapping\Annotation as Gedmo;
-use Knp\DoctrineBehaviors\Model as ORMBehaviors;
+use Knp\DoctrineBehaviors\Model\Translatable\TranslationTrait;
 
 /**
  * Class CategoryTranslation.
@@ -29,7 +29,7 @@ use Knp\DoctrineBehaviors\Model as ORMBehaviors;
  */
 class QuestionTranslation
 {
-    use ORMBehaviors\Translatable\Translation;
+    use TranslationTrait;
 
     /**
      * @ORM\Column(type="string", length=255, nullable=false)

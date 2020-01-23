@@ -2,8 +2,7 @@
 
 namespace Chamilo\PluginBundle\MigrationMoodle\Transformer\Property;
 
-use Chamilo\CoreBundle\Entity\Course;
-use Chamilo\PluginBundle\MigrationMoodle\Task\CoursesTask;
+use Chamilo\PluginBundle\MigrationMoodle\Task\EfcCoursesTask;
 
 /**
  * Class LoadedCourseCodeLookup.
@@ -17,7 +16,7 @@ class LoadedCourseCodeLookup extends LoadedKeyLookup
      */
     public function __construct()
     {
-        $this->calledClass = CoursesTask::class;
+        $this->calledClass = EfcCoursesTask::class;
     }
 
     /**

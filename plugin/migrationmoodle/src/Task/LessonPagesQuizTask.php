@@ -3,7 +3,7 @@
 
 namespace Chamilo\PluginBundle\MigrationMoodle\Task;
 
-use Chamilo\PluginBundle\MigrationMoodle\Extractor\BaseExtractor;
+use Chamilo\PluginBundle\MigrationMoodle\Extractor\CourseExtractor;
 use Chamilo\PluginBundle\MigrationMoodle\Loader\LessonQuestionPagesQuizLoader;
 use Chamilo\PluginBundle\MigrationMoodle\Transformer\BaseTransformer;
 use Chamilo\PluginBundle\MigrationMoodle\Transformer\Property\LoadedCourseLookup;
@@ -24,7 +24,7 @@ class LessonPagesQuizTask extends BaseTask
     public function getExtractConfiguration()
     {
         return [
-            'class' => BaseExtractor::class,
+            'class' => CourseExtractor::class,
             'query' => 'SELECT lp.id, l.course, lp.title
                 FROM mdl_lesson_pages lp
                 INNER JOIN mdl_lesson l ON lp.lessonid = l.id

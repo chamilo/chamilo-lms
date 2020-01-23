@@ -3,13 +3,12 @@
 
 namespace Chamilo\PluginBundle\MigrationMoodle\Task;
 
-use Chamilo\PluginBundle\MigrationMoodle\Extractor\BaseExtractor;
+use Chamilo\PluginBundle\MigrationMoodle\Extractor\CourseExtractor;
 use Chamilo\PluginBundle\MigrationMoodle\Loader\LessonQuestionPagesQuestionLoader;
 use Chamilo\PluginBundle\MigrationMoodle\Transformer\BaseTransformer;
 use Chamilo\PluginBundle\MigrationMoodle\Transformer\Property\LoadedCourseLookup;
 use Chamilo\PluginBundle\MigrationMoodle\Transformer\Property\LoadedQuizLookup;
 use Chamilo\PluginBundle\MigrationMoodle\Transformer\Property\QuestionType;
-use Chamilo\PluginBundle\MigrationMoodle\Transformer\Property\QuizQuestionTypeFromLessonPage;
 use Chamilo\PluginBundle\MigrationMoodle\Transformer\Property\ReplaceFilePaths;
 
 /**
@@ -25,7 +24,7 @@ class QuestionsTask extends BaseTask
     public function getExtractConfiguration()
     {
         return [
-            'class' => BaseExtractor::class,
+            'class' => CourseExtractor::class,
             'query' => "SELECT qq.id, qq.category, qq.questiontext, qq.qtype, q.course, q.id quiz_id
                 FROM mdl_question qq
                 INNER JOIN mdl_quiz_slots qs ON qq.id = qs.questionid

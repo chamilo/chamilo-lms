@@ -28,6 +28,10 @@ abstract class LoadedKeyLookup implements TransformPropertyInterface
 
         $migration = $this->search($id);
 
+        if (empty($migration)) {
+            throw new \Exception("Loaded ID not found in {$this->getTaskName()}.");
+        }
+
         return $migration['loaded_id'];
     }
 

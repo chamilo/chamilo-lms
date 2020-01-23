@@ -3,7 +3,7 @@
 
 namespace Chamilo\PluginBundle\MigrationMoodle\Task;
 
-use Chamilo\PluginBundle\MigrationMoodle\Extractor\BaseExtractor;
+use Chamilo\PluginBundle\MigrationMoodle\Extractor\CourseExtractor;
 use Chamilo\PluginBundle\MigrationMoodle\Loader\CourseModulesLessonLoader;
 use Chamilo\PluginBundle\MigrationMoodle\Transformer\BaseTransformer;
 use Chamilo\PluginBundle\MigrationMoodle\Transformer\Property\LoadedCourseCodeLookup;
@@ -26,7 +26,7 @@ class CourseModulesLessonTask extends BaseTask
     public function getExtractConfiguration()
     {
         return [
-            'class' => BaseExtractor::class,
+            'class' => CourseExtractor::class,
             'query' => "SELECT cm.id, l.course, l.name, cs.sequence, cm.section FROM mdl_lesson l
                 INNER JOIN mdl_course_modules cm ON (l.course = cm.course AND cm.instance = l.id)
                 INNER JOIN mdl_modules m ON cm.module = m.id

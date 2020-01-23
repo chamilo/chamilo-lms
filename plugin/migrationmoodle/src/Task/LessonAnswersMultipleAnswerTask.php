@@ -3,7 +3,7 @@
 
 namespace Chamilo\PluginBundle\MigrationMoodle\Task;
 
-use Chamilo\PluginBundle\MigrationMoodle\Extractor\BaseExtractor;
+use Chamilo\PluginBundle\MigrationMoodle\Extractor\CourseExtractor;
 use Chamilo\PluginBundle\MigrationMoodle\Loader\LessonAnswersMultipleAnswerLoader;
 
 /**
@@ -21,11 +21,11 @@ class LessonAnswersMultipleAnswerTask extends LessonAnswersMultipleChoiceTask
     public function getExtractConfiguration()
     {
         return [
-            'class' => BaseExtractor::class,
+            'class' => CourseExtractor::class,
             'query' => 'SELECT la.id, la.pageid, la.score, la.answer, la.response, l.course
                 FROM mdl_lesson_answers la
                 INNER JOIN mdl_lesson_pages lp ON (la.pageid = lp.id AND la.lessonid = lp.lessonid)
-                INNER JOIN mdl_lesson l ON (lp.lessonid = l.id AND la.lessonid = l.id) 
+                INNER JOIN mdl_lesson l ON (lp.lessonid = l.id AND la.lessonid = l.id)
                 WHERE lp.qtype = 3 AND lp.qoption = 1
                 ORDER BY lp.id',
         ];

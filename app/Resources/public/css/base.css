@@ -335,6 +335,104 @@ select {
     border-radius: 10px 0 0 10px;
 }
 
+.dropdown-item.dropdown-notification:active, .dropdown-item.dropdown-notification.active {
+    color: #1d1e1f;
+    text-decoration: none;
+    background-color: #f7f7f9;
+}
+.dropdown-notification:hover .notification-read {
+    color: #34495E;
+}
+.dropdown-notification-all {
+    text-align: center;
+    padding-top: 5px;
+    padding-bottom: 5px;
+    font-style: oblique;
+    background-color: #34495E;
+    color: white;
+}
+.dropdown-notification-all:hover {
+    background-color: #34495E;
+    color: white;
+}
+.notifications-container {
+    max-height: 300px;
+    overflow: auto;
+    margin: 0;
+    list-style: none;
+    padding: 0;
+}
+.notification-dropdown-menu {
+    padding-bottom: 0;
+    min-width: 350px !important;
+}
+.notification-img {
+    width: 48px;
+    display: inline-block;
+    vertical-align: top;
+}
+.notifications-body {
+    display: inline-block;
+    width: 100%;
+    color: #565a5c;
+}
+.notification-title {
+    font-weight: bold;
+}
+.notification-read {
+    margin: 0;
+    height: 48px;
+    vertical-align: top;
+    line-height: 48px;
+    padding-left: 15px;
+    color: white;
+    float: right;
+}
+.notification-date {
+    text-align: left;
+    color: #2980b9;
+    margin: 0;
+}
+.notification-solo {
+    margin-top: 1rem;
+}
+.notification-unread {
+    text-decoration: none;
+    background-color: #f7f7f9;
+}
+.notification-dropdown-menu{
+    padding: 0 !important;
+}
+.notification-dropdown-menu .dropdown-header{
+    border-bottom: 1px solid rgba(0,0,0,.15);
+    padding-bottom: 1rem;
+}
+.notification-dropdown-menu .fw-600{
+    font-weight: 600;
+}
+.notification-dropdown-menu .c-grey-900{
+    color: #313435!important;
+    font-size: 14px;
+}
+.notification-dropdown-menu .dropdown-notification{
+    padding: 15px;
+    border-bottom: 1px solid rgba(0,0,0,.0625)!important;
+    font-size: 12px;
+}
+.notification-dropdown-menu .dropdown-notification a.link{
+    margin: 0;
+    width: 100%;
+}
+.notification-dropdown-menu .dropdown-notification a{
+    display: inline-flex;
+    flex-direction: row;
+    flex-wrap: nowrap;
+}
+.notification-dropdown-menu .notification-event-text{
+    margin-top: 5px;
+    color: #9c9c9c;
+}
+
 .cookieUsageValidation {
     padding: 5px;
     text-align: center;

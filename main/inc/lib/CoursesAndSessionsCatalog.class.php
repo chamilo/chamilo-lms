@@ -597,7 +597,7 @@ class CoursesAndSessionsCatalog
                     (
                         s.accessStartDate IS NULL AND 
                         s.accessEndDate IS NOT NULL AND 
-                        s.accessStartDate >= '$date'
+                        s.accessEndDate <= '$date'
                     )
                 )
             ";

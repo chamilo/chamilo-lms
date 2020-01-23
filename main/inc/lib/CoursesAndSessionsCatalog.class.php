@@ -592,12 +592,12 @@ class CoursesAndSessionsCatalog
                     ( 
                     s.accessStartDate IS NOT NULL AND  
                     s.accessEndDate IS NOT NULL AND
-                    s.accessStartDate >= '$date' AND s.accessEndDate <= '$date')                    
+                    s.accessStartDate <= '$date' AND s.accessEndDate >= '$date')                    
                     OR 
                     (
                         s.accessStartDate IS NULL AND 
                         s.accessEndDate IS NOT NULL AND 
-                        s.accessEndDate <= '$date'
+                        s.accessEndDate >= '$date'
                     )
                 )
             ";

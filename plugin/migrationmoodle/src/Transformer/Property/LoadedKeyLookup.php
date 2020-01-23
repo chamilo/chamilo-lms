@@ -20,7 +20,7 @@ abstract class LoadedKeyLookup implements TransformPropertyInterface
      *
      * @throws \Exception
      *
-     * @return mixed
+     * @return int
      */
     public function transform(array $data)
     {
@@ -28,11 +28,7 @@ abstract class LoadedKeyLookup implements TransformPropertyInterface
 
         $migration = $this->search($id);
 
-        if (empty($migration)) {
-            throw new \Exception("Loaded ID not found in {$this->getTaskName()}.");
-        }
-
-        return $migration['loaded_id'];
+        return isset($migration['loaded_id']) ? $migration['loaded_id'] : 0;
     }
 
     /**

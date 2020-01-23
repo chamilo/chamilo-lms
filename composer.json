@@ -103,7 +103,7 @@
         "mopa/bootstrap-bundle": "~3.3",
         "mpdf/mpdf": "~8.0",
         "oneup/flysystem-bundle": "~3.0",
-        "oneup/uploader-bundle": "dev-master",
+        "oneup/uploader-bundle": "~2.0",
         "overblog/graphql-bundle": "~0.11",
         "paragonie/random-lib": "~2.0",
         "patchwork/utf8": "~1.3",

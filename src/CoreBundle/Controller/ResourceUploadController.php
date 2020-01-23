@@ -87,14 +87,6 @@ class ResourceUploadController extends BlueimpController
 
                     $resource = $repo->saveUpload($file);
 
-                    // Uploading file.
-                    /*$document = new CDocument();
-                    $document
-                        ->setFiletype('file')
-                        ->setTitle($title)
-                        ->setSize($file->getSize())
-                    ;*/
-
                     $repo->addResourceToCourseWithParent(
                         $resource,
                         $parent,

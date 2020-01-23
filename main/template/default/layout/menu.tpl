@@ -80,7 +80,11 @@
                     <i class="fa fa-spinner fa-pulse fa-fw" aria-hidden="true"></i>
                     </span>
                     <div id="notification-menu" class="dropdown-menu notification-dropdown-menu" aria-labelledby="notifications-dropdown">
-                        <h6 class="dropdown-header">Notifications</h6>
+                        <h5 class="dropdown-header">
+                            <i class="fa fa-bell-o" aria-hidden="true"></i> <span class="fw-600 c-grey-900">
+                                {{ 'Notifications' | get_lang }}
+                            </span>
+                        </h5>
                         <a id="notificationsLoader" class="dropdown-item dropdown-notification" href="#">
                             <p class="notification-solo text-center">
                                 <i id="notificationsIcon" class="fa fa-spinner fa-pulse fa-fw" aria-hidden="true"></i>
@@ -94,8 +98,6 @@
                     </div>
                 </button>
             {% endif %}
-
-{#            <a class="navbar-brand" href="{{ _p.web }}">{{ _s.site_name }}</a>#}
             <a class="navbar-brand" href="{{ _p.web }}"> <i class="fa fa-home"></i> </a>
         </div>
 

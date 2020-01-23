@@ -10,19 +10,24 @@
     </script>
     <div class="row">
         <div class="col-md-12">
+        {{ actions }}
         <!-- header catalog session -->
-        <h2 class="title-session">{{ 'Sessions'|get_lang }}</h2>
        	<div class="search-session">
                 <div class="row">
-                {% if show_courses %}
                     <div class="col-md-4">
-                        <div class="return-catalog">
-                            <a class="btn btn-default btn-lg btn-block" href="{{ _p.web_self }}">
-                                <em class="fa fa-arrow-left"></em> {{ "CourseManagement"|get_lang }}
-                            </a>
+                    <form method="post" action="{{ _p.web_self }}?action=search_session_title">
+                        <label>{{ "Name"|get_lang }}</label>
+                        <div class="input-group">
+                            <input type="text" name="keyword" title="{{ 'Name'|get_lang }}" class="form-control"
+                                   value="{{ keyword }}"/>
+                            <span class="input-group-btn">
+                                    <button class="btn btn-default" type="submit">
+                                        <em class="fa fa-search"></em> {{ 'Search'|get_lang }}
+                                    </button>
+                                </span>
                         </div>
+                    </form>
                     </div>
-                {% endif %}
 
                 {% if show_courses %}
                     <div class="col-md-4">

@@ -1,4 +1,5 @@
 <?php
+
 /* For licensing terms, see /license.txt */
 
 use Chamilo\CoreBundle\Entity\Repository\SequenceRepository;
@@ -376,6 +377,7 @@ class CoursesController
         );
 
         $tpl = new Template();
+        $tpl->assign('actions', self::getTabList(2));
         $tpl->assign('show_courses', CoursesAndSessionsCatalog::showCourses());
         $tpl->assign('show_sessions', CoursesAndSessionsCatalog::showSessions());
         $tpl->assign('show_tutor', api_get_setting('show_session_coach') === 'true');
@@ -398,11 +400,76 @@ class CoursesController
      *
      * @param array $limit Limit info
      */
+    public function sessionsListByName(array $limit)
+    {
+        $keyword = isset($_POST['keyword']) ? $_POST['keyword'] : null;
+        $hiddenLinks = isset($_GET['hidden_links']) ? (int) $_GET['hidden_links'] == 1 : false;
+        $courseUrl = CourseCategory::getCourseCategoryUrl(
+            1,
+            $limit['length'],
+            null,
+            0,
+            'subscribe'
+        );
+
+        $sessions = CoursesAndSessionsCatalog::getSessionsByName($keyword, $limit);
+        $sessionsBlocks = $this->getFormattedSessionsBlock($sessions);
+
+        $tpl = new Template();
+        $tpl->assign('actions', self::getTabList(2));
+        $tpl->assign('show_courses', CoursesAndSessionsCatalog::showCourses());
+        $tpl->assign('show_sessions', CoursesAndSessionsCatalog::showSessions());
+        $tpl->assign('show_tutor', api_get_setting('show_session_coach') === 'true' ? true : false);
+        $tpl->assign('course_url', $courseUrl);
+        $tpl->assign('already_subscribed_label', $this->getAlreadyRegisteredInSessionLabel());
+        $tpl->assign('hidden_links', $hiddenLinks);
+        $tpl->assign('search_token', Security::get_token());
+        $tpl->assign('keyword', Security::remove_XSS($keyword));
+        $tpl->assign('sessions', $sessionsBlocks);
+
+        $contentTemplate = $tpl->get_template('auth/session_catalog.tpl');
+
+        $tpl->display($contentTemplate);
+    }
+
+    /**
+     * @param int $active
+     *
+     * @return string
+     */
+    public static function getTabList($active = 1)
+    {
+        $pageLength = isset($_GET['pageLength']) ? (int) $_GET['pageLength'] : CoursesAndSessionsCatalog::PAGE_LENGTH;
+
+        $url = CourseCategory::getCourseCategoryUrl(1, $pageLength, null, 0, 'display_sessions');
+        $headers = [];
+        if (CoursesAndSessionsCatalog::showCourses()) {
+            $headers[] =  [
+                'url' => api_get_self(),
+                'content' => get_lang('CourseManagement'),
+            ];
+        }
+
+        if (CoursesAndSessionsCatalog::showSessions()) {
+            $headers[] =  [
+                'url' => $url,
+                'content' => get_lang('SessionList'),
+            ];
+        }
+
+        return Display::tabsOnlyLink($headers, $active);
+    }
+
+    /**
+     * Show the Session Catalogue with filtered session by course tags.
+     *
+     * @param array $limit Limit info
+     */
     public function sessionsListByCoursesTag(array $limit)
     {
         $searchTag = isset($_POST['search_tag']) ? $_POST['search_tag'] : null;
         $searchDate = isset($_POST['date']) ? $_POST['date'] : date('Y-m-d');
-        $hiddenLinks = isset($_GET['hidden_links']) ? intval($_GET['hidden_links']) == 1 : false;
+        $hiddenLinks = isset($_GET['hidden_links']) ? (int) $_GET['hidden_links'] == 1 : false;
         $courseUrl = CourseCategory::getCourseCategoryUrl(
             1,
             $limit['length'],

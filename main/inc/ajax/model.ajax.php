@@ -701,6 +701,11 @@ switch ($action) {
                 $extraFieldsToLoad[] = $fieldData;
             }
         }
+
+        if ($list_type === 'custom') {
+            $whereCondition .= ' AND (s.status IN ("'.SessionManager::STATUS_PLANNED.'", "'.SessionManager::STATUS_PROGRESS.'") ) ';
+        }
+
         if ($list_type === 'simple' || $list_type === 'custom') {
             $count = SessionManager::get_sessions_admin(
                 ['where' => $whereCondition, 'extra' => $extra_fields],

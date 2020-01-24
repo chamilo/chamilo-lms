@@ -52,11 +52,9 @@ $actions = '
 $(function() {
     $("#course_name").on("change", function() {
        var courseId = $(this).val();
-
        if (!courseId) {
-        return;
+            return;
        }
-
        window.location = "'.$url.'?course_id="+courseId;
     });
 });

@@ -17,7 +17,7 @@ $htmlHeadXtra[] = api_get_jqgrid_js();
 
 $action = isset($_REQUEST['action']) ? $_REQUEST['action'] : null;
 $idChecked = isset($_REQUEST['idChecked']) ? $_REQUEST['idChecked'] : null;
-$list_type = isset($_REQUEST['list_type']) ? $_REQUEST['list_type'] : 'custom';
+$list_type = isset($_REQUEST['list_type']) ? $_REQUEST['list_type'] : 'simple';
 
 $tool_name = get_lang('SessionList');
 Display::display_header($tool_name);

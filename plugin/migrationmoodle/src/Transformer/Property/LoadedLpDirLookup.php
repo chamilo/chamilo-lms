@@ -3,7 +3,6 @@
 
 namespace Chamilo\PluginBundle\MigrationMoodle\Transformer\Property;
 
-use Chamilo\PluginBundle\MigrationMoodle\Interfaces\TransformPropertyInterface;
 use Chamilo\PluginBundle\MigrationMoodle\Task\CourseModulesLessonTask;
 
 /**

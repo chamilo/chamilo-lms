@@ -4,12 +4,6 @@
 namespace Chamilo\PluginBundle\MigrationMoodle\Task;
 
 use Chamilo\PluginBundle\MigrationMoodle\Extractor\BaseExtractor;
-use Chamilo\PluginBundle\MigrationMoodle\Loader\UsersLoader;
-use Chamilo\PluginBundle\MigrationMoodle\Transformer\BaseTransformer;
-use Chamilo\PluginBundle\MigrationMoodle\Transformer\Property\AuthLookup;
-use Chamilo\PluginBundle\MigrationMoodle\Transformer\Property\DateTimeObject;
-use Chamilo\PluginBundle\MigrationMoodle\Transformer\Property\UserActive;
-use Chamilo\PluginBundle\MigrationMoodle\Transformer\Property\UserStatus;
 
 /**
  * Class EfcUsersTask.

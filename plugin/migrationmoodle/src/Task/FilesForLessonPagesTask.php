@@ -4,9 +4,6 @@
 namespace Chamilo\PluginBundle\MigrationMoodle\Task;
 
 use Chamilo\PluginBundle\MigrationMoodle\Extractor\BaseExtractor;
-use Chamilo\PluginBundle\MigrationMoodle\Loader\CourseFilesLoader;
-use Chamilo\PluginBundle\MigrationMoodle\Transformer\BaseTransformer;
-use Chamilo\PluginBundle\MigrationMoodle\Transformer\Property\LoadedCourseLookup;
 
 /**
  * Class FilesForLessonPagesTask.

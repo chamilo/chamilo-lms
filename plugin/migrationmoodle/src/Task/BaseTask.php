@@ -7,7 +7,6 @@ use Chamilo\PluginBundle\MigrationMoodle\Interfaces\ExtractorInterface;
 use Chamilo\PluginBundle\MigrationMoodle\Interfaces\LoaderInterface;
 use Chamilo\PluginBundle\MigrationMoodle\Interfaces\TransformerInterface;
 use Chamilo\PluginBundle\MigrationMoodle\Traits\MapTrait\MapTrait;
-use Symfony\Component\Filesystem\Filesystem;
 
 /**
  * Class BaseTask.

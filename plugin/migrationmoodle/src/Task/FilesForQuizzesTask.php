@@ -4,7 +4,6 @@
 namespace Chamilo\PluginBundle\MigrationMoodle\Task;
 
 use Chamilo\PluginBundle\MigrationMoodle\Extractor\BaseExtractor;
-use Chamilo\PluginBundle\MigrationMoodle\Transformer\BaseTransformer;
 
 /**
  * Class FilesForQuizzesTask.

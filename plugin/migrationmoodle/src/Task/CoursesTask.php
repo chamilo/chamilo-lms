@@ -9,7 +9,6 @@ use Chamilo\PluginBundle\MigrationMoodle\Transformer\BaseTransformer;
 use Chamilo\PluginBundle\MigrationMoodle\Transformer\Property\CourseCategoryLookup;
 use Chamilo\PluginBundle\MigrationMoodle\Transformer\Property\CourseVisibility;
 use Chamilo\PluginBundle\MigrationMoodle\Transformer\Property\DateTimeObject;
-use Chamilo\PluginBundle\MigrationMoodle\Transformer\Property\IsFalse;
 use Chamilo\PluginBundle\MigrationMoodle\Transformer\Property\Language;
 
 /**

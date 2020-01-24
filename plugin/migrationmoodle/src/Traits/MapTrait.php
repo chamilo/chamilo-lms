@@ -13,10 +13,10 @@ trait MapTrait
     /**
      * @return string
      */
-    private function getTaskName()
+    protected function getTaskName()
     {
         $name = substr(strrchr($this->calledClass, '\\'), 1);
 
-        return  api_camel_case_to_underscore($name);
+        return api_camel_case_to_underscore($name);
     }
 }

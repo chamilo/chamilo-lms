@@ -3,9 +3,6 @@
 
 namespace Chamilo\PluginBundle\MigrationMoodle\Extractor;
 
-use Chamilo\PluginBundle\MigrationMoodle\Task\EfcCoursesTask;
-use Chamilo\PluginBundle\MigrationMoodle\Traits\MapTrait\MapTrait;
-
 /**
  * Class CourseExtractor.
  *
@@ -13,10 +10,8 @@ use Chamilo\PluginBundle\MigrationMoodle\Traits\MapTrait\MapTrait;
  *
  * @package Chamilo\PluginBundle\MigrationMoodle\Extractor
  */
-class CourseExtractor extends BaseExtractor
+class CourseExtractor extends FilterExtractor
 {
-    use MapTrait;
-
     /**
      * CourseExtractor constructor.
      *
@@ -36,25 +31,12 @@ class CourseExtractor extends BaseExtractor
      */
     public function filter(array $sourceData)
     {
-        $taskName = $this->getTaskName();
-
         $courseId = $sourceData['id'];
 
         if (isset($sourceData['course'])) {
             $courseId = $sourceData['course'];
         }
 
-        $result = \Database::select(
-            'COUNT(1) AS c',
-            'plugin_migrationmoodle_item i INNER JOIN plugin_migrationmoodle_task t ON i.task_id = t.id',
-            [
-                'where' => [
-                    't.name = ? AND i.extracted_id = ?' => [$taskName, $courseId]
-                ]
-            ],
-            'first'
-        );
-
-        return $result['c'] == 0;
+        return !$this->existsExtracted($courseId);
     }
 }

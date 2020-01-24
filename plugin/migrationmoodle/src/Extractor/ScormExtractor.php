@@ -4,17 +4,16 @@
 namespace Chamilo\PluginBundle\MigrationMoodle\Extractor;
 
 use Chamilo\PluginBundle\MigrationMoodle\Task\CourseModulesScormTask;
-use Chamilo\PluginBundle\MigrationMoodle\Traits\MapTrait\MapTrait;
 
 /**
  * Class ScormExtractor.
  *
+ * Extractor for scorms already extracted and loaded.
+ *
  * @package Chamilo\PluginBundle\MigrationMoodle\Extractor
  */
-class ScormExtractor extends BaseExtractor
+class ScormExtractor extends FilterExtractor
 {
-    use MapTrait;
-
     /**
      * ScormExtractor constructor.
      *
@@ -38,19 +37,6 @@ class ScormExtractor extends BaseExtractor
     {
         $scormId = $sourceData['scorm'];
 
-        $taskName = $this->getTaskName();
-
-        $result = \Database::select(
-            'COUNT(1) AS c',
-            'plugin_migrationmoodle_item i INNER JOIN plugin_migrationmoodle_task t ON i.task_id = t.id',
-            [
-                'where' => [
-                    't.name = ? AND i.extracted_id = ?' => [$taskName, $scormId]
-                ],
-            ],
-            'first'
-        );
-
-        return $result['c'] == 0;
+        return !$this->existsExtracted($scormId);
     }
 }

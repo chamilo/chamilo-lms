@@ -15,11 +15,15 @@ class DateTimeObject implements TransformPropertyInterface
      *
      * @throws \Exception
      *
-     * @return \DateTime
+     * @return \DateTime|null
      */
     public function transform(array $data)
     {
-        $timeCreated = (int) $data['timecreated'];
+        $timeCreated = (int) current($data);
+
+        if ($timeCreated <= 0) {
+            return null;
+        }
 
         $date = new \DateTime();
         $date->setTimezone(new \DateTimeZone('UTC'));

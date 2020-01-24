@@ -6,6 +6,7 @@ namespace Chamilo\PluginBundle\MigrationMoodle\Task;
 use Chamilo\PluginBundle\MigrationMoodle\Extractor\CourseExtractor;
 use Chamilo\PluginBundle\MigrationMoodle\Loader\CourseModulesScormLoader;
 use Chamilo\PluginBundle\MigrationMoodle\Transformer\BaseTransformer;
+use Chamilo\PluginBundle\MigrationMoodle\Transformer\Property\DateTimeObject;
 use Chamilo\PluginBundle\MigrationMoodle\Transformer\Property\LoadedCourseLookup;
 
 /**
@@ -32,7 +33,9 @@ class CourseModulesScormTask extends BaseTask
                     sco.version,
                     sco.maxgrade,
                     sco.hidetoc,
-                    i.identifier
+                    i.identifier,
+                    cm.added,
+                    sco.timemodified
                 FROM mdl_scorm sco
                 INNER JOIN mdl_scorm_scoes i on sco.id = i.scorm
                 INNER JOIN mdl_course_modules cm ON (sco.course = cm.course AND cm.instance = sco.id)
@@ -61,6 +64,18 @@ class CourseModulesScormTask extends BaseTask
                 'path' => 'reference',
                 'use_max_score' => 'maxgrade',
                 'hide_toc_frame' => 'hidetoc',
+                'created_on' => [
+                    'class' => DateTimeObject::class,
+                    'properties' => ['added']
+                ],
+                'modified_on' => [
+                    'class' => DateTimeObject::class,
+                    'properties' => ['timemodified']
+                ],
+                'publicated_on' => [
+                    'class' => DateTimeObject::class,
+                    'properties' => ['added']
+                ],
             ],
         ];
     }

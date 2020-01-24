@@ -27,12 +27,21 @@ class CourseModulesScormLoader implements LoaderInterface
         $row = \Database::fetch_assoc($resultDisplayOrder);
         $displayOrder = $row['display_order'];
 
-        $now = api_get_utc_datetime();
         $courseInfo = api_get_course_info_by_id($incomingData['c_id']);
         $userId = 1;
 
         $incomingData['path'] = str_replace('.zip', '/.', $incomingData['path']);
         $incomingData['use_max_score'] = $incomingData['use_max_score'] == 100;
+
+        $incomingData['created_on'] = $incomingData['created_on']
+            ? $incomingData['created_on']->format('Y-m-d h:i:s')
+            : null;
+        $incomingData['modified_on'] = $incomingData['modified_on']
+            ? $incomingData['modified_on']->format('Y-m-d h:i:s')
+            : null;
+        $incomingData['publicated_on'] = $incomingData['publicated_on']
+            ? $incomingData['publicated_on']->format('Y-m-d h:i:s')
+            : null;
 
         $params = array_merge(
             $incomingData,
@@ -57,9 +66,6 @@ class CourseModulesScormLoader implements LoaderInterface
                 'category_id' => 0,
                 'max_attempts' => 0,
                 'subscribe_users' => 0,
-                'created_on' => $now,
-                'modified_on' => $now,
-                'publicated_on' => $now,
             ]
         );
 

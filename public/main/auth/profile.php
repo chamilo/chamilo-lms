@@ -698,6 +698,23 @@ if ($actions) {
 
 SocialManager::setSocialUserBlock($tpl, api_get_user_id(), 'messages');
 
+$allowJustification = api_get_plugin_setting('justification', 'tool_enable') === 'true';
+$justification = '';
+if ($allowJustification) {
+    $plugin = Justification::create();
+    $headers = [
+        [
+            'url' => api_get_self(),
+            'content' => get_lang('Profile'),
+        ],
+        [
+            'url' => api_get_path(WEB_CODE_PATH).'auth/justification.php',
+            'content' => $plugin->get_lang('Justification'),
+        ],
+    ];
+    $justification = Display::tabsOnlyLink($headers, 1);
+}
+
 if ($allowSocialTool) {
     SocialManager::setSocialUserBlock($tpl, api_get_user_id(), 'home');
     $menu = SocialManager::show_social_menu(

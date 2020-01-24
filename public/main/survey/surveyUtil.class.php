@@ -1,4 +1,5 @@
 <?php
+
 /* For licensing terms, see /license.txt */
 
 use Chamilo\CourseBundle\Entity\CSurvey;
@@ -137,7 +138,7 @@ class SurveyUtil
 
         $insertId = $answer->getIid();
         if ($insertId) {
-            $sql = "UPDATE $table_survey_answer SET answer_id = $insertId 
+            $sql = "UPDATE $table_survey_answer SET answer_id = $insertId
                 WHERE iid = $insertId";
             Database::query($sql);
         }
@@ -626,7 +627,7 @@ class SurveyUtil
 			            c_id = $course_id AND
                         survey_id='".$surveyId."' AND
                         survey_question NOT LIKE '%{{%' AND
-                        type <>'pagebreak'                        
+                        type <>'pagebreak'
                     ORDER BY sort ASC
                     $limitStatement";
             $result = Database::query($sql);
@@ -826,7 +827,7 @@ class SurveyUtil
         }
 
         // Getting the answers
-        $sql = "SELECT *, count(answer_id) as total 
+        $sql = "SELECT *, count(answer_id) as total
                 FROM $table_survey_answer
                 WHERE
                    c_id = $course_id AND
@@ -938,7 +939,7 @@ class SurveyUtil
         $content = '';
         if ($addActionBar) {
             $content .= '<div class="actions">';
-            $content .= '<a 
+            $content .= '<a
                 href="'.api_get_path(WEB_CODE_PATH).'survey/reporting.php?survey_id='.$surveyId.'&'.api_get_cidreq().'">'
                 .Display::return_icon(
                     'back.png',
@@ -981,13 +982,13 @@ class SurveyUtil
             if ((isset($_POST['submit_question_filter']) && $_POST['submit_question_filter']) ||
                 (isset($_POST['export_report']) && $_POST['export_report'])
             ) {
-                $content .= '<button class="cancel" 
-                                type="submit" 
+                $content .= '<button class="cancel"
+                                type="submit"
                                 name="reset_question_filter" value="'.get_lang('Reset filter').'">'.
                                 get_lang('Reset filter').'</button>';
             }
-            $content .= '<button 
-                            class = "save" 
+            $content .= '<button
+                            class = "save"
                             type="submit" name="submit_question_filter" value="'.get_lang('Filter').'">'.
                             get_lang('Filter').'</button>';
             $content .= '</th>';
@@ -1023,18 +1024,18 @@ class SurveyUtil
             }
         }
 
-        $sql = "SELECT 
-                  q.question_id, 
-                  q.type, 
-                  q.survey_question, 
+        $sql = "SELECT
+                  q.question_id,
+                  q.type,
+                  q.survey_question,
                   count(o.question_option_id) as number_of_options
-				FROM $table_survey_question q 
+				FROM $table_survey_question q
 				LEFT JOIN $table_survey_question_option o
 				ON q.question_id = o.question_id AND q.c_id = o.c_id
-				WHERE 
+				WHERE
 				    survey_question NOT LIKE '%{{%' AND
 				    q.survey_id = '".$surveyId."' AND
-				    q.c_id = $course_id 
+				    q.c_id = $course_id
 				GROUP BY q.question_id
 				ORDER BY q.sort ASC";
         $result = Database::query($sql);
@@ -1056,8 +1057,8 @@ class SurveyUtil
                     $content .= '>';
                     $content .= '<label>';
                     if ($addFilters) {
-                        $content .= '<input 
-                                type="checkbox" 
+                        $content .= '<input
+                                type="checkbox"
                                 name="questions_filter[]" value="'.$row['question_id'].'" checked="checked"/>';
                     }
                     $content .= $row['survey_question'];
@@ -1086,15 +1087,15 @@ class SurveyUtil
         }
 
         // cells with option (none for open question)
-        $sql = "SELECT 	
-                    sq.question_id, 
+        $sql = "SELECT
+                    sq.question_id,
                     sq.survey_id,
-                    sq.survey_question, 
+                    sq.survey_question,
                     sq.display,
-                    sq.sort, 
-                    sq.type, 
+                    sq.sort,
+                    sq.type,
                     sqo.question_option_id,
-                    sqo.option_text, 
+                    sqo.option_text,
                     sqo.sort as option_sort
 				FROM $table_survey_question sq
 				LEFT JOIN $table_survey_question_option sqo
@@ -1151,7 +1152,7 @@ class SurveyUtil
         $sql = "SELECT * FROM $table_survey_answer
                 WHERE
                     c_id = $course_id AND
-                    survey_id = $surveyId 
+                    survey_id = $surveyId
                     $userCondition
                 ORDER BY answer_id, user ASC";
         $result = Database::query($sql);
@@ -1353,8 +1354,8 @@ class SurveyUtil
                     count(options.question_option_id) as number_of_options
 				FROM $table_survey_question questions
                 LEFT JOIN $table_survey_question_option options
-				ON 
-				  questions.question_id = options.question_id AND 
+				ON
+				  questions.question_id = options.question_id AND
 				  options.c_id = questions.c_id
 				WHERE
 				    survey_question NOT LIKE '%{{%' AND
@@ -1422,12 +1423,12 @@ class SurveyUtil
                     survey_question_option.sort as option_sort
 				FROM $table_survey_question survey_question
 				LEFT JOIN $table_survey_question_option survey_question_option
-				ON	    
+				ON
 				    survey_question.question_id = survey_question_option.question_id AND
 				    survey_question_option.c_id = survey_question.c_id
-				WHERE				
-				    survey_question NOT LIKE '%{{%' AND			
-				    survey_question.type <> 'pagebreak' AND				    
+				WHERE
+				    survey_question NOT LIKE '%{{%' AND
+				    survey_question.type <> 'pagebreak' AND
 				    survey_question.survey_id = $surveyId AND
 				    survey_question.c_id = $course_id
 				ORDER BY survey_question.sort ASC, survey_question_option.sort ASC";
@@ -1456,9 +1457,9 @@ class SurveyUtil
         $old_user = '';
         $answers_of_user = [];
         $sql = "SELECT * FROM $table_survey_answer
-		        WHERE 
-		          c_id = $course_id AND 
-		          survey_id='".$surveyId."'		           
+		        WHERE
+		          c_id = $course_id AND
+		          survey_id='".$surveyId."'
 		          ";
         if ($user_id != 0) {
             $sql .= "AND user='".Database::escape_string($user_id)."' ";
@@ -1649,8 +1650,8 @@ class SurveyUtil
                     count(options.question_option_id) as number_of_options
 				FROM $table_survey_question questions
 				LEFT JOIN $table_survey_question_option options
-                ON 
-                  questions.question_id = options.question_id AND 
+                ON
+                  questions.question_id = options.question_id AND
                   options.c_id = questions.c_id
 				WHERE
 				    survey_question NOT LIKE '%{{%' AND
@@ -1718,7 +1719,7 @@ class SurveyUtil
 				ON
 				    survey_question.question_id = survey_question_option.question_id AND
 				    survey_question_option.c_id = survey_question.c_id
-				WHERE				
+				WHERE
 				    survey_question NOT LIKE '%{{%' AND
 				    survey_question.type <> 'pagebreak' AND
 				    survey_question.survey_id = $surveyId AND
@@ -3887,10 +3888,10 @@ class SurveyUtil
             SELECT s, si FROM ChamiloCourseBundle:CSurvey s
             INNER JOIN ChamiloCourseBundle:CSurveyInvitation si
                 WITH (s.code = si.surveyCode AND s.cId = si.cId AND s.sessionId = si.sessionId )
-            WHERE 
-                si.user = :user_id AND 
-                s.availFrom <= :now AND 
-                s.availTill >= :now AND 
+            WHERE
+                si.user = :user_id AND
+                s.availFrom <= :now AND
+                s.availTill >= :now AND
                 si.answered = 0
             ORDER BY s.availTill ASC
         ";

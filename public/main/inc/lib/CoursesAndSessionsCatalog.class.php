@@ -293,7 +293,6 @@ class CoursesAndSessionsCatalog
     public static function getCoursesInCategory($category_code, $random_value = null, $limit = [])
     {
         $tbl_course = Database::get_main_table(TABLE_MAIN_COURSE);
-        $tblCourseCategory = Database::get_main_table(TABLE_MAIN_CATEGORY);
         $avoidCoursesCondition = self::getAvoidCourseCondition();
         $visibilityCondition = CourseManager::getCourseVisibilitySQLCondition('course', true);
 
@@ -604,12 +603,12 @@ class CoursesAndSessionsCatalog
                     (
                     s.accessStartDate IS NOT NULL AND
                     s.accessEndDate IS NOT NULL AND
-                    s.accessStartDate >= '$date' AND s.accessEndDate <= '$date')
+                    s.accessStartDate <= '$date' AND s.accessEndDate >= '$date')
                     OR
                     (
                         s.accessStartDate IS NULL AND
                         s.accessEndDate IS NOT NULL AND
-                        s.accessStartDate >= '$date'
+                        s.accessEndDate >= '$date'
                     )
                 )
             ";
@@ -690,10 +689,66 @@ class CoursesAndSessionsCatalog
                 $qb->expr()->eq('f.extraFieldType', ExtraField::COURSE_FIELD_TYPE)
             )->andWhere(
                 $qb->expr()->eq('url.accessUrlId', $urlId)
+            /*)->andWhere(
+                's.name LIKE :name'
+            )*/
             )
             ->setFirstResult($limit['start'])
             ->setMaxResults($limit['length'])
             ->setParameter('tag', "$termTag%")
+            //->setParameter('name', "%$termTag%")
+            ->getQuery()
+            ->getResult();
+
+        $sessionsToBrowse = [];
+        foreach ($sessions as $session) {
+            if ($session->getNbrCourses() === 0) {
+                continue;
+            }
+            $sessionsToBrowse[] = $session;
+        }
+
+        return $sessionsToBrowse;
+    }
+
+    /**
+     * Search sessions by the title
+     *
+     * @param string $keyword
+     * @param array  $limit   Limit info
+     *
+     * @return array The sessions
+     */
+    public static function getSessionsByName($keyword, array $limit)
+    {
+        $em = Database::getManager();
+        $qb = $em->createQueryBuilder();
+
+        $urlId = api_get_current_access_url_id();
+
+        $sessions = $qb->select('s')
+            ->distinct()
+            ->from('ChamiloCoreBundle:Session', 's')
+            ->innerJoin(
+                'ChamiloCoreBundle:SessionRelCourse',
+                'src',
+                Join::WITH,
+                's.id = src.session'
+            )
+            ->innerJoin(
+                'ChamiloCoreBundle:AccessUrlRelSession',
+                'url',
+                Join::WITH,
+                'url.sessionId = s.id'
+            )
+            ->andWhere(
+                $qb->expr()->eq('url.accessUrlId', $urlId)
+            )->andWhere(
+                's.name LIKE :keyword'
+            )
+            ->setFirstResult($limit['start'])
+            ->setMaxResults($limit['length'])
+            ->setParameter('keyword', "%$keyword%")
             ->getQuery()
             ->getResult();
 

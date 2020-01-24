@@ -247,6 +247,9 @@ function generateLPFinalItemTemplateBadgeLinks($userId, $courseId, $sessionId = 
     if ($userSkills) {
         foreach ($userSkills as $userSkill) {
             $skill = $em->find('ChamiloCoreBundle:Skill', $userSkill['skill_id']);
+            if (!$skill) {
+                continue;
+            }
             $skillList .= "
                 <div class='row'>
                     <div class='col-md-2 col-xs-4'>
@@ -270,14 +273,17 @@ function generateLPFinalItemTemplateBadgeLinks($userId, $courseId, $sessionId = 
                 </div>
             ";
         }
-        $badgeLink .= "
-            <div class='panel panel-default'>
-                <div class='panel-body'>
-                    <h3 class='text-center'>".get_lang('Additionally, you have achieved the following skills')."</h3>
-                    $skillList
-                </div>
-            </div>
-        ";
+
+	if (!empty($skillList)) {
+		$badgeLink .= "
+		    <div class='panel panel-default'>
+		        <div class='panel-body'>
+		            <h3 class='text-center'>".get_lang('Additionally, you have achieved the following skills')."</h3>
+		            $skillList
+		        </div>
+		    </div>
+		";
+	}
     }
 
     return $badgeLink;

@@ -89,7 +89,7 @@ $image = '';
 $illustrationUrl = $illustrationRepo->getIllustrationUrl($courseEntity, 'course_picture_medium');
 
 if (!empty($illustrationUrl)) {
-    $image = '<div class="row"><label class="col-md-2 control-label">'.get_lang('Image').'</label> 
+    $image = '<div class="row"><label class="col-md-2 control-label">'.get_lang('Image').'</label>
                     <div class="col-md-8"><img class="img-thumbnail" src="'.$illustrationUrl.'" /></div></div>';
 }
 

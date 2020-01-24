@@ -44,8 +44,10 @@ $interbreadcrumb[] = [
 ];
 $interbreadcrumb[] = [
     'url' => api_get_path(WEB_CODE_PATH).'survey/survey.php?survey_id='.$surveyId.'&'.api_get_cidreq(),
-    'name' => strip_tags($survey_data['title']),
+    'name' => strip_tags($survey_data['title'], '<span>'),
 ];
+
+$htmlHeadXtra[] = '<script>'.api_get_language_translate_html().'</script>';
 
 $show = 0;
 Display::display_header(get_lang('Survey preview'));

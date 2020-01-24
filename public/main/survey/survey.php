@@ -63,7 +63,7 @@ if (!empty($_GET['survey_id'])) {
     api_not_allowed(true);
 }
 
-$tool_name = strip_tags($survey_data['title']);
+$tool_name = strip_tags($survey_data['title'], '<span>');
 $is_survey_type_1 = $survey_data['survey_type'] == 1;
 
 if (api_strlen(strip_tags($survey_data['title'])) > 40) {
@@ -94,6 +94,8 @@ if ($is_survey_type_1 && ($action == 'addgroup' || $action == 'deletegroup')) {
     header('Location: '.api_get_path(WEB_CODE_PATH).'survey/survey.php?survey_id='.$survey_id.'&sendmsg='.$sendmsg);
     exit;
 }
+
+$htmlHeadXtra[] = '<script>'.api_get_language_translate_html().'</script>';
 
 // Displaying the header
 Display::display_header($tool_name, 'Survey');
@@ -313,6 +315,7 @@ while ($row = Database::fetch_array($result, 'ASSOC')) {
     }
     echo '</tr>';
 }
+
 echo '</table>';
 
 if ($is_survey_type_1) {

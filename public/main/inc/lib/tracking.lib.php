@@ -186,6 +186,7 @@ class Tracking
 
         // Extend all button
         $output = '';
+
         $extra = '<script>
         $(function() {
             $( "#dialog:ui-dialog" ).dialog( "destroy" );
@@ -503,8 +504,8 @@ class Tracking
                                     $extend_attempt_link .= '&nbsp;'.
                                         Display::url(
                                             Display::return_icon('pdf.png', get_lang('Export to PDF')),
-                                            api_get_self(
-                                            ).'?action=export_stats&extend_id='.$my_item_id.'&extend_attempt_id='.$row['iv_id'].$url_suffix
+                                            api_get_self().'?action=export_stats&extend_id='.$my_item_id.'&extend_attempt_id='.$row['iv_id'].$url_suffix,
+                                            ['class' => 'export']
                                         );
                                 }
                             } else { // Same case if fold_attempt_id is set, so not implemented explicitly.
@@ -517,8 +518,8 @@ class Tracking
                                     $extend_attempt_link .= '&nbsp;'.
                                         Display::url(
                                             Display::return_icon('pdf.png', get_lang('Export to PDF')),
-                                            api_get_self(
-                                            ).'?action=export_stats&extend_id='.$my_item_id.'&extend_attempt_id='.$row['iv_id'].$url_suffix
+                                            api_get_self().'?action=export_stats&extend_id='.$my_item_id.'&extend_attempt_id='.$row['iv_id'].$url_suffix,
+                                            ['class' => 'export']
                                         );
                                 }
                             }
@@ -2781,11 +2782,11 @@ class Tracking
                 if ($get_only_latest_attempt_results || $getOnlyBestAttempt) {
                     // Getting lp_items done by the user
                     $sql = "SELECT DISTINCT lp_item_id
-                                    FROM $lp_item_view_table
-                                    WHERE
-                                        c_id = $course_id AND
-                                        lp_view_id = $lp_view_id
-                                    ORDER BY lp_item_id";
+                            FROM $lp_item_view_table
+                            WHERE
+                                c_id = $course_id AND
+                                lp_view_id = $lp_view_id
+                            ORDER BY lp_item_id";
                     $res_lp_item = Database::query($sql);
 
                     while ($row_lp_item = Database::fetch_array($res_lp_item, 'ASSOC')) {
@@ -2999,11 +3000,11 @@ class Tracking
         foreach ($lp_list as $lp_id) {
             // Check if LP have a score we assume that all SCO have an score
             $sql = "SELECT count(id) as count
-                            FROM $lp_item_table
-                            WHERE
-                                c_id = $course_id AND
-                                (item_type = 'quiz' OR item_type = 'sco') AND
-                                lp_id = ".$lp_id;
+                    FROM $lp_item_table
+                    WHERE
+                        c_id = $course_id AND
+                        (item_type = 'quiz' OR item_type = 'sco') AND
+                        lp_id = ".$lp_id;
             $result_have_quiz = Database::query($sql);
             if (Database::num_rows($result_have_quiz) > 0) {
                 $row = Database::fetch_array($result_have_quiz, 'ASSOC');

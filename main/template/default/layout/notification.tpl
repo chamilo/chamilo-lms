@@ -40,8 +40,8 @@
                     });
                 },
                 loadAll: function () {
-                    console.log('loadAll');
-                    console.log('count : ' + count);
+                    //console.log('loadAll');
+                    //console.log('count : ' + count);
                     if (count !== lastCount || count === 0) {
                         appNotifications.load();
                     }
@@ -87,10 +87,10 @@
                     }
                 },
                 loadNumber: function () {
-                    console.log('loadNumber');
+                    //console.log('loadNumber');
                     $.get('{{ _p.web_main }}inc/ajax/message.ajax.php?a=get_count_notifications', function(data) {
                         count = data;
-                        console.log(count);
+                        //console.log(count);
 
                         $("#notificationsBadge").html(count);
 
@@ -129,8 +129,8 @@
                     appNotifications.loadingMask(true);
                     $('#notificationsContainer').html("");
                     lastCount = count;
-                    console.log('load');
-                    console.log(count);
+                    //console.log('load');
+                    //console.log(count);
 
                     $.getJSON('{{ _p.web_main }}inc/ajax/message.ajax.php?a=get_notifications', function(data) {
                         $.each(data, function(key, value) {
@@ -164,11 +164,11 @@
                     }
 
                     var notificationId = elem.parent().parent().attr('id');
-                    console.log('markAsRead id : ' + notificationId);
+                    //console.log('markAsRead id : ' + notificationId);
                     $.ajax({
                         url: '{{ _p.web_main }}inc/ajax/message.ajax.php?a=mark_notification_as_read&id='+notificationId,
                         success: function (data) {
-                            console.log(notifications);
+                            //console.log(notifications);
                             notifications = $.grep(notifications, function(value) {
                                 if (notificationId == value.id) {
                                     return false;
@@ -176,11 +176,10 @@
                                 return true;
                             });
 
-                            console.log(notifications);
+                            //console.log(notifications);
                             count--;
 
-                            console.log('count : ' + count);
-                            //appNotifications.loadAll();
+                            //console.log('count : ' + count);
                             appNotifications.loadNotificationArray();
                         }
                     });
@@ -206,7 +205,6 @@
             //appNotifications.init();
         });
     </script>
-    
 
     <!-- template -->
     <script id="notificationTemplate" type="text/html">

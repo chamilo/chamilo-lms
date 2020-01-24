@@ -9440,6 +9440,11 @@ ul.dropdown-menu.inner > li > a {
         float:right !important;
     }
 
+    #count_message_li{
+        display: block;
+        float:right !important;
+    }
+
     .sidebar-scorm {
         width: 25.66666667%;
     }
@@ -9486,9 +9491,6 @@ ul.dropdown-menu.inner > li > a {
 
 /* Landscape phones and down */
 @media only screen and (min-device-width: 320px) and (max-device-width: 480px) {
-    #user-dropdown {
-        display: none;
-    }
     #notification-menu{
         width: 250px !important;
         min-width : 250px !important;
@@ -9584,9 +9586,6 @@ ul.dropdown-menu.inner > li > a {
     .navbar .container .navbar-brand {
         display: block;
         font-size: 16px;
-    }
-    #user-dropdown {
-        display: none;
     }
     #notification-menu{
         width: 300px !important;

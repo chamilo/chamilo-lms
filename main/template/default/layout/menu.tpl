@@ -1,7 +1,7 @@
 <!-- Fixed navbar -->
 {% if _u.logged == 1 and not user_in_anon_survey %}
     <script>
-        $(document).ready(function () {
+        $(function () {
             $.get('{{ _p.web_main }}inc/ajax/message.ajax.php?a=get_count_message', function(data) {
                 var countNotifications = (data.ms_friends + data.ms_groups + data.ms_inbox);
                 if (countNotifications === 0 || isNaN(countNotifications)) {
@@ -24,8 +24,9 @@
                 <span class="icon-bar"></span>
             </button>
 
-            {% if notification_event == 1%}
-                <button id="user-dropdown"  type="button" class="menu-dropdown pull-right  navbar-toggle collapsed" data-toggle="collapse" data-target="#user-dropdown-menu" aria-expanded="false" aria-controls="navbar">
+            {% if notification_event == 1 %}
+                <button id="user-dropdown"  type="button" class="menu-dropdown pull-right navbar-toggle collapsed"
+                        data-toggle="collapse" data-target="#user-dropdown-menu" aria-expanded="false" aria-controls="navbar">
                     <img class="img-circle" src="{{ _u.avatar_small }}" alt="{{ _u.complete_name }}"/>
                     <span class="caret"></span>
 
@@ -73,30 +74,41 @@
                     </ul>
                 </button>
 
-                <button id="notifications-dropdown"  type="button" class="pull-right  menu-dropdown navbar-toggle collapsed" data-toggle="collapse" data-target="#notification-menu" aria-expanded="false" aria-controls="navbar">
-                    <i id="notificationsIcon" class="fa fa-bell-o " aria-hidden="true"></i>
-                    {# hide red button loading #}
-                    <span id="notificationsBadge" class="label label-danger">
-                    <i class="fa fa-spinner fa-pulse fa-fw" aria-hidden="true"></i>
-                    </span>
-                    <div id="notification-menu" class="dropdown-menu notification-dropdown-menu" aria-labelledby="notifications-dropdown">
-                        <h5 class="dropdown-header">
-                            <i class="fa fa-bell-o" aria-hidden="true"></i> <span class="fw-600 c-grey-900">
-                                {{ 'Notifications' | get_lang }}
-                            </span>
-                        </h5>
-                        <a id="notificationsLoader" class="dropdown-item dropdown-notification" href="#">
-                            <p class="notification-solo text-center">
-                                <i id="notificationsIcon" class="fa fa-spinner fa-pulse fa-fw" aria-hidden="true"></i>
-                                {{ 'Loading' | get_lang }}
-                            </p>
-                        </a>
-                        <ul id="notificationsContainer" class="notifications-container"></ul>
-                        <a id="notificationEmpty" class="dropdown-item dropdown-notification" href="#">
-                            <p class="notification-solo text-center"> {{ 'NoNewNotification' | get_lang }}</p>
-                        </a>
-                    </div>
+                {% if _u.logged == 1 %}
+                    <button id="notifications-dropdown" type="button" class="pull-right menu-dropdown navbar-toggle collapsed"
+                            data-toggle="collapse" data-target="#notification-menu" aria-expanded="false" aria-controls="navbar">
+                        <i id="notificationsIcon" class="fa fa-bell-o " aria-hidden="true"></i>
+                        {# hide red button loading #}
+                        <span id="notificationsBadge" class="label label-danger">
+                        <i class="fa fa-spinner fa-pulse fa-fw" aria-hidden="true"></i>
+                        </span>
+                        <div id="notification-menu"
+                             class="dropdown-menu notification-dropdown-menu" aria-labelledby="notifications-dropdown">
+                            <h5 class="dropdown-header">
+                                <i class="fa fa-bell-o" aria-hidden="true"></i> <span class="fw-600 c-grey-900">
+                                    {{ 'Notifications' | get_lang }}
+                                </span>
+                            </h5>
+                            <a id="notificationsLoader" class="dropdown-item dropdown-notification" href="#">
+                                <p class="notification-solo text-center">
+                                    <i id="notificationsIcon" class="fa fa-spinner fa-pulse fa-fw" aria-hidden="true"></i>
+                                    {{ 'Loading' | get_lang }}
+                                </p>
+                            </a>
+                            <ul id="notificationsContainer" class="notifications-container"></ul>
+                            <a id="notificationEmpty" class="dropdown-item dropdown-notification" href="#">
+                                <p class="notification-solo text-center"> {{ 'NoNewNotification' | get_lang }}</p>
+                            </a>
+                        </div>
+                    </button>
+                {% endif %}
+
+                <button id="count_message_li" type="button" class="pull-right navbar-toggle collapsed menu-dropdown" aria-expanded="true">
+                    <a href="{{ message_url }}">
+                        <span id="count_message" class="badge badge-warning"></span>
+                    </a>
                 </button>
+
             {% endif %}
             <a class="navbar-brand" href="{{ _p.web }}"> <i class="fa fa-home"></i> </a>
         </div>
@@ -105,7 +117,6 @@
             <ul class="nav navbar-nav">
                 {% for item in menu %}
                     {% set show_item = true %}
-
                     {% if user_in_anon_survey and item.key != 'homepage' %}
                         {% set show_item = false %}
                     {% endif %}
@@ -121,11 +132,7 @@
             </ul>
             {% if _u.logged == 1 and not user_in_anon_survey %}
                 <ul class="nav navbar-nav navbar-right">
-                    <li id="count_message_li" class="hidden">
-                        <a href="{{ message_url }}">
-                            <span id="count_message" class="badge badge-warning"></span>
-                        </a>
-                    </li>
+
                     {% if language_form %}
                         <li class="dropdown language">
                             {{ language_form }}
@@ -187,7 +194,7 @@
                         {% endif %}
                     {% endif %}
 
-                    {% if notification_event == 1%}
+                    {% if notification_event == 1 %}
                         {% include 'default/layout/notification.tpl' %}
                     {% endif %}
                 </ul>

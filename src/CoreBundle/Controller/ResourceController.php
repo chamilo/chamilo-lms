@@ -42,7 +42,7 @@ use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Routing\Router;
 use Symfony\Component\Routing\RouterInterface;
 use Symfony\Component\Security\Core\Exception\AccessDeniedException;
-use Vich\UploaderBundle\Util\Transliterator;
+use Vich\UploaderBundle\Storage\FlysystemStorage;
 use ZipStream\Option\Archive;
 use ZipStream\ZipStream;
 
@@ -789,7 +789,7 @@ class ResourceController extends AbstractResourceController implements CourseCon
      *
      * @Route("/{tool}/{type}/{id}/view", methods={"GET"}, name="chamilo_core_resource_view")
      */
-    public function viewAction(Request $request, Glide $glide, RouterInterface $router): Response
+    public function viewAction(Request $request, Glide $glide, RouterInterface $router, FlysystemStorage $storage): Response
     {
         $id = $request->get('id');
         $filter = $request->get('filter');
@@ -811,7 +811,7 @@ class ResourceController extends AbstractResourceController implements CourseCon
             return $this->redirect($url);
         }
 
-        return $this->showFile($request, $resourceNode, $mode, $glide, $filter);
+        return $this->showFile($request, $resourceNode, $mode, $glide, $filter, $storage);
     }
 
     /**
@@ -1064,7 +1064,7 @@ class ResourceController extends AbstractResourceController implements CourseCon
      *
      * @return mixed|StreamedResponse
      */
-    private function showFile(Request $request, ResourceNode $resourceNode, $mode = 'show', Glide $glide = null, $filter = '')
+    private function showFile(Request $request, ResourceNode $resourceNode, $mode = 'show', Glide $glide = null, $filter = '', FlysystemStorage $storage)
     {
         $this->denyAccessUnlessGranted(
             ResourceNodeVoter::VIEW,
@@ -1073,6 +1073,7 @@ class ResourceController extends AbstractResourceController implements CourseCon
         );
 
         $repo = $this->getRepositoryFromRequest($request);
+
         $resourceFile = $resourceNode->getResourceFile();
 
         if (!$resourceFile) {
@@ -1080,7 +1081,6 @@ class ResourceController extends AbstractResourceController implements CourseCon
         }
 
         $fileName = $resourceNode->getSlug();
-        $filePath = $resourceFile->getFile()->getPathname();
         $mimeType = $resourceFile->getMimeType();
 
         switch ($mode) {
@@ -1108,7 +1108,9 @@ class ResourceController extends AbstractResourceController implements CourseCon
                         $params['crop'] = $crop;
                     }
 
-                    return $server->getImageResponse($filePath, $params);
+                    $file = $storage->resolveUri($resourceFile);
+
+                    return $server->getImageResponse($file, $params);
                 }
 
                 break;

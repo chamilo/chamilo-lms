@@ -4,7 +4,7 @@ vich_uploader:
 
     mappings:
         resources:
-            uri_prefix: '/'
+            uri_prefix: ''
             upload_destination: resources_fs
             namer: Vich\UploaderBundle\Naming\SmartUniqueNamer
             directory_namer:

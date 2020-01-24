@@ -18,4 +18,6 @@ interface ResourceInterface
     public function getResourceName(): string;
 
     public function getResourceNode(): ResourceNode;
+
+    public function setResourceNode(ResourceNode $resourceNode): AbstractResource;
 }

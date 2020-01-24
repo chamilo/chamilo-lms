@@ -4556,15 +4556,17 @@ class learnpath
                 $session = $em->getRepository('ChamiloCoreBundle:Session')->find($sessionId);
             }
 
-            $course = $courseRepo->find($courseId);
+            if ($courseId != 0) {
+                $course = $courseRepo->find($courseId);
 
-            // Subscribed groups to a LP
-            $subscribedGroupsInLp = $itemRepo->getGroupsSubscribedToItem(
-                TOOL_LEARNPATH_CATEGORY,
-                $category->getId(),
-                $course,
-                $session
-            );
+                // Subscribed groups to a LP
+                $subscribedGroupsInLp = $itemRepo->getGroupsSubscribedToItem(
+                    TOOL_LEARNPATH_CATEGORY,
+                    $category->getId(),
+                    $course,
+                    $session
+                );
+            }
 
             if (!empty($subscribedGroupsInLp)) {
                 $groups = array_column($groups, 'iid');

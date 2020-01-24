@@ -188,7 +188,7 @@ class ImportCsv
                         echo "Error - This file '$file' can't be processed.".PHP_EOL;
                         echo "Trying to call $method".PHP_EOL;
                         echo "The file have to has this format:".PHP_EOL;
-                        echo "prefix_students_ddmmyyyy.csv, prefix_teachers_ddmmyyyy.csv, 
+                        echo "prefix_students_ddmmyyyy.csv, prefix_teachers_ddmmyyyy.csv,
                         prefix_courses_ddmmyyyy.csv, prefix_sessions_ddmmyyyy.csv ".PHP_EOL;
                         exit;
                     }
@@ -817,7 +817,7 @@ class ImportCsv
             $counter = 1;
             $secondsInYear = 365 * 24 * 60 * 60;
 
-            foreach ($data as $row) {
+            foreach ($data as $row  ) {
                 $row = $this->cleanUserRow($row);
                 $user_id = UserManager::get_user_id_from_original_id(
                     $row['extra_'.$this->extraFieldIdNameList['user']],
@@ -849,7 +849,7 @@ class ImportCsv
                             if (!empty($emails)) {
                                 $this->logger->addInfo('Preparing email to users in configuration: "cron_notification_help_desk"');
                                 $subject = 'User not added due to same username';
-                                $body = 'Cannot add username: "'.$row['username'].'" 
+                                $body = 'Cannot add username: "'.$row['username'].'"
                                     with external_user_id: '.$row['extra_'.$this->extraFieldIdNameList['user']].'
                                     because '.$userInfoFromUsername['username'].' with external_user_id '.$value.' exists on the portal';
                                 $this->logger->addInfo($body);
@@ -1169,8 +1169,8 @@ class ImportCsv
                     $date->sub($interval);
                     if ($date->getTimestamp() > time()) {
                         $this->logger->addInfo(
-                            "Calendar event # ".$row['external_calendar_itemID']." 
-                            in session [$externalSessionId] was not added 
+                            "Calendar event # ".$row['external_calendar_itemID']."
+                            in session [$externalSessionId] was not added
                             because the startdate is more than 7 days in the future: ".$sessionInfo['access_start_date']
                         );
                         $errorFound = true;
@@ -1300,15 +1300,15 @@ class ImportCsv
                                 "Delete event # $calendarId because session # $calendarSessionId doesn't exist"
                             );
 
-                            $sql = "DELETE FROM c_calendar_event 
+                            $sql = "DELETE FROM c_calendar_event
                                     WHERE iid = $calendarId AND session_id = $calendarSessionId";
                             Database::query($sql);
                             $this->logger->addInfo($sql);
 
-                            $sql = "DELETE FROM c_item_property 
-                                    WHERE 
-                                        tool = 'calendar_event' AND 
-                                        ref = $calendarSessionId AND 
+                            $sql = "DELETE FROM c_item_property
+                                    WHERE
+                                        tool = 'calendar_event' AND
+                                        ref = $calendarSessionId AND
                                         session_id = $calendarSessionId";
                             Database::query($sql);
                             $this->logger->addInfo($sql);
@@ -1604,7 +1604,7 @@ class ImportCsv
                                 ];
                                 $extraFieldValue->update($params);
                                 $this->logger->addInfo(
-                                    'Updating calendar extra field #'.$extraFieldValueItem['id'].' 
+                                    'Updating calendar extra field #'.$extraFieldValueItem['id'].'
                                     new item_id: '.$eventId.' old item_id: '.$item['item_id']
                                 );
                             }

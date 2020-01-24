@@ -26,7 +26,7 @@ class CourseModulesScormTask extends BaseTask
         return [
             'class' => CourseExtractor::class,
             'query' => "SELECT
-                    cm.id,
+                    sco.id,
                     sco.course,
                     sco.name,
                     sco.reference,

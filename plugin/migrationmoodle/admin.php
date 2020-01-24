@@ -70,6 +70,9 @@ $menu = [
         'question_multi_choice_multiple',
         'questions_true_false',
     ],
+    'course_modules_scorm' => [
+        'scorm_scoes',
+    ],
 ];
 
 Display::display_header($plugin->get_title());

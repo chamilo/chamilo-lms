@@ -16,115 +16,59 @@ if ('true' != $plugin->get('active')) {
 }
 
 $menu = [
-    1 => [
-        //'action' => 'users',
-        'action' => 'efc_users',
-        'parent' => 0,
+    '_' => [
+        //'users',
+        'efc_users',
+        'course_categories',
+        //'courses',
+        'efc_courses',
+        'role_assignments',
     ],
-    2 => [
-        'action' => 'course_categories',
-        'parent' => 0,
+    'efc_courses' => [
+        'course_sections',
+        'course_modules_scorm',
     ],
-    3 => [
-        //'action' => 'courses',
-        'action' => 'efc_courses',
-        'parent' => 0,
+    'course_sections' => [
+        'course_modules_lesson',
+        'course_modules_quiz',
+        'c_quiz',
     ],
-    4 => [
-        'action' => 'course_sections',
-        'parent' => 3,
+    'course_modules_lesson' => [
+        'lesson_pages',
     ],
-    5 => [
-        'action' => 'course_modules_lesson',
-        'parent' => 4,
+    'lesson_pages' => [
+        'lesson_pages_document',
+        'lesson_pages_quiz',
     ],
-    6 => [
-        'action' => 'course_modules_quiz',
-        'parent' => 4,
+    'lesson_pages_document' => [
+        'files_for_lesson_pages',
     ],
-    7 => [
-        'action' => 'lesson_pages',
-        'parent' => 5,
+    'lesson_pages_quiz' => [
+        'lesson_pages_quiz_question',
+        'files_for_lesson_answers',
     ],
-    8 => [
-        'action' => 'lesson_pages_document',
-        'parent' => 7,
+    'lesson_pages_quiz_question' => [
+        'lesson_answers_true_false',
+        'lesson_answers_multiple_choice',
+        'lesson_answers_multiple_answer',
+        'lesson_answers_matching',
+        'lesson_answers_essay',
+        'lesson_answers_short_answer',
     ],
-    9 => [
-        'action' => 'files_for_lesson_pages',
-        'parent' => 8,
+    'course_modules_quiz' => [
+        'quizzes',
     ],
-    10 => [
-        'action' => 'lesson_pages_quiz',
-        'parent' => 7,
+    'quizzes' => [
+        'files_for_quizzes',
+        'question_categories',
     ],
-    11 => [
-        'action' => 'lesson_pages_quiz_question',
-        'parent' => 10,
+    'question_categories' => [
+        'questions',
     ],
-    12 => [
-        'action' => 'lesson_answers_true_false',
-        'parent' => 11,
-    ],
-    13 => [
-        'action' => 'lesson_answers_multiple_choice',
-        'parent' => 11,
-    ],
-    14 => [
-        'action' => 'lesson_answers_multiple_answer',
-        'parent' => 11,
-    ],
-    15 => [
-        'action' => 'lesson_answers_matching',
-        'parent' => 11,
-    ],
-    16 => [
-        'action' => 'lesson_answers_essay',
-        'parent' => 11,
-    ],
-    17 => [
-        'action' => 'lesson_answers_short_answer',
-        'parent' => 11,
-    ],
-    18 => [
-        'action' => 'files_for_lesson_answers',
-        'parent' => 10,
-    ],
-    19 => [
-        'action' => 'c_quiz',
-        'parent' => 4,
-    ],
-    20 => [
-        'action' => 'role_assignments',
-        'parent' => 0,
-    ],
-    21 => [
-        'action' => 'quizzes',
-        'parent' => 6,
-    ],
-    22 => [
-        'action' => 'files_for_quizzes',
-        'parent' => 21,
-    ],
-    23 => [
-        'action' => 'question_categories',
-        'parent' => 21,
-    ],
-    24 => [
-        'action' => 'questions',
-        'parent' => 21,
-    ],
-    25 => [
-        'action' => 'question_multi_choice_single',
-        'parent' => 24,
-    ],
-    26 => [
-        'action' => 'question_multi_choice_multiple',
-        'parent' => 24,
-    ],
-    27 => [
-        'action' => 'questions_true_false',
-        'parent' => 24,
+    'questions' => [
+        'question_multi_choice_single',
+        'question_multi_choice_multiple',
+        'questions_true_false',
     ],
 ];
 
@@ -132,7 +76,7 @@ Display::display_header($plugin->get_title());
 
 echo '<div class="row">';
 echo '<div class="col-sm-6">';
-echo displayMenu($menu);
+echo displayMenu();
 echo '</div>';
 echo '<div class="col-sm-6">';
 
@@ -159,36 +103,32 @@ echo '</div>';
 Display::display_footer();
 
 /**
- * @param array $menu
- * @param int   $parent
+ * @param string $parent
  *
  * @return string
  */
-function displayMenu(array $menu, $parent = 0) {
-    /** @var MigrationMoodlePlugin $plugin */
-    $plugin = $GLOBALS['plugin'];
+function displayMenu($parent = '_') {
+    $plugin = MigrationMoodlePlugin::create();
+    $menu = $GLOBALS['menu'];
 
-    $items = array_filter(
-        $menu,
-        function ($item) use ($parent) {
-            return $item['parent'] == $parent;
-        }
-    );
+    $items = $menu[$parent];
 
     $baseUrl = api_get_self()."?action=";
 
     $html = '<ol>';
 
-    foreach ($items as $key => $item) {
-        $title = api_underscore_to_camel_case($item['action']);
+    foreach ($items as $item) {
+        $title = api_underscore_to_camel_case($item);
 
         $html .= '<li>';
         $html .= Display::url(
             $plugin->get_lang($title.'Task'),
-            $baseUrl.$item['action']
+            $baseUrl.$item
         );
 
-        $html .= displayMenu($menu, $key);
+        if (isset($menu[$item])) {
+            $html .= displayMenu($item);
+        }
 
         $html .= '</li>';
     }
@@ -205,8 +145,8 @@ function displayMenu(array $menu, $parent = 0) {
  * @return bool
  */
 function isAllowedAction($action, array $menu) {
-    foreach ($menu as $item) {
-        if ($item['action'] == $action) {
+    foreach ($menu as $items) {
+        if (in_array($action, $items)) {
             return true;
         }
     }

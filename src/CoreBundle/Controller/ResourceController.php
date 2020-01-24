@@ -915,7 +915,7 @@ class ResourceController extends AbstractResourceController implements CourseCon
 
         $disposition = $response->headers->makeDisposition(
             ResponseHeaderBag::DISPOSITION_ATTACHMENT,
-            Transliterator::transliterate($zipName)
+            $zipName //Transliterator::transliterate($zipName)
         );
         $response->headers->set('Content-Disposition', $disposition);
         $response->headers->set('Content-Type', 'application/octet-stream');
@@ -1079,7 +1079,6 @@ class ResourceController extends AbstractResourceController implements CourseCon
             throw new NotFoundHttpException($this->trans('File not found for resource'));
         }
 
-        //$fileName = $resourceFile->getOriginalName();
         $fileName = $resourceNode->getSlug();
         $filePath = $resourceFile->getFile()->getPathname();
         $mimeType = $resourceFile->getMimeType();
@@ -1117,7 +1116,6 @@ class ResourceController extends AbstractResourceController implements CourseCon
 
         $stream = $repo->getResourceNodeFileStream($resourceNode);
 
-        //$stream = $this->fs->readStream($resourceNode);
         $response = new StreamedResponse(function () use ($stream): void {
             stream_copy_to_stream($stream, fopen('php://output', 'wb'));
         });

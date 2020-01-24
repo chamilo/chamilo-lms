@@ -69,7 +69,7 @@ class Survey extends Basic
                 'BGColor',
                 api_get_configuration_value('translate_html') ? 'Language' : '',
             ],
-            [api_get_setting('allow_spellcheck') == 'true' ? 'Scayt' : ''],
+            ['true' == api_get_setting('allow_spellcheck') ? 'Scayt' : ''],
             ['Styles', 'Format', 'Font', 'FontSize'],
             ['PageBreak', 'ShowBlocks', 'Source'],
             ['Toolbarswitch'],
@@ -117,7 +117,7 @@ class Survey extends Basic
                 'TextColor',
                 'BGColor',
                 api_get_configuration_value('translate_html') ? 'Language' : '',
-                'Source'
+                'Source',
             ],
             ['Toolbarswitch'],
         ];

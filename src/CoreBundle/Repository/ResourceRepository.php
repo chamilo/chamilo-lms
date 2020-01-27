@@ -360,6 +360,7 @@ class ResourceRepository extends BaseEntityRepository
         $resourceLink = new ResourceLink();
         $resourceLink
             ->setResourceNode($resourceNode)
+            ->setVisibility(ResourceLink::VISIBILITY_PUBLISHED)
             ->setUser($toUser);
 
         return $resourceLink;
@@ -380,7 +381,8 @@ class ResourceRepository extends BaseEntityRepository
             $resourceLink
                 ->setResourceNode($resourceNode)
                 ->setGroup($group)
-                ->setVisibility(ResourceLink::VISIBILITY_PUBLISHED);
+                ->setVisibility(ResourceLink::VISIBILITY_PUBLISHED)
+            ;
             $this->getEntityManager()->persist($resourceLink);
 
             return $resourceLink;

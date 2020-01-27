@@ -2,6 +2,9 @@
 
 /* For licensing terms, see /license.txt */
 
+use Chamilo\CoreBundle\Framework\Container;
+use Chamilo\CourseBundle\Entity\CAnnouncement;
+
 /**
  * @author Frederik Vermeire <frederik.vermeire@pandora.be>, UGent Internship
  * @author Patrick Cool <patrick.cool@UGent.be>, Ghent University: code cleaning
@@ -12,7 +15,6 @@
  *             as there was no title field (the title was merged into the content field)
  */
 
-// use anonymous mode when accessing this course tool
 $use_anonymous = true;
 
 require_once __DIR__.'/../inc/global.inc.php';
@@ -28,6 +30,7 @@ $group_id = api_get_group_id();
 $current_course_tool = TOOL_ANNOUNCEMENT;
 $this_section = SECTION_COURSES;
 $nameTools = get_lang('Announcements');
+$repo = Container::getAnnouncementRepository();
 
 $allowToEdit = (
     api_is_allowed_to_edit(false, true) ||
@@ -110,7 +113,7 @@ switch ($action) {
             }
 
             $sql = "SELECT DISTINCT announcement.id, announcement.display_order
-                    FROM $tbl_announcement announcement 
+                    FROM $tbl_announcement announcement
                     INNER JOIN $tbl_item_property itemproperty
                     ON (announcement.c_id = itemproperty.c_id)
                     WHERE
@@ -494,14 +497,15 @@ switch ($action) {
             $announcement_to_modify = '';
         }
 
-        $announcementInfo = [];
+        $announcementInfo = null;
         if (!empty($id)) {
-            $announcementInfo = AnnouncementManager::get_by_id($courseId, $id);
+            /** @var CAnnouncement $announcementInfo */
+            $announcementInfo = $repo->find($id);
         }
 
         $showSubmitButton = true;
         if (!empty($announcementInfo)) {
-            $to = AnnouncementManager::loadEditUsers('announcement', $id);
+            $to = AnnouncementManager::loadEditUsers($announcementInfo);
 
             if (!empty($group_id)) {
                 $separated = CourseManager::separateUsersGroups($to);
@@ -513,9 +517,9 @@ switch ($action) {
             }
 
             $defaults = [
-                'title' => $announcementInfo['title'],
-                'content' => $announcementInfo['content'],
-                'id' => $announcementInfo['id'],
+                'title' => $announcementInfo->getTitle(),
+                'content' => $announcementInfo->getContent(),
+                'id' => $announcementInfo->getIid(),
                 'users' => $to,
             ];
         } else {
@@ -530,22 +534,22 @@ switch ($action) {
         $form->addHtml("
             <script>
                 $(function () {
-                    $('#announcement_preview').on('click', function() {  
+                    $('#announcement_preview').on('click', function() {
                         var users = [];
                         $('#users_to option').each(function() {
-                            users.push($(this).val());                            
+                            users.push($(this).val());
                         });
-                        
+
                         var form = $('#announcement').serialize();
                         $.ajax({
                             type: 'POST',
                             dataType: 'json',
                             url: '".$ajaxUrl."',
-                            data: {users : JSON.stringify(users), form: form},  
+                            data: {users : JSON.stringify(users), form: form},
                             beforeSend: function() {
                                 $('#announcement_preview_result').html('<i class=\"fa fa-spinner\"></i>');
                                 $('#send_button').hide();
-                            },  
+                            },
                             success: function(result) {
                                 var resultToString = '';
                                 $.each(result, function(index, value) {
@@ -555,7 +559,7 @@ switch ($action) {
                                     '".addslashes(get_lang('Announcement will be sent to'))."<br/>' + resultToString
                                 );
                                 $('#announcement_preview_result').show();
-                                $('#send_button').show();                                
+                                $('#send_button').show();
                             }
                         });
                     });
@@ -655,7 +659,7 @@ switch ($action) {
                     $file_comment = $_POST['file_comment'];
                     $file = $_FILES['user_upload'];
 
-                    AnnouncementManager::edit_announcement(
+                    $announcement = AnnouncementManager::edit_announcement(
                         $id,
                         $data['title'],
                         $data['content'],
@@ -671,14 +675,14 @@ switch ($action) {
                         $messageSentTo = AnnouncementManager::sendEmail(
                             api_get_course_info(),
                             api_get_session_id(),
-                            $id,
+                            $announcement,
                             $sendToUsersInSession,
                             isset($data['send_to_hrm_users'])
                         );
                     }
 
                     if ($sendMeCopy && !in_array(api_get_user_id(), $messageSentTo)) {
-                        $email = new AnnouncementEmail(api_get_course_info(), api_get_session_id(), $id);
+                        $email = new AnnouncementEmail(api_get_course_info(), api_get_session_id(), $announcement);
                         $email->sendAnnouncementEmailToMySelf();
                     }
 
@@ -699,7 +703,7 @@ switch ($action) {
                     $file_comment = $data['file_comment'];
 
                     if (empty($group_id)) {
-                        $insert_id = AnnouncementManager::add_announcement(
+                        $announcement = AnnouncementManager::add_announcement(
                             api_get_course_info(),
                             api_get_session_id(),
                             $data['title'],
@@ -711,7 +715,7 @@ switch ($action) {
                             $sendToUsersInSession
                         );
                     } else {
-                        $insert_id = AnnouncementManager::addGroupAnnouncement(
+                        $announcement = AnnouncementManager::addGroupAnnouncement(
                             $data['title'],
                             $data['content'],
                             $group_id,
@@ -722,7 +726,7 @@ switch ($action) {
                         );
                     }
 
-                    if ($insert_id) {
+                    if ($announcement) {
                         Display::addFlash(
                             Display::return_message(
                                 get_lang('Announcement has been added'),
@@ -736,13 +740,13 @@ switch ($action) {
                             $messageSentTo = AnnouncementManager::sendEmail(
                                 api_get_course_info(),
                                 api_get_session_id(),
-                                $insert_id,
+                                $announcement,
                                 $sendToUsersInSession
                             );
                         }
 
                         if ($sendMeCopy && !in_array(api_get_user_id(), $messageSentTo)) {
-                            $email = new AnnouncementEmail(api_get_course_info(), api_get_session_id(), $insert_id);
+                            $email = new AnnouncementEmail(api_get_course_info(), api_get_session_id(), $announcement);
                             $email->sendAnnouncementEmailToMySelf();
                         }
 

@@ -4,6 +4,9 @@
 /**
  * Responses to AJAX calls.
  */
+
+use Chamilo\CoreBundle\Framework\Container;
+
 require_once __DIR__.'/../global.inc.php';
 
 $action = isset($_REQUEST['a']) ? $_REQUEST['a'] : null;
@@ -194,18 +197,18 @@ switch ($action) {
             }
 
             $list = explode(',', $_REQUEST['id']);
+
+            $repo = Container::getAnnouncementRepository();
             foreach ($list as $itemId) {
                 if (!api_is_session_general_coach() || api_is_element_in_the_session(TOOL_ANNOUNCEMENT, $itemId)) {
-                    $result = AnnouncementManager::get_by_id(
-                        api_get_course_int_id(),
-                        $itemId
-                    );
-                    if (!empty($result)) {
+                    $announcement = $repo->find($itemId);
+
+                    if (!empty($announcement)) {
                         $delete = true;
                         if (!empty($groupId) && $isTutor) {
-                            if ($groupId != $result['to_group_id']) {
+                            /*if ($groupId != $result['to_group_id']) {
                                 $delete = false;
-                            }
+                            }*/
                         }
                         if ($delete) {
                             AnnouncementManager::delete_announcement($courseInfo, $itemId);

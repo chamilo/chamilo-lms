@@ -4334,8 +4334,10 @@ function get_whats_new()
                     access_tool = '".Database::escape_string($tool)."'";
         $result = Database::query($sql);
         $row = Database::fetch_array($result);
-        Session::write('last_forum_access', $row['access_date']);
-        $lastForumAccess = $row['access_date'];
+        if (isset($row['access_date'])) {
+            Session::write('last_forum_access', $row['access_date']);
+            $lastForumAccess = $row['access_date'];
+        }
     }
 
     $whatsNew = Session::read('whatsnew_post_info');

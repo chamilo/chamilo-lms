@@ -34,7 +34,7 @@ abstract class AbstractResourceController extends BaseController
     {
         $services = parent::getSubscribedServices();
         $services['glide'] = Glide::class;
-        $services['storage'] = FlysystemStorage::class;
+        //$services['storage'] = FlysystemStorage::class;
 
         return $services;
     }
@@ -45,13 +45,5 @@ abstract class AbstractResourceController extends BaseController
     public function getGlide()
     {
         return $this->container->get('glide');
-    }
-
-    /**
-     * @return FlysystemStorage
-     */
-    public function getStorage()
-    {
-        return $this->container->get('storage');
     }
 }

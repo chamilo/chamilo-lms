@@ -878,7 +878,6 @@ class ResourceController extends AbstractResourceController implements CourseCon
 
         $zipName = $resourceNode->getSlug().'.zip';
         $rootNodePath = $resourceNode->getPathForDisplay();
-
         $resourceNodeRepo = $repo->getResourceNodeRepository();
 
         $criteria = Criteria::create()
@@ -1071,7 +1070,6 @@ class ResourceController extends AbstractResourceController implements CourseCon
         );
 
         $repo = $this->getRepositoryFromRequest($request);
-
         $resourceFile = $resourceNode->getResourceFile();
 
         if (!$resourceFile) {
@@ -1107,9 +1105,9 @@ class ResourceController extends AbstractResourceController implements CourseCon
                         $params['crop'] = $crop;
                     }
 
-                    $file = $this->getStorage()->resolveUri($resourceFile);
+                    $fileName = $repo->getFilename($resourceFile);
 
-                    return $server->getImageResponse($file, $params);
+                    return $server->getImageResponse($fileName, $params);
                 }
 
                 break;

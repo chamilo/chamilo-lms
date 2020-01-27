@@ -12,7 +12,6 @@ use APY\DataGridBundle\Grid\Export\ExcelExport;
 use APY\DataGridBundle\Grid\Grid;
 use APY\DataGridBundle\Grid\Row;
 use APY\DataGridBundle\Grid\Source\Entity;
-use Chamilo\CoreBundle\Component\Utils\Glide;
 use Chamilo\CoreBundle\Entity\Resource\AbstractResource;
 use Chamilo\CoreBundle\Entity\Resource\ResourceInterface;
 use Chamilo\CoreBundle\Entity\Resource\ResourceLink;
@@ -42,7 +41,6 @@ use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Routing\Router;
 use Symfony\Component\Routing\RouterInterface;
 use Symfony\Component\Security\Core\Exception\AccessDeniedException;
-use Vich\UploaderBundle\Storage\FlysystemStorage;
 use ZipStream\Option\Archive;
 use ZipStream\ZipStream;
 
@@ -789,7 +787,7 @@ class ResourceController extends AbstractResourceController implements CourseCon
      *
      * @Route("/{tool}/{type}/{id}/view", methods={"GET"}, name="chamilo_core_resource_view")
      */
-    public function viewAction(Request $request, Glide $glide, RouterInterface $router, FlysystemStorage $storage): Response
+    public function viewAction(Request $request, RouterInterface $router): Response
     {
         $id = $request->get('id');
         $filter = $request->get('filter');
@@ -811,7 +809,7 @@ class ResourceController extends AbstractResourceController implements CourseCon
             return $this->redirect($url);
         }
 
-        return $this->showFile($request, $resourceNode, $mode, $glide, $filter, $storage);
+        return $this->showFile($request, $resourceNode, $mode, $filter);
     }
 
     /**
@@ -821,7 +819,7 @@ class ResourceController extends AbstractResourceController implements CourseCon
      *
      * @throws \League\Flysystem\FileNotFoundException
      */
-    public function getDocumentAction(Request $request, Glide $glide): Response
+    public function getDocumentAction(Request $request): Response
     {
         /*$file = $request->get('file');
         $mode = $request->get('mode');
@@ -1064,7 +1062,7 @@ class ResourceController extends AbstractResourceController implements CourseCon
      *
      * @return mixed|StreamedResponse
      */
-    private function showFile(Request $request, ResourceNode $resourceNode, $mode = 'show', Glide $glide = null, $filter = '', FlysystemStorage $storage)
+    private function showFile(Request $request, ResourceNode $resourceNode, $mode = 'show', $filter = '')
     {
         $this->denyAccessUnlessGranted(
             ResourceNodeVoter::VIEW,
@@ -1093,6 +1091,7 @@ class ResourceController extends AbstractResourceController implements CourseCon
                 $forceDownload = false;
                 // If it's an image then send it to Glide.
                 if (false !== strpos($mimeType, 'image')) {
+                    $glide = $this->getGlide();
                     $server = $glide->getServer();
                     $params = $request->query->all();
 
@@ -1108,7 +1107,7 @@ class ResourceController extends AbstractResourceController implements CourseCon
                         $params['crop'] = $crop;
                     }
 
-                    $file = $storage->resolveUri($resourceFile);
+                    $file = $this->getStorage()->resolveUri($resourceFile);
 
                     return $server->getImageResponse($file, $params);
                 }

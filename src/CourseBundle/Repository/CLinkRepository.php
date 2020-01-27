@@ -15,6 +15,7 @@ use Chamilo\CoreBundle\Repository\ResourceRepositoryInterface;
 use Chamilo\CourseBundle\Entity\CGroupInfo;
 use Chamilo\CourseBundle\Entity\CLink;
 use Chamilo\UserBundle\Entity\User;
+use Doctrine\ORM\QueryBuilder;
 use Symfony\Component\Form\FormInterface;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 
@@ -23,7 +24,7 @@ use Symfony\Component\HttpFoundation\File\UploadedFile;
  */
 final class CLinkRepository extends ResourceRepository implements ResourceRepositoryInterface
 {
-    public function getResources(User $user, ResourceNode $parentNode, Course $course = null, Session $session = null, CGroupInfo $group = null)
+    public function getResources(User $user, ResourceNode $parentNode, Course $course = null, Session $session = null, CGroupInfo $group = null): QueryBuilder
     {
         return $this->getResourcesByCourse($course, $session, $group, $parentNode);
     }

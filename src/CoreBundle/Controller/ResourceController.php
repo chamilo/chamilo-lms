@@ -148,7 +148,7 @@ class ResourceController extends AbstractResourceController implements CourseCon
 
         $course = $this->getCourse();
         $session = $this->getSession();
-
+        /** @var QueryBuilder $qb */
         $qb = $repository->getResources($this->getUser(), $parentNode, $course, $session, null);
 
         // 3. Set QueryBuilder to the source.

@@ -16,6 +16,7 @@ use Chamilo\CoreBundle\Repository\ResourceRepositoryInterface;
 use Chamilo\CourseBundle\Entity\CGroupInfo;
 use Chamilo\UserBundle\Entity\User;
 use Doctrine\ORM\Query\Expr\Join;
+use Doctrine\ORM\QueryBuilder;
 use Symfony\Component\Form\FormInterface;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\Security\Core\Exception\AccessDeniedException;
@@ -34,7 +35,7 @@ final class CToolRepository extends ResourceRepository implements ResourceReposi
         return $settings;
     }
 
-    public function getResources(User $user, ResourceNode $parentNode, Course $course = null, Session $session = null, CGroupInfo $group = null)
+    public function getResources(User $user, ResourceNode $parentNode, Course $course = null, Session $session = null, CGroupInfo $group = null): QueryBuilder
     {
         $repo = $this->getRepository();
         $className = $repo->getClassName();

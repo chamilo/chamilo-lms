@@ -83,124 +83,6 @@ class AddCourse
     }
 
     /**
-     * Initializes a file repository for a newly created course.
-     *
-     * @param string Course repository
-     * @param string Course code
-     *
-     * @return int
-     * @assert (null,null) === false
-     */
-    public static function prepare_course_repository($course_repository)
-    {
-        return true;
-
-        $perm = api_get_permissions_for_new_directories();
-        $perm_file = api_get_permissions_for_new_files();
-        $htmlpage = "<!DOCTYPE html>\n<html lang=\"en\">\n  <head>\n    <meta charset=\"utf-8\">\n    <title>Not authorized</title>\n  </head>\n  <body>\n  </body>\n</html>";
-        $cp = api_get_path(SYS_COURSE_PATH).$course_repository;
-
-        //Creating document folder
-        mkdir($cp, $perm);
-        mkdir($cp.'/document', $perm);
-        $cpt = $cp.'/document/index.html';
-        $fd = fopen($cpt, 'w');
-        fwrite($fd, $htmlpage);
-        fclose($fd);
-
-        /*
-        @chmod($cpt, $perm_file);
-        @copy($cpt, $cp . '/document/index.html');
-        mkdir($cp . '/document/images', $perm);
-        @copy($cpt, $cp . '/document/images/index.html');
-        mkdir($cp . '/document/images/gallery/', $perm);
-        @copy($cpt, $cp . '/document/images/gallery/index.html');
-        mkdir($cp . '/document/shared_folder/', $perm);
-        @copy($cpt, $cp . '/document/shared_folder/index.html');
-        mkdir($cp . '/document/audio', $perm);
-        @copy($cpt, $cp . '/document/audio/index.html');
-        mkdir($cp . '/document/flash', $perm);
-        @copy($cpt, $cp . '/document/flash/index.html');
-        mkdir($cp . '/document/video', $perm);
-        @copy($cpt, $cp . '/document/video/index.html');    */
-
-        //Creatind dropbox folder
-        mkdir($cp.'/dropbox', $perm);
-        $cpt = $cp.'/dropbox/index.html';
-        $fd = fopen($cpt, 'w');
-        fwrite($fd, $htmlpage);
-        fclose($fd);
-        @chmod($cpt, $perm_file);
-        mkdir($cp.'/group', $perm);
-        @copy($cpt, $cp.'/group/index.html');
-        mkdir($cp.'/page', $perm);
-        @copy($cpt, $cp.'/page/index.html');
-        mkdir($cp.'/scorm', $perm);
-        @copy($cpt, $cp.'/scorm/index.html');
-        mkdir($cp.'/upload', $perm);
-        @copy($cpt, $cp.'/upload/index.html');
-        mkdir($cp.'/upload/forum', $perm);
-        @copy($cpt, $cp.'/upload/forum/index.html');
-        mkdir($cp.'/upload/forum/images', $perm);
-        @copy($cpt, $cp.'/upload/forum/images/index.html');
-        mkdir($cp.'/upload/test', $perm);
-        @copy($cpt, $cp.'/upload/test/index.html');
-        mkdir($cp.'/upload/blog', $perm);
-        @copy($cpt, $cp.'/upload/blog/index.html');
-        mkdir($cp.'/upload/learning_path', $perm);
-        @copy($cpt, $cp.'/upload/learning_path/index.html');
-        mkdir($cp.'/upload/learning_path/images', $perm);
-        @copy($cpt, $cp.'/upload/learning_path/images/index.html');
-        mkdir($cp.'/upload/calendar', $perm);
-        @copy($cpt, $cp.'/upload/calendar/index.html');
-        mkdir($cp.'/upload/calendar/images', $perm);
-        @copy($cpt, $cp.'/upload/calendar/images/index.html');
-        mkdir($cp.'/work', $perm);
-        @copy($cpt, $cp.'/work/index.html');
-        mkdir($cp.'/upload/announcements', $perm);
-        @copy($cpt, $cp.'/upload/announcements/index.html');
-        mkdir($cp.'/upload/announcements/images', $perm);
-        @copy($cpt, $cp.'/upload/announcements/images/index.html');
-
-        //Oral expression question type
-        mkdir($cp.'/exercises', $perm);
-        @copy($cpt, $cp.'/exercises/index.html');
-
-        // Create .htaccess in the dropbox directory.
-        $fp = fopen($cp.'/dropbox/.htaccess', 'w');
-        fwrite(
-            $fp,
-            "AuthName AllowLocalAccess
-                       AuthType Basic
-
-                       order deny,allow
-                       deny from all
-
-                       php_flag zlib.output_compression off"
-        );
-        fclose($fp);
-
-        // Build index.php of the course.
-        /*$fd = fopen($cp . '/index.php', 'w');
-
-        // str_replace() removes \r that cause squares to appear at the end of each line
-        //@todo fix the harcoded include
-        $string = str_replace(
-            "\r",
-            "",
-            "<?" . "php
-        \$cidReq = \"$course_code\";
-        \$dbname = \"$course_code\";
-
-        include(\"" . api_get_path(SYS_CODE_PATH) . "course_home/course_home.php\");
-        ?>"
-        );
-        fwrite($fd, $string);
-        @chmod($cp . '/index.php', $perm_file);*/
-        return 0;
-    }
-
-    /**
      * Gets an array with all the course tables (deprecated?).
      *
      * @return array
@@ -371,8 +253,6 @@ class AddCourse
         $TABLESETTING = Database::get_course_table(TABLE_COURSE_SETTING);
         $TABLEGRADEBOOK = Database::get_main_table(TABLE_MAIN_GRADEBOOK_CATEGORY);
         $TABLEGRADEBOOKLINK = Database::get_main_table(TABLE_MAIN_GRADEBOOK_LINK);
-        $visible_for_course_admin = 0;
-        $em = Database::getManager();
         $course = api_get_course_entity($course_id);
         $settingsManager = CourseManager::getCourseSettingsManager();
         $settingsManager->setCourse($course);
@@ -479,30 +359,40 @@ class AddCourse
             $finder = new Symfony\Component\Finder\Finder();
             $defaultPath = api_get_path(SYS_PUBLIC_PATH).'img/document';
             $finder->in($defaultPath);
+
             /** @var SplFileInfo $file */
             foreach ($finder as $file) {
                 $path = str_replace($defaultPath, '', $file->getRealPath());
                 $parentName = dirname(str_replace($defaultPath, '', $file->getRealPath()));
                 $title = $file->getFilename();
+                $parent = DocumentManager::getDocumentByPathInCourse($courseInfo, $parentName);
+
+                $parentId = 0;
+                if (!empty($parent)) {
+                    $parent = $parent[0];
+                    $parentId = $parent['iid'];
+                }
+
                 if ($file->isDir()) {
-                    create_unexisting_directory(
+                    $realPath = str_replace($defaultPath, '', $file->getRealPath());
+                    DocumentManager::addDocument(
                         $courseInfo,
-                        api_get_user_id(),
-                        0,
-                        0,
-                        0,
-                        $path,
-                        $path,
-                        $title
+                        $realPath,
+                        'folder',
+                        null,
+                        $title,
+                        '',
+                        null,
+                        null,
+                        null,
+                        null,
+                        null,
+                        false,
+                        null,
+                        $parentId,
+                        $file->getRealPath()
                     );
                 } else {
-                    $parent = DocumentManager::getDocumentByPathInCourse($courseInfo, $parentName);
-                    $parentId = 0;
-                    if (!empty($parent)) {
-                        $parent = $parent[0];
-                        $parentId = $parent['iid'];
-                    }
-
                     $realPath = str_replace($defaultPath, '', $file->getRealPath());
                     $document = DocumentManager::addDocument(
                         $courseInfo,

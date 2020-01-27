@@ -451,10 +451,7 @@ class ResourceRepository extends BaseEntityRepository
         return $repo->findOneBy(['name' => $name]);
     }
 
-    /**
-     * @return QueryBuilder
-     */
-    public function getResourcesByCourse(Course $course, Session $session = null, CGroupInfo $group = null, ResourceNode $parentNode = null)
+    public function getResourcesByCourse(Course $course, Session $session = null, CGroupInfo $group = null, ResourceNode $parentNode = null): QueryBuilder
     {
         $repo = $this->getRepository();
         $className = $repo->getClassName();

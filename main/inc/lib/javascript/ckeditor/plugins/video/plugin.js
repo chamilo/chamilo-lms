@@ -139,7 +139,12 @@ CKEDITOR.plugins.add( 'video',
 									realElement.children[ i ].name = 'cke:source'
 							}
 
-							var fakeElement = editor.createFakeParserElement( realElement, 'cke_video', 'video', false ),
+							var fakeElement = editor.createFakeParserElement(
+									realElement,
+									'cke_video ' + realElement.attributes.class,
+									'video',
+									false
+								),
 								fakeStyle = fakeElement.attributes.style || '';
 
 							var width = realElement.attributes.width,

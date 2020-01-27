@@ -530,6 +530,8 @@ abstract class Question
         $id = $this->id;
         $type = $this->type;
         $c_id = $this->course['real_id'];
+
+        $courseEntity = api_get_course_entity($c_id);
         $categoryId = $this->category;
 
         $questionRepo = Container::getQuestionRepository();
@@ -605,11 +607,15 @@ abstract class Question
                     $this->id
                 );
                 $exerciseEntity = $exerciseRepo->find($exerciseId);
-                $node = $questionRepo->addResourceNode($question, api_get_user_entity(api_get_user_id()), $exerciseEntity);
+                $node = $questionRepo->addResourceNode(
+                    $question,
+                    api_get_user_entity(api_get_user_id()),
+                    $exerciseEntity
+                );
                 $questionRepo->addResourceNodeToCourse(
                     $node,
                     ResourceLink::VISIBILITY_PUBLISHED,
-                    api_get_course_entity(),
+                    $courseEntity,
                     api_get_session_entity(),
                     api_get_group_entity()
                 );

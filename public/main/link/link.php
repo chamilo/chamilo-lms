@@ -46,6 +46,7 @@ $action = !empty($_REQUEST['action']) ? $_REQUEST['action'] : '';
 $nameTools = get_lang('Links');
 $course_id = api_get_course_int_id();
 $session_id = api_get_session_id();
+$courseInfo = api_get_course_info();
 
 if ('addlink' === $action) {
     $nameTools = '';
@@ -102,8 +103,9 @@ switch ($action) {
     case 'addlink':
         $form = Link::getLinkForm(null, 'addlink', $token);
         if ($form->validate() && Security::check_token('get')) {
-            // Here we add a link
-            $linkId = Link::addLink();
+            $link = new Link();
+            $link->setCourse($courseInfo);
+            $linkId = $link->save($form->exportValues());
             Skill::saveSkills($form, ITEM_TYPE_LINK, $linkId);
 
             Security::clear_token();

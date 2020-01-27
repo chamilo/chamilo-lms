@@ -78,172 +78,22 @@ class Link extends Model
     public function save($params, $show_query = null)
     {
         $course_info = $this->getCourse();
-        $courseId = $course_info['real_id'];
-
-        $params['session_id'] = api_get_session_id();
-        $params['category_id'] = isset($params['category_id']) ? $params['category_id'] : 0;
-
-        $sql = "SELECT MAX(display_order)
-                FROM  ".$this->table."
-                WHERE
-                    c_id = $courseId AND
-                    category_id = '".intval($params['category_id'])."'";
-        $result = Database:: query($sql);
-        list($orderMax) = Database:: fetch_row($result);
-        $order = $orderMax + 1;
-        $params['display_order'] = $order;
-
-        $id = parent::save($params, $show_query);
-
-        if (!empty($id)) {
-            // iid
-            $sql = "UPDATE ".$this->table." SET id = iid WHERE iid = $id";
-            Database::query($sql);
-
-            api_item_property_update(
-                $course_info,
-                TOOL_LINK,
-                $id,
-                'LinkAdded',
-                api_get_user_id()
-            );
-
-            api_set_default_visibility($id, TOOL_LINK);
-        }
-
-        return $id;
-    }
-
-    /**
-     * Update a link in the database.
-     *
-     * @param int    $linkId    The ID of the link to update
-     * @param string $linkUrl   The new URL to be saved
-     * @param int    $courseId
-     * @param int    $sessionId
-     *
-     * @return bool
-     */
-    public function updateLink(
-        $linkId,
-        $linkUrl,
-        $courseId = null,
-        $sessionId = null
-    ) {
-        $tblLink = Database::get_course_table(TABLE_LINK);
-        $linkUrl = Database::escape_string($linkUrl);
-        $linkId = intval($linkId);
-        if (is_null($courseId)) {
-            $courseId = api_get_course_int_id();
-        }
-        $courseId = intval($courseId);
-        if (is_null($sessionId)) {
-            $sessionId = api_get_session_id();
-        }
-        $sessionId = intval($sessionId);
-        if ($linkUrl != '') {
-            $sql = "UPDATE $tblLink SET
-                    url = '$linkUrl'
-                    WHERE id = $linkId AND c_id = $courseId AND session_id = $sessionId";
-            $resLink = Database::query($sql);
-
-            return $resLink;
-        }
-
-        return false;
-    }
-
-    public static function addCategory()
-    {
-        $_course = api_get_course_info();
-        $course_id = $_course['real_id'];
-        $tbl_categories = Database::get_course_table(TABLE_LINK_CATEGORY);
-
-        $category_title = trim($_POST['category_title']);
-        $description = trim($_POST['description']);
-
-        if (empty($category_title)) {
-            echo Display::return_message(get_lang('Please give the category name'), 'error');
-            return false;
-        }
-
-        // Looking for the largest order number for this category.
-        $result = Database:: query(
-            "SELECT MAX(display_order) FROM  $tbl_categories
-            WHERE c_id = $course_id "
-        );
-        list($orderMax) = Database:: fetch_row($result);
-        $order = $orderMax + 1;
-        $order = (int) $order;
+        $course_id = $course_info['real_id'];
         $session_id = api_get_session_id();
 
-        $repo = Container::getLinkCategoryRepository();
-        $courseEntity = api_get_course_entity($course_id);
-        $sessionEntity = api_get_session_entity($session_id);
-
-        $category = new CLinkCategory();
-        $category
-            ->setSessionId($session_id)
-            ->setCId($course_id)
-            ->setCategoryTitle($category_title)
-            ->setDescription($description)
-            ->setDisplayOrder($order)
-        ;
-
-        $repo->addResourceToCourse(
-            $category,
-            ResourceLink::VISIBILITY_PUBLISHED,
-            api_get_user_entity(api_get_user_id()),
-            $courseEntity,
-            $sessionEntity,
-            api_get_group_entity()
-        );
-
-        $repo->getEntityManager()->flush();
-        $linkId = $category->getIid();
-
-        if ($linkId) {
-            // iid
-            $sql = "UPDATE $tbl_categories SET id = iid WHERE iid = $linkId";
-            Database:: query($sql);
-
-            // add link_category visibility
-            // course ID is taken from context in api_set_default_visibility
-            //api_set_default_visibility($linkId, TOOL_LINK_CATEGORY);
-            /*api_item_property_update(
-                $_course,
-                TOOL_LINK_CATEGORY,
-                $linkId,
-                'LinkCategoryAdded',
-                api_get_user_id()
-            );
-            api_set_default_visibility($linkId, TOOL_LINK_CATEGORY);*/
-        }
-
-        Display::addFlash(Display::return_message(get_lang('Category added')));
-
-        return $linkId;
-    }
-
-    public static function addLink()
-    {
-        $_course = api_get_course_info();
-        $course_id = $_course['real_id'];
-        $session_id = api_get_session_id();
-
-        $title = Security::remove_XSS(stripslashes($_POST['title']));
-        $urllink = Security::remove_XSS($_POST['url']);
-        $description = Security::remove_XSS($_POST['description']);
-        $categoryId = (int) $_POST['category_id'];
+        $title = stripslashes($params['title']);
+        $urllink = $params['url'];
+        $description = $params['description'];
+        $categoryId = (int) $params['category_id'];
 
         $onhomepage = 0;
-        if (isset($_POST['on_homepage'])) {
-            $onhomepage = Security::remove_XSS($_POST['on_homepage']);
+        if (isset($params['on_homepage'])) {
+            $onhomepage = Security::remove_XSS($params['on_homepage']);
         }
 
         $target = '_self'; // Default target.
-        if (!empty($_POST['target'])) {
-            $target = Security::remove_XSS($_POST['target']);
+        if (!empty($params['target'])) {
+            $target = Security::remove_XSS($params['target']);
         }
 
         $urllink = trim($urllink);
@@ -389,8 +239,8 @@ class Link extends Model
                 }
 
                 $di = new ChamiloIndexer();
-                isset($_POST['language']) ? $lang = Database:: escape_string(
-                    $_POST['language']
+                isset($params['language']) ? $lang = Database:: escape_string(
+                    $params['language']
                 ) : $lang = 'english';
                 $di->connectDb(null, null, $lang);
                 $di->addChunk($ic_slide);
@@ -420,8 +270,119 @@ class Link extends Model
 
             return $link_id;
         }
-
     }
+
+    /**
+     * Update a link in the database.
+     *
+     * @param int    $linkId    The ID of the link to update
+     * @param string $linkUrl   The new URL to be saved
+     * @param int    $courseId
+     * @param int    $sessionId
+     *
+     * @return bool
+     */
+    public function updateLink(
+        $linkId,
+        $linkUrl,
+        $courseId = null,
+        $sessionId = null
+    ) {
+        $tblLink = Database::get_course_table(TABLE_LINK);
+        $linkUrl = Database::escape_string($linkUrl);
+        $linkId = intval($linkId);
+        if (is_null($courseId)) {
+            $courseId = api_get_course_int_id();
+        }
+        $courseId = intval($courseId);
+        if (is_null($sessionId)) {
+            $sessionId = api_get_session_id();
+        }
+        $sessionId = intval($sessionId);
+        if ($linkUrl != '') {
+            $sql = "UPDATE $tblLink SET
+                    url = '$linkUrl'
+                    WHERE id = $linkId AND c_id = $courseId AND session_id = $sessionId";
+            $resLink = Database::query($sql);
+
+            return $resLink;
+        }
+
+        return false;
+    }
+
+    public static function addCategory()
+    {
+        $_course = api_get_course_info();
+        $course_id = $_course['real_id'];
+        $tbl_categories = Database::get_course_table(TABLE_LINK_CATEGORY);
+
+        $category_title = trim($_POST['category_title']);
+        $description = trim($_POST['description']);
+
+        if (empty($category_title)) {
+            echo Display::return_message(get_lang('Please give the category name'), 'error');
+            return false;
+        }
+
+        // Looking for the largest order number for this category.
+        $result = Database:: query(
+            "SELECT MAX(display_order) FROM  $tbl_categories
+            WHERE c_id = $course_id "
+        );
+        list($orderMax) = Database:: fetch_row($result);
+        $order = $orderMax + 1;
+        $order = (int) $order;
+        $session_id = api_get_session_id();
+
+        $repo = Container::getLinkCategoryRepository();
+        $courseEntity = api_get_course_entity($course_id);
+        $sessionEntity = api_get_session_entity($session_id);
+
+        $category = new CLinkCategory();
+        $category
+            ->setSessionId($session_id)
+            ->setCId($course_id)
+            ->setCategoryTitle($category_title)
+            ->setDescription($description)
+            ->setDisplayOrder($order)
+        ;
+
+        $repo->addResourceToCourse(
+            $category,
+            ResourceLink::VISIBILITY_PUBLISHED,
+            api_get_user_entity(api_get_user_id()),
+            $courseEntity,
+            $sessionEntity,
+            api_get_group_entity()
+        );
+
+        $repo->getEntityManager()->flush();
+        $linkId = $category->getIid();
+
+        if ($linkId) {
+            // iid
+            $sql = "UPDATE $tbl_categories SET id = iid WHERE iid = $linkId";
+            Database:: query($sql);
+
+            // add link_category visibility
+            // course ID is taken from context in api_set_default_visibility
+            //api_set_default_visibility($linkId, TOOL_LINK_CATEGORY);
+            /*api_item_property_update(
+                $_course,
+                TOOL_LINK_CATEGORY,
+                $linkId,
+                'LinkCategoryAdded',
+                api_get_user_id()
+            );
+            api_set_default_visibility($linkId, TOOL_LINK_CATEGORY);*/
+        }
+
+        Display::addFlash(Display::return_message(get_lang('Category added')));
+
+        return $linkId;
+    }
+
     public static function deleteCategory($id)
     {
         $repo = Container::getLinkCategoryRepository();
@@ -550,13 +511,14 @@ class Link extends Model
     {
         $tbl_link = Database::get_course_table(TABLE_LINK);
         $course_id = api_get_course_int_id();
+        $id = (int) $id;
 
         if (empty($id) || empty($course_id)) {
             return [];
         }
 
         $sql = "SELECT * FROM $tbl_link
-                WHERE c_id = $course_id AND id='".intval($id)."' ";
+                WHERE c_id = $course_id AND iid= $id ";
         $result = Database::query($sql);
         $data = [];
         if (Database::num_rows($result)) {

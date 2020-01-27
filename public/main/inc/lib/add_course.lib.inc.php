@@ -210,7 +210,7 @@ class AddCourse
     public static function get_course_tables()
     {
         $tables = [];
-        $tables[] = 'item_property';
+        //$tables[] = 'item_property';
         $tables[] = 'tool';
         $tables[] = 'tool_intro';
         $tables[] = 'group_info';
@@ -669,8 +669,8 @@ class AddCourse
             ];
 
             $forumId = store_forum($params, $courseInfo, true);
-
-            $forumInfo = get_forum_information($forumId, $courseInfo['real_id']);
+            $repo = Container::getForumRepository();
+            $forumEntity = $repo->find($forumId);
 
             $params = [
                 'post_title' => get_lang('Example Thread'),
@@ -683,7 +683,7 @@ class AddCourse
                 'thread_peer_qualify' => 0,
             ];
 
-            store_thread($forumInfo, $params, $courseInfo, false);
+            store_thread($forumEntity, $params, $courseInfo, false);
 
             /* Gradebook tool */
             $course_code = $courseInfo['code'];

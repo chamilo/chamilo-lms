@@ -2,14 +2,12 @@
 
 /* For licensing terms, see /license.txt */
 
-use Chamilo\CoreBundle\Entity\Course;
 use Chamilo\CoreBundle\Entity\Resource\ResourceLink;
 use Chamilo\CoreBundle\Framework\Container;
 use Chamilo\CourseBundle\Entity\CForumCategory;
 use Chamilo\CourseBundle\Entity\CForumForum;
 use Chamilo\CourseBundle\Entity\CForumPost;
 use Chamilo\CourseBundle\Entity\CForumThread;
-use Chamilo\UserBundle\Entity\User;
 use ChamiloSession as Session;
 use Doctrine\Common\Collections\Criteria;
 
@@ -824,7 +822,7 @@ function store_forum($values, $courseInfo = [], $returnId = false)
         ->setAllowNewThreads($values['allow_new_threads_group']['allow_new_threads'] ?? null)
         ->setDefaultView($values['default_view_type_group']['default_view_type'] ?? null)
         ->setForumOfGroup($values['group_forum'] ?? null)
-        ->setForumGroupPublicPrivate($values['public_private_group_forum_group']['public_private_group_forum'] ?? null)
+        ->setForumGroupPublicPrivate($values['public_private_group_forum_group']['public_private_group_forum'] ?? '')
         ->setModerated($values['moderated']['moderated'] ?? null)
         ->setStartTime(!empty($values['start_time']) ? api_get_utc_datetime($values['start_time']) : null)
         ->setEndTime(!empty($values['end_time']) ? api_get_utc_datetime($values['end_time']) : null)
@@ -2728,8 +2726,6 @@ function updateThread($values)
  * This function stores a new thread. This is done through an entry in the forum_thread table AND
  * in the forum_post table because. The threads are also stored in the item_property table. (forum posts are not (yet)).
  *
- * @param array $values
- * @param array $courseInfo
  * @param bool  $showMessage
  * @param int   $userId      Optional. The user ID
  * @param int   $sessionId
@@ -2742,8 +2738,8 @@ function updateThread($values)
  */
 function store_thread(
     CForumForum $forum,
-    $values,
-    $courseInfo = [],
+    array $values,
+    array $courseInfo = [],
     $showMessage = true,
     $userId = 0,
     $sessionId = 0
@@ -4544,8 +4540,9 @@ function get_unaproved_messages($forum_id)
  */
 function send_notification_mails(CForumForum $forum, CForumThread $thread, $reply_info)
 {
-    $_course = api_get_course_info();
-    $courseEntity = $_course['entity'];
+    $courseEntity = api_get_course_entity($forum->getCId());
+    $courseId = $courseEntity->getId();
+
     $sessionId = api_get_session_id();
     $sessionEntity = api_get_session_entity($sessionId);
 
@@ -4580,7 +4577,7 @@ function send_notification_mails(CForumForum $forum, CForumThread $thread, $repl
         if ($forum) {
             $sql = "SELECT * FROM $table_notification
                     WHERE
-                        c_id = ".api_get_course_int_id()." AND
+                        c_id = ".$courseId." AND
                         (
                             forum_id = '".$forum->getIid()."' OR
                             thread_id = '".$thread->getIid()."'
@@ -4589,7 +4586,7 @@ function send_notification_mails(CForumForum $forum, CForumThread $thread, $repl
             $user_id = api_get_user_id();
             while ($row = Database::fetch_array($result)) {
                 $sql = "INSERT INTO $table (c_id, thread_id, post_id, user_id)
-                        VALUES (".api_get_course_int_id().", '".$thread->getIid()."', '".(int) ($reply_info['new_post_id'])."', '$user_id' )";
+                        VALUES (".$courseId.", '".$thread->getIid()."', '".(int) ($reply_info['new_post_id'])."', '$user_id' )";
                 Database::query($sql);
             }
         }

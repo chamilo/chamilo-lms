@@ -81,7 +81,7 @@ final class IllustrationRepository extends ResourceRepository implements Resourc
         return $newResource;
     }
 
-    public function addIllustration(AbstractResource $resource, User $user, UploadedFile $uploadFile): ?ResourceFile
+    public function addIllustration(AbstractResource $resource, User $user, UploadedFile $uploadFile = null): ?ResourceFile
     {
         if (null === $uploadFile) {
             return null;

@@ -6,6 +6,7 @@ namespace Chamilo\FaqBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Mapping\Annotation as Gedmo;
+use Knp\DoctrineBehaviors\Contract\Entity\TranslationInterface;
 use Knp\DoctrineBehaviors\Model\Translatable\TranslationTrait;
 
 /**
@@ -27,9 +28,16 @@ use Knp\DoctrineBehaviors\Model\Translatable\TranslationTrait;
  *     )
  * })
  */
-class QuestionTranslation
+class QuestionTranslation implements TranslationInterface
 {
     use TranslationTrait;
+
+    /**
+     * @ORM\Column(name="id", type="integer")
+     * @ORM\Id
+     * @ORM\GeneratedValue(strategy="AUTO")
+     */
+    private $id;
 
     /**
      * @ORM\Column(type="string", length=255, nullable=false)

@@ -7,7 +7,8 @@ namespace Chamilo\FaqBundle\Entity;
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Mapping\Annotation as Gedmo;
 use Gedmo\Timestampable\Traits\TimestampableEntity;
-use Knp\DoctrineBehaviors\Model\Translatable\TranslationTrait;
+use Knp\DoctrineBehaviors\Contract\Entity\TranslatableInterface;
+use Knp\DoctrineBehaviors\Model\Translatable\TranslatableTrait;
 
 /**
  * Class Category.
@@ -18,10 +19,10 @@ use Knp\DoctrineBehaviors\Model\Translatable\TranslationTrait;
  *     indexes={@ORM\Index(name="is_active_idx", columns={"is_active"})}
  * )
  */
-class Category
+class Category implements TranslatableInterface
 {
     use TimestampableEntity;
-    use TranslationTrait;
+    use TranslatableTrait;
 
     /**
      * @ORM\Column(type="integer")

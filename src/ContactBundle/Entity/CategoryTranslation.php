@@ -5,6 +5,7 @@
 namespace Chamilo\ContactBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use Knp\DoctrineBehaviors\Contract\Entity\TranslationInterface;
 use Knp\DoctrineBehaviors\Model\Translatable\TranslationTrait;
 
 /**
@@ -16,9 +17,18 @@ use Knp\DoctrineBehaviors\Model\Translatable\TranslationTrait;
  *     options={"row_format":"DYNAMIC"}
  * )
  */
-class CategoryTranslation
+class CategoryTranslation implements TranslationInterface
 {
     use TranslationTrait;
+
+    /**
+     * @var int
+     *
+     * @ORM\Column(name="id", type="integer")
+     * @ORM\Id
+     * @ORM\GeneratedValue()
+     */
+    protected $id;
 
     /**
      * @ORM\Column(type="string", length=255, nullable=false)

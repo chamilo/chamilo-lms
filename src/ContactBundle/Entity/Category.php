@@ -5,7 +5,8 @@
 namespace Chamilo\ContactBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
-use Knp\DoctrineBehaviors\Model\Translatable\TranslationTrait;
+use Knp\DoctrineBehaviors\Contract\Entity\TranslatableInterface;
+use Knp\DoctrineBehaviors\Model\Translatable\TranslatableTrait;
 
 /**
  * Class Category.
@@ -13,9 +14,9 @@ use Knp\DoctrineBehaviors\Model\Translatable\TranslationTrait;
  * @ORM\Entity
  * @ORM\Table(name="contact_category")
  */
-class Category
+class Category implements TranslatableInterface
 {
-    use TranslationTrait;
+    use TranslatableTrait;
 
     /**
      * @var int

@@ -1,4 +1,5 @@
 <?php
+
 /* For licensing terms, see /license.txt */
 
 use ChamiloSession as Session;
@@ -552,9 +553,9 @@ function getQuestions(
     $currentExerciseCondition = '';
     if (!empty($fromExercise)) {
         $currentCourseId = api_get_course_int_id();
-        $currentExerciseCondition = " 
+        $currentExerciseCondition = "
             AND qu.id NOT IN (
-                SELECT question_id FROM $TBL_EXERCISE_QUESTION 
+                SELECT question_id FROM $TBL_EXERCISE_QUESTION
                 WHERE exercice_id = $fromExercise AND c_id = $currentCourseId
             )";
     }
@@ -565,9 +566,9 @@ function getQuestions(
         $from = '';
         if (isset($courseCategoryId) && $courseCategoryId > 0) {
             $from = ", $TBL_COURSE_REL_CATEGORY crc ";
-            $where .= " AND 
-                    crc.c_id = $selected_course AND 
-                    crc.question_id = qu.id AND 
+            $where .= " AND
+                    crc.c_id = $selected_course AND
+                    crc.question_id = qu.id AND
                     crc.category_id = $courseCategoryId";
         }
         if (isset($exerciseLevel) && $exerciseLevel != -1) {
@@ -589,7 +590,7 @@ function getQuestions(
                     id,
                     question,
                     type,
-                    level,  
+                    level,
                     qt.exercice_id exerciseId';
         if ($getCount) {
             $select = 'count(qu.iid) as count';
@@ -601,18 +602,18 @@ function getQuestions(
                     ON qt.question_id = qu.id
                     $from
                 WHERE
-                    qt.exercice_id = $exerciseId AND 
-                    qt.c_id = $selected_course  AND 
+                    qt.exercice_id = $exerciseId AND
+                    qt.c_id = $selected_course  AND
                     qu.c_id = $selected_course
                     $where
-                    $currentExerciseCondition                    
+                    $currentExerciseCondition
                 ORDER BY question_order";
     } elseif ($exerciseId == -1) {
         // If we have selected the option 'Orphan questions' in the list-box 'Filter'
         $level_where = '';
         $from = '';
         if (isset($courseCategoryId) && $courseCategoryId > 0) {
-            $from = " INNER JOIN $TBL_COURSE_REL_CATEGORY crc 
+            $from = " INNER JOIN $TBL_COURSE_REL_CATEGORY crc
                       ON crc.question_id = q.id AND crc.c_id = q.c_id ";
             $level_where .= " AND
                     crc.c_id = $selected_course AND
@@ -651,10 +652,10 @@ function getQuestions(
                     WHERE
                         ex.c_id = '$selected_course' AND
                         ex.active = '-1'
-                        $level_where 
+                        $level_where
                         $answer_where
-                )                  
-                UNION                 
+                )
+                UNION
                 (
                     SELECT $select
                     FROM $TBL_QUESTIONS q
@@ -664,10 +665,10 @@ function getQuestions(
                     WHERE
                         q.c_id = '$selected_course' AND
                         r.question_id is null
-                        $level_where 
+                        $level_where
                         $answer_where
-                )                  
-                UNION                 
+                )
+                UNION
                 (
                         SELECT $select
                         FROM $TBL_QUESTIONS q
@@ -677,9 +678,9 @@ function getQuestions(
                         WHERE
                             r.c_id = '$selected_course' AND
                             (r.exercice_id = '-1' OR r.exercice_id = '0')
-                            $level_where 
+                            $level_where
                             $answer_where
-                    ) 
+                    )
                  ";
         if ($getCount) {
             $sql = "SELECT SUM(count) count FROM ($sql) as total";
@@ -746,8 +747,11 @@ function getQuestions(
     if ($getCount) {
         $result = Database::query($sql);
         $row = Database::fetch_array($result, 'ASSOC');
+        if ($row) {
+            return (int) $row['count'];
+        }
 
-        return (int) $row['count'];
+        return 0;
     }
 
     $sql .= " LIMIT $start, $length";

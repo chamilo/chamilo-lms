@@ -1364,6 +1364,9 @@ ALTER TABLE notification_event ADD COLUMN event_id INT NULL;
 // ALTER TABLE sys_announcement ADD COLUMN promotion_id INT DEFAULT 0;
 //$_configuration['allow_careers_in_global_announcements'] = false;
 
+// Allow start/end dates in "My courses" page (user_portal.php)
+//$_configuration['allow_session_dates_in_user_portal'] = false;
+
 // KEEP THIS AT THE END
 // -------- Custom DB changes
 // Add user activation by confirmation email

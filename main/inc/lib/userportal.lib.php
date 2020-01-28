@@ -1762,9 +1762,10 @@ class IndexManager
                                     }
 
                                     $this->tpl->assign('session', $sessionParams);
-                                    $this->tpl->assign('show_tutor', (api_get_setting('show_session_coach') === 'true' ? true : false));
+                                    $this->tpl->assign('show_tutor', api_get_setting('show_session_coach') === 'true');
                                     $this->tpl->assign('gamification_mode', $gameModeIsActive);
                                     $this->tpl->assign('remove_session_url', api_get_configuration_value('remove_session_url'));
+                                    $this->tpl->assign('allow_session_dates', api_get_configuration_value('allow_session_dates_in_user_portal'));
 
                                     if ($viewGridCourses) {
                                         $html_sessions .= $this->tpl->fetch(

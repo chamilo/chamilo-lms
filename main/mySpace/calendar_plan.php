@@ -20,6 +20,13 @@ $now = new DateTime('now', $timezone);
 $currentYear = (int) $now->format('Y');
 
 $searchYear = isset($_GET['year']) ? (int) $_GET['year'] : $currentYear;
+$order = isset($_GET['order']) && $_GET['order'] === 'asc' ? 'asc' : 'desc';
+
+if (api_is_western_name_order()) {
+    $orderBy = " firstname ";
+} else {
+    $orderBy = " lastname ";
+}
 
 $students = UserManager::getUsersFollowedByUser(
     api_get_user_id(),
@@ -29,12 +36,18 @@ $students = UserManager::getUsersFollowedByUser(
     false,
     null,
     null,
-    null,
-    null,
+    $orderBy,
+    $order,
     null,
     null,
     api_is_student_boss() ? STUDENT_BOSS : COURSEMANAGER
 );
+
+if ($order === 'desc') {
+    $order = 'asc';
+} else {
+    $order = 'desc';
+}
 
 $userInfo = api_get_user_info();
 $userId = $userInfo['id'];
@@ -94,5 +107,7 @@ $template->assign('student_id', $userId);
 $template->assign('search_year', $searchYear);
 $template->assign('students', $students);
 $template->assign('legend', $table->toHtml());
+$template->assign('order', $order);
+
 $layout = $template->get_template('agenda/student_boss_planification.tpl');
 $template->display($layout);

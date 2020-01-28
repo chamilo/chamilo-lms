@@ -26,7 +26,11 @@
             <table class="table table-bordered table-condensed">
                 <thead>
                 <tr>
-                    <th class="col-session">{{ 'Student'|get_lang }}</th>
+                    <th class="col-session">
+                        <a href=" {{ _p.web_self ~ '?order=' ~ order }}">
+                            {{ 'Student'|get_lang }}
+                        </a>
+                    </th>
                     <th>{{ 'Session'|get_lang }}</th>
                     {% for i in 1..52 %}
                         <th class="col-week text-center" title="{{ 'WeekX'|get_lang|format(i) }}"><span>{{ i }}</span></th>

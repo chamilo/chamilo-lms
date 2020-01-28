@@ -666,6 +666,8 @@ class AnnouncementManager
             );
         }
 
+        $resourceNode = $announcement->getResourceNode();
+
         // store in item_property (first the groups, then the users
         if (empty($sentTo) ||
             (!empty($sentTo) && isset($sentTo[0]) && $sentTo[0] == 'everyone')
@@ -685,15 +687,14 @@ class AnnouncementManager
             );*/
         } else {
             $send_to = CourseManager::separateUsersGroups($sentTo);
-            $batchSize = 20;
-            $em = Database::getManager();
             // Storing the selected groups
             if (is_array($send_to['groups']) &&
                 !empty($send_to['groups'])
             ) {
-                $counter = 1;
                 foreach ($send_to['groups'] as $group) {
-                    $groupInfo = GroupManager::get_group_properties($group);
+                    $group = api_get_group_entity($group);
+                    $repo->addResourceToCourseGroup($resourceNode, $group);
+
                     /*api_item_property_update(
                         $courseInfo,
                         TOOL_ANNOUNCEMENT,
@@ -707,8 +708,9 @@ class AnnouncementManager
 
             // Storing the selected users
             if (is_array($send_to['users'])) {
-                $counter = 1;
                 foreach ($send_to['users'] as $user) {
+                    $user = api_get_user_entity($user);
+                    $repo->addResourceToUser($resourceNode, $user);
                     /*api_item_property_update(
                         $courseInfo,
                         TOOL_ANNOUNCEMENT,
@@ -723,8 +725,11 @@ class AnnouncementManager
         }
 
         if ($sendToUsersInSession) {
-            self::addAnnouncementToAllUsersInSessions($last_id);
+            self::addAnnouncementToAllUsersInSessions($announcement);
         }
+
+        $repo->getEntityManager()->persist($resourceNode);
+        $repo->getEntityManager()->flush();
 
         return $announcement;
     }
@@ -845,7 +850,7 @@ class AnnouncementManager
             }
 
             if ($sendToUsersInSession) {
-                self::addAnnouncementToAllUsersInSessions($last_id);
+                self::addAnnouncementToAllUsersInSessions($announcement);
             }
         }
 
@@ -917,7 +922,7 @@ class AnnouncementManager
         Database::query($sql);*/
 
         if ($sendToUsersInSession) {
-            self::addAnnouncementToAllUsersInSessions($id);
+            self::addAnnouncementToAllUsersInSessions($announcement);
         }
 
         // store in item_property (first the groups, then the users
@@ -991,13 +996,16 @@ class AnnouncementManager
     }
 
     /**
-     * @param int $announcementId
+     * @param CAnnouncement $announcement
      */
-    public static function addAnnouncementToAllUsersInSessions($announcementId)
+    public static function addAnnouncementToAllUsersInSessions($announcement)
     {
         $courseCode = api_get_course_id();
         $courseInfo = api_get_course_info();
         $sessionList = SessionManager::get_session_by_course(api_get_course_int_id());
+
+        $repo = Container::getAnnouncementRepository();
+        $resourceNode = $announcement->getResourceNode();
 
         if (!empty($sessionList)) {
             foreach ($sessionList as $sessionInfo) {
@@ -1009,7 +1017,9 @@ class AnnouncementManager
 
                 if (!empty($userList)) {
                     foreach ($userList as $user) {
-                        api_item_property_update(
+                        $user = api_get_user_entity($user);
+                        $repo->addResourceToUser($resourceNode, $user);
+                        /*api_item_property_update(
                             $courseInfo,
                             TOOL_ANNOUNCEMENT,
                             $announcementId,
@@ -1020,11 +1030,14 @@ class AnnouncementManager
                             0,
                             0,
                             $sessionId
-                        );
+                        );*/
                     }
                 }
             }
         }
+
+        $repo->getEntityManager()->persist($resourceNode);
+        $repo->getEntityManager()->flush();
     }
 
     /**
@@ -1123,6 +1136,10 @@ class AnnouncementManager
         $result['users'] = [];
 
         $links = $announcement->getResourceNode()->getResourceLinks();
+
+        if (empty($links)) {
+            return $result;
+        }
 
         /** @var ResourceLink $link */
         foreach ($links as $link) {

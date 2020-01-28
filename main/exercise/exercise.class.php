@@ -6228,9 +6228,9 @@ class Exercise
         $isVisible = true;
         $message = null;
 
-        // 1.1 Admins and teachers can access to the exercise
+        // 1.1 Admins, teachers and tutors can access to the exercise
         if ($filterByAdmin) {
-            if (api_is_platform_admin() || api_is_course_admin()) {
+            if (api_is_platform_admin() || api_is_course_admin() || api_is_course_tutor()) {
                 return ['value' => true, 'message' => ''];
             }
         }

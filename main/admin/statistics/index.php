@@ -23,6 +23,8 @@ if (
     )
    ) {
     $htmlHeadXtra[] = api_get_js('chartjs/Chart.min.js');
+    $htmlHeadXtra[] = api_get_asset('chartjs-plugin-labels/build/chartjs-plugin-labels.min.js');
+
     // Prepare variables for the JS charts
     $url = $reportName = $reportType = $reportOptions = '';
     switch ($report) {
@@ -166,6 +168,7 @@ if (
             $reportName5 = get_lang('UserByCareer');
             $reportName6 = get_lang('UserByContract');
             $reportName7 = get_lang('UserByCertificate');
+            $reportName8 = get_lang('UserByAge');
 
             $url1 = $urlBase.'a=users_active&filter=active&date_start='.$dateStart.'&date_end='.$dateEnd;
             $url2 = $urlBase.'a=users_active&filter=status&date_start='.$dateStart.'&date_end='.$dateEnd;
@@ -174,6 +177,7 @@ if (
             $url5 = $urlBase.'a=users_active&filter=career&date_start='.$dateStart.'&date_end='.$dateEnd;
             $url6 = $urlBase.'a=users_active&filter=contract&date_start='.$dateStart.'&date_end='.$dateEnd;
             $url7 = $urlBase.'a=users_active&filter=certificate&date_start='.$dateStart.'&date_end='.$dateEnd;
+            $url8 = $urlBase.'a=users_active&filter=age&date_start='.$dateStart.'&date_end='.$dateEnd;
 
             $reportOptions1 = sprintf($reportOptions, $reportName1);
             $reportOptions2 = sprintf($reportOptions, $reportName2);
@@ -182,6 +186,7 @@ if (
             $reportOptions5 = sprintf($reportOptions, $reportName5);
             $reportOptions6 = sprintf($reportOptions, $reportName6);
             $reportOptions7 = sprintf($reportOptions, $reportName7);
+            $reportOptions8 = sprintf($reportOptions, $reportName8);
 
             $htmlHeadXtra[] = Statistics::getJSChartTemplate(
                 $url1,
@@ -224,6 +229,12 @@ if (
                 $reportType,
                 $reportOptions7,
                 'canvas7'
+            );
+            $htmlHeadXtra[] = Statistics::getJSChartTemplate(
+                $url8,
+                $reportType,
+                $reportOptions8,
+                'canvas8'
             );
 
             break;
@@ -405,10 +416,6 @@ switch ($report) {
     case 'session_by_date':
         if ($validated) {
             $values = $form->getSubmitValues();
-
-            /*$start = Security::remove_XSS($_REQUEST['range_start']);
-            $end = Security::remove_XSS($_REQUEST['range_end']);*/
-            //var_dump($dateStart);
             $first = DateTime::createFromFormat('Y-m-d', $dateStart);
             $second = DateTime::createFromFormat('Y-m-d', $dateEnd);
             $numberOfWeeks = floor($first->diff($second)->days / 7);
@@ -782,6 +789,10 @@ switch ($report) {
             $content .=  '<div class="col-md-6"><canvas id="canvas7" style="margin-bottom: 20px"></canvas></div>';
             $content .=  '</div>';
 
+            $content .=  '<div class="row">';
+            $content .=  '<div class="col-md-4"><canvas id="canvas8" style="margin-bottom: 20px"></canvas></div>';
+            $content .=  '</div>';
+
             $conditions = [];
             $extraConditions = '';
             if (!empty($startDate) && !empty($endDate)) {
@@ -836,6 +847,10 @@ switch ($report) {
                 $data[] = $headers;
             }
 
+            if (isset($_REQUEST['table_users_active_per_page'])) {
+                $limit = (int) $_REQUEST['table_users_active_per_page'];
+            }
+
             $users = UserManager::getUserListExtraConditions(
                 $conditions,
                 [],
@@ -850,6 +865,8 @@ switch ($report) {
 
             foreach ($users as $user) {
                 $userId = $user['user_id'];
+                $userInfo = api_get_user_info($userId);
+
                 $extraDataList = $extraFieldValueUser->getAllValuesByItem($userId);
                 $extraFields = [];
                 foreach ($extraDataList as $extraData) {
@@ -876,7 +893,7 @@ switch ($report) {
                 $item[] = $contract ? get_lang('Yes') : get_lang('No');
                 $item[] = $residence;
                 $item[] = $career;
-                $item[] = $statusList[$user['status']];
+                $item[] = $userInfo['icon_status_label'];
                 $item[] = $user['active'] == 1 ? get_lang('Yes') : get_lang('No');
                 $item[] = $certificate ? get_lang('Yes') : get_lang('No');
                 $item[] = $birthDate;
@@ -893,6 +910,7 @@ switch ($report) {
             $table->table_data = $data;
             unset($values['submit']);
             $table->set_additional_parameters($values);
+            $table->handlePagination = true;
 
             $row = 0;
             $column = 0;
@@ -900,7 +918,12 @@ switch ($report) {
                 $table->set_header($column, $header, false);
                 $column++;
             }
-            $content .=  $table->return_table();
+
+            $studentCount = UserManager::getUserListExtraConditions(['status' => STUDENT], null, null, null, null, null, true);
+            $content .= Display::page_subheader2(get_lang('NumberOfUsers').': '.$totalCount);
+            $content .= Display::page_subheader2(get_lang('TotalNumberOfStudents').': '.$studentCount);
+
+            $content .= $table->return_table();
         }
 
         $content =  $form->returnForm().$content;

@@ -1153,7 +1153,7 @@ class Statistics
                 success: function(data) {
                     Chart.defaults.global.responsive = true;
                     var ctx = document.getElementById("'.$elementId.'").getContext("2d");
-                    var myLoginChart = new Chart(ctx, {
+                    var chart = new Chart(ctx, {
                         type: "'.$type.'",
                         data: data,
                         options: {'.$options.'}

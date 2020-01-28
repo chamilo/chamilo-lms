@@ -1,0 +1,24 @@
+{
+  "name": "chartjs-plugin-labels",
+  "version": "1.1.0",
+  "main": [
+    "src/chartjs-plugin-labels.js"
+  ],
+  "ignore": [
+    "samples",
+    "tests"
+  ],
+  "dependencies": {
+    "chart.js": ">= 2.6.0"
+  },
+  "homepage": "https://github.com/emn178/chartjs-plugin-labels",
+  "_release": "1.1.0",
+  "_resolution": {
+    "type": "version",
+    "tag": "v1.1.0",
+    "commit": "2776b337984a6515cdbc2d83c52efdcd6770cddb"
+  },
+  "_source": "https://github.com/emn178/chartjs-plugin-labels.git",
+  "_target": "^1.1",
+  "_originalSource": "chartjs-plugin-labels"
+}

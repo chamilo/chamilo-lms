@@ -1594,24 +1594,29 @@ function _api_format_user($user, $add_password = false, $loadAvatars = true)
         $urlImg = api_get_path(WEB_IMG_PATH);
         $iconStatus = '';
         $iconStatusMedium = '';
-
+        $label = '';
         switch ($result['status']) {
             case STUDENT:
                 if ($result['has_certificates']) {
                     $iconStatus = $urlImg.'icons/svg/identifier_graduated.svg';
+                    $label = get_lang('Graduated');
                 } else {
                     $iconStatus = $urlImg.'icons/svg/identifier_student.svg';
+                    $label = get_lang('Student');
                 }
                 break;
             case COURSEMANAGER:
                 if ($result['is_admin']) {
                     $iconStatus = $urlImg.'icons/svg/identifier_admin.svg';
+                    $label = get_lang('Admin');
                 } else {
                     $iconStatus = $urlImg.'icons/svg/identifier_teacher.svg';
+                    $label = get_lang('Teacher');
                 }
                 break;
             case STUDENT_BOSS:
                 $iconStatus = $urlImg.'icons/svg/identifier_teacher.svg';
+                $label = get_lang('StudentBoss');
                 break;
         }
 
@@ -1621,6 +1626,7 @@ function _api_format_user($user, $add_password = false, $loadAvatars = true)
         }
 
         $result['icon_status'] = $iconStatus;
+        $result['icon_status_label'] = $label;
         $result['icon_status_medium'] = $iconStatusMedium;
     }
 

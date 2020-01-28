@@ -1783,7 +1783,7 @@ class UserManager
 
         $sql .= str_replace("\'", "'", Database::escape_string($extraConditions));
 
-        if (count($order_by) > 0) {
+        if (!empty($order_by) && count($order_by) > 0) {
             $sql .= ' ORDER BY '.Database::escape_string(implode(',', $order_by));
         }
 

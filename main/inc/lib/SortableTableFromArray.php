@@ -3,8 +3,6 @@
 
 /**
  * Sortable table which can be used for data available in an array.
- *
- * @package chamilo.library
  */
 class SortableTableFromArray extends SortableTable
 {
@@ -12,6 +10,7 @@ class SortableTableFromArray extends SortableTable
      * The array containing all data for this table.
      */
     public $table_data;
+    public $handlePagination;
 
     /**
      * Constructor.
@@ -41,6 +40,7 @@ class SortableTableFromArray extends SortableTable
             $tableId
         );
         $this->table_data = $table_data;
+        $this->handlePagination = false;
     }
 
     /**
@@ -65,8 +65,12 @@ class SortableTableFromArray extends SortableTable
             $content = $this->table_data;
         }
 
-        if ($this->total_number_of_items === count($this->table_data) ) {
+        if ((int) $this->total_number_of_items === count($this->table_data)) {
             return array_slice($content, $from, $this->per_page);
+        }
+
+        if ($this->handlePagination) {
+            return $content;
         }
 
         return array_slice($content, 1, $this->per_page);

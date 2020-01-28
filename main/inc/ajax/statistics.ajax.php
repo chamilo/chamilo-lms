@@ -284,7 +284,7 @@ switch ($action) {
 
                 break;
             case 'status':
-                $statusList = api_get_status_langvars();
+                /*$statusList = api_get_status_langvars();
                 unset($statusList[ANONYMOUS]);
 
                 foreach ($statusList as $status => $name) {
@@ -299,7 +299,33 @@ switch ($action) {
                         true
                     );
                     $all[$name] = $count;
+                }*/
+
+
+                $users = UserManager::getUserListExtraConditions(
+                    [],
+                    [],
+                    false,
+                    false,
+                    null,
+                    $extraConditions,
+                    false
+                );
+
+                $all[get_lang('N/A')] = 0;
+                foreach ($users as $user) {
+                    $userInfo = api_get_user_info($user['id']);
+                    if (empty($userInfo['icon_status_label'])) {
+                        $all[get_lang('N/A')] += 1;
+                        continue;
+                    }
+
+                    if (!isset($all[$userInfo['icon_status_label']])) {
+                        $all[$userInfo['icon_status_label']] = 0;
+                    }
+                    $all[$userInfo['icon_status_label']] += 1;
                 }
+
                 break;
             case 'language':
                 $languages = api_get_languages();
@@ -362,6 +388,80 @@ switch ($action) {
                     $all[$item['display_text']] = $count;
                 }
                 $all[get_lang('N/A')] = $total - $usersFound;
+                break;
+
+            case 'age':
+                $extraFieldValueUser = new ExtraField('user');
+                $extraField = $extraFieldValueUser->get_handler_field_info_by_field_variable('terms_datedenaissance');
+
+                $users = UserManager::getUserListExtraConditions(
+                    [],
+                    [],
+                    false,
+                    false,
+                    null,
+                    $extraConditions,
+                    false
+                );
+
+                $userIdList = array_column($users, 'user_id');
+                $userIdListToString = implode("', '", $userIdList);
+
+                $all = [];
+                $total = count($users);
+
+                $sql = "SELECT value
+                        FROM $extraFieldValueUser->table_field_values
+                        WHERE
+                        item_id IN ('$userIdListToString') AND
+                        field_id = ".$extraField['id'];
+                $query = Database::query($sql);
+                $usersFound = 0;
+                $now = new DateTime();
+                $all = [
+                    get_lang('N/A') => 0,
+                    //'10-14' => 0,
+                    '15-19' => 0,
+                    '20-30' => 0,
+                    '31-40' => 0,
+                    '41-50' => 0,
+                    '> 51' => 0,
+                ];
+
+                while ($row = Database::fetch_array($query)) {
+                    $usersFound++;
+                    if (!empty($row['value'])) {
+                        $date1 = new DateTime($row['value']);
+                        $interval = $now->diff($date1);
+                        $years = (int) $interval->y;
+                        if (empty($years) || $years <= 14) {
+                            $all[get_lang('N/A')] += 1;
+                            continue;
+                        }
+                        /*if ($years >= 10 && $years <= 14) {
+                            $all['10-14'] += 1;
+                        }*/
+
+                        if ($years >= 15 && $years <= 19) {
+                            $all['15-19'] += 1;
+                        }
+                        if ($years >= 20 && $years <= 30) {
+                            $all['20-30'] += 1;
+                        }
+                        if ($years >= 31 && $years <= 40) {
+                            $all['31-40'] += 1;
+                        }
+                        if ($years >= 41 && $years <= 50) {
+                            $all['41-50'] += 1;
+                        }
+                        if ($years >= 51) {
+                            $all['> 51'] += 1;
+                        }
+                    } else {
+                        $all[get_lang('N/A')] += 1;
+                    }
+                }
+
                 break;
 
             case 'career':

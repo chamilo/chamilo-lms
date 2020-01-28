@@ -767,8 +767,8 @@ class UserManager
         $table_work = Database::get_course_table(TABLE_STUDENT_PUBLICATION);
 
         // Unsubscribe the user from all groups in all his courses
-        $sql = "SELECT c.id 
-                FROM $table_course c 
+        $sql = "SELECT c.id
+                FROM $table_course c
                 INNER JOIN $table_course_user cu
                 ON (c.id = cu.c_id)
                 WHERE
@@ -2332,13 +2332,13 @@ class UserManager
                     </a>';
                 if ($showDelete) {
                     $production_list .= '&nbsp;&nbsp;
-                        <input 
-                            style="width:16px;" 
-                            type="image" 
-                            name="remove_production['.urlencode($file).']" 
-                            src="'.$del_image.'" 
-                            alt="'.$del_text.'" 
-                            title="'.$del_text.' '.htmlentities($file).'" 
+                        <input
+                            style="width:16px;"
+                            type="image"
+                            name="remove_production['.urlencode($file).']"
+                            src="'.$del_image.'"
+                            alt="'.$del_text.'"
+                            title="'.$del_text.' '.htmlentities($file).'"
                             onclick="javascript: return confirmation(\''.htmlentities($file).'\');" /></li>';
                 }
             }
@@ -2730,7 +2730,7 @@ class UserManager
         $res = Database::query($sql);
         if (Database::num_rows($res) > 0) {
             while ($row = Database::fetch_array($res)) {
-                $sqlu = "SELECT value as fval FROM $t_ufv v 
+                $sqlu = "SELECT value as fval FROM $t_ufv v
                          INNER JOIN $t_uf f
                          ON (v.field_id = f.id)
                          WHERE
@@ -3406,7 +3406,7 @@ class UserManager
             FROM $tbl_session_course_user as session_course_user
             INNER JOIN $tbl_course AS course
             ON course.id = session_course_user.c_id AND session_course_user.session_id = $session_id
-            INNER JOIN $tbl_session as session 
+            INNER JOIN $tbl_session as session
             ON session_course_user.session_id = session.id
             LEFT JOIN $tbl_user as user ON user.id = session_course_user.user_id
             WHERE session_course_user.user_id = $user_id
@@ -3494,7 +3494,7 @@ class UserManager
 
         if (api_is_allowed_to_create_course()) {
             $sql = "SELECT DISTINCT
-                        c.visibility, 
+                        c.visibility,
                         c.id as real_id,
                         c.code as course_code,
                         sc.position
@@ -3804,7 +3804,7 @@ class UserManager
             return false;
         }
         $t_api = Database::get_main_table(TABLE_MAIN_USER_API_KEY);
-        $sql = "SELECT id FROM $t_api 
+        $sql = "SELECT id FROM $t_api
                 WHERE user_id=".$user_id." AND api_service='".$api_service."'";
         $res = Database::query($sql);
         $num = Database::num_rows($res);
@@ -3838,7 +3838,7 @@ class UserManager
         }
         $t_api = Database::get_main_table(TABLE_MAIN_USER_API_KEY);
         $api_service = Database::escape_string($api_service);
-        $sql = "SELECT id FROM $t_api 
+        $sql = "SELECT id FROM $t_api
                 WHERE user_id=".$user_id." AND api_service='".$api_service."'";
         $res = Database::query($sql);
         if (Database::num_rows($res) < 1) {
@@ -3886,14 +3886,14 @@ class UserManager
         $t_a = Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_USER);
 
         if (api_is_multiple_url_enabled()) {
-            $sql = "SELECT count(u.id) 
-                    FROM $t_u u 
+            $sql = "SELECT count(u.id)
+                    FROM $t_u u
                     INNER JOIN $t_a url_user
                     ON (u.id = url_user.user_id)
-                    WHERE url_user.access_url_id = $access_url_id                
+                    WHERE url_user.access_url_id = $access_url_id
             ";
         } else {
-            $sql = "SELECT count(u.id) 
+            $sql = "SELECT count(u.id)
                     FROM $t_u u
                     WHERE 1 = 1 ";
         }
@@ -4538,10 +4538,10 @@ class UserManager
         $js = '<script>
         extra_field_toogle();
         function extra_field_toogle() {
-            if (jQuery("select[name=search_type]").val() != "1") { 
-                jQuery(".extra_field").hide(); 
-            } else { 
-                jQuery(".extra_field").show(); 
+            if (jQuery("select[name=search_type]").val() != "1") {
+                jQuery(".extra_field").hide();
+            } else {
+                jQuery(".extra_field").show();
             }
         }
         </script>';
@@ -4655,13 +4655,13 @@ class UserManager
                 $extra_condition = ' AND relation_type = '.intval($with_status_condition);
             }
             $sql = 'DELETE FROM '.$tbl_my_friend.'
-                    WHERE 
-                        relation_type <> '.USER_RELATION_TYPE_RRHH.' AND 
+                    WHERE
+                        relation_type <> '.USER_RELATION_TYPE_RRHH.' AND
                         friend_user_id='.$friend_id.' '.$extra_condition;
             Database::query($sql);
             $sql = 'DELETE FROM '.$tbl_my_friend.'
-                   WHERE 
-                    relation_type <> '.USER_RELATION_TYPE_RRHH.' AND 
+                   WHERE
+                    relation_type <> '.USER_RELATION_TYPE_RRHH.' AND
                     user_id='.$friend_id.' '.$extra_condition;
             Database::query($sql);
         } else {
@@ -4678,16 +4678,16 @@ class UserManager
                           WHERE user_id='.$user_id.' AND friend_user_id='.$friend_id;
 
                 $sql_j = 'UPDATE '.$tbl_my_message.' SET msg_status='.MESSAGE_STATUS_INVITATION_DENIED.'
-                          WHERE 
-                                user_receiver_id='.$user_id.' AND 
+                          WHERE
+                                user_receiver_id='.$user_id.' AND
                                 user_sender_id='.$friend_id.' AND update_date="0000-00-00 00:00:00" ';
                 // Delete user
                 $sql_ij = 'UPDATE '.$tbl_my_friend.'  SET relation_type='.USER_RELATION_TYPE_DELETED.'
                            WHERE user_id='.$friend_id.' AND friend_user_id='.$user_id;
                 $sql_ji = 'UPDATE '.$tbl_my_message.' SET msg_status='.MESSAGE_STATUS_INVITATION_DENIED.'
-                           WHERE 
-                                user_receiver_id='.$friend_id.' AND 
-                                user_sender_id='.$user_id.' AND 
+                           WHERE
+                                user_receiver_id='.$friend_id.' AND
+                                user_sender_id='.$user_id.' AND
                                 update_date="0000-00-00 00:00:00" ';
                 Database::query($sql_i);
                 Database::query($sql_j);
@@ -4697,15 +4697,15 @@ class UserManager
         }
 
         // Delete accepted invitations
-        $sql = "DELETE FROM $tbl_my_message 
+        $sql = "DELETE FROM $tbl_my_message
                 WHERE
                     msg_status = ".MESSAGE_STATUS_INVITATION_ACCEPTED." AND
                     (
-                        user_receiver_id = $user_id AND 
+                        user_receiver_id = $user_id AND
                         user_sender_id = $friend_id
-                    ) OR 
+                    ) OR
                     (
-                        user_sender_id = $user_id AND 
+                        user_sender_id = $user_id AND
                         user_receiver_id = $friend_id
                     )
         ";
@@ -4924,7 +4924,7 @@ class UserManager
                                     $tbl_session_rel_access_url session_rel_access_rel_user
                                     ON session_rel_access_rel_user.session_id = s.id
                                     WHERE access_url_id = ".api_get_current_access_url_id()."
-                                    $sessionConditionsCoach                                  
+                                    $sessionConditionsCoach
                                 ) OR sru.session_id IN (
                                     SELECT DISTINCT(s.id) FROM $tbl_session s
                                     INNER JOIN $tbl_session_rel_access_url url
@@ -4934,7 +4934,7 @@ class UserManager
                                     WHERE access_url_id = ".api_get_current_access_url_id()."
                                     $sessionConditionsTeacher
                                 )
-                            )                            
+                            )
                             $userConditions
                     )
                     UNION ALL(
@@ -5104,29 +5104,29 @@ class UserManager
         if ($deleteOtherAssignedUsers) {
             if (api_get_multiple_access_url()) {
                 // Deleting assigned users to hrm_id
-                $sql = "SELECT s.user_id 
-                        FROM $userRelUserTable s 
+                $sql = "SELECT s.user_id
+                        FROM $userRelUserTable s
                         INNER JOIN $userRelAccessUrlTable a
-                        ON (a.user_id = s.user_id) 
-                        WHERE 
-                            friend_user_id = $userId AND 
-                            relation_type = $relationType AND 
+                        ON (a.user_id = s.user_id)
+                        WHERE
+                            friend_user_id = $userId AND
+                            relation_type = $relationType AND
                             access_url_id = ".api_get_current_access_url_id();
             } else {
-                $sql = "SELECT user_id 
-                        FROM $userRelUserTable 
-                        WHERE 
-                            friend_user_id = $userId AND 
+                $sql = "SELECT user_id
+                        FROM $userRelUserTable
+                        WHERE
+                            friend_user_id = $userId AND
                             relation_type = $relationType";
             }
             $result = Database::query($sql);
 
             if (Database::num_rows($result) > 0) {
                 while ($row = Database::fetch_array($result)) {
-                    $sql = "DELETE FROM $userRelUserTable 
+                    $sql = "DELETE FROM $userRelUserTable
                             WHERE
-                                user_id = {$row['user_id']} AND 
-                                friend_user_id = $userId AND 
+                                user_id = {$row['user_id']} AND
+                                friend_user_id = $userId AND
                                 relation_type = $relationType";
                     Database::query($sql);
                 }
@@ -5134,8 +5134,8 @@ class UserManager
         }
 
         if ($deleteUsersBeforeInsert) {
-            $sql = "DELETE FROM $userRelUserTable 
-                    WHERE 
+            $sql = "DELETE FROM $userRelUserTable
+                    WHERE
                         user_id = $userId AND
                         relation_type = $relationType";
             Database::query($sql);
@@ -5145,11 +5145,11 @@ class UserManager
         if (is_array($subscribedUsersId)) {
             foreach ($subscribedUsersId as $subscribedUserId) {
                 $subscribedUserId = (int) $subscribedUserId;
-                $sql = "SELECT id 
+                $sql = "SELECT id
                         FROM $userRelUserTable
-                        WHERE 
-                            user_id = $subscribedUserId AND 
-                            friend_user_id = $userId AND 
+                        WHERE
+                            user_id = $subscribedUserId AND
+                            friend_user_id = $userId AND
                             relation_type = $relationType";
 
                 $result = Database::query($sql);
@@ -5264,7 +5264,7 @@ class UserManager
         $user_id = (int) $user_id;
 
         $table = Database::get_main_table(TABLE_MAIN_GRADEBOOK_CERTIFICATE);
-        $sql = 'SELECT path_certificate 
+        $sql = 'SELECT path_certificate
                 FROM '.$table.'
                 WHERE
                     cat_id = "'.$cat_id.'" AND
@@ -5299,12 +5299,12 @@ class UserManager
             $session_condition = " AND session_id = $session_id";
         }
 
-        $sql = 'SELECT * FROM '.$tbl_grade_certificate.' 
+        $sql = 'SELECT * FROM '.$tbl_grade_certificate.'
                 WHERE cat_id = (
                     SELECT id FROM '.$tbl_grade_category.'
                     WHERE
-                        course_code = "'.Database::escape_string($course_code).'" '.$session_condition.' 
-                    LIMIT 1 
+                        course_code = "'.Database::escape_string($course_code).'" '.$session_condition.'
+                    LIMIT 1
                 ) AND user_id='.intval($user_id);
 
         $rs = Database::query($sql);
@@ -5447,15 +5447,18 @@ class UserManager
      *
      * @param int   $bossId  The boss id
      * @param array $usersId The users array
+     * @param bool  $deleteOtherAssignedUsers
      *
      * @return int Affected rows
      */
-    public static function subscribeBossToUsers($bossId, $usersId)
+    public static function subscribeBossToUsers($bossId, $usersId, $deleteOtherAssignedUsers = true)
     {
         return self::subscribeUsersToUser(
             $bossId,
             $usersId,
-            USER_RELATION_TYPE_BOSS
+            USER_RELATION_TYPE_BOSS,
+            false,
+            $deleteOtherAssignedUsers
         );
     }
 
@@ -5473,7 +5476,7 @@ class UserManager
         }
 
         $userRelUserTable = Database::get_main_table(TABLE_MAIN_USER_REL_USER);
-        $sql = "DELETE FROM $userRelUserTable 
+        $sql = "DELETE FROM $userRelUserTable
                 WHERE user_id = $userId AND relation_type = ".USER_RELATION_TYPE_BOSS;
         Database::query($sql);
 
@@ -5803,7 +5806,7 @@ class UserManager
         $sql = <<<SQL
             SELECT id, username, lastname, firstname
             FROM $userTable
-            WHERE 
+            WHERE
                 firstname LIKE '$firstname%' AND
                 lastname LIKE '$lastname%'
 SQL;
@@ -6549,11 +6552,11 @@ SQL;
         $tableCareer = Database::get_main_table(TABLE_CAREER);
         $userId = (int) $userId;
 
-        $sql = "SELECT c.id, c.name 
-                FROM $table uc 
-                INNER JOIN $tableCareer c 
-                ON uc.career_id = c.id 
-                WHERE user_id = $userId 
+        $sql = "SELECT c.id, c.name
+                FROM $table uc
+                INNER JOIN $tableCareer c
+                ON uc.career_id = c.id
+                WHERE user_id = $userId
                 ORDER BY uc.created_at
                 ";
         $result = Database::query($sql);

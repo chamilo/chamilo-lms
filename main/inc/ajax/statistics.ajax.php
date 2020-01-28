@@ -82,7 +82,7 @@ switch ($action) {
                             FROM $table
                             WHERE
                                 relation_type = 0 AND
-                                registered_at >= '$start' AND  
+                                registered_at >= '$start' AND
                                 registered_at <= '$end' AND
                                 session_id = '$sessionId' ";
                 $result = Database::query($sql);
@@ -578,6 +578,39 @@ switch ($action) {
                     }
                     $all[$language] += 1;
                 }
+                break;
+            case 'course_in_session':
+                $sql = "SELECT id FROM $table
+                        WHERE
+                            (display_start_date BETWEEN '$startDate' AND '$endDate' OR
+                            display_end_date BETWEEN '$startDate' AND '$endDate')
+                            $statusCondition
+                    ";
+
+                $result = Database::query($sql);
+
+                $all = [];
+                $courseSessions = [];
+                $total = 0;
+                while ($row = Database::fetch_array($result)) {
+                    $courseList = SessionManager::getCoursesInSession($row['id']);
+                    foreach ($courseList as $courseId) {
+                        if (!isset($courseSessions[$courseId])) {
+                            $courseSessions[$courseId] = 0;
+                        }
+                        $courseSessions[$courseId]++;
+                        $total++;
+                    }
+                }
+
+                if (!empty($courseSessions)) {
+                    arsort($courseSessions);
+                    foreach ($courseSessions as $courseId => $count) {
+                        $courseInfo = api_get_course_info_by_id($courseId);
+                        $all[$courseInfo['name']] = $count;
+                    }
+                }
+
                 break;
         }
 

@@ -237,7 +237,6 @@ if (
             );
             $options = SessionManager::getStatusList();
             $form->addSelect('status_id', get_lang('SessionStatus'), $options, ['placeholder' => get_lang('All')]);
-
             $form->addHidden('report', 'session_by_date');
             $form->addButtonSearch(get_lang('Search'));
 
@@ -270,10 +269,13 @@ if (
                 $url1 = $urlBase.'a=session_by_date&filter=category'.$conditions;
                 $url2 = $urlBase.'a=session_by_date&filter=language'.$conditions;
                 $url3 = $urlBase.'a=session_by_date&filter=status'.$conditions;
+                $url4 = $urlBase.'a=session_by_date&filter=course_in_session'.$conditions;
+                //$url5 = $urlBase.'a=session_by_date&filter=status'.$conditions;
 
                 $reportName1 = get_lang('SessionsPerCategory');
                 $reportName2 = get_lang('SessionsPerLanguage');
                 $reportName3 = get_lang('SessionsPerStatus');
+                $reportName4 = get_lang('CourseInSession');
 
                 $reportType = 'pie';
                 $reportOptions = '
@@ -307,6 +309,45 @@ if (
                     $reportType,
                     $reportOptions3,
                     'canvas3'
+                );
+
+                $reportOptions = '
+                    legend: {
+                        position: "left"
+                    },
+                    title: {
+                        text: "'.$reportName4.'",
+                        display: true
+                    },
+                    responsive: true,
+                    animation: {
+                      animateScale: true,
+                      animateRotate: true
+                    },
+                    cutoutPercentage: 25,
+                    tooltips: {
+                        callbacks: {
+                            label: function(tooltipItem, data) {
+                                var dataset = data.datasets[tooltipItem.datasetIndex];
+                                var total = dataset.data.reduce(function(previousValue, currentValue, currentIndex, array) {
+                                    return previousValue + currentValue;
+                                });
+
+                                var label = data.labels[tooltipItem.datasetIndex];
+                                var currentValue = dataset.data[tooltipItem.index];
+                                var percentage = Math.floor(((currentValue/total) * 100)+0.5);
+
+                                return label + " " + percentage + "%";
+                            }
+                        }
+                    }
+                ';
+
+                $htmlHeadXtra[] = Statistics::getJSChartTemplate(
+                    $url4,
+                    $reportType,
+                    $reportOptions,
+                    'canvas4'
                 );
             }
             break;
@@ -517,7 +558,16 @@ switch ($report) {
             }
             $row++;
 
+            $courseSessions = [];
             foreach ($sessions as $session) {
+                $courseList = SessionManager::getCoursesInSession($session['id']);
+                foreach ($courseList as $courseId) {
+                    if (!isset($courseSessions[$courseId])) {
+                        $courseSessions[$courseId] = 0;
+                    }
+                    $courseSessions[$courseId]++;
+                }
+
                 $table->setCellContents($row, 0, $session['name']);
                 $table->setCellContents($row, 1, api_get_local_time($session['display_start_date']));
                 $table->setCellContents($row, 2, api_get_local_time($session['display_end_date']));
@@ -540,6 +590,35 @@ switch ($report) {
             }
             $content .= $table->toHtml();
         }
+
+        $tableCourse = new HTML_Table(['class' => 'table table-responsive']);
+        $headers = [
+            get_lang('Course'),
+            get_lang('CountOfSessions'),
+        ];
+
+        $row = 0;
+        $column = 0;
+        foreach ($headers as $header) {
+            $tableCourse->setHeaderContents($row, $column, $header);
+            $column++;
+        }
+        $row++;
+
+        if (!empty($courseSessions)) {
+            arsort($courseSessions);
+            foreach ($courseSessions as $courseId => $count) {
+                $courseInfo = api_get_course_info_by_id($courseId);
+                $tableCourse->setCellContents($row, 0, $courseInfo['name']);
+                $tableCourse->setCellContents($row, 1, $count);
+                $row++;
+            }
+        }
+
+        $content .= '<div class="row">';
+        $content .= '<div class="col-md-12"><canvas id="canvas4" style="margin-bottom: 20px"></canvas></div>';
+        $content .= '</div>';
+        $content .= $tableCourse->toHtml();
 
         if (isset($_REQUEST['action']) && $_REQUEST['action'] === 'export') {
             $data = $table->toArray();

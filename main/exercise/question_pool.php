@@ -10,8 +10,6 @@ use Knp\Component\Pager\Paginator;
  * This script allows administrators to manage questions and add them into their exercises.
  * One question can be in several exercises.
  *
- * @package chamilo.exercise
- *
  * @author Olivier Brouckaert
  * @author Julio Montoya adding support to query all questions from all session, courses, exercises
  * @author Modify by hubert borderiou 2011-10-21 Question's category
@@ -68,7 +66,7 @@ $displayMessage = '';
 if ($is_allowedToEdit) {
     // Duplicating a Question
     if (!isset($_POST['recup']) && $question_copy != 0 && isset($fromExercise)) {
-        $origin_course_id = (int) $_GET['course_id'];
+         $origin_course_id = (int) $_GET['course_id'];
         $origin_course_info = api_get_course_info_by_id($origin_course_id);
         $current_course = api_get_course_info();
         $old_question_id = $question_copy;
@@ -254,10 +252,8 @@ if (isset($_REQUEST['action'])) {
         case 'clone':
             if (!empty($_REQUEST['questions']) && !empty($fromExercise)) {
                 $questions = $_REQUEST['questions'];
-                $objExercise = new Exercise();
-                $objExercise->read($fromExercise, false);
-
                 $origin_course_id = (int) $_GET['course_id'];
+
                 $origin_course_info = api_get_course_info_by_id($origin_course_id);
                 $current_course = api_get_course_info();
 
@@ -275,7 +271,7 @@ if (isset($_REQUEST['action'])) {
                             $new_question_obj = Question::read($new_id);
                             $new_question_obj->addToList($fromExercise);
                             //Reading Answers obj of the current course
-                            $new_answer_obj = new Answer($old_question_id, $origin_course_id);
+                            $new_answer_obj = new Answer($questionId, $origin_course_id);
                             $new_answer_obj->read();
                             //Duplicating the Answers in the current course
                             $new_answer_obj->duplicate($new_question_obj, $current_course);

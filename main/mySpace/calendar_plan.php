@@ -20,7 +20,7 @@ $now = new DateTime('now', $timezone);
 $currentYear = (int) $now->format('Y');
 
 $searchYear = isset($_GET['year']) ? (int) $_GET['year'] : $currentYear;
-$order = isset($_GET['order']) && $_GET['order'] === 'asc' ? 'asc' : 'desc';
+$order = isset($_GET['order']) && $_GET['order'] === 'desc' ? 'desc' : 'asc';
 
 if (api_is_western_name_order()) {
     $orderBy = " firstname ";

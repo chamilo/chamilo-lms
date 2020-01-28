@@ -435,12 +435,12 @@ class IndexManager
                             t1.parent_id,
                             t1.children_count,COUNT(DISTINCT t3.code) AS nbCourse
                     FROM $main_category_table t1
-                    LEFT JOIN $main_category_table t2 
+                    LEFT JOIN $main_category_table t2
                     ON t1.code=t2.parent_id
-                    LEFT JOIN $main_course_table t3 
+                    LEFT JOIN $main_course_table t3
                     ON (t3.category_code = t1.code $platform_visible_courses)
                     WHERE t1.parent_id ".(empty($category) ? "IS NULL" : "='$category'")."
-                    GROUP BY t1.name,t1.code,t1.parent_id,t1.children_count 
+                    GROUP BY t1.name,t1.code,t1.parent_id,t1.children_count
                     ORDER BY t1.tree_pos, t1.name";
 
         // Showing only the category of courses of the current access_url_id
@@ -2399,9 +2399,9 @@ class IndexManager
                     $button
                     <span class='$class'>$icon
                         <a class='sessionView' href='$courseLink'>$title</a>
-                    </span> 
-                    $notifications 
-                    $rightActions 
+                    </span>
+                    $notifications
+                    $rightActions
                 </div>
                 $teachers";
     }

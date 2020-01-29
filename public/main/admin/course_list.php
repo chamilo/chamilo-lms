@@ -172,7 +172,6 @@ function get_course_data($from, $number_of_items, $column, $direction)
     $languages = api_get_languages_to_array();
 
     $path = api_get_path(WEB_CODE_PATH);
-    $coursePath = api_get_path(WEB_COURSE_PATH);
 
     while ($course = Database::fetch_array($res)) {
         $courseInfo = api_get_course_info_by_id($course['id']);

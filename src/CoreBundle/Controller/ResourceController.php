@@ -733,6 +733,15 @@ class ResourceController extends AbstractResourceController implements CourseCon
             $this->trans('Unauthorised access to resource')
         );
 
+        $children = $resourceNode->getChildren();
+
+        if (!empty($children)) {
+            /** @var ResourceNode $child */
+            foreach ($children as $child) {
+                $em->remove($child);
+            }
+        }
+
         $em->remove($resourceNode);
         $this->addFlash('success', $this->trans('Deleted'));
         $em->flush();

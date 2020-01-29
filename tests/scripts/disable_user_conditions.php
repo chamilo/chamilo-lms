@@ -5,6 +5,7 @@
 require_once __DIR__.'/../../main/inc/global.inc.php';
 
 $test = true;
+$newLine = '<br />';
 $userReportList = [];
 $extraFieldValue = new ExtraField('user');
 $extraFieldInfo = $extraFieldValue->get_handler_field_info_by_field_variable('termactivated');
@@ -26,9 +27,6 @@ $sql = "SELECT u.id
         ON u.id = ev.item_id AND field_id = $fieldId
         WHERE (ev.value IS NULL OR ev.value = '') AND u.active = 1 ";
 
-/*
-SELECT distinct u.id, access_date                 FROM user u                 LEFT JOIN extra_field_values ev                 ON u.id = ev.item_id AND field_id = 44                 INNER JOIN track_e_lastaccess a                 ON (a.access_user_id = u.id)                 WHERE (ev.value IS NULL OR ev.value = '') AND access_date > '2019-11-01';
-*/
 $result = Database::query($sql);
 $students = Database::store_result($result);
 foreach ($students as $student) {
@@ -37,19 +35,30 @@ foreach ($students as $student) {
     $lastDate = api_get_utc_datetime($lastDate);
 
     if ($date3Months > $lastDate) {
-        $userReportList[$studentId]['message'] = "User# $studentId to be disabled. Case 1. Last connection: $lastDate - 3 months: $date3Months ";
-        if ($test === false) {
-            UserManager::disable($studentId);
+        $disabledUser = api_get_user_info($studentId);
+        $userReportList[$studentId]['message'] = "User# $studentId (".$disabledUser['username'].") to be disabled. Case 1. Last connection: $lastDate - 3 months: $date3Months ";
+
+        $language = $disabledUser['language'];
+        $subject = get_lang('AccountDisabled', null, $language).': '.$disabledUser['complete_name'];
+        $content = get_lang('DisableUserCase1', null, $language);
+
+        $userReportList[$studentId]['message'] .= $newLine.'Mail will be send to: '.$disabledUser['username'].$newLine.'Subject: '.$subject.$newLine.'Content: '.$content.$newLine;
+
+        if (false === $test) {
+            if ($disabledUser) {
+                UserManager::disable($studentId);
+                MessageManager::send_message($studentId, $subject, $content);
+            }
         }
     }
 }
 
 // 3. Certificate completed not connected 6 months.
-$sql = "SELECT user_id, MAX(login_date) latest_login_date
+$sql = 'SELECT user_id, MAX(login_date) latest_login_date
         FROM gradebook_certificate c
         INNER JOIN track_e_login l
         ON (l.login_user_id = c.user_id)
-        GROUP BY user_id  ";
+        GROUP BY user_id  ';
 
 $result = Database::query($sql);
 $students = Database::store_result($result);
@@ -63,15 +72,19 @@ foreach ($students as $student) {
             continue;
         }
 
-        if ($disabledUser['active'] != 1) {
+        if (1 != $disabledUser['active']) {
             continue;
         }
 
-        $userReportList[$studentId]['message'] = "User# $studentId to be disabled. Case 3. Last connection: $lastDate - 6 months: $date6Months ";
-        if ($test === false) {
+        $language = $disabledUser['language'];
+        $subject = get_lang('AccountDisabled', null, $language).': '.$disabledUser['complete_name'];
+        $content = get_lang('DisableUserCase3Student', null, $language);
+
+        $userReportList[$studentId]['message'] = "User# $studentId (".$disabledUser['username'].") to be disabled. Case 3. Last connection: $lastDate - 6 months: $date6Months ";
+        $userReportList[$studentId]['message'] .= $newLine.'Mail will be send to: '.$disabledUser['username'].$newLine.'Subject: '.$subject.$newLine.'Content: '.$content.$newLine;
+
+        if (false === $test) {
             UserManager::disable($studentId);
-            $subject = 'AccountDisabled: '.$disabledUser['complete_name'];
-            $content = 'AccountDisabled: '.$disabledUser['complete_name'];
             MessageManager::send_message($studentId, $subject, $content);
         }
     }
@@ -92,28 +105,45 @@ foreach ($students as $student) {
     $lastDate = api_get_utc_datetime($lastDate);
 
     if ($date6Months > $lastDate) {
-        $userReportList[$studentId]['message'] = "User# $studentId to be disabled. Case 2 . Last connection: $lastDate - 6 months: $date6Months ";
-        if ($test === false) {
-            $disabledUser = api_get_user_info($studentId);
-            UserManager::disable($studentId);
-            $subject = 'AccountDisabled: '.$disabledUser['complete_name'];
-            $content = 'AccountDisabled: '.$disabledUser['complete_name'];
+        $disabledUser = api_get_user_info($studentId);
+        if (empty($disabledUser)) {
+            continue;
+        }
 
-            MessageManager::send_message($studentId, $subject, $content);
-            $studentBoss = UserManager::getFirstStudentBoss($studentId);
-            if (!empty($studentBoss)) {
-                MessageManager::send_message($studentBoss, $subject, $content);
+        $userReportList[$studentId]['message'] = "User# $studentId (".$disabledUser['username'].") to be disabled. Case 2 . Last connection: $lastDate - 6 months: $date6Months ";
+
+        $subject = get_lang('AccountDisabled', null, $disabledUser['language']).': '.$disabledUser['complete_name'];
+        $content = get_lang('DisableUserCase2', null, $disabledUser['language']);
+
+        $userReportList[$studentId]['message'] .= $newLine.'Mail will be send to: '.$disabledUser['username'].$newLine.'Subject: '.$subject.$newLine.'Content: '.$content.$newLine;
+
+        $subjectBoss = '';
+        $contentBoss = '';
+        $studentBoss = UserManager::getFirstStudentBoss($studentId);
+        $bossInfo = [];
+        if (!empty($studentBoss)) {
+            $bossInfo = api_get_user_info($studentBoss);
+            if ($bossInfo) {
+                $subjectBoss = get_lang('AccountDisabled', null, $bossInfo['language']).': '.$disabledUser['complete_name'];
+                $contentBoss = sprintf(get_lang('DisableUserCase2StudentX', null, $bossInfo['language']), $disabledUser['complete_name']);
+                $userReportList[$studentId]['message'] .= $newLine.'Mail will be send to: '.$bossInfo['username'].$newLine.'Subject: '.$subjectBoss.$newLine.'Content: '.$contentBoss.$newLine;
             }
+        }
 
+        if (false === $test) {
+            UserManager::disable($studentId);
+            MessageManager::send_message($studentId, $subject, $content);
+
+            if (!empty($bossInfo) && !empty($subjectBoss)) {
+                MessageManager::send_message($studentBoss, $subjectBoss, $contentBoss);
+            }
             UserManager::removeAllBossFromStudent($studentId);
         }
     }
 }
 
-
 //$newLine = PHP_EOL;
 
-$newLine = '<br />';
 if ($test) {
     echo 'No changes have been made.'.$newLine;
     echo "Now: $now".$newLine;

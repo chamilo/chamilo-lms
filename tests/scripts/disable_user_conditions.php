@@ -36,6 +36,9 @@ foreach ($students as $student) {
 
     if ($date3Months > $lastDate) {
         $disabledUser = api_get_user_info($studentId);
+        if (empty($disabledUser)) {
+            continue;
+        }
         $userReportList[$studentId]['message'] = "User# $studentId (".$disabledUser['username'].") to be disabled. Case 1. Last connection: $lastDate - 3 months: $date3Months ";
 
         $language = $disabledUser['language'];
@@ -45,10 +48,8 @@ foreach ($students as $student) {
         $userReportList[$studentId]['message'] .= $newLine.'Mail will be send to: '.$disabledUser['username'].$newLine.'Subject: '.$subject.$newLine.'Content: '.$content.$newLine;
 
         if (false === $test) {
-            if ($disabledUser) {
-                UserManager::disable($studentId);
-                MessageManager::send_message($studentId, $subject, $content);
-            }
+            UserManager::disable($studentId);
+            MessageManager::send_message($studentId, $subject, $content);
         }
     }
 }

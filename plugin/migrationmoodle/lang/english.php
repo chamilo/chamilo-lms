@@ -39,3 +39,4 @@ $strings['QuestionMultiChoiceMultipleTask'] = 'Answers for multichoice questions
 $strings['QuestionsTrueFalseTask'] = 'Answers for truefalse questions';
 $strings['CourseModulesScormTask'] = 'Course Scorms';
 $strings['ScormScoesTask'] = 'Scorms items';
+$strings['FilesForScormScoesTask'] = 'Files for Scorm items';

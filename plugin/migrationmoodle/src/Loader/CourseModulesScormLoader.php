@@ -4,6 +4,7 @@
 namespace Chamilo\PluginBundle\MigrationMoodle\Loader;
 
 use Chamilo\PluginBundle\MigrationMoodle\Interfaces\LoaderInterface;
+use Symfony\Component\Filesystem\Filesystem;
 
 /**
  * Class CourseModulesScormLoader.
@@ -30,7 +31,7 @@ class CourseModulesScormLoader implements LoaderInterface
         $courseInfo = api_get_course_info_by_id($incomingData['c_id']);
         $userId = 1;
 
-        $incomingData['path'] = str_replace('.zip', '/.', $incomingData['path']);
+        $incomingData['path'] = $this->createDirectory($incomingData['name'], $courseInfo['code']);
         $incomingData['use_max_score'] = $incomingData['use_max_score'] == 100;
 
         $incomingData['created_on'] = $incomingData['created_on']
@@ -79,5 +80,44 @@ class CourseModulesScormLoader implements LoaderInterface
         }
 
         return $lpId;
+    }
+
+    /**
+     * @param string $fileName
+     *
+     * @return string
+     */
+    public static function generateDirectoryName($fileName)
+    {
+        $newDirectory = trim($fileName);
+        $newDirectory = trim($newDirectory, '/');
+
+        return api_replace_dangerous_char($newDirectory);
+    }
+
+    /**
+     * @param string $name
+     * @param string $courseCode
+     *
+     * @return string
+     */
+    private function createDirectory($name, $courseCode)
+    {
+        $courseRelDir = api_get_path(SYS_COURSE_PATH).api_get_course_path($courseCode).'/scorm';
+
+        $newDirectory = self::generateDirectoryName($name);
+
+        $fullPath = "$courseRelDir/$newDirectory";
+
+        $fileSystem = new Filesystem();
+
+        if (!is_dir($fullPath)) {
+            $fileSystem->mkdir(
+                $fullPath,
+                api_get_permissions_for_new_directories()
+            );
+        }
+
+        return "$newDirectory/.";
     }
 }

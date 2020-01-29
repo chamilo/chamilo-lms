@@ -72,7 +72,7 @@ class CForumPost extends AbstractResource implements ResourceInterface
      * @var CForumThread|null
      *
      * @ORM\ManyToOne(targetEntity="Chamilo\CourseBundle\Entity\CForumThread", inversedBy="posts")
-     * @ORM\JoinColumn(name="thread_id", referencedColumnName="iid")
+     * @ORM\JoinColumn(name="thread_id", referencedColumnName="iid", nullable=true, onDelete="SET NULL")
      */
     protected $thread;
 

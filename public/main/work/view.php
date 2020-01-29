@@ -97,14 +97,17 @@ if ((user_is_author($id) || $isDrhOfCourse || (api_is_allowed_to_edit() || api_i
                 );
 
                 if (api_is_allowed_to_edit()) {
-                    $work_table = Database::get_course_table(TABLE_STUDENT_PUBLICATION);
-                    $sql = "UPDATE $work_table 
-                            SET	
-                                qualificator_id = '".api_get_user_id()."',
-                                qualification = '".api_float_val($_POST['qualification'])."',
-                                date_of_qualification = '".api_get_utc_datetime()."'
-                            WHERE c_id = ".$courseInfo['real_id']." AND id = $id";
-                    Database::query($sql);
+                    $qualification = isset($_POST['qualification']) ? api_float_val($_POST['qualification']) : null;
+                    if (null !== $qualification) {
+                        $work_table = Database::get_course_table(TABLE_STUDENT_PUBLICATION);
+                        $sql = "UPDATE $work_table
+                                SET
+                                    qualificator_id = '".api_get_user_id()."',
+                                    qualification = '".api_float_val($_POST['qualification'])."',
+                                    date_of_qualification = '".api_get_utc_datetime()."'
+                                WHERE c_id = ".$courseInfo['real_id']." AND id = $id";
+                        Database::query($sql);
+                    }
 
                     Display::addFlash(Display::return_message(get_lang('Update successful')));
 

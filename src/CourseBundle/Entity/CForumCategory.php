@@ -91,7 +91,6 @@ class CForumCategory extends AbstractResource implements ResourceInterface
     public function __construct()
     {
         $this->locked = 0;
-
         $this->catId = 0;
     }
 

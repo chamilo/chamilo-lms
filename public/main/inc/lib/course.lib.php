@@ -2287,7 +2287,6 @@ class CourseManager
         $table_stats_lastaccess = Database::get_main_table(TABLE_STATISTIC_TRACK_E_LASTACCESS);
         $table_stats_course_access = Database::get_main_table(TABLE_STATISTIC_TRACK_E_COURSE_ACCESS);
         $table_stats_online = Database::get_main_table(TABLE_STATISTIC_TRACK_E_ONLINE);
-        $table_stats_default = Database::get_main_table(TABLE_STATISTIC_TRACK_E_DEFAULT);
         $table_stats_downloads = Database::get_main_table(TABLE_STATISTIC_TRACK_E_DOWNLOADS);
         $table_stats_links = Database::get_main_table(TABLE_STATISTIC_TRACK_E_LINKS);
         $table_stats_uploads = Database::get_main_table(TABLE_STATISTIC_TRACK_E_UPLOADS);

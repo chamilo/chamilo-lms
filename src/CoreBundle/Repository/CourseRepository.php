@@ -27,7 +27,6 @@ class CourseRepository extends ResourceRepository
         foreach ($children as $child) {
             $em->remove($child);
         }
-        $em->flush();
 
         $em->remove($course);
         $em->flush();

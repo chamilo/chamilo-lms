@@ -112,7 +112,7 @@ class AddCourse
         $tables[] = 'student_publication';
         $tables[] = 'student_publication_assignment';
         $tables[] = 'document';
-        $tables[] = 'forum_category';
+        /*$tables[] = 'forum_category';
         $tables[] = 'forum_forum';
         $tables[] = 'forum_thread';
         $tables[] = 'forum_post';
@@ -120,7 +120,7 @@ class AddCourse
         $tables[] = 'forum_attachment';
         $tables[] = 'forum_notification';
         $tables[] = 'forum_thread_qualify';
-        $tables[] = 'forum_thread_qualify_log';
+        $tables[] = 'forum_thread_qualify_log';*/
         $tables[] = 'link';
         $tables[] = 'link_category';
         $tables[] = 'online_connected';
@@ -541,7 +541,6 @@ class AddCourse
             $answer->save();
 
             /* Forum tool */
-
             require_once api_get_path(SYS_CODE_PATH).'forum/forumfunction.inc.php';
 
             $params = [

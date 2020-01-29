@@ -44,8 +44,10 @@ $interbreadcrumb[] = [
 ];
 $interbreadcrumb[] = [
     'url' => api_get_path(WEB_CODE_PATH).'survey/survey.php?survey_id='.$surveyId.'&'.api_get_cidreq(),
-    'name' => strip_tags($survey_data['title']),
+    'name' => strip_tags($survey_data['title'], '<span>'),
 ];
+
+$htmlHeadXtra[] = '<script>'.api_get_language_translate_html().'</script>';
 
 $show = 0;
 Display::display_header(get_lang('SurveyPreview'));
@@ -83,7 +85,7 @@ if (isset($_GET['show'])) {
     $counter = 0;
     $sql = "SELECT * FROM $table_survey_question
             WHERE
-              survey_question NOT LIKE '%{{%' AND 
+              survey_question NOT LIKE '%{{%' AND
               c_id = $course_id AND
               survey_id = '".$surveyId."'
             ORDER BY sort ASC";
@@ -131,7 +133,7 @@ if (isset($_GET['show'])) {
                     survey_question.survey_id = '".$surveyId."' AND
                     survey_question.question_id IN (".Database::escape_string(implode(',', $paged_questions[$_GET['show']]), null, false).") AND
                     survey_question.c_id = $course_id AND
-                    survey_question NOT LIKE '%{{%'                        
+                    survey_question NOT LIKE '%{{%'
                 ORDER BY survey_question.sort, survey_question_option.sort ASC";
 
         $result = Database::query($sql);

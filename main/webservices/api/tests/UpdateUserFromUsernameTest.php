@@ -13,7 +13,7 @@ require_once __DIR__.'/../../../../vendor/autoload.php';
  */
 class UpdateUserFromUsernameTest extends V2TestCase
 {
-    protected function action()
+    public function action()
     {
         return 'update_user_from_username';
     }
@@ -65,12 +65,12 @@ class UpdateUserFromUsernameTest extends V2TestCase
         $parameters['extra'] = [
             [ 'field_name' => $extraFieldName, 'field_value' => $extraFieldNewValue ],
         ];
-        $parameters['loginName'] = $loginName;
+        $parameters['loginname'] = $loginName;
         $updated = $this->boolean($parameters);
         $this->assertTrue($updated);
 
         // assert the webservice reports an error with a non-existent login name
-        $parameters['loginName'] = 'santaClaus';
+        $parameters['loginname'] = 'santaClaus';
         $this->assertSame('UserNotFound', $this->errorMessageString($parameters));
 
         // compare each saved value to the original

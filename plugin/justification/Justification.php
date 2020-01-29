@@ -57,7 +57,7 @@ class Justification extends Plugin
 
     public function getList()
     {
-        $sql = 'SELECT * FROM justification_document ';
+        $sql = 'SELECT * FROM justification_document ORDER BY name ';
         $query = Database::query($sql);
 
         return Database::store_result($query, 'ASSOC');

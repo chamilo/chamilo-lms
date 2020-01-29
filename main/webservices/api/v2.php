@@ -301,10 +301,10 @@ try {
             $restResponse->setData([$newSessionId]);
             break;
         case Rest::SUBSCRIBE_USER_TO_SESSION_FROM_USERNAME:
-            if (empty($_POST['sessionId']) || empty($_POST['loginName'])) {
+            if (empty($_POST['sessionId']) || empty($_POST['loginname'])) {
                 throw new Exception(get_lang('NoData'));
             }
-            $subscribed = $restApi->subscribeUserToSessionFromUsername($_POST['sessionId'], $_POST['loginName']);
+            $subscribed = $restApi->subscribeUserToSessionFromUsername($_POST['sessionId'], $_POST['loginname']);
             $restResponse->setData([$subscribed]);
             break;
         case Rest::GET_SESSION_FROM_EXTRA_FIELD;
@@ -316,6 +316,10 @@ try {
             break;
         case Rest::UPDATE_USER_FROM_USERNAME:
             $data = $restApi->updateUserFromUserName($_POST);
+            $restResponse->setData([$data]);
+            break;
+        case Rest::USERNAME_EXIST:
+            $data = $restApi->usernameExist($_POST['loginname']);
             $restResponse->setData([$data]);
             break;
         default:

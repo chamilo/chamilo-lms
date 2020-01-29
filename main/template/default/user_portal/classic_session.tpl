@@ -74,16 +74,18 @@
                                 </li>
                             {% endif %}
 
-                            {% if row.date %}
-                                <li>
-                                    <i class="fa fa-calendar" aria-hidden="true"></i>
-                                    {{ row.date }}
-                                </li>
-                            {% elseif row.duration %}
-                                <li>
-                                    <i class="fa fa-calendar" aria-hidden="true"></i>
-                                    {{ row.duration }}
-                                </li>
+                            {% if allow_session_dates == true %}
+                                {% if row.date %}
+                                    <li>
+                                        <i class="fa fa-calendar" aria-hidden="true"></i>
+                                        {{ row.date }}
+                                    </li>
+                                {% elseif row.duration %}
+                                    <li>
+                                        <i class="fa fa-calendar" aria-hidden="true"></i>
+                                        {{ row.duration }}
+                                    </li>
+                                {% endif %}
                             {% endif %}
                         </ul>
                         <div class="sessions-items">

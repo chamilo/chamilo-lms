@@ -184,10 +184,13 @@
                         {{ row.coach_name }}
                     </li>
                 {% endif %}
-                <li>
-                    <i class="fa fa-calendar" aria-hidden="true"></i>
-                    {{ row.date ? row.date : row.duration }}
-                </li>
+
+                {% if allow_session_dates == true %}
+                    <li>
+                        <i class="fa fa-calendar" aria-hidden="true"></i>
+                        {{ row.date ? row.date : row.duration }}
+                    </li>
+                {% endif %}
             </ul>
             <div class="grid-courses">
                 {% if not group_courses %}

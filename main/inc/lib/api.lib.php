@@ -2480,7 +2480,7 @@ function api_check_password($password)
 function api_clear_anonymous($db_check = false)
 {
     global $_user;
-    if (api_is_anonymous($_user['user_id'], $db_check)) {
+    if (isset($_user['user_id']) && api_is_anonymous($_user['user_id'], $db_check)) {
         unset($_user['user_id']);
         Session::erase('_uid');
 
@@ -9562,7 +9562,7 @@ function api_set_noreply_and_from_address_to_mailer(PHPMailer $mailer, array $se
             PHPMailer::ValidateAddress($replyToAddress['mail'])
         ) {
             $mailer->AddReplyTo($replyToAddress['mail'], $replyToAddress['name']);
-            $mailer->Sender = $replyToAddress['mail'];
+            //$mailer->Sender = $replyToAddress['mail'];
         }
     }
 

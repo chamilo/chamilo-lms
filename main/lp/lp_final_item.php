@@ -247,6 +247,9 @@ function generateLPFinalItemTemplateBadgeLinks($userId, $courseId, $sessionId = 
     if ($userSkills) {
         foreach ($userSkills as $userSkill) {
             $skill = $em->find('ChamiloCoreBundle:Skill', $userSkill['skill_id']);
+            if (!$skill) {
+                continue;
+            }
             $skillList .= "
                 <div class='row'>
                     <div class='col-md-2 col-xs-4'>
@@ -263,21 +266,25 @@ function generateLPFinalItemTemplateBadgeLinks($userId, $courseId, $sessionId = 
                         <a href='http://www.facebook.com/sharer.php?u=".api_get_path(WEB_PATH)."badge/".$skill->getId()."/user/".$userId."' target='_new'>
                             <em class='fa fa-facebook-square fa-3x text-info' aria-hidden='true'></em>
                         </a>
-                        <a href='https://twitter.com/home?status=".sprintf(get_lang('IHaveObtainedSkillXOnY'), '"'.$skill->getName().'"', api_get_setting('siteName')).' - '.api_get_path(WEB_PATH).'badge/'.$skill->getId().'/user/'.$userId."' target='_new'>
+                        <a
+                            href='https://twitter.com/home?status=".sprintf(get_lang('IHaveObtainedSkillXOnY'), '"'.$skill->getName().'"', api_get_setting('siteName')).' - '.api_get_path(WEB_PATH).'badge/'.$skill->getId().'/user/'.$userId."' target='_new'>
                             <em class='fa fa-twitter-square fa-3x text-light' aria-hidden='true'></em>
                         </a>
                     </div>
                 </div>
             ";
         }
-        $badgeLink .= "
-            <div class='panel panel-default'>
-                <div class='panel-body'>
-                    <h3 class='text-center'>".get_lang('AdditionallyYouHaveObtainedTheFollowingSkills')."</h3>
-                    $skillList
+
+        if (!empty($skillList)) {
+            $badgeLink .= "
+                <div class='panel panel-default'>
+                    <div class='panel-body'>
+                        <h3 class='text-center'>".get_lang('AdditionallyYouHaveObtainedTheFollowingSkills')."</h3>
+                        $skillList
+                    </div>
                 </div>
-            </div>
-        ";
+            ";
+        }
     }
 
     return $badgeLink;

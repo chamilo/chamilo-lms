@@ -1,4 +1,5 @@
 <?php
+
 /* For licensing terms, see /license.txt */
 
 use Chamilo\CoreBundle\Entity\SequenceResource;
@@ -8,8 +9,6 @@ use Chamilo\CoreBundle\Entity\SequenceResource;
  * to the controllers depend on the current action.
  *
  * @author Christian Fasanando <christian1827@gmail.com> - Beeznest
- *
- * @package chamilo.auth
  */
 // Delete the globals['_cid'], we don't need it here.
 $cidReset = true; // Flag forcing the 'current course' reset
@@ -49,6 +48,7 @@ $actions = [
     'display_sessions',
     'subscribe_to_session',
     'search_tag',
+    'search_session_title',
     'subscribe_course_validation',
     'subscribe_course',
 ];
@@ -280,5 +280,12 @@ switch ($action) {
         }
 
         $courseController->sessionsListByCoursesTag($limit);
+        break;
+    case 'search_session_title':
+        if (!$user_can_view_page) {
+            api_not_allowed(true);
+        }
+
+        $courseController->sessionsListByName($limit);
         break;
 }

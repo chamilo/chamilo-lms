@@ -54,6 +54,9 @@ $interbreadcrumb[] = [
     'name' => get_lang('SurveyList'),
 ];
 
+Session::erase('answer_count');
+Session::erase('answer_list');
+
 // Getting the survey information
 if (!empty($_GET['survey_id'])) {
     $course_code = api_get_course_id();
@@ -66,7 +69,7 @@ if (!empty($_GET['survey_id'])) {
     api_not_allowed(true);
 }
 
-$tool_name = strip_tags($survey_data['title']);
+$tool_name = strip_tags($survey_data['title'], '<span>');
 $is_survey_type_1 = $survey_data['survey_type'] == 1;
 
 if (api_strlen(strip_tags($survey_data['title'])) > 40) {
@@ -89,7 +92,7 @@ if ($is_survey_type_1 && ($action == 'addgroup' || $action == 'deletegroup')) {
     }
 
     if ($action == 'deletegroup') {
-        $sql = 'DELETE FROM '.$table_survey_question_group.' 
+        $sql = 'DELETE FROM '.$table_survey_question_group.'
                 WHERE c_id = '.$course_id.' AND id = '.intval($_GET['gid']).' AND survey_id = '.intval($survey_id);
         Database::query($sql);
         $sendmsg = 'GroupDeletedSuccessfully';
@@ -97,6 +100,8 @@ if ($is_survey_type_1 && ($action == 'addgroup' || $action == 'deletegroup')) {
     header('Location: '.api_get_path(WEB_CODE_PATH).'survey/survey.php?survey_id='.$survey_id.'&sendmsg='.$sendmsg);
     exit;
 }
+
+$htmlHeadXtra[] = '<script>'.api_get_language_translate_html().'</script>';
 
 // Displaying the header
 Display::display_header($tool_name, 'Survey');
@@ -236,7 +241,7 @@ echo '</thead>';
 // Displaying the table contents with all the questions
 $question_counter = 1;
 $sql = "SELECT * FROM $table_survey_question_group
-        WHERE c_id = $course_id AND survey_id = $survey_id 
+        WHERE c_id = $course_id AND survey_id = $survey_id
         ORDER BY id";
 $result = Database::query($sql);
 $groups = [];
@@ -246,8 +251,8 @@ while ($row = Database::fetch_array($result)) {
 $sql = "SELECT survey_question.*, count(survey_question_option.question_option_id) as number_of_options
         FROM $table_survey_question survey_question
         LEFT JOIN $table_survey_question_option survey_question_option
-        ON 
-            survey_question.question_id = survey_question_option.question_id AND 
+        ON
+            survey_question.question_id = survey_question_option.question_id AND
             survey_question_option.c_id = $course_id
         WHERE
             survey_question.survey_id 	= ".intval($survey_id)." AND
@@ -277,6 +282,8 @@ while ($row = Database::fetch_array($result, 'ASSOC')) {
         $tool_name = get_lang('YesNo');
     } elseif ($row['type'] == 'multiplechoice') {
         $tool_name = get_lang('UniqueSelect');
+    } elseif ($row['type'] == 'multipleresponse') {
+        $tool_name = get_lang('MultipleChoiceMultipleAnswers');
     } else {
         $tool_name = get_lang(api_ucfirst(Security::remove_XSS($row['type'])));
     }
@@ -344,7 +351,7 @@ if ($is_survey_type_1) {
     echo '<table border="0"><tr><td width="100">'.get_lang('Name').'</td><td>'.get_lang('Description').'</td></tr></table>';
     echo '<form action="'.api_get_path(WEB_CODE_PATH).'survey/survey.php?action=addgroup&survey_id='.$survey_id.'" method="post">';
     if ($_GET['action'] == 'editgroup') {
-        $sql = 'SELECT name,description FROM '.$table_survey_question_group.' 
+        $sql = 'SELECT name,description FROM '.$table_survey_question_group.'
                 WHERE id = '.intval($_GET['gid']).' AND survey_id = '.intval($survey_id).' limit 1';
         $rs = Database::query($sql);
         $editedrow = Database::fetch_array($rs, 'ASSOC');
@@ -366,11 +373,11 @@ if ($is_survey_type_1) {
     echo '		<th width="100">'.get_lang('Modify').'</th>';
     echo '	</tr>';
 
-    $sql = 'SELECT id,name,description 
+    $sql = 'SELECT id,name,description
             FROM '.$table_survey_question_group.'
-            WHERE 
-                c_id = '.$course_id.' AND 
-                survey_id = '.intval($survey_id).' 
+            WHERE
+                c_id = '.$course_id.' AND
+                survey_id = '.intval($survey_id).'
             ORDER BY name';
 
     $rs = Database::query($sql);

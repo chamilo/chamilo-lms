@@ -48,7 +48,7 @@ $survey_data = SurveyManager::get_survey($survey_id);
 $course_id = api_get_course_id();
 $session_id = api_get_session_id();
 $gradebook_link_type = 8;
-$urlname = isset($survey_data['title']) ? strip_tags($survey_data['title']) : null;
+$urlname = isset($survey_data['title']) ? strip_tags($survey_data['title'], '<span>') : null;
 
 // Breadcrumbs
 if ($action == 'add') {

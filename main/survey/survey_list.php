@@ -12,6 +12,9 @@
  *
  * @todo use quickforms for the forms
  */
+
+use ChamiloSession as Session;
+
 if (!isset($_GET['cidReq'])) {
     $_GET['cidReq'] = 'none'; // Prevent sql errors
     $cidReset = true;
@@ -46,6 +49,8 @@ $isDrhOfCourse = CourseManager::isUserSubscribedInCourseAsDrh(
     $courseInfo
 );
 
+$htmlHeadXtra[] = '<script>'.api_get_language_translate_html().'</script>';
+
 if ($isDrhOfCourse) {
     Display::display_header(get_lang('SurveyList'));
     // Tool introduction
@@ -66,6 +71,9 @@ if (!api_is_allowed_to_edit(false, true)) {
 }
 
 $extend_rights_for_coachs = api_get_setting('extend_rights_for_coach_on_survey');
+
+Session::erase('answer_count');
+Session::erase('answer_list');
 
 // Language variables
 if (isset($_GET['search']) && $_GET['search'] == 'advanced') {

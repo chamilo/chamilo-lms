@@ -8379,4 +8379,6 @@ $CompilatioSeeReport = "Voir le rapport";
 $CompilatioNonToAnalyse = "Votre sélection ne contient aucun travaux à analyser. Seul les travaux gérés par Compilatio et non déjà analysés peuvent être envoyés.";
 $CompilatioComunicationAjaxImpossible = "Communication AJAX avec le serveur Compilatio impossible. Veuillez reessayer ultérieurement.";
 $UserClassExplanation = "Information : La liste des classes ci-dessous contient la liste des classes que vous avez déjà inscrits à votre cours. Si cette liste est vide, utilisez le + vert ci-dessus pour ajouter des classes.";
+$InsertTwoNames = "Saisir vos deux noms";
+$AddRightLogo = "Intégrer le logo en haut à droite";
 ?>

@@ -318,7 +318,9 @@ class survey_question
         }
 
         /**
-         * This solution is a little bit strange but I could not find a different solution.
+         * Deleting a specific answer is only saved in the session until the
+         * "Save question" button is pressed. This means all options are kept
+         * in the survey_question_option table until the question is saved.
          */
         if (isset($_POST['delete_answer'])) {
             $deleted = false;
@@ -328,12 +330,22 @@ class survey_question
                 Session::write('answer_count', $counter);
             }
 
+            $newAnswers=[];
             foreach ($formData['answers'] as $key => &$value) {
                 if ($key > $deleted) {
-                    $formData['answers'][$key - 1] = $formData['answers'][$key];
+                    // swap with previous (deleted) option slot
+                    $newAnswers[$key - 1] = $formData['answers'][$key];
                     unset($formData['answers'][$key]);
+                } elseif ($key === $deleted) {
+                    // delete option
+                    unset($formData['answers'][$deleted]);
+                } else {
+                    // keep as is
+                    $newAnswers[$key] = $value;
                 }
             }
+            unset($formData['answers']);
+            $formData['answers'] = $newAnswers;
         }
 
         // Adding an answer
@@ -354,17 +366,21 @@ class survey_question
         }
 
         if (!isset($_POST['delete_answer'])) {
-            if (isset($formData['answers'])) {
-                foreach ($formData['answers'] as $index => $data) {
-                    if ($index > $counter) {
-                        unset($formData['answers'][$index]);
-                    }
+            // Make sure we have an array of answers
+            if (!isset($formData['answers'])) {
+                $formData['answers'] = [];
+            }
+            // Check if no deleted answer remains at the end of the answers
+            // array and add empty answers if the array is too short
+            foreach ($formData['answers'] as $index => $data) {
+                if ($index > $counter) {
+                    unset($formData['answers'][$index]);
                 }
+            }
 
-                for ($i = 0; $i <= $counter; $i++) {
-                    if (!isset($formData['answers'][$i])) {
-                        $formData['answers'][$i] = '';
-                    }
+            for ($i = 0; $i <= $counter; $i++) {
+                if (!isset($formData['answers'][$i])) {
+                    $formData['answers'][$i] = '';
                 }
             }
         }

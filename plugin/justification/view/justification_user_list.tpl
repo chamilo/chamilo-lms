@@ -4,7 +4,7 @@
 <div class ="row">
     <div class ="col-md-12">
         <div class="page-header">
-            <h2>{{ 'List'| get_lang }}</h2>
+            <h2>{{ 'DocumentListForUserX'| get_plugin_lang('Justification')|format(user_info.complete_name) }}</h2>
         </div>
         <table class="table">
             <tr>

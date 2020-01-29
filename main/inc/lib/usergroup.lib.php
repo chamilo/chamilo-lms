@@ -235,6 +235,56 @@ class UserGroup extends Model
     }
 
     /**
+     * @param int $course_id
+     * @param int $type
+     *
+     * @return mixed
+     */
+    public function getUserGroupByCourseWithDataCount($course_id, $type = -1)
+    {
+        if ($this->getUseMultipleUrl()) {
+            $course_id = (int) $course_id;
+            $urlId = api_get_current_access_url_id();
+            $sql = "SELECT count(c.usergroup_id) as count
+                    FROM {$this->usergroup_rel_course_table} c
+                    INNER JOIN {$this->access_url_rel_usergroup} a
+                    ON (c.usergroup_id = a.usergroup_id)
+                    WHERE access_url_id = $urlId AND course_id = $course_id
+            ";
+            $result = Database::query($sql);
+            if (Database::num_rows($result)) {
+                $row = Database::fetch_array($result);
+
+                return $row['count'];
+            }
+
+            return 0;
+        } else {
+            $typeCondition = '';
+            if ($type != -1) {
+                $type = (int) $type;
+                $typeCondition = " AND group_type = $type ";
+            }
+            $sql = "SELECT count(c.usergroup_id) as count
+                    FROM {$this->usergroup_rel_course_table} c
+                    INNER JOIN {$this->table} a
+                    ON (c.usergroup_id = a.id)
+                    WHERE
+                        course_id = $course_id
+                        $typeCondition
+            ";
+            $result = Database::query($sql);
+            if (Database::num_rows($result)) {
+                $row = Database::fetch_array($result);
+
+                return $row['count'];
+            }
+
+            return 0;
+        }
+    }
+
+    /**
      * @param string $name
      *
      * @return mixed

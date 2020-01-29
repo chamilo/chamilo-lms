@@ -5,9 +5,11 @@
 namespace Chamilo\CoreBundle\Controller;
 
 use Chamilo\CoreBundle\Component\Utils\Glide;
+use Chamilo\CoreBundle\Entity\Resource\AbstractResource;
 use Chamilo\CoreBundle\Repository\ResourceFactory;
 use Chamilo\CoreBundle\Repository\ResourceRepository;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Vich\UploaderBundle\Storage\FlysystemStorage;
 
 /**
@@ -37,6 +39,19 @@ abstract class AbstractResourceController extends BaseController
         //$services['storage'] = FlysystemStorage::class;
 
         return $services;
+    }
+
+    public function denyAccessUnlessValidResource(AbstractResource $resource)
+    {
+        if (null === $resource) {
+            throw new NotFoundHttpException($this->trans('Resource doesn\'t exists.'));
+        }
+
+        $resourceNode = $resource->getResourceNode();
+
+        if (null === $resourceNode) {
+            throw new NotFoundHttpException($this->trans('Resource doesn\'t have a node.'));
+        }
     }
 
     /**

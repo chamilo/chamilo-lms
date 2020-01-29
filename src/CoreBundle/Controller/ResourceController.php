@@ -593,15 +593,9 @@ class ResourceController extends AbstractResourceController implements CourseCon
         /** @var AbstractResource $resource */
         $resource = $repository->getResourceFromResourceNode($nodeId);
 
-        if (null === $resource) {
-            throw new NotFoundHttpException();
-        }
+        $this->denyAccessUnlessValidResource($resource);
 
         $resourceNode = $resource->getResourceNode();
-
-        if (null === $resourceNode) {
-            throw new NotFoundHttpException();
-        }
 
         $this->denyAccessUnlessGranted(
             ResourceNodeVoter::VIEW,

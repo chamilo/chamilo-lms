@@ -7,7 +7,7 @@
     <nav aria-label="...">
         <ul class="pager">
             <li class="previous">
-                <a href="{{ _p.web_self ~ '?' ~ {"year": search_year - 1, "user": user_id }|url_encode }}">
+                <a href="{{ _p.web_self ~ '?' ~ {"year": search_year - 1, "user": user_id, "order": current_order } |url_encode }}">
                     <span aria-hidden="true">&larr;</span> {{ search_year - 1 }}
                 </a>
             </li>
@@ -15,7 +15,7 @@
                 {{ search_year }}
             </li>
             <li class="next">
-                <a href="{{ _p.web_self ~ '?' ~ {"year": search_year + 1, "user": user_id }|url_encode }}">
+                <a href="{{ _p.web_self ~ '?' ~ {"year": search_year + 1, "user": user_id, "order": current_order }|url_encode }}">
                     {{ search_year + 1 }} <span aria-hidden="true">&rarr;</span>
                 </a>
             </li>
@@ -27,7 +27,7 @@
                 <thead>
                 <tr>
                     <th class="col-session">
-                        <a href=" {{ _p.web_self ~ '?order=' ~ order }}">
+                        <a href=" {{ _p.web_self ~ '?' ~ {"year": search_year, "user": user_id, "order": order }|url_encode }} ">
                             {{ 'Student'|get_lang }}
                         </a>
                     </th>

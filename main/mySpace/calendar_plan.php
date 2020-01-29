@@ -20,7 +20,7 @@ $now = new DateTime('now', $timezone);
 $currentYear = (int) $now->format('Y');
 
 $searchYear = isset($_GET['year']) ? (int) $_GET['year'] : $currentYear;
-$order = isset($_GET['order']) && $_GET['order'] === 'desc' ? 'desc' : 'asc';
+$currentOrder = isset($_GET['order']) && $_GET['order'] === 'desc' ? 'desc' : 'asc';
 
 if (api_is_western_name_order()) {
     $orderBy = " firstname ";
@@ -37,13 +37,13 @@ $students = UserManager::getUsersFollowedByUser(
     null,
     null,
     $orderBy,
-    $order,
+    $currentOrder,
     null,
     null,
     api_is_student_boss() ? STUDENT_BOSS : COURSEMANAGER
 );
 
-if ($order === 'desc') {
+if ($currentOrder === 'desc') {
     $order = 'asc';
 } else {
     $order = 'desc';
@@ -95,7 +95,6 @@ foreach ($sessionColorName as  $color => $name) {
     $row++;
 }
 
-
 $agenda = new Agenda('personal');
 $actions = $agenda->displayActions('list', $userId);
 
@@ -108,6 +107,7 @@ $template->assign('search_year', $searchYear);
 $template->assign('students', $students);
 $template->assign('legend', $table->toHtml());
 $template->assign('order', $order);
+$template->assign('current_order', $currentOrder);
 
 $layout = $template->get_template('agenda/student_boss_planification.tpl');
 $template->display($layout);

@@ -899,6 +899,18 @@ class ResourceController extends AbstractResourceController implements CourseCon
         $qb = $resourceNodeRepo->getChildrenQueryBuilder($resourceNode);
         $qb->addCriteria($criteria);
         $children = $qb->getQuery()->getResult();
+        $count = count($children);
+        if (0 === $count) {
+            $params = $this->getResourceParams($request);
+            $params['id'] = $resourceNodeId;
+
+            $this->addFlash('warning', $this->trans('No files'));
+
+            return $this->redirectToRoute(
+                'chamilo_core_resource_list',
+                $params
+            );
+        }
 
         $response = new StreamedResponse(function () use ($rootNodePath, $zipName, $children, $repo) {
             // Define suitable options for ZipStream Archive.

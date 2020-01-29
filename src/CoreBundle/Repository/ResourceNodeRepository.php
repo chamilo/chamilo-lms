@@ -29,6 +29,6 @@ class ResourceNodeRepository extends MaterializedPathRepository
             ->andWhere('file IS NOT NULL')
         ;
 
-        return $qb->getQuery()->getSingleScalarResult();
+        return (int) $qb->getQuery()->getSingleScalarResult();
     }
 }

@@ -170,7 +170,7 @@ if (
             $reportName7 = get_lang('UserByCertificate');
             $reportName8 = get_lang('UserByAge');
 
-            $url1 = $urlBase.'a=users_active&filter=active&date_start='.$dateStart.'&date_end='.$dateEnd;
+            //$url1 = $urlBase.'a=users_active&filter=active&date_start='.$dateStart.'&date_end='.$dateEnd;
             $url2 = $urlBase.'a=users_active&filter=status&date_start='.$dateStart.'&date_end='.$dateEnd;
             $url3 = $urlBase.'a=users_active&filter=language&date_start='.$dateStart.'&date_end='.$dateEnd;
             $url4 = $urlBase.'a=users_active&filter=language_cible&date_start='.$dateStart.'&date_end='.$dateEnd;
@@ -188,13 +188,13 @@ if (
             $reportOptions7 = sprintf($reportOptions, $reportName7);
             $reportOptions8 = sprintf($reportOptions, $reportName8);
 
-            $htmlHeadXtra[] = Statistics::getJSChartTemplate(
+            /*$htmlHeadXtra[] = Statistics::getJSChartTemplate(
                 $url1,
                 $reportType,
                 $reportOptions1,
                 'canvas1'
-            );
-            $htmlHeadXtra[] = Statistics::getJSChartTemplate(
+            );*/
+            /*$htmlHeadXtra[] = Statistics::getJSChartTemplate(
                 $url2,
                 $reportType,
                 $reportOptions2,
@@ -235,7 +235,7 @@ if (
                 $reportType,
                 $reportOptions8,
                 'canvas8'
-            );
+            );*/
 
             break;
         case 'session_by_date':
@@ -773,25 +773,25 @@ switch ($report) {
             $startDate = $values['daterange_start'];
             $endDate = $values['daterange_end'];
 
-            $content .=  '<div class="row">';
-            $content .=  '<div class="col-md-4"><canvas id="canvas1" style="margin-bottom: 20px"></canvas></div>';
-            $content .=  '<div class="col-md-4"><canvas id="canvas2" style="margin-bottom: 20px"></canvas></div>';
-            $content .=  '<div class="col-md-4"><canvas id="canvas3" style="margin-bottom: 20px"></canvas></div>';
-            $content .=  '</div>';
+            $graph =  '<div class="row">';
+            $graph .=  '<div class="col-md-4"><canvas id="canvas1" style="margin-bottom: 20px"></canvas></div>';
+            $graph .=  '<div class="col-md-4"><canvas id="canvas2" style="margin-bottom: 20px"></canvas></div>';
+            $graph .=  '<div class="col-md-4"><canvas id="canvas3" style="margin-bottom: 20px"></canvas></div>';
+            $graph .=  '</div>';
 
-            $content .=  '<div class="row">';
-            $content .=  '<div class="col-md-6"><canvas id="canvas4" style="margin-bottom: 20px"></canvas></div>';
-            $content .=  '<div class="col-md-6"><canvas id="canvas5" style="margin-bottom: 20px"></canvas></div>';
-            $content .=  '</div>';
+            $graph .=  '<div class="row">';
+            $graph .=  '<div class="col-md-6"><canvas id="canvas4" style="margin-bottom: 20px"></canvas></div>';
+            $graph .=  '<div class="col-md-6"><canvas id="canvas5" style="margin-bottom: 20px"></canvas></div>';
+            $graph .=  '</div>';
 
-            $content .=  '<div class="row">';
-            $content .=  '<div class="col-md-6"><canvas id="canvas6" style="margin-bottom: 20px"></canvas></div>';
-            $content .=  '<div class="col-md-6"><canvas id="canvas7" style="margin-bottom: 20px"></canvas></div>';
-            $content .=  '</div>';
+            $graph .=  '<div class="row">';
+            $graph .=  '<div class="col-md-6"><canvas id="canvas6" style="margin-bottom: 20px"></canvas></div>';
+            $graph .=  '<div class="col-md-6"><canvas id="canvas7" style="margin-bottom: 20px"></canvas></div>';
+            $graph .=  '</div>';
 
-            $content .=  '<div class="row">';
-            $content .=  '<div class="col-md-4"><canvas id="canvas8" style="margin-bottom: 20px"></canvas></div>';
-            $content .=  '</div>';
+            $graph .=  '<div class="row">';
+            $graph .=  '<div class="col-md-4"><canvas id="canvas8" style="margin-bottom: 20px"></canvas></div>';
+            $graph .=  '</div>';
 
             $conditions = [];
             $extraConditions = '';
@@ -919,11 +919,381 @@ switch ($report) {
                 $column++;
             }
 
-            $studentCount = UserManager::getUserListExtraConditions(['status' => STUDENT], null, null, null, null, null, true);
-            $content .= Display::page_subheader2(get_lang('NumberOfUsers').': '.$totalCount);
-            $content .= Display::page_subheader2(get_lang('TotalNumberOfStudents').': '.$studentCount);
-
+            $studentCount = UserManager::getUserListExtraConditions(
+                ['status' => STUDENT],
+                null,
+                null,
+                null,
+                null,
+                null,
+                true
+            );
             $content .= $table->return_table();
+
+            $conditions = ['active' => 1];
+            $active = UserManager::getUserListExtraConditions(
+                $conditions,
+                [],
+                false,
+                false,
+                null,
+                $extraConditions,
+                true
+            );
+            $conditions = ['active' => 0];
+            $noActive = UserManager::getUserListExtraConditions(
+                $conditions,
+                [],
+                false,
+                false,
+                null,
+                $extraConditions,
+                true
+            );
+
+            $all = [
+                get_lang('Active') => $active,
+                get_lang('Inactive') => $noActive,
+            ];
+
+            $data = Statistics::buildJsChartData($all, $reportName1);
+            $htmlHeadXtra[] = Statistics::getJSChartTemplateWithData(
+                $data['chart'],
+                'pie',
+                $reportOptions1,
+                'canvas1'
+            );
+            $extraTables = $data['table'];
+
+            // graph 2
+            $extraFieldValueUser = new ExtraField('user');
+            $extraField = $extraFieldValueUser->get_handler_field_info_by_field_variable('statusocial');
+
+            $users = UserManager::getUserListExtraConditions(
+                [],
+                [],
+                false,
+                false,
+                null,
+                $extraConditions,
+                false
+            );
+
+            $userIdList = array_column($users, 'user_id');
+            $userIdListToString = implode("', '", $userIdList);
+
+            $all = [];
+            $total = count($users);
+            $usersFound = 0;
+            foreach ($extraField['options'] as $item) {
+                $value = Database::escape_string($item['option_value']);
+                $count = 0;
+                $sql = "SELECT count(id) count
+                            FROM $extraFieldValueUser->table_field_values
+                            WHERE
+                            value = '$value' AND
+                            item_id IN ('$userIdListToString') AND
+                            field_id = ".$extraField['id'];
+                $query = Database::query($sql);
+                $result = Database::fetch_array($query);
+                $count = $result['count'];
+                $usersFound += $count;
+                $all[$item['display_text']] = $count;
+            }
+            $all[get_lang('N/A')] = $total - $usersFound;
+
+            $data = Statistics::buildJsChartData($all, $reportName2);
+            $htmlHeadXtra[] = Statistics::getJSChartTemplateWithData(
+                $data['chart'],
+                'pie',
+                $reportOptions1,
+                'canvas2'
+            );
+            $extraTables .= $data['table'];
+
+            // graph 3
+
+            $languages = api_get_languages();
+            $all = [];
+            foreach ($languages['folder'] as $language) {
+                $conditions = ['language' => $language];
+                $key = $language;
+                if (substr($language, -1) === '2') {
+                    $key = str_replace(2, '', $language);
+                }
+                if (!isset($all[$key])) {
+                    $all[$key] = 0;
+                }
+                $all[$key] += UserManager::getUserListExtraConditions(
+                    $conditions,
+                    [],
+                    false,
+                    false,
+                    null,
+                    $extraConditions,
+                    true
+                );
+            }
+
+            $data = Statistics::buildJsChartData($all, $reportName3);
+            $htmlHeadXtra[] = Statistics::getJSChartTemplateWithData(
+                $data['chart'],
+                'pie',
+                $reportOptions3,
+                'canvas3'
+            );
+            $extraTables .= $data['table'];
+
+            // graph 4
+            $extraFieldValueUser = new ExtraField('user');
+            $extraField = $extraFieldValueUser->get_handler_field_info_by_field_variable('langue_cible');
+
+            $users = UserManager::getUserListExtraConditions(
+                [],
+                [],
+                false,
+                false,
+                null,
+                $extraConditions,
+                false
+            );
+
+            $userIdList = array_column($users, 'user_id');
+            $userIdListToString = implode("', '", $userIdList);
+
+            $all = [];
+            $total = count($users);
+            $usersFound = 0;
+            foreach ($extraField['options'] as $item) {
+                $value = Database::escape_string($item['option_value']);
+                $count = 0;
+                $sql = "SELECT count(id) count
+                            FROM $extraFieldValueUser->table_field_values
+                            WHERE
+                            value = '$value' AND
+                            item_id IN ('$userIdListToString') AND
+                            field_id = ".$extraField['id'];
+                $query = Database::query($sql);
+                $result = Database::fetch_array($query);
+                $count = $result['count'];
+                $usersFound += $count;
+                $all[$item['display_text']] = $count;
+            }
+            $all[get_lang('N/A')] = $total - $usersFound;
+
+            $data = Statistics::buildJsChartData($all, $reportName4);
+            $htmlHeadXtra[] = Statistics::getJSChartTemplateWithData(
+                $data['chart'],
+                'pie',
+                $reportOptions4,
+                'canvas4'
+            );
+            $extraTables .= $data['table'];
+
+            // graph 5
+
+            $extraFieldValueUser = new ExtraField('user');
+            $extraField = $extraFieldValueUser->get_handler_field_info_by_field_variable('filiere_user');
+
+            $all = [];
+            $users = UserManager::getUserListExtraConditions(
+                [],
+                [],
+                false,
+                false,
+                null,
+                $extraConditions,
+                false
+            );
+
+            $userIdList = array_column($users, 'user_id');
+            $userIdListToString = implode("', '", $userIdList);
+            $usersFound = 0;
+
+            $total = count($users);
+            foreach ($extraField['options'] as $item) {
+                $value = Database::escape_string($item['option_value']);
+                $count = 0;
+                $sql = "SELECT count(id) count
+                            FROM $extraFieldValueUser->table_field_values
+                            WHERE
+                            value = '$value' AND
+                            item_id IN ('$userIdListToString') AND
+                            field_id = ".$extraField['id'];
+                $query = Database::query($sql);
+                $result = Database::fetch_array($query);
+                $count = $result['count'];
+                $all[$item['display_text']] = $count;
+                $usersFound += $count;
+            }
+
+            $all[get_lang('N/A')] = $total - $usersFound;
+
+            $data = Statistics::buildJsChartData($all, $reportName5);
+            $htmlHeadXtra[] = Statistics::getJSChartTemplateWithData(
+                $data['chart'],
+                'pie',
+                $reportOptions5,
+                'canvas5'
+            );
+            $extraTables .= $data['table'];
+
+            // graph 6
+
+            $extraFieldValueUser = new ExtraField('user');
+            $extraField = $extraFieldValueUser->get_handler_field_info_by_field_variable('termactivated');
+
+            $users = UserManager::getUserListExtraConditions(
+                [],
+                [],
+                false,
+                false,
+                null,
+                $extraConditions,
+                false
+            );
+
+            $userIdList = array_column($users, 'user_id');
+            $userIdListToString = implode("', '", $userIdList);
+
+            $all = [];
+            $total = count($users);
+            $sql = "SELECT count(id) count
+                        FROM $extraFieldValueUser->table_field_values
+                        WHERE
+                        value = 1 AND
+                        item_id IN ('$userIdListToString') AND
+                        field_id = ".$extraField['id'];
+            $query = Database::query($sql);
+            $result = Database::fetch_array($query);
+            $count = $result['count'];
+
+            $all[get_lang('Yes')] = $count;
+            $all[get_lang('No')] = $total - $count;
+
+            $data = Statistics::buildJsChartData($all, $reportName6);
+            $htmlHeadXtra[] = Statistics::getJSChartTemplateWithData(
+                $data['chart'],
+                'pie',
+                $reportOptions6,
+                'canvas6'
+            );
+            $extraTables .= $data['table'];
+
+            // Graph 7
+
+            $extraFieldValueUser = new ExtraField('user');
+            $extraField = $extraFieldValueUser->get_handler_field_info_by_field_variable('langue_cible');
+
+            $users = UserManager::getUserListExtraConditions(
+                [],
+                [],
+                false,
+                false,
+                null,
+                $extraConditions,
+                false
+            );
+
+            $total = count($users);
+            $userIdList = array_column($users, 'user_id');
+            $certificateCount = 0;
+            foreach ($userIdList as $userId) {
+                $certificate = GradebookUtils::get_certificate_by_user_id(
+                    0,
+                    $userId
+                );
+
+                if (!empty($certificate)) {
+                    $certificateCount++;
+                }
+            }
+
+            $all[get_lang('Yes')] = $certificateCount;
+            $all[get_lang('No')] = $total - $certificateCount;
+
+            $data = Statistics::buildJsChartData($all, $reportName7);
+            $htmlHeadXtra[] = Statistics::getJSChartTemplateWithData(
+                $data['chart'],
+                'pie',
+                $reportOptions7,
+                'canvas7'
+            );
+            $extraTables .= $data['table'];
+
+            // Graph 8
+
+            $extraFieldValueUser = new ExtraField('user');
+            $extraField = $extraFieldValueUser->get_handler_field_info_by_field_variable('terms_datedenaissance');
+
+            $users = UserManager::getUserListExtraConditions(
+                [],
+                [],
+                false,
+                false,
+                null,
+                $extraConditions,
+                false
+            );
+
+            $userIdList = array_column($users, 'user_id');
+            $userIdListToString = implode("', '", $userIdList);
+
+            $all = [];
+            $total = count($users);
+
+            $sql = "SELECT value
+                        FROM $extraFieldValueUser->table_field_values
+                        WHERE
+                        item_id IN ('$userIdListToString') AND
+                        field_id = ".$extraField['id'];
+            $query = Database::query($sql);
+            $usersFound = 0;
+            $now = new DateTime();
+            $all = [
+                //get_lang('N/A') => 0,
+                '16-17' => 0,
+                '18-25' => 0,
+                '26-30' => 0,
+            ];
+
+            while ($row = Database::fetch_array($query)) {
+                $usersFound++;
+                if (!empty($row['value'])) {
+                    $date1 = new DateTime($row['value']);
+                    $interval = $now->diff($date1);
+                    $years = (int) $interval->y;
+
+                    if ($years >= 16 && $years <= 17) {
+                        $all['16-17'] += 1;
+                    }
+                    if ($years >= 18 && $years <= 25) {
+                        $all['18-25'] += 1;
+                    }
+                    if ($years >= 26 && $years <= 30) {
+                        $all['26-30'] += 1;
+                    }
+                    /*if ($years >= 31) {
+                        $all[get_lang('N/A')] += 1;
+                    }*/
+                } else {
+                    //$all[get_lang('N/A')] += 1;
+                }
+            }
+
+            $data = Statistics::buildJsChartData($all, $reportName8);
+            $htmlHeadXtra[] = Statistics::getJSChartTemplateWithData(
+                $data['chart'],
+                'pie',
+                $reportOptions8,
+                'canvas8'
+            );
+            $extraTables .= $data['table'];
+
+            $header = Display::page_subheader2(get_lang('NumberOfUsers').': '.$totalCount);
+            $header .= Display::page_subheader2(get_lang('TotalNumberOfStudents').': '.$studentCount);
+
+            $content = $header.$extraTables.$content.$graph;
         }
 
         $content =  $form->returnForm().$content;

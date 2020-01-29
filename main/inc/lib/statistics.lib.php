@@ -2,6 +2,8 @@
 
 /* For licensing terms, see /license.txt */
 
+use Chamilo\CoreBundle\Component\Utils\ChamiloApi;
+
 /**
  * This class provides some functions for statistics.
  */
@@ -1164,6 +1166,74 @@ class Statistics
         </script>';
 
         return $chartCode;
+    }
+
+    public static function getJSChartTemplateWithData($data, $type = 'pie', $options = '', $elementId = 'canvas')
+    {
+        $data = json_encode($data);
+        $chartCode = '
+        <script>
+            $(function() {
+                Chart.defaults.global.responsive = true;
+                var ctx = document.getElementById("'.$elementId.'").getContext("2d");
+                var chart = new Chart(ctx, {
+                    type: "'.$type.'",
+                    data: '.$data.',
+                    options: {'.$options.'}
+                });
+            });
+        </script>';
+
+        return $chartCode;
+    }
+
+    public static function buildJsChartData($all, $chartName)
+    {
+        $list = [];
+        $palette = ChamiloApi::getColorPalette(true, true);
+        foreach ($all as $tick => $tock) {
+            $list['labels'][] = $tick;
+        }
+
+        $list['datasets'][0]['label'] = $chartName;
+        $list['datasets'][0]['borderColor'] = 'rgba(255,255,255,1)';
+
+        $i = 0;
+        foreach ($all as $tick => $tock) {
+            $j = $i % count($palette);
+            $list['datasets'][0]['data'][] = $tock;
+            $list['datasets'][0]['backgroundColor'][] = $palette[$j];
+            $i++;
+        }
+
+        $scoreDisplay = ScoreDisplay::instance();
+        $table = new HTML_Table(['class' => 'data_table']);
+        $headers = [
+            get_lang('Name'),
+            get_lang('Count'),
+            get_lang('Percentage'),
+        ];
+        $row = 0;
+        $column = 0;
+        foreach ($headers as $header) {
+            $table->setHeaderContents($row, $column, $header);
+            $column++;
+        }
+
+        $total = 0;
+        foreach ($all as $name => $value) {
+            $total += $value;
+        }
+        $row++;
+        foreach ($all as $name => $value) {
+            $table->setCellContents($row, 0, $name);
+            $table->setCellContents($row, 1, $value);
+            $table->setCellContents($row, 2, $scoreDisplay->display_score([$value, $total], SCORE_PERCENT));
+            $row++;
+        }
+        $table = Display::page_subheader2($chartName).$table->toHtml();
+
+        return ['chart' => $list, 'table' => $table];
     }
 
     /**

@@ -284,23 +284,8 @@ switch ($action) {
 
                 break;
             case 'status':
-                /*$statusList = api_get_status_langvars();
-                unset($statusList[ANONYMOUS]);
-
-                foreach ($statusList as $status => $name) {
-                    $conditions = ['status' => $status];
-                    $count = UserManager::getUserListExtraConditions(
-                        $conditions,
-                        [],
-                        false,
-                        false,
-                        null,
-                        $extraConditions,
-                        true
-                    );
-                    $all[$name] = $count;
-                }*/
-
+                $extraFieldValueUser = new ExtraField('user');
+                $extraField = $extraFieldValueUser->get_handler_field_info_by_field_variable('statusocial');
 
                 $users = UserManager::getUserListExtraConditions(
                     [],
@@ -312,19 +297,28 @@ switch ($action) {
                     false
                 );
 
-                $all[get_lang('N/A')] = 0;
-                foreach ($users as $user) {
-                    $userInfo = api_get_user_info($user['id']);
-                    if (empty($userInfo['icon_status_label'])) {
-                        $all[get_lang('N/A')] += 1;
-                        continue;
-                    }
+                $userIdList = array_column($users, 'user_id');
+                $userIdListToString = implode("', '", $userIdList);
 
-                    if (!isset($all[$userInfo['icon_status_label']])) {
-                        $all[$userInfo['icon_status_label']] = 0;
-                    }
-                    $all[$userInfo['icon_status_label']] += 1;
+                $all = [];
+                $total = count($users);
+                $usersFound = 0;
+                foreach ($extraField['options'] as $item) {
+                    $value = Database::escape_string($item['option_value']);
+                    $count = 0;
+                    $sql = "SELECT count(id) count
+                            FROM $extraFieldValueUser->table_field_values
+                            WHERE
+                            value = '$value' AND
+                            item_id IN ('$userIdListToString') AND
+                            field_id = ".$extraField['id'];
+                    $query = Database::query($sql);
+                    $result = Database::fetch_array($query);
+                    $count = $result['count'];
+                    $usersFound += $count;
+                    $all[$item['display_text']] = $count;
                 }
+                $all[get_lang('N/A')] = $total - $usersFound;
 
                 break;
             case 'language':
@@ -383,7 +377,6 @@ switch ($action) {
                     $query = Database::query($sql);
                     $result = Database::fetch_array($query);
                     $count = $result['count'];
-                    //$item['display_text'] = str_replace('2', '', $item['display_text']);
                     $usersFound += $count;
                     $all[$item['display_text']] = $count;
                 }
@@ -419,13 +412,10 @@ switch ($action) {
                 $usersFound = 0;
                 $now = new DateTime();
                 $all = [
-                    get_lang('N/A') => 0,
-                    //'10-14' => 0,
-                    '15-19' => 0,
-                    '20-30' => 0,
-                    '31-40' => 0,
-                    '41-50' => 0,
-                    '> 51' => 0,
+                    //get_lang('N/A') => 0,
+                    '16-17' => 0,
+                    '18-25' => 0,
+                    '26-30' => 0,
                 ];
 
                 while ($row = Database::fetch_array($query)) {
@@ -434,31 +424,21 @@ switch ($action) {
                         $date1 = new DateTime($row['value']);
                         $interval = $now->diff($date1);
                         $years = (int) $interval->y;
-                        if (empty($years) || $years <= 14) {
-                            $all[get_lang('N/A')] += 1;
-                            continue;
-                        }
-                        /*if ($years >= 10 && $years <= 14) {
-                            $all['10-14'] += 1;
-                        }*/
 
-                        if ($years >= 15 && $years <= 19) {
-                            $all['15-19'] += 1;
+                        if ($years >= 16 && $years <= 17) {
+                            $all['16-17'] += 1;
                         }
-                        if ($years >= 20 && $years <= 30) {
-                            $all['20-30'] += 1;
+                        if ($years >= 18 && $years <= 25) {
+                            $all['18-25'] += 1;
                         }
-                        if ($years >= 31 && $years <= 40) {
-                            $all['31-40'] += 1;
+                        if ($years >= 26 && $years <= 30) {
+                            $all['26-30'] += 1;
                         }
-                        if ($years >= 41 && $years <= 50) {
-                            $all['41-50'] += 1;
-                        }
-                        if ($years >= 51) {
-                            $all['> 51'] += 1;
-                        }
+                        /*if ($years >= 31) {
+                            $all[get_lang('N/A')] += 1;
+                        }*/
                     } else {
-                        $all[get_lang('N/A')] += 1;
+                        //$all[get_lang('N/A')] += 1;
                     }
                 }
 

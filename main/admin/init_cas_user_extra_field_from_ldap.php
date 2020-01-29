@@ -1,38 +1,34 @@
 <?php
 /* For licensing terms, see /license.txt */
 /*
-User account CASification script, to be used to move from LDAP auth to CAS auth.
-Copies over the CAS identifier to each user's "cas_user" extra field
-and sets its "auth_source" to CAS_AUTH_SOURCE.
+User account CASification interactive script
 
-This script is interactive, to be run from a terminal.
+to move user accounts from LDAP authentication to CAS authentication
+
+Creates the "cas_user" extra field if missing, then for each registred user:
+- copies over the right CAS identifier to the "cas_user" extra field
+- ensures the "username" is spelled right
+- updates the "auth_source".
+
+This script should be run from a terminal.
 It does not read any parameter from the command line, but uses the global configuration arrays
  $extldap_config
 and
  $extldap_user_correspondance
 defined in app/config/auth.conf.php.
 
-It creates the "cas_user" extra field if missing.
-
-For each user account,
-it looks for its username in the LDAP directory, in both
+The username is used to search the LDAP directory, in both attributes
 $extldap_user_correspondance['username']
 and
 $extldap_user_correspondance['extra']['cas_user'].
 
-Skips the user account if no match is found or more than one matches are found.
+Any user account with no match or more than one matches in the LDAP directory is skipped.
 
-Fix the username if it is not exactly as in the LDAP directory.
-
-Sets or fixes extra field "cas_user" value if not set or wrong, with the correct CAS identification code read from LDAP.
-
-Changes the auth source to CAS_AUTH_SOURCE.
-
-All these corrections are only applied in phase 2, and take time.
+All the corrections are only applied in phase 2, and take time.
 
 Phase 1 only builds a TO-DO list.
 
-Phase 2 starts with the script asking the operator confirmation for each modification category :
+Phase 2 starts with the script asking the operator confirmation for each modification category:
 - fix usernames
 - add missing CAS identifiers
 - fix wrong CAS identifiers
@@ -47,7 +43,7 @@ but can be run several times.
 In case phase 2 is stopped before the end, one should run this script again.
 If this script is run after all user accounts were CASified, it just stops after Phase 1.
 This can be used to check whether no work is left to do.
- */
+*/
 if (php_sapi_name() !== 'cli') die("this script is supposed to be run from the command-line\n");
 require __DIR__.'/../../cli-config.php';
 require_once __DIR__.'/../../app/config/auth.conf.php';

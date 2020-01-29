@@ -134,21 +134,25 @@
                                 {% endif %}
                             {% endif %}
                         {% endif %}
-                    <dl class="list-info">
-                        {% for item in extra_info %}
-                            {% if item.variable != 'langue_cible' %}
-                            <dt>{{ item.label }}:</dt>
-                            <dd>{{ item.value }}</dd>
-                            {% endif %}
-                        {% endfor %}
-                    </dl>
 
-                    {% if not profile_edition_link is empty %}
-                    <li class="item">
-                        <a class="btn btn-default btn-sm btn-block" href="{{ profile_edition_link }}">
-                        <em class="fa fa-edit"></em>{{ "EditProfile" | get_lang }}
-                        </a>
-                    </li>
+                        <li>
+                            <dl class="list-info">
+                                {% for item in extra_info %}
+                                    {% if item.variable != 'langue_cible' %}
+                                    <dt>{{ item.label }}:</dt>
+                                    <dd>{{ item.value }}</dd>
+                                    {% endif %}
+                                {% endfor %}
+                            </dl>
+                        </li>
+                        {% if not profile_edition_link is empty %}
+                        <li class="item">
+                            <span style="float: left; width:100%; padding-top: 10px;">
+                                <a class="btn btn-default btn-sm btn-block" href="{{ profile_edition_link }}">
+                                <em class="fa fa-edit"></em>{{ "EditProfile" | get_lang }}
+                                </a>
+                            </span>
+                        </li>
                     {% endif %}
                     </ul>
                 </div>

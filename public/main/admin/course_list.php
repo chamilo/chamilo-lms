@@ -100,7 +100,7 @@ function get_course_data($from, $number_of_items, $column, $direction)
     $course_table = Database::get_main_table(TABLE_MAIN_COURSE);
     $tblCourseCategory = Database::get_main_table(TABLE_MAIN_CATEGORY);
 
-    $sql = "SELECT  
+    $sql = "SELECT
                 course.code AS col0,
                 title AS col1,
                 course.code AS col2,
@@ -175,10 +175,12 @@ function get_course_data($from, $number_of_items, $column, $direction)
     $coursePath = api_get_path(WEB_COURSE_PATH);
 
     while ($course = Database::fetch_array($res)) {
+        $courseInfo = api_get_course_info_by_id($course['id']);
+
         // Place colour icons in front of courses.
         $show_visual_code = $course['visual_code'] != $course[2] ? Display::label($course['visual_code'], 'info') : null;
         $course[1] = get_course_visibility_icon($course[8]).PHP_EOL
-            .Display::url(Security::remove_XSS($course[1]), $coursePath.$course[9].'/index.php').PHP_EOL
+            .Display::url(Security::remove_XSS($course[1]), $courseInfo['course_public_url']).PHP_EOL
             .$show_visual_code;
         $course[5] = SUBSCRIBE_ALLOWED == $course[5] ? get_lang('Yes') : get_lang('No');
         $course[6] = UNSUBSCRIBE_ALLOWED == $course[6] ? get_lang('Yes') : get_lang('No');
@@ -194,7 +196,7 @@ function get_course_data($from, $number_of_items, $column, $direction)
         );
         $actions[] = Display::url(
             Display::return_icon('course_home.png', get_lang('Course home')),
-            $coursePath.$course['directory'].'/index.php'
+            $courseInfo['course_public_url']
         );
         $actions[] = Display::url(
             Display::return_icon('statistics.png', get_lang('Reporting')),
@@ -528,7 +530,7 @@ if (isset($_GET['search']) && 'advanced' === $_GET['search']) {
                 if (!sessionId) {
                     return;
                 }
-    
+
                 window.location = "'.$courseListUrl.'?session_id="+sessionId;
             });
         });

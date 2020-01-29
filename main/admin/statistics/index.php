@@ -1006,7 +1006,7 @@ switch ($report) {
             $htmlHeadXtra[] = Statistics::getJSChartTemplateWithData(
                 $data['chart'],
                 'pie',
-                $reportOptions1,
+                $reportOptions2,
                 'canvas2'
             );
             $extraTables .= $data['table'];
@@ -1293,7 +1293,7 @@ switch ($report) {
             $header = Display::page_subheader2(get_lang('NumberOfUsers').': '.$totalCount);
             $header .= Display::page_subheader2(get_lang('TotalNumberOfStudents').': '.$studentCount);
 
-            $content = $header.$extraTables.$content.$graph;
+            $content = $header.$extraTables.$graph.$content;
         }
 
         $content =  $form->returnForm().$content;

@@ -11,6 +11,8 @@ $extraFieldValue = new ExtraField('user');
 $extraFieldInfo = $extraFieldValue->get_handler_field_info_by_field_variable('termactivated');
 $fieldId = $extraFieldInfo['id'];
 
+$statusCondition = ' AND u.status = '.STUDENT;
+
 $date = new Datetime();
 $now = $date->format('Y-m-d H:i:s');
 
@@ -25,7 +27,11 @@ $sql = "SELECT u.id
         FROM user u
         LEFT JOIN extra_field_values ev
         ON u.id = ev.item_id AND field_id = $fieldId
-        WHERE (ev.value IS NULL OR ev.value = '') AND u.active = 1 ";
+        WHERE
+            (ev.value IS NULL OR ev.value = '') AND
+            u.active = 1
+            $statusCondition
+        ";
 
 $result = Database::query($sql);
 $students = Database::store_result($result);
@@ -39,7 +45,10 @@ foreach ($students as $student) {
         if (empty($disabledUser)) {
             continue;
         }
-        $userReportList[$studentId]['message'] = "User# $studentId (".$disabledUser['username'].") to be disabled. Case 1. Last connection: $lastDate - 3 months: $date3Months ";
+        if (!isset($userReportList[$studentId]['message'])) {
+            $userReportList[$studentId]['message'] = '';
+        }
+        $userReportList[$studentId]['message'] .= $newLine."User# $studentId (".$disabledUser['username'].") to be disabled. Case 1. Last connection: $lastDate - 3 months: $date3Months ";
 
         $language = $disabledUser['language'];
         $subject = get_lang('AccountDisabled', null, $language).': '.$disabledUser['complete_name'];
@@ -55,11 +64,15 @@ foreach ($students as $student) {
 }
 
 // 3. Certificate completed not connected 6 months.
-$sql = 'SELECT user_id, MAX(login_date) latest_login_date
+$sql = "SELECT c.user_id, MAX(login_date) latest_login_date
         FROM gradebook_certificate c
         INNER JOIN track_e_login l
         ON (l.login_user_id = c.user_id)
-        GROUP BY user_id  ';
+        INNER JOIN user u
+        ON (l.login_user_id = u.id)
+        WHERE 1=1
+        $statusCondition
+        GROUP BY c.user_id  ";
 
 $result = Database::query($sql);
 $students = Database::store_result($result);
@@ -81,8 +94,12 @@ foreach ($students as $student) {
         $subject = get_lang('AccountDisabled', null, $language).': '.$disabledUser['complete_name'];
         $content = get_lang('DisableUserCase3Student', null, $language);
 
-        $userReportList[$studentId]['message'] = "User# $studentId (".$disabledUser['username'].") to be disabled. Case 3. Last connection: $lastDate - 6 months: $date6Months ";
-        $userReportList[$studentId]['message'] .= $newLine.'Mail will be send to: '.$disabledUser['username'].$newLine.'Subject: '.$subject.$newLine.'Content: '.$content.$newLine;
+        if (!isset($userReportList[$studentId]['message'])) {
+            $userReportList[$studentId]['message'] = '';
+        }
+
+        $userReportList[$studentId]['message'] .= $newLine."User# $studentId (".$disabledUser['username'].") to be disabled. Case 3. Last connection: $lastDate - 6 months: $date6Months ";
+        $userReportList[$studentId]['message'] .= $newLine.'Mail will be send to: '.$disabledUser['username'].$newLine.'Subject: '.$subject.$newLine.'Content: '.$content;
 
         if (false === $test) {
             UserManager::disable($studentId);
@@ -96,7 +113,11 @@ $sql = "SELECT u.id
         FROM user u
         INNER JOIN extra_field_values ev
         ON u.id = ev.item_id AND field_id = $fieldId
-        WHERE ev.value = 1 AND u.active = 1  ";
+        WHERE
+            ev.value = 1 AND
+            u.active = 1
+            $statusCondition
+        ";
 
 $result = Database::query($sql);
 $students = Database::store_result($result);
@@ -111,7 +132,11 @@ foreach ($students as $student) {
             continue;
         }
 
-        $userReportList[$studentId]['message'] = "User# $studentId (".$disabledUser['username'].") to be disabled. Case 2 . Last connection: $lastDate - 6 months: $date6Months ";
+        if (!isset($userReportList[$studentId]['message'])) {
+            $userReportList[$studentId]['message'] = '';
+        }
+
+        $userReportList[$studentId]['message'] .= $newLine."User# $studentId (".$disabledUser['username'].") to be disabled. Case 2 . Last connection: $lastDate - 6 months: $date6Months ";
 
         $subject = get_lang('AccountDisabled', null, $disabledUser['language']).': '.$disabledUser['complete_name'];
         $content = get_lang('DisableUserCase2', null, $disabledUser['language']);
@@ -146,7 +171,7 @@ foreach ($students as $student) {
 //$newLine = PHP_EOL;
 
 if ($test) {
-    echo 'No changes have been made.'.$newLine;
+    echo '<h3>No changes have been made.</h3>'.$newLine;
     echo "Now: $now".$newLine;
     echo "3 Months old: $date3Months".$newLine;
     echo "6 Months old: $date6Months".$newLine;

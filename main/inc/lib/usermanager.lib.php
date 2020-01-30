@@ -802,7 +802,7 @@ class UserManager
         self::ensureCASUserExtraFieldExists();
 
         require_once(__DIR__.'/../../auth/external_login/ldap.inc.php');
-        $login = extldap_cas_user_login($casUser);
+        $login = extldapCasUserLogin($casUser);
         if (false !== $login) {
             $ldapUser = extldap_authenticate($login, 'nopass', true);
             if (false !== $ldapUser) {

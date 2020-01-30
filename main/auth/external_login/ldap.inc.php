@@ -422,7 +422,7 @@ function extldap_add_user_by_array($data, $update_if_exists = true)
  * @return string|bool the single matching user entry's single attribute value or false if not found
  * @throws Exception if more than one entries matched or on internal error
  */
-function extldap_get_user_attribute_value($filter, $attribute)
+function extldapGetUserAttributeValue($filter, $attribute)
 {
     global $extldap_config;
 
@@ -444,9 +444,10 @@ function extldap_get_user_attribute_value($filter, $attribute)
         throw new Exception(get_lang('LDAPSearchFailed'));
     }
 
-    switch(ldap_count_entries($ldap, $searchResult)) {
+    switch (ldap_count_entries($ldap, $searchResult)) {
         case 0:
             return false;
+            // no break
         case 1:
             $entry = ldap_first_entry($ldap, $searchResult);
             if (false === $entry) {
@@ -475,7 +476,7 @@ function extldap_get_user_attribute_value($filter, $attribute)
  * @return string|bool user login name, false if not found
  * @throws Exception on error
  */
-function extldap_cas_user_login($casUser)
+function extldapCasUserLogin($casUser)
 {
     global $extldap_user_correspondance;
 
@@ -498,5 +499,5 @@ function extldap_cas_user_login($casUser)
     }
 
     // return the value
-    return extldap_get_user_attribute_value("($attributeToFilterOn=$casUser)", $attributeToRead);
+    return extldapGetUserAttributeValue("($attributeToFilterOn=$casUser)", $attributeToRead);
 }

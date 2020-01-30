@@ -29,6 +29,7 @@ if (api_is_cas_activated()) {
                 $version = SAML_VERSION_1_1;
                 break;
             case 'CAS2':
+                // no break
             default:
                 $version = CAS_VERSION_2_0;
         }

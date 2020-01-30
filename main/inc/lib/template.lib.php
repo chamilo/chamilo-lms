@@ -1200,7 +1200,7 @@ class Template
 
                 // Minimum options using all defaults (including defaults for Image_Text):
                 //$options = array('callback' => 'qfcaptcha_image.php');
-                $captcha_question = $form->addElement('CAPTCHA_Image', 'captcha_question', '', $options);
+                $captchaQuestion = $form->addElement('CAPTCHA_Image', 'captcha_question', '', $options);
                 $form->addHtml(get_lang('ClickOnTheImageForANewOne'));
 
                 $form->addElement(
@@ -1219,7 +1219,7 @@ class Template
                     'captcha',
                     get_lang('TheTextYouEnteredDoesNotMatchThePicture'),
                     'CAPTCHA',
-                    $captcha_question
+                    $captchaQuestion
                 );
             }
         }

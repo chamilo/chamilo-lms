@@ -343,6 +343,13 @@ class SortableTable extends HTML_Table
         echo $this->return_table();
     }
 
+    public function toArray()
+    {
+        $headers = array_column($this->getHeaders(), 'label');
+
+        return array_merge([$headers], $this->get_table_data());
+    }
+
     /**
      * Displays the table, complete with navigation buttons to browse through
      * the data-pages.

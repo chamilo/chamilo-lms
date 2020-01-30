@@ -923,7 +923,7 @@ class HTML_Table extends HTML_Common
      * @access  public
      * @return  string
      */
-    function toHtml()
+    public function toHtml()
     {
         $strHtml = '';
         $tabs = $this->_getTabs();
@@ -1024,5 +1024,3 @@ class HTML_Table extends HTML_Common
     }
 
 }
-
-?>

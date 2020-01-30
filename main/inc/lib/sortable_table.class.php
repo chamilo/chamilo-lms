@@ -347,7 +347,7 @@ class SortableTable extends HTML_Table
     {
         $headers = array_column($this->getHeaders(), 'label');
 
-        return array_merge([$headers], $this->get_table_data());
+        return array_merge([$headers], $this->table_data);
     }
 
     /**

@@ -80,12 +80,12 @@ class Export
 
         $file = new \SplFileObject($filePath, 'w');
         $writer = new ExcelWriter($file);
-        $writer->prepare();
+        @$writer->prepare();
         foreach ($data as $row) {
-            $writer->writeItem($row);
+            @$writer->writeItem($row);
         }
 
-        $writer->finish();
+        @$writer->finish();
 
         DocumentManager::file_send_for_download($filePath, true, $filename.'.xlsx');
         exit;

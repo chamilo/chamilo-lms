@@ -3140,10 +3140,10 @@ class MySpace
                 $logout = api_strtotime($data['logout']);
                 //creating the main array
                 if (isset($main_month_year[date('m-Y', $login)])) {
-                    $main_month_year[date('m-Y', $login)] += float_format(($logout - $login) / 60, 0);
+                    $main_month_year[date('m-Y', $login)] += (float) ($logout - $login) / 60;
                 }
                 if (isset($main_day[date('d-m-Y', $login)])) {
-                    $main_day[date('d-m-Y', $login)] += float_format(($logout - $login) / 60, 0);
+                    $main_day[date('d-m-Y', $login)] += (float) ($logout - $login) / 60;
                 }
                 if ($i > 500) {
                     break;

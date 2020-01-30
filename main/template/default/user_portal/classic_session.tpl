@@ -73,8 +73,7 @@
                                     {{ row.coach_name }}
                                 </li>
                             {% endif %}
-
-                            {% if allow_session_dates == true %}
+                            {% if hide_session_dates_in_user_portal == false %}
                                 {% if row.date %}
                                     <li>
                                         <i class="fa fa-calendar" aria-hidden="true"></i>

@@ -1364,8 +1364,8 @@ ALTER TABLE notification_event ADD COLUMN event_id INT NULL;
 // ALTER TABLE sys_announcement ADD COLUMN promotion_id INT DEFAULT 0;
 //$_configuration['allow_careers_in_global_announcements'] = false;
 
-// Allow start/end dates in "My courses" page (user_portal.php)
-//$_configuration['allow_session_dates_in_user_portal'] = false;
+// Hide start/end dates in "My courses" page (user_portal.php)
+//$_configuration['hide_session_dates_in_user_portal'] = false;
 
 // Catalog search settings visibility
 // $_configuration['catalog_settings'] = ['sessions' => ['by_title' => true, 'by_date' => true, 'by_tag' => true ]];

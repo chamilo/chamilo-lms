@@ -211,6 +211,7 @@ class ScriptHandler
             __DIR__.'/../../../../main/ticket/update_report.php',
             __DIR__.'/../../../../main/tracking/toolaccess_details.php',
             __DIR__.'/../../../../main/tracking/course_access_details.php',
+            __DIR__.'/../../../../src/DataFixtures/AppFixtures.php',
             __DIR__.'/../../../../src/Chamilo/CoreBundle/Entity/GroupRelGroup.php',
             __DIR__.'/../../../../src/Chamilo/CoreBundle/Entity/GroupRelTag.php',
             __DIR__.'/../../../../src/Chamilo/CoreBundle/Entity/GroupRelUser.php',

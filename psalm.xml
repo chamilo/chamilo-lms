@@ -22,7 +22,6 @@
             <directory name="src/GraphQlBundle" />
 
             <directory name="src/LtiBundle" />
-            <directory name="src/DataFixtures/" />
             <file name="public/main/admin/db.php" />
 <!--            <directory name="src/MediaBundle" />-->
 <!--            <directory name="src/NotificationBundle" />-->

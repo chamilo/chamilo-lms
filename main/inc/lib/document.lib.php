@@ -675,7 +675,7 @@ class DocumentManager
             }
 
             foreach ($rows as $row) {
-                if ($row['filetype'] == 'file' &&
+                if ($row['filetype'] === 'file' &&
                     pathinfo($row['path'], PATHINFO_EXTENSION) == 'html'
                 ) {
                     // Templates management
@@ -697,6 +697,7 @@ class DocumentManager
             if (!$isCoach && !$isAllowedToEdit) {
                 // Checking parents visibility.
                 $finalDocumentData = [];
+
                 foreach ($documentData as $row) {
                     $isVisible = self::check_visibility_tree(
                         $row['id'],
@@ -3697,7 +3698,6 @@ class DocumentManager
             if (api_is_platform_admin() || CourseManager::is_course_teacher($user_id, $courseCode)) {
                 return true;
             }
-
             if ($document_data['parent_id'] == false || empty($document_data['parent_id'])) {
                 if (!empty($groupId)) {
                     return true;
@@ -3711,7 +3711,7 @@ class DocumentManager
                 if (!$visible) {
                     return false;
                 } else {
-                    if ($checkParentVisibility) {
+                    if ($checkParentVisibility && $doc_id != $document_data['parent_id']) {
                         return self::check_visibility_tree(
                             $document_data['parent_id'],
                             $courseInfo,

@@ -424,10 +424,13 @@ class UserRepository extends EntityRepository
                 $online_time = time() - $time_limit * 60;
                 $limit_date = api_get_utc_datetime($online_time);
                 $dql = "SELECT DISTINCT U
-                        FROM ChamiloUserBundle:User U
-                        INNER JOIN ChamiloCoreBundle:TrackEOnline T 
+			FROM ChamiloUserBundle:User U
+                        LEFT JOIN ChamiloCoreBundle:AccessUrlRelUser R
+                        WITH U = R.user
+			INNER JOIN ChamiloCoreBundle:TrackEOnline T
                         WITH U.id = T.loginUserId
-                        WHERE 
+			WHERE
+                          R.portal = $accessUrlId AND
                           U.active = 1 AND 
                           T.loginDate >= '".$limit_date."'";
             }

@@ -1367,6 +1367,9 @@ ALTER TABLE notification_event ADD COLUMN event_id INT NULL;
 // Allow start/end dates in "My courses" page (user_portal.php)
 //$_configuration['allow_session_dates_in_user_portal'] = false;
 
+// Catalog search settings visibility
+// $_configuration['catalog_settings'] = ['sessions' => ['by_title' => true, 'by_date' => true, 'by_tag' => true ]];
+
 // KEEP THIS AT THE END
 // -------- Custom DB changes
 // Add user activation by confirmation email

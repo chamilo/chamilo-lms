@@ -389,6 +389,7 @@ class CoursesController
         $tpl->assign('web_session_courses_ajax_url', api_get_path(WEB_AJAX_PATH).'course.ajax.php');
         $tpl->assign('sessions', $sessionsBlocks);
         $tpl->assign('already_subscribed_label', $this->getAlreadyRegisteredInSessionLabel());
+        $tpl->assign('catalog_settings', self::getCatalogSearchSettings());
 
         $contentTemplate = $tpl->get_template('auth/session_catalog.tpl');
 
@@ -426,10 +427,22 @@ class CoursesController
         $tpl->assign('search_token', Security::get_token());
         $tpl->assign('keyword', Security::remove_XSS($keyword));
         $tpl->assign('sessions', $sessionsBlocks);
+        $tpl->assign('catalog_settings', self::getCatalogSearchSettings());
 
         $contentTemplate = $tpl->get_template('auth/session_catalog.tpl');
 
         $tpl->display($contentTemplate);
+    }
+
+    public static function getCatalogSearchSettings()
+    {
+        $settings = api_get_configuration_value('catalog_settings');
+        if (empty($settings)) {
+            // Default everything is visible
+            $settings = ['sessions' => ['by_title' => true, 'by_date' => true, 'by_tag' => true]];
+        }
+
+        return $settings;
     }
 
     /**

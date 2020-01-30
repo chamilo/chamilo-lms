@@ -157,6 +157,10 @@ class ResourceController extends AbstractResourceController implements CourseCon
 
         $resourceParams = $this->getResourceParams($request);
 
+        if (0 === $resourceParams['id']) {
+            $resourceParams['id'] = $resourceNodeId;
+        }
+
         $grid->setRouteUrl($this->generateUrl('chamilo_core_resource_list', $resourceParams));
 
         //$grid->hideFilters();
@@ -325,7 +329,6 @@ class ResourceController extends AbstractResourceController implements CourseCon
         // Set EDIT/DELETE
         $setNodeParameters = function (RowAction $action, Row $row) use ($routeParams) {
             $id = $row->getEntity()->getResourceNode()->getId();
-
             $allowedEdit = $this->isGranted(ResourceNodeVoter::EDIT, $row->getEntity()->getResourceNode());
 
             if (false === $allowedEdit) {
@@ -472,18 +475,18 @@ class ResourceController extends AbstractResourceController implements CourseCon
         $this->setBreadCrumb($request);
 
         $nodeId = $request->get('id');
-
         $repository = $this->getRepositoryFromRequest($request);
 
         /** @var ResourceNode $resourceNode */
         $resourceNode = $repository->getResourceNodeRepository()->find($nodeId);
-        $size = $repository->getResourceNodeRepository()->getSize($resourceNode, $repository->getResourceType());
 
         $this->denyAccessUnlessGranted(
             ResourceNodeVoter::VIEW,
             $resourceNode,
             $this->trans('Unauthorised access to resource')
         );
+
+        $size = $repository->getResourceNodeRepository()->getSize($resourceNode, $repository->getResourceType());
 
         return $this->render(
             '@ChamiloTheme/Resource/disk_space.html.twig',
@@ -504,6 +507,8 @@ class ResourceController extends AbstractResourceController implements CourseCon
         $this->setBreadCrumb($request);
         $repository = $this->getRepositoryFromRequest($request);
         $resource = $repository->getResourceFromResourceNode($resourceNodeId);
+        $this->denyAccessUnlessValidResource($resource);
+
         $resourceNode = $resource->getResourceNode();
 
         $this->denyAccessUnlessGranted(
@@ -592,11 +597,9 @@ class ResourceController extends AbstractResourceController implements CourseCon
 
         /** @var AbstractResource $resource */
         $resource = $repository->getResourceFromResourceNode($nodeId);
-
         $this->denyAccessUnlessValidResource($resource);
 
         $resourceNode = $resource->getResourceNode();
-
         $this->denyAccessUnlessGranted(
             ResourceNodeVoter::VIEW,
             $resourceNode,
@@ -632,16 +635,9 @@ class ResourceController extends AbstractResourceController implements CourseCon
 
         /** @var AbstractResource $resource */
         $resource = $repository->getResourceFromResourceNode($nodeId);
-
-        if (null === $resource) {
-            throw new NotFoundHttpException();
-        }
+        $this->denyAccessUnlessValidResource($resource);
 
         $resourceNode = $resource->getResourceNode();
-
-        if (null === $resourceNode) {
-            throw new NotFoundHttpException();
-        }
 
         $this->denyAccessUnlessGranted(
             ResourceNodeVoter::VIEW,
@@ -673,9 +669,7 @@ class ResourceController extends AbstractResourceController implements CourseCon
         /** @var AbstractResource $resource */
         $resource = $repository->getResourceFromResourceNode($id);
 
-        if (null === $resource) {
-            throw new NotFoundHttpException();
-        }
+        $this->denyAccessUnlessValidResource($resource);
 
         $resourceNode = $resource->getResourceNode();
 
@@ -716,10 +710,6 @@ class ResourceController extends AbstractResourceController implements CourseCon
         $id = $request->get('id');
         $resourceNode = $this->getDoctrine()->getRepository('ChamiloCoreBundle:Resource\ResourceNode')->find($id);
         $parentId = $resourceNode->getParent()->getId();
-
-        if (null === $resourceNode) {
-            throw new NotFoundHttpException();
-        }
 
         $this->denyAccessUnlessGranted(
             ResourceNodeVoter::DELETE,
@@ -861,10 +851,6 @@ class ResourceController extends AbstractResourceController implements CourseCon
             $resourceNode = $courseNode;
         } else {
             $resourceNode = $repo->getResourceNodeRepository()->find($resourceNodeId);
-        }
-
-        if (null === $resourceNode) {
-            throw new NotFoundHttpException();
         }
 
         $this->denyAccessUnlessGranted(
@@ -1048,7 +1034,6 @@ class ResourceController extends AbstractResourceController implements CourseCon
         $parentNodeId = $request->get('id');
 
         $parentResourceNode = null;
-
         if (empty($parentNodeId)) {
             if ($this->hasCourse()) {
                 $parentResourceNode = $this->getCourse()->getResourceNode();
@@ -1157,7 +1142,6 @@ class ResourceController extends AbstractResourceController implements CourseCon
 
         // Default parent node is course.
         $parentNode = $this->getParentResourceNode($request);
-        //var_dump($parentNode->getPath());
 
         $this->denyAccessUnlessGranted(
             ResourceNodeVoter::CREATE,

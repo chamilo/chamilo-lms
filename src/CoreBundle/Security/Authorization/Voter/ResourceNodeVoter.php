@@ -101,6 +101,10 @@ class ResourceNodeVoter extends Voter
             return false;
         }
 
+        if (!$resourceNode instanceof ResourceNode) {
+            return false;
+        }
+
         $authChecker = $this->container->get('security.authorization_checker');
 
         // Checking admin roles.

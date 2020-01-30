@@ -58,8 +58,8 @@
                     "zoom",
                     //"share",
                     "slideShow",
-                    //"fullScreen",
-                    "download",
+                    "fullScreen",
+                    //"download",
                     "thumbs",
                     "close"
                 ],
@@ -67,6 +67,15 @@
                 video: {
                     autoStart: false
                 },
+                // caption : function( instance, item ) {
+                //     var caption = $(this).data('caption') || '';
+                //
+                //     if ( item.type === 'image' ) {
+                //         caption = (caption.length ? caption + '<br />' : '') + '<a href="' + item.src + '">Download image</a>' ;
+                //     }
+                //
+                //     return caption;
+                // }
                 // Base template for layout
                 {#baseTpl:#}
                 {#    '<div class="fancybox-container" role="dialog" tabindex="-1">' +#}

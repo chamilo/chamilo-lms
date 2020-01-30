@@ -6520,20 +6520,21 @@ class DocumentManager
     {
         return [
             'asuswebstorage.com',
+            'box.com',
             'dropbox.com',
             'dropboxusercontent.com',
-            'fileserve.com',
-            'drive.google.com',
             'docs.google.com',
+            'drive.google.com',
+            'fileserve.com',
             'icloud.com',
+            'livefilestore.com', // OneDrive
             'mediafire.com',
             'mega.nz',
             'onedrive.live.com',
-            'slideshare.net',
             'scribd.com',
+            'slideshare.net',
+            'sharepoint.com',
             'wetransfer.com',
-            'box.com',
-            'livefilestore.com', // OneDrive
         ];
     }
 

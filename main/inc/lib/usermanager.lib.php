@@ -1742,6 +1742,77 @@ class UserManager
         return $return_array;
     }
 
+    public static function getUserListExtraConditions(
+        $conditions = [],
+        $order_by = [],
+        $limit_from = false,
+        $limit_to = false,
+        $idCampus = null,
+        $extraConditions = '',
+        $getCount = false
+    ) {
+        $user_table = Database::get_main_table(TABLE_MAIN_USER);
+        $userUrlTable = Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_USER);
+        $return_array = [];
+        $sql = "SELECT user.* FROM $user_table user ";
+
+        if ($getCount) {
+            $sql = "SELECT count(user.id) count FROM $user_table user ";
+        }
+
+        if (api_is_multiple_url_enabled()) {
+            if ($idCampus) {
+                $urlId = $idCampus;
+            } else {
+                $urlId = api_get_current_access_url_id();
+            }
+            $sql .= " INNER JOIN $userUrlTable url_user
+                      ON (user.user_id = url_user.user_id)
+                      WHERE url_user.access_url_id = $urlId";
+        } else {
+            $sql .= " WHERE 1=1 ";
+        }
+
+        $sql .= " AND status <> ".ANONYMOUS." ";
+
+        if (count($conditions) > 0) {
+            foreach ($conditions as $field => $value) {
+                $field = Database::escape_string($field);
+                $value = Database::escape_string($value);
+                $sql .= " AND $field = '$value'";
+            }
+        }
+
+        $sql .= str_replace("\'", "'", Database::escape_string($extraConditions));
+
+        if (!empty($order_by) && count($order_by) > 0) {
+            $sql .= ' ORDER BY '.Database::escape_string(implode(',', $order_by));
+        }
+
+        if (is_numeric($limit_from) && is_numeric($limit_from)) {
+            $limit_from = (int) $limit_from;
+            $limit_to = (int) $limit_to;
+            $sql .= " LIMIT $limit_from, $limit_to";
+        }
+
+        $sql_result = Database::query($sql);
+
+        if ($getCount) {
+
+            $result = Database::fetch_array($sql_result);
+
+            return $result['count'];
+        }
+
+        while ($result = Database::fetch_array($sql_result)) {
+            $result['complete_name'] = api_get_person_name($result['firstname'], $result['lastname']);
+            $return_array[] = $result;
+        }
+
+        return $return_array;
+    }
+
+
     /**
      * Get a list of users of which the given conditions match with a LIKE '%cond%'.
      *
@@ -2513,6 +2584,62 @@ class UserManager
     }
 
     /**
+     * Build a list of extra file already uploaded in $user_folder/{$extra_field}/.
+     *
+     * @param $user_id
+     * @param $extra_field
+     * @param bool $force
+     * @param bool $showDelete
+     *
+     * @return bool|string
+     */
+    public static function build_user_extra_file_list(
+        $user_id,
+        $extra_field,
+        $force = false,
+        $showDelete = false
+    ) {
+        if (!$force && !empty($_POST['remove_'.$extra_field])) {
+            return true; // postpone reading from the filesystem
+        }
+
+        $extra_files = self::get_user_extra_files($user_id, $extra_field);
+        if (empty($extra_files)) {
+            return false;
+        }
+
+        $path_info = self::get_user_picture_path_by_id($user_id, 'web');
+        $path = $path_info['dir'];
+        $del_image = Display::returnIconPath('delete.png');
+
+        $del_text = get_lang('Delete');
+        $extra_file_list = '';
+        if (count($extra_files) > 0) {
+            $extra_file_list = '<div class="files-production"><ul id="productions">';
+            foreach ($extra_files as $file) {
+                $filename = substr($file, strlen($extra_field) + 1);
+                $extra_file_list .= '<li>'.Display::return_icon('archive.png').
+                    '<a href="'.$path.$extra_field.'/'.urlencode($filename).'" target="_blank">
+                        '.htmlentities($filename).
+                    '</a> ';
+                if ($showDelete) {
+                    $extra_file_list .= '<input
+                        style="width:16px;"
+                        type="image"
+                        name="remove_extra_'.$extra_field.'['.urlencode($file).']"
+                        src="'.$del_image.'"
+                        alt="'.$del_text.'"
+                        title="'.$del_text.' '.htmlentities($filename).'"
+                        onclick="javascript: return confirmation(\''.htmlentities($filename).'\');" /></li>';
+                }
+            }
+            $extra_file_list .= '</ul></div>';
+        }
+
+        return $extra_file_list;
+    }
+
+    /**
      * Get valid filenames in $user_folder/{$extra_field}/.
      *
      * @param $user_id
@@ -2552,6 +2679,33 @@ class UserManager
         }
 
         return $files; // can be an empty array
+    }
+
+    /**
+     * Remove an {$extra_file} from the user folder $user_folder/{$extra_field}/.
+     *
+     * @param int    $user_id
+     * @param string $extra_field
+     * @param string $extra_file
+     *
+     * @return bool
+     */
+    public static function remove_user_extra_file($user_id, $extra_field, $extra_file)
+    {
+        $extra_file = Security::filter_filename($extra_file);
+        $path_info = self::get_user_picture_path_by_id($user_id, 'system');
+        if (strpos($extra_file, $extra_field) !== false) {
+            $path_extra_file = $path_info['dir'].$extra_file;
+        } else {
+            $path_extra_file = $path_info['dir'].$extra_field.'/'.$extra_file;
+        }
+        if (is_file($path_extra_file)) {
+            unlink($path_extra_file);
+
+            return true;
+        }
+
+        return false;
     }
 
     /**
@@ -2795,6 +2949,18 @@ class UserManager
         $extraField = new ExtraField('user');
 
         return $extraField->get_handler_field_info_by_tags($variable);
+    }
+
+    /**
+     * @param string $type
+     *
+     * @return array
+     */
+    public static function get_all_extra_field_by_type($type)
+    {
+        $extraField = new ExtraField('user');
+
+        return $extraField->get_all_extra_field_by_type($type);
     }
 
     /**

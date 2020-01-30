@@ -651,7 +651,7 @@ switch ($report) {
                 jQuery("#user_session_grid").jqGrid("navButtonAdd","#user_session_grid_pager", {
                     caption:"",
                     onClickButton : function () {
-                        jQuery("#user_session_grid").jqGrid("excelExport",{"url":"<?php echo $url; ?>&export_format=xls"});
+                        jQuery("#user_session_grid").jqGrid("excelExport",{"url":"'.$url.'&export_format=xls"});
                     }
                 });
             });

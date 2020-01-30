@@ -1,4 +1,5 @@
 <?php
+
 /* For licensing terms, see /license.txt */
 
 /**
@@ -78,7 +79,7 @@ $interbreadcrumb[] = [
 // Interbreadcrumb for the current directory root path
 if (empty($document_data['parents'])) {
     // Hack in order to not add the document to the breadcrumb in case it is a link
-    if ($document_data['filetype'] != 'link') {
+    if ($document_data && $document_data['filetype'] != 'link') {
         $interbreadcrumb[] = ['url' => '#', 'name' => $document_data['title']];
     }
 } else {
@@ -144,7 +145,7 @@ if ($form->validate()) {
                 Display::addFlash(Display::return_message(get_lang('ErrorAddCloudLink'), 'warning', false));
             }
         }
-        header('Location: document.php?'.api_get_cidreq());
+        header('Location: document.php?'.api_get_cidreq().'&id='.$documentId);
         exit;
     }
 }
@@ -177,7 +178,7 @@ echo DocumentManager::build_directory_selector(
 echo '<script>
 $(function() {
     $("[data-toggle=\'tooltip\']").tooltip({
-        content: 
+        content:
             function() {
                 return $(this).attr("title");
             }

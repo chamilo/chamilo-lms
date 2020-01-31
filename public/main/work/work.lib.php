@@ -690,6 +690,7 @@ function build_work_move_to_selector($folders, $curdirpath, $move_file, $group_d
     $form->addHidden('action', 'move_to');
 
     // Group documents cannot be uploaded in the root
+    $options = [];
     if ('' == $group_dir) {
         if (is_array($folders)) {
             foreach ($folders as $fid => $folder) {
@@ -3378,16 +3379,11 @@ function getWorkComment($id, $courseInfo = [])
         if ($commentEntity->getResourceNode()->hasResourceFile()) {
             $fileUrl = $repo->getResourceFileUrl($commentEntity);
             $workId = $commentEntity->getWorkId();
-            $work = get_work_data_by_id($workId);
-            $workParent = get_work_data_by_id($work['parent_id']);
             $filePath = '';
-            //$filePath = api_get_path(SYS_COURSE_PATH).$courseInfo['path'].'/work/'.$workParent['url'].'/'.$comment['file'];
-            //$fileUrl = api_get_path(WEB_CODE_PATH).'work/download_comment_file.php?comment_id='.$id.'&'.api_get_cidreq();
             $deleteUrl = api_get_path(WEB_CODE_PATH).'work/view.php?'.api_get_cidreq().'&id='.$workId.'&action=delete_attachment&comment_id='.$id;
-            ///$fileParts = explode('_', $comment['file']);
-            //$fileName = str_replace($fileParts[0].'_'.$fileParts[1].'_', '', $comment['file']);
             $fileName = $commentEntity->getResourceNode()->getResourceFile()->getName();
         }
+        $comment['comment'] = $commentEntity->getComment();
         $comment['delete_file_url'] = $deleteUrl;
         $comment['file_path'] = $filePath;
         $comment['file_url'] = $fileUrl;
@@ -4202,14 +4198,11 @@ function processWorkForm(
  */
 function addDir($formValues, $user_id, $courseInfo, $groupId, $sessionId = 0)
 {
-    $em = Database::getManager();
-
     $user_id = (int) $user_id;
     $groupId = (int) $groupId;
     $sessionId = (int) $sessionId;
 
     $groupIid = 0;
-    $groupInfo = [];
     if (!empty($groupId)) {
         $groupInfo = GroupManager::get_group_properties($groupId);
         $groupIid = $groupInfo['iid'];
@@ -4233,7 +4226,6 @@ function addDir($formValues, $user_id, $courseInfo, $groupId, $sessionId = 0)
         }
     }
 
-    //$dirName = '/'.$created_dir;
     $today = new DateTime(api_get_utc_datetime(), new DateTimeZone('UTC'));
     $title = isset($formValues['work_title']) ? $formValues['work_title'] : $formValues['new_dir'];
 
@@ -4967,9 +4959,10 @@ function generateMoveForm($item_id, $path, $courseInfo, $groupId, $sessionId)
             WHERE
                 c_id = $courseId AND
                 active IN (0, 1) AND
-                url LIKE '/%' AND
+                parent_id = 0 AND
                 post_group_id = $groupIid
                 $sessionCondition";
+
     $res = Database::query($sql);
     while ($folder = Database::fetch_array($res)) {
         $title = empty($folder['title']) ? basename($folder['url']) : $folder['title'];

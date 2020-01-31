@@ -70,7 +70,7 @@ if ((user_is_author($id) || $isDrhOfCourse || (api_is_allowed_to_edit() || api_i
         $action = isset($_REQUEST['action']) ? $_REQUEST['action'] : null;
         $page = isset($_REQUEST['page']) ? $_REQUEST['page'] : null;
 
-        if ('edit' == $page) {
+        if ('edit' === $page) {
             $url = api_get_path(WEB_CODE_PATH).'work/edit.php?id='.$my_folder_data['id'].'&item_id='.$work['id'].'&'.api_get_cidreq();
         } else {
             $url = api_get_path(WEB_CODE_PATH).'work/view.php?id='.$work['id'].'&'.api_get_cidreq();

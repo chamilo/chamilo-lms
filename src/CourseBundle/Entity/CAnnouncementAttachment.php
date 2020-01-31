@@ -157,24 +157,9 @@ class CAnnouncementAttachment extends AbstractResource implements ResourceInterf
         return $this->size;
     }
 
-    /**
-     * @return int
-     */
     public function getIid(): int
     {
         return $this->iid;
-    }
-
-    /**
-     * @param int $iid
-     *
-     * @return CAnnouncementAttachment
-     */
-    public function setIid(int $iid): CAnnouncementAttachment
-    {
-        $this->iid = $iid;
-
-        return $this;
     }
 
     /**
@@ -254,7 +239,7 @@ class CAnnouncementAttachment extends AbstractResource implements ResourceInterf
         return $this->announcement;
     }
 
-    public function setAnnouncement(CAnnouncement $announcement): CAnnouncementAttachment
+    public function setAnnouncement(CAnnouncement $announcement): self
     {
         $this->announcement = $announcement;
 

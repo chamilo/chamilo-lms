@@ -3,6 +3,7 @@
 /* For licensing terms, see /license.txt */
 
 use Chamilo\CoreBundle\Framework\Container;
+use Chamilo\CourseBundle\Entity\CStudentPublication;
 
 require_once __DIR__.'/../inc/global.inc.php';
 $current_course_tool = TOOL_STUDENTPUBLICATION;
@@ -34,7 +35,6 @@ $tool_name = get_lang('Assignments');
 $item_id = isset($_REQUEST['item_id']) ? (int) $_REQUEST['item_id'] : null;
 $origin = api_get_origin();
 $action = isset($_REQUEST['action']) ? $_REQUEST['action'] : 'list';
-
 
 // Download folder
 if ('downloadfolder' === $action) {
@@ -212,55 +212,43 @@ switch ($action) {
         break;
     case 'move':
         // Move file form request
-        if ($is_allowed_to_edit) {
-            if (!empty($item_id)) {
-                $content = generateMoveForm(
-                    $item_id,
-                    $curdirpath,
-                    $courseInfo,
-                    $groupId,
-                    $sessionId
-                );
-            }
+        if ($is_allowed_to_edit && !empty($item_id)) {
+            $content = generateMoveForm(
+                $item_id,
+                $curdirpath,
+                $courseInfo,
+                $groupId,
+                $sessionId
+            );
         }
 
         break;
     case 'move_to':
         /* Move file command */
-        if ($is_allowed_to_edit) {
-            $move_to_path = get_work_path($_REQUEST['move_to_id']);
+        if ($is_allowed_to_edit && isset($_REQUEST['move_to_id'])) {
+            $moveToParentId = $_REQUEST['move_to_id'];
 
-            if (-1 == $move_to_path) {
-                $move_to_path = '/';
-            } elseif ('/' != substr($move_to_path, -1, 1)) {
-                $move_to_path .= '/';
-            }
+            /** @var CStudentPublication $newParent */
+            $newParent = $repo->find($_REQUEST['move_to_id']);
 
-            // Security fix: make sure they can't move files that are not in the document table
-            if ($path = get_work_path($item_id)) {
-                if (move($course_dir.'/'.$path, $base_work_dir.$move_to_path)) {
-                    // Update db
-                    updateWorkUrl(
-                        $item_id,
-                        'work'.$move_to_path,
-                        $_REQUEST['move_to_id']
-                    );
+            /** @var CStudentPublication $studentPublication */
+            $studentPublication = $repo->find($_REQUEST['item_id']);
+            $studentPublication->setParentId($_REQUEST['move_to_id']);
+            $studentPublication->getResourceNode()->setParent($newParent->getResourceNode());
 
-                    api_item_property_update(
-                        $courseInfo,
-                        'work',
-                        $_REQUEST['move_to_id'],
-                        'FolderUpdated',
-                        $user_id
-                    );
+            $repo->getEntityManager()->persist($studentPublication);
+            $repo->getEntityManager()->flush();
 
-                    $message = Display::return_message(get_lang('Element moved'), 'success');
-                } else {
-                    $message = Display::return_message(get_lang('Operation impossible'), 'error');
-                }
-            } else {
-                $message = Display::return_message(get_lang('Operation impossible'), 'error');
-            }
+            /*api_item_property_update(
+                $courseInfo,
+                'work',
+                $_REQUEST['move_to_id'],
+                'FolderUpdated',
+                $user_id
+            );*/
+
+            $message = Display::return_message(get_lang('Element moved'), 'success');
+
             Display::addFlash($message);
             header('Location: '.$currentUrl);
             exit;

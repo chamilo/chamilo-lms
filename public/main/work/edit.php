@@ -253,7 +253,7 @@ if ($form->validate()) {
                 }
             }
 
-            if ($_POST['qualification'] > $_POST['qualification_over']) {
+            if (isset($_POST['qualification']) && $_POST['qualification'] > $_POST['qualification_over']) {
                 Display::addFlash(Display::return_message(
                     get_lang('ScoreMustNotBeMoreThanScoreOver'),
                     'error'

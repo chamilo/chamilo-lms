@@ -110,7 +110,7 @@ class CAnnouncement extends AbstractResource implements ResourceInterface
     /**
      * @param CAnnouncementAttachment[] $attachments
      */
-    public function setAttachments(array $attachments): CAnnouncement
+    public function setAttachments(array $attachments): self
     {
         $this->attachments = $attachments;
 

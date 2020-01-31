@@ -12,7 +12,6 @@ use Doctrine\ORM\Query\Expr\Join;
 /**
  * ExtraFieldValuesRepository class.
  *
- *
  * @author Angel Fernando Quiroz Campos <angel.quiroz@beeznest.com>
  */
 class ExtraFieldValuesRepository extends ServiceEntityRepository

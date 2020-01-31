@@ -17,7 +17,6 @@ use CpChart\Image as pImage;
  * it should be required inside dashboard controller for showing it
  * into dashboard interface from platform
  *
- *
  * @author Christian Fasanando
  */
 class BlockEvaluationGraph extends Block

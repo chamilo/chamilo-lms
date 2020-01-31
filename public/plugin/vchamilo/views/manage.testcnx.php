@@ -5,7 +5,6 @@
 /**
  * Tests database connection.
  *
- *
  * @author Moheissen Fabien (fabien.moheissen@gmail.com)
  * @license http://www.gnu.org/copyleft/gpl.html GNU GPL
  */

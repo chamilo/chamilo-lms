@@ -9,8 +9,8 @@ twig:
         - '@SonataFormatter/Form/formatter.html.twig'
         - '@SonataCore/Form/datepicker.html.twig'
         - '@SonataCore/Form/color.html.twig'
-
-    exception_controller: Chamilo\CoreBundle\Controller\ExceptionController::showAction
+#
+#    exception_controller: Chamilo\CoreBundle\Controller\ExceptionController::showAction
 
     globals:
         show_toolbar: true

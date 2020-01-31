@@ -7,7 +7,6 @@
  * it should be required inside the dashboard controller for
  * showing it into the dashboard interface.
  *
- *
  * @author Yannick Warnier
  */
 

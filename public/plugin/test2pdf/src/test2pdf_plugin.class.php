@@ -2,7 +2,6 @@
 /**
  * Plugin class for the Test2Pdf plugin.
  *
- *
  * @author Jose Angel Ruiz <desarrollo@nosolored.com>
  */
 class Test2pdfPlugin extends Plugin

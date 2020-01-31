@@ -3,7 +3,6 @@
  * This plugin allows you to configure a footer note to plug some additional features. In a way, it works a bit like
  * any block plugin to be added in a region.
  *
- *
  * @author Julio Montoya <gugli100@gmail.com>
  */
 

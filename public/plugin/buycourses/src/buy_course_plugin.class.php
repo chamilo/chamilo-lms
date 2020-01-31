@@ -10,7 +10,6 @@ use Doctrine\ORM\Query\Expr\Join;
 /**
  * Plugin class for the BuyCourses plugin.
  *
- *
  * @author  Jose Angel Ruiz <jaruiz@nosolored.com>
  * @author  Imanol Losada <imanol.losada@beeznest.com>
  * @author  Alex Aragón <alex.aragon@beeznest.com>

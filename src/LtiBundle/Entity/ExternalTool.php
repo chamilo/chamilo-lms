@@ -12,7 +12,6 @@ use Doctrine\ORM\Mapping as ORM;
 /**
  * Class ExternalTool.
  *
- *
  * @ORM\Table(name="lti_external_tool")
  * @ORM\Entity()
  */
@@ -481,6 +480,21 @@ class ExternalTool
         return $this;
     }
 
+    public function getChildren(): ArrayCollection
+    {
+        return $this->children;
+    }
+
+    /**
+     * @return ExternalTool
+     */
+    public function setChildren(ArrayCollection $children): self
+    {
+        $this->children = $children;
+
+        return $this;
+    }
+
     /**
      * Map the key from custom param.
      *
@@ -505,20 +519,5 @@ class ExternalTool
         }
 
         return $newKey;
-    }
-
-    public function getChildren(): ArrayCollection
-    {
-        return $this->children;
-    }
-
-    /**
-     * @return ExternalTool
-     */
-    public function setChildren(ArrayCollection $children): self
-    {
-        $this->children = $children;
-
-        return $this;
     }
 }

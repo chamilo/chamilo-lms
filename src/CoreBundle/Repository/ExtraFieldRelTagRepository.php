@@ -13,7 +13,6 @@ use Doctrine\ORM\Query\Expr\Join;
 /**
  * ExtraFieldRelTagRepository.
  *
- *
  * @author Angel Fernando Quiroz Campos <angel.quiroz@beeznest.com>
  */
 class ExtraFieldRelTagRepository extends ServiceEntityRepository

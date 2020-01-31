@@ -3,7 +3,6 @@
  * This file is part of course block plugin for dashboard,
  * it should be required inside dashboard controller for showing it into dashboard interface from plattform.
  *
- *
  * @author Marco Sousa original code
  * @author Julio Montoya class named was changed of name, and some minor changes
  */

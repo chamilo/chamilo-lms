@@ -5,7 +5,6 @@
  * These settings will be used in the administration interface for plugins
  * (Chamilo configuration settings->Plugins).
  *
- *
  * @author Julio Montoya <gugli100@gmail.com>
  */
 global $_configuration;

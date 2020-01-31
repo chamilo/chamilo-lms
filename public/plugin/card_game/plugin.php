@@ -6,7 +6,6 @@
  * These settings will be used in the administration interface for plugins
  * (Chamilo configuration settings->Plugins).
  *
- *
  * @author Damien Renou <renou.damien@gmail.com>
  */
 /* Plugin config */

@@ -5,7 +5,6 @@
 /**
  * Plugin class for the SEPE plugin.
  *
- *
  * @author Jose Angel Ruiz    <jaruiz@nosolored.com>
  * @author Julio Montoya <gugli100@gmail.com>
  */

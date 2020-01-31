@@ -11,7 +11,6 @@ use Doctrine\Common\Persistence\ManagerRegistry;
 /**
  * SessionRepository.
  *
- *
  * @author  Julio Montoya <gugli100@gmail.com>
  */
 class SessionRepository extends ServiceEntityRepository

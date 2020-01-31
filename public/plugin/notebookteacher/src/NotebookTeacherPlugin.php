@@ -5,7 +5,6 @@
 /**
  * Plugin class for the NotebookTeacher plugin.
  *
- *
  * @author Jose Angel Ruiz <desarrollo@nosolored.com>
  * @author Julio Montoya
  */

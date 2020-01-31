@@ -16,6 +16,7 @@ $rules = [
     'multiline_comment_opening_closing' => true,
     'phpdoc_to_comment' => false,
     'phpdoc_annotation_without_dot' => false,
+    'increment_style' => ['style' => 'post'],
     'no_useless_else' => false,
     'single_quote' => false,
     'no_useless_return' => true,

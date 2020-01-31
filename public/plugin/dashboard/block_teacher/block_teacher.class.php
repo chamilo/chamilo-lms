@@ -6,7 +6,6 @@
  * This file is part of teacher block plugin for dashboard,
  * it should be required inside dashboard controller for showing it into dashboard interface from plattform.
  *
- *
  * @author Christian Fasanando
  */
 

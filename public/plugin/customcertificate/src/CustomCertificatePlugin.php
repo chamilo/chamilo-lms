@@ -5,7 +5,6 @@
 /**
  * Plugin class for the CustomCertificate plugin.
  *
- *
  * @author Jose Angel Ruiz <desarrollo@nosolored.com>
  */
 class CustomCertificatePlugin extends Plugin

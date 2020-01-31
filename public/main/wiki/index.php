@@ -4,8 +4,6 @@
 /**
  * @author Patrick Cool <patrick.cool@UGent.be>, Ghent University, Belgium
  * @author Juan Carlos Raña <herodoto@telefonica.net>
- *
- * @package chamilo.wiki
  */
 require_once __DIR__.'/../inc/global.inc.php';
 require_once 'wiki.inc.php';
@@ -89,7 +87,7 @@ $wiki->blockConcurrentEditions(api_get_user_id(), $action);
 
 ob_start();
 $handleAction = $wiki->handleAction($action);
-if (!$handleAction && $action == 'export_to_pdf') {
+if (!$handleAction && 'export_to_pdf' == $action) {
     $wiki->handleAction('showpage');
 }
 $content = ob_get_contents();

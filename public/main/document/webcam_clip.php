@@ -6,8 +6,6 @@ use ChamiloSession as Session;
 /**
  * This file allows record wav files.
  *
- * @package chamilo.document
- *
  * @author  Juan Carlos Raña Trabado herodoto@telefonica.net
  *
  * @since   7/jun/2012
@@ -48,7 +46,7 @@ $dir = $documentData['path'];
 
 //make some vars
 $webcamdir = $dir;
-if ($webcamdir == "/") {
+if ("/" == $webcamdir) {
     $webcamdir = '';
 }
 
@@ -59,15 +57,15 @@ if (strstr($dir, '..')) {
     $dir = '/';
 }
 
-if ($dir[0] == '.') {
+if ('.' == $dir[0]) {
     $dir = substr($dir, 1);
 }
 
-if ($dir[0] != '/') {
+if ('/' != $dir[0]) {
     $dir = '/'.$dir;
 }
 
-if ($dir[strlen($dir) - 1] != '/') {
+if ('/' != $dir[strlen($dir) - 1]) {
     $dir .= '/';
 }
 
@@ -123,7 +121,7 @@ if (isset($documentData['parents'])) {
     foreach ($documentData['parents'] as $documentSubData) {
         //fixing double group folder in breadcrumb
         if ($groupId) {
-            if ($counter == 0) {
+            if (0 == $counter) {
                 $counter++;
                 continue;
             }

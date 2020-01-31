@@ -7,8 +7,6 @@
  * Extends FormValidator with add&edit forms for evaluations
  *
  * @author Stijn Konings
- *
- * @package chamilo.gradebook
  */
 class EvalForm extends FormValidator
 {
@@ -98,12 +96,12 @@ class EvalForm extends FormValidator
         $user2 = $item2['user'];
         if (api_sort_by_first_name()) {
             $result = api_strcmp($user1['firstname'], $user2['firstname']);
-            if ($result == 0) {
+            if (0 == $result) {
                 return api_strcmp($user1['lastname'], $user2['lastname']);
             }
         } else {
             $result = api_strcmp($user1['lastname'], $user2['lastname']);
-            if ($result == 0) {
+            if (0 == $result) {
                 return api_strcmp($user1['firstname'], $user2['firstname']);
             }
         }
@@ -471,7 +469,7 @@ class EvalForm extends FormValidator
             ]
         );
         $this->build_basic_form();
-        if ($this->evaluation_object->get_course_code() == null) {
+        if (null == $this->evaluation_object->get_course_code()) {
             $this->addElement('checkbox', 'adduser', null, get_lang('Add users to evaluation'));
         } else {
             $this->addElement('checkbox', 'addresult', null, get_lang('Grade learners'));
@@ -486,7 +484,7 @@ class EvalForm extends FormValidator
     {
         $parent_cat = Category::load($this->evaluation_object->get_category_id());
         //@TODO $weight_mask is replaced?
-        if ($parent_cat[0]->get_parent_id() == 0) {
+        if (0 == $parent_cat[0]->get_parent_id()) {
             $weight_mask = $this->evaluation_object->get_weight();
         } else {
             $cat = Category::load($parent_cat[0]->get_parent_id());
@@ -522,7 +520,7 @@ class EvalForm extends FormValidator
     private function build_basic_form($edit = 0)
     {
         $form_title = get_lang('Add classroom activity');
-        if (!empty($_GET['editeval']) && $_GET['editeval'] == 1) {
+        if (!empty($_GET['editeval']) && 1 == $_GET['editeval']) {
             $form_title = get_lang('Edit evaluation');
         }
 
@@ -554,7 +552,7 @@ class EvalForm extends FormValidator
             false
         );
 
-        if (count($all_categories) == 1) {
+        if (1 == count($all_categories)) {
             $this->addElement('hidden', 'hid_category_id', $cat_id);
         } else {
             $select_gradebook = $this->addElement(
@@ -571,7 +569,7 @@ class EvalForm extends FormValidator
                     if ($my_cat->get_course_code() == api_get_course_id()) {
                         $grade_model_id = $my_cat->get_grade_model_id();
                         if (empty($grade_model_id)) {
-                            if ($my_cat->get_parent_id() == 0) {
+                            if (0 == $my_cat->get_parent_id()) {
                                 $default_weight = $my_cat->get_weight();
                                 $select_gradebook->addoption(get_lang('Default'), $my_cat->get_id());
                                 $cats_added[] = $my_cat->get_id();
@@ -697,7 +695,7 @@ class EvalForm extends FormValidator
         );
         $setting = api_get_setting('tool_visible_by_default_at_creation');
         $visibility_default = 1;
-        if (isset($setting['gradebook']) && $setting['gradebook'] == 'false') {
+        if (isset($setting['gradebook']) && 'false' == $setting['gradebook']) {
             $visibility_default = 0;
         }
         $this->setDefaults(['visible' => $visibility_default]);
@@ -719,7 +717,7 @@ class EvalForm extends FormValidator
         if ($this->evaluation_object->get_category_id() < 0) {
             $link = LinkFactory::get_evaluation_link($this->evaluation_object->get_id());
             $doc_url = $link->get_view_url($id);
-            if ($doc_url != null) {
+            if (null != $doc_url) {
                 $opendocurl_start .= '<a href="'.$doc_url.'" target="_blank">';
                 $opendocurl_end = '</a>';
             }

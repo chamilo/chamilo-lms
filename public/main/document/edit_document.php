@@ -24,8 +24,6 @@ use ChamiloSession as Session;
  * database, regardless of wether they are visible/invisible, have
  * comments or not.
  *
- * @package chamilo.document
- *
  * @todo improve script structure (FormValidator is used to display form, but
  * not for validation at the moment)
  */
@@ -244,7 +242,7 @@ if (isset($_POST['comment'])) {
 
     if (!empty($document_id)) {
         $linkExists = false;
-        if ($file_type == 'link') {
+        if ('link' == $file_type) {
             $linkExists = DocumentManager::cloudLinkExists($course_info, $file, $_POST['comment']);
         }
 
@@ -256,7 +254,7 @@ if (isset($_POST['comment'])) {
             $em->persist($document);
             $em->flush();
 
-            if ($file_type != 'link') {
+            if ('link' != $file_type) {
                 Display::addFlash(Display::return_message(get_lang('Update successful')));
             } else {
                 Display::addFlash(Display::return_message(get_lang('Cloud file link updated.')));
@@ -268,17 +266,17 @@ if (isset($_POST['comment'])) {
 }
 
 if ($is_allowed_to_edit) {
-    if (isset($_POST['formSent']) && $_POST['formSent'] == 1 && !empty($document_id)) {
+    if (isset($_POST['formSent']) && 1 == $_POST['formSent'] && !empty($document_id)) {
         $content = isset($_POST['content']) ? trim(str_replace(["\r", "\n"], '', stripslashes($_POST['content']))) : null;
         $content = Security::remove_XSS($content, COURSEMANAGERLOWSECURITY);
-        if ($dir == '/') {
+        if ('/' == $dir) {
             $dir = '';
         }
 
         $read_only_flag = isset($_POST['readonly']) ? $_POST['readonly'] : null;
         $read_only_flag = empty($read_only_flag) ? 0 : 1;
 
-        if ($read_only_flag == 0 && !empty($content)) {
+        if (0 == $read_only_flag && !empty($content)) {
             $documentRepository->updateDocumentContent($document, $content);
         }
 
@@ -339,7 +337,7 @@ if ($owner_id == api_get_user_id() ||
 
     // Form title
     $form->addHeader($nameTools);
-    $key_label_title = $file_type != 'link' ? 'Title' : 'LinkName';
+    $key_label_title = 'link' != $file_type ? 'Title' : 'LinkName';
     $form->addText(
         'title',
         get_lang($key_label_title),
@@ -356,13 +354,13 @@ if ($owner_id == api_get_user_id() ||
 
     // HotPotatoes tests are html files, but they should not be edited in order their functionality to be preserved.
     $showSystemFolders = api_get_course_setting('show_system_folders');
-    $condition = stripos($dir, '/HotPotatoes_files') === false;
-    if ($showSystemFolders == 1) {
+    $condition = false === stripos($dir, '/HotPotatoes_files');
+    if (1 == $showSystemFolders) {
         $condition = true;
     }
 
-    if (($extension == 'htm' || $extension == 'html') && $condition) {
-        if (empty($readonly) && $readonly == 0) {
+    if (('htm' == $extension || 'html' == $extension) && $condition) {
+        if (empty($readonly) && 0 == $readonly) {
             $form->addHtmlEditor('content', get_lang('Content'), true, true, $editorConfig);
         }
     }
@@ -371,7 +369,7 @@ if ($owner_id == api_get_user_id() ||
         $form->addLabel(get_lang('Created on'), Display::dateToStringAgoAndLongDate($createdDate));
     }
 
-    if ($file_type != 'link') {
+    if ('link' != $file_type) {
         if (!$group_document && !DocumentManager::is_my_shared_folder(api_get_user_id(), $currentDirPath, $sessionId)) {
             $form->addLabel(get_lang('Update successfulOn'), Display::dateToStringAgoAndLongDate($last_edit_date));
         }
@@ -384,7 +382,7 @@ if ($owner_id == api_get_user_id() ||
         }
     }
 
-    if ($file_type == 'link') {
+    if ('link' == $file_type) {
         // URLs in whitelist
         $urlWL = DocumentManager::getFileHostingWhiteList();
         sort($urlWL);
@@ -405,16 +403,16 @@ if ($owner_id == api_get_user_id() ||
         $form->addElement('textarea', 'comment', get_lang('Comment'), ['cols-size' => [2, 10, 0]]);
     }
 
-    if ($file_type != 'link') {
+    if ('link' != $file_type) {
         if ($owner_id == api_get_user_id() || api_is_platform_admin()) {
             $checked = &$form->addElement('checkbox', 'readonly', null, get_lang('Read only'));
-            if ($readonly == 1) {
+            if (1 == $readonly) {
                 $checked->setChecked(true);
             }
         }
     }
 
-    if ($file_type == 'link') {
+    if ('link' == $file_type) {
         $form->addRule('title', get_lang('Please enter a name for this Cloud link'), 'required');
         $form->addRule('comment', get_lang('Please enter the URL'), 'required');
         // Well formed url pattern (must have the protocol)
@@ -427,7 +425,7 @@ if ($owner_id == api_get_user_id() ||
 
     if ($is_certificate_mode) {
         $form->addButtonUpdate(get_lang('Save certificate'));
-    } elseif ($file_type == 'link') {
+    } elseif ('link' == $file_type) {
         $form->addButtonUpdate(get_lang('Save link'));
     } else {
         $form->addButtonUpdate(get_lang('Save document'));
@@ -470,12 +468,12 @@ if ($owner_id == api_get_user_id() ||
         );
     }
 
-    if ($extension == 'svg' && !api_browser_support('svg') &&
-        api_get_setting('enabled_support_svg') == 'true'
+    if ('svg' == $extension && !api_browser_support('svg') &&
+        'true' == api_get_setting('enabled_support_svg')
     ) {
         echo Display::return_message(get_lang('Your browser does not support SVG files. To use the drawing tool you must have an advanced browser such as Firefox or Chrome'), 'warning');
     }
-    if ($file_type != 'link') {
+    if ('link' != $file_type) {
         // HTML-editor
         echo '<div class="page-create">
                 <div class="row" style="overflow:hidden">
@@ -523,20 +521,20 @@ function show_return($document_id, $path, $call_from_tool = '', $slide_id = 0, $
         $actionsLeft .= '<a href="document.php?curdirpath='.$selectedCategory.'&selectcat='.$selectedCategory.'">'.
             Display::return_icon('back.png', get_lang('Back').' '.get_lang('To').' '.get_lang('Certificate overview'), '', ICON_SIZE_MEDIUM).'</a>';
         $actionsLeft .= '<a id="hide_bar_template" href="#" role="button">'.Display::return_icon('expand.png', get_lang('Expand'), ['id' => 'expand'], ICON_SIZE_MEDIUM).Display::return_icon('contract.png', get_lang('Collapse'), ['id' => 'contract', 'class' => 'hide'], ICON_SIZE_MEDIUM).'</a>';
-    } elseif ($call_from_tool == 'slideshow') {
+    } elseif ('slideshow' == $call_from_tool) {
         /*$actionsLeft .= '<a href="'.api_get_path(WEB_PATH).'main/document/slideshow.php?slide_id='.$slide_id.'&curdirpath='.Security::remove_XSS(urlencode($_GET['curdirpath'])).'">'.
             Display::return_icon('slideshow.png', get_lang('Back to').' '.get_lang('View Slideshow'), '', ICON_SIZE_MEDIUM).'</a>';
         */
-    } elseif ($call_from_tool == 'editdraw') {
+    } elseif ('editdraw' == $call_from_tool) {
         $actionsLeft .= '<a href="'.$url.'">'.
             Display::return_icon('back.png', get_lang('Back to').' '.get_lang('Documents overview'), '', ICON_SIZE_MEDIUM).'</a>';
         $actionsLeft .= '<a href="javascript:history.back(1)">'.Display::return_icon('draw.png', get_lang('Back to').' '.get_lang('Draw'), [], 32).'</a>';
-    } elseif ($call_from_tool == 'editodf') {
+    } elseif ('editodf' == $call_from_tool) {
         $actionsLeft .= '<a href="'.$url.'">'.
             Display::return_icon('back.png', get_lang('Back to').' '.get_lang('Documents overview'), '', ICON_SIZE_MEDIUM).'</a>';
         $actionsLeft .= '<a href="javascript:history.back(1)">'.Display::return_icon('draw.png', get_lang('Back to').' '.get_lang('Write'), [], 32).'</a>';
         $actionsLeft .= '<a id="hide_bar_template" href="#" role="button">'.Display::return_icon('expand.png', get_lang('Expand'), ['id' => 'expand'], ICON_SIZE_MEDIUM).Display::return_icon('contract.png', get_lang('Collapse'), ['id' => 'contract', 'class' => 'hide'], ICON_SIZE_MEDIUM).'</a>';
-    } elseif ($call_from_tool == 'editpaint' && api_get_setting('enabled_support_pixlr') === 'true') {
+    } elseif ('editpaint' == $call_from_tool && 'true' === api_get_setting('enabled_support_pixlr')) {
         $actionsLeft .= '<a href="'.$url.'">'.
             Display::return_icon('back.png', get_lang('Back to').' '.get_lang('Documents overview'), [], ICON_SIZE_MEDIUM).'</a>';
         $actionsLeft .= '<a href="javascript:history.back(1)">'.Display::return_icon('paint.png', get_lang('Back to').' '.get_lang('Paint'), [], 32).'</a>';

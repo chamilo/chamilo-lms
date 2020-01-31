@@ -10,8 +10,6 @@ use ChamiloSession as Session;
  * @author Denes Nagy
  * @author Roan Embrechts, refactoring and code cleaning
  * @author Yannick Warnier <ywarnier@beeznest.org> - cleaning and update for new SCORM tool
- *
- * @package chamilo.learnpath
  */
 $this_section = SECTION_COURSES;
 
@@ -33,7 +31,7 @@ if (!$is_allowed_to_edit || $isStudentView) {
 }
 /* The learnpath has been just created, go get the last id. */
 $is_new = false;
-if ($learnpath_id == 0) {
+if (0 == $learnpath_id) {
     $is_new = true;
 }
 
@@ -83,7 +81,7 @@ echo $learnPath->return_new_tree();
 echo '</div>';
 echo '<div class="col-md-8">';
 
-if (isset($is_success) && $is_success === true) {
+if (isset($is_success) && true === $is_success) {
     echo Display::return_message(get_lang('The learning object has been removed'), 'confirmation');
 } else {
     if ($is_new) {

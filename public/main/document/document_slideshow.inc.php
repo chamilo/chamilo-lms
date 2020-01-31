@@ -17,8 +17,6 @@
  *
  * @author Patrick Cool, responsible author
  * @author Roan Embrechts, minor cleanup
- *
- * @package chamilo.document
  */
 /**
  * General code that belongs in document.php.
@@ -53,7 +51,7 @@ if (isset($all_files) && is_array($all_files) && count($all_files) > 0) {
 }*/
 
 $tablename_column = isset($_GET['tablename_column']) ? Security::remove_XSS($_GET['tablename_column']) : 0;
-if ($tablename_column == 0) {
+if (0 == $tablename_column) {
     $tablename_column = 1;
 } else {
     $tablename_column = intval($tablename_column) - 1;
@@ -68,7 +66,7 @@ function sort_files($table)
     $temp = [];
 
     foreach ($table as &$file_array) {
-        if ($file_array['filetype'] == 'file') {
+        if ('file' == $file_array['filetype']) {
             $slideshow_extension = strrchr($file_array['path'], '.');
             $slideshow_extension = strtolower($slideshow_extension);
             if (in_array($slideshow_extension, $accepted_extensions)) {
@@ -78,7 +76,7 @@ function sort_files($table)
         }
     }
 
-    if ($tablename_direction == 'DESC') {
+    if ('DESC' == $tablename_direction) {
         usort($temp, 'rsort_table');
     } else {
         usort($temp, 'sort_table');

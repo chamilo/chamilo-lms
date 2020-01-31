@@ -166,7 +166,7 @@ foreach ($questions as $item) {
     $questionsWithAnswer = 0;
     if (isset($answerList[$questionId])) {
         foreach ($answerList[$questionId] as $userAnswer) {
-            if ((int) $userAnswer === 1) {
+            if (1 === (int) $userAnswer) {
                 $questionsWithAnswer++;
             }
         }
@@ -189,7 +189,7 @@ foreach ($students as $studentId) {
     $userInfo = api_get_user_info($studentId);
     $name = $userInfo['complete_name'];
     if ($userId == $studentId) {
-        if ($action !== 'edit') {
+        if ('edit' !== $action) {
             $name .= Display::url(
                 Display::return_icon('edit.png', get_lang('Edit')),
                 $urlEdit
@@ -204,15 +204,15 @@ foreach ($students as $studentId) {
                 if (empty($answerList[$item['question_id']][$studentId])) {
                     $checked = $notAvailableIcon;
                 }
-                if ($action === 'edit') {
+                if ('edit' === $action) {
                     $checked = '';
-                    if ($answerList[$item['question_id']][$studentId] == 1) {
+                    if (1 == $answerList[$item['question_id']][$studentId]) {
                         $checked = 'checked';
                     }
                 }
             }
 
-            if ($action === 'edit') {
+            if ('edit' === $action) {
                 $html = '<div class="alert alert-info"><input 
                     id="'.$item['question_id'].'" 
                     name="options['.$item['question_id'].']" 
@@ -252,13 +252,13 @@ foreach ($students as $studentId) {
     $table->setCellContents($row, $column, $name);
     $row++;
 }
-if ($action === 'edit') {
+if ('edit' === $action) {
     $content .= '<form name="meeting" action="'.$urlEdit.'" method="post">';
 }
 
 $content .= $table->toHtml();
 
-if ($action === 'edit') {
+if ('edit' === $action) {
     $content .= '<div class="pull-right">
         <button name="submit" type="submit" class="btn btn-primary btn-lg">'.get_lang('Save').'</button></div>';
     $content .= '</form>';

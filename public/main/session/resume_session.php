@@ -10,8 +10,6 @@ use Chamilo\CoreBundle\Repository\SessionRepository;
 
 /**
  * @author  Bart Mollet, Julio Montoya lot of fixes
- *
- * @package chamilo.admin
  */
 $cidReset = true;
 require_once __DIR__.'/../inc/global.inc.php';
@@ -160,7 +158,7 @@ $courseListToShow .= '<table id="session-list-course" class="table table-hover d
   <th width="25%">'.get_lang('Detail').'</th>
 </tr>';
 
-if ($session->getNbrCourses() === 0) {
+if (0 === $session->getNbrCourses()) {
     $courseListToShow .= '<tr>
 			<td colspan="4">'.get_lang('No course for this session').'</td>
 		</tr>';

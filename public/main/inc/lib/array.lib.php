@@ -3,8 +3,6 @@
 /**
  * This is the array library for Chamilo.
  * Include/require it in your code to use its functionality.
- *
- * @package chamilo.library
  */
 
 /**
@@ -53,7 +51,7 @@ function msort($array, $id = 'id', $order = 'desc')
         $lowest_id = 0;
         $index = 0;
         foreach ($array as $item) {
-            if ($order == 'desc') {
+            if ('desc' == $order) {
                 if ($item[$id] < $array[$lowest_id][$id]) {
                     $lowest_id = $index;
                 }

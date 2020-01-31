@@ -230,7 +230,7 @@ class UserResolver implements ContainerAwareInterface
                     $courseIsVisible = !in_array($course['visibility'], $closedVisibilityList);
 
                     if (false === $courseIsVisible || SESSION_INVISIBLE == $sessionCourseVisibility) {
-                        ++$blockedCourseCount;
+                        $blockedCourseCount++;
                     }
                 }
 

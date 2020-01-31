@@ -2,8 +2,6 @@
 /* For licensing terms, see /license.txt */
 /**
  * Edition script for sessions categories.
- *
- * @package chamilo.admin
  */
 $cidReset = true;
 require_once __DIR__.'/../inc/global.inc.php';
@@ -105,131 +103,131 @@ if (!empty($return)) {
                 <div class="col-sm-6">
                     <select name="day_start">
                         <option value="1">01</option>
-                        <option value="2" <?php if ($day_start == 2) {
+                        <option value="2" <?php if (2 == $day_start) {
     echo 'selected="selected"';
 } ?> >02</option>
-                        <option value="3" <?php if ($day_start == 3) {
+                        <option value="3" <?php if (3 == $day_start) {
     echo 'selected="selected"';
 } ?> >03</option>
-                        <option value="4" <?php if ($day_start == 4) {
+                        <option value="4" <?php if (4 == $day_start) {
     echo 'selected="selected"';
 } ?> >04</option>
-                        <option value="5" <?php if ($day_start == 5) {
+                        <option value="5" <?php if (5 == $day_start) {
     echo 'selected="selected"';
 } ?> >05</option>
-                        <option value="6" <?php if ($day_start == 6) {
+                        <option value="6" <?php if (6 == $day_start) {
     echo 'selected="selected"';
 } ?> >06</option>
-                        <option value="7" <?php if ($day_start == 7) {
+                        <option value="7" <?php if (7 == $day_start) {
     echo 'selected="selected"';
 } ?> >07</option>
-                        <option value="8" <?php if ($day_start == 8) {
+                        <option value="8" <?php if (8 == $day_start) {
     echo 'selected="selected"';
 } ?> >08</option>
-                        <option value="9" <?php if ($day_start == 9) {
+                        <option value="9" <?php if (9 == $day_start) {
     echo 'selected="selected"';
 } ?> >09</option>
-                        <option value="10" <?php if ($day_start == 10) {
+                        <option value="10" <?php if (10 == $day_start) {
     echo 'selected="selected"';
 } ?> >10</option>
-                        <option value="11" <?php if ($day_start == 11) {
+                        <option value="11" <?php if (11 == $day_start) {
     echo 'selected="selected"';
 } ?> >11</option>
-                        <option value="12" <?php if ($day_start == 12) {
+                        <option value="12" <?php if (12 == $day_start) {
     echo 'selected="selected"';
 } ?> >12</option>
-                        <option value="13" <?php if ($day_start == 13) {
+                        <option value="13" <?php if (13 == $day_start) {
     echo 'selected="selected"';
 } ?> >13</option>
-                        <option value="14" <?php if ($day_start == 14) {
+                        <option value="14" <?php if (14 == $day_start) {
     echo 'selected="selected"';
 } ?> >14</option>
-                        <option value="15" <?php if ($day_start == 15) {
+                        <option value="15" <?php if (15 == $day_start) {
     echo 'selected="selected"';
 } ?> >15</option>
-                        <option value="16" <?php if ($day_start == 16) {
+                        <option value="16" <?php if (16 == $day_start) {
     echo 'selected="selected"';
 } ?> >16</option>
-                        <option value="17" <?php if ($day_start == 17) {
+                        <option value="17" <?php if (17 == $day_start) {
     echo 'selected="selected"';
 } ?> >17</option>
-                        <option value="18" <?php if ($day_start == 18) {
+                        <option value="18" <?php if (18 == $day_start) {
     echo 'selected="selected"';
 } ?> >18</option>
-                        <option value="19" <?php if ($day_start == 19) {
+                        <option value="19" <?php if (19 == $day_start) {
     echo 'selected="selected"';
 } ?> >19</option>
-                        <option value="20" <?php if ($day_start == 20) {
+                        <option value="20" <?php if (20 == $day_start) {
     echo 'selected="selected"';
 } ?> >20</option>
-                        <option value="21" <?php if ($day_start == 21) {
+                        <option value="21" <?php if (21 == $day_start) {
     echo 'selected="selected"';
 } ?> >21</option>
-                        <option value="22" <?php if ($day_start == 22) {
+                        <option value="22" <?php if (22 == $day_start) {
     echo 'selected="selected"';
 } ?> >22</option>
-                        <option value="23" <?php if ($day_start == 23) {
+                        <option value="23" <?php if (23 == $day_start) {
     echo 'selected="selected"';
 } ?> >23</option>
-                        <option value="24" <?php if ($day_start == 24) {
+                        <option value="24" <?php if (24 == $day_start) {
     echo 'selected="selected"';
 } ?> >24</option>
-                        <option value="25" <?php if ($day_start == 25) {
+                        <option value="25" <?php if (25 == $day_start) {
     echo 'selected="selected"';
 } ?> >25</option>
-                        <option value="26" <?php if ($day_start == 26) {
+                        <option value="26" <?php if (26 == $day_start) {
     echo 'selected="selected"';
 } ?> >26</option>
-                        <option value="27" <?php if ($day_start == 27) {
+                        <option value="27" <?php if (27 == $day_start) {
     echo 'selected="selected"';
 } ?> >27</option>
-                        <option value="28" <?php if ($day_start == 28) {
+                        <option value="28" <?php if (28 == $day_start) {
     echo 'selected="selected"';
 } ?> >28</option>
-                        <option value="29" <?php if ($day_start == 29) {
+                        <option value="29" <?php if (29 == $day_start) {
     echo 'selected="selected"';
 } ?> >29</option>
-                        <option value="30" <?php if ($day_start == 30) {
+                        <option value="30" <?php if (30 == $day_start) {
     echo 'selected="selected"';
 } ?> >30</option>
-                        <option value="31" <?php if ($day_start == 31) {
+                        <option value="31" <?php if (31 == $day_start) {
     echo 'selected="selected"';
 } ?> >31</option>
                   </select>
                   /
                   <select name="month_start">
                         <option value="1">01</option>
-                        <option value="2" <?php if ($month_start == 2) {
+                        <option value="2" <?php if (2 == $month_start) {
     echo 'selected="selected"';
 } ?> >02</option>
-                        <option value="3" <?php if ($month_start == 3) {
+                        <option value="3" <?php if (3 == $month_start) {
     echo 'selected="selected"';
 } ?> >03</option>
-                        <option value="4" <?php if ($month_start == 4) {
+                        <option value="4" <?php if (4 == $month_start) {
     echo 'selected="selected"';
 } ?> >04</option>
-                        <option value="5" <?php if ($month_start == 5) {
+                        <option value="5" <?php if (5 == $month_start) {
     echo 'selected="selected"';
 } ?> >05</option>
-                        <option value="6" <?php if ($month_start == 6) {
+                        <option value="6" <?php if (6 == $month_start) {
     echo 'selected="selected"';
 } ?> >06</option>
-                        <option value="7" <?php if ($month_start == 7) {
+                        <option value="7" <?php if (7 == $month_start) {
     echo 'selected="selected"';
 } ?> >07</option>
-                        <option value="8" <?php if ($month_start == 8) {
+                        <option value="8" <?php if (8 == $month_start) {
     echo 'selected="selected"';
 } ?> >08</option>
-                        <option value="9" <?php if ($month_start == 9) {
+                        <option value="9" <?php if (9 == $month_start) {
     echo 'selected="selected"';
 } ?> >09</option>
-                        <option value="10" <?php if ($month_start == 10) {
+                        <option value="10" <?php if (10 == $month_start) {
     echo 'selected="selected"';
 } ?> >10</option>
-                        <option value="11" <?php if ($month_start == 11) {
+                        <option value="11" <?php if (11 == $month_start) {
     echo 'selected="selected"';
 } ?> >11</option>
-                        <option value="12" <?php if ($month_start == 12) {
+                        <option value="12" <?php if (12 == $month_start) {
     echo 'selected="selected"';
 } ?> >12</option>
                   </select>
@@ -252,137 +250,137 @@ if (!empty($return)) {
                 <div class="col-sm-6">
                     <select name="day_end">
                         <option value="0">--</option>
-                        <option value="1" <?php if ($day_end == 1) {
+                        <option value="1" <?php if (1 == $day_end) {
                             echo 'selected="selected"';
                         } ?> >01</option>
-                        <option value="2" <?php if ($day_end == 2) {
+                        <option value="2" <?php if (2 == $day_end) {
                             echo 'selected="selected"';
                         } ?> >02</option>
-                        <option value="3" <?php if ($day_end == 3) {
+                        <option value="3" <?php if (3 == $day_end) {
                             echo 'selected="selected"';
                         } ?> >03</option>
-                        <option value="4" <?php if ($day_end == 4) {
+                        <option value="4" <?php if (4 == $day_end) {
                             echo 'selected="selected"';
                         } ?> >04</option>
-                        <option value="5" <?php if ($day_end == 5) {
+                        <option value="5" <?php if (5 == $day_end) {
                             echo 'selected="selected"';
                         } ?> >05</option>
-                        <option value="6" <?php if ($day_end == 6) {
+                        <option value="6" <?php if (6 == $day_end) {
                             echo 'selected="selected"';
                         } ?> >06</option>
-                        <option value="7" <?php if ($day_end == 7) {
+                        <option value="7" <?php if (7 == $day_end) {
                             echo 'selected="selected"';
                         } ?> >07</option>
-                        <option value="8" <?php if ($day_end == 8) {
+                        <option value="8" <?php if (8 == $day_end) {
                             echo 'selected="selected"';
                         } ?> >08</option>
-                        <option value="9" <?php if ($day_end == 9) {
+                        <option value="9" <?php if (9 == $day_end) {
                             echo 'selected="selected"';
                         } ?> >09</option>
-                        <option value="10" <?php if ($day_end == 10) {
+                        <option value="10" <?php if (10 == $day_end) {
                             echo 'selected="selected"';
                         } ?> >10</option>
-                        <option value="11" <?php if ($day_end == 11) {
+                        <option value="11" <?php if (11 == $day_end) {
                             echo 'selected="selected"';
                         } ?> >11</option>
-                        <option value="12" <?php if ($day_end == 12) {
+                        <option value="12" <?php if (12 == $day_end) {
                             echo 'selected="selected"';
                         } ?> >12</option>
-                        <option value="13" <?php if ($day_end == 13) {
+                        <option value="13" <?php if (13 == $day_end) {
                             echo 'selected="selected"';
                         } ?> >13</option>
-                        <option value="14" <?php if ($day_end == 14) {
+                        <option value="14" <?php if (14 == $day_end) {
                             echo 'selected="selected"';
                         } ?> >14</option>
-                        <option value="15" <?php if ($day_end == 15) {
+                        <option value="15" <?php if (15 == $day_end) {
                             echo 'selected="selected"';
                         } ?> >15</option>
-                        <option value="16" <?php if ($day_end == 16) {
+                        <option value="16" <?php if (16 == $day_end) {
                             echo 'selected="selected"';
                         } ?> >16</option>
-                        <option value="17" <?php if ($day_end == 17) {
+                        <option value="17" <?php if (17 == $day_end) {
                             echo 'selected="selected"';
                         } ?> >17</option>
-                        <option value="18" <?php if ($day_end == 18) {
+                        <option value="18" <?php if (18 == $day_end) {
                             echo 'selected="selected"';
                         } ?> >18</option>
-                        <option value="19" <?php if ($day_end == 19) {
+                        <option value="19" <?php if (19 == $day_end) {
                             echo 'selected="selected"';
                         } ?> >19</option>
-                        <option value="20" <?php if ($day_end == 20) {
+                        <option value="20" <?php if (20 == $day_end) {
                             echo 'selected="selected"';
                         } ?> >20</option>
-                        <option value="21" <?php if ($day_end == 21) {
+                        <option value="21" <?php if (21 == $day_end) {
                             echo 'selected="selected"';
                         } ?> >21</option>
-                        <option value="22" <?php if ($day_end == 22) {
+                        <option value="22" <?php if (22 == $day_end) {
                             echo 'selected="selected"';
                         } ?> >22</option>
-                        <option value="23" <?php if ($day_end == 23) {
+                        <option value="23" <?php if (23 == $day_end) {
                             echo 'selected="selected"';
                         } ?> >23</option>
-                        <option value="24" <?php if ($day_end == 24) {
+                        <option value="24" <?php if (24 == $day_end) {
                             echo 'selected="selected"';
                         } ?> >24</option>
-                        <option value="25" <?php if ($day_end == 25) {
+                        <option value="25" <?php if (25 == $day_end) {
                             echo 'selected="selected"';
                         } ?> >25</option>
-                        <option value="26" <?php if ($day_end == 26) {
+                        <option value="26" <?php if (26 == $day_end) {
                             echo 'selected="selected"';
                         } ?> >26</option>
-                        <option value="27" <?php if ($day_end == 27) {
+                        <option value="27" <?php if (27 == $day_end) {
                             echo 'selected="selected"';
                         } ?> >27</option>
-                        <option value="28" <?php if ($day_end == 28) {
+                        <option value="28" <?php if (28 == $day_end) {
                             echo 'selected="selected"';
                         } ?> >28</option>
-                        <option value="29" <?php if ($day_end == 29) {
+                        <option value="29" <?php if (29 == $day_end) {
                             echo 'selected="selected"';
                         } ?> >29</option>
-                        <option value="30" <?php if ($day_end == 30) {
+                        <option value="30" <?php if (30 == $day_end) {
                             echo 'selected="selected"';
                         } ?> >30</option>
-                        <option value="31" <?php if ($day_end == 31) {
+                        <option value="31" <?php if (31 == $day_end) {
                             echo 'selected="selected"';
                         } ?> >31</option>
                   </select>
                   /
                   <select name="month_end">
                         <option value="0">--</option>
-                        <option value="1" <?php if ($month_end == 1) {
+                        <option value="1" <?php if (1 == $month_end) {
                             echo 'selected="selected"';
                         } ?> >01</option>
-                        <option value="2" <?php if ($month_end == 2) {
+                        <option value="2" <?php if (2 == $month_end) {
                             echo 'selected="selected"';
                         } ?> >02</option>
-                        <option value="3" <?php if ($month_end == 3) {
+                        <option value="3" <?php if (3 == $month_end) {
                             echo 'selected="selected"';
                         } ?> >03</option>
-                        <option value="4" <?php if ($month_end == 4) {
+                        <option value="4" <?php if (4 == $month_end) {
                             echo 'selected="selected"';
                         } ?> >04</option>
-                        <option value="5" <?php if ($month_end == 5) {
+                        <option value="5" <?php if (5 == $month_end) {
                             echo 'selected="selected"';
                         } ?> >05</option>
-                        <option value="6" <?php if ($month_end == 6) {
+                        <option value="6" <?php if (6 == $month_end) {
                             echo 'selected="selected"';
                         } ?> >06</option>
-                        <option value="7" <?php if ($month_end == 7) {
+                        <option value="7" <?php if (7 == $month_end) {
                             echo 'selected="selected"';
                         } ?> >07</option>
-                        <option value="8" <?php if ($month_end == 8) {
+                        <option value="8" <?php if (8 == $month_end) {
                             echo 'selected="selected"';
                         } ?> >08</option>
-                        <option value="9" <?php if ($month_end == 9) {
+                        <option value="9" <?php if (9 == $month_end) {
                             echo 'selected="selected"';
                         } ?> >09</option>
-                        <option value="10" <?php if ($month_end == 10) {
+                        <option value="10" <?php if (10 == $month_end) {
                             echo 'selected="selected"';
                         } ?> >10</option>
-                        <option value="11" <?php if ($month_end == 11) {
+                        <option value="11" <?php if (11 == $month_end) {
                             echo 'selected="selected"';
                         } ?> >11</option>
-                        <option value="12" <?php if ($month_end == 12) {
+                        <option value="12" <?php if (12 == $month_end) {
                             echo 'selected="selected"';
                         } ?> >12</option>
                   </select>
@@ -415,7 +413,7 @@ if (!empty($return)) {
 
 
 <script>
-<?php if ($year_start == "0000") {
+<?php if ("0000" == $year_start) {
                             echo "setDisable(document.form.nolimit);\r\n";
                         } ?>
 function setDisable(select){

@@ -6,8 +6,6 @@
  * tool from Office presentations (.ppt, .sxi, .odp, .pptx) to
  * learning paths.
  *
- * @package chamilo.learnpath
- *
  * @author  Eric Marguin <eric.marguin@dokeos.com>
  * @license GNU/GPL
  */
@@ -17,7 +15,7 @@
  */
 require_once 'openoffice_document.class.php';
 
-if (api_get_setting('search_enabled') == 'true') {
+if ('true' == api_get_setting('search_enabled')) {
     require_once api_get_path(LIBRARY_PATH).'specific_fields_manager.lib.php';
 }
 
@@ -41,7 +39,7 @@ class OpenofficePresentation extends OpenofficeDocument
             return false;
         }
         $dir = $this->created_dir;
-        if (substr($dir, -1, 1) !== '/') {
+        if ('/' !== substr($dir, -1, 1)) {
             $dir .= '/';
         }
 
@@ -57,19 +55,19 @@ class OpenofficePresentation extends OpenofficeDocument
             $slide_name = api_convert_encoding($slide_name, api_get_system_encoding(), $this->original_charset);
             $slide_name = api_html_entity_decode($slide_name, ENT_COMPAT, api_get_system_encoding());
 
-            if ($this->take_slide_name === true) {
+            if (true === $this->take_slide_name) {
                 $slide_name = str_replace('_', ' ', $slide_name);
                 $slide_name = api_ucfirst($slide_name);
             } else {
                 $slide_name = 'slide'.str_repeat('0', 2 - strlen($i)).$i;
             }
 
-            if (!is_file($this->base_work_dir.$dir.$file_name) or filesize($this->base_work_dir.$dir.$file_name) == 0) {
+            if (!is_file($this->base_work_dir.$dir.$file_name) or 0 == filesize($this->base_work_dir.$dir.$file_name)) {
                 continue;
             }
 
             $i++;
-            if (substr($file_name, -1, 1) == '/') {
+            if ('/' == substr($file_name, -1, 1)) {
                 $file_name = substr($file_name, 0, -1);
             }
             // Add the png to documents.
@@ -181,12 +179,12 @@ class OpenofficePresentation extends OpenofficeDocument
                     $slide_name,
                     ''
                 );
-                if ($this->first_item == 0) {
+                if (0 == $this->first_item) {
                     $this->first_item = intval($previous);
                 }
             }
             // Code for text indexing.
-            if (api_get_setting('search_enabled') == 'true') {
+            if ('true' == api_get_setting('search_enabled')) {
                 if (isset($_POST['index_document']) && $_POST['index_document']) {
                     $di = new ChamiloIndexer();
                     isset($_POST['language']) ? $lang = Database::escape_string($_POST['language']) : $lang = 'english';

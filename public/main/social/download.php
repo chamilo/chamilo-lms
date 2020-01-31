@@ -6,8 +6,6 @@
  * Html files are parsed to fix a few problems with URLs,
  * but this code will hopefully be replaced soon by an Apache URL
  * rewrite mechanism.
- *
- * @package chamilo.messages
  */
 session_cache_limiter('public');
 
@@ -61,7 +59,7 @@ if (Security::check_abs_path($file, $dir.'message_attachments/')) {
         false,
         $title
     );
-    if ($result === false) {
+    if (false === $result) {
         api_not_allowed(true);
     }
 }

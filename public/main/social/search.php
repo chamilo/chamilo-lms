@@ -2,8 +2,6 @@
 /* For licensing terms, see /license.txt */
 
 /**
- * @package chamilo.social
- *
  * @author Julio Montoya <gugli100@gmail.com>
  */
 $cidReset = true;
@@ -12,7 +10,7 @@ require_once __DIR__.'/../inc/global.inc.php';
 $ajax_url = api_get_path(WEB_AJAX_PATH).'message.ajax.php';
 api_block_anonymous_users();
 
-if (api_get_setting('allow_social_tool') != 'true') {
+if ('true' != api_get_setting('allow_social_tool')) {
     api_not_allowed();
 }
 
@@ -32,7 +30,7 @@ $query_vars = ['q' => $query, 'search_type' => $query_search_type];
 if (!empty($extra_fields)) {
     foreach ($extra_fields as $extra_field) {
         $field_name = 'field_'.$extra_field['variable'];
-        if (isset($_GET[$field_name]) && $_GET[$field_name] != '0') {
+        if (isset($_GET[$field_name]) && '0' != $_GET[$field_name]) {
             $query_vars[$field_name] = $_GET[$field_name];
         }
     }
@@ -50,10 +48,10 @@ $totalUsers = [];
 $usergroup = new UserGroup();
 
 // I'm searching something
-if ($query != '' || ($query_vars['search_type'] == '1' && count($query_vars) > 2)) {
+if ('' != $query || ('1' == $query_vars['search_type'] && count($query_vars) > 2)) {
     $itemPerPage = 6;
 
-    if ($_GET['search_type'] == '0' || $_GET['search_type'] == '1') {
+    if ('0' == $_GET['search_type'] || '1' == $_GET['search_type']) {
         $page = isset($_GET['users_page_nr']) ? intval($_GET['users_page_nr']) : 1;
         $totalUsers = UserManager::get_all_user_tags(
             $_GET['q'],
@@ -68,7 +66,7 @@ if ($query != '' || ($query_vars['search_type'] == '1' && count($query_vars) > 2
         $users = UserManager::get_all_user_tags($_GET['q'], 0, $from, $itemPerPage);
     }
 
-    if ($_GET['search_type'] == '0' || $_GET['search_type'] == '2') {
+    if ('0' == $_GET['search_type'] || '2' == $_GET['search_type']) {
         $pageGroup = isset($_GET['groups_page_nr']) ? intval($_GET['groups_page_nr']) : 1;
         // Groups
         $fromGroups = intval(($pageGroup - 1) * $itemPerPage);
@@ -93,7 +91,7 @@ if ($query != '' || ($query_vars['search_type'] == '1' && count($query_vars) > 2
             $url = api_get_path(WEB_PATH).'main/social/profile.php?u='.$user_info['user_id'];
 
             // Show send invitation icon if they are not friends yet
-            if ($relation_type != 3 && $relation_type != 4 && $user_info['user_id'] != api_get_user_id()) {
+            if (3 != $relation_type && 4 != $relation_type && $user_info['user_id'] != api_get_user_id()) {
                 $sendInvitation = '<a href="#" class="'.$buttonClass.' btn-to-send-invitation" data-send-to="'.$user_info['user_id'].'">
                              <em class="fa fa-user"></em> '.get_lang('Send invitation').'</a>';
             }
@@ -120,7 +118,7 @@ if ($query != '' || ($query_vars['search_type'] == '1' && count($query_vars) > 2
                 $status_icon = Display::return_icon('offline.png', get_lang('Disconnected'), null, ICON_SIZE_TINY);
             }
 
-            if ($user_info['status'] == 5) {
+            if (5 == $user_info['status']) {
                 $user_icon = Display::return_icon('user.png', get_lang('Learner'), null, ICON_SIZE_TINY);
             } else {
                 $user_icon = Display::return_icon('teacher.png', get_lang('Trainer'), null, ICON_SIZE_TINY);
@@ -176,7 +174,7 @@ if ($query != '' || ($query_vars['search_type'] == '1' && count($query_vars) > 2
             $url_close = '</a>';
             $name = cut($group['name'], 60, true);
             $count_users_group = count($usergroup->get_all_users_by_group($id));
-            if ($count_users_group == 1) {
+            if (1 == $count_users_group) {
                 $count_users_group = $count_users_group;
             } else {
                 $count_users_group = $count_users_group;

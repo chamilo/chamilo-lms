@@ -7,8 +7,6 @@
  * it should be included inside a dispatcher file (e.g: index.php).
  *
  * @author Christian Fasanando <christian1827@gmail.com>
- *
- * @package chamilo.course_description
  */
 class CourseDescriptionController
 {
@@ -66,8 +64,8 @@ class CourseDescriptionController
 
         foreach ($data['descriptions'] as $id => $description) {
             if (!empty($description['content'])
-                && strpos($description['content'], '<iframe') !== false
-                && $browser['name'] == 'Chrome'
+                && false !== strpos($description['content'], '<iframe')
+                && 'Chrome' == $browser['name']
             ) {
                 header("X-XSS-Protection: 0");
             }
@@ -89,7 +87,7 @@ class CourseDescriptionController
 
             ksort($categories);
             foreach ($categories as $id => $title) {
-                if ($i == ADD_BLOCK) {
+                if (ADD_BLOCK == $i) {
                     $actionLeft .= '<a href="index.php?'.api_get_cidreq().'&action=add">'.
                         Display::return_icon(
                             $data['default_description_icon'][$id],
@@ -140,7 +138,7 @@ class CourseDescriptionController
         $data = [];
         $data['id'] = $id;
         $affected_rows = null;
-        if (strtoupper($_SERVER['REQUEST_METHOD']) == "POST") {
+        if ("POST" == strtoupper($_SERVER['REQUEST_METHOD'])) {
             if (!empty($_POST['title']) && !empty($_POST['contentDescription'])) {
                 if (1) {
                     $title = $_POST['title'];
@@ -251,7 +249,7 @@ class CourseDescriptionController
         $course_description->set_session_id($session_id);
 
         $data = [];
-        if (strtoupper($_SERVER['REQUEST_METHOD']) == "POST") {
+        if ("POST" == strtoupper($_SERVER['REQUEST_METHOD'])) {
             if (!empty($_POST['title']) && !empty($_POST['contentDescription'])) {
                 if (1) {
                     $title = $_POST['title'];

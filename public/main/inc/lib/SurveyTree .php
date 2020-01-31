@@ -3,8 +3,6 @@
 
 /**
  * Manage the "versioning" of a conditional survey.
- *
- *	@package chamilo.survey
  */
 class SurveyTree
 {
@@ -57,7 +55,7 @@ class SurveyTree
             $thisref['name'] = $survey['name'];
             $thisref['id'] = $survey['survey_id'];
             $thisref['survey_version'] = $survey['survey_version'];
-            if ($survey['parent_id'] == 0) {
+            if (0 == $survey['parent_id']) {
                 $list[$survey['survey_id']] = &$thisref;
             } else {
                 $refs[$survey['parent_id']]['children'][$survey['survey_id']] = &$thisref;

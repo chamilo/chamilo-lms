@@ -7,8 +7,6 @@
  *
  * @author Stijn Konings
  * @author Bert Steppé (made more generic)
- *
- * @package chamilo.gradebook
  */
 class LinkForm extends FormValidator
 {
@@ -50,9 +48,9 @@ class LinkForm extends FormValidator
         if (isset($extra)) {
             $this->extra = $extra;
         }
-        if ($form_type == self::TYPE_CREATE) {
+        if (self::TYPE_CREATE == $form_type) {
             $this->build_create();
-        } elseif ($form_type == self::TYPE_MOVE) {
+        } elseif (self::TYPE_MOVE == $form_type) {
             $this->build_move();
         }
     }
@@ -102,19 +100,19 @@ class LinkForm extends FormValidator
 
         foreach ($linkTypes as $linkType) {
             // The hot potatoe link will be added "inside" the exercise option.
-            if ($linkType == LINK_HOTPOTATOES) {
+            if (LINK_HOTPOTATOES == $linkType) {
                 continue;
             }
             $link = $this->createLink($linkType, $courseCode);
             // disable this element if the link works with a dropdownlist
             // and if there are no links left
-            if (!$link->needs_name_and_description() && count($link->get_all_links()) == '0') {
+            if (!$link->needs_name_and_description() && '0' == count($link->get_all_links())) {
                 $select->addoption($link->get_type_name(), $linkType, 'disabled');
             } else {
                 $select->addoption($link->get_type_name(), $linkType);
             }
 
-            if ($link->get_type() == LINK_EXERCISE) {
+            if (LINK_EXERCISE == $link->get_type()) {
                 // Adding hot potatoes
                 $linkHot = $this->createLink(LINK_HOTPOTATOES, $courseCode);
                 $linkHot->setHp(true);

@@ -99,7 +99,7 @@ class Export
         foreach ($data as $row) {
             $string = implode("</td><td>", $row);
             $string = '<tr><td>'.$string.'</td></tr>';
-            if ($encoding != 'utf-8') {
+            if ('utf-8' != $encoding) {
                 $string = api_convert_encoding($string, $encoding, $systemEncoding);
             }
             fwrite($handle, $string."\n");

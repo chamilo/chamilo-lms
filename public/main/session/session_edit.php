@@ -3,8 +3,6 @@
 
 /**
  * Sessions edition script.
- *
- * @package chamilo.admin
  */
 $cidReset = true;
 require_once __DIR__.'/../inc/global.inc.php';
@@ -70,7 +68,7 @@ $sql = "SELECT user_id,lastname,firstname,username
 if (api_is_multiple_url_enabled()) {
     $table_access_url_rel_user = Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_USER);
     $access_url_id = api_get_current_access_url_id();
-    if ($access_url_id != -1) {
+    if (-1 != $access_url_id) {
         $sql = "SELECT DISTINCT u.user_id,lastname,firstname,username
                 FROM $tbl_user u
                 INNER JOIN $table_access_url_rel_user url_rel_user
@@ -96,7 +94,7 @@ $categoriesOption = [
     '0' => get_lang('none'),
 ];
 
-if ($categoriesList != false) {
+if (false != $categoriesList) {
     foreach ($categoriesList as $categoryItem) {
         $categoriesOption[$categoryItem['id']] = $categoryItem['name'];
     }
@@ -149,7 +147,7 @@ if ($form->validate()) {
     $id_session_category = $params['session_category'];
     $id_visibility = $params['session_visibility'];
     $duration = isset($params['duration']) ? $params['duration'] : null;
-    if ($params['access'] == 1) {
+    if (1 == $params['access']) {
         $duration = null;
     }
 
@@ -160,7 +158,7 @@ if ($form->validate()) {
 
     $extraFields = [];
     foreach ($params as $key => $value) {
-        if (strpos($key, 'extra_') === 0) {
+        if (0 === strpos($key, 'extra_')) {
             $extraFields[$key] = $value;
         }
     }

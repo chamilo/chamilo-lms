@@ -55,7 +55,7 @@ $pagination = '';
 $url = api_get_self().'?student_id='.$studentId;
 if ($totalItems > 1) {
     $pagination .= '<ul class="pagination">';
-    for ($i = 0; $i < $pagesCount; ++$i) {
+    for ($i = 0; $i < $pagesCount; $i++) {
         $newPage = $i + 1;
         if ($currentPage == $newPage) {
             $pagination .= '<li class="active"><a href="'.$url.'&page='.$newPage.'">'.$newPage.'</a></li>';

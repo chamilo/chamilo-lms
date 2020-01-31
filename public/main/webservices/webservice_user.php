@@ -1,8 +1,6 @@
 <?php
 /* For licensing terms, see /license.txt */
-/**
- * @package chamilo.webservices
- */
+
 require_once __DIR__.'/../inc/global.inc.php';
 require_once __DIR__.'/webservice.php';
 
@@ -432,10 +430,10 @@ class WSUser extends WS
         if ($user_id instanceof WSError) {
             return $user_id;
         } else {
-            if ($state == 0) {
+            if (0 == $state) {
                 UserManager::disable($user_id);
             } else {
-                if ($state == 1) {
+                if (1 == $state) {
                     UserManager::enable($user_id);
                 }
             }
@@ -539,7 +537,7 @@ class WSUser extends WS
     ) {
         // Add the original user id field name and value to the extra fields if needed
         $extras_associative = [];
-        if ($user_id_field_name != "chamilo_user_id") {
+        if ("chamilo_user_id" != $user_id_field_name) {
             $extras_associative[$user_id_field_name] = $user_id_value;
         }
         if (!empty($extras)) {
@@ -612,11 +610,11 @@ class WSUser extends WS
         if ($user_id instanceof WSError) {
             return $user_id;
         } else {
-            if ($password == '') {
+            if ('' == $password) {
                 $password = null;
             }
             $user_info = api_get_user_info($user_id);
-            if (count($extras) == 0) {
+            if (0 == count($extras)) {
                 $extras = null;
             }
 

@@ -33,19 +33,19 @@ class Draggable extends Question
             $nb_options = $form->getSubmitValue('nb_options');
 
             if (isset($_POST['lessMatches'])) {
-                --$nb_matches;
+                $nb_matches--;
             }
 
             if (isset($_POST['moreMatches'])) {
-                ++$nb_matches;
+                $nb_matches++;
             }
 
             if (isset($_POST['lessOptions'])) {
-                --$nb_options;
+                $nb_options--;
             }
 
             if (isset($_POST['moreOptions'])) {
-                ++$nb_options;
+                $nb_options++;
             }
         } elseif (!empty($this->id)) {
             $defaults['orientation'] = in_array($this->extra, ['h', 'v']) ? $this->extra : 'h';
@@ -55,15 +55,15 @@ class Draggable extends Question
 
             if ($answer->nbrAnswers > 0) {
                 $nb_matches = $nb_options = 0;
-                for ($i = 1; $i <= $answer->nbrAnswers; ++$i) {
+                for ($i = 1; $i <= $answer->nbrAnswers; $i++) {
                     if ($answer->isCorrect($i)) {
-                        ++$nb_matches;
+                        $nb_matches++;
                         $defaults['answer['.$nb_matches.']'] = $answer->selectAnswer($i);
                         $defaults['weighting['.$nb_matches.']'] = float_format($answer->selectWeighting($i), 1);
                         $answerInfo = $answer->getAnswerByAutoId($answer->correct[$i]);
                         $defaults['matches['.$nb_matches.']'] = isset($answerInfo['answer']) ? $answerInfo['answer'] : '';
                     } else {
-                        ++$nb_options;
+                        $nb_options++;
                         $defaults['option['.$nb_options.']'] = $answer->selectAnswer($i);
                     }
                 }
@@ -77,7 +77,7 @@ class Draggable extends Question
             $defaults['orientation'] = 'h';
         }
 
-        for ($i = 1; $i <= $nb_matches; ++$i) {
+        for ($i = 1; $i <= $nb_matches; $i++) {
             $matches[$i] = $i;
         }
 
@@ -109,7 +109,7 @@ class Draggable extends Question
             echo Display::return_message(get_lang('You have to create at least one answer'), 'normal');
         }
 
-        for ($i = 1; $i <= $nb_matches; ++$i) {
+        for ($i = 1; $i <= $nb_matches; $i++) {
             $renderer = &$form->defaultRenderer();
             $renderer->setElementTemplate(
                 '<td><!-- BEGIN error --><span class="form_error">{error}</span><!-- END error -->{element}</td>',
@@ -177,14 +177,14 @@ class Draggable extends Question
         $position = 0;
         $objAnswer = new Answer($this->id);
         // Insert the options
-        for ($i = 1; $i <= $nb_matches; ++$i) {
-            ++$position;
+        for ($i = 1; $i <= $nb_matches; $i++) {
+            $position++;
             $objAnswer->createAnswer($position, 0, '', 0, $position);
         }
 
         // Insert the answers
-        for ($i = 1; $i <= $nb_matches; ++$i) {
-            ++$position;
+        for ($i = 1; $i <= $nb_matches; $i++) {
+            $position++;
             $answer = $form->getSubmitValue('answer['.$i.']');
             $matches = $form->getSubmitValue('matches['.$i.']');
             $weighting = $form->getSubmitValue('weighting['.$i.']');

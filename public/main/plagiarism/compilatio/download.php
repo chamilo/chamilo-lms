@@ -8,8 +8,6 @@ exit;
  *	Html files are parsed to fix a few problems with URLs,
  *	but this code will hopefully be replaced soon by an Apache URL
  *	rewrite mechanism.
- *
- *	@package chamilo.work
  */
 session_cache_limiter('public');
 require_once '../../inc/global.inc.php';
@@ -45,7 +43,7 @@ if (!empty($courseInfo['real_id'])) {
         if (empty($item_info)) {
             exit;
         }
-        if ($courseInfo['show_score'] == 0 || $item_info['visibility'] == 1 && $row['accepted'] == 1 &&
+        if (0 == $courseInfo['show_score'] || 1 == $item_info['visibility'] && 1 == $row['accepted'] &&
             ($row['user_id'] == api_get_user_id() || api_is_allowed_to_edit())
         ) {
             $title = str_replace(' ', '_', $row['title']);

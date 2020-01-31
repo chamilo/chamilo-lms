@@ -6,12 +6,8 @@
  * This class handles the elements from an AICC Descriptor file.
  * Container for the aiccItem class that deals with AICC Assignable Units (AUs).
  *
- * @package chamilo.learnpath
- *
  * @author  Yannick Warnier    <ywarnier@beeznest.org>
  * @license GNU/GPL
- *
- * @package chamilo.learnpath
  */
 class aiccItem extends learnpathItem
 {

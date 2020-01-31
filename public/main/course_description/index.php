@@ -6,8 +6,6 @@
  * to the controllers depend on the current action.
  *
  * @author Christian Fasanando <christian1827@gmail.com>
- *
- * @package chamilo.course_description
  */
 require_once __DIR__.'/../inc/global.inc.php';
 $current_course_tool = TOOL_COURSE_DESCRIPTION;
@@ -42,34 +40,34 @@ if (isset($_GET['id'])) {
     $id = intval($_GET['id']);
 }
 
-if (isset($_GET['isStudentView']) && $_GET['isStudentView'] == 'true') {
+if (isset($_GET['isStudentView']) && 'true' == $_GET['isStudentView']) {
     $action = 'listing';
 }
 
 // interbreadcrumb
 $interbreadcrumb[] = ["url" => "index.php?".api_get_cidreq(), "name" => get_lang('Description')];
-if ($description_type == 1) {
+if (1 == $description_type) {
     $interbreadcrumb[] = ["url" => "#", "name" => get_lang('Description')];
 }
-if ($description_type == 2) {
+if (2 == $description_type) {
     $interbreadcrumb[] = ["url" => "#", "name" => get_lang('Objectives')];
 }
-if ($description_type == 3) {
+if (3 == $description_type) {
     $interbreadcrumb[] = ["url" => "#", "name" => get_lang('Topics')];
 }
-if ($description_type == 4) {
+if (4 == $description_type) {
     $interbreadcrumb[] = ["url" => "#", "name" => get_lang('Methodology')];
 }
-if ($description_type == 5) {
+if (5 == $description_type) {
     $interbreadcrumb[] = ["url" => "#", "name" => get_lang('Course material')];
 }
-if ($description_type == 6) {
+if (6 == $description_type) {
     $interbreadcrumb[] = ["url" => "#", "name" => get_lang('Resources')];
 }
-if ($description_type == 7) {
+if (7 == $description_type) {
     $interbreadcrumb[] = ["url" => "#", "name" => get_lang('Assessment')];
 }
-if ($description_type == 8) {
+if (8 == $description_type) {
     $interbreadcrumb[] = ["url" => "#", "name" => get_lang('Thematic advance')];
 }
 if ($description_type >= 9) {

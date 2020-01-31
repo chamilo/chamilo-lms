@@ -100,7 +100,7 @@ if (!empty($users)) {
             'id' => $user['user_id'],
             'first_name' => $userInfo['firstname'],
             'last_name' => $userInfo['lastname'],
-            'email' => $showEmail === 'true' ? $userInfo['email'] : '',
+            'email' => 'true' === $showEmail ? $userInfo['email'] : '',
             'lp_time' => api_time_to_hms($lpTime),
             'lp_score' => is_numeric($lpScore) ? "$lpScore%" : $lpScore,
             'lp_progress' => "$lpProgress%",
@@ -143,7 +143,7 @@ $template->assign('user_list', $userList);
 $template->assign('session_id', api_get_session_id());
 $template->assign('course_code', api_get_course_id());
 $template->assign('lp_id', $lpId);
-$template->assign('show_email', $showEmail === 'true');
+$template->assign('show_email', 'true' === $showEmail);
 $template->assign('export', (int) $export);
 $template->assign('header', $lpInfo['name']);
 $template->assign(

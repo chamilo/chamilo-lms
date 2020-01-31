@@ -9,8 +9,6 @@
  * @author Christian Fasanando <christian1827@gmail.com>
  *
  * @todo move to main/inc/lib
- *
- * @package chamilo.dashboard
  */
 class DashboardController
 {
@@ -69,7 +67,7 @@ class DashboardController
         $view = isset($_GET['view']) ? $_GET['view'] : 'blocks';
         api_block_anonymous_users();
         $link_blocks_view = $link_list_view = null;
-        if ($view == 'list') {
+        if ('list' == $view) {
             $link_blocks_view = '<a href="'.api_get_self().'?view=blocks">'.
                 Display::return_icon('blocks.png', get_lang('Dashboard blocks'), '', ICON_SIZE_MEDIUM).'</a>';
         } else {
@@ -94,7 +92,7 @@ class DashboardController
         // block dashboard view
         $columns = [];
         $blockList = null;
-        if (isset($view) && $view == 'blocks') {
+        if (isset($view) && 'blocks' == $view) {
             if (isset($blocks) && count($blocks) > 0) {
                 // group content html by number of column
                 if (is_array($blocks)) {
@@ -126,7 +124,7 @@ class DashboardController
      */
     public function store_user_block()
     {
-        if (strtoupper($_SERVER['REQUEST_METHOD']) == "POST") {
+        if ("POST" == strtoupper($_SERVER['REQUEST_METHOD'])) {
             $enabled_blocks = $_POST['enabled_blocks'];
             $columns = $_POST['columns'];
             DashboardManager::store_user_blocks($this->user_id, $enabled_blocks, $columns);

@@ -6,8 +6,6 @@ use ChamiloSession as Session;
 /**
  * This file allows creating new svg and png documents with an online editor.
  *
- * @package chamilo.document
- *
  * @author Juan Carlos Raña Trabado
  *
  * @since 30/january/2011
@@ -74,23 +72,23 @@ $filename = Security::remove_XSS($filename);
 $filename = api_replace_dangerous_char($filename);
 $filename = disable_dangerous_file($filename);
 
-if (strlen(trim($filename)) == 0) {
+if (0 == strlen(trim($filename))) {
     echo "The title is empty"; //if title is empty, headers Content-Type = application/octet-stream,
     // then not create a new title here please
     exit;
 }
 
 //check file_get_contents
-if ($contents === false) {
+if (false === $contents) {
     echo "I cannot read: ".$urlcontents;
     exit;
 }
 
 // Extension security
-if ($extension != 'jpg' && $extension != 'png' && $extension != 'pxd') {
+if ('jpg' != $extension && 'png' != $extension && 'pxd' != $extension) {
     die();
 }
-if ($extension == 'pxd') {
+if ('pxd' == $extension) {
     echo "pxd file type does not supported";
     // not secure because check security headers and finfo() return  Content-Type = application/octet-stream
     exit;
@@ -99,7 +97,7 @@ if ($extension == 'pxd') {
 //Verify that the file is an image. Headers method
 $headers = get_headers($urlcontents, 1);
 $content_type = explode("/", $headers['Content-Type']);
-if ($content_type[0] != "image") {
+if ("image" != $content_type[0]) {
     echo "Invalid file type";
     exit;
 }
@@ -108,7 +106,7 @@ if ($content_type[0] != "image") {
 $finfo = new finfo(FILEINFO_MIME);
 $current_mime = $finfo->buffer($contents);
 
-if (strpos($current_mime, 'image') === false) {
+if (false === strpos($current_mime, 'image')) {
     echo "Invalid mime type file";
     exit;
 }

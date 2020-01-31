@@ -399,7 +399,7 @@ switch ($action) {
                     $type
                 );
 
-                if (count($sequences) === 0) {
+                if (0 === count($sequences)) {
                     break;
                 }
 

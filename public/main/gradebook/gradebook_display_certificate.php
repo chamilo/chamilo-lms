@@ -3,8 +3,6 @@
 
 /**
  * Script.
- *
- * @package chamilo.gradebook
  */
 require_once __DIR__.'/../inc/global.inc.php';
 $current_course_tool = TOOL_GRADEBOOK;
@@ -44,7 +42,7 @@ $filter = api_get_setting('certificate_filter_by_official_code');
 $userList = [];
 $filterForm = null;
 $certificate_list = [];
-if ($filter === 'true') {
+if ('true' === $filter) {
     $options = UserManager::getOfficialCodeGrouped();
     $options = array_merge(['all' => get_lang('All')], $options);
     $form = new FormValidator(
@@ -58,7 +56,7 @@ if ($filter === 'true') {
 
     if ($form->validate()) {
         $officialCode = $form->getSubmitValue('filter');
-        if ($officialCode == 'all') {
+        if ('all' == $officialCode) {
             $certificate_list = GradebookUtils::get_list_users_certificates($categoryId);
         } else {
             $userList = UserManager::getUsersByOfficialCode($officialCode);
@@ -80,8 +78,8 @@ $content = '';
 
 $courseCode = api_get_course_id();
 
-$allowExportToZip = api_get_plugin_setting('customcertificate', 'enable_plugin_customcertificate') == 'true' &&
-    api_get_course_setting('customcertificate_course_enable', $courseInfo) == 1;
+$allowExportToZip = 'true' == api_get_plugin_setting('customcertificate', 'enable_plugin_customcertificate') &&
+    1 == api_get_course_setting('customcertificate_course_enable', $courseInfo);
 
 $tags = Certificate::notificationTags();
 
@@ -163,7 +161,7 @@ switch ($action) {
 
         if (!empty($userList)) {
             foreach ($userList as $userInfo) {
-                if ($userInfo['status'] == INVITEE) {
+                if (INVITEE == $userInfo['status']) {
                     continue;
                 }
                 Category::generateUserCertificate($categoryId, $userInfo['user_id']);
@@ -189,13 +187,13 @@ $interbreadcrumb[] = ['url' => '#', 'name' => get_lang('AssessmentsListOfLearner
 $this_section = SECTION_COURSES;
 Display::display_header('');
 
-if (isset($_GET['action']) && $_GET['action'] == 'delete') {
+if (isset($_GET['action']) && 'delete' == $_GET['action']) {
     $check = Security::check_token('get');
     if ($check) {
         $certificate = new Certificate($_GET['certificate_id']);
         $result = $certificate->delete(true);
         Security::clear_token();
-        if ($result == true) {
+        if (true == $result) {
             echo Display::return_message(get_lang('Certificate removed'), 'confirmation');
         } else {
             echo Display::return_message(get_lang('Certificate can\'t be removed'), 'error');
@@ -273,7 +271,7 @@ $actions .= Display::url(
 
 $hideCertificateExport = api_get_setting('hide_certificate_export_link');
 
-if (count($certificate_list) > 0 && $hideCertificateExport !== 'true') {
+if (count($certificate_list) > 0 && 'true' !== $hideCertificateExport) {
     $actions .= Display::url(
         Display::return_icon('pdf.png', get_lang('Export all certificates to PDF'), [], ICON_SIZE_MEDIUM),
         $url.'&action=export_all_certificates'
@@ -296,7 +294,7 @@ echo Display::toolbarAction('actions', [$actions]);
 
 echo $filterForm;
 
-if (count($certificate_list) == 0) {
+if (0 == count($certificate_list)) {
     echo Display::return_message(get_lang('No results available'), 'warning');
 } else {
     echo '<table class="data_table">';

@@ -9,8 +9,6 @@
  * http://drupal.org/project/chamilo.
  *
  * @author Yannick Warnier <yannick.warnier@beeznest.com>
- *
- * @package chamilo.webservices
  */
 require_once __DIR__.'/../inc/global.inc.php';
 

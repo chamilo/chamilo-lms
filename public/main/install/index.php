@@ -196,7 +196,7 @@ if (isset($_POST['step2_install']) || isset($_POST['step2_update_8']) || isset($
     $installType = isset($_GET['installType']) ? $_GET['installType'] : '';
     $updateFromConfigFile = isset($_GET['updateFromConfigFile']) ? $_GET['updateFromConfigFile'] : false;
 }
-if ($installType === 'update' && in_array($my_old_version, $update_from_version_8)) {
+if ('update' === $installType && in_array($my_old_version, $update_from_version_8)) {
     // This is the main configuration file of the system before the upgrade.
     // Old configuration file.
     // Don't change to include_once
@@ -220,7 +220,7 @@ if (!isset($_GET['running'])) {
         $emailForm = $_SERVER['SERVER_ADMIN'];
     }
     $email_parts = explode('@', $emailForm);
-    if (isset($email_parts[1]) && $email_parts[1] == 'localhost') {
+    if (isset($email_parts[1]) && 'localhost' == $email_parts[1]) {
         $emailForm .= '.localdomain';
     }
 
@@ -272,17 +272,17 @@ if (!$_POST) {
 error_log("Step: $current_step");
 
 // Managing the $encryptPassForm
-if ($encryptPassForm == '1') {
+if ('1' == $encryptPassForm) {
     $encryptPassForm = 'bcrypt';
-} elseif ($encryptPassForm == '0') {
+} elseif ('0' == $encryptPassForm) {
     $encryptPassForm = 'none';
 }
 
 $form = '';
 $instalation_type_label = '';
-if ($installType == 'new') {
+if ('new' == $installType) {
     $instalation_type_label = get_lang('New installation');
-} elseif ($installType == 'update') {
+} elseif ('update' == $installType) {
     $update_from_version = isset($update_from_version) ? $update_from_version : null;
     $instalation_type_label = get_lang('Update from Chamilo').(is_array($update_from_version) ? implode('|', $update_from_version) : '');
 }
@@ -354,7 +354,7 @@ if (isset($_POST['step2'])) {
 } elseif (isset($_POST['step4'])) {
     //STEP 5 : CONFIGURATION SETTINGS
     //if update, try getting settings from the database...
-    if ($installType === 'update') {
+    if ('update' === $installType) {
         $db_name = $dbNameForm;
         $database = connectToDatabase(
             $dbHostForm,
@@ -408,9 +408,9 @@ if (isset($_POST['step2'])) {
         // For version 1.9
         $encryptPassForm = get_config_param('password_encryption');
         // Managing the $encryptPassForm
-        if ($encryptPassForm == '1') {
+        if ('1' == $encryptPassForm) {
             $encryptPassForm = 'sha1';
-        } elseif ($encryptPassForm == '0') {
+        } elseif ('0' == $encryptPassForm) {
             $encryptPassForm = 'none';
         }
 
@@ -458,11 +458,11 @@ if (isset($_POST['step2'])) {
     </div>
 
     <?php
-    if ($installType == 'new') {
+    if ('new' == $installType) {
         echo get_lang('Administrator login').' : <strong>'.$loginForm.'</strong><br />';
         echo get_lang('Administrator password (<font color="red">you may want to change this</font>)').' : <strong>'.$passForm.'</strong><br /><br />'; /* TODO: Maybe this password should be hidden too? */
     }
-    $allowSelfRegistrationLiteral = ($allowSelfReg == 'true') ? get_lang('Yes') : ($allowSelfReg == 'approval' ? get_lang('Approval') : get_lang('No'));
+    $allowSelfRegistrationLiteral = ('true' == $allowSelfReg) ? get_lang('Yes') : ('approval' == $allowSelfReg ? get_lang('Approval') : get_lang('No'));
     echo get_lang('Administrator first name').' : '.$adminFirstName, '<br />', get_lang('Administrator last name').' : '.$adminLastName, '<br />';
     echo get_lang('Administrator e-mail').' : '.$emailForm; ?><br />
     <?php echo get_lang('Administrator telephone').' : '.$adminPhoneForm; ?><br />
@@ -481,7 +481,7 @@ if (isset($_POST['step2'])) {
     <?php echo get_lang('URL of this company').' : '.$institutionUrlForm; ?><br />
     <?php echo get_lang('Chamilo URL').' : '.$urlForm; ?><br /><br />
     <?php
-    if ($installType == 'new') {
+    if ('new' == $installType) {
         echo Display::return_message(
             '<h4 style="text-align: center">'.get_lang(
                 'Warning'
@@ -516,7 +516,7 @@ if (isset($_POST['step2'])) {
     //STEP 6 : INSTALLATION PROCESS
     $current_step = 7;
     $msg = get_lang('Installation process execution');
-    if ($installType === 'update') {
+    if ('update' === $installType) {
         $msg = get_lang('Update process execution');
     }
     $form .= '<div class="RequirementHeading">
@@ -533,7 +533,7 @@ if (isset($_POST['step2'])) {
       </div>
       </div>';
 
-    if ($installType === 'update') {
+    if ('update' === $installType) {
         $database = connectToDatabase(
             $dbHostForm,
             $dbUsernameForm,
@@ -642,7 +642,7 @@ if (isset($_POST['step2'])) {
         $result = $command->run($input, new ConsoleOutput());
 
         // No errors
-        if ($result == 0) {
+        if (0 == $result) {
             session_unset();
             $_SESSION = [];
             session_destroy();

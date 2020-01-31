@@ -4,8 +4,6 @@
 /**
  * This script retrieves a list of terms that have xapian documents
  * related with the term passed.
- *
- * @package chamilo.include.search
  */
 $terms_list = [];
 
@@ -55,11 +53,11 @@ $operator = $_GET['operator'];
 $specific_fields = get_specific_field_list();
 $sf_terms = [];
 
-if (($cid = api_get_course_id()) != -1) { // with cid
+if (-1 != ($cid = api_get_course_id())) { // with cid
     // course filter
     $filter[] = chamilo_get_boolean_query(XAPIAN_PREFIX_COURSEID.$cid);
     // term filter
-    if ($term != '__all__') {
+    if ('__all__' != $term) {
         $filter[] = chamilo_get_boolean_query($prefix.$term);
         // always and between term and courseid
         $filter = chamilo_join_queries($filter, null, 'and');
@@ -67,7 +65,7 @@ if (($cid = api_get_course_id()) != -1) { // with cid
 
     $sf_terms = get_usual_sf_terms($filter, $specific_fields);
 } else { // without cid
-    if ($term != '__all__') {
+    if ('__all__' != $term) {
         $filter[] = chamilo_get_boolean_query($prefix.$term);
 
         $sf_terms = get_usual_sf_terms($filter, $specific_fields);
@@ -86,7 +84,7 @@ if (($cid = api_get_course_id()) != -1) { // with cid
 // build array to return
 foreach ($sf_terms as $sf_prefix => $term_group) {
     //if (count($tem_group) > 0) {
-    $first_term = ['__all__' => ($operator == 'or' ? '-- Any --' : '-- All -- ')];
+    $first_term = ['__all__' => ('or' == $operator ? '-- Any --' : '-- All -- ')];
     //}
     if ($sf_prefix != $prefix) {
         $terms_list[] = [

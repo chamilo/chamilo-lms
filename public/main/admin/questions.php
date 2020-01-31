@@ -7,9 +7,6 @@ use ChamiloSession as Session;
 use Doctrine\Common\Collections\Criteria;
 use Knp\Component\Pager\Paginator;
 
-/**
- *  @package chamilo.admin
- */
 $cidReset = true;
 require_once __DIR__.'/../inc/global.inc.php';
 
@@ -177,7 +174,7 @@ if ($formSent) {
                         /** @var CQuiz $exercise */
                         foreach ($exerciseList as $exercise) {
                             $question->questionData .= $exercise->getTitle();
-                            if ($exercise->getActive() == -1) {
+                            if (-1 == $exercise->getActive()) {
                                 $question->questionData .= '- ('.get_lang('The test has been deleted').' #'.$exercise->getIid().') ';
                             }
                             $question->questionData .= '<br />';

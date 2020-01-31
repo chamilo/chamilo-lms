@@ -5,8 +5,6 @@ use Chamilo\CoreBundle\Repository\LegalRepository;
 
 /**
  * Sessions list script.
- *
- * @package chamilo.admin
  */
 $cidReset = true;
 require_once __DIR__.'/../inc/global.inc.php';

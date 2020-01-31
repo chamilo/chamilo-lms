@@ -2,8 +2,6 @@
 /* For licensing terms, see /license.txt */
 /**
  * Search widget. Shows the search screen contents.
- *
- * @package chamilo.include.search
  */
 require_once api_get_path(LIBRARY_PATH).'specific_fields_manager.lib.php';
 
@@ -38,9 +36,9 @@ function format_one_specific_field_select($prefix, $sf_term_array, $op, $extra_s
             $all_selected = 'selected="selected"';
         }
     }
-    if ($op == 'and') {
+    if ('and' == $op) {
         $all_selected_name = get_lang('All');
-    } elseif ($op == 'or') {
+    } elseif ('or' == $op) {
         $all_selected_name = get_lang('Any');
     }
     $multiple_select .= '<option value="__all__" '.$all_selected.' >-- '.$all_selected_name.' --</option>';
@@ -115,7 +113,7 @@ function search_widget_normal_form($action, $show_thesaurus, $sf_terms, $op)
 {
     $thesaurus_icon = Display::return_icon('thesaurus.gif', get_lang('Advanced search options'), ['id' => 'thesaurus-icon']);
     $advanced_options = '<a id="tags-toggle" href="#">'.get_lang('Advanced search options').'</a>';
-    $display_thesaurus = ($show_thesaurus == true ? 'block' : 'none');
+    $display_thesaurus = (true == $show_thesaurus ? 'block' : 'none');
     $help = '<h3>'.get_lang('Keywords search help').'</h3>'.get_lang('Select keywords in one or more fields and click the search button.<br /><br />To select more than one keyword in a field, use Ctrl+click.');
     $mode = (!empty($_REQUEST['mode']) ? htmlentities($_REQUEST['mode']) : 'gallery');
     $type = (!empty($_REQUEST['type']) ? htmlentities($_REQUEST['type']) : 'normal');
@@ -125,12 +123,12 @@ function search_widget_normal_form($action, $show_thesaurus, $sf_terms, $op)
      * SortableTableFromArray pagination is done with simple links, so now we
      * could not send a form in pagination.
      */
-    if (isset($_GET['action']) && strcmp(trim($_GET['action']), 'search') === 0) {
+    if (isset($_GET['action']) && 0 === strcmp(trim($_GET['action']), 'search')) {
         $action = 'index.php';
     }
     $navigator_info = api_get_navigator();
 
-    if ($navigator_info['name'] == 'Internet Explorer' && $navigator_info['version'] == '6') {
+    if ('Internet Explorer' == $navigator_info['name'] && '6' == $navigator_info['version']) {
         $submit_button1 = '<input type="submit" id="submit" value="'.get_lang('Search').'" />';
         $submit_button2 = '<input class="lower-submit" type="submit" value="'.get_lang('Search').'" />';
         $reset_button = '<input type="submit" id="tags-clean" value="'.get_lang('Reset keywords').'" />';
@@ -160,9 +158,9 @@ function search_widget_normal_form($action, $show_thesaurus, $sf_terms, $op)
         $form .= format_specific_fields_selects($sf_terms, $op);
         $or_checked = '';
         $and_checked = '';
-        if ($op == 'or') {
+        if ('or' == $op) {
             $or_checked = 'checked="checked"';
-        } elseif ($op == 'and') {
+        } elseif ('and' == $op) {
             $and_checked = 'checked="checked"';
         }
         $form .= '</tr>
@@ -202,7 +200,7 @@ function search_widget_prefilter_form(
 ) {
     $thesaurus_icon = Display::return_icon('thesaurus.gif', get_lang('Advanced search options'), ['id' => 'thesaurus-icon']);
     $advanced_options = '<a id="tags-toggle" href="#">'.get_lang('Advanced search options').'</a>';
-    $display_thesaurus = ($show_thesaurus == true ? 'block' : 'none');
+    $display_thesaurus = (true == $show_thesaurus ? 'block' : 'none');
     $help = '<h3>'.get_lang('Keywords search help').'</h3>'.get_lang('Select keywords in one or more fields and click the search button.<br /><br />To select more than one keyword in a field, use Ctrl+click.');
     $mode = (!empty($_REQUEST['mode']) ? htmlentities($_REQUEST['mode']) : 'gallery');
     $type = (!empty($_REQUEST['type']) ? htmlentities($_REQUEST['type']) : 'normal');
@@ -212,7 +210,7 @@ function search_widget_prefilter_form(
      * SortableTableFromArray pagination is done with simple links, so now we
      * could not send a form in pagination.
      */
-    if (isset($_GET['action']) && strcmp(trim($_GET['action']), 'search') === 0) {
+    if (isset($_GET['action']) && 0 === strcmp(trim($_GET['action']), 'search')) {
         $action = 'index.php';
     }
 
@@ -254,9 +252,9 @@ function search_widget_prefilter_form(
         }
         $or_checked = '';
         $and_checked = '';
-        if ($op == 'or') {
+        if ('or' == $op) {
             $or_checked = 'checked="checked"';
-        } elseif ($op == 'and') {
+        } elseif ('and' == $op) {
             $and_checked = 'checked="checked"';
         }
         $form .= '
@@ -338,7 +336,7 @@ function search_widget_show($action = 'index.php')
     $specific_fields = get_specific_field_list();
     $url_params = [];
 
-    if (($cid = api_get_course_id()) != -1) { // with cid
+    if (-1 != ($cid = api_get_course_id())) { // with cid
         // get search engine terms
         $course_filter = chamilo_get_boolean_query(XAPIAN_PREFIX_COURSEID.$cid);
         $dkterms = chamilo_query_simple_query('', 0, 1000, [$course_filter]);
@@ -367,7 +365,7 @@ function search_widget_show($action = 'index.php')
 
     // Tool introduction
     // TODO: Settings for the online editor to be checked (insert an image for example). Probably this is a special case here.
-    if (api_get_course_id() !== -1) {
+    if (-1 !== api_get_course_id()) {
         if (!empty($groupId)) {
             Display::display_introduction_section(TOOL_SEARCH.$groupId);
         } else {

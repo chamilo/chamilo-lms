@@ -9,8 +9,6 @@ use Chamilo\CourseBundle\Component\CourseCopy\CourseSelectForm;
  * Delete resources from a course.
  *
  * @author Bart Mollet <bart.mollet@hogent.be>
- *
- * @package chamilo.backup
  */
 require_once __DIR__.'/../inc/global.inc.php';
 $current_course_tool = TOOL_COURSE_MAINTENANCE;
@@ -39,25 +37,25 @@ echo Display::page_header($nameTools);
 $action = isset($_POST['action']) ? $_POST['action'] : '';
 
 if (Security::check_token('post') && (
-        $action === 'course_select_form' ||
+        'course_select_form' === $action ||
         (
             isset($_POST['recycle_option']) &&
-            $_POST['recycle_option'] == 'full_backup'
+            'full_backup' == $_POST['recycle_option']
         )
     )
 ) {
     // Clear token
     Security::clear_token();
-    if (isset($_POST['action']) && $_POST['action'] === 'course_select_form') {
+    if (isset($_POST['action']) && 'course_select_form' === $_POST['action']) {
         $course = CourseSelectForm::get_posted_course();
     } else {
         $cb = new CourseBuilder();
         $course = $cb->build();
     }
     $recycle_type = '';
-    if (isset($_POST['recycle_option']) && $_POST['recycle_option'] === 'full_backup') {
+    if (isset($_POST['recycle_option']) && 'full_backup' === $_POST['recycle_option']) {
         $recycle_type = 'full_backup';
-    } elseif (isset($_POST['action']) && $_POST['action'] === 'course_select_form') {
+    } elseif (isset($_POST['action']) && 'course_select_form' === $_POST['action']) {
         $recycle_type = 'select_items';
     }
     $cr = new CourseRecycler($course);
@@ -65,7 +63,7 @@ if (Security::check_token('post') && (
     echo Display::return_message(get_lang('Recycle is finished'), 'confirm');
 } elseif (Security::check_token('post') && (
         isset($_POST['recycle_option']) &&
-        $_POST['recycle_option'] === 'select_items'
+        'select_items' === $_POST['recycle_option']
     )
 ) {
     // Clear token

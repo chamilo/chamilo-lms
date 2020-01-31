@@ -7,8 +7,6 @@ use Chamilo\CoreBundle\Repository\TrackECourseAccessRepository;
  * See the progress for a user when the gamification mode is active.
  *
  * @author Angel Fernando Quiroz Campos <angel.quiroz@beeznest.com>
- *
- * @package chamilo.gamification
  */
 $cidReset = true;
 require_once __DIR__.'/../inc/global.inc.php';
@@ -18,7 +16,7 @@ $nameTools = get_lang('Progress');
 
 api_block_anonymous_users();
 
-if (api_get_setting('gamification_mode') == '0') {
+if ('0' == api_get_setting('gamification_mode')) {
     api_not_allowed(true);
 }
 

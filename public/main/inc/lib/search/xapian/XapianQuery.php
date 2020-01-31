@@ -1,9 +1,7 @@
 <?php
 
 /* For licensing terms, see /license.txt */
-/**
- * @package chamilo.include.search
- */
+
 require_once 'xapian.php';
 //TODO: think another way without including specific fields here
 require_once api_get_path(LIBRARY_PATH).'specific_fields_manager.lib.php';
@@ -151,7 +149,7 @@ function xapian_get_all_terms($count = 0, $prefix, $db = null)
 
         $terms = [];
         $i = 0;
-        for (; !$termi->equals($db->allterms_end()) && (++$i <= $count || $count == 0); $termi->next()) {
+        for (; !$termi->equals($db->allterms_end()) && (++$i <= $count || 0 == $count); $termi->next()) {
             $terms[] = [
                 'frequency' => $termi->get_termfreq(),
                 'name' => $termi->get_term(),
@@ -252,19 +250,19 @@ function display_xapian_error($xapian_error_message)
 {
     $message = explode(':', $xapian_error_message);
     $type_error_message = $message[0];
-    if ($type_error_message == 'DatabaseOpeningError') {
+    if ('DatabaseOpeningError' == $type_error_message) {
         $message_error = get_lang('Failed to open the search database');
-    } elseif ($type_error_message == 'DatabaseVersionError') {
+    } elseif ('DatabaseVersionError' == $type_error_message) {
         $message_error = get_lang('The search database uses an unsupported format');
-    } elseif ($type_error_message == 'DatabaseModifiedError') {
+    } elseif ('DatabaseModifiedError' == $type_error_message) {
         $message_error = get_lang('The search database has been modified/broken');
-    } elseif ($type_error_message == 'DatabaseLockError') {
+    } elseif ('DatabaseLockError' == $type_error_message) {
         $message_error = get_lang('Failed to lock the search database');
-    } elseif ($type_error_message == 'DatabaseCreateError') {
+    } elseif ('DatabaseCreateError' == $type_error_message) {
         $message_error = get_lang('Failed to create the search database');
-    } elseif ($type_error_message == 'DatabaseCorruptError') {
+    } elseif ('DatabaseCorruptError' == $type_error_message) {
         $message_error = get_lang('The search database has suffered corruption');
-    } elseif ($type_error_message == 'NetworkTimeoutError') {
+    } elseif ('NetworkTimeoutError' == $type_error_message) {
         $message_error = get_lang('Connection timed out while communicating with the remote search database');
     } else {
         $message_error = get_lang('Error in search engine');

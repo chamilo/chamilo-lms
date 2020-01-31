@@ -2,8 +2,6 @@
 /* For licensing terms, see /license.txt */
 /**
  *	@author Julio Montoya <gugli100@gmail.com> BeezNest 2011
- *
- *	@package chamilo.timeline
  */
 require_once __DIR__.'/../inc/global.inc.php';
 
@@ -70,7 +68,7 @@ $timeline = new Timeline();
 // Action handling: Add
 switch ($action) {
     case 'add':
-        if (api_get_session_id() != 0 && !api_is_allowed_to_session_edit(false, true)) {
+        if (0 != api_get_session_id() && !api_is_allowed_to_session_edit(false, true)) {
             api_not_allowed();
         }
         $url = api_get_self().'?action='.Security::remove_XSS($_GET['action']);

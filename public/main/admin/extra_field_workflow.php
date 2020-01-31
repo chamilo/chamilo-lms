@@ -3,9 +3,6 @@
 
 use Chamilo\CoreBundle\Entity\ExtraFieldOptionRelFieldOption;
 
-/**
- *  @package chamilo.admin
- */
 $cidReset = true;
 require_once __DIR__.'/../inc/global.inc.php';
 
@@ -35,7 +32,7 @@ $extraFieldInfo = $extraField->get($field_id);
 $check = Security::check_token('request');
 $token = Security::get_token();
 
-if ($action == 'add') {
+if ('add' == $action) {
     $interbreadcrumb[] = ['url' => 'extra_fields.php?type='.$extraField->type, 'name' => $extraField->pageName];
     $interbreadcrumb[] = [
         'url' => 'extra_fields.php?type='.$extraField->type.'&action=edit&id='.$extraFieldInfo['id'],
@@ -46,7 +43,7 @@ if ($action == 'add') {
         'name' => get_lang('Edit extra field options'),
     ];
     $interbreadcrumb[] = ['url' => '#', 'name' => get_lang('Add')];
-} elseif ($action == 'edit') {
+} elseif ('edit' == $action) {
     $interbreadcrumb[] = [
         'url' => 'extra_fields.php?type='.$extraField->type,
         'name' => $extraField->pageName,
@@ -234,7 +231,7 @@ if ($form->validate()) {
                     ]
                 );
 
-                if ($value == 1) {
+                if (1 == $value) {
                     if (empty($extraFieldOptionRelFieldOption)) {
                         $extraFieldOptionRelFieldOption = new ExtraFieldOptionRelFieldOption();
                         $extraFieldOptionRelFieldOption

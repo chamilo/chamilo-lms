@@ -85,7 +85,7 @@ class LearnpathList
         }
 
         $categoryFilter = '';
-        if ($ignoreCategoryFilter == false) {
+        if (false == $ignoreCategoryFilter) {
             if (!empty($categoryId)) {
                 $categoryId = (int) $categoryId;
                 $categoryFilter = " AND lp.categoryId = $categoryId";
@@ -147,14 +147,14 @@ class LearnpathList
             $visibility = $lp->isVisible($courseEntity, $sessionEntity);
 
             // If option is not true then don't show invisible LP to user
-            if ($ignoreLpVisibility === false) {
-                if ($showBlockedPrerequisite !== true && !$isAllowToEdit) {
+            if (false === $ignoreLpVisibility) {
+                if (true !== $showBlockedPrerequisite && !$isAllowToEdit) {
                     $lpVisibility = learnpath::is_lp_visible_for_student(
                         $lp,
                         $user_id,
                         $courseInfo
                     );
-                    if ($lpVisibility === false) {
+                    if (false === $lpVisibility) {
                         continue;
                     }
                 }

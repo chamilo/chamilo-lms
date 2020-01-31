@@ -117,7 +117,7 @@ switch ($type) {
         break;
 }
 
-if ($action === 'add_item' && $type === 'document') {
+if ('add_item' === $action && 'document' === $type) {
     $interbreadcrumb[] = ['url' => '#', 'name' => get_lang('The rich media page/activity has been added to the course')];
 }
 
@@ -198,7 +198,7 @@ echo $learnPath->return_new_tree(null, true);
 $message = isset($_REQUEST['message']) ? $_REQUEST['message'] : null;
 
 // Show the template list.
-if (($type == 'document' || $type == 'step') && !isset($_GET['file'])) {
+if (('document' == $type || 'step' == $type) && !isset($_GET['file'])) {
     // Show the template list.
     echo '<div id="frmModel" class="scrollbar-inner lp-add-item">';
     echo '</div>';

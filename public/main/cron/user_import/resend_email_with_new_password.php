@@ -7,8 +7,6 @@
  * Note that the password generation has been simplified, which
  * means the password below is not really "safe"
  * To enable script, prefix the first die(); with //.
- *
- * @package chamilo.cron.user_import
  */
 /**
  * Initialization.
@@ -34,10 +32,10 @@ foreach ($list as $mail) {
     $sql = "SELECT user_id, official_code, firstname, lastname, email, username, language
             FROM $users WHERE email = '$mail'\n";
     $res = Database::query($sql);
-    if ($res === false) {
+    if (false === $res) {
         echo 'Error in database with email '.$mail."\n";
     }
-    if (Database::num_rows($res) == 0) {
+    if (0 == Database::num_rows($res)) {
         echo '[Error] Email not found in database: '.$row['email']."\n";
     } else {
         $row = Database::fetch_assoc($res);

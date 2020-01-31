@@ -84,7 +84,7 @@ function checkExtension(
     if (extension_loaded($extensionName)) {
         if (!empty($enabledTerm)) {
             $isEnabled = ini_get($enabledTerm);
-            if ($isEnabled == '1') {
+            if ('1' == $isEnabled) {
                 return Display::label($returnSuccess, 'success');
             } else {
                 if ($optional) {
@@ -141,7 +141,7 @@ function checkPhpSetting(
  */
 function checkPhpSettingExists($phpSetting)
 {
-    if (ini_get($phpSetting) != "") {
+    if ("" != ini_get($phpSetting)) {
         return ini_get($phpSetting);
     }
 
@@ -167,7 +167,7 @@ function getPhpSetting($val)
             break;
     }
 
-    return $value == '1' ? 'ON' : 'OFF';
+    return '1' == $value ? 'ON' : 'OFF';
 }
 
 /**
@@ -268,7 +268,7 @@ function detect_browser_language()
     $system_available_languages = get_language_folder_list();
     $accept_languages = strtolower(str_replace('_', '-', $_SERVER['HTTP_ACCEPT_LANGUAGE']));
     foreach ($language_index as $code => $language) {
-        if (strpos($accept_languages, $code) === 0) {
+        if (0 === strpos($accept_languages, $code)) {
             if (!empty($system_available_languages[$language])) {
                 return $language;
             }
@@ -565,7 +565,7 @@ function get_config_param_from_db($param = '')
 {
     $param = Database::escape_string($param);
 
-    if (($res = Database::query("SELECT * FROM settings_current WHERE variable = '$param'")) !== false) {
+    if (false !== ($res = Database::query("SELECT * FROM settings_current WHERE variable = '$param'"))) {
         if (Database::num_rows($res) > 0) {
             $row = Database::fetch_array($res);
 
@@ -738,7 +738,7 @@ function display_requirements(
 
     foreach ($perms_dir as $perm) {
         $r = @mkdir($dir, $perm);
-        if ($r === true) {
+        if (true === $r) {
             $dir_perm_verified = $perm;
             $course_test_was_created = true;
             break;
@@ -749,11 +749,11 @@ function display_requirements(
     $file_course_test_was_created = false;
     if (is_dir($dir)) {
         foreach ($perms_fil as $perm) {
-            if ($file_course_test_was_created == true) {
+            if (true == $file_course_test_was_created) {
                 break;
             }
             $r = @touch($dir.'/'.$fileToCreate, $perm);
-            if ($r === true) {
+            if (true === $r) {
                 $fil_perm_verified = $perm;
                 $file_course_test_was_created = true;
             }
@@ -768,7 +768,7 @@ function display_requirements(
     echo '<strong>'.get_lang('Please read the following requirements thoroughly.').'</strong><br />';
     echo get_lang('For more details').' <a href="../../documentation/installation_guide.html" target="_blank">'.get_lang('Read the installation guide').'</a>.<br />'."\n";
 
-    if ($installType == 'update') {
+    if ('update' == $installType) {
         echo get_lang('If you plan to upgrade from an older version of Chamilo, you might want to <a href="../../documentation/changelog.html" target="_blank">have a look at the changelog</a> to know what\'s new and what has been changed').'<br />';
     }
     echo '</div>';
@@ -967,7 +967,7 @@ function display_requirements(
 
     echo '</div>';
 
-    if ($installType === 'update' && (empty($updatePath) || $badUpdatePath)) {
+    if ('update' === $installType && (empty($updatePath) || $badUpdatePath)) {
         if ($badUpdatePath) {
             ?>
             <div class="alert alert-warning">
@@ -1010,7 +1010,7 @@ function display_requirements(
             @chmod($checked_writable, $perm);
         }
 
-        if ($course_test_was_created == false) {
+        if (false == $course_test_was_created) {
             $error = true;
         }
 
@@ -1290,14 +1290,14 @@ function displayDatabaseParameter(
     //echo "<tr ".$tr_attribute.">";
     echo "<label class='col-sm-4'>$parameterName</label>";
 
-    if ($installType == INSTALL_TYPE_UPDATE && $displayWhenUpdate) {
+    if (INSTALL_TYPE_UPDATE == $installType && $displayWhenUpdate) {
         echo '<input type="hidden" name="'.$formFieldName.'" id="'.$formFieldName.'" value="'.api_htmlentities($parameterValue).'" />'.$parameterValue;
     } else {
-        $inputType = $formFieldName == 'dbPassForm' ? 'password' : 'text';
+        $inputType = 'dbPassForm' == $formFieldName ? 'password' : 'text';
 
         //Slightly limit the length of the database prefix to avoid having to cut down the databases names later on
-        $maxLength = $formFieldName == 'dbPrefixForm' ? '15' : MAX_FORM_FIELD_LENGTH;
-        if ($installType == INSTALL_TYPE_UPDATE) {
+        $maxLength = 'dbPrefixForm' == $formFieldName ? '15' : MAX_FORM_FIELD_LENGTH;
+        if (INSTALL_TYPE_UPDATE == $installType) {
             echo '<input type="hidden" name="'.$formFieldName.'" id="'.$formFieldName.'" value="'.api_htmlentities($parameterValue).'" />';
             echo api_htmlentities($parameterValue);
         } else {
@@ -1329,7 +1329,7 @@ function display_database_settings_form(
     $dbPortForm = 3306,
     $installationProfile = ''
 ) {
-    if ($installType == 'update') {
+    if ('update' == $installType) {
         global $_configuration;
         $dbHostForm = $_configuration['db_host'];
         $dbUsernameForm = $_configuration['db_user'];
@@ -1351,7 +1351,7 @@ function display_database_settings_form(
         <div class="panel-body">
         <div class="form-group row">
             <label class="col-sm-4"><?php echo get_lang('Database Host'); ?> </label>
-            <?php if ($installType == 'update') {
+            <?php if ('update' == $installType) {
         ?>
             <div class="col-sm-5">
                 <input type="hidden" name="dbHostForm" value="<?php echo htmlentities($dbHostForm); ?>" /><?php echo $dbHostForm; ?>
@@ -1369,7 +1369,7 @@ function display_database_settings_form(
         </div>
         <div class="form-group row">
             <label class="col-sm-4"><?php echo get_lang('Port'); ?> </label>
-            <?php if ($installType == 'update') {
+            <?php if ('update' == $installType) {
         ?>
             <div class="col-sm-5">
                 <input type="hidden" name="dbPortForm" value="<?php echo htmlentities($dbPortForm); ?>" /><?php echo $dbPortForm; ?>
@@ -1400,7 +1400,7 @@ function display_database_settings_form(
         <div class="form-group row">
             <?php
             //Database Name fix replace weird chars
-            if ($installType != INSTALL_TYPE_UPDATE) {
+            if (INSTALL_TYPE_UPDATE != $installType) {
                 $dbNameForm = str_replace(['-', '*', '$', ' ', '.'], '', $dbNameForm);
             }
 
@@ -1414,7 +1414,7 @@ function display_database_settings_form(
                 'id="optional_param1"'
                 ); ?>
         </div>
-       <?php if ($installType != INSTALL_TYPE_UPDATE) {
+       <?php if (INSTALL_TYPE_UPDATE != $installType) {
                     ?>
         <div class="form-group row">
             <div class="col-sm-4"></div>
@@ -1434,7 +1434,7 @@ function display_database_settings_form(
         $database_exists_text = '';
     $manager = null;
     try {
-        if ($installType === 'update') {
+        if ('update' === $installType) {
             /** @var \Database $manager */
             $manager = connectToDatabase(
                 $dbHostForm,
@@ -1459,7 +1459,7 @@ function display_database_settings_form(
                 $sql = "ALTER TABLE $table ADD COLUMN name2 varchar(140) ";
                 $connection->query($sql);
                 $schemaManager->dropTable($table);
-                $tableDropWorks = $schemaManager->tablesExist($table) === false;
+                $tableDropWorks = false === $schemaManager->tablesExist($table);
             }
         } else {
             $manager = connectToDatabase(
@@ -1488,7 +1488,7 @@ function display_database_settings_form(
             Database port: <strong><?php echo $manager->getConnection()->getPort(); ?></strong><br/>
             Database driver: <strong><?php echo $manager->getConnection()->getDriver()->getName(); ?></strong><br/>
             <?php
-                if ($installType === 'update') {
+                if ('update' === $installType) {
                     echo get_lang('CreateTableWorks').' <strong>Ok</strong>';
                     echo '<br/ >';
                     echo get_lang('AlterTableWorks').' <strong>Ok</strong>';
@@ -1568,7 +1568,7 @@ function display_configuration_parameter(
 ) {
     $html = '<div class="form-group row">';
     $html .= '<label class="col-sm-6 control-label">'.$parameterName.'</label>';
-    if ($installType == INSTALL_TYPE_UPDATE && $displayWhenUpdate) {
+    if (INSTALL_TYPE_UPDATE == $installType && $displayWhenUpdate) {
         $html .= '<input type="hidden" name="'.$formFieldName.'" value="'.api_htmlentities($parameterValue, ENT_QUOTES).'" />'.$parameterValue;
     } else {
         $html .= '<div class="col-sm-6"><input class="form-control" type="text" size="'.FORM_FIELD_DISPLAY_LENGTH.'" maxlength="'.MAX_FORM_FIELD_LENGTH.'" name="'.$formFieldName.'" value="'.api_htmlentities($parameterValue, ENT_QUOTES).'" />'."</div>";
@@ -1614,7 +1614,7 @@ function display_configuration_settings_form(
     $loginForm,
     $passForm
 ) {
-    if ($installType != 'update' && empty($languageForm)) {
+    if ('update' != $installType && empty($languageForm)) {
         $languageForm = $_SESSION['install_language'];
     }
     echo '<div class="RequirementHeading">';
@@ -1628,11 +1628,11 @@ function display_configuration_settings_form(
         get_lang('Administrator login'),
         'loginForm',
         $loginForm,
-        $installType == 'update'
+        'update' == $installType
     );
 
     // Parameter 2: administrator's password
-    if ($installType != 'update') {
+    if ('update' != $installType) {
         $html .= display_configuration_parameter($installType, get_lang('Administrator password (<font color="red">you may want to change this</font>)'), 'passForm', $passForm, false);
     }
 
@@ -1656,7 +1656,7 @@ function display_configuration_settings_form(
     //First parameter: language
     $html = '<div class="form-group row">';
     $html .= '<label class="col-sm-6 control-label">'.get_lang('Main language')."</label>";
-    if ($installType == 'update') {
+    if ('update' == $installType) {
         $html .= '<input type="hidden" name="languageForm" value="'.api_htmlentities($languageForm, ENT_QUOTES).'" />'.$languageForm;
     } else { // new installation
         $html .= '<div class="col-sm-6">';
@@ -1669,7 +1669,7 @@ function display_configuration_settings_form(
     $html .= '<div class="form-group row">';
     $html .= '<label class="col-sm-6 control-label">'.get_lang('Chamilo URL').get_lang('Required field').'</label>';
 
-    if ($installType == 'update') {
+    if ('update' == $installType) {
         $html .= api_htmlentities($urlForm, ENT_QUOTES)."\n";
     } else {
         $html .= '<div class="col-sm-6">';
@@ -1705,24 +1705,24 @@ function display_configuration_settings_form(
     $html .= '<div class="form-group row">
             <label class="col-sm-6 control-label">'.get_lang("Encryption method").'</label>
         <div class="col-sm-6">';
-    if ($installType == 'update') {
+    if ('update' == $installType) {
         $html .= '<input type="hidden" name="encryptPassForm" value="'.$encryptPassForm.'" />'.$encryptPassForm;
     } else {
         $html .= '<div class="checkbox">
                     <label>
-                        <input  type="radio" name="encryptPassForm" value="bcrypt" id="encryptPass1" '.($encryptPassForm == 'bcrypt' ? 'checked="checked" ' : '').'/> bcrypt
+                        <input  type="radio" name="encryptPassForm" value="bcrypt" id="encryptPass1" '.('bcrypt' == $encryptPassForm ? 'checked="checked" ' : '').'/> bcrypt
                     </label>';
 
         $html .= '<label>
-                        <input  type="radio" name="encryptPassForm" value="sha1" id="encryptPass1" '.($encryptPassForm == 'sha1' ? 'checked="checked" ' : '').'/> sha1
+                        <input  type="radio" name="encryptPassForm" value="sha1" id="encryptPass1" '.('sha1' == $encryptPassForm ? 'checked="checked" ' : '').'/> sha1
                     </label>';
 
         $html .= '<label>
-                        <input type="radio" name="encryptPassForm" value="md5" id="encryptPass0" '.($encryptPassForm == 'md5' ? 'checked="checked" ' : '').'/> md5
+                        <input type="radio" name="encryptPassForm" value="md5" id="encryptPass0" '.('md5' == $encryptPassForm ? 'checked="checked" ' : '').'/> md5
                     </label>';
 
         $html .= '<label>
-                        <input type="radio" name="encryptPassForm" value="none" id="encryptPass2" '.($encryptPassForm == 'none' ? 'checked="checked" ' : '').'/>'.get_lang('none').'
+                        <input type="radio" name="encryptPassForm" value="none" id="encryptPass2" '.('none' == $encryptPassForm ? 'checked="checked" ' : '').'/>'.get_lang('none').'
                     </label>';
         $html .= '</div>';
     }
@@ -1731,10 +1731,10 @@ function display_configuration_settings_form(
     $html .= '<div class="form-group row">
             <label class="col-sm-6 control-label">'.get_lang('Allow self-registration').'</label>
             <div class="col-sm-6">';
-    if ($installType == 'update') {
-        if ($allowSelfReg == 'true') {
+    if ('update' == $installType) {
+        if ('true' == $allowSelfReg) {
             $label = get_lang('Yes');
-        } elseif ($allowSelfReg == 'false') {
+        } elseif ('false' == $allowSelfReg) {
             $label = get_lang('No');
         } else {
             $label = get_lang('After approval');
@@ -1743,13 +1743,13 @@ function display_configuration_settings_form(
     } else {
         $html .= '<div class="control-group">';
         $html .= '<label class="checkbox-inline">
-                        <input type="radio" name="allowSelfReg" value="true" id="allowSelfReg1" '.($allowSelfReg == 'true' ? 'checked="checked" ' : '').' /> '.get_lang('Yes').'
+                        <input type="radio" name="allowSelfReg" value="true" id="allowSelfReg1" '.('true' == $allowSelfReg ? 'checked="checked" ' : '').' /> '.get_lang('Yes').'
                     </label>';
         $html .= '<label class="checkbox-inline">
-                        <input type="radio" name="allowSelfReg" value="false" id="allowSelfReg0" '.($allowSelfReg == 'false' ? '' : 'checked="checked" ').' /> '.get_lang('No').'
+                        <input type="radio" name="allowSelfReg" value="false" id="allowSelfReg0" '.('false' == $allowSelfReg ? '' : 'checked="checked" ').' /> '.get_lang('No').'
                     </label>';
         $html .= '<label class="checkbox-inline">
-                    <input type="radio" name="allowSelfReg" value="approval" id="allowSelfReg2" '.($allowSelfReg == 'approval' ? '' : 'checked="checked" ').' /> '.get_lang('After approval').'
+                    <input type="radio" name="allowSelfReg" value="approval" id="allowSelfReg2" '.('approval' == $allowSelfReg ? '' : 'checked="checked" ').' /> '.get_lang('After approval').'
                 </label>';
         $html .= '</div>';
     }
@@ -1759,8 +1759,8 @@ function display_configuration_settings_form(
     $html .= '<div class="form-group row">';
     $html .= '<label class="col-sm-6 control-label">'.get_lang('Allow self-registrationProf').'</label>
         <div class="col-sm-6">';
-    if ($installType == 'update') {
-        if ($allowSelfRegProf == 'true') {
+    if ('update' == $installType) {
+        if ('true' == $allowSelfRegProf) {
             $label = get_lang('Yes');
         } else {
             $label = get_lang('No');
@@ -2582,7 +2582,7 @@ function fixIds(EntityManager $em)
                             'item_id' => $value[$handlerId],
                         ];
                         $connection->insert('extra_field_values', $params);
-                        if ($debug && ($k % 10000 == 0)) {
+                        if ($debug && (0 == $k % 10000)) {
                             error_log("Saving field $k");
                         }
                         $k++;
@@ -2708,7 +2708,7 @@ function fixLpId($connection, $debug)
                         }
                     }
 
-                    if ($item['item_type'] == 'document' && !empty($item['path'])) {
+                    if ('document' == $item['item_type'] && !empty($item['path'])) {
                         $oldDocumentId = $item['path'];
                         $sql = "SELECT * FROM c_document WHERE c_id = $courseId AND id = $oldDocumentId";
                         $result = $connection->query($sql);
@@ -2982,7 +2982,7 @@ function installPages($container)
     $blockInteractor = $container->get('sonata.page.block_interactor');
     $parentBlock = null;
     foreach ($containers as $id => $area) {
-        if (false === $area['block'] && $templateContainers[$id]['shared'] === false) {
+        if (false === $area['block'] && false === $templateContainers[$id]['shared']) {
             $block = $blockInteractor->createNewContainer(
                 [
                     'page' => $pageWelcome,
@@ -2991,7 +2991,7 @@ function installPages($container)
                 ]
             );
 
-            if ($id === 'content' && $templateContainers[$id]['name'] == 'Main content') {
+            if ('content' === $id && 'Main content' == $templateContainers[$id]['name']) {
                 $parentBlock = $block;
             }
         }
@@ -3183,7 +3183,7 @@ function finishInstallationWithContainer(
             ->setProject($ticketProject)
             ->setInsertUserId(1);
 
-        $isRequired = $i == 6;
+        $isRequired = 6 == $i;
         $ticketCategory->setCourseRequired($isRequired);
 
         $manager->persist($ticketCategory);
@@ -3402,7 +3402,7 @@ function installProfileSettings($installationProfile = '')
     }
     $json = file_get_contents($jsonPath);
     $params = json_decode($json);
-    if ($params === false or $params === null) {
+    if (false === $params or null === $params) {
         return false;
     }
     $settings = $params->params;
@@ -3439,8 +3439,8 @@ function rrmdir($dir)
     if (is_dir($dir)) {
         $objects = scandir($dir);
         foreach ($objects as $object) {
-            if ($object != "." && $object != "..") {
-                if (filetype($dir."/".$object) == "dir") {
+            if ("." != $object && ".." != $object) {
+                if ("dir" == filetype($dir."/".$object)) {
                     @rrmdir($dir."/".$object);
                 } else {
                     @unlink($dir."/".$object);
@@ -3494,7 +3494,7 @@ function get_group_picture_path_by_id($id, $type = 'web', $preview = false, $ano
     $user = Database::fetch_array($res);
     $picture_filename = trim($user['picture_uri']);
 
-    if (api_get_setting('split_users_upload_directory') === 'true') {
+    if ('true' === api_get_setting('split_users_upload_directory')) {
         if (!empty($picture_filename)) {
             $dir = $base.'groups/'.substr($picture_filename, 0, 1).'/'.$id.'/';
         } elseif ($preview) {

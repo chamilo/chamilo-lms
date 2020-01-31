@@ -58,7 +58,7 @@ class HtmlEditor extends HTML_QuickForm_textarea
         if ($this->editor) {
             if ($this->editor->getConfigAttribute('fullPage')) {
                 $value = $this->getValue();
-                if (strlen(trim($value)) == 0) {
+                if (0 == strlen(trim($value))) {
                     // TODO: To be considered whether here to add
                     // language and character set declarations.
                     $value = '<!DOCTYPE html><html><head><title></title></head><body></body></html>';
@@ -103,7 +103,7 @@ class HtmlEditor extends HTML_QuickForm_textarea
 
             $this->editor->setName($this->getName());
             $this->editor->setTextareaId($this->getAttribute('id'));
-            if ($style === true) {
+            if (true === $style) {
                 $result = $this->editor->createHtmlStyle($value);
             } else {
                 $result = $this->editor->createHtml($value);

@@ -9,15 +9,13 @@
  * @uses /main/webservices/user_import/
  *
  * @author Eric Marguin <eric.marguin@dokeos.com>
- *
- * @package chamilo.cron
  */
 /**
  * Global cycle: init, execute, output.
  */
 require_once __DIR__.'/../../inc/global.inc.php';
 // check if this client has been called by php_cli (command line or cron)
-if (php_sapi_name() != 'cli') {
+if ('cli' != php_sapi_name()) {
     echo 'You can\'t call this service through a browser';
     die();
 }

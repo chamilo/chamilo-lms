@@ -5,8 +5,6 @@ use Chamilo\CoreBundle\Entity\ExtraField;
 
 /**
  * Sub language AJAX script to update variables.
- *
- * @package chamilo.admin.sub_language
  */
 $this_script = 'sub_language';
 require_once __DIR__.'/../inc/global.inc.php';
@@ -41,7 +39,7 @@ if (isset($new_language) && isset($language_variable) && isset($file_id)) {
     $variables_with_problems = '';
     if (!empty($result_array)) {
         foreach ($result_array as $key => $result) {
-            if ($result == false) {
+            if (false == $result) {
                 $variables_with_problems .= $key.' <br />';
             }
         }

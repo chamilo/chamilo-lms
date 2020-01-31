@@ -63,7 +63,7 @@ switch ($action) {
             $toolImage = $tool->getImage();
             $customIcon = $tool->getCustomIcon();
 
-            if (api_get_setting('homepage_view') != 'activity_big') {
+            if ('activity_big' != api_get_setting('homepage_view')) {
                 $toolImage = Display::return_icon(
                     $toolImage,
                     null,
@@ -92,13 +92,13 @@ switch ($action) {
                 $inactiveImage = CourseHome::getCustomWebIconPath().CourseHome::getDisableIcon($customIcon);
             }
 
-            $requested_image = $visibility == 0 ? $toolImage : $inactiveImage;
-            $requested_class = $visibility == 0 ? '' : 'text-muted';
-            $requested_message = $visibility == 0 ? 'is_active' : 'is_inactive';
-            $requested_view = $visibility == 0 ? 'visible.png' : 'invisible.png';
-            $requestedVisible = $visibility == 0 ? 1 : 0;
-            $requested_view = $visibility == 0 ? 'visible.png' : 'invisible.png';
-            $requestedVisible = $visibility == 0 ? 1 : 0;
+            $requested_image = 0 == $visibility ? $toolImage : $inactiveImage;
+            $requested_class = 0 == $visibility ? '' : 'text-muted';
+            $requested_message = 0 == $visibility ? 'is_active' : 'is_inactive';
+            $requested_view = 0 == $visibility ? 'visible.png' : 'invisible.png';
+            $requestedVisible = 0 == $visibility ? 1 : 0;
+            $requested_view = 0 == $visibility ? 'visible.png' : 'invisible.png';
+            $requestedVisible = 0 == $visibility ? 1 : 0;
 
             // HIDE AND REACTIVATE TOOL
             if ($_GET['id'] == strval(intval($_GET['id']))) {
@@ -142,8 +142,8 @@ switch ($action) {
         $course_info = api_get_course_info($_GET['code']);
         $content = get_lang('No description');
         if (!empty($course_info)) {
-            if (api_get_setting('course_catalog_hide_private') === 'true' &&
-                $course_info['visibility'] == COURSE_VISIBILITY_REGISTERED
+            if ('true' === api_get_setting('course_catalog_hide_private') &&
+                COURSE_VISIBILITY_REGISTERED == $course_info['visibility']
             ) {
                 echo get_lang('Private access');
                 break;
@@ -215,7 +215,7 @@ switch ($action) {
                 $temp[$count]['id'] = $lp_id;
 
                 $lp = new learnpath($item['code'], $lp_id, api_get_user_id());
-                if ($lp->progress_db == 100) {
+                if (100 == $lp->progress_db) {
                     continue;
                 }
 

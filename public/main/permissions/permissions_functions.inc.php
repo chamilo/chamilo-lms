@@ -9,8 +9,6 @@
  *    limited_or_full($current_permissions)
  *
  * @author Patrick Cool <patrick.cool@ugent.be>, Ghent University
- *
- * @package chamilo.permissions
  */
 
 /**
@@ -31,15 +29,15 @@ function store_permissions($content, $id)
     $course_id = api_get_course_int_id();
 
     // Which database are we using (depending on the $content parameter)
-    if ($content == 'user') {
+    if ('user' == $content) {
         $table = Database::get_course_table(TABLE_PERMISSION_USER);
         $id_field = user_id;
     }
-    if ($content == 'group') {
+    if ('group' == $content) {
         $table = Database::get_course_table(TABLE_PERMISSION_GROUP);
         $id_field = group_id;
     }
-    if ($content == 'role') {
+    if ('role' == $content) {
         $table = Database::get_course_table(TABLE_ROLE_PERMISSION);
         $id_field = role_id;
     }
@@ -87,28 +85,28 @@ function store_one_permission($content, $action, $id, $tool, $permission)
 
     // Which database are we using (depending on the $content parameter)
 
-    if ($content == 'user') {
+    if ('user' == $content) {
         $table = Database::get_course_table(TABLE_PERMISSION_USER);
         $id_field = user_id;
     }
-    if ($content == 'group') {
+    if ('group' == $content) {
         $table = Database::get_course_table(TABLE_PERMISSION_GROUP);
         $id_field = group_id;
     }
-    if ($content == 'role') {
+    if ('role' == $content) {
         $table = Database::get_course_table(TABLE_ROLE_PERMISSION);
         $id_field = role_id;
     }
 
     // grating a right
-    if ($action == 'grant') {
+    if ('grant' == $action) {
         $sql = "INSERT INTO $table (c_id, $id_field,tool,action) VALUES ($course_id, '".Database::escape_string($id)."','".Database::escape_string($tool)."','".Database::escape_string($permission)."')";
         $result = Database::query($sql);
         if ($result) {
             $result_message = get_lang('PermissionGranted');
         }
     }
-    if ($action == 'revoke') {
+    if ('revoke' == $action) {
         $sql = "DELETE FROM $table WHERE c_id = $course_id AND $id_field = '".Database::escape_string($id)."' AND tool='".Database::escape_string($tool)."' AND action='".Database::escape_string($permission)."'";
         $result = Database::query($sql);
         if ($result) {
@@ -135,20 +133,20 @@ function get_permissions($content, $id)
     $currentpermissions = [];
     // Which database are we using (depending on the $content parameter)
     $course_id_condition = " c_id = $course_id AND ";
-    if ($content == 'user') {
+    if ('user' == $content) {
         $table = Database::get_course_table(TABLE_PERMISSION_USER);
         $id_field = 'user_id';
-    } elseif ($content == 'group') {
+    } elseif ('group' == $content) {
         $table = Database::get_course_table(TABLE_PERMISSION_GROUP);
         $id_field = 'group_id';
-    } elseif ($content == 'role') {
+    } elseif ('role' == $content) {
         $table = Database::get_course_table(TABLE_ROLE_PERMISSION);
         $id_field = 'role_id';
-    } elseif ($content == 'platform_role') {
+    } elseif ('platform_role' == $content) {
         $table = Database::get_main_table(TABLE_ROLE_PERMISSION);
         $id_field = 'role_id';
         $course_id_condition = '';
-    } elseif ($content == 'task') {
+    } elseif ('task' == $content) {
         $table = Database::get_course_table(TABLE_BLOGS_TASKS_PERMISSIONS);
         $id_field = 'task_id';
     }
@@ -182,15 +180,15 @@ function get_permissions($content, $id)
  */
 function limited_or_full($current_permissions)
 {
-    if (api_get_setting('permissions') == 'limited') {
+    if ('limited' == api_get_setting('permissions')) {
         foreach ($current_permissions as $tool => $tool_rights) {
             // we loop through the possible permissions of a tool and unset the entry if it is view
             // if it is visibility or move we have to grant the edit right
             foreach ($tool_rights as $key => $value) {
-                if ($value == 'View') {
+                if ('View' == $value) {
                     unset($current_permissions[$tool][$key]);
                 }
-                if ($value == 'Visibility' or $value == 'Move') {
+                if ('Visibility' == $value or 'Move' == $value) {
                     if (!in_array('Edit', $current_permissions[$tool])) {
                         $current_permissions[$tool][] = 'Edit';
                     }
@@ -205,7 +203,7 @@ function limited_or_full($current_permissions)
 
         return $current_permissions;
     }
-    if (api_get_setting('permissions') == 'full') {
+    if ('full' == api_get_setting('permissions')) {
         return $current_permissions;
     }
 }
@@ -401,10 +399,10 @@ function display_role_list($current_course_roles, $current_platform_roles)
             $image = 'wrong.gif';
             $action = 'grant';
         }
-        if ($setting_visualisation == 'checkbox') {
+        if ('checkbox' == $setting_visualisation) {
             echo "<input type=\"checkbox\" name=\"role*course*".$row['role_id']."\" $checked>";
         }
-        if ($setting_visualisation == 'image') {
+        if ('image' == $setting_visualisation) {
             echo "<a href=\"".str_replace('&', '&amp;', $_SERVER['REQUEST_URI'])."&amp;action=$action&amp;role=".$row['role_id']."&amp;scope=course\"><img src=\"../img/".$image."\" border=\"0\"/></a>";
         }
 
@@ -430,11 +428,11 @@ function display_role_list($current_course_roles, $current_platform_roles)
 function get_roles($content, $id, $scope = 'course')
 {
     $course_id = api_get_course_int_id();
-    if ($content == 'user') {
+    if ('user' == $content) {
         $table = Database::get_course_table(TABLE_ROLE_USER);
         $id_field = user_id;
     }
-    if ($content == 'group') {
+    if ('group' == $content) {
         $table = Database::get_course_table(TABLE_ROLE_GROUP);
         $id_field = 'group_id';
     }
@@ -465,10 +463,10 @@ function get_all_roles($content = 'course')
     $course_id = api_get_course_int_id();
     $course_id_condition = " WHERE c_id = $course_id ";
 
-    if ($content == 'course') {
+    if ('course' == $content) {
         $table_role = Database::get_course_table(TABLE_ROLE);
     }
-    if ($content == 'platform') {
+    if ('platform' == $content) {
         $table_role = Database::get_main_table(TABLE_ROLE);
         $course_id_condition = '';
     }
@@ -501,26 +499,26 @@ function get_all_roles($content = 'course')
 function get_roles_permissions($content, $id, $scope = 'course')
 {
     $course_id = api_get_course_int_id();
-    if ($content == 'user') {
+    if ('user' == $content) {
         $table = Database::get_course_table(TABLE_ROLE_USER);
         $id_field = 'user_id';
     }
 
-    if ($content == 'group') {
+    if ('group' == $content) {
         $table = Database::get_course_table(TABLE_ROLE_GROUP);
         $id_field = 'group_id';
     }
 
     // course roles or platform roles
     $scope = 'course';
-    if ($scope == 'course') {
+    if ('course' == $scope) {
         $table_role = Database::get_course_table(TABLE_ROLE);
         $table_role_permissions = Database::get_course_table(TABLE_ROLE_PERMISSION);
 
         $role_condition = " role.c_id = $course_id AND role_permissions.c_id = $course_id AND ";
     }
 
-    if ($scope == 'platform') {
+    if ('platform' == $scope) {
         $table_role = Database::get_main_table(TABLE_ROLE);
         $table_role_permissions = Database::get_main_table(TABLE_ROLE_PERMISSION);
         $role_condition = '';
@@ -563,10 +561,10 @@ function assign_role($content, $action, $id, $role_id, $scope = 'course')
 {
     $course_id = api_get_course_int_id();
     // Which database are we using (depending on the $content parameter)
-    if ($content == 'user') {
+    if ('user' == $content) {
         $table = Database::get_course_table(TABLE_ROLE_USER);
         $id_field = 'user_id';
-    } elseif ($content == 'group') {
+    } elseif ('group' == $content) {
         $table = Database::get_course_table(TABLE_ROLE_GROUP);
         $id_field = 'group_id';
     } else {
@@ -574,7 +572,7 @@ function assign_role($content, $action, $id, $role_id, $scope = 'course')
     }
 
     // grating a right
-    if ($action == 'grant') {
+    if ('grant' == $action) {
         $sql = "INSERT INTO $table (c_id, role_id, scope, $id_field) VALUES ($course_id, '".Database::escape_string($role_id)."','".Database::escape_string($scope)."','".Database::escape_string($id)."')";
         $result = Database::query($sql);
         if ($result) {
@@ -582,7 +580,7 @@ function assign_role($content, $action, $id, $role_id, $scope = 'course')
         }
     }
 
-    if ($action == 'revoke') {
+    if ('revoke' == $action) {
         $sql = "DELETE FROM $table WHERE c_id = $course_id AND $id_field = '".Database::escape_string($id)."' AND role_id='".Database::escape_string($role_id)."'";
         $result = Database::query($sql);
         if ($result) {

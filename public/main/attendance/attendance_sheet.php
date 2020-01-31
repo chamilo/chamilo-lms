@@ -251,7 +251,7 @@ if (api_is_allowed_to_edit(null, true) ||
                                 </td>
                             </tr>
                             <?php
-                            ++$i;
+                            $i++;
         } ?>
                         </tbody>
                     </table>
@@ -393,7 +393,7 @@ if (api_is_allowed_to_edit(null, true) ||
                         </td>';
             }
             echo '</tr>';
-            ++$i;
+            $i++;
         }
         echo '</tbody></table>';
         echo '</div></div>'; ?>

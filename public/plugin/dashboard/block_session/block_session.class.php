@@ -121,7 +121,7 @@ class BlockSession extends Block
                                         <td align="center">'.$date.'</td>
                                         <td align="center">'.$count_courses_in_session.'</td>
                                    </tr>';
-                ++$i;
+                $i++;
             }
             $sessions_table .= '</table>';
             $content .= $sessions_table;

@@ -6,8 +6,6 @@
  * to be the same as in the application which calls the webservice).
  * This script should be called any time a new user (or a large group of new
  * users) is added to the database.
- *
- * @package chamilo.webservices
  */
 //remove the next line to enable the script (this can harm your database so
 // don't enable unless you know what you're doing and you have a backup)

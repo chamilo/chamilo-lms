@@ -137,7 +137,7 @@ class CourseHome
         $session_id = api_get_session_id();
         $is_platform_admin = api_is_platform_admin();
         $allowEditionInSession = api_get_configuration_value('allow_edit_tool_visibility_in_session');
-        if ($session_id == 0) {
+        if (0 == $session_id) {
             $is_allowed_to_edit = api_is_allowed_to_edit(null, true) && api_is_course_admin();
         } else {
             $is_allowed_to_edit = api_is_allowed_to_edit(null, true) && !api_is_coach();
@@ -155,7 +155,7 @@ class CourseHome
             $toolModel = $toolChain->getToolFromName($tool->getTool()->getName());
             if ($is_allowed_to_edit) {
                 if (empty($session_id)) {
-                    if ($tool->getVisibility() == '1' && $toolAdmin != '1') {
+                    if ('1' == $tool->getVisibility() && '1' != $toolAdmin) {
                         $link['name'] = Display::return_icon(
                             'visible.png',
                             get_lang('Deactivate'),
@@ -164,7 +164,7 @@ class CourseHome
                             false
                         );
                     }
-                    if ($tool->getVisibility() == '0' && $toolAdmin != '1') {
+                    if ('0' == $tool->getVisibility() && '1' != $toolAdmin) {
                         $link['name'] = Display::return_icon(
                             'invisible.png',
                             get_lang('Activate'),
@@ -207,7 +207,7 @@ class CourseHome
 
             // Both checks are necessary as is_platform_admin doesn't take student view into account
             if ($is_platform_admin && $is_allowed_to_edit) {
-                if ($toolAdmin != '1') {
+                if ('1' != $toolAdmin) {
                     $link['cmd'] = 'hide=yes';
                 }
             }
@@ -215,7 +215,7 @@ class CourseHome
             $item['visibility'] = '';
 
             $class = '';
-            if ($tool->getVisibility() == '0' && $toolAdmin != '1') {
+            if ('0' == $tool->getVisibility() && '1' != $toolAdmin) {
                 $class = 'text-muted';
                 $info = pathinfo($tool['image']);
                 $basename = basename($tool['image'], '.'.$info['extension']);
@@ -416,8 +416,8 @@ class CourseHome
         $html = '<div id="toolnav">';
         $html .= '<ul id="toolnavbox">';
 
-        $showOnlyText = api_get_setting('show_navigation_menu') === 'text';
-        $showOnlyIcons = api_get_setting('show_navigation_menu') === 'icons';
+        $showOnlyText = 'text' === api_get_setting('show_navigation_menu');
+        $showOnlyIcons = 'icons' === api_get_setting('show_navigation_menu');
 
         foreach ($blocks as $block) {
             $blockItems = $block['content'];
@@ -476,7 +476,7 @@ class CourseHome
     {
         $origin = api_get_origin();
         $courseInfo = api_get_course_info();
-        if ($origin === 'learnpath') {
+        if ('learnpath' === $origin) {
             return '';
         }
 
@@ -484,7 +484,7 @@ class CourseHome
         $html = '';
         if (!empty($blocks)) {
             $styleId = 'toolshortcuts_vertical';
-            if ($orientation == SHORTCUTS_HORIZONTAL) {
+            if (SHORTCUTS_HORIZONTAL == $orientation) {
                 $styleId = 'toolshortcuts_horizontal';
             }
             $html .= '<div id="'.$styleId.'">';
@@ -505,7 +505,7 @@ class CourseHome
                         $item['only_href'],
                         $item['url_params']
                     );
-                    if ($orientation == SHORTCUTS_VERTICAL) {
+                    if (SHORTCUTS_VERTICAL == $orientation) {
                         $html .= '<br />';
                     }
                 }
@@ -626,7 +626,7 @@ class CourseHome
             'description' => $values['description'],
         ];
 
-        if (isset($_FILES['icon']['size']) && $_FILES['icon']['size'] !== 0) {
+        if (isset($_FILES['icon']['size']) && 0 !== $_FILES['icon']['size']) {
             $dir = self::getCustomSysIconPath();
 
             // Resize image if it is larger than 64px
@@ -653,7 +653,7 @@ class CourseHome
             $ext = pathinfo($path, PATHINFO_EXTENSION);
             $bwPath = substr($path, 0, -(strlen($ext) + 1)).'_na.'.$ext;
 
-            if ($r === false) {
+            if (false === $r) {
                 error_log('Conversion to B&W of '.$path.' failed in '.__FILE__.' at line '.__LINE__);
             } else {
                 $temp->send_image($bwPath);
@@ -747,13 +747,13 @@ class CourseHome
         ];
 
         $sessionsCopy = api_get_setting('allow_session_course_copy_for_teachers');
-        if ($sessionsCopy === 'true') {
+        if ('true' === $sessionsCopy) {
             // Adding only maintenance for coaches.
             $myList = self::get_tools_category(TOOL_ADMIN_PLATFORM);
             $onlyMaintenanceList = [];
 
             foreach ($myList as $item) {
-                if ($item['name'] === 'course_maintenance') {
+                if ('course_maintenance' === $item['name']) {
                     $item['link'] = 'course_info/maintenance_coach.php';
 
                     $onlyMaintenanceList[] = $item;
@@ -785,7 +785,7 @@ class CourseHome
         if ($isDrhOfCourse) {
             $addUserTool = true;
             foreach ($tools as $tool) {
-                if ($tool['name'] === 'user') {
+                if ('user' === $tool['name']) {
                     $addUserTool = false;
                     break;
                 }
@@ -827,7 +827,7 @@ class CourseHome
     {
         $sessionId = api_get_session_id();
         // Start of tools for CourseAdmins (teachers/tutors)
-        if ($sessionId === 0 && api_is_course_admin() && api_is_allowed_to_edit(null, true)) {
+        if (0 === $sessionId && api_is_course_admin() && api_is_allowed_to_edit(null, true)) {
             $blocks = self::getCourseAdminBlocks($toolChain);
         } elseif (api_is_coach()) {
             $blocks = self::getCoachBlocks($toolChain);
@@ -851,7 +851,7 @@ class CourseHome
     {
         $patronKey = ':teacher';
 
-        if ($courseToolCategory == TOOL_STUDENT_VIEW) {
+        if (TOOL_STUDENT_VIEW == $courseToolCategory) {
             //Fix only coach can see external pages - see #8236 - icpna
             if (api_is_coach()) {
                 foreach ($dataIcons as $index => $array) {
@@ -872,7 +872,7 @@ class CourseHome
 
                 $pos = strpos($array['name'], $patronKey);
 
-                if ($pos !== false) {
+                if (false !== $pos) {
                     unset($dataIcons[$index]);
                     $flagOrder = true;
                 }

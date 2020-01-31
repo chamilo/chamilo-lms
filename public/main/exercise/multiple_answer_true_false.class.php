@@ -79,7 +79,7 @@ class MultipleAnswerTrueFalse extends Question
         // Can be more options
         $optionData = Question::readQuestionOption($this->id, $course_id);
 
-        for ($i = 1; $i <= $nb_answers; ++$i) {
+        for ($i = 1; $i <= $nb_answers; $i++) {
             $form->addHtml('<tr>');
 
             $renderer->setElementTemplate(
@@ -118,7 +118,7 @@ class MultipleAnswerTrueFalse extends Question
                 if (!empty($optionData)) {
                     foreach ($optionData as $id => $data) {
                         $form->addElement('radio', 'correct['.$i.']', null, null, $id);
-                        ++$j;
+                        $j++;
                         if (3 == $j) {
                             break;
                         }
@@ -206,7 +206,7 @@ class MultipleAnswerTrueFalse extends Question
             $scores = explode(':', $this->extra);
 
             if (!empty($scores)) {
-                for ($i = 1; $i <= 3; ++$i) {
+                for ($i = 1; $i <= 3; $i++) {
                     $defaults['option['.$i.']'] = $scores[$i - 1];
                 }
             }
@@ -249,7 +249,7 @@ class MultipleAnswerTrueFalse extends Question
                 Question::updateQuestionOption($id, $optionData, $course_id);
             }
         } else {
-            for ($i = 1; $i <= 3; ++$i) {
+            for ($i = 1; $i <= 3; $i++) {
                 $last_id = Question::saveQuestionOption(
                     $this->id,
                     $this->options[$i],
@@ -272,13 +272,13 @@ class MultipleAnswerTrueFalse extends Question
         the true, false, doubt options registered in this format
         XX:YY:ZZZ where XX is a float score value.*/
         $extra_values = [];
-        for ($i = 1; $i <= 3; ++$i) {
+        for ($i = 1; $i <= 3; $i++) {
             $score = trim($form->getSubmitValue('option['.$i.']'));
             $extra_values[] = $score;
         }
         $this->setExtra(implode(':', $extra_values));
 
-        for ($i = 1; $i <= $nb_answers; ++$i) {
+        for ($i = 1; $i <= $nb_answers; $i++) {
             $answer = trim($form->getSubmitValue('answer['.$i.']'));
             $comment = trim($form->getSubmitValue('comment['.$i.']'));
             $goodAnswer = trim($form->getSubmitValue('correct['.$i.']'));

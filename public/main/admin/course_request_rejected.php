@@ -5,7 +5,6 @@
 /**
  * A list containing the rejected course requests.
  *
- *
  * @author José Manuel Abuin Mosquera <chema@cesga.es>, 2010
  * @author Bruno Rubio Gayo <brubio@cesga.es>, 2010
  * Centro de Supercomputacion de Galicia (CESGA)

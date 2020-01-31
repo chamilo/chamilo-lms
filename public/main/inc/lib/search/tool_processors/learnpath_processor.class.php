@@ -3,8 +3,6 @@
 
 /**
  * Process learning paths before pass it to search listing scripts.
- *
- * @package chamilo.include.search
  */
 class learnpath_processor extends search_processor
 {
@@ -38,7 +36,7 @@ class learnpath_processor extends search_processor
     {
         $results = [];
         foreach ($this->learnpaths as $courseid => $learnpaths) {
-            $search_show_unlinked_results = api_get_setting('search_show_unlinked_results') == 'true';
+            $search_show_unlinked_results = 'true' == api_get_setting('search_show_unlinked_results');
             $course_visible_for_user = api_is_course_visible_for_user(null, $courseid);
             // can view course?
             if ($course_visible_for_user || $search_show_unlinked_results) {

@@ -992,7 +992,7 @@ class LearningCalendarPlugin extends Plugin
         if (Database::num_rows($result)) {
             $row = Database::fetch_array($result, 'ASSOC');
             $currentType = $row['type'];
-            ++$currentType;
+            $currentType++;
             if ($currentType > count($eventTypeList)) {
                 Database::delete(
                     'learning_calendar_events',

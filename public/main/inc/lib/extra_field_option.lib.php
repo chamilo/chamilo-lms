@@ -145,7 +145,7 @@ class ExtraFieldOption extends Model
             $params['option_value']
         );
 
-        if ($optionInfo == false) {
+        if (false == $optionInfo) {
             $optionValue = api_replace_dangerous_char($params['option_value']);
             $order = $this->get_max_order($params['field_id']);
             $newParams = [
@@ -229,7 +229,7 @@ class ExtraFieldOption extends Model
                         parent::update($new_params, $showQuery);
                     }
 
-                    if ($params['field_type'] == ExtraField::FIELD_TYPE_SELECT_WITH_TEXT_FIELD) {
+                    if (ExtraField::FIELD_TYPE_SELECT_WITH_TEXT_FIELD == $params['field_type']) {
                         continue;
                     }
 
@@ -345,7 +345,7 @@ class ExtraFieldOption extends Model
                     $optionValue = api_replace_dangerous_char($option);
                     $option = trim($option);
 
-                    if ($option_info != false) {
+                    if (false != $option_info) {
                         continue;
                     }
 
@@ -402,7 +402,7 @@ class ExtraFieldOption extends Model
                 $field_id,
                 $params['option_value']
             );
-            if ($check == false) {
+            if (false == $check) {
                 parent::save($params, $show_query);
             }
         }
@@ -753,7 +753,7 @@ class ExtraFieldOption extends Model
         $form = new FormValidator($form_name, 'post', $url);
         // Setting the form elements
         $header = get_lang('Add');
-        if ($action == 'edit') {
+        if ('edit' == $action) {
             $header = get_lang('Edit');
         }
 
@@ -764,7 +764,7 @@ class ExtraFieldOption extends Model
         $form->addElement('hidden', 'type', $this->type);
         $form->addElement('hidden', 'field_id', $this->fieldId);
 
-        if ($action == 'edit') {
+        if ('edit' == $action) {
             $translateUrl = api_get_path(WEB_CODE_PATH).'extrafield/translate.php?'.http_build_query([
                 'extra_field_option' => $id,
             ]);
@@ -790,7 +790,7 @@ class ExtraFieldOption extends Model
 
         $defaults = [];
 
-        if ($action == 'edit') {
+        if ('edit' == $action) {
             // Setting the defaults
             $defaults = $this->get($id, false);
             $form->freeze('option_value');

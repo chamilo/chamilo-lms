@@ -294,7 +294,7 @@ if (isset($rows)) {
         }
 
         echo '</table></div>';
-        ++$counter;
+        $counter++;
     }
 }
 
@@ -322,7 +322,7 @@ if (api_is_allowed_to_edit() && $counter > 0) {
     $table_list .= '<th width="40%">'.get_lang('Date changed').'</th>';
     $table_list .= '</tr>';
 
-    for ($i = 0; $i < count($historyList); ++$i) {
+    for ($i = 0; $i < count($historyList); $i++) {
         $userInfo = api_get_user_info($historyList[$i]['qualify_user_id']);
         $table_list .= '<tr><td>'.$userInfo['complete_name'].'</td>';
         $table_list .= '<td>'.$historyList[$i]['qualify'].'</td>';

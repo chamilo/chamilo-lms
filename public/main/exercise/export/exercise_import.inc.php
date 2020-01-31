@@ -225,7 +225,7 @@ function import_exercise($file)
                         $i = $split[1];
                     } else {
                         $i = $j;
-                        ++$j;
+                        $j++;
                         $matchAnswerIds[$key] = $j;
                     }
 
@@ -455,7 +455,7 @@ function parseQti2($xmlData)
                 if (!isset($currentMatchSet)) {
                     $currentMatchSet = 1;
                 } else {
-                    ++$currentMatchSet;
+                    $currentMatchSet++;
                 }
                 $exerciseInfo['question'][$currentQuestionIdent]['answer'][$currentMatchSet] = [];
 
@@ -707,7 +707,7 @@ function qtiProcessManifest($filePath)
     ];
     $tableDocuments = Database::get_course_table(TABLE_DOCUMENT);
     $countResources = count($xml->resources->resource->file);
-    for ($i = 0; $i < $countResources; ++$i) {
+    for ($i = 0; $i < $countResources; $i++) {
         $file = $xml->resources->resource->file[$i];
         $href = '';
         foreach ($file->attributes() as $key => $value) {

@@ -3,8 +3,6 @@
 
 /**
  * Reporting page on the user's own progress.
- *
- * @package chamilo.tracking
  */
 $cidReset = true;
 require_once __DIR__.'/../inc/global.inc.php';
@@ -28,7 +26,7 @@ $(function() {
 });
 </script>";
 
-$pluginCalendar = api_get_plugin_setting('learning_calendar', 'enabled') === 'true';
+$pluginCalendar = 'true' === api_get_plugin_setting('learning_calendar', 'enabled');
 
 if ($pluginCalendar) {
     $plugin = LearningCalendarPlugin::create();
@@ -55,7 +53,7 @@ if (!empty($courseUserList)) {
         $courseId = $result['c_id'];
         $courseInfo = api_get_course_info_by_id($courseId);
 
-        if ($count == 1) {
+        if (1 == $count) {
             $first = '<a href="#'.$login.'">'.get_lang('First').'</a>';
         }
         if ($count == $last_item) {
@@ -99,9 +97,9 @@ if (!empty($dates)) {
     $content .= '</div></div>';
 }
 
-if (api_get_configuration_value('private_messages_about_user_visible_to_user') === true) {
+if (true === api_get_configuration_value('private_messages_about_user_visible_to_user')) {
     $allowMessages = api_get_configuration_value('private_messages_about_user');
-    if ($allowMessages === true) {
+    if (true === $allowMessages) {
         // Messages
         $content .= Display::page_subheader2(get_lang('Messages'));
         $content .= MessageManager::getMessagesAboutUserToString(api_get_user_info());

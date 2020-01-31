@@ -6,8 +6,6 @@
  *
  * @author Angel Fernando Quiroz Campos <angel.quiroz@beeznest.com>
  *
- * @package chamilo.admin.openbadges
- *
  * @deprecated use skill_list.php
  */
 $cidReset = true;

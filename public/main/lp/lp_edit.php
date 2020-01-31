@@ -6,8 +6,6 @@ use ChamiloSession as Session;
 /**
  * Script allowing simple edition of learnpath information (title, description, etc).
  *
- * @package chamilo.learnpath
- *
  * @author  Yannick Warnier <ywarnier@beeznest.org>
  */
 require_once api_get_path(LIBRARY_PATH).'specific_fields_manager.lib.php';
@@ -93,9 +91,9 @@ $form->addElement(
     get_lang('Hide table of contents frame')
 );
 
-if (api_get_setting('allow_course_theme') === 'true') {
+if ('true' === api_get_setting('allow_course_theme')) {
     $mycourselptheme = api_get_course_setting('allow_learning_path_theme');
-    if (!empty($mycourselptheme) && $mycourselptheme != -1 && $mycourselptheme == 1) {
+    if (!empty($mycourselptheme) && -1 != $mycourselptheme && 1 == $mycourselptheme) {
         //LP theme picker
         $theme_select = $form->addElement('SelectTheme', 'lp_theme', get_lang('Graphical theme'));
         $form->applyFilter('lp_theme', 'trim');
@@ -121,12 +119,12 @@ if (strlen($learnPath->get_preview_image()) > 0) {
     $form->addElement('label', get_lang('Image preview'), $show_preview_image);
     $form->addElement('checkbox', 'remove_picture', null, get_lang('Remove picture'));
 }
-$label = $learnPath->get_preview_image() != '' ? get_lang('Update Image') : get_lang('Add image');
+$label = '' != $learnPath->get_preview_image() ? get_lang('Update Image') : get_lang('Add image');
 $form->addElement('file', 'lp_preview_image', [$label, get_lang('Trainer picture will resize if needed')]);
 $form->addRule('lp_preview_image', get_lang('Only PNG, JPG or GIF images allowed'), 'filetype', ['jpg', 'jpeg', 'png', 'gif']);
 
 // Search terms (only if search is activated).
-if (api_get_setting('search_enabled') === 'true') {
+if ('true' === api_get_setting('search_enabled')) {
     $specific_fields = get_specific_field_list();
     foreach ($specific_fields as $specific_field) {
         $form->addElement('text', $specific_field['code'], $specific_field['name']);
@@ -185,7 +183,7 @@ $form->addElement(
 );
 
 $display_date = 'none';
-if (!empty($publicated_on) && $publicated_on !== '0000-00-00 00:00:00') {
+if (!empty($publicated_on) && '0000-00-00 00:00:00' !== $publicated_on) {
     $display_date = 'block';
     $defaults['activate_start_date_check'] = 1;
 }
@@ -266,7 +264,7 @@ $(function() {
 
 $htmlHeadXtra[] = '<script>'.$learnPath->get_js_dropdown_array().'</script>';
 
-$defaults['publicated_on'] = !empty($publicated_on) && $publicated_on !== '0000-00-00 00:00:00'
+$defaults['publicated_on'] = !empty($publicated_on) && '0000-00-00 00:00:00' !== $publicated_on
     ? api_get_local_time($publicated_on)
     : null;
 $defaults['expired_on'] = (!empty($expired_on))

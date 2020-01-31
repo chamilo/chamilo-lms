@@ -7,7 +7,7 @@ require_once __DIR__.'/../inc/global.inc.php';
 
 api_protect_admin_script();
 
-$exportCSV = isset($_GET['export']) && $_GET['export'] === 'csv' ? true : false;
+$exportCSV = isset($_GET['export']) && 'csv' === $_GET['export'] ? true : false;
 
 // the section (for the tabs)
 $this_section = SECTION_TRACKING;

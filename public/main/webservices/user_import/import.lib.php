@@ -13,11 +13,11 @@ function validate_data($users)
         foreach ($users as $index => $user) {
             // 1. Check whether mandatory fields have been set.
             $mandatory_fields = ['LastName', 'FirstName'];
-            if (api_get_setting('registration', 'email') == 'true') {
+            if ('true' == api_get_setting('registration', 'email')) {
                 $mandatory_fields[] = 'Email';
             }
             foreach ($mandatory_fields as $key => $field) {
-                if (!isset($user[$field]) || strlen($user[$field]) == 0) {
+                if (!isset($user[$field]) || 0 == strlen($user[$field])) {
                     $user['error'] = get_lang($field.'Mandatory');
                     $errors[] = $user;
                 }
@@ -47,7 +47,7 @@ function validate_data($users)
                 $errors[] = $user;
             }
             // 5. Check authentication source.
-            if (isset($user['AuthSource']) && strlen($user['AuthSource']) != 0) {
+            if (isset($user['AuthSource']) && 0 != strlen($user['AuthSource'])) {
                 if (!in_array($user['AuthSource'], $defined_auth_sources)) {
                     $user['error'] = get_lang('Authentication source unavailable.');
                     $errors[] = $user;
@@ -72,15 +72,15 @@ function complete_missing_data($user)
         );
     }
     // 2. Generate a password if necessary.
-    if (!isset($user['Password']) || strlen($user['Password']) == 0) {
+    if (!isset($user['Password']) || 0 == strlen($user['Password'])) {
         $user['Password'] = api_generate_password();
     }
     // 3. set status if not allready set.
-    if (!isset($user['Status']) || strlen($user['Status']) == 0) {
+    if (!isset($user['Status']) || 0 == strlen($user['Status'])) {
         $user['Status'] = 'user';
     }
     // 4. Set authsource if not allready set.
-    if (!isset($user['AuthSource']) || strlen($user['AuthSource']) == 0) {
+    if (!isset($user['AuthSource']) || 0 == strlen($user['AuthSource'])) {
         $user['AuthSource'] = PLATFORM_AUTH_SOURCE;
     }
 

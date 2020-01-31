@@ -6,8 +6,6 @@
  * Html files are parsed to fix a few problems with URLs,
  * but this code will hopefully be replaced soon by an Apache URL
  * rewrite mechanism.
- *
- * @package chamilo.calendar
  */
 session_cache_limiter('public');
 
@@ -50,7 +48,7 @@ $full_file_name = api_get_path(SYS_COURSE_PATH).$course_info['path'].'/upload/ca
 
 //if the rewrite rule asks for a directory, we redirect to the document explorer
 if (is_dir($full_file_name)) {
-    while ($doc_url[$dul = strlen($doc_url) - 1] == '/') {
+    while ('/' == $doc_url[$dul = strlen($doc_url) - 1]) {
         $doc_url = substr($doc_url, 0, $dul);
     }
     // create the path
@@ -79,7 +77,7 @@ if (Database::num_rows($result)) {
         api_get_path(SYS_COURSE_PATH).$course_info['path'].'/upload/calendar/'
     )) {
         $result = DocumentManager::file_send_for_download($full_file_name, true, $title);
-        if ($result === false) {
+        if (false === $result) {
             api_not_allowed(true);
         }
     }

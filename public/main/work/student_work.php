@@ -120,9 +120,9 @@ $headers = [
 ];
 foreach ($headers as $header) {
     $table->setHeaderContents($row, $column, $header);
-    ++$column;
+    $column++;
 }
-++$row;
+$row++;
 $column = 0;
 $url = api_get_path(WEB_CODE_PATH).'work/';
 
@@ -136,17 +136,17 @@ foreach ($workPerUser as $work) {
         $itemId = $userResult['id'];
         $table->setCellContents($row, $column, $work->title.' ['.trim(strip_tags($userResult['title'])).']');
         $table->setCellAttributes($row, $column, ['width' => '300px']);
-        ++$column;
+        $column++;
         $table->setCellContents($row, $column, $userResult['sent_date']);
-        ++$column;
+        $column++;
         $dateQualification = !empty($workExtraData['expires_on']) ? api_get_local_time($workExtraData['expires_on']) : '-';
         $table->setCellContents($row, $column, $dateQualification);
-        ++$column;
+        $column++;
 
         $score = null;
         $score = $userResult['qualification'];
         $table->setCellContents($row, $column, $score);
-        ++$column;
+        $column++;
 
         // Detail
         $links = null;
@@ -170,7 +170,7 @@ foreach ($workPerUser as $work) {
 
         $table->setCellContents($row, $column, $links);
 
-        ++$row;
+        $row++;
         $column = 0;
     }
 }

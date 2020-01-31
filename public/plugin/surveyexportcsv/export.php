@@ -63,7 +63,7 @@ foreach ($surveyAnswers as $answer) {
     array_unshift($row, $i);
 
     $content[] = $row;
-    ++$i;
+    $i++;
 }
 
 // Generate file

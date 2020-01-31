@@ -1,9 +1,6 @@
 <?php
 /* For licensing terms, see /license.txt */
 
-/**
- *  @package chamilo.admin
- */
 $cidReset = true;
 require_once __DIR__.'/../inc/global.inc.php';
 
@@ -20,7 +17,7 @@ $action = isset($_REQUEST['action']) ? $_REQUEST['action'] : 'display';
 // setting breadcrumbs
 $tool_name = get_lang('Skills and assessments');
 $interbreadcrumb[] = ['url' => 'index.php', 'name' => get_lang('Administration')];
-if ($action == 'add_skill') {
+if ('add_skill' == $action) {
     $interbreadcrumb[] = ['url' => 'skills_gradebook.php', 'name' => get_lang('Skills and assessments')];
     $tool_name = get_lang('Add');
 }

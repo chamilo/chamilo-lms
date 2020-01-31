@@ -9,7 +9,6 @@ use ChamiloSession as Session;
 /**
  * This file generates the ActionScript variables code used by the HotSpot .swf.
  *
- *
  * @author Toon Keppens
  */
 require_once __DIR__.'/../inc/global.inc.php';
@@ -67,7 +66,7 @@ $answer_type = $objQuestion->getType();
 $answers = Session::read('tmp_answers');
 $nbrAnswers = count($answers['answer']);
 
-for ($i = 1; $i <= $nbrAnswers; ++$i) {
+for ($i = 1; $i <= $nbrAnswers; $i++) {
     $hotSpot = [];
     $hotSpot['id'] = null;
     $hotSpot['answer'] = $answers['answer'][$i];
@@ -102,7 +101,7 @@ for ($i = 1; $i <= $nbrAnswers; ++$i) {
 
     // This is a good answer, count + 1 for nmbr of clicks
     if ($answers['weighting'][$i] > 0) {
-        ++$nmbrTries;
+        $nmbrTries++;
     }
 
     $hotSpot['coord'] = $answers['hotspot_coordinates'][$i];

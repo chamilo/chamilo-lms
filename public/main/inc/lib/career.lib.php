@@ -124,7 +124,7 @@ class Career extends Model
         $form = new FormValidator('career', 'post', $url);
         // Setting the form elements
         $header = get_lang('Add');
-        if ($action == 'edit') {
+        if ('edit' == $action) {
             $header = get_lang('Edit');
         }
 
@@ -146,7 +146,7 @@ class Career extends Model
         $status_list = $this->get_status_list();
         $form->addElement('select', 'status', get_lang('Status'), $status_list);
 
-        if ($action == 'edit') {
+        if ('edit' == $action) {
             $extraField = new ExtraField('career');
             $extraField->addElements($form, $id);
 
@@ -360,7 +360,7 @@ class Career extends Model
             foreach ($subGroupList as $subGroupData) {
                 $columns = isset($subGroupData['columns']) ? $subGroupData['columns'] : [];
                 $showGroupLine = true;
-                if (count($columns) == 1) {
+                if (1 == count($columns)) {
                     $showGroupLine = false;
                 }
                 $groupDrawLine[$group] = $showGroupLine;
@@ -377,7 +377,7 @@ class Career extends Model
                             if (!empty($connectionList)) {
                                 $explode = explode('-', $connectionList);
                                 $pos = strpos($explode[0], 'SG');
-                                if ($pos === false) {
+                                if (false === $pos) {
                                     $pos = strpos($explode[0], 'G');
                                     if (is_numeric($pos)) {
                                         // group_123 id
@@ -400,7 +400,7 @@ class Career extends Model
                                 }
 
                                 $pos = strpos($explode[1], 'SG');
-                                if ($pos === false) {
+                                if (false === $pos) {
                                     $pos = strpos($explode[1], 'G');
                                     if (is_numeric($pos)) {
                                         $groupValueId = (int) str_replace(
@@ -558,7 +558,7 @@ class Career extends Model
 
                         $explode = explode('-', $connectionList);
                         $pos = strpos($explode[0], 'SG');
-                        if ($pos === false) {
+                        if (false === $pos) {
                             $pos = strpos($explode[0], 'G');
                             if (is_numeric($pos)) {
                                 // Is group
@@ -583,7 +583,7 @@ class Career extends Model
                         if (isset($explode[1])) {
                             $pos = strpos($explode[1], 'SG');
                         }
-                        if ($pos === false) {
+                        if (false === $pos) {
                             if (isset($explode[1])) {
                                 $pos = strpos($explode[1], 'G');
                                 $value = $explode[1];
@@ -913,7 +913,7 @@ class Career extends Model
                             break;
                     }
 
-                    if (substr($resultId, 0, 1) == 2) {
+                    if (2 == substr($resultId, 0, 1)) {
                         $iconData['Description'] = 'Result Id = '.$resultId;
                     }
 
@@ -1010,11 +1010,11 @@ class Career extends Model
             $found = false;
             if (!empty($arrow)) {
                 $pos = strpos($arrow, 'SG');
-                if ($pos === false) {
+                if (false === $pos) {
                     $pos = strpos($arrow, 'G');
                     if (is_numeric($pos)) {
                         $parts = explode('G', $arrow);
-                        if (empty($parts[0]) && count($parts) == 2) {
+                        if (empty($parts[0]) && 2 == count($parts)) {
                             $groupArrow = $parts[1];
                             $graphHtml .= self::createConnection(
                                 "group_$groupArrow",
@@ -1031,7 +1031,7 @@ class Career extends Model
                 } else {
                     // Case is only one subgroup value example: SG1
                     $parts = explode('SG', $arrow);
-                    if (empty($parts[0]) && count($parts) == 2) {
+                    if (empty($parts[0]) && 2 == count($parts)) {
                         $subGroupArrow = $parts[1];
                         $graphHtml .= self::createConnection(
                             "subgroup_$subGroupArrow",
@@ -1046,10 +1046,10 @@ class Career extends Model
                     }
                 }
 
-                if ($found == false) {
+                if (false == $found) {
                     // case is connected to 2 subgroups: Example SG1-SG2
                     $parts = explode('-', $arrow);
-                    if (count($parts) == 2 && !empty($parts[0]) && !empty($parts[1])) {
+                    if (2 == count($parts) && !empty($parts[0]) && !empty($parts[1])) {
                         $defaultArrow = ['Top', 'Bottom'];
                         $firstPrefix = '';
                         $firstId = '';
@@ -1075,7 +1075,7 @@ class Career extends Model
                     }
                 }
 
-                if ($found == false) {
+                if (false == $found) {
                     // case DrawArrowFrom is an integer
                     $defaultArrow = ['Left', 'Right'];
                     if (isset($groupCourseList[$column]) &&
@@ -1121,12 +1121,12 @@ class Career extends Model
         $topValue = 90;
         $defaultSpace = 40;
         $leftGroup = $defaultSpace.'px';
-        if ($group == 1) {
+        if (1 == $group) {
             $leftGroup = 0;
         }
 
         $groupIdTag = "group_$group";
-        $borderLine = $showGroupLine === true ? 'border-style:solid;' : '';
+        $borderLine = true === $showGroupLine ? 'border-style:solid;' : '';
 
         $graphHtml = '<div 
             id="'.$groupIdTag.'" class="career_group" 
@@ -1158,10 +1158,10 @@ class Career extends Model
             }
             foreach ($columnList as $column => $rows) {
                 $leftColumn = $defaultSpace.'px';
-                if ($column == 1) {
+                if (1 == $column) {
                     $leftColumn = 0;
                 }
-                if (count($columnList) == 1) {
+                if (1 == count($columnList)) {
                     $leftColumn = 0;
                 }
 
@@ -1184,7 +1184,7 @@ class Career extends Model
                     $vertex = isset($rows[$i + 1]) ? $rows[$i + 1] : null;
                     if (!is_null($vertex)) {
                         $subGroup = $vertex->getAttribute('SubGroup');
-                        if ($subGroup == '' || empty($subGroup)) {
+                        if ('' == $subGroup || empty($subGroup)) {
                             $defaultSubGroup = 0;
                         } else {
                             $defaultSubGroup = (int) $subGroup;
@@ -1203,7 +1203,7 @@ class Career extends Model
                 /** @var Vertex $vertex */
                 foreach ($newRowList as $row => $subGroupList) {
                     foreach ($subGroupList as $subGroup => $vertexList) {
-                        if (!empty($subGroup) && $subGroup != -1) {
+                        if (!empty($subGroup) && -1 != $subGroup) {
                             if (!isset($subGroupAdded[$subGroup])) {
                                 $subGroupAdded[$subGroup] = 1;
                             } else {
@@ -1248,11 +1248,11 @@ class Career extends Model
                             $found = false;
                             if (!empty($arrow)) {
                                 $pos = strpos($arrow, 'SG');
-                                if ($pos === false) {
+                                if (false === $pos) {
                                     $pos = strpos($arrow, 'G');
                                     if (is_numeric($pos)) {
                                         $parts = explode('G', $arrow);
-                                        if (empty($parts[0]) && count($parts) == 2) {
+                                        if (empty($parts[0]) && 2 == count($parts)) {
                                             $groupArrow = $parts[1];
                                             $graphHtml .= self::createConnection(
                                                 "group_$groupArrow",
@@ -1264,7 +1264,7 @@ class Career extends Model
                                     }
                                 } else {
                                     $parts = explode('SG', $arrow);
-                                    if (empty($parts[0]) && count($parts) == 2) {
+                                    if (empty($parts[0]) && 2 == count($parts)) {
                                         $subGroupArrow = $parts[1];
                                         $graphHtml .= self::createConnection(
                                             "subgroup_$subGroupArrow",
@@ -1276,7 +1276,7 @@ class Career extends Model
                                 }
                             }
 
-                            if ($found == false) {
+                            if (false == $found) {
                                 $defaultArrow = ['Left', 'Right'];
                                 if (isset($groupCourseList[$group]) &&
                                     in_array($arrow, $groupCourseList[$group])

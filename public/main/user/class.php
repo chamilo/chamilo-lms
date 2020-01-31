@@ -1,15 +1,12 @@
 <?php
 /* For licensing terms, see /license.txt */
 
-/**
- * @package chamilo.user
- */
 require_once __DIR__.'/../inc/global.inc.php';
 $this_section = SECTION_COURSES;
 
 api_protect_course_script(true, false, 'user');
 
-if (api_get_setting('allow_user_course_subscription_by_course_admin') == 'false') {
+if ('false' == api_get_setting('allow_user_course_subscription_by_course_admin')) {
     if (!api_is_platform_admin()) {
         api_not_allowed(true);
     }
@@ -44,7 +41,7 @@ $usergroup = new UserGroup();
 $actions = '';
 
 if (api_is_allowed_to_edit()) {
-    if ($type === 'registered') {
+    if ('registered' === $type) {
         $actionsLeft .= '<a href="class.php?'.api_get_cidreq().'&type=not_registered">'.
             Display::return_icon('add-class.png', get_lang('Add classes to a course'), [], ICON_SIZE_MEDIUM).'</a>';
     } else {

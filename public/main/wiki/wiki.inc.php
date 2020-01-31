@@ -81,7 +81,7 @@ class Wiki
         $result = Database::query($sql);
         $num = Database::num_rows($result);
         // the value has not been found and is this available
-        if ($num == 0) {
+        if (0 == $num) {
             return true;
         } else {
             // the value has been found
@@ -109,10 +109,10 @@ class Wiki
         $all_links = [];
 
         foreach ($input_array as $key => $value) {
-            if (isset($input_array[$key - 1]) && $input_array[$key - 1] == '[[' &&
-                isset($input_array[$key + 1]) && $input_array[$key + 1] == ']]'
+            if (isset($input_array[$key - 1]) && '[[' == $input_array[$key - 1] &&
+                isset($input_array[$key + 1]) && ']]' == $input_array[$key + 1]
             ) {
-                if (api_strpos($value, "|") !== false) {
+                if (false !== api_strpos($value, "|")) {
                     $full_link_array = explode("|", $value);
                     $link = trim($full_link_array[0]);
                     $title = trim($full_link_array[1]);
@@ -239,10 +239,10 @@ class Wiki
         foreach ($input_array as $key => $value) {
             //now doubles brackets
             if (isset($input_array[$key - 1]) &&
-                $input_array[$key - 1] == '[[' && $input_array[$key + 1] == ']]'
+                '[[' == $input_array[$key - 1] && ']]' == $input_array[$key + 1]
             ) {
                 // now full wikilink
-                if (api_strpos($value, "|") !== false) {
+                if (false !== api_strpos($value, "|")) {
                     $full_link_array = explode("|", $value);
                     $link = trim(strip_tags($full_link_array[0]));
                     $title = trim($full_link_array[1]);
@@ -252,7 +252,7 @@ class Wiki
                 }
 
                 //if wikilink is homepage
-                if ($link == 'index') {
+                if ('index' == $link) {
                     $title = get_lang('Home');
                 }
                 if ($link == get_lang('Home')) {
@@ -319,7 +319,7 @@ class Wiki
         // are not made here, but through the interce buttons
 
         // cleaning the variables
-        if (api_get_setting('htmlpurifier_wiki') == 'true') {
+        if ('true' == api_get_setting('htmlpurifier_wiki')) {
             //$purifier = new HTMLPurifier();
             $values['content'] = Security::remove_XSS($values['content']);
         }
@@ -343,13 +343,13 @@ class Wiki
             $_clean['fprogress3'] = $values['fprogress3'];
         }
 
-        if (isset($values['initstartdate']) && $values['initstartdate'] == 1) {
+        if (isset($values['initstartdate']) && 1 == $values['initstartdate']) {
             $_clean['startdate_assig'] = $values['startdate_assig'];
         } else {
             $_clean['startdate_assig'] = null;
         }
 
-        if (isset($values['initenddate']) && $values['initenddate'] == 1) {
+        if (isset($values['initenddate']) && 1 == $values['initenddate']) {
             $_clean['enddate_assig'] = $values['enddate_assig'];
         } else {
             $_clean['enddate_assig'] = null;
@@ -411,7 +411,7 @@ class Wiki
                 $groupInfo
             );
 
-            if ($values['page_id'] == 0) {
+            if (0 == $values['page_id']) {
                 $sql = 'UPDATE '.$tbl_wiki.' SET page_id="'.$id.'"
                         WHERE c_id = '.$course_id.' AND iid ="'.$id.'"';
                 Database::query($sql);
@@ -419,7 +419,7 @@ class Wiki
         }
 
         // Update wiki config
-        if ($values['reflink'] == 'index' && $version == 1) {
+        if ('index' == $values['reflink'] && 1 == $version) {
             $params = [
                 'c_id' => $course_id,
                 'page_id' => $id,
@@ -612,7 +612,7 @@ class Wiki
         $session_id = api_get_session_id();
         // Unlike ordinary pages of pages of assignments.
         // Allow create a ordinary page although there is a assignment with the same name
-        if ($_clean['assignment'] == 2 || $_clean['assignment'] == 1) {
+        if (2 == $_clean['assignment'] || 1 == $_clean['assignment']) {
             $page = str_replace(
                 ' ',
                 '_',
@@ -625,7 +625,7 @@ class Wiki
         $_clean['title'] = trim($values['title']);
         $_clean['content'] = $values['content'];
 
-        if (api_get_setting('htmlpurifier_wiki') === 'true') {
+        if ('true' === api_get_setting('htmlpurifier_wiki')) {
             $purifier = new HTMLPurifier();
             $_clean['content'] = $purifier->purify($_clean['content']);
         }
@@ -635,7 +635,7 @@ class Wiki
             return false;
         }
 
-        if ($_clean['assignment'] == 2) {
+        if (2 == $_clean['assignment']) {
             //config by default for individual assignment (students)
             //Identifies the user as a creator, not the teacher who created
             $_clean['user_id'] = intval($assig_user_id);
@@ -668,13 +668,13 @@ class Wiki
         $_clean['fprogress2'] = isset($values['fprogress2']) ? $values['fprogress2'] : '';
         $_clean['fprogress3'] = isset($values['fprogress3']) ? $values['fprogress3'] : '';
 
-        if (isset($values['initstartdate']) && $values['initstartdate'] == 1) {
+        if (isset($values['initstartdate']) && 1 == $values['initstartdate']) {
             $_clean['startdate_assig'] = $values['startdate_assig'];
         } else {
             $_clean['startdate_assig'] = null;
         }
 
-        if (isset($values['initenddate']) && $values['initenddate'] == 1) {
+        if (isset($values['initenddate']) && 1 == $values['initenddate']) {
             $_clean['enddate_assig'] = $values['enddate_assig'];
         } else {
             $_clean['enddate_assig'] = null;
@@ -687,7 +687,7 @@ class Wiki
         $course_id = api_get_course_int_id();
 
         // Filter no _uass
-        if (api_strtoupper(trim($values['title'])) === 'INDEX') {
+        if ('INDEX' === api_strtoupper(trim($values['title']))) {
             Display::addFlash(
                 Display::return_message(
                     get_lang('To start Group wiki go and edit Main page'),
@@ -812,7 +812,7 @@ class Wiki
 
         if ((api_is_allowed_to_edit(false, true) ||
             api_is_platform_admin()) &&
-            isset($row['reflink']) && $row['reflink'] != 'index'
+            isset($row['reflink']) && 'index' != $row['reflink']
         ) {
             $form->addElement(
                 'advanced_settings',
@@ -963,13 +963,13 @@ class Wiki
             } elseif (!self::double_post($_POST['wpost_id'])) {
                 //double post
             } else {
-                if (isset($values['assignment']) && $values['assignment'] == 1) {
+                if (isset($values['assignment']) && 1 == $values['assignment']) {
                     self::auto_add_page_users($values);
                 }
 
                 $return_message = self::save_new_wiki($values);
 
-                if ($return_message == false) {
+                if (false == $return_message) {
                     Display::addFlash(
                         Display::return_message(
                             get_lang('Your changes have been saved. You still have to give a name to the page'),
@@ -1069,7 +1069,7 @@ class Wiki
         $groupInfo = GroupManager::get_group_properties(api_get_group_id());
 
         // if both are empty and we are displaying the index page then we display the default text.
-        if ($row['content'] == '' && $row['title'] == '' && $page == 'index') {
+        if ('' == $row['content'] && '' == $row['title'] && 'index' == $page) {
             if (api_is_allowed_to_edit(false, true) ||
                 api_is_platform_admin() ||
                 GroupManager::is_user_in_group(api_get_user_id(), $groupInfo) ||
@@ -1101,14 +1101,14 @@ class Wiki
 
         //assignment mode: identify page type
         $icon_assignment = null;
-        if ($row['assignment'] == 1) {
+        if (1 == $row['assignment']) {
             $icon_assignment = Display::return_icon(
                 'wiki_assignment.png',
                 get_lang('This page is an assignment proposed by a trainer'),
                 '',
                 ICON_SIZE_SMALL
             );
-        } elseif ($row['assignment'] == 2) {
+        } elseif (2 == $row['assignment']) {
             $icon_assignment = Display::return_icon(
                 'wiki_work.png',
                 get_lang('Learner paper'),
@@ -1129,10 +1129,10 @@ class Wiki
         }
 
         // Show page. Show page to all users if isn't hide page. Mode assignments: if student is the author, can view
-        if ($KeyVisibility == "1" ||
+        if ("1" == $KeyVisibility ||
             api_is_allowed_to_edit(false, true) ||
             api_is_platform_admin() ||
-            ($row['assignment'] == 2 && $KeyVisibility == "0" && (api_get_user_id() == $row['user_id'])) ||
+            (2 == $row['assignment'] && "0" == $KeyVisibility && (api_get_user_id() == $row['user_id'])) ||
             api_is_allowed_in_course()
         ) {
             $actionsLeft = '';
@@ -1168,7 +1168,7 @@ class Wiki
             if (api_is_allowed_to_edit(false, true) ||
                 api_is_platform_admin()
             ) {
-                if (self::check_protect_page() == 1) {
+                if (1 == self::check_protect_page()) {
                     $protect_page = Display::return_icon(
                         'lock.png',
                         get_lang('This page is protected. Trainers only can change it'),
@@ -1198,7 +1198,7 @@ class Wiki
             if (api_is_allowed_to_edit(false, true) ||
                 api_is_platform_admin()
             ) {
-                if (self::check_visibility_page() == 1) {
+                if (1 == self::check_visibility_page()) {
                     $visibility_page = Display::return_icon(
                         'visible.png',
                         get_lang('Now the page is visible by all users'),
@@ -1224,7 +1224,7 @@ class Wiki
 
             //page action: notification
             if (api_is_allowed_to_session_edit()) {
-                if (self::check_notify_page($page) == 1) {
+                if (1 == self::check_notify_page($page)) {
                     $notify_page = Display::return_icon(
                         'messagebox_info.png',
                         get_lang('Notify me by e-mail when somebody replies'),
@@ -1515,10 +1515,10 @@ class Wiki
             api_is_platform_admin()
         ) {
             if (isset($_GET['actionpage'])) {
-                if ($_GET['actionpage'] == 'lockaddnew' && $status_addlock == 1) {
+                if ('lockaddnew' == $_GET['actionpage'] && 1 == $status_addlock) {
                     $status_addlock = 0;
                 }
-                if ($_GET['actionpage'] == 'unlockaddnew' && $status_addlock == 0) {
+                if ('unlockaddnew' == $_GET['actionpage'] && 0 == $status_addlock) {
                     $status_addlock = 1;
                 }
                 $sql = 'UPDATE '.$tbl_wiki.' SET
@@ -1566,10 +1566,10 @@ class Wiki
 
         // Change status
         if (api_is_allowed_to_edit(false, true) || api_is_platform_admin()) {
-            if (isset($_GET['actionpage']) && $_GET['actionpage'] == 'lock' && $status_editlock == 0) {
+            if (isset($_GET['actionpage']) && 'lock' == $_GET['actionpage'] && 0 == $status_editlock) {
                 $status_editlock = 1;
             }
-            if (isset($_GET['actionpage']) && $_GET['actionpage'] == 'unlock' && $status_editlock == 1) {
+            if (isset($_GET['actionpage']) && 'unlock' == $_GET['actionpage'] && 1 == $status_editlock) {
                 $status_editlock = 0;
             }
 
@@ -1620,14 +1620,14 @@ class Wiki
             api_is_platform_admin()
         ) {
             if (isset($_GET['actionpage']) &&
-                $_GET['actionpage'] == 'visible' &&
-                $status_visibility == 0
+                'visible' == $_GET['actionpage'] &&
+                0 == $status_visibility
             ) {
                 $status_visibility = 1;
             }
             if (isset($_GET['actionpage']) &&
-                $_GET['actionpage'] == 'invisible' &&
-                $status_visibility == 1
+                'invisible' == $_GET['actionpage'] &&
+                1 == $status_visibility
             ) {
                 $status_visibility = 0;
             }
@@ -1692,14 +1692,14 @@ class Wiki
         //change status
         if (api_is_allowed_to_edit(false, true) || api_is_platform_admin()) {
             if (isset($_GET['actionpage']) &&
-                $_GET['actionpage'] == 'showdisc' &&
-                $status_visibility_disc == 0
+                'showdisc' == $_GET['actionpage'] &&
+                0 == $status_visibility_disc
             ) {
                 $status_visibility_disc = 1;
             }
             if (isset($_GET['actionpage']) &&
-                $_GET['actionpage'] == 'hidedisc' &&
-                $status_visibility_disc == 1
+                'hidedisc' == $_GET['actionpage'] &&
+                1 == $status_visibility_disc
             ) {
                 $status_visibility_disc = 0;
             }
@@ -1758,14 +1758,14 @@ class Wiki
         //change status
         if (api_is_allowed_to_edit() || api_is_platform_admin()) {
             if (isset($_GET['actionpage']) &&
-                $_GET['actionpage'] == 'lockdisc' &&
-                $status_addlock_disc == 0
+                'lockdisc' == $_GET['actionpage'] &&
+                0 == $status_addlock_disc
             ) {
                 $status_addlock_disc = 1;
             }
             if (isset($_GET['actionpage']) &&
-                $_GET['actionpage'] == 'unlockdisc' &&
-                $status_addlock_disc == 1
+                'unlockdisc' == $_GET['actionpage'] &&
+                1 == $status_addlock_disc
             ) {
                 $status_addlock_disc = 0;
             }
@@ -1825,14 +1825,14 @@ class Wiki
             api_is_platform_admin()
         ) {
             if (isset($_GET['actionpage']) &&
-                $_GET['actionpage'] == 'lockrating' &&
-                $status_ratinglock_disc == 0
+                'lockrating' == $_GET['actionpage'] &&
+                0 == $status_ratinglock_disc
             ) {
                 $status_ratinglock_disc = 1;
             }
             if (isset($_GET['actionpage']) &&
-                $_GET['actionpage'] == 'unlockrating' &&
-                $status_ratinglock_disc == 1
+                'unlockrating' == $_GET['actionpage'] &&
+                1 == $status_ratinglock_disc
             ) {
                 $status_ratinglock_disc = 0;
             }
@@ -1907,8 +1907,8 @@ class Wiki
 
         // Change status
         if (isset($_GET['actionpage']) &&
-            $_GET['actionpage'] == 'locknotify' &&
-            $status_notify == 0
+            'locknotify' == $_GET['actionpage'] &&
+            0 == $status_notify
         ) {
             $sql = "SELECT id FROM $tbl_wiki_mailcue
                     WHERE c_id = $course_id AND id = $id AND user_id = $userId";
@@ -1917,7 +1917,7 @@ class Wiki
             if (Database::num_rows($result)) {
                 $exist = true;
             }
-            if ($exist == false) {
+            if (false == $exist) {
                 $sql = "INSERT INTO ".$tbl_wiki_mailcue." (c_id, id, user_id, type, group_id, session_id) VALUES
                 ($course_id, '".$id."','".api_get_user_id()."','P','".$groupId."','".$session_id."')";
                 Database::query($sql);
@@ -1926,8 +1926,8 @@ class Wiki
         }
 
         if (isset($_GET['actionpage']) &&
-            $_GET['actionpage'] == 'unlocknotify' &&
-            $status_notify == 1
+            'unlocknotify' == $_GET['actionpage'] &&
+            1 == $status_notify
         ) {
             $sql = 'DELETE FROM '.$tbl_wiki_mailcue.'
                     WHERE 
@@ -1986,8 +1986,8 @@ class Wiki
 
         // change status
         if (isset($_GET['actionpage']) &&
-            $_GET['actionpage'] == 'locknotifydisc' &&
-            $status_notify_disc == 0
+            'locknotifydisc' == $_GET['actionpage'] &&
+            0 == $status_notify_disc
         ) {
             $sql = "INSERT INTO ".$tbl_wiki_mailcue." (c_id, id, user_id, type, group_id, session_id) VALUES
             ($course_id, '".$id."','".api_get_user_id()."','D','".$groupId."','".$session_id."')";
@@ -1995,8 +1995,8 @@ class Wiki
             $status_notify_disc = 1;
         }
         if (isset($_GET['actionpage']) &&
-            $_GET['actionpage'] == 'unlocknotifydisc' &&
-            $status_notify_disc == 1
+            'unlocknotifydisc' == $_GET['actionpage'] &&
+            1 == $status_notify_disc
         ) {
             $sql = 'DELETE FROM '.$tbl_wiki_mailcue.'
                     WHERE 
@@ -2044,8 +2044,8 @@ class Wiki
 
         //change status
         if (isset($_GET['actionpage']) &&
-            $_GET['actionpage'] == 'locknotifyall' &&
-            $status_notify_all == 0
+            'locknotifyall' == $_GET['actionpage'] &&
+            0 == $status_notify_all
         ) {
             $sql = "INSERT INTO ".$tbl_wiki_mailcue." (c_id, user_id, type, group_id, session_id) VALUES
             ($course_id, '".api_get_user_id()."','F','".$groupId."','".$session_id."')";
@@ -2055,8 +2055,8 @@ class Wiki
 
         if (isset($_GET['actionpage']) &&
             isset($_GET['actionpage']) &&
-            $_GET['actionpage'] == 'unlocknotifyall' &&
-            $status_notify_all == 1
+            'unlocknotifyall' == $_GET['actionpage'] &&
+            1 == $status_notify_all
         ) {
             $sql = 'DELETE FROM '.$tbl_wiki_mailcue.'
                    WHERE
@@ -2095,7 +2095,7 @@ class Wiki
         $group_name = $group_properties['name'];
         $allow_send_mail = false; //define the variable to below
         $email_assignment = null;
-        if ($type == 'P') {
+        if ('P' == $type) {
             //if modifying a wiki page
             //first, current author and time
             //Who is the author?
@@ -2122,7 +2122,7 @@ class Wiki
             $row = Database::fetch_array($result);
             $id = $row['id'];
             $email_page_name = $row['title'];
-            if ($row['visibility'] == 1) {
+            if (1 == $row['visibility']) {
                 $allow_send_mail = true; //if visibility off - notify off
                 $sql = 'SELECT * FROM '.$tbl_wiki_mailcue.'
                         WHERE
@@ -2138,7 +2138,7 @@ class Wiki
                     '<strong>'.$email_page_name.'</strong> '.
                     get_lang('Group wiki');
             }
-        } elseif ($type == 'D') {
+        } elseif ('D' == $type) {
             //if added a post to discuss
             //first, current author and time
             //Who is the author of last message?
@@ -2163,7 +2163,7 @@ class Wiki
             $row = Database::fetch_array($result);
 
             $email_page_name = $row['title'];
-            if ($row['visibility_disc'] == 1) {
+            if (1 == $row['visibility_disc']) {
                 $allow_send_mail = true; //if visibility off - notify off
                 $sql = 'SELECT * FROM '.$tbl_wiki_mailcue.'
                         WHERE
@@ -2181,7 +2181,7 @@ class Wiki
                         'Group wiki'
                     );
             }
-        } elseif ($type == 'A') {
+        } elseif ('A' == $type) {
             //for added pages
             $id = 0; //for tbl_wiki_mailcue
             $sql = 'SELECT * FROM '.$tbl_wiki.'
@@ -2205,12 +2205,12 @@ class Wiki
             $seconds = substr($row['dtime'], 17, 2);
             $email_date_changes = $day.' '.$month.' '.$year.' '.$hours.":".$minutes.":".$seconds;
 
-            if ($row['assignment'] == 0) {
+            if (0 == $row['assignment']) {
                 $allow_send_mail = true;
-            } elseif ($row['assignment'] == 1) {
+            } elseif (1 == $row['assignment']) {
                 $email_assignment = get_lang('This page is an assignment proposed by a trainer').' ('.get_lang('individual assignment mode').')';
                 $allow_send_mail = true;
-            } elseif ($row['assignment'] == 2) {
+            } elseif (2 == $row['assignment']) {
                 $allow_send_mail = false; //Mode tasks: avoids notifications to all users about all users
             }
 
@@ -2226,7 +2226,7 @@ class Wiki
             $result = Database::query($sql);
             $emailtext = get_lang('EmailGroup wikiPageAdded').' <strong>'.
                 $email_page_name.'</strong> '.get_lang('in').' '.get_lang('Group wiki');
-        } elseif ($type == 'E') {
+        } elseif ('E' == $type) {
             $id = 0;
             $allow_send_mail = true;
             // Who is the author?
@@ -2261,7 +2261,7 @@ class Wiki
                         $userinfo['firstname'],
                         $userinfo['lastname']
                     ).',<br /><br />';
-                if ($session_id == 0) {
+                if (0 == $session_id) {
                     $email_body .= $emailtext.' <strong>'.$_course['name'].' - '.$group_name.'</strong><br /><br /><br />';
                 } else {
                     $email_body .= $emailtext.' <strong>'.$_course['name'].' ('.api_get_session_name(
@@ -2402,10 +2402,10 @@ class Wiki
         $wikiContents = str_replace('{CONTENT}', $wikiContents, $template);
         // replace relative path by absolute path for courses, so you can see
         // items into this page wiki (images, mp3, etc..) exported in documents
-        if (api_strpos(
+        if (false !== api_strpos(
                 $wikiContents,
                 '../..'.api_get_path(REL_COURSE_PATH)
-            ) !== false) {
+            )) {
             $web_course_path = api_get_path(WEB_COURSE_PATH);
             $wikiContents = str_replace(
                 '../..'.api_get_path(REL_COURSE_PATH),
@@ -2443,7 +2443,7 @@ class Wiki
     public function export_to_pdf($id, $course_code)
     {
         if (!api_is_platform_admin()) {
-            if (api_get_setting('students_export2pdf') !== 'true') {
+            if ('true' !== api_get_setting('students_export2pdf')) {
                 Display::addFlash(
                     Display::return_message(
                         get_lang('PDF download is not allowed for students'),
@@ -2539,7 +2539,7 @@ class Wiki
         $session_id = $this->session_id;
         $groupId = api_get_group_id();
         $groupInfo = GroupManager::get_group_properties($groupId);
-        if ($groupId == 0) {
+        if (0 == $groupId) {
             //extract course members
             if (!empty($session_id)) {
                 $a_users_to_add = CourseManager::get_user_list_from_course_code(
@@ -2643,7 +2643,7 @@ class Wiki
                     }
                 }
 
-                if ($assignment_type == 1) {
+                if (1 == $assignment_type) {
                     $values['title'] = $title_orig;
                     $values['content'] = '<div align="center" style="background-color: #F5F8FB; border:solid; border-color: #E6E6E6">
                     <table border="0">
@@ -2680,7 +2680,7 @@ class Wiki
         foreach ($a_users_to_add as $o_user_to_add) {
             if ($o_user_to_add['user_id'] == $userId) {
                 $assig_user_id = $o_user_to_add['user_id'];
-                if ($assignment_type == 1) {
+                if (1 == $assignment_type) {
                     $values['title'] = $title_orig;
                     $values['comment'] = get_lang('Assignment proposed by the trainer');
                     sort($all_students_pages);
@@ -2724,8 +2724,8 @@ class Wiki
 
         //only by professors when page is hidden
         if (api_is_allowed_to_edit(false, true) || api_is_platform_admin()) {
-            if ($all_vers == '1') {
-                if ($search_content == '1') {
+            if ('1' == $all_vers) {
+                if ('1' == $search_content) {
                     $sql = "SELECT * FROM ".$tbl_wiki."
                             WHERE
                                 c_id = $course_id AND
@@ -2742,7 +2742,7 @@ class Wiki
                         )."%' AND ".$groupfilter.$condition_session;
                 }
             } else {
-                if ($search_content == '1') {
+                if ('1' == $search_content) {
                     // warning don't use group by reflink because don't return the last version
                     $sql = "SELECT * FROM ".$tbl_wiki." s1
                             WHERE
@@ -2774,8 +2774,8 @@ class Wiki
                 }
             }
         } else {
-            if ($all_vers == '1') {
-                if ($search_content == '1') {
+            if ('1' == $all_vers) {
+                if ('1' == $search_content) {
                     //search all pages and all versions
                     $sql = "SELECT * FROM ".$tbl_wiki."
                             WHERE
@@ -2793,7 +2793,7 @@ class Wiki
                                 ".$groupfilter.$condition_session;
                 }
             } else {
-                if ($search_content == '1') {
+                if ('1' == $search_content) {
                     $sql = "SELECT * FROM ".$tbl_wiki." s1
                             WHERE
                                 s1.c_id = $course_id AND
@@ -2839,21 +2839,21 @@ class Wiki
                 $seconds = substr($obj->dtime, 17, 2);
 
                 //get type assignment icon
-                if ($obj->assignment == 1) {
+                if (1 == $obj->assignment) {
                     $ShowAssignment = Display::return_icon(
                         'wiki_assignment.png',
                         get_lang('Assignment proposed by the trainer'),
                         '',
                         ICON_SIZE_SMALL
                     );
-                } elseif ($obj->assignment == 2) {
+                } elseif (2 == $obj->assignment) {
                     $ShowAssignment = Display::return_icon(
                         'wiki_work.png',
                         get_lang('Learner paper'),
                         '',
                         ICON_SIZE_SMALL
                     );
-                } elseif ($obj->assignment == 0) {
+                } elseif (0 == $obj->assignment) {
                     $ShowAssignment = Display::return_icon(
                         'px_transparent.gif'
                     );
@@ -2861,7 +2861,7 @@ class Wiki
                 $row = [];
                 $row[] = $ShowAssignment;
 
-                if ($all_vers == '1') {
+                if ('1' == $all_vers) {
                     $row[] = '<a href="'.api_get_self().'?'.api_get_cidreq(
                         ).'&action=showpage&title='.api_htmlentities(
                             urlencode($obj->reflink)
@@ -2881,12 +2881,12 @@ class Wiki
                         $obj->title.'</a>';
                 }
 
-                $row[] = ($obj->user_id != 0 && $userinfo !== false) ? UserManager::getUserProfileLink(
+                $row[] = (0 != $obj->user_id && false !== $userinfo) ? UserManager::getUserProfileLink(
                     $userinfo
                 ) : get_lang('Anonymous').' ('.$obj->user_ip.')';
                 $row[] = $year.'-'.$month.'-'.$day.' '.$hours.":".$minutes.":".$seconds;
 
-                if ($all_vers == '1') {
+                if ('1' == $all_vers) {
                     $row[] = $obj->version;
                 } else {
                     $showdelete = '';
@@ -2982,7 +2982,7 @@ class Wiki
                 ['style' => 'width:30px;']
             );
             $table->set_header(1, get_lang('Title'), true);
-            if ($all_vers == '1') {
+            if ('1' == $all_vers) {
                 $table->set_header(2, get_lang('Author'), true);
                 $table->set_header(3, get_lang('Date'), true);
                 $table->set_header(4, get_lang('Version'), true);
@@ -3021,7 +3021,7 @@ class Wiki
     {
         $tbl_wiki = $this->tbl_wiki;
         $course_id = api_get_course_int_id();
-        if ($id === false) {
+        if (false === $id) {
             return [];
         }
         $id = intval($id);
@@ -3201,7 +3201,7 @@ class Wiki
                 // be available or if a page was edited and saved by its author
                 if ($time_editing > $max_edit_time ||
                     ($is_editing_block['is_editing'] == $userId &&
-                        $action != 'edit')
+                        'edit' != $action)
                 ) {
                     self::updateWikiIsEditing($is_editing_block['is_editing']);
                 }
@@ -3616,7 +3616,7 @@ class Wiki
             $wiki_add_lock = $row['addlock'];
         }
 
-        if ($wiki_add_lock == 1) {
+        if (1 == $wiki_add_lock) {
             $status_add_new_pag = get_lang('Yes');
         } else {
             $status_add_new_pag = get_lang('No');
@@ -3916,7 +3916,7 @@ class Wiki
             while ($obj = Database::fetch_object($allpages)) {
                 $userinfo = api_get_user_info($obj->user_id);
                 $row = [];
-                if ($obj->user_id != 0 && $userinfo !== false) {
+                if (0 != $obj->user_id && false !== $userinfo) {
                     $row[] = UserManager::getUserProfileLink($userinfo).'
                             <a href="'.api_get_self(
                         ).'?cidReq='.$_course['code'].'&action=usercontrib&user_id='.urlencode(
@@ -3980,8 +3980,8 @@ class Wiki
         $groupfilter = $this->groupfilter;
         $tbl_wiki_discuss = $this->tbl_wiki_discuss;
 
-        if (api_get_session_id() != 0 &&
-            api_is_allowed_to_session_edit(false, true) == false
+        if (0 != api_get_session_id() &&
+            false == api_is_allowed_to_session_edit(false, true)
         ) {
             api_not_allowed();
         }
@@ -4050,14 +4050,14 @@ class Wiki
 
         // mode assignment: previous to show  page type
         $icon_assignment = null;
-        if ($row['assignment'] == 1) {
+        if (1 == $row['assignment']) {
             $icon_assignment = Display::return_icon(
                 'wiki_assignment.png',
                 get_lang('This page is an assignment proposed by a trainer'),
                 '',
                 ICON_SIZE_SMALL
             );
-        } elseif ($row['assignment'] == 2) {
+        } elseif (2 == $row['assignment']) {
             $icon_assignment = Display::return_icon(
                 'wiki_work.png',
                 get_lang('Learner paperExtra'),
@@ -4070,21 +4070,21 @@ class Wiki
         $avg_WPost_score = null;
 
         // Show title and form to discuss if page exist
-        if ($id != '') {
+        if ('' != $id) {
             // Show discussion to students if isn't hidden.
             // Show page to all teachers if is hidden.
             // Mode assignments: If is hidden, show pages to student only if student is the author
-            if ($row['visibility_disc'] == 1 ||
+            if (1 == $row['visibility_disc'] ||
                 api_is_allowed_to_edit(false, true) ||
                 api_is_platform_admin() ||
-                ($row['assignment'] == 2 && $row['visibility_disc'] == 0 && (api_get_user_id() == $row['user_id']))
+                (2 == $row['assignment'] && 0 == $row['visibility_disc'] && (api_get_user_id() == $row['user_id']))
             ) {
                 echo '<div id="wikititle">';
                 // discussion action: protecting (locking) the discussion
                 $addlock_disc = null;
                 $lock_unlock_disc = null;
                 if (api_is_allowed_to_edit(false, true) || api_is_platform_admin()) {
-                    if (self::check_addlock_discuss() == 1) {
+                    if (1 == self::check_addlock_discuss()) {
                         $addlock_disc = Display::return_icon(
                             'unlock.png',
                             get_lang('Now all members can add comments to this discussion'),
@@ -4112,7 +4112,7 @@ class Wiki
                 $visibility_disc = null;
                 $hide_show_disc = null;
                 if (api_is_allowed_to_edit(false, true) || api_is_platform_admin()) {
-                    if (self::check_visibility_discuss() == 1) {
+                    if (1 == self::check_visibility_discuss()) {
                         /// TODO: 	Fix Mode assignments: If is hidden, show discussion to student only if student is the author
                         $visibility_disc = Display::return_icon(
                             'visible.png',
@@ -4141,7 +4141,7 @@ class Wiki
                 $lock_unlock_rating_disc = null;
                 $ratinglock_disc = null;
                 if (api_is_allowed_to_edit(false, true) || api_is_platform_admin()) {
-                    if (self::check_ratinglock_discuss() == 1) {
+                    if (1 == self::check_ratinglock_discuss()) {
                         $ratinglock_disc = Display::return_icon(
                             'star.png',
                             get_lang('Now all members can rate this page'),
@@ -4167,7 +4167,7 @@ class Wiki
                 echo '</span>';
 
                 // discussion action: email notification
-                if (self::check_notify_discuss($page) == 1) {
+                if (1 == self::check_notify_discuss($page)) {
                     $notify_disc = Display::return_icon(
                         'messagebox_info.png',
                         get_lang('Notify by e-mail of new comments about this page is allowed'),
@@ -4192,13 +4192,13 @@ class Wiki
                 echo $icon_assignment.'&nbsp;&nbsp;&nbsp;'.api_htmlentities(
                         $row['title']
                     );
-                if ($lastuserinfo !== false) {
+                if (false !== $lastuserinfo) {
                     echo ' ('.get_lang('The latest version was edited by').' '.
                         UserManager::getUserProfileLink($lastuserinfo).' '.$lastversiondate.$countWPost.')'.$avg_WPost_score.' '; //TODO: read average score
                 }
 
                 echo '</div>';
-                if ($row['addlock_disc'] == 1 || api_is_allowed_to_edit(false, true) || api_is_platform_admin()) {
+                if (1 == $row['addlock_disc'] || api_is_allowed_to_edit(false, true) || api_is_platform_admin()) {
                     //show comments but students can't add theirs
                     ?>
                     <div class="panel panel-default">
@@ -4221,7 +4221,7 @@ class Wiki
                                 <div class="form-group">
                                     <?php
                                     //check if rating is allowed
-                                    if ($row['ratinglock_disc'] == 1 || api_is_allowed_to_edit(false, true) || api_is_platform_admin()) {
+                                    if (1 == $row['ratinglock_disc'] || api_is_allowed_to_edit(false, true) || api_is_platform_admin()) {
                                         ?>
                                         <label
                                             class="col-sm-2 control-label"><?php echo get_lang('Rating'); ?>:</label>
@@ -4290,7 +4290,7 @@ class Wiki
 
                 echo ' - '.get_lang('Comments on this pageScore').': '.$countWPost_score;
 
-                if ($countWPost_score != 0) {
+                if (0 != $countWPost_score) {
                     $avg_WPost_score = round($row2['sumWPost'] / $countWPost_score, 2).' / 10';
                 } else {
                     $avg_WPost_score = $countWPost_score;
@@ -4310,7 +4310,7 @@ class Wiki
                 echo '<hr noshade size="1">';
                 while ($row = Database::fetch_array($result)) {
                     $userinfo = api_get_user_info($row['userc_id']);
-                    if (($userinfo['status']) == "5") {
+                    if ("5" == ($userinfo['status'])) {
                         $author_status = get_lang('Learner');
                     } else {
                         $author_status = get_lang('Trainer');
@@ -4382,7 +4382,7 @@ class Wiki
                     echo '<tr>';
                     echo '<td rowspan="2">'.$author_photo.'</td>';
                     $userProfile = '';
-                    if ($userinfo !== false) {
+                    if (false !== $userinfo) {
                         $userProfile = UserManager::getUserProfileLink(
                             $userinfo
                         );
@@ -4482,21 +4482,21 @@ class Wiki
                 );
 
                 //get type assignment icon
-                if ($obj->assignment == 1) {
+                if (1 == $obj->assignment) {
                     $ShowAssignment = Display::return_icon(
                         'wiki_assignment.png',
                         get_lang('Assignment proposed by the trainer'),
                         '',
                         ICON_SIZE_SMALL
                     );
-                } elseif ($obj->assignment == 2) {
+                } elseif (2 == $obj->assignment) {
                     $ShowAssignment = Display::return_icon(
                         'wiki_work.png',
                         get_lang('Learner paper'),
                         '',
                         ICON_SIZE_SMALL
                     );
-                } elseif ($obj->assignment == 0) {
+                } elseif (0 == $obj->assignment) {
                     $ShowAssignment = Display::return_icon(
                         'px_transparent.gif'
                     );
@@ -4523,7 +4523,7 @@ class Wiki
                         $_GET['session_id']
                     ).'&group_id='.api_htmlentities($_GET['group_id']).'">
                 '.api_htmlentities($obj->title).'</a>';
-                if ($userinfo !== false) {
+                if (false !== $userinfo) {
                     $row[] = UserManager::getUserProfileLink($userinfo);
                 } else {
                     $row[] = get_lang('Anonymous').' ('.api_htmlentities(
@@ -4660,7 +4660,7 @@ class Wiki
         $tbl_wiki_conf = $this->tbl_wiki_conf;
 
         if (api_is_allowed_to_session_edit(false, true)) {
-            if (self::check_notify_all() == 1) {
+            if (1 == self::check_notify_all()) {
                 $notify_all = Display::return_icon(
                         'messagebox_info.png',
                         get_lang('Notify me by e-mail when somebody replies'),
@@ -4714,21 +4714,21 @@ class Wiki
                 $userinfo = api_get_user_info($obj->user_id);
 
                 //get type assignment icon
-                if ($obj->assignment == 1) {
+                if (1 == $obj->assignment) {
                     $ShowAssignment = Display::return_icon(
                         'wiki_assignment.png',
                         get_lang('Assignment proposed by the trainer'),
                         '',
                         ICON_SIZE_SMALL
                     );
-                } elseif ($obj->assignment == 2) {
+                } elseif (2 == $obj->assignment) {
                     $ShowAssignment = Display::return_icon(
                         'wiki_work.png',
                         get_lang('Learner paper'),
                         '',
                         ICON_SIZE_SMALL
                     );
-                } elseif ($obj->assignment == 0) {
+                } elseif (0 == $obj->assignment) {
                     $ShowAssignment = Display::return_icon(
                         'px_transparent.gif'
                     );
@@ -4760,7 +4760,7 @@ class Wiki
                 $row[] = $obj->version > 1 ? get_lang('edited by') : get_lang(
                     'added by'
                 );
-                if ($userinfo !== false) {
+                if (false !== $userinfo) {
                     $row[] = UserManager::getUserProfileLink($userinfo);
                 } else {
                     $row[] = get_lang('Anonymous').' ('.api_htmlentities(
@@ -4844,21 +4844,21 @@ class Wiki
 
             //get type assignment icon
             $ShowAssignment = '';
-            if ($row['assignment'] == 1) {
+            if (1 == $row['assignment']) {
                 $ShowAssignment = Display::return_icon(
                     'wiki_assignment.png',
                     get_lang('Assignment proposed by the trainer'),
                     '',
                     ICON_SIZE_SMALL
                 );
-            } elseif ($row['assignment'] == 2) {
+            } elseif (2 == $row['assignment']) {
                 $ShowAssignment = Display::return_icon(
                     'wiki_work.png',
                     get_lang('Learner paper'),
                     '',
                     ICON_SIZE_SMALL
                 );
-            } elseif ($row['assignment'] == 0) {
+            } elseif (0 == $row['assignment']) {
                 $ShowAssignment = Display::return_icon('px_transparent.gif');
             }
 
@@ -4881,7 +4881,7 @@ class Wiki
 
             //fix index to title Main page into linksto
 
-            if ($page == 'index') {
+            if ('index' == $page) {
                 $page = str_replace(' ', '_', get_lang('Home'));
             }
 
@@ -4921,21 +4921,21 @@ class Wiki
                     $seconds = substr($obj->dtime, 17, 2);
 
                     //get type assignment icon
-                    if ($obj->assignment == 1) {
+                    if (1 == $obj->assignment) {
                         $ShowAssignment = Display::return_icon(
                             'wiki_assignment.png',
                             get_lang('Assignment proposed by the trainer'),
                             '',
                             ICON_SIZE_SMALL
                         );
-                    } elseif ($obj->assignment == 2) {
+                    } elseif (2 == $obj->assignment) {
                         $ShowAssignment = Display::return_icon(
                             'wiki_work.png',
                             get_lang('Learner paper'),
                             '',
                             ICON_SIZE_SMALL
                         );
-                    } elseif ($obj->assignment == 0) {
+                    } elseif (0 == $obj->assignment) {
                         $ShowAssignment = Display::return_icon(
                             'px_transparent.gif'
                         );
@@ -4950,7 +4950,7 @@ class Wiki
                             $_GET['session_id']
                         ).'&group_id='.api_htmlentities($_GET['group_id']).'">'.
                         api_htmlentities($obj->title).'</a>';
-                    if ($userinfo !== false) {
+                    if (false !== $userinfo) {
                         $row[] = UserManager::getUserProfileLink($userinfo);
                     } else {
                         $row[] = get_lang('Anonymous').' ('.$obj->user_ip.')';
@@ -5075,7 +5075,7 @@ class Wiki
         $groupfilter = $this->groupfilter;
         $userId = intval($userId);
         $userinfo = api_get_user_info($userId);
-        if ($userinfo !== false) {
+        if (false !== $userinfo) {
             echo '<div class="actions">'.
                 get_lang('Usercontributions').': '.UserManager::getUserProfileLink($userinfo).
                 '<a href="'.api_get_self().'?cidReq='.$_course['code'].'&action=usercontrib&user_id='.$userId.
@@ -5107,21 +5107,21 @@ class Wiki
             while ($obj = Database::fetch_object($allpages)) {
                 //get type assignment icon
                 $ShowAssignment = '';
-                if ($obj->assignment == 1) {
+                if (1 == $obj->assignment) {
                     $ShowAssignment = Display::return_icon(
                         'wiki_assignment.png',
                         get_lang('This page is an assignment proposed by a trainer'),
                         '',
                         ICON_SIZE_SMALL
                     );
-                } elseif ($obj->assignment == 2) {
+                } elseif (2 == $obj->assignment) {
                     $ShowAssignment = Display::return_icon(
                         'wiki_work.png',
                         get_lang('Learner paper'),
                         '',
                         ICON_SIZE_SMALL
                     );
-                } elseif ($obj->assignment == 0) {
+                } elseif (0 == $obj->assignment) {
                     $ShowAssignment = Display::return_icon(
                         'px_transparent.gif'
                     );
@@ -5240,21 +5240,21 @@ class Wiki
             while ($obj = Database::fetch_object($allpages)) {
                 //get type assignment icon
                 $ShowAssignment = '';
-                if ($obj->assignment == 1) {
+                if (1 == $obj->assignment) {
                     $ShowAssignment = Display::return_icon(
                         'wiki_assignment.png',
                         get_lang('Assignment proposed by the trainer'),
                         '',
                         ICON_SIZE_SMALL
                     );
-                } elseif ($obj->assignment == 2) {
+                } elseif (2 == $obj->assignment) {
                     $ShowAssignment = Display::return_icon(
                         'wiki_work.png',
                         get_lang('Learner paper'),
                         '',
                         ICON_SIZE_SMALL
                     );
-                } elseif ($obj->assignment == 0) {
+                } elseif (0 == $obj->assignment) {
                     $ShowAssignment = Display::return_icon(
                         'px_transparent.gif'
                     );
@@ -5322,11 +5322,11 @@ class Wiki
 
         /* Only teachers and platform admin can edit the index page.
         Only teachers and platform admin can edit an assignment teacher*/
-        if (($current_row['reflink'] == 'index' ||
-                $current_row['reflink'] == '' ||
-                $current_row['assignment'] == 1) &&
+        if (('index' == $current_row['reflink'] ||
+                '' == $current_row['reflink'] ||
+                1 == $current_row['assignment']) &&
             (!api_is_allowed_to_edit(false, true) &&
-                $this->group_id == 0)
+                0 == $this->group_id)
         ) {
             Display::addFlash(
                 Display::return_message(
@@ -5337,7 +5337,7 @@ class Wiki
             );
         } else {
             // check if is a wiki group
-            if ($current_row['group_id'] != 0) {
+            if (0 != $current_row['group_id']) {
                 $groupInfo = GroupManager::get_group_properties(
                     $this->group_id
                 );
@@ -5363,7 +5363,7 @@ class Wiki
 
             // check if is an assignment
             //$icon_assignment = null;
-            if ($current_row['assignment'] == 1) {
+            if (1 == $current_row['assignment']) {
                 Display::addFlash(
                     Display::return_message(
                         get_lang('You can edit this page, but the pages of learners will not be modified'),
@@ -5371,8 +5371,8 @@ class Wiki
                         false
                     )
                 );
-            } elseif ($current_row['assignment'] == 2) {
-                if (($userId == $current_row['user_id']) == false) {
+            } elseif (2 == $current_row['assignment']) {
+                if (false == ($userId == $current_row['user_id'])) {
                     if (api_is_allowed_to_edit(
                             false,
                             true
@@ -5395,9 +5395,9 @@ class Wiki
 
             //show editor if edit is allowed
             if ($PassEdit) {
-                if ($current_row['editlock'] == 1 &&
-                    (api_is_allowed_to_edit(false, true) == false ||
-                        api_is_platform_admin() == false)
+                if (1 == $current_row['editlock'] &&
+                    (false == api_is_allowed_to_edit(false, true) ||
+                        false == api_is_platform_admin())
                 ) {
                     Display::addFlash(
                         Display::return_message(
@@ -5407,7 +5407,7 @@ class Wiki
                         )
                     );
                 } else {
-                    if ($last_row['is_editing'] != 0 && $last_row['is_editing'] != $userId) {
+                    if (0 != $last_row['is_editing'] && $last_row['is_editing'] != $userId) {
                         // Checking for concurrent users
                         $timestamp_edit = strtotime($last_row['time_edit']);
                         $time_editing = time() - $timestamp_edit;
@@ -5557,7 +5557,7 @@ class Wiki
                 ORDER BY reflink ASC';
         $allpages = Database::query($sql);
         while ($row = Database::fetch_array($allpages)) {
-            if ($row['reflink'] == 'index') {
+            if ('index' == $row['reflink']) {
                 $row['reflink'] = str_replace(
                     ' ',
                     '_',
@@ -5592,7 +5592,7 @@ class Wiki
             // Find linksto into reflink. If found ->page is linked
             foreach ($refs as $v) {
                 if (in_array($v, $pages)) {
-                    if (trim($v) != "") {
+                    if ("" != trim($v)) {
                         $linked[] = $v;
                     }
                 }
@@ -5714,21 +5714,21 @@ class Wiki
             while ($row = Database::fetch_array($allpages)) {
                 $orphaned_title = $row['title'];
                 $orphaned_visibility = $row['visibility'];
-                if ($row['assignment'] == 1) {
+                if (1 == $row['assignment']) {
                     $ShowAssignment = Display::return_icon(
                         'wiki_assignment.png',
                         '',
                         '',
                         ICON_SIZE_SMALL
                     );
-                } elseif ($row['assignment'] == 2) {
+                } elseif (2 == $row['assignment']) {
                     $ShowAssignment = Display::return_icon(
                         'wiki_work.png',
                         '',
                         '',
                         ICON_SIZE_SMALL
                     );
-                } elseif ($row['assignment'] == 0) {
+                } elseif (0 == $row['assignment']) {
                     $ShowAssignment = Display::return_icon(
                         'px_transparent.gif'
                     );
@@ -5736,7 +5736,7 @@ class Wiki
             }
 
             if (!api_is_allowed_to_edit(false, true) || !api_is_platform_admin(
-                ) && $orphaned_visibility == 0) {
+                ) && 0 == $orphaned_visibility) {
                 continue;
             }
 
@@ -5801,7 +5801,7 @@ class Wiki
         $allpages = Database::query($sql);
 
         while ($row = Database::fetch_array($allpages)) {
-            if ($row['reflink'] == 'index') {
+            if ('index' == $row['reflink']) {
                 $row['reflink'] = str_replace(
                     ' ',
                     '_',
@@ -5825,7 +5825,7 @@ class Wiki
             // Find linksto into reflink. If not found ->page is wanted
             foreach ($refs as $v) {
                 if (!in_array($v, $pages)) {
-                    if (trim($v) != "") {
+                    if ("" != trim($v)) {
                         $wanted[] = $v;
                     }
                 }
@@ -5913,21 +5913,21 @@ class Wiki
             while ($obj = Database::fetch_object($allpages)) {
                 //get type assignment icon
                 $ShowAssignment = '';
-                if ($obj->assignment == 1) {
+                if (1 == $obj->assignment) {
                     $ShowAssignment = Display::return_icon(
                         'wiki_assignment.png',
                         get_lang('Assignment proposed by the trainer'),
                         '',
                         ICON_SIZE_SMALL
                     );
-                } elseif ($obj->assignment == 2) {
+                } elseif (2 == $obj->assignment) {
                     $ShowAssignment = $ShowAssignment = Display::return_icon(
                         'wiki_work.png',
                         get_lang('Learner paper'),
                         '',
                         ICON_SIZE_SMALL
                     );
-                } elseif ($obj->assignment == 0) {
+                } elseif (0 == $obj->assignment) {
                     $ShowAssignment = Display::return_icon(
                         'px_transparent.gif'
                     );
@@ -6016,7 +6016,7 @@ class Wiki
 
         if (api_is_allowed_to_edit(false, true) || api_is_platform_admin()) {
             // page action: enable or disable the adding of new pages
-            if (self::check_addnewpagelock() == 0) {
+            if (0 == self::check_addnewpagelock()) {
                 $protect_addnewpage = Display::return_icon(
                     'off.png',
                     get_lang('The Add option has been protected. Trainers only can add pages to this Wiki. But learners and group members can still edit them')
@@ -6101,7 +6101,7 @@ class Wiki
             Display::addFlash(
                 '<div id="wikititle">'.get_lang('Delete this page and all its versions').'</div>'
             );
-            if ($page == "index") {
+            if ("index" == $page) {
                 Display::addFlash(
                     Display::return_message(
                         get_lang('Deleting the homepage of the Wiki is not recommended because it is the main access to the wiki.<br />If, however, you need to do so, do not forget to re-create this Homepage. Until then, other users will not be able to add new pages.'),
@@ -6124,7 +6124,7 @@ class Wiki
                 );
             }
 
-            if (isset($_GET['delete']) && $_GET['delete'] == 'yes') {
+            if (isset($_GET['delete']) && 'yes' == $_GET['delete']) {
                 $result = self::deletePage(
                     $page,
                     $course_id,
@@ -6166,8 +6166,8 @@ class Wiki
         $groupId = $this->group_id;
         $userId = api_get_user_id();
 
-        if (api_get_session_id() != 0 &&
-            api_is_allowed_to_session_edit(false, true) == false
+        if (0 != api_get_session_id() &&
+            false == api_is_allowed_to_session_edit(false, true)
         ) {
             api_not_allowed();
         }
@@ -6184,7 +6184,7 @@ class Wiki
         $row = Database::fetch_array($result);
 
         // we do not need a while loop since we are always displaying the last version
-        if ($row['content'] == '' && $row['title'] == '' && $page == '') {
+        if ('' == $row['content'] && '' == $row['title'] && '' == $page) {
             Display::addFlash(
                 Display::return_message(
                     get_lang('You must select a page first'),
@@ -6194,7 +6194,7 @@ class Wiki
             );
 
             return;
-        } elseif ($row['content'] == '' && $row['title'] == '' && $page == 'index') {
+        } elseif ('' == $row['content'] && '' == $row['title'] && 'index' == $page) {
             // Table structure for better export to pdf
             $default_table_for_content_Start = '<table align="center" border="0"><tr><td align="center">';
             $default_table_for_content_End = '</td></tr></table>';
@@ -6214,11 +6214,11 @@ class Wiki
         // Only teachers and platform admin can edit an assignment teacher.
         // And users in groups
 
-        if (($row['reflink'] == 'index' || $row['reflink'] == '' || $row['assignment'] == 1) &&
+        if (('index' == $row['reflink'] || '' == $row['reflink'] || 1 == $row['assignment']) &&
             (!api_is_allowed_to_edit(
                     false,
                     true
-                ) && $groupId == 0) && !api_is_allowed_in_course()
+                ) && 0 == $groupId) && !api_is_allowed_in_course()
         ) {
             Display::addFlash(
                 Display::return_message(
@@ -6250,7 +6250,7 @@ class Wiki
 
             $icon_assignment = null;
             // check if is a assignment
-            if ($row['assignment'] == 1) {
+            if (1 == $row['assignment']) {
                 Display::addFlash(
                     Display::return_message(get_lang('You can edit this page, but the pages of learners will not be modified'))
                 );
@@ -6261,14 +6261,14 @@ class Wiki
                     '',
                     ICON_SIZE_SMALL
                 );
-            } elseif ($row['assignment'] == 2) {
+            } elseif (2 == $row['assignment']) {
                 $icon_assignment = Display::return_icon(
                     'wiki_work.png',
                     get_lang('Learner paperExtra'),
                     '',
                     ICON_SIZE_SMALL
                 );
-                if (($userId == $row['user_id']) == false) {
+                if (false == ($userId == $row['user_id'])) {
                     if (api_is_allowed_to_edit(
                             false,
                             true
@@ -6290,9 +6290,9 @@ class Wiki
 
             if ($PassEdit) {
                 //show editor if edit is allowed <<<<<
-                if ($row['editlock'] == 1 &&
-                    (api_is_allowed_to_edit(false, true) == false ||
-                        api_is_platform_admin() == false)
+                if (1 == $row['editlock'] &&
+                    (false == api_is_allowed_to_edit(false, true) ||
+                        false == api_is_platform_admin())
                 ) {
                     Display::addFlash(
                         Display::return_message(
@@ -6322,7 +6322,7 @@ class Wiki
 
                     if (!empty($row['enddate_assig']) &&
                         time() > strtotime($row['enddate_assig']) &&
-                        $row['delayedsubmit'] == 0
+                        0 == $row['delayedsubmit']
                     ) {
                         $message = get_lang(
                                 'TheDeadlineHasBeenCompleted'
@@ -6384,19 +6384,19 @@ class Wiki
                             );
                         }
 
-                        if ($row['delayedsubmit'] == 0) {
+                        if (0 == $row['delayedsubmit']) {
                             $message_task_delayedsubmit = get_lang('No');
                         } else {
                             $message_task_delayedsubmit = get_lang('Yes');
                         }
 
-                        if ($row['max_version'] == 0) {
+                        if (0 == $row['max_version']) {
                             $message_task_max_version = get_lang('No');
                         } else {
                             $message_task_max_version = $row['max_version'];
                         }
 
-                        if ($row['max_text'] == 0) {
+                        if (0 == $row['max_text']) {
                             $message_task_max_text = get_lang('No');
                         } else {
                             $message_task_max_text = $row['max_text'];
@@ -6461,7 +6461,7 @@ class Wiki
                     }
 
                     // Previous checking for concurrent editions
-                    if ($row['is_editing'] == 0) {
+                    if (0 == $row['is_editing']) {
                         Display::addFlash(
                             Display::return_message(
                                 get_lang('You have 20 minutes to edit this page. After this time, if you have not saved the page, another user will be able to edit it, and you might lose your changes')
@@ -6480,7 +6480,7 @@ class Wiki
                         $rest_time = $max_edit_time - $time_editing;
 
                         $userinfo = api_get_user_info($row['is_editing']);
-                        if ($userinfo !== false) {
+                        if (false !== $userinfo) {
                             $is_being_edited = get_lang(
                                     'ThisPageisBeginedited by'
                                 ).' '.UserManager::getUserProfileLink(
@@ -6540,7 +6540,7 @@ class Wiki
                             );
                         } elseif (!self::double_post($_POST['wpost_id'])) {
                             //double post
-                        } elseif ($_POST['version'] != '' && $versionFromSession != 0 && $_POST['version'] != $versionFromSession) {
+                        } elseif ('' != $_POST['version'] && 0 != $versionFromSession && $_POST['version'] != $versionFromSession) {
                             //prevent concurrent users and double version
                             Display::addFlash(
                                 Display::return_message(
@@ -6619,14 +6619,14 @@ class Wiki
             $KeyUserId = $row['user_id'];
         }
         $icon_assignment = null;
-        if ($KeyAssignment == 1) {
+        if (1 == $KeyAssignment) {
             $icon_assignment = Display::return_icon(
                 'wiki_assignment.png',
                 get_lang('This page is an assignment proposed by a trainer'),
                 '',
                 ICON_SIZE_SMALL
             );
-        } elseif ($KeyAssignment == 2) {
+        } elseif (2 == $KeyAssignment) {
             $icon_assignment = Display::return_icon(
                 'wiki_work.png',
                 get_lang('Learner paperExtra'),
@@ -6637,11 +6637,11 @@ class Wiki
 
         // Second, show
         //if the page is hidden and is a job only sees its author and professor
-        if ($KeyVisibility == 1 ||
+        if (1 == $KeyVisibility ||
             api_is_allowed_to_edit(false, true) ||
             api_is_platform_admin() ||
             (
-                $KeyAssignment == 2 && $KeyVisibility == 0 &&
+                2 == $KeyAssignment && 0 == $KeyVisibility &&
                 ($userId == $KeyUserId)
             )
         ) {
@@ -6695,10 +6695,10 @@ class Wiki
                     );
 
                     echo '<li style="margin-bottom: 5px;">';
-                    ($counter == 0) ? $oldstyle = 'style="visibility: hidden;"' : $oldstyle = '';
-                    ($counter == 0) ? $newchecked = ' checked' : $newchecked = '';
+                    (0 == $counter) ? $oldstyle = 'style="visibility: hidden;"' : $oldstyle = '';
+                    (0 == $counter) ? $newchecked = ' checked' : $newchecked = '';
                     ($counter == $total_versions - 1) ? $newstyle = 'style="visibility: hidden;"' : $newstyle = '';
-                    ($counter == 1) ? $oldchecked = ' checked' : $oldchecked = '';
+                    (1 == $counter) ? $oldchecked = ' checked' : $oldchecked = '';
                     echo '<input name="old" value="'.$row['id'].'" type="radio" '.$oldstyle.' '.$oldchecked.'/> ';
                     echo '<input name="new" value="'.$row['id'].'" type="radio" '.$newstyle.' '.$newchecked.'/> ';
                     echo '<a href="'.api_get_self(
@@ -6715,7 +6715,7 @@ class Wiki
                     echo '</a>';
                     echo ' ('.get_lang('Version').' '.$row['version'].')';
                     echo ' '.get_lang('By').' ';
-                    if ($userinfo !== false) {
+                    if (false !== $userinfo) {
                         echo UserManager::getUserProfileLink($userinfo);
                     } else {
                         echo get_lang('Anonymous').' ('.api_htmlentities(
@@ -6728,7 +6728,7 @@ class Wiki
                     $comment = $row['comment'];
                     if (!empty($comment)) {
                         $comment = api_substr($comment, 0, 100);
-                        if ($comment !== false) {
+                        if (false !== $comment) {
                             $comment = api_htmlentities($comment);
                             echo get_lang('Comments').': '.$comment;
                             if (api_strlen($row['comment']) > 100) {
@@ -7035,7 +7035,7 @@ class Wiki
                         false,
                         true
                     ) || api_is_platform_admin()) {
-                    if (isset($_GET['delete']) && $_GET['delete'] == 'yes') {
+                    if (isset($_GET['delete']) && 'yes' == $_GET['delete']) {
                         $return_message = self::delete_wiki();
                         Display::addFlash(
                             Display::return_message(
@@ -7055,10 +7055,10 @@ class Wiki
                 self::getLinks($page);
                 break;
             case 'addnew':
-                if (api_get_session_id() != 0 && api_is_allowed_to_session_edit(
+                if (0 != api_get_session_id() && false == api_is_allowed_to_session_edit(
                         false,
                         true
-                    ) == false) {
+                    )) {
                     api_not_allowed();
                 }
                 $groupInfo = GroupManager::get_group_properties(
@@ -7092,11 +7092,11 @@ class Wiki
                             )
                         );
                     }
-                } elseif (self::check_addnewpagelock(
-                    ) == 0 && (api_is_allowed_to_edit(
+                } elseif (0 == self::check_addnewpagelock(
+                    ) && (false == api_is_allowed_to_edit(
                             false,
                             true
-                        ) == false || api_is_platform_admin() == false)) {
+                        ) || false == api_is_platform_admin())) {
                     Display::addFlash(
                         Display::return_message(
                             get_lang('The add option has been temporarily disabled by the trainer'),
@@ -7114,7 +7114,7 @@ class Wiki
                             api_get_user_id(),
                             $groupInfo
                         ) ||
-                        $_GET['group_id'] == 0
+                        0 == $_GET['group_id']
                     ) {
                         self::display_new_wiki_form();
                     } else {

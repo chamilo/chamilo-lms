@@ -92,7 +92,7 @@ function validateDate($value)
 {
     $value = DateTime::createFromFormat('d/m/Y', $value);
 
-    if ($value === false) {
+    if (false === $value) {
         return false;
     }
 

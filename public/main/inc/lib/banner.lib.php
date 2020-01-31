@@ -8,8 +8,6 @@ use ChamiloSession as Session;
  * Code.
  *
  * @todo use globals or parameters or add this file in the template
- *
- * @package chamilo.include
  */
 
 /**
@@ -29,9 +27,9 @@ function getCustomTabs()
     $customTabs = [];
     while ($row = Database::fetch_assoc($result)) {
         $shouldAdd = true;
-        if (strpos($row['subkey'], Plugin::TAB_FILTER_NO_STUDENT) !== false && api_is_student()) {
+        if (false !== strpos($row['subkey'], Plugin::TAB_FILTER_NO_STUDENT) && api_is_student()) {
             $shouldAdd = false;
-        } elseif (strpos($row['subkey'], Plugin::TAB_FILTER_ONLY_STUDENT) !== false && !api_is_student()) {
+        } elseif (false !== strpos($row['subkey'], Plugin::TAB_FILTER_ONLY_STUDENT) && !api_is_student()) {
             $shouldAdd = false;
         }
 
@@ -79,14 +77,14 @@ function accessToWhoIsOnline()
     $user_id = api_get_user_id();
     $course_id = api_get_course_int_id();
     $access = false;
-    if ((api_get_setting('showonline', 'world') === 'true' && !$user_id) ||
-        (api_get_setting('showonline', 'users') === 'true' && $user_id) ||
-        (api_get_setting('showonline', 'course') === 'true' && $user_id && $course_id)
+    if (('true' === api_get_setting('showonline', 'world') && !$user_id) ||
+        ('true' === api_get_setting('showonline', 'users') && $user_id) ||
+        ('true' === api_get_setting('showonline', 'course') && $user_id && $course_id)
     ) {
         $access = true;
     }
 
-    if ($access === true) {
+    if (true === $access) {
         $profileList = api_get_configuration_value('allow_online_users_by_status');
         if (!empty($profileList) && isset($profileList['status'])) {
             $userInfo = api_get_user_info();
@@ -122,8 +120,8 @@ function returnNotificationMenu()
 
         // Display the who's online of the platform
         if ($number &&
-            (api_get_setting('showonline', 'world') == 'true' && !$user_id) ||
-            (api_get_setting('showonline', 'users') == 'true' && $user_id)
+            ('true' == api_get_setting('showonline', 'world') && !$user_id) ||
+            ('true' == api_get_setting('showonline', 'users') && $user_id)
         ) {
             $html .= '<li class="user-online"><a href="'.api_get_path(WEB_PATH).'whoisonline.php" target="_self" title="'
                 .get_lang('Users online').'" >'
@@ -135,7 +133,7 @@ function returnNotificationMenu()
         if ($number_online_in_course &&
             (
                 is_array($courseInfo) &&
-                api_get_setting('showonline', 'course') == 'true' && isset($courseInfo['sysCode'])
+                'true' == api_get_setting('showonline', 'course') && isset($courseInfo['sysCode'])
             )
         ) {
             $html .= '<li class="user-online-course"><a href="'.api_get_path(WEB_PATH).'whoisonline.php?cidReq='.$courseInfo['sysCode']
@@ -181,7 +179,7 @@ function return_navigation_array()
         $menu_navigation[SECTION_CAMPUS] = $possible_tabs[SECTION_CAMPUS];
     }
 
-    if (api_get_setting('course_catalog_published') == 'true' && api_is_anonymous()) {
+    if ('true' == api_get_setting('course_catalog_published') && api_is_anonymous()) {
         $navigation[SECTION_CATALOG] = $possible_tabs[SECTION_CATALOG];
     }
 
@@ -195,7 +193,7 @@ function return_navigation_array()
 
         // My Profile
         if (in_array('my_profile', $tabs) &&
-            api_get_setting('allow_social_tool') != 'true'
+            'true' != api_get_setting('allow_social_tool')
         ) {
             $navigation['myprofile'] = $possible_tabs['myprofile'];
         } else {
@@ -210,7 +208,7 @@ function return_navigation_array()
         }
 
         // Gradebook
-        if (api_get_setting('gradebook_enable') == 'true') {
+        if ('true' == api_get_setting('gradebook_enable')) {
             if (in_array('my_gradebook', $tabs)) {
                 $navigation['mygradebook'] = $possible_tabs['mygradebook'];
             } else {
@@ -235,7 +233,7 @@ function return_navigation_array()
 
         // Social Networking
         if (in_array('social', $tabs)) {
-            if (api_get_setting('allow_social_tool') == 'true') {
+            if ('true' == api_get_setting('allow_social_tool')) {
                 $navigation['social'] = isset($possible_tabs['social']) ? $possible_tabs['social'] : null;
             }
         } else {
@@ -256,7 +254,7 @@ function return_navigation_array()
             $params = ['variable = ? AND subkey = ?' => ['status', 'studentfollowup']];
             $result = api_get_settings_params_simple($params);
             $plugin = StudentFollowUpPlugin::create();
-            if (!empty($result) && $result['selected_value'] === 'installed') {
+            if (!empty($result) && 'installed' === $result['selected_value']) {
                 // Students
                 $url = api_get_path(WEB_PLUGIN_PATH).'studentfollowup/posts.php';
                 if (api_is_platform_admin() || api_is_drh() || api_is_teacher()) {
@@ -282,7 +280,7 @@ function return_navigation_array()
         $customTabs = getCustomTabs();
         if (!empty($customTabs)) {
             foreach ($customTabs as $tab) {
-                if (api_get_setting($tab['variable'], $tab['subkey']) == 'true' &&
+                if ('true' == api_get_setting($tab['variable'], $tab['subkey']) &&
                     isset($possible_tabs[$tab['subkey']])
                 ) {
                     $possible_tabs[$tab['subkey']]['url'] = api_get_path(WEB_PATH).$possible_tabs[$tab['subkey']]['url'];
@@ -300,9 +298,9 @@ function return_navigation_array()
         $customTabs = getCustomTabs();
         if (!empty($customTabs)) {
             foreach ($customTabs as $tab) {
-                if (api_get_setting($tab['variable'], $tab['subkey']) == 'true' &&
+                if ('true' == api_get_setting($tab['variable'], $tab['subkey']) &&
                     isset($possible_tabs[$tab['subkey']]) &&
-                    api_get_plugin_setting(strtolower(str_replace('Tabs', '', $tab['subkeytext'])), 'public_main_menu_tab') == 'true'
+                    'true' == api_get_plugin_setting(strtolower(str_replace('Tabs', '', $tab['subkeytext'])), 'public_main_menu_tab')
                 ) {
                     $possible_tabs[$tab['subkey']]['url'] = api_get_path(WEB_PATH).$possible_tabs[$tab['subkey']]['url'];
                     $navigation[$tab['subkey']] = $possible_tabs[$tab['subkey']];
@@ -424,36 +422,36 @@ function return_breadcrumb($interbreadcrumb, $language_file, $nameTools)
     (which is the tool itself)*/
     if (isset($interbreadcrumb) && is_array($interbreadcrumb)) {
         foreach ($interbreadcrumb as $breadcrumb_step) {
-            if (isset($breadcrumb_step['type']) && $breadcrumb_step['type'] == 'right') {
+            if (isset($breadcrumb_step['type']) && 'right' == $breadcrumb_step['type']) {
                 continue;
             }
-            if ($breadcrumb_step['url'] != '#') {
+            if ('#' != $breadcrumb_step['url']) {
                 $sep = strrchr($breadcrumb_step['url'], '?') ? '&' : '?';
-                $courseParams = strpos($breadcrumb_step['url'], 'cidReq') === false ? api_get_cidreq() : '';
+                $courseParams = false === strpos($breadcrumb_step['url'], 'cidReq') ? api_get_cidreq() : '';
                 $navigation_item['url'] = $breadcrumb_step['url'].$sep.$courseParams;
             } else {
                 $navigation_item['url'] = '#';
             }
             $navigation_item['title'] = $breadcrumb_step['name'];
             // titles for shared folders
-            if ($breadcrumb_step['name'] == 'shared_folder') {
+            if ('shared_folder' == $breadcrumb_step['name']) {
                 $navigation_item['title'] = get_lang('Folders of users');
             } elseif (strstr($breadcrumb_step['name'], 'shared_folder_session_')) {
                 $navigation_item['title'] = get_lang('Folders of users');
             } elseif (strstr($breadcrumb_step['name'], 'sf_user_')) {
                 $userinfo = api_get_user_info(substr($breadcrumb_step['name'], 8));
                 $navigation_item['title'] = $userinfo['complete_name'];
-            } elseif ($breadcrumb_step['name'] == 'chat_files') {
+            } elseif ('chat_files' == $breadcrumb_step['name']) {
                 $navigation_item['title'] = get_lang('Chat conversations history');
-            } elseif ($breadcrumb_step['name'] == 'images') {
+            } elseif ('images' == $breadcrumb_step['name']) {
                 $navigation_item['title'] = get_lang('Images');
-            } elseif ($breadcrumb_step['name'] == 'video') {
+            } elseif ('video' == $breadcrumb_step['name']) {
                 $navigation_item['title'] = get_lang('Video');
-            } elseif ($breadcrumb_step['name'] == 'audio') {
+            } elseif ('audio' == $breadcrumb_step['name']) {
                 $navigation_item['title'] = get_lang('Audio');
-            } elseif ($breadcrumb_step['name'] == 'flash') {
+            } elseif ('flash' == $breadcrumb_step['name']) {
                 $navigation_item['title'] = get_lang('Flash');
-            } elseif ($breadcrumb_step['name'] == 'gallery') {
+            } elseif ('gallery' == $breadcrumb_step['name']) {
                 $navigation_item['title'] = get_lang('Gallery');
             }
             // Fixes breadcrumb title now we applied the Security::remove_XSS and
@@ -468,8 +466,8 @@ function return_breadcrumb($interbreadcrumb, $language_file, $nameTools)
     $navigation_right = [];
     if (isset($interbreadcrumb) && is_array($interbreadcrumb)) {
         foreach ($interbreadcrumb as $breadcrumb_step) {
-            if (isset($breadcrumb_step['type']) && $breadcrumb_step['type'] == 'right') {
-                if ($breadcrumb_step['url'] != '#') {
+            if (isset($breadcrumb_step['type']) && 'right' == $breadcrumb_step['type']) {
+                if ('#' != $breadcrumb_step['url']) {
                     $sep = (strrchr($breadcrumb_step['url'], '?') ? '&amp;' : '?');
                     $navigation_item['url'] = $breadcrumb_step['url'].$sep.api_get_cidreq();
                 } else {
@@ -495,7 +493,7 @@ function return_breadcrumb($interbreadcrumb, $language_file, $nameTools)
     $counter = 0;
     foreach ($navigation as $index => $navigation_info) {
         if (!empty($navigation_info['title'])) {
-            if ($navigation_info['url'] == '#') {
+            if ('#' == $navigation_info['url']) {
                 $final_navigation[$index] = $navigation_info['title'];
             } else {
                 $final_navigation[$index] = '<a href="'.$navigation_info['url'].'" target="_self">'.$navigation_info['title'].'</a>';
@@ -514,7 +512,7 @@ function return_breadcrumb($interbreadcrumb, $language_file, $nameTools)
                 api_is_platform_admin() ||
                 api_is_coach(null, null, false)
             ) &&
-            api_get_setting('student_view_enabled') === 'true' && api_get_course_info()
+            'true' === api_get_setting('student_view_enabled') && api_get_course_info()
         ) {
             $view_as_student_link = api_display_tool_view_option();
 
@@ -587,7 +585,7 @@ function getOnlineUsersCount()
 {
     $number = 0;
     $cacheAvailable = api_get_configuration_value('apc');
-    if ($cacheAvailable === true) {
+    if (true === $cacheAvailable) {
         $apcVar = api_get_configuration_value('apc_prefix').'my_campus_whoisonline_count_simple';
         if (apcu_exists($apcVar)) {
             $number = apcu_fetch($apcVar);
@@ -615,7 +613,7 @@ function getOnlineUsersInCourseCount($userId, $courseInfo)
     $cacheAvailable = api_get_configuration_value('apc');
     $numberOnlineInCourse = 0;
     if (!empty($courseInfo['id'])) {
-        if ($cacheAvailable === true) {
+        if (true === $cacheAvailable) {
             $apcVar = api_get_configuration_value('apc_prefix').'my_campus_whoisonline_count_simple_'.$courseInfo['id'];
             if (apcu_exists($apcVar)) {
                 $numberOnlineInCourse = apcu_fetch($apcVar);
@@ -658,7 +656,7 @@ function getOnlineUsersInSessionCount($sessionId)
         return 0;
     }
 
-    if ($cacheAvailable === true) {
+    if (true === $cacheAvailable) {
         $apcVar = api_get_configuration_value('apc_prefix').'my_campus_whoisonline_session_count_simple_'.$sessionId;
 
         if (apcu_exists($apcVar)) {

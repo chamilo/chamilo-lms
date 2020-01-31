@@ -15,8 +15,6 @@ use ChamiloSession as Session;
  * @author   Yannick Warnier <ywarnier@beeznest.org> (extended and maintained - 2005-2014)
  *
  * @version  v 1.2
- *
- * @package  chamilo.learnpath.scorm
  */
 
 // If you open the imsmanifest.xml via local machine (f.ex.: file://c:/...), then the Apiwrapper.js
@@ -354,7 +352,7 @@ function LMSInitialize() {
         $fixLinkSetting = api_get_configuration_value('lp_fix_embed_content');
         $showGlossary = in_array($glossaryExtraTools, ['true', 'lp', 'exercise_and_lp']);
         if ($showGlossary) {
-            if (api_get_setting('show_glossary_in_documents') == 'ismanual') {
+            if ('ismanual' == api_get_setting('show_glossary_in_documents')) {
                 ?>
                 if (olms.lms_item_type == 'sco') {
                     attach_glossary_into_scorm('automatic');
@@ -362,7 +360,7 @@ function LMSInitialize() {
                     attach_glossary_into_scorm('manual');
                 }
                 <?php
-            } elseif (api_get_setting('show_glossary_in_documents') == 'isautomatic') {
+            } elseif ('isautomatic' == api_get_setting('show_glossary_in_documents')) {
                 ?>
                 attach_glossary_into_scorm('automatic');
             <?php
@@ -848,7 +846,7 @@ function LMSSetValue(param, val) {
         }
     }
     <?php
-    if ($oLP->force_commit == 1) {
+    if (1 == $oLP->force_commit) {
         echo " var mycommit = LMSCommit('force');";
     }
     ?>
@@ -1665,7 +1663,7 @@ function switch_item(current_item, next_item)
                 '&item_id=' + next_item + '&cid=' + olms.lms_course_id + '&sid=' + olms.lms_session_id;
     var cont_f = $("#content_id");
 
-    <?php if ($oLP->mode == 'fullscreen') {
+    <?php if ('fullscreen' == $oLP->mode) {
         ?>
         cont_f = window.open('' + mysrc, 'content_id', 'toolbar=0,location=0,status=0,scrollbars=1,resizable=1');
         cont_f.onload=function(){

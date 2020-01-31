@@ -10,8 +10,6 @@ use ChamiloSession as Session;
  * @author Denes Nagy
  * @author Roan Embrechts, refactoring and code cleaning
  * @author Yannick Warnier <ywarnier@beeznest.org> - cleaning and update for new SCORM tool
- *
- * @package chamilo.learnpath
  */
 $this_section = SECTION_COURSES;
 
@@ -75,7 +73,7 @@ if (isset($_POST['save_audio'])) {
     $tbl_lp_item = Database::get_course_table(TABLE_LP_ITEM);
     // Deleting the audio fragments.
     foreach ($_POST as $key => $value) {
-        if (substr($key, 0, 9) == 'removemp3') {
+        if ('removemp3' == substr($key, 0, 9)) {
             $lp_items_to_remove_audio[] = str_ireplace('removemp3', '', $key);
             // Removing the audio from the learning path item.
             $in = implode(',', $lp_items_to_remove_audio);
@@ -89,7 +87,7 @@ if (isset($_POST['save_audio'])) {
 
     // Uploading the audio files.
     foreach ($_FILES as $key => $value) {
-        if (substr($key, 0, 7) == 'mp3file' &&
+        if ('mp3file' == substr($key, 0, 7) &&
             !empty($_FILES[$key]['tmp_name'])
         ) {
             // The id of the learning path item.
@@ -271,7 +269,7 @@ echo '</div>';
 echo '<div class="col-md-8">';
 switch ($_GET['action']) {
     case 'edit_item':
-        if (isset($is_success) && $is_success === true) {
+        if (isset($is_success) && true === $is_success) {
             echo Display::return_message(
                 get_lang('The learning object has been edited'),
                 'confirm'
@@ -281,7 +279,7 @@ switch ($_GET['action']) {
         }
         break;
     case 'delete_item':
-        if (isset($is_success) && $is_success === true) {
+        if (isset($is_success) && true === $is_success) {
             echo Display::return_message(
                 get_lang('The learning object has been deleted'),
                 'confirm'

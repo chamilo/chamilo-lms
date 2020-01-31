@@ -16,8 +16,6 @@ use Chamilo\CoreBundle\Repository\SequenceRepository;
  * it should be included inside a dispatcher file (e.g: index.php)
  *
  * @author Christian Fasanando <christian1827@gmail.com> - BeezNest
- *
- * @package chamilo.auth
  */
 class CoursesController
 {
@@ -62,7 +60,7 @@ class CoursesController
         $listCategories = CoursesAndSessionsCatalog::getCourseCategoriesTree();
 
         $data['countCoursesInCategory'] = CourseCategory::countCoursesInCategory($category_code);
-        if ($action === 'display_random_courses') {
+        if ('display_random_courses' === $action) {
             // Random value is used instead limit filter
             $data['browse_courses_in_category'] = CoursesAndSessionsCatalog::getCoursesInCategory(null, 12);
             $data['countCoursesInCategory'] = count($data['browse_courses_in_category']);
@@ -85,7 +83,7 @@ class CoursesController
         $user_coursecodes = [];
 
         // we need only the course codes as these will be used to match against the courses of the category
-        if ($user_courses != '') {
+        if ('' != $user_courses) {
             foreach ($user_courses as $key => $value) {
                 $user_coursecodes[] = $value['code'];
             }
@@ -150,7 +148,7 @@ class CoursesController
         $user_coursecodes = [];
 
         // we need only the course codes as these will be used to match against the courses of the category
-        if ($user_courses != '') {
+        if ('' != $user_courses) {
             foreach ($user_courses as $value) {
                 $user_coursecodes[] = $value['code'];
             }
@@ -254,7 +252,7 @@ class CoursesController
         }
 
         $catalogSessionAutoSubscriptionAllowed = false;
-        if (api_get_setting('catalog_allow_session_auto_subscription') === 'true') {
+        if ('true' === api_get_setting('catalog_allow_session_auto_subscription')) {
             $catalogSessionAutoSubscriptionAllowed = true;
         }
 
@@ -357,7 +355,7 @@ class CoursesController
     public function sessionList($action, $nameTools, $limit = [])
     {
         $date = isset($_POST['date']) ? $_POST['date'] : date('Y-m-d');
-        $hiddenLinks = isset($_GET['hidden_links']) ? $_GET['hidden_links'] == 1 : false;
+        $hiddenLinks = isset($_GET['hidden_links']) ? 1 == $_GET['hidden_links'] : false;
         $limit = isset($limit) ? $limit : self::getLimitArray();
 
         $countSessions = CoursesAndSessionsCatalog::browseSessions($date, [], false, true);
@@ -381,7 +379,7 @@ class CoursesController
         $tpl->assign('actions', self::getTabList(2));
         $tpl->assign('show_courses', CoursesAndSessionsCatalog::showCourses());
         $tpl->assign('show_sessions', CoursesAndSessionsCatalog::showSessions());
-        $tpl->assign('show_tutor', api_get_setting('show_session_coach') === 'true');
+        $tpl->assign('show_tutor', 'true' === api_get_setting('show_session_coach'));
         $tpl->assign('course_url', $courseUrl);
         $tpl->assign('catalog_pagination', $pagination);
         $tpl->assign('hidden_links', $hiddenLinks);
@@ -405,7 +403,7 @@ class CoursesController
     public function sessionsListByName(array $limit)
     {
         $keyword = isset($_POST['keyword']) ? $_POST['keyword'] : null;
-        $hiddenLinks = isset($_GET['hidden_links']) ? (int) $_GET['hidden_links'] == 1 : false;
+        $hiddenLinks = isset($_GET['hidden_links']) ? 1 == (int) $_GET['hidden_links'] : false;
         $courseUrl = CourseCategory::getCourseCategoryUrl(
             1,
             $limit['length'],
@@ -421,7 +419,7 @@ class CoursesController
         $tpl->assign('actions', self::getTabList(2));
         $tpl->assign('show_courses', CoursesAndSessionsCatalog::showCourses());
         $tpl->assign('show_sessions', CoursesAndSessionsCatalog::showSessions());
-        $tpl->assign('show_tutor', api_get_setting('show_session_coach') === 'true' ? true : false);
+        $tpl->assign('show_tutor', 'true' === api_get_setting('show_session_coach') ? true : false);
         $tpl->assign('course_url', $courseUrl);
         $tpl->assign('already_subscribed_label', $this->getAlreadyRegisteredInSessionLabel());
         $tpl->assign('hidden_links', $hiddenLinks);
@@ -429,7 +427,7 @@ class CoursesController
         $tpl->assign('keyword', Security::remove_XSS($keyword));
         $tpl->assign('sessions', $sessionsBlocks);
 
-         $layout = $tpl->get_template('auth/session_catalog.html.twig');
+        $layout = $tpl->get_template('auth/session_catalog.html.twig');
         $content = $tpl->fetch($layout);
         $tpl->assign('content', $content);
         $tpl->display_one_col_template();
@@ -447,14 +445,14 @@ class CoursesController
         $url = CourseCategory::getCourseCategoryUrl(1, $pageLength, null, 0, 'display_sessions');
         $headers = [];
         if (CoursesAndSessionsCatalog::showCourses()) {
-            $headers[] =  [
+            $headers[] = [
                 'url' => api_get_self(),
                 'content' => get_lang('CourseManagement'),
             ];
         }
 
         if (CoursesAndSessionsCatalog::showSessions()) {
-            $headers[] =  [
+            $headers[] = [
                 'url' => $url,
                 'content' => get_lang('SessionList'),
             ];
@@ -472,7 +470,7 @@ class CoursesController
     {
         $searchTag = isset($_POST['search_tag']) ? $_POST['search_tag'] : null;
         $searchDate = isset($_POST['date']) ? $_POST['date'] : date('Y-m-d');
-        $hiddenLinks = isset($_GET['hidden_links']) ? (int) $_GET['hidden_links'] == 1 : false;
+        $hiddenLinks = isset($_GET['hidden_links']) ? 1 == (int) $_GET['hidden_links'] : false;
         $courseUrl = CourseCategory::getCourseCategoryUrl(
             1,
             $limit['length'],
@@ -487,7 +485,7 @@ class CoursesController
         $tpl = new Template();
         $tpl->assign('show_courses', CoursesAndSessionsCatalog::showCourses());
         $tpl->assign('show_sessions', CoursesAndSessionsCatalog::showSessions());
-        $tpl->assign('show_tutor', api_get_setting('show_session_coach') === 'true' ? true : false);
+        $tpl->assign('show_tutor', 'true' === api_get_setting('show_session_coach') ? true : false);
         $tpl->assign('course_url', $courseUrl);
         $tpl->assign('already_subscribed_label', $this->getAlreadyRegisteredInSessionLabel());
         $tpl->assign('hidden_links', $hiddenLinks);
@@ -584,7 +582,7 @@ class CoursesController
 
             $hasRequirements = false;
             foreach ($sequences['sequences'] as $sequence) {
-                if (count($sequence['requirements']) === 0) {
+                if (0 === count($sequence['requirements'])) {
                     continue;
                 }
                 $hasRequirements = true;

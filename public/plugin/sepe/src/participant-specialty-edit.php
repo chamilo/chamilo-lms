@@ -237,7 +237,7 @@ if (api_is_platform_admin()) {
     $endRangeYear = $registrationYear + 15 < $leaveYear ? $leaveYear + 1 : $registrationYear + 15;
     while ($registrationYear <= $endRangeYear) {
         $listYear[] = $registrationYear;
-        ++$registrationYear;
+        $registrationYear++;
     }
     $tpl->assign('list_year', $listYear);
 
@@ -252,7 +252,7 @@ if (api_is_platform_admin()) {
     $endRangeYear = $startYear + 15 < $endYear ? $endYear + 1 : $startYear + 15;
     while ($startYear <= $endRangeYear) {
         $listYear[] = $startYear;
-        ++$startYear;
+        $startYear++;
     }
     $tpl->assign('list_year_2', $listYear);
 

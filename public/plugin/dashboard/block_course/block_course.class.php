@@ -105,7 +105,7 @@ class BlockCourse extends Block
                     $data_table .= '<td align="right">'.$cell.'</td>';
                 }
                 $data_table .= '</tr>';
-                ++$i;
+                $i++;
             }
             $data_table .= '</table>';
         } else {

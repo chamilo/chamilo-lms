@@ -71,7 +71,7 @@ abstract class _IndexableChunk
     public function addTerm($term, $flag)
     {
         global $charset;
-        if (strlen($flag) == 1) {
+        if (1 == strlen($flag)) {
             $this->terms[] = ['name' => api_convert_encoding(stripslashes($term), 'UTF-8', $charset), 'flag' => $flag];
         }
     }
@@ -79,8 +79,6 @@ abstract class _IndexableChunk
 
 /**
  * Extension of the _IndexableChunk class to make IndexableChunk extensible.
- *
- * @package chamilo.include.search
  */
 class IndexableChunk extends _IndexableChunk
 {

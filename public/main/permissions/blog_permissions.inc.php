@@ -4,8 +4,6 @@
  * in a course.
  *
  * @author Toon Keppens
- *
- * @package chamilo.permissions
  */
 /**
  * Init.
@@ -54,14 +52,14 @@ while ($user = Database::fetch_assoc($result)) {
 }
 
 //$user_id=$userIdViewed;
-if (isset($mainUserInfo) && isset($mainUserInfo['status']) && $mainUserInfo['status'] == 1) {
+if (isset($mainUserInfo) && isset($mainUserInfo['status']) && 1 == $mainUserInfo['status']) {
     $course_admin = 1;
 }
 
 include_once 'permissions_functions.inc.php';
 // 			ACTIONS
 if (isset($_GET['do'])) {
-    if (isset($_GET['permission']) and isset($_GET['tool']) and ($_GET['do'] == 'grant' or $_GET['do'] == 'revoke')) {
+    if (isset($_GET['permission']) and isset($_GET['tool']) and ('grant' == $_GET['do'] or 'revoke' == $_GET['do'])) {
         $result_message = store_one_permission(
             'user',
             $_GET['do'],
@@ -70,7 +68,7 @@ if (isset($_GET['do'])) {
             $_GET['permission']
         );
     }
-    if (isset($_GET['role']) and ($_GET['do'] == 'grant' or $_GET['do'] == 'revoke')) {
+    if (isset($_GET['role']) and ('grant' == $_GET['do'] or 'revoke' == $_GET['do'])) {
         $result_message = assign_role(
             'user',
             $_GET['do'],
@@ -84,7 +82,7 @@ if (isset($_GET['do'])) {
 // ------------------------------------------------------------------
 // 			RETRIEVING THE PERMISSIONS OF THE ROLES OF THE USER
 // ------------------------------------------------------------------
-if (api_get_setting('user_roles') == 'true') {
+if ('true' == api_get_setting('user_roles')) {
     // course roles that are assigned to the user
     $current_user_role_permissions_of_user = get_roles_permissions('user', $user_id);
     $inherited_permissions = permission_array_merge($inherited_permissions, $current_user_role_permissions_of_user);
@@ -103,7 +101,7 @@ if (api_get_setting('user_roles') == 'true') {
 // ------------------------------------------------------------------
 //	RETRIEVING THE PERMISSIONS OF THE ROLES OF THE GROUPS OF THE USER
 // ------------------------------------------------------------------
-if (api_get_setting('group_roles') == 'true') {
+if ('true' == api_get_setting('group_roles')) {
     // NOTE: DIT MOET NOG VERDER UITGEWERKT WORDEN
     foreach ($groups_of_user as $group) {
         $this_current_group_role_permissions_of_user = get_roles_permissions('user', $user_id);
@@ -117,7 +115,7 @@ echo "<form method=\"post\" action=\"".str_replace('&', '&amp;', $_SERVER['REQUE
 // 		DISPLAYING THE ROLES LIST
 // ---------------------------------------------------
 
-if (api_get_setting('user_roles') == 'true') {
+if ('true' == api_get_setting('user_roles')) {
     // the list of the roles for the user
     echo '<strong>'.get_lang('User roles').'</strong><br />';
     $current_user_course_roles = get_roles('user', $user_id);

@@ -7,7 +7,7 @@ $this_section = SECTION_COURSES;
 // notice for unauthorized people.
 api_protect_course_script(true);
 
-if (api_get_setting('allow_user_course_subscription_by_course_admin') == 'false') {
+if ('false' == api_get_setting('allow_user_course_subscription_by_course_admin')) {
     if (!api_is_platform_admin()) {
         api_not_allowed(true);
     }
@@ -15,7 +15,7 @@ if (api_get_setting('allow_user_course_subscription_by_course_admin') == 'false'
 
 // Make sure we know if we're importing students or teachers into the course
 $userType = STUDENT;
-if (!empty($_REQUEST['type']) && $_REQUEST['type'] == COURSEMANAGER) {
+if (!empty($_REQUEST['type']) && COURSEMANAGER == $_REQUEST['type']) {
     $userType = COURSEMANAGER;
 }
 
@@ -43,7 +43,7 @@ $user_to_show = [];
 $type = '';
 
 if ($form->validate()) {
-    if (isset($_FILES['import_file']['size']) && $_FILES['import_file']['size'] !== 0) {
+    if (isset($_FILES['import_file']['size']) && 0 !== $_FILES['import_file']['size']) {
         $unsubscribe_users = isset($_POST['unsubscribe_users']) ? true : false;
         //@todo : csvToArray deprecated
         $users = Import::csvToArray($_FILES['import_file']['tmp_name']);
@@ -88,7 +88,7 @@ if ($form->validate()) {
                     if (!empty($current_user_list)) {
                         $user_ids = [];
                         foreach ($current_user_list as $user) {
-                            if ($userType == COURSEMANAGER) {
+                            if (COURSEMANAGER == $userType) {
                                 if (CourseManager::is_course_teacher($user['user_id'], $course_code)) {
                                     $user_ids[] = $user['user_id'];
                                 }
@@ -140,13 +140,13 @@ if (!empty($message)) {
             $user = array_filter($user);
             $userMessage .= implode(', ', $user)."<br />";
         }
-        if ($type == 'confirmation') {
+        if ('confirmation' == $type) {
             echo Display::return_message($message.': <br />'.$userMessage, 'confirm', false);
         } else {
             echo Display::return_message($message.':  <br />'.$userMessage, 'warning', false);
         }
     } else {
-        $empty_line_msg = ($empty_line == 0) ? get_lang('Errors when importing file') : get_lang('Errors when importing file').': '.get_lang('There are empty lines in the header of selected file');
+        $empty_line_msg = (0 == $empty_line) ? get_lang('Errors when importing file') : get_lang('Errors when importing file').': '.get_lang('There are empty lines in the header of selected file');
         echo Display::return_message($empty_line_msg, 'error');
     }
 }

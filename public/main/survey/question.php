@@ -2,8 +2,6 @@
 /* For licensing terms, see /license.txt */
 
 /**
- * @package chamilo.survey
- *
  * @author unknown, the initial survey that did not make it in 1.8 because of bad code
  * @author Patrick Cool <patrick.cool@UGent.be>, Ghent University: cleanup,
  * refactoring and rewriting large parts of the code
@@ -36,13 +34,13 @@ if (api_strlen(strip_tags($surveyData['title'])) > 40) {
     $urlname .= '...';
 }
 
-if ($surveyData['survey_type'] == 1) {
+if (1 == $surveyData['survey_type']) {
     $sql = 'SELECT id FROM '.Database::get_course_table(TABLE_SURVEY_QUESTION_GROUP).'
             WHERE
                 c_id = '.$course_id.' AND
                 survey_id = '.(int) $_GET['survey_id'].' LIMIT 1';
     $rs = Database::query($sql);
-    if (Database::num_rows($rs) === 0) {
+    if (0 === Database::num_rows($rs)) {
         Display::addFlash(
             Display::return_message(get_lang('You need to create groups'))
         );
@@ -62,10 +60,10 @@ $interbreadcrumb[] = [
 ];
 
 // Tool name
-if ($_GET['action'] == 'add') {
+if ('add' == $_GET['action']) {
     $tool_name = get_lang('Add a question');
 }
-if ($_GET['action'] == 'edit') {
+if ('edit' == $_GET['action']) {
     $tool_name = get_lang('Edit question');
 }
 

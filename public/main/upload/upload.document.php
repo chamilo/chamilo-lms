@@ -7,8 +7,6 @@
  *
  * @todo check if this file is deprecated ... jmontoya
  *
- * @package chamilo.upload
- *
  * @author Yannick Warnier <ywarnier@beeznest.org>
  */
 $_course = api_get_course_info();
@@ -132,8 +130,8 @@ if (isset($_POST['submit_image'])) {
     }
 }
 //they want to create a directory
-if (isset($_POST['create_dir']) && $_POST['dirname'] != '') {
-    $added_slash = $path == '/' ? '' : '/';
+if (isset($_POST['create_dir']) && '' != $_POST['dirname']) {
+    $added_slash = '/' == $path ? '' : '/';
     $dir_name = $path.$added_slash.api_replace_dangerous_char($_POST['dirname']);
     $created_dir = create_unexisting_directory(
         $_course,

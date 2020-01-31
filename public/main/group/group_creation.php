@@ -23,7 +23,7 @@ if (isset($_POST['action'])) {
                 $useOnlyFirstCategory = true;
             }
 
-            for ($i = 0; $i < $_POST['number_of_groups']; ++$i) {
+            for ($i = 0; $i < $_POST['number_of_groups']; $i++) {
                 $group1['name'] = empty($_POST['group_'.$i.'_name']) ? get_lang('Group').' '.$i : $_POST['group_'.$i.'_name'];
                 $group1['category'] = isset($_POST['group_'.$i.'_category']) ? $_POST['group_'.$i.'_category'] : null;
                 if ($useOnlyFirstCategory) {
@@ -193,7 +193,7 @@ EOT;
             $form->addGroup($group_el, 'groups', null, '</td><td>', false);
         }
         // Properties for all groups
-        for ($group_number = 0; $group_number < $_POST['number_of_groups']; ++$group_number) {
+        for ($group_number = 0; $group_number < $_POST['number_of_groups']; $group_number++) {
             $group_el = [];
             $group_el[] = $form->createElement('text', 'group_'.$group_number.'_name');
             if ('true' === api_get_setting('allow_group_categories')) {

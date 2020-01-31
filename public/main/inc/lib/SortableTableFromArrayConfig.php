@@ -9,8 +9,6 @@
  * $column_order is an array that lets us decide the ordering of the columns
  * i.e: $column_header=array('a','b','c','d','e'); $column_order=array(1,2,5,4,5);
  * These means that the 3th column (letter "c") will be sort like the order we use in the 5th column
- *
- * @package chamilo.library
  */
 class SortableTableFromArrayConfig extends SortableTable
 {
@@ -81,7 +79,7 @@ class SortableTableFromArrayConfig extends SortableTable
         $table = TableSort::sort_table_config(
             $this->table_data,
             $this->column,
-            $this->direction === 'ASC' ? SORT_ASC : SORT_DESC,
+            'ASC' === $this->direction ? SORT_ASC : SORT_DESC,
             $this->column_show,
             $this->column_order,
             SORT_REGULAR,

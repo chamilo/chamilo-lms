@@ -6,8 +6,6 @@
  *
  * @author Christian Fasanando <christian1827@gmail.com>
  * @author Julio Montoya <gugli100@gmail.com> Bug fixing
- *
- * @package chamilo.course_progress
  */
 
 // protect a course script
@@ -69,7 +67,7 @@ if ($isTeacher) {
     $toolbar = Display::toolbarAction('thematic-bar', [$actionLeft]);
 }
 
-if ($action == 'thematic_list') {
+if ('thematic_list' == $action) {
     $table = new SortableTable(
         'thematic_list',
         ['Thematic', 'get_number_of_thematics'],
@@ -90,9 +88,9 @@ if ($action == 'thematic_list') {
         $table->set_form_actions(['thematic_delete_select' => get_lang('Delete all thematics')]);
     }
     $table->display();
-} elseif ($action == 'thematic_details') {
+} elseif ('thematic_details' == $action) {
     if (isset($_GET['thematic_plan_save_message']) &&
-        $_GET['thematic_plan_save_message'] == 'ok'
+        'ok' == $_GET['thematic_plan_save_message']
     ) {
         Display::addFlash(
             Display::return_message(
@@ -158,7 +156,7 @@ if ($action == 'thematic_list') {
                     'index.php?'.api_get_cidreq().'&action=thematic_copy&thematic_id='.$my_thematic_id.$params.$url_token,
                     ['class' => 'btn btn-default']
                 );
-                if (api_get_session_id() == 0) {
+                if (0 == api_get_session_id()) {
                     if ($thematic['display_order'] > 1) {
                         $toolbarThematic .= ' <a class="btn btn-default" href="'.api_get_self().'?action=moveup&'.api_get_cidreq().'&thematic_id='.$my_thematic_id.$params.$url_token.'">'.
                             Display::return_icon('up.png', get_lang('Up'), '', ICON_SIZE_TINY).'</a>';
@@ -223,10 +221,10 @@ if ($action == 'thematic_list') {
     $thematicLayout = $tpl->get_template('course_progress/progress.html.twig');
     $content = $tpl->fetch($thematicLayout);
     $tpl->assign('content', $content);
-} elseif ($action == 'thematic_add' || $action == 'thematic_edit') {
+} elseif ('thematic_add' == $action || 'thematic_edit' == $action) {
     // Display form
     $form = new FormValidator('thematic_add', 'POST', 'index.php?action=thematic_add&'.api_get_cidreq());
-    if ($action == 'thematic_edit') {
+    if ('thematic_edit' == $action) {
         $form->addElement('header', '', get_lang('Edit thematic section'));
     }
 
@@ -279,7 +277,7 @@ if ($action == 'thematic_list') {
     if ($show_form) {
         $html = $form->returnForm();
     }
-} elseif ($action == 'thematic_import_select') {
+} elseif ('thematic_import_select' == $action) {
     // Create form to upload csv file.
     $form = new FormValidator(
         'thematic_import',

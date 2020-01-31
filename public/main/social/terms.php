@@ -5,7 +5,7 @@ $cidReset = true;
 
 require_once __DIR__.'/../inc/global.inc.php';
 
-if (api_get_setting('allow_terms_conditions') !== 'true') {
+if ('true' !== api_get_setting('allow_terms_conditions')) {
     api_not_allowed(true);
 }
 
@@ -41,7 +41,7 @@ $term['date_text'] = get_lang('Publication date').': '.
     );
 
 $socialMenuBlock = '';
-$allowSocial = api_get_setting('allow_social_tool') === 'true';
+$allowSocial = 'true' === api_get_setting('allow_social_tool');
 
 if ($allowSocial) {
     // Block Social Menu
@@ -59,7 +59,7 @@ $tpl->assign('actions', Display::toolbarAction('toolbar', [$actions]));
 
 // Block Social Avatar
 SocialManager::setSocialUserBlock($tpl, api_get_user_id(), 'messages');
-if (api_get_setting('allow_social_tool') === 'true') {
+if ('true' === api_get_setting('allow_social_tool')) {
     $tpl->assign('social_menu_block', $socialMenuBlock);
 } else {
     $tpl->assign('social_menu_block', '');

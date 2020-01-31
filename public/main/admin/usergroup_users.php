@@ -17,7 +17,7 @@ $usergroup->protectScript($userGroupInfo, true, true);
 $allowEdit = api_is_platform_admin() || isset($userGroupInfo['author_id']) && $userGroupInfo['author_id'] == api_get_user_id();
 
 $calendarPlugin = null;
-if ($allowEdit && api_get_plugin_setting('learning_calendar', 'enabled') === 'true') {
+if ($allowEdit && 'true' === api_get_plugin_setting('learning_calendar', 'enabled')) {
     $calendarPlugin = LearningCalendarPlugin::create();
 }
 
@@ -326,7 +326,7 @@ $(function() {
 
 $usergroup->showGroupTypeSetting = true;
 // Action handling: Adding a note
-if ($allowEdit && $action === 'delete' && is_numeric($_GET['id'])) {
+if ($allowEdit && 'delete' === $action && is_numeric($_GET['id'])) {
     $res = $usergroup->delete_user_rel_group($_GET['user_id'], $_GET['id']);
     Display::addFlash(Display::return_message(get_lang('Deleted'), 'confirmation'));
     header('Location: '.api_get_self().'?id='.$id);

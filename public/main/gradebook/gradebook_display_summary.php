@@ -3,9 +3,6 @@
 
 use ChamiloSession as Session;
 
-/**
- * @package chamilo.gradebook
- */
 require_once __DIR__.'/../inc/global.inc.php';
 $current_course_tool = TOOL_GRADEBOOK;
 
@@ -30,10 +27,10 @@ $userList = CourseManager::get_user_list_from_course_code(
 );
 
 $loadStats = [];
-if (api_get_setting('gradebook_detailed_admin_view') === 'true') {
+if ('true' === api_get_setting('gradebook_detailed_admin_view')) {
     $loadStats = [1, 2, 3];
 } else {
-    if (api_get_configuration_value('gradebook_enable_best_score') !== false) {
+    if (false !== api_get_configuration_value('gradebook_enable_best_score')) {
         $loadStats = [2];
     }
 }
@@ -174,7 +171,7 @@ echo '</div>';
 
 $allowSkillRelItem = api_get_configuration_value('allow_skill_rel_items');
 
-if (count($userList) == 0) {
+if (0 == count($userList)) {
     echo Display::return_message(get_lang('No results available'), 'warning');
 } else {
     echo '<br /><br /><table class="data_table">';

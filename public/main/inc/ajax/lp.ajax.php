@@ -30,7 +30,7 @@ switch ($action) {
         }
         $lpId = isset($_GET['lp_id']) ? $_GET['lp_id'] : false;
         $url = isset($_GET['url']) ? $_GET['url'] : '';
-        $addMove = isset($_GET['add_move_button']) && $_GET['add_move_button'] == 1 ? true : false;
+        $addMove = isset($_GET['add_move_button']) && 1 == $_GET['add_move_button'] ? true : false;
 
         echo DocumentManager::get_document_preview(
             $courseInfo,
@@ -148,7 +148,7 @@ switch ($action) {
         }
         break;
     case 'record_audio':
-        if (api_is_allowed_to_edit(null, true) == false) {
+        if (false == api_is_allowed_to_edit(null, true)) {
             exit;
         }
         /** @var Learnpath $lp */

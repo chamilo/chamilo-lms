@@ -106,7 +106,6 @@ class ImsAssessmentItem
      *
      * This is a default behaviour, some classes may want to override this.
      *
-     *
      * @return string string, the XML flow for an Item
      */
     public function export($standalone = false)
@@ -391,7 +390,6 @@ class ImsItem
      * Export the question as an IMS/QTI Item.
      *
      * This is a default behaviour, some classes may want to override this.
-     *
      *
      * @return string string, the XML flow for an Item
      *

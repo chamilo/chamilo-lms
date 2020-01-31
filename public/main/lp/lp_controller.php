@@ -26,8 +26,8 @@ $_course = api_get_course_info();
 $glossaryExtraTools = api_get_setting('show_glossary_in_extra_tools');
 $showGlossary = in_array($glossaryExtraTools, ['true', 'lp', 'exercise_and_lp']);
 if ($showGlossary) {
-    if (api_get_setting('show_glossary_in_documents') === 'ismanual' ||
-        api_get_setting('show_glossary_in_documents') === 'isautomatic'
+    if ('ismanual' === api_get_setting('show_glossary_in_documents') ||
+        'isautomatic' === api_get_setting('show_glossary_in_documents')
     ) {
         $htmlHeadXtra[] = '<script>
     <!--
@@ -302,7 +302,7 @@ $lpfound = false;
 $myrefresh = 0;
 $myrefresh_id = 0;
 $refresh = Session::read('refresh');
-if ($refresh == 1) {
+if (1 == $refresh) {
     // Check if we should do a refresh of the oLP object (for example after editing the LP).
     // If refresh is set, we regenerate the oLP object from the database (kind of flush).
     Session::erase('refresh');
@@ -327,7 +327,7 @@ if (!empty($lpObject)) {
         if ($debug) {
             error_log(' oLP is object');
         }
-        if ($myrefresh == 1 ||
+        if (1 == $myrefresh ||
             empty($oLP->cc) ||
             $oLP->cc != api_get_course_id() ||
             $oLP->lp_view_session_id != $session_id
@@ -340,7 +340,7 @@ if (!empty($lpObject)) {
                 error_log('api_get_course_id(): '.api_get_course_id());
             }
 
-            if ($myrefresh == 1) {
+            if (1 == $myrefresh) {
                 $myrefresh_id = $oLP->get_id();
             }
             $oLP = null;
@@ -400,25 +400,25 @@ if (!$lp_found || (!empty($_REQUEST['lp_id']) && $_SESSION['oLP']->get_id() != $
                 switch ($type) {
                     case 1:
                         $oLP = new learnpath(api_get_course_id(), $lpIid, api_get_user_id());
-                        if ($oLP !== false) {
+                        if (false !== $oLP) {
                             $lp_found = true;
                         }
                         break;
                     case 2:
                         $oLP = new scorm(api_get_course_id(), $lpIid, api_get_user_id());
-                        if ($oLP !== false) {
+                        if (false !== $oLP) {
                             $lp_found = true;
                         }
                         break;
                     case 3:
                         $oLP = new aicc(api_get_course_id(), $lpIid, api_get_user_id());
-                        if ($oLP !== false) {
+                        if (false !== $oLP) {
                             $lp_found = true;
                         }
                         break;
                     default:
                         $oLP = new learnpath(api_get_course_id(), $lpIid, api_get_user_id());
-                        if ($oLP !== false) {
+                        if (false !== $oLP) {
                             $lp_found = true;
                         }
                         break;
@@ -495,7 +495,7 @@ if (isset($_POST['title'])) {
     $post_title = Security::remove_XSS($_POST['title']);
     if (isset($_POST['type']) &&
         isset($_POST['title']) &&
-        $_POST['type'] == TOOL_QUIZ &&
+        TOOL_QUIZ == $_POST['type'] &&
         !empty($_POST['title'])
     ) {
         $post_title = Exercise::format_title_variable($_POST['title']);
@@ -593,8 +593,8 @@ switch ($action) {
                     $prerequisites = isset($_POST['prerequisites']) ? $_POST['prerequisites'] : '';
                     $maxTimeAllowed = isset($_POST['maxTimeAllowed']) ? $_POST['maxTimeAllowed'] : '';
 
-                    if ($_POST['type'] == TOOL_DOCUMENT) {
-                        if (isset($_POST['path']) && $_GET['edit'] != 'true') {
+                    if (TOOL_DOCUMENT == $_POST['type']) {
+                        if (isset($_POST['path']) && 'true' != $_GET['edit']) {
                             $document_id = $_POST['path'];
                         } else {
                             if ($_POST['content_lp']) {
@@ -617,8 +617,8 @@ switch ($action) {
                             $description,
                             $prerequisites
                         );
-                    } elseif ($_POST['type'] == TOOL_READOUT_TEXT) {
-                        if (isset($_POST['path']) && $_GET['edit'] != 'true') {
+                    } elseif (TOOL_READOUT_TEXT == $_POST['type']) {
+                        if (isset($_POST['path']) && 'true' != $_GET['edit']) {
                             $document_id = $_POST['path'];
                         } else {
                             $document_id = $_SESSION['oLP']->createReadOutText(
@@ -681,7 +681,7 @@ switch ($action) {
                 $lp_item_obj = new learnpathItem($_REQUEST['id']);
 
                 // Remove audio
-                if (isset($_GET['delete_file']) && $_GET['delete_file'] == 1) {
+                if (isset($_GET['delete_file']) && 1 == $_GET['delete_file']) {
                     $lp_item_obj->remove_audio();
 
                     $url = api_get_self().'?action=add_audio&lp_id='.intval($_SESSION['oLP']->lp_id).'&id='.$lp_item_obj->get_id().'&'.api_get_cidreq();
@@ -760,14 +760,14 @@ switch ($action) {
 
                 $publicated_on = null;
                 if (isset($_REQUEST['activate_start_date_check']) &&
-                    $_REQUEST['activate_start_date_check'] == 1
+                    1 == $_REQUEST['activate_start_date_check']
                 ) {
                     $publicated_on = $_REQUEST['publicated_on'];
                 }
 
                 $expired_on = null;
                 if (isset($_REQUEST['activate_end_date_check']) &&
-                    $_REQUEST['activate_end_date_check'] == 1
+                    1 == $_REQUEST['activate_end_date_check']
                 ) {
                     $expired_on = $_REQUEST['expired_on'];
                 }
@@ -826,7 +826,7 @@ switch ($action) {
         break;
     case 'auto_launch':
         // Redirect to a specific LP
-        if (api_get_course_setting('enable_lp_auto_launch') == 1) {
+        if (1 == api_get_course_setting('enable_lp_auto_launch')) {
             if (!$is_allowed_to_edit) {
                 api_not_allowed(true);
             }
@@ -895,7 +895,7 @@ switch ($action) {
                 header('Location: '.$url);
                 exit;
             }
-            if (isset($_GET['view']) && $_GET['view'] === 'build') {
+            if (isset($_GET['view']) && 'build' === $_GET['view']) {
                 require 'lp_edit_item.php';
             } else {
                 require 'lp_admin_view.php';
@@ -955,7 +955,7 @@ switch ($action) {
                 header('Location: '.$url);
                 exit;
             }
-            if (isset($_GET['view']) && $_GET['view'] == 'build') {
+            if (isset($_GET['view']) && 'build' == $_GET['view']) {
                 require 'lp_move_item.php';
             } else {
                 // Avoids weird behaviours see CT#967.
@@ -995,7 +995,7 @@ switch ($action) {
         }
 
         $hideScormCopyLink = api_get_setting('hide_scorm_copy_link');
-        if ($hideScormCopyLink === 'true') {
+        if ('true' === $hideScormCopyLink) {
             api_not_allowed(true);
         }
 
@@ -1011,7 +1011,7 @@ switch ($action) {
             api_not_allowed(true);
         }
         $hideScormExportLink = api_get_setting('hide_scorm_export_link');
-        if ($hideScormExportLink === 'true') {
+        if ('true' === $hideScormExportLink) {
             api_not_allowed(true);
         }
         if (!$lp_found) {
@@ -1023,7 +1023,7 @@ switch ($action) {
         break;
     case 'export_to_pdf':
         $hideScormPdfLink = api_get_setting('hide_scorm_pdf_link');
-        if ($hideScormPdfLink === 'true') {
+        if ('true' === $hideScormPdfLink) {
             api_not_allowed(true);
         }
 
@@ -1173,7 +1173,7 @@ switch ($action) {
             $author = $_REQUEST['lp_author'];
             // Fixing the author name (no body or html tags).
             $auth_init = stripos($author, '<p>');
-            if ($auth_init === false) {
+            if (false === $auth_init) {
                 $auth_init = stripos($author, '<body>');
                 $auth_end = $auth_init + stripos(substr($author, $auth_init + 6), '</body>') + 7;
                 $len = $auth_end - $auth_init + 6;
@@ -1196,7 +1196,7 @@ switch ($action) {
             $_SESSION['oLP']->set_theme($_REQUEST['lp_theme']);
 
             $hide_toc_frame = null;
-            if (isset($_REQUEST['hide_toc_frame']) && $_REQUEST['hide_toc_frame'] == 1) {
+            if (isset($_REQUEST['hide_toc_frame']) && 1 == $_REQUEST['hide_toc_frame']) {
                 $hide_toc_frame = $_REQUEST['hide_toc_frame'];
             }
             $_SESSION['oLP']->set_hide_toc_frame($hide_toc_frame);
@@ -1211,12 +1211,12 @@ switch ($action) {
             $_SESSION['oLP']->setAccumulateScormTime($accumulateScormTime);
 
             $publicated_on = null;
-            if (isset($_REQUEST['activate_start_date_check']) && $_REQUEST['activate_start_date_check'] == 1) {
+            if (isset($_REQUEST['activate_start_date_check']) && 1 == $_REQUEST['activate_start_date_check']) {
                 $publicated_on = $_REQUEST['publicated_on'];
             }
 
             $expired_on = null;
-            if (isset($_REQUEST['activate_end_date_check']) && $_REQUEST['activate_end_date_check'] == 1) {
+            if (isset($_REQUEST['activate_end_date_check']) && 1 == $_REQUEST['activate_end_date_check']) {
                 $expired_on = $_REQUEST['expired_on'];
             }
 
@@ -1241,7 +1241,7 @@ switch ($action) {
             $form->addSelect('skills', 'skills');
             Skill::saveSkills($form, ITEM_TYPE_LEARNPATH, $_SESSION['oLP']->get_id());
 
-            if (api_get_setting('search_enabled') === 'true') {
+            if ('true' === api_get_setting('search_enabled')) {
                 require_once api_get_path(LIBRARY_PATH).'specific_fields_manager.lib.php';
                 $specific_fields = get_specific_field_list();
                 foreach ($specific_fields as $specific_field) {
@@ -1398,13 +1398,13 @@ switch ($action) {
     case 'mode':
         // Switch between fullscreen and embedded mode.
         $mode = $_REQUEST['mode'];
-        if ($mode == 'fullscreen') {
+        if ('fullscreen' == $mode) {
             $_SESSION['oLP']->mode = 'fullscreen';
-        } elseif ($mode == 'embedded') {
+        } elseif ('embedded' == $mode) {
             $_SESSION['oLP']->mode = 'embedded';
-        } elseif ($mode == 'embedframe') {
+        } elseif ('embedframe' == $mode) {
             $_SESSION['oLP']->mode = 'embedframe';
-        } elseif ($mode == 'impress') {
+        } elseif ('impress' == $mode) {
             $_SESSION['oLP']->mode = 'impress';
         }
         require 'lp_view.php';

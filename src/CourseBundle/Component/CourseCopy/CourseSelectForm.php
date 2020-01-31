@@ -338,21 +338,21 @@ class CourseSelectForm
                         foreach ($resources as $id => $resource) {
                             $forum_categories[$id] = $resource;
                         }
-                        ++$element_count;
+                        $element_count++;
 
                         break;
                     case RESOURCE_FORUM:
                         foreach ($resources as $id => $resource) {
                             $forums[$resource->obj->forum_category][$id] = $resource;
                         }
-                        ++$element_count;
+                        $element_count++;
 
                         break;
                     case RESOURCE_FORUMTOPIC:
                         foreach ($resources as $id => $resource) {
                             $forum_topics[$resource->obj->forum_id][$id] = $resource;
                         }
-                        ++$element_count;
+                        $element_count++;
 
                         break;
                     case RESOURCE_LINKCATEGORY:
@@ -431,7 +431,7 @@ class CourseSelectForm
                             echo '</div>';
                             echo '<script language="javascript">exp('."'$type'".')</script>';
                         }
-                        ++$element_count;
+                        $element_count++;
                 }
             }
         }

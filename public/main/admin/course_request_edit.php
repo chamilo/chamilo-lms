@@ -5,7 +5,6 @@
 /**
  * A page for detailed preview or edition of a given course request.
  *
- *
  * @author Ivan Tcholakov <ivantcholakov@gmail.com>, 2010
  */
 $cidReset = true;

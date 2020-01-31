@@ -184,7 +184,7 @@ if (isset($_REQUEST['comments']) &&
         $array_content_id_exe = $post_content_id;
     }
 
-    for ($i = 0; $i < $loop_in_track; ++$i) {
+    for ($i = 0; $i < $loop_in_track; $i++) {
         $my_marks = isset($_POST['marks_'.$array_content_id_exe[$i]]) ? $_POST['marks_'.$array_content_id_exe[$i]] : '';
         $my_comments = '';
         if (isset($_POST['comments_'.$array_content_id_exe[$i]])) {

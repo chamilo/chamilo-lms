@@ -71,7 +71,7 @@ if (!empty($userList)) {
         $table->setCellContents($row, 1, $webDate);
         $table->setCellContents($row, 2, $mailDate);
         $table->setCellContents($row, 3, $link.' '.$deleteLink);
-        ++$row;
+        $row++;
     }
 }
 $url = $pluginPath.'start.php?'.api_get_cidreq();

@@ -7,8 +7,6 @@ use Chamilo\UserBundle\Entity\User;
 
 /**
  * Courses reporting.
- *
- * @package chamilo.reporting
  */
 require_once __DIR__.'/../inc/global.inc.php';
 

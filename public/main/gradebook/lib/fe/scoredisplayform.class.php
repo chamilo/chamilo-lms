@@ -7,8 +7,6 @@
  *
  * @author Stijn Konings
  * @author Bert Steppé
- *
- * @package chamilo.gradebook
  */
 class ScoreDisplayForm extends FormValidator
 {
@@ -22,7 +20,7 @@ class ScoreDisplayForm extends FormValidator
         $displayscore = ScoreDisplay::instance();
         $customdisplays = $displayscore->get_custom_score_display_settings();
 
-        $nr_items = (count($customdisplays) != '0') ? count($customdisplays) : '1';
+        $nr_items = ('0' != count($customdisplays)) ? count($customdisplays) : '1';
         $this->setDefaults(
             [
                 'scorecolpercent' => $displayscore->get_color_split_value(),
@@ -61,7 +59,7 @@ class ScoreDisplayForm extends FormValidator
                 ]
             );
 
-            if (api_get_setting('teachers_can_change_score_settings') != 'true') {
+            if ('true' != api_get_setting('teachers_can_change_score_settings')) {
                 $this->freeze('scorecolpercent');
             }
 
@@ -115,7 +113,7 @@ class ScoreDisplayForm extends FormValidator
                     <a href="javascript:plusItem('.($counter + 1).')">
                     <img style="display: '.(($counter >= $nr_items) ? 'inline' : 'none').';" id="plus-'.($counter + 1).'" src="'.Display::returnIconPath('add.png').'" alt="'.get_lang('Add').'" title="'.get_lang('Add').'"></a>
                     <a href="javascript:minItem('.($counter).')">
-                    <img style="display: '.(($counter >= $nr_items && $counter != 1) ? 'inline' : 'none').';" id="min-'.$counter.'" src="'.Display::returnIconPath('delete.png').'" alt="'.get_lang('Delete').'" title="'.get_lang('Delete').'"></a>
+                    <img style="display: '.(($counter >= $nr_items && 1 != $counter) ? 'inline' : 'none').';" id="min-'.$counter.'" src="'.Display::returnIconPath('delete.png').'" alt="'.get_lang('Delete').'" title="'.get_lang('Delete').'"></a>
                 </div>
                 </div>
                 </div>';

@@ -4,8 +4,6 @@
 
 /**
  * This page allows the administrator to manage the system announcements.
- *
- * @package chamilo.admin.announcement
  */
 
 // Resetting the course id.
@@ -44,13 +42,13 @@ if (!empty($action)) {
         "url" => "system_announcements.php",
         "name" => get_lang('Portal news'),
     ];
-    if ($action == 'add') {
+    if ('add' == $action) {
         $interbreadcrumb[] = [
             "url" => '#',
             "name" => get_lang('Add an announcement'),
         ];
     }
-    if ($action == 'edit') {
+    if ('edit' == $action) {
         $interbreadcrumb[] = ['url' => '#', 'name' => get_lang('Edit')];
     }
 } else {
@@ -87,7 +85,7 @@ function showCareer() {
 
 // Displaying the header.
 Display::display_header($tool_name);
-if ($action != 'add' && $action != 'edit') {
+if ('add' != $action && 'edit' != $action) {
     echo '<div class="actions">';
     echo '<a href="?action=add">'.Display::return_icon('add.png', get_lang('Add an announcement'), [], 32).'</a>';
     echo '</div>';
@@ -107,7 +105,7 @@ switch ($action) {
     case 'make_visible':
     case 'make_invisible':
         $status = false;
-        if ($action == 'make_visible') {
+        if ('make_visible' == $action) {
             $status = true;
         }
 
@@ -172,10 +170,10 @@ switch ($action) {
 }
 
 if ($action_todo) {
-    if (isset($_REQUEST['action']) && $_REQUEST['action'] == 'add') {
+    if (isset($_REQUEST['action']) && 'add' == $_REQUEST['action']) {
         $form_title = get_lang('Add news');
         $url = api_get_self();
-    } elseif (isset($_REQUEST['action']) && $_REQUEST['action'] == 'edit') {
+    } elseif (isset($_REQUEST['action']) && 'edit' == $_REQUEST['action']) {
         $form_title = get_lang('Edit News');
         $url = api_get_self().'?id='.intval($_GET['id']);
     }
@@ -316,12 +314,12 @@ if ($action_todo) {
     $values['group'] = isset($values['group']) ? $values['group'] : '0';
     $form->addElement('checkbox', 'send_mail', null, get_lang('Send mail'));
 
-    if (isset($_REQUEST['action']) && $_REQUEST['action'] == 'add') {
+    if (isset($_REQUEST['action']) && 'add' == $_REQUEST['action']) {
         $form->addElement('checkbox', 'add_to_calendar', null, get_lang('Add to calendar'));
         $text = get_lang('Add news');
         $class = 'add';
         $form->addElement('hidden', 'action', 'add');
-    } elseif (isset($_REQUEST['action']) && $_REQUEST['action'] == 'edit') {
+    } elseif (isset($_REQUEST['action']) && 'edit' == $_REQUEST['action']) {
         $text = get_lang('Edit News');
         $class = 'save';
         $form->addElement('hidden', 'action', 'edit');
@@ -340,7 +338,7 @@ if ($action_todo) {
             $visibilityResult[$key] = (int) $values[$key];
         }
 
-        if ($values['lang'] == 'all') {
+        if ('all' == $values['lang']) {
             $values['lang'] = null;
         }
 
@@ -360,7 +358,7 @@ if ($action_todo) {
                     empty($values['send_email_test']) ? false : true
                 );
 
-                if ($announcement_id !== false) {
+                if (false !== $announcement_id) {
                     // ADD Picture
                     $picture = $_FILES['picture'];
                     if (!empty($picture['name'])) {

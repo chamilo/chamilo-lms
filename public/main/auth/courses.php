@@ -23,14 +23,14 @@ $limit = CoursesController::getLimitArray();
 // Section for the tabs.
 $this_section = SECTION_CATALOG;
 
-if (api_get_setting('course_catalog_published') !== 'true') {
+if ('true' !== api_get_setting('course_catalog_published')) {
     // Access rights: anonymous users can't do anything useful here.
     api_block_anonymous_users();
 }
 
 // For students
 $user_can_view_page = true;
-if (api_get_setting('allow_students_to_browse_courses') === 'false') {
+if ('false' === api_get_setting('allow_students_to_browse_courses')) {
     $user_can_view_page = false;
 }
 
@@ -224,7 +224,7 @@ switch ($action) {
         }
 
         $registrationAllowed = api_get_setting('catalog_allow_session_auto_subscription');
-        if ($registrationAllowed === 'true') {
+        if ('true' === $registrationAllowed) {
             $entityManager = Database::getManager();
             $repository = $entityManager->getRepository('ChamiloCoreBundle:SequenceResource');
 
@@ -262,7 +262,7 @@ switch ($action) {
             if ($count <= 0) {
                 // no course in session -> return to catalog
                 $url = api_get_path(WEB_CODE_PATH).'auth/courses.php';
-            } elseif ($count == 1) {
+            } elseif (1 == $count) {
                 // only one course, so redirect directly to this course
                 foreach ($coursesList as $course) {
                     $url = api_get_path(WEB_COURSE_PATH).$course['directory'].'/index.php?id_session='.$sessionId;

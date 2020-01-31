@@ -206,7 +206,7 @@ class Plugin
         if ($checkboxNames = array_keys($this->fields, 'checkbox')) {
             $pluginInfoCollection = api_get_settings('Plugins');
             foreach ($pluginInfoCollection as $pluginInfo) {
-                if (array_search($pluginInfo['title'], $checkboxNames) !== false) {
+                if (false !== array_search($pluginInfo['title'], $checkboxNames)) {
                     $checkboxCollection[$pluginInfo['title']] = $pluginInfo;
                 }
             }
@@ -214,7 +214,7 @@ class Plugin
 
         foreach ($this->fields as $name => $type) {
             $options = null;
-            if (is_array($type) && isset($type['type']) && $type['type'] === 'select') {
+            if (is_array($type) && isset($type['type']) && 'select' === $type['type']) {
                 $attributes = isset($type['attributes']) ? $type['attributes'] : [];
                 if (!empty($type['options']) && isset($type['translate_options']) && $type['translate_options']) {
                     foreach ($type['options'] as $key => &$optionName) {
@@ -232,7 +232,7 @@ class Plugin
             $help = null;
             if ($this->get_lang_plugin_exists($name.'_help')) {
                 $help = $this->get_lang($name.'_help');
-                if ($name === "show_main_menu_tab") {
+                if ("show_main_menu_tab" === $name) {
                     $pluginName = strtolower(str_replace('Plugin', '', get_class($this)));
                     $pluginUrl = api_get_path(WEB_PATH)."plugin/$pluginName/index.php";
                     $pluginUrl = "<a href=$pluginUrl>$pluginUrl</a>";
@@ -271,7 +271,7 @@ class Plugin
                 case 'checkbox':
                     $selectedValue = null;
                     if (isset($checkboxCollection[$name])) {
-                        if ($checkboxCollection[$name]['selected_value'] === 'true') {
+                        if ('true' === $checkboxCollection[$name]['selected_value']) {
                             $selectedValue = 'checked';
                         }
                     }
@@ -526,7 +526,7 @@ class Plugin
         }
 
         // Stop here if we don't want a tool link on the course homepage
-        if (!$add_tool_link || $this->addCourseTool == false) {
+        if (!$add_tool_link || false == $this->addCourseTool) {
             return true;
         }
 
@@ -754,9 +754,9 @@ class Plugin
                 foreach ($tabs as $row) {
                     $newSubKey = "custom_tab_$i";
 
-                    if (strpos($row['subkey'], self::TAB_FILTER_NO_STUDENT) !== false) {
+                    if (false !== strpos($row['subkey'], self::TAB_FILTER_NO_STUDENT)) {
                         $newSubKey .= self::TAB_FILTER_NO_STUDENT;
-                    } elseif (strpos($row['subkey'], self::TAB_FILTER_ONLY_STUDENT) !== false) {
+                    } elseif (false !== strpos($row['subkey'], self::TAB_FILTER_ONLY_STUDENT)) {
                         $newSubKey .= self::TAB_FILTER_ONLY_STUDENT;
                     }
 
@@ -800,7 +800,7 @@ class Plugin
         $pluginName = strtolower($langString);
         $pluginUrl = 'plugin/'.$pluginName.'/'.$filePath;
 
-        if ($showTab === 'true') {
+        if ('true' === $showTab) {
             $tabAdded = $this->addTab($langString, $pluginUrl);
             if ($tabAdded) {
                 // The page must be refreshed to show the recently created tab
@@ -859,7 +859,7 @@ class Plugin
                 ],
             ]
         );
-        if (is_array($settings) && isset($settings['selected_value']) && $settings['selected_value'] == 'installed') {
+        if (is_array($settings) && isset($settings['selected_value']) && 'installed' == $settings['selected_value']) {
             return true;
         }
 

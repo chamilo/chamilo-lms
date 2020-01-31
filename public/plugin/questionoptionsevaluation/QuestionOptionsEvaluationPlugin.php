@@ -174,9 +174,9 @@ class QuestionOptionsEvaluationPlugin extends Plugin
         /** @var TrackEAttempt $qTrack */
         foreach ($qTracks as $qTrack) {
             if ($qTrack->getMarks() > 0) {
-                ++$counts['correct'];
+                $counts['correct']++;
             } elseif ($qTrack->getMarks() < 0) {
-                ++$counts['incorrect'];
+                $counts['incorrect']++;
             }
         }
 

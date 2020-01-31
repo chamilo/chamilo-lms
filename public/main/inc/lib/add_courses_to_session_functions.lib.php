@@ -50,7 +50,7 @@ class AddCourseToSession
                 }
             }
 
-            if ($type == 'single') {
+            if ('single' == $type) {
                 // search users where username or firstname or lastname begins likes $needle
                 $sql = 'SELECT
                             course.id,
@@ -75,8 +75,8 @@ class AddCourseToSession
             if (api_is_multiple_url_enabled()) {
                 $tbl_course_rel_access_url = Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_COURSE);
                 $access_url_id = api_get_current_access_url_id();
-                if ($access_url_id != -1) {
-                    if ($type == 'single') {
+                if (-1 != $access_url_id) {
+                    if ('single' == $type) {
                         $sql = 'SELECT
                                     course.id,
                                     course.visual_code,
@@ -106,7 +106,7 @@ class AddCourseToSession
 
             $rs = Database::query($sql);
             $course_list = [];
-            if ($type == 'single') {
+            if ('single' == $type) {
                 while ($course = Database::fetch_array($rs)) {
                     $course_list[] = $course['id'];
                     $course_title = str_replace("'", "\'", $course_title);

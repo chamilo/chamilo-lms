@@ -180,7 +180,7 @@ class Database
      */
     public static function fetch_array(Statement $result, $option = 'BOTH')
     {
-        if ($result === false) {
+        if (false === $result) {
             return [];
         }
 
@@ -216,7 +216,7 @@ class Database
      */
     public static function fetch_row(Statement $result)
     {
-        if ($result === false) {
+        if (false === $result) {
             return [];
         }
 
@@ -238,7 +238,7 @@ class Database
      */
     public static function num_rows(Statement $result)
     {
-        if ($result === false) {
+        if (false === $result) {
             return 0;
         }
 
@@ -288,7 +288,7 @@ class Database
      */
     public static function handleError($e)
     {
-        $debug = api_get_setting('server_type') == 'test';
+        $debug = 'test' == api_get_setting('server_type');
         if ($debug) {
             // We use Symfony exception handler for better error information
             $handler = new ExceptionHandler();
@@ -469,7 +469,7 @@ class Database
         if (is_array($columns)) {
             $clean_columns = implode(',', $columns);
         } else {
-            if ($columns == '*') {
+            if ('*' == $columns) {
                 $clean_columns = '*';
             } else {
                 $clean_columns = (string) $columns;
@@ -483,7 +483,7 @@ class Database
         $result = self::query($sql);
         $array = [];
 
-        if ($type_result === 'all') {
+        if ('all' === $type_result) {
             while ($row = self::fetch_array($result, $option)) {
                 if (isset($row['id'])) {
                     $array[$row['id']] = $row;
@@ -515,7 +515,7 @@ class Database
         }
         $return_value = $where_return = '';
         foreach ($conditions as $type_condition => $condition_data) {
-            if ($condition_data == false) {
+            if (false == $condition_data) {
                 continue;
             }
             $type_condition = strtolower($type_condition);
@@ -533,7 +533,7 @@ class Database
                             $clean_values = $value_array;
                         }
 
-                        if (!empty($condition) && $clean_values != '') {
+                        if (!empty($condition) && '' != $clean_values) {
                             $condition = str_replace('%', "'@percentage@'", $condition); //replace "%"
                             $condition = str_replace("'?'", "%s", $condition);
                             $condition = str_replace("?", "%s", $condition);

@@ -100,18 +100,18 @@ $row = 0;
 $column = 0;
 foreach ($headers as $header) {
     $table->setHeaderContents($row, $column, $header);
-    ++$column;
+    $column++;
 }
-++$row;
+$row++;
 foreach ($data as $row_table) {
     $column = 0;
     foreach ($row_table as $cell) {
         $table->setCellContents($row, $column, $cell);
         $table->updateCellAttributes($row, $column, 'align="center"');
-        ++$column;
+        $column++;
     }
     $table->updateRowAttributes($row, $row % 2 ? 'class="row_even"' : 'class="row_odd"', true);
-    ++$row;
+    $row++;
 }
 $content = $table->toHtml();
 
@@ -139,7 +139,7 @@ if (!empty($question_list)) {
         $answer = new Answer($question_id);
         $answer_count = $answer->selectNbrAnswers();
 
-        for ($answer_id = 1; $answer_id <= $answer_count; ++$answer_id) {
+        for ($answer_id = 1; $answer_id <= $answer_count; $answer_id++) {
             $answer_info = $answer->selectAnswer($answer_id);
             $is_correct = $answer->isCorrect($answer_id);
             $correct_answer = 1 == $is_correct ? get_lang('Yes') : get_lang('No');
@@ -178,8 +178,8 @@ if (!empty($question_list)) {
                             false,
                             $count.' / '.$count_students
                         );
-                        ++$id;
-                        ++$counter;
+                        $id++;
+                        $counter++;
                     }
 
                     break;
@@ -192,7 +192,7 @@ if (!empty($question_list)) {
                             $data[$id]['name'] = '-';
                         }
                         $correct = '';
-                        for ($i = 1; $i <= $answer_count; ++$i) {
+                        for ($i = 1; $i <= $answer_count; $i++) {
                             $is_correct_i = $answer->isCorrect($i);
                             if (0 != $is_correct_i && $is_correct_i == $answer_id) {
                                 $correct = $answer->selectAnswer($i);
@@ -276,7 +276,7 @@ if (!empty($question_list)) {
                         $count.' / '.$count_students
                     );
             }
-            ++$id;
+            $id++;
         }
     }
 }
@@ -287,18 +287,18 @@ $row = 0;
 $column = 0;
 foreach ($headers as $header) {
     $table->setHeaderContents($row, $column, $header);
-    ++$column;
+    $column++;
 }
-++$row;
+$row++;
 foreach ($data as $row_table) {
     $column = 0;
     foreach ($row_table as $cell) {
         $table->setCellContents($row, $column, $cell);
         $table->updateCellAttributes($row, $column, 'align="center"');
-        ++$column;
+        $column++;
     }
     $table->updateRowAttributes($row, $row % 2 ? 'class="row_even"' : 'class="row_odd"', true);
-    ++$row;
+    $row++;
 }
 $content .= $table->toHtml();
 

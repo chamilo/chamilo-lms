@@ -5,8 +5,6 @@
  * Extends FormValidator with import and export forms.
  *
  * @author Stijn Konings
- *
- * @package chamilo.gradebook
  */
 class DataForm extends FormValidator
 {
@@ -34,15 +32,15 @@ class DataForm extends FormValidator
     ) {
         parent:: __construct($form_name, $method, $action, $target);
         $this->form_type = $form_type;
-        if ($this->form_type == self::TYPE_IMPORT) {
+        if (self::TYPE_IMPORT == $this->form_type) {
             $this->build_import_form();
-        } elseif ($this->form_type == self::TYPE_EXPORT) {
-            if ($locked_status == 0) {
+        } elseif (self::TYPE_EXPORT == $this->form_type) {
+            if (0 == $locked_status) {
                 $this->build_export_form_option(false);
             } else {
                 $this->build_export_form();
             }
-        } elseif ($this->form_type == self::TYPE_EXPORT_PDF) {
+        } elseif (self::TYPE_EXPORT_PDF == $this->form_type) {
             $this->build_pdf_export_form();
         }
         $this->setDefaults();

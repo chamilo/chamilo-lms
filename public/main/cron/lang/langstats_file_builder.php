@@ -59,7 +59,7 @@ $words_found = 0;
 $global_var = []; //keep the combination of all vars
 $terms_in_limit = array_flip($terms_in_limit);
 foreach ($list_files as $file) {
-    if (substr($file, 0, 1) == '.') {
+    if ('.' == substr($file, 0, 1)) {
         continue;
     }
     //echo "'".substr($file,0,-8)."',<br />"; //print in a PHP array format

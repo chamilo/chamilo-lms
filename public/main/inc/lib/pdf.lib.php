@@ -8,8 +8,6 @@ use Mpdf\Output\Destination;
 
 /**
  * Class PDF.
- *
- * @package chamilo.library
  */
 class PDF
 {
@@ -253,7 +251,7 @@ class PDF
 
             if (empty($file) && !empty($htmlTitle)) {
                 // this is a chapter, print title & skip the rest
-                if ($counter === 2 && !empty($mainTitle)) {
+                if (2 === $counter && !empty($mainTitle)) {
                     $this->pdf->WriteHTML(
                         '<html><body><h2 style="text-align: center">'.$mainTitle.'</h2></body></html>'
                     );
@@ -265,7 +263,7 @@ class PDF
                 }
                 continue;
             } else {
-                if ($counter === 2 && !empty($mainTitle)) {
+                if (2 === $counter && !empty($mainTitle)) {
                     $this->pdf->WriteHTML(
                         '<html><body><h2 style="text-align: center">'.$mainTitle.'</h2></body></html>'
                     );
@@ -296,9 +294,9 @@ class PDF
                 $filename = $file_info['basename'];
                 $filename = str_replace('_', ' ', $filename);
 
-                if ($extension === 'html') {
+                if ('html' === $extension) {
                     $filename = basename($filename, '.html');
-                } elseif ($extension === 'htm') {
+                } elseif ('htm' === $extension) {
                     $filename = basename($filename, '.htm');
                 }
 
@@ -433,10 +431,10 @@ class PDF
                         continue;
                     }
 
-                    if (strpos($old_src, $protocol) === false) {
-                        if (strpos($old_src, '/main/default_course_document') === false) {
-                            if (strpos($old_src, '/main/inc/lib/') === false &&
-                                strpos($old_src, '/app/upload/') === false
+                    if (false === strpos($old_src, $protocol)) {
+                        if (false === strpos($old_src, '/main/default_course_document')) {
+                            if (false === strpos($old_src, '/main/inc/lib/') &&
+                                false === strpos($old_src, '/app/upload/')
                             ) {
                                 $old_src_fixed = str_replace(
                                     api_get_path(REL_COURSE_PATH).$courseInfo['path'].'/document/',
@@ -498,7 +496,7 @@ class PDF
             $output_file = $pdf_name.'.pdf';
         }
 
-        if ($outputMode == 'F') {
+        if ('F' == $outputMode) {
             $output_file = api_get_path(SYS_ARCHIVE_PATH).$output_file;
         }
 
@@ -516,7 +514,7 @@ class PDF
             ); // F to save the pdf in a file
         }
 
-        if ($outputMode != 'F') {
+        if ('F' != $outputMode) {
             exit;
         }
 
@@ -535,7 +533,7 @@ class PDF
     {
         $web_path = false;
         $urlId = api_get_current_access_url_id();
-        if (!empty($courseCode) && api_get_setting('pdf_export_watermark_by_course') == 'true') {
+        if (!empty($courseCode) && 'true' == api_get_setting('pdf_export_watermark_by_course')) {
             $course_info = api_get_course_info($courseCode);
             // course path
             $store_path = api_get_path(SYS_COURSE_PATH).$course_info['path'].'/'.$urlId.'_pdf_watermark.png';
@@ -564,7 +562,7 @@ class PDF
     public function delete_watermark($courseCode = null)
     {
         $urlId = api_get_current_access_url_id();
-        if (!empty($courseCode) && api_get_setting('pdf_export_watermark_by_course') == 'true') {
+        if (!empty($courseCode) && 'true' == api_get_setting('pdf_export_watermark_by_course')) {
             $course_info = api_get_course_info($courseCode);
             // course path
             $store_path = api_get_path(SYS_COURSE_PATH).$course_info['path'].'/'.$urlId.'_pdf_watermark.png';
@@ -593,7 +591,7 @@ class PDF
     public function upload_watermark($filename, $source_file, $courseCode = null)
     {
         $urlId = api_get_current_access_url_id();
-        if (!empty($courseCode) && api_get_setting('pdf_export_watermark_by_course') == 'true') {
+        if (!empty($courseCode) && 'true' == api_get_setting('pdf_export_watermark_by_course')) {
             $course_info = api_get_course_info($courseCode);
             $store_path = api_get_path(SYS_COURSE_PATH).$course_info['path']; // course path
             $web_path = api_get_path(WEB_COURSE_PATH).$course_info['path'].'/pdf_watermark.png';
@@ -674,7 +672,7 @@ class PDF
             $organization = ChamiloApi::getPlatformLogo('', [], true);
             // Use custom logo image.
             $pdfLogo = api_get_setting('pdf_logo_header');
-            if ($pdfLogo === 'true') {
+            if ('true' === $pdfLogo) {
                 $visualTheme = api_get_visual_theme();
                 $img = api_get_path(SYS_CSS_PATH).'themes/'.$visualTheme.'/images/pdf_logo_header.png';
                 if (file_exists($img)) {
@@ -739,7 +737,7 @@ class PDF
         // Add decoration only if not stated otherwise
         if ($complete) {
             // Adding watermark
-            if (api_get_setting('pdf_export_watermark_enable') == 'true') {
+            if ('true' == api_get_setting('pdf_export_watermark_enable')) {
                 $watermark_file = self::get_watermark($courseCode);
                 if ($watermark_file) {
                     //http://mpdf1.com/manual/index.php?tid=269&searchstring=watermark
@@ -918,7 +916,7 @@ class PDF
             $src = $element->getAttribute('src');
             $src = trim($src);
 
-            if (strpos($src, $protocol) !== false) {
+            if (false !== strpos($src, $protocol)) {
                 continue;
             }
 
@@ -927,7 +925,7 @@ class PDF
                 continue;
             }
 
-            if (strpos($src, '/main/default_course_document') === 0) {
+            if (0 === strpos($src, '/main/default_course_document')) {
                 $element->setAttribute(
                     'src',
                     str_replace('/main/default_course_document', $sysCodePath.'default_course_document', $src)
@@ -935,7 +933,7 @@ class PDF
                 continue;
             }
 
-            if (strpos($src, '/main/img') === 0) {
+            if (0 === strpos($src, '/main/img')) {
                 $element->setAttribute(
                     'src',
                     str_replace('/main/img/', $sysCodePath.'img/', $src)
@@ -943,7 +941,7 @@ class PDF
                 continue;
             }
 
-            if (strpos($src, '/app/upload/') === 0) {
+            if (0 === strpos($src, '/app/upload/')) {
                 $element->setAttribute(
                     'src',
                     str_replace('/app/upload/', $sysUploadPath, $src)
@@ -955,7 +953,7 @@ class PDF
                 continue;
             }
 
-            if (api_get_path(REL_PATH) != '/') {
+            if ('/' != api_get_path(REL_PATH)) {
                 $oldSrcFixed = str_replace(
                     api_get_path(REL_PATH).'courses/'.$courseInfo['path'].'/document/',
                     '',
@@ -970,7 +968,7 @@ class PDF
                     }
                 }
             } else {
-                if (strpos($src, 'courses/'.$courseInfo['path'].'/document/') !== false) {
+                if (false !== strpos($src, 'courses/'.$courseInfo['path'].'/document/')) {
                     $oldSrcFixed = str_replace('courses/'.$courseInfo['path'].'/document/', '', $src);
                 } else {
                     // Try with the dirname if exists

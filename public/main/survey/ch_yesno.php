@@ -54,7 +54,7 @@ class ch_yesno extends survey_question
         if (is_array($questionData['options'])) {
             $class = 'radio-inline';
             $labelClass = 'radio-inline';
-            if ($questionData['display'] == 'vertical') {
+            if ('vertical' == $questionData['display']) {
                 $class = 'radio-vertical';
             }
 

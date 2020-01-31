@@ -1810,7 +1810,7 @@ class Exercise
             // random all questions
             if ($this->isRandom() && 0 == $this->isRandomByCat()) {
                 if (count($this->questionList) >= $this->random && $this->random > 0) {
-                    --$this->random;
+                    $this->random--;
                     $this->save();
                 }
             }
@@ -2898,7 +2898,7 @@ class Exercise
                 $sql = "DELETE FROM $table_track_e_attempt
                         WHERE exe_id = '".$item['exe_id']."'";
                 Database::query($sql);
-                ++$i;
+                $i++;
             }
         }
 
@@ -3174,7 +3174,7 @@ class Exercise
                             $showPreview = true;
                             if (!empty($myRemindList)) {
                                 $beforeId = null;
-                                for ($i = 0; $i < count($myRemindList); ++$i) {
+                                for ($i = 0; $i < count($myRemindList); $i++) {
                                     if (isset($myRemindList[$i]) && $myRemindList[$i] == $question_id) {
                                         $beforeId = isset($myRemindList[$i - 1]) ? $myRemindList[$i - 1] : null;
 
@@ -3190,7 +3190,7 @@ class Exercise
                                         if ($originalQuestionId == $beforeId) {
                                             break;
                                         }
-                                        ++$num;
+                                        $num++;
                                     }
                                     $prev_question = $num;
                                 }
@@ -3590,7 +3590,7 @@ class Exercise
         $answerDestination = null;
         $userAnsweredQuestion = false;
         $correctAnswerId = null;
-        for ($answerId = 1; $answerId <= $nbrAnswers; ++$answerId) {
+        for ($answerId = 1; $answerId <= $nbrAnswers; $answerId++) {
             $answer = $objAnswerTmp->selectAnswer($answerId);
             $answerComment = $objAnswerTmp->selectComment($answerId);
             $answerCorrect = $objAnswerTmp->isCorrect($answerId);
@@ -3880,7 +3880,7 @@ class Exercise
                             $switchable_answer_set = true;
                         }
                         $answer = '';
-                        for ($k = 0; $k < $last; ++$k) {
+                        for ($k = 0; $k < $last; $k++) {
                             $answer .= $pre_array[$k];
                         }
                         // splits weightings that are joined with a comma
@@ -3937,14 +3937,14 @@ class Exercise
                             $user_tags[] = $choice[$j];
                             // Put the contents of the [] answer tag into correct_tags[]
                             $correct_tags[] = api_substr($temp, 0, $pos);
-                            ++$j;
+                            $j++;
                             $temp = api_substr($temp, $pos + 1);
                         }
                         $answer = '';
                         $real_correct_tags = $correct_tags;
                         $chosen_list = [];
 
-                        for ($i = 0; $i < count($real_correct_tags); ++$i) {
+                        for ($i = 0; $i < count($real_correct_tags); $i++) {
                             if (0 == $i) {
                                 $answer .= $real_text[0];
                             }
@@ -4016,7 +4016,7 @@ class Exercise
                         // loop other all blanks words
                         if (!$switchableAnswerSet) {
                             // not switchable answer, must be in the same place than teacher order
-                            for ($i = 0; $i < count($listCorrectAnswers['words']); ++$i) {
+                            for ($i = 0; $i < count($listCorrectAnswers['words']); $i++) {
                                 $studentAnswer = isset($choice[$i]) ? $choice[$i] : '';
                                 $correctAnswer = $listCorrectAnswers['words'][$i];
 
@@ -4072,7 +4072,7 @@ class Exercise
                             $listTeacherAnswerTemp = $listCorrectAnswers['words'];
 
                             // for every teacher answer, check if there is a student answer
-                            for ($i = 0; $i < count($listStudentAnswerTemp); ++$i) {
+                            for ($i = 0; $i < count($listStudentAnswerTemp); $i++) {
                                 $studentAnswer = trim($listStudentAnswerTemp[$i]);
                                 $studentAnswerToShow = $studentAnswer;
 
@@ -4082,7 +4082,7 @@ class Exercise
                                 }
 
                                 $found = false;
-                                for ($j = 0; $j < count($listTeacherAnswerTemp); ++$j) {
+                                for ($j = 0; $j < count($listTeacherAnswerTemp); $j++) {
                                     $correctAnswer = $listTeacherAnswerTemp[$j];
                                     $type = FillBlanks::getFillTheBlankAnswerType($correctAnswer);
                                     if (FillBlanks::FILL_THE_BLANK_MENU == $type) {
@@ -4131,7 +4131,7 @@ class Exercise
                         $preArray = explode('@@', $answer);
                         $last = count($preArray) - 1;
                         $answer = '';
-                        for ($k = 0; $k < $last; ++$k) {
+                        for ($k = 0; $k < $last; $k++) {
                             $answer .= $preArray[$k];
                         }
                         $answerWeighting = [$answerWeighting];
@@ -4196,7 +4196,7 @@ class Exercise
                             $userTags[] = $choice[$j];
                             // put the contents of the [] answer tag into correct_tags[]
                             $correctTags[] = api_substr($temp, 0, $pos);
-                            ++$j;
+                            $j++;
                             $temp = api_substr($temp, $pos + 1);
                         }
                         $answer = '';
@@ -4205,7 +4205,7 @@ class Exercise
                         $expectedAnswer = '';
                         $calculatedChoice = '';
 
-                        for ($i = 0; $i < count($realCorrectTags); ++$i) {
+                        for ($i = 0; $i < count($realCorrectTags); $i++) {
                             if (0 == $i) {
                                 $answer .= $realText[0];
                             }
@@ -4544,7 +4544,7 @@ class Exercise
                                         break;
                                 }
                             }
-                            ++$counterAnswer;
+                            $counterAnswer++;
                         }
 
                         break 2; // break the switch and the "for" condition
@@ -5046,7 +5046,7 @@ class Exercise
                                         if ($debug > 0) {
                                             error_log(__LINE__.' - Overlap is '.$overlap.': OAR hit', 0);
                                         }
-                                        ++$organs_at_risk_hit;
+                                        $organs_at_risk_hit++;
                                         //show the feedback
                                         $next = 0;
                                         $comment = $answerDestination = $objAnswerTmp->selectComment($answerId);
@@ -5409,7 +5409,7 @@ class Exercise
                                         if ($debug > 0) {
                                             error_log(__LINE__.' - Overlap is '.$overlap.': OAR hit', 0);
                                         }
-                                        ++$organs_at_risk_hit;
+                                        $organs_at_risk_hit++;
                                         //show the feedback
                                         $next = 0;
                                         $comment = $answerDestination = $objAnswerTmp->selectComment($answerId);
@@ -5708,7 +5708,7 @@ class Exercise
                 if (0 != $choice) {
                     $reply = array_keys($choice);
                     $countReply = count($reply);
-                    for ($i = 0; $i < $countReply; ++$i) {
+                    for ($i = 0; $i < $countReply; $i++) {
                         $chosenAnswer = $reply[$i];
                         if (MULTIPLE_ANSWER_TRUE_FALSE_DEGREE_CERTAINTY == $answerType) {
                             if (0 != $choiceDegreeCertainty) {
@@ -5753,7 +5753,7 @@ class Exercise
             } elseif (MULTIPLE_ANSWER == $answerType || GLOBAL_MULTIPLE_ANSWER == $answerType) {
                 if (0 != $choice) {
                     $reply = array_keys($choice);
-                    for ($i = 0; $i < count($reply); ++$i) {
+                    for ($i = 0; $i < count($reply); $i++) {
                         $ans = $reply[$i];
                         Event::saveQuestionAttempt($questionScore, $ans, $quesId, $exeId, $i, $this->id);
                     }
@@ -5763,7 +5763,7 @@ class Exercise
             } elseif (MULTIPLE_ANSWER_COMBINATION == $answerType) {
                 if (0 != $choice) {
                     $reply = array_keys($choice);
-                    for ($i = 0; $i < count($reply); ++$i) {
+                    for ($i = 0; $i < count($reply); $i++) {
                         $ans = $reply[$i];
                         Event::saveQuestionAttempt($questionScore, $ans, $quesId, $exeId, $i, $this->id);
                     }
@@ -6618,7 +6618,7 @@ class Exercise
                             $add_question = false;
                             if (!in_array($media_id, $new_question_list)) {
                                 $new_question_list[$counter] = $media_id;
-                                ++$counter;
+                                $counter++;
                             }
 
                             break;
@@ -6626,7 +6626,7 @@ class Exercise
                     }
                     if ($add_question) {
                         $new_question_list[$counter] = $question_id;
-                        ++$counter;
+                        $counter++;
                     }
                 }
                 if ($expand_media_questions) {
@@ -6738,7 +6738,7 @@ class Exercise
                             $add_question = false;
                             if (!in_array($media_id, $new_question_list)) {
                                 $new_question_list[$counter] = $media_id;
-                                ++$counter;
+                                $counter++;
                             }
 
                             break;
@@ -6746,7 +6746,7 @@ class Exercise
                     }
                     if ($add_question) {
                         $new_question_list[$counter] = $question_id;
-                        ++$counter;
+                        $counter++;
                     }
                 }
                 if ($expand_media_questions) {
@@ -7087,11 +7087,11 @@ class Exercise
                     $link,
                     $counter
                 );
-                ++$counter;
-                ++$nextValue;
+                $counter++;
+                $nextValue++;
                 $wasMedia = false;
             }
-            ++$counterNoMedias;
+            $counterNoMedias++;
         }
         $html .= '</ul></div>';
 
@@ -7213,7 +7213,7 @@ class Exercise
                 if (999 == $mediaQuestionId) {
                     $counterNoMedias += count($questionList);
                 } else {
-                    ++$counterNoMedias;
+                    $counterNoMedias++;
                 }
 
                 $nextValue += count($questionList);
@@ -7251,7 +7251,7 @@ class Exercise
 
         // Normal question list render (medias compressed)
         foreach ($questionList as $questionId) {
-            ++$i;
+            $i++;
             // For sequential exercises
 
             if (ONE_PER_PAGE == $this->type) {
@@ -7310,8 +7310,8 @@ class Exercise
                                 $isLastQuestionInMedia,
                                 $questionList
                             );
-                            ++$letterCounter;
-                            ++$counter;
+                            $letterCounter++;
+                            $counter++;
                         }
                     }
                 } else {
@@ -7325,7 +7325,7 @@ class Exercise
                         null,
                         $questionList
                     );
-                    ++$i;
+                    $i++;
                 }
             } else {
                 // Normal question render.
@@ -7604,7 +7604,7 @@ class Exercise
 
             rsort($questionScoreList);
             // add the first $numberRandomQuestions value of score array to get max_score
-            for ($i = 0; $i < min($numberRandomQuestions, count($questionScoreList)); ++$i) {
+            for ($i = 0; $i < min($numberRandomQuestions, count($questionScoreList)); $i++) {
                 $out_max_score += $questionScoreList[$i];
             }
         } elseif ($this->random > 0 && $this->randomByCat > 0) {
@@ -7626,7 +7626,7 @@ class Exercise
             // here we've got an array with first key, the category_id, second key, score of question for this cat
             foreach ($tab_categories_scores as $tab_scores) {
                 rsort($tab_scores);
-                for ($i = 0; $i < min($numberRandomQuestions, count($tab_scores)); ++$i) {
+                for ($i = 0; $i < min($numberRandomQuestions, count($tab_scores)); $i++) {
                     $out_max_score += $tab_scores[$i];
                 }
             }
@@ -7788,7 +7788,7 @@ class Exercise
             return null;
         }
 
-        --$currentQuestion;
+        $currentQuestion--;
 
         if (!empty($result['question_list'])) {
             $answeredQuestions = [];
@@ -7806,7 +7806,7 @@ class Exercise
                         break;
                     }
                 }
-                ++$counterAnsweredQuestions;
+                $counterAnsweredQuestions++;
             }
 
             $counterRemindListQuestions = 0;
@@ -7819,7 +7819,7 @@ class Exercise
                             break;
                         }
                     }
-                    ++$counterRemindListQuestions;
+                    $counterRemindListQuestions++;
                 }
 
                 if ($counterRemindListQuestions < $currentQuestion) {
@@ -7857,13 +7857,13 @@ class Exercise
                 if (in_array($questionId, $mediaQuestionList)) {
                     return $position;
                 } else {
-                    ++$position;
+                    $position++;
                 }
             } else {
                 if ($id == $questionId) {
                     return $position;
                 } else {
-                    ++$position;
+                    $position++;
                 }
             }
         }
@@ -8137,12 +8137,12 @@ class Exercise
             if (true === $hideLabel) {
                 $answerUsed = (int) $array['used'];
                 $answerMissing = (int) $array['missing'] - $answerUsed;
-                for ($i = 1; $i <= $answerUsed; ++$i) {
+                for ($i = 1; $i <= $answerUsed; $i++) {
                     $html .= '<span class="score-img">'.
                         Display::return_icon('attempt-check.png', null, null, ICON_SIZE_SMALL).
                         '</span>';
                 }
-                for ($i = 1; $i <= $answerMissing; ++$i) {
+                for ($i = 1; $i <= $answerMissing; $i++) {
                     $html .= '<span class="score-img">'.
                         Display::return_icon('attempt-nocheck.png', null, null, ICON_SIZE_SMALL).
                         '</span>';
@@ -8998,7 +8998,7 @@ class Exercise
 
             // Just in case we save the order in other array
             $temp_question_list[$counter] = $new_object->question_id;
-            ++$counter;
+            $counter++;
         }
 
         if (!empty($temp_question_list)) {

@@ -3,8 +3,6 @@
 
 /**
  *	This script displays a help window.
- *
- *	@package chamilo.help
  */
 require_once __DIR__.'/../inc/global.inc.php';
 

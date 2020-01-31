@@ -53,7 +53,7 @@ try {
     $context = Container::getRouter()->getContext();
 
     $pos = strpos($currentBaseUrl, 'main');
-    if ($pos === false) {
+    if (false === $pos) {
         echo 'Cannot load current URL';
         exit;
     }

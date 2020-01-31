@@ -5,8 +5,6 @@
  * Show information about Mozilla OpenBadges.
  *
  * @author Angel Fernando Quiroz Campos <angel.quiroz@beeznest.com>
- *
- * @package chamilo.admin.openbadges
  */
 $cidReset = true;
 
@@ -32,12 +30,12 @@ $badgeStudio = [
     'script_js' => '<script src="'.api_get_path(WEB_LIBRARY_JS_PATH).'badge-studio/media/js/studio.js?"></script>',
 ];
 
-if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+if ('POST' === $_SERVER['REQUEST_METHOD']) {
     $params = [
         'id' => $skillId,
     ];
 
-    if ((isset($_FILES['image']) && $_FILES['image']['error'] == 0) ||
+    if ((isset($_FILES['image']) && 0 == $_FILES['image']['error']) ||
         !empty($_POST['badge_studio_image'])
     ) {
         $dirPermissions = api_get_permissions_for_new_directories();

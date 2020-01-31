@@ -29,7 +29,7 @@ if (empty($wamiuserid)) {
 
 $type = isset($_REQUEST['type']) ? $_REQUEST['type'] : 'document'; // can be document or message
 
-if ($type === 'document') {
+if ('document' === $type) {
     api_protect_course_script();
 }
 
@@ -48,7 +48,7 @@ if (empty($content)) {
 $ext = explode('.', $waminame);
 $ext = strtolower($ext[sizeof($ext) - 1]);
 
-if ($ext != 'wav') {
+if ('wav' != $ext) {
     die();
 }
 

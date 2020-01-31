@@ -6,7 +6,7 @@ require_once __DIR__.'/../inc/global.inc.php';
 
 api_block_anonymous_users(true);
 
-$allowJustification = api_get_plugin_setting('justification', 'tool_enable') === 'true';
+$allowJustification = 'true' === api_get_plugin_setting('justification', 'tool_enable');
 
 if (!$allowJustification) {
     api_not_allowed(true);
@@ -79,7 +79,7 @@ switch ($action) {
         $justificationId = isset($_REQUEST['justification_id']) ? (int) $_REQUEST['justification_id'] : '';
         $userJustification = $plugin->getUserJustification($justificationId);
         $justification = $plugin->getJustification($userJustification['justification_document_id']);
-        if ($justification['date_manual_on'] == 0) {
+        if (0 == $justification['date_manual_on']) {
             api_not_allowed(true);
         }
         $formEdit = new FormValidator('edit', 'post', api_get_self().'?a=edit_justification&justification_id='.$justificationId);
@@ -146,7 +146,7 @@ if (!empty($userJustifications)) {
         $table->setCellContents($row, $col++, $date);
         $actions = '';
 
-        if ($justification['date_manual_on'] == 1) {
+        if (1 == $justification['date_manual_on']) {
             $actions .= Display::url(get_lang('Edit'), api_get_self().'?a=edit_justification&justification_id='.$userJustification['id'], ['class' => 'btn btn-primary']);
         }
         $actions .= '&nbsp;'.Display::url(get_lang('Delete'), api_get_self().'?a=delete_justification&justification_id='.$userJustification['id'], ['class' => 'btn btn-danger']);
@@ -170,9 +170,7 @@ $headers = [
 ];
 $justificationTab = Display::tabsOnlyLink($headers, 2);
 
-
 $justification = $justificationTab.$formValidator->returnForm().$userJustificationList;
-
 
 $tpl = new Template(get_lang('ModifyProfile'));
 

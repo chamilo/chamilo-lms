@@ -1,9 +1,6 @@
 <?php
 /* For licensing terms, see /license.txt */
 
-/**
- *  @package chamilo.admin
- */
 $cidReset = true;
 
 require_once __DIR__.'/../inc/global.inc.php';
@@ -75,7 +72,7 @@ switch ($action) {
         $interbreadcrumb[] = ['url' => 'usergroups.php', 'name' => get_lang('Classes')];
         $interbreadcrumb[] = ['url' => '#', 'name' => get_lang('Add')];
 
-        if (api_get_session_id() != 0 && !api_is_allowed_to_session_edit(false, true)) {
+        if (0 != api_get_session_id() && !api_is_allowed_to_session_edit(false, true)) {
             api_not_allowed();
         }
         $form = new FormValidator(

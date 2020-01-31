@@ -3,8 +3,6 @@
  * This script gets users details of a given list of users
  * (given by e-mail) and prints the details in /tmp/list.txt
  * To enable script, prefix the first die(); with //.
- *
- * @package chamilo.cron.user_import
  */
 /**
  * Initialization.
@@ -24,7 +22,7 @@ foreach ($list as $mail) {
     $mail = trim($mail);
     $sql = "SELECT user_id, official_code, firstname, lastname, email FROM $users WHERE email = '$mail'\n";
     $res = Database::query($sql);
-    if (Database::num_rows($res) == 0) {
+    if (0 == Database::num_rows($res)) {
         $string .= 'No encontrado;'.$row['email'];
     } else {
         $row = Database::fetch_assoc($res);

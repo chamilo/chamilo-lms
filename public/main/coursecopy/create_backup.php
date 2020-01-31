@@ -9,8 +9,6 @@ use Chamilo\CourseBundle\Component\CourseCopy\CourseSelectForm;
  * Create a backup.
  *
  * @author Bart Mollet <bart.mollet@hogent.be>
- *
- * @package chamilo.backup
  */
 require_once __DIR__.'/../inc/global.inc.php';
 $current_course_tool = TOOL_COURSE_MAINTENANCE;
@@ -44,12 +42,12 @@ $action = isset($_POST['action']) ? $_POST['action'] : '';
 $backupOption = isset($_POST['backup_option']) ? $_POST['backup_option'] : '';
 
 if (Security::check_token('post') &&
-    ($action === 'course_select_form' || $backupOption === 'full_backup')
+    ('course_select_form' === $action || 'full_backup' === $backupOption)
 ) {
     // Clear token
     Security::clear_token();
 
-    if ($action === 'course_select_form') {
+    if ('course_select_form' === $action) {
         $cb = new CourseBuilder('partial');
         $course = $cb->build(0, null, false, array_keys($_POST['resource']), $_POST['resource']);
         $course = CourseSelectForm::get_posted_course(null, 0, '', $course);
@@ -65,7 +63,7 @@ if (Security::check_token('post') &&
         api_get_path(WEB_CODE_PATH).'course_info/download.php?archive='.$zipFile.'&'.api_get_cidreq(),
         ['class' => 'btn btn-primary btn-large']
     );
-} elseif (Security::check_token('post') && $backupOption === 'select_items') {
+} elseif (Security::check_token('post') && 'select_items' === $backupOption) {
     // Clear token
     Security::clear_token();
     $cb = new CourseBuilder('partial');

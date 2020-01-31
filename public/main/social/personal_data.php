@@ -3,9 +3,6 @@
 
 use Chamilo\CoreBundle\Entity\Repository\LegalRepository;
 
-/**
- * @package chamilo.messages
- */
 $cidReset = true;
 
 require_once __DIR__.'/../inc/global.inc.php';
@@ -34,7 +31,7 @@ $substitutionTerms = [
 $action = isset($_REQUEST['action']) ? $_REQUEST['action'] : '';
 $formToString = '';
 
-if (api_get_setting('allow_terms_conditions') === 'true') {
+if ('true' === api_get_setting('allow_terms_conditions')) {
     $form = new FormValidator('delete_term', 'post', api_get_self().'?action=delete_legal&user_id='.$userId);
     $form->addHtml(Display::return_message(get_lang('You can ask below for your legal agreement to be deleted or your account to be deleted.</br>In the case of the legal agreement, once deleted you will have to accept it again on your next login to be able to access the platform and recover your access, because we cannot reasonably at the same time give you a personal environment and not treat your personal data.</br>In the case of an account deletion, your account will be deleted along with all of your course subscriptions and all the information related to your account. Please select the corresponding option with care. In both cases, one of our administrators will review your request before it is effective, to avoid any misunderstanding and definitive loss of your data.'), 'normal', false));
     $form->addTextarea('explanation', [get_lang('Delete legal agreement'), get_lang('ExplanationDelete legal agreement')], [], true);
@@ -203,13 +200,13 @@ if (!empty($_GET['export'])) {
     $filename = md5(mt_rand(0, 1000000)).'.json';
     $path = api_get_path(SYS_ARCHIVE_PATH).$filename;
     $writeResult = file_put_contents($path, $propertiesToJson);
-    if ($writeResult !== false) {
+    if (false !== $writeResult) {
         DocumentManager::file_send_for_download($path, true, $filename);
         exit;
     }
 }
 
-$allowSocial = api_get_setting('allow_social_tool') === 'true';
+$allowSocial = 'true' === api_get_setting('allow_social_tool');
 
 $nameTools = get_lang('Personal data');
 $show_message = null;
@@ -248,7 +245,7 @@ foreach ($properties as $key => $value) {
             case 'classes':
                 foreach ($value as $category => $subValue) {
                     $categoryName = 'Social group';
-                    if ($category == 0) {
+                    if (0 == $category) {
                         $categoryName = 'Class';
                     }
                     $personalDataContent .= '<li class="advanced_options" id="personal-data-list-'.$category.'">';
@@ -289,11 +286,11 @@ foreach ($properties as $key => $value) {
                     if (empty($subValue)) {
                         $personalDataContent .= '<li>'.get_lang('No data available').'</li>';
                     } else {
-                        if (count($subValue) === 1000) {
+                        if (1000 === count($subValue)) {
                             $showWarningMessage = true;
                         }
                         foreach ($subValue as $subSubValue) {
-                            if ($category === 'DocumentsAdded') {
+                            if ('DocumentsAdded' === $category) {
                                 $documentLink = Display::url(
                                     $subSubValue->code_path,
                                     $webCoursePath.$subSubValue->directory.'/document'.$subSubValue->path
@@ -365,7 +362,7 @@ $personalDataContent .= '</ul>';
 
 // Check terms acceptation
 $permissionBlock = '';
-if (api_get_setting('allow_terms_conditions') === 'true') {
+if ('true' === api_get_setting('allow_terms_conditions')) {
     $extraFieldValue = new ExtraFieldValue('user');
     $value = $extraFieldValue->get_values_by_handler_and_field_variable(
         $userId,
@@ -437,7 +434,7 @@ $actions = Display::url(
 $tpl->assign('actions', Display::toolbarAction('toolbar', [$actions]));
 
 $termLink = '';
-if (api_get_setting('allow_terms_conditions') === 'true') {
+if ('true' === api_get_setting('allow_terms_conditions')) {
     $url = api_get_path(WEB_CODE_PATH).'social/terms.php';
     $termLink = Display::url(get_lang('Read the Terms and Conditions'), $url);
 }
@@ -448,7 +445,7 @@ if ($showWarningMessage) {
 
 // Block Social Avatar
 SocialManager::setSocialUserBlock($tpl, api_get_user_id(), 'messages');
-if (api_get_setting('allow_social_tool') === 'true') {
+if ('true' === api_get_setting('allow_social_tool')) {
     $tpl->assign('social_menu_block', $socialMenuBlock);
 } else {
     $tpl->assign('social_menu_block', '');

@@ -3,8 +3,6 @@
 
 /**
  * Shows who is online in a specific session.
- *
- * @package chamilo.main
  */
 require_once '../../main/inc/global.inc.php';
 

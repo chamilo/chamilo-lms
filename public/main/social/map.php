@@ -2,8 +2,6 @@
 /* For licensing terms, see /license.txt */
 
 /**
- * @package chamilo.social
- *
  * @author Julio Montoya <gugli100@gmail.com>
  */
 $cidReset = true;
@@ -33,7 +31,7 @@ if (empty($infoStage) || empty($infoVille)) {
 }
 
 $gMapsPlugin = GoogleMapsPlugin::create();
-$localization = $gMapsPlugin->get('enable_api') === 'true';
+$localization = 'true' === $gMapsPlugin->get('enable_api');
 
 if ($localization) {
     $apiKey = $gMapsPlugin->get('api_key');

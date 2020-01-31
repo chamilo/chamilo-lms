@@ -9,7 +9,7 @@ if (empty($allow)) {
 }
 
 api_block_anonymous_users();
-$export_csv = isset($_GET['export']) && $_GET['export'] === 'csv' ? true : false;
+$export_csv = isset($_GET['export']) && 'csv' === $_GET['export'] ? true : false;
 $course_code = isset($_GET['course']) ? Security::remove_XSS($_GET['course']) : null;
 $_course = api_get_course_info();
 $coment = '';
@@ -29,7 +29,7 @@ if (!api_is_allowed_to_create_course() &&
     // Francois Belisle Kezber...
     // If user is NOT a teacher -> student, but IS the teacher of the course... Won't have the global teacher status
     // and won't be tutor... So have to check is_course_teacher
-    if (($user_course_status != 1) && !(CourseManager::is_course_teacher(api_get_user_id(), $course_code))) {
+    if ((1 != $user_course_status) && !(CourseManager::is_course_teacher(api_get_user_id(), $course_code))) {
         api_not_allowed(true);
     }
 }
@@ -57,7 +57,7 @@ if ($export) {
 $csv_content = [];
 $from_myspace = false;
 
-if (isset($_GET['from']) && $_GET['from'] == 'myspace') {
+if (isset($_GET['from']) && 'myspace' == $_GET['from']) {
     $from_myspace = true;
     $this_section = SECTION_TRACKING;
 } else {
@@ -68,7 +68,7 @@ $nameTools = get_lang('Learner details');
 $em = Database::getManager();
 
 if (isset($_GET['details'])) {
-    if ($origin === 'user_course') {
+    if ('user_course' === $origin) {
         if (empty($cidReq)) {
             $interbreadcrumb[] = [
                 "url" => api_get_path(WEB_COURSE_PATH).$courseInfo['directory'],
@@ -80,13 +80,13 @@ if (isset($_GET['details'])) {
             "name" => get_lang('Users'),
         ];
     } else {
-        if ($origin === 'tracking_course') {
+        if ('tracking_course' === $origin) {
             $interbreadcrumb[] = [
                 "url" => "../tracking/courseLog.php?cidReq=".$course_code.'&id_session='.api_get_session_id(),
                 "name" => get_lang('Reporting'),
             ];
         } else {
-            if ($origin === 'resume_session') {
+            if ('resume_session' === $origin) {
                 $interbreadcrumb[] = [
                     'url' => "../session/session_list.php",
                     "name" => get_lang('Session list'),
@@ -124,7 +124,7 @@ if (isset($_GET['details'])) {
     }
     $nameTools = get_lang("Learner details in course");
 } else {
-    if ($origin == 'resume_session') {
+    if ('resume_session' == $origin) {
         $interbreadcrumb[] = [
             'url' => "../session/session_list.php",
             "name" => get_lang('Session list'),
@@ -188,7 +188,7 @@ $course_quiz_answer = 'quiz_answer';
 $course_student_publication = Database::get_course_table(TABLE_STUDENT_PUBLICATION);
 $TABLECALHORAIRE = Database:: get_course_table(TABLE_CAL_HORAIRE);
 
-if (isset($_GET['user_id']) && $_GET['user_id'] != '') {
+if (isset($_GET['user_id']) && '' != $_GET['user_id']) {
     $user_id = intval($_GET['user_id']);
 } else {
     $user_id = api_get_user_id();
@@ -422,12 +422,12 @@ if (!empty($studentId)) {
 
     // get information about connections on the platform by student
     $first_connection_date = Tracking:: get_first_connection_date($user_info['user_id']);
-    if ($first_connection_date == '') {
+    if ('' == $first_connection_date) {
         $first_connection_date = get_lang('No connection');
     }
 
     $last_connection_date = Tracking:: get_last_connection_date($user_info['user_id'], true);
-    if ($last_connection_date == '') {
+    if ('' == $last_connection_date) {
         $last_connection_date = get_lang('No connection');
     }
 
@@ -530,10 +530,10 @@ if (!empty($studentId)) {
                 $timezone = null;
     $timezone_user = UserManager::get_extra_user_data_by_field($user_info['user_id'], 'timezone');
     $use_users_timezone = api_get_setting('use_users_timezone', 'timezones');
-    if ($timezone_user['timezone'] != null && $use_users_timezone == 'true') {
+    if (null != $timezone_user['timezone'] && 'true' == $use_users_timezone) {
         $timezone = $timezone_user['timezone'];
     }
-    if ($timezone !== null) {
+    if (null !== $timezone) {
         ?>
                     <tr>
                         <td> <?php echo get_lang('Timezone').' : '.$timezone; ?> </td>
@@ -559,7 +559,7 @@ if (!empty($studentId)) {
                     <td align="right"><?php echo get_lang('Latest login in platform'); ?></td>
                     <td align="left"><?php echo $last_connection_date; ?></td>
                 </tr>
-                <?php if (isset($_GET['details']) && $_GET['details'] == 'true') {
+                <?php if (isset($_GET['details']) && 'true' == $_GET['details']) {
         ?>
                     <tr>
                         <td align="right"><?php echo get_lang('Time spent in the course'); ?></td>
@@ -598,7 +598,7 @@ if (!empty($studentId)) {
                     <?php
     }
 
-    if (api_get_setting('allow_terms_conditions') === 'true') {
+    if ('true' === api_get_setting('allow_terms_conditions')) {
         $isBoss = UserManager::userIsBossOfStudent(api_get_user_id(), $studentId);
         if ($isBoss || api_is_platform_admin()) {
             $extraFieldValue = new ExtraFieldValue('user');
@@ -818,7 +818,7 @@ if (!empty($studentId)) {
             echo '</div>';
         }
     } else {
-        if ($user_info['status'] != INVITEE) {
+        if (INVITEE != $user_info['status']) {
             $csv_content[] = [];
             $csv_content[] = [str_replace('&nbsp;', '', $table_title)];
             $t_lp = Database:: get_course_table(TABLE_LP_MAIN);
@@ -935,7 +935,7 @@ if (!empty($studentId)) {
                                 $sessionId
                             );
 
-                    if ($progress === null) {
+                    if (null === $progress) {
                         $progress = '0%';
                     } else {
                         $any_result = true;
@@ -989,7 +989,7 @@ if (!empty($studentId)) {
                                 true
                             );
 
-                    if ($i % 2 == 0) {
+                    if (0 == $i % 2) {
                         $css_class = "row_even";
                     } else {
                         $css_class = "row_odd";
@@ -1036,7 +1036,7 @@ if (!empty($studentId)) {
                     // which implies several other changes not a priority right now
                     echo Display::tag('td', $start_time);
 
-                    if ($any_result === true) {
+                    if (true === $any_result) {
                         $from = '';
                         if ($from_myspace) {
                             $from = '&from=myspace';
@@ -1051,7 +1051,7 @@ if (!empty($studentId)) {
 
                     if (api_is_allowed_to_edit()) {
                         echo '<td>';
-                        if ($any_result === true) {
+                        if (true === $any_result) {
                             echo '<a href="myStudents.php?action=reset_lp&sec_token='.$token.
                                 '&cidReq='.$course_code.
                                 '&course='.$course_code.
@@ -1081,7 +1081,7 @@ if (!empty($studentId)) {
             }
         } ?>
         <!-- line about exercises -->
-        <?php if ($user_info['status'] != INVITEE) {
+        <?php if (INVITEE != $user_info['status']) {
             ?>
             <div class="table-responsive">
                 <table class="table table-striped table-hover">
@@ -1413,7 +1413,7 @@ $resulta = Database::fetch_array($res);
 
 $num_hours = $resulta['num_hours'];
 $num_minute = $resulta['num_minute'];
-if ($num_minute == '0') {
+if ('0' == $num_minute) {
     $num_minute = '1';
 }
 $minute_mod = $num_hours * 60;
@@ -1500,7 +1500,7 @@ while ($jtot = Database::fetch_array($resultjt)) {
 //recherche du jour inséré dans agenda par le calendrier
 $jour_agenda = '';
 $tour = -1;
-while ($jour_agenda == '') {
+while ('' == $jour_agenda) {
     $tour++;
     $date = date("Y-m-d", mktime(0, 0, 0, date("m"), date("d") - $tour, date("Y")));
     $sql4 = "SELECT *  FROM $tbl_personal_agenda
@@ -1767,12 +1767,12 @@ if (empty($_GET['details'])) {
         }
         $date_start = '';
 
-        if (!empty($session_info['date_start']) && $session_info['date_start'] != '0000-00-00') {
+        if (!empty($session_info['date_start']) && '0000-00-00' != $session_info['date_start']) {
             $date_start = api_format_date($session_info['date_start'], DATE_FORMAT_SHORT);
         }
 
         $date_end = '';
-        if (!empty($session_info['date_end']) && $session_info['date_end'] != '0000-00-00') {
+        if (!empty($session_info['date_end']) && '0000-00-00' != $session_info['date_end']) {
             $date_end = api_format_date($session_info['date_end'], DATE_FORMAT_SHORT);
         }
         if (!empty($date_start) && !empty($date_end)) {
@@ -1930,7 +1930,7 @@ if (empty($_GET['details'])) {
                     $warming = '';
                     $today = date('Y-m-d');
 
-                    if ($end_date_module <= $today and $progress != '100%') {
+                    if ($end_date_module <= $today and '100%' != $progress) {
                         $warming = '<b><font color=#CC0000>  '.get_lang('limite_atteinte').'</font></b>';
                     }
 
@@ -2063,7 +2063,7 @@ if (empty($_GET['details'])) {
                 $session_id
             );
 
-            if ($progress === null) {
+            if (null === $progress) {
                 $progress = '0%';
             } else {
                 $any_result = true;
@@ -2117,7 +2117,7 @@ if (empty($_GET['details'])) {
                 true
             );
 
-            if ($i % 2 == 0) {
+            if (0 == $i % 2) {
                 $css_class = "row_even";
             } else {
                 $css_class = "row_odd";
@@ -2165,7 +2165,7 @@ if (empty($_GET['details'])) {
             //which implies several other changes not a priority right now
             echo Display::tag('td', $start_time);
 
-            if ($any_result === true) {
+            if (true === $any_result) {
                 $from = '';
                 if ($from_myspace) {
                     $from = '&from=myspace';
@@ -2183,7 +2183,7 @@ if (empty($_GET['details'])) {
 
             if (api_is_allowed_to_edit()) {
                 echo '<td>';
-                if ($any_result === true) {
+                if (true === $any_result) {
                     echo '<a href="myStudents.php?action=reset_lp&sec_token='.$token.'&cidReq='.Security::remove_XSS(
                             $_GET['course']
                         ).'&course='.Security::remove_XSS($_GET['course']).'&details='.Security::remove_XSS(

@@ -2,8 +2,6 @@
 /* For licensing terms, see /license.txt */
 
 /**
- * @package chamilo.social
- *
  * @author Julio Montoya <gugli100@gmail.com>
  */
 $cidReset = true;
@@ -11,7 +9,7 @@ require_once __DIR__.'/../inc/global.inc.php';
 
 api_block_anonymous_users();
 
-if (api_get_setting('allow_social_tool') !== 'true') {
+if ('true' !== api_get_setting('allow_social_tool')) {
     api_not_allowed(true);
 }
 
@@ -109,7 +107,7 @@ if (count($_GET) <= 0) {
         </div><br />';
 }
 
-if ($numberLoop != 0) {
+if (0 != $numberLoop) {
     $invitationHtml = '';
     foreach ($list_get_invitation as $invitation) {
         $sender_user_id = $invitation['user_sender_id'];

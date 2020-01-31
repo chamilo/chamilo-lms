@@ -6,8 +6,6 @@ use JeroenDesloovere\VCard\VCard;
 /**
  * VCard Generator.
  *
- * @package chamilo.social
- *
  * @author José Loguercio Silva <jose.loguercio@beeznest.com>
  */
 require_once __DIR__.'/../inc/global.inc.php';
@@ -36,7 +34,7 @@ $vcard = new VCard();
 // Adding the User Info to the vCard
 $vcard->addName($userInfo['firstname'], $userInfo['lastname']);
 
-if (api_get_setting('show_email_addresses') == 'true') {
+if ('true' == api_get_setting('show_email_addresses')) {
     $vcard->addEmail($userInfo['email']);
 }
 

@@ -6,8 +6,6 @@ use ChamiloSession as Session;
 
 /**
  * This tool allows platform admins to add users by uploading a CSV or XML file.
- *
- * @package chamilo.admin
  */
 $cidReset = true;
 require_once __DIR__.'/../inc/global.inc.php';
@@ -33,7 +31,7 @@ function validate_data($users, $checkUniqueEmail = false)
 
     // 1. Check if mandatory fields are set.
     $mandatory_fields = ['LastName', 'FirstName'];
-    if (api_get_setting('registration', 'email') == 'true' || $checkUniqueEmail) {
+    if ('true' == api_get_setting('registration', 'email') || $checkUniqueEmail) {
         $mandatory_fields[] = 'Email';
     }
 
@@ -60,7 +58,7 @@ function validate_data($users, $checkUniqueEmail = false)
             }
             // 2.1.1
             $hasDash = strpos($username, '-');
-            if ($hasDash !== false) {
+            if (false !== $hasDash) {
                 $user['message'] .= Display::return_message(
                     get_lang('The username cannot contain the \' - \' character'),
                     'warning'
@@ -82,7 +80,7 @@ function validate_data($users, $checkUniqueEmail = false)
 
         if (isset($user['Email'])) {
             $result = api_valid_email($user['Email']);
-            if ($result === false) {
+            if (false === $result) {
                 $user['message'] .= Display::return_message(get_lang('Please enter a valid e-mail address !'), 'warning');
                 $user['has_error'] = true;
             }
@@ -356,7 +354,7 @@ function parse_csv_data($users, $fileName, $sendEmail = 0, $checkUniqueEmail = t
         $users = array_splice($users, 0, $readMax);
     }
 
-    if ($resumeImport === false) {
+    if (false === $resumeImport) {
         $users = $usersFromOrigin;
     }
 
@@ -435,7 +433,7 @@ function parse_xml_data($file)
     foreach ($crawler as $domElement) {
         $row = [];
         foreach ($domElement->childNodes as $node) {
-            if ($node->nodeName != '#text') {
+            if ('#text' != $node->nodeName) {
                 $row[$node->nodeName] = $node->nodeValue;
             }
         }
@@ -507,11 +505,11 @@ if (isset($extAuthSource) && is_array($extAuthSource)) {
 
 $tool_name = get_lang('Import users list');
 $interbreadcrumb[] = ['url' => 'index.php', 'name' => get_lang('Administration')];
-$reloadImport = (isset($_REQUEST['reload_import']) && (int) $_REQUEST['reload_import'] === 1);
+$reloadImport = (isset($_REQUEST['reload_import']) && 1 === (int) $_REQUEST['reload_import']);
 
 $extra_fields = UserManager::get_extra_fields(0, 0, 5, 'ASC', true);
 
-if (isset($_POST['formSent']) && $_POST['formSent'] && $_FILES['import_file']['size'] !== 0) {
+if (isset($_POST['formSent']) && $_POST['formSent'] && 0 !== $_FILES['import_file']['size']) {
     $file_type = $_POST['file_type'];
     Security::clear_token();
     $tok = Security::get_token();
@@ -526,7 +524,7 @@ if (isset($_POST['formSent']) && $_POST['formSent'] && $_FILES['import_file']['s
 
     $users = [];
     if (in_array($ext_import_file, $allowed_file_mimetype)) {
-        if (strcmp($file_type, 'csv') === 0 &&
+        if (0 === strcmp($file_type, 'csv') &&
             $ext_import_file == $allowed_file_mimetype[0]
         ) {
             Session::erase('user_import_data_'.$userId);
@@ -540,7 +538,7 @@ if (isset($_POST['formSent']) && $_POST['formSent'] && $_FILES['import_file']['s
             );
             $users = validate_data($users, $checkUniqueEmail);
             $error_kind_file = false;
-        } elseif (strcmp($file_type, 'xml') === 0 && $ext_import_file == $allowed_file_mimetype[1]) {
+        } elseif (0 === strcmp($file_type, 'xml') && $ext_import_file == $allowed_file_mimetype[1]) {
             $users = parse_xml_data($_FILES['import_file']['tmp_name']);
             $users = validate_data($users, $checkUniqueEmail);
             $error_kind_file = false;
@@ -622,7 +620,7 @@ if (!empty($importData)) {
 
     if ($isResume) {
         $resumeStop = $importData['counter'] >= count($importData['complete_list']);
-        if ($resumeStop == false) {
+        if (false == $resumeStop) {
             $formContinue->addButtonImport(get_lang('ContinueImport'), 'import_continue');
         }
     }
@@ -642,7 +640,7 @@ if (!empty($importData)) {
         processUsers($users, $importData['send_email']);
 
         $reload = '';
-        if ($isResume && $resumeStop === false) {
+        if ($isResume && false === $resumeStop) {
             $reload = '?reload_import=1';
         }
 
@@ -778,7 +776,7 @@ if (api_get_configuration_value('plugin_redirection_enabled')) {
         &lt;OfficialCode&gt;xxx&lt;/OfficialCode&gt;
         &lt;language&gt;english/spanish/(other)&lt;/language&gt;
         &lt;PhoneNumber&gt;xxx&lt;/PhoneNumber&gt;
-        &lt;Status&gt;user/teacher/drh&lt;/Status&gt;<?php if ($result_xml != '') {
+        &lt;Status&gt;user/teacher/drh&lt;/Status&gt;<?php if ('' != $result_xml) {
     echo '<br /><span style="color:red;">', $result_xml;
     echo '</span><br />';
 } ?>

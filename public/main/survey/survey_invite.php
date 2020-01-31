@@ -2,8 +2,6 @@
 /* For licensing terms, see /license.txt */
 
 /**
- * @package chamilo.survey
- *
  * @author unknown, the initial survey that did not make it in 1.8 because of bad code
  * @author Patrick Cool <patrick.cool@UGent.be>, Ghent University: cleanup, refactoring and rewriting large parts of the code
  * @author Julio Montoya Chamilo: cleanup, refactoring, security improvements
@@ -46,7 +44,7 @@ $interbreadcrumb[] = [
     'name' => get_lang('Survey list'),
 ];
 if (api_is_course_admin()) {
-    if ($survey_data['survey_type'] == 3) {
+    if (3 == $survey_data['survey_type']) {
         $interbreadcrumb[] = [
             'url' => api_get_path(WEB_CODE_PATH).'survey/meeting.php?survey_id='.$survey_id.'&'.api_get_cidreq(),
             'name' => $urlname,
@@ -148,7 +146,7 @@ $form->addHtmlEditor(
 );
 $form->addElement('html', '</div>');
 // You cab send a reminder to unanswered people if the survey is not anonymous
-if ($survey_data['anonymous'] != 1 || api_get_configuration_value('survey_anonymous_show_answered')) {
+if (1 != $survey_data['anonymous'] || api_get_configuration_value('survey_anonymous_show_answered')) {
     $form->addElement('checkbox', 'remindUnAnswered', '', get_lang('Remind only users who didn\'t answer'));
 }
 // Allow resending to all selected users

@@ -24,7 +24,7 @@ if (empty($lpId)) {
 }
 
 $subscriptionSettings = learnpath::getSubscriptionSettings();
-if ($subscriptionSettings['allow_add_users_to_lp'] == false) {
+if (false == $subscriptionSettings['allow_add_users_to_lp']) {
     api_not_allowed(true);
 }
 

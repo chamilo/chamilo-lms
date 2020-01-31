@@ -5,7 +5,6 @@
 /**
  * A list containing the pending course requests.
  *
- *
  * @author José Manuel Abuin Mosquera <chema@cesga.es>, 2010
  * Centro de Supercomputacion de Galicia (CESGA)
  * @author Ivan Tcholakov <ivantcholakov@gmail.com> (technical adaptation for Chamilo 1.8.8), 2010

@@ -2,8 +2,6 @@
 /* For licensing terms, see /license.txt */
 /**
  * @author Mustapha Alouani
- *
- * @package chamilo.admin
  */
 $cidReset = true;
 require_once __DIR__.'/../inc/global.inc.php';
@@ -16,7 +14,7 @@ $action = @$_GET["action"] ?: null;
 $login_as_user_id = @$_GET["user_id"] ?: null;
 
 // Login as ...
-if ($action == "login_as" && !empty($login_as_user_id)) {
+if ("login_as" == $action && !empty($login_as_user_id)) {
     login_user($login_as_user_id);
 }
 
@@ -123,7 +121,7 @@ if (isset($_POST['action'])) {
                         $UserList[] = ldap_add_user($user_id);
                     }
                 }
-                if (isset($_GET['id_session']) && (trim($_GET['id_session']) != "")) {
+                if (isset($_GET['id_session']) && ("" != trim($_GET['id_session']))) {
                     addUserToSession($UserList, $_GET['id_session']);
                 }
                 if (count($UserList) > 0) {

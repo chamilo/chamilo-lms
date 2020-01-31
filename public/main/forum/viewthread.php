@@ -662,7 +662,7 @@ foreach ($posts as $post) {
     // The post has been displayed => it can be removed from the what's new array
     //unset($whatsnew_post_info[$current_forum['forum_id']][$current_thread['thread_id']][$post['post_id']]);
     //unset($_SESSION['whatsnew_post_info'][$current_forum['forum_id']][$current_thread['thread_id']][$post['post_id']]);
-    ++$count;
+    $count++;
 }
 
 $template->assign('posts', $postList);

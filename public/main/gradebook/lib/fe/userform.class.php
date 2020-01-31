@@ -6,8 +6,6 @@
  * Extends formvalidator with import and export forms.
  *
  * @author Stijn Konings
- *
- * @package chamilo.gradebook
  */
 class UserForm extends FormValidator
 {
@@ -33,9 +31,9 @@ class UserForm extends FormValidator
         if (isset($result_object)) {
             $this->result_object = $result_object;
         }
-        if ($this->form_type == self::TYPE_USER_INFO) {
+        if (self::TYPE_USER_INFO == $this->form_type) {
             $this->build_user_info_form();
-        } elseif ($this->form_type == self::TYPE_SIMPLE_SEARCH) {
+        } elseif (self::TYPE_SIMPLE_SEARCH == $this->form_type) {
             $this->build_simple_search();
         }
         $this->setDefaults();

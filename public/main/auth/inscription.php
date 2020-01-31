@@ -6,8 +6,6 @@ use ChamiloSession as Session;
 
 /**
  * This script displays a form for registering new users.
- *
- * @package    chamilo.auth
  */
 
 //quick hack to adapt the registration form result to the selected registration language
@@ -27,7 +25,7 @@ $allowedFields = [
 ];
 
 $allowedFieldsConfiguration = api_get_configuration_value('allow_fields_inscription');
-if ($allowedFieldsConfiguration !== false) {
+if (false !== $allowedFieldsConfiguration) {
     $allowedFields = isset($allowedFieldsConfiguration['fields']) ? $allowedFieldsConfiguration['fields'] : [];
     $allowedFields['extra_fields'] = isset($allowedFieldsConfiguration['extra_fields']) ? $allowedFieldsConfiguration['extra_fields'] : [];
 }
@@ -36,8 +34,8 @@ $extraFieldsLoaded = false;
 $htmlHeadXtra[] = api_get_password_checker_js('#username', '#pass1');
 // User is not allowed if Terms and Conditions are disabled and
 // registration is disabled too.
-$isNotAllowedHere = api_get_setting('allow_terms_conditions') === 'false' &&
-    api_get_setting('allow_registration') === 'false';
+$isNotAllowedHere = 'false' === api_get_setting('allow_terms_conditions') &&
+    'false' === api_get_setting('allow_registration');
 
 if ($isNotAllowedHere) {
     api_not_allowed(true, get_lang('Sorry, you are trying to access the registration page for this portal, but registration is currently disabled. Please contact the administrator (see contact information in the footer). If you already have an account on this site.'));
@@ -59,7 +57,7 @@ if ($extraConditions && isset($extraConditions['conditions'])) {
     $extraConditions = $extraConditions['conditions'];
     foreach ($extraConditions as $condition) {
         $exists = $userExtraField->get_handler_field_info_by_field_variable($condition['variable']);
-        if ($exists == false) {
+        if (false == $exists) {
             $params = [
                 'field_type' => ExtraField::FIELD_TYPE_CHECKBOX,
                 'variable' => $condition['variable'],
@@ -77,7 +75,7 @@ if ($extraConditions && isset($extraConditions['conditions'])) {
 
 $form = new FormValidator('registration');
 $user_already_registered_show_terms = false;
-if (api_get_setting('allow_terms_conditions') === 'true') {
+if ('true' === api_get_setting('allow_terms_conditions')) {
     $user_already_registered_show_terms = isset($_SESSION['term_and_condition']['user_id']);
 }
 
@@ -104,11 +102,11 @@ if (!empty($course_code_redirect)) {
     Session::write('exercise_redirect', $exercise_redirect);
 }
 
-if ($user_already_registered_show_terms === false &&
-    api_get_setting('allow_registration') !== 'false'
+if (false === $user_already_registered_show_terms &&
+    'false' !== api_get_setting('allow_registration')
 ) {
     // STUDENT/TEACHER
-    if (api_get_setting('allow_registration_as_teacher') != 'false') {
+    if ('false' != api_get_setting('allow_registration_as_teacher')) {
         if (in_array('status', $allowedFields)) {
             $form->addRadio(
                 'status',
@@ -138,13 +136,13 @@ if ($user_already_registered_show_terms === false &&
 
     // EMAIL
     $form->addElement('text', 'email', get_lang('e-mail'), ['size' => 40]);
-    if (api_get_setting('registration', 'email') === 'true') {
+    if ('true' === api_get_setting('registration', 'email')) {
         $form->addRule('email', get_lang('Required field'), 'required');
     }
 
-    if (api_get_setting('login_is_email') === 'true') {
+    if ('true' === api_get_setting('login_is_email')) {
         $form->applyFilter('email', 'trim');
-        if (api_get_setting('registration', 'email') != 'true') {
+        if ('true' != api_get_setting('registration', 'email')) {
             $form->addRule('email', get_lang('Required field'), 'required');
         }
         $form->addRule(
@@ -162,7 +160,7 @@ if ($user_already_registered_show_terms === false &&
     $form->addRule('email', get_lang('e-mailWrong'), 'email');
 
     // USERNAME
-    if (api_get_setting('login_is_email') != 'true') {
+    if ('true' != api_get_setting('login_is_email')) {
         $form->addText(
             'username',
             get_lang('Username'),
@@ -215,7 +213,7 @@ if ($user_already_registered_show_terms === false &&
             get_lang('Phone'),
             ['size' => 20]
         );
-        if (api_get_setting('registration', 'phone') == 'true') {
+        if ('true' == api_get_setting('registration', 'phone')) {
             $form->addRule(
                 'phone',
                 get_lang('Required field'),
@@ -226,7 +224,7 @@ if ($user_already_registered_show_terms === false &&
 
     // Language
     if (in_array('language', $allowedFields)) {
-        if (api_get_setting('registration', 'language') == 'true') {
+        if ('true' == api_get_setting('registration', 'language')) {
             $form->addSelectLanguage(
                 'language',
                 get_lang('Language')
@@ -241,7 +239,7 @@ if ($user_already_registered_show_terms === false &&
             get_lang('Code'),
             ['size' => 40]
         );
-        if (api_get_setting('registration', 'officialcode') == 'true') {
+        if ('true' == api_get_setting('registration', 'officialcode')) {
             $form->addRule(
                 'official_code',
                 get_lang('Required field'),
@@ -251,8 +249,8 @@ if ($user_already_registered_show_terms === false &&
     }
 
     // EXTENDED FIELDS
-    if (api_get_setting('extended_profile') == 'true' &&
-        api_get_setting('extendedprofile_registration', 'mycomptetences') == 'true'
+    if ('true' == api_get_setting('extended_profile') &&
+        'true' == api_get_setting('extendedprofile_registration', 'mycomptetences')
     ) {
         $form->addHtmlEditor(
             'competences',
@@ -263,8 +261,8 @@ if ($user_already_registered_show_terms === false &&
         );
     }
 
-    if (api_get_setting('extended_profile') == 'true' &&
-        api_get_setting('extendedprofile_registration', 'mydiplomas') == 'true'
+    if ('true' == api_get_setting('extended_profile') &&
+        'true' == api_get_setting('extendedprofile_registration', 'mydiplomas')
     ) {
         $form->addHtmlEditor(
             'diplomas',
@@ -275,8 +273,8 @@ if ($user_already_registered_show_terms === false &&
         );
     }
 
-    if (api_get_setting('extended_profile') == 'true' &&
-        api_get_setting('extendedprofile_registration', 'myteach') == 'true'
+    if ('true' == api_get_setting('extended_profile') &&
+        'true' == api_get_setting('extendedprofile_registration', 'myteach')
     ) {
         $form->addHtmlEditor(
             'teach',
@@ -287,8 +285,8 @@ if ($user_already_registered_show_terms === false &&
         );
     }
 
-    if (api_get_setting('extended_profile') == 'true' &&
-        api_get_setting('extendedprofile_registration', 'mypersonalopenarea') == 'true'
+    if ('true' == api_get_setting('extended_profile') &&
+        'true' == api_get_setting('extendedprofile_registration', 'mypersonalopenarea')
     ) {
         $form->addHtmlEditor(
             'openarea',
@@ -299,24 +297,24 @@ if ($user_already_registered_show_terms === false &&
         );
     }
 
-    if (api_get_setting('extended_profile') === 'true') {
-        if (api_get_setting('extendedprofile_registration', 'mycomptetences') === 'true' &&
-            api_get_setting('extendedprofile_registrationrequired', 'mycomptetences') === 'true'
+    if ('true' === api_get_setting('extended_profile')) {
+        if ('true' === api_get_setting('extendedprofile_registration', 'mycomptetences') &&
+            'true' === api_get_setting('extendedprofile_registrationrequired', 'mycomptetences')
         ) {
             $form->addRule('competences', get_lang('Required field'), 'required');
         }
-        if (api_get_setting('extendedprofile_registration', 'mydiplomas') === 'true' &&
-            api_get_setting('extendedprofile_registrationrequired', 'mydiplomas') === 'true'
+        if ('true' === api_get_setting('extendedprofile_registration', 'mydiplomas') &&
+            'true' === api_get_setting('extendedprofile_registrationrequired', 'mydiplomas')
         ) {
             $form->addRule('diplomas', get_lang('Required field'), 'required');
         }
-        if (api_get_setting('extendedprofile_registration', 'myteach') === 'true' &&
-            api_get_setting('extendedprofile_registrationrequired', 'myteach') === 'true'
+        if ('true' === api_get_setting('extendedprofile_registration', 'myteach') &&
+            'true' === api_get_setting('extendedprofile_registrationrequired', 'myteach')
         ) {
             $form->addRule('teach', get_lang('Required field'), 'required');
         }
-        if (api_get_setting('extendedprofile_registration', 'mypersonalopenarea') === 'true' &&
-            api_get_setting('extendedprofile_registrationrequired', 'mypersonalopenarea') === 'true'
+        if ('true' === api_get_setting('extendedprofile_registration', 'mypersonalopenarea') &&
+            'true' === api_get_setting('extendedprofile_registrationrequired', 'mypersonalopenarea')
         ) {
             $form->addRule('openarea', get_lang('Required field'), 'required');
         }
@@ -359,7 +357,7 @@ if ($user_already_registered_show_terms === false &&
 
     // CAPTCHA
     $captcha = api_get_setting('allow_captcha');
-    $allowCaptcha = $captcha === 'true';
+    $allowCaptcha = 'true' === $captcha;
 
     if ($allowCaptcha) {
         $ajax = api_get_path(WEB_AJAX_PATH).'form.ajax.php?a=get_captcha';
@@ -406,7 +404,7 @@ if ($user_already_registered_show_terms === false &&
     }
 }
 
-if (isset($_SESSION['user_language_choice']) && $_SESSION['user_language_choice'] != '') {
+if (isset($_SESSION['user_language_choice']) && '' != $_SESSION['user_language_choice']) {
     $defaults['language'] = $_SESSION['user_language_choice'];
 } else {
     $defaults['language'] = api_get_setting('platformLanguage');
@@ -435,10 +433,10 @@ $tool_name = get_lang('Registration');
 
 if (!CustomPages::enabled()) {
     // Load terms & conditions from the current lang
-    if (api_get_setting('allow_terms_conditions') === 'true') {
+    if ('true' === api_get_setting('allow_terms_conditions')) {
         $get = array_keys($_GET);
         if (isset($get)) {
-            if (isset($get[0]) && $get[0] == 'legal') {
+            if (isset($get[0]) && 'legal' == $get[0]) {
                 $language = api_get_interface_language();
                 $language = api_get_language_id($language);
                 $term_preview = LegalManager::get_last_condition($language);
@@ -466,7 +464,7 @@ if (!CustomPages::enabled()) {
         }
     }
 
-    if (api_get_setting('allow_terms_conditions') === 'true' && $user_already_registered_show_terms) {
+    if ('true' === api_get_setting('allow_terms_conditions') && $user_already_registered_show_terms) {
         $tool_name = get_lang('Terms and Conditions');
     }
 }
@@ -476,18 +474,18 @@ if ($isNotAllowedHere) {
     api_not_allowed(true, get_lang('Sorry, you are trying to access the registration page for this portal, but registration is currently disabled. Please contact the administrator (see contact information in the footer). If you already have an account on this site.'));
 }
 
-if (api_get_setting('allow_registration') === 'approval') {
+if ('approval' === api_get_setting('allow_registration')) {
     $content .= Display::return_message(get_lang('Your account has to be approved'));
 }
 
 $showTerms = false;
 // Terms and conditions
-if (api_get_setting('allow_terms_conditions') === 'true' && $user_already_registered_show_terms) {
+if ('true' === api_get_setting('allow_terms_conditions') && $user_already_registered_show_terms) {
     if (!api_is_platform_admin()) {
-        if (api_get_setting('show_terms_if_profile_completed') === 'true') {
+        if ('true' === api_get_setting('show_terms_if_profile_completed')) {
             $userInfo = api_get_user_info();
-            if ($userInfo && $userInfo['status'] != ANONYMOUS) {
-                if ((int) $userInfo['profile_completed'] !== 1) {
+            if ($userInfo && ANONYMOUS != $userInfo['status']) {
+                if (1 !== (int) $userInfo['profile_completed']) {
                     api_not_allowed(true);
                 }
             }
@@ -517,7 +515,7 @@ if (api_get_setting('allow_terms_conditions') === 'true' && $user_already_regist
     $form->addHidden('legal_info', $term_preview['id'].':'.$term_preview['language_id']);
 
     // Show if only HTML type
-    if ($term_preview['type'] == '2') {
+    if ('2' == $term_preview['type']) {
         $termExtraFields = new ExtraFieldValue('terms_and_condition');
         $values = $termExtraFields->getAllValuesByItem($term_preview['id']);
         foreach ($values as $value) {
@@ -527,7 +525,7 @@ if (api_get_setting('allow_terms_conditions') === 'true' && $user_already_regist
         }
     }
 
-    if ($term_preview['type'] == 1) {
+    if (1 == $term_preview['type']) {
         $form->addElement(
             'checkbox',
             'legal_accept',
@@ -547,7 +545,7 @@ if (api_get_setting('allow_terms_conditions') === 'true' && $user_already_regist
 $allowDoubleValidation = api_get_configuration_value('allow_double_validation_in_registration');
 
 $formContainsSendButton = false;
-if ($allowDoubleValidation && $showTerms == false) {
+if ($allowDoubleValidation && false == $showTerms) {
     $htmlHeadXtra[] = '<script>
         $(function() {
             $("#pre_validation").click(function() {
@@ -578,9 +576,9 @@ if ($allowDoubleValidation && $showTerms == false) {
     // registration is allowed in any way or if the user is already registered
     // but needs to confirm terms. If not, send not allowed message
     if (
-        api_get_setting('allow_registration') === 'approval' ||
-        api_get_setting('allow_registration') === 'true' ||
-        api_get_setting('allow_registration') === 'confirmation' ||
+        'approval' === api_get_setting('allow_registration') ||
+        'true' === api_get_setting('allow_registration') ||
+        'confirmation' === api_get_setting('allow_registration') ||
         $user_already_registered_show_terms ||
         $showTerms
     ) {
@@ -630,7 +628,7 @@ if ($form->validate()) {
         $values['username'] = api_substr($values['username'], 0, USERNAME_MAX_LENGTH);
     }
 
-    if (api_get_setting('allow_registration_as_teacher') === 'false') {
+    if ('false' === api_get_setting('allow_registration_as_teacher')) {
         $values['status'] = STUDENT;
     }
 
@@ -638,12 +636,12 @@ if ($form->validate()) {
         $values['official_code'] = api_strtoupper($values['username']);
     }
 
-    if (api_get_setting('login_is_email') === 'true') {
+    if ('true' === api_get_setting('login_is_email')) {
         $values['username'] = $values['email'];
     }
 
     if ($user_already_registered_show_terms &&
-        api_get_setting('allow_terms_conditions') === 'true'
+        'true' === api_get_setting('allow_terms_conditions')
     ) {
         $user_id = $_SESSION['term_and_condition']['user_id'];
         $is_admin = UserManager::is_admin($user_id);
@@ -653,10 +651,10 @@ if ($form->validate()) {
         // Register extra fields
         $extras = [];
         foreach ($values as $key => $value) {
-            if (substr($key, 0, 6) == 'extra_') {
+            if ('extra_' == substr($key, 0, 6)) {
                 //an extra field
                 $extras[substr($key, 6)] = $value;
-            } elseif (strpos($key, 'remove_extra_') !== false) {
+            } elseif (false !== strpos($key, 'remove_extra_')) {
                 $extra_value = Security::filter_filename(urldecode(key($value)));
                 // To remove from user_field_value and folder
                 UserManager::update_extra_field_value(
@@ -726,29 +724,29 @@ if ($form->validate()) {
             $store_extended = false;
             $sql = "UPDATE ".Database::get_main_table(TABLE_MAIN_USER)." SET ";
 
-            if (api_get_setting('extended_profile') == 'true' &&
-                api_get_setting('extendedprofile_registration', 'mycomptetences') == 'true'
+            if ('true' == api_get_setting('extended_profile') &&
+                'true' == api_get_setting('extendedprofile_registration', 'mycomptetences')
             ) {
                 $sql_set[] = "competences = '".Database::escape_string($values['competences'])."'";
                 $store_extended = true;
             }
 
-            if (api_get_setting('extended_profile') == 'true' &&
-                api_get_setting('extendedprofile_registration', 'mydiplomas') == 'true'
+            if ('true' == api_get_setting('extended_profile') &&
+                'true' == api_get_setting('extendedprofile_registration', 'mydiplomas')
             ) {
                 $sql_set[] = "diplomas = '".Database::escape_string($values['diplomas'])."'";
                 $store_extended = true;
             }
 
-            if (api_get_setting('extended_profile') == 'true' &&
-                api_get_setting('extendedprofile_registration', 'myteach') == 'true'
+            if ('true' == api_get_setting('extended_profile') &&
+                'true' == api_get_setting('extendedprofile_registration', 'myteach')
             ) {
                 $sql_set[] = "teach = '".Database::escape_string($values['teach'])."'";
                 $store_extended = true;
             }
 
-            if (api_get_setting('extended_profile') == 'true' &&
-                api_get_setting('extendedprofile_registration', 'mypersonalopenarea') == 'true'
+            if ('true' == api_get_setting('extended_profile') &&
+                'true' == api_get_setting('extendedprofile_registration', 'mypersonalopenarea')
             ) {
                 $sql_set[] = "openarea = '".Database::escape_string($values['openarea'])."'";
                 $store_extended = true;
@@ -795,7 +793,7 @@ if ($form->validate()) {
 
             /* If the account has to be approved then we set the account to inactive,
             sent a mail to the platform admin and exit the page.*/
-            if (api_get_setting('allow_registration') === 'approval') {
+            if ('approval' === api_get_setting('allow_registration')) {
                 // 1. Send mail to all platform admin
                 $emailsubject = get_lang('Approval for new account').': '.$values['username'];
                 $emailbody = get_lang('Approval for new account')."\n";
@@ -853,7 +851,7 @@ if ($form->validate()) {
                 echo $content;
                 Display::display_footer();
                 exit;
-            } elseif (api_get_setting('allow_registration') === 'confirmation') {
+            } elseif ('confirmation' === api_get_setting('allow_registration')) {
                 // 1. Send mail to the user
                 $thisUser = api_get_user_entity($user_id);
                 UserManager::sendUserConfirmationMail($thisUser);
@@ -880,7 +878,7 @@ if ($form->validate()) {
     }
 
     // Terms & Conditions
-    if (api_get_setting('allow_terms_conditions') === 'true') {
+    if ('true' === api_get_setting('allow_terms_conditions')) {
         // Update the terms & conditions.
         if (isset($values['legal_accept_type'])) {
             $cond_array = explode(':', $values['legal_accept_type']);
@@ -937,7 +935,7 @@ if ($form->validate()) {
     $_user['user_id'] = $user_id;
     Session::write('_user', $_user);
 
-    $is_allowedCreateCourse = isset($values['status']) && $values['status'] == 1;
+    $is_allowedCreateCourse = isset($values['status']) && 1 == $values['status'];
     $usersCanCreateCourse = api_is_allowed_to_create_course();
 
     Session::write('is_allowedCreateCourse', $is_allowedCreateCourse);
@@ -966,8 +964,8 @@ if ($form->validate()) {
         'go_button' => '',
     ];
 
-    if (api_get_setting('allow_terms_conditions') === 'true' && $user_already_registered_show_terms) {
-        if (api_get_setting('load_term_conditions_section') === 'login') {
+    if ('true' === api_get_setting('allow_terms_conditions') && $user_already_registered_show_terms) {
+        if ('login' === api_get_setting('load_term_conditions_section')) {
             $form_data['action'] = api_get_path(WEB_PATH).'user_portal.php';
         } else {
             $courseInfo = api_get_course_info();
@@ -991,7 +989,7 @@ if ($form->validate()) {
             }
             $form_data['action'] = api_get_path(WEB_CODE_PATH).'create_course/add_course.php';
 
-            if (api_get_setting('course_validation') === 'true') {
+            if ('true' === api_get_setting('course_validation')) {
                 $form_data['button'] = Display::button(
                     'next',
                     get_lang('Create a course request'),
@@ -1010,7 +1008,7 @@ if ($form->validate()) {
                     ).'</a>';
             }
         } else {
-            if (api_get_setting('allow_students_to_browse_courses') == 'true') {
+            if ('true' == api_get_setting('allow_students_to_browse_courses')) {
                 $form_data['action'] = 'courses.php?action=subscribe';
                 $form_data['message'] = '<p>'.get_lang('You can now select, in the list, the course you want access to').".</p>";
             } else {

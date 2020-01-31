@@ -2,15 +2,13 @@
 /* For licensing terms, see /license.txt */
 
 /**
- * @package chamilo.social
- *
  * @author Julio Montoya <gugli100@gmail.com>
  */
 $cidReset = true;
 require_once __DIR__.'/../inc/global.inc.php';
 
 api_block_anonymous_users();
-if (api_get_setting('allow_social_tool') !== 'true') {
+if ('true' !== api_get_setting('allow_social_tool')) {
     api_not_allowed();
 }
 

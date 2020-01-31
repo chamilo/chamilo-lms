@@ -2,8 +2,6 @@
 /* For licensing terms, see /license.txt */
 /**
  * Script.
- *
- * @package chamilo.gradebook
  */
 require_once __DIR__.'/../inc/global.inc.php';
 api_block_anonymous_users();
@@ -48,7 +46,7 @@ while ($row = Database::fetch_row($result)) {
 
 foreach ($list_info as $key => $info_log) {
     $list_info[$key][5] = $info_log[5] ? api_convert_and_format_date($info_log[5]) : 'N/A';
-    $list_info[$key][3] = $info_log[3] == 1 ? get_lang('AssessmentsVisible') : get_lang('AssessmentsInvisible');
+    $list_info[$key][3] = 1 == $info_log[3] ? get_lang('AssessmentsVisible') : get_lang('AssessmentsInvisible');
     $userInfo = api_get_user_info($info_log[6]);
     if ($userInfo) {
         $list_info[$key][6] = $userInfo['complete_name_with_message_link'];

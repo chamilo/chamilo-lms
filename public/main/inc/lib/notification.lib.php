@@ -9,8 +9,6 @@ use Chamilo\CoreBundle\Hook\HookNotificationTitle;
  * Notification class
  * This class provides methods for the Notification management.
  * Include/require it in your code to use its features.
- *
- * @package chamilo.library
  */
 class Notification extends Model
 {
@@ -298,7 +296,7 @@ class Notification extends Model
 
                     // Means that user extra was not set
                     // Then send email now.
-                    if ($userSetting === '') {
+                    if ('' === $userSetting) {
                         $userSetting = self::NOTIFY_MESSAGE_AT_ONCE;
                     }
                 }
@@ -450,7 +448,7 @@ class Notification extends Model
         }
 
         // See message with link text
-        if (!empty($linkToNewMessage) && api_get_setting('allow_message_tool') == 'true') {
+        if (!empty($linkToNewMessage) && 'true' == api_get_setting('allow_message_tool')) {
             $content = $content.'<br /><br />'.$linkToNewMessage;
         }
 
@@ -483,13 +481,13 @@ class Notification extends Model
      */
     public static function sendPushNotification(array $userIds, $title, $content)
     {
-        if (api_get_setting('messaging_allow_send_push_notification') !== 'true') {
+        if ('true' !== api_get_setting('messaging_allow_send_push_notification')) {
             return false;
         }
 
         $gdcApiKey = api_get_setting('messaging_gdc_api_key');
 
-        if ($gdcApiKey === false) {
+        if (false === $gdcApiKey) {
             return false;
         }
 

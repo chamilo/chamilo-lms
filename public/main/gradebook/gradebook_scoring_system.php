@@ -3,15 +3,13 @@
 
 /**
  * Script.
- *
- * @package chamilo.gradebook
  */
 require_once __DIR__.'/../inc/global.inc.php';
 
 api_block_anonymous_users();
 GradebookUtils::block_students();
 
-if (api_get_setting('teachers_can_change_score_settings') != 'true') {
+if ('true' != api_get_setting('teachers_can_change_score_settings')) {
     api_not_allowed();
 }
 
@@ -50,7 +48,7 @@ $select_cat = intval($_GET['selectcat']);
 $displayScore = ScoreDisplay :: instance();
 $customdisplays = $displayScore->get_custom_score_display_settings();
 
-$nr_items = count($customdisplays) != '0' ? count($customdisplays) : '1';
+$nr_items = '0' != count($customdisplays) ? count($customdisplays) : '1';
 $scoreform = new ScoreDisplayForm(
     'scoring_system_form',
     api_get_self().'?selectcat='.$select_cat.'&'.api_get_cidreq()

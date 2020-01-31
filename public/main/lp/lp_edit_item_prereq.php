@@ -10,8 +10,6 @@ use ChamiloSession as Session;
  * @author Denes Nagy
  * @author Roan Embrechts, refactoring and code cleaning
  * @author Yannick Warnier <ywarnier@beeznest.org> - cleaning and update for new SCORM tool
- *
- * @package chamilo.learnpath
  */
 $this_section = SECTION_COURSES;
 
@@ -88,7 +86,7 @@ echo '</div>';
 echo '<div class="col-md-9">';
 echo '<div class="prerequisites">';
 $lpItem = new learnpathItem($_GET['id']);
-if (isset($is_success) && $is_success == true) {
+if (isset($is_success) && true == $is_success) {
     echo $lp->display_manipulate($_GET['id'], $lpItem->get_type());
     echo Display::return_message(get_lang('Prerequisites to the current learning object have been added.'));
 } else {

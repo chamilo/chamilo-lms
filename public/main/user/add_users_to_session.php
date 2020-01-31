@@ -31,7 +31,7 @@ if (api_is_platform_admin()) {
 }
 $allowTutors = api_get_setting('allow_tutors_to_assign_students_to_session');
 $extra_field_list = [];
-if ($allowTutors == 'true') {
+if ('true' == $allowTutors) {
     // Database Table Definitions
     $tbl_session = Database::get_main_table(TABLE_MAIN_SESSION);
     $tbl_course = Database::get_main_table(TABLE_MAIN_COURSE);
@@ -42,7 +42,7 @@ if ($allowTutors == 'true') {
     $tool_name = get_lang('Subscribe users to this session');
     $add_type = 'unique';
 
-    if (isset($_REQUEST['add_type']) && $_REQUEST['add_type'] != '') {
+    if (isset($_REQUEST['add_type']) && '' != $_REQUEST['add_type']) {
         $add_type = Security::remove_XSS($_REQUEST['add_type']);
     }
 
@@ -54,7 +54,7 @@ if ($allowTutors == 'true') {
     if (is_array($extra_field_list)) {
         foreach ($extra_field_list as $extra_field) {
             //if is enabled to filter and is a "<select>" field type
-            if ($extra_field[8] == 1 && $extra_field[2] == 4) {
+            if (1 == $extra_field[8] && 4 == $extra_field[2]) {
                 $new_field_list[] = [
                     'name' => $extra_field[3],
                     'variable' => $extra_field[1],
@@ -74,7 +74,7 @@ if ($allowTutors == 'true') {
 
         if (!empty($needle) && !empty($type)) {
             //normal behaviour
-            if ($type == 'any_session' && $needle == 'false') {
+            if ('any_session' == $type && 'false' == $needle) {
                 $type = 'multiple';
                 $needle = '';
             }
@@ -140,7 +140,7 @@ if ($allowTutors == 'true') {
             if (api_is_multiple_url_enabled()) {
                 $tbl_user_rel_access_url = Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_USER);
                 $access_url_id = api_get_current_access_url_id();
-                if ($access_url_id != -1) {
+                if (-1 != $access_url_id) {
                     switch ($type) {
                         case 'single':
                             $sql = 'SELECT user.user_id, username, lastname, firstname
@@ -184,7 +184,7 @@ if ($allowTutors == 'true') {
 
             $rs = Database::query($sql);
             $i = 0;
-            if ($type == 'single') {
+            if ('single' == $type) {
                 while ($user = Database::fetch_array($rs)) {
                     $i++;
                     if ($i <= 10) {
@@ -268,7 +268,7 @@ if ($allowTutors == 'true') {
             $UserList = [];
         }
 
-        if ($form_sent == 1) {
+        if (1 == $form_sent) {
             //added a parameter to send emails when registering a user
             SessionManager::subscribeUsersToSession($id_session, $UserList, null, true);
             header('Location: resume_session.php?id_session='.$id_session);
@@ -279,7 +279,7 @@ if ($allowTutors == 'true') {
     $session_info = SessionManager::fetch($id_session);
     Display::display_header($tool_name);
     $nosessionUsersList = $sessionUsersList = [];
-    $ajax_search = $add_type === 'unique' ? true : false;
+    $ajax_search = 'unique' === $add_type ? true : false;
 
     $order_clause = api_sort_by_first_name() ? ' ORDER BY firstname, lastname, username' : ' ORDER BY lastname, firstname, username';
     if ($ajax_search) {
@@ -295,7 +295,7 @@ if ($allowTutors == 'true') {
         if (api_is_multiple_url_enabled()) {
             $tbl_user_rel_access_url = Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_USER);
             $access_url_id = api_get_current_access_url_id();
-            if ($access_url_id != -1) {
+            if (-1 != $access_url_id) {
                 $sql = "SELECT u.user_id, lastname, firstname, username, session_id
                         FROM $tbl_user u
                         INNER JOIN $tbl_session_rel_user
@@ -324,7 +324,7 @@ if ($allowTutors == 'true') {
                 foreach ($new_field_list as $new_field) {
                     $varname = 'field_'.$new_field['variable'];
                     if (UserManager::is_extra_field_available($new_field['variable'])) {
-                        if (isset($_POST[$varname]) && $_POST[$varname] != '0') {
+                        if (isset($_POST[$varname]) && '0' != $_POST[$varname]) {
                             $use_extra_fields = true;
                             $extra_field_result[] = UserManager::get_extra_user_data_by_value(
                                 $new_field['variable'],
@@ -391,7 +391,7 @@ if ($allowTutors == 'true') {
         if (api_is_multiple_url_enabled()) {
             $tbl_user_rel_access_url = Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_USER);
             $access_url_id = api_get_current_access_url_id();
-            if ($access_url_id != -1) {
+            if (-1 != $access_url_id) {
                 $sql = "SELECT  u.user_id, lastname, firstname, username, session_id
                         FROM $tbl_user u
                         LEFT JOIN $tbl_session_rel_user
@@ -433,7 +433,7 @@ if ($allowTutors == 'true') {
         if (api_is_multiple_url_enabled()) {
             $tbl_user_rel_access_url = Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_USER);
             $access_url_id = api_get_current_access_url_id();
-            if ($access_url_id != -1) {
+            if (-1 != $access_url_id) {
                 $sql = "SELECT  u.user_id, lastname, firstname, username, session_id
                         FROM $tbl_user u
                         LEFT JOIN $tbl_session_rel_user
@@ -460,7 +460,7 @@ if ($allowTutors == 'true') {
         unset($users); //clean to free memory
     }
 
-    if ($add_type === 'multiple') {
+    if ('multiple' === $add_type) {
         $link_add_type_unique = '<a href="'.api_get_self().'?id_session='.$id_session.'&add='.Security::remove_XSS($_GET['add']).'&add_type=unique">'.
             Display::return_icon('single.gif').get_lang('Single registration').'</a>';
         $link_add_type_multiple = Display::return_icon('multiple.gif').get_lang('Multiple registration');
@@ -482,7 +482,7 @@ if ($allowTutors == 'true') {
             } ?>>
     <?php echo '<legend>'.$tool_name.' ('.$session->getName().') </legend>'; ?>
     <?php
-    if ($add_type === 'multiple') {
+    if ('multiple' === $add_type) {
         if (is_array($extra_field_list)) {
             if (is_array($new_field_list) && count($new_field_list) > 0) {
                 echo '<h3>'.get_lang('Filter users').'</h3>';
@@ -514,7 +514,7 @@ if ($allowTutors == 'true') {
         <div class="span5">
             <div class="multiple_select_header">
                 <b><?php echo get_lang('Portal users list'); ?> :</b>
-            <?php if ($add_type == 'multiple') {
+            <?php if ('multiple' == $add_type) {
         ?>
                 <?php echo get_lang('First letter (last name)'); ?> :
                     <select id="first_letter_user" name="firstLetterUser" onchange = "change_select(this.value);" >
@@ -527,7 +527,7 @@ if ($allowTutors == 'true') {
             </div>
                 <div id="content_source">
                 <?php
-                if (!($add_type == 'multiple')) {
+                if (!('multiple' == $add_type)) {
                     ?>
                   <input type="text" id="user_to_add" onkeyup="xajax_search_users(this.value,'single')" />
                   <div id="ajax_list_users_single"></div>

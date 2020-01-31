@@ -9,8 +9,6 @@
  *
  * @author Roan Embrechts
  * @author Julio Montoya, Several fixes
- *
- * @package chamilo.user
  */
 $use_anonymous = true;
 require_once __DIR__.'/../inc/global.inc.php';
@@ -22,7 +20,7 @@ api_protect_course_script(true, false, 'user');
 
 if (!api_is_platform_admin(true)) {
     if (!api_is_course_admin() && !api_is_coach()) {
-        if (api_get_course_setting('allow_user_view_user_list') == 0) {
+        if (0 == api_get_course_setting('allow_user_view_user_list')) {
             api_not_allowed(true);
         }
     }
@@ -37,7 +35,7 @@ $_user = api_get_user_info();
 $courseCode = $course_info['code'];
 $courseId = $course_info['real_id'];
 $type = isset($_REQUEST['type']) ? (int) $_REQUEST['type'] : STUDENT;
-$canEditUsers = api_get_setting('allow_user_course_subscription_by_course_admin') == 'true' || api_is_platform_admin();
+$canEditUsers = 'true' == api_get_setting('allow_user_course_subscription_by_course_admin') || api_is_platform_admin();
 
 // Can't auto unregister from a session
 if (!empty($sessionId)) {
@@ -83,7 +81,7 @@ if (isset($_GET['action'])) {
 
             if (!empty($userId)) {
                 if (!$sessionId) {
-                    if ($userInfo['status'] != INVITEE) {
+                    if (INVITEE != $userInfo['status']) {
                         CourseManager::updateUserCourseTutor(
                             $userId,
                             $courseId,
@@ -124,7 +122,7 @@ if (isset($_GET['action'])) {
             $extra_fields = array_keys($extra_fields);
             $select_email_condition = '';
 
-            if (api_get_setting('show_email_addresses') === 'true') {
+            if ('true' === api_get_setting('show_email_addresses')) {
                 $select_email_condition = ' user.email, ';
                 if ($sort_by_first_name) {
                     $a_users[0] = [
@@ -175,12 +173,12 @@ if (isset($_GET['action'])) {
 
             $legal = '';
 
-            if (isset($course_info['activate_legal']) && $course_info['activate_legal'] == 1) {
+            if (isset($course_info['activate_legal']) && 1 == $course_info['activate_legal']) {
                 $legal = ', legal_agreement';
                 $a_users[0][] = get_lang('Legal agreement accepted');
             }
 
-            if ($_GET['format'] === 'pdf') {
+            if ('pdf' === $_GET['format']) {
                 $select_email_condition = ' user.email, ';
                 if ($is_western_name_order) {
                     $a_users[0] = [
@@ -232,7 +230,7 @@ if (isset($_GET['action'])) {
                 }
 
                 // only users no coaches/teachers
-                if ($type == COURSEMANAGER) {
+                if (COURSEMANAGER == $type) {
                     $sql .= " AND session_course_user.status = 2 ";
                 } else {
                     $sql .= " AND session_course_user.status = 0 ";
@@ -244,7 +242,7 @@ if (isset($_GET['action'])) {
 
                 while ($user = Database:: fetch_array($rs, 'ASSOC')) {
                     if (isset($user['legal_agreement'])) {
-                        if ($user['legal_agreement'] == 1) {
+                        if (1 == $user['legal_agreement']) {
                             $user['legal_agreement'] = get_lang('Yes');
                         } else {
                             $user['legal_agreement'] = get_lang('No');
@@ -263,7 +261,7 @@ if (isset($_GET['action'])) {
                         }
                     }
                     $data[] = $user;
-                    if ($_GET['format'] === 'pdf') {
+                    if ('pdf' === $_GET['format']) {
                         $user_info = api_get_user_info($user['user_id']);
                         $user_image = '<img src="'.$user_info['avatar'].'" width ="'.$user_image_pdf_size.'px" />';
 
@@ -295,7 +293,7 @@ if (isset($_GET['action'])) {
                 }
             }
 
-            if ($sessionId == 0) {
+            if (0 == $sessionId) {
                 // users directly subscribed to the course
                 $table_course_user = Database::get_main_table(TABLE_MAIN_COURSE_USER);
                 $sql = "SELECT DISTINCT
@@ -319,7 +317,7 @@ if (isset($_GET['action'])) {
                 }
 
                 // only users no teachers/coaches
-                if ($type == COURSEMANAGER) {
+                if (COURSEMANAGER == $type) {
                     $sql .= " AND course_user.status = 1 ";
                 } else {
                     $sql .= " AND course_user.status = 5 ";
@@ -331,7 +329,7 @@ if (isset($_GET['action'])) {
                 $counter = 1;
                 while ($user = Database::fetch_array($rs, 'ASSOC')) {
                     if (isset($user['legal_agreement'])) {
-                        if ($user['legal_agreement'] == 1) {
+                        if (1 == $user['legal_agreement']) {
                             $user['legal_agreement'] = get_lang('Yes');
                         } else {
                             $user['legal_agreement'] = get_lang('No');
@@ -350,7 +348,7 @@ if (isset($_GET['action'])) {
                             $user[$key] = $extra_value;
                         }
                     }
-                    if ($_GET['format'] === 'pdf') {
+                    if ('pdf' === $_GET['format']) {
                         $user_info = api_get_user_info($user['user_id']);
                         $user_image = '<img src="'.$user_info['avatar'].'" width ="'.$user_image_pdf_size.'px" />';
 
@@ -386,7 +384,7 @@ if (isset($_GET['action'])) {
             $fileName = get_lang('Learners list');
             $pdfTitle = get_lang('Learners list');
 
-            if ($type == COURSEMANAGER) {
+            if (COURSEMANAGER == $type) {
                 $fileName = get_lang('Trainers');
                 $pdfTitle = get_lang('Trainers');
             }
@@ -431,8 +429,8 @@ if (api_is_allowed_to_edit(null, true)) {
     }
 } else {
     // If student can unsubscribe
-    if (isset($_REQUEST['unregister']) && $_REQUEST['unregister'] == 'yes') {
-        if ($course_info['unsubscribe'] == 1) {
+    if (isset($_REQUEST['unregister']) && 'yes' == $_REQUEST['unregister']) {
+        if (1 == $course_info['unsubscribe']) {
             $user_id = api_get_user_id();
             CourseManager::unsubscribe_user($user_id, $course_info['code']);
             header('Location: '.api_get_path(WEB_PATH).'user_portal.php');
@@ -450,7 +448,7 @@ if (!api_is_allowed_in_course()) {
 Event::event_access_tool(TOOL_USER);
 
 $default_column = 3;
-$tableLabel = $type === STUDENT ? 'student' : 'teacher';
+$tableLabel = STUDENT === $type ? 'student' : 'teacher';
 $table = new SortableTable(
     $tableLabel.'_list',
     'get_number_of_users',
@@ -523,14 +521,14 @@ if (api_is_allowed_to_edit(null, true)) {
         $table->set_form_actions(['unsubscribe' => get_lang('Unsubscribe')], 'user');
     }
 } else {
-    if ($course_info['unsubscribe'] == 1) {
+    if (1 == $course_info['unsubscribe']) {
         $table->set_header($header_nr++, get_lang('Action'), false);
         $table->set_column_filter($header_nr - 1, 'modify_filter');
     }
 }
 
 /*	Header */
-if (isset($origin) && $origin === 'learnpath') {
+if (isset($origin) && 'learnpath' === $origin) {
     Display::display_reduced_header();
 } else {
     if (isset($_GET['keyword']) && !empty($_GET['keyword'])) {
@@ -619,7 +617,7 @@ if ($canRead) {
     echo '</div>';
 
     $allowTutors = api_get_setting('allow_tutors_to_assign_students_to_session');
-    if (api_is_allowed_to_edit() && $allowTutors === 'true') {
+    if (api_is_allowed_to_edit() && 'true' === $allowTutors) {
         $actions .= ' <a class="btn btn-default" href="session_list.php?'.api_get_cidreq().'">'.
             get_lang('Course sessions').'</a>';
     }
@@ -634,7 +632,7 @@ if (!empty($_GET['keyword']) && !empty($_GET['submit'])) {
     echo '<br/>'.get_lang('Search resultsFor').' <span style="font-style: italic ;"> '.$keyword_name.' </span><br>';
 }
 
-if (!isset($origin) || $origin != 'learnpath') {
+if (!isset($origin) || 'learnpath' != $origin) {
     Display::display_footer();
 }
 
@@ -653,7 +651,7 @@ function get_number_of_users()
     if (empty($sessionId)) {
         $status = $type;
     } else {
-        if ($type == COURSEMANAGER) {
+        if (COURSEMANAGER == $type) {
             $status = 2;
         } else {
             $status = 0;
@@ -722,10 +720,10 @@ function get_number_of_users()
  */
 function searchUserKeyword($firstname, $lastname, $username, $official_code, $keyword)
 {
-    if (api_strripos($firstname, $keyword) !== false ||
-        api_strripos($lastname, $keyword) !== false ||
-        api_strripos($username, $keyword) !== false ||
-        api_strripos($official_code, $keyword) !== false
+    if (false !== api_strripos($firstname, $keyword) ||
+        false !== api_strripos($lastname, $keyword) ||
+        false !== api_strripos($username, $keyword) ||
+        false !== api_strripos($official_code, $keyword)
     ) {
         return true;
     } else {
@@ -800,7 +798,7 @@ function get_user_data($from, $number_of_items, $column, $direction)
     if (empty($sessionId)) {
         $status = $type;
     } else {
-        if ($type == COURSEMANAGER) {
+        if (COURSEMANAGER == $type) {
             $status = 2;
         } else {
             $status = 0;
@@ -863,11 +861,11 @@ function get_user_data($from, $number_of_items, $column, $direction)
 
                 // Status
                 $default_status = get_lang('Learner');
-                if ((isset($o_course_user['status_rel']) && $o_course_user['status_rel'] == 1) ||
-                    (isset($o_course_user['status_session']) && $o_course_user['status_session'] == 2)
+                if ((isset($o_course_user['status_rel']) && 1 == $o_course_user['status_rel']) ||
+                    (isset($o_course_user['status_session']) && 2 == $o_course_user['status_session'])
                 ) {
                     $default_status = get_lang('Teacher');
-                } elseif (isset($o_course_user['is_tutor']) && $o_course_user['is_tutor'] == 1) {
+                } elseif (isset($o_course_user['is_tutor']) && 1 == $o_course_user['is_tutor']) {
                     $default_status = get_lang('Coach');
                 }
 
@@ -924,7 +922,7 @@ function get_user_data($from, $number_of_items, $column, $direction)
                 // Group.
                 $temp[] = implode(', ', $groupsNameListParsed);
 
-                if ($course_info['unsubscribe'] == 1) {
+                if (1 == $course_info['unsubscribe']) {
                     //User id for actions
                     $temp[] = $user_id;
                 }
@@ -952,11 +950,11 @@ function active_filter($active, $urlParams, $row)
     $userId = api_get_user_id();
     $action = '';
     $image = '';
-    if ($active == '1') {
+    if ('1' == $active) {
         $action = 'Accountactive';
         $image = 'accept';
     }
-    if ($active == '0') {
+    if ('0' == $active) {
         $action = 'AccountInactive';
         $image = 'error';
     }
@@ -981,13 +979,13 @@ function active_filter($active, $urlParams, $row)
 function modify_filter($user_id, $row, $data)
 {
     global $charset;
-    $canEditUsers = api_get_setting('allow_user_course_subscription_by_course_admin') == 'true' || api_is_platform_admin();
+    $canEditUsers = 'true' == api_get_setting('allow_user_course_subscription_by_course_admin') || api_is_platform_admin();
 
     $is_allowed_to_track = api_is_allowed_to_edit(true, true);
 
     $user_id = $data[0];
     $userInfo = api_get_user_info($user_id);
-    $isInvitee = $userInfo['status'] == INVITEE ? true : false;
+    $isInvitee = INVITEE == $userInfo['status'] ? true : false;
     $course_info = $_course = api_get_course_info();
     $current_user_id = api_get_user_id();
     $sessionId = api_get_session_id();
@@ -1031,7 +1029,7 @@ function modify_filter($user_id, $row, $data)
                     '</a>&nbsp;';
             }
 
-            if ($data['user_status_in_course'] == STUDENT) {
+            if (STUDENT == $data['user_status_in_course']) {
                 $result .= Display::url(
                     $text,
                     'user.php?'.api_get_cidreq().'&action=set_tutor&is_tutor='.$isTutor.'&user_id='.$user_id.'&type='.$type,
@@ -1050,7 +1048,7 @@ function modify_filter($user_id, $row, $data)
         }
     } else {
         // Show buttons for unsubscribe
-        if ($course_info['unsubscribe'] == 1) {
+        if (1 == $course_info['unsubscribe']) {
             if ($user_id == $current_user_id) {
                 $result .= '<a class="btn btn-sm btn-danger delete-swal" href="'.api_get_self().'?'.api_get_cidreq().'&type='.$type.'&unregister=yes&user_id='.$user_id.'" title="'.addslashes(api_htmlentities(get_lang('Unsubscribe'))).' >'.
                     get_lang('Unsubscribe').'</a>&nbsp;';

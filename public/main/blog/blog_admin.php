@@ -26,16 +26,16 @@ if (api_is_allowed_to_edit()) {
     // showing the header if we are not in the learning path, if we are in
     // the learning path, we do not include the banner so we have to explicitly
     // include the stylesheet, which is normally done in the header
-    if ($origin != 'learnpath') {
+    if ('learnpath' != $origin) {
         $interbreadcrumb[] = [
             'url' => 'blog_admin.php?'.api_get_cidreq(),
             'name' => $nameTools,
         ];
         $my_url = '';
-        if ($action == 'add') {
+        if ('add' == $action) {
             $current_section = get_lang('Create a new project');
             $my_url = 'action=add';
-        } elseif ($action == 'edit') {
+        } elseif ('edit' == $action) {
             $current_section = get_lang('Edit a project');
             $my_url = 'action=edit&amp;blog_id='.Security::remove_XSS($_GET['blog_id']);
         }
@@ -58,16 +58,16 @@ if (api_is_allowed_to_edit()) {
             echo Display::return_message(get_lang('The project has been edited.'), 'confirmation');
         }
     }
-    if (isset($_GET['action']) && $_GET['action'] == 'visibility') {
+    if (isset($_GET['action']) && 'visibility' == $_GET['action']) {
         Blog::changeBlogVisibility(intval($_GET['blog_id']));
         echo Display::return_message(get_lang('The visibility has been changed.'), 'confirmation');
     }
-    if (isset($_GET['action']) && $_GET['action'] == 'delete') {
+    if (isset($_GET['action']) && 'delete' == $_GET['action']) {
         Blog::deleteBlog(intval($_GET['blog_id']));
         echo Display::return_message(get_lang('The project has been deleted.'), 'confirmation');
     }
 
-    if (isset($_GET['action']) && $_GET['action'] == 'add') {
+    if (isset($_GET['action']) && 'add' == $_GET['action']) {
         // we show the form if
         // 1. no post data
         // 2. there is post data and one of the required form elements is empty
@@ -76,7 +76,7 @@ if (api_is_allowed_to_edit()) {
         }
     }
 
-    if (isset($_GET['action']) && $_GET['action'] == 'edit') {
+    if (isset($_GET['action']) && 'edit' == $_GET['action']) {
         // we show the form if
         // 1. no post data
         // 2. there is post data and one of the three form elements is empty

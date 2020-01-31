@@ -95,7 +95,7 @@ class ExtraFieldValue extends Model
         foreach ($params as $key => $value) {
             $found = strpos($key, '__persist__');
 
-            if ($found === false) {
+            if (false === $found) {
                 continue;
             }
 
@@ -119,7 +119,7 @@ class ExtraFieldValue extends Model
             $field_variable = $fieldDetails['variable'];
 
             // if the field is not visible to the user in the end, we need to apply special rules
-            if ($fieldDetails['visible_to_self'] != 1) {
+            if (1 != $fieldDetails['visible_to_self']) {
                 //only admins should be able to add those values
                 if (!api_is_platform_admin(true, true)) {
                     // although if not admin but sent through a CLI script, we should accept it as well
@@ -176,7 +176,7 @@ class ExtraFieldValue extends Model
                     }
                     break;
                 case ExtraField::FIELD_TYPE_TAG:
-                    if ($type == EntityExtraField::USER_FIELD_TYPE) {
+                    if (EntityExtraField::USER_FIELD_TYPE == $type) {
                         UserManager::delete_user_tags(
                             $params['item_id'],
                             $extraFieldInfo['id']
@@ -278,7 +278,7 @@ class ExtraFieldValue extends Model
                         mkdir($fileDir, $dirPermissions, true);
                     }
 
-                    if (!empty($value['tmp_name']) && isset($value['error']) && $value['error'] == 0) {
+                    if (!empty($value['tmp_name']) && isset($value['error']) && 0 == $value['error']) {
                         // Crop the image to adjust 16:9 ratio
                         if (isset($params['extra_'.$field_variable.'_crop_result'])) {
                             $crop = new Image($value['tmp_name']);
@@ -328,7 +328,7 @@ class ExtraFieldValue extends Model
                         mkdir($fileDir, $dirPermissions, true);
                     }
 
-                    if (!empty($value['tmp_name']) && isset($value['error']) && $value['error'] == 0) {
+                    if (!empty($value['tmp_name']) && isset($value['error']) && 0 == $value['error']) {
                         $cleanedName = api_replace_dangerous_char($value['name']);
                         $fileName = ExtraField::FIELD_TYPE_FILE."_{$params['item_id']}_$cleanedName";
                         moveUploadedFile($value, $fileDir.$fileName);
@@ -339,7 +339,7 @@ class ExtraFieldValue extends Model
                             'value' => $fileDirStored.$fileName,
                         ];
 
-                        if ($this->type !== 'session' && $this->type !== 'course') {
+                        if ('session' !== $this->type && 'course' !== $this->type) {
                             $new_params['comment'] = $comment;
                         }
 
@@ -453,7 +453,7 @@ class ExtraFieldValue extends Model
                     break;
             }
 
-            if ($extraFieldInfo['field_type'] == ExtraField::FIELD_TYPE_TAG) {
+            if (ExtraField::FIELD_TYPE_TAG == $extraFieldInfo['field_type']) {
                 $field_values = self::getAllValuesByItemAndFieldAndValue(
                     $params['item_id'],
                     $params['field_id'],
@@ -474,7 +474,7 @@ class ExtraFieldValue extends Model
                 /* Enable this when field_loggeable is introduced as a table field (2.0)
                 if ($extraFieldInfo['field_loggeable'] == 1) {
                 */
-                if ($extraFieldInfo['field_type'] == ExtraField::FIELD_TYPE_TAG) {
+                if (ExtraField::FIELD_TYPE_TAG == $extraFieldInfo['field_type']) {
                     $option = new ExtraFieldOption($this->type);
                     $optionExists = $option->get($params['value']);
                     if (empty($optionExists)) {
@@ -668,7 +668,7 @@ class ExtraFieldValue extends Model
         if (Database::num_rows($result)) {
             $result = Database::fetch_array($result, 'ASSOC');
             if ($transform) {
-                if ($result['field_type'] == ExtraField::FIELD_TYPE_DOUBLE_SELECT) {
+                if (ExtraField::FIELD_TYPE_DOUBLE_SELECT == $result['field_type']) {
                     if (!empty($result['value'])) {
                         $field_option = new ExtraFieldOption($this->type);
                         $options = explode('::', $result['value']);
@@ -680,7 +680,7 @@ class ExtraFieldValue extends Model
                         }
                     }
                 }
-                if ($result['field_type'] == ExtraField::FIELD_TYPE_SELECT_WITH_TEXT_FIELD) {
+                if (ExtraField::FIELD_TYPE_SELECT_WITH_TEXT_FIELD == $result['field_type']) {
                     if (!empty($result['value'])) {
                         $options = explode('::', $result['value']);
 
@@ -694,7 +694,7 @@ class ExtraFieldValue extends Model
                         }
                     }
                 }
-                if ($result['field_type'] == ExtraField::FIELD_TYPE_TRIPLE_SELECT) {
+                if (ExtraField::FIELD_TYPE_TRIPLE_SELECT == $result['field_type']) {
                     if (!empty($result['value'])) {
                         $optionIds = explode(';', $result['value']);
                         $optionValues = [];
@@ -757,7 +757,7 @@ class ExtraFieldValue extends Model
             $sql .= ' DESC';
         }
         $result = Database::query($sql);
-        if ($result !== false && Database::num_rows($result)) {
+        if (false !== $result && Database::num_rows($result)) {
             if ($all) {
                 $result = Database::store_result($result, 'ASSOC');
             } else {
@@ -866,7 +866,7 @@ class ExtraFieldValue extends Model
             if (in_array($field['id'], $idList)) {
                 $allResults[] = $finalResult[$field['id']];
             } else {
-                if ($field['field_type'] == ExtraField::FIELD_TYPE_TAG) {
+                if (ExtraField::FIELD_TYPE_TAG == $field['field_type']) {
                     $tagResult = [];
                     $tags = $em->getRepository('ChamiloCoreBundle:ExtraFieldRelTag')
                         ->findBy(
@@ -994,7 +994,7 @@ class ExtraFieldValue extends Model
             Database::query($sql);
 
             // Delete file from uploads
-            if ($fieldData['field_type'] == ExtraField::FIELD_TYPE_FILE) {
+            if (ExtraField::FIELD_TYPE_FILE == $fieldData['field_type']) {
                 api_remove_uploaded_file($this->type, basename($fieldValue));
             }
 

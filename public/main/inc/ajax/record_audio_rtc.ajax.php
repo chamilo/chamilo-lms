@@ -13,14 +13,14 @@ $courseInfo = api_get_course_info();
 $tool = isset($_REQUEST['tool']) ? $_REQUEST['tool'] : '';
 $type = isset($_REQUEST['type']) ? $_REQUEST['type'] : 'document'; // can be document or message
 
-if ($type == 'document') {
+if ('document' == $type) {
     api_protect_course_script();
 }
 
 $userId = api_get_user_id();
 
 if (!isset($_FILES['audio_blob'], $_REQUEST['audio_dir'])) {
-    if ($tool === 'exercise') {
+    if ('exercise' === $tool) {
         header('Content-Type: application/json');
         echo json_encode([
             'error' => true,
@@ -77,7 +77,7 @@ switch ($type) {
 
             $data = DocumentManager::get_document_data_by_id($newDocId, $courseInfo['code']);
 
-            if ($tool === 'exercise') {
+            if ('exercise' === $tool) {
                 header('Content-Type: application/json');
                 echo json_encode([
                     'error' => $error,

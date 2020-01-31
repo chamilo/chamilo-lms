@@ -7,7 +7,7 @@
  */
 $type = isset($_REQUEST['type']) && in_array($_REQUEST['type'], ['personal', 'course', 'admin']) ? $_REQUEST['type'] : 'personal';
 
-if ($type === 'personal') {
+if ('personal' === $type) {
     $cidReset = true; // fixes #5162
 }
 
@@ -16,7 +16,7 @@ require_once __DIR__.'/../global.inc.php';
 $action = isset($_REQUEST['a']) ? $_REQUEST['a'] : null;
 $group_id = api_get_group_id();
 
-if ($type === 'course') {
+if ('course' === $type) {
     api_protect_course_script(true);
 }
 
@@ -109,7 +109,7 @@ switch ($action) {
         $start = isset($_REQUEST['start']) ? api_strtotime($_REQUEST['start']) : null;
         $end = isset($_REQUEST['end']) ? api_strtotime($_REQUEST['end']) : null;
 
-        if ($type == 'personal' && !empty($sessionId)) {
+        if ('personal' == $type && !empty($sessionId)) {
             $agenda->setSessionId($sessionId);
         }
 
@@ -140,15 +140,15 @@ switch ($action) {
             }
             $today = getdate();
             $year = (!empty($_GET['year']) ? (int) $_GET['year'] : null);
-            if ($year == null) {
+            if (null == $year) {
                 $year = $today['year'];
             }
             $month = (!empty($_GET['month']) ? (int) $_GET['month'] : null);
-            if ($month == null) {
+            if (null == $month) {
                 $month = $today['mon'];
             }
             $day = (!empty($_GET['day']) ? (int) $_GET['day'] : null);
-            if ($day == null) {
+            if (null == $day) {
                 $day = $today['mday'];
             }
             $monthName = $MonthsLong[$month - 1];
@@ -169,7 +169,7 @@ switch ($action) {
                 "month_view"
             );
 
-            if (api_get_setting('allow_personal_agenda') == 'true') {
+            if ('true' == api_get_setting('allow_personal_agenda')) {
                 $agendaitems = Agenda::get_personal_agenda_items(
                     $user_id,
                     $agendaitems,

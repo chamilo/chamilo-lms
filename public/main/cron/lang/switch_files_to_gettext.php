@@ -2,8 +2,6 @@
 /* For licensing terms, see /license.txt */
 /**
  * Script to switch all PHP files in Chamilo to a more Gettext-like syntax.
- *
- * @package chamilo.cron.lang
  */
 /**
  * Includes and declarations.
@@ -40,7 +38,7 @@ $countFiles = 0;
 $countReplaces = 0;
 // Browse files
 foreach ($files as $file) {
-    if (substr($file, $rootLength, 6) === 'vendor' || substr($file, $rootLength, 3) === 'web') {
+    if ('vendor' === substr($file, $rootLength, 6) || 'web' === substr($file, $rootLength, 3)) {
         continue;
     }
     //echo 'Analyzing '.$file.PHP_EOL;
@@ -54,7 +52,7 @@ foreach ($files as $file) {
         if ($res > 0) {
             foreach ($myTerms[2] as $term) {
                 echo "Found term $term - ".print_r($myTerms, 1).PHP_EOL;
-                if (substr($term, 0, 4) == 'lang') {
+                if ('lang' == substr($term, 0, 4)) {
                     $term = substr($term, 4);
                 }
                 if (!empty($terms[$term])) {
@@ -71,7 +69,7 @@ foreach ($files as $file) {
             if ($res > 0) {
                 foreach ($myTerms[2] as $term) {
                     echo "Found term $term".PHP_EOL;
-                    if (substr($term, 0, 4) == 'lang') {
+                    if ('lang' == substr($term, 0, 4)) {
                         $term = substr($term, 4);
                     }
                     if (!empty($terms[$term])) {

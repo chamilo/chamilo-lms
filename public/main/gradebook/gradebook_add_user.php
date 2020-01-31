@@ -3,8 +3,6 @@
 /* For licensing terms, see /license.txt */
 /**
  * Script.
- *
- * @package chamilo.gradebook
  */
 
 //Disabling code when course code is null (gradebook as a tab) see issue #2705
@@ -18,7 +16,7 @@ GradebookUtils::block_students();
 $evaluation = Evaluation::load($_GET['selecteval']);
 $newstudents = $evaluation[0]->get_not_subscribed_students();
 
-if (count($newstudents) == '0') {
+if ('0' == count($newstudents)) {
     header('Location: gradebook_view_result.php?nouser=&selecteval='.intval($_GET['selecteval']).'&'.api_get_cidreq());
     exit;
 }
@@ -39,7 +37,7 @@ if (isset($_POST['submit_button'])) {
         $users[$key] = intval($value);
     }
 
-    if (count($users) == 0) {
+    if (0 == count($users)) {
         header('Location: '.api_get_self().'?erroroneuser=&selecteval='.Security::remove_XSS($_GET['selecteval']));
         exit;
     } else {

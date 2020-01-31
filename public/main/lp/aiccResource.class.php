@@ -5,8 +5,6 @@
  * Class defining the elements from an AICC Descriptor file.
  * Container for the aiccResource class that deals with elemens from AICC Descriptor file.
  *
- * @package chamilo.learnpath
- *
  * @author  Yannick Warnier <ywarnier@beeznest.org>
  * @license GNU/GPL
  */

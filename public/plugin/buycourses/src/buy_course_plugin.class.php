@@ -1358,7 +1358,7 @@ class BuyCoursesPlugin extends Plugin
 
         srand((float) microtime() * 1000000);
 
-        for ($i = 0; $i < $length; ++$i) {
+        for ($i = 0; $i < $length; $i++) {
             $numbers = rand(0, strlen($salt) - 1);
             $str .= substr($salt, $numbers, 1);
         }

@@ -9,8 +9,6 @@
  * @author Roan Embrechts, refactoring and code cleaning
  * @author Yannick Warnier <ywarnier@beeznest.org> - cleaning and update for new SCORM tool
  * @author Julio Montoya <gugli100@gmail.com> Adding formvalidator support
- *
- * @package chamilo.learnpath
  */
 $this_section = SECTION_COURSES;
 api_protect_course_script();
@@ -165,7 +163,7 @@ $form->addElement('html', '</div>');
 $defaults['activate_start_date_check'] = 1;
 
 $defaults['accumulate_scorm_time'] = 0;
-if (api_get_setting('scorm_cumulative_session_time') == 'true') {
+if ('true' == api_get_setting('scorm_cumulative_session_time')) {
     $defaults['accumulate_scorm_time'] = 1;
 }
 

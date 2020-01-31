@@ -9,8 +9,6 @@ use SkillRelUser as SkillRelUserManager;
  * Show information about all issued badges with same skill by user.
  *
  * @author José Loguercio Silva <jose.loguercio@beeznest.com>
- *
- * @package chamilo.badge
  */
 require_once __DIR__.'/../inc/global.inc.php';
 
@@ -130,7 +128,7 @@ foreach ($userSkills as $index => $skillIssue) {
                 break;
             }
 
-            if (!$profile && $parent['parent_id'] == 0) {
+            if (!$profile && 0 == $parent['parent_id']) {
                 $profile = $skillLevelRepo->findAll();
                 $profile = !empty($profile) ? $profile[0] : [];
             }
@@ -220,7 +218,7 @@ foreach ($userSkills as $index => $skillIssue) {
         $backpack = 'https://backpack.openbadges.org/';
         $configBackpack = api_get_setting('openbadges_backpack');
 
-        if (strcmp($backpack, $configBackpack) !== 0) {
+        if (0 !== strcmp($backpack, $configBackpack)) {
             $backpack = $configBackpack;
         }
 
@@ -275,7 +273,7 @@ foreach ($userSkills as $index => $skillIssue) {
 
 $template = new Template(get_lang('Issued badge information'));
 $template->assign('user_badges', $allUserBadges);
-$template->assign('show_level', api_get_configuration_value('hide_skill_levels') == false);
+$template->assign('show_level', false == api_get_configuration_value('hide_skill_levels'));
 
 $content = $template->fetch(
     $template->get_template('skill/issued_all.tpl')

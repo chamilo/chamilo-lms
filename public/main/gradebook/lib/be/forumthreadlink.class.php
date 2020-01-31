@@ -5,8 +5,6 @@
  * Class ForumThreadLink.
  *
  * @author Bert Steppé
- *
- * @package chamilo.gradebook
  */
 class ForumThreadLink extends AbstractLink
 {
@@ -72,7 +70,7 @@ class ForumThreadLink extends AbstractLink
 
         $result = Database::query($sql);
         while ($data = Database::fetch_array($result)) {
-            if (isset($data['thread_title_qualify']) && $data['thread_title_qualify'] != '') {
+            if (isset($data['thread_title_qualify']) && '' != $data['thread_title_qualify']) {
                 $cats[] = [$data['thread_id'], $data['thread_title_qualify']];
             } else {
                 $cats[] = [$data['thread_id'], $data['thread_title']];
@@ -100,7 +98,7 @@ class ForumThreadLink extends AbstractLink
         $result = Database::query($sql);
         $number = Database::fetch_row($result);
 
-        return $number[0] != 0;
+        return 0 != $number[0];
     }
 
     /**
@@ -148,7 +146,7 @@ class ForumThreadLink extends AbstractLink
 
         // for 1 student
         if (isset($stud_id)) {
-            if ($threadInfo['thread_peer_qualify'] == 0) {
+            if (0 == $threadInfo['thread_peer_qualify']) {
                 // Classic way of calculate score
                 if ($data = Database::fetch_array($scores)) {
                     return [
@@ -188,7 +186,7 @@ class ForumThreadLink extends AbstractLink
 
             while ($data = Database::fetch_array($scores)) {
                 if (!(array_key_exists($data['user_id'], $students))) {
-                    if ($assignment['thread_qualify_max'] != 0) {
+                    if (0 != $assignment['thread_qualify_max']) {
                         $students[$data['user_id']] = $data['qualify'];
                         $counter++;
                         $sum += $data['qualify'] / $assignment['thread_qualify_max'];
@@ -201,7 +199,7 @@ class ForumThreadLink extends AbstractLink
                 }
             }
 
-            if ($counter == 0) {
+            if (0 == $counter) {
                 return [null, null];
             } else {
                 switch ($type) {
@@ -245,7 +243,7 @@ class ForumThreadLink extends AbstractLink
         $this->get_exercise_data();
         $thread_title = isset($this->exercise_data['thread_title']) ? $this->exercise_data['thread_title'] : '';
         $thread_title_qualify = isset($this->exercise_data['thread_title_qualify']) ? $this->exercise_data['thread_title_qualify'] : '';
-        if (isset($thread_title_qualify) && $thread_title_qualify != '') {
+        if (isset($thread_title_qualify) && '' != $thread_title_qualify) {
             return $this->exercise_data['thread_title_qualify'];
         }
 
@@ -274,7 +272,7 @@ class ForumThreadLink extends AbstractLink
         $result = Database::query($sql);
         $number = Database::fetch_row($result);
 
-        return $number[0] != 0;
+        return 0 != $number[0];
     }
 
     public function get_link()

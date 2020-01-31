@@ -6,8 +6,6 @@ use ChamiloSession as Session;
 /**
  * This file allows creating audio files from a text.
  *
- * @package chamilo.document
- *
  * @author Juan Carlos Raña Trabado
  *
  * @since 30/January/2011
@@ -16,7 +14,7 @@ use ChamiloSession as Session;
  */
 require_once __DIR__.'/../inc/global.inc.php';
 
-if (api_get_setting('enabled_support_paint') === 'false') {
+if ('false' === api_get_setting('enabled_support_paint')) {
     api_not_allowed(true);
 }
 
@@ -54,15 +52,15 @@ if (strstr($dir, '..')) {
     $dir = '/';
 }
 
-if ($dir[0] == '.') {
+if ('.' == $dir[0]) {
     $dir = substr($dir, 1);
 }
 
-if ($dir[0] != '/') {
+if ('/' != $dir[0]) {
     $dir = '/'.$dir;
 }
 
-if ($dir[strlen($dir) - 1] != '/') {
+if ('/' != $dir[strlen($dir) - 1]) {
     $dir .= '/';
 }
 
@@ -148,7 +146,7 @@ $locktarget = 'true';
 $locktitle = 'false';
 $referrer = 'Chamilo';
 
-if ($_SERVER['HTTP_HOST'] == "localhost") {
+if ("localhost" == $_SERVER['HTTP_HOST']) {
     $path_and_file = api_get_path(SYS_PATH).'/crossdomain.xml';
     if (!file_exists($path_and_file)) {
         $crossdomain = '<?xml version="1.0"?>

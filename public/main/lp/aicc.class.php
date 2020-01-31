@@ -337,7 +337,7 @@ class aicc extends learnpath
             }
 
             // Now update previous item to change next_item_id.
-            if ($previous != 0) {
+            if (0 != $previous) {
                 $upd = "UPDATE $new_lp_item SET next_item_id = $item_id WHERE c_id = $course_id AND id = $previous";
                 Database::query($upd);
                 // Update the previous item id.
@@ -529,7 +529,7 @@ class aicc extends learnpath
             }
         }
 
-        if ($package_type == '' || !$mandatory) {
+        if ('' == $package_type || !$mandatory) {
             Display::addFlash(
                 Display::return_message(get_lang('The file to upload is not valid.'))
             );
@@ -546,11 +546,11 @@ class aicc extends learnpath
         }
 
         // It happens on Linux that $new_dir sometimes doesn't start with '/'
-        if ($new_dir[0] != '/') {
+        if ('/' != $new_dir[0]) {
             $new_dir = '/'.$new_dir;
         }
         // Cut trailing slash.
-        if ($new_dir[strlen($new_dir) - 1] == '/') {
+        if ('/' == $new_dir[strlen($new_dir) - 1]) {
             $new_dir = substr($new_dir, 0, -1);
         }
 
@@ -595,7 +595,7 @@ class aicc extends learnpath
             error_log('In aicc::set_proximity('.$proxy.') method', 0);
         }
         $lp = $this->get_id();
-        if ($lp != 0) {
+        if (0 != $lp) {
             $tbl_lp = Database::get_course_table(TABLE_LP_MAIN);
             $sql = "UPDATE $tbl_lp SET content_local = '$proxy' WHERE c_id = ".$course_id." id = ".$lp;
             Database::query($sql);
@@ -620,7 +620,7 @@ class aicc extends learnpath
             error_log('In aicc::set_theme('.$theme.') method', 0);
         }
         $lp = $this->get_id();
-        if ($lp != 0) {
+        if (0 != $lp) {
             $tbl_lp = Database::get_course_table(TABLE_LP_MAIN);
             $sql = "UPDATE $tbl_lp SET theme = '$theme' WHERE c_id = ".$course_id." id = ".$lp;
             $res = Database::query($sql);
@@ -645,7 +645,7 @@ class aicc extends learnpath
             error_log('In aicc::set_preview_image('.$preview_image.') method', 0);
         }
         $lp = $this->get_id();
-        if ($lp != 0) {
+        if (0 != $lp) {
             $tbl_lp = Database::get_course_table(TABLE_LP_MAIN);
             $sql = "UPDATE $tbl_lp SET preview_image = '$preview_image' 
                     WHERE c_id = ".$course_id." id = ".$lp;
@@ -668,7 +668,7 @@ class aicc extends learnpath
     {
         $course_id = api_get_course_int_id();
         $lp = $this->get_id();
-        if ($lp != 0) {
+        if (0 != $lp) {
             $tbl_lp = Database::get_course_table(TABLE_LP_MAIN);
             $sql = "UPDATE $tbl_lp SET author = '$author' 
                     WHERE c_id = ".$course_id." id = ".$lp;
@@ -694,7 +694,7 @@ class aicc extends learnpath
             error_log('In aicc::set_maker method('.$maker.')', 0);
         }
         $lp = $this->get_id();
-        if ($lp != 0) {
+        if (0 != $lp) {
             $tbl_lp = Database::get_course_table(TABLE_LP_MAIN);
             $sql = "UPDATE $tbl_lp SET content_maker = '$maker' 
                     WHERE c_id = ".$course_id." id = ".$lp;
@@ -824,7 +824,7 @@ class aicc extends learnpath
         $title = '';
         if (isset($this->config['organizations']['default'])) {
             $title = $this->organizations[$this->config['organizations']['default']]->get_name();
-        } elseif (count($this->organizations) == 1) {
+        } elseif (1 == count($this->organizations)) {
             // This will only get one title but so we don't need to know the index.
             foreach ($this->organizations as $id => $value) {
                 $title = $this->organizations[$id]->get_name();
@@ -872,13 +872,13 @@ class aicc extends learnpath
         for ($i = 0; $i < @count($f); $i++) {
             $newsec = 0;
             $w = @trim($f[$i]);
-            if (substr($w, 0, 1) == ';') {
+            if (';' == substr($w, 0, 1)) {
                 // Ignore comment lines
                 continue;
             }
             if ($w) {
                 if ((!$r) or ($sec)) {
-                    if ((@substr($w, 0, 1) == '[') and (@substr($w, -1, 1)) == ']') {
+                    if (('[' == @substr($w, 0, 1)) and ']' == (@substr($w, -1, 1))) {
                         $sec = @substr($w, 1, @strlen($w) - 2);
                         $newsec = 1;
                     }
@@ -888,11 +888,11 @@ class aicc extends learnpath
                     $k = @trim($w[0]);
                     unset($w[0]);
                     $v = @trim(@implode('=', $w));
-                    if ((@substr($v, 0, 1) == "\"") and (@substr($v, -1, 1) == "\"")) {
+                    if (("\"" == @substr($v, 0, 1)) and ("\"" == @substr($v, -1, 1))) {
                         $v = @substr($v, 1, @strlen($v) - 2);
                     }
                     if ($sec) {
-                        if (api_strtolower($sec) == 'course_description') { // A special case.
+                        if ('course_description' == api_strtolower($sec)) { // A special case.
                             $r[api_strtolower($sec)] = $k;
                         } else {
                             $r[api_strtolower($sec)][api_strtolower($k)] = $v;
@@ -928,13 +928,13 @@ class aicc extends learnpath
         for ($i = 0; $i < @count($f); $i++) {
             $newsec = 0;
             $w = @trim($f[$i]);
-            if (substr($w, 0, 1) == ';') {
+            if (';' == substr($w, 0, 1)) {
                 // Ignore comment lines
                 continue;
             }
             if ($w) {
                 if ((!$r) or ($sec)) {
-                    if ((@substr($w, 0, 1) == '[') and (@substr($w, -1, 1)) == ']') {
+                    if (('[' == @substr($w, 0, 1)) and ']' == (@substr($w, -1, 1))) {
                         $sec = @substr($w, 1, @strlen($w) - 2);
                         $pure_data = 0;
                         if (in_array(api_strtolower($sec), $pure_strings)) {
@@ -950,14 +950,14 @@ class aicc extends learnpath
                     $k = @trim($w[0]);
                     unset($w[0]);
                     $v = @trim(@implode('=', $w));
-                    if ((@substr($v, 0, 1) == "\"") and (@substr($v, -1, 1) == "\"")) {
+                    if (("\"" == @substr($v, 0, 1)) and ("\"" == @substr($v, -1, 1))) {
                         $v = @substr($v, 1, @strlen($v) - 2);
                     }
                     if ($sec) {
                         if ($pure_data) {
                             $r[api_strtolower($sec)] .= $f[$i];
                         } else {
-                            if (api_strtolower($sec) == 'course_description') { // A special case.
+                            if ('course_description' == api_strtolower($sec)) { // A special case.
                                 $r[api_strtolower($sec)] = $k;
                             } else {
                                 $r[api_strtolower($sec)][api_strtolower($k)] = $v;
@@ -1012,7 +1012,7 @@ class aicc extends learnpath
                     }
                     break;
                 case "\r":
-                    if (!$enclosed && $data[$i + 1] == "\n") {
+                    if (!$enclosed && "\n" == $data[$i + 1]) {
                         break;
                     }
                     // no break
@@ -1026,7 +1026,7 @@ class aicc extends learnpath
                     }
                     break;
                 case "\\r":
-                    if (!$enclosed && $data[$i + 1] == "\\n") {
+                    if (!$enclosed && "\\n" == $data[$i + 1]) {
                         break;
                     }
                     // no break
@@ -1050,7 +1050,7 @@ class aicc extends learnpath
         $titles = [];
         $ret_ret_array = [];
         foreach ($ret_array as $line_idx => $line) {
-            if ($line_idx == 0) {
+            if (0 == $line_idx) {
                 $titles = $line;
             } else {
                 $ret_ret_array[$line_idx] = [];

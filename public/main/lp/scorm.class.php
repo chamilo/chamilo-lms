@@ -9,8 +9,6 @@ use Symfony\Component\DomCrawler\Crawler;
 /**
  * Defines the scorm class, which is meant to contain the scorm items (nuclear elements).
  *
- * @package chamilo.learnpath
- *
  * @author    Yannick Warnier <ywarnier@beeznest.org>
  */
 class scorm extends learnpath
@@ -121,7 +119,7 @@ class scorm extends learnpath
 
             if ($root->hasAttributes()) {
                 $attributes = $root->attributes;
-                if ($attributes->length !== 0) {
+                if (0 !== $attributes->length) {
                     foreach ($attributes as $attrib) {
                         // <manifest> element attributes
                         $this->manifest[$attrib->name] = $attrib->value;
@@ -131,10 +129,10 @@ class scorm extends learnpath
             $this->manifest['name'] = $root->tagName;
             if ($root->hasChildNodes()) {
                 $children = $root->childNodes;
-                if ($children->length !== 0) {
+                if (0 !== $children->length) {
                     foreach ($children as $child) {
                         // <manifest> element children (can be <metadata>, <organizations> or <resources> )
-                        if ($child->nodeType == XML_ELEMENT_NODE) {
+                        if (XML_ELEMENT_NODE == $child->nodeType) {
                             switch ($child->tagName) {
                                 case 'metadata':
                                     // Parse items from inside the <metadata> element.
@@ -146,7 +144,7 @@ class scorm extends learnpath
                                     $orgs_attribs = $child->attributes;
                                     foreach ($orgs_attribs as $orgs_attrib) {
                                         // Attributes of the <organizations> element.
-                                        if ($orgs_attrib->nodeType == XML_ATTRIBUTE_NODE) {
+                                        if (XML_ATTRIBUTE_NODE == $orgs_attrib->nodeType) {
                                             $this->manifest['organizations'][$orgs_attrib->name] = $orgs_attrib->value;
                                         }
                                     }
@@ -183,12 +181,12 @@ class scorm extends learnpath
                                                     $orgnode,
                                                     $this->manifest_encoding
                                                 );
-                                                if ($oOrganization->identifier != '') {
+                                                if ('' != $oOrganization->identifier) {
                                                     $name = $oOrganization->get_name();
                                                     if (empty($name)) {
                                                         // If the org title is empty, use zip file name.
                                                         $myname = $this->zipname;
-                                                        if ($this->lastzipnameindex != 0) {
+                                                        if (0 != $this->lastzipnameindex) {
                                                             $myname = $myname + $this->lastzipnameindex;
                                                             $this->lastzipnameindex++;
                                                         }
@@ -204,7 +202,7 @@ class scorm extends learnpath
                                     if ($child->hasAttributes()) {
                                         $resources_attribs = $child->attributes;
                                         foreach ($resources_attribs as $res_attr) {
-                                            if ($res_attr->type == XML_ATTRIBUTE_NODE) {
+                                            if (XML_ATTRIBUTE_NODE == $res_attr->type) {
                                                 $this->manifest['resources'][$res_attr->name] = $res_attr->value;
                                             }
                                         }
@@ -214,7 +212,7 @@ class scorm extends learnpath
                                         $i = 0;
                                         foreach ($resources_nodes as $res_node) {
                                             $oResource = new scormResource('manifest', $res_node);
-                                            if ($oResource->identifier != '') {
+                                            if ('' != $oResource->identifier) {
                                                 $this->resources[$oResource->identifier] = $oResource;
                                                 $i++;
                                             }
@@ -246,7 +244,7 @@ class scorm extends learnpath
             // Check organisations:
             if (isset($this->manifest['organizations'])) {
                 foreach ($this->manifest['organizations'] as $data) {
-                    if (strpos(strtolower($data), 'xerte') !== false) {
+                    if (false !== strpos(strtolower($data), 'xerte')) {
                         // Check if template.xml exists:
                         $templatePath = str_replace('imsmanifest.xml', 'template.xml', $file);
                         if (file_exists($templatePath) && is_file($templatePath)) {
@@ -477,7 +475,7 @@ class scorm extends learnpath
                 $title = api_utf8_decode($title);
                 $max_score = (int) $item['max_score'];
 
-                if ($max_score === 0) {
+                if (0 === $max_score) {
                     // If max score is not set The use_max_score parameter
                     // is check in order to use 100 (chamilo style) or '' (strict scorm)
                     $max_score = 'NULL';
@@ -692,7 +690,7 @@ class scorm extends learnpath
         if ($this->debug) {
             error_log("New LP - Package type is now: '$packageType'");
         }
-        if ($packageType == '') {
+        if ('' == $packageType) {
             Display::addFlash(
                 Display::return_message(get_lang('This is not a valid SCORM ZIP file !'))
             );
@@ -721,11 +719,11 @@ class scorm extends learnpath
         }
 
         // It happens on Linux that $newDir sometimes doesn't start with '/'
-        if ($newDir[0] != '/') {
+        if ('/' != $newDir[0]) {
             $newDir = '/'.$newDir;
         }
 
-        if ($newDir[strlen($newDir) - 1] == '/') {
+        if ('/' == $newDir[strlen($newDir) - 1]) {
             $newDir = substr($newDir, 0, -1);
         }
 
@@ -784,7 +782,7 @@ class scorm extends learnpath
             error_log('In scorm::set_proximity('.$proxy.') method');
         }
         $lp = $this->get_id();
-        if ($lp != 0) {
+        if (0 != $lp) {
             $tbl_lp = Database::get_course_table(TABLE_LP_MAIN);
             $sql = "UPDATE $tbl_lp SET content_local = '$proxy'
                     WHERE iid = $lp";
@@ -809,7 +807,7 @@ class scorm extends learnpath
             error_log('In scorm::set_theme('.$theme.') method');
         }
         $lp = $this->get_id();
-        if ($lp != 0) {
+        if (0 != $lp) {
             $tbl_lp = Database::get_course_table(TABLE_LP_MAIN);
             $sql = "UPDATE $tbl_lp SET theme = '$theme'
                     WHERE iid = $lp";
@@ -834,7 +832,7 @@ class scorm extends learnpath
             error_log('In scorm::set_theme('.$preview_image.') method', 0);
         }
         $lp = $this->get_id();
-        if ($lp != 0) {
+        if (0 != $lp) {
             $tbl_lp = Database::get_course_table(TABLE_LP_MAIN);
             $sql = "UPDATE $tbl_lp SET preview_image = '$preview_image'
                     WHERE iid = $lp";
@@ -859,7 +857,7 @@ class scorm extends learnpath
             error_log('In scorm::set_author('.$author.') method', 0);
         }
         $lp = $this->get_id();
-        if ($lp != 0) {
+        if (0 != $lp) {
             $tbl_lp = Database::get_course_table(TABLE_LP_MAIN);
             $sql = "UPDATE $tbl_lp SET author = '$author'
                     WHERE iid = ".$lp;
@@ -884,7 +882,7 @@ class scorm extends learnpath
             error_log('In scorm::set_maker method('.$maker.')', 0);
         }
         $lp = $this->get_id();
-        if ($lp != 0) {
+        if (0 != $lp) {
             $tbl_lp = Database::get_course_table(TABLE_LP_MAIN);
             $sql = "UPDATE $tbl_lp SET content_maker = '$maker' WHERE iid = $lp";
             $res = Database::query($sql);
@@ -1013,7 +1011,7 @@ class scorm extends learnpath
         $title = '';
         if (isset($this->manifest['organizations']['default'])) {
             $title = $this->organizations[$this->manifest['organizations']['default']]->get_name();
-        } elseif (count($this->organizations) == 1) {
+        } elseif (1 == count($this->organizations)) {
             // This will only get one title but so we don't need to know the index.
             foreach ($this->organizations as $id => $value) {
                 $title = $this->organizations[$id]->get_name();
@@ -1071,8 +1069,8 @@ class scorm extends learnpath
             $this->scorm_debug = $row['debug'];
             $this->js_lib = $row['js_lib'];
             $this->path = $row['path'];
-            if ($this->type == 2) {
-                if ($row['force_commit'] == 1) {
+            if (2 == $this->type) {
+                if (1 == $row['force_commit']) {
                     $this->force_commit = true;
                 }
             }
@@ -1081,7 +1079,7 @@ class scorm extends learnpath
         }
         // Parse the manifest (it is already in this lp's details).
         $manifest_file = api_get_path(SYS_COURSE_PATH).$courseInfo['directory'].'/scorm/'.$this->subdir.'/imsmanifest.xml';
-        if ($this->subdir == '') {
+        if ('' == $this->subdir) {
             $manifest_file = api_get_path(SYS_COURSE_PATH).$courseInfo['directory'].'/scorm/imsmanifest.xml';
         }
         echo $manifest_file;

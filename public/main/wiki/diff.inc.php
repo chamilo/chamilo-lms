@@ -10,8 +10,6 @@
  * as published by the FREE SOFTWARE FOUNDATION. The GPL is available
  * through the world-wide-web at http://www.gnu.org/copyleft/gpl.html
  * @author Frederic Minne <zefredz@gmail.com>
- *
- * @package Wiki
  */
 define("DIFF_EQUAL", "=");
 define("DIFF_ADDED", "+");
@@ -94,11 +92,11 @@ function str_split_on_new_line($str)
 {
     $content = [];
 
-    if (api_strpos($str, "\r\n") !== false) {
+    if (false !== api_strpos($str, "\r\n")) {
         $content = explode("\r\n", $str);
-    } elseif (api_strpos($str, "\n") !== false) {
+    } elseif (false !== api_strpos($str, "\n")) {
         $content = explode("\n", $str);
-    } elseif (api_strpos($str, "\r") !== false) {
+    } elseif (false !== api_strpos($str, "\r")) {
         $content = explode("\r", $str);
     } else {
         $content[] = $str;
@@ -120,9 +118,9 @@ function str_split_on_new_line($str)
  */
 function format_line($line, $type, $value, $skip_empty = false)
 {
-    if (trim($value) == "" && $skip_empty) {
+    if ("" == trim($value) && $skip_empty) {
         return "";
-    } elseif (trim($value) == "") {
+    } elseif ("" == trim($value)) {
         $value = '&nbsp;';
     }
 
@@ -153,9 +151,9 @@ function format_line($line, $type, $value, $skip_empty = false)
  */
 function format_table_line($line, $type, $value, $skip_empty = false)
 {
-    if (trim($value) == "" && $skip_empty) {
+    if ("" == trim($value) && $skip_empty) {
         return "";
-    } elseif (trim($value) == "") {
+    } elseif ("" == trim($value)) {
         $value = '&nbsp;';
     }
 

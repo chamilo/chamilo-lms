@@ -4,8 +4,6 @@
 
 /**
  * This tool allows platform admins to add users by uploading a CSV or XML file.
- *
- * @package chamilo.admin
  */
 
 /**
@@ -26,7 +24,7 @@ function validate_data($users)
     // 1. Check if mandatory fields are set.
     $mandatory_fields = ['LastName', 'FirstName'];
 
-    if (api_get_setting('registration', 'email') == 'true') {
+    if ('true' == api_get_setting('registration', 'email')) {
         $mandatory_fields[] = 'Email';
     }
     $classExistList = [];
@@ -153,7 +151,7 @@ function updateUsers($users)
             $userName = $user['UserName'];
             $userInfo = api_get_user_info_from_username($userName);
             $user_id = $userInfo['user_id'];
-            if ($user_id == 0) {
+            if (0 == $user_id) {
                 return false;
             }
             $firstName = isset($user['FirstName']) ? $user['FirstName'] : $userInfo['firstname'];
@@ -165,7 +163,7 @@ function updateUsers($users)
                 $changePassMethod = 2;
             }
             $authSource = isset($user['AuthSource']) ? $user['AuthSource'] : '';
-            if ($changePassMethod === 2 && !empty($authSource) && $authSource != $userInfo['auth_source']) {
+            if (2 === $changePassMethod && !empty($authSource) && $authSource != $userInfo['auth_source']) {
                 $changePassMethod = 3;
             }
             $email = isset($user['Email']) ? $user['Email'] : $userInfo['email'];
@@ -272,7 +270,7 @@ function parse_xml_data($file)
     foreach ($crawler as $domElement) {
         $row = [];
         foreach ($domElement->childNodes as $node) {
-            if ($node->nodeName != '#text') {
+            if ('#text' != $node->nodeName) {
                 $row[$node->nodeName] = $node->nodeValue;
             }
         }
@@ -301,7 +299,7 @@ $extra_fields = UserManager::get_extra_fields(0, 0, 5, 'ASC', true);
 $user_id_error = [];
 $error_message = '';
 
-if (isset($_POST['formSent']) && $_POST['formSent'] && $_FILES['import_file']['size'] !== 0) {
+if (isset($_POST['formSent']) && $_POST['formSent'] && 0 !== $_FILES['import_file']['size']) {
     $file_type = 'csv';
     Security::clear_token();
     $tok = Security::get_token();
@@ -312,11 +310,11 @@ if (isset($_POST['formSent']) && $_POST['formSent'] && $_FILES['import_file']['s
     $ext_import_file = $uploadInfo['extension'];
 
     if (in_array($ext_import_file, $allowed_file_mimetype)) {
-        if (strcmp($file_type, 'csv') === 0 && $ext_import_file == $allowed_file_mimetype[0]) {
+        if (0 === strcmp($file_type, 'csv') && $ext_import_file == $allowed_file_mimetype[0]) {
             $users = parse_csv_data($_FILES['import_file']['tmp_name']);
             $errors = validate_data($users);
             $error_kind_file = false;
-        } elseif (strcmp($file_type, 'xml') === 0 && $ext_import_file == $allowed_file_mimetype[1]) {
+        } elseif (0 === strcmp($file_type, 'xml') && $ext_import_file == $allowed_file_mimetype[1]) {
             $users = parse_xml_data($_FILES['import_file']['tmp_name']);
             $errors = validate_data($users);
             $error_kind_file = false;
@@ -345,7 +343,7 @@ if (isset($_POST['formSent']) && $_POST['formSent'] && $_FILES['import_file']['s
     }
 
     $inserted_in_course = [];
-    if (strcmp($file_type, 'csv') === 0) {
+    if (0 === strcmp($file_type, 'csv')) {
         updateUsers($users_to_insert);
     }
 
@@ -356,7 +354,7 @@ if (isset($_POST['formSent']) && $_POST['formSent'] && $_FILES['import_file']['s
     }
 
     $warning_message = '';
-    if (count($errors) != 0) {
+    if (0 != count($errors)) {
         $warning_message = '<ul>';
         foreach ($errors as $index => $error_user) {
             $warning_message .= '<li><b>'.$error_user['error'].'</b>: ';

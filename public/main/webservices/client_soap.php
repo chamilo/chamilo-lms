@@ -256,7 +256,7 @@ if (!empty($user_id) && is_numeric($user_id)) {
         echo 'Course TEST does not exists please create one course with code "TEST"';
     }
 
-    if ($result == 1) {
+    if (1 == $result) {
         echo "User $user_id was added to course TEST";
     } else {
         echo $result;

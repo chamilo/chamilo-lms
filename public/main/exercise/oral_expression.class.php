@@ -72,10 +72,10 @@ class OralExpression extends Question
     /**
      * initialize the attributes to generate the file path.
      *
-     * @param integer $sessionId
-     * @param integer $userId
-     * @param integer $exerciseId
-     * @param integer $exeId
+     * @param int $sessionId
+     * @param int $userId
+     * @param int $exerciseId
+     * @param int $exeId
      */
     public function initFile($sessionId, $userId, $exerciseId, $exeId)
     {
@@ -204,7 +204,7 @@ class OralExpression extends Question
     /**
      * Tricky stuff to deal with the feedback = 0 in exercises (all question per page).
      *
-     * @param integer $exe_id
+     * @param int $exe_id
      */
     public function replaceWithRealExe($exe_id)
     {

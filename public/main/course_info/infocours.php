@@ -40,7 +40,7 @@ $router = Container::getRouter();
 $translator = Container::getTranslator();
 
 $show_delete_watermark_text_message = false;
-if (api_get_setting('pdf_export_watermark_by_course') == 'true') {
+if ('true' == api_get_setting('pdf_export_watermark_by_course')) {
     if (isset($_GET['delete_watermark'])) {
         PDF::delete_watermark($course_code);
         $show_delete_watermark_text_message = true;
@@ -165,11 +165,11 @@ $form->addRule(
 );
 $form->addElement('checkbox', 'delete_picture', null, get_lang('Delete picture'));
 
-if (api_get_setting('pdf_export_watermark_by_course') == 'true') {
+if ('true' == api_get_setting('pdf_export_watermark_by_course')) {
     $url = PDF::get_watermark($course_code);
     $form->addText('pdf_export_watermark_text', get_lang('PDF watermark text'), false, ['size' => '60']);
     $form->addElement('file', 'pdf_export_watermark_path', get_lang('Upload a watermark image'));
-    if ($url != false) {
+    if (false != $url) {
         $delete_url = '<a href="?delete_watermark">'.Display::return_icon('delete.png', get_lang('Remove picture')).'</a>';
         $form->addElement(
             'html',
@@ -184,7 +184,7 @@ if (api_get_setting('pdf_export_watermark_by_course') == 'true') {
     );
 }
 
-if (api_get_setting('allow_course_theme') == 'true') {
+if ('true' == api_get_setting('allow_course_theme')) {
     $group = [];
     $group[] = $form->createElement(
         'SelectTheme',
@@ -311,7 +311,7 @@ $form->addPanelOption(
 
 // Documents
 $globalGroup = [];
-if (api_get_setting('documents_default_visibility_defined_in_course') == 'true') {
+if ('true' == api_get_setting('documents_default_visibility_defined_in_course')) {
     $group = [
         $form->createElement('radio', 'documents_default_visibility', null, get_lang('Visible'), 'visible'),
         $form->createElement('radio', 'documents_default_visibility', null, get_lang('invisible'), 'invisible'),
@@ -610,7 +610,7 @@ $group[] = $form->createElement('radio', 'enable_lp_auto_launch', null, get_lang
 
 $globalGroup[get_lang('Enable learning path auto-launch')] = $group;
 
-if (api_get_setting('allow_course_theme') == 'true') {
+if ('true' == api_get_setting('allow_course_theme')) {
     // Allow theme into Learning path
     $group = [];
     $group[] = $form->createElement(
@@ -632,7 +632,7 @@ if (api_get_setting('allow_course_theme') == 'true') {
 }
 
 $allowLPReturnLink = api_get_setting('allow_lp_return_link');
-if ($allowLPReturnLink === 'true') {
+if ('true' === $allowLPReturnLink) {
     $group = [
         $form->createElement(
             'radio',
@@ -662,8 +662,8 @@ if ($allowLPReturnLink === 'true') {
 $exerciseInvisible = api_get_setting('exercise_invisible_in_session');
 $configureExerciseVisibility = api_get_setting('configure_exercise_visibility_in_course');
 
-if ($exerciseInvisible === 'true' &&
-    $configureExerciseVisibility === 'true'
+if ('true' === $exerciseInvisible &&
+    'true' === $configureExerciseVisibility
 ) {
     $group = [
         $form->createElement(
@@ -795,7 +795,7 @@ $form->addPanelOption(
     'accordionSettings'
 );
 
-if (api_get_setting('allow_public_certificates') === 'true') {
+if ('true' === api_get_setting('allow_public_certificates')) {
     $group = [];
     $group[] = $form->createElement(
         'radio',
@@ -926,7 +926,7 @@ $courseSettings = CourseManager::getCourseSettingVariables($appPlugin);
 
 foreach ($courseSettings as $setting) {
     $result = api_get_course_setting($setting);
-    if ($result != '-1') {
+    if ('-1' != $result) {
         $values[$setting] = $result;
     }
 }
@@ -969,7 +969,7 @@ if ($form->validate() && $isEditable) {
         $courseInfo = api_get_course_info_by_id($courseId);
 
         // Check if
-        if ($courseInfo['visibility'] == COURSE_VISIBILITY_HIDDEN &&
+        if (COURSE_VISIBILITY_HIDDEN == $courseInfo['visibility'] &&
             $visibility != $courseInfo['visibility']
         ) {
             $num = CourseManager::countActiveCourses($urlId);

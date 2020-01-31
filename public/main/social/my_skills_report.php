@@ -5,8 +5,6 @@
  * Show the skills report.
  *
  * @author Angel Fernando Quiroz Campos <angel.quiroz@beeznest.com>
- *
- * @package chamilo.social.skill
  */
 use Chamilo\CoreBundle\Framework\Container;
 
@@ -46,8 +44,8 @@ $objSkill = new Skill();
 $tpl = new Template(get_lang('Skills'));
 $tplPath = null;
 
-$tpl->assign('allow_skill_tool', api_get_setting('allow_skills_tool') === 'true');
-$tpl->assign('allow_drh_skills_management', api_get_setting('allow_hr_skills_management') === 'true');
+$tpl->assign('allow_skill_tool', 'true' === api_get_setting('allow_skills_tool'));
+$tpl->assign('allow_drh_skills_management', 'true' === api_get_setting('allow_hr_skills_management'));
 
 if ($isStudent) {
     $result = $objSkill->getUserSkillsTable($userId);

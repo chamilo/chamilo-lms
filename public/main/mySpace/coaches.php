@@ -135,15 +135,15 @@ if (Database::num_rows($result_coachs) > 0) {
             $nb_seconds += ($timestamp_logout_date - $timestamp_login_date);
         }
 
-        if ($nb_seconds == 0) {
+        if (0 == $nb_seconds) {
             $s_connection_time = '';
         } else {
             $s_connection_time = api_time_to_hms($nb_seconds);
         }
 
-        if ($i % 2 == 0) {
+        if (0 == $i % 2) {
             $css_class = "row_odd";
-            if ($i % 20 == 0 && $i != 0) {
+            if (0 == $i % 20 && 0 != $i) {
                 if (api_is_western_name_order()) {
                     echo '<tr>
 					    <th>'.get_lang('First name').'</th>

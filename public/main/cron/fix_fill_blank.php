@@ -58,7 +58,7 @@ while ($row = Database::fetch_array($res2)) {
              WHERE id = $id AND c_id = $courseId AND id_auto  = $idAuto ";
 
     if ($answerOriginal != $answerFixedNotEscape) {
-        if (!empty($execute) && $execute == 1) {
+        if (!empty($execute) && 1 == $execute) {
             Database::query($sql4);
             echo '<pre>';
             var_dump($sql4);

@@ -6,8 +6,6 @@ use ChamiloSession as Session;
 /**
  * This file allows creating new svg and png documents with an online editor.
  *
- * @package chamilo.document
- *
  * @todo used the document_id instead of the curdirpath
  *
  * @author Juan Carlos Raña Trabado
@@ -63,15 +61,15 @@ if (strstr($dir, '..')) {
     $dir = '/';
 }
 
-if ($dir[0] == '.') {
+if ('.' == $dir[0]) {
     $dir = substr($dir, 1);
 }
 
-if ($dir[0] != '/') {
+if ('/' != $dir[0]) {
     $dir = '/'.$dir;
 }
 
-if ($dir[strlen($dir) - 1] != '/') {
+if ('/' != $dir[strlen($dir) - 1]) {
     $dir .= '/';
 }
 
@@ -148,7 +146,7 @@ $target = $target_path;
 $locktarget = "true";
 $locktitle = "false";
 
-if ($_SERVER['HTTP_HOST'] == "localhost") {
+if ("localhost" == $_SERVER['HTTP_HOST']) {
     $path_and_file = api_get_path(SYS_PATH).'/crossdomain.xml';
     if (!file_exists($path_and_file)) {
         $crossdomain = '<?xml version="1.0"?>

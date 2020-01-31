@@ -7,7 +7,7 @@ require_once __DIR__.'/../inc/global.inc.php';
 
 api_block_anonymous_users();
 
-$exportCSV = isset($_GET['export']) && $_GET['export'] === 'csv' ? true : false;
+$exportCSV = isset($_GET['export']) && 'csv' === $_GET['export'] ? true : false;
 $display = isset($_GET['display']) ? Security::remove_XSS($_GET['display']) : null;
 
 $htmlHeadXtra[] = api_get_jqgrid_js();
@@ -23,13 +23,13 @@ if (!$allowToTrack) {
 }
 
 if ($exportCSV) {
-    if ($display === 'user') {
+    if ('user' === $display) {
         MySpace::export_tracking_user_overview();
         exit;
-    } elseif ($display === 'session') {
+    } elseif ('session' === $display) {
         MySpace::export_tracking_session_overview();
         exit;
-    } elseif ($display === 'course') {
+    } elseif ('course' === $display) {
         MySpace::export_tracking_course_overview();
         exit;
     }

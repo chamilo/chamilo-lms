@@ -2,8 +2,6 @@
 /* For licensing terms, see /license.txt */
 /**
  * @author jmontoya
- *
- * @package chamilo.document
  */
 require_once __DIR__.'/../inc/global.inc.php';
 
@@ -33,7 +31,7 @@ $document_data = DocumentManager::get_document_data_by_id(
     $session_id
 );
 
-if ($session_id != 0 && !$document_data) {
+if (0 != $session_id && !$document_data) {
     $document_data = DocumentManager::get_document_data_by_id(
         $document_id,
         $course_code,
@@ -78,7 +76,7 @@ if (is_dir($file_url_sys)) {
 //fix the screen when you try to access a protected course through the url
 $is_allowed_in_course = api_is_allowed_in_course();
 
-if ($is_allowed_in_course == false) {
+if (false == $is_allowed_in_course) {
     api_not_allowed(true);
 }
 
@@ -107,7 +105,7 @@ $browser_display_title = 'Documents - '.Security::remove_XSS($_GET['cidReq']).' 
 $file_url_web = api_get_path(WEB_COURSE_PATH).$course_info['path'].'/document'.$header_file.'?'.api_get_cidreq();
 $pathinfo = pathinfo($header_file);
 
-if ($pathinfo['extension'] == 'swf') {
+if ('swf' == $pathinfo['extension']) {
     $width = '83%';
     $height = '83%';
 } else {

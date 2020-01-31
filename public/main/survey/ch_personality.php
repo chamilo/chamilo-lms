@@ -24,13 +24,13 @@ class ch_personality extends survey_question
         $this->html .= '		<td align="right" valign="top">&nbsp;</td>';
         $this->html .= '		<td>';
         $this->html .= '		  <input name="horizontalvertical" type="radio" value="horizontal" ';
-        if (empty($form_content['horizontalvertical']) || $form_content['horizontalvertical'] == 'horizontal') {
+        if (empty($form_content['horizontalvertical']) || 'horizontal' == $form_content['horizontalvertical']) {
             $this->html .= 'checked="checked"';
         }
         $this->html .= '/>'.get_lang('Horizontal').'</label><br />';
         $this->html .= '		  <input name="horizontalvertical" type="radio" value="vertical" ';
 
-        if (isset($form_content['horizontalvertical']) && $form_content['horizontalvertical'] == 'vertical') {
+        if (isset($form_content['horizontalvertical']) && 'vertical' == $form_content['horizontalvertical']) {
             $this->html .= 'checked="checked"';
         }
 

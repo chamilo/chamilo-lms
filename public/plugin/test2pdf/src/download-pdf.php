@@ -119,7 +119,7 @@ if ('answer' == $_GET['type'] || 'all' == $_GET['type']) {
         if (0 == $i % 4) {
             $pdf->Ln();
         }
-        ++$i;
+        $i++;
     }
 }
 

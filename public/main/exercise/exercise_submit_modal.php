@@ -357,7 +357,7 @@ if (!empty($links)) {
     echo '<div style="padding-left: 450px"><h5>'.$links.'</h5></div>';
     echo '</div>';
 } else {
-    ++$questionNum;
+    $questionNum++;
     echo '<script>
             window.location.href = "exercise_submit.php?exerciseId='.$exerciseId.'&num='.$questionNum.'&'.api_get_cidreq().'";
         </script>';

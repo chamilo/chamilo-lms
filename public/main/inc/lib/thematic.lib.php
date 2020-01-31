@@ -8,8 +8,6 @@
  *
  * @author Christian Fasanando <christian1827@gmail.com>
  * @author Julio Montoya <gugli100@gmail.com> SQL fixes
- *
- * @package chamilo.course_progress
  */
 class Thematic
 {
@@ -211,7 +209,7 @@ class Thematic
         $tbl_thematic = Database::get_course_table(TABLE_THEMATIC);
 
         // sort direction
-        if ($direction == 'up') {
+        if ('up' == $direction) {
             $sortorder = 'DESC';
         } else {
             $sortorder = 'ASC';
@@ -630,7 +628,7 @@ class Thematic
             foreach ($thematic_advance_data as $key => $thematic_advance) {
                 $session_star = '';
                 if (api_is_allowed_to_edit(null, true)) {
-                    if ($thematic_advance['session_id'] != 0) {
+                    if (0 != $thematic_advance['session_id']) {
                         $session_star = api_get_session_image(api_get_session_id(), $uinfo['status']);
                     }
                 }
@@ -675,14 +673,14 @@ class Thematic
             if (!empty($default_thematic_plan_title)) {
                 foreach ($default_thematic_plan_title as $id => $title) {
                     //avoid others
-                    if ($title == 'Others' && empty($data[$thematic_id][$id]['description'])) {
+                    if ('Others' == $title && empty($data[$thematic_id][$id]['description'])) {
                         continue;
                     }
                     if (!empty($data[$thematic_id][$id]['title']) &&
                         !empty($data[$thematic_id][$id]['description'])
                     ) {
                         if (api_is_allowed_to_edit(null, true)) {
-                            if ($data[$thematic_id][$id]['session_id'] != 0) {
+                            if (0 != $data[$thematic_id][$id]['session_id']) {
                                 $session_star = api_get_session_image(api_get_session_id(), $uinfo['status']);
                             }
                         }
@@ -1305,7 +1303,7 @@ class Thematic
             foreach ($thematic_data as $thematic) {
                 if (!empty($thematic_advance_data[$thematic['id']])) {
                     foreach ($thematic_advance_data[$thematic['id']] as $thematic_advance) {
-                        if ($thematic_advance['done_advance'] == 1) {
+                        if (1 == $thematic_advance['done_advance']) {
                             $a_thematic_advance_ids[] = $thematic_advance['id'];
                         }
                     }
@@ -1337,7 +1335,7 @@ class Thematic
             foreach ($thematic_data as $thematic) {
                 if (!empty($thematic_advance_data[$thematic['id']])) {
                     foreach ($thematic_advance_data[$thematic['id']] as $thematic_advance) {
-                        if ($thematic_advance['done_advance'] == 0) {
+                        if (0 == $thematic_advance['done_advance']) {
                             $a_thematic_advance_ids[] = $thematic_advance['id'];
                         }
                     }
@@ -1420,7 +1418,7 @@ class Thematic
             $advances = [];
             $count_done_advances = 0;
             foreach ($thematic_advance_data as $thematic_advance) {
-                if ($thematic_advance['done_advance'] == 1) {
+                if (1 == $thematic_advance['done_advance']) {
                     $count_done_advances++;
                 }
                 $advances[] = $thematic_advance['done_advance'];

@@ -206,7 +206,7 @@ foreach ($messages as $message) {
             ['class' => 'well']
         );
     }
-    ++$counter;
+    $counter++;
 }
 
 $subject = get_lang('Re:').': '.Security::remove_XSS($ticket['ticket']['subject']);

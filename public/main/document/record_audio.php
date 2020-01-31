@@ -5,8 +5,6 @@ use ChamiloSession as Session;
 
 /**
  * This file allows record audio files.
- *
- * @package chamilo.document
  */
 require_once __DIR__.'/../inc/global.inc.php';
 $this_section = SECTION_COURSES;
@@ -43,7 +41,7 @@ $dir = $document_data['path'];
 
 //make some vars
 $wamidir = $dir;
-if ($wamidir == "/") {
+if ("/" == $wamidir) {
     $wamidir = '';
 }
 $wamiurlplay = api_get_path(WEB_COURSE_PATH).api_get_course_path().'/document'.$wamidir."/";
@@ -56,15 +54,15 @@ if (strstr($dir, '..')) {
     $dir = '/';
 }
 
-if ($dir[0] == '.') {
+if ('.' == $dir[0]) {
     $dir = substr($dir, 1);
 }
 
-if ($dir[0] != '/') {
+if ('/' != $dir[0]) {
     $dir = '/'.$dir;
 }
 
-if ($dir[strlen($dir) - 1] != '/') {
+if ('/' != $dir[strlen($dir) - 1]) {
     $dir .= '/';
 }
 
@@ -117,7 +115,7 @@ if (isset($document_data['parents'])) {
     foreach ($document_data['parents'] as $document_sub_data) {
         //fixing double group folder in breadcrumb
         if (api_get_group_id()) {
-            if ($counter == 0) {
+            if (0 == $counter) {
                 $counter++;
                 continue;
             }

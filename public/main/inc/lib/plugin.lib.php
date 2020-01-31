@@ -64,7 +64,7 @@ class AppPlugin
         $plugins = [];
         $handle = @opendir($pluginPath);
         while (false !== ($file = readdir($handle))) {
-            if ($file != '.' && $file != '..' && is_dir(api_get_path(SYS_PLUGIN_PATH).$file)) {
+            if ('.' != $file && '..' != $file && is_dir(api_get_path(SYS_PLUGIN_PATH).$file)) {
                 $plugins[] = $file;
             }
         }
@@ -142,13 +142,13 @@ class AppPlugin
     {
         static $installedPlugins = null;
 
-        if ($fromDatabase === false) {
+        if (false === $fromDatabase) {
             if (is_array($installedPlugins)) {
                 return $installedPlugins;
             }
         }
 
-        if ($fromDatabase || $installedPlugins === null) {
+        if ($fromDatabase || null === $installedPlugins) {
             $installedPlugins = [];
             $plugins = api_get_settings_params(
                 [
@@ -280,7 +280,7 @@ class AppPlugin
      */
     public function loadRegion($pluginName, $region, $template, $forced = false)
     {
-        if ($region == 'course_tool_plugin') {
+        if ('course_tool_plugin' == $region) {
             return '';
         }
 
@@ -317,7 +317,7 @@ class AppPlugin
         }
 
         // 2. Loading the system language
-        if ($language_interface != 'english') {
+        if ('english' != $language_interface) {
             $path = $root.$plugin_name."/lang/$language_interface.php";
             if (is_readable($path)) {
                 include $path;
@@ -626,10 +626,10 @@ class AppPlugin
 
                 $groups = [];
                 foreach ($obj->course_settings as $setting) {
-                    if ($obj->validateCourseSetting($setting['name']) === false) {
+                    if (false === $obj->validateCourseSetting($setting['name'])) {
                         continue;
                     }
-                    if ($setting['type'] != 'checkbox') {
+                    if ('checkbox' != $setting['type']) {
                         $form->addElement($setting['type'], $setting['name'], $obj->get_lang($setting['name']));
                     } else {
                         $element = &$form->createElement(
@@ -638,7 +638,7 @@ class AppPlugin
                             '',
                             $obj->get_lang($setting['name'])
                         );
-                        if (isset($setting['init_value']) && $setting['init_value'] == 1) {
+                        if (isset($setting['init_value']) && 1 == $setting['init_value']) {
                             $element->setChecked(true);
                         }
                         $form->addElement($element);

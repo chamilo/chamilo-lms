@@ -3,8 +3,6 @@
 /**
  * Course expiration reminder.
  *
- * @package chamilo.cron
- *
  * @author Imanol Losada <imanol.losada@beeznest.com>
  */
 require_once __DIR__.'/../inc/global.inc.php';
@@ -12,11 +10,11 @@ require_once __DIR__.'/../inc/global.inc.php';
 /**
  * Initialization.
  */
-if (php_sapi_name() != 'cli') {
+if ('cli' != php_sapi_name()) {
     exit; //do not run from browser
 }
 
-$isActive = api_get_setting('cron_remind_course_expiration_activate') === 'true';
+$isActive = 'true' === api_get_setting('cron_remind_course_expiration_activate');
 
 if (!$isActive) {
     exit;

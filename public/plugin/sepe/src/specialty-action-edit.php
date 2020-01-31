@@ -220,7 +220,7 @@ if (api_is_platform_admin()) {
     $fin_rango_anio = $yearStart + 15 < $yearEnd ? $yearEnd + 1 : $yearStart + 15;
     while ($yearStart <= $fin_rango_anio) {
         $yearList[] = $yearStart;
-        ++$yearStart;
+        $yearStart++;
     }
     $tpl->assign('list_year', $yearList);
     if (isset($_SESSION['sepe_message_info'])) {

@@ -429,7 +429,7 @@ class FillBlanks extends Question
         if ($nb > 0) {
             $answer .= '::';
             // weighting
-            for ($i = 0; $i < $nb; ++$i) {
+            for ($i = 0; $i < $nb; $i++) {
                 // enter the weighting of word $i
                 $answer .= $form->getSubmitValue('weighting['.$i.']');
                 // not the last word, add ","
@@ -442,7 +442,7 @@ class FillBlanks extends Question
 
             // input width
             $answer .= ':';
-            for ($i = 0; $i < $nb; ++$i) {
+            for ($i = 0; $i < $nb; $i++) {
                 // enter the width of input for word $i
                 $answer .= $form->getSubmitValue('sizeofinput['.$i.']');
                 // not the last word, add ","
@@ -754,7 +754,7 @@ class FillBlanks extends Question
         if (count($listDetails) < 3) {
             $listWeightings = explode(',', $listDetails[0]);
             $listSizeOfInput = [];
-            for ($i = 0; $i < count($listWeightings); ++$i) {
+            for ($i = 0; $i < count($listWeightings); $i++) {
                 $listSizeOfInput[] = 200;
             }
             $blankSeparatorNumber = 0; // 0 is [...]
@@ -791,7 +791,7 @@ class FillBlanks extends Question
                 $listWords[0],
                 function (&$value, $key, $tabBlankChar) {
                     $trimChars = '';
-                    for ($i = 0; $i < count($tabBlankChar); ++$i) {
+                    for ($i = 0; $i < count($tabBlankChar); $i++) {
                         $trimChars .= $tabBlankChar[$i];
                     }
                     $value = trim($value, $trimChars);
@@ -813,17 +813,17 @@ class FillBlanks extends Question
         $listBrackets = [];
         $listWords = [];
         if ($isStudentAnswer) {
-            for ($i = 0; $i < count($listAnswerResults['words']); ++$i) {
+            for ($i = 0; $i < count($listAnswerResults['words']); $i++) {
                 $listBrackets[] = $listAnswerResults['words_with_bracket'][$i];
                 $listWords[] = $listAnswerResults['words'][$i];
                 if ($i + 1 < count($listAnswerResults['words'])) {
                     // should always be
-                    ++$i;
+                    $i++;
                 }
                 $listAnswerResults['student_answer'][] = $listAnswerResults['words'][$i];
                 if ($i + 1 < count($listAnswerResults['words'])) {
                     // should always be
-                    ++$i;
+                    $i++;
                 }
                 $listAnswerResults['student_score'][] = $listAnswerResults['words'][$i];
             }
@@ -963,7 +963,7 @@ class FillBlanks extends Question
             // for each bracket, if student has at least one answer ( choice > -2) then he pass the question
             foreach ($list as $choice) {
                 if ($choice > -2 && !$found) {
-                    ++$outRes;
+                    $outRes++;
                     $found = true;
                 }
             }
@@ -985,7 +985,7 @@ class FillBlanks extends Question
         $separatorEnd = $listWithStudentAnswer['blank_separator_end'];
         // lets rebuild the sentence with [correct answer][student answer][answer is correct]
         $result = '';
-        for ($i = 0; $i < count($listWithStudentAnswer['common_words']) - 1; ++$i) {
+        for ($i = 0; $i < count($listWithStudentAnswer['common_words']) - 1; $i++) {
             $answerValue = null;
             if (isset($listWithStudentAnswer['student_answer'][$i])) {
                 $answerValue = $listWithStudentAnswer['student_answer'][$i];
@@ -1142,7 +1142,7 @@ class FillBlanks extends Question
 
         // rebuild the answer with good HTML style
         // this is the student answer, right or wrong
-        for ($i = 0; $i < count($listStudentAnswerInfo['student_answer']); ++$i) {
+        for ($i = 0; $i < count($listStudentAnswerInfo['student_answer']); $i++) {
             if (1 == $listStudentAnswerInfo['student_score'][$i]) {
                 $listStudentAnswerInfo['student_answer'][$i] = self::getHtmlRightAnswer(
                     $listStudentAnswerInfo['student_answer'][$i],
@@ -1163,7 +1163,7 @@ class FillBlanks extends Question
         }
 
         // rebuild the sentence with student answer inserted
-        for ($i = 0; $i < count($listStudentAnswerInfo['common_words']); ++$i) {
+        for ($i = 0; $i < count($listStudentAnswerInfo['common_words']); $i++) {
             $result .= isset($listStudentAnswerInfo['common_words'][$i]) ? $listStudentAnswerInfo['common_words'][$i] : '';
             $studentLabel = isset($listStudentAnswerInfo['student_answer'][$i]) ? $listStudentAnswerInfo['student_answer'][$i] : '';
             $result .= $studentLabel;
@@ -1233,7 +1233,7 @@ class FillBlanks extends Question
                 $listPossibleAnswers = self::getFillTheBlankMenuAnswers($correct, false);
                 $correctAnswerHtml .= "<span class='correct-answer'><strong>".$listPossibleAnswers[0].'</strong>';
                 $correctAnswerHtml .= ' (';
-                for ($i = 1; $i < count($listPossibleAnswers); ++$i) {
+                for ($i = 1; $i < count($listPossibleAnswers); $i++) {
                     $correctAnswerHtml .= $listPossibleAnswers[$i];
                     if ($i != count($listPossibleAnswers) - 1) {
                         $correctAnswerHtml .= ' | ';

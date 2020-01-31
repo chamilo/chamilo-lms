@@ -40,7 +40,7 @@ $tbl_course = Database::get_main_table(TABLE_MAIN_COURSE);
 $tool_name = get_lang('Add courses to this session');
 
 $add_type = 'multiple';
-if (isset($_GET['add_type']) && $_GET['add_type'] != '') {
+if (isset($_GET['add_type']) && '' != $_GET['add_type']) {
     $add_type = Security::remove_XSS($_REQUEST['add_type']);
 }
 
@@ -107,7 +107,7 @@ if (isset($_POST['formSent']) && $_POST['formSent'] && isset($_POST['SessionCour
 // Display the header
 Display::display_header($tool_name);
 
-if ($add_type === 'multiple') {
+if ('multiple' === $add_type) {
     $link_add_type_unique = '<a href="'.api_get_self().'?id_session='.$sessionId.'&add='.$add.'&add_type=unique">'.
         Display::return_icon('single.gif').get_lang('Single registration').'</a>';
     $link_add_type_multiple = Display::return_icon('multiple.gif').get_lang('Multiple registration').' ';
@@ -123,7 +123,7 @@ echo '<div class="actions">';
 echo $link_add_type_unique.$link_add_type_multiple;
 echo '</div>';
 
-$ajax_search = $add_type === 'unique' ? true : false;
+$ajax_search = 'unique' === $add_type ? true : false;
 $nosessionCourses = $sessionCourses = [];
 if ($ajax_search) {
     $sql = "SELECT course.id, code, title, visual_code, session_id
@@ -137,7 +137,7 @@ if ($ajax_search) {
     if (api_is_multiple_url_enabled()) {
         $tbl_course_rel_access_url = Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_COURSE);
         $access_url_id = api_get_current_access_url_id();
-        if ($access_url_id != -1) {
+        if (-1 != $access_url_id) {
             $sql = "SELECT course.id, code, title, visual_code, session_id
                     FROM $tbl_course course
                     INNER JOIN $tbl_session_rel_course session_rel_course
@@ -166,7 +166,7 @@ if ($ajax_search) {
     if (api_is_multiple_url_enabled()) {
         $tbl_course_rel_access_url = Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_COURSE);
         $access_url_id = api_get_current_access_url_id();
-        if ($access_url_id != -1) {
+        if (-1 != $access_url_id) {
             $sql = "SELECT course.id, code, title, visual_code, session_id
                     FROM $tbl_course course
                     LEFT JOIN $tbl_session_rel_course session_rel_course
@@ -219,7 +219,7 @@ unset($Courses);
         <div class="col-md-4">
             <label><?php echo get_lang('Courses list'); ?> :</label>
             <?php
-            if (!($add_type == 'multiple')) {
+            if (!('multiple' == $add_type)) {
                 ?>
                 <input type="text" id="course_to_add" onkeyup="xajax_search_courses(this.value, 'single', <?php echo $sessionId; ?>)" class="form-control"/>
                 <div id="ajax_list_courses_single"></div>
@@ -246,7 +246,7 @@ unset($Courses);
             ?>
         </div>
         <div class="col-md-4">
-            <?php if ($add_type == 'multiple') {
+            <?php if ('multiple' == $add_type) {
                 ?>
                 <div class="code-course">
                     <?php echo get_lang('First letter (code)'); ?> :

@@ -89,7 +89,7 @@ function lp_upload_quiz_main()
     foreach ($tableList as $key => $label) {
         $table->setCellContents($row, 0, $label);
         $table->setCellContents($row, 1, $key);
-        ++$row;
+        $row++;
     }
     $table = $table->toHtml();
 
@@ -159,7 +159,7 @@ function lp_upload_quiz_action_handling()
     $incorrectScore = isset($_POST['incorrect_score']) ? $_POST['incorrect_score'] : null;
     $useCustomScore = isset($_POST['user_custom_score']) ? true : false;
 
-    for ($row = 1; $row <= $highestRow; ++$row) {
+    for ($row = 1; $row <= $highestRow; $row++) {
         $cellTitleInfo = $worksheet->getCellByColumnAndRow(0, $row);
         $cellDataInfo = $worksheet->getCellByColumnAndRow(1, $row);
         $cellScoreInfo = $worksheet->getCellByColumnAndRow(2, $row);
@@ -177,7 +177,7 @@ function lp_upload_quiz_action_handling()
                 $continue = true;
                 $answerIndex = 0;
                 while ($continue) {
-                    ++$answerRow;
+                    $answerRow++;
                     $answerInfoTitle = $worksheet->getCellByColumnAndRow(0, $answerRow);
                     $answerInfoData = $worksheet->getCellByColumnAndRow(1, $answerRow);
                     $answerInfoExtra = $worksheet->getCellByColumnAndRow(2, $answerRow);
@@ -188,7 +188,7 @@ function lp_upload_quiz_action_handling()
                     } else {
                         $continue = false;
                     }
-                    ++$answerIndex;
+                    $answerIndex++;
 
                     // To avoid loops
                     if ($answerIndex > 60) {
@@ -201,7 +201,7 @@ function lp_upload_quiz_action_handling()
                 $continue = true;
                 $questionTypeIndex = 0;
                 while ($continue) {
-                    ++$answerRow;
+                    $answerRow++;
                     $questionTypeTitle = $worksheet->getCellByColumnAndRow(0, $answerRow);
                     $questionTypeExtra = $worksheet->getCellByColumnAndRow(2, $answerRow);
                     $title = $questionTypeTitle->getValue();
@@ -216,11 +216,11 @@ function lp_upload_quiz_action_handling()
                     if ($questionTypeIndex > 60) {
                         $continue = false;
                     }
-                    ++$questionTypeIndex;
+                    $questionTypeIndex++;
                 }
 
                 // Detect answers
-                ++$numberQuestions;
+                $numberQuestions++;
 
                 break;
             case 'Score':
@@ -280,7 +280,7 @@ function lp_upload_quiz_action_handling()
 
         if ($quiz_id) {
             // Import questions.
-            for ($i = 0; $i < $numberQuestions; ++$i) {
+            for ($i = 0; $i < $numberQuestions; $i++) {
                 // Question name
                 $questionTitle = $question[$i];
                 $myAnswerList = isset($answerList[$i]) ? $answerList[$i] : [];
@@ -373,7 +373,7 @@ function lp_upload_quiz_action_handling()
                             $numberRightAnswers = 0;
                             foreach ($myAnswerList as $answer_data) {
                                 if ('x' == strtolower($answer_data['extra'])) {
-                                    ++$numberRightAnswers;
+                                    $numberRightAnswers++;
                                 }
                             }
 
@@ -435,7 +435,7 @@ function lp_upload_quiz_action_handling()
                                 );
 
                                 $total += (float) $score;
-                                ++$id;
+                                $id++;
                             }
 
                             $objAnswer->save();
@@ -514,13 +514,13 @@ function lp_upload_quiz_action_handling()
                         foreach ($myAnswerList as $data) {
                             $option = isset($data['extra']) ? $data['extra'] : '';
                             $objAnswer->createAnswer($option, 0, '', 0, $position);
-                            ++$position;
+                            $position++;
                         }
 
                         $counter = 1;
                         foreach ($myAnswerList as $data) {
                             $value = isset($data['data']) ? $data['data'] : '';
-                            ++$position;
+                            $position++;
                             $objAnswer->createAnswer(
                                 $value,
                                 $counter,
@@ -528,7 +528,7 @@ function lp_upload_quiz_action_handling()
                                 $globalScore,
                                 $position
                             );
-                            ++$counter;
+                            $counter++;
                         }
                         $objAnswer->save();
                         $questionObj = Question::read($question_id, $_course);
@@ -596,7 +596,7 @@ function detectQuestionType($answers_data)
 
     foreach ($answers_data as $answer_data) {
         if ('x' == strtolower($answer_data['extra'])) {
-            ++$correct;
+            $correct++;
         } else {
             if (is_numeric($answer_data['extra'])) {
                 $isNumeric = true;

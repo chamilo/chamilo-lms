@@ -141,7 +141,7 @@ function handle_forum_and_forumcategories($lp_id = null)
     // Delete a forum category
     if ('delete' === $action_forum_cat) {
         $list_threads = get_threads($get_id);
-        for ($i = 0; $i < count($list_threads); ++$i) {
+        for ($i = 0; $i < count($list_threads); $i++) {
             deleteForumCategoryThread('thread', $list_threads[$i]['thread_id']);
             $link_info = GradebookUtils::isResourceInCourseGradebook(
                 api_get_course_id(),
@@ -1321,7 +1321,7 @@ function return_up_down_icon($content, $id, $list)
 
     if (is_array($list)) {
         foreach ($list as $key => $listitem) {
-            ++$internal_counter;
+            $internal_counter++;
             if ($id == $key) {
                 $position = $internal_counter;
             }
@@ -2295,7 +2295,7 @@ function getPosts(
     }
 
     $posts = $qb->getQuery()->getResult();
-    ++$depth;
+    $depth++;
 
     $list = [];
     /** @var CForumPost $post */
@@ -2558,7 +2558,7 @@ function get_thread_users_not_qualify($thread_id)
 /**
  * This function retrieves all the information of a given forumcategory id.
  *
- * @param integer $cat_id that indicates the forum
+ * @param int $cat_id that indicates the forum
  *
  * @return array returns if there are category or bool returns if there aren't category
  *
@@ -2726,9 +2726,9 @@ function updateThread($values)
  * This function stores a new thread. This is done through an entry in the forum_thread table AND
  * in the forum_post table because. The threads are also stored in the item_property table. (forum posts are not (yet)).
  *
- * @param bool  $showMessage
- * @param int   $userId      Optional. The user ID
- * @param int   $sessionId
+ * @param bool $showMessage
+ * @param int  $userId      Optional. The user ID
+ * @param int  $sessionId
  *
  * @return CForumThread
  *
@@ -5082,7 +5082,7 @@ function prepare4display($input)
                 '<span style="background-color: '.$highlightcolors[$counter].'">$0</span>',
                 $input
             );
-            ++$counter;
+            $counter++;
         }
     }
 
@@ -5304,7 +5304,7 @@ function add_forum_attachment_file($file_comment, $last_id)
     } else {
         $fileCount = count($_FILES['user_upload']['name']);
         $fileKeys = array_keys($_FILES['user_upload']);
-        for ($i = 0; $i < $fileCount; ++$i) {
+        for ($i = 0; $i < $fileCount; $i++) {
             foreach ($fileKeys as $key) {
                 $filesData[$i][$key] = $_FILES['user_upload'][$key][$i];
             }
@@ -5400,7 +5400,7 @@ function edit_forum_attachment_file($file_comment, $post_id, $id_attach)
         $fileCount = count($_FILES['user_upload']['name']);
         $fileKeys = array_keys($_FILES['user_upload']);
 
-        for ($i = 0; $i < $fileCount; ++$i) {
+        for ($i = 0; $i < $fileCount; $i++) {
             foreach ($fileKeys as $key) {
                 $filesData[$i][$key] = $_FILES['user_upload'][$key][$i];
             }
@@ -5537,7 +5537,6 @@ function getAllAttachment($postId)
  * @param int $id_attach
  *
  * @return bool
- *
  */
 function delete_attachment($postId, $id_attach = 0)
 {
@@ -6178,7 +6177,7 @@ function get_all_post_from_user($user_id, $course_code)
                             }
                         }
                     }
-                    ++$i;
+                    $i++;
                 }
                 $forum_results .= '<div id="social-forum">';
                 $forum_results .= '<div class="clear"></div><br />';
@@ -6195,7 +6194,7 @@ function get_all_post_from_user($user_id, $course_code)
                 }
                 $forum_results .= '</div>';
             }
-            ++$j;
+            $j++;
         }
     }
 
@@ -6317,7 +6316,7 @@ function forumRecursiveSort($rows, &$threads, $seed = 0, $indent = 0)
     if ($seed > 0) {
         $threads[$rows[$seed]['post_id']] = $rows[$seed];
         $threads[$rows[$seed]['post_id']]['indent_cnt'] = $indent;
-        ++$indent;
+        $indent++;
     }
 
     if (isset($rows[$seed]['children'])) {
@@ -6749,8 +6748,8 @@ function getPostStatus(CForumForum $forum, $row, $addWrapper = true)
 
 /**
  * @param CForumForum $forum
- * @param int   $threadId
- * @param int   $status
+ * @param int         $threadId
+ * @param int         $status
  */
 function getCountPostsWithStatus($status, $forum, $threadId = null)
 {

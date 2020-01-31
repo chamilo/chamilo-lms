@@ -3,8 +3,6 @@
 
 /**
  * User move script (to move between courses and sessions).
- *
- * @package chamilo.admin
  */
 $cidReset = true;
 require_once __DIR__.'/../inc/global.inc.php';
@@ -19,18 +17,18 @@ function compare_data($result_message)
 {
     foreach ($result_message as $table => $data) {
         $title = $table;
-        if ($table == 'TRACK_E_EXERCISES') {
+        if ('TRACK_E_EXERCISES' == $table) {
             $title = get_lang('Tests');
-        } elseif ($table == 'TRACK_E_EXERCISES_IN_LP') {
+        } elseif ('TRACK_E_EXERCISES_IN_LP' == $table) {
             $title = get_lang('TestsInLp');
-        } elseif ($table == 'LP_VIEW') {
+        } elseif ('LP_VIEW' == $table) {
             $title = get_lang('Learning paths');
         }
         echo '<br / ><h3>'.get_lang($title).' </h3><hr />';
 
         if (is_array($data)) {
             foreach ($data as $id => $item) {
-                if ($table == 'TRACK_E_EXERCISES' || $table == 'TRACK_E_EXERCISES_IN_LP') {
+                if ('TRACK_E_EXERCISES' == $table || 'TRACK_E_EXERCISES_IN_LP' == $table) {
                     echo "<br /><h3>".get_lang('Attempt')." #$id</h3>";
                     echo '<h3>';
                     echo get_lang('Test').' #'.$item['exe_exo_id'];
@@ -102,7 +100,7 @@ if (isset($_REQUEST['load_ajax'])) {
             $result_message_compare = [];
 
             $update_database = true;
-            if (isset($_REQUEST['view_stat']) && $_REQUEST['view_stat'] == 1) {
+            if (isset($_REQUEST['view_stat']) && 1 == $_REQUEST['view_stat']) {
                 $update_database = false;
             }
 
@@ -610,7 +608,7 @@ if (isset($_REQUEST['load_ajax'])) {
                     echo '<tr>';
                     echo '<td width="50%" valign="top">';
 
-                    if ($origin_session_id == 0) {
+                    if (0 == $origin_session_id) {
                         echo '<h4>'.get_lang('Original course').'</h4>';
                     } else {
                         echo '<h4>'.get_lang('Original session').' #'.$origin_session_id.'</h4>';
@@ -618,7 +616,7 @@ if (isset($_REQUEST['load_ajax'])) {
                     compare_data($result_message);
                     echo '</td>';
                     echo '<td width="50%" valign="top">';
-                    if ($new_session_id == 0) {
+                    if (0 == $new_session_id) {
                         echo '<h4>'.get_lang('Destination course').'</h4>';
                     } else {
                         echo '<h4>'.get_lang('Destination session').' #'.$new_session_id.'</h4>';

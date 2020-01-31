@@ -894,7 +894,7 @@ $marginOptions = [];
 $i = 0;
 while ($i < 298) {
     $marginOptions[$i] = $i.' mm';
-    ++$i;
+    $i++;
 }
 $form->addElement(
     'select',

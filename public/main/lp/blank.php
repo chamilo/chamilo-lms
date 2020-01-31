@@ -6,8 +6,6 @@ use ChamiloSession as Session;
 /**
  * Script that displays a blank page (with later a message saying why).
  *
- * @package chamilo.learnpath
- *
  * @author Yannick Warnier <ywarnier@beeznest.org>
  */
 // Flag to allow for anonymous user - needs to be set before global.inc.php.
@@ -58,7 +56,7 @@ if (isset($_GET['error'])) {
         default:
             break;
     }
-} elseif (isset($_GET['msg']) && $_GET['msg'] == 'exerciseFinished') {
+} elseif (isset($_GET['msg']) && 'exerciseFinished' == $_GET['msg']) {
     $message = Display::return_message(get_lang('Test Finished'));
 }
 

@@ -9,8 +9,6 @@ use Chamilo\CourseBundle\Entity\CSurveyQuestionOption;
 /**
  * Class SurveyManager.
  *
- * @package chamilo.survey
- *
  * @author Patrick Cool <patrick.cool@UGent.be>, Ghent University:
  * cleanup, refactoring and rewriting large parts (if not all) of the code
  * @author Julio Montoya <gugli100@gmail.com>, Personality Test modification
@@ -152,7 +150,7 @@ class SurveyManager
         $survey_id = (int) $survey_id;
         $table_survey = Database::get_course_table(TABLE_SURVEY);
 
-        if ($shared != 0) {
+        if (0 != $shared) {
             $table_survey = Database::get_main_table(TABLE_MAIN_SHARED_SURVEY_QUESTION);
             $sql = "SELECT * FROM $table_survey
                     WHERE survey_id='".$survey_id."' ";
@@ -261,18 +259,18 @@ class SurveyManager
             $survey = new CSurvey();
 
             $extraParams = [];
-            if ($values['anonymous'] == 0) {
+            if (0 == $values['anonymous']) {
                 // Input_name_list
                 $values['show_form_profile'] = isset($values['show_form_profile']) ? $values['show_form_profile'] : 0;
                 $survey->setShowFormProfile($values['show_form_profile']);
 
-                if ($values['show_form_profile'] == 1) {
+                if (1 == $values['show_form_profile']) {
                     // Input_name_list
                     $fields = explode(',', $values['input_name_list']);
                     $field_values = '';
                     foreach ($fields as &$field) {
-                        if ($field != '') {
-                            if ($values[$field] == '') {
+                        if ('' != $field) {
+                            if ('' == $values[$field]) {
                                 $values[$field] = 0;
                             }
                             $field_values .= $field.':'.$values[$field].'@';
@@ -291,7 +289,7 @@ class SurveyManager
             $extraParams['one_question_per_page'] = isset($values['one_question_per_page']) ? $values['one_question_per_page'] : 0;
             $extraParams['shuffle'] = isset($values['shuffle']) ? $values['shuffle'] : 0;
 
-            if ($values['survey_type'] == 1) {
+            if (1 == $values['survey_type']) {
                 $survey
                     ->setSurveyType(1)
                     ->setShuffle($values['shuffle'])
@@ -309,7 +307,7 @@ class SurveyManager
                             ORDER BY survey_version DESC
                             LIMIT 1';
                     $rs = Database::query($sql);
-                    if (Database::num_rows($rs) === 0) {
+                    if (0 === Database::num_rows($rs)) {
                         $sql = 'SELECT survey_version FROM '.$table_survey.'
 						        WHERE
 						            c_id = '.$course_id.' AND
@@ -324,7 +322,7 @@ class SurveyManager
                     } else {
                         $row = Database::fetch_array($rs, 'ASSOC');
                         $pos = api_strpos($row['survey_version']);
-                        if ($pos === false) {
+                        if (false === $pos) {
                             $row['survey_version'] = $row['survey_version'] + 1;
                             $versionValue = $row['survey_version'];
                         } else {
@@ -332,7 +330,7 @@ class SurveyManager
                             $lastversion = array_pop($getlast);
                             $lastversion = $lastversion + 1;
                             $add = implode('.', $getlast);
-                            if ($add != '') {
+                            if ('' != $add) {
                                 $insertnewversion = $add.'.'.$lastversion;
                             } else {
                                 $insertnewversion = $lastversion;
@@ -389,7 +387,7 @@ class SurveyManager
                 );
             }
 
-            if ($values['survey_type'] == 1 && !empty($values['parent_id'])) {
+            if (1 == $values['survey_type'] && !empty($values['parent_id'])) {
                 self::copy_survey($values['parent_id'], $survey_id);
             }
 
@@ -423,7 +421,7 @@ class SurveyManager
             }
 
             if (!isset($values['anonymous'])
-                || (isset($values['anonymous']) && $values['anonymous'] == '')
+                || (isset($values['anonymous']) && '' == $values['anonymous'])
             ) {
                 $values['anonymous'] = 0;
             }
@@ -432,15 +430,15 @@ class SurveyManager
             $extraParams['one_question_per_page'] = isset($values['one_question_per_page']) ? $values['one_question_per_page'] : 0;
             $extraParams['shuffle'] = isset($values['shuffle']) ? $values['shuffle'] : 0;
 
-            if ($values['anonymous'] == 0) {
+            if (0 == $values['anonymous']) {
                 $extraParams['show_form_profile'] = isset($values['show_form_profile']) ? $values['show_form_profile'] : 0;
-                if ($extraParams['show_form_profile'] == 1) {
+                if (1 == $extraParams['show_form_profile']) {
                     $fields = explode(',', $values['input_name_list']);
                     $field_values = '';
                     foreach ($fields as &$field) {
-                        if ($field != '') {
+                        if ('' != $field) {
                             if (!isset($values[$field]) ||
-                                (isset($values[$field]) && $values[$field] == '')
+                                (isset($values[$field]) && '' == $values[$field])
                             ) {
                                 $values[$field] = 0;
                             }
@@ -582,7 +580,7 @@ class SurveyManager
 
         if (!$values['survey_id'] ||
             !is_numeric($values['survey_id']) ||
-            $values['survey_share']['survey_share'] == 'true'
+            'true' == $values['survey_share']['survey_share']
         ) {
             $sql = "INSERT INTO $table_survey (code, title, subtitle, author, lang, template, intro, surveythanks, creation_date, course_code) VALUES (
                     '".Database::escape_string($values['survey_code'])."',
@@ -845,7 +843,7 @@ class SurveyManager
 
         $datas = self::get_survey($surveyId);
         $session_where = '';
-        if (api_get_session_id() != 0) {
+        if (0 != api_get_session_id()) {
             $session_where = ' AND session_id = "'.api_get_session_id().'" ';
         }
 
@@ -1028,7 +1026,7 @@ class SurveyManager
             ? $row['is_required']
             : false;
 
-        if ($row['survey_group_pri'] != 0) {
+        if (0 != $row['survey_group_pri']) {
             $return['assigned'] = $row['survey_group_pri'];
             $return['choose'] = 1;
         } else {
@@ -1124,14 +1122,14 @@ class SurveyManager
             // Checks length of the question
             $empty_answer = false;
 
-            if ($survey_data['survey_type'] == 1) {
+            if (1 == $survey_data['survey_type']) {
                 if (empty($form_content['choose'])) {
                     $return_message = 'PleaseChooseACondition';
 
                     return $return_message;
                 }
 
-                if (($form_content['choose'] == 2) &&
+                if ((2 == $form_content['choose']) &&
                     ($form_content['assigned1'] == $form_content['assigned2'])
                 ) {
                     $return_message = 'ChooseDifferentCategories';
@@ -1140,7 +1138,7 @@ class SurveyManager
                 }
             }
 
-            if ($form_content['type'] != 'percentage') {
+            if ('percentage' != $form_content['type']) {
                 if (isset($form_content['answers'])) {
                     for ($i = 0; $i < count($form_content['answers']); $i++) {
                         if (strlen($form_content['answers'][$i]) < 1) {
@@ -1151,7 +1149,7 @@ class SurveyManager
                 }
             }
 
-            if ($form_content['type'] == 'score') {
+            if ('score' == $form_content['type']) {
                 if (strlen($form_content['maximum_score']) < 1) {
                     $empty_answer = true;
                 }
@@ -1165,13 +1163,13 @@ class SurveyManager
                 $survey_data = self::get_survey($form_content['survey_id']);
 
                 // Storing the question in the shared database
-                if (is_numeric($survey_data['survey_share']) && $survey_data['survey_share'] != 0) {
+                if (is_numeric($survey_data['survey_share']) && 0 != $survey_data['survey_share']) {
                     $shared_question_id = self::save_shared_question($form_content, $survey_data);
                     $form_content['shared_question_id'] = $shared_question_id;
                 }
 
                 // Storing a new question
-                if ($form_content['question_id'] == '' || !is_numeric($form_content['question_id'])) {
+                if ('' == $form_content['question_id'] || !is_numeric($form_content['question_id'])) {
                     // Finding the max sort order of the questions in the given survey
                     $sql = "SELECT max(sort) AS max_sort
 					        FROM $tbl_survey_question
@@ -1185,9 +1183,9 @@ class SurveyManager
                     // Some variables defined for survey-test type
                     $extraParams = [];
                     if (isset($_POST['choose'])) {
-                        if ($_POST['choose'] == 1) {
+                        if (1 == $_POST['choose']) {
                             $question->setSurveyGroupPri($_POST['assigned']);
-                        } elseif ($_POST['choose'] == 2) {
+                        } elseif (2 == $_POST['choose']) {
                             $question->setSurveyGroupSec1($_POST['assigned1']);
                             $question->setSurveyGroupSec2($_POST['assigned2']);
                         }
@@ -1226,11 +1224,11 @@ class SurveyManager
                     // Updating an existing question
                     $extraParams = [];
                     if (isset($_POST['choose'])) {
-                        if ($_POST['choose'] == 1) {
+                        if (1 == $_POST['choose']) {
                             $extraParams['survey_group_pri'] = $_POST['assigned'];
                             $extraParams['survey_group_sec1'] = 0;
                             $extraParams['survey_group_sec2'] = 0;
-                        } elseif ($_POST['choose'] == 2) {
+                        } elseif (2 == $_POST['choose']) {
                             $extraParams['survey_group_pri'] = 0;
                             $extraParams['survey_group_sec1'] = $_POST['assigned1'];
                             $extraParams['survey_group_sec2'] = $_POST['assigned2'];
@@ -1316,7 +1314,7 @@ class SurveyManager
         $tbl_survey_question = Database::get_main_table(TABLE_MAIN_SHARED_SURVEY_QUESTION);
 
         // Storing a new question
-        if ($form_content['shared_question_id'] == '' ||
+        if ('' == $form_content['shared_question_id'] ||
             !is_numeric($form_content['shared_question_id'])
         ) {
             // Finding the max sort order of the questions in the given survey
@@ -1375,10 +1373,10 @@ class SurveyManager
         $table_survey_question = Database::get_course_table(TABLE_SURVEY_QUESTION);
         $course_id = api_get_course_int_id();
 
-        if ($direction == 'moveup') {
+        if ('moveup' == $direction) {
             $sort = 'DESC';
         }
-        if ($direction == 'movedown') {
+        if ('movedown' == $direction) {
             $sort = 'ASC';
         }
 
@@ -1537,13 +1535,13 @@ class SurveyManager
     {
         $course_id = api_get_course_int_id();
         // A percentage question type has options 1 -> 100
-        if ($form_content['type'] === 'percentage') {
+        if ('percentage' === $form_content['type']) {
             for ($i = 1; $i < 101; $i++) {
                 $form_content['answers'][] = $i;
             }
         }
 
-        if (is_numeric($survey_data['survey_share']) && $survey_data['survey_share'] != 0) {
+        if (is_numeric($survey_data['survey_share']) && 0 != $survey_data['survey_share']) {
             self::save_shared_question_options($form_content, $survey_data);
         }
 
@@ -1908,7 +1906,7 @@ class SurveyManager
      */
     public static function protectByMandatory()
     {
-        if (strpos($_SERVER['SCRIPT_NAME'], 'fillsurvey.php') !== false) {
+        if (false !== strpos($_SERVER['SCRIPT_NAME'], 'fillsurvey.php')) {
             return;
         }
 
@@ -2161,7 +2159,7 @@ class SurveyManager
         $questions = self::get_questions($surveyId);
         foreach ($questions as $question) {
             // Questions marked with "geneated" were created using the "multiplicate" feature.
-            if ($question['survey_question_comment'] === 'generated') {
+            if ('generated' === $question['survey_question_comment']) {
                 self::delete_survey_question($surveyId, $question['question_id']);
             }
         }
@@ -2203,7 +2201,7 @@ class SurveyManager
                 }
 
                 $text = $question['question'];
-                if (strpos($text, $classTag) !== false) {
+                if (false !== strpos($text, $classTag)) {
                     $replacedText = str_replace($classTag, $className, $text);
                     $values = [
                         'c_id' => $courseId,
@@ -2223,7 +2221,7 @@ class SurveyManager
                 foreach ($users as $userId) {
                     $userInfo = api_get_user_info($userId);
 
-                    if (strpos($text, $studentTag) !== false) {
+                    if (false !== strpos($text, $studentTag)) {
                         $replacedText = str_replace($studentTag, $userInfo['complete_name'], $text);
                         $values = [
                             'c_id' => $courseId,
@@ -2303,7 +2301,7 @@ class SurveyManager
         $result = Database::query($sql);
         $countOfQuestions = Database::result($result, 0, 0);
 
-        if ($survey['one_question_per_page'] == 1) {
+        if (1 == $survey['one_question_per_page']) {
             if (!empty($countOfQuestions)) {
                 return $countOfQuestions;
             }
@@ -2494,7 +2492,7 @@ class SurveyManager
                     );
                 }
 
-                if (!empty($answered) && $surveyData['anonymous'] == 0) {
+                if (!empty($answered) && 0 == $surveyData['anonymous']) {
                     $answers = SurveyUtil::displayCompleteReport(
                         $surveyData,
                         $userId,

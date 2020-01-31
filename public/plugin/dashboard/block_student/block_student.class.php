@@ -125,7 +125,7 @@ class BlockStudent extends Block
                                             <td align="center" colspan="2"><i>'.get_lang('You left some fields empty.<br>Use the <b>Back</b> button on your browser and try again.<br>If you ignore your training code, see the Training Program').'</i></td>
                                         </tr>';
                 }
-                ++$i;
+                $i++;
             }
             $students_table .= '</table>';
         } else {
@@ -211,7 +211,7 @@ class BlockStudent extends Block
                                         <td>'.$evaluations_avg.'</td>
                                     </tr>';
 
-                ++$i;
+                $i++;
             }
             $students_table .= '</table>';
         } else {

@@ -324,7 +324,7 @@ class ChamiloApi
         // If we want more colors, loop through existing colors
         $count = count($palette);
         if (isset($fillUpTo) && $fillUpTo > $count) {
-            for ($i = $count; $i < $fillUpTo; ++$i) {
+            for ($i = $count; $i < $fillUpTo; $i++) {
                 $palette[$i] = $palette[$i % $count];
             }
         }

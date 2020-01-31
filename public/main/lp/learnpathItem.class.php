@@ -9,8 +9,6 @@ use Chamilo\CoreBundle\Framework\Container;
  * a score, a use time and additional information that enables tracking a user's
  * progress in a learning path.
  *
- * @package chamilo.learnpath
- *
  * @author  Yannick Warnier <ywarnier@beeznest.org>
  */
 class learnpathItem
@@ -169,7 +167,7 @@ class learnpathItem
             }
 
             // Get search_did.
-            if (api_get_setting('search_enabled') == 'true') {
+            if ('true' == api_get_setting('search_enabled')) {
                 $tbl_se_ref = Database::get_main_table(TABLE_MAIN_SEARCH_ENGINE_REF);
                 $sql = 'SELECT *
                         FROM %s
@@ -268,8 +266,8 @@ class learnpathItem
         }
         $this->current_stop_time = time();
         $type = $this->get_type();
-        if ($type != 'sco') {
-            if ($type == TOOL_QUIZ || $type == TOOL_HOTPOTATOES) {
+        if ('sco' != $type) {
+            if (TOOL_QUIZ == $type || TOOL_HOTPOTATOES == $type) {
                 $this->get_status(
                     true,
                     true
@@ -314,7 +312,7 @@ class learnpathItem
                 WHERE iid = ".$this->db_id;
         Database::query($sql);
 
-        if (api_get_setting('search_enabled') == 'true') {
+        if ('true' == api_get_setting('search_enabled')) {
             if (!is_null($this->search_did)) {
                 $di = new ChamiloIndexer();
                 $di->remove_document($this->search_did);
@@ -398,7 +396,7 @@ class learnpathItem
         // Now check the value of prevent_reinit (if it's 0, return credit as
         // the default was).
         // If prevent_reinit == 1 (or more).
-        if ($this->get_prevent_reinit() != 0) {
+        if (0 != $this->get_prevent_reinit()) {
             // If status is not attempted or incomplete, credit anyway.
             // Otherwise:
             // Check the status in the database rather than in the object, as
@@ -473,7 +471,7 @@ class learnpathItem
         $type = $this->get_type();
 
         if (empty($path)) {
-            if ($type == 'dir') {
+            if ('dir' == $type) {
                 return '';
             } else {
                 return '-1';
@@ -711,7 +709,7 @@ class learnpathItem
     public function get_lesson_mode()
     {
         $mode = 'normal';
-        if ($this->get_prevent_reinit() != 0) {
+        if (0 != $this->get_prevent_reinit()) {
             // If prevent_reinit == 0
             $my_status = $this->get_status();
             if ($my_status != $this->possible_status[0] && $my_status != $this->possible_status[1]) {
@@ -755,14 +753,14 @@ class learnpathItem
      */
     public function get_max()
     {
-        if ($this->type == 'sco') {
+        if ('sco' == $this->type) {
             if (isset($this->view_max_score) &&
                 !empty($this->view_max_score) &&
                 $this->view_max_score > 0
             ) {
                 return $this->view_max_score;
             } elseif (isset($this->view_max_score) &&
-                $this->view_max_score === ''
+                '' === $this->view_max_score
             ) {
                 return $this->view_max_score;
             } else {
@@ -1023,7 +1021,7 @@ class learnpathItem
                                     if (strpos($source, "+this.")) {
                                         continue;
                                     } // javascript code - will still work unaltered.
-                                    if (strpos($source, '.') === false) {
+                                    if (false === strpos($source, '.')) {
                                         continue;
                                     } // No dot, should not be an external file anyway.
                                     if (strpos($source, 'mailto:')) {
@@ -1035,7 +1033,7 @@ class learnpathItem
                                         continue;
                                     } // Avoid code - that should help.
 
-                                    if ($attr == 'value') {
+                                    if ('value' == $attr) {
                                         if (strpos($source, 'mp3file')) {
                                             $files_list[] = [
                                                 substr(
@@ -1056,7 +1054,7 @@ class learnpathItem
                                                     'mp3file='
                                                 ) + 8
                                             );
-                                            if (substr($mp3file, 0, 1) == '/') {
+                                            if ('/' == substr($mp3file, 0, 1)) {
                                                 $files_list[] = [
                                                     $mp3file,
                                                     'local',
@@ -1069,7 +1067,7 @@ class learnpathItem
                                                     'rel',
                                                 ];
                                             }
-                                        } elseif (strpos($source, 'flv=') === 0) {
+                                        } elseif (0 === strpos($source, 'flv=')) {
                                             $source = substr($source, 4);
                                             if (strpos($source, '&') > 0) {
                                                 $source = substr(
@@ -1079,7 +1077,7 @@ class learnpathItem
                                                 );
                                             }
                                             if (strpos($source, '://') > 0) {
-                                                if (strpos($source, api_get_path(WEB_PATH)) !== false) {
+                                                if (false !== strpos($source, api_get_path(WEB_PATH))) {
                                                     // We found the current portal url.
                                                     $files_list[] = [
                                                         $source,
@@ -1129,7 +1127,7 @@ class learnpathItem
                                                     $pos1 + 1,
                                                     $pos2 - ($pos1 + 1)
                                                 );
-                                                if (strpos($second_part, api_get_path(WEB_PATH)) !== false) {
+                                                if (false !== strpos($second_part, api_get_path(WEB_PATH))) {
                                                     // We found the current portal url.
                                                     $files_list[] = [
                                                         $second_part,
@@ -1156,7 +1154,7 @@ class learnpathItem
                                                     ];
                                                 }
                                             } elseif (strpos($second_part, '=') > 0) {
-                                                if (substr($second_part, 0, 1) === '/') {
+                                                if ('/' === substr($second_part, 0, 1)) {
                                                     // Link starts with a /,
                                                     // making it absolute (relative to DocumentRoot).
                                                     $files_list[] = [
@@ -1175,7 +1173,7 @@ class learnpathItem
                                                             $in_files_list
                                                         );
                                                     }
-                                                } elseif (strstr($second_part, '..') === 0) {
+                                                } elseif (0 === strstr($second_part, '..')) {
                                                     // Link is relative but going back in the hierarchy.
                                                     $files_list[] = [
                                                         $second_part,
@@ -1201,7 +1199,7 @@ class learnpathItem
                                                     }
                                                 } else {
                                                     // No starting '/', making it relative to current document's path.
-                                                    if (substr($second_part, 0, 2) == './') {
+                                                    if ('./' == substr($second_part, 0, 2)) {
                                                         $second_part = substr(
                                                             $second_part,
                                                             2
@@ -1238,7 +1236,7 @@ class learnpathItem
                                                 strpos($source, '?')
                                             );
                                             if (strpos($source, '://') > 0) {
-                                                if (strpos($source, api_get_path(WEB_PATH)) !== false) {
+                                                if (false !== strpos($source, api_get_path(WEB_PATH))) {
                                                     // We found the current portal url.
                                                     $files_list[] = [
                                                         $source,
@@ -1266,7 +1264,7 @@ class learnpathItem
                                                 }
                                             } else {
                                                 // No protocol found, make link local.
-                                                if (substr($source, 0, 1) === '/') {
+                                                if ('/' === substr($source, 0, 1)) {
                                                     // Link starts with a /, making it absolute (relative to DocumentRoot).
                                                     $files_list[] = [
                                                         $source,
@@ -1284,7 +1282,7 @@ class learnpathItem
                                                             $in_files_list
                                                         );
                                                     }
-                                                } elseif (strstr($source, '..') === 0) {
+                                                } elseif (0 === strstr($source, '..')) {
                                                     // Link is relative but going back in the hierarchy.
                                                     $files_list[] = [
                                                         $source,
@@ -1310,7 +1308,7 @@ class learnpathItem
                                                     }
                                                 } else {
                                                     // No starting '/', making it relative to current document's path.
-                                                    if (substr($source, 0, 2) == './') {
+                                                    if ('./' == substr($source, 0, 2)) {
                                                         $source = substr(
                                                             $source,
                                                             2
@@ -1343,7 +1341,7 @@ class learnpathItem
                                         }
 
                                         // Found some protocol there.
-                                        if (strpos($source, api_get_path(WEB_PATH)) !== false) {
+                                        if (false !== strpos($source, api_get_path(WEB_PATH))) {
                                             // We found the current portal url.
                                             $files_list[] = [
                                                 $source,
@@ -1371,7 +1369,7 @@ class learnpathItem
                                         }
                                     } else {
                                         // No protocol found, make link local.
-                                        if (substr($source, 0, 1) === '/') {
+                                        if ('/' === substr($source, 0, 1)) {
                                             // Link starts with a /, making it absolute (relative to DocumentRoot).
                                             $files_list[] = [
                                                 $source,
@@ -1389,7 +1387,7 @@ class learnpathItem
                                                     $in_files_list
                                                 );
                                             }
-                                        } elseif (strstr($source, '..') === 0) {
+                                        } elseif (0 === strstr($source, '..')) {
                                             // Link is relative but going back in the hierarchy.
                                             $files_list[] = [
                                                 $source,
@@ -1419,7 +1417,7 @@ class learnpathItem
                                                 continue;
                                             }
 
-                                            if (substr($source, 0, 2) == './') {
+                                            if ('./' == substr($source, 0, 2)) {
                                                 $source = substr(
                                                     $source,
                                                     2
@@ -1518,7 +1516,7 @@ class learnpathItem
                             iid = '".$this->db_item_view_id."' AND
                             view_count = '".$this->get_attempt_id()."'";
                 $res = Database::query($sql);
-                if (Database::num_rows($res) == 1) {
+                if (1 == Database::num_rows($res)) {
                     $row = Database::fetch_array($res);
                     if ($update_local) {
                         $this->set_status($row['status']);
@@ -1566,7 +1564,7 @@ class learnpathItem
     ) {
         $h = get_lang('h');
         if (!isset($time)) {
-            if ($origin == 'js') {
+            if ('js' == $origin) {
                 return '00 : 00: 00';
             }
 
@@ -1600,7 +1598,7 @@ class learnpathItem
                     0
                 );
             }
-            if ($query_db === true) {
+            if (true === $query_db) {
                 $table = Database::get_course_table(TABLE_LP_ITEM_VIEW);
                 $sql = "SELECT start_time, total_time
                         FROM $table
@@ -1683,7 +1681,7 @@ class learnpathItem
                 0
             );
         }
-        if ($this->current_start_time == 0) {
+        if (0 == $this->current_start_time) {
             // Shouldn't be necessary thanks to the open() method.
             if ($debug) {
                 error_log(
@@ -1695,7 +1693,7 @@ class learnpathItem
         }
 
         if (time() < $this->current_stop_time ||
-            $this->current_stop_time == 0
+            0 == $this->current_stop_time
         ) {
             if ($debug) {
                 error_log(
@@ -1923,7 +1921,7 @@ class learnpathItem
         if (self::DEBUG > 0) {
             error_log('learnpathItem::open()', 0);
         }
-        if ($this->prevent_reinit == 0) {
+        if (0 == $this->prevent_reinit) {
             $this->current_score = 0;
             $this->current_start_time = time();
             // In this case, as we are opening the item, what is important to us
@@ -2000,11 +1998,11 @@ class learnpathItem
 
         // First parse all parenthesis by using a sequential loop
         //  (looking for less-inclusives first).
-        if ($prereqs_string == '_true_') {
+        if ('_true_' == $prereqs_string) {
             return true;
         }
 
-        if ($prereqs_string == '_false_') {
+        if ('_false_' == $prereqs_string) {
             if (empty($this->prereq_alert)) {
                 $this->prereq_alert = get_lang('This learning object cannot display because the course prerequisites are not completed. This happens when a course imposes that you follow it step by step or get a minimum score in tests before you reach the next steps.');
             }
@@ -2012,7 +2010,7 @@ class learnpathItem
             return false;
         }
 
-        while (strpos($prereqs_string, '(') !== false) {
+        while (false !== strpos($prereqs_string, '(')) {
             // Remove any () set and replace with its value.
             $matches = [];
             $res = preg_match_all(
@@ -2047,11 +2045,11 @@ class learnpathItem
 
         // Parenthesis removed, now look for ORs as it is the lesser-priority
         //  binary operator (= always uses one text operand).
-        if (strpos($prereqs_string, '|') === false) {
+        if (false === strpos($prereqs_string, '|')) {
             if ($debug) {
                 error_log('New LP - Didnt find any OR, looking for AND', 0);
             }
-            if (strpos($prereqs_string, '&') !== false) {
+            if (false !== strpos($prereqs_string, '&')) {
                 $list = explode('&', $prereqs_string);
                 if (count($list) > 1) {
                     $andstatus = true;
@@ -2099,13 +2097,13 @@ class learnpathItem
                     error_log('New LP - Didnt find any AND, looking for =', 0);
                 }
 
-                if (strpos($prereqs_string, '=') !== false) {
+                if (false !== strpos($prereqs_string, '=')) {
                     if ($debug) {
                         error_log('New LP - Found =, looking into it', 0);
                     }
                     // We assume '=' signs only appear when there's nothing else around.
                     $params = explode('=', $prereqs_string);
-                    if (count($params) == 2) {
+                    if (2 == count($params)) {
                         // Right number of operands.
                         if (isset($items[$refs_list[$params[0]]])) {
                             $status = $items[$refs_list[$params[0]]]->get_status(true);
@@ -2129,13 +2127,13 @@ class learnpathItem
                         );
                     }
 
-                    if (strpos($prereqs_string, '<>') !== false) {
+                    if (false !== strpos($prereqs_string, '<>')) {
                         if ($debug) {
                             error_log('New LP - Found <>, looking into it', 0);
                         }
                         // We assume '<>' signs only appear when there's nothing else around.
                         $params = explode('<>', $prereqs_string);
-                        if (count($params) == 2) {
+                        if (2 == count($params)) {
                             // Right number of operands.
                             if (isset($items[$refs_list[$params[0]]])) {
                                 $status = $items[$refs_list[$params[0]]]->get_status(true);
@@ -2159,7 +2157,7 @@ class learnpathItem
                             );
                         }
                         // Only remains: ~ and X*{}
-                        if (strpos($prereqs_string, '~') !== false) {
+                        if (false !== strpos($prereqs_string, '~')) {
                             // Found NOT.
                             if ($debug) {
                                 error_log(
@@ -2342,7 +2340,7 @@ class learnpathItem
                                     /** @var learnpathItem $itemToCheck */
                                     $itemToCheck = $items[$refs_list[$prereqs_string]];
 
-                                    if ($itemToCheck->type === 'quiz') {
+                                    if ('quiz' === $itemToCheck->type) {
                                         // 1. Checking the status in current items.
                                         $status = $itemToCheck->get_status(true);
                                         $returnstatus = $status == $this->possible_status[2] || $status == $this->possible_status[3];
@@ -2356,7 +2354,7 @@ class learnpathItem
                                         }
 
                                         // For one and first attempt.
-                                        if ($this->prevent_reinit == 1) {
+                                        if (1 == $this->prevent_reinit) {
                                             // 2. If is completed we check the results in the DB of the quiz.
                                             if ($returnstatus) {
                                                 $sql = 'SELECT score, max_score
@@ -2470,7 +2468,7 @@ class learnpathItem
                                             }
                                         }
 
-                                        if ($returnstatus === false) {
+                                        if (false === $returnstatus) {
                                             // Check results from another sessions.
                                             $checkOtherSessions = api_get_configuration_value('validate_lp_prerequisite_from_other_session');
                                             if ($checkOtherSessions) {
@@ -2483,7 +2481,7 @@ class learnpathItem
                                         }
 
                                         return $returnstatus;
-                                    } elseif ($itemToCheck->type === 'student_publication') {
+                                    } elseif ('student_publication' === $itemToCheck->type) {
                                         require_once api_get_path(SYS_CODE_PATH).'work/work.lib.php';
                                         $workId = $items[$refs_list[$prereqs_string]]->path;
                                         $count = get_work_count_by_student($user_id, $workId);
@@ -2520,7 +2518,7 @@ class learnpathItem
                                         $lp_item_view = Database::get_course_table(TABLE_LP_ITEM_VIEW);
                                         $lp_view = Database::get_course_table(TABLE_LP_VIEW);
 
-                                        if ($returnstatus && $this->prevent_reinit == 1) {
+                                        if ($returnstatus && 1 == $this->prevent_reinit) {
                                             $sql = "SELECT iid FROM $lp_view
                                                     WHERE
                                                         c_id = $course_id AND
@@ -2549,7 +2547,7 @@ class learnpathItem
                                                 }
                                             }
 
-                                            if ($checkOtherSessions && $returnstatus === false) {
+                                            if ($checkOtherSessions && false === $returnstatus) {
                                                 $returnstatus = $returnstatus = $this->getStatusFromOtherSessions(
                                                     $user_id,
                                                     $prereqs_string,
@@ -2611,7 +2609,7 @@ class learnpathItem
                 }
                 if (isset($items[$refs_list[$list[0]]])) {
                     $status = $items[$refs_list[$list[0]]]->get_status(true);
-                    $returnstatus = $status == 'completed' || $status == 'passed';
+                    $returnstatus = 'completed' == $status || 'passed' == $status;
                     if (!$returnstatus && empty($this->prereq_alert)) {
                         $this->prereq_alert = get_lang('This learning object cannot display because the course prerequisites are not completed. This happens when a course imposes that you follow it step by step or get a minimum score in tests before you reach the next steps.');
                     }
@@ -2646,7 +2644,7 @@ class learnpathItem
         }
         $seriousGame = $this->get_seriousgame_mode();
         //For serious game  : We reuse same attempt_id
-        if ($seriousGame == 1 && $this->type == 'sco') {
+        if (1 == $seriousGame && 'sco' == $this->type) {
             // If this is a sco, Chamilo can't update the time without an
             //  explicit scorm call
             $this->current_start_time = 0;
@@ -2659,9 +2657,9 @@ class learnpathItem
         $this->save();
 
         $allowed = $this->isRestartAllowed();
-        if ($allowed === -1) {
+        if (-1 === $allowed) {
             // Nothing allowed, do nothing.
-        } elseif ($allowed === 1) {
+        } elseif (1 === $allowed) {
             // Restart as new attempt is allowed, record a new attempt.
             $this->attempt_id = $this->attempt_id + 1; // Simply reuse the previous attempt_id.
             $this->current_score = 0;
@@ -2674,7 +2672,7 @@ class learnpathItem
             $this->objectives_count = 0;
             $this->objectives = [];
             $this->lesson_location = '';
-            if ($this->type != TOOL_QUIZ) {
+            if (TOOL_QUIZ != $this->type) {
                 $this->write_to_db();
             }
         } else {
@@ -2706,9 +2704,9 @@ class learnpathItem
         }
         // First check if parameters passed via GET can be saved here
         // in case it's a SCORM, we should get:
-        if ($this->type == 'sco' || $this->type == 'au') {
+        if ('sco' == $this->type || 'au' == $this->type) {
             $status = $this->get_status(true);
-            if ($this->prevent_reinit == 1 &&
+            if (1 == $this->prevent_reinit &&
                 $status != $this->possible_status[0] && // not attempted
                 $status != $this->possible_status[1]    //incomplete
             ) {
@@ -3027,7 +3025,7 @@ class learnpathItem
                         lp_iv_id = '".$this->db_item_view_id."'";
 
             $res = Database::query($sql);
-            if ($res !== false) {
+            if (false !== $res) {
                 $this->interactions_count = Database::num_rows($res);
             } else {
                 $this->interactions_count = 0;
@@ -3041,7 +3039,7 @@ class learnpathItem
 
             $this->objectives_count = 0;
             $res = Database::query($sql);
-            if ($res !== false) {
+            if (false !== $res) {
                 $this->objectives_count = Database::num_rows($res);
             }
         }
@@ -3098,7 +3096,7 @@ class learnpathItem
             $current_status = $this->get_status(false);
 
             // Fixes bug when SCORM doesn't send a mastery score even if they sent a score!
-            if ($masteryScore == -1) {
+            if (-1 == $masteryScore) {
                 $masteryScore = $this->max_score;
             }
 
@@ -3134,7 +3132,7 @@ class learnpathItem
      */
     public function set_max_score($score)
     {
-        if (is_int($score) || $score == '') {
+        if (is_int($score) || '' == $score) {
             $this->view_max_score = $score;
 
             return true;
@@ -3211,7 +3209,7 @@ class learnpathItem
                 WHERE iid=".$this->get_id();
         Database::query($sql);
         // Save it to search engine.
-        if (api_get_setting('search_enabled') == 'true') {
+        if ('true' == api_get_setting('search_enabled')) {
             $di = new ChamiloIndexer();
             $di->update_terms($this->get_search_did(), $new_terms, 'T');
         }
@@ -3245,9 +3243,9 @@ class learnpathItem
             error_log("this->current_start_time: ".$this->current_start_time);
         }
 
-        if ($scorm_time == '0' &&
-            $this->type != 'sco' &&
-            $this->current_start_time != 0
+        if ('0' == $scorm_time &&
+            'sco' != $this->type &&
+            0 != $this->current_start_time
         ) {
             $myTime = time() - $this->current_start_time;
             if ($myTime > 0) {
@@ -3435,7 +3433,7 @@ class learnpathItem
         }
 
         // Step 2.1 : if normal mode total_time = total_time + total_sec
-        if ($this->type == 'sco' && $accumulateScormTime != 0) {
+        if ('sco' == $this->type && 0 != $accumulateScormTime) {
             if ($debug) {
                 error_log("accumulateScormTime is on. total_time modified: $total_time + $total_sec");
             }
@@ -3471,7 +3469,7 @@ class learnpathItem
             'failed',
         ];
 
-        if ($this->seriousgame_mode != 1 ||
+        if (1 != $this->seriousgame_mode ||
             !in_array($row['status'], $case_completed)
         ) {
             $sql = "UPDATE $item_view_table
@@ -3653,9 +3651,9 @@ class learnpathItem
             }
         }
 
-        if ((($save === false && $this->type == 'sco') ||
-           ($this->type == 'sco' && ($credit == 'no-credit' || $mode == 'review' || $mode == 'browse'))) &&
-           ($this->seriousgame_mode != 1 && $this->type == 'sco')
+        if (((false === $save && 'sco' == $this->type) ||
+           ('sco' == $this->type && ('no-credit' == $credit || 'review' == $mode || 'browse' == $mode))) &&
+           (1 != $this->seriousgame_mode && 'sco' == $this->type)
         ) {
             if ($debug) {
                 error_log(
@@ -3671,9 +3669,9 @@ class learnpathItem
             // Check the row exists.
             $inserted = false;
             // This a special case for multiple attempts and Chamilo exercises.
-            if ($this->type == 'quiz' &&
-                $this->get_prevent_reinit() == 0 &&
-                $this->get_status() == 'completed'
+            if ('quiz' == $this->type &&
+                0 == $this->get_prevent_reinit() &&
+                'completed' == $this->get_status()
             ) {
                 // We force the item to be restarted.
                 $this->restart();
@@ -3752,7 +3750,7 @@ class learnpathItem
                     Database::query($sql);
                 }
             } else {
-                if ($this->type === 'hotpotatoes') {
+                if ('hotpotatoes' === $this->type) {
                     $params = [
                         'total_time' => $this->get_total_time(),
                         'start_time' => $this->get_current_start_time(),
@@ -3773,7 +3771,7 @@ class learnpathItem
                     Database::update($item_view_table, $params, $where);
                 } else {
                     // For all other content types...
-                    if ($this->type == 'quiz') {
+                    if ('quiz' == $this->type) {
                         if ($debug) {
                             error_log("item is quiz:");
                         }
@@ -3807,13 +3805,13 @@ class learnpathItem
                         ];
 
                         // Is not multiple attempts
-                        if ($this->seriousgame_mode == 1 && $this->type == 'sco') {
+                        if (1 == $this->seriousgame_mode && 'sco' == $this->type) {
                             $total_time = " total_time = total_time +".$this->get_total_time().", ";
                             $my_status = " status = '".$this->get_status(false)."' ,";
                             if ($debug) {
                                 error_log("seriousgame_mode time changed: $total_time");
                             }
-                        } elseif ($this->get_prevent_reinit() == 1) {
+                        } elseif (1 == $this->get_prevent_reinit()) {
                             // Process of status verified into data base.
                             $sql = 'SELECT status FROM '.$item_view_table.'
                                     WHERE
@@ -3828,7 +3826,7 @@ class learnpathItem
                             // Get type lp: 1=lp dokeos and  2=scorm.
                             // If not is completed or passed or browsed and learning path is scorm.
                             if (!in_array($this->get_status(false), $case_completed) &&
-                                $my_type_lp == 2
+                                2 == $my_type_lp
                             ) {
                                 $total_time = " total_time = total_time +".$this->get_total_time().", ";
                                 $my_status = " status = '".$this->get_status(false)."' ,";
@@ -3838,7 +3836,7 @@ class learnpathItem
                             } else {
                                 // Verified into database.
                                 if (!in_array($row_verified['status'], $case_completed) &&
-                                    $my_type_lp == 2
+                                    2 == $my_type_lp
                                 ) {
                                     $total_time = " total_time = total_time +".$this->get_total_time().", ";
                                     $my_status = " status = '".$this->get_status(false)."' ,";
@@ -3846,7 +3844,7 @@ class learnpathItem
                                         error_log("total_time time changed case 1: $total_time");
                                     }
                                 } elseif (in_array($row_verified['status'], $case_completed) &&
-                                    $my_type_lp == 2 && $this->type != 'sco'
+                                    2 == $my_type_lp && 'sco' != $this->type
                                 ) {
                                     $total_time = " total_time = total_time +".$this->get_total_time().", ";
                                     $my_status = " status = '".$this->get_status(false)."' ,";
@@ -3854,8 +3852,8 @@ class learnpathItem
                                         error_log("total_time time changed case 2: $total_time");
                                     }
                                 } else {
-                                    if (($my_type_lp == 3 && $this->type == 'au') ||
-                                        ($my_type_lp == 1 && $this->type != 'dir')) {
+                                    if ((3 == $my_type_lp && 'au' == $this->type) ||
+                                        (1 == $my_type_lp && 'dir' != $this->type)) {
                                         // Is AICC or Chamilo LP
                                         $total_time = " total_time = total_time + ".$this->get_total_time().", ";
                                         $my_status = " status = '".$this->get_status(false)."' ,";
@@ -3867,13 +3865,13 @@ class learnpathItem
                             }
                         } else {
                             // Multiple attempts are allowed.
-                            if (in_array($this->get_status(false), $case_completed) && $my_type_lp == 2) {
+                            if (in_array($this->get_status(false), $case_completed) && 2 == $my_type_lp) {
                                 // Reset zero new attempt ?
                                 $my_status = " status = '".$this->get_status(false)."' ,";
                                 if ($debug) {
                                     error_log("total_time time changed Multiple attempt case 1: $total_time");
                                 }
-                            } elseif (!in_array($this->get_status(false), $case_completed) && $my_type_lp == 2) {
+                            } elseif (!in_array($this->get_status(false), $case_completed) && 2 == $my_type_lp) {
                                 $total_time = " total_time = ".$this->get_total_time().", ";
                                 $my_status = " status = '".$this->get_status(false)."' ,";
                                 if ($debug) {
@@ -3889,7 +3887,7 @@ class learnpathItem
                             }
 
                             // This code line fixes the problem of wrong status.
-                            if ($my_type_lp == 2) {
+                            if (2 == $my_type_lp) {
                                 // Verify current status in multiples attempts.
                                 $sql = 'SELECT status FROM '.$item_view_table.'
                                         WHERE
@@ -3917,7 +3915,7 @@ class learnpathItem
                         }
                     }
 
-                    if ($this->type == 'sco') {
+                    if ('sco' == $this->type) {
                         //IF scorm scorm_update_time has already updated total_time in db
                         //" . //start_time = ".$this->get_current_start_time().", " . //scorm_init_time does it
                         ////" max_time_allowed = '".$this->get_max_time_allowed()."'," .
@@ -4223,7 +4221,7 @@ class learnpathItem
                 break;
         }
 
-        if ($type == 'simple') {
+        if ('simple' == $type) {
             if (in_array($status, ['failed', 'passed', 'browsed'])) {
                 $myLessonStatus = get_lang('Incomplete');
 
@@ -4337,7 +4335,7 @@ class learnpathItem
 
         $fakeFrom = "$forumThreadTable ft INNER JOIN $itemProperty ip ";
 
-        if ($lpSessionId == 0) {
+        if (0 == $lpSessionId) {
             $fakeFrom .= "
                 ON (
                     ft.thread_id = ip.ref AND ft.c_id = ip.c_id AND (

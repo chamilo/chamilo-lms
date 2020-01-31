@@ -401,7 +401,7 @@ if (is_array($forumCategories)) {
                     }
 
                     if ($show_forum) {
-                        ++$form_count;
+                        $form_count++;
                         /*$mywhatsnew_post_info = isset($whatsnew_post_info[$forum['forum_id']])
                             ? $whatsnew_post_info[$forum['forum_id']]
                             : null;*/

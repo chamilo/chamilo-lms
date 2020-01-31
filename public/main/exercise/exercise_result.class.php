@@ -6,7 +6,6 @@
  * Class ExerciseResult
  * which allows you to export exercises results in multiple presentation forms.
  *
- *
  * @author Yannick Warnier
  */
 class ExerciseResult
@@ -238,7 +237,7 @@ class ExerciseResult
                 }
 
                 $userWithResults[$result['excruid']] = 1;
-                ++$i;
+                $i++;
             }
         }
 
@@ -277,7 +276,7 @@ class ExerciseResult
                         $return[$i]['lp_name'] = null;
                         $return[$i]['is_user_subscribed'] = get_lang('Yes');
 
-                        ++$latestId;
+                        $latestId++;
                     }
                 }
             }
@@ -628,7 +627,7 @@ class ExerciseResult
             $list[$column][] = $row['status'];
             $list[$column][] = $row['lp_name'];
             $list[$column][] = $row['is_user_subscribed'];
-            ++$column;
+            $column++;
         }
         Export::arrayToXls($list, $filename);
 

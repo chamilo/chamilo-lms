@@ -43,7 +43,7 @@ $userAccess = CourseManager::getFirstCourseAccessPerSessionAndUser(
     $userId
 );
 
-if (count($userAccess) == 0) {
+if (0 == count($userAccess)) {
     // User never accessed the session. End date is still open
     $msg = sprintf(get_lang('This user never accessed this session before. The duration is currently set to %s days (from the first access date)'), $sessionInfo['duration']);
 } else {
@@ -78,7 +78,7 @@ $message = null;
 if ($form->validate()) {
     $duration = $form->getSubmitValue('duration');
     // Only update if the duration is different from the default duration
-    if ($duration != 0) {
+    if (0 != $duration) {
         SessionManager::editUserSessionDuration($duration, $userId, $sessionId);
         $message = Display::return_message(get_lang('Item updated'), 'confirmation');
     } else {

@@ -6,8 +6,6 @@ use Chamilo\SkillBundle\Entity\Profile;
 
 /**
  * Add a skill Profile.
- *
- * @package chamilo.skill
  */
 $cidReset = true;
 require_once __DIR__.'/../inc/global.inc.php';

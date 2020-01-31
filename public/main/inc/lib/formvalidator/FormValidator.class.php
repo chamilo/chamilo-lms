@@ -42,7 +42,7 @@ class FormValidator extends HTML_QuickForm
             $attributes['class'] = 'form-horizontal';
         }
 
-        if (isset($attributes['class']) && strpos($attributes['class'], 'form-search') !== false) {
+        if (isset($attributes['class']) && false !== strpos($attributes['class'], 'form-search')) {
             $layout = 'inline';
         }
 
@@ -68,10 +68,10 @@ class FormValidator extends HTML_QuickForm
         $renderer->setFormTemplate($formTemplate);
 
         // Element template
-        if (isset($attributes['class']) && $attributes['class'] == 'form-inline') {
+        if (isset($attributes['class']) && 'form-inline' == $attributes['class']) {
             $elementTemplate = ' {label}  {element} ';
             $renderer->setElementTemplate($elementTemplate);
-        } elseif (isset($attributes['class']) && $attributes['class'] == 'form-search') {
+        } elseif (isset($attributes['class']) && 'form-search' == $attributes['class']) {
             $elementTemplate = ' {label}  {element} ';
             $renderer->setElementTemplate($elementTemplate);
         } else {
@@ -1075,9 +1075,9 @@ EOT;
     public function addGeoLocationMapField($name, $label, $dataValue, $hideGeoLocalizationDetails = false)
     {
         $gMapsPlugin = GoogleMapsPlugin::create();
-        $geolocalization = $gMapsPlugin->get('enable_api') === 'true';
+        $geolocalization = 'true' === $gMapsPlugin->get('enable_api');
 
-        if ($geolocalization && $gMapsPlugin->javascriptIncluded === false) {
+        if ($geolocalization && false === $gMapsPlugin->javascriptIncluded) {
             $gmapsApiKey = $gMapsPlugin->get('api_key');
             $url = '//maps.googleapis.com/maps/api/js?key='.$gmapsApiKey;
             $this->addHtml('<script type="text/javascript" src="'.$url.'" ></script>');
@@ -1382,7 +1382,7 @@ EOT;
             '/(^-?\d\d*\.\d*$)|(^-?\d\d*$)|(^-?\.\d\d*$)|(^-?\d\d*\,\d*$)|(^-?\,\d\d*$)/'
         );*/
 
-        if ($allowNegative == false) {
+        if (false == $allowNegative) {
             $this->addRule(
                 $name,
                 get_lang('Negative value'),
@@ -1557,7 +1557,7 @@ EOT;
      */
     public function addPasswordRule($elementName, $groupName = '')
     {
-        if (api_get_setting('security.check_password') == 'true') {
+        if ('true' == api_get_setting('security.check_password')) {
             $message = get_lang('this password  is too simple. Use a pass like this').': '.api_generate_password();
 
             if (!empty($groupName)) {
@@ -1566,7 +1566,7 @@ EOT;
                 if ($groupObj instanceof HTML_QuickForm_group) {
                     $elementName = $groupObj->getElementName($elementName);
 
-                    if ($elementName === false) {
+                    if (false === $elementName) {
                         throw new Exception("The $groupName doesn't have the element $elementName");
                     }
 
@@ -1626,7 +1626,7 @@ EOT;
                 $options[$item['id']] = $item['name'];
                 $name = $item['name'];
                 if (empty($defaultId)) {
-                    $defaultId = $item['default_template'] == 1 ? $item['id'] : '';
+                    $defaultId = 1 == $item['default_template'] ? $item['id'] : '';
                 }
             }
 

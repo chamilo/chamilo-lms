@@ -115,7 +115,6 @@ class ScormExercise
      *
      * This is a default behaviour, some classes may want to override this.
      *
-     *
      * @return string string, the XML flow for an Item
      */
     public function export()
@@ -173,7 +172,7 @@ class ScormExercise
             list($jstmp, $htmltmp) = $scormQuestion->exportQuestionToScorm($q, $counter);
             $js .= $jstmp."\n";
             $html .= $htmltmp."\n";
-            ++$counter;
+            $counter++;
         }
 
         return [$js, $html];

@@ -12,8 +12,6 @@ use Symfony\Component\HttpFoundation\File\UploadedFile;
  * This is the file upload library for Chamilo.
  * Include/require it in your code to use its functionality.
  *
- * @package chamilo.library
- *
  * @todo test and reorganise
  */
 
@@ -280,7 +278,7 @@ function handle_uploaded_document(
     $defaultVisibility = in_array('document', $defaultVisibility) ? ResourceLink::VISIBILITY_PUBLISHED : ResourceLink::VISIBILITY_DRAFT;
 
     // If the want to unzip, check if the file has a .zip (or ZIP,Zip,ZiP,...) extension
-    if ($unzip == 1 && preg_match('/.zip$/', strtolower($uploadedFile['name']))) {
+    if (1 == $unzip && preg_match('/.zip$/', strtolower($uploadedFile['name']))) {
         return unzip_uploaded_document(
             $courseInfo,
             $userInfo,
@@ -294,7 +292,7 @@ function handle_uploaded_document(
             $onlyUploadFile,
             $whatIfFileExists
         );
-    } elseif ($unzip == 1 && !preg_match('/.zip$/', strtolower($uploadedFile['name']))) {
+    } elseif (1 == $unzip && !preg_match('/.zip$/', strtolower($uploadedFile['name']))) {
         // We can only unzip ZIP files (no gz, tar,...)
         if ($output) {
             Display::addFlash(
@@ -327,7 +325,7 @@ function handle_uploaded_document(
             return false;
         } else {
             // If the upload path differs from / (= root) it will need a slash at the end
-            if ($uploadPath != '/') {
+            if ('/' != $uploadPath) {
                 $uploadPath = $uploadPath.'/';
             }
 
@@ -645,7 +643,7 @@ function dir_total_space($dir_path)
     $sumSize = 0;
     $dirList = [];
     while ($element = readdir($handle)) {
-        if ($element == '.' || $element == '..') {
+        if ('.' == $element || '..' == $element) {
             continue; // Skip the current and parent directories
         }
         if (is_file($element)) {
@@ -888,11 +886,11 @@ function unzip_uploaded_file($uploaded_file, $upload_path, $base_work_dir, $max_
         }
 
         // It happens on Linux that $upload_path sometimes doesn't start with '/'
-        if ($upload_path[0] != '/' && substr($base_work_dir, -1, 1) != '/') {
+        if ('/' != $upload_path[0] && '/' != substr($base_work_dir, -1, 1)) {
             $upload_path = '/'.$upload_path;
         }
 
-        if ($upload_path[strlen($upload_path) - 1] == '/') {
+        if ('/' == $upload_path[strlen($upload_path) - 1]) {
             $upload_path = substr($upload_path, 0, -1);
         }
 
@@ -921,7 +919,7 @@ function unzip_uploaded_file($uploaded_file, $upload_path, $base_work_dir, $max_
             }
             if ($dir = @opendir($base_work_dir.$upload_path)) {
                 while ($file = readdir($dir)) {
-                    if ($file != '.' && $file != '..') {
+                    if ('.' != $file && '..' != $file) {
                         $filetype = 'file';
                         if (is_dir($base_work_dir.$upload_path.'/'.$file)) {
                             $filetype = 'folder';
@@ -1009,7 +1007,7 @@ function unzip_uploaded_document(
         PCLZIP_OPT_REPLACE_NEWER
     );
 
-    if ($onlyUploadFile === false) {
+    if (false === $onlyUploadFile) {
         // Add all documents in the unzipped folder to the database
         add_all_documents_in_folder_to_database(
             $courseInfo,
@@ -1116,7 +1114,7 @@ function clean_up_path($path)
     // Clean up every folder and filename in the path
     foreach ($path_array as $key => &$val) {
         // We don't want to lose the dots in ././folder/file (cfr. zipfile)
-        if ($val != '.') {
+        if ('.' != $val) {
             $val = disable_dangerous_file(api_replace_dangerous_char($val));
         }
     }
@@ -1139,11 +1137,11 @@ function clean_up_path($path)
  */
 function filter_extension(&$filename)
 {
-    if (substr($filename, -1) == '/') {
+    if ('/' == substr($filename, -1)) {
         return 1; // Authorize directories
     }
     $blacklist = api_get_setting('upload_extensions_list_type');
-    if ($blacklist != 'whitelist') { // if = blacklist
+    if ('whitelist' != $blacklist) { // if = blacklist
         $extensions = explode(';', strtolower(api_get_setting('upload_extensions_blacklist')));
 
         $skip = api_get_setting('upload_extensions_skip');
@@ -1153,7 +1151,7 @@ function filter_extension(&$filename)
             return 1; // We're in blacklist mode, so accept empty extensions
         }
         if (in_array(strtolower($ext), $extensions)) {
-            if ($skip == 'true') {
+            if ('true' == $skip) {
                 return 0;
             } else {
                 $new_ext = api_get_setting('upload_extensions_replace_by');
@@ -1173,7 +1171,7 @@ function filter_extension(&$filename)
             return 1; // Accept empty extensions
         }
         if (!in_array(strtolower($ext), $extensions)) {
-            if ($skip == 'true') {
+            if ('true' == $skip) {
                 return 0;
             } else {
                 $new_ext = api_get_setting('upload_extensions_replace_by');
@@ -1227,7 +1225,7 @@ function update_existing_document($_course, $documentId, $filesize, $readonly = 
 function item_property_update_on_folder($_course, $path, $user_id)
 {
     // If we are in the root, just return... no need to update anything
-    if ($path == '/') {
+    if ('/' == $path) {
         return;
     }
 
@@ -1235,7 +1233,7 @@ function item_property_update_on_folder($_course, $path, $user_id)
 
     // If the given path ends with a / we remove it
     $endchar = substr($path, strlen($path) - 1, 1);
-    if ($endchar == '/') {
+    if ('/' == $endchar) {
         $path = substr($path, 0, strlen($path) - 1);
     }
 
@@ -1252,7 +1250,7 @@ function item_property_update_on_folder($_course, $path, $user_id)
     $newpath = '';
     foreach ($exploded_path as $key => &$value) {
         // We don't want a slash before our first slash
-        if ($key != 0) {
+        if (0 != $key) {
             $newpath .= '/'.$value;
             // Select ID of given folder
             $folder_id = DocumentManager::get_document_id($_course, $newpath);
@@ -1294,15 +1292,15 @@ function set_default_settings($upload_path, $filename, $filetype = 'file')
     $upload_path = str_replace('\\', '/', $upload_path);
     $upload_path = str_replace('//', '/', $upload_path);
 
-    if ($upload_path == '/') {
+    if ('/' == $upload_path) {
         $upload_path = '';
-    } elseif (!empty($upload_path) && $upload_path[0] != '/') {
+    } elseif (!empty($upload_path) && '/' != $upload_path[0]) {
         $upload_path = "/$upload_path";
     }
 
     $endchar = substr($filename, strlen($filename) - 1, 1);
 
-    if ($endchar == '/') {
+    if ('/' == $endchar) {
         $filename = substr($filename, 0, -1);
     }
     $filename = Database::escape_string($filename);
@@ -1341,10 +1339,10 @@ function search_img_from_html($html_file)
     }
 
     // Aearch and store occurences of the <img> tag in an array
-    $size_file = (filesize($html_file) === 0) ? 1 : filesize($html_file);
-    if (isset($fp) && $fp !== false) {
+    $size_file = (0 === filesize($html_file)) ? 1 : filesize($html_file);
+    if (isset($fp) && false !== $fp) {
         $buffer = fread($fp, $size_file);
-        if (strlen($buffer) >= 0 && $buffer !== false) {
+        if (strlen($buffer) >= 0 && false !== $buffer) {
         } else {
             die('<center>Can not read file.</center>');
         }
@@ -1441,7 +1439,7 @@ function create_unexisting_directory(
         $to_group_id
     );
 
-    if ($folderExists === true) {
+    if (true === $folderExists) {
         if ($generateNewNameIfExists) {
             $counter = 1;
             while (1) {
@@ -1452,7 +1450,7 @@ function create_unexisting_directory(
                     $to_group_id
                 );
 
-                if ($folderExists === false) {
+                if (false === $folderExists) {
                     break;
                 }
                 $counter++;
@@ -1472,7 +1470,7 @@ function create_unexisting_directory(
 
     $systemFolderName .= $suffix;
 
-    if ($title == null) {
+    if (null == $title) {
         $title = basename($desired_dir_name);
     }
 
@@ -1489,7 +1487,7 @@ function create_unexisting_directory(
         $parentId = $parentInfo['iid'];
     }
 
-    if (Database::num_rows($rs) == 0) {
+    if (0 == Database::num_rows($rs)) {
         $document = DocumentManager::addDocument(
             $_course,
             $systemFolderName,
@@ -1632,7 +1630,7 @@ function replace_img_path_in_html_file($original_img_path, $new_img_path, $html_
  */
 function check_for_missing_files($file)
 {
-    if (strrchr($file, '.') == '.htm' || strrchr($file, '.') == '.html') {
+    if ('.htm' == strrchr($file, '.') || '.html' == strrchr($file, '.')) {
         $img_file_path = search_img_from_html($file);
 
         return $img_file_path;
@@ -1654,7 +1652,7 @@ function check_for_missing_files($file)
 function build_missing_files_form($missing_files, $upload_path, $file_name)
 {
     // Do we need a / or not?
-    $added_slash = ($upload_path == '/') ? '' : '/';
+    $added_slash = ('/' == $upload_path) ? '' : '/';
     $folder_id = DocumentManager::get_document_id(api_get_course_info(), $upload_path);
     // Build the form
     $form = "<p><strong>".get_lang('Missing images detected')."</strong></p>"
@@ -1722,14 +1720,14 @@ function add_all_documents_in_folder_to_database(
     if (is_dir($folderPath)) {
         // Run trough
         while ($file = readdir($handle)) {
-            if ($file == '.' || $file == '..') {
+            if ('.' == $file || '..' == $file) {
                 continue;
             }
 
             $parentPath = '';
             if (!empty($parent) && isset($parent['path'])) {
                 $parentPath = $parent['path'];
-                if ($parentPath == '/') {
+                if ('/' == $parentPath) {
                     $parentPath = '';
                 }
             }
@@ -1746,7 +1744,7 @@ function add_all_documents_in_folder_to_database(
                     $groupId
                 );
 
-                if ($folderExists === true) {
+                if (true === $folderExists) {
                     switch ($whatIfFileExists) {
                         case 'overwrite':
                             $documentId = DocumentManager::get_document_id($courseInfo, $completePath, $sessionId);

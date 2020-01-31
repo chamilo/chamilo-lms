@@ -6,8 +6,6 @@ use ChamiloSession as Session;
 /**
  * This file allows creating audio files from a text.
  *
- * @package chamilo.document
- *
  * @author Juan Carlos Raña Trabado
  *
  * @since 8/January/2011
@@ -26,7 +24,7 @@ $courseInfo = api_get_course_info();
 $groupRights = Session::read('group_member_with_upload_rights');
 $groupId = api_get_group_id();
 
-if (api_get_setting('enabled_text2audio') === 'false') {
+if ('false' === api_get_setting('enabled_text2audio')) {
     api_not_allowed(true);
 }
 
@@ -64,15 +62,15 @@ if (strstr($dir, '..')) {
     $dir = '/';
 }
 
-if ($dir[0] == '.') {
+if ('.' == $dir[0]) {
     $dir = substr($dir, 1);
 }
 
-if ($dir[0] != '/') {
+if ('/' != $dir[0]) {
     $dir = '/'.$dir;
 }
 
-if ($dir[strlen($dir) - 1] != '/') {
+if ('/' != $dir[strlen($dir) - 1]) {
     $dir .= '/';
 }
 
@@ -140,7 +138,7 @@ for ($i = 0; $i < $array_len; $i++) {
 
 $service = isset($_GET['service']) ? $_GET['service'] : 'google';
 
-if (isset($_POST['text2voice_mode']) && $_POST['text2voice_mode'] == 'google') {
+if (isset($_POST['text2voice_mode']) && 'google' == $_POST['text2voice_mode']) {
     downloadAudioGoogle($dir);
 }
 
@@ -222,7 +220,7 @@ while ($row = Database::fetch_array($result_select)) {
     }
 }
 
-if ($service == 'google') {
+if ('google' == $service) {
     $selected_language = api_get_language_isocode(); //lang default is the course language
     $form = new FormValidator('form1', 'post', api_get_self().'?'.api_get_cidreq(), '', ['id' => 'form1']);
     $form->addHeader(get_lang('Convert your text to speech'));

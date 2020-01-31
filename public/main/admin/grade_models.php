@@ -8,7 +8,7 @@ $this_section = SECTION_PLATFORM_ADMIN;
 
 api_protect_admin_script();
 
-if (api_get_setting('gradebook_enable_grade_model') != 'true') {
+if ('true' != api_get_setting('gradebook_enable_grade_model')) {
     api_not_allowed(true);
 }
 
@@ -23,10 +23,10 @@ $action = isset($_GET['action']) ? $_GET['action'] : null;
 $check = Security::check_token('request');
 $token = Security::get_token();
 
-if ($action === 'add') {
+if ('add' === $action) {
     $interbreadcrumb[] = ['url' => 'grade_models.php', 'name' => get_lang('Grading model')];
     $interbreadcrumb[] = ['url' => '#', 'name' => get_lang('Add')];
-} elseif ($action == 'edit') {
+} elseif ('edit' == $action) {
     $interbreadcrumb[] = ['url' => 'grade_models.php', 'name' => get_lang('Grading model')];
     $interbreadcrumb[] = ['url' => '#', 'name' => get_lang('Edit')];
 } else {
@@ -136,7 +136,7 @@ $obj = new GradeModel();
 // Action handling: Add
 switch ($action) {
     case 'add':
-        if (api_get_session_id() != 0 && !api_is_allowed_to_session_edit(false, true)) {
+        if (0 != api_get_session_id() && !api_is_allowed_to_session_edit(false, true)) {
             api_not_allowed();
         }
 

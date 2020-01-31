@@ -3,8 +3,6 @@
 
 /**
  * Report.
- *
- * @package chamilo.tracking
  */
 $cidReset = true;
 require_once __DIR__.'/../inc/global.inc.php';
@@ -40,7 +38,7 @@ $my_session_list = [];
 foreach ($session_list as $sesion_item) {
     $my_session_list[$sesion_item['id']] = $sesion_item['name'];
 }
-if (count($session_list) == 0) {
+if (0 == count($session_list)) {
     $my_session_list[0] = get_lang('none');
 }
 $form->addElement('select', 'session_id', get_lang('Course sessions'), $my_session_list);
@@ -137,7 +135,7 @@ if (!empty($users) && is_array($users)) {
         $total_student = 0;
         $counter++;
         $s_css_class = 'row_even';
-        if ($counter % 2 == 0) {
+        if (0 == $counter % 2) {
             $s_css_class = 'row_odd';
         }
         $html_result .= "<tr class='$s_css_class'>

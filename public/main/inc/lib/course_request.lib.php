@@ -4,14 +4,10 @@
 /**
  * Course request manager.
  *
- * @package chamilo.library
- *
  * @author José Manuel Abuin Mosquera <chema@cesga.es>, 2010
  * @author Bruno Rubio Gayo <brubio@cesga.es>, 2010
  * Centro de Supercomputacion de Galicia (CESGA)
  * @author Ivan Tcholakov <ivantcholakov@gmail.com> (technical adaptation for Chamilo 1.8.8), 2010
- *
- * @package chamilo.library
  */
 class CourseRequestManager
 {
@@ -72,7 +68,7 @@ class CourseRequestManager
         $user_id = (int) $user_id;
         $exemplary_content = (bool) $exemplary_content ? 1 : 0;
 
-        if ($wanted_code == '') {
+        if ('' == $wanted_code) {
             return false;
         }
 
@@ -274,7 +270,7 @@ class CourseRequestManager
         $user_id = (int) $user_id;
         $exemplary_content = (bool) $exemplary_content ? 1 : 0;
 
-        if ($wanted_code == '') {
+        if ('' == $wanted_code) {
             return false;
         }
 
@@ -367,7 +363,7 @@ class CourseRequestManager
         );
         $result_sql = Database::query($sql);
 
-        return $result_sql !== false;
+        return false !== $result_sql;
     }
 
     /**
@@ -384,7 +380,7 @@ class CourseRequestManager
                 WHERE id = ".$id;
         $result = Database::query($sql);
 
-        return $result !== false;
+        return false !== $result;
     }
 
     /**
@@ -594,7 +590,7 @@ class CourseRequestManager
         $sql = "UPDATE ".Database::get_main_table(TABLE_MAIN_COURSE_REQUEST)."
                 SET status = ".COURSE_REQUEST_REJECTED."
                 WHERE id = ".$id;
-        if (Database::query($sql) === false) {
+        if (false === Database::query($sql)) {
             return false;
         }
 
@@ -731,7 +727,7 @@ class CourseRequestManager
         // Marking the fact that additional information about the request has been asked.
         $sql = "UPDATE ".Database::get_main_table(TABLE_MAIN_COURSE_REQUEST)."
                 SET info = 1 WHERE id = ".$id;
-        $result = Database::query($sql) !== false;
+        $result = false !== Database::query($sql);
 
         return $result;
     }

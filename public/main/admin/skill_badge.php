@@ -4,8 +4,6 @@
  * Show information about Mozilla OpenBadges.
  *
  * @author Angel Fernando Quiroz Campos <angel.quiroz@beeznest.com>
- *
- * @package chamilo.admin.openbadges
  */
 $cidReset = true;
 
@@ -19,7 +17,7 @@ Skill::isAllowed();
 $backpack = 'https://backpack.openbadges.org/';
 
 $configBackpack = api_get_setting('openbadges_backpack');
-if (strcmp($backpack, $configBackpack) !== 0) {
+if (0 !== strcmp($backpack, $configBackpack)) {
     $backpack = $configBackpack;
 }
 

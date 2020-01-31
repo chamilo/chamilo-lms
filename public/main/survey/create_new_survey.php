@@ -2,8 +2,6 @@
 /* For licensing terms, see /license.txt */
 
 /**
- * @package chamilo.survey
- *
  * @author Patrick Cool <patrick.cool@UGent.be>, Ghent University: cleanup,
  *  refactoring and rewriting large parts (if not all) of the code
  * @author Julio Montoya Armas <gugli100@gmail.com>, Chamilo: Personality
@@ -46,14 +44,14 @@ $gradebook_link_type = 8;
 $urlname = isset($survey_data['title']) ? strip_tags($survey_data['title']) : null;
 
 // Breadcrumbs
-if ($action == 'add') {
+if ('add' == $action) {
     $interbreadcrumb[] = [
         'url' => api_get_path(WEB_CODE_PATH).'survey/survey_list.php?'.api_get_cidreq(),
         'name' => get_lang('Survey list'),
     ];
     $tool_name = get_lang('Create survey');
 }
-if ($action == 'edit' && is_numeric($survey_id)) {
+if ('edit' == $action && is_numeric($survey_id)) {
     $interbreadcrumb[] = [
         'url' => api_get_path(WEB_CODE_PATH).'survey/survey_list.php?'.api_get_cidreq(),
         'name' => get_lang('Survey list'),
@@ -66,7 +64,7 @@ if ($action == 'edit' && is_numeric($survey_id)) {
 }
 $gradebook_link_id = null;
 // Getting the default values
-if ($action == 'edit' && isset($survey_id) && is_numeric($survey_id)) {
+if ('edit' == $action && isset($survey_id) && is_numeric($survey_id)) {
     $defaults = $survey_data;
     $defaults['survey_id'] = $survey_id;
     $defaults['anonymous'] = $survey_data['anonymous'];
@@ -121,7 +119,7 @@ $form = new FormValidator(
 $form->addElement('header', $tool_name);
 
 // Setting the form elements
-if ($action == 'edit' && isset($survey_id) && is_numeric($survey_id)) {
+if ('edit' == $action && isset($survey_id) && is_numeric($survey_id)) {
     $form->addElement('hidden', 'survey_id');
 }
 
@@ -132,7 +130,7 @@ $survey_code = $form->addElement(
     ['size' => '20', 'maxlength' => '20', 'autofocus' => 'autofocus']
 );
 
-if ($action == 'edit') {
+if ('edit' == $action) {
     $survey_code->freeze();
     $form->applyFilter('survey_code', 'api_strtoupper');
 }
@@ -235,7 +233,7 @@ if (Gradebook::is_active()) {
 
     // Loading Gradebook select
     GradebookUtils::load_gradebook_select_in_tool($form);
-    if ($action == 'edit') {
+    if ('edit' == $action) {
         $element = $form->getElement('category_id');
         $element->freeze();
     }
@@ -246,7 +244,7 @@ if (Gradebook::is_active()) {
 $surveytypes[0] = get_lang('Normal');
 $surveytypes[1] = get_lang('Conditional');
 
-if ($action == 'add') {
+if ('add' == $action) {
     $form->addElement('hidden', 'survey_type', 0);
     $survey_tree = new SurveyTree();
     $list_surveys = $survey_tree->createList($survey_tree->surveylist);
@@ -260,8 +258,8 @@ $form->addElement('checkbox', 'shuffle', null, get_lang('Enable shuffle mode'));
 
 $input_name_list = null;
 
-if ($action == 'edit' && !empty($survey_id)) {
-    if ($survey_data['anonymous'] == 0) {
+if ('edit' == $action && !empty($survey_id)) {
+    if (0 == $survey_data['anonymous']) {
         $form->addElement(
             'checkbox',
             'show_form_profile',
@@ -270,7 +268,7 @@ if ($action == 'edit' && !empty($survey_id)) {
             'onclick="javascript: if(this.checked){document.getElementById(\'options_field\').style.display = \'block\';}else{document.getElementById(\'options_field\').style.display = \'none\';}"'
         );
 
-        if ($survey_data['show_form_profile'] == 1) {
+        if (1 == $survey_data['show_form_profile']) {
             $form->addElement('html', '<div id="options_field" style="display:block">');
         } else {
             $form->addElement('html', '<div id="options_field" style="display:none">');
@@ -281,7 +279,7 @@ if ($action == 'edit' && !empty($survey_id)) {
         if (is_array($field_list)) {
             // TODO hide and show the list in a fancy DIV
             foreach ($field_list as $key => &$field) {
-                if ($field['visibility'] == 1) {
+                if (1 == $field['visibility']) {
                     $form->addElement('checkbox', 'profile_'.$key, ' ', '&nbsp;&nbsp;'.$field['name']);
                     $input_name_list .= 'profile_'.$key.',';
                 }
@@ -295,7 +293,7 @@ if ($action == 'edit' && !empty($survey_id)) {
                 $form_fields = explode('@', $survey_data['form_fields']);
                 foreach ($form_fields as &$field) {
                     $field_value = explode(':', $field);
-                    if ($field_value[0] != '' && $field_value[1] != '') {
+                    if ('' != $field_value[0] && '' != $field_value[1]) {
                         $defaults[$field_value[0]] = $field_value[1];
                     }
                 }
@@ -309,14 +307,14 @@ $skillList = Skill::addSkillsToForm($form, ITEM_TYPE_SURVEY, $survey_id);
 
 $form->addElement('html', '</div><br />');
 
-if (isset($_GET['survey_id']) && $action == 'edit') {
+if (isset($_GET['survey_id']) && 'edit' == $action) {
     $form->addButtonUpdate(get_lang('Edit survey'), 'submit_survey');
 } else {
     $form->addButtonCreate(get_lang('Create survey'), 'submit_survey');
 }
 
 // Setting the rules
-if ($action == 'add') {
+if ('add' == $action) {
     $form->addRule('survey_code', get_lang('Required field'), 'required');
     $form->addRule('survey_code', '', 'maxlength', 20);
 }

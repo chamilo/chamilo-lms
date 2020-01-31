@@ -8,8 +8,6 @@
  * This script operates only in the case of an update, and only to change the
  * active version number (and other things that might need a change) in the
  * current configuration file.
- *
- * @package chamilo.install
  */
 error_log("Starting ".basename(__FILE__));
 

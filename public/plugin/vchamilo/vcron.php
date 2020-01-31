@@ -128,7 +128,7 @@ function fire_vhost_cron($vhost)
     echo "VCron stop on $vhost->root_web : ".api_time_to_hms($timestamp_receive)."\n#################\n\n";
     $vhost->lastcrongap = time() - $vhost->lastcron;
     $vhost->lastcron = $timestamp_send;
-    ++$vhost->croncount;
+    $vhost->croncount++;
 
     $vhostid = $vhost->id;
     unset($vhost->id);
@@ -168,7 +168,7 @@ function exec_vhost_cron($vhost)
 
     $vhost->lastcrongap = time() - $vhost->lastcron;
     $vhost->lastcron = $timestamp_send;
-    ++$vhost->croncount;
+    $vhost->croncount++;
 
     $DB->update_record('vchamilo', $vhost, 'id');
 }
@@ -286,7 +286,7 @@ if (ROUND_ROBIN == $VCRON->STRATEGY) {
             } else {
                 fire_vhost_cron($vhost);
             }
-            ++$i;
+            $i++;
             if ($i >= $hostsperturn) {
                 return;
             }

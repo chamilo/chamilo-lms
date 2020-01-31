@@ -9,7 +9,7 @@ $typeList = ['personal', 'course', 'admin', 'platform'];
 $type = isset($_REQUEST['type']) && in_array($_REQUEST['type'], $typeList) ? $_REQUEST['type'] : 'personal';
 $userId = isset($_REQUEST['user_id']) ? $_REQUEST['user_id'] : null;
 
-if ($type == 'personal' || $type == 'admin') {
+if ('personal' == $type || 'admin' == $type) {
     $cidReset = true; // fixes #5162
 }
 require_once __DIR__.'/../inc/global.inc.php';
@@ -22,12 +22,12 @@ $htmlHeadXtra[] = api_get_asset('fullcalendar/dist/locale-all.js');
 $htmlHeadXtra[] = api_get_asset('fullcalendar/dist/gcal.js');
 $htmlHeadXtra[] = api_get_css_asset('fullcalendar/dist/fullcalendar.min.css');*/
 
-if (api_is_platform_admin() && ($type == 'admin' || $type == 'platform')) {
+if (api_is_platform_admin() && ('admin' == $type || 'platform' == $type)) {
     $type = 'admin';
 }
 
 if (isset($_REQUEST['cidReq']) && !empty($_REQUEST['cidReq'])) {
-    if ($_REQUEST['cidReq'] == -1) {
+    if (-1 == $_REQUEST['cidReq']) {
         // When is out of the course tool (e.g My agenda)
         header('Location: '.api_get_self());
         exit;
@@ -109,7 +109,7 @@ switch ($type) {
 $tpl->assign('js_format_date', 'll');
 $region_value = api_get_language_isocode();
 
-if ($region_value == 'en') {
+if ('en' == $region_value) {
     $region_value = 'en-GB';
 }
 $tpl->assign('region_value', $region_value);
@@ -156,7 +156,7 @@ $tpl->assign('type', $type);
 
 $type_event_class = $type.'_event';
 $type_label = get_lang(ucfirst($type).'Calendar');
-if ($type == 'course' && !empty($group_id)) {
+if ('course' == $type && !empty($group_id)) {
     $type_event_class = 'group_event';
     $type_label = get_lang('Agenda');
 }
@@ -170,7 +170,7 @@ if (empty($defaultView)) {
 /* month, basicWeek, agendaWeek, agendaDay */
 $tpl->assign('default_view', $defaultView);
 
-if ($type == 'course' && !empty($session_id)) {
+if ('course' == $type && !empty($session_id)) {
     $type_event_class = 'session_event';
     $type_label = get_lang('Session calendar');
 }
@@ -219,7 +219,7 @@ if (!empty($userId)) {
     $agenda_ajax_url = api_get_path(WEB_AJAX_PATH).'agenda.ajax.php?type='.$type;
 }
 
-if ($type == 'course' && !empty($courseId)) {
+if ('course' == $type && !empty($courseId)) {
     $agenda_ajax_url .= '&'.api_get_cidreq();
 }
 
@@ -268,7 +268,7 @@ $form->addHtmlEditor(
     ]
 );
 
-if ($agenda->type === 'course') {
+if ('course' === $agenda->type) {
     $form->addHtml('<div id="add_as_announcement_div" style="display: none">');
     $form->addElement('checkbox', 'add_as_annonuncement', null, get_lang('Add as an announcement'));
     $form->addHtml('</div>');

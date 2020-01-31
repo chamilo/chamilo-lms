@@ -44,7 +44,7 @@ if (isset($_POST['formSent']) && $_POST['formSent']) {
         $sessions = [];
         $session_counter = 0;
 
-        if ($file_type == 'xml') {
+        if ('xml' == $file_type) {
             // XML
             // SimpleXML for PHP5 deals with various encodings, but how many they are, what are version issues, do we need to waste time with configuration options?
             // For avoiding complications we go some sort of "PHP4 way" - we convert the input xml-file into UTF-8 before passing it to the parser.
@@ -190,7 +190,7 @@ if (isset($_POST['formSent']) && $_POST['formSent']) {
 
                         if (!empty($coach)) {
                             $coach_id = UserManager::get_user_id_from_username($coach);
-                            if ($coach_id === false) {
+                            if (false === $coach_id) {
                                 $error_message .= get_lang('This user doesn\'t exist').' : '.$coach.'<br />';
                                 // Forcing the coach id if user does not exist.
                                 $coach_id = api_get_user_id();
@@ -265,7 +265,7 @@ if (isset($_POST['formSent']) && $_POST['formSent']) {
                         } else {
                             // Update the session if it is needed.
                             $my_session_result = SessionManager::get_session_by_name($session_name);
-                            if ($my_session_result === false) {
+                            if (false === $my_session_result) {
                                 // Creating the session.
                                 $sql_session = "INSERT IGNORE INTO $tbl_session SET
                                         name = '".Database::escape_string($session_name)."',
@@ -309,7 +309,7 @@ if (isset($_POST['formSent']) && $_POST['formSent']) {
                         foreach ($node_session->User as $node_user) {
                             $username = UserManager::purify_username(api_utf8_decode($node_user), $purification_option_for_usernames);
                             $user_id = UserManager::get_user_id_from_username($username);
-                            if ($user_id !== false) {
+                            if (false !== $user_id) {
                                 $sql = "INSERT IGNORE INTO $tbl_session_user SET
                                         user_id ='$user_id',
                                         session_id = '$session_id',
@@ -343,7 +343,7 @@ if (isset($_POST['formSent']) && $_POST['formSent']) {
                                 foreach ($course_coaches as $course_coach) {
                                     $coach_id = UserManager::purify_username(api_utf8_decode($course_coach), $purification_option_for_usernames);
                                     $coach_id = UserManager::get_user_id_from_username($course_coach);
-                                    if ($coach_id !== false) {
+                                    if (false !== $coach_id) {
                                         $sql = "INSERT IGNORE INTO $tbl_session_course_user SET
                                                 user_id='$coach_id',
                                                 c_id = '$courseId',
@@ -361,7 +361,7 @@ if (isset($_POST['formSent']) && $_POST['formSent']) {
                                 foreach ($node_course->User as $node_user) {
                                     $username = UserManager::purify_username(api_utf8_decode($node_user), $purification_option_for_usernames);
                                     $user_id = UserManager::get_user_id_from_username($username);
-                                    if ($user_id !== false) {
+                                    if (false !== $user_id) {
                                         // Adding to session_rel_user table.
                                         $sql = "INSERT IGNORE INTO $tbl_session_user SET
                                                 user_id ='$user_id',
@@ -432,8 +432,8 @@ if (isset($_POST['formSent']) && $_POST['formSent']) {
             }
             $warn = substr($warn, 0, -1);
         }
-        if ($session_counter == 1) {
-            if ($file_type == 'csv') {
+        if (1 == $session_counter) {
+            if ('csv' == $file_type) {
                 $session_id = current($sessionList);
             }
             Display::addFlash(Display::return_message($warn));

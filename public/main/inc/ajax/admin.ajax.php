@@ -20,7 +20,7 @@ switch ($action) {
     case 'update_changeable_setting':
         $url_id = api_get_current_access_url_id();
 
-        if (api_is_global_platform_admin() && $url_id == 1) {
+        if (api_is_global_platform_admin() && 1 == $url_id) {
             if (isset($_GET['id']) && !empty($_GET['id'])) {
                 $params = ['variable = ? ' => [$_GET['id']]];
                 $data = api_get_settings_params($params);
@@ -53,7 +53,7 @@ switch ($action) {
         if (api_is_multiple_url_enabled()) {
             $accessUrlId = api_get_current_access_url_id();
 
-            if ($accessUrlId != -1) {
+            if (-1 != $accessUrlId) {
                 $urlInfo = api_get_access_url($accessUrlId);
                 $url = api_remove_trailing_slash(preg_replace('/https?:\/\//i', '', $urlInfo['url']));
                 $cleanUrl = str_replace('/', '-', $url);
@@ -69,7 +69,7 @@ switch ($action) {
 
         break;
     case 'get_latest_news':
-        if (api_get_configuration_value('admin_chamilo_announcements_disable') === true) {
+        if (true === api_get_configuration_value('admin_chamilo_announcements_disable')) {
             break;
         }
 
@@ -104,7 +104,7 @@ function version_check()
 
     // The site has not been registered yet.
     $return = '';
-    if ($row['selected_value'] == 'false') {
+    if ('false' == $row['selected_value']) {
         $return .= get_lang('In order to enable the automatic version checking you have to register your portal on chamilo.org. The information obtained by clicking this button is only for internal use and only aggregated data will be publicly available (total number of portals, total number of chamilo course, total number of chamilo users, ...) (see <a href="http://www.chamilo.org/stats/">http://www.chamilo.org/stats/</a>. When registering you will also appear on the worldwide list (<a href="http://www.chamilo.org/community.php">http://www.chamilo.org/community.php</a>. If you do not want to appear in this list you have to check the checkbox below. The registration is as easy as it can be: you only have to click this button: <br />');
         $return .= '<form class="version-checking" action="'.api_get_path(WEB_CODE_PATH).'admin/index.php" id="VersionCheck" name="VersionCheck" method="post">';
         $return .= '<label class="checkbox"><input type="checkbox" name="donotlistcampus" value="1" id="checkbox" />'.get_lang('Hide campus from public platforms list');
@@ -145,7 +145,7 @@ function check_system_version()
     try {
         $client = new GuzzleHttp\Client();
         $res = $client->request('GET', $url, $options);
-        if ($res->getStatusCode() == '200' || $res->getStatusCode() == '301') {
+        if ('200' == $res->getStatusCode() || '301' == $res->getStatusCode()) {
             $urlValidated = true;
         }
     } catch (Exception $e) {
@@ -215,7 +215,7 @@ function check_system_version()
             $url .= urlencode($k).'='.urlencode($v).'&';
         }
         $res = $client->request('GET', $url, $options);
-        if ($res->getStatusCode() == '200') {
+        if ('200' == $res->getStatusCode()) {
             $versionData = $res->getHeader('X-Chamilo-Version');
             if (isset($versionData[0])) {
                 $version = trim($versionData[0]);
@@ -259,7 +259,7 @@ function getLatestNews()
         ]
     );
 
-    if ($response->getStatusCode() !== 200) {
+    if (200 !== $response->getStatusCode()) {
         throw new Exception(get_lang('Deny access'));
     }
 

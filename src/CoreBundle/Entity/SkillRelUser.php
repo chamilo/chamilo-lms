@@ -437,7 +437,7 @@ class SkillRelUser
             }
 
             $sum += $comment->getFeedbackValue();
-            ++$countValues;
+            $countValues++;
         }
 
         $average = $countValues > 0 ? $sum / $countValues : 0;

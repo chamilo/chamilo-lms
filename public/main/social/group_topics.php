@@ -2,8 +2,6 @@
 /* For licensing terms, see /license.txt */
 
 /**
- * @package chamilo.social
- *
  * @author Julio Montoya <gugli100@gmail.com>
  */
 $cidReset = true;
@@ -11,7 +9,7 @@ $cidReset = true;
 require_once __DIR__.'/../inc/global.inc.php';
 
 api_block_anonymous_users();
-if (api_get_setting('allow_social_tool') != 'true') {
+if ('true' != api_get_setting('allow_social_tool')) {
     api_not_allowed(true);
 }
 
@@ -33,12 +31,12 @@ if (empty($group_id)) {
     }
     $is_member = $usergroup->is_group_member($group_id);
 
-    if ($group_info['visibility'] == GROUP_PERMISSION_CLOSED && !$is_member) {
+    if (GROUP_PERMISSION_CLOSED == $group_info['visibility'] && !$is_member) {
         api_not_allowed(true);
     }
 }
 
-if (isset($_REQUEST['action']) && $_REQUEST['action'] == 'delete') {
+if (isset($_REQUEST['action']) && 'delete' == $_REQUEST['action']) {
     $group_role = $usergroup->get_user_group_role(api_get_user_id(), $group_id);
 
     if (api_is_platform_admin() ||
@@ -64,11 +62,11 @@ if (isset($_POST['action'])) {
     $group_id = intval($_POST['group_id']);
     $parent_id = intval($_POST['parent_id']);
 
-    if ($_POST['action'] == 'reply_message_group') {
+    if ('reply_message_group' == $_POST['action']) {
         $title = cut($content, 50);
     }
 
-    if ($_POST['action'] == 'edit_message_group') {
+    if ('edit_message_group' == $_POST['action']) {
         $edit_message_id = intval($_POST['message_id']);
         $res = MessageManager::send_message(
             0,
@@ -83,7 +81,7 @@ if (isset($_POST['action'])) {
             $topic_id
         );
     } else {
-        if ($_POST['action'] == 'add_message_group' && !$is_member) {
+        if ('add_message_group' == $_POST['action'] && !$is_member) {
             api_not_allowed(true);
         }
         $res = MessageManager::send_message(
@@ -104,7 +102,7 @@ if (isset($_POST['action'])) {
         Display::addFlash(Display::return_message(get_lang('Error'), 'error'));
     }
     $topic_id = isset($_GET['topic_id']) ? intval($_GET['topic_id']) : null;
-    if ($_POST['action'] == 'add_message_group') {
+    if ('add_message_group' == $_POST['action']) {
         $topic_id = $res;
     }
     $message_id = $res;

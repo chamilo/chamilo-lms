@@ -6,8 +6,6 @@ use Chamilo\CourseBundle\Entity\CForumPost;
 /**
  * Responses to AJAX calls for forum attachments.
  *
- * @package chamilo/forum
- *
  * @author Daniel Barreto Alva <daniel.barreto@beeznest.com>
  */
 require_once __DIR__.'/../global.inc.php';
@@ -40,8 +38,8 @@ if (!empty($action)) {
                 // They are several pieces for clarity.
                 if (!api_is_allowed_to_edit(null, true) &&
                     (
-                        ($current_forum_category && $current_forum_category['visibility'] == 0) ||
-                        $current_forum['visibility'] == 0
+                        ($current_forum_category && 0 == $current_forum_category['visibility']) ||
+                        0 == $current_forum['visibility']
                     )
                 ) {
                     $json['errorMessage'] = '1. the forum category, forum or thread is invisible (visibility==0)';
@@ -49,14 +47,14 @@ if (!empty($action)) {
                 }
                 if (!api_is_allowed_to_edit(null, true) &&
                     (
-                        ($current_forum_category && $current_forum_category['locked'] != 0) ||
-                        $current_forum['locked'] != 0 || $current_thread['locked'] != 0
+                        ($current_forum_category && 0 != $current_forum_category['locked']) ||
+                        0 != $current_forum['locked'] || 0 != $current_thread['locked']
                     )
                 ) {
                     $json['errorMessage'] = '2. the forum category, forum or thread is locked (locked <>0)';
                     break;
                 }
-                if (api_is_anonymous() && $current_forum['allow_anonymous'] == 0) {
+                if (api_is_anonymous() && 0 == $current_forum['allow_anonymous']) {
                     $json['errorMessage'] = '3. if anonymous posts are not allowed';
                     break;
                 }
@@ -77,7 +75,7 @@ if (!empty($action)) {
                 ) {
                     // Save forum attachment
                     $attachId = add_forum_attachment_file('', $postId);
-                    if ($attachId !== false) {
+                    if (false !== $attachId) {
                         // Get prepared array of attachment data
                         $array = getAttachedFiles(
                             $forumId,
@@ -114,8 +112,8 @@ if (!empty($action)) {
                 // They are several pieces for clarity.
                 if (!api_is_allowed_to_edit(null, true) &&
                     (
-                        ($current_forum_category && $current_forum_category['visibility'] == 0) ||
-                        $current_forum['visibility'] == 0
+                        ($current_forum_category && 0 == $current_forum_category['visibility']) ||
+                        0 == $current_forum['visibility']
                     )
                 ) {
                     $json['errorMessage'] = '1. the forum category, forum or thread is invisible (visibility==0)';
@@ -123,21 +121,21 @@ if (!empty($action)) {
                 }
                 if (!api_is_allowed_to_edit(null, true) &&
                     (
-                        ($current_forum_category && $current_forum_category['locked'] != 0) ||
-                        $current_forum['locked'] != 0 || $current_thread['locked'] != 0
+                        ($current_forum_category && 0 != $current_forum_category['locked']) ||
+                        0 != $current_forum['locked'] || 0 != $current_thread['locked']
                     )
                 ) {
                     $json['errorMessage'] = '2. the forum category, forum or thread is locked (locked <>0)';
                     break;
                 }
-                if (api_is_anonymous() && $current_forum['allow_anonymous'] == 0) {
+                if (api_is_anonymous() && 0 == $current_forum['allow_anonymous']) {
                     $json['errorMessage'] = '3. if anonymous posts are not allowed';
                     break;
                 }
                 $group_id = api_get_group_id();
                 $groupInfo = GroupManager::get_group_properties($group_id);
                 if (!api_is_allowed_to_edit(null, true) &&
-                    $current_forum['allow_edit'] == 0 &&
+                    0 == $current_forum['allow_edit'] &&
                     ($group_id && !GroupManager::is_tutor_of_group(api_get_user_id(), $groupInfo))
                 ) {
                     $json['errorMessage'] = '4. if editing of replies is not allowed';

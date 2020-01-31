@@ -6,8 +6,6 @@ use ChamiloSession as Session;
 /**
  * @author Bart Mollet
  * @author Julio Montoya <gugli100@gmail.com> BeezNest 2011
- *
- * @package chamilo.admin
  */
 $cidReset = true;
 require_once __DIR__.'/../inc/global.inc.php';
@@ -20,7 +18,7 @@ $currentUserId = api_get_user_id();
 $action = isset($_REQUEST['action']) ? $_REQUEST['action'] : '';
 
 // Login as can be used by different roles
-if (isset($_GET['user_id']) && $action == 'login_as') {
+if (isset($_GET['user_id']) && 'login_as' == $action) {
     $check = Security::check_token('get');
     if ($check && api_can_login_as($_GET['user_id'])) {
         $result = UserManager::loginAsUser($_GET['user_id']);
@@ -268,7 +266,7 @@ function prepare_user_sql_query($getCount)
         }
     }
 
-    if ($atLeastOne == false) {
+    if (false == $atLeastOne) {
         $keywordListValues = [];
     }
 
@@ -296,7 +294,7 @@ function prepare_user_sql_query($getCount)
         $keyword_admin = '';
 
         if (isset($keywordListValues['keyword_status']) &&
-            $keywordListValues['keyword_status'] == PLATFORM_ADMIN
+            PLATFORM_ADMIN == $keywordListValues['keyword_status']
         ) {
             $query_admin_table = " , $admin_table a ";
             $keyword_admin = ' AND a.user_id = u.id ';
@@ -341,7 +339,7 @@ function prepare_user_sql_query($getCount)
     }
 
     $preventSessionAdminsToManageAllUsers = api_get_setting('prevent_session_admins_to_manage_all_users');
-    if (api_is_session_admin() && $preventSessionAdminsToManageAllUsers === 'true') {
+    if (api_is_session_admin() && 'true' === $preventSessionAdminsToManageAllUsers) {
         $sql .= ' AND u.creator_id = '.$currentUserId;
     }
 
@@ -374,7 +372,7 @@ function prepare_user_sql_query($getCount)
                     if (empty($value)) {
                         continue;
                     }
-                    if ($info['field_type'] == ExtraField::FIELD_TYPE_TAG) {
+                    if (ExtraField::FIELD_TYPE_TAG == $info['field_type']) {
                         $result = $extraField->getAllUserPerTag(
                             $info['id'],
                             $value
@@ -468,7 +466,7 @@ function get_user_data($from, $number_of_items, $column, $direction)
             alt="'.api_get_person_name($user[2], $user[3]).'"
             title="'.api_get_person_name($user[2], $user[3]).'" />';
 
-        if ($user[7] == 1 && !empty($user['exp'])) {
+        if (1 == $user[7] && !empty($user['exp'])) {
             // check expiration date
             $expiration_time = convert_sql_date($user['exp']);
             // if expiration date is passed, store a special value for active field
@@ -805,20 +803,20 @@ function active_filter($active, $params, $row)
 {
     $_user = api_get_user_info();
 
-    if ($active == '1') {
+    if ('1' == $active) {
         $action = 'Lock';
         $image = 'accept';
-    } elseif ($active == '-1') {
+    } elseif ('-1' == $active) {
         $action = 'edit';
         $image = 'warning';
-    } elseif ($active == '0') {
+    } elseif ('0' == $active) {
         $action = 'Unlock';
         $image = 'error';
     }
 
     $result = '';
 
-    if ($action === 'edit') {
+    if ('edit' === $action) {
         $result = Display::return_icon(
             $image.'.png',
             get_lang('Account expired'),
@@ -1116,7 +1114,7 @@ $table->set_column_filter(8, 'active_filter');
 $table->set_column_filter(11, 'modify_filter');
 
 // Hide email column if login is email, to avoid column with same data
-if (api_get_setting('login_is_email') === 'true') {
+if ('true' === api_get_setting('login_is_email')) {
     $table->setHideColumn(6);
 }
 
@@ -1135,7 +1133,7 @@ $table_result = $table->return_table();
 $extra_search_options = '';
 
 // Try to search the user everywhere
-if ($table->get_total_number_of_items() == 0) {
+if (0 == $table->get_total_number_of_items()) {
     if (api_get_multiple_access_url() && isset($_REQUEST['keyword'])) {
         $keyword = Database::escape_string($_REQUEST['keyword']);
         $conditions = ['username' => $keyword];

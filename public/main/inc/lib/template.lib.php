@@ -82,7 +82,7 @@ class Template
 
         if (empty($this->show_learnpath)) {
             $origin = api_get_origin();
-            if ($origin === 'learnpath') {
+            if ('learnpath' === $origin) {
                 $this->show_learnpath = true;
                 $show_footer = false;
                 $show_header = false;
@@ -138,7 +138,7 @@ class Template
         }
 
         $content = '';
-        if (api_get_setting('enable_help_link') == 'true') {
+        if ('true' == api_get_setting('enable_help_link')) {
             if (!empty($help)) {
                 $help = Security::remove_XSS($help);
                 $content = '<div class="help">';
@@ -313,11 +313,11 @@ class Template
         $courseToolBar = '';
         $show_course_navigation_menu = '';
         if (!empty($this->course_id) && $this->user_is_logged_in) {
-            if (api_get_setting('show_toolshortcuts') !== 'false') {
+            if ('false' !== api_get_setting('show_toolshortcuts')) {
                 // Course toolbar
                 $courseToolBar = CourseHome::show_navigation_tool_shortcuts();
             }
-            if (api_get_setting('show_navigation_menu') !== 'false') {
+            if ('false' !== api_get_setting('show_navigation_menu')) {
                 //Course toolbar
                 $show_course_navigation_menu = CourseHome::show_navigation_menu();
             }
@@ -350,7 +350,7 @@ class Template
 
         // If a template folder has been manually defined, search for the right
         // file, and if not found, go for the same file in the default template
-        if ($defaultFolder && $defaultFolder != 'default') {
+        if ($defaultFolder && 'default' != $defaultFolder) {
             // Avoid missing template error, use the default file.
             if (file_exists($sysTemplatePath."$defaultFolder/$name")) {
                 return "$defaultFolder/$name";
@@ -509,7 +509,7 @@ class Template
 
         if (!empty($features) && isset($features['features'])) {
             foreach ($features['features'] as $feature) {
-                if ($feature === 'vrview') {
+                if ('vrview' === $feature) {
                     continue;
                 }
                 $bowerCSSFiles[] = "mediaelement/plugins/$feature/$feature.css";
@@ -575,7 +575,7 @@ class Template
         }
 
         $navigator_info = api_get_navigator();
-        if ($navigator_info['name'] == 'Internet Explorer' && $navigator_info['version'] == '6') {
+        if ('Internet Explorer' == $navigator_info['name'] && '6' == $navigator_info['version']) {
             $css_file_to_string .= 'img, div { behavior: url('.api_get_path(WEB_LIBRARY_PATH).'javascript/iepngfix/iepngfix.htc) } '."\n";
         }
 
@@ -610,7 +610,7 @@ class Template
         $isoCode = api_get_language_isocode();
         $selectLink = 'bootstrap-select/dist/js/i18n/defaults-'.$isoCode.'_'.strtoupper($isoCode).'.min.js';
 
-        if ($isoCode == 'en') {
+        if ('en' == $isoCode) {
             $selectLink = 'bootstrap-select/dist/js/i18n/defaults-'.$isoCode.'_US.min.js';
         }
         // JS files
@@ -618,19 +618,19 @@ class Template
             'chosen/chosen.jquery.min.js',
         ];
 
-        $viewBySession = api_get_setting('my_courses_view_by_session') === 'true';
+        $viewBySession = 'true' === api_get_setting('my_courses_view_by_session');
 
         if (api_is_global_chat_enabled() || $viewBySession) {
             // Do not include the global chat in LP
-            if ($this->show_learnpath == false &&
-                $this->show_footer == true &&
-                $this->hide_global_chat == false
+            if (false == $this->show_learnpath &&
+                true == $this->show_footer &&
+                false == $this->hide_global_chat
             ) {
                 $js_files[] = 'chat/js/chat.js';
             }
         }
 
-        if (api_get_setting('accessibility_font_resize') === 'true') {
+        if ('true' === api_get_setting('accessibility_font_resize')) {
             $js_files[] = 'fontresize.js';
         }
 
@@ -659,7 +659,7 @@ class Template
         $features = api_get_configuration_value('video_features');
         if (!empty($features) && isset($features['features'])) {
             foreach ($features['features'] as $feature) {
-                if ($feature === 'vrview') {
+                if ('vrview' === $feature) {
                     continue;
                 }
                 $bowerJsFiles[] = "mediaelement/plugins/$feature/$feature.js";
@@ -670,11 +670,11 @@ class Template
             $bowerJsFiles[] = 'ckeditor/ckeditor.js';
         }
 
-        if (api_get_setting('include_asciimathml_script') === 'true') {
+        if ('true' === api_get_setting('include_asciimathml_script')) {
             $bowerJsFiles[] = 'MathJax/MathJax.js?config=TeX-MML-AM_HTMLorMML';
         }
 
-        if ($isoCode != 'en') {
+        if ('en' != $isoCode) {
             $bowerJsFiles[] = 'jqueryui-timepicker-addon/dist/i18n/jquery-ui-timepicker-'.$isoCode.'.js';
             $bowerJsFiles[] = 'jquery-ui/ui/minified/i18n/datepicker-'.$isoCode.'.min.js';
         }
@@ -688,7 +688,7 @@ class Template
         }
 
         // Loading email_editor js
-        if (!api_is_anonymous() && api_get_setting('allow_email_editor') == 'true') {
+        if (!api_is_anonymous() && 'true' == api_get_setting('allow_email_editor')) {
             $template = $this->get_template('mail_editor/email_link.js.tpl');
             $js_file_to_string .= $this->fetch($template);
         }
@@ -764,7 +764,7 @@ class Template
         $js_files = [];
         if (api_is_global_chat_enabled()) {
             //Do not include the global chat in LP
-            if ($this->show_learnpath == false && $this->show_footer == true && $this->hide_global_chat == false) {
+            if (false == $this->show_learnpath && true == $this->show_footer && false == $this->hide_global_chat) {
                 $js_files[] = 'chat/js/chat.js';
             }
         }
@@ -873,7 +873,7 @@ class Template
                 case 'account_inactive':
                     $message = get_lang('Account inactive');
 
-                    if (api_get_setting('allow_registration') === 'confirmation') {
+                    if ('confirmation' === api_get_setting('allow_registration')) {
                         $message = get_lang('Your account is inactive because you have not confirmed it yet. Check your email and follow the instructions or click the following link to resend the email').PHP_EOL;
                         $message .= Display::url(
                             get_lang('Send confirmation mail again'),
@@ -955,7 +955,7 @@ class Template
 
         // Captcha
         $captcha = api_get_setting('allow_captcha');
-        $allowCaptcha = $captcha === 'true';
+        $allowCaptcha = 'true' === $captcha;
 
         if ($allowCaptcha) {
             $useCaptcha = isset($_SESSION['loginFailed']) ? $_SESSION['loginFailed'] : null;
@@ -1107,7 +1107,7 @@ class Template
             [],
             ICON_SIZE_LARGE
         );
-        if (api_get_setting('show_link_bug_notification') === 'true' && $this->user_is_logged_in) {
+        if ('true' === api_get_setting('show_link_bug_notification') && $this->user_is_logged_in) {
             $rightFloatMenu = '<div class="report">
 		        <a href="https://github.com/chamilo/chamilo-lms/wiki/How-to-report-issues" target="_blank">
                     '.$iconBug.'
@@ -1115,7 +1115,7 @@ class Template
 		        </div>';
         }
 
-        if (api_get_setting('show_link_ticket_notification') === 'true' &&
+        if ('true' === api_get_setting('show_link_ticket_notification') &&
             $this->user_is_logged_in
         ) {
             // by default is project_id = 1
@@ -1186,7 +1186,7 @@ class Template
             'directory' => $course['directory'],
             'session_id' => api_get_session_id(),
             'user_is_teacher' => api_is_course_admin(),
-            'student_view' => (!empty($_GET['isStudentView']) && $_GET['isStudentView'] == 'true'),
+            'student_view' => (!empty($_GET['isStudentView']) && 'true' == $_GET['isStudentView']),
         ];
         $this->assign('course_code', $course['code']);
         $this->assign('_c', $_c);
@@ -1263,7 +1263,7 @@ class Template
         if (!empty($course_title)) {
             $title_list[] = $course_title;
         }
-        if ($nameTools != '') {
+        if ('' != $nameTools) {
             $title_list[] = $nameTools;
         }
 
@@ -1286,7 +1286,7 @@ class Template
         $this->setCssCustomFiles();
 
         $browser = api_browser_support('check_browser');
-        if ($browser[0] == 'Internet Explorer' && $browser[1] >= '11') {
+        if ('Internet Explorer' == $browser[0] && $browser[1] >= '11') {
             $browser_head = '<meta http-equiv="X-UA-Compatible" content="IE=EmulateIE9" />';
             $this->assign('browser_specific_head', $browser_head);
         }
@@ -1315,14 +1315,14 @@ class Template
 
         // Logout link
         $hideLogout = api_get_setting('hide_logout_button');
-        if ($hideLogout === 'true') {
+        if ('true' === $hideLogout) {
             $this->assign('logout_link', null);
         } else {
             $this->assign('logout_link', api_get_path(WEB_PATH).'index.php?logout=logout&uid='.api_get_user_id());
         }
 
         // Profile link
-        if (api_get_setting('allow_social_tool') == 'true') {
+        if ('true' == api_get_setting('allow_social_tool')) {
             $profile_url = api_get_path(WEB_CODE_PATH).'social/home.php';
         } else {
             $profile_url = api_get_path(WEB_CODE_PATH).'auth/profile.php';
@@ -1333,7 +1333,7 @@ class Template
         //Message link
         $message_link = null;
         $message_url = null;
-        if (api_get_setting('allow_message_tool') == 'true') {
+        if ('true' == api_get_setting('allow_message_tool')) {
             $message_url = api_get_path(WEB_CODE_PATH).'messages/inbox.php';
             $message_link = '<a href="'.api_get_path(WEB_CODE_PATH).'messages/inbox.php">'.get_lang('Inbox').'</a>';
         }
@@ -1349,7 +1349,7 @@ class Template
 
         // Certificate Link
         $allow = api_get_configuration_value('certificate.hide_my_certificate_link');
-        if ($allow === false) {
+        if (false === $allow) {
             $certificateUrl = api_get_path(WEB_CODE_PATH).'gradebook/my_certificates.php';
             $certificateLink = Display::url(
                 get_lang('My certificates'),
@@ -1370,7 +1370,7 @@ class Template
 
         $breadcrumb = '';
         // Hide breadcrumb in LP
-        if ($this->show_learnpath == false) {
+        if (false == $this->show_learnpath) {
             $breadcrumb = return_breadcrumb(
                 $interbreadcrumb,
                 $language_file,
@@ -1563,7 +1563,7 @@ class Template
     private function assignAccessibilityBlock()
     {
         $resize = '';
-        if (api_get_setting('accessibility_font_resize') == 'true') {
+        if ('true' == api_get_setting('accessibility_font_resize')) {
             $resize .= '<div class="resize_font">';
             $resize .= '<div class="btn-group">';
             $resize .= '<a title="'.get_lang('Decrease the font size').'" href="#" class="decrease_font btn btn-default"><em class="fa fa-font"></em></a>';
@@ -1610,7 +1610,7 @@ class Template
                 // Check session ID from session/id/about (see .htaccess)
                 $sessionId = isset($_GET['session_id']) ? intval($_GET['session_id']) : 0;
 
-                if ($courseId != false) {
+                if (false != $courseId) {
                     // If we are inside a course (even if within a session), publish info about the course
                     $course = api_get_course_entity($courseId);
                     // @TODO: support right-to-left in title
@@ -1635,7 +1635,7 @@ class Template
                     } else {
                         $socialMeta .= $this->getMetaPortalImagePath($metaTitle);
                     }
-                } elseif ($sessionId !== 0) {
+                } elseif (0 !== $sessionId) {
                     // If we are on a session "about" screen, publish info about the session
                     $em = Database::getManager();
                     $session = $em->find('ChamiloCoreBundle:Session', $sessionId);

@@ -74,14 +74,14 @@ abstract class XapianIndexer
      */
     public function connectDb($path = null, $dbMode = null, $lang = 'english')
     {
-        if ($this->db != null) {
+        if (null != $this->db) {
             return $this->db;
         }
-        if ($dbMode == null) {
+        if (null == $dbMode) {
             $dbMode = Xapian::DB_CREATE_OR_OPEN;
         }
 
-        if ($path == null) {
+        if (null == $path) {
             $path = api_get_path(SYS_UPLOAD_PATH).'plugins/xapian/searchdb/';
         }
 
@@ -172,7 +172,7 @@ abstract class XapianIndexer
      */
     public function get_document($did)
     {
-        if ($this->db == null) {
+        if (null == $this->db) {
             $this->connectDb();
         }
         try {
@@ -194,7 +194,7 @@ abstract class XapianIndexer
      */
     public function get_document_data($doc)
     {
-        if ($this->db == null) {
+        if (null == $this->db) {
             $this->connectDb();
         }
         try {
@@ -223,7 +223,7 @@ abstract class XapianIndexer
     public function update_terms($did, $terms, $prefix)
     {
         $doc = $this->get_document($did);
-        if ($doc === false) {
+        if (false === $doc) {
             return false;
         }
         $doc->clear_terms();
@@ -244,13 +244,13 @@ abstract class XapianIndexer
      */
     public function remove_document($did)
     {
-        if ($this->db == null) {
+        if (null == $this->db) {
             $this->connectDb();
         }
         $did = (int) $did;
         if ($did > 0) {
             $doc = $this->get_document($did);
-            if ($doc !== false) {
+            if (false !== $doc) {
                 $this->db->delete_document($did);
                 $this->db->flush();
             }
@@ -314,7 +314,7 @@ abstract class XapianIndexer
         if (!is_a($doc, 'XapianDocument')) {
             return false;
         }
-        if ($this->db == null) {
+        if (null == $this->db) {
             $this->connectDb();
         }
         try {

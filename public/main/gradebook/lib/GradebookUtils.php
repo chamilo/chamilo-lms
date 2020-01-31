@@ -130,7 +130,7 @@ class GradebookUtils
             }
         } else {
             $isCoach = api_is_coach(api_get_session_id(), api_get_course_int_id());
-            if ($isCoach === false) {
+            if (false === $isCoach) {
                 if (!api_is_allowed_to_edit()) {
                     api_not_allowed();
                 }
@@ -224,9 +224,9 @@ class GradebookUtils
         $selectcat = $selectcat->get_id();
         $modify_icons = null;
 
-        if ($show_message === false) {
-            $visibility_icon = ($cat->is_visible() == 0) ? 'invisible' : 'visible';
-            $visibility_command = ($cat->is_visible() == 0) ? 'set_visible' : 'set_invisible';
+        if (false === $show_message) {
+            $visibility_icon = (0 == $cat->is_visible()) ? 'invisible' : 'visible';
+            $visibility_command = (0 == $cat->is_visible()) ? 'set_visible' : 'set_invisible';
 
             $modify_icons .= '<a class="view_children" data-cat-id="'.$cat->get_id().'" href="javascript:void(0);">'.
                 Display::return_icon(
@@ -262,7 +262,7 @@ class GradebookUtils
 
             if (api_is_allowed_to_edit(null, true)) {
                 // Locking button
-                if (api_get_setting('gradebook_locking_enabled') == 'true') {
+                if ('true' == api_get_setting('gradebook_locking_enabled')) {
                     if ($cat->is_locked()) {
                         if (api_is_platform_admin()) {
                             $modify_icons .= '&nbsp;<a onclick="javascript:if (!confirm(\''.addslashes(get_lang('Are you sure you want to unlock this element?')).'\')) return false;" href="'.api_get_self().'?'.api_get_cidreq().'&category_id='.$cat->get_id().'&action=unlock">'.
@@ -280,7 +280,7 @@ class GradebookUtils
                     }
                 }
 
-                if (empty($grade_model_id) || $grade_model_id == -1) {
+                if (empty($grade_model_id) || -1 == $grade_model_id) {
                     if ($cat->is_locked() && !api_is_platform_admin()) {
                         $modify_icons .= Display::return_icon(
                             'edit_na.png',
@@ -361,9 +361,9 @@ class GradebookUtils
         $message_eval = $cat->show_message_resource_delete($eval->get_course_code());
         $courseParams = api_get_cidreq_params($eval->get_course_code(), $eval->getSessionId());
 
-        if ($message_eval === false && api_is_allowed_to_edit(null, true)) {
-            $visibility_icon = $eval->is_visible() == 0 ? 'invisible' : 'visible';
-            $visibility_command = $eval->is_visible() == 0 ? 'set_visible' : 'set_invisible';
+        if (false === $message_eval && api_is_allowed_to_edit(null, true)) {
+            $visibility_icon = 0 == $eval->is_visible() ? 'invisible' : 'visible';
+            $visibility_command = 0 == $eval->is_visible() ? 'set_visible' : 'set_invisible';
             if ($is_locked && !api_is_platform_admin()) {
                 $modify_icons = Display::return_icon(
                     'edit_na.png',
@@ -458,9 +458,9 @@ class GradebookUtils
             $link->get_session_id()
         );
 
-        if ($message_link === false) {
-            $visibility_icon = $link->is_visible() == 0 ? 'invisible' : 'visible';
-            $visibility_command = $link->is_visible() == 0 ? 'set_visible' : 'set_invisible';
+        if (false === $message_link) {
+            $visibility_icon = 0 == $link->is_visible() ? 'invisible' : 'visible';
+            $visibility_command = 0 == $link->is_visible() ? 'set_visible' : 'set_invisible';
 
             if ($is_locked && !api_is_platform_admin()) {
                 $modify_icons = Display::return_icon(
@@ -498,7 +498,7 @@ class GradebookUtils
                 '</a>';
 
             $allowStats = api_get_configuration_value('allow_gradebook_stats');
-            if ($allowStats && $link->get_type() == LINK_EXERCISE) {
+            if ($allowStats && LINK_EXERCISE == $link->get_type()) {
                 $modify_icons .= Display::url(
                     Display::return_icon('reload.png', get_lang('Generate statistics')),
                     api_get_self().'?itemId='.$link->get_id().'&action=generate_link_stats&selectcat='.$selectcat.'&'.$courseParams
@@ -697,7 +697,7 @@ class GradebookUtils
                 WHERE gc.cat_id = $cat_id AND user_id = $user_id ";
         $rs_exist = Database::query($sql);
         $row = Database::fetch_array($rs_exist);
-        if ($row['count'] == 0) {
+        if (0 == $row['count']) {
             $params = [
                 'cat_id' => $cat_id,
                 'user_id' => $user_id,
@@ -987,7 +987,7 @@ class GradebookUtils
                 if ($my_cat->get_course_code() == api_get_course_id()) {
                     $grade_model_id = $my_cat->get_grade_model_id();
                     if (empty($grade_model_id)) {
-                        if ($my_cat->get_parent_id() == 0) {
+                        if (0 == $my_cat->get_parent_id()) {
                             //$default_weight = $my_cat->get_weight();
                             $select_gradebook->addoption(get_lang('Default'), $my_cat->get_id());
                             $cats_added[] = $my_cat->get_id();
@@ -1052,7 +1052,7 @@ class GradebookUtils
 
         $parent_id = $cat[0]->get_parent_id();
         if (isset($cat[0]) && isset($parent_id)) {
-            if ($parent_id == 0) {
+            if (0 == $parent_id) {
                 $grade_model_id = $cat[0]->get_grade_model_id();
             } else {
                 $parent_cat = Category::load($parent_id);
@@ -1061,18 +1061,18 @@ class GradebookUtils
         }
 
         $use_grade_model = true;
-        if (empty($grade_model_id) || $grade_model_id == -1) {
+        if (empty($grade_model_id) || -1 == $grade_model_id) {
             $use_grade_model = false;
         }
 
         if ($use_grade_model) {
-            if ($parent_id == 0) {
+            if (0 == $parent_id) {
                 $title = api_strtoupper(get_lang('Average')).'<br />'.get_lang('Detailed');
             } else {
                 $title = api_strtoupper(get_lang('Average')).'<br />'.$cat[0]->get_description().' - ('.$cat[0]->get_name().')';
             }
         } else {
-            if ($parent_id == 0) {
+            if (0 == $parent_id) {
                 $title = api_strtoupper(get_lang('Average')).'<br />'.get_lang('Detailed');
             } else {
                 $title = api_strtoupper(get_lang('Average'));
@@ -1110,10 +1110,10 @@ class GradebookUtils
                     $attributes['align'] = 'center';
                     $attributes['style'] = null;
 
-                    if ($key === 'name') {
+                    if ('name' === $key) {
                         $attributes['align'] = 'left';
                     }
-                    if ($key === 'total') {
+                    if ('total' === $key) {
                         $attributes['style'] = 'font-weight:bold';
                     }
                     $table->setCellContents($row, $column, $printable_data_cell);
@@ -1136,7 +1136,7 @@ class GradebookUtils
             'add_signatures' => ['Drh', 'Teacher', 'Date'],
         ];
 
-        $page_format = $params['orientation'] === 'landscape' ? 'A4-L' : 'A4';
+        $page_format = 'landscape' === $params['orientation'] ? 'A4-L' : 'A4';
         ob_start();
         $pdf = new PDF($page_format, $page_format, $pdfParams);
         $pdf->html_to_pdf_with_template($flatviewtable->return_table(), false, false, true);
@@ -1157,7 +1157,7 @@ class GradebookUtils
         $badges = [];
         foreach ($list_values as $value) {
             $class = 'warning';
-            if ($counter == 1) {
+            if (1 == $counter) {
                 $class = 'success';
             }
             $counter++;
@@ -1604,10 +1604,10 @@ class GradebookUtils
         $alllink = $cats[0]->get_links($userId);
 
         $loadStats = [];
-        if (api_get_setting('gradebook_detailed_admin_view') === 'true') {
+        if ('true' === api_get_setting('gradebook_detailed_admin_view')) {
             $loadStats = [1, 2, 3];
         } else {
-            if (api_get_configuration_value('gradebook_enable_best_score') !== false) {
+            if (false !== api_get_configuration_value('gradebook_enable_best_score')) {
                 $loadStats = [2];
             }
         }

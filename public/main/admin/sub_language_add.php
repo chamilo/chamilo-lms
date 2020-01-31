@@ -3,8 +3,6 @@
 
 /**
  * This script allows for the addition of sub-languages.
- *
- * @package chamilo.admin
  */
 $cidReset = true;
 require_once __DIR__.'/../inc/global.inc.php';
@@ -45,7 +43,7 @@ function add_sub_language($original_name, $english_name, $isocode, $sublanguage_
     $sql = 'INSERT INTO '.$tbl_admin_languages.'(original_name,english_name,isocode,dokeos_folder,available,parent_id)
     	  VALUES ("'.$original_name.'","'.$english_name.'","'.$isocode.'","'.$english_name.'","'.$sublanguage_available.'","'.$parent_id.'")';
     $res = Database::query($sql);
-    if ($res === false) {
+    if (false === $res) {
         return false;
     }
 
@@ -84,11 +82,11 @@ function check_if_language_exist($original_name, $english_name, $isocode, $subla
     $has_error = false;
     $message_information = [];
 
-    if ($count_original_name == 1) {
+    if (1 == $count_original_name) {
         $has_error = true;
         $message_information['original_name'] = true;
     }
-    if ($count_english_name == 1) {
+    if (1 == $count_english_name) {
         $has_error = true;
         $message_information['english_name'] = true;
     }
@@ -100,10 +98,10 @@ function check_if_language_exist($original_name, $english_name, $isocode, $subla
         $has_error = true;
         $message_information['isocode'] = true;
     }
-    if ($has_error === true) {
+    if (true === $has_error) {
         $message_information['execute_add'] = false;
     }
-    if ($has_error === false) {
+    if (false === $has_error) {
         $message_information['execute_add'] = true;
     }
 
@@ -136,7 +134,7 @@ function ckeck_if_is_parent_of_sub_language($parent_id)
 {
     $sql = 'SELECT count(*) AS count FROM language WHERE parent_id= '.intval($parent_id);
     $rs = Database::query($sql);
-    if (Database::num_rows($rs) > 0 && Database::result($rs, 0, 'count') == 1) {
+    if (Database::num_rows($rs) > 0 && 1 == Database::result($rs, 0, 'count')) {
         return true;
     } else {
         return false;
@@ -162,7 +160,7 @@ function allow_get_all_information_of_sub_language($parent_id, $sub_language_id)
 
 if (isset($_GET['sub_language_id']) && $_GET['sub_language_id'] == strval(intval($_GET['sub_language_id']))) {
     $language_name = SubLanguageManager::get_name_of_language_by_id($_GET['sub_language_id']);
-    if (check_if_exist_language_by_id($_GET['sub_language_id']) === true) {
+    if (true === check_if_exist_language_by_id($_GET['sub_language_id'])) {
         $sub_language_id = $_GET['sub_language_id'];
         $sub_language_id_exist = true;
     } else {
@@ -174,7 +172,7 @@ $language_name = '';
 if (isset($_GET['id']) && $_GET['id'] == strval(intval($_GET['id']))) {
     $language_details = SubLanguageManager::get_all_information_of_language($_GET['id']);
     $language_name = $language_details['original_name'];
-    if (check_if_exist_language_by_id($_GET['id']) === true) {
+    if (true === check_if_exist_language_by_id($_GET['id'])) {
         $parent_id = $_GET['id'];
         $language_id_exist = true;
     } else {
@@ -189,7 +187,7 @@ if (isset($_GET['id']) && $_GET['id'] == strval(intval($_GET['id']))) {
 if ((isset($_GET['id']) && $_GET['id'] == strval(intval($_GET['id']))) &&
     (isset($_GET['sub_language_id']) && $_GET['sub_language_id'] == strval(intval($_GET['sub_language_id'])))
 ) {
-    if (check_if_exist_language_by_id($_GET['id']) === true && check_if_exist_language_by_id($_GET['sub_language_id']) === true) {
+    if (true === check_if_exist_language_by_id($_GET['id']) && true === check_if_exist_language_by_id($_GET['sub_language_id'])) {
         $get_all_information = allow_get_all_information_of_sub_language($_GET['id'], $_GET['sub_language_id']);
         $original_name = $get_all_information['original_name'];
         $english_name = $get_all_information['english_name'];
@@ -199,8 +197,8 @@ if ((isset($_GET['id']) && $_GET['id'] == strval(intval($_GET['id']))) &&
 
 $language_name = get_lang('Create sub-languageForLanguage').' ( '.strtolower($language_name).' )';
 
-if (ckeck_if_is_parent_of_sub_language($parent_id) === true &&
-    isset($_GET['action']) && $_GET['action'] == 'deletesublanguage'
+if (true === ckeck_if_is_parent_of_sub_language($parent_id) &&
+    isset($_GET['action']) && 'deletesublanguage' == $_GET['action']
 ) {
     $language_name = get_lang('Delete sub-language');
 }
@@ -219,28 +217,28 @@ if (isset($_POST['SubmitAddNewLanguage'])) {
     $check_information = check_if_language_exist($original_name, $english_name, $isocode, $sublanguage_available);
     foreach ($check_information as $index_information => $value_information) {
         $allow_insert_info = false;
-        if ($index_information == 'original_name') {
+        if ('original_name' == $index_information) {
             $msg .= Display::return_message(
                 get_lang('Already exists').' "'.get_lang('Original name').'" '.'('.$original_name.')',
                 'error'
             );
         }
-        if ($index_information == 'english_name') {
+        if ('english_name' == $index_information) {
             $msg .= Display::return_message(
                 get_lang('Already exists').' "'.get_lang('English name').'" '.'('.$english_name.')',
                 'error'
             );
         }
-        if ($index_information == 'isocode') {
+        if ('isocode' == $index_information) {
             $msg .= Display::return_message(get_lang('This code does not exist').': '.$isocode.'', 'error');
         }
-        if ($index_information == 'execute_add' && $value_information === true) {
+        if ('execute_add' == $index_information && true === $value_information) {
             $allow_insert_info = true;
         }
     }
 
     if (strlen($original_name) > 0 && strlen($english_name) > 0 && strlen($isocode) > 0) {
-        if ($allow_insert_info === true && $language_id_exist === true) {
+        if (true === $allow_insert_info && true === $language_id_exist) {
             $english_name = str_replace(' ', '_', $english_name);
             //Fixes BT#1636
             $english_name = api_strtolower($english_name);
@@ -251,7 +249,7 @@ if (isset($_POST['SubmitAddNewLanguage'])) {
             $mkdir_result = SubLanguageManager::add_language_directory($english_name);
             if ($mkdir_result) {
                 $sl_id = add_sub_language($original_name, $english_name, $isocode, $sublanguage_available, $parent_id);
-                if ($sl_id === false) {
+                if (false === $sl_id) {
                     SubLanguageManager::remove_language_directory($english_name);
                     $msg .= Display::return_message(get_lang('The /main/lang directory, used on this portal to store the languages, is not writable. Please contact your platform administrator and report this message.'), 'error');
                 } else {
@@ -267,7 +265,7 @@ if (isset($_POST['SubmitAddNewLanguage'])) {
                 $msg .= Display::return_message(get_lang('The /main/lang directory, used on this portal to store the languages, is not writable. Please contact your platform administrator and report this message.'), 'error');
             }
         } else {
-            if ($language_id_exist === false) {
+            if (false === $language_id_exist) {
                 $msg .= Display::return_message(get_lang('The parent language does not exist.'), 'error');
             }
         }
@@ -282,14 +280,14 @@ echo $msg;
 
 if (isset($_POST['SubmitAddDeleteLanguage'])) {
     $rs = SubLanguageManager::remove_sub_language($_GET['id'], $_GET['sub_language_id']);
-    if ($rs === true) {
+    if (true === $rs) {
         echo Display::return_message(get_lang('The sub language has been removed'), 'confirm');
     } else {
         echo Display::return_message(get_lang('The sub-language has not been removed.'), 'error');
     }
 }
 // ckeck_if_is_parent_of_sub_language($parent_id)===false
-if (isset($_GET['action']) && $_GET['action'] == 'definenewsublanguage') {
+if (isset($_GET['action']) && 'definenewsublanguage' == $_GET['action']) {
     $text = $language_name;
     $form = new FormValidator(
         'addsublanguage',
@@ -313,7 +311,7 @@ if (isset($_GET['action']) && $_GET['action'] == 'definenewsublanguage') {
     $form->setDefaults($values);
     $form->display();
 } else {
-    if (isset($_GET['action']) && $_GET['action'] == 'deletesublanguage') {
+    if (isset($_GET['action']) && 'deletesublanguage' == $_GET['action']) {
         $text = $language_name;
         $form = new FormValidator(
             'deletesublanguage',
@@ -328,7 +326,7 @@ if (isset($_GET['action']) && $_GET['action'] == 'definenewsublanguage') {
         $form->addButtonCreate(get_lang('Delete sub-language'), 'SubmitAddDeleteLanguage');
         $form->display();
     }
-    if (isset($_GET['action']) && $_GET['action'] == 'definenewsublanguage') {
+    if (isset($_GET['action']) && 'definenewsublanguage' == $_GET['action']) {
         echo Display::return_message(get_lang('The sub-language of this language has been added'));
     }
 }

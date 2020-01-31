@@ -112,7 +112,7 @@ class ZombieReport implements Countable
     {
         $form = $this->get_parameters_form();
 
-        return $form->isSubmitted() == false || $form->validate();
+        return false == $form->isSubmitted() || $form->validate();
     }
 
     public function get_ceiling($format = null)
@@ -120,7 +120,7 @@ class ZombieReport implements Countable
         $result = Request::get('ceiling');
         $result = $result ? $result : ZombieManager::last_year();
 
-        $result = is_array($result) && count($result) == 1 ? reset($result) : $result;
+        $result = is_array($result) && 1 == count($result) ? reset($result) : $result;
         $result = is_array($result) ? mktime(0, 0, 0, $result['F'], $result['d'], $result['Y']) : $result;
         $result = is_numeric($result) ? (int) $result : $result;
         $result = is_string($result) ? strtotime($result) : $result;
@@ -134,8 +134,8 @@ class ZombieReport implements Countable
     public function get_active_only()
     {
         $result = Request::get('active_only', false);
-        $result = $result === 'true' ? true : $result;
-        $result = $result === 'false' ? false : $result;
+        $result = 'true' === $result ? true : $result;
+        $result = 'false' === $result ? false : $result;
         $result = (bool) $result;
 
         return $result;
@@ -265,7 +265,7 @@ class ZombieReport implements Countable
      */
     public function format_active($active)
     {
-        $active = $active == '1';
+        $active = '1' == $active;
         if ($active) {
             $image = 'accept';
             $text = get_lang('Yes');

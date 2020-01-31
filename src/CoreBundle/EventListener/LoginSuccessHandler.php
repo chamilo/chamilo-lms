@@ -111,9 +111,9 @@ class LoginSuccessHandler
             foreach ($personal_course_list as $course) {
                 if (!empty($course['session_id'])) {
                     $my_session_list[$course['session_id']] = true;
-                    ++$count_of_courses_with_sessions;
+                    $count_of_courses_with_sessions++;
                 } else {
-                    ++$count_of_courses_no_sessions;
+                    $count_of_courses_no_sessions++;
                 }
             }
 

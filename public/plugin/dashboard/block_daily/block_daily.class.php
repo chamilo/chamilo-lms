@@ -114,7 +114,7 @@ class BlockDaily extends Block
                     $data_table .= '<td align="right">'.$cell.'</td>';
                 }
                 $data_table .= '</tr>';
-                ++$i;
+                $i++;
             }
             $data_table .= '</table>';
         } else {
@@ -229,7 +229,7 @@ class BlockDaily extends Block
                         if (count($eval) - 1 != $i) {
                             $score .= ', ';
                         }
-                        ++$i;
+                        $i++;
                     }
                 } else {
                     $score = get_lang('Not available');

@@ -13,8 +13,6 @@ use ChamiloSession as Session;
  * - click on the table header to sort the data
  * - choose how many items you see per page
  * - navigate through all data-pages.
- *
- * @package chamilo.library
  */
 class SortableTable extends HTML_Table
 {
@@ -159,7 +157,7 @@ class SortableTable extends HTML_Table
         }
 
         $cleanSessionData = Session::read('clean_sortable_table');
-        if ($cleanSessionData === true) {
+        if (true === $cleanSessionData) {
             $this->cleanUrlSessionParams();
         }
 
@@ -195,9 +193,9 @@ class SortableTable extends HTML_Table
             if (!in_array($my_session_direction, ['ASC', 'DESC'])) {
                 $this->direction = 'ASC';
             } else {
-                if ($my_session_direction === 'ASC') {
+                if ('ASC' === $my_session_direction) {
                     $this->direction = 'ASC';
-                } elseif ($my_session_direction === 'DESC') {
+                } elseif ('DESC' === $my_session_direction) {
                     $this->direction = 'DESC';
                 }
             }
@@ -208,9 +206,9 @@ class SortableTable extends HTML_Table
             if (!in_array($my_get_direction, ['ASC', 'DESC'])) {
                 $this->direction = 'ASC';
             } else {
-                if ($my_get_direction === 'ASC') {
+                if ('ASC' === $my_get_direction) {
                     $this->direction = 'ASC';
-                } elseif ($my_get_direction === 'DESC') {
+                } elseif ('DESC' === $my_get_direction) {
                     $this->direction = 'DESC';
                 }
             }
@@ -282,7 +280,7 @@ class SortableTable extends HTML_Table
      */
     public function get_pager()
     {
-        if ($this->pager === null) {
+        if (null === $this->pager) {
             $params['mode'] = 'Sliding';
             $params['perPage'] = $this->per_page;
             $params['totalItems'] = $this->get_total_number_of_items();
@@ -351,7 +349,7 @@ class SortableTable extends HTML_Table
     {
         $empty_table = false;
         $content = $this->get_table_html();
-        if ($this->get_total_number_of_items() == 0) {
+        if (0 == $this->get_total_number_of_items()) {
             $cols = $this->getColCount();
             $this->setCellAttributes(
                 1,
@@ -465,7 +463,7 @@ class SortableTable extends HTML_Table
     public function display_grid()
     {
         $empty_table = false;
-        if ($this->get_total_number_of_items() == 0) {
+        if (0 == $this->get_total_number_of_items()) {
             $message_empty = api_xml_http_response_encode(get_lang('Empty'));
             $this->setCellContents(1, 0, $message_empty);
             $empty_table = true;
@@ -552,7 +550,7 @@ class SortableTable extends HTML_Table
         $grid_class = []
     ) {
         $empty_table = false;
-        if ($this->get_total_number_of_items() == 0) {
+        if (0 == $this->get_total_number_of_items()) {
             $message_empty = api_xml_http_response_encode(get_lang('Empty'));
             $this->setCellContents(1, 0, $message_empty);
             $empty_table = true;
@@ -598,7 +596,7 @@ class SortableTable extends HTML_Table
         if (is_array($visibility_options)) {
             $filter = false; // The 2nd condition of the if will be loaded
         } else {
-            $filter = $visibility_options !== false;
+            $filter = false !== $visibility_options;
         }
 
         $item_css_class = $item_css_style = $grid_css_class = $grid_css_style = '';
@@ -700,7 +698,7 @@ class SortableTable extends HTML_Table
             }
         }
 
-        if ($this->odd_even_rows_enabled == true) {
+        if (true == $this->odd_even_rows_enabled) {
             $this->altRowAttributes(
                 0,
                 ['class' => 'row_odd'],
@@ -754,7 +752,7 @@ class SortableTable extends HTML_Table
             return '';
         }
 
-        if ($this->hideItemSelector === true) {
+        if (true === $this->hideItemSelector) {
             return '';
         }
         $result[] = '<form method="GET" action="'.api_get_self().'" style="display:inline;">';
@@ -835,7 +833,7 @@ class SortableTable extends HTML_Table
 
             $column = $counter;
             $param['direction'] = 'ASC';
-            if ($this->column == $column && $this->direction == 'ASC') {
+            if ($this->column == $column && 'ASC' == $this->direction) {
                 $param['direction'] = 'DESC';
             }
 
@@ -851,7 +849,7 @@ class SortableTable extends HTML_Table
                 $link .= $this->get_additional_url_paramstring();
                 $link .= '">'.$label.'</a>';
                 if ($this->column == $column) {
-                    $link .= $this->direction == 'ASC' ? ' &#8595;' : ' &#8593;';
+                    $link .= 'ASC' == $this->direction ? ' &#8595;' : ' &#8593;';
                 }
             }
             $this->setHeaderContents(0, $column, $link);
@@ -1067,7 +1065,7 @@ class SortableTable extends HTML_Table
      */
     public function get_total_number_of_items()
     {
-        if ($this->total_number_of_items == -1 && !is_null($this->get_total_number_function)) {
+        if (-1 == $this->total_number_of_items && !is_null($this->get_total_number_function)) {
             $this->total_number_of_items = call_user_func(
                 $this->get_total_number_function,
                 $this->getDataFunctionParams()
@@ -1108,7 +1106,7 @@ class SortableTable extends HTML_Table
         $sort = null
     ) {
         $data = [];
-        if ($this->get_data_function !== null) {
+        if (null !== $this->get_data_function) {
             $data = call_user_func(
                 $this->get_data_function,
                 $from,

@@ -7,8 +7,6 @@ use ChamiloSession as Session;
  * View (MVC patter) for thematic plan.
  *
  * @author Christian Fasanando <christian1827@gmail.com>
- *
- * @package chamilo.course_progress
  */
 $tpl = new Template(get_lang('Thematic control'));
 $toolbar = null;
@@ -33,11 +31,11 @@ if (!empty($thematic_simple_list)) {
     }
 }
 
-if (isset($message) && $message == 'ok') {
+if (isset($message) && 'ok' == $message) {
     echo Display::return_message(get_lang('Thematic section has been created successfully'), 'normal');
 }
 
-if ($action === 'thematic_plan_list') {
+if ('thematic_plan_list' === $action) {
     $token = Security::get_token();
 
     Session::write('thematic_plan_token', $token);
@@ -101,7 +99,7 @@ if ($action === 'thematic_plan_list') {
         $form->addButtonSave(get_lang('Save'), 'submit', true),
     ]);
     $formLayout = $form->returnForm();
-} elseif ($action == 'thematic_plan_add' || $action == 'thematic_plan_edit') {
+} elseif ('thematic_plan_add' == $action || 'thematic_plan_edit' == $action) {
     if ($description_type >= ADD_THEMATIC_PLAN) {
         $header_form = get_lang('Other');
     } else {

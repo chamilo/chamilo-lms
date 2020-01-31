@@ -15,27 +15,27 @@ class LoginRedirection
         global $param;
         $param = isset($param) ? $param : '';
         $redirect_url = '';
-        if (api_is_student() && !api_get_setting('student_page_after_login') == '') {
+        if (api_is_student() && '' == !api_get_setting('student_page_after_login')) {
             $redirect_url = html_entity_decode(api_get_setting('student_page_after_login'));
-            if ($redirect_url[0] == "/") {
+            if ("/" == $redirect_url[0]) {
                 $redirect_url = substr(api_get_path(WEB_PATH), 0, -1).$redirect_url;
             }
         }
-        if (api_is_teacher() && !api_get_setting('teacher_page_after_login') == '') {
+        if (api_is_teacher() && '' == !api_get_setting('teacher_page_after_login')) {
             $redirect_url = html_entity_decode(api_get_setting('teacher_page_after_login'));
-            if ($redirect_url[0] == "/") {
+            if ("/" == $redirect_url[0]) {
                 $redirect_url = substr(api_get_path(WEB_PATH), 0, -1).$redirect_url;
             }
         }
-        if (api_is_drh() && !api_get_setting('drh_page_after_login') == '') {
+        if (api_is_drh() && '' == !api_get_setting('drh_page_after_login')) {
             $redirect_url = html_entity_decode(api_get_setting('drh_page_after_login'));
-            if ($redirect_url[0] == "/") {
+            if ("/" == $redirect_url[0]) {
                 $redirect_url = substr(api_get_path(WEB_PATH), 0, -1).$redirect_url;
             }
         }
-        if (api_is_session_admin() && !api_get_setting('sessionadmin_page_after_login') == '') {
+        if (api_is_session_admin() && '' == !api_get_setting('sessionadmin_page_after_login')) {
             $redirect_url = html_entity_decode(api_get_setting('sessionadmin_page_after_login'));
-            if ($redirect_url[0] == "/") {
+            if ("/" == $redirect_url[0]) {
                 $redirect_url = substr(api_get_path(WEB_PATH), 0, -1).$redirect_url;
             }
         }

@@ -98,7 +98,7 @@ if (isset($_POST['form_sent']) && $_POST['form_sent']) {
                     $user_info = api_get_user_info($user);
                     if (!empty($user_info)) {
                         $user_added_list[] = $i.'. '.api_get_person_name($user_info['firstname'], $user_info['lastname'], null, null, null, $user_info['username']);
-                        ++$i;
+                        $i++;
                     }
                 }
                 if (!empty($user_added_list)) {
@@ -114,7 +114,7 @@ if (isset($_POST['form_sent']) && $_POST['form_sent']) {
                     $user_info = api_get_user_info($user);
                     if (!empty($user_info)) {
                         $user_deleted_list[] = $i.'. '.api_get_person_name($user_info['firstname'], $user_info['lastname']);
-                        ++$i;
+                        $i++;
                     }
                 }
                 if (!empty($user_deleted_list)) {

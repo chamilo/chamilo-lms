@@ -617,7 +617,7 @@ class CourseRestorer
                             $new_file_name = $file_name_no_ext.'_'.$i.$ext;
                             $file_exists = file_exists($path.$new_file_name);
                             while ($file_exists) {
-                                ++$i;
+                                $i++;
                                 $new_file_name = $file_name_no_ext.'_'.$i.$ext;
                                 $file_exists = file_exists($path.$new_file_name);
                             }
@@ -644,7 +644,7 @@ class CourseRestorer
                                         $_SESSION['orig_base_foldername'] = $new_base_foldername;
                                         $x = '';
                                         while ($folder_exists) {
-                                            ++$x;
+                                            $x++;
                                             $new_base_foldername = $document_path[1].'_'.$x;
                                             $new_base_path = $orig_base_path.'_'.$x;
                                             if ($_SESSION['new_base_foldername'] == $new_base_foldername) {
@@ -1151,7 +1151,7 @@ class CourseRestorer
                         foreach ($this->course->resources[RESOURCE_FORUMTOPIC] as $topic_id => $topic) {
                             if ($topic->obj->forum_id == $id) {
                                 $this->restore_topic($topic_id, $new_id, $sessionId);
-                                ++$forum_topics;
+                                $forum_topics++;
                             }
                         }
                     }
@@ -1269,7 +1269,7 @@ class CourseRestorer
 
             foreach ($this->course->resources[RESOURCE_FORUMPOST] as $post_id => $post) {
                 if ($post->obj->thread_id == $thread_id) {
-                    ++$topic_replies;
+                    $topic_replies++;
                     $this->restore_post($post_id, $new_id, $forum_id, $sessionId);
                 }
             }

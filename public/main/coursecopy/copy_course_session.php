@@ -11,8 +11,6 @@ use ChamiloSession as Session;
  *
  * @author Christian Fasanando
  * @author Julio Montoya <gugli100@gmail.com> Lots of bug fixes/improvements
- *
- * @package chamilo.backup
  */
 $cidReset = true;
 require_once __DIR__.'/../inc/global.inc.php';
@@ -62,7 +60,7 @@ function make_select_session_list($name, $sessions, $attr = [])
     }
     $output = '<select id="session" class="form-control" name="'.$name.'" '.$attributes.'>';
 
-    if (count($sessions) == 0) {
+    if (0 == count($sessions)) {
         $output .= '<option value = "0">'.get_lang('There are no sessions available').'</option>';
     } else {
         $output .= '<option value = "0">'.get_lang('Select a session').'</option>';
@@ -164,7 +162,7 @@ function search_courses($id_session, $type)
 
     if (!empty($type)) {
         $id_session = (int) $id_session;
-        if ($type == 'origin') {
+        if ('origin' == $type) {
             $course_list = SessionManager::get_course_list_by_session_id($id_session);
             $temp_course_list = [];
             $return .= '<select id="origin" name="SessionCoursesListOrigin[]" class="form-control" onclick="javascript: checkSelected(this.id,\'copy_option_2\',\'title_option2\',\'destination\');">';
@@ -279,16 +277,16 @@ if (isset($_POST['copy_only_session_items']) && $_POST['copy_only_session_items'
 
 /*  MAIN CODE  */
 if (Security::check_token('post') && (
-        ($action === 'course_select_form') || (
+        ('course_select_form' === $action) || (
             isset($_POST['copy_option']) &&
-            $_POST['copy_option'] == 'full_copy'
+            'full_copy' == $_POST['copy_option']
         )
     )
 ) {
     // Clear token
     Security::clear_token();
     $destination_course = $origin_course = $destination_session = $origin_session = '';
-    if ($action === 'course_select_form') {
+    if ('course_select_form' === $action) {
         $destination_course = $_POST['destination_course'];
         $origin_course = $_POST['origin_course'];
         $destination_session = $_POST['destination_session'];
@@ -359,14 +357,14 @@ if (Security::check_token('post') && (
     }
 } elseif (Security::check_token('post') && (
         isset($_POST['copy_option']) &&
-        $_POST['copy_option'] == 'select_items'
+        'select_items' == $_POST['copy_option']
     )
 ) {
     // Clear token
     Security::clear_token();
 
     // Else, if a CourseSelectForm is requested, show it
-    if (api_get_setting('show_glossary_in_documents') != 'none') {
+    if ('none' != api_get_setting('show_glossary_in_documents')) {
         echo Display::return_message(get_lang('To export a document that has glossary terms with its references to the glossary, you have to make sure you include the glossary tool in the export'), 'normal');
     }
 

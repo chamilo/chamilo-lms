@@ -6,8 +6,6 @@
  *
  * @author Christian Fasanando <christian1827@gmail.com>
  * @author Julio Montoya <gugli100@gmail.com> BeezNest 2011 Bug fixing
- *
- * @package chamilo.course_progress
  */
 
 // protect a course script
@@ -16,9 +14,9 @@ $tpl = new Template(get_lang('Thematic control'));
 $toolbar = null;
 $formLayout = null;
 
-if ($action === 'thematic_advance_add' || $action === 'thematic_advance_edit') {
+if ('thematic_advance_add' === $action || 'thematic_advance_edit' === $action) {
     $header_form = get_lang('New thematic advance');
-    if ($action === 'thematic_advance_edit') {
+    if ('thematic_advance_edit' === $action) {
         $header_form = get_lang('Edit thematic advance');
     }
 
@@ -65,7 +63,7 @@ if ($action === 'thematic_advance_add' || $action === 'thematic_advance_edit') {
     $form->addGroup($radios, null, get_lang('Start date options'));
 
     if (isset($thematic_advance_data['attendance_id']) &&
-        $thematic_advance_data['attendance_id'] == 0) {
+        0 == $thematic_advance_data['attendance_id']) {
         $form->addElement('html', '<div id="div_custom_datetime" style="display:block">');
     } else {
         $form->addElement('html', '<div id="div_custom_datetime" style="display:none">');
@@ -75,7 +73,7 @@ if ($action === 'thematic_advance_add' || $action === 'thematic_advance_edit') {
     $form->addElement('html', '</div>');
 
     if (isset($thematic_advance_data['attendance_id']) &&
-        $thematic_advance_data['attendance_id'] == 0
+        0 == $thematic_advance_data['attendance_id']
     ) {
         $form->addElement('html', '<div id="div_datetime_by_attendance" style="display:none">');
     } else {
@@ -134,7 +132,7 @@ if ($action === 'thematic_advance_add' || $action === 'thematic_advance_edit') {
         ]
     );
 
-    if ($action == 'thematic_advance_add') {
+    if ('thematic_advance_add' == $action) {
         $form->addButtonSave(get_lang('Save'));
     } else {
         $form->addButtonUpdate(get_lang('Save'));
@@ -144,7 +142,7 @@ if ($action === 'thematic_advance_add' || $action === 'thematic_advance_edit') {
     if (count($attendance_select) > 1) {
         $i = 1;
         foreach ($attendance_select as $key => $attendance_select_item) {
-            if ($i == 2) {
+            if (2 == $i) {
                 $attendance_select_item_id = $key;
                 break;
             }
@@ -199,9 +197,9 @@ if ($action === 'thematic_advance_add' || $action === 'thematic_advance_edit') {
         $thematic->set_thematic_advance_attributes(
             isset($values['thematic_advance_id']) ? $values['thematic_advance_id'] : null,
             $values['thematic_id'],
-            $values['start_date_type'] == 1 && isset($values['attendance_select']) ? $values['attendance_select'] : 0,
+            1 == $values['start_date_type'] && isset($values['attendance_select']) ? $values['attendance_select'] : 0,
             $values['content'],
-            $values['start_date_type'] == 2 ? $values['custom_start_date'] : $values['start_date_by_attendance'],
+            2 == $values['start_date_type'] ? $values['custom_start_date'] : $values['start_date_by_attendance'],
             $values['duration_in_hours']
         );
 
@@ -229,7 +227,7 @@ if ($action === 'thematic_advance_add' || $action === 'thematic_advance_edit') {
     }
 
     $formLayout = $form->returnForm();
-} elseif ($action == 'thematic_advance_list') {
+} elseif ('thematic_advance_list' == $action) {
     // thematic advance list
     echo '<div class="actions">';
     echo '<a href="'.api_get_self().'?'.api_get_cidreq().'&action=thematic_details">'.

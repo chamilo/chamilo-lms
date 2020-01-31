@@ -194,7 +194,7 @@ switch ($action) {
         Database::query($sql);
         Display::addFlash(Display::return_message(get_lang('Update successful')));
 
-        if ($redirect === 'home') {
+        if ('home' === $redirect) {
             $url = api_get_path(WEB_PATH).'user_portal.php';
             header('Location: '.$url);
             exit;
@@ -211,7 +211,7 @@ Display::display_header();
 $stok = Security::get_token();
 $courses_without_category = isset($courses_in_category[0]) ? $courses_in_category[0] : null;
 echo '<div id="actions" class="actions">';
-if ($action != 'createcoursecategory') {
+if ('createcoursecategory' != $action) {
     echo '<a class="ajax" href="'.$currentUrl.'?action=createcoursecategory">';
     echo Display::return_icon('new_folder.png', get_lang('Create a personal courses category'), '', '32');
     echo '</a>';
@@ -234,7 +234,7 @@ if (!empty($user_course_categories)) {
         echo '<a name="category'.$row['id'].'"></a>';
         $url = $currentUrl.'?categoryid='.$row['id'].'&sec_token='.$stok;
         if ($allowCollapsable) {
-            if (isset($row['collapsed']) && $row['collapsed'] == 0) {
+            if (isset($row['collapsed']) && 0 == $row['collapsed']) {
                 echo Display::url(
                     '<i class="fa fa-folder-open"></i>',
                     $url.'&action=set_collapsable&option=1'
@@ -306,13 +306,13 @@ if (!empty($user_course_categories)) {
                 echo CourseManager::getTeacherListFromCourseCodeToString($course['code']);
                 echo '<br />';
 
-                if (api_get_setting('display_teacher_in_courselist') === 'true') {
+                if ('true' === api_get_setting('display_teacher_in_courselist')) {
                     echo $course['tutor'];
                 }
                 echo '</td><td valign="top">'; ?>
                 <div style="float:left;width:110px;">
                 <?php
-                    if (api_get_setting('show_courses_descriptions_in_catalog') == 'true') {
+                    if ('true' == api_get_setting('show_courses_descriptions_in_catalog')) {
                         $icon_title = get_lang('Course description').' - '.$course['title']; ?>
                 <a href="<?php echo api_get_path(WEB_CODE_PATH); ?>inc/ajax/course_home.ajax.php?a=show_course_information&code=<?php echo $course['code']; ?>" data-title="<?php echo $icon_title; ?>" title="<?php echo $icon_title; ?>" class="ajax">
                     <?php
@@ -347,8 +347,8 @@ if (!empty($user_course_categories)) {
               </div>
               <div style="float:left; margin-right:10px;">
                 <?php
-                    if ($course['status'] != 1) {
-                        if ($course['unsubscr'] == 1) {
+                    if (1 != $course['status']) {
+                        if (1 == $course['unsubscr']) {
                             ?>
 
                 <form action="<?php echo api_get_self(); ?>" method="post" onsubmit="javascript: if (!confirm('<?php echo addslashes(api_htmlentities(get_lang("Are you sure you want to unsubscribe?"), ENT_QUOTES, api_get_system_encoding())); ?>')) return false">
@@ -386,13 +386,13 @@ if (!empty($courses_without_category)) {
         echo CourseManager::getTeacherListFromCourseCodeToString($course['code']);
         echo '<br />';
 
-        if (api_get_setting('display_teacher_in_courselist') === 'true') {
+        if ('true' === api_get_setting('display_teacher_in_courselist')) {
             echo $course['tutor'];
         }
         echo '</td><td valign="top">'; ?>
             <div style="float:left; width:110px">
             <?php
-            if (api_get_setting('show_courses_descriptions_in_catalog') == 'true') {
+            if ('true' == api_get_setting('show_courses_descriptions_in_catalog')) {
                 $icon_title = get_lang('Course description').' - '.$course['title']; ?>
             <a href="<?php echo api_get_path(WEB_CODE_PATH); ?>inc/ajax/course_home.ajax.php?a=show_course_information&code=<?php echo $course['code']; ?>" data-title="<?php echo $icon_title; ?>" title="<?php echo $icon_title; ?>" class="ajax">
                 <?php echo Display::return_icon('info.png', $icon_title, '', '22'); ?>
@@ -430,8 +430,8 @@ if (!empty($courses_without_category)) {
                 </div>
                  <div style="float:left; margin-right:10px;">
             <?php
-                if ($course['status'] != 1) {
-                    if ($course['unsubscr'] == 1) {
+                if (1 != $course['status']) {
+                    if (1 == $course['unsubscr']) {
                         ?>
                 <!-- changed link to submit to avoid action by the search tool indexer -->
                 <form action="<?php echo api_get_self(); ?>" method="post" onsubmit="javascript: if (!confirm('<?php echo addslashes(api_htmlentities(get_lang("Are you sure you want to unsubscribe?"), ENT_QUOTES, api_get_system_encoding())); ?>')) return false;">

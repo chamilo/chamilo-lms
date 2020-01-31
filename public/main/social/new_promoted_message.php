@@ -6,7 +6,7 @@ require_once __DIR__.'/../inc/global.inc.php';
 
 api_protect_admin_script();
 
-if (api_get_setting('allow_social_tool') !== 'true') {
+if ('true' !== api_get_setting('allow_social_tool')) {
     api_not_allowed(true);
 }
 
@@ -16,7 +16,7 @@ $logInfo = [
 ];
 Event::registerLog($logInfo);
 
-$allowSocial = api_get_setting('allow_social_tool') === 'true';
+$allowSocial = 'true' === api_get_setting('allow_social_tool');
 $nameTools = api_xml_http_response_encode(get_lang('Messages'));
 
 $htmlHeadXtra[] = '<script>

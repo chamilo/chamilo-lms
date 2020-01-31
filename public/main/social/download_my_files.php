@@ -24,7 +24,7 @@ if ($config) {
 
 if (Security::check_abs_path($file, $dir.'my_files/')) {
     $result = DocumentManager::file_send_for_download($file);
-    if ($result === false) {
+    if (false === $result) {
         exit;
     }
 }

@@ -3,8 +3,6 @@
 
 /**
  * This class provides some functions for statistics.
- *
- * @package chamilo.statistics
  */
 class Statistics
 {
@@ -344,8 +342,8 @@ class Statistics
         $res = Database::query($sql);
         $activities = [];
         while ($row = Database::fetch_row($res)) {
-            if (strpos($row[1], '_object') === false &&
-                strpos($row[1], '_array') === false
+            if (false === strpos($row[1], '_object') &&
+                false === strpos($row[1], '_array')
             ) {
                 $row[2] = $row[2];
             } else {
@@ -484,7 +482,7 @@ class Statistics
             }
             $percentage = ($total > 0 ? number_format(100 * $number / $total, 1, ',', '.') : '0');
 
-            echo '<tr class="row_'.($i % 2 == 0 ? 'odd' : 'even').'">
+            echo '<tr class="row_'.(0 == $i % 2 ? 'odd' : 'even').'">
                     <td width="150">'.$subtitle.'</td>
                     <td width="550">'.Display::bar_progress($percentage, false).'</td>
                     <td align="right">'.$number_label.'</td>';
@@ -573,7 +571,7 @@ class Statistics
             $res_last_x = Database::query($sql_last_x);
             $result_last_x = [];
             while ($obj = Database::fetch_object($res_last_x)) {
-                $stat_date = ($type === 'day') ? $periodCollection[$obj->stat_date] : $obj->stat_date;
+                $stat_date = ('day' === $type) ? $periodCollection[$obj->stat_date] : $obj->stat_date;
                 $result_last_x[$stat_date] = $obj->number_of_logins;
             }
             self::printStats(get_lang('Last logins').' ('.$period.')', $result_last_x, true);
@@ -641,7 +639,7 @@ class Statistics
             $localEndDate = api_get_local_time($endDate, null, null, false, false);
 
             $label = sprintf(get_lang('Last %s days'), $day);
-            if ($day == 1) {
+            if (1 == $day) {
                 $label = get_lang('Today');
             }
             $label .= " <br /> $localDate - $localEndDate";

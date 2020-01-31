@@ -7,8 +7,6 @@ use ChamiloSession as Session;
 
 /**
  * Functions and main code for the download folder feature.
- *
- * @package chamilo.document
  */
 set_time_limit(0);
 
@@ -52,7 +50,7 @@ if (empty($path)) {
 }
 
 // A student should not be able to download a root shared directory
-if (($path == '/shared_folder' ||
+if (('/shared_folder' == $path ||
     $path == '/shared_folder_session_'.api_get_session_id()) &&
     (!api_is_allowed_to_edit() || !api_is_platform_admin())
 ) {
@@ -62,14 +60,14 @@ if (($path == '/shared_folder' ||
 // Creating a ZIP file.
 $tempZipFile = api_get_path(SYS_ARCHIVE_PATH).api_get_unique_id().".zip";
 
-$name = ($path == '/') ? 'documents.zip' : $documentInfo['title'].'.zip';
+$name = ('/' == $path) ? 'documents.zip' : $documentInfo['title'].'.zip';
 $zip = api_create_zip($name);
 $doc_table = Database::get_course_table(TABLE_DOCUMENT);
 $prop_table = Database::get_course_table(TABLE_ITEM_PROPERTY);
 
 // We need this path to clean it out of the zip file
 // I'm not using dir name as it gives too much problems (cfr.)
-$remove_dir = ($path != '/') ? substr($path, 0, strlen($path) - strlen(basename($path))) : '/';
+$remove_dir = ('/' != $path) ? substr($path, 0, strlen($path) - strlen(basename($path))) : '/';
 
 // Put the files in the zip
 // 2 possibilities: Admins get all files and folders in the selected folder (except for the deleted ones)
@@ -101,9 +99,9 @@ function fixDocumentNameCallback($p_event, &$p_header)
         $documentNameFixed
     );
 
-    if ($remove_dir != '/') {
+    if ('/' != $remove_dir) {
         $documentNameFixed = str_replace($remove_dir, '/', $documentNameFixed);
-        if (substr($documentNameFixed, 0, 1) == '/') {
+        if ('/' == substr($documentNameFixed, 0, 1)) {
             $documentNameFixed = substr($documentNameFixed, 1, api_strlen($documentNameFixed));
         }
     } else {
@@ -131,7 +129,7 @@ Event::event_download($name);
 // Admins are allowed to download invisible files
 if (api_is_allowed_to_edit()) {
     // Set the path that will be used in the query
-    if ($path === '/') {
+    if ('/' === $path) {
         $querypath = ''; // To prevent ...path LIKE '//%'... in query
     } else {
         $querypath = $path;
@@ -192,7 +190,7 @@ if (api_is_allowed_to_edit()) {
     $zip->finish();
 } else {
     // For other users, we need to create a zip  file with only visible files and folders
-    if ($path == '/') {
+    if ('/' == $path) {
         $querypath = ''; // To prevent ...path LIKE '//%'... in query
     } else {
         $querypath = $path;

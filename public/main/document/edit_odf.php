@@ -2,8 +2,6 @@
 /* For licensing terms, see /license.txt */
 /**
  * ODF document editor script.
- *
- * @package chamilo.document
  */
 require_once __DIR__.'/../inc/global.inc.php';
 
@@ -43,7 +41,7 @@ $showOdfEditor = false;
 $webOdfSupportedFiles = DocumentManager::get_web_odf_extension_list();
 
 if (in_array(strtolower($pathinfo['extension']), $webOdfSupportedFiles) &&
-    api_get_configuration_value('enabled_support_odf') === true
+    true === api_get_configuration_value('enabled_support_odf')
 ) {
     $showOdfEditor = true;
 }

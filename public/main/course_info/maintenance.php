@@ -2,8 +2,6 @@
 /* For licensing terms, see /license.txt */
 /**
  * @author Created on 18 October 2006 by Elixir Interactive http://www.elixir-interactive.com
- *
- * @package chamilo.course_info
  */
 require_once __DIR__.'/../inc/global.inc.php';
 $current_course_tool = TOOL_COURSE_MAINTENANCE;

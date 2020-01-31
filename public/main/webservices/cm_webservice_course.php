@@ -1,9 +1,6 @@
 <?php
 /* For licensing terms, see /license.txt */
 
-/**
- * @package chamilo.webservices
- */
 require_once __DIR__.'/../inc/global.inc.php';
 require_once __DIR__.'/cm_webservice.php';
 
@@ -449,7 +446,7 @@ class WSCMCourse extends WSCM
 
     public function unreadMessage($username, $password)
     {
-        if ($this->verifyUserPass($username, $password) == "valid") {
+        if ("valid" == $this->verifyUserPass($username, $password)) {
             $table_message = Database::get_main_table(TABLE_MESSAGE);
             $user_id = UserManager::get_user_id_from_username($username);
             $condition_msg_status = ' msg_status = 1 '; // define('MESSAGE_STATUS_UNREAD', '1');
@@ -469,14 +466,14 @@ class WSCMCourse extends WSCM
 
     public function get_message_data($username, $password)
     {
-        if ($this->verifyUserPass($username, $password) == "valid") {
+        if ("valid" == $this->verifyUserPass($username, $password)) {
             $user_id = get_user_id_from_username($username);
         }
     }
 
     public function nada($username, $password)
     {
-        if ($this->verifyUserPass($username, $password) == "valid") {
+        if ("valid" == $this->verifyUserPass($username, $password)) {
             return $username.$password;
         }
 
@@ -541,7 +538,7 @@ class WSCMCourse extends WSCM
     ) {
         // Add the original course id field name and value to the extra fields if needed
         $extras_associative = [];
-        if ($course_id_field_name != "chamilo_course_id") {
+        if ("chamilo_course_id" != $course_id_field_name) {
             $extras_associative[$course_id_field_name] = $course_id_value;
         }
         foreach ($extras as $extra) {
@@ -551,7 +548,7 @@ class WSCMCourse extends WSCM
         if ($course_admin_id instanceof WSError) {
             return $course_admin_id;
         }
-        if ($wanted_code == '') {
+        if ('' == $wanted_code) {
             $wanted_code = CourseManager::generate_course_code($title);
         }
         $result = create_course(
@@ -630,13 +627,13 @@ class WSCMCourse extends WSCM
             if (!empty($language)) {
                 $attributes['course_language'] = $language;
             }
-            if ($visibility != '') {
+            if ('' != $visibility) {
                 $attributes['visibility'] = (int) $visibility;
             }
-            if ($subscribe != '') {
+            if ('' != $subscribe) {
                 $attributes['subscribe'] = (int) $subscribe;
             }
-            if ($unsubscribe != '') {
+            if ('' != $unsubscribe) {
                 $attributes['unsubscribe'] = (int) $unsubscribe;
             }
             if (!empty($visual_code)) {
@@ -689,7 +686,7 @@ class WSCMCourse extends WSCM
                 return $user_id;
             } else {
                 $course_code = CourseManager::get_course_code_from_course_id($course_id);
-                if ($state == 0) {
+                if (0 == $state) {
                     // Unsubscribe user
                     CourseManager::unsubscribe_user($user_id, $course_code);
 

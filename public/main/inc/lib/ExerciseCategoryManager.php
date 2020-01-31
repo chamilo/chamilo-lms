@@ -205,7 +205,7 @@ class ExerciseCategoryManager extends Model
         $header = get_lang('Add');
         $defaults = [];
 
-        if ($action === 'edit') {
+        if ('edit' === $action) {
             $header = get_lang('Edit');
             // Setting the defaults
             $defaults = $this->get($id, false);
@@ -220,7 +220,7 @@ class ExerciseCategoryManager extends Model
 
         $form->addHtmlEditor('description', get_lang('Description'));
 
-        if ($action === 'edit') {
+        if ('edit' === $action) {
             $form->addButtonUpdate(get_lang('Edit'));
         } else {
             $form->addButtonCreate(get_lang('Add'));

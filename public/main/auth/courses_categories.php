@@ -9,7 +9,7 @@ use Chamilo\CoreBundle\Framework\Container;
  *
  * @author Christian Fasanando <christian1827@gmail.com> - Beeznest
  */
-if (isset($_REQUEST['action']) && Security::remove_XSS($_REQUEST['action']) !== 'subscribe') {
+if (isset($_REQUEST['action']) && 'subscribe' !== Security::remove_XSS($_REQUEST['action'])) {
     $stok = Security::get_token();
 } else {
     $stok = Security::getTokenFromSession();
@@ -74,7 +74,7 @@ echo '<div class="row">
 
 if ($showCourses) {
     echo '<div class="col-md-'.($showSessions ? '4' : '6').'">';
-    if (!isset($_GET['hidden_links']) || intval($_GET['hidden_links']) != 1) {
+    if (!isset($_GET['hidden_links']) || 1 != intval($_GET['hidden_links'])) {
         ?>
         <form method="post"
               action="<?php echo CourseCategory::getCourseCategoryUrl(1, $pageLength, 'ALL', 0, 'subscribe'); ?>">
@@ -114,7 +114,7 @@ if ($showCourses) {
 
 echo '</div></div></div></div>';
 
-if ($showCourses && $action != 'display_sessions') {
+if ($showCourses && 'display_sessions' != $action) {
     if (!empty($message)) {
         echo Display::return_message($message, 'confirmation', false);
     }
@@ -130,7 +130,7 @@ if ($showCourses && $action != 'display_sessions') {
         echo "<p><strong>".get_lang('Search results for:')." ".$searchTerm."</strong><br />";
     }
 
-    $showTeacher = api_get_setting('display_teacher_in_courselist') === 'true';
+    $showTeacher = 'true' === api_get_setting('display_teacher_in_courselist');
     $ajax_url = api_get_path(WEB_AJAX_PATH).'course.ajax.php?a=add_course_vote';
     $user_id = api_get_user_id();
     $categoryListFromDatabase = CourseCategory::getCategories();
@@ -145,7 +145,7 @@ if ($showCourses && $action != 'display_sessions') {
     if (!empty($browse_courses_in_category)) {
         echo '<div class="grid-courses row">';
         foreach ($browse_courses_in_category as $course) {
-            $course_hidden = $course['visibility'] == COURSE_VISIBILITY_HIDDEN;
+            $course_hidden = COURSE_VISIBILITY_HIDDEN == $course['visibility'];
 
             if ($course_hidden) {
                 continue;
@@ -155,13 +155,13 @@ if ($showCourses && $action != 'display_sessions') {
             $userRegisteredInCourseAsTeacher = CourseManager::is_course_teacher($user_id, $course['code']);
             $userRegistered = $userRegisteredInCourse && $userRegisteredInCourseAsTeacher;
 
-            $course_public = $course['visibility'] == COURSE_VISIBILITY_OPEN_WORLD;
-            $course_open = $course['visibility'] == COURSE_VISIBILITY_OPEN_PLATFORM;
-            $course_private = $course['visibility'] == COURSE_VISIBILITY_REGISTERED;
-            $course_closed = $course['visibility'] == COURSE_VISIBILITY_CLOSED;
+            $course_public = COURSE_VISIBILITY_OPEN_WORLD == $course['visibility'];
+            $course_open = COURSE_VISIBILITY_OPEN_PLATFORM == $course['visibility'];
+            $course_private = COURSE_VISIBILITY_REGISTERED == $course['visibility'];
+            $course_closed = COURSE_VISIBILITY_CLOSED == $course['visibility'];
 
-            $course_subscribe_allowed = $course['subscribe'] == 1;
-            $course_unsubscribe_allowed = $course['unsubscribe'] == 1;
+            $course_subscribe_allowed = 1 == $course['subscribe'];
+            $course_unsubscribe_allowed = 1 == $course['unsubscribe'];
             $count_connections = $course['count_connections'];
             $creation_date = substr($course['creation_date'], 0, 10);
 
@@ -405,7 +405,7 @@ function return_title($course)
     $html .= '<a title="'.$course['title'].'" href="'.$course['about_url'].'">'.$course['title'].'</a>';
     $html .= '</h4></div>';
 
-    if (api_get_configuration_value('hide_course_rating') === false) {
+    if (false === api_get_configuration_value('hide_course_rating')) {
         $ajax_url = api_get_path(WEB_AJAX_PATH).'course.ajax.php?a=add_course_vote';
         $rating = Display::return_rating_system(
             'star_'.$course['real_id'],
@@ -452,7 +452,7 @@ function return_already_registered_label($in_status)
 {
     $icon = '<em class="fa fa-check"></em>';
     $title = get_lang("YouAreATrainerOfThisCourse");
-    if ($in_status == 'student') {
+    if ('student' == $in_status) {
         $icon = '<em class="fa fa-check"></em>';
         $title = get_lang("Already subscribed");
     }

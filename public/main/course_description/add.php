@@ -5,8 +5,6 @@
  * View (MVC patter) for adding a course description.
  *
  * @author Christian Fasanando <christian1827@gmail.com>
- *
- * @package chamilo.course_description
  */
 
 // protect a course script
@@ -26,7 +24,7 @@ echo '<a href="index.php?'.api_get_cidreq().'">'.
     '</a>';
 ksort($categories);
 foreach ($categories as $id => $title) {
-    if ($i == ADD_BLOCK) {
+    if (ADD_BLOCK == $i) {
         echo '<a href="index.php?'.api_get_cidreq().'&action=add">'.
             Display::return_icon($default_description_icon[$id], $title, '', ICON_SIZE_MEDIUM).'</a>';
         break;
@@ -39,7 +37,7 @@ foreach ($categories as $id => $title) {
 echo '</div>';
 
 // error messages
-if (isset($error) && intval($error) == 1) {
+if (isset($error) && 1 == intval($error)) {
     echo Display::return_message(
         get_lang('The form contains incorrect or incomplete data. Please check your input.'),
         'error',

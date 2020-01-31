@@ -864,7 +864,7 @@ abstract class Question
             $newExercise = new Exercise($courseId);
             $newExercise->read($exerciseId, false);
             $count = $newExercise->getQuestionCount();
-            ++$count;
+            $count++;
             $sql = "INSERT INTO $exerciseRelQuestionTable (c_id, question_id, exercice_id, question_order)
                     VALUES ({$this->course['real_id']}, ".$id.', '.$exerciseId.", '$count')";
             Database::query($sql);

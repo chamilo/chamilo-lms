@@ -7,7 +7,6 @@ use ChamiloSession as Session;
  * This script allows to manage answers. It is included from the
  * script admin.php.
  *
- *
  * @author  Toon Keppens
  */
 $modifyAnswers = (int) $_GET['hotspotadmin'];
@@ -75,7 +74,7 @@ if ($submitAnswers || $buttonBack) {
             echo '$submitAnswers or $buttonBack was set'."<br />\n";
         }
         $questionWeighting = $nbrGoodAnswers = 0;
-        for ($i = 1; $i <= $nbrAnswers; ++$i) {
+        for ($i = 1; $i <= $nbrAnswers; $i++) {
             if ($debug > 0) {
                 echo str_repeat('&nbsp;', 4).'$answerType is HOT_SPOT'."<br />\n";
             }
@@ -112,7 +111,7 @@ if ($submitAnswers || $buttonBack) {
         }  // end for()
 
         if (empty($msgErr)) {
-            for ($i = 1; $i <= $nbrAnswers; ++$i) {
+            for ($i = 1; $i <= $nbrAnswers; $i++) {
                 if ($debug > 0) {
                     echo str_repeat('&nbsp;', 4).'$answerType is HOT_SPOT'."<br />\n";
                 }
@@ -167,7 +166,7 @@ if ($submitAnswers || $buttonBack) {
         $threadhold2 = $_POST['threadhold2'];
         $threadhold3 = $_POST['threadhold3'];
 
-        for ($i = 1; $i <= $nbrAnswers; ++$i) {
+        for ($i = 1; $i <= $nbrAnswers; $i++) {
             $reponse[$i] = trim($reponse[$i]);
             $comment[$i] = trim($comment[$i]);
             $weighting[$i] = $weighting[$i];
@@ -279,7 +278,7 @@ if ($submitAnswers || $buttonBack) {
         $destination_noerror = $threadhold_total.'@@'.$try_str.'@@'.$lp_str.'@@'.$question_str.'@@'.$url_str;
 
         if (empty($msgErr)) {
-            for ($i = 1; $i <= $nbrAnswers; ++$i) {
+            for ($i = 1; $i <= $nbrAnswers; $i++) {
                 if ($debug > 0) {
                     echo str_repeat('&nbsp;', 4).'$answerType is HOT_SPOT'."<br />\n";
                 }
@@ -345,7 +344,7 @@ if (isset($modifyAnswers)) {
 
     if (HOT_SPOT_DELINEATION == $answerType) {
         $try = isset($_POST['try']) ? $_POST['try'] : [];
-        for ($i = 1; $i <= $nbrAnswers; ++$i) {
+        for ($i = 1; $i <= $nbrAnswers; $i++) {
             if (isset($try[$i]) && 'on' == $try[$i]) {
                 $try[$i] = 1;
             } else {
@@ -366,7 +365,7 @@ if (isset($modifyAnswers)) {
             // the magic happens here ...
             // we do this to not count the if no error section
             if ($nbrAnswers >= 2) {
-                --$nbrAnswers;
+                $nbrAnswers--;
             }
         }
 
@@ -378,7 +377,7 @@ if (isset($modifyAnswers)) {
         $destination_items = [];
         $destination = [];
 
-        for ($i = 1; $i <= $nbrAnswers; ++$i) {
+        for ($i = 1; $i <= $nbrAnswers; $i++) {
             $reponse[$i] = $objAnswer->selectAnswer($i);
 
             if (EXERCISE_FEEDBACK_TYPE_EXAM != $objExercise->getFeedbackType()) {
@@ -448,7 +447,7 @@ if (isset($modifyAnswers)) {
             $lest_answer = 1;
             // At least 1 answer
             if ($nbrAnswers > $lest_answer) {
-                --$nbrAnswers;
+                $nbrAnswers--;
                 // Remove the last answer
                 $tmp = array_pop($_SESSION['tmp_answers']['answer']);
                 $tmp = array_pop($_SESSION['tmp_answers']['comment']);
@@ -465,7 +464,7 @@ if (isset($modifyAnswers)) {
         } else {
             // At least 1 answer
             if ($nbrAnswers > 1) {
-                --$nbrAnswers;
+                $nbrAnswers--;
                 // Remove the last answer
                 $tmp = array_pop($_SESSION['tmp_answers']['answer']);
                 if (EXERCISE_FEEDBACK_TYPE_EXAM != $objExercise->getFeedbackType()) {
@@ -484,7 +483,7 @@ if (isset($modifyAnswers)) {
 
     if ($moreAnswers) {
         if ($nbrAnswers < 12) {
-            ++$nbrAnswers;
+            $nbrAnswers++;
 
             // Add a new answer
             $_SESSION['tmp_answers']['answer'][] = '';
@@ -505,7 +504,7 @@ if (isset($modifyAnswers)) {
     if ($moreOARAnswers) {
         if ($nbrAnswers < 12) {
             // Add a new answer
-            ++$nbrAnswers;
+            $nbrAnswers++;
 
             $_SESSION['tmp_answers']['answer'][] = '';
             $_SESSION['tmp_answers']['comment'][] = '';
@@ -626,7 +625,7 @@ if (isset($modifyAnswers)) {
     // Loading list of LPs
     $flat_list = $list->get_flat_list();
 
-    for ($i = 1; $i <= $nbrAnswers; ++$i) {
+    for ($i = 1; $i <= $nbrAnswers; $i++) {
         // is an delineation
         if (HOT_SPOT_DELINEATION == $answerType) {
             $option_lp = '';
@@ -676,7 +675,7 @@ if (isset($modifyAnswers)) {
             //-------- IF it is a delineation
             if ('delineation' == $_SESSION['tmp_answers']['hotspot_type'][$i]) {
                 $option1 = $option2 = $option3 = '';
-                for ($k = 1; $k <= 100; ++$k) {
+                for ($k = 1; $k <= 100; $k++) {
                     $selected1 = $selected2 = $selected3 = '';
                     if ($k == $threadhold1[$i]) {
                         $selected1 = 'selected="selected"';

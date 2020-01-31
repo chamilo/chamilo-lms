@@ -45,7 +45,7 @@ class ScormAnswerMultipleChoice extends Answer
                 }
                 $jstmpw .= 'questions_answers_ponderation['.$questionId.']['.$i.'] = '.$this->weighting[$i].';';
                 $jstmpw .= 'questions_answers_correct['.$questionId.']['.$i.'] = '.$this->correct[$i].';';
-                ++$id;
+                $id++;
             }
             $js[] = 'questions_answers['.$questionId.'] = new Array('.substr($jstmp, 0, -1).');'."\n";
             $js[] = 'questions_types['.$questionId.'] = \'mcma\';'."\n";
@@ -73,7 +73,7 @@ class ScormAnswerMultipleChoice extends Answer
                 }
                 $jstmpw .= 'questions_answers_ponderation['.$questionId.']['.$i.'] = '.$this->weighting[$i].';';
                 $jstmpw .= 'questions_answers_correct['.$questionId.']['.$i.'] = '.$this->correct[$i].';';
-                ++$id;
+                $id++;
             }
             $js[] = 'questions_answers['.$questionId.'] = new Array('.substr($jstmp, 0, -1).');';
             $js[] = 'questions_types['.$questionId.'] = "exact";';
@@ -100,7 +100,7 @@ class ScormAnswerMultipleChoice extends Answer
                 }
                 $jstmpw .= 'questions_answers_ponderation['.$questionId.']['.$i.'] = '.$this->weighting[$i].';';
                 $jstmpw .= 'questions_answers_correct['.$questionId.']['.$i.'] = '.$this->correct[$i].';';
-                ++$id;
+                $id++;
             }
             $js[] = 'questions_answers['.$questionId.'] = new Array('.substr($jstmp, 0, -1).');';
             $js[] = 'questions_types['.$questionId.'] = \'mcua\';';

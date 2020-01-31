@@ -57,7 +57,7 @@ if (empty($title)) {
         $nbcol = 2;
 
         echo "<table border='1'><tr>";
-        if ($i % $nbcol == 0) {
+        if (0 == $i % $nbcol) {
             for ($i = 0; $i <= $nbjour; $i++) {
                 echo "<td><input type='text' NAME='date_case' size='8' value=".date('Y-m-d', $date1)."> ";
                 $date1 += 60 * 60 * 24; //On additionne d'un jour (en seconde)

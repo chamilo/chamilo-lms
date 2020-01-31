@@ -126,7 +126,7 @@ class UniqueAnswerImage extends UniqueAnswer
             echo Display::return_message(get_lang('You have to create at least one answer'));
         }
 
-        for ($i = 1; $i <= $numberAnswers; ++$i) {
+        for ($i = 1; $i <= $numberAnswers; $i++) {
             $form->addHtml('<tr>');
             if (isset($answer) && is_object($answer)) {
                 if ($answer->correct[$i]) {
@@ -261,7 +261,7 @@ class UniqueAnswerImage extends UniqueAnswer
         $objAnswer = new Answer($this->id);
         $numberAnswers = $form->getSubmitValue('nb_answers');
 
-        for ($i = 1; $i <= $numberAnswers; ++$i) {
+        for ($i = 1; $i <= $numberAnswers; $i++) {
             $answer = trim(str_replace(['<p>', '</p>'], '', $form->getSubmitValue('answer['.$i.']')));
             $comment = trim(str_replace(['<p>', '</p>'], '', $form->getSubmitValue('comment['.$i.']')));
             $weighting = trim($form->getSubmitValue('weighting['.$i.']'));
@@ -296,7 +296,7 @@ class UniqueAnswerImage extends UniqueAnswer
               } */
             $goodAnswer = $correct == $i ? true : false;
             if ($goodAnswer) {
-                ++$nbrGoodAnswers;
+                $nbrGoodAnswers++;
                 $weighting = abs($weighting);
 
                 if ($weighting > 0) {

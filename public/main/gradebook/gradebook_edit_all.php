@@ -4,8 +4,6 @@
 /**
  * Script.
  *
- * @package chamilo.gradebook
- *
  * @author Julio Montoya - fixes in order to use gradebook models + some code cleaning
  */
 require_once __DIR__.'/../inc/global.inc.php';
@@ -86,7 +84,7 @@ $table_evaluated[LINK_SURVEY] = [
 ];
 
 $submitted = isset($_POST['submitted']) ? $_POST['submitted'] : '';
-if ($submitted == 1) {
+if (1 == $submitted) {
     Display::addFlash(Display::return_message(get_lang('Weights updated successfully')));
     if (isset($_POST['evaluation'])) {
         $eval_log = new Evaluation();
@@ -206,7 +204,7 @@ if ($form->validate()) {
 
     foreach ($links as $link) {
         $weightToApply = $weight;
-        if ($diffApplied == false) {
+        if (false == $diffApplied) {
             if (!empty($diff)) {
                 $weightToApply = $weight - $diff;
                 $diffApplied = true;
@@ -221,7 +219,7 @@ if ($form->validate()) {
 
     foreach ($evaluations as $evaluation) {
         $weightToApply = $weight;
-        if ($diffApplied == false) {
+        if (false == $diffApplied) {
             if (!empty($diff)) {
                 $weightToApply = $weight - $diff;
                 $diffApplied = true;

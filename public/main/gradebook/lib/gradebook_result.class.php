@@ -5,8 +5,6 @@
  * Gradebook results class.
  *
  * @author Yannick Warnier
- *
- * @package chamilo.gradebook
  */
 class GradeBookResult
 {

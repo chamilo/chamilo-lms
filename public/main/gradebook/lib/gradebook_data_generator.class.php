@@ -9,8 +9,6 @@ use ChamiloSession as Session;
  * used for the general gradebook view.
  *
  * @author Bert Steppé
- *
- * @package chamilo.gradebook
  */
 class GradebookDataGenerator
 {
@@ -256,7 +254,7 @@ class GradebookDataGenerator
                                             $evalres = $eval->calc_score($user['user_id'], null);
                                             $eval->setStudentList($studentList);
 
-                                            if (isset($evalres) && $eval->get_weight() != 0) {
+                                            if (isset($evalres) && 0 != $eval->get_weight()) {
                                                 $evalweight = $eval->get_weight();
                                                 $weightsum += $evalweight;
                                                 if (!empty($evalres[1])) {
@@ -267,7 +265,7 @@ class GradebookDataGenerator
                                                     $bestResult = $ressum;
                                                 }
                                             } else {
-                                                if ($eval->get_weight() != 0) {
+                                                if (0 != $eval->get_weight()) {
                                                     $evalweight = $eval->get_weight();
                                                     $weightsum += $evalweight;
                                                 }
@@ -284,9 +282,9 @@ class GradebookDataGenerator
                                             }
 
                                             $linkres = $link->calc_score($user['user_id'], null);
-                                            if (!empty($linkres) && $link->get_weight() != 0) {
+                                            if (!empty($linkres) && 0 != $link->get_weight()) {
                                                 $linkweight = $link->get_weight();
-                                                $link_res_denom = $linkres[1] == 0 ? 1 : $linkres[1];
+                                                $link_res_denom = 0 == $linkres[1] ? 1 : $linkres[1];
 
                                                 $weightsum += $linkweight;
                                                 $ressum += $linkres[0] / $link_res_denom * $linkweight;
@@ -295,7 +293,7 @@ class GradebookDataGenerator
                                                 }
                                             } else {
                                                 // Adding if result does not exists
-                                                if ($link->get_weight() != 0) {
+                                                if (0 != $link->get_weight()) {
                                                     $linkweight = $link->get_weight();
                                                     $weightsum += $linkweight;
                                                 }
@@ -484,7 +482,7 @@ class GradebookDataGenerator
     public function sort_by_description($item1, $item2)
     {
         $result = api_strcmp($item1->get_description(), $item2->get_description());
-        if ($result == 0) {
+        if (0 == $result) {
             return $this->sort_by_name($item1, $item2);
         }
 
@@ -565,7 +563,7 @@ class GradebookDataGenerator
             true
         );
         $type = $item->get_item_type();
-        if ($type == 'L' && get_class($item) === 'ExerciseLink') {
+        if ('L' == $type && 'ExerciseLink' === get_class($item)) {
             $display = ExerciseLib::show_score($score[0], $score[1], false);
         }
 
@@ -597,7 +595,7 @@ class GradebookDataGenerator
         );
         $type = $item->get_item_type();
 
-        if ($type === 'L' && get_class($item) === 'ExerciseLink') {
+        if ('L' === $type && 'ExerciseLink' === get_class($item)) {
             $display = ExerciseLib::show_score($score[0], $score[1], false);
             $result = ExerciseLib::convertScoreToPlatformSetting($score[0], $score[1]);
             $score[0] = $result['score'];
@@ -659,7 +657,7 @@ class GradebookDataGenerator
             switch ($item->get_item_type()) {
                 // category
                 case 'C':
-                    if ($score != null) {
+                    if (null != $score) {
                         if (empty($model)) {
                             return [
                                 'display' => $scoreDisplay->display_score(
@@ -704,7 +702,7 @@ class GradebookDataGenerator
                         );
 
                         $type = $item->get_item_type();
-                        if ($type == 'L' && get_class($item) == 'ExerciseLink') {
+                        if ('L' == $type && 'ExerciseLink' == get_class($item)) {
                             $display = ExerciseLib::show_score(
                                 $score[0],
                                 $score[1],

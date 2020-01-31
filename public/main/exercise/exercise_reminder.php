@@ -222,7 +222,7 @@ foreach ($question_list as $questionId) {
         </div>
     </div>';
 
-    ++$counter;
+    $counter++;
     $questionTitle = $counter.'. '.strip_tags($objQuestionTmp->selectTitle());
     // Check if the question doesn't have an answer
     if (!in_array($questionId, $exercise_result)) {

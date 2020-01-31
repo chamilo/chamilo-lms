@@ -87,10 +87,10 @@ switch ($action) {
                 foreach ($results as $item) {
                     $item2 = [];
                     foreach ($item as $id => $internal) {
-                        if ($id == 'id') {
+                        if ('id' == $id) {
                             $item2[$id] = $internal;
                         }
-                        if ($id == 'name') {
+                        if ('name' == $id) {
                             $item2['text'] = $internal;
                         }
                     }
@@ -120,10 +120,10 @@ switch ($action) {
                 foreach ($results as $item) {
                     $item2 = [];
                     foreach ($item as $id => $internal) {
-                        if ($id == 'id') {
+                        if ('id' == $id) {
                             $item2[$id] = $internal;
                         }
-                        if ($id == 'name') {
+                        if ('name' == $id) {
                             $item2['text'] = $internal;
                         }
                     }
@@ -169,7 +169,7 @@ switch ($action) {
             $sessionInfo = api_get_session_info($_GET['session']);
             echo '<h2>'.$sessionInfo['name'].'</h2>';
             echo '<div class="home-course-intro"><div class="page-course"><div class="page-course-intro">';
-            echo $sessionInfo['show_description'] == 1 ? $sessionInfo['description'] : get_lang('none');
+            echo 1 == $sessionInfo['show_description'] ? $sessionInfo['description'] : get_lang('none');
             echo '</div></div></div>';
         }
         break;
@@ -305,7 +305,7 @@ switch ($action) {
             $documentAndFolders = array_filter(
                 $documentAndFolders,
                 function (array $documentData) {
-                    return $documentData['filetype'] != 'folder';
+                    return 'folder' != $documentData['filetype'];
                 }
             );
             $documentAndFolders = array_map(
@@ -413,7 +413,7 @@ switch ($action) {
             break;
         }
 
-        if ($documentInfo['filetype'] != 'link') {
+        if ('link' != $documentInfo['filetype']) {
             $deletedDocument = DocumentManager::delete_document(
                 $courseInfo,
                 null,

@@ -74,7 +74,7 @@ switch ($action) {
         $user_id = api_get_user_id();
         $name_search = Security::remove_XSS($_POST['search_name_q']);
 
-        if (isset($name_search) && $name_search != 'undefined') {
+        if (isset($name_search) && 'undefined' != $name_search) {
             $friends = SocialManager::get_friends($user_id, null, $name_search);
         } else {
             $friends = SocialManager::get_friends($user_id);
@@ -83,7 +83,7 @@ switch ($action) {
         $friend_html = '';
         $number_of_images = 8;
         $number_friends = count($friends);
-        if ($number_friends != 0) {
+        if (0 != $number_friends) {
             $number_loop = $number_friends / $number_of_images;
             $loop_friends = ceil($number_loop);
             $j = 0;
@@ -144,7 +144,7 @@ switch ($action) {
                     //------Forum messages
                     $forum_result = get_all_post_from_user($user_id, $course_code);
                     $all_result_data = 0;
-                    if ($forum_result != '') {
+                    if ('' != $forum_result) {
                         echo '<div id="social-forum-main-title">';
                         echo api_xml_http_response_encode(get_lang('Forum'));
                         echo '</div>';
@@ -178,7 +178,7 @@ switch ($action) {
                         echo '<br />';
                         $all_result_data++;
                     }
-                    if ($all_result_data == 0) {
+                    if (0 == $all_result_data) {
                         echo api_xml_http_response_encode(get_lang('No data available'));
                     }
                 } else {
@@ -201,7 +201,7 @@ switch ($action) {
             exit;
         }
 
-        if (api_get_setting('allow_social_tool') !== 'true') {
+        if ('true' !== api_get_setting('allow_social_tool')) {
             exit;
         }
 
@@ -235,7 +235,7 @@ switch ($action) {
             exit;
         }
 
-        if (api_get_setting('allow_social_tool') !== 'true') {
+        if ('true' !== api_get_setting('allow_social_tool')) {
             exit;
         }
 
@@ -323,7 +323,7 @@ switch ($action) {
         $url = isset($_POST['social_wall_new_msg_main']) ? $_POST['social_wall_new_msg_main'] : '';
         $url = trim($url);
         $html = '';
-        if (SocialManager::verifyUrl($url) == true) {
+        if (true == SocialManager::verifyUrl($url)) {
             $html = Security::remove_XSS(
                 SocialManager::readContentWithOpenGraph($url)
             );

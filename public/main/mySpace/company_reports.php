@@ -2,8 +2,6 @@
 /* For licensing terms, see /license.txt */
 /**
  * Special report for corporate users.
- *
- * @package chamilo.reporting
  */
 $cidReset = true;
 require_once __DIR__.'/../inc/global.inc.php';

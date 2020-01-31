@@ -59,9 +59,9 @@ if (Database::num_rows($result_admins) > 0) {
         $firstname = $admins["firstname"];
         $email = $admins["email"];
 
-        if ($i % 2 == 0) {
+        if (0 == $i % 2) {
             $css_class = "row_odd";
-            if ($i % 20 == 0 && $i != 0) {
+            if (0 == $i % 20 && 0 != $i) {
                 if (api_is_western_name_order()) {
                     echo '<tr><th>'.get_lang('First name').'</th><th>'.get_lang('Last name').'</th><th>'.get_lang('e-mail').'</th></tr>';
                 } else {

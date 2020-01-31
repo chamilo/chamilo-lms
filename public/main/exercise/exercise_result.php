@@ -10,7 +10,6 @@ use ChamiloSession as Session;
  * that exercise.
  * Then it shows the results on the screen.
  *
- *
  * @author Olivier Brouckaert, main author
  * @author Roan Embrechts, some refactoring
  * @author Julio Montoya switchable fill in blank option added
@@ -158,7 +157,7 @@ if ($objExercise->selectAttempts() > 0) {
         }
         exit;
     } else {
-        ++$attempt_count;
+        $attempt_count++;
         $remainingAttempts = $objExercise->selectAttempts() - $attempt_count;
         if ($remainingAttempts) {
             $attemptMessage = sprintf(get_lang('Remaining %d attempts'), $remainingAttempts);

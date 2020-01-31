@@ -6,8 +6,6 @@
  * tool from Office text documents (.doc, .sxw, .odt, .docx) to
  * learning paths.
  *
- * @package chamilo.learnpath
- *
  * @author  Eric Marguin <eric.marguin@dokeos.com>
  * @license GNU/GPL
  */
@@ -17,9 +15,6 @@
 require_once 'openoffice_document.class.php';
 require_once api_get_path(LIBRARY_PATH).'specific_fields_manager.lib.php';
 
-/**
- * @package chamilo.learnpath.openofficedocument
- */
 class OpenOfficeTextDocument extends OpenofficeDocument
 {
     public $split_steps;
@@ -122,7 +117,7 @@ class OpenOfficeTextDocument extends OpenofficeDocument
         // Empty the fake dir/chapters.
         $new_index = 0;
         for ($i = 0; $i < count($matches_temp[0]); $i++) {
-            if (trim($matches_temp[1][$i]) !== '') {
+            if ('' !== trim($matches_temp[1][$i])) {
                 $matches[0][$new_index] = $matches_temp[0][$i];
                 $matches[1][$new_index] = $matches_temp[1][$i];
                 $new_index++;
@@ -193,7 +188,7 @@ class OpenOfficeTextDocument extends OpenofficeDocument
                     $slide_name,
                     ''
                 );
-                if ($this->first_item == 0) {
+                if (0 == $this->first_item) {
                     $this->first_item = (int) $previous;
                 }
             }
@@ -259,7 +254,7 @@ class OpenOfficeTextDocument extends OpenofficeDocument
                     $slide_name,
                     ''
                 );
-                if ($this->first_item == 0) {
+                if (0 == $this->first_item) {
                     $this->first_item = (int) $previous;
                 }
                 // Code for text indexing.

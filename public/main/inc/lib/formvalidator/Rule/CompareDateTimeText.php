@@ -18,7 +18,7 @@ class HTML_QuickForm_Rule_CompareDateTimeText extends HTML_QuickForm_Rule_Compar
         $datetime1 = api_strtotime($values[0]);
         $datetime2 = api_strtotime($values[1]);
 
-        if (strpos($operator, 'allow_empty') !== false) {
+        if (false !== strpos($operator, 'allow_empty')) {
             $operator = str_replace('allow_empty', '', $operator);
             if (!$datetime2 || empty($datetime2)) {
                 return true;

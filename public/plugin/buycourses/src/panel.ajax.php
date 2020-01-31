@@ -137,7 +137,7 @@ switch ($action) {
 
         foreach ($allPays as $payout) {
             $totalPayout += number_format($payout['commission'], 2);
-            ++$totalAccounts;
+            $totalAccounts++;
         }
 
         $currentCurrency = $plugin->getSelectedCurrency();

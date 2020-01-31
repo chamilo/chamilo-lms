@@ -14,8 +14,6 @@ use ChamiloSession as Session;
  * @author Roan Embrechts, virtual course support
  * @author Patrick Cool <patrick.cool@UGent.be>, Ghent University (see history version 1.3)
  *
- * @package chamilo.dropbox
- *
  * @todo complete refactoring. Currently there are about at least 3 sql queries needed for every individual dropbox document.
  *  first we find all the documents that were sent (resp. received) by the user
  *   then for every individual document the user(s)information who received (resp. sent) the document is searched
@@ -107,8 +105,6 @@ Version 1.1
  * download file / folder (download icon)
  * same action on multiple documents
  * extended feedback
- *
- * @package chamilo.dropbox
  */
 require_once __DIR__.'/../inc/global.inc.php';
 $is_allowed_in_course = api_is_allowed_in_course();
@@ -155,7 +151,7 @@ if (empty($session_id)) {
 // off all the documents that have already been sent.
 // @todo consider moving the javascripts in a function that displays the javascripts
 // only when it is needed.
-if ($action == 'add') {
+if ('add' == $action) {
     $dropbox_person = new Dropbox_Person(
         $user_id,
         $is_courseAdmin,
@@ -200,7 +196,7 @@ function checkForm (frm)
 ";
 
 $allowOverwrite = api_get_setting('dropbox_allow_overwrite');
-if ($allowOverwrite == 'true') {
+if ('true' == $allowOverwrite) {
     //sentArray keeps list of all files still available in the sent files list
     //of the user.
     //This is used to show or hide the overwrite file-radio button of the upload form
@@ -284,7 +280,7 @@ $(function () {
 });
 </script>";
 $checked_files = false;
-if (!$view || $view == 'received') {
+if (!$view || 'received' == $view) {
     $part = 'received';
 } elseif ($view = 'sent') {
     $part = 'sent';
@@ -293,9 +289,9 @@ if (!$view || $view == 'received') {
     exit;
 }
 
-if (($postAction == 'download_received' || $postAction == 'download_sent') and !$_POST['store_feedback']) {
+if (('download_received' == $postAction || 'download_sent' == $postAction) and !$_POST['store_feedback']) {
     $checked_file_ids = $_POST['id'];
-    if (!is_array($checked_file_ids) || count($checked_file_ids) == 0) {
+    if (!is_array($checked_file_ids) || 0 == count($checked_file_ids)) {
         header('Location: index.php?'.api_get_cidreq().'&view='.$view.'&error=CheckAtLeastOneFile');
     } else {
         handle_multiple_actions();
@@ -310,7 +306,7 @@ if (($postAction == 'download_received' || $postAction == 'download_sent') and !
 if ((!$is_allowed_in_course || !$is_course_member) &&
     !api_is_allowed_to_edit(null, true)
 ) {
-    if ($origin != 'learnpath') {
+    if ('learnpath' != $origin) {
         api_not_allowed(true); //print headers/footers
     } else {
         api_not_allowed();
@@ -319,14 +315,14 @@ if ((!$is_allowed_in_course || !$is_course_member) &&
 }
 
 /*	BREADCRUMBS */
-if ($view == 'received') {
+if ('received' == $view) {
     $interbreadcrumb[] = [
         'url' => api_get_path(WEB_CODE_PATH).'dropbox/index.php?'.api_get_cidreq(),
         'name' => get_lang('Dropbox'),
     ];
     $nameTools = get_lang('Received Files');
 
-    if ($action == 'addreceivedcategory') {
+    if ('addreceivedcategory' == $action) {
         $interbreadcrumb[] = [
             'url' => api_get_path(WEB_CODE_PATH).'dropbox/index.php?view=received&'.api_get_cidreq(),
             'name' => get_lang('Received Files'),
@@ -335,25 +331,25 @@ if ($view == 'received') {
     }
 }
 
-if ($view == 'sent' || empty($view)) {
+if ('sent' == $view || empty($view)) {
     $interbreadcrumb[] = [
         'url' => api_get_path(WEB_CODE_PATH).'dropbox/index.php?'.api_get_cidreq(),
         'name' => get_lang('Dropbox'),
     ];
     $nameTools = get_lang('Sent Files');
 
-    if ($action == 'addsentcategory') {
+    if ('addsentcategory' == $action) {
         $interbreadcrumb[] = [
             'url' => api_get_path(WEB_CODE_PATH).'dropbox/index.php?view=sent&'.api_get_cidreq(),
             'name' => get_lang('Sent Files'),
         ];
         $nameTools = get_lang('Add a new folder');
     }
-    if ($action == 'add') {
+    if ('add' == $action) {
         $nameTools = get_lang('Share a new file');
     }
 
-    if ($action == 'update') {
+    if ('update' == $action) {
         $interbreadcrumb[] = [
             'url' => api_get_path(WEB_CODE_PATH).'dropbox/index.php?view=sent&'.api_get_cidreq(),
             'name' => get_lang('Sent Files'),
@@ -363,7 +359,7 @@ if ($view == 'sent' || empty($view)) {
 }
 
 /*	HEADER & TITLE */
-if (isset($origin) && $origin == 'learnpath') {
+if (isset($origin) && 'learnpath' == $origin) {
     $htmlHeadXtra[] = $javascript;
     Display::display_reduced_header($nameTools, 'Dropbox');
 } else {

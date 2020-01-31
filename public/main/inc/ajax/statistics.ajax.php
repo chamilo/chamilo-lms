@@ -18,8 +18,8 @@ $order = isset($_REQUEST['sord']) && in_array($_REQUEST['sord'], ['asc', 'desc']
 
 switch ($action) {
     case 'add_student_to_boss':
-        $studentId =  isset($_GET['student_id']) ? (int) $_GET['student_id'] : 0;
-        $bossId =  isset($_GET['boss_id']) ? (int) $_GET['boss_id'] : 0;
+        $studentId = isset($_GET['student_id']) ? (int) $_GET['student_id'] : 0;
+        $bossId = isset($_GET['boss_id']) ? (int) $_GET['boss_id'] : 0;
 
         if ($studentId && $bossId) {
             UserManager::subscribeBossToUsers($bossId, [$studentId], false);
@@ -161,10 +161,10 @@ switch ($action) {
         // for global tools usage (number of clicks)
         $list = [];
         $palette = ChamiloApi::getColorPalette(true, true);
-        if ($action == 'tools_usage') {
+        if ('tools_usage' == $action) {
             $statsName = 'Tools';
             $all = Statistics::getToolsStats();
-        } elseif ($action == 'courses') {
+        } elseif ('courses' == $action) {
             $statsName = 'CountCours';
             $course_categories = Statistics::getCourseCategories();
             // total amount of courses
@@ -172,7 +172,7 @@ switch ($action) {
             foreach ($course_categories as $code => $name) {
                 $all[$name] = Statistics::countCourses($code);
             }
-        } elseif ($action == 'courses_by_language') {
+        } elseif ('courses_by_language' == $action) {
             $statsName = 'CountCourseByLanguage';
             $all = Statistics::printCourseByLanguageStats();
             // use slightly different colors than previous chart
@@ -180,14 +180,14 @@ switch ($action) {
                 $item = array_shift($palette);
                 array_push($palette, $item);
             }
-        } elseif ($action == 'users') {
+        } elseif ('users' == $action) {
             $statsName = 'NumberOfUsers';
             $countInvisible = isset($_GET['count_invisible']) ? (int) $_GET['count_invisible'] : null;
             $all = [
                 get_lang('Trainers') => Statistics::countUsers(COURSEMANAGER, null, $countInvisible),
                 get_lang('Learners') => Statistics::countUsers(STUDENT, null, $countInvisible),
             ];
-        } elseif ($action == 'users_teachers') {
+        } elseif ('users_teachers' == $action) {
             $statsName = 'Teachers';
             $course_categories = Statistics::getCourseCategories();
             $countInvisible = isset($_GET['count_invisible']) ? (int) $_GET['count_invisible'] : null;
@@ -201,7 +201,7 @@ switch ($action) {
                 $item = array_shift($palette);
                 array_push($palette, $item);
             }
-        } elseif ($action == 'users_students') {
+        } elseif ('users_students' == $action) {
             $statsName = 'Students';
             $course_categories = Statistics::getCourseCategories();
             $countInvisible = isset($_GET['count_invisible']) ? (int) $_GET['count_invisible'] : null;
@@ -302,7 +302,7 @@ switch ($action) {
                 foreach ($languages['folder'] as $language) {
                     $conditions = ['language' => $language];
                     $key = $language;
-                    if (substr($language, -1) === '2') {
+                    if ('2' === substr($language, -1)) {
                         $key = str_replace(2, '', $language);
                     }
                     if (!isset($all[$key])) {
@@ -571,7 +571,7 @@ switch ($action) {
                     if (!isset($all[$language])) {
                         $all[$language] = 0;
                     }
-                    $all[$language] += 1;
+                    $all[$language]++;
                 }
                 break;
         }

@@ -6,9 +6,6 @@ use Chamilo\CoreBundle\Framework\Container;
 use Chamilo\CoreBundle\Hook\HookWSRegistration;
 use Chamilo\UserBundle\Entity\User;
 
-/**
- * @package chamilo.webservices
- */
 require_once __DIR__.'/../inc/global.inc.php';
 $debug = true;
 
@@ -310,7 +307,7 @@ function WSCreateUsers($params)
             /** @var User $user */
             $user = $userRepository->find($user_id);
 
-            if ($user && $user->isActive() == false) {
+            if ($user && false == $user->isActive()) {
                 if (!is_null($password)) {
                     $user->setPlainPassword($password);
                 }
@@ -384,7 +381,7 @@ function WSCreateUsers($params)
 
         if ($userId) {
             if (api_is_multiple_url_enabled()) {
-                if (api_get_current_access_url_id() != -1) {
+                if (-1 != api_get_current_access_url_id()) {
                     UrlManager::add_user_to_url(
                         $userId,
                         api_get_current_access_url_id()
@@ -537,7 +534,7 @@ function WSCreateUser($params)
     if ($user_id > 0) {
         /** @var User $user */
         $user = $userRepository->find($user_id);
-        if ($user && $user->isActive() == false) {
+        if ($user && false == $user->isActive()) {
             if (!is_null($password)) {
                 $user->setPlainPassword($password);
             }
@@ -615,7 +612,7 @@ function WSCreateUser($params)
 
     if ($userId) {
         if (api_is_multiple_url_enabled()) {
-            if (api_get_current_access_url_id() != -1) {
+            if (-1 != api_get_current_access_url_id()) {
                 UrlManager::add_user_to_url($userId, api_get_current_access_url_id());
             } else {
                 UrlManager::add_user_to_url($userId, 1);
@@ -816,11 +813,11 @@ function WSCreateUsersPasswordCrypted($params)
 
         if (!empty($_configuration['password_encryption'])) {
             if ($_configuration['password_encryption'] === $encrypt_method) {
-                if ($encrypt_method == 'md5' && !preg_match('/^[A-Fa-f0-9]{32}$/', $password)) {
+                if ('md5' == $encrypt_method && !preg_match('/^[A-Fa-f0-9]{32}$/', $password)) {
                     $msg = "Encryption $encrypt_method is invalid";
                     $results[] = $msg;
                     continue;
-                } elseif ($encrypt_method == 'sha1' && !preg_match('/^[A-Fa-f0-9]{40}$/', $password)) {
+                } elseif ('sha1' == $encrypt_method && !preg_match('/^[A-Fa-f0-9]{40}$/', $password)) {
                     $msg = "Encryption $encrypt_method is invalid";
                     $results[] = $msg;
                     continue;
@@ -838,7 +835,7 @@ function WSCreateUsersPasswordCrypted($params)
 
         if (is_array($extra_list) && count($extra_list) > 0) {
             foreach ($extra_list as $extra) {
-                if ($extra['field_name'] == 'salt') {
+                if ('salt' == $extra['field_name']) {
                     $salt = $extra['field_value'];
                     break;
                 }
@@ -957,7 +954,7 @@ function WSCreateUsersPasswordCrypted($params)
             Database::query($sql);
 
             if (api_is_multiple_url_enabled()) {
-                if (api_get_current_access_url_id() != -1) {
+                if (-1 != api_get_current_access_url_id()) {
                     UrlManager::add_user_to_url(
                         $return,
                         api_get_current_access_url_id()
@@ -1308,14 +1305,14 @@ function WSCreateUserPasswordCrypted($params)
 
     if (!empty($_configuration['password_encryption'])) {
         if ($_configuration['password_encryption'] === $encrypt_method) {
-            if ($encrypt_method == 'md5' && !preg_match('/^[A-Fa-f0-9]{32}$/', $password)) {
+            if ('md5' == $encrypt_method && !preg_match('/^[A-Fa-f0-9]{32}$/', $password)) {
                 $msg = "Encryption $encrypt_method is invalid";
                 if ($debug) {
                     error_log($msg);
                 }
 
                 return $msg;
-            } elseif ($encrypt_method == 'sha1' && !preg_match('/^[A-Fa-f0-9]{40}$/', $password)) {
+            } elseif ('sha1' == $encrypt_method && !preg_match('/^[A-Fa-f0-9]{40}$/', $password)) {
                 $msg = "Encryption $encrypt_method is invalid";
                 if ($debug) {
                     error_log($msg);
@@ -1638,7 +1635,7 @@ function WSEditUserCredentials($params)
         $original_user_id_name
     );
 
-    if ($user_id == 0) {
+    if (0 == $user_id) {
         return 0;
     } else {
         $sql = "SELECT user_id FROM $table_user
@@ -1764,7 +1761,7 @@ function WSEditUsers($params)
             $original_user_id_name
         );
 
-        if ($user_id == 0) {
+        if (0 == $user_id) {
             $results[] = 0; // Original_user_id_value doesn't exist.
             continue;
         } else {
@@ -1949,7 +1946,7 @@ function WSEditUser($params)
         $original_user_id_name
     );
 
-    if ($user_id == 0) {
+    if (0 == $user_id) {
         return 0;
     } elseif (empty($enable)) {
         $sql = "SELECT user_id FROM $table_user
@@ -2130,7 +2127,7 @@ function WSEditUserWithPicture($params)
         $pictureUri = UserManager::update_user_picture($user_id, $filename, $tempDir.$filename);
     }
 
-    if ($user_id == 0) {
+    if (0 == $user_id) {
         return 0;
     } else {
         $sql = "SELECT id FROM $table_user WHERE id =$user_id AND active= 0";
@@ -2340,11 +2337,11 @@ function WSEditUsersPasswordCrypted($params)
             $password = $user_param['password'];
             $encrypt_method = $user_param['encrypt_method'];
             if ($_configuration['password_encryption'] === $encrypt_method) {
-                if ($encrypt_method == 'md5' && !preg_match('/^[A-Fa-f0-9]{32}$/', $password)) {
+                if ('md5' == $encrypt_method && !preg_match('/^[A-Fa-f0-9]{32}$/', $password)) {
                     $msg = "Encryption $encrypt_method is invalid";
                     $results[] = $msg;
                     continue;
-                } elseif ($encrypt_method == 'sha1' && !preg_match('/^[A-Fa-f0-9]{40}$/', $password)) {
+                } elseif ('sha1' == $encrypt_method && !preg_match('/^[A-Fa-f0-9]{40}$/', $password)) {
                     $msg = "Encryption $encrypt_method is invalid";
                     $results[] = $msg;
                     continue;
@@ -2369,7 +2366,7 @@ function WSEditUsersPasswordCrypted($params)
             $original_user_id_name
         );
 
-        if ($user_id == 0) {
+        if (0 == $user_id) {
             $results[] = 0; // Original_user_id_value doesn't exist.
             continue;
         } else {
@@ -2545,11 +2542,11 @@ function WSEditUserPasswordCrypted($params)
         $password = $params['password'];
         $encrypt_method = $params['encrypt_method'];
         if ($_configuration['password_encryption'] === $encrypt_method) {
-            if ($encrypt_method == 'md5' && !preg_match('/^[A-Fa-f0-9]{32}$/', $password)) {
+            if ('md5' == $encrypt_method && !preg_match('/^[A-Fa-f0-9]{32}$/', $password)) {
                 $msg = "Encryption $encrypt_method is invalid";
 
                 return $msg;
-            } elseif ($encrypt_method == 'sha1' && !preg_match('/^[A-Fa-f0-9]{40}$/', $password)) {
+            } elseif ('sha1' == $encrypt_method && !preg_match('/^[A-Fa-f0-9]{40}$/', $password)) {
                 $msg = "Encryption $encrypt_method is invalid";
 
                 return $msg;
@@ -2578,7 +2575,7 @@ function WSEditUserPasswordCrypted($params)
         error_log("user: $user_id");
     }
 
-    if ($user_id == 0) {
+    if (0 == $user_id) {
         return 0;
     } else {
         $sql = "SELECT user_id FROM $table_user
@@ -2763,11 +2760,11 @@ function WSHelperActionOnUsers($params, $type)
             if ($debug) {
                 error_log("User found: $user_id");
             }
-            if ($type == 'delete') {
+            if ('delete' == $type) {
                 $result = UserManager::delete_user($user_id);
-            } elseif ($type == "disable") {
+            } elseif ("disable" == $type) {
                 $result = UserManager::disable($user_id);
-            } elseif ($type == "enable") {
+            } elseif ("enable" == $type) {
                 $result = UserManager::enable($user_id);
             }
         } else {
@@ -2986,14 +2983,14 @@ function WSCreateCourse($params)
         );
 
         if (!empty($courseInfo)) {
-            if ($courseInfo['visibility'] != 0) {
+            if (0 != $courseInfo['visibility']) {
                 $sql = "UPDATE $table_course SET
                             course_language='".Database::escape_string($course_language)."',
                             title='".Database::escape_string($title)."',
                             category_code='".Database::escape_string($category_code)."',
                             tutor_name='".Database::escape_string($tutor_name)."',
                             visual_code='".Database::escape_string($wanted_code)."'";
-                if ($visibility !== null) {
+                if (null !== $visibility) {
                     $sql .= ", visibility = '$visibility' ";
                 }
                 $sql .= " WHERE id='".$courseInfo['real_id']."'";
@@ -3033,10 +3030,10 @@ function WSCreateCourse($params)
         $params['visibility'] = $visibility;
         $params['disk_quota'] = $diskQuota;
 
-        if (isset($subscribe) && $subscribe != '') { // Valid values: 0, 1
+        if (isset($subscribe) && '' != $subscribe) { // Valid values: 0, 1
             $params['subscribe'] = $subscribe;
         }
-        if (isset($unsubscribe) && $subscribe != '') { // Valid values: 0, 1
+        if (isset($unsubscribe) && '' != $subscribe) { // Valid values: 0, 1
             $params['unsubscribe'] = $unsubscribe;
         }
 
@@ -3219,7 +3216,7 @@ function WSCreateCourseByTitle($params)
         );
 
         if (!empty($courseInfo)) {
-            if ($courseInfo['visibility'] != 0) {
+            if (0 != $courseInfo['visibility']) {
                 $sql = "UPDATE $table_course SET
                             course_language='".Database::escape_string($course_language)."',
                             title='".Database::escape_string($title)."',
@@ -3579,7 +3576,7 @@ function WSCourseDescription($params)
         $original_course_id_name
     );
 
-    if (empty($courseInfo) || (isset($courseInfo) && $courseInfo['visibility'] == 0)) {
+    if (empty($courseInfo) || (isset($courseInfo) && 0 == $courseInfo['visibility'])) {
         return 0; // Original_course_id_value doesn't exist.
     }
 
@@ -3732,7 +3729,7 @@ function WSEditCourseDescription($params)
             $original_course_id_name
         );
 
-        if (empty($courseInfo) || (isset($courseInfo) && $courseInfo['visibility'] == 0)) {
+        if (empty($courseInfo) || (isset($courseInfo) && 0 == $courseInfo['visibility'])) {
             $results[] = 0;
             continue; // Original_course_id_value doesn't exist.
         }
@@ -3880,7 +3877,7 @@ function WSDeleteCourse($params)
             $original_course_id_name
         );
 
-        if (empty($courseInfo) || (isset($courseInfo) && $courseInfo['visibility'] == 0)) {
+        if (empty($courseInfo) || (isset($courseInfo) && 0 == $courseInfo['visibility'])) {
             $results[] = 0;
             continue; // Original_course_id_value doesn't exist.
         }
@@ -4634,7 +4631,7 @@ function WSSubscribeUserToCourse($params)
             error_log('WSSubscribeUserToCourse user_id: '.$user_id);
         }
 
-        if ($user_id == 0) {
+        if (0 == $user_id) {
             // If user was not found, there was a problem
             $resultValue = 0;
         } else {
@@ -5143,7 +5140,7 @@ function WSUnsubscribeUserFromCourse($params)
                 $original_user_id_values[$key],
                 $original_user_id_name[$key]
             );
-            if ($user_id == 0) {
+            if (0 == $user_id) {
                 continue; // user_id doesn't exist.
             } else {
                 $sql = "SELECT user_id FROM $user_table WHERE user_id ='".$user_id."' AND active= '0'";
@@ -5164,7 +5161,7 @@ function WSUnsubscribeUserFromCourse($params)
         );
 
         if (empty($courseInfo) ||
-            (isset($courseInfo) && $courseInfo['visibility'] == 0)
+            (isset($courseInfo) && 0 == $courseInfo['visibility'])
         ) {
             $results[] = 0;
             continue; // Original_course_id_value doesn't exist.
@@ -5172,7 +5169,7 @@ function WSUnsubscribeUserFromCourse($params)
 
         $courseId = $courseInfo['real_id'];
 
-        if (count($usersList) == 0) {
+        if (0 == count($usersList)) {
             $results[] = 0;
             continue;
         }
@@ -5474,7 +5471,7 @@ function WSSuscribeUsersToSession($params)
                 error_log("User to subscribe: $user_id");
             }
 
-            if ($user_id == 0) {
+            if (0 == $user_id) {
                 $results[] = 0;
                 continue; // user_id doesn't exist.
             } else {
@@ -5721,7 +5718,7 @@ function WSUnsuscribeUsersFromSession($params)
                 $original_user_id_name
             );
 
-            if ($user_id == 0) {
+            if (0 == $user_id) {
                 $results[] = 0;
                 continue; // user_id doesn't exist.
             } else {
@@ -5926,7 +5923,7 @@ function WSSuscribeCoursesToSession($params)
             );
 
             if (empty($courseInfo) ||
-                (isset($courseInfo) && $courseInfo['visibility'] == 0)
+                (isset($courseInfo) && 0 == $courseInfo['visibility'])
             ) {
                 $results[] = 0;
                 continue; // Original_course_id_value doesn't exist.
@@ -6083,7 +6080,7 @@ function WSUnsuscribeCoursesFromSession($params)
             );
 
             if (empty($courseInfo) || isset($courseInfo) &&
-                $courseInfo['visibility'] == 0
+                0 == $courseInfo['visibility']
             ) {
                 continue; // Course_code doesn't exist'
             }
@@ -6689,7 +6686,7 @@ function WSFetchSession($params)
 
     $sessionData = SessionManager::fetch($params['id']);
 
-    if ($sessionData === false) {
+    if (false === $sessionData) {
         return returnError(WS_ERROR_INVALID_INPUT);
     }
 
@@ -6752,7 +6749,7 @@ $server->register(
 function WSCertificatesList($startingDate = '', $endingDate = '')
 {
     $certificatesCron = api_get_setting('add_gradebook_certificates_cron_task_enabled');
-    if ($certificatesCron === 'true') {
+    if ('true' === $certificatesCron) {
         require_once api_get_path(SYS_CODE_PATH).'cron/add_gradebook_certificates.php';
     }
     $result = [];
@@ -7257,7 +7254,7 @@ function WSAddUserVisibilityToCourseInCatalogue($params)
             error_log('WSAddUserVisibilityToCourseCatalogue userId: '.$userId);
         }
 
-        if ($userId == 0) {
+        if (0 == $userId) {
             // If user was not found, there was a problem
             $resultValue = 0;
         } else {
@@ -7341,7 +7338,7 @@ function WSRemoveUserVisibilityToCourseInCatalogue($params)
             error_log('WSRemoveUserVisibilityToCourseInCatalogue user_id: '.$userId);
         }
 
-        if ($userId == 0) {
+        if (0 == $userId) {
             // If user was not found, there was a problem
             $resultValue = 0;
         } else {
@@ -7399,7 +7396,7 @@ $HTTP_RAW_POST_DATA = isset($HTTP_RAW_POST_DATA) ? $HTTP_RAW_POST_DATA : '';
 
 // If you send your data in utf8 then this value must be false.
 $decodeUTF8 = api_get_setting('registration.soap.php.decode_utf8');
-if ($decodeUTF8 === 'true') {
+if ('true' === $decodeUTF8) {
     $server->decode_utf8 = true;
 } else {
     $server->decode_utf8 = false;

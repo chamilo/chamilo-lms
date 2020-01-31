@@ -11,8 +11,6 @@ use ChamiloSession as Session;
  * @author Roan Embrechts, refactoring and code cleaning
  * @author Yannick Warnier <ywarnier@beeznest.org> - cleaning and update for new SCORM tool
  * @author Julio Montoya  - Improving the list of templates
- *
- * @package chamilo.learnpath
  */
 $this_section = SECTION_COURSES;
 api_protect_course_script();
@@ -139,7 +137,7 @@ if (empty($documentInfo)) {
 
 $path_parts = pathinfo($path_file);
 
-if (!empty($path_file) && isset($path_parts['extension']) && $path_parts['extension'] == 'html') {
+if (!empty($path_file) && isset($path_parts['extension']) && 'html' == $path_parts['extension']) {
     echo $learnPath->return_new_tree();
     // Show the template list
     echo '<div id="frmModel" class="scrollbar-inner lp-add-item"></div>';
@@ -149,7 +147,7 @@ if (!empty($path_file) && isset($path_parts['extension']) && $path_parts['extens
 echo '</div>';
 echo '<div id="doc_form" class="col-md-8">';
 
-if (isset($is_success) && $is_success === true) {
+if (isset($is_success) && true === $is_success) {
     $msg = '<div class="lp_message" style="margin-bottom:10px;">';
     $msg .= 'The item has been edited.';
     $msg .= '</div>';

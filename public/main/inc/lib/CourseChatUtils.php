@@ -236,7 +236,7 @@ class CourseChatUtils
         /** @var CChatConnected $connection */
         foreach ($connectedUsers as $connection) {
             $date_count_time_seconds = $connection->getLastConnection()->getTimestamp();
-            if (strcmp($now->format('Y-m-d'), $connection->getLastConnection()->format('Y-m-d')) !== 0) {
+            if (0 !== strcmp($now->format('Y-m-d'), $connection->getLastConnection()->format('Y-m-d'))) {
                 continue;
             }
 
@@ -570,7 +570,7 @@ class CourseChatUtils
 
         array_splice($content, 0, $remove);
 
-        if (isset($_GET['origin']) && $_GET['origin'] == 'whoisonline') {
+        if (isset($_GET['origin']) && 'whoisonline' == $_GET['origin']) {
             //the caller
             $content[0] = get_lang('Chat call has been sent. Waiting for the approval of your partner.').'<br />'.$content[0];
         }

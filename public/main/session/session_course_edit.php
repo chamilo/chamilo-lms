@@ -3,8 +3,6 @@
 
 /**
  * Implements the edition of course-session settings.
- *
- * @package chamilo.admin
  */
 $cidReset = true;
 

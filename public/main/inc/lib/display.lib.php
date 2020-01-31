@@ -79,6 +79,7 @@ class Display
     {
         ob_start();
         self::$legacyTemplate = '@ChamiloTheme/Layout/no_layout.html.twig';
+
         return true;
 
         global $show_learnpath, $tool_name;
@@ -169,7 +170,7 @@ class Display
         $editor_config = null
     ) {
         $moduleId = $tool;
-        if (api_get_setting('enable_tool_introduction') == 'true' || $tool == TOOL_COURSE_HOMEPAGE) {
+        if ('true' == api_get_setting('enable_tool_introduction') || TOOL_COURSE_HOMEPAGE == $tool) {
             $introduction_section = null;
             require api_get_path(SYS_CODE_PATH).'inc/introductionSection.inc.php';
 
@@ -221,7 +222,7 @@ class Display
         if (is_array($query_vars)) {
             $table->set_additional_parameters($query_vars);
         }
-        if ($style == 'table') {
+        if ('table' == $style) {
             if (is_array($header) && count($header) > 0) {
                 foreach ($header as $index => $header_item) {
                     $table->set_header(
@@ -506,12 +507,12 @@ class Display
         }
 
         // "mailto:" already present?
-        if (substr($email, 0, 7) !== 'mailto:') {
+        if ('mailto:' !== substr($email, 0, 7)) {
             $email = 'mailto:'.$email;
         }
 
         // Class (stylesheet) defined?
-        if ($style_class !== '') {
+        if ('' !== $style_class) {
             $style_class = ' class="'.$style_class.'"';
         }
 
@@ -524,7 +525,7 @@ class Display
         $value = api_get_configuration_value('add_user_course_information_in_mailto');
 
         if ($value) {
-            if (api_get_setting('allow_email_editor') === 'false') {
+            if ('false' === api_get_setting('allow_email_editor')) {
                 $hmail .= '?';
             }
 
@@ -585,11 +586,11 @@ class Display
         $style_class = ''
     ) {
         // "mailto:" already present?
-        if (substr($email, 0, 7) != 'mailto:') {
+        if ('mailto:' != substr($email, 0, 7)) {
             $email = 'mailto:'.$email;
         }
         // Class (stylesheet) defined?
-        if ($style_class != '') {
+        if ('' != $style_class) {
             $style_class = ' class="'.$style_class.'"';
         }
         // Encrypt email
@@ -768,7 +769,7 @@ class Display
         // When moving this to production, the return_icon() calls should
         // ask for the SVG version directly
         $svgIcons = api_get_setting('icons_mode_svg');
-        if ($svgIcons == 'true' && $return_only_path == false) {
+        if ('true' == $svgIcons && false == $return_only_path) {
             $svgImage = substr($image, 0, -3).'svg';
             if (is_file($code_path.$theme.'svg/'.$svgImage)) {
                 $icon = $w_code_path.$theme.'svg/'.$svgImage;
@@ -831,7 +832,7 @@ class Display
         }
 
         // alt text = the image name if there is none provided (for XHTML compliance)
-        if ($alt_text == '') {
+        if ('' == $alt_text) {
             $alt_text = basename($image_path);
         }
 
@@ -982,7 +983,7 @@ class Display
         $default_id = 'id="'.$name.'" ';
         $extra_attributes = array_merge(['class' => 'form-control'], $extra_attributes);
         foreach ($extra_attributes as $key => $parameter) {
-            if ($key == 'id') {
+            if ('id' == $key) {
                 $default_id = '';
             }
             $extra .= $key.'="'.$parameter.'" ';
@@ -1055,7 +1056,7 @@ class Display
         $ul_attributes = [],
         $selected = ''
     ) {
-        if (empty($headers) || count($headers) == 0) {
+        if (empty($headers) || 0 == count($headers)) {
             return '';
         }
 
@@ -1063,7 +1064,7 @@ class Display
         $i = 1;
         foreach ($headers as $item) {
             $active = '';
-            if ($i == 1) {
+            if (1 == $i) {
                 $active = ' active';
             }
 
@@ -1105,7 +1106,7 @@ class Display
         $divs = '';
         foreach ($items as $content) {
             $active = '';
-            if ($i == 1) {
+            if (1 == $i) {
                 $active = ' show active';
             }
 
@@ -1368,7 +1369,7 @@ class Display
         if (!empty($extra_params)) {
             foreach ($extra_params as $key => $element) {
                 // the groupHeaders key gets a special treatment
-                if ($key != 'groupHeaders') {
+                if ('groupHeaders' != $key) {
                     $obj->$key = $element;
                 }
             }
@@ -1403,8 +1404,8 @@ class Display
         $json_encode = str_replace(['{"first":"first",', '"end":"end"}'], '', $json_encode);
 
         if (api_get_configuration_value('allow_compilatio_tool') &&
-            (strpos($_SERVER['REQUEST_URI'], 'work/work.php') !== false ||
-             strpos($_SERVER['REQUEST_URI'], 'work/work_list_all.php') != false
+            (false !== strpos($_SERVER['REQUEST_URI'], 'work/work.php') ||
+             false != strpos($_SERVER['REQUEST_URI'], 'work/work_list_all.php')
             )
         ) {
             $json_encode = str_replace('"function () { compilatioInit() }"',
@@ -1572,7 +1573,7 @@ class Display
                 $toolName = Database::escape_string($toolName);
                 // Fix to get student publications
                 $toolCondition = " tool = '$toolName' AND ";
-                if ($toolName == 'student_publication' || $toolName == 'work') {
+                if ('student_publication' == $toolName || 'work' == $toolName) {
                     $toolCondition = " (tool = 'work' OR tool = 'student_publication') AND ";
                 }
 
@@ -1610,15 +1611,15 @@ class Display
         foreach ($notifications as $notification) {
             $toolName = $notification['tool'];
             if (!(
-                    $notification['visibility'] == '1' ||
-                    ($status == '1' && $notification['visibility'] == '0') ||
+                    '1' == $notification['visibility'] ||
+                    ('1' == $status && '0' == $notification['visibility']) ||
                     !isset($notification['visibility'])
                 )
             ) {
                 continue;
             }
 
-            if ($toolName == TOOL_SURVEY) {
+            if (TOOL_SURVEY == $toolName) {
                 $survey_info = SurveyManager::get_survey($notification['ref'], 0, $course_code);
                 if (!empty($survey_info)) {
                     $invited_users = SurveyUtil::get_invited_users(
@@ -1631,30 +1632,30 @@ class Display
                 }
             }
 
-            if ($notification['tool'] == TOOL_LEARNPATH) {
+            if (TOOL_LEARNPATH == $notification['tool']) {
                 if (!learnpath::is_lp_visible_for_student($notification['ref'], $user_id, $courseInfo)) {
                     continue;
                 }
             }
 
-            if ($notification['tool'] == TOOL_DROPBOX) {
+            if (TOOL_DROPBOX == $notification['tool']) {
                 $notification['link'] = 'dropbox/dropbox_download.php?id='.$notification['ref'];
             }
 
-            if ($notification['tool'] == 'work' &&
-                $notification['lastedit_type'] == 'DirectoryCreated'
+            if ('work' == $notification['tool'] &&
+                'DirectoryCreated' == $notification['lastedit_type']
             ) {
                 $notification['lastedit_type'] = 'WorkAdded';
             }
 
             $lastDate = api_get_local_time($notification['lastedit_date']);
             $type = $notification['lastedit_type'];
-            if ($type == 'CalendareventVisible') {
+            if ('CalendareventVisible' == $type) {
                 $type = 'Visible';
             }
             $label = get_lang('Since your latest visit').": ".get_lang($type)." ($lastDate)";
 
-            if (strpos($notification['link'], '?') === false) {
+            if (false === strpos($notification['link'], '?')) {
                 $notification['link'] = $notification['link'].'?notification=1';
             } else {
                 $notification['link'] = $notification['link'].'&notification=1';
@@ -1704,12 +1705,12 @@ class Display
             $session['coach_id'] = $session['id_coach'] = $session_info['id_coach'];
             $session['dates'] = '';
             $session['coach'] = '';
-            if (api_get_setting('show_session_coach') === 'true' && isset($coachInfo['complete_name'])) {
+            if ('true' === api_get_setting('show_session_coach') && isset($coachInfo['complete_name'])) {
                 $session['coach'] = get_lang('General coach').': '.$coachInfo['complete_name'];
             }
 
-            if (($session_info['access_end_date'] == '0000-00-00 00:00:00' &&
-                $session_info['access_start_date'] == '0000-00-00 00:00:00') ||
+            if (('0000-00-00 00:00:00' == $session_info['access_end_date'] &&
+                '0000-00-00 00:00:00' == $session_info['access_start_date']) ||
                 (empty($session_info['access_end_date']) && empty($session_info['access_start_date']))
             ) {
                 if (isset($session_info['duration']) && !empty($session_info['duration'])) {
@@ -1722,7 +1723,7 @@ class Display
             } else {
                 $dates = SessionManager::parseSessionDates($session_info, true);
                 $session['dates'] = $dates['access'];
-                if (api_get_setting('show_session_coach') === 'true' && isset($coachInfo['complete_name'])) {
+                if ('true' === api_get_setting('show_session_coach') && isset($coachInfo['complete_name'])) {
                     $session['coach'] = $coachInfo['complete_name'];
                 }
                 $active = $date_start <= $now && $date_end >= $now;
@@ -1802,8 +1803,8 @@ class Display
         $html .= '</section>';
         $labels = [];
 
-        $labels[] = $number_of_users_who_voted == 1 ? $number_of_users_who_voted.' '.get_lang('Vote') : $number_of_users_who_voted.' '.get_lang('Votes');
-        $labels[] = $accesses == 1 ? $accesses.' '.get_lang('Visit') : $accesses.' '.get_lang('Visits');
+        $labels[] = 1 == $number_of_users_who_voted ? $number_of_users_who_voted.' '.get_lang('Vote') : $number_of_users_who_voted.' '.get_lang('Votes');
+        $labels[] = 1 == $accesses ? $accesses.' '.get_lang('Visit') : $accesses.' '.get_lang('Visits');
         $labels[] = $point_info['user_vote'] ? get_lang('Your vote').' ['.$point_info['user_vote'].']' : get_lang('Your vote').' [?] ';
 
         if (!$add_div_wrapper && api_is_anonymous()) {
@@ -2090,7 +2091,7 @@ class Display
             if (empty($id)) {
                 $id = api_get_unique_id();
             }
-            if ($type == 'jquery') {
+            if ('jquery' == $type) {
                 $html = '<div class="accordion_jquery" id="'.$id.'">'; //using jquery
             } else {
                 $html = '<div class="accordion" id="'.$id.'">'; //using bootstrap
@@ -2295,7 +2296,7 @@ class Display
             switch ($type) {
                 case 'positive':
                     if (in_array($itemId, $array)) {
-                        if ($mode == 'overwrite') {
+                        if ('overwrite' == $mode) {
                             $class = " $defaultClass $class_to_applied";
                         } else {
                             $class .= " $class_to_applied";
@@ -2304,7 +2305,7 @@ class Display
                     break;
                 case 'negative':
                     if (!in_array($itemId, $array)) {
-                        if ($mode == 'overwrite') {
+                        if ('overwrite' == $mode) {
                             $class = " $defaultClass $class_to_applied";
                         } else {
                             $class .= " $class_to_applied";
@@ -2707,7 +2708,7 @@ HTML;
      */
     public static function dateToStringAgoAndLongDate($dateTime)
     {
-        if (empty($dateTime) || $dateTime === '0000-00-00 00:00:00') {
+        if (empty($dateTime) || '0000-00-00 00:00:00' === $dateTime) {
             return '';
         }
 
@@ -2816,7 +2817,7 @@ HTML;
         $videoPluginCSS = [];
         if (!empty($features) && isset($features['features'])) {
             foreach ($features['features'] as $feature) {
-                if ($feature === 'vrview') {
+                if ('vrview' === $feature) {
                     continue;
                 }
                 $defaultFeatures[] = $feature;

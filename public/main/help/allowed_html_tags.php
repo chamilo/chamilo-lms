@@ -4,8 +4,6 @@
 /**
  *	This	 script displays a help window with an overview of the allowed HTML-
  *   tags  and their attributes.
- *
- *	@package chamilo.help
  */
 require '../inc/global.inc.php';
 
@@ -24,7 +22,7 @@ header('Content-Type: text/html; charset='.api_get_system_encoding());
 /*]]>*/
 </style>
 <?php
-if (api_get_setting('stylesheets') != '') {
+if ('' != api_get_setting('stylesheets')) {
     ?>
 	<style type="text/css" media="screen, projection">
 	/*<![CDATA[*/
@@ -42,9 +40,9 @@ if (api_get_setting('stylesheets') != '') {
 <?php echo get_lang('Allowed HTML tags'); ?>
 </h4>
 <?php
-$html_type = $_SESSION['status'] == COURSEMANAGER ? TEACHER_HTML : STUDENT_HTML;
+$html_type = COURSEMANAGER == $_SESSION['status'] ? TEACHER_HTML : STUDENT_HTML;
 
-$fullpage = intval($_GET['fullpage']) != 0;
+$fullpage = 0 != intval($_GET['fullpage']);
 $tags = HTML_QuickForm_Rule_HTML :: get_allowed_tags($html_type, $fullpage);
 $table_header = [];
 $table_header[] = ['tag', true];

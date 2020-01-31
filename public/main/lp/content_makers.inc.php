@@ -4,8 +4,6 @@
 /**
  * The only usage of this script is to have a portable way of keeping the list of content makers.
  *
- * @package chamilo.learnpath
- *
  * @author Yannick Warnier <yannick.warnier@beeznest.com>
  */
 $content_origins = [

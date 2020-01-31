@@ -12,8 +12,6 @@ use CpChart\Image as pImage;
  *
  * @author Stijn Konings
  * @author Bert Steppé (refactored, optimised)
- *
- * @package chamilo.gradebook
  */
 class GradebookTable extends SortableTable
 {
@@ -93,7 +91,7 @@ class GradebookTable extends SortableTable
 
         $column = 0;
         if ($this->teacherView) {
-            if ($this->exportToPdf == false) {
+            if (false == $this->exportToPdf) {
                 $this->set_header($column++, '', '', 'width="25px"');
             }
         }
@@ -101,7 +99,7 @@ class GradebookTable extends SortableTable
         $this->set_header($column++, get_lang('Type'), '', 'width="35px"');
         $this->set_header($column++, get_lang('Name'), false);
 
-        if ($this->exportToPdf == false) {
+        if (false == $this->exportToPdf) {
             $this->set_header($column++, get_lang('Description'), false);
         }
 
@@ -133,7 +131,7 @@ class GradebookTable extends SortableTable
         if ($this->teacherView) {
         } else {
             if (!empty($cats)) {
-                if ($this->exportToPdf == false) {
+                if (false == $this->exportToPdf) {
                     $this->set_header($column++, get_lang('Detail'), false);
                 }
             }
@@ -155,7 +153,7 @@ class GradebookTable extends SortableTable
             );
         } else {
             if (empty($_GET['selectcat']) && !$this->teacherView) {
-                if ($this->exportToPdf == false) {
+                if (false == $this->exportToPdf) {
                     $this->set_header(
                         $column++,
                         get_lang('Certificates'),
@@ -324,7 +322,7 @@ class GradebookTable extends SortableTable
                 break;
         }
 
-        if ($this->direction == 'DESC') {
+        if ('DESC' == $this->direction) {
             $sorting |= GradebookDataGenerator::GDG_SORT_DESC;
         } else {
             $sorting |= GradebookDataGenerator::GDG_SORT_ASC;
@@ -404,12 +402,12 @@ class GradebookTable extends SortableTable
                 $item = $data[0];
 
                 // If the item is invisible, wrap it in a span with class invisible
-                $invisibility_span_open = $isAllowedToEdit && $item->is_visible() == '0' ? '<span class="text-muted">' : '';
-                $invisibility_span_close = $isAllowedToEdit && $item->is_visible() == '0' ? '</span>' : '';
+                $invisibility_span_open = $isAllowedToEdit && '0' == $item->is_visible() ? '<span class="text-muted">' : '';
+                $invisibility_span_close = $isAllowedToEdit && '0' == $item->is_visible() ? '</span>' : '';
 
                 // Id
                 if ($this->teacherView) {
-                    if ($this->exportToPdf == false) {
+                    if (false == $this->exportToPdf) {
                         $row[] = $this->build_id_column($item);
                     }
                 }
@@ -418,7 +416,7 @@ class GradebookTable extends SortableTable
                 $row[] = $this->build_type_column($item);
 
                 // Name.
-                if (get_class($item) === 'Category') {
+                if ('Category' === get_class($item)) {
                     $row[] = $invisibility_span_open.'<strong>'.$item->get_name().'</strong>'.$invisibility_span_close;
                     $main_categories[$item->get_id()]['name'] = $item->get_name();
                 } else {
@@ -432,7 +430,7 @@ class GradebookTable extends SortableTable
                 $total_categories_weight += $item->get_weight();
 
                 // Description.
-                if ($this->exportToPdf == false) {
+                if (false == $this->exportToPdf) {
                     $row[] = $invisibility_span_open.$data[2].$invisibility_span_close;
                 }
 
@@ -465,7 +463,7 @@ class GradebookTable extends SortableTable
                 if ($this->teacherView) {
                     $cat = new Category();
                     $show_message = $cat->show_message_resource_delete($item->get_course_code());
-                    if ($show_message === false) {
+                    if (false === $show_message) {
                         $row[] = $this->build_edit_column($item);
                     }
                 } else {
@@ -553,8 +551,8 @@ class GradebookTable extends SortableTable
                         }
                     }
 
-                    if (get_class($item) === 'Category') {
-                        if ($this->exportToPdf == false) {
+                    if ('Category' === get_class($item)) {
+                        if (false == $this->exportToPdf) {
                             $row[] = $this->build_edit_column($item);
                         }
                     }
@@ -564,7 +562,7 @@ class GradebookTable extends SortableTable
                 $sortable_data[] = $row;
 
                 // Loading children
-                if (get_class($item) === 'Category') {
+                if ('Category' === get_class($item)) {
                     $parent_id = $item->get_id();
                     $cats = Category::load(
                         $parent_id,
@@ -600,8 +598,8 @@ class GradebookTable extends SortableTable
                             $item = $data[0];
 
                             //if the item is invisible, wrap it in a span with class invisible
-                            $invisibility_span_open = $isAllowedToEdit && $item->is_visible() == '0' ? '<span class="text-muted">' : '';
-                            $invisibility_span_close = $isAllowedToEdit && $item->is_visible() == '0' ? '</span>' : '';
+                            $invisibility_span_open = $isAllowedToEdit && '0' == $item->is_visible() ? '<span class="text-muted">' : '';
+                            $invisibility_span_close = $isAllowedToEdit && '0' == $item->is_visible() ? '</span>' : '';
 
                             if (isset($item)) {
                                 $main_categories[$parent_id]['children'][$item->get_id()]['name'] = $item->get_name();
@@ -609,7 +607,7 @@ class GradebookTable extends SortableTable
                             }
 
                             if ($this->teacherView) {
-                                if ($this->exportToPdf == false) {
+                                if (false == $this->exportToPdf) {
                                     $row[] = $this->build_id_column($item);
                                 }
                             }
@@ -622,7 +620,7 @@ class GradebookTable extends SortableTable
                                 $this->build_name_link($item, $type).$invisibility_span_close;
 
                             // Description.
-                            if ($this->exportToPdf == false) {
+                            if (false == $this->exportToPdf) {
                                 $row[] = $invisibility_span_open.$data[2].$invisibility_span_close;
                             }
 
@@ -634,13 +632,13 @@ class GradebookTable extends SortableTable
 
                             // Admins get an edit column.
                             if (api_is_allowed_to_edit(null, true) &&
-                                isset($_GET['user_id']) == false &&
-                                (isset($_GET['action']) && $_GET['action'] != 'export_all' || !isset($_GET['action']))
+                                false == isset($_GET['user_id']) &&
+                                (isset($_GET['action']) && 'export_all' != $_GET['action'] || !isset($_GET['action']))
                             ) {
                                 $cat = new Category();
                                 $show_message = $cat->show_message_resource_delete($item->get_course_code());
-                                if ($show_message === false) {
-                                    if ($this->exportToPdf == false) {
+                                if (false === $show_message) {
+                                    if (false == $this->exportToPdf) {
                                         $row[] = $this->build_edit_column($item);
                                     }
                                 }
@@ -678,13 +676,13 @@ class GradebookTable extends SortableTable
                                 }
 
                                 if (!empty($cats)) {
-                                    if ($this->exportToPdf == false) {
+                                    if (false == $this->exportToPdf) {
                                         $row[] = null;
                                     }
                                 }
                             }
 
-                            if ($this->exportToPdf == false) {
+                            if (false == $this->exportToPdf) {
                                 $row['child_of'] = $parent_id;
                             }
                             $sortable_data[] = $row;
@@ -730,7 +728,7 @@ class GradebookTable extends SortableTable
             /** @var Category $myCat */
             foreach ($main_cat as $myCat) {
                 $myParentId = $myCat->get_parent_id();
-                if ($myParentId == 0) {
+                if (0 == $myParentId) {
                     $main_weight = (int) $myCat->get_weight();
                 }
             }
@@ -893,7 +891,7 @@ class GradebookTable extends SortableTable
         if ($this->teacherView) {
             if (isset($_GET['selectcat']) &&
                 $_GET['selectcat'] > 0 &&
-                $view !== 'presence'
+                'presence' !== $view
             ) {
                 $id_cat = (int) $_GET['selectcat'];
                 $category = Category::load($id_cat);
@@ -1188,15 +1186,15 @@ class GradebookTable extends SortableTable
                 $show_message = $cat->show_message_resource_delete($course_id);
 
                 // course/platform admin can go to the view_results page
-                if (api_is_allowed_to_edit() && $show_message === false) {
-                    if ($item->get_type() == 'presence') {
+                if (api_is_allowed_to_edit() && false === $show_message) {
+                    if ('presence' == $item->get_type()) {
                         return '&nbsp;'
                             .'<a href="gradebook_view_result.php?cidReq='.$course_id.'&amp;selecteval='.$item->get_id().'">'
                             .$item->get_name()
                             .'</a>';
                     } else {
                         $extra = Display::label(get_lang('Score'));
-                        if ($type == 'simple') {
+                        if ('simple' == $type) {
                             $extra = '';
                         }
 
@@ -1205,13 +1203,13 @@ class GradebookTable extends SortableTable
                             .$item->get_name()
                             .'</a>&nbsp;'.$extra;
                     }
-                } elseif (ScoreDisplay::instance()->is_custom() && $show_message === false) {
+                } elseif (ScoreDisplay::instance()->is_custom() && false === $show_message) {
                     // students can go to the statistics page (if custom display enabled)
                     return '&nbsp;'
                         .'<a href="gradebook_statistics.php?'.api_get_cidreq().'&selecteval='.$item->get_id().'">'
                         .$item->get_name()
                         .'</a>';
-                } elseif ($show_message === false && !api_is_allowed_to_edit() && !ScoreDisplay::instance()->is_custom()) {
+                } elseif (false === $show_message && !api_is_allowed_to_edit() && !ScoreDisplay::instance()->is_custom()) {
                     return '&nbsp;'
                         .'<a href="gradebook_statistics.php?'.api_get_cidreq().'&selecteval='.$item->get_id().'">'
                         .$item->get_name()
@@ -1229,14 +1227,14 @@ class GradebookTable extends SortableTable
                 $url = $item->get_link();
 
                 $text = $item->get_name();
-                if (isset($url) && $show_message === false) {
+                if (isset($url) && false === $show_message) {
                     $text = '&nbsp;<a href="'.$item->get_link().'">'
                         .$item->get_name()
                         .'</a>';
                 }
 
                 $extra = Display::label($item->get_type_name(), 'info');
-                if ($type == 'simple') {
+                if ('simple' == $type) {
                     $extra = '';
                 }
                 $extra .= $item->getSkillsFromItem();

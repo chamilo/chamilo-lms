@@ -7,8 +7,6 @@
  *
  * @author Christian Fasanando <christian1827@gmail.com>
  * @author Julio Montoya <gugli100@gmail.com> improvements
- *
- * @package chamilo.attendance
  */
 class Attendance
 {
@@ -52,7 +50,7 @@ class Attendance
 
         $active_plus = '';
 
-        if ((isset($_GET['isStudentView']) && $_GET['isStudentView'] == 'true') ||
+        if ((isset($_GET['isStudentView']) && 'true' == $_GET['isStudentView']) ||
             !api_is_allowed_to_edit(null, true)
         ) {
             $active_plus = ' AND att.active = 1';
@@ -138,7 +136,7 @@ class Attendance
         }
 
         $active_plus = '';
-        if ((isset($_GET['isStudentView']) && $_GET['isStudentView'] == 'true') ||
+        if ((isset($_GET['isStudentView']) && 'true' == $_GET['isStudentView']) ||
             !api_is_allowed_to_edit(null, true)
         ) {
             $active_plus = ' AND att.active = 1';
@@ -176,7 +174,7 @@ class Attendance
                 $session_star = api_get_session_image(api_get_session_id(), $user_info['status']);
             }
 
-            if ($attendance[5] == 1) {
+            if (1 == $attendance[5]) {
                 $isDrhOfCourse = CourseManager::isUserSubscribedInCourseAsDrh(
                     api_get_user_id(),
                     api_get_course_info()
@@ -192,7 +190,7 @@ class Attendance
                 $attendance[1] = '<a class="muted" href="index.php?'.api_get_cidreq().'&action=attendance_sheet_list&attendance_id='.$attendance[0].$student_param.'">'.$attendance[1].'</a>'.$session_star;
             }
 
-            if ($attendance[5] == 1) {
+            if (1 == $attendance[5]) {
                 $attendance[3] = '<center>'.$attendance[3].'</center>';
             } else {
                 $attendance[3] = '<center><span class="muted">'.$attendance[3].'</span></center>';
@@ -207,7 +205,7 @@ class Attendance
                     $actions .= '<a href="index.php?'.api_get_cidreq().'&action=attendance_edit&attendance_id='.$attendance[0].'">'.
                         Display::return_icon('edit.png', get_lang('Edit'), [], ICON_SIZE_SMALL).'</a>&nbsp;';
                     // Visible
-                    if ($attendance[5] == 1) {
+                    if (1 == $attendance[5]) {
                         $actions .= '<a href="index.php?'.api_get_cidreq().'&action=attendance_set_invisible&attendance_id='.$attendance[0].'">'.
                             Display::return_icon('visible.png', get_lang('Hide'), [], ICON_SIZE_SMALL).'</a>';
                     } else {
@@ -215,7 +213,7 @@ class Attendance
                             Display::return_icon('invisible.png', get_lang('Show'), [], ICON_SIZE_SMALL).'</a>';
                         $attendance[2] = '<span class="muted">'.$attendance[2].'</span>';
                     }
-                    if ($allowDelete === 'true') {
+                    if ('true' === $allowDelete) {
                         $actions .= '<a href="index.php?'.api_get_cidreq().'&action=attendance_delete&attendance_id='.$attendance[0].'">'.
                             Display::return_icon('delete.png', get_lang('Delete'), [], ICON_SIZE_SMALL).'</a>';
                     }
@@ -228,7 +226,7 @@ class Attendance
                         $actions .= '<a href="index.php?'.api_get_cidreq().'&action=attendance_edit&attendance_id='.$attendance[0].'">'.
                             Display::return_icon('edit.png', get_lang('Edit'), [], ICON_SIZE_SMALL).'</a>&nbsp;';
 
-                        if ($attendance[5] == 1) {
+                        if (1 == $attendance[5]) {
                             $actions .= ' <a href="index.php?'.api_get_cidreq().'&action=attendance_set_invisible&attendance_id='.$attendance[0].'">'.
                                 Display::return_icon('visible.png', get_lang('Hide'), [], ICON_SIZE_SMALL).'</a>';
                         } else {
@@ -236,7 +234,7 @@ class Attendance
                                 Display::return_icon('invisible.png', get_lang('Show'), [], ICON_SIZE_SMALL).'</a>';
                             $attendance[2] = '<span class="muted">'.$attendance[2].'</span>';
                         }
-                        if ($allowDelete === 'true') {
+                        if ('true' === $allowDelete) {
                             $actions .= ' <a href="index.php?'.api_get_cidreq().'&action=attendance_delete&attendance_id='.$attendance[0].'">'.
                                 Display::return_icon('delete.png', get_lang('Delete'), [], ICON_SIZE_SMALL).'</a>';
                         }
@@ -248,7 +246,7 @@ class Attendance
 
                 if ($is_done_all_calendar) {
                     $locked = $attendance[4];
-                    if ($locked == 0) {
+                    if (0 == $locked) {
                         if (api_is_platform_admin()) {
                             $message_alert = get_lang('Are you sure you want to lock the attendance?');
                         } else {
@@ -590,7 +588,7 @@ class Attendance
         $status = (int) $status;
 
         $action = 'visible';
-        if ($status == 0) {
+        if (0 == $status) {
             $action = 'invisible';
         }
 
@@ -737,9 +735,9 @@ class Attendance
 
             // Not taking into account DRH or COURSEMANAGER
             if ($uid <= 1 ||
-                $status == DRH ||
-                $user_status_in_course == COURSEMANAGER ||
-                $user_status_in_session == 2
+                DRH == $status ||
+                COURSEMANAGER == $user_status_in_course ||
+                2 == $user_status_in_session
             ) {
                 continue;
             }
@@ -811,7 +809,7 @@ class Attendance
             $sql = "SELECT user_id FROM $tbl_attendance_sheet
                     WHERE c_id = $course_id AND user_id='$uid' AND attendance_calendar_id = '$calendar_id'";
             $rs = Database::query($sql);
-            if (Database::num_rows($rs) == 0) {
+            if (0 == Database::num_rows($rs)) {
                 $sql = "INSERT INTO $tbl_attendance_sheet SET
                         c_id = $course_id,
                         user_id = '$uid',
@@ -839,7 +837,7 @@ class Attendance
             $sql = "SELECT user_id FROM $tbl_attendance_sheet
                     WHERE c_id = $course_id AND user_id='$uid' AND attendance_calendar_id = '$calendar_id'";
             $rs = Database::query($sql);
-            if (Database::num_rows($rs) == 0) {
+            if (0 == Database::num_rows($rs)) {
                 $sql = "INSERT INTO $tbl_attendance_sheet SET
                         c_id = $course_id,
                         user_id ='$uid',
@@ -1517,7 +1515,7 @@ class Attendance
                 $row['date'] = api_format_date($row['date_time'], DATE_FORMAT_SHORT);
                 $row['time'] = api_format_date($row['date_time'], TIME_NO_SEC_FORMAT);
                 $row['groups'] = $this->getGroupListByAttendanceCalendar($row['id'], $course_id);
-                if ($type == 'today') {
+                if ('today' == $type) {
                     if (date('d-m-Y', api_strtotime($row['date_time'], 'UTC')) == date('d-m-Y', time())) {
                         $data[] = $row;
                     }
@@ -1915,7 +1913,7 @@ class Attendance
                     attendance_id = '$attendanceId'";
         $rs = Database::query($sql);
 
-        if (Database::num_rows($rs) == 0) {
+        if (0 == Database::num_rows($rs)) {
             $sql = "UPDATE $tbl_attendance_calendar
                     SET date_time='".Database::escape_string($this->date_time)."'
                     WHERE c_id = $course_id AND id = '".intval($calendar_id)."'";
@@ -2076,11 +2074,11 @@ class Attendance
     public function getAttendanceLogin($startDate, $endDate)
     {
         if (empty($startDate) ||
-            $startDate == '0000-00-00' ||
-            $startDate == '0000-00-00 00:00:00' ||
+            '0000-00-00' == $startDate ||
+            '0000-00-00 00:00:00' == $startDate ||
             empty($endDate) ||
-            $endDate == '0000-00-00' ||
-            $endDate == '0000-00-00 00:00:00'
+            '0000-00-00' == $endDate ||
+            '0000-00-00 00:00:00' == $endDate
         ) {
             return false;
         }

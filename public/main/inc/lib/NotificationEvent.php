@@ -3,6 +3,8 @@
 
 class NotificationEvent extends Model
 {
+    const ACCOUNT_EXPIRATION = 1;
+    const JUSTIFICATION_EXPIRATION = 2;
     public $table;
     public $columns = [
         'id',
@@ -14,9 +16,6 @@ class NotificationEvent extends Model
         'event_type',
         'event_id',
     ];
-
-    const ACCOUNT_EXPIRATION = 1;
-    const JUSTIFICATION_EXPIRATION = 2;
     public $extraFieldName;
 
     /**
@@ -62,7 +61,6 @@ class NotificationEvent extends Model
                 break;
         }
         $form->freeze('event_id');
-
 
         $form->addText('title', get_lang('Title'));
         $form->addTextarea('content', get_lang('Content'));
@@ -121,7 +119,7 @@ class NotificationEvent extends Model
         $userInfo = api_get_user_info($userId);
         $events = $this->get_all();
         $extraFieldData = $this->getUserExtraData(api_get_user_id());
-        $allowJustification = api_get_plugin_setting('justification', 'tool_enable') === 'true';
+        $allowJustification = 'true' === api_get_plugin_setting('justification', 'tool_enable');
 
         $userJustificationList = [];
         if ($allowJustification) {
@@ -132,7 +130,7 @@ class NotificationEvent extends Model
         $notifications = [];
         foreach ($events as $event) {
             $days = (int) $event['day_diff'];
-            $checkIsRead = $event['persistent'] == 0 ? true : false;
+            $checkIsRead = 0 == $event['persistent'] ? true : false;
             $eventItemId = $event['event_id'];
 
             switch ($event['event_type']) {
@@ -149,14 +147,14 @@ class NotificationEvent extends Model
                     }
 
                     $showNotification = $this->showNotification($userInfo['expiration_date'], $days);
-                    if ($showNotification && $read === false) {
+                    if ($showNotification && false === $read) {
                         $notifications[] = [
                             'id' => $id,
                             'title' => $event['title'],
                             'content' => $event['content'],
                             'event_text' => get_lang('ExpirationDate').': '.api_get_local_time($userInfo['expiration_date']),
                             'link' => $event['link'],
-                            'persistent' => $event['persistent']
+                            'persistent' => $event['persistent'],
                         ];
                     }
                     break;
@@ -190,14 +188,14 @@ class NotificationEvent extends Model
                                 $url = api_get_path(WEB_CODE_PATH).'auth/justification.php#'.$fieldData['code'];
                             }
 
-                            if ($showNotification && $read === false) {
+                            if ($showNotification && false === $read) {
                                 $notifications[] = [
                                     'id' => $id,
                                     'title' => $event['title'],
                                     'content' => $event['content'],
                                     'event_text' => $eventText,
                                     'link' => $url,
-                                    'persistent' => $event['persistent']
+                                    'persistent' => $event['persistent'],
                                 ];
                             }
                         }

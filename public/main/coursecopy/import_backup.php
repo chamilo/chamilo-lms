@@ -10,8 +10,6 @@ use ChamiloSession as Session;
  * Import a backup.
  *
  * @author Bart Mollet <bart.mollet@hogent.be>
- *
- * @package chamilo.backup
  */
 require_once __DIR__.'/../inc/global.inc.php';
 
@@ -47,24 +45,24 @@ $importOption = isset($_POST['import_option']) ? $_POST['import_option'] : '';
 
 /* MAIN CODE */
 $filename = '';
-if (Security::check_token('post') && ($action === 'course_select_form' || $importOption === 'full_backup')) {
+if (Security::check_token('post') && ('course_select_form' === $action || 'full_backup' === $importOption)) {
     // Clear token
     Security::clear_token();
 
     $error = false;
-    if ($action === 'course_select_form') {
+    if ('course_select_form' === $action) {
         // Partial backup here we recover the documents posted
         $filename = Session::read('backup_file');
         $course = CourseArchiver::readCourse($filename, false);
         $course = CourseSelectForm::get_posted_course(null, null, null, $course);
     } else {
-        if ($_POST['backup_type'] === 'server') {
+        if ('server' === $_POST['backup_type']) {
             $filename = $_POST['backup_server'];
             $delete_file = false;
         } else {
-            if ($_FILES['backup']['error'] == 0) {
+            if (0 == $_FILES['backup']['error']) {
                 $filename = CourseArchiver::importUploadedFile($_FILES['backup']['tmp_name']);
-                if ($filename === false) {
+                if (false === $filename) {
                     $error = true;
                 } else {
                     $delete_file = false;
@@ -92,11 +90,11 @@ if (Security::check_token('post') && ($action === 'course_select_form' || $impor
         if (!$error) {
             echo Display::return_message(get_lang('There are no resources in backup file'), 'warning');
             echo '<a class="btn btn-default" href="import_backup.php?'.api_get_cidreq().'">'.get_lang('Try again').'</a>';
-        } elseif ($filename === false) {
+        } elseif (false === $filename) {
             echo Display::return_message(get_lang('The app/cache/ directory, used by this tool, is not writeable. Please contact your platform administrator.'), 'error');
             echo '<a class="btn btn-default" href="import_backup.php?'.api_get_cidreq().'">'.get_lang('Try again').'</a>';
         } else {
-            if ($filename == '') {
+            if ('' == $filename) {
                 echo Display::return_message(get_lang('Select a backup file'), 'error');
                 echo '<a class="btn btn-default" href="import_backup.php?'.api_get_cidreq().'">'.get_lang('Try again').'</a>';
             } else {
@@ -106,11 +104,11 @@ if (Security::check_token('post') && ($action === 'course_select_form' || $impor
         }
     }
     CourseArchiver::cleanBackupDir();
-} elseif (Security::check_token('post') && $importOption === 'select_items') {
+} elseif (Security::check_token('post') && 'select_items' === $importOption) {
     // Clear token
     Security::clear_token();
 
-    if ($_POST['backup_type'] === 'server') {
+    if ('server' === $_POST['backup_type']) {
         $filename = $_POST['backup_server'];
         $delete_file = false;
     } else {
@@ -120,12 +118,12 @@ if (Security::check_token('post') && ($action === 'course_select_form' || $impor
     }
     $course = CourseArchiver::readCourse($filename, $delete_file);
 
-    if ($course->has_resources() && $filename !== false) {
+    if ($course->has_resources() && false !== $filename) {
         $hiddenFields['same_file_name_option'] = $_POST['same_file_name_option'];
         // Add token to Course select form
         $hiddenFields['sec_token'] = Security::get_token();
         CourseSelectForm::display_form($course, $hiddenFields);
-    } elseif ($filename === false) {
+    } elseif (false === $filename) {
         echo Display::return_message(get_lang('The app/cache/ directory, used by this tool, is not writeable. Please contact your platform administrator.'), 'error');
         echo '<a class="btn btn-default" href="import_backup.php?'.api_get_cidreq().'">'.get_lang('Try again').'</a>';
     } else {

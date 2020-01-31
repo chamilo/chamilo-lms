@@ -294,7 +294,7 @@ if (!empty($attempts)) {
             $row['attempt_link'] = $attempt_link;
         }
         $my_attempt_array[] = $row;
-        --$i;
+        $i--;
     }
 
     $header_names = [];
@@ -365,7 +365,7 @@ if (!empty($attempts)) {
     $column = 0;
     foreach ($header_names as $item) {
         $table->setHeaderContents(0, $column, $item);
-        ++$column;
+        $column++;
     }
     $row = 1;
     if (!empty($my_attempt_array)) {
@@ -373,8 +373,8 @@ if (!empty($attempts)) {
             $column = 0;
             $table->setCellContents($row, $column, $data);
             $table->setRowAttributes($row, null, true);
-            ++$column;
-            ++$row;
+            $column++;
+            $row++;
         }
     }
     $table_content = $table->toHtml();

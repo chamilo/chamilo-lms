@@ -23,7 +23,7 @@ $enabled = api_get_plugin_setting('courselegal', 'tool_enable');
 $pluginExtra = null;
 $pluginLegal = false;
 
-if ($enabled == 'true') {
+if ('true' == $enabled) {
     $pluginLegal = true;
     require_once api_get_path(SYS_PLUGIN_PATH).'courselegal/config.php';
     $plugin = CourseLegalPlugin::create();
@@ -54,7 +54,7 @@ $form = new FormValidator('legal', 'GET', api_get_self().'?course_code='.$course
 $pluginMessage = null;
 $hideForm = false;
 if ($pluginLegal && isset($userData) && !empty($userData)) {
-    if ($userData['web_agreement'] == 1) {
+    if (1 == $userData['web_agreement']) {
         if (empty($userData['mail_agreement'])) {
             $pluginMessage = Display::return_message(
                 $plugin->get_lang('You need to confirm your agreement to our terms first. Please check your e-mail.')
@@ -80,7 +80,7 @@ $url = api_get_course_url($course_code, $session_id);
 if ($form->validate()) {
     $accept_legal = $form->exportValue('accept_legal');
 
-    if ($accept_legal == 1) {
+    if (1 == $accept_legal) {
         CourseManager::save_user_legal($user_id, $course_code, $session_id);
         if (api_check_user_access_to_legal($course_info['visibility'])) {
             Session::write($variable, true);
@@ -140,7 +140,7 @@ if (empty($session_id)) {
 
 Display :: display_header();
 echo $pluginMessage;
-if ($hideForm == false) {
+if (false == $hideForm) {
     $form->display();
 }
 Display :: display_footer();

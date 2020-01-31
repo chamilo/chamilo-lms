@@ -102,9 +102,9 @@ if ($form->validate()) {
         $username = $userInfo['username'];
         $send_mail = intval($user['mail']['send_mail']);
         $auth_source = PLATFORM_AUTH_SOURCE;
-        $resetPassword = $user['password']['password_auto'] == '1' ? 0 : 2;
+        $resetPassword = '1' == $user['password']['password_auto'] ? 0 : 2;
         $auth_source = $userInfo['auth_source'];
-        $password = $user['password']['password_auto'] == '1' ? api_generate_password() : $user['password']['password'];
+        $password = '1' == $user['password']['password_auto'] ? api_generate_password() : $user['password']['password'];
 
         UserManager::update_user(
             $userId,
@@ -134,7 +134,7 @@ if ($form->validate()) {
             $portal_url = api_get_path(WEB_PATH);
             if (api_is_multiple_url_enabled()) {
                 $access_url_id = api_get_current_access_url_id();
-                if ($access_url_id != -1) {
+                if (-1 != $access_url_id) {
                     $url = api_get_access_url($access_url_id);
                     $portal_url = $url['url'];
                 }

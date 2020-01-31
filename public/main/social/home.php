@@ -4,8 +4,6 @@
 use ChamiloSession as Session;
 
 /**
- * @package chamilo.social
- *
  * @author Julio Montoya <gugli100@gmail.com>
  * @autor Alex Aragon <alex.aragon@beeznest.com> CSS Design and Template
  */
@@ -21,7 +19,7 @@ $show_full_profile = true;
 Session::erase('this_section');
 $this_section = SECTION_SOCIAL;
 
-if (api_get_setting('allow_social_tool') !== 'true') {
+if ('true' !== api_get_setting('allow_social_tool')) {
     $url = api_get_path(WEB_CODE_PATH).'auth/profile.php';
     header('Location: '.$url);
     exit;

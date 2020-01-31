@@ -7,8 +7,6 @@ use Chamilo\CourseBundle\Component\CourseCopy\CourseRestorer;
 /**
  * Script managing the learnpath upload. To best treat the uploaded file, make sure we can identify it.
  *
- * @package chamilo.learnpath
- *
  * @author Yannick Warnier <ywarnier@beeznest.org>
  */
 require_once __DIR__.'/../inc/global.inc.php';
@@ -42,7 +40,7 @@ if (isset($_POST) && $is_error) {
 
     return false;
     unset($_FILES['user_file']);
-} elseif ($_SERVER['REQUEST_METHOD'] == 'POST' && count($_FILES) > 0 && !empty($_FILES['user_file']['name'])) {
+} elseif ('POST' == $_SERVER['REQUEST_METHOD'] && count($_FILES) > 0 && !empty($_FILES['user_file']['name'])) {
     // A file upload has been detected, now deal with the file...
     // Directory creation.
     $stopping_error = false;
@@ -124,7 +122,7 @@ if (isset($_POST) && $is_error) {
             break;
         case 'woogie':
             require_once 'openoffice_text.class.php';
-            $split_steps = (empty($_POST['split_steps']) || $_POST['split_steps'] == 'per_page') ? 'per_page' : 'per_chapter';
+            $split_steps = (empty($_POST['split_steps']) || 'per_page' == $_POST['split_steps']) ? 'per_page' : 'per_chapter';
             $o_doc = new OpenofficeText($split_steps);
             $first_item_id = $o_doc->convert_document($_FILES['user_file']);
             Display::addFlash(Display::return_message(get_lang('File upload succeeded!')));
@@ -136,7 +134,7 @@ if (isset($_POST) && $is_error) {
             return false;
             break;
     }
-} elseif ($_SERVER['REQUEST_METHOD'] == 'POST') {
+} elseif ('POST' == $_SERVER['REQUEST_METHOD']) {
     // end if is_uploaded_file
     // If file name given to get in /upload/, try importing this way.
     // A file upload has been detected, now deal with the file...

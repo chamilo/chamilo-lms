@@ -1,9 +1,6 @@
 <?php
 /* For licensing terms, see /license.txt */
 
-/**
- * @package chamilo.admin
- */
 // resetting the course id
 $cidReset = true;
 
@@ -32,7 +29,7 @@ $tbl_session_rel_user = Database::get_main_table(TABLE_MAIN_SESSION_USER);
 // setting the name of the tool
 $tool_name = get_lang('Subscribe users to this session');
 $add_type = 'unique';
-if (isset($_REQUEST['add_type']) && $_REQUEST['add_type'] != '') {
+if (isset($_REQUEST['add_type']) && '' != $_REQUEST['add_type']) {
     $add_type = Security::remove_XSS($_REQUEST['add_type']);
 }
 
@@ -45,7 +42,7 @@ $new_field_list = [];
 if (is_array($extra_field_list)) {
     foreach ($extra_field_list as $extra_field) {
         //if is enabled to filter and is a "<select>" field type
-        if ($extra_field[8] == 1 && $extra_field[2] == ExtraField::FIELD_TYPE_SELECT) {
+        if (1 == $extra_field[8] && ExtraField::FIELD_TYPE_SELECT == $extra_field[2]) {
             $new_field_list[] = [
                 'name' => $extra_field[3],
                 'type' => $extra_field[2],
@@ -53,7 +50,7 @@ if (is_array($extra_field_list)) {
                 'data' => $extra_field[9],
             ];
         }
-        if ($extra_field[8] == 1 && $extra_field[2] == ExtraField::FIELD_TYPE_TAG) {
+        if (1 == $extra_field[8] && ExtraField::FIELD_TYPE_TAG == $extra_field[2]) {
             $options = UserManager::get_extra_user_data_for_tags($extra_field[1]);
             $new_field_list[] = [
                 'name' => $extra_field[3],
@@ -77,7 +74,7 @@ function search_users($needle, $type)
 
     if (!empty($needle) && !empty($type)) {
         // Normal behaviour
-        if ($type == 'any_session' && $needle == 'false') {
+        if ('any_session' == $type && 'false' == $needle) {
             $type = 'multiple';
             $needle = '';
         }
@@ -87,13 +84,13 @@ function search_users($needle, $type)
         $showOfficialCode = false;
 
         $orderListByOfficialCode = api_get_setting('order_user_list_by_official_code');
-        if ($orderListByOfficialCode === 'true') {
+        if ('true' === $orderListByOfficialCode) {
             $showOfficialCode = true;
             $order_clause = ' ORDER BY official_code, lastname, firstname, username';
         }
 
         if (api_is_session_admin()
-            && api_get_setting('prevent_session_admins_to_manage_all_users') === 'true'
+            && 'true' === api_get_setting('prevent_session_admins_to_manage_all_users')
         ) {
             $order_clause = " AND user.creator_id = ".api_get_user_id().$order_clause;
         }
@@ -166,7 +163,7 @@ function search_users($needle, $type)
         if (api_is_multiple_url_enabled()) {
             $tbl_user_rel_access_url = Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_USER);
             $access_url_id = api_get_current_access_url_id();
-            if ($access_url_id != -1) {
+            if (-1 != $access_url_id) {
                 switch ($type) {
                     case 'single':
                         $sql = "
@@ -221,7 +218,7 @@ function search_users($needle, $type)
 
         $rs = Database::query($sql);
         $i = 0;
-        if ($type == 'single') {
+        if ('single' == $type) {
             while ($user = Database:: fetch_array($rs)) {
                 $i++;
                 if ($i <= 10) {
@@ -323,7 +320,7 @@ if (isset($_POST['form_sent']) && $_POST['form_sent']) {
         $UserList = [];
     }
 
-    if ($form_sent == 1) {
+    if (1 == $form_sent) {
         //$notEmptyList = api_get_configuration_value('session_multiple_subscription_students_list_avoid_emptying');
 
         // Added a parameter to send emails when registering a user
@@ -344,7 +341,7 @@ Display::display_header($tool_name);
 
 $nosessionUsersList = $sessionUsersList = [];
 $where_filter = null;
-$ajax_search = $add_type == 'unique' ? true : false;
+$ajax_search = 'unique' == $add_type ? true : false;
 
 //$order_clause = api_sort_by_first_name() ? ' ORDER BY firstname, lastname, username' : ' ORDER BY lastname, firstname, username';
 // On this screen, it doesn't make sense to order users by firstname. Always use lastname first
@@ -355,7 +352,7 @@ $order_clause = ' ORDER BY lastname, firstname, username';
 
 $showOfficialCode = false;
 $orderListByOfficialCode = api_get_setting('order_user_list_by_official_code');
-if ($orderListByOfficialCode === 'true') {
+if ('true' === $orderListByOfficialCode) {
     $showOfficialCode = true;
     $order_clause = ' ORDER BY official_code, lastname, firstname, username';
 }
@@ -366,7 +363,7 @@ if ($ajax_search) {
     // Filter the user list in all courses in the session
     foreach ($sessionUserInfo as $sessionUser) {
         // filter students in session
-        if ($sessionUser['status_in_session'] != 0) {
+        if (0 != $sessionUser['status_in_session']) {
             continue;
         }
 
@@ -387,9 +384,9 @@ if ($ajax_search) {
                 $varname = 'field_'.$new_field['variable'];
                 $fieldtype = $new_field['type'];
                 if (UserManager::is_extra_field_available($new_field['variable'])) {
-                    if (isset($_POST[$varname]) && $_POST[$varname] != '0') {
+                    if (isset($_POST[$varname]) && '0' != $_POST[$varname]) {
                         $use_extra_fields = true;
-                        if ($fieldtype == ExtraField::FIELD_TYPE_TAG) {
+                        if (ExtraField::FIELD_TYPE_TAG == $fieldtype) {
                             $extra_field_result[] = UserManager::get_extra_user_data_by_tags(
                                 intval($_POST['field_id']),
                                 $_POST[$varname]
@@ -437,7 +434,7 @@ if ($ajax_search) {
             }
         }
     }
-    if (api_is_session_admin() && api_get_setting('prevent_session_admins_to_manage_all_users') === 'true') {
+    if (api_is_session_admin() && 'true' === api_get_setting('prevent_session_admins_to_manage_all_users')) {
         $order_clause = " AND u.creator_id = ".api_get_user_id().$order_clause;
     }
     if ($use_extra_fields) {
@@ -468,7 +465,7 @@ if ($ajax_search) {
     if (api_is_multiple_url_enabled()) {
         $tbl_user_rel_access_url = Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_USER);
         $access_url_id = api_get_current_access_url_id();
-        if ($access_url_id != -1) {
+        if (-1 != $access_url_id) {
             $sql = "
                 SELECT  u.id, lastname, firstname, username, session_id, official_code
                 FROM $tbl_user u
@@ -516,7 +513,7 @@ if ($ajax_search) {
     if (api_is_multiple_url_enabled()) {
         $tbl_user_rel_access_url = Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_USER);
         $access_url_id = api_get_current_access_url_id();
-        if ($access_url_id != -1) {
+        if (-1 != $access_url_id) {
             $sql = "
                 SELECT  u.id, lastname, firstname, username, session_id, official_code
                 FROM $tbl_user u
@@ -547,7 +544,7 @@ if ($ajax_search) {
     unset($users); //clean to free memory
 }
 
-if ($add_type == 'multiple') {
+if ('multiple' == $add_type) {
     $link_add_type_unique =
         '<a href="'.api_get_self().'?id_session='.$id_session.'&add='.$addProcess.'&add_type=unique">'.
         Display::return_icon('single.gif').get_lang('Single registration').'</a>';
@@ -590,7 +587,7 @@ $newLinks .= Display::url(
         } ?>>
         <?php echo '<legend>'.$tool_name.' ('.$session_info['name'].') </legend>'; ?>
         <?php
-        if ($add_type == 'multiple') {
+        if ('multiple' == $add_type) {
             if (is_array($extra_field_list)) {
                 if (is_array($new_field_list) && count($new_field_list) > 0) {
                     echo '<h3>'.get_lang('Filter users').'</h3>';
@@ -602,7 +599,7 @@ $newLinks .= Display::url(
                         echo '<option value="0">--'.get_lang('Select').'--</option>';
                         foreach ($new_field['data'] as $option) {
                             $checked = '';
-                            if ($fieldtype == ExtraField::FIELD_TYPE_TAG) {
+                            if (ExtraField::FIELD_TYPE_TAG == $fieldtype) {
                                 if (isset($_POST[$varname])) {
                                     if ($_POST[$varname] == $option['tag']) {
                                         $checked = 'selected="true"';
@@ -620,7 +617,7 @@ $newLinks .= Display::url(
                         }
                         echo '</select>';
                         $extraHidden =
-                            $fieldtype == ExtraField::FIELD_TYPE_TAG ? '<input type="hidden" name="field_id" value="'
+                            ExtraField::FIELD_TYPE_TAG == $fieldtype ? '<input type="hidden" name="field_id" value="'
                                 .$option['field_id'].'" />' : '';
                         echo $extraHidden;
                         echo '&nbsp;&nbsp;';
@@ -643,7 +640,7 @@ $newLinks .= Display::url(
             <div class="col-md-4">
                 <div class="form-group">
                     <?php
-                    if (!($add_type == 'multiple')) {
+                    if (!('multiple' == $add_type)) {
                         ?>
                         <input
                                 placeholder="<?php echo get_lang('Search'); ?>"
@@ -690,7 +687,7 @@ $newLinks .= Display::url(
             </div>
 
             <div class="col-md-4">
-                <?php if ($add_type == 'multiple') {
+                <?php if ('multiple' == $add_type) {
                         ?>
                     <?php echo get_lang('First letter (last name)'); ?> :
                     <select id="first_letter_user" name="firstLetterUser" onchange="change_select(this.value);">

@@ -3,9 +3,6 @@
 
 /**
  * Script to import students from LDAP.
- *
- * @package chamilo.admin
- * Copyright (c) 2007 Mustapha Alouani (supervised by Michel Moreau-Belliard)
  */
 // resetting the course id
 $cidReset = true;
@@ -127,7 +124,7 @@ if (empty($annee) && empty($course)) {
     echo '<a href="ldap_import_students.php?annee=&composante=&etape=">'.get_lang('Back to start new search').'</a>';
     echo '<br /><br />';
     echo '</div>';
-} elseif (!empty($annee) && !empty($course) && ($_POST['confirmed'] == 'yes')) {
+} elseif (!empty($annee) && !empty($course) && ('yes' == $_POST['confirmed'])) {
     $id = $_POST['username_form'];
     $UserList = [];
     $userid_match_login = [];

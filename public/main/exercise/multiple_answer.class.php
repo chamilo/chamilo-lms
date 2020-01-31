@@ -76,7 +76,7 @@ class MultipleAnswer extends Question
             echo Display::return_message(get_lang('You have to create at least one answer'));
         }
 
-        for ($i = 1; $i <= $nb_answers; ++$i) {
+        for ($i = 1; $i <= $nb_answers; $i++) {
             $form->addHtml('<tr>');
             if (is_object($answer)) {
                 $defaults['answer['.$i.']'] = $answer->answer[$i];
@@ -187,7 +187,7 @@ class MultipleAnswer extends Question
         $objAnswer = new Answer($this->id);
         $nb_answers = $form->getSubmitValue('nb_answers');
 
-        for ($i = 1; $i <= $nb_answers; ++$i) {
+        for ($i = 1; $i <= $nb_answers; $i++) {
             $answer = trim(str_replace(['<p>', '</p>'], '', $form->getSubmitValue('answer['.$i.']')));
             $comment = trim(str_replace(['<p>', '</p>'], '', $form->getSubmitValue('comment['.$i.']')));
             $weighting = trim($form->getSubmitValue('weighting['.$i.']'));

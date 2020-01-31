@@ -794,7 +794,7 @@ $pagination->renderer = function ($data) use ($url) {
     $render = '';
     if ($data['pageCount'] > 1) {
         $render = '<ul class="pagination">';
-        for ($i = 1; $i <= $data['pageCount']; ++$i) {
+        for ($i = 1; $i <= $data['pageCount']; $i++) {
             $pageContent = '<li><a href="'.$url.'&page='.$i.'">'.$i.'</a></li>';
             if ($data['current'] == $i) {
                 $pageContent = '<li class="active"><a href="#" >'.$i.'</a></li>';

@@ -10,8 +10,6 @@
  *   such as the database names.
  * - .htaccess file (in the courses directory) that is optional but improves
  *   security
- *
- * @package chamilo.install
  */
 if (defined('SYSTEM_INSTALLATION')) {
     // Write the system config file

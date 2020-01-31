@@ -3,8 +3,6 @@
 
 /**
  * List sessions in an efficient and usable way.
- *
- * @package chamilo.admin
  */
 $cidReset = true;
 
@@ -20,7 +18,7 @@ $action = isset($_REQUEST['action']) ? $_REQUEST['action'] : null;
 $idChecked = isset($_REQUEST['idChecked']) ? $_REQUEST['idChecked'] : null;
 $list_type = isset($_REQUEST['list_type']) ? $_REQUEST['list_type'] : 'simple';
 
-if ($action == 'delete') {
+if ('delete' == $action) {
     $sessionInfo = api_get_session_info($idChecked);
     if ($sessionInfo) {
         $response = SessionManager::delete($idChecked);
@@ -32,7 +30,7 @@ if ($action == 'delete') {
     }
     header('Location: session_list.php');
     exit();
-} elseif ($action == 'copy') {
+} elseif ('copy' == $action) {
     $result = SessionManager::copy($idChecked);
     if ($result) {
         Display::addFlash(Display::return_message(get_lang('Item copied')));
@@ -310,7 +308,7 @@ $orderUrl = api_get_path(WEB_AJAX_PATH).'session.ajax.php?a=order';
 
             <?php
             // Create the searching dialog.
-            if ($hideSearch !== true) {
+            if (true !== $hideSearch) {
                 echo 'grid.searchGrid(prmSearch);';
             }
             ?>
@@ -351,7 +349,7 @@ if (api_is_platform_admin()) {
         Display::return_icon('folder.png', get_lang('Sessions categories list'), '', ICON_SIZE_MEDIUM).'</a>';
 }
 
-if ($list_type == 'complete') {
+if ('complete' == $list_type) {
     echo '<a href="'.api_get_self().'?list_type=simple">'.
         Display::return_icon('view_remove.png', get_lang('Simple'), '', ICON_SIZE_MEDIUM).'</a>';
 } else {

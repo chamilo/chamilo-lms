@@ -23,13 +23,13 @@ if (isset($_GET['skill'])) {
     /** @var Skill $skill */
     $skill = $em->find('ChamiloCoreBundle:Skill', intval($_GET['skill']));
 
-    if ($action === 'name') {
+    if ('name' === $action) {
         $variableLanguage = ChamiloApi::getLanguageVar(
             $skill->getName(false),
             'Skill'
         );
         $originalName = $skill->getName(false);
-    } elseif ($action === 'code') {
+    } elseif ('code' === $action) {
         $variableLanguage = ChamiloApi::getLanguageVar(
             $skill->getShortCode(false),
             'SkillCode'
@@ -93,7 +93,7 @@ $form->setDefaults([
     'variable_language' => '$'.$variableLanguage,
     'original_name' => $originalName,
     'sub_language' => $languageId,
-    'new_language' => $action === 'code' ? $skill->getShortCode() : $skill->getName(),
+    'new_language' => 'code' === $action ? $skill->getShortCode() : $skill->getName(),
 ]);
 $form->addRule('sub_language', get_lang('Required'), 'required');
 $form->freeze(['variable_language', 'original_name']);

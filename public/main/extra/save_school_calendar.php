@@ -29,7 +29,7 @@ foreach ($_POST as $index => $valeur) {
 
     echo "<table border='1'><tr>";
 
-    if ($i % $nbcol == 0) {
+    if (0 == $i % $nbcol) {
         $sqlexam = "SELECT * FROM set_module
                     WHERE cal_name =  '$d_title'";
     }

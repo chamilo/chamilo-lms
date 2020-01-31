@@ -153,7 +153,7 @@ function search_users($needle, $type = 'multiple')
             $rs = Database::query($sql);
             $i = 0;
             while ($user = Database :: fetch_array($rs)) {
-                ++$i;
+                $i++;
                 if ($i <= 10) {
                     $person_name = api_get_person_name($user['firstname'], $user['lastname']);
                     $return .= '<a href="javascript: void(0);" onclick="javascript: add_user_to_user(\''.$user['user_id'].'\',\''.$person_name.' ('.$user['username'].')'.'\')">'.$person_name.' ('.$user['username'].')</a><br />';

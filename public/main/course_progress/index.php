@@ -8,8 +8,6 @@ use ChamiloSession as Session;
  *
  * @author Christian Fasanando <christian1827@gmail.com>
  * @author Julio Montoya <gugli100@gmail.com> Bugfixes session support
- *
- * @package chamilo.course_progress
  */
 
 // including files
@@ -55,15 +53,15 @@ if (isset($_REQUEST['action']) && in_array($_REQUEST['action'], $actions)) {
     $action = $_REQUEST['action'];
 }
 
-if (isset($_POST['action']) && $_POST['action'] == 'thematic_delete_select') {
+if (isset($_POST['action']) && 'thematic_delete_select' == $_POST['action']) {
     $action = 'thematic_delete_select';
 }
 
-if (isset($_GET['isStudentView']) && $_GET['isStudentView'] == 'true') {
+if (isset($_GET['isStudentView']) && 'true' == $_GET['isStudentView']) {
     $action = 'thematic_details';
 }
 
-if ($action == 'thematic_details' || $action == 'thematic_list') {
+if ('thematic_details' == $action || 'thematic_list' == $action) {
     Session::write('thematic_control', $action);
 }
 
@@ -181,27 +179,27 @@ function check_per_custom_date(obj) {
 
 $thematicControl = Session::read('thematic_control');
 
-if ($action == 'thematic_list') {
+if ('thematic_list' == $action) {
     $interbreadcrumb[] = ['url' => '#', 'name' => get_lang('Thematic control')];
 }
-if ($action == 'thematic_add') {
+if ('thematic_add' == $action) {
     $interbreadcrumb[] = [
         'url' => 'index.php?'.api_get_cidreq().'&action='.$thematicControl,
         'name' => get_lang('Thematic control'),
     ];
     $interbreadcrumb[] = ['url' => '#', 'name' => get_lang('New thematic section')];
 }
-if ($action == 'thematic_edit') {
+if ('thematic_edit' == $action) {
     $interbreadcrumb[] = [
         'url' => 'index.php?'.api_get_cidreq().'&action='.$thematicControl,
         'name' => get_lang('Thematic control'),
     ];
     $interbreadcrumb[] = ['url' => '#', 'name' => get_lang('Edit thematic section')];
 }
-if ($action == 'thematic_details') {
+if ('thematic_details' == $action) {
     $interbreadcrumb[] = ['url' => '#', 'name' => get_lang('Thematic control')];
 }
-if ($action == 'thematic_plan_list' || $action == 'thematic_plan_delete') {
+if ('thematic_plan_list' == $action || 'thematic_plan_delete' == $action) {
     $interbreadcrumb[] = [
         'url' => 'index.php?'.api_get_cidreq().'&action='.$thematicControl,
         'name' => get_lang('Thematic control'),
@@ -213,7 +211,7 @@ if ($action == 'thematic_plan_list' || $action == 'thematic_plan_delete') {
         ];
     }
 }
-if ($action == 'thematic_plan_add' || $action == 'thematic_plan_edit') {
+if ('thematic_plan_add' == $action || 'thematic_plan_edit' == $action) {
     $interbreadcrumb[] = [
         'url' => 'index.php?'.api_get_cidreq().'&action='.$thematicControl,
         'name' => get_lang('Thematic control'),
@@ -223,14 +221,14 @@ if ($action == 'thematic_plan_add' || $action == 'thematic_plan_edit') {
         'name' => get_lang('Thematic plan').' ('.$cleanThematicTitle.')',
     ];
 }
-if ($action == 'thematic_advance_list' || $action == 'thematic_advance_delete') {
+if ('thematic_advance_list' == $action || 'thematic_advance_delete' == $action) {
     $interbreadcrumb[] = [
         'url' => 'index.php?'.api_get_cidreq().'&action='.$thematicControl,
         'name' => get_lang('Thematic control'),
     ];
     $interbreadcrumb[] = ['url' => '#', 'name' => get_lang('Thematic advance').' ('.$cleanThematicTitle.')'];
 }
-if ($action == 'thematic_advance_add' || $action == 'thematic_advance_edit') {
+if ('thematic_advance_add' == $action || 'thematic_advance_edit' == $action) {
     $interbreadcrumb[] = [
         'url' => 'index.php?'.api_get_cidreq().'&action='.$thematicControl,
         'name' => get_lang('Thematic control'),
@@ -242,7 +240,7 @@ if ($action == 'thematic_advance_add' || $action == 'thematic_advance_edit') {
     $interbreadcrumb[] = ['url' => '#', 'name' => get_lang('NewThematic advance')];
 }
 
-if ($action == 'thematic_plan_list') {
+if ('thematic_plan_list' == $action) {
     $htmlHeadXtra[] = "
         <script>
             $(function () {

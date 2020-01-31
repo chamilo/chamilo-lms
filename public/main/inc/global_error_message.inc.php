@@ -4,8 +4,6 @@
 /**
  * This script displays error messages on fatal errors during initialization.
  *
- * @package chamilo.include
- *
  * @author Ivan Tcholakov, 2009-2010
  */
 $Organisation = '<a href="http://www.chamilo.org" target="_blank">Chamilo Homepage</a>';
@@ -84,7 +82,7 @@ if (is_int($global_error_code) && $global_error_code > 0) {
             $IncorrectPhpVersionDescription = str_replace('%s1', $php_version, $IncorrectPhpVersionDescription);
             $IncorrectPhpVersionDescription = str_replace('%s2', REQUIRED_PHP_VERSION, $IncorrectPhpVersionDescription);
             $pos = strpos($IncorrectPhpVersionDescription, '%s3');
-            if ($pos !== false) {
+            if (false !== $pos) {
                 $length = strlen($IncorrectPhpVersionDescription);
                 $read_installation_guide = substr($IncorrectPhpVersionDescription, $pos + 3, $length);
                 $IncorrectPhpVersionDescription = substr($IncorrectPhpVersionDescription, 0, $pos);
@@ -96,11 +94,11 @@ if (is_int($global_error_code) && $global_error_code > 0) {
             require __DIR__.'/../install/version.php';
             $global_error_message['section'] = $SectionInstallation;
             $global_error_message['title'] = $InstallationTitle;
-            if (($pos = strpos($InstallationDescription, '%s')) === false) {
+            if (false === ($pos = strpos($InstallationDescription, '%s'))) {
                 $InstallationDescription = 'Click to INSTALL Chamilo %s or read the installation guide';
             }
             $read_installation_guide = substr($InstallationDescription, $pos + 2);
-            $versionStatus = (!empty($new_version_status) && $new_version_status != 'stable' ? $new_version_status : '');
+            $versionStatus = (!empty($new_version_status) && 'stable' != $new_version_status ? $new_version_status : '');
             $InstallationDescription = '<form action="'.$root_rel.'main/install/index.php" method="get">
             <div class="row">
                     <div class="col-md-12">
@@ -136,7 +134,7 @@ if (is_int($global_error_code) && $global_error_code > 0) {
             break;
     }
 
-    $show_error_codes = defined('SHOW_ERROR_CODES') && SHOW_ERROR_CODES && $global_error_code != 2;
+    $show_error_codes = defined('SHOW_ERROR_CODES') && SHOW_ERROR_CODES && 2 != $global_error_code;
     $global_error_message['code'] = $show_error_codes ? $ErrorCode.': '.$global_error_code.'<br /><br />' : '';
     $global_error_message['details'] = empty($global_error_message['details']) ? '' : ($show_error_codes ? ': '.$global_error_message['details'] : $global_error_message['details']);
     $global_error_message['organisation'] = $Organisation;
@@ -148,7 +146,7 @@ if (is_int($global_error_code) && $global_error_code > 0) {
     $installChamiloImage = "data:image/png;base64,".base64_encode(file_get_contents("$root_sys/public/img/mr_chamilo_install.png"));
     $global_error_message['mr_chamilo'] = $installChamiloImage;
 
-    if ($global_error_code == 2) {
+    if (2 == $global_error_code) {
         $global_error_message_page =
 <<<EOM
 <!DOCTYPE html>

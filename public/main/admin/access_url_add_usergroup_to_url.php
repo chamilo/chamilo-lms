@@ -5,7 +5,6 @@
  *  It displays a list of users and a list of courses;
  *  you can select multiple users and courses and then click on.
  *
- *
  *  @author Julio Montoya <gugli100@gmail.com>
  */
 $cidReset = true;

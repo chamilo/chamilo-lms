@@ -211,7 +211,7 @@ class AddCourse
     {
         $pictures = [];
         foreach ($files as $value) {
-            if (isset($value[$type]) && $value[$type] != '') {
+            if (isset($value[$type]) && '' != $value[$type]) {
                 $pictures[][$type] = $value[$type];
             }
         }
@@ -239,7 +239,7 @@ class AddCourse
         $authorId = 0
     ) {
         if (is_null($fill_with_exemplary_content)) {
-            $fill_with_exemplary_content = api_get_setting('example_material_course_creation') !== 'false';
+            $fill_with_exemplary_content = 'false' !== api_get_setting('example_material_course_creation');
         }
 
         $course_id = (int) $courseInfo['real_id'];
@@ -259,7 +259,7 @@ class AddCourse
 
         $alert = api_get_setting('email_alert_manager_on_new_quiz');
         $defaultEmailExerciseAlert = 0;
-        if ($alert === 'true') {
+        if ('true' === $alert) {
             $defaultEmailExerciseAlert = 1;
         }
 
@@ -283,7 +283,7 @@ class AddCourse
             'enable_document_auto_launch' => ['default' => 0, 'category' => 'document'],
             'pdf_export_watermark_text' => ['default' => '', 'category' => 'learning_path'],
             'allow_public_certificates' => [
-                'default' => api_get_setting('allow_public_certificates') === 'true' ? 1 : '',
+                'default' => 'true' === api_get_setting('allow_public_certificates') ? 1 : '',
                 'category' => 'certificates',
             ],
             'documents_default_visibility' => ['default' => 'visible', 'category' => 'document'],
@@ -412,7 +412,7 @@ class AddCourse
                         $file->getRealPath()
                     );
 
-                    if ($document && $document->getTitle() === 'default.html') {
+                    if ($document && 'default.html' === $document->getTitle()) {
                         $certificateId = $document->getIid();
                     }
                 }
@@ -640,10 +640,10 @@ class AddCourse
      */
     public static function string2binary($variable)
     {
-        if ($variable == 'true') {
+        if ('true' == $variable) {
             return true;
         }
-        if ($variable == 'false') {
+        if ('false' == $variable) {
             return false;
         }
     }
@@ -691,7 +691,7 @@ class AddCourse
             $visibility = $params['visibility'];
         }
 
-        $subscribe = isset($params['subscribe']) ? (int) $params['subscribe'] : $visibility == COURSE_VISIBILITY_OPEN_PLATFORM ? 1 : 0;
+        $subscribe = isset($params['subscribe']) ? (int) $params['subscribe'] : COURSE_VISIBILITY_OPEN_PLATFORM == $visibility ? 1 : 0;
         $unsubscribe = isset($params['unsubscribe']) ? (int) $params['unsubscribe'] : 0;
         $expiration_date = isset($params['expiration_date']) ? $params['expiration_date'] : null;
         $teachers = isset($params['teachers']) ? $params['teachers'] : null;
@@ -736,16 +736,16 @@ class AddCourse
             $disk_quota = api_get_setting('default_document_quotum');
         }
 
-        if (stripos($department_url, 'http://') === false && stripos(
+        if (false === stripos($department_url, 'http://') && false === stripos(
                 $department_url,
                 'https://'
-            ) === false
+            )
         ) {
             $department_url = 'http://'.$department_url;
         }
 
         // just in case
-        if ($department_url == 'http://') {
+        if ('http://' == $department_url) {
             $department_url = '';
         }
         $course_id = 0;
@@ -756,7 +756,7 @@ class AddCourse
             /** @var \Chamilo\CoreBundle\Entity\CourseCategory $courseCategory */
             $courseCategory = Container::getCourseCategoryRepository()->find($categoryId);
             $urlId = 1;
-            if (api_get_current_access_url_id() !== -1) {
+            if (-1 !== api_get_current_access_url_id()) {
                 $urlId = api_get_current_access_url_id();
             }
 
@@ -855,7 +855,7 @@ class AddCourse
                 $send_mail_to_admin = api_get_setting('send_email_to_admin_when_create_course');
 
                 // @todo Improve code to send to all current portal administrators.
-                if ($send_mail_to_admin === 'true') {
+                if ('true' === $send_mail_to_admin) {
                     $siteName = api_get_setting('siteName');
                     $recipient_email = api_get_setting('emailAdministrator');
                     $recipient_name = api_get_person_name(
@@ -929,7 +929,7 @@ class AddCourse
             'first'
         );
 
-        if ($newIdResultData === false) {
+        if (false === $newIdResultData) {
             return 1;
         }
 

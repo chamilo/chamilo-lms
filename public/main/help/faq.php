@@ -3,8 +3,6 @@
 
 /**
  * This script displays a help window.
- *
- * @package chamilo.help
  */
 require_once __DIR__.'/../inc/global.inc.php';
 $help_name = isset($_GET['open']) ? Security::remove_XSS($_GET['open']) : null;
@@ -18,7 +16,7 @@ if (api_is_platform_admin()) {
 echo Display::page_header(get_lang('Frequently Asked Question'));
 
 $faq_file = 'faq.html';
-if (!empty($_GET['edit']) && $_GET['edit'] == 'true' && api_is_platform_admin()) {
+if (!empty($_GET['edit']) && 'true' == $_GET['edit'] && api_is_platform_admin()) {
     $form = new FormValidator('set_faq', 'post', 'faq.php?edit=true');
     $form->addHtmlEditor(
         'faq_content',

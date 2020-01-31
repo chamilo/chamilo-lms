@@ -68,7 +68,7 @@ if (!api_is_allowed_to_edit(false, true)) {
 $extend_rights_for_coachs = api_get_setting('extend_rights_for_coach_on_survey');
 
 // Database table definitions
-if (isset($_GET['search']) && $_GET['search'] == 'advanced') {
+if (isset($_GET['search']) && 'advanced' == $_GET['search']) {
     $interbreadcrumb[] = [
         'url' => api_get_path(WEB_CODE_PATH).'survey/survey_list.php',
         'name' => get_lang('Survey list'),
@@ -137,7 +137,7 @@ switch ($action) {
         break;
     case 'empty':
         $mysession = api_get_session_id();
-        if ($mysession != 0) {
+        if (0 != $mysession) {
             if (!((api_is_session_general_coach() || api_is_platform_admin()) &&
                 api_is_element_in_the_session(TOOL_SURVEY, $surveyId))) {
                 // The coach can't empty a survey not belonging to his session
@@ -164,7 +164,7 @@ Display::display_header($tool_name, 'Survey');
 Display::display_introduction_section('survey', 'left');
 
 // Action handling: searching
-if (isset($_GET['search']) && $_GET['search'] == 'advanced') {
+if (isset($_GET['search']) && 'advanced' == $_GET['search']) {
     SurveyUtil::display_survey_search_form();
 }
 
@@ -188,7 +188,7 @@ if (isset($_POST['action']) && $_POST['action']) {
 }
 
 echo '<div class="actions">';
-if (!api_is_session_general_coach() || $extend_rights_for_coachs == 'true') {
+if (!api_is_session_general_coach() || 'true' == $extend_rights_for_coachs) {
     // Action links
     echo '<a href="'.api_get_path(WEB_CODE_PATH).'survey/create_new_survey.php?'.api_get_cidreq().'&amp;action=add">'.
         Display::return_icon('new_survey.png', get_lang('Create survey'), '', ICON_SIZE_MEDIUM).'</a> ';
@@ -200,7 +200,7 @@ echo '<a href="'.api_get_self().'?'.api_get_cidreq().'&amp;search=advanced">'.
 echo '</div>';
 
 // Load main content
-if (api_is_session_general_coach() && $extend_rights_for_coachs == 'false') {
+if (api_is_session_general_coach() && 'false' == $extend_rights_for_coachs) {
     SurveyUtil::display_survey_list_for_coach();
 } else {
     SurveyUtil::display_survey_list();

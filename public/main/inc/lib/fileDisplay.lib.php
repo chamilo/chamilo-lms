@@ -179,7 +179,7 @@ function choose_image($file_name)
  */
 function chooseFolderIcon($folderPath)
 {
-    if ($folderPath == '/shared_folder') {
+    if ('/shared_folder' == $folderPath) {
         return 'folder_users.png';
     }
 

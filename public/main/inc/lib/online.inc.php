@@ -10,8 +10,6 @@ use ChamiloSession as Session;
  * @author Denes Nagy, principal author
  * @author Bart Mollet
  * @author Roan Embrechts, cleaning and bugfixing
- *
- * @package chamilo.whoisonline
  */
 
 /**
@@ -33,7 +31,7 @@ function LoginCheck($uid)
 
         $login_date = api_get_utc_datetime();
         $access_url_id = 1;
-        if (api_get_multiple_access_url() && api_get_current_access_url_id() != -1) {
+        if (api_get_multiple_access_url() && -1 != api_get_current_access_url_id()) {
             $access_url_id = api_get_current_access_url_id();
         }
         $session_id = api_get_session_id();
@@ -57,7 +55,7 @@ function preventMultipleLogin($userId)
 {
     $table = Database::get_main_table(TABLE_STATISTIC_TRACK_E_ONLINE);
     $userId = intval($userId);
-    if (api_get_setting('prevent_multiple_simultaneous_login') === 'true') {
+    if ('true' === api_get_setting('prevent_multiple_simultaneous_login')) {
         if (!empty($userId) && !api_is_anonymous()) {
             $isFirstLogin = Session::read('first_user_login');
             if (empty($isFirstLogin)) {
@@ -74,7 +72,7 @@ function preventMultipleLogin($userId)
                 $userIsReallyOnline = user_is_online($userId);
 
                 // Trying double login.
-                if (!empty($loginData) && $userIsReallyOnline == true) {
+                if (!empty($loginData) && true == $userIsReallyOnline) {
                     session_regenerate_id();
                     Session::destroy();
                     header('Location: '.api_get_path(WEB_PATH).'index.php?loginFailed=1&error=multiple_connection_not_allowed');
@@ -149,7 +147,7 @@ function online_logout($user_id = null, $logout_redirect = false)
     // (using *authent_name*_logout as the function name) and the following code
     // will find and execute it
     $uinfo = api_get_user_info($user_id);
-    if (($uinfo['auth_source'] != PLATFORM_AUTH_SOURCE) && is_array($extAuthSource)) {
+    if ((PLATFORM_AUTH_SOURCE != $uinfo['auth_source']) && is_array($extAuthSource)) {
         if (is_array($extAuthSource[$uinfo['auth_source']])) {
             $subarray = $extAuthSource[$uinfo['auth_source']];
             if (!empty($subarray['logout']) && file_exists($subarray['logout'])) {
@@ -165,8 +163,8 @@ function online_logout($user_id = null, $logout_redirect = false)
     // After logout redirect to
     $url = api_get_path(WEB_PATH).'index.php';
 
-    if ($logout_redirect && api_get_plugin_setting('azure_active_directory', 'enable') == 'true') {
-        if (ChamiloSession::read('_user_auth_source') === 'azure_active_directory') {
+    if ($logout_redirect && 'true' == api_get_plugin_setting('azure_active_directory', 'enable')) {
+        if ('azure_active_directory' === ChamiloSession::read('_user_auth_source')) {
             $activeDirectoryPlugin = AzureActiveDirectory::create();
             $azureLogout = $activeDirectoryPlugin->getUrl(AzureActiveDirectory::URL_TYPE_LOGOUT);
             if (!empty($azureLogout)) {
@@ -181,8 +179,8 @@ function online_logout($user_id = null, $logout_redirect = false)
     session_regenerate_id();
     Session::destroy();
 
-    $pluginKeycloak = api_get_plugin_setting('keycloak', 'tool_enable') === 'true';
-    if ($pluginKeycloak && $uinfo['auth_source'] === 'keycloak') {
+    $pluginKeycloak = 'true' === api_get_plugin_setting('keycloak', 'tool_enable');
+    if ($pluginKeycloak && 'keycloak' === $uinfo['auth_source']) {
         $pluginUrl = api_get_path(WEB_PLUGIN_PATH).'keycloak/start.php?slo';
         header('Location: '.$pluginUrl);
         exit;
@@ -303,7 +301,7 @@ function who_is_online(
 
     if (api_get_multiple_access_url()) {
         $access_url_id = api_get_current_access_url_id();
-        if ($access_url_id != -1) {
+        if (-1 != $access_url_id) {
             if ($friends) {
                 // 	friends from social network is online
                 $query = "SELECT distinct login_user_id, login_date
@@ -385,7 +383,7 @@ function who_is_online_count($time_limit = null, $friends = false)
 
     if (api_get_multiple_access_url()) {
         $access_url_id = api_get_current_access_url_id();
-        if ($access_url_id != -1) {
+        if (-1 != $access_url_id) {
             if ($friends) {
                 // friends from social network is online
                 $query = "SELECT DISTINCT count(login_user_id) as count

@@ -10,8 +10,6 @@ use ChamiloSession as Session;
  *
  * This class provides methods for messages management.
  * Include/require it in your code to use its features.
- *
- * @package chamilo.library
  */
 class MessageManager
 {
@@ -34,7 +32,7 @@ class MessageManager
         static $count;
         if (!isset($count)) {
             $cacheAvailable = api_get_configuration_value('apc');
-            if ($cacheAvailable === true) {
+            if (true === $cacheAvailable) {
                 $var = api_get_configuration_value('apc_prefix').'social_messages_unread_u_'.$userId;
                 if (apcu_exists($var)) {
                     $count = apcu_fetch($var);
@@ -213,7 +211,7 @@ class MessageManager
             $title = cut($title, 80, true);
 
             $class = 'class = "read"';
-            if ($status == 1) {
+            if (1 == $status) {
                 $class = 'class = "unread"';
             }
 
@@ -483,7 +481,7 @@ class MessageManager
             $receiverUserInfo = api_get_user_info($receiver_user_id);
 
             // Disabling messages for inactive users.
-            if ($receiverUserInfo['active'] == 0) {
+            if (0 == $receiverUserInfo['active']) {
                 return false;
             }
         }
@@ -607,7 +605,7 @@ class MessageManager
             // Save attachment file for inbox messages
             if (is_array($attachmentList)) {
                 foreach ($attachmentList as $attachment) {
-                    if ($attachment['error'] == 0) {
+                    if (0 == $attachment['error']) {
                         $comment = $attachment['comment'];
                         self::saveMessageAttachmentFile(
                             $attachment,
@@ -622,7 +620,7 @@ class MessageManager
             }
 
             // Save message in the outbox for user friend or group.
-            if (empty($group_id) && $status == MESSAGE_STATUS_UNREAD) {
+            if (empty($group_id) && MESSAGE_STATUS_UNREAD == $status) {
                 $params = [
                     'user_sender_id' => $user_sender_id,
                     'user_receiver_id' => $receiver_user_id,
@@ -639,7 +637,7 @@ class MessageManager
                 // save attachment file for outbox messages
                 if (is_array($attachmentList)) {
                     foreach ($attachmentList as $attachment) {
-                        if ($attachment['error'] == 0) {
+                        if (0 == $attachment['error']) {
                             $comment = $attachment['comment'];
                             self::saveMessageAttachmentFile(
                                 $attachment,
@@ -748,7 +746,7 @@ class MessageManager
         $attachmentList = []
     ) {
         $files = $_FILES ? $_FILES : [];
-        if ($uploadFiles === false) {
+        if (false === $uploadFiles) {
             $files = [];
         }
         // $attachmentList must have: tmp_name, name, size keys
@@ -1265,7 +1263,7 @@ class MessageManager
             $sendDate = $row['col2'];
             $senderId = $row['user_sender_id'];
 
-            if ($request === true) {
+            if (true === $request) {
                 $message[0] = '<input type="checkbox" value='.$messageId.' name="out[]">';
             } else {
                 $message[0] = $messageId;
@@ -1274,7 +1272,7 @@ class MessageManager
             $class = 'class = "read"';
             $title = Security::remove_XSS($title);
             $userInfo = api_get_user_info($senderId);
-            if ($request === true) {
+            if (true === $request) {
                 $message[1] = '<a onclick="show_sent_message('.$messageId.')" href="javascript:void(0)">'.
                     $userInfo['complete_name_with_username'].'</a>';
                 $message[2] = '<a onclick="show_sent_message('.$messageId.')" href="javascript:void(0)">'.str_replace(
@@ -1396,7 +1394,7 @@ class MessageManager
         }
 
         $message_content .= '<tr>';
-        if (api_get_setting('allow_social_tool') === 'true') {
+        if ('true' === api_get_setting('allow_social_tool')) {
             $message_content .= '<div class="row">';
             $message_content .= '<div class="col-md-12">';
             $message_content .= '<ul class="list-message">';
@@ -1456,7 +1454,7 @@ class MessageManager
 		        <div id="message-attach">'.(!empty($files_attachments) ? implode('<br />', $files_attachments) : '').'</div>
 		        <div style="padding: 15px 0px 5px 0px">';
         $social_link = '';
-        if (isset($_GET['f']) && $_GET['f'] == 'social') {
+        if (isset($_GET['f']) && 'social' == $_GET['f']) {
             $social_link = 'f=social';
         }
 
@@ -1557,7 +1555,7 @@ class MessageManager
                 $html .= '<div class="row">';
 
                 $items = $topic['count'];
-                $reply_label = ($items == 1) ? get_lang('Reply') : get_lang('Replies');
+                $reply_label = (1 == $items) ? get_lang('Reply') : get_lang('Replies');
                 $label = '<i class="fa fa-envelope"></i> '.$items.' '.$reply_label;
                 $topic['title'] = trim($topic['title']);
 
@@ -1575,8 +1573,8 @@ class MessageManager
                     ['class' => 'title']
                 );
                 $actions = '';
-                if ($my_group_role == GROUP_USER_PERMISSION_ADMIN ||
-                    $my_group_role == GROUP_USER_PERMISSION_MODERATOR
+                if (GROUP_USER_PERMISSION_ADMIN == $my_group_role ||
+                    GROUP_USER_PERMISSION_MODERATOR == $my_group_role
                 ) {
                     $actions = '<br />'.Display::url(
                             get_lang('Delete'),
@@ -1683,7 +1681,7 @@ class MessageManager
         $links .= '<div class="pull-right">';
         $links .= '<div class="btn-group btn-group-sm">';
 
-        if (($my_group_role == GROUP_USER_PERMISSION_ADMIN || $my_group_role == GROUP_USER_PERMISSION_MODERATOR) ||
+        if ((GROUP_USER_PERMISSION_ADMIN == $my_group_role || GROUP_USER_PERMISSION_MODERATOR == $my_group_role) ||
             $main_message['user_sender_id'] == $current_user_id
         ) {
             $urlEdit = $webCodePath.'social/message_for_group_form.inc.php?'
@@ -1822,8 +1820,8 @@ class MessageManager
 
                 $links .= '<div class="btn-group btn-group-sm">';
                 if (
-                    ($my_group_role == GROUP_USER_PERMISSION_ADMIN ||
-                        $my_group_role == GROUP_USER_PERMISSION_MODERATOR
+                    (GROUP_USER_PERMISSION_ADMIN == $my_group_role ||
+                        GROUP_USER_PERMISSION_MODERATOR == $my_group_role
                     ) ||
                     $topic['user_sender_id'] == $current_user_id
                 ) {
@@ -1921,7 +1919,7 @@ class MessageManager
 
                 $base_padding = 20;
 
-                if ($topic['indent_cnt'] == 0) {
+                if (0 == $topic['indent_cnt']) {
                     $indent = $base_padding;
                 } else {
                     $indent = (int) $topic['indent_cnt'] * $base_padding + $base_padding;
@@ -2071,7 +2069,7 @@ class MessageManager
                 $comment = !empty($comment) ? '&nbsp;-&nbsp;<i>'.$comment.'</i>' : '';
 
                 $attachmentLine = $attachIcon.'&nbsp;'.$link.'&nbsp;('.$size.')'.$comment;
-                if ($row_file['comment'] === 'audio_message') {
+                if ('audio_message' === $row_file['comment']) {
                     $attachmentLine = '<audio src="'.$archiveURL.$archiveFile.'"/>';
                 }
                 $list[] = $attachmentLine;
@@ -2169,7 +2167,7 @@ class MessageManager
         $table->set_header(2, get_lang('Date'), true, ['style' => 'width:180px;']);
         $table->set_header(3, get_lang('Edit'), false, ['style' => 'width:120px;']);
 
-        if (isset($_REQUEST['f']) && $_REQUEST['f'] === 'social') {
+        if (isset($_REQUEST['f']) && 'social' === $_REQUEST['f']) {
             $parameters['f'] = 'social';
             $table->set_additional_parameters($parameters);
         }
@@ -2377,7 +2375,7 @@ class MessageManager
             switch ($_REQUEST['action']) {
                 case 'delete':
                     $count = count($_POST['id']);
-                    if ($count != 0) {
+                    if (0 != $count) {
                         foreach ($_POST['id'] as $index => $messageId) {
                             self::delete_message_by_user_receiver(
                                 api_get_user_id(),
@@ -2452,7 +2450,7 @@ class MessageManager
         $result = Database::query($sql);
 
         $messages = [];
-        if ($result !== false) {
+        if (false !== $result) {
             while ($row = Database::fetch_assoc($result)) {
                 $messages[] = $row;
             }
@@ -2632,7 +2630,7 @@ class MessageManager
         while (!feof($file)) {
             $line = fgets($file);
 
-            if (trim($line) == '') {
+            if ('' == trim($line)) {
                 continue;
             }
 
@@ -2649,7 +2647,7 @@ class MessageManager
             while (!feof($mailFile)) {
                 $mailLine = fgets($mailFile);
                 //if ($iX == 4 && preg_match('/(.*):\s(.*)$/', $mailLine, $matches)) {
-                if ($iX == 2 &&
+                if (2 == $iX &&
                     preg_match('/(.*)(\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2})\s(.*)/', $mailLine, $detailsMatches)
                 ) {
                     $mail_queue[$i]['reason'] = $detailsMatches[3];
@@ -2882,7 +2880,7 @@ class MessageManager
         );
 
         $btnDislike = '';
-        if (api_get_configuration_value('disable_dislike_option') === false) {
+        if (false === api_get_configuration_value('disable_dislike_option')) {
             $disabled = $countLikes['user_disliked'] ? 'btn-danger' : 'btn-default';
 
             $btnDislike = Display::button(

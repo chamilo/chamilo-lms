@@ -48,7 +48,7 @@ switch ($action) {
 
         echo '<div class="col-sm-7">';
 
-        if (api_get_setting('show_email_addresses') == 'false') {
+        if ('false' == api_get_setting('show_email_addresses')) {
             $user_info['mail'] = ' ';
         } else {
             $user_info['mail'] = ' '.$user_info['mail'].' ';
@@ -62,7 +62,7 @@ switch ($action) {
         if ($isAnonymous) {
             // Only allow anonymous users to see user popup if the popup user
             // is a teacher (which might be necessary to illustrate a course)
-            if ($user_info['status'] === COURSEMANAGER) {
+            if (COURSEMANAGER === $user_info['status']) {
                 echo $userData;
             } else {
                 echo '<h3>-</h3>';
@@ -78,8 +78,8 @@ switch ($action) {
 
         $url = api_get_path(WEB_AJAX_PATH).'message.ajax.php?a=send_message&user_id='.$user_info['user_id'].'&course_id='.$courseId.'&session_id='.$sessionId;
 
-        if ($isAnonymous === false &&
-            api_get_setting('allow_message_tool') == 'true'
+        if (false === $isAnonymous &&
+            'true' == api_get_setting('allow_message_tool')
         ) {
             echo '<script>';
             echo '
@@ -177,7 +177,7 @@ switch ($action) {
                 $result = Database::query($sql);
 
                 // Send and email if account is active
-                if ($status == 1) {
+                if (1 == $status) {
                     $user_info = api_get_user_info($user_id);
                     $recipientName = api_get_person_name(
                         $user_info['firstname'],

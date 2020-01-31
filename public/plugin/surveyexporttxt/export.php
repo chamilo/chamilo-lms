@@ -52,12 +52,12 @@ foreach ($questionsData as $questionData) {
     }
 
     if ('pagebreak' === $questionData['type']) {
-        ++$indexPart;
+        $indexPart++;
 
         continue;
     }
 
-    ++$numberOfQuestions;
+    $numberOfQuestions++;
 
     if (0 === $indexPart) {
         $parts[0][] = $questionData;
@@ -150,7 +150,7 @@ foreach ($surveyAnswers as $answer) {
     }
 
     $content[] = '"'.$i.'","'.$surveyLine;
-    ++$i;
+    $i++;
 }
 
 // Add EOL to lines

@@ -113,7 +113,7 @@ class GamificationUtils
                 true
             );
 
-            if ($courseProgress === false) {
+            if (false === $courseProgress) {
                 continue;
             }
 

@@ -7,8 +7,6 @@
  *	you can select multiple users and courses and then click on
  *	'Add to this(these) course(s)'.
  *
- *	@package chamilo.admin
- *
  * 	@todo use formvalidator for the form
  */
 $cidReset = true;
@@ -55,7 +53,7 @@ $new_field_list = [];
 if (is_array($extra_field_list)) {
     foreach ($extra_field_list as $extra_field) {
         // if is enabled to filter and is a "<select>" field type
-        if ($extra_field[8] == 1 && $extra_field[2] == ExtraField::FIELD_TYPE_SELECT) {
+        if (1 == $extra_field[8] && ExtraField::FIELD_TYPE_SELECT == $extra_field[2]) {
             $new_field_list[] = [
                 'name' => $extra_field[3],
                 'type' => $extra_field[2],
@@ -63,7 +61,7 @@ if (is_array($extra_field_list)) {
                 'data' => $extra_field[9],
             ];
         }
-        if ($extra_field[8] == 1 && $extra_field[2] == ExtraField::FIELD_TYPE_TAG) {
+        if (1 == $extra_field[8] && ExtraField::FIELD_TYPE_TAG == $extra_field[2]) {
             $options = UserManager::get_extra_user_data_for_tags($extra_field[1]);
 
             $new_field_list[] = [
@@ -88,15 +86,15 @@ if (isset($_POST['form_sent']) && $_POST['form_sent']) {
         $users[$key] = intval($value);
     }
 
-    if ($form_sent == 1) {
-        if (count($users) == 0 || count($courses) == 0) {
+    if (1 == $form_sent) {
+        if (0 == count($users) || 0 == count($courses)) {
             echo Display::return_message(get_lang('You must select at least one user and one course'), 'error');
         } else {
             $errorDrh = 0;
             foreach ($courses as $course_code) {
                 foreach ($users as $user_id) {
                     $user = api_get_user_info($user_id);
-                    if ($user['status'] != DRH) {
+                    if (DRH != $user['status']) {
                         CourseManager::subscribeUser($user_id, $course_code);
                     } else {
                         $errorDrh = 1;
@@ -104,7 +102,7 @@ if (isset($_POST['form_sent']) && $_POST['form_sent']) {
                 }
             }
 
-            if ($errorDrh == 0) {
+            if (0 == $errorDrh) {
                 echo Display::return_message(get_lang('The selected users are subscribed to the selected course'), 'confirm');
             } else {
                 echo Display::return_message(get_lang('Human resources managers should not be registered to courses. The corresponding users you selected have not been subscribed.'), 'error');
@@ -137,9 +135,9 @@ if (is_array($extra_field_list)) {
             $varname = 'field_'.$new_field['variable'];
             $fieldtype = $new_field['type'];
             if (UserManager::is_extra_field_available($new_field['variable'])) {
-                if (isset($_POST[$varname]) && $_POST[$varname] != '0') {
+                if (isset($_POST[$varname]) && '0' != $_POST[$varname]) {
                     $use_extra_fields = true;
-                    if ($fieldtype == ExtraField::FIELD_TYPE_TAG) {
+                    if (ExtraField::FIELD_TYPE_TAG == $fieldtype) {
                         $extra_field_result[] = UserManager::get_extra_user_data_by_tags(
                             intval($_POST['field_id']),
                             $_POST[$varname]
@@ -189,7 +187,7 @@ $target_name = 'lastname';
 $orderBy = $target_name;
 $showOfficialCode = false;
 $orderListByOfficialCode = api_get_setting('order_user_list_by_official_code');
-if ($orderListByOfficialCode === 'true') {
+if ('true' === $orderListByOfficialCode) {
     $showOfficialCode = true;
     $orderBy = " official_code, lastname, firstname";
 }
@@ -202,7 +200,7 @@ $sql = "SELECT user_id, lastname, firstname, username, official_code
 if (api_is_multiple_url_enabled()) {
     $tbl_user_rel_access_url = Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_USER);
     $access_url_id = api_get_current_access_url_id();
-    if ($access_url_id != -1) {
+    if (-1 != $access_url_id) {
         $sql = "SELECT u.user_id,lastname,firstname,username, official_code
                 FROM $tbl_user u
                 INNER JOIN $tbl_user_rel_access_url user_rel_url
@@ -228,7 +226,7 @@ $sql = "SELECT code,visual_code,title
 if (api_is_multiple_url_enabled()) {
     $tbl_course_rel_access_url = Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_COURSE);
     $access_url_id = api_get_current_access_url_id();
-    if ($access_url_id != -1) {
+    if (-1 != $access_url_id) {
         $sql = "SELECT code, visual_code, title
                 FROM $tbl_course as course
                 INNER JOIN $tbl_course_rel_access_url course_rel_url
@@ -257,7 +255,7 @@ if (is_array($extra_field_list)) {
             echo '<option value="0">--'.get_lang('Select').'--</option>';
             foreach ($new_field['data'] as $option) {
                 $checked = '';
-                if ($fieldtype == ExtraField::FIELD_TYPE_TAG) {
+                if (ExtraField::FIELD_TYPE_TAG == $fieldtype) {
                     if (isset($_POST[$varname])) {
                         if ($_POST[$varname] == $option['tag']) {
                             $checked = 'selected="true"';
@@ -274,7 +272,7 @@ if (is_array($extra_field_list)) {
                 }
             }
             echo '</select>';
-            $extraHidden = $fieldtype == ExtraField::FIELD_TYPE_TAG ? '<input type="hidden" name="field_id" value="'.$option['field_id'].'" />' : '';
+            $extraHidden = ExtraField::FIELD_TYPE_TAG == $fieldtype ? '<input type="hidden" name="field_id" value="'.$option['field_id'].'" />' : '';
             echo $extraHidden;
             echo '&nbsp;&nbsp;';
         }

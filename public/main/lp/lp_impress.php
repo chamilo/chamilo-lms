@@ -3,9 +3,6 @@
 
 use ChamiloSession as Session;
 
-/**
- * @package chamilo.learnpath
- */
 require_once __DIR__.'/../inc/global.inc.php';
 
 $this_section = SECTION_COURSES;
@@ -34,7 +31,7 @@ $visibility = api_get_item_visibility(
     null,
     api_get_group_id()
 );
-if (!api_is_allowed_to_edit(null, true) && intval($visibility) == 0) {
+if (!api_is_allowed_to_edit(null, true) && 0 == intval($visibility)) {
     api_not_allowed();
 }
 /** @var learnpath $lp */
@@ -73,7 +70,7 @@ foreach ($list as $toc) {
     $html .= '<div id="step-'.$step.'" class="step slide" data-x="'.$x.'" data-y="-1500"  >';
     $html .= '<div class="impress-content">';
     $src = $lp->get_link('http', $toc['id']);
-    if ($toc['type'] !== 'dir') {
+    if ('dir' !== $toc['type']) {
         //just showing the src in a iframe ...
         $html .= '<h2>'.$toc['title'].'</h2>';
         $html .= '<iframe border="0" frameborder="0" style="width:100%;height:600px" src="'.$src.'"></iframe>';

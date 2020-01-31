@@ -1,7 +1,5 @@
 <?php
-/**
- * @package chamilo.permissions
- */
+
 require '../inc/global.inc.php';
 require_once 'permissions_functions.inc.php';
 require_once 'all_permissions.inc.php';
@@ -26,13 +24,13 @@ if ($_POST['StoreRolePermissions']) {
 }
 // storing a permission for a given role when the image approach is used
 if (isset($_GET['action']) and isset($_GET['permission']) and isset($_GET['tool'])) {
-    if ($_GET['action'] == 'grant' or $_GET['action'] == 'revoke') {
+    if ('grant' == $_GET['action'] or 'revoke' == $_GET['action']) {
         $result_message = store_one_permission('role', $_GET['action'], $role_id, $_GET['tool'], $_GET['permission']);
     }
 }
 
 // deleting a role
-if (isset($_GET['action']) and isset($_GET['role_id']) and $_GET['action'] == 'delete') {
+if (isset($_GET['action']) and isset($_GET['role_id']) and 'delete' == $_GET['action']) {
     //deleting the assignments fo this role: users
     $table = Database::get_course_table(TABLE_ROLE_USER);
     $sql = "DELETE FROM $table WHERE role_id='".intval($_GET['role_id'])."'";
@@ -63,7 +61,7 @@ if (isset($result_message)) {
 // 		ADDING A NEW ROLE (FORM AND LINK)
 echo '<img src="../img/add.png" /> <a href="roles.php?action=add">'.get_lang('AddRole').'</a>';
 
-if ($_GET['action'] == 'add') {
+if ('add' == $_GET['action']) {
     echo "<form method=\"post\" action=\"".api_get_self()."\">";
     echo "\n<table>";
     echo "\n\t<tr>";
@@ -94,10 +92,10 @@ if ($_GET['action'] == 'add') {
     echo "<table class=\"data_table\">\n";
 
     // the header
-    if (api_get_setting('permissions') == 'limited') {
+    if ('limited' == api_get_setting('permissions')) {
         $header_array = $rights_limited;
     }
-    if (api_get_setting('permissions') == 'full') {
+    if ('full' == api_get_setting('permissions')) {
         $header_array = $rights_full;
     }
     echo "\t<tr>\n";
@@ -152,10 +150,10 @@ if ($_GET['role_id']) {
     $current_role_permissions = get_permissions('role', $_GET['role_id']);
     // 			LIMITED OR FULL
     $current_role_permissions = limited_or_full($current_role_permissions);
-    if (api_get_setting('permissions') == 'limited') {
+    if ('limited' == api_get_setting('permissions')) {
         $header_array = $rights_limited;
     }
-    if (api_get_setting('permissions') == 'full') {
+    if ('full' == api_get_setting('permissions')) {
         $header_array = $rights_full;
     }
     // ---------------------------------------------------
@@ -165,7 +163,7 @@ if ($_GET['role_id']) {
 
     // the list of the roles for the user
     echo get_lang('PermissionsOfRole').':'.$current_role_info['role_name'].'<br />';
-    if ($_GET['scope'] == 'platform') {
+    if ('platform' == $_GET['scope']) {
         echo get_lang('IsPlatformRoleNotEditable').'<br />';
     }
 
@@ -189,15 +187,15 @@ if ($_GET['role_id']) {
         foreach ($header_array as $key => $value) {
             echo "\t\t<td align='center'>\n";
             if (in_array($value, $rights)) {
-                if ($setting_visualisation == 'checkbox') {
+                if ('checkbox' == $setting_visualisation) {
                     display_checkbox_matrix(
                         $current_role_permissions,
                         $tool,
                         $value
                     );
                 }
-                if ($setting_visualisation == 'image') {
-                    if ($_GET['scope'] == 'platform') {
+                if ('image' == $setting_visualisation) {
+                    if ('platform' == $_GET['scope']) {
                         $roles_editable = false;
                     } else {
                         $roles_editable = true;
@@ -218,7 +216,7 @@ if ($_GET['role_id']) {
     }
 
     echo "</table>\n";
-    if ($setting_visualisation == 'checkbox') {
+    if ('checkbox' == $setting_visualisation) {
         echo "<input type=\"Submit\" name=\"StoreRolePermissions\" value=\"".get_lang('Store permissions')."\">";
     }
     echo "</form>";

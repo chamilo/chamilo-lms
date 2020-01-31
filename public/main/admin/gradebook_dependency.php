@@ -8,7 +8,7 @@ require_once __DIR__.'/../inc/global.inc.php';
 api_protect_admin_script();
 
 $allow = api_get_configuration_value('gradebook_dependency');
-if ($allow == false) {
+if (false == $allow) {
     api_not_allowed(true);
 }
 

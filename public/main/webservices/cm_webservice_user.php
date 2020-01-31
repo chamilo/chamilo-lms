@@ -1,8 +1,6 @@
 <?php
 /* For licensing terms, see /license.txt */
-/**
- * @package chamilo.webservices
- */
+
 require_once __DIR__.'/../inc/global.inc.php';
 require_once __DIR__.'/cm_webservice.php';
 
@@ -15,7 +13,7 @@ class WSCMUser extends WSCM
 {
     public function find_id_user($username, $password, $name)
     {
-        if ($this->verifyUserPass($username, $password) == "valid") {
+        if ("valid" == $this->verifyUserPass($username, $password)) {
             $listResult = "#";
 
             $listArrayResult = [];
@@ -58,7 +56,7 @@ class WSCMUser extends WSCM
 
     public function get_link_user_picture($username, $password, $id)
     {
-        if ($this->verifyUserPass($username, $password) == "valid") {
+        if ("valid" == $this->verifyUserPass($username, $password)) {
             $userPic = UserManager::getUserPicture($id);
             if (empty($userPic)) {
                 return "0";
@@ -72,7 +70,7 @@ class WSCMUser extends WSCM
 
     public function get_user_name($username, $password, $id, $field)
     {
-        if ($this->verifyUserPass($username, $password) == "valid") {
+        if ("valid" == $this->verifyUserPass($username, $password)) {
             $userInfo = api_get_user_info($id);
             switch ($field) {
                 case 'firstname':
@@ -104,7 +102,7 @@ class WSCMUser extends WSCM
         $content_message = ''
     ) {
         global $charset;
-        if ($this->verifyUserPass($username, $password) == "valid") {
+        if ("valid" == $this->verifyUserPass($username, $password)) {
             $user_id = UserManager::get_user_id_from_username($username);
             $message_title = get_lang('Invitation');
             $count_is_true = SocialManager::send_invitation_friend(
@@ -142,7 +140,7 @@ class WSCMUser extends WSCM
 
     public function accept_friend($username, $password, $userfriend_id)
     {
-        if ($this->verifyUserPass($username, $password) == "valid") {
+        if ("valid" == $this->verifyUserPass($username, $password)) {
             $user_id = UserManager::get_user_id_from_username($username);
             UserManager::relate_users(
                 $userfriend_id,
@@ -159,7 +157,7 @@ class WSCMUser extends WSCM
 
     public function denied_invitation($username, $password, $userfriend_id)
     {
-        if ($this->verifyUserPass($username, $password) == "valid") {
+        if ("valid" == $this->verifyUserPass($username, $password)) {
             $user_id = UserManager::get_user_id_from_username($username);
             SocialManager::invitation_denied($userfriend_id, $user_id);
 

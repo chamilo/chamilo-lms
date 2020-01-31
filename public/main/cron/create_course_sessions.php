@@ -4,15 +4,13 @@
  * Create course sessions procedure. It creates sessions for courses that haven't it yet.
  * If today is greater than OFFSET, it will create them also for the next quarter.
  *
- * @package chamilo.cron
- *
  * @author Imanol Losada <imanol.losada@beeznest.com>
  */
 
 /**
  * Initialization.
  */
-if (php_sapi_name() != 'cli') {
+if ('cli' != php_sapi_name()) {
     exit; //do not run from browser
 }
 
@@ -67,7 +65,7 @@ function getQuarter($month)
 {
     $quarter = 1;
     // Remove the leading 0 if any
-    if (substr($month, 0, 1) == '0') {
+    if ('0' == substr($month, 0, 1)) {
         $month = substr($month, 1);
     }
     // reduce to 4 quarters: 1..3=1; 4..6=2

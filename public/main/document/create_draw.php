@@ -6,8 +6,6 @@ use ChamiloSession as Session;
 /**
  * This file allows creating new svg and png documents with an online editor.
  *
- * @package chamilo.document
- *
  * @author Juan Carlos Raña Trabado
  *
  * @since 25/september/2010
@@ -48,7 +46,7 @@ $dir = $document_data['path'];
 
 // path for svg-edit save
 Session::write('draw_dir', Security::remove_XSS($dir));
-if ($dir == '/') {
+if ('/' == $dir) {
     Session::write('draw_dir', '');
 }
 
@@ -60,15 +58,15 @@ if (strstr($dir, '..')) {
     $dir = '/';
 }
 
-if ($dir[0] == '.') {
+if ('.' == $dir[0]) {
     $dir = substr($dir, 1);
 }
 
-if ($dir[0] != '/') {
+if ('/' != $dir[0]) {
     $dir = '/'.$dir;
 }
 
-if ($dir[strlen($dir) - 1] != '/') {
+if ('/' != $dir[strlen($dir) - 1]) {
     $dir .= '/';
 }
 

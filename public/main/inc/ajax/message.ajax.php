@@ -16,7 +16,7 @@ switch ($action) {
     case 'get_notifications_inbox':
         $userId = api_get_user_id();
         $listInbox = [];
-        if (api_get_setting('allow_message_tool') == 'true') {
+        if ('true' == api_get_setting('allow_message_tool')) {
             $list = MessageManager::getMessageData(
                 0,
                 10,
@@ -41,7 +41,7 @@ switch ($action) {
         $userId = api_get_user_id();
         $listInvitations = [];
         $temp = [];
-        if (api_get_setting('allow_social_tool') == 'true') {
+        if ('true' == api_get_setting('allow_social_tool')) {
             $list = SocialManager::get_list_invitation_of_friends_by_user_id($userId, 3);
 
             foreach ($list as $row) {
@@ -64,12 +64,12 @@ switch ($action) {
         $invitations = [];
         // Setting notifications
         $count_unread_message = 0;
-        if (api_get_setting('allow_message_tool') === 'true') {
+        if ('true' === api_get_setting('allow_message_tool')) {
             // get count unread message and total invitations
             $count_unread_message = MessageManager::getCountNewMessagesFromDB($userId);
         }
 
-        if (api_get_setting('allow_social_tool') === 'true') {
+        if ('true' === api_get_setting('allow_social_tool')) {
             $number_of_new_messages_of_friend = SocialManager::get_message_number_invitation_by_user_id(
                 $userId
             );
@@ -155,7 +155,7 @@ switch ($action) {
             $_REQUEST['page_limit']
         );
 
-        $showEmail = api_get_setting('show_email_addresses') === 'true';
+        $showEmail = 'true' === api_get_setting('show_email_addresses');
         $return = ['items' => []];
 
         /** @var User $user */

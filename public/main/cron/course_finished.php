@@ -5,16 +5,14 @@
  * Cron for send a email when the course are finished.
  *
  * @author Angel Fernando Quiroz Campos <angel.quiroz@beeznest.com>
- *
- * @package chamilo.cron
  */
 require_once __DIR__.'/../inc/global.inc.php';
 
-if (php_sapi_name() != 'cli') {
+if ('cli' != php_sapi_name()) {
     exit; //do not run from browser
 }
 
-$isActive = api_get_setting('cron_remind_course_expiration_activate') === 'true';
+$isActive = 'true' === api_get_setting('cron_remind_course_expiration_activate');
 
 if (!$isActive) {
     exit;

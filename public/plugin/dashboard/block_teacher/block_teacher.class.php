@@ -114,7 +114,7 @@ class BlockTeacher extends Block
                                         <td align="right">'.$last_connection.'</td>
                                     </tr>
                                     ';
-                ++$i;
+                $i++;
             }
             $teachers_table .= '</table>';
         } else {
@@ -171,7 +171,7 @@ class BlockTeacher extends Block
                                         <td align="right">'.$time_on_platform.'</td>
                                     </tr>';
 
-                ++$i;
+                $i++;
             }
             $teachers_table .= '</table>';
         } else {

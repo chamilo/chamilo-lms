@@ -6,8 +6,6 @@ use ChamiloSession as Session;
 /**
  * Script that displays an error message when no content could be loaded.
  *
- * @package chamilo.learnpath
- *
  * @author Yannick Warnier <ywarnier@beeznest.org>
  */
 require_once __DIR__.'/../inc/global.inc.php';
@@ -44,7 +42,7 @@ $list = $learnPath->get_toc();
 $dir = false;
 
 foreach ($list as $toc) {
-    if ($toc['id'] == $lpItemId && $toc['type'] == 'dir') {
+    if ($toc['id'] == $lpItemId && 'dir' == $toc['type']) {
         $dir = true;
     }
 }
@@ -56,7 +54,7 @@ if ($dir) {
         case 1:
             $learnPath->stop_previous_item();
             $prerequisiteCheck = $learnPath->prerequisites_match($lpItemId);
-            if ($prerequisiteCheck === true) {
+            if (true === $prerequisiteCheck) {
                 $src = $learnPath->get_link('http', $lpItemId);
                 $learnPath->start_current_item(); // starts time counter manually if asset
                 $src = $learnPath->fixBlockedLinks($src);
@@ -68,7 +66,7 @@ if ($dir) {
             $learnPath->stop_previous_item();
             $prerequisiteCheck = $learnPath->prerequisites_match($lpItemId);
 
-            if ($prerequisiteCheck === true) {
+            if (true === $prerequisiteCheck) {
                 $src = $learnPath->get_link('http', $lpItemId);
                 $learnPath->start_current_item(); // starts time counter manually if asset
             } else {
@@ -79,7 +77,7 @@ if ($dir) {
             // save old if asset
             $learnPath->stop_previous_item(); // save status manually if asset
             $prerequisiteCheck = $learnPath->prerequisites_match($lpItemId);
-            if ($prerequisiteCheck === true) {
+            if (true === $prerequisiteCheck) {
                 $src = $learnPath->get_link('http', $lpItemId);
                 $learnPath->start_current_item(); // starts time counter manually if asset
             } else {

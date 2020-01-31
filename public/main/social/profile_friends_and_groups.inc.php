@@ -4,15 +4,13 @@
 /**
  * Helper file for friends and groups profiles.
  *
- * @package chamilo.social
- *
  * @author Julio Montoya <gugli100@gmail.com>
  */
 $cidReset = true;
 require_once __DIR__.'/../inc/global.inc.php';
 
 api_block_anonymous_users();
-if (api_get_setting('allow_social_tool') != 'true') {
+if ('true' != api_get_setting('allow_social_tool')) {
     api_not_allowed();
 }
 
@@ -22,7 +20,7 @@ $userGroup = new UserGroup();
 
 if (isset($_GET['view']) && in_array($_GET['view'], $views)) {
     // show all friends by user_id
-    if ($_GET['view'] == 'friends') {
+    if ('friends' == $_GET['view']) {
         echo '<div style="margin-top:20px;">';
         $list_path_friends = $list_path_normal_friends = $list_path_parents = [];
         //SOCIALGOODFRIEND , USER_RELATION_TYPE_FRIEND, SOCIALPARENT
@@ -36,7 +34,7 @@ if (isset($_GET['view']) && in_array($_GET['view'], $views)) {
         $friend_html .= '<div id="friend-container" class="social-friend-container">';
         $friend_html .= '<div id="friend-header" >';
 
-        if ($number_friends == 1) {
+        if (1 == $number_friends) {
             $friend_html .= '<div style="float:left;width:80%">'.$number_friends.' '.get_lang('Friend').'</div>';
         } else {
             $friend_html .= '<div style="float:left;width:80%">'.$number_friends.' '.get_lang('Friends').'</div>';
@@ -75,13 +73,13 @@ if (isset($_GET['view']) && in_array($_GET['view'], $views)) {
                 $url_close = '</a>';
                 $icon = '';
                 $name = cut($result['name'], 20, true);
-                if ($result['relation_type'] == GROUP_USER_PERMISSION_ADMIN) {
+                if (GROUP_USER_PERMISSION_ADMIN == $result['relation_type']) {
                     $icon = Display::return_icon(
                         'social_group_admin.png',
                         get_lang('Admin'),
                         ['style' => 'vertical-align:middle;width:16px;height:16px;']
                     );
-                } elseif ($result['relation_type'] == GROUP_USER_PERMISSION_MODERATOR) {
+                } elseif (GROUP_USER_PERMISSION_MODERATOR == $result['relation_type']) {
                     $icon = Display::return_icon(
                         'social_group_moderator.png',
                         get_lang('Moderator'),
@@ -91,7 +89,7 @@ if (isset($_GET['view']) && in_array($_GET['view'], $views)) {
                 $count_users_group = count(
                     $userGroup->get_all_users_by_group($id)
                 );
-                if ($count_users_group == 1) {
+                if (1 == $count_users_group) {
                     $count_users_group = $count_users_group.' '.get_lang('Member');
                 } else {
                     $count_users_group = $count_users_group.' '.get_lang('Members');
@@ -130,7 +128,7 @@ if (isset($_GET['view']) && in_array($_GET['view'], $views)) {
             echo '<div style="margin-top:20px">';
             echo '<div><h3>'.get_lang('My groups').'</h3></div>';
             $count_groups = 0;
-            if (count($results) == 1) {
+            if (1 == count($results)) {
                 $count_groups = count($results).' '.get_lang('Group');
             } else {
                 $count_groups = count($results).' '.get_lang('Groups');

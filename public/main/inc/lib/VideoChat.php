@@ -87,7 +87,7 @@ class VideoChat
             'first'
         );
 
-        if ($resultData !== false) {
+        if (false !== $resultData) {
             return $resultData['count'] > 0;
         }
 

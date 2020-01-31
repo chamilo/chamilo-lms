@@ -5,8 +5,6 @@
  * This is a learning path creation and player tool in Chamilo - previously.
  *
  * @author Julio Montoya  - Improving the list of templates
- *
- * @package chamilo.learnpath
  */
 require_once __DIR__.'/../inc/global.inc.php';
 

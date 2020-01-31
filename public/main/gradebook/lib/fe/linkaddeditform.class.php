@@ -6,8 +6,6 @@
  *
  * @author Stijn Konings
  * @author Bert Steppé
- *
- * @package chamilo.gradebook
  */
 class LinkAddEditForm extends FormValidator
 {
@@ -46,7 +44,7 @@ class LinkAddEditForm extends FormValidator
         }
 
         // ELEMENT: name
-        if ($form_type == self::TYPE_ADD || $link->is_allowed_to_change_name()) {
+        if (self::TYPE_ADD == $form_type || $link->is_allowed_to_change_name()) {
             if ($link->needs_name_and_description()) {
                 $this->addText('name', get_lang('Name'), true, ['size' => '40', 'maxlength' => '40']);
             } else {
@@ -70,7 +68,7 @@ class LinkAddEditForm extends FormValidator
             );
         }
 
-        if (count($category_object) == 1) {
+        if (1 == count($category_object)) {
             $this->addElement('hidden', 'select_gradebook', $category_object[0]->get_id());
         } else {
             $select_gradebook = $this->addElement(
@@ -87,7 +85,7 @@ class LinkAddEditForm extends FormValidator
                     if ($my_cat->get_course_code() == api_get_course_id()) {
                         $grade_model_id = $my_cat->get_grade_model_id();
                         if (empty($grade_model_id)) {
-                            if ($my_cat->get_parent_id() == 0) {
+                            if (0 == $my_cat->get_parent_id()) {
                                 $default_weight = $my_cat->get_weight();
                                 $select_gradebook->addoption(get_lang('Default'), $my_cat->get_id());
                             } else {
@@ -121,9 +119,9 @@ class LinkAddEditForm extends FormValidator
 
         $this->addElement('hidden', 'weight');
 
-        if ($form_type == self::TYPE_EDIT) {
+        if (self::TYPE_EDIT == $form_type) {
             $parent_cat = Category::load($link->get_category_id());
-            if ($parent_cat[0]->get_parent_id() == 0) {
+            if (0 == $parent_cat[0]->get_parent_id()) {
                 $values['weight'] = $link->get_weight();
             } else {
                 $cat = Category::load($parent_cat[0]->get_parent_id());
@@ -139,7 +137,7 @@ class LinkAddEditForm extends FormValidator
         }
         // ELEMENT: max
         if ($link->needs_max()) {
-            if ($form_type == self::TYPE_EDIT && $link->has_results()) {
+            if (self::TYPE_EDIT == $form_type && $link->has_results()) {
                 $this->addText(
                     'max',
                     get_lang('Maximum score'),
@@ -164,7 +162,7 @@ class LinkAddEditForm extends FormValidator
                     0
                 );
             }
-            if ($form_type == self::TYPE_EDIT) {
+            if (self::TYPE_EDIT == $form_type) {
                 $defaults['max'] = $link->get_max();
             }
         }
@@ -177,33 +175,33 @@ class LinkAddEditForm extends FormValidator
                 get_lang('Description'),
                 ['rows' => '3', 'cols' => '34']
             );
-            if ($form_type == self::TYPE_EDIT) {
+            if (self::TYPE_EDIT == $form_type) {
                 $defaults['description'] = $link->get_description();
             }
         }
 
         // ELEMENT: visible
-        $visible = ($form_type == self::TYPE_EDIT && $link->is_visible()) ? '1' : '0';
+        $visible = (self::TYPE_EDIT == $form_type && $link->is_visible()) ? '1' : '0';
         $this->addElement('checkbox', 'visible', null, get_lang('Visible'), $visible);
-        if ($form_type == self::TYPE_EDIT) {
+        if (self::TYPE_EDIT == $form_type) {
             $defaults['visible'] = $link->is_visible();
         }
 
         // ELEMENT: add results
-        if ($form_type == self::TYPE_ADD && $link->needs_results()) {
+        if (self::TYPE_ADD == $form_type && $link->needs_results()) {
             $this->addElement('checkbox', 'addresult', get_lang('Grade learners'));
         }
         // submit button
-        if ($form_type == self::TYPE_ADD) {
+        if (self::TYPE_ADD == $form_type) {
             $this->addButtonCreate(get_lang('Add this learning activity to the assessment'));
         } else {
             $this->addButtonUpdate(get_lang('Edit link'));
         }
 
-        if ($form_type == self::TYPE_ADD) {
+        if (self::TYPE_ADD == $form_type) {
             $setting = api_get_setting('tool_visible_by_default_at_creation');
             $visibility_default = 1;
-            if (isset($setting['gradebook']) && $setting['gradebook'] == 'false') {
+            if (isset($setting['gradebook']) && 'false' == $setting['gradebook']) {
                 $visibility_default = 0;
             }
             $defaults['visible'] = $visibility_default;

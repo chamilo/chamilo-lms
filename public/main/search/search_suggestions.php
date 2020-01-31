@@ -3,8 +3,6 @@
 
 /**
  * Suggest words to search.
- *
- * @package chamilo.search
  */
 require_once __DIR__.'/../inc/global.inc.php';
 
@@ -17,7 +15,7 @@ function get_suggestions_from_search_engine($q)
     $q = Database::escape_string($q);
     $cid = api_get_course_id();
     $sql_add = '';
-    if ($cid != -1) {
+    if (-1 != $cid) {
         $sql_add = " AND course_code = '".$cid."' ";
     }
     $sql = "SELECT * FROM $table_sfv where value LIKE '%$q%'".$sql_add."
@@ -83,7 +81,7 @@ function get_suggestions_from_search_engine($q)
                     } else {
                         //no identical field id, continue as usual
                         $c = count($output);
-                        if ($c == 0) {
+                        if (0 == $c) {
                             $output[] = $row2['value'].' - ';
                         } else {
                             foreach ($output as $i => $out) {
@@ -95,7 +93,7 @@ function get_suggestions_from_search_engine($q)
                     }
                 }
                 foreach ($output as $i => $out) {
-                    if (api_stristr($out, $q) === false) {
+                    if (false === api_stristr($out, $q)) {
                         continue;
                     }
                     $s = api_convert_encoding(substr($out, 0, -3), 'UTF-8', $charset);

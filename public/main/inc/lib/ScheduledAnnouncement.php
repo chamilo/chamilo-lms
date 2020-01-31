@@ -15,8 +15,6 @@
  *
  * Requires:
  * composer update
- *
- * @package chamilo.library
  */
 class ScheduledAnnouncement extends Model
 {
@@ -125,7 +123,7 @@ class ScheduledAnnouncement extends Model
 
         $form->addCheckBox('sent', null, get_lang('Message Sent'));
 
-        if ($action == 'edit') {
+        if ('edit' == $action) {
             $form->addButtonUpdate(get_lang('Edit'));
         }
 
@@ -148,7 +146,7 @@ class ScheduledAnnouncement extends Model
         // Setting the form elements
         $header = get_lang('Add');
 
-        if ($action == 'edit') {
+        if ('edit' == $action) {
             $header = get_lang('Edit');
         }
 
@@ -159,7 +157,7 @@ class ScheduledAnnouncement extends Model
         );
 
         $form->addHeader($header);
-        if ($action == 'add') {
+        if ('add' == $action) {
             $form->addHtml(
                 Display::return_message(
                     nl2br(get_lang('This form allows scheduling announcements to be sent automatically to the students who are taking a course in a session.')),
@@ -247,7 +245,7 @@ class ScheduledAnnouncement extends Model
 
         $this->setTagsInForm($form);
 
-        if ($action == 'edit') {
+        if ('edit' == $action) {
             $form->addButtonUpdate(get_lang('Edit'));
         } else {
             $form->addButtonCreate(get_lang('Add'));
@@ -327,7 +325,7 @@ class ScheduledAnnouncement extends Model
                         $sendToCoaches = $extraFieldValue->get_values_by_handler_and_field_variable($result['id'], 'send_to_coaches');
                         $courseList = SessionManager::getCoursesInSession($sessionId);
                         $coachList = [];
-                        if (!empty($sendToCoaches) && !empty($sendToCoaches['value']) && $sendToCoaches['value'] == 1) {
+                        if (!empty($sendToCoaches) && !empty($sendToCoaches['value']) && 1 == $sendToCoaches['value']) {
                             foreach ($courseList as $courseItemId) {
                                 $coaches = SessionManager::getCoachesByCourseSession(
                                     $sessionId,

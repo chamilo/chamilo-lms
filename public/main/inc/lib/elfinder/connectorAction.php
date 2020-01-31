@@ -24,7 +24,7 @@ if (empty($driverList)) {
     $newDriverList = [];
     if ($block && !api_is_allowed_to_edit()) {
         foreach ($driverList as $driver) {
-            if ($driver === 'CourseDriver') {
+            if ('CourseDriver' === $driver) {
                 continue;
             }
             $newDriverList[] = $driver;

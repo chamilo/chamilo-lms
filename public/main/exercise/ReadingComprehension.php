@@ -92,7 +92,7 @@ class ReadingComprehension extends UniqueAnswer
 
         $firstIndex = $indexes[0];
 
-        for ($i = 1; $i <= $turns; ++$i) {
+        for ($i = 1; $i <= $turns; $i++) {
             $text = substr_replace($text, $tagStart, $firstIndex, 0);
 
             if ($i * $this->expectedWordsPerRefresh <= count($words)) {

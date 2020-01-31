@@ -3,8 +3,6 @@
 
 /**
  * Process links before pass it to search listing scripts.
- *
- * @package chamilo.include.search
  */
 class link_processor extends search_processor
 {
@@ -34,7 +32,7 @@ class link_processor extends search_processor
         $results = [];
         foreach ($this->links as $courseCode => $one_course_links) {
             $course_info = api_get_course_info($courseCode);
-            $search_show_unlinked_results = (api_get_setting('search_show_unlinked_results') == 'true');
+            $search_show_unlinked_results = ('true' == api_get_setting('search_show_unlinked_results'));
             $course_visible_for_user = api_is_course_visible_for_user(null, $courseCode);
             // can view course?
             if ($course_visible_for_user || $search_show_unlinked_results) {

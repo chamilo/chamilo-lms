@@ -7,8 +7,6 @@
  * This class works as a singleton: call instance() to retrieve an object.
  *
  * @author Bert Steppé
- *
- * @package chamilo.gradebook
  */
 class ScoreDisplay
 {
@@ -34,7 +32,7 @@ class ScoreDisplay
         $value = api_get_setting('gradebook_score_display_coloring');
 
         // Setting coloring.
-        $this->coloring_enabled = $value == 'true' ? true : false;
+        $this->coloring_enabled = 'true' == $value ? true : false;
 
         if ($this->coloring_enabled) {
             $value = api_get_setting('gradebook_score_display_colorsplit');
@@ -45,7 +43,7 @@ class ScoreDisplay
 
         // Setting custom enabled
         $value = api_get_setting('gradebook_score_display_custom');
-        $this->custom_enabled = $value == 'true' ? true : false;
+        $this->custom_enabled = 'true' == $value ? true : false;
 
         if ($this->custom_enabled) {
             $params = ['category = ?' => ['Gradebook']];
@@ -68,14 +66,14 @@ class ScoreDisplay
             if (count($this->custom_display) > 0) {
                 $value = api_get_setting('gradebook_score_display_upperlimit');
                 $value = $value['my_display_upperlimit'];
-                $this->upperlimit_included = $value == 'true' ? true : false;
+                $this->upperlimit_included = 'true' == $value ? true : false;
                 $this->custom_display_conv = $this->convert_displays($this->custom_display);
             }
         }
 
         //If teachers can override the portal parameters
 
-        if (api_get_setting('teachers_can_change_score_settings') == 'true') {
+        if ('true' == api_get_setting('teachers_can_change_score_settings')) {
             //Load course settings
             if ($this->custom_enabled) {
                 $this->custom_display = $this->get_custom_displays();
@@ -302,20 +300,20 @@ class ScoreDisplay
         $disableColor = false,
         $ignoreDecimals = false
     ) {
-        $my_score = $score == 0 ? 1 : $score;
+        $my_score = 0 == $score ? 1 : $score;
 
-        if ($type == SCORE_BAR) {
+        if (SCORE_BAR == $type) {
             $percentage = $my_score[0] / $my_score[1] * 100;
 
             return Display::bar_progress($percentage);
         }
-        if ($type == SCORE_NUMERIC) {
+        if (SCORE_NUMERIC == $type) {
             $percentage = $my_score[0] / $my_score[1] * 100;
 
             return round($percentage);
         }
 
-        if ($type == SCORE_SIMPLE) {
+        if (SCORE_SIMPLE == $type) {
             $simpleScore = $this->format_score($my_score[0], $ignoreDecimals);
 
             return $simpleScore;
@@ -327,7 +325,7 @@ class ScoreDisplay
             // if no custom display set, use default display
             $display = $this->display_default($my_score, $type, $ignoreDecimals);
         }
-        if ($this->coloring_enabled && $disableColor == false) {
+        if ($this->coloring_enabled && false == $disableColor) {
             $my_score_denom = isset($score[1]) && !empty($score[1]) && $score[1] > 0 ? $score[1] : 1;
             $scoreCleaned = isset($score[0]) ? $score[0] : 0;
             if (($scoreCleaned / $my_score_denom) < ($this->color_split_value / 100)) {
@@ -453,7 +451,7 @@ class ScoreDisplay
      */
     private function display_as_decimal($score)
     {
-        $score_denom = ($score[1] == 0) ? 1 : $score[1];
+        $score_denom = (0 == $score[1]) ? 1 : $score[1];
 
         return $this->format_score($score[0] / $score_denom);
     }
@@ -463,7 +461,7 @@ class ScoreDisplay
      */
     private function display_as_percent($score)
     {
-        $score_denom = ($score[1] == 0) ? 1 : $score[1];
+        $score_denom = (0 == $score[1]) ? 1 : $score[1];
 
         return $this->format_score($score[0] / $score_denom * 100).' %';
     }
@@ -478,7 +476,7 @@ class ScoreDisplay
      */
     private function display_as_div($score, $ignoreDecimals = false)
     {
-        if ($score == 1) {
+        if (1 == $score) {
             return '0 / 0';
         } else {
             $score[0] = isset($score[0]) ? $this->format_score($score[0], $ignoreDecimals) : 0;
@@ -497,7 +495,7 @@ class ScoreDisplay
      */
     private function display_custom($score)
     {
-        $my_score_denom = $score[1] == 0 ? 1 : $score[1];
+        $my_score_denom = 0 == $score[1] ? 1 : $score[1];
         $scaledscore = $score[0] / $my_score_denom;
 
         if ($this->upperlimit_included) {
@@ -509,7 +507,7 @@ class ScoreDisplay
         } else {
             if (!empty($this->custom_display_conv)) {
                 foreach ($this->custom_display_conv as $displayitem) {
-                    if ($scaledscore < $displayitem['score'] || $displayitem['score'] == 1) {
+                    if ($scaledscore < $displayitem['score'] || 1 == $displayitem['score']) {
                         return $displayitem['display'];
                     }
                 }

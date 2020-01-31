@@ -5,8 +5,6 @@
  * Print a learning path finish page with details.
  *
  * @author Jose Loguercio <jose.loguercio@beeznest.com>
- *
- * @package chamilo.learnpath
  */
 $_in_course = true;
 
@@ -76,8 +74,8 @@ $currentItem = $lp->items[$currentItemId];
 $currentItemStatus = $currentItem->get_status();
 $accessGranted = false;
 
-if (($count - $completed == 0) ||
-    ($count - $completed == 1 && ($currentItemStatus == 'incomplete') || ($currentItemStatus == 'not attempted'))
+if ((0 == $count - $completed) ||
+    (1 == $count - $completed && ('incomplete' == $currentItemStatus) || ('not attempted' == $currentItemStatus))
 ) {
     if ($lp->prerequisites_match($currentItemId)) {
         $accessGranted = true;
@@ -92,7 +90,7 @@ unset($currentItem);
 
 // If for some reason we consider the requirements haven't been completed yet,
 // show a prerequisites warning
-if ($accessGranted == false) {
+if (false == $accessGranted) {
     echo Display::return_message(
         get_lang('This learning object cannot display because the course prerequisites are not completed. This happens when a course imposes that you follow it step by step or get a minimum score in tests before you reach the next steps.'),
         'warning'
@@ -274,8 +272,8 @@ function generateLPFinalItemTemplateBadgeLinks($userId, $courseId, $sessionId = 
             ";
         }
 
-	if (!empty($skillList)) {
-		$badgeLink .= "
+        if (!empty($skillList)) {
+            $badgeLink .= "
 		    <div class='panel panel-default'>
 		        <div class='panel-body'>
 		            <h3 class='text-center'>".get_lang('Additionally, you have achieved the following skills')."</h3>
@@ -283,7 +281,7 @@ function generateLPFinalItemTemplateBadgeLinks($userId, $courseId, $sessionId = 
 		        </div>
 		    </div>
 		";
-	}
+        }
     }
 
     return $badgeLink;

@@ -37,10 +37,10 @@ if (!empty($function)) {
 $list = scandir($serversys);
 $scripts = [];
 foreach ($list as $item) {
-    if (substr($item, 0, 1) == '.') {
+    if ('.' == substr($item, 0, 1)) {
         continue;
     }
-    if (substr($item, -8) == 'soap.php') {
+    if ('soap.php' == substr($item, -8)) {
         $scripts[] = $item;
     }
 }

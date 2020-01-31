@@ -5,8 +5,6 @@
  * This class takes the creation and querying of an SQLite DB in charge. The
  * goal of this DB is to get stats on the usage of language vars for a common
  * user.
- *
- * @package chamilo.cron.lang
  */
 
 /**
@@ -50,7 +48,7 @@ class langstats
                         .' id integer PRIMARY KEY AUTOINCREMENT, ' //autoincrement in SQLITE
                         .' term_name text, term_file text, term_count integer default 0)'
                     );
-                    if ($err === false) {
+                    if (false === $err) {
                         $this->error = 'CouldNotCreateTable';
 
                         return false;
@@ -58,7 +56,7 @@ class langstats
                     $err = $this->db->exec(
                         'CREATE INDEX lang_freq_terms_idx ON lang_freq(term_name, term_file)'
                     );
-                    if ($err === false) {
+                    if (false === $err) {
                         $this->error = 'CouldNotCreateIndex';
 
                         return false;
@@ -73,13 +71,13 @@ class langstats
                     return false; //cannot use if sqlite not installed
                 }
                 $err = Database::query('SELECT * FROM lang_freq');
-                if ($err === false) { //the database probably does not exist, create it
+                if (false === $err) { //the database probably does not exist, create it
                     $err = Database::query(
                         'CREATE TABLE lang_freq ('
                         .' id int PRIMARY KEY AUTO_INCREMENT, '
                         .' term_name text, term_file text default \'\', term_count int default 0)'
                     );
-                    if ($err === false) {
+                    if (false === $err) {
                         $this->error = 'CouldNotCreateTable';
 
                         return false;
@@ -105,7 +103,7 @@ class langstats
         $term_file = $this->db->escapeString($term_file);
         $sql = "SELECT id, term_name, term_file, term_count FROM lang_freq WHERE term_name='$term' and term_file='$term_file'";
         $ress = $this->db->query($sql);
-        if ($ress === false) {
+        if (false === $ress) {
             $this->error = 'CouldNotQueryTermFromTable';
 
             return false;
@@ -118,7 +116,7 @@ class langstats
             $res = $this->db->query(
                 'UPDATE lang_freq SET term_count = '.$num.' WHERE id = '.$row[0]
             );
-            if ($res === false) {
+            if (false === $res) {
                 $this->error = 'CouldNotUpdateTerm';
 
                 return false;
@@ -126,12 +124,12 @@ class langstats
                 return $row[0];
             }
         }
-        if ($i == 0) {
+        if (0 == $i) {
             //No term found in the table, register as new term
             $resi = $this->db->query(
                 "INSERT INTO lang_freq(term_name, term_file, term_count) VALUES ('$term', '$term_file', 1)"
             );
-            if ($resi === false) {
+            if (false === $resi) {
                 $this->error = 'CouldNotInsertRow';
 
                 return false;
@@ -198,7 +196,7 @@ class langstats
         }
         $files = scandir($path);
         foreach ($files as $file) {
-            if (substr($file, 0, 1) == '.' or in_array($file, $priority)) {
+            if ('.' == substr($file, 0, 1) or in_array($file, $priority)) {
                 continue;
             }
             $list = SubLanguageManager::get_all_language_variable_in_file(

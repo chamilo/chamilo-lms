@@ -21,7 +21,7 @@ require_once __DIR__.'/../inc/global.inc.php';
 
 api_protect_course_script();
 
-if (isset($_REQUEST['origin']) && $_REQUEST['origin'] === 'learnpath') {
+if (isset($_REQUEST['origin']) && 'learnpath' === $_REQUEST['origin']) {
     $_REQUEST['origin'] = '';
 }
 
@@ -56,7 +56,7 @@ if (!api_is_platform_admin()) {
 // Checking visibility (eye icon)
 $visibility = $lp->getEntity()->isVisible($courseEntity, $sessionEntity);
 
-if ($visibility === false &&
+if (false === $visibility &&
     !api_is_allowed_to_edit(false, true, false, false)
 ) {
     api_not_allowed(true);
@@ -118,7 +118,7 @@ $(function() {
 var chamilo_xajax_handler = window.oxajax;
 </script>';
 
-$allowLpItemTip = api_get_configuration_value('hide_accessibility_label_on_lp_item') === false;
+$allowLpItemTip = false === api_get_configuration_value('hide_accessibility_label_on_lp_item');
 if ($allowLpItemTip) {
     $htmlHeadXtra[] = '<script>
     $(function() {
@@ -154,7 +154,7 @@ if ($allowLpItemTip) {
 }
 
 // Impress js
-if ($lp->mode === 'impress') {
+if ('impress' === $lp->mode) {
     $lp_id = $lp->get_id();
     $url = api_get_path(WEB_CODE_PATH)."lp/lp_impress.php?lp_id=$lp_id&".api_get_cidreq();
     header("Location: $url");
@@ -192,7 +192,7 @@ $get_teacher_buttons = $lp->get_teacher_toc_buttons();
 
 $type_quiz = false;
 foreach ($get_toc_list as $toc) {
-    if ($toc['id'] == $lp_item_id && $toc['type'] == 'quiz') {
+    if ($toc['id'] == $lp_item_id && 'quiz' == $toc['type']) {
         $type_quiz = true;
     }
 }
@@ -205,7 +205,7 @@ if (!isset($src)) {
             $htmlHeadXtra[] = '<script src="scorm_api.php" type="text/javascript" language="javascript"></script>';
             $preReqCheck = $lp->prerequisites_match($lp_item_id);
 
-            if ($preReqCheck === true) {
+            if (true === $preReqCheck) {
                 $src = $lp->get_link(
                     'http',
                     $lp_item_id,
@@ -219,7 +219,7 @@ if (!isset($src)) {
                 }
 
                 if (isset($file_info['extension']) &&
-                    api_strtolower(substr($file_info['extension'], 0, 3)) == 'pdf'
+                    'pdf' == api_strtolower(substr($file_info['extension'], 0, 3))
                 ) {
                     $src = api_get_path(WEB_CODE_PATH).'lp/lp_view_item.php?lp_item_id='.$lp_item_id.'&'.api_get_cidreq();
                 }
@@ -235,7 +235,7 @@ if (!isset($src)) {
             $lp->stop_previous_item(); // save status manually if asset
             $htmlHeadXtra[] = '<script src="scorm_api.php" type="text/javascript" language="javascript"></script>';
             $preReqCheck = $lp->prerequisites_match($lp_item_id);
-            if ($preReqCheck === true) {
+            if (true === $preReqCheck) {
                 $src = $lp->get_link('http', $lp_item_id, $get_toc_list);
                 $lp->start_current_item(); // starts time counter manually if asset
             } else {
@@ -247,7 +247,7 @@ if (!isset($src)) {
             $lp->stop_previous_item(); // save status manually if asset
             $htmlHeadXtra[] = '<script src="'.$lp->get_js_lib().'" type="text/javascript" language="javascript"></script>';
             $preReqCheck = $lp->prerequisites_match($lp_item_id);
-            if ($preReqCheck === true) {
+            if (true === $preReqCheck) {
                 $src = $lp->get_link(
                     'http',
                     $lp_item_id,
@@ -348,7 +348,7 @@ if (!empty($_REQUEST['exeId']) &&
             Database::query($sql);
         }
     }
-    if (intval($_GET['fb_type']) != EXERCISE_FEEDBACK_TYPE_END) {
+    if (EXERCISE_FEEDBACK_TYPE_END != intval($_GET['fb_type'])) {
         $src = 'blank.php?msg=exerciseFinished';
     } else {
         $src = api_get_path(WEB_CODE_PATH).'exercise/result.php?id='.$safe_exe_id.'&'.api_get_cidreq(true, true, 'learnpath');
@@ -368,7 +368,7 @@ $_setting['show_navigation_menu'] = 'false';
 $scorm_css_header = true;
 $lp_theme_css = $lp->get_theme();
 // Sets the css theme of the LP this call is also use at the frames (toc, nav, message).
-if ($lp->mode == 'fullscreen') {
+if ('fullscreen' == $lp->mode) {
     $htmlHeadXtra[] = "<script>
         window.open('$src','content_id','toolbar=0,location=0,status=0,scrollbars=1,resizable=1');
     </script>";
@@ -384,7 +384,7 @@ $scorm_css_header = true;
 $lp_theme_css = $lp->get_theme();
 
 // Setting up the CSS theme if exists.
-if (!empty($lp_theme_css) && !empty($mycourselptheme) && $mycourselptheme != -1 && $mycourselptheme == 1) {
+if (!empty($lp_theme_css) && !empty($mycourselptheme) && -1 != $mycourselptheme && 1 == $mycourselptheme) {
     global $lp_theme_css;
 } else {
     $lp_theme_css = $my_style;
@@ -473,9 +473,9 @@ if ($lp->current == $lp->get_last()) {
         $gradebookEvaluations = $categories[0]->get_evaluations();
         $gradebookLinks = $categories[0]->get_links();
 
-        if (count($gradebookEvaluations) === 0 &&
-            count($gradebookLinks) === 1 &&
-            $gradebookLinks[0]->get_type() == LINK_LEARNPATH &&
+        if (0 === count($gradebookEvaluations) &&
+            1 === count($gradebookLinks) &&
+            LINK_LEARNPATH == $gradebookLinks[0]->get_type() &&
             $gradebookLinks[0]->get_ref_id() == $lp->lp_id
         ) {
             $gradebookMinScore = $categories[0]->getCertificateMinScore();
@@ -520,7 +520,7 @@ $template->assign('toc_list', $get_toc_list);
 $template->assign('teacher_toc_buttons', $get_teacher_buttons);
 $template->assign('iframe_src', $src);
 $template->assign('navigation_bar_bottom', $navigation_bar_bottom);
-$template->assign('show_left_column', $lp->getHideTableOfContents() == 0);
+$template->assign('show_left_column', 0 == $lp->getHideTableOfContents());
 
 $showMenu = 0;
 $settings = api_get_configuration_value('lp_view_settings');
@@ -531,7 +531,7 @@ if (!empty($display)) {
 
 $template->assign('show_toolbar_by_default', $showMenu);
 
-if ($gamificationMode == 1) {
+if (1 == $gamificationMode) {
     $template->assign('gamification_stars', $lp->getCalculateStars($sessionId));
     $template->assign('gamification_points', $lp->getCalculateScore($sessionId));
 }
@@ -584,7 +584,7 @@ if (Tracking::minimumTimeAvailable(api_get_session_id(), api_get_course_int_id()
 $template->assign('lp_accumulate_work_time', $lpMinTime);
 $template->assign('lp_mode', $lp->mode);
 $template->assign('lp_title_scorm', $lp->get_name());
-if (api_get_configuration_value('lp_view_accordion') === true && $lpType == 1) {
+if (true === api_get_configuration_value('lp_view_accordion') && 1 == $lpType) {
     $template->assign('data_panel', $lp->getParentToc($get_toc_list));
 } else {
     $template->assign('data_list', $lp->getListArrayToc($get_toc_list));

@@ -27,18 +27,18 @@ Display::display_header($nameTools);
 
 echo Display::page_header($nameTools);
 
-if (count($_POST) == 0) {
+if (0 == count($_POST)) {
     echo Display::return_message(get_lang('Special exportsIntroduction'));
 }
 $error = 0;
 $tbl_session = Database::get_main_table(TABLE_MAIN_SESSION);
 $tbl_session_course = Database::get_main_table(TABLE_MAIN_SESSION_COURSE);
 
-if ((isset($_POST['action']) && $_POST['action'] == 'course_select_form') ||
-    (isset($_POST['backup_option']) && $_POST['backup_option'] == 'full_backup')
+if ((isset($_POST['action']) && 'course_select_form' == $_POST['action']) ||
+    (isset($_POST['backup_option']) && 'full_backup' == $_POST['backup_option'])
 ) {
     $export = false;
-    if (isset($_POST['action']) && $_POST['action'] == 'course_select_form') {
+    if (isset($_POST['action']) && 'course_select_form' == $_POST['action']) {
         $FileZip = create_zip();
         $to_group_id = 0;
         $sql_session = "SELECT id, name FROM $tbl_session ";
@@ -54,7 +54,7 @@ if ((isset($_POST['action']) && $_POST['action'] == 'course_select_form') ||
         }
 
         $zip_folder = new PclZip($FileZip['TEMP_FILE_ZIP']);
-        if (!isset($_POST['resource']) || count($_POST['resource']) == 0) {
+        if (!isset($_POST['resource']) || 0 == count($_POST['resource'])) {
             echo Display::return_message(get_lang('There were no courses registered or may not have made the association with the sessions'), 'error');
         } else {
             $Resource = $_POST['resource'];
@@ -125,10 +125,10 @@ if ($export && $name) {
     echo '<br /><a class="btn btn-default" href="'.api_get_path(WEB_CODE_PATH).'course_info/download.php?archive_path=&archive='.urlencode($name).'">'.get_lang('Download').'</a>';
 } else {
     // Display forms especial export
-    if (isset($_POST['backup_option']) && $_POST['backup_option'] == 'select_items') {
+    if (isset($_POST['backup_option']) && 'select_items' == $_POST['backup_option']) {
         $cb = new CourseBuilder();
         $course = $cb->build_session_course();
-        if ($course === false) {
+        if (false === $course) {
             echo Display::return_message(get_lang('There were no courses registered or may not have made the association with the sessions'), 'error');
             form_special_export();
         } else {
@@ -163,7 +163,7 @@ function create_zip()
     if (empty($path)) {
         $path = '/';
     }
-    $remove_dir = ($path != '/') ? substr($path, 0, strlen($path) - strlen(basename($path))) : '/';
+    $remove_dir = ('/' != $path) ? substr($path, 0, strlen($path) - strlen(basename($path))) : '/';
     $sys_archive_path = api_get_path(SYS_ARCHIVE_PATH).'special_export/';
     $sys_course_path = api_get_path(SYS_COURSE_PATH);
     $temp_zip_dir = $sys_archive_path;
@@ -172,7 +172,7 @@ function create_zip()
     } else {
         $handle = opendir($temp_zip_dir);
         while (false !== ($file = readdir($handle))) {
-            if ($file != "." && $file != "..") {
+            if ("." != $file && ".." != $file) {
                 $Diff = (time() - filemtime("$temp_zip_dir/$file")) / 60 / 60; //the "age" of the file in hours
                 if ($Diff > 4) {
                     unlink("$temp_zip_dir/$file");
@@ -193,8 +193,8 @@ function create_zip()
 
 function rename_zip($FileZip)
 {
-    Event::event_download(($FileZip['PATH'] == '/') ? 'full_export_'.date('Ymd').'.zip (folder)' : basename($FileZip['PATH']).'.zip (folder)');
-    $name = ($FileZip['PATH'] == '/') ? 'full_export_'.date('Ymd').'.zip' : basename($FileZip['PATH']).'.zip';
+    Event::event_download(('/' == $FileZip['PATH']) ? 'full_export_'.date('Ymd').'.zip (folder)' : basename($FileZip['PATH']).'.zip (folder)');
+    $name = ('/' == $FileZip['PATH']) ? 'full_export_'.date('Ymd').'.zip' : basename($FileZip['PATH']).'.zip';
     if (file_exists($FileZip['PATH_TEMP_ARCHIVE'].'/'.$name)) {
         unlink($FileZip['PATH_TEMP_ARCHIVE'].'/'.$name);
     }
@@ -227,7 +227,7 @@ function fullexportspecial()
 
     if (count($list_course) > 0) {
         foreach ($list_course as $_course) {
-            if ($FileZip['PATH'] == '/') {
+            if ('/' == $FileZip['PATH']) {
                 $querypath = ''; // to prevent ...path LIKE '//%'... in query
             } else {
                 $querypath = $FileZip['PATH'];
@@ -290,7 +290,7 @@ function fullexportspecial()
         }
 
         $name = rename_zip($FileZip);
-        if ($name === false) {
+        if (false === $name) {
             $export = false;
 
             return false;

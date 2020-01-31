@@ -5,7 +5,6 @@
 /**
  * Frontend script for multiple access urls.
  *
- *
  * @author Julio Montoya <gugli100@gmail.com>
  * @author Yannick Warnier <yannick.warnier@beeznest.com>
  */

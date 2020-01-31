@@ -39,7 +39,7 @@ switch ($action) {
             // changed images that can have some weight
             $now = time() + 600; //time must be in GMT anyway
             $headers = [
-              'Expires' => gmdate('D, d M Y H:i:s ', $now) . 'GMT',
+              'Expires' => gmdate('D, d M Y H:i:s ', $now).'GMT',
               'Cache-Control' => 'max-age=600',
             ];
             DocumentManager::file_send_for_download($courseInfo[$image], null, null, null, $headers);
@@ -191,10 +191,10 @@ switch ($action) {
                 foreach ($results as $item) {
                     $item2 = [];
                     foreach ($item as $id => $internal) {
-                        if ($id == 'id') {
+                        if ('id' == $id) {
                             $item2[$id] = $internal;
                         }
-                        if ($id == 'title') {
+                        if ('title' == $id) {
                             $item2['text'] = $internal;
                         }
                     }
@@ -208,7 +208,7 @@ switch ($action) {
         break;
     case 'search_course_by_session_all':
         if (api_is_platform_admin()) {
-            if ($_GET['session_id'] == 'TODOS' || $_GET['session_id'] == 'T') {
+            if ('TODOS' == $_GET['session_id'] || 'T' == $_GET['session_id']) {
                 $_GET['session_id'] = '%';
             }
 
@@ -221,10 +221,10 @@ switch ($action) {
                 foreach ($results as $item) {
                     $item2 = [];
                     foreach ($item as $id => $internal) {
-                        if ($id == 'id') {
+                        if ('id' == $id) {
                             $item2[$id] = $internal;
                         }
-                        if ($id == 'title') {
+                        if ('title' == $id) {
                             $item2['text'] = $internal;
                         }
                     }
@@ -324,7 +324,7 @@ switch ($action) {
             );
             $result = Database::query($sql_query);
             while ($survey = Database::fetch_assoc($result)) {
-                $survey['title'] .= ($survey['anonymous'] == 1) ? ' ('.get_lang('Anonymous').')' : '';
+                $survey['title'] .= (1 == $survey['anonymous']) ? ' ('.get_lang('Anonymous').')' : '';
                 $data[] = [
                     'id' => $survey['id'],
                     'text' => strip_tags(html_entity_decode($survey['title'])),

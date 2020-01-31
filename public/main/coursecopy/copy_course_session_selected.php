@@ -12,8 +12,6 @@ use ChamiloSession as Session;
  * @author Christian Fasanando
  * @author Julio Montoya <gugli100@gmail.com> Lots of bug fixes/improvements
  * @author Angel Fernando Quiroz Campos <angel.quiroz@beeznest.com> Code conventions
- *
- * @package chamilo.backup
  */
 require_once __DIR__.'/../inc/global.inc.php';
 
@@ -72,7 +70,7 @@ function make_select_session_list($name, $sessions, $attr = [])
     }
     $output = '<select name="'.$name.'" '.$attrs.'>';
 
-    if (count($sessions) == 0) {
+    if (0 == count($sessions)) {
         $output .= '<option value = "0">'.get_lang(
                 'ThereIsNotStillASession'
             ).'</option>';
@@ -280,14 +278,14 @@ Display::display_header($nameTools);
 
 /* MAIN CODE */
 
-if (($action === 'course_select_form') ||
-    (isset($_POST['copy_option']) && $_POST['copy_option'] == 'full_copy')
+if (('course_select_form' === $action) ||
+    (isset($_POST['copy_option']) && 'full_copy' == $_POST['copy_option'])
 ) {
     $destinationCourse = $destinationSession = '';
     $originCourse = api_get_course_id();
     $originSession = api_get_session_id();
 
-    if ($action === 'course_select_form') {
+    if ('course_select_form' === $action) {
         $destinationCourse = $_POST['destination_course'];
         $destinationSession = $_POST['destination_session'];
         $course = CourseSelectForm::get_posted_course(
@@ -350,9 +348,9 @@ if (($action === 'course_select_form') ||
             displayForm();
         }
     }
-} elseif (isset($_POST['copy_option']) && $_POST['copy_option'] == 'select_items') {
+} elseif (isset($_POST['copy_option']) && 'select_items' == $_POST['copy_option']) {
     // Else, if a CourseSelectForm is requested, show it
-    if (api_get_setting('show_glossary_in_documents') != 'none') {
+    if ('none' != api_get_setting('show_glossary_in_documents')) {
         echo Display::return_message(
             get_lang('To export a document that has glossary terms with its references to the glossary, you have to make sure you include the glossary tool in the export'),
             'normal'

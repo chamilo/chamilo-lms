@@ -1,9 +1,6 @@
 <?php
 /* For licensing terms, see /license.txt */
 
-/**
- * @package chamilo.webservices
- */
 require_once __DIR__.'/../inc/global.inc.php';
 require_once __DIR__.'/cm_webservice.php';
 
@@ -16,7 +13,7 @@ class WSCMCourses extends WSCM
 {
     public function get_courses_code($username, $password)
     {
-        if ($this->verifyUserPass($username, $password) == "valid") {
+        if ("valid" == $this->verifyUserPass($username, $password)) {
             $user_id = UserManager::get_user_id_from_username($username);
             $listOfCourses = UserManager::get_personal_session_course_list($user_id);
 
@@ -33,7 +30,7 @@ class WSCMCourses extends WSCM
 
     public function get_course_title($username, $password, $course_code)
     {
-        if ($this->verifyUserPass($username, $password) == "valid") {
+        if ("valid" == $this->verifyUserPass($username, $password)) {
             $course_info = CourseManager::get_course_information($course_code);
 
             return $course_info['title'];

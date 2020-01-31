@@ -101,12 +101,12 @@ class Link extends Model
         $description = trim($description);
 
         // We ensure URL to be absolute.
-        if (strpos($urllink, '://') === false) {
+        if (false === strpos($urllink, '://')) {
             $urllink = 'http://'.$urllink;
         }
 
         // If the title is empty, we use the URL as title.
-        if ($title == '') {
+        if ('' == $title) {
             $title = $urllink;
         }
 
@@ -165,7 +165,7 @@ class Link extends Model
             $repo->getEntityManager()->flush();
             $link_id = $link->getIid();
 
-            if ((api_get_setting('search_enabled') == 'true') &&
+            if (('true' == api_get_setting('search_enabled')) &&
                 $link_id && extension_loaded('xapian')
             ) {
                 require_once api_get_path(LIBRARY_PATH).'specific_fields_manager.lib.php';
@@ -229,7 +229,7 @@ class Link extends Model
                         $course_int_id
                     );
                     $result = Database:: query($sql_cat);
-                    if (Database:: num_rows($result) == 1) {
+                    if (1 == Database:: num_rows($result)) {
                         $row = Database:: fetch_array($result);
                         $ic_slide->addValue(
                             'category',
@@ -299,7 +299,7 @@ class Link extends Model
             $sessionId = api_get_session_id();
         }
         $sessionId = intval($sessionId);
-        if ($linkUrl != '') {
+        if ('' != $linkUrl) {
             $sql = "UPDATE $tblLink SET
                     url = '$linkUrl'
                     WHERE id = $linkId AND c_id = $courseId AND session_id = $sessionId";
@@ -322,6 +322,7 @@ class Link extends Model
 
         if (empty($category_title)) {
             echo Display::return_message(get_lang('Please give the category name'), 'error');
+
             return false;
         }
 
@@ -388,7 +389,7 @@ class Link extends Model
         $repo = Container::getLinkCategoryRepository();
         /** @var CLinkCategory $category */
         $category = $repo->find($id);
-        if ($category)  {
+        if ($category) {
             $repo->delete($category);
             Display::addFlash(Display::return_message(get_lang('The category has been deleted.')));
 
@@ -421,7 +422,8 @@ class Link extends Model
 
     /**
      * Used to delete a link.
-     * @param int    $id
+     *
+     * @param int $id
      *
      * @return bool
      */
@@ -478,7 +480,7 @@ class Link extends Model
     public static function delete_link_from_search_engine($course_id, $link_id)
     {
         // Remove from search engine if enabled.
-        if (api_get_setting('search_enabled') === 'true') {
+        if ('true' === api_get_setting('search_enabled')) {
             $tbl_se_ref = Database::get_main_table(
                 TABLE_MAIN_SEARCH_ENGINE_REF
             );
@@ -548,12 +550,12 @@ class Link extends Model
         $categoryId = intval($values['category_id']);
 
         // We ensure URL to be absolute.
-        if (strpos($values['url'], '://') === false) {
+        if (false === strpos($values['url'], '://')) {
             $values['url'] = 'http://'.$_POST['url'];
         }
 
         // If the title is empty, we use the URL as title.
-        if ($values['title'] == '') {
+        if ('' == $values['title']) {
             $values['title'] = $values['url'];
         }
 
@@ -606,7 +608,7 @@ class Link extends Model
         );
 
         // Update search enchine and its values table if enabled.
-        if (api_get_setting('search_enabled') == 'true') {
+        if ('true' == api_get_setting('search_enabled')) {
             $course_int_id = api_get_course_int_id();
             $course_id = api_get_course_id();
             $link_title = Database:: escape_string($values['title']);
@@ -696,7 +698,7 @@ class Link extends Model
                         $course_int_id
                     );
                     $result = Database:: query($sql_cat);
-                    if (Database:: num_rows($result) == 1) {
+                    if (1 == Database:: num_rows($result)) {
                         $row = Database:: fetch_array($result);
                         $ic_slide->addValue(
                             'category',
@@ -786,7 +788,7 @@ class Link extends Model
      */
     public static function setVisible($id, $scope)
     {
-        if ($scope == TOOL_LINK) {
+        if (TOOL_LINK == $scope) {
             /*api_item_property_update(
                 $_course,
                 TOOL_LINK,
@@ -800,7 +802,7 @@ class Link extends Model
             if ($link) {
                 $repo->setVisibilityPublished($link);
             }
-        } elseif ($scope == TOOL_LINK_CATEGORY) {
+        } elseif (TOOL_LINK_CATEGORY == $scope) {
             $repo = Container::getLinkCategoryRepository();
             /** @var CLink $link */
             $link = $repo->find($id);
@@ -817,16 +819,17 @@ class Link extends Model
         }
         Display::addFlash(Display::return_message(get_lang('The visibility has been changed.')));
     }
+
     public static function setInvisible($id, $scope)
     {
-        if ($scope == TOOL_LINK) {
+        if (TOOL_LINK == $scope) {
             $repo = Container::getLinkRepository();
             /** @var CLink $link */
             $link = $repo->find($id);
             if ($link) {
                 $repo->setVisibilityDraft($link);
             }
-        } elseif ($scope == TOOL_LINK_CATEGORY) {
+        } elseif (TOOL_LINK_CATEGORY == $scope) {
             $repo = Container::getLinkCategoryRepository();
             /** @var CLinkCategory $link */
             $link = $repo->find($id);
@@ -1162,7 +1165,7 @@ class Link extends Model
                             api_get_self().'?'.api_get_cidreq().'&'.http_build_query($moveLinkParams),
                             'level-up-alt',
                             'secondary',
-                            ['class' => 'btn-sm '.($i === 1 ? 'disabled' : '')],
+                            ['class' => 'btn-sm '.(1 === $i ? 'disabled' : '')],
                             false
                         );
 
@@ -1265,7 +1268,7 @@ class Link extends Model
             ).'</a>';
 
         // DISPLAY MOVE UP COMMAND only if it is not the top link.
-        if ($currentCategory != 0) {
+        if (0 != $currentCategory) {
             $tools .= '<a href="'.api_get_self().'?'.api_get_cidreq().'&sec_token='.$token.'&action=up&up='.$categoryId.'&category_id='.$categoryId.'" title="'.get_lang('Up').'">'.
                 Display:: return_icon(
                     'up.png',
@@ -1338,11 +1341,11 @@ Do you really want to delete this category and its links ?')."')) return false;\
         $sessionId = intval($sessionId);
         $thiscatlinkId = intval($catlinkid);
 
-        if ($action == 'down') {
+        if ('down' == $action) {
             $sortDirection = 'DESC';
         }
 
-        if ($action == 'up') {
+        if ('up' == $action) {
             $sortDirection = 'ASC';
         }
 
@@ -1478,14 +1481,14 @@ Do you really want to delete this category and its links ?')."')) return false;\
         $id = '';
 
         //If false try other options
-        if ($pos === false) {
+        if (false === $pos) {
             $url_parsed = parse_url($url);
 
             //Youtube shortener
             //http://youtu.be/ID
             $pos = strpos($url, "youtu.be");
 
-            if ($pos == false) {
+            if (false == $pos) {
                 $id = '';
             } else {
                 return substr($url_parsed['path'], 1);
@@ -1494,7 +1497,7 @@ Do you really want to delete this category and its links ?')."')) return false;\
             //if empty try the youtube.com/embed/ID
             if (empty($id)) {
                 $pos = strpos($url, "embed");
-                if ($pos === false) {
+                if (false === $pos) {
                     return '';
                 } else {
                     return substr($url_parsed['path'], 7);
@@ -1596,7 +1599,7 @@ Do you really want to delete this category and its links ?')."')) return false;\
             }
 
             // Validation when belongs to a session
-            $showChildren = $categoryId == $categoryItemId || $show === 'all';
+            $showChildren = $categoryId == $categoryItemId || 'all' === $show;
             if ($forceOpenCategories) {
                 $showChildren = true;
             }
@@ -1674,7 +1677,7 @@ Do you really want to delete this category and its links ?')."')) return false;\
             '&sec_token='.$token
         );
 
-        if ($action === 'addlink') {
+        if ('addlink' === $action) {
             $form->addHeader(get_lang('LinksAdd'));
         } else {
             $form->addHeader(get_lang('LinksMod'));
@@ -1691,7 +1694,7 @@ Do you really want to delete this category and its links ?')."')) return false;\
             $title = $linkInfo['title'];
             $description = $linkInfo['description'];
             $category = $linkInfo['category_id'];
-            if ($linkInfo['on_homepage'] != 0) {
+            if (0 != $linkInfo['on_homepage']) {
                 $onhomepage = 1;
             }
             $target_link = $linkInfo['target'];
@@ -1739,14 +1742,14 @@ Do you really want to delete this category and its links ?')."')) return false;\
             'target' => $target_link,
         ];
 
-        if (api_get_setting('search_enabled') == 'true') {
+        if ('true' == api_get_setting('search_enabled')) {
             require_once api_get_path(LIBRARY_PATH).'specific_fields_manager.lib.php';
             $specific_fields = get_specific_field_list();
             $form->addCheckBox('index_document', get_lang('Index link title and description?s'), get_lang('Yes'));
 
             foreach ($specific_fields as $specific_field) {
                 $default_values = '';
-                if ($action == 'editlink') {
+                if ('editlink' == $action) {
                     $filter = [
                         'field_id' => $specific_field['id'],
                         'ref_id' => intval($_GET['id']),
@@ -1793,7 +1796,7 @@ Do you really want to delete this category and its links ?')."')) return false;\
         );
 
         $defaults = [];
-        if ($action === 'addcategory') {
+        if ('addcategory' === $action) {
             $form->addHeader(get_lang('Add a category'));
             $my_cat_title = get_lang('Add a category');
         } else {

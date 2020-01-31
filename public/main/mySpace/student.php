@@ -3,8 +3,6 @@
 
 /**
  * Report on students subscribed to courses I am teaching.
- *
- * @package chamilo.reporting
  */
 $cidReset = true;
 
@@ -22,7 +20,7 @@ if (!$allowToTrack) {
 
 $nameTools = get_lang('Learners');
 
-$export_csv = isset($_GET['export']) && $_GET['export'] == 'csv' ? true : false;
+$export_csv = isset($_GET['export']) && 'csv' == $_GET['export'] ? true : false;
 $keyword = isset($_GET['keyword']) ? Security::remove_XSS($_GET['keyword']) : null;
 $active = isset($_GET['active']) ? intval($_GET['active']) : 1;
 $sleepingDays = isset($_GET['sleeping_days']) ? intval($_GET['sleeping_days']) : null;
@@ -35,14 +33,14 @@ $interbreadcrumb[] = [
     "name" => get_lang('Reporting'),
 ];
 
-if (isset($_GET["user_id"]) && $_GET["user_id"] != "" && !isset($_GET["type"])) {
+if (isset($_GET["user_id"]) && "" != $_GET["user_id"] && !isset($_GET["type"])) {
     $interbreadcrumb[] = [
         "url" => "teachers.php",
         "name" => get_lang('Teachers'),
     ];
 }
 
-if (isset($_GET["user_id"]) && $_GET["user_id"] != "" && isset($_GET["type"]) && $_GET["type"] == "coach") {
+if (isset($_GET["user_id"]) && "" != $_GET["user_id"] && isset($_GET["type"]) && "coach" == $_GET["type"]) {
     $interbreadcrumb[] = ["url" => "coaches.php", "name" => get_lang('Coaches')];
 }
 
@@ -107,7 +105,7 @@ function get_users($from, $limit, $column, $direction)
         }
     }
 
-    if ($drhLoaded === false) {
+    if (false === $drhLoaded) {
         $students = UserManager::getUsersFollowedByUser(
             api_get_user_id(),
             api_is_student_boss() ? null : STUDENT,
@@ -170,7 +168,7 @@ function get_users($from, $limit, $column, $direction)
         }
 
         $urlDetails = $url."?student=$student_id";
-        if (isset($_GET['id_coach']) && intval($_GET['id_coach']) != 0) {
+        if (isset($_GET['id_coach']) && 0 != intval($_GET['id_coach'])) {
             $urlDetails = $url."?student=$student_id&id_coach=$coach_id&id_session=$sessionId";
         }
 

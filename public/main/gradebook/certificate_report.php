@@ -5,8 +5,6 @@
  * List all certificates filtered by session/course and month/year.
  *
  * @author Angel Fernando Quiroz Campos <angel.quiroz@beeznest.com>
- *
- * @package chamilo.gradebook
  */
 $cidReset = true;
 

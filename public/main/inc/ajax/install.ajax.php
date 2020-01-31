@@ -28,7 +28,7 @@ switch ($action) {
             $a_required_fields = [$person_name, $person_role, $company_name, $company_activity, $company_country];
             $required_field_error = false;
             foreach ($a_required_fields as $required_file) {
-                if (trim($required_file) === '') {
+                if ('' === trim($required_file)) {
                     $required_field_error = true;
                     break;
                 }
@@ -51,7 +51,7 @@ switch ($action) {
                 try {
                     $client = new GuzzleHttp\Client();
                     $res = $client->request('GET', $url, $options);
-                    if ($res->getStatusCode() == '200' || $res->getStatusCode() == '301') {
+                    if ('200' == $res->getStatusCode() || '301' == $res->getStatusCode()) {
                         $urlValidated = true;
                     }
                 } catch (Exception $e) {
@@ -74,7 +74,7 @@ switch ($action) {
                 $client = new GuzzleHttp\Client();
                 $options['query'] = $data;
                 $res = $client->request('GET', $url, $options);
-                if ($res->getStatusCode() == '200') {
+                if ('200' == $res->getStatusCode()) {
                     echo '1';
                 }
             }

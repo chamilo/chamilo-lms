@@ -25,7 +25,7 @@ switch ($action) {
         $sessionId = isset($_REQUEST['session_id']) ? $_REQUEST['session_id'] : 0;
         $courseInfo = api_get_course_info($course_code);
 
-        if ($range == 1) {
+        if (1 == $range) {
             $start_date = Security::remove_XSS($_REQUEST['sd']);
             $end_date = Security::remove_XSS($_REQUEST['ed']);
             $sql_result = MySpace::get_connections_to_course_by_date(

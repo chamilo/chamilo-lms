@@ -83,7 +83,7 @@ switch ($action) {
             exit;
         }
 
-        if ($attempt->getStatus() != 'incomplete') {
+        if ('incomplete' != $attempt->getStatus()) {
             if ($debug) {
                 error_log('Cannot update exercise is already completed.');
             }
@@ -458,7 +458,7 @@ switch ($action) {
             }
 
             // Updating Reminder algorithm.
-            if ($objExercise->type == ONE_PER_PAGE) {
+            if (ONE_PER_PAGE == $objExercise->type) {
                 $bd_reminder_list = explode(',', $exercise_stat_info['questions_to_check']);
                 if (empty($remind_list)) {
                     $remind_list = $bd_reminder_list;
@@ -493,7 +493,7 @@ switch ($action) {
 
             // Getting the total weight if the request is simple
             $total_weight = 0;
-            if ($type == 'simple') {
+            if ('simple' == $type) {
                 foreach ($question_list as $my_question_id) {
                     $objQuestionTmp = Question::read($my_question_id, $objExercise->course);
                     $total_weight += $objQuestionTmp->selectWeighting();
@@ -507,7 +507,7 @@ switch ($action) {
                     error_log("Saving question_id = $my_question_id ");
                 }
 
-                if ($type == 'simple' && $question_id != $my_question_id) {
+                if ('simple' == $type && $question_id != $my_question_id) {
                     continue;
                 }
 
@@ -521,20 +521,20 @@ switch ($action) {
                 $objQuestionTmp = Question::read($my_question_id, $objExercise->course);
 
                 $myChoiceDegreeCertainty = null;
-                if ($objQuestionTmp->type === MULTIPLE_ANSWER_TRUE_FALSE_DEGREE_CERTAINTY) {
+                if (MULTIPLE_ANSWER_TRUE_FALSE_DEGREE_CERTAINTY === $objQuestionTmp->type) {
                     if (isset($choiceDegreeCertainty[$my_question_id])) {
                         $myChoiceDegreeCertainty = $choiceDegreeCertainty[$my_question_id];
                     }
                 }
 
                 // Getting free choice data.
-                if (in_array($objQuestionTmp->type, [FREE_ANSWER, ORAL_EXPRESSION]) && $type == 'all') {
+                if (in_array($objQuestionTmp->type, [FREE_ANSWER, ORAL_EXPRESSION]) && 'all' == $type) {
                     $my_choice = isset($_REQUEST['free_choice'][$my_question_id]) && !empty($_REQUEST['free_choice'][$my_question_id])
                         ? $_REQUEST['free_choice'][$my_question_id]
                         : null;
                 }
 
-                if ($type == 'all') {
+                if ('all' == $type) {
                     $total_weight += $objQuestionTmp->selectWeighting();
                 }
 
@@ -546,7 +546,7 @@ switch ($action) {
                     $hotspot_delineation_result = $_SESSION['hotspot_delineation_result'][$objExercise->selectId()][$my_question_id];
                 }
 
-                if ($type === 'simple') {
+                if ('simple' === $type) {
                     // Getting old attempt in order to decrees the total score.
                     $old_result = $objExercise->manage_answer(
                         $exeId,
@@ -575,7 +575,7 @@ switch ($action) {
                         $session_id,
                         $my_question_id
                     );
-                    if ($objQuestionTmp->type === HOT_SPOT) {
+                    if (HOT_SPOT === $objQuestionTmp->type) {
                         Event::delete_attempt_hotspot(
                             $exeId,
                             api_get_user_id(),
@@ -593,7 +593,7 @@ switch ($action) {
                 }
 
                 // We're inside *one* question. Go through each possible answer for this question
-                if ($objQuestionTmp->type === MULTIPLE_ANSWER_TRUE_FALSE_DEGREE_CERTAINTY) {
+                if (MULTIPLE_ANSWER_TRUE_FALSE_DEGREE_CERTAINTY === $objQuestionTmp->type) {
                     $myChoiceTmp = [];
                     $myChoiceTmp['choice'] = $my_choice;
                     $myChoiceTmp['choiceDegreeCertainty'] = $myChoiceDegreeCertainty;
@@ -634,7 +634,7 @@ switch ($action) {
 
                 $duration = 0;
                 $now = time();
-                if ($type == 'all') {
+                if ('all' == $type) {
                     $exercise_stat_info = $objExercise->get_stat_track_exercise_info_by_exe_id($exeId);
                 }
 
@@ -688,12 +688,12 @@ switch ($action) {
             }
         }
 
-        if ($type == 'all') {
+        if ('all' == $type) {
             echo 'ok';
             exit;
         }
 
-        if ($objExercise->type == ONE_PER_PAGE) {
+        if (ONE_PER_PAGE == $objExercise->type) {
             if ($debug) {
                 error_log("result: one_per_page");
                 error_log(" ------ end ajax call ------- ");
@@ -731,7 +731,7 @@ switch ($action) {
         }
         echo $id;
         echo '<p class="lead">'.$objQuestion->get_question_type_name().'</p>';
-        if ($objQuestion->type === FILL_IN_BLANKS) {
+        if (FILL_IN_BLANKS === $objQuestion->type) {
             echo '<script>
                 $(function() {
                     $(".selectpicker").selectpicker({});
@@ -740,7 +740,7 @@ switch ($action) {
         }
 
         // Allows render MathJax elements in a ajax call
-        if (api_get_setting('include_asciimathml_script') === 'true') {
+        if ('true' === api_get_setting('include_asciimathml_script')) {
             echo '<script> MathJax.Hub.Queue(["Typeset",MathJax.Hub]);</script>';
         }
 

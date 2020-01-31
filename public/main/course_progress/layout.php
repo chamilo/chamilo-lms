@@ -5,8 +5,6 @@
  * Layout (principal view) used for structuring other views.
  *
  * @author Christian Fasanando <christian1827@gmail.com>
- *
- * @package chamilo.course_progress
  */
 
 // protect a course script

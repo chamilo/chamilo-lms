@@ -102,7 +102,7 @@ class MultipleAnswerTrueFalseDegreeCertainty extends Question
         // Can be more options
         $optionData = Question::readQuestionOption($this->id, $courseId);
 
-        for ($i = 1; $i <= $nbAnswers; ++$i) {
+        for ($i = 1; $i <= $nbAnswers; $i++) {
             $renderer->setElementTemplate(
                 '<td><!-- BEGIN error --><span class="form_error">{error}</span><!-- END error --><br/>{element}</td>',
                 'correct['.$i.']'
@@ -149,7 +149,7 @@ class MultipleAnswerTrueFalseDegreeCertainty extends Question
                 if (!empty($optionData)) {
                     foreach ($optionData as $id => $data) {
                         $form->addElement('radio', 'correct['.$i.']', null, null, $id);
-                        ++$j;
+                        $j++;
                         if (3 == $j) {
                             break;
                         }
@@ -203,7 +203,7 @@ class MultipleAnswerTrueFalseDegreeCertainty extends Question
         if (!empty($this->extra)) {
             $scores = explode(':', $this->extra);
             if (!empty($scores)) {
-                for ($i = 1; $i <= 3; ++$i) {
+                for ($i = 1; $i <= 3; $i++) {
                     $defaults['option['.$i.']'] = $scores[$i - 1];
                 }
             }
@@ -253,7 +253,7 @@ class MultipleAnswerTrueFalseDegreeCertainty extends Question
                 Question::updateQuestionOption($id, $optionData, $courseId);
             }
         } else {
-            for ($i = 1; $i <= 8; ++$i) {
+            for ($i = 1; $i <= 8; $i++) {
                 $lastId = Question::saveQuestionOption($this->id, $this->options[$i], $courseId, $i);
                 $correct[$i] = $lastId;
             }
@@ -271,13 +271,13 @@ class MultipleAnswerTrueFalseDegreeCertainty extends Question
           the true, false, doubt options registered in this format
           XX:YY:ZZZ where XX is a float score value. */
         $extraValues = [];
-        for ($i = 1; $i <= 3; ++$i) {
+        for ($i = 1; $i <= 3; $i++) {
             $score = trim($form->getSubmitValue('option['.$i.']'));
             $extraValues[] = $score;
         }
         $this->setExtra(implode(':', $extraValues));
 
-        for ($i = 1; $i <= $nbAnswers; ++$i) {
+        for ($i = 1; $i <= $nbAnswers; $i++) {
             $answer = trim($form->getSubmitValue('answer['.$i.']'));
             $comment = trim($form->getSubmitValue('comment['.$i.']'));
             $goodAnswer = trim($form->getSubmitValue('correct['.$i.']'));
@@ -572,7 +572,7 @@ class MultipleAnswerTrueFalseDegreeCertainty extends Question
                 $html .= '<div style="clear:both; height: 10px;">&nbsp;</div>';
                 $i = 0;
             } else {
-                ++$i;
+                $i++;
             }
         }
         $html .= '</div>';
@@ -906,7 +906,7 @@ class MultipleAnswerTrueFalseDegreeCertainty extends Question
                 ;
                 $html .= get_lang($explain);
                 $html .= '</td>';
-                ++$i;
+                $i++;
             }
             $html .= '</tr>';
         }
@@ -1003,7 +1003,7 @@ class MultipleAnswerTrueFalseDegreeCertainty extends Question
             if (MULTIPLE_ANSWER_TRUE_FALSE_DEGREE_CERTAINTY == $oQuestion->type) {
                 $answerColor = self::getAnswerColor($exeId, $attemptInfo['question_id'], $attemptInfo['position']);
                 if ($answerColor) {
-                    ++$result[$answerColor];
+                    $result[$answerColor]++;
                 }
             }
         }
@@ -1050,7 +1050,7 @@ class MultipleAnswerTrueFalseDegreeCertainty extends Question
                     if (!isset($result[$questionCategory][$answerColor])) {
                         $result[$questionCategory][$answerColor] = 0;
                     }
-                    ++$result[$questionCategory][$answerColor];
+                    $result[$questionCategory][$answerColor]++;
                 }
             }
         }

@@ -14,7 +14,6 @@ use Chamilo\CourseBundle\Entity\CAnnouncement;
  *             Announcements tool and also add the resource linker here. The database also needed refactoring
  *             as there was no title field (the title was merged into the content field)
  */
-
 $use_anonymous = true;
 
 require_once __DIR__.'/../inc/global.inc.php';

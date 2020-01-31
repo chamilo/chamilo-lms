@@ -259,7 +259,7 @@ class DocumentManager
             'zip' => 'application/zip',
         ];
 
-        if ($filename === true) {
+        if (true === $filename) {
             return $mimeTypes;
         }
 
@@ -342,7 +342,7 @@ class DocumentManager
         $cur = $begin;
         fseek($fm, $begin, 0);
 
-        while (!feof($fm) && $cur <= $end && (connection_status() == 0)) {
+        while (!feof($fm) && $cur <= $end && (0 == connection_status())) {
             echo fread($fm, min(1024 * 16, ($end - $cur) + 1));
             $cur += 1024 * 16;
         }
@@ -352,10 +352,10 @@ class DocumentManager
      * This function streams a file to the client.
      *
      * @param string $full_file_name
-     * @param bool   $forced Wether to force the browser to download the file
+     * @param bool   $forced              Wether to force the browser to download the file
      * @param string $name
      * @param bool   $fixLinksHttpToHttps change file content from http to https
-     * @param array  $extraHeaders Additional headers to be sent
+     * @param array  $extraHeaders        Additional headers to be sent
      *
      * @return false if file doesn't exist, true if stream succeeded
      */
@@ -369,7 +369,7 @@ class DocumentManager
         if (!is_file($full_file_name)) {
             return false;
         }
-        $filename = $name == '' ? basename($full_file_name) : api_replace_dangerous_char($name);
+        $filename = '' == $name ? basename($full_file_name) : api_replace_dangerous_char($name);
         $len = filesize($full_file_name);
         // Fixing error when file name contains a ","
         $filename = str_replace(',', '', $filename);
@@ -418,7 +418,7 @@ class DocumentManager
             return true;
         } else {
             // no forced download, just let the browser decide what to do according to the mimetype
-            $lpFixedEncoding = api_get_setting('lp.fixed_encoding') === 'true';
+            $lpFixedEncoding = 'true' === api_get_setting('lp.fixed_encoding');
 
             // Commented to let courses content to be cached in order to improve performance:
             //header('Expires: Wed, 01 Jan 1990 00:00:00 GMT');
@@ -432,7 +432,7 @@ class DocumentManager
 
             switch ($contentType) {
                 case 'text/html':
-                    if (isset($lpFixedEncoding) && $lpFixedEncoding === 'true') {
+                    if (isset($lpFixedEncoding) && 'true' === $lpFixedEncoding) {
                         $contentType .= '; charset=UTF-8';
                     } else {
                         $encoding = @api_detect_encoding_html(file_get_contents($full_file_name));
@@ -442,7 +442,7 @@ class DocumentManager
                     }
                     break;
                 case 'text/plain':
-                    if (isset($lpFixedEncoding) && $lpFixedEncoding === 'true') {
+                    if (isset($lpFixedEncoding) && 'true' === $lpFixedEncoding) {
                         $contentType .= '; charset=UTF-8';
                     } else {
                         $encoding = @api_detect_encoding(strip_tags(file_get_contents($full_file_name)));
@@ -515,7 +515,7 @@ class DocumentManager
 
         if (!empty($sessionId)) {
             // Chat folder filter
-            if ($path == '/chat_files') {
+            if ('/chat_files' == $path) {
                 $condition .= " AND (docs.session_id = '$sessionId') ";
             }
             // share_folder filter
@@ -561,10 +561,10 @@ class DocumentManager
 
         // The given path will not end with a slash, unless it's the root '/'
         // so no root -> add slash
-        $addedSlash = $path == '/' ? '' : '/';
+        $addedSlash = '/' == $path ? '' : '/';
 
         $sharedCondition = null;
-        if ($originalPath == '/shared_folder') {
+        if ('/shared_folder' == $originalPath) {
             $students = CourseManager::get_user_list_from_course_code($courseInfo['code'], $sessionId);
             if (!empty($students)) {
                 $conditionList = [];
@@ -609,7 +609,7 @@ class DocumentManager
         $documentData = [];
         $isAllowedToEdit = api_is_allowed_to_edit(null, true);
         $isCoach = api_is_coach();
-        if ($result !== false && Database::num_rows($result) != 0) {
+        if (false !== $result && 0 != Database::num_rows($result)) {
             $rows = [];
             $hideInvisibleDocuments = api_get_configuration_value('hide_invisible_course_documents_in_sessions');
             while ($row = Database::fetch_array($result, 'ASSOC')) {
@@ -659,8 +659,8 @@ class DocumentManager
             }
 
             foreach ($rows as $row) {
-                if ($row['filetype'] == 'file' &&
-                    pathinfo($row['path'], PATHINFO_EXTENSION) == 'html'
+                if ('file' == $row['filetype'] &&
+                    'html' == pathinfo($row['path'], PATHINFO_EXTENSION)
                 ) {
                     // Templates management
                     $tblTemplate = Database::get_main_table(TABLE_MAIN_TEMPLATES);
@@ -750,7 +750,7 @@ class DocumentManager
         }
 
         $show_users_condition = '';
-        if (api_get_setting('show_users_folders') === 'false') {
+        if ('false' === api_get_setting('show_users_folders')) {
             $show_users_condition = " AND docs.path NOT LIKE '%shared_folder%'";
         }
 
@@ -774,20 +774,20 @@ class DocumentManager
                         l.visibility NOT IN ('".ResourceLink::VISIBILITY_DELETED."')
                         $condition_session ";
 
-            if ($groupIid != 0) {
+            if (0 != $groupIid) {
                 $sql .= " AND docs.path NOT LIKE '%shared_folder%' ";
             } else {
                 $sql .= $show_users_condition;
             }
 
             $result = Database::query($sql);
-            if ($result && Database::num_rows($result) != 0) {
+            if ($result && 0 != Database::num_rows($result)) {
                 while ($row = Database::fetch_array($result, 'ASSOC')) {
                     if (self::is_folder_to_avoid($row['path'])) {
                         continue;
                     }
 
-                    if (strpos($row['path'], '/shared_folder/') !== false) {
+                    if (false !== strpos($row['path'], '/shared_folder/')) {
                         if (!in_array($row['path'], $conditionList)) {
                             continue;
                         }
@@ -931,7 +931,7 @@ class DocumentManager
         /** @var CDocument $document */
         $document = $repo->find($document_id);
 
-        if ($document === null) {
+        if (null === $document) {
             return false;
         }
 
@@ -960,7 +960,7 @@ class DocumentManager
                 WHERE c_id = $course_id AND id= $id";
         $result = Database::fetch_array(Database::query($sql), 'ASSOC');
 
-        return $result['filetype'] === 'folder';
+        return 'folder' === $result['filetype'];
     }
 
     /**
@@ -1089,7 +1089,7 @@ class DocumentManager
     public static function delete_document_from_search_engine($course_id, $document_id)
     {
         // remove from search engine if enabled
-        if (api_get_setting('search_enabled') === 'true') {
+        if ('true' === api_get_setting('search_enabled')) {
             $tbl_se_ref = Database::get_main_table(TABLE_MAIN_SEARCH_ENGINE_REF);
             $sql = 'SELECT * FROM %s WHERE course_code=\'%s\' AND tool_id=\'%s\' AND ref_id_high_level=%s LIMIT 1';
             $sql = sprintf($sql, $tbl_se_ref, $course_id, TOOL_DOCUMENT, $document_id);
@@ -1189,7 +1189,7 @@ class DocumentManager
 
         $result = Database::query($sql);
         $courseParam = '&cidReq='.$course_code.'&id='.$id.'&id_session='.$session_id.'&gidReq='.$groupId;
-        if ($result && Database::num_rows($result) == 1) {
+        if ($result && 1 == Database::num_rows($result)) {
             $row = Database::fetch_array($result, 'ASSOC');
             //@todo need to clarify the name of the URLs not nice right now
             $url_path = urlencode($row['path']);
@@ -1204,7 +1204,7 @@ class DocumentManager
             $row['direct_url'] = $www.$path;
             $row['basename'] = basename($row['path']);
 
-            if (dirname($row['path']) == '.') {
+            if ('.' == dirname($row['path'])) {
                 $row['parent_id'] = '0';
             } else {
                 $row['parent_id'] = self::get_document_id($course_info, dirname($row['path']), $session_id);
@@ -1226,7 +1226,7 @@ class DocumentManager
                 for ($i = 1; $i < $array_len; $i++) {
                     $real_dir .= '/'.(isset($dir_array[$i]) ? $dir_array[$i] : '');
                     $parent_id = self::get_document_id($course_info, $real_dir);
-                    if ($session_id != 0 && empty($parent_id)) {
+                    if (0 != $session_id && empty($parent_id)) {
                         $parent_id = self::get_document_id($course_info, $real_dir, 0);
                     }
                     if (!empty($parent_id)) {
@@ -1236,7 +1236,7 @@ class DocumentManager
                             false,
                             $session_id
                         );
-                        if ($session_id != 0 and !$sub_document_data) {
+                        if (0 != $session_id and !$sub_document_data) {
                             $sub_document_data = self::get_document_data_by_id(
                                 $parent_id,
                                 $course_code,
@@ -1403,7 +1403,7 @@ class DocumentManager
             $repo = $em->getRepository('ChamiloCourseBundle:CDocument');
             /** @var \Chamilo\CourseBundle\Entity\CDocument $document */
             $document = $repo->find($row['iid']);
-            if ($document->getVisibility() === ResourceLink::VISIBILITY_PUBLISHED) {
+            if (ResourceLink::VISIBILITY_PUBLISHED === $document->getVisibility()) {
                 $is_visible = api_is_allowed_in_course() || api_is_platform_admin();
             }
         }
@@ -1453,7 +1453,7 @@ class DocumentManager
         $sessionId = (int) $sessionId;
         // 2. Course and Session visibility are handle in local.inc.php/global.inc.php
         // 3. Checking if user exist in course/session
-        if ($sessionId == 0) {
+        if (0 == $sessionId) {
             if (is_null($userIsSubscribed)) {
                 $userIsSubscribed = CourseManager::is_user_subscribed_in_course(
                     $user_id,
@@ -1461,7 +1461,7 @@ class DocumentManager
                 );
             }
 
-            if ($userIsSubscribed === true || api_is_platform_admin()) {
+            if (true === $userIsSubscribed || api_is_platform_admin()) {
                 $user_in_course = true;
             }
 
@@ -1499,7 +1499,7 @@ class DocumentManager
             /** @var CDocument $document */
             $document = $repo->find($doc_id);
             $link = $document->getCourseSessionResourceLink($course_info['entity']);
-            if ($link && $link->getVisibility() == ResourceLink::VISIBILITY_PUBLISHED) {
+            if ($link && ResourceLink::VISIBILITY_PUBLISHED == $link->getVisibility()) {
                 return true;
             }
 
@@ -1573,7 +1573,7 @@ class DocumentManager
 
         $rs = Database::query($sql);
         $num = Database::num_rows($rs);
-        if ($num == 0) {
+        if (0 == $num) {
             return null;
         }
         $row = Database::fetch_array($rs);
@@ -1782,7 +1782,7 @@ class DocumentManager
         if ((int) $default_certificate == (int) $default_certificate_id) {
             $tbl_category = Database::get_main_table(TABLE_MAIN_GRADEBOOK_CATEGORY);
             $session_id = api_get_session_id();
-            if ($session_id == 0 || is_null($session_id)) {
+            if (0 == $session_id || is_null($session_id)) {
                 $sql_session = 'AND (session_id='.intval($session_id).' OR isnull(session_id)) ';
             } elseif ($session_id > 0) {
                 $sql_session = 'AND session_id='.intval($session_id);
@@ -1861,11 +1861,11 @@ class DocumentManager
         $is_certificate_mode = false;
         $is_certificate_array = explode('/', $dir);
         array_shift($is_certificate_array);
-        if (isset($is_certificate_array[0]) && $is_certificate_array[0] == 'certificates') {
+        if (isset($is_certificate_array[0]) && 'certificates' == $is_certificate_array[0]) {
             $is_certificate_mode = true;
         }
 
-        return $is_certificate_mode || (isset($_GET['certificate']) && $_GET['certificate'] === 'true');
+        return $is_certificate_mode || (isset($_GET['certificate']) && 'true' === $_GET['certificate']);
     }
 
     /**
@@ -1958,7 +1958,7 @@ class DocumentManager
                             if (strpos($source, '+this.')) {
                                 continue; //javascript code - will still work unaltered
                             }
-                            if (strpos($source, '.') === false) {
+                            if (false === strpos($source, '.')) {
                                 continue; //no dot, should not be an external file anyway
                             }
                             if (strpos($source, 'mailto:')) {
@@ -1968,7 +1968,7 @@ class DocumentManager
                                 continue; //avoid code - that should help
                             }
 
-                            if ($attr == 'value') {
+                            if ('value' == $attr) {
                                 if (strpos($source, 'mp3file')) {
                                     $files_list[] = [
                                         substr($source, 0, strpos($source, '.swf') + 4),
@@ -1976,18 +1976,18 @@ class DocumentManager
                                         'abs',
                                     ];
                                     $mp3file = substr($source, strpos($source, 'mp3file=') + 8);
-                                    if (substr($mp3file, 0, 1) == '/') {
+                                    if ('/' == substr($mp3file, 0, 1)) {
                                         $files_list[] = [$mp3file, 'local', 'abs'];
                                     } else {
                                         $files_list[] = [$mp3file, 'local', 'rel'];
                                     }
-                                } elseif (strpos($source, 'flv=') === 0) {
+                                } elseif (0 === strpos($source, 'flv=')) {
                                     $source = substr($source, 4);
                                     if (strpos($source, '&') > 0) {
                                         $source = substr($source, 0, strpos($source, '&'));
                                     }
                                     if (strpos($source, '://') > 0) {
-                                        if (strpos($source, api_get_path(WEB_PATH)) !== false) {
+                                        if (false !== strpos($source, api_get_path(WEB_PATH))) {
                                             //we found the current portal url
                                             $files_list[] = [$source, 'local', 'url'];
                                         } else {
@@ -2011,7 +2011,7 @@ class DocumentManager
                                         $pos1 = strpos($second_part, '=');
                                         $pos2 = strpos($second_part, '&');
                                         $second_part = substr($second_part, $pos1 + 1, $pos2 - ($pos1 + 1));
-                                        if (strpos($second_part, api_get_path(WEB_PATH)) !== false) {
+                                        if (false !== strpos($second_part, api_get_path(WEB_PATH))) {
                                             //we found the current portal url
                                             $files_list[] = [$second_part, 'local', 'url'];
                                             $in_files_list[] = self::get_resources_from_source_html(
@@ -2028,7 +2028,7 @@ class DocumentManager
                                             $files_list[] = [$second_part, 'remote', 'url'];
                                         }
                                     } elseif (strpos($second_part, '=') > 0) {
-                                        if (substr($second_part, 0, 1) === '/') {
+                                        if ('/' === substr($second_part, 0, 1)) {
                                             //link starts with a /, making it absolute (relative to DocumentRoot)
                                             $files_list[] = [$second_part, 'local', 'abs'];
                                             $in_files_list[] = self::get_resources_from_source_html(
@@ -2040,7 +2040,7 @@ class DocumentManager
                                             if (count($in_files_list) > 0) {
                                                 $files_list = array_merge($files_list, $in_files_list);
                                             }
-                                        } elseif (strstr($second_part, '..') === 0) {
+                                        } elseif (0 === strstr($second_part, '..')) {
                                             //link is relative but going back in the hierarchy
                                             $files_list[] = [$second_part, 'local', 'rel'];
                                             //$dir = api_get_path(SYS_CODE_PATH);//dirname($abs_path);
@@ -2061,7 +2061,7 @@ class DocumentManager
                                             }
                                         } else {
                                             //no starting '/', making it relative to current document's path
-                                            if (substr($second_part, 0, 2) == './') {
+                                            if ('./' == substr($second_part, 0, 2)) {
                                                 $second_part = substr($second_part, 2);
                                             }
                                             $files_list[] = [$second_part, 'local', 'rel'];
@@ -2084,7 +2084,7 @@ class DocumentManager
                                     //leave that second part behind now
                                     $source = substr($source, 0, strpos($source, '?'));
                                     if (strpos($source, '://') > 0) {
-                                        if (strpos($source, api_get_path(WEB_PATH)) !== false) {
+                                        if (false !== strpos($source, api_get_path(WEB_PATH))) {
                                             //we found the current portal url
                                             $files_list[] = [$source, 'local', 'url'];
                                             $in_files_list[] = self::get_resources_from_source_html(
@@ -2102,7 +2102,7 @@ class DocumentManager
                                         }
                                     } else {
                                         //no protocol found, make link local
-                                        if (substr($source, 0, 1) === '/') {
+                                        if ('/' === substr($source, 0, 1)) {
                                             //link starts with a /, making it absolute (relative to DocumentRoot)
                                             $files_list[] = [$source, 'local', 'abs'];
                                             $in_files_list[] = self::get_resources_from_source_html(
@@ -2114,7 +2114,7 @@ class DocumentManager
                                             if (count($in_files_list) > 0) {
                                                 $files_list = array_merge($files_list, $in_files_list);
                                             }
-                                        } elseif (strstr($source, '..') === 0) {
+                                        } elseif (0 === strstr($source, '..')) {
                                             //link is relative but going back in the hierarchy
                                             $files_list[] = [$source, 'local', 'rel'];
                                             $dir = '';
@@ -2133,7 +2133,7 @@ class DocumentManager
                                             }
                                         } else {
                                             //no starting '/', making it relative to current document's path
-                                            if (substr($source, 0, 2) == './') {
+                                            if ('./' == substr($source, 0, 2)) {
                                                 $source = substr($source, 2);
                                             }
                                             $files_list[] = [$source, 'local', 'rel'];
@@ -2155,7 +2155,7 @@ class DocumentManager
                                     }
                                 }
                                 //found some protocol there
-                                if (strpos($source, api_get_path(WEB_PATH)) !== false) {
+                                if (false !== strpos($source, api_get_path(WEB_PATH))) {
                                     //we found the current portal url
                                     $files_list[] = [$source, 'local', 'url'];
                                     $in_files_list[] = self::get_resources_from_source_html(
@@ -2173,7 +2173,7 @@ class DocumentManager
                                 }
                             } else {
                                 //no protocol found, make link local
-                                if (substr($source, 0, 1) === '/') {
+                                if ('/' === substr($source, 0, 1)) {
                                     //link starts with a /, making it absolute (relative to DocumentRoot)
                                     $files_list[] = [$source, 'local', 'abs'];
                                     $in_files_list[] = self::get_resources_from_source_html(
@@ -2185,7 +2185,7 @@ class DocumentManager
                                     if (count($in_files_list) > 0) {
                                         $files_list = array_merge($files_list, $in_files_list);
                                     }
-                                } elseif (strpos($source, '..') === 0) {
+                                } elseif (0 === strpos($source, '..')) {
                                     //link is relative but going back in the hierarchy
                                     $files_list[] = [$source, 'local', 'rel'];
                                     $dir = '';
@@ -2204,7 +2204,7 @@ class DocumentManager
                                     }
                                 } else {
                                     //no starting '/', making it relative to current document's path
-                                    if (substr($source, 0, 2) == './') {
+                                    if ('./' == substr($source, 0, 2)) {
                                         $source = substr($source, 2);
                                     }
                                     $files_list[] = [$source, 'local', 'rel'];
@@ -2314,11 +2314,11 @@ class DocumentManager
                         if ($name == $check) {
                             $attributes[strtolower($name)][] = strtolower($name);
                         } else {
-                            if (!empty($value) && ($value[0] == '\'' || $value[0] == '"')) {
+                            if (!empty($value) && ('\'' == $value[0] || '"' == $value[0])) {
                                 $value = substr($value, 1, -1);
                             }
 
-                            if ($value == 'API.LMSGetValue(name') {
+                            if ('API.LMSGetValue(name' == $value) {
                                 $value = 'API.LMSGetValue(name)';
                             }
                             //Gets the xx.flv value from the string flashvars="width=320&height=240&autostart=false&file=xxx.flv&repeat=false"
@@ -2404,16 +2404,16 @@ class DocumentManager
 
                 if (!empty($real_orig_query)) {
                     $dest_url_query = '?'.$real_orig_query;
-                    if (strpos($dest_url_query, $origin_course_code) !== false) {
+                    if (false !== strpos($dest_url_query, $origin_course_code)) {
                         $dest_url_query = str_replace($origin_course_code, $destination_course_code, $dest_url_query);
                     }
                 }
 
-                if ($scope_url == 'local') {
-                    if ($type_url == 'abs' || $type_url == 'rel') {
+                if ('local' == $scope_url) {
+                    if ('abs' == $type_url || 'rel' == $type_url) {
                         $document_file = strstr($real_orig_path, 'document');
 
-                        if (strpos($real_orig_path, $document_file) !== false) {
+                        if (false !== strpos($real_orig_path, $document_file)) {
                             $origin_filepath = $orig_course_path.$document_file;
                             $destination_filepath = $dest_course_path.$document_file;
 
@@ -2465,7 +2465,7 @@ class DocumentManager
                             }
 
                             // Replace origin course path by destination course path.
-                            if (strpos($content_html, $real_orig_url) !== false) {
+                            if (false !== strpos($content_html, $real_orig_url)) {
                                 $url_course_path = str_replace(
                                     $orig_course_info_path.'/'.$document_file,
                                     '',
@@ -2474,7 +2474,7 @@ class DocumentManager
                                 // See BT#7780
                                 $destination_url = $dest_course_path_rel.$document_file.$dest_url_query;
                                 // If the course code doesn't exist in the path? what we do? Nothing! see BT#1985
-                                if (strpos($real_orig_path, $origin_course_code) === false) {
+                                if (false === strpos($real_orig_path, $origin_course_code)) {
                                     $url_course_path = $real_orig_path;
                                     $destination_url = $real_orig_path;
                                 }
@@ -2483,7 +2483,7 @@ class DocumentManager
                         }
 
                         // replace origin course code by destination course code  from origin url
-                        if (strpos($real_orig_url, '?') === 0) {
+                        if (0 === strpos($real_orig_url, '?')) {
                             $dest_url = str_replace($origin_course_code, $destination_course_code, $real_orig_url);
                             $content_html = str_replace($real_orig_url, $dest_url, $content_html);
                         }
@@ -2526,7 +2526,7 @@ class DocumentManager
         //$filePath = api_get_path(SYS_COURSE_PATH).$course_data['path'].'/document'.$document_data['path'];
         $pageFormat = 'A4';
         $pdfOrientation = 'P';
-        if ($orientation === 'landscape') {
+        if ('landscape' === $orientation) {
             $pageFormat = 'A4-L';
             $pdfOrientation = 'L';
         }
@@ -2619,7 +2619,7 @@ class DocumentManager
                 );
 
                 // Showing message when sending zip files
-                if ($document && $unzip == 1) {
+                if ($document && 1 == $unzip) {
                     if ($show_output) {
                         echo Display::return_message(
                             get_lang('File upload succeeded!').'<br />',
@@ -2672,7 +2672,7 @@ class DocumentManager
             case 'application/postscript':
                 $temp_file = tempnam(sys_get_temp_dir(), 'chamilo');
                 exec("ps2pdf $doc_path $temp_file", $output, $ret_val);
-                if ($ret_val !== 0) { // shell fail, probably 127 (command not found)
+                if (0 !== $ret_val) { // shell fail, probably 127 (command not found)
                     return false;
                 }
                 exec("pdftotext $temp_file -", $output, $ret_val);
@@ -2688,7 +2688,7 @@ class DocumentManager
                 // Note: correct handling of code pages in unrtf
                 // on debian lenny unrtf v0.19.2 can not, but unrtf v0.20.5 can
                 exec("unrtf --text $doc_path", $output, $ret_val);
-                if ($ret_val == 127) { // command not found
+                if (127 == $ret_val) { // command not found
                     return false;
                 }
                 // Avoid index unrtf comments
@@ -2714,7 +2714,7 @@ class DocumentManager
 
         $content = '';
         if (!is_null($ret_val)) {
-            if ($ret_val !== 0) { // shell fail, probably 127 (command not found)
+            if (0 !== $ret_val) { // shell fail, probably 127 (command not found)
                 return false;
             }
         }
@@ -2969,7 +2969,7 @@ class DocumentManager
         }
 
         $parentData = [];
-        if ($folderId !== false) {
+        if (false !== $folderId) {
             $parentData = self::get_document_data_by_id(
                 $folderId,
                 $course_info['code'],
@@ -2998,7 +2998,7 @@ class DocumentManager
         }
 
         $levelCondition = '';
-        if ($folderId === false) {
+        if (false === $folderId) {
             $levelCondition = " AND docs.path NOT LIKE'/%/%'";
         }
 
@@ -3019,8 +3019,8 @@ class DocumentManager
         $resources = Database::store_result($res_doc, 'ASSOC');
 
         $return = '';
-        if ($lp_id == false && $addCloseButton) {
-            if ($folderId === false) {
+        if (false == $lp_id && $addCloseButton) {
+            if (false === $folderId) {
                 $return .= Display::div(
                     Display::url(
                         Display::return_icon('close.png', get_lang('Close'), [], ICON_SIZE_SMALL),
@@ -3043,7 +3043,7 @@ class DocumentManager
                     api_get_user_id()
                 );
 
-                if ($showInvisibleFiles === false) {
+                if (false === $showInvisibleFiles) {
                     if (!$is_visible) {
                         continue;
                     }
@@ -3056,7 +3056,7 @@ class DocumentManager
         $label = get_lang('Documents');
 
         $documents = [];
-        if ($folderId === false) {
+        if (false === $folderId) {
             $documents[$label] = [
                 'id' => 0,
                 'files' => $newResources,
@@ -3084,7 +3084,7 @@ class DocumentManager
 
         $return .= $writeResult;
         $lpAjaxUrl = api_get_path(WEB_AJAX_PATH).'lp.ajax.php';
-        if ($lp_id === false) {
+        if (false === $lp_id) {
             $url = $lpAjaxUrl.'?a=get_documents&lp_id=&cidReq='.$course_info['code'];
             $return .= "<script>
             $(function() {
@@ -3187,7 +3187,7 @@ class DocumentManager
                         'title' => $key,
                     ];
 
-                    if ($folderId === false) {
+                    if (false === $folderId) {
                         $return .= self::parseFolder($folderId, $mainFolderResource, $lp_id);
                     }
 
@@ -3206,7 +3206,7 @@ class DocumentManager
                     $return .= '</div>';
                     $return .= '</ul>';
                 } else {
-                    if ($resource['filetype'] === 'folder') {
+                    if ('folder' === $resource['filetype']) {
                         $return .= self::parseFolder($folderId, $resource, $lp_id);
                     } else {
                         $return .= self::parseFile(
@@ -3262,7 +3262,7 @@ class DocumentManager
             $sessionId
         );
 
-        if ($sessionId != 0 && !$document_data) {
+        if (0 != $sessionId && !$document_data) {
             $document_data = self::get_document_data_by_id(
                 $doc_id,
                 $courseCode,
@@ -3277,7 +3277,7 @@ class DocumentManager
                 return true;
             }
 
-            if ($document_data['parent_id'] == false || empty($document_data['parent_id'])) {
+            if (false == $document_data['parent_id'] || empty($document_data['parent_id'])) {
                 if (!empty($groupId)) {
                     return true;
                 }
@@ -3330,7 +3330,7 @@ class DocumentManager
         $if_exists = '',
         $simulation = false
     ) {
-        if (api_get_setting('search_enabled') !== 'true') {
+        if ('true' !== api_get_setting('search_enabled')) {
             return false;
         }
         if (empty($docid) or $docid != intval($docid)) {
@@ -3349,7 +3349,7 @@ class DocumentManager
 
         $qry = "SELECT path, title FROM $table_document WHERE c_id = $course_id AND id = '$docid' LIMIT 1";
         $result = Database::query($qry);
-        if (Database::num_rows($result) == 1) {
+        if (1 == Database::num_rows($result)) {
             $row = Database::fetch_array($result);
             $doc_path = api_get_path(SYS_COURSE_PATH).$course_dir.$row['path'];
             //TODO: mime_content_type is deprecated, fileinfo php extension is enabled by default as of PHP 5.3.0
@@ -3425,7 +3425,7 @@ class DocumentManager
                  * overwriten. Now all work is done at
                  * handle_uploaded_document() and it's difficult to verify it
                  */
-                if (!empty($if_exists) && $if_exists == 'overwrite') {
+                if (!empty($if_exists) && 'overwrite' == $if_exists) {
                     // Overwrite the file on search engine
                     // Actually, it consists on a delete of terms from db,
                     // insert new ones, create a new search engine document,
@@ -3620,50 +3620,50 @@ class DocumentManager
         $extensionListFromDrawing = ['odg'];
         $extensionListToDrawing = ['svg', 'swf'];
 
-        if ($mode === 'from') {
-            if ($format === 'text') {
+        if ('from' === $mode) {
+            if ('text' === $format) {
                 $extensionList = array_merge($extensionList, $extensionListFromText);
-            } elseif ($format === 'spreadsheet') {
+            } elseif ('spreadsheet' === $format) {
                 $extensionList = array_merge($extensionList, $extensionListFromSpreadsheet);
-            } elseif ($format === 'presentation') {
+            } elseif ('presentation' === $format) {
                 $extensionList = array_merge($extensionList, $extensionListFromPresentation);
-            } elseif ($format === 'drawing') {
+            } elseif ('drawing' === $format) {
                 $extensionList = array_merge($extensionList, $extensionListFromDrawing);
-            } elseif ($format === 'all') {
+            } elseif ('all' === $format) {
                 $extensionList = array_merge($extensionList, $extensionListFromText);
                 $extensionList = array_merge($extensionList, $extensionListFromSpreadsheet);
                 $extensionList = array_merge($extensionList, $extensionListFromPresentation);
                 $extensionList = array_merge($extensionList, $extensionListFromDrawing);
             }
-        } elseif ($mode === 'to') {
-            if ($format === 'text') {
+        } elseif ('to' === $mode) {
+            if ('text' === $format) {
                 $extensionList = array_merge($extensionList, $extensionListToText);
-            } elseif ($format === 'spreadsheet') {
+            } elseif ('spreadsheet' === $format) {
                 $extensionList = array_merge($extensionList, $extensionListToSpreadsheet);
-            } elseif ($format === 'presentation') {
+            } elseif ('presentation' === $format) {
                 $extensionList = array_merge($extensionList, $extensionListToPresentation);
-            } elseif ($format === 'drawing') {
+            } elseif ('drawing' === $format) {
                 $extensionList = array_merge($extensionList, $extensionListToDrawing);
-            } elseif ($format === 'all') {
+            } elseif ('all' === $format) {
                 $extensionList = array_merge($extensionList, $extensionListToText);
                 $extensionList = array_merge($extensionList, $extensionListToSpreadsheet);
                 $extensionList = array_merge($extensionList, $extensionListToPresentation);
                 $extensionList = array_merge($extensionList, $extensionListToDrawing);
             }
-        } elseif ($mode === 'all') {
-            if ($format === 'text') {
+        } elseif ('all' === $mode) {
+            if ('text' === $format) {
                 $extensionList = array_merge($extensionList, $extensionListFromText);
                 $extensionList = array_merge($extensionList, $extensionListToText);
-            } elseif ($format === 'spreadsheet') {
+            } elseif ('spreadsheet' === $format) {
                 $extensionList = array_merge($extensionList, $extensionListFromSpreadsheet);
                 $extensionList = array_merge($extensionList, $extensionListToSpreadsheet);
-            } elseif ($format === 'presentation') {
+            } elseif ('presentation' === $format) {
                 $extensionList = array_merge($extensionList, $extensionListFromPresentation);
                 $extensionList = array_merge($extensionList, $extensionListToPresentation);
-            } elseif ($format === 'drawing') {
+            } elseif ('drawing' === $format) {
                 $extensionList = array_merge($extensionList, $extensionListFromDrawing);
                 $extensionList = array_merge($extensionList, $extensionListToDrawing);
-            } elseif ($format === 'all') {
+            } elseif ('all' === $format) {
                 $extensionList = array_merge($extensionList, $extensionListFromText);
                 $extensionList = array_merge($extensionList, $extensionListToText);
                 $extensionList = array_merge($extensionList, $extensionListFromSpreadsheet);
@@ -3717,15 +3717,15 @@ class DocumentManager
         ];
         $systemFolder = api_get_course_setting('show_system_folders');
 
-        if ($systemFolder == 1) {
+        if (1 == $systemFolder) {
             $foldersToAvoid = [];
         }
 
-        if (basename($path) == 'css') {
+        if ('css' == basename($path)) {
             return true;
         }
 
-        if ($is_certificate_mode == false) {
+        if (false == $is_certificate_mode) {
             //Certificate results
             if (strstr($path, 'certificates')) {
                 return true;
@@ -3733,7 +3733,7 @@ class DocumentManager
         }
 
         // Admin setting for Hide/Show the folders of all users
-        if (api_get_setting('show_users_folders') == 'false') {
+        if ('false' == api_get_setting('show_users_folders')) {
             $foldersToAvoid[] = '/shared_folder';
 
             if (strstr($path, 'shared_folder_session_')) {
@@ -3742,7 +3742,7 @@ class DocumentManager
         }
 
         // Admin setting for Hide/Show Default folders to all users
-        if (api_get_setting('show_default_folders') == 'false') {
+        if ('false' == api_get_setting('show_default_folders')) {
             $foldersToAvoid[] = '/images';
             $foldersToAvoid[] = '/flash';
             $foldersToAvoid[] = '/audio';
@@ -3750,7 +3750,7 @@ class DocumentManager
         }
 
         // Admin setting for Hide/Show chat history folder
-        if (api_get_setting('show_chat_folder') == 'false') {
+        if ('false' == api_get_setting('show_chat_folder')) {
             $foldersToAvoid[] = '/chat_files';
         }
 
@@ -3805,14 +3805,14 @@ class DocumentManager
 
         if (isset($settings['documents'])) {
             $portalDefaultVisibility = 'invisible';
-            if ($settings['documents'] == 'true') {
+            if ('true' == $settings['documents']) {
                 $portalDefaultVisibility = 'visible';
             }
 
             $defaultVisibility = $portalDefaultVisibility;
         }
 
-        if (api_get_setting('documents_default_visibility_defined_in_course') == 'true') {
+        if ('true' == api_get_setting('documents_default_visibility_defined_in_course')) {
             $courseVisibility = api_get_course_setting('documents_default_visibility', $courseCode);
             if (!empty($courseVisibility) && in_array($courseVisibility, ['visible', 'invisible'])) {
                 $defaultVisibility = $courseVisibility;
@@ -4263,11 +4263,11 @@ class DocumentManager
         $fileName = pathinfo($name, PATHINFO_FILENAME);
         $dir = pathinfo($name, PATHINFO_DIRNAME);
 
-        if ($dir == '.') {
+        if ('.' == $dir) {
             $dir = null;
         }
 
-        if (!empty($dir) && $dir != '/') {
+        if (!empty($dir) && '/' != $dir) {
             $dir = $dir.'/';
         }
 
@@ -4523,7 +4523,7 @@ class DocumentManager
                         $label = ' &mdash; '.$folder_titles[$folder];
                     }
                     $parent_select->addOption($label, $folder_id);
-                    if ($selected != '') {
+                    if ('' != $selected) {
                         $parent_select->setSelected($folder_id);
                     }
                 }
@@ -4541,7 +4541,7 @@ class DocumentManager
                         $label = str_repeat('&nbsp;&nbsp;&nbsp;', count($path_parts) - 2).' &mdash; '.$label;
                     }
                     $parent_select->addOption($label, $folder_id);
-                    if ($selected != '') {
+                    if ('' != $selected) {
                         $parent_select->setSelected($folder_id);
                     }
                 }
@@ -4587,7 +4587,7 @@ class DocumentManager
         $webODFList = self::get_web_odf_extension_list();
 
         // Get the title or the basename depending on what we're using
-        if ($document_data['title'] != '') {
+        if ('' != $document_data['title']) {
             $title = $document_data['title'];
         } else {
             $title = basename($document_data['path']);
@@ -4607,7 +4607,7 @@ class DocumentManager
         if ($addToEditor) {
             $classAddToEditor = 'select_to_ckeditor';
         }
-        $visibility_class = $visibility === false ? ' class="muted"' : ' class="'.$classAddToEditor.'" ';
+        $visibility_class = false === $visibility ? ' class="muted"' : ' class="'.$classAddToEditor.'" ';
 
         $forcedownload_link = '';
         $forcedownload_icon = '';
@@ -4616,19 +4616,19 @@ class DocumentManager
 
         if (!$show_as_icon) {
             // Build download link (icon)
-            $forcedownload_link = $filetype === 'folder'
+            $forcedownload_link = 'folder' === $filetype
                 ? $pageUrl.'?'.$courseParams.'&action=downloadfolder&id='.$document_data['id']
                 : $pageUrl.'?'.$courseParams.'&action=download&id='.$document_data['id'];
             // Folder download or file download?
-            $forcedownload_icon = $filetype === 'folder' ? 'save_pack.png' : 'save.png';
+            $forcedownload_icon = 'folder' === $filetype ? 'save_pack.png' : 'save.png';
             // Prevent multiple clicks on zipped folder download
-            $prevent_multiple_click = $filetype === 'folder' ? " onclick=\"javascript: if(typeof clic_$dbl_click_id == 'undefined' || !clic_$dbl_click_id) { clic_$dbl_click_id=true; window.setTimeout('clic_".($dbl_click_id++)."=false;',10000); } else { return false; }\"" : '';
+            $prevent_multiple_click = 'folder' === $filetype ? " onclick=\"javascript: if(typeof clic_$dbl_click_id == 'undefined' || !clic_$dbl_click_id) { clic_$dbl_click_id=true; window.setTimeout('clic_".($dbl_click_id++)."=false;',10000); } else { return false; }\"" : '';
         }
 
         $target = '_self';
         $is_browser_viewable_file = false;
 
-        if ($filetype === 'file') {
+        if ('file' === $filetype) {
             // Check the extension
             $ext = explode('.', $path);
             $ext = strtolower($ext[count($ext) - 1]);
@@ -4636,7 +4636,7 @@ class DocumentManager
             // HTML-files an some other types are shown in a frameset by default.
             $is_browser_viewable_file = self::isBrowserViewable($ext);
             if ($is_browser_viewable_file) {
-                if ($ext == 'pdf' || in_array($ext, $webODFList)) {
+                if ('pdf' == $ext || in_array($ext, $webODFList)) {
                     $url = $pageUrl.'?'.$courseParams.'&action=download&amp;id='.$document_data['id'];
                 } else {
                     $url = $basePageUrl.'showinframes.php?'.$courseParams.'&id='.$document_data['id'];
@@ -4656,31 +4656,31 @@ class DocumentManager
         $tooltip_title = $title;
         $tooltip_title_alt = $tooltip_title;
 
-        if ($filetype == 'link') {
+        if ('link' == $filetype) {
             $tooltip_title_alt = $title;
             $url = $document_data['comment'].'" target="_blank';
         }
 
-        if ($path === '/shared_folder') {
+        if ('/shared_folder' === $path) {
             $tooltip_title_alt = get_lang('Folders of users');
         } elseif (strstr($path, 'shared_folder_session_')) {
             $tooltip_title_alt = get_lang('Folders of users').' ('.api_get_session_name($sessionId).')';
         } elseif (strstr($tooltip_title, 'sf_user_')) {
             $userinfo = api_get_user_info(substr($tooltip_title, 8));
             $tooltip_title_alt = get_lang('User folder').' '.$userinfo['complete_name'];
-        } elseif ($path == '/chat_files') {
+        } elseif ('/chat_files' == $path) {
             $tooltip_title_alt = get_lang('Chat conversations history');
-        } elseif ($path == '/learning_path') {
+        } elseif ('/learning_path' == $path) {
             $tooltip_title_alt = get_lang('Learning paths');
-        } elseif ($path == '/video') {
+        } elseif ('/video' == $path) {
             $tooltip_title_alt = get_lang('Video');
-        } elseif ($path == '/audio') {
+        } elseif ('/audio' == $path) {
             $tooltip_title_alt = get_lang('Audio');
-        } elseif ($path == '/flash') {
+        } elseif ('/flash' == $path) {
             $tooltip_title_alt = get_lang('Flash');
-        } elseif ($path == '/images') {
+        } elseif ('/images' == $path) {
             $tooltip_title_alt = get_lang('Images');
-        } elseif ($path == '/images/gallery') {
+        } elseif ('/images/gallery' == $path) {
             $tooltip_title_alt = get_lang('Gallery');
         }
 
@@ -4692,10 +4692,10 @@ class DocumentManager
         $document_data['file_extension'] = $extension;
 
         if (!$show_as_icon) {
-            if ($filetype === 'folder') {
+            if ('folder' === $filetype) {
                 if ($isAllowedToEdit ||
                     $isAdmin ||
-                    api_get_setting('students_download_folders') == 'true'
+                    'true' == api_get_setting('students_download_folders')
                 ) {
                     // filter: when I am into a shared folder, I can only show "my shared folder" for donwload
                     if (self::is_shared_folder($curdirpath, $sessionId)) {
@@ -4703,26 +4703,26 @@ class DocumentManager
                             preg_match('/shared_folder_session_'.$sessionId.'\/sf_user_'.api_get_user_id().'$/', urldecode($forcedownload_link)) ||
                             $isAllowedToEdit || $isAdmin
                         ) {
-                            $force_download_html = ($size == 0) ? '' : '<a href="'.$forcedownload_link.'" style="float:right"'.$prevent_multiple_click.'>'.
+                            $force_download_html = (0 == $size) ? '' : '<a href="'.$forcedownload_link.'" style="float:right"'.$prevent_multiple_click.'>'.
                                 Display::return_icon($forcedownload_icon, get_lang('Download'), [], ICON_SIZE_SMALL).'</a>';
                         }
                     } elseif (!preg_match('/shared_folder/', urldecode($forcedownload_link)) ||
                         $isAllowedToEdit ||
                         $isAdmin
                     ) {
-                        $force_download_html = ($size == 0) ? '' : '<a href="'.$forcedownload_link.'" style="float:right"'.$prevent_multiple_click.'>'.
+                        $force_download_html = (0 == $size) ? '' : '<a href="'.$forcedownload_link.'" style="float:right"'.$prevent_multiple_click.'>'.
                             Display::return_icon($forcedownload_icon, get_lang('Download'), [], ICON_SIZE_SMALL).'</a>';
                     }
                 }
             } else {
-                $force_download_html = $size == 0 ? '' : '<a href="'.$forcedownload_link.'" style="float:right"'.$prevent_multiple_click.' download="'.$document_data['basename'].'">'.
+                $force_download_html = 0 == $size ? '' : '<a href="'.$forcedownload_link.'" style="float:right"'.$prevent_multiple_click.' download="'.$document_data['basename'].'">'.
                     Display::return_icon($forcedownload_icon, get_lang('Download'), [], ICON_SIZE_SMALL).'</a>';
             }
 
             $pdf_icon = '';
             if (!$isAllowedToEdit &&
-                api_get_setting('students_export2pdf') == 'true' &&
-                $filetype === 'file' &&
+                'true' == api_get_setting('students_export2pdf') &&
+                'file' === $filetype &&
                 in_array($extension, ['html', 'htm'])
             ) {
                 $pdf_icon = ' <a style="float:right".'.$prevent_multiple_click.' href="'.$pageUrl.'?'.$courseParams.'&action=export_to_pdf&id='.$document_data['id'].'&curdirpath='.$curdirpath.'">'.
@@ -4739,14 +4739,14 @@ class DocumentManager
                 $open_in_new_window_link = '';
                 $send_to = '';
                 $pdf_icon = '';
-                if ($filetype === 'folder') {
+                if ('folder' === $filetype) {
                     $url = $editorUrl.'/'.$document_data['id'].'/?'.api_get_cidreq();
                 } else {
                     $url = $documentWebPath.str_replace('%2F', '/', $url_path).'?'.$courseParams;
                 }
             }
 
-            if ($filetype === 'file') {
+            if ('file' === $filetype) {
                 // Sound preview
                 if (preg_match('/mp3$/i', urldecode($checkExtension)) ||
                     (preg_match('/wav$/i', urldecode($checkExtension))) ||
@@ -4776,7 +4776,7 @@ class DocumentManager
                         $url = $documentWebPath.$url_path;
                     }
 
-                    if ($visibility == false) {
+                    if (false == $visibility) {
                         $class = ' ajax text-muted ';
                         if ($addToEditor) {
                             $class = ' text-muted not_select_to_ckeditor';
@@ -4798,7 +4798,7 @@ class DocumentManager
                 } else {
                     // For a "PDF Download" of the file.
                     $pdfPreview = null;
-                    if ($ext != 'pdf' && !in_array($ext, $webODFList)) {
+                    if ('pdf' != $ext && !in_array($ext, $webODFList)) {
                         $url = $basePageUrl.'showinframes.php?'.$courseParams.'&id='.$document_data['id'];
                     } else {
                         $pdfPreview = Display::url(
@@ -4819,10 +4819,10 @@ class DocumentManager
             $urlDecoded = urldecode($checkExtension);
             // Icon column
             if (preg_match('/shared_folder/', $urlDecoded) &&
-                preg_match('/shared_folder$/', $urlDecoded) == false &&
-                preg_match('/shared_folder_session_'.$sessionId.'$/', urldecode($url)) == false
+                false == preg_match('/shared_folder$/', $urlDecoded) &&
+                false == preg_match('/shared_folder_session_'.$sessionId.'$/', urldecode($url))
             ) {
-                if ($filetype === 'file') {
+                if ('file' === $filetype) {
                     // Sound preview
                     if (preg_match('/mp3$/i', $urlDecoded) ||
                         preg_match('/wav$/i', $urlDecoded) ||
@@ -4860,7 +4860,7 @@ class DocumentManager
                     '</a>';
                 }
             } else {
-                if ($filetype === 'file') {
+                if ('file' === $filetype) {
                     // Sound preview with jplayer
                     if (preg_match('/mp3$/i', $urlDecoded) ||
                         (preg_match('/wav$/i', $urlDecoded)) ||
@@ -4915,14 +4915,14 @@ class DocumentManager
             $isAllowedToEdit = api_is_allowed_to_edit(null, true);
         }
         $user_image = false;
-        if ($type == 'file') {
+        if ('file' == $type) {
             $icon = choose_image($basename);
             $basename = substr(strrchr($basename, '.'), 1);
-        } elseif ($type == 'link') {
+        } elseif ('link' == $type) {
             $icon = 'clouddoc.png';
             $basename = get_lang('Cloud file link');
         } else {
-            if ($path == '/shared_folder') {
+            if ('/shared_folder' == $path) {
                 $icon = 'folder_users.png';
                 if ($isAllowedToEdit) {
                     $basename = get_lang('INFORMATION VISIBLE TO THE TEACHER ONLY:
@@ -4947,7 +4947,7 @@ The users folder contains a folder for each user who has accessed it through the
             } else {
                 $icon = 'folder_document.png';
 
-                if ($path == '/audio') {
+                if ('/audio' == $path) {
                     $icon = 'folder_audio.png';
                     if ($isAllowedToEdit) {
                         $basename = get_lang('INFORMATION VISIBLE TO THE TEACHER ONLY:
@@ -4955,7 +4955,7 @@ This folder contains the default archives. You can clear files or add new ones, 
                     } else {
                         $basename = get_lang('Audio');
                     }
-                } elseif ($path == '/flash') {
+                } elseif ('/flash' == $path) {
                     $icon = 'folder_flash.png';
                     if ($isAllowedToEdit) {
                         $basename = get_lang('INFORMATION VISIBLE TO THE TEACHER ONLY:
@@ -4963,7 +4963,7 @@ This folder contains the default archives. You can clear files or add new ones, 
                     } else {
                         $basename = get_lang('Flash');
                     }
-                } elseif ($path == '/images') {
+                } elseif ('/images' == $path) {
                     $icon = 'folder_images.png';
                     if ($isAllowedToEdit) {
                         $basename = get_lang('INFORMATION VISIBLE TO THE TEACHER ONLY:
@@ -4971,7 +4971,7 @@ This folder contains the default archives. You can clear files or add new ones, 
                     } else {
                         $basename = get_lang('Images');
                     }
-                } elseif ($path == '/video') {
+                } elseif ('/video' == $path) {
                     $icon = 'folder_video.png';
                     if ($isAllowedToEdit) {
                         $basename = get_lang('INFORMATION VISIBLE TO THE TEACHER ONLY:
@@ -4979,7 +4979,7 @@ This folder contains the default archives. You can clear files or add new ones, 
                     } else {
                         $basename = get_lang('Video');
                     }
-                } elseif ($path == '/images/gallery') {
+                } elseif ('/images/gallery' == $path) {
                     $icon = 'folder_gallery.png';
                     if ($isAllowedToEdit) {
                         $basename = get_lang('INFORMATION VISIBLE TO THE TEACHER ONLY:
@@ -4987,7 +4987,7 @@ This folder contains the default archives. You can clear files or add new ones, 
                     } else {
                         $basename = get_lang('Gallery');
                     }
-                } elseif ($path == '/chat_files') {
+                } elseif ('/chat_files' == $path) {
                     $icon = 'folder_chat.png';
                     if ($isAllowedToEdit) {
                         $basename = get_lang('INFORMATION VISIBLE TO THE TEACHER ONLY:
@@ -4995,7 +4995,7 @@ This folder contains all sessions that have been opened in the chat. Although th
                     } else {
                         $basename = get_lang('Chat conversations history');
                     }
-                } elseif ($path == '/learning_path') {
+                } elseif ('/learning_path' == $path) {
                     $icon = 'folder_learningpath.png';
                     if ($isAllowedToEdit) {
                         $basename = get_lang('HelpFolderLearning paths');
@@ -5032,7 +5032,7 @@ This folder contains all sessions that have been opened in the chat. Although th
         $is_read_only = $document_data['readonly'];
         $path = $document_data['path'];
 
-        if ($type == 'link') {
+        if ('link' == $type) {
             $parent_id = self::get_document_id(
                 api_get_course_info(),
                 rtrim($path, '/'),
@@ -5059,7 +5059,7 @@ This folder contains all sessions that have been opened in the chat. Although th
         $curdirpath = urlencode($curdirpath);
         $extension = pathinfo($path, PATHINFO_EXTENSION);
         //@todo Implement remote support for converter
-        $usePpt2lp = api_get_setting('service_ppt2lp', 'active') == 'true' && api_get_setting('service_ppt2lp', 'host') == 'localhost';
+        $usePpt2lp = 'true' == api_get_setting('service_ppt2lp', 'active') && 'localhost' == api_get_setting('service_ppt2lp', 'host');
         $formatTypeList = self::getFormatTypeListConvertor('from', $extension);
         $formatType = current($formatTypeList);
 
@@ -5097,15 +5097,15 @@ This folder contains all sessions that have been opened in the chat. Although th
             }
         }
 
-        if ($type == 'file' && ($extension == 'html' || $extension == 'htm')) {
-            if ($is_template == 0) {
-                if ((isset($_GET['curdirpath']) && $_GET['curdirpath'] != '/certificates') || !isset($_GET['curdirpath'])) {
+        if ('file' == $type && ('html' == $extension || 'htm' == $extension)) {
+            if (0 == $is_template) {
+                if ((isset($_GET['curdirpath']) && '/certificates' != $_GET['curdirpath']) || !isset($_GET['curdirpath'])) {
                     $modify_icons[] = Display::url(
                         Display::return_icon('wizard.png', get_lang('Add as a template')),
                         api_get_self()."?$courseParams&curdirpath=$curdirpath&add_as_template=$id"
                     );
                 }
-                if ((isset($_GET['curdirpath']) && $_GET['curdirpath'] == '/certificates') || $is_certificate_mode) {//allow attach certificate to course
+                if ((isset($_GET['curdirpath']) && '/certificates' == $_GET['curdirpath']) || $is_certificate_mode) {//allow attach certificate to course
                     $visibility_icon_certificate = 'nocertificate';
                     if (self::get_default_certificate_id(api_get_course_int_id()) == $id) {
                         $visibility_icon_certificate = 'certificate';
@@ -5163,44 +5163,44 @@ This folder contains all sessions that have been opened in the chat. Although th
         $options = [];
 
         // Group documents cannot be uploaded in the root
-        if ($group_dir == '') {
-            if ($curdirpath != '/') {
+        if ('' == $group_dir) {
+            if ('/' != $curdirpath) {
                 $options['/'] = get_lang('Documents');
             }
 
             if (is_array($folders)) {
                 foreach ($folders as &$folder) {
                     // Hide some folders
-                    if ($folder == '/HotPotatoes_files' ||
-                        $folder == '/certificates' ||
-                        basename($folder) == 'css'
+                    if ('/HotPotatoes_files' == $folder ||
+                        '/certificates' == $folder ||
+                        'css' == basename($folder)
                     ) {
                         continue;
                     }
                     // Admin setting for Hide/Show the folders of all users
-                    if (api_get_setting('show_users_folders') == 'false' &&
+                    if ('false' == api_get_setting('show_users_folders') &&
                         (strstr($folder, '/shared_folder') || strstr($folder, 'shared_folder_session_'))
                     ) {
                         continue;
                     }
 
                     // Admin setting for Hide/Show Default folders to all users
-                    if (api_get_setting('show_default_folders') == 'false' &&
+                    if ('false' == api_get_setting('show_default_folders') &&
                         (
-                            $folder == '/images' ||
-                            $folder == '/flash' ||
-                            $folder == '/audio' ||
-                            $folder == '/video' ||
+                            '/images' == $folder ||
+                            '/flash' == $folder ||
+                            '/audio' == $folder ||
+                            '/video' == $folder ||
                             strstr($folder, '/images/gallery') ||
-                            $folder == '/video/flv'
+                            '/video/flv' == $folder
                         )
                     ) {
                         continue;
                     }
 
                     // Admin setting for Hide/Show chat history folder
-                    if (api_get_setting('show_chat_folder') == 'false' &&
-                        $folder == '/chat_files') {
+                    if ('false' == api_get_setting('show_chat_folder') &&
+                        '/chat_files' == $folder) {
                         continue;
                     }
 
@@ -5230,7 +5230,7 @@ This folder contains all sessions that have been opened in the chat. Although th
                     // Cannot copy dir into his own subdir
                     $path_displayed = self::get_titles_of_path($folder);
                     $display_folder = substr($path_displayed, strlen($group_dir));
-                    $display_folder = $display_folder == '' ? get_lang('Documents') : $display_folder;
+                    $display_folder = '' == $display_folder ? get_lang('Documents') : $display_folder;
                     $options[$folder] = $display_folder;
                 }
             }
@@ -5311,7 +5311,7 @@ This folder contains all sessions that have been opened in the chat. Although th
     public static function is_shared_folder($curdirpath, $sessionId)
     {
         $clean_curdirpath = Security::remove_XSS($curdirpath);
-        if ($clean_curdirpath == '/shared_folder') {
+        if ('/shared_folder' == $clean_curdirpath) {
             return true;
         } elseif ($clean_curdirpath == '/shared_folder_session_'.$sessionId) {
             return true;
@@ -5464,7 +5464,7 @@ This folder contains all sessions that have been opened in the chat. Although th
      */
     public static function search_keyword($document_name, $keyword)
     {
-        if (api_strripos($document_name, $keyword) !== false) {
+        if (false !== api_strripos($document_name, $keyword)) {
             return true;
         } else {
             return false;
@@ -5505,37 +5505,37 @@ This folder contains all sessions that have been opened in the chat. Although th
         }
 
         //check native support (Explorer, Opera, Firefox, Chrome, Safari)
-        if ($file_extension == "pdf") {
+        if ("pdf" == $file_extension) {
             return api_browser_support('pdf');
-        } elseif ($file_extension == "mp3") {
+        } elseif ("mp3" == $file_extension) {
             return api_browser_support('mp3');
-        } elseif ($file_extension == "mp4") {
+        } elseif ("mp4" == $file_extension) {
             return api_browser_support('mp4');
-        } elseif ($file_extension == "ogg" || $file_extension == "ogx" || $file_extension == "ogv" || $file_extension == "oga") {
+        } elseif ("ogg" == $file_extension || "ogx" == $file_extension || "ogv" == $file_extension || "oga" == $file_extension) {
             return api_browser_support('ogg');
-        } elseif ($file_extension == "svg") {
+        } elseif ("svg" == $file_extension) {
             return api_browser_support('svg');
-        } elseif ($file_extension == "mpg" || $file_extension == "mpeg") {
+        } elseif ("mpg" == $file_extension || "mpeg" == $file_extension) {
             return api_browser_support('mpg');
-        } elseif ($file_extension == "mov") {
+        } elseif ("mov" == $file_extension) {
             return api_browser_support('mov');
-        } elseif ($file_extension == "wav") {
+        } elseif ("wav" == $file_extension) {
             return api_browser_support('wav');
-        } elseif ($file_extension == "mid" || $file_extension == "kar") {
+        } elseif ("mid" == $file_extension || "kar" == $file_extension) {
             return api_browser_support('mid');
-        } elseif ($file_extension == "avi") {
+        } elseif ("avi" == $file_extension) {
             return api_browser_support('avi');
-        } elseif ($file_extension == "wma") {
+        } elseif ("wma" == $file_extension) {
             return api_browser_support('wma');
-        } elseif ($file_extension == "wmv") {
+        } elseif ("wmv" == $file_extension) {
             return api_browser_support('wmv');
-        } elseif ($file_extension == "tif" || $file_extension == "tiff") {
+        } elseif ("tif" == $file_extension || "tiff" == $file_extension) {
             return api_browser_support('tif');
-        } elseif ($file_extension == "mov") {
+        } elseif ("mov" == $file_extension) {
             return api_browser_support('mov');
-        } elseif ($file_extension == "au") {
+        } elseif ("au" == $file_extension) {
             return api_browser_support('au');
-        } elseif ($file_extension == "webm") {
+        } elseif ("webm" == $file_extension) {
             return api_browser_support('webm');
         }
 
@@ -5773,7 +5773,7 @@ This folder contains all sessions that have been opened in the chat. Although th
                 Database::query($query);
                 break;
             case 'update':
-                if ($new_path[0] == '.') {
+                if ('.' == $new_path[0]) {
                     $new_path = substr($new_path, 1);
                 }
                 $new_path = str_replace('//', '/', $new_path);
@@ -5815,7 +5815,7 @@ This folder contains all sessions that have been opened in the chat. Although th
         // Modifications by Ivan Tcholakov, 04-MAY-2009.
         $result = [];
         $imageResize = Session::read('image_resizing');
-        if ($imageResize == 'resizing' || $slideshow == 1) {
+        if ('resizing' == $imageResize || 1 == $slideshow) {
             $new_sizes = api_resize_image($image, $target_width, $target_height);
             $result[] = $new_sizes['height'];
             $result[] = $new_sizes['width'];
@@ -5906,7 +5906,7 @@ This folder contains all sessions that have been opened in the chat. Although th
         $courseId = (int) $courseInfo['real_id'];
         $path = Database::escape_string($path);
 
-        if (substr($path, -1) != '/') {
+        if ('/' != substr($path, -1)) {
             // Add final slash to path if not present
             $path .= '/';
         }
@@ -6021,7 +6021,7 @@ This folder contains all sessions that have been opened in the chat. Although th
         $result = Database::query($sql);
 
         $list = [];
-        if (Database::num_rows($result) != 0) {
+        if (0 != Database::num_rows($result)) {
             while ($row = Database::fetch_array($result, 'ASSOC')) {
                 $row['code_path'] = $row['code'].':'.$row['path'];
                 $list[] = $row;
@@ -6053,7 +6053,7 @@ This folder contains all sessions that have been opened in the chat. Although th
         $title = $document->getTitle();
 
         // Only create a ResourceFile if there's a file involved
-        if ($fileType === 'file') {
+        if ('file' === $fileType) {
             $resourceFile = $resourceNode->getResourceFile();
             if (empty($resourceFile)) {
                 $resourceFile = new ResourceFile();
@@ -6293,11 +6293,11 @@ This folder contains all sessions that have been opened in the chat. Although th
                 false,
                 $userIsSubscribed
             );
-            $invisibility_span_open = $is_visible == 0 ? '<span class="muted">' : '';
-            $invisibility_span_close = $is_visible == 0 ? '</span>' : '';
+            $invisibility_span_open = 0 == $is_visible ? '<span class="muted">' : '';
+            $invisibility_span_close = 0 == $is_visible ? '</span>' : '';
             $size = 1;
             // Get the title or the basename depending on what we're using
-            if ($document_data['title'] != '') {
+            if ('' != $document_data['title']) {
                 $document_name = $document_data['title'];
             } else {
                 $document_name = basename($document_data['path']);
@@ -6331,7 +6331,7 @@ This folder contains all sessions that have been opened in the chat. Although th
             }
 
             // Hack in order to avoid the download icon appearing on cloud links
-            if ($document_data['filetype'] == 'link') {
+            if ('link' == $document_data['filetype']) {
                 $size = 0;
             }
 
@@ -6368,7 +6368,7 @@ This folder contains all sessions that have been opened in the chat. Although th
                 .nl2br(htmlspecialchars($document_data['comment'], ENT_QUOTES, 'utf-8'))
                 .'</i>'.$invisibility_span_close.$user_link;
 
-            if ($document_data['filetype'] == 'folder') {
+            if ('folder' == $document_data['filetype']) {
                 $displaySize = '<span id="document_size_'.$document_data['id']
                     .'" data-path= "'.$document_data['path']
                     .'" class="document_size"></span>';
@@ -6518,12 +6518,12 @@ This folder contains all sessions that have been opened in the chat. Although th
         );
 
         $visibilityClass = null;
-        if ($visibility == 0) {
+        if (0 == $visibility) {
             $visibilityClass = ' text-muted ';
         }
         $return = null;
 
-        if ($lp_id == false) {
+        if (false == $lp_id) {
             $return .= '<li class="doc_resource '.$visibilityClass.' " data_id="'.$documentId.'" data_type="document" title="'.$my_file_title.'" >';
         } else {
             $return .= '<li class="doc_resource lp_resource_element '.$visibilityClass.' " data_id="'.$documentId.'" data_type="document" title="'.$my_file_title.'" >';
@@ -6581,7 +6581,7 @@ This folder contains all sessions that have been opened in the chat. Although th
         // if in LP, hidden folder are displayed in grey
         $folder_class_hidden = '';
         if ($lp_id) {
-            if (isset($resource['visible']) && $resource['visible'] == 0) {
+            if (isset($resource['visible']) && 0 == $resource['visible']) {
                 $folder_class_hidden = ' doc_folder_hidden'; // in base.css
             }
         }
@@ -6604,7 +6604,7 @@ This folder contains all sessions that have been opened in the chat. Although th
         $return .= '</li>';
 
         if (empty($path)) {
-            if ($folderId == false) {
+            if (false == $folderId) {
                 $return .= '<div id="res_'.$resource['id'].'" >';
             } else {
                 $return .= '<div id="res_'.$resource['id'].'" style="display: none;" >';
@@ -6639,22 +6639,22 @@ This folder contains all sessions that have been opened in the chat. Although th
             }
 
             if (
-                $extension == 'svg' && api_browser_support('svg') &&
-                api_get_setting('enabled_support_svg') == 'true'
+                'svg' == $extension && api_browser_support('svg') &&
+                'true' == api_get_setting('enabled_support_svg')
             ) {
                 return Display::url($iconEn, "edit_draw.php?$courseParams&id=$documentId");
             }
 
             if (
                 in_array($extension, $webOdfExtensionList) &&
-                api_get_configuration_value('enabled_support_odf') === true
+                true === api_get_configuration_value('enabled_support_odf')
             ) {
                 return Display::url($iconEn, "edit_odf.php?$courseParams&id=$documentId");
             }
 
             if (
                 in_array($extension, ['png', 'jpg', 'jpeg', 'bmp', 'gif', 'pxd']) &&
-                    api_get_setting('enabled_support_pixlr') == 'true'
+                    'true' == api_get_setting('enabled_support_pixlr')
             ) {
                 return Display::url($iconEn, "edit_paint.php?$courseParams&id=$documentId");
             }
@@ -6677,22 +6677,22 @@ This folder contains all sessions that have been opened in the chat. Although th
         }
 
         if (
-            $extension == 'svg' && api_browser_support('svg') &&
-            api_get_setting('enabled_support_svg') == 'true'
+            'svg' == $extension && api_browser_support('svg') &&
+            'true' == api_get_setting('enabled_support_svg')
         ) {
             return Display::url($iconEn, "edit_draw.php?$courseParams&id=$documentId");
         }
 
         if (
             in_array($extension, $webOdfExtensionList) &&
-            api_get_configuration_value('enabled_support_odf') === true
+            true === api_get_configuration_value('enabled_support_odf')
         ) {
             return Display::url($iconEn, "edit_odf.php?$courseParams&id=$documentId");
         }
 
         if (
             in_array($extension, ['png', 'jpg', 'jpeg', 'bmp', 'gif', 'pxd']) &&
-                api_get_setting('enabled_support_pixlr') == 'true'
+                'true' == api_get_setting('enabled_support_pixlr')
         ) {
             return Display::url($iconEn, "edit_paint.php?$courseParams&id=$documentId");
         }
@@ -6758,8 +6758,8 @@ This folder contains all sessions that have been opened in the chat. Although th
         $isCertificateMode,
         $parentId
     ) {
-        $visibility_icon = $visibility == 0 ? 'invisible' : 'visible';
-        $visibility_command = $visibility == 0 ? 'set_visible' : 'set_invisible';
+        $visibility_icon = 0 == $visibility ? 'invisible' : 'visible';
+        $visibility_command = 0 == $visibility ? 'set_visible' : 'set_invisible';
         $courseParams = api_get_cidreq();
 
         if ($isReadOnly) {
@@ -6775,7 +6775,7 @@ This folder contains all sessions that have been opened in the chat. Although th
         }
 
         if (api_is_allowed_to_edit() || api_is_platform_admin()) {
-            $tip_visibility = $visibility_icon == 'invisible' ? get_lang('Show') : get_lang('Hide');
+            $tip_visibility = 'invisible' == $visibility_icon ? get_lang('Show') : get_lang('Hide');
 
             return Display::url(
                 Display::return_icon($visibility_icon.'.png', $tip_visibility),
@@ -6836,7 +6836,7 @@ This folder contains all sessions that have been opened in the chat. Although th
 
         if (
             isset($_GET['curdirpath']) &&
-            $_GET['curdirpath'] == '/certificates' &&
+            '/certificates' == $_GET['curdirpath'] &&
             self::get_default_certificate_id(api_get_course_int_id()) == $id
         ) {
             return $btn;

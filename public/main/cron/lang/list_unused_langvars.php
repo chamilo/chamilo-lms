@@ -1,8 +1,6 @@
 <?php /* For licensing terms, see /license.txt */
 /**
  * Cron script to list unused, but defined, language variables.
- *
- * @package chamilo.cron.lang
  */
 /**
  * Includes and declarations.
@@ -40,7 +38,7 @@ foreach ($files as $file) {
     //echo 'Analyzing '.$shortFile."<br />";
     $lines = file($file);
     $isDataSQL = false;
-    if (substr($file, -21) === 'main/install/data.sql') {
+    if ('main/install/data.sql' === substr($file, -21)) {
         $isDataSQL = true;
     }
     // Browse lines inside file $file
@@ -56,7 +54,7 @@ foreach ($files as $file) {
             $res = preg_match_all('/\'(\w*)\',/', $line, $myTerms);
             if ($res > 0) {
                 foreach ($myTerms[1] as $term) {
-                    if (substr($term, 0, 4) == 'lang') {
+                    if ('lang' == substr($term, 0, 4)) {
                         $term = substr($term, 4);
                     }
                     $usedTerms[$term] = $shortFile;
@@ -67,7 +65,7 @@ foreach ($files as $file) {
             $res = preg_match_all('/get_lang\(\'(\\w*)\'\)/', $line, $myTerms);
             if ($res > 0) {
                 foreach ($myTerms[1] as $term) {
-                    if (substr($term, 0, 4) == 'lang') {
+                    if ('lang' == substr($term, 0, 4)) {
                         $term = substr($term, 4);
                     }
                     $usedTerms[$term] = $shortFile;
@@ -82,7 +80,7 @@ foreach ($files as $file) {
                 $res = preg_match_all('/\{\s*[\'"](\w*)[\'"]\s*\|\s*get_lang\s*(\|\s*\w*(\s*\([\w_\.,\s]*\))?\s*)?\}/', $line, $myTerms);
                 if ($res > 0) {
                     foreach ($myTerms[1] as $term) {
-                        if (substr($term, 0, 4) == 'lang') {
+                        if ('lang' == substr($term, 0, 4)) {
                             $term = substr($term, 4);
                         }
                         $usedTerms[$term] = $shortFile;
@@ -94,7 +92,7 @@ foreach ($files as $file) {
                 $res = preg_match_all('/\{\s*[\w\.]*\([\'"](\w*)[\'"]\s*\|\s*get_lang\s*(,\s*[\w_\.,\s\|\'"]*\s*)?\)\s*\}/', $line, $myTerms);
                 if ($res > 0) {
                     foreach ($myTerms[1] as $term) {
-                        if (substr($term, 0, 4) == 'lang') {
+                        if ('lang' == substr($term, 0, 4)) {
                             $term = substr($term, 4);
                         }
                         $usedTerms[$term] = $shortFile;
@@ -117,7 +115,7 @@ if (count($usedTerms) < 1) {
 $i = 1;
 foreach ($defined_terms as $term => $file) {
     // remove "lang" prefix just in case
-    if (substr($term, 0, 4) == 'lang') {
+    if ('lang' == substr($term, 0, 4)) {
         $term = substr($term, 4);
     }
     if (!isset($usedTerms[$term])) {

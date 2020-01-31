@@ -1,9 +1,6 @@
 <?php
 /* For licensing terms, see /license.txt */
 
-/**
- *   @package chamilo.admin
- */
 // resetting the course id
 $cidReset = true;
 
@@ -22,7 +19,7 @@ $interbreadcrumb[] = [
 // Setting the name of the tool
 $tool_name = get_lang('Subscribe students to session(s)');
 $add_type = 'multiple';
-if (isset($_REQUEST['add_type']) && $_REQUEST['add_type'] != '') {
+if (isset($_REQUEST['add_type']) && '' != $_REQUEST['add_type']) {
     $add_type = Security::remove_XSS($_REQUEST['add_type']);
 }
 $form_sent = 0;
@@ -34,7 +31,7 @@ SessionManager::protectSession($id);
 $htmlResult = '';
 if (isset($_POST['form_sent']) && $_POST['form_sent']) {
     $form_sent = $_POST['form_sent'];
-    if ($form_sent == 1) {
+    if (1 == $form_sent) {
         $sessionSourceList = $_POST['sessions'];
         $sessionDestinationList = $_POST['sessions_destination'];
         $result = SessionManager::copyStudentsFromSession(

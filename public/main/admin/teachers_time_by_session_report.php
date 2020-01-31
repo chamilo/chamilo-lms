@@ -7,8 +7,6 @@ use Doctrine\Common\Collections\Criteria;
 
 /**
  * Generate a teacher time report in platform by session only.
- *
- * @package chamilo.admin
  */
 $cidReset = true;
 

@@ -4,10 +4,6 @@
 /**
  * This is the tracking library for Chamilo.
  *
- * @package chamilo.reporting
- *
- * Calculates the time spent on the course
- *
  * @param int    $user_id     the user id
  * @param string $course_code the course code
  *
@@ -157,7 +153,7 @@ $form->display();
         </div><br />
         <div id="cev_cont_stats">
             <?php
-            if ($result_to_print != '') {
+            if ('' != $result_to_print) {
                 $rst = get_stats($user_id, $courseInfo, $session_id);
                 $foo_stats = '<strong>'.get_lang('Total').': </strong>'.$rst['total'].'<br />';
                 $foo_stats .= '<strong>'.get_lang('Average').': </strong>'.$rst['avg'].'<br />';

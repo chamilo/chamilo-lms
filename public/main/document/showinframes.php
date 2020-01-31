@@ -19,8 +19,6 @@
  * @version 0.6
  *
  * @author Roan Embrechts (roan.embrechts@vub.ac.be)
- *
- * @package chamilo.document
  */
 require_once __DIR__.'/../inc/global.inc.php';
 
@@ -28,7 +26,7 @@ api_protect_course_script();
 
 $header_file = isset($_GET['file']) ? Security::remove_XSS($_GET['file']) : null;
 $document_id = (int) $_GET['id'];
-$originIsLearnpath = isset($_GET['origin']) && $_GET['origin'] === 'learnpathitem';
+$originIsLearnpath = isset($_GET['origin']) && 'learnpathitem' === $_GET['origin'];
 $courseInfo = api_get_course_info();
 $course_code = api_get_course_id();
 $session_id = api_get_session_id();
@@ -50,7 +48,7 @@ $document_data = DocumentManager::get_document_data_by_id(
     $session_id
 );
 
-if ($session_id != 0 && !$document_data) {
+if (0 != $session_id && !$document_data) {
     $document_data = DocumentManager::get_document_data_by_id(
         $document_id,
         $course_code,
@@ -76,7 +74,7 @@ $file_url_web = api_get_path(WEB_COURSE_PATH).$file_root;
 $is_allowed_to_edit = api_is_allowed_to_edit();
 //fix the screen when you try to access a protected course through the url
 $is_allowed_in_course = api_is_allowed_in_course() || $is_allowed_to_edit;
-if ($is_allowed_in_course == false) {
+if (false == $is_allowed_in_course) {
     api_not_allowed(true);
 }
 
@@ -105,7 +103,7 @@ $group_id = api_get_group_id();
 $current_group = GroupManager::get_group_properties($group_id);
 $current_group_name = $current_group['name'];
 
-if (isset($group_id) && $group_id != '') {
+if (isset($group_id) && '' != $group_id) {
     $interbreadcrumb[] = [
         'url' => api_get_path(WEB_CODE_PATH).'group/group.php?'.api_get_cidreq(),
         'name' => get_lang('Groups'),
@@ -191,7 +189,7 @@ if (in_array(strtolower($pathinfo['extension']), $web_odf_supported_files)) {
 $isChatFolder = false;
 if (isset($document_data['parents']) && isset($document_data['parents'][0])) {
     $chatFolder = $document_data['parents'][0];
-    if (isset($chatFolder['path']) && $chatFolder['path'] == '/chat_files') {
+    if (isset($chatFolder['path']) && '/chat_files' == $chatFolder['path']) {
         $isChatFolder = true;
     }
 }
@@ -250,7 +248,7 @@ if ($show_web_odf) {
     echo '<div class="text-center">';
     $browser = api_get_navigator();
     $pdfUrl = api_get_path(WEB_LIBRARY_PATH).'javascript/ViewerJS/index.html#'.$file_url;
-    if ($browser['name'] == 'Mozilla' && preg_match('|.*\.pdf|i', $header_file)) {
+    if ('Mozilla' == $browser['name'] && preg_match('|.*\.pdf|i', $header_file)) {
         $pdfUrl = $file_url;
     }
     echo '<div id="viewerJS">';

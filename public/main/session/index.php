@@ -9,7 +9,6 @@ use ChamiloSession as Session;
  *
  *   @author Julio Montoya <gugli100@gmail.com>  Beeznest
  */
-
 $cidReset = true;
 require_once __DIR__.'/../inc/global.inc.php';
 
@@ -24,7 +23,7 @@ $valueAllowVisitors = $sessionField->get_values_by_handler_and_field_variable(
     $session_id,
     'allow_visitors'
 );
-$allowVisitors = $valueAllowVisitors != false;
+$allowVisitors = false != $valueAllowVisitors;
 
 if (!$allowVisitors) {
     // Only users who are logged in can proceed.
@@ -56,7 +55,7 @@ foreach ($courseList as $course) {
         $course['real_id'],
         $session_id
     );
-    if ($status !== false || api_is_platform_admin() || $userIsGeneralCoach) {
+    if (false !== $status || api_is_platform_admin() || $userIsGeneralCoach) {
         $user_course_list[] = $course['real_id'];
     }
 
@@ -78,7 +77,7 @@ foreach ($courseList as $course) {
                 $exerciseId,
                 $session_id
             );
-            if ($visibility == 0) {
+            if (0 == $visibility) {
                 continue;
             }
             $exerciseListNew[] = $exerciseInfo;
@@ -182,7 +181,7 @@ if (!empty($courseList)) {
 }
 
 //If session is not active we stop de script
-if (api_is_coach_of_course_in_session($session_id) == false) {
+if (false == api_is_coach_of_course_in_session($session_id)) {
     //If session is not active we stop de script
     if (!api_is_allowed_to_session_edit()) {
         api_not_allowed(true);
@@ -193,7 +192,7 @@ $entityManager = Database::getManager();
 $session = $entityManager->find('ChamiloCoreBundle:Session', $session_id);
 $sessionTitleLink = api_get_configuration_value('courses_list_session_title_link');
 
-if ($sessionTitleLink == 2 && $session->getNbrCourses() === 1) {
+if (2 == $sessionTitleLink && 1 === $session->getNbrCourses()) {
     $sessionCourses = $session->getCourses();
     $sessionCourse = $sessionCourses[0]->getCourse();
     $courseUrl = $sessionCourse->getDirectory().'/index.php?';
@@ -258,7 +257,7 @@ if (!empty($courseList)) {
         if (!empty($exerciseList)) {
             // Exercises
             foreach ($exerciseList as $exerciseInfo) {
-                if ($exerciseInfo['start_time'] == '0000-00-00 00:00:00') {
+                if ('0000-00-00 00:00:00' == $exerciseInfo['start_time']) {
                     $start_date = '-';
                 } else {
                     $start_date = $exerciseInfo['start_time'];
@@ -287,7 +286,7 @@ if (!empty($courseList)) {
 
                 if (empty($exerciseResultInfo)) {
                     // We check the date validation of the exercise if the user can make it
-                    if ($exerciseInfo['start_time'] != '0000-00-00 00:00:00') {
+                    if ('0000-00-00 00:00:00' != $exerciseInfo['start_time']) {
                         $allowed_time = api_strtotime($exerciseInfo['start_time'], 'UTC');
                         if ($now < $allowed_time) {
                             continue;
@@ -326,7 +325,7 @@ if (!empty($courseList)) {
                     );
                     $my_score = 0;
                     if (!empty($result['max_score']) &&
-                        intval($result['max_score']) != 0
+                        0 != intval($result['max_score'])
                     ) {
                         $my_score = $result['score'] / $result['max_score'];
                     }
@@ -400,9 +399,9 @@ if (api_is_platform_admin()) {
 
 echo Display::tag('h1', $session_info['name'].$editLink);
 echo $dates.'<br />';
-$allow = api_get_setting('show_session_description') === 'true';
+$allow = 'true' === api_get_setting('show_session_description');
 
-if ($session_info['show_description'] == 1 && $allow) {
+if (1 == $session_info['show_description'] && $allow) {
     ?>
     <div class="home-course-intro">
         <div class="page-course">

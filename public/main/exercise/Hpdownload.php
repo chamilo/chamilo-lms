@@ -4,7 +4,6 @@
 /**
  * This script shows the list of exercises for administrators and students.
  *
- *
  * @author Istvan Mandak
  *
  * @version $Id: Hpdownload.php 22201 2009-07-17 19:57:03Z cfasanando $

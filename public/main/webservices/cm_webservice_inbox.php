@@ -1,8 +1,6 @@
 <?php
 /* For licensing terms, see /license.txt */
-/**
- * @package chamilo.webservices
- */
+
 require_once __DIR__.'/../inc/global.inc.php';
 require_once __DIR__.'/cm_webservice.php';
 
@@ -15,7 +13,7 @@ class WSCMInbox extends WSCM
 {
     public function unreadMessage($username, $password)
     {
-        if ($this->verifyUserPass($username, $password) == "valid") {
+        if ("valid" == $this->verifyUserPass($username, $password)) {
             $table_message = Database::get_main_table(TABLE_MESSAGE);
             $user_id = UserManager::get_user_id_from_username($username);
             $condition_msg_status = ' msg_status = 1 '; // define('MESSAGE_STATUS_UNREAD', '1');
@@ -39,7 +37,7 @@ class WSCMInbox extends WSCM
         $from,
         $number_of_items
     ) {
-        if ($this->verifyUserPass($username, $password) == "valid") {
+        if ("valid" == $this->verifyUserPass($username, $password)) {
             $user_id = UserManager::get_user_id_from_username($username);
             $table_message = Database::get_main_table(TABLE_MESSAGE);
 
@@ -61,7 +59,7 @@ class WSCMInbox extends WSCM
 
     public function get_message_data($username, $password, $message_id, $field)
     {
-        if ($this->verifyUserPass($username, $password) == "valid") {
+        if ("valid" == $this->verifyUserPass($username, $password)) {
             $htmlcode = false;
             $user_id = UserManager::get_user_id_from_username($username);
             switch ($field) {
@@ -107,7 +105,7 @@ class WSCMInbox extends WSCM
         $from,
         $number_of_items
     ) {
-        if ($this->verifyUserPass($username, $password) == "valid") {
+        if ("valid" == $this->verifyUserPass($username, $password)) {
             $user_id = UserManager::get_user_id_from_username($username);
 
             $table_message = Database::get_main_table(TABLE_MESSAGE);
@@ -129,7 +127,7 @@ class WSCMInbox extends WSCM
 
     public function get_message_data_sent($username, $password, $id, $field)
     {
-        if ($this->verifyUserPass($username, $password) == "valid") {
+        if ("valid" == $this->verifyUserPass($username, $password)) {
             $htmlcode = false;
             switch ($field) {
                 case 'sender':
@@ -173,7 +171,7 @@ class WSCMInbox extends WSCM
         $content
     ) {
         //TODO: verificar data de envio. Esta divergindo de data!
-        if ($this->verifyUserPass($username, $password) == "valid") {
+        if ("valid" == $this->verifyUserPass($username, $password)) {
             $group_id = intval(0);
             $parent_id = intval(0);
             $edit_message_id = intval(0);

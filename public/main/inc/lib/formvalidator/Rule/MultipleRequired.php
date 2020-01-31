@@ -31,7 +31,7 @@ class HTML_QuickForm_Rule_MultipleRequired extends HTML_QuickForm_Rule
         if (is_array($value)) {
             $value = implode(null, $value);
         }
-        if ((string) $value == '') {
+        if ('' == (string) $value) {
             return false;
         }
 

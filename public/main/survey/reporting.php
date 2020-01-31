@@ -2,8 +2,6 @@
 /* For licensing terms, see /license.txt */
 
 /**
- * @package chamilo.survey
- *
  * @author unknown, the initial survey that did not make it in 1.8 because of bad code
  * @author Patrick Cool <patrick.cool@UGent.be>, Ghent University: cleanup,
  * refactoring and rewriting large parts of the code
@@ -22,7 +20,7 @@ if (empty($survey_data)) {
     api_not_allowed(true);
 }
 
-if ($survey_data['anonymous'] == 0) {
+if (0 == $survey_data['anonymous']) {
     $people_filled_full_data = true;
 } else {
     $people_filled_full_data = false;
@@ -43,7 +41,7 @@ $isDrhOfCourse = CourseManager::isUserSubscribedInCourseAsDrh(
 /** @todo this has to be moved to a more appropriate place (after the display_header of the code)*/
 if (!api_is_allowed_to_edit(false, true) || $isDrhOfCourse) {
     // Show error message if the survey can be seen only by tutors
-    if ($survey_data['visible_results'] == SURVEY_VISIBLE_TUTOR) {
+    if (SURVEY_VISIBLE_TUTOR == $survey_data['visible_results']) {
         api_not_allowed(true);
     }
 
@@ -107,7 +105,7 @@ $interbreadcrumb[] = [
     'name' => $urlname,
 ];
 
-if ($action == 'overview') {
+if ('overview' == $action) {
     $tool_name = get_lang('Reporting');
 } else {
     $interbreadcrumb[] = [
@@ -138,7 +136,7 @@ Display::display_header($tool_name, 'Survey');
 SurveyUtil::handle_reporting_actions($survey_data, $people_filled);
 
 // Content
-if ($action == 'overview') {
+if ('overview' == $action) {
     $html = null;
     $url = api_get_path(WEB_CODE_PATH).'survey/reporting.php?'.api_get_cidreq().'&';
 

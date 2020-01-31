@@ -5,8 +5,6 @@
  *
  * @author Julio Montoya <julio.montoya@beeznest.com>
  * @author Angel Fernando Quiroz Campos <angel.quiroz@beeznest.com>
- *
- * @package chamilo.course_info
  */
 require_once __DIR__.'/../inc/global.inc.php';
 
@@ -19,7 +17,7 @@ api_protect_course_script(true);
 api_block_anonymous_users();
 
 $sessionsCopy = api_get_setting('allow_session_course_copy_for_teachers');
-if ($sessionsCopy !== 'true') {
+if ('true' !== $sessionsCopy) {
     api_not_allowed(true);
 }
 

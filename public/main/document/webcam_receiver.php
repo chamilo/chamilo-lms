@@ -22,7 +22,7 @@ if (isset($params['webcamname']) && isset($params['webcamdir']) && isset($params
     die();
 }
 
-if ($webcamuserid != api_get_user_id() || api_get_user_id() == 0 || $webcamuserid == 0) {
+if ($webcamuserid != api_get_user_id() || 0 == api_get_user_id() || 0 == $webcamuserid) {
     api_not_allowed();
     die();
 }
@@ -39,7 +39,7 @@ $webcamdir = Security::remove_XSS($webcamdir);
 $ext = explode('.', $webcamname);
 $ext = strtolower($ext[sizeof($ext) - 1]);
 
-if ($ext != 'jpg') {
+if ('jpg' != $ext) {
     die();
 }
 

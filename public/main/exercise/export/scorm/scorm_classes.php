@@ -109,7 +109,7 @@ class ScormAnswerHotspot extends Answer
             border: 1px solid #4271b5; 
             height: 448px; 
             width: 200px;"><b>'.get_lang('Image zones').'</b><ol>';
-        for ($answerId = 1; $answerId <= $nbrAnswers; ++$answerId) {
+        for ($answerId = 1; $answerId <= $nbrAnswers; $answerId++) {
             $answerList .= '<li>'.$this->selectAnswer($answerId).'</li>';
         }
         $answerList .= '</ol></div>';

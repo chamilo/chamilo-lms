@@ -2,8 +2,6 @@
 /* For licensing terms, see /license.txt */
 
 /**
- * @package chamilo.social
- *
  * @author Julio Montoya <gugli100@gmail.com>
  */
 
@@ -60,7 +58,7 @@ if (isset($_POST['form_sent']) && $_POST['form_sent']) {
         $user_list = [];
     }
 
-    if ($form_sent == 1) {
+    if (1 == $form_sent) {
         // invite this users
         $result = $usergroup->add_users_to_groups(
             $user_list,
@@ -111,7 +109,7 @@ if (!$friends) {
 
             if (!isset($group_friend_list[$group_id]) ||
                 isset($group_friend_list[$group_id]) &&
-                $group_friend_list[$group_id]['relation_type'] == '') {
+                '' == $group_friend_list[$group_id]['relation_type']) {
                 $Users[$friend['friend_user_id']] = [
                     'user_id' => $friend['friend_user_id'],
                     'firstname' => $friend['firstName'],
@@ -146,9 +144,9 @@ if (is_array($Users) && count($Users) > 0) {
 $social_left_content = SocialManager::show_social_menu('invite_friends', $group_id);
 $social_right_content = '<h3 class="group-title">'.Security::remove_XSS($group_info['name'], STUDENT, true).'</h3>';
 
-if (count($nosessionUsersList) == 0) {
+if (0 == count($nosessionUsersList)) {
     $friends = SocialManager::get_friends(api_get_user_id());
-    if ($friends == 0) {
+    if (0 == $friends) {
         $social_right_content .= Display::return_message(get_lang('You need to have friends in your social network'), 'warning');
     } else {
         $social_right_content .= Display::return_message(get_lang('You already invite all your contacts'), 'info');

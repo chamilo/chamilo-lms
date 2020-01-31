@@ -165,7 +165,7 @@ class GroupManager
         $groups = [];
         while ($thisGroup = Database::fetch_array($result)) {
             $thisGroup['number_of_members'] = count(self::get_subscribed_users($thisGroup));
-            if ($thisGroup['session_id'] != 0) {
+            if (0 != $thisGroup['session_id']) {
                 $sql = 'SELECT name FROM '.Database::get_main_table(TABLE_MAIN_SESSION).'
                         WHERE id='.$thisGroup['session_id'];
                 $rs_session = Database::query($sql);
@@ -210,11 +210,11 @@ class GroupManager
         $documentAccess = 0;
 
         if ($category) {
-            if ($places == 0) {
+            if (0 == $places) {
                 //if the amount of users per group is not filled in, use the setting from the category
                 $places = $category['max_student'];
             } else {
-                if ($places > $category['max_student'] && $category['max_student'] != 0) {
+                if ($places > $category['max_student'] && 0 != $category['max_student']) {
                     $places = $category['max_student'];
                 }
             }
@@ -324,11 +324,11 @@ class GroupManager
                 $values['allow_new_threads_group']['allow_new_threads'] = 1;
                 $values['default_view_type_group']['default_view_type'] = api_get_setting('default_forum_view');
                 $values['group_forum'] = $lastId;
-                if ($forumState == '1') {
+                if ('1' == $forumState) {
                     $values['public_private_group_forum_group']['public_private_group_forum'] = 'public';
-                } elseif ($forumState == '2') {
+                } elseif ('2' == $forumState) {
                     $values['public_private_group_forum_group']['public_private_group_forum'] = 'private';
-                } elseif ($forumState == '0') {
+                } elseif ('0' == $forumState) {
                     $values['public_private_group_forum_group']['public_private_group_forum'] = 'unavailable';
                 }
                 store_forum($values);
@@ -470,7 +470,7 @@ class GroupManager
                 );
 
                 if (file_exists($source_directory)) {
-                    if (api_get_setting('permanently_remove_deleted_files') === 'true') {
+                    if ('true' === api_get_setting('permanently_remove_deleted_files')) {
                         // Delete
                         my_delete($source_directory);
                     } else {
@@ -746,11 +746,11 @@ class GroupManager
         duplicates the table group_info.forum_state cvargas*/
         $forum_state = (int) $forum_state;
         $sql2 = "UPDATE ".$table_forum." SET ";
-        if ($forum_state === 1) {
+        if (1 === $forum_state) {
             $sql2 .= " forum_group_public_private='public' ";
-        } elseif ($forum_state === 2) {
+        } elseif (2 === $forum_state) {
             $sql2 .= " forum_group_public_private='private' ";
-        } elseif ($forum_state === 0) {
+        } elseif (0 === $forum_state) {
             $sql2 .= " forum_group_public_private='unavailable' ";
         }
         $sql2 .= " WHERE c_id = $courseId AND forum_of_group=".$group_id;
@@ -1138,7 +1138,7 @@ class GroupManager
 				WHERE g.c_id = '.$course_info['real_id'].'
 				AND gu.c_id = g.c_id
 				AND gu.group_id = g.iid ';
-        if ($category_id != null) {
+        if (null != $category_id) {
             $category_id = intval($category_id);
             $sql .= ' AND g.category_id = '.$category_id;
         }
@@ -1229,7 +1229,7 @@ class GroupManager
 
         if (!empty($column) && !empty($direction)) {
             $column = Database::escape_string($column, null, false);
-            $direction = ($direction == 'ASC' ? 'ASC' : 'DESC');
+            $direction = ('ASC' == $direction ? 'ASC' : 'DESC');
             $sql .= " ORDER BY $column $direction";
         }
 
@@ -1504,7 +1504,7 @@ class GroupManager
                 WHERE c_id = $course_id AND iid = $group_id";
         $db_result = Database::query($sql);
         $db_object = Database::fetch_object($db_result);
-        if ($db_object->max_student == 0) {
+        if (0 == $db_object->max_student) {
             return self::INFINITE;
         }
 
@@ -1572,7 +1572,7 @@ class GroupManager
             $result = Database::query($sql);
             $group = Database::fetch_object($result);
 
-            if ($group->status == 0 || $group->self_registration_allowed != 1) {
+            if (0 == $group->status || 1 != $group->self_registration_allowed) {
                 return false;
             }
 
@@ -1605,7 +1605,7 @@ class GroupManager
         $result = Database::query($sql);
         $group = Database::fetch_object($result);
 
-        if ($group->status == 0 || $group->self_unregistration_allowed != 1) {
+        if (0 == $group->status || 1 != $group->self_unregistration_allowed) {
             return false;
         }
 
@@ -1660,18 +1660,18 @@ class GroupManager
         if ($checkMaxNumberStudents) {
             $category = self::get_category_from_group($groupIid);
             if ($category) {
-                if ($category['groups_per_user'] == self::GROUP_PER_MEMBER_NO_LIMIT) {
+                if (self::GROUP_PER_MEMBER_NO_LIMIT == $category['groups_per_user']) {
                     $category['groups_per_user'] = self::INFINITE;
                 }
                 $result = self::user_in_number_of_groups($user_id, $category['id']) < $category['groups_per_user'];
-                if ($result == false) {
+                if (false == $result) {
                     return false;
                 }
             }
 
             $result = self::number_of_students($group_id) < self::maximum_number_of_students($groupIid);
 
-            if ($result == false) {
+            if (false == $result) {
                 return false;
             }
         }
@@ -1709,7 +1709,7 @@ class GroupManager
         $table_group_user = Database::get_course_table(TABLE_GROUP_USER);
         $order_clause = api_sort_by_first_name() ? ' ORDER BY u.firstname, u.lastname' : ' ORDER BY u.lastname, u.firstname';
         $orderListByOfficialCode = api_get_setting('order_user_list_by_official_code');
-        if ($orderListByOfficialCode === 'true') {
+        if ('true' === $orderListByOfficialCode) {
             $order_clause = ' ORDER BY u.official_code, u.firstname, u.lastname';
         }
 
@@ -1770,7 +1770,7 @@ class GroupManager
         $order_clause = api_sort_by_first_name() ? ' ORDER BY u.firstname, u.lastname' : ' ORDER BY u.lastname, u.firstname';
 
         $orderListByOfficialCode = api_get_setting('order_user_list_by_official_code');
-        if ($orderListByOfficialCode === 'true') {
+        if ('true' === $orderListByOfficialCode) {
             $order_clause = ' ORDER BY u.official_code, u.firstname, u.lastname';
         }
 
@@ -2117,7 +2117,7 @@ class GroupManager
             return false;
         }
 
-        if ($groupInfo['status'] == 0) {
+        if (0 == $groupInfo['status']) {
             return false;
         }
 
@@ -2143,7 +2143,7 @@ class GroupManager
             case self::TOOL_PRIVATE_BETWEEN_USERS:
                 // Only works for announcements for now
                 $userIsInGroup = self::is_user_in_group($user_id, $groupInfo);
-                if ($userIsInGroup && $tool == self::GROUP_TOOL_ANNOUNCEMENT) {
+                if ($userIsInGroup && self::GROUP_TOOL_ANNOUNCEMENT == $tool) {
                     return true;
                 }
                 break;
@@ -2190,7 +2190,7 @@ class GroupManager
             return true;
         }
 
-        if ($groupInfo['status'] == 0) {
+        if (0 == $groupInfo['status']) {
             return false;
         }
 
@@ -2311,7 +2311,7 @@ class GroupManager
             if (self::userHasAccessToBrowse($user_id, $this_group, $session_id)) {
                 // Group name
                 $groupNameClass = null;
-                if ($this_group['status'] == 0) {
+                if (0 == $this_group['status']) {
                     $groupNameClass = 'muted';
                 }
 
@@ -2336,7 +2336,7 @@ class GroupManager
                 $group_name .= $session_img;
                 $row[] = $group_name.$group_name2.'<br />'.stripslashes(trim($this_group['description']));
             } else {
-                if ($hideGroup === 'true') {
+                if ('true' === $hideGroup) {
                     continue;
                 }
                 $row[] = $this_group['name'].'<br />'.stripslashes(trim($this_group['description']));
@@ -2351,7 +2351,7 @@ class GroupManager
                         sprintf(get_lang('Login: %s'), $tutor['username']),
                         ENT_QUOTES
                     );
-                    if (api_get_setting('show_email_addresses') === 'true') {
+                    if ('true' === api_get_setting('show_email_addresses')) {
                         $tutor_info .= Display::tag(
                             'span',
                             Display::encrypted_mailto_link(
@@ -2389,7 +2389,7 @@ class GroupManager
             $row[] = $tutor_info;
 
             // Max number of members in group
-            $max_members = $this_group['maximum_number_of_members'] == self::MEMBER_PER_GROUP_NO_LIMIT ? ' ' : ' / '.$this_group['maximum_number_of_members'];
+            $max_members = self::MEMBER_PER_GROUP_NO_LIMIT == $this_group['maximum_number_of_members'] ? ' ' : ' / '.$this_group['maximum_number_of_members'];
 
             // Number of members in group
             $row[] = $this_group['number_of_members'].$max_members;
@@ -2413,7 +2413,7 @@ class GroupManager
                 $edit_actions = '<a href="'.$url.'settings.php?'.api_get_cidreq(true, false).'&gid='.$this_group['id'].'"  title="'.get_lang('Edit').'">'.
                     Display::return_icon('edit.png', get_lang('Edit this group'), '', ICON_SIZE_SMALL).'</a>&nbsp;';
 
-                if ($this_group['status'] == 1) {
+                if (1 == $this_group['status']) {
                     $edit_actions .= '<a href="'.api_get_self().'?'.api_get_cidreq(true, false).'&category='.$category_id.'&action=set_invisible&id='.$this_group['id'].'" title="'.get_lang('Hide').'">'.
                         Display::return_icon('visible.png', get_lang('Hide'), '', ICON_SIZE_SMALL).'</a>&nbsp;';
                 } else {
@@ -2760,7 +2760,7 @@ class GroupManager
             $data[0][] = 'tutors';
         }
 
-        if ($loadUsers == false) {
+        if (false == $loadUsers) {
             $categories = self::get_categories();
 
             foreach ($categories as $categoryInfo) {
@@ -2905,7 +2905,7 @@ class GroupManager
         $categories = self::get_categories();
         if (!empty($categories)) {
             foreach ($categories as $category) {
-                if (api_get_setting('allow_group_categories') == 'true') {
+                if ('true' == api_get_setting('allow_group_categories')) {
                     $content .= '<h2>'.$category['title'].'</h2>';
                 }
                 if (!empty($keyword)) {
@@ -3064,7 +3064,7 @@ class GroupManager
         }
 
         // Just in case also check if document in group is available
-        if ($groupInfo['doc_state'] == 0) {
+        if (0 == $groupInfo['doc_state']) {
             if ($blockPage) {
                 api_not_allowed(true);
             }
@@ -3148,7 +3148,7 @@ class GroupManager
                 break;
         }
 
-        if ($blockPage && $result == false) {
+        if ($blockPage && false == $result) {
             api_not_allowed(true);
         }
 

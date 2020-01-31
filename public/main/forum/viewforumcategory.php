@@ -303,7 +303,7 @@ if ('add' != $action) {
                 }
                 $form_count = isset($form_count) ? $form_count : 0;
                 if (true === $show_forum) {
-                    ++$form_count;
+                    $form_count++;
                     $html = '<div class="panel panel-default forum">';
                     $html .= '<div class="panel-body">';
                     $my_whatsnew_post_info = isset($whatsnew_post_info[$forum['forum_id']]) ? $whatsnew_post_info[$forum['forum_id']] : null;

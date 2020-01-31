@@ -9,7 +9,7 @@ $_course = api_get_course_info();
 $last_access = '';
 // get the last time the user accessed the tool
 if (isset($_SESSION[$_course['id']]) &&
-    $_SESSION[$_course['id']]['last_access'][TOOL_DROPBOX] == ''
+    '' == $_SESSION[$_course['id']]['last_access'][TOOL_DROPBOX]
 ) {
     $last_access = get_last_tool_access(TOOL_DROPBOX);
     $_SESSION[$_course['id']]['last_access'][TOOL_DROPBOX] = $last_access;
@@ -58,8 +58,8 @@ if (isset($_GET['dropbox_direction']) && in_array($_GET['dropbox_direction'], ['
 $sort_params = Security::remove_XSS(implode('&', $sort_params));
 
 // Display the form for adding a new dropbox item.
-if ($action == 'add') {
-    if (api_get_session_id() != 0 && !api_is_allowed_to_session_edit(false, true)) {
+if ('add' == $action) {
+    if (0 != api_get_session_id() && !api_is_allowed_to_session_edit(false, true)) {
         api_not_allowed();
     }
     display_add_form(
@@ -77,8 +77,8 @@ if (isset($_POST['submitWork'])) {
 }
 
 // Display the form for adding a category
-if ($action == 'addreceivedcategory' || $action == 'addsentcategory') {
-    if (api_get_session_id() != 0 && !api_is_allowed_to_session_edit(false, true)) {
+if ('addreceivedcategory' == $action || 'addsentcategory' == $action) {
+    if (0 != api_get_session_id() && !api_is_allowed_to_session_edit(false, true)) {
         api_not_allowed();
     }
     $categoryName = isset($_POST['category_name']) ? $_POST['category_name'] : '';
@@ -86,12 +86,12 @@ if ($action == 'addreceivedcategory' || $action == 'addsentcategory') {
 }
 
 // Editing a category: displaying the form
-if ($action == 'editcategory' && isset($_GET['id'])) {
-    if (api_get_session_id() != 0 && !api_is_allowed_to_session_edit(false, true)) {
+if ('editcategory' == $action && isset($_GET['id'])) {
+    if (0 != api_get_session_id() && !api_is_allowed_to_session_edit(false, true)) {
         api_not_allowed();
     }
     if (!$_POST) {
-        if (api_get_session_id() != 0 && !api_is_allowed_to_session_edit(false, true)) {
+        if (0 != api_get_session_id() && !api_is_allowed_to_session_edit(false, true)) {
             api_not_allowed();
         }
         display_addcategory_form('', $_GET['id'], 'editcategory');
@@ -100,16 +100,16 @@ if ($action == 'editcategory' && isset($_GET['id'])) {
 
 // Storing a new or edited category
 if (isset($_POST['StoreCategory'])) {
-    if (api_get_session_id() != 0 &&
+    if (0 != api_get_session_id() &&
         !api_is_allowed_to_session_edit(false, true)
     ) {
         api_not_allowed();
     }
     $return_information = store_addcategory();
-    if ($return_information['type'] == 'confirmation') {
+    if ('confirmation' == $return_information['type']) {
         echo Display::return_message($return_information['message'], 'confirmation');
     }
-    if ($return_information['type'] == 'error') {
+    if ('error' == $return_information['type']) {
         echo Display::return_message(
             get_lang('The form contains incorrect or incomplete data. Please check your input.').'<br />'.$return_information['message'],
             'error'
@@ -119,8 +119,8 @@ if (isset($_POST['StoreCategory'])) {
 }
 
 // Move a File
-if (($action == 'movesent' || $action == 'movereceived') && isset($_GET['move_id'])) {
-    if (api_get_session_id() != 0 && !api_is_allowed_to_session_edit(false, true)) {
+if (('movesent' == $action || 'movereceived' == $action) && isset($_GET['move_id'])) {
+    if (0 != api_get_session_id() && !api_is_allowed_to_session_edit(false, true)) {
         api_not_allowed();
     }
     display_move_form(
@@ -146,8 +146,8 @@ if (isset($_POST['do_move'])) {
 }
 
 // Delete a file
-if (($action == 'deletereceivedfile' || $action == 'deletesentfile') && isset($_GET['id']) && is_numeric($_GET['id'])) {
-    if (api_get_session_id() != 0 && !api_is_allowed_to_session_edit(false, true)) {
+if (('deletereceivedfile' == $action || 'deletesentfile' == $action) && isset($_GET['id']) && is_numeric($_GET['id'])) {
+    if (0 != api_get_session_id() && !api_is_allowed_to_session_edit(false, true)) {
         api_not_allowed();
     }
     $dropboxfile = new Dropbox_Person(
@@ -155,11 +155,11 @@ if (($action == 'deletereceivedfile' || $action == 'deletesentfile') && isset($_
         $is_courseAdmin,
         $is_courseTutor
     );
-    if ($action == 'deletereceivedfile') {
+    if ('deletereceivedfile' == $action) {
         $dropboxfile->deleteReceivedWork($_GET['id']);
         $message = get_lang('The received file has been deleted.');
     }
-    if ($action == 'deletesentfile') {
+    if ('deletesentfile' == $action) {
         $dropboxfile->deleteSentWork($_GET['id']);
         $message = get_lang('The sent file has been deleted.');
     }
@@ -167,10 +167,10 @@ if (($action == 'deletereceivedfile' || $action == 'deletesentfile') && isset($_
 }
 
 // Delete a category
-if (($action == 'deletereceivedcategory' || $action == 'deletesentcategory') &&
+if (('deletereceivedcategory' == $action || 'deletesentcategory' == $action) &&
     isset($_GET['id']) && is_numeric($_GET['id'])
 ) {
-    if (api_get_session_id() != 0 && !api_is_allowed_to_session_edit(false, true)) {
+    if (0 != api_get_session_id() && !api_is_allowed_to_session_edit(false, true)) {
         api_not_allowed();
     }
     $message = delete_category($action, $_GET['id']);
@@ -184,10 +184,10 @@ if (($action == 'deletereceivedcategory' || $action == 'deletesentcategory') &&
 if (!isset($_POST['feedback']) && (
     strstr($postAction, 'move_received') ||
     strstr($postAction, 'move_sent') ||
-    $postAction == 'delete_received' ||
-    $postAction == 'download_received' ||
-    $postAction == 'delete_sent' ||
-    $postAction == 'download_sent'
+    'delete_received' == $postAction ||
+    'download_received' == $postAction ||
+    'delete_sent' == $postAction ||
+    'download_sent' == $postAction
 )
 ) {
     $display_message = handle_multiple_actions();
@@ -196,7 +196,7 @@ if (!isset($_POST['feedback']) && (
 
 // Store Feedback
 if (isset($_POST['feedback'])) {
-    if (api_get_session_id() != 0 && !api_is_allowed_to_session_edit(false, true)) {
+    if (0 != api_get_session_id() && !api_is_allowed_to_session_edit(false, true)) {
         api_not_allowed();
     }
     $check = Security::check_token();
@@ -216,32 +216,32 @@ $dropbox_data_sent = [];
 $movelist = [];
 $dropbox_data_recieved = [];
 
-if ($action != 'add') {
+if ('add' != $action) {
     // Getting all the categories in the dropbox for the given user
     $dropbox_categories = get_dropbox_categories();
     // Greating the arrays with the categories for the received files and for the sent files
     foreach ($dropbox_categories as $category) {
-        if ($category['received'] == '1') {
+        if ('1' == $category['received']) {
             $dropbox_received_category[] = $category;
         }
-        if ($category['sent'] == '1') {
+        if ('1' == $category['sent']) {
             $dropbox_sent_category[] = $category;
         }
     }
 
     // ACTIONS
-    if ($view == 'received' || !$showSentReceivedTabs) {
+    if ('received' == $view || !$showSentReceivedTabs) {
         // This is for the categories
-        if (isset($viewReceivedCategory) && $viewReceivedCategory != '') {
+        if (isset($viewReceivedCategory) && '' != $viewReceivedCategory) {
             $view_dropbox_category_received = $viewReceivedCategory;
         } else {
             $view_dropbox_category_received = 0;
         }
         /* Menu Received */
 
-        if (api_get_session_id() == 0) {
+        if (0 == api_get_session_id()) {
             echo '<div class="actions">';
-            if ($view_dropbox_category_received != 0 && api_is_allowed_to_session_edit(false, true)) {
+            if (0 != $view_dropbox_category_received && api_is_allowed_to_session_edit(false, true)) {
                 echo '<a href="'.api_get_self().'?'.api_get_cidreq().'&view_received_category=0&view_sent_category='.$viewSentCategory.'&view='.$view.'">'.
                     Display::return_icon('folder_up.png', get_lang('Up').' '.get_lang('root'), '', ICON_SIZE_MEDIUM).
                     "</a>";
@@ -255,7 +255,7 @@ if ($action != 'add') {
         } else {
             if (api_is_allowed_to_session_edit(false, true)) {
                 echo '<div class="actions">';
-                if ($view_dropbox_category_received != 0 && api_is_allowed_to_session_edit(false, true)) {
+                if (0 != $view_dropbox_category_received && api_is_allowed_to_session_edit(false, true)) {
                     echo '<a href="'.api_get_self().'?'.api_get_cidreq().'&view_received_category=0&view_sent_category='.$viewSentCategory.'&view='.$view.'">'.
                         Display::return_icon('folder_up.png', get_lang('Up').' '.get_lang('root'), '', ICON_SIZE_MEDIUM)."</a>";
                     echo get_lang('Category').': <strong>'.Security::remove_XSS($dropbox_categories[$view_dropbox_category_received]['cat_name']).'</strong> ';
@@ -270,23 +270,23 @@ if ($action != 'add') {
         }
     }
 
-    if (!$view || $view == 'sent' || !$showSentReceivedTabs) {
+    if (!$view || 'sent' == $view || !$showSentReceivedTabs) {
         // This is for the categories
-        if (isset($viewSentCategory) && $viewSentCategory != '') {
+        if (isset($viewSentCategory) && '' != $viewSentCategory) {
             $view_dropbox_category_sent = $viewSentCategory;
         } else {
             $view_dropbox_category_sent = 0;
         }
 
         /* Menu Sent */
-        if (api_get_session_id() == 0) {
+        if (0 == api_get_session_id()) {
             echo '<div class="actions">';
             if (empty($viewSentCategory)) {
                 echo "<a href=\"".api_get_self()."?".api_get_cidreq()."&view=".$view."&action=add\">".
                     Display::return_icon('upload_file.png', get_lang('Share a new file'), '', ICON_SIZE_MEDIUM).
                     "</a>";
             }
-            if ($view_dropbox_category_sent != 0) {
+            if (0 != $view_dropbox_category_sent) {
                 echo '<a href="'.api_get_self().'?'.api_get_cidreq().'&view_received_category='.$viewReceivedCategory.'&view_sent_category=0&view='.$view.'">'.
                     Display::return_icon('folder_up.png', get_lang('Up').' '.get_lang('root'), '', ICON_SIZE_MEDIUM).
                     "</a>";
@@ -304,7 +304,7 @@ if ($action != 'add') {
                         Display::return_icon('upload_file.png', get_lang('Share a new file'), '', ICON_SIZE_MEDIUM).
                     "</a>";
                 }
-                if ($view_dropbox_category_sent != 0) {
+                if (0 != $view_dropbox_category_sent) {
                     echo get_lang('You are in folder').': <strong>'.Security::remove_XSS($dropbox_categories[$view_dropbox_category_sent]['cat_name']).'</strong> ';
                     echo '<a href="'.api_get_self().'?'.api_get_cidreq().'&view_received_category='.$viewReceivedCategory.'&view_sent_category=0&view='.$view.'">'.
                         Display::return_icon('folder_up.png', get_lang('Up').' '.get_lang('root'), '', ICON_SIZE_MEDIUM).
@@ -321,14 +321,14 @@ if ($action != 'add') {
     if ($showSentReceivedTabs) {
         ?>
 <ul class="nav nav-tabs">
-    <li <?php if (!$view || $view == 'sent') {
+    <li <?php if (!$view || 'sent' == $view) {
             echo 'class="active"';
         } ?> >
         <a href="<?php echo api_get_path(WEB_CODE_PATH).'dropbox/'; ?>index.php?<?php echo api_get_cidreq(); ?>&view=sent" >
             <?php echo get_lang('Sent Files'); ?>
         </a>
     </li>
-    <li <?php if ($view == 'received') {
+    <li <?php if ('received' == $view) {
             echo 'class="active"';
         } ?> >
         <a href="<?php echo api_get_path(WEB_CODE_PATH).'dropbox/'; ?>index.php?<?php echo api_get_cidreq(); ?>&view=received"  >
@@ -338,9 +338,9 @@ if ($action != 'add') {
 <?php
     }
     /*	RECEIVED FILES */
-    if ($view == 'received' || !$showSentReceivedTabs) {
+    if ('received' == $view || !$showSentReceivedTabs) {
         // This is for the categories
-        if (isset($viewReceivedCategory) && $viewReceivedCategory != '') {
+        if (isset($viewReceivedCategory) && '' != $viewReceivedCategory) {
             $view_dropbox_category_received = $viewReceivedCategory;
         } else {
             $view_dropbox_category_received = 0;
@@ -366,7 +366,7 @@ if ($action != 'add') {
         $column_header[] = [get_lang('Authors'), true, ''];
         $column_header[] = [get_lang('Latest sent on'), true];
 
-        if (api_get_session_id() == 0) {
+        if (0 == api_get_session_id()) {
             $column_header[] = [get_lang('Edit'), false, '', 'nowrap style="text-align: right"'];
         } elseif (api_is_allowed_to_session_edit(false, true)) {
             $column_header[] = [get_lang('Edit'), false, '', 'nowrap style="text-align: right"'];
@@ -383,7 +383,7 @@ if ($action != 'add') {
         $column_show[] = 1;
         $column_show[] = 1;
 
-        if (api_get_session_id() == 0) {
+        if (0 == api_get_session_id()) {
             $column_show[] = 1;
         } elseif (api_is_allowed_to_session_edit(false, true)) {
             $column_show[] = 1;
@@ -451,7 +451,7 @@ if ($action != 'add') {
                 '</a>';
 
                 // This is a hack to have an additional row in a sortable table
-                if ($action == 'viewfeedback' && isset($_GET['id']) && is_numeric($_GET['id']) && $dropbox_file->id == $_GET['id']) {
+                if ('viewfeedback' == $action && isset($_GET['id']) && is_numeric($_GET['id']) && $dropbox_file->id == $_GET['id']) {
                     $action_icons .= "</td></tr>"; // Ending the normal row of the sortable table
                     $url = api_get_path(WEB_CODE_PATH).'dropbox/index.php?"'.api_get_cidreq().'&view_received_category='.$viewReceivedCategory."&view_sent_category=".$viewSentCategory."&view=".$view.'&'.$sort_params;
                     $action_icons .= "        
@@ -460,7 +460,7 @@ if ($action != 'add') {
                         feedback($dropbox_file->feedback2, $url).
                         "</td></tr>";
                 }
-                if (api_get_session_id() == 0) {
+                if (0 == api_get_session_id()) {
                     $dropbox_file_data[] = $action_icons;
                 } elseif (api_is_allowed_to_session_edit(false, true)) {
                     $dropbox_file_data[] = $action_icons;
@@ -473,13 +473,13 @@ if ($action != 'add') {
         }
 
         // The content of the sortable table = the categories (if we are not in the root)
-        if ($view_dropbox_category_received == 0) {
+        if (0 == $view_dropbox_category_received) {
             foreach ($dropbox_categories as $category) {
                 /*  Note: This can probably be shortened since the categories
                 for the received files are already in the
                 $dropbox_received_category array;*/
                 $dropbox_category_data = [];
-                if ($category['received'] == '1') {
+                if ('1' == $category['received']) {
                     $movelist[$category['cat_id']] = $category['cat_name'];
                     // This is where the checkbox icon for the files appear
                     $dropbox_category_data[] = $category['cat_id'];
@@ -521,7 +521,7 @@ if ($action != 'add') {
             }
         }
 
-        if (api_get_session_id() != 0 && !api_is_allowed_to_session_edit(false, true)) {
+        if (0 != api_get_session_id() && !api_is_allowed_to_session_edit(false, true)) {
             $selectlist = [];
         }
         echo '<div class="files-table">';
@@ -540,9 +540,9 @@ if ($action != 'add') {
     }
 
     /*	SENT FILES */
-    if (!$view || $view == 'sent' || !$showSentReceivedTabs) {
+    if (!$view || 'sent' == $view || !$showSentReceivedTabs) {
         // This is for the categories
-        if (isset($viewSentCategory) && $viewSentCategory != '') {
+        if (isset($viewSentCategory) && '' != $viewSentCategory) {
             $view_dropbox_category_sent = $viewSentCategory;
         } else {
             $view_dropbox_category_sent = 0;
@@ -564,7 +564,7 @@ if ($action != 'add') {
         $column_header[] = [get_lang('Visible to'), true, ''];
         $column_header[] = [get_lang('Latest sent on'), true, ''];
 
-        if (api_get_session_id() == 0) {
+        if (0 == api_get_session_id()) {
             $column_header[] = [get_lang('Edit'), false, '', 'nowrap style="text-align: right"'];
         } elseif (api_is_allowed_to_session_edit(false, true)) {
             $column_header[] = [get_lang('Edit'), false, '', 'nowrap style="text-align: right"'];
@@ -583,7 +583,7 @@ if ($action != 'add') {
         $column_show[] = 1;
         $column_show[] = 1;
         $column_show[] = 1;
-        if (api_get_session_id() == 0) {
+        if (0 == api_get_session_id()) {
             $column_show[] = 1;
         } elseif (api_is_allowed_to_session_edit(false, true)) {
             $column_show[] = 1;
@@ -638,7 +638,7 @@ if ($action != 'add') {
                         Display::return_icon('delete.png', get_lang('Delete'), '', ICON_SIZE_SMALL).
                     '</a>';
                 // This is a hack to have an additional row in a sortable table
-                if ($action == 'viewfeedback' && isset($_GET['id']) && is_numeric($_GET['id']) && $dropbox_file->id == $_GET['id']) {
+                if ('viewfeedback' == $action && isset($_GET['id']) && is_numeric($_GET['id']) && $dropbox_file->id == $_GET['id']) {
                     $action_icons .= "</td></tr>\n"; // ending the normal row of the sortable table
                     $action_icons .= "<tr><td colspan=\"9\">";
                     $url = api_get_path(WEB_CODE_PATH)."dropbox/index.php?".api_get_cidreq()."&view_received_category=".$viewReceivedCategory."&view_sent_category=".$viewSentCategory."&view=".$view.'&'.$sort_params;
@@ -656,10 +656,10 @@ if ($action != 'add') {
 
         $moveList = [];
         // The content of the sortable table = the categories (if we are not in the root)
-        if ($view_dropbox_category_sent == 0) {
+        if (0 == $view_dropbox_category_sent) {
             foreach ($dropbox_categories as $category) {
                 $dropbox_category_data = [];
-                if ($category['sent'] == '1') {
+                if ('1' == $category['sent']) {
                     $moveList[$category['cat_id']] = $category['cat_name'];
                     $dropbox_category_data[] = $category['cat_id'];
                     // This is where the checkbox icon for the files appear.
@@ -699,7 +699,7 @@ if ($action != 'add') {
             }
         }
 
-        if (api_get_session_id() != 0 && !api_is_allowed_to_session_edit(false, true)) {
+        if (0 != api_get_session_id() && !api_is_allowed_to_session_edit(false, true)) {
             $selectlist = ['download_received' => get_lang('Download')];
         }
 

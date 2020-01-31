@@ -135,7 +135,7 @@ if (api_is_platform_admin()) {
     $endRangeYear = $startYear + 15 < $endYear ? $endYear + 1 : $startYear + 15;
     while ($startYear <= $endRangeYear) {
         $listYears[] = $startYear;
-        ++$startYear;
+        $startYear++;
     }
     $tpl->assign('list_year', $listYears);
 

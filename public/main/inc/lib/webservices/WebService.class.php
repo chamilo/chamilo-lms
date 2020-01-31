@@ -7,8 +7,6 @@ use Chamilo\UserBundle\Entity\User;
  * Base class for Web Services.
  *
  * @author Angel Fernando Quiroz Campos <angel.quiroz@beeznest.com>
- *
- * @package chamilo.webservices
  */
 class WebService
 {

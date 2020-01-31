@@ -53,7 +53,7 @@ if (Database::num_rows($result_course) > 0) {
             $result = $result + $moy_test['score'];
             $weighting = $weighting + $moy_test['max_score'];
         }
-        if ($weighting != 0) {
+        if (0 != $weighting) {
             $moyenne_test = round(($result * 100) / $weighting);
         } else {
             $moyenne_test = null;

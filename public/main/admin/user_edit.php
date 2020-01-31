@@ -3,9 +3,6 @@
 
 use ChamiloSession as Session;
 
-/**
- * @package chamilo.admin
- */
 $cidReset = true;
 require_once __DIR__.'/../inc/global.inc.php';
 
@@ -80,7 +77,7 @@ $sql = "SELECT u.*, a.user_id AS is_admin FROM $table_user u
         LEFT JOIN $table_admin a ON a.user_id = u.id
         WHERE u.id = '".$user_id."'";
 $res = Database::query($sql);
-if (Database::num_rows($res) != 1) {
+if (1 != Database::num_rows($res)) {
     header('Location: user_list.php');
     exit;
 }
@@ -136,11 +133,11 @@ $form->applyFilter('official_code', 'trim');
 // e-mail
 $form->addElement('text', 'email', get_lang('e-mail'));
 $form->addRule('email', get_lang('e-mailWrong'), 'email');
-if (api_get_setting('registration', 'email') == 'true') {
+if ('true' == api_get_setting('registration', 'email')) {
     $form->addRule('email', get_lang('e-mailWrong'), 'required');
 }
 
-if (api_get_setting('login_is_email') == 'true') {
+if ('true' == api_get_setting('login_is_email')) {
     $form->addRule('email', sprintf(get_lang('The login needs to be maximum %s characters long'), (string) USERNAME_MAX_LENGTH), 'maxlength', USERNAME_MAX_LENGTH);
     $form->addRule('email', get_lang('This login is already in use'), 'username_available', $user_data['username']);
 }
@@ -167,7 +164,7 @@ if (strlen($user_data['picture_uri']) > 0) {
 }
 
 // Username
-if (api_get_setting('login_is_email') != 'true') {
+if ('true' != api_get_setting('login_is_email')) {
     $form->addElement('text', 'username', get_lang('Login'), ['maxlength' => USERNAME_MAX_LENGTH]);
     $form->addRule('username', get_lang('Required field'), 'required');
     $form->addRule('username', sprintf(get_lang('The login needs to be maximum %s characters long'), (string) USERNAME_MAX_LENGTH), 'maxlength', USERNAME_MAX_LENGTH);
@@ -192,7 +189,7 @@ if (isset($extAuthSource) && !empty($extAuthSource) && count($extAuthSource) > 0
         // Special case for CAS. CAS is activated from Chamilo > Administration > Configuration > CAS
         // extAuthSource always on for CAS even if not activated
         // same action for file user_add.php
-        if (($key == CAS_AUTH_SOURCE && api_get_setting('cas_activate') === 'true') || ($key != CAS_AUTH_SOURCE)) {
+        if ((CAS_AUTH_SOURCE == $key && 'true' === api_get_setting('cas_activate')) || (CAS_AUTH_SOURCE != $key)) {
             $auth_sources[$key] = $key;
             $nb_ext_auth_source_added++;
         }
@@ -238,7 +235,7 @@ $form->addElement(
     ]
 );
 
-$display = isset($user_data['status']) && ($user_data['status'] == STUDENT || (isset($_POST['status']) && $_POST['status'] == STUDENT)) ? 'block' : 'none';
+$display = isset($user_data['status']) && (STUDENT == $user_data['status'] || (isset($_POST['status']) && STUDENT == $_POST['status'])) ? 'block' : 'none';
 
 // Platform admin
 if (api_is_platform_admin()) {
@@ -246,7 +243,7 @@ if (api_is_platform_admin()) {
     $group[] = $form->createElement('radio', 'platform_admin', null, get_lang('Yes'), 1);
     $group[] = $form->createElement('radio', 'platform_admin', null, get_lang('No'), 0);
 
-    $user_data['status'] == 1 ? $display = 'block' : $display = 'none';
+    1 == $user_data['status'] ? $display = 'block' : $display = 'none';
 
     $form->addElement('html', '<div id="id_platform_admin" style="display:'.$display.'">');
     $form->addGroup($group, 'admin', get_lang('Administration'), null, false);
@@ -367,7 +364,7 @@ $error_drh = false;
 if ($form->validate()) {
     $user = $form->getSubmitValues(1);
     $reset_password = intval($user['reset_password']);
-    if ($reset_password == 2 && empty($user['password'])) {
+    if (2 == $reset_password && empty($user['password'])) {
         Display::addFlash(Display::return_message(get_lang('The password is too short')));
         header('Location: '.api_get_self().'?user_id='.$user_id);
         exit();
@@ -375,7 +372,7 @@ if ($form->validate()) {
 
     $is_user_subscribed_in_course = CourseManager::is_user_subscribed_in_course($user['user_id']);
 
-    if ($user['status'] == DRH && $is_user_subscribed_in_course) {
+    if (DRH == $user['status'] && $is_user_subscribed_in_course) {
         $error_drh = true;
     } else {
         $picture_element = $form->getElement('picture');
@@ -409,7 +406,7 @@ if ($form->validate()) {
         $language = $user['language'];
         $address = isset($user['address']) ? $user['address'] : null;
 
-        if (!$user_data['platform_admin'] && $user['radio_expiration_date'] == '1') {
+        if (!$user_data['platform_admin'] && '1' == $user['radio_expiration_date']) {
             $expiration_date = $user['expiration_date'];
         } else {
             $expiration_date = null;
@@ -418,11 +415,11 @@ if ($form->validate()) {
         $active = $user_data['platform_admin'] ? 1 : intval($user['active']);
 
         //If the user is set to admin the status will be overwrite by COURSEMANAGER = 1
-        if ($platform_admin == 1) {
+        if (1 == $platform_admin) {
             $status = COURSEMANAGER;
         }
 
-        if (api_get_setting('login_is_email') == 'true') {
+        if ('true' == api_get_setting('login_is_email')) {
             $username = $email;
         }
 
@@ -467,7 +464,7 @@ if ($form->validate()) {
         UserManager::add_user_as_admin($userObj);
 
         if ($user_id != $currentUserId) {
-            if ($platform_admin == 1) {
+            if (1 == $platform_admin) {
                 $userObj = api_get_user_entity($user_id);
                 UserManager::add_user_as_admin($userObj);
             } else {

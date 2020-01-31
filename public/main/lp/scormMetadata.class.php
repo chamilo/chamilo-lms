@@ -3,8 +3,6 @@
 
 /**
  * Container for the scormMetadata class, setup to hold information about the <metadata> element in imsmanifest files.
- *
- * @package chamilo.learnpath.scorm
  */
 
 /**
@@ -75,8 +73,8 @@ class scormMetadata
                                 }
                                 break;
                             case XML_TEXT_NODE:
-                                if (trim($child->textContent) != '') {
-                                    if (count($children == 1)) {
+                                if ('' != trim($child->textContent)) {
+                                    if (count(1 == $children)) {
                                         // If this is the only child at this level and it is a content... save differently.
                                         $this->text = $child->textContent;
                                     } else {
@@ -90,7 +88,7 @@ class scormMetadata
                     //$keep_href = '';
                     if (is_array($attributes)) {
                         foreach ($attributes as $attrib) {
-                            if (trim($attrib->value) != '') {
+                            if ('' != trim($attrib->value)) {
                                 $this->attribs[$attrib->name] = $attrib->value;
                             }
                         }

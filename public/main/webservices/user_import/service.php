@@ -42,7 +42,7 @@ function import_users_from_file($filepath, $security_key)
 
     // Get list of users
     $users = parse_csv_data($filepath);
-    if (count($users) == 0) {
+    if (0 == count($users)) {
         return $errors_returned[2];
     }
 

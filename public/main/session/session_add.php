@@ -1,9 +1,6 @@
 <?php
 /* For licensing terms, see /license.txt */
 
-/**
- * @package chamilo.admin
- */
 $cidReset = true;
 
 require_once __DIR__.'/../inc/global.inc.php';
@@ -52,7 +49,7 @@ function search_coachs($needle)
         if (api_is_multiple_url_enabled()) {
             $tbl_user_rel_access_url = Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_USER);
             $access_url_id = api_get_current_access_url_id();
-            if ($access_url_id != -1) {
+            if (-1 != $access_url_id) {
                 $sql = 'SELECT username, lastname, firstname
                         FROM '.$tbl_user.' user
                         INNER JOIN '.$tbl_user_rel_access_url.' url_user
@@ -389,7 +386,7 @@ if ($form->validate()) {
 
     $extraFields = [];
     foreach ($params as $key => $value) {
-        if (strpos($key, 'extra_') === 0) {
+        if (0 === strpos($key, 'extra_')) {
             $extraFields[$key] = $value;
         }
     }

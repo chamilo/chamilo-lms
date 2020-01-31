@@ -6,8 +6,6 @@
  * tool from Office text documents (.doc, .sxw, .odt, .docx) to
  * learning paths.
  *
- * @package chamilo.learnpath
- *
  * @author  Eric Marguin <eric.marguin@dokeos.com>
  * @license GNU/GPL
  */
@@ -16,13 +14,10 @@
  * Defines the "OpenofficeText" child of class "learnpath".
  */
 require_once 'openoffice_document.class.php';
-if (api_get_setting('search_enabled') == 'true') {
+if ('true' == api_get_setting('search_enabled')) {
     require_once api_get_path(LIBRARY_PATH).'specific_fields_manager.lib.php';
 }
 
-/**
- * @package chamilo.learnpath.OpenofficeDocument
- */
 class OpenofficeText extends OpenofficeDocument
 {
     public $split_steps;
@@ -129,7 +124,7 @@ class OpenofficeText extends OpenofficeDocument
         // Empty the fake chapters.
         $new_index = 0;
         for ($i = 0; $i < count($matches_temp[0]); $i++) {
-            if (trim($matches_temp[1][$i]) !== '') {
+            if ('' !== trim($matches_temp[1][$i])) {
                 $matches[0][$new_index] = $matches_temp[0][$i];
                 $matches[1][$new_index] = $matches_temp[1][$i];
                 $new_index++;
@@ -201,7 +196,7 @@ class OpenofficeText extends OpenofficeDocument
                     $slide_name,
                     ''
                 );
-                if ($this->first_item == 0) {
+                if (0 == $this->first_item) {
                     $this->first_item = $previous;
                 }
             }
@@ -257,11 +252,11 @@ class OpenofficeText extends OpenofficeDocument
                 $infos = pathinfo($this->filepath);
                 $slide_name = 'Page '.str_repeat('0', 2 - strlen($key)).$key;
                 $previous = learnpath::add_item(0, $previous, 'document', $document_id, $slide_name, '');
-                if ($this->first_item == 0) {
+                if (0 == $this->first_item) {
                     $this->first_item = $previous;
                 }
                 // Code for text indexing.
-                if (api_get_setting('search_enabled') == 'true') {
+                if ('true' == api_get_setting('search_enabled')) {
                     if (isset($_POST['index_document']) && $_POST['index_document']) {
                         //echo Display::return_message(print_r($_POST));
                         $di = new ChamiloIndexer();

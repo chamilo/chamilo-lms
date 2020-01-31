@@ -1,9 +1,6 @@
 <?php
 /* For licensing terms, see /license.txt */
 
-/**
- *  @package chamilo.admin
- */
 $cidReset = true;
 
 require_once __DIR__.'/../inc/global.inc.php';
@@ -112,7 +109,7 @@ Display::display_header($tool_name);
 // Action handling: Add
 switch ($action) {
     case 'add':
-        if (api_get_session_id() != 0 &&
+        if (0 != api_get_session_id() &&
             !api_is_allowed_to_session_edit(false, true)
         ) {
             api_not_allowed();

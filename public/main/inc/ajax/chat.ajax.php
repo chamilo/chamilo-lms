@@ -10,14 +10,14 @@ require_once __DIR__.'/../global.inc.php';
 
 api_block_anonymous_users();
 
-if (api_get_setting('allow_global_chat') == 'false') {
+if ('false' == api_get_setting('allow_global_chat')) {
     exit;
 }
 
 $action = isset($_REQUEST['action']) ? $_REQUEST['action'] : '';
 
 // Course Chat
-if ($action === 'preview') {
+if ('preview' === $action) {
     echo CourseChatUtils::prepareMessage($_REQUEST['message']);
     exit;
 }

@@ -7,8 +7,6 @@
  * Parent class for controller Blocks from dashboard plugin.
  *
  * @author Christian Fasanando <christian1827@gmail.com>
- *
- * @package chamilo.dashboard
  */
 class Block
 {

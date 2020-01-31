@@ -5,14 +5,12 @@
  * Search user certificates if them are publics.
  *
  * @author Angel Fernando Quiroz Campos <angel.quiroz@beeznest.com>
- *
- * @package chamilo.gradebook
  */
 $cidReset = true;
 
 require_once __DIR__.'/../inc/global.inc.php';
 
-if (api_get_setting('allow_public_certificates') != 'true') {
+if ('true' != api_get_setting('allow_public_certificates')) {
     api_not_allowed(
         true,
         Display::return_message(get_lang('Certificates are not publicly available'), 'warning')

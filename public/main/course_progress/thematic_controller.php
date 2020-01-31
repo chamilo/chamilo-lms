@@ -16,8 +16,6 @@ use ChamiloSession as Session;
  *
  * @author Christian Fasanando <christian1827@gmail.com>
  * @author Julio Montoya <gugli100@gmail.com> token support improving UI
- *
- * @package chamilo.course_progress
  */
 class ThematicController
 {
@@ -42,7 +40,7 @@ class ThematicController
         $data = [];
         $check = Security::check_token('request');
         $thematic_id = isset($_REQUEST['thematic_id']) ? intval($_REQUEST['thematic_id']) : null;
-        $displayHeader = !empty($_REQUEST['display']) && $_REQUEST['display'] === 'no_header' ? false : true;
+        $displayHeader = !empty($_REQUEST['display']) && 'no_header' === $_REQUEST['display'] ? false : true;
         $courseId = api_get_course_int_id();
 
         if ($check) {
@@ -50,8 +48,8 @@ class ThematicController
                 case 'thematic_add':
                 case 'thematic_edit':
                     // insert or update a thematic
-                    if (strtoupper($_SERVER['REQUEST_METHOD']) == "POST") {
-                        if (trim($_POST['title']) !== '') {
+                    if ("POST" == strtoupper($_SERVER['REQUEST_METHOD'])) {
+                        if ('' !== trim($_POST['title'])) {
                             if (api_is_allowed_to_edit(null, true)) {
                                 $id = isset($_POST['thematic_id']) ? $_POST['thematic_id'] : null;
                                 $title = trim($_POST['title']);
@@ -59,7 +57,7 @@ class ThematicController
                                 $session_id = api_get_session_id();
                                 $thematic->set_thematic_attributes($id, $title, $content, $session_id);
                                 $last_id = $thematic->thematic_save();
-                                if ($_POST['action'] == 'thematic_add') {
+                                if ('thematic_add' == $_POST['action']) {
                                     $action = 'thematic_details';
                                     $thematic_id = null;
                                     if ($last_id) {
@@ -92,7 +90,7 @@ class ThematicController
                     break;
                 case 'thematic_delete_select':
                     // Delete many thematics
-                    if (strtoupper($_SERVER['REQUEST_METHOD']) == "POST") {
+                    if ("POST" == strtoupper($_SERVER['REQUEST_METHOD'])) {
                         if (api_is_allowed_to_edit(null, true)) {
                             $thematic_ids = $_POST['id'];
                             $thematic->delete($thematic_ids);
@@ -237,13 +235,13 @@ class ThematicController
                     $view->assign('data', $listFinish);
                     $template = $view->get_template('course_progress/pdf_general_thematic.tpl');
 
-                    $format = $pdfOrientation !== 'portrait' ? 'A4-L' : 'A4-P';
-                    $orientation = $pdfOrientation !== 'portrait' ? 'L' : 'P';
+                    $format = 'portrait' !== $pdfOrientation ? 'A4-L' : 'A4-P';
+                    $orientation = 'portrait' !== $pdfOrientation ? 'L' : 'P';
                     $fileName = get_lang('Thematic').'-'.api_get_local_time();
                     $title = get_lang('Thematic');
                     $signatures = ['Drh', 'Teacher', 'Date'];
 
-                    if ($action === 'export_documents') {
+                    if ('export_documents' === $action) {
                         $pdf = new PDF(
                             $format,
                             $orientation,
@@ -290,13 +288,13 @@ class ThematicController
                     $template = $view->get_template('course_progress/pdf_single_thematic.tpl');
 
                     $pdfOrientation = api_get_configuration_value('thematic_pdf_orientation');
-                    $format = $pdfOrientation !== 'portrait' ? 'A4-L' : 'A4-P';
-                    $orientation = $pdfOrientation !== 'portrait' ? 'L' : 'P';
+                    $format = 'portrait' !== $pdfOrientation ? 'A4-L' : 'A4-P';
+                    $orientation = 'portrait' !== $pdfOrientation ? 'L' : 'P';
                     $title = get_lang('Thematic').'-'.$theme['title'];
                     $fileName = $title.'-'.api_get_local_time();
                     $signatures = ['Drh', 'Teacher', 'Date'];
 
-                    if ($action === 'export_single_documents') {
+                    if ('export_single_documents' === $action) {
                         $pdf = new PDF(
                             $format,
                             $orientation,
@@ -348,7 +346,7 @@ class ThematicController
             $data['thematic_id'] = $thematic_id;
         }
 
-        if ($action == 'thematic_details') {
+        if ('thematic_details' == $action) {
             if (isset($thematic_id)) {
                 $thematic_data_result = $thematic->get_thematic_list($thematic_id);
                 if (!empty($thematic_data_result)) {
@@ -397,9 +395,9 @@ class ThematicController
     {
         $thematic = new Thematic();
         $data = [];
-        if (strtoupper($_SERVER['REQUEST_METHOD']) == "POST") {
+        if ("POST" == strtoupper($_SERVER['REQUEST_METHOD'])) {
             if (isset($_POST['action']) &&
-                ($_POST['action'] == 'thematic_plan_add' || $_POST['action'] == 'thematic_plan_edit')
+                ('thematic_plan_add' == $_POST['action'] || 'thematic_plan_edit' == $_POST['action'])
             ) {
                 if (isset($_POST['title'])) {
                     $token = Session::read('thematic_plan_token');
@@ -470,13 +468,13 @@ class ThematicController
         }
 
         $thematic_id = intval($_GET['thematic_id']);
-        if ($action == 'thematic_plan_list') {
+        if ('thematic_plan_list' == $action) {
             $data['thematic_plan_data'] = $thematic->get_thematic_plan_data($thematic_id);
         }
 
         $description_type = isset($_GET['description_type']) ? intval($_GET['description_type']) : null;
         if (!empty($thematic_id) && !empty($description_type)) {
-            if ($action === 'thematic_plan_delete') {
+            if ('thematic_plan_delete' === $action) {
                 if (api_is_allowed_to_edit(null, true)) {
                     $thematic->thematic_plan_destroy(
                         $thematic_id,
@@ -490,7 +488,7 @@ class ThematicController
             }
             $data['thematic_id'] = $thematic_id;
             $data['description_type'] = $description_type;
-        } elseif (!empty($thematic_id) && $action === 'thematic_plan_list') {
+        } elseif (!empty($thematic_id) && 'thematic_plan_list' === $action) {
             $data['thematic_plan_data'] = $thematic->get_thematic_plan_data($thematic_id);
             $data['thematic_id'] = $thematic_id;
         }
@@ -522,7 +520,7 @@ class ThematicController
         $thematic = new Thematic();
         $attendance = new Attendance();
         $data = [];
-        $displayHeader = !empty($_REQUEST['display']) && $_REQUEST['display'] === 'no_header' ? false : true;
+        $displayHeader = !empty($_REQUEST['display']) && 'no_header' === $_REQUEST['display'] ? false : true;
 
         // get data for attendance input select
         $attendance_list = $attendance->get_attendances_list();

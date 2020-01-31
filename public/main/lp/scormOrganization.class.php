@@ -4,8 +4,6 @@
 /**
  * Container for the scormOrganization class.
  *
- * @package chamilo.learnpath.scorm
- *
  * @author    Yannick Warnier <ywarnier@beeznest.org>
  */
 
@@ -49,7 +47,7 @@ class scormOrganization
                                             'manifest',
                                             $child
                                         );
-                                        if ($oItem->identifier != '') {
+                                        if ('' != $oItem->identifier) {
                                             $this->items[$oItem->identifier] = $oItem;
                                         }
                                         break;
@@ -61,7 +59,7 @@ class scormOrganization
                                         break;
                                     case 'title':
                                         $tmp_children = $child->childNodes;
-                                        if ($tmp_children->length == 1 && $child->firstChild->nodeValue != '') {
+                                        if (1 == $tmp_children->length && '' != $child->firstChild->nodeValue) {
                                             $this->title = api_utf8_decode(
                                                 api_html_entity_decode(
                                                     $child->firstChild->nodeValue,

@@ -603,9 +603,9 @@ class AttendanceController
                     } else {
                         $result[$class_day['id']] = ' ';
                     }
-                    ++$cols;
+                    $cols++;
                 }
-                ++$count;
+                $count++;
                 $data_table[] = $result;
             }
         }
@@ -620,7 +620,7 @@ class AttendanceController
             $tables = [];
             $changed = 1;
 
-            for ($i = 0; $i <= $rows; ++$i) {
+            for ($i = 0; $i <= $rows; $i++) {
                 $row = isset($data_table[$i]) ? $data_table[$i] : null;
                 $key = 1;
                 $max_dates_per_page = 10;
@@ -630,14 +630,14 @@ class AttendanceController
                 if (!empty($item)) {
                     foreach ($item as $value) {
                         if ($count_j >= $max_dates_per_page) {
-                            ++$key;
+                            $key++;
                             $max_dates_per_page = $max_dates_per_page_original * $key;
                             //magic hack
                             $tables[$key][$i][] = $tables[1][$i][0];
                             $tables[$key][$i][] = $tables[1][$i][1];
                         }
                         $tables[$key][$i][] = $value;
-                        ++$count_j;
+                        $count_j++;
                     }
                 }
             }

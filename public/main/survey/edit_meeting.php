@@ -169,7 +169,7 @@ if ($form->validate()) {
 
             $date = $values[$name];
 
-            if ($date === 'delete' && !empty($id)) {
+            if ('delete' === $date && !empty($id)) {
                 $deleteItems[] = $id;
             }
 

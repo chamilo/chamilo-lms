@@ -4,7 +4,6 @@
 /**
  * Responses to AJAX calls.
  */
-
 use Chamilo\CoreBundle\Framework\Container;
 
 require_once __DIR__.'/../global.inc.php';
@@ -38,7 +37,7 @@ switch ($action) {
             $allowToEdit = $allowToEdit || api_is_drh();
         }
 
-        if ($allowToEdit === false && !empty($groupId)) {
+        if (false === $allowToEdit && !empty($groupId)) {
             $groupProperties = GroupManager::get_group_properties($groupId);
             // Check if user is tutor group
             $isTutor = GroupManager::is_tutor_of_group(api_get_user_id(), $groupProperties, $courseId);
@@ -47,12 +46,12 @@ switch ($action) {
             }
 
             // Last chance ... students can send announcements.
-            if ($groupProperties['announcements_state'] == GroupManager::TOOL_PRIVATE_BETWEEN_USERS) {
+            if (GroupManager::TOOL_PRIVATE_BETWEEN_USERS == $groupProperties['announcements_state']) {
                 $allowToEdit = true;
             }
         }
 
-        if ($allowToEdit === false) {
+        if (false === $allowToEdit) {
             exit;
         }
 
@@ -67,7 +66,7 @@ switch ($action) {
         $previewTotal = [];
         if (empty($groupId)) {
             if (empty($users) ||
-                (!empty($users) && isset($users[0]) && $users[0] == 'everyone')
+                (!empty($users) && isset($users[0]) && 'everyone' == $users[0])
             ) {
                 // All users in course session
                 if (empty($sessionId)) {
@@ -111,7 +110,7 @@ switch ($action) {
                 $sentToAllGroup = true;
             }
 
-            if ($sentToAllGroup === false) {
+            if (false === $sentToAllGroup) {
                 if (!empty($send_to_users['groups'])) {
                     foreach ($send_to_users['groups'] as $group) {
                         $previewGroups[] = $group;
@@ -126,7 +125,7 @@ switch ($action) {
             }
         }
 
-        if (isset($formParams['send_to_users_in_session']) && $formParams['send_to_users_in_session'] == 1) {
+        if (isset($formParams['send_to_users_in_session']) && 1 == $formParams['send_to_users_in_session']) {
             $sessionList = SessionManager::get_session_by_course(api_get_course_int_id());
 
             if (!empty($sessionList)) {
@@ -146,7 +145,7 @@ switch ($action) {
             }
         }
 
-        if (isset($formParams['send_to_hrm_users']) && $formParams['send_to_hrm_users'] == 1) {
+        if (isset($formParams['send_to_hrm_users']) && 1 == $formParams['send_to_hrm_users']) {
             foreach ($previewUsers as $userId) {
                 $userInfo = api_get_user_info($userId);
                 $drhList = UserManager::getDrhListFromUser($userId);
@@ -158,7 +157,7 @@ switch ($action) {
             }
         }
 
-        if (isset($formParams['send_me_a_copy_by_email']) && $formParams['send_me_a_copy_by_email'] == 1) {
+        if (isset($formParams['send_me_a_copy_by_email']) && 1 == $formParams['send_me_a_copy_by_email']) {
             $previewUsers[] = api_get_user_id();
         }
 
@@ -192,7 +191,7 @@ switch ($action) {
             if (empty($_REQUEST['id'])) {
                 return false;
             }
-            if (!empty($sessionId) && api_is_allowed_to_session_edit(false, true) == false && empty($groupId)) {
+            if (!empty($sessionId) && false == api_is_allowed_to_session_edit(false, true) && empty($groupId)) {
                 return false;
             }
 

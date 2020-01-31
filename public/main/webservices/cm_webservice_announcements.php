@@ -1,9 +1,6 @@
 <?php
 /* For licensing terms, see /license.txt */
 
-/**
- * @package chamilo.webservices
- */
 require_once __DIR__.'/../inc/global.inc.php';
 require_once __DIR__.'/cm_webservice.php';
 
@@ -16,7 +13,7 @@ class WSCMAnnouncements extends WSCM
 {
     public function get_announcements_id($username, $password, $course_code)
     {
-        if ($this->verifyUserPass($username, $password) == "valid") {
+        if ("valid" == $this->verifyUserPass($username, $password)) {
             $result = self::get_announcements($username, $course_code);
 
             $announcements = "#";
@@ -37,7 +34,7 @@ class WSCMAnnouncements extends WSCM
         $announcement_id,
         $field
     ) {
-        if ($this->verifyUserPass($username, $password) == "valid") {
+        if ("valid" == $this->verifyUserPass($username, $password)) {
             $htmlcode = false;
             $user_id = UserManager::get_user_id_from_username($username);
 
@@ -92,7 +89,7 @@ class WSCMAnnouncements extends WSCM
         $session_id = api_get_session_id();
         $condition_session = api_get_session_condition($session_id);
 
-        $announcement_id = ($announcement_id == 0) ? "" : "AND announcement.id=".$announcement_id;
+        $announcement_id = (0 == $announcement_id) ? "" : "AND announcement.id=".$announcement_id;
         $user_id = UserManager::get_user_id_from_username($username);
         $course_info = CourseManager::get_course_information($course_code);
         $tbl_item_property = Database::get_course_table(TABLE_ITEM_PROPERTY);
@@ -104,7 +101,7 @@ class WSCMAnnouncements extends WSCM
             $user_id
         );
 
-        if (api_get_group_id() == 0) {
+        if (0 == api_get_group_id()) {
             $cond_user_id = " AND (
                 ip.to_user_id='".$user_id."' OR
                 ip.to_group_id IN (0, ".implode(", ", $group_memberships).") OR

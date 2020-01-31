@@ -3,8 +3,6 @@
 
 /**
  * Document quota management script.
- *
- * @package chamilo.document
  */
 use Chamilo\CoreBundle\Framework\Container;
 
@@ -90,11 +88,11 @@ if (!empty($group_list)) {
 $document_list = DocumentManager::getAllDocumentData(api_get_course_info());
 if (!empty($document_list)) {
     foreach ($document_list as $document_data) {
-        if ($document_data['creator_id'] == api_get_user_id() && $document_data['filetype'] === 'file') {
+        if ($document_data['creator_id'] == api_get_user_id() && 'file' === $document_data['filetype']) {
             $quota_bytes += $document_data['size'];
         }
     }
-    if ($quota_bytes != 0) {
+    if (0 != $quota_bytes) {
         $quotaPercentage = round($quota_bytes / $total_quota_bytes, 2) * 100;
     }
 
@@ -103,7 +101,7 @@ if (!empty($document_list)) {
         $quotaPercentage,
     ];
     //if a sesson is active
-    if ($sessionId != 0) {
+    if (0 != $sessionId) {
         if (!empty($course_list)) {
             $total_courses_quota = 0;
             $total_quota_bytes = 0;
@@ -112,7 +110,7 @@ if (!empty($document_list)) {
                     $total_quota_bytes += DocumentManager::get_course_quota($course_data['id']);
                 }
             }
-            if ($quota_bytes != 0) {
+            if (0 != $quota_bytes) {
                 $quotaPercentage = round($quota_bytes / $total_quota_bytes, 2) * 100;
             }
         }

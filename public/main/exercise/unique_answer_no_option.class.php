@@ -98,17 +98,17 @@ class UniqueAnswerNoOption extends Question
             if (isset($_POST['lessAnswers'])) {
                 if (!isset($_SESSION['less_answer'])) {
                     $_SESSION['less_answer'] = $this->id;
-                    --$nb_answers;
+                    $nb_answers--;
                 }
             }
-            for ($k = 1; $k <= $nb_answers; ++$k) {
+            for ($k = 1; $k <= $nb_answers; $k++) {
                 if ('666' != $answer->position[$k]) {
                     $new_list[$count] = $count;
-                    ++$count;
+                    $count++;
                 }
             }
         } else {
-            for ($k = 1; $k <= $nb_answers; ++$k) {
+            for ($k = 1; $k <= $nb_answers; $k++) {
                 $new_list[$k] = $k;
             }
         }
@@ -192,7 +192,7 @@ class UniqueAnswerNoOption extends Question
             $form->addElement('html_editor', 'comment['.$i.']', null, [], $editor_config);
             $form->addElement('text', 'weighting['.$i.']', null, ['style' => 'width: 60px;', 'value' => '0']);
             $form->addElement('html', '</tr>');
-            ++$i;
+            $i++;
         }
 
         if (empty($this->id)) {
@@ -288,7 +288,7 @@ class UniqueAnswerNoOption extends Question
             $minus = 0;
         }
 
-        for ($i = 1; $i <= $nb_answers - $minus; ++$i) {
+        for ($i = 1; $i <= $nb_answers - $minus; $i++) {
             $answer = trim($form->getSubmitValue('answer['.$i.']'));
             $comment = trim($form->getSubmitValue('comment['.$i.']'));
             $weighting = trim($form->getSubmitValue('weighting['.$i.']'));

@@ -6,8 +6,6 @@ use ChamiloSession as Session;
 /**
  * This file allows creating new svg and png documents with an online editor.
  *
- * @package chamilo.document
- *
  * @author Juan Carlos Ra�a Trabado
  *
  * @since 30/january/2011

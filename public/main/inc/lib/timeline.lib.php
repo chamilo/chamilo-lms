@@ -113,7 +113,7 @@ class Timeline extends Model
         $form = new FormValidator('timeline', 'post', $url);
         // Setting the form elements
         $header = get_lang('Add');
-        if ($action == 'edit') {
+        if ('edit' == $action) {
             $header = get_lang('Edit');
         }
         $form->addElement('header', $header);
@@ -123,11 +123,11 @@ class Timeline extends Model
         $form->addElement('text', 'headline', get_lang('Name'), ['size' => '70']);
         $status_list = $this->get_status_list();
         $form->addElement('select', 'status', get_lang('Status'), $status_list);
-        if ($action == 'edit') {
+        if ('edit' == $action) {
             //$form->addElement('text', 'created_at', get_lang('Created at'));
             //$form->freeze('created_at');
         }
-        if ($action == 'edit') {
+        if ('edit' == $action) {
             $form->addButtonSave(get_lang('Edit'), 'submit');
         } else {
             $form->addButtonCreate(get_lang('Add'), 'submit');
@@ -163,7 +163,7 @@ class Timeline extends Model
         $form = new FormValidator('item_form', 'post', $url);
         // Setting the form elements
         $header = get_lang('Add');
-        if ($action == 'edit') {
+        if ('edit' == $action) {
             $header = get_lang('Edit');
         }
         $form->addElement('header', $header);
@@ -185,7 +185,7 @@ class Timeline extends Model
         $form->addRule('headline', get_lang('Required field'), 'required');
         $form->addRule('start_date', get_lang('Required field'), 'required');
 
-        if ($action == 'edit') {
+        if ('edit' == $action) {
             // Setting the defaults
             $defaults = $this->get($id);
             $form->addButtonSave(get_lang('Edit'), 'submit');

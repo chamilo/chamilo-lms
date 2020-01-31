@@ -7,8 +7,6 @@
  *
  * @author Julio Montoya <gugli100@gmail.com>
  *
- * @package chamilo.include.image
- *
  * @todo move in a DB configuration setting
  */
 class Image
@@ -141,8 +139,6 @@ class Image
 
 /**
  * Image wrapper class.
- *
- * @package chamilo.include.image
  */
 abstract class ImageWrapper
 {
@@ -192,8 +188,6 @@ abstract class ImageWrapper
  * Imagick Chamilo wrapper.
  *
  * @author jmontoya
- *
- * @package chamilo.include.image
  */
 class ImagickWrapper extends ImageWrapper
 {
@@ -357,8 +351,6 @@ class ImagickWrapper extends ImageWrapper
 
 /**
  * php-gd wrapper.
- *
- * @package chamilo.include.image
  */
 class GDWrapper extends ImageWrapper
 {
@@ -436,7 +428,7 @@ class GDWrapper extends ImageWrapper
         if (!$this->image_validated) {
             return false;
         }
-        if ($border == 1) {
+        if (1 == $border) {
             if ($specific_size) {
                 $width = $thumbw;
                 $height = $thumbh;
@@ -456,7 +448,7 @@ class GDWrapper extends ImageWrapper
             }
             $this->width = $thumbw;
             $this->height = $thumbh;
-        } elseif ($border == 0) {
+        } elseif (0 == $border) {
             if ($specific_size) {
                 $width = $thumbw;
                 $height = $thumbh;
@@ -559,7 +551,7 @@ class GDWrapper extends ImageWrapper
                 if (!$file) {
                     header("Content-type: image/jpeg");
                 }
-                if ($compress == -1) {
+                if (-1 == $compress) {
                     $compress = 100;
                 }
 
@@ -569,7 +561,7 @@ class GDWrapper extends ImageWrapper
                 if (!$file) {
                     header("Content-type: image/png");
                 }
-                if ($compress != -1) {
+                if (-1 != $compress) {
                     @imagetruecolortopalette($this->bg, true, $compress);
                 }
 
@@ -579,7 +571,7 @@ class GDWrapper extends ImageWrapper
                 if (!$file) {
                     header("Content-type: image/gif");
                 }
-                if ($compress != -1) {
+                if (-1 != $compress) {
                     @imagetruecolortopalette($this->bg, true, $compress);
                 }
 

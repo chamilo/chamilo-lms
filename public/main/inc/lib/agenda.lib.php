@@ -71,7 +71,7 @@ class Agenda
                 // Check if teacher/admin rights.
                 $isAllowToEdit = api_is_allowed_to_edit(false, true);
                 // Check course setting.
-                if (api_get_course_setting('allow_user_edit_agenda') === '1'
+                if ('1' === api_get_course_setting('allow_user_edit_agenda')
                     && api_is_allowed_in_course()
                 ) {
                     $isAllowToEdit = true;
@@ -253,7 +253,7 @@ class Agenda
     ) {
         $start = api_get_utc_datetime($start, false, true);
         $end = api_get_utc_datetime($end, false, true);
-        $allDay = isset($allDay) && $allDay === 'true' ? 1 : 0;
+        $allDay = isset($allDay) && 'true' === $allDay ? 1 : 0;
         $id = null;
 
         $em = Database::getManager();
@@ -318,30 +318,30 @@ class Agenda
                             $groupEntity
                         );
 
-                        /*api_item_property_update(
-                            $this->course,
-                            TOOL_CALENDAR_EVENT,
-                            $id,
-                            'AgendaAdded',
-                            $senderId,
-                            $groupInfo,
-                            '',
-                            $start,
-                            $end,
-                            $sessionId
-                        );
-                        api_item_property_update(
-                            $this->course,
-                            TOOL_CALENDAR_EVENT,
-                            $id,
-                            'visible',
-                            $senderId,
-                            $groupInfo,
-                            '',
-                            $start,
-                            $end,
-                            $sessionId
-                        );*/
+                    /*api_item_property_update(
+                        $this->course,
+                        TOOL_CALENDAR_EVENT,
+                        $id,
+                        'AgendaAdded',
+                        $senderId,
+                        $groupInfo,
+                        '',
+                        $start,
+                        $end,
+                        $sessionId
+                    );
+                    api_item_property_update(
+                        $this->course,
+                        TOOL_CALENDAR_EVENT,
+                        $id,
+                        'visible',
+                        $senderId,
+                        $groupInfo,
+                        '',
+                        $start,
+                        $end,
+                        $sessionId
+                    );*/
                     } else {
                         // Storing the selected groups
                         if (!empty($sendTo['groups'])) {
@@ -562,7 +562,7 @@ class Agenda
 
             // @todo remove comment code
             $startDateInLocal = new DateTime($newStartDate, new DateTimeZone($timeZone));
-            if ($startDateInLocal->format('I') == 0) {
+            if (0 == $startDateInLocal->format('I')) {
                 // Is saving time? Then fix UTC time to add time
                 $seconds = $startDateInLocal->getOffset();
                 $startDate->add(new DateInterval("PT".$seconds."S"));
@@ -572,7 +572,7 @@ class Agenda
             }
 
             $endDateInLocal = new DateTime($newEndDate, new DateTimeZone($timeZone));
-            if ($endDateInLocal->format('I') == 0) {
+            if (0 == $endDateInLocal->format('I')) {
                 // Is saving time? Then fix UTC time to add time
                 $seconds = $endDateInLocal->getOffset();
                 $endDate->add(new DateInterval("PT".$seconds."S"));
@@ -617,7 +617,7 @@ class Agenda
                 WHERE c_id = $courseId AND id = $eventId";
         $res = Database::query($sql);
 
-        if (Database::num_rows($res) !== 1) {
+        if (1 !== Database::num_rows($res)) {
             return false;
         }
 
@@ -763,7 +763,7 @@ class Agenda
     ) {
         $start = api_get_utc_datetime($start);
         $end = api_get_utc_datetime($end);
-        $allDay = isset($allDay) && $allDay == 'true' ? 1 : 0;
+        $allDay = isset($allDay) && 'true' == $allDay ? 1 : 0;
         $authorId = empty($authorId) ? api_get_user_id() : (int) $authorId;
 
         switch ($this->type) {
@@ -1088,7 +1088,7 @@ class Agenda
                 $sessionId = api_get_session_id();
                 $isAllowToEdit = api_is_allowed_to_edit(null, true);
 
-                if ($isAllowToEdit == false && !empty($sessionId)) {
+                if (false == $isAllowToEdit && !empty($sessionId)) {
                     $allowDhrToEdit = api_get_configuration_value('allow_agenda_edit_for_hrm');
                     if ($allowDhrToEdit) {
                         $isHrm = SessionManager::isUserSubscribedAsHRM(
@@ -1241,7 +1241,7 @@ class Agenda
                     $sessionFilterActive = true;
                 }
 
-                if ($sessionFilterActive == false) {
+                if (false == $sessionFilterActive) {
                     // Getting personal events
                     $this->getPersonalEvents($start, $end);
 
@@ -1320,7 +1320,7 @@ class Agenda
                     }
                 }
 
-                if (!empty($my_course_list) && $sessionFilterActive == false) {
+                if (!empty($my_course_list) && false == $sessionFilterActive) {
                     foreach ($my_course_list as $courseInfoItem) {
                         $courseInfo = api_get_course_info_by_id(
                             $courseInfoItem['real_id']
@@ -1572,10 +1572,10 @@ class Agenda
         $startCondition = '';
         $endCondition = '';
 
-        if ($start !== 0) {
+        if (0 !== $start) {
             $startCondition = "AND date >= '".api_get_utc_datetime($start)."'";
         }
-        if ($start !== 0) {
+        if (0 !== $start) {
             $endCondition = "AND (enddate <= '".api_get_utc_datetime($end)."' OR enddate IS NULL)";
         }
         $user_id = api_get_user_id();
@@ -1607,7 +1607,7 @@ class Agenda
                 }
 
                 $event['description'] = $row['text'];
-                $event['allDay'] = isset($row['all_day']) && $row['all_day'] == 1 ? $row['all_day'] : 0;
+                $event['allDay'] = isset($row['all_day']) && 1 == $row['all_day'] ? $row['all_day'] : 0;
                 $event['parent_event_id'] = 0;
                 $event['has_children'] = 0;
 
@@ -1690,7 +1690,7 @@ class Agenda
             }
 
             if (empty($groups) && empty($users)) {
-                if ($row['to_group_id'] == 0) {
+                if (0 == $row['to_group_id']) {
                     $everyone = true;
                 }
             }
@@ -1841,7 +1841,7 @@ class Agenda
                     // Show all events not added in group
                     $userCondition = ' (links.group IS NULL) ';
                     // admin see only his stuff
-                    if ($this->type === 'personal') {
+                    if ('personal' === $this->type) {
                         $userCondition = " (links.user = ".api_get_user_id()." AND (links.group IS NULL) ";
                         //$userCondition = " (ip.to_user_id = ".api_get_user_id()." AND (ip.to_group_id IS NULL OR ip.to_group_id = 0) ) ";
                         $userCondition .= " OR ( (links.user IS NULL)  AND (links.group IS NULL ))) ";
@@ -1882,7 +1882,6 @@ class Agenda
                     $userCondition .= " ) ";
                 }
                 $userCondition .= " OR (links.user = ".api_get_user_id()." AND (links.group IS NULL )) ";
-
             } else {
                 if (!empty($groupMemberships)) {
                     // Show send to everyone - and only selected groups
@@ -2072,10 +2071,10 @@ class Agenda
             }
 
             $event['editable'] = false;
-            if ($this->getIsAllowedToEdit() && $this->type === 'course') {
+            if ($this->getIsAllowedToEdit() && 'course' === $this->type) {
                 $event['editable'] = true;
                 if (!empty($sessionId)) {
-                    if ($coachCanEdit == false) {
+                    if (false == $coachCanEdit) {
                         $event['editable'] = false;
                     }
                     if ($isAllowToEditByHrm) {
@@ -2099,7 +2098,7 @@ class Agenda
 
             $event['sent_to'] = '';
             $event['type'] = 'course';
-            if ($row->getSessionId() != 0) {
+            if (0 != $row->getSessionId()) {
                 $event['type'] = 'session';
             }
 
@@ -2208,7 +2207,7 @@ class Agenda
                 $event['editable'] = false;
                 $event['type'] = 'admin';
 
-                if (api_is_platform_admin() && $this->type === 'admin') {
+                if (api_is_platform_admin() && 'admin' === $this->type) {
                     $event['editable'] = true;
                 }
 
@@ -2221,7 +2220,7 @@ class Agenda
                     $event['end'] = $this->formatEventDate($row['end_date']);
                     $event['end_date_localtime'] = api_get_local_time($row['end_date']);
                 }
-                $event['allDay'] = isset($row['all_day']) && $row['all_day'] == 1 ? $row['all_day'] : 0;
+                $event['allDay'] = isset($row['all_day']) && 1 == $row['all_day'] ? $row['all_day'] : 0;
                 $event['parent_event_id'] = 0;
                 $event['has_children'] = 0;
                 $event['description'] = $row['content'];
@@ -2325,7 +2324,7 @@ class Agenda
         if (is_array($userList)) {
             $options = [];
             foreach ($userList as $user) {
-                if ($user['status'] == ANONYMOUS) {
+                if (ANONYMOUS == $user['status']) {
                     continue;
                 }
                 $option = [
@@ -2379,7 +2378,7 @@ class Agenda
         $sendTo['everyone'] = false;
         if (is_array($to) && count($to) > 0) {
             foreach ($to as $item) {
-                if ($item == 'everyone') {
+                if ('everyone' == $item) {
                     $sendTo['everyone'] = true;
                 } else {
                     list($type, $id) = explode(':', $item);
@@ -2411,7 +2410,7 @@ class Agenda
         $id = isset($params['id']) ? (int) $params['id'] : 0;
 
         $url = api_get_self().'?action='.$action.'&id='.$id.'&type='.$this->type;
-        if ($this->type == 'course') {
+        if ('course' == $this->type) {
             $url = api_get_self().'?'.api_get_cidreq().'&action='.$action.'&id='.$id.'&type='.$this->type;
         }
 
@@ -2439,7 +2438,7 @@ class Agenda
         $isParentFromSerie = false;
         $showAttachmentForm = true;
 
-        if ($this->type == 'course') {
+        if ('course' == $this->type) {
             // Edition mode.
             if (!empty($id)) {
                 $showAttachmentForm = false;
@@ -2474,7 +2473,7 @@ class Agenda
             $form->addElement('hidden', 'to', 'true');
         } else {
             $sendTo = isset($params['send_to']) ? $params['send_to'] : ['everyone' => true];
-            if ($this->type == 'course') {
+            if ('course' == $this->type) {
                 $this->showToForm($form, $sendTo, [], false, true);
             }
         }
@@ -2487,7 +2486,7 @@ class Agenda
         );
         $form->addElement('checkbox', 'all_day', null, get_lang('All day'));
 
-        if ($this->type == 'course') {
+        if ('course' == $this->type) {
             $repeat = $form->addElement(
                 'checkbox',
                 'repeat',
@@ -2559,7 +2558,7 @@ class Agenda
             ]
         );
 
-        if ($this->type == 'course') {
+        if ('course' == $this->type) {
             $form->addElement('textarea', 'comment', get_lang('Comment'));
             $form->addLabel(
                 get_lang('Files attachments'),
@@ -2654,7 +2653,7 @@ class Agenda
         $addOnlyItemsInSendTo = false,
         $required = false
     ) {
-        if ($this->type != 'course') {
+        if ('course' != $this->type) {
             return false;
         }
 
@@ -2707,7 +2706,7 @@ class Agenda
             $userId = intval($userId);
         }
 
-        if ($visibility == 0) {
+        if (0 == $visibility) {
             api_item_property_update(
                 $courseInfo,
                 TOOL_CALENDAR_EVENT,
@@ -2764,7 +2763,7 @@ class Agenda
                     agenda_id = $eventId";
         $result = Database::query($sql);
         $list = [];
-        if (Database::num_rows($result) != 0) {
+        if (0 != Database::num_rows($result)) {
             $list = Database::store_result($result, 'ASSOC');
         }
 
@@ -2800,7 +2799,7 @@ class Agenda
                     id = $attachmentId
                 ";
         $result = Database::query($sql);
-        if (Database::num_rows($result) != 0) {
+        if (0 != Database::num_rows($result)) {
             $row = Database::fetch_array($result, 'ASSOC');
         }
 
@@ -3039,7 +3038,7 @@ class Agenda
 
         $form = '';
         if (api_is_allowed_to_edit(false, true) ||
-            (api_get_course_setting('allow_user_edit_agenda') == '1' && !api_is_anonymous()) &&
+            ('1' == api_get_course_setting('allow_user_edit_agenda') && !api_is_anonymous()) &&
             api_is_allowed_to_session_edit(false, true)
             || (
                 GroupManager::user_has_access($currentUserId, $groupIid, GroupManager::GROUP_TOOL_CALENDAR)
@@ -3056,7 +3055,7 @@ class Agenda
                 $codePath."calendar/agenda.php?action=importical&type={$this->type}&$cidReq"
             );
 
-            if ($this->type === 'course') {
+            if ('course' === $this->type) {
                 if (!isset($_GET['action'])) {
                     $form = new FormValidator(
                         'form-search',
@@ -3077,7 +3076,7 @@ class Agenda
             }
         }
 
-        if ($this->type == 'personal' && !api_is_anonymous()) {
+        if ('personal' == $this->type && !api_is_anonymous()) {
             $actionsLeft .= Display::url(
                 Display::return_icon('1day.png', get_lang('Sessions plan calendar'), [], ICON_SIZE_MEDIUM),
                 $codePath."calendar/planification.php"
@@ -3091,7 +3090,7 @@ class Agenda
             api_is_session_admin() ||
             api_is_coach()
         ) {
-            if ($this->type == 'personal') {
+            if ('personal' == $this->type) {
                 $form = null;
                 if (!isset($_GET['action'])) {
                     $form = new FormValidator(
@@ -3134,7 +3133,7 @@ class Agenda
         }
 
         $actionsRight = '';
-        if ($view == 'calendar') {
+        if ('calendar' == $view) {
             $actionsRight .= $form;
         }
 
@@ -3247,7 +3246,7 @@ class Agenda
 
                     if (isset($repeat['UNTIL']) && !empty($repeat['UNTIL'])) {
                         // Check if datetime or just date (strlen == 8)
-                        if (strlen($repeat['UNTIL']) == 8) {
+                        if (8 == strlen($repeat['UNTIL'])) {
                             // Fix the datetime format to avoid exception in the next step
                             $repeat['UNTIL'] .= 'T000000';
                         }
@@ -3289,10 +3288,10 @@ class Agenda
         $groupId = null;
         $userId = null;
 
-        if ($filter === 'everyone') {
+        if ('everyone' === $filter) {
             $everyone = true;
         } else {
-            if (substr($filter, 0, 1) === 'G') {
+            if ('G' === substr($filter, 0, 1)) {
                 $groupId = str_replace('GROUP:', '', $filter);
             } else {
                 $userId = str_replace('USER:', '', $filter);
@@ -3340,7 +3339,7 @@ class Agenda
                 $array_course_info['real_id']
             );
             // if the user is administrator of that course we show all the agenda items
-            if ($course_user_status == '1') {
+            if ('1' == $course_user_status) {
                 //echo "course admin";
                 $sqlquery = "SELECT DISTINCT agenda.*, ip.visibility, ip.to_group_id, ip.insert_user_id, ip.ref
 							FROM ".$TABLEAGENDA." agenda,
@@ -3462,12 +3461,12 @@ class Agenda
 
         $current_access_url_id = api_get_current_access_url_id();
 
-        if ($type == "month_view" or $type == "") {
+        if ("month_view" == $type or "" == $type) {
             // We are in month view
             $sql = "SELECT * FROM ".$tbl_global_agenda." WHERE MONTH(start_date) = ".$month." AND YEAR(start_date) = ".$year."  AND access_url_id = $current_access_url_id ORDER BY start_date ASC";
         }
         // 2. creating the SQL statement for getting the personal agenda items in WEEK view
-        if ($type == "week_view") { // we are in week view
+        if ("week_view" == $type) { // we are in week view
             $start_end_day_of_week = self::calculate_start_end_of_week(
                 $week,
                 $year
@@ -3487,7 +3486,7 @@ class Agenda
             $sql = " SELECT * FROM ".$tbl_global_agenda." WHERE start_date>='".$start_filter."' AND start_date<='".$end_filter."' AND  access_url_id = $current_access_url_id ";
         }
         // 3. creating the SQL statement for getting the personal agenda items in DAY view
-        if ($type == "day_view") { // we are in day view
+        if ("day_view" == $type) { // we are in day view
             // we could use mysql date() function but this is only available from 4.1 and higher
             $start_filter = $year."-".$month."-".$day." 00:00:00";
             $start_filter = api_get_utc_datetime($start_filter);
@@ -3523,7 +3522,7 @@ class Agenda
             $minute = $agendatime[1];
             $second = $agendatime[2];
 
-            if ($type == 'month_view') {
+            if ('month_view' == $type) {
                 $item['calendar_type'] = 'global';
                 $agendaitems[$day][] = $item;
                 continue;
@@ -3543,7 +3542,7 @@ class Agenda
 
             // Creating the array that will be returned. If we have week or month view we have an array with the date as the key
             // if we have a day_view we use a half hour as index => key 33 = 16h30
-            if ($type !== "day_view") {
+            if ("day_view" !== $type) {
                 // This is the array construction for the WEEK or MONTH view
                 //Display the Agenda global in the tab agenda (administrator)
                 $agendaitems[$day] .= "<i>$start_time $end_time</i>&nbsp;-&nbsp;";
@@ -3584,14 +3583,14 @@ class Agenda
         $user_id = intval($user_id);
 
         // 1. creating the SQL statement for getting the personal agenda items in MONTH view
-        if ($type == "month_view" or $type == "") {
+        if ("month_view" == $type or "" == $type) {
             // we are in month view
             $sql = "SELECT * FROM ".$tbl_personal_agenda." WHERE user='".$user_id."' and MONTH(date)='".$month."' AND YEAR(date) = '".$year."'  ORDER BY date ASC";
         }
 
         // 2. creating the SQL statement for getting the personal agenda items in WEEK view
         // we are in week view
-        if ($type == "week_view") {
+        if ("week_view" == $type) {
             $start_end_day_of_week = self::calculate_start_end_of_week(
                 $week,
                 $year
@@ -3610,7 +3609,7 @@ class Agenda
             $sql = " SELECT * FROM ".$tbl_personal_agenda." WHERE user='".$user_id."' AND date>='".$start_filter."' AND date<='".$end_filter."'";
         }
         // 3. creating the SQL statement for getting the personal agenda items in DAY view
-        if ($type == "day_view") {
+        if ("day_view" == $type) {
             // we are in day view
             // we could use mysql date() function but this is only available from 4.1 and higher
             $start_filter = $year."-".$month."-".$day." 00:00:00";
@@ -3646,7 +3645,7 @@ class Agenda
             $minute = $agendatime[1];
             $second = $agendatime[2];
 
-            if ($type == 'month_view') {
+            if ('month_view' == $type) {
                 $item['calendar_type'] = 'personal';
                 $item['start_date'] = $item['date'];
                 $agendaitems[$day][] = $item;
@@ -3655,7 +3654,7 @@ class Agenda
 
             // Creating the array that will be returned. If we have week or month view we have an array with the date as the key
             // if we have a day_view we use a half hour as index => key 33 = 16h30
-            if ($type !== "day_view") {
+            if ("day_view" !== $type) {
                 // This is the array construction for the WEEK or MONTH view
 
                 //Display events in agenda
@@ -3711,20 +3710,20 @@ class Agenda
             30,
             31,
         ];
-        if (($year % 400 == 0) or ($year % 4 == 0 and $year % 100 != 0)) {
+        if ((0 == $year % 400) or (0 == $year % 4 and 0 != $year % 100)) {
             $numberofdays[2] = 29;
         }
         //Get the first day of the month
         $dayone = getdate(mktime(0, 0, 0, $month, 1, $year));
         //Start the week on monday
-        $startdayofweek = $dayone['wday'] != 0 ? ($dayone['wday'] - 1) : 6;
+        $startdayofweek = 0 != $dayone['wday'] ? ($dayone['wday'] - 1) : 6;
         $g_cc = (isset($_GET['courseCode']) ? $_GET['courseCode'] : '');
 
-        $next_month = ($month == 1 ? 12 : $month - 1);
-        $prev_month = ($month == 12 ? 1 : $month + 1);
+        $next_month = (1 == $month ? 12 : $month - 1);
+        $prev_month = (12 == $month ? 1 : $month + 1);
 
-        $next_year = ($month == 1 ? $year - 1 : $year);
-        $prev_year = ($month == 12 ? $year + 1 : $year);
+        $next_year = (1 == $month ? $year - 1 : $year);
+        $prev_year = (12 == $month ? $year + 1 : $year);
 
         if ($show_content) {
             $back_url = Display::url(
@@ -3781,7 +3780,7 @@ class Agenda
         while ($curday <= $numberofdays[$month]) {
             $html .= "<tr>";
             for ($ii = 0; $ii < 7; $ii++) {
-                if (($curday == -1) && ($ii == $startdayofweek)) {
+                if ((-1 == $curday) && ($ii == $startdayofweek)) {
                     $curday = 1;
                 }
                 if (($curday > 0) && ($curday <= $numberofdays[$month])) {
@@ -3991,7 +3990,7 @@ class Agenda
                 $user_id
             );
             // if the user is administrator of that course we show all the agenda items
-            if ($course['status'] == '1') {
+            if ('1' == $course['status']) {
                 //echo "course admin";
                 $sqlquery = "SELECT ".
                     " DISTINCT agenda.*, ip.visibility, ip.to_group_id, ip.insert_user_id, ip.ref ".

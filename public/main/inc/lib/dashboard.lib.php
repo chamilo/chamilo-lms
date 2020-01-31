@@ -61,7 +61,7 @@ class DashboardManager
                 }
                 echo '</tr>';
             } else {
-                if ($testplugin != 'css') {
+                if ('css' != $testplugin) {
                     echo Display::tag(
                         'tr',
                         Display::tag(
@@ -81,7 +81,7 @@ class DashboardManager
                 echo '<td><center><input type="checkbox" name="disabled_block" value="true" checked disabled /></center>';
                 for ($j = 0; $j < count($table_cols); $j++) {
                     if (isset($disabled_block[strtolower($table_cols[$j])])) {
-                        if ($j == 2) {
+                        if (2 == $j) {
                             echo '<td>';
                             echo '<font color="#aaa">'.$disabled_block[$table_cols[$j]].'</font><br />';
                             echo '<font color="red">'.get_lang('This plugin has been deleted from the dashboard plugin directory').'</font>';
@@ -262,7 +262,7 @@ class DashboardManager
         $dashboard_pluginpath = api_get_path(SYS_PLUGIN_PATH).'dashboard/';
         $handle = @opendir($dashboard_pluginpath);
         while (false !== ($file = readdir($handle))) {
-            if ($file != '.' && $file != '..' && is_dir($dashboard_pluginpath.$file)) {
+            if ('.' != $file && '..' != $file && is_dir($dashboard_pluginpath.$file)) {
                 $possiblePlugins[] = $file;
             }
         }
@@ -394,8 +394,8 @@ class DashboardManager
                     $html .= '<td>'.$block['description'].'</td>';
                     $html .= '<td>
                             <select class="selectpicker show-tick form-control" name="columns['.$block['id'].']">
-                            <option value="1" '.(isset($user_block_data[$block['id']]) && $user_block_data[$block['id']]['column'] == 1 ? 'selected' : '').' >1</option>
-                            <option value="2" '.(isset($user_block_data[$block['id']]) && $user_block_data[$block['id']]['column'] == 2 ? 'selected' : '').' >2</option>
+                            <option value="1" '.(isset($user_block_data[$block['id']]) && 1 == $user_block_data[$block['id']]['column'] ? 'selected' : '').' >1</option>
+                            <option value="2" '.(isset($user_block_data[$block['id']]) && 2 == $user_block_data[$block['id']]['column'] ? 'selected' : '').' >2</option>
                             </select>
                           </td>';
                     $html .= '</tr>';

@@ -14,8 +14,6 @@ use Fhaculty\Graph\Vertex;
  * Class SkillProfile.
  *
  * @todo break the file in different classes
- *
- * @package chamilo.library
  */
 class SkillProfile extends Model
 {
@@ -240,7 +238,7 @@ class SkillRelSkill extends Model
 
         $parents = [];
         if (!empty($skill)) {
-            if ($skill['parent_id'] != null) {
+            if (null != $skill['parent_id']) {
                 $parents = self::getSkillParents($skill['parent_id']);
             }
             if ($add_child_info) {
@@ -1256,7 +1254,7 @@ class Skill extends Model
             }
 
             // Cannot change parent of root
-            if ($skillId == 1) {
+            if (1 == $skillId) {
                 $params['parent_id'] = 0;
             }
 
@@ -1359,7 +1357,7 @@ class Skill extends Model
                 $data = $subVertex->getAttribute('graphviz.data');
                 $passed = in_array($data['id'], array_keys($skills));
                 $transparency = '';
-                if ($passed === false) {
+                if (false === $passed) {
                     // @todo use css class
                     $transparency = 'opacity: 0.4; filter: alpha(opacity=40);';
                 }
@@ -1371,7 +1369,7 @@ class Skill extends Model
                     $subTable .= '</li>';
                 } else {
                     $imageSize = 'mini';
-                    if ($level == 2) {
+                    if (2 == $level) {
                         $imageSize = 'small';
                     }
                     $showTitle = true;
@@ -1510,7 +1508,7 @@ class Skill extends Model
 
                         $passed = in_array($data['id'], array_keys($skills));
                         $transparency = '';
-                        if ($passed === false) {
+                        if (false === $passed) {
                             // @todo use a css class
                             $transparency = 'opacity: 0.4; filter: alpha(opacity=40);';
                         }
@@ -1534,7 +1532,7 @@ class Skill extends Model
 
                         $passed = in_array($data['id'], array_keys($skills));
                         $transparency = '';
-                        if ($passed === false) {
+                        if (false === $passed) {
                             // @todo use a css class
                             $transparency = 'opacity: 0.4; filter: alpha(opacity=40);';
                         }
@@ -1588,7 +1586,7 @@ class Skill extends Model
         $return_flat_array = false,
         $add_root = false
     ) {
-        if ($skill_id == 1) {
+        if (1 == $skill_id) {
             $skill_id = 0;
         }
         if (isset($user_id) && !empty($user_id)) {
@@ -1629,7 +1627,7 @@ class Skill extends Model
         $family = [];
         if (!empty($skills)) {
             foreach ($skills as &$skill) {
-                if ($skill['parent_id'] == 0) {
+                if (0 == $skill['parent_id']) {
                     $skill['parent_id'] = 'root';
                 }
 
@@ -1640,7 +1638,7 @@ class Skill extends Model
                 // If a short code was defined, send the short code to replace
                 // skill name (to shorten the text in the wheel)
                 if (!empty($skill['short_code']) &&
-                    api_get_setting('show_full_skill_name_on_skill_wheel') === 'false'
+                    'false' === api_get_setting('show_full_skill_name_on_skill_wheel')
                 ) {
                     $skill['data']['short_code'] = $skill['short_code'];
                 }
@@ -1650,7 +1648,7 @@ class Skill extends Model
 
                 // In order to paint all members of a family with the same color
                 if (empty($skill_id)) {
-                    if ($skill['parent_id'] == 1) {
+                    if (1 == $skill['parent_id']) {
                         $family[$skill['id']] = $this->getAllChildren($skill['id']);
                     }
                 } else {
@@ -1981,7 +1979,7 @@ class Skill extends Model
             'first'
         );
 
-        if ($result != false) {
+        if (false != $result) {
             if ($result['qty'] > 0) {
                 return true;
             }
@@ -2018,7 +2016,7 @@ class Skill extends Model
             'first'
         );
 
-        if ($result === false) {
+        if (false === $result) {
             return false;
         }
 
@@ -2040,7 +2038,7 @@ class Skill extends Model
     {
         $courseId = (int) $courseId;
 
-        if ($courseId == 0) {
+        if (0 == $courseId) {
             return [];
         }
 
@@ -2087,7 +2085,7 @@ class Skill extends Model
     {
         $skillId = (int) $skillId;
 
-        if ($skillId == 0) {
+        if (0 == $skillId) {
             return [];
         }
 
@@ -2165,7 +2163,7 @@ class Skill extends Model
 
         switch ($fromUserStatus) {
             case SESSIONADMIN:
-                if (api_get_setting('allow_session_admins_to_manage_all_sessions') === 'true') {
+                if ('true' === api_get_setting('allow_session_admins_to_manage_all_sessions')) {
                     if ($toUser->getCreatorId() === $fromUser->getId()) {
                         return true;
                     }
@@ -2212,7 +2210,7 @@ class Skill extends Model
      */
     public static function isAllowed($studentId = 0, $blockPage = true)
     {
-        $allowHR = api_get_setting('allow_hr_skills_management') === 'true';
+        $allowHR = 'true' === api_get_setting('allow_hr_skills_management');
 
         if (self::isToolAvailable()) {
             if (api_is_platform_admin(false, $allowHR)) {
@@ -2250,7 +2248,7 @@ class Skill extends Model
     {
         $allowTool = api_get_setting('allow_skills_tool');
 
-        if ($allowTool === 'true') {
+        if ('true' === $allowTool) {
             return true;
         }
 
@@ -2285,7 +2283,7 @@ class Skill extends Model
             }
 
             $allow = api_get_configuration_value('allow_private_skills');
-            if ($allow === true) {
+            if (true === $allow) {
                 if (api_is_teacher()) {
                     return UserManager::isTeacherOfStudent(
                         $currentUserId,
@@ -2437,7 +2435,7 @@ class Skill extends Model
         $form->addText('short_code', [get_lang('Short code'), $translateCodeButton], false, ['id' => 'short_code']);
 
         // Cannot change parent of root
-        if ($skillId != 1) {
+        if (1 != $skillId) {
             $form->addSelect('parent_id', get_lang('Parent'), $skillList, ['id' => 'parent_id']);
         }
 
@@ -2985,7 +2983,7 @@ class Skill extends Model
      */
     public function addSkillToUserBadge($user, $skill, $levelId, $argumentation, $authorId)
     {
-        $showLevels = api_get_configuration_value('hide_skill_levels') === false;
+        $showLevels = false === api_get_configuration_value('hide_skill_levels');
 
         $entityManager = Database::getManager();
 

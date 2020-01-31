@@ -3,8 +3,6 @@
  * Test script for soap.php.
  *
  * @author Yannick Warnier <yannick.warnier@beeznest.com>
- *
- * @package chamilo.webservices
  */
 exit; //remove to enable
 // Include the necessary files, assuming this script is located in main/lp/ or something like that

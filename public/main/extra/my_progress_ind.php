@@ -113,7 +113,7 @@ while ($a_courses = Database::fetch_array($result2)) {
                                 ";
                 $res4 = Database::query($Req4);
                 while ($resultat = Database::fetch_array($res4)) {
-                    if ($resultat[0] == null) {
+                    if (null == $resultat[0]) {
                         $resultat[0] = 0;
                     }
                     $Total = $Total + $resultat[0];
@@ -146,7 +146,7 @@ while ($jtot = Database::fetch_array($resultjt)) {
 //si rien n'est inscrit cette journée dans l'agenda, recule de -1
 $jour_agenda = '';
 $tour = -1;
-while ($jour_agenda == '') {
+while ('' == $jour_agenda) {
     $tour++;
     $date = date("Y-m-d", mktime(0, 0, 0, date("m"), date("d") - $tour, date("Y")));
     $sql4 = "SELECT title  FROM $tbl_personal_agenda
@@ -276,7 +276,7 @@ $diff = abs($diff);
                     <td>$inter_coment</td>";
             $exe_id = $a_inter['exe_id'];
         }
-        if ($level == 3) {
+        if (3 == $level) {
             echo '<span style="color: red; font-weight: bold;"><img src="../img/anim/pointeranim.gif"align="middle"  > ';
             echo $limit;
             echo '</span>';
@@ -405,7 +405,7 @@ while ($a_courses = Database::fetch_array($result2)) {
             [$lp_id],
             $session_id
         );
-        if ($progress === null) {
+        if (null === $progress) {
             $progress = '0%';
         } else {
             $any_result = true;
@@ -424,7 +424,7 @@ while ($a_courses = Database::fetch_array($result2)) {
             $any_result = true;
         }
 
-        if ($i % 2 == 0) {
+        if (0 == $i % 2) {
             $css_class = "row_even";
         } else {
             $css_class = "row_odd";
@@ -442,7 +442,7 @@ while ($a_courses = Database::fetch_array($result2)) {
     }
     $warming = '';
     $today = date('Y-m-d');
-    if (isset($end_date_module) && $end_date_module <= $today and $progress != '100%') {
+    if (isset($end_date_module) && $end_date_module <= $today and '100%' != $progress) {
         $warming = '<b><font color=#CC0000>  '.get_lang('limite_atteinte').'</font></b>';
     }
     $end_date_module = $end_date_module.$warming;

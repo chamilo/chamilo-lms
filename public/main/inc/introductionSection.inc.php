@@ -26,8 +26,6 @@ use Chamilo\CourseBundle\Entity\CToolIntro;
  *
  * This script is also used since Chamilo 1.9 to show course progress (from the
  * course_progress module)
- *
- * @package chamilo.include
  */
 $em = Database::getManager();
 $intro_editAllowed = $is_allowed_to_edit = api_is_allowed_to_edit();
@@ -175,25 +173,25 @@ if ($intro_dispForm) {
 $thematic_description_html = '';
 $thematicItemTwo = '';
 
-if ($tool == TOOL_COURSE_HOMEPAGE && !isset($_GET['intro_cmdEdit'])) {
+if (TOOL_COURSE_HOMEPAGE == $tool && !isset($_GET['intro_cmdEdit'])) {
     // Only show this if we're on the course homepage and we're not currently editing
     $thematic = new Thematic();
     $displayMode = api_get_course_setting('display_info_advance_inside_homecourse');
     $class1 = '';
-    if ($displayMode == '1') {
+    if ('1' == $displayMode) {
         // Show only the current course progress step
         $last_done_advance = $thematic->get_last_done_thematic_advance();
         $thematic_advance_info = $thematic->get_thematic_advance_list($last_done_advance);
         $subTitle1 = get_lang('Current topic');
         $class1 = ' current';
-    } elseif ($displayMode == '2') {
+    } elseif ('2' == $displayMode) {
         // Show only the two next course progress steps
         $last_done_advance = $thematic->get_next_thematic_advance_not_done();
         $next_advance_not_done = $thematic->get_next_thematic_advance_not_done(2);
         $thematic_advance_info = $thematic->get_thematic_advance_list($last_done_advance);
         $thematic_advance_info2 = $thematic->get_thematic_advance_list($next_advance_not_done);
         $subTitle1 = $subTitle2 = get_lang('Next topic');
-    } elseif ($displayMode == '3') {
+    } elseif ('3' == $displayMode) {
         // Show the current and next course progress steps
         $last_done_advance = $thematic->get_last_done_thematic_advance();
         $next_advance_not_done = $thematic->get_next_thematic_advance_not_done();
@@ -348,7 +346,7 @@ if ($intro_dispCommand) {
 
         // Fix for chrome XSS filter for videos in iframes - BT#7930
         $browser = api_get_navigator();
-        if (strpos($introduction_section, '<iframe') !== false && $browser['name'] == 'Chrome') {
+        if (false !== strpos($introduction_section, '<iframe') && 'Chrome' == $browser['name']) {
             header('X-XSS-Protection: 0');
         }
     }
@@ -356,7 +354,7 @@ if ($intro_dispCommand) {
 
 $nameSection = get_lang('Add an introduction to the course');
 $helpSection = get_lang('This course is already created! Now you can add a presentation or welcome text to your course in this section, ideal for your students.');
-if ($moduleId != 'course_homepage') {
+if ('course_homepage' != $moduleId) {
     $nameSection = get_lang('Add an introduction to the tool');
     $helpSection = get_lang('Add Custom Tools Intro');
 }
@@ -384,7 +382,7 @@ if ($intro_dispDefault) {
 
 $browser = api_get_navigator();
 
-if (strpos($introduction_section, '<iframe') !== false && $browser['name'] == 'Chrome') {
+if (false !== strpos($introduction_section, '<iframe') && 'Chrome' == $browser['name']) {
     header("X-XSS-Protection: 0");
 }
 $data = null;

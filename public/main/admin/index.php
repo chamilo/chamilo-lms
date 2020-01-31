@@ -7,8 +7,6 @@ use League\Flysystem\Filesystem;
 
 /**
  * Index page of the admin tools.
- *
- * @package chamilo.admin
  */
 // Resetting the course id.
 $cidReset = true;
@@ -162,7 +160,7 @@ if (api_is_platform_admin()) {
     $items[] = ['url' => 'course_list.php', 'label' => get_lang('Course list')];
     $items[] = ['url' => 'course_add.php', 'label' => get_lang('Add course')];
 
-    if (api_get_setting('course_validation') == 'true') {
+    if ('true' == api_get_setting('course_validation')) {
         $items[] = ['url' => 'course_request_review.php', 'label' => get_lang('Review incoming course requests')];
         $items[] = ['url' => 'course_request_accepted.php', 'label' => get_lang('Accepted course requests')];
         $items[] = ['url' => 'course_request_rejected.php', 'label' => get_lang('Rejected course requests')];
@@ -174,7 +172,7 @@ if (api_is_platform_admin()) {
     $items[] = ['url' => 'subscribe_user2course.php', 'label' => get_lang('Add a user to a course')];
     $items[] = ['url' => 'course_user_import.php', 'label' => get_lang('Import users list')];
 
-    if (api_get_setting('gradebook_enable_grade_model') == 'true') {
+    if ('true' == api_get_setting('gradebook_enable_grade_model')) {
         $items[] = ['url' => 'grade_models.php', 'label' => get_lang('Grading model')];
     }
 
@@ -381,14 +379,14 @@ if (api_is_platform_admin()) {
         }
     }
 
-    if (api_get_plugin_setting('dictionary', 'enable_plugin_dictionary') == 'true') {
+    if ('true' == api_get_plugin_setting('dictionary', 'enable_plugin_dictionary')) {
         $items[] = [
             'url' => api_get_path(WEB_PLUGIN_PATH).'dictionary/terms.php',
             'label' => get_lang('Dictionary'),
         ];
     }
 
-    if (api_get_setting('allow_terms_conditions') == 'true') {
+    if ('true' == api_get_setting('allow_terms_conditions')) {
         $items[] = ['url' => 'legal_add.php', 'label' => get_lang('Terms and Conditions')];
     }
 
@@ -452,7 +450,7 @@ if (api_is_platform_admin()) {
         'label' => get_lang('Tickets'),
     ];
 
-    if (api_get_configuration_value('db_manager_enabled') == true &&
+    if (true == api_get_configuration_value('db_manager_enabled') &&
         api_is_global_platform_admin()
     ) {
         $host = $_configuration['db_host'];
@@ -601,7 +599,7 @@ $tpl = new Template();
 
 // Display the Site Use Cookie Warning Validation
 $useCookieValidation = api_get_setting('cookie_warning');
-if ($useCookieValidation === 'true') {
+if ('true' === $useCookieValidation) {
     if (isset($_POST['acceptCookies'])) {
         api_set_site_use_cookie_warning_cookie();
     } elseif (!api_site_use_cookie_warning_cookie_exist()) {

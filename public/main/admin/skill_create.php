@@ -5,8 +5,6 @@
  * Create skill form.
  *
  * @author Angel Fernando Quiroz Campos <angel.quiroz@beeznest.com>
- *
- * @package chamilo.admin
  */
 $cidReset = true;
 

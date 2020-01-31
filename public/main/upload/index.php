@@ -13,8 +13,6 @@ use ChamiloSession as Session;
  * The script respects the strategical split between process and display, so the first
  * part is only processing code (init, process, display preparation) and the second
  * part is only display (HTML)
- *
- * @package chamilo.upload
  */
 require_once __DIR__.'/../inc/global.inc.php';
 
@@ -64,11 +62,11 @@ function get_zip_files_in_garbage()
 {
     $list = [];
     $dh = opendir(api_get_path(SYS_ARCHIVE_PATH));
-    if ($dh === false) {
+    if (false === $dh) {
         //ignore
     } else {
         while ($entry = readdir($dh)) {
-            if (substr($entry, 0, 1) == '.') {
+            if ('.' == substr($entry, 0, 1)) {
                 /* ignore files starting with . */
             } else {
                 if (preg_match('/^.*\.zip$/i', $entry)) {
@@ -123,7 +121,7 @@ $form->addRule('user_file', get_lang('Required field'), 'required');
 unset($content_origins[0]);
 unset($content_origins[1]);
 
-if (api_get_setting('search_enabled') == 'true') {
+if ('true' == api_get_setting('search_enabled')) {
     $form->addElement('checkbox', 'index_document', '', get_lang('Index document text?'));
     $specific_fields = get_specific_field_list();
     foreach ($specific_fields as $specific_field) {

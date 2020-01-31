@@ -5,8 +5,6 @@
  * Class Promotion
  * This class provides methods for the promotion management.
  * Include/require it in your code to use its features.
- *
- * @package chamilo.library
  */
 class Promotion extends Model
 {
@@ -223,7 +221,7 @@ class Promotion extends Model
         $form = new FormValidator('promotion', 'post', $url);
         // Setting the form elements
         $header = get_lang('Add');
-        if ($action == 'edit') {
+        if ('edit' == $action) {
             $header = get_lang('Edit');
         }
 
@@ -262,11 +260,11 @@ class Promotion extends Model
         );
         $status_list = $this->get_status_list();
         $form->addElement('select', 'status', get_lang('Status'), $status_list);
-        if ($action == 'edit') {
+        if ('edit' == $action) {
             $form->addElement('text', 'created_at', get_lang('Created at'));
             $form->freeze('created_at');
         }
-        if ($action == 'edit') {
+        if ('edit' == $action) {
             $form->addButtonSave(get_lang('Edit'), 'submit');
         } else {
             $form->addButtonCreate(get_lang('Add'), 'submit');

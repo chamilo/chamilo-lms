@@ -305,7 +305,7 @@ if ('liststd' == $my_action &&
                         .$current_qualify_thread.'">'
                         .Display::return_icon($icon_qualify, get_lang('Grade activity')).'</a></td></tr>';
                 }
-                ++$counter_stdlist;
+                $counter_stdlist++;
             }
         } else {
             if ('qualify' === $listType) {
@@ -653,7 +653,7 @@ if (is_array($threads)) {
 
             echo $html;
         }
-        ++$count;
+        $count++;
     }
 }
 

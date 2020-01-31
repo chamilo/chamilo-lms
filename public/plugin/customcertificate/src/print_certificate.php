@@ -439,7 +439,7 @@ foreach ($userList as $userInfo) {
                         $htmlText .= '</td><td>';
                     }
                     $htmlText .= $value;
-                    ++$i;
+                    $i++;
                 }
                 $htmlText .= '</td>';
                 $htmlText .= '</tr>';
@@ -515,14 +515,14 @@ function getIndexFiltered($index)
     $txt = str_replace(chr(13).chr(10).chr(13).chr(10), chr(13).chr(10), $txt);
     $lines = explode(chr(13).chr(10), $txt);
     $text1 = '';
-    for ($x = 0; $x < 47; ++$x) {
+    for ($x = 0; $x < 47; $x++) {
         if (isset($lines[$x])) {
             $text1 .= $lines[$x].chr(13).chr(10);
         }
     }
 
     $text2 = '';
-    for ($x = 47; $x < 94; ++$x) {
+    for ($x = 47; $x < 94; $x++) {
         if (isset($lines[$x])) {
             $text2 .= $lines[$x].chr(13).chr(10);
         }

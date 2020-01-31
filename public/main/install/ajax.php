@@ -4,8 +4,6 @@
 /**
  * Chamilo installation
  * AJAX requests for the installation.
- *
- * @package chamilo.install
  */
 ini_set('display_errors', '1');
 ini_set('log_errors', '1');
@@ -35,7 +33,7 @@ $dbPass = isset($_POST['db_pass']) ? $_POST['db_pass'] : '';
 $dbName = isset($_POST['db_name']) ? $_POST['db_name'] : 'chamilo';
 $installType = isset($_POST['install_type']) ? $_POST['install_type'] : 'new';
 
-if ($installType === 'new') {
+if ('new' === $installType) {
     $dbName = null;
 }
 

@@ -2,9 +2,6 @@
 /* For licensing terms, see /license.txt */
 /**
  * Form to add users through LDAP (deprecated?).
- *
- * @package chamilo.admin
- * Copyright (c) 2007 Mustapha Alouani (supervised by Michel Moreau-Belliard)
  */
 
 /**
@@ -12,7 +9,7 @@
  */
 $nbre = 0;
 echo '<form name="form" method="post" action="'.api_get_self().'?annee='.Security::remove_XSS($annee).'">';
-if ($statut == 1) {
+if (1 == $statut) {
     echo get_lang(
             'e-mailNotifySubscription'
         ).': <input type="checkbox" name="mailling" value="1" checked="checked"><i>'.get_lang(

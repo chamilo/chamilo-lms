@@ -96,7 +96,7 @@ foreach ($instances as $instance) {
     ];
     $attrs = ['center' => 'left'];
     $table->addRow($data, $attrs, 'td');
-    ++$i;
+    $i++;
 }
 
 $items = [

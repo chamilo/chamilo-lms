@@ -5,8 +5,6 @@
  * Gradebook link to a survey item.
  *
  * @author Ivan Tcholakov <ivantcholakov@gmail.com>, 2010
- *
- * @package chamilo.gradebook
  */
 class SurveyLink extends AbstractLink
 {
@@ -125,7 +123,7 @@ class SurveyLink extends AbstractLink
         $sql_result = Database::query($sql);
         $data = Database::fetch_array($sql_result);
 
-        return $data[0] != 0;
+        return 0 != $data[0];
     }
 
     /**
@@ -186,7 +184,7 @@ class SurveyLink extends AbstractLink
             }
             $sum = $sum / $max_score;
 
-            if ($rescount == 0) {
+            if (0 == $rescount) {
                 return [null, null];
             }
 
@@ -223,7 +221,7 @@ class SurveyLink extends AbstractLink
         $result = Database::query($sql);
         $number = Database::fetch_row($result);
 
-        return $number[0] != 0;
+        return 0 != $number[0];
     }
 
     public function get_link()
@@ -238,7 +236,7 @@ class SurveyLink extends AbstractLink
             $sessionId = $this->get_session_id();
             $courseId = $this->getCourseId();
 
-            if ($tbl_name != '') {
+            if ('' != $tbl_name) {
                 $sql = 'SELECT survey_id 
                         FROM '.$this->get_survey_table().'
                         WHERE
@@ -285,7 +283,7 @@ class SurveyLink extends AbstractLink
     {
         $tbl_name = $this->get_survey_table();
 
-        if ($tbl_name == '') {
+        if ('' == $tbl_name) {
             return false;
         } elseif (empty($this->survey_data)) {
             $courseId = $this->getCourseId();

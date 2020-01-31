@@ -31,7 +31,7 @@ $tbl_course = Database::get_main_table(TABLE_MAIN_COURSE);
 $tool_name = get_lang('Subscription sessions in the category');
 
 $add_type = 'multiple';
-if (isset($_GET['add_type']) && $_GET['add_type'] != '') {
+if (isset($_GET['add_type']) && '' != $_GET['add_type']) {
     $add_type = Security::remove_XSS($_REQUEST['add_type']);
 }
 
@@ -83,7 +83,7 @@ if (isset($_POST['formSent']) && $_POST['formSent']) {
     $formSent = $_POST['formSent'];
     $sessionCategoryList = $_POST['SessionCategoryList'];
 
-    if ($categoryId != 0 && count($sessionCategoryList) > 0) {
+    if (0 != $categoryId && count($sessionCategoryList) > 0) {
         // Removing all
         $sql = "UPDATE $tbl_session SET session_category_id = NULL WHERE session_category_id = $categoryId";
         Database::query($sql);
@@ -105,11 +105,11 @@ if (isset($_GET['id_category'])) {
     $categoryId = intval($_GET['id_category']);
 }
 
-if (isset($_GET['msg']) && $_GET['msg'] == 'error') {
+if (isset($_GET['msg']) && 'error' == $_GET['msg']) {
     $errorMsg = get_lang('Select category and sessions');
 }
 
-if (isset($_GET['msg']) && $_GET['msg'] == 'ok') {
+if (isset($_GET['msg']) && 'ok' == $_GET['msg']) {
     $OkMsg = get_lang('Category update');
 }
 
@@ -119,7 +119,7 @@ Display::display_header($tool_name);
 
 $where = '';
 $rows_category_session = [];
-if ((isset($_POST['CategorySessionId']) && $_POST['formSent'] == 0) || isset($_GET['id_category'])) {
+if ((isset($_POST['CategorySessionId']) && 0 == $_POST['formSent']) || isset($_GET['id_category'])) {
     $where = 'WHERE session_category_id != '.$categoryId.' OR session_category_id IS NULL';
     $sql = 'SELECT id, name  FROM '.$tbl_session.' WHERE session_category_id ='.$categoryId.' ORDER BY name';
     $result = Database::query($sql);
@@ -204,7 +204,7 @@ if (!empty($OkMsg)) {
   <td align="center" width="45%"><b><?php echo get_lang('Session listInCategory'); ?> :</b></td>
 </tr>
 
-<?php if ($add_type == 'multiple') {
+<?php if ('multiple' == $add_type) {
                 ?>
 <tr>
 <td>&nbsp;</td></tr>

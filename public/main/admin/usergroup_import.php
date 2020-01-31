@@ -5,8 +5,6 @@
  *  This tool allows platform admins to add classes by uploading a CSV file.
  *
  * @todo Add some langvars to DLTT
- *
- * @package chamilo.admin
  */
 
 /**
@@ -18,7 +16,7 @@ function validate_data($classes)
     $usergroup = new UserGroup();
     foreach ($classes as $index => $class) {
         // 1. Check of class name is available.
-        if (!isset($class['name']) || strlen(trim($class['name'])) == 0) {
+        if (!isset($class['name']) || 0 == strlen(trim($class['name']))) {
             $class['line'] = $index + 2;
             $class['error'] = get_lang('Missing class name');
             $errors[] = $class;
@@ -109,7 +107,7 @@ $form->addButtonImport(get_lang('Import'));
 if ($form->validate()) {
     $classes = Import::csvToArray($_FILES['import_file']['tmp_name']);
     $errors = validate_data($classes);
-    if (count($errors) == 0) {
+    if (0 == count($errors)) {
         $number_of_added_classes = save_data($classes);
         Display::addFlash(Display::return_message($number_of_added_classes.' '.get_lang('Added'), 'normal'));
     } else {

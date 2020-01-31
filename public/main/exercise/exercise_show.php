@@ -716,7 +716,7 @@ foreach ($questionList as $questionId) {
                     );
 
                     if (empty($model)) {
-                        for ($i = 0; $i <= $questionWeighting; ++$i) {
+                        for ($i = 0; $i <= $questionWeighting; $i++) {
                             $attributes = [];
                             if ($questionScore == $i) {
                                 $attributes['selected'] = 'selected';
@@ -839,12 +839,12 @@ foreach ($questionList as $questionId) {
         ];
         $check = $objQuestionTmp->isQuestionWaitingReview($scoreToReview);
         if (false === $check) {
-            ++$countPendingQuestions;
+            $countPendingQuestions++;
         }
     }
 
     unset($objAnswerTmp);
-    ++$i;
+    $i++;
 
     $contents = ob_get_clean();
     $question_content = '<div class="question_row">';
@@ -857,7 +857,7 @@ foreach ($questionList as $questionId) {
             $score
         );
     }
-    ++$counter;
+    $counter++;
     $question_content .= $contents;
     $question_content .= '</div>';
     $exercise_content .= Display::panel($question_content);

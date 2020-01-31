@@ -127,7 +127,7 @@ if (!empty($userList) || $isAdmin) {
         $itemTags = $tag['tags'];
         foreach ($itemTags as $itemTag) {
             if (in_array($itemTag, array_keys($tagList))) {
-                ++$tagList[$itemTag];
+                $tagList[$itemTag]++;
             } else {
                 $tagList[$itemTag] = 1;
             }
@@ -142,7 +142,7 @@ $pagination = '';
 $url = api_get_self().'?session_id='.$sessionId.'&tag='.$selectedTag.'&keyword='.$keyword.'&';
 if ($totalItems > 1 && $pagesCount > 1) {
     $pagination .= '<ul class="pagination">';
-    for ($i = 0; $i < $pagesCount; ++$i) {
+    for ($i = 0; $i < $pagesCount; $i++) {
         $newPage = $i + 1;
         if ($currentPage == $newPage) {
             $pagination .= '<li class="active"><a href="'.$url.'page='.$newPage.'">'.$newPage.'</a></li>';

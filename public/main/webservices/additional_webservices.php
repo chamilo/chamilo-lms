@@ -1,8 +1,6 @@
 <?php
 /* For licensing terms, see /license.txt */
 /**
- * @package chamilo.webservices
- *
  * @author Francis Gonzales
  */
 require_once __DIR__.'/../inc/global.inc.php';
@@ -62,7 +60,7 @@ function wsConvertPpt($pptData)
     $shell = exec($cmd, $files, $return);
     umask($oldumask);
 
-    if ($return === 0) {
+    if (0 === $return) {
         $images = [];
         if (is_array($files) && !empty($files)) {
             foreach ($files as $file) {

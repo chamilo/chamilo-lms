@@ -11,8 +11,6 @@ use ChamiloSession as Session;
  *
  * @version  v 1.0
  *
- * @package  chamilo.learnpath
- *
  * @license    GNU/GPL
  */
 
@@ -200,7 +198,7 @@ if (!empty($_REQUEST['command'])) {
                                     $oItem->set_score($value);
                                     break;
                                 case 'time':
-                                    if (strpos($value, ':') !== false) {
+                                    if (false !== strpos($value, ':')) {
                                         $oItem->set_time($value, 'scorm');
                                     } else {
                                         $oItem->set_time($value);

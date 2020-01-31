@@ -2,8 +2,6 @@
 /* For licensing terms, see /license.txt */
 
 /**
- * @package chamilo.survey
- *
  * @author Patrick Cool <patrick.cool@UGent.be>, Ghent University: cleanup, refactoring and rewriting large parts of the code
  *
  * @version $Id: survey_invite.php 10680 2007-01-11 21:26:23Z pcool $
@@ -61,13 +59,13 @@ $invitationsCount = count($sentInvitations);
 $answeredCount = count($answered_data);
 $unasnweredCount = count($sentInvitations) - count($answered_data);
 
-if ($survey_data['anonymous'] == 1 && !api_get_configuration_value('survey_anonymous_show_answered')) {
+if (1 == $survey_data['anonymous'] && !api_get_configuration_value('survey_anonymous_show_answered')) {
     echo Display::return_message(
         get_lang('This survey is anonymous. You can\'t see who answered.').' '.$answeredCount.' '.get_lang('people answered')
     );
     $answered_data = [];
 }
-if ($survey_data['anonymous'] == 1) {
+if (1 == $survey_data['anonymous']) {
     if ($answeredCount < 2) {
         $answeredCount = 0;
         $unasnweredCount = $invitationsCount;
@@ -77,7 +75,7 @@ $url = api_get_self().'?survey_id='.$survey_id.'&'.api_get_cidreq();
 
 echo '<ul class="nav nav-tabs">';
 
-if ($view == 'invited') {
+if ('invited' == $view) {
     echo '<li role="presentation" class="active"><a href="#">'.get_lang('View invited');
 } else {
     echo '<li role="presentation"><a href="'.$url.'&view=invited">'.
@@ -85,7 +83,7 @@ if ($view == 'invited') {
 }
 echo ' <span class="badge badge-default">'.$invitationsCount.'</span>';
 echo '</a></li>';
-if ($view == 'answered') {
+if ('answered' == $view) {
     echo '<li role="presentation" class="active"><a href="#">'.get_lang('View people who answered');
 } else {
     echo '<li role="presentation"><a href="'.$url.'&view=answered">'.
@@ -94,7 +92,7 @@ if ($view == 'answered') {
 echo ' <span class="badge badge-default">'.$answeredCount.'</span>';
 echo '</a></li>';
 
-if ($view == 'unanswered') {
+if ('unanswered' == $view) {
     echo '<li role="presentation" class="active"><a href="#">'.get_lang('View people who didn\'t answer');
 } else {
     echo '<li role="presentation"><a href="'.$url.'&view=unanswered">'.
@@ -126,9 +124,9 @@ $hideSurveyReportingButton = api_get_configuration_value('hide_survey_reporting_
 
 foreach ($sentInvitations as $row) {
     $id = $row['iid'];
-    if ($view == 'invited' ||
-        ($view == 'answered' && in_array($row['user'], $answered_data) && $answeredCount > 1) ||
-        ($view == 'unanswered' && !in_array($row['user'], $answered_data) && $answeredCount > 1)
+    if ('invited' == $view ||
+        ('answered' == $view && in_array($row['user'], $answered_data) && $answeredCount > 1) ||
+        ('unanswered' == $view && !in_array($row['user'], $answered_data) && $answeredCount > 1)
     ) {
         echo '<tr>';
         if (is_numeric($row['user'])) {
@@ -150,14 +148,14 @@ foreach ($sentInvitations as $row) {
                     get_lang('View answers').'</a>';
                 echo '</td>';
             } else {
-                if ($survey_data['anonymous'] == 1 && $answeredCount > 1) {
+                if (1 == $survey_data['anonymous'] && $answeredCount > 1) {
                     echo '<td>'.get_lang('Answered').'</td>';
                 } else {
                     echo '<td>-</td>';
                 }
             }
         } else {
-            if ($view == 'unanswered') {
+            if ('unanswered' == $view) {
                 echo '	<td>';
                 $code = $row['invitation_code'];
 
@@ -177,7 +175,7 @@ foreach ($sentInvitations as $row) {
         }
 
         echo '</tr>';
-    } elseif ($view === 'unanswered' && $answeredCount == 0) {
+    } elseif ('unanswered' === $view && 0 == $answeredCount) {
         echo '<tr>';
         if (is_numeric($row['user'])) {
             $userInfo = api_get_user_info($row['user']);

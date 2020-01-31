@@ -1,8 +1,6 @@
 <?php /* For licensing terms, see /license.txt */
 /**
  * Cron script to list used, but undefined, language variables.
- *
- * @package chamilo.cron
  */
 /**
  * Includes and declarations.
@@ -71,7 +69,7 @@ if (count($undefined_terms) < 1) {
 }
 $i = 1;
 foreach ($undefined_terms as $term => $file) {
-    $isPlugin = substr($file, 0, 7) == 'plugin/';
+    $isPlugin = 'plugin/' == substr($file, 0, 7);
     echo "<tr><td>$i</td><td>$term</td><td>in $file";
     if ($isPlugin) {
         echo " <span style=\"color: #00ff00;\">(this one should be taken care of by the plugin's language files)</span>";

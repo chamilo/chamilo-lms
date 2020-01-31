@@ -14,13 +14,12 @@ class AnnouncementEmail
     public $session_id;
     public $logger;
     protected $course;
-    /** @var CAnnouncement  */
+    /** @var CAnnouncement */
     protected $announcement;
 
     /**
      * @param array           $courseInfo
      * @param int             $sessionId
-     * @param CAnnouncement   $announcement
      * @param \Monolog\Logger $logger
      */
     public function __construct($courseInfo, $sessionId, CAnnouncement $announcement, $logger = null)
@@ -293,7 +292,7 @@ class AnnouncementEmail
         foreach ($users as $user) {
             $message = $this->message($user['user_id']);
             $wasSent = MessageManager::messageWasAlreadySent($senderId, $user['user_id'], $subject, $message);
-            if ($wasSent === false) {
+            if (false === $wasSent) {
                 if (!empty($this->logger)) {
                     $this->logger->addInfo(
                         'Announcement: #'.$this->announcement->getIid().'. Send email to user: #'.$user['user_id']
@@ -318,7 +317,7 @@ class AnnouncementEmail
                 }
             }
 
-            if (($counter % $batchSize) === 0) {
+            if (0 === ($counter % $batchSize)) {
                 $em->flush();
                 $em->clear();
             }

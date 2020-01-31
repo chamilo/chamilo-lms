@@ -2,8 +2,6 @@
 /* For licensing terms, see /license.txt */
 
 /**
- * @package chamilo.admin
- *
  * @todo lib not use. Only the class variables not the functions
  */
 class SkillVisualizer
@@ -47,7 +45,7 @@ class SkillVisualizer
         $block_id = $skill['id'];
 
         $extra_class = 'third_window';
-        if ($skill['parent_id'] == 0) {
+        if (0 == $skill['parent_id']) {
             $extra_class = 'second_window';
         }
 
@@ -61,7 +59,7 @@ class SkillVisualizer
 
         $this->html .= $content;
 
-        if ($this->type == 'edit' && $skill['parent_id'] != 0) {
+        if ('edit' == $this->type && 0 != $skill['parent_id']) {
             //$this->html .= Display::url(Display::return_icon('edit.png', get_lang('Edit'), array(), ICON_SIZE_SMALL), '#', array('id'=>'edit_block_'.$block_id,'class'=>'edit_block'));
             //$this->html .= Display::url(Display::return_icon('add.png', get_lang('Add'), array(), ICON_SIZE_SMALL), '#', array('id'=>'edit_block_'.$block_id,'class'=>'edit_block'));
             //$this->html .= Display::url(Display::return_icon('delete.png', get_lang('Delete'), array(), ICON_SIZE_SMALL), '#', array('id=>"edit_block_'.$block_id,'class'=>'edit_block'));
@@ -118,7 +116,7 @@ class SkillVisualizer
             $brother_count = $brothers[$skill['id']];
             $my_count = 0;
             $parent_x = 0;
-            if ($skill['parent_id'] == 0) {
+            if (0 == $skill['parent_id']) {
                 //$x = 130*$childs/2;
                 //$x = $this->space_between_blocks_x*$childs/2;
                 $x = $this->canvas_x / 2 - $this->block_size / 2;
@@ -156,11 +154,11 @@ class SkillVisualizer
         $block_id = $skill['id'];
         $end_point = 'readEndpoint';
         $class = 'default_window';
-        if ($this->type == 'edit') {
+        if ('edit' == $this->type) {
             $class = 'edit_window';
             $end_point = 'editEndpoint';
         } else {
-            if ($skill['done_by_user'] == 1) {
+            if (1 == $skill['done_by_user']) {
                 $class = 'done_window';
                 $end_point = 'doneEndpoint';
             } else {
@@ -169,7 +167,7 @@ class SkillVisualizer
         }
         $this->prepare_skill_box($skill, $position, $class);
 
-        if ($skill['parent_id'] == 0) {
+        if (0 == $skill['parent_id']) {
             return;
         }
         //default_arrow_color

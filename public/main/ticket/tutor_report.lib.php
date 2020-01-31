@@ -36,7 +36,7 @@ function initializeReport($course_code)
                     WHERE  week_id > $weeksCount AND course_code = '$course_code'";
             Database::query($sql);
         } else {
-            for ($i = $obj->cant + 1; $i <= $weeksCount; ++$i) {
+            for ($i = $obj->cant + 1; $i <= $weeksCount; $i++) {
                 if (!Database::query("INSERT INTO $table_reporte_semanas (week_id, course_code, forum_id, work_id, quiz_id, pc_id)
 						VALUES ($i, '$course_code', '0', '0', '0', '0' )")) {
                     return false;
@@ -149,7 +149,7 @@ function showResults($courseInfo, $weeksCount, $page)
     $html .= '<table class="reports">';
     $html .= '<tr>
             <th ></th>';
-    for ($i = 7 * $page - 6; $i <= $page * 7; ++$i) {
+    for ($i = 7 * $page - 6; $i <= $page * 7; $i++) {
         $html .= '<th colspan="2">Week '.$i.'<a href="assign_tickets.php?id='.$ids[$i].'" class="ajax">'.Display::return_icon('edit.png', get_lang('Edit'), ['width' => '16', 'height' => '16'], 22).'</a></th>';
     }
     $html .= '</tr>';

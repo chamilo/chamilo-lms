@@ -3,8 +3,6 @@
 
 /**
  * Script.
- *
- * @package chamilo.gradebook
  */
 require_once __DIR__.'/../inc/global.inc.php';
 require_once api_get_path(SYS_CODE_PATH).'gradebook/lib/fe/exportgradebook.php';
@@ -37,7 +35,7 @@ $interbreadcrumb[] = [
 
 $showeval = isset($_POST['showeval']) ? '1' : '0';
 $showlink = isset($_POST['showlink']) ? '1' : '0';
-if ($showlink == '0' && $showeval == '0') {
+if ('0' == $showlink && '0' == $showeval) {
     $showlink = '1';
     $showeval = '1';
 }
@@ -55,7 +53,7 @@ if ($showlink) {
     $alllinks = $cat[0]->get_links($userId, true);
 }
 
-if (isset($export_flatview_form) && !$file_type === 'pdf') {
+if (isset($export_flatview_form) && 'pdf' === !$file_type) {
     Display::addFlash(
         Display::return_message(
             $export_flatview_form->toHtml(),
@@ -127,12 +125,12 @@ $parameters = ['selectcat' => $categoryId];
 $flatViewTable->set_additional_parameters($parameters);
 
 $params = [];
-if (isset($_GET['export_pdf']) && $_GET['export_pdf'] == 'category') {
+if (isset($_GET['export_pdf']) && 'category' == $_GET['export_pdf']) {
     $params['only_total_category'] = true;
     $params['join_firstname_lastname'] = true;
     $params['show_official_code'] = true;
     $params['export_pdf'] = true;
-    if ($cat[0]->is_locked() == true || api_is_platform_admin()) {
+    if (true == $cat[0]->is_locked() || api_is_platform_admin()) {
         //Display::set_header(null, false, false);
         GradebookUtils::export_pdf_flatview(
             $flatViewTable,
@@ -211,7 +209,7 @@ if (isset($_GET['print'])) {
 }
 
 if (!empty($_GET['export_report']) &&
-    $_GET['export_report'] === 'export_report'
+    'export_report' === $_GET['export_report']
 ) {
     if (api_is_platform_admin() || api_is_course_admin() || api_is_session_general_coach() || $isDrhOfCourse) {
         $user_id = null;
@@ -274,7 +272,7 @@ if (isset($_GET['exportpdf'])) {
     Display::display_header(get_lang('List View'));
 }
 
-if (isset($_GET['isStudentView']) && $_GET['isStudentView'] == 'false') {
+if (isset($_GET['isStudentView']) && 'false' == $_GET['isStudentView']) {
     DisplayGradebook::display_header_reduce_flatview(
         $cat[0],
         $showeval,
@@ -282,7 +280,7 @@ if (isset($_GET['isStudentView']) && $_GET['isStudentView'] == 'false') {
         $simple_search_form
     );
     $flatViewTable->display();
-} elseif (isset($_GET['selectcat']) && isset($_GET['isStudentView']) && ($_SESSION['studentview'] == 'teacherview')) {
+} elseif (isset($_GET['selectcat']) && isset($_GET['isStudentView']) && ('teacherview' == $_SESSION['studentview'])) {
     DisplayGradebook::display_header_reduce_flatview(
         $cat[0],
         $showeval,

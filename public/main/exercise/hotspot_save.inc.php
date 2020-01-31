@@ -31,7 +31,7 @@ if ('poly' == $_GET['type'] || 'delineation' == $_GET['type'] || 'oar' == $_GET[
             $delimiter = '|';
         }
         $hotspot_coordinates .= $coord.$delimiter;
-        ++$i;
+        $i++;
     }
     $hotspot_coordinates = api_substr($hotspot_coordinates, 0, -2);
 }

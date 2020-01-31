@@ -6,8 +6,6 @@
  * Defines the OpenofficeDocument class, which is meant as a mother class
  * to help in the conversion of Office documents to learning paths.
  *
- * @package chamilo.learnpath
- *
  * @author	Eric Marguin <eric.marguin@dokeos.com>
  * @author Julio Montoya
  * @license	GNU/GPL
@@ -58,7 +56,7 @@ abstract class OpenofficeDocument extends learnpath
         $this->base_work_dir = api_get_path(SYS_COURSE_PATH).$_course['path'].'/document';
         ///learning_path/ppt_dirname directory
         $this->created_dir = $result['dir'];
-        if (substr($this->created_dir, -1, 1) == '/') {
+        if ('/' == substr($this->created_dir, -1, 1)) {
             $this->file_path = $this->created_dir.api_replace_dangerous_char($file['name']);
         } else {
             $this->file_path = $this->created_dir.'/'.api_replace_dangerous_char($file['name']);
@@ -102,7 +100,7 @@ abstract class OpenofficeDocument extends learnpath
 
         $ppt2lp_host = api_get_setting('service_ppt2lp', 'host');
 
-        if ($ppt2lp_host == 'localhost') {
+        if ('localhost' == $ppt2lp_host) {
             move_uploaded_file($file['tmp_name'], $this->base_work_dir.'/'.$this->file_path);
             //var_dump( $this->base_work_dir.$this->created_dir.$this->file_path);
             $perm = api_get_setting('permissions_for_new_files');
@@ -134,7 +132,7 @@ abstract class OpenofficeDocument extends learnpath
             $return = 0;
             $shell = exec($cmd, $files, $return);
 
-            if ($return != 0) { // If the java application returns an error code.
+            if (0 != $return) { // If the java application returns an error code.
                 switch ($return) {
                     case 1:
                         // Can't connect to openoffice.
@@ -224,7 +222,7 @@ abstract class OpenofficeDocument extends learnpath
             return $ids;
         }
 
-        if ($ppt2lpHost == 'localhost') {
+        if ('localhost' == $ppt2lpHost) {
             if (IS_WINDOWS_OS) { // IS_WINDOWS_OS has been defined in main_api.lib.php
                 $converterPath = str_replace('/', '\\', api_get_path(SYS_PATH).'main/inc/lib/ppt2png');
                 $classPath = $converterPath.';'.$converterPath.'/jodconverter-2.2.2.jar;'.$converterPath.'/jodconverter-cli-2.2.2.jar';
@@ -252,7 +250,7 @@ abstract class OpenofficeDocument extends learnpath
             @chown($this->base_work_dir.'/'.$this->created_dir, 'www-data');
             @chmod($this->base_work_dir.'/'.$this->created_dir, $permissionFile);
 
-            if ($return != 0) { // If the java application returns an error code.
+            if (0 != $return) { // If the java application returns an error code.
                 switch ($return) {
                     case 1:
                         // Can't connect to openoffice.
@@ -352,7 +350,7 @@ abstract class OpenofficeDocument extends learnpath
             'features' => SOAP_SINGLE_ELEMENT_ARRAYS,
             'compression' => SOAP_COMPRESSION_ACCEPT | SOAP_COMPRESSION_GZIP | 9,
         ];
-        if (substr($ppt2lp_host, 0, 5) === 'https') {
+        if ('https' === substr($ppt2lp_host, 0, 5)) {
             $options['ssl_method'] = SOAP_SSL_METHOD_TLS;
             // If using SSL, please note that *not* supporting the SSLv2
             // (broken in terms of security), the server tends to generate

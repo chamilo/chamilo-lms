@@ -39,7 +39,7 @@ if (isset($_GET['cidReq']) && strlen($_GET['cidReq']) > 0) {
 
 if ($user_list) {
     if (!isset($_GET['id'])) {
-        if (api_get_setting('allow_social_tool') == 'true') {
+        if ('true' == api_get_setting('allow_social_tool')) {
             if (!api_is_anonymous()) {
                 $query = isset($_GET['q']) ? $_GET['q'] : null;
                 $social_search = UserManager::getSearchForm($query);
@@ -52,7 +52,7 @@ if ($user_list) {
 $whoisonline_list .= SocialManager::display_user_list($user_list);
 
 if (isset($_GET['id'])) {
-    if (api_get_setting('allow_social_tool') == 'true' && api_user_is_login()) {
+    if ('true' == api_get_setting('allow_social_tool') && api_user_is_login()) {
         header("Location: ".api_get_path(WEB_CODE_PATH)."social/profile.php?u=".intval($_GET['id']));
         exit;
     }
@@ -60,7 +60,7 @@ if (isset($_GET['id'])) {
 
 $tpl = new Template(get_lang('Online users list'));
 
-if (api_get_setting('allow_social_tool') === 'true' && !api_is_anonymous()) {
+if ('true' === api_get_setting('allow_social_tool') && !api_is_anonymous()) {
     $tpl->assign('whoisonline', $whoisonline_list);
     $tpl->assign('social_search', $social_search);
 } else {

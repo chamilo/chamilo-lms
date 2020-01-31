@@ -1,9 +1,6 @@
 <?php
 /* For licensing terms, see /license.txt */
 
-/**
- * @package chamilo.admin
- */
 $cidReset = true;
 
 require_once __DIR__.'/../inc/global.inc.php';
@@ -35,7 +32,7 @@ global $_configuration;
 if (api_is_multiple_url_enabled()) {
     $tbl_course_rel_access_url = Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_COURSE);
     $access_url_id = api_get_current_access_url_id();
-    if ($access_url_id != -1) {
+    if (-1 != $access_url_id) {
         $sql = "SELECT code,visual_code,title
             FROM $course_table as c
             INNER JOIN $tbl_course_rel_access_url as course_rel_url
@@ -86,7 +83,7 @@ if ($form->validate()) {
                 u.firstname 	AS FirstName,
                 u.email 		AS Email,
                 u.username	AS UserName,
-                ".(($_configuration['password_encryption'] != 'none') ? " " : "u.password AS Password, ")."
+                ".(('none' != $_configuration['password_encryption']) ? " " : "u.password AS Password, ")."
                 u.auth_source	AS AuthSource,
                 u.status		AS Status,
                 u.official_code	AS OfficialCode,
@@ -112,7 +109,7 @@ if ($form->validate()) {
         if (api_is_multiple_url_enabled()) {
             $tbl_user_rel_access_url = Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_USER);
             $access_url_id = api_get_current_access_url_id();
-            if ($access_url_id != -1) {
+            if (-1 != $access_url_id) {
                 $sql .= " FROM $user_table u
                           INNER JOIN $tbl_user_rel_access_url as user_rel_url
                           ON (u.user_id= user_rel_url.user_id)
@@ -128,8 +125,8 @@ if ($form->validate()) {
     $extra_fields = UserManager::get_extra_fields(0, 0, 5, 'ASC', false);
 
     if (!empty($export['addcsvheader'])) {
-        if ($export['addcsvheader'] == '1' && ($export['file_type'] == 'csv' || $export['file_type'] == 'xls')) {
-            if ($_configuration['password_encryption'] != 'none') {
+        if ('1' == $export['addcsvheader'] && ('csv' == $export['file_type'] || 'xls' == $export['file_type'])) {
+            if ('none' != $_configuration['password_encryption']) {
                 $data[] = [
                     'UserId',
                     'LastName',

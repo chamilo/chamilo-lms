@@ -3,8 +3,6 @@
 
 /**
  * Script.
- *
- * @package chamilo.gradebook
  */
 require_once __DIR__.'/../inc/global.inc.php';
 $_in_course = true;
@@ -44,8 +42,8 @@ if ($form->validate()) {
     $values = $form->exportValues();
     $select_course = isset($values['select_course']) ? $values['select_course'] : [];
     $cat = new Category();
-    if ($values['hid_parent_id'] == '0') {
-        if ($select_course == 'COURSEINDEPENDENT') {
+    if ('0' == $values['hid_parent_id']) {
+        if ('COURSEINDEPENDENT' == $select_course) {
             $cat->set_name($values['name']);
             $cat->set_course_code(null);
         } else {

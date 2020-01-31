@@ -3,9 +3,6 @@
 
 use ChamiloSession as Session;
 
-/**
- * @package chamilo.tracking
- */
 require_once __DIR__.'/../inc/global.inc.php';
 $current_course_tool = TOOL_TRACKING;
 
@@ -15,7 +12,7 @@ $from_myspace = false;
 $from = isset($_GET['from']) ? $_GET['from'] : null;
 
 $this_section = SECTION_COURSES;
-if ($from == 'myspace') {
+if ('myspace' == $from) {
     $from_myspace = true;
     $this_section = 'session_my_space';
 }
@@ -47,7 +44,7 @@ if (!empty($groupId)) {
 $TABLEQUIZ = Database::get_course_table(TABLE_QUIZ_TEST);
 
 // Starting the output buffering when we are exporting the information.
-$export_csv = isset($_GET['export']) && $_GET['export'] == 'csv' ? true : false;
+$export_csv = isset($_GET['export']) && 'csv' == $_GET['export'] ? true : false;
 $session_id = intval($_REQUEST['id_session']);
 
 if ($export_csv) {
@@ -59,7 +56,7 @@ if ($export_csv) {
 $csv_content = [];
 
 // Breadcrumbs.
-if (isset($_GET['origin']) && $_GET['origin'] == 'resume_session') {
+if (isset($_GET['origin']) && 'resume_session' == $_GET['origin']) {
     $interbreadcrumb[] = ['url' => '../admin/index.php', 'name' => get_lang('Administration')];
     $interbreadcrumb[] = ['url' => '../session/session_list.php', 'name' => get_lang('Session list')];
     $interbreadcrumb[] = [
@@ -210,7 +207,7 @@ if ($exerciseReporting) {
                     $quiz_avg_score += $avg_student_score;
                 }
             }
-            $studentCount = ($studentCount == 0 || is_null($studentCount) || $studentCount == '') ? 1 : $studentCount;
+            $studentCount = (0 == $studentCount || is_null($studentCount) || '' == $studentCount) ? 1 : $studentCount;
             $quiz_avg_score = round(($quiz_avg_score / $studentCount), 2).'%';
             $url = api_get_path(WEB_CODE_PATH).'exercise/overview.php?exerciseId='.$quiz['id'].$course_path_params;
 

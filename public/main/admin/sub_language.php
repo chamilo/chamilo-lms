@@ -2,8 +2,6 @@
 /* For licensing terms, see /license.txt */
 /**
  * Script for sub-language administration.
- *
- * @package chamilo.admin.sub_language
  */
 $cidReset = true;
 $this_script = 'sub_language';
@@ -76,7 +74,7 @@ if (isset($_GET['id']) && $_GET['id'] == strval(intval($_GET['id']))) {
     if (!file_exists($sub_language_file) || !is_writable($sub_language_file)) {
         $sublanguage_folder_error = $sub_language_file.' '.get_lang('is not writeable');
     }
-    if (SubLanguageManager::check_if_exist_language_by_id($_GET['id']) === true) {
+    if (true === SubLanguageManager::check_if_exist_language_by_id($_GET['id'])) {
         $language_id_exist = true;
     } else {
         $language_id_exist = false;
@@ -89,7 +87,7 @@ if (isset($_GET['id']) && $_GET['id'] == strval(intval($_GET['id']))) {
 $intro = sprintf(get_lang('Define new terms for sub-language %s by searching some term, then save each translation by clicking the save button. You will then have to switch your own user language to see the new terms appear.'), strtolower($sub_language_name));
 $path_folder = api_get_path(SYS_LANG_PATH).$all_data_of_language['dokeos_folder'];
 
-if (!is_dir($path_folder) || strlen($all_data_of_language['dokeos_folder']) == 0) {
+if (!is_dir($path_folder) || 0 == strlen($all_data_of_language['dokeos_folder'])) {
     api_not_allowed(true);
 }
 
@@ -162,7 +160,7 @@ function search_language_term(
                 }
                 $founded = false;
                 // searching the item in the parent tool
-                if (preg_match($term, $parent_variable_value) !== 0) {
+                if (0 !== preg_match($term, $parent_variable_value)) {
                     $founded = true;
                 }
                 if ($founded) {
@@ -230,16 +228,16 @@ function search_language_term(
                 $founded = false;
                 if ($search_in_english && $search_in_variable) {
                     // searching the item in the parent tool
-                    if (preg_match($term, $variable_value) !== 0 || preg_match($term, $name_variable) !== 0) {
+                    if (0 !== preg_match($term, $variable_value) || 0 !== preg_match($term, $name_variable)) {
                         $founded = true;
                     }
                 } else {
                     if ($search_in_english) {
-                        if (preg_match($term, $variable_value) !== 0) {
+                        if (0 !== preg_match($term, $variable_value)) {
                             $founded = true;
                         }
                     } else {
-                        if (preg_match($term, $name_variable) !== 0) {
+                        if (0 !== preg_match($term, $name_variable)) {
                             $founded = true;
                         }
                     }
@@ -305,7 +303,7 @@ function search_language_term(
 
                 $founded = false;
                 // searching the item in the parent tool
-                if (preg_match($term, $variable_value) !== 0) {
+                if (0 !== preg_match($term, $variable_value)) {
                     $founded = true;
                 }
                 if ($founded) {

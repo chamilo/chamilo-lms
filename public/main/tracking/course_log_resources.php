@@ -1,21 +1,18 @@
 <?php
 /* For licensing terms, see /license.txt */
 
-/**
- * @package chamilo.tracking
- */
 require_once __DIR__.'/../inc/global.inc.php';
 $current_course_tool = TOOL_TRACKING;
 
 $from_myspace = false;
 $from = isset($_GET['from']) ? $_GET['from'] : null;
 // Starting the output buffering when we are exporting the information.
-$export_csv = isset($_GET['export']) && $_GET['export'] == 'csv' ? true : false;
-$exportXls = isset($_GET['export']) && $_GET['export'] == 'xls' ? true : false;
+$export_csv = isset($_GET['export']) && 'csv' == $_GET['export'] ? true : false;
+$exportXls = isset($_GET['export']) && 'xls' == $_GET['export'] ? true : false;
 $session_id = intval($_REQUEST['id_session']);
 
 $this_section = SECTION_COURSES;
-if ($from == 'myspace') {
+if ('myspace' == $from) {
     $from_myspace = true;
     $this_section = 'session_my_space';
 }
@@ -76,7 +73,7 @@ if (empty($session_id)) {
 }
 
 // Breadcrumbs.
-if (isset($_GET['origin']) && $_GET['origin'] == 'resume_session') {
+if (isset($_GET['origin']) && 'resume_session' == $_GET['origin']) {
     $interbreadcrumb[] = [
         'url' => api_get_path(WEB_CODE_PATH).'admin/index.php',
         'name' => get_lang('Administration'),

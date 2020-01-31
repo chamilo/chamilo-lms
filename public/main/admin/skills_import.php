@@ -3,7 +3,6 @@
 /**
  * This tool allows platform admins to add skills by uploading a CSV or XML file.
  *
- * @package chamilo.admin
  * @documentation Some interesting basic skills can be found in the "Skills"
  * section here: http://en.wikipedia.org/wiki/Personal_knowledge_management
  */
@@ -112,7 +111,7 @@ $extra_fields = UserManager::get_extra_fields(0, 0, 5, 'ASC', true);
 $user_id_error = [];
 $error_message = '';
 
-if (!empty($_POST['formSent']) && $_FILES['import_file']['size'] !== 0) {
+if (!empty($_POST['formSent']) && 0 !== $_FILES['import_file']['size']) {
     $file_type = $_POST['file_type'];
     Security::clear_token();
     $tok = Security::get_token();
@@ -123,7 +122,7 @@ if (!empty($_POST['formSent']) && $_FILES['import_file']['size'] !== 0) {
     $ext_import_file = substr($_FILES['import_file']['name'], (strrpos($_FILES['import_file']['name'], '.') + 1));
 
     if (in_array($ext_import_file, $allowed_file_mimetype)) {
-        if (strcmp($file_type, 'csv') === 0 && $ext_import_file == $allowed_file_mimetype[0]) {
+        if (0 === strcmp($file_type, 'csv') && $ext_import_file == $allowed_file_mimetype[0]) {
             $skills = parse_csv_data($_FILES['import_file']['tmp_name']);
             $errors = validate_data($skills);
             $error_kind_file = false;
@@ -149,7 +148,7 @@ if (!empty($_POST['formSent']) && $_FILES['import_file']['size'] !== 0) {
         }
     }
 
-    if (strcmp($file_type, 'csv') === 0) {
+    if (0 === strcmp($file_type, 'csv')) {
         save_data($skills_to_insert);
     } else {
         $error_message = get_lang('You must import a file corresponding to the selected format');
@@ -161,7 +160,7 @@ if (!empty($_POST['formSent']) && $_FILES['import_file']['size'] !== 0) {
         $see_message_import = get_lang('File imported');
     }
 
-    if (count($errors) != 0) {
+    if (0 != count($errors)) {
         $warning_message = '<ul>';
         foreach ($errors as $index => $error_skill) {
             $warning_message .= '<li><b>'.$error_skill['error'].'</b>: ';

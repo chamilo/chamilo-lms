@@ -5,8 +5,6 @@
 /**
  * Script to draw the results from a query.
  *
- * @package chamilo.learnpath
- *
  * @author Diego Escalante Urrelo <diegoe@gmail.com>
  * @author Marco Antonio Villegas Vega <marvil07@gmail.com>
  * @author Julio Montoya <gugli100@gmail.com> bug fixing
@@ -28,7 +26,7 @@ $interbreadcrumb[] = ['url' => './index.php', 'name' => get_lang(ucfirst(TOOL_SE
 search_widget_prepare($htmlHeadXtra);
 Display::display_header(null, 'Path');
 
-if (api_get_setting('search_enabled') !== 'true') {
+if ('true' !== api_get_setting('search_enabled')) {
     echo Display::return_message(get_lang('The full-text search feature is not enabled in Chamilo. Please contact the Chamilo administrator.'), 'error');
 } else {
     if (!empty($_GET['action'])) {
@@ -92,7 +90,7 @@ foreach ($specific_fields as $specific_field) {
 // Get right group of terms to show on multiple select.
 $fixed_queries = [];
 $course_filter = null;
-if (($cid = api_get_course_id()) != -1) {
+if (-1 != ($cid = api_get_course_id())) {
     // Results only from actual course.
     $course_filter = chamilo_get_boolean_query(XAPIAN_PREFIX_COURSEID.$cid);
 }
@@ -100,7 +98,7 @@ if (($cid = api_get_course_id()) != -1) {
 if (count($term_array)) {
     $fixed_queries = chamilo_join_queries($term_array, null, $op);
 
-    if ($course_filter != null) {
+    if (null != $course_filter) {
         $fixed_queries = chamilo_join_queries(
             $fixed_queries,
             $course_filter,
@@ -143,7 +141,7 @@ if ($count > 0) {
             $a_suffix = '';
         }
 
-        if ($mode == 'gallery') {
+        if ('gallery' == $mode) {
             $title = $a_prefix.str_replace('_', ' ', $result['title']).$a_suffix;
             $blocks[] = [1 => $a_prefix.'<img src="'.$result['thumbnail'].'" />'.$a_suffix.'<br />'.$title.'<br />'.$result['author'],
             ];
@@ -180,14 +178,14 @@ if (count($blocks) > 0) {
     $additional_parameters['operator'] = $op;
     $s->additional_parameters = $additional_parameters;
 
-    if ($mode == 'default') {
+    if ('default' == $mode) {
         $s->set_header(0, get_lang(ucfirst(TOOL_SEARCH)), false);
     }
 
     $search_link = '<a href="%ssearch/index.php?mode=%s&action=search&query=%s%s">';
 
-    $iconGallery = (($mode == 'gallery') ? 'ButtonGallOn' : 'ButtonGallOff').'.png';
-    $iconDefault = (($mode == 'default') ? 'ButtonListOn' : 'ButtonListOff').'.png';
+    $iconGallery = (('gallery' == $mode) ? 'ButtonGallOn' : 'ButtonGallOff').'.png';
+    $iconDefault = (('default' == $mode) ? 'ButtonListOn' : 'ButtonListOff').'.png';
 
     $mode_selector = '<div id="mode-selector">';
     $mode_selector .= sprintf($search_link, api_get_path(WEB_CODE_PATH), 'gallery', $_REQUEST['query'], $get_params);

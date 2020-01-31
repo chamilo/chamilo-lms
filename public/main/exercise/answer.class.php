@@ -9,7 +9,6 @@ use Chamilo\CourseBundle\Entity\CQuizAnswer;
  * Allows to instantiate an object of type Answer
  * 5 arrays are created to receive the attributes of each answer belonging to a specified question.
  *
- *
  * @author Olivier Brouckaert
  */
 class Answer
@@ -148,7 +147,7 @@ class Answer
             $this->destination[$i] = $object->destination;
             $this->autoId[$i] = $object->id_auto;
             $this->iid[$i] = $object->iid;
-            ++$i;
+            $i++;
         }
         $this->nbrAnswers = $i - 1;
     }
@@ -275,7 +274,7 @@ class Answer
             $this->destination[$i] = $object->destination;
             $this->autoId[$i] = $object->id_auto;
             $this->iid[$i] = $object->iid;
-            ++$i;
+            $i++;
         }
 
         if (UNIQUE_ANSWER_NO_OPTION == $questionType['type'] && !empty($doubt_data)) {
@@ -289,7 +288,7 @@ class Answer
             $this->destination[$i] = $doubt_data->destination;
             $this->autoId[$i] = $doubt_data->id_auto;
             $this->iid[$i] = $doubt_data->iid;
-            ++$i;
+            $i++;
         }
         $this->nbrAnswers = $i - 1;
 
@@ -417,7 +416,7 @@ class Answer
     public function getAnswersList($decode = false)
     {
         $list = [];
-        for ($i = 1; $i <= $this->nbrAnswers; ++$i) {
+        for ($i = 1; $i <= $this->nbrAnswers; $i++) {
             if (!empty($this->answer[$i])) {
                 //Avoid problems when parsing elements with accents
                 if ($decode) {
@@ -459,7 +458,7 @@ class Answer
     public function getGradesList()
     {
         $list = [];
-        for ($i = 0; $i < $this->nbrAnswers; ++$i) {
+        for ($i = 0; $i < $this->nbrAnswers; $i++) {
             if (!empty($this->answer[$i])) {
                 $list[$i] = $this->weighting[$i];
             }
@@ -597,7 +596,7 @@ class Answer
         $new_hotspot_type = null,
         $destination = ''
     ) {
-        ++$this->new_nbrAnswers;
+        $this->new_nbrAnswers++;
         $id = $this->new_nbrAnswers;
         $this->new_answer[$id] = $answer;
         $this->new_correct[$id] = $correct;
@@ -675,7 +674,7 @@ class Answer
         $courseId = $this->course['real_id'];
         $answerList = [];
 
-        for ($i = 1; $i <= $this->new_nbrAnswers; ++$i) {
+        for ($i = 1; $i <= $this->new_nbrAnswers; $i++) {
             $answer = $this->new_answer[$i];
             $correct = isset($this->new_correct[$i]) ? $this->new_correct[$i] : '';
             $comment = isset($this->new_comment[$i]) ? $this->new_comment[$i] : '';
@@ -803,7 +802,7 @@ class Answer
                             question_id = '".$questionId."' AND
                             position ='$position'";
                 Database::query($sql);
-                ++$i;
+                $i++;
             }
         }
 
@@ -863,7 +862,7 @@ class Answer
             if (!empty($destination_options)) {
                 foreach ($destination_options as $item) {
                     $fixed_list[$new_option_list[$i]] = $item['id'];
-                    ++$i;
+                    $i++;
                 }
             }
         }
@@ -880,7 +879,7 @@ class Answer
 
             if (in_array($newQuestion->type, [MATCHING, MATCHING_DRAGGABLE])) {
                 $temp = [];
-                for ($i = 1; $i <= $this->nbrAnswers; ++$i) {
+                for ($i = 1; $i <= $this->nbrAnswers; $i++) {
                     $answer = [
                         'id' => $this->id[$i],
                         'answer' => $this->answer[$i],
@@ -944,7 +943,7 @@ class Answer
                     }
                 }
             } else {
-                for ($i = 1; $i <= $this->nbrAnswers; ++$i) {
+                for ($i = 1; $i <= $this->nbrAnswers; $i++) {
                     if ($this->course['id'] != $course_info['id']) {
                         $this->answer[$i] = DocumentManager::replaceUrlWithNewCourseCode(
                             $this->answer[$i],

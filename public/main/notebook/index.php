@@ -4,8 +4,6 @@
 use ChamiloSession as Session;
 
 /**
- * @package chamilo.notebook
- *
  * @author Christian Fasanando, initial version
  * @author Patrick Cool <patrick.cool@UGent.be>, Ghent University, Belgium,
  * refactoring and tighter integration
@@ -49,14 +47,14 @@ $logInfo = [
 Event::registerLog($logInfo);
 
 // Tool name
-if ($action === 'addnote') {
+if ('addnote' === $action) {
     $tool = 'Add new note in my personal notebook';
     $interbreadcrumb[] = [
         'url' => 'index.php?'.api_get_cidreq(),
         'name' => get_lang('Notebook'),
     ];
 }
-if ($action === 'editnote') {
+if ('editnote' === $action) {
     $tool = 'Edit my personal note';
     $interbreadcrumb[] = [
         'url' => 'index.php?'.api_get_cidreq(),
@@ -71,8 +69,8 @@ Display::display_header(get_lang(ucfirst($tool)));
 Display::display_introduction_section(TOOL_NOTEBOOK);
 
 // Action handling: Adding a note
-if ($action === 'addnote') {
-    if (api_get_session_id() != 0 && !api_is_allowed_to_session_edit(false, true)) {
+if ('addnote' === $action) {
+    if (0 != api_get_session_id() && !api_is_allowed_to_session_edit(false, true)) {
         api_not_allowed();
     }
 
@@ -130,7 +128,7 @@ if ($action === 'addnote') {
         $form->setConstants(['sec_token' => $token]);
         $form->display();
     }
-} elseif ($action === 'editnote' && is_numeric($_GET['notebook_id'])) {
+} elseif ('editnote' === $action && is_numeric($_GET['notebook_id'])) {
     // Action handling: Editing a note
 
     if (!empty($_GET['isStudentView'])) {
@@ -193,7 +191,7 @@ if ($action === 'addnote') {
         $form->setConstants(['sec_token' => $token]);
         $form->display();
     }
-} elseif ($action === 'deletenote' && is_numeric($_GET['notebook_id'])) {
+} elseif ('deletenote' === $action && is_numeric($_GET['notebook_id'])) {
     // Action handling: deleting a note
     $res = NotebookManager::delete_note($_GET['notebook_id']);
     if ($res) {
@@ -201,13 +199,13 @@ if ($action === 'addnote') {
     }
 
     NotebookManager::display_notes();
-} elseif ($action === 'changeview' &&
+} elseif ('changeview' === $action &&
     in_array($_GET['view'], ['creation_date', 'update_date', 'title'])
 ) {
     // Action handling: changing the view (sorting order)
     switch ($_GET['view']) {
         case 'creation_date':
-            if (!$_GET['direction'] || $_GET['direction'] == 'ASC') {
+            if (!$_GET['direction'] || 'ASC' == $_GET['direction']) {
                 echo Display::return_message(
                     get_lang('Notes sorted by creation date ascendant'),
                     'confirmation'
@@ -220,7 +218,7 @@ if ($action === 'addnote') {
             }
             break;
         case 'update_date':
-            if (!$_GET['direction'] || $_GET['direction'] == 'ASC') {
+            if (!$_GET['direction'] || 'ASC' == $_GET['direction']) {
                 echo Display::return_message(
                     get_lang('Notes sorted by update date ascendant'),
                     'confirmation'
@@ -233,7 +231,7 @@ if ($action === 'addnote') {
             }
             break;
         case 'title':
-            if (!$_GET['direction'] || $_GET['direction'] == 'ASC') {
+            if (!$_GET['direction'] || 'ASC' == $_GET['direction']) {
                 echo Display::return_message(
                     get_lang('Notes sorted by title ascendant'),
                     'confirmation'

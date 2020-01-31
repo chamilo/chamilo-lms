@@ -5,8 +5,6 @@
  * Chamilo LMS.
  *
  * Only updates the  main/inc/conf/configuration.php
- *
- * @package chamilo.install
  */
 if (defined('SYSTEM_INSTALLATION')) {
     error_log("Starting ".basename(__FILE__));
@@ -27,21 +25,21 @@ if (defined('SYSTEM_INSTALLATION')) {
 
     foreach ($file as $line) {
         $ignore = false;
-        if (stripos($line, '$_configuration[\'system_version\']') !== false) {
+        if (false !== stripos($line, '$_configuration[\'system_version\']')) {
             $found_version = true;
             $line = '$_configuration[\'system_version\'] = \''.$GLOBALS['new_version'].'\';'."\r\n";
-        } elseif (stripos($line, '$_configuration[\'system_stable\']') !== false) {
+        } elseif (false !== stripos($line, '$_configuration[\'system_stable\']')) {
             $found_stable = true;
             $line = '$_configuration[\'system_stable\'] = '.($GLOBALS['new_version_stable'] ? 'true' : 'false').';'."\r\n";
-        } elseif (stripos($line, '$_configuration[\'software_name\']') !== false) {
+        } elseif (false !== stripos($line, '$_configuration[\'software_name\']')) {
             $found_software_name = true;
             $line = '$_configuration[\'software_name\'] = \''.$GLOBALS['software_name'].'\';'."\r\n";
-        } elseif (stripos($line, '$_configuration[\'software_url\']') !== false) {
+        } elseif (false !== stripos($line, '$_configuration[\'software_url\']')) {
             $found_software_url = true;
             $line = '$_configuration[\'software_url\'] = \''.$GLOBALS['software_url'].'\';'."\r\n";
-        } elseif (stripos($line, '$userPasswordCrypted') !== false) {
+        } elseif (false !== stripos($line, '$userPasswordCrypted')) {
             $line = '$_configuration[\'password_encryption\'] = \''.$userPasswordCrypted.'\';'."\r\n";
-        } elseif (stripos($line, '?>') !== false) {
+        } elseif (false !== stripos($line, '?>')) {
             $ignore = true;
         }
         if (!$ignore) {

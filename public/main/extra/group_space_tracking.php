@@ -38,19 +38,19 @@ $forums_of_groups = get_forums_of_group($current_group['id']);
 $forum_state_public = 0;
 if (is_array($forums_of_groups)) {
     foreach ($forums_of_groups as $key => $value) {
-        if ($value['forum_group_public_private'] == 'public') {
+        if ('public' == $value['forum_group_public_private']) {
             $forum_state_public = 1;
         }
     }
 }
 
-if ($current_group['doc_state'] != 1 &&
-    $current_group['calendar_state'] != 1 &&
-    $current_group['work_state'] != 1 &&
-    $current_group['announcements_state'] != 1 &&
-    $current_group['wiki_state'] != 1 &&
-    $current_group['chat_state'] != 1 &&
-    $forum_state_public != 1
+if (1 != $current_group['doc_state'] &&
+    1 != $current_group['calendar_state'] &&
+    1 != $current_group['work_state'] &&
+    1 != $current_group['announcements_state'] &&
+    1 != $current_group['wiki_state'] &&
+    1 != $current_group['chat_state'] &&
+    1 != $forum_state_public
 ) {
     if (!api_is_allowed_to_edit(null, true) &&
         !GroupManager::is_user_in_group($user_id, $group_id)) {
@@ -74,7 +74,7 @@ $is_course_member = CourseManager::is_user_subscribed_in_real_or_linked_course(
 $tutors = GroupManager::get_subscribed_tutors($current_group['id']);
 
 $tutor_info = '';
-if (count($tutors) == 0) {
+if (0 == count($tutors)) {
     $tutor_info = get_lang('(none)');
 } else {
     isset($origin) ? $my_origin = $origin : $my_origin = '';
@@ -331,7 +331,7 @@ while ($resulta = Database::fetch_array($result)) {
     //si rien n'est inscrit cette journée dans l'agenda, recule de -1
     unset($jour_agenda);
     $tour = -1;
-    while ($jour_agenda == '') {
+    while ('' == $jour_agenda) {
         $tour++;
         $date = date("Y-m-d", mktime(0, 0, 0, date("m"), date("d") - $tour, date("Y")));
         $sql4 = "SELECT *  FROM $tbl_personal_agenda
@@ -367,7 +367,7 @@ while ($resulta = Database::fetch_array($result)) {
 
     $diff = abs($diff);
     $last_connection_date = Tracking:: get_last_connection_date($user_in_groupe, true);
-    if ($last_connection_date == '') {
+    if ('' == $last_connection_date) {
         $last_connection_date = get_lang('No connection');
     }
     // on présente tous les résultats
@@ -421,6 +421,6 @@ function user_name_filter($name, $url_params, $row)
 
 // Footer
 $orig = isset($origin) ? $origin : '';
-if ($orig != 'learnpath') {
+if ('learnpath' != $orig) {
     Display::display_footer();
 }

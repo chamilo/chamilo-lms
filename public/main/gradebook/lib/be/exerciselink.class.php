@@ -6,8 +6,6 @@
  * Defines a gradebook ExerciseLink object.
  *
  * @author Bert Steppé
- *
- * @package chamilo.gradebook
  */
 class ExerciseLink extends AbstractLink
 {
@@ -24,7 +22,7 @@ class ExerciseLink extends AbstractLink
         parent::__construct();
         $this->set_type(LINK_EXERCISE);
         $this->is_hp = $hp;
-        if ($this->is_hp == 1) {
+        if (1 == $this->is_hp) {
             $this->set_type(LINK_HOTPOTATOES);
         }
     }
@@ -111,7 +109,7 @@ class ExerciseLink extends AbstractLink
         $result = Database::query($sql);
         $number = Database::fetch_row($result);
 
-        return $number[0] != 0;
+        return 0 != $number[0];
     }
 
     /**
@@ -212,7 +210,7 @@ class ExerciseLink extends AbstractLink
         $exercise->read($exerciseId);
 
         if (!$this->is_hp) {
-            if ($exercise->exercise_was_added_in_lp == false) {
+            if (false == $exercise->exercise_was_added_in_lp) {
                 $sql = "SELECT * FROM $tblStats
                         WHERE
                             exe_exo_id = $exerciseId AND
@@ -240,7 +238,7 @@ class ExerciseLink extends AbstractLink
                             c_id = $courseId ";
             }
 
-            if (!empty($stud_id) && $type != 'ranking') {
+            if (!empty($stud_id) && 'ranking' != $type) {
                 $sql .= " AND exe_user_id = $stud_id ";
             }
             $sql .= ' ORDER BY exe_id DESC';
@@ -306,7 +304,7 @@ class ExerciseLink extends AbstractLink
                 }
 
                 if (!isset($students[$data['exe_user_id']])) {
-                    if ($data['max_score'] != 0) {
+                    if (0 != $data['max_score']) {
                         $students[$data['exe_user_id']] = $data['score'];
                         $student_count++;
                         if ($data['score'] > $bestResult) {
@@ -319,7 +317,7 @@ class ExerciseLink extends AbstractLink
                 }
             }
 
-            if ($student_count == 0) {
+            if (0 == $student_count) {
                 if ($cacheAvailable) {
                     $cacheDriver->save($key, null);
                 }
@@ -437,7 +435,7 @@ class ExerciseLink extends AbstractLink
      */
     public function get_type_name()
     {
-        if ($this->is_hp == 1) {
+        if (1 == $this->is_hp) {
             return 'HotPotatoes';
         }
 
@@ -499,7 +497,7 @@ class ExerciseLink extends AbstractLink
     public function get_exercise_data()
     {
         $tableItemProperty = Database::get_course_table(TABLE_ITEM_PROPERTY);
-        if ($this->is_hp == 1) {
+        if (1 == $this->is_hp) {
             $table = Database::get_course_table(TABLE_DOCUMENT);
         } else {
             $table = Database::get_course_table(TABLE_QUIZ_TEST);
@@ -508,7 +506,7 @@ class ExerciseLink extends AbstractLink
         $exerciseId = $this->get_ref_id();
 
         if (empty($this->exercise_data)) {
-            if ($this->is_hp == 1) {
+            if (1 == $this->is_hp) {
                 $sql = "SELECT * FROM $table ex
                     INNER JOIN $tableItemProperty ip
                     ON (ip.ref = ex.id AND ip.c_id = ex.c_id)

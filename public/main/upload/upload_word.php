@@ -24,7 +24,7 @@ $form_style = '<style>
 
 $htmlHeadXtra[] = $form_style;
 
-if (api_get_setting('search_enabled') == 'true') {
+if ('true' == api_get_setting('search_enabled')) {
     $specific_fields = get_specific_field_list();
 }
 
@@ -34,9 +34,9 @@ if (isset($_POST['convert'])) {
         $allowed_extensions = ['doc', 'docx', 'odt', 'txt', 'sxw', 'rtf'];
         if (in_array(strtolower(pathinfo($_FILES['user_file']['name'], PATHINFO_EXTENSION)), $allowed_extensions)) {
             require '../lp/lp_upload.php';
-            if (isset($o_doc) && $first_item_id != 0) {
+            if (isset($o_doc) && 0 != $first_item_id) {
                 // Search-related section
-                if (api_get_setting('search_enabled') == 'true') {
+                if ('true' == api_get_setting('search_enabled')) {
                     require_once api_get_path(LIBRARY_PATH).'specific_fields_manager.lib.php';
                     $specific_fields = get_specific_field_list();
 
@@ -153,7 +153,7 @@ EOT;
 $renderer->setCustomElementTemplate($user_file_template);
 
 $form->addElement('file', 'user_file', Display::return_icon('word_big.gif'));
-if (api_get_setting('search_enabled') === 'true') {
+if ('true' === api_get_setting('search_enabled')) {
     $form->addElement('checkbox', 'index_document', '', get_lang('Index document text?ument'));
     $form->addElement('html', '<br />');
     $form->addElement(

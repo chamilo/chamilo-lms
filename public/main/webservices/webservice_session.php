@@ -1,8 +1,6 @@
 <?php
 /* For licensing terms, see /license.txt */
-/**
- * @package chamilo.webservices
- */
+
 require_once __DIR__.'/../inc/global.inc.php';
 require_once __DIR__.'/webservice.php';
 
@@ -437,7 +435,7 @@ class WSSession extends WS
         } else {
             // Add the Original session id to the extra fields
             $extras_associative = [];
-            if ($session_id_field_name != "chamilo_session_id") {
+            if ("chamilo_session_id" != $session_id_field_name) {
                 $extras_associative[$session_id_field_name] = $session_id_value;
             }
             foreach ($extras as $extra) {
@@ -615,7 +613,7 @@ class WSSession extends WS
             if ($user_id instanceof WSError) {
                 return $user_id;
             } else {
-                if ($state == 1) {
+                if (1 == $state) {
                     SessionManager::subscribeUsersToSession(
                         $session_id,
                         [$user_id]
@@ -678,7 +676,7 @@ class WSSession extends WS
                 if ($course_id instanceof WSError) {
                     return $course_id;
                 } else {
-                    if ($state == 1) {
+                    if (1 == $state) {
                         SessionManager::set_coach_to_course_session(
                             $user_id,
                             $session_id,
@@ -737,7 +735,7 @@ class WSSession extends WS
             if ($course_id instanceof WSError) {
                 return $course_id;
             } else {
-                if ($state == 1) {
+                if (1 == $state) {
                     SessionManager::add_courses_to_session(
                         $session_id,
                         [$course_id]

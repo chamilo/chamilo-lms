@@ -9,7 +9,7 @@ if (empty($allow)) {
 }
 
 $from_myspace = false;
-if (isset($_GET['from']) && $_GET['from'] == 'myspace') {
+if (isset($_GET['from']) && 'myspace' == $_GET['from']) {
     $from_myspace = true;
     $this_section = SECTION_TRACKING;
 } else {
@@ -20,7 +20,7 @@ if (isset($_GET['from']) && $_GET['from'] == 'myspace') {
 $cidReset = true;
 $get_course_code = Security:: remove_XSS($_GET['course']);
 if (isset($_GET['details'])) {
-    if (!empty($_GET['origin']) && $_GET['origin'] == 'user_course') {
+    if (!empty($_GET['origin']) && 'user_course' == $_GET['origin']) {
         $course_info = CourseManager:: get_course_information($get_course_code);
         if (empty($cidReq)) {
             $interbreadcrumb[] = [
@@ -33,7 +33,7 @@ if (isset($_GET['details'])) {
             "name" => get_lang("Users"),
         ];
     } else {
-        if (!empty($_GET['origin']) && $_GET['origin'] == 'tracking_course') {
+        if (!empty($_GET['origin']) && 'tracking_course' == $_GET['origin']) {
             $course_info = CourseManager:: get_course_information($get_course_code);
             if (empty($cidReq)) {
                 //$interbreadcrumb[] = array ("url" => api_get_path(WEB_COURSE_PATH).$course_info['directory'], 'name' => $course_info['title']);
@@ -43,7 +43,7 @@ if (isset($_GET['details'])) {
                 "name" => get_lang("Reporting"),
             ];
         } else {
-            if (!empty($_GET['origin']) && $_GET['origin'] == 'resume_session') {
+            if (!empty($_GET['origin']) && 'resume_session' == $_GET['origin']) {
                 $interbreadcrumb[] = [
                     'url' => '../admin/index.php',
                     "name" => get_lang('Administration'),
@@ -61,7 +61,7 @@ if (isset($_GET['details'])) {
                     "url" => "index.php",
                     "name" => get_lang('Reporting'),
                 ];
-                if (isset($_GET['id_coach']) && intval($_GET['id_coach']) != 0) {
+                if (isset($_GET['id_coach']) && 0 != intval($_GET['id_coach'])) {
                     $interbreadcrumb[] = [
                         "url" => "student.php?id_coach=".Security:: remove_XSS($_GET['id_coach']),
                         "name" => get_lang("Learners of trainer"),
@@ -87,7 +87,7 @@ if (isset($_GET['details'])) {
     }
     $nameTools = get_lang("Learner details in course");
 } else {
-    if (!empty($_GET['origin']) && $_GET['origin'] == 'resume_session') {
+    if (!empty($_GET['origin']) && 'resume_session' == $_GET['origin']) {
         $interbreadcrumb[] = [
             'url' => '../admin/index.php',
             "name" => get_lang('Administration'),
@@ -105,8 +105,8 @@ if (isset($_GET['details'])) {
             "url" => "index.php",
             "name" => get_lang('Reporting'),
         ];
-        if (isset($_GET['id_coach']) && intval($_GET['id_coach']) != 0) {
-            if (isset($_GET['id_session']) && intval($_GET['id_session']) != 0) {
+        if (isset($_GET['id_coach']) && 0 != intval($_GET['id_coach'])) {
+            if (isset($_GET['id_session']) && 0 != intval($_GET['id_session'])) {
                 $interbreadcrumb[] = [
                     "url" => "student.php?id_coach=".Security:: remove_XSS(
                             $_GET['id_coach']
@@ -131,14 +131,14 @@ if (isset($_GET['details'])) {
 api_block_anonymous_users();
 
 if (!api_is_allowed_to_edit() && !api_is_coach() && !api_is_drh() && !api_is_course_tutor(
-    ) && $_user['status'] != SESSIONADMIN && !api_is_platform_admin(true)) {
+    ) && SESSIONADMIN != $_user['status'] && !api_is_platform_admin(true)) {
     api_not_allowed(true);
 }
 
 Display:: display_header($nameTools);
 $tbl_stats_exercices = Database:: get_main_table(TABLE_STATISTIC_TRACK_E_EXERCISES);
 
-if (isset($_GET['user_id']) && $_GET['user_id'] != '') {
+if (isset($_GET['user_id']) && '' != $_GET['user_id']) {
     $user_id = intval($_GET['user_id']);
 } else {
     $user_id = $_user['user_id'];

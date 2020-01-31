@@ -9,8 +9,6 @@ use ChamiloSession as Session;
  *
  * @author Patrick Cool
  * @author Julio Montoya - Multiple URL site
- *
- * @package chamilo.admin
  */
 
 // Resetting the course id.
@@ -27,7 +25,7 @@ $_SESSION['this_section'] = $this_section;
 api_protect_admin_script();
 
  // Submit stylesheets.
-if (isset($_POST['save']) && isset($_GET['category']) && $_GET['category'] === 'Stylesheets') {
+if (isset($_POST['save']) && isset($_GET['category']) && 'Stylesheets' === $_GET['category']) {
     storeStylesheets();
     Display::addFlash(Display::return_message(get_lang('Saved.')));
 }
@@ -68,7 +66,7 @@ if (isset($_GET['delete_watermark'])) {
     Display::addFlash(Display::return_message(get_lang('File deleted')));
 }
 
-if (isset($_GET['action']) && $_GET['action'] == 'delete_grading') {
+if (isset($_GET['action']) && 'delete_grading' == $_GET['action']) {
     $id = intval($_GET['id']);
     api_delete_setting_option($id);
 }
@@ -166,19 +164,19 @@ if (!empty($_GET['category']) &&
             }
         }
 
-        if (isset($values['allow_social_tool']) && $values['allow_social_tool'] == 'true') {
+        if (isset($values['allow_social_tool']) && 'true' == $values['allow_social_tool']) {
             $values['allow_message_tool'] = 'true';
         }
 
         foreach ($settings as $item) {
             $key = $item['variable'];
-            if ($key === 'prevent_multiple_simultaneous_login') {
+            if ('prevent_multiple_simultaneous_login' === $key) {
                 Session::write('first_user_login', 1);
             }
             if (in_array($key, $settings_to_avoid)) {
                 continue;
             }
-            if ($key == 'search_field' || $key == 'submit_fixed_in_bottom') {
+            if ('search_field' == $key || 'submit_fixed_in_bottom' == $key) {
                 continue;
             }
             $key = Database::escape_string($key);
@@ -195,14 +193,14 @@ if (!empty($_GET['category']) &&
         $keys = [];
 
         foreach ($values as $key => $value) {
-            if (strcmp($key, 'MAX_FILE_SIZE') === 0) {
+            if (0 === strcmp($key, 'MAX_FILE_SIZE')) {
                 continue;
             }
             if (in_array($key, $settings_to_avoid)) {
                 continue;
             }
             // Avoid form elements which have nothing to do with settings
-            if ($key == 'search_field' || $key == 'submit_fixed_in_bottom') {
+            if ('search_field' == $key || 'submit_fixed_in_bottom' == $key) {
                 continue;
             }
 
@@ -223,9 +221,9 @@ if (!empty($_GET['category']) &&
                     case 'course_validation_terms_and_conditions_url':
                         // URL validation for some settings.
                         $value = trim(Security::remove_XSS($value));
-                        if ($value != '') {
+                        if ('' != $value) {
                             // Here we accept absolute URLs only.
-                            if (strpos($value, '://') === false) {
+                            if (false === strpos($value, '://')) {
                                 $value = 'http://'.$value;
                             }
                             if (!api_valid_url($value, true)) {
@@ -238,7 +236,7 @@ if (!empty($_GET['category']) &&
                     case 'emailAdministrator':
                         // Validation against e-mail address for some settings.
                         $value = trim(Security::remove_XSS($value));
-                        if ($value != '' && !api_valid_email($value)) {
+                        if ('' != $value && !api_valid_email($value)) {
                             // If the new (non-empty) e-mail address is invalid, then the old e-mail address stays.
                             // If the new e-mail address is empty, then it will be stored (i.e. the setting will be deleted).
                             $value = $old_value;
@@ -256,8 +254,8 @@ if (!empty($_GET['category']) &&
 
                 while ($row_subkeys = Database::fetch_array($res)) {
                     // If subkey is changed:
-                    if ((isset($value[$row_subkeys['subkey']]) && api_get_setting($key, $row_subkeys['subkey']) == 'false') ||
-                        (!isset($value[$row_subkeys['subkey']]) && api_get_setting($key, $row_subkeys['subkey']) == 'true')
+                    if ((isset($value[$row_subkeys['subkey']]) && 'false' == api_get_setting($key, $row_subkeys['subkey'])) ||
+                        (!isset($value[$row_subkeys['subkey']]) && 'true' == api_get_setting($key, $row_subkeys['subkey']))
                     ) {
                         $keys[] = $key;
                         break;

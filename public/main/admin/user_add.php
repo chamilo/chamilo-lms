@@ -1,9 +1,6 @@
 <?php
 /* For licensing terms, see /license.txt */
 
-/**
- * @package chamilo.admin
- */
 $cidReset = true;
 // Including necessary libraries.
 require_once __DIR__.'/../inc/global.inc.php';
@@ -141,11 +138,11 @@ $form->applyFilter('official_code', 'trim');
 // e-mail
 $form->addElement('text', 'email', get_lang('e-mail'), ['size' => '40', 'autocomplete' => 'off', 'id' => 'email']);
 $form->addRule('email', get_lang('e-mailWrong'), 'email');
-if (api_get_setting('registration', 'email') == 'true') {
+if ('true' == api_get_setting('registration', 'email')) {
     $form->addRule('email', get_lang('e-mailWrong'), 'required');
 }
 
-if (api_get_setting('login_is_email') == 'true') {
+if ('true' == api_get_setting('login_is_email')) {
     $form->addRule('email', sprintf(get_lang('The login needs to be maximum %s characters long'), (string) USERNAME_MAX_LENGTH), 'maxlength', USERNAME_MAX_LENGTH);
     $form->addRule('email', get_lang('This login is already in use'), 'username_available');
 }
@@ -163,7 +160,7 @@ $allowed_picture_types = api_get_supported_image_extensions(false);
 $form->addRule('picture', get_lang('Only PNG, JPG or GIF images allowed').' ('.implode(',', $allowed_picture_types).')', 'filetype', $allowed_picture_types);
 
 // Username
-if (api_get_setting('login_is_email') != 'true') {
+if ('true' != api_get_setting('login_is_email')) {
     $form->addElement('text', 'username', get_lang('Login'), ['id' => 'username', 'maxlength' => USERNAME_MAX_LENGTH, 'autocomplete' => 'off']);
     $form->addRule('username', get_lang('Required field'), 'required');
     $form->addRule('username', sprintf(get_lang('The login needs to be maximum %s characters long'), (string) USERNAME_MAX_LENGTH), 'maxlength', USERNAME_MAX_LENGTH);
@@ -182,7 +179,7 @@ if (isset($extAuthSource) && count($extAuthSource) > 0) {
         // Special case for CAS. CAS is activated from Chamilo > Administration > Configuration > CAS
         // extAuthSource always on for CAS even if not activated
         // same action for file user_edit.php
-        if (($key == CAS_AUTH_SOURCE && api_get_setting('cas_activate') === 'true') || ($key != CAS_AUTH_SOURCE)) {
+        if ((CAS_AUTH_SOURCE == $key && 'true' === api_get_setting('cas_activate')) || (CAS_AUTH_SOURCE != $key)) {
             $auth_sources[$key] = $key;
             $nb_ext_auth_source_added++;
         }
@@ -245,7 +242,7 @@ $form->addElement(
 );
 
 //drh list (display only if student)
-$display = (isset($_POST['status']) && $_POST['status'] == STUDENT) || !isset($_POST['status']) ? 'block' : 'none';
+$display = (isset($_POST['status']) && STUDENT == $_POST['status']) || !isset($_POST['status']) ? 'block' : 'none';
 
 //@todo remove the drh list here. This code is unused
 $form->addElement('html', '<div id="drh_list" style="display:'.$display.';">');
@@ -368,28 +365,28 @@ if ($form->validate()) {
         $hr_dept_id = isset($user['hr_dept_id']) ? (int) $user['hr_dept_id'] : 0;
 
         if (isset($extAuthSource) && count($extAuthSource) > 0 &&
-            $user['password']['password_auto'] == '2'
+            '2' == $user['password']['password_auto']
         ) {
             $auth_source = $user['password']['auth_source'];
             $password = 'PLACEHOLDER';
         } else {
             $auth_source = PLATFORM_AUTH_SOURCE;
-            $password = $user['password']['password_auto'] == '1' ? api_generate_password() : $user['password']['password'];
+            $password = '1' == $user['password']['password_auto'] ? api_generate_password() : $user['password']['password'];
         }
 
         $expiration_date = null;
-        if ($user['radio_expiration_date'] == '1') {
+        if ('1' == $user['radio_expiration_date']) {
             $expiration_date = $user['expiration_date'];
         }
 
         $active = (int) $user['active'];
-        if (api_get_setting('login_is_email') == 'true') {
+        if ('true' == api_get_setting('login_is_email')) {
             $username = $email;
         }
 
         $extra = [];
         foreach ($user as $key => $value) {
-            if (substr($key, 0, 6) == 'extra_') {
+            if ('extra_' == substr($key, 0, 6)) {
                 // An extra field
                 $extra[substr($key, 6)] = $value;
             }

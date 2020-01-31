@@ -29,7 +29,7 @@ if (!is_dir($toolPath)) {
 if (Security::check_abs_path($toolPath.$file, $toolPath.'/')) {
     $fullFilePath = $toolPath.$file;
     $result = DocumentManager::file_send_for_download($fullFilePath, false, '');
-    if ($result === false) {
+    if (false === $result) {
         api_not_allowed(true);
     }
 }

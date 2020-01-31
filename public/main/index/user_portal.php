@@ -11,8 +11,6 @@ use ChamiloSession as Session;
  * - menu bar
  * Search for CONFIGURATION parameters to modify settings
  *
- * @package chamilo.main
- *
  * @todo Shouldn't the CONFVAL_ constant be moved to the config page? Has anybody any idea what the are used for?
  *       If these are really configuration settings then we can add those to the dokeos config settings.
  * @todo check for duplication of functions with index.php (user_portal.php is orginally a copy of index.php)
@@ -59,9 +57,9 @@ if ($collapsable) {
 
 /* Constants and CONFIGURATION parameters */
 $load_dirs = api_get_setting('show_documents_preview');
-$displayMyCourseViewBySessionLink = api_get_setting('my_courses_view_by_session') === 'true';
+$displayMyCourseViewBySessionLink = 'true' === api_get_setting('my_courses_view_by_session');
 $nameTools = get_lang('My courses');
-$loadHistory = isset($_GET['history']) && intval($_GET['history']) == 1 ? true : false;
+$loadHistory = isset($_GET['history']) && 1 == intval($_GET['history']) ? true : false;
 
 // Load course notification by ajax
 $loadNotificationsByAjax = api_get_configuration_value('user_portal_load_notification_by_ajax');
@@ -156,7 +154,7 @@ $controller = new IndexManager(get_lang('My courses'));
 if (!$myCourseListAsCategory) {
     // Main courses and session list
     if (isset($_COOKIE['defaultMyCourseView'.$userId]) &&
-        $_COOKIE['defaultMyCourseView'.$userId] == IndexManager::VIEW_BY_SESSION &&
+        IndexManager::VIEW_BY_SESSION == $_COOKIE['defaultMyCourseView'.$userId] &&
         $displayMyCourseViewBySessionLink
     ) {
         $courseAndSessions = $controller->returnCoursesAndSessionsViewBySession($userId);
@@ -211,18 +209,18 @@ if (!$myCourseListAsCategory) {
 }
 
 // Check if a user is enrolled only in one course for going directly to the course after the login.
-if (api_get_setting('go_to_course_after_login') === 'true') {
+if ('true' === api_get_setting('go_to_course_after_login')) {
     $count_of_sessions = $courseAndSessions['session_count'];
     $count_of_courses_no_sessions = $courseAndSessions['course_count'];
     // User is subscribe in 1 session and 0 courses.
-    if ($count_of_sessions == 1 && $count_of_courses_no_sessions == 0) {
+    if (1 == $count_of_sessions && 0 == $count_of_courses_no_sessions) {
         $sessions = SessionManager::get_sessions_by_user($userId);
 
         if (isset($sessions[0])) {
             $sessionInfo = $sessions[0];
             // Session only has 1 course.
             if (isset($sessionInfo['courses']) &&
-                count($sessionInfo['courses']) == 1
+                1 == count($sessionInfo['courses'])
             ) {
                 $courseCode = $sessionInfo['courses'][0]['code'];
                 $courseInfo = api_get_course_info_by_id($sessionInfo['courses'][0]['real_id']);
@@ -243,8 +241,8 @@ if (api_get_setting('go_to_course_after_login') === 'true') {
 
     // User is subscribed to 1 course.
     if (!isset($_SESSION['coursesAlreadyVisited']) &&
-        $count_of_sessions == 0 &&
-        $count_of_courses_no_sessions == 1
+        0 == $count_of_sessions &&
+        1 == $count_of_courses_no_sessions
     ) {
         $courses = CourseManager::get_courses_list_by_user_id($userId);
         if (!empty($courses) && isset($courses[0]) && isset($courses[0]['code'])) {
@@ -269,7 +267,7 @@ $controller->tpl->assign('content', $courseAndSessions['html']);
 
 // Display the Site Use Cookie Warning Validation
 $useCookieValidation = api_get_setting('cookie_warning');
-if ($useCookieValidation === 'true') {
+if ('true' === $useCookieValidation) {
     if (isset($_POST['acceptCookies'])) {
         api_set_site_use_cookie_warning_cookie();
     } else {

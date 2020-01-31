@@ -9,8 +9,6 @@ use Chamilo\TicketBundle\Entity\Ticket;
 
 /**
  * Class TicketManager.
- *
- * @package chamilo.plugin.ticket
  */
 class TicketManager
 {
@@ -197,7 +195,7 @@ class TicketManager
 
         $table = Database::get_main_table(TABLE_TICKET_CATEGORY_REL_USER);
         foreach ($users as $userId) {
-            if (self::userIsAssignedToCategory($userId, $categoryId) === false) {
+            if (false === self::userIsAssignedToCategory($userId, $categoryId)) {
                 $params = [
                     'category_id' => $categoryId,
                     'user_id' => $userId,
@@ -320,7 +318,7 @@ class TicketManager
         $project_id = (int) $project_id;
         $priority = empty($priority) ? self::PRIORITY_NORMAL : (int) $priority;
 
-        if ($status === '') {
+        if ('' === $status) {
             $status = self::STATUS_NEW;
             if ($other_area > 0) {
                 $status = self::STATUS_FORWARDED;
@@ -389,7 +387,7 @@ class TicketManager
                 false
             ));
 
-            if ($assignedUserId != 0) {
+            if (0 != $assignedUserId) {
                 self::assignTicketToUser(
                     $ticketId,
                     $assignedUserId
@@ -468,7 +466,7 @@ class TicketManager
                         </tr>
                     </table>';
 
-            if ($assignedUserId != 0) {
+            if (0 != $assignedUserId) {
                 $href = api_get_path(WEB_CODE_PATH).'/ticket/ticket_details.php?ticket_id='.$ticketId;
                 $helpDeskMessage .= sprintf(
                     get_lang('TicketAssignedToXCheckZAtLinkY'),
@@ -479,7 +477,7 @@ class TicketManager
             }
 
             if (empty($category_id)) {
-                if (api_get_setting('ticket_send_warning_to_all_admins') === 'true') {
+                if ('true' === api_get_setting('ticket_send_warning_to_all_admins')) {
                     $warningSubject = sprintf(
                         get_lang('Ticket %s createdWithNoCategory'),
                         $ticket_code
@@ -503,7 +501,7 @@ class TicketManager
 
                 $message = '<h2>'.get_lang('Ticket info').'</h2><br />'.$helpDeskMessage;
 
-                if (api_get_setting('ticket_warn_admin_no_user_in_category') === 'true') {
+                if ('true' === api_get_setting('ticket_warn_admin_no_user_in_category')) {
                     $usersInCategory = self::getUsersInCategory($category_id);
                     if (empty($usersInCategory)) {
                         $subject = sprintf(
@@ -511,7 +509,7 @@ class TicketManager
                             $categoryInfo['name']
                         );
 
-                        if (api_get_setting('ticket_send_warning_to_all_admins') === 'true') {
+                        if ('true' === api_get_setting('ticket_send_warning_to_all_admins')) {
                             Display::addFlash(Display::return_message(
                                 sprintf(
                                     get_lang('A notification was sent to the administrators to report this category has no user assigned'),
@@ -685,14 +683,14 @@ class TicketManager
 
             if (is_array($fileAttachments)) {
                 foreach ($fileAttachments as $file_attach) {
-                    if ($file_attach['error'] == 0) {
+                    if (0 == $file_attach['error']) {
                         self::saveMessageAttachmentFile(
                             $file_attach,
                             $ticketId,
                             $messageId
                         );
                     } else {
-                        if ($file_attach['error'] != UPLOAD_ERR_NO_FILE) {
+                        if (UPLOAD_ERR_NO_FILE != $file_attach['error']) {
                             return false;
                         }
                     }
@@ -855,12 +853,12 @@ class TicketManager
         $userIsAllowInProject = self::userIsAllowInProject($userInfo, $projectId);
 
         // Check if a role was set to the project
-        if ($userIsAllowInProject == false) {
+        if (false == $userIsAllowInProject) {
             $sql .= " AND (ticket.assigned_last_user = $userId OR ticket.sys_insert_user_id = $userId )";
         }
 
         // Search simple
-        if (isset($_GET['submit_simple']) && $_GET['keyword'] != '') {
+        if (isset($_GET['submit_simple']) && '' != $_GET['keyword']) {
             $keyword = Database::escape_string(trim($_GET['keyword']));
             $sql .= " AND (
                       ticket.id LIKE '%$keyword%' OR
@@ -900,15 +898,15 @@ class TicketManager
         $keyword_course = isset($_GET['keyword_course']) ? Database::escape_string(trim($_GET['keyword_course'])) : '';
         $keyword_range = !empty($keyword_start_date_start) && !empty($keyword_start_date_end);
 
-        if ($keyword_range == false && $keyword_start_date_start != '') {
+        if (false == $keyword_range && '' != $keyword_start_date_start) {
             $sql .= " AND DATE_FORMAT(ticket.start_date,'%d/%m/%Y') >= '$keyword_start_date_start' ";
         }
-        if ($keyword_range && $keyword_start_date_start != '' && $keyword_start_date_end != '') {
+        if ($keyword_range && '' != $keyword_start_date_start && '' != $keyword_start_date_end) {
             $sql .= " AND DATE_FORMAT(ticket.start_date,'%d/%m/%Y') >= '$keyword_start_date_start'
                       AND DATE_FORMAT(ticket.start_date,'%d/%m/%Y') <= '$keyword_start_date_end'";
         }
 
-        if ($keyword_course != '') {
+        if ('' != $keyword_course) {
             $course_table = Database::get_main_table(TABLE_MAIN_COURSE);
             $sql .= " AND ticket.course_id IN ( 
                      SELECT id FROM $course_table
@@ -929,7 +927,7 @@ class TicketManager
             $userInfo = api_get_user_info($row['sys_insert_user_id']);
             $hrefUser = $webPath.'main/admin/user_information.php?user_id='.$userInfo['user_id'];
             $name = "<a href='$hrefUser'> {$userInfo['complete_name_with_username']} </a>";
-            if ($row['assigned_last_user'] != 0) {
+            if (0 != $row['assigned_last_user']) {
                 $assignedUserInfo = api_get_user_info($row['assigned_last_user']);
                 if (!empty($assignedUserInfo)) {
                     $hrefResp = $webPath.'main/admin/user_information.php?user_id='.$assignedUserInfo['user_id'];
@@ -938,7 +936,7 @@ class TicketManager
                     $row['assigned_last_user'] = get_lang('Unknown user');
                 }
             } else {
-                if ($row['status_id'] !== self::STATUS_FORWARDED) {
+                if (self::STATUS_FORWARDED !== $row['status_id']) {
                     $row['assigned_last_user'] = '<span style="color:#ff0000;">'.get_lang('To be assigned').'</span>';
                 } else {
                     $row['assigned_last_user'] = '<span style="color:#00ff00;">'.get_lang('Message resent').'</span>';
@@ -1049,7 +1047,7 @@ class TicketManager
 
         // Search simple
         if (isset($_GET['submit_simple'])) {
-            if ($_GET['keyword'] != '') {
+            if ('' != $_GET['keyword']) {
                 $keyword = Database::escape_string(trim($_GET['keyword']));
                 $sql .= " AND (
                           ticket.code LIKE '%$keyword%' OR
@@ -1084,14 +1082,14 @@ class TicketManager
         $keyword_range = isset($_GET['keyword_dates']) ? Database::escape_string(trim($_GET['keyword_dates'])) : '';
         $keyword_course = isset($_GET['keyword_course']) ? Database::escape_string(trim($_GET['keyword_course'])) : '';
 
-        if ($keyword_range == false && $keyword_start_date_start != '') {
+        if (false == $keyword_range && '' != $keyword_start_date_start) {
             $sql .= " AND DATE_FORMAT( ticket.start_date,'%d/%m/%Y') = '$keyword_start_date_start' ";
         }
-        if ($keyword_range && $keyword_start_date_start != '' && $keyword_start_date_end != '') {
+        if ($keyword_range && '' != $keyword_start_date_start && '' != $keyword_start_date_end) {
             $sql .= " AND DATE_FORMAT( ticket.start_date,'%d/%m/%Y') >= '$keyword_start_date_start'
                       AND DATE_FORMAT( ticket.start_date,'%d/%m/%Y') <= '$keyword_start_date_end'";
         }
-        if ($keyword_course != '') {
+        if ('' != $keyword_course) {
             $course_table = Database::get_main_table(TABLE_MAIN_COURSE);
             $sql .= " AND ticket.course_id IN (  
                         SELECT id
@@ -1198,7 +1196,7 @@ class TicketManager
                     api_get_timezone()
                 );
                 $row['course_url'] = null;
-                if ($row['course_id'] != 0) {
+                if (0 != $row['course_id']) {
                     $course = api_get_course_info_by_id($row['course_id']);
                     $sessionId = 0;
                     if ($row['session_id']) {
@@ -1583,7 +1581,7 @@ class TicketManager
         $history = [];
         $webpath = api_get_path(WEB_PATH);
         while ($row = Database::fetch_assoc($result)) {
-            if ($row['user_id'] != 0) {
+            if (0 != $row['user_id']) {
                 $assignuser = api_get_user_info($row['user_id']);
                 $row['assignuser'] = '<a href="'.$webpath.'main/admin/user_information.php?user_id='.$row['user_id'].'"  target="_blank">'.
                 $assignuser['username'].'</a>';
@@ -1630,7 +1628,7 @@ class TicketManager
         if (is_null($direction)) {
             $direction = 'DESC';
         }
-        if (is_null($userId) || $userId == 0) {
+        if (is_null($userId) || 0 == $userId) {
             $userId = api_get_user_id();
         }
 
@@ -1655,7 +1653,7 @@ class TicketManager
                     AND user.user_id = ticket.request_user ";
         // Search simple
         if (isset($_GET['submit_simple'])) {
-            if ($_GET['keyword'] !== '') {
+            if ('' !== $_GET['keyword']) {
                 $keyword = Database::escape_string(trim($_GET['keyword']));
                 $sql .= " AND (ticket.code = '$keyword'
                           OR user.firstname LIKE '%$keyword%'
@@ -1699,10 +1697,10 @@ class TicketManager
                 trim($_GET['keyword_course'])
             );
 
-            if ($keyword_category != '') {
+            if ('' != $keyword_category) {
                 $sql .= " AND ticket.category_id = '$keyword_category'  ";
             }
-            if ($keyword_request_user != '') {
+            if ('' != $keyword_request_user) {
                 $sql .= " AND (ticket.request_user = '$keyword_request_user'
                           OR user.firstname LIKE '%$keyword_request_user%'
                           OR user.official_code LIKE '%$keyword_request_user%'
@@ -1714,26 +1712,26 @@ class TicketManager
             if (!empty($keywordAssignedTo)) {
                 $sql .= " AND ticket.assigned_last_user = $keywordAssignedTo ";
             }
-            if ($keyword_status != '') {
+            if ('' != $keyword_status) {
                 $sql .= " AND ticket.status_id = '$keyword_status'  ";
             }
-            if ($keyword_range == '' && $keyword_start_date_start != '') {
+            if ('' == $keyword_range && '' != $keyword_start_date_start) {
                 $sql .= " AND DATE_FORMAT( ticket.start_date,'%d/%m/%Y') = '$keyword_start_date_start' ";
             }
-            if ($keyword_range == '1' && $keyword_start_date_start != '' && $keyword_start_date_end != '') {
+            if ('1' == $keyword_range && '' != $keyword_start_date_start && '' != $keyword_start_date_end) {
                 $sql .= " AND DATE_FORMAT( ticket.start_date,'%d/%m/%Y') >= '$keyword_start_date_start'
                           AND DATE_FORMAT( ticket.start_date,'%d/%m/%Y') <= '$keyword_start_date_end'";
             }
-            if ($keyword_priority != '') {
+            if ('' != $keyword_priority) {
                 $sql .= " AND ticket.priority_id = '$keyword_priority'  ";
             }
-            if ($keyword_source != '') {
+            if ('' != $keyword_source) {
                 $sql .= " AND ticket.source = '$keyword_source' ";
             }
-            if ($keyword_priority != '') {
+            if ('' != $keyword_priority) {
                 $sql .= " AND ticket.priority_id = '$keyword_priority' ";
             }
-            if ($keyword_course != '') {
+            if ('' != $keyword_course) {
                 $course_table = Database::get_main_table(TABLE_MAIN_COURSE);
                 $sql .= " AND ticket.course_id IN ( ";
                 $sql .= "SELECT id
@@ -1742,7 +1740,7 @@ class TicketManager
                          OR code LIKE '%$keyword_course%'
                          OR visual_code LIKE '%$keyword_course%' )) ";
             }
-            if ($keyword_unread == 'yes') {
+            if ('yes' == $keyword_unread) {
                 $sql .= " AND ticket.id IN (
                           SELECT ticket.id
                           FROM $table_support_tickets ticket,
@@ -1754,7 +1752,7 @@ class TicketManager
                           AND user.status != 1   AND ticket.status_id != '".self::STATUS_FORWARDED."'
                           GROUP BY ticket.id)";
             } else {
-                if ($keyword_unread == 'no') {
+                if ('no' == $keyword_unread) {
                     $sql .= " AND ticket.id NOT IN (
                               SELECT ticket.id
                               FROM  $table_support_tickets ticket,
@@ -1786,7 +1784,7 @@ class TicketManager
         ];
 
         while ($row = Database::fetch_assoc($result)) {
-            if ($row['responsable'] != 0) {
+            if (0 != $row['responsable']) {
                 $row['responsable'] = api_get_user_info($row['responsable']);
                 $row['responsable'] = $row['responsable']['firstname'].' '.$row['responsable']['lastname'];
             }

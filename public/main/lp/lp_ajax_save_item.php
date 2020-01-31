@@ -7,8 +7,6 @@ use ChamiloSession as Session;
  * This script contains the server part of the AJAX interaction process.
  * The client part is located * in lp_api.php or other api's.
  *
- * @package chamilo.learnpath
- *
  * @author Yannick Warnier <ywarnier@beeznest.org>
  */
 
@@ -109,7 +107,7 @@ function save_item(
     $myLPI->set_lp_view($view_id);
 
     // Launch the prerequisites check and set error if needed
-    if ($prerequisitesCheck !== true) {
+    if (true !== $prerequisitesCheck) {
         // If prerequisites were not matched, don't update any item info
         if ($debug) {
             error_log("prereq_check: ".intval($prerequisitesCheck));
@@ -130,7 +128,7 @@ function save_item(
         ];
         Event::registerLog($logInfo);
 
-        if (isset($max) && $max != -1) {
+        if (isset($max) && -1 != $max) {
             $myLPI->max_score = $max;
             $myLPI->set_max_score($max);
             if ($debug > 1) {
@@ -138,7 +136,7 @@ function save_item(
             }
         }
 
-        if (isset($min) && $min != -1 && $min != 'undefined') {
+        if (isset($min) && -1 != $min && 'undefined' != $min) {
             $myLPI->min_score = $min;
             if ($debug > 1) {
                 error_log("Setting min_score: $min");
@@ -146,7 +144,7 @@ function save_item(
         }
 
         // set_score function used to save the status, but this is not the case anymore
-        if (isset($score) && $score != -1) {
+        if (isset($score) && -1 != $score) {
             if ($debug > 1) {
                 error_log('Calling set_score('.$score.')');
                 error_log('set_score changes the status to failed/passed if mastery score is provided');
@@ -163,7 +161,7 @@ function save_item(
 
         $statusIsSet = false;
         // Default behaviour.
-        if (isset($status) && $status != '' && $status != 'undefined') {
+        if (isset($status) && '' != $status && 'undefined' != $status) {
             if ($debug > 1) {
                 error_log('Calling set_status('.$status.')');
             }
@@ -181,8 +179,8 @@ function save_item(
 
         $my_type = $myLPI->get_type();
         // Set status to completed for hotpotatoes if score > 80%.
-        if ($my_type == 'hotpotatoes') {
-            if ((empty($status) || $status == 'undefined' || $status == 'not attempted') && $max > 0) {
+        if ('hotpotatoes' == $my_type) {
+            if ((empty($status) || 'undefined' == $status || 'not attempted' == $status) && $max > 0) {
                 if (($score / $max) > 0.8) {
                     $myStatus = 'completed';
                     if ($debug > 1) {
@@ -194,7 +192,7 @@ function save_item(
                         error_log('Done calling set_status for hotpotatoes - now '.$myLPI->get_status(false));
                     }
                 }
-            } elseif ($status == 'completed' && $max > 0 && ($score / $max) < 0.8) {
+            } elseif ('completed' == $status && $max > 0 && ($score / $max) < 0.8) {
                 $myStatus = 'failed';
                 if ($debug > 1) {
                     error_log('Calling set_status('.$myStatus.') for hotpotatoes');
@@ -205,7 +203,7 @@ function save_item(
                     error_log('Done calling set_status for hotpotatoes - now '.$myLPI->get_status(false));
                 }
             }
-        } elseif ($my_type == 'sco') {
+        } elseif ('sco' == $my_type) {
             /*
              * This is a specific implementation for SCORM 1.2, matching page 26 of SCORM 1.2's RTE
              * "Normally the SCO determines its own status and passes it to the LMS.
@@ -241,7 +239,7 @@ function save_item(
              *   the LMS will leave the cmi.core.lesson_status as "completed"
              */
             $masteryScore = $myLPI->get_mastery_score();
-            if ($masteryScore == -1 || empty($masteryScore)) {
+            if (-1 == $masteryScore || empty($masteryScore)) {
                 $masteryScore = false;
             }
             $credit = $myLPI->get_credit();
@@ -252,9 +250,9 @@ function save_item(
              *    the status to either passed or failed depending on the
              *    student's score compared to the mastery score.
              */
-            if ($credit == 'credit' &&
+            if ('credit' == $credit &&
                 $masteryScore &&
-                (isset($score) && $score != -1) &&
+                (isset($score) && -1 != $score) &&
                 !$statusIsSet && !$statusSignalReceived
             ) {
                 if ($score >= $masteryScore) {
@@ -293,9 +291,9 @@ function save_item(
              *    lesson_mode is "browse", the lesson_status may change to
              *    "browsed" even if the cmi.core.credit is set to no-credit.
              */
-            if (!$statusIsSet && $credit == 'no-credit' && !$statusSignalReceived) {
+            if (!$statusIsSet && 'no-credit' == $credit && !$statusSignalReceived) {
                 $mode = $myLPI->get_lesson_mode();
-                if ($mode == 'browse' && $status == 'browsed') {
+                if ('browse' == $mode && 'browsed' == $status) {
                     if ($debug) {
                         error_log("Set status: $status because mode browse");
                     }
@@ -335,7 +333,7 @@ function save_item(
                      *   either "passed" or "failed".  If no Mastery Score is provided,
                      *   the LMS will leave the cmi.core.lesson_status as "completed”.
                      */
-                    if ($masteryScore && (isset($score) && $score != -1)) {
+                    if ($masteryScore && (isset($score) && -1 != $score)) {
                         if ($score >= $masteryScore) {
                             $myStatus = 'passed';
                         } else {
@@ -356,7 +354,7 @@ function save_item(
         // generic behaviour
         if (!$statusIsSet && !$statusSignalReceived) {
             // Default behaviour
-            if (isset($status) && $status != '' && $status != 'undefined') {
+            if (isset($status) && '' != $status && 'undefined' != $status) {
                 if ($debug > 1) {
                     error_log('Calling set_status('.$status.')');
                 }
@@ -373,7 +371,7 @@ function save_item(
             }
         }
 
-        if (isset($time) && $time != '' && $time != 'undefined') {
+        if (isset($time) && '' != $time && 'undefined' != $time) {
             // If big integer, then it's a timestamp, otherwise it's normal scorm time.
             if ($debug > 1) {
                 error_log('Calling set_time('.$time.') ');
@@ -400,11 +398,11 @@ function save_item(
             $myLPI->current_stop_time = time();
         }
 
-        if (isset($suspend) && $suspend != '' && $suspend != 'undefined') {
+        if (isset($suspend) && '' != $suspend && 'undefined' != $suspend) {
             $myLPI->current_data = $suspend;
         }
 
-        if (isset($location) && $location != '' && $location != 'undefined') {
+        if (isset($location) && '' != $location && 'undefined' != $location) {
             $myLPI->set_lesson_location($location);
         }
 
@@ -419,7 +417,7 @@ function save_item(
             }
         }
 
-        if ($core_exit != 'undefined') {
+        if ('undefined' != $core_exit) {
             $myLPI->set_core_exit($core_exit);
         }
         $myLP->save_item($item_id, false);
@@ -430,10 +428,10 @@ function save_item(
         error_log("Status in DB: $myStatusInDB");
     }
 
-    if ($myStatusInDB != 'completed' &&
-        $myStatusInDB != 'passed' &&
-        $myStatusInDB != 'browsed' &&
-        $myStatusInDB != 'failed'
+    if ('completed' != $myStatusInDB &&
+        'passed' != $myStatusInDB &&
+        'browsed' != $myStatusInDB &&
+        'failed' != $myStatusInDB
     ) {
         $myStatusInMemory = $myLPI->get_status(false);
         if ($debug) {
@@ -452,7 +450,7 @@ function save_item(
     $myTotal = $myLP->getTotalItemsCountWithoutDirs();
     $myComplete = $myLP->get_complete_items_count();
     $myProgressMode = $myLP->get_progress_bar_mode();
-    $myProgressMode = $myProgressMode == '' ? '%' : $myProgressMode;
+    $myProgressMode = '' == $myProgressMode ? '%' : $myProgressMode;
 
     if ($debug > 1) {
         error_log("mystatus: $myStatus");
@@ -460,7 +458,7 @@ function save_item(
         error_log("progress: $myComplete / $myTotal");
     }
 
-    if ($myLPI->get_type() != 'sco') {
+    if ('sco' != $myLPI->get_type()) {
         // If this object's JS status has not been updated by the SCORM API, update now.
         $return .= "olms.lesson_status='".$myStatus."';";
     }
@@ -498,7 +496,7 @@ function save_item(
         }
     }
 
-    if ($myLP->get_type() == 2) {
+    if (2 == $myLP->get_type()) {
         $return .= 'update_stats();';
     }
 

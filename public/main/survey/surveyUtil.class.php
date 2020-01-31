@@ -36,11 +36,11 @@ class SurveyUtil
         $counter = 1;
         $error = false;
         while ($row = Database::fetch_array($result, 'ASSOC')) {
-            if ($counter == 1 && $row['type'] == 'pagebreak') {
+            if (1 == $counter && 'pagebreak' == $row['type']) {
                 echo Display::return_message(get_lang('The page break cannot be the first'), 'error', false);
                 $error = true;
             }
-            if ($counter == $total && $row['type'] == 'pagebreak') {
+            if ($counter == $total && 'pagebreak' == $row['type']) {
                 echo Display::return_message(get_lang('The page break cannot be the last one'), 'error', false);
                 $error = true;
             }
@@ -112,7 +112,7 @@ class SurveyUtil
         $table_survey_answer = Database::get_course_table(TABLE_SURVEY_ANSWER);
 
         // Make the survey anonymous
-        if ($survey_data['anonymous'] == 1) {
+        if (1 == $survey_data['anonymous']) {
             $surveyUser = Session::read('surveyuser');
             if (empty($surveyUser)) {
                 $user = md5($user.time());
@@ -181,8 +181,8 @@ class SurveyUtil
         }
 
         // User report
-        if (isset($_GET['action']) && $_GET['action'] == 'userreport') {
-            if ($survey_data['anonymous'] == 0) {
+        if (isset($_GET['action']) && 'userreport' == $_GET['action']) {
+            if (0 == $survey_data['anonymous']) {
                 foreach ($people_filled as $key => &$value) {
                     $people_filled_userids[] = $value['invited_user'];
                 }
@@ -196,7 +196,7 @@ class SurveyUtil
         }
 
         // Question report
-        if (isset($_GET['action']) && $_GET['action'] == 'questionreport') {
+        if (isset($_GET['action']) && 'questionreport' == $_GET['action']) {
             if (isset($_GET['question']) && !is_numeric($_GET['question'])) {
                 $error = get_lang('Unknown question');
             }
@@ -237,11 +237,11 @@ class SurveyUtil
         $temp_questions_data = SurveyManager::get_questions($_GET['survey_id']);
 
         // Sorting like they should be displayed and removing the non-answer question types (comment and pagebreak)
-        $my_temp_questions_data = $temp_questions_data == null ? [] : $temp_questions_data;
+        $my_temp_questions_data = null == $temp_questions_data ? [] : $temp_questions_data;
         $questions_data = [];
 
         foreach ($my_temp_questions_data as $key => &$value) {
-            if ($value['type'] != 'pagebreak') {
+            if ('pagebreak' != $value['type']) {
                 $questions_data[$value['sort']] = $value;
             }
         }
@@ -307,7 +307,7 @@ class SurveyUtil
             $result = Database::query($sql);
         }
 
-        if ($result !== false) {
+        if (false !== $result) {
             $message = get_lang('The user\'s answers to the survey have been succesfully removed.').'<br />
 					<a href="'.api_get_path(WEB_CODE_PATH).'survey/reporting.php?action=userreport&survey_id='
                 .$survey_id.'">'.
@@ -344,10 +344,10 @@ class SurveyUtil
             .get_lang('User').'</option>';
 
         foreach ($people_filled as $key => &$person) {
-            if ($survey_data['anonymous'] == 0) {
+            if (0 == $survey_data['anonymous']) {
                 $name = $person['user_info']['complete_name_with_username'];
                 $id = $person['user_id'];
-                if ($id == '') {
+                if ('' == $id) {
                     $id = $person['invited_user'];
                     $name = $person['invited_user'];
                 }
@@ -416,7 +416,7 @@ class SurveyUtil
 					ORDER BY survey_question.sort, survey_question_option.sort ASC";
             $result = Database::query($sql);
             while ($row = Database::fetch_array($result, 'ASSOC')) {
-                if ($row['type'] != 'pagebreak') {
+                if ('pagebreak' != $row['type']) {
                     $questions[$row['sort']]['question_id'] = $row['question_id'];
                     $questions[$row['sort']]['survey_id'] = $row['survey_id'];
                     $questions[$row['sort']]['survey_question'] = $row['survey_question'];
@@ -597,7 +597,7 @@ class SurveyUtil
             $limitStatement = null;
             if (!$singlePage) {
                 echo '<div id="question_report_questionnumbers" class="pagination">';
-                if ($currentQuestion != 0) {
+                if (0 != $currentQuestion) {
                     echo '<li><a href="'.api_get_path(WEB_CODE_PATH).'survey/reporting.php?action='.$action.'&'
                         .api_get_cidreq().'&survey_id='.$surveyId.'&question='.($offset - 1).'">'
                         .get_lang('Previous question').'</a></li>';
@@ -643,10 +643,10 @@ class SurveyUtil
             echo strip_tags(isset($question['survey_question']) ? $question['survey_question'] : null);
             echo '</div>';
 
-            if ($question['type'] == 'score') {
+            if ('score' == $question['type']) {
                 /** @todo This function should return the options as this is needed further in the code */
                 $options = self::display_question_report_score($survey_data, $question, $offset);
-            } elseif ($question['type'] == 'open' || $question['type'] == 'comment') {
+            } elseif ('open' == $question['type'] || 'comment' == $question['type']) {
                 /** @todo Also get the user who has answered this */
                 $sql = "SELECT * FROM $table_survey_answer
                         WHERE
@@ -714,13 +714,13 @@ class SurveyUtil
                         if (isset($data[$value['question_option_id']])) {
                             $absolute_number = $data[$value['question_option_id']]['total'];
                         }
-                        if ($question['type'] == 'percentage' && empty($absolute_number)) {
+                        if ('percentage' == $question['type'] && empty($absolute_number)) {
                             continue;
                         }
                         $number_of_answers[$option['question_id']] = isset($number_of_answers[$option['question_id']])
                             ? $number_of_answers[$option['question_id']]
                             : 0;
-                        if ($number_of_answers[$option['question_id']] == 0) {
+                        if (0 == $number_of_answers[$option['question_id']]) {
                             $answers_number = 0;
                         } else {
                             $answers_number = $absolute_number / $number_of_answers[$option['question_id']] * 100;
@@ -728,7 +728,7 @@ class SurveyUtil
                         echo '	<tr>';
                         echo '		<td class="center">'.$value['option_text'].'</td>';
                         echo '		<td class="center">';
-                        if ($absolute_number != 0) {
+                        if (0 != $absolute_number) {
                             echo '<a href="'.api_get_path(WEB_CODE_PATH).'survey/reporting.php?action='.$action
                                 .'&survey_id='.$surveyId.'&question='.$offset.'&viewoption='
                                 .$value['question_option_id'].'">'.$absolute_number.'</a>';
@@ -753,7 +753,7 @@ class SurveyUtil
 
                 $optionResult = '';
                 if (isset($option['question_id']) && isset($number_of_answers[$option['question_id']])) {
-                    if ($number_of_answers[$option['question_id']] == 0) {
+                    if (0 == $number_of_answers[$option['question_id']]) {
                         $optionResult = '0';
                     } else {
                         $optionResult = $number_of_answers[$option['question_id']];
@@ -1049,9 +1049,9 @@ class SurveyUtil
                 in_array($row['question_id'], $_POST['questions_filter']))
             ) {
                 // We do not show comment and pagebreak question types
-                if ($row['type'] != 'pagebreak') {
+                if ('pagebreak' != $row['type']) {
                     $content .= ' <th';
-                    if ($row['number_of_options'] > 0 && $row['type'] != 'percentage') {
+                    if ($row['number_of_options'] > 0 && 'percentage' != $row['type']) {
                         $content .= ' colspan="'.$row['number_of_options'].'"';
                     }
                     $content .= '>';
@@ -1118,17 +1118,17 @@ class SurveyUtil
                 (is_array($_POST['questions_filter']) && in_array($row['question_id'], $_POST['questions_filter']))
             ) {
                 // we do not show comment and pagebreak question types
-                if ($row['type'] == 'open' || $row['type'] == 'comment') {
+                if ('open' == $row['type'] || 'comment' == $row['type']) {
                     $content .= '<th>&nbsp;-&nbsp;</th>';
                     $possible_answers[$row['question_id']][$row['question_option_id']] = $row['question_option_id'];
                     $display_percentage_header = 1;
-                } elseif ($row['type'] == 'percentage' && $display_percentage_header) {
+                } elseif ('percentage' == $row['type'] && $display_percentage_header) {
                     $content .= '<th>&nbsp;%&nbsp;</th>';
                     $possible_answers[$row['question_id']][$row['question_option_id']] = $row['question_option_id'];
                     $display_percentage_header = 0;
-                } elseif ($row['type'] == 'percentage') {
+                } elseif ('percentage' == $row['type']) {
                     $possible_answers[$row['question_id']][$row['question_option_id']] = $row['question_option_id'];
-                } elseif ($row['type'] != 'pagebreak' && $row['type'] != 'percentage') {
+                } elseif ('pagebreak' != $row['type'] && 'percentage' != $row['type']) {
                     $content .= '<th>';
                     $content .= $row['option_text'];
                     $content .= '</th>';
@@ -1158,9 +1158,9 @@ class SurveyUtil
         $result = Database::query($sql);
         $i = 1;
         while ($row = Database::fetch_array($result)) {
-            if ($old_user != $row['user'] && $old_user != '') {
+            if ($old_user != $row['user'] && '' != $old_user) {
                 $userParam = $old_user;
-                if ($survey_data['anonymous'] != 0) {
+                if (0 != $survey_data['anonymous']) {
                     $userParam = $i;
                     $i++;
                 }
@@ -1175,8 +1175,8 @@ class SurveyUtil
                 $answers_of_user = [];
             }
             if (isset($questions[$row['question_id']]) &&
-                $questions[$row['question_id']]['type'] != 'open' &&
-                $questions[$row['question_id']]['type'] != 'comment'
+                'open' != $questions[$row['question_id']]['type'] &&
+                'comment' != $questions[$row['question_id']]['type']
             ) {
                 $answers_of_user[$row['question_id']][$row['option_id']] = $row;
             } else {
@@ -1186,7 +1186,7 @@ class SurveyUtil
         }
 
         $userParam = $old_user;
-        if ($survey_data['anonymous'] != 0) {
+        if (0 != $survey_data['anonymous']) {
             $userParam = $i;
             $i++;
         }
@@ -1236,8 +1236,8 @@ class SurveyUtil
 
         $content = '<tr>';
         $url = api_get_path(WEB_CODE_PATH).'survey/reporting.php?survey_id='.$surveyId.'&'.api_get_cidreq();
-        if ($survey_data['anonymous'] == 0) {
-            if (intval($user) !== 0) {
+        if (0 == $survey_data['anonymous']) {
+            if (0 !== intval($user)) {
                 $userInfo = api_get_user_info($user);
                 $user_displayed = '-';
                 if (!empty($userInfo)) {
@@ -1271,7 +1271,7 @@ class SurveyUtil
 
         if (is_array($possible_options)) {
             foreach ($possible_options as $question_id => &$possible_option) {
-                if ($questions[$question_id]['type'] == 'open' || $questions[$question_id]['type'] == 'comment') {
+                if ('open' == $questions[$question_id]['type'] || 'comment' == $questions[$question_id]['type']) {
                     $content .= '<td align="center">';
                     if (isset($answers_of_user[$question_id]) && isset($answers_of_user[$question_id]['0'])) {
                         $content .= $answers_of_user[$question_id]['0']['option_id'];
@@ -1279,7 +1279,7 @@ class SurveyUtil
                     $content .= '</td>';
                 } else {
                     foreach ($possible_option as $option_id => &$value) {
-                        if ($questions[$question_id]['type'] == 'percentage') {
+                        if ('percentage' == $questions[$question_id]['type']) {
                             if (!empty($answers_of_user[$question_id][$option_id])) {
                                 $content .= "<td align='center'>";
                                 $content .= $answers_of_user[$question_id][$option_id]['value'];
@@ -1288,7 +1288,7 @@ class SurveyUtil
                         } else {
                             $content .= '<td align="center">';
                             if (!empty($answers_of_user[$question_id][$option_id])) {
-                                if ($answers_of_user[$question_id][$option_id]['value'] != 0) {
+                                if (0 != $answers_of_user[$question_id][$option_id]['value']) {
                                     $content .= $answers_of_user[$question_id][$option_id]['value'];
                                 } else {
                                     $content .= 'v';
@@ -1375,7 +1375,7 @@ class SurveyUtil
                     is_array($_POST['questions_filter']) &&
                     in_array($row['question_id'], $_POST['questions_filter']))
             ) {
-                if ($row['number_of_options'] == 0) {
+                if (0 == $row['number_of_options']) {
                     $return .= str_replace(
                         "\r\n",
                         '  ',
@@ -1461,7 +1461,7 @@ class SurveyUtil
 		          c_id = $course_id AND
 		          survey_id='".$surveyId."'
 		          ";
-        if ($user_id != 0) {
+        if (0 != $user_id) {
             $sql .= "AND user='".Database::escape_string($user_id)."' ";
         }
         $sql .= ' ORDER BY user ASC ';
@@ -1473,7 +1473,7 @@ class SurveyUtil
             if (!in_array($row['question_id'], $questionIdList)) {
                 continue;
             }
-            if ($old_user != $row['user'] && $old_user != '') {
+            if ($old_user != $row['user'] && '' != $old_user) {
                 $return .= self::export_complete_report_row(
                     $survey_data,
                     $possible_answers,
@@ -1484,8 +1484,8 @@ class SurveyUtil
                 $answers_of_user = [];
             }
 
-            if ($possible_answers_type[$row['question_id']] == 'open' ||
-                $possible_answers_type[$row['question_id']] == 'comment'
+            if ('open' == $possible_answers_type[$row['question_id']] ||
+                'comment' == $possible_answers_type[$row['question_id']]
             ) {
                 $temp_id = 'open'.$open_question_iterator;
                 $answers_of_user[$row['question_id']][$temp_id] = $row;
@@ -1530,8 +1530,8 @@ class SurveyUtil
         $display_extra_user_fields = false
     ) {
         $return = '';
-        if ($survey_data['anonymous'] == 0) {
-            if (intval($user) !== 0) {
+        if (0 == $survey_data['anonymous']) {
+            if (0 !== intval($user)) {
                 $userInfo = api_get_user_info($user);
                 if (!empty($userInfo)) {
                     $user_displayed = $userInfo['complete_name_with_username'];
@@ -1564,9 +1564,9 @@ class SurveyUtil
             foreach ($possible_options as $question_id => $possible_option) {
                 if (is_array($possible_option) && count($possible_option) > 0) {
                     foreach ($possible_option as $option_id => &$value) {
-                        $my_answer_of_user = !isset($answers_of_user[$question_id]) || isset($answers_of_user[$question_id]) && $answers_of_user[$question_id] == null ? [] : $answers_of_user[$question_id];
+                        $my_answer_of_user = !isset($answers_of_user[$question_id]) || isset($answers_of_user[$question_id]) && null == $answers_of_user[$question_id] ? [] : $answers_of_user[$question_id];
                         $key = array_keys($my_answer_of_user);
-                        if (isset($key[0]) && substr($key[0], 0, 4) == 'open') {
+                        if (isset($key[0]) && 'open' == substr($key[0], 0, 4)) {
                             $return .= '"'.
                                 str_replace(
                                     '"',
@@ -1581,7 +1581,7 @@ class SurveyUtil
                                 '"';
                         } elseif (!empty($answers_of_user[$question_id][$option_id])) {
                             //$return .= 'v';
-                            if ($answers_of_user[$question_id][$option_id]['value'] != 0) {
+                            if (0 != $answers_of_user[$question_id][$option_id]['value']) {
                                 $return .= $answers_of_user[$question_id][$option_id]['value'];
                             } else {
                                 $return .= 'v';
@@ -1672,8 +1672,8 @@ class SurveyUtil
                 in_array($row['question_id'], $_POST['questions_filter']))
             ) {
                 // We do not show comment and pagebreak question types
-                if ($row['type'] != 'pagebreak') {
-                    if ($row['number_of_options'] == 0 && ($row['type'] == 'open' || $row['type'] == 'comment')) {
+                if ('pagebreak' != $row['type']) {
+                    if (0 == $row['number_of_options'] && ('open' == $row['type'] || 'comment' == $row['type'])) {
                         $list[$line][$column] = api_html_entity_decode(
                             strip_tags($row['survey_question']),
                             ENT_QUOTES
@@ -1737,7 +1737,7 @@ class SurveyUtil
                 in_array($row['question_id'], $_POST['questions_filter']))
             ) {
                 // We do not show comment and pagebreak question types
-                if ($row['type'] != 'pagebreak') {
+                if ('pagebreak' != $row['type']) {
                     $list[$line][$column] = api_html_entity_decode(
                         strip_tags($row['option_text']),
                         ENT_QUOTES
@@ -1756,7 +1756,7 @@ class SurveyUtil
         $answers_of_user = [];
         $sql = "SELECT * FROM $table_survey_answer
                 WHERE c_id = $course_id AND survey_id = $surveyId";
-        if ($user_id != 0) {
+        if (0 != $user_id) {
             $sql .= " AND user='".$user_id."' ";
         }
         $sql .= ' ORDER BY user ASC';
@@ -1764,7 +1764,7 @@ class SurveyUtil
         $open_question_iterator = 1;
         $result = Database::query($sql);
         while ($row = Database::fetch_array($result)) {
-            if ($old_user != $row['user'] && $old_user != '') {
+            if ($old_user != $row['user'] && '' != $old_user) {
                 $return = self::export_complete_report_row_xls(
                     $survey_data,
                     $possible_answers,
@@ -1780,7 +1780,7 @@ class SurveyUtil
                 $line++;
                 $column = 0;
             }
-            if ($possible_answers_type[$row['question_id']] == 'open' || $possible_answers_type[$row['question_id']] == 'comment') {
+            if ('open' == $possible_answers_type[$row['question_id']] || 'comment' == $possible_answers_type[$row['question_id']]) {
                 $temp_id = 'open'.$open_question_iterator;
                 $answers_of_user[$row['question_id']][$temp_id] = $row;
                 $open_question_iterator++;
@@ -1827,8 +1827,8 @@ class SurveyUtil
         $display_extra_user_fields = false
     ) {
         $return = [];
-        if ($survey_data['anonymous'] == 0) {
-            if (intval($user) !== 0) {
+        if (0 == $survey_data['anonymous']) {
+            if (0 !== intval($user)) {
                 $userInfo = api_get_user_info($user);
                 if ($userInfo) {
                     $user_displayed = $userInfo['complete_name_with_username'];
@@ -1865,13 +1865,13 @@ class SurveyUtil
                             ? $answers_of_user[$question_id]
                             : [];
                         $key = array_keys($my_answers_of_user);
-                        if (isset($key[0]) && substr($key[0], 0, 4) == 'open') {
+                        if (isset($key[0]) && 'open' == substr($key[0], 0, 4)) {
                             $return[] = api_html_entity_decode(
                                 strip_tags($answers_of_user[$question_id][$key[0]]['option_id']),
                                 ENT_QUOTES
                             );
                         } elseif (!empty($answers_of_user[$question_id][$option_id])) {
-                            if ($answers_of_user[$question_id][$option_id]['value'] != 0) {
+                            if (0 != $answers_of_user[$question_id][$option_id]['value']) {
                                 $return[] = $answers_of_user[$question_id][$option_id]['value'];
                             } else {
                                 $return[] = 'v';
@@ -1949,7 +1949,7 @@ class SurveyUtil
         foreach ($questions as $key => &$question) {
             // Ignored tagged questions
             if ($question) {
-                if (strpos($question['question'], '{{') !== false) {
+                if (false !== strpos($question['question'], '{{')) {
                     $question = null;
                     continue;
                 }
@@ -1998,10 +1998,10 @@ class SurveyUtil
             // The header
             $tableHtml .= '<tr>';
             for ($ii = 0; $ii <= count($question_x['answers']); $ii++) {
-                if ($ii == 0) {
+                if (0 == $ii) {
                     $tableHtml .= '<th>&nbsp;</th>';
                 } else {
-                    if ($question_x['type'] == 'score') {
+                    if ('score' == $question_x['type']) {
                         for ($x = 1; $x <= $question_x['maximum_score']; $x++) {
                             $tableHtml .= '<th>'.$question_x['answers'][($ii - 1)].'<br />'.$x.'</th>';
                         }
@@ -2021,13 +2021,13 @@ class SurveyUtil
                 $currentYQuestion = strip_tags($question_y['answers'][$ij]);
                 $currentYQuestion = html_entity_decode($currentYQuestion);
                 // The Y axis is a scoring question type so we have more rows than the options (actually options * maximum score)
-                if ($question_y['type'] == 'score') {
+                if ('score' == $question_y['type']) {
                     for ($y = 1; $y <= $question_y['maximum_score']; $y++) {
                         $tableHtml .= '<tr>';
                         for ($ii = 0; $ii <= count($question_x['answers']); $ii++) {
-                            if ($question_x['type'] == 'score') {
+                            if ('score' == $question_x['type']) {
                                 for ($x = 1; $x <= $question_x['maximum_score']; $x++) {
-                                    if ($ii == 0) {
+                                    if (0 == $ii) {
                                         $tableHtml .= '<th>'.$question_y['answers'][($ij)].' '.$y.'</th>';
                                         break;
                                     } else {
@@ -2053,7 +2053,7 @@ class SurveyUtil
                                     }
                                 }
                             } else {
-                                if ($ii == 0) {
+                                if (0 == $ii) {
                                     $tableHtml .= '<th>'.$question_y['answers'][$ij].' '.$y.'</th>';
                                 } else {
                                     $tableHtml .= '<td align="center">';
@@ -2084,9 +2084,9 @@ class SurveyUtil
                     // The Y axis is NOT a score question type so the number of rows = the number of options
                     $tableHtml .= '<tr>';
                     for ($ii = 0; $ii <= count($question_x['answers']); $ii++) {
-                        if ($question_x['type'] == 'score') {
+                        if ('score' == $question_x['type']) {
                             for ($x = 1; $x <= $question_x['maximum_score']; $x++) {
-                                if ($ii == 0) {
+                                if (0 == $ii) {
                                     $tableHtml .= '<th>'.$question_y['answers'][$ij].'</th>';
                                     break;
                                 } else {
@@ -2112,7 +2112,7 @@ class SurveyUtil
                                 }
                             }
                         } else {
-                            if ($ii == 0) {
+                            if (0 == $ii) {
                                 $tableHtml .= '<th>'.$question_y['answers'][($ij)].'</th>';
                             } else {
                                 $tableHtml .= '<td align="center">';
@@ -2172,7 +2172,7 @@ class SurveyUtil
         $result = Database::query($sql);
         $return = [];
         while ($row = Database::fetch_array($result)) {
-            if ($row['value'] == 0) {
+            if (0 == $row['value']) {
                 $return[$row['user']][] = $row['option_id'];
             } else {
                 $return[$row['user']][] = $row['option_id'].'*'.$row['value'];
@@ -2204,12 +2204,12 @@ class SurveyUtil
         $value_x = 0,
         $value_y = 0
     ) {
-        if ($value_x == 0) {
+        if (0 == $value_x) {
             $check_x = $option_x;
         } else {
             $check_x = $option_x.'*'.$value_x;
         }
-        if ($value_y == 0) {
+        if (0 == $value_y) {
             $check_y = $option_y;
         } else {
             $check_y = $option_y.'*'.$value_y;
@@ -2250,7 +2250,7 @@ class SurveyUtil
         $table_survey = Database::get_course_table(TABLE_SURVEY);
 
         // Reminder or not
-        if ($reminder == 0) {
+        if (0 == $reminder) {
             $mail_field = 'invite_mail';
         } else {
             $mail_field = 'reminder_mail';
@@ -2306,7 +2306,7 @@ class SurveyUtil
 
         // Remind unanswered is a special version of remind all reminder
         $exclude_users = [];
-        if ($remindUnAnswered == 1) {
+        if (1 == $remindUnAnswered) {
             // Remind only unanswered users
             $reminder = 1;
             $exclude_users = SurveyManager::get_people_who_filled_survey($_GET['survey_id']);
@@ -2316,7 +2316,7 @@ class SurveyUtil
         $course_id = api_get_course_int_id();
         $session_id = api_get_session_id();
 
-        if ($isAdditionalEmail == false) {
+        if (false == $isAdditionalEmail) {
             $result = CourseManager::separateUsersGroups($users_array);
             $groupList = $result['groups'];
             $users_array = $result['users'];
@@ -2347,7 +2347,7 @@ class SurveyUtil
 
         $users_array = array_unique($users_array);
         foreach ($users_array as $key => $value) {
-            if (!isset($value) || $value == '') {
+            if (!isset($value) || '' == $value) {
                 continue;
             }
 
@@ -2357,7 +2357,7 @@ class SurveyUtil
             }
 
             // Get the unique invitation code if we already have it
-            if ($reminder == 1 && array_key_exists($value, $survey_invitations)) {
+            if (1 == $reminder && array_key_exists($value, $survey_invitations)) {
                 $invitation_code = $survey_invitations[$value]['invitation_code'];
             } else {
                 $invitation_code = md5($value.microtime());
@@ -2367,7 +2367,7 @@ class SurveyUtil
             $addit_users_array = isset($already_invited['additional_users']) && !empty($already_invited['additional_users'])
                     ? explode(';', $already_invited['additional_users'])
                     : [];
-            $my_alredy_invited = $already_invited['course_users'] == null ? [] : $already_invited['course_users'];
+            $my_alredy_invited = null == $already_invited['course_users'] ? [] : $already_invited['course_users'];
             if ((is_numeric($value) && !in_array($value, $my_alredy_invited)) ||
                 (!is_numeric($value) && !in_array($value, $addit_users_array))
             ) {
@@ -2386,7 +2386,7 @@ class SurveyUtil
             }
 
             // Send the email if checkboxed
-            if (($new_user || $reminder == 1) && $sendmail) {
+            if (($new_user || 1 == $reminder) && $sendmail) {
                 // Make a change for absolute url
                 if (isset($invitation_text)) {
                     $invitation_text = api_html_entity_decode($invitation_text, ENT_QUOTES);
@@ -2509,7 +2509,7 @@ class SurveyUtil
         $sender_user_id = api_get_user_id();
 
         $replyto = [];
-        if (api_get_setting('survey_email_sender_noreply') == 'noreply') {
+        if ('noreply' == api_get_setting('survey_email_sender_noreply')) {
             $noreply = api_get_setting('noreply_email_address');
             if (!empty($noreply)) {
                 $replyto['Reply-to'] = $noreply;
@@ -2958,7 +2958,7 @@ class SurveyUtil
         ) {
             $editUrl = $codePath.'survey/create_new_survey.php?'.
                 http_build_query($params + ['action' => 'edit', 'survey_id' => $survey_id]);
-            if ($survey->getSurveyType() == 3) {
+            if (3 == $survey->getSurveyType()) {
                 $editUrl = $codePath.'survey/edit_meeting.php?'.
                     http_build_query($params + ['action' => 'edit', 'survey_id' => $survey_id]);
             }
@@ -2975,7 +2975,7 @@ class SurveyUtil
                 );
             }
 
-            if ($type != 3) {
+            if (3 != $type) {
                 $actions[] = Display::url(
                     Display::return_icon('backup.png', get_lang('Copy survey')),
                     $codePath.'survey/copy_survey.php?'.http_build_query($params + ['survey_id' => $survey_id])
@@ -3011,7 +3011,7 @@ class SurveyUtil
             }
         }
 
-        if ($type != 3) {
+        if (3 != $type) {
             $actions[] = Display::url(
                 Display::return_icon('preview_view.png', get_lang('Preview')),
                 $codePath.'survey/preview.php?'.http_build_query($params + ['survey_id' => $survey_id])
@@ -3023,7 +3023,7 @@ class SurveyUtil
             $codePath.'survey/survey_invite.php?'.http_build_query($params + ['survey_id' => $survey_id])
         );
 
-        if ($type != 3) {
+        if (3 != $type) {
             $actions[] = $hideReportingButton ? null : $reportingLink;
         }
 
@@ -3115,7 +3115,7 @@ class SurveyUtil
      */
     public static function anonymous_filter($anonymous)
     {
-        if ($anonymous == 1) {
+        if (1 == $anonymous) {
             return get_lang('Yes');
         } else {
             return get_lang('No');
@@ -3134,16 +3134,16 @@ class SurveyUtil
     public static function survey_search_restriction()
     {
         if (isset($_GET['do_search'])) {
-            if ($_GET['keyword_title'] != '') {
+            if ('' != $_GET['keyword_title']) {
                 $search_term[] = 'title like "%" \''.Database::escape_string($_GET['keyword_title']).'\' "%"';
             }
-            if ($_GET['keyword_code'] != '') {
+            if ('' != $_GET['keyword_code']) {
                 $search_term[] = 'code =\''.Database::escape_string($_GET['keyword_code']).'\'';
             }
-            if ($_GET['keyword_language'] != '%') {
+            if ('%' != $_GET['keyword_language']) {
                 $search_term[] = 'lang =\''.Database::escape_string($_GET['keyword_language']).'\'';
             }
-            $my_search_term = ($search_term == null) ? [] : $search_term;
+            $my_search_term = (null == $search_term) ? [] : $search_term;
             $search_restriction = implode(' AND ', $my_search_term);
 
             return $search_restriction;
@@ -3278,7 +3278,7 @@ class SurveyUtil
                 $array[1] = $survey[1];
             } else {
                 // Doodle
-                if ($survey['survey_type'] == 3) {
+                if (3 == $survey['survey_type']) {
                     $array[1] = Display::url(
                         $survey[1],
                         api_get_path(WEB_CODE_PATH).'survey/meeting.php?survey_id='.$survey[0].'&'.api_get_cidreq()
@@ -3300,7 +3300,7 @@ class SurveyUtil
             // Dates
             $array[5] = '';
 
-            if (!empty($survey[5]) && $survey[5] !== '0000-00-00' && $survey[5] !== '0000-00-00 00:00:00') {
+            if (!empty($survey[5]) && '0000-00-00' !== $survey[5] && '0000-00-00 00:00:00' !== $survey[5]) {
                 $array[5] = api_convert_and_format_date(
                     $survey[5],
                     $allowSurveyAvailabilityDatetime ? DATE_TIME_FORMAT_LONG : DATE_FORMAT_LONG
@@ -3308,7 +3308,7 @@ class SurveyUtil
             }
 
             $array[6] = '';
-            if (!empty($survey[6]) && $survey[6] !== '0000-00-00' && $survey[6] !== '0000-00-00 00:00:00') {
+            if (!empty($survey[6]) && '0000-00-00' !== $survey[6] && '0000-00-00 00:00:00' !== $survey[6]) {
                 $array[6] = api_convert_and_format_date(
                     $survey[6],
                     $allowSurveyAvailabilityDatetime ? DATE_TIME_FORMAT_LONG : DATE_FORMAT_LONG
@@ -3515,7 +3515,7 @@ class SurveyUtil
             }
 
             echo '<tr>';
-            if ($row['answered'] == 0) {
+            if (0 == $row['answered']) {
                 echo '<td>';
                 echo Display::return_icon(
                     'statistics.png',
@@ -3539,7 +3539,7 @@ class SurveyUtil
                     ICON_SIZE_TINY
                 );
                 $showLink = (!api_is_allowed_to_edit(false, true) || $isDrhOfCourse)
-                    && $row['visible_results'] != SURVEY_VISIBLE_TUTOR;
+                    && SURVEY_VISIBLE_TUTOR != $row['visible_results'];
 
                 echo '<td>';
                 echo $showLink
@@ -3554,7 +3554,7 @@ class SurveyUtil
                 echo '</td>';
             }
             echo '<td class="text-center">';
-            echo ($row['anonymous'] == 1) ? get_lang('Yes') : get_lang('No');
+            echo (1 == $row['anonymous']) ? get_lang('Yes') : get_lang('No');
             echo '</td>';
             if ($mandatoryAllowed) {
                 $efvMandatory = $efv->get_values_by_handler_and_field_variable(
@@ -3587,7 +3587,7 @@ class SurveyUtil
         $field_list_array['lastname']['name'] = get_lang('Last name');
         $field_list_array['firstname']['name'] = get_lang('First name');
 
-        if (api_get_setting('profile', 'name') != 'true') {
+        if ('true' != api_get_setting('profile', 'name')) {
             $field_list_array['firstname']['visibility'] = 0;
             $field_list_array['lastname']['visibility'] = 0;
         } else {
@@ -3601,7 +3601,7 @@ class SurveyUtil
         //	OFFICIAL CODE
         $field_list_array['official_code']['name'] = get_lang('OfficialCourse code');
 
-        if (api_get_setting('profile', 'officialcode') != 'true') {
+        if ('true' != api_get_setting('profile', 'officialcode')) {
             $field_list_array['official_code']['visibility'] = 1;
         } else {
             $field_list_array['official_code']['visibility'] = 0;
@@ -3609,7 +3609,7 @@ class SurveyUtil
 
         // EMAIL
         $field_list_array['email']['name'] = get_lang('e-mail');
-        if (api_get_setting('profile', 'email') != 'true') {
+        if ('true' != api_get_setting('profile', 'email')) {
             $field_list_array['email']['visibility'] = 1;
         } else {
             $field_list_array['email']['visibility'] = 0;
@@ -3617,14 +3617,14 @@ class SurveyUtil
 
         // PHONE
         $field_list_array['phone']['name'] = get_lang('Phone');
-        if (api_get_setting('profile', 'phone') != 'true') {
+        if ('true' != api_get_setting('profile', 'phone')) {
             $field_list_array['phone']['visibility'] = 0;
         } else {
             $field_list_array['phone']['visibility'] = 1;
         }
         //	LANGUAGE
         $field_list_array['language']['name'] = get_lang('Language');
-        if (api_get_setting('profile', 'language') != 'true') {
+        if ('true' != api_get_setting('profile', 'language')) {
             $field_list_array['language']['visibility'] = 0;
         } else {
             $field_list_array['language']['visibility'] = 1;
@@ -3634,13 +3634,13 @@ class SurveyUtil
         $extra = UserManager::get_extra_fields(0, 50, 5, 'ASC');
 
         foreach ($extra as $id => $field_details) {
-            if ($field_details[6] == 0) {
+            if (0 == $field_details[6]) {
                 continue;
             }
             switch ($field_details[2]) {
                 case UserManager::USER_FIELD_TYPE_TEXT:
                     $field_list_array['extra_'.$field_details[1]]['name'] = $field_details[3];
-                    if ($field_details[7] == 0) {
+                    if (0 == $field_details[7]) {
                         $field_list_array['extra_'.$field_details[1]]['visibility'] = 0;
                     } else {
                         $field_list_array['extra_'.$field_details[1]]['visibility'] = 1;
@@ -3648,7 +3648,7 @@ class SurveyUtil
                     break;
                 case UserManager::USER_FIELD_TYPE_TEXTAREA:
                     $field_list_array['extra_'.$field_details[1]]['name'] = $field_details[3];
-                    if ($field_details[7] == 0) {
+                    if (0 == $field_details[7]) {
                         $field_list_array['extra_'.$field_details[1]]['visibility'] = 0;
                     } else {
                         $field_list_array['extra_'.$field_details[1]]['visibility'] = 1;
@@ -3656,7 +3656,7 @@ class SurveyUtil
                     break;
                 case UserManager::USER_FIELD_TYPE_RADIO:
                     $field_list_array['extra_'.$field_details[1]]['name'] = $field_details[3];
-                    if ($field_details[7] == 0) {
+                    if (0 == $field_details[7]) {
                         $field_list_array['extra_'.$field_details[1]]['visibility'] = 0;
                     } else {
                         $field_list_array['extra_'.$field_details[1]]['visibility'] = 1;
@@ -3678,7 +3678,7 @@ class SurveyUtil
                         $field_list_array['extra_'.$field_details[1]]['name'] = $field_details[3];
                     }
 
-                    if ($field_details[7] == 0) {
+                    if (0 == $field_details[7]) {
                         $field_list_array['extra_'.$field_details[1]]['visibility'] = 0;
                     } else {
                         $field_list_array['extra_'.$field_details[1]]['visibility'] = 1;
@@ -3686,7 +3686,7 @@ class SurveyUtil
                     break;
                 case UserManager::USER_FIELD_TYPE_SELECT_MULTIPLE:
                     $field_list_array['extra_'.$field_details[1]]['name'] = $field_details[3];
-                    if ($field_details[7] == 0) {
+                    if (0 == $field_details[7]) {
                         $field_list_array['extra_'.$field_details[1]]['visibility'] = 0;
                     } else {
                         $field_list_array['extra_'.$field_details[1]]['visibility'] = 1;
@@ -3694,7 +3694,7 @@ class SurveyUtil
                     break;
                 case UserManager::USER_FIELD_TYPE_DATE:
                     $field_list_array['extra_'.$field_details[1]]['name'] = $field_details[3];
-                    if ($field_details[7] == 0) {
+                    if (0 == $field_details[7]) {
                         $field_list_array['extra_'.$field_details[1]]['visibility'] = 0;
                     } else {
                         $field_list_array['extra_'.$field_details[1]]['visibility'] = 1;
@@ -3702,7 +3702,7 @@ class SurveyUtil
                     break;
                 case UserManager::USER_FIELD_TYPE_DATETIME:
                     $field_list_array['extra_'.$field_details[1]]['name'] = $field_details[3];
-                    if ($field_details[7] == 0) {
+                    if (0 == $field_details[7]) {
                         $field_list_array['extra_'.$field_details[1]]['visibility'] = 0;
                     } else {
                         $field_list_array['extra_'.$field_details[1]]['visibility'] = 1;
@@ -3710,7 +3710,7 @@ class SurveyUtil
                     break;
                 case UserManager::USER_FIELD_TYPE_DOUBLE_SELECT:
                     $field_list_array['extra_'.$field_details[1]]['name'] = $field_details[3];
-                    if ($field_details[7] == 0) {
+                    if (0 == $field_details[7]) {
                         $field_list_array['extra_'.$field_details[1]]['visibility'] = 0;
                     } else {
                         $field_list_array['extra_'.$field_details[1]]['visibility'] = 1;

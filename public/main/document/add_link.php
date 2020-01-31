@@ -3,8 +3,6 @@
 
 /**
  * This script allows to add cloud file links to the document structure.
- *
- * @package chamilo.document
  */
 require_once __DIR__.'/../inc/global.inc.php';
 
@@ -28,7 +26,7 @@ if (empty($document_data)) {
     $document_id = $parent_id = 0;
     $path = '/';
 } else {
-    if ($document_data['filetype'] == 'folder') {
+    if ('folder' == $document_data['filetype']) {
         $document_id = $document_data['id'];
         $path = $document_data['path'].'/';
         $parent_id = DocumentManager::get_document_id(api_get_course_info(), dirname($path));
@@ -65,7 +63,7 @@ if (api_get_group_id()) {
 }
 
 // Group docs can only be uploaded in the group directory
-if ($groupIid != 0 && $path == '/') {
+if (0 != $groupIid && '/' == $path) {
     $path = $group_properties['directory']."/";
 }
 
@@ -78,13 +76,13 @@ $interbreadcrumb[] = [
 // Interbreadcrumb for the current directory root path
 if (empty($document_data['parents'])) {
     // Hack in order to not add the document to the breadcrumb in case it is a link
-    if ($document_data['filetype'] != 'link') {
+    if ('link' != $document_data['filetype']) {
         $interbreadcrumb[] = ['url' => '#', 'name' => $document_data['title']];
     }
 } else {
     foreach ($document_data['parents'] as $document_sub_data) {
         // Hack in order to not add the document to the breadcrumb in case it is a link
-        if ($document_data['filetype'] != 'link') {
+        if ('link' != $document_data['filetype']) {
             $interbreadcrumb[] = [
                 'url' => $document_sub_data['document_url'],
                 'name' => $document_sub_data['title'],

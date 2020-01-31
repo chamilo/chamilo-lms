@@ -2,8 +2,6 @@
 /* For licensing terms, see /license.txt */
 
 /**
- * @package chamilo.social
- *
  * @author Julio Montoya <gugli100@gmail.com>
  */
 $cidReset = true;
@@ -11,7 +9,7 @@ require_once __DIR__.'/../inc/global.inc.php';
 
 api_block_anonymous_users();
 
-if (api_get_setting('allow_social_tool') !== 'true') {
+if ('true' !== api_get_setting('allow_social_tool')) {
     api_not_allowed();
 }
 $join_url = '';
@@ -21,10 +19,10 @@ $allowed_views = ['mygroups', 'newest', 'pop'];
 $content = null;
 
 if (isset($_GET['view']) && in_array($_GET['view'], $allowed_views)) {
-    if ($_GET['view'] === 'mygroups') {
+    if ('mygroups' === $_GET['view']) {
         $interbreadcrumb[] = ['url' => 'groups.php', 'name' => get_lang('Groups')];
         $interbreadcrumb[] = ['url' => '#', 'name' => get_lang('My groups')];
-    } elseif ($_GET['view'] === 'newest') {
+    } elseif ('newest' === $_GET['view']) {
         $interbreadcrumb[] = ['url' => 'groups.php', 'name' => get_lang('Groups')];
         $interbreadcrumb[] = ['url' => '#', 'name' => get_lang('Newest')];
     } else {
@@ -45,7 +43,7 @@ $usergroup = new UserGroup();
 $create_thread_link = '';
 
 $show_menu = 'browse_groups';
-if (isset($_GET['view']) && $_GET['view'] == 'mygroups') {
+if (isset($_GET['view']) && 'mygroups' == $_GET['view']) {
     $show_menu = $_GET['view'];
 }
 
@@ -64,13 +62,13 @@ if (is_array($results) && count($results) > 0) {
         $my_group_list[] = $id;
         $name = cut($result['name'], GROUP_TITLE_LENGTH, true);
 
-        if ($result['relation_type'] == GROUP_USER_PERMISSION_ADMIN) {
+        if (GROUP_USER_PERMISSION_ADMIN == $result['relation_type']) {
             $name .= ' '.Display::return_icon(
                 'social_group_admin.png',
                 get_lang('Admin'),
                 ['style' => 'vertical-align:middle']
             );
-        } elseif ($result['relation_type'] == GROUP_USER_PERMISSION_MODERATOR) {
+        } elseif (GROUP_USER_PERMISSION_MODERATOR == $result['relation_type']) {
             $name .= ' '.Display::return_icon(
                 'social_group_moderator.png',
                 get_lang('Moderator'),
@@ -92,7 +90,7 @@ if (is_array($results) && count($results) > 0) {
                 1000
             )
         );
-        if ($count_users_group == 1) {
+        if (1 == $count_users_group) {
             $count_users_group = $count_users_group.' '.get_lang('Member');
         } else {
             $count_users_group = $count_users_group.' '.get_lang('Members');
@@ -115,7 +113,7 @@ if (is_array($results) && count($results) > 0) {
         $html .= Display::tag('h5', $url);
         $html .= '</div>';
         $html .= '<div class="members-groups">'.$members.'</div>';
-        if ($result['description'] != '') {
+        if ('' != $result['description']) {
             $html .= '<div class="description-groups">'.cut($result['description'], 100, true).'</div>';
         } else {
             $html .= '';
@@ -147,7 +145,7 @@ foreach ($results as $result) {
             1000
         )
     );
-    if ($count_users_group == 1) {
+    if (1 == $count_users_group) {
         $count_users_group = $count_users_group.' '.get_lang('Member');
     } else {
         $count_users_group = $count_users_group.' '.get_lang('Members');
@@ -168,7 +166,7 @@ foreach ($results as $result) {
     $html .= Display::tag('h5', $url);
     $html .= '</div>';
     $html .= '<div class="members-groups">'.$members.'</div>';
-    if ($result['description'] != '') {
+    if ('' != $result['description']) {
         $html .= '<div class="description-groups">'.cut($result['description'], 100, true).'</div>';
     }
     // Avoiding my groups
@@ -208,7 +206,7 @@ if (is_array($results) && count($results) > 0) {
                 1000
             )
         );
-        if ($count_users_group == 1) {
+        if (1 == $count_users_group) {
             $count_users_group = $count_users_group.' '.get_lang('Member');
         } else {
             $count_users_group = $count_users_group.' '.get_lang('Members');
@@ -228,7 +226,7 @@ if (is_array($results) && count($results) > 0) {
         $html .= Display::tag('h5', $url);
         $html .= '</div>';
         $html .= '<div class="members-groups">'.$members.'</div>';
-        if ($result['description'] != '') {
+        if ('' != $result['description']) {
             $html .= '<div class="description-groups">'.cut($result['description'], 100, true).'</div>';
         } else {
             $html .= '';
@@ -266,7 +264,7 @@ if (isset($_GET['view']) && in_array($_GET['view'], $allowed_views)) {
                     [true, true, true, false]
                 );
             }
-            if (api_get_setting('allow_students_to_create_groups_in_social') == 'true') {
+            if ('true' == api_get_setting('allow_students_to_create_groups_in_social')) {
                 $create_group_item =
                     '<a class="btn btn-default" href="'.api_get_path(WEB_PATH).'main/social/group_add.php">'.
                     get_lang('Create a social group').'</a>';
@@ -320,7 +318,7 @@ if (isset($_GET['view']) && in_array($_GET['view'], $allowed_views)) {
     } else {
         $my_group_content = '<span class="muted">'.get_lang('(none)').'</span>';
     }
-    if (api_get_setting('allow_students_to_create_groups_in_social') == 'true') {
+    if ('true' == api_get_setting('allow_students_to_create_groups_in_social')) {
         $create_group_item =
             '<a class="btn btn-default" href="'.api_get_path(WEB_PATH).'main/social/group_add.php">'.
             get_lang('Create a social group').'</a>';
@@ -374,7 +372,7 @@ $tpl = new Template(null);
 // Block Social Avatar
 SocialManager::setSocialUserBlock($tpl, api_get_user_id(), $show_menu);
 $show_menu = 'browse_groups';
-if (isset($_GET['view']) && $_GET['view'] == 'mygroups') {
+if (isset($_GET['view']) && 'mygroups' == $_GET['view']) {
     $show_menu = $_GET['view'];
 }
 

@@ -5,8 +5,6 @@
  * Class Diagnoser
  * Class that is responsible for generating diagnostic information about the system.
  *
- * @package chamilo.diagnoser
- *
  * @author Ivan Tcholakov, 2008, initial proposal and sample code.
  * @author spou595, 2009, implementation for Chamilo 2.x
  * @author Julio Montoya <gugli100@gmail.com>, 2010, port to chamilo 1.8.7, Some fixes
@@ -74,7 +72,7 @@ class Diagnoser
         $data = call_user_func([$this, 'get_'.$currentSection.'_data']);
         echo $html;
 
-        if ($currentSection != 'paths') {
+        if ('paths' != $currentSection) {
             echo '<br />';
             echo Display::return_message($sections[$currentSection]['info'], 'normal');
 
@@ -190,11 +188,11 @@ class Diagnoser
 
         $access_url_id = api_get_current_access_url_id();
 
-        if ($access_url_id === 1) {
+        if (1 === $access_url_id) {
             $size = '-';
             global $_configuration;
             $message2 = '';
-            if ($access_url_id === 1) {
+            if (1 === $access_url_id) {
                 if (api_is_windows_os()) {
                     $message2 .= get_lang('The space used on disk cannot be measured properly on Windows-based systems.');
                 } else {
@@ -390,7 +388,7 @@ class Diagnoser
         );
 
         $setting = ini_get('default_charset');
-        if ($setting == '') {
+        if ('' == $setting) {
             $setting = null;
         }
         $req_setting = 'UTF-8';

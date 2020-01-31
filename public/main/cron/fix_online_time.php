@@ -17,14 +17,12 @@
  *
  * Where "5" is the value of the 'STUDENT' constant.
  *
- * @package chamilo.cron
- *
  * @author Imanol Losada <imanol.losada@beeznest.com>
  * @author Julio Montoya
  */
 require_once __DIR__.'/../inc/global.inc.php';
 
-if (php_sapi_name() != 'cli') {
+if ('cli' != php_sapi_name()) {
     exit; //do not run from browser
 }
 

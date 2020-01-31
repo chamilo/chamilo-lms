@@ -10,13 +10,11 @@ use ChamiloSession as Session;
  * @author Isaac Flores Paz <florespaz_isaac@hotmail.com>
  *
  * @todo use Display::panel()
- *
- * @package chamilo.social
  */
 $cidReset = true;
 require_once __DIR__.'/../inc/global.inc.php';
 
-if (api_get_setting('allow_social_tool') != 'true') {
+if ('true' != api_get_setting('allow_social_tool')) {
     $url = api_get_path(WEB_PATH).'whoisonline.php?id='.intval($_GET['u']);
     header('Location: '.$url);
     exit;

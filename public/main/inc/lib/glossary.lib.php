@@ -195,7 +195,7 @@ class GlossaryManager
 					    c_id = $course_id AND
 					    glossary_id = ".intval($values['glossary_id']);
             $result = Database::query($sql);
-            if ($result === false) {
+            if (false === $result) {
                 return false;
             }
 
@@ -232,7 +232,7 @@ class GlossaryManager
         $get_max = "SELECT MAX(display_order) FROM $table
                     WHERE c_id = $course_id ";
         $res_max = Database::query($get_max);
-        if (Database::num_rows($res_max) == 0) {
+        if (0 == Database::num_rows($res_max)) {
             return 0;
         }
         $row = Database::fetch_array($res_max);
@@ -261,7 +261,7 @@ class GlossaryManager
                 WHERE
                     c_id = $course_id AND
                     name = '".Database::escape_string($term)."'";
-        if ($not_id != '') {
+        if ('' != $not_id) {
             $sql .= " AND glossary_id <> '".intval($not_id)."'";
         }
         $result = Database::query($sql);
@@ -306,7 +306,7 @@ class GlossaryManager
                     ip.c_id = ".api_get_course_int_id();
 
         $result = Database::query($sql);
-        if ($result === false || Database::num_rows($result) != 1) {
+        if (false === $result || 1 != Database::num_rows($result)) {
             return false;
         }
 
@@ -339,7 +339,7 @@ class GlossaryManager
                     c_id = $course_id AND 
                     glossary_id='".$glossary_id."'";
         $result = Database::query($sql);
-        if ($result === false || Database::affected_rows($result) < 1) {
+        if (false === $result || Database::affected_rows($result) < 1) {
             return false;
         }
 
@@ -415,7 +415,7 @@ class GlossaryManager
                 Display::return_icon('save.png', get_lang('Export'), '', ICON_SIZE_MEDIUM).'</a>';
         }
 
-        if ($view === 'table' || !isset($view)) {
+        if ('table' === $view || !isset($view)) {
             $actionsLeft .= '<a href="index.php?'.api_get_cidreq().'&action=changeview&view=list">'.
                 Display::return_icon('view_detailed.png', get_lang('List view'), '', ICON_SIZE_MEDIUM).'</a>';
         } else {
@@ -435,7 +435,7 @@ class GlossaryManager
             $orderList = 'ASC';
         }
         if (!api_is_allowed_to_edit(true, true, true)) {
-            if ($orderList === 'ASC') {
+            if ('ASC' === $orderList) {
                 $actionsLeft .= Display::url(
                     Display::return_icon('falling.png', get_lang('Sort Descending'), [], ICON_SIZE_MEDIUM),
                     api_get_self().'?'.api_get_cidreq().'&'.http_build_query(['order' => 'DESC'])
@@ -470,7 +470,7 @@ class GlossaryManager
 
         $content = $toolbar;
 
-        if (!$view || $view === 'table') {
+        if (!$view || 'table' === $view) {
             $table = new SortableTable(
                 'glossary',
                 ['GlossaryManager', 'get_number_glossary_terms'],
@@ -486,7 +486,7 @@ class GlossaryManager
             $content .= $table->return_table();
         }
 
-        if ($view === 'list') {
+        if ('list' === $view) {
             $content .= self::displayGlossaryList();
         }
 
@@ -539,7 +539,7 @@ class GlossaryManager
                 WHERE c_id = $course_id $sql_filter
                 $keywordCondition ";
         $res = Database::query($sql);
-        if ($res === false) {
+        if (false === $res) {
             return 0;
         }
         $obj = Database::fetch_object($res);
@@ -623,13 +623,13 @@ class GlossaryManager
             $session_img = api_get_session_image($data['session_id'], $_user['status']);
             $array[0] = $data[0].$session_img;
 
-            if (!$view || $view === 'table') {
+            if (!$view || 'table' === $view) {
                 $array[1] = str_replace(['<p>', '</p>'], ['', '<br />'], $data[1]);
             } else {
                 $array[1] = $data[1];
             }
 
-            if (isset($_GET['action']) && $_GET['action'] === 'export') {
+            if (isset($_GET['action']) && 'export' === $_GET['action']) {
                 $array[1] = api_html_entity_decode($data[1]);
             }
 
@@ -722,7 +722,7 @@ class GlossaryManager
         $table = Database::get_course_table(TABLE_GLOSSARY);
 
         // sort direction
-        if ($direction === 'up') {
+        if ('up' === $direction) {
             $sortorder = 'DESC';
         } else {
             $sortorder = 'ASC';
@@ -829,7 +829,7 @@ class GlossaryManager
      */
     public static function exportToFormat($format)
     {
-        if ($format == 'pdf') {
+        if ('pdf' == $format) {
             self::export_to_pdf();
 
             return;

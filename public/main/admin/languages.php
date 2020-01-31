@@ -27,9 +27,9 @@ $action = isset($_GET['action']) ? $_GET['action'] : null;
 //Ajax request
 if (isset($_POST['sent_http_request'])) {
     if (isset($_POST['visibility']) &&
-        $_POST['visibility'] == strval(intval($_POST['visibility'])) && $_POST['visibility'] == 0) {
+        $_POST['visibility'] == strval(intval($_POST['visibility'])) && 0 == $_POST['visibility']) {
         if (isset($_POST['id']) && $_POST['id'] == strval(intval($_POST['id']))) {
-            if (SubLanguageManager::check_if_language_is_used($_POST['id']) == false) {
+            if (false == SubLanguageManager::check_if_language_is_used($_POST['id'])) {
                 SubLanguageManager::make_unavailable_language($_POST['id']);
                 echo 'set_hidden';
             } else {
@@ -38,7 +38,7 @@ if (isset($_POST['sent_http_request'])) {
         }
     }
     if (isset($_POST['visibility']) &&
-        $_POST['visibility'] == strval(intval($_POST['visibility'])) && $_POST['visibility'] == 1
+        $_POST['visibility'] == strval(intval($_POST['visibility'])) && 1 == $_POST['visibility']
     ) {
         if (isset($_POST['id']) && $_POST['id'] == strval(intval($_POST['id']))) {
             SubLanguageManager::make_available_language($_POST['id']);
@@ -186,7 +186,7 @@ switch ($action) {
         $failedDisabledLanguages = '';
         $checkFailed = false;
         foreach ($allLanguages as $language) {
-            if (SubLanguageManager::check_if_language_is_used($language['id']) == false) {
+            if (false == SubLanguageManager::check_if_language_is_used($language['id'])) {
                 SubLanguageManager::make_unavailable_language($language['id']);
             } else {
                 if (intval(SubLanguageManager::get_platform_language_id()) !== intval($language['id'])) {
@@ -205,7 +205,7 @@ switch ($action) {
         break;
     case 'make_unavailable_confirmed':
         $language_info = SubLanguageManager::get_all_information_of_language($id);
-        if ($language_info['available'] == 1) {
+        if (1 == $language_info['available']) {
             SubLanguageManager::make_unavailable_language($id);
             $platform_language = api_get_setting('platformLanguage');
             UserManager::update_all_user_languages($language_info['english_name'], $platform_language);
@@ -224,7 +224,7 @@ if (isset($_POST['Submit']) && $_POST['Submit']) {
             WHERE id='$postId'";
     $result = Database::query($sql);
     // changing the Platform language
-    if ($_POST['platformlanguage'] && $_POST['platformlanguage'] != '') {
+    if ($_POST['platformlanguage'] && '' != $_POST['platformlanguage']) {
         api_set_setting('platformLanguage', $_POST['platformlanguage'], null, null, api_get_current_access_url_id());
         header("Location: $url");
         exit;
@@ -285,7 +285,7 @@ while ($row = Database::fetch_array($result_select)) {
     $row_td[] = $row['id'];
     $checked = '';
     // the first column is the original name of the language OR a form containing the original name
-    if ($action == 'edit' && $row['id'] == $id) {
+    if ('edit' == $action && $row['id'] == $id) {
         if ($row['english_name'] == api_get_setting('platformLanguage')) {
             $checked = ' checked="checked" ';
         }
@@ -321,13 +321,13 @@ while ($row = Database::fetch_array($result_select)) {
     $allow_add_term_sub_language = null;
     $allow_use_sub_language = '';
     $allow_add_term_sub_language = '';
-    if (api_get_setting('allow_use_sub_language') === 'true') {
+    if ('true' === api_get_setting('allow_use_sub_language')) {
         $verified_if_is_sub_language = SubLanguageManager::check_if_language_is_sub_language($row['id']);
-        if ($verified_if_is_sub_language === false) {
+        if (false === $verified_if_is_sub_language) {
             $verified_if_is_father = SubLanguageManager::check_if_language_is_father($row['id']);
             $allow_use_sub_language = "&nbsp;<a href='sub_language_add.php?action=definenewsublanguage&id=".$row['id']."'>".
                 Display::return_icon('new_language.png', get_lang('Create sub-language'), [], ICON_SIZE_SMALL)."</a>";
-            if ($verified_if_is_father === true) {
+            if (true === $verified_if_is_father) {
                 $allow_add_term_sub_language = '';
             } else {
                 $allow_add_term_sub_language = '';
@@ -346,7 +346,7 @@ while ($row = Database::fetch_array($result_select)) {
             Display::return_icon('edit.png', get_lang('Edit'), '', ICON_SIZE_SMALL)."</a>
                      &nbsp;".$setplatformlanguage.$allow_use_sub_language.$allow_add_term_sub_language.$allow_delete_sub_language;
     } else {
-        if ($row['available'] == 1) {
+        if (1 == $row['available']) {
             $row_td[] = "<a class=\"make_visible_and_invisible\" id=\"linktool_".$row['id']."\" href='".api_get_self()."?action=makeunavailable&id=".$row['id']."'>".
                 Display::return_icon('visible.png', get_lang('Make unavailable'), ['id' => 'imglinktool_'.$row['id']], ICON_SIZE_SMALL)."</a> <a href='".api_get_self()."?action=edit&id=".$row['id']."#value'>".Display::return_icon('edit.png', get_lang('Edit'), '', ICON_SIZE_SMALL)."</a>&nbsp;".$setplatformlanguage.$allow_use_sub_language.$allow_add_term_sub_language.$allow_delete_sub_language;
         } else {

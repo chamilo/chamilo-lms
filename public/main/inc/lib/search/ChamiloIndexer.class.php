@@ -36,8 +36,8 @@ class ChamiloIndexer extends XapianIndexer
         $stored_terms = $this->get_terms_on_db($prefix, $course_code, $tool_id, $ref_id_high_level);
 
         // don't do anything if no change, verify only at DB, not the search engine
-        if ((count(array_diff($terms, $stored_terms)) == 0) &&
-            (count(array_diff($stored_terms, $terms)) == 0)
+        if ((0 == count(array_diff($terms, $stored_terms))) &&
+            (0 == count(array_diff($stored_terms, $terms)))
         ) {
             return false;
         }

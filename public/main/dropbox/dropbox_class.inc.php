@@ -39,8 +39,6 @@
  * @copyright 2004
  * @author Jan Bols <jan@ivpv.UGent.be>
  * with contributions by René Haentjens <rene.haentjens@UGent.be>
- *
- * @package chamilo.dropbox
  */
 class Dropbox_Work
 {
@@ -163,7 +161,7 @@ class Dropbox_Work
                 WHERE c_id = $course_id AND file_id = ".intval($this->id)." AND user_id = ".$this->uploader_id;
         $result = Database::query($sql);
         $row = Database::fetch_array($result);
-        if ($row['count'] == 0) {
+        if (0 == $row['count']) {
             // Insert entries into person table
             $sql = "INSERT INTO ".Database::get_course_table(TABLE_DROPBOX_PERSON)." (c_id, file_id, user_id)
                     VALUES ($course_id, ".intval($this->id)." , ".intval($this->uploader_id).")";
@@ -213,7 +211,7 @@ class Dropbox_Work
         $this->category = $res['cat_id'];
 
         // Getting the feedback on the work.
-        if ($action == 'viewfeedback' && $this->id == $_GET['id']) {
+        if ('viewfeedback' == $action && $this->id == $_GET['id']) {
             $feedback2 = [];
             $sql = "SELECT * FROM ".Database::get_course_table(TABLE_DROPBOX_FEEDBACK)."
                     WHERE c_id = $course_id AND file_id='".$id."' 
@@ -319,12 +317,12 @@ class Dropbox_SentWork extends Dropbox_Work
         if (is_int($recipient_ids)) {
             $justSubmit = true;
             $recipient_ids = [$recipient_ids + $this->id];
-        } elseif (count($recipient_ids) == 0) {
+        } elseif (0 == count($recipient_ids)) {
             $justSubmit = true;
             $recipient_ids = [$uploader_id];
         }
 
-        if (!is_array($recipient_ids) || count($recipient_ids) == 0) {
+        if (!is_array($recipient_ids) || 0 == count($recipient_ids)) {
             die(get_lang('An error has occured. Please contact your system administrator.').' (code 209)');
         }
 

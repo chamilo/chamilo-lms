@@ -8,8 +8,6 @@ use ChamiloSession as Session;
  * in lp_api.php or other api's.
  * This is a first attempt at using xajax and AJAX in general, so the code might be a bit unsettling.
  *
- * @package chamilo.learnpath
- *
  * @author Yannick Warnier <ywarnier@beeznest.org>
  */
 
@@ -111,7 +109,7 @@ function switch_item_details($lp_id, $user_id, $view_id, $current_item, $next_it
      */
     $myscore = $mylpi->get_score();
     $mymax = $mylpi->get_max();
-    if ($mymax === '') {
+    if ('' === $mymax) {
         $mymax = "''";
     }
     $mymin = $mylpi->get_min();
@@ -182,7 +180,7 @@ function switch_item_details($lp_id, $user_id, $view_id, $current_item, $next_it
     $mytotal = $mylp->getTotalItemsCountWithoutDirs();
     $mycomplete = $mylp->get_complete_items_count();
     $myprogress_mode = $mylp->get_progress_bar_mode();
-    $myprogress_mode = ($myprogress_mode == '' ? '%' : $myprogress_mode);
+    $myprogress_mode = ('' == $myprogress_mode ? '%' : $myprogress_mode);
     $mynext = $mylp->get_next_item_id();
     $myprevious = $mylp->get_previous_item_id();
     $myitemtype = $mylpi->get_type();
@@ -226,7 +224,7 @@ function switch_item_details($lp_id, $user_id, $view_id, $current_item, $next_it
         // Time from the course
         $tc = $timeTotalCourse;
         $sessionId = api_get_session_id();
-        if (!empty($sessionId) && $sessionId != 0) {
+        if (!empty($sessionId) && 0 != $sessionId) {
             /*$sql = "SELECT hours, perc FROM plugin_licences_course_session WHERE session_id = $sessionId";
             $res = Database::query($sql);
             if (Database::num_rows($res) > 0) {

@@ -2,8 +2,6 @@
 /* For licensing terms, see /license.txt */
 /**
  * Special report for corporate users.
- *
- * @package chamilo.reporting
  */
 $cidReset = true;
 
@@ -49,7 +47,7 @@ $column_model = [
 
 if (!empty($extra_fields)) {
     foreach ($extra_fields as $extra) {
-        if ($extra['1'] == 'ruc') {
+        if ('ruc' == $extra['1']) {
             continue;
         }
         $col = [

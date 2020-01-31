@@ -7,8 +7,6 @@
  * used for a student's general view.
  *
  * @author Bert Steppé
- *
- * @package chamilo.gradebook
  */
 class UserDataGenerator
 {
@@ -48,7 +46,7 @@ class UserDataGenerator
             $coursecode = $eval->get_course_code();
             if (isset($coursecode)) {
                 $result = Result::load(null, $userid, $eval->get_id());
-                if (count($result) == 0) {
+                if (0 == count($result)) {
                     $toadd = false;
                 }
             }
@@ -56,7 +54,7 @@ class UserDataGenerator
                 $evals_filtered_copy = $evals;
             }
         }
-        if (count($result) == 0) {
+        if (0 == count($result)) {
             $evals_filtered = $evals;
         } else {
             $evals_filtered = $evals_filtered_copy;
@@ -440,7 +438,7 @@ class UserDataGenerator
     private function get_category_name_to_display($cat)
     {
         if (isset($cat)) {
-            if ($cat->get_parent_id() == '0' || $cat->get_parent_id() == null) {
+            if ('0' == $cat->get_parent_id() || null == $cat->get_parent_id()) {
                 return '';
             } else {
                 return $cat->get_name();

@@ -56,7 +56,7 @@ $isValid = function ($item) use ($user, $course, $session) {
         return false;
     }
 
-    if (get_class($item) == Portfolio::class) {
+    if (Portfolio::class == get_class($item)) {
         if ($session && $item->getSession()->getId() != $session->getId()) {
             return false;
         }

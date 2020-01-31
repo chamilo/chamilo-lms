@@ -209,7 +209,7 @@ function aiken_import_exercise($file)
             }
 
             foreach ($question_array['answer'] as $key => $answers) {
-                ++$key;
+                $key++;
                 $answer->new_answer[$key] = $answers['value'];
                 $answer->new_position[$key] = $key;
                 $answer->new_comment[$key] = '';
@@ -359,7 +359,7 @@ function aiken_parse_file(&$exercise_info, $exercisePath, $file, $questionFile)
 
                 return 'ExerciseAikenErrorNoAnswerOptionGiven';
             }
-            ++$question_index;
+            $question_index++;
             //emptying answers array when moving to next question
             $answers_array = [];
             $new_question = true;

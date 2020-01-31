@@ -3,8 +3,6 @@
 
 /**
  * Report.
- *
- * @package chamilo.tracking
  */
 $cidReset = true;
 require_once __DIR__.'/../inc/global.inc.php';
@@ -187,7 +185,7 @@ if (!empty($main_question_list) && is_array($main_question_list)) {
         $total_student = 0;
         $counter++;
         $s_css_class = 'row_even';
-        if ($counter % 2 == 0) {
+        if (0 == $counter % 2) {
             $s_css_class = 'row_odd';
         }
         $html_result .= "<tr class='$s_css_class'>

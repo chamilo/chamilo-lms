@@ -13,8 +13,6 @@ use Symfony\Component\Filesystem\Filesystem;
  * @author Guillaume Viguier <guillaume@viguierjust.com>
  *
  * @since Chamilo 1.8.7
- *
- * @package chamilo.admin
  */
 define('CSS_UPLOAD_PATH', api_get_path(SYS_PATH).'Resources/public/css/themes/');
 
@@ -314,7 +312,7 @@ function handleStylesheets()
         );
     } else {
         // Uploading a new stylesheet.
-        if ($urlId == 1) {
+        if (1 == $urlId) {
             $show_upload_form = true;
         } else {
             if ($is_style_changeable) {
@@ -385,7 +383,7 @@ function handleStylesheets()
         )
     );
 
-    if ($webPlatformLogoPath !== null) {
+    if (null !== $webPlatformLogoPath) {
         $logoForm->addLabel(
             get_lang('Current logo'),
             '<img id="header-logo-custom" src="'.$webPlatformLogoPath.'?'.time().'">'
@@ -540,7 +538,7 @@ function uploadStylesheet($values, $picture)
 
     $info = pathinfo($picture['name']);
 
-    if ($info['extension'] == 'zip') {
+    if ('zip' == $info['extension']) {
         // Try to open the file and extract it in the theme.
         $zip = new ZipArchive();
         if ($zip->open($picture['tmp_name'])) {
@@ -554,7 +552,7 @@ function uploadStylesheet($values, $picture)
 
             for ($i = 0; $i < $num_files; $i++) {
                 $file = $zip->statIndex($i);
-                if (substr($file['name'], -1) != '/') {
+                if ('/' != substr($file['name'], -1)) {
                     $path_parts = pathinfo($file['name']);
                     if (!in_array($path_parts['extension'], $allowedFiles)) {
                         $valid = false;
@@ -562,7 +560,7 @@ function uploadStylesheet($values, $picture)
                     }
                 }
 
-                if (strpos($file['name'], '/') === false) {
+                if (false === strpos($file['name'], '/')) {
                     $single_directory = false;
                 }
             }
@@ -588,14 +586,14 @@ function uploadStylesheet($values, $picture)
                     $mode = api_get_permissions_for_new_directories();
                     for ($i = 0; $i < $num_files; $i++) {
                         $entry = $zip->getNameIndex($i);
-                        if (substr($entry, -1) == '/') {
+                        if ('/' == substr($entry, -1)) {
                             continue;
                         }
 
                         $pos_slash = strpos($entry, '/');
                         $entry_without_first_dir = substr($entry, $pos_slash + 1);
                         // If there is still a slash, we need to make sure the directories are created.
-                        if (strpos($entry_without_first_dir, '/') !== false) {
+                        if (false !== strpos($entry_without_first_dir, '/')) {
                             if (!is_dir($extraction_path.dirname($entry_without_first_dir))) {
                                 // Create it.
                                 @mkdir($extraction_path.dirname($entry_without_first_dir), $mode, true);
@@ -664,7 +662,7 @@ function storeRegions()
             if (!empty($areas_to_installed)) {
                 $plugin_obj->removeAllRegions($plugin);
                 foreach ($areas_to_installed as $region) {
-                    if (!empty($region) && $region != '-1') {
+                    if (!empty($region) && '-1' != $region) {
                         $plugin_obj->add_to_region($plugin, $region);
                     }
                 }
@@ -781,7 +779,7 @@ function handleSearch()
     }
     $specific_fields = get_specific_field_list();
 
-    if ($search_enabled == 'true') {
+    if ('true' == $search_enabled) {
         $values = api_get_settings_options('search_show_unlinked_results');
         $group = formGenerateElementsGroup(
             $form,
@@ -834,7 +832,7 @@ function handleSearch()
     $form->display();
     echo '</div>';
 
-    if ($search_enabled == 'true') {
+    if ('true' == $search_enabled) {
         $xapianPath = api_get_path(SYS_UPLOAD_PATH).'plugins/xapian/searchdb';
 
         /*
@@ -913,14 +911,14 @@ function handleTemplates()
      * isset() combos all over the place. */
     $action = isset($_GET['action']) ? $_GET['action'] : "invalid";
 
-    if ($action != 'add') {
+    if ('add' != $action) {
         echo '<div class="actions" style="margin-left: 1px;">';
         echo '<a href="settings.php?category=Templates&action=add">'.
                 Display::return_icon('new_template.png', get_lang('Add a template'), '', ICON_SIZE_MEDIUM).'</a>';
         echo '</div>';
     }
 
-    if ($action == 'add' || ($action == 'edit' && is_numeric($_GET['id']))) {
+    if ('add' == $action || ('edit' == $action && is_numeric($_GET['id']))) {
         addEditTemplate();
 
         // Add event to the system log.
@@ -934,7 +932,7 @@ function handleTemplates()
             $user_id
         );
     } else {
-        if ($action == 'delete' && is_numeric($_GET['id'])) {
+        if ('delete' == $action && is_numeric($_GET['id'])) {
             deleteTemplate($_GET['id']);
 
             // Add event to the system log
@@ -1108,7 +1106,7 @@ function addEditTemplate()
     );
 
     // Setting the form elements: the header.
-    if ($_GET['action'] == 'add') {
+    if ('add' == $_GET['action']) {
         $title = get_lang('Add a template');
     } else {
         $title = get_lang('Template edition');
@@ -1137,7 +1135,7 @@ function addEditTemplate()
     $form->addElement('static', 'file_comment', '', get_lang('This image will represent the template in the templates list. It should be no larger than 100x70 pixels'));
 
     // Getting all the information of the template when editing a template.
-    if ($_GET['action'] == 'edit') {
+    if ('edit' == $_GET['action']) {
         $defaults['template_id'] = $id;
         $defaults['template_text'] = $template->getContent();
         // Forcing get_lang().
@@ -1231,7 +1229,7 @@ function addEditTemplate()
             $bootstrap = api_get_bootstrap_and_font_awesome();
             $viewport = '<meta name="viewport" content="width=device-width, initial-scale=1.0">';
 
-            if ($_GET['action'] == 'add') {
+            if ('add' == $_GET['action']) {
                 $templateContent = '<head>'.$viewport.'<title>'.$values['title'].'</title>'.$bootstrap.'</head>'
                     .$values['template_text'];
                 $template
@@ -1414,9 +1412,9 @@ function generateSettingsForm($settings, $settings_by_access_list)
 
         if (!empty($_configuration['multiple_access_urls'])) {
             if (api_is_global_platform_admin()) {
-                if ($row['access_url_locked'] == 0) {
-                    if ($url_id == 1) {
-                        if ($row['access_url_changeable'] == '1') {
+                if (0 == $row['access_url_locked']) {
+                    if (1 == $url_id) {
+                        if ('1' == $row['access_url_changeable']) {
                             $form->addElement(
                                 'html',
                                 '<div class="float-right"><a class="share_this_setting" data_status = "0"  data_to_send = "'.$row['variable'].'" href="javascript:void(0);">'.
@@ -1430,7 +1428,7 @@ function generateSettingsForm($settings, $settings_by_access_list)
                             );
                         }
                     } else {
-                        if ($row['access_url_changeable'] == '1') {
+                        if ('1' == $row['access_url_changeable']) {
                             $form->addElement(
                                 'html',
                                 '<div class="float-right">'.
@@ -1451,12 +1449,12 @@ function generateSettingsForm($settings, $settings_by_access_list)
         $hideme = [];
         $hide_element = false;
 
-        if ($_configuration['access_url'] != 1) {
-            if ($row['access_url_changeable'] == 0) {
+        if (1 != $_configuration['access_url']) {
+            if (0 == $row['access_url_changeable']) {
                 // We hide the element in other cases (checkbox, radiobutton) we 'freeze' the element.
                 $hide_element = true;
                 $hideme = ['disabled'];
-            } elseif ($url_info['active'] == 1) {
+            } elseif (1 == $url_info['active']) {
                 // We show the elements.
                 if (empty($row['variable'])) {
                     $row['variable'] = 0;
@@ -1472,7 +1470,7 @@ function generateSettingsForm($settings, $settings_by_access_list)
                     is_array($settings_by_access_list[$row['variable']][$row['subkey']][$row['category']])
                 ) {
                     // We are sure that the other site have a selected value.
-                    if ($settings_by_access_list[$row['variable']][$row['subkey']][$row['category']]['selected_value'] != '') {
+                    if ('' != $settings_by_access_list[$row['variable']][$row['subkey']][$row['category']]['selected_value']) {
                         $row['selected_value'] = $settings_by_access_list[$row['variable']][$row['subkey']][$row['category']]['selected_value'];
                     }
                 }
@@ -1495,7 +1493,7 @@ function generateSettingsForm($settings, $settings_by_access_list)
                     );
                     $form->applyFilter($row['variable'], 'html_filter');
                     $default_values[$row['variable']] = round($row['selected_value'] / 1024 / 1024, 1);
-                } elseif ($row['variable'] == 'account_valid_duration') {
+                } elseif ('account_valid_duration' == $row['variable']) {
                     $form->addElement(
                         'text',
                         $row['variable'],
@@ -1510,7 +1508,7 @@ function generateSettingsForm($settings, $settings_by_access_list)
                     // For platform character set selection:
                     // Conversion of the textfield to a select box with valid values.
                     $default_values[$row['variable']] = $row['selected_value'];
-                } elseif ($row['variable'] == 'platform_charset') {
+                } elseif ('platform_charset' == $row['variable']) {
                     break;
                 } else {
                     $hideme['class'] = 'col-md-4';
@@ -1529,7 +1527,7 @@ function generateSettingsForm($settings, $settings_by_access_list)
                 }
                 break;
             case 'textarea':
-                if ($row['variable'] == 'header_extra_content') {
+                if ('header_extra_content' == $row['variable']) {
                     $file = api_get_home_path().'header_extra_content.txt';
                     $value = '';
                     if (file_exists($file)) {
@@ -1543,7 +1541,7 @@ function generateSettingsForm($settings, $settings_by_access_list)
                         $hideme
                     );
                     $default_values[$row['variable']] = $value;
-                } elseif ($row['variable'] == 'footer_extra_content') {
+                } elseif ('footer_extra_content' == $row['variable']) {
                     $file = api_get_home_path().'footer_extra_content.txt';
                     $value = '';
                     if (file_exists($file)) {
@@ -1605,14 +1603,14 @@ function generateSettingsForm($settings, $settings_by_access_list)
                 $group = [];
                 while ($rowkeys = Database::fetch_array($result)) {
                     // Profile tab option should be hidden when the social tool is enabled.
-                    if (api_get_setting('allow_social_tool') == 'true') {
-                        if ($rowkeys['variable'] === 'show_tabs' && $rowkeys['subkey'] === 'my_profile') {
+                    if ('true' == api_get_setting('allow_social_tool')) {
+                        if ('show_tabs' === $rowkeys['variable'] && 'my_profile' === $rowkeys['subkey']) {
                             continue;
                         }
                     }
 
                     // Hiding the gradebook option.
-                    if ($rowkeys['variable'] === 'show_tabs' && $rowkeys['subkey'] === 'my_gradebook') {
+                    if ('show_tabs' === $rowkeys['variable'] && 'my_gradebook' === $rowkeys['subkey']) {
                         continue;
                     }
 
@@ -1623,7 +1621,7 @@ function generateSettingsForm($settings, $settings_by_access_list)
                         get_lang($rowkeys['subkeytext'])
                     );
 
-                    if ($row['access_url_changeable'] == 1) {
+                    if (1 == $row['access_url_changeable']) {
                         // 2. We look into the DB if there is a setting for a specific access_url.
                         $access_url = $_configuration['access_url'];
                         if (empty($access_url)) {
@@ -1637,11 +1635,11 @@ function generateSettingsForm($settings, $settings_by_access_list)
                                     access_url =  $access_url";
                         $result_access = Database::query($sql);
                         $row_access = Database::fetch_array($result_access);
-                        if ($row_access['selected_value'] === 'true' && !$form->isSubmitted()) {
+                        if ('true' === $row_access['selected_value'] && !$form->isSubmitted()) {
                             $element->setChecked(true);
                         }
                     } else {
-                        if ($rowkeys['selected_value'] === 'true' && !$form->isSubmitted()) {
+                        if ('true' === $rowkeys['selected_value'] && !$form->isSubmitted()) {
                             $element->setChecked(true);
                         }
                     }
@@ -1706,7 +1704,7 @@ function generateSettingsForm($settings, $settings_by_access_list)
             case 'pdf_export_watermark_enable':
                 $url = PDF::get_watermark(null);
 
-                if ($url != false) {
+                if (false != $url) {
                     $delete_url = '<a href="?delete_watermark">'.get_lang('Remove picture').' '.Display::return_icon('delete.png', get_lang('Remove picture')).'</a>';
                     $form->addElement('html', '<div style="max-height:100px; max-width:100px; margin-left:162px; margin-bottom:10px; clear:both;"><img src="'.$url.'" style="margin-bottom:10px;" />'.$delete_url.'</div>');
                 }
@@ -1767,12 +1765,12 @@ function searchSetting($search)
 
             $title = api_strtolower(get_lang($setting['title']));
             // try the title
-            if (strpos($title, $search) === false) {
+            if (false === strpos($title, $search)) {
                 $comment = api_strtolower(get_lang($setting['comment']));
                 //Try the comment
-                if (strpos($comment, $search) === false) {
+                if (false === strpos($comment, $search)) {
                     //Try the variable name
-                    if (strpos($setting['variable'], $search) === false) {
+                    if (false === strpos($setting['variable'], $search)) {
                         continue;
                     } else {
                         $found = true;
@@ -1870,7 +1868,7 @@ function showSearchSettingsTable($data)
 function showSearchToolsStatusTable()
 {
     //@todo windows support
-    if (api_is_windows_os() == false) {
+    if (false == api_is_windows_os()) {
         $list_of_programs = ['pdftotext', 'ps2pdf', 'catdoc', 'html2text', 'unrtf', 'catppt', 'xls2csv'];
         foreach ($list_of_programs as $program) {
             $output = [];
@@ -1940,7 +1938,7 @@ function isStyleChangeable()
     if ($urlId) {
         $style_info = api_get_settings('stylesheets', '', 1, 0);
         $url_info = api_get_access_url($urlId);
-        if ($style_info[0]['access_url_changeable'] == 1 && $url_info['active'] == 1) {
+        if (1 == $style_info[0]['access_url_changeable'] && 1 == $url_info['active']) {
             $changeable = true;
         }
     } else {
@@ -1962,13 +1960,13 @@ function getCategorySettings($category = '')
     $url_id = api_get_current_access_url_id();
     $settings_by_access_list = [];
 
-    if ($url_id == 1) {
+    if (1 == $url_id) {
         $settings = api_get_settings($category, 'group', $url_id);
     } else {
         $url_info = api_get_access_url($url_id);
-        if ($url_info['active'] == 1) {
+        if (1 == $url_info['active']) {
             $categoryToSearch = $category;
-            if ($category == 'search_setting') {
+            if ('search_setting' == $category) {
                 $categoryToSearch = '';
             }
             // The default settings of Chamilo
@@ -1988,7 +1986,7 @@ function getCategorySettings($category = '')
                 }
 
                 // One more validation if is changeable.
-                if ($row['access_url_changeable'] == 1) {
+                if (1 == $row['access_url_changeable']) {
                     $settings_by_access_list[$row['variable']][$row['subkey']][$row['category']] = $row;
                 } else {
                     $settings_by_access_list[$row['variable']][$row['subkey']][$row['category']] = [];
@@ -1997,7 +1995,7 @@ function getCategorySettings($category = '')
         }
     }
 
-    if (isset($category) && $category == 'search_setting') {
+    if (isset($category) && 'search_setting' == $category) {
         if (!empty($_REQUEST['search_field'])) {
             $settings = searchSetting($_REQUEST['search_field']);
         }

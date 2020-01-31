@@ -5,8 +5,6 @@ use ChamiloSession as Session;
 
 /**
  * This file allows creating new html documents with an online WYSIWYG html editor.
- *
- * @package chamilo.document
  */
 require_once __DIR__.'/../inc/global.inc.php';
 
@@ -59,7 +57,7 @@ $(window).on("load", function () {
 //I'm in the certification module?
 $is_certificate_mode = false;
 
-if (isset($_REQUEST['certificate']) && $_REQUEST['certificate'] == 'true') {
+if (isset($_REQUEST['certificate']) && 'true' == $_REQUEST['certificate']) {
     $is_certificate_mode = true;
 }
 
@@ -122,15 +120,15 @@ if (strstr($dir, '..')) {
     $dir = '/';
 }
 
-if ($dir[0] == '.') {
+if ('.' == $dir[0]) {
     $dir = substr($dir, 1);
 }
 
-if ($dir[0] != '/') {
+if ('/' != $dir[0]) {
     $dir = '/'.$dir;
 }
 
-if ($dir[strlen($dir) - 1] != '/') {
+if ('/' != $dir[strlen($dir) - 1]) {
     $dir .= '/';
 }
 
@@ -164,7 +162,7 @@ for ($i = 0; $i < ($count_dir); $i++) {
     $relative_url .= '../';
 }
 
-if ($relative_url == '') {
+if ('' == $relative_url) {
     $relative_url = '/';
 }
 
@@ -362,21 +360,21 @@ if (!$is_certificate_mode &&
         $escaped_folders = [];
         foreach ($folders as $key => &$val) {
             // Hide some folders
-            if ($val == '/HotPotatoes_files' || $val == '/certificates' || basename($val) == 'css') {
+            if ('/HotPotatoes_files' == $val || '/certificates' == $val || 'css' == basename($val)) {
                 continue;
             }
             // Admin setting for Hide/Show the folders of all users
-            if (api_get_setting('show_users_folders') == 'false' &&
+            if ('false' == api_get_setting('show_users_folders') &&
                 (strstr($val, '/shared_folder') || strstr($val, 'shared_folder_session_'))
             ) {
                 continue;
             }
             // Admin setting for Hide/Show Default folders to all users
-            if (api_get_setting('show_default_folders') == 'false' && ($val == '/images' || $val == '/flash' || $val == '/audio' || $val == '/video' || strstr($val, '/images/gallery') || $val == '/video/flv')) {
+            if ('false' == api_get_setting('show_default_folders') && ('/images' == $val || '/flash' == $val || '/audio' == $val || '/video' == $val || strstr($val, '/images/gallery') || '/video/flv' == $val)) {
                 continue;
             }
             // Admin setting for Hide/Show chat history folder
-            if (api_get_setting('show_chat_folder') == 'false' && $val == '/chat_files') {
+            if ('false' == api_get_setting('show_chat_folder') && '/chat_files' == $val) {
                 continue;
             }
 
@@ -401,31 +399,31 @@ if (!$is_certificate_mode &&
         if (is_array($folders)) {
             foreach ($folders as &$folder) {
                 //Hide some folders
-                if ($folder == '/HotPotatoes_files' || $folder == '/certificates' || basename($folder) == 'css') {
+                if ('/HotPotatoes_files' == $folder || '/certificates' == $folder || 'css' == basename($folder)) {
                     continue;
                 }
                 //Admin setting for Hide/Show the folders of all users
-                if (api_get_setting('show_users_folders') == 'false' &&
+                if ('false' == api_get_setting('show_users_folders') &&
                     (strstr($folder, '/shared_folder') || strstr($folder, 'shared_folder_session_'))
                 ) {
                     continue;
                 }
                 //Admin setting for Hide/Show Default folders to all users
-                if (api_get_setting('show_default_folders') == 'false' &&
+                if ('false' == api_get_setting('show_default_folders') &&
                     (
-                        $folder == '/images' ||
-                        $folder == '/flash' ||
-                        $folder == '/audio' ||
-                        $folder == '/video' ||
+                        '/images' == $folder ||
+                        '/flash' == $folder ||
+                        '/audio' == $folder ||
+                        '/video' == $folder ||
                         strstr($folder, '/images/gallery') ||
-                        $folder == '/video/flv'
+                        '/video/flv' == $folder
                     )
                 ) {
                     continue;
                 }
                 //Admin setting for Hide/Show chat history folder
-                if (api_get_setting('show_chat_folder') == 'false' &&
-                    $folder == '/chat_files'
+                if ('false' == api_get_setting('show_chat_folder') &&
+                    '/chat_files' == $folder
                 ) {
                     continue;
                 }
@@ -440,7 +438,7 @@ if (!$is_certificate_mode &&
                     $label = ' &mdash; '.$folder_titles[$folder];
                 }
                 $parent_select->addOption($label, $folder);
-                if ($selected != '') {
+                if ('' != $selected) {
                     $parent_select->setSelected($folder);
                 }
             }
@@ -458,7 +456,7 @@ if (!$is_certificate_mode &&
                     $label = str_repeat('&nbsp;&nbsp;&nbsp;', count($path_parts) - 2).' &mdash; '.$label;
                 }
                 $parent_select->addOption($label, $folder);
-                if ($selected != '') {
+                if ('' != $selected) {
                     $parent_select->setSelected($folder);
                 }
             }
@@ -486,7 +484,7 @@ if ($form->validate()) {
         $dir = $values['dirValue'];
     }
 
-    if ($dir[strlen($dir) - 1] != '/') {
+    if ('/' != $dir[strlen($dir) - 1]) {
         $dir .= '/';
     }
     $filepath = $filepath.$dir;

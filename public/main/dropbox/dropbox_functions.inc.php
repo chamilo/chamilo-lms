@@ -37,9 +37,9 @@ function handle_multiple_actions()
     $is_courseTutor = api_is_course_tutor();
 
     // STEP 1: are we performing the actions on the received or on the sent files?
-    if ($_POST['action'] == 'delete_received' || $_POST['action'] == 'download_received') {
+    if ('delete_received' == $_POST['action'] || 'download_received' == $_POST['action']) {
         $part = 'received';
-    } elseif ($_POST['action'] == 'delete_sent' || $_POST['action'] == 'download_sent') {
+    } elseif ('delete_sent' == $_POST['action'] || 'download_sent' == $_POST['action']) {
         $part = 'sent';
     }
 
@@ -49,7 +49,7 @@ function handle_multiple_actions()
         $checked_file_ids = $_POST['id'];
     } else {
         foreach ($_POST as $key => $value) {
-            if (strstr($value, $part.'_') && $key != 'view_received_category' && $key != 'view_sent_category') {
+            if (strstr($value, $part.'_') && 'view_received_category' != $key && 'view_sent_category' != $key) {
                 $checked_files = true;
                 $checked_file_ids[] = intval(substr($value, strrpos($value, '_')));
             }
@@ -57,19 +57,19 @@ function handle_multiple_actions()
     }
     $checked_file_ids = $_POST['id'];
 
-    if (!is_array($checked_file_ids) || count($checked_file_ids) == 0) {
+    if (!is_array($checked_file_ids) || 0 == count($checked_file_ids)) {
         return get_lang('Check at least one file.');
     }
 
     // Deleting
-    if ($_POST['action'] == 'delete_received' || $_POST['action'] == 'delete_sent') {
+    if ('delete_received' == $_POST['action'] || 'delete_sent' == $_POST['action']) {
         $dropboxfile = new Dropbox_Person($_user['user_id'], $is_courseAdmin, $is_courseTutor);
         foreach ($checked_file_ids as $key => $value) {
-            if ($_GET['view'] == 'received') {
+            if ('received' == $_GET['view']) {
                 $dropboxfile->deleteReceivedWork($value);
                 $message = get_lang('The received file has been deleted.');
             }
-            if ($_GET['view'] == 'sent' || empty($_GET['view'])) {
+            if ('sent' == $_GET['view'] || empty($_GET['view'])) {
                 $dropboxfile->deleteSentWork($value);
                 $message = get_lang('The sent file has been deleted.');
             }
@@ -97,7 +97,7 @@ function handle_multiple_actions()
     }
 
     // STEP 3D: downloading
-    if ($_POST['action'] == 'download_sent' || $_POST['action'] == 'download_received') {
+    if ('download_sent' == $_POST['action'] || 'download_received' == $_POST['action']) {
         zip_download($checked_file_ids);
     }
 }
@@ -133,7 +133,7 @@ function delete_category($action, $id, $user_id = null)
     }
 
     $cat = get_dropbox_category($id);
-    if (count($cat) == 0) {
+    if (0 == count($cat)) {
         return false;
     }
 
@@ -142,12 +142,12 @@ function delete_category($action, $id, $user_id = null)
     }
 
     // an additional check that might not be necessary
-    if ($action == 'deletereceivedcategory') {
+    if ('deletereceivedcategory' == $action) {
         $sentreceived = 'received';
         $entries_table = Database::get_course_table(TABLE_DROPBOX_POST);
         $id_field = 'file_id';
         $return_message = get_lang('The folder has been deleted');
-    } elseif ($action == 'deletesentcategory') {
+    } elseif ('deletesentcategory' == $action) {
         $sentreceived = 'sent';
         $entries_table = Database::get_course_table(TABLE_DROPBOX_FILE);
         $id_field = 'id';
@@ -168,10 +168,10 @@ function delete_category($action, $id, $user_id = null)
 
     while ($row = Database::fetch_array($result)) {
         $dropboxfile = new Dropbox_Person($user_id, $is_courseAdmin, $is_courseTutor);
-        if ($action == 'deletereceivedcategory') {
+        if ('deletereceivedcategory' == $action) {
             $dropboxfile->deleteReceivedWork($row[$id_field]);
         }
-        if ($action == 'deletesentcategory') {
+        if ('deletesentcategory' == $action) {
             $dropboxfile->deleteSentWork($row[$id_field]);
         }
     }
@@ -231,11 +231,11 @@ function store_move($id, $target, $part)
     $_user = api_get_user_info();
     $course_id = api_get_course_int_id();
 
-    if ((isset($id) && $id != '') &&
-        (isset($target) && $target != '') &&
-        (isset($part) && $part != '')
+    if ((isset($id) && '' != $id) &&
+        (isset($target) && '' != $target) &&
+        (isset($part) && '' != $part)
     ) {
-        if ($part == 'received') {
+        if ('received' == $part) {
             $sql = "UPDATE ".Database::get_course_table(TABLE_DROPBOX_POST)."
                     SET cat_id = ".intval($target)."
                     WHERE c_id = $course_id AND dest_user_id = ".intval($_user['user_id'])."
@@ -243,7 +243,7 @@ function store_move($id, $target, $part)
             Database::query($sql);
             $return_message = get_lang('The received file has been moved.');
         }
-        if ($part == 'sent') {
+        if ('sent' == $part) {
             $sql = "UPDATE ".Database::get_course_table(TABLE_DROPBOX_FILE)."
                     SET cat_id = ".intval($target)."
                     WHERE
@@ -285,8 +285,8 @@ function get_dropbox_categories($filter = '')
 
     $result = Database::query($sql);
     while ($row = Database::fetch_array($result)) {
-        if (($filter == 'sent' && $row['sent'] == 1) ||
-            ($filter == 'received' && $row['received'] == 1) || $filter == ''
+        if (('sent' == $filter && 1 == $row['sent']) ||
+            ('received' == $filter && 1 == $row['received']) || '' == $filter
         ) {
             $return_array[$row['cat_id']] = $row;
         }
@@ -314,7 +314,7 @@ function get_dropbox_category($id)
     $sql = "SELECT * FROM ".Database::get_course_table(TABLE_DROPBOX_CATEGORY)."
             WHERE c_id = $course_id AND cat_id='".$id."'";
     $res = Database::query($sql);
-    if ($res === false) {
+    if (false === $res) {
         return [];
     }
     $row = Database::fetch_assoc($res);
@@ -344,10 +344,10 @@ function store_addcategory()
     $_user = api_get_user_info();
 
     // check if the target is valid
-    if ($_POST['target'] == 'sent') {
+    if ('sent' == $_POST['target']) {
         $sent = 1;
         $received = 0;
-    } elseif ($_POST['target'] == 'received') {
+    } elseif ('received' == $_POST['target']) {
         $sent = 0;
         $received = 1;
     } else {
@@ -355,7 +355,7 @@ function store_addcategory()
     }
 
     // check if the category name is valid
-    if ($_POST['category_name'] == '') {
+    if ('' == $_POST['category_name']) {
         return ['type' => 'error', 'message' => get_lang('Please give a category name')];
     }
 
@@ -373,7 +373,7 @@ function store_addcategory()
         $result = Database::query($sql);
 
         // step 3b, we add the category if it does not exist yet.
-        if (Database::num_rows($result) == 0) {
+        if (0 == Database::num_rows($result)) {
             $params = [
                 'cat_id' => 0,
                 'c_id' => $course_id,
@@ -447,25 +447,25 @@ function display_addcategory_form($category_name = '', $id = 0, $action = '')
             // (happens when createinrecievedfiles AND createinsentfiles are not checked)
             $category_name = $row['cat_name'];
         }
-        if ($row['received'] == '1') {
+        if ('1' == $row['received']) {
             $target = 'received';
         }
-        if ($row['sent'] == '1') {
+        if ('1' == $row['sent']) {
             $target = 'sent';
         }
         $title = get_lang('Edit this category');
     }
 
-    if ($action == 'addreceivedcategory') {
+    if ('addreceivedcategory' == $action) {
         $target = 'received';
     }
-    if ($action == 'addsentcategory') {
+    if ('addsentcategory' == $action) {
         $target = 'sent';
     }
 
-    if ($action == 'editcategory') {
+    if ('editcategory' == $action) {
         $text = get_lang('Edit category');
-    } elseif ($action == 'addreceivedcategory' || $action == 'addsentcategory') {
+    } elseif ('addreceivedcategory' == $action || 'addsentcategory' == $action) {
         $text = get_lang('Create category');
     }
 
@@ -547,7 +547,7 @@ function display_add_form($viewReceivedCategory, $viewSentCategory, $view, $id =
     );
 
     $allowOverwrite = api_get_setting('dropbox_allow_overwrite');
-    if ($allowOverwrite == 'true' && empty($idCondition)) {
+    if ('true' == $allowOverwrite && empty($idCondition)) {
         $form->addElement(
             'checkbox',
             'cb_overwrite',
@@ -560,7 +560,7 @@ function display_add_form($viewReceivedCategory, $viewSentCategory, $view, $id =
     // List of all users in this course and all virtual courses combined with it
     if (api_get_session_id()) {
         $complete_user_list_for_dropbox = [];
-        if (api_get_setting('dropbox_allow_student_to_student') == 'true' || $_user['status'] != STUDENT) {
+        if ('true' == api_get_setting('dropbox_allow_student_to_student') || STUDENT != $_user['status']) {
             $complete_user_list_for_dropbox = CourseManager:: get_user_list_from_course_code(
                 $course_info['code'],
                 api_get_session_id(),
@@ -585,7 +585,7 @@ function display_add_form($viewReceivedCategory, $viewSentCategory, $view, $id =
         $generalCoachList = [];
         $courseCoachList = [];
         foreach ($complete_user_list2 as $coach) {
-            if ($coach['type'] == 'general_coach') {
+            if ('general_coach' == $coach['type']) {
                 $generalCoachList[] = $coach;
             } else {
                 $courseCoachList[] = $coach;
@@ -593,7 +593,7 @@ function display_add_form($viewReceivedCategory, $viewSentCategory, $view, $id =
         }
 
         $hideCourseCoach = api_get_setting('dropbox_hide_course_coach');
-        if ($hideCourseCoach == 'false') {
+        if ('false' == $hideCourseCoach) {
             $complete_user_list_for_dropbox = array_merge(
                 $complete_user_list_for_dropbox,
                 $courseCoachList
@@ -601,14 +601,14 @@ function display_add_form($viewReceivedCategory, $viewSentCategory, $view, $id =
         }
         $hideGeneralCoach = api_get_setting('dropbox_hide_general_coach');
 
-        if ($hideGeneralCoach == 'false') {
+        if ('false' == $hideGeneralCoach) {
             $complete_user_list_for_dropbox = array_merge(
                 $complete_user_list_for_dropbox,
                 $generalCoachList
             );
         }
     } else {
-        if (api_get_setting('dropbox_allow_student_to_student') == 'true' || $_user['status'] != STUDENT) {
+        if ('true' == api_get_setting('dropbox_allow_student_to_student') || STUDENT != $_user['status']) {
             $complete_user_list_for_dropbox = CourseManager::get_user_list_from_course_code(
                 $course_info['code'],
                 api_get_session_id(),
@@ -655,16 +655,16 @@ function display_add_form($viewReceivedCategory, $viewSentCategory, $view, $id =
         if ((
             $dropbox_person->isCourseTutor
                 || $dropbox_person->isCourseAdmin
-                || $allowStudentToStudent == 'true'
-                || $current_user['status'] != 5                         // Always allow teachers.
-                || $current_user['is_tutor'] == 1                       // Always allow tutors.
+                || 'true' == $allowStudentToStudent
+                || 5 != $current_user['status']                         // Always allow teachers.
+                || 1 == $current_user['is_tutor']                       // Always allow tutors.
                 ) && $current_user['user_id'] != $_user['user_id']) {   // Don't include yourself.
             if ($current_user['user_id'] == $current_user_id) {
                 continue;
             }
             $userId = $current_user['user_id'];
             $userInfo = api_get_user_info($userId);
-            if ($userInfo['status'] != INVITEE) {
+            if (INVITEE != $userInfo['status']) {
                 $groupNameListToString = '';
                 if (!empty($groups)) {
                     $groupNameList = array_column($groups, 'name');
@@ -684,7 +684,7 @@ function display_add_form($viewReceivedCategory, $viewSentCategory, $view, $id =
     */
     $allowGroups = api_get_setting('dropbox_allow_group');
     if (($dropbox_person->isCourseTutor || $dropbox_person->isCourseAdmin)
-        && $allowGroups == 'true' || $allowStudentToStudent == 'true'
+        && 'true' == $allowGroups || 'true' == $allowStudentToStudent
     ) {
         $complete_group_list_for_dropbox = GroupManager::get_group_list(null, $course_info);
 
@@ -698,7 +698,7 @@ function display_add_form($viewReceivedCategory, $viewSentCategory, $view, $id =
     }
 
     $allowUpload = api_get_setting('dropbox_allow_just_upload');
-    if ($allowUpload == 'true') {
+    if ('true' == $allowUpload) {
         $options['user_'.$_user['user_id']] = get_lang('---Just upload---');
     }
 
@@ -817,7 +817,7 @@ function getUserOwningThisMailing($mailingPseudoId, $owner = 0, $or_die = '')
     if (!($res = Database::fetch_array($result))) {
         die(get_lang('An error has occured. Please contact your system administrator.').' (code 901)');
     }
-    if ($owner == 0) {
+    if (0 == $owner) {
         return $res['uploader_id'];
     }
     if ($res['uploader_id'] == $owner) {
@@ -887,11 +887,11 @@ function store_add_dropbox($file = [], $work = null)
             $thisIsJustUpload = false;
 
             foreach ($_POST['recipients'] as $rec) {
-                if ($rec == 'mailing') {
+                if ('mailing' == $rec) {
                     $thisIsAMailing = true;
-                } elseif ($rec == 'upload') {
+                } elseif ('upload' == $rec) {
                     $thisIsJustUpload = true;
-                } elseif (strpos($rec, 'user_') === 0 &&
+                } elseif (0 === strpos($rec, 'user_') &&
                     !CourseManager::is_user_subscribed_in_course(
                         substr($rec, strlen('user_')),
                         $_course['code'],
@@ -906,7 +906,7 @@ function store_add_dropbox($file = [], $work = null)
                     );
 
                     return false;
-                } elseif (strpos($rec, 'group_') !== 0 && strpos($rec, 'user_') !== 0) {
+                } elseif (0 !== strpos($rec, 'group_') && 0 !== strpos($rec, 'user_')) {
                     Display::addFlash(
                         Display::return_message(
                             get_lang('Invalid group detected.'),
@@ -920,7 +920,7 @@ function store_add_dropbox($file = [], $work = null)
         }
 
         // we are doing a mailing but an additional recipient is selected
-        if ($thisIsAMailing && (count($_POST['recipients']) != 1)) {
+        if ($thisIsAMailing && (1 != count($_POST['recipients']))) {
             Display::addFlash(
                 Display::return_message(
                     get_lang('Mailing cannot be combined with other recipients'),
@@ -934,7 +934,7 @@ function store_add_dropbox($file = [], $work = null)
         // we are doing a just upload but an additional recipient is selected.
         // note: why can't this be valid? It is like sending a document to
         // yourself AND to a different person (I do this quite often with my e-mails)
-        if ($thisIsJustUpload && (count($_POST['recipients']) != 1)) {
+        if ($thisIsJustUpload && (1 != count($_POST['recipients']))) {
             Display::addFlash(
                 Display::return_message(
                     get_lang('Just Upload cannot be combined with other recipients'),
@@ -1040,9 +1040,9 @@ function store_add_dropbox($file = [], $work = null)
         // creating the array that contains all the users who will receive the file
         $new_work_recipients = [];
         foreach ($_POST['recipients'] as $rec) {
-            if (strpos($rec, 'user_') === 0) {
+            if (0 === strpos($rec, 'user_')) {
                 $new_work_recipients[] = substr($rec, strlen('user_'));
-            } elseif (strpos($rec, 'group_') === 0) {
+            } elseif (0 === strpos($rec, 'group_')) {
                 $groupInfo = GroupManager::get_group_properties(substr($rec, strlen('group_')));
                 $userList = GroupManager::get_subscribed_users($groupInfo);
                 foreach ($userList as $usr) {
@@ -1353,7 +1353,7 @@ function zip_download($fileList)
     Session::erase('dropbox_files_to_download');
     $name = 'dropbox-'.api_get_utc_datetime().'.zip';
     $result = DocumentManager::file_send_for_download($temp_zip_file, true, $name);
-    if ($result === false) {
+    if (false === $result) {
         api_not_allowed(true);
     }
     @unlink($temp_zip_file);
@@ -1402,7 +1402,7 @@ function generate_html_overview($files, $dont_show_columns = [], $make_link = []
     $counter = 0;
     foreach ($files as $value) {
         // Adding the header.
-        if ($counter == 0) {
+        if (0 == $counter) {
             $columns_array = array_keys($value);
             $return .= "\n<tr>";
             foreach ($columns_array as $columns_array_key => $columns_array_value) {

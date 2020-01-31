@@ -49,7 +49,7 @@ class ResultTable extends SortableTable
         }
         $scoredisplay = ScoreDisplay::instance();
         $column = 0;
-        if ($this->iscourse == '1') {
+        if ('1' == $this->iscourse) {
             $this->set_header($column++, '', false);
             $this->set_form_actions([
                     'delete' => get_lang('Delete'),
@@ -98,7 +98,7 @@ class ResultTable extends SortableTable
         $scoredisplay = ScoreDisplay::instance();
 
         // determine sorting type
-        $col_adjust = $this->iscourse == '1' ? 1 : 0;
+        $col_adjust = '1' == $this->iscourse ? 1 : 0;
 
         switch ($this->column) {
             // first name or last name
@@ -126,7 +126,7 @@ class ResultTable extends SortableTable
                 break;
         }
 
-        if ($this->direction === 'DESC') {
+        if ('DESC' === $this->direction) {
             $sorting |= ResultsDataGenerator::RDG_SORT_DESC;
         } else {
             $sorting |= ResultsDataGenerator::RDG_SORT_ASC;
@@ -140,7 +140,7 @@ class ResultTable extends SortableTable
         $sortable_data = [];
         foreach ($data_array as $item) {
             $row = [];
-            if ($this->iscourse == '1') {
+            if ('1' == $this->iscourse) {
                 $row[] = $item['result_id'];
             }
             if ($isWesternNameOrder) {
@@ -230,7 +230,7 @@ class ResultTable extends SortableTable
         $allowMultipleAttempts = api_get_configuration_value('gradebook_multiple_evaluation_attempts');
         $baseUrl = api_get_self().'?selecteval='.$this->evaluation->get_id().'&'.api_get_cidreq();
         $editColumn = '';
-        if (api_is_allowed_to_edit(null, true) && $locked_status == 0) {
+        if (api_is_allowed_to_edit(null, true) && 0 == $locked_status) {
             if ($allowMultipleAttempts) {
                 if (!empty($item['percentage_score'])) {
                     $editColumn .=
@@ -250,7 +250,7 @@ class ResultTable extends SortableTable
                 Display::return_icon('delete.png', get_lang('Delete'), '', '22').'</a>';
         }
 
-        if ($this->evaluation->get_course_code() == null) {
+        if (null == $this->evaluation->get_course_code()) {
             $editColumn .= '&nbsp;<a href="'.api_get_self().'?resultdelete='.$item['result_id'].'&selecteval='.$this->evaluation->get_id().'" onclick="return confirmationuser();">';
             $editColumn .= Display::return_icon('delete.png', get_lang('Delete'));
             $editColumn .= '</a>';
@@ -264,7 +264,7 @@ class ResultTable extends SortableTable
             $link = LinkFactory::get_evaluation_link($this->evaluation->get_id());
             $doc_url = $link->get_view_url($item['id']);
 
-            if ($doc_url != null) {
+            if (null != $doc_url) {
                 $editColumn .= '&nbsp;<a href="'.$doc_url.'" target="_blank">';
                 $editColumn .= Display::return_icon('link.gif', get_lang('Open document')).'</a>';
             }

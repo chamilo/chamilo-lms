@@ -12,8 +12,6 @@
  * to generate a new one.
  *
  * @todo refactor, move relevant functions to code libraries
- *
- * @package chamilo.auth
  */
 require_once __DIR__.'/../inc/global.inc.php';
 
@@ -22,7 +20,7 @@ require_once __DIR__.'/../inc/global.inc.php';
 // already be some display output.
 
 // Forbidden to retrieve the lost password
-if (api_get_setting('allow_lostpassword') == 'false') {
+if ('false' == api_get_setting('allow_lostpassword')) {
     api_not_allowed(true);
 }
 
@@ -63,7 +61,7 @@ $form->addText(
 );
 
 $captcha = api_get_setting('allow_captcha');
-$allowCaptcha = $captcha === 'true';
+$allowCaptcha = 'true' === $captcha;
 
 if ($allowCaptcha) {
     $ajax = api_get_path(WEB_AJAX_PATH).'form.ajax.php?a=get_captcha';
@@ -120,7 +118,7 @@ if ($form->validate()) {
 
     $passwordEncryption = api_get_configuration_value('password_encryption');
 
-    if ($passwordEncryption === 'none') {
+    if ('none' === $passwordEncryption) {
         $messageText = Login::send_password_to_user($user, true);
 
         if (CustomPages::enabled() && CustomPages::exists(CustomPages::INDEX_UNLOGGED)) {
@@ -138,7 +136,7 @@ if ($form->validate()) {
         exit;
     }
 
-    if ($user['auth_source'] == 'extldap') {
+    if ('extldap' == $user['auth_source']) {
         Display::addFlash(
             Display::return_message(get_lang('Could not reset password, contact your helpdesk.'), 'info', false)
         );
@@ -148,7 +146,7 @@ if ($form->validate()) {
 
     $userResetPasswordSetting = api_get_setting('user_reset_password');
 
-    if ($userResetPasswordSetting === 'true') {
+    if ('true' === $userResetPasswordSetting) {
         $userObj = api_get_user_entity($user['uid']);
         Login::sendResetEmail($userObj);
 

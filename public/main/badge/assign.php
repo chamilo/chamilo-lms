@@ -120,7 +120,7 @@ if (!$profile) {
             break;
         }
 
-        if (!$profile && $parent['parent_id'] == 0) {
+        if (!$profile && 0 == $parent['parent_id']) {
             $profile = $skillLevelRepo->findAll();
             $profile = isset($profile[0]) ? $profile[0] : false;
         }
@@ -227,7 +227,7 @@ $form->addHidden('user', $user->getId());
 $form->addHidden('id', $skillId);
 $form->addRule('skill', get_lang('Required field'), 'required');
 
-$showLevels = api_get_configuration_value('hide_skill_levels') === false;
+$showLevels = false === api_get_configuration_value('hide_skill_levels');
 
 if ($showLevels) {
     $form->addSelect('acquired_level', get_lang('Level acquired'), $acquiredLevel);
@@ -364,7 +364,7 @@ if (api_is_drh()) {
         'url' => api_get_path(WEB_CODE_PATH).'mySpace/index.php',
         "name" => get_lang('Reporting'),
     ];
-    if ($user->getStatus() == COURSEMANAGER) {
+    if (COURSEMANAGER == $user->getStatus()) {
         $interbreadcrumb[] = [
             "url" => api_get_path(WEB_CODE_PATH).'mySpace/teachers.php',
             'name' => get_lang('Trainers'),

@@ -6,15 +6,13 @@ use Chamilo\CourseBundle\Entity\CLpItemView;
 
 /**
  * Learning paths reporting.
- *
- * @package chamilo.reporting
  */
 require_once __DIR__.'/../inc/global.inc.php';
 
 $cidReset = true;
 $from_myspace = false;
 $from_link = '';
-if (isset($_GET['from']) && $_GET['from'] == 'myspace') {
+if (isset($_GET['from']) && 'myspace' == $_GET['from']) {
     $from_link = '&from=myspace';
     $this_section = SECTION_TRACKING;
 } else {
@@ -22,7 +20,7 @@ if (isset($_GET['from']) && $_GET['from'] == 'myspace') {
 }
 
 $session_id = isset($_REQUEST['id_session']) ? (int) $_REQUEST['id_session'] : api_get_session_id();
-$export_csv = isset($_GET['export']) && $_GET['export'] == 'csv';
+$export_csv = isset($_GET['export']) && 'csv' == $_GET['export'];
 $user_id = isset($_GET['student_id']) ? (int) $_GET['student_id'] : api_get_user_id();
 $courseCode = isset($_GET['course']) ? Security::remove_XSS($_GET['course']) : api_get_course_id();
 $origin = api_get_origin();
@@ -31,7 +29,7 @@ $csv_content = [];
 $courseInfo = api_get_course_info($courseCode);
 
 if (empty($courseInfo) || empty($lp_id)) {
-    api_not_allowed(api_get_origin() !== 'learnpath');
+    api_not_allowed('learnpath' !== api_get_origin());
 }
 $userInfo = api_get_user_info($user_id);
 $name = $userInfo['complete_name'];
@@ -44,10 +42,10 @@ if (!$isBoss &&
     !CourseManager::is_course_teacher(api_get_user_id(), $courseCode) &&
     !Tracking::is_allowed_to_coach_student(api_get_user_id(), $user_id)
 ) {
-    api_not_allowed(api_get_origin() !== 'learnpath');
+    api_not_allowed('learnpath' !== api_get_origin());
 }
 
-if ($origin === 'user_course') {
+if ('user_course' === $origin) {
     $interbreadcrumb[] = [
         'url' => api_get_path(WEB_COURSE_PATH).$courseInfo['directory'],
         'name' => $courseInfo['name'],
@@ -56,7 +54,7 @@ if ($origin === 'user_course') {
         'url' => "../user/user.php?cidReq=$courseCode",
         'name' => get_lang('Users'),
     ];
-} elseif ($origin === 'tracking_course') {
+} elseif ('tracking_course' === $origin) {
     $interbreadcrumb[] = [
         'url' => "../tracking/courseLog.php?cidReq=$courseCode&id_session=$session_id",
         'name' => get_lang('Reporting'),
@@ -118,9 +116,9 @@ switch ($action) {
         $categories = [];
         foreach ($list1 as $id => $interaction) {
             $counter++;
-            if ($counter === 1) {
+            if (1 === $counter) {
                 continue;
-            } elseif ($counter === 2) {
+            } elseif (2 === $counter) {
                 $studentName = $interaction['student_response_formatted'];
             } else {
                 $data = $interaction['student_response_formatted'];
@@ -164,14 +162,14 @@ switch ($action) {
             $total = 0;
             // Question options
             foreach ($data['options'] as $option) {
-                if ($option['result'] === 'correct') {
+                if ('correct' === $option['result']) {
                     $total++;
                     $globalTotal++;
                 }
                 $table->setCellContents($row, 0, 'Q'.$choiceCounter);
                 $table->setCellContents($row, 1, $option['student_response_formatted']);
                 $result = Display::return_icon('icon_check.png', null, [], ICON_SIZE_SMALL);
-                if ($option['result'] === 'wrong') {
+                if ('wrong' === $option['result']) {
                     $result = Display::return_icon('icon_error.png', null, [], ICON_SIZE_SMALL);
                 }
 
@@ -248,7 +246,7 @@ switch ($action) {
         );
         $table->setCellContents(0, 0, $logo);
 
-        $addLogo = (isset($_GET['add_logo']) && (int) $_GET['add_logo'] === 1);
+        $addLogo = (isset($_GET['add_logo']) && 1 === (int) $_GET['add_logo']);
         if ($addLogo) {
             $secondLogo = api_get_path(SYS_PATH).'custompages/url-images/'.api_get_current_access_url_id().'_url_image_2.png';
             $logo2 = Display::img($secondLogo, null, ['style' => 'height:70px;']);

@@ -2,8 +2,6 @@
 /* For licensing terms, see /license.txt */
 /**
  * Definition of the Accessurleditsessiontourl class.
- *
- * @package chamilo.library
  */
 require_once 'xajax/xajax.inc.php';
 

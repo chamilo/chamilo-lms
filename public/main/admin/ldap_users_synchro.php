@@ -1,8 +1,6 @@
 <?php
 /* For licensing terms, see /license.txt */
-/**
- * @package chamilo.admin
- */
+
 /**
  * Code.
  */
@@ -57,7 +55,7 @@ Display::display_header($tool_name);
 		</form>
 
 <?php
-if (isset($action) && ($action == "synchro")) {
+if (isset($action) && ("synchro" == $action)) {
     $included = true;
     require 'ldap_synchro.php';
     echo Display::return_message($message, 'normal', false);

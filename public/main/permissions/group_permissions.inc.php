@@ -1,24 +1,22 @@
 <?php
-/**
- * @package chamilo.permissions
- */
+
 include_once 'permissions_functions.inc.php';
 include_once 'all_permissions.inc.php';
 $group_id = api_get_group_id();
 
 echo $group_id;
 // 			ACTIONS
-if ($_POST['StoreGroupPermissions'] and $setting_visualisation == 'checkbox') {
+if ($_POST['StoreGroupPermissions'] and 'checkbox' == $setting_visualisation) {
     $result_message = store_permissions('group', $group_id);
     if ($result_message) {
         echo Display::return_message($result_message);
     }
 }
 if (isset($_GET['action'])) {
-    if (($_GET['action'] == 'grant' or $_GET['action'] == 'revoke') and isset($_GET['permission']) and isset($_GET['tool'])) {
+    if (('grant' == $_GET['action'] or 'revoke' == $_GET['action']) and isset($_GET['permission']) and isset($_GET['tool'])) {
         $result_message = store_one_permission('group', $_GET['action'], $group_id, $_GET['tool'], $_GET['permission']);
     }
-    if (isset($_GET['role']) and ($_GET['action'] == 'grant' or $_GET['action'] == 'revoke')) {
+    if (isset($_GET['role']) and ('grant' == $_GET['action'] or 'revoke' == $_GET['action'])) {
         $result_message = assign_role('group', $_GET['action'], $group_id, $_GET['role'], $_GET['scope']);
         echo 'hier';
     }
@@ -40,16 +38,16 @@ $inherited_permissions = permission_array_merge($group_course_roles_permissions,
 // 			LIMITED OR FULL
 $current_group_permissions = limited_or_full($current_group_permissions);
 $inherited_permissions = limited_or_full($inherited_permissions);
-if (api_get_setting('permissions') == 'limited') {
+if ('limited' == api_get_setting('permissions')) {
     $header_array = $rights_limited;
 }
-if (api_get_setting('permissions') == 'full') {
+if ('full' == api_get_setting('permissions')) {
     $header_array = $rights_full;
 }
 
 echo "<form method=\"post\" action=\"".str_replace('&', '&amp;', $_SERVER['REQUEST_URI'])."\">";
 // 		DISPLAYING THE ROLES LIST
-if (api_get_setting('group_roles') == 'true') {
+if ('true' == api_get_setting('group_roles')) {
     // the list of the roles for the user
     echo '<strong>'.get_lang('Group roles').'</strong><br />';
     $current_group_course_roles = get_roles('group', $group_id);
@@ -79,7 +77,7 @@ foreach ($tool_rights as $tool => $rights) { // $tool_rights contains all the po
     foreach ($header_array as $key => $value) {
         echo "\t\t<td align='center'>\n";
         if (in_array($value, $rights)) {
-            if ($setting_visualisation == 'checkbox') {
+            if ('checkbox' == $setting_visualisation) {
                 //display_checkbox_matrix($current_group_permissions, $tool, $value);
                 display_checkbox_matrix(
                     $current_group_permissions,
@@ -89,7 +87,7 @@ foreach ($tool_rights as $tool => $rights) { // $tool_rights contains all the po
                     $course_admin
                 );
             }
-            if ($setting_visualisation == 'image') {
+            if ('image' == $setting_visualisation) {
                 //display_image_matrix($current_group_permissions, $tool, $value);
                 display_image_matrix(
                     $current_group_permissions,
@@ -110,7 +108,7 @@ foreach ($tool_rights as $tool => $rights) { // $tool_rights contains all the po
 }
 
 echo "</table>\n";
-if ($setting_visualisation == 'checkbox') {
+if ('checkbox' == $setting_visualisation) {
     echo "<input type=\"Submit\" name=\"StoreGroupPermissions\" value=\"".get_lang('Store permissions')."\">";
 }
 echo "</form>";

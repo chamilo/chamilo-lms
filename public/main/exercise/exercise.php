@@ -270,9 +270,9 @@ if ($is_allowedToEdit && !empty($action)) {
             $currentPosition = $category->getPosition();
 
             if ('up_category' === $action) {
-                --$currentPosition;
+                $currentPosition--;
             } else {
-                ++$currentPosition;
+                $currentPosition++;
             }
             $category->setPosition($currentPosition);
             $em->persist($category);
@@ -408,7 +408,7 @@ if (false === api_get_configuration_value('allow_exercise_categories')) {
                     $up = Display::url(Display::return_icon('up_na.png'), '#');
                 }
                 $down = Display::url($downIcon, $modifyUrl.'&action=down_category&category_id_edit='.$categoryIdItem);
-                ++$counter;
+                $counter++;
                 if ($total === $counter) {
                     $down = Display::url(Display::return_icon('down_na.png'), '#');
                 }

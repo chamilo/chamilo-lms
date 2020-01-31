@@ -14,8 +14,6 @@ use Westsworld\TimeAgo;
  *
  * @author Ivan Tcholakov, <ivantcholakov@gmail.com>, 2009, 2010
  * @author More authors, mentioned in the correpsonding fragments of this source.
- *
- * @package chamilo.library
  */
 // Predefined date formats in Chamilo provided by the language sub-system.
 // To be used as a parameter for the function api_format_date()
@@ -232,14 +230,14 @@ function api_get_timezone()
         // Second, see if a timezone has been chosen for the platform
         $timezoneFromSettings = api_get_setting('timezone_value', 'timezones');
 
-        if ($timezoneFromSettings != null) {
+        if (null != $timezoneFromSettings) {
             $timezone = $timezoneFromSettings;
         }
 
         // If allowed by the administrator
         $allowUserTimezones = api_get_setting('use_users_timezone', 'timezones');
 
-        if ($allowUserTimezones === 'true') {
+        if ('true' === $allowUserTimezones) {
             $userId = api_get_user_id();
             // Get the timezone based on user preference, if it exists
             $newExtraField = new ExtraFieldValue('user');
@@ -273,7 +271,7 @@ function api_get_utc_datetime(
     $returnNullIfInvalidDate = false,
     $returnObj = false
 ) {
-    if (is_null($time) || empty($time) || $time === '0000-00-00 00:00:00') {
+    if (is_null($time) || empty($time) || '0000-00-00 00:00:00' === $time) {
         if ($returnNullIfInvalidDate) {
             return null;
         }
@@ -341,7 +339,7 @@ function api_get_local_time(
     }
 
     // If time is a timestamp, convert it to a string
-    if (is_null($time) || empty($time) || $time == '0000-00-00 00:00:00') {
+    if (is_null($time) || empty($time) || '0000-00-00 00:00:00' == $time) {
         if ($returnNullIfInvalidDate) {
             return null;
         }
@@ -571,13 +569,13 @@ function api_format_date($time, $format = null, $language = null)
  */
 function date_to_str_ago($date, $timeZone = 'UTC', $returnDateDifference = false)
 {
-    if ($date === '0000-00-00 00:00:00') {
+    if ('0000-00-00 00:00:00' === $date) {
         return '';
     }
 
     $getOldTimezone = api_get_timezone();
     $isoCode = api_get_language_isocode();
-    if ($isoCode === 'pt') {
+    if ('pt' === $isoCode) {
         $isoCode = 'pt-BR';
     }
     $isoCode = ucfirst($isoCode);
@@ -1021,7 +1019,7 @@ function api_html_entity_decode($string, $quote_style = ENT_COMPAT, $encoding = 
  */
 function api_xml_http_response_encode($string, $from_encoding = 'UTF8')
 {
-    if (isset($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQUESTED_WITH']) == 'xmlhttprequest') {
+    if (isset($_SERVER['HTTP_X_REQUESTED_WITH']) && 'xmlhttprequest' == strtolower($_SERVER['HTTP_X_REQUESTED_WITH'])) {
         if (empty($from_encoding)) {
             $from_encoding = _api_mb_internal_encoding();
         }
@@ -1853,7 +1851,7 @@ function api_is_valid_utf8($string)
  */
 function api_is_valid_ascii(&$string)
 {
-    return mb_detect_encoding($string, 'ASCII', true) == 'ASCII' ? true : false;
+    return 'ASCII' == mb_detect_encoding($string, 'ASCII', true) ? true : false;
 }
 
 /**
@@ -2013,7 +2011,7 @@ function _api_get_person_name_convention($language, $type)
                     )
                 )
             );
-            $conventions[$key]['sort_by'] = strtolower($conventions[$key]['sort_by']) != 'last_name' ? true : false;
+            $conventions[$key]['sort_by'] = 'last_name' != strtolower($conventions[$key]['sort_by']) ? true : false;
         }
     }
     switch ($type) {
@@ -2035,7 +2033,7 @@ function _api_get_person_name_convention($language, $type)
  */
 function _api_validate_person_name_format($format)
 {
-    if (empty($format) || stripos($format, '%f') === false || stripos($format, '%l') === false) {
+    if (empty($format) || false === stripos($format, '%f') || false === stripos($format, '%l')) {
         return '%t %f %l';
     }
 
@@ -2166,7 +2164,7 @@ function _api_iconv_supports($encoding)
     if (!isset($supported[$encoding])) {
         if (ICONV_INSTALLED) {
             $enc = api_refine_encoding_id($encoding);
-            if ($enc != 'HTML-ENTITIES') {
+            if ('HTML-ENTITIES' != $enc) {
                 $test_string = '';
                 for ($i = 32; $i < 128; $i++) {
                     $test_string .= chr($i);
@@ -2189,7 +2187,7 @@ function _api_convert_encoding_supports($encoding)
 {
     static $supports = [];
     if (!isset($supports[$encoding])) {
-        $supports[$encoding] = _api_get_character_map_name(api_refine_encoding_id($encoding)) != '';
+        $supports[$encoding] = '' != _api_get_character_map_name(api_refine_encoding_id($encoding));
     }
 
     return $supports[$encoding];

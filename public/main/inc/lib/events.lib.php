@@ -43,13 +43,13 @@ class Event
         Database::query($sql);
 
         $status = 'student';
-        if ($userInfo['status'] == SESSIONADMIN) {
+        if (SESSIONADMIN == $userInfo['status']) {
             $status = 'sessionadmin';
         }
-        if ($userInfo['status'] == COURSEMANAGER) {
+        if (COURSEMANAGER == $userInfo['status']) {
             $status = 'teacher';
         }
-        if ($userInfo['status'] == DRH) {
+        if (DRH == $userInfo['status']) {
             $status = 'DRH';
         }
 
@@ -76,13 +76,13 @@ class Event
     {
         if (!empty($sessionId)) {
             $visibility = api_get_session_visibility($sessionId);
-            if (!empty($visibility) && $visibility != SESSION_AVAILABLE) {
+            if (!empty($visibility) && SESSION_AVAILABLE != $visibility) {
                 $extraFieldValue = new ExtraFieldValue('session');
                 $value = $extraFieldValue->get_values_by_handler_and_field_variable(
                     $sessionId,
                     'disable_log_after_session_ends'
                 );
-                if (!empty($value) && isset($value['value']) && (int) $value['value'] == 1) {
+                if (!empty($value) && isset($value['value']) && 1 == (int) $value['value']) {
                     return false;
                 }
             }
@@ -113,7 +113,7 @@ class Event
         $userId = api_get_user_id();
         $ip = Database::escape_string(api_get_real_ip());
 
-        if (self::isSessionLogNeedToBeSave($sessionId) === false) {
+        if (false === self::isSessionLogNeedToBeSave($sessionId)) {
             return false;
         }
 
@@ -136,7 +136,7 @@ class Event
                   access_session_id = $sessionId";
         $result = Database::query($sql);
 
-        if (Database::affected_rows($result) == 0) {
+        if (0 == Database::affected_rows($result)) {
             $sql = "INSERT INTO $TABLETRACK_LASTACCESS (access_user_id, c_id, access_date, access_session_id)
                     VALUES ($userId, $courseId, '$now', $sessionId)";
             Database::query($sql);
@@ -183,7 +183,7 @@ class Event
             return false;
         }
 
-        if (self::isSessionLogNeedToBeSave($sessionId) === false) {
+        if (false === self::isSessionLogNeedToBeSave($sessionId)) {
             return false;
         }
 
@@ -204,7 +204,7 @@ class Event
         $pos2 = isset($_SERVER['HTTP_REFERER']) ? strpos(strtolower($_SERVER['HTTP_REFERER']), strtolower(api_get_path(WEB_PATH)."index")) : false;
 
         // end "what's new" notification
-        if ($pos !== false || $pos2 !== false) {
+        if (false !== $pos || false !== $pos2) {
             $params = [
                 'access_user_id' => $userId,
                 'c_id' => $courseId,
@@ -226,7 +226,7 @@ class Event
                     access_session_id = $sessionId";
         $result = Database::query($sql);
 
-        if (Database::affected_rows($result) == 0) {
+        if (0 == Database::affected_rows($result)) {
             $params = [
                 'access_user_id' => $userId,
                 'c_id' => $courseId,
@@ -590,7 +590,7 @@ class Event
                 if ($debug) {
                     error_log("Attempt already exist: exe_id: $exe_id - user_id:$user_id - question_id:$question_id");
                 }
-                if ($updateResults == false) {
+                if (false == $updateResults) {
                     //The attempt already exist do not update use  update_event_exercise() instead
                     return false;
                 }
@@ -606,7 +606,7 @@ class Event
 
             $recording_table = Database::get_main_table(TABLE_STATISTIC_TRACK_E_ATTEMPT_RECORDING);
 
-            if ($updateResults == false) {
+            if (false == $updateResults) {
                 $attempt_id = Database::insert($TBL_TRACK_ATTEMPT, $attempt);
 
                 if ($debug) {
@@ -698,7 +698,7 @@ class Event
         $debug = false;
         global $safe_lp_id, $safe_lp_item_id;
 
-        if ($updateResults == false) {
+        if (false == $updateResults) {
             // Validation in case of fraud with activated control time
             if (!ExerciseLib::exercise_time_control_is_valid($exerciseId, $safe_lp_id, $safe_lp_item_id)) {
                 if ($debug) {
@@ -801,7 +801,7 @@ class Event
         }
 
         //Clean the user_info
-        if ($event_value_type == LOG_USER_OBJECT) {
+        if (LOG_USER_OBJECT == $event_value_type) {
             if (is_array($event_value)) {
                 unset($event_value['complete_name']);
                 unset($event_value['complete_name_with_username']);
@@ -1842,7 +1842,7 @@ class Event
         }
 
         $sessionId = (int) $sessionId;
-        if (self::isSessionLogNeedToBeSave($sessionId) === false) {
+        if (false === self::isSessionLogNeedToBeSave($sessionId)) {
             return false;
         }
 
@@ -1901,7 +1901,7 @@ class Event
 
         $sessionId = (int) $sessionId;
 
-        if (self::isSessionLogNeedToBeSave($sessionId) === false) {
+        if (false === self::isSessionLogNeedToBeSave($sessionId)) {
             return false;
         }
 
@@ -1981,7 +1981,7 @@ class Event
                 $sessionId = (int) $logoutInfo['sid'];
             }
 
-            if (self::isSessionLogNeedToBeSave($sessionId) === false) {
+            if (false === self::isSessionLogNeedToBeSave($sessionId)) {
                 return false;
             }
 
@@ -2165,11 +2165,11 @@ class Event
             return false;
         }
 
-        if (self::isSessionLogNeedToBeSave($sessionId) === false) {
+        if (false === self::isSessionLogNeedToBeSave($sessionId)) {
             return false;
         }
 
-        $loginAs = (int) Session::read('login_as') === true;
+        $loginAs = true === (int) Session::read('login_as');
 
         $logInfo['user_id'] = api_get_user_id();
         $logInfo['date_reg'] = api_get_utc_datetime();

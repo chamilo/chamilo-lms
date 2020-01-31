@@ -9,8 +9,6 @@
  * Most code here is ripped from /main/course_home/course_home.php.
  *
  * @author Bert Steppé
- *
- * @package chamilo.gradebook
  */
 require_once __DIR__.'/../inc/global.inc.php';
 api_block_anonymous_users();
@@ -57,7 +55,7 @@ if (!empty($doExerciseUrl)) {
             if ($exercise->exercise_was_added_in_lp) {
                 if (!empty($exercise->lpList)) {
                     $count = count($exercise->lpList);
-                    if ($count == 1) {
+                    if (1 == $count) {
                         // If the exercise was added once redirect to the LP
                         $firstLp = current($exercise->lpList);
                         if (isset($firstLp['lp_id'])) {

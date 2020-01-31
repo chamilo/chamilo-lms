@@ -300,7 +300,7 @@ function WSGetGradebookCategoryUserScore($params)
             $item->set_course_code($courseCode);
             $score = $item->calc_score($userId);
             if (!empty($score)) {
-                $divide = $score[1] == 0 ? 1 : $score[1];
+                $divide = 0 == $score[1] ? 1 : $score[1];
                 $item_value = $score[0] / $divide * $item->get_weight();
                 $item_value_total += $item_value;
             }
@@ -511,7 +511,7 @@ $HTTP_RAW_POST_DATA = isset($HTTP_RAW_POST_DATA) ? $HTTP_RAW_POST_DATA : '';
 
 // If you send your data in utf8 then this value must be false.
 $decodeUTF8 = api_get_setting('registration.soap.php.decode_utf8');
-if ($decodeUTF8 === 'true') {
+if ('true' === $decodeUTF8) {
     $server->decode_utf8 = true;
 } else {
     $server->decode_utf8 = false;

@@ -3,8 +3,6 @@
 
 /**
  * Course sessions reporting.
- *
- * @package chamilo.reporting
  */
 ob_start();
 $cidReset = true;
@@ -14,12 +12,12 @@ api_block_anonymous_users();
 
 $this_section = SECTION_TRACKING;
 $export_csv = false;
-if (isset($_REQUEST['export']) && $_REQUEST['export'] == 'csv') {
+if (isset($_REQUEST['export']) && 'csv' == $_REQUEST['export']) {
     $export_csv = true;
 }
 
 $id_coach = api_get_user_id();
-if (isset($_REQUEST['id_coach']) && $_REQUEST['id_coach'] != '') {
+if (isset($_REQUEST['id_coach']) && '' != $_REQUEST['id_coach']) {
     $id_coach = (int) $_REQUEST['id_coach'];
 }
 

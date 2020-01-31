@@ -7,8 +7,6 @@ use ChamiloSession as Session;
  * This script is about deleting a course.
  * It displays a message box ('are you sure you wish to delete this course')
  * and deletes the course if the user answers affirmatively.
- *
- * @package chamilo.course_info
  */
 require_once __DIR__.'/../inc/global.inc.php';
 $this_section = SECTION_COURSES;
@@ -26,7 +24,7 @@ if (!api_is_allowed_to_edit()) {
 
 $tool_name = get_lang('Completely delete this course');
 
-if (isset($_GET['delete']) && $_GET['delete'] === 'yes') {
+if (isset($_GET['delete']) && 'yes' === $_GET['delete']) {
     CourseManager::delete_course($_course['sysCode']);
 
     // DELETE CONFIRMATION MESSAGE

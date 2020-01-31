@@ -20,8 +20,8 @@ if (isset($_POST['convert'])) {
             $allowed_extensions
         )) {
             require_once api_get_path(SYS_CODE_PATH).'lp/lp_upload.php';
-            if (isset($o_ppt) && $first_item_id != 0) {
-                if (api_get_setting('search_enabled') == 'true') {
+            if (isset($o_ppt) && 0 != $first_item_id) {
+                if ('true' == api_get_setting('search_enabled')) {
                     require_once api_get_path(LIBRARY_PATH).'specific_fields_manager.lib.php';
                     $specific_fields = get_specific_field_list();
                     foreach ($specific_fields as $specific_field) {
@@ -85,7 +85,7 @@ $form->addElement('file', 'user_file', [Display::return_icon('powerpoint_big.gif
 $form->addElement('checkbox', 'take_slide_name', '', get_lang('Use the slides names as course learning object names'));
 $options = ChamiloApi::getDocumentConversionSizes();
 $form->addElement('select', 'slide_size', get_lang('Size of the slides'), $options);
-if (api_get_setting('search_enabled') === 'true') {
+if ('true' === api_get_setting('search_enabled')) {
     require_once api_get_path(LIBRARY_PATH).'specific_fields_manager.lib.php';
     $specific_fields = get_specific_field_list();
     $form->addElement('checkbox', 'index_document', '', get_lang('Index document text?ument'));

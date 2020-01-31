@@ -5,8 +5,6 @@
  * Adds gradebook certificates to gradebook_certificate table from users
  * who have achieved the requirements but have not reviewed them yet.
  *
- * @package chamilo.cron
- *
  * @author Imanol Losada <imanol.losada@beeznest.com>
  */
 require_once __DIR__.'/../inc/global.inc.php';

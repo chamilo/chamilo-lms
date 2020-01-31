@@ -230,7 +230,7 @@ function diff($arr1, $arr2)
     foreach ($arr1 as $av) {
         if (!in_array($av, $arr2)) {
             $res[$r] = $av;
-            ++$r;
+            $r++;
         }
     }
 

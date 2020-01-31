@@ -5,8 +5,6 @@
  * List of achieved certificates by the current user.
  *
  * @author Angel Fernando Quiroz Campos <angel.quiroz@beeznest.com>
- *
- * @package chamilo.gradebook
  */
 $cidReset = true;
 
@@ -43,7 +41,7 @@ $template->assign('session_list', $sessionList);
 $templateName = $template->get_template('gradebook/my_certificates.tpl');
 $content = $template->fetch($templateName);
 
-if (api_get_setting('allow_public_certificates') === 'true') {
+if ('true' === api_get_setting('allow_public_certificates')) {
     $template->assign(
         'actions',
         Display::toolbarButton(

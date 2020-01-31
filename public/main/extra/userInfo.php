@@ -34,11 +34,11 @@ if (api_is_anonymous()) {
 $TBL_USERINFO_DEF = Database:: get_course_table(TABLE_USER_INFO_DEF);
 $TBL_USERINFO_CONTENT = Database:: get_course_table(TABLE_USER_INFO_CONTENT);
 
-if ($tool_info['visibility'] == 1) {
+if (1 == $tool_info['visibility']) {
     $interbreadcrumb[] = ['url' => 'user.php', 'name' => get_lang('Users')];
 }
 
-if ($origin != 'learnpath') { //so we are not in learnpath tool
+if ('learnpath' != $origin) { //so we are not in learnpath tool
     Display :: display_header($nameTools, "User");
     $origin = Security::remove_XSS($_GET['origin']);
 } else {
@@ -138,7 +138,7 @@ if ($allowedToEditContent) {
 }
 if (api_is_allowed_to_edit(null, true)) {
     echo '<div class="actions">';
-    if ($origin == 'users') {
+    if ('users' == $origin) {
         echo '<a href="user.php?'.api_get_cidreq().'&origin='.$origin.'">'.
             Display::return_icon('back.png', get_lang('Back to users list'), '', ICON_SIZE_MEDIUM).'</a>';
     } else {
@@ -147,7 +147,7 @@ if (api_is_allowed_to_edit(null, true)) {
     }
 
     if (!is_numeric($_GET['editMainUserInfo'])) {
-        if (api_get_setting('allow_user_course_subscription_by_course_admin') == 'true') {
+        if ('true' == api_get_setting('allow_user_course_subscription_by_course_admin')) {
             echo '<a href="userInfo.php?'.api_get_cidreq(
                 ).'&origin='.$origin.'&editMainUserInfo='.$userIdViewed.'">'.
                 Display::return_icon('edit.png', get_lang('Edit this user'), '', ICON_SIZE_MEDIUM).get_lang(
@@ -155,7 +155,7 @@ if (api_is_allowed_to_edit(null, true)) {
                 ).'</a>';
         }
     } else {
-        if (api_get_setting('allow_user_course_subscription_by_course_admin') == 'true') {
+        if ('true' == api_get_setting('allow_user_course_subscription_by_course_admin')) {
             echo '<a href="userInfo.php?'.api_get_cidreq().'&origin='.$origin.'&uInfo='.$userIdViewed.'">'.
                 Display::return_icon(
                     'user.png',
@@ -168,9 +168,9 @@ if (api_is_allowed_to_edit(null, true)) {
     echo '<a href="../mySpace/myStudents.php?'.api_get_cidreq().'&origin=user_course&student='.$userIdViewed.'&details=true&course='.$_course['id'].'">'.Display::return_icon('statistics.png', get_lang('Reporting for this user'), '', ICON_SIZE_MEDIUM).get_lang('Reporting for this user').'</a>';
     echo '</div>';
 } else {
-    if ($tool_info['visibility'] == 1) {
+    if (1 == $tool_info['visibility']) {
         echo '<div class="actions">';
-        if ($origin == 'users') {
+        if ('users' == $origin) {
             echo '<a href="user.php?'.api_get_cidreq().'&origin='.$origin.'">'.
                 Display::return_icon(
                     'back.png',
@@ -198,7 +198,7 @@ $is_session_course_coach = UserManager::is_session_course_coach(
     $current_session_id
 );
 
-if ($displayMode == "viewDefEdit") {
+if ("viewDefEdit" == $displayMode) {
     /* CATEGORIES DEFINITIONS : EDIT */
     $catToEdit = get_cat_def($_GET['editDef']);
     $edit_heading_form = new FormValidator('edit_heading_form');
@@ -214,7 +214,7 @@ if ($displayMode == "viewDefEdit") {
     $edit_heading_form->addElement('submit', 'submitDef', get_lang('Validate'));
     $edit_heading_form->setDefaults($catToEdit);
     $edit_heading_form->display();
-} elseif ($displayMode == "viewDefList") {
+} elseif ("viewDefList" == $displayMode) {
     $catList = get_cat_def_list();
     if ($catList) {
         foreach ($catList as $thisCat) {
@@ -236,7 +236,7 @@ if ($displayMode == "viewDefEdit") {
         "<input type=\"submit\" name=\"addDef\" class=\"plus\" value=\"".get_lang('Add new heading')."\" />",
     "</form>\n",
     "<center>\n";
-} elseif ($displayMode == 'viewContentEdit') {
+} elseif ('viewContentEdit' == $displayMode) {
     /* CATEGORIES CONTENTS : EDIT */
     $catToEdit = get_cat_content($userIdViewed, $_GET['editContent']);
     $content_heading_form = new FormValidator('content_heading_form');
@@ -244,7 +244,7 @@ if ($displayMode == "viewDefEdit") {
     $content_heading_form->addElement('hidden', 'catId');
     $content_heading_form->addElement('hidden', 'uInfo');
     $content_heading_form->addElement('static', null, $catToEdit['title'], htmlize($catToEdit['comment']));
-    if ($catToEdit['nbline'] == 1) {
+    if (1 == $catToEdit['nbline']) {
         $content_heading_form->addElement('text', 'content', null, ['size' => 80]);
     } else {
         $content_heading_form->addElement(
@@ -260,10 +260,10 @@ if ($displayMode == "viewDefEdit") {
     $defaults['uInfo'] = $userIdViewed;
     $content_heading_form->setDefaults($defaults);
     $content_heading_form->display();
-} elseif ($displayMode == "viewMainInfoEdit") {
+} elseif ("viewMainInfoEdit" == $displayMode) {
     $mainUserInfo = api_get_user_info($userIdViewed);
     if ($mainUserInfo) {
-        ($mainUserInfo['status'] == COURSEMANAGER) ? $courseAdminChecked = "checked" : $courseAdminChecked = "";
+        (COURSEMANAGER == $mainUserInfo['status']) ? $courseAdminChecked = "checked" : $courseAdminChecked = "";
         $image_array = UserManager::get_user_picture_path_by_id($userIdViewed, 'web', false, true);
         // get the path,width and height from original picture
         $big_image = $image_array['dir'].'big_'.$image_array['file'];
@@ -272,7 +272,7 @@ if ($displayMode == "viewDefEdit") {
         $big_image_height = $big_image_size['height'];
         $url_big_image = $big_image.'?rnd='.time();
 
-        if ($image_array['file'] == 'unknown.jpg') {
+        if ('unknown.jpg' == $image_array['file']) {
             echo '<img src="'.$image_array['dir'].$image_array['file'].'" border="1">';
         } else {
             echo '<input type="image" src="'.$image_array['dir'].$image_array['file'].'" onclick="return show_image(\''.$url_big_image.'\',\''.$big_image_width.'\',\''.$big_image_height.'\');"/>';
@@ -309,11 +309,11 @@ if ($displayMode == "viewDefEdit") {
             echo "<td>", get_lang('Teacher'), "</td>\n";
         }
         echo "<td><button class=\"save\" type=\"submit\" name=\"submit\">".get_lang('Save changes')."</button></td>\n", "</tr>", "</table>", "</form>\n";
-        if (api_get_setting('show_email_addresses') == 'true') {
+        if ('true' == api_get_setting('show_email_addresses')) {
             echo "<p>".Display:: encrypted_mailto_link($mainUserInfo['email'], $mainUserInfo['email'])."</p>";
         }
 
-        if (api_get_setting('extended_profile') == 'true') {
+        if ('true' == api_get_setting('extended_profile')) {
             if (!empty($mainUserInfo['competences'])) {
                 echo '<div style="margin-top:10px;" class="actions-message"><strong>'.get_lang('My competences').'</strong></div><div>'.$mainUserInfo['competences'].'</div>';
             }
@@ -333,7 +333,7 @@ if ($displayMode == "viewDefEdit") {
     } else {
         echo Display::return_message(get_lang('This learner is subscribed in this training through a training session. You cannot edit his information'));
     }
-} elseif ($displayMode == "viewContentList") {
+} elseif ("viewContentList" == $displayMode) {
     // default display
     $virtual_course_code = $_GET["virtual_course"];
     if (isset($virtual_course_code)) {
@@ -350,7 +350,7 @@ if ($displayMode == "viewDefEdit") {
         $big_image_height = $big_image_size['height'];
         $url_big_image = $big_image.'?rnd='.time();
 
-        if ($image_array['file'] == 'unknown.jpg') {
+        if ('unknown.jpg' == $image_array['file']) {
             echo '<img src="'.$image_array['dir'].$image_array['file'].'" border="1">';
         } else {
             echo '<input type="image" src="'.$image_array['dir'].$image_array['file'].'" onclick="return show_image(\''.$url_big_image.'\',\''.$big_image_width.'\',\''.$big_image_height.'\');"/>';
@@ -363,7 +363,7 @@ if ($displayMode == "viewDefEdit") {
         }
 
         // DISPLAY TABLE HEADING
-        if ($origin == 'learnpath') {
+        if ('learnpath' == $origin) {
             $allowedToEditDef = false;
             $is_allowedToTrack = false;
         }
@@ -380,11 +380,11 @@ if ($displayMode == "viewDefEdit") {
         "<td align=\"left\"><b>", $mainUserInfo['official_code'], "</td>";
         // DISPLAY TABLE CONTENT
         if ($current_session_id) {
-            if ($user_info_viewed['status'] == COURSEMANAGER) {
+            if (COURSEMANAGER == $user_info_viewed['status']) {
                 echo "<td> - </td>\n";
             }
         } else {
-            if ($user_info_viewed['status'] == STUDENT) {
+            if (STUDENT == $user_info_viewed['status']) {
                 echo "<td> - </td>\n";
             } else {
                 echo "<td> - </td>\n";
@@ -392,11 +392,11 @@ if ($displayMode == "viewDefEdit") {
         }
 
         echo "</tr></table>";
-        if (api_get_setting("show_email_addresses") == "true") {
+        if ("true" == api_get_setting("show_email_addresses")) {
             echo "<p>".Display::encrypted_mailto_link($mainUserInfo['email'], $mainUserInfo['email'])."</p>";
         }
 
-        if (api_get_setting('extended_profile') == 'true') {
+        if ('true' == api_get_setting('extended_profile')) {
             if (!empty($mainUserInfo['competences'])) {
                 echo '<div style="margin-top:10px;" class="actions-message"><strong>'.get_lang('My competences').'</strong></div><div>'.$mainUserInfo['competences'].'</div>';
             }
@@ -417,7 +417,7 @@ if ($displayMode == "viewDefEdit") {
         Display::return_message(get_lang('This learner is subscribed in this training through a training session. You cannot edit his information'), 'normal');
     }
 
-    if (api_get_setting('allow_user_headings') == 'true' && $allowedToEditDef) {
+    if ('true' == api_get_setting('allow_user_headings') && $allowedToEditDef) {
         // only course administrators see this line
         echo "<div align=right>",
             "<form method=\"post\" action=\"".api_get_self()."\">",

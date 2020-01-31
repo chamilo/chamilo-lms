@@ -1,9 +1,6 @@
 <?php
 /* For licensing terms, see /license.txt */
 
-/**
- * @package chamilo.webservices
- */
 require_once __DIR__.'/cm_webservice_courses.php';
 require_once __DIR__.'/cm_soap.php';
 

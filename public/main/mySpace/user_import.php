@@ -16,7 +16,7 @@ api_block_anonymous_users();
 
 $interbreadcrumb[] = ['url' => 'index.php', 'name' => get_lang('Reporting')];
 $id_session = '';
-if (isset($_GET['id_session']) && $_GET['id_session'] != '') {
+if (isset($_GET['id_session']) && '' != $_GET['id_session']) {
     $id_session = intval($_GET['id_session']);
     $interbreadcrumb[] = ['url' => 'session.php', 'name' => get_lang('Course sessions')];
     $interbreadcrumb[] = ['url' => 'course.php?id_session='.$id_session.'', 'name' => get_lang('Course')];
@@ -26,7 +26,7 @@ if (isset($_GET['id_session']) && $_GET['id_session'] != '') {
 $purification_option_for_usernames = false;
 
 // Checking whether the current coach is the admin coach.
-if (api_get_setting('add_users_by_coach') === 'true') {
+if ('true' === api_get_setting('add_users_by_coach')) {
     if (!api_is_platform_admin()) {
         if (isset($_REQUEST['id_session'])) {
             $id_session = intval($_REQUEST['id_session']);
@@ -46,10 +46,10 @@ if (api_get_setting('add_users_by_coach') === 'true') {
 
 set_time_limit(0);
 $errors = [];
-if (isset($_POST['formSent']) && $_POST['formSent'] && $_FILES['import_file']['size'] !== 0) {
+if (isset($_POST['formSent']) && $_POST['formSent'] && 0 !== $_FILES['import_file']['size']) {
     $file_type = $_POST['file_type'];
     $id_session = intval($_POST['id_session']);
-    if ($file_type == 'csv') {
+    if ('csv' == $file_type) {
         $users = MySpace::parse_csv_data($_FILES['import_file']['tmp_name']);
     } else {
         $users = MySpace::parse_xml_data($_FILES['import_file']['tmp_name']);
@@ -59,7 +59,7 @@ if (isset($_POST['formSent']) && $_POST['formSent'] && $_FILES['import_file']['s
         $errors = $results['errors'];
         $users = $results['users'];
 
-        if (count($errors) == 0) {
+        if (0 == count($errors)) {
             if (!empty($id_session)) {
                 $tbl_session_rel_course = Database::get_main_table(TABLE_MAIN_SESSION_COURSE);
                 // Selecting all the courses from the session id requested.
@@ -71,7 +71,7 @@ if (isset($_POST['formSent']) && $_POST['formSent'] && $_FILES['import_file']['s
                 }
                 $errors = MySpace::get_user_creator($users);
                 $users = MySpace::check_all_usernames($users, $course_list, $id_session);
-                if (count($errors) == 0) {
+                if (0 == count($errors)) {
                     MySpace::save_data($users, $course_list, $id_session);
                 }
             } else {
@@ -89,11 +89,11 @@ if (isset($_POST['formSent']) && $_POST['formSent'] && $_FILES['import_file']['s
 
 Display::display_header($tool_name);
 
-if (isset($_FILES['import_file']) && $_FILES['import_file']['size'] == 0 && $_POST) {
+if (isset($_FILES['import_file']) && 0 == $_FILES['import_file']['size'] && $_POST) {
     echo Display::return_message(get_lang('Required field'), 'error');
 }
 
-if (count($errors) != 0) {
+if (0 != count($errors)) {
     $error_message = '<ul>';
     foreach ($errors as $index => $error_user) {
         $error_message .= '<li><strong>'.$error_user['error'].'</strong>: ';

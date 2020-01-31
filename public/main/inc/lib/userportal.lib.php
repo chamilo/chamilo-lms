@@ -514,7 +514,7 @@ class IndexManager
                     if (($user_identified && COURSE_VISIBILITY_OPEN_PLATFORM == $course['visibility']) ||
                         (COURSE_VISIBILITY_OPEN_WORLD == $course['visibility'])
                     ) {
-                        ++$courses_shown;
+                        $courses_shown++;
                         $courses_list_string .= "<li>";
                         $courses_list_string .= '<a href="'.$web_course_path.$course['directory'].'/">'.$course['title'].'</a><br />';
                         $course_details = [];
@@ -541,7 +541,7 @@ class IndexManager
                     // 4. the user is logged in and the user is course admin of te course (regardless of the course visibility setting);
                     // 5. the user is the platform admin api_is_platform_admin().
 
-                    ++$courses_shown;
+                    $courses_shown++;
                     $courses_list_string .= "<li>";
                     if (COURSE_VISIBILITY_OPEN_WORLD == $course['visibility']
                         || ($user_identified && COURSE_VISIBILITY_OPEN_PLATFORM == $course['visibility'])
@@ -1505,7 +1505,7 @@ class IndexManager
                                             $html_courses_session[] = $course_session;
                                         }
                                     }
-                                    ++$count_courses_session;
+                                    $count_courses_session++;
                                 }
                             }
 
@@ -1590,7 +1590,7 @@ class IndexManager
                                     );
                                 }
                                 $listSession[] = $params;
-                                ++$sessionCount;
+                                $sessionCount++;
                             }
                         }
                     } else {
@@ -1674,8 +1674,8 @@ class IndexManager
                                                 $html_courses_session[] = $c[1];
                                             }
                                         }
-                                        ++$count_courses_session;
-                                        ++$count;
+                                        $count_courses_session++;
+                                        $count++;
                                     }
                                 }
 
@@ -1729,7 +1729,7 @@ class IndexManager
                                             $this->tpl->get_template('user_portal/classic_session.tpl')
                                         );
                                     }
-                                    ++$sessionCount;
+                                    $sessionCount++;
                                 }
                             }
                         }
@@ -1913,7 +1913,7 @@ class IndexManager
                     'userCatId' => $userCategoryId,
                     'userCatTitle' => $userCatTitle,
                 ];
-                ++$courseCount;
+                $courseCount++;
             }
             usort($listCoursesInfo, 'self::compareByCourse');
         }
@@ -1973,7 +1973,7 @@ class IndexManager
                                 $coursesInfo
                             );
                             $htmlSession .= '</div>';
-                            ++$sessionCount;
+                            $sessionCount++;
                         }
                         $htmlSession .= ''; // end session block
                         $htmlSessionCategory .= $htmlSession;
@@ -2137,7 +2137,7 @@ class IndexManager
                             $result20 += 10;
                         }
                     } else {
-                        ++$countCoursesPassedNoDependency;
+                        $countCoursesPassedNoDependency++;
                         if ($result80 < 80) {
                             $result80 += 10;
                         }
@@ -2174,7 +2174,7 @@ class IndexManager
                                 true
                             );
                             if ($score) {
-                                ++$countDependenciesPassed;
+                                $countDependenciesPassed++;
                             }
                         }
                     }

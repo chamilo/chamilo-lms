@@ -42,7 +42,7 @@ class CoursesAndSessionsCatalog
     {
         $catalogShow = (int) api_get_setting('catalog_show_courses_sessions');
 
-        if ($catalogShow == CATALOG_SESSIONS || $catalogShow == CATALOG_COURSES_SESSIONS) {
+        if (CATALOG_SESSIONS == $catalogShow || CATALOG_COURSES_SESSIONS == $catalogShow) {
             return true;
         }
 
@@ -60,7 +60,7 @@ class CoursesAndSessionsCatalog
     {
         $catalogShow = (int) api_get_setting('catalog_show_courses_sessions');
 
-        if ($catalogShow == CATALOG_COURSES || $catalogShow == CATALOG_COURSES_SESSIONS) {
+        if (CATALOG_COURSES == $catalogShow || CATALOG_COURSES_SESSIONS == $catalogShow) {
             return true;
         }
 
@@ -350,7 +350,7 @@ class CoursesAndSessionsCatalog
                     $id_in = "$id";
                 }
             }
-            if ($id_in === null) {
+            if (null === $id_in) {
                 return [];
             }
             $sql = "SELECT *, id as real_id FROM $tbl_course WHERE id IN($id_in)";
@@ -362,7 +362,7 @@ class CoursesAndSessionsCatalog
             $joinCategory = '';
 
             if (empty($listCode)) {
-                if ($category_code === 'NONE') {
+                if ('NONE' === $category_code) {
                     $conditionCode .= " category_id IS NULL";
                 } else {
                     $conditionCode .= " course_category.code = '$category_code' ";
@@ -376,7 +376,7 @@ class CoursesAndSessionsCatalog
                 $conditionCode .= " course_category.code = '$category_code' ";
             }
 
-            if (empty($category_code) || $category_code == 'ALL') {
+            if (empty($category_code) || 'ALL' == $category_code) {
                 $sql = "SELECT *, id as real_id
                         FROM $tbl_course course
                         WHERE
@@ -400,7 +400,7 @@ class CoursesAndSessionsCatalog
                 $tbl_url_rel_course = Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_COURSE);
 
                 $urlCondition = ' access_url_id = '.$urlId.' ';
-                if ($category_code != 'ALL') {
+                if ('ALL' != $category_code) {
                     $sql = "SELECT *, course.id real_id, course_category.code AS category_code FROM $tbl_course as course
                             $joinCategory
                             INNER JOIN $tbl_url_rel_course as url_rel_course
@@ -435,7 +435,7 @@ class CoursesAndSessionsCatalog
                 api_get_utc_datetime(time() - (30 * 86400))
             );
 
-            if ($row['tutor_name'] == '0') {
+            if ('0' == $row['tutor_name']) {
                 $row['tutor_name'] = get_lang('No administrator');
             }
             $point_info = CourseManager::get_course_ranking($row['id'], 0);
@@ -498,7 +498,7 @@ class CoursesAndSessionsCatalog
 
         if (api_is_multiple_url_enabled()) {
             $urlId = api_get_current_access_url_id();
-            if ($urlId != -1) {
+            if (-1 != $urlId) {
                 $tbl_url_rel_course = Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_COURSE);
 
                 $urlCondition = ' access_url_id = '.$urlId.' AND';
@@ -702,7 +702,7 @@ class CoursesAndSessionsCatalog
 
         $sessionsToBrowse = [];
         foreach ($sessions as $session) {
-            if ($session->getNbrCourses() === 0) {
+            if (0 === $session->getNbrCourses()) {
                 continue;
             }
             $sessionsToBrowse[] = $session;
@@ -712,7 +712,7 @@ class CoursesAndSessionsCatalog
     }
 
     /**
-     * Search sessions by the title
+     * Search sessions by the title.
      *
      * @param string $keyword
      * @param array  $limit   Limit info
@@ -754,7 +754,7 @@ class CoursesAndSessionsCatalog
 
         $sessionsToBrowse = [];
         foreach ($sessions as $session) {
-            if ($session->getNbrCourses() === 0) {
+            if (0 === $session->getNbrCourses()) {
                 continue;
             }
             $sessionsToBrowse[] = $session;
@@ -814,7 +814,7 @@ class CoursesAndSessionsCatalog
         $list = [];
         $row = [];
 
-        if ($code != 'ALL' and $code != 'NONE') {
+        if ('ALL' != $code and 'NONE' != $code) {
             foreach ($allCategories as $category) {
                 if ($category['code'] === $code) {
                     $list = self::buildCourseCategoryTree($allCategories, $category['code'], 0);

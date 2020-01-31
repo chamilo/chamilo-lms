@@ -1,8 +1,6 @@
 <?php
 /* For licensing terms, see /license.txt */
-/**
- * @package chamilo.webservices
- */
+
 require_once __DIR__.'/../inc/global.inc.php';
 
 /**
@@ -159,7 +157,7 @@ class WS
      */
     protected function getUserId($user_id_field_name, $user_id_value)
     {
-        if ($user_id_field_name == "chamilo_user_id") {
+        if ("chamilo_user_id" == $user_id_field_name) {
             if (UserManager::is_user_id_valid(intval($user_id_value))) {
                 return intval($user_id_value);
             } else {
@@ -170,7 +168,7 @@ class WS
                 $user_id_value,
                 $user_id_field_name
             );
-            if ($user_id == 0) {
+            if (0 == $user_id) {
                 return new WSError(100, "User not found");
             } else {
                 return $user_id;
@@ -190,10 +188,10 @@ class WS
      */
     protected function getCourseId($course_id_field_name, $course_id_value)
     {
-        if ($course_id_field_name == "chamilo_course_id") {
-            if (CourseManager::get_course_code_from_course_id(
+        if ("chamilo_course_id" == $course_id_field_name) {
+            if (null != CourseManager::get_course_code_from_course_id(
                     intval($course_id_value)
-                ) != null
+                )
             ) {
                 return intval($course_id_value);
             } else {
@@ -224,7 +222,7 @@ class WS
      */
     protected function getSessionId($session_id_field_name, $session_id_value)
     {
-        if ($session_id_field_name == "chamilo_session_id") {
+        if ("chamilo_session_id" == $session_id_field_name) {
             $session = SessionManager::fetch((int) $session_id_value);
             if (!empty($session)) {
                 return intval($session_id_value);
@@ -236,7 +234,7 @@ class WS
                 $session_id_value,
                 $session_id_field_name
             );
-            if ($session_id == 0) {
+            if (0 == $session_id) {
                 return new WSError(300, "Session not found");
             } else {
                 return $session_id;

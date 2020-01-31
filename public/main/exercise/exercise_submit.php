@@ -20,7 +20,6 @@ use ChamiloSession as Session;
  * Notice : This script is also used to show a question before modifying it by
  * the administrator
  *
- *
  * @author Olivier Brouckaert
  * @author Julio Montoya <gugli100@gmail.com>
  *            Fill in blank option added (2008)
@@ -432,7 +431,7 @@ if (empty($exercise_stat_info)) {
                 if ($last['question_id'] == $question) {
                     break;
                 }
-                ++$count;
+                $count++;
             }
             $current_question = $count;
         }
@@ -762,7 +761,7 @@ if (null === $current_question) {
         $current_question = $objExercise->getPositionInCompressedQuestionList($latestQuestionId);
     }
 } else {
-    ++$current_question;
+    $current_question++;
 }
 
 if (0 != $question_count) {
@@ -988,8 +987,8 @@ if (2 == $reminder) {
 
     if (!empty($myRemindList)) {
         // Checking which questions we are going to call from the remind list
-        for ($i = 0; $i < count($data_tracking); ++$i) {
-            for ($j = 0; $j < count($myRemindList); ++$j) {
+        for ($i = 0; $i < count($data_tracking); $i++) {
+            for ($j = 0; $j < count($myRemindList); $j++) {
                 if (!empty($remind_question_id)) {
                     if ($remind_question_id == $myRemindList[$j]) {
                         if ($remind_question_id == $data_tracking[$i]) {
@@ -1053,7 +1052,7 @@ if (!empty($error)) {
     $i = 0;
     if (!empty($questionList)) {
         foreach ($questionList as $questionId) {
-            ++$i;
+            $i++;
             $objQuestionTmp = Question::read($questionId);
             // for sequential exercises
 
@@ -1065,7 +1064,7 @@ if (!empty($error)) {
                     if (HOT_SPOT == $objQuestionTmp->selectType() ||
                         HOT_SPOT_DELINEATION == $objQuestionTmp->selectType()
                     ) {
-                        ++$number_of_hotspot_questions;
+                        $number_of_hotspot_questions++;
                     }
 
                     break;
@@ -1074,7 +1073,7 @@ if (!empty($error)) {
                 if (HOT_SPOT == $objQuestionTmp->selectType() ||
                     HOT_SPOT_DELINEATION == $objQuestionTmp->selectType()
                 ) {
-                    ++$number_of_hotspot_questions;
+                    $number_of_hotspot_questions++;
                 }
             }
         }
@@ -1396,7 +1395,7 @@ if (!empty($error)) {
         if (ONE_PER_PAGE == $objExercise->type) {
             // if it is not the right question, goes to the next loop iteration
             if ($current_question != $i) {
-                ++$i;
+                $i++;
 
                 continue;
             } else {
@@ -1409,7 +1408,7 @@ if (!empty($error)) {
                         // destruction of the Question object
                         unset($objQuestionTmp);
                         echo Display::return_message(get_lang('You already answered the question'));
-                        ++$i;
+                        $i++;
 
                         break;
                     }
@@ -1564,7 +1563,7 @@ if (!empty($error)) {
         echo Display::div($exerciseActions, ['class' => 'form-actions']);
         echo '</div>';
 
-        ++$i;
+        $i++;
         // for sequential exercises
         if (ONE_PER_PAGE == $objExercise->type) {
             // quits the loop

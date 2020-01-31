@@ -1,9 +1,6 @@
 <?php
 /* For licensing terms, see /license.txt */
 
-/**
- * @package chamilo.gradebook
- */
 require_once __DIR__.'/../inc/global.inc.php';
 
 api_block_anonymous_users();
@@ -60,7 +57,7 @@ if ($form->validate()) {
         $cat->setGenerateCertificates(false);
     }
 
-    if ($values['hid_parent_id'] == 0) {
+    if (0 == $values['hid_parent_id']) {
         $cat->set_certificate_min_score($values['certif_min_score']);
     }
 

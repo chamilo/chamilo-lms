@@ -1,8 +1,6 @@
 <?php
 /* For licensing terms, see /license.txt */
-/**
- * @package chamilo.webservices
- */
+
 require_once __DIR__.'/../inc/global.inc.php';
 require_once __DIR__.'/webservice.php';
 
@@ -537,7 +535,7 @@ class WSCourse extends WS
     ) {
         // Add the original course id field name and value to the extra fields if needed
         $extras_associative = [];
-        if ($course_id_field_name != "chamilo_course_id") {
+        if ("chamilo_course_id" != $course_id_field_name) {
             $extras_associative[$course_id_field_name] = $course_id_value;
         }
         foreach ($extras as $extra) {
@@ -550,7 +548,7 @@ class WSCourse extends WS
         if ($course_admin_id instanceof WSError) {
             return $course_admin_id;
         }
-        if ($wanted_code == '') {
+        if ('' == $wanted_code) {
             $wanted_code = CourseManager::generate_course_code($title);
         }
         $result = create_course(
@@ -636,13 +634,13 @@ class WSCourse extends WS
             if (!empty($language)) {
                 $attributes['course_language'] = $language;
             }
-            if ($visibility != '') {
+            if ('' != $visibility) {
                 $attributes['visibility'] = (int) $visibility;
             }
-            if ($subscribe != '') {
+            if ('' != $subscribe) {
                 $attributes['subscribe'] = (int) $subscribe;
             }
-            if ($unsubscribe != '') {
+            if ('' != $unsubscribe) {
                 $attributes['unsubscribe'] = (int) $unsubscribe;
             }
             if (!empty($visual_code)) {
@@ -706,7 +704,7 @@ class WSCourse extends WS
                 $course_code = CourseManager::get_course_code_from_course_id(
                     $course_id
                 );
-                if ($state == 0) {
+                if (0 == $state) {
                     // Unsubscribe user
                     CourseManager::unsubscribe_user($user_id, $course_code);
 

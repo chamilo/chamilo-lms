@@ -6,8 +6,6 @@
  *
  * @author  José Loguercio <jose.loguercio@beeznest.com>,
  * @author  Julio Montoya <gugli100@gmail.com>
- *
- * @package chamilo.library
  */
 class MoodleImport
 {
@@ -69,7 +67,7 @@ class MoodleImport
 
                 if (!empty($packageContent)) {
                     foreach ($packageContent as $index => $value) {
-                        if ($value['filename'] == 'moodle_backup.xml') {
+                        if ('moodle_backup.xml' == $value['filename']) {
                             $mainFileKey = $index;
                             break;
                         }
@@ -220,7 +218,7 @@ class MoodleImport
 
                     // Match shuffle question with chamilo
                     if (isset($moduleValues['shufflequestions']) &&
-                        (int) $moduleValues['shufflequestions'] === 1
+                        1 === (int) $moduleValues['shufflequestions']
                     ) {
                         $exercise->setRandom(-1);
                     } else {
@@ -230,7 +228,7 @@ class MoodleImport
                     // @todo divide to minutes
                     $exercise->updateExpiredTime((int) $moduleValues['timelimit']);
 
-                    if ($moduleValues['questionsperpage'] == 1) {
+                    if (1 == $moduleValues['questionsperpage']) {
                         $exercise->updateType(2);
                     } else {
                         $exercise->updateType(1);
@@ -280,7 +278,7 @@ class MoodleImport
                         $questionInstance->updateCategory(0);
 
                         //Save normal question if NOT media
-                        if ($questionInstance->type != MEDIA_QUESTION) {
+                        if (MEDIA_QUESTION != $questionInstance->type) {
                             $questionInstance->save($exercise);
 
                             // modify the exercise
@@ -516,10 +514,10 @@ class MoodleImport
             }
             $isThisItemThatIWant = false;
             foreach ($activity->childNodes as $item) {
-                if (!$isThisItemThatIWant && $item->nodeName == 'contenthash') {
+                if (!$isThisItemThatIWant && 'contenthash' == $item->nodeName) {
                     $currentItem['contenthash'] = $item->nodeValue;
                 }
-                if ($item->nodeName == 'contextid' &&
+                if ('contextid' == $item->nodeName &&
                     (int) $item->nodeValue == (int) $contextId &&
                     !$isThisItemThatIWant
                 ) {
@@ -527,22 +525,22 @@ class MoodleImport
                     continue;
                 }
 
-                if ($isThisItemThatIWant && $item->nodeName == 'filename') {
+                if ($isThisItemThatIWant && 'filename' == $item->nodeName) {
                     $currentItem['filename'] = $item->nodeValue;
                 }
 
-                if ($isThisItemThatIWant && $item->nodeName == 'filesize') {
+                if ($isThisItemThatIWant && 'filesize' == $item->nodeName) {
                     $currentItem['filesize'] = $item->nodeValue;
                 }
 
-                if ($isThisItemThatIWant && $item->nodeName == 'mimetype' &&
-                    $item->nodeValue == 'document/unknown'
+                if ($isThisItemThatIWant && 'mimetype' == $item->nodeName &&
+                    'document/unknown' == $item->nodeValue
                 ) {
                     break;
                 }
 
-                if ($isThisItemThatIWant && $item->nodeName == 'mimetype' &&
-                    $item->nodeValue !== 'document/unknown'
+                if ($isThisItemThatIWant && 'mimetype' == $item->nodeName &&
+                    'document/unknown' !== $item->nodeValue
                 ) {
                     $currentItem['mimetype'] = $item->nodeValue;
                     break 2;
@@ -584,7 +582,7 @@ class MoodleImport
             $questionType = '';
             foreach ($question->childNodes as $item) {
                 $currentItem[$item->nodeName] = $item->nodeValue;
-                if ($item->nodeName == 'qtype') {
+                if ('qtype' == $item->nodeName) {
                     $questionType = $item->nodeValue;
                 }
 
@@ -608,7 +606,7 @@ class MoodleImport
                     foreach ($typeValues->item($i)->childNodes as $properties) {
                         $currentItem[$questionType.'_values'][$properties->nodeName] = $properties->nodeValue;
 
-                        if ($properties->nodeName != 'sequence') {
+                        if ('sequence' != $properties->nodeName) {
                             continue;
                         }
 
@@ -1077,27 +1075,27 @@ class MoodleImport
 
             if ($activity->childNodes->length) {
                 foreach ($activity->childNodes as $item) {
-                    if ($item->nodeName == 'component' && $item->nodeValue == 'mod_resource') {
+                    if ('component' == $item->nodeName && 'mod_resource' == $item->nodeValue) {
                         $thisIsAnInvalidItem = true;
                     }
 
-                    if ($item->nodeName == 'contenthash') {
+                    if ('contenthash' == $item->nodeName) {
                         $currentItem['contenthash'] = $item->nodeValue;
                     }
 
-                    if ($item->nodeName == 'filename') {
+                    if ('filename' == $item->nodeName) {
                         $currentItem['filename'] = $item->nodeValue;
                     }
 
-                    if ($item->nodeName == 'filesize') {
+                    if ('filesize' == $item->nodeName) {
                         $currentItem['filesize'] = $item->nodeValue;
                     }
 
-                    if ($item->nodeName == 'mimetype' && $item->nodeValue == 'document/unknown') {
+                    if ('mimetype' == $item->nodeName && 'document/unknown' == $item->nodeValue) {
                         $thisIsAnInvalidItem = true;
                     }
 
-                    if ($item->nodeName == 'mimetype' && $item->nodeValue !== 'document/unknown') {
+                    if ('mimetype' == $item->nodeName && 'document/unknown' !== $item->nodeValue) {
                         $currentItem['mimetype'] = $item->nodeValue;
                     }
                 }

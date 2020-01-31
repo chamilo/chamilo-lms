@@ -115,9 +115,9 @@ class survey_question
             ['align' => 'middle', 'height' => '22px']
         ).' ';
 
-        if ($action == 'add') {
+        if ('add' == $action) {
             $toolName .= get_lang('Add a question').': ';
-        } elseif ($action == 'edit') {
+        } elseif ('edit' == $action) {
             $toolName .= get_lang('Edit question').': ';
         }
 
@@ -164,7 +164,7 @@ class survey_question
         }
 
         // When survey type = 1??
-        if ($surveyData['survey_type'] == 1) {
+        if (1 == $surveyData['survey_type']) {
             $table_survey_question_group = Database::get_course_table(TABLE_SURVEY_QUESTION_GROUP);
             $sql = 'SELECT id,name FROM '.$table_survey_question_group.'
                     WHERE survey_id = '.(int) $_GET['survey_id'].'
@@ -204,12 +204,12 @@ class survey_question
 			<fieldset style="border:1px solid black"><legend>'.get_lang('Condition').'</legend>
 
 			<b>'.get_lang('Primary').'</b><br />
-			'.'<input type="radio" name="choose" value="1" '.(($formData['choose'] == 1) ? 'checked' : '').
+			'.'<input type="radio" name="choose" value="1" '.((1 == $formData['choose']) ? 'checked' : '').
                 '><select name="assigned">'.$grouplist.'</select><br />';
 
             $this->html .= '
 			<b>'.get_lang('Secondary').'</b><br />
-			'.'<input type="radio" name="choose" value="2" '.(($formData['choose'] == 2) ? 'checked' : '').
+			'.'<input type="radio" name="choose" value="2" '.((2 == $formData['choose']) ? 'checked' : '').
                 '><select name="assigned1">'.$grouplist1.'</select> '.
                 '<select name="assigned2">'.$grouplist2.'</select>'
                 .'</fieldset><br />';
@@ -395,7 +395,7 @@ class survey_question
                 $formData
             );
 
-            if ($message == 'QuestionAdded' || $message == 'QuestionUpdated') {
+            if ('QuestionAdded' == $message || 'QuestionUpdated' == $message) {
                 header('Location: '.api_get_path(WEB_CODE_PATH).'survey/survey.php?survey_id='.intval($_GET['survey_id']).'&message='.$message.'&'.api_get_cidreq());
                 exit;
             }

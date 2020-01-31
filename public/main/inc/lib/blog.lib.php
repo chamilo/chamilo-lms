@@ -125,7 +125,7 @@ class Blog
         $res = Database::query($sql);
         $info_count = Database::result($res, 0, 0);
 
-        if ($info_count == 0) {
+        if (0 == $info_count) {
             // Create the blog
             $params = [
                 'blog_id' => 0,
@@ -687,7 +687,7 @@ class Blog
 
         $tool = 'BLOG_'.$blog_id;
 
-        if ($articleDelete == 'on') {
+        if ('on' == $articleDelete) {
             $sql = "INSERT INTO $tbl_tasks_permissions ( c_id,  task_id, tool, action)
                     VALUES ($course_id, $task_id, '$tool', 'article_delete')";
             Database::query($sql);
@@ -700,7 +700,7 @@ class Blog
             }
         }
 
-        if ($articleEdit == 'on') {
+        if ('on' == $articleEdit) {
             $sql = "
                 INSERT INTO $tbl_tasks_permissions (c_id, task_id, tool, action ) 
                 VALUES ($course_id, $task_id, '$tool', 'article_edit')";
@@ -713,7 +713,7 @@ class Blog
             }
         }
 
-        if ($commentsDelete == 'on') {
+        if ('on' == $commentsDelete) {
             $sql = "
                 INSERT INTO $tbl_tasks_permissions (c_id, task_id, tool, action )
                 VALUES ($course_id, $task_id, '$tool', 'article_comments_delete')";
@@ -774,7 +774,7 @@ class Blog
                 WHERE c_id = $course_id AND task_id = $task_id";
         Database::query($sql);
 
-        if ($articleDelete == 'on') {
+        if ('on' == $articleDelete) {
             $sql = "INSERT INTO $tbl_tasks_permissions ( c_id, task_id, tool, action)
                     VALUES ($course_id, $task_id, '$tool', 'article_delete')";
             Database::query($sql);
@@ -786,7 +786,7 @@ class Blog
             }
         }
 
-        if ($articleEdit == 'on') {
+        if ('on' == $articleEdit) {
             $sql = "INSERT INTO $tbl_tasks_permissions (c_id, task_id, tool, action) 
                     VALUES ($course_id, $task_id, '$tool', 'article_edit')";
             Database::query($sql);
@@ -798,7 +798,7 @@ class Blog
             }
         }
 
-        if ($commentsDelete == 'on') {
+        if ('on' == $commentsDelete) {
             $sql = "INSERT INTO $tbl_tasks_permissions (c_id, task_id, tool, action)
                     VALUES ($course_id, $task_id, '$tool', 'article_comments_delete')";
             Database::query($sql);
@@ -929,7 +929,7 @@ class Blog
         $visibility = $blog['visibility'];
         $title = $blog['blog_name'];
 
-        if ($visibility == 1) {
+        if (1 == $visibility) {
             // Change visibility state, remove from course home.
             $sql = "UPDATE $tbl_blogs SET visibility = '0'
                     WHERE c_id = $course_id AND blog_id ='".(int) $blog_id."' LIMIT 1";
@@ -1056,7 +1056,7 @@ class Blog
 
             return $listArticle;
         } else {
-            if ($filter == '1=1') {
+            if ('1=1' == $filter) {
                 return get_lang('There are no tasks in this project. If you are the manager of this project, click on  link New task to write an task.');
             } else {
                 return get_lang('No tasks have been found. Check the word spelling or try another search.');
@@ -1337,7 +1337,7 @@ class Blog
         $type = Database::escape_string($type);
         $html = null;
 
-        if ($type == 'post') {
+        if ('post' == $type) {
             // Check if the user has already rated this post
             $sql = "SELECT rating_id FROM $tbl_blogs_rating
                     WHERE c_id = $course_id AND
@@ -1347,7 +1347,7 @@ class Blog
                     AND user_id = ".$_user['user_id'];
             $result = Database::query($sql);
             // Add rating
-            if (Database::num_rows($result) == 0) {
+            if (0 == Database::num_rows($result)) {
                 $html .= '<form class="form-horizontal" method="get" action="blog.php" id="frm_rating_'.$type.'_'.$post_id.'" name="frm_rating_'.$type.'_'.$post_id.'">';
                 $html .= '<div class="form-group">';
                 $html .= '<label class="col-sm-3 control-label">'.get_lang('Rate this task').'</label>';
@@ -1371,7 +1371,7 @@ class Blog
                     AND rating_type = '$type'
                     AND user_id = ".$_user['user_id'];
             $result = Database::query($sql);
-            if (Database::num_rows($result) == 0) {
+            if (0 == Database::num_rows($result)) {
                 $html .= '<form class="form-horizontal" method="get" action="blog.php" id="frm_rating_'.$type.'_'.$comment_id.'" name="frm_rating_'.$type.'_'.$comment_id.'">';
                 $html .= '<div class="form-group">';
                 $html .= '<label class="col-sm-3 control-label">'.get_lang('Rate this task').'</label>';
@@ -1548,7 +1548,7 @@ class Blog
         $result = Database::query($sql);
 
         // Add rating
-        if (Database::num_rows($result) == 0) {
+        if (0 == Database::num_rows($result)) {
             $sql = "INSERT INTO $tbl_blogs_rating (c_id, blog_id, rating_type, item_id, user_id, rating )
                     VALUES ($course_id, $blog_id, '$type', $item_id, ".$_user['user_id'].", '$rating')";
             Database::query($sql);
@@ -1744,11 +1744,11 @@ class Blog
 
             while ($task = Database::fetch_array($result)) {
                 $counter++;
-                $css_class = (($counter % 2) == 0) ? "row_odd" : "row_even";
-                $delete_icon = $task['system_task'] == '1' ? "delete_na.png" : "delete.png";
-                $delete_title = $task['system_task'] == '1' ? get_lang('This is a preset task. You can\'t delete a preset task.') : get_lang('Delete this task');
-                $delete_link = $task['system_task'] == '1' ? '#' : api_get_self().'?action=manage_tasks&blog_id='.$task['blog_id'].'&do=delete&task_id='.$task['task_id'].'&'.api_get_cidreq();
-                $delete_confirm = ($task['system_task'] == '1') ? '' : 'onclick="javascript:if(!confirm(\''.addslashes(
+                $css_class = (0 == ($counter % 2)) ? "row_odd" : "row_even";
+                $delete_icon = '1' == $task['system_task'] ? "delete_na.png" : "delete.png";
+                $delete_title = '1' == $task['system_task'] ? get_lang('This is a preset task. You can\'t delete a preset task.') : get_lang('Delete this task');
+                $delete_link = '1' == $task['system_task'] ? '#' : api_get_self().'?action=manage_tasks&blog_id='.$task['blog_id'].'&do=delete&task_id='.$task['task_id'].'&'.api_get_cidreq();
+                $delete_confirm = ('1' == $task['system_task']) ? '' : 'onclick="javascript:if(!confirm(\''.addslashes(
                         api_htmlentities(get_lang("Please confirm your choice"), ENT_QUOTES, $charset)
                     ).'\')) return false;"';
 
@@ -1819,11 +1819,11 @@ class Blog
 
         while ($assignment = Database::fetch_array($result)) {
             $counter++;
-            $css_class = (($counter % 2) == 0) ? "row_odd" : "row_even";
-            $delete_icon = ($assignment['system_task'] == '1') ? "delete_na.png" : "delete.png";
-            $delete_title = ($assignment['system_task'] == '1') ? get_lang('This is a preset task. You can\'t delete a preset task.') : get_lang('Delete this task');
-            $delete_link = ($assignment['system_task'] == '1') ? '#' : api_get_self().'?action=manage_tasks&blog_id='.$assignment['blog_id'].'&do=delete&task_id='.$assignment['task_id'].'&'.api_get_cidreq();
-            $delete_confirm = ($assignment['system_task'] == '1') ? '' : 'onclick="javascript:if(!confirm(\''.addslashes(
+            $css_class = (0 == ($counter % 2)) ? "row_odd" : "row_even";
+            $delete_icon = ('1' == $assignment['system_task']) ? "delete_na.png" : "delete.png";
+            $delete_title = ('1' == $assignment['system_task']) ? get_lang('This is a preset task. You can\'t delete a preset task.') : get_lang('Delete this task');
+            $delete_link = ('1' == $assignment['system_task']) ? '#' : api_get_self().'?action=manage_tasks&blog_id='.$assignment['blog_id'].'&do=delete&task_id='.$assignment['task_id'].'&'.api_get_cidreq();
+            $delete_confirm = ('1' == $assignment['system_task']) ? '' : 'onclick="javascript:if(!confirm(\''.addslashes(
                     api_htmlentities(get_lang("Please confirm your choice"), ENT_QUOTES, $charset)
                 ).'\')) return false;"';
 
@@ -2249,7 +2249,7 @@ class Blog
         $result = Database::query($sql);
         $row = Database::fetch_assoc($result);
 
-        if ($row['number'] == 0) {
+        if (0 == $row['number']) {
             $sql = "
                 INSERT INTO ".$table." (
                     c_id,
@@ -2311,8 +2311,8 @@ class Blog
         $result = Database::query($sql);
         $row = Database::fetch_assoc($result);
 
-        if ($row['number'] == 0 ||
-            ($row['number'] != 0 && $task_id == $old_task_id && $user_id == $old_user_id)
+        if (0 == $row['number'] ||
+            (0 != $row['number'] && $task_id == $old_task_id && $user_id == $old_user_id)
         ) {
             $sql = "UPDATE $tbl_blogs_tasks_rel_user
                 SET
@@ -2365,7 +2365,7 @@ class Blog
         $return = '<span class="blogpost_title">'.get_lang('TaskArticle').' "'.stripslashes($row['title']).'"</span>';
         $return .= '<span style="font-style: italic;"">'.stripslashes($row['description']).'</span><br><br>';
 
-        if (Database::num_rows($result) == 0) {
+        if (0 == Database::num_rows($result)) {
             $return .= get_lang('There are no tasks in this project. If you are the manager of this project, click on  link New task to write an task.');
 
             return $return;
@@ -2479,7 +2479,7 @@ class Blog
             if (!in_array($user['user_id'], $blog_member_ids)) {
                 $a_infosUser = api_get_user_info($user['user_id']);
                 $row = [];
-                $row[] = '<input type="checkbox" name="user[]" value="'.$a_infosUser['user_id'].'" '.((isset($_GET['selectall']) && $_GET['selectall'] == "subscribe") ? ' checked="checked" ' : '').'/>';
+                $row[] = '<input type="checkbox" name="user[]" value="'.$a_infosUser['user_id'].'" '.((isset($_GET['selectall']) && "subscribe" == $_GET['selectall']) ? ' checked="checked" ' : '').'/>';
                 $username = api_htmlentities(sprintf(get_lang('Login: %s'), $a_infosUser["username"]), ENT_QUOTES);
                 if ($is_western_name_order) {
                     $row[] = $a_infosUser["firstname"];
@@ -2590,7 +2590,7 @@ class Blog
         $user_data = [];
         while ($myrow = Database::fetch_array($sql_result)) {
             $row = [];
-            $row[] = '<input type="checkbox" name="user[]" value="'.$myrow['user_id'].'" '.((isset($_GET['selectall']) && $_GET['selectall'] == "unsubscribe") ? ' checked="checked" ' : '').'/>';
+            $row[] = '<input type="checkbox" name="user[]" value="'.$myrow['user_id'].'" '.((isset($_GET['selectall']) && "unsubscribe" == $_GET['selectall']) ? ' checked="checked" ' : '').'/>';
             $username = api_htmlentities(sprintf(get_lang('Login: %s'), $myrow["username"]), ENT_QUOTES);
             if ($is_western_name_order) {
                 $row[] = $myrow["firstname"];
@@ -2625,7 +2625,7 @@ class Blog
                 $task .= stripslashes($r['task']).', ';
             }
             //echo $task;
-            $task = (api_strlen(trim($task)) != 0) ? api_substr($task, 0, api_strlen($task) - 2) : get_lang('Reader');
+            $task = (0 != api_strlen(trim($task))) ? api_substr($task, 0, api_strlen($task) - 2) : get_lang('Reader');
             $row[] = $task;
             //Link to register users
 
@@ -2725,7 +2725,7 @@ class Blog
         //Handle leap year
         $numberofdays = [0, 31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31];
 
-        if (($year % 400 == 0) or ($year % 4 == 0 and $year % 100 != 0)) {
+        if ((0 == $year % 400) or (0 == $year % 4 and 0 != $year % 100)) {
             $numberofdays[2] = 29;
         }
 
@@ -2734,13 +2734,13 @@ class Blog
         $monthName = $MonthsLong[$month - 1];
 
         //Start the week on monday
-        $startdayofweek = $dayone['wday'] != 0 ? ($dayone['wday'] - 1) : 6;
+        $startdayofweek = 0 != $dayone['wday'] ? ($dayone['wday'] - 1) : 6;
         $blogId = isset($_GET['blog_id']) ? intval($_GET['blog_id']) : null;
         $filter = isset($_GET['filter']) ? Security::remove_XSS($_GET['filter']) : null;
         $backwardsURL = api_get_self(
-            )."?blog_id=".$blogId."&filter=".$filter."&month=".($month == 1 ? 12 : $month - 1)."&year=".($month == 1 ? $year - 1 : $year);
+            )."?blog_id=".$blogId."&filter=".$filter."&month=".(1 == $month ? 12 : $month - 1)."&year=".(1 == $month ? $year - 1 : $year);
         $forewardsURL = api_get_self(
-            )."?blog_id=".$blogId."&filter=".$filter."&month=".($month == 12 ? 1 : $month + 1)."&year=".($month == 12 ? $year + 1 : $year);
+            )."?blog_id=".$blogId."&filter=".$filter."&month=".(12 == $month ? 1 : $month + 1)."&year=".(12 == $month ? $year + 1 : $year);
 
         // Get posts for this month
         $sql = "SELECT post.*, DAYOFMONTH(date_creation) as post_day, user.lastname, user.firstname
@@ -2818,7 +2818,7 @@ class Blog
         while ($curday <= $numberofdays[$month]) {
             $html .= '<tr>';
             for ($ii = 0; $ii < 7; $ii++) {
-                if (($curday == -1) && ($ii == $startdayofweek)) {
+                if ((-1 == $curday) && ($ii == $startdayofweek)) {
                     $curday = 1;
                 }
 
@@ -2982,8 +2982,8 @@ class Blog
                 $list_body_blog[] = $list_name;
                 $list_body_blog[] = $info_log[1];
 
-                $visibility_icon = ($info_log[2] == 0) ? 'invisible' : 'visible';
-                $visibility_info = ($info_log[2] == 0) ? 'Visible' : 'Invisible';
+                $visibility_icon = (0 == $info_log[2]) ? 'invisible' : 'visible';
+                $visibility_info = (0 == $info_log[2]) ? 'Visible' : 'Invisible';
 
                 $my_image = '<a href="'.api_get_self().'?action=visibility&blog_id='.$info_log[3].'">';
                 $my_image .= Display::return_icon($visibility_icon.'.png', get_lang($visibility_info));
@@ -3059,7 +3059,7 @@ class Blog
 	            $where";
 
         $result = Database::query($sql);
-        if (Database::num_rows($result) != 0) {
+        if (0 != Database::num_rows($result)) {
             $row = Database::fetch_array($result);
         }
 
@@ -3152,7 +3152,7 @@ class Blog
         $result = Database::query($sql);
         $return_data = '';
 
-        if (Database::num_rows($result) != 0) {
+        if (0 != Database::num_rows($result)) {
             while ($row = Database::fetch_array($result)) {
                 $return_data .= '<div class="clear"></div><br />';
                 $return_data .= '<div class="actions" style="margin-left:5px;margin-right:5px;">'.
@@ -3199,7 +3199,7 @@ class Blog
                 ORDER BY blog_name";
         $result = Database::query($sql);
         $return_data = '';
-        if (Database::num_rows($result) != 0) {
+        if (0 != Database::num_rows($result)) {
             while ($row = Database::fetch_array($result)) {
                 $return_data .= '<div class="clear"></div><br />';
                 $return_data .= '<div class="actions" style="margin-left:5px;margin-right:5px;">'.

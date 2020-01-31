@@ -609,7 +609,7 @@ class ExtraField extends Model
                     $field['id']
                 );
 
-                if ($field['field_type'] == self::FIELD_TYPE_TAG) {
+                if (self::FIELD_TYPE_TAG == $field['field_type']) {
                     $tags = UserManager::get_user_tags_to_string(
                         $itemId,
                         $field['id'],
@@ -802,7 +802,7 @@ class ExtraField extends Model
         $options_parsed = [];
         if (!empty($options)) {
             foreach ($options as $option) {
-                if ($option['option_value'] == 0) {
+                if (0 == $option['option_value']) {
                     $options_parsed[$option['id']][] = $option;
                 } else {
                     $options_parsed[$option['option_value']][] = $option;
@@ -847,7 +847,7 @@ class ExtraField extends Model
             foreach ($options_parsed as $option) {
                 foreach ($option as $key => $item) {
                     $string .= $item['display_text'];
-                    if ($key == 0) {
+                    if (0 == $key) {
                         $string .= ':';
                     } else {
                         if (isset($option[$key + 1])) {
@@ -1082,7 +1082,7 @@ class ExtraField extends Model
                 }
 
                 if (!$adminPermissions) {
-                    if ($field_details['visible_to_self'] == 0) {
+                    if (0 == $field_details['visible_to_self']) {
                         continue;
                     }
 
@@ -1099,7 +1099,7 @@ class ExtraField extends Model
 
                 $freezeElement = false;
                 if (!$adminPermissions) {
-                    $freezeElement = $field_details['visible_to_self'] == 0 || $field_details['changeable'] == 0;
+                    $freezeElement = 0 == $field_details['visible_to_self'] || 0 == $field_details['changeable'];
                 }
 
                 $translatedDisplayText = get_lang($field_details['display_text'], true);
@@ -1212,7 +1212,7 @@ class ExtraField extends Model
 
                             if (empty($checkboxAttributes) &&
                                 isset($field_details['default_value']) && empty($extraData)) {
-                                if ($field_details['default_value'] == 1) {
+                                if (1 == $field_details['default_value']) {
                                     $checkboxAttributes['checked'] = 1;
                                 }
                             }
@@ -1362,7 +1362,7 @@ class ExtraField extends Model
                                 ['style' => 'width: 100%;']
                             );
 
-                            if ($useTagAsSelect === false) {
+                            if (false === $useTagAsSelect) {
                                 $tagsSelect->setAttribute('class', null);
                             }
 
@@ -1373,7 +1373,7 @@ class ExtraField extends Model
                             $tagsSelect->setMultiple(true);
 
                             $selectedOptions = [];
-                            if ($this->type === 'user') {
+                            if ('user' === $this->type) {
                                 // The magic should be here
                                 $user_tags = UserManager::get_user_tags(
                                     $itemId,
@@ -1475,7 +1475,7 @@ class ExtraField extends Model
                                 ]
                             );
 
-                            if ($useTagAsSelect == false) {
+                            if (false == $useTagAsSelect) {
                                 $jquery_ready_content .= "
                                 $('#extra_$variable').select2({
                                     ajax: {
@@ -1524,7 +1524,7 @@ class ExtraField extends Model
                         $leftpad = '1.7';
                         $top = '0.4';
                         $domain = parse_url($icon_path, PHP_URL_HOST);
-                        if ($domain == 'www.hi5.com' or $domain == 'hi5.com') {
+                        if ('www.hi5.com' == $domain or 'hi5.com' == $domain) {
                             $leftpad = '3';
                             $top = '0';
                         }
@@ -1603,7 +1603,7 @@ class ExtraField extends Model
                             }
                         }
 
-                        if ($fieldTexts[0] === 'Image') {
+                        if ('Image' === $fieldTexts[0]) {
                             $fieldTexts[0] = get_lang($fieldTexts[0]);
                         }
 
@@ -1832,10 +1832,10 @@ class ExtraField extends Model
      */
     public function setupBreadcrumb(&$breadcrumb, $action)
     {
-        if ($action == 'add') {
+        if ('add' == $action) {
             $breadcrumb[] = ['url' => $this->pageUrl, 'name' => $this->pageName];
             $breadcrumb[] = ['url' => '#', 'name' => get_lang('Add')];
-        } elseif ($action == 'edit') {
+        } elseif ('edit' == $action) {
             $breadcrumb[] = ['url' => $this->pageUrl, 'name' => $this->pageName];
             $breadcrumb[] = ['url' => '#', 'name' => get_lang('Edit')];
         } else {
@@ -1978,7 +1978,7 @@ class ExtraField extends Model
         $header = get_lang('Add');
         $defaults = [];
 
-        if ($action === 'edit') {
+        if ('edit' === $action) {
             $header = get_lang('Edit');
             // Setting the defaults
             $defaults = $this->get($id, false);
@@ -1986,7 +1986,7 @@ class ExtraField extends Model
 
         $form->addElement('header', $header);
 
-        if ($action === 'edit') {
+        if ('edit' === $action) {
             $translateUrl = api_get_path(WEB_CODE_PATH).'extrafield/translate.php?'
                 .http_build_query(['extra_field' => $id]);
             $translateButton = Display::toolbarButton(get_lang('Translate this term'), $translateUrl, 'language', 'link');
@@ -2030,7 +2030,7 @@ class ExtraField extends Model
             self::FIELD_TYPE_TRIPLE_SELECT,
         ];
 
-        if ($action == 'edit') {
+        if ('edit' == $action) {
             if (in_array($defaults['field_type'], $fieldWithOptions)) {
                 $url = Display::url(
                     get_lang('Edit extra field options'),
@@ -2038,7 +2038,7 @@ class ExtraField extends Model
                 );
                 $form->addElement('label', null, $url);
 
-                if ($defaults['field_type'] == self::FIELD_TYPE_SELECT) {
+                if (self::FIELD_TYPE_SELECT == $defaults['field_type']) {
                     $urlWorkFlow = Display::url(
                         get_lang('Edit this field\'s workflow'),
                         'extra_field_workflow.php?type='.$this->type.'&field_id='.$id
@@ -2085,7 +2085,7 @@ class ExtraField extends Model
 
         $form->addElement('text', 'field_order', get_lang('Order'));
 
-        if ($action == 'edit') {
+        if ('edit' == $action) {
             $option = new ExtraFieldOption($this->type);
             $defaults['field_options'] = $option->get_field_options_by_field_to_string($id);
             $form->addButtonUpdate(get_lang('Edit'));
@@ -2179,7 +2179,7 @@ JAVASCRIPT;
                     ? $search_options['field_default_value']
                     : null;
 
-                if ($field['field_type'] == self::FIELD_TYPE_DOUBLE_SELECT) {
+                if (self::FIELD_TYPE_DOUBLE_SELECT == $field['field_type']) {
                     // Add 2 selects
                     $options = $extraFieldOption->get_field_options_by_field($field['id']);
                     $options = self::extra_field_double_select_convert_array_to_ordered_array($options);
@@ -2188,7 +2188,7 @@ JAVASCRIPT;
                     if (!empty($options)) {
                         foreach ($options as $option) {
                             foreach ($option as $sub_option) {
-                                if ($sub_option['option_value'] == 0) {
+                                if (0 == $sub_option['option_value']) {
                                     $first_options[] = $sub_option['field_id'].'#'.$sub_option['id'].':'
                                         .$sub_option['display_text'];
                                 }
@@ -2300,7 +2300,7 @@ JAVASCRIPT;
                         $info = $this->get($extra['id']);
                         $extra_fields_info[$extra['id']] = $info;
                     }
-                    if (isset($info['field_type']) && $info['field_type'] == self::FIELD_TYPE_DOUBLE_SELECT) {
+                    if (isset($info['field_type']) && self::FIELD_TYPE_DOUBLE_SELECT == $info['field_type']) {
                         $double_fields[$info['id']] = $info;
                     }
                     $counter++;
@@ -2358,7 +2358,7 @@ JAVASCRIPT;
                             ";
                     } else {
                         if (isset($extra_field_info['field_type']) &&
-                            $extra_field_info['field_type'] == self::FIELD_TYPE_TAG
+                            self::FIELD_TYPE_TAG == $extra_field_info['field_type']
                         ) {
                             $options['where'] = str_replace(
                                 $extra_info['field'],
@@ -2429,13 +2429,13 @@ JAVASCRIPT;
         if (empty($col)) {
             return '';
         }
-        if ($oper == 'bw' || $oper == 'bn') {
+        if ('bw' == $oper || 'bn' == $oper) {
             $val .= '%';
         }
-        if ($oper == 'ew' || $oper == 'en') {
+        if ('ew' == $oper || 'en' == $oper) {
             $val = '%'.$val;
         }
-        if ($oper == 'cn' || $oper == 'nc' || $oper == 'in' || $oper == 'ni') {
+        if ('cn' == $oper || 'nc' == $oper || 'in' == $oper || 'ni' == $oper) {
             if (is_array($val)) {
                 $result = '"%'.implode(';', $val).'%"';
                 foreach ($val as $item) {
@@ -2474,7 +2474,7 @@ JAVASCRIPT;
             if (empty($rule)) {
                 continue;
             }
-            if (strpos($rule->field, '_second') === false) {
+            if (false === strpos($rule->field, '_second')) {
             } else {
                 $my_field = str_replace('_second', '', $rule->field);
                 $double_select[$my_field] = $rule->data;
@@ -2486,20 +2486,20 @@ JAVASCRIPT;
             if (empty($rule)) {
                 continue;
             }
-            if (strpos($rule->field, $stringToSearch) === false) {
+            if (false === strpos($rule->field, $stringToSearch)) {
                 // normal fields
                 $field = $rule->field;
-                if (isset($rule->data) && is_string($rule->data) && $rule->data != -1) {
+                if (isset($rule->data) && is_string($rule->data) && -1 != $rule->data) {
                     $condition_array[] = $this->get_where_clause($field, $rule->op, $rule->data);
                 }
             } else {
                 // Extra fields
-                if (strpos($rule->field, '_second') === false) {
+                if (false === strpos($rule->field, '_second')) {
                     //No _second
                     $original_field = str_replace($stringToSearch, '', $rule->field);
                     $field_option = $this->get_handler_field_info_by_field_variable($original_field);
 
-                    if ($field_option['field_type'] == self::FIELD_TYPE_DOUBLE_SELECT) {
+                    if (self::FIELD_TYPE_DOUBLE_SELECT == $field_option['field_type']) {
                         if (isset($double_select[$rule->field])) {
                             $data = explode('#', $rule->data);
                             $rule->data = $data[1].'::'.$double_select[$rule->field];
@@ -2519,7 +2519,7 @@ JAVASCRIPT;
                         }
                     } else {
                         if (isset($rule->data)) {
-                            if (isset($rule->data) && is_int($rule->data) && $rule->data == -1) {
+                            if (isset($rule->data) && is_int($rule->data) && -1 == $rule->data) {
                                 continue;
                             }
                             $condition_array[] = ' ('
@@ -2564,7 +2564,7 @@ JAVASCRIPT;
         $em = Database::getManager();
 
         foreach ($fields as $field) {
-            if ($field['visible_to_self'] != '1') {
+            if ('1' != $field['visible_to_self']) {
                 continue;
             }
 
@@ -2575,7 +2575,7 @@ JAVASCRIPT;
                 true
             );
 
-            if ($field['field_type'] == ExtraField::FIELD_TYPE_TAG) {
+            if (ExtraField::FIELD_TYPE_TAG == $field['field_type']) {
                 $tags = $em
                     ->getRepository('ChamiloCoreBundle:ExtraFieldRelTag')
                     ->findBy(
@@ -2608,14 +2608,14 @@ JAVASCRIPT;
 
             switch ($field['field_type']) {
                 case self::FIELD_TYPE_CHECKBOX:
-                    if ($valueData !== false && $valueData['value'] == '1') {
+                    if (false !== $valueData && '1' == $valueData['value']) {
                         $displayedValue = get_lang('Yes');
                     } else {
                         $displayedValue = get_lang('No');
                     }
                     break;
                 case self::FIELD_TYPE_DATE:
-                    if ($valueData !== false && !empty($valueData['value'])) {
+                    if (false !== $valueData && !empty($valueData['value'])) {
                         $displayedValue = api_format_date($valueData['value'], DATE_FORMAT_LONG_NO_DAY);
                     }
                     break;
@@ -2625,7 +2625,7 @@ JAVASCRIPT;
                     }
                     break;
                 case self::FIELD_TYPE_FILE_IMAGE:
-                    if ($valueData === false || empty($valueData['value'])) {
+                    if (false === $valueData || empty($valueData['value'])) {
                         break;
                     }
 
@@ -2646,7 +2646,7 @@ JAVASCRIPT;
                     );
                     break;
                 case self::FIELD_TYPE_FILE:
-                    if ($valueData === false || empty($valueData['value'])) {
+                    if (false === $valueData || empty($valueData['value'])) {
                         break;
                     }
 
@@ -3218,7 +3218,7 @@ JAVASCRIPT;
         if (!empty($options)) {
             foreach ($options as $option) {
                 foreach ($option as $sub_option) {
-                    if ($sub_option['option_value'] == '0') {
+                    if ('0' == $sub_option['option_value']) {
                         $values[$sub_option['id']] = $sub_option['display_text'];
 
                         continue;
@@ -3291,7 +3291,7 @@ JAVASCRIPT;
         if (!empty($options)) {
             foreach ($options as $option) {
                 foreach ($option as $sub_option) {
-                    if ($sub_option['option_value'] != '0') {
+                    if ('0' != $sub_option['option_value']) {
                         continue;
                     }
 

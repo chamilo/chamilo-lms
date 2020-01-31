@@ -63,7 +63,7 @@ class Model
 
         // Database table definition
         $result = Database::delete($this->table, $params);
-        if ($result != 1) {
+        if (1 != $result) {
             return false;
         }
 

@@ -8,8 +8,6 @@ use ChamiloSession as Session;
  * Include/require it in your code to use its features.
  *
  * @author Carlos Vargas <litox84@gmail.com>, move code of main/notebook up here
- *
- * @package chamilo.library
  */
 class NotebookManager
 {
@@ -126,7 +124,7 @@ class NotebookManager
                 FROM $table
                 WHERE c_id = $course_id AND notebook_id = '".$notebook_id."' ";
         $result = Database::query($sql);
-        if (Database::num_rows($result) != 1) {
+        if (1 != Database::num_rows($result)) {
             return [];
         }
 
@@ -214,7 +212,7 @@ class NotebookManager
         $result = Database::query($sql);
         $affected_rows = Database::affected_rows($result);
 
-        if ($affected_rows != 1) {
+        if (1 != $affected_rows) {
             return false;
         }
 
@@ -240,7 +238,7 @@ class NotebookManager
         if (!isset($_GET['direction'])) {
             $sort_direction = 'ASC';
             $link_sort_direction = 'DESC';
-        } elseif ($_GET['direction'] == 'ASC') {
+        } elseif ('ASC' == $_GET['direction']) {
             $sort_direction = 'ASC';
             $link_sort_direction = 'DESC';
         } else {
@@ -251,7 +249,7 @@ class NotebookManager
         // action links
         echo '<div class="actions">';
         if (!api_is_anonymous()) {
-            if ($sessionId == 0 || api_is_allowed_to_session_edit(false, true)) {
+            if (0 == $sessionId || api_is_allowed_to_session_edit(false, true)) {
                 echo '<a href="index.php?'.api_get_cidreq().'&action=addnote">'.
                     Display::return_icon('new_note.png', get_lang('Add new note in my personal notebook'), '', '32').'</a>';
             }
@@ -281,7 +279,7 @@ class NotebookManager
         // Condition for the session
         $condition_session = api_get_session_condition($sessionId);
 
-        $cond_extra = $notebookView == 'update_date' ? " AND update_date <> ''" : ' ';
+        $cond_extra = 'update_date' == $notebookView ? " AND update_date <> ''" : ' ';
         $course_id = api_get_course_int_id();
 
         $sql = "SELECT * FROM $table

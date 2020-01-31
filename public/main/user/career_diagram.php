@@ -12,7 +12,7 @@ ALTER TABLE extra_field_values modify column value longtext null;
 
 require_once __DIR__.'/../inc/global.inc.php';
 
-if (api_get_configuration_value('allow_career_diagram') == false) {
+if (false == api_get_configuration_value('allow_career_diagram')) {
     api_not_allowed(true);
 }
 
@@ -33,7 +33,7 @@ if (empty($careerInfo)) {
 $userId = api_get_user_id();
 $allow = UserManager::userHasCareer($userId, $careerId) || api_is_platform_admin();
 
-if ($allow === false) {
+if (false === $allow) {
     api_not_allowed(true);
 }
 

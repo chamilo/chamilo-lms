@@ -2,8 +2,6 @@
 /* For licensing terms, see /license.txt */
 /**
  * Courses reporting.
- *
- * @package chamilo.reporting
  */
 ob_start();
 $cidReset = true;
@@ -24,19 +22,19 @@ if (!$allowToTrack) {
 
 $interbreadcrumb[] = ["url" => "index.php", "name" => get_lang('Reporting')];
 
-if (isset($_GET["id_session"]) && $_GET["id_session"] != "") {
+if (isset($_GET["id_session"]) && "" != $_GET["id_session"]) {
     $interbreadcrumb[] = ["url" => "session.php", "name" => get_lang('Course sessions')];
 }
 
-if (isset($_GET["user_id"]) && $_GET["user_id"] != "" && isset($_GET["type"]) && $_GET["type"] == "coach") {
+if (isset($_GET["user_id"]) && "" != $_GET["user_id"] && isset($_GET["type"]) && "coach" == $_GET["type"]) {
     $interbreadcrumb[] = ["url" => "coaches.php", "name" => get_lang('Coaches')];
 }
 
-if (isset($_GET["user_id"]) && $_GET["user_id"] != "" && isset($_GET["type"]) && $_GET["type"] == "student") {
+if (isset($_GET["user_id"]) && "" != $_GET["user_id"] && isset($_GET["type"]) && "student" == $_GET["type"]) {
     $interbreadcrumb[] = ["url" => "student.php", "name" => get_lang('Learners')];
 }
 
-if (isset($_GET["user_id"]) && $_GET["user_id"] != "" && !isset($_GET["type"])) {
+if (isset($_GET["user_id"]) && "" != $_GET["user_id"] && !isset($_GET["type"])) {
     $interbreadcrumb[] = ["url" => "teachers.php", "name" => get_lang('Teachers')];
 }
 
@@ -49,7 +47,7 @@ function count_courses()
 
 // Checking if the current coach is the admin coach
 $showImportIcon = false;
-if (api_get_setting('add_users_by_coach') == 'true') {
+if ('true' == api_get_setting('add_users_by_coach')) {
     if (!api_is_platform_admin()) {
         $isGeneralCoach = SessionManager::user_is_general_coach(
             api_get_user_id(),
@@ -174,7 +172,7 @@ function get_count_courses()
         }
     }
 
-    if ($drhLoaded == false) {
+    if (false == $drhLoaded) {
         $isGeneralCoach = SessionManager::user_is_general_coach(
             api_get_user_id(),
             $sessionId
@@ -232,7 +230,7 @@ function get_courses($from, $limit, $column, $direction)
         }
     }
 
-    if ($drhLoaded == false) {
+    if (false == $drhLoaded) {
         $isGeneralCoach = SessionManager::user_is_general_coach(
             api_get_user_id(),
             $sessionId

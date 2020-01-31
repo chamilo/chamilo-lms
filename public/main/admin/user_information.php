@@ -8,8 +8,6 @@ use Chamilo\UserBundle\Entity\User;
  * Script showing information about a user (name, e-mail, courses and sessions).
  *
  * @author Bart Mollet
- *
- * @package chamilo.admin
  */
 $cidReset = true;
 require_once __DIR__.'/../inc/global.inc.php';
@@ -158,7 +156,7 @@ $data = [
     get_lang('Phone') => $user['phone'],
     get_lang('Course code') => $user['official_code'],
     get_lang('Online') => !empty($user['user_is_online']) ? Display::return_icon('online.png') : Display::return_icon('offline.png'),
-    get_lang('Status') => $user['status'] == 1 ? get_lang('Trainer') : get_lang('Learner'),
+    get_lang('Status') => 1 == $user['status'] ? get_lang('Trainer') : get_lang('Learner'),
 ];
 
 $userInfo = [
@@ -167,7 +165,7 @@ $userInfo = [
     'phone' => $user['phone'],
     'official_code' => $user['official_code'],
     'user_is_online' => !empty($user['user_is_online']) ? Display::return_icon('online.png') : Display::return_icon('offline.png'),
-    'status' => $user['status'] == 1 ? get_lang('Trainer') : get_lang('Learner'),
+    'status' => 1 == $user['status'] ? get_lang('Trainer') : get_lang('Learner'),
     'avatar' => $user['avatar'],
 ];
 
@@ -204,7 +202,7 @@ $data = [
     get_lang('Latest login') => $userInfo['last_connection'],
 ];
 
-if (api_get_setting('allow_terms_conditions') === 'true') {
+if ('true' === api_get_setting('allow_terms_conditions')) {
     $extraFieldValue = new ExtraFieldValue('user');
     $value = $extraFieldValue->get_values_by_handler_and_field_variable(
         $userId,
@@ -250,12 +248,12 @@ foreach ($data as $label => $item) {
 /**
  * Show social activity.
  */
-if (api_get_setting('allow_social_tool') === 'true') {
+if ('true' === api_get_setting('allow_social_tool')) {
     $userObject = api_get_user_entity($userId);
     $data = [];
 
     // Calculate values
-    if (api_get_setting('allow_message_tool') === 'true') {
+    if ('true' === api_get_setting('allow_message_tool')) {
         $messagesSent = SocialManager::getCountMessagesSent($userId);
         $data[] = [get_lang('Number of messages sent'), $messagesSent];
         $messagesReceived = SocialManager::getCountMessagesReceived($userId);
@@ -342,7 +340,7 @@ if (count($sessions) > 0) {
                 '<a href="'.$courseInfo['course_public_url'].'?id_session='.$id_session.'">'.
                 Display::return_icon('course_home.png', get_lang('Course home')).'</a>';
 
-            if (!empty($my_course['status']) && $my_course['status'] == STUDENT) {
+            if (!empty($my_course['status']) && STUDENT == $my_course['status']) {
                 $tools .= '<a href="user_information.php?action=unsubscribe_session_course&course_id='.$courseInfo['real_id'].'&user_id='.$userId.'&id_session='.$id_session.'">'.
                     Display::return_icon('delete.png', get_lang('Delete')).'</a>';
             }
@@ -457,7 +455,7 @@ if (Database::num_rows($res) > 0) {
             Display::return_icon('course_home.png', get_lang('Course home')).'</a>'.
             '<a href="course_edit.php?id='.$course->c_id.'">'.
             Display::return_icon('edit.png', get_lang('Edit')).'</a>';
-        if ($course->status == STUDENT) {
+        if (STUDENT == $course->status) {
             $tools .= '<a href="user_information.php?action=unsubscribe&course_id='.$courseInfo['real_id'].'&user_id='.$userId.'">'.
                 Display::return_icon('delete.png', get_lang('Delete')).'</a>';
         }
@@ -478,7 +476,7 @@ if (Database::num_rows($res) > 0) {
         $row = [
             Display::url($courseCode, $courseInfo['course_public_url']),
             $course->title,
-            $course->status == STUDENT ? get_lang('Learner') : get_lang('Trainer'),
+            STUDENT == $course->status ? get_lang('Learner') : get_lang('Trainer'),
             $timeSpent,
             $totalForumMessages,
             $tools,
@@ -571,7 +569,7 @@ if (isset($_GET['action'])) {
                 break;
             }
 
-            if (CourseManager::getUserInCourseStatus($userId, $courseInfo['real_id']) == STUDENT) {
+            if (STUDENT == CourseManager::getUserInCourseStatus($userId, $courseInfo['real_id'])) {
                 CourseManager::unsubscribe_user($userId, $courseInfo['code'], $sessionId);
                 Display::addFlash(Display::return_message(get_lang('User is now unsubscribed')));
             } else {
@@ -658,7 +656,7 @@ if ($hrmList) {
     echo '</div>';
 }
 
-if ($user['status'] == DRH) {
+if (DRH == $user['status']) {
     $usersAssigned = UserManager::get_users_followed_by_drh($userId);
 
     if ($usersAssigned) {

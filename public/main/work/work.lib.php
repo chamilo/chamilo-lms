@@ -756,7 +756,7 @@ function create_unexisting_work_directory($workDir, $desiredDirName)
     $workDir = ('/' == substr($workDir, -1, 1) ? $workDir : $workDir.'/');
     $checkDirName = $desiredDirName;
     while (file_exists($workDir.$checkDirName)) {
-        ++$counter;
+        $counter++;
         $checkDirName = $desiredDirName.$counter;
     }
 
@@ -5460,7 +5460,7 @@ function exportAllStudentWorkFromPublication(
                 $column = 0;
                 foreach ($headers as $header) {
                     $table->setHeaderContents(0, $column, $header);
-                    ++$column;
+                    $column++;
                 }
 
                 $row = 1;
@@ -5496,7 +5496,7 @@ function exportAllStudentWorkFromPublication(
                     $table->setCellContents($row, 5, $score);
                     $table->setCellContents($row, 6, $feedback);
 
-                    ++$row;
+                    $row++;
                 }
 
                 $content = $table->toHtml();

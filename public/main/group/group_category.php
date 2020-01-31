@@ -119,7 +119,7 @@ $form->addText('title', get_lang('Title'));
 
 // Groups per user
 $possible_values = [];
-for ($i = 1; $i <= 10; ++$i) {
+for ($i = 1; $i <= 10; $i++) {
     $possible_values[$i] = $i;
 }
 $possible_values[GroupManager::GROUP_PER_MEMBER_NO_LIMIT] = get_lang('All');

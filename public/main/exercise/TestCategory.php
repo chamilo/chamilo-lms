@@ -398,9 +398,9 @@ class TestCategory
         $quiz->read($exerciseId);
         $questionList = $quiz->selectQuestionList();
         // the array given by selectQuestionList start at indice 1 and not at indice 0 !!! ? ? ?
-        for ($i = 1; $i <= count($questionList); ++$i) {
+        for ($i = 1; $i <= count($questionList); $i++) {
             if (self::getCategoryForQuestion($questionList[$i]) == $categoryId) {
-                ++$nbCatResult;
+                $nbCatResult++;
             }
         }
 
@@ -719,7 +719,7 @@ class TestCategory
                         true
                     )
                 );
-                ++$row;
+                $row++;
             }
 
             if (!empty($none_category)) {
@@ -744,7 +744,7 @@ class TestCategory
                         true
                     )
                 );
-                ++$row;
+                $row++;
             }
             if (!empty($total)) {
                 $table->setCellContents($row, 0, get_lang('Total'));

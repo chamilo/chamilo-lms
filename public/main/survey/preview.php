@@ -2,8 +2,6 @@
 /* For licensing terms, see /license.txt */
 
 /**
- * @package chamilo.survey
- *
  * @author  Patrick Cool <patrick.cool@UGent.be>, Ghent University
  * @author  Julio Montoya <gugli100@gmail.com>
  */
@@ -93,14 +91,14 @@ if (isset($_GET['show'])) {
     $questions_exists = true;
     if (Database::num_rows($result)) {
         while ($row = Database::fetch_array($result)) {
-            if ($survey_data['one_question_per_page'] == 1) {
-                if ($row['type'] != 'pagebreak') {
+            if (1 == $survey_data['one_question_per_page']) {
+                if ('pagebreak' != $row['type']) {
                     $paged_questions[$counter][] = $row['question_id'];
                     $counter++;
                     continue;
                 }
             } else {
-                if ($row['type'] == 'pagebreak') {
+                if ('pagebreak' == $row['type']) {
                     $counter++;
                 } else {
                     $paged_questions[$counter][] = $row['question_id'];
@@ -139,7 +137,7 @@ if (isset($_GET['show'])) {
         $result = Database::query($sql);
         while ($row = Database::fetch_array($result)) {
             // If the type is not a pagebreak we store it in the $questions array
-            if ($row['type'] != 'pagebreak') {
+            if ('pagebreak' != $row['type']) {
                 $sort = $row['sort'];
                 $questions[$sort]['question_id'] = $row['question_id'];
                 $questions[$sort]['survey_id'] = $row['survey_id'];
@@ -197,7 +195,7 @@ if (is_array($questions) && count($questions) > 0) {
 $form->addHtml('<div class="start-survey">');
 
 if ($show < $numberOfPages) {
-    if ($show == 0) {
+    if (0 == $show) {
         $form->addButton(
             'next_survey_page',
             get_lang('Start the Survey'),
@@ -215,8 +213,8 @@ if ($show < $numberOfPages) {
 }
 
 if (isset($_GET['show'])) {
-    if ($show >= $numberOfPages || count($questions) == 0) {
-        if ($questions_exists == false) {
+    if ($show >= $numberOfPages || 0 == count($questions)) {
+        if (false == $questions_exists) {
             echo '<p>'.get_lang('There are not questions for this survey').'</p>';
         }
         $form->addButton(

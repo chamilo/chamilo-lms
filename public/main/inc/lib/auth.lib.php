@@ -8,8 +8,6 @@
  * It's also used like model to courses_controller (MVC pattern).
  *
  * @author Christian Fasanando <christian1827@gmail.com>
- *
- * @package chamilo.auth
  */
 class Auth
 {
@@ -187,7 +185,7 @@ class Auth
                 // source_course is the course where we clicked the up or down icon
                 $source_course = $course;
                 // target_course is the course before/after the source_course (depending on the up/down icon)
-                if ($direction == 'up') {
+                if ('up' == $direction) {
                     $target_course = $user_courses[$count - 1];
                 } else {
                     $target_course = $user_courses[$count + 1];
@@ -251,7 +249,7 @@ class Auth
                 // source_course is the course where we clicked the up or down icon
                 $source_category = $userCategories[$category2move];
                 // target_course is the course before/after the source_course (depending on the up/down icon)
-                if ($direction == 'up') {
+                if ('up' == $direction) {
                     if (isset($categories[$key - 1])) {
                         $target_category = $userCategories[$categories[$key - 1]['id']];
                     }
@@ -432,7 +430,7 @@ class Auth
                     title='".$category_title."'
                 ORDER BY sort DESC";
         $rs = Database::query($sql);
-        if (Database::num_rows($rs) == 0) {
+        if (0 == Database::num_rows($rs)) {
             $sql = "INSERT INTO $table (user_id, title,sort)
                     VALUES ('".$current_user_id."', '".api_htmlentities($category_title, ENT_QUOTES, api_get_system_encoding())."', '".$nextsort."')";
             $resultQuery = Database::query($sql);

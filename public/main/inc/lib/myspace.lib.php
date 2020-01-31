@@ -484,7 +484,7 @@ class MySpace
         if (api_is_multiple_url_enabled()) {
             $tbl_session_rel_access_url = Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_SESSION);
             $access_url_id = api_get_current_access_url_id();
-            if ($access_url_id != -1) {
+            if (-1 != $access_url_id) {
                 $sqlCoachs = "SELECT DISTINCT
                                     scu.user_id as id_coach,
                                     u.id as user_id,
@@ -523,7 +523,7 @@ class MySpace
         if (api_is_multiple_url_enabled()) {
             $tbl_session_rel_access_url = Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_SESSION);
             $access_url_id = api_get_current_access_url_id();
-            if ($access_url_id != -1) {
+            if (-1 != $access_url_id) {
                 $sql_session_coach = "SELECT session.id_coach, u.id as user_id, lastname, firstname, MAX(login_date) as login_date
 					FROM $tbl_user u , $tbl_sessions as session, $tbl_track_login , $tbl_session_rel_access_url as session_rel_url
 					WHERE
@@ -601,15 +601,15 @@ class MySpace
             }
         }
 
-        if ($tracking_column != 3) {
-            if ($tracking_direction == 'DESC') {
+        if (3 != $tracking_column) {
+            if ('DESC' == $tracking_direction) {
                 usort($all_datas, ['MySpace', 'rsort_users']);
             } else {
                 usort($all_datas, ['MySpace', 'sort_users']);
             }
         }
 
-        if ($export_csv && $tracking_column != 3) {
+        if ($export_csv && 3 != $tracking_column) {
             usort($csv_content, 'sort_users');
         }
         if ($export_csv) {
@@ -667,7 +667,7 @@ class MySpace
         $message = '';
         $defaults = [];
         // include the user manager and formvalidator library
-        if (isset($_GET['export']) && $_GET['export'] == 'options') {
+        if (isset($_GET['export']) && 'options' == $_GET['export']) {
             // get all the defined extra fields
             $extrafields = UserManager::get_extra_fields(
                 0,
@@ -714,7 +714,7 @@ class MySpace
                 $message = '';
                 $additionalExportFields = [];
                 foreach ($values as $field_ids => $value) {
-                    if ($value == 1 && strstr($field_ids, 'extra_export_field')) {
+                    if (1 == $value && strstr($field_ids, 'extra_export_field')) {
                         $additionalExportFields[] = str_replace('extra_export_field', '', $field_ids);
                     }
                 }
@@ -918,11 +918,11 @@ class MySpace
                 null,
                 false
             );
-            if ($last_login_date_tmp != false &&
-                $last_login_date == false
+            if (false != $last_login_date_tmp &&
+                false == $last_login_date
             ) { // TODO: To be cleaned
                 $last_login_date = $last_login_date_tmp;
-            } elseif ($last_login_date_tmp != false && $last_login_date != false) {
+            } elseif (false != $last_login_date_tmp && false != $last_login_date) {
                 // TODO: Repeated previous condition. To be cleaned.
                 // Find the max and assign it to first_login_date
                 if (strtotime($last_login_date_tmp) > strtotime($last_login_date)) {
@@ -1110,10 +1110,10 @@ class MySpace
                     null,
                     false
                 );
-                if ($last_login_date_tmp != false && $last_login_date == false) {
+                if (false != $last_login_date_tmp && false == $last_login_date) {
                     // TODO: To be cleaned.
                     $last_login_date = $last_login_date_tmp;
-                } elseif ($last_login_date_tmp != false && $last_login_date == false) {
+                } elseif (false != $last_login_date_tmp && false == $last_login_date) {
                     // TODO: Repeated previous condition. To be cleaned.
                     // Find the max and assign it to first_login_date
                     if (strtotime($last_login_date_tmp) > strtotime($last_login_date)) {
@@ -1252,7 +1252,7 @@ class MySpace
         $numberItems = (int) $numberItems;
         $direction = Database::escape_string($direction);
         $columnName = 'name';
-        if ($column === 1) {
+        if (1 === $column) {
             $columnName = 'id';
         }
 
@@ -1344,10 +1344,10 @@ class MySpace
                     $session_id,
                     false
                 );
-                if ($last_login_date_tmp != false && $last_login_date == false) {
+                if (false != $last_login_date_tmp && false == $last_login_date) {
                     // TODO: To be cleaned.
                     $last_login_date = $last_login_date_tmp;
-                } elseif ($last_login_date_tmp != false && $last_login_date != false) {
+                } elseif (false != $last_login_date_tmp && false != $last_login_date) {
                     // TODO: Repeated previous condition! To be cleaned.
                     // Find the max and assign it to first_login_date
                     if (strtotime($last_login_date_tmp) > strtotime($last_login_date)) {
@@ -1534,10 +1534,10 @@ class MySpace
                         $session_id,
                         false
                     );
-                    if ($last_login_date_tmp != false && $last_login_date == false) {
+                    if (false != $last_login_date_tmp && false == $last_login_date) {
                         // TODO: To be cleaned.
                         $last_login_date = $last_login_date_tmp;
-                    } elseif ($last_login_date_tmp != false && $last_login_date == false) {
+                    } elseif (false != $last_login_date_tmp && false == $last_login_date) {
                         // TODO: Repeated previous condition. To be cleaned.
                         // Find the max and assign it to first_login_date
                         if (strtotime($last_login_date_tmp) > strtotime($last_login_date)) {
@@ -1649,7 +1649,7 @@ class MySpace
         }
 
         $percentage = null;
-        if ($score_possible != 0) {
+        if (0 != $score_possible) {
             $percentage = round(($score_obtained / $score_possible * 100), 2);
         }
 
@@ -1687,7 +1687,7 @@ class MySpace
         } else {
             $orderby = 0;
         }
-        if ($is_western_name_order != api_is_western_name_order() && ($orderby == 1 || $orderby == 2)) {
+        if ($is_western_name_order != api_is_western_name_order() && (1 == $orderby || 2 == $orderby)) {
             // Swapping the sorting column if name order for export is different than the common name order.
             $orderby = 3 - $orderby;
         }
@@ -2008,7 +2008,7 @@ class MySpace
         if (!UserManager::is_username_available($username) || empty($username)) {
             $i = 0;
             while (1) {
-                if ($i == 0) {
+                if (0 == $i) {
                     $sufix = '';
                 } else {
                     $sufix = $i;
@@ -2131,7 +2131,7 @@ class MySpace
                     $user['create'] = '1';
                 } else {
                     $is_session_avail = self::user_available_in_session($user['UserName'], $course_list, $id_session);
-                    if ($is_session_avail == 0) {
+                    if (0 == $is_session_avail) {
                         $user_name = $user['UserName'];
                         $sql_select = "SELECT user_id FROM $table_user WHERE username ='$user_name' ";
                         $rs = Database::query($sql_select);
@@ -2173,7 +2173,7 @@ class MySpace
             $rs = Database::query($sql);
             $creator_id = Database::result($rs, 0, 0);
             // check if we are the creators or not
-            if ($creator_id != '') {
+            if ('' != $creator_id) {
                 if ($creator_id != api_get_user_id()) {
                     $user['error'] = get_lang('User already register by other coach.');
                     $errors[] = $user;
@@ -2196,12 +2196,12 @@ class MySpace
         foreach ($users as $index => $user) {
             // 1. Check whether mandatory fields are set.
             $mandatory_fields = ['LastName', 'FirstName'];
-            if (api_get_setting('registration', 'email') == 'true') {
+            if ('true' == api_get_setting('registration', 'email')) {
                 $mandatory_fields[] = 'Email';
             }
 
             foreach ($mandatory_fields as $key => $field) {
-                if (!isset($user[$field]) || strlen($user[$field]) == 0) {
+                if (!isset($user[$field]) || 0 == strlen($user[$field])) {
                     $user['error'] = get_lang($field.'Mandatory');
                     $errors[] = $user;
                 }
@@ -2230,7 +2230,7 @@ class MySpace
     public static function complete_missing_data($user)
     {
         // 1. Generate a password if it is necessary.
-        if (!isset($user['Password']) || strlen($user['Password']) == 0) {
+        if (!isset($user['Password']) || 0 == strlen($user['Password'])) {
             $user['Password'] = api_generate_password();
         }
 
@@ -2256,7 +2256,7 @@ class MySpace
             $user = self::complete_missing_data($user);
             // coach only will registered users
             $default_status = STUDENT;
-            if ($user['create'] == COURSEMANAGER) {
+            if (COURSEMANAGER == $user['create']) {
                 $user['id'] = UserManager:: create_user(
                     $user['FirstName'],
                     $user['LastName'],
@@ -2345,14 +2345,14 @@ class MySpace
                 );
                 $userInfo = api_get_user_info($user['id']);
 
-                if (($user['added_at_platform'] == 1 && $user['added_at_session'] == 1) || $user['added_at_session'] == 1) {
-                    if ($user['added_at_platform'] == 1) {
+                if ((1 == $user['added_at_platform'] && 1 == $user['added_at_session']) || 1 == $user['added_at_session']) {
+                    if (1 == $user['added_at_platform']) {
                         $addedto = get_lang('User created in portal');
                     } else {
                         $addedto = '          ';
                     }
 
-                    if ($user['added_at_session'] == 1) {
+                    if (1 == $user['added_at_session']) {
                         $addedto .= get_lang('User added into the session');
                     }
                 } else {
@@ -2364,14 +2364,14 @@ class MySpace
         } else {
             foreach ($users as $index => $user) {
                 $userInfo = api_get_user_info($user['id']);
-                if (($user['added_at_platform'] == 1 && $user['added_at_session'] == 1) || $user['added_at_session'] == 1) {
-                    if ($user['added_at_platform'] == 1) {
+                if ((1 == $user['added_at_platform'] && 1 == $user['added_at_session']) || 1 == $user['added_at_session']) {
+                    if (1 == $user['added_at_platform']) {
                         $addedto = get_lang('User created in portal');
                     } else {
                         $addedto = '          ';
                     }
 
-                    if ($user['added_at_session'] == 1) {
+                    if (1 == $user['added_at_session']) {
                         $addedto .= ' '.get_lang('User added into the session');
                     }
                 } else {
@@ -2422,7 +2422,7 @@ class MySpace
         foreach ($crawler as $domElement) {
             $row = [];
             foreach ($domElement->childNodes as $node) {
-                if ($node->nodeName != '#text') {
+                if ('#text' != $node->nodeName) {
                     $row[$node->nodeName] = $node->nodeValue;
                 }
             }
@@ -2804,7 +2804,7 @@ function get_stats($user_id, $course_info, $sessionId, $start_date = null, $end_
     if (!empty($course_info)) {
         $stringStartDate = '';
         $stringEndDate = '';
-        if ($start_date != null && $end_date != null) {
+        if (null != $start_date && null != $end_date) {
             $end_date = add_day_to($end_date);
 
             $start_date = Database::escape_string($start_date);
@@ -2904,7 +2904,7 @@ function grapher($sql_result, $start_date, $end_date, $type = '')
     if (empty($end_date)) {
         $end_date = '';
     }
-    if ($type == '') {
+    if ('' == $type) {
         $type = 'day';
     }
     $main_year = $main_month_year = $main_day = [];
@@ -2959,7 +2959,7 @@ function grapher($sql_result, $start_date, $end_date, $type = '')
         }
 
         $labels = array_keys($main_date);
-        if (count($main_date) == 1) {
+        if (1 == count($main_date)) {
             $labels = $labels[0];
             $main_date = $main_date[$labels];
         }
@@ -2967,7 +2967,7 @@ function grapher($sql_result, $start_date, $end_date, $type = '')
         /* Create and populate the pData object */
         $myData = new pData();
         $myData->addPoints($main_date, 'Serie1');
-        if (count($main_date) != 1) {
+        if (1 != count($main_date)) {
             $myData->addPoints($labels, 'Labels');
             $myData->setSerieDescription('Labels', 'Months');
             $myData->setAbscissa('Labels');

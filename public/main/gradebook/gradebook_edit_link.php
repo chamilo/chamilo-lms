@@ -3,8 +3,6 @@
 
 /**
  * Script.
- *
- * @package chamilo.gradebook
  */
 require_once __DIR__.'/../inc/global.inc.php';
 
@@ -29,7 +27,7 @@ $linkedit = isset($_GET['editlink']) ? Security::remove_XSS($_GET['editlink']) :
 $course_code = api_get_course_id();
 $session_id = api_get_session_id();
 
-if ($session_id == 0) {
+if (0 == $session_id) {
     $cats = Category:: load(
         null,
         null,

@@ -226,7 +226,7 @@ class CourseCategory
         // First get to the highest level possible in the tree
         $result = Database::query("SELECT parent_id FROM $table WHERE id = '$categoryId'");
         $row = Database::fetch_array($result);
-        if ($row !== false && $row['parent_id'] != 0) {
+        if (false !== $row && 0 != $row['parent_id']) {
             // if a parent was found, enter there to see if he's got one more parent
             self::updateParentCategoryChildrenCount($row['parent_id'], $delta);
         }
@@ -625,9 +625,9 @@ class CourseCategory
 
         $categoryJoin = '';
         $categoryFilter = '';
-        if ($categoryCode === 'ALL') {
+        if ('ALL' === $categoryCode) {
             // Nothing to do
-        } elseif ($categoryCode === 'NONE') {
+        } elseif ('NONE' === $categoryCode) {
             $categoryFilter = ' AND course.category_id IS NULL ';
         } else {
             $categoryJoin = " INNER JOIN $tblCourseCategory cat ON course.category_id = cat.id ";
@@ -808,7 +808,7 @@ class CourseCategory
         $action = isset($action) ? Security::remove_XSS($action) : $requestAction;
         $searchTerm = isset($_REQUEST['search_term']) ? Security::remove_XSS($_REQUEST['search_term']) : null;
 
-        if ($action === 'subscribe_user_with_password') {
+        if ('subscribe_user_with_password' === $action) {
             $action = 'subscribe';
         }
 
@@ -865,7 +865,7 @@ class CourseCategory
 
         // If is current page ('active' class) clear URL
         if (isset($liAttributes) && is_array($liAttributes) && isset($liAttributes['class'])) {
-            if (strpos('active', $liAttributes['class']) !== false) {
+            if (false !== strpos('active', $liAttributes['class'])) {
                 $url = '';
             }
         }

@@ -3,7 +3,7 @@
 
 require_once __DIR__.'/../inc/global.inc.php';
 
-if (api_get_setting('platform_unsubscribe_allowed') != 'true') {
+if ('true' != api_get_setting('platform_unsubscribe_allowed')) {
     api_not_allowed();
 }
 

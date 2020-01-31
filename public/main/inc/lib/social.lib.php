@@ -12,8 +12,6 @@ use Laminas\Feed\Reader\Reader;
  *
  * This class provides methods for the social network management.
  * Include/require it in your code to use its features.
- *
- * @package chamilo.social
  */
 class SocialManager extends UserManager
 {
@@ -46,7 +44,7 @@ class SocialManager extends UserManager
             $friend_relation_list[] = $row;
         }
         $count_list = count($friend_relation_list);
-        if ($count_list == 0) {
+        if (0 == $count_list) {
             $friend_relation_list[] = get_lang('Unknown');
         } else {
             return $friend_relation_list;
@@ -245,7 +243,7 @@ class SocialManager extends UserManager
         $res_exist = Database::query($sql);
         $row_exist = Database::fetch_array($res_exist, 'ASSOC');
 
-        if ($row_exist['count'] == 0) {
+        if (0 == $row_exist['count']) {
             $params = [
                 'user_sender_id' => $user_id,
                 'user_receiver_id' => $friend_id,
@@ -280,7 +278,7 @@ class SocialManager extends UserManager
                         msg_status = 7';
             $res_if_exist = Database::query($sql);
             $row_if_exist = Database::fetch_array($res_if_exist, 'ASSOC');
-            if ($row_if_exist['count'] == 1) {
+            if (1 == $row_if_exist['count']) {
                 $sql = 'UPDATE '.$tbl_message.' SET
                             msg_status = 5, content = "'.$clean_message_content.'"
                         WHERE
@@ -417,7 +415,7 @@ class SocialManager extends UserManager
                 WHERE
                     user_receiver_id = '.$userId.' AND
                     msg_status = '.MESSAGE_STATUS_INVITATION_PENDING;
-        if ($limit != null && $limit > 0) {
+        if (null != $limit && $limit > 0) {
             $sql .= ' LIMIT '.$limit;
         }
         $res = Database::query($sql);
@@ -570,7 +568,7 @@ class SocialManager extends UserManager
             return '';
         }
         $feeds = explode(';', $feed['rssfeeds']);
-        if (count($feeds) == 0) {
+        if (0 == count($feeds)) {
             return '';
         }
         $res = '';
@@ -847,14 +845,14 @@ class SocialManager extends UserManager
             ['shared_profile', 'groups', 'group_edit', 'member_list', 'waiting_list', 'invite_friends']
         )) {
             $links = '<ul class="nav nav-pills nav-stacked">';
-            $active = $show === 'home' ? 'active' : null;
+            $active = 'home' === $show ? 'active' : null;
             $links .= '
                 <li class="home-icon '.$active.'">
                     <a href="'.api_get_path(WEB_CODE_PATH).'social/home.php">
                         '.$homeIcon.' '.get_lang('Home').'
                     </a>
                 </li>';
-            $active = $show === 'messages' ? 'active' : null;
+            $active = 'messages' === $show ? 'active' : null;
             $links .= '
                 <li class="messages-icon '.$active.'">
                     <a href="'.api_get_path(WEB_CODE_PATH).'messages/inbox.php">
@@ -863,7 +861,7 @@ class SocialManager extends UserManager
                 </li>';
 
             // Invitations
-            $active = $show === 'invitations' ? 'active' : null;
+            $active = 'invitations' === $show ? 'active' : null;
             $links .= '
                 <li class="invitations-icon '.$active.'">
                     <a href="'.api_get_path(WEB_CODE_PATH).'social/invitations.php">
@@ -872,21 +870,21 @@ class SocialManager extends UserManager
                 </li>';
 
             // Shared profile and groups
-            $active = $show === 'shared_profile' ? 'active' : null;
+            $active = 'shared_profile' === $show ? 'active' : null;
             $links .= '
                 <li class="shared-profile-icon'.$active.'">
                     <a href="'.api_get_path(WEB_CODE_PATH).'social/profile.php">
                         '.$sharedProfileIcon.' '.get_lang('My shared profile').'
                     </a>
                 </li>';
-            $active = $show === 'friends' ? 'active' : null;
+            $active = 'friends' === $show ? 'active' : null;
             $links .= '
                 <li class="friends-icon '.$active.'">
                     <a href="'.api_get_path(WEB_CODE_PATH).'social/friends.php">
                         '.$friendsIcon.' '.get_lang('Friends').'
                     </a>
                 </li>';
-            $active = $show === 'browse_groups' ? 'active' : null;
+            $active = 'browse_groups' === $show ? 'active' : null;
             $links .= '
                 <li class="browse-groups-icon '.$active.'">
                     <a href="'.$groupUrl.'">
@@ -895,7 +893,7 @@ class SocialManager extends UserManager
                 </li>';
 
             // Search users
-            $active = $show === 'search' ? 'active' : null;
+            $active = 'search' === $show ? 'active' : null;
             $links .= '
                 <li class="search-icon '.$active.'">
                     <a href="'.api_get_path(WEB_CODE_PATH).'social/search.php">
@@ -904,7 +902,7 @@ class SocialManager extends UserManager
                 </li>';
 
             // My files
-            $active = $show === 'myfiles' ? 'active' : null;
+            $active = 'myfiles' === $show ? 'active' : null;
 
             $myFiles = '
                 <li class="myfiles-icon '.$active.'">
@@ -913,13 +911,13 @@ class SocialManager extends UserManager
                     </a>
                 </li>';
 
-            if (api_get_setting('allow_my_files') === 'false') {
+            if ('false' === api_get_setting('allow_my_files')) {
                 $myFiles = '';
             }
             $links .= $myFiles;
             if (api_get_configuration_value('allow_portfolio_tool')) {
                 $links .= '
-                    <li class="portoflio-icon '.($show === 'portfolio' ? 'active' : '').'">
+                    <li class="portoflio-icon '.('portfolio' === $show ? 'active' : '').'">
                         <a href="'.api_get_path(WEB_CODE_PATH).'portfolio/index.php">
                             '.$portfolioIcon.' '.get_lang('Portfolio').'
                         </a>
@@ -928,7 +926,7 @@ class SocialManager extends UserManager
             }
 
             if (!api_get_configuration_value('disable_gdpr')) {
-                $active = $show === 'personal-data' ? 'active' : null;
+                $active = 'personal-data' === $show ? 'active' : null;
                 $personalData = '
                     <li class="personal-data-icon '.$active.'">
                         <a href="'.api_get_path(WEB_CODE_PATH).'social/personal_data.php">
@@ -939,7 +937,7 @@ class SocialManager extends UserManager
             }
 
             if (api_is_platform_admin()) {
-                $active = $show === 'promoted_messages' ? 'active' : null;
+                $active = 'promoted_messages' === $show ? 'active' : null;
                 $personalData = '
                     <li class="personal-data-icon '.$active.'">
                         <a href="'.api_get_path(WEB_CODE_PATH).'social/promoted_messages.php">
@@ -967,7 +965,7 @@ class SocialManager extends UserManager
             );
         }
 
-        if ($show === 'shared_profile') {
+        if ('shared_profile' === $show) {
             $links = '<ul class="nav nav-pills nav-stacked">';
             // My own profile
             if ($show_full_profile && $user_id == api_get_user_id()) {
@@ -982,7 +980,7 @@ class SocialManager extends UserManager
                             '.$messagesIcon.' '.get_lang('Messages').$count_unread_message.'
                         </a>
                     </li>';
-                $active = $show === 'invitations' ? 'active' : null;
+                $active = 'invitations' === $show ? 'active' : null;
                 $links .= '
                     <li class="invitations-icon'.$active.'">
                         <a href="'.api_get_path(WEB_CODE_PATH).'social/invitations.php">
@@ -1008,14 +1006,14 @@ class SocialManager extends UserManager
                         </a>
                         </li>';
 
-                $active = $show == 'search' ? 'active' : null;
+                $active = 'search' == $show ? 'active' : null;
                 $links .= '
                     <li class="search-icon '.$active.'">
                         <a href="'.api_get_path(WEB_CODE_PATH).'social/search.php">
                             '.$searchIcon.' '.get_lang('Search').'
                         </a>
                     </li>';
-                $active = $show == 'myfiles' ? 'active' : null;
+                $active = 'myfiles' == $show ? 'active' : null;
 
                 $myFiles = '
                     <li class="myfiles-icon '.$active.'">
@@ -1024,14 +1022,14 @@ class SocialManager extends UserManager
                         </a>
                     </li>';
 
-                if (api_get_setting('allow_my_files') === 'false') {
+                if ('false' === api_get_setting('allow_my_files')) {
                     $myFiles = '';
                 }
                 $links .= $myFiles;
 
                 if (api_get_configuration_value('allow_portfolio_tool')) {
                     $links .= '
-                        <li class="portoflio-icon '.($show == 'portfolio' ? 'active' : '').'">
+                        <li class="portoflio-icon '.('portfolio' == $show ? 'active' : '').'">
                             <a href="'.api_get_path(WEB_CODE_PATH).'portfolio/index.php">
                                 '.$portfolioIcon.' '.get_lang('Portfolio').'
                             </a>
@@ -1040,7 +1038,7 @@ class SocialManager extends UserManager
                 }
 
                 if (!api_get_configuration_value('disable_gdpr')) {
-                    $active = $show == 'personal-data' ? 'active' : null;
+                    $active = 'personal-data' == $show ? 'active' : null;
                     $personalData = '
                     <li class="personal-data-icon '.$active.'">
                         <a href="'.api_get_path(WEB_CODE_PATH).'social/personal_data.php">
@@ -1078,7 +1076,7 @@ class SocialManager extends UserManager
 
                 if (api_get_configuration_value('allow_portfolio_tool')) {
                     $links .= '
-                        <li class="portoflio-icon '.($show == 'portfolio' ? 'active' : '').'">
+                        <li class="portoflio-icon '.('portfolio' == $show ? 'active' : '').'">
                             <a href="'.api_get_path(WEB_CODE_PATH).'portfolio/index.php?user='.$user_id.'">
                                 '.$portfolioIcon.' '.get_lang('Portfolio').'
                             </a>
@@ -1193,9 +1191,9 @@ class SocialManager extends UserManager
             $lastname = $user_info['lastname'];
             $firstname = $user_info['firstname'];
             $completeName = $firstname.', '.$lastname;
-            $user_rol = $user_info['status'] == 1 ? Display::return_icon('teacher.png', get_lang('Trainer'), null, ICON_SIZE_TINY) : Display::return_icon('user.png', get_lang('Learner'), null, ICON_SIZE_TINY);
+            $user_rol = 1 == $user_info['status'] ? Display::return_icon('teacher.png', get_lang('Trainer'), null, ICON_SIZE_TINY) : Display::return_icon('user.png', get_lang('Learner'), null, ICON_SIZE_TINY);
             $status_icon_chat = null;
-            if (isset($user_info['user_is_online_in_chat']) && $user_info['user_is_online_in_chat'] == 1) {
+            if (isset($user_info['user_is_online_in_chat']) && 1 == $user_info['user_is_online_in_chat']) {
                 $status_icon_chat = Display::return_icon('online.png', get_lang('Online'));
             } else {
                 $status_icon_chat = Display::return_icon('offline.png', get_lang('Offline'));
@@ -1203,11 +1201,11 @@ class SocialManager extends UserManager
 
             $userPicture = $user_info['avatar'];
             $officialCode = '';
-            if (api_get_setting('show_official_code_whoisonline') == 'true') {
+            if ('true' == api_get_setting('show_official_code_whoisonline')) {
                 $officialCode .= '<div class="items-user-official-code"><p style="min-height: 30px;" title="'.get_lang('Code').'">'.$user_info['official_code'].'</p></div>';
             }
 
-            if ($hide === true) {
+            if (true === $hide) {
                 $completeName = '';
                 $firstname = '';
                 $lastname = '';
@@ -1218,7 +1216,7 @@ class SocialManager extends UserManager
             $url = null;
             // Anonymous users can't have access to the profile
             if (!api_is_anonymous()) {
-                if (api_get_setting('allow_social_tool') === 'true') {
+                if ('true' === api_get_setting('allow_social_tool')) {
                     $url = api_get_path(WEB_CODE_PATH).'social/profile.php?u='.$uid.$course_url;
                 } else {
                     $url = '?id='.$uid.$course_url;
@@ -1260,7 +1258,7 @@ class SocialManager extends UserManager
         $sql = "SELECT * FROM $user_table WHERE user_id = ".$safe_user_id;
         $result = Database::query($sql);
         $html = null;
-        if (Database::num_rows($result) == 1) {
+        if (1 == Database::num_rows($result)) {
             $user_object = Database::fetch_object($result);
             $userInfo = api_get_user_info($user_id);
             $alt = $userInfo['complete_name'].($currentUserId == $user_id ? '&nbsp;('.get_lang('Me').')' : '');
@@ -1277,7 +1275,7 @@ class SocialManager extends UserManager
             }
             $html .= '</div>';
 
-            if (api_get_setting('show_email_addresses') == 'true') {
+            if ('true' == api_get_setting('show_email_addresses')) {
                 $html .= Display::encrypted_mailto_link($user_object->email, $user_object->email).'<br />';
             }
 
@@ -1336,7 +1334,7 @@ class SocialManager extends UserManager
                 if (is_dir($sysdir.$file)) {
                     $subs = scandir($sysdir.$file);
                     foreach ($subs as $my => $sub) {
-                        if (substr($sub, 0, 1) != '.' && is_file($sysdir.$file.'/'.$sub)) {
+                        if ('.' != substr($sub, 0, 1) && is_file($sysdir.$file.'/'.$sub)) {
                             echo '<li><a href="'.$webdir.urlencode($file).'/'.urlencode($sub).'" target=_blank>'.$sub.'</a></li>';
                         }
                     }
@@ -1620,7 +1618,7 @@ class SocialManager extends UserManager
         $sqlLimit = " LIMIT $start, $length ";
         $messages = [];
         foreach ($sql as $index => $oneQuery) {
-            if ($index === 5) {
+            if (5 === $index) {
                 // Exception only for the forum query above (field name change)
                 $oneQuery .= ' ORDER BY post_date DESC '.$sqlLimit;
             } else {
@@ -1651,7 +1649,7 @@ class SocialManager extends UserManager
                     $row['post_title'] = '';
                     $row['forum_title'] = '';
                     $row['thread_url'] = '';
-                    if ($row['msg_status'] == MESSAGE_STATUS_FORUM) {
+                    if (MESSAGE_STATUS_FORUM == $row['msg_status']) {
                         /** @var CForumPost $post */
                         $post = $repo->find($row['id']);
                         /** @var CForumThread $thread */
@@ -1894,7 +1892,7 @@ class SocialManager extends UserManager
      */
     public static function readContentWithOpenGraph($link)
     {
-        if (strpos($link, "://") === false && substr($link, 0, 1) != "/") {
+        if (false === strpos($link, "://") && "/" != substr($link, 0, 1)) {
             $link = "http://".$link;
         }
         $graph = OpenGraph::fetch($link);
@@ -2000,7 +1998,7 @@ class SocialManager extends UserManager
         $groupId = 0,
         $show_full_profile = true
     ) {
-        if (api_get_setting('allow_social_tool') != 'true') {
+        if ('true' != api_get_setting('allow_social_tool')) {
             return '';
         }
 
@@ -2027,20 +2025,20 @@ class SocialManager extends UserManager
         }
 
         $vCardUserLink = Display::getVCardUserLink($userId);
-        if (isset($options['vcard']) && $options['vcard'] === false) {
+        if (isset($options['vcard']) && false === $options['vcard']) {
             $vCardUserLink = '';
         }
 
         $userInfo = api_get_user_info($userId, true, false, true, true);
 
-        if (isset($options['firstname']) && $options['firstname'] === false) {
+        if (isset($options['firstname']) && false === $options['firstname']) {
             $userInfo['firstname'] = '';
         }
-        if (isset($options['lastname']) && $options['lastname'] === false) {
+        if (isset($options['lastname']) && false === $options['lastname']) {
             $userInfo['lastname'] = '';
         }
 
-        if (isset($options['email']) && $options['email'] === false) {
+        if (isset($options['email']) && false === $options['email']) {
             $userInfo['email'] = '';
         }
 
@@ -2063,11 +2061,11 @@ class SocialManager extends UserManager
             ];
         }
 
-        if (isset($options['language']) && $options['language'] === false) {
+        if (isset($options['language']) && false === $options['language']) {
             $userInfo['language'] = '';
         }
 
-        if (isset($options['photo']) && $options['photo'] === false) {
+        if (isset($options['photo']) && false === $options['photo']) {
             $socialAvatarBlock = '';
         }
 
@@ -2086,7 +2084,7 @@ class SocialManager extends UserManager
             $template->assign('vcard_user_link', $vCardUserLink);
         }
 
-        if (api_get_setting('gamification_mode') === '1') {
+        if ('1' === api_get_setting('gamification_mode')) {
             $gamificationPoints = GamificationUtils::getTotalUserPoints(
                 $userId,
                 $userInfo['status']
@@ -2096,7 +2094,7 @@ class SocialManager extends UserManager
         }
         $chatEnabled = api_is_global_chat_enabled();
 
-        if (isset($options['chat']) && $options['chat'] === false) {
+        if (isset($options['chat']) && false === $options['chat']) {
             $chatEnabled = '';
         }
 
@@ -2348,7 +2346,7 @@ class SocialManager extends UserManager
     public static function wrapPost($message, $content)
     {
         $class = '';
-        if ($message['msg_status'] === MESSAGE_STATUS_PROMOTED) {
+        if (MESSAGE_STATUS_PROMOTED === $message['msg_status']) {
             $class = 'promoted_post';
         }
 
@@ -2417,7 +2415,7 @@ class SocialManager extends UserManager
      */
     public static function getSkillBlock($userId, $orientation = 'horizontal')
     {
-        if (Skill::isAllowed($userId, false) === false) {
+        if (false === Skill::isAllowed($userId, false)) {
             return '';
         }
 
@@ -2464,7 +2462,7 @@ class SocialManager extends UserManager
                 if (empty($data)) {
                     continue;
                 }
-                if (in_array($key, $fieldVisibilityKeys) && $fieldVisibility[$key] === false) {
+                if (in_array($key, $fieldVisibilityKeys) && false === $fieldVisibility[$key]) {
                     continue;
                 }
 
@@ -2491,12 +2489,12 @@ class SocialManager extends UserManager
                 }
 
                 // if is not visible skip
-                if ($extraFieldInfo['visible_to_self'] != 1) {
+                if (1 != $extraFieldInfo['visible_to_self']) {
                     continue;
                 }
 
                 // if is not visible to others skip also
-                if ($extraFieldInfo['visible_to_others'] != 1) {
+                if (1 != $extraFieldInfo['visible_to_others']) {
                     continue;
                 }
 
@@ -2595,13 +2593,13 @@ class SocialManager extends UserManager
                             break;
                         case ExtraField::FIELD_TYPE_SOCIAL_PROFILE:
                             $icon_path = UserManager::get_favicon_from_url($data);
-                            if (self::verifyUrl($icon_path) == false) {
+                            if (false == self::verifyUrl($icon_path)) {
                                 break;
                             }
                             $bottom = '0.2';
                             //quick hack for hi5
                             $domain = parse_url($icon_path, PHP_URL_HOST);
-                            if ($domain == 'www.hi5.com' || $domain == 'hi5.com') {
+                            if ('www.hi5.com' == $domain || 'hi5.com' == $domain) {
                                 $bottom = '-0.8';
                             }
                             $data = '<a href="'.$data.'">'
@@ -2657,7 +2655,7 @@ class SocialManager extends UserManager
                         default:
                             // Ofaj
                             // Converts "Date of birth" into "age"
-                            if ($key === 'terms_datedenaissance') {
+                            if ('terms_datedenaissance' === $key) {
                                 $dataArray = date_to_str_ago($data, 'UTC', true);
                                 $dataToString = isset($dataArray['years']) && !empty($dataArray['years']) ? $dataArray['years'] : 0;
                                 if (!empty($dataToString)) {

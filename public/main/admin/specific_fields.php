@@ -2,8 +2,6 @@
 /* For licensing terms, see /license.txt */
 /**
  * Manage specific fields.
- *
- * @package chamilo.admin
  */
 // Resetting the course id.
 $cidReset = true;
@@ -64,7 +62,7 @@ function edit_filter($id, $url_params, $row)
     return $return;
 }
 
-if (isset($_REQUEST['action']) && $_REQUEST['action'] == 'delete') {
+if (isset($_REQUEST['action']) && 'delete' == $_REQUEST['action']) {
     delete_specific_field($_REQUEST['field_id']);
     header('Location: specific_fields.php?message='.get_lang('Field removed'));
     exit;

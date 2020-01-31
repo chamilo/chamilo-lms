@@ -8,7 +8,7 @@ $cidReset = true;
 require_once __DIR__.'/../inc/global.inc.php';
 
 api_block_anonymous_users();
-if (api_get_setting('allow_social_tool') != 'true') {
+if ('true' != api_get_setting('allow_social_tool')) {
     api_not_allowed();
 }
 
@@ -73,7 +73,7 @@ $user_id = api_get_user_id();
 $name_search = isset($_POST['search_name_q']) ? $_POST['search_name_q'] : null;
 $number_friends = 0;
 
-if (isset($name_search) && $name_search != 'undefined') {
+if (isset($name_search) && 'undefined' != $name_search) {
     $friends = SocialManager::get_friends($user_id, USER_RELATION_TYPE_FRIEND, $name_search);
 } else {
     $friends = SocialManager::get_friends($user_id, USER_RELATION_TYPE_FRIEND);
@@ -81,7 +81,7 @@ if (isset($name_search) && $name_search != 'undefined') {
 
 $social_right_content = '<div class="col-md-12">';
 
-if (count($friends) == 0) {
+if (0 == count($friends)) {
     $social_right_content .= Display::return_message(
         Display::tag('p', get_lang('No friends in your contact list')),
         'warning',

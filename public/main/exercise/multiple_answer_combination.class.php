@@ -68,7 +68,7 @@ class MultipleAnswerCombination extends Question
             echo Display::return_message(get_lang('You have to create at least one answer'));
         }
 
-        for ($i = 1; $i <= $nb_answers; ++$i) {
+        for ($i = 1; $i <= $nb_answers; $i++) {
             $form->addHtml('<tr>');
 
             if (is_object($answer)) {
@@ -181,7 +181,7 @@ class MultipleAnswerCombination extends Question
         $objAnswer = new Answer($this->id);
         $nb_answers = $form->getSubmitValue('nb_answers');
 
-        for ($i = 1; $i <= $nb_answers; ++$i) {
+        for ($i = 1; $i <= $nb_answers; $i++) {
             $answer = trim($form->getSubmitValue('answer['.$i.']'));
             $comment = trim($form->getSubmitValue('comment['.$i.']'));
             if (1 == $i) {

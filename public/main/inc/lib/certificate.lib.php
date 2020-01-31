@@ -6,8 +6,6 @@ use Endroid\QrCode\QrCode;
 /**
  * Certificate Class
  * Generate certificates based in the gradebook tool.
- *
- * @package chamilo.library.certificates
  */
 class Certificate extends Model
 {
@@ -169,11 +167,11 @@ class Certificate extends Model
     {
         $delete_db = false;
         if (!empty($this->certificate_data)) {
-            if (!is_null($this->html_file) || $this->html_file != '' || strlen($this->html_file)) {
+            if (!is_null($this->html_file) || '' != $this->html_file || strlen($this->html_file)) {
                 // Deleting HTML file
                 if (is_file($this->html_file)) {
                     @unlink($this->html_file);
-                    if (is_file($this->html_file) === false) {
+                    if (false === is_file($this->html_file)) {
                         $delete_db = true;
                     } else {
                         $delete_db = false;
@@ -206,7 +204,7 @@ class Certificate extends Model
     {
         // The user directory should be set
         if (empty($this->certification_user_path) &&
-            $this->force_certificate_generation === false
+            false === $this->force_certificate_generation
         ) {
             return false;
         }
@@ -254,7 +252,7 @@ class Certificate extends Model
                         if (file_exists($myPathCertificate) &&
                             !empty($name) &&
                             !is_dir($myPathCertificate) &&
-                            $this->force_certificate_generation == false
+                            false == $this->force_certificate_generation
                         ) {
                             // Seems that the file was already generated
                             return true;
@@ -596,7 +594,7 @@ class Certificate extends Model
             return true;
         }
 
-        if (api_get_setting('allow_public_certificates') != 'true') {
+        if ('true' != api_get_setting('allow_public_certificates')) {
             // The "non-public" setting is set, so do not print
             return false;
         }
@@ -617,7 +615,7 @@ class Certificate extends Model
             api_get_course_info($gradeBookInfo['course_code'])
         );
 
-        if ($setting == 0) {
+        if (0 == $setting) {
             // Printing not allowed
             return false;
         }
@@ -746,7 +744,6 @@ class Certificate extends Model
                             true
                         );
 
-
                         // Find time spent in LP
                         $timeSpent = Tracking::get_time_spent_in_lp(
                             $this->user_id,
@@ -780,7 +777,7 @@ class Certificate extends Model
 
         $totalTimeInLearningPaths = 0;
         foreach ($courseList as $courseId => $courseData) {
-            if ($courseData['approved'] === true) {
+            if (true === $courseData['approved']) {
                 $totalTimeInLearningPaths += $courseData['time_spent'];
             }
         }
@@ -859,7 +856,7 @@ class Certificate extends Model
         $params['right'] = 0;
         $params['top'] = 0;
         $params['bottom'] = 0;
-        $page_format = $params['orientation'] == 'landscape' ? 'A4-L' : 'A4';
+        $page_format = 'landscape' == $params['orientation'] ? 'A4-L' : 'A4';
         $pdf = new PDF($page_format, $params['orientation'], $params);
 
         $pdf->html_to_pdf(

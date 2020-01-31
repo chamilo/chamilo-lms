@@ -130,7 +130,7 @@ class ImportCsv
         if (!empty($files)) {
             foreach ($files as $file) {
                 $fileInfo = pathinfo($file);
-                if (isset($fileInfo['extension']) && $fileInfo['extension'] === 'csv') {
+                if (isset($fileInfo['extension']) && 'csv' === $fileInfo['extension']) {
                     // Checking teachers_yyyymmdd.csv,
                     // courses_yyyymmdd.csv, students_yyyymmdd.csv and sessions_yyyymmdd.csv
                     $parts = explode('_', $fileInfo['filename']);
@@ -140,37 +140,37 @@ class ImportCsv
 
                     $isStatic = strpos($method, 'Static');
 
-                    if ($method == 'importSessionsextidStatic') {
+                    if ('importSessionsextidStatic' == $method) {
                         $method = 'importSessionsExtIdStatic';
                     }
 
-                    if ($method == 'importCourseinsertStatic') {
+                    if ('importCourseinsertStatic' == $method) {
                         $method = 'importSubscribeUserToCourse';
                     }
 
-                    if ($method == 'importUnsubsessionsextidStatic') {
+                    if ('importUnsubsessionsextidStatic' == $method) {
                         $method = 'importUnsubsessionsExtidStatic';
                     }
 
-                    if ($method == 'importCareersdiagram') {
+                    if ('importCareersdiagram' == $method) {
                         $method = 'importCareersDiagram';
                     }
 
-                    if ($method == 'importCareersresults') {
+                    if ('importCareersresults' == $method) {
                         $method = 'importCareersResults';
                     }
 
-                    if ($method == 'importOpensessions') {
+                    if ('importOpensessions' == $method) {
                         $method = 'importOpenSessions';
                     }
 
-                    if ($method == 'importSubsessionsextidStatic') {
+                    if ('importSubsessionsextidStatic' == $method) {
                         $method = 'importSubscribeUserToCourseSessionExtStatic';
                     }
                     if (method_exists($this, $method)) {
                         if ((
-                                $method == 'importSubscribeStatic' ||
-                                $method == 'importSubscribeUserToCourse'
+                                'importSubscribeStatic' == $method ||
+                                'importSubscribeUserToCourse' == $method
                             ) ||
                             empty($isStatic)
                         ) {
@@ -230,7 +230,7 @@ class ImportCsv
                         $this->logger->addInfo('====================================================');
                         $this->logger->addInfo("Reading file: $file");
                         $this->logger->addInfo("Loading method $method ");
-                        if ($method == 'importSessions' || $method == 'importOpenSessions') {
+                        if ('importSessions' == $method || 'importOpenSessions' == $method) {
                             $this->$method(
                                 $file,
                                 true,
@@ -404,7 +404,7 @@ class ImportCsv
 
                 $this->logger->addInfo("Post id saved #".$post->getId());
 
-                if (($counter % $batchSize) === 0) {
+                if (0 === ($counter % $batchSize)) {
                     $em->flush();
                     $em->clear(); // Detaches all objects from Doctrine!
                 }
@@ -436,7 +436,7 @@ class ImportCsv
      */
     public function updateUsersEmails()
     {
-        if ($this->getUpdateEmailToDummy() === true) {
+        if (true === $this->getUpdateEmailToDummy()) {
             $sql = "UPDATE user SET email = CONCAT(username,'@example.com') WHERE id NOT IN (SELECT user_id FROM admin)";
             Database::query($sql);
         }
@@ -690,7 +690,7 @@ class ImportCsv
 
                     if ($userId) {
                         foreach ($row as $key => $value) {
-                            if (substr($key, 0, 6) == 'extra_') {
+                            if ('extra_' == substr($key, 0, 6)) {
                                 //an extra field
                                 UserManager::update_extra_field_value(
                                     $userId,
@@ -737,7 +737,7 @@ class ImportCsv
 
                     if ($result) {
                         foreach ($row as $key => $value) {
-                            if (substr($key, 0, 6) == 'extra_') {
+                            if ('extra_' == substr($key, 0, 6)) {
                                 //an extra field
                                 UserManager::update_extra_field_value(
                                     $userInfo['user_id'],
@@ -752,7 +752,7 @@ class ImportCsv
                     }
                 }
 
-                if (($counter % $batchSize) === 0) {
+                if (0 === ($counter % $batchSize)) {
                     $em->flush();
                     $em->clear(); // Detaches all objects from Doctrine!
                 }
@@ -889,7 +889,7 @@ class ImportCsv
 
                     if ($result) {
                         foreach ($row as $key => $value) {
-                            if (substr($key, 0, 6) === 'extra_') {
+                            if ('extra_' === substr($key, 0, 6)) {
                                 //an extra field
                                 UserManager::update_extra_field_value(
                                     $result,
@@ -910,7 +910,7 @@ class ImportCsv
                         continue;
                     }
 
-                    if (isset($row['action']) && $row['action'] === 'delete') {
+                    if (isset($row['action']) && 'delete' === $row['action']) {
                         // Inactive one year later
                         $userInfo['expiration_date'] = api_get_utc_datetime(api_strtotime(time() + $secondsInYear));
                     }
@@ -999,7 +999,7 @@ class ImportCsv
                             $this->logger->addInfo("Students - Username was changes from '".$userInfo['username']."' to '".$row['username']."' ");
                         }
                         foreach ($row as $key => $value) {
-                            if (substr($key, 0, 6) === 'extra_') {
+                            if ('extra_' === substr($key, 0, 6)) {
                                 //an extra field
                                 UserManager::update_extra_field_value(
                                     $userInfo['user_id'],
@@ -1014,7 +1014,7 @@ class ImportCsv
                     }
                 }
 
-                if (($counter % $batchSize) === 0) {
+                if (0 === ($counter % $batchSize)) {
                     $em->flush();
                     $em->clear(); // Detaches all objects from Doctrine!
                     $this->logger->addInfo("Detaches all objects");
@@ -1085,7 +1085,7 @@ class ImportCsv
                     'disable_import_calendar'
                 );
 
-                if (!empty($item) && isset($item['value']) && $item['value'] == 1) {
+                if (!empty($item) && isset($item['value']) && 1 == $item['value']) {
                     $this->logger->addInfo(
                         "Course '".$courseInfo['code']."' has 'disable_import_calendar' turn on. Skip"
                     );
@@ -1095,7 +1095,7 @@ class ImportCsv
                 if (empty($courseInfo)) {
                     $this->logger->addInfo("Course '$courseCode' does not exists");
                 } else {
-                    if ($courseInfo['visibility'] == COURSE_VISIBILITY_HIDDEN) {
+                    if (COURSE_VISIBILITY_HIDDEN == $courseInfo['visibility']) {
                         $this->logger->addInfo("Course '".$courseInfo['code']."' has hidden visiblity. Skip");
                         $errorFound = true;
                     }
@@ -1113,7 +1113,7 @@ class ImportCsv
                         $courseInfo['real_id']
                     );
 
-                    if ($courseIncluded == false) {
+                    if (false == $courseIncluded) {
                         $this->logger->addInfo(
                             "Course '$courseCode' is not included in session: $sessionId"
                         );
@@ -1177,7 +1177,7 @@ class ImportCsv
                     }
                 }
 
-                if ($errorFound == false) {
+                if (false == $errorFound) {
                     $eventsToCreate[] = [
                         'start' => $startDate,
                         'end' => $endDate,
@@ -1410,7 +1410,7 @@ class ImportCsv
                 }
 
                 // Send announcement to users
-                if ($sendMail && $alreadyAdded == false) {
+                if ($sendMail && false == $alreadyAdded) {
                     $start = $firstDate;
                     $end = $firstEndDate;
 
@@ -1442,7 +1442,7 @@ class ImportCsv
                         'careerid'
                     );
                     $externalCareerIdList = $externalCareerIdList['value'];
-                    if (substr($externalCareerIdList, 0, 1) === '[') {
+                    if ('[' === substr($externalCareerIdList, 0, 1)) {
                         $externalCareerIdList = substr($externalCareerIdList, 1, -1);
                         $externalCareerIds = preg_split('/,/', $externalCareerIdList);
                     } else {
@@ -1507,7 +1507,7 @@ class ImportCsv
                         1
                     );
 
-                    if (count($announcementsWithTitleList) === 0) {
+                    if (0 === count($announcementsWithTitleList)) {
                         $this->logger->addInfo(
                             'Mail to be sent because start date: '.$event['start'].' and no announcement found.'
                         );
@@ -1562,7 +1562,7 @@ class ImportCsv
                     $this->logger->addInfo(
                         "Send Mail: ".intval($sendMail).' - Already added: '.intval($alreadyAdded)
                     );
-                    if ($sendMail == false) {
+                    if (false == $sendMail) {
                         $report['mail_not_sent_because_date']++;
                     }
                 }
@@ -1630,7 +1630,7 @@ class ImportCsv
                             $this->defaultAdminId
                         );
 
-                        if ($eventResult !== false) {
+                        if (false !== $eventResult) {
                             $this->logger->addInfo(
                                 "Event updated #".$item['item_id']." External cal Id: (".$externalEventId.") $info"
                             );
@@ -1675,7 +1675,7 @@ class ImportCsv
                     }
                 }
 
-                if (($counter % $batchSize) === 0) {
+                if (0 === ($counter % $batchSize)) {
                     $em->flush();
                     $em->clear(); // Detaches all objects from Doctrine!
                 }
@@ -2267,7 +2267,7 @@ class ImportCsv
                                     $courseCoachId = UserManager::get_user_id_from_username(
                                         $courseCoach
                                     );
-                                    if ($courseCoachId !== false) {
+                                    if (false !== $courseCoachId) {
                                         // Just insert new coaches
                                         $coachList[] = $courseCoachId;
                                     }
@@ -2709,7 +2709,7 @@ class ImportCsv
                     }
                 }
 
-                if (UserManager::userHasCareer($studentId, $careerChamiloId) === false) {
+                if (false === UserManager::userHasCareer($studentId, $careerChamiloId)) {
                     $this->logger->addInfo(
                         "User $studentId (".$row['StudentId'].") has no career #$careerChamiloId (ext #$careerId)"
                     );
@@ -3195,7 +3195,7 @@ if (isset($argv[1]) && $argv[1] = '--dump') {
 }
 
 if (isset($_configuration['import_csv_disable_dump']) &&
-    $_configuration['import_csv_disable_dump'] == true
+    true == $_configuration['import_csv_disable_dump']
 ) {
     $import->setDumpValues(false);
 } else {
@@ -3231,7 +3231,7 @@ $executionTime = round(($timeEnd - $timeStart) / 60, 2);
 $logger->addInfo("Total execution Time $executionTime Min");
 
 if (isset($_configuration['import_csv_fix_permissions']) &&
-    $_configuration['import_csv_fix_permissions'] == true
+    true == $_configuration['import_csv_fix_permissions']
 ) {
     $command = "sudo find ".api_get_path(SYS_COURSE_PATH)." -type d -exec chmod 777 {} \; ";
     echo "Executing: ".$command.PHP_EOL;

@@ -126,7 +126,7 @@ switch ($action) {
                             break;
                         }
                     }
-                    if ($insert == true) {
+                    if (true == $insert) {
                         $input_select .= '<option '.$selected.' value="'.$calendar['date_time'].'">'.$calendar['date_time'].'</option>';
                     }
                 }

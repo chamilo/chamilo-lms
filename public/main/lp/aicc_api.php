@@ -11,8 +11,6 @@ use ChamiloSession as Session;
  *
  * @version  v 1.0
  *
- * @package  chamilo.learnpath
- *
  * @license    GNU/GPL
  */
 
@@ -259,7 +257,7 @@ function LMSSetValue(param, val) {
     case 'cmi.core.lesson_status'	:
         saved_lesson_status = lesson_status;
         lesson_status = val;
-        <?php if ($oLP->mode != 'fullscreen') {
+        <?php if ('fullscreen' != $oLP->mode) {
               ?>
         //var update = update_toc(lesson_status,lms_item_id);
         <?php
@@ -274,7 +272,7 @@ function LMSSetValue(param, val) {
     //var update = update_toc();
     //var update_progress = update_progress_bar();
     <?php
-    if ($oLP->force_commit == 1) {
+    if (1 == $oLP->force_commit) {
         echo "	var mycommit = LMSCommit('force');";
     }
     ?>
@@ -492,7 +490,7 @@ function logit_lms(message,priority) {
  */
 function update_toc(update_action,update_id)
 {
-    <?php if ($oLP->mode != 'fullscreen') {
+    <?php if ('fullscreen' != $oLP->mode) {
     ?>
         var myframe = frames["toc_name"];
         var myelem = myframe.document.getElementById("toc_"+update_id);

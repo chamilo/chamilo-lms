@@ -2,8 +2,6 @@
 /* For licensing terms, see /license.txt */
 /**
  * Configures the WSCourse SOAP service.
- *
- * @package chamilo.webservices
  */
 require_once __DIR__.'/webservice_course.php';
 require_once __DIR__.'/soap.php';

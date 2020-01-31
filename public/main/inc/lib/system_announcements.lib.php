@@ -179,7 +179,7 @@ class SystemAnnouncementManager
             $sql .= " AND access_url_id IN ('1', '$current_access_url_id')";
         }
 
-        if (!isset($_GET['start']) || $_GET['start'] == 0) {
+        if (!isset($_GET['start']) || 0 == $_GET['start']) {
             $sql .= " ORDER BY date_start DESC LIMIT ".$start.",20";
         } else {
             $sql .= " ORDER BY date_start DESC LIMIT ".($start + 1).",20";
@@ -238,7 +238,7 @@ class SystemAnnouncementManager
         $next = ((int) $_GET['start'] + 19);
         $prev = ((int) $_GET['start'] - 19);
         $content = '';
-        if (!isset($_GET['start']) || $_GET['start'] == 0) {
+        if (!isset($_GET['start']) || 0 == $_GET['start']) {
             if ($nb_announcement > 20) {
                 $content .= '<a href="news_list.php?start='.$next.'">'.get_lang('Next').' >> </a>';
             }
@@ -428,7 +428,7 @@ class SystemAnnouncementManager
             return false;
         }
 
-        if (strlen(trim($title)) == 0) {
+        if (0 == strlen(trim($title))) {
             Display::addFlash(
                 Display::return_message(get_lang('Please enter a title'), 'warning')
             );
@@ -487,7 +487,7 @@ class SystemAnnouncementManager
                     true
                 );
             } else {
-                if ($send_mail == 1) {
+                if (1 == $send_mail) {
                     self::send_system_announcement_by_email(
                         $resultId,
                         $visibility
@@ -531,17 +531,17 @@ class SystemAnnouncementManager
              WHERE announcement_id=".intval($announcement_id)
         );
 
-        if ($res === false) {
+        if (false === $res) {
             return false;
         }
 
         foreach ($group_array as $group_id) {
-            if (intval($group_id) != 0) {
+            if (0 != intval($group_id)) {
                 $sql = "INSERT INTO $tbl_announcement_group SET
                         announcement_id=".intval($announcement_id).",
                         group_id=".intval($group_id);
                 $res = Database::query($sql);
-                if ($res === false) {
+                if (false === $res) {
                     return false;
                 }
             }
@@ -639,7 +639,7 @@ class SystemAnnouncementManager
             return false;
         }
 
-        if (strlen(trim($title)) == 0) {
+        if (0 == strlen(trim($title))) {
             echo Display::return_message(get_lang('Please enter a title'));
 
             return false;
@@ -689,7 +689,6 @@ class SystemAnnouncementManager
                 $params,
                 ['id = ? ' => $id]
             );
-
         }
 
         foreach ($list as $key => $title) {
@@ -705,7 +704,7 @@ class SystemAnnouncementManager
                 true
             );
         } else {
-            if ($send_mail == 1) {
+            if (1 == $send_mail) {
                 self::send_system_announcement_by_email(
                     $id,
                     $visibility
@@ -729,7 +728,7 @@ class SystemAnnouncementManager
         $id = (int) $id;
         $sql = "DELETE FROM $table WHERE id =".$id;
         $res = Database::query($sql);
-        if ($res === false) {
+        if (false === $res) {
             return false;
         }
         self::deleteAnnouncementPicture($id);
@@ -779,7 +778,7 @@ class SystemAnnouncementManager
                 WHERE id='".$id."'";
         $res = Database::query($sql);
 
-        if ($res === false) {
+        if (false === $res) {
             return false;
         }
 
@@ -831,17 +830,17 @@ class SystemAnnouncementManager
             $urlCondition = " AND access_url_id = '".$current_access_url_id."' ";
         }
 
-        if ($teacher != 0 && $student == 0) {
+        if (0 != $teacher && 0 == $student) {
             $sql = "SELECT DISTINCT u.user_id FROM $user_table u $urlJoin
                     WHERE status = '1' $urlCondition";
         }
 
-        if ($teacher == 0 && $student != 0) {
+        if (0 == $teacher && 0 != $student) {
             $sql = "SELECT DISTINCT u.user_id FROM $user_table u $urlJoin
                     WHERE status = '5' $urlCondition";
         }
 
-        if ($teacher != 0 && $student != 0) {
+        if (0 != $teacher && 0 != $student) {
             $sql = "SELECT DISTINCT u.user_id FROM $user_table u $urlJoin
                     WHERE 1 = 1 $urlCondition";
         }
@@ -867,7 +866,7 @@ class SystemAnnouncementManager
             $promotionList = $promotion->get_all_promotions_by_career_id($announcement->career_id);
             if (isset($announcement->promotion_id) && !empty($announcement->promotion_id)) {
                 $promotionList = [];
-                $promotionList[]  = $promotion->get($announcement->promotion_id);
+                $promotionList[] = $promotion->get($announcement->promotion_id);
             }
             if (!empty($promotionList)) {
                 foreach ($promotionList as $promotion) {
@@ -884,12 +883,12 @@ class SystemAnnouncementManager
             return true;
         }
 
-        if ((empty($teacher) || $teacher == '0') && (empty($student) || $student == '0')) {
+        if ((empty($teacher) || '0' == $teacher) && (empty($student) || '0' == $student)) {
             return true;
         }
 
         $result = Database::query($sql);
-        if ($result === false) {
+        if (false === $result) {
             return false;
         }
 
@@ -967,7 +966,7 @@ class SystemAnnouncementManager
             }
         }
 
-        if (count($announcements) === 0) {
+        if (0 === count($announcements)) {
             return [];
         }
 

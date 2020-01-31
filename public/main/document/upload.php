@@ -1,9 +1,6 @@
 <?php
 /* For licensing terms, see /license.txt */
 
-/**
- * @package chamilo.document
- */
 use Chamilo\CoreBundle\Framework\Container;
 
 require_once __DIR__.'/../inc/global.inc.php';
@@ -34,7 +31,7 @@ if (isset($_REQUEST['id'])) {
         $sessionId
     );
 
-    if ($sessionId != 0 && !$document_data) {
+    if (0 != $sessionId && !$document_data) {
         $document_data = DocumentManager::get_document_data_by_id(
             $_REQUEST['id'],
             api_get_course_id(),
@@ -97,7 +94,7 @@ if (!empty($groupId)) {
 }
 
 // Group docs can only be uploaded in the group directory
-if ($groupId != 0 && $path == '/') {
+if (0 != $groupId && '/' == $path) {
     $path = $group_properties['directory'];
 }
 
@@ -105,13 +102,13 @@ if ($groupId != 0 && $path == '/') {
 $is_certificate_mode = false;
 $is_certificate_array = explode('/', $path);
 array_shift($is_certificate_array);
-if ($is_certificate_array[0] == 'certificates') {
+if ('certificates' == $is_certificate_array[0]) {
     $is_certificate_mode = true;
 }
 
 // Title of the tool
 $add_group_to_title = null;
-if ($groupId != 0) {
+if (0 != $groupId) {
     // Add group name after for group documents
     $add_group_to_title = ' ('.$group_properties['name'].')';
 }
@@ -256,7 +253,7 @@ $form->addElement(
     'onclick="javascript: check_unzip();" value="1"'
 );
 
-if (api_get_setting('search_enabled') === 'true') {
+if ('true' === api_get_setting('search_enabled')) {
     //TODO: include language file
     $supportedFormats = get_lang('Supported formats for index').': HTML, PDF, TXT, PDF, Postscript, MS Word, RTF, MS Power Point';
     $form->addElement(

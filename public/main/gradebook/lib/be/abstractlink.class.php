@@ -12,8 +12,6 @@ use Chamilo\CoreBundle\Entity\GradebookLink;
  *
  * @author Bert Steppé
  * @author Julio Montoya <gugli100@gmail.com> security improvements
- *
- * @package chamilo.gradebook
  */
 abstract class AbstractLink implements GradebookItem
 {
@@ -176,7 +174,7 @@ abstract class AbstractLink implements GradebookItem
 
     public function is_locked()
     {
-        return isset($this->locked) && $this->locked == 1 ? true : false;
+        return isset($this->locked) && 1 == $this->locked ? true : false;
     }
 
     public function is_visible()
@@ -306,7 +304,7 @@ abstract class AbstractLink implements GradebookItem
             $paramcount++;
         }
         if (isset($type)) {
-            if ($paramcount != 0) {
+            if (0 != $paramcount) {
                 $sql .= ' AND';
             } else {
                 $sql .= ' WHERE';
@@ -315,7 +313,7 @@ abstract class AbstractLink implements GradebookItem
             $paramcount++;
         }
         if (isset($ref_id)) {
-            if ($paramcount != 0) {
+            if (0 != $paramcount) {
                 $sql .= ' AND';
             } else {
                 $sql .= ' WHERE';
@@ -324,7 +322,7 @@ abstract class AbstractLink implements GradebookItem
             $paramcount++;
         }
         if (isset($user_id)) {
-            if ($paramcount != 0) {
+            if (0 != $paramcount) {
                 $sql .= ' AND';
             } else {
                 $sql .= ' WHERE';
@@ -333,7 +331,7 @@ abstract class AbstractLink implements GradebookItem
             $paramcount++;
         }
         if (isset($course_code)) {
-            if ($paramcount != 0) {
+            if (0 != $paramcount) {
                 $sql .= ' AND';
             } else {
                 $sql .= ' WHERE';
@@ -345,7 +343,7 @@ abstract class AbstractLink implements GradebookItem
             }
         }
         if (isset($category_id)) {
-            if ($paramcount != 0) {
+            if (0 != $paramcount) {
                 $sql .= ' AND';
             } else {
                 $sql .= ' WHERE';
@@ -354,7 +352,7 @@ abstract class AbstractLink implements GradebookItem
             $paramcount++;
         }
         if (isset($visible)) {
-            if ($paramcount != 0) {
+            if (0 != $paramcount) {
                 $sql .= ' AND';
             } else {
                 $sql .= ' WHERE';
@@ -393,7 +391,7 @@ abstract class AbstractLink implements GradebookItem
             $result = Database::query($sql);
             $row = Database::fetch_array($result, 'ASSOC');
 
-            if ($row['count'] == 0) {
+            if (0 == $row['count']) {
                 $em = Database::getManager();
                 $link = new GradebookLink();
                 $link
@@ -551,7 +549,7 @@ abstract class AbstractLink implements GradebookItem
         $links = $rootcat[0]->get_links((api_is_allowed_to_edit() ? null : api_get_user_id()), true);
         $foundlinks = [];
         foreach ($links as $link) {
-            if (!(api_strpos(api_strtolower($link->get_name()), api_strtolower($name_mask)) === false)) {
+            if (!(false === api_strpos(api_strtolower($link->get_name()), api_strtolower($name_mask)))) {
                 $foundlinks[] = $link;
             }
         }
@@ -658,7 +656,7 @@ abstract class AbstractLink implements GradebookItem
             }
 
             // If no ranking was detected.
-            if ($ranking == 0) {
+            if (0 == $ranking) {
                 return [];
             }
 

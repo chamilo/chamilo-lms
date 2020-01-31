@@ -29,6 +29,6 @@ class HTML_QuickForm_Rule_UsernameAvailable extends HTML_QuickForm_Rule
         $res = Database::query($sql);
         $number = Database::num_rows($res);
 
-        return $number == 0;
+        return 0 == $number;
     }
 }

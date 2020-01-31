@@ -76,7 +76,7 @@ class GlobalMultipleAnswer extends Question
         $scoreG = 0; //Global
 
         /* boucle pour sauvegarder les donn�es dans le tableau defaults */
-        for ($i = 1; $i <= $nb_answers; ++$i) {
+        for ($i = 1; $i <= $nb_answers; $i++) {
             /* si la reponse est de type objet */
             if (is_object($answer)) {
                 $defaults['answer['.$i.']'] = $answer->answer[$i];
@@ -209,10 +209,10 @@ class GlobalMultipleAnswer extends Question
 
         // Reponses correctes
         $nbr_corrects = 0;
-        for ($i = 1; $i <= $nb_answers; ++$i) {
+        for ($i = 1; $i <= $nb_answers; $i++) {
             $goodAnswer = trim($form->getSubmitValue('correct['.$i.']'));
             if ($goodAnswer) {
-                ++$nbr_corrects;
+                $nbr_corrects++;
             }
         }
         // Set question weighting (score total)
@@ -228,7 +228,7 @@ class GlobalMultipleAnswer extends Question
         // cr�ation variable pour r�cuperer la valeur de la coche pour la prise en compte des n�gatifs
         $test = $form->getSubmitValue('pts');
 
-        for ($i = 1; $i <= $nb_answers; ++$i) {
+        for ($i = 1; $i <= $nb_answers; $i++) {
             $answer = trim($form->getSubmitValue('answer['.$i.']'));
             $comment = trim($form->getSubmitValue('comment['.$i.']'));
             $goodAnswer = trim($form->getSubmitValue('correct['.$i.']'));

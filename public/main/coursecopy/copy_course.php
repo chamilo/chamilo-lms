@@ -7,8 +7,6 @@ use Chamilo\CourseBundle\Component\CourseCopy\CourseSelectForm;
 
 /**
  * @todo rework file in order to use addFlash
- *
- * @package chamilo.backup
  */
 
 // Setting the global file that gets the general configuration, the databases, the languages, ...
@@ -39,13 +37,13 @@ $action = isset($_POST['action']) ? $_POST['action'] : '';
 
 // If a CourseSelectForm is posted or we should copy all resources, then copy them
 if (Security::check_token('post') && (
-    ($action === 'course_select_form') ||
-    (isset($_POST['copy_option']) && $_POST['copy_option'] === 'full_copy')
+    ('course_select_form' === $action) ||
+    (isset($_POST['copy_option']) && 'full_copy' === $_POST['copy_option'])
     )
 ) {
     // Clear token
     Security::clear_token();
-    if ($action === 'course_select_form') {
+    if ('course_select_form' === $action) {
         $course = CourseSelectForm::get_posted_course('copy_course');
     } else {
         $cb = new CourseBuilder();
@@ -63,7 +61,7 @@ if (Security::check_token('post') && (
     );
 } elseif (Security::check_token('post') && (
         isset($_POST['copy_option']) &&
-        $_POST['copy_option'] === 'select_items'
+        'select_items' === $_POST['copy_option']
     )
 ) {
     // Clear token

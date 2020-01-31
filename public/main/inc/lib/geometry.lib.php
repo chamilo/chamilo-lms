@@ -2,8 +2,6 @@
 /* For licensing terms, see /license.txt */
 /**
  * @author Arnaud Ligot (CBlue SPRL) <arnaud@cblue.be>
- *
- * @package chamilo.include.geometry
  */
 define('DEBUG', false);
 
@@ -153,7 +151,7 @@ function poly_compile($poly, $max, $test = false)
         // droite--> rien à faire
         // elevation between $poly[0]['x'] and $poly[1]['x'])
         $rest = $poly[0]['y'] - $poly[1]['y'];
-        if ($rest != 0) {
+        if (0 != $rest) {
             $pente1 = ($poly[0]['x'] - $poly[1]['x']) / ($rest);
         } else {
             $pente1 = 0;
@@ -209,7 +207,7 @@ function poly_compile($poly, $max, $test = false)
 
             for ($k = round($bords[$i][$j]); $k <= $bords[$i][$j + 1]; $k++) {
                 $res[$k][$i] = true; //filling the array with trues
-                if ($test == 1) {
+                if (1 == $test) {
                     /*how to draw the polygon in a human way:
                     In ubuntu : sudo apt-get install gnuplot
                     Create an empty file with all points with the result of this echos (No commas, no point, no headers)
@@ -239,20 +237,20 @@ function poly_compile($poly, $max, $test = false)
  */
 function poly_dump(&$poly, $max, $format = 'raw')
 {
-    if ($format == 'html') {
+    if ('html' == $format) {
         $s = "<div style='font-size: 8px; line-height:3px'><pre>\n";
     }
     for ($i = 0; $i < $max['y']; $i++) {
         for ($j = 0; $j < $max['x']; $j++) {
-            if ($poly[$j][$i] == true) {
-                $s .= ($format == 'html' ? "<b>1</b>" : '1');
+            if (true == $poly[$j][$i]) {
+                $s .= ('html' == $format ? "<b>1</b>" : '1');
             } else {
                 $s .= "0";
             }
         }
-        $s .= ($format == 'html' ? "<br />\n" : "\n");
+        $s .= ('html' == $format ? "<br />\n" : "\n");
     }
-    $s .= ($format == 'html' ? "</pre></div>\n" : "\n");
+    $s .= ('html' == $format ? "</pre></div>\n" : "\n");
 
     return $s;
 }
@@ -274,13 +272,13 @@ function poly_result(&$poly1, &$poly2, $max)
 
     for ($i = 0; $i < $max['x']; $i++) {
         for ($j = 0; $j < $max['y']; $j++) {
-            if (isset($poly1[$i][$j]) && ($poly1[$i][$j] == true)) {
+            if (isset($poly1[$i][$j]) && (true == $poly1[$i][$j])) {
                 $surfaceOf1++;
-                if (isset($poly2[$i][$j]) && ($poly2[$i][$j] == false)) {
+                if (isset($poly2[$i][$j]) && (false == $poly2[$i][$j])) {
                     $onlyIn1++;
                 }
             }
-            if (isset($poly2[$i][$j]) && ($poly2[$i][$j] == true)) {
+            if (isset($poly2[$i][$j]) && (true == $poly2[$i][$j])) {
                 $surfaceOf2++;
             }
         }
@@ -307,8 +305,8 @@ function poly_touch(&$poly1, &$poly2, $max)
 {
     for ($i = 0; $i < $max['x']; $i++) {
         for ($j = 0; $j < $max['y']; $j++) {
-            if (isset($poly1[$i][$j]) && ($poly1[$i][$j] == true)
-                && isset($poly2[$i][$j]) && ($poly2[$i][$j] == true)) {
+            if (isset($poly1[$i][$j]) && (true == $poly1[$i][$j])
+                && isset($poly2[$i][$j]) && (true == $poly2[$i][$j])) {
                 return true;
             }
         }

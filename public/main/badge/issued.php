@@ -10,8 +10,6 @@ use SkillRelUser as SkillRelUserManager;
  *
  * @author Angel Fernando Quiroz Campos <angel.quiroz@beeznest.com>
  * @author José Loguercio Silva <jose.loguercio@beeznest.com>
- *
- * @package chamilo.badge
  */
 require_once __DIR__.'/../inc/global.inc.php';
 
@@ -55,7 +53,7 @@ if (!Skill::isToolAvailable()) {
     api_not_allowed(true);
 }
 
-$showLevels = api_get_configuration_value('hide_skill_levels') === false;
+$showLevels = false === api_get_configuration_value('hide_skill_levels');
 
 $skillInfo = [
     'id' => $skill->getId(),
@@ -145,7 +143,7 @@ if (!$profile) {
             break;
         }
 
-        if (!$profile && $parent['parent_id'] == 0) {
+        if (!$profile && 0 == $parent['parent_id']) {
             $profile = $skillLevelRepo->findAll();
             if ($profile) {
                 $profile = $profile[0];
@@ -233,7 +231,7 @@ if ($allowExport) {
     $backpack = 'https://backpack.openbadges.org/';
     $configBackpack = api_get_setting('openbadges_backpack');
 
-    if (strcmp($backpack, $configBackpack) !== 0) {
+    if (0 !== strcmp($backpack, $configBackpack)) {
         $backpack = $configBackpack;
     }
 

@@ -35,8 +35,8 @@ $idChecked = isset($_REQUEST['idChecked']) ? Security::remove_XSS($_REQUEST['idC
 $order = isset($_REQUEST['order']) ? Security::remove_XSS($_REQUEST['order']) : 'ASC';
 $keyword = isset($_REQUEST['keyword']) ? Security::remove_XSS($_REQUEST['keyword']) : null;
 
-if ($action === 'delete_on_session' || $action === 'delete_off_session') {
-    $delete_session = $action == 'delete_on_session' ? true : false;
+if ('delete_on_session' === $action || 'delete_off_session' === $action) {
+    $delete_session = 'delete_on_session' == $action ? true : false;
     SessionManager::delete_session_category($idChecked, $delete_session);
     Display::addFlash(Display::return_message(get_lang('The selected categories have been deleted')));
     header('Location: '.api_get_self().'?sort='.$sort);
@@ -45,7 +45,7 @@ if ($action === 'delete_on_session' || $action === 'delete_off_session') {
 
 $interbreadcrumb[] = ['url' => 'session_list.php', 'name' => get_lang('Session list')];
 
-if (isset($_GET['search']) && $_GET['search'] === 'advanced') {
+if (isset($_GET['search']) && 'advanced' === $_GET['search']) {
     $interbreadcrumb[] = ['url' => 'session_category_list.php', 'name' => get_lang('Sessions categories list')];
     $tool_name = get_lang('Find a training session');
     Display::display_header($tool_name);
@@ -92,7 +92,7 @@ if (isset($_GET['search']) && $_GET['search'] === 'advanced') {
 
     $query_rows = "SELECT count(*) as total_rows
                   FROM $tbl_session_category sc $where ";
-    $order = ($order == 'ASC') ? 'DESC' : 'ASC';
+    $order = ('ASC' == $order) ? 'DESC' : 'ASC';
     $result_rows = Database::query($query_rows);
     $recorset = Database::fetch_array($result_rows);
     $num = $recorset['total_rows'];
@@ -133,7 +133,7 @@ if (isset($_GET['search']) && $_GET['search'] === 'advanced') {
     <form method="post" action="<?php echo api_get_self(); ?>?action=delete&sort=<?php echo $sort; ?>"
           onsubmit="if(!confirm('<?php echo get_lang('Please confirm your choice'); ?>')) return false;">
         <?php
-        if (count($Sessions) == 0 && isset($_POST['keyword'])) {
+        if (0 == count($Sessions) && isset($_POST['keyword'])) {
             echo Display::return_message(get_lang('No search results'), 'warning');
         } else {
             if ($num > $limit) {
@@ -173,13 +173,13 @@ if (isset($_GET['search']) && $_GET['search'] === 'advanced') {
             <table class="data_table" width="100%">
                 <tr>
                     <th>&nbsp;</th>
-                    <th><a href="<?php echo api_get_self(); ?>?sort=name&order=<?php echo ($sort == 'name') ? $order
+                    <th><a href="<?php echo api_get_self(); ?>?sort=name&order=<?php echo ('name' == $sort) ? $order
                             : 'ASC'; ?>"><?php echo get_lang('Category name'); ?></a></th>
-                    <th><a href="<?php echo api_get_self(); ?>?sort=nbr_session&order=<?php echo ($sort
-                            == 'nbr_session') ? $order : 'ASC'; ?>"><?php echo get_lang('Number sessions'); ?></a></th>
-                    <th><a href="<?php echo api_get_self(); ?>?sort=date_start&order=<?php echo ($sort == 'date_start')
+                    <th><a href="<?php echo api_get_self(); ?>?sort=nbr_session&order=<?php echo ('nbr_session'
+                            == $sort) ? $order : 'ASC'; ?>"><?php echo get_lang('Number sessions'); ?></a></th>
+                    <th><a href="<?php echo api_get_self(); ?>?sort=date_start&order=<?php echo ('date_start' == $sort)
                             ? $order : 'ASC'; ?>"><?php echo get_lang('Start Date'); ?></a></th>
-                    <th><a href="<?php echo api_get_self(); ?>?sort=date_end&order=<?php echo ($sort == 'date_end')
+                    <th><a href="<?php echo api_get_self(); ?>?sort=date_end&order=<?php echo ('date_end' == $sort)
                             ? $order : 'ASC'; ?>"><?php echo get_lang('End Date'); ?></a></th>
                     <th><?php echo get_lang('Detail'); ?></th>
                 </tr>
@@ -210,7 +210,7 @@ if (isset($_GET['search']) && $_GET['search'] === 'advanced') {
                         <td><?php echo api_format_date($enreg['date_start'], DATE_FORMAT_SHORT); ?></td>
                         <td>
                             <?php
-                            if (!empty($enreg['date_end']) && $enreg['date_end'] != '0000-00-00') {
+                            if (!empty($enreg['date_end']) && '0000-00-00' != $enreg['date_end']) {
                                 echo api_format_date($enreg['date_end'], DATE_FORMAT_SHORT);
                             } else {
                                 echo '-';

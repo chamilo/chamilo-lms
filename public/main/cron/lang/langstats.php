@@ -21,18 +21,18 @@ $terms_limit = 10000 + 50;
 $x_most_popular = 2000;
 $output = false;
 $ls = new langstats();
-if ($ls === false) {
+if (false === $ls) {
     exit($ls->error);
 }
 $list = $ls->get_popular_terms($x_most_popular);
-if ($_GET['output'] == 1) {
+if (1 == $_GET['output']) {
     $output = true;
     $variables_origin = $ls->get_variables_origin();
 }
 /**
  * Display.
  */
-if (count($list) == 0) {
+if (0 == count($list)) {
     echo 'No terms loaded so far';
 }
 if (count($list) > 0) {
@@ -42,7 +42,7 @@ if (count($list) > 0) {
     $files = [];
     $trans = [];
     echo 'Number of records: '.count($list).'<br />';
-    echo '<table><tr><th>Index</th><th>Registration order</th><th>Term</th>'.($output == 1 ? '<th>Origin</th>' : '').'<th>Count</th></tr>';
+    echo '<table><tr><th>Index</th><th>Registration order</th><th>Term</th>'.(1 == $output ? '<th>Origin</th>' : '').'<th>Count</th></tr>';
     foreach ($list as $elem) {
         if ($k > $terms_limit) {
             break;

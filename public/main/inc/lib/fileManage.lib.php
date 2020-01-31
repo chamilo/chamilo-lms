@@ -83,7 +83,7 @@ function removeDir($dir)
     }
 
     while ($readdir = readdir($opendir)) {
-        if ($readdir != '..' && $readdir != '.') {
+        if ('..' != $readdir && '.' != $readdir) {
             if (is_file($dir.'/'.$readdir)) {
                 if (!@unlink($dir.'/'.$readdir)) {
                     return false;
@@ -120,7 +120,7 @@ function folder_is_empty($in_folder)
     if (is_dir($in_folder)) {
         $tab_folder_content = scandir($in_folder);
         if ((
-            count($tab_folder_content) == 2 &&
+            2 == count($tab_folder_content) &&
             in_array(".", $tab_folder_content) &&
             in_array("..", $tab_folder_content)
             ) ||
@@ -153,7 +153,7 @@ function my_rename($file_path, $new_file_name)
     $new_file_name = api_replace_dangerous_char($new_file_name);
 
     // If no extension, take the old one
-    if ((strpos($new_file_name, '.') === false) && ($dotpos = strrpos($old_file_name, '.'))) {
+    if ((false === strpos($new_file_name, '.')) && ($dotpos = strrpos($old_file_name, '.'))) {
         $new_file_name .= substr($old_file_name, $dotpos);
     }
 
@@ -202,7 +202,7 @@ function move($source, $target, $forceMove = true, $moveContent = false)
     if (check_name_exist($source)) {
         $file_name = basename($source);
         // move onto self illegal: mv a/b/c a/b/c or mv a/b/c a/b
-        if (strcasecmp($target, dirname($source)) === 0) {
+        if (0 === strcasecmp($target, dirname($source))) {
             return false;
         }
         $isWindowsOS = api_is_windows_os();
@@ -226,7 +226,7 @@ function move($source, $target, $forceMove = true, $moveContent = false)
             return true;
         } elseif (is_dir($source)) {
             // move dir down will cause loop: mv a/b/ a/b/c/ not legal
-            if (strncasecmp($target, $source, strlen($source)) == 0) {
+            if (0 == strncasecmp($target, $source, strlen($source))) {
                 return false;
             }
             /* Directory */
@@ -236,7 +236,7 @@ function move($source, $target, $forceMove = true, $moveContent = false)
                     $out = [];
                     $retVal = -1;
                     exec('mv '.$source.'/* '.$target.'/'.$base, $out, $retVal);
-                    if ($retVal !== 0) {
+                    if (0 !== $retVal) {
                         return false; // mv should return 0 on success
                     }
                     exec('rm -rf '.$source);
@@ -244,7 +244,7 @@ function move($source, $target, $forceMove = true, $moveContent = false)
                     $out = [];
                     $retVal = -1;
                     exec("mv $source $target", $out, $retVal);
-                    if ($retVal !== 0) {
+                    if (0 !== $retVal) {
                         error_log("Chamilo error fileManage.lib.php: mv $source $target\n");
 
                         return false; // mv should return 0 on success
@@ -363,7 +363,7 @@ function getAllPhpFiles($base_path, $includeStatic = false)
         $extensionsArray[] = '.css';
     }
     foreach ($list as $item) {
-        if (substr($item, 0, 1) == '.') {
+        if ('.' == substr($item, 0, 1)) {
             continue;
         }
         $special_dirs = [api_get_path(SYS_TEST_PATH), api_get_path(SYS_COURSE_PATH), api_get_path(SYS_LANG_PATH), api_get_path(SYS_ARCHIVE_PATH)];

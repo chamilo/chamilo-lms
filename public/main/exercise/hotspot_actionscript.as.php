@@ -117,7 +117,7 @@ while ($hotspot = Database::fetch_assoc($result)) {
 
     // This is a good answer, count + 1 for nmbr of clicks
     if ($hotspot['hotspot_type'] > 0) {
-        ++$nmbrTries;
+        $nmbrTries++;
     }
 
     $hotSpot['coord'] = $hotspot['hotspot_coordinates'];

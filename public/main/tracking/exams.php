@@ -3,8 +3,6 @@
 
 /**
  * Exams script.
- *
- * @package chamilo.tracking
  */
 require_once __DIR__.'/../inc/global.inc.php';
 
@@ -188,7 +186,7 @@ if (!empty($courseList) && is_array($courseList)) {
             $exerciseCount = $exerciseCount + $exerciseCount * count($newSessionList) + $exerciseSessionCount;
 
             // Add course and session list.
-            if ($exerciseCount == 0) {
+            if (0 == $exerciseCount) {
                 $exerciseCount = 2;
             }
             $html .= "<tr>
@@ -202,7 +200,7 @@ if (!empty($courseList) && is_array($courseList)) {
         $result = Database::query($sql);
 
         // If main tool is visible.
-        if (Database::result($result, 0, 'visibility') == 1) {
+        if (1 == Database::result($result, 0, 'visibility')) {
             // Getting the exam list.
             if ($global) {
                 $sql = "SELECT quiz.title, id, session_id
@@ -572,7 +570,7 @@ function processStudentList($filter_score, $global, $exercise, $courseInfo, $ses
 
         $percentageScore = 0;
 
-        if ($weighting != 0) {
+        if (0 != $weighting) {
             $percentageScore = round(($score * 100) / $weighting);
         }
 
@@ -651,7 +649,7 @@ function processStudentList($filter_score, $global, $exercise, $courseInfo, $ses
         if (!empty($studentResult)) {
             $studentResultEmpty = $studentResultContent = [];
             foreach ($studentResult as $row) {
-                if ($row['score'] == '-') {
+                if ('-' == $row['score']) {
                     $studentResultEmpty[] = $row;
                 } else {
                     $studentResultContent[] = $row;

@@ -253,7 +253,7 @@ class ImsAnswerMatching extends Answer implements ImsAnswerInterface
                 $out .= '<simpleAssociableChoice identifier="right_'.$i.'" >
                         <![CDATA['.formatExerciseQtiText($rightElement['answer']).']]>
                         </simpleAssociableChoice>'."\n";
-                ++$i;
+                $i++;
             }
         }
         $out .= '  </simpleMatchSet>'."\n";
@@ -277,7 +277,7 @@ class ImsAnswerMatching extends Answer implements ImsAnswerInterface
                         $out .= '      <value>left_'.$leftKey.' right_'.$i.'</value>'."\n";
                         $gradeArray['left_'.$leftKey.' right_'.$i] = $leftElement['grade'];
                     }
-                    ++$i;
+                    $i++;
                 }
             }
         }

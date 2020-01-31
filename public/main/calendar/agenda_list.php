@@ -47,7 +47,7 @@ $events = $agenda->getEvents(
 
 $this_section = SECTION_MYAGENDA;
 
-if (!empty($currentCourseId) && $currentCourseId != -1) {
+if (!empty($currentCourseId) && -1 != $currentCourseId) {
     // Agenda is inside a course tool
     $url = api_get_self().'?'.api_get_cidreq();
     $this_section = SECTION_COURSES;
@@ -89,11 +89,11 @@ $tpl->assign('agenda_actions', $actions);
 $tpl->assign('is_allowed_to_edit', api_is_allowed_to_edit());
 
 if (api_is_allowed_to_edit()) {
-    if ($action === 'change_visibility') {
+    if ('change_visibility' === $action) {
         $courseInfo = api_get_course_info();
         $courseCondition = '';
         // This happens when list agenda is not inside a course
-        if (($type === 'course' || $type === 'session' && !empty($courseInfo))) {
+        if (('course' === $type || 'session' === $type && !empty($courseInfo))) {
             // For course and session event types
             // Just needs course ID
             $agenda->changeVisibility($_GET['id'], $_GET['visibility'], $courseInfo);

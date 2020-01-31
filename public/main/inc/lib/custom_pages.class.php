@@ -24,7 +24,7 @@ class CustomPages
      */
     public static function enabled()
     {
-        return api_get_setting('use_custom_pages') == 'true';
+        return 'true' == api_get_setting('use_custom_pages');
     }
 
     /**

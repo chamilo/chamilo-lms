@@ -14,8 +14,6 @@ use CpChart\Image as pImage;
  * @author Stijn Konings
  * @author Bert Steppé  - (refactored, optimised)
  * @author Julio Montoya Armas - Gradebook Graphics
- *
- * @package chamilo.gradebook
  */
 class FlatViewTable extends SortableTable
 {
@@ -317,7 +315,7 @@ class FlatViewTable extends SortableTable
                 $imgPath = api_get_path(WEB_ARCHIVE_PATH).$chartHash;
             }
             echo '<img src="'.$imgPath.'" >';
-            if ($i % 2 == 0 && $i != 0) {
+            if (0 == $i % 2 && 0 != $i) {
                 echo '<br /><br />';
             } else {
                 echo '&nbsp;&nbsp;&nbsp;';
@@ -410,12 +408,12 @@ class FlatViewTable extends SortableTable
 
         // retrieve sorting type
         if ($is_western_name_order) {
-            $users_sorting = ($this->column == 0 ? FlatViewDataGenerator::FVDG_SORT_FIRSTNAME : FlatViewDataGenerator::FVDG_SORT_LASTNAME);
+            $users_sorting = (0 == $this->column ? FlatViewDataGenerator::FVDG_SORT_FIRSTNAME : FlatViewDataGenerator::FVDG_SORT_LASTNAME);
         } else {
-            $users_sorting = ($this->column == 0 ? FlatViewDataGenerator::FVDG_SORT_LASTNAME : FlatViewDataGenerator::FVDG_SORT_FIRSTNAME);
+            $users_sorting = (0 == $this->column ? FlatViewDataGenerator::FVDG_SORT_LASTNAME : FlatViewDataGenerator::FVDG_SORT_FIRSTNAME);
         }
 
-        if ($this->direction == 'DESC') {
+        if ('DESC' == $this->direction) {
             $users_sorting |= FlatViewDataGenerator::FVDG_SORT_DESC;
         } else {
             $users_sorting |= FlatViewDataGenerator::FVDG_SORT_ASC;

@@ -2,8 +2,6 @@
 /* For licensing terms, see /license.txt */
 
 /**
- * @package chamilo.survey
- *
  * @author Arnaud Ligot <arnaud@cblue.be>
  *
  * A small peace of code to enable user to access images included into survey
@@ -36,7 +34,7 @@ function check_download_survey($course, $invitation, $doc_url)
     $survey_invitation = Database::fetch_assoc($result);
 
     // Now we check if the user already filled the survey
-    if ($survey_invitation['answered'] == 1) {
+    if (1 == $survey_invitation['answered']) {
         echo Display::return_message(get_lang('You already filled this survey'), 'error', false);
         Display::display_footer();
         exit;
@@ -99,7 +97,7 @@ function check_download_survey($course, $invitation, $doc_url)
                         option_text LIKE '%$doc_url%'
                     )";
     $result = Database::query($sql);
-    if (Database::num_rows($result) == 0) {
+    if (0 == Database::num_rows($result)) {
         echo Display::return_message(get_lang('Wrong invitation code'), 'error', false);
         Display::display_footer();
         exit;

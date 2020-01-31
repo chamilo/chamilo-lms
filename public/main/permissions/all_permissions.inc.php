@@ -5,8 +5,6 @@
 * a user, group or role.
 *
 * @author Patrick Cool <patrick.cool@ugent.be>, Ghent University
-*
-* @package chamilo.permissions
 */
 // possible permissions
 $rights_full = ["View", "Add", "Edit", "Delete", "Visibility", "Move"];

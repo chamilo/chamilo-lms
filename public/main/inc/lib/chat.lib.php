@@ -7,8 +7,6 @@ use ChamiloSession as Session;
  * Class Chat.
  *
  * @todo ChamiloSession instead of $_SESSION
- *
- * @package chamilo.library.chat
  */
 class Chat extends Model
 {
@@ -369,7 +367,7 @@ class Chat extends Model
     ) {
         $relation = SocialManager::get_relation_between_contacts($fromUserId, $to_user_id);
 
-        if ($relation == USER_RELATION_TYPE_FRIEND) {
+        if (USER_RELATION_TYPE_FRIEND == $relation) {
             $now = api_get_utc_datetime();
             $user_info = api_get_user_info($to_user_id, true);
             $this->saveWindow($to_user_id);
@@ -493,7 +491,7 @@ class Chat extends Model
     {
         $status = Session::read('disable_chat');
         if (!empty($status)) {
-            if ($status == true) {
+            if (true == $status) {
                 Session::write('disable_chat', null);
 
                 return true;
@@ -511,7 +509,7 @@ class Chat extends Model
         $currentExercises = Session::read('current_exercises');
         if (!empty($currentExercises)) {
             foreach ($currentExercises as $attempt_status) {
-                if ($attempt_status == true) {
+                if (true == $attempt_status) {
                     return true;
                 }
             }

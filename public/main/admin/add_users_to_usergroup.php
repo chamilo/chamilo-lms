@@ -169,7 +169,7 @@ if (is_array($extra_field_list)) {
 if ($use_extra_fields) {
     $final_result = [];
     if (count($extra_field_result) > 1) {
-        for ($i = 0; $i < count($extra_field_result) - 1; ++$i) {
+        for ($i = 0; $i < count($extra_field_result) - 1; $i++) {
             if (is_array($extra_field_result[$i + 1])) {
                 $final_result = array_intersect($extra_field_result[$i], $extra_field_result[$i + 1]);
             }

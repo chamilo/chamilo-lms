@@ -2,8 +2,6 @@
 /* For licensing terms, see /license.txt */
 /**
  * Script.
- *
- * @package chamilo.gradebook
  */
 
 /**
@@ -165,7 +163,7 @@ function export_pdf_with_html($headers_table, $data_table, $headers_pdf, $footer
                 $content_table .= '<td>'.($item < 10 ? '0'.$item : $item).'</td>';
                 foreach ($data as $key => $content) {
                     if (isset($content)) {
-                        $key == 1 ? $align = 'align="left"' : $align = 'align="center"';
+                        1 == $key ? $align = 'align="left"' : $align = 'align="center"';
                         $content_table .= '<td '.$align.' style="padding:4px;" >'.$content.'</td>';
                     }
                 }
@@ -203,22 +201,22 @@ function export_pdf($pdf, $newarray, $header_names, $format)
 {
     $pdf->selectFont(api_get_path(LIBRARY_PATH).'ezpdf/fonts/Courier.afm');
     $pdf->ezSetCmMargins(0, 0, 0, 0);
-    $pdf->ezSetY(($format == 'portrait') ? '820' : '570');
+    $pdf->ezSetY(('portrait' == $format) ? '820' : '570');
     $pdf->selectFont(api_get_path(LIBRARY_PATH).'ezpdf/fonts/Courier.afm');
-    if ($format == 'portrait') {
+    if ('portrait' == $format) {
         $pdf->line(40, 790, 540, 790);
         $pdf->line(40, 40, 540, 40);
     } else {
         $pdf->line(40, 540, 790, 540);
         $pdf->line(40, 40, 790, 40);
     }
-    $pdf->ezSetY(($format == 'portrait') ? '750' : '520');
+    $pdf->ezSetY(('portrait' == $format) ? '750' : '520');
     $pdf->ezTable($newarray, $header_names, '', [
         'showHeadings' => 1,
         'shaded' => 1,
         'showLines' => 1,
         'rowGap' => 3,
-        'width' => (($format == 'portrait') ? '500' : '750'),
+        'width' => (('portrait' == $format) ? '500' : '750'),
     ]);
     $pdf->ezStream();
 }

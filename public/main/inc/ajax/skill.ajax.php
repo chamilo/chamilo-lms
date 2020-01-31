@@ -56,7 +56,7 @@ switch ($action) {
         //Only course gradebook with certificate
         if (!empty($gradebooks)) {
             foreach ($gradebooks as $gradebook) {
-                if ($gradebook['parent_id'] == 0 &&
+                if (0 == $gradebook['parent_id'] &&
                     !empty($gradebook['certif_min_score']) &&
                     !empty($gradebook['document_id'])
                 ) {
@@ -141,7 +141,7 @@ switch ($action) {
         break;
     case 'get_skills_tree_json':
         header('Content-Type: application/json');
-        $userId = isset($_REQUEST['load_user']) && $_REQUEST['load_user'] == 1 ? api_get_user_id() : 0;
+        $userId = isset($_REQUEST['load_user']) && 1 == $_REQUEST['load_user'] ? api_get_user_id() : 0;
         $skill_id = isset($_REQUEST['skill_id']) ? intval($_REQUEST['skill_id']) : 0;
         $depth = isset($_REQUEST['main_depth']) ? intval($_REQUEST['main_depth']) : 2;
         $all = $skill->getSkillsTreeToJson($userId, $skill_id, false, $depth);

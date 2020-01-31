@@ -1269,7 +1269,6 @@ class CourseRestorer
 
             foreach ($this->course->resources[RESOURCE_FORUMPOST] as $post_id => $post) {
                 if ($post->obj->thread_id == $thread_id) {
-                    $topic_replies++;
                     $this->restore_post($post_id, $new_id, $forum_id, $sessionId);
                 }
             }

@@ -106,12 +106,9 @@ class LoginSuccessHandler
             $personal_course_list = \UserManager::get_personal_session_course_list($userId);
             $my_session_list = [];
             $count_of_courses_no_sessions = 0;
-            $count_of_courses_with_sessions = 0;
-
             foreach ($personal_course_list as $course) {
                 if (!empty($course['session_id'])) {
                     $my_session_list[$course['session_id']] = true;
-                    $count_of_courses_with_sessions++;
                 } else {
                     $count_of_courses_no_sessions++;
                 }

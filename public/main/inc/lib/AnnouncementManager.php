@@ -7,6 +7,7 @@ use Chamilo\CoreBundle\Entity\ExtraFieldValues;
 use Chamilo\CoreBundle\Entity\Resource\ResourceLink;
 use Chamilo\CoreBundle\Framework\Container;
 use Chamilo\CourseBundle\Entity\CAnnouncement;
+use Chamilo\CourseBundle\Entity\CAnnouncementAttachment;
 
 /**
  * Include file with functions for the announcements module.
@@ -520,31 +521,33 @@ class AnnouncementManager
                 ['class' => 'announcements_datum']
             );
         }
-        $attachment_list = self::get_attachment($id);
 
-        if (count($attachment_list) > 0) {
-            $html .= "<tr><td>";
-            $realname = $attachment_list['path'];
-            $user_filename = $attachment_list['filename'];
-            $full_file_name = 'download.php?'.api_get_cidreq().'&file='.$realname;
-            $html .= '<br/>';
-            $html .= Display::return_icon('attachment.gif', get_lang('Attachment'));
-            $html .= '<a href="'.$full_file_name.' "> '.$user_filename.' </a>';
-            $html .= ' - <span class="forum_attach_comment" >'.$attachment_list['comment'].'</span>';
-            if (api_is_allowed_to_edit(false, true)) {
-                $url = api_get_self()."?".api_get_cidreq().
-                    "&action=delete_attachment&id_attach=".$attachment_list['id']."&sec_token=".$stok;
-                $html .= Display::url(
-                    Display::return_icon(
-                        'delete.png',
-                        get_lang('Delete'),
-                        '',
-                        16
-                    ),
-                    $url
-                );
+        $attachments = $announcement->getAttachments();
+        if (count($attachments) > 0) {
+            $repo = Container::getAnnouncementAttachmentRepository();
+            foreach ($attachments as $attachment) {
+                $attachmentId = $attachment->getIid();
+                $url = $repo->getResourceFileUrl($attachment, ['mode' => 'download']);
+                $html .= "<tr><td>";
+                $html .= '<br/>';
+                $html .= Display::returnFontAwesomeIcon('paperclip');
+                $html .= '<a href="'.$url.' "> '.$attachment->getFilename().' </a>';
+                $html .= ' - <span class="forum_attach_comment" >'.$attachment->getComment().'</span>';
+                if (api_is_allowed_to_edit(false, true)) {
+                    $url = api_get_self()."?".api_get_cidreq().
+                        "&action=delete_attachment&id_attach=".$attachmentId."&sec_token=".$stok;
+                    $html .= Display::url(
+                        Display::return_icon(
+                            'delete.png',
+                            get_lang('Delete'),
+                            '',
+                            16
+                        ),
+                        $url
+                    );
+                }
+                $html .= '</td></tr>';
             }
-            $html .= '</td></tr>';
         }
         $html .= '</table>';
 
@@ -659,7 +662,7 @@ class AnnouncementManager
 
         if (!empty($file)) {
             self::add_announcement_attachment_file(
-                $last_id,
+                $announcement,
                 $file_comment,
                 $_FILES['user_upload']
             );
@@ -794,7 +797,7 @@ class AnnouncementManager
 
             if (!empty($file)) {
                 self::add_announcement_attachment_file(
-                    $last_id,
+                    $announcement,
                     $file_comment,
                     $file
                 );
@@ -902,7 +905,7 @@ class AnnouncementManager
         if (!empty($file)) {
             if (empty($id_attach)) {
                 self::add_announcement_attachment_file(
-                    $id,
+                    $announcement,
                     $file_comment,
                     $file
                 );
@@ -1000,7 +1003,6 @@ class AnnouncementManager
     public static function addAnnouncementToAllUsersInSessions($announcement)
     {
         $courseCode = api_get_course_id();
-        $courseInfo = api_get_course_info();
         $sessionList = SessionManager::get_session_by_course(api_get_course_int_id());
 
         $repo = Container::getAnnouncementRepository();
@@ -1348,6 +1350,7 @@ class AnnouncementManager
                 FROM '.$table.'
 				WHERE c_id = '.$courseId.' AND announcement_id = '.$announcementId;
         $result = Database::query($sql);
+        $repo = Container::getAnnouncementAttachmentRepository();
         if (0 != Database::num_rows($result)) {
             $row = Database::fetch_array($result, 'ASSOC');
         }
@@ -1358,29 +1361,21 @@ class AnnouncementManager
     /**
      * This function add a attachment file into announcement.
      *
-     * @param int  announcement id
      * @param string file comment
      * @param array  uploaded file $_FILES
      *
      * @return int -1 if failed, 0 if unknown (should not happen), 1 if success
      */
     public static function add_announcement_attachment_file(
-        $announcement_id,
+        CAnnouncement $announcement,
         $file_comment,
         $file
     ) {
-        $courseInfo = api_get_course_info();
         $table = Database::get_course_table(TABLE_ANNOUNCEMENT_ATTACHMENT);
         $return = 0;
-        $announcement_id = (int) $announcement_id;
         $courseId = api_get_course_int_id();
 
         if (is_array($file) && 0 == $file['error']) {
-            // TODO: This path is obsolete. The new document repository scheme should be kept in mind here.
-            $courseDir = $courseInfo['path'].'/upload/announcements';
-            $sys_course_path = api_get_path(SYS_COURSE_PATH);
-            $updir = $sys_course_path.$courseDir;
-
             // Try to add an extension to the file if it hasn't one
             $new_file_name = add_ext_on_mime(stripslashes($file['name']), $file['type']);
             // user's file name
@@ -1388,28 +1383,45 @@ class AnnouncementManager
 
             if (!filter_extension($new_file_name)) {
                 $return = -1;
-                echo Display::return_message(get_lang('File upload failed: this file extension or file type is prohibited'), 'error');
+                Display::addFlash(
+                    Display::return_message(
+                        get_lang('File upload failed: this file extension or file type is prohibited'),
+                        'error'
+                    )
+                );
             } else {
+                $repo = Container::getAnnouncementAttachmentRepository();
                 $new_file_name = uniqid('');
-                $new_path = $updir.'/'.$new_file_name;
+                $attachment = new CAnnouncementAttachment();
+                $attachment
+                    ->setCId($courseId)
+                    ->setFilename($file_name)
+                    ->setPath($new_file_name)
+                    ->setComment($file_comment)
+                    ->setAnnouncement($announcement)
+                    ->setSize((int) $file['size'])
+                ;
+                $userId = api_get_user_id();
+                $request = Container::getRequest();
+                $file = $request->files->get('user_upload');
 
-                // This file is copy here but its cleaned in api_mail_html in api.lib.php
-                copy($file['tmp_name'], $new_path);
-
-                $params = [
-                    'c_id' => $courseId,
-                    'filename' => $file_name,
-                    'comment' => $file_comment,
-                    'path' => $new_file_name,
-                    'announcement_id' => $announcement_id,
-                    'size' => intval($file['size']),
-                ];
-
-                $insertId = Database::insert($table, $params);
-                if ($insertId) {
-                    $sql = "UPDATE $table SET id = iid
-                            WHERE iid = $insertId";
-                    Database::query($sql);
+                if (!empty($file)) {
+                    $repo->addResourceToCourseWithParent(
+                        $attachment,
+                        $announcement->getResourceNode(),
+                        ResourceLink::VISIBILITY_PUBLISHED,
+                        api_get_user_entity($userId),
+                        api_get_course_entity($courseId),
+                        api_get_session_entity(api_get_session_id()),
+                        api_get_group_entity(),
+                        $file
+                    );
+                    $repo->getEntityManager()->flush();
+                    $insertId = $attachment->getIid();
+                    if ($insertId) {
+                        $sql = "UPDATE $table SET id = iid WHERE iid = $insertId";
+                        Database::query($sql);
+                    }
                 }
 
                 $return = 1;
@@ -1497,15 +1509,11 @@ class AnnouncementManager
      */
     public static function delete_announcement_attachment_file($id)
     {
-        $table = Database::get_course_table(TABLE_ANNOUNCEMENT_ATTACHMENT);
-        $id = intval($id);
-        $courseId = api_get_course_int_id();
-        if (empty($courseId) || empty($id)) {
-            return false;
-        }
-        $sql = "DELETE FROM $table
-                WHERE c_id = $courseId AND id = $id";
-        Database::query($sql);
+        $id = (int) $id;
+        $repo = Container::getAnnouncementAttachmentRepository();
+        $attachment = $repo->find($id);
+        $repo->getEntityManager()->remove($attachment);
+        $repo->getEntityManager()->flush();
 
         return true;
     }

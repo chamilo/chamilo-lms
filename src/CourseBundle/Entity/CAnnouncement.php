@@ -6,6 +6,7 @@ namespace Chamilo\CourseBundle\Entity;
 
 use Chamilo\CoreBundle\Entity\Resource\AbstractResource;
 use Chamilo\CoreBundle\Entity\Resource\ResourceInterface;
+use Chamilo\CourseBundle\Repository\CAnnouncementAttachmentRepository;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -87,9 +88,36 @@ class CAnnouncement extends AbstractResource implements ResourceInterface
      */
     protected $sessionId;
 
+    /**
+     * @var CAnnouncementAttachment[]
+     *
+     * @ORM\OneToMany(targetEntity="Chamilo\CourseBundle\Entity\CAnnouncementAttachment", mappedBy="announcement", cascade={"persist", "remove"}, orphanRemoval=true)
+     */
+    protected $attachments;
+
     public function __toString(): string
     {
         return $this->getTitle();
+    }
+
+    /**
+     * @return CAnnouncementAttachment[]
+     */
+    public function getAttachments()
+    {
+        return $this->attachments;
+    }
+
+    /**
+     * @param CAnnouncementAttachment[] $attachments
+     *
+     * @return CAnnouncement
+     */
+    public function setAttachments(array $attachments): CAnnouncement
+    {
+        $this->attachments = $attachments;
+
+        return $this;
     }
 
     /**

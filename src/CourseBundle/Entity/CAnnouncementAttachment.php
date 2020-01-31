@@ -4,6 +4,8 @@
 
 namespace Chamilo\CourseBundle\Entity;
 
+use Chamilo\CoreBundle\Entity\Resource\AbstractResource;
+use Chamilo\CoreBundle\Entity\Resource\ResourceInterface;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -17,7 +19,7 @@ use Doctrine\ORM\Mapping as ORM;
  * )
  * @ORM\Entity
  */
-class CAnnouncementAttachment
+class CAnnouncementAttachment extends AbstractResource implements ResourceInterface
 {
     /**
      * @var int
@@ -64,11 +66,12 @@ class CAnnouncementAttachment
     protected $size;
 
     /**
-     * @var int
+     * @var CAnnouncement
      *
-     * @ORM\Column(name="announcement_id", type="integer", nullable=false)
+     * @ORM\ManyToOne(targetEntity="Chamilo\CourseBundle\Entity\CAnnouncement", cascade={"persist"})
+     * @ORM\JoinColumn(name="announcement_id", referencedColumnName="iid", onDelete="CASCADE" )
      */
-    protected $announcementId;
+    protected $announcement;
 
     /**
      * @var string
@@ -76,6 +79,11 @@ class CAnnouncementAttachment
      * @ORM\Column(name="filename", type="string", length=255, nullable=false)
      */
     protected $filename;
+
+    public function __toString(): string
+    {
+        return $this->getFilename();
+    }
 
     /**
      * Set path.
@@ -150,27 +158,23 @@ class CAnnouncementAttachment
     }
 
     /**
-     * Set announcementId.
-     *
-     * @param int $announcementId
-     *
-     * @return CAnnouncementAttachment
+     * @return int
      */
-    public function setAnnouncementId($announcementId)
+    public function getIid(): int
     {
-        $this->announcementId = $announcementId;
-
-        return $this;
+        return $this->iid;
     }
 
     /**
-     * Get announcementId.
+     * @param int $iid
      *
-     * @return int
+     * @return CAnnouncementAttachment
      */
-    public function getAnnouncementId()
+    public function setIid(int $iid): CAnnouncementAttachment
     {
-        return $this->announcementId;
+        $this->iid = $iid;
+
+        return $this;
     }
 
     /**
@@ -243,5 +247,38 @@ class CAnnouncementAttachment
     public function getCId()
     {
         return $this->cId;
+    }
+
+    /**
+     * @return CAnnouncement
+     */
+    public function getAnnouncement(): CAnnouncement
+    {
+        return $this->announcement;
+    }
+
+    /**
+     * @param CAnnouncement $announcement
+     *
+     * @return CAnnouncementAttachment
+     */
+    public function setAnnouncement(CAnnouncement $announcement): CAnnouncementAttachment
+    {
+        $this->announcement = $announcement;
+
+        return $this;
+    }
+
+    /**
+     * Resource identifier.
+     */
+    public function getResourceIdentifier(): int
+    {
+        return $this->getId();
+    }
+
+    public function getResourceName(): string
+    {
+        return $this->getFilename();
     }
 }

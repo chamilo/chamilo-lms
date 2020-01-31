@@ -1,6 +1,8 @@
 <?php
+
 /* For licensing terms, see /license.txt */
 
+use Chamilo\CoreBundle\Framework\Container;
 use Chamilo\CourseBundle\Entity\CAnnouncement;
 
 /**
@@ -17,12 +19,7 @@ class AnnouncementEmail
     /** @var CAnnouncement */
     protected $announcement;
 
-    /**
-     * @param array           $courseInfo
-     * @param int             $sessionId
-     * @param \Monolog\Logger $logger
-     */
-    public function __construct($courseInfo, $sessionId, CAnnouncement $announcement, $logger = null)
+    public function __construct(array $courseInfo, $sessionId, CAnnouncement $announcement, Monolog\Logger $logger = null)
     {
         if (empty($courseInfo)) {
             $courseInfo = api_get_course_info();
@@ -72,9 +69,7 @@ class AnnouncementEmail
      */
     public function sent_to_info()
     {
-        $result = AnnouncementManager::getSenders($this->announcement);
-
-        return $result;
+        return AnnouncementManager::getSenders($this->announcement);
 
         $sql = "SELECT to_group_id, to_user_id
                 FROM $table
@@ -199,14 +194,18 @@ class AnnouncementEmail
         $result = "<div>$content</div>";
 
         // Adding attachment
-        $attachment = $this->attachment();
-        if (!empty($attachment)) {
-            $result .= '<br />';
-            $result .= Display::url(
-                $attachment['filename'],
-                api_get_path(WEB_CODE_PATH).'announcements/download.php?file='.basename($attachment['path']).'&'.$course_param
-            );
-            $result .= '<br />';
+        $attachments = $this->announcement->getAttachments();
+        if (!empty($attachments)) {
+            $repo = Container::getAnnouncementAttachmentRepository();
+            foreach ($attachments as $attachment) {
+                $url = $repo->getResourceFileUrl($attachment, ['mode' => 'download']);
+                $result .= '<br />';
+                $result .= Display::url(
+                    $attachment->getFilename(),
+                    $url
+                );
+                $result .= '<br />';
+            }
         }
 
         $result .= '<hr />';
@@ -233,11 +232,8 @@ class AnnouncementEmail
         $sql = "SELECT * FROM $table
                 WHERE c_id = $course_id AND announcement_id = $id ";
         $rs = Database::query($sql);
-        $course_path = $this->course['directory'];
         while ($row = Database::fetch_array($rs)) {
-            $path = api_get_path(SYS_COURSE_PATH).$course_path.'/upload/announcements/'.$row['path'];
-            $filename = $row['filename'];
-            $result[] = ['path' => $path, 'filename' => $filename];
+            $result[] = $row;
         }
 
         $result = $result ? reset($result) : [];

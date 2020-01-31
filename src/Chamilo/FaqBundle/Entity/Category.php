@@ -139,8 +139,6 @@ class Category
     /**
      * Set createdAt.
      *
-     * @param \DateTime $createdAt
-     *
      * @return Category
      */
     public function setCreatedAt(\DateTime $createdAt)
@@ -162,8 +160,6 @@ class Category
 
     /**
      * Set updatedAt.
-     *
-     * @param \DateTime $updatedAt
      *
      * @return Category
      */
@@ -187,8 +183,6 @@ class Category
     /**
      * Add question.
      *
-     * @param Question $question
-     *
      * @return Category
      */
     public function addQuestion(Question $question)
@@ -200,8 +194,6 @@ class Category
 
     /**
      * Remove question.
-     *
-     * @param Question $question
      */
     public function removeQuestion(Question $question)
     {

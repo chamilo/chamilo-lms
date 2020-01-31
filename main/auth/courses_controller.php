@@ -457,14 +457,14 @@ class CoursesController
         $url = CourseCategory::getCourseCategoryUrl(1, $pageLength, null, 0, 'display_sessions');
         $headers = [];
         if (CoursesAndSessionsCatalog::showCourses()) {
-            $headers[] =  [
+            $headers[] = [
                 'url' => api_get_self(),
                 'content' => get_lang('CourseManagement'),
             ];
         }
 
         if (CoursesAndSessionsCatalog::showSessions()) {
-            $headers[] =  [
+            $headers[] = [
                 'url' => $url,
                 'content' => get_lang('SessionList'),
             ];

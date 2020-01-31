@@ -17,9 +17,6 @@ use Sonata\AdminBundle\Show\ShowMapper;
  */
 class CourseRelUserAdmin extends Admin
 {
-    /**
-     * @param \Sonata\AdminBundle\Show\ShowMapper $showMapper
-     */
     protected function configureShowField(ShowMapper $showMapper)
     {
         $showMapper
@@ -27,9 +24,6 @@ class CourseRelUserAdmin extends Admin
         ;
     }
 
-    /**
-     * @param FormMapper $formMapper
-     */
     protected function configureFormFields(FormMapper $formMapper)
     {
         $formMapper
@@ -53,9 +47,6 @@ class CourseRelUserAdmin extends Admin
         ;
     }
 
-    /**
-     * @param DatagridMapper $datagridMapper
-     */
     protected function configureDatagridFilters(DatagridMapper $datagridMapper)
     {
         $datagridMapper
@@ -64,9 +55,6 @@ class CourseRelUserAdmin extends Admin
         ;
     }
 
-    /**
-     * @param ListMapper $listMapper
-     */
     protected function configureListFields(ListMapper $listMapper)
     {
         $listMapper

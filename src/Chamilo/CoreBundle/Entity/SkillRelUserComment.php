@@ -124,8 +124,6 @@ class SkillRelUserComment
     /**
      * Set skillRelUser.
      *
-     * @param SkillRelUser $skillRelUser
-     *
      * @return SkillRelUserComment
      */
     public function setSkillRelUser(SkillRelUser $skillRelUser)
@@ -137,8 +135,6 @@ class SkillRelUserComment
 
     /**
      * Set feedbackGiver.
-     *
-     * @param User $feedbackGiver
      *
      * @return SkillRelUserComment
      */
@@ -179,8 +175,6 @@ class SkillRelUserComment
 
     /**
      * Set feedbackDateTime.
-     *
-     * @param \DateTime $feedbackDateTime
      *
      * @return SkillRelUserComment
      */

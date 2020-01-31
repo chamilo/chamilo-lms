@@ -170,9 +170,7 @@ $headers = [
 ];
 $justificationTab = Display::tabsOnlyLink($headers, 2);
 
-
 $justification = $justificationTab.$formValidator->returnForm().$userJustificationList;
-
 
 $tpl = new Template(get_lang('ModifyProfile'));
 

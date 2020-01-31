@@ -15,8 +15,7 @@ interface ImsAnswerInterface
     public function imsExportResponses($questionIdent, $questionStatment);
 
     /**
-     * @param               $questionIdent
-     * @param Question|null $question
+     * @param $questionIdent
      *
      * @return mixed
      */

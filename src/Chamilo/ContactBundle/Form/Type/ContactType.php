@@ -20,10 +20,6 @@ use Symfony\Component\Validator\Constraints\NotBlank;
  */
 class ContactType extends AbstractType
 {
-    /**
-     * @param FormBuilderInterface $builder
-     * @param array                $options
-     */
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
@@ -41,9 +37,6 @@ class ContactType extends AbstractType
         ;
     }
 
-    /**
-     * @param OptionsResolverInterface $resolver
-     */
     public function setDefaultOptions(OptionsResolverInterface $resolver)
     {
         $collectionConstraint = new Collection([

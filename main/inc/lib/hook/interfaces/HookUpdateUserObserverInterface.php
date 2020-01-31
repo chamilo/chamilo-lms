@@ -13,8 +13,6 @@
 interface HookUpdateUserObserverInterface extends HookObserverInterface
 {
     /**
-     * @param HookUpdateUserEventInterface $hook
-     *
      * @return int
      */
     public function hookUpdateUser(HookUpdateUserEventInterface $hook);

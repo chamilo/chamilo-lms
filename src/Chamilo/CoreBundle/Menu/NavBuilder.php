@@ -48,9 +48,6 @@ class NavBuilder extends ContainerAware
     /**
      * Top menu left.
      *
-     * @param FactoryInterface $factory
-     * @param array            $options
-     *
      * @return \Knp\Menu\ItemInterface
      */
     public function leftMenu(FactoryInterface $factory, array $options)
@@ -212,9 +209,6 @@ class NavBuilder extends ContainerAware
 
     /**
      * Top menu right.
-     *
-     * @param FactoryInterface $factory
-     * @param array            $options
      *
      * @return \Knp\Menu\ItemInterface
      */

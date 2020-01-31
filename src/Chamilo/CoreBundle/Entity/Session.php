@@ -323,9 +323,6 @@ class Session
         }
     }
 
-    /**
-     * @param SessionRelUser $user
-     */
     public function addUser(SessionRelUser $user)
     {
         $user->setSession($this);
@@ -336,8 +333,7 @@ class Session
     }
 
     /**
-     * @param int  $status
-     * @param User $user
+     * @param int $status
      */
     public function addUserInSession($status, User $user)
     {
@@ -350,8 +346,6 @@ class Session
     }
 
     /**
-     * @param SessionRelUser $subscription
-     *
      * @return bool
      */
     public function hasUser(SessionRelUser $subscription)
@@ -393,9 +387,6 @@ class Session
         }
     }
 
-    /**
-     * @param SessionRelCourse $course
-     */
     public function addCourses(SessionRelCourse $course)
     {
         $course->setSession($this);
@@ -403,8 +394,6 @@ class Session
     }
 
     /**
-     * @param Course $course
-     *
      * @return bool
      */
     public function hasCourse(Course $course)
@@ -438,9 +427,6 @@ class Session
     /**
      * Remove course subscription for a user.
      * If user status in session is student, then decrease number of course users.
-     *
-     * @param User   $user
-     * @param Course $course
      */
     public function removeUserCourseSubscription(User $user, Course $course)
     {
@@ -462,10 +448,8 @@ class Session
     }
 
     /**
-     * @param User   $user
-     * @param Course $course
-     * @param int    $status if not set it will check if the user is registered
-     *                       with any status
+     * @param int $status if not set it will check if the user is registered
+     *                    with any status
      *
      * @return bool
      */
@@ -477,9 +461,6 @@ class Session
     }
 
     /**
-     * @param User   $user
-     * @param Course $course
-     *
      * @return bool
      */
     public function hasStudentInCourse(User $user, Course $course)
@@ -488,9 +469,6 @@ class Session
     }
 
     /**
-     * @param User   $user
-     * @param Course $course
-     *
      * @return bool
      */
     public function hasCoachInCourseWithStatus(User $user, Course $course)
@@ -499,8 +477,6 @@ class Session
     }
 
     /**
-     * @param User   $user
-     * @param Course $course
      * @param string $status
      *
      * @return \Doctrine\Common\Collections\Collection|static
@@ -922,9 +898,6 @@ class Session
         return $now > $this->getAccessStartDate();
     }
 
-    /**
-     * @param Course $course
-     */
     public function addCourse(Course $course)
     {
         $entity = new SessionRelCourse();
@@ -952,9 +925,6 @@ class Session
         }
     }
 
-    /**
-     * @param SessionRelCourseRelUser $subscription
-     */
     public function addUserCourseSubscription(SessionRelCourseRelUser $subscription)
     {
         $subscription->setSession($this);
@@ -964,8 +934,6 @@ class Session
     }
 
     /**
-     * @param Course $course
-     *
      * @return SessionRelCourse
      */
     public function getCourseSubscription(Course $course)
@@ -986,9 +954,7 @@ class Session
      * Add a user course subscription.
      * If user status in session is student, then increase number of course users.
      *
-     * @param int    $status
-     * @param User   $user
-     * @param Course $course
+     * @param int $status
      */
     public function addUserInCourse($status, User $user, Course $course)
     {
@@ -1009,8 +975,6 @@ class Session
     }
 
     /**
-     * @param SessionRelCourseRelUser $subscription
-     *
      * @return bool
      */
     public function hasUserCourseSubscription(SessionRelCourseRelUser $subscription)
@@ -1040,8 +1004,6 @@ class Session
     }
 
     /**
-     * @param Course $course
-     *
      * @return $this
      */
     public function setCurrentCourse(Course $course)
@@ -1081,8 +1043,7 @@ class Session
     /**
      * Get user from course by status.
      *
-     * @param Course $course
-     * @param int    $status
+     * @param int $status
      *
      * @return \Doctrine\Common\Collections\ArrayCollection|\Doctrine\Common\Collections\Collection
      */
@@ -1100,8 +1061,6 @@ class Session
     }
 
     /**
-     * @param ArrayCollection $studentPublications
-     *
      * @return Session
      */
     public function setStudentPublications(ArrayCollection $studentPublications)
@@ -1116,8 +1075,6 @@ class Session
     }
 
     /**
-     * @param CStudentPublication $studentPublication
-     *
      * @return Session
      */
     public function addStudentPublication(CStudentPublication $studentPublication)
@@ -1138,8 +1095,6 @@ class Session
     }
 
     /**
-     * @param Course $course
-     *
      * @return ArrayCollection
      */
     public function getUsersSubscriptionsInCourse(Course $course)

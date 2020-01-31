@@ -24,8 +24,6 @@ class TaskListEvent extends ThemeEvent
     }
 
     /**
-     * @param TaskInterface $taskInterface
-     *
      * @return $this
      */
     public function addTask(TaskInterface $taskInterface)

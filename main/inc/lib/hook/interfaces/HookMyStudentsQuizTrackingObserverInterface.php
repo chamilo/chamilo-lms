@@ -15,8 +15,6 @@ interface HookMyStudentsQuizTrackingObserverInterface extends HookObserverInterf
      * ]
      * </code>.
      *
-     * @param HookMyStudentsQuizTrackingEventInterface $hook
-     *
      * @return array
      */
     public function trackingHeader(HookMyStudentsQuizTrackingEventInterface $hook);
@@ -29,8 +27,6 @@ interface HookMyStudentsQuizTrackingObserverInterface extends HookObserverInterf
      *     'attrs' => ['class' => 'text-center text-success'],
      * ]
      * </code>.
-     *
-     * @param HookMyStudentsQuizTrackingEventInterface $hook
      *
      * @return array
      */

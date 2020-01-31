@@ -202,8 +202,6 @@ class Language
     /**
      * Set parent.
      *
-     * @param Language $parent
-     *
      * @return Language
      */
     public function setParent(Language $parent)

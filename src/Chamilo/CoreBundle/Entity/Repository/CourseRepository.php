@@ -20,8 +20,6 @@ class CourseRepository extends EntityRepository
     /**
      * Get all users that are registered in the course. No matter the status.
      *
-     * @param Course $course
-     *
      * @return \Doctrine\ORM\QueryBuilder
      */
     public function getSubscribedUsers(Course $course)
@@ -65,8 +63,6 @@ class CourseRepository extends EntityRepository
     /**
      * Gets students subscribed in the course.
      *
-     * @param Course $course
-     *
      * @return QueryBuilder
      */
     public function getSubscribedStudents(Course $course)
@@ -76,8 +72,6 @@ class CourseRepository extends EntityRepository
 
     /**
      * Gets the students subscribed in the course.
-     *
-     * @param Course $course
      *
      * @return QueryBuilder
      */
@@ -91,8 +85,6 @@ class CourseRepository extends EntityRepository
     /**
      * Gets the teachers subscribed in the course.
      *
-     * @param Course $course
-     *
      * @return QueryBuilder
      */
     public function getSubscribedTeachers(Course $course)
@@ -101,8 +93,7 @@ class CourseRepository extends EntityRepository
     }
 
     /**
-     * @param Course $course
-     * @param int    $status use legacy chamilo constants COURSEMANAGER|STUDENT
+     * @param int $status use legacy chamilo constants COURSEMANAGER|STUDENT
      *
      * @return QueryBuilder
      */

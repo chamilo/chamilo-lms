@@ -2082,13 +2082,12 @@ class SocialManager extends UserManager
     /**
      * Generate the social block for a user.
      *
-     * @param Template $template
-     * @param int      $userId            The user id
-     * @param string   $groupBlock        Optional. Highlight link possible values:
-     *                                    group_add, home, messages, messages_inbox, messages_compose,
-     *                                    messages_outbox, invitations, shared_profile, friends, groups, search
-     * @param int      $groupId           Optional. Group ID
-     * @param bool     $show_full_profile
+     * @param int    $userId            The user id
+     * @param string $groupBlock        Optional. Highlight link possible values:
+     *                                  group_add, home, messages, messages_inbox, messages_compose,
+     *                                  messages_outbox, invitations, shared_profile, friends, groups, search
+     * @param int    $groupId           Optional. Group ID
+     * @param bool   $show_full_profile
      *
      * @return string The HTML code with the social block
      */

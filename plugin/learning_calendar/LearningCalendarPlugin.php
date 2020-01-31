@@ -577,9 +577,6 @@ class LearningCalendarPlugin extends Plugin
         return true;
     }*/
 
-    /**
-     * @param FormValidator $form
-     */
     public function getForm(FormValidator &$form)
     {
         $form->addText('title', get_lang('Title'));
@@ -1052,9 +1049,6 @@ class LearningCalendarPlugin extends Plugin
         return $list;
     }
 
-    /**
-     * @param array $calendarInfo
-     */
     public function protectCalendar(array $calendarInfo)
     {
         $allow = api_is_platform_admin() || api_is_teacher();
@@ -1142,9 +1136,6 @@ class LearningCalendarPlugin extends Plugin
         }
     }
 
-    /**
-     * @param FormValidator $form
-     */
     public function getAddUserToCalendarForm(FormValidator &$form)
     {
         $calendars = $this->getCalendars(0, 1000, '');

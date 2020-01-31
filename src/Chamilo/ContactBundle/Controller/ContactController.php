@@ -22,8 +22,6 @@ class ContactController extends Controller
     /**
      * @Route("/", name="contact")
      *
-     * @param Request $request
-     *
      * @return mixed
      */
     public function indexAction(Request $request)

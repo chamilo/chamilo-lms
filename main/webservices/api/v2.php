@@ -1,7 +1,7 @@
 <?php
 /* For licensing terms, see /license.txt */
 /**
- * Entry point for REST web services in Chamilo
+ * Entry point for REST web services in Chamilo.
  *
  * Call it with the 'authenticate' action first, to get an api_key, then use
  * the api_key in all subsequent calls.
@@ -307,7 +307,7 @@ try {
             $subscribed = $restApi->subscribeUserToSessionFromUsername($_POST['sessionId'], $_POST['loginname']);
             $restResponse->setData([$subscribed]);
             break;
-        case Rest::GET_SESSION_FROM_EXTRA_FIELD;
+        case Rest::GET_SESSION_FROM_EXTRA_FIELD:
             if (empty($_POST['field_name']) || empty($_POST['field_value'])) {
                 throw new Exception(get_lang('NoData'));
             }
@@ -333,6 +333,5 @@ try {
 
 header('Content-Type: application/json');
 header('Access-Control-Allow-Origin: *');
-
 
 echo $restResponse->format();

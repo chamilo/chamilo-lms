@@ -745,8 +745,7 @@ class CourseChatUtils
     /**
      * Format the user data to return it in the user list.
      *
-     * @param User $user
-     * @param int  $status
+     * @param int $status
      *
      * @return array
      */

@@ -710,7 +710,6 @@ require_once __DIR__.'/internationalization.lib.php';
  *
  * @return string the requested path or the converted path
  *
- *
  * Notes about the current behaviour model:
  * 1. Windows back-slashes are converted to slashes in the result.
  * 2. A semi-absolute web-path is detected by its leading slash. On Linux systems, absolute system paths start with
@@ -9524,10 +9523,6 @@ function api_unserialize_content($type, $serialized, $ignoreErrors = false)
 /**
  * Set the From and ReplyTo properties to PHPMailer instance.
  *
- * @param PHPMailer $mailer
- * @param array     $sender
- * @param array     $replyToAddress
- *
  * @throws phpmailerException
  */
 function api_set_noreply_and_from_address_to_mailer(PHPMailer $mailer, array $sender, array $replyToAddress = [])
@@ -9568,7 +9563,7 @@ function api_set_noreply_and_from_address_to_mailer(PHPMailer $mailer, array $se
         isset($platformEmail['SMTP_UNIQUE_SENDER']) &&
         $platformEmail['SMTP_UNIQUE_SENDER']
     ) {
-	    $senderName = $notification->getDefaultPlatformSenderName();
+        $senderName = $notification->getDefaultPlatformSenderName();
         $senderEmail = $notification->getDefaultPlatformSenderEmail();
 
         if (PHPMailer::ValidateAddress($senderEmail)) {

@@ -16,9 +16,6 @@ class TemplatesRepository extends EntityRepository
     /**
      * Get the course template for a user.
      *
-     * @param Course $course
-     * @param User   $user
-     *
      * @return array
      */
     public function getCourseTemplates(Course $course, User $user)

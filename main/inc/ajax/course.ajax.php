@@ -39,7 +39,7 @@ switch ($action) {
             // changed images that can have some weight
             $now = time() + 600; //time must be in GMT anyway
             $headers = [
-              'Expires' => gmdate('D, d M Y H:i:s ', $now) . 'GMT',
+              'Expires' => gmdate('D, d M Y H:i:s ', $now).'GMT',
               'Cache-Control' => 'max-age=600',
             ];
             DocumentManager::file_send_for_download($courseInfo[$image], null, null, null, $headers);

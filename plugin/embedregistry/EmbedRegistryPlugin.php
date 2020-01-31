@@ -138,9 +138,6 @@ class EmbedRegistryPlugin extends Plugin
     }
 
     /**
-     * @param Course       $course
-     * @param Session|null $session
-     *
      * @throws \Doctrine\ORM\NonUniqueResultException
      *
      * @return Embed
@@ -172,8 +169,6 @@ class EmbedRegistryPlugin extends Plugin
     }
 
     /**
-     * @param Embed $embed
-     *
      * @return string
      */
     public function formatDisplayDate(Embed $embed)
@@ -193,8 +188,6 @@ class EmbedRegistryPlugin extends Plugin
     }
 
     /**
-     * @param Embed $embed
-     *
      * @return string
      */
     public function getViewUrl(Embed $embed)
@@ -203,8 +196,6 @@ class EmbedRegistryPlugin extends Plugin
     }
 
     /**
-     * @param Embed $embed
-     *
      * @throws \Doctrine\ORM\Query\QueryException
      *
      * @return int

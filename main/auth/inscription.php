@@ -122,8 +122,7 @@ if ($user_already_registered_show_terms === false &&
         }
     }
     $LastnameLabel = get_lang('LastName');
-    if (api_get_configuration_value('registration_add_helptext_for_2_names') == true) 
-    {
+    if (api_get_configuration_value('registration_add_helptext_for_2_names') == true) {
         $LastnameLabel = [$LastnameLabel, get_lang('InsertTwoNames')];
     }
     if (api_is_western_name_order()) {

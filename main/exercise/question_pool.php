@@ -66,7 +66,7 @@ $displayMessage = '';
 if ($is_allowedToEdit) {
     // Duplicating a Question
     if (!isset($_POST['recup']) && $question_copy != 0 && isset($fromExercise)) {
-         $origin_course_id = (int) $_GET['course_id'];
+        $origin_course_id = (int) $_GET['course_id'];
         $origin_course_info = api_get_course_info_by_id($origin_course_id);
         $current_course = api_get_course_info();
         $old_question_id = $question_copy;

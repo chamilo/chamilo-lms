@@ -26,6 +26,7 @@ class SurveyQuestion extends Basic
 
         return $config;
     }
+
     /**
      * Get the toolbar configuration when CKEditor is maximized.
      *
@@ -106,6 +107,4 @@ class SurveyQuestion extends Basic
             ['Toolbarswitch', 'Source'],
         ];
     }
-
-
 }

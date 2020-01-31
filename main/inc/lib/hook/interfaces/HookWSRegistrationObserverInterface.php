@@ -13,8 +13,6 @@
 interface HookWSRegistrationObserverInterface extends HookObserverInterface
 {
     /**
-     * @param HookWSRegistrationEventInterface $hook
-     *
      * @return int
      */
     public function hookWSRegistration(HookWSRegistrationEventInterface $hook);

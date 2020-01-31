@@ -19,4 +19,3 @@ $strings['JustificationDate'] = "Fecha del justificativo";
 
 $strings['SubscribeToASession'] = "Inscribirse a una sesion de examen";
 $strings['DocumentListForUserX'] = "Lista de documentos para %s";
-

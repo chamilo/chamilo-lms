@@ -13,8 +13,6 @@
 interface HookResubscribeObserverInterface extends HookObserverInterface
 {
     /**
-     * @param HookResubscribeEventInterface $hook
-     *
      * @return int
      */
     public function hookResubscribe(HookResubscribeEventInterface $hook);

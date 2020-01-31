@@ -16,9 +16,6 @@ use Sonata\AdminBundle\Show\ShowMapper;
  */
 class CGroupInfoAdmin extends Admin
 {
-    /**
-     * @param FormMapper $formMapper
-     */
     protected function configureFormFields(FormMapper $formMapper)
     {
         $formMapper
@@ -29,9 +26,6 @@ class CGroupInfoAdmin extends Admin
         ;
     }
 
-    /**
-     * @param ShowMapper $showMapper
-     */
     protected function configureShowField(ShowMapper $showMapper)
     {
         $showMapper
@@ -39,9 +33,6 @@ class CGroupInfoAdmin extends Admin
         ;
     }
 
-    /**
-     * @param DatagridMapper $datagridMapper
-     */
     protected function configureDatagridFilters(DatagridMapper $datagridMapper)
     {
         $datagridMapper
@@ -50,9 +41,6 @@ class CGroupInfoAdmin extends Admin
         ;
     }
 
-    /**
-     * @param ListMapper $listMapper
-     */
     protected function configureListFields(ListMapper $listMapper)
     {
         $listMapper

@@ -32,10 +32,8 @@ class Data
     private $converter;
 
     /**
-     * @param array      $paths
-     * @param Filesystem $filesystem
-     * @param Connector  $connector
-     * @param Alchemyst  $converter
+     * @param array     $paths
+     * @param Alchemyst $converter
      */
     public function __construct(
         $paths,
@@ -65,12 +63,7 @@ class Data
         if ($this->fs->exists($file)) {
             return $file;
         } else {
-            throw new \InvalidArgumentException(
-                sprintf(
-                    'The file "%s" does not exists .',
-                    $file
-                )
-            );
+            throw new \InvalidArgumentException(sprintf('The file "%s" does not exists .', $file));
         }
     }
 
@@ -122,7 +115,6 @@ class Data
     /**
      * Create folders.
      *
-     * @param array           $folderList
      * @param OutputInterface $output
      * @param string          $folderPermissions
      */
@@ -148,7 +140,6 @@ class Data
     }
 
     /**
-     * @param array           $folderList
      * @param OutputInterface $output
      */
     public function copyFolders(array $folderList, OutputInterface $output = null)
@@ -281,8 +272,6 @@ class Data
 
     /**
      * Creates the users/upload/X/my_files folder.
-     *
-     * @param User $user
      */
     public function createMyFilesFolder(User $user)
     {

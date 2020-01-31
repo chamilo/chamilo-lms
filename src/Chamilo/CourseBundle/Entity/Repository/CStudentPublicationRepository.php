@@ -19,8 +19,6 @@ class CStudentPublicationRepository extends EntityRepository
     /**
      * Find all the works registered by a teacher.
      *
-     * @param User    $user
-     * @param Course  $course
      * @param Session $session Optional
      * @param int     $groupId Optional
      *

@@ -738,7 +738,6 @@ class Certificate extends Model
                             true
                         );
 
-
                         // Find time spent in LP
                         $timeSpent = Tracking::get_time_spent_in_lp(
                             $this->user_id,

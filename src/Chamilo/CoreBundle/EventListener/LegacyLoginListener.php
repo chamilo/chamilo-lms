@@ -37,9 +37,6 @@ class LegacyLoginListener implements EventSubscriberInterface
         $this->tokenStorage = $tokenStorage;
     }
 
-    /**
-     * @param GetResponseEvent $event
-     */
     public function onKernelRequest(GetResponseEvent $event)
     {
         $request = $event->getRequest();
@@ -112,9 +109,6 @@ class LegacyLoginListener implements EventSubscriberInterface
         ];
     }
 
-    /**
-     * @param FilterResponseEvent $event
-     */
     public function redirectUser(FilterResponseEvent $event)
     {
         $uri = $event->getRequest()->getUri();

@@ -118,7 +118,7 @@ class Survey extends Basic
                 'TextColor',
                 'BGColor',
                 api_get_configuration_value('translate_html') ? 'Language' : '',
-                'Source'
+                'Source',
             ],
             ['Toolbarswitch'],
         ];

@@ -47,9 +47,6 @@ class SidebarMenuKnpEvent extends ThemeEvent
         return $this->menu;
     }
 
-    /**
-     * @param MenuItem $menu
-     */
     public function setMenu(MenuItem $menu)
     {
         $this->menu = $menu;
@@ -63,9 +60,6 @@ class SidebarMenuKnpEvent extends ThemeEvent
         return $this->menuRootItems;
     }
 
-    /**
-     * @param MenuItem $item
-     */
     public function addItem(MenuItem $item)
     {
         $this->menuRootItems[$item->getUri()] = $item;

@@ -2038,10 +2038,7 @@ class PHPMailer
     protected function SendmailSend($header, $body)
     {
         if (!(is_file($this->Sendmail) and is_executable($this->Sendmail))) {
-            throw new phpmailerException(
-              $this->lang('execute').$this->Sendmail,
-              self::STOP_CRITICAL
-          );
+            throw new phpmailerException($this->lang('execute').$this->Sendmail, self::STOP_CRITICAL);
         }
         if (!empty($this->Sender) and $this->validateAddress($this->Sender)) {
             if ($this->Mailer == 'qmail') {

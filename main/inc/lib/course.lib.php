@@ -5272,8 +5272,6 @@ class CourseManager
     /**
      * Course available settings variables see c_course_setting table.
      *
-     * @param AppPlugin $appPlugin
-     *
      * @return array
      */
     public static function getCourseSettingVariables(AppPlugin $appPlugin)
@@ -5343,7 +5341,6 @@ class CourseManager
     }
 
     /**
-     * @param AppPlugin    $appPlugin
      * @param string       $variable
      * @param string|array $value
      * @param int          $courseId
@@ -6295,8 +6292,6 @@ class CourseManager
     /**
      * Get the course categories form a course list.
      *
-     * @param array $courseList
-     *
      * @return array
      */
     public static function getCourseCategoriesFromCourseList(array $courseList)
@@ -6344,8 +6339,6 @@ class CourseManager
     }
 
     /**
-     * @param Course $course
-     *
      * @return bool
      */
     public static function hasPicture(Course $course)
@@ -6356,8 +6349,7 @@ class CourseManager
     /**
      * Get the course picture path.
      *
-     * @param Course $course
-     * @param bool   $fullSize
+     * @param bool $fullSize
      *
      * @return string|null
      */

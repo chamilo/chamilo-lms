@@ -2801,7 +2801,6 @@ class SurveyUtil
     /**
      * This function displays the sortable table with all the surveys.
      *
-     *
      * @author Patrick Cool <patrick.cool@UGent.be>, Ghent University
      *
      * @version January 2007

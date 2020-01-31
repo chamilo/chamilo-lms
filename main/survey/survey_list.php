@@ -12,7 +12,6 @@
  *
  * @todo use quickforms for the forms
  */
-
 use ChamiloSession as Session;
 
 if (!isset($_GET['cidReq'])) {

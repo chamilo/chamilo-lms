@@ -701,7 +701,7 @@ class CoursesAndSessionsCatalog
     }
 
     /**
-     * Search sessions by the title
+     * Search sessions by the title.
      *
      * @param string $keyword
      * @param array  $limit   Limit info

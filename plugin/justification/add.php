@@ -62,7 +62,6 @@ $tpl->assign(
     Display::toolbarAction('toolbar', [$actionLinks])
 );
 
-
 $content = $form->returnForm();
 
 $tpl->assign('content', $content);

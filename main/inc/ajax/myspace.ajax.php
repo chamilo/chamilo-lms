@@ -75,7 +75,7 @@ switch ($action) {
                 $item = [
                     api_get_local_time($data['login']),
                     api_time_to_hms(api_strtotime($data['logout']) - api_strtotime($data['login'])),
-                    $data['user_ip']
+                    $data['user_ip'],
                 ];
                 $tableData[] = $item;
             }
@@ -88,8 +88,8 @@ switch ($action) {
                 null,
                 'stat_table'
             );
-            $table->set_header(1,  get_lang('LoginDate'), false);
-            $table->set_header(2,  get_lang('Duration'), false);
+            $table->set_header(1, get_lang('LoginDate'), false);
+            $table->set_header(2, get_lang('Duration'), false);
             $table->set_header(3, get_lang('IP'), false);
             $result['result'] = $table->return_table();
 

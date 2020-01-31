@@ -47,7 +47,6 @@ class GradebookTable extends SortableTable
      * @param null     $showTeacherView
      * @param int      $userId
      * @param array    $studentList
-     * @param array    $loadStats
      */
     public function __construct(
         $currentcat,

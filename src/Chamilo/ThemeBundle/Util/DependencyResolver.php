@@ -156,14 +156,7 @@ class DependencyResolver implements DependencyResolverInterface
 
             foreach ($dependencies as $dep) {
                 if ($this->contains($id, $dep)) {
-                    throw new \RuntimeException(
-                        sprintf(
-                            'Circular dependency [%s] depends on [%s] which itself depends on [%s]',
-                            $id,
-                            $dep,
-                            $id
-                        )
-                    );
+                    throw new \RuntimeException(sprintf('Circular dependency [%s] depends on [%s] which itself depends on [%s]', $id, $dep, $id));
                 }
             }
         }

@@ -168,8 +168,6 @@ class PortfolioCategory
     /**
      * Set user.
      *
-     * @param User $user
-     *
      * @return PortfolioCategory
      */
     public function setUser(User $user)
@@ -206,9 +204,7 @@ class PortfolioCategory
     /**
      * Get items.
      *
-     * @param Course|null  $course
-     * @param Session|null $session
-     * @param bool         $onlyVisibles
+     * @param bool $onlyVisibles
      *
      * @return ArrayCollection
      */
@@ -237,8 +233,6 @@ class PortfolioCategory
 
     /**
      * Set items.
-     *
-     * @param ArrayCollection $items
      *
      * @return PortfolioCategory
      */

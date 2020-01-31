@@ -20,7 +20,6 @@ class ItemPropertyRepository extends EntityRepository
      *
      * @param string  $tool    learnpath | document | etc
      * @param int     $itemId
-     * @param Course  $course
      * @param Session $session
      * @param Group   $group
      *
@@ -50,7 +49,6 @@ class ItemPropertyRepository extends EntityRepository
      *
      * @param string  $tool    learnpath | document | etc
      * @param int     $itemId
-     * @param Course  $course
      * @param Session $session
      *
      * @return array
@@ -78,7 +76,6 @@ class ItemPropertyRepository extends EntityRepository
      *
      * @param User    $currentUser
      * @param string  $tool        learnpath | document | etc
-     * @param Course  $course
      * @param Session $session
      * @param int     $itemId
      * @param array   $newList
@@ -149,7 +146,6 @@ class ItemPropertyRepository extends EntityRepository
      * Unsubscribe groups to item.
      *
      * @param string  $tool
-     * @param Course  $course
      * @param Session $session
      * @param int     $itemId
      * @param array   $groups
@@ -204,7 +200,6 @@ class ItemPropertyRepository extends EntityRepository
      *
      * @param User    $currentUser
      * @param string  $tool
-     * @param Course  $course
      * @param Session $session
      * @param int     $itemId
      * @param array   $newUserList
@@ -278,7 +273,6 @@ class ItemPropertyRepository extends EntityRepository
      * Unsubscribe users to item.
      *
      * @param string  $tool
-     * @param Course  $course
      * @param Session $session
      * @param int     $itemId
      * @param array   $usersToDelete

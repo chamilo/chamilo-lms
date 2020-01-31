@@ -87,8 +87,7 @@ class QuestionOptionsEvaluationPlugin extends Plugin
     }
 
     /**
-     * @param int      $formula
-     * @param Exercise $exercise
+     * @param int $formula
      */
     public function saveFormulaForExercise($formula, Exercise $exercise)
     {
@@ -198,8 +197,7 @@ class QuestionOptionsEvaluationPlugin extends Plugin
     }
 
     /**
-     * @param int      $formula
-     * @param Exercise $exercise
+     * @param int $formula
      */
     private function recalculateQuestionScore($formula, Exercise $exercise)
     {

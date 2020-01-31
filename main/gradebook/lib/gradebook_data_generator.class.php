@@ -373,7 +373,6 @@ class GradebookDataGenerator
                         } else {
                             if (!empty($studentList)) {
                                 foreach ($studentList as $user) {
-
                                     $score = $this->build_result_column(
                                         $user['user_id'],
                                         $item,
@@ -534,8 +533,6 @@ class GradebookDataGenerator
     /**
      * Get best result of an item.
      *
-     * @param GradebookItem $item
-     *
      * @return array
      */
     public function buildBestResultColumn(GradebookItem $item)
@@ -571,8 +568,6 @@ class GradebookDataGenerator
     }
 
     /**
-     * @param GradebookItem $item
-     *
      * @return array
      */
     public function buildAverageResultColumn(GradebookItem $item)
@@ -608,9 +603,8 @@ class GradebookDataGenerator
     }
 
     /**
-     * @param GradebookItem $item
-     * @param int           $userId
-     * @param int           $userCount
+     * @param int $userId
+     * @param int $userCount
      *
      * @return array
      */

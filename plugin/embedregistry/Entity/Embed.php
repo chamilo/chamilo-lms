@@ -113,8 +113,6 @@ class Embed
     }
 
     /**
-     * @param \DateTime $displayStartDate
-     *
      * @return Embed
      */
     public function setDisplayStartDate(\DateTime $displayStartDate)
@@ -133,8 +131,6 @@ class Embed
     }
 
     /**
-     * @param \DateTime $displayEndDate
-     *
      * @return Embed
      */
     public function setDisplayEndDate(\DateTime $displayEndDate)
@@ -173,8 +169,6 @@ class Embed
     }
 
     /**
-     * @param Course $course
-     *
      * @return Embed
      */
     public function setCourse(Course $course)
@@ -193,8 +187,6 @@ class Embed
     }
 
     /**
-     * @param Session|null $session
-     *
      * @return Embed
      */
     public function setSession(Session $session = null)

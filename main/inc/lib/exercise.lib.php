@@ -3003,8 +3003,7 @@ HOTSPOT;
     }
 
     /**
-     * @param FormValidator $form
-     * @param string        $name
+     * @param string $name
      * @param $weight
      * @param $selected
      *
@@ -5061,11 +5060,10 @@ EOT;
     }
 
     /**
-     * @param Exercise $objExercise
-     * @param float    $score
-     * @param float    $weight
-     * @param bool     $checkPassPercentage
-     * @param int      $countPendingQuestions
+     * @param float $score
+     * @param float $weight
+     * @param bool  $checkPassPercentage
+     * @param int   $countPendingQuestions
      *
      * @return string
      */
@@ -5303,10 +5301,9 @@ EOT;
     }
 
     /**
-     * @param DateTime $time
-     * @param int      $userId
-     * @param int      $courseId
-     * @param int      $sessionId
+     * @param int $userId
+     * @param int $courseId
+     * @param int $sessionId
      *
      * @throws \Doctrine\ORM\Query\QueryException
      *
@@ -5413,12 +5410,11 @@ EOT;
      * Generate a certificate linked to current quiz and.
      * Return the HTML block with links to download and view the certificate.
      *
-     * @param float    $totalScore
-     * @param float    $totalWeight
-     * @param Exercise $objExercise
-     * @param int      $studentId
-     * @param string   $courseCode
-     * @param int      $sessionId
+     * @param float  $totalScore
+     * @param float  $totalWeight
+     * @param int    $studentId
+     * @param string $courseCode
+     * @param int    $sessionId
      *
      * @return string
      */

@@ -56,6 +56,5 @@ $tpl->assign(
     Display::toolbarAction('toolbar', [$actionLinks])
 );
 
-
 $tpl->assign('content', $content);
 $tpl->display_one_col_template();

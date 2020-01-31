@@ -7,5 +7,4 @@
  *
  * @package chamilo.plugin.azure_active_directory
  */
-
 $strings['InvalidId'] = 'Deze identificatie is niet geldig (verkeerde log-in of wachtwoord). Errocode: AZMNF';

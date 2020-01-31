@@ -99,9 +99,6 @@ class CourseAdmin extends Admin
         }
     }
 
-    /**
-     * @param ToolChain $chainTool
-     */
     public function setToolChain(ToolChain $chainTool)
     {
         $this->toolChain = $chainTool;
@@ -115,9 +112,6 @@ class CourseAdmin extends Admin
         return $this->toolChain;
     }
 
-    /**
-     * @param FormMapper $formMapper
-     */
     protected function configureFormFields(FormMapper $formMapper)
     {
         $formMapper
@@ -176,9 +170,6 @@ class CourseAdmin extends Admin
         ;
     }
 
-    /**
-     * @param DatagridMapper $datagridMapper
-     */
     protected function configureDatagridFilters(DatagridMapper $datagridMapper)
     {
         $datagridMapper
@@ -194,9 +185,6 @@ class CourseAdmin extends Admin
         ;
     }
 
-    /**
-     * @param ListMapper $listMapper
-     */
     protected function configureListFields(ListMapper $listMapper)
     {
         $listMapper

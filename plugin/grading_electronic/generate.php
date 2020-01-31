@@ -28,9 +28,7 @@ try {
     $form = $gradingElectronic->getForm();
 
     if (!$form->validate()) {
-        throw new Exception(
-            implode('<br>', $form->_errors)
-        );
+        throw new Exception(implode('<br>', $form->_errors));
     }
 
     $em = Database::getManager();

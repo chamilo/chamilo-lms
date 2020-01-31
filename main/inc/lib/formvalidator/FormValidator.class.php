@@ -1286,10 +1286,10 @@ EOT;
     }
 
     /**
-     * @param string      $name
-     * @param string      $label
-     * @param array $attributes
-     * @param bool  $required
+     * @param string $name
+     * @param string $label
+     * @param array  $attributes
+     * @param bool   $required
      *
      * @return HTML_QuickForm_element
      */

@@ -50,8 +50,6 @@ class SidebarController extends Controller
     }
 
     /**
-     * @param Request $request
-     *
      * @return Response
      */
     public function menuAction(Request $request)
@@ -74,8 +72,6 @@ class SidebarController extends Controller
     }
 
     /**
-     * @param Request $request
-     *
      * @return Response
      */
     public function menuKnpAction(Request $request)

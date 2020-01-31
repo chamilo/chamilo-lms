@@ -13,8 +13,6 @@
 interface HookCreateUserObserverInterface extends HookObserverInterface
 {
     /**
-     * @param HookCreateUserEventInterface $hook
-     *
      * @return int
      */
     public function hookCreateUser(HookCreateUserEventInterface $hook);

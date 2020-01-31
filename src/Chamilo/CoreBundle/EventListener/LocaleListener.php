@@ -31,9 +31,6 @@ class LocaleListener implements EventSubscriberInterface
         $this->container = $container;
     }
 
-    /**
-     * @param GetResponseEvent $event
-     */
     public function onKernelRequest(GetResponseEvent $event)
     {
         $request = $event->getRequest();

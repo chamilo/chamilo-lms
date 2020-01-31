@@ -28,8 +28,6 @@ class NotificationListEvent extends ThemeEvent
     }
 
     /**
-     * @param NotificationInterface $notificationInterface
-     *
      * @return $this
      */
     public function addNotification(NotificationInterface $notificationInterface)

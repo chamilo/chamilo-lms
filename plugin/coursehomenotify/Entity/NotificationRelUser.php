@@ -68,8 +68,6 @@ class NotificationRelUser
     }
 
     /**
-     * @param Notification $notification
-     *
      * @return NotificationRelUser
      */
     public function setNotification(Notification $notification)

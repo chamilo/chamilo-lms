@@ -2506,8 +2506,6 @@ class Category implements GradebookItem
     /**
      * Return HTML code with links to download and view certificate.
      *
-     * @param array $certificate
-     *
      * @return string
      */
     public static function getDownloadCertificateBlock(array $certificate)
@@ -2576,6 +2574,25 @@ class Category implements GradebookItem
     public function getDocumentId()
     {
         return $this->documentId;
+    }
+
+    /**
+     * Get the remaining weight in root category.
+     *
+     * @return int
+     */
+    public function getRemainingWeight()
+    {
+        $subCategories = $this->get_subcategories();
+
+        $subWeight = 0;
+
+        /** @var Category $subCategory */
+        foreach ($subCategories as $subCategory) {
+            $subWeight += $subCategory->get_weight();
+        }
+
+        return $this->weight - $subWeight;
     }
 
     /**
@@ -2782,24 +2799,5 @@ class Category implements GradebookItem
         }
 
         return api_float_val($categoryScore);
-    }
-
-    /**
-     * Get the remaining weight in root category.
-     *
-     * @return int
-     */
-    public function getRemainingWeight()
-    {
-        $subCategories = $this->get_subcategories();
-
-        $subWeight = 0;
-
-        /** @var Category $subCategory */
-        foreach ($subCategories as $subCategory) {
-            $subWeight += $subCategory->get_weight();
-        }
-
-        return $this->weight - $subWeight;
     }
 }

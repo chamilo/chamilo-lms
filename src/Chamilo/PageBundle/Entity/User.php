@@ -509,9 +509,6 @@ class User extends BaseUser
             ;
     }
 
-    /**
-     * @param ClassMetadata $metadata
-     */
     public static function loadValidatorMetadata(ClassMetadata $metadata)
     {
         //$metadata->addPropertyConstraint('firstname', new Assert\NotBlank());
@@ -1318,8 +1315,6 @@ class User extends BaseUser
     /**
      * Set lastLogin.
      *
-     * @param \DateTime $lastLogin
-     *
      * @return User
      */
     public function setLastLogin(\DateTime $lastLogin)
@@ -1503,8 +1498,6 @@ class User extends BaseUser
     /**
      * Sets the last update date.
      *
-     * @param \DateTime|null $updatedAt
-     *
      * @return User
      */
     public function setUpdatedAt(\DateTime $updatedAt = null)
@@ -1546,8 +1539,6 @@ class User extends BaseUser
 
     /**
      * Sets the credentials expiration date.
-     *
-     * @param \DateTime|null $date
      *
      * @return User
      */
@@ -1951,8 +1942,6 @@ class User extends BaseUser
     }
 
     /**
-     * @param array $roles
-     *
      * @return User
      */
     public function setRealRoles(array $roles)

@@ -13,8 +13,7 @@ class survey_question
     private $form;
 
     /**
-     * @param FormValidator $form
-     * @param array         $surveyData
+     * @param array $surveyData
      */
     public function addParentMenu(FormValidator $form, $surveyData)
     {
@@ -330,7 +329,7 @@ class survey_question
                 Session::write('answer_count', $counter);
             }
 
-            $newAnswers=[];
+            $newAnswers = [];
             foreach ($formData['answers'] as $key => &$value) {
                 if ($key > $deleted) {
                     // swap with previous (deleted) option slot
@@ -452,9 +451,8 @@ class survey_question
     }
 
     /**
-     * @param FormValidator $form
-     * @param array         $questionData
-     * @param array         $answers
+     * @param array $questionData
+     * @param array $answers
      */
     public function render(FormValidator $form, $questionData = [], $answers = [])
     {

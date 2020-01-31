@@ -16,8 +16,6 @@ interface HookConditionalLoginObserverInterface extends HookObserverInterface
      * </code>
      * conditional_function returns false to redirect to the url and returns true to continue with the classical login.
      *
-     * @param HookConditionalLoginEventInterface $hook
-     *
      * @return array
      */
     public function hookConditionalLogin(HookConditionalLoginEventInterface $hook);

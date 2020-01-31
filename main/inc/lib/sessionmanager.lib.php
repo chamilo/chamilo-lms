@@ -2078,6 +2078,7 @@ class SessionManager
                 SET nbr_users = (SELECT count(user_id) FROM $tbl_session_rel_user WHERE session_id = $sessionId)
                 WHERE id = $sessionId";
         Database::query($sql);
+
         return true;
     }
 
@@ -4397,7 +4398,6 @@ class SessionManager
     /**
      * Copies a session with the same data to a new session.
      * The new copy is not assigned to the same promotion.
-     *
      *
      * @param int  $id                         Session ID
      * @param bool $copy_courses               Whether to copy the relationship with courses
@@ -6777,8 +6777,7 @@ class SessionManager
      * Returns the number of days the student has left in a session when using
      * sessions durations.
      *
-     * @param array $sessionInfo
-     * @param int   $userId
+     * @param int $userId
      *
      * @return int
      */
@@ -7700,8 +7699,7 @@ class SessionManager
     }
 
     /**
-     * @param FormValidator $form
-     * @param array         $sessionInfo Optional
+     * @param array $sessionInfo Optional
      *
      * @return array
      */
@@ -8970,9 +8968,6 @@ class SessionManager
     }
 
     /**
-     * @param Course  $course
-     * @param Session $session
-     *
      * @return int
      */
     public static function getCountUsersInCourseSession(
@@ -9001,9 +8996,6 @@ class SessionManager
 
     /**
      * Get course IDs where user in not subscribed in session.
-     *
-     * @param User    $user
-     * @param Session $session
      *
      * @return array
      */

@@ -564,7 +564,6 @@ class SystemAnnouncementManager
                 $params,
                 ['id = ? ' => $id]
             );
-
         }
 
         foreach ($list as $key => $title) {
@@ -741,7 +740,7 @@ class SystemAnnouncementManager
             $promotionList = $promotion->get_all_promotions_by_career_id($announcement->career_id);
             if (isset($announcement->promotion_id) && !empty($announcement->promotion_id)) {
                 $promotionList = [];
-                $promotionList[]  = $promotion->get($announcement->promotion_id);
+                $promotionList[] = $promotion->get($announcement->promotion_id);
             }
             if (!empty($promotionList)) {
                 foreach ($promotionList as $promotion) {

@@ -439,13 +439,13 @@ switch ($report) {
             $averageUser = 0;
             $averageCoach = 0;
             if (!empty($numberOfWeeks)) {
-                $sessionAverage = api_number_format($sessionCount/$numberOfWeeks, 2);
+                $sessionAverage = api_number_format($sessionCount / $numberOfWeeks, 2);
             }
             if (!empty($numberUsers)) {
-                $averageUser = api_number_format($sessionCount/$numberUsers, 2);
+                $averageUser = api_number_format($sessionCount / $numberUsers, 2);
             }
             if (!empty($uniqueCoaches)) {
-                $averageCoach = api_number_format($sessionCount/$uniqueCoaches, 2);
+                $averageCoach = api_number_format($sessionCount / $uniqueCoaches, 2);
             }
 
             $table = new HTML_Table(['class' => 'table table-responsive']);
@@ -674,7 +674,7 @@ switch ($report) {
         $content .= Statistics::printToolStats();
         break;
     case 'coursebylanguage':
-        $content .=  '<canvas class="col-md-12" id="canvas" height="300px" style="margin-bottom: 20px"></canvas>';
+        $content .= '<canvas class="col-md-12" id="canvas" height="300px" style="margin-bottom: 20px"></canvas>';
         $result = Statistics::printCourseByLanguageStats();
         $content .= Statistics::printStats(get_lang('CountCourseByLanguage'), $result, true);
         break;
@@ -687,21 +687,21 @@ switch ($report) {
             $startDate = $values['daterange_start'];
             $endDate = $values['daterange_end'];
 
-            $content .=  '<div class="row">';
-            $content .=  '<div class="col-md-4"><canvas id="canvas1" style="margin-bottom: 20px"></canvas></div>';
-            $content .=  '<div class="col-md-4"><canvas id="canvas2" style="margin-bottom: 20px"></canvas></div>';
-            $content .=  '<div class="col-md-4"><canvas id="canvas3" style="margin-bottom: 20px"></canvas></div>';
-            $content .=  '</div>';
+            $content .= '<div class="row">';
+            $content .= '<div class="col-md-4"><canvas id="canvas1" style="margin-bottom: 20px"></canvas></div>';
+            $content .= '<div class="col-md-4"><canvas id="canvas2" style="margin-bottom: 20px"></canvas></div>';
+            $content .= '<div class="col-md-4"><canvas id="canvas3" style="margin-bottom: 20px"></canvas></div>';
+            $content .= '</div>';
 
-            $content .=  '<div class="row">';
-            $content .=  '<div class="col-md-6"><canvas id="canvas4" style="margin-bottom: 20px"></canvas></div>';
-            $content .=  '<div class="col-md-6"><canvas id="canvas5" style="margin-bottom: 20px"></canvas></div>';
-            $content .=  '</div>';
+            $content .= '<div class="row">';
+            $content .= '<div class="col-md-6"><canvas id="canvas4" style="margin-bottom: 20px"></canvas></div>';
+            $content .= '<div class="col-md-6"><canvas id="canvas5" style="margin-bottom: 20px"></canvas></div>';
+            $content .= '</div>';
 
-            $content .=  '<div class="row">';
-            $content .=  '<div class="col-md-6"><canvas id="canvas6" style="margin-bottom: 20px"></canvas></div>';
-            $content .=  '<div class="col-md-6"><canvas id="canvas7" style="margin-bottom: 20px"></canvas></div>';
-            $content .=  '</div>';
+            $content .= '<div class="row">';
+            $content .= '<div class="col-md-6"><canvas id="canvas6" style="margin-bottom: 20px"></canvas></div>';
+            $content .= '<div class="col-md-6"><canvas id="canvas7" style="margin-bottom: 20px"></canvas></div>';
+            $content .= '</div>';
 
             $conditions = [];
             $extraConditions = '';
@@ -821,10 +821,10 @@ switch ($report) {
                 $table->set_header($column, $header, false);
                 $column++;
             }
-            $content .=  $table->return_table();
+            $content .= $table->return_table();
         }
 
-        $content =  $form->returnForm().$content;
+        $content = $form->returnForm().$content;
 
         break;
     case 'users':
@@ -880,7 +880,7 @@ switch ($report) {
         $content .= ZombieReport::create(['report' => 'zombies'])->display(true);
         break;
     case 'activities':
-        $content .=Statistics::printActivitiesStats();
+        $content .= Statistics::printActivitiesStats();
         break;
     case 'messagesent':
         $messages_sent = Statistics::getMessages('sent');

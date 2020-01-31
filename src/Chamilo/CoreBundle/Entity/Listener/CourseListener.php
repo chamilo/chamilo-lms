@@ -18,9 +18,6 @@ class CourseListener
 {
     protected $toolChain;
 
-    /**
-     * @param ToolChain $toolChain
-     */
     public function __construct(ToolChain $toolChain)
     {
         $this->toolChain = $toolChain;
@@ -29,9 +26,6 @@ class CourseListener
     /**
      * new object : prePersist
      * edited object: preUpdate.
-     *
-     * @param Course             $course
-     * @param LifecycleEventArgs $args
      */
     public function prePersist(Course $course, LifecycleEventArgs $args)
     {

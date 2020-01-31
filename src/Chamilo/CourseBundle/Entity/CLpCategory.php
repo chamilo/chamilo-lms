@@ -173,9 +173,6 @@ class CLpCategory
         }
     }
 
-    /**
-     * @param CLpCategoryUser $categoryUser
-     */
     public function addUser(CLpCategoryUser $categoryUser)
     {
         $categoryUser->setCategory($this);
@@ -186,8 +183,6 @@ class CLpCategory
     }
 
     /**
-     * @param CLpCategoryUser $categoryUser
-     *
      * @return bool
      */
     public function hasUser(CLpCategoryUser $categoryUser)
@@ -226,8 +221,6 @@ class CLpCategory
     }
 
     /**
-     * @param CLpCategoryUser $user
-     *
      * @return $this
      */
     public function removeUsers(CLpCategoryUser $user)

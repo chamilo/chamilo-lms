@@ -126,8 +126,6 @@ class CItemProperty
 
     /**
      * CItemProperty constructor.
-     *
-     * @param Course $course
      */
     public function __construct(Course $course)
     {
@@ -187,8 +185,6 @@ class CItemProperty
 
     /**
      * Set lasteditDate.
-     *
-     * @param \DateTime $lasteditDate
      *
      * @return CItemProperty
      */
@@ -466,8 +462,6 @@ class CItemProperty
     }
 
     /**
-     * @param User $insertUser
-     *
      * @return $this
      */
     public function setInsertUser(User $insertUser)

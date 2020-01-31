@@ -81,8 +81,6 @@ class CourseRelUserCatalogue
     }
 
     /**
-     * @param Course $course
-     *
      * @return $this
      */
     public function setCourse(Course $course)

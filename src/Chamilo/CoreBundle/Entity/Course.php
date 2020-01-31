@@ -341,9 +341,6 @@ class Course
         }
     }
 
-    /**
-     * @param CTool $tool
-     */
     public function addTools(CTool $tool)
     {
         $tool->setCourse($this);
@@ -370,9 +367,6 @@ class Course
         }
     }
 
-    /**
-     * @param AccessUrlRelCourse $url
-     */
     public function addUrls(AccessUrlRelCourse $url)
     {
         $url->setCourse($this);
@@ -421,9 +415,6 @@ class Course
         }
     }
 
-    /**
-     * @param CourseRelUser $courseRelUser
-     */
     public function addUsers(CourseRelUser $courseRelUser)
     {
         $courseRelUser->setCourse($this);
@@ -434,8 +425,6 @@ class Course
     }
 
     /**
-     * @param User $user
-     *
      * @return bool
      */
     public function hasUser(User $user)
@@ -448,8 +437,6 @@ class Course
     }
 
     /**
-     * @param User $user
-     *
      * @return bool
      */
     public function hasStudent(User $user)
@@ -462,8 +449,6 @@ class Course
     }
 
     /**
-     * @param User $user
-     *
      * @return bool
      */
     public function hasTeacher(User $user)
@@ -477,8 +462,6 @@ class Course
 
     /**
      * Remove $user.
-     *
-     * @param CourseRelUser $user
      */
     public function removeUsers(CourseRelUser $user)
     {
@@ -489,17 +472,11 @@ class Course
         }
     }
 
-    /**
-     * @param User $user
-     */
     public function addTeacher(User $user)
     {
         $this->addUser($user, 0, "Trainer", User::COURSE_MANAGER);
     }
 
-    /**
-     * @param User $user
-     */
     public function addStudent(User $user)
     {
         $this->addUser($user, 0, "", User::STUDENT);
@@ -1154,8 +1131,6 @@ class Course
     }
 
     /**
-     * @param Session $session
-     *
      * @return $this
      */
     public function setCurrentSession(Session $session)
@@ -1169,8 +1144,6 @@ class Course
     }
 
     /**
-     * @param CourseRelUser $subscription
-     *
      * @return bool
      */
     protected function hasSubscription(CourseRelUser $subscription)
@@ -1193,7 +1166,6 @@ class Course
     }
 
     /**
-     * @param User   $user
      * @param string $relationType
      * @param string $role
      * @param string $status

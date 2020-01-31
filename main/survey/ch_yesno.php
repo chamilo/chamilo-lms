@@ -46,9 +46,8 @@ class ch_yesno extends survey_question
     }
 
     /**
-     * @param FormValidator $form
-     * @param array         $questionData
-     * @param array         $answers
+     * @param array $questionData
+     * @param array $answers
      */
     public function render(FormValidator $form, $questionData = [], $answers = null)
     {

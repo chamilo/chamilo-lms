@@ -1283,8 +1283,10 @@ class BuyCoursesPlugin extends Plugin
      *
      * @param string $dateStart
      * @param string $dateEnd
-     * @return array
+     *
      * @throws Exception
+     *
+     * @return array
      */
     public function getSaleListReport($dateStart = null, $dateEnd = null)
     {
@@ -1296,7 +1298,7 @@ class BuyCoursesPlugin extends Plugin
             INNER JOIN $userTable u ON s.user_id = u.id
         ";
         $list = Database::select(
-            ['c.iso_code', 'u.firstname', 'u.lastname', 'u.email' , 's.*'],
+            ['c.iso_code', 'u.firstname', 'u.lastname', 'u.email', 's.*'],
             "$saleTable s $innerJoins",
             [
                 'order' => 'id DESC',
@@ -1346,7 +1348,7 @@ class BuyCoursesPlugin extends Plugin
             $this->get_lang('ProductType'),
             $this->get_lang('ProductName'),
             $this->get_lang('UserName'),
-            get_lang('Email')
+            get_lang('Email'),
         ];
         //Validation Export
         $dateStart = strtotime($dateStart);
@@ -1368,6 +1370,7 @@ class BuyCoursesPlugin extends Plugin
                 ];
             }
         }
+
         return $listExport;
     }
 
@@ -1576,8 +1579,9 @@ class BuyCoursesPlugin extends Plugin
             INNER JOIN $currencyTable c ON s.currency_id = c.id
             INNER JOIN $userTable u ON s.user_id = u.id
         ";
+
         return Database::select(
-            ['c.iso_code', 'u.firstname', 'u.lastname', 'u.email' , 's.*'],
+            ['c.iso_code', 'u.firstname', 'u.lastname', 'u.email', 's.*'],
             "$saleTable s $innerJoins",
             [
                 'where' => [
@@ -1609,6 +1613,7 @@ class BuyCoursesPlugin extends Plugin
             INNER JOIN $currencyTable c ON s.currency_id = c.id
             INNER JOIN $userTable u ON s.user_id = u.id
         ";
+
         return Database::select(
             ['c.iso_code', 'u.firstname', 'u.lastname', 'u.email', 's.*'],
             "$saleTable s $innerJoins",
@@ -1624,8 +1629,7 @@ class BuyCoursesPlugin extends Plugin
     /**
      * Convert the course info to array with necessary course data for save item.
      *
-     * @param Course $course
-     * @param array  $defaultCurrency Optional. Currency data
+     * @param array $defaultCurrency Optional. Currency data
      *
      * @return array
      */
@@ -2766,8 +2770,6 @@ class BuyCoursesPlugin extends Plugin
     }
 
     /**
-     * @param Session $session
-     *
      * @return array
      */
     public function getBuyCoursePluginPrice(Session $session)
@@ -2790,8 +2792,6 @@ class BuyCoursesPlugin extends Plugin
     }
 
     /**
-     * @param array $saleInfo
-     *
      * @return string
      */
     public function getSubscriptionSuccessMessage(array $saleInfo)

@@ -4,7 +4,6 @@
 require_once __DIR__.'/functions.inc.php';
 
 /** @var array $uData */
-
 if ($uData['auth_source'] === 'azure') {
     $plugin = AzureActiveDirectory::create();
 

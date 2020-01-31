@@ -111,8 +111,6 @@ class Portfolio
     /**
      * Set user.
      *
-     * @param User $user
-     *
      * @return Portfolio
      */
     public function setUser(User $user)
@@ -134,8 +132,6 @@ class Portfolio
 
     /**
      * Set course.
-     *
-     * @param Course|null $course
      *
      * @return Portfolio
      */
@@ -168,8 +164,6 @@ class Portfolio
 
     /**
      * Set session.
-     *
-     * @param Session|null $session
      *
      * @return Portfolio
      */
@@ -231,8 +225,6 @@ class Portfolio
     /**
      * Set creationDate.
      *
-     * @param \DateTime $creationDate
-     *
      * @return Portfolio
      */
     public function setCreationDate(\DateTime $creationDate)
@@ -254,8 +246,6 @@ class Portfolio
 
     /**
      * Set updateDate.
-     *
-     * @param \DateTime $updateDate
      *
      * @return Portfolio
      */
@@ -322,8 +312,6 @@ class Portfolio
 
     /**
      * Set category.
-     *
-     * @param PortfolioCategory|null $category
      *
      * @return Portfolio
      */

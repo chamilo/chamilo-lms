@@ -68,13 +68,15 @@ foreach ($userList as $user) {
     unsubscribeUser($userId, $courseInfo);
 }
 
-function unsubscribeUser($userId, $courseInfo) {
+function unsubscribeUser($userId, $courseInfo)
+{
     $courseId = $courseInfo['real_id'];
     CourseManager::unsubscribe_user($userId, $courseInfo['code']);
     echo "Unsubscribe user id #$userId to course #$courseId".PHP_EOL;
 }
 
-function subscribeUser($userId, $courseInfo) {
+function subscribeUser($userId, $courseInfo)
+{
     $courseId = $courseInfo['real_id'];
     $isUserSubscribed = CourseManager::is_user_subscribed_in_course($userId, $courseInfo['code']);
     if ($isUserSubscribed === false) {

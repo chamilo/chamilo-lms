@@ -2,6 +2,7 @@
 /* For licensing terms, see /license.txt */
 
 use ChamiloSession as Session;
+use Symfony\Component\HttpFoundation\Request;
 
 /**
  * This script allows to manage answers. It is included from the
@@ -22,6 +23,13 @@ $pictureName = $objQuestion->getPictureFilename();
 
 $debug = 0; // debug variable to get where we are
 $okPicture = empty($pictureName) ? false : true;
+
+$httpRequest = Request::createFromGlobals();
+$reponse = $httpRequest->request->get('reponse');
+$comment = $httpRequest->request->get('comment');
+$weighting = $httpRequest->request->get('weighting');
+$hotspot_coordinates = $httpRequest->request->get('hotspot_coordinates');
+$hotspot_type = $httpRequest->request->get('hotspot_type');
 
 // if we come from the warning box "this question is used in several exercises"
 if ($modifyIn) {

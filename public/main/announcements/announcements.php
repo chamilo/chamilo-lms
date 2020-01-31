@@ -352,33 +352,32 @@ switch ($action) {
         exit;
 
         break;
-    case 'showhide':
-        if (!isset($_GET['isStudentView']) || 'false' != $_GET['isStudentView']) {
-            if (isset($_GET['id']) && $_GET['id']) {
-                if (0 != $sessionId &&
-                    false == api_is_allowed_to_session_edit(false, true)
-                ) {
-                    api_not_allowed();
-                }
+    case 'set_visibility':
+        if (!empty($announcement_id)) {
+            if (0 != $sessionId &&
+                false == api_is_allowed_to_session_edit(false, true)
+            ) {
+                api_not_allowed();
+            }
 
-                if (!$allowToEdit) {
-                    api_not_allowed(true);
-                }
+            $status = isset($_GET['status']) ? $_GET['status'] : null;
+            if (!$allowToEdit) {
+                api_not_allowed(true);
+            }
 
-                if (!api_is_session_general_coach() ||
-                    api_is_element_in_the_session(TOOL_ANNOUNCEMENT, $_GET['id'])
-                ) {
-                    AnnouncementManager::change_visibility_announcement(
-                        $_course,
-                        $_GET['id']
-                    );
-                    Display::addFlash(Display::return_message(get_lang('The visibility has been changed.')));
-                    header('Location: '.$homeUrl);
-                    exit;
-                }
+            if (!api_is_session_general_coach() ||
+                api_is_element_in_the_session(TOOL_ANNOUNCEMENT, $announcement_id)
+            ) {
+                AnnouncementManager::change_visibility_announcement(
+                    $_course,
+                    $announcement_id,
+                    $status
+                );
+                Display::addFlash(Display::return_message(get_lang('The visibility has been changed.')));
+                header('Location: '.$homeUrl);
+                exit;
             }
         }
-
         break;
     case 'add':
     case 'modify':

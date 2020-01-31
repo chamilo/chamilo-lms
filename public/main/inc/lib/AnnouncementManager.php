@@ -206,14 +206,28 @@ class AnnouncementManager
      * This functions switches the visibility a course resource
      * using the visibility field in 'item_property'.
      *
-     * @param array $courseInfo
-     * @param int   $id         ID of the element of the corresponding type
+     * @param array  $courseInfo
+     * @param int    $id
+     * @param string $status
      *
      * @return bool False on failure, True on success
      */
-    public static function change_visibility_announcement($courseInfo, $id)
+    public static function change_visibility_announcement($courseInfo, $id, $status)
     {
-        $session_id = api_get_session_id();
+        $repo = Container::getAnnouncementRepository();
+        $announcement = $repo->find($id);
+        if ($announcement) {
+            switch ($status) {
+                case 'invisible':
+                    $repo->setVisibilityDraft($announcement);
+                    break;
+                case 'visible':
+                    $repo->setVisibilityPublished($announcement);
+                    break;
+            }
+        }
+
+        /*$session_id = api_get_session_id();
         $item_visibility = api_get_item_visibility(
             $courseInfo,
             TOOL_ANNOUNCEMENT,
@@ -236,7 +250,7 @@ class AnnouncementManager
                 'visible',
                 api_get_user_id()
             );
-        }
+        }*/
 
         return true;
     }
@@ -479,12 +493,14 @@ class AnnouncementManager
 
             $image_visibility = 'invisible';
             $alt_visibility = get_lang('Visible');
+            $setNewStatus = 'visible';
             if ($announcement->isVisible($course, $session)) {
                 $image_visibility = 'visible';
                 $alt_visibility = get_lang('Hide');
+                $setNewStatus = 'invisible';
             }
             global $stok;
-            $modify_icons .= "<a href=\"".api_get_self()."?".api_get_cidreq()."&action=showhide&id=".$id."&sec_token=".$stok."\">".
+            $modify_icons .= "<a href=\"".api_get_self()."?".api_get_cidreq()."&action=set_visibility&status=".$setNewStatus."&id=".$id."&sec_token=".$stok."\">".
                 Display::return_icon($image_visibility.'.png', $alt_visibility, '', ICON_SIZE_SMALL)."</a>";
 
             if (api_is_allowed_to_edit(false, true)) {
@@ -1575,7 +1591,6 @@ class AnnouncementManager
         $courseId = 0,
         $sessionId = 0
     ) {
-        $user_id = $userId ?: api_get_user_id();
         $group_id = api_get_group_id();
         $session_id = $sessionId ?: api_get_session_id();
         if (empty($courseId)) {
@@ -1990,14 +2005,16 @@ class AnnouncementManager
                     }
 
                     if ($visibility) {
-                        $image_visibility = "visible";
+                        $image_visibility = 'visible';
+                        $setNewStatus = 'invisible';
                         $alt_visibility = get_lang('Hide');
                     } else {
-                        $image_visibility = "invisible";
+                        $image_visibility = 'invisible';
+                        $setNewStatus = 'visible';
                         $alt_visibility = get_lang('Visible');
                     }
 
-                    $modify_icons .= "<a href=\"".$actionUrl."&action=showhide&id=".$announcementId."&sec_token=".$stok."\">".
+                    $modify_icons .= "<a href=\"".$actionUrl."&action=set_visibility&status=".$setNewStatus."&id=".$announcementId."&sec_token=".$stok."\">".
                         Display::return_icon($image_visibility.'.png', $alt_visibility, '', ICON_SIZE_SMALL)."</a>";
 
                     // DISPLAY MOVE UP COMMAND only if it is not the top announcement

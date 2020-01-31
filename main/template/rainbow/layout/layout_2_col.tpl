@@ -194,7 +194,7 @@
                                     <div class="panel panel-default">
                                         <div class="panel-body">
                                             <div class="demostration">
-                                                <a href="{{ _p.web }}web/page-de-dmo-francais" class="btn btn-primary btn-demo">
+                                                <a href="{{ 'DemoMenuLink' | get_lang  }}" class="btn btn-primary btn-demo">
                                                     {{ 'demo' | get_lang }}
                                                 </a>
                                             </div>

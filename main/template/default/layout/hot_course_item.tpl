@@ -17,7 +17,7 @@
                     <div class="block-title">
                         <h5 class="title">
                             {% if item.is_course_student or item.is_course_teacher %}
-                                <a alt="{{ item.title }}" title="{{ item.title }}" href="{{ _p.web }}courses/{{ item.code  }}/">
+                                <a alt="{{ item.title }}" title="{{ item.title }}" href="{{ _p.web }}courses/{{ item.directory  }}/">
                                     {{ item.title_cut}}
                                 </a>
                             {% else %}

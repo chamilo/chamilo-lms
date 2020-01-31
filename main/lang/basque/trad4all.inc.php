@@ -6768,6 +6768,7 @@ $CasMainPortComment = "CAS zerbitzari nagusiarekin konektatzeko ataka";
 $CasMainProtocolTitle = "CAS zerbitzari nagusiaren protokoloa";
 $CAS1Text = "CAS 1";
 $CAS2Text = "CAS 2";
+$CAS3Text = "CAS 3";
 $SAMLText = "SAML";
 $CasMainProtocolComment = "Gu CAS zerbitzariarekin konektatzeko protokoloa";
 $CasUserAddActivateTitle = "Gaitu erabiltzaileak CAS bidez erregistratzea";

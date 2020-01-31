@@ -115,7 +115,8 @@
         "zendframework/zend-config": "~2.6|^3.0",
         "zendframework/zend-feed": "~2.6|^3.0",
         "zendframework/zend-http": "~2.6|^3.0",
-        "zendframework/zend-soap": "~2.6|^3.0"
+        "zendframework/zend-soap": "~2.6|^3.0",
+        "apereo/phpcas": "^1.3"
     },
     "require-dev": {
         "behat/behat": "@stable",

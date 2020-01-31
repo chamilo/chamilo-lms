@@ -1075,11 +1075,67 @@ class Template
         return Display::return_message($message, 'error', false);
     }
 
+    public static function displayCASLoginButton($label = null)
+    {
+        $course = api_get_course_id();
+        $form = new FormValidator(
+            'form-cas-login',
+            'POST',
+            $course
+                ? api_get_path(WEB_COURSE_PATH).$course.'/'
+                : api_get_path(WEB_PATH).api_get_setting('page_after_login'),
+            null,
+            null,
+            FormValidator::LAYOUT_BOX_NO_LABEL
+        );
+        $form->addHidden('forceCASAuthentication', 1);
+        $form->addButton(
+            'casLoginButton',
+            is_null($label) ? sprintf(get_lang('LoginWithYourAccount'), api_get_setting("Institution")) : $label,
+            api_get_setting("casLogoURL"),
+            'primary',
+            null,
+            'btn-block'
+        );
+
+        return $form->returnForm();
+    }
+
+    public static function displayCASLogoutButton($label = null)
+    {
+        $form = new FormValidator(
+            'form-cas-logout',
+            'GET',
+            api_get_path(WEB_PATH),
+            null,
+            null,
+            FormValidator::LAYOUT_BOX_NO_LABEL
+        );
+        $form->addHidden('logout', 1);
+        $form->addButton(
+            'casLogoutButton',
+            is_null($label) ? sprintf(get_lang('LogoutWithYourAccount'), api_get_setting("Institution")) : $label,
+            api_get_setting("casLogoURL"),
+            'primary',
+            null,
+            'btn-block'
+        );
+
+        return $form->returnForm();
+    }
+
     /**
      * @return string
+     * @throws Exception
      */
-    public function displayLoginForm()
+    public static function displayLoginForm()
     {
+        global $cas;
+
+        if (is_array($cas) && array_key_exists('replace_login_form',  $cas) && $cas['replace_login_form'] = true) {
+            return self::displayCASLoginButton();
+        }
+
         $form = new FormValidator(
             'form-login',
             'POST',
@@ -1144,7 +1200,7 @@ class Template
 
                 // Minimum options using all defaults (including defaults for Image_Text):
                 //$options = array('callback' => 'qfcaptcha_image.php');
-                $captcha_question = $form->addElement('CAPTCHA_Image', 'captcha_question', '', $options);
+                $captchaQuestion = $form->addElement('CAPTCHA_Image', 'captcha_question', '', $options);
                 $form->addHtml(get_lang('ClickOnTheImageForANewOne'));
 
                 $form->addElement(
@@ -1163,7 +1219,7 @@ class Template
                     'captcha',
                     get_lang('TheTextYouEnteredDoesNotMatchThePicture'),
                     'CAPTCHA',
-                    $captcha_question
+                    $captchaQuestion
                 );
             }
         }

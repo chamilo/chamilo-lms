@@ -3814,7 +3814,7 @@ function api_not_allowed(
         if (api_is_cas_activated()) {
             $content .= Display::return_message(sprintf(get_lang('YouHaveAnInstitutionalAccount'), api_get_setting("Institution")), '', false);
             $content .= Display::div(
-                "<br/><a href='".get_cas_direct_URL(api_get_course_id())."'>".sprintf(get_lang('LoginWithYourAccount'), api_get_setting("Institution"))."</a><br/><br/>",
+                Template::displayCASLoginButton(),
                 ['align' => 'center']
             );
             $content .= Display::return_message(get_lang('YouDontHaveAnInstitutionAccount'));
@@ -3865,7 +3865,10 @@ function api_not_allowed(
                 '',
                 false
             );
-            $msg .= Display::div("<br/><a href='".get_cas_direct_URL(api_get_course_int_id())."'>".getCASLogoHTML()." ".sprintf(get_lang('LoginWithYourAccount'), api_get_setting("Institution"))."</a><br/><br/>", ['align' => 'center']);
+            $msg .= Display::div(
+                Template::displayCASLoginButton(),
+                ['align' => 'center']
+            );
             $msg .= Display::return_message(get_lang('YouDontHaveAnInstitutionAccount'));
             $msg .= "<p style='text-align:center'><a href='#' onclick='$(this).parent().next().toggle()'>".get_lang('LoginWithExternalAccount')."</a></p>";
             $msg .= "<div style='display:none;'>";

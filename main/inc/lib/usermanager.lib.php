@@ -685,6 +685,193 @@ class UserManager
     }
 
     /**
+     * Ensure the CAS-authenticated user exists in the database.
+     *
+     * @param $casUser string the CAS user identifier
+     * @return string|bool the recognised user login name or false if not found
+     * @throws Exception if more than one user share the same CAS user identifier
+     */
+    public static function casUserLoginName($casUser) {
+        $loginName = false;
+
+        // look inside the casUser extra field
+        if (UserManager::is_extra_field_available('cas_user')) {
+            $valueModel = new ExtraFieldValue('user');
+            $itemList = $valueModel->get_item_id_from_field_variable_and_field_value(
+                'cas_user',
+                $casUser,
+                false,
+                false,
+                true
+            );
+            if (false !== $itemList) {
+                // at least one user has $casUser in the 'cas_user' extra field
+                // we attempt to load each candidate user because there might be deleted ones
+                // (extra field values of a deleted user might remain)
+                foreach ($itemList as $item) {
+                    $userId = intval($item['item_id']);
+                    $user = UserManager::getRepository()->find($userId);
+                    if (!is_null($user)) {
+                        if (false === $loginName) {
+                            $loginName = $user->getUsername();
+                        } else {
+                            throw new Exception(get_lang('MoreThanOneUserMatched'));
+                        }
+                    }
+                }
+            }
+        }
+
+        if (false === $loginName) {
+            // no matching 'cas_user' extra field value, or no such extra field
+            // falling back to the old behaviour: $casUser must be the login name
+            $userId = UserManager::get_user_id_from_username($casUser);
+            if (false !== $userId) {
+                $loginName = $casUser;
+            }
+        }
+
+        return $loginName;
+    }
+
+    /**
+     * Checks the availability of extra field 'cas_user'
+     * and creates it if missing
+     *
+     * @throws Exception on failure
+     */
+    public static function ensureCASUserExtraFieldExists()
+    {
+        if (!UserManager::is_extra_field_available('cas_user')) {
+            $extraField = new ExtraField('user');
+            if (false === $extraField->save(
+                    [
+                        'variable' => 'cas_user',
+                        'field_type' => ExtraField::FIELD_TYPE_TEXT,
+                        'display_text' => get_lang('CAS User Identifier'),
+                        'visible_to_self' => true,
+                        'filter' => true,
+                    ]
+                )) {
+                throw new Exception(get_lang('FailedToCreateExtraFieldCasUser'));
+            }
+        }
+    }
+
+    /**
+     * Create a CAS-authenticated user from scratch, from its CAS user identifier, with temporary default values.
+     *
+     * @param string $casUser the CAS user identifier
+     * @return string the login name of the new user
+     * @throws Exception on error
+     */
+    public static function createCASAuthenticatedUserFromScratch($casUser)
+    {
+        self::ensureCASUserExtraFieldExists();
+
+        $loginName = 'cas_user_'.$casUser;
+        $defaultValue = get_lang("EditInProfile");
+        require_once(__DIR__.'/../../auth/external_login/functions.inc.php');
+        $userId = external_add_user(
+            [
+                'username' => $loginName,
+                'auth_source' => CAS_AUTH_SOURCE,
+                'firstname' => $defaultValue,
+                'lastname' => $defaultValue,
+                'email' => $defaultValue,
+            ]
+        );
+        if (false === $userId) {
+            throw new Exception(get_lang('FailedUserCreation'));
+        }
+        // Not checking function update_extra_field_value return value because not reliable
+        self::update_extra_field_value($userId, 'cas_user', $casUser);
+        return $loginName;
+    }
+
+    /**
+     * Create a CAS-authenticated user from LDAP, from its CAS user identifier.
+     *
+     * @param $casUser
+     * @return string login name of the new user
+     * @throws Exception
+     */
+    public static function createCASAuthenticatedUserFromLDAP($casUser)
+    {
+        self::ensureCASUserExtraFieldExists();
+
+        require_once(__DIR__.'/../../auth/external_login/ldap.inc.php');
+        $login = extldapCasUserLogin($casUser);
+        if (false !== $login) {
+            $ldapUser = extldap_authenticate($login, 'nopass', true);
+            if (false !== $ldapUser) {
+                require_once(__DIR__.'/../../auth/external_login/functions.inc.php');
+                $user = extldap_get_chamilo_user($ldapUser);
+                $user['username'] = $login;
+                $user['auth_source'] = CAS_AUTH_SOURCE;
+                $userId = external_add_user($user);
+                if (false !== $userId) {
+                    // Not checking function update_extra_field_value return value because not reliable
+                    self::update_extra_field_value($userId, 'cas_user', $casUser);
+                    return $login;
+                } else {
+                    throw new Exception('Could not create the new user '.$login);
+                }
+            } else {
+                throw new Exception('Could not load the new user from LDAP using its login '.$login);
+            }
+        } else {
+            throw new Exception('Could not find the new user from LDAP using its cas user identifier '.$casUser);
+        }
+    }
+
+    /**
+     * updates user record in database from its LDAP record
+     * copies relevant LDAP attribute values : firstname, lastname and email.
+     *
+     * @param $login string the user login name
+     * @throws Exception when the user login name is not found in the LDAP or in the database
+     */
+    public static function updateUserFromLDAP($login)
+    {
+        require_once(__DIR__ . '/../../auth/external_login/ldap.inc.php');
+
+        $ldapUser = extldap_authenticate($login, 'nopass', true);
+        if (false === $ldapUser) {
+            throw new Exception(get_lang('NoSuchUserInLDAP'));
+        }
+
+        $user = extldap_get_chamilo_user($ldapUser);
+        $userInfo = api_get_user_info_from_username($login);
+        if (false === $userInfo) {
+            throw new Exception(get_lang('NoSuchUserInInternalDatabase'));
+        }
+
+        $userId = UserManager::update_user(
+            $userInfo['user_id'],
+            $user["firstname"],
+            $user["lastname"],
+            $login,
+            null,
+            null,
+            $user["email"],
+            $userInfo['status'],
+            '',
+            '',
+            '',
+            null,
+            1,
+            null,
+            0,
+            null,
+            ''
+        );
+        if (false === $userId) {
+            throw new Exception(get_lang('CouldNotUpdateUser'));
+        }
+    }
+
+    /**
      * Can user be deleted? This function checks whether there's a course
      * in which the given user is the
      * only course administrator. If that is the case, the user can't be
@@ -2911,7 +3098,7 @@ class UserManager
     /**
      * Get the extra field information for a certain field (the options as well).
      *
-     * @param int $variable The name of the field we want to know everything about
+     * @param string $variable The name of the field we want to know everything about
      *
      * @return array Array containing all the information about the extra profile field
      *               (first level of array contains field details, then 'options' sub-array contains options details,

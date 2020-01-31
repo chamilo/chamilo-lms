@@ -1265,8 +1265,6 @@ class CourseRestorer
             );
 
             $this->course->resources[RESOURCE_FORUMTOPIC][$thread_id]->destination_id = $new_id;
-            $topic_replies = -1;
-
             foreach ($this->course->resources[RESOURCE_FORUMPOST] as $post_id => $post) {
                 if ($post->obj->thread_id == $thread_id) {
                     $this->restore_post($post_id, $new_id, $forum_id, $sessionId);

@@ -5,6 +5,9 @@ services:
     PhpCsFixer\Fixer\Phpdoc\NoSuperfluousPhpdocTagsFixer:
         remove_inheritdoc: true
 
+    PhpCsFixer\Fixer\Operator\IncrementStyleFixer:
+        style: 'post'
+
 parameters:
     sets:
         - 'clean-code'

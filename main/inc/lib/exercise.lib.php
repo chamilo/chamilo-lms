@@ -2786,7 +2786,7 @@ HOTSPOT;
         $minNote = api_get_setting('exercise_min_score');
 
         if ($maxNote != '' && $minNote != '') {
-            if (!empty($weight) && intval($weight) != 0) {
+            if (!empty($weight) && (float) $weight !== 0) {
                 $score = $minNote + ($maxNote - $minNote) * $score / $weight;
             } else {
                 $score = $minNote;
@@ -2839,6 +2839,7 @@ HOTSPOT;
         $percentage = float_format($percentage, 1);
         $score = float_format($score, 1);
         $weight = float_format($weight, 1);
+
         if ($roundValues) {
             $whole = floor($percentage); // 1
             $fraction = $percentage - $whole; // .25
@@ -2877,6 +2878,7 @@ HOTSPOT;
             if ($hidePercentageSign) {
                 $percentageSign = '';
             }
+
             $html = $percentage."$percentageSign ($score / $weight)";
             if ($show_only_percentage) {
                 $html = $percentage.$percentageSign;
@@ -2891,9 +2893,10 @@ HOTSPOT;
             $html = $scoreBasedInModel;
         }
 
-        // Ignore other formats and use the configuratio['exercise_score_format'] value
+        // Ignore other formats and use the configuration['exercise_score_format'] value
         // But also keep the round values settings.
         $format = api_get_configuration_value('exercise_score_format');
+
         if (!empty($format)) {
             $html = ScoreDisplay::instance()->display_score([$score, $weight], $format);
         }

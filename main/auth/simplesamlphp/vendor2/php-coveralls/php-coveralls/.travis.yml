@@ -1,0 +1,59 @@
+sudo: false
+dist: trusty
+language: php
+
+matrix:
+    include:
+        - php: 5.5
+          env: 'COMPOSER_FLAGS="--prefer-stable --prefer-lowest"'
+        - php: 5.5
+        - php: 5.6
+        - php: 7.0
+          env: 'BOX=yes'
+        - php: 7.1
+          env: CHECKS=yes
+        - php: 7.1
+          env: SYMFONY_VERSION="^3.0"
+        - php: 7.2
+          env: SYMFONY_VERSION="^4.0"
+        - php: 7.3
+          env: SYMFONY_VERSION="^5.0" MIN_STABILITY=dev
+
+cache:
+    directories:
+        - $HOME/.composer/cache
+
+install:
+    - mkdir -p build/logs
+    - mv ${HOME}/.phpenv/versions/$(phpenv version-name)/etc/conf.d/xdebug.ini ${HOME}/xdebug.ini || return 0
+    - 'if [ "$MIN_STABILITY" != "" ]; then composer config minimum-stability $MIN_STABILITY; fi'
+    - 'if [ "$SYMFONY_VERSION" != "" ]; then sed -i "s/\"symfony\/\([^\"]*\)\": \"^2[^\"]*\"/\"symfony\/\1\": \"$SYMFONY_VERSION\"/g" composer.json; fi'
+    - travis_retry composer update ${COMPOSER_FLAGS} --no-interaction
+    - if [ "$CHECKS" = "yes" ]; then travis_retry composer install-dev-tools; fi;
+
+script:
+    - cp ${HOME}/xdebug.ini ${HOME}/.phpenv/versions/$(phpenv version-name)/etc/conf.d/xdebug.ini || return 0
+    - vendor/bin/phpunit -v
+    - rm ${HOME}/.phpenv/versions/$(phpenv version-name)/etc/conf.d/xdebug.ini || return 0
+    - if [ "$CHECKS" = "yes" ]; then composer sca; fi;
+
+after_success:
+    - bin/php-coveralls -v --exclude-no-stmt
+
+before_deploy:
+    - if [ "${BOX}" = "yes" ]; then curl -LSs http://box-project.github.io/box2/installer.php | php; fi;
+    - if [ "${BOX}" = "yes" ]; then composer config platform.php 2> /dev/null || composer config platform.php 5.5.0; fi;
+    - if [ "${BOX}" = "yes" ]; then composer update --no-dev --no-interaction ${COMPOSER_FLAGS}; fi;
+    - if [ "${BOX}" = "yes" ]; then php -d phar.readonly=false box.phar build; fi;
+
+deploy:
+    provider: releases
+    token:
+        secure: RvyoncgjY7qxxQj6gDl+socPypw4pGVSi3cPIjl7me6D0qm9/peibmWaTmW3bbnugYTEHF1mEpR8jUKeyHnEyxWG+gWD71KD42ofT22QUxBoKpVxyRMr44gJNCuTlbzvcQwsURRvP9Fkic4oVukpvjnOCifBdlmay+NE31Wjof0=
+    file: build/artifacts/php-coveralls.phar
+    skip_cleanup: true
+    on:
+        repo: php-coveralls/php-coveralls
+        tags: true
+        all_branches: true
+        condition: $BOX = yes

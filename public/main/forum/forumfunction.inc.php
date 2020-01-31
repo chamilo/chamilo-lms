@@ -1227,9 +1227,8 @@ function return_visible_invisible_icon(
 ) {
     $html = '';
     $id = (int) $id;
-    $current_visibility_status = (int) $current_visibility_status;
 
-    if (1 == $current_visibility_status) {
+    if ($current_visibility_status) {
         $html .= '<a href="'.api_get_self().'?'.api_get_cidreq().'&';
         if (is_array($additional_url_parameters)) {
             foreach ($additional_url_parameters as $key => $value) {
@@ -1238,8 +1237,7 @@ function return_visible_invisible_icon(
         }
         $html .= 'action=invisible&content='.$content.'&id='.$id.'">'.
             Display::return_icon('visible.png', get_lang('Make invisible'), [], ICON_SIZE_SMALL).'</a>';
-    }
-    if (0 == $current_visibility_status) {
+    } else {
         $html .= '<a href="'.api_get_self().'?'.api_get_cidreq().'&';
         if (is_array($additional_url_parameters)) {
             foreach ($additional_url_parameters as $key => $value) {
@@ -1650,7 +1648,7 @@ function get_forum_categories($id = 0, $courseId = 0, $sessionId = 0)
  * @param int $cat_id   the id of the forum category
  * @param int $courseId Optional. The course ID
  *
- * @return array containing all the information about the forums (regardless of their category)
+ * @return CForumForum[] containing all the information about the forums (regardless of their category)
  *
  * @author Patrick Cool <patrick.cool@UGent.be>, Ghent University
  *

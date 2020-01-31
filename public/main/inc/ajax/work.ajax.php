@@ -114,7 +114,7 @@ switch ($action) {
 
                     $json['url'] = $result['view_url'];
                     $json['size'] = '';
-                    $json['type'] = api_htmlentities($result['filetype']);
+                    //$json['type'] = api_htmlentities($result['filetype']);
                     $json['result'] = Display::return_icon(
                         'accept.png',
                         get_lang('Uploaded..')

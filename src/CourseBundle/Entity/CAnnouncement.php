@@ -6,7 +6,6 @@ namespace Chamilo\CourseBundle\Entity;
 
 use Chamilo\CoreBundle\Entity\Resource\AbstractResource;
 use Chamilo\CoreBundle\Entity\Resource\ResourceInterface;
-use Chamilo\CourseBundle\Repository\CAnnouncementAttachmentRepository;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -110,8 +109,6 @@ class CAnnouncement extends AbstractResource implements ResourceInterface
 
     /**
      * @param CAnnouncementAttachment[] $attachments
-     *
-     * @return CAnnouncement
      */
     public function setAttachments(array $attachments): CAnnouncement
     {
@@ -312,12 +309,7 @@ class CAnnouncement extends AbstractResource implements ResourceInterface
         return $this->cId;
     }
 
-    /**
-     * Get iid.
-     *
-     * @return int
-     */
-    public function getIid()
+    public function getIid(): int
     {
         return $this->iid;
     }

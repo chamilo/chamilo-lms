@@ -223,6 +223,7 @@ class CStudentPublication extends AbstractResource implements ResourceInterface
         $this->parentId = 0;
         $this->qualificatorId = 0;
         $this->qualification = 0;
+        $this->sentDate = new \DateTime();
     }
 
     public function __toString(): string
@@ -582,12 +583,10 @@ class CStudentPublication extends AbstractResource implements ResourceInterface
 
     /**
      * Get qualificatorId.
-     *
-     * @return int
      */
-    public function getQualificatorId()
+    public function getQualificatorId(): int
     {
-        return $this->qualificatorId;
+        return (int) $this->qualificatorId;
     }
 
     /**

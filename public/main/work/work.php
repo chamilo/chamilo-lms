@@ -2,6 +2,8 @@
 
 /* For licensing terms, see /license.txt */
 
+use Chamilo\CoreBundle\Framework\Container;
+
 require_once __DIR__.'/../inc/global.inc.php';
 $current_course_tool = TOOL_STUDENTPUBLICATION;
 
@@ -18,6 +20,11 @@ $groupId = api_get_group_id();
 $this_section = SECTION_COURSES;
 $work_id = isset($_GET['id']) ? (int) $_GET['id'] : null;
 $my_folder_data = get_work_data_by_id($work_id);
+$repo = Container::getStudentPublicationRepository();
+$studentPublication = null;
+if (!empty($work_id)) {
+    $studentPublication = $repo->find($work_id);
+}
 
 $curdirpath = '';
 $htmlHeadXtra[] = api_get_jqgrid_js();
@@ -27,6 +34,7 @@ $tool_name = get_lang('Assignments');
 $item_id = isset($_REQUEST['item_id']) ? (int) $_REQUEST['item_id'] : null;
 $origin = api_get_origin();
 $action = isset($_REQUEST['action']) ? $_REQUEST['action'] : 'list';
+
 
 // Download folder
 if ('downloadfolder' === $action) {
@@ -38,7 +46,6 @@ if ('upload_form' === $action) {
     $display_upload_form = true;
 }
 
-/*	Header */
 if (api_is_in_gradebook()) {
     $interbreadcrumb[] = [
         'url' => api_get_path(WEB_CODE_PATH).'gradebook/index.php?'.api_get_cidreq(),
@@ -114,8 +121,6 @@ Event::event_access_tool(TOOL_STUDENTPUBLICATION);
 
 $logInfo = [
     'tool' => TOOL_STUDENTPUBLICATION,
-    'tool_id' => 0,
-    'tool_id_detail' => 0,
     'action' => $action,
 ];
 Event::registerLog($logInfo);
@@ -267,7 +272,9 @@ switch ($action) {
             api_not_allowed();
         }
 
-        api_item_property_update(
+        $repo->setVisibilityPublished($studentPublication);
+
+        /*api_item_property_update(
             $courseInfo,
             'work',
             $work_id,
@@ -278,7 +285,7 @@ switch ($action) {
             null,
             null,
             $sessionId
-        );
+        );*/
 
         Display::addFlash(
             Display::return_message(
@@ -296,6 +303,8 @@ switch ($action) {
             api_not_allowed();
         }
 
+        $repo->setVisibilityDraft($studentPublication);
+        /*
         api_item_property_update(
             $courseInfo,
             'work',
@@ -307,7 +316,7 @@ switch ($action) {
             null,
             null,
             $sessionId
-        );
+        );*/
 
         Display::addFlash(
             Display::return_message(

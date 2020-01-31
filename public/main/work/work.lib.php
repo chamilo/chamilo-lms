@@ -112,14 +112,6 @@ function get_work_data_by_path($path, $courseId = 0)
 function get_work_data_by_id($id, $courseId = 0, $sessionId = 0)
 {
     $id = (int) $id;
-    $courseId = (int) $courseId ?: api_get_course_int_id();
-    $table = Database::get_course_table(TABLE_STUDENT_PUBLICATION);
-
-    $sessionCondition = '';
-    if (!empty($sessionId)) {
-        $sessionCondition = api_get_session_condition($sessionId, true);
-    }
-
     $webCodePath = api_get_path(WEB_CODE_PATH);
 
     $repo = Container::getStudentPublicationRepository();
@@ -137,7 +129,6 @@ function get_work_data_by_id($id, $courseId = 0, $sessionId = 0)
         $workId = $studentPublication->getIid();
         $work['id'] = $workId;
         $work['iid'] = $workId;
-
         $work['description'] = $studentPublication->getDescription();
         $work['url'] = $studentPublication->getUrl();
         $work['active'] = $studentPublication->getActive();
@@ -1395,7 +1386,6 @@ function getWorkListTeacher(
     $workTable = Database::get_course_table(TABLE_STUDENT_PUBLICATION);
     $workTableAssignment = Database::get_course_table(TABLE_STUDENT_PUBLICATION_ASSIGNMENT);
 
-    $courseInfo = api_get_course_info();
     $course_id = api_get_course_int_id();
     $session_id = api_get_session_id();
     $condition_session = api_get_session_condition($session_id);
@@ -1447,13 +1437,20 @@ function getWorkListTeacher(
         if ($getCount) {
             $row = Database::fetch_array($result);
 
-            return $row['count'];
+            return (int) $row['count'];
         }
 
         $url = api_get_path(WEB_CODE_PATH).'work/work_list_all.php?'.api_get_cidreq();
         $blockEdition = api_get_configuration_value('block_student_publication_edition');
+        $repo = Container::getStudentPublicationRepository();
+        $courseEntity = api_get_course_entity($course_id);
+        $sessionEntity = api_get_session_entity($session_id);
+
         while ($work = Database::fetch_array($result, 'ASSOC')) {
-            $workId = $work['id'];
+            /** @var CStudentPublication $studentPublication */
+            $studentPublication = $repo->find($work['iid']);
+            $workId = $studentPublication->getIid();
+
             $work['type'] = Display::return_icon('work.png');
             $work['expires_on'] = empty($work['expires_on']) ? null : api_get_local_time($work['expires_on']);
 
@@ -1479,8 +1476,8 @@ function getWorkListTeacher(
             );
 
             //$visibility = api_get_item_visibility($courseInfo, 'work', $workId, $session_id);
-            $visibility = 1;
-            if (1 == $visibility) {
+            $isVisible = $studentPublication->isVisible($courseEntity, $sessionEntity);
+            if ($isVisible) {
                 $icon = 'visible.png';
                 $text = get_lang('Visible');
                 $action = 'invisible';
@@ -4034,7 +4031,6 @@ function processWorkForm(
     }
 
     $groupIid = 0;
-    $groupInfo = [];
     if ($groupId) {
         $groupInfo = GroupManager::get_group_properties($groupId);
         $groupIid = $groupInfo['iid'];
@@ -4047,6 +4043,13 @@ function processWorkForm(
         $content = $request->files->get('file');
         if (is_array($content)) {
             $content = $content[0];
+        }
+
+        if (empty($content)) {
+            $content = $request->files->get('files');
+            if (is_array($content)) {
+                $content = $content[0];
+            }
         }
 
         $studentPublication = new CStudentPublication();
@@ -4063,7 +4066,6 @@ function processWorkForm(
             ->setWeight(0)
             ->setAllowTextAssignment(0)
             ->setPostGroupId($groupIid)
-            ->setSentDate(new DateTime())
             ->setParentId($workInfo['id'])
             ->setSession(api_get_session_entity($sessionId))
             ->setFilesize($filesize)
@@ -4590,7 +4592,6 @@ function deleteWorkItem($item_id, $courseInfo)
     }
 
     $work_table = Database::get_course_table(TABLE_STUDENT_PUBLICATION);
-    $TSTDPUBASG = Database::get_course_table(TABLE_STUDENT_PUBLICATION_ASSIGNMENT);
     $is_allowed_to_edit = api_is_allowed_to_edit();
     $file_deleted = false;
     $is_author = user_is_author($item_id);
@@ -4664,7 +4665,6 @@ function deleteWorkItem($item_id, $courseInfo)
             } // end of considered_working_time check section
 
             $repo = Container::getStudentPublicationRepository();
-            //$repo = $repo->getRepository();
             /** @var CStudentPublication $work */
             $work = $repo->find($item_id);
             $work->setActive(2);
@@ -4708,7 +4708,6 @@ function deleteWorkItem($item_id, $courseInfo)
                 api_get_session_id()
             );
             $file_deleted = true;
-            $work = $row['url'];
 
             if (1 == $row['contains_file']) {
                 /*if (!empty($work)) {
@@ -4880,6 +4879,21 @@ function makeVisible($itemId, $course_info)
     if (empty($course_info) || empty($itemId)) {
         return false;
     }
+
+    $itemId = (int) $itemId;
+    if (empty($course_info) || empty($itemId)) {
+        return false;
+    }
+
+    $repo = Container::getStudentPublicationRepository();
+    /** @var CStudentPublication $studentPublication */
+    $studentPublication = $repo->find($itemId);
+    if ($studentPublication) {
+        $studentPublication->setAccepted(1);
+        $repo->getEntityManager()->persist($studentPublication);
+        $repo->getEntityManager()->flush();
+    }
+    /*
     $work_table = Database::get_course_table(TABLE_STUDENT_PUBLICATION);
     $course_id = $course_info['real_id'];
 
@@ -4887,7 +4901,7 @@ function makeVisible($itemId, $course_info)
             WHERE c_id = $course_id AND id = $itemId";
     Database::query($sql);
     api_item_property_update($course_info, 'work', $itemId, 'visible', api_get_user_id());
-
+    */
     return true;
 }
 
@@ -4904,19 +4918,22 @@ function makeInvisible($itemId, $course_info)
         return false;
     }
 
-    $table = Database::get_course_table(TABLE_STUDENT_PUBLICATION);
-    $course_id = $course_info['real_id'];
-    $sql = "UPDATE $table
-            SET accepted = 0
-            WHERE c_id = $course_id AND id = '".$itemId."'";
-    Database::query($sql);
-    api_item_property_update(
+    $repo = Container::getStudentPublicationRepository();
+    /** @var CStudentPublication $studentPublication */
+    $studentPublication = $repo->find($itemId);
+    if ($studentPublication) {
+        $studentPublication->setAccepted(0);
+        $repo->getEntityManager()->persist($studentPublication);
+        $repo->getEntityManager()->flush();
+    }
+
+    /*api_item_property_update(
         $course_info,
         'work',
         $itemId,
         'invisible',
         api_get_user_id()
-    );
+    );*/
 
     return true;
 }

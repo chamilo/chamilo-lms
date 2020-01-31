@@ -249,19 +249,11 @@ class CAnnouncementAttachment extends AbstractResource implements ResourceInterf
         return $this->cId;
     }
 
-    /**
-     * @return CAnnouncement
-     */
     public function getAnnouncement(): CAnnouncement
     {
         return $this->announcement;
     }
 
-    /**
-     * @param CAnnouncement $announcement
-     *
-     * @return CAnnouncementAttachment
-     */
     public function setAnnouncement(CAnnouncement $announcement): CAnnouncementAttachment
     {
         $this->announcement = $announcement;

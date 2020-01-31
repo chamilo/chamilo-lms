@@ -1,0 +1,11 @@
+/build/
+/vendor/
+.DS_Store
+/.php_cs.cache
+/.php_cs
+/.*.swp
+/.*.swo
+/composer.lock
+/phpunit.xml
+/vendor-bin/*/composer.lock
+/vendor-bin/*/vendor/

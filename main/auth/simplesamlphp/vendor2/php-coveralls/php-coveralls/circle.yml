@@ -1,0 +1,16 @@
+machine:
+  php:
+    version:
+      7.1.0
+
+dependencies:
+  override:
+    - mkdir -p build/logs
+    - echo "date.timezone = America/Los_Angeles" > /opt/circleci/php/$(phpenv global)/etc/conf.d/date.ini
+    - composer update --prefer-stable --prefer-lowest --no-interaction
+
+test:
+  override:
+    - phpunit
+  post:
+    - bin/php-coveralls -v --exclude-no-stmt

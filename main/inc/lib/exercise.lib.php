@@ -3556,7 +3556,7 @@ EOT;
         $best_score = 0;
         if (!empty($user_results)) {
             foreach ($user_results as $result) {
-                if (!empty($result['exe_weighting']) && intval($result['exe_weighting']) != 0) {
+                if (!empty($result['exe_weighting']) && (float) $result['exe_weighting'] != 0) {
                     $score = $result['exe_result'] / $result['exe_weighting'];
                     if ($score >= $best_score) {
                         $best_score = $score;
@@ -4962,12 +4962,9 @@ EOT;
             ->getScalarResult();
 
         $data = [];
-
         /** @var TrackEExercises $item */
         foreach ($result as $item) {
-            $bestAttemp = self::get_best_attempt_by_user($item['exeUserId'], $exerciseId, $courseId, $sessionId = 0);
-
-            $data[] = $bestAttemp;
+            $data[] = self::get_best_attempt_by_user($item['exeUserId'], $exerciseId, $courseId, $sessionId = 0);
         }
 
         usort(
@@ -4988,7 +4985,6 @@ EOT;
         // flags to display the same position in case of tie
         $lastScore = $data[0]['exe_result'];
         $position = 1;
-
         $data = array_map(
             function ($item) use (&$lastScore, &$position) {
                 if ($item['exe_result'] < $lastScore) {

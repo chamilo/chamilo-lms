@@ -1,0 +1,29 @@
+{
+    "name": "simplesamlphp/twig-configurable-i18n",
+    "description": "This is an extension on top of Twig's i18n extension, allowing you to customize which functions to use for translations.",
+    "type": "project",
+    "keywords": [ "twig", "extension", "i18n", "internationalization", "translation", "gettext" ],
+    "license": "LGPL-2.1",
+    "authors": [
+        {
+            "name": "Jaime Perez",
+            "email": "jaime.perez@uninett.no"
+        }
+    ],
+    "autoload": {
+        "psr-4": {
+            "SimpleSAML\\TwigConfigurableI18n\\": "src/"
+        }
+    },
+    "require": {
+        "twig/extensions": "^1.5"
+    },
+    "require-dev": {
+        "phpunit/phpunit": "~4.8.36 || ~7.5",
+        "twig/twig": "^1.37 || ^2.7"
+    },
+    "support": {
+        "issues": "https://github.com/simplesamlphp/twig-configurable-i18n/issues",
+        "source": "https://github.com/simplesamlphp/twig-configurable-i18n"
+    }
+}

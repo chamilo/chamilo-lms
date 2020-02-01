@@ -1,0 +1,49 @@
+<?php
+
+return PhpCsFixer\Config::create()
+    ->setRiskyAllowed(true)
+    ->setRules([
+        '@Symfony' => true,
+        '@Symfony:risky' => true,
+        'align_multiline_comment' => true,
+        'array_syntax' => ['syntax' => 'short'],
+        'blank_line_before_statement' => true,
+        'combine_consecutive_unsets' => true,
+        'concat_space' => array('spacing' => 'one'),
+        'heredoc_to_nowdoc' => true,
+        'list_syntax' => ['syntax' => 'long'],
+        'method_argument_space' => ['ensure_fully_multiline' => true],
+        'native_constant_invocation' => false,
+        'native_function_invocation' => false,
+        'no_extra_consecutive_blank_lines' => ['tokens' => ['break', 'continue', 'extra', 'return', 'throw', 'use', 'parenthesis_brace_block', 'square_brace_block', 'curly_brace_block']],
+        'no_null_property_initialization' => true,
+        'no_short_echo_tag' => true,
+        'no_superfluous_elseif' => true,
+        'no_superfluous_phpdoc_tags' => false,
+        'no_unneeded_curly_braces' => true,
+        'no_unneeded_final_method' => true,
+        'no_unreachable_default_argument_value' => true,
+        'no_useless_else' => true,
+        'no_useless_return' => true,
+        'ordered_class_elements' => true,
+        'ordered_imports' => true,
+        'php_unit_strict' => true,
+        'phpdoc_add_missing_param_annotation' => true,
+        'phpdoc_order' => true,
+        'phpdoc_types_order' => true,
+        'semicolon_after_instruction' => true,
+        'single_line_throw' => false,
+        'strict_comparison' => true,
+        'strict_param' => true,
+        'yoda_style' => [
+            'equal' => false,
+            'identical' => false,
+            'less_and_greater' => false,
+        ],
+    ])
+    ->setFinder(
+        PhpCsFixer\Finder::create()
+            ->in(__DIR__)
+            ->exclude('tests/Fixture')
+    )
+;

@@ -1157,6 +1157,9 @@ switch ($action) {
             'currently_learning',
             'rank',
         ];
+        if (trim($whereCondition) === '1 = 1') {
+            $whereCondition = '';
+        }
         $result = $skill->getUserListSkillRanking(
             $start,
             $limit,

@@ -7,12 +7,14 @@
 interface ImsAnswerInterface
 {
     /**
-     * @param $questionIdent
-     * @param $questionStatment
+     * @param string $questionIdent
+     * @param string $questionStatment
+     * @param string $questionDesc
+     * @param string $questionMedia
      *
-     * @return mixed
+     * @return string
      */
-    public function imsExportResponses($questionIdent, $questionStatment);
+    public function imsExportResponses($questionIdent, $questionStatment, $questionDesc = '', $questionMedia = '');
 
     /**
      * @param $questionIdent
@@ -99,13 +101,20 @@ class ImsAnswerMultipleChoice extends Answer implements ImsAnswerInterface
 {
     /**
      * Return the XML flow for the possible answers.
+     *
+     * @param string $questionIdent
+     * @param string $questionStatment
+     * @param string $questionDesc
+     * @param string $questionMedia
+     *
+     * @return string
      */
-    public function imsExportResponses($questionIdent, $questionStatment)
+    public function imsExportResponses($questionIdent, $questionStatment, $questionDesc = '', $questionMedia = '')
     {
         // @todo getAnswersList() converts the answers using api_html_entity_decode()
         $this->answerList = $this->getAnswersList(true);
         $out = '    <choiceInteraction responseIdentifier="'.$questionIdent.'" >'."\n";
-        $out .= '      <prompt><![CDATA['.formatExerciseQtiText($questionStatment).']]></prompt>'."\n";
+        $out .= '      <prompt><![CDATA['.formatExerciseQtiText($questionDesc).']]></prompt>'."\n";
         if (is_array($this->answerList)) {
             foreach ($this->answerList as $current_answer) {
                 $out .= '<simpleChoice identifier="answer_'.$current_answer['id'].'" fixed="false">
@@ -178,8 +187,15 @@ class ImsAnswerFillInBlanks extends Answer implements ImsAnswerInterface
 
     /**
      * Export the text with missing words.
+     *
+     * @param string $questionIdent
+     * @param string $questionStatment
+     * @param string $questionDesc
+     * @param string $questionMedia
+     *
+     * @return string
      */
-    public function imsExportResponses($questionIdent, $questionStatment)
+    public function imsExportResponses($questionIdent, $questionStatment, $questionDesc = '', $questionMedia = '')
     {
         $this->answerList = $this->getAnswersList(true);
         $text = isset($this->answerText) ? $this->answerText : '';
@@ -235,8 +251,15 @@ class ImsAnswerMatching extends Answer implements ImsAnswerInterface
 
     /**
      * Export the question part as a matrix-choice, with only one possible answer per line.
+     *
+     * @param string $questionIdent
+     * @param string $questionStatment
+     * @param string $questionDesc
+     * @param string $questionMedia
+     *
+     * @return string
      */
-    public function imsExportResponses($questionIdent, $questionStatment)
+    public function imsExportResponses($questionIdent, $questionStatment, $questionDesc = '', $questionMedia = '')
     {
         $this->answerList = $this->getAnswersList(true);
         $maxAssociation = max(count($this->leftList), count($this->rightList));
@@ -321,8 +344,15 @@ class ImsAnswerHotspot extends Answer implements ImsAnswerInterface
     private $gradeList = [];
 
     /**
-     * TODO update this to match hot spots instead of copying matching
+     * @todo update this to match hot spots instead of copying matching
      * Export the question part as a matrix-choice, with only one possible answer per line.
+     *
+     * @param string $questionIdent
+     * @param string $questionStatment
+     * @param string $questionDesc
+     * @param string $questionMedia
+     *
+     * @return string
      */
     public function imsExportResponses($questionIdent, $questionStatment, $questionDesc = '', $questionMedia = '')
     {
@@ -405,15 +435,18 @@ class ImsAnswerHotspot extends Answer implements ImsAnswerInterface
 class ImsAnswerFree extends Answer implements ImsAnswerInterface
 {
     /**
-     * TODO implement
+     * @todo implement
      * Export the question part as a matrix-choice, with only one possible answer per line.
+     *
+     * @param string $questionIdent
+     * @param string $questionStatment
+     * @param string $questionDesc
+     * @param string $questionMedia
+     *
+     * @return string
      */
-    public function imsExportResponses(
-        $questionIdent,
-        $questionStatment,
-        $questionDesc = '',
-        $questionMedia = ''
-    ) {
+    public function imsExportResponses($questionIdent, $questionStatment, $questionDesc = '', $questionMedia = '')
+    {
         $questionDesc = formatExerciseQtiText($questionDesc);
 
         return '<extendedTextInteraction responseIdentifier="'.$questionIdent.'" >

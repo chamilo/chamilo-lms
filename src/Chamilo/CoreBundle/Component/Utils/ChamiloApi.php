@@ -200,9 +200,9 @@ class ChamiloApi
     public static function stripGivenTags($string, $tags)
     {
         foreach ($tags as $tag) {
-            $string2 = preg_replace('#</'.$tag.'[^>]*>#i', ' ', $string);
+            $string2 = preg_replace('#</\b'.$tag.'\b[^>]*>#i', ' ', $string);
             if ($string2 != $string) {
-                $string = preg_replace('/<'.$tag.'[^>]*>/i', ' ', $string2);
+                $string = preg_replace('/<\b'.$tag.'\b[^>]*>/i', ' ', $string2);
             }
         }
 

@@ -34,10 +34,11 @@ $forumId = isset($_GET['forum']) ? (int) $_GET['forum'] : 0;
 $threadId = isset($_GET['thread']) ? (int) $_GET['thread'] : 0;
 
 $repo = Container::getForumRepository();
-$forumEntity = null;
-if (!empty($forumId)) {
-    /** @var CForumForum $forumEntity */
-    $forumEntity = $repo->find($forumId);
+/** @var CForumForum $forum */
+$forum = $repo->find($forumId);
+
+if (empty($forum)) {
+    api_not_allowed();
 }
 
 $repoThread = Container::getForumThreadRepository();
@@ -49,7 +50,7 @@ if (!empty($threadId)) {
 
 $courseEntity = api_get_course_entity(api_get_course_int_id());
 $sessionEntity = api_get_session_entity(api_get_session_id());
-$current_forum_category = $forumEntity->getForumCategory();
+$current_forum_category = $forum->getForumCategory();
 
 /* Is the user allowed here? */
 // The user is not allowed here if
@@ -60,24 +61,24 @@ $current_forum_category = $forumEntity->getForumCategory();
 // I have split this is several pieces for clarity.
 if (!api_is_allowed_to_edit(false, true) &&
     (($current_forum_category && !$current_forum_category->isVisible($courseEntity, $sessionEntity)) ||
-        !$forumEntity->isVisible($courseEntity, $sessionEntity))
+        !$forum->isVisible($courseEntity, $sessionEntity))
 ) {
     api_not_allowed(true);
 }
 if (!api_is_allowed_to_edit(false, true) &&
     (($current_forum_category && 0 != $current_forum_category->getLocked()) ||
-        0 != $forumEntity->getLocked() || 0 != $threadEntity->getLocked())
+        0 != $forum->getLocked() || 0 != $threadEntity->getLocked())
 ) {
     api_not_allowed(true);
 }
-if (!$_user['user_id'] && 0 == $forumEntity->getAllowAnonymous()) {
+if (!$_user['user_id'] && 0 == $forum->getAllowAnonymous()) {
     api_not_allowed(true);
 }
 
-if (0 != $forumEntity->getForumOfGroup()) {
+if (0 != $forum->getForumOfGroup()) {
     $show_forum = GroupManager::user_has_access(
         api_get_user_id(),
-        $forumEntity->getForumOfGroup(),
+        $forum->getForumOfGroup(),
         GroupManager::GROUP_TOOL_FORUM
     );
     if (!$show_forum) {
@@ -106,7 +107,7 @@ if (!empty($groupId)) {
 
     $interbreadcrumb[] = [
         'url' => api_get_path(WEB_CODE_PATH).'forum/viewforum.php?forum='.$forumId.'&'.api_get_cidreq(),
-        'name' => $forumEntity->getForumTitle(),
+        'name' => $forum->getForumTitle(),
     ];
     $interbreadcrumb[] = [
         'url' => api_get_path(WEB_CODE_PATH).'forum/viewthread.php?forum='.$forumId.'&thread='.$threadId.'&'.api_get_cidreq(),
@@ -128,7 +129,7 @@ if (!empty($groupId)) {
     ];
     $interbreadcrumb[] = [
         'url' => api_get_path(WEB_CODE_PATH).'forum/viewforum.php?forum='.$forumId.'&'.api_get_cidreq(),
-        'name' => $forumEntity->getForumTitle(),
+        'name' => $forum->getForumTitle(),
     ];
     $interbreadcrumb[] = [
         'url' => api_get_path(WEB_CODE_PATH).'forum/viewthread.php?forum='.$forumId.'&thread='.$threadId.'&'.api_get_cidreq(),
@@ -169,21 +170,25 @@ $logInfo = [
 ];
 Event::registerLog($logInfo);
 
+$postRepo = Container::getForumPostRepository();
+$post = $postRepo->find($my_post);
+
 $form = show_add_post_form(
-    $forumEntity,
+    $forum,
     $threadEntity,
+    $post,
     $my_action,
     $my_elements
 );
 
-if ('learnpath' == $origin) {
+if ('learnpath' === $origin) {
     Display::display_reduced_header();
 } else {
     // The last element of the breadcrumb navigation is already set in interbreadcrumb, so give an empty string.
     Display::display_header();
 }
 
-if ('learnpath' != $origin) {
+if ('learnpath' !== $origin) {
     echo '<div class="actions">';
     echo '<span style="float:right;">'.search_link().'</span>';
     echo '<a href="viewthread.php?'.api_get_cidreq().'&forum='.$forumId.'&thread='.$threadId.'">';
@@ -199,18 +204,18 @@ if ('learnpath' != $origin) {
 echo '<div class="forum_title">';
 echo '<h1>';
 echo Display::url(
-    prepare4display($forumEntity->getForumTitle()),
+    prepare4display($forum->getForumTitle()),
     'viewforum.php?'.api_get_cidreq().'&'.http_build_query(['forum' => $forumId]),
-    ['class' => empty($forumEntity->isVisible($courseEntity, $sessionEntity)) ? 'text-muted' : null]
+    ['class' => empty($forum->isVisible($courseEntity, $sessionEntity)) ? 'text-muted' : null]
 );
 echo '</h1>';
-echo '<p class="forum_description">'.prepare4display($forumEntity->getForumComment()).'</p>';
+echo '<p class="forum_description">'.prepare4display($forum->getForumComment()).'</p>';
 echo '</div>';
 if ($form) {
     $form->display();
 }
 
-if ('learnpath' == $origin) {
+if ('learnpath' === $origin) {
     Display::display_reduced_footer();
 } else {
     Display::display_footer();

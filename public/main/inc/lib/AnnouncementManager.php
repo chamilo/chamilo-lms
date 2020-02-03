@@ -1081,7 +1081,7 @@ class AnnouncementManager
      *
      * @return array|bool
      */
-    public static function getAnnoucementCourseTotalByUser($user_id)
+    public static function getAnnouncementCourseTotalByUser($user_id)
     {
         $user_id = (int) $user_id;
 

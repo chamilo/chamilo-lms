@@ -2,6 +2,11 @@
 
 /* For licensing terms, see /license.txt */
 
+use Chamilo\CoreBundle\Framework\Container;
+use Chamilo\CourseBundle\Entity\CForumForum;
+use Chamilo\CourseBundle\Entity\CForumPost;
+use Chamilo\CourseBundle\Entity\CForumThread;
+
 /**
  * These files are a complete rework of the forum. The database structure is
  * based on phpBB but all the code is rewritten. A lot of new functionalities
@@ -46,17 +51,35 @@ $origin = api_get_origin();
 // Note pcool: I tried to use only one sql statement (and function) for this,
 // but the problem is that the visibility of the forum AND forum category are stored in the item_property table.
 $forumId = isset($_GET['forum']) ? (int) $_GET['forum'] : 0;
-$current_thread = get_thread_information($forumId, $_GET['thread']);
-$current_forum = get_forum_information($forumId);
-$current_forum_category = get_forumcategory_information($current_forum['forum_category']);
-$current_post = get_post_information($_GET['post']);
-if (empty($current_post)) {
+$userId = api_get_user_id();
+
+$repo = Container::getForumRepository();
+/** @var CForumForum $forum */
+$forum = $repo->find($forumId);
+
+$repoThread = Container::getForumThreadRepository();
+/** @var CForumThread $thread */
+$thread = $repoThread->find($_GET['thread']);
+
+$category = $forum->getForumCategory();
+
+$postRepo = Container::getForumPostRepository();
+/** @var CForumPost $post */
+$post = $postRepo->find($_GET['post']);
+
+$courseEntity = api_get_course_entity();
+$sessionEntity = api_get_session_entity();
+
+$forumIsVisible = $forum->isVisible($courseEntity, $sessionEntity);
+$categoryIsVisible = $category->isVisible($courseEntity, $sessionEntity);
+
+if (empty($post)) {
     api_not_allowed(true);
 }
 
 api_block_course_item_locked_by_gradebook($_GET['thread'], LINK_FORUM_THREAD);
 
-$isEditable = postIsEditableByStudent($current_forum, $current_post);
+$isEditable = postIsEditableByStudent($forum, $post);
 if (!$isEditable) {
     api_not_allowed(true);
 }
@@ -69,7 +92,7 @@ if (api_is_in_gradebook()) {
 }
 
 $group_properties = GroupManager::get_group_properties(api_get_group_id());
-if ('group' == $origin) {
+if ('group' === $origin) {
     $_clean['toolgroup'] = api_get_group_id();
     $interbreadcrumb[] = [
         'url' => api_get_path(WEB_CODE_PATH).'group/group.php?'.api_get_cidreq(),
@@ -81,7 +104,7 @@ if ('group' == $origin) {
     ];
     $interbreadcrumb[] = [
         'url' => api_get_path(WEB_CODE_PATH).'forum/viewforum.php?'.api_get_cidreq().'&forum='.$forumId,
-        'name' => prepare4display($current_forum['forum_title']),
+        'name' => prepare4display($forum->getForumTitle()),
     ];
     $interbreadcrumb[] = ['url' => 'javascript: void (0);', 'name' => get_lang('Edit a post')];
 } else {
@@ -90,16 +113,16 @@ if ('group' == $origin) {
         'name' => $nameTools,
     ];
     $interbreadcrumb[] = [
-        'url' => api_get_path(WEB_CODE_PATH).'forum/viewforumcategory.php?forumcategory='.$current_forum_category['cat_id'].'&'.api_get_cidreq(),
-        'name' => prepare4display($current_forum_category['cat_title']),
+        'url' => api_get_path(WEB_CODE_PATH).'forum/viewforumcategory.php?forumcategory='.$category->getIid().'&'.api_get_cidreq(),
+        'name' => prepare4display($category->getCatTitle()),
     ];
     $interbreadcrumb[] = [
         'url' => api_get_path(WEB_CODE_PATH).'forum/viewforum.php?forum='.$forumId.'&'.api_get_cidreq(),
-        'name' => prepare4display($current_forum['forum_title']),
+        'name' => prepare4display($forum->getForumTitle()),
     ];
     $interbreadcrumb[] = [
         'url' => api_get_path(WEB_CODE_PATH).'forum/viewthread.php?'.api_get_cidreq().'&forum='.$forumId.'&thread='.(int) ($_GET['thread']),
-        'name' => prepare4display($current_thread['thread_title']),
+        'name' => prepare4display($thread->getThreadTitle()),
     ];
     $interbreadcrumb[] = ['url' => 'javascript: void (0);', 'name' => get_lang('Edit a post')];
 }
@@ -112,12 +135,10 @@ $htmlHeadXtra[] = <<<JS
     $(function() {
         $('#reply-add-attachment').on('click', function(e) {
             e.preventDefault();
-
             var newInputFile = $('<input>', {
                 type: 'file',
                 name: 'user_upload[]'
             });
-
             $('[name="user_upload[]"]').parent().append(newInputFile);
         });
     });
@@ -135,8 +156,8 @@ JS;
 // I have split this is several pieces for clarity.
 if (!api_is_allowed_to_edit(null, true) &&
     (
-        ($current_forum_category && 0 == $current_forum_category['visibility']) ||
-        0 == $current_forum['visibility']
+        (false === $categoryIsVisible) ||
+        false === $forumIsVisible
     )
 ) {
     api_not_allowed(true);
@@ -144,38 +165,38 @@ if (!api_is_allowed_to_edit(null, true) &&
 
 if (!api_is_allowed_to_edit(null, true) &&
     (
-        ($current_forum_category && 0 != $current_forum_category['locked']) ||
-        0 != $current_forum['locked'] ||
-        0 != $current_thread['locked']
+        ($category->getLocked()) ||
+        0 != $forum->getLocked() ||
+        0 != $thread->getLocked()
     )
 ) {
     api_not_allowed(true);
 }
 
-if (!$_user['user_id'] && 0 == $current_forum['allow_anonymous']) {
+if (!$userId && 0 == $forum->getAllowAnonymous()) {
     api_not_allowed(true);
 }
 
 $group_id = api_get_group_id();
 
 if (!api_is_allowed_to_edit(null, true) &&
-    0 == $current_forum['allow_edit'] &&
+    0 == $forum->getAllowEdit() &&
     !GroupManager::is_tutor_of_group(api_get_user_id(), $group_properties)
 ) {
     api_not_allowed(true);
 }
 
-if ('learnpath' == $origin) {
+if ('learnpath' === $origin) {
     Display::display_reduced_header();
 } else {
     Display::display_header();
 }
 
 // Action links
-if ('learnpath' != $origin) {
+if ('learnpath' !== $origin) {
     echo '<div class="actions">';
     echo '<span style="float:right;">'.search_link().'</span>';
-    if ('group' == $origin) {
+    if ('group' === $origin) {
         echo '<a href="../group/group_space.php?'.api_get_cidreq().'">'.
             Display::return_icon(
                 'back.png',
@@ -206,39 +227,38 @@ if ('learnpath' != $origin) {
 }
 
 /* Display Forum Category and the Forum information */
-
 /*New display forum div*/
 echo '<div class="forum_title">';
 echo '<h1>';
 echo Display::url(
-    prepare4display($current_forum['forum_title']),
+    prepare4display($forum->getForumTitle()),
     'viewforum.php?'.api_get_cidreq().'&'.http_build_query([
         'origin' => $origin,
-        'forum' => $current_forum['forum_id'],
+        'forum' => $forum->getIid(),
     ]),
-    ['class' => empty($current_forum['visibility']) ? 'text-muted' : null]
+    ['class' => false === $forumIsVisible ? 'text-muted' : null]
 );
 echo '</h1>';
-echo '<p class="forum_description">'.prepare4display($current_forum['forum_comment']).'</p>';
+echo '<p class="forum_description">'.prepare4display($forum->getForumComment()).'</p>';
 echo '</div>';
 /* End new display forum */
 
 // Set forum attachment data into $_SESSION
 getAttachedFiles(
-    $current_forum['forum_id'],
-    $current_thread['thread_id'],
-    $current_post['post_id']
+    $forum->getIid(),
+    $thread->getIid(),
+    $post->getIid()
 );
 
 show_edit_post_form(
-    $current_post,
-    $current_thread,
-    $current_forum,
+    $post,
+    $thread,
+    $forum,
     isset($_SESSION['formelements']) ? $_SESSION['formelements'] : ''
 );
 
 // Footer
-if (isset($origin) && 'learnpath' == $origin) {
+if (isset($origin) && 'learnpath' === $origin) {
     Display::display_reduced_footer();
 } else {
     Display::display_footer();

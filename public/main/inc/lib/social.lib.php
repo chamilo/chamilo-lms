@@ -1116,7 +1116,7 @@ class SocialManager extends UserManager
             if ($show_full_profile && $user_id == api_get_user_id()) {
                 // Announcements
                 $announcements = [];
-                $announcementsByCourse = AnnouncementManager::getAnnoucementCourseTotalByUser($user_id);
+                $announcementsByCourse = AnnouncementManager::getAnnouncementCourseTotalByUser($user_id);
                 if (!empty($announcementsByCourse)) {
                     foreach ($announcementsByCourse as $announcement) {
                         $url = Display::url(

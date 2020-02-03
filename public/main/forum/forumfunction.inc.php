@@ -3049,33 +3049,34 @@ function store_thread(
 /**
  * This function displays the form that is used to add a post. This can be a new thread or a reply.
  *
- * @param array  $current_forum
- * @param string $action        is the parameter that determines if we are
+ * @param CForumForum  $forum
+ * @param CForumThread $thread
+ * @param string       $action  is the parameter that determines if we are
  *                              2. replythread: Replying to a thread ($action = replythread) => I-frame with the complete thread (if enabled)
  *                              3. replymessage: Replying to a message ($action =replymessage) => I-frame with the complete thread (if enabled)
  *                              (I first thought to put and I-frame with the message only)
  *                              4. quote: Quoting a message ($action= quotemessage) => I-frame with the complete thread (if enabled).
  *                              The message will be in the reply. (I first thought not to put an I-frame here)
- * @param array  $form_values
- * @param bool   $showPreview
+ * @param array        $form_values
+ * @param bool         $showPreview
  *
  * @return FormValidator
  */
-function show_add_post_form(CForumForum $current_forum, CForumThread $thread, $action, $form_values = '', $showPreview = true)
+function show_add_post_form(CForumForum $forum, CForumThread $thread, CForumPost $post = null, $action, $form_values = '', $showPreview = true)
 {
     $_user = api_get_user_info();
     $action = isset($action) ? Security::remove_XSS($action) : '';
     $threadId = $thread->getIid();
-    $forumId = $current_forum->getIid();
-    $my_post = isset($_GET['post']) ? (int) $_GET['post'] : '';
+    $forumId = $forum->getIid();
     $giveRevision = isset($_GET['give_revision']) && 1 == $_GET['give_revision'];
+    $postId = $post ? $post->getIid() : 0;
 
     $url = api_get_self().'?'.http_build_query(
         [
             'action' => $action,
             'forum' => $forumId,
             'thread' => $threadId,
-            'post' => $my_post,
+            'post' => $postId,
         ]
     ).'&'.api_get_cidreq();
 
@@ -3084,7 +3085,6 @@ function show_add_post_form(CForumForum $current_forum, CForumThread $thread, $a
         'post',
         $url
     );
-
     $form->setConstants(['forum' => '5']);
 
     // Setting the form elements.
@@ -3093,7 +3093,7 @@ function show_add_post_form(CForumForum $current_forum, CForumThread $thread, $a
     $form->addElement('hidden', 'action', $action);
 
     // If anonymous posts are allowed we also display a form to allow the user to put his name or username in.
-    if (1 == $current_forum->getAllowAnonymous() && !isset($_user['user_id'])) {
+    if (1 == $forum->getAllowAnonymous() && !isset($_user['user_id'])) {
         $form->addElement('text', 'poster_name', get_lang('Name'));
         $form->applyFilter('poster_name', 'html_filter');
     }
@@ -3133,9 +3133,9 @@ function show_add_post_form(CForumForum $current_forum, CForumThread $thread, $a
 
     $iframe = null;
     if ($showPreview) {
-        if ('newthread' != $action && !empty($threadId)) {
-            $iframe = '<iframe style="border: 1px solid black" src="iframe_thread.php?'.api_get_cidreq(
-                ).'&forum='.$forumId.'&thread='.$threadId.'#'.$my_post.'" width="100%"></iframe>';
+        if ('newthread' !== $action && !empty($threadId)) {
+            $iframe = '<iframe style="border: 1px solid black"
+            src="iframe_thread.php?'.api_get_cidreq().'&forum='.$forumId.'&thread='.$threadId.'#'.$postId.'" width="100%"></iframe>';
         }
         if (!empty($iframe)) {
             $form->addElement('label', get_lang('Thread'), $iframe);
@@ -3198,27 +3198,25 @@ function show_add_post_form(CForumForum $current_forum, CForumThread $thread, $a
     // If we are quoting a message we have to retrieve the information of the post we are quoting so that
     // we can add this as default to the textarea.
     // We also need to put the parent_id of the post in a hidden form when
-    if (('quote' == $action || 'replymessage' == $action || $giveRevision) && !empty($my_post)) {
+    if (('quote' === $action || 'replymessage' === $action || $giveRevision) && !empty($postId)) {
         // we are quoting or replying to a message (<> reply to a thread !!!)
-        $form->addHidden('post_parent_id', $my_post);
-
+        $form->addHidden('post_parent_id', $post->getIid());
         // If we are replying or are quoting then we display a default title.
-        $values = get_post_information($my_post);
-        $posterInfo = api_get_user_info($values['poster_id']);
+        $posterInfo = api_get_user_info($post->getPosterId());
         $posterName = '';
         if ($posterInfo) {
             $posterName = $posterInfo['complete_name'];
         }
-        $defaults['post_title'] = get_lang('Re:').api_html_entity_decode($values['post_title'], ENT_QUOTES);
+        $defaults['post_title'] = get_lang('Re:').api_html_entity_decode($post->getPostTitle(), ENT_QUOTES);
         // When we are quoting a message then we have to put that message into the wysiwyg editor.
         // Note: The style has to be hardcoded here because using class="quote" didn't work.
-        if ('quote' == $action) {
+        if ('quote' === $action) {
             $defaults['post_text'] = '<div>&nbsp;</div>
                 <div style="margin: 5px;">
                     <div style="font-size: 90%; font-style: italic;">'.
                 get_lang('Quoting').' '.$posterName.':</div>
                         <div style="color: #006600; font-size: 90%;  font-style: italic; background-color: #FAFAFA; border: #D1D7DC 1px solid; padding: 3px;">'.
-                prepare4display($values['post_text']).'
+                prepare4display($post->getPostText()).'
                         </div>
                     </div>
                 <div>&nbsp;</div>
@@ -3226,7 +3224,7 @@ function show_add_post_form(CForumForum $current_forum, CForumThread $thread, $a
             ';
         }
         if ($giveRevision) {
-            $defaults['post_text'] = prepare4display($values['post_text']);
+            $defaults['post_text'] = prepare4display($post->getPostText());
         }
     }
 
@@ -3234,7 +3232,7 @@ function show_add_post_form(CForumForum $current_forum, CForumThread $thread, $a
 
     // The course admin can make a thread sticky (=appears with special icon and always on top).
     $form->addRule('post_title', get_lang('Required field'), 'required');
-    if (1 == $current_forum->getAllowAnonymous() && !isset($_user['user_id'])) {
+    if (1 == $forum->getAllowAnonymous() && !isset($_user['user_id'])) {
         $form->addRule(
             'poster_name',
             get_lang('Required field'),
@@ -3269,7 +3267,7 @@ function show_add_post_form(CForumForum $current_forum, CForumThread $thread, $a
                 case 'quote':
                 case 'replythread':
                 case 'replymessage':
-                    $postId = store_reply($current_forum, $thread, $values);
+                    $postId = store_reply($forum, $thread, $values);
 
                     break;
             }
@@ -3326,7 +3324,7 @@ function show_add_post_form(CForumForum $current_forum, CForumThread $thread, $a
         // and keep only attachments for new post
         clearAttachedFiles(FORUM_NEW_POST);
         // Get forum attachment ajax table to add it to form
-        $attachmentAjaxTable = getAttachmentsAjaxTable(0, $current_forum->getIid());
+        $attachmentAjaxTable = getAttachmentsAjaxTable(0, $forum->getIid());
         $ajaxHtml = $attachmentAjaxTable;
         $form->addElement('html', $ajaxHtml);
 
@@ -3334,10 +3332,10 @@ function show_add_post_form(CForumForum $current_forum, CForumThread $thread, $a
     }
 }
 
-function newThread(CForumForum $current_forum, $form_values = '', $showPreview = true)
+function newThread(CForumForum $forum, $form_values = '', $showPreview = true)
 {
     $_user = api_get_user_info();
-    $forumId = $current_forum->getIid();
+    $forumId = $forum->getIid();
     $my_post = isset($_GET['post']) ? (int) $_GET['post'] : '';
     $giveRevision = isset($_GET['give_revision']) && 1 == $_GET['give_revision'];
     $action = 'new_thread';
@@ -3362,7 +3360,7 @@ function newThread(CForumForum $current_forum, $form_values = '', $showPreview =
     $form->addElement('hidden', 'action', $action);
 
     // If anonymous posts are allowed we also display a form to allow the user to put his name or username in.
-    if (1 == $current_forum->getAllowAnonymous() && !isset($_user['user_id'])) {
+    if (1 == $forum->getAllowAnonymous() && !isset($_user['user_id'])) {
         $form->addElement('text', 'poster_name', get_lang('Name'));
         $form->applyFilter('poster_name', 'html_filter');
     }
@@ -3487,7 +3485,7 @@ function newThread(CForumForum $current_forum, $form_values = '', $showPreview =
 
     // The course admin can make a thread sticky (=appears with special icon and always on top).
     $form->addRule('post_title', get_lang('Required field'), 'required');
-    if (1 == $current_forum->getAllowAnonymous() && !isset($_user['user_id'])) {
+    if (1 == $forum->getAllowAnonymous() && !isset($_user['user_id'])) {
         $form->addRule(
             'poster_name',
             get_lang('Required field'),
@@ -3518,7 +3516,7 @@ function newThread(CForumForum $current_forum, $form_values = '', $showPreview =
             $postId = 0;
             $threadId = 0;
 
-            $newThread = store_thread($current_forum, $values);
+            $newThread = store_thread($forum, $values);
             if ($newThread) {
                 Skill::saveSkills($form, ITEM_TYPE_FORUM_THREAD, $newThread->getIid());
                 $postId = $newThread->getThreadLastPost();
@@ -3574,7 +3572,7 @@ function newThread(CForumForum $current_forum, $form_values = '', $showPreview =
         // and keep only attachments for new post
         clearAttachedFiles(FORUM_NEW_POST);
         // Get forum attachment ajax table to add it to form
-        $attachmentAjaxTable = getAttachmentsAjaxTable(0, $current_forum->getIid());
+        $attachmentAjaxTable = getAttachmentsAjaxTable(0, $forum->getIid());
         $ajaxHtml = $attachmentAjaxTable;
         $form->addElement('html', $ajaxHtml);
 
@@ -3885,7 +3883,7 @@ function current_qualify_of_thread($threadId, $sessionId, $userId)
  *
  * @return int post id
  */
-function store_reply(CForumForum $current_forum, CForumThread $thread, $values, $courseId = 0, $userId = 0)
+function store_reply(CForumForum $forum, CForumThread $thread, $values, $courseId = 0, $userId = 0)
 {
     $courseId = !empty($courseId) ? $courseId : api_get_course_int_id();
     $_course = api_get_course_info_by_id($courseId);
@@ -3893,7 +3891,7 @@ function store_reply(CForumForum $current_forum, CForumThread $thread, $values, 
     $post_date = api_get_utc_datetime();
     $userId = $userId ?: api_get_user_id();
 
-    if (1 == $current_forum->getAllowAnonymous()) {
+    if (1 == $forum->getAllowAnonymous()) {
         if (api_is_anonymous() && empty($userId)) {
             $userId = api_get_anonymous_id();
         }
@@ -3904,7 +3902,7 @@ function store_reply(CForumForum $current_forum, CForumThread $thread, $values, 
     }
 
     $visible = 1;
-    if ('1' == $current_forum->getApprovalDirectPost() &&
+    if ('1' == $forum->getApprovalDirectPost() &&
         !api_is_allowed_to_edit(null, true)
     ) {
         $visible = 0;
@@ -3920,7 +3918,7 @@ function store_reply(CForumForum $current_forum, CForumThread $thread, $values, 
             ->setPostTitle($values['post_title'])
             ->setPostText(isset($values['post_text']) ?: null)
             ->setThread($thread)
-            ->setForumId($current_forum->getIid())
+            ->setForumId($forum->getIid())
             ->setPosterId($userId)
             ->setPostNotification(isset($values['post_notification']) ? $values['post_notification'] : null)
             ->setPostParentId(isset($values['post_parent_id']) ? $values['post_parent_id'] : null)
@@ -3989,13 +3987,13 @@ function store_reply(CForumForum $current_forum, CForumThread $thread, $values, 
                 $userId
             );*/
 
-            if ('1' == $current_forum->getApprovalDirectPost() &&
+            if ('1' == $forum->getApprovalDirectPost() &&
                 !api_is_allowed_to_edit(null, true)
             ) {
                 $message .= '<br />'.get_lang('Your message has to be approved before people can view it.').'<br />';
             }
 
-            if ($current_forum->isModerated() &&
+            if ($forum->isModerated() &&
                 !api_is_allowed_to_edit(null, true)
             ) {
                 $message .= '<br />'.get_lang('Your message has to be approved before people can view it.').'<br />';
@@ -4008,7 +4006,7 @@ function store_reply(CForumForum $current_forum, CForumThread $thread, $values, 
             }
 
             send_notification_mails(
-                $current_forum,
+                $forum,
                 $thread,
                 $values
             );
@@ -4047,19 +4045,19 @@ function store_reply(CForumForum $current_forum, CForumThread $thread, $values, 
 /**
  * This function displays the form that is used to edit a post. This can be a new thread or a reply.
  *
- * @param array $current_post   contains all the information about the current post
- * @param array $current_thread contains all the information about the current thread
- * @param array $current_forum  contains all info about the current forum (to check if attachments are allowed)
- * @param array $form_values    contains the default values to fill the form
+ * @param CForumPost   $post        contains all the information about the current post
+ * @param CForumThread $thread      contains all the information about the current thread
+ * @param CForumForum  $forum       contains all info about the current forum (to check if attachments are allowed)
+ * @param array        $form_values contains the default values to fill the form
  *
  * @author Patrick Cool <patrick.cool@UGent.be>, Ghent University
  *
  * @version february 2006, dokeos 1.8
  */
 function show_edit_post_form(
-    $current_post,
-    $current_thread,
-    $current_forum,
+    $post,
+    $thread,
+    $forum,
     $form_values = '',
     $id_attach = 0
 ) {
@@ -4071,11 +4069,11 @@ function show_edit_post_form(
     );
     $form->addElement('header', get_lang('Edit a post'));
     // Setting the form elements.
-    $form->addElement('hidden', 'post_id', $current_post['post_id']);
-    $form->addElement('hidden', 'thread_id', $current_thread['thread_id']);
+    $form->addElement('hidden', 'post_id', $post->getIid());
+    $form->addElement('hidden', 'thread_id', $thread->getIid());
     $form->addElement('hidden', 'id_attach', $id_attach);
 
-    if (empty($current_post['post_parent_id'])) {
+    if (empty($post->getPostParentId())) {
         $form->addElement('hidden', 'is_first_post_of_thread', '1');
     }
 
@@ -4100,12 +4098,12 @@ function show_edit_post_form(
     $form->addRule('post_text', get_lang('Required field'), 'required');
 
     $extraFields = new ExtraField('forum_post');
-    $extraFields->addElements($form, $current_post['post_id']);
+    $extraFields->addElements($form, $post->getIid());
 
     $form->addButtonAdvancedSettings('advanced_params');
     $form->addElement('html', '<div id="advanced_params_options" style="display:none">');
 
-    if ($current_forum['moderated'] && api_is_allowed_to_edit(null, true)) {
+    if ($forum->isModerated() && api_is_allowed_to_edit(null, true)) {
         $group = [];
         $group[] = $form->createElement(
             'radio',
@@ -4131,20 +4129,26 @@ function show_edit_post_form(
         $form->addGroup($group, 'status', get_lang('Status'));
     }
 
-    $defaults['status']['status'] = isset($current_post['status']) && !empty($current_post['status']) ? $current_post['status'] : 2;
+    $defaults['status']['status'] = $post->getStatus();
+
     $form->addElement(
         'checkbox',
         'post_notification',
         '',
-        get_lang('Notify me by e-mail when somebody replies').' ('.$current_post['email'].')'
+        get_lang('Notify me by e-mail when somebody replies')
     );
 
     if (api_is_allowed_to_edit(null, true) &&
-        empty($current_post['post_parent_id'])
+        empty($post->getPostParentId())
     ) {
         // The sticky checkbox only appears when it is the first post of a thread.
-        $form->addElement('checkbox', 'thread_sticky', '', get_lang('This is a sticky message (appears always on top and has a special sticky icon)'));
-        if (1 == $current_thread['thread_sticky']) {
+        $form->addElement(
+            'checkbox',
+            'thread_sticky',
+            '',
+            get_lang('This is a sticky message (appears always on top and has a special sticky icon)')
+        );
+        if (1 == $thread->getThreadSticky()) {
             $defaults['thread_sticky'] = true;
         }
     }
@@ -4165,10 +4169,10 @@ function show_edit_post_form(
     $form->addButtonUpdate(get_lang('Edit'), 'SubmitPost');
 
     // Setting the default values for the form elements.
-    $defaults['post_title'] = $current_post['post_title'];
-    $defaults['post_text'] = $current_post['post_text'];
+    $defaults['post_title'] = $post->getPostTitle();
+    $defaults['post_text'] = $post->getPostText();
 
-    if (1 == $current_post['post_notification']) {
+    if (1 == $post->getPostNotification()) {
         $defaults['post_notification'] = true;
     }
 
@@ -4180,23 +4184,21 @@ function show_edit_post_form(
     $form->setDefaults($defaults);
 
     // The course admin can make a thread sticky (=appears with special icon and always on top).
-
     $form->addRule('post_title', get_lang('Required field'), 'required');
 
     // Validation or display
     if ($form->validate()) {
         $values = $form->exportValues();
-
-        $values['item_id'] = $current_post['post_id'];
+        $values['item_id'] = $post->getIid();
         $extraFieldValues = new ExtraFieldValue('forum_post');
         $extraFieldValues->saveFieldValues($values);
 
-        store_edit_post($current_forum, $values);
+        store_edit_post($forum, $values);
     } else {
         // Delete from $_SESSION forum attachment from other posts
-        clearAttachedFiles($current_post['post_id']);
+        clearAttachedFiles($post->getIid());
         // Get forum attachment ajax table to add it to form
-        $fileData = getAttachmentsAjaxTable($current_post['post_id'], $current_forum['forum_id']);
+        $fileData = getAttachmentsAjaxTable($post->getIid(), $forum->getIid());
         $form->addElement('html', $fileData);
         $form->display();
     }
@@ -4205,13 +4207,11 @@ function show_edit_post_form(
 /**
  * This function stores the edit of a post in the forum_post table.
  *
- * @param array $forumInfo
- *
  * @author Patrick Cool <patrick.cool@UGent.be>, Ghent University
  *
  * @version february 2006, dokeos 1.8
  */
-function store_edit_post($forumInfo, $values)
+function store_edit_post(CForumForum $forum, $values)
 {
     $logInfo = [
         'tool' => TOOL_FORUM,
@@ -4231,7 +4231,7 @@ function store_edit_post($forumInfo, $values)
     // First we check if the change affects the thread and if so we commit
     // the changes (sticky and post_title=thread_title are relevant).
 
-    $posts = getPosts($forumInfo, $values['thread_id']);
+    $posts = getPosts($forum, $values['thread_id']);
     $first_post = null;
     if (!empty($posts) && count($posts) > 0 && isset($posts[0])) {
         $first_post = $posts[0];
@@ -4249,7 +4249,7 @@ function store_edit_post($forumInfo, $values)
 
     $status = '';
     $updateStatus = false;
-    if ($forumInfo['moderated']) {
+    if ($forum->isModerated()) {
         if (api_is_allowed_to_edit(null, true)) {
             $status = $values['status']['status'];
             $updateStatus = true;
@@ -4263,7 +4263,7 @@ function store_edit_post($forumInfo, $values)
     $params = [
         'post_title' => $values['post_title'],
         'post_text' => $values['post_text'],
-        'post_notification' => isset($values['post_notification']) ? $values['post_notification'] : '',
+        'post_notification' => isset($values['post_notification']) ? 1 : 0,
     ];
 
     if ($updateStatus) {
@@ -4304,8 +4304,10 @@ function store_edit_post($forumInfo, $values)
     }
 
     $message = get_lang('The post has been modified').'<br />';
-    $message .= get_lang('You can now return to the').' <a href="viewforum.php?'.api_get_cidreq().'&forum='.(int) ($_GET['forum']).'&">'.get_lang('Forum').'</a><br />';
-    $message .= get_lang('You can now return to the').' <a href="viewthread.php?'.api_get_cidreq().'&forum='.(int) ($_GET['forum']).'&thread='.$values['thread_id'].'&post='.Security::remove_XSS($_GET['post']).'">'.get_lang('Message').'</a>';
+    $message .= get_lang('You can now return to the').
+        ' <a href="viewforum.php?'.api_get_cidreq().'&forum='.(int) ($_GET['forum']).'&">'.get_lang('Forum').'</a><br />';
+    $message .= get_lang('You can now return to the').
+        ' <a href="viewthread.php?'.api_get_cidreq().'&forum='.(int) ($_GET['forum']).'&thread='.$values['thread_id'].'&post='.Security::remove_XSS($_GET['post']).'">'.get_lang('Message').'</a>';
 
     Session::erase('formelements');
     Session::erase('origin');
@@ -6772,8 +6774,8 @@ function getCountPostsWithStatus($status, $forum, $threadId = null)
 }
 
 /**
- * @param array $forum
- * @param array $post
+ * @param CForumForum $forum
+ * @param CForumPost  $post
  *
  * @return bool
  */
@@ -6783,21 +6785,21 @@ function postIsEditableByStudent($forum, $post)
         return true;
     }
 
-    if (1 == $forum['moderated']) {
-        if (null === $post['status']) {
+    if (1 == $forum->isModerated()) {
+        if (null === $post->getStatus()) {
             return true;
         } else {
             return in_array(
-                $post['status'],
+                $post->getStatus(),
                 [
                     CForumPost::STATUS_WAITING_MODERATION,
                     CForumPost::STATUS_REJECTED,
                 ]
             );
         }
-    } else {
-        return true;
     }
+
+    return true;
 }
 
 /**

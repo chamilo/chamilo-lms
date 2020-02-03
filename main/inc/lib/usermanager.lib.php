@@ -688,10 +688,13 @@ class UserManager
      * Ensure the CAS-authenticated user exists in the database.
      *
      * @param $casUser string the CAS user identifier
-     * @return string|bool the recognised user login name or false if not found
+     *
      * @throws Exception if more than one user share the same CAS user identifier
+     *
+     * @return string|bool the recognised user login name or false if not found
      */
-    public static function casUserLoginName($casUser) {
+    public static function casUserLoginName($casUser)
+    {
         $loginName = false;
 
         // look inside the casUser extra field
@@ -736,7 +739,7 @@ class UserManager
 
     /**
      * Checks the availability of extra field 'cas_user'
-     * and creates it if missing
+     * and creates it if missing.
      *
      * @throws Exception on failure
      */
@@ -762,8 +765,10 @@ class UserManager
      * Create a CAS-authenticated user from scratch, from its CAS user identifier, with temporary default values.
      *
      * @param string $casUser the CAS user identifier
-     * @return string the login name of the new user
+     *
      * @throws Exception on error
+     *
+     * @return string the login name of the new user
      */
     public static function createCASAuthenticatedUserFromScratch($casUser)
     {
@@ -771,7 +776,7 @@ class UserManager
 
         $loginName = 'cas_user_'.$casUser;
         $defaultValue = get_lang("EditInProfile");
-        require_once(__DIR__.'/../../auth/external_login/functions.inc.php');
+        require_once __DIR__.'/../../auth/external_login/functions.inc.php';
         $userId = external_add_user(
             [
                 'username' => $loginName,
@@ -786,6 +791,7 @@ class UserManager
         }
         // Not checking function update_extra_field_value return value because not reliable
         self::update_extra_field_value($userId, 'cas_user', $casUser);
+
         return $loginName;
     }
 
@@ -793,19 +799,21 @@ class UserManager
      * Create a CAS-authenticated user from LDAP, from its CAS user identifier.
      *
      * @param $casUser
-     * @return string login name of the new user
+     *
      * @throws Exception
+     *
+     * @return string login name of the new user
      */
     public static function createCASAuthenticatedUserFromLDAP($casUser)
     {
         self::ensureCASUserExtraFieldExists();
 
-        require_once(__DIR__.'/../../auth/external_login/ldap.inc.php');
+        require_once __DIR__.'/../../auth/external_login/ldap.inc.php';
         $login = extldapCasUserLogin($casUser);
         if (false !== $login) {
             $ldapUser = extldap_authenticate($login, 'nopass', true);
             if (false !== $ldapUser) {
-                require_once(__DIR__.'/../../auth/external_login/functions.inc.php');
+                require_once __DIR__.'/../../auth/external_login/functions.inc.php';
                 $user = extldap_get_chamilo_user($ldapUser);
                 $user['username'] = $login;
                 $user['auth_source'] = CAS_AUTH_SOURCE;
@@ -813,6 +821,7 @@ class UserManager
                 if (false !== $userId) {
                     // Not checking function update_extra_field_value return value because not reliable
                     self::update_extra_field_value($userId, 'cas_user', $casUser);
+
                     return $login;
                 } else {
                     throw new Exception('Could not create the new user '.$login);
@@ -830,11 +839,12 @@ class UserManager
      * copies relevant LDAP attribute values : firstname, lastname and email.
      *
      * @param $login string the user login name
+     *
      * @throws Exception when the user login name is not found in the LDAP or in the database
      */
     public static function updateUserFromLDAP($login)
     {
-        require_once(__DIR__ . '/../../auth/external_login/ldap.inc.php');
+        require_once __DIR__.'/../../auth/external_login/ldap.inc.php';
 
         $ldapUser = extldap_authenticate($login, 'nopass', true);
         if (false === $ldapUser) {

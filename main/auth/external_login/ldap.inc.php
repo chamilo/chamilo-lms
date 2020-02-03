@@ -419,8 +419,10 @@ function extldap_add_user_by_array($data, $update_if_exists = true)
  *
  * @param $filter string LDAP entry filter, such as '(uid=10000)'
  * @param $attribute string name of the LDAP attribute to read the value from
- * @return string|bool the single matching user entry's single attribute value or false if not found
+ *
  * @throws Exception if more than one entries matched or on internal error
+ *
+ * @return string|bool the single matching user entry's single attribute value or false if not found
  */
 function extldapGetUserAttributeValue($filter, $attribute)
 {
@@ -439,7 +441,7 @@ function extldapGetUserAttributeValue($filter, $attribute)
         throw new Exception(get_lang('LDAPBindFailed'));
     }
 
-    $searchResult = ldap_search($ldap, $extldap_config['base_dn'], $filter, [ $attribute ]);
+    $searchResult = ldap_search($ldap, $extldap_config['base_dn'], $filter, [$attribute]);
     if (false === $searchResult) {
         throw new Exception(get_lang('LDAPSearchFailed'));
     }
@@ -447,7 +449,6 @@ function extldapGetUserAttributeValue($filter, $attribute)
     switch (ldap_count_entries($ldap, $searchResult)) {
         case 0:
             return false;
-            // no break
         case 1:
             $entry = ldap_first_entry($ldap, $searchResult);
             if (false === $entry) {
@@ -467,14 +468,16 @@ function extldapGetUserAttributeValue($filter, $attribute)
 }
 
 /**
- * Get the username from the CAS-supplied user identifier
+ * Get the username from the CAS-supplied user identifier.
  *
  * searches in attribute $extldap_user_correspondance['extra']['cas_user'] or 'uid' by default
  * reads value from attribute $extldap_user_correspondance['username'] or 'uid' by default
  *
  * @param $casUser string code returned from the CAS server to identify the user
- * @return string|bool user login name, false if not found
+ *
  * @throws Exception on error
+ *
+ * @return string|bool user login name, false if not found
  */
 function extldapCasUserLogin($casUser)
 {

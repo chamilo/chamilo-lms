@@ -54,7 +54,6 @@ require_once __DIR__.'/../../main/inc/lib/database.constants.inc.php';
 require_once __DIR__.'/../../main/inc/lib/internationalization.lib.php';
 require_once __DIR__.'/../../main/inc/lib/text.lib.php';
 
-
 // Bind to LDAP server
 
 $ldap = false;
@@ -69,7 +68,7 @@ foreach ($extldap_config['host'] as $ldapHost) {
 if (false === $ldap) {
     die("ldap_connect() failed\n");
 }
-print "Connected to LDAP server $ldapHost.\n";
+echo "Connected to LDAP server $ldapHost.\n";
 
 ldap_set_option(
     $ldap,
@@ -85,22 +84,21 @@ ldap_set_option(
 
 ldap_bind($ldap, $extldap_config['admin_dn'], $extldap_config['admin_password'])
 or die('ldap_bind() failed: '.ldap_error($ldap)."\n");
-print "Bound to LDAP server as ${extldap_config['admin_dn']}.\n";
-
+echo "Bound to LDAP server as ${extldap_config['admin_dn']}.\n";
 
 // set a few variables for LDAP search
 
 $baseDn = $extldap_config['base_dn']
 or die("cannot read the LDAP directory base DN where to search for user entries\n");
-print "Base DN is '$baseDn'.\n";
+echo "Base DN is '$baseDn'.\n";
 
 $ldapCASUserAttribute = $extldap_user_correspondance['extra']['cas_user']
 or die("cannot read the name of the LDAP attribute where to find the CAS user code\n");
-print "LDAP CAS user code attribute is '$ldapCASUserAttribute'.\n";
+echo "LDAP CAS user code attribute is '$ldapCASUserAttribute'.\n";
 
 $ldapUsernameAttribute = $extldap_user_correspondance['username']
 or die("cannot read the name of the LDAP attribute where to find the username\n");
-print "LDAP username attribute is '$ldapUsernameAttribute'.\n";
+echo "LDAP username attribute is '$ldapUsernameAttribute'.\n";
 
 $filters = [
     "$ldapCASUserAttribute=*",
@@ -109,7 +107,6 @@ $filters = [
 if (array_key_exists('filter', $extldap_config)) {
     $filters[] = $extldap_config['filter'];
 }
-
 
 // read 'cas_user' extra field id from internal database
 
@@ -135,8 +132,7 @@ if (empty($extraFieldData)) {
 } else {
     $fieldId = $extraFieldData['id'];
 }
-print "'cas_user' extra field id is $fieldId.\n";
-
+echo "'cas_user' extra field id is $fieldId.\n";
 
 // read cas_user extra field existing values as an associative array ( user id => CAS code )
 
@@ -148,15 +144,14 @@ if (false !== $recordList) {
         $existingCasUserValues[$value['item_id']] = $value['value'];
     }
 }
-print count($existingCasUserValues)." users have their cas_user value set already.\n";
-
+echo count($existingCasUserValues)." users have their cas_user value set already.\n";
 
 // read all users from the internal database and check their LDAP CAS code to build a to-do list
 
 $userRepository = Database::getManager()->getRepository('ChamiloUserBundle:User');
 $databaseUsers = $userRepository->findAll();
 $count = count($databaseUsers);
-print "$count users are registered in the internal database.\n";
+echo "$count users are registered in the internal database.\n";
 
 $userNamesInUse = [];
 foreach ($databaseUsers as $user) {
@@ -171,7 +166,7 @@ $wrongAuthSources = [];
 $checked = 0;
 foreach ($databaseUsers as $user) {
     $username = $user->getUsername();
-    print "Checked $checked / $count users - now checking '$username'…\r";
+    echo "Checked $checked / $count users - now checking '$username'…\r";
     $filter = '(&('
         .join(
             ')(',
@@ -180,10 +175,10 @@ foreach ($databaseUsers as $user) {
         .'))';
     $searchResult = ldap_search($ldap, $baseDn, $filter, [$ldapCASUserAttribute, $ldapUsernameAttribute]);
     if (false === $searchResult) {
-        die('ldap_search() failed: ' . ldap_error($ldap) . "\n");
+        die('ldap_search() failed: '.ldap_error($ldap)."\n");
     }
     $userId = $user->getId();
-    print "$username ($userId): ";
+    echo "$username ($userId): ";
     switch (ldap_count_entries($ldap, $searchResult)) {
         case 0:
             print "does not exist in the LDAP directory, skipping.\n";
@@ -191,26 +186,26 @@ foreach ($databaseUsers as $user) {
         case 1:
             $entry = ldap_first_entry($ldap, $searchResult);
             if (false === $entry) {
-                die('ldap_first_entry() failed: ' . ldap_error($ldap) . "\n");
+                die('ldap_first_entry() failed: '.ldap_error($ldap)."\n");
             }
             $ldapCASUser = ldap_get_values($ldap, $entry, $ldapCASUserAttribute)[0];
             if (false === $ldapCASUser) {
-                die('cannot read CAS user code from LDAP entry: ' . ldap_error($ldap) . "\n");
+                die('cannot read CAS user code from LDAP entry: '.ldap_error($ldap)."\n");
             }
             $ldapUsername = ldap_get_values($ldap, $entry, $ldapUsernameAttribute)[0];
             if (false === $ldapUsername) {
-                die('cannot read username from LDAP entry: ' . ldap_error($ldap) . "\n");
+                die('cannot read username from LDAP entry: '.ldap_error($ldap)."\n");
             }
-            print "\033[2K\r$ldapUsernameAttribute: $ldapUsername, $ldapCASUserAttribute: $ldapCASUser, ";
+            echo "\033[2K\r$ldapUsernameAttribute: $ldapUsername, $ldapCASUserAttribute: $ldapCASUser, ";
             $problems = [];
             if ($username === $ldapUsername) {
                 true; // fine
             } elseif (in_array(
                 strtolower(trim($username)),
-                [ strtolower(trim($ldapUsername)), strtolower(trim($ldapCASUser)) ]
+                [strtolower(trim($ldapUsername)), strtolower(trim($ldapCASUser))]
             )) {
                 if (array_key_exists($ldapUsername, $userNamesInUse)) {
-                    print "wrong username but '$ldapUsername' is already taken, skipping.\n";
+                    echo "wrong username but '$ldapUsername' is already taken, skipping.\n";
                     break;
                 } else {
                     $problems[] = "wrong username";
@@ -235,15 +230,14 @@ foreach ($databaseUsers as $user) {
                 $problems[] = "wrong auth source '$currentAuthSource'";
                 $wrongAuthSources[$userId] = true;
             }
-            print (empty($problems) ? "ok\r" : (join(', ', $problems)."\n"));
+            echo empty($problems) ? "ok\r" : (join(', ', $problems)."\n");
             break;
         default:
             print "more than 1 entries for username '$username' in the LDAP directory for user id=$userId, skipping.\n";
     }
-    $checked ++;
+    $checked++;
 }
-print "\033[2K\r";
-
+echo "\033[2K\r";
 
 // ask for confirmation and write changes to the database
 
@@ -253,7 +247,7 @@ $fixUsernames = (
     ('y' === readline("Fix wrong user names for ".count($wrongUserNames)." users ? (type 'y' to confirm) "))
 );
 if ($fixUsernames) {
-    print "I will fix user names.\n";
+    echo "I will fix user names.\n";
 }
 
 $fixMissingCASCodes = (
@@ -262,7 +256,7 @@ $fixMissingCASCodes = (
     ('y' === readline("Fix missing CAS codes for ".count($missingCASCodes)." users ? (type 'y' to confirm) "))
 );
 if ($fixMissingCASCodes) {
-    print "I will fix missing CAS codes.\n";
+    echo "I will fix missing CAS codes.\n";
 }
 
 $fixWrongCASCodes = (
@@ -271,7 +265,7 @@ $fixWrongCASCodes = (
     ('y' === readline("Fix wrong CAS codes for ".count($wrongCASCodes)." users ? (type 'y' to confirm) "))
 );
 if ($fixWrongCASCodes) {
-    print "I will fix wrong CAS codes.\n";
+    echo "I will fix wrong CAS codes.\n";
 }
 
 $fixWrongAuthSources = (
@@ -280,7 +274,7 @@ $fixWrongAuthSources = (
     ('y' === readline("Fix auth source for ".count($wrongAuthSources)." users ? (type 'y' to confirm) "))
 );
 if ($fixWrongAuthSources) {
-    print "I will fix wrong authentication sources.\n";
+    echo "I will fix wrong authentication sources.\n";
 }
 
 if ($fixUsernames || $fixWrongAuthSources || $fixWrongCASCodes || $fixMissingCASCodes) {
@@ -296,7 +290,7 @@ if ($fixUsernames || $fixWrongAuthSources || $fixWrongCASCodes || $fixMissingCAS
         }
     }
     $fixCount = count($usersToFix);
-    print "Now fixing $fixCount out of $count database users…\n";
+    echo "Now fixing $fixCount out of $count database users…\n";
     $done = 0;
     foreach ($usersToFix as $user) {
         $userId = $user->getId();
@@ -313,7 +307,7 @@ if ($fixUsernames || $fixWrongAuthSources || $fixWrongCASCodes || $fixMissingCAS
             try {
                 UserManager::getManager()->save($user);
             } catch (Exception $exception) {
-                print $exception->getMessage()."\n";
+                echo $exception->getMessage()."\n";
                 die("Script stopped before the end.\n");
             }
         }
@@ -322,10 +316,10 @@ if ($fixUsernames || $fixWrongAuthSources || $fixWrongCASCodes || $fixMissingCAS
         } elseif ($fixWrongCASCodes && array_key_exists($userId, $wrongCASCodes)) {
             UserManager::update_extra_field_value($userId, 'cas_user', $wrongCASCodes[$userId]);
         }
-        $done ++;
-        print "Fixed $done / $fixCount users\r";
+        $done++;
+        echo "Fixed $done / $fixCount users\r";
     }
-    print "\n";
+    echo "\n";
 }
 
-print "End of script.\n";
+echo "End of script.\n";

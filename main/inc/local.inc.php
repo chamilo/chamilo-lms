@@ -274,7 +274,6 @@ if (!empty($_SESSION['_user']['user_id']) && !($login || $logout)) {
         && !isset($_POST['login'])
         && !$logout
     ) {
-
         // load the CAS system to authenticate the user
         require_once __DIR__.'/../auth/cas/cas_var.inc.php';
 
@@ -291,7 +290,6 @@ if (!empty($_SESSION['_user']['user_id']) && !($login || $logout)) {
 
         // check whether we are authenticated
         if (phpCAS::isAuthenticated()) {
-
             // the user was successfully authenticated by the CAS server, read its CAS user identification
             $casUser = phpCAS::getUser();
 
@@ -302,7 +300,6 @@ if (!empty($_SESSION['_user']['user_id']) && !($login || $logout)) {
 
                 // see whether we are supposed to create it
                 switch (api_get_setting("cas_add_user_activate")) {
-
                     case PLATFORM_AUTH_SOURCE:
                         // create the new user from its CAS user identifier
                         $login = UserManager::createCASAuthenticatedUserFromScratch($casUser);
@@ -329,7 +326,6 @@ if (!empty($_SESSION['_user']['user_id']) && !($login || $logout)) {
             $_user = api_get_user_info_from_username($login);
             Session::write('_user', $_user);
             $doNotRedirectToCourse = true; // we should already be on the right page, no need to redirect
-
         } else {
             // not CAS authenticated
         }

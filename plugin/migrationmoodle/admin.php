@@ -23,6 +23,7 @@ $menu = [
         //'courses',
         'efc_courses',
         'role_assignments',
+        'efc_user_sessions',
     ],
     'efc_courses' => [
         'course_sections',

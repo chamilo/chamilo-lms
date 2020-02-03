@@ -40,3 +40,4 @@ $strings['QuestionsTrueFalseTask'] = 'Answers for truefalse questions';
 $strings['CourseModulesScormTask'] = 'Course Scorms';
 $strings['ScormScoesTask'] = 'Scorms items';
 $strings['FilesForScormScoesTask'] = 'Files for Scorm items';
+$strings['EfcUserSessionsTask'] = 'Course Sessions for efc* users';

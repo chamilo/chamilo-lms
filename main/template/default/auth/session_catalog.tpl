@@ -129,21 +129,26 @@
                                    </div>
                             	</div>
                             	{% endif %}
-                            	<div class="block-info">
-                                    <ul class="info list-inline">
-                                        <li class="course_label_number_courses">
-                                            <i class="fa fa-book" aria-hidden="true"></i>
-                                            {{ item.nbr_courses ~ ' ' ~ 'Courses'|get_lang }}
-                                        </li>
-                                        <li class="course_label_number_users">
-                                            <i class="fa fa-user" aria-hidden="true"></i>
-                                            {{ item.nbr_users ~ ' ' ~ 'NbUsers'|get_lang }}
-                                        </li>
-                                    </ul>
-                            	</div>
-                                <div class="block-date">
-                                    {{ item.duration ? 'SessionDurationXDaysLeft'|get_lang|format(item.duration) : item.date }}
-                                </div>
+
+                                {% if catalog_settings.sessions.show_session_info %}
+                                    <div class="block-info">
+                                        <ul class="info list-inline">
+                                            <li class="course_label_number_courses">
+                                                <i class="fa fa-book" aria-hidden="true"></i>
+                                                {{ item.nbr_courses ~ ' ' ~ 'Courses'|get_lang }}
+                                            </li>
+                                            <li class="course_label_number_users">
+                                                <i class="fa fa-user" aria-hidden="true"></i>
+                                                {{ item.nbr_users ~ ' ' ~ 'NbUsers'|get_lang }}
+                                            </li>
+                                        </ul>
+                                    </div>
+                                {% endif %}
+                                {% if catalog_settings.sessions.show_session_date %}
+                                    <div class="block-date">
+                                        {{ item.duration ? 'SessionDurationXDaysLeft'|get_lang|format(item.duration) : item.date }}
+                                    </div>
+                                {% endif %}
                                 <div class="toolbar row">
                                     {% if item.price %}
                                         <div class="col-sm-4">

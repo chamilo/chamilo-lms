@@ -1368,7 +1368,7 @@ ALTER TABLE notification_event ADD COLUMN event_id INT NULL;
 //$_configuration['hide_session_dates_in_user_portal'] = false;
 
 // Catalog search settings visibility
-// $_configuration['catalog_settings'] = ['sessions' => ['by_title' => true, 'by_date' => true, 'by_tag' => true ]];
+//$_configuration['catalog_settings'] = ['sessions' => ['by_title' => true, 'by_date' => true, 'by_tag' => true, 'show_session_info' => true, 'show_session_date' => true]];
 
 // KEEP THIS AT THE END
 // -------- Custom DB changes

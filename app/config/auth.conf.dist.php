@@ -33,7 +33,8 @@
  */
 /*$okta_config = array(
     'integration_name' => 'chamilo-okta-com',
-    'idp_metadata' => 'http://idp.oktadev.com/metadata'
+    'idp_metadata' => 'http://idp.oktadev.com/metadata',
+    'redirect_all' => false
 );*/
 
 

@@ -114,7 +114,7 @@ final class Versions
   'symfony/console' => 'v4.4.4@f512001679f37e6a042b51897ed24a2f05eba656',
   'symfony/stopwatch' => 'v4.4.4@abc08d7c48987829bac301347faa10f7e8bbf4fb',
   'vimeo/psalm' => '1.1.9@d15cf3b7f50249caf933144c8926c8e69aff3d34',
-  'simplesamlphp/simplesamlphp' => 'dev-okta-integration-saml@d0f538934032376291890b8e90088bf5c5338118',
+  'simplesamlphp/simplesamlphp' => 'dev-okta-integration-saml@b0235d095ef54ffcc40dfa8e669189b8649230ad',
 );
 
     private function __construct()

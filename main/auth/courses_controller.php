@@ -439,7 +439,15 @@ class CoursesController
         $settings = api_get_configuration_value('catalog_settings');
         if (empty($settings)) {
             // Default everything is visible
-            $settings = ['sessions' => ['by_title' => true, 'by_date' => true, 'by_tag' => true]];
+            $settings = [
+                'sessions' => [
+                    'by_title' => true,
+                    'by_date' => true,
+                    'by_tag' => true,
+                    'show_session_info' => true,
+                    'show_session_date' => true,
+                ],
+            ];
         }
 
         return $settings;

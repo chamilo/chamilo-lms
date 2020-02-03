@@ -44,12 +44,8 @@ $isAllowedToEdit = api_is_allowed_to_edit(false, true) && api_is_allowed_to_sess
 $repo = Container::getForumRepository();
 
 $my_forum = isset($_GET['forum']) ? (int) $_GET['forum'] : 0;
-$forumEntity = null;
-if (!empty($my_forum)) {
-    /** @var CForumForum $forumEntity */
-    $forumEntity = $repo->find($my_forum);
-}
-
+/** @var CForumForum $forumEntity */
+$forumEntity = $repo->find($my_forum);
 $courseEntity = api_get_course_entity(api_get_course_int_id());
 $sessionEntity = api_get_session_entity(api_get_session_id());
 $isForumOpenByDateAccess = api_is_date_in_date_range($forumEntity->getStartTime(), $forumEntity->getEndTime());

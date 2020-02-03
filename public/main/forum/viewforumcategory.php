@@ -147,7 +147,6 @@ if ('notify' === $action && isset($_GET['content']) && isset($_GET['id'])) {
 }
 
 if ('add' !== $action) {
-
     // Step 2: We find all the forums.
     $forum_list = get_forums();
     // The groups of the user.
@@ -328,8 +327,8 @@ if ('add' !== $action) {
                     }
 
                     // the number of topics and posts
-                    $my_number_threads = $forum->getThreads() ? $forum->getThreads()->count() : 0; //isset($forum['number_of_threads']) ? $forum['number_of_threads'] : 0;
-                    $my_number_posts =  $forum->getForumPosts() ? $forum->getForumPosts()->count() : 0; // isset($forum['number_of_posts']) ? $forum['number_of_posts'] : 0;
+                    $my_number_threads = $forum->getThreads() ? $forum->getThreads()->count() : 0;
+                    $my_number_posts = $forum->getForumPosts() ? $forum->getForumPosts()->count() : 0;
 
                     $html .= '<div class="row">';
                     $html .= '<div class="col-md-6">';
@@ -391,14 +390,8 @@ if ('add' !== $action) {
                     // The number of topics and posts.
                     if ('0' !== $forumOfGroup) {
                         $newPost = $iconEmpty;
-                        /*if (is_array($my_whatsnew_post_info) && !empty($my_whatsnew_post_info)) {
-                            $newPost = ' '.Display::return_icon('alert.png', get_lang('Forum'), null, ICON_SIZE_SMALL);
-                        }*/
                     } else {
                         $newPost = $iconEmpty;
-                        /*if (is_array($my_whatsnew_post_info) && !empty($my_whatsnew_post_info)) {
-                            $newPost = ' '.Display::return_icon('alert.png', get_lang('Forum'), null, ICON_SIZE_SMALL);
-                        }*/
                     }
 
                     $html .= '<div class="row">';

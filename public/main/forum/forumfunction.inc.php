@@ -1660,7 +1660,6 @@ function get_forums_in_category($cat_id, $courseId = 0)
     $course = api_get_course_entity($courseId);
 
     $qb = $repo->getResourcesByCourse($course, null);
-
     $qb->andWhere('resource.forumCategory = :catId')
         ->setParameter('catId', $cat_id);
 
@@ -2198,6 +2197,7 @@ function get_threads($forum_id, $courseId = null, $sessionId = null)
 function getThreadInfo($threadId, $cId)
 {
     $repo = Database::getManager()->getRepository('ChamiloCourseBundle:CForumThread');
+    /** @var CForumThread $forumThread */
     $forumThread = $repo->findOneBy(['threadId' => $threadId, 'cId' => $cId]);
 
     $thread = [];
@@ -2654,10 +2654,11 @@ function updateThread($values)
         $id,
         $sessionId
     );
-    $linkId = $linkInfo['id'];
-    $em = Database::getManager();
+
     $gradebookLink = null;
-    if (!empty($linkId)) {
+    $em = Database::getManager();
+    if (!empty($linkInfo) && isset($linkInfo['id'])) {
+        $linkId = $linkInfo['id'];
         $gradebookLink = $em->getRepository('ChamiloCoreBundle:GradebookLink')->find($linkId);
     }
 

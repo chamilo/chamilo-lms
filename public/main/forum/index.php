@@ -110,7 +110,7 @@ if (api_is_allowed_to_edit(false, true)) {
 }
 
 // Notification
-if ('notify' == $action && isset($_GET['content']) && isset($_GET['id'])) {
+if ('notify' === $action && isset($_GET['content']) && isset($_GET['id'])) {
     if (0 != api_get_session_id() &&
         false == api_is_allowed_to_session_edit(false, true)
     ) {
@@ -144,7 +144,6 @@ $forumCategories = get_forum_categories();
 // Step 2: We find all the forums (only the visible ones if it is a student).
 // display group forum in general forum tool depending to configuration option
 $setting = api_get_setting('display_groups_forum_in_general_tool');
-
 $allCourseForums = get_forums('', '', 'true' === $setting);
 $user_id = api_get_user_id();
 
@@ -225,7 +224,6 @@ if ($value && isset($value['value']) && !empty($value['value'])) {
 
 // Create a search-box
 $searchFilter = '';
-
 $translate = api_get_configuration_value('translate_html');
 if ($translate) {
     $form = new FormValidator('search_simple', 'get', api_get_self().'?'.api_get_cidreq(), null, null, 'inline');
@@ -298,7 +296,6 @@ if (is_array($forumCategories)) {
 
         $tools = null;
         $forumCategoryInfo['url'] = 'viewforumcategory.php?'.api_get_cidreq().'&forumcategory='.$categoryId;
-
         $visibility = $forumCategory->isVisible($courseEntity, $sessionEntity);
 
         if (!empty($idCategory)) {
@@ -352,13 +349,14 @@ if (is_array($forumCategories)) {
         $forumCategoryInfo['forums'] = [];
         // The forums in this category.
         $forumInfo = [];
-        $forumsInCategory = get_forums_in_category($categoryId);
+        $forumsInCategory = get_forums_in_category($categoryId, $_course['real_id']);
 
         if (!empty($forumsInCategory)) {
             $forumsDetailsList = [];
             // We display all the forums in this category.
-            foreach ($allCourseForums as $forum) {
+            foreach ($forumsInCategory as $forum) {
                 $forumId = $forum->getIid();
+
                 // Here we clean the whatnew_post_info array a little bit because to display the icon we
                 // test if $whatsnew_post_info[$forum['forum_id']] is empty or not.
                 /*if ($forum) {
@@ -584,6 +582,7 @@ if (is_array($forumCategories)) {
         $listForumCategory[] = $forumCategoryInfo;
     }
 }
+
 $isTeacher = api_is_allowed_to_edit(false, true);
 $tpl = new Template($nameTools);
 $tpl->assign('introduction', $introduction);

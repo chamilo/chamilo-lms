@@ -2,11 +2,15 @@
 
 /* For licensing terms, see /license.txt */
 
+use Chamilo\CoreBundle\Framework\Container;
+use Chamilo\CourseBundle\Entity\CForumForum;
+
 /**
  * Edit a Forum Thread.
  *
  * @Author José Loguercio <jose.loguercio@beeznest.com>
  */
+
 require_once __DIR__.'/../inc/global.inc.php';
 
 // The section (tabs).
@@ -24,9 +28,21 @@ require_once 'forumfunction.inc.php';
 $origin = api_get_origin();
 
 /* MAIN DISPLAY SECTION */
-$forumId = (int) $_GET['forum'];
-$currentForum = get_forum_information($forumId);
-$currentForumCategory = get_forumcategory_information($currentForum['forum_category']);
+$forumId = isset($_GET['forum']) ? (int) $_GET['forum'] : 0;
+
+$repo = Container::getForumRepository();
+/** @var CForumForum $forum */
+$forum = $repo->find($forumId);
+if (empty($forum)) {
+    api_not_allowed();
+}
+
+$courseEntity = api_get_course_entity();
+$sessionEntity = api_get_session_entity();
+//$forumIsVisible = $forum->isVisible($courseEntity, $sessionEntity);
+
+$category = $forum->getForumCategory();
+$categoryIsVisible = $category->isVisible($courseEntity, $sessionEntity);
 
 if (api_is_in_gradebook()) {
     $interbreadcrumb[] = [
@@ -36,8 +52,9 @@ if (api_is_in_gradebook()) {
 }
 
 $threadId = isset($_GET['thread']) ? (int) ($_GET['thread']) : 0;
-$courseInfo = isset($_GET['cidReq']) ? api_get_course_info($_GET['cidReq']) : 0;
-$cId = isset($courseInfo['real_id']) ? (int) ($courseInfo['real_id']) : 0;
+$courseInfo = api_get_course_info();
+$courseId = $courseInfo['real_id'];
+
 $gradebookId = (int) (api_is_in_gradebook());
 
 /* Is the user allowed here? */
@@ -45,35 +62,33 @@ $gradebookId = (int) (api_is_in_gradebook());
 // The user is not allowed here if:
 
 // 1. the forumcategory or forum is invisible (visibility==0) and the user is not a course manager
-if (!api_is_allowed_to_edit(false, true) &&
-    (($currentForumCategory['visibility'] && 0 == $currentForumCategory['visibility']) || 0 == $currentForum['visibility'])
-) {
+if (!api_is_allowed_to_edit(false, true) && false === $categoryIsVisible) {
     api_not_allowed();
 }
 
 // 2. the forumcategory or forum is locked (locked <>0) and the user is not a course manager
 if (!api_is_allowed_to_edit(false, true) &&
-    (($currentForumCategory['visibility'] && 0 != $currentForumCategory['locked']) || 0 != $currentForum['locked'])
+    (($categoryIsVisible && 0 != $category->getLocked()) || 0 != $forum->getLocked())
 ) {
     api_not_allowed();
 }
 
 // 3. new threads are not allowed and the user is not a course manager
 if (!api_is_allowed_to_edit(false, true) &&
-    1 != $currentForum['allow_new_threads']
+    1 != $forum->getAllowNewThreads()
 ) {
     api_not_allowed();
 }
 // 4. anonymous posts are not allowed and the user is not logged in
-if (!$_user['user_id'] && 1 != $currentForum['allow_anonymous']) {
+if (!$_user['user_id'] && 1 != $forum->getAllowAnonymous()) {
     api_not_allowed();
 }
 
 // 5. Check user access
-if (0 != $currentForum['forum_of_group']) {
+if (0 != $forum->getForumOfGroup()) {
     $show_forum = GroupManager::user_has_access(
         api_get_user_id(),
-        $currentForum['forum_of_group'],
+        $forum->getForumOfGroup(),
         GroupManager::GROUP_TOOL_FORUM
     );
     if (!$show_forum) {
@@ -88,7 +103,7 @@ if (api_is_invitee()) {
 
 $groupId = api_get_group_id();
 if (!empty($groupId)) {
-    $groupProperties = GroupManager:: get_group_properties($groupId);
+    $groupProperties = GroupManager::get_group_properties($groupId);
     $interbreadcrumb[] = [
         'url' => api_get_path(WEB_CODE_PATH).'group/group.php?'.$cidreq,
         'name' => get_lang('Groups'),
@@ -99,7 +114,7 @@ if (!empty($groupId)) {
     ];
     $interbreadcrumb[] = [
         'url' => api_get_path(WEB_CODE_PATH).'forum/viewforum.php?'.$cidreq.'&forum='.$forumId,
-        'name' => $currentForum['forum_title'],
+        'name' => $forum->getForumTitle(),
     ];
     $interbreadcrumb[] = [
         'url' => api_get_path(WEB_CODE_PATH).'forum/newthread.php?'.$cidreq.'&forum='.$forumId,
@@ -108,12 +123,12 @@ if (!empty($groupId)) {
 } else {
     $interbreadcrumb[] = ['url' => api_get_path(WEB_CODE_PATH).'forum/index.php?'.$cidreq, 'name' => $nameTools];
     $interbreadcrumb[] = [
-        'url' => api_get_path(WEB_CODE_PATH).'forum/viewforumcategory.php?'.$cidreq.'&forumcategory='.$currentForumCategory['cat_id'],
-        'name' => $currentForumCategory['cat_title'],
+        'url' => api_get_path(WEB_CODE_PATH).'forum/viewforumcategory.php?'.$cidreq.'&forumcategory='.$category->getIid(),
+        'name' => $category->getCatTitle(),
     ];
     $interbreadcrumb[] = [
         'url' => api_get_path(WEB_CODE_PATH).'forum/viewforum.php?'.$cidreq.'&forum='.$forumId,
-        'name' => $currentForum['forum_title'],
+        'name' => $forum->getForumTitle(),
     ];
     $interbreadcrumb[] = ['url' => '#', 'name' => get_lang('Edit thread')];
 }
@@ -148,9 +163,8 @@ $actions = [
     search_link(),
 ];
 
-$threadData = getThreadInfo($threadId, $cId);
-
-$gradeThisThread = empty($_POST) && ($threadData['threadQualifyMax'] > 0 || $threadData['threadWeight'] > 0);
+$threadData = getThreadInfo($threadId, $courseId);
+$gradeThisThread = empty($_POST) && ($threadData && ($threadData['threadQualifyMax'] > 0 || $threadData['threadWeight'] > 0));
 
 $form = new FormValidator(
     'thread',
@@ -216,6 +230,13 @@ $form->addElement('html', '</div>');
 
 $skillList = Skill::addSkillsToForm($form, ITEM_TYPE_FORUM_THREAD, $threadId);
 
+$defaults = [];
+$defaults['thread_qualify_gradebook'] = 0;
+$defaults['numeric_calification'] = 0;
+$defaults['calification_notebook_title'] = '';
+$defaults['weight_calification'] = 0;
+$defaults['thread_peer_qualify'] = 0;
+
 if (!empty($threadData)) {
     $defaults['thread_qualify_gradebook'] = $gradeThisThread;
     $defaults['thread_title'] = prepare4display($threadData['threadTitle']);
@@ -224,12 +245,6 @@ if (!empty($threadData)) {
     $defaults['numeric_calification'] = $threadData['threadQualifyMax'];
     $defaults['calification_notebook_title'] = $threadData['threadTitleQualify'];
     $defaults['weight_calification'] = $threadData['threadWeight'];
-} else {
-    $defaults['thread_qualify_gradebook'] = 0;
-    $defaults['numeric_calification'] = 0;
-    $defaults['calification_notebook_title'] = '';
-    $defaults['weight_calification'] = 0;
-    $defaults['thread_peer_qualify'] = 0;
 }
 
 $defaults['skills'] = array_keys($skillList);
@@ -249,11 +264,11 @@ if ($form->validate()) {
     }
 }
 
-$form->setDefaults(isset($defaults) ? $defaults : null);
+$form->setDefaults($defaults);
 $token = Security::get_token();
 $form->addElement('hidden', 'sec_token');
 $form->setConstants(['sec_token' => $token]);
-$originIsLearnPath = 'learnpath' == $origin;
+$originIsLearnPath = 'learnpath' === $origin;
 
 $view = new Template(
     '',

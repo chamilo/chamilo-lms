@@ -199,7 +199,7 @@ switch ($action) {
             api_not_allowed(true);
         }
 
-        $courseController->sessionList($action, $nameTools, $limit);
+        $courseController->sessionList($limit);
         break;
     case 'subscribe_to_session':
         if (!$user_can_view_page) {

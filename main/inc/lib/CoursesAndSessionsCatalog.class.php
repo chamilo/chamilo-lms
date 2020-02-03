@@ -569,12 +569,7 @@ class CoursesAndSessionsCatalog
     {
         $urlId = api_get_current_access_url_id();
 
-        $select = 's';
-        if ($getCount) {
-            $select = 'count(s) ';
-        }
-
-        $dql = "SELECT $select
+        /*$dql = "SELECT $select
                 FROM ChamiloCoreBundle:Session s
                 WHERE EXISTS
                     (
@@ -601,9 +596,56 @@ class CoursesAndSessionsCatalog
                     )
                 )
             ";
+        }*/
+
+        $em = Database::getManager();
+        $qb = $em->createQueryBuilder();
+        $qb2 = $em->createQueryBuilder();
+
+        $qb = $qb
+            ->select('s')
+            ->from('ChamiloCoreBundle:Session', 's')
+            ->where(
+                $qb->expr()->in(
+                    's',
+                    $qb2
+                        ->select('s2')
+                        ->from('ChamiloCoreBundle:AccessUrlRelSession', 'url')
+                        ->join('ChamiloCoreBundle:Session', 's2')
+                        ->where(
+                            $qb->expr()->eq('url.sessionId ', 's2.id')
+                        )->andWhere(
+                            $qb->expr()->eq('url.accessUrlId ', $urlId))
+                        ->getDQL()
+                )
+            )
+            ->andWhere($qb->expr()->gt('s.nbrCourses', 0))
+        ;
+
+        if (!is_null($date)) {
+            $qb->andWhere(
+        $qb->expr()->orX(
+                $qb->expr()->isNull('s.accessEndDate'),
+                    $qb->expr()->andX(
+                        $qb->expr()->isNotNull('s.accessStartDate'),
+                        $qb->expr()->isNotNull('s.accessEndDate'),
+                       $qb->expr()->lte('s.accessStartDate', $date),
+                        $qb->expr()->gte('s.accessEndDate', $date)
+                    ),
+                    $qb->expr()->andX(
+                        $qb->expr()->isNull('s.accessStartDate'),
+                        $qb->expr()->isNotNull('s.accessEndDate'),
+                        $qb->expr()->gte('s.accessEndDate', $date)
+                    )
+                )
+            );
         }
 
-        $qb = Database::getManager()->createQuery($dql);
+        if ($getCount) {
+            $qb->select('count(s)');
+        }
+
+        $qb = self::hideFromSessionCatalogCondition($qb);
 
         if (!empty($limit)) {
             $qb
@@ -612,15 +654,49 @@ class CoursesAndSessionsCatalog
             ;
         }
 
+        $query = $qb->getQuery();
+
         if ($returnQueryBuilder) {
-            return $qb;
+            return $query;
         }
 
         if ($getCount) {
-            return $qb->getSingleScalarResult();
+            return $query->getSingleScalarResult();
         }
 
-        return $qb->getResult();
+        return $query->getResult();
+    }
+
+    /**
+     * @param \Doctrine\ORM\QueryBuilder $qb
+     *
+     * @return mixed
+     */
+    public static function hideFromSessionCatalogCondition($qb)
+    {
+        $em = Database::getManager();
+        $qb3 = $em->createQueryBuilder();
+
+        $extraField = new \ExtraField('session');
+        $extraFieldInfo = $extraField->get_handler_field_info_by_field_variable('hide_from_catalog');
+        if (!empty($extraFieldInfo)) {
+            $qb->andWhere(
+                $qb->expr()->notIn(
+                    's',
+                    $qb3
+                        ->select('s3')
+                        ->from('ChamiloCoreBundle:ExtraFieldValues', 'fv')
+                        ->innerJoin('ChamiloCoreBundle:Session', 's3', Join::WITH,'fv.itemId = s3.id')
+                        ->where(
+                            $qb->expr()->eq('fv.field', $extraFieldInfo['id'])
+                        )->andWhere(
+                            $qb->expr()->eq('fv.value ', 1))
+                        ->getDQL()
+                )
+            );
+        }
+
+        return $qb;
     }
 
     /**
@@ -638,7 +714,7 @@ class CoursesAndSessionsCatalog
 
         $urlId = api_get_current_access_url_id();
 
-        $sessions = $qb->select('s')
+        $qb->select('s')
             ->distinct()
             ->from('ChamiloCoreBundle:Session', 's')
             ->innerJoin(
@@ -676,28 +752,21 @@ class CoursesAndSessionsCatalog
             )
             ->andWhere(
                 $qb->expr()->eq('f.extraFieldType', ExtraField::COURSE_FIELD_TYPE)
-            )->andWhere(
+            )
+            ->andWhere(
+                $qb->expr()->gt('s.nbrCourses', 0)
+            )
+            ->andWhere(
                 $qb->expr()->eq('url.accessUrlId', $urlId)
-            /*)->andWhere(
-                's.name LIKE :name'
-            )*/
             )
             ->setFirstResult($limit['start'])
             ->setMaxResults($limit['length'])
             ->setParameter('tag', "$termTag%")
-            //->setParameter('name', "%$termTag%")
-            ->getQuery()
-            ->getResult();
+            ;
 
-        $sessionsToBrowse = [];
-        foreach ($sessions as $session) {
-            if ($session->getNbrCourses() === 0) {
-                continue;
-            }
-            $sessionsToBrowse[] = $session;
-        }
+        $qb = self::hideFromSessionCatalogCondition($qb);
 
-        return $sessionsToBrowse;
+        return $qb->getQuery()->getResult();
     }
 
     /**
@@ -715,7 +784,7 @@ class CoursesAndSessionsCatalog
 
         $urlId = api_get_current_access_url_id();
 
-        $sessions = $qb->select('s')
+        $qb->select('s')
             ->distinct()
             ->from('ChamiloCoreBundle:Session', 's')
             ->innerJoin(
@@ -735,21 +804,17 @@ class CoursesAndSessionsCatalog
             )->andWhere(
                 's.name LIKE :keyword'
             )
+            ->andWhere(
+                $qb->expr()->gt('s.nbrCourses', 0)
+            )
             ->setFirstResult($limit['start'])
             ->setMaxResults($limit['length'])
             ->setParameter('keyword', "%$keyword%")
-            ->getQuery()
-            ->getResult();
+        ;
 
-        $sessionsToBrowse = [];
-        foreach ($sessions as $session) {
-            if ($session->getNbrCourses() === 0) {
-                continue;
-            }
-            $sessionsToBrowse[] = $session;
-        }
+        $qb = self::hideFromSessionCatalogCondition($qb);
 
-        return $sessionsToBrowse;
+        return $qb->getQuery()->getResult();
     }
 
     /**

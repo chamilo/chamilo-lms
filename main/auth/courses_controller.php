@@ -349,11 +349,9 @@ class CoursesController
     /**
      * Return Session catalog rendered view.
      *
-     * @param string $action
-     * @param string $nameTools
      * @param array  $limit
      */
-    public function sessionList($action, $nameTools, $limit = [])
+    public function sessionList($limit = [])
     {
         $date = isset($_POST['date']) ? $_POST['date'] : date('Y-m-d');
         $hiddenLinks = isset($_GET['hidden_links']) ? $_GET['hidden_links'] == 1 : false;

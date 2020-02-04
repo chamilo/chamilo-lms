@@ -199,8 +199,17 @@ switch ($action) {
 
         break;
     case 'get_forum_thread':
-        $lpId = isset($_GET['lp']) ? intval($_GET['lp']) : 0;
-        $lpItemId = isset($_GET['lp_item']) ? intval($_GET['lp_item']) : 0;
+        // FORUM - LP connection disabled
+        if (empty($lpId) || empty($lpItemId)) {
+            echo json_encode([
+                'error' => true,
+            ]);
+
+            break;
+        }
+
+        $lpId = isset($_GET['lp']) ? (int) $_GET['lp'] : 0;
+        $lpItemId = isset($_GET['lp_item']) ? (int) $_GET['lp_item'] : 0;
         $sessionId = api_get_session_id();
 
         if (empty($lpId) || empty($lpItemId)) {

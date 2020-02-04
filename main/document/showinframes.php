@@ -252,16 +252,15 @@ if (!$playerSupported && $execute_iframe) {
         }
     </script>';
 
-    /*$htmlHeadXtra[] = '<script>
+    $htmlHeadXtra[] = '<script>
         // Fixes the content height of the frame
         $(function() {
-            $(\'#mainFrame\').on(\'load\', function () {
+            /*$(\'#mainFrame\').on(\'load\', function () {
                 this.style.height = (this.contentWindow.document.body.scrollHeight + 50) + \'px\';
-            });
-
+            });*/
             '.$frameReady.'
         });
-    </script>';*/
+    </script>';
 }
 
 if ($originIsLearnpath) {

@@ -13,7 +13,7 @@
 <!-- START MAIN -->
 <main id="main" dir="{{ text_direction }}" class="{{ section_name }} {{ login_class }}">
     <noscript>{{ "NoJavascript"|get_lang }}</noscript>
-    {% if show_course_shortcut is not null %}
+    {% if show_header == true and show_course_shortcut is not null %}
         <!-- TOOLS SHOW COURSE -->
         <div id="cm-tools" class="nav-tools">
             {{ show_course_shortcut }}
@@ -53,7 +53,9 @@
     <!-- START CONTENT -->
     <section id="cm-content">
         <div class="container{{ fluid == true ? '-fluid':'' }}">
-            {% block breadcrumb %}
-                {{ breadcrumb }}
-            {% endblock %}
+            {% if show_header == true %}
+                {% block breadcrumb %}
+                    {{ breadcrumb }}
+                {% endblock %}
+            {% endif %}
             {{ flash_messages }}

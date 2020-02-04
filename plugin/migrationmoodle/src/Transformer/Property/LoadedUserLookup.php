@@ -2,7 +2,7 @@
 
 namespace Chamilo\PluginBundle\MigrationMoodle\Transformer\Property;
 
-use Chamilo\PluginBundle\MigrationMoodle\Task\UsersTask;
+use Chamilo\PluginBundle\MigrationMoodle\Task\EfcUsersTask;
 
 /**
  * Class LoadedUserLookup.
@@ -16,6 +16,6 @@ class LoadedUserLookup extends LoadedKeyLookup
      */
     public function __construct()
     {
-        $this->calledClass = UsersTask::class;
+        $this->calledClass = EfcUsersTask::class;
     }
 }

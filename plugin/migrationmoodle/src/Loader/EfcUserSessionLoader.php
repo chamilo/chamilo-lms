@@ -4,6 +4,7 @@
 namespace Chamilo\PluginBundle\MigrationMoodle\Loader;
 
 use Chamilo\PluginBundle\MigrationMoodle\Interfaces\LoaderInterface;
+use Chamilo\PluginBundle\MigrationMoodle\Task\EfcUserSessionsTask;
 
 /**
  * Class EfcUserSessionLoader.
@@ -20,7 +21,22 @@ class EfcUserSessionLoader implements LoaderInterface
         $datetime = api_get_utc_datetime();
         $coachId = 1;
 
-        return \SessionManager::create_session(
+        $courseCodes = explode(EfcUserSessionsTask::SEPARATOR_NAME, $incomingData['courses_list']);
+        $courseIds = [];
+
+        foreach ($courseCodes as $courseCode) {
+            $courseId = api_get_course_int_id($courseCode);
+
+            if (empty($courseId)) {
+                throw new \Exception(
+                    "Course ($courseCode) not found when creating course session for user ({$incomingData['user_id']})"
+                );
+            }
+
+            $courseIds[] = $courseId;
+        }
+
+        $sessionId = \SessionManager::create_session(
             $incomingData['name'],
             $datetime,
             '',
@@ -31,5 +47,9 @@ class EfcUserSessionLoader implements LoaderInterface
             $coachId,
             0
         );
+        \SessionManager::add_courses_to_session($sessionId, $courseIds);
+        \SessionManager::subscribeUsersToSession($sessionId, [$incomingData['user_id']]);
+
+        return $sessionId;
     }
 }

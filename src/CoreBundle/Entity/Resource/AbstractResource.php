@@ -89,7 +89,7 @@ abstract class AbstractResource
         $resourceNode = $this->getResourceNode();
 
         $result = null;
-        if ($resourceNode && $resourceNode->getResourceLinks()) {
+        if ($resourceNode && $resourceNode->getResourceLinks()->count() > 0) {
             $result = $resourceNode->getResourceLinks()->matching($criteria)->first();
             if ($result) {
                 return $result;

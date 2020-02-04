@@ -276,7 +276,7 @@ if (isset($new_item_id) && is_numeric($new_item_id)) {
             if (isset($_GET['file']) && is_numeric($_GET['file'])) {
                 echo $learnPath->display_document_form('add', 0, $_GET['file']);
             } else {
-                echo $learnPath->display_document_form('add', 0);
+                echo $learnPath->display_document_form('add');
             }
             break;
         /*case 'hotpotatoes':

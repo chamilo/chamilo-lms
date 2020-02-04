@@ -1,4 +1,5 @@
 <?php
+
 /* For licensing terms, see /license.txt */
 
 use ChamiloSession as Session;
@@ -47,7 +48,7 @@ if (empty($lp)) {
 
 $mode = isset($_REQUEST['mode']) ? $_REQUEST['mode'] : 'fullpage';
 if (isset($_SESSION['oLP']) && isset($_GET['id'])) {
-    $_SESSION['oLP']->current = intval($_GET['id']);
+    $_SESSION['oLP']->current = (int) $_GET['id'];
 }
 $this_section = SECTION_COURSES;
 /* Header and action code */
@@ -87,7 +88,7 @@ $interbreadcrumb[] = [
 $show_learn_path = true;
 $lp_theme_css = $lp->get_theme();
 
-if ('fullpage' == $mode) {
+if ('fullpage' === $mode) {
     Display::display_header(get_lang('Item'), 'Path');
 }
 

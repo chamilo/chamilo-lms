@@ -91,13 +91,12 @@ $audioFolderId = DocumentManager::get_document_id($courseInfo, '/audio');
 
 $file = null;
 if (isset($lp_item->audio) && !empty($lp_item->audio)) {
-    $file = api_get_path(SYS_COURSE_PATH).$courseInfo['path'].'/document/audio/'.$lp_item->audio;
-    $urlFile = api_get_path(WEB_COURSE_PATH).$courseInfo['path'].'/document/audio/'.$lp_item->audio.'?'.api_get_cidreq();
-
-    if (!file_exists($file)) {
+    //$file = api_get_path(SYS_COURSE_PATH).$courseInfo['path'].'/document/audio/'.$lp_item->audio;
+    //$urlFile = api_get_path(WEB_COURSE_PATH).$courseInfo['path'].'/document/audio/'.$lp_item->audio.'?'.api_get_cidreq();
+    /*if (!file_exists($file)) {
         $file = api_get_path(SYS_COURSE_PATH).$courseInfo['path'].'/document'.$lpPathInfo['dir'].'/'.$lp_item->audio;
         $urlFile = api_get_path(WEB_COURSE_PATH).$courseInfo['path'].'/document'.$lpPathInfo['dir'].'/'.$lp_item->audio.'?'.api_get_cidreq();
-    }
+    }*/
 }
 
 $page = $lp->build_action_menu(true);

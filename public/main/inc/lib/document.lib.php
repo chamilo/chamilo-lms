@@ -4076,14 +4076,7 @@ class DocumentManager
             return false;
         }
 
-        $audioId = null;
-        $path = api_get_path(SYS_COURSE_PATH).$_course['path'].'/document/';
-        if (!is_dir($path.'audio')) {
-            mkdir($path.'audio', api_get_permissions_for_new_directories());
-            self::addDocument($_course, '/audio', 'folder', 0, 'Audio');
-        }
-
-        return $audioId;
+        self::addDocument($_course, '/audio', 'folder', 0, 'Audio');
     }
 
     /**
@@ -4548,9 +4541,7 @@ class DocumentManager
             }
         }
 
-        $html = $form->toHtml();
-
-        return $html;
+        return $form->toHtml();
     }
 
     /**

@@ -8,6 +8,7 @@ use Chamilo\CoreBundle\Entity\Resource\ResourceLink;
 use Chamilo\CoreBundle\Entity\Resource\ResourceNode;
 use Chamilo\CoreBundle\Repository\ResourceRepository;
 use Chamilo\CoreBundle\Security\Authorization\Voter\ResourceNodeVoter;
+use Chamilo\CourseBundle\Entity\CDocument;
 use Oneup\UploaderBundle\Controller\BlueimpController;
 use Oneup\UploaderBundle\Uploader\File\FileInterface;
 use Oneup\UploaderBundle\Uploader\File\FilesystemFile;
@@ -85,7 +86,14 @@ class ResourceUploadController extends BlueimpController
 
                     $this->dispatchPreUploadEvent($file, $response, $request);
 
-                    $resource = $repo->saveUpload($file);
+                    $resource = $repo->saveUpload($file, $course, $session);
+
+                    if ($resource instanceof CDocument) {
+                        $resource
+                            ->setCourse($course)
+                            ->setSession($session)
+                        ;
+                    }
 
                     $repo->addResourceToCourseWithParent(
                         $resource,

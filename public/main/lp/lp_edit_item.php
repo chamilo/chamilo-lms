@@ -1,6 +1,8 @@
 <?php
+
 /* For licensing terms, see /license.txt */
 
+use Chamilo\CoreBundle\Framework\Container;
 use ChamiloSession as Session;
 
 /**
@@ -109,7 +111,6 @@ $(function() {
 
     $('.lp-btn-dissociate-forum').on('click', function (e) {
         var dissociate = confirm('<?php echo get_lang('This action will dissociate the forum thread of this learning path item. Do you want to proceed?'); ?>');
-
         if (!dissociate) {
             e.preventDefault();
         }
@@ -123,21 +124,10 @@ echo $learnPath->build_action_menu();
 echo '<div class="row">';
 echo '<div id="lp_sidebar" class="col-md-4">';
 $documentId = isset($_GET['path_item']) ? (int) $_GET['path_item'] : 0;
-$documentInfo = DocumentManager::get_document_data_by_id($documentId, api_get_course_id(), false, null, true);
-if (empty($documentInfo)) {
-    // Try with iid
-    $table = Database::get_course_table(TABLE_DOCUMENT);
-    $sql = "SELECT path FROM $table
-            WHERE c_id = $course_id AND iid = $documentId AND path NOT LIKE '%_DELETED_%'";
-    $res_doc = Database::query($sql);
-    $path_file = Database::result($res_doc, 0, 0);
-} else {
-    $path_file = $documentInfo['path'];
-}
+$repo = Container::getDocumentRepository();
+$document = $repo->find($documentId);
 
-$path_parts = pathinfo($path_file);
-
-if (!empty($path_file) && isset($path_parts['extension']) && 'html' == $path_parts['extension']) {
+if ($document) {
     echo $learnPath->return_new_tree();
     // Show the template list
     echo '<div id="frmModel" class="scrollbar-inner lp-add-item"></div>';
@@ -146,7 +136,6 @@ if (!empty($path_file) && isset($path_parts['extension']) && 'html' == $path_par
 }
 echo '</div>';
 echo '<div id="doc_form" class="col-md-8">';
-
 if (isset($is_success) && true === $is_success) {
     $msg = '<div class="lp_message" style="margin-bottom:10px;">';
     $msg .= 'The item has been edited.';

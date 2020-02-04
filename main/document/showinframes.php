@@ -111,9 +111,12 @@ if (in_array(strtolower($pathinfo['extension']), $playerSupportedFiles)) {
 
 $group_id = api_get_group_id();
 $current_group = GroupManager::get_group_properties($group_id);
-$current_group_name = $current_group['name'];
 
 if (isset($group_id) && $group_id != '') {
+    if ($current_group) {
+        $current_group_name = $current_group['name'];
+    }
+
     $interbreadcrumb[] = [
         'url' => api_get_path(WEB_CODE_PATH).'group/group.php?'.api_get_cidreq(),
         'name' => get_lang('Groups'),
@@ -242,7 +245,7 @@ if (!$playerSupported && $execute_iframe) {
             $(\'#mainFrame\').on(\'load\', function () {
                 this.style.height = (this.contentWindow.document.body.scrollHeight + 50) + \'px\';
             });
-            
+
             '.$frameReady.'
         });
     </script>';
@@ -409,14 +412,14 @@ if ($execute_iframe) {
 
         echo $toolbar = Display::toolbarAction('actions-documents', [$actionsLeft]);
 
-        echo '<iframe 
-            id="mainFrame" 
-            name="mainFrame" 
-            border="0" 
-            frameborder="0" 
-            scrolling="no" 
-            style="width:100%;" height="600" 
-            src="'.$file_url_web.'&rand='.mt_rand(1, 10000).'" 
+        echo '<iframe
+            id="mainFrame"
+            name="mainFrame"
+            border="0"
+            frameborder="0"
+            scrolling="no"
+            style="width:100%;" height="600"
+            src="'.$file_url_web.'&rand='.mt_rand(1, 10000).'"
             height="500" allowfullscreen="true" webkitallowfullscreen="true" mozallowfullscreen="true"></iframe>';
     }
 }

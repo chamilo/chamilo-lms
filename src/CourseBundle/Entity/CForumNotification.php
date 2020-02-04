@@ -74,6 +74,13 @@ class CForumNotification
      */
     protected $postId;
 
+    public function __construct()
+    {
+        $this->forumId = 0;
+        $this->threadId = 0;
+        $this->postId = 0;
+    }
+
     /**
      * Set id.
      *

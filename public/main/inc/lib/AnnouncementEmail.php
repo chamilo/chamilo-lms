@@ -188,7 +188,7 @@ class AnnouncementEmail
         );
 
         // Build the link by hand because api_get_cidreq() doesn't accept course params
-        $course_param = 'cidReq='.$courseCode.'&id_session='.$session_id.'&gidReq='.api_get_group_id();
+        $course_param = 'cid='.$this->course['real_id'].'&sid='.$session_id.'&gid='.api_get_group_id();
         $course_name = $this->course['title'];
 
         $result = "<div>$content</div>";

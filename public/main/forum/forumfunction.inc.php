@@ -6,6 +6,7 @@ use Chamilo\CoreBundle\Entity\Resource\ResourceLink;
 use Chamilo\CoreBundle\Framework\Container;
 use Chamilo\CourseBundle\Entity\CForumCategory;
 use Chamilo\CourseBundle\Entity\CForumForum;
+use Chamilo\CourseBundle\Entity\CForumNotification;
 use Chamilo\CourseBundle\Entity\CForumPost;
 use Chamilo\CourseBundle\Entity\CForumThread;
 use ChamiloSession as Session;
@@ -5772,7 +5773,6 @@ function set_notification($content, $id, $addOnly = false, $userInfo = [], $cour
 
     // Database table definition
     $table_notification = Database::get_course_table(TABLE_FORUM_NOTIFICATION);
-
     $course_id = $courseInfo['real_id'];
 
     // Which database field do we have to store the id in?
@@ -5795,9 +5795,22 @@ function set_notification($content, $id, $addOnly = false, $userInfo = [], $cour
     // If the user did not indicate that (s)he wanted to be notified already
     // then we store the notification request (to prevent double notification requests).
     if ($total <= 0) {
-        $sql = "INSERT INTO $table_notification (c_id, $field, user_id)
-                VALUES ($course_id, '$id','$userId')";
-        Database::query($sql);
+        $notification = new CForumNotification();
+        $notification
+            ->setCId($course_id)
+            ->setUserId($userId)
+        ;
+
+        if ('forum' === $content) {
+            $notification->setForumId($id);
+        } else {
+            $notification->setThreadId($id);
+        }
+
+        $em = Database::getManager();
+        $em->persist($notification);
+        $em->flush();
+
         Session::erase('forum_notification');
         getNotificationsPerUser(0, true);
 

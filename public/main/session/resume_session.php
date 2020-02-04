@@ -105,8 +105,8 @@ switch ($action) {
             );
             $nbr_affected_rows = Database::affected_rows($result);
             Database::query(
-                "UPDATE $tbl_session 
-                SET nbr_classes = nbr_classes - $nbr_affected_rows 
+                "UPDATE $tbl_session
+                SET nbr_classes = nbr_classes - $nbr_affected_rows
                 WHERE id = $sessionId");
         }
 
@@ -246,7 +246,7 @@ if (0 === $session->getNbrCourses()) {
         );
         $courseItem .= Display::url(
             Display::return_icon('import_csv.png', get_lang('Import users list')),
-            $codePath."user/user_import.php?action=import&cidReq={$course->getCode()}&id_session=$sessionId"
+            $codePath."user/user_import.php?action=import&cid={$course->getId()}&sid=$sessionId"
         );
         $courseItem .= Display::url(
             Display::return_icon('export_csv.png', get_lang('Export users of a course')),

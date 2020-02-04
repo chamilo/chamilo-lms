@@ -834,7 +834,7 @@ class SocialManager extends UserManager
         if (!empty($forumCourseId)) {
             $courseInfo = api_get_course_info_by_id($forumCourseId);
             if (!empty($courseInfo)) {
-                $groupUrl = api_get_path(WEB_CODE_PATH).'forum/index.php?cidReq='.$courseInfo['code'];
+                $groupUrl = api_get_path(WEB_CODE_PATH).'forum/index.php?cid='.$courseInfo['real_id'];
             }
         }
 
@@ -1117,14 +1117,16 @@ class SocialManager extends UserManager
                 // Announcements
                 $announcements = [];
                 $announcementsByCourse = AnnouncementManager::getAnnouncementCourseTotalByUser($user_id);
+
                 if (!empty($announcementsByCourse)) {
                     foreach ($announcementsByCourse as $announcement) {
+                        $courseInfo = api_get_course_info_by_id($announcement->getCId());
                         $url = Display::url(
                             Display::return_icon(
                                 'announcement.png',
                                 get_lang('Announcements')
-                            ).$announcement['course']['name'].' ('.$announcement['count'].')',
-                            api_get_path(WEB_CODE_PATH).'announcements/announcements.php?cidReq='.$announcement['course']['code']
+                            ).$courseInfo['name'],
+                            api_get_path(WEB_CODE_PATH).'announcements/announcements.php?cid='.$courseInfo['real_id']
                         );
                         $announcements[] = Display::tag('li', $url);
                     }
@@ -1659,7 +1661,7 @@ class SocialManager extends UserManager
                             $row['post_title'] = $post->getForumId();
                             $row['forum_title'] = $thread->getThreadTitle();
                             $row['thread_url'] = api_get_path(WEB_CODE_PATH).'forum/viewthread.php?'.http_build_query([
-                                    'cidReq' => $courseInfo['code'],
+                                    'cid' => $courseInfo['real_id'],
                                     'forum' => $post->getForumId(),
                                     'thread' => $post->getThreadId(),
                                     'post_id' => $post->getIid(),
@@ -2901,7 +2903,7 @@ class SocialManager extends UserManager
             Session::erase('forum_notification');
 
             $threadUrlBase = api_get_path(WEB_CODE_PATH).'forum/viewthread.php?'.http_build_query([
-                'cidReq' => $courseInfo['code'],
+                'cid' => $courseInfo['real_id'],
             ]).'&';
             if (isset($notification['thread']) && !empty($notification['thread'])) {
                 $threadList = array_filter(array_unique($notification['thread']));
@@ -2965,7 +2967,7 @@ class SocialManager extends UserManager
 
             $social_group_block .= Display::url(
                 get_lang('See all communities'),
-                api_get_path(WEB_CODE_PATH).'forum/index.php?cidReq='.$courseInfo['code']
+                api_get_path(WEB_CODE_PATH).'forum/index.php?cid='.$courseInfo['real_id']
             );
 
             if (!empty($social_group_block)) {

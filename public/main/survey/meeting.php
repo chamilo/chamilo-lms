@@ -52,8 +52,7 @@ $students = isset($invitations['course_users']) ? $invitations['course_users'] :
 $content = Display::page_header($surveyData['title']);
 
 $interbreadcrumb[] = [
-    'url' => api_get_path(WEB_CODE_PATH).
-        'survey/survey_list.php?cidReq='.$courseInfo['code'].'&id_session='.$sessionId,
+    'url' => api_get_path(WEB_CODE_PATH).'survey/survey_list.php?cid='.$courseInfo['real_id'].'&sid='.$sessionId,
     'name' => get_lang('Survey list'),
 ];
 
@@ -213,11 +212,11 @@ foreach ($students as $studentId) {
             }
 
             if ('edit' === $action) {
-                $html = '<div class="alert alert-info"><input 
-                    id="'.$item['question_id'].'" 
-                    name="options['.$item['question_id'].']" 
-                    class="question" '.$checked.' 
-                    type="checkbox" 
+                $html = '<div class="alert alert-info"><input
+                    id="'.$item['question_id'].'"
+                    name="options['.$item['question_id'].']"
+                    class="question" '.$checked.'
+                    type="checkbox"
                 /></div>';
             } else {
                 $html = $checked;

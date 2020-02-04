@@ -295,7 +295,7 @@ if (!empty($courseList)) {
 
                     $name = Display::url(
                         $exerciseInfo['title'],
-                        api_get_path(WEB_CODE_PATH)."exercise/overview.php?cidReq=$courseCode&exerciseId={$exerciseId}&id_session=$session_id",
+                        api_get_path(WEB_CODE_PATH)."exercise/overview.php?cid=$courseId&exerciseId={$exerciseId}&sid=$session_id",
                         ['target' => SESSION_LINK_TARGET]
                     );
 
@@ -340,7 +340,7 @@ if (!empty($courseList)) {
 
                     $name = Display::url(
                         $exerciseInfo['title'],
-                        api_get_path(WEB_CODE_PATH)."exercise/result.php?cidReq=$courseCode&id={$result['exe_id']}&id_session=$session_id&show_headers=1",
+                        api_get_path(WEB_CODE_PATH)."exercise/result.php?cid=$courseId&id={$result['exe_id']}&sid=$session_id&show_headers=1",
                         ['target' => SESSION_LINK_TARGET, 'class' => 'exercise-result-link']
                     );
 

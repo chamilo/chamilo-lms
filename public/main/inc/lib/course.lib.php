@@ -3524,7 +3524,7 @@ class CourseManager
                 $params['edit_actions'] = '';
                 $params['document'] = '';
                 if (api_is_platform_admin()) {
-                    $params['edit_actions'] .= api_get_path(WEB_CODE_PATH).'course_info/infocours.php?cidReq='.$course['code'];
+                    $params['edit_actions'] .= api_get_path(WEB_CODE_PATH).'course_info/infocours.php?cid='.$course['real_id'];
                     if ($load_dirs) {
                         $params['document'] = '<a id="document_preview_'.$courseId.'_0" class="document_preview btn btn-outline-secondary btn-sm" href="javascript:void(0);">'
                            .Display::returnFontAwesomeIcon('folder-open').'</a>';
@@ -3800,7 +3800,7 @@ class CourseManager
             $params['edit_actions'] = '';
             $params['document'] = '';
             if (api_is_platform_admin()) {
-                $params['edit_actions'] .= api_get_path(WEB_CODE_PATH).'course_info/infocours.php?cidReq='.$course_info['code'];
+                $params['edit_actions'] .= api_get_path(WEB_CODE_PATH).'course_info/infocours.php?cid='.$course_info['real_id'];
                 if ($load_dirs) {
                     $params['document'] = '<a id="document_preview_'.$course_info['real_id'].'_0" class="document_preview btn btn-default btn-sm" href="javascript:void(0);">'
                                .Display::returnFontAwesomeIcon('folder-open').'</a>';
@@ -4098,7 +4098,7 @@ class CourseManager
             COURSE_VISIBILITY_HIDDEN != $course_visibility
         ) {
             if (api_is_platform_admin()) {
-                $params['edit_actions'] .= api_get_path(WEB_CODE_PATH).'course_info/infocours.php?cidReq='.$course_info['code'];
+                $params['edit_actions'] .= api_get_path(WEB_CODE_PATH).'course_info/infocours.php?cid='.$course_info['real_id'];
                 if ($load_dirs) {
                     $params['document'] .= '<a
                         id="document_preview_'.$course_info['real_id'].'_'.$course_info['id_session'].'"
@@ -5949,7 +5949,7 @@ class CourseManager
                             ['class' => 'btn btn-primary btn-large']
                         );
 
-                        $exercise_redirect = intval(Session::read('exercise_redirect'));
+                        $exercise_redirect = (int) Session::read('exercise_redirect');
                         // Specify the course id as the current context does not
                         // hold a global $_course array
                         $objExercise = new Exercise($course_info['real_id']);
@@ -5957,7 +5957,7 @@ class CourseManager
 
                         if (!empty($exercise_redirect) && !empty($result)) {
                             $form_data['action'] = api_get_path(WEB_CODE_PATH).
-                                'exercise/overview.php?exerciseId='.$exercise_redirect.'&cidReq='.$course_info['code'];
+                                'exercise/overview.php?exerciseId='.$exercise_redirect.'&cid='.$course_info['real_id'];
                             $form_data['message'] .= '<br />'.get_lang('Go to the test');
                             $form_data['button'] = Display::button(
                                 'next',
@@ -6070,7 +6070,7 @@ class CourseManager
         if (api_is_platform_admin()) {
             if ($loadDirs) {
                 $params['right_actions'] .= '<a id="document_preview_'.$course_info['real_id'].'_0" class="document_preview" href="javascript:void(0);">'.Display::return_icon('folder.png', get_lang('Documents'), ['align' => 'absmiddle'], ICON_SIZE_SMALL).'</a>';
-                $params['right_actions'] .= '<a href="'.api_get_path(WEB_CODE_PATH).'course_info/infocours.php?cidReq='.$course['code'].'">'.
+                $params['right_actions'] .= '<a href="'.api_get_path(WEB_CODE_PATH).'course_info/infocours.php?cid='.$course['real_id'].'">'.
                     Display::return_icon('edit.png', get_lang('Edit'), ['align' => 'absmiddle'], ICON_SIZE_SMALL).
                     '</a>';
                 $params['right_actions'] .= Display::div(
@@ -6081,7 +6081,8 @@ class CourseManager
                     ]
                 );
             } else {
-                $params['right_actions'] .= '<a class="btn btn-default btn-sm" title="'.get_lang('Edit').'" href="'.api_get_path(WEB_CODE_PATH).'course_info/infocours.php?cidReq='.$course['code'].'">'.
+                $params['right_actions'] .=
+                    '<a class="btn btn-default btn-sm" title="'.get_lang('Edit').'" href="'.api_get_path(WEB_CODE_PATH).'course_info/infocours.php?cid='.$course['real_id'].'">'.
                     Display::returnFontAwesomeIcon('pencil').'</a>';
             }
         } else {
@@ -6098,7 +6099,8 @@ class CourseManager
                     );
                 } else {
                     if (COURSEMANAGER == $course_info['status']) {
-                        $params['right_actions'] .= '<a class="btn btn-default btn-sm" title="'.get_lang('Edit').'" href="'.api_get_path(WEB_CODE_PATH).'course_info/infocours.php?cidReq='.$course['code'].'">'.
+                        $params['right_actions'] .= '<a
+                            class="btn btn-default btn-sm" title="'.get_lang('Edit').'" href="'.api_get_path(WEB_CODE_PATH).'course_info/infocours.php?cid='.$course['real_id'].'">'.
                             Display::returnFontAwesomeIcon('pencil').'</a>';
                     }
                 }

@@ -58,7 +58,7 @@ $sessionId = isset($_GET['id_session']) ? (int) $_GET['id_session'] : api_get_se
 // Breadcrumbs
 if (!empty($userInfo)) {
     $interbreadcrumb[] = [
-        'url' => api_get_path(WEB_CODE_PATH).'survey/survey_list.php?cidReq='.$courseInfo['code'].'&id_session='.$sessionId,
+        'url' => api_get_path(WEB_CODE_PATH).'survey/survey_list.php?cid='.$courseInfo['real_id'].'&sid='.$sessionId,
         'name' => get_lang('Survey list'),
     ];
 }
@@ -228,7 +228,7 @@ $survey_data['survey_id'] = $survey_invitation['survey_id'];
 if ('3' == $survey_data['survey_type']) {
     header('Location: '.
         api_get_path(WEB_CODE_PATH).
-        'survey/meeting.php?cidReq='.$courseInfo['code'].'&id_session='.$sessionId.'&invitationcode='.Security::remove_XSS($invitationcode)
+        'survey/meeting.php?cid='.$courseInfo['real_id'].'&sid='.$sessionId.'&invitationcode='.Security::remove_XSS($invitationcode)
     );
     exit;
 }
@@ -423,9 +423,7 @@ if ('' != $survey_data['form_fields'] &&
         }
     }
 
-    $url = api_get_self().
-        '?cidReq='.$courseInfo['code'].
-        '&id_session='.$sessionId;
+    $url = api_get_self().'?cid='.$courseInfo['real_id'].'&sid='.$sessionId;
     $listQueryParams = preg_split('/&/', $_SERVER['QUERY_STRING']);
     foreach ($listQueryParams as $param) {
         $url .= '&'.Security::remove_XSS($param);
@@ -684,8 +682,8 @@ if ((isset($_GET['show']) && '' != $_GET['show']) ||
         if (empty($paged_questions)) {
             $sql = "SELECT * FROM $table_survey_question
                     WHERE
-                        survey_question NOT LIKE '%{{%' AND 
-                        c_id = $course_id AND 
+                        survey_question NOT LIKE '%{{%' AND
+                        c_id = $course_id AND
                         survey_id = '".intval($survey_invitation['survey_id'])."'
                     ORDER BY sort ASC";
             $result = Database::query($sql);
@@ -765,7 +763,7 @@ if ((isset($_GET['show']) && '' != $_GET['show']) ||
                         LEFT JOIN $table_survey_question_option survey_question_option
                         ON survey_question.question_id = survey_question_option.question_id AND
                             survey_question_option.c_id = $course_id
-                        WHERE                        
+                        WHERE
                             survey_question NOT LIKE '%{{%' AND
                             survey_question.survey_id = '".intval($survey_invitation['survey_id'])."' AND
                             survey_question.question_id IN (".implode(',', $paged_questions[$_GET['show']]).") AND
@@ -808,9 +806,9 @@ if ((isset($_GET['show']) && '' != $_GET['show']) ||
             $answer_list = [];
             // Get current user results
             $results = [];
-            $sql = "SELECT 
-                      survey_group_pri, 
-                      user, 
+            $sql = "SELECT
+                      survey_group_pri,
+                      user,
                       SUM(value) as value
                     FROM $table_survey_answer as survey_answer
                     INNER JOIN $table_survey_question as survey_question
@@ -1020,7 +1018,7 @@ if ((isset($_GET['show']) && '' != $_GET['show']) ||
                                 ON survey_question.question_id = survey_question_option.question_id AND
                                 survey_question_option.c_id = $course_id
                                 WHERE
-                                    survey_question NOT LIKE '%{{%' AND 
+                                    survey_question NOT LIKE '%{{%' AND
                                     survey_question.survey_id = '".$my_survey_id."' AND
                                     survey_question.c_id = $course_id AND
                                     survey_question.question_id IN (".implode(',', $paged_questions_sec[$val]).")
@@ -1131,7 +1129,7 @@ if ((isset($_GET['show']) && '' != $_GET['show']) ||
                             ON survey_question.question_id = survey_question_option.question_id AND
                             survey_question_option.c_id = $course_id
                             WHERE
-                                survey_question NOT LIKE '%{{%' AND 
+                                survey_question NOT LIKE '%{{%' AND
                                 survey_question.survey_id = '".intval($survey_invitation['survey_id'])."' AND
                                 survey_question.c_id = $course_id  AND
                                 survey_question.question_id IN (".$imploded.")
@@ -1204,9 +1202,7 @@ $g_ic = isset($_GET['invitationcode']) ? Security::remove_XSS($_GET['invitationc
 $g_cr = isset($_GET['cidReq']) ? Security::remove_XSS($_GET['cidReq']) : '';
 $p_l = isset($_POST['language']) ? Security::remove_XSS($_POST['language']) : '';
 $add_parameters = isset($_GET['user_id']) ? '&user_id='.intval($_GET['user_id']) : '';
-$url = api_get_self().'?cidReq='.$courseInfo['code'].
-    '&id_session='.$sessionId.
-    $add_parameters.
+$url = api_get_self().'?cid='.$courseInfo['real_id'].'&sid='.$sessionId.$add_parameters.
     '&course='.$g_c.
     '&invitationcode='.$g_ic.
     '&show='.$show;

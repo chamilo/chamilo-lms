@@ -3900,7 +3900,7 @@ function sendAlertToUsers($workId, $courseInfo, $sessionId)
             $message = get_lang('Send messageMailBody')."\n".get_lang('Course name').' : '.$courseInfo['name']."\n";
             $message .= get_lang('Username').' : '.$user_info['complete_name']."\n";
             $message .= get_lang('Date sent').' : '.api_format_date(api_get_local_time())."\n";
-            $url = api_get_path(WEB_CODE_PATH).'work/work.php?cidReq='.$courseInfo['code'].'&id_session='.$sessionId.'&id='.$workData['id'];
+            $url = api_get_path(WEB_CODE_PATH).'work/work.php?cid='.$courseInfo['real_id'].'&sid='.$sessionId.'&id='.$workData['id'];
             $message .= get_lang('Assignment name').' : '.$workData['title']."\n\n".'<a href="'.$url.'">'.get_lang('Download link')."</a>\n";
             MessageManager::send_message_simple(
                 $to_user_id,

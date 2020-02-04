@@ -1265,11 +1265,11 @@ class SessionManager
             // Overall Total
             $overall_total = ($course_description_progress + $exercises_progress + $forums_progress + $assignments_progress + $wiki_progress + $surveys_progress) / 6;
 
-            $link = '<a href="'.api_get_path(WEB_CODE_PATH).'mySpace/myStudents.php?student='.$user[0].'&details=true&course='.$course['code'].'&id_session='.$user['id_session'].'"> %s </a>';
-            $linkForum = '<a href="'.api_get_path(WEB_CODE_PATH).'forum/index.php?cidReq='.$course['code'].'&id_session='.$user['id_session'].'"> %s </a>';
-            $linkWork = '<a href="'.api_get_path(WEB_CODE_PATH).'work/work.php?cidReq='.$course['code'].'&id_session='.$user['id_session'].'"> %s </a>';
-            $linkWiki = '<a href="'.api_get_path(WEB_CODE_PATH).'wiki/index.php?cidReq='.$course['code'].'&session_id='.$user['id_session'].'&action=statistics"> %s </a>';
-            $linkSurvey = '<a href="'.api_get_path(WEB_CODE_PATH).'survey/survey_list.php?cidReq='.$course['code'].'&id_session='.$user['id_session'].'"> %s </a>';
+            $link = '<a href="'.api_get_path(WEB_CODE_PATH).'mySpace/myStudents.php?student='.$user[0].'&details=true&course='.$course['code'].'&sid='.$user['id_session'].'"> %s </a>';
+            $linkForum = '<a href="'.api_get_path(WEB_CODE_PATH).'forum/index.php?cid='.$course['real_id'].'&sid='.$user['id_session'].'"> %s </a>';
+            $linkWork = '<a href="'.api_get_path(WEB_CODE_PATH).'work/work.php?cid='.$course['real_id'].'&sid='.$user['id_session'].'"> %s </a>';
+            $linkWiki = '<a href="'.api_get_path(WEB_CODE_PATH).'wiki/index.php?cid='.$course['real_id'].'&sid='.$user['id_session'].'&action=statistics"> %s </a>';
+            $linkSurvey = '<a href="'.api_get_path(WEB_CODE_PATH).'survey/survey_list.php?cid='.$course['real_id'].'&sid='.$user['id_session'].'"> %s </a>';
 
             $table[] = [
                 'lastname' => $user[1],

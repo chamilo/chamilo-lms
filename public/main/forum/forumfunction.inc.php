@@ -5135,7 +5135,6 @@ function forum_search()
 /**
  * Display the search results.
  *
- * @param string
  * @param string $search_term
  *
  * @author Patrick Cool <patrick.cool@UGent.be>, Ghent University, Belgium
@@ -5258,6 +5257,10 @@ function display_forum_search_results($search_term)
  */
 function search_link()
 {
+    // @todo implement search
+
+    return '';
+
     $return = '';
     $origin = api_get_origin();
     if ('learnpath' != $origin) {

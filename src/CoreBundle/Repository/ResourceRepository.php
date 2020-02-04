@@ -500,7 +500,13 @@ class ResourceRepository extends BaseEntityRepository
         }
 
         if (null === $session) {
-            $qb->andWhere('links.session IS NULL');
+            //$qb->andWhere('links.session IS NULL');
+            $qb->andWhere(
+                $qb->expr()->orX(
+                    $qb->expr()->isNull('links.session'),
+                    $qb->expr()->eq('links.session', 0)
+                )
+            );
         } else {
             if ($loadBaseSessionContent) {
                 // Load course base content.
@@ -519,7 +525,12 @@ class ResourceRepository extends BaseEntityRepository
         }
 
         if (null === $group) {
-            $qb->andWhere('links.group IS NULL');
+            $qb->andWhere(
+                $qb->expr()->orX(
+                    $qb->expr()->isNull('links.group'),
+                    $qb->expr()->eq('links.group', 0)
+                )
+            );
         } else {
             $qb->andWhere('links.group = :group');
             $qb->setParameter('group', $group);

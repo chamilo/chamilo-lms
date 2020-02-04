@@ -121,6 +121,21 @@ abstract class BaseController extends AbstractController
         return $this->getDoctrine()->getManager()->find('ChamiloCoreBundle:Session', $sessionId);
     }
 
+    public function getGroup()
+    {
+        $request = $this->getRequest();
+
+        if ($request) {
+            $groupId = $request->getSession()->get('gid', 0);
+        }
+
+        if (empty($groupId)) {
+            return null;
+        }
+
+        return $this->getDoctrine()->getManager()->find('ChamiloCourseBundle:CGroupInfo', $groupId);
+    }
+
     public function getCourseUrlQuery(): string
     {
         $url = '';
@@ -128,12 +143,19 @@ abstract class BaseController extends AbstractController
         if ($course) {
             $url = 'cid='.$course->getId();
         }
-        $session = $this->getCourseSession();
 
+        $session = $this->getCourseSession();
         if ($session) {
             $url .= '&sid='.$session->getId();
         } else {
             $url .= '&sid=0';
+        }
+
+        $group = $this->getGroup();
+        if ($group) {
+            $url .= '&gid='.$group->getIid();
+        } else {
+            $url .= '&gid=0';
         }
 
         return $url;

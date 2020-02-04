@@ -137,7 +137,9 @@ class CourseListener
             // Group
             $groupId = (int) $request->get('gid');
 
-            if (!empty($groupId)) {
+            if (empty($groupId)) {
+                $sessionHandler->remove('gid');
+            } else {
                 $group = $em->getRepository('ChamiloCourseBundle:CGroupInfo')->find($groupId);
 
                 if (!$group) {

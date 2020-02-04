@@ -2,6 +2,7 @@
 
 /* For licensing terms, see /license.txt */
 
+use Chamilo\CoreBundle\Entity\ExtraField as ExtraFieldEntity;
 use ChamiloSession as Session;
 use Knp\Component\Pager\Paginator;
 
@@ -505,12 +506,88 @@ $form
 $form->addHidden('course_id_changed', '0');
 $form->addHidden('exercise_id_changed', '0');
 
+$extraField = new ExtraField('question');
+$jsForExtraFields = $extraField->addElements($form, 0, [], true);
+
 $form->addButtonFilter(get_lang('Filter'), 'name');
 
 echo $form->display();
+
+echo '<script>$(function () {
+        '.$jsForExtraFields['jquery_ready_content'].'
+    })</script>';
 ?>
 <div class="clear"></div>
 <?php
+
+/**
+ * @param array $formValues
+ *
+ * @return array
+ */
+function getExtraFieldConditions(array $formValues, $queryType = 'from')
+{
+    $extraField = new ExtraField('question');
+    $fields = $extraField->get_all(
+        ['visible_to_self = ? AND filter = ?' => [1, 1]],
+        'display_text'
+    );
+
+    $from = '';
+    $where = '';
+
+    foreach ($fields as $field) {
+        $variable = $field['variable'];
+
+        if (empty($formValues["extra_$variable"])) {
+            continue;
+        }
+
+        $value = $formValues["extra_$variable"];
+
+        switch ($field['field_type']) {
+            case ExtraField::FIELD_TYPE_CHECKBOX:
+                $value = $value["extra_$variable"];
+                break;
+            case ExtraField::FIELD_TYPE_DOUBLE_SELECT:
+                if (!isset($value["extra_{$variable}_second"])) {
+                    $value = null;
+                    break;
+                }
+
+                $value = $value["extra_$variable"].'::'.$value["extra_{$variable}_second"];
+                break;
+        }
+
+        if (empty($value)) {
+            continue;
+        }
+
+        if ($queryType === 'from') {
+            $from .= ", extra_field_values efv_$variable, extra_field ef_$variable";
+            $where .= "AND (
+                    qu.iid = efv_$variable.item_id
+                    AND efv_$variable.field_id = ef_$variable.id
+                    AND ef_$variable.extra_field_type = ".ExtraFieldEntity::QUESTION_FIELD_TYPE."
+                    AND ef_$variable.variable = '$variable'
+                    AND efv_$variable.value = '$value'
+                )";
+        } elseif ($queryType === 'join') {
+            $from .= " INNER JOIN extra_field_values efv_$variable ON qu.iid = efv_$variable.item_id
+                INNER JOIN extra_field ef_$variable ON efv_$variable.field_id = ef_$variable.id";
+            $where .= "AND (
+                    ef_$variable.extra_field_type = ".ExtraFieldEntity::QUESTION_FIELD_TYPE."
+                    AND ef_$variable.variable = '$variable'
+                    AND efv_$variable.value = '$value'
+                )";
+        }
+    }
+
+    return [
+        'from' => $from,
+        'where' => $where,
+    ];
+}
 
 function getQuestions(
     $getCount,
@@ -524,7 +601,8 @@ function getQuestions(
     $answerType,
     $questionId,
     $description,
-    $fromExercise = 0
+    $fromExercise = 0,
+    $formValues = []
 ) {
     $start = (int) $start;
     $length = (int) $length;
@@ -555,6 +633,8 @@ function getQuestions(
 
     // if we have selected an exercise in the list-box 'Filter'
     if ($exerciseId > 0) {
+        $efConditions = getExtraFieldConditions($formValues, 'from');
+
         $where = '';
         $from = '';
         if (isset($courseCategoryId) && $courseCategoryId > 0) {
@@ -594,14 +674,17 @@ function getQuestions(
                     INNER JOIN $TBL_QUESTIONS qu
                     ON qt.question_id = qu.id
                     $from
+                    {$efConditions['from']}
                 WHERE
                     qt.exercice_id = $exerciseId AND
                     qt.c_id = $selected_course  AND
                     qu.c_id = $selected_course
                     $where
                     $currentExerciseCondition
+                    {$efConditions['where']}
                 ORDER BY question_order";
     } elseif ($exerciseId == -1) {
+        $efConditions = getExtraFieldConditions($formValues, 'join');
         // If we have selected the option 'Orphan questions' in the list-box 'Filter'
         $level_where = '';
         $from = '';
@@ -628,57 +711,64 @@ function getQuestions(
             $answer_where .= " AND q.description LIKE '%$description%'";
         }
 
-        $select = ' q.*, r.exercice_id exerciseId  ';
+        $select = ' qu.*, r.exercice_id exerciseId  ';
         if ($getCount) {
-            $select = 'count(q.iid) as count';
+            $select = 'count(qu.iid) as count';
         }
 
         // @todo fix this query with the new id field
         $sql = " (
                     SELECT $select
-                    FROM $TBL_QUESTIONS q
+                    FROM $TBL_QUESTIONS qu
                     INNER JOIN $TBL_EXERCISE_QUESTION r
-                    ON (q.c_id = r.c_id AND q.id = r.question_id)
+                    ON (qu.c_id = r.c_id AND qu.id = r.question_id)
                     INNER JOIN $TBL_EXERCISES ex
                     ON (ex.id = r.exercice_id AND ex.c_id = r.c_id)
                     $from
+                    {$efConditions['from']}
                     WHERE
                         ex.c_id = '$selected_course' AND
                         ex.active = '-1'
                         $level_where
                         $answer_where
+                        {$efConditions['where']}
                 )
                 UNION
                 (
                     SELECT $select
-                    FROM $TBL_QUESTIONS q
+                    FROM $TBL_QUESTIONS qu
                     LEFT OUTER JOIN $TBL_EXERCISE_QUESTION r
-                    ON (q.c_id = r.c_id AND q.id = r.question_id)
+                    ON (qu.c_id = r.c_id AND qu.id = r.question_id)
                     $from
+                    {$efConditions['from']}
                     WHERE
-                        q.c_id = '$selected_course' AND
+                        qu.c_id = '$selected_course' AND
                         r.question_id is null
                         $level_where
                         $answer_where
+                        {$efConditions['where']}
                 )
                 UNION
                 (
                         SELECT $select
-                        FROM $TBL_QUESTIONS q
+                        FROM $TBL_QUESTIONS qu
                         INNER JOIN $TBL_EXERCISE_QUESTION r
-                        ON (q.c_id = r.c_id AND q.id = r.question_id)
+                        ON (qu.c_id = r.c_id AND qu.id = r.question_id)
                         $from
+                        {$efConditions['from']}
                         WHERE
                             r.c_id = '$selected_course' AND
                             (r.exercice_id = '-1' OR r.exercice_id = '0')
                             $level_where
                             $answer_where
+                            {$efConditions['where']}
                     )
                  ";
         if ($getCount) {
             $sql = "SELECT SUM(count) count FROM ($sql) as total";
         }
     } else {
+        $efConditions = getExtraFieldConditions($formValues, 'from');
         // All tests for selected course
         // If we have not selected any option in the list-box 'Filter'
         $filter = '';
@@ -722,6 +812,7 @@ function getQuestions(
                 $TBL_QUESTIONS as qu,
                 $TBL_EXERCISE_QUESTION as qt,
                 $TBL_EXERCISES as q
+                {$efConditions['from']}
                 $from
                 WHERE
                     qu.c_id = $selected_course AND
@@ -732,6 +823,7 @@ function getQuestions(
                     q.id = qt.exercice_id
                     $filter
                     $currentExerciseCondition
+                    {$efConditions['where']}
                 GROUP BY qu.iid
                 ORDER BY session_id ASC
                 ";
@@ -759,6 +851,8 @@ function getQuestions(
     return $mainQuestionList;
 }
 
+$formValues = $form->validate() ? $form->exportValues() : [];
+
 $nbrQuestions = getQuestions(
     true,
     null,
@@ -771,7 +865,8 @@ $nbrQuestions = getQuestions(
     $answerType,
     $questionId,
     $description,
-    $fromExercise
+    $fromExercise,
+    $formValues
 );
 
 $length = api_get_configuration_value('question_pagination_length');
@@ -816,7 +911,8 @@ $mainQuestionList = getQuestions(
     $answerType,
     $questionId,
     $description,
-    $fromExercise
+    $fromExercise,
+    $formValues
 );
 
 // build the line of the array to display questions

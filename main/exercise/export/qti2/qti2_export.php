@@ -179,9 +179,9 @@ class ImsSection
 
     public function start_section()
     {
-        $out = '<section 
-            ident = "EXO_'.$this->exercise->selectId().'" 
-            title = "'.cleanAttribute(formatExerciseQtiDescription($this->exercise->selectTitle())).'"            
+        $out = '<section
+            ident = "EXO_'.$this->exercise->selectId().'"
+            title = "'.cleanAttribute(formatExerciseQtiDescription($this->exercise->selectTitle())).'"
         >'."\n";
 
         return $out;

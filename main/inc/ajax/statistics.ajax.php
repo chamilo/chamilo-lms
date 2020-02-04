@@ -333,6 +333,7 @@ switch ($action) {
                     if (!isset($all[$key])) {
                         $all[$key] = 0;
                     }
+                    $key = get_lang($key);
                     $all[$key] += UserManager::getUserListExtraConditions(
                         $conditions,
                         [],
@@ -378,6 +379,7 @@ switch ($action) {
                     $result = Database::fetch_array($query);
                     $count = $result['count'];
                     $usersFound += $count;
+                    $item['display_text'] = get_lang(str_replace('2', '', $item['display_text']));
                     $all[$item['display_text']] = $count;
                 }
                 $all[get_lang('N/A')] = $total - $usersFound;

@@ -17,11 +17,11 @@ $sessionDuration = isset($_GET['session_duration']) ? (int) $_GET['session_durat
 $validated = false;
 
 if (
-    in_array(
-        $report,
-        ['recentlogins', 'tools', 'courses', 'coursebylanguage', 'users', 'users_active', 'session_by_date']
-    )
-   ) {
+in_array(
+    $report,
+    ['recentlogins', 'tools', 'courses', 'coursebylanguage', 'users', 'users_active', 'session_by_date']
+)
+) {
     $htmlHeadXtra[] = api_get_js('chartjs/Chart.min.js');
     $htmlHeadXtra[] = api_get_asset('chartjs-plugin-labels/build/chartjs-plugin-labels.min.js');
 
@@ -29,7 +29,9 @@ if (
     $url = $reportName = $reportType = $reportOptions = '';
     switch ($report) {
         case 'recentlogins':
-            $url = api_get_path(WEB_CODE_PATH).'inc/ajax/statistics.ajax.php?a=recent_logins&session_duration='.$sessionDuration;
+            $url = api_get_path(
+                    WEB_CODE_PATH
+                ).'inc/ajax/statistics.ajax.php?a=recent_logins&session_duration='.$sessionDuration;
             $reportName = '';
             $reportType = 'line';
             $reportOptions = '';
@@ -161,7 +163,7 @@ if (
                 cutoutPercentage: 25
                 ';
 
-            $reportName1 = get_lang('ActiveUsers');
+            $reportName1 = get_lang('UsersCreatedInTheSelectedPeriod');
             $reportName2 = get_lang('UserByStatus');
             $reportName3 = get_lang('UserByLanguage');
             $reportName4 = get_lang('UserByLanguageCible');
@@ -187,55 +189,6 @@ if (
             $reportOptions6 = sprintf($reportOptions, $reportName6);
             $reportOptions7 = sprintf($reportOptions, $reportName7);
             $reportOptions8 = sprintf($reportOptions, $reportName8);
-
-            /*$htmlHeadXtra[] = Statistics::getJSChartTemplate(
-                $url1,
-                $reportType,
-                $reportOptions1,
-                'canvas1'
-            );*/
-            /*$htmlHeadXtra[] = Statistics::getJSChartTemplate(
-                $url2,
-                $reportType,
-                $reportOptions2,
-                'canvas2'
-            );
-            $htmlHeadXtra[] = Statistics::getJSChartTemplate(
-                $url3,
-                $reportType,
-                $reportOptions3,
-                'canvas3'
-            );
-            $htmlHeadXtra[] = Statistics::getJSChartTemplate(
-                $url4,
-                $reportType,
-                $reportOptions4,
-                'canvas4'
-            );
-            $htmlHeadXtra[] = Statistics::getJSChartTemplate(
-                $url5,
-                $reportType,
-                $reportOptions5,
-                'canvas5'
-            );
-            $htmlHeadXtra[] = Statistics::getJSChartTemplate(
-                $url6,
-                $reportType,
-                $reportOptions6,
-                'canvas6'
-            );
-            $htmlHeadXtra[] = Statistics::getJSChartTemplate(
-                $url7,
-                $reportType,
-                $reportOptions7,
-                'canvas7'
-            );
-            $htmlHeadXtra[] = Statistics::getJSChartTemplate(
-                $url8,
-                $reportType,
-                $reportOptions8,
-                'canvas8'
-            );*/
 
             break;
         case 'session_by_date':
@@ -365,7 +318,7 @@ if (
     }
 }
 
-if ($report === 'user_session') {
+if ('user_session' === $report) {
     $htmlHeadXtra[] = api_get_jqgrid_js();
 }
 
@@ -404,8 +357,6 @@ $tools = [
     ],
     get_lang('Session') => [
         'report=session_by_date' => get_lang('SessionsByDate'),
-        //'report=session_by_week' => get_lang('SessionsByWeek'),
-        //'report=session_by_user' => get_lang('SessionsByUser'),
     ],
 ];
 
@@ -454,7 +405,7 @@ switch ($report) {
             while ($row = Database::fetch_array($result, 'ASSOC')) {
                 $sessions[] = $row;
                 $numberUsers += $row['nbr_users'];
-                $sessionCount++;
+                ++$sessionCount;
             }
 
             // Coach
@@ -487,36 +438,36 @@ switch ($report) {
             $averageUser = 0;
             $averageCoach = 0;
             if (!empty($numberOfWeeks)) {
-                $sessionAverage = api_number_format($sessionCount/$numberOfWeeks, 2);
+                $sessionAverage = api_number_format($sessionCount / $numberOfWeeks, 2);
             }
             if (!empty($numberUsers)) {
-                $averageUser = api_number_format($sessionCount/$numberUsers, 2);
+                $averageUser = api_number_format($sessionCount / $numberUsers, 2);
             }
             if (!empty($uniqueCoaches)) {
-                $averageCoach = api_number_format($sessionCount/$uniqueCoaches, 2);
+                $averageCoach = api_number_format($sessionCount / $uniqueCoaches, 2);
             }
 
             $table = new HTML_Table(['class' => 'table table-responsive']);
             $row = 0;
             $table->setCellContents($row, 0, get_lang('Weeks'));
             $table->setCellContents($row, 1, $numberOfWeeks);
-            $row++;
+            ++$row;
 
             $table->setCellContents($row, 0, get_lang('SessionCount'));
             $table->setCellContents($row, 1, $sessionCount);
-            $row++;
+            ++$row;
 
             $table->setCellContents($row, 0, get_lang('SessionsPerWeek'));
             $table->setCellContents($row, 1, $sessionAverage);
-            $row++;
+            ++$row;
 
             $table->setCellContents($row, 0, get_lang('AverageUserPerWeek'));
             $table->setCellContents($row, 1, $averageUser);
-            $row++;
+            ++$row;
 
             $table->setCellContents($row, 0, get_lang('AverageSessionPerGeneralCoach'));
             $table->setCellContents($row, 1, $averageCoach);
-            $row++;
+            ++$row;
 
             $content .= $table->toHtml();
 
@@ -530,9 +481,9 @@ switch ($report) {
             $column = 0;
             foreach ($headers as $header) {
                 $table->setHeaderContents($row, $column, $header);
-                $column++;
+                ++$column;
             }
-            $row++;
+            ++$row;
 
             foreach ($sessionPerCategories as $categoryId => $count) {
                 $categoryData = SessionManager::get_session_category($categoryId);
@@ -542,7 +493,7 @@ switch ($report) {
                 }
                 $table->setCellContents($row, 0, $label);
                 $table->setCellContents($row, 1, $count);
-                $row++;
+                ++$row;
             }
 
             $content .= $table->toHtml();
@@ -561,9 +512,9 @@ switch ($report) {
             $column = 0;
             foreach ($headers as $header) {
                 $table->setHeaderContents($row, $column, $header);
-                $column++;
+                ++$column;
             }
-            $row++;
+            ++$row;
 
             $courseSessions = [];
             foreach ($sessions as $session) {
@@ -572,7 +523,7 @@ switch ($report) {
                     if (!isset($courseSessions[$courseId])) {
                         $courseSessions[$courseId] = 0;
                     }
-                    $courseSessions[$courseId]++;
+                    ++$courseSessions[$courseId];
                 }
 
                 $table->setCellContents($row, 0, $session['name']);
@@ -593,7 +544,7 @@ switch ($report) {
                 if ($sessionStatusAllowed) {
                     $table->setCellContents($row, 4, SessionManager::getStatusLabel($session['status']));
                 }
-                $row++;
+                ++$row;
             }
             $content .= $table->toHtml();
         }
@@ -608,9 +559,9 @@ switch ($report) {
         $column = 0;
         foreach ($headers as $header) {
             $tableCourse->setHeaderContents($row, $column, $header);
-            $column++;
+            ++$column;
         }
-        $row++;
+        ++$row;
 
         if (!empty($courseSessions)) {
             arsort($courseSessions);
@@ -618,7 +569,7 @@ switch ($report) {
                 $courseInfo = api_get_course_info_by_id($courseId);
                 $tableCourse->setCellContents($row, 0, $courseInfo['name']);
                 $tableCourse->setCellContents($row, 1, $count);
-                $row++;
+                ++$row;
             }
         }
 
@@ -627,7 +578,7 @@ switch ($report) {
         $content .= '</div>';
         $content .= $tableCourse->toHtml();
 
-        if (isset($_REQUEST['action']) && $_REQUEST['action'] === 'export') {
+        if (isset($_REQUEST['action']) && 'export' === $_REQUEST['action']) {
             $data = $table->toArray();
             Export::arrayToXls($data);
             exit;
@@ -715,15 +666,15 @@ switch ($report) {
         <script>
             $(function() {
                 '.Display::grid_js(
-                    'user_session_grid',
-                    $url,
-                    $columns,
-                    $columnModel,
-                    $extraParams,
-                    [],
-                    $actionLinks,
-                    true
-                ).'
+                'user_session_grid',
+                $url,
+                $columns,
+                $columnModel,
+                $extraParams,
+                [],
+                $actionLinks,
+                true
+            ).';
 
                 jQuery("#user_session_grid").jqGrid("navGrid","#user_session_grid_pager",{
                     view:false,
@@ -760,7 +711,7 @@ switch ($report) {
         $content .= Statistics::printToolStats();
         break;
     case 'coursebylanguage':
-        $content .=  '<canvas class="col-md-12" id="canvas" height="300px" style="margin-bottom: 20px"></canvas>';
+        $content .= '<canvas class="col-md-12" id="canvas" height="300px" style="margin-bottom: 20px"></canvas>';
         $result = Statistics::printCourseByLanguageStats();
         $content .= Statistics::printStats(get_lang('CountCourseByLanguage'), $result, true);
         break;
@@ -773,29 +724,30 @@ switch ($report) {
             $startDate = $values['daterange_start'];
             $endDate = $values['daterange_end'];
 
-            $graph =  '<div class="row">';
-            $graph .=  '<div class="col-md-4"><canvas id="canvas1" style="margin-bottom: 20px"></canvas></div>';
-            $graph .=  '<div class="col-md-4"><canvas id="canvas2" style="margin-bottom: 20px"></canvas></div>';
-            $graph .=  '<div class="col-md-4"><canvas id="canvas3" style="margin-bottom: 20px"></canvas></div>';
-            $graph .=  '</div>';
+            $graph = '<div class="row">';
+            $graph .= '<div class="col-md-4"><canvas id="canvas1" style="margin-bottom: 20px"></canvas></div>';
+            $graph .= '<div class="col-md-4"><canvas id="canvas2" style="margin-bottom: 20px"></canvas></div>';
+            $graph .= '<div class="col-md-4"><canvas id="canvas3" style="margin-bottom: 20px"></canvas></div>';
+            $graph .= '</div>';
 
-            $graph .=  '<div class="row">';
-            $graph .=  '<div class="col-md-6"><canvas id="canvas4" style="margin-bottom: 20px"></canvas></div>';
-            $graph .=  '<div class="col-md-6"><canvas id="canvas5" style="margin-bottom: 20px"></canvas></div>';
-            $graph .=  '</div>';
+            $graph .= '<div class="row">';
+            $graph .= '<div class="col-md-6"><canvas id="canvas4" style="margin-bottom: 20px"></canvas></div>';
+            $graph .= '<div class="col-md-6"><canvas id="canvas5" style="margin-bottom: 20px"></canvas></div>';
+            $graph .= '</div>';
 
-            $graph .=  '<div class="row">';
-            $graph .=  '<div class="col-md-6"><canvas id="canvas6" style="margin-bottom: 20px"></canvas></div>';
-            $graph .=  '<div class="col-md-6"><canvas id="canvas7" style="margin-bottom: 20px"></canvas></div>';
-            $graph .=  '</div>';
+            $graph .= '<div class="row">';
+            $graph .= '<div class="col-md-6"><canvas id="canvas6" style="margin-bottom: 20px"></canvas></div>';
+            $graph .= '<div class="col-md-6"><canvas id="canvas7" style="margin-bottom: 20px"></canvas></div>';
+            $graph .= '</div>';
 
-            $graph .=  '<div class="row">';
-            $graph .=  '<div class="col-md-4"><canvas id="canvas8" style="margin-bottom: 20px"></canvas></div>';
-            $graph .=  '</div>';
+            $graph .= '<div class="row">';
+            $graph .= '<div class="col-md-4"><canvas id="canvas8" style="margin-bottom: 20px"></canvas></div>';
+            $graph .= '</div>';
 
             $conditions = [];
             $extraConditions = '';
             if (!empty($startDate) && !empty($endDate)) {
+                // $extraConditions is already cleaned inside the function getUserListExtraConditions
                 $extraConditions .= " AND registration_date BETWEEN '$startDate' AND '$endDate' ";
             }
 
@@ -810,7 +762,6 @@ switch ($report) {
             );
 
             $pagination = 10;
-
             $table = new SortableTableFromArray(
                 [],
                 0,
@@ -820,7 +771,12 @@ switch ($report) {
                 'table_users_active'
             );
 
-            $table->actionButtons = ['export' => ['label' => get_lang('ExportAsXLS'), 'icon' => Display::return_icon('excel.png')]];
+            $table->actionButtons = [
+                'export' => [
+                    'label' => get_lang('ExportAsXLS'),
+                    'icon' => Display::return_icon('excel.png'),
+                ],
+            ];
 
             $first = ($table->page_nr - 1) * $pagination;
             $limit = $table->page_nr * $pagination;
@@ -841,7 +797,7 @@ switch ($report) {
                 get_lang('UserBirthday'),
             ];
 
-            if (isset($_REQUEST['action_table']) && $_REQUEST['action_table'] === 'export') {
+            if (isset($_REQUEST['action_table']) && 'export' === $_REQUEST['action_table']) {
                 $first = 0;
                 $limit = $totalCount;
                 $data[] = $headers;
@@ -884,24 +840,34 @@ switch ($report) {
                 $career = isset($extraFields['filiere_user']) ? $extraFields['filiere_user'] : '';
                 $birthDate = isset($extraFields['terms_datedenaissance']) ? $extraFields['terms_datedenaissance'] : '';
 
+                $userLanguage = '';
+                if (!empty($user['language'])) {
+                    $userLanguage = get_lang(ucfirst(str_replace(2, '', $user['language'])));
+                }
+
+                $languageTarget = '';
+                if (!empty($language)) {
+                    $languageTarget = get_lang(ucfirst(str_replace(2, '', strtolower($language))));
+                }
+
                 $item = [];
                 $item[] = $user['firstname'];
                 $item[] = $user['lastname'];
                 $item[] = api_get_local_time($user['registration_date']);
-                $item[] = $user['language'];
-                $item[] = $language;
+                $item[] = $userLanguage;
+                $item[] = $languageTarget;
                 $item[] = $contract ? get_lang('Yes') : get_lang('No');
                 $item[] = $residence;
                 $item[] = $career;
                 $item[] = $userInfo['icon_status_label'];
-                $item[] = $user['active'] == 1 ? get_lang('Yes') : get_lang('No');
+                $item[] = 1 == $user['active'] ? get_lang('Yes') : get_lang('No');
                 $item[] = $certificate ? get_lang('Yes') : get_lang('No');
                 $item[] = $birthDate;
                 $data[] = $item;
-                $row++;
+                ++$row;
             }
 
-            if (isset($_REQUEST['action_table']) && $_REQUEST['action_table'] === 'export') {
+            if (isset($_REQUEST['action_table']) && 'export' === $_REQUEST['action_table']) {
                 Export::arrayToXls($data);
                 exit;
             }
@@ -916,7 +882,7 @@ switch ($report) {
             $column = 0;
             foreach ($headers as $header) {
                 $table->set_header($column, $header, false);
-                $column++;
+                ++$column;
             }
 
             $studentCount = UserManager::getUserListExtraConditions(
@@ -963,7 +929,39 @@ switch ($report) {
                 $reportOptions1,
                 'canvas1'
             );
-            $extraTables = $data['table'];
+
+            $scoreDisplay = ScoreDisplay::instance();
+            $table = new HTML_Table(['class' => 'data_table']);
+            $headers = [
+                get_lang('Name'),
+                get_lang('Count'),
+                get_lang('Percentage'),
+            ];
+            $row = 0;
+            $column = 0;
+            foreach ($headers as $header) {
+                $table->setHeaderContents($row, $column, $header);
+                ++$column;
+            }
+
+            ++$row;
+            $table->setCellContents($row, 0, get_lang('Total'));
+            $table->setCellContents($row, 1, $totalCount);
+            $table->setCellContents($row, 2, '100 %');
+
+            ++$row;
+            $total = 0;
+            foreach ($all as $name => $value) {
+                $total += $value;
+            }
+            foreach ($all as $name => $value) {
+                $percentage = $scoreDisplay->display_score([$value, $total], SCORE_PERCENT);
+                $table->setCellContents($row, 0, $name);
+                $table->setCellContents($row, 1, $value);
+                $table->setCellContents($row, 2, $percentage);
+                ++$row;
+            }
+            $extraTables = Display::page_subheader2($reportName1).$table->toHtml();
 
             // graph 2
             $extraFieldValueUser = new ExtraField('user');
@@ -1012,15 +1010,16 @@ switch ($report) {
             $extraTables .= $data['table'];
 
             // graph 3
-
             $languages = api_get_languages();
             $all = [];
             foreach ($languages['folder'] as $language) {
                 $conditions = ['language' => $language];
                 $key = $language;
-                if (substr($language, -1) === '2') {
+                if ('2' === substr($language, -1)) {
                     $key = str_replace(2, '', $language);
                 }
+
+                $key = get_lang(ucfirst($key));
                 if (!isset($all[$key])) {
                     $all[$key] = 0;
                 }
@@ -1077,6 +1076,8 @@ switch ($report) {
                 $result = Database::fetch_array($query);
                 $count = $result['count'];
                 $usersFound += $count;
+
+                $item['display_text'] = get_lang(ucfirst(str_replace('2', '', strtolower($item['display_text']))));
                 $all[$item['display_text']] = $count;
             }
             $all[get_lang('N/A')] = $total - $usersFound;
@@ -1205,7 +1206,7 @@ switch ($report) {
                 );
 
                 if (!empty($certificate)) {
-                    $certificateCount++;
+                    ++$certificateCount;
                 }
             }
 
@@ -1258,20 +1259,20 @@ switch ($report) {
             ];
 
             while ($row = Database::fetch_array($query)) {
-                $usersFound++;
+                ++$usersFound;
                 if (!empty($row['value'])) {
                     $date1 = new DateTime($row['value']);
                     $interval = $now->diff($date1);
                     $years = (int) $interval->y;
 
                     if ($years >= 16 && $years <= 17) {
-                        $all['16-17'] += 1;
+                        ++$all['16-17'];
                     }
                     if ($years >= 18 && $years <= 25) {
-                        $all['18-25'] += 1;
+                        ++$all['18-25'];
                     }
                     if ($years >= 26 && $years <= 30) {
-                        $all['26-30'] += 1;
+                        ++$all['26-30'];
                     }
                     /*if ($years >= 31) {
                         $all[get_lang('N/A')] += 1;
@@ -1290,13 +1291,13 @@ switch ($report) {
             );
             $extraTables .= $data['table'];
 
-            $header = Display::page_subheader2(get_lang('NumberOfUsers').': '.$totalCount);
-            $header .= Display::page_subheader2(get_lang('TotalNumberOfStudents').': '.$studentCount);
+            //$header = Display::page_subheader2(get_lang('NumberOfUsers').': '.$totalCount);
+            $header = Display::page_subheader2(get_lang('TotalNumberOfStudents').': '.$studentCount);
 
             $content = $header.$extraTables.$graph.$content;
         }
 
-        $content =  $form->returnForm().$content;
+        $content = $form->returnForm().$content;
 
         break;
     case 'users':
@@ -1317,7 +1318,7 @@ switch ($report) {
             ]
         );
         foreach ($course_categories as $code => $name) {
-            $name = str_replace(get_lang('Department'), "", $name);
+            $name = str_replace(get_lang('Department'), '', $name);
             $teachers[$name] = Statistics::countUsers(COURSEMANAGER, $code, $countInvisible);
             $students[$name] = Statistics::countUsers(STUDENT, $code, $countInvisible);
         }
@@ -1328,7 +1329,11 @@ switch ($report) {
         break;
     case 'recentlogins':
         $content .= '<h2>'.sprintf(get_lang('LastXDays'), '15').'</h2>';
-        $form = new FormValidator('session_time', 'get', api_get_self().'?report=recentlogins&session_duration='.$sessionDuration);
+        $form = new FormValidator(
+            'session_time',
+            'get',
+            api_get_self().'?report=recentlogins&session_duration='.$sessionDuration
+        );
         $sessionTimeList = ['', 5 => 5, 15 => 15, 30 => 30, 60 => 60];
         $form->addSelect('session_duration', [get_lang('SessionMinDuration'), get_lang('Minutes')], $sessionTimeList);
         $form->addButtonSend(get_lang('Filter'));
@@ -1352,7 +1357,7 @@ switch ($report) {
         $content .= ZombieReport::create(['report' => 'zombies'])->display(true);
         break;
     case 'activities':
-        $content .=Statistics::printActivitiesStats();
+        $content .= Statistics::printActivitiesStats();
         break;
     case 'messagesent':
         $messages_sent = Statistics::getMessages('sent');

@@ -1,7 +1,7 @@
 <?php
 /* For licensing terms, see /license.txt */
 
-use Chamilo\CoreBundle\Entity\Repository\LegalRepository;
+use Chamilo\CoreBundle\Repository\LegalRepository;
 
 $cidReset = true;
 

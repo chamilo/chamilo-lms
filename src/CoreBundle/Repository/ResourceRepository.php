@@ -520,6 +520,9 @@ class ResourceRepository extends BaseEntityRepository
 
         if (null === $group) {
             $qb->andWhere('links.group IS NULL');
+        } else {
+            $qb->andWhere('links.group = :group');
+            $qb->setParameter('group', $group);
         }
 
         return $qb;
@@ -618,8 +621,7 @@ class ResourceRepository extends BaseEntityRepository
 
         $qb
             ->andWhere('links.user = :user')
-            ->setParameter('user', $user)
-        ;
+            ->setParameter('user', $user);
 
         return $qb;
     }

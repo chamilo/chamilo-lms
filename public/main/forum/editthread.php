@@ -10,7 +10,6 @@ use Chamilo\CourseBundle\Entity\CForumForum;
  *
  * @Author José Loguercio <jose.loguercio@beeznest.com>
  */
-
 require_once __DIR__.'/../inc/global.inc.php';
 
 // The section (tabs).

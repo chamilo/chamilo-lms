@@ -3052,12 +3052,13 @@ function store_thread(
  *
  * @param CForumForum  $forum
  * @param CForumThread $thread
- * @param string       $action  is the parameter that determines if we are
- *                              2. replythread: Replying to a thread ($action = replythread) => I-frame with the complete thread (if enabled)
- *                              3. replymessage: Replying to a message ($action =replymessage) => I-frame with the complete thread (if enabled)
- *                              (I first thought to put and I-frame with the message only)
- *                              4. quote: Quoting a message ($action= quotemessage) => I-frame with the complete thread (if enabled).
- *                              The message will be in the reply. (I first thought not to put an I-frame here)
+ * @param string       $action
+ *  is the parameter that determines if we are
+ *  2. replythread: Replying to a thread ($action = replythread) => I-frame with the complete thread (if enabled)
+ *  3. replymessage: Replying to a message ($action =replymessage) => I-frame with the complete thread (if enabled)
+ *  (I first thought to put and I-frame with the message only)
+ *  4. quote: Quoting a message ($action= quotemessage) => I-frame with the complete thread (if enabled).
+ *  The message will be in the reply. (I first thought not to put an I-frame here)
  * @param array        $form_values
  * @param bool         $showPreview
  *
@@ -5545,8 +5546,6 @@ function getAllAttachment($postId)
  */
 function delete_attachment($postId, $id_attach = 0)
 {
-    $_course = api_get_course_info();
-
     $repo = Container::getForumPostRepository();
     /** @var CForumPost $post */
     $post = $repo->find($postId);
@@ -5609,12 +5608,24 @@ function delete_attachment($postId, $id_attach = 0)
  *
  * @param array $groupInfo the id of the group we need the fora of (see forum.forum_of_group)
  *
- * @return array
+ * @return CForumForum[]
  *
  * @todo this is basically the same code as the get_forums function. Consider merging the two.
  */
 function get_forums_of_group($groupInfo)
 {
+    $groupId = (int) $groupInfo['id'];
+
+    $group = api_get_group_entity($groupId);
+    $course = api_get_course_entity();
+    $session = api_get_session_entity();
+
+    $repo = Container::getForumRepository();
+
+    $qb = $repo->getResourcesByCourse($course, $session, $group);
+
+    return $qb->getQuery()->getResult();
+
     $table_forums = Database::get_course_table(TABLE_FORUM);
     $table_threads = Database::get_course_table(TABLE_FORUM_THREAD);
     $table_posts = Database::get_course_table(TABLE_FORUM_POST);

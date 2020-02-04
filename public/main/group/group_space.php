@@ -31,8 +31,7 @@ $interbreadcrumb[] = [
 ];
 
 /*	Ensure all private groups // Juan Carlos Raña Trabado */
-
-$forums_of_groups = get_forums_of_group($current_group);
+$forums = get_forums_of_group($current_group);
 if (!GroupManager::userHasAccessToBrowse($user_id, $current_group, api_get_session_id())) {
     api_not_allowed(true);
 }
@@ -122,19 +121,19 @@ if (api_is_allowed_to_edit(false, true) ||
     GroupManager::userHasAccessToBrowse($user_id, $current_group, api_get_session_id())
 ) {
     $actions_array = [];
-    if (is_array($forums_of_groups)) {
+    if (is_array($forums)) {
         if (GroupManager::TOOL_NOT_AVAILABLE != $current_group['forum_state']) {
-            foreach ($forums_of_groups as $key => $value) {
-                if ('public' == $value['forum_group_public_private'] ||
-                    ('private' == $value['forum_group_public_private']) ||
+            foreach ($forums as $forum) {
+                if ('public' == $forum->getForumGroupPublicPrivate() ||
+                    ('private' == $forum->getForumGroupPublicPrivate()) ||
                     !empty($user_is_tutor) ||
                     api_is_allowed_to_edit(false, true)
                 ) {
                     $actions_array[] = [
-                        'url' => api_get_path(WEB_CODE_PATH).'forum/viewforum.php?forum='.$value['forum_id'].'&'.api_get_cidreq().'&origin=group',
+                        'url' => api_get_path(WEB_CODE_PATH).'forum/viewforum.php?forum='.$forum->getIid().'&'.api_get_cidreq().'&origin=group',
                         'content' => Display::return_icon(
                             'forum.png',
-                            get_lang('Forum').': '.$value['forum_title'],
+                            get_lang('Forum').': '.$forum->getForumTitle(),
                             [],
                             32
                         ),
@@ -221,13 +220,13 @@ if (api_is_allowed_to_edit(false, true) ||
     }
 } else {
     $actions_array = [];
-    if (is_array($forums_of_groups)) {
+    if (is_array($forums)) {
         if (GroupManager::TOOL_PUBLIC == $current_group['forum_state']) {
-            foreach ($forums_of_groups as $key => $value) {
-                if ('public' == $value['forum_group_public_private']) {
+            foreach ($forums as $forum) {
+                if ('public' == $forum->getForumGroupPublicPrivate()) {
                     $actions_array[] = [
                         'url' => api_get_path(WEB_CODE_PATH).
-                            'forum/viewforum.php?cid='.api_get_course_int_id().'&forum='.$value['forum_id'].'&gid='.Security::remove_XSS($current_group['id']).'&origin=group',
+                            'forum/viewforum.php?cid='.api_get_course_int_id().'&forum='.$forum->getIid().'&gid='.Security::remove_XSS($current_group['id']).'&origin=group',
                         'content' => Display::return_icon(
                             'forum.png',
                             get_lang('Group Forum'),
@@ -423,6 +422,7 @@ function get_group_user_data($from, $number_of_items, $column, $direction)
 {
     $groupInfo = GroupManager::get_group_properties(api_get_group_id());
     $course_id = api_get_course_int_id();
+    $column = (int) $column;
 
     if (empty($groupInfo) || empty($course_id)) {
         return 0;

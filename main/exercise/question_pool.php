@@ -700,7 +700,7 @@ function getQuestions(
         }
         $answer_where = '';
         if (isset($answerType) && $answerType > 0 - 1) {
-            $answer_where = ' AND type='.$answerType;
+            $answer_where = ' AND qu.type='.$answerType;
         }
 
         if (!empty($questionId)) {

@@ -237,6 +237,7 @@ if (!$playerSupported && $execute_iframe) {
     </script>';
     $htmlHeadXtra[] = '<script type="text/javascript" src="'.api_get_path(WEB_LIBRARY_PATH).'javascript/jquery.frameready.js"></script>';
 
+    // Ofaj
     $htmlHeadXtra[] = '<script>
         var updateContentHeight = function() {
             my_iframe = document.getElementById("mainFrame");
@@ -251,7 +252,7 @@ if (!$playerSupported && $execute_iframe) {
         }
     </script>';
 
-    $htmlHeadXtra[] = '<script>
+    /*$htmlHeadXtra[] = '<script>
         // Fixes the content height of the frame
         $(function() {
             $(\'#mainFrame\').on(\'load\', function () {
@@ -260,7 +261,7 @@ if (!$playerSupported && $execute_iframe) {
 
             '.$frameReady.'
         });
-    </script>';
+    </script>';*/
 }
 
 if ($originIsLearnpath) {

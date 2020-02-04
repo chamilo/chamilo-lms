@@ -624,7 +624,6 @@ class ResourceRepository extends BaseEntityRepository
         return $qb;
     }
 
-
     public function getResourcesByLinkedUser(User $user, ResourceNode $parentNode = null): QueryBuilder
     {
         $repo = $this->getRepository();

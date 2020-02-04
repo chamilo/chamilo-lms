@@ -311,25 +311,15 @@ if ($displayMessage != '') {
     echo Display::return_message($displayMessage, 'confirm');
 }
 
-// Form
-echo '<form class="form-horizontal" name="question_pool" method="GET" action="'.$url.'">';
-// Title
-echo '<legend>'.$nameTools.' - '.$titleAdd.'</legend>';
-echo '<input type="hidden" name="fromExercise" value="'.$fromExercise.'">';
-
 // Session list, if sessions are used.
 $sessionList = SessionManager::get_sessions_by_user(api_get_user_id(), api_is_platform_admin());
-$session_select_list = [];
+$session_select_list = ['-1' => get_lang('Select')];
 foreach ($sessionList as $item) {
     $session_select_list[$item['session_id']] = $item['session_name'];
 }
-$sessionListToString = Display::select(
-    'session_id',
-    $session_select_list,
-    $session_id,
-    ['onchange' => 'submit_form(this)']
-);
-echo Display::form_row(get_lang('Session'), $sessionListToString);
+
+// Course list, get course list of session, or for course where user is admin
+$course_list = [];
 
 // Course list, get course list of session, or for course where user is admin
 if (!empty($session_id) && $session_id != '-1' && !empty($sessionList)) {
@@ -360,7 +350,7 @@ if (!empty($session_id) && $session_id != '-1' && !empty($sessionList)) {
     }
 }
 
-$course_select_list = [];
+$course_select_list = ['-1' => get_lang('Select')];
 foreach ($course_list as $item) {
     $courseItemId = $item['real_id'];
     $courseInfo = api_get_course_info_by_id($courseItemId);
@@ -370,15 +360,6 @@ foreach ($course_list as $item) {
     }
     $course_select_list[$courseItemId] .= $courseInfo['title'];
 }
-
-$courseListToString = Display::select(
-    'selected_course',
-    $course_select_list,
-    $selected_course,
-    ['onchange' => 'mark_course_id_changed(); submit_form(this);']
-);
-
-echo Display::form_row(get_lang('Course'), $courseListToString);
 
 if (empty($selected_course) || $selected_course == '-1') {
     $course_info = api_get_course_info();
@@ -394,14 +375,6 @@ if ($course_id_changed) {
 
 // Get category list for the course $selected_course
 $categoryList = TestCategory::getCategoriesIdAndName($selected_course);
-$selectCourseCategory = Display::select(
-    'courseCategoryId',
-    $categoryList,
-    $courseCategoryId,
-    ['onchange' => 'submit_form(this);'],
-    false
-);
-echo Display::form_row(get_lang('QuestionCategory'), $selectCourseCategory);
 
 // Get exercise list for this course
 $exercise_list = ExerciseLib::get_all_exercises_for_course_id(
@@ -435,16 +408,6 @@ if (is_array($exercise_list)) {
     }
 }
 
-$exerciseListToString = Display::select(
-    'exerciseId',
-    $my_exercise_list,
-    $exerciseId,
-    ['onchange' => 'mark_exercise_id_changed(); submit_form(this);'],
-    false
-);
-
-echo Display::form_row(get_lang('Exercise'), $exerciseListToString);
-
 // Difficulty list (only from 0 to 5)
 $levels = [
     -1 => get_lang('All'),
@@ -455,15 +418,6 @@ $levels = [
     4 => 4,
     5 => 5,
 ];
-
-$select_difficulty_html = Display::select(
-    'exerciseLevel',
-    $levels,
-    $exerciseLevel,
-    ['onchange' => 'submit_form(this);'],
-    false
-);
-echo Display::form_row(get_lang('Difficulty'), $select_difficulty_html);
 
 // Answer type
 $question_list = Question::getQuestionTypeList();
@@ -489,29 +443,72 @@ if (!empty($_course)) {
     }
 }
 
-// Answer type list
-$select_answer_html = Display::select(
-    'answerType',
-    $new_question_list,
-    $answerType,
-    ['onchange' => 'submit_form(this);'],
-    false
-);
+// Form
+$form = new FormValidator('question_pool', 'GET', $url);
+$form->addHeader($nameTools.' - '.$titleAdd);
+$form->addHidden('fromExercise', $fromExercise);
+$form
+    ->addSelect(
+        'session_id',
+        get_lang('Session'),
+        $session_select_list,
+        ['onchange' => 'submit_form(this)', 'id' => 'session_id']
+    )
+    ->setSelected($session_id);
+$form
+    ->addSelect(
+        'selected_course',
+        get_lang('Course'),
+        $course_select_list,
+        ['onchange' => 'mark_course_id_changed(); submit_form(this);', 'id' => 'selected_course']
+    )
+    ->setSelected($selected_course);
+$form
+    ->addSelect(
+        'courseCategoryId',
+        get_lang('QuestionCategory'),
+        $categoryList,
+        ['onchange' => 'submit_form(this);', 'id' => 'courseCategoryId']
+    )
+    ->setSelected($courseCategoryId);
+$form
+    ->addSelect(
+        'exerciseId',
+        get_lang('Exercise'),
+        $my_exercise_list,
+        ['onchange' => 'mark_exercise_id_changed(); submit_form(this);', 'id' => 'exerciseId']
+    )
+    ->setSelected($exerciseId);
+$form
+    ->addSelect(
+        'exerciseLevel',
+        get_lang('Difficulty'),
+        $levels,
+        ['onchange' => 'submit_form(this);', 'id' => 'exerciseLevel']
+    )
+    ->setSelected($exerciseLevel);
+$form
+    ->addSelect(
+        'answerType',
+        get_lang('AnswerType'),
+        $new_question_list,
+        ['onchange' => 'submit_form(this);', 'id' => 'answerType']
+    )
+    ->setSelected($answerType);
+$form
+    ->addText('question_id', get_lang('Id'), false)
+    ->setValue($questionId);
+$form
+    ->addText('description', get_lang('Description'), false)
+    ->setValue(Security::remove_XSS($description));
 
-echo Display::form_row(get_lang('AnswerType'), $select_answer_html);
-echo Display::form_row(get_lang('Id'), Display::input('text', 'question_id', $questionId));
-echo Display::form_row(
-    get_lang('Description'),
-    Display::input('text', 'description', Security::remove_XSS($description))
-);
+$form->addHidden('course_id_changed', '0');
+$form->addHidden('exercise_id_changed', '0');
 
-$button = '<button class="btn btn-primary save" type="submit" name="name" value="'.get_lang('Filter').'">'.
-    get_lang('Filter').'</button>';
-echo Display::form_row('', $button);
-echo "<input type='hidden' id='course_id_changed' name='course_id_changed' value='0' />";
-echo "<input type='hidden' id='exercise_id_changed' name='exercise_id_changed' value='0' />";
+$form->addButtonFilter(get_lang('Filter'), 'name');
+
+echo $form->display();
 ?>
-</form>
 <div class="clear"></div>
 <?php
 

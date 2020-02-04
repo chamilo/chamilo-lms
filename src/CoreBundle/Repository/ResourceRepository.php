@@ -612,6 +612,68 @@ class ResourceRepository extends BaseEntityRepository
         return $qb;
     }
 
+    public function getResourcesByCourseLinkedToUser(User $user, Course $course, Session $session = null, CGroupInfo $group = null, ResourceNode $parentNode = null): QueryBuilder
+    {
+        $qb = $this->getResourcesByCourse($course, $session, $group, $parentNode);
+
+        $qb
+            ->andWhere('links.user = :user')
+            ->setParameter('user', $user)
+        ;
+
+        return $qb;
+    }
+
+
+    public function getResourcesByLinkedUser(User $user, ResourceNode $parentNode = null): QueryBuilder
+    {
+        $repo = $this->getRepository();
+        $className = $repo->getClassName();
+        $checker = $this->getAuthorizationChecker();
+        $type = $this->getResourceType();
+
+        $qb = $repo->getEntityManager()->createQueryBuilder()
+            ->select('resource')
+            ->from($className, 'resource')
+            ->innerJoin(
+                ResourceNode::class,
+                'node',
+                Join::WITH,
+                'resource.resourceNode = node.id'
+            )
+            ->innerJoin('node.resourceLinks', 'links')
+            ->where('node.resourceType = :type')
+            ->setParameter('type', $type);
+        $qb
+            ->andWhere('links.user = :user')
+            ->setParameter('user', $user)
+        ;
+
+        $isAdmin = $checker->isGranted('ROLE_ADMIN') ||
+            $checker->isGranted('ROLE_CURRENT_COURSE_TEACHER');
+
+        // Do not show deleted resources
+        $qb
+            ->andWhere('links.visibility != :visibilityDeleted')
+            ->setParameter('visibilityDeleted', ResourceLink::VISIBILITY_DELETED)
+        ;
+
+        if (false === $isAdmin) {
+            $qb
+                ->andWhere('links.visibility = :visibility')
+                ->setParameter('visibility', ResourceLink::VISIBILITY_PUBLISHED)
+            ;
+            // @todo Add start/end visibility restrictrions
+        }
+
+        if (null !== $parentNode) {
+            $qb->andWhere('node.parent = :parentNode');
+            $qb->setParameter('parentNode', $parentNode);
+        }
+
+        return $qb;
+    }
+
     public function getResourceFromResourceNode(int $resourceNodeId): ?AbstractResource
     {
         return $this->getRepository()->findOneBy(['resourceNode' => $resourceNodeId]);

@@ -171,7 +171,7 @@ class AnnouncementManager
         ];
 
         return $repo->findBy($criteria);
-
+        /*
         $tbl_announcement = Database::get_course_table(TABLE_ANNOUNCEMENT);
         $tbl_item_property = Database::get_course_table(TABLE_ITEM_PROPERTY);
 
@@ -199,7 +199,7 @@ class AnnouncementManager
             return $list;
         }
 
-        return false;
+        return false;*/
     }
 
     /**
@@ -1079,7 +1079,7 @@ class AnnouncementManager
     /**
      * @param int $user_id
      *
-     * @return array|bool
+     * @return CAnnouncement[]
      */
     public static function getAnnouncementCourseTotalByUser($user_id)
     {
@@ -1089,6 +1089,14 @@ class AnnouncementManager
             return false;
         }
 
+        $user = api_get_user_entity($user_id);
+        $repo = Container::getAnnouncementRepository();
+
+        $qb = $repo->getResourcesByLinkedUser($user);
+
+        return $qb->getQuery()->getResult();
+
+        /*
         $tbl_announcement = Database::get_course_table(TABLE_ANNOUNCEMENT);
         $tbl_item_property = Database::get_course_table(TABLE_ITEM_PROPERTY);
 
@@ -1119,7 +1127,7 @@ class AnnouncementManager
             }
         }
 
-        return $result;
+        return $result;*/
     }
 
     /**
@@ -1996,7 +2004,8 @@ class AnnouncementManager
                 if (api_is_allowed_to_edit(false, true) ||
                     (api_is_session_general_coach() && api_is_element_in_the_session(TOOL_ANNOUNCEMENT, $announcementId)) ||
                     (api_get_course_setting('allow_user_edit_announcement') && !api_is_anonymous()) ||
-                    ($row['to_group_id'] == $group_id && $isTutor)
+                    ($isTutor)
+                    //$row['to_group_id'] == $group_id &&
                 ) {
                     if (true === $disableEdit) {
                         $modify_icons = "<a href='#'>".$editIconDisable."</a>";
@@ -2004,14 +2013,14 @@ class AnnouncementManager
                         $modify_icons = "<a href=\"".$actionUrl."&action=modify&id=".$announcementId."\">".$editIcon."</a>";
                     }
 
+                    $image_visibility = 'invisible';
+                    $setNewStatus = 'visible';
+                    $alt_visibility = get_lang('Visible');
+
                     if ($visibility) {
                         $image_visibility = 'visible';
                         $setNewStatus = 'invisible';
                         $alt_visibility = get_lang('Hide');
-                    } else {
-                        $image_visibility = 'invisible';
-                        $setNewStatus = 'visible';
-                        $alt_visibility = get_lang('Visible');
                     }
 
                     $modify_icons .= "<a href=\"".$actionUrl."&action=set_visibility&status=".$setNewStatus."&id=".$announcementId."&sec_token=".$stok."\">".
@@ -2103,7 +2112,7 @@ class AnnouncementManager
         if (api_is_allowed_to_edit(false, true)) {
             // check teacher status
             if (empty($_GET['origin']) || 'learnpath' !== $_GET['origin']) {
-                if (0 == api_get_group_id()) {
+                /*if (0 == api_get_group_id()) {
                     $group_condition = '';
                 } else {
                     $group_condition = " AND (ip.to_group_id='".api_get_group_id()."' OR ip.to_group_id = 0 OR ip.to_group_id IS NULL)";
@@ -2126,7 +2135,7 @@ class AnnouncementManager
                             $condition_session
                         GROUP BY ip.ref
                         ORDER BY display_order DESC
-                        LIMIT 0, $maximum";
+                        LIMIT 0, $maximum";*/
 
                 $qb = $repo->getResourcesByCourse($course, $session, $group);
                 $qb->select('count(resource)');
@@ -2135,6 +2144,14 @@ class AnnouncementManager
                 return $count;
             }
         } else {
+            $user = api_get_user_entity($userId);
+
+            $qb = $repo->getResourcesByCourseLinkedToUser($user, $course, $session, $group);
+            $qb->select('count(resource)');
+            $count = $qb->getQuery()->getSingleScalarResult();
+
+            return $count;
+
             // students only get to see the visible announcements
             if (empty($_GET['origin']) || 'learnpath' !== $_GET['origin']) {
                 $group_memberships = GroupManager::get_group_ids(

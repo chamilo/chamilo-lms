@@ -1,6 +1,7 @@
 <?php
 /* For licensing terms, see /license.txt */
 
+use Chamilo\PluginBundle\MigrationMoodle\Exceptions\Exception as MigrationMoodleException;
 use Chamilo\PluginBundle\MigrationMoodle\Task\BaseTask;
 
 require_once __DIR__.'/../../main/inc/global.inc.php';
@@ -93,15 +94,20 @@ if (!empty($action) && isAllowedAction($action, $menu)) {
     echo Display::page_subheader(
         $plugin->get_lang($taskName)
     );
+    echo '<pre>';
 
     $taskName = 'Chamilo\\PluginBundle\\MigrationMoodle\\Task\\'.$taskName;
 
     /** @var BaseTask $task */
     $task = new $taskName();
 
-    echo '<div style="overflow: auto;height: 820px;">';
-    $task->execute();
-    echo '</div>';
+    try {
+        $task->execute();
+    } catch (MigrationMoodleException $exception) {
+        $exception->displayAsString();
+    }
+
+    echo '</pre>';
 }
 
 echo '</div>';

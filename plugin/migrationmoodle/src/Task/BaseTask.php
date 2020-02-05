@@ -3,6 +3,10 @@
 
 namespace Chamilo\PluginBundle\MigrationMoodle\Task;
 
+use Chamilo\PluginBundle\MigrationMoodle\Exceptions\Exception;
+use Chamilo\PluginBundle\MigrationMoodle\Exceptions\ExtractException;
+use Chamilo\PluginBundle\MigrationMoodle\Exceptions\LoadException;
+use Chamilo\PluginBundle\MigrationMoodle\Exceptions\TransformException;
 use Chamilo\PluginBundle\MigrationMoodle\Interfaces\ExtractorInterface;
 use Chamilo\PluginBundle\MigrationMoodle\Interfaces\LoaderInterface;
 use Chamilo\PluginBundle\MigrationMoodle\Interfaces\TransformerInterface;
@@ -63,43 +67,28 @@ abstract class BaseTask
      */
     abstract public function getLoadConfiguration();
 
+    /**
+     * @throws Exception
+     */
     public function execute()
     {
         foreach ($this->extractFiltered() as $extractedData) {
             try {
                 $incomingData = $this->transformer->transform($extractedData);
             } catch (\Exception $exception) {
-                $this->showMessage('Error while transforming extracted data.', $exception->getMessage(), $extractedData);
-
-                continue;
+                throw new TransformException($extractedData, $exception);
             }
 
             try {
                 $loadedId = $this->loader->load($incomingData);
             } catch (\Exception $exception) {
-                $this->showMessage('Error while loading transformed data.', $exception->getMessage(), $incomingData);
-
-                continue;
+                throw new LoadException($incomingData, $exception);
             }
 
             $hash = $this->saveMapLog($extractedData['id'], $loadedId);
 
-            $this->showMessage('Data migrated.', "{$extractedData['id']} -> $loadedId", $hash);
+            echo "Data migrated. $hash".PHP_EOL;
         }
-    }
-
-    /**
-     * @param string $first
-     * @param string $second
-     * @param string $data
-     */
-    private function showMessage($first, $second, $data)
-    {
-        echo '<p>'
-            ."$first "
-            ."<em>$second</em><br>"
-            .'<code>'.print_r($data, true).'</code>'
-            .'</p>';
     }
 
     /**
@@ -122,6 +111,8 @@ abstract class BaseTask
     }
 
     /**
+     * @throws ExtractException
+     *
      * @return \Generator
      */
     private function extractFiltered()
@@ -135,8 +126,7 @@ abstract class BaseTask
                 yield $extractedData;
             }
         } catch (\Exception $exception) {
-            echo 'Error while extracting data. ';
-            echo $exception->getMessage();
+            throw new ExtractException($exception);
         }
     }
 

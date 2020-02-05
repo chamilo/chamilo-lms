@@ -36,7 +36,6 @@ if ($limitTeacherAccess && !api_is_platform_admin()) {
     api_not_allowed(true);
 }
 
-// including additional libraries
 require_once 'hotpotatoes.lib.php';
 
 $_course = api_get_course_info();
@@ -152,7 +151,6 @@ if (!empty($_REQUEST['export_report']) && $_REQUEST['export_report'] == '1') {
 
 $objExerciseTmp = new Exercise();
 $exerciseExists = $objExerciseTmp->read($exercise_id);
-
 $courseInfo = api_get_course_info();
 
 //Send student email @todo move this code in a class, library
@@ -311,13 +309,13 @@ if (isset($_REQUEST['comments']) &&
             Display::addFlash(Display::return_message(get_lang('LearnpathUpdated')));
         }
 
-        $sql = "UPDATE $TBL_LP_ITEM_VIEW 
+        $sql = "UPDATE $TBL_LP_ITEM_VIEW
                 SET score = '".floatval($tot)."'
                 $statusCondition
                 WHERE c_id = ".$course_id." AND id = ".$lp_item_view_id;
         Database::query($sql);
 
-        if (empty($origin)) {
+        /*if (empty($origin)) {
             header('Location: '.api_get_path(WEB_CODE_PATH).'exercise/exercise_report.php?exerciseId='.$exercise_id.'&'.api_get_cidreq());
             exit;
         }
@@ -333,7 +331,9 @@ if (isset($_REQUEST['comments']) &&
                 ).'&session_id='.$session_id
             );
             exit;
-        }
+        }*/
+        header('Location: '.api_get_path(WEB_CODE_PATH).'exercise/exercise_show.php?id='.$id.'&student='.$student_id.'&'.api_get_cidreq());
+        exit;
     }
 }
 
@@ -447,7 +447,7 @@ if (($is_allowedToEdit || $is_tutor || api_is_coach()) &&
 ) {
     // Close the user attempt otherwise left pending
     $exe_id = intval($_GET['id']);
-    $sql = "UPDATE $TBL_TRACK_EXERCISES SET status = '' 
+    $sql = "UPDATE $TBL_TRACK_EXERCISES SET status = ''
             WHERE exe_id = $exe_id AND status = 'incomplete'";
     Database::query($sql);
 }
@@ -667,7 +667,7 @@ $extra_params['height'] = 'auto';
 $extra_params['gridComplete'] = "
     defaultGroupId = Cookies.get('default_group_".$exercise_id."');
     if (typeof defaultGroupId !== 'undefined') {
-        $('#gs_group_name').val(defaultGroupId);        
+        $('#gs_group_name').val(defaultGroupId);
     }
 ";
 
@@ -684,13 +684,13 @@ if (typeof defaultGroupId !== 'undefined') {
     $('#gs_group_name').val(defaultGroupId);
     //console.log('from cookies');
 }
- 
+
 if (typeof defaultGroupId !== 'undefined') {
     var posted_data = $(\"#results\").jqGrid('getGridParam', 'postData');
     var defFilter = '{\"groupOp\":\"AND\",\"rules\":[{\"field\":\"group_id\",\"op\":\"eq\",\"data\":\"'+ defaultGroupId +'\"}]}';
     posted_data.filters = defFilter;
     //console.log(posted_data);
-    $(this).jqGrid('setGridParam', 'postData', posted_data);          
+    $(this).jqGrid('setGridParam', 'postData', posted_data);
 }
 ";
 

@@ -86,11 +86,6 @@ if (!in_array($origin, ['learnpath', 'embeddable'])) {
     // So we are not in learnpath tool
     Display::display_header($nameTools, get_lang('Exercise'));
 } else {
-    $htmlHeadXtra[] = "
-    <style>
-    body { background: none;}
-    </style>
-    ";
     Display::display_reduced_header();
 }
 
@@ -245,7 +240,7 @@ function showEmbeddableFinishButton()
 {
     echo '<script>
         $(function () {
-            $(\'.btn-close-quiz\').on(\'click\', function () {    
+            $(\'.btn-close-quiz\').on(\'click\', function () {
                 window.parent.$(\'video:not(.skip), audio:not(.skip)\').get(0).play();
             });
         });

@@ -1650,7 +1650,7 @@ switch ($action) {
         $session_columns = SessionManager::getGridColumns($list_type);
         $columns = $session_columns['simple_column_name'];
 
-        if ($list_type == 'simple') {
+        if ($list_type === 'simple') {
             $result = SessionManager::formatSessionsAdminForGrid(
                 [
                     'where' => $whereCondition,

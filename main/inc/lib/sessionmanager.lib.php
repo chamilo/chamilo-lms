@@ -518,16 +518,16 @@ class SessionManager
             }
 
             $select =
-                "SELECT DISTINCT 
+                "SELECT DISTINCT
                      s.name,
-                     s.display_start_date, 
-                     s.display_end_date, 
-                     access_start_date, 
-                     access_end_date, 
-                     s.visibility, 
-                     s.session_category_id, 
-                     $inject_extra_fields 
-                     s.id 
+                     s.display_start_date,
+                     s.display_end_date,
+                     access_start_date,
+                     access_end_date,
+                     s.visibility,
+                     s.session_category_id,
+                     $inject_extra_fields
+                     s.id
              ";
 
             if ($showCountUsers) {
@@ -1079,18 +1079,18 @@ class SessionManager
                     FROM $workTable w
                     LEFT JOIN $workTableAssignment a
                     ON (a.publication_id = w.id AND a.c_id = w.c_id)
-                    WHERE 
-                        w.c_id = %s AND 
-                        parent_id = 0 AND 
+                    WHERE
+                        w.c_id = %s AND
+                        parent_id = 0 AND
                         active IN (1, 0)";
         } else {
             $sql = "SELECT count(w.id) as count
                     FROM $workTable w
                     LEFT JOIN $workTableAssignment a
                     ON (a.publication_id = w.id AND a.c_id = w.c_id)
-                    WHERE 
-                        w.c_id = %s AND 
-                        parent_id = 0 AND 
+                    WHERE
+                        w.c_id = %s AND
+                        parent_id = 0 AND
                         active IN (1, 0)";
 
             if (empty($sessionId)) {
@@ -1821,7 +1821,7 @@ class SessionManager
     {
         $tbl_session = Database::get_main_table(TABLE_MAIN_SESSION);
         $id = intval($id);
-        $sql = "UPDATE $tbl_session 
+        $sql = "UPDATE $tbl_session
                 SET promotion_id = 0
                 WHERE promotion_id = $id";
         if (Database::query($sql)) {
@@ -2033,8 +2033,8 @@ class SessionManager
         // Delete users from the session
         if ($empty_users === true) {
             $sql = "DELETE FROM $tbl_session_rel_user
-                    WHERE 
-                      session_id = $sessionId AND 
+                    WHERE
+                      session_id = $sessionId AND
                       relation_type <> ".SESSION_RELATION_TYPE_RRHH;
             // Don't reset session_rel_user.registered_at of users that will be registered later anyways.
             if (!empty($userList)) {
@@ -2074,7 +2074,7 @@ class SessionManager
         }
 
         // update number of users in the session
-        $sql = "UPDATE $tbl_session 
+        $sql = "UPDATE $tbl_session
                 SET nbr_users = (SELECT count(user_id) FROM $tbl_session_rel_user WHERE session_id = $sessionId)
                 WHERE id = $sessionId";
         Database::query($sql);
@@ -2461,7 +2461,7 @@ class SessionManager
 
         if (Database::affected_rows($result)) {
             // Update number of users in this relation
-            $sql = "UPDATE $tbl_session_rel_course SET 
+            $sql = "UPDATE $tbl_session_rel_course SET
                     nbr_users = nbr_users - 1
                     WHERE session_id = $session_id AND c_id = $courseId";
             Database::query($sql);
@@ -3307,7 +3307,7 @@ class SessionManager
         $extraField = new ExtraFieldModel('session');
         $field = $extraField->get_handler_field_info_by_field_variable('image');
 
-        $sql = "SELECT 
+        $sql = "SELECT
                 s.id,
                 s.name,
                 s.id_coach,
@@ -3500,7 +3500,7 @@ class SessionManager
 
         $sql = "DELETE FROM $tbl_session_rel_user
                 WHERE
-                    session_id = $sessionId AND                            
+                    session_id = $sessionId AND
                     relation_type =".SESSION_RELATION_TYPE_RRHH;
         Database::query($sql);
 
@@ -3551,14 +3551,14 @@ class SessionManager
             if (api_is_multiple_url_enabled()) {
                 $sql = "SELECT s.session_id
                         FROM $tbl_session_rel_user s
-                        INNER JOIN $tbl_session_rel_access_url a 
+                        INNER JOIN $tbl_session_rel_access_url a
                         ON (a.session_id = s.session_id)
                         WHERE
                             s.user_id = $userId AND
                             relation_type = ".SESSION_RELATION_TYPE_RRHH." AND
                             access_url_id = ".api_get_current_access_url_id();
             } else {
-                $sql = "SELECT s.session_id 
+                $sql = "SELECT s.session_id
                         FROM $tbl_session_rel_user s
                         WHERE user_id = $userId AND relation_type=".SESSION_RELATION_TYPE_RRHH;
             }
@@ -3818,9 +3818,9 @@ class SessionManager
         $whereConditions .= $keywordCondition;
         $subQuery = $sessionQuery.$courseSessionQuery;
 
-        $sql = " $select 
+        $sql = " $select
                 FROM $tbl_session s
-                INNER JOIN $tbl_session_rel_access_url a 
+                INNER JOIN $tbl_session_rel_access_url a
                 ON (s.id = a.session_id)
                 $sqlInjectJoins
                 WHERE
@@ -3830,7 +3830,7 @@ class SessionManager
                     )
                     $whereConditions
                     $extraFieldsConditions
-                    $sqlInjectWhere                    
+                    $sqlInjectWhere
                     $orderCondition
                     $limitCondition";
 
@@ -4303,10 +4303,10 @@ class SessionManager
         $table = Database::get_main_table(TABLE_MAIN_SESSION_COURSE_USER);
         $tbl_user = Database::get_main_table(TABLE_MAIN_USER);
         $sql = "SELECT session_rcru.status
-                FROM $table session_rcru 
+                FROM $table session_rcru
                 INNER JOIN $tbl_user user
                 ON (session_rcru.user_id = user.user_id)
-                WHERE                    
+                WHERE
                     session_rcru.session_id = '".intval($session_id)."' AND
                     session_rcru.c_id ='".intval($courseId)."' AND
                     user.user_id = ".intval($user_id);
@@ -4771,12 +4771,12 @@ class SessionManager
 
         $sql = "SELECT name, s.id
                 FROM $table_session_course sc
-                INNER JOIN $table_session s 
+                INNER JOIN $table_session s
                 ON (sc.session_id = s.id)
                 INNER JOIN $url u
                 ON (u.session_id = s.id)
-                WHERE 
-                    u.access_url_id = $urlId AND 
+                WHERE
+                    u.access_url_id = $urlId AND
                     sc.c_id = '$courseId' ";
         $result = Database::query($sql);
 
@@ -5773,7 +5773,7 @@ class SessionManager
                 }
                 $access_url_id = api_get_current_access_url_id();
                 UrlManager::add_session_to_url($session_id, $access_url_id);
-                $sql = "UPDATE $tbl_session SET nbr_users = '$user_counter', nbr_courses = '$course_counter' 
+                $sql = "UPDATE $tbl_session SET nbr_users = '$user_counter', nbr_courses = '$course_counter'
                         WHERE id = '$session_id'";
                 Database::query($sql);
 
@@ -6093,7 +6093,7 @@ class SessionManager
         if (!empty($userConditionsFromDrh)) {
             $userUnion = "
             UNION (
-                $select                    
+                $select
                 FROM $tbl_user u
                 INNER JOIN $tbl_user_rel_access_url url ON (url.user_id = u.id)
                 $where
@@ -6428,11 +6428,11 @@ class SessionManager
                 $courseUser = Database::get_main_table(TABLE_MAIN_COURSE_USER);
 
                 // Select the teachers.
-                $sql = "SELECT DISTINCT(cu.user_id) 
+                $sql = "SELECT DISTINCT(cu.user_id)
                         FROM $course c
-                        INNER JOIN $sessionCourse src 
+                        INNER JOIN $sessionCourse src
                         ON c.id = src.c_id
-                        INNER JOIN $courseUser cu 
+                        INNER JOIN $courseUser cu
                         ON (cu.c_id = c.id)
 		                WHERE src.session_id IN ('$sessionToString') AND cu.status = 1";
                 $result = Database::query($sql);
@@ -7103,15 +7103,15 @@ class SessionManager
             $courseCondition = "  c_id = $courseId AND ";
         }
 
-        $sql = "SELECT 
-                    COUNT(u.id) as count, 
-                    u.id, 
-                    scu.status status_in_session, 
+        $sql = "SELECT
+                    COUNT(u.id) as count,
+                    u.id,
+                    scu.status status_in_session,
                     u.status user_status
                 FROM $table scu
-                INNER JOIN $tableUser u 
+                INNER JOIN $tableUser u
                 ON scu.user_id = u.id
-                WHERE 
+                WHERE
                   $courseCondition
                   scu.session_id = ".$sessionId."
                 GROUP BY u.id";
@@ -7609,7 +7609,7 @@ class SessionManager
 
         $sql = "SELECT DISTINCT s.*
                 FROM $sessionTable s
-                INNER JOIN $sessionUserTable sru 
+                INNER JOIN $sessionUserTable sru
                 ON s.id = sru.id_session
                 WHERE
                     (sru.id_user IN (".implode(', ', $userIdList).")
@@ -8469,7 +8469,7 @@ class SessionManager
 
         $limit = '';
         if (!empty($options['limit'])) {
-            $limit = " LIMIT ".$options['limit'];
+            $limit = ' LIMIT '.$options['limit'];
         }
 
         $query = "$select FROM $tbl_session s
@@ -8486,7 +8486,7 @@ class SessionManager
                     LEFT JOIN $tbl_session_category sc
                     ON (s.session_category_id = sc.id)
                     INNER JOIN $tbl_user u
-                    ON (s.id_coach = u.user_id) 
+                    ON (s.id_coach = u.user_id)
                     $where
                     $limit
         ";
@@ -8497,19 +8497,19 @@ class SessionManager
             if ($access_url_id != -1) {
                 $query = "$select
                     FROM $tbl_session s
-                    LEFT JOIN $tbl_session_field_values fv 
+                    LEFT JOIN $tbl_session_field_values fv
                     ON (fv.item_id = s.id)
-                    LEFT JOIN $tbl_session_field_options fvo 
+                    LEFT JOIN $tbl_session_field_options fvo
                     ON (fv.field_id = fvo.field_id)
-                    LEFT JOIN $tbl_session_rel_course src 
+                    LEFT JOIN $tbl_session_rel_course src
                     ON (src.session_id = s.id)
-                    LEFT JOIN $tbl_course c 
+                    LEFT JOIN $tbl_course c
                     ON (src.c_id = c.id)
-                    LEFT JOIN $tbl_session_category sc 
+                    LEFT JOIN $tbl_session_category sc
                     ON (s.session_category_id = sc.id)
-                    INNER JOIN $tbl_user u 
+                    INNER JOIN $tbl_user u
                     ON (s.id_coach = u.user_id)
-                    INNER JOIN $table_access_url_rel_session ar 
+                    INNER JOIN $table_access_url_rel_session ar
                     ON (ar.session_id = s.id AND ar.access_url_id = $access_url_id)
                     $where
                     $limit
@@ -8517,10 +8517,10 @@ class SessionManager
             }
         }
 
-        $query .= ") AS session_table";
+        $query .= ') AS s';
 
         if (!empty($options['order'])) {
-            $query .= " ORDER BY ".$options['order'];
+            $query .= ' ORDER BY '.$options['order'];
         }
 
         $result = Database::query($query);
@@ -8934,7 +8934,7 @@ class SessionManager
             return [];
         }
 
-        $sql = "SELECT * FROM $table 
+        $sql = "SELECT * FROM $table
                 WHERE c_id = $courseId AND user_id = $userId";
         $result = Database::query($sql);
 
@@ -8981,9 +8981,9 @@ class SessionManager
                 INNER JOIN ChamiloCoreBundle:SessionRelUser su
                     WITH scu.user = su.user
                     AND scu.session = su.session
-                WHERE 
-                    scu.course = :course AND 
-                    su.relationType <> :relationType AND 
+                WHERE
+                    scu.course = :course AND
+                    su.relationType <> :relationType AND
                     scu.session = :session
             ")
             ->setParameters([

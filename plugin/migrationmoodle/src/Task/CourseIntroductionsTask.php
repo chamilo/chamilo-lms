@@ -4,32 +4,34 @@
 namespace Chamilo\PluginBundle\MigrationMoodle\Task;
 
 use Chamilo\PluginBundle\MigrationMoodle\Extractor\CourseExtractor;
-use Chamilo\PluginBundle\MigrationMoodle\Loader\CourseSectionsLoader;
+use Chamilo\PluginBundle\MigrationMoodle\Loader\CourseIntroductionLoader;
 use Chamilo\PluginBundle\MigrationMoodle\Transformer\BaseTransformer;
-use Chamilo\PluginBundle\MigrationMoodle\Transformer\Property\LoadedCourseCodeLookup;
+use Chamilo\PluginBundle\MigrationMoodle\Transformer\Property\LoadedCourseLookup;
 
 /**
- * Class CourseSectionsTask.
+ * Class CourseIntroductionsTask.
  *
- * Task to convert Moodle course sections in a Chamilo learning paths.
+ * Migrate the first section (section 0) from a moodle course as introduction for a chamilo course.
  *
  * @package Chamilo\PluginBundle\MigrationMoodle\Task
  */
-class CourseSectionsTask extends BaseTask
+class CourseIntroductionsTask extends BaseTask
 {
     /**
-     * @return array
+     * @inheritDoc
      */
     public function getExtractConfiguration()
     {
         return [
             'class' => CourseExtractor::class,
-            'query' => "SELECT id, course, summary FROM mdl_course_sections WHERE section > 0 AND (name != '' OR name IS NOT NULL)",
+            'query' => "SELECT id, course, name, summary
+                FROM mdl_course_sections
+                WHERE section = 0 AND (summary != '' AND summary IS NOT NULL)",
         ];
     }
 
     /**
-     * @return array
+     * @inheritDoc
      */
     public function getTransformConfiguration()
     {
@@ -37,21 +39,22 @@ class CourseSectionsTask extends BaseTask
             'class' => BaseTransformer::class,
             'map' => [
                 'c_id' => [
-                    'class' => LoadedCourseCodeLookup::class,
+                    'class' => LoadedCourseLookup::class,
                     'properties' => ['course'],
                 ],
+                'name' => 'name',
                 'description' => 'summary',
             ],
         ];
     }
 
     /**
-     * @return array
+     * @inheritDoc
      */
     public function getLoadConfiguration()
     {
         return [
-            'class' => CourseSectionsLoader::class,
+            'class' => CourseIntroductionLoader::class,
         ];
     }
 }

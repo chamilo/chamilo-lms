@@ -27,6 +27,7 @@ $menu = [
         'efc_user_sessions',
     ],
     'efc_courses' => [
+        'course_introductions',
         'course_sections',
         'course_modules_scorm',
     ],

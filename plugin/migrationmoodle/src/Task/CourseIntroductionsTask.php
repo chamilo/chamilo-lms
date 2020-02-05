@@ -7,6 +7,7 @@ use Chamilo\PluginBundle\MigrationMoodle\Extractor\CourseExtractor;
 use Chamilo\PluginBundle\MigrationMoodle\Loader\CourseIntroductionLoader;
 use Chamilo\PluginBundle\MigrationMoodle\Transformer\BaseTransformer;
 use Chamilo\PluginBundle\MigrationMoodle\Transformer\Property\LoadedCourseLookup;
+use Chamilo\PluginBundle\MigrationMoodle\Transformer\Property\ReplaceFilePaths;
 
 /**
  * Class CourseIntroductionsTask.
@@ -43,7 +44,10 @@ class CourseIntroductionsTask extends BaseTask
                     'properties' => ['course'],
                 ],
                 'name' => 'name',
-                'description' => 'summary',
+                'description' => [
+                    'class' => ReplaceFilePaths::class,
+                    'properties' => ['summary', 'course'],
+                ],
             ],
         ];
     }

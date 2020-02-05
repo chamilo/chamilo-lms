@@ -79,6 +79,9 @@ $menu = [
     'scorm_scoes' => [
         'files_for_scorm_scoes',
     ],
+    'course_introductions' => [
+        'files_for_course_introductions',
+    ],
 ];
 
 Display::display_header($plugin->get_title());

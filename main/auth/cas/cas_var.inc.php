@@ -29,7 +29,6 @@ if (api_is_cas_activated()) {
                 $version = SAML_VERSION_1_1;
                 break;
             case 'CAS2':
-                // no break
             default:
                 $version = CAS_VERSION_2_0;
         }
@@ -65,7 +64,7 @@ if (api_is_cas_activated()) {
             $fixedServiceURL = $cas['fixedServiceURL'];
             if (is_string($fixedServiceURL)) {
                 phpCAS::setFixedServiceURL($fixedServiceURL);
-            } else if (is_bool($fixedServiceURL) && $fixedServiceURL) {
+            } elseif (is_bool($fixedServiceURL) && $fixedServiceURL) {
                 phpCAS::setFixedServiceURL(api_get_configuration_value('root_web'));
             }
         }

@@ -686,11 +686,12 @@ class CoursesAndSessionsCatalog
                     $qb3
                         ->select('s3')
                         ->from('ChamiloCoreBundle:ExtraFieldValues', 'fv')
-                        ->innerJoin('ChamiloCoreBundle:Session', 's3', Join::WITH,'fv.itemId = s3.id')
+                        ->innerJoin('ChamiloCoreBundle:Session', 's3', Join::WITH, 'fv.itemId = s3.id')
                         ->where(
                             $qb->expr()->eq('fv.field', $extraFieldInfo['id'])
                         )->andWhere(
-                            $qb->expr()->eq('fv.value ', 1))
+                            $qb->expr()->eq('fv.value ', 1)
+                        )
                         ->getDQL()
                 )
             );

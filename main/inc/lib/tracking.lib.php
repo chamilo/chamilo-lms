@@ -7622,6 +7622,12 @@ class TrackingCourseLog
 
             if (empty($session_id)) {
                 $user_row['survey'] = $user['survey'];
+            } else {
+                $userSession = SessionManager::getUserSession($user['user_id'], $session_id);
+                $user_row['registered_at'] = '';
+                if ($userSession) {
+                    $user_row['registered_at'] = api_get_local_time($userSession['registered_at']);
+                }
             }
 
             $user_row['first_connection'] = $user['first_connection'];

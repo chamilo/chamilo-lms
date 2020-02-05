@@ -635,6 +635,8 @@ if ($export_csv) {
 
     if (empty($sessionId)) {
         $csv_headers[] = get_lang('Survey');
+    } else {
+        $csv_headers[] = get_lang('RegistrationDate');
     }
 
     $csv_headers[] = get_lang('FirstLoginInCourse');

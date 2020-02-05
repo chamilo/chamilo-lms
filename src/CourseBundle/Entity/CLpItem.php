@@ -207,6 +207,14 @@ class CLpItem
     }
 
     /**
+     * @return int
+     */
+    public function getIid(): int
+    {
+        return $this->iid;
+    }
+
+    /**
      * Set lpId.
      *
      * @param int $lpId

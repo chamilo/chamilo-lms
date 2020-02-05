@@ -297,7 +297,6 @@ $htmlHeadXtra[] = '
 </script>';
 
 $session_id = api_get_session_id();
-
 $lpfound = false;
 $myrefresh = 0;
 $myrefresh_id = 0;
@@ -309,18 +308,10 @@ if (1 == $refresh) {
     $myrefresh = 1;
 }
 
-if ($debug > 0) {
-    error_log(' $refresh: '.$refresh);
-    error_log(' $myrefresh: '.$myrefresh);
-}
-
 $lp_controller_touched = 1;
 $lp_found = false;
 $lpObject = Session::read('lpobject');
 if (!empty($lpObject)) {
-    if ($debug) {
-        error_log(' SESSION[lpobject] is defined');
-    }
     /** @var learnpath $oLP */
     $oLP = UnserializeApi::unserialize('lp', $lpObject);
     if (isset($oLP) && is_object($oLP)) {
@@ -352,12 +343,15 @@ if (!empty($lpObject)) {
         }
     }
 }
-if ($debug) {
-    error_log('$lp_found: '.$lp_found);
-    error_log('$myrefresh_id: '.$myrefresh_id);
-}
 
 $course_id = api_get_course_int_id();
+
+$lpItemId = $_REQUEST['id'] ?? 0;
+$lpItem = null;
+if (!empty($lpItemId)) {
+    $lpItemRepo = Database::getManager()->getRepository('ChamiloCourseBundle:CLpItem');
+    $lpItem = $lpItemRepo->find($lpItemId);
+}
 
 if (!$lp_found || (!empty($_REQUEST['lp_id']) && $_SESSION['oLP']->get_id() != $_REQUEST['lp_id'])) {
     if ($debug > 0) {

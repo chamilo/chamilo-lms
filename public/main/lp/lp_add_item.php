@@ -247,7 +247,7 @@ if (isset($new_item_id) && is_numeric($new_item_id)) {
                 get_lang('The rich media page/activity has been added to the course'),
                 'confirmation'
             );
-            echo $learnPath->display_item($new_item_id);
+            echo $learnPath->display_item($lpItem);
             break;
         case TOOL_FORUM:
             echo $learnPath->display_manipulate($new_item_id, $type);

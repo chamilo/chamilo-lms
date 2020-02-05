@@ -769,7 +769,6 @@ class ResourceRepository extends BaseEntityRepository
 
     public function getFilename(ResourceFile $resourceFile)
     {
-        //$fileName = $resourceFile->getFile()->getPathname();
         return $this->storage->resolveUri($resourceFile);
     }
 
@@ -823,9 +822,10 @@ class ResourceRepository extends BaseEntityRepository
             if ($resourceNode->hasResourceFile()) {
                 $resourceFile = $resourceNode->getResourceFile();
                 if ($resourceFile) {
-                    $fileName = $resourceFile->getFile()->getPathname();
+                    $fileName = $this->getFilename($resourceFile);
                     $this->getFileSystem()->update($fileName, $content);
                     $size = $this->getFileSystem()->getSize($fileName);
+
                     if ($resource instanceof CDocument) {
                         $resource->setSize($size);
                     }

@@ -347,9 +347,9 @@ class UniqueAnswer extends Question
             //$destination_str = $form -> getSubmitValue('destination'.$i);
 
             $try = !empty($scenario['try'.$i]);
-            $lp = $scenario['lp'.$i];
-            $destination = $scenario['destination'.$i];
-            $url = trim($scenario['url'.$i]);
+            $lp = $scenario['lp'.$i] ?? null;
+            $destination = $scenario['destination'.$i] ?? null;
+            $url = trim($scenario['url'.$i] ?? null);
 
             /*
             How we are going to parse the destination value

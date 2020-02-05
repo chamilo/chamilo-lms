@@ -140,10 +140,9 @@ if (isset($is_success) && true === $is_success) {
     $msg = '<div class="lp_message" style="margin-bottom:10px;">';
     $msg .= 'The item has been edited.';
     $msg .= '</div>';
-    echo $learnPath->display_item($_GET['id'], $msg);
+    echo $learnPath->display_item($lpItem, $msg);
 } else {
-    $item = $learnPath->getItem($_GET['id']);
-    echo $learnPath->display_edit_item($item->getIid());
+    echo $learnPath->display_edit_item($lpItem);
     $finalItem = Session::read('finalItem');
     if ($finalItem) {
         echo '<script>$("#frmModel").remove()</script>';

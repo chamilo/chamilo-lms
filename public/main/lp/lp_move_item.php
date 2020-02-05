@@ -111,9 +111,9 @@ if (isset($is_success) && true === $is_success) {
     $msg = '<div class="lp_message" style="margin-bottom:10px;">';
     $msg .= 'The item has been moved.';
     $msg .= '</div>';
-    echo $learnPath->display_item($_GET['id'], $msg);
+    echo $learnPath->display_item($lpItem, $msg);
 } else {
-    echo $learnPath->display_move_item($_GET['id']);
+    echo $learnPath->display_move_item($lpItem);
 }
 echo '</div>';
 echo '</div>';

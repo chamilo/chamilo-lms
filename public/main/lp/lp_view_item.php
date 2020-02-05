@@ -123,13 +123,13 @@ if (is_object($lp)) {
             echo $lp->return_new_tree();
             echo '</div>';
             echo '<div class="col-md-9">';
-            echo $lp->display_item($id);
+            echo $lp->display_item($lpItem);
             echo '</div>';
             echo '</div>';
             Display::display_footer();
             break;
         case 'preview_document':
-            echo $lp->display_item($id, null, false);
+            echo $lp->display_item($lpItem, null, false);
             break;
     }
 }

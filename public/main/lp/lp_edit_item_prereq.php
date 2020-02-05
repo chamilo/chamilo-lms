@@ -1,4 +1,5 @@
 <?php
+
 /* For licensing terms, see /license.txt */
 
 use ChamiloSession as Session;
@@ -85,13 +86,12 @@ echo $lp->return_new_tree();
 echo '</div>';
 echo '<div class="col-md-9">';
 echo '<div class="prerequisites">';
-$lpItem = new learnpathItem($_GET['id']);
 if (isset($is_success) && true == $is_success) {
-    echo $lp->display_manipulate($_GET['id'], $lpItem->get_type());
+    echo $lp->display_manipulate($lpItem);
     echo Display::return_message(get_lang('Prerequisites to the current learning object have been added.'));
 } else {
-    echo $lp->display_manipulate($_GET['id'], $lpItem->get_type());
-    echo $lp->display_item_prerequisites_form($_GET['id']);
+    echo $lp->display_manipulate($lpItem);
+    echo $lp->display_item_prerequisites_form($lpItem);
 }
 echo '</div>';
 echo '</div>';

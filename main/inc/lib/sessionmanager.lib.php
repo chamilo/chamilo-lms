@@ -183,7 +183,8 @@ class SessionManager
             ? (empty($accessUrlId) ? api_get_current_access_url_id() : (int) $accessUrlId)
             : 1;
 
-        if (is_array($_configuration[$accessUrlId]) &&
+        if (isset($_configuration[$accessUrlId]) &&
+            is_array($_configuration[$accessUrlId]) &&
             isset($_configuration[$accessUrlId]['hosting_limit_sessions']) &&
             $_configuration[$accessUrlId]['hosting_limit_sessions'] > 0
         ) {
@@ -2420,6 +2421,8 @@ class SessionManager
                 SET nbr_users = (SELECT count(user_id) FROM $tbl_session_rel_user WHERE session_id = $sessionId)
                 WHERE id = $sessionId";
         Database::query($sql);
+
+        return true;
     }
 
     /**
@@ -3717,9 +3720,9 @@ class SessionManager
             }
 
             return $sessions;
-        } else {
-            return false;
         }
+
+        return false;
     }
 
     /**
@@ -4287,7 +4290,7 @@ class SessionManager
         $tbl_course = Database::get_main_table(TABLE_MAIN_COURSE);
         $tbl_session_rel_course = Database::get_main_table(TABLE_MAIN_SESSION_COURSE);
         $session_id = (int) $session_id;
-        $sqlSelect = '*, c.id, c.id as real_id';
+        $sqlSelect = '*, c.id, c.id as real_id, c.code as course_code';
 
         if ($getCount) {
             $sqlSelect = 'COUNT(1) as count';
@@ -4764,27 +4767,34 @@ class SessionManager
 
     /**
      * Copies a session with the same data to a new session.
-     * The new copy is not assigned to the same promotion. @see subscribe_sessions_to_promotions() for that.
+     * The new copy is not assigned to the same promotion.
      *
-     * @param   int     Session ID
-     * @param   bool    Whether to copy the relationship with courses
-     * @param   bool    Whether to copy the relationship with users
-     * @param   bool    New courses will be created
-     * @param   bool    Whether to set exercises and learning paths in the new session to invisible by default
+     * @param int  $id                         Session ID
+     * @param bool $copy_courses               Whether to copy the relationship with courses
+     * @param bool $copyTeachersAndDrh
+     * @param bool $create_new_courses         New courses will be created
+     * @param bool $set_exercises_lp_invisible Set exercises and LPs in the new session to invisible by default
      *
      * @return int The new session ID on success, 0 otherwise
+     *
+     * @see subscribe_sessions_to_promotions() for that.
      *
      * @todo make sure the extra session fields are copied too
      */
     public static function copy(
         $id,
         $copy_courses = true,
-        $copy_users = true,
+        $copyTeachersAndDrh = true,
         $create_new_courses = false,
         $set_exercises_lp_invisible = false
     ) {
-        $id = intval($id);
+        $id = (int) $id;
         $s = self::fetch($id);
+
+        if (empty($s)) {
+            return false;
+        }
+
         // Check all dates before copying
         // Get timestamp for now in UTC - see http://php.net/manual/es/function.time.php#117251
         $now = time() - date('Z');
@@ -4810,6 +4820,24 @@ class SessionManager
             $s['coach_access_end_date'] = $inOneMonth;
         }
         // Now try to create the session
+        $extraFieldValue = new ExtraFieldValue('session');
+        $extraFieldsValues = $extraFieldValue->getAllValuesByItem($id);
+        $extraFieldsValuesToCopy = [];
+        if (!empty($extraFieldsValues)) {
+            foreach ($extraFieldsValues as $extraFieldValue) {
+                //$extraFieldsValuesToCopy['extra_'.$extraFieldValue['variable']] = $extraFieldValue['value'];
+                $extraFieldsValuesToCopy['extra_'.$extraFieldValue['variable']]['extra_'.$extraFieldValue['variable']] = $extraFieldValue['value'];
+            }
+        }
+
+        if (isset($extraFieldsValuesToCopy['extra_image']) && isset($extraFieldsValuesToCopy['extra_image']['extra_image'])) {
+            $extraFieldsValuesToCopy['extra_image'] = [
+                'tmp_name' => api_get_path(SYS_UPLOAD_PATH).$extraFieldsValuesToCopy['extra_image']['extra_image'],
+                'error' => 0,
+            ];
+        }
+
+        // Now try to create the session
         $sid = self::create_session(
             $s['name'].' '.get_lang('CopyLabelSuffix'),
             $s['access_start_date'],
@@ -4821,7 +4849,11 @@ class SessionManager
             (int) $s['id_coach'],
             $s['session_category_id'],
             (int) $s['visibility'],
-            true
+            true,
+            $s['duration'],
+            $s['description'],
+            $s['show_description'],
+            $extraFieldsValuesToCopy
         );
 
         if (!is_numeric($sid) || empty($sid)) {
@@ -4831,7 +4863,6 @@ class SessionManager
         if ($copy_courses) {
             // Register courses from the original session to the new session
             $courses = self::get_course_list_by_session_id($id);
-
             $short_courses = $new_short_courses = [];
             if (is_array($courses) && count($courses) > 0) {
                 foreach ($courses as $course) {
@@ -4839,7 +4870,6 @@ class SessionManager
                 }
             }
 
-            $courses = null;
             // We will copy the current courses of the session to new courses
             if (!empty($short_courses)) {
                 if ($create_new_courses) {
@@ -4897,27 +4927,50 @@ class SessionManager
 
                 $short_courses = $new_short_courses;
                 self::add_courses_to_session($sid, $short_courses, true);
-                $short_courses = null;
+
+                if ($create_new_courses === false && $copyTeachersAndDrh) {
+                    foreach ($short_courses as $courseItemId) {
+                        $coachList = self::getCoachesByCourseSession($id, $courseItemId);
+                        foreach ($coachList as $userId) {
+                            self::set_coach_to_course_session($userId, $sid, $courseItemId);
             }
         }
-        if ($copy_users) {
-            // Register users from the original session to the new session
-            $users = self::get_users_by_session($id);
-            $short_users = [];
-            if (is_array($users) && count($users) > 0) {
-                foreach ($users as $user) {
-                    $short_users[] = $user['user_id'];
                 }
             }
-            $users = null;
+        }
+
+        if ($copyTeachersAndDrh) {
+            // Register users from the original session to the new session
+            $users = self::get_users_by_session($id);
+            if (!empty($users)) {
+                $userListByStatus = [];
+                foreach ($users as $userData) {
+                    $userData['relation_type'] = (int) $userData['relation_type'];
+                    $userListByStatus[$userData['relation_type']][] = $userData;
+                }
             //Subscribing in read only mode
-            self::subscribeUsersToSession(
+                foreach ($userListByStatus as $status => $userList) {
+                    $userList = array_column($userList, 'user_id');
+                    switch ($status) {
+                        case 0:
+                            /*self::subscribeUsersToSession(
                 $sid,
-                $short_users,
+                                $userList,
                 SESSION_VISIBLE_READ_ONLY,
+                                false,
                 true
-            );
-            $short_users = null;
+                            );*/
+                            break;
+                        case 1:
+                            // drh users
+                            foreach ($userList as $drhId) {
+                                $userInfo = api_get_user_info($drhId);
+                                self::subscribeSessionsToDrh($userInfo, [$sid], false, false);
+                            }
+                            break;
+                    }
+                }
+            }
         }
 
         return $sid;
@@ -4948,16 +5001,17 @@ class SessionManager
     /**
      * Get the number of sessions.
      *
-     * @param  int ID of the URL we want to filter on (optional)
+     * @param int $access_url_id ID of the URL we want to filter on (optional)
      *
      * @return int Number of sessions
      */
-    public static function count_sessions($access_url_id = null)
+    public static function count_sessions($access_url_id = 0)
     {
         $session_table = Database::get_main_table(TABLE_MAIN_SESSION);
         $access_url_rel_session_table = Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_SESSION);
+        $access_url_id = (int) $access_url_id;
         $sql = "SELECT count(s.id) FROM $session_table s";
-        if (!empty($access_url_id) && $access_url_id == intval($access_url_id)) {
+        if (!empty($access_url_id)) {
             $sql .= ", $access_url_rel_session_table u ".
                 " WHERE s.id = u.session_id AND u.access_url_id = $access_url_id";
         }
@@ -5658,9 +5712,30 @@ SQL;
                 // Adding the relationship "Session - User" for students
                 $userList = [];
                 if (is_array($users)) {
+                    $extraFieldValueCareer = new ExtraFieldValue('career');
+                    $careerList = isset($enreg['extra_careerid']) && !empty($enreg['extra_careerid']) ? $enreg['extra_careerid'] : [];
+                    $careerList = str_replace(['[', ']'], '', $careerList);
+                    $careerList = explode(',', $careerList);
+                    $finalCareerIdList = [];
+                    foreach ($careerList as $careerId) {
+                        $realCareerIdList = $extraFieldValueCareer->get_item_id_from_field_variable_and_field_value(
+                            'external_career_id',
+                            $careerId
+                        );
+                        if (isset($realCareerIdList['item_id'])) {
+                            $finalCareerIdList[] = $realCareerIdList['item_id'];
+                        }
+                    }
+
                     foreach ($users as $user) {
                         $user_id = UserManager::get_user_id_from_username($user);
                         if ($user_id !== false) {
+                            if (!empty($finalCareerIdList)) {
+                                foreach ($finalCareerIdList as $careerId) {
+                                    UserManager::addUserCareer($user_id, $careerId);
+                                }
+                            }
+
                             $userList[] = $user_id;
                             // Insert new users.
                             $sql = "INSERT IGNORE INTO $tbl_session_user SET
@@ -7111,7 +7186,6 @@ SQL;
      * Returns the number of days the student has left in a session when using
      * sessions durations.
      *
-     * @param array $sessionInfo
      * @param int   $userId
      *
      * @return int
@@ -7154,9 +7228,9 @@ SQL;
      */
     public static function editUserSessionDuration($duration, $userId, $sessionId)
     {
-        $duration = intval($duration);
-        $userId = intval($userId);
-        $sessionId = intval($sessionId);
+        $duration = (int) $duration;
+        $userId = (int) $userId;
+        $sessionId = (int) $sessionId;
 
         if (empty($userId) || empty($sessionId)) {
             return false;
@@ -7210,8 +7284,8 @@ SQL;
     public static function isUserSubscribedAsStudent($sessionId, $userId)
     {
         $sessionRelUserTable = Database::get_main_table(TABLE_MAIN_SESSION_USER);
-        $sessionId = intval($sessionId);
-        $userId = intval($userId);
+        $sessionId = (int) $sessionId;
+        $userId = (int) $userId;
 
         // COUNT(1) actually returns the number of rows from the table (as if
         // counting the results from the first column)
@@ -7242,8 +7316,8 @@ SQL;
     {
         $sessionRelUserTable = Database::get_main_table(TABLE_MAIN_SESSION_USER);
 
-        $sessionId = intval($sessionId);
-        $userId = intval($userId);
+        $sessionId = (int) $sessionId;
+        $userId = (int) $userId;
 
         // COUNT(1) actually returns the number of rows from the table (as if
         // counting the results from the first column)
@@ -7859,6 +7933,10 @@ SQL;
             "variable IN ( ".implode(", ", $variablePlaceHolders)." ) " => $variables,
         ]);
 
+        if (empty($fieldList)) {
+            return [];
+        }
+
         $fields = [];
 
         // Index session fields
@@ -8030,7 +8108,6 @@ SQL;
     }
 
     /**
-     * @param FormValidator $form
      * @param array         $sessionInfo Optional
      *
      * @return array
@@ -8954,7 +9031,7 @@ SQL;
 
         $limit = '';
         if (!empty($options['limit'])) {
-            $limit = " LIMIT ".$options['limit'];
+            $limit = ' LIMIT '.$options['limit'];
         }
 
         $query = "$select FROM $tbl_session s
@@ -9002,10 +9079,10 @@ SQL;
             }
         }
 
-        $query .= ") AS session_table";
+        $query .= ') AS s';
 
         if (!empty($options['order'])) {
-            $query .= " ORDER BY ".$options['order'];
+            $query .= ' ORDER BY '.$options['order'];
         }
 
         $result = Database::query($query);
@@ -9453,9 +9530,6 @@ SQL;
     }
 
     /**
-     * @param Course  $course
-     * @param Session $session
-     *
      * @return int
      */
     public static function getCountUsersInCourseSession(
@@ -9484,9 +9558,6 @@ SQL;
 
     /**
      * Get course IDs where user in not subscribed in session.
-     *
-     * @param User    $user
-     * @param Session $session
      *
      * @return array
      */
@@ -9528,6 +9599,7 @@ SQL;
         }
 
         $userRelSession = self::getUserSession($userId, $sessionId);
+
         if ($userRelSession) {
             if (isset($userRelSession['collapsed']) && $userRelSession['collapsed'] != '') {
                 $collapsed = $userRelSession['collapsed'];

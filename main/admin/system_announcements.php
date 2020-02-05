@@ -56,6 +56,34 @@ if (!empty($action)) {
 } else {
     $tool_name = get_lang('SystemAnnouncements');
 }
+$url = api_get_path(WEB_AJAX_PATH).'career.ajax.php';
+
+$htmlHeadXtra[] = '<script>
+function showCareer() {
+    $("#promotion").show();
+    var url = "'.$url.'";
+    var id = $(\'#career_id\').val();
+
+    $.getJSON(
+        url, {
+            "career_id" : id,
+            "a" : "get_promotions"
+        }
+    )
+    .done(function(data) {
+        $("#promotion_id").empty();
+        $("#promotion_id").append(
+            $("<option>", {value: "0", text: "'.addslashes(get_lang('All')).'"})
+        );
+        $.each(data, function(index, value) {
+            $("#promotion_id").append(
+                $("<option>", {value: value.id, text: value.name})
+            );
+        });
+        $("#promotion_id").selectpicker("refresh");
+    });
+}
+</script>';
 
 // Displaying the header.
 Display::display_header($tool_name);
@@ -130,6 +158,10 @@ switch ($action) {
                 $values[$key] = $data[$key];
             }
         }
+        if ($allowCareers) {
+            $values['career_id'] = $announcement->career_id;
+            $values['promotion_id'] = $announcement->promotion_id;
+        }
 
         $values['lang'] = $announcement->lang;
         $values['action'] = 'edit';
@@ -177,6 +209,39 @@ if ($action_todo) {
         true,
         ['id' => 'range']
     );
+
+    if ($allowCareers) {
+        $career = new Career();
+        $careerList = $career->get_all();
+        $list = array_column($careerList, 'name', 'id');
+
+        $form->addSelect(
+            'career_id',
+            get_lang('Career'),
+            $list,
+            ['onchange' => 'javascript: showCareer();', 'placeholder' => get_lang('SelectAnOption'), 'id' => 'career_id']
+        );
+
+        $display = 'none;';
+        $options = [];
+        if (isset($values['promotion_id'])) {
+            $promotion = new Promotion();
+            $promotion = $promotion->get($values['promotion_id']);
+            if ($promotion) {
+                $options = [$promotion['id'] => $promotion['name']];
+                $display = 'block';
+            }
+        }
+
+        $form->addHtml('<div id="promotion" style="display:'.$display.';">');
+        $form->addSelect(
+            'promotion_id',
+            get_lang('Promotion'),
+            $options,
+            ['id' => 'promotion_id']
+        );
+        $form->addHtml('</div>');
+    }
 
     $group = [];
     foreach ($visibleList as $key => $name) {
@@ -248,7 +313,9 @@ if ($action_todo) {
                     $values['lang'],
                     $sendMail,
                     empty($values['add_to_calendar']) ? false : true,
-                    empty($values['send_email_test']) ? false : true
+                    empty($values['send_email_test']) ? false : true,
+                    isset($values['career_id']) ? $values['career_id'] : 0,
+                    isset($values['promotion_id']) ? $values['promotion_id'] : 0
                 );
 
                 if ($announcement_id !== false) {
@@ -279,7 +346,9 @@ if ($action_todo) {
                     $visibilityResult,
                     $values['lang'],
                     $sendMail,
-                    $sendMailTest
+                    $sendMailTest,
+                    isset($values['career_id']) ? $values['career_id'] : 0,
+                    isset($values['promotion_id']) ? $values['promotion_id'] : 0
                 )) {
                     if (isset($values['group'])) {
                         SystemAnnouncementManager::announcement_for_groups(

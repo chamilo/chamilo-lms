@@ -10,7 +10,6 @@
  * The two bits are separate to allow for a one-big-javascript and a one-big-html
  * files to be built. Each export function thus returns an array of HTML+JS.
  *
- *
  * @author Claro Team <cvs@claroline.net>
  * @author Yannick Warnier <yannick.warnier@beeznest.com>
  *

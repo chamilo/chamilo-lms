@@ -26,25 +26,6 @@
     3.2 - updated to allow for specific term search for teachers identification
     3.1 - updated code to use database settings, to respect coding conventions
  *        as much as possible (camel-case removed) and to allow for non-anonymous login
-    3.0    - updated to use ldap_var.inc.php instead of ldap_var.inc (deprecated)
-        (November 2003)
-    2.9    - further changes for new login procedure
-        - (busy) translating french functions to english
-        (October 2003)
-    2.8    - adapted for new Claroline login procedure
-        - ldap package now becomes a standard, in auth/ldap
-    2.7 - uses more standard LDAP field names: mail, sn, givenname (or cn)
-            instead of mail, preferredsn, preferredgivenname
-            there are still
-        - code cleanup
-        - fixed bug: dc = xx, dc = yy was configured for UGent
-            and put literally in the code, this is now a variable
-            in configuration.php ($LDAPbasedn)
-
-    with thanks to
-    - Stefan De Wannemacker (Ghent University)
-    - Universite Jean Monet (J Dubois / Michel Courbon)
-    - Michel Panckoucke for reporting and fixing a bug
     - Patrick Cool: fixing security hole
 
  *    @author Roan Embrechts

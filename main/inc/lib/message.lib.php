@@ -2462,6 +2462,92 @@ class MessageManager
     }
 
     /**
+     * Get the data of the last received messages for a user.
+     *
+     * @param int $userId The user id
+     * @param int $lastId The id of the last received message
+     *
+     * @return array
+     */
+    public static function getReceivedMessages($userId, $lastId = 0)
+    {
+        $userId = intval($userId);
+        $lastId = intval($lastId);
+
+        if (empty($userId)) {
+            return [];
+        }
+        $messagesTable = Database::get_main_table(TABLE_MESSAGE);
+        $userTable = Database::get_main_table(TABLE_MAIN_USER);
+        $sql = "SELECT m.*, u.user_id, u.lastname, u.firstname, u.picture_uri 
+                FROM $messagesTable as m
+                INNER JOIN $userTable as u
+                ON m.user_sender_id = u.user_id
+                WHERE
+                    m.user_receiver_id = $userId AND
+                    m.msg_status IN (".MESSAGE_STATUS_NEW.", ".MESSAGE_STATUS_UNREAD.")
+                    AND m.id > $lastId
+                ORDER BY m.send_date DESC";
+
+        $result = Database::query($sql);
+
+        $messages = [];
+        if ($result !== false) {
+            while ($row = Database::fetch_assoc($result)) {
+                $pictureInfo = UserManager::get_user_picture_path_by_id($row['user_id'], 'web');
+                $row['pictureUri'] = $pictureInfo['dir'].$pictureInfo['file'];
+                $messages[] = $row;
+            }
+        }
+
+        return $messages;
+    }
+
+    /**
+     * Get the data of the last received messages for a user.
+     *
+     * @param int $userId The user id
+     * @param int $lastId The id of the last received message
+     *
+     * @return array
+     */
+    public static function getSentMessages($userId, $lastId = 0)
+    {
+        $userId = intval($userId);
+        $lastId = intval($lastId);
+
+        if (empty($userId)) {
+            return [];
+        }
+
+        $messagesTable = Database::get_main_table(TABLE_MESSAGE);
+        $userTable = Database::get_main_table(TABLE_MAIN_USER);
+
+        $sql = "SELECT m.*, u.user_id, u.lastname, u.firstname, u.picture_uri 
+                FROM $messagesTable as m
+                INNER JOIN $userTable as u
+                ON m.user_receiver_id = u.user_id
+                WHERE
+                    m.user_sender_id = $userId 
+                    AND m.msg_status = ".MESSAGE_STATUS_OUTBOX." 
+                    AND m.id > $lastId
+                ORDER BY m.send_date DESC";
+
+        $result = Database::query($sql);
+
+        $messages = [];
+        if ($result !== false) {
+            while ($row = Database::fetch_assoc($result)) {
+                $pictureInfo = UserManager::get_user_picture_path_by_id($row['user_id'], 'web');
+                $row['pictureUri'] = $pictureInfo['dir'].$pictureInfo['file'];
+                $messages[] = $row;
+            }
+        }
+
+        return $messages;
+    }
+
+    /**
      * Check whether a message has attachments.
      *
      * @param int $messageId The message id
@@ -2566,10 +2652,8 @@ class MessageManager
 
     /**
      * Send a notification to all admins when a new user is registered.
-     *
-     * @param User $user
      */
-    public static function sendNotificationByRegisteredUser(User $user)
+    public static function sendNotificationOfNewRegisteredUser(User $user)
     {
         $tplMailBody = new Template(
             null,
@@ -2607,6 +2691,86 @@ class MessageManager
                 null,
                 $user->getId()
             );
+        }
+    }
+
+    /**
+     * Send a notification to all admins when a new user is registered
+     * while the approval method is used for users registration.
+     */
+    public static function sendNotificationOfNewRegisteredUserApproval(User $user)
+    {
+        $tplMailBody = new Template(
+            null,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false
+        );
+        $tplMailBody->assign('user', $user);
+        $tplMailBody->assign('is_western_name_order', api_is_western_name_order());
+        $userId = $user->getId();
+        $url_edit = Display::url(
+            api_get_path(WEB_CODE_PATH).'admin/user_edit.php?user_id='.$userId,
+            api_get_path(WEB_CODE_PATH).'admin/user_edit.php?user_id='.$userId
+        );
+        $tplMailBody->assign(
+            'manageUrl',
+            $url_edit
+        );
+        // Get extra field values for this user and reformat the array
+        $extraFieldValues = new ExtraFieldValue('user');
+        $userExtraFields = $extraFieldValues->getAllValuesByItem($userId);
+        $values = [];
+        foreach ($userExtraFields as $field => $value) {
+            $values[$value['variable']] = $value['value'];
+        }
+        $tplMailBody->assign(
+            'extra',
+            $values
+        );
+        $layoutContent = '';
+        $emailbody = '';
+        if (api_get_configuration_value('mail_template_system') == true) {
+            $mailTemplateManager = new MailTemplateManager();
+            $templateText = $mailTemplateManager->getTemplateByType('new_user_mail_to_admin_approval.tpl');
+            if (empty($templateText)) {
+            } else {
+                // custom procedure to load a template as a string (doesn't use cache so may slow down)
+                $template = $tplMailBody->twig->createTemplate($templateText);
+                $emailbody = $template->render($tplMailBody->params);
+            }
+        }
+        if (empty($emailbody)) {
+            $layoutContent = $tplMailBody->get_template('mail/new_user_mail_to_admin_approval.tpl');
+            $emailbody = $tplMailBody->fetch($layoutContent);
+        }
+
+        $emailsubject = '['.get_lang('ApprovalForNewAccount').'] '.$user->getUsername();
+
+        if (api_get_configuration_value('send_inscription_notification_to_general_admin_only')) {
+            $email = api_get_setting('emailAdministrator');
+            $firstname = api_get_setting('administratorSurname');
+            $lastname = api_get_setting('administratorName');
+            api_mail_html("$firstname $lastname", $email, $emailsubject, $emailbody);
+        } else {
+            $admins = UserManager::get_all_administrators();
+            foreach ($admins as $admin_info) {
+                self::send_message(
+                    $admin_info['user_id'],
+                    $emailsubject,
+                    $emailbody,
+                    [],
+                    [],
+                    null,
+                    null,
+                    null,
+                    null,
+                    $userId
+                );
+            }
         }
     }
 

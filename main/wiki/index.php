@@ -55,29 +55,18 @@ api_protect_course_script();
 api_block_anonymous_users();
 api_protect_course_group(GroupManager::GROUP_TOOL_WIKI);
 
-/* TRACKING */
 Event::event_access_tool(TOOL_WIKI);
 
 if ($groupId) {
     $group_properties = GroupManager::get_group_properties($groupId);
     $interbreadcrumb[] = [
-        "url" => api_get_path(WEB_CODE_PATH)."group/group.php?".api_get_cidreq(),
-        "name" => get_lang('Groups'),
+        'url' => api_get_path(WEB_CODE_PATH).'group/group.php?'.api_get_cidreq(),
+        'name' => get_lang('Groups'),
     ];
     $interbreadcrumb[] = [
-        "url" => api_get_path(WEB_CODE_PATH)."group/group_space.php?".api_get_cidreq(),
-        "name" => get_lang('GroupSpace').' '.Security::remove_XSS($group_properties['name']),
+        'url' => api_get_path(WEB_CODE_PATH).'group/group_space.php?'.api_get_cidreq(),
+        'name' => get_lang('GroupSpace').' '.Security::remove_XSS($group_properties['name']),
     ];
-    //ensure this tool in groups whe it's private or deactivated
-    if ($group_properties['wiki_state'] == 0) {
-        api_not_allowed();
-    } elseif ($group_properties['wiki_state'] == 2) {
-        if (!api_is_allowed_to_edit(false, true) and
-            !GroupManager :: is_user_in_group(api_get_user_id(), $group_properties)
-        ) {
-            api_not_allowed();
-        }
-    }
 }
 
 $is_allowed_to_edit = api_is_allowed_to_edit(false, true);

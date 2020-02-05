@@ -1922,7 +1922,7 @@ class Exercise
                 get_lang('ExerciseName'),
                 false,
                 false,
-                ['ToolbarSet' => 'Minimal']
+                ['ToolbarSet' => 'TitleAsHtml']
             );
         } else {
             $form->addElement(
@@ -3518,7 +3518,6 @@ class Exercise
                 error_log(print_r($extra, 1));
             }
             // Fixes problems with negatives values using intval
-
             $true_score = floatval(trim($extra[0]));
             $false_score = floatval(trim($extra[1]));
             $doubt_score = floatval(trim($extra[2]));
@@ -5560,8 +5559,6 @@ class Exercise
                             $destinationid = $select_question_hotspot;
                             $url = $url_hotspot;
                         } else {
-                            //show if no error
-                            //echo 'no error';
                             $comment = $answerComment = $objAnswerTmp->selectComment($nbrAnswers);
                             $answerDestination = $objAnswerTmp->selectDestination($nbrAnswers);
                         }
@@ -6246,7 +6243,7 @@ class Exercise
 
         // 1.1 Admins and teachers can access to the exercise
         if ($filterByAdmin) {
-            if (api_is_platform_admin() || api_is_course_admin()) {
+            if (api_is_platform_admin() || api_is_course_admin() || api_is_course_tutor()) {
                 return ['value' => true, 'message' => ''];
             }
         }
@@ -7962,6 +7959,10 @@ class Exercise
      */
     public function getExerciseCategoryId()
     {
+        if (empty($this->exerciseCategoryId)) {
+            return null;
+        }
+
         return (int) $this->exerciseCategoryId;
     }
 

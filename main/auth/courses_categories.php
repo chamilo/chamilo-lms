@@ -1,12 +1,11 @@
 <?php
 /* For licensing terms, see /license.txt */
 
+
 /**
  * View (MVC patter) for courses categories.
  *
  * @author Christian Fasanando <christian1827@gmail.com> - Beeznest
- *
- * @package chamilo.auth
  */
 if (isset($_REQUEST['action']) && Security::remove_XSS($_REQUEST['action']) !== 'subscribe') {
     $stok = Security::get_token();
@@ -20,8 +19,8 @@ $action = in_array($action, $actions) ? $action : 'display_courses';
 
 $showCourses = CoursesAndSessionsCatalog::showCourses();
 $showSessions = CoursesAndSessionsCatalog::showSessions();
-$pageCurrent = isset($pageCurrent) ? $pageCurrent : isset($_GET['pageCurrent']) ? (int) $_GET['pageCurrent'] : 1;
-$pageLength = isset($pageLength) ? $pageLength : isset($_GET['pageLength']) ? (int) $_GET['pageLength'] : CoursesAndSessionsCatalog::PAGE_LENGTH;
+$pageCurrent = isset($_GET['pageCurrent']) ? (int) $_GET['pageCurrent'] : 1;
+$pageLength = isset($_GET['pageLength']) ? (int) $_GET['pageLength'] : CoursesAndSessionsCatalog::PAGE_LENGTH;
 $pageTotal = (int) ceil((int) $countCoursesInCategory / $pageLength);
 $cataloguePagination = $pageTotal > 1 ? CourseCategory::getCatalogPagination($pageCurrent, $pageLength, $pageTotal) : '';
 $searchTerm = isset($_REQUEST['search_term']) ? Security::remove_XSS($_REQUEST['search_term']) : '';
@@ -44,13 +43,8 @@ $code = isset($code) ? $code : null;
                 url: $(this).attr('data-link'),
                 success: function(data) {
                     $("#rating_wrapper_"+id).html(data);
-                    if (data == 'added') {
                         //$('#vote_label2_' + id).html("{'Saved'|get_lang}");
                     }
-                    if (data == 'updated') {
-                        //$('#vote_label2_' + id).html("{'Saved'|get_lang}");
-                    }
-                }
             });
         });
         var getSessionId = function (el) {

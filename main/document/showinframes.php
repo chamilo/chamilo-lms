@@ -111,9 +111,12 @@ if (in_array(strtolower($pathinfo['extension']), $playerSupportedFiles)) {
 
 $group_id = api_get_group_id();
 $current_group = GroupManager::get_group_properties($group_id);
-$current_group_name = $current_group['name'];
 
 if (isset($group_id) && $group_id != '') {
+    if ($current_group) {
+        $current_group_name = $current_group['name'];
+    }
+
     $interbreadcrumb[] = [
         'url' => api_get_path(WEB_CODE_PATH).'group/group.php?'.api_get_cidreq(),
         'name' => get_lang('Groups'),

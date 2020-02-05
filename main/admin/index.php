@@ -6,7 +6,6 @@
  * Index page of the admin tools.
  */
 
-// Resetting the course id.
 $cidReset = true;
 
 // Including some necessary chamilo files.

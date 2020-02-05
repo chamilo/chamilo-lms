@@ -635,6 +635,8 @@ if ($export_csv) {
 
     if (empty($sessionId)) {
         $csv_headers[] = get_lang('Survey');
+    } else {
+        $csv_headers[] = get_lang('RegistrationDate');
     }
 
     $csv_headers[] = get_lang('FirstLoginInCourse');
@@ -653,7 +655,6 @@ if ($export_csv) {
     array_unshift($csvContentInSession, $csv_headers);
 
     if ($sessionId) {
-        $sessionData = [];
         $sessionInfo = api_get_session_info($sessionId);
         $sessionDates = SessionManager::parseSessionDates($sessionInfo);
 

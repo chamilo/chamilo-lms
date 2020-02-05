@@ -342,6 +342,13 @@ class SortableTable extends HTML_Table
         echo $this->return_table();
     }
 
+    public function toArray()
+    {
+        $headers = array_column($this->getHeaders(), 'label');
+
+        return array_merge([$headers], $this->table_data);
+    }
+
     /**
      * Displays the table, complete with navigation buttons to browse through
      * the data-pages.
@@ -350,7 +357,6 @@ class SortableTable extends HTML_Table
     {
         $empty_table = false;
         $content = $this->get_table_html();
-
         if ($this->get_total_number_of_items() == 0) {
             $cols = $this->getColCount();
             $this->setCellAttributes(
@@ -362,7 +368,6 @@ class SortableTable extends HTML_Table
             $this->setCellContents(1, 0, $message_empty);
             $empty_table = true;
         }
-
         $html = '';
 
         $params = $this->get_sortable_table_param_string().'&amp;'.$this->get_additional_url_paramstring();
@@ -453,6 +458,7 @@ class SortableTable extends HTML_Table
                 $html .= '<td> ';
                 $html .= '</td>';
             }
+
             $html .= '</tr>';
             $html .= '</table>';
 
@@ -789,7 +795,6 @@ class SortableTable extends HTML_Table
             }
             $result[] = '<option value="'.$nr.'" '.($nr == $this->per_page ? 'selected="selected"' : '').'>'.$nr.'</option>';
         }
-        // @todo no limits
         //if ($total_number_of_items < 500) {
         $result[] = '<option value="'.$total_number_of_items.'" '.($total_number_of_items == $this->per_page ? 'selected="selected"' : '').'>'.api_ucfirst(get_lang('All')).'</option>';
         //}

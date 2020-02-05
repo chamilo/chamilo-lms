@@ -69,15 +69,7 @@ $exercisePath = substr($exercisePath, 0, strpos($exercisePath, $exfile));
 $exercisePath = $exercisePath.'exercise.php';
 
 // Clear the exercise session
-Session::erase('objExercise');
-Session::erase('objQuestion');
-Session::erase('objAnswer');
-Session::erase('questionList');
-Session::erase('exerciseResult');
-Session::erase('firstTime');
-Session::erase('calculatedAnswerId');
-Session::erase('duration_time_previous');
-Session::erase('duration_time');
+Exercise::cleanSessionVariables();
 
 //General POST/GET/SESSION/COOKIES parameters recovery
 $origin = api_get_origin();
@@ -288,7 +280,6 @@ Event::event_access_tool(TOOL_QUIZ);
 $logInfo = [
     'tool' => TOOL_QUIZ,
     'tool_id' => (int) $exerciseId,
-    'tool_id_detail' => 0,
     'action' => isset($_REQUEST['learnpath_id']) ? 'learnpath_id' : '',
     'action_details' => isset($_REQUEST['learnpath_id']) ? (int) $_REQUEST['learnpath_id'] : '',
 ];
@@ -628,7 +619,6 @@ if ($is_allowedToEdit) {
         [6, 1, 5]
     );
 }
-
 if (api_get_configuration_value('allow_exercise_categories') === false) {
     echo Exercise::exerciseGrid(0, $page, $from, $limit, $keyword);
 } else {

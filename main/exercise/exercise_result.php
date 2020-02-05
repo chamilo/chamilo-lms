@@ -118,7 +118,7 @@ $learnpath_id = isset($exercise_stat_info['orig_lp_id']) ? $exercise_stat_info['
 $learnpath_item_id = isset($exercise_stat_info['orig_lp_item_id']) ? $exercise_stat_info['orig_lp_item_id'] : 0;
 $learnpath_item_view_id = isset($exercise_stat_info['orig_lp_item_view_id']) ? $exercise_stat_info['orig_lp_item_view_id'] : 0;
 
-if ($origin == 'learnpath') {
+if ($origin === 'learnpath') {
     ?>
     <form method="GET" action="exercise.php?<?php echo api_get_cidreq(); ?>">
     <input type="hidden" name="origin" value="<?php echo $origin; ?>" />
@@ -129,7 +129,6 @@ if ($origin == 'learnpath') {
 }
 
 $i = $total_score = $max_score = 0;
-
 $remainingMessage = '';
 $attemptButton = '';
 
@@ -170,10 +169,9 @@ if ($objExercise->selectAttempts() > 0) {
     } else {
         $attempt_count++;
         $remainingAttempts = $objExercise->selectAttempts() - $attempt_count;
-
         if ($remainingAttempts) {
             $attemptMessage = sprintf(get_lang('RemainingXAttempts'), $remainingAttempts);
-            $remainingMessage = sprintf("<p>%s</p> %s", $attemptMessage, $attemptButton);
+            $remainingMessage = sprintf('<p>%s</p> %s', $attemptMessage, $attemptButton);
         }
     }
 } else {
@@ -222,20 +220,12 @@ if (!in_array($origin, ['learnpath', 'embeddable'])) {
     echo '</div>';
 
     if (api_is_allowed_to_session_edit()) {
-        Session::erase('objExercise');
-        Session::erase('exe_id');
-        Session::erase('calculatedAnswerId');
-        Session::erase('duration_time_previous');
-        Session::erase('duration_time');
+        Exercise::cleanSessionVariables();
     }
     Display::display_footer();
 } elseif ($origin === 'embeddable') {
     if (api_is_allowed_to_session_edit()) {
-        Session::erase('objExercise');
-        Session::erase('exe_id');
-        Session::erase('calculatedAnswerId');
-        Session::erase('duration_time_previous');
-        Session::erase('duration_time');
+        Exercise::cleanSessionVariables();
     }
 
     Session::write('attempt_remaining', $remainingMessage);
@@ -247,18 +237,13 @@ if (!in_array($origin, ['learnpath', 'embeddable'])) {
     $href = $lp_mode === 'fullscreen' ? ' window.opener.location.href="'.$url.'" ' : ' top.location.href="'.$url.'"';
 
     if (api_is_allowed_to_session_edit()) {
-        Session::erase('objExercise');
-        Session::erase('exe_id');
-        Session::erase('calculatedAnswerId');
-        Session::erase('duration_time_previous');
-        Session::erase('duration_time');
+        Exercise::cleanSessionVariables();
     }
     Session::write('attempt_remaining', $remainingMessage);
 
     // Record the results in the learning path, using the SCORM interface (API)
     echo "<script>window.parent.API.void_save_asset('$total_score', '$max_score', 0, 'completed');</script>";
     echo '<script type="text/javascript">'.$href.'</script>';
-
     Display::display_reduced_footer();
 }
 

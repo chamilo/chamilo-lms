@@ -279,8 +279,10 @@ define('LOG_USER_DELETE_ACCOUNT_REQUEST', 'user_delete_account_request');
 
 define('LOG_QUESTION_CREATED', 'question_created');
 define('LOG_QUESTION_UPDATED', 'question_updated');
+define('LOG_QUESTION_DELETED', 'question_deleted');
+define('LOG_QUESTION_REMOVED_FROM_QUIZ', 'question_removed_from_quiz');
 
-define('USERNAME_PURIFIER', '/[^0-9A-Za-z_\.]/');
+define('USERNAME_PURIFIER', '/[^0-9A-Za-z_\.-]/');
 
 //used when login_is_email setting is true
 define('USERNAME_PURIFIER_MAIL', '/[^0-9A-Za-z_\.@]/');
@@ -707,7 +709,6 @@ require_once __DIR__.'/internationalization.lib.php';
  *                     This parameter has meaning when $type parameter has one of the following values: TO_WEB, TO_SYS, TO_REL. Otherwise it is ignored.
  *
  * @return string the requested path or the converted path
- *
  *
  * Notes about the current behaviour model:
  * 1. Windows back-slashes are converted to slashes in the result.
@@ -5168,11 +5169,14 @@ function api_max_sort_value($user_course_category, $user_id)
  *
  * @author Julian Prud'homme
  *
- * @param int the number of seconds
+ * @param int    $seconds      number of seconds
+ * @param string $space
+ * @param bool   $showSeconds
+ * @param bool   $roundMinutes
  *
- * @return string the formated time
+ * @return string the formatted time
  */
-function api_time_to_hms($seconds, $space = ':')
+function api_time_to_hms($seconds, $space = ':', $showSeconds = true, $roundMinutes = false)
 {
     // $seconds = -1 means that we have wrong data in the db.
     if ($seconds == -1) {
@@ -5191,6 +5195,24 @@ function api_time_to_hms($seconds, $space = ':')
     // How many minutes ?
     $min = floor(($seconds - ($hours * 3600)) / 60);
 
+    if ($roundMinutes) {
+        if ($min >= 45) {
+            $min = 45;
+        }
+
+        if ($min >= 30 && $min <= 44) {
+            $min = 30;
+        }
+
+        if ($min >= 15 && $min <= 29) {
+            $min = 15;
+        }
+
+        if ($min >= 0 && $min <= 14) {
+            $min = 0;
+        }
+    }
+
     // How many seconds
     $sec = floor($seconds - ($hours * 3600) - ($min * 60));
 
@@ -5206,7 +5228,12 @@ function api_time_to_hms($seconds, $space = ':')
         $min = "0$min";
     }
 
-    return $hours.$space.$min.$space.$sec;
+    $seconds = '';
+    if ($showSeconds) {
+        $seconds = $space.$sec;
+    }
+
+    return $hours.$space.$min.$seconds;
 }
 
 /* FILE SYSTEM RELATED FUNCTIONS */
@@ -6382,7 +6409,7 @@ function api_replace_dangerous_char($filename, $treat_spaces_as_hyphens = true)
         250,
         '',
         true,
-        true,
+        false,
         false,
         false,
         $treat_spaces_as_hyphens
@@ -9016,7 +9043,28 @@ function api_protect_course_group($tool, $showHeader = true)
 {
     $groupId = api_get_group_id();
     if (!empty($groupId)) {
+        if (api_is_platform_admin()) {
+            return true;
+        }
+
+        if (api_is_allowed_to_edit(false, true, true)) {
+            return true;
+        }
+
         $userId = api_get_user_id();
+        $sessionId = api_get_session_id();
+        if (!empty($sessionId)) {
+            if (api_is_coach($sessionId, api_get_course_int_id())) {
+                return true;
+            }
+
+            if (api_is_drh()) {
+                if (SessionManager::isUserSubscribedAsHRM($sessionId, $userId)) {
+                    return true;
+                }
+            }
+        }
+
         $groupInfo = GroupManager::get_group_properties($groupId);
 
         // Group doesn't exists
@@ -9444,10 +9492,6 @@ function api_unserialize_content($type, $serialized, $ignoreErrors = false)
 
 /**
  * Set the From and ReplyTo properties to PHPMailer instance.
- *
- * @param PHPMailer $mailer
- * @param array     $sender
- * @param array     $replyToAddress
  *
  * @throws phpmailerException
  */

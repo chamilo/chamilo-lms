@@ -2780,7 +2780,7 @@ HOTSPOT;
         $minNote = api_get_setting('exercise_min_score');
 
         if ($maxNote != '' && $minNote != '') {
-            if (!empty($weight) && intval($weight) != 0) {
+            if (!empty($weight) && (float) $weight !== 0) {
                 $score = $minNote + ($maxNote - $minNote) * $score / $weight;
             } else {
                 $score = $minNote;
@@ -2833,6 +2833,7 @@ HOTSPOT;
         $percentage = float_format($percentage, 1);
         $score = float_format($score, 1);
         $weight = float_format($weight, 1);
+
         if ($roundValues) {
             $whole = floor($percentage); // 1
             $fraction = $percentage - $whole; // .25
@@ -2871,6 +2872,7 @@ HOTSPOT;
             if ($hidePercentageSign) {
                 $percentageSign = '';
             }
+
             $html = $percentage."$percentageSign ($score / $weight)";
             if ($show_only_percentage) {
                 $html = $percentage.$percentageSign;
@@ -2888,6 +2890,7 @@ HOTSPOT;
         // Ignore other formats and use the configuratio['exercise_score_format'] value
         // But also keep the round values settings.
         $format = api_get_configuration_value('exercise_score_format');
+
         if (!empty($format)) {
             $html = ScoreDisplay::instance()->display_score([$score, $weight], $format);
         }
@@ -2994,7 +2997,6 @@ HOTSPOT;
     }
 
     /**
-     * @param FormValidator $form
      * @param string        $name
      * @param $weight
      * @param $selected
@@ -3547,7 +3549,7 @@ EOT;
         $best_score = 0;
         if (!empty($user_results)) {
             foreach ($user_results as $result) {
-                if (!empty($result['exe_weighting']) && intval($result['exe_weighting']) != 0) {
+                if (!empty($result['exe_weighting']) && (float) $result['exe_weighting'] != 0) {
                     $score = $result['exe_result'] / $result['exe_weighting'];
                     if ($score >= $best_score) {
                         $best_score = $score;
@@ -4953,12 +4955,9 @@ EOT;
             ->getScalarResult();
 
         $data = [];
-
         /** @var TrackEExercises $item */
         foreach ($result as $item) {
-            $bestAttemp = self::get_best_attempt_by_user($item['exeUserId'], $exerciseId, $courseId, $sessionId = 0);
-
-            $data[] = $bestAttemp;
+            $data[] = self::get_best_attempt_by_user($item['exeUserId'], $exerciseId, $courseId, $sessionId = 0);
         }
 
         usort(
@@ -4979,7 +4978,6 @@ EOT;
         // flags to display the same position in case of tie
         $lastScore = $data[0]['exe_result'];
         $position = 1;
-
         $data = array_map(
             function ($item) use (&$lastScore, &$position) {
                 if ($item['exe_result'] < $lastScore) {
@@ -5056,7 +5054,6 @@ EOT;
     }
 
     /**
-     * @param Exercise $objExercise
      * @param float    $score
      * @param float    $weight
      * @param bool     $checkPassPercentage
@@ -5298,7 +5295,6 @@ EOT;
     }
 
     /**
-     * @param DateTime $time
      * @param int      $userId
      * @param int      $courseId
      * @param int      $sessionId
@@ -5410,7 +5406,6 @@ EOT;
      *
      * @param float    $totalScore
      * @param float    $totalWeight
-     * @param Exercise $objExercise
      * @param int      $studentId
      * @param string   $courseCode
      * @param int      $sessionId
@@ -5467,5 +5462,105 @@ EOT;
         }
 
         return Category::getDownloadCertificateBlock($certificate);
+    }
+
+    /**
+     * @param int $exeId      ID from track_e_exercises
+     * @param int $userId     User ID
+     * @param int $exerciseId Exercise ID
+     * @param int $courseId   Optional. Coure ID.
+     *
+     * @throws \Doctrine\ORM\ORMException
+     * @throws \Doctrine\ORM\OptimisticLockException
+     * @throws \Doctrine\ORM\TransactionRequiredException
+     *
+     * @return TrackEExercises|null
+     */
+    public static function recalculateResult($exeId, $userId, $exerciseId, $courseId = 0)
+    {
+        if (empty($userId) || empty($exerciseId)) {
+            return null;
+        }
+
+        $em = Database::getManager();
+        /** @var TrackEExercises $trackedExercise */
+        $trackedExercise = $em->getRepository('ChamiloCoreBundle:TrackEExercises')->find($exeId);
+
+        if (empty($trackedExercise)) {
+            return null;
+        }
+
+        if ($trackedExercise->getExeUserId() != $userId ||
+            $trackedExercise->getExeExoId() != $exerciseId
+        ) {
+            return null;
+        }
+
+        $questionList = $trackedExercise->getDataTracking();
+
+        if (empty($questionList)) {
+            return null;
+        }
+
+        $questionList = explode(',', $questionList);
+
+        $exercise = new Exercise($courseId);
+        $courseInfo = $courseId ? api_get_course_info_by_id($courseId) : [];
+
+        if ($exercise->read($exerciseId) === false) {
+            return null;
+        }
+
+        $totalScore = 0;
+        $totalWeight = 0;
+
+        $pluginEvaluation = QuestionOptionsEvaluationPlugin::create();
+
+        $formula = 'true' === $pluginEvaluation->get(QuestionOptionsEvaluationPlugin::SETTING_ENABLE)
+            ? $pluginEvaluation->getFormulaForExercise($exerciseId)
+            : 0;
+
+        if (empty($formula)) {
+            foreach ($questionList as $questionId) {
+                $question = Question::read($questionId, $courseInfo);
+
+                if (false === $question) {
+                    continue;
+                }
+
+                $totalWeight += $question->selectWeighting();
+
+                // We're inside *one* question. Go through each possible answer for this question
+                $result = $exercise->manage_answer(
+                    $exeId,
+                    $questionId,
+                    [],
+                    'exercise_result',
+                    [],
+                    false,
+                    true,
+                    false,
+                    $exercise->selectPropagateNeg(),
+                    [],
+                    [],
+                    true
+                );
+
+                //  Adding the new score.
+                $totalScore += $result['score'];
+            }
+        } else {
+            $totalScore = $pluginEvaluation->getResultWithFormula($exeId, $formula);
+            $totalWeight = $pluginEvaluation->getMaxScore();
+        }
+
+        $trackedExercise
+            ->setExeResult($totalScore)
+            ->setExeWeighting($totalWeight);
+
+        $em->persist($trackedExercise);
+        $em->flush();
+
+        return $trackedExercise;
     }
 }

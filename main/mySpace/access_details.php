@@ -100,7 +100,6 @@ function loadGraph() {
             if (!db.is_empty) {
                 // Display confirmation message to the user
                 $('#messages').html(db.result).stop().css('opacity', 1).fadeIn(30);
-                console.log(url);
 
                 var exportLink = $('<a></a>').
                     attr(\"href\", url+'&export=excel')
@@ -138,6 +137,9 @@ $interbreadcrumb[] = ['url' => '#', 'name' => get_lang('AccessDetails')];
 
 Display::display_header('');
 $userInfo = api_get_user_info($user_id);
+$result_to_print = '';
+$sql_result = MySpace::get_connections_to_course($user_id, $courseInfo);
+$result_to_print = convert_to_string($sql_result);
 
 echo Display::page_header(get_lang('DetailsStudentInCourse'));
 echo Display::page_subheader(

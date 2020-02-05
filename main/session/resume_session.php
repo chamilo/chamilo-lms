@@ -1,4 +1,5 @@
 <?php
+
 /* For licensing terms, see /license.txt */
 
 use Chamilo\CoreBundle\Entity\Course;
@@ -10,9 +11,8 @@ use Chamilo\CoreBundle\Entity\SessionRelCourseRelUser;
 
 /**
  * @author  Bart Mollet, Julio Montoya lot of fixes
- *
- * @package chamilo.admin
  */
+
 $cidReset = true;
 require_once __DIR__.'/../inc/global.inc.php';
 
@@ -26,7 +26,6 @@ if (empty($sessionId)) {
 }
 
 SessionManager::protectSession($sessionId);
-
 $codePath = api_get_path(WEB_CODE_PATH);
 
 $tool_name = get_lang('SessionOverview');

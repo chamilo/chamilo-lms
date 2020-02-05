@@ -1,10 +1,9 @@
 <?php
+
 /* For licensing terms, see /license.txt */
 
 /**
  * Sessions edition script.
- *
- * @package chamilo.admin
  */
 $cidReset = true;
 require_once __DIR__.'/../inc/global.inc.php';
@@ -81,6 +80,8 @@ if (api_is_multiple_url_enabled()) {
 
 $result = Database::query($sql);
 $coaches = Database::store_result($result);
+$thisYear = date('Y');
+
 $coachesOption = [
     '' => '----- '.get_lang('None').' -----',
 ];
@@ -169,6 +170,8 @@ if ($form->validate()) {
         $extraFields['extra_image']['crop_parameters'] = $params['picture_crop_result'];
     }
 
+    $status = isset($params['status']) ? $params['status'] : 0;
+
     $return = SessionManager::edit_session(
         $id,
         $name,
@@ -186,7 +189,8 @@ if ($form->validate()) {
         $duration,
         $extraFields,
         null,
-        $sendSubscriptionNotification
+        $sendSubscriptionNotification,
+        $status
     );
 
     if ($return) {

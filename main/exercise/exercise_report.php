@@ -36,7 +36,6 @@ if ($limitTeacherAccess && !api_is_platform_admin()) {
     api_not_allowed(true);
 }
 
-// including additional libraries
 require_once 'hotpotatoes.lib.php';
 
 $_course = api_get_course_info();
@@ -305,7 +304,7 @@ if (isset($_REQUEST['comments']) &&
                 WHERE c_id = ".$course_id." AND id = ".$lp_item_view_id;
         Database::query($sql);
 
-        if (empty($origin)) {
+        /*if (empty($origin)) {
             header('Location: '.api_get_path(WEB_CODE_PATH).'exercise/exercise_report.php?exerciseId='.$exercise_id.'&'.api_get_cidreq());
             exit;
         }
@@ -321,7 +320,9 @@ if (isset($_REQUEST['comments']) &&
                 ).'&session_id='.$session_id
             );
             exit;
-        }
+        }*/
+        header('Location: '.api_get_path(WEB_CODE_PATH).'exercise/exercise_show.php?id='.$id.'&student='.$student_id.'&'.api_get_cidreq());
+        exit;
     }
 }
 
@@ -724,7 +725,6 @@ $gridJs = Display::grid_js(
         for (var i in data) {
             colNames[ii++] = i;
         }
-        // capture col names
         var html = "";
         for (i = 0; i < mya.length; i++) {
             data = $("#results").getRowData(mya[i]); // get each row

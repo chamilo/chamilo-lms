@@ -437,7 +437,7 @@ if ($nbStudents > 0) {
         'since',
         Display::returnFontAwesomeIcon('warning').get_lang('RemindInactivesLearnersSince'),
         $options,
-        ['disable_js' => true]
+        ['disable_js' => true, 'class' => 'col-sm-3']
     );
     $el->setSelected(7);
 

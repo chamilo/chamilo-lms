@@ -1,9 +1,7 @@
 <?php
+
 /* For licensing terms, see /license.txt */
 
-/**
- * @package chamilo.admin
- */
 $cidReset = true;
 
 require_once __DIR__.'/../inc/global.inc.php';
@@ -386,6 +384,7 @@ if ($form->validate()) {
     $showDescription = isset($params['show_description']) ? 1 : 0;
     $sendSubscriptionNotification = isset($params['send_subscription_notification']);
     $isThisImageCropped = isset($params['picture_crop_result']);
+    $status = isset($params['status']) ? $params['status'] : 0;
 
     $extraFields = [];
     foreach ($params as $key => $value) {
@@ -438,7 +437,9 @@ if ($form->validate()) {
         $showDescription,
         $extraFields,
         null,
-        $sendSubscriptionNotification
+        $sendSubscriptionNotification,
+        api_get_current_access_url_id(),
+        $status
     );
 
     if ($return == strval(intval($return))) {

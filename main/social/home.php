@@ -1,11 +1,10 @@
 <?php
+
 /* For licensing terms, see /license.txt */
 
 use ChamiloSession as Session;
 
 /**
- * @package chamilo.social
- *
  * @author Julio Montoya <gugli100@gmail.com>
  * @autor Alex Aragon <alex.aragon@beeznest.com> CSS Design and Template
  */

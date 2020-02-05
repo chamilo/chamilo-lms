@@ -21,11 +21,14 @@ use Monolog\Logger;
  * All main sessions functions should be placed here.
  * This class provides methods for sessions management.
  * Include/require it in your code to use its features.
- *
- * @package chamilo.library
  */
 class SessionManager
 {
+    const STATUS_PLANNED = 1;
+    const STATUS_PROGRESS = 2;
+    const STATUS_FINISHED = 3;
+    const STATUS_CANCELLED = 4;
+
     public static $_debug = false;
 
     /**
@@ -92,6 +95,15 @@ class SessionManager
             'send_subscription_notification' => $session->getSendSubscriptionNotification(),
         ];
 
+        if (api_get_configuration_value('allow_session_status')) {
+            $table = Database::get_main_table(TABLE_MAIN_SESSION);
+            $sql = "SELECT status FROM $table WHERE id = $id";
+            $resultQuery = Database::query($sql);
+            $row = Database::fetch_array($resultQuery);
+            $result['status'] = $row['status'];
+            $result['status_label'] = self::getStatusLabel($row['status']);
+        }
+
         // Converted to local values
         $variables = [
             'display_start_date',
@@ -136,7 +148,8 @@ class SessionManager
      * @param int      $sessionAdminId               Optional. If this sessions was created by a session admin, assign it to him
      * @param bool     $sendSubscriptionNotification Optional.
      *                                               Whether send a mail notification to users being subscribed
-     * @param int|null $accessUrlId                  Optional.
+     * @param int      $accessUrlId                  Optional.
+     * @param int      $status
      *
      * @return mixed Session ID on success, error message otherwise
      *
@@ -160,7 +173,8 @@ class SessionManager
         $extraFields = [],
         $sessionAdminId = 0,
         $sendSubscriptionNotification = false,
-        $accessUrlId = null
+        $accessUrlId = 0,
+        $status = 0
     ) {
         global $_configuration;
 
@@ -268,6 +282,10 @@ class SessionManager
 
                 if (!empty($sessionCategoryId)) {
                     $values['session_category_id'] = $sessionCategoryId;
+                }
+
+                if (api_get_configuration_value('allow_session_status')) {
+                    $values['status'] = $status;
                 }
 
                 $session_id = Database::insert($tbl_session, $values);
@@ -1526,8 +1544,8 @@ class SessionManager
      * @param int    $duration
      * @param array  $extraFields
      * @param int    $sessionAdminId
-     * @param bool   $sendSubscriptionNotification Optional.
-     *                                             Whether send a mail notification to users being subscribed
+     * @param bool   $sendSubscriptionNotification Optional. Whether send a mail notification to users being subscribed
+     * @param int    $status
      *
      * @return mixed
      */
@@ -1548,8 +1566,10 @@ class SessionManager
         $duration = null,
         $extraFields = [],
         $sessionAdminId = 0,
-        $sendSubscriptionNotification = false
+        $sendSubscriptionNotification = false,
+        $status = 0
     ) {
+        $status = (int) $status;
         $coachId = (int) $coachId;
         $sessionCategoryId = (int) $sessionCategoryId;
         $visibility = (int) $visibility;
@@ -1651,10 +1671,13 @@ class SessionManager
                     $values['coach_access_end_date'] = api_get_utc_datetime($coachEndDate);
                 }
 
+                $values['session_category_id'] = null;
                 if (!empty($sessionCategoryId)) {
                     $values['session_category_id'] = $sessionCategoryId;
-                } else {
-                    $values['session_category_id'] = null;
+                }
+
+                if (api_get_configuration_value('allow_session_status')) {
+                    $values['status'] = $status;
                 }
 
                 Database::update(
@@ -7836,6 +7859,18 @@ class SessionManager
             ]
         );
 
+        if (api_get_configuration_value('allow_session_status')) {
+            $statusList = self::getStatusList();
+            $form->addSelect(
+                'status',
+                get_lang('SessionStatus'),
+                $statusList,
+                [
+                    'id' => 'status',
+                ]
+            );
+        }
+
         $form->addHtmlEditor(
             'description',
             get_lang('Description'),
@@ -9251,5 +9286,27 @@ class SessionManager
         } else {
             return -1;
         }
+    }
+
+    public static function getStatusList()
+    {
+        return [
+            self::STATUS_PLANNED => get_lang('Planned'),
+            self::STATUS_PROGRESS => get_lang('InProgress'),
+            self::STATUS_FINISHED => get_lang('Finished'),
+            self::STATUS_CANCELLED => get_lang('Cancelled'),
+        ];
+    }
+
+    public static function getStatusLabel($status)
+    {
+        $list = self::getStatusList();
+
+        if (!isset($list[$status])) {
+
+            return get_lang('NoStatus');
+        }
+
+        return $list[$status];
     }
 }

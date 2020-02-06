@@ -33,12 +33,12 @@ class ReplaceFilePaths extends LoadedCourseLookup
             mb_convert_encoding($content, 'HTML-ENTITIES', 'UTF-8')
         );
 
-        /** @var \DOMElement $img */
         foreach ($doc->getElementsByTagName('img') as $img) {
-            $source = $img->getAttribute('src');
-            $newSource = $this->getNewSource($source, $courseInfo['path']);
+            $this->getNewSource('src', $img, $courseInfo['path']);
+        }
 
-            $img->setAttribute('src', $newSource);
+        foreach ($doc->getElementsByTagName('a') as $a) {
+            $this->getNewSource('href', $a, $courseInfo['path']);
         }
 
         $body = $doc->getElementsByTagName('body')->item(0);
@@ -48,18 +48,32 @@ class ReplaceFilePaths extends LoadedCourseLookup
     }
 
     /**
-     * @param string $source
-     * @param string $coursePath
+     * @param string      $attribute
+     * @param \DOMElement $domElement
+     * @param string      $coursePath
      *
      * @return string
      */
-    private function getNewSource($source, $coursePath)
+    private function getNewSource($attribute, \DOMElement $domElement, $coursePath)
     {
-        $fileName = basename($source);
+        $source = $domElement->getAttribute($attribute);
+
+        if (empty($source) || strpos($source, '@@PLUGINFILE@@') === false) {
+            return;
+        }
+
+        $parsedUrl = parse_url($source);
+        $urlPath = $parsedUrl['path'];
+        $urlQuery = isset($parsedUrl['query']) ? $parsedUrl['query'] : '';
+
+        $fileName = basename($urlPath);
         $fileName = urldecode($fileName);
         $fileName = \URLify::filter($fileName, 250, '', true, true, false, false);
 
-        return "/courses/$coursePath/document/$fileName";
+        $newSource = "/courses/$coursePath/document/$fileName"
+            .(!empty($urlQuery) ? "?$urlQuery" : '');
+
+        $domElement->setAttribute($attribute, $newSource);
     }
 
     /**

@@ -15,6 +15,7 @@ $sessionDuration = isset($_GET['session_duration']) ? (int) $_GET['session_durat
 $exportFormat = isset($_REQUEST['export_format']) ? $_REQUEST['export_format'] : 'csv';
 $operation = isset($_REQUEST['oper']) ? $_REQUEST['oper'] : false;
 $order = isset($_REQUEST['sord']) && in_array($_REQUEST['sord'], ['asc', 'desc']) ? $_REQUEST['sord'] : 'asc';
+$table = '';
 
 switch ($action) {
     case 'add_student_to_boss':
@@ -579,11 +580,6 @@ switch ($action) {
         $startDate = Database::escape_string($_REQUEST['date_start']);
         $endDate = Database::escape_string($_REQUEST['date_end']);
         $statusId = (int) $_REQUEST['status'];
-
-        /*$extraConditions = '';
-        if (!empty($startDate) && !empty($endDate)) {
-            $extraConditions .= " AND registration_date BETWEEN '$startDate' AND '$endDate' ";
-        }*/
         $table = Database::get_main_table(TABLE_MAIN_SESSION);
 
         $statusCondition = '';
@@ -611,6 +607,9 @@ switch ($action) {
                     }
                     $all[$label] = $row['count'];
                 }
+
+                $table = Statistics::buildJsChartData($all, '');
+                $table = $table['table'];
                 break;
             case 'status':
                 $sessionStatusAllowed = api_get_configuration_value('allow_session_status');
@@ -633,6 +632,8 @@ switch ($action) {
                     $row['status'] = SessionManager::getStatusLabel($row['status']);
                     $all[$row['status']] = $row['count'];
                 }
+                $table = Statistics::buildJsChartData($all, '');
+                $table = $table['table'];
 
                 break;
             case 'language':
@@ -660,6 +661,8 @@ switch ($action) {
                     }
                     $all[$language] += 1;
                 }
+                $table = Statistics::buildJsChartData($all, '');
+                $table = $table['table'];
                 break;
             case 'course_in_session':
                 $sql = "SELECT id FROM $table
@@ -692,6 +695,8 @@ switch ($action) {
                         $all[$courseInfo['name']] = $count;
                     }
                 }
+                $table = Statistics::buildJsChartData($all, '');
+                $table = $table['table'];
 
                 break;
         }
@@ -710,6 +715,9 @@ switch ($action) {
             $list['datasets'][0]['backgroundColor'][] = $palette[$j];
             $i++;
         }
+
+        $list['table'] = $table;
+
 
         header('Content-type: application/json');
         echo json_encode($list);

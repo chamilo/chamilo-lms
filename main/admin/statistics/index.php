@@ -234,7 +234,6 @@ in_array(
                 $url2 = $urlBase.'a=session_by_date&filter=language'.$conditions;
                 $url3 = $urlBase.'a=session_by_date&filter=status'.$conditions;
                 $url4 = $urlBase.'a=session_by_date&filter=course_in_session'.$conditions;
-                //$url5 = $urlBase.'a=session_by_date&filter=status'.$conditions;
 
                 $reportName1 = get_lang('SessionsPerCategory');
                 $reportName2 = get_lang('SessionsPerLanguage');
@@ -378,6 +377,16 @@ switch ($report) {
             $sessionStatusAllowed = api_get_configuration_value('allow_session_status');
             if ($sessionStatusAllowed) {
                 $content .= '<div class="col-md-4"><canvas id="canvas3" style="margin-bottom: 20px"></canvas></div>';
+            }
+            $content .= '</div>';
+
+            $content .= '<div class="row">';
+            $content .= '<div class="col-md-4"><h4 class="page-header" id="canvas1_title"></h4><div id="canvas1_table"></div></div>';
+            $content .= '<div class="col-md-4"><h4 class="page-header" id="canvas2_title"></h4><div id="canvas2_table"></div></div>';
+
+            $sessionStatusAllowed = api_get_configuration_value('allow_session_status');
+            if ($sessionStatusAllowed) {
+                $content .= '<div class="col-md-4"><h4 class="page-header" id="canvas3_title"></h4><div id="canvas3_table"></div></div>';
             }
             $content .= '</div>';
 
@@ -576,6 +585,10 @@ switch ($report) {
         $content .= '<div class="row">';
         $content .= '<div class="col-md-12"><canvas id="canvas4" style="margin-bottom: 20px"></canvas></div>';
         $content .= '</div>';
+
+        /*$content .= '<div class="row">';
+        $content .= '<div class="col-md-12"><h4 class="page-header" id="canvas4_title"></h4><div id="canvas4_table"></div></div>';
+        $content .= '</div>';*/
         $content .= $tableCourse->toHtml();
 
         if (isset($_REQUEST['action']) && 'export' === $_REQUEST['action']) {

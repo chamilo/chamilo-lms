@@ -1160,6 +1160,9 @@ class Statistics
                         data: data,
                         options: {'.$options.'}
                     });
+                    var title = chart.options.title.text;
+                    $("#'.$elementId.'_title").html(title);
+                    $("#'.$elementId.'_table").html(data.table);
                 }
             });
         });

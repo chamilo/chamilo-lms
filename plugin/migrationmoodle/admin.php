@@ -109,6 +109,8 @@ if (!empty($action) && isAllowedAction($action, $menu)) {
         $task->execute();
     } catch (MigrationMoodleException $exception) {
         $exception->displayAsString();
+    } catch (Exception $exception) {
+        echo $exception->getTraceAsString();
     }
 
     echo '</pre>';

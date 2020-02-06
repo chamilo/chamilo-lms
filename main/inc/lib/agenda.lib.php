@@ -3013,8 +3013,7 @@ class Agenda
             if (api_is_student_boss() || api_is_platform_admin()) {
                 $actionsLeft .= Display::url(
                     Display::return_icon('calendar-user.png', get_lang('MyStudentsSchedule'), [], ICON_SIZE_MEDIUM),
-                    $codePath.'mySpace/calendar_plan.php',
-                    ['class' => 'btn btn-default']
+                    $codePath.'mySpace/calendar_plan.php'
                 );
             }
         }

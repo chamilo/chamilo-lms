@@ -3,6 +3,8 @@
 
 namespace Chamilo\PluginBundle\MigrationMoodle\Extractor;
 
+use Chamilo\PluginBundle\MigrationMoodle\Task\EfcCoursesTask;
+
 /**
  * Class CourseExtractor.
  *

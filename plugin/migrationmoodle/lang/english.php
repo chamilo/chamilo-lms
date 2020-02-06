@@ -43,3 +43,4 @@ $strings['FilesForScormScoesTask'] = 'Files for Scorm items';
 $strings['EfcUserSessionsTask'] = 'Course Sessions for efc* users';
 $strings['CourseIntroductionsTask'] = 'Course introductions';
 $strings['FilesForCourseIntroductionsTask'] = 'Files for course introductions';
+$strings['FilesForCourseSectionsTask'] = 'Files for course sections';

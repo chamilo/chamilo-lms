@@ -32,6 +32,7 @@ $menu = [
         'course_modules_scorm',
     ],
     'course_sections' => [
+        'files_for_course_sections',
         'course_modules_lesson',
         'course_modules_quiz',
         'c_quiz',

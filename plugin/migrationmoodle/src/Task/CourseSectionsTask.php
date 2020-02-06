@@ -3,15 +3,18 @@
 
 namespace Chamilo\PluginBundle\MigrationMoodle\Task;
 
-use Chamilo\PluginBundle\MigrationMoodle\Extractor\CourseSectionsExtractor;
+use Chamilo\PluginBundle\MigrationMoodle\Extractor\CourseExtractor;
 use Chamilo\PluginBundle\MigrationMoodle\Loader\CourseSectionsLoader;
 use Chamilo\PluginBundle\MigrationMoodle\Transformer\BaseTransformer;
 use Chamilo\PluginBundle\MigrationMoodle\Transformer\Property\LoadedCourseCodeLookup;
+use Chamilo\PluginBundle\MigrationMoodle\Transformer\Property\ReplaceFilePaths;
+use Chamilo\PluginBundle\MigrationMoodle\Transformer\Property\WrapHtmlReplacingFilePaths;
 
 /**
  * Class CourseSectionsTask.
  *
  * Task to convert Moodle course sections in a Chamilo learning paths.
+ * The section summary will be the first item in the learning path.
  *
  * @package Chamilo\PluginBundle\MigrationMoodle\Task
  */
@@ -23,10 +26,18 @@ class CourseSectionsTask extends BaseTask
     public function getExtractConfiguration()
     {
         return [
-            'class' => CourseSectionsExtractor::class,
+            'class' => CourseExtractor::class,
             'query' => "SELECT id, course, name, summary
                 FROM mdl_course_sections
                 WHERE section > 0 AND (name != '' OR name IS NOT NULL)
+                    AND course NOT IN (
+                        SELECT sco.course
+                        FROM mdl_scorm sco
+                        INNER JOIN mdl_course_modules cm ON (sco.course = cm.course AND cm.instance = sco.id)
+                        INNER JOIN mdl_modules m ON cm.module = m.id
+                        INNER JOIN mdl_course_sections cs ON (cm.course = cs.course AND cm.section = cs.id )
+                        WHERE m.name = 'scorm'
+                    )
                 ORDER BY course, section",
         ];
     }
@@ -39,12 +50,15 @@ class CourseSectionsTask extends BaseTask
         return [
             'class' => BaseTransformer::class,
             'map' => [
-                'c_id' => [
+                'course_code' => [
                     'class' => LoadedCourseCodeLookup::class,
                     'properties' => ['course'],
                 ],
                 'name' => 'name',
-                'description' => 'summary',
+                'description' => [
+                    'class' => WrapHtmlReplacingFilePaths::class,
+                    'properties' => ['summary', 'course'],
+                ],
             ],
         ];
     }

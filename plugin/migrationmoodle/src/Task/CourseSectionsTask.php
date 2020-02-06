@@ -3,7 +3,7 @@
 
 namespace Chamilo\PluginBundle\MigrationMoodle\Task;
 
-use Chamilo\PluginBundle\MigrationMoodle\Extractor\CourseExtractor;
+use Chamilo\PluginBundle\MigrationMoodle\Extractor\CourseSectionsExtractor;
 use Chamilo\PluginBundle\MigrationMoodle\Loader\CourseSectionsLoader;
 use Chamilo\PluginBundle\MigrationMoodle\Transformer\BaseTransformer;
 use Chamilo\PluginBundle\MigrationMoodle\Transformer\Property\LoadedCourseCodeLookup;
@@ -23,8 +23,11 @@ class CourseSectionsTask extends BaseTask
     public function getExtractConfiguration()
     {
         return [
-            'class' => CourseExtractor::class,
-            'query' => "SELECT id, course, summary FROM mdl_course_sections WHERE section > 0 AND (name != '' OR name IS NOT NULL)",
+            'class' => CourseSectionsExtractor::class,
+            'query' => "SELECT id, course, name, summary
+                FROM mdl_course_sections
+                WHERE section > 0 AND (name != '' OR name IS NOT NULL)
+                ORDER BY course, section",
         ];
     }
 
@@ -40,6 +43,7 @@ class CourseSectionsTask extends BaseTask
                     'class' => LoadedCourseCodeLookup::class,
                     'properties' => ['course'],
                 ],
+                'name' => 'name',
                 'description' => 'summary',
             ],
         ];

@@ -3,13 +3,12 @@
 
 namespace Chamilo\PluginBundle\MigrationMoodle\Task;
 
-use Chamilo\PluginBundle\MigrationMoodle\Exceptions\Exception;
-use Chamilo\PluginBundle\MigrationMoodle\Exceptions\ExtractException;
-use Chamilo\PluginBundle\MigrationMoodle\Exceptions\LoadException;
-use Chamilo\PluginBundle\MigrationMoodle\Exceptions\TransformException;
 use Chamilo\PluginBundle\MigrationMoodle\Interfaces\ExtractorInterface;
 use Chamilo\PluginBundle\MigrationMoodle\Interfaces\LoaderInterface;
 use Chamilo\PluginBundle\MigrationMoodle\Interfaces\TransformerInterface;
+use Chamilo\PluginBundle\MigrationMoodle\Messages\ExtractMessage;
+use Chamilo\PluginBundle\MigrationMoodle\Messages\LoadMessage;
+use Chamilo\PluginBundle\MigrationMoodle\Messages\TransformMessage;
 use Chamilo\PluginBundle\MigrationMoodle\Traits\MapTrait\MapTrait;
 
 /**
@@ -67,27 +66,33 @@ abstract class BaseTask
      */
     abstract public function getLoadConfiguration();
 
-    /**
-     * @throws Exception
-     */
     public function execute()
     {
         foreach ($this->extractFiltered() as $extractedData) {
             try {
                 $incomingData = $this->transformer->transform($extractedData);
             } catch (\Exception $exception) {
-                throw new TransformException($extractedData, $exception);
+                new TransformMessage($extractedData, $exception);
+
+                continue;
             }
 
             try {
                 $loadedId = $this->loader->load($incomingData);
             } catch (\Exception $exception) {
-                throw new LoadException($incomingData, $exception);
+                new LoadMessage($incomingData, $exception);
+
+                continue;
             }
 
-            $hash = $this->saveMapLog($extractedData['id'], $loadedId);
+            try {
+                $hash = $this->saveMapLog($extractedData['id'], $loadedId);
 
-            echo "Data migrated. $hash".PHP_EOL;
+                echo "Data migrated. $hash".PHP_EOL;
+            } catch (\Exception $exception) {
+                echo "Data migrated, but... \n";
+                echo "\n".$exception->getTraceAsString();
+            }
         }
     }
 
@@ -111,8 +116,6 @@ abstract class BaseTask
     }
 
     /**
-     * @throws ExtractException
-     *
      * @return \Generator
      */
     private function extractFiltered()
@@ -126,7 +129,7 @@ abstract class BaseTask
                 yield $extractedData;
             }
         } catch (\Exception $exception) {
-            throw new ExtractException($exception);
+            new ExtractMessage($exception);
         }
     }
 

@@ -1,16 +1,16 @@
 <?php
 /* For licensing terms, see /license.txt */
 
-namespace Chamilo\PluginBundle\MigrationMoodle\Exceptions;
+namespace Chamilo\PluginBundle\MigrationMoodle\Messages;
 
 use Throwable;
 
 /**
- * Class TransformException.
+ * Class TransformMessage.
  *
- * @package Chamilo\PluginBundle\MigrationMoodle\Exceptions
+ * @package Chamilo\PluginBundle\MigrationMoodle\Messages
  */
-class TransformException extends Exception
+class TransformMessage extends Message
 {
     /**
      * @var array
@@ -18,7 +18,7 @@ class TransformException extends Exception
     private $extractedData;
 
     /**
-     * TransformException constructor.
+     * TransformMessage constructor.
      *
      * @param array          $extractedData
      * @param Throwable|null $previous
@@ -28,7 +28,7 @@ class TransformException extends Exception
         $message = 'Error while transforming extracted data.';
         $this->extractedData = $extractedData;
 
-        parent::__construct($message, 0, $previous);
+        parent::__construct($message, $previous);
     }
 
     public function displayAsString()

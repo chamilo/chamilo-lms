@@ -1,28 +1,34 @@
 <?php
 /* For licensing terms, see /license.txt */
 
-namespace Chamilo\PluginBundle\MigrationMoodle\Exceptions;
+namespace Chamilo\PluginBundle\MigrationMoodle\Messages;
 
 use Throwable;
 
 /**
- * Class LoadException.
+ * Class LoadMessage.
  *
- * @package Chamilo\PluginBundle\MigrationMoodle\Exceptions
+ * @package Chamilo\PluginBundle\MigrationMoodle\Messages
  */
-class LoadException extends Exception
+class LoadMessage extends Message
 {
     /**
      * @var array
      */
     private $incomingData;
 
+    /**
+     * LoadMessage constructor.
+     *
+     * @param                $incomingData
+     * @param Throwable|null $previous
+     */
     public function __construct($incomingData, Throwable $previous = null)
     {
         $message = 'Error while loading transformed data.';
         $this->incomingData = $incomingData;
 
-        parent::__construct($message, 0, $previous);
+        parent::__construct($message, $previous);
     }
 
     public function displayAsString()

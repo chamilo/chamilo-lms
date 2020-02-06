@@ -1,19 +1,19 @@
 <?php
 /* For licensing terms, see /license.txt */
 
-namespace Chamilo\PluginBundle\MigrationMoodle\Exceptions;
+namespace Chamilo\PluginBundle\MigrationMoodle\Messages;
 
 use Throwable;
 
 /**
  * Class ExtractException.
  *
- * @package Chamilo\PluginBundle\MigrationMoodle\Exceptions
+ * @package Chamilo\PluginBundle\MigrationMoodle\Messages
  */
-class ExtractException extends Exception
+class ExtractMessage extends Message
 {
     /**
-     * ExtractException constructor.
+     * ExtractMessage constructor.
      *
      * @param Throwable|null $previous
      */
@@ -21,6 +21,6 @@ class ExtractException extends Exception
     {
         $message = 'Error while extracting data.';
 
-        parent::__construct($message, 0, $previous);
+        parent::__construct($message, $previous);
     }
 }

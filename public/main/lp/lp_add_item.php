@@ -296,7 +296,7 @@ if (isset($new_item_id) && is_numeric($new_item_id)) {
             echo $learnPath->display_thread_form('add', 0, $_GET['thread_id']);
             break;
         case TOOL_LINK:
-            echo $learnPath->display_link_form('add', 0, $_GET['file']);
+            echo $learnPath->display_link_form('add');
             break;
         case TOOL_STUDENTPUBLICATION:
             $extra = isset($_GET['file']) ? $_GET['file'] : null;

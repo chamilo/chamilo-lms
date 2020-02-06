@@ -359,6 +359,17 @@ class HTML_QuickForm extends HTML_Common
         }
     }
 
+    public function setDefault($elementName, $defaultValue)
+    {
+        if (!$this->elementExists($elementName)) {
+            throw new \Exception('Element does not exists');
+        }
+
+        $element = $this->getElement($elementName);
+        $this->_defaultValues[$elementName] = $defaultValue;
+        $element->onQuickFormEvent('updateValue', null, $this);
+    }
+
     /**
      * Initializes constant form values.
      * These values won't get overridden by POST or GET vars
@@ -809,7 +820,7 @@ class HTML_QuickForm extends HTML_Common
                 }
                 $fileValue = eval($code . "    return \$v;\n}\n");
                 if (null !== $fileValue) {
-                    $value = null === $value? $fileValue: HTML_QuickForm::arrayMerge($value, $fileValue);
+                    $value = null === $value? $fileValue: self::arrayMerge($value, $fileValue);
                 }
             }
         }
@@ -1250,7 +1261,7 @@ class HTML_QuickForm extends HTML_Common
                     if (!isset($a[$k])) {
                         $a[$k] = array();
                     }
-                    $a[$k] = HTML_QuickForm::arrayMerge($a[$k], $v);
+                    $a[$k] = self::arrayMerge($a[$k], $v);
                 }
             } else {
                 $a[$k] = $v;
@@ -1552,7 +1563,7 @@ class HTML_QuickForm extends HTML_Common
         if (!is_callable($callback)) {
             throw new \Exception("Callback function does not exist in QuickForm::process()");
         }
-        $values = ($mergeFiles === true) ? HTML_QuickForm::arrayMerge($this->_submitValues, $this->_submitFiles) : $this->_submitValues;
+        $values = ($mergeFiles === true) ? self::arrayMerge($this->_submitValues, $this->_submitFiles) : $this->_submitValues;
 
         return call_user_func($callback, $values);
     }
@@ -1719,7 +1730,7 @@ class HTML_QuickForm extends HTML_Common
      */
     public function getSubmitValues($mergeFiles = false)
     {
-        return $mergeFiles ? HTML_QuickForm::arrayMerge($this->_submitValues, $this->_submitFiles): $this->_submitValues;
+        return $mergeFiles ? self::arrayMerge($this->_submitValues, $this->_submitFiles): $this->_submitValues;
     }
 
     /**
@@ -1795,7 +1806,7 @@ class HTML_QuickForm extends HTML_Common
                 $value = $this->_elements[$key]->exportValue($this->_submitValues, true);
                 if (is_array($value)) {
                     // This shit throws a bogus warning in PHP 4.3.x
-                    $values = HTML_QuickForm::arrayMerge($values, $value);
+                    $values = self::arrayMerge($values, $value);
                 }
             }
         } else {
@@ -1870,7 +1881,7 @@ class HTML_QuickForm extends HTML_Common
         }
 
         // If this is an error object, then grab the corresponding error code
-        if (HTML_QuickForm::isError($value)) {
+        if (self::isError($value)) {
             $value = $value->getCode();
         }
 
@@ -1923,7 +1934,7 @@ class HTML_QuickForm_Error extends PEAR_Error
         $debuginfo = null
     ) {
         if (is_int($code)) {
-            parent::__construct(HTML_QuickForm::errorMessage($code), $code, $mode, $level, $debuginfo);
+            parent::__construct(self::errorMessage($code), $code, $mode, $level, $debuginfo);
         } else {
             parent::__construct("Invalid error code: $code", QUICKFORM_ERROR, $mode, $level, $debuginfo);
         }

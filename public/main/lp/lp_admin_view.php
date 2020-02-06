@@ -80,7 +80,7 @@ if (isset($_POST['save_audio'])) {
         }
     }
     if (count($lp_items_to_remove_audio) > 0) {
-        $sql = "UPDATE $tbl_lp_item SET audio = '' 
+        $sql = "UPDATE $tbl_lp_item SET audio = ''
                 WHERE iid IN (".$in.")";
         Database::query($sql);
     }
@@ -139,7 +139,7 @@ if (isset($_POST['save_audio'])) {
             $file = $file_components[count($file_components) - 1];
 
             // Store the mp3 file in the lp_item table.
-            $sql = "UPDATE $tbl_lp_item 
+            $sql = "UPDATE $tbl_lp_item
                     SET audio = '".Database::escape_string($file)."'
                     WHERE iid = ".(int) $lp_item_id;
             Database::query($sql);
@@ -275,7 +275,7 @@ switch ($_GET['action']) {
                 'confirm'
             );
         } else {
-            echo $learnPath->display_edit_item($_GET['id']);
+            echo $learnPath->display_edit_item($lpItem);
         }
         break;
     case 'delete_item':

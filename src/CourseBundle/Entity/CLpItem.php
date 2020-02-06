@@ -203,12 +203,10 @@ class CLpItem
      */
     public function __construct()
     {
+        $this->iid = 0;
         $this->maxScore = 100.0;
     }
 
-    /**
-     * @return int
-     */
     public function getIid(): int
     {
         return $this->iid;

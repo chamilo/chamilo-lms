@@ -103,10 +103,6 @@ class learnpathItem
         if (!isset($user_id)) {
             $user_id = api_get_user_id();
         }
-        if (self::DEBUG > 0) {
-            error_log("learnpathItem constructor: id: $id user_id: $user_id course_id: $course_id");
-            error_log("item_content: ".print_r($item_content, 1));
-        }
         $id = (int) $id;
         if (empty($item_content)) {
             if (empty($course_id)) {
@@ -195,13 +191,7 @@ class learnpathItem
             }
         }
         $this->seriousgame_mode = 0;
-        $this->audio = $row['audio'];
-        if (self::DEBUG > 0) {
-            error_log(
-                'New LP - End of learnpathItem constructor for item '.$id,
-                0
-            );
-        }
+        //$this->audio = $row['audio'];
     }
 
     /**
@@ -261,9 +251,6 @@ class learnpathItem
      */
     public function close()
     {
-        if (self::DEBUG > 0) {
-            error_log('learnpathItem::close()', 0);
-        }
         $this->current_stop_time = time();
         $type = $this->get_type();
         if ('sco' != $type) {
@@ -290,9 +277,6 @@ class learnpathItem
      */
     public function delete()
     {
-        if (self::DEBUG > 0) {
-            error_log('learnpath_item::delete() for item '.$this->db_id, 0);
-        }
         $lp_item_view = Database::get_course_table(TABLE_LP_ITEM_VIEW);
         $lp_item = Database::get_course_table(TABLE_LP_ITEM);
         $course_id = api_get_course_int_id();
@@ -464,9 +448,6 @@ class learnpathItem
     public function get_file_path($path_to_scorm_dir = '')
     {
         $course_id = api_get_course_int_id();
-        if (self::DEBUG > 0) {
-            error_log('learnpathItem::get_file_path()', 0);
-        }
         $path = $this->get_path();
         $type = $this->get_type();
 
@@ -1853,26 +1834,11 @@ class learnpathItem
         ];
 
         if ($this->status_is($completedStatusList)) {
-            if (self::DEBUG > 2) {
-                error_log(
-                    'learnpath::is_done() - Item '.$this->get_id(
-                    ).' is complete',
-                    0
-                );
-            }
 
             return true;
-        } else {
-            if (self::DEBUG > 2) {
-                error_log(
-                    'learnpath::is_done() - Item '.$this->get_id(
-                    ).' is not complete',
-                    0
-                );
-            }
-
-            return false;
         }
+
+        return false;
     }
 
     /**
@@ -1899,12 +1865,6 @@ class learnpathItem
                 $restart = -1;
             }
         }
-        if (self::DEBUG > 2) {
-            error_log(
-                'New LP - End of learnpathItem::isRestartAllowed() - Returning '.$restart,
-                0
-            );
-        }
 
         return $restart;
     }
@@ -1918,9 +1878,6 @@ class learnpathItem
      */
     public function open($allow_new_attempt = false)
     {
-        if (self::DEBUG > 0) {
-            error_log('learnpathItem::open()', 0);
-        }
         if (0 == $this->prevent_reinit) {
             $this->current_score = 0;
             $this->current_start_time = time();

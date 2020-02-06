@@ -3,7 +3,7 @@
 
 namespace Chamilo\PluginBundle\MigrationMoodle\Task;
 
-use Chamilo\PluginBundle\MigrationMoodle\Extractor\BaseExtractor;
+use Chamilo\PluginBundle\MigrationMoodle\Extractor\CourseExtractor;
 
 /**
  * Class FilesForLessonAnswersTask.
@@ -20,7 +20,7 @@ class FilesForLessonAnswersTask extends CourseFilesTask
     public function getExtractConfiguration()
     {
         return [
-            'class' => BaseExtractor::class,
+            'class' => CourseExtractor::class,
             'query' => "SELECT
                     f.id,
                     f.contenthash,

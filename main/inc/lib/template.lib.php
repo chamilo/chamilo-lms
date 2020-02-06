@@ -963,6 +963,7 @@ class Template
      */
     public function display($template, $clearFlashMessages = true)
     {
+        $this->assign('page_origin', api_get_origin());
         $this->assign('flash_messages', Display::getFlashToString());
 
         if ($clearFlashMessages) {

@@ -64,6 +64,14 @@ body {
     margin-bottom: 60px;
 }
 
+body.page_origin_embeddable {
+    padding-top: 10px;
+}
+body.page_origin_embeddable #cm-content > .container {
+    margin-bottom: 0px;
+    padding-bottom: 0px;
+}
+
 .footer > .container {
     padding-right: 15px;
     padding-left: 15px;

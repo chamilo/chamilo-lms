@@ -151,7 +151,7 @@ class LearnPathItemForm
         }
 
         // Content
-        if (in_array($itemType, [TOOL_DOCUMENT, TOOL_LP_FINAL_ITEM], true)) {
+        if (in_array($itemType, [TOOL_DOCUMENT, TOOL_LP_FINAL_ITEM, TOOL_READOUT_TEXT], true)) {
             $repo = Container::getDocumentRepository();
             /** @var CDocument $document */
             $document = $repo->find($lpItem->getPath());
@@ -166,14 +166,6 @@ class LearnPathItemForm
                     //'CreateDocumentWebDir' => api_get_path(WEB_COURSE_PATH).api_get_course_path().'/document/',
                     //'BaseHref' => api_get_path(WEB_COURSE_PATH).api_get_course_path().'/document/'.$relative_path,
                 ];
-
-                if ('add_item' === $action) {
-                    $text = get_lang('Add this document to the course');
-                }
-
-                if ('edit_item' === $action) {
-                    $text = get_lang('Save document');
-                }
 
                 $form->addButtonSave(get_lang('Save'), 'submit_button');
 

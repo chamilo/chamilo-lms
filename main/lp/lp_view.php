@@ -124,7 +124,7 @@ $htmlHeadXtra[] = api_get_css_asset('qtip2/jquery.qtip.min.css');
 $htmlHeadXtra[] = api_get_asset('qtip2/jquery.qtip.min.js');
 $htmlHeadXtra[] = '<script type="text/javascript" src="'.api_get_path(WEB_LIBRARY_PATH).'javascript/jquery.frameready.js"></script>';
 $htmlHeadXtra[] = '<script>
-$(function() {   
+$(function() {
     $("div#log_content_cleaner").bind("click", function() {
         $("div#log_content").empty();
     });
@@ -135,34 +135,34 @@ var chamilo_xajax_handler = window.oxajax;
 $allowLpItemTip = api_get_configuration_value('hide_accessibility_label_on_lp_item') === false;
 if ($allowLpItemTip) {
     $htmlHeadXtra[] = '<script>
-    $(function() {   
+    $(function() {
          $(".scorm_item_normal").qtip({
             content: {
                 text: function(event, api) {
-                    var item = $(this);                 
+                    var item = $(this);
                     var itemId = $(this).attr("id");
                     itemId = itemId.replace("toc_", "");
                     var textToShow = "";
                     $.ajax({
                         type: "GET",
-                        url: "'.$ajaxUrl.'&item_id="+ itemId,            
-                        async: false                 
+                        url: "'.$ajaxUrl.'&item_id="+ itemId,
+                        async: false
                     })
-                    .then(function(content) {                    
+                    .then(function(content) {
                         if (content == 1) {
                             textToShow = "'.addslashes(get_lang('LPItemCanBeAccessed')).'";
-                            api.set("style.classes", "qtip-green qtip-shadow");                        
+                            api.set("style.classes", "qtip-green qtip-shadow");
                         } else {
-                            textToShow = content;                        
+                            textToShow = content;
                             api.set("style.classes", "qtip-red qtip-shadow");
                         }
-                        
+
                         return textToShow;
                     });
-                    return textToShow;                
+                    return textToShow;
                 }
             }
-        }); 
+        });
     });
     </script>';
 }
@@ -548,11 +548,14 @@ $template->assign('show_left_column', $lp->getHideTableOfContents() == 0);
 $showMenu = 0;
 $settings = api_get_configuration_value('lp_view_settings');
 $display = isset($settings['display']) ? $settings['display'] : false;
+$navigationInTheMiddle = false;
 if (!empty($display)) {
     $showMenu = isset($display['show_toolbar_by_default']) && $display['show_toolbar_by_default'] ? 1 : 0;
+    $navigationInTheMiddle = isset($display['navigation_in_the_middle']) && $display['navigation_in_the_middle'] ? 1 : 0;
 }
 
 $template->assign('show_toolbar_by_default', $showMenu);
+$template->assign('navigation_in_the_middle', $navigationInTheMiddle);
 
 if ($gamificationMode == 1) {
     $template->assign('gamification_stars', $lp->getCalculateStars($sessionId));

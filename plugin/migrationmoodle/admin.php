@@ -23,7 +23,7 @@ $menu = [
         'course_categories',
         //'courses',
         'efc_courses',
-        'role_assignments',
+        //'role_assignments',
         'efc_user_sessions',
     ],
     'efc_courses' => [
@@ -36,7 +36,7 @@ $menu = [
         'course_modules_lesson',
         'course_modules_quiz',
         'course_modules_url',
-        'c_quiz',
+        //'c_quiz',
     ],
     'course_modules_lesson' => [
         'lesson_pages',

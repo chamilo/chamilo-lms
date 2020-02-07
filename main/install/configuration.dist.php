@@ -1377,6 +1377,9 @@ ALTER TABLE notification_event ADD COLUMN event_id INT NULL;
 // Catalog search settings visibility
 //$_configuration['catalog_settings'] = ['sessions' => ['by_title' => true, 'by_date' => true, 'by_tag' => true, 'show_session_info' => true, 'show_session_date' => true]];
 
+// Use this link as the "Forgot password?" link instead of the default. This setting should be transformed into a hook for plugins at a later time
+//$_configuration['pass_reminder_custom_link'] = '';
+
 // KEEP THIS AT THE END
 // -------- Custom DB changes
 // Add user activation by confirmation email

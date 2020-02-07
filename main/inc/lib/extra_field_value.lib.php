@@ -410,7 +410,9 @@ class ExtraFieldValue extends Model
             $extraFieldInfo = $extra_field->get_handler_field_info_by_field_variable(
                 $params['variable']
             );
-            $params['field_id'] = $extraFieldInfo['id'];
+            if ($extraFieldInfo) {
+                $params['field_id'] = $extraFieldInfo['id'];
+            }
         }
 
         if ($extraFieldInfo) {

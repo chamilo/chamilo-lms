@@ -123,8 +123,8 @@ class GroupManager
             $select = ' DISTINCT count(g.iid) as count ';
         }
 
-        $sql = "SELECT 
-                $select    
+        $sql = "SELECT
+                $select
                 FROM $table_group g
                 WHERE 1 = 1 ";
 
@@ -622,8 +622,8 @@ class GroupManager
 
         $table = Database::get_course_table(TABLE_GROUP);
         $sql = "SELECT * FROM $table
-                WHERE 
-                  c_id = $course_id AND 
+                WHERE
+                  c_id = $course_id AND
                   name = '$name'
                   $sessionCondition
                 LIMIT 1";
@@ -883,7 +883,7 @@ class GroupManager
                 WHERE
                     gc.c_id = $courseId AND
                     g.c_id = $courseId AND
-                    gc.id = g.category_id AND 
+                    gc.id = g.category_id AND
                     g.iid = $group_id
                 LIMIT 1";
         $res = Database::query($sql);
@@ -1216,8 +1216,8 @@ class GroupManager
                 ON (gu.group_id = g.id and g.c_id = gu.c_id)
                 INNER JOIN $user_table u
                 ON (u.id = gu.user_id)
-                WHERE 
-                    gu.c_id = $courseId AND 
+                WHERE
+                    gu.c_id = $courseId AND
                     g.id = $group_id";
 
         if (!empty($column) && !empty($direction)) {
@@ -1227,8 +1227,8 @@ class GroupManager
         }
 
         if (!empty($start) && !empty($limit)) {
-            $start = intval($start);
-            $limit = intval($limit);
+            $start = (int) $start;
+            $limit = (int) $limit;
             $sql .= " LIMIT $start, $limit";
         }
         $res = Database::query($sql);
@@ -1261,7 +1261,7 @@ class GroupManager
 
         $course_id = api_get_course_int_id();
         $group_id = intval($group_id);
-        $sql = "SELECT user_id 
+        $sql = "SELECT user_id
                 FROM $group_user_table gu
                 INNER JOIN $groupTable g
                 ON (gu.group_id = g.iid and g.c_id = gu.c_id)
@@ -1273,7 +1273,7 @@ class GroupManager
             $users[] = api_get_user_info($obj->user_id);
         }
 
-        $sql = "SELECT user_id 
+        $sql = "SELECT user_id
                 FROM $tutor_user_table gu
                 INNER JOIN $groupTable g
                 ON (gu.group_id = g.id and g.c_id = gu.c_id)
@@ -1300,7 +1300,7 @@ class GroupManager
         $course_id = api_get_course_int_id();
         $group_id = intval($groupInfo['iid']);
 
-        $sql = "SELECT user_id 
+        $sql = "SELECT user_id
                 FROM $tutor_user_table gu
                 INNER JOIN $groupTable g
                 ON (gu.group_id = g.id and g.c_id = gu.c_id)
@@ -1493,7 +1493,7 @@ class GroupManager
         $table = Database::get_course_table(TABLE_GROUP);
         $group_id = intval($group_id);
         $course_id = api_get_course_int_id();
-        $sql = "SELECT max_student FROM $table 
+        $sql = "SELECT max_student FROM $table
                 WHERE c_id = $course_id AND iid = $group_id";
         $db_result = Database::query($sql);
         $db_object = Database::fetch_object($db_result);
@@ -1526,13 +1526,13 @@ class GroupManager
         }
 
         $sql = "SELECT COUNT(*) AS number_of_groups
-                FROM $table_group_user gu 
+                FROM $table_group_user gu
                 INNER JOIN $table_group g
                 ON (g.iid = gu.group_id AND gu.c_id = g.c_id)
                 WHERE
                     gu.c_id = $course_id AND
                     g.c_id = $course_id AND
-                    gu.user_id = $user_id                       
+                    gu.user_id = $user_id
                     $cat_condition";
 
         $result = Database::query($sql);
@@ -1714,14 +1714,14 @@ class GroupManager
 
         $course_id = api_get_course_int_id();
 
-        $sql = "SELECT 
-                    ug.id, 
-                    u.user_id, 
-                    u.lastname, 
-                    u.firstname, 
-                    u.email, 
+        $sql = "SELECT
+                    ug.id,
+                    u.user_id,
+                    u.lastname,
+                    u.firstname,
+                    u.email,
                     u.username
-                FROM $table_user u 
+                FROM $table_user u
                 INNER JOIN $table_group_user ug
                 ON (ug.user_id = u.user_id)
                 WHERE ug.c_id = $course_id AND
@@ -1775,7 +1775,7 @@ class GroupManager
                 WHERE
                     tg.c_id = $course_id AND
                     tg.group_id = $group_id AND
-                    tg.user_id = u.user_id 
+                    tg.user_id = u.user_id
                 $order_clause
                 ";
         $db_result = Database::query($sql);
@@ -1898,8 +1898,8 @@ class GroupManager
 
         $table_group_user = Database::get_course_table(TABLE_GROUP_USER);
         $sql = "DELETE FROM $table_group_user
-                WHERE 
-                    group_id = $groupId AND 
+                WHERE
+                    group_id = $groupId AND
                     c_id = $course_id";
         $result = Database::query($sql);
 
@@ -1968,9 +1968,9 @@ class GroupManager
         $table = Database::get_course_table(TABLE_GROUP_TUTOR);
 
         $sql = "SELECT * FROM $table
-                WHERE 
-                    c_id = $courseId AND 
-                    user_id = $user_id AND 
+                WHERE
+                    c_id = $courseId AND
+                    user_id = $user_id AND
                     group_id = $group_id";
         $result = Database::query($sql);
         if (Database::num_rows($result) > 0) {
@@ -2219,7 +2219,7 @@ class GroupManager
         $user_id = intval($user_id);
         $course_id = api_get_course_int_id();
         $sql = "SELECT name
-                FROM $table_group g 
+                FROM $table_group g
                 INNER JOIN $table_group_user gu
                 ON (gu.group_id = g.iid)
                 WHERE

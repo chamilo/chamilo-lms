@@ -947,12 +947,15 @@ VALUES (2, 13, 'session_courses_read_only_mode', 'Lock Course In Session', 1, 1,
 // $_configuration['show_pending_survey_in_menu'] = false;
 
 // GDPR: European's General Data Protection Rules activation option
-// Set to true to disable the new personal data page inside the social network menu
+// Set to true to disable the new personal data page inside the social network
+// menu
 // $_configuration['disable_gdpr'] = true;
 
-// GDPR requires users to be informed of the Data Protection Officer name and contact point
-// These can only be defined here for now, but will be moved to web settings in the future.
-// Name of the person or organization that is responsible for the treatment of personal info
+// GDPR requires users to be informed of the Data Protection Officer name and 
+// contact point. These can only be defined here for now, but will be moved to 
+// web settings in the future.
+// Name of the person or organization that is responsible for the treatment of
+// personal info
 //$_configuration['data_protection_officer_name'] = '';
 // A description of the role of the DP Officer in this context
 //$_configuration['data_protection_officer_role'] = '';
@@ -975,6 +978,10 @@ VALUES (2, 13, 'session_courses_read_only_mode', 'Lock Course In Session', 1, 1,
         ],
     ],
 ];*/
+
+// Make GDPR terms public (useful when using the platform for anonymous survey
+// invitations where users can leave personal info).
+// $_configuration['gdpr_terms_public'] = false;
 
 // Hide LP item prerequisite label in the LP view
 //$_configuration['hide_accessibility_label_on_lp_item'] = true;

@@ -833,19 +833,6 @@ switch ($action) {
             }
         }
         break;
-    case 'build':
-        if (!$is_allowed_to_edit) {
-            api_not_allowed(true);
-        }
-        if (!$lp_found) {
-            require 'lp_list.php';
-        } else {
-            Session::write('refresh', 1);
-            $url = api_get_self().'?action=add_item&type=step&lp_id='.intval($_SESSION['oLP']->lp_id).'&'.api_get_cidreq();
-            header('Location: '.$url);
-            exit;
-        }
-        break;
     case 'edit_item':
         if (!$is_allowed_to_edit) {
             api_not_allowed(true);

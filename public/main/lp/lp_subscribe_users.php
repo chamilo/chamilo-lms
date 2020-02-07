@@ -36,7 +36,7 @@ $interbreadcrumb[] = [
 ];
 
 $interbreadcrumb[] = [
-    'url' => api_get_self().'?action=build&lp_id='.$oLP->get_id().'&'.api_get_cidreq(),
+    'url' => api_get_self().'?action=add_item&lp_id='.$oLP->get_id().'&'.api_get_cidreq(),
     'name' => $oLP->getNameNoTags(),
 ];
 

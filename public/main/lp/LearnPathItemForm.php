@@ -2,18 +2,23 @@
 
 /* For licensing terms, see /license.txt */
 
+use Chamilo\CoreBundle\Framework\Container;
+use Chamilo\CourseBundle\Entity\CDocument;
 use Chamilo\CourseBundle\Entity\CLpItem;
-use ChamiloSession as Session;
 
+/**
+ * Class LearnPathItemForm
+ */
 class LearnPathItemForm
 {
     public static function setForm(FormValidator $form, $action, learnpath $lp, CLpItem $lpItem)
     {
         $itemId = $lpItem->getIid();
-        $item_title = $lpItem->getTitle();
-        $item_description = $lpItem->getDescription();
-        $parent = $lpItem->getParentItemId();
-        $item_type = $lpItem->getItemType();
+        $itemTitle = $lpItem->getTitle();
+        $itemDescription = $lpItem->getDescription();
+        $parentItemId = $lpItem->getParentItemId();
+        $itemType = $lpItem->getItemType();
+        $previousItemId = $lpItem->getPreviousItemId();
 
         $arrLP = $lp->getItemsForForm();
         $lp->tree_array($arrLP);
@@ -29,9 +34,6 @@ class LearnPathItemForm
 
             case 'edit':
                 $form->addHeader(get_lang('Edit'));
-                /*if (isset($data['id'])) {
-                    $defaults['directory_parent_id'] = $data['id'];
-                }*/
                 self::setItemTitle($form);
 
                 break;
@@ -42,7 +44,6 @@ class LearnPathItemForm
                 break;
         }
 
-        $id = $lpItem->getIid();
         $arrHide = [];
         $count = count($arrLP);
         $sections = [];
@@ -63,6 +64,7 @@ class LearnPathItemForm
             }
         }
 
+        // Parent
         $parentSelect = $form->addSelect(
             'parent',
             get_lang('Parent'),
@@ -76,7 +78,7 @@ class LearnPathItemForm
 
         $arrHide = [];
         for ($i = 0; $i < $count; $i++) {
-            if ($arrLP[$i]['id'] != $id && 'dir' != $arrLP[$i]['item_type']) {
+            if ($arrLP[$i]['id'] != $itemId && 'dir' !== $arrLP[$i]['item_type']) {
                 $arrHide[$arrLP[$i]['id']]['value'] = $arrLP[$i]['title'];
             }
         }
@@ -102,28 +104,22 @@ class LearnPathItemForm
             $sectionCount++;
         }
 
-        if (!empty($itemId)) {
-            $parentSelect->setSelected($parent);
-        } else {
-            $parent_item_id = Session::read('parent_item_id', 0);
-            $parentSelect->setSelected($parent_item_id);
-        }
+        $parentSelect->setSelected($parentItemId);
 
         if (is_array($arrLP)) {
             reset($arrLP);
         }
 
         $arrHide = [];
-        // POSITION
+
+        // Position
         for ($i = 0; $i < $count; $i++) {
-            if (($arrLP[$i]['parent_item_id'] == $parent && $arrLP[$i]['id'] != $itemId) ||
+            if (($arrLP[$i]['parent_item_id'] == $parentItemId && $arrLP[$i]['id'] != $itemId) ||
                 TOOL_LP_FINAL_ITEM == $arrLP[$i]['item_type']
             ) {
                 $arrHide[$arrLP[$i]['id']]['value'] = get_lang('After').' "'.$arrLP[$i]['title'].'"';
             }
         }
-
-        $selectedPosition = $lpItem ? $lpItem->getPreviousItemId() : 0;
 
         $position = $form->addSelect(
             'previous',
@@ -135,7 +131,7 @@ class LearnPathItemForm
         $position->addOption(get_lang('First position'), 0);
 
         foreach ($arrHide as $key => $value) {
-            $padding = isset($value['padding']) ? $value['padding'] : 20;
+            $padding = $value['padding'] ?? 20;
             $position->addOption(
                 $value['value'],
                 $key,
@@ -143,17 +139,72 @@ class LearnPathItemForm
             );
         }
 
-        $position->setSelected($selectedPosition);
+        $position->setSelected($previousItemId);
 
         if (is_array($arrLP)) {
             reset($arrLP);
         }
 
-        $form->setDefault('title', $item_title);
-        $form->setDefault('description', $item_description);
+        if (TOOL_LP_FINAL_ITEM == $itemType) {
+            $parentSelect->freeze();
+            $position->freeze();
+        }
+
+        // Content
+        if (in_array($itemType, [TOOL_DOCUMENT, TOOL_LP_FINAL_ITEM], true)) {
+            $repo = Container::getDocumentRepository();
+            /** @var CDocument $document */
+            $document = $repo->find($lpItem->getPath());
+
+            if ($document) {
+                $editorConfig = [
+                    'ToolbarSet' => 'LearningPathDocuments',
+                    'Width' => '100%',
+                    'Height' => '500',
+                    'FullPage' => true,
+                    //   'CreateDocumentDir' => $relative_prefix,
+                    //'CreateDocumentWebDir' => api_get_path(WEB_COURSE_PATH).api_get_course_path().'/document/',
+                    //'BaseHref' => api_get_path(WEB_COURSE_PATH).api_get_course_path().'/document/'.$relative_path,
+                ];
+
+                if ('add_item' === $action) {
+                    $text = get_lang('Add this document to the course');
+                }
+
+                if ('edit_item' === $action) {
+                    $text = get_lang('Save document');
+                }
+
+                $form->addButtonSave(get_lang('Save'), 'submit_button');
+
+                if ($document->getResourceNode()->hasEditableContent()) {
+                    $form->addHidden('document_id', $document->getIid());
+                    $renderer = $form->defaultRenderer();
+                    $renderer->setElementTemplate('&nbsp;{label}{element}', 'content_lp');
+
+                    $form->addElement('html', '<div class="editor-lp">');
+                    $form->addHtmlEditor('content_lp', null, null, true, $editorConfig, true);
+                    $form->addElement('html', '</div>');
+
+                    $content = $lp->display_document(
+                        $document,
+                        false,
+                        false
+                    );
+                    $form->setDefault('content_lp', $content);
+                }
+            }
+        }
+
+        if ($form->hasElement('title')) {
+            $form->setDefault('title', $itemTitle);
+        }
+        if ($form->hasElement('description')) {
+            $form->setDefault('description', $itemDescription);
+        }
 
         $form->addHidden('id', $itemId);
-        $form->addHidden('type', $item_type);
+        $form->addHidden('type', $itemType);
         $form->addHidden('post_time', time());
         $form->addHidden('path', $lpItem->getPath());
     }

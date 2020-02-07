@@ -3315,7 +3315,7 @@ class learnpath
             if ($this->get_lp_session_id() == api_get_session_id()) {
                 $html .= '<div id="actions_lp" class="actions_lp"><hr>';
                 $html .= '<div class="btn-group">';
-                $html .= "<a class='btn btn-sm btn-default' href='lp_controller.php?".api_get_cidreq()."&action=build&lp_id=".$this->lp_id."&isStudentView=false' target='_parent'>".
+                $html .= "<a class='btn btn-sm btn-default' href='lp_controller.php?".api_get_cidreq()."&action=add_item&lp_id=".$this->lp_id."&isStudentView=false' target='_parent'>".
                     Display::returnFontAwesomeIcon('street-view').get_lang('Overview')."</a>";
                 $html .= "<a class='btn btn-sm btn-default' href='lp_controller.php?".api_get_cidreq()."&action=add_item&type=step&lp_id=".$this->lp_id."&isStudentView=false' target='_parent'>".
                     Display::returnFontAwesomeIcon('pencil').get_lang('Edit')."</a>";
@@ -5899,7 +5899,7 @@ class learnpath
         $default_content = null;
         $elements = [];
         $return_audio = null;
-        $iconPath = api_get_path(SYS_CODE_PATH).'img/';
+        $iconPath = api_get_path(SYS_PUBLIC_PATH).'img/';
         $mainUrl = api_get_path(WEB_CODE_PATH).'lp/lp_controller.php?'.api_get_cidreq();
         $countItems = count($arrLP);
 
@@ -5947,7 +5947,7 @@ class learnpath
                 $title_cut = cut($arrLP[$i]['title'], self::MAX_LP_ITEM_TITLE_LENGTH);
             }
             // Link for the documents
-            if ('document' === $arrLP[$i]['item_type'] || TOOL_READOUT_TEXT == $arrLP[$i]['item_type']) {
+            if ('document' === $arrLP[$i]['item_type'] || TOOL_READOUT_TEXT === $arrLP[$i]['item_type']) {
                 $url = $mainUrl.'&action=view_item&mode=preview_document&id='.$arrLP[$i]['id'].'&lp_id='.$this->lp_id;
                 $title_cut = Display::url(
                     $title_cut,
@@ -5961,7 +5961,7 @@ class learnpath
             }
 
             // Detect if type is FINAL_ITEM to set path_id to SESSION
-            if (TOOL_LP_FINAL_ITEM == $arrLP[$i]['item_type']) {
+            if (TOOL_LP_FINAL_ITEM === $arrLP[$i]['item_type']) {
                 Session::write('pathItem', $arrLP[$i]['path']);
             }
 
@@ -6224,7 +6224,7 @@ class learnpath
                         ['class' => 'btn btn-default']
                     );
                     if ('final_item' != $arrLP[$i]['item_type']) {
-                        $move_item_icon = Display::url(
+                        /*$move_item_icon = Display::url(
                             Display::return_icon(
                                 'move.png',
                                 get_lang('Move'),
@@ -6233,7 +6233,7 @@ class learnpath
                             ),
                             $url.'&action=move_item',
                             ['class' => 'btn btn-default']
-                        );
+                        );*/
                     }
                     $audio_icon = Display::url(
                         Display::return_icon(
@@ -6903,7 +6903,7 @@ class learnpath
         }
 
         if ($show_actions) {
-            $return .= $this->display_manipulate($lpItem);
+            $return .= $this->displayItemMenu($lpItem);
         }
         $return .= '<div style="padding:10px;">';
 
@@ -6992,23 +6992,21 @@ class learnpath
             case 'asset':
             case 'sco':
                 if (isset($_GET['view']) && 'build' === $_GET['view']) {
-                    $return .= $this->display_manipulate($lpItem);
+                    $return .= $this->displayItemMenu($lpItem);
                     $return .= $this->display_item_form(
                         $lpItem,
-                        get_lang('Edit the current section').' :',
                         'edit'
                     );
                 } else {
                     $return .= $this->display_item_form(
                         $lpItem,
-                        get_lang('Edit the current section').' :',
                         'edit_item'
                     );
                 }
                 break;
             case TOOL_DOCUMENT:
             case TOOL_READOUT_TEXT:
-                $return .= $this->display_manipulate($lpItem);
+                $return .= $this->displayItemMenu($lpItem);
                 if (TOOL_DOCUMENT === $itemType) {
                     $return .= $this->display_document_form('edit', $lpItem);
                 }
@@ -7023,7 +7021,7 @@ class learnpath
                     $repo = Container::getLinkRepository();
                     $link = $repo->find($path);
                 }
-                $return .= $this->display_manipulate($lpItem);
+                $return .= $this->displayItemMenu($lpItem);
                 $return .= $this->display_link_form('edit', $lpItem, $link);
                 break;
             case TOOL_LP_FINAL_ITEM:
@@ -7038,7 +7036,7 @@ class learnpath
                             lp.iid = ".$item_id;
                 $res_step = Database::query($sql);
                 $row_step = Database::fetch_array($res_step, 'ASSOC');
-                $return .= $this->display_manipulate($lpItem);
+                $return .= $this->displayItemMenu($lpItem);
                 $return .= $this->display_document_form('edit', $item_id, $row_step);
                 break;
             case TOOL_QUIZ:
@@ -7046,11 +7044,11 @@ class learnpath
                     $repo = Container::getExerciseRepository();
                     $resource = $repo->find($path);
                 }
-                $return .= $this->display_manipulate($lpItem);
+                $return .= $this->displayItemMenu($lpItem);
                 $return .= $this->display_quiz_form('edit', $lpItem, $resource);
                 break;
             case TOOL_HOTPOTATOES:
-                $return .= $this->display_manipulate($lpItem);
+                $return .= $this->displayItemMenu($lpItem);
                 $return .= $this->display_hotpotatoes_form('edit', $item_id, $row);
                 break;
             case TOOL_STUDENTPUBLICATION:
@@ -7058,7 +7056,7 @@ class learnpath
                     $repo = Container::getStudentPublicationRepository();
                     $resource = $repo->find($path);
                 }
-                $return .= $this->display_manipulate($lpItem);
+                $return .= $this->displayItemMenu($lpItem);
                 $return .= $this->display_student_publication_form('edit', $lpItem, $resource);
                 break;
             case TOOL_FORUM:
@@ -7066,7 +7064,7 @@ class learnpath
                     $repo = Container::getForumRepository();
                     $resource = $repo->find($path);
                 }
-                $return .= $this->display_manipulate($lpItem);
+                $return .= $this->displayItemMenu($lpItem);
                 $return .= $this->display_forum_form('edit', $lpItem, $resource);
                 break;
             case TOOL_THREAD:
@@ -7074,7 +7072,7 @@ class learnpath
                     $repo = Container::getForumPostRepository();
                     $resource = $repo->find($path);
                 }
-                $return .= $this->display_manipulate($lpItem);
+                $return .= $this->displayItemMenu($lpItem);
                 $return .= $this->display_thread_form('edit', $lpItem, $resource);
                 break;
         }
@@ -7124,7 +7122,6 @@ class learnpath
         ];
 
         echo Display::return_message(get_lang('Click on the [Learner view] button to see your learning path'), 'normal');
-        //$dir = $this->display_item_form('dir', get_lang('EnterDataAdd section'), 'add_item');
         $dir = $this->displayNewSectionForm();
 
         $selected = isset($_REQUEST['lp_build_selected']) ? (int) $_REQUEST['lp_build_selected'] : 0;
@@ -7283,177 +7280,9 @@ class learnpath
     }
 
     /**
-     * Addition of Hotpotatoes tests.
-     *
-     * @param string $action
-     * @param int    $id         Internal ID of the item
-     * @param string $extra_info
-     *
-     * @return string HTML structure to display the hotpotatoes addition formular
-     */
-    public function display_hotpotatoes_form($action = 'add', $id = 0, $extra_info = '')
-    {
-        $course_id = api_get_course_int_id();
-        $uploadPath = DIR_HOTPOTATOES;
-
-        if (0 != $id && is_array($extra_info)) {
-            $item_title = stripslashes($extra_info['title']);
-            $item_description = stripslashes($extra_info['description']);
-        } elseif (is_numeric($extra_info)) {
-            $TBL_DOCUMENT = Database::get_course_table(TABLE_DOCUMENT);
-
-            $sql = "SELECT * FROM $TBL_DOCUMENT
-                    WHERE
-                        c_id = $course_id AND
-                        path LIKE '".$uploadPath."/%/%htm%' AND
-                        iid = ".(int) $extra_info."
-                    ORDER BY iid ASC";
-
-            $res_hot = Database::query($sql);
-            $row = Database::fetch_array($res_hot);
-
-            $item_title = $row['title'];
-            $item_description = $row['description'];
-
-            if (!empty($row['comment'])) {
-                $item_title = $row['comment'];
-            }
-        } else {
-            $item_title = '';
-            $item_description = '';
-        }
-
-        $parent = 0;
-        if (0 != $id && is_array($extra_info)) {
-            $parent = $extra_info['parent_item_id'];
-        }
-
-        $arrLP = $this->getItemsForForm();
-        $legend = '<legend>';
-        if ('add' == $action) {
-            $legend .= get_lang('Adding a test to the course');
-        } elseif ('move' == $action) {
-            $legend .= get_lang('Move the current test');
-        } else {
-            $legend .= get_lang('Edit the current test');
-        }
-        if (isset($_GET['edit']) && 'true' == $_GET['edit']) {
-            $legend .= Display:: return_message(
-                get_lang('Warning ! ! !').' ! '.get_lang('Warning ! ! !EditingDocument')
-            );
-        }
-        $legend .= '</legend>';
-
-        $return = '<form method="POST">';
-        $return .= $legend;
-        $return .= '<table cellpadding="0" cellspacing="0" class="lp_form">';
-        $return .= '<tr>';
-        $return .= '<td class="label"><label for="idParent">'.get_lang('Parent').' :</label></td>';
-        $return .= '<td class="input">';
-        $return .= '<select id="idParent" name="parent" onChange="javascript: load_cbo(this.value);" size="1">';
-        $return .= '<option class="top" value="0">'.$this->name.'</option>';
-        $arrHide = [$id];
-
-        if (count($arrLP) > 0) {
-            for ($i = 0; $i < count($arrLP); $i++) {
-                if ('add' != $action) {
-                    if ('dir' == $arrLP[$i]['item_type'] &&
-                        !in_array($arrLP[$i]['id'], $arrHide) &&
-                        !in_array($arrLP[$i]['parent_item_id'], $arrHide)
-                    ) {
-                        $return .= '<option '.(($parent == $arrLP[$i]['id']) ? 'selected="selected" ' : '').'style="padding-left:'.($arrLP[$i]['depth'] * 10).'px;" value="'.$arrLP[$i]['id'].'">'.$arrLP[$i]['title'].'</option>';
-                    } else {
-                        $arrHide[] = $arrLP[$i]['id'];
-                    }
-                } else {
-                    if ('dir' == $arrLP[$i]['item_type']) {
-                        $return .= '<option '.(($parent == $arrLP[$i]['id']) ? 'selected="selected" ' : '').'style="padding-left:'.($arrLP[$i]['depth'] * 10).'px;" value="'.$arrLP[$i]['id'].'">'.$arrLP[$i]['title'].'</option>';
-                    }
-                }
-            }
-            reset($arrLP);
-        }
-
-        $return .= '</select>';
-        $return .= '</td>';
-        $return .= '</tr>';
-        $return .= '<tr>';
-        $return .= '<td class="label"><label for="previous">'.get_lang('Position').' :</label></td>';
-        $return .= '<td class="input">';
-        $return .= '<select id="previous" name="previous" size="1">';
-        $return .= '<option class="top" value="0">'.get_lang('First position').'</option>';
-
-        for ($i = 0; $i < count($arrLP); $i++) {
-            if ($arrLP[$i]['parent_item_id'] == $parent && $arrLP[$i]['id'] != $id) {
-                if ($extra_info['previous_item_id'] == $arrLP[$i]['id']) {
-                    $selected = 'selected="selected" ';
-                } elseif ('add' == $action) {
-                    $selected = 'selected="selected" ';
-                } else {
-                    $selected = '';
-                }
-
-                $return .= '<option '.$selected.'value="'.$arrLP[$i]['id'].'">'.
-                    get_lang('After').' "'.$arrLP[$i]['title'].'"</option>';
-            }
-        }
-
-        $return .= '</select>';
-        $return .= '</td>';
-        $return .= '</tr>';
-
-        if ('move' != $action) {
-            $return .= '<tr>';
-            $return .= '<td class="label"><label for="idTitle">'.get_lang('Title').' :</label></td>';
-            $return .= '<td class="input"><input id="idTitle" name="title" type="text" value="'.$item_title.'" /></td>';
-            $return .= '</tr>';
-            $id_prerequisite = 0;
-            if (is_array($arrLP) && count($arrLP) > 0) {
-                foreach ($arrLP as $key => $value) {
-                    if ($value['id'] == $id) {
-                        $id_prerequisite = $value['prerequisite'];
-                        break;
-                    }
-                }
-
-                $arrHide = [];
-                for ($i = 0; $i < count($arrLP); $i++) {
-                    if ($arrLP[$i]['id'] != $id && 'dir' != $arrLP[$i]['item_type']) {
-                        $arrHide[$arrLP[$i]['id']]['value'] = $arrLP[$i]['title'];
-                    }
-                }
-            }
-        }
-
-        $return .= '<tr>';
-        $return .= '<td>&nbsp; </td><td><button class="save" name="submit_button" action="edit" type="submit">'.
-            get_lang('Save hotpotatoes').'</button></td>';
-        $return .= '</tr>';
-        $return .= '</table>';
-
-        if ('move' == $action) {
-            $return .= '<input name="title" type="hidden" value="'.$item_title.'" />';
-            $return .= '<input name="description" type="hidden" value="'.$item_description.'" />';
-        }
-
-        if (is_numeric($extra_info)) {
-            $return .= '<input name="path" type="hidden" value="'.$extra_info.'" />';
-        } elseif (is_array($extra_info)) {
-            $return .= '<input name="path" type="hidden" value="'.$extra_info['path'].'" />';
-        }
-        $return .= '<input name="type" type="hidden" value="'.TOOL_HOTPOTATOES.'" />';
-        $return .= '<input name="post_time" type="hidden" value="'.time().'" />';
-        $return .= '</form>';
-
-        return $return;
-    }
-
-    /**
      * Return the form to display the forum edit/add option.
      *
      * @param CLpItem $lpItem
-     * @param int    $id         ID of the lp_item if already exists
-     * @param string $extra_info
      *
      * @throws Exception
      *
@@ -7468,7 +7297,7 @@ class learnpath
         );
         LearnPathItemForm::setForm($form, $action, $this, $lpItem);
 
-        if ('add' == $action) {
+        if ('add' === $action) {
             $form->addButtonSave(get_lang('Add forum to course'), 'submit_button');
         } else {
             $form->addButtonSave(get_lang('Edit the current forum'), 'submit_button');
@@ -7522,7 +7351,6 @@ class learnpath
      */
     public function display_item_form(
         $lpItem,
-        $title = '',
         $action = 'add_item'
     ) {
         $item_type = $lpItem->getItemType();
@@ -7533,37 +7361,6 @@ class learnpath
         LearnPathItemForm::setForm($form, 'edit', $this, $lpItem);
 
         $form->addButtonSave(get_lang('Save section'), 'submit_button');
-
-        //assets can't be modified
-        //$item_type == 'asset' ||
-        if (('sco' == $item_type) && ('html' == $extension || 'htm' == $extension)) {
-            if ('sco' == $item_type) {
-                $form->addElement(
-                    'html',
-                    '<script>alert("'.get_lang('Warning ! ! !WhenEditingScorm').'")</script>'
-                );
-            }
-            $renderer = $form->defaultRenderer();
-            $renderer->setElementTemplate(
-                '<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{label}<br />{element}',
-                'content_lp'
-            );
-
-            $relative_prefix = '';
-            $editor_config = [
-                'ToolbarSet' => 'LearningPathDocuments',
-                'Width' => '100%',
-                'Height' => '500',
-                'FullPage' => true,
-                'CreateDocumentDir' => $relative_prefix,
-                //'CreateDocumentWebDir' => api_get_path(WEB_COURSE_PATH).api_get_course_path().'/scorm/',
-                //'BaseHref' => api_get_path(WEB_COURSE_PATH).api_get_course_path().$item_path_fck,
-            ];
-
-            $form->addElement('html_editor', 'content_lp', '', null, $editor_config);
-            $content_path = api_get_path(SYS_COURSE_PATH).api_get_course_path().$item_path_fck;
-            $defaults['content_lp'] = file_get_contents($content_path);
-        }
 
         return $form->returnForm();
     }
@@ -7631,14 +7428,11 @@ class learnpath
      */
     public function display_document_form($action = 'add', $lpItem = null)
     {
-        $_course = api_get_course_info();
-
         if (empty($lpItem)) {
             return '';
         }
 
-        $item_title = $lpItem->getTitle();
-        $item_description = $lpItem->getDescription();
+        $_course = api_get_course_info();
         $item_type = $lpItem->getItemType();
 
         $form = new FormValidator(
@@ -7677,106 +7471,8 @@ class learnpath
         }
 
         $showButton = false;
-        if ('move' !== $action) {
-            $arrHide = [];
-            /*for ($i = 0; $i < $count; $i++) {
-                if ($arrLP[$i]['id'] != $itemId && 'dir' !== $arrLP[$i]['item_type'] &&
-                    TOOL_LP_FINAL_ITEM !== $arrLP[$i]['item_type']
-                ) {
-                    $arrHide[$arrLP[$i]['id']]['value'] = $arrLP[$i]['title'];
-                }
-            }*/
 
-            //$edit = isset($_GET['edit']) ? $_GET['edit'] : null;
-            $repo = Container::getDocumentRepository();
-            /** @var CDocument $document */
-            $document = $repo->find($lpItem->getPath());
-            if (TOOL_DOCUMENT == $item_type || TOOL_LP_FINAL_ITEM == $item_type) {
-                /*if (isset($_POST['content'])) {
-                    $content = stripslashes($_POST['content']);
-                } else {
-                    $content = $this->display_document(
-                        $lpItem->getPath(),
-                        false,
-                        false
-                    );
-                }*/
-
-                ///if (!$no_display_edit_textarea) {
-                    // We need to calculate here some specific settings for the online editor.
-                    // The calculated settings work for documents in the Documents tool
-                    // (on the root or in subfolders).
-                    // For documents in native scorm packages it is unclear whether the
-                    // online editor should be activated or not.
-
-                    // A new document, it is in the root of the repository.
-                   /* if (is_array($extra_info) && 'new' !== $extra_info) {
-                        // The document already exists. Whe have to determine its relative path towards the repository root.
-                        $relative_path = explode('/', $extra_info['dir']);
-                        $cnt = count($relative_path) - 2;
-                        if ($cnt < 0) {
-                            $cnt = 0;
-                        }
-                        $relative_prefix = str_repeat('../', $cnt);
-                        $relative_path = array_slice($relative_path, 1, $cnt);
-                        $relative_path = implode('/', $relative_path);
-                        if (strlen($relative_path) > 0) {
-                            $relative_path = $relative_path.'/';
-                        }
-                    } else {
-                        $result = $this->generate_lp_folder($_course);
-                        $relative_path = api_substr($result['dir'], 1, strlen($result['dir']));
-                        $relative_prefix = '../../';
-                    }*/
-                    $editorConfig = [
-                        'ToolbarSet' => 'LearningPathDocuments',
-                        'Width' => '100%',
-                        'Height' => '500',
-                        'FullPage' => true,
-                     //   'CreateDocumentDir' => $relative_prefix,
-                        'CreateDocumentWebDir' => api_get_path(WEB_COURSE_PATH).api_get_course_path().'/document/',
-                        //'BaseHref' => api_get_path(WEB_COURSE_PATH).api_get_course_path().'/document/'.$relative_path,
-                    ];
-
-                    if ('add_item' === $action) {
-                        $text = get_lang('Add this document to the course');
-                    }
-
-                    if ('edit_item' === $action) {
-                        $text = get_lang('Save document');
-                    }
-
-                    $form->addButtonSave(get_lang('Save'), 'submit_button');
-
-                    if ($document->getResourceNode()->hasEditableContent()) {
-                        $form->addHidden('document_id', $document->getIid());
-                        $showButton = true;
-                        $renderer = $form->defaultRenderer();
-                        $renderer->setElementTemplate('&nbsp;{label}{element}', 'content_lp');
-
-                        $form->addElement('html', '<div class="editor-lp">');
-                        $form->addHtmlEditor('content_lp', null, null, true, $editorConfig, true);
-                        $form->addElement('html', '</div>');
-
-                        $content = $this->display_document(
-                            $document,
-                            false,
-                            false
-                        );
-                        $defaults['content_lp'] = $content;
-                    }
-                //}
-            } elseif ($lpItem) {
-                $form->addButtonSave(get_lang('Save document'), 'submit_button');
-                $return = $this->display_document($document, true, true, true);
-                $form->addElement('html', $return);
-            }
-        }
-
-        if (TOOL_LP_FINAL_ITEM == $item_type) {
-            $parentSelect->freeze();
-            $position->freeze();
-        }
+        $form->addButtonSave(get_lang('Save document'), 'submit_button');
 
         if ($showButton) {
             $form->addButtonSave(get_lang('Save document'), 'submit_button');
@@ -7787,7 +7483,6 @@ class learnpath
             $form->addElement('hidden', 'path', $extra_info['path']);
         }*/
         $form->addElement('hidden', 'type', TOOL_DOCUMENT);
-        $form->setDefaults($defaults);
 
         return $form->returnForm();
     }
@@ -8216,15 +7911,14 @@ class learnpath
      *
      * @return string
      */
-    public function display_manipulate(CLpItem $lpItem)
+    public function displayItemMenu(CLpItem $lpItem)
     {
-        $course_code = api_get_course_id();
         $item_id = $lpItem->getIid();
         $audio = $lpItem->getAudio();
         $itemType = $lpItem->getItemType();
         $path = $lpItem->getPath();
-        $return = '<div class="actions">';
 
+        $return = '<div class="actions">';
         $audio_player = null;
         // We display an audio player if needed.
         if (!empty($audio)) {
@@ -8280,7 +7974,7 @@ class learnpath
             $url.'&action=delete_item'
         );
 
-        if (in_array($itemType, [TOOL_DOCUMENT, TOOL_LP_FINAL_ITEM, TOOL_HOTPOTATOES])) {
+        /*if (in_array($itemType, [TOOL_DOCUMENT, TOOL_LP_FINAL_ITEM, TOOL_HOTPOTATOES])) {
             $documentData = DocumentManager::get_document_data_by_id($path, $course_code);
             if (empty($documentData)) {
                 // Try with iid
@@ -8299,7 +7993,7 @@ class learnpath
             if (isset($documentData['absolute_path_from_document'])) {
                 $return .= get_lang('File').': '.$documentData['absolute_path_from_document'];
             }
-        }
+        }*/
 
         $return .= '</div>';
 
@@ -8330,7 +8024,7 @@ class learnpath
                     lp_id = ".$this->lp_id." AND
                     parent_item_id = 0
                 ORDER BY display_order ASC";
-        $res_zero = Database::query($sql);
+        Database::query($sql);
         $i = 0;
 
         $list = $this->getItemsForForm(true);
@@ -8415,7 +8109,7 @@ class learnpath
             switch ($itemType) {
                 case 'dir':
                 case 'asset':
-                    $return .= $this->display_manipulate($lpItem);
+                    $return .= $this->displayItemMenu($lpItem);
                     $return .= $this->display_item_form(
                         $lpItem,
                         get_lang('Move the current section'),
@@ -8424,7 +8118,7 @@ class learnpath
                     );
                     break;
                 case TOOL_DOCUMENT:
-                    $return .= $this->display_manipulate($lpItem);
+                    $return .= $this->displayItemMenu($lpItem);
                     $return .= $this->display_document_form('move', $lpItem);
                     break;
                 case TOOL_LINK:
@@ -8433,27 +8127,27 @@ class learnpath
                         $repo = Container::getLinkRepository();
                         $link = $repo->find($path);
                     }
-                    $return .= $this->display_manipulate($lpItem);
+                    $return .= $this->displayItemMenu($lpItem);
                     $return .= $this->display_link_form('move', $lpItem, $link);
                     break;
                 case TOOL_HOTPOTATOES:
-                    $return .= $this->display_manipulate($lpItem);
+                    $return .= $this->displayItemMenu($lpItem);
                     $return .= $this->display_link_form('move', $lpItem, $row);
                     break;
                 case TOOL_QUIZ:
-                    $return .= $this->display_manipulate($lpItem);
+                    $return .= $this->displayItemMenu($lpItem);
                     $return .= $this->display_quiz_form('move', $lpItem, $row);
                     break;
                 case TOOL_STUDENTPUBLICATION:
-                    $return .= $this->display_manipulate($lpItem);
+                    $return .= $this->displayItemMenu($lpItem);
                     $return .= $this->display_student_publication_form('move', $lpItem, $row);
                     break;
                 case TOOL_FORUM:
-                    $return .= $this->display_manipulate($lpItem);
+                    $return .= $this->displayItemMenu($lpItem);
                     $return .= $this->display_forum_form('move', $lpItem, $row);
                     break;
                 case TOOL_THREAD:
-                    $return .= $this->display_manipulate($lpItem);
+                    $return .= $this->displayItemMenu($lpItem);
                     $return .= $this->display_forum_form('move', $lpItem, $row);
                     break;
             }
@@ -9059,10 +8753,11 @@ class learnpath
     {
         $return = '<ul class="lp_resource">';
         $return .= '<li class="lp_resource_element">';
+        /*
         $return .= Display::return_icon('works_new.gif');
         $return .= ' <a href="'.api_get_self().'?'.api_get_cidreq().'&action=add_item&type='.TOOL_STUDENTPUBLICATION.'&lp_id='.$this->lp_id.'">'.
             get_lang('Add the Assignments tool to the course').'</a>';
-        $return .= '</li>';
+        $return .= '</li>';*/
 
         require_once api_get_path(SYS_CODE_PATH).'work/work.lib.php';
         $works = getWorkListTeacher(0, 100, null, null, null);

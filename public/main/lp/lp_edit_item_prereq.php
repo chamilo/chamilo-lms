@@ -47,7 +47,7 @@ $interbreadcrumb[] = [
     'name' => get_lang('Learning paths'),
 ];
 $interbreadcrumb[] = [
-    'url' => api_get_self()."?action=build&lp_id=$learnpath_id",
+    'url' => api_get_self()."?action=add_item&lp_id=$learnpath_id",
     'name' => $lp->getNameNoTags(),
 ];
 $interbreadcrumb[] = [
@@ -87,10 +87,10 @@ echo '</div>';
 echo '<div class="col-md-9">';
 echo '<div class="prerequisites">';
 if (isset($is_success) && true == $is_success) {
-    echo $lp->display_manipulate($lpItem);
+    echo $lp->displayItemMenu($lpItem);
     echo Display::return_message(get_lang('Prerequisites to the current learning object have been added.'));
 } else {
-    echo $lp->display_manipulate($lpItem);
+    echo $lp->displayItemMenu($lpItem);
     echo $lp->display_item_prerequisites_form($lpItem);
 }
 echo '</div>';

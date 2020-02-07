@@ -32,7 +32,7 @@ $interbreadcrumb[] = [
     'name' => get_lang('Learning paths'),
 ];
 $interbreadcrumb[] = [
-    'url' => api_get_self()."?action=build&lp_id=".$lpId.'&'.api_get_cidreq(),
+    'url' => api_get_self()."?action=add_item&lp_id=".$lpId.'&'.api_get_cidreq(),
     'name' => $learnPath->getNameNoTags(),
 ];
 

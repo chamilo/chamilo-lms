@@ -18,7 +18,7 @@ api_protect_course_script();
 $isStudentView = isset($_REQUEST['isStudentView']) ? $_REQUEST['isStudentView'] : null;
 $lpId = isset($_REQUEST['lp_id']) ? (int) $_REQUEST['lp_id'] : 0;
 $submit = isset($_POST['submit_button']) ? $_POST['submit_button'] : null;
-$type = isset($_GET['type']) ? $_GET['type'] : null;
+$type = isset($_GET['type']) ? $_GET['type'] : 'step';
 $action = isset($_GET['action']) ? $_GET['action'] : null;
 $is_allowed_to_edit = api_is_allowed_to_edit(null, false);
 
@@ -94,7 +94,7 @@ $interbreadcrumb[] = [
     'name' => get_lang('Learning paths'),
 ];
 $interbreadcrumb[] = [
-    'url' => api_get_self()."?action=build&lp_id=$lpId&".api_get_cidreq(),
+    'url' => api_get_self()."?action=add_item&lp_id=$lpId&".api_get_cidreq(),
     'name' => $learnPath->getNameNoTags(),
 ];
 
@@ -212,101 +212,46 @@ if (in_array($message, ['ItemUpdated'])) {
     echo Display::return_message(get_lang($message));
 }
 
-if (isset($new_item_id) && is_numeric($new_item_id)) {
-    switch ($type) {
-        case 'dir':
-            echo $learnPath->display_manipulate($new_item_id, $_POST['type']);
-            echo Display::return_message(
-                get_lang('Add sectionCreated'),
-                'confirmation'
-            );
-            break;
-        case TOOL_LINK:
-            echo $learnPath->display_manipulate($new_item_id, $type);
-            echo Display::return_message(
-                get_lang('The new link has been created'),
-                'confirmation'
-            );
-            break;
-        case TOOL_STUDENTPUBLICATION:
-            echo $learnPath->display_manipulate($new_item_id, $type);
-            echo Display::return_message(
-                get_lang('The new assignment has been created'),
-                'confirmation'
-            );
-            break;
-        case TOOL_QUIZ:
-            echo $learnPath->display_manipulate($new_item_id, $type);
-            echo Display::return_message(
-                get_lang('The test has been added to the course'),
-                'confirmation'
-            );
-            break;
-        case TOOL_DOCUMENT:
-            echo Display::return_message(
-                get_lang('The rich media page/activity has been added to the course'),
-                'confirmation'
-            );
-            echo $learnPath->display_item($lpItem);
-            break;
-        case TOOL_FORUM:
-            echo $learnPath->display_manipulate($new_item_id, $type);
-            echo Display::return_message(
-                get_lang('A new forum has now been created'),
-                'confirmation'
-            );
-            break;
-        case 'thread':
-            echo $learnPath->display_manipulate($new_item_id, $type);
-            echo Display::return_message(
-                get_lang('A new forum thread has now been created'),
-                'confirmation'
-            );
-            break;
-    }
-} else {
-    switch ($type) {
-        case 'dir':
-            echo $learnPath->display_item_form(
-                $type,
-                get_lang('EnterDataAdd section')
-            );
-            break;
-        case TOOL_DOCUMENT:
-            if (isset($_GET['file']) && is_numeric($_GET['file'])) {
-                echo $learnPath->display_document_form('add', 0, $_GET['file']);
-            } else {
-                echo $learnPath->display_document_form('add');
-            }
-            break;
-        /*case 'hotpotatoes':
-            echo $learnPath->display_hotpotatoes_form('add', 0, $_GET['file']);
-            break;*/
-        case TOOL_QUIZ:
-            echo Display::return_message(
-                get_lang('Exercise can\'t be edited after being added to the Learning Path'),
-                'warning'
-            );
-            echo $learnPath->display_quiz_form('add', 0, $_GET['file']);
-            break;
-        case TOOL_FORUM:
-            echo $learnPath->display_forum_form('add', 0, $_GET['forum_id']);
-            break;
-        case 'thread':
-            echo $learnPath->display_thread_form('add', 0, $_GET['thread_id']);
-            break;
-        case TOOL_LINK:
-            echo $learnPath->display_link_form('add');
-            break;
-        case TOOL_STUDENTPUBLICATION:
-            $extra = isset($_GET['file']) ? $_GET['file'] : null;
-            echo $learnPath->display_student_publication_form('add', 0, $extra);
-            break;
-        case 'step':
-            $learnPath->display_resources();
-            break;
-    }
-}
+$learnPath->display_resources();
+/*
+switch ($type) {
+    case 'dir':
+        echo $learnPath->display_item_form(
+            $type
+        );
+        break;
+    case TOOL_DOCUMENT:
+        if (isset($_GET['file']) && is_numeric($_GET['file'])) {
+            echo $learnPath->display_document_form('add', 0, $_GET['file']);
+        } else {
+            echo $learnPath->display_document_form('add');
+        }
+        break;
+    case 'hotpotatoes':
+        echo $learnPath->display_hotpotatoes_form('add', 0, $_GET['file']);
+        break;
+    case TOOL_QUIZ:
+        echo Display::return_message(
+            get_lang('Exercise can\'t be edited after being added to the Learning Path'),
+            'warning'
+        );
+        echo $learnPath->display_quiz_form('add', 0, $_GET['file']);
+        break;
+    case TOOL_FORUM:
+        echo $learnPath->display_forum_form('add', 0, $_GET['forum_id']);
+        break;
+    case 'thread':
+        echo $learnPath->display_thread_form('add', 0, $_GET['thread_id']);
+        break;
+    case TOOL_LINK:
+        echo $learnPath->display_link_form('add');
+        break;
+    case TOOL_STUDENTPUBLICATION:
+        echo $learnPath->display_student_publication_form('add', 0, $extra);
+        break;
+    case 'step':
+        break;
+}*/
 echo '</div>';
 echo '</div>';
 

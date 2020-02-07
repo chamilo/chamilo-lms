@@ -359,6 +359,10 @@ class HTML_QuickForm extends HTML_Common
         }
     }
 
+    /**
+     * @param string $elementName
+     * @param string $defaultValue
+     */
     public function setDefault($elementName, $defaultValue)
     {
         if (!$this->elementExists($elementName)) {

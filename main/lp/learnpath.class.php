@@ -1965,7 +1965,7 @@ class learnpath
      * @param string $file_path the path to the file
      * @param string $file_name the original name of the file
      *
-     * @return string 'scorm','aicc','scorm2004','dokeos' or '' if the package cannot be recognized
+     * @return string 'scorm','aicc','scorm2004','dokeos', 'error-empty-package' if the package is empty, or '' if the package cannot be recognized
      */
     public static function getPackageType($file_path, $file_name)
     {
@@ -1994,43 +1994,47 @@ class learnpath
         $aicc_match_au = 0;
         $aicc_match_des = 0;
         $aicc_match_cst = 0;
+        $countItems = 0;
 
         // The following loop should be stopped as soon as we found the right imsmanifest.xml (how to recognize it?).
-        if (is_array($zipContentArray) && count($zipContentArray) > 0) {
-            foreach ($zipContentArray as $thisContent) {
-                if (preg_match('~.(php.*|phtml)$~i', $thisContent['filename'])) {
-                    // New behaviour: Don't do anything. These files will be removed in scorm::import_package.
-                } elseif (stristr($thisContent['filename'], 'imsmanifest.xml') !== false) {
-                    $manifest = $thisContent['filename']; // Just the relative directory inside scorm/
-                    $package_type = 'scorm';
-                    break; // Exit the foreach loop.
-                } elseif (
-                    preg_match('/aicc\//i', $thisContent['filename']) ||
-                    in_array(
-                        strtolower(pathinfo($thisContent['filename'], PATHINFO_EXTENSION)),
-                        ['crs', 'au', 'des', 'cst']
-                    )
-                ) {
-                    $ext = strtolower(pathinfo($thisContent['filename'], PATHINFO_EXTENSION));
-                    switch ($ext) {
-                        case 'crs':
-                            $aicc_match_crs = 1;
-                            break;
-                        case 'au':
-                            $aicc_match_au = 1;
-                            break;
-                        case 'des':
-                            $aicc_match_des = 1;
-                            break;
-                        case 'cst':
-                            $aicc_match_cst = 1;
-                            break;
-                        default:
-                            break;
+        if (is_array($zipContentArray)) {
+            $countItems = count($zipContentArray);
+            if ($countItems > 0) {
+                foreach ($zipContentArray as $thisContent) {
+                    if (preg_match('~.(php.*|phtml)$~i', $thisContent['filename'])) {
+                        // New behaviour: Don't do anything. These files will be removed in scorm::import_package.
+                    } elseif (stristr($thisContent['filename'], 'imsmanifest.xml') !== false) {
+                        $manifest = $thisContent['filename']; // Just the relative directory inside scorm/
+                        $package_type = 'scorm';
+                        break; // Exit the foreach loop.
+                    } elseif (
+                        preg_match('/aicc\//i', $thisContent['filename']) ||
+                        in_array(
+                            strtolower(pathinfo($thisContent['filename'], PATHINFO_EXTENSION)),
+                            ['crs', 'au', 'des', 'cst']
+                        )
+                    ) {
+                        $ext = strtolower(pathinfo($thisContent['filename'], PATHINFO_EXTENSION));
+                        switch ($ext) {
+                            case 'crs':
+                                $aicc_match_crs = 1;
+                                break;
+                            case 'au':
+                                $aicc_match_au = 1;
+                                break;
+                            case 'des':
+                                $aicc_match_des = 1;
+                                break;
+                            case 'cst':
+                                $aicc_match_cst = 1;
+                                break;
+                            default:
+                                break;
+                        }
+                        //break; // Don't exit the loop, because if we find an imsmanifest afterwards, we want it, not the AICC.
+                    } else {
+                        $package_type = '';
                     }
-                    //break; // Don't exit the loop, because if we find an imsmanifest afterwards, we want it, not the AICC.
-                } else {
-                    $package_type = '';
                 }
             }
         }
@@ -2042,6 +2046,13 @@ class learnpath
 
         // Try with chamilo course builder
         if (empty($package_type)) {
+            // Sometimes users will try to upload an empty zip, or a zip with
+            // only a folder. Catch that and make the calling function aware.
+            // If the single file was the imsmanifest.xml, then $package_type
+            // would be 'scorm' and we wouldn't be here.
+            if ($countItems < 2) {
+                return 'error-empty-package';
+            }
             $package_type = 'chamilo';
         }
 

@@ -1967,7 +1967,7 @@ class learnpath
      *
      * @return string 'scorm','aicc','scorm2004','dokeos' or '' if the package cannot be recognized
      */
-    public static function get_package_type($file_path, $file_name)
+    public static function getPackageType($file_path, $file_name)
     {
         // Get name of the zip file without the extension.
         $file_info = pathinfo($file_name);

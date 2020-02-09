@@ -548,11 +548,14 @@ $template->assign('show_left_column', $lp->getHideTableOfContents() == 0);
 $showMenu = 0;
 $settings = api_get_configuration_value('lp_view_settings');
 $display = isset($settings['display']) ? $settings['display'] : false;
+$navigationInTheMiddle = false;
 if (!empty($display)) {
     $showMenu = isset($display['show_toolbar_by_default']) && $display['show_toolbar_by_default'] ? 1 : 0;
+    $navigationInTheMiddle = isset($display['navigation_in_the_middle']) && $display['navigation_in_the_middle'] ? 1 : 0;
 }
 
 $template->assign('show_toolbar_by_default', $showMenu);
+$template->assign('navigation_in_the_middle', $navigationInTheMiddle);
 
 if ($gamificationMode == 1) {
     $template->assign('gamification_stars', $lp->getCalculateStars($sessionId));

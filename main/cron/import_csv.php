@@ -6,6 +6,7 @@ use Chamilo\CourseBundle\Entity\CItemProperty;
 use Chamilo\PluginBundle\Entity\StudentFollowUp\CarePost;
 use Fhaculty\Graph\Graph;
 use Monolog\Handler\BufferHandler;
+use Monolog\Handler\ErrorLogHandler;
 use Monolog\Handler\RotatingFileHandler;
 use Monolog\Handler\StreamHandler;
 use Monolog\Logger;
@@ -188,7 +189,7 @@ class ImportCsv
                         echo "Error - This file '$file' can't be processed.".PHP_EOL;
                         echo "Trying to call $method".PHP_EOL;
                         echo "The file have to has this format:".PHP_EOL;
-                        echo "prefix_students_ddmmyyyy.csv, prefix_teachers_ddmmyyyy.csv, 
+                        echo "prefix_students_ddmmyyyy.csv, prefix_teachers_ddmmyyyy.csv,
                         prefix_courses_ddmmyyyy.csv, prefix_sessions_ddmmyyyy.csv ".PHP_EOL;
                         exit;
                     }
@@ -849,7 +850,7 @@ class ImportCsv
                             if (!empty($emails)) {
                                 $this->logger->addInfo('Preparing email to users in configuration: "cron_notification_help_desk"');
                                 $subject = 'User not added due to same username';
-                                $body = 'Cannot add username: "'.$row['username'].'" 
+                                $body = 'Cannot add username: "'.$row['username'].'"
                                     with external_user_id: '.$row['extra_'.$this->extraFieldIdNameList['user']].'
                                     because '.$userInfoFromUsername['username'].' with external_user_id '.$value.' exists on the portal';
                                 $this->logger->addInfo($body);
@@ -1169,8 +1170,8 @@ class ImportCsv
                     $date->sub($interval);
                     if ($date->getTimestamp() > time()) {
                         $this->logger->addInfo(
-                            "Calendar event # ".$row['external_calendar_itemID']." 
-                            in session [$externalSessionId] was not added 
+                            "Calendar event # ".$row['external_calendar_itemID']."
+                            in session [$externalSessionId] was not added
                             because the startdate is more than 7 days in the future: ".$sessionInfo['access_start_date']
                         );
                         $errorFound = true;
@@ -1300,15 +1301,15 @@ class ImportCsv
                                 "Delete event # $calendarId because session # $calendarSessionId doesn't exist"
                             );
 
-                            $sql = "DELETE FROM c_calendar_event 
+                            $sql = "DELETE FROM c_calendar_event
                                     WHERE iid = $calendarId AND session_id = $calendarSessionId";
                             Database::query($sql);
                             $this->logger->addInfo($sql);
 
-                            $sql = "DELETE FROM c_item_property 
-                                    WHERE 
-                                        tool = 'calendar_event' AND 
-                                        ref = $calendarSessionId AND 
+                            $sql = "DELETE FROM c_item_property
+                                    WHERE
+                                        tool = 'calendar_event' AND
+                                        ref = $calendarSessionId AND
                                         session_id = $calendarSessionId";
                             Database::query($sql);
                             $this->logger->addInfo($sql);
@@ -1604,7 +1605,7 @@ class ImportCsv
                                 ];
                                 $extraFieldValue->update($params);
                                 $this->logger->addInfo(
-                                    'Updating calendar extra field #'.$extraFieldValueItem['id'].' 
+                                    'Updating calendar extra field #'.$extraFieldValueItem['id'].'
                                     new item_id: '.$eventId.' old item_id: '.$item['item_id']
                                 );
                             }
@@ -2603,6 +2604,7 @@ class ImportCsv
                     ];
                     $careerId = $career->save($params);
                     if ($careerId) {
+                        $this->logger->addInfo('Career saved: '.print_r($params, 1));
                         $params = [
                             'item_id' => $careerId,
                             'extra_'.$extraFieldName => $itemId,
@@ -2626,6 +2628,7 @@ class ImportCsv
                             'name' => $row['CareerName'],
                         ];
                         $career->update($params);
+                        $this->logger->addInfo('Career updated: '.print_r($params, 1));
                         $links = isset($row['HLinks']) ? $row['HLinks'] : [];
 
                         if (!empty($links)) {
@@ -2711,7 +2714,7 @@ class ImportCsv
 
                 if (UserManager::userHasCareer($studentId, $careerChamiloId) === false) {
                     $this->logger->addInfo(
-                        "User $studentId (".$row['StudentId'].") has no career #$careerChamiloId (ext #$careerId)"
+                        "User chamilo id # $studentId (".$row['StudentId'].") has no career #$careerChamiloId (ext #$careerId)"
                     );
                     continue;
                 }
@@ -2741,6 +2744,10 @@ class ImportCsv
                     'IconColor' => $row['IconColor'],
                 ];
                 $serializedValue = serialize($extraData);
+
+                $this->logger->addInfo(
+                    "Saving graph for user chamilo # $studentId (".$row['StudentId'].") with career #$careerChamiloId (ext #$careerId)"
+                );
 
                 UserManager::updateUserCareer($userCareerData['id'], $serializedValue);
             }
@@ -3179,6 +3186,14 @@ $stream = new StreamHandler(
 $logger->pushHandler(new BufferHandler($stream, 0, $minLevel));
 $logger->pushHandler(new RotatingFileHandler('import_csv', 5, $minLevel));
 
+$verbose = false;
+if (isset($argv[1]) && $argv[1] === '--verbose') {
+    $verbose = true;
+}
+if ($verbose) {
+    $logger->pushHandler(new ErrorLogHandler());
+}
+
 $cronImportCSVConditions = isset($_configuration['cron_import_csv_conditions']) ? $_configuration['cron_import_csv_conditions'] : null;
 
 echo 'See the error log here: '.api_get_path(SYS_ARCHIVE_PATH).'import_csv.log'."\n";
@@ -3190,8 +3205,7 @@ if (isset($_configuration['default_admin_user_id_for_cron'])) {
 }
 // @todo in production disable the dump option
 $dump = false;
-
-if (isset($argv[1]) && $argv[1] = '--dump') {
+if (isset($argv[1]) && $argv[1] === '--dump') {
     $dump = true;
 }
 

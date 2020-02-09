@@ -1965,9 +1965,9 @@ class learnpath
      * @param string $file_path the path to the file
      * @param string $file_name the original name of the file
      *
-     * @return string 'scorm','aicc','scorm2004','dokeos' or '' if the package cannot be recognized
+     * @return string 'scorm','aicc','scorm2004','dokeos', 'error-empty-package' if the package is empty, or '' if the package cannot be recognized
      */
-    public static function get_package_type($file_path, $file_name)
+    public static function getPackageType($file_path, $file_name)
     {
         // Get name of the zip file without the extension.
         $file_info = pathinfo($file_name);
@@ -1994,43 +1994,47 @@ class learnpath
         $aicc_match_au = 0;
         $aicc_match_des = 0;
         $aicc_match_cst = 0;
+        $countItems = 0;
 
         // The following loop should be stopped as soon as we found the right imsmanifest.xml (how to recognize it?).
-        if (is_array($zipContentArray) && count($zipContentArray) > 0) {
-            foreach ($zipContentArray as $thisContent) {
-                if (preg_match('~.(php.*|phtml)$~i', $thisContent['filename'])) {
-                    // New behaviour: Don't do anything. These files will be removed in scorm::import_package.
-                } elseif (stristr($thisContent['filename'], 'imsmanifest.xml') !== false) {
-                    $manifest = $thisContent['filename']; // Just the relative directory inside scorm/
-                    $package_type = 'scorm';
-                    break; // Exit the foreach loop.
-                } elseif (
-                    preg_match('/aicc\//i', $thisContent['filename']) ||
-                    in_array(
-                        strtolower(pathinfo($thisContent['filename'], PATHINFO_EXTENSION)),
-                        ['crs', 'au', 'des', 'cst']
-                    )
-                ) {
-                    $ext = strtolower(pathinfo($thisContent['filename'], PATHINFO_EXTENSION));
-                    switch ($ext) {
-                        case 'crs':
-                            $aicc_match_crs = 1;
-                            break;
-                        case 'au':
-                            $aicc_match_au = 1;
-                            break;
-                        case 'des':
-                            $aicc_match_des = 1;
-                            break;
-                        case 'cst':
-                            $aicc_match_cst = 1;
-                            break;
-                        default:
-                            break;
+        if (is_array($zipContentArray)) {
+            $countItems = count($zipContentArray);
+            if ($countItems > 0) {
+                foreach ($zipContentArray as $thisContent) {
+                    if (preg_match('~.(php.*|phtml)$~i', $thisContent['filename'])) {
+                        // New behaviour: Don't do anything. These files will be removed in scorm::import_package.
+                    } elseif (stristr($thisContent['filename'], 'imsmanifest.xml') !== false) {
+                        $manifest = $thisContent['filename']; // Just the relative directory inside scorm/
+                        $package_type = 'scorm';
+                        break; // Exit the foreach loop.
+                    } elseif (
+                        preg_match('/aicc\//i', $thisContent['filename']) ||
+                        in_array(
+                            strtolower(pathinfo($thisContent['filename'], PATHINFO_EXTENSION)),
+                            ['crs', 'au', 'des', 'cst']
+                        )
+                    ) {
+                        $ext = strtolower(pathinfo($thisContent['filename'], PATHINFO_EXTENSION));
+                        switch ($ext) {
+                            case 'crs':
+                                $aicc_match_crs = 1;
+                                break;
+                            case 'au':
+                                $aicc_match_au = 1;
+                                break;
+                            case 'des':
+                                $aicc_match_des = 1;
+                                break;
+                            case 'cst':
+                                $aicc_match_cst = 1;
+                                break;
+                            default:
+                                break;
+                        }
+                        //break; // Don't exit the loop, because if we find an imsmanifest afterwards, we want it, not the AICC.
+                    } else {
+                        $package_type = '';
                     }
-                    //break; // Don't exit the loop, because if we find an imsmanifest afterwards, we want it, not the AICC.
-                } else {
-                    $package_type = '';
                 }
             }
         }
@@ -2042,6 +2046,13 @@ class learnpath
 
         // Try with chamilo course builder
         if (empty($package_type)) {
+            // Sometimes users will try to upload an empty zip, or a zip with
+            // only a folder. Catch that and make the calling function aware.
+            // If the single file was the imsmanifest.xml, then $package_type
+            // would be 'scorm' and we wouldn't be here.
+            if ($countItems < 2) {
+                return 'error-empty-package';
+            }
             $package_type = 'chamilo';
         }
 
@@ -2538,16 +2549,40 @@ class learnpath
         if (empty($mode)) {
             $mode = $this->progress_bar_mode;
         }
+        $text = '';
+        $percentage = 0;
+        // If the option to use the score as progress is set for this learning
+        // path, then the rules are completely different: we assume only one
+        // item exists and the progress of the LP depends on the score
+        $scoreAsProgressSetting = api_get_configuration_value('lp_score_as_progress_enable');
+        if ($scoreAsProgressSetting === true) {
+            $scoreAsProgress = $this->getUseScoreAsProgress();
+            if ($scoreAsProgress) {
+                // Get single item's score
+                $itemId = $this->get_current_item_id();
+                $item = $this->getItem($itemId);
+                $score = $item->get_score();
+                $maxScore = $item->get_max();
+                if ($mode = '%') {
+                    $percentage = ((float) $score / (float) $maxScore) * 100;
+                    $percentage = number_format($percentage, 0);
+                    $text = '%';
+                } else {
+                    $percentage = $score;
+                    $text = '/'.$maxScore;
+                }
+                return [$percentage, $text];
+            }
+        }
+        // otherwise just continue the normal processing of progress
         $total_items = $this->getTotalItemsCountWithoutDirs();
         $completeItems = $this->get_complete_items_count();
         if ($add != 0) {
             $completeItems += $add;
         }
-        $text = '';
         if ($completeItems > $total_items) {
             $completeItems = $total_items;
         }
-        $percentage = 0;
         if ($mode == '%') {
             if ($total_items > 0) {
                 $percentage = ((float) $completeItems / (float) $total_items) * 100;
@@ -13739,5 +13774,30 @@ EOD;
         }
 
         return '';
+    }
+    /**
+     * Gets whether this SCORM learning path has been marked to use the score
+     * as progress. Takes into account whether the learnpath matches (SCORM
+     * content + less than 2 items).
+     * @return bool True if the score should be used as progress, false otherwise
+     */
+    public function getUseScoreAsProgress()
+    {
+        // If not a SCORM, we don't care about the setting
+        if ($this->get_type() != 2) {
+            return false;
+        }
+        // If more than one step in the SCORM, we don't care about the setting
+        if ($this->get_total_items_count() > 1) {
+            return false;
+        }
+        $extraFieldValue = new ExtraFieldValue('lp');
+        $doUseScore = false;
+        $useScore = $extraFieldValue->get_values_by_handler_and_field_variable($this->get_id(), 'use_score_as_progress');
+        if (!empty($useScore) && isset($useScore['value'])) {
+            $doUseScore = $useScore['value'];
+        }
+
+        return $doUseScore;
     }
 }

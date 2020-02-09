@@ -474,7 +474,20 @@ function save_item(
             $return .= "update_toc('".$my_upd_status."','".$my_upd_id."');";
         }
     }
-    $return .= "update_progress_bar('$myComplete', '$myTotal', '$myProgressMode');";
+    $progressBarSpecial = false;
+    $scoreAsProgressSetting = api_get_configuration_value('lp_score_as_progress_enable');
+    if ($scoreAsProgressSetting === true) {
+        $scoreAsProgress = $myLP->getUseScoreAsProgress();
+        if ($scoreAsProgress) {
+            $score = $myLPI->get_score();
+            $maxScore = $myLPI->get_max();
+            $return .= "update_progress_bar('$score', '$maxScore', '$myProgressMode');";
+            $progressBarSpecial = true;
+        }
+    }
+    if (!$progressBarSpecial) {
+        $return .= "update_progress_bar('$myComplete', '$myTotal', '$myProgressMode');";
+    }
 
     if (!Session::read('login_as')) {
         // If $_SESSION['login_as'] is set, then the user is an admin logged as the user.

@@ -124,7 +124,7 @@ $htmlHeadXtra[] = api_get_css_asset('qtip2/jquery.qtip.min.css');
 $htmlHeadXtra[] = api_get_asset('qtip2/jquery.qtip.min.js');
 $htmlHeadXtra[] = '<script type="text/javascript" src="'.api_get_path(WEB_LIBRARY_PATH).'javascript/jquery.frameready.js"></script>';
 $htmlHeadXtra[] = '<script>
-$(function() {   
+$(function() {
     $("div#log_content_cleaner").bind("click", function() {
         $("div#log_content").empty();
     });
@@ -135,34 +135,34 @@ var chamilo_xajax_handler = window.oxajax;
 $allowLpItemTip = api_get_configuration_value('hide_accessibility_label_on_lp_item') === false;
 if ($allowLpItemTip) {
     $htmlHeadXtra[] = '<script>
-    $(function() {   
+    $(function() {
          $(".scorm_item_normal").qtip({
             content: {
                 text: function(event, api) {
-                    var item = $(this);                 
+                    var item = $(this);
                     var itemId = $(this).attr("id");
                     itemId = itemId.replace("toc_", "");
                     var textToShow = "";
                     $.ajax({
                         type: "GET",
-                        url: "'.$ajaxUrl.'&item_id="+ itemId,            
-                        async: false                 
+                        url: "'.$ajaxUrl.'&item_id="+ itemId,
+                        async: false
                     })
-                    .then(function(content) {                    
+                    .then(function(content) {
                         if (content == 1) {
                             textToShow = "'.addslashes(get_lang('LPItemCanBeAccessed')).'";
-                            api.set("style.classes", "qtip-green qtip-shadow");                        
+                            api.set("style.classes", "qtip-green qtip-shadow");
                         } else {
-                            textToShow = content;                        
+                            textToShow = content;
                             api.set("style.classes", "qtip-red qtip-shadow");
                         }
-                        
+
                         return textToShow;
                     });
-                    return textToShow;                
+                    return textToShow;
                 }
             }
-        }); 
+        });
     });
     </script>';
 }

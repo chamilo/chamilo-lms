@@ -2549,16 +2549,40 @@ class learnpath
         if (empty($mode)) {
             $mode = $this->progress_bar_mode;
         }
+        $text = '';
+        $percentage = 0;
+        // If the option to use the score as progress is set for this learning
+        // path, then the rules are completely different: we assume only one
+        // item exists and the progress of the LP depends on the score
+        $scoreAsProgressSetting = api_get_configuration_value('lp_score_as_progress_enable');
+        if ($scoreAsProgressSetting === true) {
+            $scoreAsProgress = $this->getUseScoreAsProgress();
+            if ($scoreAsProgress) {
+                // Get single item's score
+                $itemId = $this->get_current_item_id();
+                $item = $this->getItem($itemId);
+                $score = $item->get_score();
+                $maxScore = $item->get_max();
+                if ($mode = '%') {
+                    $percentage = ((float) $score / (float) $maxScore) * 100;
+                    $percentage = number_format($percentage, 0);
+                    $text = '%';
+                } else {
+                    $percentage = $score;
+                    $text = '/'.$maxScore;
+                }
+                return [$percentage, $text];
+            }
+        }
+        // otherwise just continue the normal processing of progress
         $total_items = $this->getTotalItemsCountWithoutDirs();
         $completeItems = $this->get_complete_items_count();
         if ($add != 0) {
             $completeItems += $add;
         }
-        $text = '';
         if ($completeItems > $total_items) {
             $completeItems = $total_items;
         }
-        $percentage = 0;
         if ($mode == '%') {
             if ($total_items > 0) {
                 $percentage = ((float) $completeItems / (float) $total_items) * 100;

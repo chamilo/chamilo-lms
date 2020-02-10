@@ -139,8 +139,28 @@ class Display
      */
     public static function display_reduced_footer()
     {
-        echo self::$global_template->show_footer_js_template();
-        echo '</body></html>';
+        $contents = ob_get_contents();
+        if (ob_get_length()) {
+            ob_end_clean();
+        }
+        $tpl = '@ChamiloTheme/Layout/no_layout.html.twig';
+        if (!empty(self::$legacyTemplate)) {
+            $tpl = self::$legacyTemplate;
+        }
+        $response = new Response();
+        $params['content'] = $contents;
+        global $interbreadcrumb, $htmlHeadXtra;
+        $params['legacy_javascript'] = $htmlHeadXtra;
+        $params['legacy_breadcrumb'] = $interbreadcrumb;
+
+        $flash = Display::getFlashToString();
+        Display::cleanFlashMessages();
+        $params['flash_messages'] = $flash;
+
+        $content = Container::getTemplating()->render($tpl, $params);
+        $response->setContent($content);
+        $response->send();
+        exit;
     }
 
     /**

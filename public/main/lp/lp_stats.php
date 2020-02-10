@@ -32,7 +32,8 @@ if ('true' === $lpReportType) {
     $type = 'simple';
 }
 $courseInfo = api_get_course_info($courseCode);
-$output = Tracking::getLpStats(
+
+return Tracking::getLpStats(
     $userId,
     $courseInfo,
     $sessionId,
@@ -47,11 +48,3 @@ $output = Tracking::getLpStats(
     $type,
     $allowExtend
 );
-
-// Origin = tracking means that teachers see that info in the Reporting tool
-if ('tracking' !== $origin) {
-    Display::display_reduced_header();
-    $output .= '</body></html>';
-}
-
-return $output;

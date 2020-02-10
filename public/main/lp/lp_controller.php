@@ -345,7 +345,6 @@ if (!empty($lpObject)) {
 }
 
 $course_id = api_get_course_int_id();
-
 $lpItemId = $_REQUEST['id'] ?? 0;
 $lpItem = null;
 if (!empty($lpItemId)) {
@@ -371,9 +370,6 @@ if (!$lp_found || (!empty($_REQUEST['lp_id']) && $_SESSION['oLP']->get_id() != $
         $lp_table = Database::get_course_table(TABLE_LP_MAIN);
         if (!empty($lp_id)) {
             $sel = "SELECT iid, lp_type FROM $lp_table WHERE c_id = $course_id AND id = $lp_id";
-            if ($debug > 0) {
-                error_log(' querying '.$sel);
-            }
             $res = Database::query($sel);
             if (Database::num_rows($res)) {
                 $row = Database::fetch_array($res);
@@ -385,8 +381,6 @@ if (!$lp_found || (!empty($_REQUEST['lp_id']) && $_SESSION['oLP']->get_id() != $
                 }
                 $logInfo = [
                     'tool' => TOOL_LEARNPATH,
-                    'tool_id' => 0,
-                    'tool_id_detail' => 0,
                     'action' => 'lp_load',
                 ];
                 Event::registerLog($logInfo);
@@ -500,9 +494,6 @@ if (isset($_POST['title'])) {
 }
 
 $redirectTo = '';
-if ($debug > 0) {
-    error_log('action "'.$action.'" triggered');
-}
 
 switch ($action) {
     case 'send_notify_teacher':
@@ -1367,8 +1358,11 @@ switch ($action) {
         } else {
             $_SESSION['oLP']->save_current();
             $_SESSION['oLP']->save_last();
+
+            Display::display_reduced_header();
             $output = require 'lp_stats.php';
             echo $output;
+            Display::display_reduced_footer();
         }
         break;
     case 'list':

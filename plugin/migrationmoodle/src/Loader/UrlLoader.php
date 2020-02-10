@@ -31,6 +31,9 @@ class UrlLoader implements LoaderInterface
         ];
 
         $link = new \Link();
+        $link->setCourse(
+            api_get_course_info_by_id($incomingData['c_id'])
+        );
         $linkId = $link->save($params);
 
         \Database::getManager()

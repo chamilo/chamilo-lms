@@ -115,13 +115,13 @@ function compareLpTimeAndCourseTime($user, $courseInfo, $sessionId = 0)
         $content .= PHP_EOL;
 
         // Check possible records with high values
-        $sql = "SELECT iv.iid, lp_id, total_time 
-                FROM c_lp_view v 
+        $sql = "SELECT iv.iid, lp_id, total_time
+                FROM c_lp_view v
                 INNER JOIN c_lp_item_view iv
                 ON (iv.c_id = v.c_id AND v.id = iv.lp_view_id)
-                WHERE 
-                    user_id = $userId AND 
-                    v.c_id = $courseId AND 
+                WHERE
+                    user_id = $userId AND
+                    v.c_id = $courseId AND
                     session_id = $sessionId
                 ORDER BY total_time desc
                 LIMIT 1

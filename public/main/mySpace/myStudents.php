@@ -1378,6 +1378,7 @@ if (empty($details)) {
         }
 
         $userEntity = api_get_user_entity(api_get_user_id());
+        $codePath = api_get_path(WEB_CODE_PATH);
 
         /** @var CLpCategory $item */
         foreach ($categories as $item) {
@@ -1566,8 +1567,8 @@ if (empty($details)) {
                     }
                     $link = Display::url(
                         Display::return_icon('2rightarrow.png', get_lang('Details')),
-                        'lp_tracking.php?cidReq='.$course_code.'&course='.$course_code.$from.'&origin='.$origin
-                        .'&lp_id='.$lp_id.'&student_id='.$user_info['user_id'].'&id_session='.$sessionId
+                        $codePath.'mySpace/lp_tracking.php?cid='.$courseInfo['real_id'].'&course='.$course_code.$from.'&origin='.$origin
+                        .'&lp_id='.$lp_id.'&student_id='.$user_info['user_id'].'&sid='.$sessionId
                     );
                     echo Display::tag('td', $link);
                 }
@@ -1575,9 +1576,9 @@ if (empty($details)) {
                 if (api_is_allowed_to_edit()) {
                     echo '<td>';
                     if (true === $any_result) {
-                        $url = 'myStudents.php?action=reset_lp&sec_token='.$token.'&cidReq='.$course_code.'&course='
+                        $url = 'myStudents.php?action=reset_lp&sec_token='.$token.'&cid='.$courseInfo['real_id'].'&course='
                             .$course_code.'&details='.$details.'&origin='.$origin.'&lp_id='.$lp_id.'&student='
-                            .$user_info['user_id'].'&details=true&id_session='.$sessionId;
+                            .$user_info['user_id'].'&details=true&sid='.$sessionId;
                         echo Display::url(
                             Display::return_icon('clean.png', get_lang('Clean')),
                             $url,

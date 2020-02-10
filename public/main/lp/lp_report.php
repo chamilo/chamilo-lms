@@ -15,8 +15,8 @@ if (!$isAllowedToEdit) {
 
 $lpTable = Database::get_course_table(TABLE_LP_MAIN);
 
-$lpId = isset($_GET['lp_id']) ? intval($_GET['lp_id']) : false;
-$export = isset($_GET['export']) ? true : false;
+$lpId = isset($_GET['lp_id']) ? (int) $_GET['lp_id'] : false;
+$export = isset($_GET['export']);
 
 if (empty($lpId)) {
     api_not_allowed(true);
@@ -161,6 +161,7 @@ if ($export) {
         //'course_code' => $course_code
     ];
     $pdf = new PDF('A4', 'P', $pdfParams);
+
     $pdf->html_to_pdf_with_template(
         $result,
         false,

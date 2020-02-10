@@ -4240,8 +4240,8 @@ class learnpath
      * on the course homepage
      * Can be used as abstract.
      *
-     * @param int    $lp_id          Learnpath id
-     * @param string $set_visibility New visibility (v/i - visible/invisible)
+     * @param int    $id          Learnpath id
+     * @param string $setVisibility New visibility (v/i - visible/invisible)
      *
      * @return bool
      */
@@ -4371,14 +4371,34 @@ class learnpath
      */
     public static function toggleCategoryPublish($id, $setVisibility = 1)
     {
-        $courseId = api_get_course_int_id();
+        $setVisibility = (int) $setVisibility;
         $sessionId = api_get_session_id();
-        $sessionCondition = api_get_session_condition(
-            $sessionId,
-            true,
-            false,
-            't.sessionId'
-        );
+        $addShortcut = false;
+        if (1 === $setVisibility) {
+            $addShortcut = true;
+        }
+
+        $repo = Container::getLpCategoryRepository();
+        /** @var CLpCategory $lp */
+        $category = $repo->find($id);
+        $repoShortcut = Container::getShortcutRepository();
+        if ($addShortcut) {
+            $shortcut = new CShortcut();
+            $shortcut->setName($category->getName());
+            $shortcut->setShortCutNode($category->getResourceNode());
+
+            $courseEntity = api_get_course_entity(api_get_course_int_id());
+            $repoShortcut->addResourceNode($shortcut, api_get_user_entity(api_get_user_id()), $courseEntity);
+            $repoShortcut->getEntityManager()->flush();
+        } else {
+            $shortcut = $repoShortcut->getShortcutFromResource($category);
+            if (null !== $shortcut) {
+                $repoShortcut->getEntityManager()->remove($shortcut);
+                $repoShortcut->getEntityManager()->flush();
+            }
+        }
+
+        return true;
 
         $em = Database::getManager();
 
@@ -10060,19 +10080,12 @@ EOD;
         // Using doctrine extensions
         /** @var SortableRepository $repo */
         $repo = $em->getRepository('ChamiloCourseBundle:CLpCategory');
-        $items = $repo
-            ->getBySortableGroupsQuery(['cId' => $courseId])
-            ->getResult();
 
-        return $items;
+        return $repo->getBySortableGroupsQuery(['cId' => $courseId])->getResult();
     }
 
     /**
      * @param int $id
-     *
-     * @throws \Doctrine\ORM\ORMException
-     * @throws \Doctrine\ORM\OptimisticLockException
-     * @throws \Doctrine\ORM\TransactionRequiredException
      *
      * @return CLpCategory
      */
@@ -10080,9 +10093,8 @@ EOD;
     {
         $id = (int) $id;
         $em = Database::getManager();
-        $item = $em->find('ChamiloCourseBundle:CLpCategory', $id);
 
-        return $item;
+        return $em->find('ChamiloCourseBundle:CLpCategory', $id);
     }
 
     /**

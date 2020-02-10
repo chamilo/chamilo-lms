@@ -2,6 +2,7 @@
 
 /* For licensing terms, see /license.txt */
 
+use Chamilo\CoreBundle\Framework\Container;
 use Chamilo\CourseBundle\Entity\CLpCategory;
 use ChamiloSession as Session;
 
@@ -187,6 +188,8 @@ $enableAutoLaunch = api_get_course_setting('enable_lp_auto_launch');
 $gameMode = api_get_setting('gamification_mode');
 
 $data = [];
+$shortcutRepository = Container::getShortcutRepository();
+
 /** @var CLpCategory $category */
 foreach ($categories as $category) {
     $categoryId = $category->getId();
@@ -911,13 +914,15 @@ foreach ($categories as $category) {
         } // end foreach ($flat_list)
     }
 
+    $shortcut = false;
+    if ($category->hasResourceNode()) {
+        $shortcut = $shortcutRepository->getShortcutFromResource($category);
+    }
+
     $data[] = [
         'category' => $category,
         'category_visibility' => $visibility,
-        'category_is_published' => learnpath::categoryIsPublished(
-            $category,
-            $courseInfo['real_id']
-        ),
+        'category_is_published' => $shortcut ? 1 : 0,
         'lp_list' => $listData,
     ];
 }

@@ -34,6 +34,11 @@ abstract class AbstractResource
         return $this;
     }
 
+    public function hasResourceNode(): bool
+    {
+        return $this->resourceNode instanceof ResourceNode;
+    }
+
     public function getResourceNode(): ResourceNode
     {
         return $this->resourceNode;

@@ -78,59 +78,21 @@ switch ($action) {
         break;
     case 'update_lp_item_order':
         if (api_is_allowed_to_edit(null, true)) {
+            // $new_order gets a value like "647|0^648|0^649|0^"
             $new_order = $_POST['new_order'];
             $sections = explode('^', $new_order);
-            // We have to update parent_item_id, previous_item_id, next_item_id, display_order in the database
-            $itemList = new LpItemOrderList();
+            $sections = array_filter($sections);
+
+            $orderList = [];
+
             foreach ($sections as $items) {
-                if (!empty($items)) {
-                    list($id, $parent_id) = explode('|', $items);
-                    $item = new LpOrderItem($id, $parent_id);
-                    $itemList->add($item);
-                }
+                list($id, $parentId) = explode('|', $items);
+
+                $orderList[$id] = $parentId;
             }
 
-            $parents = $itemList->getListOfParents();
-            foreach ($parents as $parentId) {
-                $sameParentLpItemList = $itemList->getItemWithSameParent($parentId);
-                $previous_item_id = 0;
-                for ($i = 0; $i < count($sameParentLpItemList->list); $i++) {
-                    $item_id = $sameParentLpItemList->list[$i]->id;
-                    // display_order
-                    $display_order = $i + 1;
-                    $itemList->setParametersForId($item_id, $display_order, 'display_order');
-                    // previous_item_id
-                    $itemList->setParametersForId($item_id, $previous_item_id, 'previous_item_id');
-                    $previous_item_id = $item_id;
-                    // next_item_id
-                    $next_item_id = 0;
-                    if ($i < count($sameParentLpItemList->list) - 1) {
-                        $next_item_id = $sameParentLpItemList->list[$i + 1]->id;
-                    }
-                    $itemList->setParametersForId($item_id, $next_item_id, 'next_item_id');
-                }
-            }
+            learnpath::sortItemByOrderList($orderList);
 
-            $table = Database::get_course_table(TABLE_LP_ITEM);
-
-            foreach ($itemList->list as $item) {
-                $params = [];
-                $params['display_order'] = $item->display_order;
-                $params['previous_item_id'] = $item->previous_item_id;
-                $params['next_item_id'] = $item->next_item_id;
-                $params['parent_item_id'] = $item->parent_item_id;
-
-                Database::update(
-                    $table,
-                    $params,
-                    [
-                        'iid = ? AND c_id = ? ' => [
-                            intval($item->id),
-                            $courseId,
-                        ],
-                    ]
-                );
-            }
             echo Display::return_message(get_lang('Saved'), 'confirm');
         }
         break;

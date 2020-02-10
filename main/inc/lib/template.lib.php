@@ -1134,7 +1134,7 @@ class Template
     {
         global $cas;
 
-        if (is_array($cas) && array_key_exists('replace_login_form', $cas) && $cas['replace_login_form'] = true) {
+        if (is_array($cas) && array_key_exists('replace_login_form', $cas) && $cas['replace_login_form'] == true) {
             return self::displayCASLoginButton();
         }
 

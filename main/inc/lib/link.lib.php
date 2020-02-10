@@ -106,7 +106,7 @@ class Link extends Model
                 api_get_user_id()
             );
 
-            api_set_default_visibility($id, TOOL_LINK);
+            api_set_default_visibility($id, TOOL_LINK, 0, $course_info);
         }
 
         return $id;
@@ -140,7 +140,7 @@ class Link extends Model
         }
         $sessionId = intval($sessionId);
         if ($linkUrl != '') {
-            $sql = "UPDATE $tblLink SET 
+            $sql = "UPDATE $tblLink SET
                     url = '$linkUrl'
                     WHERE id = $linkId AND c_id = $courseId AND session_id = $sessionId";
             $resLink = Database::query($sql);
@@ -561,7 +561,7 @@ class Link extends Model
 
         if ($category_id != $values['category_id']) {
             $sql = "SELECT MAX(display_order)
-                    FROM $tbl_link 
+                    FROM $tbl_link
                     WHERE
                         c_id = $course_id AND
                         category_id='".intval($values['category_id'])."'";
@@ -914,10 +914,10 @@ class Link extends Model
                 $withBaseContent,
                 'ip.session_id'
             );
-            $condition = " AND 
+            $condition = " AND
                 (
                     (ip.visibility = '1' $conditionBaseSession) OR
-                     
+
                     (
                         (ip.visibility = '0' OR ip.visibility = '1')
                         $condition_session
@@ -934,7 +934,7 @@ class Link extends Model
             $condition .= " AND (ip.visibility = '0' OR ip.visibility = '1') $condition ";
         }
 
-        $sql = "SELECT 
+        $sql = "SELECT
                     link.id,
                     ip.session_id,
                     link.session_id link_session_id,
@@ -1744,7 +1744,7 @@ class Link extends Model
         if (empty($id) || empty($courseId)) {
             return [];
         }
-        $sql = "SELECT * FROM $table 
+        $sql = "SELECT * FROM $table
                 WHERE id = $id AND c_id = $courseId";
         $result = Database::query($sql);
         $category = Database::fetch_array($result, 'ASSOC');

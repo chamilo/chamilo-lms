@@ -3075,7 +3075,7 @@ class Tracking
         if (!empty($course_code)) {
             $course = api_get_course_info($course_code);
             $courseId = $course['real_id'];
-            $conditions[] = " c_id = $courseId";
+            $conditions[] = " lp.c_id = $courseId";
         }
 
         // Get course tables names
@@ -3086,13 +3086,13 @@ class Tracking
 
         // Compose a filter based on optional learning paths list given
         if (!empty($lp_ids) && count($lp_ids) > 0) {
-            $conditions[] = ' id IN ('.implode(',', $lp_ids).') ';
+            $conditions[] = ' lp.id IN ('.implode(',', $lp_ids).') ';
         }
 
         // Compose a filter based on optional session id
         $session_id = (int) $session_id;
         if (!empty($session_id)) {
-            $conditions[] = " session_id = $session_id ";
+            $conditions[] = " lp_view.session_id = $session_id ";
         }
 
         if (is_array($student_id)) {
@@ -3103,7 +3103,7 @@ class Tracking
             $conditions[] = " lp_view.user_id = $student_id ";
         }
 
-        $conditionsToString = implode('AND ', $conditions);
+        $conditionsToString = implode(' AND ', $conditions);
         $sql = "SELECT
                     SUM(lp_iv.score) sum_score,
                     SUM(lp_i.max_score) sum_max_score

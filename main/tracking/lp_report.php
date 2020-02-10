@@ -376,7 +376,7 @@ function getData($from, $numberOfItems, $column, $direction)
                 DATE_TIME_FORMAT_LONG
             );
 
-            $score = Tracking::get_avg_student_score(
+            $score = Tracking::getAverageStudentScore(
                 $userId,
                 $courseCode,
                 [$lpId],

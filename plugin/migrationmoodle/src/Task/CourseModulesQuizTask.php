@@ -7,7 +7,6 @@ use Chamilo\PluginBundle\MigrationMoodle\Extractor\CourseExtractor;
 use Chamilo\PluginBundle\MigrationMoodle\Loader\CourseModulesQuizLoader;
 use Chamilo\PluginBundle\MigrationMoodle\Transformer\BaseTransformer;
 use Chamilo\PluginBundle\MigrationMoodle\Transformer\Property\LoadedCourseCodeLookup;
-use Chamilo\PluginBundle\MigrationMoodle\Transformer\Property\LoadedLpItemInSequenceLookup;
 use Chamilo\PluginBundle\MigrationMoodle\Transformer\Property\LoadedLpLookup;
 
 /**
@@ -26,7 +25,7 @@ class CourseModulesQuizTask extends BaseTask
     {
         return [
             'class' => CourseExtractor::class,
-            'query' => "SELECT cm.id, q.course, q.name, cm.section, cs.sequence
+            'query' => "SELECT cm.id, q.course, q.name, cm.section
                 FROM mdl_quiz q
                 INNER JOIN mdl_course_modules cm ON (q.course = cm.course AND cm.instance = q.id)
                 INNER JOIN mdl_modules m ON cm.module = m.id
@@ -51,10 +50,6 @@ class CourseModulesQuizTask extends BaseTask
                 'lp_id' => [
                     'class' => LoadedLpLookup::class,
                     'properties' => ['section']
-                ],
-                'previous' => [
-                    'class' => LoadedLpItemInSequenceLookup::class,
-                    'properties' => ['id', 'sequence'],
                 ],
                 'title' => 'name',
             ],

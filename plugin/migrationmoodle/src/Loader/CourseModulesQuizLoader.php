@@ -29,15 +29,14 @@ class CourseModulesQuizLoader implements LoaderInterface
             $incomingData['lp_id'],
             api_get_user_id()
         );
-        $itemId = $lp->add_item(
+
+        return $lp->add_item(
             0,
-            $incomingData['previous'],
+            0,
             'quiz',
             0,
             $incomingData['title'],
             ''
         );
-
-        return $itemId;
     }
 }

@@ -37,6 +37,7 @@ $menu = [
         'course_modules_quiz',
         'course_modules_url',
         'c_quiz',
+        'sort_section_modules',
     ],
     'course_modules_lesson' => [
         'lesson_pages',
@@ -83,6 +84,9 @@ $menu = [
     ],
     'course_introductions' => [
         'files_for_course_introductions',
+    ],
+    'course_modules_url' => [
+        'urls',
     ],
 ];
 

@@ -4,19 +4,18 @@
 namespace Chamilo\PluginBundle\MigrationMoodle\Task;
 
 use Chamilo\PluginBundle\MigrationMoodle\Extractor\CourseExtractor;
-use Chamilo\PluginBundle\MigrationMoodle\Loader\CourseModulesUrlLoader;
+use Chamilo\PluginBundle\MigrationMoodle\Loader\UrlLoader;
 use Chamilo\PluginBundle\MigrationMoodle\Transformer\BaseTransformer;
-use Chamilo\PluginBundle\MigrationMoodle\Transformer\Property\LoadedCourseCodeLookup;
+use Chamilo\PluginBundle\MigrationMoodle\Transformer\Property\LoadedCourseLookup;
+use Chamilo\PluginBundle\MigrationMoodle\Transformer\Property\LoadedCourseModulesUrlLookup;
 use Chamilo\PluginBundle\MigrationMoodle\Transformer\Property\LoadedLpLookup;
 
 /**
- * Class CourseModulesUrlTask.
- *
- * Task to create a Chamilo Link from a Moodle URL module.
+ * Class UrlsTask.
  *
  * @package Chamilo\PluginBundle\MigrationMoodle\Task
  */
-class CourseModulesUrlTask extends BaseTask
+class UrlsTask extends BaseTask
 {
     /**
      * @inheritDoc
@@ -25,7 +24,7 @@ class CourseModulesUrlTask extends BaseTask
     {
         return [
             'class' => CourseExtractor::class,
-            'query' => "SELECT cm.id, u.course, u.name, cm.section
+            'query' => "SELECT u.id, u.course, u.name, u.externalurl, cm.section, cm.id cm_id
                 FROM mdl_url u
                 INNER JOIN mdl_course_modules cm ON (u.course = cm.course AND cm.instance = u.id)
                 INNER JOIN mdl_modules m ON cm.module = m.id
@@ -50,15 +49,20 @@ class CourseModulesUrlTask extends BaseTask
         return [
             'class' => BaseTransformer::class,
             'map' => [
-                'c_code' => [
-                    'class' => LoadedCourseCodeLookup::class,
+                'c_id' => [
+                    'class' => LoadedCourseLookup::class,
                     'properties' => ['course'],
                 ],
                 'lp_id' => [
                     'class' => LoadedLpLookup::class,
                     'properties' => ['section'],
                 ],
+                'item_id' => [
+                    'class' => LoadedCourseModulesUrlLookup::class,
+                    'properties' => ['cm_id'],
+                ],
                 'title' => 'name',
+                'url' => 'externalurl',
             ],
         ];
     }
@@ -69,7 +73,7 @@ class CourseModulesUrlTask extends BaseTask
     public function getLoadConfiguration()
     {
         return [
-            'class' => CourseModulesUrlLoader::class,
+            'class' => UrlLoader::class,
         ];
     }
 }

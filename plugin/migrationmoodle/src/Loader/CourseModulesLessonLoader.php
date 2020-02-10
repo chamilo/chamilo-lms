@@ -30,7 +30,7 @@ class CourseModulesLessonLoader implements LoaderInterface
         );
         $itemId = $lp->add_item(
             0,
-            $incomingData['previous'],
+            0,
             'dir',
             0,
             $incomingData['title'],

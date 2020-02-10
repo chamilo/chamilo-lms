@@ -35,26 +35,19 @@ class CourseSectionsLoader implements LoaderInterface
 
         $incomingData['description'] = trim($incomingData['description']);
 
-        if (empty($incomingData['description'])) {
-            return $lpId;
+        if (!empty($incomingData['description'])) {
+            $lp = new \learnpath(
+                $incomingData['course_code'],
+                $lpId,
+                api_get_user_id()
+            );
+            $lp->generate_lp_folder($courseInfo);
+
+            $itemTitle = get_lang('Description');
+
+            $documentId = $lp->create_document($courseInfo, $incomingData['description'], $itemTitle);
+            $lp->add_item(0, 0, 'document', $documentId, $itemTitle, '');
         }
-
-        $lp = new \learnpath(
-            $incomingData['course_code'],
-            $lpId,
-            api_get_user_id()
-        );
-        $lp->generate_lp_folder($courseInfo);
-
-        $itemTitle = get_lang('Description');
-
-        $itemId = $lp->add_item(0, 0, 'document', 0, $itemTitle, '');
-        $documentId = $lp->create_document($courseInfo, $incomingData['description'], $itemTitle);
-
-        \Database::getManager()
-            ->createQuery('UPDATE ChamiloCourseBundle:CLpItem i SET i.path = :path WHERE i.iid = :id')
-            ->setParameters(['path' => $documentId, 'id' => $itemId])
-            ->execute();
 
         return $lpId;
     }

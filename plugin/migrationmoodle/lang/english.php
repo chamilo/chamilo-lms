@@ -45,3 +45,5 @@ $strings['CourseIntroductionsTask'] = 'Course introductions';
 $strings['FilesForCourseIntroductionsTask'] = 'Files for course introductions';
 $strings['FilesForCourseSectionsTask'] = 'Files for course sections';
 $strings['CourseModulesUrlTask'] = 'Course modules: URLs';
+$strings['UrlsTask'] = 'URLs';
+$strings['SortSectionModulesTask'] = 'Sort modules in section';

@@ -20,7 +20,7 @@ abstract class LoadedKeyLookup implements TransformPropertyInterface
      *
      * @throws \Exception
      *
-     * @return int
+     * @return mixed
      */
     public function transform(array $data)
     {

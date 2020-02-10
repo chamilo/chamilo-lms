@@ -7,7 +7,6 @@ use Chamilo\PluginBundle\MigrationMoodle\Extractor\CourseExtractor;
 use Chamilo\PluginBundle\MigrationMoodle\Loader\CourseModulesLessonLoader;
 use Chamilo\PluginBundle\MigrationMoodle\Transformer\BaseTransformer;
 use Chamilo\PluginBundle\MigrationMoodle\Transformer\Property\LoadedCourseCodeLookup;
-use Chamilo\PluginBundle\MigrationMoodle\Transformer\Property\LoadedLpDirLookup;
 use Chamilo\PluginBundle\MigrationMoodle\Transformer\Property\LoadedLpLookup;
 
 /**
@@ -19,7 +18,6 @@ use Chamilo\PluginBundle\MigrationMoodle\Transformer\Property\LoadedLpLookup;
  */
 class CourseModulesLessonTask extends BaseTask
 {
-
     /**
      * @return array
      */
@@ -27,12 +25,13 @@ class CourseModulesLessonTask extends BaseTask
     {
         return [
             'class' => CourseExtractor::class,
-            'query' => "SELECT cm.id, l.course, l.name, cs.sequence, cm.section FROM mdl_lesson l
+            'query' => "SELECT cm.id, l.course, l.name, cm.section
+                FROM mdl_lesson l
                 INNER JOIN mdl_course_modules cm ON (l.course = cm.course AND cm.instance = l.id)
                 INNER JOIN mdl_modules m ON cm.module = m.id
                 INNER JOIN mdl_course_sections cs ON (cm.course = cs.course AND cm.section = cs.id )
                 WHERE m.name = 'lesson'
-                ORDER BY FIND_IN_SET(cm.id, cs.sequence)",
+                ORDER BY cs.id, FIND_IN_SET(cm.id, cs.sequence)",
         ];
     }
 
@@ -51,10 +50,6 @@ class CourseModulesLessonTask extends BaseTask
                 'lp_id' => [
                     'class' => LoadedLpLookup::class,
                     'properties' => ['section'],
-                ],
-                'previous' => [
-                    'class' => LoadedLpDirLookup::class,
-                    'properties' => ['id', 'sequence']
                 ],
                 'title' => 'name',
             ],

@@ -427,10 +427,6 @@ if (!$lp_found || (!empty($_REQUEST['lp_id']) && $_SESSION['oLP']->get_id() != $
     }
 }
 
-if ($debug > 0) {
-    error_log('Passed oLP creation check');
-}
-
 $is_allowed_to_edit = api_is_allowed_to_edit(false, true, false, false);
 
 if (isset($_SESSION['oLP'])) {
@@ -483,7 +479,7 @@ if (isset($_POST['title'])) {
     $post_title = Security::remove_XSS($_POST['title']);
     if (isset($_POST['type']) &&
         isset($_POST['title']) &&
-        TOOL_QUIZ == $_POST['type'] &&
+        TOOL_QUIZ === $_POST['type'] &&
         !empty($_POST['title'])
     ) {
         $post_title = Exercise::format_title_variable($_POST['title']);
@@ -688,12 +684,8 @@ switch ($action) {
                     $_SESSION['oLP']->set_modified_on();
                     $lp_item_obj->add_audio_from_documents($_REQUEST['document_id']);
                 }
-
-                // Display.
-                require 'lp_add_audio.php';
-            } else {
-                require 'lp_add_audio.php';
             }
+            require 'lp_add_audio.php';
         }
         break;
     case 'add_lp_category':
@@ -1066,7 +1058,7 @@ switch ($action) {
         }
 
         if ($lp_found) {
-            learnpath::toggle_visibility($_REQUEST['lp_id'], $_REQUEST['new_status']);
+            learnpath::toggleVisibility($_REQUEST['lp_id'], $_REQUEST['new_status']);
             Display::addFlash(Display::return_message(get_lang('Update successful')));
         }
         header('Location: '.$listUrl);
@@ -1090,7 +1082,7 @@ switch ($action) {
             api_not_allowed(true);
         }
         if ($lp_found) {
-            learnpath::toggle_publish($_REQUEST['lp_id'], $_REQUEST['new_status']);
+            learnpath::togglePublish($_REQUEST['lp_id'], $_REQUEST['new_status']);
             Display::addFlash(Display::return_message(get_lang('Update successful')));
         }
         header('Location: '.$listUrl);

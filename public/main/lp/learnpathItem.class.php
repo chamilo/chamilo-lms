@@ -3728,7 +3728,7 @@ class learnpathItem
                     Database::update($item_view_table, $params, $where);
                 } else {
                     // For all other content types...
-                    if ('quiz' == $this->type) {
+                    if ('quiz' === $this->type) {
                         if ($debug) {
                             error_log("item is quiz:");
                         }

@@ -3411,6 +3411,11 @@ class learnpath
             // Now go through the specific cases to get the end of the path
             // @todo Use constants instead of int values.
 
+            if ($this->debug > 2) {
+                error_log('In learnpath::get_link() '.__LINE__.' - $lp_item_type: '.$lp_item_type, 0);
+                error_log('In learnpath::get_link() '.__LINE__.' - $lp_type: '.$lp_type, 0);
+            }
+
             switch ($lp_type) {
                 case 1:
                     $file = self::rl_get_resource_link_for_learnpath(
@@ -3483,14 +3488,8 @@ class learnpath
                             }
 
                             if (empty($provided_toc)) {
-                                if ($this->debug > 0) {
-                                    error_log('In learnpath::get_link() Loading get_toc ', 0);
-                                }
                                 $list = $this->get_toc();
                             } else {
-                                if ($this->debug > 0) {
-                                    error_log('In learnpath::get_link() Loading get_toc from "cache" ', 0);
-                                }
                                 $list = $provided_toc;
                             }
 
@@ -3529,11 +3528,7 @@ class learnpath
                     }
                     break;
                 case 2:
-                    if ($this->debug > 2) {
-                        error_log('In learnpath::get_link() '.__LINE__.' - Item type: '.$lp_item_type, 0);
-                    }
-
-                    if ('dir' != $lp_item_type) {
+                    if ('dir' !== $lp_item_type) {
                         // Quite complex here:
                         // We want to make sure 'http://' (and similar) links can
                         // be loaded as is (withouth the Chamilo path in front) but
@@ -3601,15 +3596,12 @@ class learnpath
                     }
                     break;
                 case 3:
-                    if ($this->debug > 2) {
-                        error_log('In learnpath::get_link() '.__LINE__.' - Item type: '.$lp_item_type, 0);
-                    }
                     // Formatting AICC HACP append URL.
                     $aicc_append = '?aicc_sid='.urlencode(session_id()).'&aicc_url='.urlencode(api_get_path(WEB_CODE_PATH).'lp/aicc_hacp.php').'&';
                     if (!empty($lp_item_params)) {
                         $aicc_append .= $lp_item_params.'&';
                     }
-                    if ('dir' != $lp_item_type) {
+                    if ('dir' !== $lp_item_type) {
                         // Quite complex here:
                         // We want to make sure 'http://' (and similar) links can
                         // be loaded as is (withouth the Chamilo path in front) but
@@ -4182,14 +4174,31 @@ class learnpath
      * to normal users.
      * Can be used as abstract.
      *
-     * @param int $lp_id          Learnpath ID
-     * @param int $set_visibility New visibility
+     * @param int $id          Learnpath ID
+     * @param int $visibility New visibility
      *
      * @return bool
      */
-    public static function toggle_visibility($lp_id, $set_visibility = 1)
+    public static function toggleVisibility($id, $visibility = 1)
     {
-        $action = 'visible';
+        $repo = Container::getLpRepository();
+        $lp = $repo->find($id);
+
+        if (!$lp) {
+            return false;
+        }
+
+        $visibility = (int) $visibility;
+
+        if (1 === $visibility) {
+            $repo->setVisibilityPublished($lp);
+        } else {
+            $repo->setVisibilityDraft($lp);
+        }
+
+        return true;
+
+        /*$action = 'visible';
         if (1 != $set_visibility) {
             $action = 'invisible';
             self::toggle_publish($lp_id, 'i');
@@ -4201,7 +4210,7 @@ class learnpath
             $lp_id,
             $action,
             api_get_user_id()
-        );
+        );*/
     }
 
     /**
@@ -4211,15 +4220,28 @@ class learnpath
      * @param int $id
      * @param int $visibility
      *
-     * @throws \Doctrine\ORM\NonUniqueResultException
-     * @throws \Doctrine\ORM\ORMException
-     * @throws \Doctrine\ORM\OptimisticLockException
-     * @throws \Doctrine\ORM\TransactionRequiredException
-     *
      * @return bool
      */
     public static function toggleCategoryVisibility($id, $visibility = 1)
     {
+        $repo = Container::getLpCategoryRepository();
+        $resource = $repo->find($id);
+
+        if (!$resource) {
+            return false;
+        }
+
+        $visibility = (int) $visibility;
+
+        if (1 === $visibility) {
+            $repo->setVisibilityPublished($resource);
+        } else {
+            $repo->setVisibilityDraft($resource);
+            self::toggleCategoryPublish($id, 0);
+        }
+
+        return false;
+        /*
         $action = 'visible';
         if (1 != $visibility) {
             self::toggleCategoryPublish($id, 0);
@@ -4232,7 +4254,7 @@ class learnpath
             $id,
             $action,
             api_get_user_id()
-        );
+        );*/
     }
 
     /**
@@ -4245,7 +4267,7 @@ class learnpath
      *
      * @return bool
      */
-    public static function toggle_publish($id, $setVisibility = 'v')
+    public static function togglePublish($id, $setVisibility = 'v')
     {
         $addShortcut = false;
         if ('v' === $setVisibility) {
@@ -4361,11 +4383,6 @@ class learnpath
      *
      * @param int $id
      * @param int $setVisibility
-     *
-     * @throws \Doctrine\ORM\NonUniqueResultException
-     * @throws \Doctrine\ORM\ORMException
-     * @throws \Doctrine\ORM\OptimisticLockException
-     * @throws \Doctrine\ORM\TransactionRequiredException
      *
      * @return bool
      */
@@ -10009,10 +10026,6 @@ EOD;
 
     /**
      * @param int $id
-     *
-     * @throws \Doctrine\ORM\ORMException
-     * @throws \Doctrine\ORM\OptimisticLockException
-     * @throws \Doctrine\ORM\TransactionRequiredException
      */
     public static function moveUpCategory($id)
     {
@@ -10030,10 +10043,6 @@ EOD;
 
     /**
      * @param int $id
-     *
-     * @throws \Doctrine\ORM\ORMException
-     * @throws \Doctrine\ORM\OptimisticLockException
-     * @throws \Doctrine\ORM\TransactionRequiredException
      */
     public static function moveDownCategory($id)
     {
@@ -10114,10 +10123,6 @@ EOD;
 
     /**
      * @param int $id
-     *
-     * @throws \Doctrine\ORM\ORMException
-     * @throws \Doctrine\ORM\OptimisticLockException
-     * @throws \Doctrine\ORM\TransactionRequiredException
      *
      * @return mixed
      */
@@ -10241,9 +10246,7 @@ EOD;
     {
         $attempt = $this->getItem($this->get_current_item_id());
         if ($attempt) {
-            $attemptId = $attempt->get_attempt_id();
-
-            return $attemptId;
+            return $attempt->get_attempt_id();
         }
 
         return 0;
@@ -10428,7 +10431,7 @@ EOD;
     {
         $exercises = [];
         foreach ($this->items as $item) {
-            if ('quiz' != $item->type) {
+            if (TOOL_QUIZ !== $item->type) {
                 continue;
             }
 
@@ -10629,7 +10632,7 @@ EOD;
     {
         require_once api_get_path(SYS_CODE_PATH).'/forum/forumfunction.inc.php';
 
-        $forumId = store_forum(
+        return store_forum(
             [
                 'lp_id' => $this->lp_id,
                 'forum_title' => $this->name,
@@ -10644,8 +10647,6 @@ EOD;
             [],
             true
         );
-
-        return $forumId;
     }
 
     /**

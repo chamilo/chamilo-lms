@@ -167,7 +167,7 @@ class LearnPathItemForm
                     //'BaseHref' => api_get_path(WEB_COURSE_PATH).api_get_course_path().'/document/'.$relative_path,
                 ];
 
-                $form->addButtonSave(get_lang('Save'), 'submit_button');
+                //$form->addButtonSave(get_lang('Save'), 'submit_button');
 
                 if ($document->getResourceNode()->hasEditableContent()) {
                     $form->addHidden('document_id', $document->getIid());

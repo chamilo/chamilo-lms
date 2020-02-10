@@ -7412,19 +7412,7 @@ class learnpath
                 break;
         }
 
-        $showButton = false;
-
-        $form->addButtonSave(get_lang('Save document'), 'submit_button');
-
-        if ($showButton) {
-            $form->addButtonSave(get_lang('Save document'), 'submit_button');
-            //$form->addElement('hidden', 'path', $extra_info);
-        }
-        /* elseif (is_array($extra_info)) {
-            $form->addButtonSave(get_lang('Save document'), 'submit_button');
-            $form->addElement('hidden', 'path', $extra_info['path']);
-        }*/
-        $form->addElement('hidden', 'type', TOOL_DOCUMENT);
+        $form->addButtonSave(get_lang('Save'), 'submit_button');
 
         return $form->returnForm();
     }

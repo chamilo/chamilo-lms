@@ -2867,22 +2867,30 @@ class DocumentManager
 
         $repo = Container::getDocumentRepository();
         $nodeRepository = $repo->getResourceNodeRepository();
+        $move = get_lang('Move');
+        $icon = Display::return_icon('move_everywhere.png', $move);
+        $folderIcon = Display::return_icon('lp_folder.png');
+
         $options = [
             'decorate' => true,
             'rootOpen' => '<ul class="lp_resource">',
             'rootClose' => '</ul>',
             'childOpen' => '<li class="doc_resource lp_resource_element ">',
             'childClose' => '</li>',
-            'nodeDecorator' => function ($node) {
+            'nodeDecorator' => function ($node) use ($icon, $folderIcon) {
                 $link = '<div class="item_data">';
-                if (empty($node['__children'])) {
-                    $move = get_lang('Move');
+                $slug = $node['slug'];
+                $extension = pathinfo($slug, PATHINFO_EXTENSION);
+                $folder = $folderIcon;
+                if (empty($node['__children']) && !empty($extension)) {
                     $link .= '<a class="moved ui-sortable-handle" href="#">';
-                    $link .= '<img src="/img/icons/16/move_everywhere.png" alt="'.$move.'" title="'.$move.'"></a>';
+                    $link .= $icon;
                     $link .= '</a>';
+                    $folder = '';
                 }
+
                 $link .= '<a data_id="'.$node['id'].'" class="moved ui-sortable-handle link_with_id">';
-                $link .= $node['slug'];
+                $link .= $folder.'&nbsp;'.$node['slug'];
                 $link .= '</a>';
 
                 $link .= '</div>';
@@ -2905,11 +2913,23 @@ class DocumentManager
             /*  ->where('node.parent = :parent') */
             ->setParameters(['type' => $type, 'course' => $course_info['entity']])
             ->orderBy('node.parent', 'ASC')
-            ->getQuery();
+            ->getQuery()
+        ;
 
-        $tree = $nodeRepository->buildTree($query->getArrayResult(), $options);
+        /*$em->getConfiguration()->addCustomHydrationMode('tree', 'Gedmo\Tree\Hydrator\ORM\TreeObjectHydrator');
+        $tree = $query->getQuery()
+            ->setHint(\Doctrine\ORM\Query::HINT_INCLUDE_META_COLUMNS, true)
+            ->getResult('tree');
+        */
+
+        /*foreach ($tree as $a) {
+            var_dump(get_class($a));
+        }*/
+
+        return $nodeRepository->buildTree($query->getArrayResult(), $options);
 
         return $tree;
+        $nodeRepository->buildTree($query->getResult(), $options);
 
         $user_id = api_get_user_id();
         $userInfo = api_get_user_info();
@@ -6825,9 +6845,8 @@ This folder contains all sessions that have been opened in the chat. Although th
             ]
         );
 
-        if (
-            isset($_GET['curdirpath']) &&
-            '/certificates' == $_GET['curdirpath'] &&
+        if (isset($_GET['curdirpath']) &&
+            '/certificates' === $_GET['curdirpath'] &&
             self::get_default_certificate_id(api_get_course_int_id()) == $id
         ) {
             return $btn;

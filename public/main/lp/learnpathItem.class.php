@@ -3872,7 +3872,7 @@ class learnpathItem
                         }
                     }
 
-                    if ('sco' == $this->type) {
+                    if ('sco' === $this->type) {
                         //IF scorm scorm_update_time has already updated total_time in db
                         //" . //start_time = ".$this->get_current_start_time().", " . //scorm_init_time does it
                         ////" max_time_allowed = '".$this->get_max_time_allowed()."'," .
@@ -4178,7 +4178,7 @@ class learnpathItem
                 break;
         }
 
-        if ('simple' == $type) {
+        if ('simple' === $type) {
             if (in_array($status, ['failed', 'passed', 'browsed'])) {
                 $myLessonStatus = get_lang('Incomplete');
 
@@ -4188,9 +4188,9 @@ class learnpathItem
 
         if ($decorate) {
             return Display::label($myLessonStatus, $classStatus);
-        } else {
-            return $myLessonStatus;
         }
+
+        return $myLessonStatus;
     }
 
     /**

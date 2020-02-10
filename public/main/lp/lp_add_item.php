@@ -207,12 +207,8 @@ echo '</div>';
 
 echo '<div id="doc_form" class="col-md-8">';
 
-//@todo use session flash messages
-if (in_array($message, ['ItemUpdated'])) {
-    echo Display::return_message(get_lang($message));
-}
-
 $learnPath->display_resources();
+
 /*
 switch ($type) {
     case 'dir':

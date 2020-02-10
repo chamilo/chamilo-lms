@@ -587,8 +587,8 @@ switch ($action) {
                     $prerequisites = isset($_POST['prerequisites']) ? $_POST['prerequisites'] : '';
                     $maxTimeAllowed = isset($_POST['maxTimeAllowed']) ? $_POST['maxTimeAllowed'] : '';
 
-                    if (TOOL_DOCUMENT == $_POST['type']) {
-                        if (isset($_POST['path']) && 'true' != $_GET['edit']) {
+                    if (TOOL_DOCUMENT === $_POST['type']) {
+                        if (isset($_POST['path']) && isset($_GET['id']) && !empty($_GET['id'])) {
                             $document_id = $_POST['path'];
                         } else {
                             if ($_POST['content_lp']) {
@@ -615,12 +615,14 @@ switch ($action) {
                         if (isset($_POST['path']) && 'true' != $_GET['edit']) {
                             $document_id = $_POST['path'];
                         } else {
-                            $document_id = $_SESSION['oLP']->createReadOutText(
-                                $_course,
-                                $_POST['content_lp'],
-                                $_POST['title'],
-                                $directoryParentId
-                            );
+                            if ($_POST['content_lp']) {
+                                $document_id = $_SESSION['oLP']->createReadOutText(
+                                    $_course,
+                                    $_POST['content_lp'],
+                                    $_POST['title'],
+                                    $directoryParentId
+                                );
+                            }
                         }
 
                         $_SESSION['oLP']->add_item(

@@ -152,32 +152,32 @@ class LearnPathItemForm
 
         // Content
         if (in_array($itemType, [TOOL_DOCUMENT, TOOL_LP_FINAL_ITEM, TOOL_READOUT_TEXT], true)) {
-            $repo = Container::getDocumentRepository();
-            /** @var CDocument $document */
-            $document = $repo->find($lpItem->getPath());
+            $document = null;
+            if (!empty($lpItem->getPath())) {
+                $repo = Container::getDocumentRepository();
+                /** @var CDocument $document */
+                $document = $repo->find($lpItem->getPath());
+            }
+
+            $editorConfig = [
+                'ToolbarSet' => 'LearningPathDocuments',
+                'Width' => '100%',
+                'Height' => '500',
+                'FullPage' => true,
+                //   'CreateDocumentDir' => $relative_prefix,
+                //'CreateDocumentWebDir' => api_get_path(WEB_COURSE_PATH).api_get_course_path().'/document/',
+                //'BaseHref' => api_get_path(WEB_COURSE_PATH).api_get_course_path().'/document/'.$relative_path,
+            ];
+
+            $renderer = $form->defaultRenderer();
+            $renderer->setElementTemplate('&nbsp;{label}{element}', 'content_lp');
+            $form->addElement('html', '<div class="editor-lp">');
+            $form->addHtmlEditor('content_lp', null, null, true, $editorConfig, true);
+            $form->addElement('html', '</div>');
 
             if ($document) {
-                $editorConfig = [
-                    'ToolbarSet' => 'LearningPathDocuments',
-                    'Width' => '100%',
-                    'Height' => '500',
-                    'FullPage' => true,
-                    //   'CreateDocumentDir' => $relative_prefix,
-                    //'CreateDocumentWebDir' => api_get_path(WEB_COURSE_PATH).api_get_course_path().'/document/',
-                    //'BaseHref' => api_get_path(WEB_COURSE_PATH).api_get_course_path().'/document/'.$relative_path,
-                ];
-
-                //$form->addButtonSave(get_lang('Save'), 'submit_button');
-
                 if ($document->getResourceNode()->hasEditableContent()) {
                     $form->addHidden('document_id', $document->getIid());
-                    $renderer = $form->defaultRenderer();
-                    $renderer->setElementTemplate('&nbsp;{label}{element}', 'content_lp');
-
-                    $form->addElement('html', '<div class="editor-lp">');
-                    $form->addHtmlEditor('content_lp', null, null, true, $editorConfig, true);
-                    $form->addElement('html', '</div>');
-
                     $content = $lp->display_document(
                         $document,
                         false,

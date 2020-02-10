@@ -207,7 +207,7 @@ echo '</div>';
 
 echo '<div id="doc_form" class="col-md-8">';
 
-$learnPath->display_resources();
+$learnPath->displayResources();
 
 /*
 switch ($type) {

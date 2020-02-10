@@ -6978,7 +6978,7 @@ class learnpath
             case TOOL_DOCUMENT:
             case TOOL_READOUT_TEXT:
                 $return .= $this->displayItemMenu($lpItem);
-                $return .= $this->display_document_form('edit', $lpItem);
+                $return .= $this->displayDocumentForm('edit', $lpItem);
                 break;
             case TOOL_LINK:
                 $link = null;
@@ -7040,7 +7040,7 @@ class learnpath
      *
      * @return bool
      */
-    public function display_resources()
+    public function displayResources()
     {
         $course_code = api_get_course_id();
 
@@ -7073,7 +7073,7 @@ class learnpath
         ];
 
         echo Display::return_message(get_lang('Click on the [Learner view] button to see your learning path'), 'normal');
-        $dir = $this->displayNewSectionForm();
+        $section = $this->displayNewSectionForm();
 
         $selected = isset($_REQUEST['lp_build_selected']) ? (int) $_REQUEST['lp_build_selected'] : 0;
 
@@ -7085,7 +7085,7 @@ class learnpath
                 $links,
                 $works,
                 $forums,
-                $dir,
+                $section,
                 $finish,
             ],
             'resource_tab',
@@ -7369,13 +7369,13 @@ class learnpath
      *
      * @throws Exception
      */
-    public function display_document_form($action = 'add', $lpItem = null)
+    public function displayDocumentForm($action = 'add', $lpItem = null)
     {
         if (empty($lpItem)) {
             return '';
         }
 
-        $_course = api_get_course_info();
+        $courseInfo = api_get_course_info();
 
         $form = new FormValidator(
             'form',
@@ -7385,14 +7385,14 @@ class learnpath
             ['enctype' => 'multipart/form-data']
         );
 
-        $data = $this->generate_lp_folder($_course);
+        $data = $this->generate_lp_folder($courseInfo);
 
         LearnPathItemForm::setForm($form, $action, $this, $lpItem);
 
         switch ($action) {
             case 'add':
                 $folders = DocumentManager::get_all_document_folders(
-                    $_course,
+                    $courseInfo,
                     0,
                     true
                 );
@@ -7576,7 +7576,7 @@ class learnpath
 
         $url = api_get_self().'?'.api_get_cidreq().'&view=build&id='.$item_id.'&lp_id='.$this->lp_id;
 
-        if (TOOL_LP_FINAL_ITEM != $itemType) {
+        if (TOOL_LP_FINAL_ITEM !== $itemType) {
             $return .= Display::url(
                 Display::return_icon(
                     'edit.png',
@@ -7587,7 +7587,7 @@ class learnpath
                 $url.'&action=edit_item&path_item='.$path
             );
 
-            $return .= Display::url(
+            /*$return .= Display::url(
                 Display::return_icon(
                     'move.png',
                     get_lang('Move'),
@@ -7595,11 +7595,11 @@ class learnpath
                     ICON_SIZE_SMALL
                 ),
                 $url.'&action=move_item'
-            );
+            );*/
         }
 
         // Commented for now as prerequisites cannot be added to chapters.
-        if ('dir' != $itemType) {
+        if ('dir' !== $itemType) {
             $return .= Display::url(
                 Display::return_icon(
                     'accept.png',
@@ -7765,7 +7765,7 @@ class learnpath
                     break;
                 case TOOL_DOCUMENT:
                     $return .= $this->displayItemMenu($lpItem);
-                    $return .= $this->display_document_form('move', $lpItem);
+                    $return .= $this->displayDocumentForm('move', $lpItem);
                     break;
                 case TOOL_LINK:
                     $link = null;
@@ -8041,13 +8041,6 @@ class learnpath
             true
         );
 
-        $headers = [
-            get_lang('Files'),
-            get_lang('Create a new document'),
-            get_lang('Create read-out text'),
-            get_lang('Upload'),
-        ];
-
         $form = new FormValidator(
             'form_upload',
             'POST',
@@ -8115,15 +8108,27 @@ class learnpath
 
         $url = api_get_path(WEB_AJAX_PATH).'document.ajax.php?'.api_get_cidreq().'&a=upload_file&curdirpath=';
         $form->addMultipleUpload($url);
-        $new = $this->display_document_form('add');
-        $frmReadOutText = $this->display_document_form('add');
-        $tabs = Display::tabs(
+
+        $lpItem = new CLpItem();
+        $lpItem->setItemType(TOOL_DOCUMENT);
+        $new = $this->displayDocumentForm('add', $lpItem);
+
+        /*$lpItem = new CLpItem();
+        $lpItem->setItemType(TOOL_READOUT_TEXT);
+        $frmReadOutText = $this->displayDocumentForm('add');*/
+
+        $headers = [
+            get_lang('Files'),
+            get_lang('Create a new document'),
+            get_lang('Create read-out text'),
+            get_lang('Upload'),
+        ];
+
+        return Display::tabs(
             $headers,
-            [$documentTree, $new, $frmReadOutText, $form->returnForm()],
+            [$documentTree, $new, $form->returnForm()],
             'subtab'
         );
-
-        return $tabs;
     }
 
     /**

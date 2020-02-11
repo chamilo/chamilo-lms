@@ -26,7 +26,7 @@ class QuestionShortAnswerTask extends LessonAnswersShortAnswerTask
             'query' => "SELECT
                     qa.id,
                     qa.question,
-                    GROUP_CONCAT(qa.answer SEPARATOR '|') answers,
+                    GROUP_CONCAT(qa.answer SEPARATOR '||') answers,
                     GROUP_CONCAT(qa.fraction * qq.defaultmark) scores,
                     GROUP_CONCAT(qa.feedback SEPARATOR '\n') feedback,
                     COUNT(qa.id) nb,

@@ -29,7 +29,7 @@ class LessonAnswersShortAnswerTask extends BaseTask
             'query' => "SELECT
                     la.id,
                     la.pageid,
-                    GROUP_CONCAT(la.answer SEPARATOR '|') answers,
+                    GROUP_CONCAT(la.answer SEPARATOR '||') answers,
                     GROUP_CONCAT(la.response SEPARATOR '') comment,
                     GROUP_CONCAT(la.score) scores,
                     l.course,

@@ -910,7 +910,7 @@ switch ($action) {
                 'calendar_id',
             ];
         }
-        $result = $usergroup->getUserGroupUsers($id);
+        $result = $usergroup->getUserGroupUsers($id, false, $start, $limit);
         break;
     case 'get_learning_path_calendars':
         $columns = ['title', 'total_hours', 'minutes_per_day', 'actions'];

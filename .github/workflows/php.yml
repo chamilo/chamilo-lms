@@ -35,7 +35,7 @@ jobs:
                   extensions: mbstring, xml, ctype, iconv, mysql, gd, soap, intl, zip, bcmath
 
             - name: Install dependencies
-              run: composer install --prefer-dist --no-progress --no-suggest
+              run: composer install --prefer-dist --no-progress --no-suggest --no-scripts
 
             - name: Composer analyse
               run: composer analyse

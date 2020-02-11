@@ -4,6 +4,8 @@
 use Chamilo\PluginBundle\MigrationMoodle\Exceptions\Message as MigrationMoodleException;
 use Chamilo\PluginBundle\MigrationMoodle\Task\BaseTask;
 
+$cidReset = true;
+
 require_once __DIR__.'/../../main/inc/global.inc.php';
 
 api_protect_admin_script(true);

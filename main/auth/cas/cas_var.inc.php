@@ -7,6 +7,7 @@
 if (api_is_cas_activated()) {
     require_once __DIR__.'/../../../vendor/apereo/phpcas/source/CAS.php';
 
+    // Get the $cas array from app/config/auth.conf.php
     global $cas;
 
     if (is_array($cas) && array_key_exists('debug', $cas) && !empty($cas['debug'])) {

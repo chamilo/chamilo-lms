@@ -37,6 +37,7 @@ $strings['QuestionsTask'] = 'Questions';
 $strings['QuestionMultiChoiceSingleTask'] = 'Answers for multichoice questions (single)';
 $strings['QuestionMultiChoiceMultipleTask'] = 'Answers for multichoice questions (multiple)';
 $strings['QuestionsTrueFalseTask'] = 'Answers for truefalse questions';
+$strings['QuestionShortAnswerTask'] = 'Answers for shortanswers questions';
 $strings['CourseModulesScormTask'] = 'Course Scorms';
 $strings['ScormScoesTask'] = 'Scorms items';
 $strings['FilesForScormScoesTask'] = 'Files for Scorm items';

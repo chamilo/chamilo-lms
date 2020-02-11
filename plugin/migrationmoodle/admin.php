@@ -75,6 +75,7 @@ $menu = [
         'question_multi_choice_single',
         'question_multi_choice_multiple',
         'questions_true_false',
+        'question_short_answer',
     ],
     'course_modules_scorm' => [
         'scorm_scoes',

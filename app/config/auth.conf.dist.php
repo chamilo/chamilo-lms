@@ -32,8 +32,10 @@
  *  Find them here : https://developer.okta.com/
  */
 /*$okta_config = array(
-    'integration_name' => 'chamilo-okta-com',
-    'idp_metadata' => 'http://idp.oktadev.com/metadata',
+    'idp' => array (
+        'integration_name' => 'idp_metadata',
+        'chamilo-okta-com' => 'http://idp.oktadev.com/metadata',
+    ),
     'redirect_all' => false
 );*/
 

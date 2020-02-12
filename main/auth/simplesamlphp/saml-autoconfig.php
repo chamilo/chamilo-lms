@@ -42,16 +42,7 @@ if (empty($oktaConfig)) {
     //var_dump('saml-autoconfig <pre>', $GLOBALS, $GLOBALS['okta_config'], $okta_config, $_SESSION);
     exit;
 }
-$metadata_url_for = array(
-    /* WARNING WARNING WARNING
-     *   You MUST remove the testing IdP (idp.oktadev.com) from a production system,
-     *   as the testing IdP will allow ANYBODY to log in as ANY USER!
-     * WARNING WARNING WARNING
-     * For testing with http://saml.oktadev.com use the line below:
-     */
-    //'chamilo-okta-com' => 'https://dev-645246.okta.com/app/exk2debikvzohBZAI357/sso/saml/metadata',
-    $oktaConfig['integration_name'] => $oktaConfig['idp_metadata'],
-);
+$metadata_url_for = $oktaConfig['idp'];
 
 foreach($metadata_url_for as $idp_name => $metadata_url) {
   /*

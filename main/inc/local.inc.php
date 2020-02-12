@@ -123,9 +123,10 @@ if (api_is_facebook_auth_activated() && !api_get_user_id()) {
 
 // okta connection, if activated
 if (api_is_okta_auth_activated() && !api_get_user_id()) {
-    if (!empty($_GET['saml_sso']) && $_GET['saml_sso'] == $GLOBALS['okta_config']['integration_name']) {
+
+    if (!empty($_GET['saml_sso']) &&  array_key_exists($_GET['saml_sso'], $GLOBALS['okta_config']['idp'])) {
         require_once api_get_path(SYS_PATH)  . 'main/auth/external_login/okta.inc.php';
-        if (isset($okta_config['integration_name']) && isset($okta_config['idp_metadata'])) {
+        if (isset($okta_config['integration_name']) && isset($GLOBALS['okta_config']['idp'])) {
             oktaConnect();
         }
     }

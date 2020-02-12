@@ -149,6 +149,24 @@
                                 </div>
                             </div>
                         {% endif %}
+
+                        {% if has_requirements %}
+                            <div class="session-requirements">
+                                <h5>{{ 'RequiredCourses'|get_lang }}</h5>
+                                {% for sequence in sequences %}
+                                    {% if sequence.requirements %}
+                                        <p>
+                                            {{ sequence.name }} :
+                                            {% for requirement in sequence.requirements %}
+                                                <a href="{{ _p.web ~ 'course/' ~ requirement.getId ~ '/about/' }}">
+                                                    {{ requirement.title }}
+                                                </a>
+                                            {% endfor %}
+                                        </p>
+                                    {% endif %}
+                                {% endfor %}
+                            </div>
+                        {% endif %}
                     </div>
                 </div>
                 {% endif %}

@@ -1,9 +1,10 @@
 <?php
+
 /* For licensing terms, see /license.txt */
 
 use Chamilo\CoreBundle\Entity\Course;
 use Chamilo\CoreBundle\Entity\ExtraField;
-use Chamilo\CoreBundle\Entity\Repository\SequenceRepository;
+use Chamilo\CoreBundle\Entity\Repository\SequenceResourceRepository;
 use Chamilo\CoreBundle\Entity\SequenceResource;
 use Chamilo\CourseBundle\Entity\CCourseDescription;
 use Chamilo\UserBundle\Entity\User;
@@ -14,8 +15,6 @@ use Chamilo\UserBundle\Entity\User;
  *
  * @author Angel Fernando Quiroz Campos <angel.quiroz@beeznest.com>
  * @author Julio Montoya
- *
- * @package chamilo.session
  */
 $cidReset = true;
 
@@ -36,7 +35,7 @@ $sessionCourses = $em->getRepository('ChamiloCoreBundle:Session')->getCoursesOrd
 $fieldsRepo = $em->getRepository('ChamiloCoreBundle:ExtraField');
 $fieldTagsRepo = $em->getRepository('ChamiloCoreBundle:ExtraFieldRelTag');
 $userRepo = UserManager::getRepository();
-/** @var SequenceRepository $sequenceResourceRepo */
+/** @var SequenceResourceRepository $sequenceResourceRepo */
 $sequenceResourceRepo = $em->getRepository('ChamiloCoreBundle:SequenceResource');
 
 $tagField = $fieldsRepo->findOneBy([
@@ -156,13 +155,13 @@ $sessionDates = SessionManager::parseSessionDates(
     true
 );
 
-$sessionRequirements = $sequenceResourceRepo->getRequirements(
+$requirements = $sequenceResourceRepo->getRequirements(
     $session->getId(),
     SequenceResource::SESSION_TYPE
 );
 
 $hasRequirements = false;
-foreach ($sessionRequirements as $sequence) {
+foreach ($requirements as $sequence) {
     if (!empty($sequence['requirements'])) {
         $hasRequirements = true;
         break;
@@ -173,7 +172,7 @@ $courseController = new CoursesController();
 
 /* View */
 $template = new Template($session->getName(), true, true, false, true, false);
-$template->assign('show_tutor', (api_get_setting('show_session_coach') === 'true' ? true : false));
+$template->assign('show_tutor', ('true' === api_get_setting('show_session_coach') ? true : false));
 $template->assign('page_url', api_get_path(WEB_PATH)."session/{$session->getId()}/about/");
 $template->assign('session', $session);
 $template->assign('session_date', $sessionDates);
@@ -221,7 +220,7 @@ $redirectToSession = $redirectToSession ? '?s='.$sessionId : false;
 
 $coursesInThisSession = SessionManager::get_course_list_by_session_id($sessionId);
 $coursesCount = count($coursesInThisSession);
-$redirectToSession = $coursesCount == 1 && $redirectToSession
+$redirectToSession = 1 == $coursesCount && $redirectToSession
     ? ($redirectToSession.'&cr='.array_values($coursesInThisSession)[0]['directory'])
     : $redirectToSession;
 
@@ -234,7 +233,7 @@ $template->assign(
     $sessionValues->getAllValuesForAnItem($session->getId(), null, true)
 );
 $template->assign('has_requirements', $hasRequirements);
-$template->assign('sequences', $sessionRequirements);
+$template->assign('sequences', $requirements);
 $template->assign('is_premium', $sessionIsPremium);
 $layout = $template->get_template('session/about.tpl');
 $content = $template->fetch($layout);

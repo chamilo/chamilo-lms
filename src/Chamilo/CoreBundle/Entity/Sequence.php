@@ -1,4 +1,5 @@
 <?php
+
 /* For licensing terms, see /license.txt */
 
 namespace Chamilo\CoreBundle\Entity;
@@ -11,7 +12,7 @@ use Gedmo\Mapping\Annotation as Gedmo;
  * Class Sequence.
  *
  * @ORM\Table(name="sequence")
- * @ORM\Entity
+ * @ORM\Entity(repositoryClass="Chamilo\CoreBundle\Entity\Repository\SequenceRepository")
  */
 class Sequence
 {

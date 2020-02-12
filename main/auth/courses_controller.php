@@ -2,7 +2,7 @@
 
 /* For licensing terms, see /license.txt */
 
-use Chamilo\CoreBundle\Entity\Repository\SequenceRepository;
+use Chamilo\CoreBundle\Entity\Repository\SequenceResourceRepository;
 use Chamilo\CoreBundle\Entity\SequenceResource;
 use Chamilo\CoreBundle\Entity\SessionRelCourse;
 use Chamilo\CoreBundle\Entity\Tag;
@@ -223,33 +223,15 @@ class CoursesController
         $btnBing = false
     ) {
         $sessionId = (int) $sessionId;
+
         if ($btnBing) {
             $btnBing = 'btn-lg btn-block';
         } else {
             $btnBing = 'btn-sm';
         }
-        if ($checkRequirements) {
-            $url = api_get_path(WEB_AJAX_PATH);
-            $url .= 'sequence.ajax.php?';
-            $url .= http_build_query([
-                'a' => 'get_requirements',
-                'id' => $sessionId,
-                'type' => SequenceResource::SESSION_TYPE,
-            ]);
 
-            return Display::toolbarButton(
-                get_lang('CheckRequirements'),
-                $url,
-                'shield',
-                'info',
-                [
-                    'class' => $btnBing.' ajax',
-                    'data-title' => get_lang('CheckRequirements'),
-                    'data-size' => 'md',
-                    'title' => get_lang('CheckRequirements'),
-                ],
-                $includeText
-            );
+        if ($checkRequirements) {
+            return $this->getRequirements($sessionId, SequenceResource::SESSION_TYPE, $includeText, $btnBing);
         }
 
         $catalogSessionAutoSubscriptionAllowed = false;
@@ -309,6 +291,36 @@ class CoursesController
         }
 
         return $result;
+    }
+
+    public function getRequirements($id, $type, $includeText, $btnBing)
+    {
+        $id = (int) $id;
+        $type = (int) $type;
+
+        $url = api_get_path(WEB_AJAX_PATH);
+        $url .= 'sequence.ajax.php?';
+        $url .= http_build_query(
+            [
+                'a' => 'get_requirements',
+                'id' => $id,
+                'type' => $type,
+            ]
+        );
+
+        return Display::toolbarButton(
+            get_lang('CheckRequirements'),
+            $url,
+            'shield',
+            'info',
+            [
+                'class' => $btnBing.' ajax',
+                'data-title' => get_lang('CheckRequirements'),
+                'data-size' => 'md',
+                'title' => get_lang('CheckRequirements'),
+            ],
+            $includeText
+        );
     }
 
     /**
@@ -591,7 +603,7 @@ class CoursesController
                 $sessionCourseTags = array_unique($sessionCourseTags);
             }
 
-            /** @var SequenceRepository $repo */
+            /** @var SequenceResourceRepository $repo */
             $repo = $entityManager->getRepository('ChamiloCoreBundle:SequenceResource');
             $sequences = $repo->getRequirementsAndDependenciesWithinSequences(
                 $session->getId(),

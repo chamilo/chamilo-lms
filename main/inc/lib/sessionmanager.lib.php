@@ -3,7 +3,7 @@
 
 use Chamilo\CoreBundle\Entity\Course;
 use Chamilo\CoreBundle\Entity\ExtraField;
-use Chamilo\CoreBundle\Entity\Repository\SequenceRepository;
+use Chamilo\CoreBundle\Entity\Repository\SequenceResourceRepository;
 use Chamilo\CoreBundle\Entity\SequenceResource;
 use Chamilo\CoreBundle\Entity\Session;
 use Chamilo\CoreBundle\Entity\SessionRelCourse;
@@ -1726,7 +1726,7 @@ class SessionManager
         $em = Database::getManager();
         $userId = api_get_user_id();
 
-        /** @var SequenceRepository $repo */
+        /** @var SequenceResourceRepository $repo */
         $repo = Database::getManager()->getRepository('ChamiloCoreBundle:SequenceResource');
         $sequenceResource = $repo->findRequirementForResource(
             $id_checked,
@@ -8137,7 +8137,8 @@ class SessionManager
      */
     public static function getGridColumns(
         $listType = 'simple',
-        $extraFields = []
+        $extraFields = [],
+        $addExtraFields = true
     ) {
         $showCount = api_get_configuration_value('session_list_show_count_users');
         // Column config
@@ -8171,7 +8172,13 @@ class SessionManager
                         'sortable' => 'false',
                         'search' => 'false',
                     ],
-                    ['name' => 'actions', 'index' => 'actions', 'width' => '100', 'sortable' => 'false', 'search' => 'false'],
+                    [
+                        'name' => 'actions',
+                        'index' => 'actions',
+                        'width' => '100',
+                        'sortable' => 'false',
+                        'search' => 'false',
+                    ],
                 ];
                 break;
             case 'simple':
@@ -8247,6 +8254,39 @@ class SessionManager
                         'align' => 'left',
                         'search' => 'false',
                     ];
+
+                    // ofaj
+                    $columns[] = get_lang('Teachers');
+                    $columnModel[] = [
+                        'name' => 'teachers',
+                        'index' => 'teachers',
+                        'width' => '20',
+                        'align' => 'left',
+                        'search' => 'false',
+                    ];
+                }
+
+                if (api_get_configuration_value('allow_session_status')) {
+                    $columns[] = get_lang('SessionStatus');
+                    $list = self::getStatusList();
+                    $listToString = '';
+                    foreach ($list as $statusId => $status) {
+                        $listToString .= $statusId.':'.$status.';';
+                    }
+
+                    $columnModel[] = [
+                        'name' => 'status',
+                        'index' => 'status',
+                        'width' => '25',
+                        'align' => 'left',
+                        'search' => 'true',
+                        'stype' => 'select',
+                        // for the bottom bar
+                        'searchoptions' => [
+                            'defaultValue' => '1',
+                            'value' => $listToString,
+                        ],
+                    ];
                 }
                 break;
             case 'complete':
@@ -8260,21 +8300,183 @@ class SessionManager
                     get_lang('CourseTitle'),
                 ];
                 $columnModel = [
-                    ['name' => 'name', 'index' => 's.name', 'width' => '200', 'align' => 'left', 'search' => 'true', 'searchoptions' => ['sopt' => $operators]],
-                    ['name' => 'display_start_date', 'index' => 'display_start_date', 'width' => '70', 'align' => 'left', 'search' => 'true', 'searchoptions' => ['dataInit' => 'date_pick_today', 'sopt' => $date_operators]],
-                    ['name' => 'display_end_date', 'index' => 'display_end_date', 'width' => '70', 'align' => 'left', 'search' => 'true', 'searchoptions' => ['dataInit' => 'date_pick_one_month', 'sopt' => $date_operators]],
-                    ['name' => 'coach_name', 'index' => 'coach_name', 'width' => '70', 'align' => 'left', 'search' => 'false', 'searchoptions' => ['sopt' => $operators]],
-                    ['name' => 'session_active', 'index' => 'session_active', 'width' => '25', 'align' => 'left', 'search' => 'true', 'stype' => 'select',
+                    [
+                        'name' => 'name',
+                        'index' => 's.name',
+                        'width' => '200',
+                        'align' => 'left',
+                        'search' => 'true',
+                        'searchoptions' => ['sopt' => $operators],
+                    ],
+                    [
+                        'name' => 'display_start_date',
+                        'index' => 'display_start_date',
+                        'width' => '70',
+                        'align' => 'left',
+                        'search' => 'true',
+                        'searchoptions' => ['dataInit' => 'date_pick_today', 'sopt' => $date_operators],
+                    ],
+                    [
+                        'name' => 'display_end_date',
+                        'index' => 'display_end_date',
+                        'width' => '70',
+                        'align' => 'left',
+                        'search' => 'true',
+                        'searchoptions' => ['dataInit' => 'date_pick_one_month', 'sopt' => $date_operators],
+                    ],
+                    [
+                        'name' => 'coach_name',
+                        'index' => 'coach_name',
+                        'width' => '70',
+                        'align' => 'left',
+                        'search' => 'false',
+                        'searchoptions' => ['sopt' => $operators],
+                    ],
+                    [
+                        'name' => 'session_active',
+                        'index' => 'session_active',
+                        'width' => '25',
+                        'align' => 'left',
+                        'search' => 'true',
+                        'stype' => 'select',
                         // for the bottom bar
                         'searchoptions' => [
                             'defaultValue' => '1',
-                            'value' => '1:'.get_lang('Active').';0:'.get_lang('Inactive'), ],
+                            'value' => '1:'.get_lang('Active').';0:'.get_lang('Inactive'),
+                        ],
                         // for the top bar
-                        'editoptions' => ['value' => '" ":'.get_lang('All').';1:'.get_lang('Active').';0:'.get_lang('Inactive')],
+                        'editoptions' => [
+                            'value' => '" ":'.get_lang('All').';1:'.get_lang('Active').';0:'.get_lang(
+                                    'Inactive'
+                                ),
+                        ],
                     ],
-                    ['name' => 'visibility', 'index' => 'visibility', 'width' => '40', 'align' => 'left', 'search' => 'false'],
-                    ['name' => 'course_title', 'index' => 'course_title', 'width' => '50', 'hidden' => 'true', 'search' => 'true', 'searchoptions' => ['searchhidden' => 'true', 'sopt' => $operators]],
+                    [
+                        'name' => 'visibility',
+                        'index' => 'visibility',
+                        'width' => '40',
+                        'align' => 'left',
+                        'search' => 'false',
+                    ],
+                    [
+                        'name' => 'course_title',
+                        'index' => 'course_title',
+                        'width' => '50',
+                        'hidden' => 'true',
+                        'search' => 'true',
+                        'searchoptions' => ['searchhidden' => 'true', 'sopt' => $operators],
+                    ],
                 ];
+
+                break;
+
+            case 'custom':
+                $columns = [
+                    '#',
+                    get_lang('Name'),
+                    get_lang('Category'),
+                    get_lang('SessionDisplayStartDate'),
+                    get_lang('SessionDisplayEndDate'),
+                    get_lang('Visibility'),
+                ];
+                $columnModel = [
+                    [
+                        'name' => 'id',
+                        'index' => 's.id',
+                        'width' => '160',
+                        'hidden' => 'true',
+                    ],
+                    [
+                        'name' => 'name',
+                        'index' => 's.name',
+                        'width' => '160',
+                        'align' => 'left',
+                        'search' => 'true',
+                        'searchoptions' => ['sopt' => $operators],
+                    ],
+                    [
+                        'name' => 'category_name',
+                        'index' => 'category_name',
+                        'width' => '40',
+                        'align' => 'left',
+                        'search' => 'true',
+                        'searchoptions' => ['sopt' => $operators],
+                    ],
+                    [
+                        'name' => 'display_start_date',
+                        'index' => 'display_start_date',
+                        'width' => '50',
+                        'align' => 'left',
+                        'search' => 'true',
+                        'searchoptions' => [
+                            'dataInit' => 'date_pick_today',
+                            'sopt' => $date_operators,
+                        ],
+                    ],
+                    [
+                        'name' => 'display_end_date',
+                        'index' => 'display_end_date',
+                        'width' => '50',
+                        'align' => 'left',
+                        'search' => 'true',
+                        'searchoptions' => [
+                            'dataInit' => 'date_pick_one_month',
+                            'sopt' => $date_operators,
+                        ],
+                    ],
+                    [
+                        'name' => 'visibility',
+                        'index' => 'visibility',
+                        'width' => '40',
+                        'align' => 'left',
+                        'search' => 'false',
+                    ],
+                ];
+
+                if ($showCount) {
+                    $columns[] = get_lang('Users');
+                    $columnModel[] = [
+                        'name' => 'users',
+                        'index' => 'users',
+                        'width' => '20',
+                        'align' => 'left',
+                        'search' => 'false',
+                    ];
+
+                    // ofaj
+                    $columns[] = get_lang('Teachers');
+                    $columnModel[] = [
+                        'name' => 'teachers',
+                        'index' => 'teachers',
+                        'width' => '20',
+                        'align' => 'left',
+                        'search' => 'false',
+                    ];
+                }
+
+                if (api_get_configuration_value('allow_session_status')) {
+                    $columns[] = get_lang('SessionStatus');
+                    $list = self::getStatusList();
+                    $listToString = '';
+                    foreach ($list as $statusId => $status) {
+                        $listToString .= $statusId.':'.$status.';';
+                    }
+
+                    $columnModel[] = [
+                        'name' => 'status',
+                        'index' => 'status',
+                        'width' => '25',
+                        'align' => 'left',
+                        'search' => 'true',
+                        'stype' => 'select',
+                        // for the bottom bar
+                        'searchoptions' => [
+                            'defaultValue' => '1',
+                            'value' => $listToString,
+                        ],
+                    ];
+                }
+
                 break;
         }
 
@@ -8292,8 +8494,11 @@ class SessionManager
         }
 
         // Inject extra session fields
-        $sessionField = new ExtraFieldModel('session');
-        $rules = $sessionField->getRules($columns, $columnModel);
+        $rules = [];
+        if ($addExtraFields) {
+            $sessionField = new ExtraFieldModel('session');
+            $rules = $sessionField->getRules($columns, $columnModel);
+        }
 
         if (!in_array('actions', array_column($columnModel, 'name'))) {
             $columnModel[] = [

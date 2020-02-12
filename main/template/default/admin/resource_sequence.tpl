@@ -1,23 +1,23 @@
 {% extends 'layout/layout_1_col.tpl'|get_template %}
 
 {% block content %}
+    {{ tabs }}
     <script>
-        var url = '{{ _p.web_ajax }}sequence.ajax.php';
+        var url = '{{ _p.web_ajax }}sequence.ajax.php?type={{ sequence_type }}';
         var parentList = [];
         var resourceId = 0;
         var sequenceId = 0;
 
-        function useAsReference(type, sequenceId, itemId) {
-            var id = itemId || $("#item option:selected" ).val();
-
-            sequenceId = $("#sequence_id option:selected" ).val();
+        function useAsReference(sequenceId, itemId) {
+            var id = itemId || $("#item option:selected").val();
+            sequenceId = $("#sequence_id option:selected").val();
 
             // Cleaning parent list.
             parentList = [];
 
             // Check if data exists and load parents
             $.ajax({
-                url: url + '?a=load_resource&load_resource_type=parent&id=' + id + '&type='+type+'&sequence_id='+sequenceId,
+                url: url + '&a=load_resource&load_resource_type=parent&id=' + id + '&sequence_id='+sequenceId,
                 success: function (data) {
                     if (data) {
                         var loadingResources = new Array(),
@@ -28,7 +28,6 @@
                                 data: {
                                     a: 'get_icon',
                                     id: value,
-                                    type: type,
                                     sequence_id: sequenceId,
                                     show_delete: 1
                                 },
@@ -65,13 +64,13 @@
 
             // Check if data exists and load children
             $.ajax({
-                url: url + '?a=load_resource&load_resource_type=children&id=' + id + '&type='+type+'&sequence_id='+sequenceId,
+                url: url + '&a=load_resource&load_resource_type=children&id=' + id + '&sequence_id='+sequenceId,
                 success: function (data) {
                     if (data) {
                         var listLoaded = data.split(',');
                         listLoaded.forEach(function(value) {
                             $.ajax({
-                                url: url + '?a=get_icon&id='+ value+'&type='+type+'&sequence_id='+sequenceId,
+                                url: url + '&a=get_icon&id='+ value+'&sequence_id='+sequenceId,
                                 success:function(data){
                                     $('#children').append(data);
                                 }
@@ -86,7 +85,7 @@
             $('#children').html('');
 
             $.ajax({
-                url: url + '?a=get_icon&id='+ id+'&type='+type+'&sequence_id='+sequenceId,
+                url: url + '&a=get_icon&id='+ id+'&sequence_id='+sequenceId,
                 success:function(data){
                     $('#resource').html(data);
                     parentList.push(id);
@@ -95,17 +94,15 @@
             });
 
             $.ajax({
-                url: url + '?a=graph&type='+type+'&sequence_id='+sequenceId,
+                url: url + '&a=graph&sequence_id='+sequenceId,
                 success: function (data) {
                     $('#show_graph').html(data);
                 }
             });
         }
 
-        $(document).ready(function() {
-            var type = $('input[name="sequence_type"]').val();
+        $(function() {
             // By default "set requirement" is set to false
-
             sequenceId = $("#sequence_id option:selected" ).val();
 
             // Load parents
@@ -146,7 +143,7 @@
                 $('#requirements').prop('disabled', false);
                 $('button[name="save_resource"]').prop('disabled', false);
 
-                useAsReference(type, sequenceId, itemId);
+                useAsReference(sequenceId, itemId);
             });
 
             // Button use as reference
@@ -161,7 +158,7 @@
                 $('button[name="set_requirement"], #requirements, button[name="save_resource"]').prop('disabled', false);
                 $('#requirements').selectpicker('refresh');
 
-                useAsReference(type, sequenceId);
+                useAsReference(sequenceId);
             });
 
             // Button set requirement
@@ -178,7 +175,7 @@
                     var id = $(this).val();
                     if ($.inArray(id, parentList) == -1) {
                         $.ajax({
-                            url: url + '?a=get_icon&id=' + id + '&type='+type+'&sequence_id='+sequenceId,
+                            url: url + '&a=get_icon&id=' + id + '&sequence_id='+sequenceId,
                             success: function (data) {
                                 $('#parents').append(data);
                                 parentList.push(id);
@@ -216,7 +213,6 @@
                             a: 'delete_vertex',
                             id: resourceId,
                             vertex_id: vertexId,
-                            type: type,
                             sequence_id: sequenceId
                         },
                         success: function() {
@@ -236,7 +232,6 @@
                                 a: 'save_resource',
                                 id: resourceId,
                                 parents: params,
-                                type: type,
                                 sequence_id: sequenceId
                             }
                         });
@@ -253,7 +248,7 @@
 
                             self.prop('disabled', false);
 
-                            useAsReference(type, sequenceId);
+                            useAsReference(sequenceId);
                         });
                     }
                 });
@@ -263,7 +258,10 @@
                 sequenceId = $(this).val();
 
                 if (sequenceId > 0) {
-                    $('#secuence-title').text(
+                    $('#sequence-title').text(
+                        $(this).children(':selected').text()
+                    );
+                    $('#sequence_name').text(
                         $(this).children(':selected').text()
                     );
                     $('#show_graph').html('');
@@ -305,9 +303,8 @@
 
     <div id="pnl-configuration" class="panel panel-default" style="display: none;">
         <div class="panel-body">
-            <div class="section-title-sequence">{{ 'SequenceConfiguration' | get_lang }}</div>
+            <div class="section-title-sequence">{{ 'SequenceConfiguration' | get_lang }}: <b><span id="sequence_name"></span></b></div>
             <div class="row">
-
                 {{ configure_sequence }}
             </div>
 
@@ -316,7 +313,7 @@
     <div id="pnl-preview" class="panel panel-default" style="display: none;">
         <div class="panel-body">
             <div class="section-title-sequence">{{ 'SequencePreview' | get_lang }} &mdash;
-                <span id="secuence-title"></span>
+                <span id="sequence-title"></span>
             </div>
             <div class="row">
                 <div class="col-md-9">

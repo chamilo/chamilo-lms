@@ -3,7 +3,7 @@
 /* For licensing terms, see /license.txt */
 
 use Chamilo\CoreBundle\Entity\Course;
-use Chamilo\CoreBundle\Entity\Repository\SequenceRepository;
+use Chamilo\CoreBundle\Entity\Repository\SequenceResourceRepository;
 use Chamilo\CoreBundle\Entity\Repository\SessionRepository;
 use Chamilo\CoreBundle\Entity\SequenceResource;
 use Chamilo\CoreBundle\Entity\Session;
@@ -106,8 +106,8 @@ switch ($action) {
             );
             $nbr_affected_rows = Database::affected_rows($result);
             Database::query(
-                "UPDATE $tbl_session 
-                SET nbr_classes = nbr_classes - $nbr_affected_rows 
+                "UPDATE $tbl_session
+                SET nbr_classes = nbr_classes - $nbr_affected_rows
                 WHERE id = $sessionId");
         }
 
@@ -379,7 +379,7 @@ if (!empty($userList)) {
     $userListToShow .= $table->toHtml();
 }
 
-/** @var SequenceRepository $repo */
+/** @var SequenceResourceRepository $repo */
 $repo = $em->getRepository('ChamiloCoreBundle:SequenceResource');
 $requirementAndDependencies = $repo->getRequirementAndDependencies(
     $sessionId,

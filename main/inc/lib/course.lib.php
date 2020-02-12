@@ -1891,7 +1891,7 @@ class CourseManager
                 $joinSession = "INNER JOIN ".Database::get_main_table(TABLE_MAIN_SESSION)." s";
             }
 
-            $sql = "SELECT '.$select.'
+            $sql = "SELECT $select
                       FROM ".Database::get_main_table(TABLE_MAIN_SESSION_COURSE_USER)." scu
                       $joinSession
                       INNER JOIN $userTable u

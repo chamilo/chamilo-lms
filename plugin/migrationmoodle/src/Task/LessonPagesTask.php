@@ -21,6 +21,10 @@ use Chamilo\PluginBundle\MigrationMoodle\Transformer\Property\LpItemType;
  */
 class LessonPagesTask extends BaseTask
 {
+    const TYPE_END_BRANCH = 21;
+    const TYPE_CLUSTER = 30;
+    const TYPE_END_CLUSTER = 31;
+
     /**
      * @return array
      */
@@ -28,16 +32,29 @@ class LessonPagesTask extends BaseTask
     {
         return [
             'class' => CourseExtractor::class,
-            'query' => 'SELECT lp.id, lp.lessonid, lp.prevpageid, lp.nextpageid, lp.qtype, lp.title, l.course
-                FROM mdl_lesson_pages lp
-                INNER JOIN mdl_lesson l ON lp.lessonid = l.id
-                WHERE lp.qtype NOT IN (21, 30, 31)
-                ORDER BY
-                    l.id,
-                    CASE
-                        WHEN lp.id > lp.prevpageid THEN lp.prevpageid
-                        WHEN lp.id < lp.prevpageid THEN lp.id
-                    END',
+            'query' => "WITH RECURSIVE lesson_pages_ordered (id, title, qtype, prev, next, lesson, display_order) AS
+                (
+                    SELECT id, title, qtype, prevpageid, nextpageid, lessonid, '01'
+                    FROM mdl_lesson_pages
+                    WHERE prevpageid = 0
+                    UNION
+                    SELECT lp.id, lp.title, lp.qtype, lp.prevpageid, lp.nextpageid, lp.lessonid, lpo.display_order + 1
+                    FROM lesson_pages_ordered lpo
+                    LEFT JOIN mdl_lesson_pages lp
+                        ON (lpo.next = lp.id AND lpo.lesson = lp.lessonid)
+                )
+                SELECT
+                    lpo.id,
+                    lpo.title,
+                    lpo.qtype,
+                    lpo.prev,
+                    lpo.lesson,
+                    cast(lpo.display_order AS INT) lpo_display_order,
+                    l.course
+                FROM lesson_pages_ordered lpo
+                INNER JOIN mdl_lesson l ON lpo.lesson = l.id
+                WHERE lpo.qtype NOT IN (".self::TYPE_END_BRANCH.", ".self::TYPE_CLUSTER.", ".self::TYPE_END_CLUSTER.")
+                ORDER BY l.course, lpo.lesson, lpo_display_order",
         ];
     }
 
@@ -55,21 +72,22 @@ class LessonPagesTask extends BaseTask
                 ],
                 'lp_id' => [
                     'class' => LoadedLpFromLessonLookup::class,
-                    'properties' => ['lessonid']
+                    'properties' => ['lesson']
                 ],
                 'parent' => [
                     'class' => LoadedLpDirFromLessonLookup::class,
-                    'properties' => ['lessonid']
+                    'properties' => ['lesson']
                 ],
                 'previous' => [
                     'class' => LoadedLpItemLookup::class,
-                    'properties' => ['prevpageid'],
+                    'properties' => ['prev'],
                 ],
                 'item_type' => [
                     'class' => LpItemType::class,
                     'properties' => ['qtype'],
                 ],
                 'title' => 'title',
+                'display_order' => 'lpo_display_order',
             ],
         ];
     }

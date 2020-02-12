@@ -37,6 +37,17 @@ class LessonPagesLoader implements LoaderInterface
             ''
         );
 
+        //$em = \Database::getManager();
+        //
+        //try {
+        //    $item = $em->find('ChamiloCourseBundle:CLpItem', $itemId)->setDisplayOrder(0);
+        //
+        //    $em->persist($item);
+        //    $em->flush();
+        //} catch (\Exception $e) {
+        //    return $itemId;
+        //}
+
         return $itemId;
     }
 }

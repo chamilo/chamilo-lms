@@ -48,3 +48,4 @@ $strings['FilesForCourseSectionsTask'] = 'Files for course sections';
 $strings['CourseModulesUrlTask'] = 'Course modules: URLs';
 $strings['UrlsTask'] = 'URLs';
 $strings['SortSectionModulesTask'] = 'Sort modules in section';
+$strings['UsersScormsViewTask'] = 'Scorm views for users';

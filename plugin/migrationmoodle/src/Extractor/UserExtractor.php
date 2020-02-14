@@ -31,7 +31,11 @@ class UserExtractor extends FilterExtractor
      */
     public function filter(array $sourceData)
     {
-        $userId = current($sourceData);
+        $userId = $sourceData['id'];
+
+        if (isset($sourceData['userid'])) {
+            $userId = $sourceData['userid'];
+        }
 
         return !$this->existsExtracted($userId);
     }

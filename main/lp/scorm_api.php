@@ -476,7 +476,7 @@ function LMSGetValue(param) {
         }
     } else if(param == 'cmi.core.student_id'){
         // ---- cmi.core.student_id
-        result='<?php echo $userId; ?>';
+        result='<?php echo learnpath::getUserIdentifierForExternalServices(); ?>';
     } else if(param == 'cmi.core.student_name'){
         // ---- cmi.core.student_name
         <?php

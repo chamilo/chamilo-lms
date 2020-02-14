@@ -1385,6 +1385,10 @@ ALTER TABLE notification_event ADD COLUMN event_id INT NULL;
 // Use this link as the "Forgot password?" link instead of the default. This setting should be transformed into a hook for plugins at a later time
 //$_configuration['pass_reminder_custom_link'] = '';
 
+// In Scorm comunication use the username instead of the user_id
+//$_configuration['scorm_api_username_as_student_id'] = false;
+
+
 // KEEP THIS AT THE END
 // -------- Custom DB changes
 // Add user activation by confirmation email

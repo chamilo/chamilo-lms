@@ -710,7 +710,7 @@ if (isset($_GET['page']) && !empty($_GET['page'])) {
     $page = intval($_GET['page']);
 }
 $default = 20;
-$count = UserManager::get_number_of_users();
+$count = UserManager::get_number_of_users(null,api_get_current_access_url_id());
 $nro_pages = round($count / $default) + 1;
 $begin = $default * ($page - 1);
 $end = $default * $page;

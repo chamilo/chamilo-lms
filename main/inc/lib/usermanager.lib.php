@@ -4486,7 +4486,7 @@ class UserManager
         if ($getCount) {
             $select = "SELECT count(DISTINCT u.id) count";
         } else {
-            $select = "SELECT DISTINCT u.id, u.username, firstname, lastname, email, tag, picture_uri";
+            $select = "SELECT DISTINCT u.id, u.username, firstname, lastname, email, picture_uri";
         }
 
         $sql = " $select
@@ -4528,16 +4528,6 @@ class UserManager
                 return $row['count'];
             }
             while ($row = Database::fetch_array($result, 'ASSOC')) {
-                if (isset($return[$row['id']]) &&
-                    !empty($return[$row['id']]['tag'])
-                ) {
-                    $url = Display::url(
-                        $row['tag'],
-                        api_get_path(WEB_PATH).'main/social/search.php?q='.$row['tag'],
-                        ['class' => 'tag']
-                    );
-                    $row['tag'] = $url;
-                }
                 $return[$row['id']] = $row;
             }
         }

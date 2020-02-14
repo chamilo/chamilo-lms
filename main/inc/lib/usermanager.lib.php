@@ -258,7 +258,7 @@ class UserManager
             is_array($_configuration[$access_url_id]) &&
             isset($_configuration[$access_url_id]['hosting_limit_users']) &&
             $_configuration[$access_url_id]['hosting_limit_users'] > 0) {
-            $num = self::get_number_of_users(null,$access_url_id);
+            $num = self::get_number_of_users(null, $access_url_id);
             if ($num >= $_configuration[$access_url_id]['hosting_limit_users']) {
                 api_warn_hosting_contact('hosting_limit_users');
                 Display::addFlash(
@@ -278,7 +278,7 @@ class UserManager
             isset($_configuration[$access_url_id]['hosting_limit_teachers']) &&
             $_configuration[$access_url_id]['hosting_limit_teachers'] > 0
         ) {
-            $num = self::get_number_of_users(1,$access_url_id);
+            $num = self::get_number_of_users(1, $access_url_id);
             if ($num >= $_configuration[$access_url_id]['hosting_limit_teachers']) {
                 Display::addFlash(
                     Display::return_message(

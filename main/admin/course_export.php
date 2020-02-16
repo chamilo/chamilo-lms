@@ -18,7 +18,15 @@ $interbreadcrumb[] = ['url' => 'index.php', 'name' => get_lang('PlatformAdmin')]
 
 set_time_limit(0);
 
-$course_list = CourseManager::get_courses_list();
+$course_list = CourseManager::get_courses_list(
+    0,
+    0,
+    1,
+    'ASC',
+    -1,
+    '',
+    api_get_current_access_url_id()
+);
 $formSent = null;
 $courses = $selected_courses = [];
 

@@ -1811,7 +1811,7 @@ function api_get_user_entity($userId)
  *
  * @author Yannick Warnier <yannick.warnier@beeznest.com>
  */
-function api_get_user_info_from_username($username = '')
+function api_get_user_info_from_username($username)
 {
     if (empty($username)) {
         return false;

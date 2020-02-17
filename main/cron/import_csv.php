@@ -2665,6 +2665,7 @@ class ImportCsv
     ) {
         $data = Import::csv_reader($file);
 
+        $userTable = Database::get_main_table(TABLE_MAIN_USER);
         if (!empty($data)) {
             $totalCount = count($data);
             $this->logger->addInfo($totalCount.' records found.');
@@ -2678,6 +2679,7 @@ class ImportCsv
                 if (empty($row)) {
                     continue;
                 }
+
                 foreach ($row as $key => $value) {
                     $key = (string) trim($key);
                     // Remove utf8 bom
@@ -2691,9 +2693,12 @@ class ImportCsv
                     $this->extraFieldIdNameList['user']
                 );
 
-                $studentInfo = api_get_user_info($studentId);
-                if (empty($studentInfo)) {
-                    $this->logger->addInfo("Student id not found: $studentId");
+                //$studentInfo = api_get_user_info($studentId);
+
+                $sql = "SELECT id FROM $userTable WHERE id = $studentId";
+                $result = Database::query($sql);
+                if (empty(Database::num_rows($result))) {
+                    $this->logger->addInfo("Student chamilo id not found: $studentId row data StudentId: ".$row['StudentId']);
                     continue;
                 }
 
@@ -2715,21 +2720,26 @@ class ImportCsv
                     }
                 }
 
-                if (UserManager::userHasCareer($studentId, $careerChamiloId) === false) {
+                $userCareerData = UserManager::getUserCareer($studentId, $careerChamiloId);
+
+                if (empty($userCareerData)) {
                     $this->logger->addInfo(
                         "User chamilo id # $studentId (".$row['StudentId'].") has no career #$careerChamiloId (ext #$careerId)"
                     );
                     continue;
                 }
 
-                $userCareerData = UserManager::getUserCareer($studentId, $careerChamiloId);
-
                 $extraData = isset($userCareerData['extra_data']) && !empty($userCareerData['extra_data']) ? unserialize($userCareerData['extra_data']) : [];
 
-                $teacherInfo = api_get_user_info_from_username($row['TeacherUsername']);
+                //$teacherInfo = api_get_user_info_from_username($row['TeacherUsername']);
+                $sql = "SELECT firstname, lastname FROM $userTable
+                        WHERE username='".Database::escape_string($row['TeacherUsername'])."'";
+                $result = Database::query($sql);
+
                 $teacherName = $row['TeacherUsername'];
-                if ($teacherInfo) {
-                    $teacherName = $teacherInfo['complete_name'];
+                if (Database::num_rows($result)) {
+                    $teacherInfo = Database::fetch_array($result);
+                    $teacherName = $teacherInfo['firstname'].' '.$teacherInfo['lastname'];
                 }
 
                 $extraData[$row['CourseId']][$row['ResultId']] = [
@@ -2748,11 +2758,11 @@ class ImportCsv
                 ];
                 $serializedValue = serialize($extraData);
 
+                UserManager::updateUserCareer($userCareerData['id'], $serializedValue);
+
                 $this->logger->addInfo(
                     "Saving graph for user chamilo # $studentId (".$row['StudentId'].") with career #$careerChamiloId (ext #$careerId)"
                 );
-
-                UserManager::updateUserCareer($userCareerData['id'], $serializedValue);
             }
         }
     }

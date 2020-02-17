@@ -2666,12 +2666,15 @@ class ImportCsv
         $data = Import::csv_reader($file);
 
         if (!empty($data)) {
-            $this->logger->addInfo(count($data).' records found.');
+            $totalCount = count($data);
+            $this->logger->addInfo($totalCount.' records found.');
 
             $extraFieldValue = new ExtraFieldValue('career');
             $extraFieldName = $this->extraFieldIdNameList['career'];
-
+            $rowCounter = 0;
             foreach ($data as $row) {
+                $this->logger->addInfo("---------- Row: # $rowCounter");
+                $rowCounter++;
                 if (empty($row)) {
                     continue;
                 }

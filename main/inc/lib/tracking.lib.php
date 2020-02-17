@@ -3075,7 +3075,7 @@ class Tracking
         if (!empty($course_code)) {
             $course = api_get_course_info($course_code);
             $courseId = $course['real_id'];
-            $conditions[] = " c_id = $courseId";
+            $conditions[] = " lp.c_id = $courseId";
         }
 
         // Get course tables names
@@ -3086,13 +3086,13 @@ class Tracking
 
         // Compose a filter based on optional learning paths list given
         if (!empty($lp_ids) && count($lp_ids) > 0) {
-            $conditions[] = ' id IN ('.implode(',', $lp_ids).') ';
+            $conditions[] = ' lp.id IN ('.implode(',', $lp_ids).') ';
         }
 
         // Compose a filter based on optional session id
         $session_id = (int) $session_id;
         if (!empty($session_id)) {
-            $conditions[] = " session_id = $session_id ";
+            $conditions[] = " lp_view.session_id = $session_id ";
         }
 
         if (is_array($student_id)) {
@@ -3103,7 +3103,7 @@ class Tracking
             $conditions[] = " lp_view.user_id = $student_id ";
         }
 
-        $conditionsToString = implode('AND ', $conditions);
+        $conditionsToString = implode(' AND ', $conditions);
         $sql = "SELECT
                     SUM(lp_iv.score) sum_score,
                     SUM(lp_i.max_score) sum_max_score
@@ -3337,6 +3337,54 @@ class Tracking
         }
 
         return $lastTime;
+    }
+
+    public static function getFirstConnectionTimeInLp(
+        $student_id,
+        $course_code,
+        $lp_id,
+        $session_id = 0
+    ) {
+        $course = api_get_course_info($course_code);
+        $student_id = (int) $student_id;
+        $lp_id = (int) $lp_id;
+        $session_id = (int) $session_id;
+        $time = 0;
+
+        if (!empty($course)) {
+            $course_id = $course['real_id'];
+            $lp_table = Database::get_course_table(TABLE_LP_MAIN);
+            $t_lpv = Database::get_course_table(TABLE_LP_VIEW);
+            $t_lpiv = Database::get_course_table(TABLE_LP_ITEM_VIEW);
+
+            // Check the real number of LPs corresponding to the filter in the
+            // database (and if no list was given, get them all)
+            $sql = "SELECT id FROM $lp_table
+                    WHERE c_id = $course_id AND id = $lp_id ";
+            $row = Database::query($sql);
+            $count = Database::num_rows($row);
+
+            // calculates first connection time
+            if ($count > 0) {
+                $sql = 'SELECT MIN(start_time)
+                        FROM '.$t_lpiv.' AS item_view
+                        INNER JOIN '.$t_lpv.' AS view
+                        ON (item_view.lp_view_id = view.id AND item_view.c_id = view.c_id)
+                        WHERE
+                            status != "not attempted" AND
+                            item_view.c_id = '.$course_id.' AND
+                            view.c_id = '.$course_id.' AND
+                            view.lp_id = '.$lp_id.' AND
+                            view.user_id = '.$student_id.' AND
+                            view.session_id = '.$session_id;
+                $rs = Database::query($sql);
+                if (Database::num_rows($rs) > 0) {
+                    $time = Database::result($rs, 0, 0);
+                }
+            }
+        }
+
+        return $time;
     }
 
     /**
@@ -7622,6 +7670,12 @@ class TrackingCourseLog
 
             if (empty($session_id)) {
                 $user_row['survey'] = $user['survey'];
+            } else {
+                $userSession = SessionManager::getUserSession($user['user_id'], $session_id);
+                $user_row['registered_at'] = '';
+                if ($userSession) {
+                    $user_row['registered_at'] = api_get_local_time($userSession['registered_at']);
+                }
             }
 
             $user_row['first_connection'] = $user['first_connection'];
@@ -7850,6 +7904,11 @@ class TrackingCourseLog
             api_get_path(WEB_CODE_PATH).'tracking/course_log_events.php?'.api_get_cidreq()
         );
 
+        $lpLink = Display::url(
+            Display::return_icon('scorms.png', get_lang('CourseLPsGenericStats'), [], ICON_SIZE_MEDIUM),
+            api_get_path(WEB_CODE_PATH).'tracking/lp_report.php?'.api_get_cidreq()
+        );
+
         $attendanceLink = '';
         if (!empty($sessionId)) {
             $attendanceLink = Display::url(
@@ -7913,6 +7972,12 @@ class TrackingCourseLog
                     );
                 }
                 break;
+            case 'lp':
+                $lpLink = Display::url(
+                    Display::return_icon('scorms_na.png', get_lang('CourseLPsGenericStats'), [], ICON_SIZE_MEDIUM),
+                    '#'
+                );
+                break;
         }
 
         $items = [
@@ -7922,6 +7987,7 @@ class TrackingCourseLog
             $resourcesLink,
             $examLink,
             $eventsLink,
+            $lpLink,
             $attendanceLink,
         ];
 

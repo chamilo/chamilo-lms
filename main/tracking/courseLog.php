@@ -437,7 +437,7 @@ if ($nbStudents > 0) {
         'since',
         Display::returnFontAwesomeIcon('warning').get_lang('RemindInactivesLearnersSince'),
         $options,
-        ['disable_js' => true]
+        ['disable_js' => true, 'class' => 'col-sm-3']
     );
     $el->setSelected(7);
 
@@ -635,6 +635,8 @@ if ($export_csv) {
 
     if (empty($sessionId)) {
         $csv_headers[] = get_lang('Survey');
+    } else {
+        $csv_headers[] = get_lang('RegistrationDate');
     }
 
     $csv_headers[] = get_lang('FirstLoginInCourse');

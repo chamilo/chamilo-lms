@@ -56,11 +56,12 @@ class NotificationEvent extends Model
                 $list = $plugin->getList();
                 $list = array_column($list, 'name', 'id');
                 $form->addSelect('event_id', get_lang('JustificationType'), $list);
+                $form->freeze('event_id');
+
                 break;
             default:
                 break;
         }
-        $form->freeze('event_id');
 
         $form->addText('title', get_lang('Title'));
         $form->addTextarea('content', get_lang('Content'));

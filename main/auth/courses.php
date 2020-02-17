@@ -136,8 +136,8 @@ switch ($action) {
         $message = get_lang('CourseRequiresPassword').' ';
         $message .= $courseInfo['title'].' ('.$courseInfo['visual_code'].') ';
 
-        $action = api_get_self().
-            '?action=subscribe_course_validation&sec_token='.Security::getTokenFromSession().'&subscribe_course='.$courseCodeToSubscribe;
+        $action = api_get_self().'?action=subscribe_course_validation&sec_token='.
+            Security::getTokenFromSession().'&subscribe_course='.$courseCodeToSubscribe;
         $form = new FormValidator(
             'subscribe_user_with_password',
             'post',
@@ -199,7 +199,7 @@ switch ($action) {
             api_not_allowed(true);
         }
 
-        $courseController->sessionList($action, $nameTools, $limit);
+        $courseController->sessionList($limit);
         break;
     case 'subscribe_to_session':
         if (!$user_can_view_page) {
@@ -234,13 +234,13 @@ switch ($action) {
             );
 
             if (count($sequences) > 0) {
-                $requirementsData = SequenceResourceManager::checkRequirementsForUser(
+                $requirementsData = $repository->checkRequirementsForUser(
                     $sequences,
                     SequenceResource::SESSION_TYPE,
                     $userId
                 );
 
-                $continueWithSubscription = SequenceResourceManager::checkSequenceAreCompleted($requirementsData);
+                $continueWithSubscription = $repository->checkSequenceAreCompleted($requirementsData);
 
                 if (!$continueWithSubscription) {
                     header('Location: '.api_get_path(WEB_CODE_PATH).'auth/courses.php');

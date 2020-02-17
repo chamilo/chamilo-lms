@@ -1279,7 +1279,7 @@ HTML;
                                     $s .= "
                                         <script>
                                             $(function() {
-                                                jsPlumb.ready(function() {
+                                                $(window).on('load', function() {
                                                     jsPlumb.connect({
                                                         source: 'window_$windowId',
                                                         target: 'window_{$questionId}_{$selectedIndex}_answer',

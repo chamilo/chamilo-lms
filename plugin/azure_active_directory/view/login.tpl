@@ -10,8 +10,15 @@
                     <li><a href="{{ _p.web_main }}auth/inscription.php">{{ 'SignUp'|get_lang }}</a></li>
                 {% endif %}
 
-                {% if "allow_lostpassword"|api_get_setting == 'true' %}
-                    <li><a href="{{ _p.web_main }}auth/lostPassword.php">{{ 'LostPassword'|get_lang }}</a></li>
+                {% if "allow_lostpassword" | api_get_setting == 'true' %}
+                    {% set pass_reminder_link = 'pass_reminder_custom_link'|api_get_configuration_value %}
+                    {% set lost_password_link = _p.web_main ~ 'auth/lostPassword.php' %}
+
+                    {% if not pass_reminder_link is empty %}
+                        {% set lost_password_link = pass_reminder_link %}
+                    {% endif %}
+
+                    <li><a href="{{ lost_password_link }}"> {{ 'LostPassword' | get_lang }} </a></li>
                 {% endif %}
             </ul>
         {% endif %}

@@ -963,6 +963,7 @@ class Template
      */
     public function display($template, $clearFlashMessages = true)
     {
+        $this->assign('page_origin', api_get_origin());
         $this->assign('flash_messages', Display::getFlashToString());
 
         if ($clearFlashMessages) {
@@ -1125,14 +1126,16 @@ class Template
     }
 
     /**
-     * @return string
      * @throws Exception
+     *
+     * @return string
      */
     public static function displayLoginForm()
     {
+        // Get the $cas array from app/config/auth.conf.php
         global $cas;
 
-        if (is_array($cas) && array_key_exists('replace_login_form',  $cas) && $cas['replace_login_form'] = true) {
+        if (is_array($cas) && array_key_exists('replace_login_form', $cas) && $cas['replace_login_form'] == true) {
             return self::displayCASLoginButton();
         }
 

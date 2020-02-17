@@ -68,7 +68,7 @@ class SystemAnnouncementManager
         $user_id = ''
     ) {
         $user_selected_language = api_get_interface_language();
-        $start = intval($start);
+        $start = (int) $start;
         $userGroup = new UserGroup();
         $tbl_announcement_group = Database::get_main_table(TABLE_MAIN_SYSTEM_ANNOUNCEMENTS_GROUPS);
         $temp_user_groups = $userGroup->get_groups_by_user(api_get_user_id(), 0);
@@ -734,6 +734,11 @@ class SystemAnnouncementManager
         // Expiration date
         $sql .= " AND (expiration_date = '' OR expiration_date IS NULL OR expiration_date > '$now') ";
 
+        if ((empty($teacher) || $teacher == '0') && (empty($student) || $student == '0')) {
+            return true;
+        }
+
+        $userListToFilter = [];
         // @todo check if other filters will apply for the career/promotion option.
         if (isset($announcement->career_id) && !empty($announcement->career_id)) {
             $promotion = new Promotion();
@@ -742,23 +747,33 @@ class SystemAnnouncementManager
                 $promotionList = [];
                 $promotionList[] = $promotion->get($announcement->promotion_id);
             }
+
             if (!empty($promotionList)) {
                 foreach ($promotionList as $promotion) {
                     $sessionList = SessionManager::get_all_sessions_by_promotion($promotion['id']);
                     foreach ($sessionList as $session) {
-                        $users = SessionManager::get_users_by_session($session['id'], 0);
-                        foreach ($users as $user) {
-                            MessageManager::send_message_simple($user['user_id'], $title, $content);
+                        if ($teacher) {
+                            $users = SessionManager::get_users_by_session($session['id'], 2);
+                            if (!empty($users)) {
+                                $userListToFilter = array_merge($users, $userListToFilter);
+                            }
+                        }
+
+                        if ($student) {
+                            $users = SessionManager::get_users_by_session($session['id'], 0);
+                            if (!empty($users)) {
+                                $userListToFilter = array_merge($users, $userListToFilter);
+                            }
                         }
                     }
                 }
             }
-
-            return true;
         }
 
-        if ((empty($teacher) || $teacher == '0') && (empty($student) || $student == '0')) {
-            return true;
+        if (!empty($userListToFilter)) {
+            $userListToFilter = array_column($userListToFilter, 'user_id');
+            $userListToFilterToString = implode("', '", $userListToFilter);
+            $sql .= " AND (u.user_id IN ('$userListToFilterToString') ) ";
         }
 
         $result = Database::query($sql);

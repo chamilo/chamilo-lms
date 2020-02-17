@@ -857,6 +857,7 @@ ALTER TABLE skill_rel_course ADD CONSTRAINT FK_E7CEC7FA613FECDF FOREIGN KEY (ses
         'show_reporting_icon' => true,
         'hide_lp_arrow_navigation' => false,
         'show_toolbar_by_default' => false,
+        'navigation_in_the_middle' => false,
     ],
 ];*/
 
@@ -947,12 +948,15 @@ VALUES (2, 13, 'session_courses_read_only_mode', 'Lock Course In Session', 1, 1,
 // $_configuration['show_pending_survey_in_menu'] = false;
 
 // GDPR: European's General Data Protection Rules activation option
-// Set to true to disable the new personal data page inside the social network menu
+// Set to true to disable the new personal data page inside the social network
+// menu
 // $_configuration['disable_gdpr'] = true;
 
-// GDPR requires users to be informed of the Data Protection Officer name and contact point
-// These can only be defined here for now, but will be moved to web settings in the future.
-// Name of the person or organization that is responsible for the treatment of personal info
+// GDPR requires users to be informed of the Data Protection Officer name and 
+// contact point. These can only be defined here for now, but will be moved to 
+// web settings in the future.
+// Name of the person or organization that is responsible for the treatment of
+// personal info
 //$_configuration['data_protection_officer_name'] = '';
 // A description of the role of the DP Officer in this context
 //$_configuration['data_protection_officer_role'] = '';
@@ -975,6 +979,10 @@ VALUES (2, 13, 'session_courses_read_only_mode', 'Lock Course In Session', 1, 1,
         ],
     ],
 ];*/
+
+// Make GDPR terms public (useful when using the platform for anonymous survey
+// invitations where users can leave personal info).
+// $_configuration['gdpr_terms_public'] = false;
 
 // Hide LP item prerequisite label in the LP view
 //$_configuration['hide_accessibility_label_on_lp_item'] = true;
@@ -1369,6 +1377,17 @@ ALTER TABLE notification_event ADD COLUMN event_id INT NULL;
 
 // Catalog search settings visibility
 //$_configuration['catalog_settings'] = ['sessions' => ['by_title' => true, 'by_date' => true, 'by_tag' => true, 'show_session_info' => true, 'show_session_date' => true]];
+
+// Enable learning paths with only one SCO item to use the score returned by 
+// the SCO as an indicator of progress of the whole learning path
+// $_configuration['lp_score_as_progress_enable'] = false;
+
+// Use this link as the "Forgot password?" link instead of the default. This setting should be transformed into a hook for plugins at a later time
+//$_configuration['pass_reminder_custom_link'] = '';
+
+// In Scorm comunication use the username instead of the user_id
+//$_configuration['scorm_api_username_as_student_id'] = false;
+
 
 // KEEP THIS AT THE END
 // -------- Custom DB changes

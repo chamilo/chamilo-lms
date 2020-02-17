@@ -869,7 +869,7 @@ class SystemAnnouncementManager
                                 break 2;
                             }
 
-                            if ($visible === self::VISIBLE_STUDENT && $status === 1) {
+                            if ($visible === self::VISIBLE_STUDENT && $status === 0) {
                                 $show = true;
                                 break 2;
                             }

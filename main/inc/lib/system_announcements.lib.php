@@ -854,7 +854,14 @@ class SystemAnnouncementManager
                     foreach ($promotionList as $promotionId) {
                         $sessionList = SessionManager::get_all_sessions_by_promotion($promotionId);
                         foreach ($sessionList as $session) {
-                            $status = (int) SessionManager::getUserStatusInSession($userId, $session['id']);
+                            $sessionRelUser = SessionManager::getUserStatusInSession($userId, $session['id']);
+
+                            if (null === $sessionRelUser) {
+                                continue;
+                            }
+
+                            $status = $sessionRelUser->getRelationType();
+
                             if ($visible === self::VISIBLE_TEACHER && $status === 2) {
                                 $show = true;
                                 break 2;

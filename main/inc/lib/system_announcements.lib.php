@@ -2,6 +2,8 @@
 
 /* For licensing terms, see /license.txt */
 
+use Chamilo\CoreBundle\Entity\SessionRelUser;
+
 /**
  * Class SystemAnnouncementManager.
  */
@@ -856,7 +858,7 @@ class SystemAnnouncementManager
                         foreach ($sessionList as $session) {
                             $sessionRelUser = SessionManager::getUserStatusInSession($userId, $session['id']);
 
-                            if (null === $sessionRelUser) {
+                            if (!($sessionRelUser instanceof SessionRelUser)) {
                                 continue;
                             }
 

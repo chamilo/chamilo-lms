@@ -64,7 +64,8 @@ class UniqueAnswerImage extends UniqueAnswer
         if (isset($zoomOptions['options'])) {
             $finderFolder = api_get_path(WEB_PATH).'vendor/studio-42/elfinder/';
             $html .= '<!-- elFinder CSS (REQUIRED) -->';
-            $html .= '<link rel="stylesheet" type="text/css" media="screen" href="'.$finderFolder.'css/elfinder.full.css">';
+            $html .= '<link rel="stylesheet" type="text/css" media="screen" 
+                href="'.$finderFolder.'css/elfinder.full.css">';
             $html .= '<link rel="stylesheet" type="text/css" media="screen" href="'.$finderFolder.'css/theme.css">';
             
             $html .= '<!-- elFinder JS (REQUIRED) -->';
@@ -103,7 +104,15 @@ class UniqueAnswerImage extends UniqueAnswer
                             var imageZoom = filePath.url;
                             var iname = "answer["+id+"]";
 
-                            CKEDITOR.instances[iname].insertHtml(\'<img id="zoom_picture" class="zoom_picture" src="\'+imageZoom+\'" data-zoom-image="\'+imageZoom+\'" width="200px" height="150px" />\');
+                            CKEDITOR.instances[iname].insertHtml(\'
+                                <img 
+                                    id="zoom_picture" 
+                                    class="zoom_picture" 
+                                    src="\'+imageZoom+\'" 
+                                    data-zoom-image="\'+imageZoom+\'" 
+                                    width="200px" 
+                                    height="150px" 
+                                />\');
 
                             $("#elfinder").elfinder("destroy"); //close the window after image is selected
                         },

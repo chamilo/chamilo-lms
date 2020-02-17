@@ -1638,7 +1638,14 @@ abstract class Question
                     e.stopPropagation();
                     var imageZoom = $("input[name=\'imageZoom\']").val();
                     var imageWidth = $("input[name=\'imageWidth\']").val();
-                    CKEDITOR.instances.questionDescription.insertHtml(\'<img id="zoom_picture" class="zoom_picture" src="\'+imageZoom+\'" data-zoom-image="\'+imageZoom+\'" width="\'+imageWidth+\'px"/>\');
+                    CKEDITOR.instances.questionDescription.insertHtml(\'
+                        <img 
+                            id="zoom_picture" 
+                            class="zoom_picture" 
+                            src="\'+imageZoom+\'" 
+                            data-zoom-image="\'+imageZoom+\'" 
+                            width="\'+imageWidth+\'px"
+                        />\');
                 });
 
                 $("input[name=\'imageZoom\']").on("click", function(){

@@ -453,10 +453,10 @@ class ExerciseShowFunctions
      * Display the answers to a ptest question.
      *
      * @param Exercise $exercise
-     * @param int      $answerType                   Answer type
-     * @param int      $studentChoice                Student choice
-     * @param string   $answer                       Textual answer
-     * @param string   $answerComment                Comment on answer
+     * @param int      $answerType    Answer type
+     * @param int      $studentChoice Student choice
+     * @param string   $answer        Textual answer
+     * @param string   $answerComment Comment on answer
      * @param bool     $export
      */
     public static function display_ptest_answer(

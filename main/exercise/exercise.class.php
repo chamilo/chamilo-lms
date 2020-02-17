@@ -2576,7 +2576,7 @@ class Exercise
                 ['id' => 'randomQuestions']
             );
             $form->addElement('html', '</div>');
-            
+
             $form->addElement(
                 'html',
                 '<div id="hidden_matrix" style="display:'.$displayMatrix.'">'
@@ -2680,7 +2680,7 @@ class Exercise
 
             $form->addElement('date_time_picker', 'end_time');
             $form->addElement('html', '</div>');
-            
+
             $display = 'block';
 
             $form->addElement('html', '<div class="clear">&nbsp;</div>');
@@ -2701,7 +2701,7 @@ class Exercise
             );
 
             $expired_date = (int) $this->selectExpiredTime();
-            
+
             if (($expired_date != '0')) {
                 $form->addElement('html', '<div id="timercontrol" style="display:block;">');
             } else {
@@ -2751,7 +2751,6 @@ class Exercise
 
             $form->addElement('html', '</div>'); //End advanced setting
             $form->addElement('html', '</div>');
-            
         }
 
         // submit
@@ -2831,7 +2830,7 @@ class Exercise
                 $defaults['on_success_message'] = null;
                 $defaults['on_failed_message'] = null;
             }
-        } else if ($type == 'ptest') {
+        } elseif ($type == 'ptest') {
             // rules
             $form->addRule('exerciseAttempts', get_lang('Numeric'), 'numeric');
             $form->addRule('start_time', get_lang('InvalidDate'), 'datetime');
@@ -5180,7 +5179,7 @@ class Exercise
                                     question_id = $questionId";
                         $result = Database::query($sql);
                         $choice = Database::result($result, 0, 'answer');
-                        
+
                         $studentChoice = $choice == $answerAutoId ? 1 : 0;
                     } else {
                         $studentChoice = $choice == $answerAutoId ? 1 : 0;
@@ -6678,7 +6677,7 @@ class Exercise
 
         $cList = PTestCategory::getCategoryListInfo($this->id);
 
-        $categoryList =  [];
+        $categoryList = [];
         foreach ($cList as $item) {
             $categoryList[$item->id]['label'] = $item->name;
             $categoryList[$item->id]['num'] = 0;
@@ -6688,7 +6687,7 @@ class Exercise
         $answerTable = Database::get_course_table(TABLE_QUIZ_ANSWER);
         $questionTable = Database::get_course_table(TABLE_QUIZ_QUESTION);
         $attemptsTable = Database::get_main_table(TABLE_STATISTIC_TRACK_E_ATTEMPT);
-        
+
         // QUESTION_PT_TYPE_CATEGORY_RANKING
         $sql = "SELECT an.ptest_category AS id, COUNT(*) AS rep FROM $attemptsTable att
                 INNER JOIN $answerTable an ON att.answer = an.id
@@ -6748,7 +6747,7 @@ class Exercise
                 $categoryList[$ptestCategoryId]['num'] += $value;
             }
         }
-        
+
         // QUESTION_PT_TYPE_AGREE_REORDER
         $sql = "SELECT att.answer AS answer FROM $attemptsTable att
                 INNER JOIN $questionTable q ON att.question_id = q.id
@@ -6769,7 +6768,7 @@ class Exercise
             }
         }
 
-        $labels =  [];
+        $labels = [];
         $num = [];
         $backgroundColor = $borderColor = [];
         foreach ($categoryList as $item) {
@@ -6784,7 +6783,7 @@ class Exercise
                 $brColor = 'rgb('.$r.', '.$g.', '.$b.')';
                 $bgColor = 'rgba('.$r.', '.$g.', '.$b.', 0.6)';
             }
-            
+
             $backgroundColor[] = $bgColor;
             $borderColor[] = $brColor;
         }
@@ -9556,7 +9555,7 @@ class Exercise
                                 // Exercise results
                                 $resultsLink = '<a href="ptest_exercise_report.php?'.api_get_cidreq().'&exerciseId='.$row['id'].'">'.
                                     Display::return_icon('test_results.png', get_lang('Results'), '', ICON_SIZE_SMALL).'</a>';
-                                    
+
                                 if ($limitTeacherAccess) {
                                     if (api_is_platform_admin()) {
                                         $actions .= $resultsLink;

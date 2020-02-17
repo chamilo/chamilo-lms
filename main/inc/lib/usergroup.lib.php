@@ -125,7 +125,7 @@ class UserGroup extends Model
             $limitCondition = " LIMIT $start, $limit";
         }
 
-        $sql.= $limitCondition;
+        $sql .= $limitCondition;
 
         $result = Database::query($sql);
 

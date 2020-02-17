@@ -390,10 +390,10 @@ class CQuizAnswer
     public function setPtestCategory($ptestCategory)
     {
         $this->ptestCategory = empty($ptestCategory) ? null : $ptestCategory;
-        
+
         return $this;
     }
-    
+
     /**
      * Get ptestCategory.
      *

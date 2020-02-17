@@ -25,7 +25,6 @@ $htmlHeadXtra[] = '<script>
     });
 </script>';
 
-
 $lps = learnpath::getLpList($courseId);
 Session::write('lps', $lps);
 
@@ -274,7 +273,6 @@ function getCount()
     }
 
     return $count;
-
 }
 
 /**

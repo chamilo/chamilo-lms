@@ -228,7 +228,6 @@ if (!empty($question_list)) {
             $row++;
         }
         $content .= $table->toHtml();
-
     }
 }
 

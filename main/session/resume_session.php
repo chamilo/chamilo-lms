@@ -12,7 +12,6 @@ use Chamilo\CoreBundle\Entity\SessionRelCourseRelUser;
 /**
  * @author  Bart Mollet, Julio Montoya lot of fixes
  */
-
 $cidReset = true;
 require_once __DIR__.'/../inc/global.inc.php';
 

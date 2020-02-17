@@ -1388,6 +1388,13 @@ ALTER TABLE notification_event ADD COLUMN event_id INT NULL;
 // In Scorm comunication use the username instead of the user_id
 //$_configuration['scorm_api_username_as_student_id'] = false;
 
+// Zoom in description images quiz
+// $_configuration['zoom_images_quiz'] = [
+//    'options' => [
+//          'zoomWindowWidth' => 400,
+//          'zoomWindowHeight' => 400,
+//     ]
+// ];
 
 // KEEP THIS AT THE END
 // -------- Custom DB changes

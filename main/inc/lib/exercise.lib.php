@@ -523,7 +523,9 @@ class ExerciseLib
                             }
                         }
 
-                        $answer = Security::remove_XSS($answer, STUDENT);
+                        if ($answerType != UNIQUE_ANSWER_IMAGE) {
+                            $answer = Security::remove_XSS($answer, STUDENT);
+                        }
                         $s .= Display::input(
                             'hidden',
                             'choice2['.$questionId.']',

@@ -59,7 +59,7 @@ class UniqueAnswerImage extends UniqueAnswer
 
         $html = '<div class="alert alert-success" role="alert">'.
                 get_lang('UniqueAnswerImagePreferredSize200x150').'</div>';
-        
+
         $zoomOptions = api_get_configuration_value('zoom_images_quiz');
         if (isset($zoomOptions['options'])) {
             $finderFolder = api_get_path(WEB_PATH).'vendor/studio-42/elfinder/';
@@ -243,7 +243,12 @@ class UniqueAnswerImage extends UniqueAnswer
                     '<br><div class="form-group ">
                         <label for="question_admin_form_btn_add_img['.$i.']" class="col-sm-2 control-label"></label>
                         <div class="col-sm-8">
-                            <button class="add_img_link btn btn-info btn-sm" name="btn_add_img['.$i.']" type="submit" id="question_admin_form_btn_add_img['.$i.']"><em class="fa fa-plus"></em> Agregar imagen con zoom</button>
+                            <button class="add_img_link btn btn-info btn-sm" 
+                                name="btn_add_img['.$i.']" 
+                                type="submit" 
+                                id="question_admin_form_btn_add_img['.$i.']">
+                                <em class="fa fa-plus"></em> '.get_lang('AddZoomImage').'
+                            </button>
                         </div>
                         <div class="col-sm-2"></div>
                     </div>' : '').'</td>',

@@ -6768,6 +6768,7 @@ $CasMainPortComment = "CAS zerbitzari nagusiarekin konektatzeko ataka";
 $CasMainProtocolTitle = "CAS zerbitzari nagusiaren protokoloa";
 $CAS1Text = "CAS 1";
 $CAS2Text = "CAS 2";
+$CAS3Text = "CAS 3";
 $SAMLText = "SAML";
 $CasMainProtocolComment = "Gu CAS zerbitzariarekin konektatzeko protokoloa";
 $CasUserAddActivateTitle = "Gaitu erabiltzaileak CAS bidez erregistratzea";
@@ -7215,4 +7216,8 @@ $DataTableSearch = "Bilatu";
 $HideColumn = "Ezkutatu zutabea";
 $DisplayColumn = "Erakutsi zutabea";
 $LegalAgreementAccepted = "Lege hitzarmena onartu da";
+$TimeSpentInLp = "Ikasgaian emandako denbora";
+$IHaveFinishedTheLessonsNotifyTheTeacher = "Bukatu ditut ikastaroko ikasgaiak. Irakasleari jakinaraztea";
+$TimeSpentTimeRequired = "Erabilitako denbora / Behar izandako denbora";
+$ProgressSpentInLp = "Aurrerapena edukietan";
 ?>

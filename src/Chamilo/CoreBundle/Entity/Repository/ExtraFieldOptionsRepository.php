@@ -16,8 +16,6 @@ class ExtraFieldOptionsRepository extends EntityRepository
     /**
      * Get the secondary options. For double select extra field.
      *
-     * @param ExtraFieldOptions $option
-     *
      * @return array
      */
     public function findSecondaryOptions(ExtraFieldOptions $option)

@@ -2652,8 +2652,6 @@ class MessageManager
 
     /**
      * Send a notification to all admins when a new user is registered.
-     *
-     * @param User $user
      */
     public static function sendNotificationOfNewRegisteredUser(User $user)
     {
@@ -2698,9 +2696,7 @@ class MessageManager
 
     /**
      * Send a notification to all admins when a new user is registered
-     * while the approval method is used for users registration
-     *
-     * @param User $user
+     * while the approval method is used for users registration.
      */
     public static function sendNotificationOfNewRegisteredUserApproval(User $user)
     {
@@ -2728,7 +2724,7 @@ class MessageManager
         $extraFieldValues = new ExtraFieldValue('user');
         $userExtraFields = $extraFieldValues->getAllValuesByItem($userId);
         $values = [];
-        foreach($userExtraFields as $field => $value) {
+        foreach ($userExtraFields as $field => $value) {
             $values[$value['variable']] = $value['value'];
         }
         $tplMailBody->assign(

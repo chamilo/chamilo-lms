@@ -29,9 +29,6 @@ class RestResponse
         $this->data = [];
     }
 
-    /**
-     * @param array $data
-     */
     public function setData(array $data)
     {
         $this->error = false;

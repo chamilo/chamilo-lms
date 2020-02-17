@@ -31,7 +31,7 @@ function extldap_purify_string($string)
 /**
  * Establishes a connection to the LDAP server and sets the protocol version.
  *
- * @return bool ldap link identifier or false
+ * @return resource|bool ldap link identifier or false
  *
  * @author ndiechburg <noel@cblue.be>
  * */
@@ -219,6 +219,12 @@ function extldap_get_chamilo_user($ldap_user, $cor = null)
                     $chamilo_user[$chamilo_field] = trim($ldap_field, "!\t\n\r\0");
                     break;
                 }
+                if (!array_key_exists($ldap_field, $ldap_user)) {
+                    $lowerCaseFieldName = strtolower($ldap_field);
+                    if (array_key_exists($lowerCaseFieldName, $ldap_user)) {
+                        $ldap_field = $lowerCaseFieldName;
+                    }
+                }
                 if (isset($ldap_user[$ldap_field][0])) {
                     $chamilo_user[$chamilo_field] = extldap_purify_string($ldap_user[$ldap_field][0]);
                 } else {
@@ -404,4 +410,97 @@ function extldap_add_user_by_array($data, $update_if_exists = true)
     }
 
     return $user_id;
+}
+
+/**
+ * Get one user's single attribute value.
+ * User is identified by filter.
+ * $extldap_config['filter'] is also applied in complement, if defined.
+ *
+ * @param $filter string LDAP entry filter, such as '(uid=10000)'
+ * @param $attribute string name of the LDAP attribute to read the value from
+ *
+ * @throws Exception if more than one entries matched or on internal error
+ *
+ * @return string|bool the single matching user entry's single attribute value or false if not found
+ */
+function extldapGetUserAttributeValue($filter, $attribute)
+{
+    global $extldap_config;
+
+    if (array_key_exists('filter', $extldap_config) && !empty($extldap_config['filter'])) {
+        $filter = '(&'.$filter.'('.$extldap_config['filter'].'))';
+    }
+
+    $ldap = extldap_connect();
+    if (false === $ldap) {
+        throw new Exception(get_lang('LDAPConnectFailed'));
+    }
+
+    if (false === ldap_bind($ldap, $extldap_config['admin_dn'], $extldap_config['admin_password'])) {
+        throw new Exception(get_lang('LDAPBindFailed'));
+    }
+
+    $searchResult = ldap_search($ldap, $extldap_config['base_dn'], $filter, [$attribute]);
+    if (false === $searchResult) {
+        throw new Exception(get_lang('LDAPSearchFailed'));
+    }
+
+    switch (ldap_count_entries($ldap, $searchResult)) {
+        case 0:
+            return false;
+        case 1:
+            $entry = ldap_first_entry($ldap, $searchResult);
+            if (false === $entry) {
+                throw new Exception(get_lang('LDAPFirstEntryFailed'));
+            }
+            $values = ldap_get_values($ldap, $entry, $attribute);
+            if (false == $values) {
+                throw new Exception(get_lang('LDAPGetValuesFailed'));
+            }
+            if ($values['count'] == 1) {
+                return $values[0];
+            }
+            throw new Exception(get_lang('MoreThanOneAttributeValueFound'));
+        default:
+            throw new Exception(get_lang('MoreThanOneUserMatched'));
+    }
+}
+
+/**
+ * Get the username from the CAS-supplied user identifier.
+ *
+ * searches in attribute $extldap_user_correspondance['extra']['cas_user'] or 'uid' by default
+ * reads value from attribute $extldap_user_correspondance['username'] or 'uid' by default
+ *
+ * @param $casUser string code returned from the CAS server to identify the user
+ *
+ * @throws Exception on error
+ *
+ * @return string|bool user login name, false if not found
+ */
+function extldapCasUserLogin($casUser)
+{
+    global $extldap_user_correspondance;
+
+    // which LDAP attribute is the cas user identifier stored in ?
+    $attributeToFilterOn = 'uid';
+    if (is_array($extldap_user_correspondance) && array_key_exists('extra', $extldap_user_correspondance)) {
+        $extra = $extldap_user_correspondance['extra'];
+        if (is_array($extra) && array_key_exists('cas_user', $extra) && !empty($extra['cas_user'])) {
+            $attributeToFilterOn = $extra['cas_user'];
+        }
+    }
+
+    // which LDAP attribute is the username ?
+    $attributeToRead = 'uid';
+    if (is_array($extldap_user_correspondance)
+        && array_key_exists('username', $extldap_user_correspondance)
+        && !empty($extldap_user_correspondance['username'])
+    ) {
+        $attributeToRead = $extldap_user_correspondance['username'];
+    }
+
+    // return the value
+    return extldapGetUserAttributeValue("($attributeToFilterOn=$casUser)", $attributeToRead);
 }

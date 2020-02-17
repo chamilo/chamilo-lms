@@ -122,8 +122,6 @@ echo $form->returnForm();
 Display::display_footer();
 
 /**
- * @param Session $session
- *
  * @return array
  */
 function getSessionCourseList(Session $session)

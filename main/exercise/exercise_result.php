@@ -87,11 +87,6 @@ if (!in_array($origin, ['learnpath', 'embeddable'])) {
     // So we are not in learnpath tool
     Display::display_header($nameTools, get_lang('Exercise'));
 } else {
-    $htmlHeadXtra[] = "
-    <style>
-    body { background: none;}
-    </style>
-    ";
     Display::display_reduced_header();
 }
 
@@ -224,7 +219,7 @@ if (!in_array($origin, ['learnpath', 'embeddable'])) {
     }
 
     Session::write('attempt_remaining', $remainingMessage);
-    showEmbeddableFinishButton();
+    //showEmbeddableFinishButton();
     Display::display_reduced_footer();
 } else {
     $lp_mode = Session::read('lp_mode');
@@ -246,7 +241,7 @@ function showEmbeddableFinishButton()
 {
     echo '<script>
         $(function () {
-            $(\'.btn-close-quiz\').on(\'click\', function () {    
+            $(\'.btn-close-quiz\').on(\'click\', function () {
                 window.parent.$(\'video:not(.skip), audio:not(.skip)\').get(0).play();
             });
         });
@@ -255,12 +250,12 @@ function showEmbeddableFinishButton()
     echo Display::tag(
         'p',
         Display::toolbarButton(
-            get_lang('EndTest'),
+            get_lang('GoBackToVideo'),
             '#',
-            'times',
+            'undo',
             'warning',
             ['role' => 'button', 'class' => 'btn-close-quiz']
         ),
-        ['class' => 'text-right']
+        ['class' => 'text-center']
     );
 }

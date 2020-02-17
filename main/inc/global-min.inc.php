@@ -4,7 +4,6 @@
  * This is a minified version of global.inc.php meant *only* for download.php
  * to check permissions and deliver the file.
  */
-use Chamilo\CoreBundle\Component\Utils\ChamiloApi;
 
 // Include the libraries that are necessary everywhere
 require_once __DIR__.'/../../vendor/autoload.php';

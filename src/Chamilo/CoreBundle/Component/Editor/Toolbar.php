@@ -111,17 +111,11 @@ class Toolbar
         return [];
     }
 
-    /**
-     * @param array $config
-     */
     public function setConfig(array $config)
     {
         $this->config = $config;
     }
 
-    /**
-     * @param array $config
-     */
     public function updateConfig(array $config)
     {
         if (empty($this->config)) {

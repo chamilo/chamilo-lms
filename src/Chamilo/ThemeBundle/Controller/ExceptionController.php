@@ -13,10 +13,9 @@ use Symfony\Component\HttpFoundation\Request;
 class ExceptionController extends \Symfony\Bundle\TwigBundle\Controller\ExceptionController
 {
     /**
-     * @param Request $request
-     * @param string  $format
-     * @param int     $code
-     * @param bool    $debug
+     * @param string $format
+     * @param int    $code
+     * @param bool   $debug
      *
      * @return TemplateReference
      */

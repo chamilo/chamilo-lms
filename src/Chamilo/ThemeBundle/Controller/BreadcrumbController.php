@@ -22,8 +22,7 @@ class BreadcrumbController extends Controller
      *
      * If there are no listeners attached for this event, the return value is an empty response.
      *
-     * @param Request $request
-     * @param string  $title
+     * @param string $title
      *
      * @return Response
      */

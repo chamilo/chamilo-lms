@@ -205,7 +205,8 @@ CKEDITOR.dialog.add( 'video', function ( editor )
 
             var responsiveParent = null;
             // Refresh the fake image.
-            var newFakeImage = editor.createFakeElement( videoNode, 'cke_video', 'video', false );
+            var newFakeImageClass = 'cke_video' + (responsive ? ' embed-responsive-item' : '');
+            var newFakeImage = editor.createFakeElement( videoNode, newFakeImageClass, 'video', false );
             newFakeImage.setStyles( extraStyles );
             if ( this.fakeImage )
             {
@@ -418,7 +419,13 @@ CKEDITOR.dialog.add( 'video', function ( editor )
                                 label: lang.responsive,
                                 items: [ [ lang.ratio16by9, '16by9' ], [ lang.ratio4by3, '4by3' ] ],
                                 commit : commitValue,
-                                setup : loadValue
+                                setup : loadValue,
+                                onChange: function () {
+                                    var dialog = this.getDialog();
+
+                                    dialog.setValueOf('info', 'width', '100%');
+                                    dialog.setValueOf('info', 'height', '100%');
+                                }
                             }
                         ]
                 },

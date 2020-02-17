@@ -1,8 +1,6 @@
 <?php
 /* For license terms, see /license.txt */
 
-use ChamiloSession as Session;
-
 class Justification extends Plugin
 {
     protected function __construct()
@@ -12,6 +10,7 @@ class Justification extends Plugin
             'Julio Montoya',
             [
                 'tool_enable' => 'boolean',
+                'default_course_id' => 'text',
             ]
         );
     }
@@ -26,16 +25,46 @@ class Justification extends Plugin
         return $result ? $result : $result = new self();
     }
 
+    public function getJustification($id)
+    {
+        $id = (int) $id;
+
+        $sql = 'SELECT * FROM justification_document WHERE id = '.$id;
+        $query = Database::query($sql);
+
+        return Database::fetch_array($query, 'ASSOC');
+    }
+
+    public function getUserJustificationList($userId)
+    {
+        $userId = (int) $userId;
+
+        $sql = "SELECT * FROM justification_document_rel_users WHERE user_id = $userId ";
+        $query = Database::query($sql);
+
+        return Database::store_result($query, 'ASSOC');
+    }
+
+    public function getUserJustification($id)
+    {
+        $id = (int) $id;
+
+        $sql = "SELECT * FROM justification_document_rel_users WHERE id = $id ";
+        $query = Database::query($sql);
+
+        return Database::fetch_array($query, 'ASSOC');
+    }
+
     public function getList()
     {
-        $sql = 'SELECT * FROM justification_document ';
+        $sql = 'SELECT * FROM justification_document ORDER BY name ';
         $query = Database::query($sql);
 
         return Database::store_result($query, 'ASSOC');
     }
 
     /**
-     * Install
+     * Install.
      */
     public function install()
     {

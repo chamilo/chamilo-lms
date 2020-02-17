@@ -811,16 +811,16 @@ class Career extends Model
             }
 
             if (!empty($newGroup)) {
-                $graphHtml .= '<div 
+                $graphHtml .= '<div
                     id ="group_'.$newGroup.'"
-                    class="group'.$newGroup.' group_class" 
-                    style="display:grid; 
+                    class="group'.$newGroup.' group_class"
+                    style="display:grid;
                         align-self: start;
-                        grid-gap: 10px;                                     
+                        grid-gap: 10px;
                         justify-items: stretch;
                         align-items: start;
-                        align-content: start;	
-                        justify-content: stretch;	
+                        align-content: start;
+                        justify-content: stretch;
                         grid-area:'.$minRow.'/'.$minColumn.'/'.$maxRow.'/'.$maxColumn.'">'; //style="display:grid"
             }
 
@@ -870,6 +870,7 @@ class Career extends Model
         $graphHtml = '';
         /** @var Vertex $vertex */
         foreach ($vertexList as $vertex) {
+            $borderColor = 'green';
             $column = $vertex->getAttribute('Column');
             $realRow = $originalRow = $vertex->getAttribute('Row');
             if ($addRow) {
@@ -877,12 +878,12 @@ class Career extends Model
             }
             $id = $vertex->getId();
             $area = "$realRow/$column";
-            $graphHtml .= '<div 
-                id = "row_wrapper_'.$id.'"   
-                data= "'.$originalRow.'-'.$column.'"                            
+            $graphHtml .= '<div
+                id = "row_wrapper_'.$id.'"
+                data= "'.$originalRow.'-'.$column.'"
                 style="
                     align-self: start;
-                    justify-content: stretch; 
+                    justify-content: stretch;
                     grid-area:'.$area.'"
             >';
             $color = '';
@@ -893,6 +894,11 @@ class Career extends Model
             $content .= '<div class="pull-right">['.$id.']</div>';
 
             if (!empty($userResult) && isset($userResult[$id])) {
+                $lastItem = end($userResult[$id]);
+                if ($lastItem && isset($lastItem['BgColor']) && !empty($lastItem['BgColor'])) {
+                    $color = $lastItem['BgColor'].'; color: '.$lastItem['Color'];
+                    $borderColor = $lastItem['BorderColor'];
+                }
                 $results = '';
                 $size = 2;
                 foreach ($userResult[$id] as $resultId => $iconData) {
@@ -947,7 +953,7 @@ class Career extends Model
 
             $originalRow--;
             $column--;
-            //$title = "$originalRow / $column";
+
             $graphHtml .= Display::panel(
                 $content,
                 $title,
@@ -974,7 +980,7 @@ class Career extends Model
             $width = $graph->blockWidth - $graph->xGap;
             $height = $graph->blockHeight - $graph->yGap;
 
-            $style = 'text;html=1;strokeColor=green;fillColor=#ffffff;overflow=fill;rounded=0;align=left;';
+            $style = 'text;html=1;strokeColor='.$borderColor.';fillColor=#ffffff;overflow=fill;rounded=0;align=left;';
 
             $panel = str_replace(["\n", "\r"], '', $panel);
             $vertexData = "var v$id = graph.insertVertex(parent, null, '".addslashes($panel)."', $x, $y, $width, $height, '$style');";
@@ -1124,8 +1130,8 @@ class Career extends Model
         $groupIdTag = "group_$group";
         $borderLine = $showGroupLine === true ? 'border-style:solid;' : '';
 
-        $graphHtml = '<div 
-            id="'.$groupIdTag.'" class="career_group" 
+        $graphHtml = '<div
+            id="'.$groupIdTag.'" class="career_group"
             style=" '.$borderLine.' padding:15px; float:left; margin-left:'.$leftGroup.'; width:'.$widthGroup.'%">';
 
         if (!empty($groupLabel)) {
@@ -1146,8 +1152,8 @@ class Career extends Model
             }
 
             // padding:15px;
-            $graphHtml .= '<div 
-                id="subgroup_'.$subGroup.'" class="career_subgroup" 
+            $graphHtml .= '<div
+                id="subgroup_'.$subGroup.'" class="career_subgroup"
                 style="'.$line.' margin-bottom:20px; padding:15px; float:left; margin-left:0px; width:100%">';
             if (!empty($subGroupLabel)) {
                 $graphHtml .= '<h3>'.$subGroupLabel.'</h3>';
@@ -1162,8 +1168,8 @@ class Career extends Model
                 }
 
                 $widthColumn = 85 / count($columnList);
-                $graphHtml .= '<div 
-                    id="col_'.$column.'" class="career_column" 
+                $graphHtml .= '<div
+                    id="col_'.$column.'" class="career_column"
                     style="padding:15px;float:left; margin-left:'.$leftColumn.'; width:'.$widthColumn.'%">';
                 $maxRow = 0;
                 foreach ($rows as $row => $vertex) {
@@ -1336,19 +1342,19 @@ class Career extends Model
         $html .= 'jsPlumb.connect({
             source:"'.$source.'",
             target:"'.$target.'",
-            endpoint:[ "Rectangle", { width:1, height:1 }],                                        
-            connector: ["Flowchart"],             
-            paintStyle: connectorPaintStyle,    
-            hoverPaintStyle: endpointHoverStyle,                
+            endpoint:[ "Rectangle", { width:1, height:1 }],
+            connector: ["Flowchart"],
+            paintStyle: connectorPaintStyle,
+            hoverPaintStyle: endpointHoverStyle,
             anchor: ["'.$anchor.'"],
             overlays: [
-                [ 
-                    "Arrow", 
-                    { 
-                        location:1,  
-                        width:11, 
-                        length:11 
-                    } 
+                [
+                    "Arrow",
+                    {
+                        location:1,
+                        width:11,
+                        length:11
+                    }
                 ],
             ],
         });';

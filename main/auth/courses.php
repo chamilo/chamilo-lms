@@ -1,4 +1,5 @@
 <?php
+
 /* For licensing terms, see /license.txt */
 
 use Chamilo\CoreBundle\Entity\SequenceResource;
@@ -8,8 +9,6 @@ use Chamilo\CoreBundle\Entity\SequenceResource;
  * to the controllers depend on the current action.
  *
  * @author Christian Fasanando <christian1827@gmail.com> - Beeznest
- *
- * @package chamilo.auth
  */
 // Delete the globals['_cid'], we don't need it here.
 $cidReset = true; // Flag forcing the 'current course' reset
@@ -49,6 +48,7 @@ $actions = [
     'display_sessions',
     'subscribe_to_session',
     'search_tag',
+    'search_session_title',
     'subscribe_course_validation',
     'subscribe_course',
 ];
@@ -136,8 +136,8 @@ switch ($action) {
         $message = get_lang('CourseRequiresPassword').' ';
         $message .= $courseInfo['title'].' ('.$courseInfo['visual_code'].') ';
 
-        $action = api_get_self().
-            '?action=subscribe_course_validation&sec_token='.Security::getTokenFromSession().'&subscribe_course='.$courseCodeToSubscribe;
+        $action = api_get_self().'?action=subscribe_course_validation&sec_token='.
+            Security::getTokenFromSession().'&subscribe_course='.$courseCodeToSubscribe;
         $form = new FormValidator(
             'subscribe_user_with_password',
             'post',
@@ -199,7 +199,7 @@ switch ($action) {
             api_not_allowed(true);
         }
 
-        $courseController->sessionList($action, $nameTools, $limit);
+        $courseController->sessionList($limit);
         break;
     case 'subscribe_to_session':
         if (!$user_can_view_page) {
@@ -234,13 +234,13 @@ switch ($action) {
             );
 
             if (count($sequences) > 0) {
-                $requirementsData = SequenceResourceManager::checkRequirementsForUser(
+                $requirementsData = $repository->checkRequirementsForUser(
                     $sequences,
                     SequenceResource::SESSION_TYPE,
                     $userId
                 );
 
-                $continueWithSubscription = SequenceResourceManager::checkSequenceAreCompleted($requirementsData);
+                $continueWithSubscription = $repository->checkSequenceAreCompleted($requirementsData);
 
                 if (!$continueWithSubscription) {
                     header('Location: '.api_get_path(WEB_CODE_PATH).'auth/courses.php');
@@ -280,5 +280,12 @@ switch ($action) {
         }
 
         $courseController->sessionsListByCoursesTag($limit);
+        break;
+    case 'search_session_title':
+        if (!$user_can_view_page) {
+            api_not_allowed(true);
+        }
+
+        $courseController->sessionsListByName($limit);
         break;
 }

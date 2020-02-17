@@ -294,8 +294,6 @@ class CThematicAdvance
     }
 
     /**
-     * @param Room $room
-     *
      * @return $this
      */
     public function setRoom(Room $room)

@@ -209,9 +209,12 @@ class MailTemplateManager extends Model
 
         return false;
     }
+
     /**
-     * Gets a custom mail template by the name of the template it replaces
+     * Gets a custom mail template by the name of the template it replaces.
+     *
      * @param string $templateType Name of the template file it replaces
+     *
      * @return string
      */
     public function getTemplateByType($templateType)
@@ -228,6 +231,7 @@ class MailTemplateManager extends Model
         if (empty($result)) {
             return '';
         }
+
         return $result['template'];
     }
 }

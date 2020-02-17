@@ -121,14 +121,17 @@ if ($user_already_registered_show_terms === false &&
             $form->addRule('status', get_lang('ThisFieldIsRequired'), 'required');
         }
     }
-
+    $LastnameLabel = get_lang('LastName');
+    if (api_get_configuration_value('registration_add_helptext_for_2_names') == true) {
+        $LastnameLabel = [$LastnameLabel, get_lang('InsertTwoNames')];
+    }
     if (api_is_western_name_order()) {
         // FIRST NAME and LAST NAME
         $form->addElement('text', 'firstname', get_lang('FirstName'), ['size' => 40]);
-        $form->addElement('text', 'lastname', get_lang('LastName'), ['size' => 40]);
+        $form->addElement('text', 'lastname', $LastnameLabel, ['size' => 40]);
     } else {
         // LAST NAME and FIRST NAME
-        $form->addElement('text', 'lastname', get_lang('LastName'), ['size' => 40]);
+        $form->addElement('text', 'lastname', $LastnameLabel, ['size' => 40]);
         $form->addElement('text', 'firstname', get_lang('FirstName'), ['size' => 40]);
     }
     $form->applyFilter(['lastname', 'firstname'], 'trim');

@@ -11,7 +11,7 @@
         <div class='cas_plugin_comm'>{{ add_cas_login_button.comm_label }}</div>
         {% if add_cas_login_button.cas_activated %}
             {% if add_cas_login_button.cas_configured %}
-                <button class="btn btn-default" onclick="javascript:self.location.href='main/auth/cas/logincas.php'">{{"LoginEnter"|get_lang}}</button>
+                {{ add_cas_login_button.form }}
             {% else %}
                 CAS isn't configured. Go to Admin > Configuration > CAS.<br/>
             {% endif %}

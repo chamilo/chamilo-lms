@@ -703,6 +703,7 @@ See https://support.chamilo.org/issues/6976
 .tabs-right{
     text-align: right;
 }
+
 #learning_path_toc .panel-default{
     border: none;
     box-shadow: none;
@@ -730,10 +731,10 @@ See https://support.chamilo.org/issues/6976
 #learning_path_toc .root_item.lp_item_type_document.scorm_not_attempted{
     background: url(../../main/img/icons/svg/check-not-attempted.svg) #FFFFFF right center no-repeat;
 }
-#learning_path_toc .root_item.lp_item_type_document.current_item{
+#learning_path_toc .root_item.lp_item_type_document.scorm_highlight{
     background-color: #f1f4f9;
 }
-#learning_path_toc .child_item.lp_item_type_document.current_item{
+#learning_path_toc .child_item.lp_item_type_document.scorm_highlight{
     background-color: #f1f4f9;
 }
 .status-heading .panel-heading .item-action{

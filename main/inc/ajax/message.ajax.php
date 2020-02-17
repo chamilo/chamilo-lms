@@ -13,6 +13,28 @@ require_once __DIR__.'/../global.inc.php';
 $action = $_GET['a'];
 
 switch ($action) {
+    case 'get_count_notifications':
+        if (api_get_configuration_value('notification_event')) {
+            $notificationManager = new NotificationEvent();
+            $notifications = $notificationManager->getNotificationsByUser(api_get_user_id());
+            echo count($notifications);
+        }
+        break;
+    case 'get_notifications':
+        if (api_get_configuration_value('notification_event')) {
+            $notificationManager = new NotificationEvent();
+            $notifications = $notificationManager->getNotificationsByUser(api_get_user_id());
+            echo json_encode($notifications);
+        }
+        break;
+    case 'mark_notification_as_read':
+        if (api_get_configuration_value('notification_event')) {
+            $id = isset($_REQUEST['id']) ? $_REQUEST['id'] : 0;
+            $notificationManager = new NotificationEvent();
+            $notificationManager->markAsRead($id);
+            echo 1;
+        }
+        break;
     case 'get_count_message':
         $userId = api_get_user_id();
         $invitations = [];

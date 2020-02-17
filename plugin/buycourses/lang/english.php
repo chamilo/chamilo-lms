@@ -190,6 +190,6 @@ $strings['SubscriptionToServiceXSuccessful'] = "Subscription to service %s compl
 $strings['ClickHereToFinish'] = "Click here to finish";
 $strings['OrderCancelled'] = "Order cancelled";
 $strings['use_currency_symbol'] = "Use currency symbol";
-$strings['ExportReport'] =  "Export Sales Report";
+$strings['ExportReport'] = "Export Sales Report";
 $strings['OrderTime'] = "Order time";
 $strings['SelectDateRange'] = "Select a <strong>start date</strong> and <strong>end date</strong> for the report";

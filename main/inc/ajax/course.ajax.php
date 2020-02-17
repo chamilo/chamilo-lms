@@ -34,7 +34,15 @@ switch ($action) {
         $courseInfo = api_get_course_info_by_id($courseId);
         $image = isset($_REQUEST['image']) && in_array($_REQUEST['image'], ['course_image_large_source', 'course_image_source']) ? $_REQUEST['image'] : '';
         if ($courseInfo && $image) {
-            DocumentManager::file_send_for_download($courseInfo[$image]);
+            // Arbitrarily set a cache of 10' for the course image to
+            // avoid hammering the server with otherwise unfrequently
+            // changed images that can have some weight
+            $now = time() + 600; //time must be in GMT anyway
+            $headers = [
+              'Expires' => gmdate('D, d M Y H:i:s ', $now).'GMT',
+              'Cache-Control' => 'max-age=600',
+            ];
+            DocumentManager::file_send_for_download($courseInfo[$image], null, null, null, $headers);
         }
         break;
     case 'get_user_courses':

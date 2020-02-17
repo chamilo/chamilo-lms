@@ -118,8 +118,6 @@ function array_to_string($array, $separator = ',')
 }
 
 /**
- * @param array $array
- *
  * @return array
  */
 function array_flatten(array $array)

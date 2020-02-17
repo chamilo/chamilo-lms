@@ -6940,9 +6940,9 @@ class Exercise
         $isVisible = true;
         $message = null;
 
-        // 1.1 Admins and teachers can access to the exercise
+        // 1.1 Admins, teachers and tutors can access to the exercise
         if ($filterByAdmin) {
-            if (api_is_platform_admin() || api_is_course_admin()) {
+            if (api_is_platform_admin() || api_is_course_admin() || api_is_course_tutor()) {
                 return ['value' => true, 'message' => ''];
             }
         }
@@ -10209,10 +10209,9 @@ class Exercise
     }
 
     /**
-     * @param Question $objQuestionTmp
-     * @param int      $questionId
-     * @param bool     $show_results
-     * @param array    $question_result
+     * @param int   $questionId
+     * @param bool  $show_results
+     * @param array $question_result
      */
     public function getDelineationResult(Question $objQuestionTmp, $questionId, $show_results, $question_result)
     {
@@ -10785,8 +10784,6 @@ class Exercise
     }
 
     /**
-     * @param FormValidator $form
-     *
      * @return HTML_QuickForm_group
      */
     private function setResultDisabledGroup(FormValidator $form)

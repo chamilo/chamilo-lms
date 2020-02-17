@@ -15,8 +15,6 @@ use Symfony\Component\HttpFoundation\Request;
 class RedirectingController extends Controller
 {
     /**
-     * @param Request $request
-     *
      * @return \Symfony\Component\HttpFoundation\RedirectResponse|void
      */
     public function removeTrailingSlashAction(Request $request)

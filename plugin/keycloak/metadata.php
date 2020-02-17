@@ -23,10 +23,7 @@ try {
         header('Content-Type: text/xml');
         echo $metadata;
     } else {
-        throw new OneLogin\Saml2\Error(
-            'Invalid SP metadata: '.implode(', ', $errors),
-            OneLogin\Saml2\Error::METADATA_SP_INVALID
-        );
+        throw new OneLogin\Saml2\Error('Invalid SP metadata: '.implode(', ', $errors), OneLogin\Saml2\Error::METADATA_SP_INVALID);
     }
 } catch (Exception $e) {
     echo $e->getMessage();

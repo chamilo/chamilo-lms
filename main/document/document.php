@@ -209,7 +209,7 @@ if (!empty($groupId)) {
 }
 
 // Actions.
-$document_id = isset($_REQUEST['id']) ? (int) $_REQUEST['id'] : null;
+$documentIdFromGet = $document_id = isset($_REQUEST['id']) ? (int) $_REQUEST['id'] : null;
 $currentUrl = api_get_self().'?'.api_get_cidreq().'&id='.$document_id;
 $curdirpath = isset($_GET['curdirpath']) ? Security::remove_XSS($_GET['curdirpath']) : null;
 
@@ -604,8 +604,8 @@ if (isset($document_id) && empty($action)) {
             0
         );
     }
-    // If the document is not a folder we show the document.
 
+    // If the document is not a folder we show the document.
     if ($document_data) {
         $parent_id = $document_data['parent_id'];
         // Hack in order to clean the document id in case of false positive from links
@@ -674,10 +674,12 @@ if (isset($document_id) && empty($action)) {
         true
     );
 
-    $parent_id = $document_data['parent_id'];
+    if (isset($document_data['parent_id'])) {
+        $parent_id = $document_data['parent_id'];
+    }
 }
 
-if (isset($document_data) && $document_data['path'] == '/certificates') {
+if (isset($document_data) && isset($document_data['path']) && $document_data['path'] == '/certificates') {
     $is_certificate_mode = true;
 }
 
@@ -1769,7 +1771,7 @@ if ($isAllowedToEdit ||
     if ($fileLinkEnabled && !$is_certificate_mode) {
         $actionsLeft .= Display::url(
             Display::return_icon('clouddoc_new.png', get_lang('AddCloudLink'), '', ICON_SIZE_MEDIUM),
-            api_get_path(WEB_CODE_PATH).'document/add_link.php?'.api_get_cidreq().'&id='.$document_id
+            api_get_path(WEB_CODE_PATH).'document/add_link.php?'.api_get_cidreq().'&id='.$documentIdFromGet
         );
     }
 }
@@ -2170,7 +2172,7 @@ if (count($documentAndFolders) > 1) {
     $ajaxURL = api_get_path(WEB_AJAX_PATH).'document.ajax.php?a=get_document_quota&'.api_get_cidreq();
     if ($isAllowedToEdit) {
         echo '<script>
-        $(function() {        
+        $(function() {
             $.ajax({
                 url:"'.$ajaxURL.'",
                 success:function(data){
@@ -2182,17 +2184,17 @@ if (count($documentAndFolders) > 1) {
     }
 
     echo '<script>
-    $(function() {        
+    $(function() {
         $(".document_size").each(function(i, obj) {
             var path = obj.getAttribute("data-path");
-                            
+
             $.ajax({
                 url:"'.$getSizeURL.'&path="+path,
                 success:function(data){
                     $(obj).html(data);
                 }
-            });            
-        });    
+            });
+        });
     });
     </script>';
 

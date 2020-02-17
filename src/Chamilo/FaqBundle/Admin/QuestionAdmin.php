@@ -21,9 +21,6 @@ class QuestionAdmin extends Admin
         '_sort_order' => 'Desc',
     ];
 
-    /**
-     * @param DatagridMapper $datagridMapper
-     */
     protected function configureDatagridFilters(DatagridMapper $datagridMapper)
     {
         $datagridMapper
@@ -32,9 +29,6 @@ class QuestionAdmin extends Admin
         ;
     }
 
-    /**
-     * @param ListMapper $listMapper
-     */
     protected function configureListFields(ListMapper $listMapper)
     {
         $listMapper
@@ -56,9 +50,6 @@ class QuestionAdmin extends Admin
             );
     }
 
-    /**
-     * @param FormMapper $formMapper
-     */
     protected function configureFormFields(FormMapper $formMapper)
     {
         $formMapper

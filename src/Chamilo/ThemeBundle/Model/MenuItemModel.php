@@ -274,8 +274,6 @@ class MenuItemModel implements MenuItemInterface
     }
 
     /**
-     * @param MenuItemInterface $child
-     *
      * @return $this
      */
     public function addChild(MenuItemInterface $child)
@@ -287,8 +285,6 @@ class MenuItemModel implements MenuItemInterface
     }
 
     /**
-     * @param MenuItemInterface $child
-     *
      * @return $this
      */
     public function removeChild(MenuItemInterface $child)

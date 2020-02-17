@@ -1405,12 +1405,12 @@ class SurveyManager
             }
         }
 
-        $sql = "UPDATE $table_survey_question 
+        $sql = "UPDATE $table_survey_question
                 SET sort = '".Database::escape_string($question_sort_two)."'
 		        WHERE c_id = $course_id AND question_id='".intval($question_id_one)."'";
         Database::query($sql);
 
-        $sql = "UPDATE $table_survey_question 
+        $sql = "UPDATE $table_survey_question
                 SET sort = '".Database::escape_string($question_sort_one)."'
 		        WHERE c_id = $course_id AND question_id='".intval($question_id_two)."'";
         Database::query($sql);
@@ -1716,7 +1716,7 @@ class SurveyManager
         $course_id = api_get_course_int_id();
         $table = Database::get_course_table(TABLE_SURVEY_ANSWER);
         $survey_id = (int) $survey_id;
-        $sql = "DELETE FROM $table 
+        $sql = "DELETE FROM $table
                 WHERE c_id = $course_id AND survey_id = $survey_id";
         Database::query($sql);
 
@@ -1737,7 +1737,7 @@ class SurveyManager
         $course_id = (int) $course_id;
         $survey_id = (int) $survey_id;
 
-        $sql = "SELECT DISTINCT user 
+        $sql = "SELECT DISTINCT user
                 FROM $table
                 WHERE
                     c_id		= $course_id AND
@@ -1787,9 +1787,9 @@ class SurveyManager
                 ? ' ORDER BY user.firstname, user.lastname'
                 : ' ORDER BY user.lastname, user.firstname';
             $sql = "SELECT DISTINCT
-			            answered_user.user as invited_user, 
-			            user.firstname, 
-			            user.lastname, 
+			            answered_user.user as invited_user,
+			            user.firstname,
+			            user.lastname,
 			            user.user_id
                     FROM $table_survey_answer answered_user
                     LEFT JOIN $table_user as user ON answered_user.user = user.user_id
@@ -1806,7 +1806,7 @@ class SurveyManager
                 $tblSurvey = Database::get_course_table(TABLE_SURVEY);
 
                 $sql = "SELECT i.user FROM $tblInvitation i
-                    INNER JOIN $tblSurvey s 
+                    INNER JOIN $tblSurvey s
                     ON i.survey_code = s.code
                         AND i.c_id = s.c_id
                         AND i.session_id = s.session_id
@@ -1930,14 +1930,14 @@ class SurveyManager
                         WITH (s.code = i.surveyCode AND s.cId = i.cId AND s.sessionId = i.sessionId)
                     INNER JOIN ChamiloCoreBundle:ExtraFieldValues efv WITH efv.itemId = s.iid
                     INNER JOIN ChamiloCoreBundle:ExtraField ef WITH efv.field = ef.id
-                    WHERE 
-                        i.answered = 0 AND 
-                        i.cId = :course AND 
-                        i.user = :user AND 
-                        i.sessionId = :session AND 
-                        :now BETWEEN s.availFrom AND s.availTill AND 
-                        ef.variable = :variable AND 
-                        efv.value = 1 AND 
+                    WHERE
+                        i.answered = 0 AND
+                        i.cId = :course AND
+                        i.user = :user AND
+                        i.sessionId = :session AND
+                        :now BETWEEN s.availFrom AND s.availTill AND
+                        ef.variable = :variable AND
+                        efv.value = 1 AND
                         s.surveyType != 3
                     ORDER BY s.availTill ASC
                 ")
@@ -1995,16 +1995,16 @@ class SurveyManager
         $courseId = (int) $surveyData['c_id'];
         $sessionId = (int) $surveyData['session_id'];
 
-        $sql = "DELETE FROM $surveyInvitationTable 
+        $sql = "DELETE FROM $surveyInvitationTable
                 WHERE session_id = $sessionId AND c_id = $courseId AND survey_code = '$surveyCode' ";
         Database::query($sql);
 
-        $sql = "DELETE FROM $surveyAnswerTable 
+        $sql = "DELETE FROM $surveyAnswerTable
                WHERE survey_id = $surveyId AND c_id = $courseId ";
         Database::query($sql);
 
-        $sql = "UPDATE $surveyTable 
-                SET invited = 0, answered = 0 
+        $sql = "UPDATE $surveyTable
+                SET invited = 0, answered = 0
                 WHERE survey_id = $surveyId AND c_id = $courseId AND session_id = $sessionId ";
         Database::query($sql);
 
@@ -2052,11 +2052,11 @@ class SurveyManager
         $newSurveyId = Database::insert($surveyTable, $surveyData);
 
         if ($newSurveyId) {
-            $sql = "UPDATE $surveyTable SET survey_id = $newSurveyId 
+            $sql = "UPDATE $surveyTable SET survey_id = $newSurveyId
                     WHERE iid = $newSurveyId";
             Database::query($sql);
 
-            $sql = "SELECT * FROM $surveyQuestionGroupTable 
+            $sql = "SELECT * FROM $surveyQuestionGroupTable
                     WHERE survey_id = $surveyId AND c_id = $originalCourseId ";
             $res = Database::query($sql);
             while ($row = Database::fetch_array($res, 'ASSOC')) {
@@ -2075,7 +2075,7 @@ class SurveyManager
             }
 
             // Get questions
-            $sql = "SELECT * FROM $surveyQuestionTable 
+            $sql = "SELECT * FROM $surveyQuestionTable
                     WHERE survey_id = $surveyId AND c_id = $originalCourseId";
             $res = Database::query($sql);
             while ($row = Database::fetch_array($res, 'ASSOC')) {
@@ -2102,7 +2102,7 @@ class SurveyManager
 
                 $insertId = Database::insert($surveyQuestionTable, $params);
                 if ($insertId) {
-                    $sql = "UPDATE $surveyQuestionTable 
+                    $sql = "UPDATE $surveyQuestionTable
                             SET question_id = iid
                             WHERE iid = $insertId";
                     Database::query($sql);
@@ -2112,7 +2112,7 @@ class SurveyManager
             }
 
             // Get questions options
-            $sql = "SELECT * FROM $surveyOptionsTable 
+            $sql = "SELECT * FROM $surveyOptionsTable
                     WHERE survey_id = $surveyId AND c_id = $originalCourseId";
 
             $res = Database::query($sql);

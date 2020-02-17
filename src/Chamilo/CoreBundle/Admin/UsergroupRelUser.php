@@ -16,9 +16,6 @@ use Sonata\AdminBundle\Show\ShowMapper;
  */
 class UsergroupRelUser extends AbstractAdmin
 {
-    /**
-     * @param FormMapper $formMapper
-     */
     protected function configureFormFields(FormMapper $formMapper)
     {
         $formMapper
@@ -27,9 +24,6 @@ class UsergroupRelUser extends AbstractAdmin
         ;
     }
 
-    /**
-     * @param ShowMapper $showMapper
-     */
     protected function configureShowField(ShowMapper $showMapper)
     {
         $showMapper
@@ -38,9 +32,6 @@ class UsergroupRelUser extends AbstractAdmin
         ;
     }
 
-    /**
-     * @param DatagridMapper $datagridMapper
-     */
     protected function configureDatagridFilters(DatagridMapper $datagridMapper)
     {
         $datagridMapper
@@ -49,9 +40,6 @@ class UsergroupRelUser extends AbstractAdmin
         ;
     }
 
-    /**
-     * @param ListMapper $listMapper
-     */
     protected function configureListFields(ListMapper $listMapper)
     {
         $listMapper

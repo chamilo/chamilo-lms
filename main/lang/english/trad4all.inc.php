@@ -8471,4 +8471,8 @@ $AgreeScale2 = "2nd lowest";
 $AgreeScale1 = "Bottom";
 $AddPT = "New personality test";
 $ExerciseGraph = "Attemps graph";
+$InsertTwoNames = "Insert your two names";
+$AddRightLogo = "Add right logo";
+$LearnpathUseScoreAsProgress = "Use score as progress";
+$LearnpathUseScoreAsProgressComment = "Use the score returned, by the only SCO in this learning path, as the progress indicator in the progress bar. This modifies the SCORM behaviour in the strict sense, but improves visual feedback to the learner.";
 ?>

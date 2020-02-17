@@ -51,8 +51,6 @@ class DropBoxDriver extends \elFinderVolumeMySQL implements DriverInterface
 
     /**
      * Set connector.
-     *
-     * @param Connector $connector
      */
     public function setConnector(Connector $connector)
     {
@@ -682,8 +680,6 @@ class DropBoxDriver extends \elFinderVolumeMySQL implements DriverInterface
     }
 
     /**
-     * @param CDropboxFile $file
-     *
      * @return array
      */
     private function transformFileInStat(CDropboxFile $file)

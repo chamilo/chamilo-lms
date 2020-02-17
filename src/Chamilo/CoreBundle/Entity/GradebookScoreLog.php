@@ -150,8 +150,6 @@ class GradebookScoreLog
     /**
      * Set the datetime of register.
      *
-     * @param \DateTime $registeredAt
-     *
      * @return $this
      */
     public function setRegisteredAt(\DateTime $registeredAt)

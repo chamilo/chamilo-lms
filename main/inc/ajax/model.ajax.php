@@ -175,20 +175,26 @@ if (($search || $forceSearch) && ($search !== 'false')) {
                 // Extra field.
                 $extraField = new ExtraField($type);
 
-                foreach ($filters->rules as $key => $data) {
-                    if (empty($data)) {
-                        continue;
-                    }
-                    if ($data->field === 'extra_access_start_date') {
-                        $accessStartDate = $data->data;
-                    }
+                if (is_object($filters)
+                    && property_exists($filters, 'rules')
+                    && is_array($filters->rules)
+                    && !empty($filters->rules)
+                ) {
+                    foreach ($filters->rules as $key => $data) {
+                        if (empty($data)) {
+                            continue;
+                        }
+                        if ($data->field === 'extra_access_start_date') {
+                            $accessStartDate = $data->data;
+                        }
 
-                    if ($data->field === 'extra_access_end_date') {
-                        $accessEndDate = $data->data;
-                    }
+                        if ($data->field === 'extra_access_end_date') {
+                            $accessEndDate = $data->data;
+                        }
 
-                    if (in_array($data->field, $toRemove)) {
-                        unset($filters->rules[$key]);
+                        if (in_array($data->field, $toRemove)) {
+                            unset($filters->rules[$key]);
+                        }
                     }
                 }
                 $result = $extraField->getExtraFieldRules($filters, 'extra_');
@@ -906,7 +912,7 @@ switch ($action) {
                 'calendar_id',
             ];
         }
-        $result = $usergroup->getUserGroupUsers($id);
+        $result = $usergroup->getUserGroupUsers($id, false, $start, $limit);
         break;
     case 'get_learning_path_calendars':
         $columns = ['title', 'total_hours', 'minutes_per_day', 'actions'];
@@ -1153,6 +1159,9 @@ switch ($action) {
             'currently_learning',
             'rank',
         ];
+        if (trim($whereCondition) === '1 = 1') {
+            $whereCondition = '';
+        }
         $result = $skill->getUserListSkillRanking(
             $start,
             $limit,
@@ -1685,7 +1694,7 @@ switch ($action) {
         $session_columns = SessionManager::getGridColumns($list_type);
         $columns = $session_columns['simple_column_name'];
 
-        if ($list_type == 'simple') {
+        if ($list_type === 'simple') {
             $result = SessionManager::formatSessionsAdminForGrid(
                 [
                     'where' => $whereCondition,

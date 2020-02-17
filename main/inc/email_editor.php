@@ -45,7 +45,7 @@ switch ($action) {
 
         $objTemplate = new Template();
         $objTemplate->assign('session_name', $sessionName);
-        $objTemplate->assign('user', api_get_user_info());
+        $objTemplate->assign('user', api_get_user_info(api_get_user_id(), false, false, true));
         $mailTemplate = $objTemplate->get_template('mail/subscribe_me_to_session.tpl');
 
         $emailDest = api_get_setting('emailAdministrator');

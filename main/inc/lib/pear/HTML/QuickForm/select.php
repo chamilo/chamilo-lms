@@ -503,6 +503,10 @@ class HTML_QuickForm_select extends HTML_QuickForm_element
             $cleanValue = $value;
         }
         if (is_array($cleanValue) && !$this->getMultiple()) {
+            if (empty($cleanValue)) {
+                return $this->_prepareValue(null, $assoc);
+            }
+
             return $this->_prepareValue($cleanValue[0], $assoc);
         } else {
             return $this->_prepareValue($cleanValue, $assoc);

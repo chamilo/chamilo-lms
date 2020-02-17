@@ -546,8 +546,10 @@ $text_dir = api_get_text_direction();
 
 // check and modify the date of user in the track.e.online table
 if (!$x = strpos($_SERVER['PHP_SELF'], 'whoisonline.php')) {
-    preventMultipleLogin($_user["user_id"]);
-    LoginCheck(isset($_user['user_id']) ? $_user['user_id'] : '');
+    if (!empty($_user['user_id'])) {
+        preventMultipleLogin($_user['user_id']);
+        LoginCheck($_user['user_id']);
+    }
 }
 
 // ===== end "who is logged in?" module section =====

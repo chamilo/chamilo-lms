@@ -12,6 +12,10 @@ class FrmAdd extends FormValidator
      * @var ImsLtiTool|null
      */
     private $baseTool;
+    /**
+     * @var bool
+     */
+    private $toolIsV1p3 = false;
 
     /**
      * FrmAdd constructor.
@@ -28,6 +32,11 @@ class FrmAdd extends FormValidator
         parent::__construct($name, 'POST', '', '', $attributes, self::LAYOUT_HORIZONTAL, true);
 
         $this->baseTool = $tool;
+        $this->toolIsV1p3 = $this->baseTool &&
+            !empty($this->baseTool->publicKey) &&
+            !empty($this->baseTool->getClientId()) &&
+            !empty($this->baseTool->getLoginUrl()) &&
+            !empty($this->baseTool->getRedirectUrl());
     }
 
     /**
@@ -43,8 +52,27 @@ class FrmAdd extends FormValidator
 
         if (null === $this->baseTool) {
             $this->addUrl('launch_url', $plugin->get_lang('LaunchUrl'), true);
+            $this->addRadio(
+                'version',
+                $plugin->get_lang('LtiVersion'),
+                [
+                    ImsLti::V_1P1 => 'LTI 1.0 / 1.1',
+                    ImsLti::V_1P3 => 'LTI 1.3.0',
+                ]
+            );
+            $this->addHtml('<div class="'.ImsLti::V_1P1.'" style="display: block;">');
             $this->addText('consumer_key', $plugin->get_lang('ConsumerKey'), false);
             $this->addText('shared_secret', $plugin->get_lang('SharedSecret'), false);
+            $this->addHtml('</div>');
+            $this->addHtml('<div class="'.ImsLti::V_1P3.'" style="display: none;">');
+            $this->addTextarea(
+                'public_key',
+                $plugin->get_lang('PublicKey'),
+                ['style' => 'font-family: monospace;', 'rows' => 5]
+            );
+            $this->addUrl('login_url', $plugin->get_lang('LoginUrl'), false);
+            $this->addUrl('redirect_url', $plugin->get_lang('RedirectUrl'), false);
+            $this->addHtml('</div>');
         }
 
         $this->addButtonAdvancedSettings('lti_adv');
@@ -64,6 +92,26 @@ class FrmAdd extends FormValidator
             );
         }
 
+        $this->addHtml('<div class="'.ImsLti::V_1P3.'" style="display: none;">');
+        $this->addRadio(
+            '1p3_ags',
+            $plugin->get_lang('AssigmentAndGradesService'),
+            [
+                LtiAssignmentGradesService::AGS_NONE => $plugin->get_lang('DontUseService'),
+                LtiAssignmentGradesService::AGS_SIMPLE => $plugin->get_lang('AGServiceSimple'),
+                LtiAssignmentGradesService::AGS_FULL => $plugin->get_lang('AGServiceFull'),
+            ]
+        );
+        $this->addRadio(
+            '1p3_nrps',
+            $plugin->get_lang('NamesAndRoleProvisioningService'),
+            [
+                LtiNamesRoleProvisioningService::NRPS_NONE => $plugin->get_lang('DontUseService'),
+                LtiNamesRoleProvisioningService::NRPS_CONTEXT_MEMBERSHIP => $plugin->get_lang('UseService'),
+            ]
+        );
+        $this->addHtml('</div>');
+
         $this->addHtml('</div>');
         $this->addButtonAdvancedSettings('lti_privacy', get_lang('Privacy'));
         $this->addHtml('<div id="lti_privacy_options" style="display:none;">');
@@ -77,17 +125,43 @@ class FrmAdd extends FormValidator
 
     public function setDefaultValues()
     {
-        if (null !== $this->baseTool) {
-            $this->setDefaults(
-                [
-                    'name' => $this->baseTool->getName(),
-                    'description' => $this->baseTool->getDescription(),
-                    'custom_params' => $this->baseTool->getCustomParams(),
-                    'share_name' => $this->baseTool->isSharingName(),
-                    'share_email' => $this->baseTool->isSharingEmail(),
-                    'share_picture' => $this->baseTool->isSharingPicture(),
-                ]
-            );
+        $defaults = [];
+        $defaults['version'] = ImsLti::V_1P1;
+
+        if ($this->baseTool) {
+            $defaults['name'] = $this->baseTool->getName();
+            $defaults['description'] = $this->baseTool->getDescription();
+            $defaults['custom_params'] = $this->baseTool->getCustomParams();
+            $defaults['share_name'] = $this->baseTool->isSharingName();
+            $defaults['share_email'] = $this->baseTool->isSharingEmail();
+            $defaults['share_picture'] = $this->baseTool->isSharingPicture();
+            $defaults['public_key'] = $this->baseTool->publicKey;
+            $defaults['login_url'] = $this->baseTool->getLoginUrl();
+            $defaults['redirect_url'] = $this->baseTool->getRedirectUrl();
+
+            if ($this->toolIsV1p3) {
+                $advServices = $this->baseTool->getAdvantageServices();
+
+                $defaults['1p3_ags'] = $advServices['ags'];
+                $defaults['1p3_nrps'] = $advServices['nrps'];
+            }
         }
+
+        $this->setDefaults($defaults);
+    }
+
+    public function returnForm()
+    {
+        $js = "<script>
+                \$(function () {
+                    \$('[name=\"version\"]').on('change', function () {
+                        $('.".ImsLti::V_1P1.", .".ImsLti::V_1P3."').hide();
+
+                        $('.' + this.value).show();
+                    })
+                });
+            </script>";
+
+        return $js.parent::returnForm(); // TODO: Change the autogenerated stub
     }
 }

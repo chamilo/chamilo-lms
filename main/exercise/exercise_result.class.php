@@ -227,7 +227,7 @@ class ExerciseResult
                 $return[$i]['result'] = $result['exresult'];
                 $return[$i]['max'] = $result['exweight'];
                 // Revised: 1 = revised, 0 = not revised, -1 = not even finished by user
-                $return[$i]['status'] = $revised === 1 ? get_lang('Validated') : ($revised === 0 ? get_lang('NotValidated') : get_lang('Unclosed') );
+                $return[$i]['status'] = $revised === 1 ? get_lang('Validated') : ($revised === 0 ? get_lang('NotValidated') : get_lang('Unclosed'));
                 $return[$i]['lp_id'] = $result['orig_lp_id'];
                 $return[$i]['lp_name'] = $result['lp_name'];
 

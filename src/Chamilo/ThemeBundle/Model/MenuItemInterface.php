@@ -52,15 +52,11 @@ interface MenuItemInterface
     public function getChildren();
 
     /**
-     * @param MenuItemInterface $child
-     *
      * @return MenuItemModel
      */
     public function addChild(MenuItemInterface $child);
 
     /**
-     * @param MenuItemInterface $child
-     *
      * @return MenuItemModel
      */
     public function removeChild(MenuItemInterface $child);

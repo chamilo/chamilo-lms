@@ -5,9 +5,9 @@
         </div>
         <table class="table">
             <tr>
-                <th>{{ 'Name'| get_plugin_lang('Justification') }}</th>
-                <th>{{ 'validity_duration'| get_lang }}</th>
-                <th>{{ 'date_manual_on'| get_plugin_lang('Justification') }}</th>
+                <th>{{ 'Name'| get_lang }}</th>
+                <th>{{ 'ValidityDuration'| get_plugin_lang('Justification') }}</th>
+                <th>{{ 'DateManualOn'| get_plugin_lang('Justification') }}</th>
                 <th>{{ 'Actions'| get_lang }}</th>
             </tr>
 
@@ -18,6 +18,10 @@
 
                     <td >{{ item.date_manual_on }}</td>
                     <td>
+                        <a href="{{_p.web_plugin }}justification/edit.php?id={{ item.id }}" class="btn btn-primary">
+                            {{'Edit' | get_lang}}
+                        </a>
+
                         <a href="{{_p.web_plugin }}justification/list.php?a=delete&id={{ item.id }}" class="btn btn-danger">
                             {{'Delete' | get_lang}}
                         </a>

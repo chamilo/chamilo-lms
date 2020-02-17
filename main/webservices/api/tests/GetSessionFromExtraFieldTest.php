@@ -13,7 +13,7 @@ require_once __DIR__.'/../../../../vendor/autoload.php';
  */
 class GetSessionFromExtraFieldTest extends V2TestCase
 {
-    protected function action()
+    public function action()
     {
         return 'get_session_from_extra_field';
     }

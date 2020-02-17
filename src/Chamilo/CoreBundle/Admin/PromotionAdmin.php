@@ -16,9 +16,6 @@ use Sonata\AdminBundle\Form\FormMapper;
  */
 class PromotionAdmin extends AbstractAdmin
 {
-    /**
-     * @param FormMapper $formMapper
-     */
     protected function configureFormFields(FormMapper $formMapper)
     {
         $formMapper
@@ -29,9 +26,6 @@ class PromotionAdmin extends AbstractAdmin
         ;
     }
 
-    /**
-     * @param DatagridMapper $datagridMapper
-     */
     protected function configureDatagridFilters(DatagridMapper $datagridMapper)
     {
         $datagridMapper
@@ -39,9 +33,6 @@ class PromotionAdmin extends AbstractAdmin
         ;
     }
 
-    /**
-     * @param ListMapper $listMapper
-     */
     protected function configureListFields(ListMapper $listMapper)
     {
         $listMapper

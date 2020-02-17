@@ -137,9 +137,6 @@ class Usergroup
         }
     }
 
-    /**
-     * @param UsergroupRelUser $user
-     */
     public function addUsers(UsergroupRelUser $user)
     {
         $user->setUsergroup($this);
@@ -148,8 +145,6 @@ class Usergroup
 
     /**
      * Remove $user.
-     *
-     * @param UsergroupRelUser $user
      */
     public function removeUsers(UsergroupRelUser $user)
     {

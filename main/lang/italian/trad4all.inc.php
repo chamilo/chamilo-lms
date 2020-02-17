@@ -6813,6 +6813,7 @@ $CasMainPortComment = "La porta alla quale connettere il Server principale CAS";
 $CasMainProtocolTitle = "Protocollo del Server principale CAS";
 $CAS1Text = "CAS 1";
 $CAS2Text = "CAS 2";
+$CAS3Text = "CAS 3";
 $SAMLText = "SAML";
 $CasMainProtocolComment = "Il protocollo col quale connettersi al Server CAS";
 $CasUserAddActivateTitle = "Abilita aggiungi utente CAS";

@@ -13,13 +13,13 @@ require_once __DIR__.'/../../../../vendor/autoload.php';
  */
 class SubscribeUserToSessionFromUsernameTest extends V2TestCase
 {
-    protected function action()
+    public function action()
     {
         return 'subscribe_user_to_session_from_username';
     }
 
     /**
-     * subscribes a test user to a test session that already have another user subscribed
+     * subscribes a test user to a test session that already has another user subscribed
      * asserts that the user was subscribed to the session
      * asserts that the other user was not unsubscribed from the session
      */
@@ -43,7 +43,7 @@ class SubscribeUserToSessionFromUsernameTest extends V2TestCase
         SessionManager::subscribeUsersToSession($sessionId, [$anotherUserId]);
 
         // call the webservice to subscribe the first user to the session
-        $subscribed = $this->boolean([ 'sessionId' => $sessionId, 'loginName' => $loginName ] );
+        $subscribed = $this->boolean([ 'sessionId' => $sessionId, 'loginname' => $loginName ] );
         $this->assertTrue($subscribed);
 
         // assert we now have two users subscribed to the session

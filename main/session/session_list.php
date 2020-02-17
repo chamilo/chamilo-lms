@@ -1,10 +1,9 @@
 <?php
+
 /* For licensing terms, see /license.txt */
 
 /**
  * List sessions in an efficient and usable way.
- *
- * @package chamilo.admin
  */
 $cidReset = true;
 
@@ -67,7 +66,6 @@ $courseSelect = $sessionFilter->addElement(
 if (!empty($courseId)) {
     $courseInfo = api_get_course_info_by_id($courseId);
     $parents = CourseCategory::getParentsToString($courseInfo['categoryCode']);
-
     $courseSelect->addOption($parents.$courseInfo['title'], $courseInfo['code'], ['selected' => 'selected']);
 }
 
@@ -77,11 +75,9 @@ $actions = '
 $(function() {
     $("#course_name").on("change", function() {
        var courseId = $(this).val();
-
        if (!courseId) {
         return;
        }
-
        window.location = "'.$url.'?course_id="+courseId;
     });
 });
@@ -130,6 +126,10 @@ $extra_params['autowidth'] = 'true';
 // height auto
 $extra_params['height'] = 'auto';
 
+// Custom params
+$extra_params['sortname'] = 'display_end_date';
+$extra_params['sortorder'] = 'desc';
+
 if (!isset($_GET['keyword'])) {
     $extra_params['postData'] = [
         'filters' => [
@@ -158,8 +158,7 @@ $orderUrl = api_get_path(WEB_AJAX_PATH).'session.ajax.php?a=order';
 ?>
     <script>
         function setSearchSelect(columnName) {
-            $("#sessions").jqGrid('setColProp', columnName, {
-            });
+            $("#sessions").jqGrid('setColProp', columnName, {});
         }
         var added_cols = [];
         var original_cols = [];
@@ -168,7 +167,7 @@ $orderUrl = api_get_path(WEB_AJAX_PATH).'session.ajax.php?a=order';
             // Cleaning
             for (key in added_cols) {
                 grid.hideCol(key);
-            };
+            }
             grid.showCol('name');
             grid.showCol('display_start_date');
             grid.showCol('display_end_date');
@@ -294,8 +293,7 @@ $orderUrl = api_get_path(WEB_AJAX_PATH).'session.ajax.php?a=order';
 
             // Sortable rows
             grid.jqGrid('sortableRows', options);
-            <?php
-            } ?>
+            <?php } ?>
 
             grid.jqGrid('navGrid','#sessions_pager',
                 {edit:false,add:false,del:false},
@@ -317,7 +315,7 @@ $orderUrl = api_get_path(WEB_AJAX_PATH).'session.ajax.php?a=order';
             searchDialogAll.addClass("table");
             var searchDialog = $("#searchmodfbox_"+grid[0].id);
             searchDialog.addClass("ui-jqgrid ui-widget ui-widget-content ui-corner-all");
-            searchDialog.css({position:"adsolute", "z-index":"100", "float":"left", "top":"55%", "left" : "25%", "padding" : "5px", "border": "1px solid #CCC"})
+            searchDialog.css({position:"absolute", "z-index":"100", "float":"left", "top":"55%", "left" : "25%", "padding" : "5px", "border": "1px solid #CCC"})
             var gbox = $("#gbox_"+grid[0].id);
             gbox.before(searchDialog);
             gbox.css({clear:"left"});

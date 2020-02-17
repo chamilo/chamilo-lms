@@ -788,7 +788,7 @@ class Category implements GradebookItem
     public function show_message_resource_delete($courseCode)
     {
         $table = Database::get_main_table(TABLE_MAIN_GRADEBOOK_CATEGORY);
-        $sql = 'SELECT count(*) AS num 
+        $sql = 'SELECT count(*) AS num
                 FROM '.$table.'
                 WHERE
                     course_code = "'.Database::escape_string($courseCode).'" AND
@@ -1511,8 +1511,8 @@ class Category implements GradebookItem
 
         $sql = 'SELECT DISTINCT(code), title
                 FROM '.$tbl_main_courses.' cc, '.$tbl_main_course_user.' cu
-                WHERE 
-                    cc.id = cu.c_id AND 
+                WHERE
+                    cc.id = cu.c_id AND
                     cu.status = '.COURSEMANAGER;
 
         if (!api_is_platform_admin()) {
@@ -2506,8 +2506,6 @@ class Category implements GradebookItem
     /**
      * Return HTML code with links to download and view certificate.
      *
-     * @param array $certificate
-     *
      * @return string
      */
     public static function getDownloadCertificateBlock(array $certificate)
@@ -2576,6 +2574,25 @@ class Category implements GradebookItem
     public function getDocumentId()
     {
         return $this->documentId;
+    }
+
+    /**
+     * Get the remaining weight in root category.
+     *
+     * @return int
+     */
+    public function getRemainingWeight()
+    {
+        $subCategories = $this->get_subcategories();
+
+        $subWeight = 0;
+
+        /** @var Category $subCategory */
+        foreach ($subCategories as $subCategory) {
+            $subWeight += $subCategory->get_weight();
+        }
+
+        return $this->weight - $subWeight;
     }
 
     /**

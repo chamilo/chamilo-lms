@@ -342,8 +342,6 @@ class TestCategory
     }
 
     /**
-     * @param Exercise $exercise
-     *
      * @return array
      */
     public static function getListOfCategoriesIDForTestObject(Exercise $exercise)
@@ -402,8 +400,6 @@ class TestCategory
     }
 
     /**
-     * @param Exercise $exercise
-     *
      * @return array
      */
     public static function getListOfCategoriesForTest(Exercise $exercise)
@@ -954,8 +950,6 @@ class TestCategory
 
     /**
      * Returns the category form.
-     *
-     * @param Exercise $exercise
      *
      * @return string
      */

@@ -149,16 +149,20 @@ if ($form->validate()) {
     $extraFields = $extraField->get_all(null, 'option_order');
     $extraFields = array_column($extraFields, 'variable');
     $filter = new stdClass();
-    $filter->groupOp = 'AND';
 
     foreach ($columnModel as $col) {
         if (isset($values[$col['index']]) && !empty($values[$col['index']]) &&
             in_array(str_replace('extra_', '', $col['index']), $extraFields)
         ) {
             $rule = new stdClass();
-            $rule->field = $col['index'];
+            $index = $col['index'];
+            $rule->field = $index;
             $rule->op = 'in';
-            $rule->data = Security::remove_XSS($values[$col['index']]);
+            $data = $values[$index];
+            if (is_array($data) && array_key_exists($index, $data)) {
+                $data = $data[$index];
+            }
+            $rule->data = Security::remove_XSS($data);
             $filter->rules[] = $rule;
             $filter->groupOp = 'AND';
         }

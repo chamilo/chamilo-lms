@@ -13,7 +13,7 @@ require_once __DIR__.'/../../../../vendor/autoload.php';
  */
 class CreateSessionFromModelTest extends V2TestCase
 {
-    protected function action()
+    public function action()
     {
         return 'create_session_from_model';
     }

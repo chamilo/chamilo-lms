@@ -69,7 +69,7 @@ if ($form->validate()) {
     if ($manifest) {
         Display::addFlash(Display::return_message(get_lang('Updated')));
     }
-    header('Location: '.api_get_path(WEB_CODE_PATH).'lp/lp_list.php?'.api_get_cidreq());
+    header('Location: '.api_get_path(WEB_CODE_PATH).'lp/lp_controller.php?'.api_get_cidreq());
     exit;
 }
 

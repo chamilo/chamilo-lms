@@ -30,8 +30,6 @@ interface DriverInterface
 
     /**
      * Set connector.
-     *
-     * @param Connector $connector
      */
     public function setConnector(Connector $connector);
 

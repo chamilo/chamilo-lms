@@ -18,11 +18,8 @@ class CNotebookRepository extends EntityRepository
     /**
      * Get the user notebooks in a course.
      *
-     * @param User         $user
-     * @param Course       $course
-     * @param Session|null $session
-     * @param string       $orderField
-     * @param string       $orderDirection
+     * @param string $orderField
+     * @param string $orderDirection
      *
      * @return array
      */

@@ -79,8 +79,6 @@ class UserModel implements UserInterface
     }
 
     /**
-     * @param \DateTime $memberSince
-     *
      * @return $this
      */
     public function setMemberSince(\DateTime $memberSince)

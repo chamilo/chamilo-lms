@@ -8484,4 +8484,6 @@ $AgreeScale2 = "2º inferior";
 $AgreeScale1 = "Inferior";
 $AddPT = "Add personality test";
 $ExerciseGraph = "Gráficos de los intentos";
+$PtestCategoryPosition = "Posición";
+$PtestCategoryColor = "Color";
 ?>

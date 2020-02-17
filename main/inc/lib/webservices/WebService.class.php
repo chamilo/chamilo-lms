@@ -86,13 +86,14 @@ class WebService
         if (empty($username) || empty($password)) {
             return false;
         }
-error_log("89");
+        error_log("89");
         $user = UserManager::getManager()->findUserByUsername($username);
-error_log("90");
+        error_log("90");
         if (!$user) {
             return false;
         }
-error_log("95");
+        error_log("95");
+
         return UserManager::isPasswordValid(
             $user->getPassword(),
             $password,

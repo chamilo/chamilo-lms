@@ -9,7 +9,7 @@ use Fhaculty\Graph\Set\Vertices;
 use Fhaculty\Graph\Vertex;
 
 /**
- * Class SequenceResourceRepository
+ * Class SequenceResourceRepository.
  */
 class SequenceResourceRepository extends EntityRepository
 {
@@ -207,33 +207,6 @@ class SequenceResourceRepository extends EntityRepository
     }
 
     /**
-     * Get sessions from vertices.
-     *
-     * @param Vertices $verticesEdges The vertices
-     *
-     * @return array
-     */
-    protected function findSessionFromVerticesEdges(Vertices $verticesEdges)
-    {
-        $sessionVertices = [];
-        foreach ($verticesEdges as $supVertex) {
-            $vertexId = $supVertex->getId();
-            $session = $this->getEntityManager()->getReference(
-                'ChamiloCoreBundle:Session',
-                $vertexId
-            );
-
-            if (empty($session)) {
-                continue;
-            }
-
-            $sessionVertices[$vertexId] = $session;
-        }
-
-        return $sessionVertices;
-    }
-
-    /**
      * Check if the ser has completed the requirements for the sequences.
      *
      * @param array $sequences The sequences
@@ -353,5 +326,32 @@ class SequenceResourceRepository extends EntityRepository
         }
 
         return false;
+    }
+
+    /**
+     * Get sessions from vertices.
+     *
+     * @param Vertices $verticesEdges The vertices
+     *
+     * @return array
+     */
+    protected function findSessionFromVerticesEdges(Vertices $verticesEdges)
+    {
+        $sessionVertices = [];
+        foreach ($verticesEdges as $supVertex) {
+            $vertexId = $supVertex->getId();
+            $session = $this->getEntityManager()->getReference(
+                'ChamiloCoreBundle:Session',
+                $vertexId
+            );
+
+            if (empty($session)) {
+                continue;
+            }
+
+            $sessionVertices[$vertexId] = $session;
+        }
+
+        return $sessionVertices;
     }
 }

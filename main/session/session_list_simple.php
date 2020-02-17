@@ -249,7 +249,7 @@ $orderUrl = api_get_path(WEB_AJAX_PATH).'session.ajax.php?a=order';
             original_cols = grid.jqGrid('getGridParam', 'colModel');
 
             <?php if ($allowOrder) {
-            ?>
+                ?>
             options = {
                 update: function (e, ui) {
                     var rowNum = jQuery("#sessions").getGridParam('rowNum');

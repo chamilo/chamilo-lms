@@ -600,7 +600,7 @@ class ExerciseLib
                         });
                     });
                 </script>";
-                
+
                 $header = Display::tag(
                     'th',
                     get_lang('Option'),
@@ -1583,7 +1583,7 @@ HTML;
                 $s .= '</div>';
                 $s .= '<div class="col-sm-2"></div>';
                 $s .= '</div>';
-                
+
                 $s .= '<div class="form-group">';
                 $s .= '<label for="choice-disagree-'.$questionId.'" class="col-sm-2 control-label">'.get_lang('LeastAgree').': </label>';
                 $s .= '<div class="col-sm-8">';
@@ -4468,11 +4468,10 @@ EOT;
                         $answerValue = json_decode($row['answer'], true);
                         $sum += $answerValue[$answer_id];
                         $count++;
-
                     }
 
                     if ($count > 0) {
-                        return round(($sum / $count),1);
+                        return round(($sum / $count), 1);
                     }
 
                     return 0;
@@ -4498,7 +4497,7 @@ EOT;
                     }
 
                     if ($count > 0) {
-                        return round(($sum / $count),1);
+                        return round(($sum / $count), 1);
                     }
 
                     return 0;

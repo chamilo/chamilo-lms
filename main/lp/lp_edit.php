@@ -273,7 +273,6 @@ $extra = $extraField->addElements(
 
 $skillList = Skill::addSkillsToForm($form, ITEM_TYPE_LEARNPATH, $lpId);
 
-
 // Submit button
 $form->addButtonSave(get_lang('SaveLPSettings'));
 

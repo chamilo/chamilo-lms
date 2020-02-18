@@ -94,6 +94,9 @@ $menu = [
         'efc_user_sessions',
         'users_scorms_view',
     ],
+    'users_scorms_view' => [
+        'users_scorms_progress',
+    ],
 ];
 
 Display::display_header($plugin->get_title());

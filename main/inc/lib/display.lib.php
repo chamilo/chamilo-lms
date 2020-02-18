@@ -2583,7 +2583,7 @@ class Display
      * @param string $content
      * @param string $title
      * @param string $footer
-     * @param string $type        primary|success|info|warning|danger
+     * @param string $type            primary|success|info|warning|danger
      * @param string $extra
      * @param string $id
      * @param string $backgroundColor

@@ -361,7 +361,7 @@ class CoursesController
     /**
      * Return Session catalog rendered view.
      *
-     * @param array  $limit
+     * @param array $limit
      */
     public function sessionList($limit = [])
     {

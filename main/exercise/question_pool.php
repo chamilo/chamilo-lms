@@ -521,8 +521,6 @@ echo '<script>$(function () {
 <?php
 
 /**
- * @param array $formValues
- *
  * @return array
  */
 function getExtraFieldConditions(array $formValues, $queryType = 'from')

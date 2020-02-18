@@ -952,8 +952,8 @@ VALUES (2, 13, 'session_courses_read_only_mode', 'Lock Course In Session', 1, 1,
 // menu
 // $_configuration['disable_gdpr'] = true;
 
-// GDPR requires users to be informed of the Data Protection Officer name and 
-// contact point. These can only be defined here for now, but will be moved to 
+// GDPR requires users to be informed of the Data Protection Officer name and
+// contact point. These can only be defined here for now, but will be moved to
 // web settings in the future.
 // Name of the person or organization that is responsible for the treatment of
 // personal info
@@ -1349,7 +1349,6 @@ requires extension "php-soap"  sudo apt-get install php-soap
 // LP view menu location. Options: "left" or "right"
 // $_configuration['lp_menu_location'] = 'left';
 
-
 // Show personality test
 // CREATE TABLE c_quiz_category_ptest (
 //    id INT AUTO_INCREMENT NOT NULL,
@@ -1392,7 +1391,7 @@ ALTER TABLE notification_event ADD COLUMN event_id INT NULL;
 // Catalog search settings visibility
 //$_configuration['catalog_settings'] = ['sessions' => ['by_title' => true, 'by_date' => true, 'by_tag' => true, 'show_session_info' => true, 'show_session_date' => true]];
 
-// Enable learning paths with only one SCO item to use the score returned by 
+// Enable learning paths with only one SCO item to use the score returned by
 // the SCO as an indicator of progress of the whole learning path
 // $_configuration['lp_score_as_progress_enable'] = false;
 

@@ -428,13 +428,13 @@ switch ($action) {
                         $years = (int) $interval->y;
 
                         if ($years >= 16 && $years <= 17) {
-                            $all['16-17'] += 1;
+                            $all['16-17']++;
                         }
                         if ($years >= 18 && $years <= 25) {
-                            $all['18-25'] += 1;
+                            $all['18-25']++;
                         }
                         if ($years >= 26 && $years <= 30) {
-                            $all['26-30'] += 1;
+                            $all['26-30']++;
                         }
                         /*if ($years >= 31) {
                             $all[get_lang('N/A')] += 1;
@@ -658,7 +658,7 @@ switch ($action) {
                     if (!isset($all[$language])) {
                         $all[$language] = 0;
                     }
-                    $all[$language] += 1;
+                    $all[$language]++;
                 }
                 break;
             case 'course_in_session':

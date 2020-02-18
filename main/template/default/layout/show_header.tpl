@@ -9,7 +9,7 @@
         {% include 'layout/head.tpl'|get_template %}
     {% endblock %}
 </head>
-<body>
+<body class="{{ 'page_origin' ? ('page_origin_' ~ page_origin) : '' }}">
 
 <!-- START MAIN -->
 <main id="main" dir="{{ text_direction }}" class="{{ section_name }} {{ login_class }}">

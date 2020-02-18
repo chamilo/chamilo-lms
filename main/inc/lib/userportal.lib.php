@@ -109,11 +109,11 @@ class IndexManager
     {
         $hideAnnouncements = api_get_setting('hide_global_announcements_when_not_connected');
         $currentUserId = api_get_user_id();
-        if ($hideAnnouncements == 'true' && empty($currentUserId)) {
+        if ($hideAnnouncements === 'true' && empty($currentUserId)) {
             return null;
         }
         $announcement = isset($_GET['announcement']) ? $_GET['announcement'] : null;
-        $announcement = intval($announcement);
+        $announcement = (int) $announcement;
 
         if (!api_is_anonymous() && $this->user_id) {
             $visibility = SystemAnnouncementManager::getCurrentUserVisibility();

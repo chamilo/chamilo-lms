@@ -3,7 +3,7 @@
 
 use Chamilo\CoreBundle\Entity\Course;
 use Chamilo\CoreBundle\Entity\ExtraField;
-use Chamilo\CoreBundle\Entity\Repository\SequenceRepository;
+use Chamilo\CoreBundle\Entity\Repository\SequenceResourceRepository;
 use Chamilo\CoreBundle\Entity\SequenceResource;
 use Chamilo\CoreBundle\Entity\Session;
 use Chamilo\CoreBundle\Entity\SessionRelCourse;
@@ -21,11 +21,14 @@ use Monolog\Logger;
  * All main sessions functions should be placed here.
  * This class provides methods for sessions management.
  * Include/require it in your code to use its features.
- *
- * @package chamilo.library
  */
 class SessionManager
 {
+    const STATUS_PLANNED = 1;
+    const STATUS_PROGRESS = 2;
+    const STATUS_FINISHED = 3;
+    const STATUS_CANCELLED = 4;
+
     public static $_debug = false;
 
     /**
@@ -92,6 +95,15 @@ class SessionManager
             'send_subscription_notification' => $session->getSendSubscriptionNotification(),
         ];
 
+        if (api_get_configuration_value('allow_session_status')) {
+            $table = Database::get_main_table(TABLE_MAIN_SESSION);
+            $sql = "SELECT status FROM $table WHERE id = $id";
+            $resultQuery = Database::query($sql);
+            $row = Database::fetch_array($resultQuery);
+            $result['status'] = $row['status'];
+            $result['status_label'] = self::getStatusLabel($row['status']);
+        }
+
         // Converted to local values
         $variables = [
             'display_start_date',
@@ -136,7 +148,8 @@ class SessionManager
      * @param int      $sessionAdminId               Optional. If this sessions was created by a session admin, assign it to him
      * @param bool     $sendSubscriptionNotification Optional.
      *                                               Whether send a mail notification to users being subscribed
-     * @param int|null $accessUrlId                  Optional.
+     * @param int      $accessUrlId                  Optional.
+     * @param int      $status
      *
      * @return mixed Session ID on success, error message otherwise
      *
@@ -160,7 +173,8 @@ class SessionManager
         $extraFields = [],
         $sessionAdminId = 0,
         $sendSubscriptionNotification = false,
-        $accessUrlId = null
+        $accessUrlId = 0,
+        $status = 0
     ) {
         global $_configuration;
 
@@ -268,6 +282,10 @@ class SessionManager
 
                 if (!empty($sessionCategoryId)) {
                     $values['session_category_id'] = $sessionCategoryId;
+                }
+
+                if (api_get_configuration_value('allow_session_status')) {
+                    $values['status'] = $status;
                 }
 
                 $session_id = Database::insert($tbl_session, $values);
@@ -518,16 +536,16 @@ class SessionManager
             }
 
             $select =
-                "SELECT DISTINCT 
+                "SELECT DISTINCT
                      s.name,
-                     s.display_start_date, 
-                     s.display_end_date, 
-                     access_start_date, 
-                     access_end_date, 
-                     s.visibility, 
-                     s.session_category_id, 
-                     $inject_extra_fields 
-                     s.id 
+                     s.display_start_date,
+                     s.display_end_date,
+                     access_start_date,
+                     access_end_date,
+                     s.visibility,
+                     s.session_category_id,
+                     $inject_extra_fields
+                     s.id
              ";
 
             if ($showCountUsers) {
@@ -1079,18 +1097,18 @@ class SessionManager
                     FROM $workTable w
                     LEFT JOIN $workTableAssignment a
                     ON (a.publication_id = w.id AND a.c_id = w.c_id)
-                    WHERE 
-                        w.c_id = %s AND 
-                        parent_id = 0 AND 
+                    WHERE
+                        w.c_id = %s AND
+                        parent_id = 0 AND
                         active IN (1, 0)";
         } else {
             $sql = "SELECT count(w.id) as count
                     FROM $workTable w
                     LEFT JOIN $workTableAssignment a
                     ON (a.publication_id = w.id AND a.c_id = w.c_id)
-                    WHERE 
-                        w.c_id = %s AND 
-                        parent_id = 0 AND 
+                    WHERE
+                        w.c_id = %s AND
+                        parent_id = 0 AND
                         active IN (1, 0)";
 
             if (empty($sessionId)) {
@@ -1526,8 +1544,8 @@ class SessionManager
      * @param int    $duration
      * @param array  $extraFields
      * @param int    $sessionAdminId
-     * @param bool   $sendSubscriptionNotification Optional.
-     *                                             Whether send a mail notification to users being subscribed
+     * @param bool   $sendSubscriptionNotification Optional. Whether send a mail notification to users being subscribed
+     * @param int    $status
      *
      * @return mixed
      */
@@ -1548,8 +1566,10 @@ class SessionManager
         $duration = null,
         $extraFields = [],
         $sessionAdminId = 0,
-        $sendSubscriptionNotification = false
+        $sendSubscriptionNotification = false,
+        $status = 0
     ) {
+        $status = (int) $status;
         $coachId = (int) $coachId;
         $sessionCategoryId = (int) $sessionCategoryId;
         $visibility = (int) $visibility;
@@ -1651,10 +1671,13 @@ class SessionManager
                     $values['coach_access_end_date'] = api_get_utc_datetime($coachEndDate);
                 }
 
+                $values['session_category_id'] = null;
                 if (!empty($sessionCategoryId)) {
                     $values['session_category_id'] = $sessionCategoryId;
-                } else {
-                    $values['session_category_id'] = null;
+                }
+
+                if (api_get_configuration_value('allow_session_status')) {
+                    $values['status'] = $status;
                 }
 
                 Database::update(
@@ -1703,7 +1726,7 @@ class SessionManager
         $em = Database::getManager();
         $userId = api_get_user_id();
 
-        /** @var SequenceRepository $repo */
+        /** @var SequenceResourceRepository $repo */
         $repo = Database::getManager()->getRepository('ChamiloCoreBundle:SequenceResource');
         $sequenceResource = $repo->findRequirementForResource(
             $id_checked,
@@ -1821,7 +1844,7 @@ class SessionManager
     {
         $tbl_session = Database::get_main_table(TABLE_MAIN_SESSION);
         $id = intval($id);
-        $sql = "UPDATE $tbl_session 
+        $sql = "UPDATE $tbl_session
                 SET promotion_id = 0
                 WHERE promotion_id = $id";
         if (Database::query($sql)) {
@@ -2033,8 +2056,8 @@ class SessionManager
         // Delete users from the session
         if ($empty_users === true) {
             $sql = "DELETE FROM $tbl_session_rel_user
-                    WHERE 
-                      session_id = $sessionId AND 
+                    WHERE
+                      session_id = $sessionId AND
                       relation_type <> ".SESSION_RELATION_TYPE_RRHH;
             // Don't reset session_rel_user.registered_at of users that will be registered later anyways.
             if (!empty($userList)) {
@@ -2074,7 +2097,7 @@ class SessionManager
         }
 
         // update number of users in the session
-        $sql = "UPDATE $tbl_session 
+        $sql = "UPDATE $tbl_session
                 SET nbr_users = (SELECT count(user_id) FROM $tbl_session_rel_user WHERE session_id = $sessionId)
                 WHERE id = $sessionId";
         Database::query($sql);
@@ -2461,7 +2484,7 @@ class SessionManager
 
         if (Database::affected_rows($result)) {
             // Update number of users in this relation
-            $sql = "UPDATE $tbl_session_rel_course SET 
+            $sql = "UPDATE $tbl_session_rel_course SET
                     nbr_users = nbr_users - 1
                     WHERE session_id = $session_id AND c_id = $courseId";
             Database::query($sql);
@@ -3307,7 +3330,7 @@ class SessionManager
         $extraField = new ExtraFieldModel('session');
         $field = $extraField->get_handler_field_info_by_field_variable('image');
 
-        $sql = "SELECT 
+        $sql = "SELECT
                 s.id,
                 s.name,
                 s.id_coach,
@@ -3500,7 +3523,7 @@ class SessionManager
 
         $sql = "DELETE FROM $tbl_session_rel_user
                 WHERE
-                    session_id = $sessionId AND                            
+                    session_id = $sessionId AND
                     relation_type =".SESSION_RELATION_TYPE_RRHH;
         Database::query($sql);
 
@@ -3551,14 +3574,14 @@ class SessionManager
             if (api_is_multiple_url_enabled()) {
                 $sql = "SELECT s.session_id
                         FROM $tbl_session_rel_user s
-                        INNER JOIN $tbl_session_rel_access_url a 
+                        INNER JOIN $tbl_session_rel_access_url a
                         ON (a.session_id = s.session_id)
                         WHERE
                             s.user_id = $userId AND
                             relation_type = ".SESSION_RELATION_TYPE_RRHH." AND
                             access_url_id = ".api_get_current_access_url_id();
             } else {
-                $sql = "SELECT s.session_id 
+                $sql = "SELECT s.session_id
                         FROM $tbl_session_rel_user s
                         WHERE user_id = $userId AND relation_type=".SESSION_RELATION_TYPE_RRHH;
             }
@@ -3818,9 +3841,9 @@ class SessionManager
         $whereConditions .= $keywordCondition;
         $subQuery = $sessionQuery.$courseSessionQuery;
 
-        $sql = " $select 
+        $sql = " $select
                 FROM $tbl_session s
-                INNER JOIN $tbl_session_rel_access_url a 
+                INNER JOIN $tbl_session_rel_access_url a
                 ON (s.id = a.session_id)
                 $sqlInjectJoins
                 WHERE
@@ -3830,7 +3853,7 @@ class SessionManager
                     )
                     $whereConditions
                     $extraFieldsConditions
-                    $sqlInjectWhere                    
+                    $sqlInjectWhere
                     $orderCondition
                     $limitCondition";
 
@@ -4303,10 +4326,10 @@ class SessionManager
         $table = Database::get_main_table(TABLE_MAIN_SESSION_COURSE_USER);
         $tbl_user = Database::get_main_table(TABLE_MAIN_USER);
         $sql = "SELECT session_rcru.status
-                FROM $table session_rcru 
+                FROM $table session_rcru
                 INNER JOIN $tbl_user user
                 ON (session_rcru.user_id = user.user_id)
-                WHERE                    
+                WHERE
                     session_rcru.session_id = '".intval($session_id)."' AND
                     session_rcru.c_id ='".intval($courseId)."' AND
                     user.user_id = ".intval($user_id);
@@ -4771,12 +4794,12 @@ class SessionManager
 
         $sql = "SELECT name, s.id
                 FROM $table_session_course sc
-                INNER JOIN $table_session s 
+                INNER JOIN $table_session s
                 ON (sc.session_id = s.id)
                 INNER JOIN $url u
                 ON (u.session_id = s.id)
-                WHERE 
-                    u.access_url_id = $urlId AND 
+                WHERE
+                    u.access_url_id = $urlId AND
                     sc.c_id = '$courseId' ";
         $result = Database::query($sql);
 
@@ -5773,7 +5796,7 @@ class SessionManager
                 }
                 $access_url_id = api_get_current_access_url_id();
                 UrlManager::add_session_to_url($session_id, $access_url_id);
-                $sql = "UPDATE $tbl_session SET nbr_users = '$user_counter', nbr_courses = '$course_counter' 
+                $sql = "UPDATE $tbl_session SET nbr_users = '$user_counter', nbr_courses = '$course_counter'
                         WHERE id = '$session_id'";
                 Database::query($sql);
 
@@ -6093,7 +6116,7 @@ class SessionManager
         if (!empty($userConditionsFromDrh)) {
             $userUnion = "
             UNION (
-                $select                    
+                $select
                 FROM $tbl_user u
                 INNER JOIN $tbl_user_rel_access_url url ON (url.user_id = u.id)
                 $where
@@ -6428,11 +6451,11 @@ class SessionManager
                 $courseUser = Database::get_main_table(TABLE_MAIN_COURSE_USER);
 
                 // Select the teachers.
-                $sql = "SELECT DISTINCT(cu.user_id) 
+                $sql = "SELECT DISTINCT(cu.user_id)
                         FROM $course c
-                        INNER JOIN $sessionCourse src 
+                        INNER JOIN $sessionCourse src
                         ON c.id = src.c_id
-                        INNER JOIN $courseUser cu 
+                        INNER JOIN $courseUser cu
                         ON (cu.c_id = c.id)
 		                WHERE src.session_id IN ('$sessionToString') AND cu.status = 1";
                 $result = Database::query($sql);
@@ -7103,15 +7126,15 @@ class SessionManager
             $courseCondition = "  c_id = $courseId AND ";
         }
 
-        $sql = "SELECT 
-                    COUNT(u.id) as count, 
-                    u.id, 
-                    scu.status status_in_session, 
+        $sql = "SELECT
+                    COUNT(u.id) as count,
+                    u.id,
+                    scu.status status_in_session,
                     u.status user_status
                 FROM $table scu
-                INNER JOIN $tableUser u 
+                INNER JOIN $tableUser u
                 ON scu.user_id = u.id
-                WHERE 
+                WHERE
                   $courseCondition
                   scu.session_id = ".$sessionId."
                 GROUP BY u.id";
@@ -7609,7 +7632,7 @@ class SessionManager
 
         $sql = "SELECT DISTINCT s.*
                 FROM $sessionTable s
-                INNER JOIN $sessionUserTable sru 
+                INNER JOIN $sessionUserTable sru
                 ON s.id = sru.id_session
                 WHERE
                     (sru.id_user IN (".implode(', ', $userIdList).")
@@ -7835,6 +7858,18 @@ class SessionManager
                 'id' => 'session_category',
             ]
         );
+
+        if (api_get_configuration_value('allow_session_status')) {
+            $statusList = self::getStatusList();
+            $form->addSelect(
+                'status',
+                get_lang('SessionStatus'),
+                $statusList,
+                [
+                    'id' => 'status',
+                ]
+            );
+        }
 
         $form->addHtmlEditor(
             'description',
@@ -8102,7 +8137,8 @@ class SessionManager
      */
     public static function getGridColumns(
         $listType = 'simple',
-        $extraFields = []
+        $extraFields = [],
+        $addExtraFields = true
     ) {
         $showCount = api_get_configuration_value('session_list_show_count_users');
         // Column config
@@ -8136,7 +8172,13 @@ class SessionManager
                         'sortable' => 'false',
                         'search' => 'false',
                     ],
-                    ['name' => 'actions', 'index' => 'actions', 'width' => '100', 'sortable' => 'false', 'search' => 'false'],
+                    [
+                        'name' => 'actions',
+                        'index' => 'actions',
+                        'width' => '100',
+                        'sortable' => 'false',
+                        'search' => 'false',
+                    ],
                 ];
                 break;
             case 'simple':
@@ -8212,6 +8254,39 @@ class SessionManager
                         'align' => 'left',
                         'search' => 'false',
                     ];
+
+                    // ofaj
+                    $columns[] = get_lang('Teachers');
+                    $columnModel[] = [
+                        'name' => 'teachers',
+                        'index' => 'teachers',
+                        'width' => '20',
+                        'align' => 'left',
+                        'search' => 'false',
+                    ];
+                }
+
+                if (api_get_configuration_value('allow_session_status')) {
+                    $columns[] = get_lang('SessionStatus');
+                    $list = self::getStatusList();
+                    $listToString = '';
+                    foreach ($list as $statusId => $status) {
+                        $listToString .= $statusId.':'.$status.';';
+                    }
+
+                    $columnModel[] = [
+                        'name' => 'status',
+                        'index' => 'status',
+                        'width' => '25',
+                        'align' => 'left',
+                        'search' => 'true',
+                        'stype' => 'select',
+                        // for the bottom bar
+                        'searchoptions' => [
+                            'defaultValue' => '1',
+                            'value' => $listToString,
+                        ],
+                    ];
                 }
                 break;
             case 'complete':
@@ -8225,21 +8300,183 @@ class SessionManager
                     get_lang('CourseTitle'),
                 ];
                 $columnModel = [
-                    ['name' => 'name', 'index' => 's.name', 'width' => '200', 'align' => 'left', 'search' => 'true', 'searchoptions' => ['sopt' => $operators]],
-                    ['name' => 'display_start_date', 'index' => 'display_start_date', 'width' => '70', 'align' => 'left', 'search' => 'true', 'searchoptions' => ['dataInit' => 'date_pick_today', 'sopt' => $date_operators]],
-                    ['name' => 'display_end_date', 'index' => 'display_end_date', 'width' => '70', 'align' => 'left', 'search' => 'true', 'searchoptions' => ['dataInit' => 'date_pick_one_month', 'sopt' => $date_operators]],
-                    ['name' => 'coach_name', 'index' => 'coach_name', 'width' => '70', 'align' => 'left', 'search' => 'false', 'searchoptions' => ['sopt' => $operators]],
-                    ['name' => 'session_active', 'index' => 'session_active', 'width' => '25', 'align' => 'left', 'search' => 'true', 'stype' => 'select',
+                    [
+                        'name' => 'name',
+                        'index' => 's.name',
+                        'width' => '200',
+                        'align' => 'left',
+                        'search' => 'true',
+                        'searchoptions' => ['sopt' => $operators],
+                    ],
+                    [
+                        'name' => 'display_start_date',
+                        'index' => 'display_start_date',
+                        'width' => '70',
+                        'align' => 'left',
+                        'search' => 'true',
+                        'searchoptions' => ['dataInit' => 'date_pick_today', 'sopt' => $date_operators],
+                    ],
+                    [
+                        'name' => 'display_end_date',
+                        'index' => 'display_end_date',
+                        'width' => '70',
+                        'align' => 'left',
+                        'search' => 'true',
+                        'searchoptions' => ['dataInit' => 'date_pick_one_month', 'sopt' => $date_operators],
+                    ],
+                    [
+                        'name' => 'coach_name',
+                        'index' => 'coach_name',
+                        'width' => '70',
+                        'align' => 'left',
+                        'search' => 'false',
+                        'searchoptions' => ['sopt' => $operators],
+                    ],
+                    [
+                        'name' => 'session_active',
+                        'index' => 'session_active',
+                        'width' => '25',
+                        'align' => 'left',
+                        'search' => 'true',
+                        'stype' => 'select',
                         // for the bottom bar
                         'searchoptions' => [
                             'defaultValue' => '1',
-                            'value' => '1:'.get_lang('Active').';0:'.get_lang('Inactive'), ],
+                            'value' => '1:'.get_lang('Active').';0:'.get_lang('Inactive'),
+                        ],
                         // for the top bar
-                        'editoptions' => ['value' => '" ":'.get_lang('All').';1:'.get_lang('Active').';0:'.get_lang('Inactive')],
+                        'editoptions' => [
+                            'value' => '" ":'.get_lang('All').';1:'.get_lang('Active').';0:'.get_lang(
+                                    'Inactive'
+                                ),
+                        ],
                     ],
-                    ['name' => 'visibility', 'index' => 'visibility', 'width' => '40', 'align' => 'left', 'search' => 'false'],
-                    ['name' => 'course_title', 'index' => 'course_title', 'width' => '50', 'hidden' => 'true', 'search' => 'true', 'searchoptions' => ['searchhidden' => 'true', 'sopt' => $operators]],
+                    [
+                        'name' => 'visibility',
+                        'index' => 'visibility',
+                        'width' => '40',
+                        'align' => 'left',
+                        'search' => 'false',
+                    ],
+                    [
+                        'name' => 'course_title',
+                        'index' => 'course_title',
+                        'width' => '50',
+                        'hidden' => 'true',
+                        'search' => 'true',
+                        'searchoptions' => ['searchhidden' => 'true', 'sopt' => $operators],
+                    ],
                 ];
+
+                break;
+
+            case 'custom':
+                $columns = [
+                    '#',
+                    get_lang('Name'),
+                    get_lang('Category'),
+                    get_lang('SessionDisplayStartDate'),
+                    get_lang('SessionDisplayEndDate'),
+                    get_lang('Visibility'),
+                ];
+                $columnModel = [
+                    [
+                        'name' => 'id',
+                        'index' => 's.id',
+                        'width' => '160',
+                        'hidden' => 'true',
+                    ],
+                    [
+                        'name' => 'name',
+                        'index' => 's.name',
+                        'width' => '160',
+                        'align' => 'left',
+                        'search' => 'true',
+                        'searchoptions' => ['sopt' => $operators],
+                    ],
+                    [
+                        'name' => 'category_name',
+                        'index' => 'category_name',
+                        'width' => '40',
+                        'align' => 'left',
+                        'search' => 'true',
+                        'searchoptions' => ['sopt' => $operators],
+                    ],
+                    [
+                        'name' => 'display_start_date',
+                        'index' => 'display_start_date',
+                        'width' => '50',
+                        'align' => 'left',
+                        'search' => 'true',
+                        'searchoptions' => [
+                            'dataInit' => 'date_pick_today',
+                            'sopt' => $date_operators,
+                        ],
+                    ],
+                    [
+                        'name' => 'display_end_date',
+                        'index' => 'display_end_date',
+                        'width' => '50',
+                        'align' => 'left',
+                        'search' => 'true',
+                        'searchoptions' => [
+                            'dataInit' => 'date_pick_one_month',
+                            'sopt' => $date_operators,
+                        ],
+                    ],
+                    [
+                        'name' => 'visibility',
+                        'index' => 'visibility',
+                        'width' => '40',
+                        'align' => 'left',
+                        'search' => 'false',
+                    ],
+                ];
+
+                if ($showCount) {
+                    $columns[] = get_lang('Users');
+                    $columnModel[] = [
+                        'name' => 'users',
+                        'index' => 'users',
+                        'width' => '20',
+                        'align' => 'left',
+                        'search' => 'false',
+                    ];
+
+                    // ofaj
+                    $columns[] = get_lang('Teachers');
+                    $columnModel[] = [
+                        'name' => 'teachers',
+                        'index' => 'teachers',
+                        'width' => '20',
+                        'align' => 'left',
+                        'search' => 'false',
+                    ];
+                }
+
+                if (api_get_configuration_value('allow_session_status')) {
+                    $columns[] = get_lang('SessionStatus');
+                    $list = self::getStatusList();
+                    $listToString = '';
+                    foreach ($list as $statusId => $status) {
+                        $listToString .= $statusId.':'.$status.';';
+                    }
+
+                    $columnModel[] = [
+                        'name' => 'status',
+                        'index' => 'status',
+                        'width' => '25',
+                        'align' => 'left',
+                        'search' => 'true',
+                        'stype' => 'select',
+                        // for the bottom bar
+                        'searchoptions' => [
+                            'defaultValue' => '1',
+                            'value' => $listToString,
+                        ],
+                    ];
+                }
+
                 break;
         }
 
@@ -8257,8 +8494,11 @@ class SessionManager
         }
 
         // Inject extra session fields
-        $sessionField = new ExtraFieldModel('session');
-        $rules = $sessionField->getRules($columns, $columnModel);
+        $rules = [];
+        if ($addExtraFields) {
+            $sessionField = new ExtraFieldModel('session');
+            $rules = $sessionField->getRules($columns, $columnModel);
+        }
 
         if (!in_array('actions', array_column($columnModel, 'name'))) {
             $columnModel[] = [
@@ -8469,7 +8709,7 @@ class SessionManager
 
         $limit = '';
         if (!empty($options['limit'])) {
-            $limit = " LIMIT ".$options['limit'];
+            $limit = ' LIMIT '.$options['limit'];
         }
 
         $query = "$select FROM $tbl_session s
@@ -8486,7 +8726,7 @@ class SessionManager
                     LEFT JOIN $tbl_session_category sc
                     ON (s.session_category_id = sc.id)
                     INNER JOIN $tbl_user u
-                    ON (s.id_coach = u.user_id) 
+                    ON (s.id_coach = u.user_id)
                     $where
                     $limit
         ";
@@ -8497,19 +8737,19 @@ class SessionManager
             if ($access_url_id != -1) {
                 $query = "$select
                     FROM $tbl_session s
-                    LEFT JOIN $tbl_session_field_values fv 
+                    LEFT JOIN $tbl_session_field_values fv
                     ON (fv.item_id = s.id)
-                    LEFT JOIN $tbl_session_field_options fvo 
+                    LEFT JOIN $tbl_session_field_options fvo
                     ON (fv.field_id = fvo.field_id)
-                    LEFT JOIN $tbl_session_rel_course src 
+                    LEFT JOIN $tbl_session_rel_course src
                     ON (src.session_id = s.id)
-                    LEFT JOIN $tbl_course c 
+                    LEFT JOIN $tbl_course c
                     ON (src.c_id = c.id)
-                    LEFT JOIN $tbl_session_category sc 
+                    LEFT JOIN $tbl_session_category sc
                     ON (s.session_category_id = sc.id)
-                    INNER JOIN $tbl_user u 
+                    INNER JOIN $tbl_user u
                     ON (s.id_coach = u.user_id)
-                    INNER JOIN $table_access_url_rel_session ar 
+                    INNER JOIN $table_access_url_rel_session ar
                     ON (ar.session_id = s.id AND ar.access_url_id = $access_url_id)
                     $where
                     $limit
@@ -8517,10 +8757,10 @@ class SessionManager
             }
         }
 
-        $query .= ") AS session_table";
+        $query .= ') AS s';
 
         if (!empty($options['order'])) {
-            $query .= " ORDER BY ".$options['order'];
+            $query .= ' ORDER BY '.$options['order'];
         }
 
         $result = Database::query($query);
@@ -8934,7 +9174,7 @@ class SessionManager
             return [];
         }
 
-        $sql = "SELECT * FROM $table 
+        $sql = "SELECT * FROM $table
                 WHERE c_id = $courseId AND user_id = $userId";
         $result = Database::query($sql);
 
@@ -8981,9 +9221,9 @@ class SessionManager
                 INNER JOIN ChamiloCoreBundle:SessionRelUser su
                     WITH scu.user = su.user
                     AND scu.session = su.session
-                WHERE 
-                    scu.course = :course AND 
-                    su.relationType <> :relationType AND 
+                WHERE
+                    scu.course = :course AND
+                    su.relationType <> :relationType AND
                     scu.session = :session
             ")
             ->setParameters([
@@ -9251,5 +9491,27 @@ class SessionManager
         } else {
             return -1;
         }
+    }
+
+    public static function getStatusList()
+    {
+        return [
+            self::STATUS_PLANNED => get_lang('Planned'),
+            self::STATUS_PROGRESS => get_lang('InProgress'),
+            self::STATUS_FINISHED => get_lang('Finished'),
+            self::STATUS_CANCELLED => get_lang('Cancelled'),
+        ];
+    }
+
+    public static function getStatusLabel($status)
+    {
+        $list = self::getStatusList();
+
+        if (!isset($list[$status])) {
+
+            return get_lang('NoStatus');
+        }
+
+        return $list[$status];
     }
 }

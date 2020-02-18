@@ -1,3 +1,10 @@
+{% if navigation_in_the_middle %}
+    <style>
+        .c-menu-left {
+            top: 50% !important;
+        }
+    </style>
+{% endif %}
 <nav id="btn-menu-float" class="c-menu-{{ menu_location }}">
     <div class="circle {{ show_toolbar_by_default == 1 ? 'open' : '' }}">
         {% if show_left_column == 1 %}

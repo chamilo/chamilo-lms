@@ -284,22 +284,42 @@ switch ($action) {
 
                 break;
             case 'status':
-                $statusList = api_get_status_langvars();
-                unset($statusList[ANONYMOUS]);
+                $extraFieldValueUser = new ExtraField('user');
+                $extraField = $extraFieldValueUser->get_handler_field_info_by_field_variable('statusocial');
 
-                foreach ($statusList as $status => $name) {
-                    $conditions = ['status' => $status];
-                    $count = UserManager::getUserListExtraConditions(
-                        $conditions,
+                $users = UserManager::getUserListExtraConditions(
+                    [],
                         [],
                         false,
                         false,
                         null,
                         $extraConditions,
-                        true
+                    false
                     );
-                    $all[$name] = $count;
+
+                $userIdList = array_column($users, 'user_id');
+                $userIdListToString = implode("', '", $userIdList);
+
+                $all = [];
+                $total = count($users);
+                $usersFound = 0;
+                foreach ($extraField['options'] as $item) {
+                    $value = Database::escape_string($item['option_value']);
+                    $count = 0;
+                    $sql = "SELECT count(id) count
+                            FROM $extraFieldValueUser->table_field_values
+                            WHERE
+                            value = '$value' AND
+                            item_id IN ('$userIdListToString') AND
+                            field_id = ".$extraField['id'];
+                    $query = Database::query($sql);
+                    $result = Database::fetch_array($query);
+                    $count = $result['count'];
+                    $usersFound += $count;
+                    $all[$item['display_text']] = $count;
                 }
+                $all[get_lang('N/A')] = $total - $usersFound;
+
                 break;
             case 'language':
                 $languages = api_get_languages();
@@ -313,6 +333,7 @@ switch ($action) {
                     if (!isset($all[$key])) {
                         $all[$key] = 0;
                     }
+                    $key = get_lang($key);
                     $all[$key] += UserManager::getUserListExtraConditions(
                         $conditions,
                         [],
@@ -357,11 +378,72 @@ switch ($action) {
                     $query = Database::query($sql);
                     $result = Database::fetch_array($query);
                     $count = $result['count'];
-                    //$item['display_text'] = str_replace('2', '', $item['display_text']);
                     $usersFound += $count;
+                    $item['display_text'] = get_lang(str_replace('2', '', $item['display_text']));
                     $all[$item['display_text']] = $count;
                 }
                 $all[get_lang('N/A')] = $total - $usersFound;
+                break;
+
+            case 'age':
+                $extraFieldValueUser = new ExtraField('user');
+                $extraField = $extraFieldValueUser->get_handler_field_info_by_field_variable('terms_datedenaissance');
+
+                $users = UserManager::getUserListExtraConditions(
+                    [],
+                    [],
+                    false,
+                    false,
+                    null,
+                    $extraConditions,
+                    false
+                );
+
+                $userIdList = array_column($users, 'user_id');
+                $userIdListToString = implode("', '", $userIdList);
+
+                $all = [];
+                $total = count($users);
+
+                $sql = "SELECT value
+                        FROM $extraFieldValueUser->table_field_values
+                        WHERE
+                        item_id IN ('$userIdListToString') AND
+                        field_id = ".$extraField['id'];
+                $query = Database::query($sql);
+                $usersFound = 0;
+                $now = new DateTime();
+                $all = [
+                    //get_lang('N/A') => 0,
+                    '16-17' => 0,
+                    '18-25' => 0,
+                    '26-30' => 0,
+                ];
+
+                while ($row = Database::fetch_array($query)) {
+                    $usersFound++;
+                    if (!empty($row['value'])) {
+                        $date1 = new DateTime($row['value']);
+                        $interval = $now->diff($date1);
+                        $years = (int) $interval->y;
+
+                        if ($years >= 16 && $years <= 17) {
+                            $all['16-17'] += 1;
+                        }
+                        if ($years >= 18 && $years <= 25) {
+                            $all['18-25'] += 1;
+                        }
+                        if ($years >= 26 && $years <= 30) {
+                            $all['26-30'] += 1;
+                        }
+                        /*if ($years >= 31) {
+                            $all[get_lang('N/A')] += 1;
+                        }*/
+                    } else {
+                        //$all[get_lang('N/A')] += 1;
+                    }
+                }
+
                 break;
 
             case 'career':
@@ -576,8 +658,41 @@ switch ($action) {
                     if (!isset($all[$language])) {
                         $all[$language] = 0;
                     }
-                    $all[$language]++;
+                    $all[$language] += 1;
                 }
+                break;
+            case 'course_in_session':
+                $sql = "SELECT id FROM $table
+                        WHERE
+                            (display_start_date BETWEEN '$startDate' AND '$endDate' OR
+                            display_end_date BETWEEN '$startDate' AND '$endDate')
+                            $statusCondition
+                    ";
+
+                $result = Database::query($sql);
+
+                $all = [];
+                $courseSessions = [];
+                $total = 0;
+                while ($row = Database::fetch_array($result)) {
+                    $courseList = SessionManager::getCoursesInSession($row['id']);
+                    foreach ($courseList as $courseId) {
+                        if (!isset($courseSessions[$courseId])) {
+                            $courseSessions[$courseId] = 0;
+                        }
+                        $courseSessions[$courseId]++;
+                        $total++;
+                    }
+                }
+
+                if (!empty($courseSessions)) {
+                    arsort($courseSessions);
+                    foreach ($courseSessions as $courseId => $count) {
+                        $courseInfo = api_get_course_info_by_id($courseId);
+                        $all[$courseInfo['name']] = $count;
+                    }
+                }
+
                 break;
         }
 

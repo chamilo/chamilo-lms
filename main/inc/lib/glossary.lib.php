@@ -110,7 +110,6 @@ class GlossaryManager
         $rs = Database::query($sql);
 
         if (Database::num_rows($rs) > 0) {
-
             return Database::fetch_array($rs, 'ASSOC');
         }
 

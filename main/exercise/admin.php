@@ -161,7 +161,9 @@ if ($objExercise->sessionId != $sessionId) {
 }
 
 if ($objExercise->selectPtType() == EXERCISE_PT_TYPE_PTEST) {
-    header('Location: '.api_get_path(WEB_CODE_PATH).'exercise/ptest_admin.php?exerciseId='.$exerciseId.'&'.api_get_cidreq());
+    header('Location: '.api_get_path(WEB_CODE_PATH).'exercise/ptest_admin.php?'.
+        'exerciseId='.$exerciseId.'&'.api_get_cidreq()
+    );
     exit();
 }
 

@@ -526,8 +526,10 @@ if ($is_allowedToEdit && $origin !== 'learnpath') {
     $actionsLeft .= '<a href="'.api_get_path(WEB_CODE_PATH).'exercise/question_create.php?'.api_get_cidreq().'">'.
         Display::return_icon('new_question.png', get_lang('AddQ'), '', ICON_SIZE_MEDIUM).'</a>';
     if (api_get_configuration_value('show_ptest_quiz')) {
-        $actionsLeft .= '<a href="'.api_get_path(WEB_CODE_PATH).'exercise/exercise_admin.php?'.api_get_cidreq().'&ptest=1">'.
-            Display::return_icon('new_personality_test.png', get_lang('AddPT'), '', ICON_SIZE_MEDIUM).'</a>';
+        $actionsLeft .= '<a href="'.api_get_path(WEB_CODE_PATH).'exercise/exercise_admin.php?'.
+            api_get_cidreq().'&ptest=1">'.
+            Display::return_icon('new_personality_test.png', get_lang('AddPT'), '', ICON_SIZE_MEDIUM).
+            '</a>';
     }
     if (api_get_configuration_value('allow_exercise_categories')) {
         $actionsLeft .= '<a href="'.api_get_path(WEB_CODE_PATH).'exercise/category.php?'.api_get_cidreq().'">';

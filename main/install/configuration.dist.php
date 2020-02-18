@@ -1351,7 +1351,14 @@ requires extension "php-soap"  sudo apt-get install php-soap
 
 
 // Show personality test
-// CREATE TABLE c_quiz_category_ptest (id INT AUTO_INCREMENT NOT NULL, c_id INT NOT NULL, exercise_id INT NOT NULL, title VARCHAR(255) NOT NULL, description LONGTEXT, session_id INT NOT NULL, PRIMARY KEY(id)) DEFAULT CHARACTER SET utf8 COLLATE utf8_unicode_ci ENGINE = InnoDB;
+// CREATE TABLE c_quiz_category_ptest (
+//    id INT AUTO_INCREMENT NOT NULL,
+//    c_id INT NOT NULL,
+//    exercise_id INT NOT NULL,
+//    title VARCHAR(255) NOT NULL,
+//    description LONGTEXT,
+//    session_id INT NOT NULL,
+// PRIMARY KEY(id)) DEFAULT CHARACTER SET utf8 COLLATE utf8_unicode_ci ENGINE = InnoDB;
 // ALTER TABLE c_quiz ADD COLUMN pt_type INT DEFAULT 0 NOT NULL;
 // ALTER TABLE c_quiz_answer ADD COLUMN ptest_category INT DEFAULT 0 NOT NULL;
 // $_configuration['show_ptest_quiz'] = true;

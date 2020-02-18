@@ -1275,7 +1275,8 @@ if (!empty($error)) {
 
             // Only for the first time
             var dataparam = "'.$params.'&type=simple&question_id="+question_id;
-            dataparam += "&"+my_choice+"&"+hotspot+"&"+remind_list+"&"+my_choiceDc+"&"+my_choice_agree+"&"+my_choice_disagree+"&"+my_choice_agree_scale+"&"+my_choice_agree_reorder;
+            dataparam += "&"+my_choice+"&"+hotspot+"&"+remind_list+"&"+my_choiceDc+"&"+my_choice_agree+"&"
+                +my_choice_disagree+"&"+my_choice_agree_scale+"&"+my_choice_agree_reorder;
 
             $("#save_for_now_"+question_id).html(\''.
                 Display::returnFontAwesomeIcon('spinner', null, true, 'fa-spin').'\');

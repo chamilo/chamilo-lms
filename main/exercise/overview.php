@@ -99,13 +99,15 @@ if ($is_allowed_to_edit) {
     if ($objExercise->selectPtType() == EXERCISE_PT_TYPE_PTEST) {
         $editLink .= Display::url(
             Display::return_icon('test_results.png', get_lang('Results'), [], ICON_SIZE_SMALL),
-            api_get_path(WEB_CODE_PATH).'exercise/ptest_exercise_report.php?'.api_get_cidreq().'&exerciseId='.$objExercise->id,
+            api_get_path(WEB_CODE_PATH).'exercise/ptest_exercise_report.php?'.
+                api_get_cidreq().'&exerciseId='.$objExercise->id,
             ['title' => get_lang('Results')]
         );
     } else {
         $editLink .= Display::url(
             Display::return_icon('test_results.png', get_lang('Results'), [], ICON_SIZE_SMALL),
-            api_get_path(WEB_CODE_PATH).'exercise/exercise_report.php?'.api_get_cidreq().'&exerciseId='.$objExercise->id,
+            api_get_path(WEB_CODE_PATH).'exercise/exercise_report.php?'.
+                api_get_cidreq().'&exerciseId='.$objExercise->id,
             ['title' => get_lang('Results')]
         );
     }

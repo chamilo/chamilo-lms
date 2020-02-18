@@ -55,8 +55,8 @@ class PtestAgreeScale extends Question
 
         //this line defines how many questions by default appear when creating a choice question
         // The previous default value was 2. See task #1759.
-        $nb_answers = isset($_POST['nb_answers']) ? (int) $_POST['nb_answers'] : count($categoriesList);
-        $nb_answers += (isset($_POST['lessAnswers']) ? -1 : (isset($_POST['moreAnswers']) ? 1 : 0));
+        $nbAnswers = isset($_POST['nb_answers']) ? (int) $_POST['nb_answers'] : count($categoriesList);
+        $nbAnswers += (isset($_POST['lessAnswers']) ? -1 : (isset($_POST['moreAnswers']) ? 1 : 0));
 
         $html = '<table class="table table-striped table-hover">
             <thead>
@@ -76,24 +76,27 @@ class PtestAgreeScale extends Question
             $answer = new Answer($this->id);
             $answer->read();
             if ($answer->nbrAnswers > 0 && !$form->isSubmitted()) {
-                $nb_answers = $answer->nbrAnswers;
+                $nbAnswers = $answer->nbrAnswers;
             }
         }
         $form->addElement('hidden', 'nb_answers');
 
         //$temp_scenario = [];
-        if ($nb_answers < 1) {
-            $nb_answers = 1;
+        if ($nbAnswers < 1) {
+            $nbAnswers = 1;
             echo Display::return_message(
                 get_lang('YouHaveToCreateAtLeastOneAnswer')
             );
         }
 
-        for ($i = 1; $i <= $nb_answers; $i++) {
+        for ($i = 1; $i <= $nbAnswers; $i++) {
             $form->addHtml('<tr>');
             if (isset($answer) && is_object($answer)) {
                 $defaults['answer['.$i.']'] = isset($answer->answer[$i]) ? $answer->answer[$i] : '';
-                $defaults['ptest_category['.$i.']'] = isset($answer->ptest_category[$i]) ? $answer->ptest_category[$i] : 0;
+                $defaults['ptest_category['.$i.']'] = 0;
+                if (isset($answer->ptest_category[$i])) {
+                    $defaults['ptest_category['.$i.']'] = $answer->ptest_category[$i];
+                }
             }
 
             $renderer = $form->defaultRenderer();
@@ -167,7 +170,7 @@ class PtestAgreeScale extends Question
                 $form->setDefaults($defaults);
             }
         }
-        $form->setConstants(['nb_answers' => $nb_answers]);
+        $form->setConstants(['nb_answers' => $nbAnswers]);
     }
 
     public function setDirectOptions($i, FormValidator $form, $renderer, $select_lp_id, $select_question)
@@ -229,9 +232,9 @@ class PtestAgreeScale extends Question
     public function processAnswersCreation($form, $exercise)
     {
         $objAnswer = new Answer($this->id);
-        $nb_answers = $form->getSubmitValue('nb_answers');
+        $nbAnswers = $form->getSubmitValue('nb_answers');
 
-        for ($i = 1; $i <= $nb_answers; $i++) {
+        for ($i = 1; $i <= $nbAnswers; $i++) {
             $answer = trim($form->getSubmitValue('answer['.$i.']'));
             $goodAnswer = false;
             $comment = '';
@@ -277,7 +280,7 @@ class PtestAgreeScale extends Question
      * Saves one answer to the database.
      *
      * @param int    $id          The ID of the answer (has to be calculated for this course)
-     * @param int    $question_id The question ID (to which the answer is attached)
+     * @param int    $questionId The question ID (to which the answer is attached)
      * @param string $title       The text of the answer
      * @param string $comment     The feedback for the answer
      * @param float  $score       The score you get when picking this answer
@@ -285,7 +288,7 @@ class PtestAgreeScale extends Question
      */
     public function addAnswer(
         $id,
-        $question_id,
+        $questionId,
         $title,
         $comment,
         $score = 0.0,
@@ -295,7 +298,7 @@ class PtestAgreeScale extends Question
         $tbl_quiz_answer = Database::get_course_table(TABLE_QUIZ_ANSWER);
         $tbl_quiz_question = Database::get_course_table(TABLE_QUIZ_QUESTION);
         $course_id = api_get_course_int_id();
-        $question_id = intval($question_id);
+        $questionId = intval($questionId);
         $score = floatval($score);
         $correct = intval($correct);
         $title = Database::escape_string($title);
@@ -305,7 +308,7 @@ class PtestAgreeScale extends Question
                 FROM $tbl_quiz_answer
                 WHERE
                     c_id = $course_id AND
-                    question_id = $question_id";
+                    question_id = $questionId";
         $rs_max = Database::query($sql);
         $row_max = Database::fetch_object($rs_max);
         $position = $row_max->max_position + 1;
@@ -315,7 +318,7 @@ class PtestAgreeScale extends Question
         $quizAnswer
             ->setCId($course_id)
             ->setId($id)
-            ->setQuestionId($question_id)
+            ->setQuestionId($questionId)
             ->setAnswer($title)
             ->setCorrect($correct)
             ->setComment($comment)
@@ -339,7 +342,7 @@ class PtestAgreeScale extends Question
         if ($correct) {
             $sql = "UPDATE $tbl_quiz_question
                     SET ponderation = (ponderation + $score)
-                    WHERE c_id = $course_id AND id = ".$question_id;
+                    WHERE c_id = $course_id AND id = ".$questionId;
             Database::query($sql);
         }
     }

@@ -1,5 +1,5 @@
 <?php
-/* See license terms in /license.txt */
+/* For licensing terms, see /license.txt */
 
 require_once __DIR__.'/../inc/global.inc.php';
 

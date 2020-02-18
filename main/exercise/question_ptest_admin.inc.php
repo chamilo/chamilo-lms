@@ -11,10 +11,19 @@
  */
 if (isset($_GET['editQuestion'])) {
     $objQuestion = Question::read($_GET['editQuestion'], null, true, true);
-    $action = api_get_self().'?exerciseId='.$objExercise->id.'&'.api_get_cidreq().'&modifyQuestion='.$modifyQuestion.'&editQuestion='.$objQuestion->id.'&page='.$page;
+    $action = api_get_self().'?'.http_build_query([
+        'exerciseId' => $objExercise->id,
+        'modifyQuestion' => $modifyQuestion,
+        'editQuestion' => $objQuestion->id,
+        'page' => $page,
+    ]).api_get_cidreq();
 } else {
     $objQuestion = Question::getInstance($_REQUEST['answerType'], true);
-    $action = api_get_self().'?exerciseId='.$objExercise->id.'&'.api_get_cidreq().'&modifyQuestion='.$modifyQuestion.'&newQuestion='.$newQuestion;
+    $action = api_get_self().'?'.http_build_query([
+        'exerciseId' => $objExercise->id,
+        'modifyQuestion' => $modifyQuestion, 
+        'newQuestion' => $newQuestion,
+    ]).'&'.api_get_cidreq();
 }
 
 if (is_object($objQuestion)) {
@@ -42,7 +51,7 @@ if (is_object($objQuestion)) {
     $form->addHeader($text.': '.$form_title_extra.$code);
 
     // question form elements
-    $objQuestion->createPtForm($form, $objExercise);
+    $objQuestion->createPtForm($form);
 
     // answer form elements
     $objQuestion->createAnswersForm($form);
@@ -61,11 +70,20 @@ if (is_object($objQuestion)) {
         if (isset($_GET['editQuestion'])) {
             if (empty($exerciseId)) {
                 Display::addFlash(Display::return_message(get_lang('ItemUpdated')));
-                $url = 'ptest_admin.php?exerciseId='.$exerciseId.'&'.api_get_cidreq().'&editQuestion='.$objQuestion->id;
+                $url = 'ptest_admin.php?'.http_build_query([
+                    'exerciseId' => $exerciseId,
+                    'editQuestion' => $objQuestion->id,
+                ]).'&'.api_get_cidreq();
                 echo '<script type="text/javascript">window.location.href="'.$url.'"</script>';
                 exit;
             }
-            echo '<script type="text/javascript">window.location.href="ptest_admin.php?exerciseId='.$exerciseId.'&'.api_get_cidreq().'&page='.$page.'&message=ItemUpdated"</script>';
+            echo '<script type="text/javascript">'.
+                    'window.location.href="ptest_admin.php?'.http_build_query([
+                        'exerciseId' => $exerciseId,
+                        'page' => $page,
+                        'message' => 'ItemUpdated',
+                    ]).'&'.api_get_cidreq().'"'.
+                '</script>';
         } else {
             // New question
             $page = 1;
@@ -73,7 +91,13 @@ if (is_object($objQuestion)) {
             if (!empty($length)) {
                 $page = round($objExercise->getQuestionCount() / $length);
             }
-            echo '<script type="text/javascript">window.location.href="ptest_admin.php?exerciseId='.$exerciseId.'&'.api_get_cidreq().'&page='.$page.'&message=ItemAdded"</script>';
+            echo '<script type="text/javascript">'.
+                'window.location.href="ptest_admin.php?'.http_build_query([
+                    'exerciseId' => $exerciseId,
+                    'page' => $page,
+                    'message' => 'ItemAdded',
+                ]).api_get_cidreq().'"'.
+            '</script>';
         }
     } else {
         if (isset($questionName)) {

@@ -95,7 +95,9 @@ $ajax_url = api_get_path(WEB_AJAX_PATH).'exercise.ajax.php?'.api_get_cidreq().'&
         $("#question_list").sortable({
             cursor: "move", // works?
             update: function (event, ui) {
-                var order = $(this).sortable("serialize") + "&a=update_question_order&exercise_id=<?php echo $exerciseId; ?>";
+                var order = $(this).sortable("serialize") +
+                    "&a=update_question_order" +
+                    "&exercise_id=<?php echo $exerciseId; ?>";
                 $.post("<?php echo $ajax_url; ?>", order, function (result) {
                     $("#message").html(result);
                 });

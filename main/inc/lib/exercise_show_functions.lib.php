@@ -364,7 +364,10 @@ class ExerciseShowFunctions
                 break;
         }
 
-        $icon = in_array($answerType, [UNIQUE_ANSWER, UNIQUE_ANSWER_NO_OPTION, QUESTION_PT_TYPE_CATEGORY_RANKING]) ? 'radio' : 'checkbox';
+        $icon = in_array(
+            $answerType,
+            [UNIQUE_ANSWER, UNIQUE_ANSWER_NO_OPTION, QUESTION_PT_TYPE_CATEGORY_RANKING]
+        ) ? 'radio' : 'checkbox';
         $icon .= $studentChoice ? '_on' : '_off';
         $icon .= '.png';
         $iconAnswer = in_array($answerType, [UNIQUE_ANSWER, UNIQUE_ANSWER_NO_OPTION]) ? 'radio' : 'checkbox';
@@ -480,7 +483,6 @@ class ExerciseShowFunctions
         }
 
         $studentChoiceInt = (int) $studentChoice;
-        $showComment = false;
 
         switch ($answerType) {
             case QUESTION_PT_TYPE_CATEGORY_RANKING:
@@ -502,7 +504,7 @@ class ExerciseShowFunctions
             case QUESTION_PT_TYPE_AGREE_REORDER:
                 $icon = '';
                 $color = 'text-primary';
-                switch ($studentChoice) {
+                switch ($studentChoiceInt) {
                     case 1:
                     case 2:
                         $color = 'text-danger';
@@ -516,7 +518,7 @@ class ExerciseShowFunctions
                         break;
                 }
                 for ($i = 0; $i < 5; $i++) {
-                    if ($i < $studentChoice) {
+                    if ($i < $studentChoiceInt) {
                         $icon .= '<i class="fa fa-square '.$color.'" aria-hidden="true"></i> ';
                     } else {
                         $icon .= '<i class="fa fa-square-o '.$color.'" aria-hidden="true"></i> ';

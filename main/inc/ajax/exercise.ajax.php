@@ -619,12 +619,14 @@ switch ($action) {
                     );
                 } elseif ($objQuestionTmp->type === QUESTION_PT_TYPE_AGREE_OR_DISAGREE) {
                     $myChoiceTmp = [];
-                    $myChoiceTmp['agree'] = isset($_REQUEST['choice-agree'][$my_question_id]) && !empty($_REQUEST['choice-agree'][$my_question_id])
-                        ? (int) $_REQUEST['choice-agree'][$my_question_id]
-                        : 0;
-                    $myChoiceTmp['disagree'] = isset($_REQUEST['choice-disagree'][$my_question_id]) && !empty($_REQUEST['choice-disagree'][$my_question_id])
-                        ? (int) $_REQUEST['choice-disagree'][$my_question_id]
-                        : 0;
+                    $myChoiceTmp['agree'] = (
+                        isset($_REQUEST['choice-agree'][$my_question_id]) &&
+                        !empty($_REQUEST['choice-agree'][$my_question_id])
+                    ) ? (int) $_REQUEST['choice-agree'][$my_question_id] : 0;
+                    $myChoiceTmp['disagree'] = (
+                        isset($_REQUEST['choice-disagree'][$my_question_id]) &&
+                        !empty($_REQUEST['choice-disagree'][$my_question_id])
+                    ) ? (int) $_REQUEST['choice-disagree'][$my_question_id] : 0;
 
                     $result = $objExercise->manage_answer(
                         $exeId,

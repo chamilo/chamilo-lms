@@ -99,13 +99,19 @@ function edit_category_form($action)
     $exerciseId = (int) $_GET['exerciseId'];
     $action = Security::remove_XSS($action);
     if (isset($_GET['category_id']) && is_numeric($_GET['category_id'])) {
-        $category_id = intval($_GET['category_id']);
+        $categoryId = intval($_GET['category_id']);
         $objcat = new PTestCategory();
-        $objcat = $objcat->getCategory($category_id);
+        $objcat = $objcat->getCategory($categoryId);
+
+        $params = [
+            'exerciseId' => $exerciseId,
+            'action' => $action,
+            'category_id' => $categoryId,
+        ];
         $form = new FormValidator(
             'note',
             'post',
-            api_get_self().'?exerciseId='.$exerciseId.'&action='.$action.'&category_id='.$category_id.'&'.api_get_cidreq()
+            api_get_self().'?'.http_build_query($params).'&'.api_get_cidreq()
         );
 
         // Setting the form elements
@@ -115,12 +121,12 @@ function edit_category_form($action)
         $form->addElement('color', 'category_color', get_lang('PtestCategoryColor'), ['size' => '95']);
         $form->addElement('number', 'category_position', get_lang('PtestCategoryPosition'), ['size' => '95']);
         $form->addHtmlEditor(
-                'category_description',
-                get_lang('PtestCategoryDescription'),
-                false,
-                false,
-                ['ToolbarSet' => 'TestQuestionDescription', 'Height' => '200']
-                );
+            'category_description',
+            get_lang('PtestCategoryDescription'),
+            false,
+            false,
+            ['ToolbarSet' => 'TestQuestionDescription', 'Height' => '200']
+        );
         $form->addButtonCreate(get_lang('ModifyPTestFeature'), 'SubmitNote');
 
         // setting the rules
@@ -196,7 +202,14 @@ function add_category_form($action)
     $exerciseId = (int) $_GET['exerciseId'];
     $action = Security::remove_XSS($action);
     // initiate the object
-    $form = new FormValidator('note', 'post', api_get_self().'?exerciseId='.$exerciseId.'&action='.$action.'&'.api_get_cidreq());
+    $form = new FormValidator(
+        'note',
+        'post',
+        api_get_self().'?'.http_build_query([
+            'exerciseId' => $exerciseId,
+            'action' => $action,
+        ]).'&'.api_get_cidreq()
+    );
     // Setting the form elements
     $form->addElement('header', get_lang('AddACategory'));
     $form->addElement('text', 'category_name', get_lang('PtestCategoryName'), ['size' => '95']);
@@ -243,11 +256,14 @@ function displayActionBar()
 {
     $exerciseId = (int) $_GET['exerciseId'];
     echo '<div class="actions">';
-    echo '<a href="'.api_get_path(WEB_CODE_PATH).'exercise/ptest_admin.php?exerciseId='.$exerciseId.'&'.api_get_cidreq().'">'.
-        Display::return_icon('back.png', get_lang('GoBackToQuestionList'), '', ICON_SIZE_MEDIUM).'</a>';
+    $urlParams = 'exerciseId='.$exerciseId.'&'.api_get_cidreq();
+    echo '<a href="'.api_get_path(WEB_CODE_PATH).'exercise/ptest_admin.php?'.$urlParams.'">'.
+        Display::return_icon('back.png', get_lang('GoBackToQuestionList'), '', ICON_SIZE_MEDIUM).
+        '</a>';
 
     echo '<a href="'.api_get_self().'?exerciseId='.$exerciseId.'&action=addcategory&'.api_get_cidreq().'">'.
-        Display::return_icon('new_folder.png', get_lang('AddACategory'), null, ICON_SIZE_MEDIUM).'</a>';
+        Display::return_icon('new_folder.png', get_lang('AddACategory'), null, ICON_SIZE_MEDIUM).
+        '</a>';
 
     echo '</div>';
     echo "<br/>";

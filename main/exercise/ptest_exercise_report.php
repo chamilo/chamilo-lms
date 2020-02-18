@@ -101,7 +101,8 @@ if ($is_allowedToEdit && $origin != 'learnpath') {
         $actions .= '<a href="ptest_stats.php?'.api_get_cidreq().'&exerciseId='.$exercise_id.'">'.
             Display::return_icon('statistics.png', get_lang('ReportByQuestion'), '', ICON_SIZE_MEDIUM).'</a>';
         $actions .= '<a href="ptest_stats_graph.php?'.api_get_cidreq().'&exerciseId='.$exercise_id.'">'.
-            Display::return_icon('survey_reporting_question.png', get_lang('ExerciseGraph'), '', ICON_SIZE_MEDIUM).'</a>';
+            Display::return_icon('survey_reporting_question.png', get_lang('ExerciseGraph'), '', ICON_SIZE_MEDIUM);
+        $actions .= '</a>';
         // clean result before a selected date icon
         $actions .= Display::url(
             Display::return_icon(
@@ -230,7 +231,8 @@ $token = Security::get_token();
 $actions = Display::div($actions, ['class' => 'actions']);
 
 echo $actions;
-$url = api_get_path(WEB_AJAX_PATH).'model.ajax.php?a=get_ptest_exercise_results&exerciseId='.$exercise_id.'&filter_by_user='.$filter_user.'&'.api_get_cidreq();
+$url = api_get_path(WEB_AJAX_PATH).'model.ajax.php?';
+$url .= 'a=get_ptest_exercise_results&exerciseId='.$exercise_id.'&filter_by_user='.$filter_user.'&'.api_get_cidreq();
 $action_links = '';
 // Generating group list
 $group_list = GroupManager::get_group_list();
@@ -270,7 +272,14 @@ if ($is_allowedToEdit || $is_tutor) {
     // Column config
     $column_model = [
         ['name' => 'firstname', 'index' => 'firstname', 'width' => '50', 'align' => 'left', 'search' => 'true'],
-        ['name' => 'lastname', 'index' => 'lastname', 'width' => '50', 'align' => 'left', 'formatter' => 'action_formatter', 'search' => 'true'],
+        [
+            'name' => 'lastname',
+            'index' => 'lastname',
+            'width' => '50',
+            'align' => 'left',
+            'formatter' => 'action_formatter',
+            'search' => 'true'
+        ],
         [
             'name' => 'login',
             'index' => 'username',
@@ -299,11 +308,24 @@ if ($is_allowedToEdit || $is_tutor) {
         ['name' => 'exe_date', 'index' => 'exe_date', 'width' => '60', 'align' => 'left', 'search' => 'true'],
         ['name' => 'ip', 'index' => 'user_ip', 'width' => '40', 'align' => 'center', 'search' => 'true'],
         ['name' => 'lp', 'index' => 'orig_lp_id', 'width' => '60', 'align' => 'left', 'search' => 'false'],
-        ['name' => 'actions', 'index' => 'actions', 'width' => '60', 'align' => 'left', 'search' => 'false', 'sortable' => 'false'],
+        [
+            'name' => 'actions',
+            'index' => 'actions',
+            'width' => '60',
+            'align' => 'left',
+            'search' => 'false',
+            'sortable' => 'false'
+        ],
     ];
 
     if ($officialCodeInList === 'true') {
-        $officialCodeRow = ['name' => 'official_code', 'index' => 'official_code', 'width' => '50', 'align' => 'left', 'search' => 'true'];
+        $officialCodeRow = [
+            'name' => 'official_code',
+            'index' => 'official_code',
+            'width' => '50',
+            'align' => 'left',
+            'search' => 'true'
+        ];
         $column_model = array_merge([$officialCodeRow], $column_model);
     }
 
@@ -438,15 +460,14 @@ $gridJs = Display::grid_js(
                 if (!$(this).data('user') || !$(this).data('exercise') || !$(this).data('id')) {
                     return;
                 }
-                var url = '<?php echo api_get_path(WEB_CODE_PATH); ?>exercise/recalculate.php?<?php echo api_get_cidreq(); ?>';
+                var url = '<?php echo api_get_path(WEB_CODE_PATH); ?>exercise/recalculate.php?'+
+                    '<?php echo api_get_cidreq(); ?>';
                 var recalculateXhr = $.post(url, $(this).data());
                 $.when(recalculateXhr).done(function (response) {
                     $('#results').trigger('reloadGrid');
                 });
             });
-        <?php
-        }
-        ?>
+        <?php } ?>
         });
     // datepicker functions
     var datapickerInputModified = false;
@@ -487,8 +508,13 @@ $gridJs = Display::grid_js(
             // Format the date for confirm box
             var dateFormat = $( "#datepicker_start" ).datepicker( "option", "dateFormat" );
             var selectedDate = $.datepicker.formatDate(dateFormat, dateTypeVar);
-            if (confirm("<?php echo convert_double_quote_to_single(get_lang('AreYouSureDeleteTestResultBeforeDateD')).' '; ?>" + selectedDate)) {
-                self.location.href = "ptest_exercise_report.php?<?php echo api_get_cidreq(); ?>&exerciseId=<?php echo $exercise_id; ?>&delete_before_date="+dateForBDD+"&sec_token=<?php echo $token; ?>";
+            if (confirm("
+                <?php echo convert_double_quote_to_single(get_lang('AreYouSureDeleteTestResultBeforeDateD')).' '; ?>"
+                 + selectedDate)
+            ) {
+                self.location.href = "ptest_exercise_report.php?<?php echo api_get_cidreq(); ?>" +
+                "&exerciseId=<?php echo $exercise_id; ?>" +
+                "&delete_before_date="+dateForBDD+"&sec_token=<?php echo $token; ?>";
             }
         }
     }

@@ -1,11 +1,7 @@
 <?php
+
 /* For licensing terms, see /license.txt */
 
-/**
- * Script.
- *
- * @package chamilo.gradebook
- */
 require_once __DIR__.'/../inc/global.inc.php';
 require_once api_get_path(SYS_CODE_PATH).'gradebook/lib/fe/exportgradebook.php';
 
@@ -193,7 +189,6 @@ if (isset($_GET['editres'])) {
             $result->set_score($row_value);
         }
         $result->save();
-
         if ($allowMultipleAttempts && !empty($result->get_id())) {
             $table = Database::get_main_table(TABLE_MAIN_GRADEBOOK_RESULT_ATTEMPT);
             $now = api_get_utc_datetime();

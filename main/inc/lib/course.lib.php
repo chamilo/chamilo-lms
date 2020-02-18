@@ -3,6 +3,8 @@
 
 use Chamilo\CoreBundle\Entity\Course;
 use Chamilo\CoreBundle\Entity\ExtraField as EntityExtraField;
+use Chamilo\CoreBundle\Entity\Repository\SequenceResourceRepository;
+use Chamilo\CoreBundle\Entity\SequenceResource;
 use Chamilo\CourseBundle\Component\CourseCopy\CourseBuilder;
 use Chamilo\CourseBundle\Component\CourseCopy\CourseRestorer;
 use ChamiloSession as Session;
@@ -2292,11 +2294,29 @@ class CourseManager
         $res = Database::query($sql);
 
         if (Database::num_rows($res) == 0) {
-            return;
+            return false;
         }
 
         $course = Database::fetch_array($res);
         $courseId = $course['id']; // int
+
+        /** @var SequenceResourceRepository $repo */
+        $repo = Database::getManager()->getRepository('ChamiloCoreBundle:SequenceResource');
+        $sequenceResource = $repo->findRequirementForResource(
+            $courseId,
+            SequenceResource::COURSE_TYPE
+        );
+
+        if ($sequenceResource) {
+            Display::addFlash(
+                Display::return_message(
+                    get_lang('ThereIsASequenceResourceLinkedToThisCourseYouNeedToDeleteItFirst'),
+                    'error'
+                )
+            );
+
+            return false;
+        }
 
         $count = 0;
         if (api_is_multiple_url_enabled()) {
@@ -2403,6 +2423,11 @@ class CourseManager
             $sql = "UPDATE $table SET course_id = NULL WHERE course_id = $courseId";
             Database::query($sql);
 
+            $repo->deleteResource(
+                $courseId,
+                SequenceResource::COURSE_TYPE
+            );
+
             // Class
             $table = Database::get_main_table(TABLE_USERGROUP_REL_COURSE);
             $sql = "DELETE FROM $table
@@ -2445,6 +2470,8 @@ class CourseManager
                 api_get_user_id(),
                 $courseId
             );
+
+            return true;
         }
     }
 
@@ -3802,6 +3829,8 @@ class CourseManager
         // Browse through all courses.
         $courseAdded = [];
         $courseList = [];
+
+        $courseController = new CoursesController();
         while ($row = Database::fetch_array($result)) {
             $course_info = api_get_course_info_by_id($row['id']);
             if (empty($course_info)) {
@@ -3818,6 +3847,9 @@ class CourseManager
             if (in_array($course_info['real_id'], $courseAdded)) {
                 continue;
             }
+
+            //$course_info['requirements'] = $courseController->getRequirements($course_info['real_id'], SequenceResource::COURSE_TYPE, true, true);
+
             $course_info['id_session'] = null;
             $course_info['status'] = $row['status'];
             // For each course, get if there is any notification icon to show
@@ -4145,6 +4177,43 @@ class CourseManager
             $params['html_image'] = Display::return_icon('session.png', $course_info['name'], ['class' => 'img-responsive'], ICON_SIZE_LARGE, $course_info['name']);
         }
         $params['link'] = $session_url;
+
+        $courseController = new CoursesController();
+
+        $entityManager = Database::getManager();
+        /** @var SequenceResourceRepository $repo */
+        $repo = $entityManager->getRepository('ChamiloCoreBundle:SequenceResource');
+        /*$sequences = $repo->getRequirementsAndDependenciesWithinSequences(
+            $course_info['real_id'],
+            SequenceResource::COURSE_TYPE
+        );*/
+
+        $sequences = $repo->getRequirements($course_info['real_id'], SequenceResource::COURSE_TYPE);
+        $sequenceList = $repo->checkRequirementsForUser($sequences, SequenceResource::COURSE_TYPE, $user_id);
+        $completed = $repo->checkSequenceAreCompleted($sequenceList);
+
+        //var_dump($course_info['real_id'], $completed);
+        $params['completed'] = $completed;
+        $params['requirements'] = '';
+
+        if ($sequences && false === $completed) {
+            $hasRequirements = false;
+            foreach ($sequences as $sequence) {
+                if (!empty($sequence['requirements'])) {
+                    $hasRequirements = true;
+                    break;
+                }
+            }
+            if ($hasRequirements) {
+                $params['requirements'] = $courseController->getRequirements(
+                    $course_info['real_id'],
+                    SequenceResource::COURSE_TYPE,
+                    false,
+                    false
+                );
+            }
+        }
+
         $params['title'] = $session_title;
         $params['name'] = $course_info['name'];
         $params['edit_actions'] = '';

@@ -51,7 +51,7 @@ class CDocumentType extends AbstractType
             )*/
             //->add('c_id', HiddenType::class)
             ->add('filetype', HiddenType::class)
-            ->add(
+            /*->add(
                 'illustration',
                 IllustrationType::class,
                 [
@@ -59,7 +59,7 @@ class CDocumentType extends AbstractType
                     'required' => false,
                     'mapped' => false,
                 ]
-            )
+            )*/
             /*->add(
                 'rights',
                 'collection',

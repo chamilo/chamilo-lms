@@ -13,7 +13,7 @@ overblog_graphql:
             types:
                 -
                     type: graphql
-                    dir: "%kernel.root_dir%/GraphQlBundle/Resources/config"
+                    dir: "%kernel.project_dir%/config/graphql/types"
 
 parameters:
     chamilo_graphql.resolver_map.query.class: Chamilo\GraphQlBundle\Map\QueryMap

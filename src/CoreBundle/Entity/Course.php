@@ -378,7 +378,7 @@ class Course extends AbstractResource implements ResourceInterface
     }
 
     /**
-     * @return ArrayCollection
+     * @return Session[]
      */
     public function getSessions()
     {

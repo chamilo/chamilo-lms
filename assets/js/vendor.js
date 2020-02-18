@@ -35,6 +35,8 @@ require('@fancyapps/fancybox/dist/jquery.fancybox.js');
 require('@fancyapps/fancybox/src/js/media.js');
 require('jquery-contextmenu/dist/jquery.contextMenu.js');
 
+require('chart.js');
+
 require('./annotation.js');
 // require('video.js');
 

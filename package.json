@@ -25,6 +25,7 @@
     "blueimp-file-upload": "^10.0",
     "bootstrap-daterangepicker": "^3.0",
     "bootstrap-select": "^1.13.6",
+    "chart.js": "^2.9.3",
     "chosen-js": "^1.8.7",
     "core-js": "2",
     "cropper": "^4.0",

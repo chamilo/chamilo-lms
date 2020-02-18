@@ -486,13 +486,33 @@ class ResourceController extends AbstractResourceController implements CourseCon
             $this->trans('Unauthorised access to resource')
         );
 
-        $size = $repository->getResourceNodeRepository()->getSize($resourceNode, $repository->getResourceType());
+        $course = $this->getCourse();
+        $totalSize = 0;
+        if ($course) {
+            $totalSize = $course->getDiskQuota();
+        }
+
+        $size = $repository->getResourceNodeRepository()->getSize($resourceNode, $repository->getResourceType(), $course);
+
+        $labels[] = $course->getTitle();
+        $data[] = $size;
+        $sessions = $course->getSessions();
+        foreach ($sessions as $session) {
+            $labels[] = $course->getTitle().' '.$session->getName();
+            $size = $repository->getResourceNodeRepository()->getSize($resourceNode, $repository->getResourceType(), $course, $session);
+            $data[] = $size;
+        }
+
+        $used = array_sum($data);
+        $labels[] = 'Free';
+        $data[] = $totalSize - $used;
 
         return $this->render(
             '@ChamiloTheme/Resource/disk_space.html.twig',
             [
                 'resourceNode' => $resourceNode,
-                'size' => $size,
+                'labels' => ($labels),
+                'data' => ($data),
             ]
         );
     }

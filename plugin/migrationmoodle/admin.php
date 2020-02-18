@@ -95,6 +95,9 @@ $menu = [
         'users_learn_paths',
         'users_scorms_view',
     ],
+    'users_learn_paths' => [
+        'users_learn_paths_sections',
+    ],
     'users_scorms_view' => [
         'users_scorms_progress',
     ],

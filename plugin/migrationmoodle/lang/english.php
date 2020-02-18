@@ -51,3 +51,4 @@ $strings['SortSectionModulesTask'] = 'Sort modules in section';
 $strings['UsersScormsViewTask'] = 'Scorm views for users';
 $strings['UsersScormsProgressTask'] = 'Scorm progress';
 $strings['UsersLearnPathsTask'] = 'Learn paths views of users';
+$strings['UsersLearnPathsSectionsTask'] = 'Learn paths sections views of users';

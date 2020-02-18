@@ -2,6 +2,8 @@
 
 /* For licensing terms, see /license.txt */
 
+use Chamilo\CoreBundle\Entity\SessionRelUser;
+
 /**
  * Class SystemAnnouncementManager.
  */
@@ -854,13 +856,20 @@ class SystemAnnouncementManager
                     foreach ($promotionList as $promotionId) {
                         $sessionList = SessionManager::get_all_sessions_by_promotion($promotionId);
                         foreach ($sessionList as $session) {
-                            $status = (int) SessionManager::getUserStatusInSession($userId, $session['id']);
+                            $sessionRelUser = SessionManager::getUserStatusInSession($userId, $session['id']);
+
+                            if (!($sessionRelUser instanceof SessionRelUser)) {
+                                continue;
+                            }
+
+                            $status = $sessionRelUser->getRelationType();
+
                             if ($visible === self::VISIBLE_TEACHER && $status === 2) {
                                 $show = true;
                                 break 2;
                             }
 
-                            if ($visible === self::VISIBLE_STUDENT && $status === 1) {
+                            if ($visible === self::VISIBLE_STUDENT && $status === 0) {
                                 $show = true;
                                 break 2;
                             }

@@ -6,16 +6,16 @@ namespace Chamilo\PluginBundle\MigrationMoodle\Transformer\Property;
 use Chamilo\PluginBundle\MigrationMoodle\Task\LessonPagesQuizTask;
 
 /**
- * Class LoadedLpQuizLookup.
+ * Class LoadedLessonPageQuizLookup.
  *
  * Lookup for a quiz ID migrated in LpQuizzesTask.
  *
  * @package Chamilo\PluginBundle\MigrationMoodle\Transformer\Property
  */
-class LoadedLpQuizLookup extends LoadedKeyLookup
+class LoadedLessonPageQuizLookup extends LoadedKeyLookup
 {
     /**
-     * LoadedLpQuizLookup constructor.
+     * LoadedLessonPageQuizLookup constructor.
      */
     public function __construct()
     {

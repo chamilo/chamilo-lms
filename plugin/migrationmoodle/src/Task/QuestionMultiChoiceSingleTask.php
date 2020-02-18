@@ -7,7 +7,7 @@ use Chamilo\PluginBundle\MigrationMoodle\Extractor\CourseExtractor;
 use Chamilo\PluginBundle\MigrationMoodle\Loader\LessonAnswersMultipleChoiceLoader;
 use Chamilo\PluginBundle\MigrationMoodle\Transformer\BaseTransformer;
 use Chamilo\PluginBundle\MigrationMoodle\Transformer\Property\LoadedCourseLookup;
-use Chamilo\PluginBundle\MigrationMoodle\Transformer\Property\LoadedLpQuizLookup;
+use Chamilo\PluginBundle\MigrationMoodle\Transformer\Property\LoadedLessonPageQuizLookup;
 use Chamilo\PluginBundle\MigrationMoodle\Transformer\Property\LoadedQuestionLookup;
 use Chamilo\PluginBundle\MigrationMoodle\Transformer\Property\ReplaceFilePaths;
 
@@ -58,7 +58,7 @@ class QuestionMultiChoiceSingleTask extends BaseTask
                     'properties' => ['course'],
                 ],
                 'quiz_id' => [
-                    'class' => LoadedLpQuizLookup::class,
+                    'class' => LoadedLessonPageQuizLookup::class,
                     'properties' => ['quizid'],
                 ],
                 'question_id' => [

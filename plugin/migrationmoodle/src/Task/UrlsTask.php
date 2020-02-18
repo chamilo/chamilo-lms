@@ -7,8 +7,8 @@ use Chamilo\PluginBundle\MigrationMoodle\Extractor\CourseExtractor;
 use Chamilo\PluginBundle\MigrationMoodle\Loader\UrlLoader;
 use Chamilo\PluginBundle\MigrationMoodle\Transformer\BaseTransformer;
 use Chamilo\PluginBundle\MigrationMoodle\Transformer\Property\LoadedCourseLookup;
-use Chamilo\PluginBundle\MigrationMoodle\Transformer\Property\LoadedCourseModulesUrlLookup;
-use Chamilo\PluginBundle\MigrationMoodle\Transformer\Property\LoadedLpLookup;
+use Chamilo\PluginBundle\MigrationMoodle\Transformer\Property\LoadedCourseModuleUrlLookup;
+use Chamilo\PluginBundle\MigrationMoodle\Transformer\Property\LoadedCourseSectionLookup;
 
 /**
  * Class UrlsTask.
@@ -54,11 +54,11 @@ class UrlsTask extends BaseTask
                     'properties' => ['course'],
                 ],
                 'lp_id' => [
-                    'class' => LoadedLpLookup::class,
+                    'class' => LoadedCourseSectionLookup::class,
                     'properties' => ['section'],
                 ],
                 'item_id' => [
-                    'class' => LoadedCourseModulesUrlLookup::class,
+                    'class' => LoadedCourseModuleUrlLookup::class,
                     'properties' => ['cm_id'],
                 ],
                 'title' => 'name',

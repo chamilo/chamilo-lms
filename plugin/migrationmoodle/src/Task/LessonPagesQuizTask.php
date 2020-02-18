@@ -7,7 +7,7 @@ use Chamilo\PluginBundle\MigrationMoodle\Extractor\CourseExtractor;
 use Chamilo\PluginBundle\MigrationMoodle\Loader\LessonQuestionPagesQuizLoader;
 use Chamilo\PluginBundle\MigrationMoodle\Transformer\BaseTransformer;
 use Chamilo\PluginBundle\MigrationMoodle\Transformer\Property\LoadedCourseLookup;
-use Chamilo\PluginBundle\MigrationMoodle\Transformer\Property\LoadedLpItemLookup;
+use Chamilo\PluginBundle\MigrationMoodle\Transformer\Property\LoadedLessonPageLookup;
 
 /**
  * Class LessonPagesQuizTask.
@@ -45,7 +45,7 @@ class LessonPagesQuizTask extends BaseTask
                     'properties' => ['course'],
                 ],
                 'item_id' => [
-                    'class' => LoadedLpItemLookup::class,
+                    'class' => LoadedLessonPageLookup::class,
                     'properties' => ['id'],
                 ],
                 'item_title' => 'title',

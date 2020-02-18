@@ -6,7 +6,7 @@ namespace Chamilo\PluginBundle\MigrationMoodle\Task;
 use Chamilo\PluginBundle\MigrationMoodle\Extractor\CourseExtractor;
 use Chamilo\PluginBundle\MigrationMoodle\Transformer\BaseTransformer;
 use Chamilo\PluginBundle\MigrationMoodle\Transformer\Property\LoadedCourseLookup;
-use Chamilo\PluginBundle\MigrationMoodle\Transformer\Property\LoadedLpQuizLookup;
+use Chamilo\PluginBundle\MigrationMoodle\Transformer\Property\LoadedLessonPageQuizLookup;
 use Chamilo\PluginBundle\MigrationMoodle\Transformer\Property\LoadedQuestionLookup;
 
 /**
@@ -56,7 +56,7 @@ class QuestionShortAnswerTask extends LessonAnswersShortAnswerTask
                     'properties' => ['course'],
                 ],
                 'quiz_id' => [
-                    'class' => LoadedLpQuizLookup::class,
+                    'class' => LoadedLessonPageQuizLookup::class,
                     'properties' => ['quizid'],
                 ],
                 'question_id' => [

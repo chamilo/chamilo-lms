@@ -6,14 +6,14 @@ namespace Chamilo\PluginBundle\MigrationMoodle\Transformer\Property;
 use Chamilo\PluginBundle\MigrationMoodle\Task\CourseModulesUrlTask;
 
 /**
- * Class LoadedCourseModulesUrlLookup.
+ * Class LoadedCourseModuleUrlLookup.
  *
  * @package Chamilo\PluginBundle\MigrationMoodle\Transformer\Property
  */
-class LoadedCourseModulesUrlLookup extends LoadedKeyLookup
+class LoadedCourseModuleUrlLookup extends LoadedKeyLookup
 {
     /**
-     * LoadedCourseModulesUrlLookup constructor.
+     * LoadedCourseModuleUrlLookup constructor.
      */
     public function __construct()
     {

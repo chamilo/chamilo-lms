@@ -3,20 +3,20 @@
 
 namespace Chamilo\PluginBundle\MigrationMoodle\Transformer\Property;
 
-use Chamilo\PluginBundle\MigrationMoodle\Task\LessonPagesTask;
+use Chamilo\PluginBundle\MigrationMoodle\Task\CourseSectionsTask;
 
 /**
- * Class LoadedLpItemLookup.
+ * Class LoadedCourseSectionLookup.
  *
  * @package Chamilo\PluginBundle\MigrationMoodle\Transformer\Property
  */
-class LoadedLpItemLookup extends LoadedKeyLookup
+class LoadedCourseSectionLookup extends LoadedKeyLookup
 {
     /**
-     * LoadedLpItemLookup constructor.
+     * LoadedCourseSectionLookup constructor.
      */
     public function __construct()
     {
-        $this->calledClass = LessonPagesTask::class;
+        $this->calledClass = CourseSectionsTask::class;
     }
 }

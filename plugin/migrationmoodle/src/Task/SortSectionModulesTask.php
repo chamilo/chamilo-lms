@@ -7,7 +7,7 @@ use Chamilo\PluginBundle\MigrationMoodle\Extractor\CourseExtractor;
 use Chamilo\PluginBundle\MigrationMoodle\Loader\SortSectionModuleLoader;
 use Chamilo\PluginBundle\MigrationMoodle\Transformer\BaseTransformer;
 use Chamilo\PluginBundle\MigrationMoodle\Transformer\Property\LoadedCourseLookup;
-use Chamilo\PluginBundle\MigrationMoodle\Transformer\Property\LoadedLpLookup;
+use Chamilo\PluginBundle\MigrationMoodle\Transformer\Property\LoadedCourseSectionLookup;
 use Chamilo\PluginBundle\MigrationMoodle\Transformer\Property\SectionSequenceLookup;
 
 /**
@@ -55,7 +55,7 @@ class SortSectionModulesTask extends BaseTask
                     'properties' => ['course'],
                 ],
                 'lp_id' => [
-                    'class' => LoadedLpLookup::class,
+                    'class' => LoadedCourseSectionLookup::class,
                     'properties' => ['section'],
                 ],
                 'order_list' => [

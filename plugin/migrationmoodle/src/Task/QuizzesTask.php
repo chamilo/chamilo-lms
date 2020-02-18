@@ -7,7 +7,7 @@ use Chamilo\PluginBundle\MigrationMoodle\Extractor\CourseExtractor;
 use Chamilo\PluginBundle\MigrationMoodle\Loader\QuizzesLoader;
 use Chamilo\PluginBundle\MigrationMoodle\Transformer\BaseTransformer;
 use Chamilo\PluginBundle\MigrationMoodle\Transformer\Property\LoadedCourseLookup;
-use Chamilo\PluginBundle\MigrationMoodle\Transformer\Property\LoadedCourseModulesQuizLookup;
+use Chamilo\PluginBundle\MigrationMoodle\Transformer\Property\LoadedCourseModuleQuizLookup;
 use Chamilo\PluginBundle\MigrationMoodle\Transformer\Property\Percentage;
 use Chamilo\PluginBundle\MigrationMoodle\Transformer\Property\ReplaceFilePaths;
 
@@ -62,7 +62,7 @@ class QuizzesTask extends BaseTask
                     'properties' => ['course'],
                 ],
                 'item_id' => [
-                    'class' => LoadedCourseModulesQuizLookup::class,
+                    'class' => LoadedCourseModuleQuizLookup::class,
                     'properties' => ['cm_id'],
                 ],
                 'exerciseTitle' => 'name',

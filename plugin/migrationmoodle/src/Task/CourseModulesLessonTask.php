@@ -7,7 +7,7 @@ use Chamilo\PluginBundle\MigrationMoodle\Extractor\CourseExtractor;
 use Chamilo\PluginBundle\MigrationMoodle\Loader\CourseModulesLessonLoader;
 use Chamilo\PluginBundle\MigrationMoodle\Transformer\BaseTransformer;
 use Chamilo\PluginBundle\MigrationMoodle\Transformer\Property\LoadedCourseCodeLookup;
-use Chamilo\PluginBundle\MigrationMoodle\Transformer\Property\LoadedLpLookup;
+use Chamilo\PluginBundle\MigrationMoodle\Transformer\Property\LoadedCourseSectionLookup;
 
 /**
  * Class CourseModulesLessonTask.
@@ -48,7 +48,7 @@ class CourseModulesLessonTask extends BaseTask
                     'properties' => ['course'],
                 ],
                 'lp_id' => [
-                    'class' => LoadedLpLookup::class,
+                    'class' => LoadedCourseSectionLookup::class,
                     'properties' => ['section'],
                 ],
                 'title' => 'name',

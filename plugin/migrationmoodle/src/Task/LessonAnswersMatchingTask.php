@@ -8,8 +8,8 @@ use Chamilo\PluginBundle\MigrationMoodle\Loader\LessonAnswersMatchingLoader;
 use Chamilo\PluginBundle\MigrationMoodle\Transformer\BaseTransformer;
 use Chamilo\PluginBundle\MigrationMoodle\Transformer\Property\LessonAnswersMatchingScore;
 use Chamilo\PluginBundle\MigrationMoodle\Transformer\Property\LoadedCourseLookup;
-use Chamilo\PluginBundle\MigrationMoodle\Transformer\Property\LoadedLpQuizLookup;
-use Chamilo\PluginBundle\MigrationMoodle\Transformer\Property\LoadedLpQuizQuestionLookup;
+use Chamilo\PluginBundle\MigrationMoodle\Transformer\Property\LoadedLessonPageQuizLookup;
+use Chamilo\PluginBundle\MigrationMoodle\Transformer\Property\LoadedLessonPageQuizQuestionLookup;
 use Chamilo\PluginBundle\MigrationMoodle\Transformer\Property\ReplaceFilePaths;
 
 /**
@@ -51,11 +51,11 @@ class LessonAnswersMatchingTask extends BaseTask
                     'properties' => ['course'],
                 ],
                 'quiz_id' => [
-                    'class' => LoadedLpQuizLookup::class,
+                    'class' => LoadedLessonPageQuizLookup::class,
                     'properties' => ['pageid'],
                 ],
                 'question_id' => [
-                    'class' => LoadedLpQuizQuestionLookup::class,
+                    'class' => LoadedLessonPageQuizQuestionLookup::class,
                     'properties' => ['pageid'],
                 ],
                 'score' => [

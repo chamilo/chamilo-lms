@@ -6,11 +6,11 @@ namespace Chamilo\PluginBundle\MigrationMoodle\Transformer\Property;
 use Chamilo\PluginBundle\MigrationMoodle\Interfaces\TransformPropertyInterface;
 
 /**
- * Class LpItemType.
+ * Class LessonPageType.
  *
  * @package Chamilo\PluginBundle\MigrationMoodle\Transformer\Property
  */
-class LpItemType implements TransformPropertyInterface
+class LessonPageType implements TransformPropertyInterface
 {
     /**
      * @param array $data

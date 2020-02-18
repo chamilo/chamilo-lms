@@ -7,8 +7,8 @@ use Chamilo\PluginBundle\MigrationMoodle\Extractor\CourseExtractor;
 use Chamilo\PluginBundle\MigrationMoodle\Loader\LessonPagesDocumentLoader;
 use Chamilo\PluginBundle\MigrationMoodle\Transformer\BaseTransformer;
 use Chamilo\PluginBundle\MigrationMoodle\Transformer\Property\LoadedCourseLookup;
-use Chamilo\PluginBundle\MigrationMoodle\Transformer\Property\LoadedLpFromLessonLookup;
-use Chamilo\PluginBundle\MigrationMoodle\Transformer\Property\LoadedLpItemLookup;
+use Chamilo\PluginBundle\MigrationMoodle\Transformer\Property\LoadedCourseSectionFromLessonLookup;
+use Chamilo\PluginBundle\MigrationMoodle\Transformer\Property\LoadedLessonPageLookup;
 use Chamilo\PluginBundle\MigrationMoodle\Transformer\Property\WrapHtmlReplacingFilePaths;
 
 /**
@@ -47,11 +47,11 @@ class LessonPagesDocumentTask extends BaseTask
                     'properties' => ['course'],
                 ],
                 'lp_id' => [
-                    'class' => LoadedLpFromLessonLookup::class,
+                    'class' => LoadedCourseSectionFromLessonLookup::class,
                     'properties' => ['lessonid'],
                 ],
                 'item_id' => [
-                    'class' => LoadedLpItemLookup::class,
+                    'class' => LoadedLessonPageLookup::class,
                     'properties' => ['id'],
                 ],
                 'item_title' => 'title',

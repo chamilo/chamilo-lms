@@ -7,10 +7,10 @@ use Chamilo\PluginBundle\MigrationMoodle\Extractor\CourseExtractor;
 use Chamilo\PluginBundle\MigrationMoodle\Loader\LessonPagesLoader;
 use Chamilo\PluginBundle\MigrationMoodle\Transformer\BaseTransformer;
 use Chamilo\PluginBundle\MigrationMoodle\Transformer\Property\LoadedCourseCodeLookup;
-use Chamilo\PluginBundle\MigrationMoodle\Transformer\Property\LoadedLpDirFromLessonLookup;
-use Chamilo\PluginBundle\MigrationMoodle\Transformer\Property\LoadedLpFromLessonLookup;
-use Chamilo\PluginBundle\MigrationMoodle\Transformer\Property\LoadedLpItemLookup;
-use Chamilo\PluginBundle\MigrationMoodle\Transformer\Property\LpItemType;
+use Chamilo\PluginBundle\MigrationMoodle\Transformer\Property\LoadedCourseModuleLessonLookup;
+use Chamilo\PluginBundle\MigrationMoodle\Transformer\Property\LoadedCourseSectionFromLessonLookup;
+use Chamilo\PluginBundle\MigrationMoodle\Transformer\Property\LoadedLessonPageLookup;
+use Chamilo\PluginBundle\MigrationMoodle\Transformer\Property\LessonPageType;
 
 /**
  * Class LessonPagesTask.
@@ -71,19 +71,19 @@ class LessonPagesTask extends BaseTask
                     'properties' => ['course'],
                 ],
                 'lp_id' => [
-                    'class' => LoadedLpFromLessonLookup::class,
+                    'class' => LoadedCourseSectionFromLessonLookup::class,
                     'properties' => ['lesson']
                 ],
                 'parent' => [
-                    'class' => LoadedLpDirFromLessonLookup::class,
+                    'class' => LoadedCourseModuleLessonLookup::class,
                     'properties' => ['lesson']
                 ],
                 'previous' => [
-                    'class' => LoadedLpItemLookup::class,
+                    'class' => LoadedLessonPageLookup::class,
                     'properties' => ['prev'],
                 ],
                 'item_type' => [
-                    'class' => LpItemType::class,
+                    'class' => LessonPageType::class,
                     'properties' => ['qtype'],
                 ],
                 'title' => 'title',

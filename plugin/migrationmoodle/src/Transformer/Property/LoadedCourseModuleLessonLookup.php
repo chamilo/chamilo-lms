@@ -8,14 +8,14 @@ use Doctrine\DBAL\DBALException;
 use Doctrine\DBAL\FetchMode;
 
 /**
- * Class LoadedLpDirFromLessonLookup.
+ * Class LoadedCourseModuleLessonLookup.
  *
  * @package Chamilo\PluginBundle\MigrationMoodle\Transformer\Property
  */
-class LoadedLpDirFromLessonLookup extends LoadedKeyLookup
+class LoadedCourseModuleLessonLookup extends LoadedKeyLookup
 {
     /**
-     * LoadedLpDirFromLessonLookup constructor.
+     * LoadedCourseModuleLessonLookup constructor.
      */
     public function __construct()
     {

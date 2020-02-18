@@ -2,6 +2,8 @@
 /* For licensing terms, see /license.txt */
 
 use Chamilo\CoreBundle\Component\Utils\ChamiloApi;
+use Chamilo\CoreBundle\Entity\Repository\SequenceResourceRepository;
+use Chamilo\CoreBundle\Entity\SequenceResource;
 use ChamiloSession as Session;
 
 /**
@@ -1350,11 +1352,27 @@ if ((isset($uidReset) && $uidReset) || $cidReset) {
                                     }
                                     break;
                                 case '0': //Student
+
                                     $is_courseMember = true;
                                     $is_courseTutor = false;
                                     $is_courseAdmin = false;
                                     $is_session_general_coach = false;
                                     $is_sessionAdmin = false;
+
+                                    // Check course dependency
+                                    $entityManager = Database::getManager();
+                                    /** @var SequenceResourceRepository $repo */
+                                    $repo = $entityManager->getRepository('ChamiloCoreBundle:SequenceResource');
+                                    $sequences = $repo->getRequirements($_real_cid, SequenceResource::COURSE_TYPE);
+
+                                    if ($sequences) {
+                                        $sequenceList = $repo->checkRequirementsForUser($sequences, SequenceResource::COURSE_TYPE, $user_id);
+                                        $completed = $repo->checkSequenceAreCompleted($sequenceList);
+
+                                        if (false === $completed) {
+                                            api_not_allowed(true);
+                                        }
+                                    }
 
                                     break;
                                 default:

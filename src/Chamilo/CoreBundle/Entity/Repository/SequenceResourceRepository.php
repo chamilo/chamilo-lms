@@ -3,6 +3,7 @@
 
 namespace Chamilo\CoreBundle\Entity\Repository;
 
+use Chamilo\CoreBundle\Entity\Course;
 use Chamilo\CoreBundle\Entity\SequenceResource;
 use Doctrine\ORM\EntityRepository;
 use Fhaculty\Graph\Set\Vertices;
@@ -108,7 +109,7 @@ class SequenceResourceRepository extends EntityRepository
     public function getRequirements($resourceId, $type)
     {
         $sequencesResource = $this->findBy(['resourceId' => $resourceId, 'type' => $type]);
-
+        $em = $this->getEntityManager();
         $result = [];
         /** @var SequenceResource $sequenceResource */
         foreach ($sequencesResource as $sequenceResource) {
@@ -131,12 +132,12 @@ class SequenceResourceRepository extends EntityRepository
                 $resource = null;
                 switch ($type) {
                     case SequenceResource::SESSION_TYPE:
-                        $repo = $this->getEntityManager()->getRepository('ChamiloCoreBundle:Session');
+                        $repo = $em->getRepository('ChamiloCoreBundle:Session');
                         $resource = $repo->find($vertexId);
 
                         break;
                     case SequenceResource::COURSE_TYPE:
-                        $repo = $this->getEntityManager()->getRepository('ChamiloCoreBundle:Course');
+                        $repo = $em->getRepository('ChamiloCoreBundle:Course');
                         $resource = $repo->find($vertexId);
 
                         break;
@@ -184,15 +185,8 @@ class SequenceResourceRepository extends EntityRepository
             $from = $vertex->getVerticesEdgeFrom();
             $to = $vertex->getVerticesEdgeTo();
 
-            $requirements = [];
-            $dependencies = [];
-
-            switch ($type) {
-                case SequenceResource::SESSION_TYPE:
-                    $requirements = $this->findSessionFromVerticesEdges($from);
-                    $dependencies = $this->findSessionFromVerticesEdges($to);
-                    break;
-            }
+            $requirements = $this->findVerticesEdges($from, $type);
+            $dependencies = $this->findVerticesEdges($to, $type);
 
             $result[$sequence->getId()] = [
                 'name' => $sequence->getName(),
@@ -201,33 +195,38 @@ class SequenceResourceRepository extends EntityRepository
             ];
         }
 
-        return [
-            'sequences' => $result,
-        ];
+        return $result;
     }
 
     /**
      * Get sessions from vertices.
      *
      * @param Vertices $verticesEdges The vertices
+     * @param int      $type
      *
      * @return array
      */
-    protected function findSessionFromVerticesEdges(Vertices $verticesEdges)
+    protected function findVerticesEdges(Vertices $verticesEdges, $type)
     {
         $sessionVertices = [];
+        $em = $this->getEntityManager();
+
         foreach ($verticesEdges as $supVertex) {
             $vertexId = $supVertex->getId();
-            $session = $this->getEntityManager()->getReference(
-                'ChamiloCoreBundle:Session',
-                $vertexId
-            );
+            switch ($type) {
+                case SequenceResource::SESSION_TYPE:
+                    $resource = $em->getRepository('ChamiloCoreBundle:Session')->find($vertexId);
+                    break;
+                case SequenceResource::COURSE_TYPE:
+                    $resource = $em->getRepository('ChamiloCoreBundle:Course')->find($vertexId);
+                    break;
+            }
 
-            if (empty($session)) {
+            if (empty($resource)) {
                 continue;
             }
 
-            $sessionVertices[$vertexId] = $session;
+            $sessionVertices[$vertexId] = $resource;
         }
 
         return $sessionVertices;
@@ -245,7 +244,19 @@ class SequenceResourceRepository extends EntityRepository
     public function checkRequirementsForUser(array $sequences, $type, $userId)
     {
         $sequenceList = [];
-        $gradebookCategoryRepo = $this->getEntityManager()->getRepository('ChamiloCoreBundle:GradebookCategory');
+        $em = $this->getEntityManager();
+        $gradebookCategoryRepo = $em->getRepository('ChamiloCoreBundle:GradebookCategory');
+
+        $sessionUserList = [];
+        if (SequenceResource::COURSE_TYPE == $type) {
+            $criteria = ['user' => $userId];
+            $sessions = $em->getRepository('ChamiloCoreBundle:SessionRelUser')->findBy($criteria);
+            if ($sessions) {
+                foreach ($sessions as $sessionRelUser) {
+                    $sessionUserList[] = $sessionRelUser->getSession()->getId();
+                }
+            }
+        }
 
         foreach ($sequences as $sequenceId => $sequence) {
             $item = [
@@ -292,29 +303,26 @@ class SequenceResourceRepository extends EntityRepository
 
                     case SequenceResource::COURSE_TYPE:
                         $id = $resource->getId();
-                        $resourceItem = [
-                            'name' => $resource->getTitle(),
-                            'status' => true,
-                        ];
+                        $status = $this->checkCourseRequirements($userId, $resource, 0);
 
-                        $gradebooks = $gradebookCategoryRepo->findBy(
-                            [
-                                'courseCode' => $resource->getCode(),
-                                'sessionId' => 0,
-                                'isRequirement' => true,
-                            ]
-                        );
-
-                        foreach ($gradebooks as $gradebook) {
-                            $category = \Category::createCategoryObjectFromEntity($gradebook);
-
-                            if (!empty($userId)) {
-                                $resourceItem['status'] = $resourceItem['status'] && \Category::userFinishedCourse(
-                                    $userId,
-                                    $category
-                                );
+                        //var_dump($status);
+                        if (false === $status) {
+                            $sessionsInCourse = \SessionManager::get_session_by_course($id);
+                            foreach ($sessionsInCourse as $session) {
+                                if (in_array($session['id'], $sessionUserList)) {
+                                    $status = $this->checkCourseRequirements($userId, $resource, $session['id']);
+                                    //var_dump($status.' - '.$session['id']);
+                                    if (true === $status) {
+                                        break;
+                                    }
+                                }
                             }
                         }
+
+                        $resourceItem = [
+                            'name' => $resource->getTitle(),
+                            'status' => $status,
+                        ];
 
                         break;
                 }
@@ -329,6 +337,51 @@ class SequenceResourceRepository extends EntityRepository
         }
 
         return $sequenceList;
+    }
+
+    public function checkCourseRequirements($userId, Course $course, $sessionId)
+    {
+        $em = $this->getEntityManager();
+        $sessionId = (int) $sessionId;
+
+        $gradebookCategoryRepo = $em->getRepository('ChamiloCoreBundle:GradebookCategory');
+        $gradebooks = $gradebookCategoryRepo->findBy(
+            [
+                'courseCode' => $course->getCode(),
+                'sessionId' => $sessionId,
+                'isRequirement' => true,
+            ]
+        );
+
+        if (empty($gradebooks)) {
+            return false;
+        }
+
+        $status = true;
+        foreach ($gradebooks as $gradebook) {
+            $category = \Category::createCategoryObjectFromEntity($gradebook);
+            $userFinishedCourse = \Category::userFinishedCourse(
+                $userId,
+                $category,
+                true
+            );
+
+            //var_dump($gradebook, $userFinishedCourse);
+
+            if (0 === $sessionId) {
+                if (false === $userFinishedCourse) {
+                    $status = false;
+                    break;
+                }
+            } else {
+                if (false === $userFinishedCourse) {
+                    $status = false;
+                    break;
+                }
+            }
+        }
+
+        return $status;
     }
 
     /**

@@ -423,7 +423,7 @@ class Evaluation implements GradebookItem
     public function delete()
     {
         $table = Database::get_main_table(TABLE_MAIN_GRADEBOOK_EVALUATION);
-        $sql = 'DELETE FROM '.$table.' 
+        $sql = 'DELETE FROM '.$table.'
                 WHERE id = '.$this->get_id();
         Database::query($sql);
     }
@@ -443,8 +443,8 @@ class Evaluation implements GradebookItem
             $parent = $this->category;
         }
         $tbl_grade_evaluations = Database::get_main_table(TABLE_MAIN_GRADEBOOK_EVALUATION);
-        $sql = "SELECT count(id) AS number 
-                FROM $tbl_grade_evaluations 
+        $sql = "SELECT count(id) AS number
+                FROM $tbl_grade_evaluations
                 WHERE name = '".Database::escape_string($name)."'";
 
         if (api_is_allowed_to_edit()) {
@@ -778,12 +778,12 @@ class Evaluation implements GradebookItem
         $tbl_user = Database::get_main_table(TABLE_MAIN_USER);
         $table = Database::get_main_table(TABLE_MAIN_GRADEBOOK_RESULT);
 
-        $sql = "SELECT user_id,lastname,firstname,username 
-                FROM $tbl_user 
-                WHERE 
-                    lastname LIKE '".Database::escape_string($first_letter_user)."%' AND 
+        $sql = "SELECT user_id,lastname,firstname,username
+                FROM $tbl_user
+                WHERE
+                    lastname LIKE '".Database::escape_string($first_letter_user)."%' AND
                     status = ".STUDENT." AND user_id NOT IN (
-                        SELECT user_id FROM $table 
+                        SELECT user_id FROM $table
                         WHERE evaluation_id = ".$this->get_id()."
                     )
                 ORDER BY lastname";
@@ -838,8 +838,8 @@ class Evaluation implements GradebookItem
     public function lock($locked)
     {
         $table_evaluation = Database::get_main_table(TABLE_MAIN_GRADEBOOK_EVALUATION);
-        $sql = "UPDATE $table_evaluation 
-                SET locked = '".intval($locked)."' 
+        $sql = "UPDATE $table_evaluation
+                SET locked = '".intval($locked)."'
                 WHERE id='".$this->get_id()."'";
         Database::query($sql);
     }

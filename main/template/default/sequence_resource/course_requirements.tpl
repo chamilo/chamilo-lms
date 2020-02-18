@@ -7,11 +7,11 @@
             <div class="parent">
                 <div class="big-icon">
                     <img src="{{ 'item-sequence.png'|icon(48) }}" width="48" height="48">
-                    <p class="sequence-course">{{ course.title }}</p>
+                    <p class="sequence-course">{{ course.name }}</p>
 
                     {% if _u.logged %}
-                        <span class="label {{ session.status ? 'label-success' : 'label-danger' }}">
-                            {% if session.status %}
+                        <span class="label {{ course.status ? 'label-success' : 'label-danger' }}">
+                            {% if course.status %}
                                 <em class="fa fa-check"></em> {{ 'Complete'|get_lang }}
                             {% else %}
                                 <em class="fa fa-exclamation-triangle"></em> {{ 'Incomplete'|get_lang }}

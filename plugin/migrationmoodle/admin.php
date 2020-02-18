@@ -92,6 +92,7 @@ $menu = [
     ],
     'efc_users' => [
         'efc_user_sessions',
+        'users_learn_paths',
         'users_scorms_view',
     ],
     'users_scorms_view' => [

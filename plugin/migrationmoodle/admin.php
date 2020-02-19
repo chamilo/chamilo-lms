@@ -64,12 +64,11 @@ $menu = [
     ],
     'course_modules_quiz' => [
         'quizzes',
+        'quizzes_scores',
     ],
     'quizzes' => [
         'files_for_quizzes',
         'question_categories',
-    ],
-    'question_categories' => [
         'questions',
     ],
     'questions' => [

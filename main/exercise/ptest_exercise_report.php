@@ -1,5 +1,5 @@
 <?php
-/* For licensing terms, see /license.txt */
+/* For licensing terms, see /licence.txt */
 
 /**
  * Personality test report: This script shows the attemp of test for administrators and students.
@@ -16,11 +16,11 @@ require_once __DIR__.'/../inc/global.inc.php';
 $this_section = SECTION_COURSES;
 $htmlHeadXtra[] = api_get_jqgrid_js();
 
-$filter_user = isset($_REQUEST['filter_by_user']) ? (int) $_REQUEST['filter_by_user'] : null;
+$filterUser = isset($_REQUEST['filter_by_user']) ? (int) $_REQUEST['filter_by_user'] : null;
 $isBossOfStudent = false;
-if (api_is_student_boss() && !empty($filter_user)) {
+if (api_is_student_boss() && !empty($filterUser)) {
     // Check if boss has access to user info.
-    if (UserManager::userIsBossOfStudent(api_get_user_id(), $filter_user)) {
+    if (UserManager::userIsBossOfStudent(api_get_user_id(), $filterUser)) {
         $isBossOfStudent = true;
     } else {
         api_not_allowed(true);
@@ -40,36 +40,36 @@ $_course = api_get_course_info();
 // document path
 $documentPath = api_get_path(SYS_COURSE_PATH).$_course['path'].'/document';
 $origin = api_get_origin();
-$is_allowedToEdit = api_is_allowed_to_edit(null, true) ||
+$isAllowedToEdit = api_is_allowed_to_edit(null, true) ||
     api_is_drh() ||
     api_is_student_boss() ||
     api_is_session_admin();
-$is_tutor = api_is_allowed_to_edit(true);
+$isTutor = api_is_allowed_to_edit(true);
 
 $TBL_TRACK_EXERCISES = Database::get_main_table(TABLE_STATISTIC_TRACK_E_EXERCISES);
 $TBL_TRACK_ATTEMPT = Database::get_main_table(TABLE_STATISTIC_TRACK_E_ATTEMPT);
 $TBL_TRACK_ATTEMPT_RECORDING = Database::get_main_table(TABLE_STATISTIC_TRACK_E_ATTEMPT_RECORDING);
 $TBL_LP_ITEM_VIEW = Database::get_course_table(TABLE_LP_ITEM_VIEW);
 $allowCoachFeedbackExercises = api_get_setting('allow_coach_feedback_exercises') === 'true';
-$course_id = api_get_course_int_id();
-$exercise_id = isset($_REQUEST['exerciseId']) ? (int) $_REQUEST['exerciseId'] : 0;
-$locked = api_resource_is_locked_by_gradebook($exercise_id, LINK_EXERCISE);
+$courseId = api_get_course_int_id();
+$exerciseId = isset($_REQUEST['exerciseId']) ? (int) $_REQUEST['exerciseId'] : 0;
+$locked = api_resource_is_locked_by_gradebook($exerciseId, LINK_EXERCISE);
 $sessionId = api_get_session_id();
 
-if (empty($exercise_id)) {
+if (empty($exerciseId)) {
     api_not_allowed(true);
 }
 
 $blockPage = true;
 if (empty($sessionId)) {
-    if ($is_allowedToEdit) {
+    if ($isAllowedToEdit) {
         $blockPage = false;
     }
 } else {
-    if ($allowCoachFeedbackExercises && api_is_coach($sessionId, $course_id)) {
+    if ($allowCoachFeedbackExercises && api_is_coach($sessionId, $courseId)) {
         $blockPage = false;
     } else {
-        if ($is_allowedToEdit) {
+        if ($isAllowedToEdit) {
             $blockPage = false;
         }
     }
@@ -79,8 +79,8 @@ if ($blockPage) {
     api_not_allowed(true);
 }
 
-if (!empty($exercise_id)) {
-    $parameters['exerciseId'] = $exercise_id;
+if (!empty($exerciseId)) {
+    $parameters['exerciseId'] = $exerciseId;
 }
 
 if (!empty($_GET['path'])) {
@@ -88,19 +88,19 @@ if (!empty($_GET['path'])) {
 }
 
 $objExerciseTmp = new Exercise();
-$exerciseExists = $objExerciseTmp->read($exercise_id);
+$exerciseExists = $objExerciseTmp->read($exerciseId);
 
 $actions = null;
-if ($is_allowedToEdit && $origin != 'learnpath') {
+if ($isAllowedToEdit && $origin != 'learnpath') {
     // the form
     if (api_is_platform_admin() || api_is_course_admin() ||
         api_is_course_tutor() || api_is_session_general_coach()
     ) {
         $actions .= '<a href="exercise.php?'.api_get_cidreq().'">'.
             Display::return_icon('back.png', get_lang('GoBackToQuestionList'), '', ICON_SIZE_MEDIUM).'</a>';
-        $actions .= '<a href="ptest_stats.php?'.api_get_cidreq().'&exerciseId='.$exercise_id.'">'.
+        $actions .= '<a href="ptest_stats.php?'.api_get_cidreq().'&exerciseId='.$exerciseId.'">'.
             Display::return_icon('statistics.png', get_lang('ReportByQuestion'), '', ICON_SIZE_MEDIUM).'</a>';
-        $actions .= '<a href="ptest_stats_graph.php?'.api_get_cidreq().'&exerciseId='.$exercise_id.'">'.
+        $actions .= '<a href="ptest_stats_graph.php?'.api_get_cidreq().'&exerciseId='.$exerciseId.'">'.
             Display::return_icon('survey_reporting_question.png', get_lang('ExerciseGraph'), '', ICON_SIZE_MEDIUM);
         $actions .= '</a>';
         // clean result before a selected date icon
@@ -147,29 +147,29 @@ if ($is_allowedToEdit && $origin != 'learnpath') {
 }
 
 // Deleting an attempt
-if (($is_allowedToEdit || $is_tutor || api_is_coach()) &&
+if (($isAllowedToEdit || $isTutor || api_is_coach()) &&
     isset($_GET['delete']) && $_GET['delete'] === 'delete' &&
     !empty($_GET['did']) && $locked == false
 ) {
-    $exe_id = (int) $_GET['did'];
-    if (!empty($exe_id)) {
-        $sql = 'DELETE FROM '.$TBL_TRACK_EXERCISES.' WHERE exe_id = '.$exe_id;
+    $exeId = (int) $_GET['did'];
+    if (!empty($exeId)) {
+        $sql = 'DELETE FROM '.$TBL_TRACK_EXERCISES.' WHERE exe_id = '.$exeId;
         Database::query($sql);
-        $sql = 'DELETE FROM '.$TBL_TRACK_ATTEMPT.' WHERE exe_id = '.$exe_id;
+        $sql = 'DELETE FROM '.$TBL_TRACK_ATTEMPT.' WHERE exe_id = '.$exeId;
         Database::query($sql);
 
         Event::addEvent(
             LOG_EXERCISE_ATTEMPT_DELETE,
             LOG_EXERCISE_ATTEMPT,
-            $exe_id,
+            $exeId,
             api_get_utc_datetime()
         );
-        header('Location: ptest_exercise_report.php?'.api_get_cidreq().'&exerciseId='.$exercise_id);
+        header('Location: ptest_exercise_report.php?'.api_get_cidreq().'&exerciseId='.$exerciseId);
         exit;
     }
 }
 
-if ($is_allowedToEdit || $is_tutor) {
+if ($isAllowedToEdit || $isTutor) {
     $interbreadcrumb[] = [
         'url' => 'exercise.php?'.api_get_cidreq(),
         'name' => get_lang('Exercises'),
@@ -192,28 +192,28 @@ if ($is_allowedToEdit || $is_tutor) {
     }
 }
 
-if (($is_allowedToEdit || $is_tutor || api_is_coach()) &&
+if (($isAllowedToEdit || $isTutor || api_is_coach()) &&
     isset($_GET['a']) && $_GET['a'] === 'close' &&
     !empty($_GET['id']) && $locked == false
 ) {
     // Close the user attempt otherwise left pending
-    $exe_id = (int) $_GET['id'];
+    $exeId = (int) $_GET['id'];
     $sql = "UPDATE $TBL_TRACK_EXERCISES SET status = '' 
-            WHERE exe_id = $exe_id AND status = 'incomplete'";
+            WHERE exe_id = $exeId AND status = 'incomplete'";
     Database::query($sql);
 }
 
 Display::display_header($nameTools);
 
 // Clean all results for this test before the selected date
-if (($is_allowedToEdit || $is_tutor || api_is_coach()) &&
+if (($isAllowedToEdit || $isTutor || api_is_coach()) &&
     isset($_GET['delete_before_date']) && $locked == false
 ) {
     // ask for the date
     $check = Security::check_token('get');
     if ($check) {
         $objExerciseTmp = new Exercise();
-        if ($objExerciseTmp->read($exercise_id)) {
+        if ($objExerciseTmp->read($exerciseId)) {
             $count = $objExerciseTmp->cleanResults(
                 true,
                 $_GET['delete_before_date'].' 23:59:59'
@@ -232,25 +232,25 @@ $actions = Display::div($actions, ['class' => 'actions']);
 
 echo $actions;
 $url = api_get_path(WEB_AJAX_PATH).'model.ajax.php?';
-$url .= 'a=get_ptest_exercise_results&exerciseId='.$exercise_id.'&filter_by_user='.$filter_user.'&'.api_get_cidreq();
-$action_links = '';
+$url .= 'a=get_ptest_exercise_results&exerciseId='.$exerciseId.'&filter_by_user='.$filterUser.'&'.api_get_cidreq();
+$actionLinks = '';
 // Generating group list
 $group_list = GroupManager::get_group_list();
-$group_parameters = [
+$groupParameters = [
     'group_all:'.get_lang('All'),
     'group_none:'.get_lang('None'),
 ];
 
 foreach ($group_list as $group) {
-    $group_parameters[] = $group['id'].':'.$group['name'];
+    $groupParameters[] = $group['id'].':'.$group['name'];
 }
-if (!empty($group_parameters)) {
-    $group_parameters = implode(';', $group_parameters);
+if (!empty($groupParameters)) {
+    $groupParameters = implode(';', $groupParameters);
 }
 
 $officialCodeInList = api_get_setting('show_official_code_exercise_result_list');
 
-if ($is_allowedToEdit || $is_tutor) {
+if ($isAllowedToEdit || $isTutor) {
     // The order is important you need to check the the $column variable in the model.ajax.php file
     $columns = [
         get_lang('FirstName'),
@@ -270,7 +270,7 @@ if ($is_allowedToEdit || $is_tutor) {
     }
 
     // Column config
-    $column_model = [
+    $columnModel = [
         ['name' => 'firstname', 'index' => 'firstname', 'width' => '50', 'align' => 'left', 'search' => 'true'],
         [
             'name' => 'lastname',
@@ -298,10 +298,10 @@ if ($is_allowedToEdit || $is_tutor) {
             //for the bottom bar
             'searchoptions' => [
                 'defaultValue' => 'group_all',
-                'value' => $group_parameters,
+                'value' => $groupParameters,
             ],
             //for the top bar
-            'editoptions' => ['value' => $group_parameters],
+            'editoptions' => ['value' => $groupParameters],
         ],
         ['name' => 'duration', 'index' => 'exe_duration', 'width' => '30', 'align' => 'left', 'search' => 'true'],
         ['name' => 'start_date', 'index' => 'start_date', 'width' => '60', 'align' => 'left', 'search' => 'true'],
@@ -326,10 +326,10 @@ if ($is_allowedToEdit || $is_tutor) {
             'align' => 'left',
             'search' => 'true'
         ];
-        $column_model = array_merge([$officialCodeRow], $column_model);
+        $columnModel = array_merge([$officialCodeRow], $columnModel);
     }
 
-    $action_links = '
+    $actionLinks = '
     // add username as title in lastname filed - ref 4226
     function action_formatter(cellvalue, options, rowObject) {
         // rowObject is firstname,lastname,login,... get the third word
@@ -341,24 +341,24 @@ if ($is_allowedToEdit || $is_tutor) {
     }';
 }
 
-$extra_params['autowidth'] = 'true';
-$extra_params['height'] = 'auto';
-$extra_params['gridComplete'] = "
-    defaultGroupId = Cookies.get('default_group_".$exercise_id."');
+$extraParams['autowidth'] = 'true';
+$extraParams['height'] = 'auto';
+$extraParams['gridComplete'] = "
+    defaultGroupId = Cookies.get('default_group_".$exerciseId."');
     if (typeof defaultGroupId !== 'undefined') {
         $('#gs_group_name').val(defaultGroupId);
     }
 ";
 
-$extra_params['beforeRequest'] = "
+$extraParams['beforeRequest'] = "
 var defaultGroupId = $('#gs_group_name').val();
 
 // Load from group menu
 if (typeof defaultGroupId !== 'undefined') {
-    Cookies.set('default_group_".$exercise_id."', defaultGroupId);
+    Cookies.set('default_group_".$exerciseId."', defaultGroupId);
 } else {
     // get from cookies
-    defaultGroupId = Cookies.get('default_group_".$exercise_id."');
+    defaultGroupId = Cookies.get('default_group_".$exerciseId."');
     $('#gs_group_name').val(defaultGroupId);    
 }
 
@@ -378,10 +378,10 @@ $gridJs = Display::grid_js(
     'results',
     $url,
     $columns,
-    $column_model,
-    $extra_params,
+    $columnModel,
+    $extraParams,
     [],
-    $action_links,
+    $actionLinks,
     true
 );
 
@@ -421,7 +421,7 @@ $gridJs = Display::grid_js(
         <?php
         echo $gridJs;
 
-        if ($is_allowedToEdit || $is_tutor) {
+        if ($isAllowedToEdit || $isTutor) {
             ?>
             $("#results").jqGrid(
                 'navGrid',
@@ -438,7 +438,7 @@ $gridJs = Display::grid_js(
             var sgrid = $("#results")[0];
 
             // Update group
-            var defaultGroupId = Cookies.get('default_group_<?php echo $exercise_id; ?>');
+            var defaultGroupId = Cookies.get('default_group_<?php echo $exerciseId; ?>');
             $('#gs_group_name').val(defaultGroupId);
             // Adding search options
             var options = {
@@ -449,7 +449,7 @@ $gridJs = Display::grid_js(
                     $('#gs_group_name').on('change', function() {
                         var defaultGroupId = $('#gs_group_name').val();
                         // Save default group id
-                        Cookies.set('default_group_<?php echo $exercise_id; ?>', defaultGroupId);
+                        Cookies.set('default_group_<?php echo $exerciseId; ?>', defaultGroupId);
                     });
                 }
             }
@@ -513,7 +513,7 @@ $gridJs = Display::grid_js(
                  + selectedDate)
             ) {
                 self.location.href = "ptest_exercise_report.php?<?php echo api_get_cidreq(); ?>" +
-                "&exerciseId=<?php echo $exercise_id; ?>" +
+                "&exerciseId=<?php echo $exerciseId; ?>" +
                 "&delete_before_date="+dateForBDD+"&sec_token=<?php echo $token; ?>";
             }
         }
@@ -522,7 +522,7 @@ $gridJs = Display::grid_js(
 <form id="export_report_form" method="post" action="ptest_exercise_report.php?<?php echo api_get_cidreq(); ?>">
     <input type="hidden" name="csvBuffer" id="csvBuffer" value="" />
     <input type="hidden" name="export_report" id="export_report" value="1" />
-    <input type="hidden" name="exerciseId" id="exerciseId" value="<?php echo $exercise_id; ?>" />
+    <input type="hidden" name="exerciseId" id="exerciseId" value="<?php echo $exerciseId; ?>" />
 </form>
 
 <?php

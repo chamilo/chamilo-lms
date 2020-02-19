@@ -467,7 +467,6 @@ class ExerciseShowFunctions
         $answerType,
         $studentChoice,
         $answer,
-        $answerComment,
         $export = false
     ) {
         if ($export) {

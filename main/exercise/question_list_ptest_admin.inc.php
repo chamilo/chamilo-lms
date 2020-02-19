@@ -1,4 +1,4 @@
-<?php
+<?php 
 /* For licensing terms, see /license.txt */
 
 use ChamiloSession as Session;
@@ -183,7 +183,7 @@ if (!$inATest) {
             <div id="question_list">
         ';
 
-        $category_list = TestCategory::getListOfCategoriesNameForTest($objExercise->id, false);
+        $categoryList = TestCategory::getListOfCategoriesNameForTest($objExercise->id, false);
 
         if (is_array($questionList)) {
             foreach ($questionList as $id) {
@@ -198,7 +198,7 @@ if (!$inATest) {
                     continue;
                 }
 
-                $edit_link = Display::url(
+                $editLink = Display::url(
                     Display::return_icon(
                         'edit.png',
                         get_lang('Modify'),
@@ -213,9 +213,9 @@ if (!$inATest) {
                         ]),
                     ['class' => 'btn btn-default btn-sm']
                 );
-                $delete_link = null;
+                $deleteLink = null;
                 if ($objExercise->edit_exercise_in_lp == true) {
-                    $delete_link = Display::url(
+                    $deleteLink = Display::url(
                         Display::return_icon(
                             'delete.png',
                             get_lang('RemoveFromTest'),
@@ -236,12 +236,12 @@ if (!$inATest) {
                 }
 
                 if ($limitTeacherAccess && !api_is_platform_admin()) {
-                    $delete_link = '';
+                    $deleteLink = '';
                 }
 
                 $btnActions = implode(
                     PHP_EOL,
-                    [$edit_link, $delete_link]
+                    [$editLink, $deleteLink]
                 );
 
                 $title = Security::remove_XSS($objQuestionTmp->selectTitle());

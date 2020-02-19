@@ -1,5 +1,5 @@
 <?php
-/* For licensing terms, see /license.txt */
+/* For licensing terms, see /licence.txt */
 
 require_once __DIR__.'/../inc/global.inc.php';
 
@@ -42,8 +42,8 @@ if (empty($sessionId)) {
         $sessionId
     );
 }
-$count_students = count($students);
-$question_list = $objExercise->get_validated_question_list();
+$countStudents = count($students);
+$questionList = $objExercise->get_validated_question_list();
 
 $cList = PTestCategory::getCategoryListInfo($objExercise->id);
 
@@ -53,23 +53,23 @@ foreach ($cList as $item) {
     $categoryList[$item->id]['num'] = 0;
 }
 
-if (!empty($question_list)) {
-    foreach ($question_list as $question_id) {
-        $questionObj = Question::read($question_id, null, null, true);
+if (!empty($questionList)) {
+    foreach ($questionList as $questionId) {
+        $questionObj = Question::read($questionId, null, null, true);
 
-        $answer = new Answer($question_id);
-        $answer_count = $answer->selectNbrAnswers();
+        $answer = new Answer($questionId);
+        $answerCount = $answer->selectNbrAnswers();
 
-        for ($answer_id = 1; $answer_id <= $answer_count; $answer_id++) {
-            $real_answer_id = $answer->selectAutoId($answer_id);
-            $categoryId = $answer->selectPtCategory($answer_id);
+        for ($answerId = 1; $answerId <= $answerCount; $answerId++) {
+            $realAnswerId = $answer->selectAutoId($answerId);
+            $categoryId = $answer->selectPtCategory($answerId);
 
             // Overwriting values depending of the question
             switch ($questionObj->type) {
                 case QUESTION_PT_TYPE_CATEGORY_RANKING:
                     $count = ExerciseLib::getNumberStudentsAnswerCountGraph(
-                        $real_answer_id,
-                        $question_id,
+                        $realAnswerId,
+                        $questionId,
                         $exerciseId,
                         $courseCode,
                         $sessionId,
@@ -79,8 +79,8 @@ if (!empty($question_list)) {
                     break;
                 case QUESTION_PT_TYPE_AGREE_OR_DISAGREE:
                     $count = ExerciseLib::getNumberStudentsAnswerCountGraph(
-                        $real_answer_id,
-                        $question_id,
+                        $realAnswerId,
+                        $questionId,
                         $exerciseId,
                         $courseCode,
                         $sessionId,
@@ -91,8 +91,8 @@ if (!empty($question_list)) {
                     break;
                 case QUESTION_PT_TYPE_AGREE_SCALE:
                     $count = ExerciseLib::getNumberStudentsAnswerCountGraph(
-                        $real_answer_id,
-                        $question_id,
+                        $realAnswerId,
+                        $questionId,
                         $exerciseId,
                         $courseCode,
                         $sessionId,
@@ -102,8 +102,8 @@ if (!empty($question_list)) {
                     break;
                 case QUESTION_PT_TYPE_AGREE_REORDER:
                     $count = ExerciseLib::getNumberStudentsAnswerCountGraph(
-                        $real_answer_id,
-                        $question_id,
+                        $realAnswerId,
+                        $questionId,
                         $exerciseId,
                         $courseCode,
                         $sessionId,

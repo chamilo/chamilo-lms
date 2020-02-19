@@ -40,7 +40,7 @@ if (is_object($objQuestion)) {
     }
 
     $typesInformation = Question::getQuestionPtTypeList();
-    $form_title_extra = isset($typesInformation[$type][1]) ? get_lang($typesInformation[$type][1]) : null;
+    $formTitleExtra = isset($typesInformation[$type][1]) ? get_lang($typesInformation[$type][1]) : null;
 
     $code = '';
     if (isset($objQuestion->code) && !empty($objQuestion->code)) {
@@ -48,7 +48,7 @@ if (is_object($objQuestion)) {
     }
 
     // form title
-    $form->addHeader($text.': '.$form_title_extra.$code);
+    $form->addHeader($text.': '.$formTitleExtra.$code);
 
     // question form elements
     $objQuestion->createPtForm($form);

@@ -36,10 +36,10 @@ class PtestAgreeOrDisagree extends Question
     public function createAnswersForm($form)
     {
         // Getting the exercise list
-        /** @var Exercise $obj_ex */
-        $obj_ex = Session::read('objExercise');
+        /** @var Exercise $objEx */
+        $objEx = Session::read('objExercise');
 
-        $editor_config = [
+        $editorConfig = [
             'ToolbarSet' => 'TestProposedAnswer',
             'Width' => '100%',
             'Height' => '125',
@@ -47,7 +47,7 @@ class PtestAgreeOrDisagree extends Question
 
         // Categories options select
         $category = new PTestCategory();
-        $categoriesList = $category->getCategoryListInfo($obj_ex->selectId());
+        $categoriesList = $category->getCategoryListInfo($objEx->selectId());
         $categoriesOptions = [null => get_lang('None')];
         foreach ($categoriesList as $categoryItem) {
             $categoriesOptions[$categoryItem->id] = (string) $categoryItem->name;
@@ -112,15 +112,15 @@ class PtestAgreeOrDisagree extends Question
                 '<td><!-- BEGIN error --><span class="form_error">{error}</span><!-- END error --><br/>{element}</td>',
                 'ptest_category['.$i.']'
             );
-            $answer_number = $form->addElement(
+            $answerNumber = $form->addElement(
                 'text',
                 'counter['.$i.']',
                 null,
                 ' value = "'.$i.'"'
             );
-            $answer_number->freeze();
+            $answerNumber->freeze();
 
-            $form->addHtmlEditor('answer['.$i.']', null, null, false, $editor_config);
+            $form->addHtmlEditor('answer['.$i.']', null, null, false, $editorConfig);
 
             $form->addRule(
                 'answer['.$i.']',
@@ -143,8 +143,8 @@ class PtestAgreeOrDisagree extends Question
         global $text;
         $buttonGroup = [];
 
-        if ($obj_ex->edit_exercise_in_lp == true ||
-            (empty($this->exerciseList) && empty($obj_ex->id))
+        if ($objEx->edit_exercise_in_lp == true ||
+            (empty($this->exerciseList) && empty($objEx->id))
         ) {
             //setting the save button here and not in the question class.php
             $buttonGroup[] = $form->addButtonDelete(get_lang('LessAnswer'), 'lessAnswers', true);
@@ -235,16 +235,16 @@ class PtestAgreeOrDisagree extends Question
      */
     public function addAnswer(
         $id,
-        $question_id,
+        $questionId,
         $title,
         $comment,
         $score = 0.0,
         $correct = 0
     ) {
         $em = Database::getManager();
-        $tbl_quiz_answer = Database::get_course_table(TABLE_QUIZ_ANSWER);
-        $tbl_quiz_question = Database::get_course_table(TABLE_QUIZ_QUESTION);
-        $course_id = api_get_course_int_id();
+        $tblQuizAnswer = Database::get_course_table(TABLE_QUIZ_ANSWER);
+        $tblQuizQuestion = Database::get_course_table(TABLE_QUIZ_QUESTION);
+        $courseId = api_get_course_int_id();
         $questionId = intval($questionId);
         $score = floatval($score);
         $correct = intval($correct);
@@ -252,18 +252,18 @@ class PtestAgreeOrDisagree extends Question
         $comment = Database::escape_string($comment);
         // Get the max position.
         $sql = "SELECT max(position) as max_position
-                FROM $tbl_quiz_answer
+                FROM $tblQuizAnswer
                 WHERE
-                    c_id = $course_id AND
+                    c_id = $courseId AND
                     question_id = $questionId";
-        $rs_max = Database::query($sql);
-        $row_max = Database::fetch_object($rs_max);
-        $position = $row_max->max_position + 1;
+        $rsMax = Database::query($sql);
+        $rowMax = Database::fetch_object($rsMax);
+        $position = $rowMax->max_position + 1;
 
         // Insert a new answer
         $quizAnswer = new CQuizAnswer();
         $quizAnswer
-            ->setCId($course_id)
+            ->setCId($courseId)
             ->setId($id)
             ->setQuestionId($questionId)
             ->setAnswer($title)
@@ -287,9 +287,9 @@ class PtestAgreeOrDisagree extends Question
         }
 
         if ($correct) {
-            $sql = "UPDATE $tbl_quiz_question
+            $sql = "UPDATE $tblQuizQuestion
                     SET ponderation = (ponderation + $score)
-                    WHERE c_id = $course_id AND id = ".$questionId;
+                    WHERE c_id = $courseId AND id = ".$questionId;
             Database::query($sql);
         }
     }

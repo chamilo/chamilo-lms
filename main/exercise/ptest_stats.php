@@ -1,5 +1,5 @@
 <?php
-/* For licensing terms, see /license.txt */
+/* For licensing terms, see /licence.txt */
 
 require_once __DIR__.'/../inc/global.inc.php';
 
@@ -42,19 +42,19 @@ if (empty($sessionId)) {
         $sessionId
     );
 }
-$count_students = count($students);
-$question_list = $objExercise->get_validated_question_list();
+$countStudents = count($students);
+$questionList = $objExercise->get_validated_question_list();
 $content = '';
 
-if (!empty($question_list)) {
+if (!empty($questionList)) {
     $id = 0;
     $counterLabel = 0;
-    foreach ($question_list as $question_id) {
+    foreach ($questionList as $questionId) {
         $counterLabel++;
         $data = [];
-        $questionObj = Question::read($question_id, null, null, true);
-        $exercise_stats = ExerciseLib::get_student_stats_by_question(
-            $question_id,
+        $questionObj = Question::read($questionId, null, null, true);
+        $exerciseStats = ExerciseLib::get_student_stats_by_question(
+            $questionId,
             $exerciseId,
             $courseCode,
             $sessionId
@@ -62,12 +62,12 @@ if (!empty($question_list)) {
         $content .= Display::page_subheader2($counterLabel.'. '.$questionObj->question);
         $content .= '<p>'.get_lang('QuestionType').': <em>'.$questionObj->get_question_type_name(true).'</em></p>';
 
-        $answer = new Answer($question_id);
-        $answer_count = $answer->selectNbrAnswers();
+        $answer = new Answer($questionId);
+        $answerCount = $answer->selectNbrAnswers();
 
-        for ($answer_id = 1; $answer_id <= $answer_count; $answer_id++) {
-            $answer_info = $answer->selectAnswer($answer_id);
-            $real_answer_id = $answer->selectAutoId($answer_id);
+        for ($answerId = 1; $answerId <= $answerCount; $answerId++) {
+            $answerInfo = $answer->selectAnswer($answerId);
+            $realAnswerId = $answer->selectAutoId($answerId);
 
             // Overwriting values depending of the question
             switch ($questionObj->type) {
@@ -77,23 +77,23 @@ if (!empty($question_list)) {
                         get_lang('NumberStudentWhoSelectedIt'),
                     ];
 
-                    $data[$id]['answer'] = $answer_info;
+                    $data[$id]['answer'] = $answerInfo;
                     $count = ExerciseLib::get_number_students_answer_count(
-                        $real_answer_id,
-                        $question_id,
+                        $realAnswerId,
+                        $questionId,
                         $exerciseId,
                         $courseCode,
                         $sessionId,
                         $questionObj->type
                     );
                     $percentage = 0;
-                    if (!empty($count_students)) {
-                        $percentage = $count / $count_students * 100;
+                    if (!empty($countStudents)) {
+                        $percentage = $count / $countStudents * 100;
                     }
                     $data[$id]['attempts'] = Display::bar_progress(
                         $percentage,
                         false,
-                        $count.' / '.$count_students
+                        $count.' / '.$countStudents
                     );
                     break;
                 case QUESTION_PT_TYPE_AGREE_OR_DISAGREE:
@@ -102,10 +102,10 @@ if (!empty($question_list)) {
                         get_lang('MostAgree'),
                         get_lang('LeastAgree'),
                     ];
-                    $data[$id]['answer'] = $real_answer_id.' - '.$answer_info;
+                    $data[$id]['answer'] = $realAnswerId.' - '.$answerInfo;
                     $count = ExerciseLib::get_number_students_answer_count(
-                        $real_answer_id,
-                        $question_id,
+                        $realAnswerId,
+                        $questionId,
                         $exerciseId,
                         $courseCode,
                         $sessionId,
@@ -114,19 +114,19 @@ if (!empty($question_list)) {
                     $percentageAgree = 0;
                     $percentageDisagree = 0;
 
-                    if (!empty($count_students)) {
-                        $percentageAgree = $count[0] / $count_students * 100;
-                        $percentageDisagree = $count[1] / $count_students * 100;
+                    if (!empty($countStudents)) {
+                        $percentageAgree = $count[0] / $countStudents * 100;
+                        $percentageDisagree = $count[1] / $countStudents * 100;
                     }
                     $data[$id]['agree'] = Display::bar_progress(
                         $percentageAgree,
                         false,
-                        $count[0].' / '.$count_students
+                        $count[0].' / '.$countStudents
                     );
                     $data[$id]['disagree'] = Display::bar_progress(
                         $percentageDisagree,
                         false,
-                        $count[1].' / '.$count_students
+                        $count[1].' / '.$countStudents
                     );
                     break;
                 case QUESTION_PT_TYPE_AGREE_SCALE:
@@ -135,17 +135,17 @@ if (!empty($question_list)) {
                         get_lang('AverageScore'),
                     ];
 
-                    $data[$id]['answer'] = $answer_info;
+                    $data[$id]['answer'] = $answerInfo;
                     $count = ExerciseLib::get_number_students_answer_count(
-                        $real_answer_id,
-                        $question_id,
+                        $realAnswerId,
+                        $questionId,
                         $exerciseId,
                         $courseCode,
                         $sessionId,
                         $questionObj->type
                     );
                     $percentage = 0;
-                    if (!empty($count_students)) {
+                    if (!empty($countStudents)) {
                         $percentage = $count / 5 * 100;
                     }
                     $data[$id]['attempts'] = Display::bar_progress(
@@ -160,17 +160,17 @@ if (!empty($question_list)) {
                         get_lang('AverageScore'),
                     ];
 
-                    $data[$id]['answer'] = $answer_info;
+                    $data[$id]['answer'] = $answerInfo;
                     $count = ExerciseLib::get_number_students_answer_count(
-                        $real_answer_id,
-                        $question_id,
+                        $realAnswerId,
+                        $questionId,
                         $exerciseId,
                         $courseCode,
                         $sessionId,
                         $questionObj->type
                     );
                     $percentage = 0;
-                    if (!empty($count_students)) {
+                    if (!empty($countStudents)) {
                         $percentage = $count / 5 * 100;
                     }
                     $data[$id]['attempts'] = Display::bar_progress(
@@ -180,29 +180,29 @@ if (!empty($question_list)) {
                     );
                     break;
                 default:
-                    if ($answer_id == 1) {
+                    if ($answerId == 1) {
                         $data[$id]['name'] = cut($questionObj->question, 100);
                     } else {
                         $data[$id]['name'] = '-';
                     }
-                    $data[$id]['answer'] = $answer_info;
+                    $data[$id]['answer'] = $answerInfo;
                     $data[$id]['correct'] = $correct_answer;
 
                     $count = ExerciseLib::get_number_students_answer_count(
-                        $real_answer_id,
-                        $question_id,
+                        $realAnswerId,
+                        $questionId,
                         $exerciseId,
                         $courseCode,
                         $sessionId
                     );
                     $percentage = 0;
-                    if (!empty($count_students)) {
-                        $percentage = $count / $count_students * 100;
+                    if (!empty($countStudents)) {
+                        $percentage = $count / $countStudents * 100;
                     }
                     $data[$id]['attempts'] = Display::bar_progress(
                         $percentage,
                         false,
-                        $count.' / '.$count_students
+                        $count.' / '.$countStudents
                     );
             }
             $id++;
@@ -217,9 +217,9 @@ if (!empty($question_list)) {
             $column++;
         }
         $row++;
-        foreach ($data as $row_table) {
+        foreach ($data as $rowTable) {
             $column = 0;
-            foreach ($row_table as $cell) {
+            foreach ($rowTable as $cell) {
                 $table->setCellContents($row, $column, $cell);
                 $table->updateCellAttributes($row, $column, 'align="center"');
                 $column++;

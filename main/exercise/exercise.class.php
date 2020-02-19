@@ -5569,7 +5569,6 @@ class Exercise
                                 $answerType,
                                 $studentChoice,
                                 $answer,
-                                $answerComment,
                                 $this->export
                             );
                         }

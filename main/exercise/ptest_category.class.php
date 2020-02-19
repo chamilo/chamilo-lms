@@ -305,14 +305,14 @@ class PTestCategory
         );
         $script = null;
         if (!empty($this->parent_id)) {
-            $parent_cat = new PTestCategory();
-            $parent_cat = $parent_cat->getCategory($this->parent_id);
-            $categoryParentList = [$parent_cat->id => $parent_cat->name];
+            $parentCat = new PTestCategory();
+            $parentCat = $parentCat->getCategory($this->parent_id);
+            $categoryParentList = [$parentCat->id => $parentCat->name];
             $script .= '<script>
                 $(function() { 
                     $("#parent_id").trigger(
                         "addItem",
-                        [{"title": "'.$parent_cat->name.'", "value": "'.$parent_cat->id.'"}]
+                        [{"title": "'.$parentCat->name.'", "value": "'.$parentCat->id.'"}]
                     );
                 });
                 </script>';

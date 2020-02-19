@@ -47,7 +47,7 @@ use ZipStream\ZipStream;
 /**
  * Class ResourceController.
  *
- * @todo improve/refactor $this->denyAccessUnlessGranted
+ * @todo   improve/refactor $this->denyAccessUnlessGranted
  * @Route("/resources")
  *
  * @author Julio Montoya <gugli100@gmail.com>.
@@ -473,7 +473,6 @@ class ResourceController extends AbstractResourceController implements CourseCon
     public function diskSpaceAction(Request $request): Response
     {
         $this->setBreadCrumb($request);
-
         $nodeId = $request->get('id');
         $repository = $this->getRepositoryFromRequest($request);
 
@@ -492,19 +491,42 @@ class ResourceController extends AbstractResourceController implements CourseCon
             $totalSize = $course->getDiskQuota();
         }
 
-        $size = $repository->getResourceNodeRepository()->getSize($resourceNode, $repository->getResourceType(), $course);
+        $size = $repository->getResourceNodeRepository()->getSize(
+            $resourceNode,
+            $repository->getResourceType(),
+            $course
+        );
 
         $labels[] = $course->getTitle();
         $data[] = $size;
         $sessions = $course->getSessions();
+
         foreach ($sessions as $session) {
-            $labels[] = $course->getTitle().' '.$session->getName();
-            $size = $repository->getResourceNodeRepository()->getSize($resourceNode, $repository->getResourceType(), $course, $session);
+            $labels[] = $course->getTitle().' - '.$session->getName();
+            $size = $repository->getResourceNodeRepository()->getSize(
+                $resourceNode,
+                $repository->getResourceType(),
+                $course,
+                $session
+            );
+            $data[] = $size;
+        }
+
+        $groups = $course->getGroups();
+        foreach ($groups as $group) {
+            $labels[] = $course->getTitle().' - '.$group->getName();
+            $size = $repository->getResourceNodeRepository()->getSize(
+                $resourceNode,
+                $repository->getResourceType(),
+                $course,
+                null,
+                $group
+            );
             $data[] = $size;
         }
 
         $used = array_sum($data);
-        $labels[] = 'Free';
+        $labels[] = $this->trans('Free');
         $data[] = $totalSize - $used;
 
         return $this->render(
@@ -827,10 +849,10 @@ class ResourceController extends AbstractResourceController implements CourseCon
 
     /**
      * Gets a document when calling route resources_document_get_file.
-1     *
+     * 1     *
+     * @throws \League\Flysystem\FileNotFoundException
      * @deprecated
      *
-     * @throws \League\Flysystem\FileNotFoundException
      */
     public function getDocumentAction(Request $request): Response
     {
@@ -862,7 +884,7 @@ class ResourceController extends AbstractResourceController implements CourseCon
      */
     public function downloadAction(Request $request)
     {
-        $resourceNodeId = (int) $request->get('id');
+        $resourceNodeId = (int)$request->get('id');
         $courseNode = $this->getCourse()->getResourceNode();
 
         $repo = $this->getRepositoryFromRequest($request);
@@ -891,7 +913,7 @@ class ResourceController extends AbstractResourceController implements CourseCon
 
         $criteria = Criteria::create()
             ->where(Criteria::expr()->neq('resourceFile', null)) // must have a file
-           // ->andWhere(Criteria::expr()->eq('resourceType', $type))
+            // ->andWhere(Criteria::expr()->eq('resourceType', $type))
         ;
 
         /** @var ArrayCollection|ResourceNode[] $children */
@@ -912,24 +934,26 @@ class ResourceController extends AbstractResourceController implements CourseCon
             );
         }
 
-        $response = new StreamedResponse(function () use ($rootNodePath, $zipName, $children, $repo) {
-            // Define suitable options for ZipStream Archive.
-            $options = new Archive();
-            $options->setContentType('application/octet-stream');
-            //initialise zipstream with output zip filename and options.
-            $zip = new ZipStream($zipName, $options);
+        $response = new StreamedResponse(
+            function () use ($rootNodePath, $zipName, $children, $repo) {
+                // Define suitable options for ZipStream Archive.
+                $options = new Archive();
+                $options->setContentType('application/octet-stream');
+                //initialise zipstream with output zip filename and options.
+                $zip = new ZipStream($zipName, $options);
 
-            /** @var ResourceNode $node */
-            foreach ($children as $node) {
-                //$resourceFile = $node->getResourceFile();
-                //$systemName = $resourceFile->getFile()->getPathname();
-                $stream = $repo->getResourceNodeFileStream($node);
-                //error_log($node->getPathForDisplay());
-                $fileToDisplay = str_replace($rootNodePath, '', $node->getPathForDisplay());
-                $zip->addFileFromStream($fileToDisplay, $stream);
+                /** @var ResourceNode $node */
+                foreach ($children as $node) {
+                    //$resourceFile = $node->getResourceFile();
+                    //$systemName = $resourceFile->getFile()->getPathname();
+                    $stream = $repo->getResourceNodeFileStream($node);
+                    //error_log($node->getPathForDisplay());
+                    $fileToDisplay = str_replace($rootNodePath, '', $node->getPathForDisplay());
+                    $zip->addFileFromStream($fileToDisplay, $stream);
+                }
+                $zip->finish();
             }
-            $zip->finish();
-        });
+        );
 
         $disposition = $response->headers->makeDisposition(
             ResponseHeaderBag::DISPOSITION_ATTACHMENT,
@@ -1135,13 +1159,15 @@ class ResourceController extends AbstractResourceController implements CourseCon
 
         $stream = $repo->getResourceNodeFileStream($resourceNode);
 
-        $response = new StreamedResponse(function () use ($stream): void {
-            stream_copy_to_stream($stream, fopen('php://output', 'wb'));
-        });
+        $response = new StreamedResponse(
+            function () use ($stream): void {
+                stream_copy_to_stream($stream, fopen('php://output', 'wb'));
+            }
+        );
         $disposition = $response->headers->makeDisposition(
             $forceDownload ? ResponseHeaderBag::DISPOSITION_ATTACHMENT : ResponseHeaderBag::DISPOSITION_INLINE,
             $fileName
-            //Transliterator::transliterate($fileName)
+        //Transliterator::transliterate($fileName)
         );
         $response->headers->set('Content-Disposition', $disposition);
         $response->headers->set('Content-Type', $mimeType ?: 'application/octet-stream');

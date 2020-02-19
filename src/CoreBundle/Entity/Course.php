@@ -89,7 +89,7 @@ class Course extends AbstractResource implements ResourceInterface
     protected $groups;
 
     /**
-     * @var ArrayCollection
+     * @var CTool[]
      *
      * @ORM\OneToMany(targetEntity="Chamilo\CourseBundle\Entity\CTool", mappedBy="course", cascade={"persist", "remove"})
      */
@@ -455,7 +455,7 @@ class Course extends AbstractResource implements ResourceInterface
     }
 
     /**
-     * @return ArrayCollection
+     * @return User[]
      */
     public function getUsers()
     {
@@ -463,7 +463,7 @@ class Course extends AbstractResource implements ResourceInterface
     }
 
     /**
-     * @return ArrayCollection
+     * @return CGroupInfo[]
      */
     public function getGroups()
     {
@@ -471,7 +471,7 @@ class Course extends AbstractResource implements ResourceInterface
     }
 
     /**
-     * @return ArrayCollection
+     * @return User[]
      */
     public function getTeachers()
     {
@@ -482,7 +482,7 @@ class Course extends AbstractResource implements ResourceInterface
     }
 
     /**
-     * @return ArrayCollection
+     * @return User[]
      */
     public function getStudents()
     {

@@ -20,8 +20,6 @@ use Chamilo\PluginBundle\MigrationMoodle\Transformer\Property\LoadedLessonPageQu
 class LessonAnswersShortAnswerTask extends BaseTask
 {
     /**
-     * @todo Review scores as in QuestionShortAnswerTask.
-     *
      * @return array
      */
     public function getExtractConfiguration()
@@ -33,7 +31,7 @@ class LessonAnswersShortAnswerTask extends BaseTask
                     la.pageid,
                     GROUP_CONCAT(la.answer SEPARATOR '||') answers,
                     GROUP_CONCAT(la.response SEPARATOR '') comment,
-                    GROUP_CONCAT(la.score) scores,
+                    MAX(la.score) scores,
                     l.course,
                     COUNT(la.pageid) nb
                 FROM mdl_lesson_answers la

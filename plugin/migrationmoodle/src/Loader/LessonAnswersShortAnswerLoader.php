@@ -63,15 +63,10 @@ class LessonAnswersShortAnswerLoader implements LoaderInterface
             $incomingData['answers']
         );
 
+        $question->weighting += $incomingData['scores'];
+
         $return .= '::'.$incomingData['scores'].':';
         $return .= self::INPUT_WIDTH;
-
-        $scores = explode(',', $incomingData['scores']);
-
-        foreach ($scores as $score) {
-            $question->weighting += $score;
-        }
-
         $return .= ':0@';
 
         $answer->createAnswer($return, 0, $incomingData['comment'], 0, 1);

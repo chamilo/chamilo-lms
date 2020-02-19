@@ -19,4 +19,24 @@ class CourseCategoryLookup extends LoadedKeyLookup
     {
         $this->calledClass = CourseCategoriesTask::class;
     }
+
+    /**
+     * @param array $data
+     *
+     * @throws \Exception
+     *
+     * @return string|null
+     */
+    public function transform(array $data)
+    {
+        $categoryId = parent::transform($data);
+
+        $category = \Database::getManager()->find('ChamiloCoreBundle:CourseCategory', $categoryId);
+
+        if (empty($category)) {
+            return null;
+        }
+
+        return $category->getCode();
+    }
 }

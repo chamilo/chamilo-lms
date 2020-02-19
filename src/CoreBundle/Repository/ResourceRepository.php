@@ -707,6 +707,16 @@ class ResourceRepository extends BaseEntityRepository
         return $action;
     }
 
+    public function delete(AbstractResource $resource)
+    {
+        $children = $resource->getResourceNode()->getChildren();
+        foreach ($children as $child) {
+            $this->getEntityManager()->remove($child);
+        }
+        $this->getEntityManager()->remove($resource->getResourceNode());
+        $this->getEntityManager()->flush();
+    }
+
     /**
      * Deletes several entities: AbstractResource (Ex: CDocument, CQuiz), ResourceNode,
      * ResourceLinks and ResourceFile (including files via Flysystem).

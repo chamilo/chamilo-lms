@@ -52,6 +52,8 @@ class ResourceNode
     protected $resourceType;
 
     /**
+     * @var ResourceLink[]
+     *
      * @ORM\OneToMany(targetEntity="ResourceLink", mappedBy="resourceNode", cascade={"remove"})
      */
     protected $resourceLinks;
@@ -130,6 +132,7 @@ class ResourceNode
     public function __construct()
     {
         $this->children = new ArrayCollection();
+        $this->resourceLinks = new ArrayCollection();
     }
 
     /**
@@ -200,7 +203,7 @@ class ResourceNode
     /**
      * Returns the children resource instances.
      *
-     * @return ArrayCollection
+     * @return ResourceNode[]|ArrayCollection
      */
     public function getChildren()
     {

@@ -60,6 +60,14 @@ $hideNotifications = 1 == $hideNotifications;
 
 require_once 'forumfunction.inc.php';
 
+/** @var CForumCategory $forumCategory */
+$forumCategory = $repo->find($_GET['forumcategory']);
+$categoryId = $forumCategory->getIid();
+
+if (api_is_allowed_to_edit(false, true)) {
+    handle_forum_and_forumcategories();
+}
+
 // Are we in a lp ?
 $origin = api_get_origin();
 
@@ -71,10 +79,6 @@ if (api_is_in_gradebook()) {
 }
 
 $sessionId = api_get_session_id();
-/** @var CForumCategory $forumCategory */
-$forumCategory = $repo->find($_GET['forumcategory']);
-$categoryId = $forumCategory->getIid();
-
 $interbreadcrumb[] = [
     'url' => 'index.php?'.api_get_cidreq().'&search='.Security::remove_XSS(urlencode(isset($_GET['search']) ? $_GET['search'] : '')),
     'name' => get_lang('Forum'),
@@ -136,9 +140,6 @@ $logInfo = [
 ];
 Event::registerLog($logInfo);
 
-if (api_is_allowed_to_edit(false, true)) {
-    handle_forum_and_forumcategories();
-}
 
 // Notification
 if ('notify' === $action && isset($_GET['content']) && isset($_GET['id'])) {
@@ -188,7 +189,7 @@ if ('add' !== $action) {
             .Display::return_icon('edit.png', get_lang('Edit'), [], ICON_SIZE_SMALL).'</a>';
         $iconsEdit .= '<a href="'.api_get_self().'?'.api_get_cidreq().'&forumcategory='
             .Security::remove_XSS($_GET['forumcategory'])
-            .'&action=delete&content=forumcategory&id='.$forumId
+            .'&action=delete&content=forumcategory&id='.$forumCategory->getIid()
             ."\" onclick=\"javascript:if(!confirm('"
             .addslashes(api_htmlentities(get_lang('Delete forum category ?'), ENT_QUOTES))
             ."')) return false;\">".Display::return_icon('delete.png', get_lang('Delete'), [], ICON_SIZE_SMALL)

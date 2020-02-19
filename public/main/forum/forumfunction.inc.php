@@ -101,7 +101,7 @@ $(function () {
  */
 function handle_forum_and_forumcategories($lp_id = null)
 {
-    $action_forum_cat = isset($_GET['action']) ? $_GET['action'] : '';
+    $action_forum_cat = $action = isset($_GET['action']) ? $_GET['action'] : '';
     $get_content = isset($_GET['content']) ? $_GET['content'] : '';
     $post_submit_cat = isset($_POST['SubmitForumCategory']) ? true : false;
     $post_submit_forum = isset($_POST['SubmitForum']) ? true : false;
@@ -139,44 +139,44 @@ function handle_forum_and_forumcategories($lp_id = null)
         $content = show_edit_forumcategory_form($forum_category);
     }
 
-    // Delete a forum category
-    if ('delete' === $action_forum_cat) {
-        $list_threads = get_threads($get_id);
-        for ($i = 0; $i < count($list_threads); $i++) {
-            deleteForumCategoryThread('thread', $list_threads[$i]['thread_id']);
-            $link_info = GradebookUtils::isResourceInCourseGradebook(
-                api_get_course_id(),
-                5,
-                $list_threads[$i]['thread_id'],
-                api_get_session_id()
+    switch ($action) {
+        case 'move':
+            $return_message = move_up_down($get_content, $_GET['direction'], $get_id);
+            Display::addFlash(
+                Display::return_message($return_message, 'confirmation', false)
             );
-            if (false !== $link_info) {
-                GradebookUtils::remove_resource_from_course_gradebook($link_info['id']);
-            }
-        }
-        deleteForumCategoryThread($get_content, $get_id);
-    }
+            header('Location: '. api_get_path(WEB_CODE_PATH).'forum/index.php?'.api_get_cidreq());
+            exit;
+            break;
+        case 'lock':
+        case 'unlock':
+            $return_message = change_lock_status($get_content, $get_id, $action_forum_cat);
+            Display::addFlash(
+                Display::return_message($return_message, 'confirmation', false)
+            );
+            header('Location: '. api_get_path(WEB_CODE_PATH).'forum/index.php?'.api_get_cidreq());
+            exit;
+            break;
+        case 'visible':
+        case 'invisible':
+            $return_message = change_visibility($get_content, $get_id, $action_forum_cat);
+            Display::addFlash(
+                Display::return_message($return_message, 'confirmation', false)
+            );
+            header('Location: '. api_get_path(WEB_CODE_PATH).'forum/index.php?'.api_get_cidreq());
+            exit;
+            break;
 
-    // Change visibility of a forum or a forum category.
-    if ('invisible' === $action_forum_cat || 'visible' === $action_forum_cat) {
-        $return_message = change_visibility($get_content, $get_id, $action_forum_cat);
-        Display::addFlash(
-            Display::return_message($return_message, 'confirmation', false)
-        );
-    }
-    // Change lock status of a forum or a forum category.
-    if ('lock' === $action_forum_cat || 'unlock' === $action_forum_cat) {
-        $return_message = change_lock_status($get_content, $get_id, $action_forum_cat);
-        Display::addFlash(
-            Display::return_message($return_message, 'confirmation', false)
-        );
-    }
-    // Move a forum or a forum category.
-    if ('move' === $action_forum_cat && isset($_GET['direction'])) {
-        $return_message = move_up_down($get_content, $_GET['direction'], $get_id);
-        Display::addFlash(
-            Display::return_message($return_message, 'confirmation', false)
-        );
+        case 'delete':
+            $repo = Container::getForumCategoryRepository();
+            $cat = $repo->find($get_id);
+            if ($cat) {
+                $repo->delete($cat);
+            }
+            Display::addFlash(Display::return_message(get_lang('Forum category deleted'), 'confirmation', false));
+            header('Location: '. api_get_path(WEB_CODE_PATH).'forum/index.php?'.api_get_cidreq());
+            exit;
+            break;
     }
 
     return $content;

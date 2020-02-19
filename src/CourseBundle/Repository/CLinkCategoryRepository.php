@@ -65,14 +65,4 @@ final class CLinkCategoryRepository extends ResourceRepository implements Resour
     {
         return $grid->getColumn('title');
     }
-
-    public function delete(CLinkCategory $category)
-    {
-        $links = $category->getResourceNode()->getChildren();
-        foreach ($links as $link) {
-            $this->getEntityManager()->remove($link);
-        }
-        $this->getEntityManager()->remove($category->getResourceNode());
-        $this->getEntityManager()->flush();
-    }
 }

@@ -60,6 +60,8 @@ class Course extends AbstractResource implements ResourceInterface
     protected $title;
 
     /**
+     * @var CourseRelUser[]|ArrayCollection
+     *
      * "orphanRemoval" is needed to delete the CourseRelUser relation
      * in the CourseAdmin class. The setUsers, getUsers, removeUsers and
      * addUsers methods need to be added.
@@ -89,7 +91,7 @@ class Course extends AbstractResource implements ResourceInterface
     protected $groups;
 
     /**
-     * @var CTool[]
+     * @var CTool[]|ArrayCollection
      *
      * @ORM\OneToMany(targetEntity="Chamilo\CourseBundle\Entity\CTool", mappedBy="course", cascade={"persist", "remove"})
      */
@@ -378,7 +380,7 @@ class Course extends AbstractResource implements ResourceInterface
     }
 
     /**
-     * @return Session[]
+     * @return Session[]|ArrayCollection
      */
     public function getSessions()
     {
@@ -455,7 +457,7 @@ class Course extends AbstractResource implements ResourceInterface
     }
 
     /**
-     * @return User[]
+     * @return CourseRelUser[]|ArrayCollection
      */
     public function getUsers()
     {
@@ -463,7 +465,7 @@ class Course extends AbstractResource implements ResourceInterface
     }
 
     /**
-     * @return CGroupInfo[]
+     * @return CGroupInfo[]|ArrayCollection
      */
     public function getGroups()
     {
@@ -471,7 +473,7 @@ class Course extends AbstractResource implements ResourceInterface
     }
 
     /**
-     * @return User[]
+     * @return CourseRelUser[]|ArrayCollection
      */
     public function getTeachers()
     {
@@ -482,7 +484,7 @@ class Course extends AbstractResource implements ResourceInterface
     }
 
     /**
-     * @return User[]
+     * @return CourseRelUser[]|ArrayCollection
      */
     public function getStudents()
     {

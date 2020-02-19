@@ -4,6 +4,7 @@
 use Chamilo\CoreBundle\Entity\Course;
 use Chamilo\CoreBundle\Entity\ExtraField as EntityExtraField;
 use Chamilo\CoreBundle\Entity\Session as SessionEntity;
+use Chamilo\CoreBundle\Framework\Container;
 use Chamilo\UserBundle\Entity\User;
 use ChamiloSession as Session;
 use CpChart\Cache as pCache;
@@ -3778,6 +3779,21 @@ class Tracking
         $course_code,
         $session_id = null
     ) {
+        $a_course = api_get_course_info($course_code);
+        $repo = Container::getDocumentRepository();
+
+        $user = api_get_user_entity($student_id);
+        $course = api_get_course_entity($a_course['real_id']);
+        $session = api_get_session_entity($session_id);
+        //$group = api_get_group_entity(api_get_group_id());
+
+        $qb = $repo->getResourcesByCourseLinkedToUser($user, $course, $session);
+
+        $qb->select('count(resource)');
+        $count = $qb->getQuery()->getSingleScalarResult();
+
+        return $count;
+
         // get the information of the course
         $a_course = api_get_course_info($course_code);
         if (!empty($a_course)) {
@@ -3837,6 +3853,21 @@ class Tracking
             return 0;
         }
 
+        $a_course = api_get_course_info($course_code);
+        $repo = Container::getStudentPublicationRepository();
+
+        $user = api_get_user_entity($student_id);
+        $course = api_get_course_entity($a_course['real_id']);
+        $session = api_get_session_entity($session_id);
+        //$group = api_get_group_entity(api_get_group_id());
+
+        $qb = $repo->getResourcesByCourseLinkedToUser($user, $course, $session);
+
+        $qb->select('count(resource)');
+        $count = $qb->getQuery()->getSingleScalarResult();
+
+        return $count;
+
         $conditions = [];
 
         // Get the information of the course
@@ -3891,7 +3922,21 @@ class Tracking
             return 0;
         }
 
-        // Table definition.
+        $a_course = api_get_course_info($courseCode);
+        $repo = Container::getForumPostRepository();
+
+        $user = api_get_user_entity($student_id);
+        $course = api_get_course_entity($a_course['real_id']);
+        $session = api_get_session_entity($session_id);
+        //$group = api_get_group_entity(api_get_group_id());
+
+        $qb = $repo->getResourcesByCourseLinkedToUser($user, $course, $session);
+
+        $qb->select('count(resource)');
+        $count = $qb->getQuery()->getSingleScalarResult();
+
+        return $count;
+
         $tbl_forum_post = Database::get_course_table(TABLE_FORUM_POST);
         $tbl_forum = Database::get_course_table(TABLE_FORUM);
 

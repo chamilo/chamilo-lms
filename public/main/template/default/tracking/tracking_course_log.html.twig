@@ -111,7 +111,7 @@ window.onload = function() {
                         <i class="fa fa-graduation-cap" aria-hidden="true"></i>
                     </span>
                     <div class="tracking-info">
-                        <div class="tracking-text"> {{ "NumberOfUsers"|get_lang }}</div>
+                        <div class="tracking-text"> {{ "Number of users"|trans }}</div>
                         <div class="tracking-number">
                             {{ number_students }}
                         </div>
@@ -126,7 +126,7 @@ window.onload = function() {
                         <i class="fa fa-book" aria-hidden="true"></i>
                     </span>
                     <div class="tracking-info">
-                        <div class="tracking-text"> {{ "CourseProgress"|get_lang }}</div>
+                        <div class="tracking-text"> {{ "Course progress"|trans }}</div>
                         <div class="tracking-number">
                             {{ students_completed_lp }}/{{ number_students }}
                         </div>
@@ -141,7 +141,7 @@ window.onload = function() {
                         <i class="fa fa-heartbeat" aria-hidden="true"></i>
                     </span>
                     <div class="tracking-info">
-                        <div class="tracking-text"> {{ "ExerciseAverage"|get_lang }}</div>
+                        <div class="tracking-text"> {{ "Exercise average"|trans }}</div>
                         <div class="tracking-number">
                             {{ students_test_score }}%
                         </div>
@@ -156,7 +156,7 @@ window.onload = function() {
                         <i class="fa fa-id-card-o" aria-hidden="true"></i>
                     </span>
                     <div class="tracking-info">
-                        <div class="tracking-text"> {{ "CountCertificates"|get_lang }}</div>
+                        <div class="tracking-text"> {{ "Certificates count"|trans }}</div>
                         <div class="tracking-number">
                             {{ certificate_count }}/{{ number_students }}
                         </div>
@@ -170,7 +170,7 @@ window.onload = function() {
             <div class="panel panel-default">
                 <div class="panel-body">
                     <div class="tracking-chart">
-                        <h4 class="tracking-box-title">{{ 'PercentileScoresDistribution'|get_lang }}</h4>
+                        <h4 class="tracking-box-title">{{ 'Percentile scores distribution'|trans }}</h4>
                         <canvas id="chart-score"></canvas>
                     </div>
                 </div>
@@ -179,7 +179,7 @@ window.onload = function() {
         <div class="col-md-4">
             <div class="panel panel-default tracking-top-student">
                 <div class="panel-body">
-                    <h4 class="tracking-box-title">{{ 'OutstandingStudents'|get_lang }}</h4>
+                    <h4 class="tracking-box-title">{{ 'Outstanding students'|trans }}</h4>
                     <ul class="list-top">
                         {% for student in top_students %}
                             {% set counter = counter + 1 %}
@@ -188,10 +188,10 @@ window.onload = function() {
                                 <div class="avatar">
                                     <span class="round">
                                         <img
-                                                title="{{ student.fullname }}"
-                                                alt="{{ student.fullname }}"
-                                                src="{{ student.avatar }}"
-                                                width="40px">
+                                            title="{{ student.fullname }}"
+                                            alt="{{ student.fullname }}"
+                                            src="{{ student.avatar }}"
+                                            width="40px">
                                     </span>
                                 </div>
                                 <div class="info">
@@ -211,7 +211,7 @@ window.onload = function() {
                         {% endfor %}
                     </ul>
                    <span class="tracking-box-legend">
-                       {{ 'ProgressObtainedFromLPProgressAndTestsAverage'|get_lang }}
+                       {{ 'Note: This progress is obtained through a combination of progress in the learning paths and average scores in the tests'|trans }}
                    </span>
                 </div>
             </div>
@@ -219,7 +219,7 @@ window.onload = function() {
         <div class="col-md-4">
             <div class="panel panel-default">
                 <div class="panel-body">
-                    <h4 class="tracking-box-title">{{ "TotalTimeSpentInTheCourse"|get_lang }}</h4>
+                    <h4 class="tracking-box-title">{{ "Total time spent in the course"|trans }}</h4>
                     <canvas id="chart-access"></canvas>
                 </div>
             </div>

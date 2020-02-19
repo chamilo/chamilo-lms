@@ -28,11 +28,11 @@
                     {{ display.reporting_user_details(user) }}
                 </div>
                 <div class="col-md-4">
-                    {{ display.card_widget('FirstLoginInPlatform'|get_lang, user.first_connection, 'calendar') }}
-                    {{ display.card_widget('LatestLoginInPlatform'|get_lang, user.last_connection, 'calendar') }}
+                    {{ display.card_widget('First login in platform'|trans, user.first_connection, 'calendar') }}
+                    {{ display.card_widget('Latest login in platform'|trans, user.last_connection, 'calendar') }}
 
                     {% if user.legal %}
-                        {{ display.card_widget('LegalAccepted'|get_lang, user.legal.datetime, 'gavel', user.legal.icon) }}
+                        {{ display.card_widget('Legal accepted'|trans, user.legal.datetime, 'gavel', user.legal.icon) }}
                     {% endif %}
                 </div>
             </div>
@@ -53,23 +53,23 @@
                         <div class="row">
                             <div class="col-md-6">
                                 <div class="easy-donut">
-                                    <div id="easypiechart-blue" title="{{ 'Progress'|get_lang }}" class="easypiechart"
+                                    <div id="easypiechart-blue" title="{{ 'Progress'|trans }}" class="easypiechart"
                                          data-percent="{{ user.student_progress }}">
                                         <span class="percent">{{ user.student_progress }}%</span>
                                     </div>
                                     <div class="easypiechart-legend">
-                                        {{ 'ScormAndLPProgressTotalAverage'|get_lang }}
+                                        {{ 'Average progress in courses'|trans }}
                                     </div>
                                 </div>
                             </div>
                             <div class="col-md-6">
                                 <div class="easy-donut">
-                                    <div id="easypiechart-red" title="{{ 'Score'|get_lang }}" class="easypiechart"
+                                    <div id="easypiechart-red" title="{{ 'Score'|trans }}" class="easypiechart"
                                          data-percent="{{ user.student_score }}">
                                         <span class="percent">{{ user.student_score }} </span>
                                     </div>
                                     <div class="easypiechart-legend">
-                                        {{ 'ScormAndLPTestTotalAverage'|get_lang }}
+                                        {{ 'Average progress in courses'|trans }}
                                     </div>
                                 </div>
                             </div>
@@ -82,7 +82,7 @@
                                             <i class="fa fa-globe" aria-hidden="true"></i>
                                             {{ user.tools.links }}
                                             <div class="box-name">
-                                                {{ 'LinksDetails'|get_lang }}
+                                                {{ 'Links accessed'|trans }}
                                             </div>
                                         </div>
                                     </div>
@@ -94,24 +94,22 @@
                                             <i class="fa fa-download" aria-hidden="true"></i>
                                             {{ user.tools.documents }}
                                             <div class="box-name">
-                                                {{ 'DocumentsDetails'|get_lang }}
+                                                {{ 'Documents'|trans }}
                                             </div>
                                         </div>
                                     </div>
                                 </div>
-
                                 <div class="card box-widget">
                                     <div class="card-body">
                                         <div class="stat-widget-five">
                                             <i class="fa fa-pencil" aria-hidden="true"></i>
                                             {{ user.tools.tasks }}
                                             <div class="box-name">
-                                                {{ 'Student_publication'|get_lang }}
+                                                {{ 'Assignments'|trans }}
                                             </div>
                                         </div>
                                     </div>
                                 </div>
-
                             </div>
                             <div class="col-md-6">
                                 <div class="card box-widget">
@@ -120,19 +118,18 @@
                                             <i class="fa fa-comments-o" aria-hidden="true"></i>
                                             {{ user.tools.messages }}
                                             <div class="box-name">
-                                                {{ 'NumberOfPostsForThisUser'|get_lang }}
+                                                {{ 'Number of posts for this user'|trans }}
                                             </div>
                                         </div>
                                     </div>
                                 </div>
-
                                 <div class="card box-widget">
                                     <div class="card-body">
                                         <div class="stat-widget-five">
                                             <i class="fa fa-paper-plane" aria-hidden="true"></i>
                                             {{ user.tools.upload_documents }}
                                             <div class="box-name">
-                                                {{ 'UploadedDocuments'|get_lang }}
+                                                {{ 'Uploaded documents'|trans }}
                                             </div>
                                         </div>
                                     </div>
@@ -146,11 +143,11 @@
                                         {% if user.tools.chat_connection != '' %}
                                             {{ user.tools.chat_connection }}
                                         {% else %}
-                                            {{ 'NotRegistered'|get_lang }}
+                                            {{ 'Not Registered'|trans }}
                                         {% endif %}
                                         </span>
                                             <div class="box-name">
-                                                {{ 'ChatLastConnection'|get_lang }}
+                                                {{ 'Latest chat connection'|trans }}
                                             </div>
                                         </div>
                                     </div>
@@ -159,13 +156,13 @@
                         </div>
                     </div>
                     <div class="col-md-4">
-                        {{ display.card_widget('FirstLoginInPlatform'|get_lang, user.first_connection, 'calendar') }}
-                        {{ display.card_widget('LatestLoginInPlatform'|get_lang, user.last_connection, 'calendar') }}
+                        {{ display.card_widget('First login in platform'|trans, user.first_connection, 'calendar') }}
+                        {{ display.card_widget('Latest login in platform'|trans, user.last_connection, 'calendar') }}
                         {% if(user.time_spent_course) %}
-                            {{ display.card_widget('TimeSpentInTheCourse'|get_lang, user.time_spent_course, 'clock-o') }}
+                            {{ display.card_widget('Time spent in the course'|trans, user.time_spent_course, 'clock-o') }}
                         {% endif %}
                         {% if user.legal %}
-                            {{ display.card_widget('LegalAccepted'|get_lang, user.legal.datetime, 'gavel', user.legal.icon) }}
+                            {{ display.card_widget('Legal accepted'|trans, user.legal.datetime, 'gavel', user.legal.icon) }}
                         {% endif %}
                     </div>
                 </div>

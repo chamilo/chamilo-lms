@@ -1,4 +1,5 @@
 <?php
+
 /* For licensing terms, see /license.txt */
 
 use Chamilo\CourseBundle\Entity\CLpCategory;
@@ -107,7 +108,7 @@ $nameTools = get_lang('Learner details');
 
 if (!empty($details)) {
     if ('user_course' === $origin) {
-        if (empty($cidReq)) {
+        if (empty($cidReq) && $courseInfo) {
             $interbreadcrumb[] = [
                 'url' => api_get_path(WEB_COURSE_PATH).$courseInfo['directory'],
                 'name' => $courseInfo['title'],

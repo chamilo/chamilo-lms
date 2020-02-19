@@ -533,8 +533,8 @@ class ResourceController extends AbstractResourceController implements CourseCon
             '@ChamiloTheme/Resource/disk_space.html.twig',
             [
                 'resourceNode' => $resourceNode,
-                'labels' => ($labels),
-                'data' => ($data),
+                'labels' => $labels,
+                'data' => $data,
             ]
         );
     }
@@ -849,10 +849,11 @@ class ResourceController extends AbstractResourceController implements CourseCon
 
     /**
      * Gets a document when calling route resources_document_get_file.
-     * 1     *
-     * @throws \League\Flysystem\FileNotFoundException
-     * @deprecated
+     * 1     *.
      *
+     * @throws \League\Flysystem\FileNotFoundException
+     *
+     * @deprecated
      */
     public function getDocumentAction(Request $request): Response
     {
@@ -884,7 +885,7 @@ class ResourceController extends AbstractResourceController implements CourseCon
      */
     public function downloadAction(Request $request)
     {
-        $resourceNodeId = (int)$request->get('id');
+        $resourceNodeId = (int) $request->get('id');
         $courseNode = $this->getCourse()->getResourceNode();
 
         $repo = $this->getRepositoryFromRequest($request);

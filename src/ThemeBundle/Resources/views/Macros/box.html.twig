@@ -54,7 +54,6 @@
     </li>
 {% endmacro %}
 
-
 {% macro card_collapse(name, item, expanded = 'true') %}
     {% autoescape false %}
     <div class="card">
@@ -111,7 +110,6 @@
                                     </ul>
                                 </div>
                             </div>
-
                             <div class="description">
                                 {{ subitem.description }}
                                 {{ subitem.last_post_text }}
@@ -122,13 +120,10 @@
                                     {{ "PostsPendingModeration"|trans }}: {{ subitem.moderation }}
                                 </span>
                             {% endif %}
-
                         </div>
                     </div>
-
                 {% endfor %}
                 </div>
-
             </div>
         </div>
     </div>
@@ -397,7 +392,6 @@
     {% endautoescape %}
 {% endmacro %}
 
-
 {% macro box_widget(name, content, icon) %}
     <div class="card box-widget">
         <div class="card-body">
@@ -438,6 +432,7 @@
 {% endmacro %}
 
 {% macro reporting_user_details(user) %}
+    {% autoescape false %}
     <div class="parameters">
         <dl class="dl-horizontal">
             {% if user.status %}
@@ -472,11 +467,12 @@
             </div>
         {% endif %}
     </div>
+    {% endautoescape %}
 {% endmacro %}
 
 {% macro reporting_user_box(user) %}
+    {% autoescape false %}
     {% import _self as display %}
-
     <div class="user">
         <div class="avatar">
             <img width="128px" src="{{ user.avatar }}" class="img-responsive">
@@ -491,8 +487,7 @@
             </h3>
             <p class="email">{{ user.email }}</p>
         </div>
-
         {{ display.reporting_user_details(user) }}
-
     </div>
+    {% endautoescape %}
 {% endmacro %}

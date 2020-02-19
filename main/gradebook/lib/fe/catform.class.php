@@ -392,7 +392,7 @@ class CatForm extends FormValidator
             );
         }
 
-        if (!empty($session_id)) {
+        //if (!empty($session_id)) {
             $isRequirementCheckbox = $this->addCheckBox(
                 'is_requirement',
                 [
@@ -401,7 +401,7 @@ class CatForm extends FormValidator
                 ],
                 get_lang('IsRequirement')
             );
-        }
+        //}
 
         if ($this->category_object->getIsRequirement()) {
             $isRequirementCheckbox->setChecked(true);

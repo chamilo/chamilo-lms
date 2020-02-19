@@ -14,7 +14,6 @@ use Chamilo\CoreBundle\Repository\ResourceRepository;
 use Chamilo\CoreBundle\Repository\ResourceRepositoryInterface;
 use Chamilo\CourseBundle\Entity\CGroupInfo;
 use Chamilo\CourseBundle\Entity\CLink;
-use Chamilo\CourseBundle\Entity\CLinkCategory;
 use Chamilo\UserBundle\Entity\User;
 use Doctrine\ORM\QueryBuilder;
 use Symfony\Component\Form\FormInterface;

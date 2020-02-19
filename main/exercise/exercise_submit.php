@@ -168,6 +168,10 @@ if (!is_object($objExercise)) {
     exit;
 }
 
+$ptest = false;
+if ($objExercise->selectPtType() == EXERCISE_PT_TYPE_PTEST) {
+    $ptest = true;
+}
 // if the user has submitted the form
 $exercise_title = $objExercise->selectTitle();
 $exercise_sound = $objExercise->selectSound();
@@ -1049,7 +1053,7 @@ if (!empty($error)) {
     if (!empty($questionList)) {
         foreach ($questionList as $questionId) {
             $i++;
-            $objQuestionTmp = Question::read($questionId);
+            $objQuestionTmp = Question::read($questionId, null, true, $ptest);
             // for sequential exercises
 
             if ($objExercise->type == ONE_PER_PAGE) {
@@ -1243,6 +1247,16 @@ if (!empty($error)) {
             // 4. choice for degree of certainty
             var my_choiceDc = $(\'*[name*="choiceDegreeCertainty[\'+question_id+\']"]\').serialize();
 
+            // 5. Agree o Disagree choice inputs
+            var my_choice_agree = $(\'*[name*="choice-agree[\'+question_id+\']"]\').serialize();
+            var my_choice_disagree = $(\'*[name*="choice-disagree[\'+question_id+\']"]\').serialize();
+
+            // 6. Agree scale choice inputs
+            var my_choice_agree_scale = $(\'*[name*="choice[\'+question_id+\']"]\').serialize();
+
+            // 7. Agree reorder choice inputs
+            var my_choice_agree_reorder = $(\'*[name*="choice[\'+question_id+\']*"]\').serialize();
+
             // Checking CkEditor
             if (question_id) {
                 if (CKEDITOR.instances["choice["+question_id+"]"]) {
@@ -1261,7 +1275,8 @@ if (!empty($error)) {
 
             // Only for the first time
             var dataparam = "'.$params.'&type=simple&question_id="+question_id;
-            dataparam += "&"+my_choice+"&"+hotspot+"&"+remind_list+"&"+my_choiceDc;
+            dataparam += "&"+my_choice+"&"+hotspot+"&"+remind_list+"&"+my_choiceDc+"&"+my_choice_agree+"&"
+                +my_choice_disagree+"&"+my_choice_agree_scale+"&"+my_choice_agree_reorder;
 
             $("#save_for_now_"+question_id).html(\''.
                 Display::returnFontAwesomeIcon('spinner', null, true, 'fa-spin').'\');

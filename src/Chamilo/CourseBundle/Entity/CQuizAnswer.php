@@ -115,6 +115,13 @@ class CQuizAnswer
     /**
      * @var string
      *
+     * @ORM\Column(name="ptest_category", type="text", nullable=true)
+     */
+    protected $ptestCategory;
+
+    /**
+     * @var string
+     *
      * @ORM\Column(name="answer_code", type="string", length=10, nullable=true)
      */
     protected $answerCode;
@@ -129,6 +136,7 @@ class CQuizAnswer
         $this->hotspotCoordinates = null;
         $this->hotspotType = null;
         $this->destination = null;
+        $this->ptestCategory = null;
         $this->answerCode = null;
     }
 
@@ -370,6 +378,30 @@ class CQuizAnswer
     public function getDestination()
     {
         return $this->destination;
+    }
+
+    /**
+     * Set personality test category.
+     *
+     * @param string $ptestCategory
+     *
+     * @return CQuizAnswer
+     */
+    public function setPtestCategory($ptestCategory)
+    {
+        $this->ptestCategory = empty($ptestCategory) ? null : $ptestCategory;
+
+        return $this;
+    }
+
+    /**
+     * Get ptestCategory.
+     *
+     * @return string
+     */
+    public function getPtestCategory()
+    {
+        return $this->ptestCategory;
     }
 
     /**

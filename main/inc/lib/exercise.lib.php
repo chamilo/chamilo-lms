@@ -55,10 +55,14 @@ class ExerciseLib
         }
         $course = $exercise->course;
 
+        $ptest = false;
+        if ($exercise->selectPtType() == EXERCISE_PT_TYPE_PTEST) {
+            $ptest = true;
+        }
         // Change false to true in the following line to enable answer hinting
         $debug_mark_answer = $show_answers;
         // Reads question information
-        if (!$objQuestionTmp = Question::read($questionId, $course)) {
+        if (!$objQuestionTmp = Question::read($questionId, $course, true, $ptest)) {
             // Question not found
             return false;
         }
@@ -472,6 +476,149 @@ class ExerciseLib
                 );
             }
 
+            if ($answerType == QUESTION_PT_TYPE_AGREE_OR_DISAGREE) {
+                echo "
+                <script>
+                    $(function() {
+                        $('.slt-choice-agree').change(function(e){
+                            var questionId = $(this).prop('id').substr(13);
+                            var sltValue = $(this).val();
+                            $('#choice-disagree-'+questionId+' option:disabled').removeAttr('disabled');
+                            if (sltValue > 0) {
+                                $('#choice-disagree-'+questionId+' option[value='+sltValue+']').attr('disabled', true);
+                            }
+                        });
+
+                        $('.slt-choice-disagree').change(function(e){
+                            var questionId = $(this).prop('id').substr(16);
+                            var sltValue = $(this).val();
+                            $('#choice-agree-'+questionId+' option:disabled').removeAttr('disabled');
+                            if (sltValue > 0) {
+                                $('#choice-agree-'+questionId+' option[value='+sltValue+']').attr('disabled', true);
+                            }
+                        });
+
+                        $('select.slt-choice-agree').each( function(key, value) {
+                            var questionId = $(this).prop('id').substr(13);
+                            var sltValue = $(this).val();
+                            if (sltValue > 0) {
+                                $('#choice-disagree-'+questionId+' option[value='+sltValue+']').attr('disabled', true);
+                            }
+                        });
+
+                        $('select.slt-choice-disagree').each( function(key, value) {
+                            var questionId = $(this).prop('id').substr(16);
+                            var sltValue = $(this).val();
+                            if (sltValue > 0) {
+                                $('#choice-agree-'+questionId+' option[value='+sltValue+']').attr('disabled', true);
+                            }
+                        });
+                    });
+                </script>";
+                $header = Display::tag(
+                    'th',
+                    get_lang('Option'),
+                    ['class' => 'text-center', 'style' => 'width:1px;white-space:nowrap;']
+                );
+                $header .= Display::tag('th', get_lang('Answer'));
+
+                $s .= '<table class="table table-hover table-striped">';
+                $s .= Display::tag(
+                    'tr',
+                    $header,
+                    ['style' => 'text-align:left;']
+                );
+
+                $optionsList = [];
+                $agreeOption = 0;
+                $disagreeOption = 0;
+            }
+
+            if ($answerType == QUESTION_PT_TYPE_AGREE_SCALE) {
+                $dataList = '<datalist id="steplist">
+                                <option>1</option>
+                                <option>2</option>
+                                <option>3</option>
+                                <option>4</option>
+                                <option>5</option>
+                            </datalist>';
+
+                $header = Display::tag(
+                    'th',
+                    get_lang('Answer')
+                );
+                $header .= Display::tag('th', get_lang('QuestionWeighting'));
+
+                $s .= '<table class="table table-hover table-striped">';
+                $s .= Display::tag(
+                    'tr',
+                    $header,
+                    ['style' => 'text-align:left;']
+                );
+            }
+
+            if ($answerType == QUESTION_PT_TYPE_AGREE_REORDER) {
+                echo "
+                <script>
+                    $(function() {
+                        $('.slt-choice-reorder').change(function(e) {
+                            var aux = $(this).prop('id').substr(7);
+                            var info = aux.split('-');
+                            var questionId = info[0];
+                            var item = info[1];
+                            var sltValue = $(this).val();
+                            
+                            $('select.slt-choice-reorder').each( function(key, value) {
+                                $('#'+value.id+' option:disabled').removeAttr('disabled');
+                            });
+
+                            $('select.slt-choice-reorder').each( function(key, valueAux) {
+                                var aux = valueAux.value;
+                                if (aux > 0) {
+                                    $('select.slt-choice-reorder').each( function(key2, valueAux2) {
+                                        if (valueAux.id == valueAux2.id) {
+                                            // no action
+                                        } else {
+                                            $('#'+valueAux2.id+' option[value='+aux+']').attr('disabled', true);
+                                        }
+                                    });
+                                }
+                            });
+                        });
+
+                        $('select.slt-choice-reorder').each( function(key, valueAux) {
+                            var aux = valueAux.value;
+                            if (aux > 0) {
+                                $('select.slt-choice-reorder').each( function(key2, valueAux2) {
+                                    if (valueAux.id == valueAux2.id) {
+                                        // no action
+                                    } else {
+                                        $('#'+valueAux2.id+' option[value='+aux+']').attr('disabled', true);
+                                    }
+                                });
+                            }
+                        });
+                    });
+                </script>";
+
+                $header = Display::tag(
+                    'th',
+                    get_lang('Option'),
+                    ['class' => 'text-center', 'style' => 'width:1px;white-space:nowrap;']
+                );
+                $header .= Display::tag('th', get_lang('Answer'));
+
+                $s .= '<table class="table table-hover table-striped">';
+                $s .= Display::tag(
+                    'tr',
+                    $header,
+                    ['style' => 'text-align:left;']
+                );
+
+                $optionsList = [];
+                $selectValue = [];
+            }
+
             for ($answerId = 1; $answerId <= $nbrAnswers; $answerId++) {
                 $answer = $objAnswerTmp->selectAnswer($answerId);
                 $answerCorrect = $objAnswerTmp->isCorrect($answerId);
@@ -484,6 +631,7 @@ class ExerciseLib
                     case UNIQUE_ANSWER_NO_OPTION:
                     case UNIQUE_ANSWER_IMAGE:
                     case READING_COMPREHENSION:
+                    case QUESTION_PT_TYPE_CATEGORY_RANKING:
                         $input_id = 'choice-'.$questionId.'-'.$answerId;
                         if (isset($user_choice[0]['answer']) && $user_choice[0]['answer'] == $numAnswer) {
                             $attributes = [
@@ -1327,6 +1475,74 @@ HTML;
                             $matching_correct_answer++;
                         }
                         break;
+                    case QUESTION_PT_TYPE_AGREE_OR_DISAGREE:
+                        $optionsList[$numAnswer] = $answerId;
+
+                        if (isset($user_choice[0]['answer'])) {
+                            $answerOption = explode(',', $user_choice[0]['answer']);
+                            if ($answerOption[0] == $numAnswer) {
+                                $agreeOption = $numAnswer;
+                            }
+                            if ($answerOption[1] == $numAnswer) {
+                                $disagreeOption = $numAnswer;
+                            }
+                        }
+
+                        $answer = Security::remove_XSS($answer, STUDENT);
+
+                        $s .= '<tr><td class="text-center">'.$answerId.'</td><td>'.$answer.'</td></tr>';
+
+                        break;
+                    case QUESTION_PT_TYPE_AGREE_SCALE:
+                        $input_id = 'choice-'.$questionId.'-'.$answerId;
+                        $value = 3;
+                        if (!empty($user_choice[0]['answer'])) {
+                            $answerList = json_decode($user_choice[0]['answer'], true);
+                            $value = $answerList[$numAnswer];
+                        }
+
+                        $attributes = [];
+                        $attributes['id'] = $input_id;
+                        $attributes['min'] = '1';
+                        $attributes['max'] = '5';
+                        $attributes['step'] = '1';
+                        $attributes['style'] = 'max-width:70%; margin:0 15px; display:inline;';
+                        $attributes['list'] = 'steplist';
+
+                        $answer_input = Display::input(
+                            'range',
+                            'choice['.$questionId.']['.$numAnswer.']',
+                            $value,
+                            $attributes
+                        );
+
+                        $answer = Security::remove_XSS($answer, STUDENT);
+
+                        $s .= '<tr>';
+                        $s .= '<td>'.$answer.'</td>';
+                        $s .= '<td><i class="fa fa-thumbs-o-down text-danger fa-2x" aria-hidden="true"></i>'.$answer_input.'<i class="fa fa-thumbs-o-up text-success fa-2x" aria-hidden="true"></i></td>';
+                        $s .= '</tr>';
+
+                        break;
+                    case QUESTION_PT_TYPE_AGREE_REORDER:
+                        $optionsList[$numAnswer] = $answerId;
+
+                        if (isset($user_choice[0]['answer'])) {
+                            $answerOption = json_decode($user_choice[0]['answer'], true);
+                            //error_log("answerOption");
+                            //error_log(print_r($answerOption,1));
+                            for ($i = 1; $i <= 5; $i++) {
+                                if ($answerOption[$i] == $numAnswer) {
+                                    $selectValue[$i] = $numAnswer;
+                                }
+                            }
+                        }
+
+                        $answer = Security::remove_XSS($answer, STUDENT);
+
+                        $s .= '<tr><td class="text-center">'.$answerId.'</td><td>'.$answer.'</td></tr>';
+
+                        break;
                 }
             }
 
@@ -1341,9 +1557,77 @@ HTML;
                     MULTIPLE_ANSWER_TRUE_FALSE,
                     MULTIPLE_ANSWER_COMBINATION_TRUE_FALSE,
                     MULTIPLE_ANSWER_TRUE_FALSE_DEGREE_CERTAINTY,
+                    QUESTION_PT_TYPE_AGREE_OR_DISAGREE,
+                    QUESTION_PT_TYPE_AGREE_SCALE,
+                    QUESTION_PT_TYPE_AGREE_REORDER,
                 ]
             )) {
                 $s .= '</table>';
+            }
+
+            if ($answerType == QUESTION_PT_TYPE_AGREE_OR_DISAGREE) {
+                $s .= '<div class="form-horizontal">';
+                $s .= '<div class="form-group">';
+                $s .= '<label for="choice-agree-'.$questionId.'" class="col-sm-2 control-label">'.get_lang('MostAgree').': </label>';
+                $s .= '<div class="col-sm-8">';
+                $s .= '<select id="choice-agree-'.$questionId.'" class="selectpicker form-control slt-choice-agree" name="choice-agree['.$questionId.']">';
+                $s .= '<option value="">'.get_lang('ChooseAnAnswer').'</option>';
+                foreach ($optionsList as $key => $value) {
+                    if ($key == $agreeOption) {
+                        $s .= '<option value="'.$key.'" selected="selected">'.get_lang('Option').' '.$value.'</option>';
+                    } else {
+                        $s .= '<option value="'.$key.'">'.get_lang('Option').' '.$value.'</option>';
+                    }
+                }
+                $s .= '</select>';
+                $s .= '</div>';
+                $s .= '<div class="col-sm-2"></div>';
+                $s .= '</div>';
+
+                $s .= '<div class="form-group">';
+                $s .= '<label for="choice-disagree-'.$questionId.'" class="col-sm-2 control-label">'.get_lang('LeastAgree').': </label>';
+                $s .= '<div class="col-sm-8">';
+                $s .= '<select id="choice-disagree-'.$questionId.'" class="selectpicker form-control slt-choice-disagree" name="choice-disagree['.$questionId.']">';
+                $s .= '<option value="">'.get_lang('ChooseAnAnswer').'</option>';
+                foreach ($optionsList as $key => $value) {
+                    if ($key == $disagreeOption) {
+                        $s .= '<option value="'.$key.'" selected="selected">'.get_lang('Option').' '.$value.'</option>';
+                    } else {
+                        $s .= '<option value="'.$key.'">'.get_lang('Option').' '.$value.'</option>';
+                    }
+                }
+                $s .= '</select>';
+                $s .= '</div>';
+                $s .= '<div class="col-sm-2"></div>';
+                $s .= '</div>';
+                $s .= '</div>';
+            }
+
+            if ($answerType == QUESTION_PT_TYPE_AGREE_REORDER) {
+                $s .= '<div class="form-horizontal">';
+                for ($i = 5; $i > 0; $i--) {
+                    $s .= '<div class="form-group">';
+                    $s .= '<label for="choice-'.$questionId.'-'.$i.'" class="col-sm-2 control-label">'.get_lang('AgreeScale'.$i).': </label>';
+                    $s .= '<div class="col-sm-8">';
+                    $s .= '<select id="choice-'.$questionId.'-'.$i.'" class="selectpicker form-control slt-choice-reorder" name="choice['.$questionId.']['.$i.']">';
+                    $s .= '<option value="">'.get_lang('ChooseAnAnswer').'</option>';
+                    //error_log("i: ".$i);
+                    //error_log(print_r($selectValue,1));
+                    //error_log(print_r($optionsList,1));
+                    //error_log(print_r($selectValue[$i],1));
+                    foreach ($optionsList as $key => $value) {
+                        if ($key == $selectValue[$i]) {
+                            $s .= '<option value="'.$key.'" selected="selected">'.get_lang('Option').' '.$value.'</option>';
+                        } else {
+                            $s .= '<option value="'.$key.'">'.get_lang('Option').' '.$value.'</option>';
+                        }
+                    }
+                    $s .= '</select>';
+                    $s .= '</div>';
+                    $s .= '<div class="col-sm-2"></div>';
+                    $s .= '</div>';
+                }
+                $s .= '</div>';
             }
 
             if ($answerType == DRAGGABLE) {
@@ -1972,7 +2256,8 @@ HOTSPOT;
         $userExtraFieldsToAdd = [],
         $useCommaAsDecimalPoint = false,
         $roundValues = false,
-        $getOnyIds = false
+        $getOnyIds = false,
+        $ptest = false
     ) {
         //@todo replace all this globals
         global $filter;
@@ -2394,67 +2679,76 @@ HOTSPOT;
                                     $actions .= Display::return_icon('teacher.png', get_lang('Teacher'));
                                 }
                             }
-                            $revisedLabel = '';
-                            switch ($revised) {
-                                case 0:
-                                    $actions .= "<a href='exercise_show.php?".api_get_cidreq()."&action=qualify&id=$id'>".
-                                        Display:: return_icon(
-                                            'quiz.png',
-                                            get_lang('Qualify')
-                                        );
-                                    $actions .= '</a>';
-                                    $revisedLabel = Display::label(
-                                        get_lang('NotValidated'),
-                                        'info'
+                            if ($ptest) {
+                                $actions .= "<a href='ptest_exercise_show.php?".api_get_cidreq()."&action=qualify&id=$id'>".
+                                    Display:: return_icon(
+                                        'quiz.png',
+                                        get_lang('Qualify')
                                     );
-                                    break;
-                                case 1:
-                                    $actions .= "<a href='exercise_show.php?".api_get_cidreq()."&action=edit&id=$id'>".
-                                        Display:: return_icon(
-                                            'edit.png',
-                                            get_lang('Edit'),
+                                $actions .= '</a>';
+                            } else {
+                                $revisedLabel = '';
+                                switch ($revised) {
+                                    case 0:
+                                        $actions .= "<a href='exercise_show.php?".api_get_cidreq()."&action=qualify&id=$id'>".
+                                            Display:: return_icon(
+                                                'quiz.png',
+                                                get_lang('Qualify')
+                                            );
+                                        $actions .= '</a>';
+                                        $revisedLabel = Display::label(
+                                            get_lang('NotValidated'),
+                                            'info'
+                                        );
+                                        break;
+                                    case 1:
+                                        $actions .= "<a href='exercise_show.php?".api_get_cidreq()."&action=edit&id=$id'>".
+                                            Display:: return_icon(
+                                                'edit.png',
+                                                get_lang('Edit'),
+                                                [],
+                                                ICON_SIZE_SMALL
+                                            );
+                                        $actions .= '</a>';
+                                        $revisedLabel = Display::label(
+                                            get_lang('Validated'),
+                                            'success'
+                                        );
+                                        break;
+                                    case 2: //finished but not marked as such
+                                        $actions .= '<a href="exercise_report.php?'
+                                            .api_get_cidreq()
+                                            .'&exerciseId='
+                                            .$exercise_id
+                                            .'&a=close&id='
+                                            .$id
+                                            .'">'.
+                                            Display:: return_icon(
+                                                'lock.png',
+                                                get_lang('MarkAttemptAsClosed'),
+                                                [],
+                                                ICON_SIZE_SMALL
+                                            );
+                                        $actions .= '</a>';
+                                        $revisedLabel = Display::label(
+                                            get_lang('Unclosed'),
+                                            'warning'
+                                        );
+                                        break;
+                                    case 3: //still ongoing
+                                        $actions .= Display:: return_icon(
+                                            'clock.png',
+                                            get_lang('AttemptStillOngoingPleaseWait'),
                                             [],
                                             ICON_SIZE_SMALL
                                         );
-                                    $actions .= '</a>';
-                                    $revisedLabel = Display::label(
-                                        get_lang('Validated'),
-                                        'success'
-                                    );
-                                    break;
-                                case 2: //finished but not marked as such
-                                    $actions .= '<a href="exercise_report.php?'
-                                        .api_get_cidreq()
-                                        .'&exerciseId='
-                                        .$exercise_id
-                                        .'&a=close&id='
-                                        .$id
-                                        .'">'.
-                                        Display:: return_icon(
-                                            'lock.png',
-                                            get_lang('MarkAttemptAsClosed'),
-                                            [],
-                                            ICON_SIZE_SMALL
+                                        $actions .= '';
+                                        $revisedLabel = Display::label(
+                                            get_lang('Ongoing'),
+                                            'danger'
                                         );
-                                    $actions .= '</a>';
-                                    $revisedLabel = Display::label(
-                                        get_lang('Unclosed'),
-                                        'warning'
-                                    );
-                                    break;
-                                case 3: //still ongoing
-                                    $actions .= Display:: return_icon(
-                                        'clock.png',
-                                        get_lang('AttemptStillOngoingPleaseWait'),
-                                        [],
-                                        ICON_SIZE_SMALL
-                                    );
-                                    $actions .= '';
-                                    $revisedLabel = Display::label(
-                                        get_lang('Ongoing'),
-                                        'danger'
-                                    );
-                                    break;
+                                        break;
+                                }
                             }
 
                             if ($filter == 2) {
@@ -2476,23 +2770,25 @@ HOTSPOT;
                                     .Display::return_icon('info.png', $ip)
                                     .'</a>';
 
-                                $recalculateUrl = api_get_path(WEB_CODE_PATH).'exercise/recalculate.php?'.
-                                    api_get_cidreq().'&'.
-                                    http_build_query([
-                                        'id' => $id,
-                                        'exercise' => $exercise_id,
-                                        'user' => $results[$i]['exe_user_id'],
-                                    ]);
-                                $actions .= Display::url(
-                                    Display::return_icon('reload.png', get_lang('RecalculateResults')),
-                                    $recalculateUrl,
-                                    [
-                                        'data-exercise' => $exercise_id,
-                                        'data-user' => $results[$i]['exe_user_id'],
-                                        'data-id' => $id,
-                                        'class' => 'exercise-recalculate',
-                                    ]
-                                );
+                                if (!$ptest) {
+                                    $recalculateUrl = api_get_path(WEB_CODE_PATH).'exercise/recalculate.php?'.
+                                        api_get_cidreq().'&'.
+                                        http_build_query([
+                                            'id' => $id,
+                                            'exercise' => $exercise_id,
+                                            'user' => $results[$i]['exe_user_id'],
+                                        ]);
+                                    $actions .= Display::url(
+                                        Display::return_icon('reload.png', get_lang('RecalculateResults')),
+                                        $recalculateUrl,
+                                        [
+                                            'data-exercise' => $exercise_id,
+                                            'data-user' => $results[$i]['exe_user_id'],
+                                            'data-id' => $id,
+                                            'class' => 'exercise-recalculate',
+                                        ]
+                                    );
+                                }
 
                                 $filterByUser = isset($_GET['filter_by_user']) ? (int) $_GET['filter_by_user'] : 0;
                                 $delete_link = '<a href="exercise_report.php?'.api_get_cidreq().'&filter_by_user='.$filterByUser.'&filter='.$filter.'&exerciseId='.$exercise_id.'&delete=delete&did='.$id.'"
@@ -4049,11 +4345,20 @@ EOT;
         $exercise_id = (int) $exercise_id;
         $courseId = api_get_course_int_id($course_code);
         $session_id = (int) $session_id;
+        $orderByCondition = '';
 
         switch ($question_type) {
             case FILL_IN_BLANKS:
                 $answer_condition = '';
                 $select_condition = ' e.exe_id, answer ';
+                break;
+            case QUESTION_PT_TYPE_CATEGORY_RANKING:
+            case QUESTION_PT_TYPE_AGREE_OR_DISAGREE:
+            case QUESTION_PT_TYPE_AGREE_SCALE:
+            case QUESTION_PT_TYPE_AGREE_REORDER:
+                $answer_condition = '';
+                $select_condition = ' DISTINCT exe_user_id, e.exe_id, answer ';
+                $orderByCondition = ' ORDER BY a.tms DESC';
                 break;
             case MATCHING:
             case MATCHING_DRAGGABLE:
@@ -4093,7 +4398,8 @@ EOT;
                 question_id = $question_id AND
                 e.status = ''
                 $courseConditionWhere
-            ";
+            $orderByCondition";
+
         $result = Database::query($sql);
         $return = 0;
         if ($result) {
@@ -4113,10 +4419,253 @@ EOT;
 
                     return $good_answers;
                     break;
+                case QUESTION_PT_TYPE_CATEGORY_RANKING:
+                    $return = 0;
+                    $userListUse = [];
+                    while ($row = Database::fetch_array($result, 'ASSOC')) {
+                        if (in_array($row['exe_user_id'], $userListUse)) {
+                            // It is not the last attempt
+                            continue;
+                        }
+                        $userListUse[] = $row['exe_user_id'];
+                        if ($row['answer'] == $answer_id) {
+                            $return++;
+                        }
+                    }
+
+                    return $return;
+                    break;
+                case QUESTION_PT_TYPE_AGREE_OR_DISAGREE:
+                    $return = [0, 0];
+                    $userListUse = [];
+                    while ($row = Database::fetch_array($result, 'ASSOC')) {
+                        if (in_array($row['exe_user_id'], $userListUse)) {
+                            // It is not the last attempt
+                            continue;
+                        }
+                        $userListUse[] = $row['exe_user_id'];
+                        $answerValue = explode(',', $row['answer']);
+                        if ($answerValue[0] == $answer_id) {
+                            $return[0]++;
+                        }
+                        if ($answerValue[1] == $answer_id) {
+                            $return[1]++;
+                        }
+                    }
+
+                    return $return;
+                    break;
+                case QUESTION_PT_TYPE_AGREE_SCALE:
+                    $sum = 0;
+                    $count = 0;
+                    $userListUse = [];
+                    while ($row = Database::fetch_array($result, 'ASSOC')) {
+                        if (in_array($row['exe_user_id'], $userListUse)) {
+                            // It is not the last attempt
+                            continue;
+                        }
+                        $userListUse[] = $row['exe_user_id'];
+                        $answerValue = json_decode($row['answer'], true);
+                        $sum += $answerValue[$answer_id];
+                        $count++;
+                    }
+
+                    if ($count > 0) {
+                        return round(($sum / $count), 1);
+                    }
+
+                    return 0;
+                    break;
+                case QUESTION_PT_TYPE_AGREE_REORDER:
+                    $sum = 0;
+                    $count = 0;
+                    $userListUse = [];
+                    while ($row = Database::fetch_array($result, 'ASSOC')) {
+                        if (in_array($row['exe_user_id'], $userListUse)) {
+                            // It is not the last attempt
+                            continue;
+                        }
+                        $userListUse[] = $row['exe_user_id'];
+                        $answerValue = json_decode($row['answer'], true);
+                        foreach ($answerValue as $key => $value) {
+                            if ($value == $answer_id) {
+                                $sum += $key;
+                                $count++;
+                                break;
+                            }
+                        }
+                    }
+
+                    if ($count > 0) {
+                        return round(($sum / $count), 1);
+                    }
+
+                    return 0;
+                    break;
                 case MATCHING:
                 case MATCHING_DRAGGABLE:
                 default:
                     $return = Database::num_rows($result);
+            }
+        }
+
+        return $return;
+    }
+
+    /**
+     * @param int    $answer_id
+     * @param int    $question_id
+     * @param int    $exercise_id
+     * @param string $course_code
+     * @param int    $session_id
+     * @param string $question_type
+     * @param string $correct_answer
+     * @param string $current_answer
+     *
+     * @return int
+     */
+    public static function getNumberStudentsAnswerCountGraph(
+        $answer_id,
+        $question_id,
+        $exercise_id,
+        $course_code,
+        $session_id,
+        $question_type = null,
+        $correct_answer = null,
+        $current_answer = null
+    ) {
+        $track_exercises = Database::get_main_table(TABLE_STATISTIC_TRACK_E_EXERCISES);
+        $track_attempt = Database::get_main_table(TABLE_STATISTIC_TRACK_E_ATTEMPT);
+        $courseTable = Database::get_main_table(TABLE_MAIN_COURSE);
+        $courseUser = Database::get_main_table(TABLE_MAIN_COURSE_USER);
+        $courseUserSession = Database::get_main_table(TABLE_MAIN_SESSION_COURSE_USER);
+
+        $question_id = (int) $question_id;
+        $answer_id = (int) $answer_id;
+        $exercise_id = (int) $exercise_id;
+        $courseId = api_get_course_int_id($course_code);
+        $session_id = (int) $session_id;
+        $orderByCondition = '';
+
+        switch ($question_type) {
+            case QUESTION_PT_TYPE_CATEGORY_RANKING:
+            case QUESTION_PT_TYPE_AGREE_OR_DISAGREE:
+            case QUESTION_PT_TYPE_AGREE_SCALE:
+            case QUESTION_PT_TYPE_AGREE_REORDER:
+                $answer_condition = '';
+                $select_condition = ' DISTINCT exe_user_id, e.exe_id, answer ';
+                $orderByCondition = ' ORDER BY a.tms DESC';
+                break;
+        }
+
+        if (empty($session_id)) {
+            $courseCondition = "
+            INNER JOIN $courseUser cu
+            ON cu.c_id = c.id AND cu.user_id  = exe_user_id";
+            $courseConditionWhere = " AND relation_type <> 2 AND cu.status = ".STUDENT;
+        } else {
+            $courseCondition = "
+            INNER JOIN $courseUserSession cu
+            ON cu.c_id = a.c_id AND cu.user_id = exe_user_id";
+            $courseConditionWhere = ' AND cu.status = 0 ';
+        }
+
+        $sql = "SELECT $select_condition
+            FROM $track_exercises e
+            INNER JOIN $track_attempt a
+            ON (
+                a.exe_id = e.exe_id AND
+                e.c_id = a.c_id AND
+                e.session_id  = a.session_id
+            )
+            INNER JOIN $courseTable c
+            ON c.id = a.c_id
+            $courseCondition
+            WHERE
+                exe_exo_id = $exercise_id AND
+                a.c_id = $courseId AND
+                e.session_id = $session_id AND
+                $answer_condition
+                question_id = $question_id AND
+                e.status = ''
+                $courseConditionWhere
+            $orderByCondition";
+
+        $result = Database::query($sql);
+        $return = 0;
+        if ($result) {
+            switch ($question_type) {
+                case QUESTION_PT_TYPE_CATEGORY_RANKING:
+                    $return = 0;
+                    $userListUse = [];
+                    while ($row = Database::fetch_array($result, 'ASSOC')) {
+                        if (in_array($row['exe_user_id'], $userListUse)) {
+                            // It is not the last attempt
+                            continue;
+                        }
+                        $userListUse[] = $row['exe_user_id'];
+                        if ($row['answer'] == $answer_id) {
+                            $return++;
+                        }
+                    }
+
+                    return $return;
+                    break;
+                case QUESTION_PT_TYPE_AGREE_OR_DISAGREE:
+                    $return = [0, 0];
+                    $userListUse = [];
+                    while ($row = Database::fetch_array($result, 'ASSOC')) {
+                        if (in_array($row['exe_user_id'], $userListUse)) {
+                            // It is not the last attempt
+                            continue;
+                        }
+                        $userListUse[] = $row['exe_user_id'];
+                        $answerValue = explode(',', $row['answer']);
+                        if ($answerValue[0] == $answer_id) {
+                            $return[0]++;
+                        }
+                        if ($answerValue[1] == $answer_id) {
+                            $return[1]++;
+                        }
+                    }
+
+                    return $return;
+                    break;
+                case QUESTION_PT_TYPE_AGREE_SCALE:
+                    $sum = 0;
+                    $userListUse = [];
+                    while ($row = Database::fetch_array($result, 'ASSOC')) {
+                        if (in_array($row['exe_user_id'], $userListUse)) {
+                            // It is not the last attempt
+                            continue;
+                        }
+                        $userListUse[] = $row['exe_user_id'];
+                        $answerValue = json_decode($row['answer'], true);
+                        $sum += $answerValue[$answer_id];
+                    }
+
+                    return $sum;
+                    break;
+                case QUESTION_PT_TYPE_AGREE_REORDER:
+                    $sum = 0;
+                    $userListUse = [];
+                    while ($row = Database::fetch_array($result, 'ASSOC')) {
+                        if (in_array($row['exe_user_id'], $userListUse)) {
+                            // It is not the last attempt
+                            continue;
+                        }
+                        $userListUse[] = $row['exe_user_id'];
+                        $answerValue = json_decode($row['answer'], true);
+                        foreach ($answerValue as $key => $value) {
+                            if ($value == $answer_id) {
+                                $sum += $key;
+                                break;
+                            }
+                        }
+                    }
+
+                    return $sum;
+                    break;
             }
         }
 
@@ -4373,10 +4922,17 @@ EOT;
     ) {
         $origin = api_get_origin();
         $courseCode = api_get_course_id();
+        $courseId = api_get_course_int_id();
         $sessionId = api_get_session_id();
 
         // Getting attempt info
         $exercise_stat_info = $objExercise->get_stat_track_exercise_info_by_exe_id($exeId);
+
+        // Get type
+        $ptest = false;
+        if ($objExercise->selectPtType() == EXERCISE_PT_TYPE_PTEST) {
+            $ptest = true;
+        }
 
         // Getting question list
         $question_list = [];
@@ -4428,6 +4984,7 @@ EOT;
                 RESULT_DISABLE_SHOW_ONLY_IN_CORRECT_ANSWER,
                 RESULT_DISABLE_SHOW_SCORE_AND_EXPECTED_ANSWERS,
                 RESULT_DISABLE_SHOW_SCORE_AND_EXPECTED_ANSWERS_AND_RANKING,
+                RESULT_DISABLE_PT_TYPE_PTEST,
             ]
         )) {
             $show_results = true;
@@ -4523,6 +5080,10 @@ EOT;
             }
         }
 
+        if ($objExercise->selectPtType() == EXERCISE_PT_TYPE_PTEST) {
+            echo $objExercise->showPtestCharts($exeId, $courseId, $sessionId);
+        }
+
         // Display text when test is finished #4074 and for LP #4227
         $endOfMessage = $objExercise->getTextWhenFinished();
         if (!empty($endOfMessage)) {
@@ -4557,7 +5118,7 @@ EOT;
         if (!empty($question_list)) {
             foreach ($question_list as $questionId) {
                 // Creates a temporary Question object
-                $objQuestionTmp = Question::read($questionId, $objExercise->course);
+                $objQuestionTmp = Question::read($questionId, $objExercise->course, true, $ptest);
                 // This variable came from exercise_submit_modal.php
                 ob_start();
                 $choice = null;
@@ -4732,7 +5293,7 @@ EOT;
 
         $totalScoreText = null;
         $certificateBlock = '';
-        if (($show_results || $show_only_score) && $showTotalScore) {
+        if (($show_results || $show_only_score) && $showTotalScore && !$ptest) {
             if ($result['answer_type'] == MULTIPLE_ANSWER_TRUE_FALSE_DEGREE_CERTAINTY) {
                 echo '<h1 style="text-align : center; margin : 20px 0;">'.get_lang('YourResults').'</h1><br />';
             }

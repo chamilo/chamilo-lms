@@ -130,6 +130,13 @@ $objExercise = new Exercise();
 $course_id = api_get_course_int_id();
 
 //INIT FORM
+$ptest = false;
+$ptestUrl = '';
+if (!empty($_GET['ptest'])) {
+    $ptest = true;
+    $ptestUrl = '&ptest=1';
+}
+
 if (isset($_GET['exerciseId'])) {
     $form = new FormValidator(
         'exercise_admin',
@@ -142,12 +149,16 @@ if (isset($_GET['exerciseId'])) {
     $form = new FormValidator(
         'exercise_admin',
         'post',
-        api_get_self().'?'.api_get_cidreq()
+        api_get_self().'?'.api_get_cidreq().$ptestUrl
     );
     $form->addElement('hidden', 'edit', 'false');
 }
 
-$objExercise->createForm($form);
+if ($ptest || $objExercise->selectPtType() == EXERCISE_PT_TYPE_PTEST) {
+    $objExercise->createForm($form, 'ptest');
+} else {
+    $objExercise->createForm($form);
+}
 
 // VALIDATE FORM
 if ($form->validate()) {

@@ -25,6 +25,7 @@ class Answer
     public $hotspot_coordinates;
     public $hotspot_type;
     public $destination;
+    public $ptest_category;
     // these arrays are used to save temporarily new answers
     // then they are moved into the arrays above or deleted in the event of cancellation
     public $new_answer;
@@ -39,6 +40,7 @@ class Answer
     public $nbrAnswers;
     public $new_nbrAnswers;
     public $new_destination; // id of the next question if feedback option is set to Directfeedback
+    public $new_ptest_category; // id c_quiz_category_test
     public $course; //Course information
     public $iid;
     public $questionJSId;
@@ -67,6 +69,7 @@ class Answer
         $this->hotspot_coordinates = [];
         $this->hotspot_type = [];
         $this->destination = [];
+        $this->ptest_category = [];
         // clears $new_* arrays
         $this->cancel();
 
@@ -114,6 +117,7 @@ class Answer
         $this->new_hotspot_type = [];
         $this->new_nbrAnswers = 0;
         $this->new_destination = [];
+        $this->new_ptest_category = [];
     }
 
     /**
@@ -146,6 +150,7 @@ class Answer
             $this->hotspot_coordinates[$i] = $object->hotspot_coordinates;
             $this->hotspot_type[$i] = $object->hotspot_type;
             $this->destination[$i] = $object->destination;
+            $this->ptest_category[$i] = $object->ptest_category;
             $this->autoId[$i] = $object->id_auto;
             $this->iid[$i] = $object->iid;
             $i++;
@@ -249,6 +254,7 @@ class Answer
                     hotspot_coordinates,
                     hotspot_type,
                     destination,
+                    ptest_category,
                     id_auto,
                     iid
                 FROM $TBL_ANSWER
@@ -274,6 +280,7 @@ class Answer
             $this->hotspot_coordinates[$i] = $object->hotspot_coordinates;
             $this->hotspot_type[$i] = $object->hotspot_type;
             $this->destination[$i] = $object->destination;
+            $this->ptest_category[$i] = $object->ptest_category;
             $this->autoId[$i] = $object->id_auto;
             $this->iid[$i] = $object->iid;
             $i++;
@@ -288,6 +295,7 @@ class Answer
             $this->hotspot_coordinates[$i] = isset($object->hotspot_coordinates) ? $object->hotspot_coordinates : 0;
             $this->hotspot_type[$i] = isset($object->hotspot_type) ? $object->hotspot_type : 0;
             $this->destination[$i] = $doubt_data->destination;
+            $this->ptest_category[$i] = $object->ptest_category;
             $this->autoId[$i] = $doubt_data->id_auto;
             $this->iid[$i] = $doubt_data->iid;
             $i++;
@@ -345,6 +353,20 @@ class Answer
     public function selectDestination($id)
     {
         return isset($this->destination[$id]) ? $this->destination[$id] : null;
+    }
+
+    /**
+     * returns the question ID of the personality test question.
+     *
+     * @author Jose Angel Ruiz (NOSOLORED)
+     *
+     * @param int $id
+     *
+     * @return int - the question ID
+     */
+    public function selectPtCategory($id)
+    {
+        return isset($this->ptest_category[$id]) ? $this->ptest_category[$id] : null;
     }
 
     /**
@@ -445,6 +467,7 @@ class Answer
                     'hotspot_type' => $this->hotspot_type[$i],
                     'correct' => $this->correct[$i],
                     'destination' => $this->destination[$i],
+                    'ptest_category' => $this->ptest_category[$i],
                 ];
             }
         }
@@ -598,7 +621,8 @@ class Answer
         $position,
         $new_hotspot_coordinates = null,
         $new_hotspot_type = null,
-        $destination = ''
+        $destination = '',
+        $ptest_category = null
     ) {
         $this->new_nbrAnswers++;
         $id = $this->new_nbrAnswers;
@@ -610,6 +634,7 @@ class Answer
         $this->new_hotspot_coordinates[$id] = $new_hotspot_coordinates;
         $this->new_hotspot_type[$id] = $new_hotspot_type;
         $this->new_destination[$id] = $destination;
+        $this->new_ptest_category[$id] = $ptest_category;
     }
 
     /**
@@ -626,6 +651,7 @@ class Answer
      * @param string $destination
      * @param string $hotSpotCoordinates
      * @param string $hotSpotType
+     * @param int    $ptestCategory
      *
      * @return CQuizAnswer
      */
@@ -638,7 +664,8 @@ class Answer
         $position,
         $destination,
         $hotSpotCoordinates,
-        $hotSpotType
+        $hotSpotType,
+        $ptestCategory
     ) {
         $em = Database::getManager();
 
@@ -653,7 +680,8 @@ class Answer
                 ->setPosition($position)
                 ->setDestination($destination)
                 ->setHotspotCoordinates($hotSpotCoordinates)
-                ->setHotspotType($hotSpotType);
+                ->setHotspotType($hotSpotType)
+                ->setPtestCategory($ptestCategory);
 
             $em->merge($quizAnswer);
             $em->flush();
@@ -687,6 +715,7 @@ class Answer
             $hotspot_coordinates = isset($this->new_hotspot_coordinates[$i]) ? $this->new_hotspot_coordinates[$i] : '';
             $hotspot_type = isset($this->new_hotspot_type[$i]) ? $this->new_hotspot_type[$i] : '';
             $destination = isset($this->new_destination[$i]) ? $this->new_destination[$i] : '';
+            $ptestCategory = isset($this->new_ptest_category[$i]) ? $this->new_ptest_category[$i] : '';
             $autoId = $this->selectAutoId($i);
             $iid = isset($this->iid[$i]) ? $this->iid[$i] : 0;
 
@@ -703,7 +732,8 @@ class Answer
                     ->setPosition($position)
                     ->setHotspotCoordinates($hotspot_coordinates)
                     ->setHotspotType($hotspot_type)
-                    ->setDestination($destination);
+                    ->setDestination($destination)
+                    ->setPtestCategory($ptestCategory);
 
                 $em->persist($quizAnswer);
                 $em->flush();
@@ -750,7 +780,8 @@ class Answer
                     $this->new_position[$i],
                     $this->new_destination[$i],
                     $this->new_hotspot_coordinates[$i],
-                    $this->new_hotspot_type[$i]
+                    $this->new_hotspot_type[$i],
+                    $this->new_ptest_category[$i]
                 );
             }
 
@@ -818,6 +849,7 @@ class Answer
         $this->hotspot_type = $this->new_hotspot_type;
         $this->nbrAnswers = $this->new_nbrAnswers;
         $this->destination = $this->new_destination;
+        $this->ptest_category = $this->new_ptest_category;
 
         $this->cancel();
     }
@@ -893,6 +925,7 @@ class Answer
                         'hotspot_coordinates' => $this->hotspot_coordinates[$i],
                         'hotspot_type' => $this->hotspot_type[$i],
                         'destination' => $this->destination[$i],
+                        'ptest_category' => $this->ptest_category[$i],
                     ];
                     $temp[$answer['position']] = $answer;
                     $allAnswers[$this->id[$i]] = $this->answer[$i];
@@ -977,7 +1010,8 @@ class Answer
                         ->setPosition($this->position[$i])
                         ->setHotspotCoordinates($this->hotspot_coordinates[$i])
                         ->setHotspotType($this->hotspot_type[$i])
-                        ->setDestination($this->destination[$i]);
+                        ->setDestination($this->destination[$i])
+                        ->setPtestCategory($this->ptest_category[$i]);
 
                     $em->persist($quizAnswer);
                     $em->flush();

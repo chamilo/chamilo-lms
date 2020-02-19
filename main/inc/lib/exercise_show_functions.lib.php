@@ -364,7 +364,10 @@ class ExerciseShowFunctions
                 break;
         }
 
-        $icon = in_array($answerType, [UNIQUE_ANSWER, UNIQUE_ANSWER_NO_OPTION]) ? 'radio' : 'checkbox';
+        $icon = in_array(
+            $answerType,
+            [UNIQUE_ANSWER, UNIQUE_ANSWER_NO_OPTION, QUESTION_PT_TYPE_CATEGORY_RANKING]
+        ) ? 'radio' : 'checkbox';
         $icon .= $studentChoice ? '_on' : '_off';
         $icon .= '.png';
         $iconAnswer = in_array($answerType, [UNIQUE_ANSWER, UNIQUE_ANSWER_NO_OPTION]) ? 'radio' : 'checkbox';
@@ -424,6 +427,10 @@ class ExerciseShowFunctions
             $showComment = true;
         }
 
+        if ($exercise->selectPtType() == EXERCISE_PT_TYPE_PTEST) {
+            $showComment = false;
+        }
+
         if ($showComment) {
             echo '<td width="20%">';
             $color = 'black';
@@ -442,6 +449,86 @@ class ExerciseShowFunctions
             echo '<td>&nbsp;</td>';
         }
 
+        echo '</tr>';
+    }
+
+    /**
+     * Display the answers to a ptest question.
+     *
+     * @param Exercise $exercise
+     * @param int      $answerType    Answer type
+     * @param int      $studentChoice Student choice
+     * @param string   $answer        Textual answer
+     * @param string   $answerComment Comment on answer
+     * @param bool     $export
+     */
+    public static function display_ptest_answer(
+        $exercise,
+        $answerType,
+        $studentChoice,
+        $answer,
+        $export = false
+    ) {
+        if ($export) {
+            $answer = strip_tags_blacklist($answer, ['title', 'head']);
+            // Fix answers that contains this tags
+            $tags = [
+                '<html>',
+                '</html>',
+                '<body>',
+                '</body>',
+            ];
+            $answer = str_replace($tags, '', $answer);
+        }
+
+        $studentChoiceInt = (int) $studentChoice;
+
+        switch ($answerType) {
+            case QUESTION_PT_TYPE_CATEGORY_RANKING:
+                $iconOff = '<i class="fa fa-circle-o" aria-hidden="true"></i>';
+                $iconOn = '<i class="fa fa-dot-circle-o" aria-hidden="true"></i>';
+                $icon .= $studentChoice ? $iconOn : $iconOff;
+                break;
+            case QUESTION_PT_TYPE_AGREE_OR_DISAGREE:
+                $icon = '';
+                if ($studentChoice == ANSWER_AGREE) {
+                    $icon = '<i class="fa fa-thumbs-o-up text-success fa-2x" aria-hidden="true"></i>';
+                }
+
+                if ($studentChoice == ANSWER_DISAGREE) {
+                    $icon = '<i class="fa fa-thumbs-o-down text-danger fa-2x" aria-hidden="true"></i>';
+                }
+                break;
+            case QUESTION_PT_TYPE_AGREE_SCALE:
+            case QUESTION_PT_TYPE_AGREE_REORDER:
+                $icon = '';
+                $color = 'text-primary';
+                switch ($studentChoiceInt) {
+                    case 1:
+                    case 2:
+                        $color = 'text-danger';
+                        break;
+                    case 3:
+                        $color = 'text-warning';
+                        break;
+                    case 4:
+                    case 5:
+                        $color = 'text-success';
+                        break;
+                }
+                for ($i = 0; $i < 5; $i++) {
+                    if ($i < $studentChoiceInt) {
+                        $icon .= '<i class="fa fa-square '.$color.'" aria-hidden="true"></i> ';
+                    } else {
+                        $icon .= '<i class="fa fa-square-o '.$color.'" aria-hidden="true"></i> ';
+                    }
+                }
+                break;
+        }
+
+        echo '<tr>';
+        echo '<td class="text-center">'.$icon.'</td>';
+        echo '<td>'.$answer.'</td>';
         echo '</tr>';
     }
 

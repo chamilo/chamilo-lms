@@ -96,11 +96,21 @@ if ($is_allowed_to_edit) {
             api_get_path(WEB_CODE_PATH).'exercise/admin.php?'.api_get_cidreq().'&exerciseId='.$objExercise->id
         );
     }
-    $editLink .= Display::url(
-        Display::return_icon('test_results.png', get_lang('Results'), [], ICON_SIZE_SMALL),
-        api_get_path(WEB_CODE_PATH).'exercise/exercise_report.php?'.api_get_cidreq().'&exerciseId='.$objExercise->id,
-        ['title' => get_lang('Results')]
-    );
+    if ($objExercise->selectPtType() == EXERCISE_PT_TYPE_PTEST) {
+        $editLink .= Display::url(
+            Display::return_icon('test_results.png', get_lang('Results'), [], ICON_SIZE_SMALL),
+            api_get_path(WEB_CODE_PATH).'exercise/ptest_exercise_report.php?'.
+                api_get_cidreq().'&exerciseId='.$objExercise->id,
+            ['title' => get_lang('Results')]
+        );
+    } else {
+        $editLink .= Display::url(
+            Display::return_icon('test_results.png', get_lang('Results'), [], ICON_SIZE_SMALL),
+            api_get_path(WEB_CODE_PATH).'exercise/exercise_report.php?'.
+                api_get_cidreq().'&exerciseId='.$objExercise->id,
+            ['title' => get_lang('Results')]
+        );
+    }
 }
 
 $iconExercise = Display::return_icon('test-quiz.png', null, [], ICON_SIZE_MEDIUM);
@@ -244,6 +254,9 @@ if (!empty($attempts)) {
         if ($attempt_result['attempt_revised'] == 0) {
             $teacher_revised = Display::label(get_lang('NotValidated'), 'info');
         }
+        if ($objExercise->results_disabled == RESULT_DISABLE_PT_TYPE_PTEST) {
+            $teacher_revised = '';
+        }
         $row = [
             'count' => $i,
             'date' => api_convert_and_format_date(
@@ -280,6 +293,7 @@ if (!empty($attempts)) {
                 RESULT_DISABLE_DONT_SHOW_SCORE_ONLY_IF_USER_FINISHES_ATTEMPTS_SHOW_ALWAYS_FEEDBACK,
                 RESULT_DISABLE_RANKING,
                 RESULT_DISABLE_SHOW_ONLY_IN_CORRECT_ANSWER,
+                RESULT_DISABLE_PT_TYPE_PTEST,
             ]
         ) || (
             $objExercise->results_disabled == RESULT_DISABLE_SHOW_SCORE_ONLY &&
@@ -369,6 +383,9 @@ if (!empty($attempts)) {
                     get_lang('Details'),
                 ];
             }
+            break;
+        case RESULT_DISABLE_PT_TYPE_PTEST:
+            $header_names = [get_lang('Attempt'), get_lang('StartDate'), get_lang('IP'), get_lang('Details')];
             break;
     }
     $column = 0;

@@ -43,6 +43,7 @@ if (!in_array(
     $action,
     [
         'get_exercise_results',
+        'get_ptest_exercise_results',
         'get_exercise_results_report',
         'get_work_student_list_overview',
         'get_hotpotatoes_exercise_results',
@@ -597,6 +598,7 @@ switch ($action) {
         );
         break;
     case 'get_exercise_results':
+    case 'get_ptest_exercise_results':
         $exercise_id = $_REQUEST['exerciseId'];
 
         if (isset($_GET['filter_by_user']) && !empty($_GET['filter_by_user'])) {
@@ -1396,6 +1398,48 @@ switch ($action) {
             $sord,
             $exercise_id,
             $whereCondition
+        );
+        break;
+    case 'get_ptest_exercise_results':
+        $is_allowedToEdit = api_is_allowed_to_edit(null, true) ||
+            api_is_drh() ||
+            api_is_student_boss() ||
+            api_is_session_admin();
+        if ($is_allowedToEdit || api_is_student_boss()) {
+            $columns = [
+                'firstname',
+                'lastname',
+                'username',
+                'group_name',
+                'exe_duration',
+                'start_date',
+                'exe_date',
+                'user_ip',
+                'lp',
+                'actions',
+            ];
+            $officialCodeInList = api_get_setting('show_official_code_exercise_result_list');
+            if ($officialCodeInList === 'true') {
+                $columns = array_merge(['official_code'], $columns);
+            }
+        }
+
+        $result = ExerciseLib::get_exam_results_data(
+            $start,
+            $limit,
+            $sidx,
+            $sord,
+            $exercise_id,
+            $whereCondition,
+            false,
+            null,
+            false,
+            false,
+            [],
+            false,
+            false,
+            false,
+            true
         );
         break;
     case 'get_exercise_results_report':
@@ -2322,6 +2366,7 @@ $allowed_actions = [
     'get_session_progress',
     'get_exercise_progress',
     'get_exercise_results',
+    'get_ptest_exercise_results',
     'get_exercise_results_report',
     'get_work_student_list_overview',
     'get_hotpotatoes_exercise_results',

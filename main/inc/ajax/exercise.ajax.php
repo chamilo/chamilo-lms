@@ -445,6 +445,11 @@ switch ($action) {
                 exit;
             }
 
+            $ptest = false;
+            if ($objExercise->selectPtType() == EXERCISE_PT_TYPE_PTEST) {
+                $ptest = true;
+            }
+
             // Getting information of the current exercise.
             $exercise_stat_info = $objExercise->get_stat_track_exercise_info_by_exe_id($exeId);
             $exercise_id = $exercise_stat_info['exe_exo_id'];
@@ -498,7 +503,7 @@ switch ($action) {
             $total_weight = 0;
             if ($type == 'simple') {
                 foreach ($question_list as $my_question_id) {
-                    $objQuestionTmp = Question::read($my_question_id, $objExercise->course);
+                    $objQuestionTmp = Question::read($my_question_id, $objExercise->course, true, $ptest);
                     $total_weight += $objQuestionTmp->selectWeighting();
                 }
             }
@@ -521,7 +526,7 @@ switch ($action) {
                 }
 
                 // Creates a temporary Question object
-                $objQuestionTmp = Question::read($my_question_id, $objExercise->course);
+                $objQuestionTmp = Question::read($my_question_id, $objExercise->course, true, $ptest);
 
                 $myChoiceDegreeCertainty = null;
                 if ($objQuestionTmp->type === MULTIPLE_ANSWER_TRUE_FALSE_DEGREE_CERTAINTY) {
@@ -604,6 +609,60 @@ switch ($action) {
                         $exeId,
                         $my_question_id,
                         $myChoiceTmp,
+                        'exercise_result',
+                        $hot_spot_coordinates,
+                        true,
+                        false,
+                        false,
+                        $objExercise->selectPropagateNeg(),
+                        $hotspot_delineation_result
+                    );
+                } elseif ($objQuestionTmp->type === QUESTION_PT_TYPE_AGREE_OR_DISAGREE) {
+                    $myChoiceTmp = [];
+                    $myChoiceTmp['agree'] = (
+                        isset($_REQUEST['choice-agree'][$my_question_id]) &&
+                        !empty($_REQUEST['choice-agree'][$my_question_id])
+                    ) ? (int) $_REQUEST['choice-agree'][$my_question_id] : 0;
+                    $myChoiceTmp['disagree'] = (
+                        isset($_REQUEST['choice-disagree'][$my_question_id]) &&
+                        !empty($_REQUEST['choice-disagree'][$my_question_id])
+                    ) ? (int) $_REQUEST['choice-disagree'][$my_question_id] : 0;
+
+                    $result = $objExercise->manage_answer(
+                        $exeId,
+                        $my_question_id,
+                        $myChoiceTmp,
+                        'exercise_result',
+                        $hot_spot_coordinates,
+                        true,
+                        false,
+                        false,
+                        $objExercise->selectPropagateNeg(),
+                        $hotspot_delineation_result
+                    );
+                } elseif ($objQuestionTmp->type === QUESTION_PT_TYPE_AGREE_SCALE) {
+                    $result = $objExercise->manage_answer(
+                        $exeId,
+                        $my_question_id,
+                        json_encode($my_choice),
+                        'exercise_result',
+                        $hot_spot_coordinates,
+                        true,
+                        false,
+                        false,
+                        $objExercise->selectPropagateNeg(),
+                        $hotspot_delineation_result
+                    );
+                } elseif ($objQuestionTmp->type === QUESTION_PT_TYPE_AGREE_REORDER) {
+                    $myChoiceTmp = [];
+                    foreach ($_REQUEST['choice'][$my_question_id] as $key => $value) {
+                        $myChoiceTmp[$key] = $value;
+                    }
+
+                    $result = $objExercise->manage_answer(
+                        $exeId,
+                        $my_question_id,
+                        json_encode($myChoiceTmp),
                         'exercise_result',
                         $hot_spot_coordinates,
                         true,

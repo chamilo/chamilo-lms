@@ -123,6 +123,7 @@ define('TOOL_POST', 'post');
 define('TOOL_DROPBOX', 'dropbox');
 define('TOOL_QUIZ', 'quiz');
 define('TOOL_TEST_CATEGORY', 'test_category');
+define('TOOL_PTEST_CATEGORY', 'ptest_category');
 define('TOOL_USER', 'user');
 define('TOOL_GROUP', 'group');
 define('TOOL_BLOGS', 'blog_management');
@@ -470,6 +471,9 @@ define('EXERCISE_FEEDBACK_TYPE_DIRECT', 1); //DirectFeedback - Do not show score
 define('EXERCISE_FEEDBACK_TYPE_EXAM', 2); // NoFeedback 	 - Show score only
 define('EXERCISE_FEEDBACK_TYPE_POPUP', 3); // Popup BT#15827
 
+define('EXERCISE_PT_TYPE_CLASSIC', 0); // Default quiz
+define('EXERCISE_PT_TYPE_PTEST', 1); // Personality test quiz
+
 define('RESULT_DISABLE_SHOW_SCORE_AND_EXPECTED_ANSWERS', 0); //show score and expected answers
 define('RESULT_DISABLE_NO_SCORE_AND_EXPECTED_ANSWERS', 1); //Do not show score nor answers
 define('RESULT_DISABLE_SHOW_SCORE_ONLY', 2); //Show score only
@@ -479,6 +483,7 @@ define('RESULT_DISABLE_DONT_SHOW_SCORE_ONLY_IF_USER_FINISHES_ATTEMPTS_SHOW_ALWAY
 define('RESULT_DISABLE_RANKING', 6);
 define('RESULT_DISABLE_SHOW_ONLY_IN_CORRECT_ANSWER', 7);
 define('RESULT_DISABLE_SHOW_SCORE_AND_EXPECTED_ANSWERS_AND_RANKING', 8);
+define('RESULT_DISABLE_PT_TYPE_PTEST', 9);
 
 define('EXERCISE_MAX_NAME_SIZE', 80);
 
@@ -506,6 +511,15 @@ define('MATCHING_DRAGGABLE', 19);
 define('ANNOTATION', 20);
 define('READING_COMPREHENSION', 21);
 define('MULTIPLE_ANSWER_TRUE_FALSE_DEGREE_CERTAINTY', 22);
+
+// Question Personality Test types
+define('QUESTION_PT_TYPE_CATEGORY_RANKING', 23); // count how many times the user clicked in different categories
+define('QUESTION_PT_TYPE_AGREE_OR_DISAGREE', 24); // Select two options out of 5 (most agree and least agree)
+define('QUESTION_PT_TYPE_AGREE_SCALE', 25); // On a scale of 5 set a value - Most agree = 5, least agree is 1
+define('QUESTION_PT_TYPE_AGREE_REORDER', 26); // Re-order these 5 words by most agree to least agree.
+
+define('ANSWER_AGREE', 1);
+define('ANSWER_DISAGREE', 2);
 
 define('EXERCISE_CATEGORY_RANDOM_SHUFFLED', 1);
 define('EXERCISE_CATEGORY_RANDOM_ORDERED', 2);

@@ -1,8 +1,10 @@
 <?php
+
 /* For licensing terms, see /license.txt */
 /**
  * @author Created on 18 October 2006 by Elixir Interactive http://www.elixir-interactive.com
  */
+
 require_once __DIR__.'/../inc/global.inc.php';
 $current_course_tool = TOOL_COURSE_MAINTENANCE;
 $this_section = SECTION_COURSES;
@@ -58,7 +60,7 @@ echo Display::page_header($nameTools);
 
 <div class="sectiontitle">
     <?php Display::display_icon('tool_delete.gif', get_lang('Empty this course')); ?>&nbsp;&nbsp;
-    <a href="../coursecopy/Empty this course.php?<?php echo api_get_cidreq(); ?>">
+    <a href="../coursecopy/recycle_course.php?<?php echo api_get_cidreq(); ?>">
         <?php echo get_lang('Empty this course'); ?>
     </a>
 </div>

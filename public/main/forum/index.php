@@ -2,6 +2,7 @@
 
 /* For licensing terms, see /license.txt */
 
+use Chamilo\CoreBundle\Framework\Container;
 use Chamilo\CourseBundle\Entity\CForumPost;
 use ChamiloSession as Session;
 
@@ -103,10 +104,33 @@ if ('add' === $action) {
 $introduction = Display::return_introduction_section(TOOL_FORUM);
 $form_count = 0;
 $formContent = '';
+
+$id = isset($_REQUEST['id']) ? (int) $_REQUEST['id'] : null;
+
 if (api_is_allowed_to_edit(false, true)) {
     //if is called from a learning path lp_id
     $lp_id = isset($_REQUEST['lp_id']) ? (int) $_REQUEST['lp_id'] : null;
-    $formContent = handle_forum_and_forumcategories($lp_id);
+
+    switch ($action) {
+        case 'add_forum':
+            $formContent = forumForm([], $lp_id);
+            break;
+        case 'edit_forum':
+            $repo = Container::getForumRepository();
+            $resource = $repo->find($id);
+            $formContent = forumForm($resource, $lp_id);
+            break;
+        case 'add_category':
+            $formContent = show_add_forumcategory_form([], $lp_id);
+            break;
+        case 'edit_category':
+            $repo = Container::getForumCategoryRepository();
+            $category = $repo->find($id);
+            $formContent = editForumCategoryForm($category);
+            break;
+
+    }
+    //$formContent = handle_forum_and_forumcategories($lp_id);
 }
 
 // Notification
@@ -189,7 +213,7 @@ if (api_is_allowed_to_edit(false, true)) {
                 null,
                 ICON_SIZE_MEDIUM
             ),
-            api_get_self().'?'.api_get_cidreq().'&action=add&content=forum&lp_id='.$lp_id
+            api_get_self().'?'.api_get_cidreq().'&action=add_forum&lp_id='.$lp_id
         );
     }
 
@@ -200,7 +224,7 @@ if (api_is_allowed_to_edit(false, true)) {
             null,
             ICON_SIZE_MEDIUM
         ),
-        api_get_self().'?'.api_get_cidreq().'&action=add&content=forumcategory&lp_id='.$lp_id
+        api_get_self().'?'.api_get_cidreq().'&action=add_category&lp_id='.$lp_id
     );
 }
 

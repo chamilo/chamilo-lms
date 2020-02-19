@@ -64,10 +64,6 @@ require_once 'forumfunction.inc.php';
 $forumCategory = $repo->find($_GET['forumcategory']);
 $categoryId = $forumCategory->getIid();
 
-if (api_is_allowed_to_edit(false, true)) {
-    handle_forum_and_forumcategories();
-}
-
 // Are we in a lp ?
 $origin = api_get_origin();
 
@@ -85,7 +81,7 @@ $interbreadcrumb[] = [
 ];
 
 if (!empty($action) && !empty($_GET['content'])) {
-    if ('add' == $action && 'forum' == $_GET['content']) {
+    if ('add' === $action) {
         $interbreadcrumb[] = [
             'url' => 'viewforumcategory.php?'.api_get_cidreq().'&forumcategory='.$categoryId,
             'name' => $forumCategory->getCatTitle(),
@@ -183,9 +179,7 @@ if ('add' !== $action) {
     if (api_is_allowed_to_edit(false, true) &&
         !(0 == $sessionCategoryId && 0 != $sessionId)
     ) {
-        $iconsEdit = '<a href="'.api_get_self().'?'.api_get_cidreq().'&forumcategory='
-            .Security::remove_XSS($_GET['forumcategory']).'&action=edit&content=forumcategory&id='
-            .''.$forumId.'">'
+        $iconsEdit = '<a href="'.api_get_path(WEB_CODE_PATH).'forum/index.php?'.api_get_cidreq().'&action=edit_category&id='.$categoryId.'">'
             .Display::return_icon('edit.png', get_lang('Edit'), [], ICON_SIZE_SMALL).'</a>';
         $iconsEdit .= '<a href="'.api_get_self().'?'.api_get_cidreq().'&forumcategory='
             .Security::remove_XSS($_GET['forumcategory'])
@@ -426,7 +420,7 @@ if ('add' !== $action) {
                     if (api_is_allowed_to_edit(false, true) &&
                         !(0 == $forum->getSessionId() && 0 != $sessionId)
                     ) {
-                        $html .= '<a href="'.$url.'?'.api_get_cidreq().'&forumcategory='.$categoryId.'&action=edit&content=forum&id='.$forumId.'">'
+                        $html .= '<a href="'.$url.'?'.api_get_cidreq().'&forumcategory='.$categoryId.'&action=edit_forum&content=forum&id='.$forumId.'">'
                             .Display::return_icon('edit.png', get_lang('Edit'), [], ICON_SIZE_SMALL).'</a>';
                         $html .= '<a href="'.$url.'?'.api_get_cidreq().'&forumcategory='.$categoryId.'&action=delete&content=forum&id='.$forumId
                             ."\" onclick=\"javascript:if(!confirm('"

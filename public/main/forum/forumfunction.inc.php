@@ -101,43 +101,26 @@ $(function () {
  */
 function handle_forum_and_forumcategories($lp_id = null)
 {
-    $action_forum_cat = $action = isset($_GET['action']) ? $_GET['action'] : '';
+    $action = isset($_GET['action']) ? $_GET['action'] : '';
     $get_content = isset($_GET['content']) ? $_GET['content'] : '';
     $post_submit_cat = isset($_POST['SubmitForumCategory']) ? true : false;
     $post_submit_forum = isset($_POST['SubmitForum']) ? true : false;
     $get_id = isset($_GET['id']) ? (int) $_GET['id'] : 0;
     $forum_categories_list = get_forum_categories();
 
-    // Verify if forum category exists
-    if (empty($forum_categories_list)) {
-        $get_content = 'forumcategory';
+    switch ($content) {
+        case 'forumcategory':
+            $repo = Container::getForumCategoryRepository();
+            break;
+        case 'forum':
+            $repo = Container::getForumRepository();
+            break;
+        case 'thread':
+            $repo = Container::getForumThreadRepository();
+            break;
     }
 
-    $content = '';
-
-    // Adding a forum category
-    if (('add' === $action_forum_cat && 'forumcategory' === $get_content) || $post_submit_cat) {
-        $content = show_add_forumcategory_form([], $lp_id); //$lp_id when is called from learning path
-    }
-
-    // Adding a forum
-    if ((('add' === $action_forum_cat || 'edit' === $action_forum_cat) && 'forum' === $get_content) ||
-        $post_submit_forum
-    ) {
-        $inputvalues = [];
-        if ('edit' === $action_forum_cat && $get_id || $post_submit_forum) {
-            $inputvalues = get_forums($get_id);
-        }
-        $content = show_add_forum_form($inputvalues, $lp_id);
-    }
-
-    // Edit a forum category
-    if (('edit' === $action_forum_cat && 'forumcategory' === $get_content) ||
-    (isset($_POST['SubmitEditForumCategory'])) ? true : false
-    ) {
-        $forum_category = get_forum_categories($get_id);
-        $content = show_edit_forumcategory_form($forum_category);
-    }
+    $resource = $repo->find($get_id);
 
     switch ($action) {
         case 'move':
@@ -150,7 +133,18 @@ function handle_forum_and_forumcategories($lp_id = null)
             break;
         case 'lock':
         case 'unlock':
-            $return_message = change_lock_status($get_content, $get_id, $action_forum_cat);
+            if ('lock' === $action) {
+                $locked = 1;
+                $return_message = get_lang('Locked: students can no longer post new messages in this forum category, forum or thread but they can still read the messages that were already posted');
+            } else  {
+                $locked = 0;
+                $return_message = get_lang('Unlocked: learners can post new messages in this forum category, forum or thread');
+            }
+
+            $resource->setLocked($locked);
+            $repo->getEntityManager()->persist($resource);
+            $repo->getEntityManager()->flush();
+
             Display::addFlash(
                 Display::return_message($return_message, 'confirmation', false)
             );
@@ -159,20 +153,28 @@ function handle_forum_and_forumcategories($lp_id = null)
             break;
         case 'visible':
         case 'invisible':
-            $return_message = change_visibility($get_content, $get_id, $action_forum_cat);
+            if ('visible' === $action) {
+                $repo->setVisibilityPublished($resource);
+            } else {
+                $repo->setVisibilityPending($resource);
+            }
+
+            if ('visible' === $action) {
+                handle_mail_cue($content, $get_id);
+            }
+
             Display::addFlash(
-                Display::return_message($return_message, 'confirmation', false)
+                Display::return_message(get_lang('Updated'), 'confirmation', false)
             );
             header('Location: '. api_get_path(WEB_CODE_PATH).'forum/index.php?'.api_get_cidreq());
             exit;
             break;
 
         case 'delete':
-            $repo = Container::getForumCategoryRepository();
-            $cat = $repo->find($get_id);
-            if ($cat) {
-                $repo->delete($cat);
+            if ($resource) {
+                $repo->delete($resource);
             }
+
             Display::addFlash(Display::return_message(get_lang('Forum category deleted'), 'confirmation', false));
             header('Location: '. api_get_path(WEB_CODE_PATH).'forum/index.php?'.api_get_cidreq());
             exit;
@@ -195,15 +197,16 @@ function handle_forum_and_forumcategories($lp_id = null)
  *
  * @version may 2011, Chamilo 1.8.8
  */
-function show_add_forumcategory_form($inputvalues = [], $lp_id)
+function show_add_forumcategory_form($lp_id)
 {
     $form = new FormValidator(
         'forumcategory',
         'post',
-        'index.php?'.api_get_cidreq()
+        'index.php?'.api_get_cidreq().'&action=add_category'
     );
     // hidden field if from learning path
     $form->addElement('hidden', 'lp_id', $lp_id);
+    $form->addElement('hidden', 'action', 'add_category');
     // Setting the form elements.
     $form->addElement('header', get_lang('Add forum category'));
     $form->addElement('text', 'forum_category_title', get_lang('Title'), ['autofocus']);
@@ -249,34 +252,26 @@ function show_add_forumcategory_form($inputvalues = [], $lp_id)
     }
 }
 
-/**
- * This function displays the form that is used to add a forum category.
- *
- * @param array $inputvalues
- * @param int   $lp_id
- *
- * @author Patrick Cool <patrick.cool@UGent.be>, Ghent University
- * @author Juan Carlos Raña Trabado (return to lp_id)
- *
- * @version may 2011, Chamilo 1.8.8
- */
-function show_add_forum_form($inputvalues = [], $lp_id)
+function forumForm(CForumForum $forum = null, $lp_id)
 {
     $_course = api_get_course_info();
-    $form = new FormValidator('forumcategory', 'post', 'index.php?'.api_get_cidreq());
-
     // The header for the form
     $form_title = get_lang('Add a forum');
-    if (!empty($inputvalues)) {
+    $action = 'add_forum';
+    $id = 0;
+    if ($forum) {
+        $id = $forum->getIid();
+        $action = 'edit_forum';
         $form_title = get_lang('Edit forum');
     }
 
+    $form = new FormValidator('forumcategory', 'post', 'index.php?'.api_get_cidreq().'&action='.$action.'&id='.$id);
+    $form->addHidden('action', $action);
     $form->addHeader($form_title);
 
     // We have a hidden field if we are editing.
-    if (!empty($inputvalues) && is_array($inputvalues)) {
-        $my_forum_id = isset($inputvalues['forum_id']) ? $inputvalues['forum_id'] : null;
-        $form->addElement('hidden', 'forum_id', $my_forum_id);
+    if ($forum) {
+        $form->addElement('hidden', 'forum_id', $id);
     }
     $lp_id = (int) $lp_id;
 
@@ -384,7 +379,8 @@ function show_add_forum_form($inputvalues = [], $lp_id)
 
     // Forum image
     $form->addProgress();
-    if (!empty($inputvalues['forum_image'])) {
+    /*
+    if ($forum) {
         $baseImagePath = api_get_course_path().'/upload/forum/images/'.$inputvalues['forum_image'];
         $image_path = api_get_path(WEB_COURSE_PATH).$baseImagePath;
         $sysImagePath = api_get_path(SYS_COURSE_PATH).$baseImagePath;
@@ -406,7 +402,7 @@ function show_add_forum_form($inputvalues = [], $lp_id)
         get_lang('Only PNG, JPG or GIF images allowed'),
         'filetype',
         ['jpg', 'jpeg', 'png', 'gif']
-    );
+    );*/
 
     //$forumId = isset($_GET['id']) ? (int) $_GET['id'] : 0;
     //$skillList = Skill::addSkillsToForm($form, ITEM_TYPE_FORUM, $forumId);
@@ -414,7 +410,7 @@ function show_add_forum_form($inputvalues = [], $lp_id)
     $form->addElement('html', '</div>');
 
     // The OK button
-    if (isset($_GET['id']) && 'edit' == $_GET['action']) {
+    if ($forum) {
         $form->addButtonUpdate(get_lang('Edit forum'), 'SubmitForum');
     } else {
         $form->addButtonCreate(get_lang('Create forum'), 'SubmitForum');
@@ -427,7 +423,7 @@ function show_add_forum_form($inputvalues = [], $lp_id)
     $defaultSettingAllowNewThreads = api_get_default_tool_setting('forum', 'allow_new_threads', 0);
 
     // Settings the defaults
-    if (empty($inputvalues) || !is_array($inputvalues)) {
+    if (null === $forum) {
         $defaults['moderated']['moderated'] = 0;
         $defaults['allow_anonymous_group']['allow_anonymous'] = 0;
         $defaults['students_can_edit_group']['students_can_edit'] = 0;
@@ -441,21 +437,21 @@ function show_add_forum_form($inputvalues = [], $lp_id)
         }
     } else {
         // the default values when editing = the data in the table
-        $defaults['forum_id'] = isset($inputvalues['forum_id']) ? $inputvalues['forum_id'] : null;
-        $defaults['forum_title'] = prepare4display(isset($inputvalues['forum_title']) ? $inputvalues['forum_title'] : null);
-        $defaults['forum_comment'] = prepare4display(isset($inputvalues['forum_comment']) ? $inputvalues['forum_comment'] : null);
-        $defaults['start_time'] = isset($inputvalues['start_time']) ? api_get_local_time($inputvalues['start_time']) : null;
-        $defaults['end_time'] = isset($inputvalues['end_time']) ? api_get_local_time($inputvalues['end_time']) : null;
-        $defaults['moderated']['moderated'] = isset($inputvalues['moderated']) ? $inputvalues['moderated'] : 0;
-        $defaults['forum_category'] = isset($inputvalues['forum_category']) ? $inputvalues['forum_category'] : null;
-        $defaults['allow_anonymous_group']['allow_anonymous'] = isset($inputvalues['allow_anonymous']) ? $inputvalues['allow_anonymous'] : null;
-        $defaults['students_can_edit_group']['students_can_edit'] = isset($inputvalues['allow_edit']) ? $inputvalues['allow_edit'] : null;
-        $defaults['approval_direct_group']['approval_direct'] = isset($inputvalues['approval_direct_post']) ? $inputvalues['approval_direct_post'] : null;
-        $defaults['allow_attachments_group']['allow_attachments'] = isset($inputvalues['allow_attachments']) ? $inputvalues['allow_attachments'] : null;
-        $defaults['allow_new_threads_group']['allow_new_threads'] = isset($inputvalues['allow_new_threads']) ? $inputvalues['allow_new_threads'] : $defaultSettingAllowNewThreads;
-        $defaults['default_view_type_group']['default_view_type'] = isset($inputvalues['default_view']) ? $inputvalues['default_view'] : null;
-        $defaults['public_private_group_forum_group']['public_private_group_forum'] = isset($inputvalues['forum_group_public_private']) ? $inputvalues['forum_group_public_private'] : null;
-        $defaults['group_forum'] = isset($inputvalues['forum_of_group']) ? $inputvalues['forum_of_group'] : null;
+        $defaults['forum_id'] = $forum->getIid();
+        $defaults['forum_title'] = prepare4display($forum->getForumTitle());
+        $defaults['forum_comment'] = prepare4display($forum->getForumComment());
+        $defaults['start_time'] = api_get_local_time($forum->getStartTime());
+        $defaults['end_time'] = api_get_local_time($forum->getEndTime());
+        $defaults['moderated']['moderated'] = $forum->isModerated();
+        $defaults['forum_category'] = $forum->getForumCategory()->getIid();
+        $defaults['allow_anonymous_group']['allow_anonymous'] = $forum->getAllowAnonymous();
+        $defaults['students_can_edit_group']['students_can_edit'] = $forum->getAllowEdit();
+        $defaults['approval_direct_group']['approval_direct'] = $forum->getApprovalDirectPost();
+        $defaults['allow_attachments_group']['allow_attachments'] = $forum->getAllowAttachments();
+        $defaults['allow_new_threads_group']['allow_new_threads'] = $forum->getAllowNewThreads();
+        $defaults['default_view_type_group']['default_view_type'] = $forum->getDefaultView();
+        $defaults['public_private_group_forum_group']['public_private_group_forum'] = $forum->getForumGroupPublicPrivate();
+        $defaults['group_forum'] = $forum->getForumOfGroup();
     }
 
     $form->setDefaults($defaults);
@@ -517,24 +513,15 @@ function delete_forum_image($forum_id)
     }
 }
 
-/**
- * This function displays the form that is used to edit a forum category.
- *
- * @param array $inputvalues
- *
- * @return string
- *
- * @author Patrick Cool <patrick.cool@UGent.be>, Ghent University
- *
- * @version february 2006, dokeos 1.8
- */
-function show_edit_forumcategory_form($inputvalues = [])
+function editForumCategoryForm(CForumCategory $category)
 {
-    $categoryId = $inputvalues['cat_id'];
-    $form = new FormValidator('forumcategory', 'post', 'index.php?'.api_get_cidreq().'&id='.$categoryId);
+    $categoryId = $category->getIid();
+    $form = new FormValidator('forumcategory', 'post', 'index.php?action=edit_category&'.api_get_cidreq().'&id='.$categoryId);
 
     // Setting the form elements.
     $form->addElement('header', '', get_lang('Edit forumCategory'));
+
+    $form->addElement('hidden', 'action', 'edit_category');
     $form->addElement('hidden', 'forum_category_id');
     $form->addElement('text', 'forum_category_title', get_lang('Title'));
 
@@ -561,9 +548,9 @@ function show_edit_forumcategory_form($inputvalues = [])
     $form->addButtonUpdate(get_lang('Edit category'), 'SubmitEdit forumCategory');
 
     // Setting the default values.
-    $defaultvalues['forum_category_id'] = $inputvalues['cat_id'];
-    $defaultvalues['forum_category_title'] = $inputvalues['cat_title'];
-    $defaultvalues['forum_category_comment'] = $inputvalues['cat_comment'];
+    $defaultvalues['forum_category_id'] = $categoryId;
+    $defaultvalues['forum_category_title'] = $category->getCatTitle();
+    $defaultvalues['forum_category_comment'] = $category->getCatComment();
     $form->setDefaults($defaultvalues);
 
     // Setting the rules.
@@ -614,36 +601,27 @@ function store_forumcategory($values, $courseInfo = [], $showMessage = true)
     $repo = Container::getForumCategoryRepository();
 
     if (isset($values['forum_category_id'])) {
-        // Storing after edition.
-        $params = [
-            'cat_title' => $clean_cat_title,
-            'cat_comment' => isset($values['forum_category_comment']) ? $values['forum_category_comment'] : '',
-        ];
+        /** @var CForumCategory $category */
+        $category = $repo->find($values['forum_category_id']);
+        $category
+            ->setCatComment(isset($values['forum_category_comment']) ? $values['forum_category_comment'] : '')
+            ->setCatTitle($values['forum_category_title'])
+        ;
 
-        Database::update(
-            $table_categories,
-            $params,
-            [
-                'c_id = ? AND cat_id = ?' => [
-                    $course_id,
-                    $values['forum_category_id'],
-                ],
-            ]
-        );
+        $repo->getEntityManager()->persist($category);
+        $repo->getEntityManager()->flush();
 
-        api_item_property_update(
+        /*api_item_property_update(
             $courseInfo,
             TOOL_FORUM_CATEGORY,
             $values['forum_category_id'],
             'ForumCategoryUpdated',
             api_get_user_id()
-        );
+        );*/
         $return_message = get_lang('The forum category has been modified');
 
         $logInfo = [
             'tool' => TOOL_FORUM,
-            'tool_id' => 0,
-            'tool_id_detail' => 0,
             'action' => 'update-forumcategory',
             'action_details' => 'forumcategory',
             'info' => $clean_cat_title,
@@ -730,10 +708,6 @@ function store_forum($values, $courseInfo = [], $returnId = false)
     $group_id = api_get_group_id();
     if (isset($values['group_id']) && !empty($values['group_id'])) {
         $group_id = $values['group_id'];
-    }
-    $groupInfo = [];
-    if (!empty($group_id)) {
-        $groupInfo = GroupManager::get_group_properties($group_id);
     }
 
     $table_forums = Database::get_course_table(TABLE_FORUM);
@@ -825,8 +799,8 @@ function store_forum($values, $courseInfo = [], $returnId = false)
         ->setForumOfGroup($values['group_forum'] ?? null)
         ->setForumGroupPublicPrivate($values['public_private_group_forum_group']['public_private_group_forum'] ?? '')
         ->setModerated($values['moderated']['moderated'] ?? null)
-        ->setStartTime(!empty($values['start_time']) ? api_get_utc_datetime($values['start_time']) : null)
-        ->setEndTime(!empty($values['end_time']) ? api_get_utc_datetime($values['end_time']) : null)
+        ->setStartTime(!empty($values['start_time']) ? api_get_utc_datetime($values['start_time'], true, true) : null)
+        ->setEndTime(!empty($values['end_time']) ? api_get_utc_datetime($values['end_time'], true, true) : null)
         ->setSessionId($session_id)
         ->setLpId($values['lp_id'] ?? 0)
 
@@ -1344,103 +1318,6 @@ function return_up_down_icon($content, $id, $list)
     return $return_value;
 }
 
-/**
- * This function changes the visibility in the database (item_property).
- *
- * @param string $content           what is it that we want to make (in)visible: forum category, forum, thread, post
- * @param int    $id                the id of the content we want to make invisible
- * @param string $target_visibility what is the current status of the visibility (0 = invisible, 1 = visible)
- *
- * @todo change the get parameter so that it matches the tool constants.
- * @todo check if api_item_property_update returns true or false => returnmessage depends on it.
- * @todo move to itemmanager
- *
- * @return string language variable
- *
- * @author Patrick Cool <patrick.cool@UGent.be>, Ghent University
- *
- * @version february 2006, dokeos 1.8
- */
-function change_visibility($content, $id, $target_visibility)
-{
-    $_course = api_get_course_info();
-    $constants = [
-        'forumcategory' => TOOL_FORUM_CATEGORY,
-        'forum' => TOOL_FORUM,
-        'thread' => TOOL_FORUM_THREAD,
-    ];
-    api_item_property_update(
-        $_course,
-        $constants[$content],
-        $id,
-        $target_visibility,
-        api_get_user_id()
-    );
-
-    if ('visible' == $target_visibility) {
-        handle_mail_cue($content, $id);
-    }
-
-    return get_lang('The visibility has been changed.');
-}
-
-/**
- * This function changes the lock status in the database.
- *
- * @param string $content what is it that we want to (un)lock: forum category, forum, thread, post
- * @param int    $id      the id of the content we want to (un)lock
- * @param string $action  do we lock (=>locked value in db = 1) or unlock (=> locked value in db = 0)
- *
- * @return string language variable
- *
- * @todo move to item manager
- *
- * @author Patrick Cool <patrick.cool@UGent.be>, Ghent University
- *
- * @version february 2006, dokeos 1.8
- */
-function change_lock_status($content, $id, $action)
-{
-    $table_categories = Database::get_course_table(TABLE_FORUM_CATEGORY);
-    $table_forums = Database::get_course_table(TABLE_FORUM);
-    $table_threads = Database::get_course_table(TABLE_FORUM_THREAD);
-
-    // Determine the relevant table.
-    if ('forumcategory' == $content) {
-        $table = $table_categories;
-        $id_field = 'cat_id';
-    } elseif ('forum' == $content) {
-        $table = $table_forums;
-        $id_field = 'forum_id';
-    } elseif ('thread' == $content) {
-        $table = $table_threads;
-        $id_field = 'thread_id';
-    } else {
-        return get_lang('Error');
-    }
-
-    // Determine what we are doing => defines the value for the database and the return message.
-    if ('lock' == $action) {
-        $db_locked = 1;
-        $return_message = get_lang('Locked: students can no longer post new messages in this forum category, forum or thread but they can still read the messages that were already posted');
-    } elseif ('unlock' == $action) {
-        $db_locked = 0;
-        $return_message = get_lang('Unlocked: learners can post new messages in this forum category, forum or thread');
-    } else {
-        return get_lang('Error');
-    }
-
-    $course_id = api_get_course_int_id();
-
-    // Doing the change in the database
-    $sql = "UPDATE $table SET locked='".Database::escape_string($db_locked)."'
-            WHERE c_id = $course_id AND $id_field='".Database::escape_string($id)."'";
-    if (Database::query($sql)) {
-        return $return_message;
-    } else {
-        return get_lang('Error');
-    }
-}
 
 /**
  * This function moves a forum or a forum category up or down.

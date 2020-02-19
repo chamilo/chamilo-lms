@@ -20,6 +20,8 @@ use Chamilo\PluginBundle\MigrationMoodle\Transformer\Property\LoadedLessonPageQu
 class LessonAnswersShortAnswerTask extends BaseTask
 {
     /**
+     * @todo Review scores as in QuestionShortAnswerTask.
+     *
      * @return array
      */
     public function getExtractConfiguration()

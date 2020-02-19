@@ -64,17 +64,12 @@ class LessonAnswersShortAnswerLoader implements LoaderInterface
         );
 
         $return .= '::'.$incomingData['scores'].':';
+        $return .= self::INPUT_WIDTH;
 
         $scores = explode(',', $incomingData['scores']);
 
-        for ($i = 0; $i < $incomingData['nb']; $i++) {
-            $question->weighting += $scores[$i];
-
-            $return .= self::INPUT_WIDTH;
-
-            if ($i != $incomingData['nb'] - 1) {
-                $return .= ',';
-            }
+        foreach ($scores as $score) {
+            $question->weighting += $score;
         }
 
         $return .= ':0@';

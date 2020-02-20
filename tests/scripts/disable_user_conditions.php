@@ -11,6 +11,13 @@ $extraFieldValue = new ExtraField('user');
 $extraFieldInfo = $extraFieldValue->get_handler_field_info_by_field_variable('termactivated');
 $fieldId = $extraFieldInfo['id'];
 
+$senderId = api_get_configuration_value('disable_user_conditions_sender_id');
+$senderInfo = api_get_user_info($senderId);
+
+if (empty($senderId) || empty($senderInfo)) {
+    echo 'Please set the configuraction value: "disable_user_conditions_sender_id" for a valid user.';
+}
+
 $statusCondition = ' AND u.status = '.STUDENT;
 
 $date = new Datetime();
@@ -58,7 +65,18 @@ foreach ($students as $student) {
 
         if (false === $test) {
             UserManager::disable($studentId);
-            MessageManager::send_message($studentId, $subject, $content);
+            MessageManager::send_message(
+                $studentId,
+                $subject,
+                $content,
+                [],
+                [],
+                0,
+                0,
+                0,
+                0,
+                $senderId
+            );
         }
     }
 }
@@ -103,7 +121,18 @@ foreach ($students as $student) {
 
         if (false === $test) {
             UserManager::disable($studentId);
-            MessageManager::send_message($studentId, $subject, $content);
+            MessageManager::send_message(
+                $studentId,
+                $subject,
+                $content,
+                [],
+                [],
+                0,
+                0,
+                0,
+                0,
+                $senderId
+            );
         }
     }
 }
@@ -158,10 +187,32 @@ foreach ($students as $student) {
 
         if (false === $test) {
             UserManager::disable($studentId);
-            MessageManager::send_message($studentId, $subject, $content);
+            MessageManager::send_message(
+                $studentId,
+                $subject,
+                $content,
+                [],
+                [],
+                0,
+                0,
+                0,
+                0,
+                $senderId
+            );
 
             if (!empty($bossInfo) && !empty($subjectBoss)) {
-                MessageManager::send_message($studentBoss, $subjectBoss, $contentBoss);
+                MessageManager::send_message(
+                    $studentBoss,
+                    $subjectBoss,
+                    $contentBoss,
+                    [],
+                    [],
+                    0,
+                    0,
+                    0,
+                    0,
+                    $senderId
+                );
             }
             UserManager::removeAllBossFromStudent($studentId);
         }
@@ -172,6 +223,8 @@ foreach ($students as $student) {
 
 if ($test) {
     echo '<h3>No changes have been made.</h3>'.$newLine;
+
+    echo 'Sender user: '.$senderInfo['complete_name'].$newLine;
     echo "Now: $now".$newLine;
     echo "3 Months old: $date3Months".$newLine;
     echo "6 Months old: $date6Months".$newLine;

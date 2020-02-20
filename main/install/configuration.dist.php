@@ -1289,6 +1289,9 @@ requires extension "php-soap"  sudo apt-get install php-soap
 // ALTER TABLE session ADD COLUMN status INT DEFAULT 0;
 // $_configuration['allow_session_status'] = 0;
 
+// Sets the sender id when using the script tests/scripts/disable_user_conditions.php
+// $_configuration['disable_user_conditions_sender_id'] = 0;
+
 // KEEP THIS AT THE END
 // -------- Custom DB changes
 // Add user activation by confirmation email

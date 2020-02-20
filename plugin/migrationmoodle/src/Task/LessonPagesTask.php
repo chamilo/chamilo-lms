@@ -3,7 +3,7 @@
 
 namespace Chamilo\PluginBundle\MigrationMoodle\Task;
 
-use Chamilo\PluginBundle\MigrationMoodle\Extractor\CourseExtractor;
+use Chamilo\PluginBundle\MigrationMoodle\Extractor\LoadedCoursesFilterExtractor;
 use Chamilo\PluginBundle\MigrationMoodle\Loader\LessonPagesLoader;
 use Chamilo\PluginBundle\MigrationMoodle\Transformer\BaseTransformer;
 use Chamilo\PluginBundle\MigrationMoodle\Transformer\Property\LoadedCourseCodeLookup;
@@ -31,7 +31,7 @@ class LessonPagesTask extends BaseTask
     public function getExtractConfiguration()
     {
         return [
-            'class' => CourseExtractor::class,
+            'class' => LoadedCoursesFilterExtractor::class,
             'query' => "WITH RECURSIVE lesson_pages_ordered (id, title, qtype, prev, next, lesson, display_order) AS
                 (
                     SELECT id, title, qtype, prevpageid, nextpageid, lessonid, '01'

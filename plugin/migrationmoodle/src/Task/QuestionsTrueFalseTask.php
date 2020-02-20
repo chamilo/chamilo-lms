@@ -3,7 +3,7 @@
 
 namespace Chamilo\PluginBundle\MigrationMoodle\Task;
 
-use Chamilo\PluginBundle\MigrationMoodle\Extractor\CourseExtractor;
+use Chamilo\PluginBundle\MigrationMoodle\Extractor\LoadedCoursesFilterExtractor;
 
 /**
  * Class QuestionsTrueFalseTask.
@@ -20,7 +20,7 @@ class QuestionsTrueFalseTask extends QuestionMultiChoiceSingleTask
     public function getExtractConfiguration()
     {
         return [
-            'class' => CourseExtractor::class,
+            'class' => LoadedCoursesFilterExtractor::class,
             'query' => "SELECT
                     qa.id,
                     qa.question,

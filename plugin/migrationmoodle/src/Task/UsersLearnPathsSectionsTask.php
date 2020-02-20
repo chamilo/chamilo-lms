@@ -3,7 +3,7 @@
 
 namespace Chamilo\PluginBundle\MigrationMoodle\Task;
 
-use Chamilo\PluginBundle\MigrationMoodle\Extractor\UserExtractor;
+use Chamilo\PluginBundle\MigrationMoodle\Extractor\LoadedUsersFilterExtractor;
 use Chamilo\PluginBundle\MigrationMoodle\Loader\UserLearnPathsSectionsLoader;
 use Chamilo\PluginBundle\MigrationMoodle\Transformer\BaseTransformer;
 use Chamilo\PluginBundle\MigrationMoodle\Transformer\Property\LoadedCourseModuleLessonLookup;
@@ -25,7 +25,7 @@ class UsersLearnPathsSectionsTask extends BaseTask
     public function getExtractConfiguration()
     {
         return [
-            'class' => UserExtractor::class,
+            'class' => LoadedUsersFilterExtractor::class,
             'query' => "SELECT id, lessonid, userid, starttime, lessontime - starttime AS total_time
                 FROM mdl_lesson_timer",
         ];

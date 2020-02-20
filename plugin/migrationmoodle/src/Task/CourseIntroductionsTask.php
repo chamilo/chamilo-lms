@@ -3,7 +3,7 @@
 
 namespace Chamilo\PluginBundle\MigrationMoodle\Task;
 
-use Chamilo\PluginBundle\MigrationMoodle\Extractor\CourseExtractor;
+use Chamilo\PluginBundle\MigrationMoodle\Extractor\LoadedCoursesFilterExtractor;
 use Chamilo\PluginBundle\MigrationMoodle\Loader\CourseIntroductionLoader;
 use Chamilo\PluginBundle\MigrationMoodle\Transformer\BaseTransformer;
 use Chamilo\PluginBundle\MigrationMoodle\Transformer\Property\LoadedCourseLookup;
@@ -24,7 +24,7 @@ class CourseIntroductionsTask extends BaseTask
     public function getExtractConfiguration()
     {
         return [
-            'class' => CourseExtractor::class,
+            'class' => LoadedCoursesFilterExtractor::class,
             'query' => "SELECT id, course, name, summary
                 FROM mdl_course_sections
                 WHERE section = 0 AND (summary != '' AND summary IS NOT NULL)",

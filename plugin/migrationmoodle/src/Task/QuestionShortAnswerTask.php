@@ -3,7 +3,7 @@
 
 namespace Chamilo\PluginBundle\MigrationMoodle\Task;
 
-use Chamilo\PluginBundle\MigrationMoodle\Extractor\CourseExtractor;
+use Chamilo\PluginBundle\MigrationMoodle\Extractor\LoadedCoursesFilterExtractor;
 use Chamilo\PluginBundle\MigrationMoodle\Transformer\BaseTransformer;
 use Chamilo\PluginBundle\MigrationMoodle\Transformer\Property\LoadedCourseLookup;
 use Chamilo\PluginBundle\MigrationMoodle\Transformer\Property\LoadedLessonPageQuizLookup;
@@ -22,7 +22,7 @@ class QuestionShortAnswerTask extends LessonAnswersShortAnswerTask
     public function getExtractConfiguration()
     {
         return [
-            'class' => CourseExtractor::class,
+            'class' => LoadedCoursesFilterExtractor::class,
             'query' => "SELECT
                     qa.id,
                     qa.question,

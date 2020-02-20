@@ -3,7 +3,7 @@
 
 namespace Chamilo\PluginBundle\MigrationMoodle\Task;
 
-use Chamilo\PluginBundle\MigrationMoodle\Extractor\UserExtractor;
+use Chamilo\PluginBundle\MigrationMoodle\Extractor\LoadedUsersFilterExtractor;
 use Chamilo\PluginBundle\MigrationMoodle\Loader\EfcUserSessionLoader;
 use Chamilo\PluginBundle\MigrationMoodle\Transformer\BaseTransformer;
 use Chamilo\PluginBundle\MigrationMoodle\Transformer\Property\LoadedUserLookup;
@@ -24,7 +24,7 @@ class EfcUserSessionsTask extends BaseTask
     public function getExtractConfiguration()
     {
         return [
-            'class' => UserExtractor::class,
+            'class' => LoadedUsersFilterExtractor::class,
             'query' => 'SELECT
                     u.id, u.username,
                     GROUP_CONCAT(c.shortname SEPARATOR "'.self::SEPARATOR_NAME.'") session_name

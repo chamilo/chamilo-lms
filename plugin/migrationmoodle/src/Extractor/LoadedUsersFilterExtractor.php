@@ -6,14 +6,14 @@ namespace Chamilo\PluginBundle\MigrationMoodle\Extractor;
 use Chamilo\PluginBundle\MigrationMoodle\Task\EfcUsersTask;
 
 /**
- * Class UserExtractor.
+ * Class LoadedUsersFilterExtractor.
  *
  * @package Chamilo\PluginBundle\MigrationMoodle\Extractor
  */
-class UserExtractor extends FilterExtractor
+class LoadedUsersFilterExtractor extends FilterExtractor
 {
     /**
-     * UserExtractor constructor.
+     * LoadedUsersFilterExtractor constructor.
      *
      * @param array $configuration
      */

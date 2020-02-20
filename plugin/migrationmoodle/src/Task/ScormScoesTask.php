@@ -3,7 +3,7 @@
 
 namespace Chamilo\PluginBundle\MigrationMoodle\Task;
 
-use Chamilo\PluginBundle\MigrationMoodle\Extractor\ScormExtractor;
+use Chamilo\PluginBundle\MigrationMoodle\Extractor\LoadedScormsFilterExtractor;
 use Chamilo\PluginBundle\MigrationMoodle\Loader\ScormScoLoader;
 use Chamilo\PluginBundle\MigrationMoodle\Transformer\BaseTransformer;
 use Chamilo\PluginBundle\MigrationMoodle\Transformer\Property\LoadedCourseCodeLookup;
@@ -23,7 +23,7 @@ class ScormScoesTask extends BaseTask
     public function getExtractConfiguration()
     {
         return [
-            'class' => ScormExtractor::class,
+            'class' => LoadedScormsFilterExtractor::class,
             'query' => "SELECT i.id, i.title, i.scormtype, i.launch, i.identifier, i.scorm, i.parent, s.course
                 FROM mdl_scorm_scoes i
                 INNER JOIN mdl_scorm s ON i.scorm = s.id

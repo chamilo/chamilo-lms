@@ -3,7 +3,7 @@
 
 namespace Chamilo\PluginBundle\MigrationMoodle\Task;
 
-use Chamilo\PluginBundle\MigrationMoodle\Extractor\UserExtractor;
+use Chamilo\PluginBundle\MigrationMoodle\Extractor\LoadedUsersFilterExtractor;
 use Chamilo\PluginBundle\MigrationMoodle\Loader\UserLearnPathsLoader;
 use Chamilo\PluginBundle\MigrationMoodle\Transformer\BaseTransformer;
 use Chamilo\PluginBundle\MigrationMoodle\Transformer\Property\LoadedUserLookup;
@@ -23,7 +23,7 @@ class UsersLearnPathsTask extends BaseTask
     public function getExtractConfiguration()
     {
         return [
-            'class' => UserExtractor::class,
+            'class' => LoadedUsersFilterExtractor::class,
             'query' => 'SELECT id FROM mdl_user WHERE username LIKE "efc%"',
         ];
     }

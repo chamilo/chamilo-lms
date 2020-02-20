@@ -6,16 +6,16 @@ namespace Chamilo\PluginBundle\MigrationMoodle\Extractor;
 use Chamilo\PluginBundle\MigrationMoodle\Task\CourseModulesScormTask;
 
 /**
- * Class ScormExtractor.
+ * Class LoadedScormsFilterExtractor.
  *
  * Extractor for scorms already extracted and loaded.
  *
  * @package Chamilo\PluginBundle\MigrationMoodle\Extractor
  */
-class ScormExtractor extends FilterExtractor
+class LoadedScormsFilterExtractor extends FilterExtractor
 {
     /**
-     * ScormExtractor constructor.
+     * LoadedScormsFilterExtractor constructor.
      *
      * @param array $configuration
      */

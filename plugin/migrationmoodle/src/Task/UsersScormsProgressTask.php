@@ -3,7 +3,7 @@
 
 namespace Chamilo\PluginBundle\MigrationMoodle\Task;
 
-use Chamilo\PluginBundle\MigrationMoodle\Extractor\UserExtractor;
+use Chamilo\PluginBundle\MigrationMoodle\Extractor\LoadedUsersFilterExtractor;
 use Chamilo\PluginBundle\MigrationMoodle\Loader\UserScormProgressLoader;
 use Chamilo\PluginBundle\MigrationMoodle\Transformer\BaseTransformer;
 use Chamilo\PluginBundle\MigrationMoodle\Transformer\Property\LoadedUserLookup;
@@ -21,7 +21,7 @@ class UsersScormsProgressTask extends EfcUsersTask
     public function getExtractConfiguration()
     {
         return [
-            'class' => UserExtractor::class,
+            'class' => LoadedUsersFilterExtractor::class,
             'query' => "SELECT DISTINCT userid id FROM mdl_scorm_scoes_track"
         ];
     }

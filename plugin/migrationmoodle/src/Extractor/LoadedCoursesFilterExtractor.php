@@ -6,16 +6,16 @@ namespace Chamilo\PluginBundle\MigrationMoodle\Extractor;
 use Chamilo\PluginBundle\MigrationMoodle\Task\EfcCoursesTask;
 
 /**
- * Class CourseExtractor.
+ * Class LoadedCoursesFilterExtractor.
  *
  * Extractor for course already extracted and loaded.
  *
  * @package Chamilo\PluginBundle\MigrationMoodle\Extractor
  */
-class CourseExtractor extends FilterExtractor
+class LoadedCoursesFilterExtractor extends FilterExtractor
 {
     /**
-     * CourseExtractor constructor.
+     * LoadedCoursesFilterExtractor constructor.
      *
      * @param array $configuration
      */

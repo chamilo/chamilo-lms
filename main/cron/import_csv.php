@@ -650,6 +650,8 @@ class ImportCsv
             $counter = 1;
             foreach ($data as $row) {
                 $row = $this->cleanUserRow($row);
+                $externalUserId = $row['official_code'];
+                $row['extra_'.$this->extraFieldIdNameList['user']] = $externalUserId;
 
                 $user_id = UserManager::get_user_id_from_original_id(
                     $row['extra_'.$this->extraFieldIdNameList['user']],
@@ -820,6 +822,9 @@ class ImportCsv
 
             foreach ($data as $row) {
                 $row = $this->cleanUserRow($row);
+                $externalUserId = $row['official_code'];
+                $row['extra_'.$this->extraFieldIdNameList['user']] = $externalUserId;
+
                 $user_id = UserManager::get_user_id_from_original_id(
                     $row['extra_'.$this->extraFieldIdNameList['user']],
                     $this->extraFieldIdNameList['user']

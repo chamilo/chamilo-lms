@@ -7,6 +7,12 @@ $strings['plugin_comment'] = 'Execute a migration process from Moodle data to Ch
 $strings['MoodlePassword'] = 'Moodle password';
 $strings['UninstallError'] = 'An error ocurred while the plugin was uninstalled.';
 
+$strings['active'] = 'Active';
+$strings['db_host'] = 'Moodle DB host';
+$strings['db_user'] = 'Moodle DB user';
+$strings['db_password'] = 'Moodle DB password';
+$strings['db_name'] = 'Moodle DB name';
+
 // Tasks
 $strings['UsersTask'] = 'Users';
 $strings['EfcUsersTask'] = 'Users (filtered with username efc*)';

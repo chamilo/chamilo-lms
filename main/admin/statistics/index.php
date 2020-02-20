@@ -370,25 +370,7 @@ switch ($report) {
             $second = DateTime::createFromFormat('Y-m-d', $dateEnd);
             $numberOfWeeks = floor($first->diff($second)->days / 7);
 
-            $content .= '<div class="row">';
-            $content .= '<div class="col-md-4"><canvas id="canvas1" style="margin-bottom: 20px"></canvas></div>';
-            $content .= '<div class="col-md-4"><canvas id="canvas2" style="margin-bottom: 20px"></canvas></div>';
-
             $sessionStatusAllowed = api_get_configuration_value('allow_session_status');
-            if ($sessionStatusAllowed) {
-                $content .= '<div class="col-md-4"><canvas id="canvas3" style="margin-bottom: 20px"></canvas></div>';
-            }
-            $content .= '</div>';
-
-            $content .= '<div class="row">';
-            $content .= '<div class="col-md-4"><h4 class="page-header" id="canvas1_title"></h4><div id="canvas1_table"></div></div>';
-            $content .= '<div class="col-md-4"><h4 class="page-header" id="canvas2_title"></h4><div id="canvas2_table"></div></div>';
-
-            $sessionStatusAllowed = api_get_configuration_value('allow_session_status');
-            if ($sessionStatusAllowed) {
-                $content .= '<div class="col-md-4"><h4 class="page-header" id="canvas3_title"></h4><div id="canvas3_table"></div></div>';
-            }
-            $content .= '</div>';
 
             $statusCondition = '';
             if (!empty($statusId)) {
@@ -399,8 +381,8 @@ switch ($report) {
             $end = Database::escape_string($dateEnd);
 
             // User count
-            $table = Database::get_main_table(TABLE_MAIN_SESSION);
-            $sql = "SELECT * FROM $table
+            $tableSession = Database::get_main_table(TABLE_MAIN_SESSION);
+            $sql = "SELECT * FROM $tableSession
                     WHERE
                         (display_start_date BETWEEN '$start' AND '$end' OR
                         display_end_date BETWEEN '$start' AND '$end')
@@ -417,8 +399,10 @@ switch ($report) {
                 ++$sessionCount;
             }
 
+            $content .= Display::page_subheader2(get_lang('GeneralStats'));
+
             // Coach
-            $sql = "SELECT count(DISTINCT(id_coach)) count FROM $table
+            $sql = "SELECT count(DISTINCT(id_coach)) count FROM $tableSession
                     WHERE
                         (display_start_date BETWEEN '$start' AND '$end' OR
                         display_end_date BETWEEN '$start' AND '$end')
@@ -429,7 +413,7 @@ switch ($report) {
             $uniqueCoaches = $row['count'];
 
             // Categories
-            $sql = "SELECT count(id) count, session_category_id FROM $table
+            $sql = "SELECT count(id) count, session_category_id FROM $tableSession
                     WHERE
                         (display_start_date BETWEEN '$start' AND '$end' OR
                         display_end_date BETWEEN '$start' AND '$end')
@@ -480,7 +464,30 @@ switch ($report) {
 
             $content .= $table->toHtml();
 
-            $table = new HTML_Table(['class' => 'table table-responsive']);
+            $content .= '<div class="row">';
+            $content .= '<div class="col-md-4"><h4 class="page-header" id="canvas1_title"></h4><div id="canvas1_table"></div></div>';
+            $content .= '<div class="col-md-4"><h4 class="page-header" id="canvas2_title"></h4><div id="canvas2_table"></div></div>';
+
+            if ($sessionStatusAllowed) {
+                $content .= '<div class="col-md-4"><h4 class="page-header" id="canvas3_title"></h4><div id="canvas3_table"></div></div>';
+            }
+            $content .= '</div>';
+
+            $content .= '<div class="row">';
+            $content .= '<div class="col-md-4"><canvas id="canvas1" style="margin-bottom: 20px"></canvas></div>';
+            $content .= '<div class="col-md-4"><canvas id="canvas2" style="margin-bottom: 20px"></canvas></div>';
+
+            if ($sessionStatusAllowed) {
+                $content .= '<div class="col-md-4"><canvas id="canvas3" style="margin-bottom: 20px"></canvas></div>';
+            }
+            $content .= '</div>';
+
+            $content .= '<div class="row">';
+            $content .= '<div class="col-md-12"><canvas id="canvas4" style="margin-bottom: 20px"></canvas></div>';
+            $content .= '</div>';
+
+
+            /*$table = new HTML_Table(['class' => 'table table-responsive']);
             $headers = [
                 get_lang('SessionCategory'),
                 get_lang('Count'),
@@ -505,57 +512,7 @@ switch ($report) {
                 ++$row;
             }
 
-            $content .= $table->toHtml();
-
-            $table = new HTML_Table(['class' => 'table table-responsive']);
-            $headers = [
-                get_lang('Name'),
-                get_lang('StartDate'),
-                get_lang('EndDate'),
-                get_lang('Language'),
-            ];
-            if ($sessionStatusAllowed) {
-                $headers[] = get_lang('Status');
-            }
-            $row = 0;
-            $column = 0;
-            foreach ($headers as $header) {
-                $table->setHeaderContents($row, $column, $header);
-                ++$column;
-            }
-            ++$row;
-
-            $courseSessions = [];
-            foreach ($sessions as $session) {
-                $courseList = SessionManager::getCoursesInSession($session['id']);
-                foreach ($courseList as $courseId) {
-                    if (!isset($courseSessions[$courseId])) {
-                        $courseSessions[$courseId] = 0;
-                    }
-                    ++$courseSessions[$courseId];
-                }
-
-                $table->setCellContents($row, 0, $session['name']);
-                $table->setCellContents($row, 1, api_get_local_time($session['display_start_date']));
-                $table->setCellContents($row, 2, api_get_local_time($session['display_end_date']));
-
-                // Get first language.
-                $language = '';
-                $courses = SessionManager::getCoursesInSession($session['id']);
-                if (!empty($courses)) {
-                    $courseId = $courses[0];
-                    $courseInfo = api_get_course_info_by_id($courseId);
-                    $language = $courseInfo['language'];
-                    $language = str_replace('2', '', $language);
-                }
-                $table->setCellContents($row, 3, $language);
-
-                if ($sessionStatusAllowed) {
-                    $table->setCellContents($row, 4, SessionManager::getStatusLabel($session['status']));
-                }
-                ++$row;
-            }
-            $content .= $table->toHtml();
+            $content .= $table->toHtml();*/
         }
 
         $tableCourse = new HTML_Table(['class' => 'table table-responsive']);
@@ -582,14 +539,62 @@ switch ($report) {
             }
         }
 
-        $content .= '<div class="row">';
-        $content .= '<div class="col-md-12"><canvas id="canvas4" style="margin-bottom: 20px"></canvas></div>';
-        $content .= '</div>';
 
         /*$content .= '<div class="row">';
         $content .= '<div class="col-md-12"><h4 class="page-header" id="canvas4_title"></h4><div id="canvas4_table"></div></div>';
         $content .= '</div>';*/
         $content .= $tableCourse->toHtml();
+
+
+        $table = new HTML_Table(['class' => 'table table-responsive']);
+        $headers = [
+            get_lang('Name'),
+            get_lang('StartDate'),
+            get_lang('EndDate'),
+            get_lang('Language'),
+        ];
+        if ($sessionStatusAllowed) {
+            $headers[] = get_lang('Status');
+        }
+        $row = 0;
+        $column = 0;
+        foreach ($headers as $header) {
+            $table->setHeaderContents($row, $column, $header);
+            ++$column;
+        }
+        ++$row;
+
+        $courseSessions = [];
+        foreach ($sessions as $session) {
+            $courseList = SessionManager::getCoursesInSession($session['id']);
+            foreach ($courseList as $courseId) {
+                if (!isset($courseSessions[$courseId])) {
+                    $courseSessions[$courseId] = 0;
+                }
+                ++$courseSessions[$courseId];
+            }
+
+            $table->setCellContents($row, 0, $session['name']);
+            $table->setCellContents($row, 1, api_get_local_time($session['display_start_date']));
+            $table->setCellContents($row, 2, api_get_local_time($session['display_end_date']));
+
+            // Get first language.
+            $language = '';
+            $courses = SessionManager::getCoursesInSession($session['id']);
+            if (!empty($courses)) {
+                $courseId = $courses[0];
+                $courseInfo = api_get_course_info_by_id($courseId);
+                $language = $courseInfo['language'];
+                $language = str_replace('2', '', $language);
+            }
+            $table->setCellContents($row, 3, $language);
+
+            if ($sessionStatusAllowed) {
+                $table->setCellContents($row, 4, SessionManager::getStatusLabel($session['status']));
+            }
+            ++$row;
+        }
+        $content .= $table->toHtml();
 
         if (isset($_REQUEST['action']) && 'export' === $_REQUEST['action']) {
             $data = $table->toArray();
@@ -612,7 +617,7 @@ switch ($report) {
             );
         }
 
-        $content = $form->returnForm().$link.$content;
+        $content = $form->returnForm().$content.$link;
 
         break;
     case 'user_session':

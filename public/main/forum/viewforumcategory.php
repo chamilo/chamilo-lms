@@ -26,6 +26,7 @@ use ChamiloSession as Session;
  * @Copyright Patrick Cool
  */
 require_once __DIR__.'/../inc/global.inc.php';
+require_once 'forumfunction.inc.php';
 
 Session::erase('_gid');
 
@@ -45,23 +46,23 @@ function hidecontent(content){
 
 // The section (tabs)
 $this_section = SECTION_COURSES;
-
-// Including additional library scripts.
 $nameTools = get_lang('Forums');
+$action = isset($_GET['action']) ? $_GET['action'] : '';
+$categoryId = isset($_GET['forumcategory']) ? $_GET['forumcategory'] : 0;
+
+$mainUrl = api_get_path(WEB_CODE_PATH).'forum/index.php?'.api_get_cidreq();
+$url = api_get_path(WEB_CODE_PATH).'forum/viewforumcategory.php?'.api_get_cidreq().'&forumcategory='.$categoryId;
+$formContent = handleForum($url);
 
 $_user = api_get_user_info();
 $_course = api_get_course_info();
 $courseEntity = api_get_course_entity();
 $sessionEntity = api_get_session_entity();
-
-$action = isset($_GET['action']) ? $_GET['action'] : '';
 $hideNotifications = api_get_course_setting('hide_forum_notifications');
 $hideNotifications = 1 == $hideNotifications;
 
-require_once 'forumfunction.inc.php';
-
 /** @var CForumCategory $forumCategory */
-$forumCategory = $repo->find($_GET['forumcategory']);
+$forumCategory = $repo->find($categoryId);
 $categoryId = $forumCategory->getIid();
 
 // Are we in a lp ?
@@ -117,11 +118,10 @@ if (!api_is_allowed_to_edit(false, true) && false === $categoryIsVisible) {
 
 /* Action Links */
 $html = '<div class="actions">';
-$html .= '<a href="index.php?'.api_get_cidreq().'">'.
+$html .= '<a href="'.$url.'">'.
     Display::return_icon('back.png', get_lang('Back to forum overview'), '', ICON_SIZE_MEDIUM).'</a>';
 if (api_is_allowed_to_edit(false, true)) {
-    $html .= '<a href="'.api_get_path(WEB_CODE_PATH).'forum/index.php?'.api_get_cidreq().'&forumcategory='
-        .$categoryId.'&action=add&content=forum"> '
+    $html .= '<a href="'.$mainUrl.'&forumcategory='.$categoryId.'&action=add_forum"> '
         .Display::return_icon('new_forum.png', get_lang('Add a forum'), '', ICON_SIZE_MEDIUM).'</a>';
 }
 $html .= search_link();
@@ -135,13 +135,6 @@ $logInfo = [
     'info' => isset($_GET['content']) ? $_GET['content'] : '',
 ];
 Event::registerLog($logInfo);
-
-
-// Notification
-if ('notify' === $action && isset($_GET['content']) && isset($_GET['id'])) {
-    $return_message = set_notification($_GET['content'], $_GET['id']);
-    echo Display::return_message($return_message, 'confirm', false);
-}
 
 if ('add' !== $action) {
     // Step 2: We find all the forums.
@@ -179,11 +172,9 @@ if ('add' !== $action) {
     if (api_is_allowed_to_edit(false, true) &&
         !(0 == $sessionCategoryId && 0 != $sessionId)
     ) {
-        $iconsEdit = '<a href="'.api_get_path(WEB_CODE_PATH).'forum/index.php?'.api_get_cidreq().'&action=edit_category&id='.$categoryId.'">'
+        $iconsEdit = '<a href="'.$mainUrl.'&action=edit_category&id='.$categoryId.'">'
             .Display::return_icon('edit.png', get_lang('Edit'), [], ICON_SIZE_SMALL).'</a>';
-        $iconsEdit .= '<a href="'.api_get_self().'?'.api_get_cidreq().'&forumcategory='
-            .Security::remove_XSS($_GET['forumcategory'])
-            .'&action=delete&content=forumcategory&id='.$forumCategory->getIid()
+        $iconsEdit .= '<a href="'.$url.'&action=delete&content=forumcategory&id='.$categoryId
             ."\" onclick=\"javascript:if(!confirm('"
             .addslashes(api_htmlentities(get_lang('Delete forum category ?'), ENT_QUOTES))
             ."')) return false;\">".Display::return_icon('delete.png', get_lang('Delete'), [], ICON_SIZE_SMALL)
@@ -235,6 +226,20 @@ if ('add' !== $action) {
     $html .= '</div>';
     echo $html;
     echo '<div class="forum_display">';
+    $notifications = [];
+    $em = Database::getManager();
+
+    $notifications = $em->getRepository('ChamiloCourseBundle:CForumNotification')->findBy(
+        ['userId' => api_get_user_id()]
+    );
+
+    $forumNotifications = [];
+    foreach ($notifications as $notification) {
+        if ($notification->getForumId()) {
+            $forumNotifications[] = $notification->getForumId();
+        }
+    }
+
     // The forums in this category.
     $forums_in_category = get_forums_in_category($categoryId);
     $forum_count = 0;
@@ -415,14 +420,12 @@ if ('add' !== $action) {
                     $html .= '</div>';
                     $html .= '<div class="col-md-4">';
 
-                    $url = api_get_path(WEB_CODE_PATH).'forum/index.php';
-
                     if (api_is_allowed_to_edit(false, true) &&
                         !(0 == $forum->getSessionId() && 0 != $sessionId)
                     ) {
-                        $html .= '<a href="'.$url.'?'.api_get_cidreq().'&forumcategory='.$categoryId.'&action=edit_forum&content=forum&id='.$forumId.'">'
+                        $html .= '<a href="'.$mainUrl.'&forumcategory='.$categoryId.'&action=edit_forum&id='.$forumId.'">'
                             .Display::return_icon('edit.png', get_lang('Edit'), [], ICON_SIZE_SMALL).'</a>';
-                        $html .= '<a href="'.$url.'?'.api_get_cidreq().'&forumcategory='.$categoryId.'&action=delete&content=forum&id='.$forumId
+                        $html .= '<a href="'.$url.'&forumcategory='.$categoryId.'&action=delete&content=forum&id='.$forumId
                             ."\" onclick=\"javascript:if(!confirm('"
                             .addslashes(api_htmlentities(get_lang('Delete forum ?'), ENT_QUOTES))
                             ."')) return false;\">"
@@ -448,14 +451,12 @@ if ('add' !== $action) {
                     }
 
                     $iconnotify = 'notification_mail_na.png';
-                    if (is_array(isset($_SESSION['forum_notification']['forum']) ? $_SESSION['forum_notification']['forum'] : null)) {
-                        if (in_array($forum['forum_id'], $_SESSION['forum_notification']['forum'])) {
-                            $iconnotify = 'notification_mail.png';
-                        }
+                    if (in_array($forum->getIid(), $forumNotifications)) {
+                        $iconnotify = 'notification_mail.png';
                     }
 
                     if (!api_is_anonymous() && false == $hideNotifications) {
-                        $html .= '<a href="'.$url.'?'.api_get_cidreq().'&forumcategory='.$categoryId.'&action=notify&content=forum&id='.$forumId.'">'.
+                        $html .= '<a href="'.$url.'&forumcategory='.$categoryId.'&action=notify&content=forum&id='.$forumId.'">'.
                             Display::return_icon($iconnotify, get_lang('Notify me')).
                         '</a>';
                     }

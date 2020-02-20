@@ -87,101 +87,146 @@ $(function () {
 });
 </script>';
 
-/**
- * This function handles all the forum and forum categories actions. This is a wrapper for the
- * forum and forum categories. All this code code could go into the section where this function is
- * called but this make the code there cleaner.
- *
- * @param int $lp_id Learning path Id
- *
- * @author Patrick Cool <patrick.cool@UGent.be>, Ghent University
- * @author Juan Carlos Raña Trabado (return to lp_id)
- *
- * @version may 2011, Chamilo 1.8.8
- */
-function handle_forum_and_forumcategories($lp_id = null)
+function handleForum($url)
 {
-    $action = isset($_GET['action']) ? $_GET['action'] : '';
-    $get_content = isset($_GET['content']) ? $_GET['content'] : '';
-    $post_submit_cat = isset($_POST['SubmitForumCategory']) ? true : false;
-    $post_submit_forum = isset($_POST['SubmitForum']) ? true : false;
-    $get_id = isset($_GET['id']) ? (int) $_GET['id'] : 0;
-    $forum_categories_list = get_forum_categories();
+    $id = isset($_REQUEST['id']) ? (int) $_REQUEST['id'] : null;
 
-    switch ($content) {
-        case 'forumcategory':
-            $repo = Container::getForumCategoryRepository();
-            break;
-        case 'forum':
-            $repo = Container::getForumRepository();
-            break;
-        case 'thread':
-            $repo = Container::getForumThreadRepository();
-            break;
+    if (api_is_allowed_to_edit(false, true)) {
+        //if is called from a learning path lp_id
+        $lp_id = isset($_REQUEST['lp_id']) ? (int) $_REQUEST['lp_id'] : null;
+        $content = isset($_REQUEST['content']) ? $_REQUEST['content'] : '';
+        $action = isset($_REQUEST['action']) ? $_REQUEST['action'] : null;
+
+        $repo = null;
+
+        switch ($content) {
+            case 'forumcategory':
+                $repo = Container::getForumCategoryRepository();
+                break;
+            case 'forum':
+                $repo = Container::getForumRepository();
+                break;
+            case 'thread':
+                $repo = Container::getForumThreadRepository();
+                break;
+        }
+
+        if ($repo && $id) {
+            $resource = $repo->find($id);
+        }
+
+        switch ($action) {
+            case 'add_forum':
+                $formContent = forumForm(null, $lp_id);
+
+                return $formContent;
+                break;
+            case 'edit_forum':
+                $repo = Container::getForumRepository();
+                $resource = $repo->find($id);
+                $formContent = forumForm($resource, $lp_id);
+
+                return $formContent;
+                break;
+            case 'add_category':
+                $formContent = show_add_forumcategory_form([], $lp_id);
+
+                return $formContent;
+                break;
+            case 'edit_category':
+                $repo = Container::getForumCategoryRepository();
+                $category = $repo->find($id);
+                $formContent = editForumCategoryForm($category);
+
+                return $formContent;
+                break;
+            case 'notify':
+                if (0 != api_get_session_id() &&
+                    false == api_is_allowed_to_session_edit(false, true)
+                ) {
+                    api_not_allowed();
+                }
+                $message = set_notification($content, $id);
+                Display::addFlash(Display::return_message($message, 'confirm', false));
+
+                header('Location: '. $url);
+                exit;
+                break;
+            case 'lock':
+            case 'unlock':
+                if ($resource) {
+                    if ('lock' === $action) {
+                        $locked = 1;
+                        $message = get_lang('Locked: students can no longer post new messages in this forum category, forum or thread but they can still read the messages that were already posted');
+                    } else  {
+                        $locked = 0;
+                        $message = get_lang('Unlocked: learners can post new messages in this forum category, forum or thread');
+                    }
+
+                    $resource->setLocked($locked);
+                    $repo->getEntityManager()->persist($resource);
+                    $repo->getEntityManager()->flush();
+
+                    Display::addFlash(
+                        Display::return_message($message, 'confirmation', false)
+                    );
+                }
+
+                header('Location: '. $url);
+                exit;
+                break;
+            case 'move':
+                move_up_down($content, $_REQUEST['direction'], $id);
+                header('Location: '. $url);
+                exit;
+                break;
+            case 'visible':
+            case 'invisible':
+                if ('visible' === $action) {
+                    $repo->setVisibilityPublished($resource);
+                } else {
+                    $repo->setVisibilityPending($resource);
+                }
+
+                if ('visible' === $action) {
+                    handle_mail_cue($content, $id);
+                }
+
+                Display::addFlash(
+                    Display::return_message(get_lang('Updated'), 'confirmation', false)
+                );
+                header('Location: '. $url);
+                exit;
+                break;
+            case 'delete':
+                $locked = api_resource_is_locked_by_gradebook($id, LINK_FORUM_THREAD);
+                if ($resource && false === $locked) {
+                    $repo->delete($resource);
+
+                    if ('thread' === $content) {
+                        $return_message = get_lang('Thread deleted');
+                        Skill::deleteSkillsFromItem($id, ITEM_TYPE_FORUM_THREAD);
+                    }
+
+                    $link_info = GradebookUtils::isResourceInCourseGradebook(
+                        api_get_course_id(),
+                        5,
+                        $id,
+                        api_get_session_id()
+                    );
+
+                    $link_id = $link_info['id'];
+                    if (false !== $link_info) {
+                        GradebookUtils::remove_resource_from_course_gradebook($link_id);
+                    }
+                }
+
+                Display::addFlash(Display::return_message(get_lang('Forum category deleted'), 'confirmation', false));
+                header('Location: '. $url);
+                exit;
+                break;
+        }
     }
-
-    $resource = $repo->find($get_id);
-
-    switch ($action) {
-        case 'move':
-            $return_message = move_up_down($get_content, $_GET['direction'], $get_id);
-            Display::addFlash(
-                Display::return_message($return_message, 'confirmation', false)
-            );
-            header('Location: '. api_get_path(WEB_CODE_PATH).'forum/index.php?'.api_get_cidreq());
-            exit;
-            break;
-        case 'lock':
-        case 'unlock':
-            if ('lock' === $action) {
-                $locked = 1;
-                $return_message = get_lang('Locked: students can no longer post new messages in this forum category, forum or thread but they can still read the messages that were already posted');
-            } else  {
-                $locked = 0;
-                $return_message = get_lang('Unlocked: learners can post new messages in this forum category, forum or thread');
-            }
-
-            $resource->setLocked($locked);
-            $repo->getEntityManager()->persist($resource);
-            $repo->getEntityManager()->flush();
-
-            Display::addFlash(
-                Display::return_message($return_message, 'confirmation', false)
-            );
-            header('Location: '. api_get_path(WEB_CODE_PATH).'forum/index.php?'.api_get_cidreq());
-            exit;
-            break;
-        case 'visible':
-        case 'invisible':
-            if ('visible' === $action) {
-                $repo->setVisibilityPublished($resource);
-            } else {
-                $repo->setVisibilityPending($resource);
-            }
-
-            if ('visible' === $action) {
-                handle_mail_cue($content, $get_id);
-            }
-
-            Display::addFlash(
-                Display::return_message(get_lang('Updated'), 'confirmation', false)
-            );
-            header('Location: '. api_get_path(WEB_CODE_PATH).'forum/index.php?'.api_get_cidreq());
-            exit;
-            break;
-
-        case 'delete':
-            if ($resource) {
-                $repo->delete($resource);
-            }
-
-            Display::addFlash(Display::return_message(get_lang('Forum category deleted'), 'confirmation', false));
-            header('Location: '. api_get_path(WEB_CODE_PATH).'forum/index.php?'.api_get_cidreq());
-            exit;
-            break;
-    }
-
-    return $content;
 }
 
 /**
@@ -469,6 +514,9 @@ function forumForm(CForumForum $forum = null, $lp_id)
                     Display::addFlash(Display::return_message(get_lang('The forum has been added'), 'confirmation'));
                 }
             }
+            $url = api_get_path(WEB_CODE_PATH).'forum/index.php?'.api_get_cidreq();
+            header('Location: '.$url);
+            exit;
         }
         Security::clear_token();
     } else {
@@ -968,117 +1016,6 @@ function store_forum($values, $courseInfo = [], $returnId = false)
 }
 
 /**
- * This function deletes a forum or a forum category
- * This function currently does not delete the forums inside the category,
- * nor the threads and replies inside these forums.
- * For the moment this is the easiest method and it has the advantage that it
- * allows to recover fora that were acidently deleted
- * when the forum category got deleted.
- *
- * @param $content = what we are deleting (a forum or a forum category)
- * @param the $id id of the forum category that has to be deleted
- *
- * @todo write the code for the cascading deletion of the forums inside a
- * forum category and also the threads and replies inside these forums
- * @todo config setting for recovery or not
- * (see also the documents tool: real delete or not).
- *
- * @return string
- *
- * @author Patrick Cool <patrick.cool@UGent.be>, Ghent University
- *
- * @version february 2006, dokeos 1.8
- */
-function deleteForumCategoryThread($content, $id)
-{
-    $_course = api_get_course_info();
-    $table_forums = Database::get_course_table(TABLE_FORUM);
-    $table_forums_post = Database::get_course_table(TABLE_FORUM_POST);
-    $table_forum_thread = Database::get_course_table(TABLE_FORUM_THREAD);
-    $course_id = api_get_course_int_id();
-    $groupId = api_get_group_id();
-    $groupInfo = GroupManager::get_group_properties($groupId);
-    $userId = api_get_user_id();
-    $id = (int) $id;
-
-    // Delete all attachment file about this tread id.
-    $sql = "SELECT post_id FROM $table_forums_post
-            WHERE c_id = $course_id AND thread_id = '".$id."' ";
-    $res = Database::query($sql);
-    while ($poster_id = Database::fetch_row($res)) {
-        delete_attachment($poster_id[0]);
-    }
-
-    $tool_constant = null;
-    $return_message = '';
-    if ('forumcategory' === $content) {
-        $tool_constant = TOOL_FORUM_CATEGORY;
-        $return_message = get_lang('Forum category deleted');
-
-        if (!empty($forum_list)) {
-            $sql = "SELECT forum_id FROM $table_forums
-                    WHERE c_id = $course_id AND forum_category='".$id."'";
-            $result = Database::query($sql);
-            $row = Database::fetch_array($result);
-            foreach ($row as $arr_forum) {
-                $forum_id = $arr_forum['forum_id'];
-                api_item_property_update(
-                    $_course,
-                    'forum',
-                    $forum_id,
-                    'delete',
-                    api_get_user_id()
-                );
-            }
-        }
-    }
-
-    if ('forum' === $content) {
-        $tool_constant = TOOL_FORUM;
-        $return_message = get_lang('Forum deleted');
-
-        if (!empty($number_threads)) {
-            $sql = "SELECT thread_id FROM $table_forum_thread
-                    WHERE c_id = $course_id AND forum_id = $id ";
-            $result = Database::query($sql);
-            $row = Database::fetch_array($result);
-            foreach ($row as $arr_forum) {
-                $forum_id = $arr_forum['thread_id'];
-                api_item_property_update(
-                    $_course,
-                    'forum_thread',
-                    $forum_id,
-                    'delete',
-                    api_get_user_id()
-                );
-            }
-        }
-    }
-
-    if ('thread' === $content) {
-        $tool_constant = TOOL_FORUM_THREAD;
-        $return_message = get_lang('Thread deleted');
-        Skill::deleteSkillsFromItem($id, ITEM_TYPE_FORUM_THREAD);
-    }
-
-    api_item_property_update(
-        $_course,
-        $tool_constant,
-        $id,
-        'delete',
-        $userId,
-        $groupInfo
-    );
-
-    // Check if this returns a true and if so => return $return_message, if not => return false;
-    if (!empty($return_message)) {
-        Display::addFlash(Display::return_message($return_message, 'confirmation', false));
-    }
-
-    return $return_message;
-}
-
-/**
  * This function deletes a forum post. This separate function is needed because forum posts do not appear
  * in the item_property table (yet)
  * and because deleting a post also has consequence on the posts that have this post as parent_id
@@ -1340,7 +1277,6 @@ function move_up_down($content, $direction, $id)
 {
     $table_categories = Database::get_course_table(TABLE_FORUM_CATEGORY);
     $table_forums = Database::get_course_table(TABLE_FORUM);
-    $table_item_property = Database::get_course_table(TABLE_ITEM_PROPERTY);
     $course_id = api_get_course_int_id();
     $id = (int) $id;
 
@@ -1377,12 +1313,9 @@ function move_up_down($content, $direction, $id)
     // The SQL statement
     if ('forumcategory' == $content) {
         $sql = "SELECT *
-                FROM $table_categories forum_categories, $table_item_property item_properties
+                FROM $table_categories forum_categories
                 WHERE
-                    forum_categories.c_id = $course_id AND
-                    item_properties.c_id = $course_id AND
-                    forum_categories.cat_id=item_properties.ref AND
-                    item_properties.tool='".TOOL_FORUM_CATEGORY."'
+                    forum_categories.c_id = $course_id'
                 ORDER BY forum_categories.cat_order $sort_direction";
     }
     if ('forum' == $content) {
@@ -1396,6 +1329,7 @@ function move_up_down($content, $direction, $id)
     // Finding the items that need to be switched.
     $result = Database::query($sql);
     $found = false;
+    $next_sort = '';
     while ($row = Database::fetch_array($result)) {
         if ($found) {
             $next_id = $row[$id_column];
@@ -5429,7 +5363,9 @@ function delete_attachment($postId, $id_attach = 0)
 
     $repoAttachment = Container::getForumAttachmentRepository();
     $attachment = $repoAttachment->find($id_attach);
-    $post->removeAttachment($attachment);
+    if ($attachment) {
+        $post->removeAttachment($attachment);
+    }
     $repo->getEntityManager()->persist($post);
     $repo->getEntityManager()->flush();
 

@@ -26,6 +26,7 @@ use ChamiloSession as Session;
  */
 require_once __DIR__.'/../inc/global.inc.php';
 
+require_once 'forumfunction.inc.php';
 api_protect_course_script(true);
 
 $current_course_tool = TOOL_FORUM;
@@ -52,8 +53,6 @@ $_user = api_get_user_info();
 $hideNotifications = api_get_course_setting('hide_forum_notifications');
 $hideNotifications = 1 == $hideNotifications;
 
-require_once 'forumfunction.inc.php';
-
 if (api_is_in_gradebook()) {
     $interbreadcrumb[] = [
         'url' => Category::getUrl(),
@@ -62,9 +61,8 @@ if (api_is_in_gradebook()) {
 }
 
 $search_forum = isset($_GET['search']) ? Security::remove_XSS($_GET['search']) : '';
-
-/* ACTIONS */
 $action = isset($_GET['action']) ? $_GET['action'] : '';
+$lp_id = isset($_REQUEST['lp_id']) ? (int) $_REQUEST['lp_id'] : null;
 
 if ('add' === $action) {
     switch ($_GET['content']) {
@@ -103,50 +101,11 @@ if ('add' === $action) {
 // Tool introduction
 $introduction = Display::return_introduction_section(TOOL_FORUM);
 $form_count = 0;
-$formContent = '';
-
-$id = isset($_REQUEST['id']) ? (int) $_REQUEST['id'] : null;
-
-if (api_is_allowed_to_edit(false, true)) {
-    //if is called from a learning path lp_id
-    $lp_id = isset($_REQUEST['lp_id']) ? (int) $_REQUEST['lp_id'] : null;
-
-    switch ($action) {
-        case 'add_forum':
-            $formContent = forumForm([], $lp_id);
-            break;
-        case 'edit_forum':
-            $repo = Container::getForumRepository();
-            $resource = $repo->find($id);
-            $formContent = forumForm($resource, $lp_id);
-            break;
-        case 'add_category':
-            $formContent = show_add_forumcategory_form([], $lp_id);
-            break;
-        case 'edit_category':
-            $repo = Container::getForumCategoryRepository();
-            $category = $repo->find($id);
-            $formContent = editForumCategoryForm($category);
-            break;
-
-    }
-    //$formContent = handle_forum_and_forumcategories($lp_id);
-}
-
-// Notification
-if ('notify' === $action && isset($_GET['content']) && isset($_GET['id'])) {
-    if (0 != api_get_session_id() &&
-        false == api_is_allowed_to_session_edit(false, true)
-    ) {
-        api_not_allowed();
-    }
-    $return_message = set_notification($_GET['content'], $_GET['id']);
-    Display::addFlash(Display::return_message($return_message, 'confirm', false));
-}
+$url = api_get_path(WEB_CODE_PATH).'forum/index.php?'.api_get_cidreq();
+$formContent = handleForum($url);
 
 get_whats_new();
 $whatsnew_post_info = Session::read('whatsnew_post_info');
-
 Event::event_access_tool(TOOL_FORUM);
 
 $logInfo = [

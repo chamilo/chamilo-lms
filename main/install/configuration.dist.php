@@ -952,8 +952,8 @@ VALUES (2, 13, 'session_courses_read_only_mode', 'Lock Course In Session', 1, 1,
 // menu
 // $_configuration['disable_gdpr'] = true;
 
-// GDPR requires users to be informed of the Data Protection Officer name and 
-// contact point. These can only be defined here for now, but will be moved to 
+// GDPR requires users to be informed of the Data Protection Officer name and
+// contact point. These can only be defined here for now, but will be moved to
 // web settings in the future.
 // Name of the person or organization that is responsible for the treatment of
 // personal info
@@ -1378,7 +1378,7 @@ ALTER TABLE notification_event ADD COLUMN event_id INT NULL;
 // Catalog search settings visibility
 //$_configuration['catalog_settings'] = ['sessions' => ['by_title' => true, 'by_date' => true, 'by_tag' => true, 'show_session_info' => true, 'show_session_date' => true]];
 
-// Enable learning paths with only one SCO item to use the score returned by 
+// Enable learning paths with only one SCO item to use the score returned by
 // the SCO as an indicator of progress of the whole learning path
 // $_configuration['lp_score_as_progress_enable'] = false;
 
@@ -1388,6 +1388,8 @@ ALTER TABLE notification_event ADD COLUMN event_id INT NULL;
 // In Scorm comunication use the username instead of the user_id
 //$_configuration['scorm_api_username_as_student_id'] = false;
 
+// Show online user only to Administrators
+//$_configuration['whoisonline_only_for_admin'] = false;
 
 // KEEP THIS AT THE END
 // -------- Custom DB changes

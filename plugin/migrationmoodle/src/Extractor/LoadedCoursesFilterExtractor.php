@@ -3,7 +3,7 @@
 
 namespace Chamilo\PluginBundle\MigrationMoodle\Extractor;
 
-use Chamilo\PluginBundle\MigrationMoodle\Task\EfcCoursesTask;
+use Chamilo\PluginBundle\MigrationMoodle\Task\CoursesTask;
 
 /**
  * Class LoadedCoursesFilterExtractor.
@@ -23,7 +23,7 @@ class LoadedCoursesFilterExtractor extends FilterExtractor
     {
         parent::__construct($configuration);
 
-        $this->calledClass = EfcCoursesTask::class;
+        $this->calledClass = CoursesTask::class;
     }
 
     /**

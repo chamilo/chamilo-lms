@@ -22,9 +22,17 @@ class UsersLearnPathsTask extends BaseTask
      */
     public function getExtractConfiguration()
     {
+        $userFilter = $this->plugin->getUserFilterSetting();
+
+        $userFilterCondition = '';
+
+        if (!empty($userFilter)) {
+            $userFilterCondition = "WHERE username LIKE '$userFilter%'";
+        }
+
         return [
             'class' => LoadedUsersFilterExtractor::class,
-            'query' => 'SELECT id FROM mdl_user WHERE username LIKE "efc%"',
+            'query' => "SELECT id FROM mdl_user $userFilterCondition",
         ];
     }
 

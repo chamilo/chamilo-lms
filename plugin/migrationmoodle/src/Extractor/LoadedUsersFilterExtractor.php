@@ -3,7 +3,7 @@
 
 namespace Chamilo\PluginBundle\MigrationMoodle\Extractor;
 
-use Chamilo\PluginBundle\MigrationMoodle\Task\EfcUsersTask;
+use Chamilo\PluginBundle\MigrationMoodle\Task\UsersTask;
 
 /**
  * Class LoadedUsersFilterExtractor.
@@ -21,7 +21,7 @@ class LoadedUsersFilterExtractor extends FilterExtractor
     {
         parent::__construct($configuration);
 
-        $this->calledClass = EfcUsersTask::class;
+        $this->calledClass = UsersTask::class;
     }
 
     /**

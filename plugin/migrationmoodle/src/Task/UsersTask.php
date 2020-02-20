@@ -25,9 +25,17 @@ class UsersTask extends BaseTask
      */
     public function getExtractConfiguration()
     {
+        $query = "SELECT * FROM mdl_user WHERE username NOT IN ('admin', 'guest')";
+
+        $userFilter = $this->plugin->getUserFilterSetting();
+
+        if (!empty($userFilter)) {
+            $query = "SELECT * FROM mdl_user WHERE username LIKE '$userFilter%'";
+        }
+
         return [
             'class' => BaseExtractor::class,
-            'query' => "SELECT * FROM mdl_user WHERE username NOT IN ('admin', 'guest')",
+            'query' => $query,
         ];
     }
 

@@ -36,10 +36,17 @@ abstract class BaseTask
     protected $loader;
 
     /**
+     * @var \MigrationMoodlePlugin
+     */
+    protected $plugin;
+
+    /**
      * BaseTask constructor.
      */
     public function __construct()
     {
+        $this->plugin = \MigrationMoodlePlugin::create();
+
         $this->extractor = $this->getExtractor();
 
         $this->transformer = $this->getTransformer();

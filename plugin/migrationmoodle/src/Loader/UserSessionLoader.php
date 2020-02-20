@@ -4,14 +4,14 @@
 namespace Chamilo\PluginBundle\MigrationMoodle\Loader;
 
 use Chamilo\PluginBundle\MigrationMoodle\Interfaces\LoaderInterface;
-use Chamilo\PluginBundle\MigrationMoodle\Task\EfcUserSessionsTask;
+use Chamilo\PluginBundle\MigrationMoodle\Task\UserSessionsTask;
 
 /**
- * Class EfcUserSessionLoader.
+ * Class UserSessionLoader.
  *
  * @package Chamilo\PluginBundle\MigrationMoodle\Loader
  */
-class EfcUserSessionLoader implements LoaderInterface
+class UserSessionLoader implements LoaderInterface
 {
     /**
      * @inheritDoc
@@ -21,7 +21,7 @@ class EfcUserSessionLoader implements LoaderInterface
         $datetime = api_get_utc_datetime();
         $coachId = 1;
 
-        $courseCodes = explode(EfcUserSessionsTask::SEPARATOR_NAME, $incomingData['courses_list']);
+        $courseCodes = explode(UserSessionsTask::SEPARATOR_NAME, $incomingData['courses_list']);
         $courseIds = [];
 
         foreach ($courseCodes as $courseCode) {

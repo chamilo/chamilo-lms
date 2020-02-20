@@ -13,7 +13,7 @@ use Chamilo\PluginBundle\MigrationMoodle\Transformer\Property\LoadedUserLookup;
  *
  * @package Chamilo\PluginBundle\MigrationMoodle\Task
  */
-class UsersScormsProgressTask extends EfcUsersTask
+class UsersScormsProgressTask extends BaseTask
 {
     /**
      * @inheritDoc

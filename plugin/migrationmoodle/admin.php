@@ -20,14 +20,12 @@ if ('true' != $plugin->get('active')) {
 
 $menu = [
     '_' => [
-        //'users',
         'course_categories',
-        //'courses',
-        'efc_courses',
+        'courses',
         //'role_assignments',
-        'efc_users',
+        'users',
     ],
-    'efc_courses' => [
+    'courses' => [
         'course_introductions',
         'course_sections',
         'course_modules_scorm',
@@ -89,8 +87,10 @@ $menu = [
     'course_modules_url' => [
         'urls',
     ],
-    'efc_users' => [
-        'efc_user_sessions',
+    'users' => [
+        'user_sessions',
+    ],
+    'user_sessions' => [
         'users_learn_paths',
         'users_scorms_view',
     ],

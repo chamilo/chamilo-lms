@@ -12,13 +12,14 @@ $strings['db_host'] = 'Moodle DB host';
 $strings['db_user'] = 'Moodle DB user';
 $strings['db_password'] = 'Moodle DB password';
 $strings['db_name'] = 'Moodle DB name';
+$strings['user_filter'] = 'Filter for users';
+$strings['user_filter_help'] = 'Allow migrate only users who have a username prefixed with it.<br>'
+    .'Course migration is also affected by this configuration, it only migrates courses in which users with the username prefix are enrolled.';
 
 // Tasks
 $strings['UsersTask'] = 'Users';
-$strings['EfcUsersTask'] = 'Users (filtered with username efc*)';
 $strings['CourseCategoriesTask'] = 'Course categories';
 $strings['CoursesTask'] = 'Courses';
-$strings['EfcCoursesTask'] = 'Courses (filtered for efc* users)';
 $strings['CourseSectionsTask'] = 'Course sections';
 $strings['CourseModulesLessonTask'] = 'Course modules: Lessons';
 $strings['LessonPagesTask'] = 'Lesson pages';
@@ -47,7 +48,7 @@ $strings['QuestionShortAnswerTask'] = 'Answers for shortanswers questions';
 $strings['CourseModulesScormTask'] = 'Course Scorms';
 $strings['ScormScoesTask'] = 'Scorms items';
 $strings['FilesForScormScoesTask'] = 'Files for Scorm items';
-$strings['EfcUserSessionsTask'] = 'Course Sessions for efc* users';
+$strings['UserSessionsTask'] = 'Course Sessions for users';
 $strings['CourseIntroductionsTask'] = 'Course introductions';
 $strings['FilesForCourseIntroductionsTask'] = 'Files for course introductions';
 $strings['FilesForCourseSectionsTask'] = 'Files for course sections';

@@ -23,9 +23,22 @@ class CoursesTask extends BaseTask
      */
     public function getExtractConfiguration()
     {
+        $query = "SELECT * FROM mdl_course";
+
+        $userFilter = $this->plugin->getUserFilterSetting();
+
+        if (!empty($userFilter)) {
+            $query = "SELECT DISTINCT c.*
+                FROM mdl_course c
+                INNER JOIN mdl_context ctx ON c.id = ctx.instanceid
+                INNER JOIN mdl_role_assignments ra ON ctx.id = ra.contextid
+                INNER JOIN mdl_user u ON ra.userid = u.id
+                WHERE u.username LIKE '$userFilter%'";
+        }
+
         return [
             'class' => BaseExtractor::class,
-            'query' => 'SELECT * FROM mdl_course',
+            'query' => $query,
         ];
     }
 

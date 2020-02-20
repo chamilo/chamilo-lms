@@ -8508,12 +8508,17 @@ class learnpath
 
         $forumList = get_forums();
         $a_forums = [];
+        $courseEntity = api_get_course_entity(api_get_course_int_id());
+        $sessionEntity = api_get_session_entity(api_get_session_id());
+
         foreach ($forumCategories as $forumCategory) {
             // The forums in this category.
             $forumsInCategory = get_forums_in_category($forumCategory->getIid());
             if (!empty($forumsInCategory)) {
-                foreach ($forumList as $forum) {
-                    $a_forums[] = $forum;
+                foreach ($forumsInCategory as $forum) {
+                    if ($forum->isVisible($courseEntity, $sessionEntity)) {
+                        $a_forums[] = $forum;
+                    }
                 }
             }
         }
@@ -8569,9 +8574,9 @@ class learnpath
             $return .= '</li>';
 
             $return .= '<div style="display:none" id="forum_'.$forumId.'_content">';
-            $a_threads = get_threads($forumId);
-            if (is_array($a_threads)) {
-                foreach ($a_threads as $thread) {
+            $threads = get_threads($forumId);
+            if (is_array($threads)) {
+                foreach ($threads as $thread) {
                     $threadId = $thread->getIid();
                     $link = Display::url(
                         Display::return_icon('preview_view.png', get_lang('Preview')),

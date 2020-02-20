@@ -63,7 +63,7 @@ if (!$isForumOpenByDateAccess && !$isAllowedToEdit) {
     }
 }
 
-$current_forum_category = $forumEntity->getForumCategory();
+$category = $forumEntity->getForumCategory();
 $is_group_tutor = false;
 
 if (!empty($groupId)) {
@@ -77,8 +77,8 @@ if (!empty($groupId)) {
     // Course
     if (!api_is_allowed_to_edit(false, true) && //is a student
         (
-            ($current_forum_category && false == $current_forum_category->isVisible($courseEntity, $sessionEntity)) ||
-            false == $current_forum_category->isVisible($courseEntity, $sessionEntity)
+            ($category && false == $category->isVisible($courseEntity, $sessionEntity)) ||
+            false == $category->isVisible($courseEntity, $sessionEntity)
         )
     ) {
         api_not_allowed(true);
@@ -87,8 +87,8 @@ if (!empty($groupId)) {
     // Course
     if (!api_is_allowed_to_edit(false, true) && //is a student
         (
-            ($current_forum_category && false == $current_forum_category->isVisible($courseEntity, $sessionEntity)) ||
-            false == $current_forum_category->isVisible($courseEntity, $sessionEntity)
+            ($category && false == $category->isVisible($courseEntity, $sessionEntity)) ||
+            false == $category->isVisible($courseEntity, $sessionEntity)
         )
     ) {
         api_not_allowed(true);
@@ -137,9 +137,9 @@ if (!empty($groupId)) {
     ];
 
     $interbreadcrumb[] = [
-        'url' => $forumUrl.'viewforumcategory.php?forumcategory='.$current_forum_category->getIid()
+        'url' => $forumUrl.'viewforumcategory.php?forumcategory='.$category->getIid()
             .'&search='.Security::remove_XSS(urlencode($my_search)),
-        'name' => prepare4display($current_forum_category->getCatTitle()),
+        'name' => prepare4display($category->getCatTitle()),
     ];
     $interbreadcrumb[] = [
         'url' => '#',

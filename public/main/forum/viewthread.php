@@ -33,10 +33,13 @@ if (!empty($forumId)) {
 }
 
 $repoThread = Container::getForumThreadRepository();
-$threadEntity = null;
-if (!empty($threadId)) {
-    /** @var CForumThread $threadEntity */
-    $threadEntity = $repoThread->find($threadId);
+/** @var CForumThread $threadEntity */
+$threadEntity = $repoThread->find($threadId);
+
+if (empty($threadEntity)) {
+    $url = api_get_path(WEB_CODE_PATH).'forum/viewforum.php?'.api_get_cidreq().'&forum='.$forumId;
+    header('Location: '. $url);
+    exit;
 }
 
 $courseEntity = api_get_course_entity(api_get_course_int_id());

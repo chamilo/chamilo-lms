@@ -500,7 +500,6 @@ class ResourceRepository extends BaseEntityRepository
         }
 
         if (null === $session) {
-            //$qb->andWhere('links.session IS NULL');
             $qb->andWhere(
                 $qb->expr()->orX(
                     $qb->expr()->isNull('links.session'),

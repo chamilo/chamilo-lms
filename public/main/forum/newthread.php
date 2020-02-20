@@ -174,7 +174,6 @@ if ('learnpath' == $origin) {
 } else {
     Display::display_header();
 }
-//handle_forum_and_forumcategories();
 
 // Action links
 echo '<div class="actions">';

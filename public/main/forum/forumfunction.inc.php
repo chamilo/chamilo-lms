@@ -1053,7 +1053,7 @@ function delete_post($post_id)
                 WHERE
                     p.cId = :course AND
                     p.postParentId = :post AND
-                    p.threadId = :thread_of_deleted_post AND
+                    p.thread = :thread_of_deleted_post AND
                     p.forumId = :forum_of_deleted_post
             ')
             ->execute([
@@ -1897,7 +1897,7 @@ function get_last_post_information($forum_id, $show_invisibles = false, $course_
  *
  * @return CForumThread[]
  */
-function get_threads($forum_id, $courseId = null, $sessionId = null)
+function get_threads($forumId, $courseId = null, $sessionId = null)
 {
     $repo = Container::getForumThreadRepository();
     $courseId = empty($courseId) ? api_get_course_int_id() : $courseId;
@@ -1906,9 +1906,8 @@ function get_threads($forum_id, $courseId = null, $sessionId = null)
 
     $qb = $repo->getResourcesByCourse($course, $session);
 
-    /*$qb->andWhere('resource.forumCategory = :catId')
-        ->setParameter('catId', $cat_id);
-    */
+    $qb->andWhere('resource.forum = :forum')->setParameter('forum', $forumId);
+
     return $qb->getQuery()->getResult();
 
     $groupId = api_get_group_id();
@@ -5360,16 +5359,17 @@ function delete_attachment($postId, $id_attach = 0)
     $repo = Container::getForumPostRepository();
     /** @var CForumPost $post */
     $post = $repo->find($postId);
+    if ($post) {
+        $repoAttachment = Container::getForumAttachmentRepository();
+        $attachment = $repoAttachment->find($id_attach);
+        if ($attachment) {
+            $post->removeAttachment($attachment);
+        }
+        $repo->getEntityManager()->persist($post);
+        $repo->getEntityManager()->flush();
 
-    $repoAttachment = Container::getForumAttachmentRepository();
-    $attachment = $repoAttachment->find($id_attach);
-    if ($attachment) {
-        $post->removeAttachment($attachment);
+        Display::addFlash(Display::return_message(get_lang('The attached file has been deleted'), 'confirmation'));
     }
-    $repo->getEntityManager()->persist($post);
-    $repo->getEntityManager()->flush();
-
-    Display::addFlash(Display::return_message(get_lang('The attached file has been deleted'), 'confirmation'));
 
     return true;
 

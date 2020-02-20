@@ -54,6 +54,11 @@ $mainUrl = api_get_path(WEB_CODE_PATH).'forum/index.php?'.api_get_cidreq();
 $url = api_get_path(WEB_CODE_PATH).'forum/viewforumcategory.php?'.api_get_cidreq().'&forumcategory='.$categoryId;
 $formContent = handleForum($url);
 
+if (empty($categoryId)) {
+    header('Location: '.$mainUrl);
+    exit;
+}
+
 $_user = api_get_user_info();
 $_course = api_get_course_info();
 $courseEntity = api_get_course_entity();
@@ -63,6 +68,10 @@ $hideNotifications = 1 == $hideNotifications;
 
 /** @var CForumCategory $forumCategory */
 $forumCategory = $repo->find($categoryId);
+if (empty($forumCategory)) {
+    header('Location: '.$mainUrl);
+    exit;
+}
 $categoryId = $forumCategory->getIid();
 
 // Are we in a lp ?

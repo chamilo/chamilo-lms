@@ -1388,6 +1388,13 @@ ALTER TABLE notification_event ADD COLUMN event_id INT NULL;
 // In Scorm comunication use the username instead of the user_id
 //$_configuration['scorm_api_username_as_student_id'] = false;
 
+// Popular courses on the home page
+// Create a extra field in course called "popular_courses" (type CHECKBOX) OR
+// INSERT extra_field (extra_field_type, field_type, variable, display_text, visible_to_self, changeable, create_at)
+// VALUES (2, 13, 'popular_courses', 'Popular Courses', 1, 1, 'YYYY-mm-dd HH:mm:ss')
+// Change datetime in SQL
+// $_configuration['popular_courses'] = true;
+
 
 // KEEP THIS AT THE END
 // -------- Custom DB changes

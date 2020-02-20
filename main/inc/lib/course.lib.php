@@ -4897,6 +4897,77 @@ class CourseManager
     }
 
     /**
+     * Returns an array with the popular courses.
+     *
+     * @return array
+     */
+    public static function return_popular_courses()
+    {
+        if (api_is_invitee()) {
+            return [];
+        }
+
+        $limit = (int) $limit;
+        $userId = api_get_user_id();
+
+        // Getting my courses
+        $my_course_list = self::get_courses_list_by_user_id($userId);
+
+        $codeList = [];
+        foreach ($my_course_list as $course) {
+            $codeList[$course['real_id']] = $course['real_id'];
+        }
+
+        if (api_is_drh()) {
+            $courses = self::get_courses_followed_by_drh($userId);
+            foreach ($courses as $course) {
+                $codeList[$course['real_id']] = $course['real_id'];
+            }
+        }
+
+        $courseTable = Database::get_main_table(TABLE_MAIN_COURSE);
+        $tbl_course_field = Database::get_main_table(TABLE_EXTRA_FIELD);
+        $tbl_course_field_value = Database::get_main_table(TABLE_EXTRA_FIELD_VALUES);
+
+        //we filter the courses from the URL
+        $join_access_url = $where_access_url = '';
+        if (api_get_multiple_access_url()) {
+            $access_url_id = api_get_current_access_url_id();
+            if ($access_url_id != -1) {
+                $tbl_url_course = Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_COURSE);
+                $join_access_url = "LEFT JOIN $tbl_url_course url_rel_course
+                ON url_rel_course.c_id = tcfv.item_id ";
+                $where_access_url = " AND access_url_id = $access_url_id ";
+            }
+        }
+
+        $extraFieldType = EntityExtraField::COURSE_FIELD_TYPE;
+
+        // get course list auto-register
+        $sql = "SELECT DISTINCT(c.id) AS c_id
+                FROM $tbl_course_field_value tcfv
+                INNER JOIN $tbl_course_field tcf
+                ON tcfv.field_id =  tcf.id $join_access_url
+                INNER JOIN $courseTable c
+                ON (c.id = tcfv.item_id)
+                WHERE
+                    tcf.extra_field_type = $extraFieldType AND
+                    tcf.variable = 'popular_courses' AND
+                    tcfv.value = 1 AND
+                    visibility <> ".COURSE_VISIBILITY_CLOSED." AND
+                    visibility <> ".COURSE_VISIBILITY_HIDDEN." $where_access_url";
+
+        $result = Database::query($sql);
+        $courses = [];
+        if (Database::num_rows($result)) {
+            $courses = Database::store_result($result, 'ASSOC');
+            $courses = self::processHotCourseItem($courses, $codeList);
+        }
+
+        return $courses;
+    }
+
+    /**
      * @param array $courses
      * @param array $codeList
      *

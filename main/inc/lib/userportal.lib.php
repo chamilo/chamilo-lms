@@ -1899,6 +1899,14 @@ class IndexManager
     }
 
     /**
+     * @return array
+     */
+    public function return_popular_courses()
+    {
+        return CourseManager::return_popular_courses();
+    }
+
+    /**
      * UserPortal view for session, return the HTML of the course list.
      *
      * @param $user_id

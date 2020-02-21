@@ -31,7 +31,7 @@ class QuizzesScoresLoader implements LoaderInterface
                 AND quiz_rel_question.c_id = {$incomingData['c_id']}";
 
         $rsQuiz = \Database::query($sql);
-        $maxScore = \Database::result($rsQuiz, 0, 0);
+        $maxScore = \Database::result($rsQuiz, 0, 0) ?: 0;
 
         \Database::query("UPDATE $tblLpItem SET max_score = $maxScore WHERE iid = {$incomingData['item_id']}");
 

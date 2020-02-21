@@ -375,7 +375,7 @@ if (is_array($forumCategories)) {
                         } else {
                             $show_forum = GroupManager::user_has_access(
                                 $user_id,
-                                $forum['forum_of_group'],
+                                $forum->getForumOfGroup(),
                                 GroupManager::GROUP_TOOL_FORUM
                             );
                         }

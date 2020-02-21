@@ -36,8 +36,8 @@ require_once 'forumfunction.inc.php';
 
 $forumId = isset($_GET['forum']) ? (int) $_GET['forum'] : 0;
 
-$url = api_get_path(WEB_CODE_PATH).'forum/viewforum.php?'.api_get_cidreq().'&forum='.$forumId;
-handleForum($url);
+$viewForumUrl = api_get_path(WEB_CODE_PATH).'forum/viewforum.php?'.api_get_cidreq().'&forum='.$forumId;
+$message = handleForum($viewForumUrl);
 
 $userId = api_get_user_id();
 $sessionId = api_get_session_id();
@@ -154,24 +154,8 @@ if ('learnpath' === $origin) {
     Display::display_header();
 }
 
-// Moving.
-if ('move' == $my_action && isset($_GET['thread']) &&
-    $isAllowedToEdit
-) {
-    $message = move_thread_form();
-}
-// Notification.
-if ('notify' == $my_action &&
-    isset($_GET['content']) &&
-    isset($_GET['id']) &&
-    api_is_allowed_to_session_edit(false, true)
-) {
-    $return_message = set_notification($_GET['content'], $_GET['id']);
-    echo Display::return_message($return_message, 'confirm', false);
-}
-
 // Student list
-if ('liststd' == $my_action &&
+if ('liststd' === $my_action &&
     isset($_GET['content']) &&
     isset($_GET['id']) &&
     (api_is_allowed_to_edit(null, true) || $is_group_tutor)
@@ -228,7 +212,7 @@ if ('liststd' == $my_action &&
         $table_list .= '<tr >';
         $table_list .= '<th height="24">'.get_lang('First names and last names').'</th>';
 
-        if ('qualify' == $listType) {
+        if ('qualify' === $listType) {
             $table_list .= '<th>'.get_lang('Score').'</th>';
         }
         if (api_is_allowed_to_edit(null, true)) {
@@ -288,11 +272,6 @@ if ('learnpath' == $origin) {
     echo '<div style="height:15px">&nbsp;</div>';
 }
 
-/* Display the action messages */
-if (!empty($message)) {
-    echo Display::return_message($message, 'confirm');
-}
-
 /* Action links */
 echo '<div class="actions">';
 if ('learnpath' != $origin) {
@@ -328,6 +307,12 @@ if (api_is_allowed_to_edit(false, true) ||
     }
 }
 echo '</div>';
+
+
+/* Display the action messages */
+if (!empty($message)) {
+    echo $message;
+}
 
 $descriptionForum = $forumEntity->getForumComment();
 $iconForum = Display::return_icon(
@@ -462,7 +447,7 @@ if (is_array($threads)) {
                 $waitingCount = getCountPostsWithStatus(
                     CForumPost::STATUS_WAITING_MODERATION,
                     $forumEntity,
-                    $thread['thread_id']
+                    $thread->getIid()
                 );
                 if (!empty($waitingCount)) {
                     $html .= Display::label(
@@ -562,7 +547,7 @@ if (is_array($threads)) {
                             'gid' => api_get_group_id(),
                         ]
                     );
-                    $iconsEdit .= '<a href="'.$url.'&forum='.$forumId.'&action=move&thread='.$threadId.'">'
+                    $iconsEdit .= '<a href="'.$viewForumUrl.'&forum='.$forumId.'&action=move_thread&thread='.$threadId.'">'
                         .Display::return_icon('move.png', get_lang('Move Thread'), [], ICON_SIZE_SMALL)
                         .'</a>';
                 }
@@ -583,7 +568,7 @@ if (is_array($threads)) {
             }
 
             if (api_is_allowed_to_edit(null, true) && 'learnpath' != $origin) {
-                $iconsEdit .= '<a href="'.$url.'&forum='.$forumId."&action=liststd&content=thread&id={$threadId}".'">'.
+                $iconsEdit .= '<a href="'.$viewForumUrl.'&forum='.$forumId."&action=liststd&content=thread&id={$threadId}".'">'.
                     Display::return_icon($icon_liststd, get_lang('Learners list'), [], ICON_SIZE_SMALL)
                     .'</a>';
             }

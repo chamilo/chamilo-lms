@@ -8,6 +8,7 @@ use Chamilo\CoreBundle\Entity\Resource\AbstractResource;
 use Chamilo\CoreBundle\Entity\Resource\ResourceInterface;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
+use Gedmo\Mapping\Annotation as Gedmo;
 
 /**
  * CForumForum.
@@ -81,6 +82,8 @@ class CForumForum extends AbstractResource implements ResourceInterface
     protected $forumLastPost;
 
     /**
+     * @Gedmo\SortableGroup
+     *
      * @var CForumCategory|null
      *
      * @ORM\ManyToOne(targetEntity="Chamilo\CourseBundle\Entity\CForumCategory", inversedBy="forums")
@@ -146,6 +149,7 @@ class CForumForum extends AbstractResource implements ResourceInterface
 
     /**
      * @var int
+     * @Gedmo\SortablePosition
      *
      * @ORM\Column(name="forum_order", type="integer", nullable=true)
      */
@@ -223,6 +227,7 @@ class CForumForum extends AbstractResource implements ResourceInterface
         $this->locked = 0;
         $this->forumImage = '';
         $this->forumOfGroup = 0;
+        $this->forumPosts = 0;
         $this->forumGroupPublicPrivate = '';
     }
 

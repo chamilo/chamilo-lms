@@ -7094,7 +7094,7 @@ class learnpath
         $works = $this->get_student_publications();
 
         // Get all the forums.
-        $forums = $this->get_forums(null, $course_code);
+        $forums = $this->get_forums();
 
         // Get the final item form (see BT#11048) .
         $finish = $this->getFinalItemForm();
@@ -8506,7 +8506,6 @@ class learnpath
             );
         }
 
-        $forumList = get_forums();
         $a_forums = [];
         $courseEntity = api_get_course_entity(api_get_course_int_id());
         $sessionEntity = api_get_session_entity(api_get_session_id());

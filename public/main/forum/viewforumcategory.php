@@ -151,10 +151,10 @@ if ('add' !== $action) {
     // The groups of the user.
     $groups_of_user = GroupManager::get_group_ids($_course['real_id'], $_user['user_id']);
     // All groups in the course (and sorting them as the id of the group = the key of the array.
-    $all_groups = GroupManager::get_group_list();
-    if (is_array($all_groups)) {
-        foreach ($all_groups as $group) {
-            $all_groups[$group['id']] = $group;
+    $groups = GroupManager::get_group_list();
+    if (is_array($groups)) {
+        foreach ($groups as $group) {
+            $groups[$group['id']] = $group;
         }
     }
 
@@ -250,7 +250,7 @@ if ('add' !== $action) {
     }
 
     // The forums in this category.
-    $forums_in_category = get_forums_in_category($categoryId);
+    $forum_list = get_forums_in_category($categoryId);
     $forum_count = 0;
     foreach ($forum_list as $forum) {
         if (!empty($forum->getForumCategory())) {
@@ -298,6 +298,8 @@ if ('add' !== $action) {
                     $html .= '<div class="panel-body">';
                     //$my_whatsnew_post_info = isset($whatsnew_post_info[$forum['forum_id']]) ? $whatsnew_post_info[$forum['forum_id']] : null;
                     $forumOfGroup = $forum->getForumOfGroup();
+
+                    $forum_title_group_addition = '';
                     if ('0' == $forumOfGroup) {
                         $forum_image = Display::return_icon(
                             'forum_group.png',
@@ -306,6 +308,12 @@ if ('add' !== $action) {
                             ICON_SIZE_LARGE
                         );
                     } else {
+                        $my_all_groups_forum_name = isset($groups[$forumOfGroup]['name']) ? $groups[$forumOfGroup]['name'] : null;
+                        $my_all_groups_forum_id = isset($groups[$forumOfGroup]['id']) ? $groups[$forumOfGroup]['id'] : null;
+                        $group_title = api_substr($my_all_groups_forum_name, 0, 30);
+                        $forum_title_group_addition = ' (<a href="../group/group_space.php?'.api_get_cidreq(true, false)
+                            .'&gid='.$my_all_groups_forum_id.'" class="forum_group_link">'
+                            .get_lang('Go to').' '.$group_title.'</a>)';
                         $forum_image = Display::return_icon(
                             'forum.png',
                             get_lang('Forum'),
@@ -314,30 +322,14 @@ if ('add' !== $action) {
                         );
                     }
 
-                    if ('0' != $forumOfGroup) {
-                        $my_all_groups_forum_name = isset($all_groups[$forumOfGroup]['name'])
-                            ? $all_groups[$forumOfGroup]['name']
-                            : null;
-                        $my_all_groups_forum_id = isset($all_groups[$forumOfGroup]['id'])
-                            ? $all_groups[$forumOfGroup]['id']
-                            : null;
-                        $group_title = api_substr($my_all_groups_forum_name, 0, 30);
-                        $forum_title_group_addition = ' (<a href="../group/group_space.php?'.api_get_cidreq()
-                            .'&gid='.$my_all_groups_forum_id.'" class="forum_group_link">'
-                            .get_lang('Go to').' '.$group_title.'</a>)';
-                    } else {
-                        $forum_title_group_addition = '';
-                    }
-
+                    $session_displayed = '';
                     if (!empty($sessionId) && !empty($forum['session_name'])) {
                         $session_displayed = ' ('.$forum['session_name'].')';
-                    } else {
-                        $session_displayed = '';
                     }
 
                     // the number of topics and posts
                     $my_number_threads = $forum->getThreads() ? $forum->getThreads()->count() : 0;
-                    $my_number_posts = $forum->getForumPosts() ? $forum->getForumPosts()->count() : 0;
+                    $my_number_posts = $forum->getForumPosts();
 
                     $html .= '<div class="row">';
                     $html .= '<div class="col-md-6">';
@@ -380,10 +372,7 @@ if ('add' !== $action) {
                     );
 
                     if ($forum->isModerated() && api_is_allowed_to_edit(false, true)) {
-                        $waitingCount = getCountPostsWithStatus(
-                            CForumPost::STATUS_WAITING_MODERATION,
-                            $forum
-                        );
+                        $waitingCount = getCountPostsWithStatus(CForumPost::STATUS_WAITING_MODERATION, $forum);
                         if (!empty($waitingCount)) {
                             $html .= Display::label(
                                 get_lang('Posts pending moderation').': '.$waitingCount,
@@ -455,7 +444,7 @@ if ('add' !== $action) {
                         $html .= return_up_down_icon(
                             'forum',
                             $forumId,
-                            $forums_in_category
+                            $forum_list
                         );
                     }
 

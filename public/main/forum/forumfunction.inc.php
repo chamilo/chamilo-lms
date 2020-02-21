@@ -176,9 +176,14 @@ function handleForum($url)
                 exit;
                 break;
             case 'move':
-                move_up_down($content, $_REQUEST['direction'], $id);
+                move_up_down($content, $_REQUEST['direction'] ?? '', $id);
                 header('Location: '. $url);
                 exit;
+                break;
+            case 'move_thread':
+                $message = move_thread_form();
+
+                return $message;
                 break;
             case 'visible':
             case 'invisible':
@@ -753,11 +758,6 @@ function store_forum($values, $courseInfo = [], $returnId = false)
     $courseInfo = empty($courseInfo) ? api_get_course_info() : $courseInfo;
     $courseId = $courseInfo['real_id'];
     $session_id = api_get_session_id();
-    $group_id = api_get_group_id();
-    if (isset($values['group_id']) && !empty($values['group_id'])) {
-        $group_id = $values['group_id'];
-    }
-
     $table_forums = Database::get_course_table(TABLE_FORUM);
 
     // Find the max forum_order for the given category. The new forum is added at the end => max cat_order + &
@@ -851,7 +851,6 @@ function store_forum($values, $courseInfo = [], $returnId = false)
         ->setEndTime(!empty($values['end_time']) ? api_get_utc_datetime($values['end_time'], true, true) : null)
         ->setSessionId($session_id)
         ->setLpId($values['lp_id'] ?? 0)
-
     ;
 
     $user = api_get_user_entity(api_get_user_id());
@@ -1230,9 +1229,9 @@ function return_up_down_icon($content, $id, $list)
     $forumCategory = isset($_GET['forumcategory']) ? Security::remove_XSS($_GET['forumcategory']) : null;
 
     if (is_array($list)) {
-        foreach ($list as $key => $listitem) {
+        foreach ($list as $item) {
             $internal_counter++;
-            if ($id == $key) {
+            if ($id == $item->getIid()) {
                 $position = $internal_counter;
             }
         }
@@ -1298,7 +1297,7 @@ function move_up_down($content, $direction, $id)
         $row = Database::fetch_array($result);
         $forum_category = $row['forum_category'];
     } else {
-        return get_lang('Error');
+        return false;
     }
 
     // Determine the need for sorting ascending or descending order.
@@ -1307,7 +1306,7 @@ function move_up_down($content, $direction, $id)
     } elseif ('up' == $direction) {
         $sort_direction = 'DESC';
     } else {
-        return get_lang('Error');
+        return false;
     }
 
     // The SQL statement
@@ -1315,7 +1314,7 @@ function move_up_down($content, $direction, $id)
         $sql = "SELECT *
                 FROM $table_categories forum_categories
                 WHERE
-                    forum_categories.c_id = $course_id'
+                    forum_categories.c_id = $course_id
                 ORDER BY forum_categories.cat_order $sort_direction";
     }
     if ('forum' == $content) {
@@ -1330,7 +1329,9 @@ function move_up_down($content, $direction, $id)
     $result = Database::query($sql);
     $found = false;
     $next_sort = '';
-    while ($row = Database::fetch_array($result)) {
+    $this_sort = '';
+    while ($row = Database::fetch_array($result, 'ASSOC')) {
+        //var_dump($content, $row, $id_column, $sort_column);
         if ($found) {
             $next_id = $row[$id_column];
             $next_sort = $row[$sort_column];
@@ -1343,34 +1344,42 @@ function move_up_down($content, $direction, $id)
         }
     }
 
-    // Committing the switch.
-    // We do an extra check if we do not have illegal values. If your remove this if statement you will
-    // be able to mess with the sorting by refreshing the page over and over again.
-    if ('' != $this_sort && '' != $next_sort && '' != $next_id && '' != $this_id) {
-        $sql = "UPDATE $table SET $sort_column='".Database::escape_string($this_sort)."'
-                WHERE c_id = $course_id AND $id_column='".Database::escape_string($next_id)."'";
-        Database::query($sql);
+    if ('forum' == $content && $next_sort) {
+        $repo = Container::getForumRepository();
+        /** @var CForumForum $forum */
+        $forum = $repo->find($id);
+        $forum->setForumOrder($next_sort);
+        $repo->getEntityManager()->persist($forum);
+        $repo->getEntityManager()->flush();
 
-        $sql = "UPDATE $table SET $sort_column='".Database::escape_string($next_sort)."'
-                WHERE c_id = $course_id AND $id_column='".Database::escape_string($this_id)."'";
-        Database::query($sql);
+        Display::addFlash(Display::return_message(get_lang('Updated')));
+    } else {
+        if ($next_sort) {
+            $repo = Container::getForumCategoryRepository();
+            /** @var CForumCategory $forum */
+            $category = $repo->find($id);
+            if ($category) {
+
+                $category->setCatOrder($next_sort);
+                $repo->getEntityManager()->persist($category);
+                $repo->getEntityManager()->flush();
+
+                Display::addFlash(Display::return_message(get_lang('Updated')));
+            }
+        }
     }
-
-    return get_lang(ucfirst($content).'Moved');
 }
 
 /**
  * Retrieve all the information off the forum categories (or one specific) for the current course.
  * The categories are sorted according to their sorting order (cat_order.
  *
- * @param int|string $id        default ''. When an id is passed we only find the information
- *                              about that specific forum category. If no id is passed we get all the forum categories.
  * @param int        $courseId  Optional. The course ID
  * @param int        $sessionId Optional. The session ID
  *
  * @return CForumCategory[]
  */
-function get_forum_categories($id = 0, $courseId = 0, $sessionId = 0)
+function get_forum_categories($courseId = 0, $sessionId = 0)
 {
     $repo = Container::getForumCategoryRepository();
 
@@ -1380,84 +1389,12 @@ function get_forum_categories($id = 0, $courseId = 0, $sessionId = 0)
     $qb = $repo->getResources(api_get_user_entity(api_get_user_id()), $course->getResourceNode(), $course, $session);
 
     return $qb->getQuery()->getResult();
-
-    $table_categories = Database::get_course_table(TABLE_FORUM_CATEGORY);
-    $table_item_property = Database::get_course_table(TABLE_ITEM_PROPERTY);
-
-    // Condition for the session
-    $session_id = $sessionId ?: api_get_session_id();
-    $course_id = $courseId ?: api_get_course_int_id();
-
-    $condition_session = api_get_session_condition(
-        $session_id,
-        true,
-        true,
-        'forum_categories.session_id'
-    );
-    $condition_session .= " AND forum_categories.c_id = $course_id AND item_properties.c_id = $course_id";
-
-    if (empty($id)) {
-        $sql = "SELECT *
-                FROM $table_item_property item_properties
-                INNER JOIN $table_categories forum_categories
-                ON (
-                    forum_categories.cat_id = item_properties.ref AND
-                    item_properties.c_id = forum_categories.c_id
-                )
-                WHERE
-                    item_properties.visibility = 1 AND
-                    item_properties.tool = '".TOOL_FORUM_CATEGORY."'
-                    $condition_session
-                ORDER BY forum_categories.cat_order ASC";
-        if (api_is_allowed_to_edit()) {
-            $sql = "SELECT *
-                    FROM $table_item_property item_properties
-                    INNER JOIN $table_categories forum_categories
-                    ON (
-                        forum_categories.cat_id = item_properties.ref AND
-                        item_properties.c_id = forum_categories.c_id
-                    )
-                    WHERE
-                        item_properties.visibility<>2 AND
-                        item_properties.tool='".TOOL_FORUM_CATEGORY."'
-                        $condition_session
-                    ORDER BY forum_categories.cat_order ASC";
-        }
-    } else {
-        $sql = "SELECT *
-                FROM $table_item_property item_properties
-                INNER JOIN $table_categories forum_categories
-                ON (
-                    forum_categories.cat_id = item_properties.ref AND
-                    item_properties.c_id = forum_categories.c_id
-                )
-                WHERE
-                    item_properties.tool='".TOOL_FORUM_CATEGORY."' AND
-                    forum_categories.cat_id = ".(int) $id."
-                    $condition_session
-                ORDER BY forum_categories.cat_order ASC";
-    }
-
-    $result = Database::query($sql);
-    $forum_categories_list = [];
-    $extraFieldValue = new ExtraFieldValue('forum_category');
-    while ($row = Database::fetch_assoc($result)) {
-        $row['extra_fields'] = $extraFieldValue->getAllValuesByItem($row['cat_id']);
-
-        if (empty($id)) {
-            $forum_categories_list[$row['cat_id']] = $row;
-        } else {
-            $forum_categories_list = $row;
-        }
-    }
-
-    return $forum_categories_list;
 }
 
 /**
  * This function retrieves all the fora in a given forum category.
  *
- * @param int $cat_id   the id of the forum category
+ * @param int $categoryId   the id of the forum category
  * @param int $courseId Optional. The course ID
  *
  * @return CForumForum[] containing all the information about the forums (regardless of their category)
@@ -1466,52 +1403,19 @@ function get_forum_categories($id = 0, $courseId = 0, $sessionId = 0)
  *
  * @version february 2006, dokeos 1.8
  */
-function get_forums_in_category($cat_id, $courseId = 0)
+function get_forums_in_category($categoryId, $courseId = 0)
 {
     $repo = Container::getForumRepository();
     $course = api_get_course_entity($courseId);
 
     $qb = $repo->getResourcesByCourse($course, null);
-    $qb->andWhere('resource.forumCategory = :catId')
-        ->setParameter('catId', $cat_id);
+    $qb
+        ->andWhere('resource.forumCategory = :catId')
+        ->setParameter('catId', $categoryId)
+        ->orderBy('resource.forumOrder')
+    ;
 
     return $qb->getQuery()->getResult();
-
-    $table_forums = Database::get_course_table(TABLE_FORUM);
-    $table_item_property = Database::get_course_table(TABLE_ITEM_PROPERTY);
-
-    $forum_list = [];
-    $course_id = $courseId ?: api_get_course_int_id();
-    $cat_id = (int) $cat_id;
-
-    $sql = "SELECT * FROM $table_forums forum
-            INNER JOIN $table_item_property item_properties
-            ON (forum.forum_id = item_properties.ref AND item_properties.c_id = forum.c_id)
-            WHERE
-                forum.forum_category = '".$cat_id."' AND
-                item_properties.visibility = 1 AND
-                forum.c_id = $course_id AND
-                item_properties.c_id = $course_id AND
-                item_properties.tool = '".TOOL_FORUM."'
-            ORDER BY forum.forum_order ASC";
-    if (api_is_allowed_to_edit()) {
-        $sql = "SELECT * FROM $table_forums forum
-                INNER JOIN $table_item_property item_properties
-                ON (forum.forum_id = item_properties.ref AND item_properties.c_id = forum.c_id)
-                WHERE
-                    forum.forum_category = '".$cat_id."' AND
-                    item_properties.visibility <> 2 AND
-                    item_properties.tool = '".TOOL_FORUM."' AND
-                    item_properties.c_id = $course_id AND
-                    forum.c_id = $course_id
-                ORDER BY forum_order ASC";
-    }
-    $result = Database::query($sql);
-    while ($row = Database::fetch_array($result)) {
-        $forum_list[$row['forum_id']] = $row;
-    }
-
-    return $forum_list;
 }
 
 /**
@@ -1527,7 +1431,6 @@ function get_forums_in_category($cat_id, $courseId = 0)
  * @return CForumForum[]
  */
 function get_forums(
-    $id = 0,
     $courseId = '',
     $includeGroupsForum = true,
     $sessionId = 0
@@ -4580,13 +4483,10 @@ function move_thread_form()
         'post',
         api_get_self().'?forum='.(int) ($_GET['forum']).'&thread='.(int) ($_GET['thread']).'&action='.Security::remove_XSS($_GET['action']).'&'.api_get_cidreq()
     );
-    // The header for the form
-    $form->addElement('header', get_lang('Move Thread'));
+    $form->addHeader(get_lang('Move Thread'));
     // Invisible form: the thread_id
-    $form->addElement('hidden', 'thread_id', (int) ($_GET['thread']));
-    // the fora
+    $form->addHidden('thread_id', (int) ($_GET['thread']));
     $forum_categories = get_forum_categories();
-    $forums = get_forums();
 
     $htmlcontent = '<div class="row">
         <div class="label">
@@ -4594,14 +4494,11 @@ function move_thread_form()
         </div>
         <div class="formw">';
     $htmlcontent .= '<select name="forum">';
-    foreach ($forum_categories as $key => $category) {
-        $htmlcontent .= '<optgroup label="'.$category['cat_title'].'">';
-        foreach ($forums as $key => $forum) {
-            if (isset($forum['forum_category'])) {
-                if ($forum['forum_category'] == $category['cat_id']) {
-                    $htmlcontent .= '<option value="'.$forum['forum_id'].'">'.$forum['forum_title'].'</option>';
-                }
-            }
+    foreach ($forum_categories as $category) {
+        $htmlcontent .= '<optgroup label="'.$category->getCatTitle().'">';
+        $forums = $category->getForums();
+        foreach ($forums as $forum) {
+            $htmlcontent .= '<option value="'.$forum->getIid().'">'.$forum->getForumTitle().'</option>';
         }
         $htmlcontent .= '</optgroup>';
     }
@@ -4619,9 +4516,10 @@ function move_thread_form()
         $values = $form->exportValues();
         if (isset($_POST['forum'])) {
             store_move_thread($values);
+            Display::addFlash(Display::return_message(get_lang('Moved')));
         }
     } else {
-        $form->display();
+        return $form->returnForm();
     }
 }
 
@@ -4846,7 +4744,7 @@ function store_move_thread($values)
 
     $forumId = (int) ($_POST['forum']);
     $threadId = (int) ($_POST['thread_id']);
-    $forumInfo = get_forums($forumId);
+    //$forumInfo = get_forums($forumId);
 
     // Change the thread table: Setting the forum_id to the new forum.
     $sql = "UPDATE $table_threads SET forum_id = $forumId
@@ -4857,9 +4755,10 @@ function store_move_thread($values)
     $sql = "UPDATE $table_posts SET forum_id = $forumId
             WHERE c_id = $courseId AND thread_id= $threadId";
     Database::query($sql);
+
     // Fix group id, if forum is moved to a different group
     if (!empty($forumInfo['to_group_id'])) {
-        $groupId = $forumInfo['to_group_id'];
+        /*$groupId = $forumInfo['to_group_id'];
         $item = api_get_item_property_info(
             $courseId,
             TABLE_FORUM_THREAD,
@@ -4892,7 +4791,7 @@ function store_move_thread($values)
                       $sessionCondition
             ";
             Database::query($sql);
-        }
+        }*/
     }
 
     return get_lang('Thread moved');
@@ -6621,7 +6520,7 @@ function getCountPostsWithStatus($status, $forum, $threadId = null)
     ;
 
     if (!empty($threadId)) {
-        $criteria->andWhere(Criteria::expr()->eq('threadId', $threadId));
+        $criteria->andWhere(Criteria::expr()->eq('thread', $threadId));
     }
 
     $qb = $em->getRepository('ChamiloCourseBundle:CForumPost')->createQueryBuilder('p');

@@ -899,7 +899,7 @@ function store_forum($values, $courseInfo = [], $returnId = false)
                         $thread['thread_id']
                     );
 
-                    foreach ($posts as $post) {
+                    /*foreach ($posts as $post) {
                         $postId = $post['post_id'];
                         $attachMentList = getAllAttachment($postId);
                         if (!empty($attachMentList)) {
@@ -921,7 +921,7 @@ function store_forum($values, $courseInfo = [], $returnId = false)
                                     ref = $postId AND
                                     c_id = $courseId";
                         Database::query($sql);
-                    }
+                    }*/
                 }
             }
         }
@@ -1783,7 +1783,8 @@ function get_last_post_by_thread($course_id, $thread_id, $forum_id, $show_visibl
  * @param int    $sessionId       Optional. The session id
  *
  * @return array containing all the information about the last post
- *               (last_post_id, last_poster_id, last_post_date, last_poster_name, last_poster_lastname, last_poster_firstname)
+ *               (last_post_id, last_poster_id, last_post_date, last_poster_name, last_poster_lastname,
+ *               last_poster_firstname)
  *
  * @author Patrick Cool <patrick.cool@UGent.be>, Ghent University
  *
@@ -2125,6 +2126,7 @@ function getPosts(
             'visible' => $post->getVisible(),
             'status' => $post->getStatus(),
             'indent_cnt' => $depth,
+            'entity' => $post
         ];
 
         $posterId = $post->getPosterId();
@@ -2167,7 +2169,8 @@ function getPosts(
  * @param int $thread_id Thread ID
  * @param   string  Course DB name (optional)
  *
- * @return Doctrine\DBAL\Driver\Statement|null array Array of type ([user_id=>w,lastname=>x,firstname=>y,thread_id=>z],[])
+ * @return Doctrine\DBAL\Driver\Statement|null array Array of type
+ *                                             ([user_id=>w,lastname=>x,firstname=>y,thread_id=>z],[])
  *
  * @author Christian Fasanando <christian.fasanando@dokeos.com>,
  *
@@ -2401,8 +2404,8 @@ function get_forumcategory_information($cat_id)
  *
  * @param int $cat_id the id of the forum category
  *
- * @todo an additional parameter that takes the visibility into account. For instance $countinvisible=0 would return the number
- *      of visible forums, $countinvisible=1 would return the number of visible and invisible forums
+ * @todo an additional parameter that takes the visibility into account. For instance $countinvisible=0 would return
+ *       the number of visible forums, $countinvisible=1 would return the number of visible and invisible forums
  *
  * @return int the number of forums inside the given category
  *
@@ -2627,6 +2630,10 @@ function store_thread(
     );
     $em->flush();
 
+    if (!$thread->getIid()) {
+        return null;
+    }
+
     // Add option gradebook qualify.
     if (isset($values['thread_qualify_gradebook']) &&
         1 == $values['thread_qualify_gradebook']
@@ -2647,63 +2654,60 @@ function store_thread(
         );
     }
 
-    if ($thread->getIid()) {
-        $thread->setThreadId($thread->getIid());
-        $em->persist($thread);
-        $em->flush();
+    $thread->setThreadId($thread->getIid());
+    $em->persist($thread);
+    $em->flush();
 
+    /*api_item_property_update(
+        $courseInfo,
+        TOOL_FORUM_THREAD,
+        $thread->getIid(),
+        'ForumThreadAdded',
+        $userId,
+        $groupInfo,
+        null,
+        null,
+        null,
+        $sessionId
+    );*/
+
+    // If the forum properties tell that the posts have to be approved
+    // we have to put the whole thread invisible,
+    // because otherwise the students will see the thread and not the post
+    // in the thread.
+    // We also have to change $visible because the post itself has to be
+    // visible in this case (otherwise the teacher would have
+    // to make the thread visible AND the post.
+    // Default behaviour
+    /*api_set_default_visibility(
+        $thread->getIid(),
+        TOOL_FORUM_THREAD,
+        $groupId,
+        $courseInfo,
+        $sessionId,
+        $userId
+    );*/
+
+    if (0 == $visible) {
         /*api_item_property_update(
             $courseInfo,
             TOOL_FORUM_THREAD,
             $thread->getIid(),
-            'ForumThreadAdded',
+            'invisible',
             $userId,
-            $groupInfo,
-            null,
-            null,
-            null,
-            $sessionId
+            $groupInfo
         );*/
-
-        // If the forum properties tell that the posts have to be approved
-        // we have to put the whole thread invisible,
-        // because otherwise the students will see the thread and not the post
-        // in the thread.
-        // We also have to change $visible because the post itself has to be
-        // visible in this case (otherwise the teacher would have
-        // to make the thread visible AND the post.
-        // Default behaviour
-        /*api_set_default_visibility(
-            $thread->getIid(),
-            TOOL_FORUM_THREAD,
-            $groupId,
-            $courseInfo,
-            $sessionId,
-            $userId
-        );*/
-
-        if (0 == $visible) {
-            /*api_item_property_update(
-                $courseInfo,
-                TOOL_FORUM_THREAD,
-                $thread->getIid(),
-                'invisible',
-                $userId,
-                $groupInfo
-            );*/
-            $visible = 1;
-        }
-
-        $logInfo = [
-            'tool' => TOOL_FORUM,
-            'tool_id' => $values['forum_id'],
-            'tool_id_detail' => $thread->getIid(),
-            'action' => 'new-thread',
-            'action_details' => '',
-            'info' => $clean_post_title,
-        ];
-        Event::registerLog($logInfo);
+        $visible = 1;
     }
+
+    $logInfo = [
+        'tool' => TOOL_FORUM,
+        'tool_id' => $values['forum_id'],
+        'tool_id_detail' => $thread->getIid(),
+        'action' => 'new-thread',
+        'info' => $clean_post_title,
+    ];
+    Event::registerLog($logInfo);
 
     // We now store the content in the table_post table.
     $post = new CForumPost();
@@ -2717,9 +2721,7 @@ function store_thread(
         ->setPosterName(isset($values['poster_name']) ? $values['poster_name'] : null)
         ->setPostDate($post_date)
         ->setPostNotification(isset($values['post_notification']) ? (int) $values['post_notification'] : null)
-        ->setPostParentId(null)
         ->setVisible($visible)
-        ->setPostId(0)
         ->setStatus(CForumPost::STATUS_VALIDATED);
 
     if ($forum->isModerated()) {
@@ -2777,10 +2779,10 @@ function store_thread(
     // Now we have to update the thread table to fill the thread_last_post
     // field (so that we know when the thread has been updated for the last time).
     $sql = "UPDATE $table_threads
-            SET thread_last_post = '".Database::escape_string($postId)."'
+            SET thread_last_post = '".$postId."'
             WHERE
                 c_id = $course_id AND
-                thread_id='".Database::escape_string($thread->getIid())."'";
+                thread_id='".$thread->getIid()."'";
     $result = Database::query($sql);
     $message = get_lang('The new thread has been added');
 
@@ -2810,7 +2812,7 @@ function store_thread(
             if ($result) {
                 add_forum_attachment_file(
                     isset($values['file_comment']) ? $values['file_comment'] : null,
-                    $postId
+                    $post
                 );
             }
         }
@@ -3822,7 +3824,7 @@ function store_reply(CForumForum $forum, CForumThread $thread, $values, $courseI
                 $thread,
                 $values
             );
-            add_forum_attachment_file('', $new_post_id);
+            add_forum_attachment_file('', $post);
 
             $logInfo = [
                 'tool' => TOOL_FORUM,
@@ -4071,19 +4073,23 @@ function store_edit_post(CForumForum $forum, $values)
         }
     }
 
-    // Update the post_title and the post_text.
-    $params = [
-        'post_title' => $values['post_title'],
-        'post_text' => $values['post_text'],
-        'post_notification' => isset($values['post_notification']) ? 1 : 0,
-    ];
+    $postId = $values['post_id'];
+    $repo = Container::getForumPostRepository();
+    /** @var CForumPost $post */
+    $post = $repo->find($postId);
+    if ($post) {
+        $post
+            ->setPostTitle($values['post_title'])
+            ->setPostText($values['post_text'])
+            ->setPostNotification(isset($values['post_notification']) ? 1 : 0)
+        ;
 
-    if ($updateStatus) {
-        $params['status'] = $status;
+        if ($updateStatus) {
+            $post->setStatus($status);
+        }
+        $repo->getEntityManager()->persist($post);
+        $repo->getEntityManager()->flush();
     }
-
-    $where = ['c_id = ? AND post_id = ?' => [$course_id, $values['post_id']]];
-    Database::update($table_posts, $params, $where);
 
     // Update attached files
     if (!empty($_POST['file_ids']) && is_array($_POST['file_ids'])) {
@@ -4105,7 +4111,7 @@ function store_edit_post(CForumForum $forum, $values)
     if (empty($values['id_attach'])) {
         add_forum_attachment_file(
             isset($values['file_comment']) ? $values['file_comment'] : null,
-            $values['post_id']
+            $post
         );
     } else {
         edit_forum_attachment_file(
@@ -4316,7 +4322,8 @@ function approve_post($post_id, $action)
 
 /**
  * This function retrieves all the unapproved messages for a given forum
- * This is needed to display the icon that there are unapproved messages in that thread (only the courseadmin can see this).
+ * This is needed to display the icon that there are unapproved messages in that thread (only the courseadmin can see
+ * this).
  *
  * @param the $forum_id forum where we want to know the unapproved messages of
  *
@@ -5100,55 +5107,35 @@ function search_link()
  * This function adds an attachment file into a forum.
  *
  * @param string $file_comment a comment about file
- * @param int    $last_id      from forum_post table
+ * @param CForumPost    $post      from forum_post table
  *
  * @return false|null
  */
-function add_forum_attachment_file($file_comment, $last_id)
+function add_forum_attachment_file($file_comment, CForumPost $post)
 {
     $_course = api_get_course_info();
-    $agenda_forum_attachment = Database::get_course_table(TABLE_FORUM_ATTACHMENT);
-
-    if (empty($_FILES['user_upload'])) {
+    $request = Container::getRequest();
+    if (false === $request->files->has('user_upload')) {
         return false;
     }
 
-    $filesData = [];
-
-    if (!is_array($_FILES['user_upload']['name'])) {
-        $filesData[] = $_FILES['user_upload'];
-    } else {
-        $fileCount = count($_FILES['user_upload']['name']);
-        $fileKeys = array_keys($_FILES['user_upload']);
-        for ($i = 0; $i < $fileCount; $i++) {
-            foreach ($fileKeys as $key) {
-                $filesData[$i][$key] = $_FILES['user_upload'][$key][$i];
-            }
-        }
-    }
-
-    foreach ($filesData as $attachment) {
-        if (empty($attachment['name'])) {
-            continue;
-        }
-
-        $upload_ok = process_uploaded_file($attachment);
+    $files = $request->files->get('user_upload');
+    /** @var \Symfony\Component\HttpFoundation\File\UploadedFile $attachment */
+    foreach ($files as $file) {
+        $upload_ok = process_uploaded_file($file);
 
         if (!$upload_ok) {
             continue;
         }
 
-        $course_dir = $_course['path'].'/upload/forum';
-        $sys_course_path = api_get_path(SYS_COURSE_PATH);
-        $updir = $sys_course_path.$course_dir;
-
         // Try to add an extension to the file if it hasn't one.
         $new_file_name = add_ext_on_mime(
-            stripslashes($attachment['name']),
-            $attachment['type']
+            stripslashes($file->getPathname()),
+            $file->getType()
         );
+
         // User's file name
-        $file_name = $attachment['name'];
+        $file_name = $file->getClientOriginalName();
 
         if (!filter_extension($new_file_name)) {
             Display::addFlash(
@@ -5162,36 +5149,52 @@ function add_forum_attachment_file($file_comment, $last_id)
         }
 
         $new_file_name = uniqid('');
-        $new_path = $updir.'/'.$new_file_name;
-        $result = @move_uploaded_file($attachment['tmp_name'], $new_path);
         $safe_file_comment = Database::escape_string($file_comment);
         $safe_file_name = Database::escape_string($file_name);
         $safe_new_file_name = Database::escape_string($new_file_name);
-        $last_id = (int) $last_id;
-        // Storing the attachments if any.
-        if (!$result) {
-            return;
-        }
 
-        $last_id_file = Database::insert(
+        $attachment = new \Chamilo\CourseBundle\Entity\CForumAttachment();
+        $attachment
+            ->setCId(api_get_course_int_id())
+            ->setComment($safe_file_comment)
+            ->setFilename($file_name)
+            ->setPath($file_name)
+            ->setPost($post)
+            ->setSize($file->getSize())
+        ;
+
+        $user = api_get_user_entity(api_get_user_id());
+        $course = api_get_course_entity(api_get_course_int_id());
+        $session = api_get_session_entity(api_get_session_id());
+
+        $repo = Container::getForumAttachmentRepository();
+        $em = $repo->getEntityManager();
+        $repo->addResourceToCourseWithParent(
+            $attachment,
+            $post->getResourceNode(),
+            ResourceLink::VISIBILITY_PUBLISHED,
+            $user,
+            $course,
+            $session,
+            null,
+            $file
+        );
+        $em->flush();
+
+        /*$last_id_file = Database::insert(
             $agenda_forum_attachment,
             [
-                'c_id' => api_get_course_int_id(),
-                'filename' => $safe_file_name,
-                'comment' => $safe_file_comment,
                 'path' => $safe_new_file_name,
-                'post_id' => $last_id,
-                'size' => (int) ($attachment['size']),
             ]
-        );
+        );*/
 
-        api_item_property_update(
+        /*api_item_property_update(
             $_course,
             TOOL_FORUM_ATTACH,
             $last_id_file,
             'ForumAttachmentAdded',
             api_get_user_id()
-        );
+        );*/
     }
 }
 
@@ -5316,54 +5319,24 @@ function get_attachment($postId)
 }
 
 /**
- * @param int $postId
- *
- * @return array
- */
-function getAllAttachment($postId)
-{
-    $forumAttachmentTable = Database::get_course_table(TABLE_FORUM_ATTACHMENT);
-    $courseId = api_get_course_int_id();
-    $postId = (int) $postId;
-
-    if (empty($postId)) {
-        return [];
-    }
-
-    $columns = ['iid', 'path', 'filename', 'comment'];
-    $conditions = [
-        'where' => [
-            'c_id = ? AND post_id = ?' => [$courseId, $postId],
-        ],
-    ];
-
-    return Database::select(
-        $columns,
-        $forumAttachmentTable,
-        $conditions,
-        'all',
-        'ASSOC'
-    );
-}
-
-/**
  * Delete the all the attachments from the DB and the file according to the post's id or attach id(optional).
  *
- * @param int $post_id
- * @param int $id_attach
+ * @param int $postId
+ * @param int $attachmentId
  *
  * @return bool
  */
-function delete_attachment($postId, $id_attach = 0)
+function delete_attachment($postId, $attachmentId)
 {
     $repo = Container::getForumPostRepository();
     /** @var CForumPost $post */
     $post = $repo->find($postId);
     if ($post) {
         $repoAttachment = Container::getForumAttachmentRepository();
-        $attachment = $repoAttachment->find($id_attach);
+        $attachment = $repoAttachment->find($attachmentId);
         if ($attachment) {
             $post->removeAttachment($attachment);
+            $repo->getEntityManager()->remove($attachment);
         }
         $repo->getEntityManager()->persist($post);
         $repo->getEntityManager()->flush();
@@ -6327,7 +6300,9 @@ function getAttachedFiles(
     // Check if exist at least one of them to filter forum attachment select query
     if (empty($postId) && empty($attachId)) {
         return [];
-    } elseif (empty($postId)) {
+    }
+
+    if (empty($postId)) {
         $filter = "AND iid = $attachId";
     } elseif (empty($attachId)) {
         $filter = "AND post_id = $postId";
@@ -6335,25 +6310,30 @@ function getAttachedFiles(
         $filter = "AND post_id = $postId AND iid = $attachId";
     }
     $forumAttachmentTable = Database::get_course_table(TABLE_FORUM_ATTACHMENT);
-    $sql = "SELECT iid, comment, filename, path, size
+    $sql = "SELECT iid
             FROM $forumAttachmentTable
             WHERE c_id = $courseId $filter";
     $result = Database::query($sql);
     $json = [];
-    if (false !== $result && Database::num_rows($result) > 0) {
+    if (Database::num_rows($result) > 0) {
+        $repo = Container::getForumAttachmentRepository();
         while ($row = Database::fetch_array($result, 'ASSOC')) {
+            /** @var \Chamilo\CourseBundle\Entity\CForumAttachment $attachment */
+            $attachment = $repo->find($row['iid']);
+            $downloadUrl = $repo->getResourceFileUrl($attachment);
+
             // name contains an URL to download attachment file and its filename
             $json['name'] = Display::url(
-                api_htmlentities($row['filename']),
-                api_get_path(WEB_CODE_PATH).'forum/download.php?file='.$row['path'].'&'.api_get_cidreq(),
+                api_htmlentities($attachment->getFilename()),
+                $downloadUrl,
                 ['target' => '_blank', 'class' => 'attachFilename']
             );
             $json['id'] = $row['iid'];
-            $json['comment'] = $row['comment'];
+            $json['comment'] = $attachment->getComment();
             // Format file size
-            $json['size'] = format_file_size($row['size']);
+            $json['size'] = format_file_size($attachment->getSize());
             // Check if $row is consistent
-            if (!empty($row) && is_array($row)) {
+            if ($attachment) {
                 // Set result as success and bring delete URL
                 $json['result'] = Display::return_icon('accept.png', get_lang('Uploaded.'));
                 $url = api_get_path(WEB_CODE_PATH).'forum/viewthread.php?'.api_get_cidreq().'&action=delete_attach&forum='.$forumId.'&thread='.$threadId.'&id_attach='.$row['iid'];

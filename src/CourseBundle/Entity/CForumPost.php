@@ -142,6 +142,7 @@ class CForumPost extends AbstractResource implements ResourceInterface
     public function __construct()
     {
         $this->postId = 0;
+        $this->postParentId = null;
     }
 
     public function __toString(): string
@@ -468,7 +469,7 @@ class CForumPost extends AbstractResource implements ResourceInterface
     /**
      * @return CForumAttachment[]
      */
-    public function getAttachments(): array
+    public function getAttachments()
     {
         return $this->attachments;
     }

@@ -81,15 +81,24 @@ function get_document_title($name)
 /**
  * This function checks if the upload succeeded.
  *
- * @param array $uploaded_file ($_FILES)
+ * @param array|UploadedFile $uploadedFile ($_FILES)
  *
  * @return true if upload succeeded
  */
-function process_uploaded_file($uploaded_file, $show_output = true)
+function process_uploaded_file($uploadedFileData, $show_output = true)
 {
+    $uploadedFile = [];
+    if ($uploadedFileData instanceof UploadedFile) {
+        $uploadedFile['error'] = $uploadedFileData->getError();
+        $uploadedFile['tmp_name'] =$uploadedFileData->getPathname() ;
+        $uploadedFile['size'] = $uploadedFileData->getSize();
+    } else {
+        $uploadedFile = $uploadedFileData;
+    }
+
     // Checking the error code sent with the file upload.
-    if (isset($uploaded_file['error'])) {
-        switch ($uploaded_file['error']) {
+    if (isset($uploadedFile['error'])) {
+        switch ($uploadedFile['error']) {
             case 1:
                 // The uploaded file exceeds the upload_max_filesize directive in php.ini.
                 if ($show_output) {
@@ -144,7 +153,7 @@ function process_uploaded_file($uploaded_file, $show_output = true)
         }
     }
 
-    if (!file_exists($uploaded_file['tmp_name'])) {
+    if (!file_exists($uploadedFile['tmp_name'])) {
         // No file was uploaded.
         if ($show_output) {
             Display::addFlash(Display::return_message(get_lang('The file upload has failed.'), 'error'));
@@ -153,8 +162,8 @@ function process_uploaded_file($uploaded_file, $show_output = true)
         return false;
     }
 
-    if (file_exists($uploaded_file['tmp_name'])) {
-        $filesize = filesize($uploaded_file['tmp_name']);
+    if (file_exists($uploadedFile['tmp_name'])) {
+        $filesize = filesize($uploadedFile['tmp_name']);
         if (empty($filesize)) {
             // No file was uploaded.
             if ($show_output) {
@@ -176,7 +185,7 @@ function process_uploaded_file($uploaded_file, $show_output = true)
     if (!empty($course_id)) {
         $max_filled_space = DocumentManager::get_course_quota();
         // Check if there is enough space to save the file
-        if (!DocumentManager::enough_space($uploaded_file['size'], $max_filled_space)) {
+        if (!DocumentManager::enough_space($uploadedFile['size'], $max_filled_space)) {
             if ($show_output) {
                 Display::addFlash(
                     Display::return_message(
@@ -1258,11 +1267,11 @@ function item_property_update_on_folder($_course, $path, $user_id)
             if ($folder_id) {
                 $sql = "UPDATE $table SET
 				        lastedit_date = '$time',
-				        lastedit_type = 'DocumentInFolderUpdated', 
+				        lastedit_type = 'DocumentInFolderUpdated',
 				        lastedit_user_id='$user_id'
-						WHERE 
-						    c_id = $course_id AND 
-						    tool='".TOOL_DOCUMENT."' AND 
+						WHERE
+						    c_id = $course_id AND
+						    tool='".TOOL_DOCUMENT."' AND
 						    ref = '$folder_id'";
                 Database::query($sql);
             }

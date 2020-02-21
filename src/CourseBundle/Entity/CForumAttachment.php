@@ -248,6 +248,13 @@ class CForumAttachment extends AbstractResource implements ResourceInterface
         return $this->post;
     }
 
+    public function setPost(CForumPost $post)
+    {
+        $this->post = $post;
+
+        return $this;
+    }
+
     /**
      * Resource identifier.
      */

@@ -93,6 +93,11 @@ Event::registerLog($logInfo);
 $currentUrl = api_get_path(WEB_CODE_PATH).'forum/viewthread.php?forum='.$forumId.'&'.api_get_cidreq().'&thread='.$threadId;
 
 switch ($my_action) {
+    case 'delete_attach':
+        delete_attachment($_GET['post'], $_GET['id_attach']);
+        header('Location: '.$currentUrl);
+        exit;
+        break;
     case 'delete':
         if (
             isset($_GET['content']) &&
@@ -276,17 +281,6 @@ if ($threadEntity->isThreadPeerQualify()) {
 }
 
 $allowReport = reportAvailable();
-
-// Are we in a lp ?
-$origin = api_get_origin();
-//delete attachment file
-if (isset($_GET['action']) &&
-    'delete_attach' == $_GET['action'] &&
-    isset($_GET['id_attach'])
-) {
-    delete_attachment(0, $_GET['id_attach']);
-}
-
 $origin = api_get_origin();
 $sessionId = api_get_session_id();
 $_user = api_get_user_info();
@@ -312,6 +306,8 @@ $tutorGroup = GroupManager::is_tutor_of_group(api_get_user_id(), $groupInfo);
 
 $postList = [];
 foreach ($posts as $post) {
+    /** @var CForumPost $postEntity */
+    $postEntity = $post['entity'];
     $posterId = isset($post['user_id']) ? $post['user_id'] : 0;
     $username = '';
     if (isset($post['username'])) {
@@ -637,21 +633,23 @@ foreach ($posts as $post) {
 
     // The check if there is an attachment
     $post['post_attachments'] = '';
-    $attachment_list = getAllAttachment($post['post_id']);
-    if (!empty($attachment_list) && is_array($attachment_list)) {
-        foreach ($attachment_list as $attachment) {
-            $user_filename = $attachment['filename'];
-            $post['post_attachments'] .= Display::return_icon('attachment.gif', get_lang('Attachment'));
-            $post['post_attachments'] .= '<a href="download.php?file=';
-            $post['post_attachments'] .= $attachment['path'];
-            $post['post_attachments'] .= ' "> '.$user_filename.' </a>';
-            $post['post_attachments'] .= '<span class="forum_attach_comment" >'.$attachment['comment'].'</span>';
+
+    $attachments = $postEntity->getAttachments();
+    if ($attachments) {
+        $repo = Container::getForumAttachmentRepository();
+        /** @var \Chamilo\CourseBundle\Entity\CForumAttachment $attachment */
+        foreach ($attachments as $attachment) {
+            $post['post_attachments'] .= Display::return_icon('attachment.png', get_lang('Attachment'));
+            $url = $repo->getResourceFileUrl($attachment);
+            $post['post_attachments'] .= Display::url($attachment->getFilename(), $url);
+
+            $post['post_attachments'] .= '<span class="forum_attach_comment" >'.$attachment->getComment().'</span>';
             if ((1 == $forumEntity->getAllowEdit() && $post['user_id'] == $userId) ||
                 (api_is_allowed_to_edit(false, true) &&
                 !(api_is_session_general_coach() && $forumEntity->getSessionId() != $sessionId))
             ) {
                 $post['post_attachments'] .= '&nbsp;&nbsp;<a href="'.api_get_self().'?'.api_get_cidreq().'&action=delete_attach&id_attach='
-                    .$attachment['iid'].'&forum='.$forumId.'&thread='.$threadId
+                    .$attachment->getIid().'&forum='.$forumId.'&thread='.$threadId.'&post='.$post['post_id']
                     .'" onclick="javascript:if(!confirm(\''
                     .addslashes(api_htmlentities(get_lang('Please confirm your choice'), ENT_QUOTES)).'\')) return false;">'
                     .Display::return_icon('delete.png', get_lang('Delete')).'</a><br />';

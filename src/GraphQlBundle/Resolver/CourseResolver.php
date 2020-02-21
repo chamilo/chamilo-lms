@@ -391,18 +391,18 @@ class CourseResolver implements ContainerAwareInterface
                     'icon' => $icon,
                     'size' => format_file_size($documentInfo['size']),
                     'url' => $webPath.http_build_query(
-                            [
-                                'username' => $this->getCurrentUser()->getUsername(),
-                                'api_key' => '', //$this->apiKey,
-                                'cidReq' => $course->getCode(),
-                                'id_session' => $session ? $session->getId() : 0,
-                                'gidReq' => 0,
-                                'gradebook' => 0,
-                                'origin' => '',
-                                'action' => 'download',
-                                'id' => $documentInfo['id'],
-                            ]
-                        ),
+                        [
+                            'username' => $this->getCurrentUser()->getUsername(),
+                            'api_key' => '', //$this->apiKey,
+                            'cid' => $course->getCode(),
+                            'sid' => $session ? $session->getId() : 0,
+                            'gid' => 0,
+                            'gradebook' => 0,
+                            'origin' => '',
+                            'action' => 'download',
+                            'id' => $documentInfo['id'],
+                        ]
+                    ),
                 ];
             },
             $documents

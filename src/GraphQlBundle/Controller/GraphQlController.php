@@ -46,9 +46,9 @@ class GraphQlController extends AbstractController
 
         $webCodePath = api_get_path(WEB_CODE_PATH).'lp/lp_controller.php?';
         $urlParams = http_build_query([
-            'cidReq' => $jwt->data->course->code,
-            'id_session' => (int) $jwt->data->session,
-            'gidReq' => 0,
+            'cid' => $jwt->data->course->code,
+            'sid' => (int) $jwt->data->session,
+            'gid' => 0,
             'gradebook' => 0,
             'origin' => '',
             'action' => 'view',

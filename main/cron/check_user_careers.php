@@ -41,11 +41,11 @@ foreach ($data as $row) {
             $userId = $userInfo['user_id'];
             foreach ($chamiloCareerList as $careerId) {
                 if (UserManager::userHasCareer($userId, $careerId)) {
-                    echo "User #$userId has already career # $careerId ".PHP_EOL;
+                    echo "User $username (#$userId) has already the chamilo career # $careerId ".PHP_EOL;
                     continue;
                 } else {
                     //UserManager::addUserCareer($userId, $careerId);
-                    echo "Save career #$careerId to user  # $userId ".PHP_EOL;
+                    echo "Save career #$careerId to user $username (#$userId)  ".PHP_EOL;
                 }
             }
         } else {

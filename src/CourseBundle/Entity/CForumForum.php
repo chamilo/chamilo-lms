@@ -208,6 +208,13 @@ class CForumForum extends AbstractResource implements ResourceInterface
     protected $threads;
 
     /**
+     * @var CForumPost[]
+     *
+     * @ORM\OneToMany(targetEntity="Chamilo\CourseBundle\Entity\CForumPost", mappedBy="forum")
+     */
+    protected $posts;
+
+    /**
      * CForumForum constructor.
      */
     public function __construct()

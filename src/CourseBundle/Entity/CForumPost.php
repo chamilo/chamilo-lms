@@ -77,11 +77,12 @@ class CForumPost extends AbstractResource implements ResourceInterface
     protected $thread;
 
     /**
-     * @var int
+     * @var CForumForum|null
      *
-     * @ORM\Column(name="forum_id", type="integer", nullable=true)
+     * @ORM\ManyToOne(targetEntity="Chamilo\CourseBundle\Entity\CForumForum", inversedBy="posts")
+     * @ORM\JoinColumn(name="forum_id", referencedColumnName="iid", nullable=true, onDelete="SET NULL")
      */
-    protected $forumId;
+    protected $forum;
 
     /**
      * @var int
@@ -218,30 +219,6 @@ class CForumPost extends AbstractResource implements ResourceInterface
     public function getThread()
     {
         return $this->thread;
-    }
-
-    /**
-     * Set forumId.
-     *
-     * @param int $forumId
-     *
-     * @return CForumPost
-     */
-    public function setForumId($forumId)
-    {
-        $this->forumId = $forumId;
-
-        return $this;
-    }
-
-    /**
-     * Get forumId.
-     *
-     * @return int
-     */
-    public function getForumId()
-    {
-        return $this->forumId;
     }
 
     /**
@@ -477,6 +454,26 @@ class CForumPost extends AbstractResource implements ResourceInterface
     public function removeAttachment(CForumAttachment $attachment)
     {
         $this->attachments->removeElement($attachment);
+    }
+
+    /**
+     * @return CForumForum|null
+     */
+    public function getForum(): ?CForumForum
+    {
+        return $this->forum;
+    }
+
+    /**
+     * @param CForumForum|null $forum
+     *
+     * @return CForumPost
+     */
+    public function setForum(?CForumForum $forum): CForumPost
+    {
+        $this->forum = $forum;
+
+        return $this;
     }
 
     /**

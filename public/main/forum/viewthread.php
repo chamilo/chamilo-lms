@@ -21,6 +21,7 @@ $forumUrl = api_get_path(WEB_CODE_PATH).'forum/';
 $origin = api_get_origin();
 $_user = api_get_user_info();
 $my_search = null;
+$moveForm = '';
 
 $forumId = isset($_GET['forum']) ? (int) $_GET['forum'] : 0;
 $threadId = isset($_GET['thread']) ? (int) $_GET['thread'] : 0;
@@ -127,11 +128,21 @@ switch ($my_action) {
         break;
     case 'move':
         if (isset($_GET['post'])) {
-            $message = move_post_form();
-            Display::addFlash(Display::return_message(get_lang($message)));
+            $form = move_post_form();
+
+            // Validation or display
+            if ($form->validate()) {
+                $values = $form->exportValues();
+                store_move_post($values);
+
+                $currentUrl = api_get_path(WEB_CODE_PATH).'forum/viewthread.php?forum='.$forumId.'&'.api_get_cidreq().'&thread='.$threadId;
+
+                header('Location: '.$currentUrl);
+                exit;
+            } else {
+                $moveForm = $form->returnForm();
+            }
         }
-        header('Location: '.$currentUrl);
-        exit;
 
         break;
     case 'report':
@@ -711,6 +722,7 @@ if ($showForm) {
 }
 
 $template->assign('form', $formToString);
+$template->assign('move_form', $moveForm);
 
 $layout = $template->get_template('forum/posts.tpl');
 

@@ -180,6 +180,9 @@ class CForumThread extends AbstractResource implements ResourceInterface
         $this->threadViews = 0;
         $this->locked = 0;
         $this->threadId = 0;
+        $this->threadQualifyMax = 0;
+        $this->threadWeight = 0;
+        $this->lpItemId = 0;
     }
 
     public function __toString(): string

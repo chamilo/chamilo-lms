@@ -1040,7 +1040,7 @@ function delete_post($post_id)
     $post_id = (int) $post_id;
     $course_id = api_get_course_int_id();
     $em = Database::getManager();
-
+    /** @var CForumPost $post */
     $post = $em
         ->getRepository('ChamiloCourseBundle:CForumPost')
         ->findOneBy(['cId' => $course_id, 'postId' => $post_id]);
@@ -1061,7 +1061,7 @@ function delete_post($post_id)
                 'course' => $course_id,
                 'post' => $post->getPostId(),
                 'thread_of_deleted_post' => $post->getThread() ? $post->getThread()->getIid() : 0,
-                'forum_of_deleted_post' => $post->getForumId(),
+                'forum_of_deleted_post' => $post->getForum()->getIid(),
             ]);
 
         $em->remove($post);
@@ -2117,7 +2117,7 @@ function getPosts(
             'post_title' => $post->getPostTitle(),
             'post_text' => $post->getPostText(),
             'thread_id' => $post->getThread() ? $post->getThread()->getIid() : 0,
-            'forum_id' => $post->getForumId(),
+            'forum_id' => $post->getForum()->getIid(),
             'poster_id' => $post->getPosterId(),
             'poster_name' => $post->getPosterName(),
             'post_date' => $post->getPostDate(),
@@ -2716,7 +2716,7 @@ function store_thread(
         ->setPostTitle($clean_post_title)
         ->setPostText($values['post_text'])
         ->setThread($thread)
-        ->setForumId($values['forum_id'])
+        ->setForum($forum)
         ->setPosterId($userId)
         ->setPosterName(isset($values['poster_name']) ? $values['poster_name'] : null)
         ->setPostDate($post_date)
@@ -3732,7 +3732,7 @@ function store_reply(CForumForum $forum, CForumThread $thread, $values, $courseI
             ->setPostTitle($values['post_title'])
             ->setPostText(isset($values['post_text']) ?: null)
             ->setThread($thread)
-            ->setForumId($forum->getIid())
+            ->setForum($forum)
             ->setPosterId($userId)
             ->setPostNotification(isset($values['post_notification']) ? $values['post_notification'] : null)
             ->setPostParentId(isset($values['post_parent_id']) ? $values['post_parent_id'] : null)
@@ -4647,10 +4647,9 @@ function move_post_form()
 
     // Dropdown list: Threads of this forum
     $threads = get_threads($_GET['forum']);
-    //my_print_r($threads);
     $threads_list[0] = get_lang('A new thread');
-    foreach ($threads as $key => $value) {
-        $threads_list[$value['thread_id']] = $value['thread_title'];
+    foreach ($threads as $thread) {
+        $threads_list[$thread->getIid()] = $thread->getThreadTitle();
     }
     $form->addElement('select', 'thread', get_lang('Move toThread'), $threads_list);
     $form->applyFilter('thread', 'html_filter');
@@ -4661,13 +4660,8 @@ function move_post_form()
     // Setting the rules
     $form->addRule('thread', get_lang('Required field'), 'required');
 
-    // Validation or display
-    if ($form->validate()) {
-        $values = $form->exportValues();
-        store_move_post($values);
-    } else {
-        $form->display();
-    }
+
+    return $form;
 }
 
 /**
@@ -4688,11 +4682,51 @@ function store_move_post($values)
     $table_threads = Database::get_course_table(TABLE_FORUM_THREAD);
     $table_posts = Database::get_course_table(TABLE_FORUM_POST);
 
+    $user = api_get_user_entity(api_get_user_id());
+    $course = api_get_course_entity($course_id);
+    $session = api_get_session_entity();
+
     if ('0' == $values['thread']) {
-        $current_post = get_post_information($values['post_id']);
+        $repoPost = Container::getForumPostRepository();
+        $repoThread = Container::getForumThreadRepository();
+        $repoForum = Container::getForumRepository();
+
+        $em = $repoPost->getEntityManager();
+
+        /** @var CForumPost $post */
+        $post = $repoPost->find($values['post_id']);
+        $forumId = $post->getForum()->getIid();
+        $threadId = $post->getThread()->getIid();
+
+        $thread = new CForumThread();
+        $thread
+            ->setCId($course_id)
+            ->setThreadTitle($post->getPostTitle())
+            ->setForum($post->getForum())
+            ->setThreadPosterId($post->getPosterId())
+            ->setThreadPosterName($post->getPosterName())
+            ->setThreadLastPost($post->getIid())
+            ->setThreadDate($post->getPostDate())
+        ;
+
+        $repo = Container::getForumThreadRepository();
+        $em = $repo->getEntityManager();
+        $repo->addResourceToCourseWithParent(
+            $thread,
+            $post->getForum()->getResourceNode(),
+            ResourceLink::VISIBILITY_PUBLISHED,
+            $user,
+            $course,
+            $session,
+            null
+        );
+        $em->flush();
+
+        $new_thread_id = $thread->getIid();
+
 
         // Storing a new thread.
-        $params = [
+        /*$params = [
             'c_id' => $course_id,
             'thread_title' => $current_post['post_title'],
             'forum_id' => $current_post['forum_id'],
@@ -4710,7 +4744,7 @@ function store_move_post($values)
             $new_thread_id,
             'visible',
             $current_post['poster_id']
-        );
+        );*/;
 
         // Moving the post to the newly created thread.
         $sql = "UPDATE $table_posts SET thread_id='".(int) $new_thread_id."', post_parent_id = NULL
@@ -4724,12 +4758,12 @@ function store_move_post($values)
 
         // Updating updating the number of threads in the forum.
         $sql = "UPDATE $table_forums SET forum_threads=forum_threads+1
-                WHERE c_id = $course_id AND forum_id='".(int) ($current_post['forum_id'])."'";
+                WHERE c_id = $course_id AND forum_id='".$forumId."'";
         Database::query($sql);
 
         // Resetting the last post of the old thread and decreasing the number of replies and the thread.
         $sql = "SELECT * FROM $table_posts
-                WHERE c_id = $course_id AND thread_id='".(int) ($current_post['thread_id'])."'
+                WHERE c_id = $course_id AND thread_id='".$threadId."'
                 ORDER BY post_id DESC";
         $result = Database::query($sql);
         $row = Database::fetch_array($result);
@@ -4738,7 +4772,7 @@ function store_move_post($values)
                     thread_replies=thread_replies-1
                 WHERE
                     c_id = $course_id AND
-                    thread_id='".(int) ($current_post['thread_id'])."'";
+                    thread_id='".$threadId."'";
         Database::query($sql);
     } else {
         // Moving to the chosen thread.
@@ -5120,6 +5154,10 @@ function add_forum_attachment_file($file_comment, CForumPost $post)
     }
 
     $files = $request->files->get('user_upload');
+    if (empty($files)) {
+        return false;
+    }
+
     /** @var \Symfony\Component\HttpFoundation\File\UploadedFile $attachment */
     foreach ($files as $file) {
         $upload_ok = process_uploaded_file($file);

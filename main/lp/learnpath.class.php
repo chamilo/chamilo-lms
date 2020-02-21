@@ -13804,9 +13804,9 @@ EOD;
      * Get the user identifier (user_id or username
      * Depends on scorm_api_username_as_student_id in app/config/configuration.php
      *
-     * @return string
+     * @return string User ID or username, depending on configuration setting
      */
-    public function getUserIdentifierForExternalServices()
+    public static function getUserIdentifierForExternalServices()
     {
         if (api_get_configuration_value('scorm_api_username_as_student_id')) {
             return api_get_user_info(api_get_user_id())['username'];

@@ -66,11 +66,7 @@ if (api_is_cas_activated()) {
             if (is_string($fixedServiceURL)) {
                 phpCAS::setFixedServiceURL($fixedServiceURL);
             } elseif (is_bool($fixedServiceURL) && $fixedServiceURL) {
-                phpCAS::setFixedServiceURL(
-                    api_get_configuration_value('root_web')
-                    .
-                    explode('?', $_SERVER['REQUEST_URI'], 2)[0]
-                );
+                phpCAS::setFixedServiceURL(api_get_configuration_value('root_web'));
             }
         }
     }

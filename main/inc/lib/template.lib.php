@@ -1082,9 +1082,7 @@ class Template
         $form = new FormValidator(
             'form-cas-login',
             'POST',
-            $course
-                ? api_get_path(WEB_COURSE_PATH).$course.'/'
-                : api_get_path(WEB_PATH).api_get_setting('page_after_login'),
+            null,
             null,
             null,
             FormValidator::LAYOUT_BOX_NO_LABEL
@@ -1135,7 +1133,7 @@ class Template
         // Get the $cas array from app/config/auth.conf.php
         global $cas;
 
-        if (is_array($cas) && array_key_exists('replace_login_form', $cas) && $cas['replace_login_form'] == true) {
+        if (is_array($cas) && array_key_exists('replace_login_form', $cas) && $cas['replace_login_form']) {
             return self::displayCASLoginButton();
         }
 

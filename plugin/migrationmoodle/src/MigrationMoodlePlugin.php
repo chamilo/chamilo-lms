@@ -120,4 +120,21 @@ class MigrationMoodlePlugin extends Plugin implements HookPluginInterface
 
         return trim($userFilter);
     }
+
+    /**
+     * @param string $name
+     *
+     * @return bool
+     */
+    public function isTaskDone($name)
+    {
+        $result = Database::select(
+            'COUNT(1) c',
+            'plugin_migrationmoodle_task',
+            ['where' => ["name = ?" => Database::escape_string($name.'_task')]],
+            'first'
+        );
+
+        return $result['c'] > 0;
+    }
 }

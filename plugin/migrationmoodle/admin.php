@@ -102,15 +102,14 @@ $menu = [
     ],
 ];
 
+$htmlHeadXtra[] = '<style>.fa-ul {list-style-type: decimal; list-style-position: outside;}</style>';
+
 Display::display_header($plugin->get_title());
 
 echo '<div class="row">';
-echo '<div class="col-sm-6">';
-echo displayMenu();
-echo '</div>';
-echo '<div class="col-sm-6">';
+echo '<div class="col-sm-6 col-sm-push-6">';
 
-if (!empty($action) && isAllowedAction($action, $menu)) {
+if (!empty($action) && isAllowedAction($action, $menu) && !$plugin->isTaskDone($action)) {
     $taskName = api_underscore_to_camel_case($action).'Task';
 
     echo Display::page_subheader(
@@ -127,6 +126,9 @@ if (!empty($action) && isAllowedAction($action, $menu)) {
     echo '</pre>';
 }
 
+echo '</div>';
+echo '<div class="col-sm-6 col-sm-pull-6">';
+echo displayMenu();
 echo '</div>';
 echo '</div>';
 
@@ -145,16 +147,23 @@ function displayMenu($parent = '_') {
 
     $baseUrl = api_get_self()."?action=";
 
-    $html = '<ol>';
+    $html = '<ol class="fa-ul">';
 
     foreach ($items as $item) {
         $title = api_underscore_to_camel_case($item);
 
         $html .= '<li>';
-        $html .= Display::url(
-            $plugin->get_lang($title.'Task'),
-            $baseUrl.$item
-        );
+
+        if ($plugin->isTaskDone($item)) {
+            $html .= Display::returnFontAwesomeIcon('check-square-o', '', true);
+            $html .= $plugin->get_lang($title.'Task');
+        } else {
+            $html .= Display::returnFontAwesomeIcon('square-o', '', true);
+            $html .= Display::url(
+                $plugin->get_lang($title.'Task'),
+                $baseUrl.$item
+            );
+        }
 
         if (isset($menu[$item])) {
             $html .= displayMenu($item);

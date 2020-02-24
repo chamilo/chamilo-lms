@@ -58,6 +58,10 @@ function oktaConnect()
                 oktaDisplayError(get_lang('UserNotRegistered'));
             }
 
+            if (!empty($_configuration['multiple_access_urls'])) {
+                UrlManager::add_user_to_url($chamiloUid, api_get_current_access_url_id());
+            }
+
             $_user['user_id'] = $chamiloUid;
             Session::write('_user', $_user);
 

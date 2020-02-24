@@ -131,7 +131,8 @@ if (api_is_okta_auth_activated() && !api_get_user_id()) {
         }
     }
 
-    if (!empty($okta_config['redirect_all'])) {
+    $currentPath = strtolower(Database::escape_string(api_get_path(WEB_PATH)));
+    if (!empty($okta_config['redirect_all']) && !empty($okta_config['redirect_all'][$currentPath])) {
         header('location: ?saml_sso=' . $okta_config['integration_name']);
     }
 }

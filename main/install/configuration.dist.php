@@ -1391,6 +1391,10 @@ ALTER TABLE notification_event ADD COLUMN event_id INT NULL;
 // Show online user only to Administrators
 //$_configuration['whoisonline_only_for_admin'] = false;
 
+// Prevent going back to previous questions
+// ALTER TABLE c_quiz ADD COLUMN prevent_backwards INT DEFAULT 0;
+//$_configuration['quiz_prevent_backwards_move'] = false;
+
 // KEEP THIS AT THE END
 // -------- Custom DB changes
 // Add user activation by confirmation email

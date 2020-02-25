@@ -43,7 +43,7 @@ $sessionId = api_get_session_id();
 $glossaryExtraTools = api_get_setting('show_glossary_in_extra_tools');
 
 $showGlossary = in_array($glossaryExtraTools, ['true', 'exercise', 'exercise_and_lp']);
-if ($origin == 'learnpath') {
+if ($origin === 'learnpath') {
     $showGlossary = in_array($glossaryExtraTools, ['true', 'lp', 'exercise_and_lp']);
 }
 if ($showGlossary) {
@@ -122,7 +122,7 @@ if (api_is_allowed_to_edit(null, true) &&
 // 1. Loading the $objExercise variable
 /** @var \Exercise $exerciseInSession */
 $exerciseInSession = Session::read('objExercise');
-if (!isset($exerciseInSession) || isset($exerciseInSession) && ($exerciseInSession->id != $_GET['exerciseId'])) {
+if (empty($exerciseInSession) || (!empty($exerciseInSession) && ($exerciseInSession->id != $_GET['exerciseId']))) {
     // Construction of Exercise
     $objExercise = new Exercise($courseId);
     Session::write('firstTime', true);
@@ -158,6 +158,8 @@ if (!isset($objExercise) && isset($exerciseInSession)) {
     }
     $objExercise = $exerciseInSession;
 }
+
+$exerciseInSession = Session::read('objExercise');
 
 //3. $objExercise is not set, then return to the exercise list
 if (!is_object($objExercise)) {
@@ -1406,6 +1408,15 @@ if (!empty($error)) {
                         break;
                     }
                 }
+
+                if (1 === $exerciseInSession->getPreventBackwards()) {
+                    if (isset($attempt_list[$questionId])) {
+                        echo Display::return_message(get_lang('AlreadyAnswered'));
+                        $i++;
+                        break;
+                    }
+                }
+
             }
         }
 

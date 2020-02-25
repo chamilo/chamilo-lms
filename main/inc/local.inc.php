@@ -132,7 +132,7 @@ if (api_is_okta_auth_activated() && !api_get_user_id()) {
     }
 
     $currentPath = strtolower(Database::escape_string(api_get_path(WEB_PATH)));
-    $siteInfo = !empty($GLOBALS['okta_config'][$currentPath]) ? $GLOBALS['okta_config'][$currentPath] : null;
+    $siteInfo = !empty($GLOBALS['okta_config']['sites'][$currentPath]) ? $GLOBALS['okta_config']['sites'][$currentPath] : null;
     if (!empty($siteInfo) && !empty($siteInfo['redirect_all'])) {
         header('location: ?saml_sso=' . $siteInfo['integration_name']);
     }

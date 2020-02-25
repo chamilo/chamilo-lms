@@ -126,14 +126,15 @@ if (api_is_okta_auth_activated() && !api_get_user_id()) {
 
     if (!empty($_GET['saml_sso']) &&  array_key_exists($_GET['saml_sso'], $GLOBALS['okta_config']['idp'])) {
         require_once api_get_path(SYS_PATH)  . 'main/auth/external_login/okta.inc.php';
-        if (isset($okta_config['integration_name']) && isset($GLOBALS['okta_config']['idp'])) {
+        if (isset($GLOBALS['okta_config']['idp'])) {
             oktaConnect();
         }
     }
 
     $currentPath = strtolower(Database::escape_string(api_get_path(WEB_PATH)));
-    if (!empty($okta_config['redirect_all']) && !empty($okta_config['redirect_all'][$currentPath])) {
-        header('location: ?saml_sso=' . $okta_config['integration_name']);
+    $siteInfo = !empty($GLOBALS['okta_config'][$currentPath]) ? $GLOBALS['okta_config'][$currentPath] : null;
+    if (!empty($siteInfo) && !empty($siteInfo['redirect_all'])) {
+        header('location: ?saml_sso=' . $siteInfo['integration_name']);
     }
 }
 

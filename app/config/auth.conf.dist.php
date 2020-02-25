@@ -36,9 +36,15 @@
         'integration_name' => 'idp_metadata',
         'chamilo-okta-com' => 'http://idp.oktadev.com/metadata',
     ),
-    'redirect_all' => array (
-        'http://chamilo.okta.com' => true,
-        'https://chamilo1.okta.com' => false
+    'sites' => array (
+        'http://chamilo.okta.com' => array (
+            'redirect_all' => true,
+            'integration_name' => 'chamilo-okta-com'
+        )
+        'http://chamilo1.okta.com' => array (
+            'redirect_all' => true,
+            'integration_name' => 'chamilo-okta-com'
+        )
     )
 );*/
 

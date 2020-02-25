@@ -36,6 +36,7 @@ class QuestionType implements TransformPropertyInterface
                 return MATCHING_DRAGGABLE;
             case 'shortanswer':
             case 'numerical':
+            case 'gapselect':
                 return FILL_IN_BLANKS;
             case 'essay':
                 return FREE_ANSWER;
@@ -48,7 +49,6 @@ class QuestionType implements TransformPropertyInterface
             case 'ddimageortext':
             case 'multianswer':
             case 'randomsamatch':
-            case 'gapselect':
             case 'description':
                 throw new \Exception("Question type \"$qtype\" not supported in question \"$id\".");
         }

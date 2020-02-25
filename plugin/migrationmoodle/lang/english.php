@@ -60,3 +60,4 @@ $strings['UsersScormsProgressTask'] = 'Scorm progress';
 $strings['UsersLearnPathsTask'] = 'Learn paths views of users';
 $strings['UsersLearnPathsSectionsTask'] = 'Learn paths sections views of users';
 $strings['QuizzesScoresTask'] = 'Update quiz scores in learn path';
+$strings['QuestionGapselectTask'] = 'Answers for gapselect questions';

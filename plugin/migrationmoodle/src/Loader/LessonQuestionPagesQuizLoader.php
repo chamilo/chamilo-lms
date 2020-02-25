@@ -31,7 +31,7 @@ class LessonQuestionPagesQuizLoader implements LoaderInterface
         $exercise->updateDescription('');
         $exercise->updateAttempts(0);
         $exercise->updateFeedbackType(0);
-        $exercise->updateType(2);
+        $exercise->updateType(ALL_ON_ONE_PAGE);
         $exercise->setRandom(0);
         $exercise->updateRandomAnswers(0);
         $exercise->updateResultsDisabled(0);

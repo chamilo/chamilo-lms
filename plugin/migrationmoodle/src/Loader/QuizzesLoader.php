@@ -28,7 +28,7 @@ class QuizzesLoader implements LoaderInterface
         $exercise->updateDescription($incomingData['exerciseDescription']);
         $exercise->updateAttempts($incomingData['exerciseAttempts']);
         $exercise->updateFeedbackType(0);
-        $exercise->updateType(2);
+        $exercise->updateType(ALL_ON_ONE_PAGE);
         $exercise->setRandom(0);
         $exercise->updateRandomAnswers($incomingData['randomAnswers']);
         $exercise->updateResultsDisabled(0);

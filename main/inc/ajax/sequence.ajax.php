@@ -80,7 +80,6 @@ switch ($action) {
         $link = '';
         $linkDelete = $linkUndo = '';
         $resourceName = '';
-
         switch ($type) {
             case SequenceResource::SESSION_TYPE:
                 $resourceData = api_get_session_info($id);

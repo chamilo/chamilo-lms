@@ -952,8 +952,8 @@ VALUES (2, 13, 'session_courses_read_only_mode', 'Lock Course In Session', 1, 1,
 // menu
 // $_configuration['disable_gdpr'] = true;
 
-// GDPR requires users to be informed of the Data Protection Officer name and 
-// contact point. These can only be defined here for now, but will be moved to 
+// GDPR requires users to be informed of the Data Protection Officer name and
+// contact point. These can only be defined here for now, but will be moved to
 // web settings in the future.
 // Name of the person or organization that is responsible for the treatment of
 // personal info
@@ -1107,7 +1107,9 @@ $_configuration['profile_fields_visibility'] = [
 // ALTER TABLE c_lp ADD accumulate_work_time INT NOT NULL;
 // CREATE TABLE track_e_access_complete (id int(11) NOT NULL AUTO_INCREMENT, user_id int(11) NOT NULL, date_reg datetime NOT NULL, tool varchar(255) NOT NULL,  tool_id int(11) NOT NULL,   tool_id_detail int(11) NOT NULL,  action varchar(255) NOT NULL,   action_details varchar(255) NOT NULL, current_id int(11) NOT NULL,  ip_user varchar(255) NOT NULL,  user_agent varchar(255) NOT NULL,   session_id int(11) NOT NULL,   c_id int(11) NOT NULL,   ch_sid varchar(255) NOT NULL,   login_as int(11) NOT NULL,   info longtext NOT NULL,   url text NOT NULL,   PRIMARY KEY (id) ) ENGINE=InnoDB AUTO_INCREMENT=13989 DEFAULT CHARSET=utf8;
 // CREATE INDEX user_course_session ON track_e_access_complete (user_id, c_id, session_id);
-// Only applied for courses with extra field "new_tracking_system" to "1"
+// Add course checkbox extra field "new_tracking_system"
+// Add session checkbox extra field "new_tracking_system"
+// Only applied for courses/sessions with extra field "new_tracking_system" to "1"
 //$_configuration['lp_minimum_time'] = false;
 
 // Track LP attempts using the new tracking system.
@@ -1378,7 +1380,7 @@ ALTER TABLE notification_event ADD COLUMN event_id INT NULL;
 // Catalog search settings visibility
 //$_configuration['catalog_settings'] = ['sessions' => ['by_title' => true, 'by_date' => true, 'by_tag' => true, 'show_session_info' => true, 'show_session_date' => true]];
 
-// Enable learning paths with only one SCO item to use the score returned by 
+// Enable learning paths with only one SCO item to use the score returned by
 // the SCO as an indicator of progress of the whole learning path
 // $_configuration['lp_score_as_progress_enable'] = false;
 
@@ -1388,6 +1390,12 @@ ALTER TABLE notification_event ADD COLUMN event_id INT NULL;
 // In Scorm comunication use the username instead of the user_id
 //$_configuration['scorm_api_username_as_student_id'] = false;
 
+// Show online user only to Administrators
+//$_configuration['whoisonline_only_for_admin'] = false;
+
+// Prevent going back to previous questions
+// ALTER TABLE c_quiz ADD COLUMN prevent_backwards INT DEFAULT 0;
+//$_configuration['quiz_prevent_backwards_move'] = false;
 
 // KEEP THIS AT THE END
 // -------- Custom DB changes

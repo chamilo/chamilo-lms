@@ -164,7 +164,7 @@ function getCustomTabs()
     $urlId = api_get_current_access_url_id();
     $tableSettingsCurrent = Database::get_main_table(TABLE_MAIN_SETTINGS_CURRENT);
     $sql = "SELECT * FROM $tableSettingsCurrent
-            WHERE 
+            WHERE
                 variable = 'show_tabs' AND
                 subkey LIKE 'custom_tab_%' AND access_url = $urlId ";
     $result = Database::query($sql);
@@ -221,6 +221,11 @@ function accessToWhoIsOnline()
     $user_id = api_get_user_id();
     $course_id = api_get_course_int_id();
     $access = false;
+
+    if (true === api_get_configuration_value('whoisonline_only_for_admin') && !api_is_platform_admin()) {
+        return false;
+    }
+
     if ((api_get_setting('showonline', 'world') == 'true' && !$user_id) ||
         (api_get_setting('showonline', 'users') == 'true' && $user_id) ||
         (api_get_setting('showonline', 'course') == 'true' && $user_id && $course_id)

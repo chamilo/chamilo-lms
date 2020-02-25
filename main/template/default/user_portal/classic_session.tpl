@@ -97,8 +97,15 @@
                                         </a>
                                     </div>
                                     <div class="col-md-10">
-                                        <h4>{{ item.title }}</h4>
-                                        <div class="list-teachers">
+                                        {% if item.requirements %}
+                                            <h4>{{ item.name }}</h4>
+                                        {% else %}
+                                            <h4>{{ item.title }}</h4>
+                                        {% endif %}
+
+                                         <div class="list-teachers">
+                                            {{ item.requirements }}
+
                                             {% if item.coaches|length > 0 %}
                                                 <img src="{{ 'teacher.png'|icon(16) }}" width="16" height="16">
                                                 {% for coach in item.coaches %}

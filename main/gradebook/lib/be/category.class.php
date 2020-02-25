@@ -2358,9 +2358,8 @@ class Category implements GradebookItem
         );
 
         $minCertificateScore = $category->getCertificateMinScore();
-        $passedCourse = $currentScore >= $minCertificateScore;
 
-        return $passedCourse;
+        return $currentScore >= $minCertificateScore;
     }
 
     /**

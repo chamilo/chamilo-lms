@@ -611,7 +611,7 @@ class CoursesController
             );
 
             $hasRequirements = false;
-            foreach ($sequences['sequences'] as $sequence) {
+            foreach ($sequences as $sequence) {
                 if (count($sequence['requirements']) === 0) {
                     continue;
                 }
@@ -676,8 +676,7 @@ class CoursesController
                 ),
             ];
 
-            $sessionsBlock = array_merge($sessionsBlock, $sequences);
-            $sessionsBlocks[] = $sessionsBlock;
+            $sessionsBlocks[] = array_merge($sessionsBlock, $sequences);
         }
 
         return $sessionsBlocks;

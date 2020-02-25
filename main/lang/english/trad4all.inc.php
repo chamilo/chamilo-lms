@@ -8463,4 +8463,5 @@ $GoBackToVideo = "Go back to video";
 $UseLearnpathScoreAsProgress = "Use score as progress";
 $UseLearnpathScoreAsProgressInfo = "Some SCORM learning paths, specifically those with one single SCO, can report their progress as the SCO's score (cmi.core.score.raw). By checking this option (only available for single SCO learning paths), Chamilo will show the progress based on the score received from the SCO item. Beware that, by using this trick, you lose the ability to get any real score from the item.";
 $ThereIsASequenceResourceLinkedToThisCourseYouNeedToDeleteItFirst = "There is a sequence resource linked to this course. You must delete this link first.";
+$QuizPreventBackwards = "Prevent moving backwards to previous questions";
 ?>

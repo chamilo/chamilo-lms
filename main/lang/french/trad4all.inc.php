@@ -8395,4 +8395,5 @@ $GoBackToVideo = "Retour à la vidéo";
 $UseLearnpathScoreAsProgress = "Utiliser le score comme progrès";
 $UseLearnpathScoreAsProgressInfo = "Certains parcours SCORM (en particulier ceux avec un seul SCO) peuvent rapporter leur progrès sous forme du score (cmi.core.score.raw), ce qui permet de visualiser le progrès dans Chamilo. Activer cette option si ce parcours SCORM utilise cette stratégie. Attention, en utilisant le score comme progrès, la possibilité d'obtenir le vrai score via cmi.core.score.raw sera perdue.";
 $ThereIsASequenceResourceLinkedToThisCourseYouNeedToDeleteItFirst = "Il y a une ressource de séquence liée à ce cours. Vous devez d'abord éliminer ce lien.";
+$QuizPreventBackwards = "Interdire le retour en arrière dans les questions précédentes";
 ?>

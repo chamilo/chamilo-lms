@@ -53,6 +53,24 @@ $strings['response_resource_owner_id_help'] = 'The array key to the user\'s <em>
 <br/>means the identifier is to be found at
 <code>$jsonArray["data"][0]["id"]</code>';
 
+
+$strings['update_user_info'] = 'Update user information';
+$strings['create_new_users'] = 'Create new users';
+$strings['response_resource_owner_firstname'] = 'Response Resource Owner firstname key';
+$strings['response_resource_owner_firstname_help'] = 'Same syntax as for the Response Resource Owner Id key';
+$strings['response_resource_owner_lastname'] = 'Response Resource Owner lastname key';
+$strings['response_resource_owner_status'] = 'Response Resource Owner status key';
+$strings['response_resource_owner_status_help'] = 'The value at this array key should be one of these integers:<dl>
+ <dt>1</dt><dd>Course Manager / Teacher</dd>
+ <dt>3</dt><dd>Session Administrator</dd>
+ <dt>4</dt><dd>DRH</dd>
+ <dt>5</dt><dd>Student</dd>
+ <dt>6</dt><dd>Anonymous</dd>
+</dl>';
+$strings['response_resource_owner_email'] = 'Response Resource Owner email key';
+$strings['response_resource_owner_username'] = 'Response Resource Owner username key';
+
+
 $strings['block_name'] = 'Block name';
 $strings['block_name_help'] = 'The title shown above the <em>OAuth2</em> Login button';
 
@@ -66,4 +84,10 @@ $strings['management_login_name_help'] = 'Default value is "Management Login".';
 
 $strings['OAuth2Id'] = 'OAuth2 identifier';
 $strings['ManagementLogin'] = 'Management Login';
+
+$strings['invalid_json_received_from_provider'] = 'The OAuth2 provider did not provide a valid JSON document';
+$strings['wrong_response_resource_owner_id'] = 'OAuth2 resource owner identifier value not found at the configured key';
+$strings['no_user_has_this_oauth_code'] = 'No existing user has this OAuth2 code';
+$strings['FailedUserCreation'] = 'User account creation failed';
+$strings['internal_error_cannot_get_user_info'] = 'Internal error: could not get user information';
 $strings['InvalidId'] = 'Login failed - the OAuth2 identifier was not recognized as an existing Chamilo user\'s.';

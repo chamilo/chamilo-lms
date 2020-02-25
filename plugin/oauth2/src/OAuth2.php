@@ -37,6 +37,14 @@ class OAuth2 extends Plugin
     const SETTING_RESPONSE_CODE = 'response_code';
     const SETTING_RESPONSE_RESOURCE_OWNER_ID = 'response_resource_owner_id';
 
+    const SETTING_UPDATE_USER_INFO = 'update_user_info';
+    const SETTING_CREATE_NEW_USERS = 'create_new_users';
+    const SETTING_RESPONSE_RESOURCE_OWNER_FIRSTNAME = 'response_resource_owner_firstname';
+    const SETTING_RESPONSE_RESOURCE_OWNER_LASTNAME = 'response_resource_owner_lastname';
+    const SETTING_RESPONSE_RESOURCE_OWNER_STATUS = 'response_resource_owner_status';
+    const SETTING_RESPONSE_RESOURCE_OWNER_EMAIL = 'response_resource_owner_email';
+    const SETTING_RESPONSE_RESOURCE_OWNER_USERNAME = 'response_resource_owner_username';
+
     const SETTING_BLOCK_NAME = 'block_name';
 
     const SETTING_MANAGEMENT_LOGIN_ENABLE = 'management_login_enable';
@@ -74,6 +82,14 @@ class OAuth2 extends Plugin
                 self::SETTING_RESPONSE_ERROR => 'text',
                 self::SETTING_RESPONSE_CODE => 'text',
                 self::SETTING_RESPONSE_RESOURCE_OWNER_ID => 'text',
+
+                self::SETTING_UPDATE_USER_INFO => 'boolean',
+                self::SETTING_CREATE_NEW_USERS => 'boolean',
+                self::SETTING_RESPONSE_RESOURCE_OWNER_FIRSTNAME => 'text',
+                self::SETTING_RESPONSE_RESOURCE_OWNER_LASTNAME => 'text',
+                self::SETTING_RESPONSE_RESOURCE_OWNER_STATUS => 'text',
+                self::SETTING_RESPONSE_RESOURCE_OWNER_EMAIL => 'text',
+                self::SETTING_RESPONSE_RESOURCE_OWNER_USERNAME => 'text',
 
                 self::SETTING_BLOCK_NAME => 'text',
 
@@ -161,18 +177,62 @@ class OAuth2 extends Plugin
         }
         $extraFieldValue = new ExtraFieldValue('user');
         $result = $extraFieldValue->get_item_id_from_field_variable_and_field_value(
-            OAuth2::EXTRA_FIELD_OAUTH2_ID,
+            self::EXTRA_FIELD_OAUTH2_ID,
             $resourceOwnerId
         );
         if (false === $result) {
-            throw new RuntimeException(
-                get_lang('no_user_has_this_oauth_code')
+            // authenticated user not found in internal database
+            if (!$this->get(self::SETTING_CREATE_NEW_USERS)) {
+                throw new RuntimeException(get_lang('no_user_has_this_oauth_code'));
+            }
+            require_once __DIR__.'/../../../main/auth/external_login/functions.inc.php';
+            $userId = external_add_user(
+                [
+                    'firstname' => $this->getValueByKey($response, $this->get(
+                        self::SETTING_RESPONSE_RESOURCE_OWNER_FIRSTNAME
+                    )),
+                    'lastname' => $this->getValueByKey($response, $this->get(
+                        self::SETTING_RESPONSE_RESOURCE_OWNER_LASTNAME
+                    )),
+                    'status' => $this->getValueByKey($response, $this->get(
+                        self::SETTING_RESPONSE_RESOURCE_OWNER_STATUS
+                    )),
+                    'email' => $this->getValueByKey($response, $this->get(
+                        self::SETTING_RESPONSE_RESOURCE_OWNER_EMAIL
+                    )),
+                    'username' => $this->getValueByKey($response, $this->get(
+                        self::SETTING_RESPONSE_RESOURCE_OWNER_USERNAME
+                    )),
+                    'auth_source' => 'oauth2',
+                ]
             );
-        }
-        if (is_array($result) and array_key_exists('item_id', $result)) {
-            $userId = $result['item_id'];
+            if (false === $userId) {
+                throw new RuntimeException(get_lang('FailedUserCreation'));
+            }
+            // Not checking function update_extra_field_value return value because not reliable
+            UserManager::update_extra_field_value($userId, self::EXTRA_FIELD_OAUTH2_ID, $resourceOwnerId);
         } else {
-            $userId = $result;
+            // authenticated user found in internal database
+            if (is_array($result) and array_key_exists('item_id', $result)) {
+                $userId = $result['item_id'];
+            } else {
+                $userId = $result;
+            }
+            if ($this->get(self::SETTING_UPDATE_USER_INFO)) {
+                $user = UserManager::getRepository()->find($userId);
+                $user->setFirstname(
+                    $this->getValueByKey($response, $this->get(self::SETTING_RESPONSE_RESOURCE_OWNER_FIRSTNAME))
+                )->setLastName(
+                    $this->getValueByKey($response, $this->get(self::SETTING_RESPONSE_RESOURCE_OWNER_LASTNAME))
+                )->setUserName(
+                    $this->getValueByKey($response, $this->get(self::SETTING_RESPONSE_RESOURCE_OWNER_USERNAME))
+                )->setEmail(
+                    $this->getValueByKey($response, $this->get(self::SETTING_RESPONSE_RESOURCE_OWNER_EMAIL))
+                )->setStatus(
+                    $this->getValueByKey($response, $this->get(self::SETTING_RESPONSE_RESOURCE_OWNER_STATUS))
+                )->setAuthSource('oauth2');
+                UserManager::getManager()->updateUser($user);
+            }
         }
         $userInfo = api_get_user_info($userId);
         if (empty($userInfo)) {

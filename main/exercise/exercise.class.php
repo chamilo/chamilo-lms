@@ -8455,7 +8455,7 @@ class Exercise
         $limitTeacherAccess = api_get_configuration_value('limit_exercise_teacher_access');
 
         // Condition for the session
-        $condition_session = api_get_session_condition($sessionId, true, true);
+        $condition_session = api_get_session_condition($sessionId, true, true, 'e.session_id');
         $content = '';
         $column = 0;
         if ($is_allowedToEdit) {
@@ -8490,7 +8490,7 @@ class Exercise
         // Only for administrators
         if ($is_allowedToEdit) {
             $total_sql = "SELECT count(iid) as count
-                          FROM $TBL_EXERCISES
+                          FROM $TBL_EXERCISES e
                           WHERE
                                 c_id = $courseId AND
                                 active <> -1
@@ -8498,7 +8498,7 @@ class Exercise
                                 $categoryCondition
                                 $keywordCondition
                                 ";
-            $sql = "SELECT * FROM $TBL_EXERCISES
+            $sql = "SELECT * FROM $TBL_EXERCISES e
                     WHERE
                         c_id = $courseId AND
                         active <> -1
@@ -8509,21 +8509,31 @@ class Exercise
                     LIMIT $from , $limit";
         } else {
             // Only for students
-            $total_sql = "SELECT count(iid) as count
-                          FROM $TBL_EXERCISES
+            $total_sql = "SELECT count(DISTINCT(e.iid)) as count
+                          FROM $TBL_EXERCISES e
+                          INNER JOIN $TBL_ITEM_PROPERTY ip
+                          ON (e.iid = ip.ref AND e.c_id = ip.c_id)
                           WHERE
-                                c_id = $courseId AND
-                                active = 1
+                                ip.tool = '".TOOL_QUIZ."' AND
+                                ip.visibility = 1 AND
+                                e.c_id = $courseId AND
+                                e.active = 1
                                 $condition_session
                                 $categoryCondition
                                 $keywordCondition
                           ";
-            $sql = "SELECT * FROM $TBL_EXERCISES
-                    WHERE c_id = $courseId AND
-                          active = 1
-                          $condition_session
-                          $categoryCondition
-                          $keywordCondition
+
+            $sql = "SELECT DISTINCT e.* FROM $TBL_EXERCISES e
+                    INNER JOIN $TBL_ITEM_PROPERTY ip
+                    ON (e.iid = ip.ref AND e.c_id = ip.c_id)
+                    WHERE
+                         ip.tool = '".TOOL_QUIZ."' AND
+                         ip.visibility = 1 AND
+                         e.c_id = $courseId AND
+                         e.active = 1
+                         $condition_session
+                         $categoryCondition
+                         $keywordCondition
                     ORDER BY title
                     LIMIT $from , $limit";
         }

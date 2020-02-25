@@ -169,7 +169,7 @@ class CForumThread extends AbstractResource implements ResourceInterface
     /**
      * @var CForumPost[]
      *
-     * @ORM\OneToMany(targetEntity="Chamilo\CourseBundle\Entity\CForumPost", mappedBy="thread")
+     * @ORM\OneToMany(targetEntity="Chamilo\CourseBundle\Entity\CForumPost", mappedBy="thread", cascade={"persist", "remove"}, orphanRemoval=true)
      */
     protected $posts;
 

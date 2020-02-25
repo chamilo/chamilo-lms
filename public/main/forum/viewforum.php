@@ -102,7 +102,6 @@ $my_action = $_GET['action'] ?? '';
 $logInfo = [
     'tool' => TOOL_FORUM,
     'tool_id' => $forumId,
-    'tool_id_detail' => 0,
     'action' => !empty($my_action) ? $my_action : 'list-threads',
     'action_details' => $_GET['content'] ?? '',
 ];
@@ -132,13 +131,12 @@ if (!empty($groupId)) {
     ];
 } else {
     $interbreadcrumb[] = [
-        'url' => $forumUrl.'index.php?search='.Security::remove_XSS($my_search),
+        'url' => $forumUrl.'index.php?'.api_get_cidreq(),
         'name' => get_lang('Forum Categories'),
     ];
 
     $interbreadcrumb[] = [
-        'url' => $forumUrl.'viewforumcategory.php?forumcategory='.$category->getIid()
-            .'&search='.Security::remove_XSS(urlencode($my_search)),
+        'url' => $forumUrl.'viewforumcategory.php?forumcategory='.$category->getIid().'&'.api_get_cidreq(),
         'name' => prepare4display($category->getCatTitle()),
     ];
     $interbreadcrumb[] = [

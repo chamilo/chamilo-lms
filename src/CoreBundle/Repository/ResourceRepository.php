@@ -710,9 +710,15 @@ class ResourceRepository extends BaseEntityRepository
     {
         $children = $resource->getResourceNode()->getChildren();
         foreach ($children as $child) {
-            $this->getEntityManager()->remove($child);
+            if ($child->hasResourceFile()) {
+                $this->getEntityManager()->remove($child->getResourceFile());
+            }
+            $resourceNode = $this->getResourceFromResourceNode($child->getId());
+            if ($resourceNode) {
+                $this->delete($resourceNode);
+            }
         }
-        $this->getEntityManager()->remove($resource->getResourceNode());
+        $this->getEntityManager()->remove($resource);
         $this->getEntityManager()->flush();
     }
 

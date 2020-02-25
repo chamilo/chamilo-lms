@@ -4,6 +4,7 @@
 
 use Chamilo\CoreBundle\Entity\Resource\ResourceLink;
 use Chamilo\CoreBundle\Framework\Container;
+use Chamilo\CourseBundle\Entity\CForumAttachment;
 use Chamilo\CourseBundle\Entity\CForumCategory;
 use Chamilo\CourseBundle\Entity\CForumForum;
 use Chamilo\CourseBundle\Entity\CForumNotification;
@@ -11,6 +12,7 @@ use Chamilo\CourseBundle\Entity\CForumPost;
 use Chamilo\CourseBundle\Entity\CForumThread;
 use ChamiloSession as Session;
 use Doctrine\Common\Collections\Criteria;
+use Symfony\Component\HttpFoundation\File\UploadedFile;
 
 /*
  * These files are a complete rework of the forum. The database structure is
@@ -1053,21 +1055,25 @@ function delete_post($post_id)
                     p.cId = :course AND
                     p.postParentId = :post AND
                     p.thread = :thread_of_deleted_post AND
-                    p.forumId = :forum_of_deleted_post
+                    p.forum = :forum_of_deleted_post
             ')
             ->execute([
                 'parent_of_deleted_post' => $post->getPostParentId(),
                 'course' => $course_id,
                 'post' => $post->getPostId(),
                 'thread_of_deleted_post' => $post->getThread() ? $post->getThread()->getIid() : 0,
-                'forum_of_deleted_post' => $post->getForum()->getIid(),
+                'forum_of_deleted_post' => $post->getForum(),
             ]);
+
+        $attachments = $post->getAttachments();
+        if (!empty($attachments)) {
+            foreach ($attachments as $attachment) {
+                $em->remove($attachment);
+            }
+        }
 
         $em->remove($post);
         $em->flush();
-
-        // Delete attachment file about this post id.
-        delete_attachment($post_id);
     }
 
     $last_post_of_thread = check_if_last_post_of_thread($_GET['thread']);
@@ -2464,31 +2470,9 @@ function store_thread(
     $userId = $userId ?: api_get_user_id();
     $course_id = $courseInfo['real_id'];
     $courseCode = $courseInfo['code'];
-    $groupId = api_get_group_id();
-    $groupInfo = GroupManager::get_group_properties($groupId);
     $sessionId = $sessionId ?: api_get_session_id();
 
     $table_threads = Database::get_course_table(TABLE_FORUM_THREAD);
-    $upload_ok = 1;
-    $has_attachment = false;
-    if (!empty($_FILES['user_upload']['name'])) {
-        $upload_ok = process_uploaded_file($_FILES['user_upload']);
-        $has_attachment = true;
-    }
-
-    if (!$upload_ok) {
-        if ($showMessage) {
-            Display::addFlash(
-                Display::return_message(
-                    get_lang('No file was uploaded.'),
-                    'error',
-                    false
-                )
-            );
-        }
-
-        return null;
-    }
 
     $post_date = new DateTime(api_get_utc_datetime(), new DateTimeZone('UTC'));
     $visible = 1;
@@ -2666,19 +2650,6 @@ function store_thread(
         $em->flush();
     }
 
-    // Update attached files
-    if (!empty($_POST['file_ids']) && is_array($_POST['file_ids'])) {
-        foreach ($_POST['file_ids'] as $key => $id) {
-            editAttachedFile(
-                [
-                    'comment' => $_POST['file_comments'][$key],
-                    'post_id' => $postId,
-                ],
-                $id
-            );
-        }
-    }
-
     // Now we have to update the thread table to fill the thread_last_post
     // field (so that we know when the thread has been updated for the last time).
     $sql = "UPDATE $table_threads
@@ -2686,7 +2657,7 @@ function store_thread(
             WHERE
                 c_id = $course_id AND
                 thread_id='".$thread->getIid()."'";
-    $result = Database::query($sql);
+    Database::query($sql);
     $message = get_lang('The new thread has been added');
 
     // Overwrite default message.
@@ -2696,32 +2667,10 @@ function store_thread(
         $message = get_lang('Your message has to be approved before people can view it.');
     }
 
-    // Storing the attachments if any.
-    if ($has_attachment) {
-        // Try to add an extension to the file if it hasn't one.
-        $new_file_name = add_ext_on_mime(
-            stripslashes($_FILES['user_upload']['name']),
-            $_FILES['user_upload']['type']
-        );
-
-        if (!filter_extension($new_file_name)) {
-            if ($showMessage) {
-                Display::addFlash(Display::return_message(
-                    get_lang('File upload failed: this file extension or file type is prohibited'),
-                    'error'
-                ));
-            }
-        } else {
-            if ($result) {
-                add_forum_attachment_file(
-                    isset($values['file_comment']) ? $values['file_comment'] : null,
-                    $post
-                );
-            }
-        }
-    } else {
-        $message .= '<br />';
-    }
+    add_forum_attachment_file(
+        null,
+        $post
+    );
 
     if ('1' == $forum->getApprovalDirectPost() &&
         !api_is_allowed_to_edit(null, true)
@@ -3229,9 +3178,6 @@ function newThread(CForumForum $forum, $form_values = '', $showPreview = true)
 
                 return false;
             }
-
-            $postId = 0;
-            $threadId = 0;
 
             $newThread = store_thread($forum, $values);
             if ($newThread) {
@@ -4017,11 +3963,11 @@ function store_edit_post(CForumForum $forum, $values)
             $post
         );
     } else {
-        edit_forum_attachment_file(
+        /*edit_forum_attachment_file(
             isset($values['file_comment']) ? $values['file_comment'] : null,
             $values['post_id'],
             $values['id_attach']
-        );
+        );*/
     }
 
     $message = get_lang('The post has been modified').'<br />';
@@ -5046,22 +4992,28 @@ function search_link()
  */
 function add_forum_attachment_file($file_comment, CForumPost $post)
 {
-    $_course = api_get_course_info();
     $request = Container::getRequest();
     if (false === $request->files->has('user_upload')) {
         return false;
     }
 
-    $files = $request->files->get('user_upload');
-    if (empty($files)) {
+    $file = $request->files->get('user_upload');
+    if (empty($file)) {
         return false;
     }
 
-    /** @var \Symfony\Component\HttpFoundation\File\UploadedFile $attachment */
-    foreach ($files as $file) {
-        $upload_ok = process_uploaded_file($file);
+    $files = [];
+    if ($file instanceof UploadedFile) {
+        $files[] = $file;
+    } else {
+        $files = $file;
+    }
 
-        if (!$upload_ok) {
+    /** @var UploadedFile $attachment */
+    foreach ($files as $file) {
+        $valid = process_uploaded_file($file);
+
+        if (!$valid) {
             continue;
         }
 
@@ -5087,10 +5039,7 @@ function add_forum_attachment_file($file_comment, CForumPost $post)
 
         $new_file_name = uniqid('');
         $safe_file_comment = Database::escape_string($file_comment);
-        $safe_file_name = Database::escape_string($file_name);
-        $safe_new_file_name = Database::escape_string($new_file_name);
-
-        $attachment = new \Chamilo\CourseBundle\Entity\CForumAttachment();
+        $attachment = new CForumAttachment();
         $attachment
             ->setCId(api_get_course_int_id())
             ->setComment($safe_file_comment)
@@ -6255,7 +6204,7 @@ function getAttachedFiles(
     if (Database::num_rows($result) > 0) {
         $repo = Container::getForumAttachmentRepository();
         while ($row = Database::fetch_array($result, 'ASSOC')) {
-            /** @var \Chamilo\CourseBundle\Entity\CForumAttachment $attachment */
+            /** @var CForumAttachment $attachment */
             $attachment = $repo->find($row['iid']);
             $downloadUrl = $repo->getResourceFileUrl($attachment);
 

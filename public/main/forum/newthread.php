@@ -54,9 +54,7 @@ $current_forum_category = $forumEntity->getForumCategory();
 $logInfo = [
     'tool' => TOOL_FORUM,
     'tool_id' => $forumId,
-    'tool_id_detail' => 0,
     'action' => 'add-thread',
-    'action_details' => '',
 ];
 Event::registerLog($logInfo);
 
@@ -169,7 +167,7 @@ $form = newThread(
     isset($_SESSION['formelements']) ? $_SESSION['formelements'] : null
 );
 
-if ('learnpath' == $origin) {
+if ('learnpath' === $origin) {
     Display::display_reduced_header();
 } else {
     Display::display_header();

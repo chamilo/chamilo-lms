@@ -68,8 +68,8 @@ class CForumAttachment extends AbstractResource implements ResourceInterface
     /**
      * @var CForumPost
      *
-     * @ORM\ManyToOne(targetEntity="Chamilo\CourseBundle\Entity\CForumPost", inversedBy="attachments")
-     * @ORM\JoinColumn(name="post_id", referencedColumnName="iid")
+     * @ORM\ManyToOne(targetEntity="Chamilo\CourseBundle\Entity\CForumPost", cascade={"persist"}, inversedBy="attachments")
+     * @ORM\JoinColumn(name="post_id", referencedColumnName="iid", onDelete="CASCADE")
      */
     protected $post;
 

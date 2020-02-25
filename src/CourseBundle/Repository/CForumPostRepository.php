@@ -5,6 +5,7 @@
 namespace Chamilo\CourseBundle\Repository;
 
 use Chamilo\CoreBundle\Entity\Course;
+use Chamilo\CoreBundle\Entity\Resource\AbstractResource;
 use Chamilo\CoreBundle\Repository\ResourceRepository;
 use Chamilo\CourseBundle\Entity\CForumPost;
 use Chamilo\CourseBundle\Entity\CForumThread;
@@ -44,7 +45,7 @@ class CForumPostRepository extends ResourceRepository
             $filterModerated = false;
         }
 
-        if ($filterModerated && $thread->getForum()->isModerated() && $onlyVisibles) {
+        if ($filterModerated && $onlyVisibles && $thread->getForum()->isModerated()) {
             $userId = $currentUser ? $currentUser->getId() : 0;
 
             $conditionModetared = 'AND p.status = 1 OR
@@ -63,9 +64,20 @@ class CForumPostRepository extends ResourceRepository
             ORDER BY p.iid $orderDirection";
 
         return $this
-            ->_em
+            ->getEntityManager()
             ->createQuery($dql)
             ->setParameters(['thread' => $thread, 'course' => $course])
             ->getResult();
+    }
+
+    public function delete(AbstractResource $resource)
+    {
+        $attachments = $resource->getAttachments();
+        if (!empty($attachments)) {
+            foreach ($attachments as $attachment) {
+                $this->getEntityManager()->remove($attachment);
+            }
+        }
+        parent::delete($resource);
     }
 }

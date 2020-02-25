@@ -33,6 +33,7 @@ try {
     $accessToken = $provider->getAccessToken('authorization_code', [
         'code' => $_GET['code']
     ]);
+    ChamiloSession::write('oauth2AccessToken', $accessToken->jsonSerialize());
     $userInfo = $plugin->getUserInfo($provider, $accessToken);
     if ($userInfo['active'] != '1') {
         throw new Exception(get_lang('AccountInactive'));

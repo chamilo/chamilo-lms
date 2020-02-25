@@ -1107,7 +1107,9 @@ $_configuration['profile_fields_visibility'] = [
 // ALTER TABLE c_lp ADD accumulate_work_time INT NOT NULL;
 // CREATE TABLE track_e_access_complete (id int(11) NOT NULL AUTO_INCREMENT, user_id int(11) NOT NULL, date_reg datetime NOT NULL, tool varchar(255) NOT NULL,  tool_id int(11) NOT NULL,   tool_id_detail int(11) NOT NULL,  action varchar(255) NOT NULL,   action_details varchar(255) NOT NULL, current_id int(11) NOT NULL,  ip_user varchar(255) NOT NULL,  user_agent varchar(255) NOT NULL,   session_id int(11) NOT NULL,   c_id int(11) NOT NULL,   ch_sid varchar(255) NOT NULL,   login_as int(11) NOT NULL,   info longtext NOT NULL,   url text NOT NULL,   PRIMARY KEY (id) ) ENGINE=InnoDB AUTO_INCREMENT=13989 DEFAULT CHARSET=utf8;
 // CREATE INDEX user_course_session ON track_e_access_complete (user_id, c_id, session_id);
-// Only applied for courses with extra field "new_tracking_system" to "1"
+// Add course checkbox extra field "new_tracking_system"
+// Add session checkbox extra field "new_tracking_system"
+// Only applied for courses/sessions with extra field "new_tracking_system" to "1"
 //$_configuration['lp_minimum_time'] = false;
 
 // Track LP attempts using the new tracking system.

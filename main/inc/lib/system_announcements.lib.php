@@ -843,6 +843,7 @@ class SystemAnnouncementManager
         if (Database::num_rows($result) > 0) {
             while ($announcement = Database::fetch_object($result)) {
                 if ($checkCareers && !empty($announcement->career_id)) {
+                    $promotionList = [];
                     if (!empty($announcement->promotion_id)) {
                         $promotionList[] = $announcement->promotion_id;
                     } else {

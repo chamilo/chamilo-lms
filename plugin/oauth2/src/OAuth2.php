@@ -182,7 +182,7 @@ class OAuth2 extends Plugin
         );
         if (false === $result) {
             // authenticated user not found in internal database
-            if (!$this->get(self::SETTING_CREATE_NEW_USERS)) {
+            if ('true' !== $this->get(self::SETTING_CREATE_NEW_USERS)) {
                 throw new RuntimeException(get_lang('no_user_has_this_oauth_code'));
             }
             require_once __DIR__.'/../../../main/auth/external_login/functions.inc.php';
@@ -218,7 +218,7 @@ class OAuth2 extends Plugin
             } else {
                 $userId = $result;
             }
-            if ($this->get(self::SETTING_UPDATE_USER_INFO)) {
+            if ('true' === $this->get(self::SETTING_UPDATE_USER_INFO)) {
                 $user = UserManager::getRepository()->find($userId);
                 $user->setFirstname(
                     $this->getValueByKey($response, $this->get(self::SETTING_RESPONSE_RESOURCE_OWNER_FIRSTNAME))

@@ -39,7 +39,7 @@ if ($oAuth2Plugin->get(OAuth2::SETTING_ENABLE) === 'true') {
                 ]);
                 ChamiloSession::write('oauth2AccessToken', $newAccessToken->jsonSerialize());
             } catch (\League\OAuth2\Client\Provider\Exception\IdentityProviderException $exception) {
-                ChamiloSession::destroy();
+                online_logout();
             }
         }
     }

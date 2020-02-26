@@ -47,6 +47,9 @@ switch ($action) {
             try {
                 $graphImage = $graphviz->createImageSrc($graph);
 
+                //echo $graphviz->createScript($graph);
+                //$graphviz->display($graph);
+
                 echo Display::img(
                     $graphImage,
                     get_lang('GraphDependencyTree'),
@@ -130,7 +133,7 @@ switch ($action) {
         $link .= '<div class="sequence-course">'.$resourceName.'</div>';
         $link .= Display::tag(
             'button',
-            $id,
+            $resourceName,
             [
                 'class' => 'sequence-id',
                 'title' => get_lang('UseAsReference'),
@@ -344,16 +347,24 @@ switch ($action) {
             $main = $graph->createVertex($id);
         }
 
+        $item = $sequenceRepository->getItem($id, $type);
+        $main->setAttribute('graphviz.shape', 'record');
+        $main->setAttribute('graphviz.label', $item->getName());
+
         foreach ($parents as $parentId) {
+            $item = $sequenceRepository->getItem($parentId, $type);
             if ($graph->hasVertex($parentId)) {
                 $parent = $graph->getVertex($parentId);
                 if (!$parent->hasEdgeTo($main)) {
-                    $parent->createEdgeTo($main);
+                    $newEdge = $parent->createEdgeTo($main);
                 }
             } else {
                 $parent = $graph->createVertex($parentId);
-                $parent->createEdgeTo($main);
+                $newEdge = $parent->createEdgeTo($main);
             }
+
+            $parent->setAttribute('graphviz.shape', 'record');
+            $parent->setAttribute('graphviz.label', $item->getName());
         }
 
         foreach ($parents as $parentId) {
@@ -426,7 +437,9 @@ switch ($action) {
         $courseController = new CoursesController();
         $view = new Template(null, false, false, false, false, false);
         $view->assign('sequences', $sequenceList);
+        $view->assign('sequence_type', $type);
         $view->assign('allow_subscription', $allowSubscription);
+
 
         if ($allowSubscription) {
             $view->assign(

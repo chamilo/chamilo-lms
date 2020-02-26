@@ -1,6 +1,6 @@
 <h2 class="page-header">{{ 'RequiredCourses'|get_lang }}</h2>
 
-{% for item in sequences %}
+{% for key, item in sequences %}
     <h4>{{ item.name }}</h4>
     <div id="parents">
         {% for course in item.requirements %}
@@ -26,6 +26,20 @@
             {% endif %}
         {% endfor %}
     </div>
+
+    <script>
+        var url = '{{ _p.web_ajax }}sequence.ajax.php?type={{ sequence_type }}';
+        var sequenceId = '{{ key }}';
+        $(function() {
+            $.ajax({
+                url: url + '&a=graph&sequence_id=' + sequenceId,
+                success: function (data) {
+                    $('#show_graph').append(data);
+                }
+            });
+        });
+        </script>
+    <div id="show_graph">{{ graph }}</div>
 {% endfor %}
 
 {% if allow_subscription %}

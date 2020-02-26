@@ -366,8 +366,6 @@ class SequenceResourceRepository extends EntityRepository
                 true
             );
 
-            //var_dump($gradebook, $userFinishedCourse);
-
             if (0 === $sessionId) {
                 if (false === $userFinishedCourse) {
                     $status = false;

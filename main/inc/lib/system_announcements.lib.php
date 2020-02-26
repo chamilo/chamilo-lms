@@ -865,6 +865,13 @@ class SystemAnnouncementManager
                                 break 2;
                             }
 
+                            if ($visible === self::VISIBLE_TEACHER &&
+                                SessionManager::user_is_general_coach($userId, $sessionId)
+                            ) {
+                                $show = true;
+                                break 2;
+                            }
+
                             // Check course coach
                             $coaches = SessionManager::getCoachesBySession($sessionId);
 

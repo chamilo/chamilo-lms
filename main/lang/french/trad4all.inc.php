@@ -8395,4 +8395,14 @@ $GoBackToVideo = "Retour à la vidéo";
 $UseLearnpathScoreAsProgress = "Utiliser le score comme progrès";
 $UseLearnpathScoreAsProgressInfo = "Certains parcours SCORM (en particulier ceux avec un seul SCO) peuvent rapporter leur progrès sous forme du score (cmi.core.score.raw), ce qui permet de visualiser le progrès dans Chamilo. Activer cette option si ce parcours SCORM utilise cette stratégie. Attention, en utilisant le score comme progrès, la possibilité d'obtenir le vrai score via cmi.core.score.raw sera perdue.";
 $ThereIsASequenceResourceLinkedToThisCourseYouNeedToDeleteItFirst = "Il y a une ressource de séquence liée à ce cours. Vous devez d'abord éliminer ce lien.";
+$QuizPreventBackwards = "Interdire le retour en arrière dans les questions précédentes";
+$UploadPlugin = "Envoyer un plugin";
+$PluginUploadPleaseRememberUploadingThirdPartyPluginsCanBeDangerous = "Merci de prendre vos précautions avant d'envoyer un nouveau plugin sur votre serveur. Les plugins non officiels peuvent avoir des conséquences négatives sur votre portail et sur votre serveur. Assurez-vous toujours d'installer un plugin depuis une source sûre ou de pouvoir compter sur le support professionnel immédiat de ses développeurs.";
+$PluginUploadingTwiceWillReplacePreviousFiles = "Envoyer un même plugin plus d'une fois aura pour effet d'écraser les fichiers antérieurs du plugin. Comme pour le premier envoi, envoyer un plugin non-vérifié comporte des risques.";
+$UploadNewPlugin = "Sélectionnez le nouveau plugin";
+$PluginUploadIsNotEnabled = "Le dépôt de nouveaux plugins n'est pas activé. Assurez-vous que l'option 'plugin_upload_enable' est mise à 'true' dans le fichier de configuration de la plateforme.";
+$PluginUploaded = "Plugin envoyé";
+$PluginOfficial = "Officiel";
+$PluginThirdParty = "Plugin tiers";
+$ErrorPluginOfficialCannotBeUploaded = "Votre plugin a le même nom qu'un plugin officiel. Les plugins officiels ne peuvent pas être remplacés. Merci de renommer le fichier zip et le répertoire de votre plugin.";
 ?>

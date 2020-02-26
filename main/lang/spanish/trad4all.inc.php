@@ -8491,4 +8491,14 @@ $GoBackToVideo = "Volver al video";
 $UseLearnpathScoreAsProgress = "Usar el score como progreso";
 $UseLearnpathScoreAsProgressInfo = "Algunas lecciones SCORM, en particular las que tienen un solo SCO, reportan su progreso a través del score de SCO (cmi.core.score.raw). Al seleccionar esta opción (solo disponible para las lecciones con un solo SCO), Chamilo mostrará el progreso en base al score que le envía el elemento SCO. Cuidado: al usar el score como progreso, se pierde la habilidad de obtener el score real del elemento.";
 $ThereIsASequenceResourceLinkedToThisCourseYouNeedToDeleteItFirst = "Un recurso de secuencia está vinculado a este curso. Tiene que borrar este enlace primero.";
+$QuizPreventBackwards = "Prohibir regresar en las preguntas anteriores";
+$UploadPlugin = "Subir un plugin";
+$PluginUploadPleaseRememberUploadingThirdPartyPluginsCanBeDangerous = "Por favor, recuerde que subir un plugin de terceros puede ser muy dañino para su portal y su servidor. Asegúrese siempre de instalar plugins de fuentes seguras o contando con soporte de sus desarrolladores.";
+$PluginUploadingTwiceWillReplacePreviousFiles = "Subir un mismo plugin más de una vez aplastará los archivos del plugin subido anteriormente. Tal como en la primera subida, subir un plugin de terceros o una actualización de este es arriesgado.";
+$UploadNewPlugin = "Seleccione el nuevo plugin";
+$PluginUploadIsNotEnabled = "La subida de plugins no está activada. Asegúrese que la opción 'plugin_upload_enable' esté en 'true' en el archivo de configuración de Chamilo.";
+$PluginUploaded = "Plugin subido";
+$PluginOfficial = "Oficial";
+$PluginThirdParty = "Plugin de terceros";
+$ErrorPluginOfficialCannotBeUploaded = "Su plugin tiene el mismo nombre que un plugin oficial. Los plugins oficiales no pueden ser sobre-escritos. Por favor cambie el nombre del archivo de su plugin.";
 ?>

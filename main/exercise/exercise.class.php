@@ -2341,6 +2341,15 @@ class Exercise
                 ]
             );
             $form->addElement('html', '</div>');
+
+            if (api_get_configuration_value('quiz_prevent_backwards_move')) {
+                $form->addCheckBox(
+                    'prevent_backwards',
+                    null,
+                    get_lang('QuizPreventBackwards')
+                );
+            }
+
             $form->addElement(
                 'text',
                 'pass_percentage',
@@ -2382,14 +2391,6 @@ class Exercise
                 null,
                 get_lang('UpdateTitleInLps')
             );
-
-            if (api_get_configuration_value('quiz_prevent_backwards_move')) {
-                $form->addCheckBox(
-                    'prevent_backwards',
-                    null,
-                    get_lang('QuizPreventBackwards')
-                );
-            }
 
             $defaults = [];
             if (api_get_setting('search_enabled') === 'true') {

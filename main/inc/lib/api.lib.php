@@ -212,6 +212,7 @@ define('LOG_PLATFORM_LANGUAGE_CHANGE', 'platform_lng_changed'); //changed in 1.9
 define('LOG_SUBSCRIBE_USER_TO_COURSE', 'user_subscribed');
 define('LOG_UNSUBSCRIBE_USER_FROM_COURSE', 'user_unsubscribed');
 define('LOG_ATTEMPTED_FORCED_LOGIN', 'attempted_forced_login');
+define('LOG_PLUGIN_CHANGE', 'plugin_changed');
 
 define('LOG_HOMEPAGE_CHANGED', 'homepage_changed');
 
@@ -252,6 +253,9 @@ define('LOG_SESSION_CATEGORY_ID', 'session_category_id');
 define('LOG_CONFIGURATION_SETTINGS_CATEGORY', 'settings_category');
 define('LOG_CONFIGURATION_SETTINGS_VARIABLE', 'settings_variable');
 define('LOG_PLATFORM_LANGUAGE', 'default_platform_language');
+define('LOG_PLUGIN_UPLOAD', 'plugin_upload');
+define('LOG_PLUGIN_ENABLE', 'plugin_enable');
+define('LOG_PLUGIN_SETTINGS_CHANGE', 'plugin_settings_change');
 define('LOG_CAREER_ID', 'career_id');
 define('LOG_PROMOTION_ID', 'promotion_id');
 define('LOG_GRADEBOOK_LOCKED', 'gradebook_locked');

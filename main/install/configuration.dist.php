@@ -1397,6 +1397,9 @@ ALTER TABLE notification_event ADD COLUMN event_id INT NULL;
 // ALTER TABLE c_quiz ADD COLUMN prevent_backwards INT DEFAULT 0;
 //$_configuration['quiz_prevent_backwards_move'] = false;
 
+// Allow third party plugins to be uploaded through a form in the plugins section
+//$_configuration['plugin_upload_enable'] = false;
+
 // KEEP THIS AT THE END
 // -------- Custom DB changes
 // Add user activation by confirmation email

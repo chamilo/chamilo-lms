@@ -2717,6 +2717,60 @@ div.admin_section h4 {
 .ribbon .success {
     color: green;
 }
+/* Ribbon top right (diagonal) */
+.ribbon-diagonal {
+    width: 85px;
+    height: 100px;
+    overflow: hidden;
+    position: absolute;
+}
+.ribbon-diagonal::before,
+.ribbon-diagonal::after {
+    position: absolute;
+    z-index: -1;
+    content: '';
+    display: block;
+    border: 5px solid #337ab7;
+}
+.ribbon-diagonal span {
+    position: absolute;
+    display: block;
+    width: 185px;
+    padding: 2px 0;
+    box-shadow: 0 5px 2px rgba(0,0,0,.1);
+    color: #fff;
+    text-shadow: 0 1px 1px rgba(0,0,0,.2);
+    text-align: center;
+}
+.ribbon-diagonal-top-right {
+    right: 24px;
+    margin-top: -9px;
+}
+.ribbon-diagonal-top-right::before,
+.ribbon-diagonal-top-right::after {
+    border-top-color: transparent;
+    border-right-color: transparent;
+}
+.ribbon-diagonal-top-right::before {
+    top: 0;
+    left: 0;
+}
+.ribbon-diagonal-top-right::after {
+    bottom: 0;
+    right: 0;
+}
+.ribbon-diagonal-top-right span {
+    left: -41px;
+    top: 30px;
+    transform: rotate(45deg);
+    font-size: x-small;
+}
+.ribbon-diagonal-official span {
+    background-color: #337ab7;
+}
+.ribbon-diagonal-thirdparty span {
+    background-color: #f0ad4e;;
+}
 
 .exercise_save_now_button img {
     position: relative;

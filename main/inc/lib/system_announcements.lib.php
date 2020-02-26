@@ -856,20 +856,19 @@ class SystemAnnouncementManager
                     foreach ($promotionList as $promotionId) {
                         $sessionList = SessionManager::get_all_sessions_by_promotion($promotionId);
                         foreach ($sessionList as $session) {
-                            $sessionRelUser = SessionManager::getUserStatusInSession($userId, $session['id']);
-
-                            if (!($sessionRelUser instanceof SessionRelUser)) {
-                                continue;
-                            }
-
-                            $status = $sessionRelUser->getRelationType();
-
-                            if ($visible === self::VISIBLE_TEACHER && $status === 2) {
+                            $sessionId = $session['id'];
+                            // Check student
+                            if ($visible === self::VISIBLE_STUDENT &&
+                                SessionManager::isUserSubscribedAsStudent($sessionId, $userId)
+                            ) {
                                 $show = true;
                                 break 2;
                             }
 
-                            if ($visible === self::VISIBLE_STUDENT && $status === 0) {
+                            // Check course coach
+                            $coaches = SessionManager::getCoachesBySession($sessionId);
+
+                            if ($visible === self::VISIBLE_TEACHER && in_array($userId, $coaches)) {
                                 $show = true;
                                 break 2;
                             }
@@ -880,6 +879,7 @@ class SystemAnnouncementManager
                         continue;
                     }
                 }
+
                 $announcementData = [
                     'id' => $announcement->id,
                     'title' => $announcement->title,

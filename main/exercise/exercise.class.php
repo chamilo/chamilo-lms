@@ -8540,7 +8540,7 @@ class Exercise
             }
 
             // Only for students
-            $total_sql = "SELECT count(e.iid) as count
+            $total_sql = "SELECT count(DISTINCT(e.iid)) as count
                           FROM $TBL_EXERCISES e
                           INNER JOIN $TBL_ITEM_PROPERTY ip
                           ON (e.iid = ip.ref AND e.c_id = ip.c_id)
@@ -8553,7 +8553,7 @@ class Exercise
                                 $keywordCondition
                           ";
 
-            $sql = "SELECT e.* FROM $TBL_EXERCISES e
+            $sql = "SELECT DISTINCT e.* FROM $TBL_EXERCISES e
                     INNER JOIN $TBL_ITEM_PROPERTY ip
                     ON (e.iid = ip.ref AND e.c_id = ip.c_id)
                     WHERE

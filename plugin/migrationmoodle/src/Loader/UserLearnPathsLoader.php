@@ -39,8 +39,6 @@ class UserLearnPathsLoader implements LoaderInterface
             $lps = $learnPathsRepo->findBy(['cId' => $course->getId(), 'lpType' => 1]);
 
             foreach ($lps as $lp) {
-                $lpItems = $lpItemRepo->findBy(['lpId' => $lp->getId()]);
-
                 $params = [
                     'c_id' => $course->getId(),
                     'lp_id' => $lp->getId(),
@@ -51,6 +49,11 @@ class UserLearnPathsLoader implements LoaderInterface
                 ];
                 $lpViewId = \Database::insert($tblLpView, $params);
                 \Database::query("UPDATE $tblLpView SET id = iid WHERE iid = $lpViewId");
+
+                $lpItems = $lpItemRepo->findBy(
+                    ['lpId' => $lp->getId()],
+                    ['parentItemId' => 'ASC', 'displayOrder' => 'ASC']
+                );
 
                 foreach ($lpItems as $lpItem) {
                     $params = [

@@ -45,6 +45,8 @@ class OAuth2 extends Plugin
     const SETTING_RESPONSE_RESOURCE_OWNER_EMAIL = 'response_resource_owner_email';
     const SETTING_RESPONSE_RESOURCE_OWNER_USERNAME = 'response_resource_owner_username';
 
+    const SETTING_LOGOUT_URL = 'logout_url';
+
     const SETTING_BLOCK_NAME = 'block_name';
 
     const SETTING_MANAGEMENT_LOGIN_ENABLE = 'management_login_enable';
@@ -90,6 +92,8 @@ class OAuth2 extends Plugin
                 self::SETTING_RESPONSE_RESOURCE_OWNER_STATUS => 'text',
                 self::SETTING_RESPONSE_RESOURCE_OWNER_EMAIL => 'text',
                 self::SETTING_RESPONSE_RESOURCE_OWNER_USERNAME => 'text',
+
+                self::SETTING_LOGOUT_URL => 'text',
 
                 self::SETTING_BLOCK_NAME => 'text',
 
@@ -257,6 +261,14 @@ class OAuth2 extends Plugin
     public function getSignInURL()
     {
         return api_get_path(WEB_PLUGIN_PATH).$this->get_name().'/src/callback.php';
+    }
+
+    public function logout($token)
+    {
+        $url = $this->get(self::SETTING_LOGOUT_URL);
+        if ($url) {
+            (new GuzzleHttp\Client())->post($url, [ 'body' => $token ]);
+        }
     }
 
     /**

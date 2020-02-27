@@ -70,6 +70,8 @@ $strings['response_resource_owner_status_help'] = 'The value at this array key s
 $strings['response_resource_owner_email'] = 'Response Resource Owner email key';
 $strings['response_resource_owner_username'] = 'Response Resource Owner username key';
 
+$strings['logout_url'] = 'Logout URL';
+$strings['logout_url_help'] = 'If this URL is set, the OAuth2 token will be POSTed to it at user logout.';
 
 $strings['block_name'] = 'Block name';
 $strings['block_name_help'] = 'The title shown above the <em>OAuth2</em> Login button';

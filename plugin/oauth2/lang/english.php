@@ -57,7 +57,7 @@ $strings['response_resource_owner_id_help'] = 'The array key to the user\'s <em>
 $strings['update_user_info'] = 'Update user information';
 $strings['create_new_users'] = 'Create new users';
 $strings['response_resource_owner_firstname'] = 'Response Resource Owner firstname key';
-$strings['response_resource_owner_firstname_help'] = 'Same syntax as for the Response Resource Owner Id key';
+$strings['response_resource_owner_firstname_help'] = 'Same syntax as for the <em>Response Resource Owner Id key</em>';
 $strings['response_resource_owner_lastname'] = 'Response Resource Owner lastname key';
 $strings['response_resource_owner_status'] = 'Response Resource Owner status key';
 $strings['response_resource_owner_status_help'] = 'The value at this array key should be one of these integers:<dl>
@@ -69,6 +69,23 @@ $strings['response_resource_owner_status_help'] = 'The value at this array key s
 </dl>';
 $strings['response_resource_owner_email'] = 'Response Resource Owner email key';
 $strings['response_resource_owner_username'] = 'Response Resource Owner username key';
+
+$strings['response_resource_owner_urls'] = 'Response Resource Owner Access URL key';
+$strings['response_resource_owner_urls_help'] = 'Similar syntax as for the <em>Response Resource Owner Id key</em>,
+except there can be more than one value returned: <code>*</code> can be used as a placeholder for an integer.
+<code>*</code> will be replaced by <code>0</code>, then <code>1</code>, then <code>2</code> and so on while it matches.
+There can be more than one <code>*</code> in this key expression.
+<br/>This option is used when $_configuration[\'multiple_access_urls\'] is set in app/config/configuration.php.
+<br/>The fetched values should be found in table <code>access_url</code> columns <code>id</code> or <code>url</code>.
+<br/>Example:
+<br/><code>data.0.domaines.*.url</code>
+<br/>means the URLs would be found at
+<ul>
+<li><code>$jsonArray["data"]["domaines"][0]["url"]</code></li>
+<li><code>$jsonArray["data"]["domaines"][1]["url"]</code></li>
+<li><code>$jsonArray["data"]["domaines"][2]["url"]</code></li>
+<li>...</li>
+</ul>';
 
 $strings['logout_url'] = 'Logout URL';
 $strings['logout_url_help'] = 'If this URL is set, the OAuth2 token will be POSTed to it at user logout.';
@@ -93,6 +110,7 @@ $strings['no_user_has_this_oauth_code'] = 'No existing user has this OAuth2 code
 $strings['FailedUserCreation'] = 'User account creation failed';
 $strings['internal_error_cannot_get_user_info'] = 'Internal error: could not get user information';
 $strings['InvalidId'] = 'Login failed - the OAuth2 identifier was not recognized as an existing Chamilo user\'s.';
+$strings['UserNotAllowedOnThisPortal'] = 'This user account is not enabled on this portal';
 
 $strings['DefaultFirstname'] = 'OAuth2 User default firstname';
 $strings['DefaultLastname'] = 'OAuth2 User default lastname';

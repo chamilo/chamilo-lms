@@ -6506,9 +6506,10 @@ function api_get_current_access_url_id()
 /**
  * Gets the registered urls from a given user id.
  *
+ * @param int $user_id
+ * @return array
  * @author Julio Montoya <gugli100@gmail.com>
  *
- * @return int user id
  */
 function api_get_access_url_from_user($user_id)
 {

@@ -1,6 +1,8 @@
 <?php
 /* For license terms, see /license.txt */
 
+use League\OAuth2\Client\Token\AccessToken;
+
 require __DIR__.'/../../../main/inc/global.inc.php';
 
 $plugin = OAuth2::create();
@@ -30,6 +32,9 @@ if (!array_key_exists('state', $_GET) || ($_GET['state'] !== ChamiloSession::rea
 
 try {
     // Try to get an access token using the authorization code grant.
+    /**
+     * @var $accessToken AccessToken
+     */
     $accessToken = $provider->getAccessToken('authorization_code', [
         'code' => $_GET['code']
     ]);
@@ -38,12 +43,24 @@ try {
     if ($userInfo['active'] != '1') {
         throw new Exception(get_lang('AccountInactive'));
     }
+    if (api_is_multiple_url_enabled()) {
+        $userId = $userInfo['user_id'];
+        $urlIdsTheUserCanAccess = api_get_access_url_from_user($userId);
+        $userCanAccessTheFirstURL = in_array(1, $urlIdsTheUserCanAccess);
+        $userCanAccessTheCurrentURL = in_array(api_get_current_access_url_id(), $urlIdsTheUserCanAccess)
+        or UserManager::is_admin($userId) and $userCanAccessTheFirstURL;
+        if (!$userCanAccessTheCurrentURL) {
+            throw new Exception(get_lang('UserNotAllowedOnThisPortal'));
+        }
+    }
 } catch (Exception $exception) {
     $message = Display::return_message($exception->getMessage(), 'error');
     Display::addFlash($message);
     header('Location: '.api_get_path(WEB_PATH));
     exit;
 }
+
+ConditionalLogin::check_conditions($userInfo);
 
 $_user['user_id'] = $userInfo['user_id'];
 $_user['uidReset'] = true;

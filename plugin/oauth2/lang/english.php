@@ -91,3 +91,6 @@ $strings['no_user_has_this_oauth_code'] = 'No existing user has this OAuth2 code
 $strings['FailedUserCreation'] = 'User account creation failed';
 $strings['internal_error_cannot_get_user_info'] = 'Internal error: could not get user information';
 $strings['InvalidId'] = 'Login failed - the OAuth2 identifier was not recognized as an existing Chamilo user\'s.';
+
+$strings['DefaultFirstname'] = 'OAuth2 User default firstname';
+$strings['DefaultLastname'] = 'OAuth2 User default lastname';

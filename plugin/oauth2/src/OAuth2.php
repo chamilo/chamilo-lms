@@ -190,19 +190,19 @@ class OAuth2 extends Plugin
                 [
                     'firstname' => $this->getValueByKey($response, $this->get(
                         self::SETTING_RESPONSE_RESOURCE_OWNER_FIRSTNAME
-                    )),
+                    ), get_lang('DefaultFirstname')),
                     'lastname' => $this->getValueByKey($response, $this->get(
                         self::SETTING_RESPONSE_RESOURCE_OWNER_LASTNAME
-                    )),
+                    ), get_lang('DefaultLastname')),
                     'status' => $this->getValueByKey($response, $this->get(
                         self::SETTING_RESPONSE_RESOURCE_OWNER_STATUS
-                    )),
+                    ), STUDENT),
                     'email' => $this->getValueByKey($response, $this->get(
                         self::SETTING_RESPONSE_RESOURCE_OWNER_EMAIL
-                    )),
+                    ), 'oauth2user_'.$resourceOwnerId.'@'.(gethostname() or 'localhost')),
                     'username' => $this->getValueByKey($response, $this->get(
                         self::SETTING_RESPONSE_RESOURCE_OWNER_USERNAME
-                    )),
+                    ), 'oauth2user_'.$resourceOwnerId),
                     'auth_source' => 'oauth2',
                 ]
             );
@@ -221,15 +221,25 @@ class OAuth2 extends Plugin
             if ('true' === $this->get(self::SETTING_UPDATE_USER_INFO)) {
                 $user = UserManager::getRepository()->find($userId);
                 $user->setFirstname(
-                    $this->getValueByKey($response, $this->get(self::SETTING_RESPONSE_RESOURCE_OWNER_FIRSTNAME))
+                    $this->getValueByKey($response, $this->get(
+                        self::SETTING_RESPONSE_RESOURCE_OWNER_FIRSTNAME
+                    ), $user->getFirstname())
                 )->setLastName(
-                    $this->getValueByKey($response, $this->get(self::SETTING_RESPONSE_RESOURCE_OWNER_LASTNAME))
+                    $this->getValueByKey($response, $this->get(
+                        self::SETTING_RESPONSE_RESOURCE_OWNER_LASTNAME
+                    ), $user->getLastname())
                 )->setUserName(
-                    $this->getValueByKey($response, $this->get(self::SETTING_RESPONSE_RESOURCE_OWNER_USERNAME))
+                    $this->getValueByKey($response, $this->get(
+                        self::SETTING_RESPONSE_RESOURCE_OWNER_USERNAME
+                    ), $user->getUsername())
                 )->setEmail(
-                    $this->getValueByKey($response, $this->get(self::SETTING_RESPONSE_RESOURCE_OWNER_EMAIL))
+                    $this->getValueByKey($response, $this->get(
+                        self::SETTING_RESPONSE_RESOURCE_OWNER_EMAIL
+                    ), $user->getEmail())
                 )->setStatus(
-                    $this->getValueByKey($response, $this->get(self::SETTING_RESPONSE_RESOURCE_OWNER_STATUS))
+                    $this->getValueByKey($response, $this->get(
+                        self::SETTING_RESPONSE_RESOURCE_OWNER_STATUS
+                    ), $user->getStatus())
                 )->setAuthSource('oauth2');
                 UserManager::getManager()->updateUser($user);
             }

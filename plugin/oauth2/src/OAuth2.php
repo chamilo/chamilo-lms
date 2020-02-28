@@ -186,6 +186,48 @@ class OAuth2 extends Plugin
         return $values;
     }
 
+    private function updateUser($userId, $response)
+    {
+        /**
+         * @var $user Chamilo\UserBundle\Entity\User
+         */
+        $user = UserManager::getRepository()->find($userId);
+        $user->setFirstname(
+            $this->getValueByKey($response, $this->get(
+                self::SETTING_RESPONSE_RESOURCE_OWNER_FIRSTNAME
+            ), $user->getFirstname())
+        );
+        $user->setLastname(
+            $this->getValueByKey($response, $this->get(
+                self::SETTING_RESPONSE_RESOURCE_OWNER_LASTNAME
+            ), $user->getLastname())
+        );
+        $user->setUserName(
+            $this->getValueByKey($response, $this->get(
+                self::SETTING_RESPONSE_RESOURCE_OWNER_USERNAME
+            ), $user->getUsername())
+        );
+        $user->setEmail(
+            $this->getValueByKey($response, $this->get(
+                self::SETTING_RESPONSE_RESOURCE_OWNER_EMAIL
+            ), $user->getEmail())
+        );
+        $user->setStatus(
+            $this->getValueByKey($response, $this->get(
+                self::SETTING_RESPONSE_RESOURCE_OWNER_STATUS
+            ), $user->getStatus())
+        );
+        $user->setAuthSource('oauth2');
+        $configFilePath = __DIR__.'/../config.php';
+        if (file_exists($configFilePath)) {
+            require_once $configFilePath;
+            $functionName = 'oauth2_update_user_from_resource_owner_details';
+            if (function_exists($functionName)) {
+                $functionName($response, $user);
+            }
+        }
+        UserManager::getManager()->updateUser($user);
+    }
     /**
      * Updates the Access URLs associated to a user
      * according to the OAuth2 server response resource owner
@@ -285,6 +327,7 @@ class OAuth2 extends Plugin
             if (false === $userId) {
                 throw new RuntimeException(get_lang('FailedUserCreation'));
             }
+            $this->updateUser($userId, $response);
             // Not checking function update_extra_field_value return value because not reliable
             UserManager::update_extra_field_value($userId, self::EXTRA_FIELD_OAUTH2_ID, $resourceOwnerId);
             $this->updateUserUrls($userId, $response);
@@ -296,37 +339,7 @@ class OAuth2 extends Plugin
                 $userId = $result;
             }
             if ('true' === $this->get(self::SETTING_UPDATE_USER_INFO)) {
-                /**
-                 * @var $user FOS\UserBundle\Model\User
-                 */
-                $user = UserManager::getRepository()->find($userId);
-                $user->setFirstname(
-                    $this->getValueByKey($response, $this->get(
-                        self::SETTING_RESPONSE_RESOURCE_OWNER_FIRSTNAME
-                    ), $user->getFirstname())
-                );
-                $user->setLastname(
-                    $this->getValueByKey($response, $this->get(
-                        self::SETTING_RESPONSE_RESOURCE_OWNER_LASTNAME
-                    ), $user->getLastname())
-                );
-                $user->setUserName(
-                    $this->getValueByKey($response, $this->get(
-                        self::SETTING_RESPONSE_RESOURCE_OWNER_USERNAME
-                    ), $user->getUsername())
-                );
-                $user->setEmail(
-                    $this->getValueByKey($response, $this->get(
-                        self::SETTING_RESPONSE_RESOURCE_OWNER_EMAIL
-                    ), $user->getEmail())
-                );
-                $user->setStatus(
-                    $this->getValueByKey($response, $this->get(
-                        self::SETTING_RESPONSE_RESOURCE_OWNER_STATUS
-                    ), $user->getStatus())
-                );
-                $user->setAuthSource('oauth2');
-                UserManager::getManager()->updateUser($user);
+                $this->updateUser($userId, $response);
                 $this->updateUserUrls($userId, $response);
             }
         }

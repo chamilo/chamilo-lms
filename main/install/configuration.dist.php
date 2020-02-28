@@ -1400,6 +1400,9 @@ ALTER TABLE notification_event ADD COLUMN event_id INT NULL;
 // Allow third party plugins to be uploaded through a form in the plugins section
 //$_configuration['plugin_upload_enable'] = false;
 
+// ALTER TABLE session ADD COLUMN status INT DEFAULT 0;
+// $_configuration['allow_session_status'] = 0;
+
 // KEEP THIS AT THE END
 // -------- Custom DB changes
 // Add user activation by confirmation email

@@ -1,4 +1,5 @@
 <?php
+
 /* For licensing terms, see /license.txt */
 
 use Chamilo\CoreBundle\Entity\Course;
@@ -68,6 +69,7 @@ class Rest extends WebService
      * @var Session
      */
     private $session;
+
     /**
      * @var Course
      */
@@ -638,8 +640,8 @@ class Rest extends WebService
 
         foreach ($forumsFullData as $forumId => $forumInfo) {
             $forum = [
-                'id' => intval($forumInfo['iid']),
-                'catId' => intval($forumInfo['forum_category']),
+                'id' => (int) $forumInfo['iid'],
+                'catId' => (int) $forumInfo['forum_category'],
                 'title' => $forumInfo['forum_title'],
                 'description' => $forumInfo['forum_comment'],
                 'image' => $forumInfo['forum_image'] ? ($webCoursePath.$forumInfo['forum_image']) : '',
@@ -675,9 +677,9 @@ class Rest extends WebService
             );
 
             $categories[] = [
-                'id' => intval($category['iid']),
+                'id' => (int) $category['iid'],
                 'title' => $category['cat_title'],
-                'catId' => intval($category['cat_id']),
+                'catId' => (int) $category['cat_id'],
                 'description' => $category['cat_comment'],
                 'forums' => $categoryForums,
                 'courseId' => $this->course->getId(),
@@ -791,6 +793,7 @@ class Rest extends WebService
 
         foreach ($extraInfo as $extra) {
             /** @var ExtraFieldValues $extraValue */
+
             $extraValue = $extra['value'];
 
             $result['extra'][] = [
@@ -887,7 +890,7 @@ class Rest extends WebService
                 $listData[] = [
                     'id' => $lpId,
                     'title' => Security::remove_XSS($lpDetails['lp_name']),
-                    'progress' => intval($progress),
+                    'progress' => $progress,
                     'url' => api_get_path(WEB_CODE_PATH).'webservices/api/v2.php?'.http_build_query([
                         'hash' => $this->encodeParams([
                             'action' => 'course_learnpath',
@@ -920,9 +923,7 @@ class Rest extends WebService
      */
     public static function decodeParams($encoded)
     {
-        $decoded = json_decode($encoded);
-
-        return $decoded;
+        return json_decode($encoded);
     }
 
     /**
@@ -947,7 +948,7 @@ class Rest extends WebService
             'gradebook' => 0,
             'origin' => '',
             'action' => 'view',
-            'lp_id' => intval($lpId),
+            'lp_id' => (int) $lpId,
             'isStudentView' => 'true',
         ]);
 
@@ -1167,7 +1168,7 @@ class Rest extends WebService
     public function addSession(array $params)
     {
         $name = $params['name'];
-        $coach_username = intval($params['coach_username']);
+        $coach_username = (int) $params['coach_username'];
         $startDate = $params['access_start_date'];
         $endDate = $params['access_end_date'];
         $displayStartDate = $startDate;

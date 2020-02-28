@@ -1,5 +1,7 @@
 <?php
+
 /* For licensing terms, see /license.txt */
+
 /**
  * Entry point for REST web services in Chamilo.
  *
@@ -28,8 +30,8 @@ if ($hash) {
 $action = isset($_REQUEST['action']) ? $_REQUEST['action'] : null;
 $username = isset($_REQUEST['username']) ? Security::remove_XSS($_REQUEST['username']) : null;
 $apiKey = isset($_REQUEST['api_key']) ? Security::remove_XSS($_REQUEST['api_key']) : null;
-$course = !empty($_REQUEST['course']) ? intval($_REQUEST['course']) : null;
-$session = !empty($_REQUEST['session']) ? intval($_REQUEST['session']) : null;
+$course = !empty($_REQUEST['course']) ? (int) $_REQUEST['course'] : null;
+$session = !empty($_REQUEST['session']) ? (int) $_REQUEST['session'] : null;
 
 $restResponse = new RestResponse();
 
@@ -66,7 +68,7 @@ try {
             break;
 
         case Rest::GET_USER_MESSAGES:
-            $lastMessageId = isset($_POST['last']) ? intval($_POST['last']) : 0;
+            $lastMessageId = isset($_POST['last']) ? (int) $_POST['last'] : 0;
             $messages = $restApi->getUserMessages($lastMessageId);
             $restResponse->setData($messages);
             break;
@@ -140,8 +142,8 @@ try {
             $restResponse->setData($forum);
             break;
         case Rest::GET_COURSE_FORUM_THREAD:
-            $forumId = isset($_POST['forum']) ? intval($_POST['forum']) : 0;
-            $threadId = isset($_POST['thread']) ? intval($_POST['thread']) : 0;
+            $forumId = isset($_POST['forum']) ? (int) $_POST['forum'] : 0;
+            $threadId = isset($_POST['thread']) ? (int) $_POST['thread'] : 0;
             $thread = $restApi->getCourseForumThread($forumId, $threadId);
             $restResponse->setData($thread);
             break;
@@ -154,7 +156,7 @@ try {
             $restResponse->setData($data);
             break;
         case Rest::GET_COURSE_LEARNPATH:
-            $lpId = isset($_REQUEST['lp_id']) ? intval($_REQUEST['lp_id']) : 1;
+            $lpId = isset($_REQUEST['lp_id']) ? (int) $_REQUEST['lp_id'] : 1;
             $restApi->showLearningPath($lpId);
             break;
         case Rest::SAVE_COURSE:
@@ -208,9 +210,9 @@ try {
                 throw new Exception(get_lang('NoData'));
             }
 
-            $forumId = isset($_POST['forum']) ? intval($_POST['forum']) : 0;
+            $forumId = isset($_POST['forum']) ? (int) $_POST['forum'] : 0;
             $notify = !empty($_POST['notify']);
-            $parentId = !empty($_POST['parent']) ? intval($_POST['parent']) : null;
+            $parentId = !empty($_POST['parent']) ? (int) $_POST['parent'] : null;
 
             $postValues = [
                 'post_title' => $_POST['title'],
@@ -257,7 +259,7 @@ try {
                 throw new Exception(get_lang('NoData'));
             }
 
-            $forumId = isset($_POST['forum']) ? intval($_POST['forum']) : 0;
+            $forumId = isset($_POST['forum']) ? (int) $_POST['forum'] : 0;
             $notify = !empty($_POST['notify']);
 
             $threadInfo = [
@@ -271,23 +273,23 @@ try {
             $restResponse->setData($data);
             break;
         case Rest::GET_USER_MESSAGES_RECEIVED:
-            $lastMessageId = isset($_POST['last']) ? intval($_POST['last']) : 0;
+            $lastMessageId = isset($_POST['last']) ? (int) $_POST['last'] : 0;
             $messages = $restApi->getUserReceivedMessages($lastMessageId);
             $restResponse->setData($messages);
             break;
         case Rest::GET_USER_MESSAGES_SENT:
-            $lastMessageId = isset($_POST['last']) ? intval($_POST['last']) : 0;
+            $lastMessageId = isset($_POST['last']) ? (int) $_POST['last'] : 0;
             $messages = $restApi->getUserSentMessages($lastMessageId);
             $restResponse->setData($messages);
             break;
         case Rest::DELETE_USER_MESSAGE:
-            $messageId = isset($_POST['message_id']) ? intval($_POST['message_id']) : 0;
+            $messageId = isset($_POST['message_id']) ? (int) $_POST['message_id'] : 0;
             $messageType = !empty($_POST['msg_type']) ? $_POST['msg_type'] : '';
             $restApi->deleteUserMessage($messageId, $messageType);
             $restResponse->setData(['status' => true]);
             break;
         case Rest::SET_MESSAGE_READ:
-            $messageId = isset($_POST['message_id']) ? intval($_POST['message_id']) : 0;
+            $messageId = isset($_POST['message_id']) ? (int) $_POST['message_id'] : 0;
             $restApi->setMessageRead($messageId);
             $restResponse->setData(['status' => true]);
             break;

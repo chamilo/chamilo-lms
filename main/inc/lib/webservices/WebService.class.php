@@ -1,4 +1,5 @@
 <?php
+
 /* For licensing terms, see /license.txt */
 
 use Chamilo\UserBundle\Entity\User;
@@ -7,8 +8,6 @@ use Chamilo\UserBundle\Entity\User;
  * Base class for Web Services.
  *
  * @author Angel Fernando Quiroz Campos <angel.quiroz@beeznest.com>
- *
- * @package chamilo.webservices
  */
 class WebService
 {
@@ -16,6 +15,7 @@ class WebService
      * @var User
      */
     protected $user;
+
     /**
      * @var string
      */
@@ -77,9 +77,9 @@ class WebService
      * @param string $username
      * @param string $password
      *
+     * @return bool Return true if the password belongs to the username. Otherwise return false
      * @throws Exception
      *
-     * @return bool Return true if the password belongs to the username. Otherwise return false
      */
     public static function isValidUser($username, $password)
     {

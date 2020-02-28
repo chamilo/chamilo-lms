@@ -232,6 +232,13 @@ class Session
     protected $position;
 
     /**
+     * @var int
+     *
+     * @ORM\Column(name="status", type="integer", nullable=false)
+     */
+    protected $status;
+
+    /**
      * @ORM\ManyToOne(targetEntity="Chamilo\UserBundle\Entity\User", inversedBy="sessionAsGeneralCoach")
      * @ORM\JoinColumn(name="id_coach", referencedColumnName="id")
      */
@@ -286,6 +293,7 @@ class Session
         $this->userCourseSubscriptions = new ArrayCollection();
         $this->showDescription = false;
         $this->category = null;
+        $this->status = 0;
         $this->studentPublications = new ArrayCollection();
     }
 
@@ -1262,6 +1270,26 @@ class Session
     public function setPosition($position)
     {
         $this->position = $position;
+
+        return $this;
+    }
+
+    /**
+     * @return int
+     */
+    public function getStatus(): int
+    {
+        return $this->status;
+    }
+
+    /**
+     * @param int $status
+     *
+     * @return Session
+     */
+    public function setStatus(int $status): Session
+    {
+        $this->status = $status;
 
         return $this;
     }

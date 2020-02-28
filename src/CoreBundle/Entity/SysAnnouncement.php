@@ -108,6 +108,20 @@ class SysAnnouncement
     protected $accessUrlId;
 
     /**
+     * @var int
+     *
+     * @ORM\Column(name="career_id", type="integer", nullable=true)
+     */
+    protected $careerId;
+
+    /**
+     * @var int
+     *
+     * @ORM\Column(name="promotion_id", type="integer", nullable=true)
+     */
+    protected $promotionId;
+
+    /**
      * SysAnnouncement constructor.
      */
     public function __construct()
@@ -118,6 +132,8 @@ class SysAnnouncement
         $this->visibleSessionAdmin = 0;
         $this->visibleStudent = 0;
         $this->visibleTeacher = 0;
+        $this->careerId = 0;
+        $this->promotionId = 0;
     }
 
     /**

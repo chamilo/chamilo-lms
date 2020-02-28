@@ -1,17 +1,17 @@
-<h2 class="page-header">{{ 'Required sessions'|trans }}</h2>
+<h2 class="page-header">{{ 'RequiredCourses'|trans }}</h2>
 
-{% for item in sequences %}
+{% for key, item in sequences %}
     <h4>{{ item.name }}</h4>
     <div id="parents">
-        {% for session in item.requirements %}
+        {% for course in item.requirements %}
             <div class="parent">
                 <div class="big-icon">
                     <img src="{{ 'item-sequence.png'|icon(48) }}" width="48" height="48">
-                    <p class="sequence-course">{{ session.name }}</p>
+                    <p class="sequence-course">{{ course.name }}</p>
 
                     {% if _u.logged %}
-                        <span class="label {{ session.status ? 'label-success' : 'label-danger' }}">
-                            {% if session.status %}
+                        <span class="label {{ course.status ? 'label-success' : 'label-danger' }}">
+                            {% if course.status %}
                                 <em class="fa fa-check"></em> {{ 'Complete'|trans }}
                             {% else %}
                                 <em class="fa fa-exclamation-triangle"></em> {{ 'Incomplete'|trans }}
@@ -26,6 +26,20 @@
             {% endif %}
         {% endfor %}
     </div>
+
+    <script>
+        var url = '{{ _p.web_ajax }}sequence.ajax.php?type={{ sequence_type }}';
+        var sequenceId = '{{ key }}';
+        $(function() {
+            $.ajax({
+                url: url + '&a=graph&sequence_id=' + sequenceId,
+                success: function (data) {
+                    $('#show_graph').append(data);
+                }
+            });
+        });
+    </script>
+    <div id="show_graph">{{ graph }}</div>
 {% endfor %}
 
 {% if allow_subscription %}

@@ -75,8 +75,8 @@ if (isset($_REQUEST['load_ajax'])) {
             echo get_lang('There was an error.');
         } else {
             $origin_course_code = $combination_result['course_code'];
-            $origin_session_id = intval($combination_result['session_id']);
-            $new_session_id = intval($_REQUEST['session_id']);
+            $origin_session_id = (int) $combination_result['session_id'];
+            $new_session_id = (int) $_REQUEST['session_id'];
             $session = $em->find('ChamiloCoreBundle:Session', $new_session_id);
 
             //if (!isset($_REQUEST['view_stat'])) {
@@ -85,7 +85,7 @@ if (isset($_REQUEST['load_ajax'])) {
                 exit;
             }
             //}
-            $user_id = intval($_REQUEST['user_id']);
+            $user_id = (int) $_REQUEST['user_id'];
 
             $new_course_list = SessionManager::get_course_list_by_session_id($new_session_id);
 
@@ -265,9 +265,9 @@ if (isset($_REQUEST['load_ajax'])) {
                 $list = [];
                 while ($row = Database::fetch_array($res, 'ASSOC')) {
                     //Checking if the LP exist in the new session
-                    if (in_array($row['lp_id'], array_keys($flat_list))) {
+                    //if (in_array($row['lp_id'], array_keys($flat_list))) {
                         $list[$row['id']] = $row;
-                    }
+                    //}
                 }
 
                 if (!empty($list)) {
@@ -318,10 +318,11 @@ if (isset($_REQUEST['load_ajax'])) {
                     $list = [];
                     while ($row = Database::fetch_array($res, 'ASSOC')) {
                         //Checking if the LP exist in the new session
-                        if (in_array($row['lp_id'], array_keys($flat_list))) {
+                        //if (in_array($row['lp_id'], array_keys($flat_list))) {
                             $list[$row['id']] = $row;
-                        }
+                        //}
                     }
+
                     if (!empty($list)) {
                         foreach ($list as $id => $data) {
                             //Getting all information of that lp_item_id

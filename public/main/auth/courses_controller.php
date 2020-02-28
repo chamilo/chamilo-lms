@@ -2,6 +2,7 @@
 
 /* For licensing terms, see /license.txt */
 
+use Chamilo\CoreBundle\Repository\SequenceResourceRepository;
 use Chamilo\CoreBundle\Entity\SequenceResource;
 use Chamilo\CoreBundle\Entity\SessionRelCourse;
 use Chamilo\CoreBundle\Entity\Tag;
@@ -222,33 +223,15 @@ class CoursesController
         $btnBing = false
     ) {
         $sessionId = (int) $sessionId;
+
         if ($btnBing) {
             $btnBing = 'btn-lg btn-block';
         } else {
             $btnBing = 'btn-sm';
         }
-        if ($checkRequirements) {
-            $url = api_get_path(WEB_AJAX_PATH);
-            $url .= 'sequence.ajax.php?';
-            $url .= http_build_query([
-                'a' => 'get_requirements',
-                'id' => $sessionId,
-                'type' => SequenceResource::SESSION_TYPE,
-            ]);
 
-            return Display::toolbarButton(
-                get_lang('Check requirements'),
-                $url,
-                'shield',
-                'info',
-                [
-                    'class' => $btnBing.' ajax',
-                    'data-title' => get_lang('Check requirements'),
-                    'data-size' => 'md',
-                    'title' => get_lang('Check requirements'),
-                ],
-                $includeText
-            );
+        if ($checkRequirements) {
+            return $this->getRequirements($sessionId, SequenceResource::SESSION_TYPE, $includeText, $btnBing);
         }
 
         $catalogSessionAutoSubscriptionAllowed = false;
@@ -310,6 +293,36 @@ class CoursesController
         return $result;
     }
 
+    public function getRequirements($id, $type, $includeText, $btnBing)
+    {
+        $id = (int) $id;
+        $type = (int) $type;
+
+        $url = api_get_path(WEB_AJAX_PATH);
+        $url .= 'sequence.ajax.php?';
+        $url .= http_build_query(
+            [
+                'a' => 'get_requirements',
+                'id' => $id,
+                'type' => $type,
+            ]
+        );
+
+        return Display::toolbarButton(
+            get_lang('CheckRequirements'),
+            $url,
+            'shield',
+            'info',
+            [
+                'class' => $btnBing.' ajax',
+                'data-title' => get_lang('CheckRequirements'),
+                'data-size' => 'md',
+                'title' => get_lang('CheckRequirements'),
+            ],
+            $includeText
+        );
+    }
+
     /**
      * Generate a label if the user has been  registered in session.
      *
@@ -348,11 +361,9 @@ class CoursesController
     /**
      * Return Session catalog rendered view.
      *
-     * @param string $action
-     * @param string $nameTools
      * @param array  $limit
      */
-    public function sessionList($action, $nameTools, $limit = [])
+    public function sessionList($limit = [])
     {
         $date = isset($_POST['date']) ? $_POST['date'] : date('Y-m-d');
         $hiddenLinks = isset($_GET['hidden_links']) ? 1 == $_GET['hidden_links'] : false;
@@ -388,6 +399,7 @@ class CoursesController
         $tpl->assign('web_session_courses_ajax_url', api_get_path(WEB_AJAX_PATH).'course.ajax.php');
         $tpl->assign('sessions', $sessionsBlocks);
         $tpl->assign('already_subscribed_label', $this->getAlreadyRegisteredInSessionLabel());
+        $tpl->assign('catalog_settings', self::getCatalogSearchSettings());
 
         $layout = $tpl->get_template('auth/session_catalog.html.twig');
         $content = $tpl->fetch($layout);
@@ -426,11 +438,31 @@ class CoursesController
         $tpl->assign('search_token', Security::get_token());
         $tpl->assign('keyword', Security::remove_XSS($keyword));
         $tpl->assign('sessions', $sessionsBlocks);
+        $tpl->assign('catalog_settings', self::getCatalogSearchSettings());
 
         $layout = $tpl->get_template('auth/session_catalog.html.twig');
         $content = $tpl->fetch($layout);
         $tpl->assign('content', $content);
         $tpl->display_one_col_template();
+    }
+
+    public static function getCatalogSearchSettings()
+    {
+        $settings = api_get_configuration_value('catalog_settings');
+        if (empty($settings)) {
+            // Default everything is visible
+            $settings = [
+                'sessions' => [
+                    'by_title' => true,
+                    'by_date' => true,
+                    'by_tag' => true,
+                    'show_session_info' => true,
+                    'show_session_date' => true,
+                ],
+            ];
+        }
+
+        return $settings;
     }
 
     /**
@@ -581,8 +613,8 @@ class CoursesController
             );
 
             $hasRequirements = false;
-            foreach ($sequences['sequences'] as $sequence) {
-                if (0 === count($sequence['requirements'])) {
+            foreach ($sequences as $sequence) {
+                if (count($sequence['requirements']) === 0) {
                     continue;
                 }
                 $hasRequirements = true;
@@ -646,8 +678,7 @@ class CoursesController
                 ),
             ];
 
-            $sessionsBlock = array_merge($sessionsBlock, $sequences);
-            $sessionsBlocks[] = $sessionsBlock;
+            $sessionsBlocks[] = array_merge($sessionsBlock, $sequences);
         }
 
         return $sessionsBlocks;

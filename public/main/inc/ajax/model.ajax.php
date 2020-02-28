@@ -64,6 +64,7 @@ if (!in_array(
         'get_learning_path_calendars',
         'get_usergroups_users',
         'get_calendar_users',
+        'get_exercise_categories',
     ]
 ) && !isset($_REQUEST['from_course_session'])) {
     api_protect_admin_script(true);
@@ -262,6 +263,11 @@ if (!$sidx) {
 //@todo rework this
 
 switch ($action) {
+    case 'get_exercise_categories':
+        $manager = new ExerciseCategoryManager();
+        $courseId = isset($_REQUEST['c_id']) ? $_REQUEST['c_id'] : 0;
+        $count = $manager->getCourseCount($courseId);
+        break;
     case 'get_calendar_users':
         $calendarPlugin = LearningCalendarPlugin::create();
         $id = isset($_REQUEST['id']) ? $_REQUEST['id'] : 0;
@@ -857,6 +863,21 @@ $is_allowedToEdit = api_is_allowed_to_edit(null, true) || api_is_allowed_to_edit
 $columns = [];
 
 switch ($action) {
+    case 'get_exercise_categories':
+        api_protect_course_script();
+        if (!api_is_allowed_to_edit()) {
+            api_not_allowed(true);
+        }
+
+        $columns = ['name', 'actions'];
+        $manager = new ExerciseCategoryManager();
+
+        $result = $manager->get_all([
+            'where' => ['c_id = ? ' => $courseId],
+            'order' => "$sidx $sord",
+            'LIMIT' => "$start , $limit",
+        ]);
+        break;
     case 'get_calendar_users':
         $columns = ['firstname', 'lastname', 'exam'];
         $result = $calendarPlugin->getUsersPerCalendar($id);
@@ -875,7 +896,7 @@ switch ($action) {
                 'calendar_id',
             ];
         }
-        $result = $usergroup->getUserGroupUsers($id);
+        $result = $usergroup->getUserGroupUsers($id, false, $start, $limit);
         break;
     case 'get_learning_path_calendars':
         $columns = ['title', 'total_hours', 'minutes_per_day', 'actions'];
@@ -1122,6 +1143,9 @@ switch ($action) {
             'currently_learning',
             'rank',
         ];
+        if (trim($whereCondition) === '1 = 1') {
+            $whereCondition = '';
+        }
         $result = $skill->getUserListSkillRanking(
             $start,
             $limit,
@@ -2248,6 +2272,7 @@ $allowed_actions = [
     'get_learning_path_calendars',
     'get_usergroups_users',
     'get_calendar_users',
+    'get_exercise_categories',
 ];
 
 // 5. Creating an obj to return a json

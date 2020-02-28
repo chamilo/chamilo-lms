@@ -207,6 +207,13 @@ class CQuiz extends AbstractResource implements ResourceInterface
     /**
      * @var int
      *
+     * @ORM\Column(name="prevent_backwards", type="integer", nullable=false, options={"default":0})
+     */
+    protected $preventBackwards;
+
+    /**
+     * @var int
+     *
      * @ORM\Column(name="question_selection_type", type="integer", nullable=true)
      */
     protected $questionSelectionType;
@@ -263,6 +270,7 @@ class CQuiz extends AbstractResource implements ResourceInterface
         $this->showPreviousButton = true;
         $this->notifications = '';
         $this->autoLaunch = 0;
+        $this->preventBackwards = 0;
     }
 
     public function __toString(): string

@@ -1,4 +1,5 @@
 <?php
+
 /* For licensing terms, see /license.txt */
 
 /**
@@ -110,16 +111,16 @@ class SystemAnnouncementManager
                         <div class="system_announcement">
                             <div class="system_announcement_title">
                                 <a name="ann'.$announcement->id.'" href="'.$show_url.'">'.
-                                $announcement->title.'</a>
+                        $announcement->title.'</a>
                             </div>
                             <div class="system_announcement_date">'.$display_date.'</div>
                         </div>';
                 } else {
                     echo '<div class="system_announcement">
                             <div class="system_announcement_title">'
-                                .$announcement->display_date.'
+                        .$announcement->display_date.'
                                 <a name="ann'.$announcement->id.'" href="'.$url.'?'.$query_string.'#ann'.$announcement->id.'">'.
-                                    $announcement->title.'
+                        $announcement->title.'
                                 </a>
                             </div>';
                 }
@@ -206,7 +207,7 @@ class SystemAnnouncementManager
                         <div class="system_announcement_date">'.$display_date.'</div>
                         <br />
                         <div class="system_announcement_content">'
-                            .$announcement->content.'
+                    .$announcement->content.'
                         </div>
                       </div><br />';
                 $content .= '</tr></td>';
@@ -417,8 +418,8 @@ class SystemAnnouncementManager
         }
 
         if (($date_end_to_compare[1] ||
-            $date_end_to_compare[2] ||
-            $date_end_to_compare[0]) &&
+                $date_end_to_compare[2] ||
+                $date_end_to_compare[0]) &&
             !checkdate($date_end_to_compare[1], $date_end_to_compare[2], $date_end_to_compare[0])
         ) {
             Display::addFlash(
@@ -630,8 +631,8 @@ class SystemAnnouncementManager
         }
 
         if (($date_end_to_compare[1] ||
-            $date_end_to_compare[2] ||
-            $date_end_to_compare[0]) &&
+                $date_end_to_compare[2] ||
+                $date_end_to_compare[0]) &&
             !checkdate($date_end_to_compare[1], $date_end_to_compare[2], $date_end_to_compare[0])
         ) {
             echo Display::return_message(get_lang('Invalid end date was given.'));
@@ -860,6 +861,11 @@ class SystemAnnouncementManager
         // Expiration date
         $sql .= " AND (expiration_date = '' OR expiration_date IS NULL OR expiration_date > '$now') ";
 
+        if ((empty($teacher) || $teacher == '0') && (empty($student) || $student == '0')) {
+            return true;
+        }
+
+        $userListToFilter = [];
         // @todo check if other filters will apply for the career/promotion option.
         if (isset($announcement->career_id) && !empty($announcement->career_id)) {
             $promotion = new Promotion();
@@ -868,23 +874,33 @@ class SystemAnnouncementManager
                 $promotionList = [];
                 $promotionList[] = $promotion->get($announcement->promotion_id);
             }
+
             if (!empty($promotionList)) {
                 foreach ($promotionList as $promotion) {
                     $sessionList = SessionManager::get_all_sessions_by_promotion($promotion['id']);
                     foreach ($sessionList as $session) {
-                        $users = SessionManager::get_users_by_session($session['id'], 0);
-                        foreach ($users as $user) {
-                            MessageManager::send_message_simple($user['user_id'], $title, $content);
+                        if ($teacher) {
+                            $users = SessionManager::get_users_by_session($session['id'], 2);
+                            if (!empty($users)) {
+                                $userListToFilter = array_merge($users, $userListToFilter);
+                            }
+                        }
+
+                        if ($student) {
+                            $users = SessionManager::get_users_by_session($session['id'], 0);
+                            if (!empty($users)) {
+                                $userListToFilter = array_merge($users, $userListToFilter);
+                            }
                         }
                     }
                 }
             }
-
-            return true;
         }
 
-        if ((empty($teacher) || '0' == $teacher) && (empty($student) || '0' == $student)) {
-            return true;
+        if (!empty($userListToFilter)) {
+            $userListToFilter = array_column($userListToFilter, 'user_id');
+            $userListToFilterToString = implode("', '", $userListToFilter);
+            $sql .= " AND (u.user_id IN ('$userListToFilterToString') ) ";
         }
 
         $result = Database::query($sql);
@@ -941,17 +957,66 @@ class SystemAnnouncementManager
             $sql .= " AND access_url_id IN ('1', '$current_url_id') ";
         }
 
+        $checkCareers = api_get_configuration_value('allow_careers_in_global_announcements') === true;
+
+        $userId = api_get_user_id();
+
+        $promotion = new Promotion();
         $sql .= ' ORDER BY date_start DESC';
         $result = Database::query($sql);
         $announcements = [];
-
         if (Database::num_rows($result) > 0) {
             while ($announcement = Database::fetch_object($result)) {
+                if ($checkCareers && !empty($announcement->career_id)) {
+                    $promotionList = [];
+                    if (!empty($announcement->promotion_id)) {
+                        $promotionList[] = $announcement->promotion_id;
+                    } else {
+                        $promotionList = $promotion->get_all_promotions_by_career_id($announcement->career_id);
+                        if (!empty($promotionList)) {
+                            $promotionList = array_column($promotionList, 'id');
+                        }
+                    }
+
+                    $show = false;
+                    foreach ($promotionList as $promotionId) {
+                        $sessionList = SessionManager::get_all_sessions_by_promotion($promotionId);
+                        foreach ($sessionList as $session) {
+                            $sessionId = $session['id'];
+                            // Check student
+                            if ($visible === self::VISIBLE_STUDENT &&
+                                SessionManager::isUserSubscribedAsStudent($sessionId, $userId)
+                            ) {
+                                $show = true;
+                                break 2;
+                            }
+
+                            if ($visible === self::VISIBLE_TEACHER &&
+                                SessionManager::user_is_general_coach($userId, $sessionId)
+                            ) {
+                                $show = true;
+                                break 2;
+                            }
+
+                            // Check course coach
+                            $coaches = SessionManager::getCoachesBySession($sessionId);
+
+                            if ($visible === self::VISIBLE_TEACHER && in_array($userId, $coaches)) {
+                                $show = true;
+                                break 2;
+                            }
+                        }
+                    }
+
+                    if (false === $show) {
+                        continue;
+                    }
+                }
+
                 $announcementData = [
                     'id' => $announcement->id,
                     'title' => $announcement->title,
                     'content' => $announcement->content,
-                    'picture' => self::getPictureAnnouncement($announcement->id),
                     'readMore' => null,
                 ];
 

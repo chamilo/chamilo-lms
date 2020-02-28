@@ -1413,6 +1413,14 @@ if (!empty($error)) {
                         break;
                     }
                 }
+
+                if (1 === $exerciseInSession->getPreventBackwards()) {
+                    if (isset($attempt_list[$questionId])) {
+                        echo Display::return_message(get_lang('AlreadyAnswered'));
+                        $i++;
+                        break;
+                    }
+                }
             }
         }
 

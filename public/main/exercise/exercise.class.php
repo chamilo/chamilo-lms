@@ -97,6 +97,7 @@ class Exercise
     public $autolaunch;
     public $exerciseCategoryId;
     public $pageResultConfiguration;
+    public $preventBackwards;
 
     /**
      * Constructor of the class.
@@ -137,6 +138,7 @@ class Exercise
         $this->notifications = [];
         $this->exerciseCategoryId = 0;
         $this->pageResultConfiguration;
+        $this->preventBackwards = 0;
 
         if (!empty($courseId)) {
             $courseInfo = api_get_course_info_by_id($courseId);
@@ -208,7 +210,8 @@ class Exercise
             $this->questionSelectionType = isset($object->question_selection_type) ? $object->question_selection_type : null;
             $this->hideQuestionTitle = isset($object->hide_question_title) ? (int) $object->hide_question_title : 0;
             $this->autolaunch = isset($object->autolaunch) ? (int) $object->autolaunch : 0;
-            $this->exerciseCategoryId = isset($object->exercise_category_id) ? (int) $object->exercise_category_id : 0;
+            $this->exerciseCategoryId = isset($object->exercise_category_id) ? (int) $object->exercise_category_id : null;
+            $this->preventBackwards = isset($object->prevent_backwards) ? (int) $object->prevent_backwards : 0;
 
             $this->notifications = [];
             if (!empty($object->notifications)) {
@@ -1590,6 +1593,10 @@ class Exercise
                 $paramsExtra['show_previous_button'] = $this->showPreviousButton();
             }
 
+            if (api_get_configuration_value('quiz_prevent_backwards_move')) {
+                $paramsExtra['prevent_backwards'] = $this->getPreventBackwards();
+            }
+
             $allow = api_get_configuration_value('allow_exercise_categories');
             if (true === $allow) {
                 if (!empty($this->getExerciseCategoryId())) {
@@ -1670,6 +1677,10 @@ class Exercise
                 if (!empty($this->getExerciseCategoryId())) {
                     $params['exercise_category_id'] = $this->getExerciseCategoryId();
                 }
+            }
+
+            if (api_get_configuration_value('quiz_prevent_backwards_move')) {
+                $params['prevent_backwards'] = $this->getPreventBackwards();
             }
 
             $allow = api_get_configuration_value('allow_quiz_show_previous_button_setting');
@@ -2304,6 +2315,15 @@ class Exercise
                 ]
             );
             $form->addElement('html', '</div>');
+
+            if (api_get_configuration_value('quiz_prevent_backwards_move')) {
+                $form->addCheckBox(
+                    'prevent_backwards',
+                    null,
+                    get_lang('QuizPreventBackwards')
+                );
+            }
+
             $form->addElement(
                 'text',
                 'pass_percentage',
@@ -2425,6 +2445,7 @@ class Exercise
                 $defaults['hide_question_title'] = $this->getHideQuestionTitle();
                 $defaults['show_previous_button'] = $this->showPreviousButton();
                 $defaults['exercise_category_id'] = $this->getExerciseCategoryId();
+                $defaults['prevent_backwards'] = $this->getPreventBackwards();
 
                 if (!empty($this->start_time)) {
                     $defaults['activate_start_date_check'] = 1;
@@ -2605,6 +2626,7 @@ class Exercise
         $this->setNotifications($form->getSubmitValue('notifications'));
         $this->setExerciseCategoryId($form->getSubmitValue('exercise_category_id'));
         $this->setPageResultConfiguration($form->getSubmitValues());
+        $this->preventBackwards = (int) $form->getSubmitValue('prevent_backwards');
 
         $this->start_time = null;
         if (1 == $form->getSubmitValue('activate_start_date_check')) {
@@ -3196,7 +3218,7 @@ class Exercise
                                 }
                             }
 
-                            if ($showPreview) {
+                            if ($showPreview && 0 === $this->getPreventBackwards()) {
                                 $buttonList[] = Display::button(
                                     'previous_question_and_save',
                                     get_lang('Previous question'),
@@ -7962,6 +7984,16 @@ class Exercise
         }
 
         return $this->showPreviousButton;
+    }
+
+    public function getPreventBackwards()
+    {
+        $allow = api_get_configuration_value('quiz_prevent_backwards_move');
+        if ($allow === false) {
+            return 0;
+        }
+
+        return (int) $this->preventBackwards;
     }
 
     /**

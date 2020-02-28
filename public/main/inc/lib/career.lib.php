@@ -874,6 +874,7 @@ class Career extends Model
         $graphHtml = '';
         /** @var Vertex $vertex */
         foreach ($vertexList as $vertex) {
+            $borderColor = 'green';
             $column = $vertex->getAttribute('Column');
             $realRow = $originalRow = $vertex->getAttribute('Row');
             if ($addRow) {
@@ -897,6 +898,11 @@ class Career extends Model
             $content .= '<div class="pull-right">['.$id.']</div>';
 
             if (!empty($userResult) && isset($userResult[$id])) {
+                $lastItem = end($userResult[$id]);
+                if ($lastItem && isset($lastItem['BgColor']) && !empty($lastItem['BgColor'])) {
+                    $color = $lastItem['BgColor'].'; color: '.$lastItem['Color'];
+                    $borderColor = $lastItem['BorderColor'];
+                }
                 $results = '';
                 $size = 2;
                 foreach ($userResult[$id] as $resultId => $iconData) {
@@ -978,7 +984,7 @@ class Career extends Model
             $width = $graph->blockWidth - $graph->xGap;
             $height = $graph->blockHeight - $graph->yGap;
 
-            $style = 'text;html=1;strokeColor=green;fillColor=#ffffff;overflow=fill;rounded=0;align=left;';
+            $style = 'text;html=1;strokeColor='.$borderColor.';fillColor=#ffffff;overflow=fill;rounded=0;align=left;';
 
             $panel = str_replace(["\n", "\r"], '', $panel);
             $vertexData = "var v$id = graph.insertVertex(parent, null, '".addslashes($panel)."', $x, $y, $width, $height, '$style');";

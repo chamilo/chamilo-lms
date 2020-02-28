@@ -382,7 +382,7 @@ class UserGroup extends Model
             $select = 'count(u.id) as count';
         }
 
-        if ($this->getUseMultipleURL()) {
+        if ($this->getUseMultipleUrl()) {
             $sql = "SELECT $select
                     FROM {$this->usergroup_rel_course_table} usergroup
                     INNER JOIN {$this->table} u

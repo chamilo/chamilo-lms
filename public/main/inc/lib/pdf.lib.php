@@ -149,6 +149,8 @@ class PDF
         $html = $tpl->fetch($tableTemplate);
         $html = api_utf8_encode($html);
 
+        //echo $html;exit;
+
         if ($returnHtml) {
             return $html;
         }
@@ -414,7 +416,7 @@ class PDF
         );
 
         if (!empty($courseInfo['path'])) {
-            $document_path = api_get_path(SYS_COURSE_PATH).$courseInfo['path'].'/document/';
+            //$document_path = api_get_path(SYS_COURSE_PATH).$courseInfo['path'].'/document/';
 
             $doc = new DOMDocument();
             @$doc->loadHTML($document_html);
@@ -436,7 +438,7 @@ class PDF
                             if (false === strpos($old_src, '/main/inc/lib/') &&
                                 false === strpos($old_src, '/app/upload/')
                             ) {
-                                $old_src_fixed = str_replace(
+                                /*$old_src_fixed = str_replace(
                                     api_get_path(REL_COURSE_PATH).$courseInfo['path'].'/document/',
                                     '',
                                     $old_src
@@ -448,7 +450,7 @@ class PDF
                                 );
                                 $new_path = $document_path.$old_src_fixed;
                                 $document_html = str_replace($old_src, $new_path, $document_html);
-                                $replaced[] = $old_src;
+                                $replaced[] = $old_src;*/
                             }
                         }
                     }
@@ -478,8 +480,8 @@ class PDF
         if ($addDefaultCss) {
             $basicStyles = [
                 api_get_bootstrap_and_font_awesome(true),
-                api_get_path(SYS_PATH).'web/css/base.css',
-                api_get_path(SYS_PATH).'web/css/themes/'.api_get_visual_theme().'/default.css',
+                api_get_path(SYS_PUBLIC_PATH).'build/css/app.css',
+                api_get_path(SYS_PUBLIC_PATH).'build/css/themes/'.api_get_visual_theme().'/default.css',
             ];
             foreach ($basicStyles as $style) {
                 $cssContent = file_get_contents($style);

@@ -703,6 +703,11 @@ class Course extends AbstractResource implements ResourceInterface
         return (string) $this->title;
     }
 
+    public function getName()
+    {
+        return $this->getTitle();
+    }
+
     /**
      * @return string
      */

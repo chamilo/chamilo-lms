@@ -1,4 +1,5 @@
 <?php
+
 /* For licensing terms, see /license.txt */
 
 /**
@@ -16,7 +17,7 @@ $htmlHeadXtra[] = api_get_jqgrid_js();
 
 $action = isset($_REQUEST['action']) ? $_REQUEST['action'] : null;
 $idChecked = isset($_REQUEST['idChecked']) ? $_REQUEST['idChecked'] : null;
-$list_type = isset($_REQUEST['list_type']) ? $_REQUEST['list_type'] : 'custom';
+$list_type = isset($_REQUEST['list_type']) ? $_REQUEST['list_type'] : 'simple';
 
 $tool_name = get_lang('SessionList');
 Display::display_header($tool_name);
@@ -34,17 +35,15 @@ $sessionFilter = new FormValidator(
 $courseSelect = $sessionFilter->addElement(
     'select_ajax',
     'course_name',
-    get_lang('Search courses'),
+    get_lang('SearchCourse'),
     null,
-    [
-        'id' => 'course_name',
-        'url' => api_get_path(WEB_AJAX_PATH).'course.ajax.php?a=search_course',
-    ]
+    ['url' => api_get_path(WEB_AJAX_PATH).'course.ajax.php?a=search_course']
 );
 
 if (!empty($courseId)) {
     $courseInfo = api_get_course_info_by_id($courseId);
     $parents = CourseCategory::getParentsToString($courseInfo['categoryCode']);
+
     $courseSelect->addOption($parents.$courseInfo['title'], $courseInfo['code'], ['selected' => 'selected']);
 }
 
@@ -54,9 +53,11 @@ $actions = '
 $(function() {
     $("#course_name").on("change", function() {
        var courseId = $(this).val();
+
        if (!courseId) {
         return;
        }
+
        window.location = "'.$url.'?course_id="+courseId;
     });
 });
@@ -105,10 +106,6 @@ $extra_params['autowidth'] = 'true';
 // height auto
 $extra_params['height'] = 'auto';
 
-// Custom params
-$extra_params['sortname'] = 'display_end_date';
-$extra_params['sortorder'] = 'desc';
-
 if (!isset($_GET['keyword'])) {
     $extra_params['postData'] = [
         'filters' => [
@@ -123,10 +120,10 @@ $hideSearch = api_get_configuration_value('hide_search_form_in_session_list');
 //With this function we can add actions to the jgrid (edit, delete, etc)
 $action_links = 'function action_formatter(cellvalue, options, rowObject) {
      return \'<a href="session_edit.php?page=resume_session.php&id=\'+options.rowId+\'">'.Display::return_icon('edit.png', get_lang('Edit'), '', ICON_SIZE_SMALL).'</a>'.
-    '&nbsp;<a href="add_users_to_session.php?page=session_list.php&id_session=\'+options.rowId+\'">'.Display::return_icon('user_subscribe_session.png', get_lang('Subscribe users to this session'), '', ICON_SIZE_SMALL).'</a>'.
-    '&nbsp;<a href="add_courses_to_session.php?page=session_list.php&id_session=\'+options.rowId+\'">'.Display::return_icon('courses_to_session.png', get_lang('Add courses to this session'), '', ICON_SIZE_SMALL).'</a>'.
-    '&nbsp;<a onclick="javascript:if(!confirm('."\'".addslashes(api_htmlentities(get_lang("Please confirm your choice"), ENT_QUOTES))."\'".')) return false;"  href="session_list.php?action=copy&idChecked=\'+options.rowId+\'">'.Display::return_icon('copy.png', get_lang('Copy'), '', ICON_SIZE_SMALL).'</a>'.
-    '&nbsp;<a onclick="javascript:if(!confirm('."\'".addslashes(api_htmlentities(get_lang("Please confirm your choice"), ENT_QUOTES))."\'".')) return false;"  href="session_list.php?action=delete&idChecked=\'+options.rowId+\'">'.Display::return_icon('delete.png', get_lang('Delete'), '', ICON_SIZE_SMALL).'</a>'.
+    '&nbsp;<a href="add_users_to_session.php?page=session_list.php&id_session=\'+options.rowId+\'">'.Display::return_icon('user_subscribe_session.png', get_lang('SubscribeUsersToSession'), '', ICON_SIZE_SMALL).'</a>'.
+    '&nbsp;<a href="add_courses_to_session.php?page=session_list.php&id_session=\'+options.rowId+\'">'.Display::return_icon('courses_to_session.png', get_lang('SubscribeCoursesToSession'), '', ICON_SIZE_SMALL).'</a>'.
+    '&nbsp;<a onclick="javascript:if(!confirm('."\'".addslashes(api_htmlentities(get_lang("ConfirmYourChoice"), ENT_QUOTES))."\'".')) return false;"  href="session_list.php?action=copy&idChecked=\'+options.rowId+\'">'.Display::return_icon('copy.png', get_lang('Copy'), '', ICON_SIZE_SMALL).'</a>'.
+    '&nbsp;<a onclick="javascript:if(!confirm('."\'".addslashes(api_htmlentities(get_lang("ConfirmYourChoice"), ENT_QUOTES))."\'".')) return false;"  href="session_list.php?action=delete&idChecked=\'+options.rowId+\'">'.Display::return_icon('delete.png', get_lang('Delete'), '', ICON_SIZE_SMALL).'</a>'.
     '\';
 }';
 
@@ -137,7 +134,8 @@ $orderUrl = api_get_path(WEB_AJAX_PATH).'session.ajax.php?a=order';
 ?>
     <script>
         function setSearchSelect(columnName) {
-            $("#sessions").jqGrid('setColProp', columnName, {});
+            $("#sessions").jqGrid('setColProp', columnName, {
+            });
         }
         var added_cols = [];
         var original_cols = [];
@@ -146,7 +144,7 @@ $orderUrl = api_get_path(WEB_AJAX_PATH).'session.ajax.php?a=order';
             // Cleaning
             for (key in added_cols) {
                 grid.hideCol(key);
-            }
+            };
             grid.showCol('name');
             grid.showCol('display_start_date');
             grid.showCol('display_end_date');
@@ -251,7 +249,7 @@ $orderUrl = api_get_path(WEB_AJAX_PATH).'session.ajax.php?a=order';
             original_cols = grid.jqGrid('getGridParam', 'colModel');
 
             <?php if ($allowOrder) {
-                ?>
+            ?>
             options = {
                 update: function (e, ui) {
                     var rowNum = jQuery("#sessions").getGridParam('rowNum');
@@ -285,7 +283,7 @@ $orderUrl = api_get_path(WEB_AJAX_PATH).'session.ajax.php?a=order';
 
             <?php
             // Create the searching dialog.
-            if (true !== $hideSearch) {
+            if ($hideSearch !== true) {
                 echo 'grid.searchGrid(prmSearch);';
             }
             ?>
@@ -295,7 +293,7 @@ $orderUrl = api_get_path(WEB_AJAX_PATH).'session.ajax.php?a=order';
             searchDialogAll.addClass("table");
             var searchDialog = $("#searchmodfbox_"+grid[0].id);
             searchDialog.addClass("ui-jqgrid ui-widget ui-widget-content ui-corner-all");
-            searchDialog.css({position:"absolute", "z-index":"100", "float":"left", "top":"55%", "left" : "25%", "padding" : "5px", "border": "1px solid #CCC"})
+            searchDialog.css({position:"adsolute", "z-index":"100", "float":"left", "top":"55%", "left" : "25%", "padding" : "5px", "border": "1px solid #CCC"})
             var gbox = $("#gbox_"+grid[0].id);
             gbox.before(searchDialog);
             gbox.css({clear:"left"});
@@ -318,12 +316,12 @@ $orderUrl = api_get_path(WEB_AJAX_PATH).'session.ajax.php?a=order';
 <?php
 
 echo '<a href="'.api_get_path(WEB_CODE_PATH).'session/session_add.php">'.
-    Display::return_icon('new_session.png', get_lang('Add a training session'), '', ICON_SIZE_MEDIUM).'</a>';
+    Display::return_icon('new_session.png', get_lang('AddSession'), '', ICON_SIZE_MEDIUM).'</a>';
 if (api_is_platform_admin()) {
     echo '<a href="'.api_get_path(WEB_CODE_PATH).'session/add_many_session_to_category.php">'.
-        Display::return_icon('session_to_category.png', get_lang('Add a training sessionsInCategories'), '', ICON_SIZE_MEDIUM).'</a>';
+        Display::return_icon('session_to_category.png', get_lang('AddSessionsInCategories'), '', ICON_SIZE_MEDIUM).'</a>';
     echo '<a href="'.api_get_path(WEB_CODE_PATH).'session/session_category_list.php">'.
-        Display::return_icon('folder.png', get_lang('Sessions categories list'), '', ICON_SIZE_MEDIUM).'</a>';
+        Display::return_icon('folder.png', get_lang('ListSessionCategory'), '', ICON_SIZE_MEDIUM).'</a>';
 }
 
 /*if ($list_type == 'complete') {
@@ -374,7 +372,12 @@ $tabs = [
     ],
 ];
 
-echo Display::tabsOnlyLink($tabs, 1);
+$default = 2;
+if ($list_type === 'complete') {
+    $default = 3;
+}
+
+echo Display::tabsOnlyLink($tabs, $default);
 echo '<div id="session-table" class="table-responsive">';
 echo Display::grid_html('sessions');
 echo '</div>';

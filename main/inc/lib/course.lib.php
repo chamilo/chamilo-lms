@@ -1,4 +1,5 @@
 <?php
+
 /* For licensing terms, see /license.txt*/
 
 use Chamilo\CoreBundle\Entity\Course;
@@ -295,6 +296,10 @@ class CourseManager
                     user_id = $userId"
             )
         );
+
+        if (empty($result['status'])) {
+            return false;
+        }
 
         return $result['status'];
     }
@@ -4083,11 +4088,7 @@ class CourseManager
             return '';
         }
 
-        $userInCourseStatus = self::getUserInCourseStatus(
-            $user_id,
-            $course_info['real_id']
-        );
-
+        $userInCourseStatus = self::getUserInCourseStatus($user_id, $course_info['real_id']);
         $course_info['status'] = empty($session_id) ? $userInCourseStatus : STUDENT;
         $course_info['id_session'] = $session_id;
 
@@ -4174,7 +4175,13 @@ class CourseManager
         if (!empty($thumbnails)) {
             $params['html_image'] = Display::img($thumbnails, $course_info['name'], ['class' => 'img-responsive']);
         } else {
-            $params['html_image'] = Display::return_icon('session.png', $course_info['name'], ['class' => 'img-responsive'], ICON_SIZE_LARGE, $course_info['name']);
+            $params['html_image'] = Display::return_icon(
+                'session.png',
+                $course_info['name'],
+                ['class' => 'img-responsive'],
+                ICON_SIZE_LARGE,
+                $course_info['name']
+            );
         }
         $params['link'] = $session_url;
 
@@ -4183,16 +4190,11 @@ class CourseManager
         $entityManager = Database::getManager();
         /** @var SequenceResourceRepository $repo */
         $repo = $entityManager->getRepository('ChamiloCoreBundle:SequenceResource');
-        /*$sequences = $repo->getRequirementsAndDependenciesWithinSequences(
-            $course_info['real_id'],
-            SequenceResource::COURSE_TYPE
-        );*/
 
         $sequences = $repo->getRequirements($course_info['real_id'], SequenceResource::COURSE_TYPE);
         $sequenceList = $repo->checkRequirementsForUser($sequences, SequenceResource::COURSE_TYPE, $user_id);
         $completed = $repo->checkSequenceAreCompleted($sequenceList);
 
-        //var_dump($course_info['real_id'], $completed);
         $params['completed'] = $completed;
         $params['requirements'] = '';
 

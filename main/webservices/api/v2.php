@@ -79,7 +79,6 @@ try {
                 : [];
 
             $messagesId = array_filter($messagesId);
-
             if (empty($messagesId)) {
                 throw new Exception(get_lang('NoData'));
             }
@@ -256,9 +255,7 @@ try {
             $restResponse->setData($data);
             break;
         case Rest::SAVE_FORUM_THREAD:
-            if (
-                empty($_POST['title']) || empty($_POST['text']) || empty($_POST['forum'])
-            ) {
+            if (empty($_POST['title']) || empty($_POST['text']) || empty($_POST['forum'])) {
                 throw new Exception(get_lang('NoData'));
             }
 

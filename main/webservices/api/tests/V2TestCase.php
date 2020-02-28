@@ -106,6 +106,10 @@ abstract class V2TestCase extends TestCase
         $this->assertNotNull($response);
         $this->assertSame(200, $response->getStatusCode());
 
+        if ($this->action() === 'course_lp_progress') {
+            //echo($response->getBody()->getContents());exit;
+        }
+
         $decodedResponse = json_decode($response->getBody()->getContents());
 
         // Help debug
@@ -170,6 +174,7 @@ abstract class V2TestCase extends TestCase
             property_exists($decodedResponse, 'data'),
             'response data property is missing: '.print_r($decodedResponse, true)
         );
+
         $data = $decodedResponse->data;
         $this->assertIsArray($data);
 

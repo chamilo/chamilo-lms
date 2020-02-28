@@ -55,8 +55,7 @@ class SaveUserTest extends V2TestCase
     }
 
     /**
-     * Creates a test user with an extra field
-     * asserts that the extra field values were saved
+     * Creates a test user with an extra field asserts that the extra field values were saved.
      *
      * @throws Exception if it cannot delete the created test user
      */

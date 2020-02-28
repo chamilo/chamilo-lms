@@ -155,6 +155,9 @@ try {
             $data = $restApi->getCourseLearnPaths();
             $restResponse->setData($data);
             break;
+        case Rest::GET_COURSE_LP_PROGRESS:
+            $restResponse->setData($restApi->getCourseLpProgress());
+            break;
         case Rest::GET_COURSE_LEARNPATH:
             $lpId = isset($_REQUEST['lp_id']) ? (int) $_REQUEST['lp_id'] : 1;
             $restApi->showLearningPath($lpId);

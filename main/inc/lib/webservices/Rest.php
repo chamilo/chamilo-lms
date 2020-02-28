@@ -37,6 +37,7 @@ class Rest extends WebService
     const GET_COURSE_FORUM_THREAD = 'course_forumthread';
     const GET_COURSE_LEARNPATHS = 'course_learnpaths';
     const GET_COURSE_LEARNPATH = 'course_learnpath';
+    const GET_COURSE_LP_PROGRESS = 'course_lp_progress';
     const SAVE_FORUM_POST = 'save_forum_post';
     const GET_USER_SESSIONS = 'user_sessions';
     const SAVE_USER_MESSAGE = 'save_user_message';
@@ -805,7 +806,21 @@ class Rest extends WebService
         return $result;
     }
 
-    /**
+    public function getCourseLpProgress()
+    {
+        $userId = $this->user->getId();
+        $sessionId = $this->session ? $this->session->getId() : 0;
+        $courseId = $this->course->getId();
+
+        $controller = new IndexManager(get_lang('MyCourses'));
+        $data = $controller->returnCoursesAndSessions($userId);
+
+
+
+
+    }
+
+        /**
      * @throws Exception
      *
      * @return array
@@ -1257,21 +1272,21 @@ class Rest extends WebService
     }
 
     /**
-     * @param $user_param
+     * @param $userParam
      *
      * @throws Exception
      *
      * @return array
      */
-    public function addUser($user_param)
+    public function addUser($userParam)
     {
-        $orig_user_id_value = [];
-        $firstName = $user_param['firstname'];
-        $lastName = $user_param['lastname'];
-        $status = $user_param['status'];
-        $email = $user_param['email'];
-        $loginName = $user_param['loginname'];
-        $password = $user_param['password'];
+        $firstName = $userParam['firstname'];
+        $lastName = $userParam['lastname'];
+        $status = $userParam['status'];
+        $email = $userParam['email'];
+        $loginName = $userParam['loginname'];
+        $password = $userParam['password'];
+
         $official_code = '';
         $language = '';
         $phone = '';
@@ -1281,18 +1296,19 @@ class Rest extends WebService
         $active = 1;
         $hr_dept_id = 0;
         $extra = null;
-        $original_user_id_name = $user_param['original_user_id_name'];
-        $original_user_id_value = $user_param['original_user_id_value'];
-        $orig_user_id_value[] = $user_param['original_user_id_value'];
-        $extra_list = $user_param['extra'];
-        if (!empty($user_param['language'])) {
-            $language = $user_param['language'];
+
+        $original_user_id_name = $userParam['original_user_id_name'];
+        $original_user_id_value = $userParam['original_user_id_value'];
+
+        $extra_list = isset($userParam['extra']) ? $userParam['extra'] : [];
+        if (isset($userParam['language'])) {
+            $language = $userParam['language'];
         }
-        if (!empty($user_param['phone'])) {
-            $phone = $user_param['phone'];
+        if (isset($userParam['phone'])) {
+            $phone = $userParam['phone'];
         }
-        if (!empty($user_param['expiration_date'])) {
-            $expiration_date = $user_param['expiration_date'];
+        if (isset($userParam['expiration_date'])) {
+            $expiration_date = $userParam['expiration_date'];
         }
 
         // Default language.
@@ -1580,11 +1596,7 @@ class Rest extends WebService
      */
     public function createSessionFromModel($modelSessionId, $sessionName, $startDate, $endDate, array $extraFields = [])
     {
-        if (empty($modelSessionId)
-            || empty($sessionName)
-            || empty($startDate)
-            || empty($endDate)
-        ) {
+        if (empty($modelSessionId) || empty($sessionName) || empty($startDate) || empty($endDate)) {
             throw new Exception(get_lang('NoData'));
         }
 
@@ -1594,6 +1606,7 @@ class Rest extends WebService
 
         $modelSession = SessionManager::fetch($modelSessionId);
 
+        $modelSession['accessUrlId'] = 1;
         if (api_is_multiple_url_enabled()) {
             if (api_get_current_access_url_id() != -1) {
                 $modelSession['accessUrlId'] = api_get_current_access_url_id();
@@ -1608,16 +1621,16 @@ class Rest extends WebService
             $endDate,
             $startDate,
             $endDate,
-            $modelSession['coachId'],
-            $modelSession['sessionCategoryId'],
+            $modelSession['id_coach'],
+            $modelSession['session_category_id'],
             $modelSession['visibility'],
             false,
             $modelSession['duration'],
             $modelSession['description'],
-            $modelSession['showDescription'],
+            $modelSession['show_description'],
             $extraFields,
-            $modelSession['sessionAdminId'],
-            $modelSession['sendSubscriptionNotification'],
+            $modelSession['session_admin_id'],
+            $modelSession['send_subscription_notification'],
             $modelSession['accessUrlId']
         );
 

@@ -28,10 +28,14 @@ class SubscribeUserToSessionFromUsernameTest extends V2TestCase
         // create a test session
         $sessionId = SessionManager::create_session(
             'Session to subscribe'.time(),
-            '2019-01-01 00:00', '2019-08-31 00:00',
-            '2019-01-01 00:00', '2019-08-31 00:00',
-            '2019-01-01 00:00', '2019-08-31 00:00',
-            null, null
+            '2019-01-01 00:00',
+            '2019-08-31 00:00',
+            '2019-01-01 00:00',
+            '2019-08-31 00:00',
+            '2019-01-01 00:00',
+            '2019-08-31 00:00',
+            null,
+            null
         );
 
         // create a test user
@@ -43,17 +47,17 @@ class SubscribeUserToSessionFromUsernameTest extends V2TestCase
         SessionManager::subscribeUsersToSession($sessionId, [$anotherUserId]);
 
         // call the webservice to subscribe the first user to the session
-        $subscribed = $this->boolean([ 'sessionId' => $sessionId, 'loginname' => $loginName ] );
+        $subscribed = $this->boolean(['sessionId' => $sessionId, 'loginname' => $loginName]);
         $this->assertTrue($subscribed);
 
         // assert we now have two users subscribed to the session
         $sessionRelUsers = Database::getManager()
             ->getRepository('ChamiloCoreBundle:SessionRelUser')
-            ->findBy([ 'session' => $sessionId ]);
+            ->findBy(['session' => $sessionId]);
         $this->assertSame(2, count($sessionRelUsers));
 
         // clean up
-        UserManager::delete_users([ $userId, $anotherUserId ]);
+        UserManager::delete_users([$userId, $anotherUserId]);
         SessionManager::delete($sessionId);
     }
 }

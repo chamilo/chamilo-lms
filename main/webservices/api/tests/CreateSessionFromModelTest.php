@@ -1,10 +1,9 @@
 <?php
+
 /* For licensing terms, see /license.txt */
 
 require_once __DIR__.'/V2TestCase.php';
-
 require_once __DIR__.'/../../../../vendor/autoload.php';
-
 
 /**
  * Class CreateSessionFromModelTest
@@ -27,10 +26,14 @@ class CreateSessionFromModelTest extends V2TestCase
         // create a model session
         $modelSessionId = SessionManager::create_session(
             'Model session'.time(),
-            '2019-01-01 00:00', '2019-08-31 00:00',
-            '2019-01-01 00:00', '2019-08-31 00:00',
-            '2019-01-01 00:00', '2019-08-31 00:00',
-            null, null
+            '2019-01-01 00:00',
+            '2019-08-31 00:00',
+            '2019-01-01 00:00',
+            '2019-08-31 00:00',
+            '2019-01-01 00:00',
+            '2019-08-31 00:00',
+            null,
+            null
         );
 
         // call the webservice to create the new session from the model session,
@@ -38,13 +41,16 @@ class CreateSessionFromModelTest extends V2TestCase
         $name = 'New session'.time();
         $startDate = '2019-09-01 00:00:00';
         $endDate = '2019-12-31 00:00:00';
-        $newSessionId = $this->integer([
+
+        $newSessionId = $this->integer(
+            [
                 'modelSessionId' => $modelSessionId,
                 'sessionName' => $name,
                 'startDate' => $startDate,
                 'endDate' => $endDate,
             ]
         );
+        //var_dump($newSessionId);exit;
 
         // assert the session was created and given the returned session id
         $entityManager = Database::getManager();
@@ -64,6 +70,7 @@ class CreateSessionFromModelTest extends V2TestCase
         // clean up
         SessionManager::delete($modelSessionId);
         SessionManager::delete($newSessionId);
+        //var_dump($modelSessionId);exit;
     }
 
     /**
@@ -74,17 +81,21 @@ class CreateSessionFromModelTest extends V2TestCase
     {
         // create a promotion
         $career = new Career();
-        $careerId = $career->save([ 'name' => 'test career'.time() ]);
+        $careerId = $career->save(['name' => 'test career'.time()]);
         $promotion = new Promotion();
-        $promotionId = $promotion->save([ 'career_id' => $careerId, 'name' => 'test promo'.time() ]);
+        $promotionId = $promotion->save(['career_id' => $careerId, 'name' => 'test promo'.time()]);
 
         // create a model session
         $modelSessionId = SessionManager::create_session(
             'Model session'.time(),
-            '2019-01-01 00:00', '2019-08-31 00:00',
-            '2019-01-01 00:00', '2019-08-31 00:00',
-            '2019-01-01 00:00', '2019-08-31 00:00',
-            null, null
+            '2019-01-01 00:00',
+            '2019-08-31 00:00',
+            '2019-01-01 00:00',
+            '2019-08-31 00:00',
+            '2019-01-01 00:00',
+            '2019-08-31 00:00',
+            null,
+            null
         );
 
         // subscribe the model session to the promotion - the new session will inherit this too
@@ -92,7 +103,8 @@ class CreateSessionFromModelTest extends V2TestCase
 
         // call the webservice to create the new session from the model session,
         // and assert it returns an integer
-        $newSessionId = $this->integer([
+        $newSessionId = $this->integer(
+            [
                 'modelSessionId' => $modelSessionId,
                 'sessionName' => 'New session'.time(),
                 'startDate' => '2019-09-01 00:00',
@@ -114,7 +126,7 @@ class CreateSessionFromModelTest extends V2TestCase
     }
 
     /**
-     * creates a session from a model session with a different URL
+     * Creates a session from a model session with a different URL
      * asserts that the new session has the called web server URL
      */
     public function testFromAModelWithADifferentURL()
@@ -126,19 +138,24 @@ class CreateSessionFromModelTest extends V2TestCase
         // create a model session
         $modelSessionId = SessionManager::create_session(
             'Model session'.time(),
-            '2019-01-01 00:00', '2019-08-31 00:00',
-            '2019-01-01 00:00', '2019-08-31 00:00',
-            '2019-01-01 00:00', '2019-08-31 00:00',
-            null, null
+            '2019-01-01 00:00',
+            '2019-08-31 00:00',
+            '2019-01-01 00:00',
+            '2019-08-31 00:00',
+            '2019-01-01 00:00',
+            '2019-08-31 00:00',
+            null,
+            null
         );
 
         // move the session to a non-standard URL
-        $urlId = UrlManager::add('https://www.url.org/chamilo-lms/' . time(), 'Non-default URL', 1);
+        $urlId = UrlManager::add('https://www.url.org/chamilo-lms/'.time(), 'Non-default URL', 1);
         UrlManager::update_urls_rel_session([$modelSessionId], $urlId);
 
         // call the webservice to create the new session from the model session,
         // and assert it returns an integer
-        $newSessionId = $this->integer([
+        $newSessionId = $this->integer(
+            [
                 'modelSessionId' => $modelSessionId,
                 'sessionName' => 'Name of the new session'.time(),
                 'startDate' => '2019-09-01 00:00',
@@ -167,25 +184,30 @@ class CreateSessionFromModelTest extends V2TestCase
         // create a model session
         $modelSessionId = SessionManager::create_session(
             'Model session'.time(),
-            '2019-01-01 00:00', '2019-08-31 00:00',
-            '2019-01-01 00:00', '2019-08-31 00:00',
-            '2019-01-01 00:00', '2019-08-31 00:00',
-            null, null
+            '2019-01-01 00:00',
+            '2019-08-31 00:00',
+            '2019-01-01 00:00',
+            '2019-08-31 00:00',
+            '2019-01-01 00:00',
+            '2019-08-31 00:00',
+            null,
+            null
         );
 
         // create courses and add them the the model session
-        $courseCodes = [ 'course A'.time(), 'course B'.time(), 'course C'.time() ];
+        $courseCodes = ['course A'.time(), 'course B'.time(), 'course C'.time()];
         $courseList = [];
         $authorId = UserManager::get_user_id_from_username(self::WEBSERVICE_USERNAME);
         foreach ($courseCodes as $code) {
-            $course = CourseManager::create_course(['code' => $code, 'title' => $code ], $authorId);
+            $course = CourseManager::create_course(['code' => $code, 'title' => $code], $authorId);
             $courseList[] = $course['real_id'];
         }
         SessionManager::add_courses_to_session($modelSessionId, $courseList);
 
         // call the webservice to create the new session from the model session,
         // and assert it returns an integer
-        $newSessionId = $this->integer([
+        $newSessionId = $this->integer(
+            [
                 'modelSessionId' => $modelSessionId,
                 'sessionName' => 'Name of the new session'.time(),
                 'startDate' => '2019-09-01 00:00',
@@ -216,10 +238,14 @@ class CreateSessionFromModelTest extends V2TestCase
         // create a model session
         $modelSessionId = SessionManager::create_session(
             'Model session'.time(),
-            '2019-01-01 00:00', '2019-08-31 00:00',
-            '2019-01-01 00:00', '2019-08-31 00:00',
-            '2019-01-01 00:00', '2019-08-31 00:00',
-            null, null
+            '2019-01-01 00:00',
+            '2019-08-31 00:00',
+            '2019-01-01 00:00',
+            '2019-08-31 00:00',
+            '2019-01-01 00:00',
+            '2019-08-31 00:00',
+            null,
+            null
         );
 
         // create an extra field and set its value in the model session
@@ -228,48 +254,55 @@ class CreateSessionFromModelTest extends V2TestCase
         $firstExtraFieldName = 'extraField'.time();
         $firstExtraFieldNameForModelSession = 'extra field value for model';
         $firstExtraFieldNameForNewSession = 'extra field value for new session';
-        $firstExtraFieldId = $extraFieldModel->save([
-            'field_type' => ExtraField::FIELD_TYPE_TEXT,
-            'variable' => $firstExtraFieldName,
-            'display_text' => $firstExtraFieldName,
-            'visible_to_self' => 1,
-            'visible_to_others' => 1,
-            'changeable' => 1,
-            'filter' => 1,
-        ]);
+        $firstExtraFieldId = $extraFieldModel->save(
+            [
+                'field_type' => ExtraField::FIELD_TYPE_TEXT,
+                'variable' => $firstExtraFieldName,
+                'display_text' => $firstExtraFieldName,
+                'visible_to_self' => 1,
+                'visible_to_others' => 1,
+                'changeable' => 1,
+                'filter' => 1,
+            ]
+        );
         SessionManager::update_session_extra_field_value(
             $modelSessionId,
             $firstExtraFieldName,
-            $firstExtraFieldNameForModelSession);
+            $firstExtraFieldNameForModelSession
+        );
 
         // create a second extra field and set its value in the model session
         // the new session will inherit the same value in this field
         $secondExtraFieldName = 'secondExtraField'.time();
         $secondExtraFieldValue = 'second extra field value';
-        $secondExtraFieldId = $extraFieldModel->save([
-            'field_type' => ExtraField::FIELD_TYPE_TEXT,
-            'variable' => $secondExtraFieldName,
-            'display_text' => $secondExtraFieldName,
-            'visible_to_self' => 1,
-            'visible_to_others' => 1,
-            'changeable' => 1,
-            'filter' => 1,
-        ]);
+        $secondExtraFieldId = $extraFieldModel->save(
+            [
+                'field_type' => ExtraField::FIELD_TYPE_TEXT,
+                'variable' => $secondExtraFieldName,
+                'display_text' => $secondExtraFieldName,
+                'visible_to_self' => 1,
+                'visible_to_others' => 1,
+                'changeable' => 1,
+                'filter' => 1,
+            ]
+        );
         SessionManager::update_session_extra_field_value(
             $modelSessionId,
             $secondExtraFieldName,
-            $secondExtraFieldValue);
+            $secondExtraFieldValue
+        );
 
         // call the webservice to create the new session from the model session,
         // specifying a different value in the first extra field
         // and assert it returns an integer
-        $newSessionId = $this->integer([
+        $newSessionId = $this->integer(
+            [
                 'modelSessionId' => $modelSessionId,
                 'sessionName' => 'Name of the new session'.time(),
                 'startDate' => '2019-09-01 00:00',
                 'endDate' => '2019-12-31 00:00',
                 'extraFields' => [
-                    $firstExtraFieldName => $firstExtraFieldNameForNewSession
+                    $firstExtraFieldName => $firstExtraFieldNameForNewSession,
                 ],
             ]
         );
@@ -278,28 +311,32 @@ class CreateSessionFromModelTest extends V2TestCase
         $extraFieldValueModel = new ExtraFieldValue('session');
         $extraFieldValue = $extraFieldValueModel->get_values_by_handler_and_field_variable(
             $newSessionId,
-            $firstExtraFieldName);
+            $firstExtraFieldName
+        );
         $this->assertNotFalse($extraFieldValue);
         $this->assertSame($firstExtraFieldNameForNewSession, $extraFieldValue['value']);
 
         // assert the model session still has its own original value in the first extra field
         $extraFieldValue = $extraFieldValueModel->get_values_by_handler_and_field_variable(
             $modelSessionId,
-            $firstExtraFieldName);
+            $firstExtraFieldName
+        );
         $this->assertNotFalse($extraFieldValue);
         $this->assertSame($firstExtraFieldNameForModelSession, $extraFieldValue['value']);
 
         // assert the new session has inherited the model session value in the second extra field
         $extraFieldValue = $extraFieldValueModel->get_values_by_handler_and_field_variable(
             $newSessionId,
-            $secondExtraFieldName);
+            $secondExtraFieldName
+        );
         $this->assertNotFalse($extraFieldValue);
         $this->assertSame($secondExtraFieldValue, $extraFieldValue['value']);
 
         // assert the model session still has the same value in the second extra field
         $extraFieldValue = $extraFieldValueModel->get_values_by_handler_and_field_variable(
             $modelSessionId,
-            $secondExtraFieldName);
+            $secondExtraFieldName
+        );
         $this->assertNotFalse($extraFieldValue);
         $this->assertSame($secondExtraFieldValue, $extraFieldValue['value']);
 

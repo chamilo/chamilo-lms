@@ -7596,7 +7596,7 @@ class SessionManager
      */
     public static function isValidId($sessionId)
     {
-        $sessionId = intval($sessionId);
+        $sessionId = (int) $sessionId;
         if ($sessionId > 0) {
             $rows = Database::select(
                 'id',

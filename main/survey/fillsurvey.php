@@ -1241,6 +1241,10 @@ $url = api_get_self().'?cidReq='.$courseInfo['code'].
     '&course='.$g_c.
     '&invitationcode='.$g_ic.
     '&show='.$show;
+if (!empty($_GET['language'])) {
+    $lang = Security::remove_XSS($_GET['language']);
+    $url .= '&language='.$lang;
+}
 $form = new FormValidator(
     'question',
     'post',

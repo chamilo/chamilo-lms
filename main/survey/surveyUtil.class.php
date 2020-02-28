@@ -3979,6 +3979,9 @@ class SurveyUtil
         if (!empty($surveyCode)) {
             $params['scode'] = Security::remove_XSS($surveyCode);
         }
+        if (!empty($courseInfo['language'])) {
+            $params['language'] = $courseInfo['language'];
+        }
 
         return api_get_path(WEB_CODE_PATH).'survey/fillsurvey.php?'.http_build_query($params);
     }

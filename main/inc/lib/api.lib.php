@@ -9646,7 +9646,12 @@ function api_get_language_translate_html()
     }
 
     $userInfo = api_get_user_info();
-    $languageId = api_get_language_id($userInfo['language']);
+    $languageId = 0;
+    if (!empty($userInfo['language'])) {
+        $languageId = api_get_language_id($userInfo['language']);
+    } elseif (!empty($_GET['language'])) {
+        $languageId = api_get_language_id($_GET['language']);
+    }
     $languageInfo = api_get_language_info($languageId);
     $isoCode = 'en';
 

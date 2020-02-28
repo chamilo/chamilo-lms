@@ -1274,20 +1274,12 @@ class Session
         return $this;
     }
 
-    /**
-     * @return int
-     */
     public function getStatus(): int
     {
         return $this->status;
     }
 
-    /**
-     * @param int $status
-     *
-     * @return Session
-     */
-    public function setStatus(int $status): Session
+    public function setStatus(int $status): self
     {
         $this->status = $status;
 

@@ -1,4 +1,5 @@
 <?php
+
 /* For licensing terms, see /license.txt */
 
 define('CHAMILO_LOAD_WYSIWYG', false);
@@ -11,8 +12,6 @@ Event::event_access_tool(TOOL_CHAT);
 
 $logInfo = [
     'tool' => TOOL_CHAT,
-    'tool_id' => 0,
-    'tool_id_detail' => 0,
     'action' => 'start',
     'action_details' => 'start-chat',
 ];

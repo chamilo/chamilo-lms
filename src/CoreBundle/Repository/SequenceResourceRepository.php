@@ -1,4 +1,5 @@
 <?php
+
 /* For licensing terms, see /license.txt */
 
 namespace Chamilo\CoreBundle\Repository;
@@ -11,7 +12,7 @@ use Fhaculty\Graph\Set\Vertices;
 use Fhaculty\Graph\Vertex;
 
 /**
- * Class SequenceResourceRepository
+ * Class SequenceResourceRepository.
  */
 class SequenceResourceRepository extends ServiceEntityRepository
 {
@@ -225,9 +226,11 @@ class SequenceResourceRepository extends ServiceEntityRepository
             switch ($type) {
                 case SequenceResource::SESSION_TYPE:
                     $resource = $em->getRepository('ChamiloCoreBundle:Session')->find($vertexId);
+
                     break;
                 case SequenceResource::COURSE_TYPE:
                     $resource = $em->getRepository('ChamiloCoreBundle:Course')->find($vertexId);
+
                     break;
             }
 
@@ -378,11 +381,13 @@ class SequenceResourceRepository extends ServiceEntityRepository
             if (0 === $sessionId) {
                 if (false === $userFinishedCourse) {
                     $status = false;
+
                     break;
                 }
             } else {
                 if (false === $userFinishedCourse) {
                     $status = false;
+
                     break;
                 }
             }

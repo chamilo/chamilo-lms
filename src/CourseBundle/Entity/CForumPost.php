@@ -456,20 +456,12 @@ class CForumPost extends AbstractResource implements ResourceInterface
         $this->attachments->removeElement($attachment);
     }
 
-    /**
-     * @return CForumForum|null
-     */
     public function getForum(): ?CForumForum
     {
         return $this->forum;
     }
 
-    /**
-     * @param CForumForum|null $forum
-     *
-     * @return CForumPost
-     */
-    public function setForum(?CForumForum $forum): CForumPost
+    public function setForum(?CForumForum $forum): self
     {
         $this->forum = $forum;
 

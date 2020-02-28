@@ -12,7 +12,7 @@ use Gedmo\Timestampable\Traits\TimestampableEntity;
  * Class Sequence.
  *
  * @ORM\Table(name="sequence")
- * @ORM\Entity
+ * @ORM\Entity(repositoryClass="Chamilo\CoreBundle\Repository\SequenceRepository")
  */
 class Sequence
 {

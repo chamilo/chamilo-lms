@@ -120,7 +120,7 @@ $(function() {
         $(this).addClass("view_children");
         $(this).find("img").attr("src", show_icon);
     });
-    
+
 	for (i=0;i<$(".actions").length;i++) {
 		if ($(".actions:eq("+i+")").html()=="<table border=\"0\"></table>" || $(".actions:eq("+i+")").html()=="" || $(".actions:eq("+i+")").html()==null || $(".actions:eq("+i+")").html().split("<TBODY></TBODY>").length==2) {
 			$(".actions:eq("+i+")").hide();
@@ -764,6 +764,7 @@ if (isset($_GET['studentoverview'])) {
             $cat->set_session_id($session_id);
         } else {
             $cat->set_name($course_code);
+            $cat->setIsRequirement(1);
         }
         $cat->set_course_code($course_code);
         $cat->set_description(null);

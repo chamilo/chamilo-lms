@@ -440,6 +440,19 @@ switch ($report) {
                 $averageCoach = api_number_format($sessionCount / $uniqueCoaches, 2);
             }
 
+            $courseSessions = [];
+            foreach ($sessions as $session) {
+                $courseList = SessionManager::getCoursesInSession($session['id']);
+                foreach ($courseList as $courseId) {
+                    if (!isset($courseSessions[$courseId])) {
+                        $courseSessions[$courseId] = 0;
+                    }
+                    $courseSessions[$courseId]++;
+                }
+            }
+
+
+
             $table = new HTML_Table(['class' => 'table table-responsive']);
             $row = 0;
             $table->setCellContents($row, 0, get_lang('Weeks'));
@@ -472,6 +485,34 @@ switch ($report) {
                 $content .= '<div class="col-md-4"><h4 class="page-header" id="canvas3_title"></h4><div id="canvas3_table"></div></div>';
             }
             $content .= '</div>';
+
+            $tableCourse = new HTML_Table(['class' => 'table table-responsive']);
+            $headers = [
+                get_lang('Course'),
+                get_lang('CountOfSessions'),
+            ];
+
+            $row = 0;
+            $column = 0;
+            foreach ($headers as $header) {
+                $tableCourse->setHeaderContents($row, $column, $header);
+                ++$column;
+            }
+            ++$row;
+
+            if (!empty($courseSessions)) {
+                arsort($courseSessions);
+                foreach ($courseSessions as $courseId => $count) {
+                    $courseInfo = api_get_course_info_by_id($courseId);
+                    $tableCourse->setCellContents($row, 0, $courseInfo['name']);
+                    $tableCourse->setCellContents($row, 1, $count);
+                    ++$row;
+                }
+            }
+
+            $content .= $tableCourse->toHtml();
+
+
 
             $content .= '<div class="row">';
             $content .= '<div class="col-md-4"><canvas id="canvas1" style="margin-bottom: 20px"></canvas></div>';
@@ -515,37 +556,6 @@ switch ($report) {
             $content .= $table->toHtml();*/
         }
 
-        $tableCourse = new HTML_Table(['class' => 'table table-responsive']);
-        $headers = [
-            get_lang('Course'),
-            get_lang('CountOfSessions'),
-        ];
-
-        $row = 0;
-        $column = 0;
-        foreach ($headers as $header) {
-            $tableCourse->setHeaderContents($row, $column, $header);
-            ++$column;
-        }
-        ++$row;
-
-        if (!empty($courseSessions)) {
-            arsort($courseSessions);
-            foreach ($courseSessions as $courseId => $count) {
-                $courseInfo = api_get_course_info_by_id($courseId);
-                $tableCourse->setCellContents($row, 0, $courseInfo['name']);
-                $tableCourse->setCellContents($row, 1, $count);
-                ++$row;
-            }
-        }
-
-
-        /*$content .= '<div class="row">';
-        $content .= '<div class="col-md-12"><h4 class="page-header" id="canvas4_title"></h4><div id="canvas4_table"></div></div>';
-        $content .= '</div>';*/
-        $content .= $tableCourse->toHtml();
-
-
         $table = new HTML_Table(['class' => 'table table-responsive']);
         $headers = [
             get_lang('Name'),
@@ -556,24 +566,17 @@ switch ($report) {
         if ($sessionStatusAllowed) {
             $headers[] = get_lang('Status');
         }
+        $headers[] = get_lang('NumberOfStudents');
         $row = 0;
         $column = 0;
         foreach ($headers as $header) {
             $table->setHeaderContents($row, $column, $header);
             ++$column;
         }
-        ++$row;
+        $row++;
 
-        $courseSessions = [];
         foreach ($sessions as $session) {
             $courseList = SessionManager::getCoursesInSession($session['id']);
-            foreach ($courseList as $courseId) {
-                if (!isset($courseSessions[$courseId])) {
-                    $courseSessions[$courseId] = 0;
-                }
-                ++$courseSessions[$courseId];
-            }
-
             $table->setCellContents($row, 0, $session['name']);
             $table->setCellContents($row, 1, api_get_local_time($session['display_start_date']));
             $table->setCellContents($row, 2, api_get_local_time($session['display_end_date']));
@@ -592,8 +595,11 @@ switch ($report) {
             if ($sessionStatusAllowed) {
                 $table->setCellContents($row, 4, SessionManager::getStatusLabel($session['status']));
             }
-            ++$row;
+            $studentsCount = SessionManager::get_users_by_session($session['id'], 0, true);
+            $table->setCellContents($row, 5, $studentsCount);
+            $row++;
         }
+
         $content .= $table->toHtml();
 
         if (isset($_REQUEST['action']) && 'export' === $_REQUEST['action']) {

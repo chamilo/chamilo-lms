@@ -784,10 +784,10 @@ class ResourceRepository extends BaseEntityRepository
                 if ($resourceFile) {
                     $fileName = $this->getResourceNodeRepository()->getFilename($resourceFile);
                     $this->getResourceNodeRepository()->getFileSystem()->update($fileName, $content);
-                    $size = $this->getResourceNodeRepository()->getSize($fileName);
+                    //$size = $this->getResourceNodeRepository()->getSize($resourceNode);
 
                     if ($resource instanceof CDocument) {
-                        $resource->setSize($size);
+                        //$resource->setSize($size);
                     }
                     $this->entityManager->persist($resource);
 

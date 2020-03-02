@@ -80,16 +80,16 @@ if ($loadNotificationsByAjax) {
     $(function() {
         $(".course_notification").each(function(index) {
             var div = $(this);
-            var id = $(this).attr("id");       
+            var id = $(this).attr("id");
             var idList = id.split("_");
             var courseId = idList[1];
             var sessionId = idList[2];
             var status = idList[3];
-            $.ajax({			
+            $.ajax({
                 type: "GET",
-                url: "'.api_get_path(WEB_AJAX_PATH).'course_home.ajax.php?a=get_notification&course_id="+courseId+"&session_id="+sessionId+"&status="+status,			
-                success: function(data) {			    
-                    div.append(data);			    
+                url: "'.api_get_path(WEB_AJAX_PATH).'course_home.ajax.php?a=get_notification&course_id="+courseId+"&session_id="+sessionId+"&status="+status,
+                success: function(data) {
+                    div.append(data);
                 }
             });
         });
@@ -139,15 +139,15 @@ if ($displayMyCourseViewBySessionLink) {
     <script>
         userId = '.$userId.'
         $(document).ready(function() {
-            changeMyCoursesView($.cookie("defaultMyCourseView" + userId));
+            changeMyCoursesView(Cookies.get("defaultMyCourseView" + userId));
         });
-    
+
         /**
         * Keep in cookie the last teacher view for the My Courses Tab. default view, or view by session
         * @param inView
         */
         function changeMyCoursesView(inView) {
-            $.cookie("defaultMyCourseView"+userId, inView, { expires: 365 });
+            Cookies.set("defaultMyCourseView" + userId, inView, 365);
             if (inView == '.IndexManager::VIEW_BY_SESSION.') {
                 $("#viewBySession").addClass("btn-primary");
                 $("#viewByDefault").removeClass("btn-primary");

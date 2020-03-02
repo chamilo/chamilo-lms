@@ -61,3 +61,4 @@ $strings['UsersLearnPathsTask'] = 'Learn paths views of users';
 $strings['UsersLearnPathsLessonTimerTask'] = 'Lesson timer to start time of Learn paths section';
 $strings['QuizzesScoresTask'] = 'Update quiz scores in learn path';
 $strings['QuestionGapselectTask'] = 'Answers for gapselect questions';
+$strings['UsersLearnPathsLessonBranchTask'] = 'Lesson branch to total time in learn paths documents';

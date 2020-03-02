@@ -58,6 +58,6 @@ $strings['SortSectionModulesTask'] = 'Sort modules in section';
 $strings['UsersScormsViewTask'] = 'Scorm views for users';
 $strings['UsersScormsProgressTask'] = 'Scorm progress';
 $strings['UsersLearnPathsTask'] = 'Learn paths views of users';
-$strings['UsersLearnPathsSectionsTask'] = 'Learn paths sections views of users';
+$strings['UsersLearnPathsLessonTimerTask'] = 'Lesson timer to start time of Learn paths section';
 $strings['QuizzesScoresTask'] = 'Update quiz scores in learn path';
 $strings['QuestionGapselectTask'] = 'Answers for gapselect questions';

@@ -4,20 +4,20 @@
 namespace Chamilo\PluginBundle\MigrationMoodle\Task;
 
 use Chamilo\PluginBundle\MigrationMoodle\Extractor\LoadedUsersFilterExtractor;
-use Chamilo\PluginBundle\MigrationMoodle\Loader\UserLearnPathsSectionsLoader;
+use Chamilo\PluginBundle\MigrationMoodle\Loader\UserLearnPathLessonTimerLoader;
 use Chamilo\PluginBundle\MigrationMoodle\Transformer\BaseTransformer;
 use Chamilo\PluginBundle\MigrationMoodle\Transformer\Property\LoadedCourseModuleLessonLookup;
-use Chamilo\PluginBundle\MigrationMoodle\Transformer\Property\LoadedCourseSectionFromLessonLookup;
 use Chamilo\PluginBundle\MigrationMoodle\Transformer\Property\LoadedUserLookup;
+use Chamilo\PluginBundle\MigrationMoodle\Transformer\Property\LoadedUserSessionLookup;
 
 /**
- * Class UsersLearnPathsSectionsTask.
+ * Class UsersLearnPathsLessonTimerTask.
  *
  * Update lp item (dirs) view.
  *
  * @package Chamilo\PluginBundle\MigrationMoodle\Task
  */
-class UsersLearnPathsSectionsTask extends BaseTask
+class UsersLearnPathsLessonTimerTask extends BaseTask
 {
     /**
      * @inheritDoc
@@ -26,8 +26,7 @@ class UsersLearnPathsSectionsTask extends BaseTask
     {
         return [
             'class' => LoadedUsersFilterExtractor::class,
-            'query' => "SELECT id, lessonid, userid, starttime, lessontime - starttime AS total_time
-                FROM mdl_lesson_timer",
+            'query' => "SELECT * FROM mdl_lesson_timer",
         ];
     }
 
@@ -39,19 +38,18 @@ class UsersLearnPathsSectionsTask extends BaseTask
         return [
             'class' => BaseTransformer::class,
             'map' => [
+                'parent_item_id' => [
+                    'class' => LoadedCourseModuleLessonLookup::class,
+                    'properties' => ['lessonid'],
+                ],
                 'user_id' => [
                     'class' => LoadedUserLookup::class,
                     'properties' => ['userid'],
                 ],
-                'item_id' => [
-                    'class' => LoadedCourseModuleLessonLookup::class,
-                    'properties' => ['lessonid']
-                ],
                 'start_time' => 'starttime',
-                'total_time' => 'total_time',
-                'lp_id' => [
-                    'class' => LoadedCourseSectionFromLessonLookup::class,
-                    'properties' => ['lessonid'],
+                'session_id' => [
+                    'class' => LoadedUserSessionLookup::class,
+                    'properties' => ['userid'],
                 ],
             ],
         ];
@@ -63,7 +61,7 @@ class UsersLearnPathsSectionsTask extends BaseTask
     public function getLoadConfiguration()
     {
         return [
-            'class' => UserLearnPathsSectionsLoader::class,
+            'class' => UserLearnPathLessonTimerLoader::class,
         ];
     }
 }

@@ -62,7 +62,7 @@ class UserLearnPathsLoader implements LoaderInterface
                         'lp_view_id' => $lpViewId,
                         'view_count' => 1,
                         'status' => 'not attempted',
-                        'start_time' => time(),
+                        'start_time' => 0,
                         'total_time' => 0,
                         'score' => 0,
                         'max_score' => $lpItem->getMaxScore(),

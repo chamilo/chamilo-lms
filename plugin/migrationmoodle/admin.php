@@ -96,7 +96,7 @@ $menu = [
         'users_scorms_view',
     ],
     'users_learn_paths' => [
-        'users_learn_paths_sections',
+        'users_learn_paths_lesson_timer',
     ],
     'users_scorms_view' => [
         'users_scorms_progress',

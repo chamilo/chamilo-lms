@@ -37,28 +37,17 @@ class CChatConversation extends AbstractResource implements ResourceInterface
         return $this->getName();
     }
 
-    /**
-     * @return int
-     */
     public function getId(): int
     {
         return $this->id;
     }
 
-    /**
-     * @return string
-     */
     public function getName(): string
     {
         return $this->name;
     }
 
-    /**
-     * @param string $name
-     *
-     * @return CChatConversation
-     */
-    public function setName(string $name): CChatConversation
+    public function setName(string $name): self
     {
         $this->name = $name;
 
@@ -77,5 +66,4 @@ class CChatConversation extends AbstractResource implements ResourceInterface
     {
         return $this->getName();
     }
-
 }

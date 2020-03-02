@@ -112,7 +112,7 @@ class ChatController extends AbstractResourceController implements CourseControl
                 $json = [
                     'status' => true,
                     'data' => [
-                        'message' => CourseChatUtils::prepareMessage($_REQUEST['message']),
+                        'message' => $courseChatUtils->prepareMessage($_REQUEST['message']),
                     ],
                 ];
 

@@ -55,7 +55,7 @@ class CourseChatUtils
      *
      * @return string
      */
-    public static function prepareMessage($message)
+    public function prepareMessage($message)
     {
         if (empty($message)) {
             return '';

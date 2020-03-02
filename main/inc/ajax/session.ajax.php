@@ -1,4 +1,5 @@
 <?php
+
 /* For licensing terms, see /license.txt */
 
 use Chamilo\UserBundle\Entity\User;
@@ -266,13 +267,10 @@ switch ($action) {
 
         if ('get_basic_course_documents_list' === $action) {
             $courseInfo = api_get_course_info_by_id($course->getId());
-
             $exists = DocumentManager::folderExists('/basic-course-documents', $courseInfo, $session->getId(), 0);
-
             if (!$exists) {
                 $courseDir = $courseInfo['directory'].'/document';
-                $sysCoursePath = api_get_path(SYS_COURSE_PATH);
-                $baseWorkDir = $sysCoursePath.$courseDir;
+                $baseWorkDir = api_get_path(SYS_COURSE_PATH).$courseDir;
 
                 $newFolderData = create_unexisting_directory(
                     $courseInfo,
@@ -290,7 +288,6 @@ switch ($action) {
             } else {
                 $id = DocumentManager::get_document_id($courseInfo, $folderName, $session->getId());
             }
-
             $http_www = api_get_path(WEB_COURSE_PATH).$courseInfo['directory'].'/document';
 
             $documentAndFolders = DocumentManager::getAllDocumentData(
@@ -302,6 +299,7 @@ switch ($action) {
                 false,
                 $session->getId()
             );
+
             $documentAndFolders = array_filter(
                 $documentAndFolders,
                 function (array $documentData) {
@@ -353,7 +351,7 @@ switch ($action) {
                 $documentAndFolders
             );
 
-            $table = new SortableTableFromArray($documentAndFolders, 1, count($documentAndFolders));
+            $table = new SortableTableFromArray($documentAndFolders, 1, 20, $folderName);
             $table->set_header(0, get_lang('Type'), false, [], ['class' => 'text-center', 'width' => '60px']);
             $table->set_header(1, get_lang('Name'), false);
             $table->set_header(2, get_lang('Size'), false, [], ['class' => 'text-right', 'style' => 'width: 80px;']);

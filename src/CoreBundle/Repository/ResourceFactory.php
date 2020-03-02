@@ -18,7 +18,6 @@ class ResourceFactory
 {
     protected $mountManager;
     protected $toolChain;
-    protected $fs;
     protected $slugify;
     protected $entityManager;
     protected $authorizationChecker;
@@ -33,8 +32,6 @@ class ResourceFactory
         Container $container
     ) {
         $this->mountManager = $mountManager;
-        // @todo create a service to remove hardcode value of "resources_fs"
-        $this->fs = $mountManager->getFilesystem('resources_fs');
         $this->toolChain = $toolChain;
         $this->slugify = $slugify;
         $this->entityManager = $entityManager;

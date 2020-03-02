@@ -4,12 +4,14 @@ services:
         public: true
         autoconfigure: true
 
+    Vich\UploaderBundle\Storage\FlysystemStorage:  ~
     Chamilo\CoreBundle\Repository\ResourceFactory: ~
+    Chamilo\CoreBundle\Repository\ResourceNodeRepository: ~
 
     # Classic entity repositories
     Chamilo\CoreBundle\Repository\:
         resource: '../../Repository'
-        exclude: '../../Repository/{BranchSyncRepository.php,ResourceRepository.php,ResourceNodeRepository.php}'
+        exclude: '../../Repository/{BranchSyncRepository.php,ResourceRepository.php}'
         tags: ['doctrine.repository_service']
 
     # Resource repositories

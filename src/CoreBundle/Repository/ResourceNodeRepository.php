@@ -5,17 +5,80 @@
 namespace Chamilo\CoreBundle\Repository;
 
 use Chamilo\CoreBundle\Entity\Course;
+use Chamilo\CoreBundle\Entity\Resource\ResourceFile;
 use Chamilo\CoreBundle\Entity\Resource\ResourceLink;
 use Chamilo\CoreBundle\Entity\Resource\ResourceNode;
 use Chamilo\CoreBundle\Entity\Resource\ResourceType;
 use Chamilo\CoreBundle\Entity\Session;
+use Doctrine\ORM\EntityManagerInterface;
 use Gedmo\Tree\Entity\Repository\MaterializedPathRepository;
+use League\Flysystem\MountManager;
+use Symfony\Component\Filesystem\Exception\FileNotFoundException;
+use Vich\UploaderBundle\Storage\FlysystemStorage;
 
 /**
  * Class ResourceNodeRepository.
  */
 class ResourceNodeRepository extends MaterializedPathRepository
 {
+    protected $mountManager;
+    protected $storage;
+
+    public function __construct(EntityManagerInterface $manager, FlysystemStorage $storage, MountManager $mountManager)
+    {
+        parent::__construct($manager, $manager->getClassMetadata(ResourceNode::class));
+        $this->storage = $storage;
+        $this->mountManager = $mountManager;
+    }
+
+    public function getFilename(ResourceFile $resourceFile)
+    {
+        return $this->storage->resolveUri($resourceFile);
+    }
+
+    /**
+     * @return \League\Flysystem\FilesystemInterface
+     */
+    public function getFileSystem()
+    {
+        // Flysystem mount name is saved in config/packages/oneup_flysystem.yaml @todo add it as a service.
+        $this->fs = $this->mountManager->getFilesystem('resources_fs');
+
+        return $this->fs;
+    }
+
+    public function getResourceNodeFileContent(ResourceNode $resourceNode): string
+    {
+        try {
+            if ($resourceNode->hasResourceFile()) {
+                $resourceFile = $resourceNode->getResourceFile();
+                $fileName = $this->getFilename($resourceFile);
+
+                return $this->getFileSystem()->read($fileName);
+            }
+
+            return '';
+        } catch (\Throwable $exception) {
+            throw new FileNotFoundException($resourceNode);
+        }
+    }
+
+    public function getResourceNodeFileStream(ResourceNode $resourceNode)
+    {
+        try {
+            if ($resourceNode->hasResourceFile()) {
+                $resourceFile = $resourceNode->getResourceFile();
+                $fileName = $this->getFilename($resourceFile);
+
+                return $this->getFileSystem()->readStream($fileName);
+            }
+
+            return '';
+        } catch (\Throwable $exception) {
+            throw new FileNotFoundException($resourceNode);
+        }
+    }
+
     /**
      * @todo filter files, check status
      */

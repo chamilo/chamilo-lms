@@ -6,11 +6,13 @@ namespace Chamilo\CoreBundle\Controller;
 
 use Chamilo\CoreBundle\Component\Utils\Glide;
 use Chamilo\CoreBundle\Entity\Resource\AbstractResource;
+use Chamilo\CoreBundle\Entity\Resource\ResourceNode;
 use Chamilo\CoreBundle\Repository\ResourceFactory;
 use Chamilo\CoreBundle\Repository\ResourceRepository;
+use Chamilo\UserBundle\Entity\User;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
-use Vich\UploaderBundle\Storage\FlysystemStorage;
+use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 
 /**
  * Class AbstractResourceController.
@@ -29,6 +31,11 @@ abstract class AbstractResourceController extends BaseController
         $tool = $request->get('tool');
         $type = $request->get('type');
 
+        return $this->getRepository($tool, $type);
+    }
+
+    public function getRepository($tool, $type): ResourceRepository
+    {
         return $this->resourceRepositoryFactory->createRepository($tool, $type);
     }
 
@@ -52,6 +59,32 @@ abstract class AbstractResourceController extends BaseController
         if (null === $resourceNode) {
             throw new NotFoundHttpException($this->trans('Resource doesn\'t have a node.'));
         }
+    }
+
+    protected function getParentResourceNode(Request $request): ResourceNode
+    {
+        $parentNodeId = $request->get('id');
+
+        $parentResourceNode = null;
+        if (empty($parentNodeId)) {
+            if ($this->hasCourse()) {
+                $parentResourceNode = $this->getCourse()->getResourceNode();
+            } else {
+                if ($this->isGranted('IS_AUTHENTICATED_REMEMBERED')) {
+                    /** @var User $user */
+                    $parentResourceNode = $this->getUser()->getResourceNode();
+                }
+            }
+        } else {
+            $repo = $this->getDoctrine()->getRepository('ChamiloCoreBundle:Resource\ResourceNode');
+            $parentResourceNode = $repo->find($parentNodeId);
+        }
+
+        if (null === $parentResourceNode) {
+            throw new AccessDeniedException();
+        }
+
+        return $parentResourceNode;
     }
 
     /**

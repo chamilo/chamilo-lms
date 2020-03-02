@@ -72,6 +72,7 @@ class CForumPostRepository extends ResourceRepository
 
     public function delete(AbstractResource $resource)
     {
+        /** @var CForumPost $resource */
         $attachments = $resource->getAttachments();
         if (!empty($attachments)) {
             foreach ($attachments as $attachment) {

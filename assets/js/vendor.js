@@ -35,6 +35,12 @@ require('@fancyapps/fancybox/dist/jquery.fancybox.js');
 require('@fancyapps/fancybox/src/js/media.js');
 require('jquery-contextmenu/dist/jquery.contextMenu.js');
 
+var hljs = require('highlight.js');
+global.hljs = hljs;
+
+var textcomplete = require('textcomplete');
+global.textcomplete = textcomplete;
+
 require('chart.js');
 
 require('./annotation.js');

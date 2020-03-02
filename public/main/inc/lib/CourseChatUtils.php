@@ -1,14 +1,22 @@
 <?php
+
 /* For licensing terms, see /license.txt */
 
 use Chamilo\CoreBundle\Entity\Course;
 use Chamilo\CoreBundle\Entity\CourseRelUser;
+use Chamilo\CoreBundle\Entity\Resource\ResourceLink;
+use Chamilo\CoreBundle\Entity\Resource\ResourceNode;
 use Chamilo\CoreBundle\Entity\Session;
 use Chamilo\CoreBundle\Entity\SessionRelCourseRelUser;
+use Chamilo\CoreBundle\Repository\ResourceNodeRepository;
+use Chamilo\CoreBundle\Repository\ResourceRepository;
 use Chamilo\CourseBundle\Entity\CChatConnected;
+use Chamilo\CourseBundle\Entity\CChatConversation;
 use Chamilo\UserBundle\Entity\User;
+use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Criteria;
 use Michelf\MarkdownExtra;
+use Symfony\Component\HttpFoundation\File\UploadedFile;
 
 /**
  * Class CourseChat
@@ -20,6 +28,7 @@ class CourseChatUtils
     private $courseId;
     private $sessionId;
     private $userId;
+    private $resourceNode;
 
     /**
      * CourseChat constructor.
@@ -29,12 +38,14 @@ class CourseChatUtils
      * @param int $sessionId
      * @param int $groupId
      */
-    public function __construct($courseId, $userId, $sessionId = 0, $groupId = 0)
+    public function __construct($courseId, $userId, $sessionId = 0, $groupId = 0, ResourceNode $resourceNode, ResourceRepository $repository)
     {
         $this->courseId = (int) $courseId;
         $this->userId = (int) $userId;
         $this->sessionId = (int) $sessionId;
         $this->groupId = (int) $groupId;
+        $this->resourceNode = $resourceNode;
+        $this->repository = $repository;
     }
 
     /**
@@ -50,8 +61,8 @@ class CourseChatUtils
             return '';
         }
 
-        Emojione\Emojione::$imagePathPNG = api_get_path(WEB_LIBRARY_PATH).'javascript/emojione/png/';
-        Emojione\Emojione::$ascii = true;
+        //Emojione\Emojione::$imagePathPNG = api_get_path(WEB_LIBRARY_PATH).'javascript/emojione/png/';
+        //Emojione\Emojione::$ascii = true;
 
         $message = trim($message);
         $message = nl2br($message);
@@ -69,8 +80,9 @@ class CourseChatUtils
             '<a href="http://$1" target="_blank">',
             $message
         );
+
         // Parsing emojis
-        $message = Emojione\Emojione::toImage($message);
+        //$message = Emojione\Emojione::toImage($message);
         // Parsing text to understand markdown (code highlight)
         $message = MarkdownExtra::defaultTransform($message);
 
@@ -95,22 +107,6 @@ class CourseChatUtils
         $user = api_get_user_entity($this->userId);
         $courseInfo = api_get_course_info_by_id($this->courseId);
         $isMaster = api_is_course_admin();
-        $document_path = api_get_path(SYS_COURSE_PATH).$courseInfo['path'].'/document';
-        $basepath_chat = '/chat_files';
-        $group_info = [];
-        if ($this->groupId) {
-            $group_info = GroupManager::get_group_properties($this->groupId);
-            $basepath_chat = $group_info['directory'].'/chat_files';
-        }
-
-        $chat_path = $document_path.$basepath_chat.'/';
-
-        if (!is_dir($chat_path)) {
-            if (is_file($chat_path)) {
-                @unlink($chat_path);
-            }
-        }
-
         $date_now = date('Y-m-d');
         $timeNow = date('d/m/y H:i:s');
         $basename_chat = 'messages-'.$date_now;
@@ -129,30 +125,10 @@ class CourseChatUtils
 
         $message = self::prepareMessage($message);
 
-        $fileTitle = $basename_chat.'.log.html';
-        $filePath = $basepath_chat.'/'.$fileTitle;
-        $absoluteFilePath = $chat_path.$fileTitle;
+        $fileTitle = $basename_chat.'-log.html';
 
-        if (!file_exists($absoluteFilePath)) {
-            $doc_id = DocumentManager::addDocument(
-                $courseInfo,
-                $filePath,
-                'file',
-                0,
-                $fileTitle,
-                null,
-                0,
-                true,
-                0,
-                0,
-                0,
-                false
-            );
-        } else {
-            $doc_id = DocumentManager::get_document_id($courseInfo, $filePath);
-        }
 
-        $fp = fopen($absoluteFilePath, 'a');
+
         $userPhoto = UserManager::getUserPicture($this->userId, USER_IMAGE_SIZE_MEDIUM);
 
         if ($isMaster) {
@@ -181,11 +157,26 @@ class CourseChatUtils
             ';
         }
 
-        fputs($fp, $fileContent);
+        $criteria = [
+            'slug' => $fileTitle,
+            'parent' => $this->resourceNode,
+        ];
+
+        $resourceNode = $this->repository->getResourceNodeRepository()->findOneBy($criteria);
+        if ($resourceNode) {
+            $resource = $this->repository->getResourceFromResourceNode($resourceNode->getId());
+            if ($resource) {
+                $content = $this->repository->getResourceNodeFileContent($resourceNode);
+                $this->repository->updateResourceFileContent($resource, $content.$fileContent);
+            }
+        }
+
+
+        /*fputs($fp, $fileContent);
         fclose($fp);
         $size = filesize($absoluteFilePath);
         update_existing_document($courseInfo, $doc_id, $size);
-        item_property_update_on_folder($courseInfo, $basepath_chat, $this->userId);
+        item_property_update_on_folder($courseInfo, $basepath_chat, $this->userId);*/
 
         return true;
     }
@@ -266,17 +257,18 @@ class CourseChatUtils
         $extraCondition = null;
 
         if ($this->groupId) {
-            $extraCondition = 'AND ccc.toGroupId = '.intval($this->groupId);
+            $extraCondition = 'AND ccc.toGroupId = '.$this->groupId;
         } else {
-            $extraCondition = 'AND ccc.sessionId = '.intval($this->sessionId);
+            $extraCondition = 'AND ccc.sessionId = '.$this->sessionId;
         }
 
         $currentTime = new DateTime(api_get_utc_datetime(), new DateTimeZone('UTC'));
 
+        /** @var CChatConnected $connection */
         $connection = $em
             ->createQuery("
                 SELECT ccc FROM ChamiloCourseBundle:CChatConnected ccc
-                WHERE ccc.userId = :user AND ccc.cId = :course $extraCondition 
+                WHERE ccc.userId = :user AND ccc.cId = :course $extraCondition
             ")
             ->setParameters([
                 'user' => $this->userId,
@@ -286,7 +278,7 @@ class CourseChatUtils
 
         if ($connection) {
             $connection->setLastConnection($currentTime);
-            $em->merge($connection);
+            $em->persist($connection);
             $em->flush();
 
             return;
@@ -309,10 +301,10 @@ class CourseChatUtils
      *
      * @return array
      */
-    public static function getEmojiStrategy()
+    /*public static function getEmojiStrategy()
     {
         return require_once api_get_path(SYS_CODE_PATH).'chat/emoji_strategy.php';
-    }
+    }*/
 
     /**
      * Get the emoji list to include in chat.
@@ -416,8 +408,9 @@ class CourseChatUtils
             return $base;
         }
 
-        $courseInfo = api_get_course_info_by_id($this->courseId);
-        $document_path = api_get_path(SYS_COURSE_PATH).$courseInfo['path'].'/document';
+        //$courseInfo = api_get_course_info_by_id($this->courseId);
+
+        $document_path = '/document';
         $chatPath = $document_path.'/chat_files/';
 
         if ($this->groupId) {
@@ -441,119 +434,72 @@ class CourseChatUtils
         $courseInfo = api_get_course_info_by_id($this->courseId);
         $date_now = date('Y-m-d');
         $isMaster = (bool) api_is_course_admin();
-        $basepath_chat = '/chat_files';
-        $document_path = api_get_path(SYS_COURSE_PATH).$courseInfo['path'].'/document';
-        $group_info = [];
+        //$basepath_chat = '/chat_files';
+        //$document_path = api_get_path(SYS_COURSE_PATH).$courseInfo['path'].'/document';
         if ($this->groupId) {
             $group_info = GroupManager:: get_group_properties($this->groupId);
-            $basepath_chat = $group_info['directory'].'/chat_files';
+            //$basepath_chat = $group_info['directory'].'/chat_files';
         }
 
-        $chat_path = $document_path.$basepath_chat.'/';
+        //$chat_path = $document_path.$basepath_chat.'/';
 
-        if (!is_dir($chat_path)) {
-            if (is_file($chat_path)) {
-                @unlink($chat_path);
-            }
-
-            if (!api_is_anonymous()) {
-                @mkdir($chat_path, api_get_permissions_for_new_directories());
-                // Save chat files document for group into item property
-                if ($this->groupId) {
-                    DocumentManager::addDocument(
-                        $courseInfo,
-                        $basepath_chat,
-                        'folder',
-                        0,
-                        'chat_files',
-                        null,
-                        0,
-                        true,
-                        0,
-                        0,
-                        0,
-                        false
-                    );
-                }
-            }
-        }
-
-        $filename_chat = 'messages-'.$date_now.'.log.html';
+        $filename_chat = 'messages-'.$date_now.'-log.html';
 
         if ($this->groupId && !$friendId) {
-            $filename_chat = 'messages-'.$date_now.'_gid-'.$this->groupId.'.log.html';
+            $filename_chat = 'messages-'.$date_now.'_gid-'.$this->groupId.'-log.html';
         } elseif ($this->sessionId && !$friendId) {
-            $filename_chat = 'messages-'.$date_now.'_sid-'.$this->sessionId.'.log.html';
+            $filename_chat = 'messages-'.$date_now.'_sid-'.$this->sessionId.'-log.html';
         } elseif ($friendId) {
             if ($this->userId < $friendId) {
-                $filename_chat = 'messages-'.$date_now.'_uid-'.$this->userId.'-'.$friendId.'.log.html';
+                $filename_chat = 'messages-'.$date_now.'_uid-'.$this->userId.'-'.$friendId.'-log.html';
             } else {
-                $filename_chat = 'messages-'.$date_now.'_uid-'.$friendId.'-'.$this->userId.'.log.html';
+                $filename_chat = 'messages-'.$date_now.'_uid-'.$friendId.'-'.$this->userId.'-log.html';
             }
         }
 
-        if (!file_exists($chat_path.$filename_chat)) {
-            @fclose(fopen($chat_path.$filename_chat, 'w'));
-            if (!api_is_anonymous()) {
-                DocumentManager::addDocument(
-                    $courseInfo,
-                    $basepath_chat.'/'.$filename_chat,
-                    'file',
-                    0,
-                    $filename_chat,
-                    null,
-                    0,
-                    true,
-                    0,
-                    0,
-                    0,
-                    false
-                );
-            }
-        }
+        $criteria = [
+            'slug' => $filename_chat,
+            'parent' => $this->resourceNode,
+        ];
 
-        $basename_chat = 'messages-'.$date_now;
-        if ($this->groupId && !$friendId) {
-            $basename_chat = 'messages-'.$date_now.'_gid-'.$this->groupId;
-        } elseif ($this->sessionId && !$friendId) {
-            $basename_chat = 'messages-'.$date_now.'_sid-'.$this->sessionId;
-        } elseif ($friendId) {
-            if ($this->userId < $friendId) {
-                $basename_chat = 'messages-'.$date_now.'_uid-'.$this->userId.'-'.$friendId;
-            } else {
-                $basename_chat = 'messages-'.$date_now.'_uid-'.$friendId.'-'.$this->userId;
-            }
-        }
+        $resourceNode = $this->repository->getResourceNodeRepository()->findOneBy($criteria);
 
-        if ($reset && $isMaster) {
-            $i = 1;
-            while (file_exists($chat_path.$basename_chat.'-'.$i.'.log.html')) {
-                $i++;
-            }
+        /** @var ResourceNode $resourceNode */
+        //$resourceNode = $this->repository->findOneBy($criteria);
+        //var_dump($filename_chat, $this->resourceNode->getId());exit;
 
-            @rename($chat_path.$basename_chat.'.log.html', $chat_path.$basename_chat.'-'.$i.'.log.html');
-            @fclose(fopen($chat_path.$basename_chat.'.log.html', 'w'));
+        if (null === $resourceNode) {
+            $em = Database::getManager();
+            $resource = new CChatConversation();
+            $resource->setName($filename_chat);
 
-            $doc_id = DocumentManager::addDocument(
-                $courseInfo,
-                $basepath_chat.'/'.$basename_chat.'-'.$i.'.log.html',
-                'file',
-                filesize($chat_path.$basename_chat.'-'.$i.'.log.html'),
-                $basename_chat.'-'.$i.'.log.html',
-                null,
-                0,
-                true,
-                0,
-                0,
-                0,
-                false
+            $handle = tmpfile();
+            fwrite($handle, '');
+            $meta = stream_get_meta_data($handle);
+            $file = new UploadedFile($meta['uri'], $filename_chat, 'text/html', null, true);
+
+            $this->repository->addResourceToCourse(
+                $resource,
+                ResourceLink::VISIBILITY_PUBLISHED,
+                api_get_user_entity(api_get_user_id()),
+                api_get_course_entity(),
+                api_get_session_entity(),
+                api_get_group_entity(),
+                $file
             );
-            $doc_id = DocumentManager::get_document_id(
-                $courseInfo,
-                $basepath_chat.'/'.$basename_chat.'.log.html'
-            );
-            update_existing_document($courseInfo, $doc_id, 0);
+            $em->flush();
+
+            $resourceNode = $resource->getResourceNode();
         }
+
+        if ($resourceNode->hasResourceFile()) {
+            //$resourceFile = $resourceNode->getResourceFile();
+            //$fileName = $this->getFilename($resourceFile);
+            return $this->repository->getResourceNodeFileContent($resourceNode);
+        }
+
+        return '';
+
 
         $remove = 0;
         $content = [];
@@ -605,9 +551,9 @@ class CourseChatUtils
         $date->modify('-5 seconds');
 
         if ($this->groupId) {
-            $extraCondition = 'AND ccc.toGroupId = '.intval($this->groupId);
+            $extraCondition = 'AND ccc.toGroupId = '.$this->groupId;
         } else {
-            $extraCondition = 'AND ccc.sessionId = '.intval($this->sessionId);
+            $extraCondition = 'AND ccc.sessionId = '.$this->sessionId;
         }
 
         $number = Database::getManager()
@@ -626,10 +572,6 @@ class CourseChatUtils
 
     /**
      * Get the users online data.
-     *
-     * @throws \Doctrine\ORM\ORMException
-     * @throws \Doctrine\ORM\OptimisticLockException
-     * @throws \Doctrine\ORM\TransactionRequiredException
      *
      * @return array
      */
@@ -686,11 +628,7 @@ class CourseChatUtils
     /**
      * Get the users subscriptions (SessionRelCourseRelUser array or CourseRelUser array) for chat.
      *
-     * @throws \Doctrine\ORM\ORMException
-     * @throws \Doctrine\ORM\OptimisticLockException
-     * @throws \Doctrine\ORM\TransactionRequiredException
-     *
-     * @return \Doctrine\Common\Collections\ArrayCollection
+     * @return ArrayCollection
      */
     private function getUsersSubscriptions()
     {
@@ -772,9 +710,9 @@ class CourseChatUtils
         $date->modify('-5 seconds');
 
         if ($this->groupId) {
-            $extraCondition = 'AND ccc.toGroupId = '.intval($this->groupId);
+            $extraCondition = 'AND ccc.toGroupId = '.$this->groupId;
         } else {
-            $extraCondition = 'AND ccc.sessionId = '.intval($this->sessionId);
+            $extraCondition = 'AND ccc.sessionId = '.$this->sessionId;
         }
 
         $number = Database::getManager()

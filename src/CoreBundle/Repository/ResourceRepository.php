@@ -29,7 +29,6 @@ use Doctrine\ORM\EntityRepository as BaseEntityRepository;
 use Doctrine\ORM\Query\Expr\Join;
 use Doctrine\ORM\QueryBuilder;
 use League\Flysystem\FilesystemInterface;
-use League\Flysystem\MountManager;
 use Symfony\Component\Filesystem\Exception\FileNotFoundException;
 use Symfony\Component\Form\FormFactory;
 use Symfony\Component\Form\FormInterface;
@@ -37,7 +36,6 @@ use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use Symfony\Component\Routing\RouterInterface;
 use Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface;
-use Vich\UploaderBundle\Storage\FlysystemStorage;
 
 /**
  * Class ResourceRepository.
@@ -78,17 +76,11 @@ class ResourceRepository extends BaseEntityRepository
      */
     protected $authorizationChecker;
 
-    /** @var MountManager */
-    protected $mountManager;
-
     /** @var SlugifyInterface */
     protected $slugify;
 
     /** @var ToolChain */
     protected $toolChain;
-
-    /** @var FlysystemStorage */
-    protected $storage;
 
     /**
      * ResourceRepository constructor.
@@ -96,22 +88,16 @@ class ResourceRepository extends BaseEntityRepository
     public function __construct(
         AuthorizationCheckerInterface $authorizationChecker,
         EntityManager $entityManager,
-        MountManager $mountManager,
         RouterInterface $router,
         SlugifyInterface $slugify,
         ToolChain $toolChain,
-        FlysystemStorage $storage,
+        ResourceNodeRepository $resourceNodeRepository,
         string $className
     ) {
         $this->authorizationChecker = $authorizationChecker;
         $this->repository = $entityManager->getRepository($className);
-
-        // Flysystem mount name is saved in config/packages/oneup_flysystem.yaml @todo add it as a service.
-        $this->fs = $mountManager->getFilesystem('resources_fs');
-        $this->storage = $storage;
-        $this->mountManager = $mountManager;
         $this->router = $router;
-        $this->resourceNodeRepository = $entityManager->getRepository('ChamiloCoreBundle:Resource\ResourceNode');
+        $this->resourceNodeRepository = $resourceNodeRepository;
         $this->slugify = $slugify;
         $this->toolChain = $toolChain;
     }
@@ -137,14 +123,6 @@ class ResourceRepository extends BaseEntityRepository
     public function getResourceNodeRepository()
     {
         return $this->resourceNodeRepository;
-    }
-
-    /**
-     * @return FilesystemInterface
-     */
-    public function getFileSystem()
-    {
-        return $this->fs;
     }
 
     public function getEntityManager(): EntityManager
@@ -737,14 +715,8 @@ class ResourceRepository extends BaseEntityRepository
     {
         try {
             $resourceNode = $resource->getResourceNode();
-            if ($resourceNode->hasResourceFile()) {
-                $resourceFile = $resourceNode->getResourceFile();
-                $fileName = $this->getFilename($resourceFile);
 
-                return $this->getFileSystem()->read($fileName);
-            }
-
-            return '';
+            return $this->resourceNodeRepository->getResourceNodeFileContent($resourceNode);
         } catch (\Throwable $exception) {
             throw new FileNotFoundException($resource);
         }
@@ -752,39 +724,12 @@ class ResourceRepository extends BaseEntityRepository
 
     public function getResourceNodeFileContent(ResourceNode $resourceNode): string
     {
-        try {
-            if ($resourceNode->hasResourceFile()) {
-                $resourceFile = $resourceNode->getResourceFile();
-                $fileName = $this->getFilename($resourceFile);
-
-                return $this->getFileSystem()->read($fileName);
-            }
-
-            return '';
-        } catch (\Throwable $exception) {
-            throw new FileNotFoundException($resourceNode);
-        }
+        return $this->resourceNodeRepository->getResourceNodeFileContent($resourceNode);
     }
 
     public function getResourceNodeFileStream(ResourceNode $resourceNode)
     {
-        try {
-            if ($resourceNode->hasResourceFile()) {
-                $resourceFile = $resourceNode->getResourceFile();
-                $fileName = $this->getFilename($resourceFile);
-
-                return $this->getFileSystem()->readStream($fileName);
-            }
-
-            return '';
-        } catch (\Throwable $exception) {
-            throw new FileNotFoundException($resourceNode);
-        }
-    }
-
-    public function getFilename(ResourceFile $resourceFile)
-    {
-        return $this->storage->resolveUri($resourceFile);
+        return $this->resourceNodeRepository->getResourceNodeFileStream($resourceNode);
     }
 
     public function getResourceFileUrl(AbstractResource $resource, array $extraParams = [], $referenceType = null): string
@@ -837,9 +782,9 @@ class ResourceRepository extends BaseEntityRepository
             if ($resourceNode->hasResourceFile()) {
                 $resourceFile = $resourceNode->getResourceFile();
                 if ($resourceFile) {
-                    $fileName = $this->getFilename($resourceFile);
-                    $this->getFileSystem()->update($fileName, $content);
-                    $size = $this->getFileSystem()->getSize($fileName);
+                    $fileName = $this->getResourceNodeRepository()->getFilename($resourceFile);
+                    $this->getResourceNodeRepository()->getFileSystem()->update($fileName, $content);
+                    $size = $this->getResourceNodeRepository()->getSize($fileName);
 
                     if ($resource instanceof CDocument) {
                         $resource->setSize($size);

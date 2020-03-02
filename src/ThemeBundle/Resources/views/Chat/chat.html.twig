@@ -1,3 +1,7 @@
+{% extends "@ChamiloTheme/Layout/no_layout.html.twig" %}
+
+{% block content %}
+    {% autoescape false %}
 <div class="page-chat">
     <div class="row">
         <div class="col-sm-4 col-md-5 col-lg-4">
@@ -60,14 +64,14 @@
     </div>
 </div>
 <audio id="chat-alert" class="skip">
-    <source src="{{ _p.web_main }}/chat/sound/notification.wav" type="audio/wav"></source>
-    <source src="{{ _p.web_main }}chat/sound/notification.ogg" type="audio/ogg"></source>
-    <source src="{{ _p.web_main }}chat/sound/notification.mp3" type="audio/mpeg"></source>
+    <source src="{{ asset('sound/notification.wav') }}" type="audio/wav"></source>
+    <source src="{{ asset('chat/sound/notification.ogg') }}" type="audio/ogg"></source>
+    <source src="{{ asset('chat/sound/notification.mp3') }}" type="audio/mpeg"></source>
 </audio>
 <script>
     $(function () {
         var ChChat = {
-            _ajaxUrl: '{{ _p.web_ajax }}course_chat.ajax.php?{{ _p.web_cid_query }}',
+            _ajaxUrl: '{{ url('chat_ajax') ~ '?' ~ course_url_params }}',
             _historySize: -1,
             usersOnline: 0,
             currentFriend: 0,
@@ -100,7 +104,7 @@
                     .prop('scrollTop', function () {
                         return this.scrollHeight;
                     });
-                $('#chat-alert').get(0).play();
+                //$('#chat-alert').get(0).play();
             },
             setConnectedUsers: function (userList) {
                 var html = '';
@@ -115,7 +119,7 @@
                         '       <ul class="list-unstyled">' +
                         '           <li>' + user.complete_name;
 
-                    if (user.id != {{ _u.user_id }}) {
+                    if (user.id != {{ user.id }}) {
                         html += '           <button type="button" class="btn btn-link btn-xs" title="' + buttonTitle + '" data-name="' + user.complete_name + '" data-user="' + user.id + '">' +
                             '               <i class="fa fa-comments text-' + buttonStatus + '"></i><span class="sr-only">' + buttonTitle + '</span>' +
                             '           </button>';
@@ -134,18 +138,17 @@
                 $('#chat-users').html(html);
             },
             onPreviewListener: function () {
-                $
-                    .post(ChChat._ajaxUrl, {
-                        action: 'preview',
-                        'message': $('textarea#chat-writer').val()
-                    })
-                    .done(function (response) {
-                        if (!response.status) {
-                            return;
-                        }
+                $.post(ChChat._ajaxUrl, {
+                    action: 'preview',
+                    'message': $('textarea#chat-writer').val()
+                })
+                .done(function (response) {
+                    if (!response.status) {
+                        return;
+                    }
 
-                        $('#html-preview').html(response.data.message);
-                    });
+                    $('#html-preview').html(response.data.message);
+                });
             },
             onSendMessageListener: function (e) {
                 e.preventDefault();
@@ -157,40 +160,39 @@
                 var self = this;
                 self.disabled = true;
 
-                $
-                    .post(ChChat._ajaxUrl, {
-                        action: 'write',
-                        message: $('textarea#chat-writer').val(),
-                        friend: ChChat.currentFriend
-                    })
-                    .done(function (response) {
-                        self.disabled = false;
+                $.get(ChChat._ajaxUrl, {
+                    action: 'write',
+                    message: $('textarea#chat-writer').val(),
+                    friend: ChChat.currentFriend
+                })
+                .done(function (response) {
+                    self.disabled = false;
 
-                        if (!response.status) {
-                            return;
-                        }
+                    if (!response.status) {
+                        return;
+                    }
 
-                        $('textarea#chat-writer').val('');
-                        $(".emoji-wysiwyg-editor").html('');
-                    });
+                    $('textarea#chat-writer').val('');
+                    $(".emoji-wysiwyg-editor").html('');
+                });
             },
             onResetListener: function (e) {
                 if (!confirm("{{ 'ConfirmReset'|get_lang }}")) {
                     e.preventDefault();
                     return;
                 }
-                $
-                    .get(ChChat._ajaxUrl, {
-                        action: 'reset',
-                        friend: ChChat.currentFriend
-                    })
-                    .done(function (response) {
-                        if (!response.status) {
-                            return;
-                        }
 
-                        ChChat.setHistory(response.data);
-                    });
+                $.get(ChChat._ajaxUrl, {
+                    action: 'reset',
+                    friend: ChChat.currentFriend
+                })
+                .done(function (response) {
+                    if (!response.status) {
+                        return;
+                    }
+
+                    ChChat.setHistory(response.data);
+                });
             },
             init: function () {
                 ChChat.track().done(function () {
@@ -201,27 +203,17 @@
 
         hljs.initHighlightingOnLoad();
 
-        emojione.ascii = true;
-        emojione.imagePathPNG = '{{ _p.web_lib }}javascript/emojione/png/';
-        emojione.imagePathSVG = '{{ _p.web_lib }}javascript/emojione/svg/';
-        emojione.imagePathSVGSprites = '{{ _p.web_lib }}javascript/emojione/sprites/';
-
-        var emojiStrategy = {{ emoji_strategy|json_encode }};
-
-        $.emojiarea.path = '{{ _p.web_lib }}javascript/emojione/png/';
-        $.emojiarea.icons = {{ icons|json_encode }};
-
         $('body').on('click', '#chat-reset', ChChat.onResetListener);
         $('#preview').on('click', ChChat.onPreviewListener);
         $('#emojis').on('click', function () {
             $('[data-toggle="tab"][href="#tab1"]').show().tab('show');
         });
 
-        $('textarea#chat-writer').emojiarea({
+        /*$('textarea#chat-writer').emojiarea({
             button: '#emojis'
-        });
+        });*/
 
-        $('body').delay(1500).find('.emoji-wysiwyg-editor').textcomplete([{
+        /*$('body').delay(1500).find('.emoji-wysiwyg-editor').textcomplete([{
             match: /\B:([\-+\w]*)$/,
             search: function (term, callback) {
                 var results = [];
@@ -263,7 +255,7 @@
             index: 1,
             maxCount: 10
         }], {});
-
+*/
         $('button#chat-send-message').on('click', ChChat.onSendMessageListener);
         $('#chat-users').on('click', 'div.chat-user', function (e) {
             e.preventDefault();
@@ -328,3 +320,6 @@
         ChChat.init();
     });
 </script>
+
+{% endautoescape %}
+{% endblock %}

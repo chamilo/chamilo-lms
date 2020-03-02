@@ -23,7 +23,6 @@ use Chamilo\CoreBundle\Security\Authorization\Voter\ResourceNodeVoter;
 use Chamilo\CourseBundle\Controller\CourseControllerInterface;
 use Chamilo\CourseBundle\Controller\CourseControllerTrait;
 use Chamilo\CourseBundle\Entity\CDocument;
-use Chamilo\UserBundle\Entity\User;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Criteria;
 use Doctrine\ORM\QueryBuilder;
@@ -40,7 +39,6 @@ use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Routing\Router;
 use Symfony\Component\Routing\RouterInterface;
-use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 use ZipStream\Option\Archive;
 use ZipStream\ZipStream;
 
@@ -1074,32 +1072,6 @@ class ResourceController extends AbstractResourceController implements CourseCon
         }
     }
 
-    private function getParentResourceNode(Request $request): ResourceNode
-    {
-        $parentNodeId = $request->get('id');
-
-        $parentResourceNode = null;
-        if (empty($parentNodeId)) {
-            if ($this->hasCourse()) {
-                $parentResourceNode = $this->getCourse()->getResourceNode();
-            } else {
-                if ($this->isGranted('IS_AUTHENTICATED_REMEMBERED')) {
-                    /** @var User $user */
-                    $parentResourceNode = $this->getUser()->getResourceNode();
-                }
-            }
-        } else {
-            $repo = $this->getDoctrine()->getRepository('ChamiloCoreBundle:Resource\ResourceNode');
-            $parentResourceNode = $repo->find($parentNodeId);
-        }
-
-        if (null === $parentResourceNode) {
-            throw new AccessDeniedException();
-        }
-
-        return $parentResourceNode;
-    }
-
     /**
      * @param string $mode
      * @param string $filter
@@ -1150,7 +1122,7 @@ class ResourceController extends AbstractResourceController implements CourseCon
                         $params['crop'] = $crop;
                     }
 
-                    $fileName = $repo->getFilename($resourceFile);
+                    $fileName = $repo->getResourceNodeRepository()->getFilename($resourceFile);
 
                     return $server->getImageResponse($fileName, $params);
                 }

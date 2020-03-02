@@ -145,9 +145,11 @@ services:
         arguments:
             - 'chat'
             - 'interaction'
-            - '/main/chat/chat.php'
+            - '/resources/chat/'
             - '@chamilo_course.settings.chat'
-            - ~
+            -
+                conversations:
+                    repository: Chamilo\CourseBundle\Repository\CChatConversationRepository
         tags:
             - {name: chamilo_core.tool}
 

@@ -702,13 +702,19 @@ switch ($action) {
         }
         break;
     case 'get_sessions':
-        $listType = isset($_REQUEST['list_type']) ? $_REQUEST['list_type'] : 'simple';
+        $listType = isset($_REQUEST['list_type']) ? $_REQUEST['list_type'] : SessionManager::getDefaultSessionTab();
+
+        if ('custom' === $listType && api_get_configuration_value('allow_session_status')) {
+            $whereCondition .= ' AND (s.status IN ("'.SessionManager::STATUS_PLANNED.'", "'.SessionManager::STATUS_PROGRESS.'") ) ';
+        }
+
         switch ($listType) {
             case 'complete':
                 $count = SessionManager::get_count_admin_complete(
                     ['where' => $whereCondition, 'extra' => $extra_fields]
                 );
                 break;
+            case 'custom':
             case 'active':
             case 'close':
             case 'all':
@@ -1673,6 +1679,7 @@ switch ($action) {
                 break;
             case 'active':
             case 'close':
+            case 'custom':
             case 'all':
                 $result = SessionManager::formatSessionsAdminForGrid(
                     [

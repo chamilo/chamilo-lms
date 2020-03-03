@@ -553,6 +553,11 @@ class SessionManager
             if ($showCountUsers) {
                 $select .= ', count(su.user_id) users';
             }
+
+            if (api_get_configuration_value('allow_session_status')) {
+                $select .= ', status';
+            }
+
             if (isset($options['order'])) {
                 $isMakingOrder = strpos($options['order'], 'category_name') === 0;
             }
@@ -630,7 +635,6 @@ class SessionManager
                 break;
         }
 
-
         if ($showCountUsers) {
             $query .= ' GROUP by s.id';
         }
@@ -703,14 +707,15 @@ class SessionManager
 
         $activeIcon = Display::return_icon('accept.png', get_lang('Active'));
         $inactiveIcon = Display::return_icon('error.png', get_lang('Inactive'));
+        $webPath = api_get_path(WEB_PATH);
 
         foreach ($sessions as $session) {
             if ($showCountUsers) {
                 $session['users'] = self::get_users_by_session($session['id'], 0, true);
             }
-            $url = api_get_path(WEB_CODE_PATH).'session/resume_session.php?id_session='.$session['id'];
+            $url = $webPath.'main/session/resume_session.php?id_session='.$session['id'];
             if ($extraFieldsToLoad || api_is_drh()) {
-                $url = api_get_path(WEB_PATH).'session/'.$session['id'].'/about/';
+                $url = $webPath.'session/'.$session['id'].'/about/';
             }
 
             $session['name'] = Display::url($session['name'], $url);
@@ -776,10 +781,12 @@ class SessionManager
                 }
             }
 
-            $categoryName = isset($orderedCategories[$session['session_category_id']])
-                ? $orderedCategories[$session['session_category_id']]
-                : '';
+            $categoryName = isset($orderedCategories[$session['session_category_id']]) ? $orderedCategories[$session['session_category_id']] : '';
             $session['category_name'] = $categoryName;
+            if (isset($session['status'])) {
+                $session['status'] = self::getStatusLabel($session['status']);
+            }
+
             $formattedSessions[] = $session;
         }
 
@@ -9558,16 +9565,24 @@ class SessionManager
         return $list[$status];
     }
 
+    public static function getDefaultSessionTab()
+    {
+        $default = 'all';
+        $view = api_get_configuration_value('default_session_list_view');
+
+        if (!empty($view)) {
+            $default = $view;
+        }
+
+        return $default;
+    }
+
     /**
      * @return array
      */
     public static function getSessionListTabs($listType)
     {
         $tabs = [
-           /* [
-                'content' => get_lang('SessionListCustom'),
-                'url' => api_get_path(WEB_CODE_PATH).'session/session_list.php',
-            ],*/
             [
                 'content' => get_lang('All'),
                 'url' => api_get_path(WEB_CODE_PATH).'session/session_list.php?list_type=all',
@@ -9579,6 +9594,10 @@ class SessionManager
             [
                 'content' => get_lang('Close'),
                 'url' => api_get_path(WEB_CODE_PATH).'session/session_list.php?list_type=close',
+            ],
+            [
+                'content' => get_lang('SessionListCustom'),
+                'url' => api_get_path(WEB_CODE_PATH).'session/session_list.php?list_type=custom',
             ],
             /*[
                 'content' => get_lang('Complete'),
@@ -9595,6 +9614,9 @@ class SessionManager
                 break;
             case 'close':
                 $default = 3;
+                break;
+            case 'custom':
+                $default = 4;
                 break;
         }
 

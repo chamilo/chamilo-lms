@@ -1402,7 +1402,10 @@ ALTER TABLE notification_event ADD COLUMN event_id INT NULL;
 //$_configuration['plugin_upload_enable'] = false;
 
 // ALTER TABLE session ADD COLUMN status INT DEFAULT 0;
-// $_configuration['allow_session_status'] = 0;
+// $_configuration['allow_session_status'] = false;
+
+// Set the default tab in the admin session list. Values: all, close, active, custom.
+//$_configuration['default_session_list_view'] = 'all';
 
 // KEEP THIS AT THE END
 // -------- Custom DB changes

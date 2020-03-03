@@ -3181,11 +3181,11 @@ class UserManager
      *
      * @param string $variable       the internal variable name of the field
      * @param string $value          the internal value of the field
-     * @param bool   $all_visibility
+     * @param bool   $useLike
      *
      * @return array with extra data info of a user i.e array('field_variable'=>'value');
      */
-    public static function get_extra_user_data_by_value($variable, $value, $all_visibility = true)
+    public static function get_extra_user_data_by_value($variable, $value, $useLike = false)
     {
         $extraFieldValue = new ExtraFieldValue('user');
         $extraField = new ExtraField('user');
@@ -3201,7 +3201,8 @@ class UserManager
             $value,
             false,
             false,
-            true
+            true,
+            $useLike
         );
 
         $result = [];

@@ -1316,9 +1316,7 @@ requires extension "php-soap"  sudo apt-get install php-soap
 //$_configuration['allow_online_users_by_status'] = ['status' =>  [1, 5]];
 
 // Allow add one column by each user extra field indicated to the Gradebook Flatview for each user.
-/*$_configuration['gradebook_flatview_extrafields_columns'] = [
-    'variables' => [],
-];*/
+// $_configuration['gradebook_flatview_extrafields_columns'] = ['variables' => []];
 
 // Show hidden exercises that were added to a LP in the exercise list
 // $_configuration['show_hidden_exercise_added_to_lp'] = true;
@@ -1406,6 +1404,9 @@ ALTER TABLE notification_event ADD COLUMN event_id INT NULL;
 
 // Set the default tab in the admin session list. Values: all, close, active, custom.
 //$_configuration['default_session_list_view'] = 'all';
+
+// Search user by extra field in the user list.
+//$_configuration['user_search_on_extra_fields'] = ['extra_fields' = > ['variable1', 'variable2']];
 
 // KEEP THIS AT THE END
 // -------- Custom DB changes

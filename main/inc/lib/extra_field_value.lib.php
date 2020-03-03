@@ -799,40 +799,47 @@ class ExtraFieldValue extends Model
             }
 
             return $result;
-        } else {
-            return false;
         }
+
+        return false;
     }
 
     /**
      * Gets the ID from the item (course, session, etc) for which
      * the given field is defined with the given value.
      *
-     * @param string $field_variable Field (type of data) we want to check
-     * @param string $field_value    Data we are looking for in the given field
+     * @param string $variable Field (type of data) we want to check
+     * @param string $value    Data we are looking for in the given field
      * @param bool   $transform      Whether to transform the result to a human readable strings
      * @param bool   $last           Whether to return the last element or simply the first one we get
+     * @param bool   $useLike
      *
      * @return mixed Give the ID if found, or false on failure or not found
      * @assert (-1,-1) === false
      */
     public function get_item_id_from_field_variable_and_field_value(
-        $field_variable,
-        $field_value,
+        $variable,
+        $value,
         $transform = false,
         $last = false,
-        $all = false
+        $all = false,
+        $useLike = false
     ) {
-        $field_value = Database::escape_string($field_value);
-        $field_variable = Database::escape_string($field_variable);
+        $value = Database::escape_string($value);
+        $variable = Database::escape_string($variable);
+
+        $valueCondition = " value  = '$value' AND ";
+        if ($useLike) {
+            $valueCondition = " value LIKE '%".$value."%' AND ";
+        }
         $extraFieldType = $this->getExtraField()->getExtraFieldType();
 
         $sql = "SELECT item_id FROM {$this->table} s
                 INNER JOIN {$this->table_handler_field} sf
                 ON (s.field_id = sf.id)
                 WHERE
-                    value  = '$field_value' AND
-                    variable = '".$field_variable."' AND
+                    $valueCondition
+                    variable = '".$variable."' AND
                     sf.extra_field_type = $extraFieldType
                 ORDER BY item_id
                 ";
@@ -852,9 +859,9 @@ class ExtraFieldValue extends Model
             }
 
             return $result;
-        } else {
-            return false;
         }
+
+        return false;
     }
 
     /**

@@ -63,3 +63,4 @@ $strings['QuizzesScoresTask'] = 'Update quiz scores in learn path';
 $strings['QuestionGapselectTask'] = 'Answers for gapselect questions';
 $strings['UsersLearnPathsLessonBranchTask'] = 'Lesson branch to total time in learn paths documents';
 $strings['UsersLearnPathsLessonAttemptsTask'] = 'Lesson attemprs to total time in learn paths quizzes';
+$strings['UsersLearnPathsQuizzesTask'] = 'Question attempts of learn paths quiz';

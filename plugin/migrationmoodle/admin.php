@@ -99,6 +99,7 @@ $menu = [
         'users_learn_paths_lesson_timer',
         'users_learn_paths_lesson_branch',
         'users_learn_paths_lesson_attempts',
+        'users_learn_paths_quizzes'
     ],
     'users_scorms_view' => [
         'users_scorms_progress',

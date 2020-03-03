@@ -207,9 +207,7 @@ class CoursesAndSessionsCatalog
             'level' => 0,
         ];
 
-        $result = array_merge($list, $categories);
-
-        return $result;
+        return array_merge($list, $categories);
     }
 
     /**

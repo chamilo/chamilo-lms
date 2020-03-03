@@ -1,4 +1,5 @@
 <?php
+
 /* For licensing terms, see /license.txt */
 
 use Chamilo\CoreBundle\Entity\Course;
@@ -488,7 +489,8 @@ class SessionManager
         $userId,
         $options = [],
         $getCount = false,
-        $columns = []
+        $columns = [],
+        $listType = 'all'
     ) {
         $tblSession = Database::get_main_table(TABLE_MAIN_SESSION);
         $sessionCategoryTable = Database::get_main_table(TABLE_MAIN_SESSION_CATEGORY);
@@ -529,7 +531,7 @@ class SessionManager
         } else {
             if (!empty($columns['column_model'])) {
                 foreach ($columns['column_model'] as $column) {
-                    if ($column['name'] == 'users') {
+                    if ($column['name'] === 'users') {
                         $showCountUsers = true;
                     }
                 }
@@ -591,6 +593,44 @@ class SessionManager
             }
         }
 
+        $date = api_get_utc_datetime();
+
+        switch ($listType) {
+            case 'all':
+                break;
+            case 'active':
+                $query .= "AND (
+                    (s.access_end_date IS NULL)
+                    OR
+                    (
+                    s.access_start_date IS NOT NULL AND
+                    s.access_end_date IS NOT NULL AND
+                    s.access_start_date <= '$date' AND s.access_end_date >= '$date')
+                    OR
+                    (
+                        s.access_start_date IS NULL AND
+                        s.access_end_date IS NOT NULL AND
+                        s.access_end_date >= '$date'
+                    )
+                )";
+                break;
+            case 'close':
+                $query .= "AND (
+                    (
+                    s.access_start_date IS NOT NULL AND
+                    s.access_end_date IS NOT NULL AND
+                    s.access_start_date <= '$date' AND s.access_end_date <= '$date')
+                    OR
+                    (
+                        s.access_start_date IS NULL AND
+                        s.access_end_date IS NOT NULL AND
+                        s.access_end_date <= '$date'
+                    )
+                )";
+                break;
+        }
+
+
         if ($showCountUsers) {
             $query .= ' GROUP by s.id';
         }
@@ -607,8 +647,12 @@ class SessionManager
 
         $sessions = Database::store_result($result, 'ASSOC');
 
-        if ($getCount) {
-            return $sessions[0]['total_rows'];
+        if ('all' === $listType) {
+            if ($getCount) {
+                return $sessions[0]['total_rows'];
+            }
+
+            return $sessions;
         }
 
         return $sessions;
@@ -621,6 +665,7 @@ class SessionManager
      * @param bool  $getCount          Whether to get all the results or only the count
      * @param array $columns
      * @param array $extraFieldsToLoad
+     * @param string $listType
      *
      * @return mixed Integer for number of rows, or array of results
      * @assert ([],true) !== false
@@ -629,27 +674,25 @@ class SessionManager
         $options = [],
         $getCount = false,
         $columns = [],
-        $extraFieldsToLoad = []
+        $extraFieldsToLoad = [],
+        $listType = 'all'
     ) {
         $showCountUsers = false;
-
         if (!$getCount && !empty($columns['column_model'])) {
             foreach ($columns['column_model'] as $column) {
-                if ($column['name'] == 'users') {
+                if ('users' === $column['name']) {
                     $showCountUsers = true;
                 }
             }
         }
 
         $userId = api_get_user_id();
-        $sessions = self::getSessionsForAdmin($userId, $options, $getCount, $columns);
-
+        $sessions = self::getSessionsForAdmin($userId, $options, $getCount, $columns, $listType);
         if ($getCount) {
             return (int) $sessions;
         }
 
         $formattedSessions = [];
-
         $categories = self::get_all_session_category();
         $orderedCategories = [];
         if (!empty($categories)) {
@@ -690,7 +733,6 @@ class SessionManager
                     $session[$field['variable']] = $fieldDataToString;
                 }
             }
-
             if (isset($session['session_active']) && $session['session_active'] == 1) {
                 $session['session_active'] = $activeIcon;
             } else {
@@ -1352,7 +1394,6 @@ class SessionManager
         $date_to = '',
         $options
     ) {
-        //escaping variables
         $sessionId = intval($sessionId);
         $courseId = intval($courseId);
         $studentId = intval($studentId);
@@ -8136,7 +8177,7 @@ class SessionManager
      * @return array
      */
     public static function getGridColumns(
-        $listType = 'simple',
+        $listType = 'all',
         $extraFields = [],
         $addExtraFields = true
     ) {
@@ -8181,7 +8222,9 @@ class SessionManager
                     ],
                 ];
                 break;
-            case 'simple':
+            case 'all':
+            case 'active':
+            case 'close':
                 $columns = [
                     '#',
                     get_lang('Name'),
@@ -9513,5 +9556,48 @@ class SessionManager
         }
 
         return $list[$status];
+    }
+
+    /**
+     * @return array
+     */
+    public static function getSessionListTabs($listType)
+    {
+        $tabs = [
+           /* [
+                'content' => get_lang('SessionListCustom'),
+                'url' => api_get_path(WEB_CODE_PATH).'session/session_list.php',
+            ],*/
+            [
+                'content' => get_lang('All'),
+                'url' => api_get_path(WEB_CODE_PATH).'session/session_list.php?list_type=all',
+            ],
+            [
+                'content' => get_lang('Active'),
+                'url' => api_get_path(WEB_CODE_PATH).'session/session_list.php?list_type=active',
+            ],
+            [
+                'content' => get_lang('Close'),
+                'url' => api_get_path(WEB_CODE_PATH).'session/session_list.php?list_type=close',
+            ],
+            /*[
+                'content' => get_lang('Complete'),
+                'url' => api_get_path(WEB_CODE_PATH).'session/session_list_simple.php?list_type=complete',
+            ],*/
+        ];
+
+        switch ($listType) {
+            case 'all':
+                $default = 1;
+                break;
+            case 'active':
+                $default = 2;
+                break;
+            case 'close':
+                $default = 3;
+                break;
+        }
+
+        return Display::tabsOnlyLink($tabs, $default);
     }
 }

@@ -2656,7 +2656,7 @@ function api_get_session_visibility(
     }
 
     $row = Database::fetch_array($result, 'ASSOC');
-    $visibility = $original_visibility = $row['visibility'];
+    $visibility = $row['visibility'];
 
     // I don't care the session visibility.
     if (empty($row['access_start_date']) && empty($row['access_end_date'])) {

@@ -1,4 +1,5 @@
 <?php
+
 /* For licensing terms, see /license.txt */
 
 use ChamiloSession as Session;
@@ -701,16 +702,25 @@ switch ($action) {
         }
         break;
     case 'get_sessions':
-        $list_type = isset($_REQUEST['list_type']) ? $_REQUEST['list_type'] : 'simple';
-        if ($list_type === 'simple') {
-            $count = SessionManager::formatSessionsAdminForGrid(
-                ['where' => $whereCondition, 'extra' => $extra_fields],
-                true
-            );
-        } else {
-            $count = SessionManager::get_count_admin_complete(
-                ['where' => $whereCondition, 'extra' => $extra_fields]
-            );
+        $listType = isset($_REQUEST['list_type']) ? $_REQUEST['list_type'] : 'simple';
+        switch ($listType) {
+            case 'complete':
+                $count = SessionManager::get_count_admin_complete(
+                    ['where' => $whereCondition, 'extra' => $extra_fields]
+                );
+                break;
+            case 'active':
+            case 'close':
+            case 'all':
+            default:
+                $count = SessionManager::formatSessionsAdminForGrid(
+                    ['where' => $whereCondition, 'extra' => $extra_fields],
+                    true,
+                    [],
+                    [],
+                    $listType
+                );
+                break;
         }
         break;
     case 'get_session_lp_progress':
@@ -1581,8 +1591,8 @@ switch ($action) {
             );
         }
 
-        $session_columns = SessionManager::getGridColumns('my_space');
-        $columns = $session_columns['simple_column_name'];
+        $sessionColumns = SessionManager::getGridColumns('my_space');
+        $columns = $sessionColumns['simple_column_name'];
 
         $result = [];
         if (!empty($sessions)) {
@@ -1647,29 +1657,36 @@ switch ($action) {
         }
         break;
     case 'get_sessions':
-        $session_columns = SessionManager::getGridColumns($list_type);
-        $columns = $session_columns['simple_column_name'];
+        $sessionColumns = SessionManager::getGridColumns($listType);
+        $columns = $sessionColumns['simple_column_name'];
 
-        if ($list_type === 'simple') {
-            $result = SessionManager::formatSessionsAdminForGrid(
-                [
-                    'where' => $whereCondition,
-                    'order' => "$sidx $sord, s.name",
-                    'extra' => $extra_fields,
-                    'limit' => "$start , $limit",
-                ],
-                false,
-                $session_columns
-            );
-        } else {
-            $result = SessionManager::get_sessions_admin_complete(
-                [
-                    'where' => $whereCondition,
-                    'order' => "$sidx $sord, s.name",
-                    'extra' => $extra_fields,
-                    'limit' => "$start , $limit",
-                ]
-            );
+        switch ($listType) {
+            case 'complete' :
+                $result = SessionManager::get_sessions_admin_complete(
+                    [
+                        'where' => $whereCondition,
+                        'order' => "$sidx $sord, s.name",
+                        'extra' => $extra_fields,
+                        'limit' => "$start , $limit",
+                    ]
+                );
+                break;
+            case 'active':
+            case 'close':
+            case 'all':
+                $result = SessionManager::formatSessionsAdminForGrid(
+                    [
+                        ['where' => $whereCondition, 'extra' => $extra_fields],
+                        'order' => "$sidx $sord, s.name",
+                        'extra' => $extra_fields,
+                        'limit' => "$start , $limit",
+                    ],
+                    false,
+                    $sessionColumns,
+                    [],
+                    $listType
+                );
+                break;
         }
         break;
     case 'get_exercise_progress':

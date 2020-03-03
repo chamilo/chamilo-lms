@@ -3375,7 +3375,7 @@ class UserManager
                     break;
                 case 'end_date':
                     $order = " ORDER BY s.accessEndDate $orderSetting ";
-                    if ($orderSetting == 'asc') {
+                    if ($orderSetting === 'asc') {
                         // Put null values at the end
                         // https://stackoverflow.com/questions/12652034/how-can-i-order-by-null-in-dql
                         $order = ' ORDER BY _isFieldNull asc, s.accessEndDate asc';

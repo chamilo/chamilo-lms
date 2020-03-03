@@ -8603,7 +8603,7 @@ class SessionManager
             }
 
             if (isset($params['access_start_date'])) {
-                $params[''] = api_format_date($params['access_start_date'], DATE_TIME_FORMAT_SHORT);
+                $params['access_start_date'] = api_format_date($params['access_start_date'], DATE_TIME_FORMAT_SHORT);
             }
 
             if (isset($params['access_end_date'])) {

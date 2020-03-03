@@ -17,7 +17,7 @@ $htmlHeadXtra[] = api_get_jqgrid_js();
 
 $action = isset($_REQUEST['action']) ? $_REQUEST['action'] : null;
 $idChecked = isset($_REQUEST['idChecked']) ? $_REQUEST['idChecked'] : null;
-$list_type = isset($_REQUEST['list_type']) ? $_REQUEST['list_type'] : 'simple';
+$list_type = isset($_REQUEST['list_type']) ? $_REQUEST['list_type'] : 'custom';
 
 if ($action == 'delete') {
     $sessionInfo = api_get_session_info($idChecked);
@@ -346,13 +346,13 @@ if (api_is_platform_admin()) {
         Display::return_icon('folder.png', get_lang('ListSessionCategory'), '', ICON_SIZE_MEDIUM).'</a>';
 }
 
-if ($list_type == 'complete') {
+/*if ($list_type == 'complete') {
     echo '<a href="'.api_get_self().'?list_type=simple">'.
         Display::return_icon('view_remove.png', get_lang('Simple'), '', ICON_SIZE_MEDIUM).'</a>';
 } else {
     echo '<a href="'.api_get_self().'?list_type=complete">'.
         Display::return_icon('view_text.png', get_lang('Complete'), '', ICON_SIZE_MEDIUM).'</a>';
-}
+}*/
 
 echo $actions;
 if (api_is_platform_admin()) {
@@ -378,6 +378,23 @@ if (api_is_platform_admin()) {
     echo '</div>';
 }
 echo '</div>';
+
+$tabs = [
+    [
+        'content' => get_lang('SessionListCustom'),
+        'url' => api_get_path(WEB_CODE_PATH).'session/session_list.php',
+    ],
+    [
+        'content' => get_lang('SessionList'),
+        'url' => api_get_path(WEB_CODE_PATH).'session/session_list_simple.php',
+    ],
+    [
+        'content' => get_lang('Complete'),
+        'url' => api_get_path(WEB_CODE_PATH).'session/session_list_simple.php?list_type=complete',
+    ],
+];
+
+echo Display::tabsOnlyLink($tabs, 1);
 echo '<div id="session-table" class="table-responsive">';
 echo Display::grid_html('sessions');
 echo '</div>';

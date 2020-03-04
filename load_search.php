@@ -1,4 +1,5 @@
 <?php
+
 /* For licensing terms, see /license.txt */
 
 use Chamilo\CoreBundle\Entity\ExtraFieldSavedSearch;
@@ -11,43 +12,43 @@ require_once 'main/inc/global.inc.php';
 $htmlHeadXtra[] = '<link  href="'.api_get_path(WEB_PATH).'web/assets/cropper/dist/cropper.min.css" rel="stylesheet">';
 $htmlHeadXtra[] = '<script src="'.api_get_path(WEB_PATH).'web/assets/cropper/dist/cropper.min.js"></script>';
 
-$htmlHeadXtra[] = '<script>		
-$(document).ready(function() {		
-    $("#filiere").on("click", function() {		
-        $("#filiere_panel").toggle();		
-        return false;		
-    });		
-    
-    $("#dispo").on("click", function() {		
-        $("#dispo_panel").toggle();		
-        return false;		
-    });		
-    
-    $("#dispo_pendant").on("click", function() {		
-        $("#dispo_pendant_panel").toggle();		
-        return false;		
-    });			
-    
-    $("#niveau").on("click", function() {		
-        $("#niveau_panel").toggle();		
-        return false;		
-    });		
-    
-    $("#methode").on("click", function() {		
-        $("#methode_panel").toggle();		
-        return false;		
-    });		
-    
-    $("#themes").on("click", function() {		
-        $("#themes_panel").toggle();		
-        return false;		
-    });		
-    
-    $("#objectifs").on("click", function() {		
-        $("#objectifs_panel").toggle();		
-        return false;		
-    });		
-});		
+$htmlHeadXtra[] = '<script>
+$(function() {
+    $("#filiere").on("click", function() {
+        $("#filiere_panel").toggle();
+        return false;
+    });
+
+    $("#dispo").on("click", function() {
+        $("#dispo_panel").toggle();
+        return false;
+    });
+
+    $("#dispo_pendant").on("click", function() {
+        $("#dispo_pendant_panel").toggle();
+        return false;
+    });
+
+    $("#niveau").on("click", function() {
+        $("#niveau_panel").toggle();
+        return false;
+    });
+
+    $("#methode").on("click", function() {
+        $("#methode_panel").toggle();
+        return false;
+    });
+
+    $("#themes").on("click", function() {
+        $("#themes_panel").toggle();
+        return false;
+    });
+
+    $("#objectifs").on("click", function() {
+        $("#objectifs_panel").toggle();
+        return false;
+    });
+});
 </script>';
 
 api_block_anonymous_users();
@@ -693,7 +694,9 @@ if ($form->validate()) {
             $userDataToSave,
             true,
             false,
-            ['heures_disponibilite_par_semaine' , 'langue_cible']
+            ['heures_disponibilite_par_semaine', 'langue_cible'],
+            [],
+            true
         );
 
         // Save session search
@@ -836,13 +839,13 @@ if (!empty($filterToSend)) {
         // Special OFAJ date logic
         if ($userEndDate == '') {
             $sql = " AND (
-                (s.access_start_date >= '$userStartDateMinus') OR 
+                (s.access_start_date >= '$userStartDateMinus') OR
                 ((s.access_start_date = '' OR s.access_start_date IS NULL) AND (s.access_end_date = '' OR s.access_end_date IS NULL))
             )";
         } else {
             $sql = " AND (
                 (s.access_start_date >= '$userStartDateMinus' AND s.access_end_date < '$userEndDatePlus') OR
-                (s.access_start_date >= '$userStartDateMinus' AND (s.access_end_date = '' OR s.access_end_date IS NULL)) OR 
+                (s.access_start_date >= '$userStartDateMinus' AND (s.access_end_date = '' OR s.access_end_date IS NULL)) OR
                 ((s.access_start_date = '' OR s.access_start_date IS NULL) AND (s.access_end_date = '' OR s.access_end_date IS NULL))
             )";
         }
@@ -1007,8 +1010,8 @@ if (!empty($sessionByUserList)) {
     }
 }
 $action_links = 'function action_formatter(cellvalue, options, rowObject) {
-    var sessionList = '.json_encode($sessionUserList).';    
-    var id = options.rowId.toString();    
+    var sessionList = '.json_encode($sessionUserList).';
+    var id = options.rowId.toString();
     if (sessionList.indexOf(id) == -1) {
         return \'<a href="'.api_get_self().'?action=subscribe_user&user_id='.$userToLoad.'&session_id=\'+id+\'">'.Display::return_icon('add.png', addslashes(get_lang('Subscribe')), '', ICON_SIZE_SMALL).'</a>'.'\';
     } else {
@@ -1039,8 +1042,8 @@ $htmlHeadXtra[] = '<style>
 	}
 </style>';
 
-$htmlHeadXtra[] = '<script>		
-$(document).ready(function() {
+$htmlHeadXtra[] = '<script>
+$(function() {
 	var blocks = [
         "#collapseOne",
         "#collapseTwo",
@@ -1049,13 +1052,13 @@ $(document).ready(function() {
         "#collapseFive",
         "#collapseSix",
         "#collapseSeven",
-        "#collapseEight"         
+        "#collapseEight"
     ];
-    
-    $.each(blocks, function( index, value ) {    
+
+    $.each(blocks, function( index, value ) {
         $(value).collapse("hide");
-    });	
-});		
+    });
+});
 </script>';
 
 $tpl = new Template(get_lang('Diagnosis'));

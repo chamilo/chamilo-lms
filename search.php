@@ -22,8 +22,8 @@ $form->addHeader(get_lang('Diagnosis'));
 
 /** @var ExtraFieldSavedSearch $saved */
 $search = ['user' => $userId];
-
-$items = $em->getRepository('ChamiloCoreBundle:ExtraFieldSavedSearch')->findBy($search);
+$extraFieldSavedSearchRepo = $em->getRepository('ChamiloCoreBundle:ExtraFieldSavedSearch');
+$items = $extraFieldSavedSearchRepo->findBy($search);
 
 $extraFieldSession = new ExtraField('session');
 $extraFieldValueSession = new ExtraFieldValue('session');
@@ -698,7 +698,7 @@ $userForm->addHtml('</div>');
 $userForm->addHtml('</div>');
 
 $htmlHeadXtra[] = '<script>
-$(document).ready(function(){
+$(function () {
 	'.$jqueryExtra.'
 });
 </script>';
@@ -718,8 +718,8 @@ $domainList = array_merge(
 );
 
 $themeList = [];
-$extraField = new ExtraField('session');
-$resultOptions = $extraField->searchOptionsFromTags(
+
+$resultOptions = $extraFieldSession->searchOptionsFromTags(
     'extra_domaine',
     'extra_'.$theme,
     $domainList
@@ -755,10 +755,11 @@ if ($userForm->validate()) {
 
     $extraFieldValue->saveFieldValues(
         $userData,
-        $adminPermissions,
+        true,
         false,
         [],
-        ['legal_accept']
+        ['legal_accept'],
+        true
     );
 
     // Saving to extra_field_saved_search
@@ -809,6 +810,8 @@ if ($userForm->validate()) {
     }
 
     // save in ExtraFieldSavedSearch.
+    $extraFieldRepo = $em->getRepository('ChamiloCoreBundle:ExtraField');
+
     foreach ($userData as $key => $value) {
         if (substr($key, 0, 6) != 'extra_' && substr($key, 0, 7) != '_extra_') {
             continue;
@@ -828,18 +831,14 @@ if ($userForm->validate()) {
             continue;
         }
 
-        $extraFieldObj = $em
-            ->getRepository('ChamiloCoreBundle:ExtraField')
-            ->find($extraFieldInfo['id'])
-        ;
-
+        $extraFieldObj = $extraFieldRepo->find($extraFieldInfo['id']);
         $search = [
             'field' => $extraFieldObj,
             'user' => $user,
         ];
 
         /** @var ExtraFieldSavedSearch $saved */
-        $saved = $em->getRepository('ChamiloCoreBundle:ExtraFieldSavedSearch')->findOneBy($search);
+        $saved = $extraFieldSavedSearchRepo->findOneBy($search);
 
         if ($saved) {
             $saved

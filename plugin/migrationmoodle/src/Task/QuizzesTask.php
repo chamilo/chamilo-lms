@@ -37,14 +37,16 @@ class QuizzesTask extends BaseTask
                     q.timeopen,
                     q.timeclose,
                     q.timelimit,
-                    q.sumgrades,
+                    gi.gradepass,
                     q.grade,
-                    cm.id cm_id
+                    cm.id cm_id,
                 FROM mdl_quiz q
                 INNER JOIN mdl_course_modules cm ON (q.course = cm.course AND cm.instance = q.id)
                 INNER JOIN mdl_modules m ON cm.module = m.id
                 INNER JOIN mdl_course_sections cs ON (cm.course = cs.course AND cm.section = cs.id )
+                INNER JOIN mdl_grade_items gi ON (q.id = gi.iteminstance AND m.name = gi.itemmodule)
                 WHERE m.name = 'quiz'
+                    AND gi.itemtype = 'mod'
                 ORDER BY cs.id, FIND_IN_SET(cm.id, cs.sequence)",
         ];
     }
@@ -77,7 +79,7 @@ class QuizzesTask extends BaseTask
                 'enabletimercontroltotalminutes' => 'timelimit',
                 'pass_percentage' => [
                     'class' => Percentage::class,
-                    'properties' => ['sumgrades', 'grade']
+                    'properties' => ['gradepass', 'grade']
                 ],
             ],
         ];

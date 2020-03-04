@@ -22,7 +22,6 @@ use Chamilo\CoreBundle\Repository\ResourceWithLinkInterface;
 use Chamilo\CoreBundle\Security\Authorization\Voter\ResourceNodeVoter;
 use Chamilo\CourseBundle\Controller\CourseControllerInterface;
 use Chamilo\CourseBundle\Controller\CourseControllerTrait;
-use Chamilo\CourseBundle\Entity\CDocument;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Criteria;
 use Doctrine\ORM\QueryBuilder;
@@ -53,6 +52,7 @@ use ZipStream\ZipStream;
 class ResourceController extends AbstractResourceController implements CourseControllerInterface
 {
     use CourseControllerTrait;
+    private $fileContentName = 'file_content';
 
     /**
      * @Route("/{tool}/{type}", name="chamilo_core_resource_index")
@@ -177,13 +177,8 @@ class ResourceController extends AbstractResourceController implements CourseCon
         // Title link.
         $titleColumn->setTitle($this->trans('Name'));
 
-        //$repository->formatGrid();
-        /*if ($grid->hasColumn('filetype')) {
-            $grid->getColumn('filetype')->setTitle($this->trans('Type'));
-        }*/
-
         $titleColumn->manipulateRenderCell(
-            function ($value, Row $row, $router) use ($routeParams) {
+            function ($value, Row $row, $router) use ($routeParams, $settings) {
                 /** @var Router $router */
                 /** @var ResourceInterface $entity */
                 $entity = $row->getEntity();
@@ -196,20 +191,15 @@ class ResourceController extends AbstractResourceController implements CourseCon
 
                 $icon = $resourceNode->getIcon().' &nbsp;';
                 if ($resourceNode->hasResourceFile()) {
+                    // Process node that contains a file, process previews.
                     if ($resourceNode->isResourceFileAnImage()) {
-                        $url = $router->generate(
-                            'chamilo_core_resource_view',
-                            $myParams
-                        );
+                        $url = $router->generate('chamilo_core_resource_view_file', $myParams);
 
                         return $icon.'<a data-fancybox="gallery" href="'.$url.'">'.$value.'</a>';
                     }
 
                     if ($resourceNode->isResourceFileAVideo()) {
-                        $url = $router->generate(
-                            'chamilo_core_resource_view',
-                            $myParams
-                        );
+                        $url = $router->generate('chamilo_core_resource_view_file', $myParams);
 
                         return '
                         <video width="640" height="320" controls id="video'.$id.'" controls preload="metadata" style="display:none;">
@@ -219,17 +209,20 @@ class ResourceController extends AbstractResourceController implements CourseCon
                         '.$icon.' <a data-fancybox="gallery"  data-width="640" data-height="360" href="#video'.$id.'">'.$value.'</a>';
                     }
 
-                    $url = $router->generate(
-                        'chamilo_core_resource_preview',
-                        $myParams
-                    );
+                    $url = $router->generate('chamilo_core_resource_preview', $myParams);
 
-                    return $icon.'<a data-fancybox="gallery" data-type="iframe" data-src="'.$url.'" href="javascript:;" >'.$value.'</a>';
+                    return $icon.
+                        '<a data-fancybox="gallery" data-type="iframe" data-src="'.$url.'" href="javascript:;" >'.
+                        $value.'</a>';
                 } else {
-                    $url = $router->generate(
-                        'chamilo_core_resource_list',
-                        $myParams
-                    );
+                    if ($settings->isAllowNodeCreation()) {
+                        $url = $router->generate(
+                            'chamilo_core_resource_list',
+                            $myParams
+                        );
+                    } else {
+                        $url = $router->generate('chamilo_core_resource_view_resource', $myParams);
+                    }
 
                     return $icon.'<a href="'.$url.'">'.$value.'</a>';
                 }
@@ -548,7 +541,7 @@ class ResourceController extends AbstractResourceController implements CourseCon
         $repository = $this->getRepositoryFromRequest($request);
         $resource = $repository->getResourceFromResourceNode($resourceNodeId);
         $this->denyAccessUnlessValidResource($resource);
-
+        $settings = $repository->getResourceSettings();
         $resourceNode = $resource->getResourceNode();
 
         $this->denyAccessUnlessGranted(
@@ -564,9 +557,9 @@ class ResourceController extends AbstractResourceController implements CourseCon
 
         $form = $repository->getForm($this->container->get('form.factory'), $resource);
 
-        if ($resourceNode->hasEditableContent()) {
+        if ($resourceNode->hasEditableContent() && $settings->isAllowToSaveEditorToResourceFile()) {
             $form->add(
-                'content',
+                $this->fileContentName,
                 CKEditorType::class,
                 [
                     'mapped' => false,
@@ -577,7 +570,7 @@ class ResourceController extends AbstractResourceController implements CourseCon
                 ]
             );
             $content = $repository->getResourceNodeFileContent($resourceNode);
-            $form->get('content')->setData($content);
+            $form->get($this->fileContentName)->setData($content);
         }
 
         $form->handleRequest($request);
@@ -586,12 +579,11 @@ class ResourceController extends AbstractResourceController implements CourseCon
             /** @var AbstractResource $newResource */
             $newResource = $form->getData();
 
-            if ($form->has('content')) {
-                $data = $form->get('content')->getData();
+            if ($form->has($this->fileContentName)) {
+                $data = $form->get($this->fileContentName)->getData();
                 $repository->updateResourceFileContent($newResource, $data);
             }
 
-            //$newResource->setTitle($form->get('title')->getData()); // already set in $form->getData()
             $repository->updateNodeForResource($newResource);
 
             if ($form->has('illustration')) {
@@ -773,10 +765,7 @@ class ResourceController extends AbstractResourceController implements CourseCon
         $routeParams = $this->getResourceParams($request);
         $routeParams['id'] = $parentId;
 
-        return $this->redirectToRoute(
-            'chamilo_core_resource_list',
-            $routeParams
-        );
+        return $this->redirectToRoute('chamilo_core_resource_list', $routeParams);
     }
 
     /**
@@ -818,7 +807,7 @@ class ResourceController extends AbstractResourceController implements CourseCon
     /**
      * Shows the associated resource file.
      *
-     * @Route("/{tool}/{type}/{id}/view", methods={"GET"}, name="chamilo_core_resource_view")
+     * @Route("/{tool}/{type}/{id}/view", methods={"GET"}, name="chamilo_core_resource_view_file")
      */
     public function viewAction(Request $request, RouterInterface $router): Response
     {
@@ -846,36 +835,41 @@ class ResourceController extends AbstractResourceController implements CourseCon
     }
 
     /**
-     * Gets a document when calling route resources_document_get_file.
-     * 1     *.
+     * Shows the associated resource file.
      *
-     * @throws \League\Flysystem\FileNotFoundException
-     *
-     * @deprecated
+     * @Route("/{tool}/{type}/{id}/view_resource", methods={"GET"}, name="chamilo_core_resource_view_resource")
      */
-    public function getDocumentAction(Request $request): Response
+    public function viewResourceAction(Request $request, RouterInterface $router): Response
     {
-        /*$file = $request->get('file');
-        $mode = $request->get('mode');
+        $id = $request->get('id');
+        $em = $this->getDoctrine();
 
-        // see list of filters in config/services.yaml
-        $filter = $request->get('filter');
-        $mode = !empty($mode) ? $mode : 'show';
+        /** @var ResourceNode $resourceNode */
+        $resourceNode = $em->getRepository('ChamiloCoreBundle:Resource\ResourceNode')->find($id);
 
-        $repository = $this->getRepository('document', 'files');
-        $nodeRepository = $repository->getResourceNodeRepository();
+        $this->denyAccessUnlessGranted(
+            ResourceNodeVoter::VIEW,
+            $resourceNode,
+            $this->trans('Unauthorised access to resource')
+        );
 
-        $title = basename($file);
-        // @todo improve criteria to avoid giving the wrong file.
-        $criteria = ['slug' => $title];
+        $repository = $this->getRepositoryFromRequest($request);
 
-        $resourceNode = $nodeRepository->findOneBy($criteria);
+        /** @var AbstractResource $resource */
+        $resource = $repository->getResourceFromResourceNode($id);
+        $tool = $request->get('tool');
+        $type = $request->get('type');
 
-        if (null === $resourceNode) {
-            throw new NotFoundHttpException();
-        }
+        $params = [
+            'resource' => $resource,
+            'tool' => $tool,
+            'type' => $type,
+        ];
 
-        return $this->showFile($request, $resourceNode, $mode, $glide,$filter);*/
+        return $this->render('@ChamiloTheme/Resource/view_resource.html.twig', $params);
+
+
+        //return $this->showFile($request, $resourceNode, $mode, $filter);
     }
 
     /**
@@ -927,10 +921,7 @@ class ResourceController extends AbstractResourceController implements CourseCon
 
             $this->addFlash('warning', $this->trans('No files'));
 
-            return $this->redirectToRoute(
-                'chamilo_core_resource_list',
-                $params
-            );
+            return $this->redirectToRoute('chamilo_core_resource_list', $params);
         }
 
         $response = new StreamedResponse(
@@ -988,10 +979,7 @@ class ResourceController extends AbstractResourceController implements CourseCon
         $routeParams['type'] = $type;
         $routeParams['id'] = $id;
 
-        return $this->render(
-            '@ChamiloTheme/Resource/upload.html.twig',
-            $routeParams
-        );
+        return $this->render('@ChamiloTheme/Resource/upload.html.twig', $routeParams);
     }
 
     public function setBreadCrumb(Request $request)
@@ -1011,10 +999,7 @@ class ResourceController extends AbstractResourceController implements CourseCon
             $breadcrumb->addChild(
                 $this->trans($tool),
                 [
-                    'uri' => $this->generateUrl(
-                        'chamilo_core_resource_index',
-                        $toolParams
-                    ),
+                    'uri' => $this->generateUrl('chamilo_core_resource_index', $toolParams),
                 ]
             );
 
@@ -1049,10 +1034,7 @@ class ResourceController extends AbstractResourceController implements CourseCon
                 $breadcrumb->addChild(
                     $item->getResourceName(),
                     [
-                        'uri' => $this->generateUrl(
-                            'chamilo_core_resource_list',
-                            $params
-                        ),
+                        'uri' => $this->generateUrl('chamilo_core_resource_list', $params),
                     ]
                 );
             }
@@ -1063,10 +1045,7 @@ class ResourceController extends AbstractResourceController implements CourseCon
             $breadcrumb->addChild(
                 $originalResource->getResourceName(),
                 [
-                    'uri' => $this->generateUrl(
-                        'chamilo_core_resource_list',
-                        $params
-                    ),
+                    'uri' => $this->generateUrl('chamilo_core_resource_list', $params),
                 ]
             );
         }
@@ -1156,7 +1135,6 @@ class ResourceController extends AbstractResourceController implements CourseCon
     private function createResource(Request $request, $fileType = 'file')
     {
         $resourceNodeParentId = $request->get('id');
-
         $repository = $this->getRepositoryFromRequest($request);
 
         // Default parent node is course.
@@ -1170,10 +1148,12 @@ class ResourceController extends AbstractResourceController implements CourseCon
 
         $form = $repository->getForm($this->container->get('form.factory'), null);
 
-        if ('file' === $fileType) {
+        $settings = $repository->getResourceSettings();
+
+        if ('file' === $fileType && $settings->isAllowToSaveEditorToResourceFile()) {
             $resourceParams = $this->getResourceParams($request);
             $form->add(
-                'content',
+                $this->fileContentName,
                 CKEditorType::class,
                 [
                     'mapped' => false,
@@ -1197,8 +1177,8 @@ class ResourceController extends AbstractResourceController implements CourseCon
             $newResource = $repository->saveResource($form, $course, $session, $fileType);
 
             $file = null;
-            if ('file' === $fileType && $newResource instanceof CDocument) {
-                $content = $form->get('content')->getViewData();
+            if ('file' === $fileType && $settings->isAllowToSaveEditorToResourceFile()) {
+                $content = $form->get($this->fileContentName)->getViewData();
                 $newResource->setTitle($newResource->getTitle().'.html');
                 $fileName = $newResource->getTitle();
 

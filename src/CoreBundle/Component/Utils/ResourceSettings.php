@@ -15,6 +15,8 @@ class ResourceSettings
     /** @var bool */
     public $allowResourceEdit;
     public $allowDownloadAll;
+    public $allowDiskSpace;
+    public $allowToSaveEditorToResourceFile;
 
     public function __construct()
     {
@@ -23,6 +25,8 @@ class ResourceSettings
         $this->allowResourceUpload = true;
         $this->allowResourceEdit = true;
         $this->allowDownloadAll = false;
+        $this->allowDiskSpace = false;
+        $this->allowToSaveEditorToResourceFile = false;
     }
 
     public function isAllowNodeCreation(): bool
@@ -84,4 +88,46 @@ class ResourceSettings
 
         return $this;
     }
+
+    /**
+     * @return bool
+     */
+    public function isAllowDiskSpace(): bool
+    {
+        return $this->allowDiskSpace;
+    }
+
+    /**
+     * @param bool $allowDiskSpace
+     *
+     * @return ResourceSettings
+     */
+    public function setAllowDiskSpace(bool $allowDiskSpace): ResourceSettings
+    {
+        $this->allowDiskSpace = $allowDiskSpace;
+
+        return $this;
+    }
+
+    /**
+     * @return bool
+     */
+    public function isAllowToSaveEditorToResourceFile(): bool
+    {
+        return $this->allowToSaveEditorToResourceFile;
+    }
+
+    /**
+     * @param bool $allowToSaveEditorToResourceFile
+     *
+     * @return ResourceSettings
+     */
+    public function setAllowToSaveEditorToResourceFile(bool $allowToSaveEditorToResourceFile): ResourceSettings
+    {
+        $this->allowToSaveEditorToResourceFile = $allowToSaveEditorToResourceFile;
+
+        return $this;
+    }
+
+
 }

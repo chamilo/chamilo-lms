@@ -342,7 +342,6 @@ if (is_array($forumCategories)) {
         $forumCategoryInfo['tools'] = $tools;
         $forumCategoryInfo['forums'] = [];
         // The forums in this category.
-        $forumInfo = [];
         $forumsInCategory = get_forums_in_category($forumCategory['cat_id']);
 
         if (!empty($forumsInCategory)) {
@@ -390,6 +389,7 @@ if (is_array($forumCategories)) {
                     }
 
                     if ($show_forum) {
+                        $forumInfo = [];
                         $form_count++;
                         $mywhatsnew_post_info = isset($whatsnew_post_info[$forum['forum_id']])
                             ? $whatsnew_post_info[$forum['forum_id']]

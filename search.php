@@ -1,4 +1,5 @@
 <?php
+
 /* For licensing terms, see /license.txt */
 
 use Chamilo\CoreBundle\Entity\ExtraFieldSavedSearch;
@@ -14,13 +15,13 @@ $userInfo = api_get_user_info();
 
 $em = Database::getManager();
 
+$adminPermissions = true;
+
 $form = new FormValidator('search', 'post', api_get_self());
 $form->addHeader(get_lang('Diagnosis'));
 
 /** @var ExtraFieldSavedSearch $saved */
-$search = [
-    'user' => $userId,
-];
+$search = ['user' => $userId];
 
 $items = $em->getRepository('ChamiloCoreBundle:ExtraFieldSavedSearch')->findBy($search);
 
@@ -29,10 +30,7 @@ $extraFieldValueSession = new ExtraFieldValue('session');
 
 $filter = false;
 $extraFieldValue = new ExtraFieldValue('user');
-$wantStage = $extraFieldValue->get_values_by_handler_and_field_variable(
-    api_get_user_id(),
-    'filiere_want_stage'
-);
+$wantStage = $extraFieldValue->get_values_by_handler_and_field_variable(api_get_user_id(), 'filiere_want_stage');
 
 $diagnosisComplete = $extraFieldValue->get_values_by_handler_and_field_variable(
     api_get_user_id(),
@@ -60,20 +58,6 @@ $url = api_get_path(WEB_AJAX_PATH).'extra_field.ajax.php?a=order&user_id='.$user
 
 // Use current user language
 $targetLanguage = $userInfo['language'];
-
-// Theme fix
-/*
-$targetLanguage = api_get_interface_language();
-
-$targetLanguageInfo = $extraFieldValue->get_values_by_handler_and_field_variable(
-    api_get_user_id(),
-    'langue_cible'
-);
-
-if (!empty($targetLanguageInfo)) {
-    $targetLanguage = strtolower($targetLanguageInfo['value']);
-}*/
-
 $theme = 'theme_fr';
 switch ($targetLanguage) {
     case 'italian':
@@ -96,11 +80,11 @@ switch ($targetLanguage) {
 }
 
 $htmlHeadXtra[] = '<script>
-$(document).ready(function() {  
+$(function() {
     var themeDefault = "extra_'.$theme.'";
-    var extraFiliere = $("input[name=\'extra_filiere[extra_filiere]\']").parent().parent().parent().parent();    
+    var extraFiliere = $("input[name=\'extra_filiere[extra_filiere]\']").parent().parent().parent().parent();
     '.$defaultValueStatus.'
-    
+
     $("input[name=\'extra_filiere_want_stage[extra_filiere_want_stage]\']").change(function() {
         if ($(this).val() == "no") {
             extraFiliere.show();
@@ -113,94 +97,94 @@ $(document).ready(function() {
         $("<a>", {
             "class": "btn ajax btn-default",
             "href": "'.$url.'&field_variable=extra_theme",
-            "text": "'.get_lang('Order').'"             
+            "text": "'.get_lang('Order').'"
         })
     );
-    
+
     $("#extra_theme_fr").parent().append(
         $("<a>", {
             "class": "btn ajax btn-default",
             "href": "'.$url.'&field_variable=extra_theme_fr",
-            "text": "'.get_lang('Order').'"             
+            "text": "'.get_lang('Order').'"
         })
     );
-    
+
     $("#extra_theme_de").parent().append(
         $("<a>", {
             "class": "btn ajax btn-default",
             "href": "'.$url.'&field_variable=extra_theme_de",
-            "text": "'.get_lang('Order').'"             
+            "text": "'.get_lang('Order').'"
         })
     );
-    
+
     $("#extra_theme_it").parent().append(
         $("<a>", {
             "class": "btn ajax btn-default",
             "href": "'.$url.'&field_variable=extra_theme_it",
-            "text": "'.get_lang('Order').'"             
+            "text": "'.get_lang('Order').'"
         })
     );
-    
+
     $("#extra_theme_es").parent().append(
         $("<a>", {
             "class": "btn ajax btn-default",
             "href": "'.$url.'&field_variable=extra_theme_es",
-            "text": "'.get_lang('Order').'"             
+            "text": "'.get_lang('Order').'"
         })
     );
-    
+
      $("#extra_theme_pl").parent().append(
         $("<a>", {
             "class": "btn ajax btn-default",
             "href": "'.$url.'&field_variable=extra_theme_pl",
-            "text": "'.get_lang('Order').'"             
+            "text": "'.get_lang('Order').'"
         })
     );
-        
-    
+
+
     $("#extra_domaine_0, #extra_domaine_1, #extra_domaine_2").on("change", function() {
         var domainList = [];
-        $("#extra_domaine_0 option:selected").each(function() {       
+        $("#extra_domaine_0 option:selected").each(function() {
             domainList.push($(this).val());
         });
-        $("#extra_domaine_1 option:selected").each(function() {       
-            domainList.push($(this).val());
-        });        
-        $("#extra_domaine_2 option:selected").each(function() {       
+        $("#extra_domaine_1 option:selected").each(function() {
             domainList.push($(this).val());
         });
-                
-        var domainListToString = JSON.stringify(domainList);  
-             
+        $("#extra_domaine_2 option:selected").each(function() {
+            domainList.push($(this).val());
+        });
+
+        var domainListToString = JSON.stringify(domainList);
+
         $.ajax({
             contentType: "application/x-www-form-urlencoded",
             type: "GET",
             url: "'.api_get_path(WEB_AJAX_PATH).'extra_field.ajax.php?a=search_options_from_tags&type=session&from=extra_domaine&search="+themeDefault+"&options="+domainListToString,
-            success: function(data) {            
+            success: function(data) {
                 var selectToString = "";
                 selectToString += "<option></option>";
                 jQuery.each(JSON.parse(data), function(i, item) {
                     selectToString += "<optgroup label=\'"+item.text+"\'>";
-                    // Add empty value                    
-                    jQuery.each(item.children, function(j, data) {                        
-                        if (data.text != "") {                                    
+                    // Add empty value
+                    jQuery.each(item.children, function(j, data) {
+                        if (data.text != "") {
                             selectToString += "<option value=\'"+data.text+"\'> " +data.text+"</option>"
                         }
-                    });                         
+                    });
                     selectToString += "</optgroup>";
-                });   
-                 
-                for (i = 0; i <= 5; i++) { 
-                    var themeId = "#"+themeDefault+"_"+i;                    
-                    var beforeValue = $(themeId).find(":selected").val()
-                    $(themeId).find("option").remove().end();                    
+                });
+
+                for (i = 0; i <= 5; i++) {
+                    var themeId = "#"+themeDefault+"_"+i;
+                    var beforeValue = $(themeId).find(":selected").val();
+                    $(themeId).find("option").remove().end();
                     $(themeId).empty();
-                    $(themeId).html(selectToString);   
-                    $(themeId).val(beforeValue);             
+                    $(themeId).html(selectToString);
+                    $(themeId).val(beforeValue);
                     $(themeId).selectpicker("refresh");
                 }
             }
-         });        
+         });
     });
 });
 </script>';
@@ -286,13 +270,12 @@ if ($form->validate()) {
     }
 }
 
-$forceShowFields = true;
 $extraField = new ExtraField('user');
 $userForm = new FormValidator('user_form', 'post', api_get_self());
 $jqueryExtra = '';
 
-$htmlHeadXtra[] = '<script>		
-$(document).ready(function() {
+$htmlHeadXtra[] = '<script>
+$(function() {
 	var blocks = [
         "#collapseOne",
         "#collapseTwo",
@@ -301,57 +284,57 @@ $(document).ready(function() {
         "#collapseFive",
         "#collapseSix",
         "#collapseSeven",
-        "#collapseEight"         
+        "#collapseEight"
     ];
-    
-    $.each(blocks, function( index, value ) {          	
-        if (window.location.hash == value) {            
+
+    $.each(blocks, function( index, value ) {
+        if (window.location.hash == value) {
             return true;
         }
         $(value).collapse("hide");
-    });	   
-	
-                
-    $("#filiere").on("click", function() {		
-        $("#filiere_panel").toggle();		
-        return false;		
-    });		
-    
-    $("#dispo").on("click", function() {		
-        $("#dispo_panel").toggle();		
-        return false;		
-    });		
-    
-    $("#dispo_pendant").on("click", function() {		
-        $("#dispo_pendant_panel").toggle();		
-        return false;		
-    });			
-    
-    $("#niveau").on("click", function() {		
-        $("#niveau_panel").toggle();		
-        return false;		
-    });		
-    
-    $("#methode").on("click", function() {		
-        $("#methode_panel").toggle();		
-        return false;		
-    });		
-    
-    $("#enviroment").on("click", function() {		
-        $("#enviroment_panel").toggle();		
-        return false;		
-    });	
-    
-    $("#themes").on("click", function() {		
-        $("#themes_panel").toggle();		
-        return false;		
-    });		
-    
-    $("#objectifs").on("click", function() {		
-        $("#objectifs_panel").toggle();		
-        return false;		
-    });		
-});		
+    });
+
+
+    $("#filiere").on("click", function() {
+        $("#filiere_panel").toggle();
+        return false;
+    });
+
+    $("#dispo").on("click", function() {
+        $("#dispo_panel").toggle();
+        return false;
+    });
+
+    $("#dispo_pendant").on("click", function() {
+        $("#dispo_pendant_panel").toggle();
+        return false;
+    });
+
+    $("#niveau").on("click", function() {
+        $("#niveau_panel").toggle();
+        return false;
+    });
+
+    $("#methode").on("click", function() {
+        $("#methode_panel").toggle();
+        return false;
+    });
+
+    $("#enviroment").on("click", function() {
+        $("#enviroment_panel").toggle();
+        return false;
+    });
+
+    $("#themes").on("click", function() {
+        $("#themes_panel").toggle();
+        return false;
+    });
+
+    $("#objectifs").on("click", function() {
+        $("#objectifs_panel").toggle();
+        return false;
+    });
+});
 </script>';
 
 $userForm->addHtml('<div class="panel-group" id="search_extrafield" role="tablist" aria-multiselectable="true">');
@@ -386,7 +369,7 @@ $extra = $extraField->addElements(
     $fieldsToShow,
     [],
     false,
-    $forceShowFields //$forceShowFields = false
+    $adminPermissions
 );
 
 $jqueryExtra .= $extra['jquery_ready_content'];
@@ -405,7 +388,7 @@ $extra = $extraFieldSession->addElements(
     $fieldsToShow,
     [],
     false,
-    $forceShowFields //$forceShowFields = false
+    $adminPermissions
 );
 
 $jqueryExtra .= $extra['jquery_ready_content'];
@@ -431,7 +414,7 @@ $extra = $extraFieldSession->addElements(
     [],
     [],
     false,
-    $forceShowFields //$forceShowFields = false
+    $adminPermissions
 );
 
 $userForm->addRule(
@@ -464,7 +447,7 @@ $extra = $extraField->addElements(
     $fieldsToShow,
     [],
     false,
-    $forceShowFields //$forceShowFields = false
+    $adminPermissions
 );
 
 $userForm->addButtonSave(get_lang('Save'), 'submit_partial[collapseTwo]');
@@ -497,7 +480,7 @@ $extra = $extraField->addElements(
     $fieldsToShow,
     [],
     false,
-    $forceShowFields //$forceShowFields = false
+    $adminPermissions
 );
 
 $userForm->addRule(
@@ -536,7 +519,7 @@ $extra = $extraFieldSession->addElements(
     $fieldsToShow,
     $defaults,
     true,
-    $forceShowFields, // $forceShowFields
+    $adminPermissions,
     ['domaine' => 3, $theme => 5], // $separateExtraMultipleSelect
     [
         'domaine' => [
@@ -585,7 +568,7 @@ $extra = $extraFieldSession->addElements(
     $fieldsToShow,
     $defaults,
     false, //$orderDependingDefaults = false,
-    $forceShowFields //$forceShowFields = false
+    $adminPermissions
 );
 
 $jqueryExtra .= $extra['jquery_ready_content'];
@@ -612,7 +595,7 @@ $extra = $extraField->addElements(
     $fieldsToShow,
     [],
     false,
-    $forceShowFields //$forceShowFields = false
+    $adminPermissions
 );
 
 $jqueryExtra .= $extra['jquery_ready_content'];
@@ -640,7 +623,7 @@ $extra = $extraField->addElements(
     $fieldsToShow,
     [],
     false,
-    $forceShowFields //$forceShowFields = false
+    $adminPermissions
 );
 
 $jqueryExtra .= $extra['jquery_ready_content'];
@@ -678,7 +661,7 @@ $extra = $extraField->addElements(
     $fieldsToShow,
     [],
     false,
-    $forceShowFields //$forceShowFields = false
+    $adminPermissions
 );
 
 $userForm->addLabel(null, get_lang('MonEnvironnementDeTravailExplanationIntro2'));
@@ -701,7 +684,7 @@ $extra = $extraField->addElements(
     $fieldsToShow,
     [],
     false,
-    $forceShowFields //$forceShowFields = false
+    $adminPermissions
 );
 
 $jqueryExtra .= $extra['jquery_ready_content'];
@@ -772,7 +755,7 @@ if ($userForm->validate()) {
 
     $extraFieldValue->saveFieldValues(
         $userData,
-        $forceShowFields,
+        $adminPermissions,
         false,
         [],
         ['legal_accept']

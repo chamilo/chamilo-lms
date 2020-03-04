@@ -4,15 +4,20 @@
 
 namespace Chamilo\CourseBundle\Entity;
 
+use APY\DataGridBundle\Grid\Mapping as GRID;
+use Chamilo\CoreBundle\Entity\Resource\AbstractResource;
+use Chamilo\CoreBundle\Entity\Resource\ResourceInterface;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
  * CCourseDescription.
  *
+ * @GRID\Source(columns="iid, title, resourceNode.createdAt", filterable=false, groups={"resource"})
+ *
  * @ORM\Table(name="c_course_description", indexes={@ORM\Index(name="session_id", columns={"session_id"})})
  * @ORM\Entity
  */
-class CCourseDescription
+class CCourseDescription extends AbstractResource implements ResourceInterface
 {
     public const TYPE_DESCRIPTION = 1;
     public const TYPE_OBJECTIVES = 2;
@@ -80,6 +85,17 @@ class CCourseDescription
      * @ORM\Column(name="progress", type="integer", nullable=false)
      */
     protected $progress;
+
+    /**
+     * CCourseDescription constructor.
+     *
+     * @param int $iid
+     */
+    public function __construct()
+    {
+        $this->progress = 0;
+        $this->descriptionType = 1;
+    }
 
     /**
      * Set title.
@@ -257,15 +273,21 @@ class CCourseDescription
         return $this->iid;
     }
 
-    /**
-     * @param int $iid
-     *
-     * @return CCourseDescription
-     */
-    public function setIid($iid)
+    public function __toString(): string
     {
-        $this->iid = $iid;
+        return $this->getTitle();
+    }
 
-        return $this;
+    /**
+     * Resource identifier.
+     */
+    public function getResourceIdentifier(): int
+    {
+        return $this->getIid();
+    }
+
+    public function getResourceName(): string
+    {
+        return $this->getTitle();
     }
 }

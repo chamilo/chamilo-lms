@@ -9,7 +9,7 @@
                 <br />
                 <img src=
                      "{{ url(
-                         'chamilo_core_resource_view', {
+                         'chamilo_core_resource_view_file', {
                              'id': resource.resourceNode.id,
                              'cid': course.id,
                              'sid': session.id,
@@ -21,7 +21,7 @@
                 />
             {% elseif resource.resourceNode.hasEditableContent %}
                 {% autoescape false %}
-                <iframe border="0" frameborder="0" style="width:100%;height:600px" src="{{ url('chamilo_core_resource_view', {
+                <iframe border="0" frameborder="0" style="width:100%;height:600px" src="{{ url('chamilo_core_resource_view_file', {
                     'id': resource.resourceNode.id,
                     'cid': course.id,
                     'sid': session.id,
@@ -37,7 +37,7 @@
             <br />
             Download file:
             <a
-                href="{{ url('chamilo_core_resource_view', {
+                href="{{ url('chamilo_core_resource_view_file', {
                 'id': resource.resourceNode.id,
                 'cid': course.id,
                 'sid': session.id,

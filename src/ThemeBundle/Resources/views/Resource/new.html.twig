@@ -2,13 +2,13 @@
 
 {% block content %}
     <div class="box-body">
-      {{ form_start(form) }}
+        {{ form_start(form) }}
+        {{ form_errors(form) }}
+        {{ form_widget(form) }}
 
-      {{ form_errors(form) }}
-
-      {{ form_row(form.title) }}
-      {{ form_row(form.content) }}
-
-      {{ form_end(form) }}
+        <div class="form-group">
+            <button type="submit" class="btn-primary btn">{{'Save' | trans}}</button>
+        </div>
+        {{ form_end(form) }}
     </div>
 {% endblock %}

@@ -31,11 +31,12 @@
                 </a>
             {% endif %}
 
-            <a class="btn btn-secondary"
-               href="{{ url('chamilo_core_resource_disk_space', { 'tool': tool, 'type': type, 'cid': course.id, 'sid': session.id,  'id': id }) }}">
-                {{ 'Disk Space' | trans }}
-            </a>
-
+            {% if resource_settings.allowToSaveEditorToResourceFile %}
+                <a class="btn btn-secondary"
+                   href="{{ url('chamilo_core_resource_disk_space', { 'tool': tool, 'type': type, 'cid': course.id, 'sid': session.id,  'id': id }) }}">
+                    {{ 'Disk Space' | trans }}
+                </a>
+            {% endif %}
         </div>
     {% endif %}
 

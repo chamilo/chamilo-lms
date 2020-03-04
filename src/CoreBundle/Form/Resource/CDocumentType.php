@@ -4,12 +4,10 @@
 
 namespace Chamilo\CoreBundle\Form\Resource;
 
-use Chamilo\CoreBundle\Form\Type\IllustrationType;
 use Chamilo\CourseBundle\Entity\CDocument;
-use FOS\CKEditorBundle\Form\Type\CKEditorType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\HiddenType;
-use Symfony\Component\Form\Extension\Core\Type\SubmitType;
+use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
@@ -21,7 +19,7 @@ class CDocumentType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
-            ->add('title')
+            ->add('title', TextType::class)
 //            ->add('comment', CKEditorType::class)
             /*->add(
                 'shared',
@@ -49,7 +47,6 @@ class CDocumentType extends AbstractType
                     'allow_delete' => true,
                 )
             )*/
-            //->add('c_id', HiddenType::class)
             ->add('filetype', HiddenType::class)
             /*->add(
                 'illustration',
@@ -69,8 +66,8 @@ class CDocumentType extends AbstractType
                     'allow_add' => true,
                 )
             )*/
-            //->add('resourceNode', new ResourceNodeType())
-            ->add('save', SubmitType::class);
+            //->add('save', SubmitType::class)
+        ;
     }
 
     public function configureOptions(OptionsResolver $resolver)

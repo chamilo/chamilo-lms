@@ -6,7 +6,6 @@ namespace Chamilo\CoreBundle\Form\Resource;
 
 use Chamilo\CoreBundle\Entity\PersonalFile;
 use Symfony\Component\Form\AbstractType;
-use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
@@ -16,7 +15,7 @@ class PersonalFileType extends AbstractType
     {
         $builder
             ->add('name')
-            ->add('save', SubmitType::class);
+        ;
     }
 
     public function configureOptions(OptionsResolver $resolver)

@@ -39,6 +39,8 @@ final class CDocumentRepository extends ResourceRepository implements ResourceRe
             ->setAllowResourceCreation(true)
             ->setAllowResourceUpload(true)
             ->setAllowDownloadAll(true)
+            ->setAllowDiskSpace(true)
+            ->setAllowToSaveEditorToResourceFile(true)
         ;
 
         return $settings;
@@ -93,7 +95,7 @@ final class CDocumentRepository extends ResourceRepository implements ResourceRe
         ];
 
         return $this->getRouter()->generate(
-            'chamilo_core_resource_view',
+            'chamilo_core_resource_view_file',
             $params
         );
     }

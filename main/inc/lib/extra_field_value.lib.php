@@ -89,10 +89,11 @@ class ExtraFieldValue extends Model
      */
     public function saveFieldValues(
         $params,
-        $forceSave = false,
+        $onlySubmittedFields = false,
         $showQuery = false,
         $saveOnlyThisFields = [],
-        $avoidFields = []
+        $avoidFields = [],
+        $forceSave = false
     ) {
         foreach ($params as $key => $value) {
             $found = strpos($key, '__persist__');
@@ -127,6 +128,10 @@ class ExtraFieldValue extends Model
             }
 
             $field_variable = $fieldDetails['variable'];
+
+            if ($onlySubmittedFields && !isset($params['extra_'.$field_variable])) {
+                continue;
+            }
 
             if (!empty($avoidFields)) {
                 if (in_array($field_variable, $avoidFields)) {

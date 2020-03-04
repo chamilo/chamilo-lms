@@ -83,6 +83,7 @@ class ExtraFieldValue extends Model
      * @param bool  $showQuery
      * @param array $saveOnlyThisFields
      * @param array $avoidFields         do not insert/modify this field
+     * @param bool  $forceSave
      *
      * @return mixed false on empty params, void otherwise
      * @assert (array()) === false
@@ -92,7 +93,8 @@ class ExtraFieldValue extends Model
         $onlySubmittedFields = false,
         $showQuery = false,
         $saveOnlyThisFields = [],
-        $avoidFields = []
+        $avoidFields = [],
+        $forceSave = false
     ) {
         foreach ($params as $key => $value) {
             $found = strpos($key, '__persist__');
@@ -118,18 +120,20 @@ class ExtraFieldValue extends Model
 
         // Parse params.
         foreach ($extraFields as $fieldDetails) {
-            $field_variable = $fieldDetails['variable'];
-
-            // if the field is not visible to the user in the end, we need to apply special rules
-            if ($fieldDetails['visible_to_self'] != 1) {
-                //only admins should be able to add those values
-                if (!api_is_platform_admin(true, true)) {
-                    // although if not admin but sent through a CLI script, we should accept it as well
-                    if (PHP_SAPI != 'cli') {
-                        continue; //not a CLI script, so don't write the value to DB
+            if ($forceSave === false) {
+                // if the field is not visible to the user in the end, we need to apply special rules
+                if ($fieldDetails['visible_to_self'] != 1) {
+                    //only admins should be able to add those values
+                    if (!api_is_platform_admin(true, true)) {
+                        // although if not admin but sent through a CLI script, we should accept it as well
+                        if (PHP_SAPI != 'cli') {
+                            continue; //not a CLI script, so don't write the value to DB
+                        }
                     }
                 }
             }
+
+            $field_variable = $fieldDetails['variable'];
 
             if ($onlySubmittedFields && !isset($params['extra_'.$field_variable])) {
                 continue;

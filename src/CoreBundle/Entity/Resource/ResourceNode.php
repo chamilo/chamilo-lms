@@ -510,7 +510,7 @@ class ResourceNode
                     'filter' => 'editor_thumbnail',
                 ];
                 $url = $router->generate(
-                    'chamilo_core_resource_view',
+                    'chamilo_core_resource_view_file',
                     $params
                 );
 

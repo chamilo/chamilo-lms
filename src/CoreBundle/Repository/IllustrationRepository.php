@@ -170,7 +170,7 @@ final class IllustrationRepository extends ResourceRepository implements Resourc
             }
 
             return $this->getRouter()->generate(
-                'chamilo_core_resource_view',
+                'chamilo_core_resource_view_file',
                 $params
             );
         }

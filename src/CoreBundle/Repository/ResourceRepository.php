@@ -107,9 +107,14 @@ class ResourceRepository extends BaseEntityRepository
         return $this->authorizationChecker;
     }
 
+    /**
+     * @return AbstractResource
+     */
     public function create()
     {
-        return new $this->className();
+        $class = $this->repository->getClassName();
+
+        return new $class;
     }
 
     public function getRouter(): RouterInterface
@@ -749,7 +754,7 @@ class ResourceRepository extends BaseEntityRepository
 
                 $referenceType = $referenceType ?? UrlGeneratorInterface::ABSOLUTE_PATH;
 
-                return $this->router->generate('chamilo_core_resource_view', $params, $referenceType);
+                return $this->router->generate('chamilo_core_resource_view_file', $params, $referenceType);
             }
 
             return '';

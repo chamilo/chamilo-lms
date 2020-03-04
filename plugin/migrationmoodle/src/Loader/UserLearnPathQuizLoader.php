@@ -26,7 +26,8 @@ class UserLearnPathQuizLoader implements LoaderInterface
         $itemView
             ->setStartTime($incomingData['start_time'])
             ->setTotalTime($incomingData['total_time'])
-            ->setScore($incomingData['score']);
+            ->setScore($incomingData['score'])
+            ->setStatus($incomingData['status']);
 
         $em = \Database::getManager();
         $em->persist($itemView);

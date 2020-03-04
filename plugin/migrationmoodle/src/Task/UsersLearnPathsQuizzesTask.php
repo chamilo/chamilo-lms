@@ -6,6 +6,7 @@ namespace Chamilo\PluginBundle\MigrationMoodle\Task;
 use Chamilo\PluginBundle\MigrationMoodle\Extractor\LoadedUsersFilterExtractor;
 use Chamilo\PluginBundle\MigrationMoodle\Loader\UserLearnPathQuizLoader;
 use Chamilo\PluginBundle\MigrationMoodle\Transformer\BaseTransformer;
+use Chamilo\PluginBundle\MigrationMoodle\Transformer\Property\LearnPathItemViewQuizStatus;
 use Chamilo\PluginBundle\MigrationMoodle\Transformer\Property\LoadedCourseModuleQuizByQuizLookup;
 use Chamilo\PluginBundle\MigrationMoodle\Transformer\Property\LoadedUserLookup;
 use Chamilo\PluginBundle\MigrationMoodle\Transformer\Property\LoadedUserSessionLookup;
@@ -56,7 +57,10 @@ class UsersLearnPathsQuizzesTask extends BaseTask
                     'class' => Subtract::class,
                     'properties' => ['timefinish', 'timestart'],
                 ],
-                'state' => 'state',
+                'status' => [
+                    'class' => LearnPathItemViewQuizStatus::class,
+                    'properties' => ['quiz', 'state', 'sumgrades'],
+                ],
                 'score' => 'sumgrades',
             ],
         ];

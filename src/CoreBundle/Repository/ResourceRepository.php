@@ -20,7 +20,6 @@ use Chamilo\CoreBundle\Entity\Session;
 use Chamilo\CoreBundle\Entity\Usergroup;
 use Chamilo\CoreBundle\Security\Authorization\Voter\ResourceNodeVoter;
 use Chamilo\CoreBundle\ToolChain;
-use Chamilo\CourseBundle\Component\CourseCopy\Resources\Resource;
 use Chamilo\CourseBundle\Entity\CDocument;
 use Chamilo\CourseBundle\Entity\CGroupInfo;
 use Chamilo\UserBundle\Entity\User;
@@ -85,6 +84,7 @@ class ResourceRepository extends BaseEntityRepository
     protected $toolChain;
     protected $settings;
     protected $templates;
+    protected $resourceType;
 
     /**
      * ResourceRepository constructor.
@@ -106,6 +106,18 @@ class ResourceRepository extends BaseEntityRepository
         $this->toolChain = $toolChain;
         $this->settings = new ResourceSettings();
         $this->templates = new ResourceTemplate();
+
+        $em = $this->getEntityManager();
+        $service = get_class($this);
+        $name = $this->toolChain->getResourceTypeNameFromRepository($service);
+        $repo = $em->getRepository('ChamiloCoreBundle:Resource\ResourceType');
+        $this->resourceType = $repo->findOneBy(['name' => $name]);
+
+        if (empty($this->resourceType)) {
+            throw new \Exception(
+                "Resource Type missing in repo: $service, you need to add a record in the resource_type table"
+            );
+        }
     }
 
     public function getAuthorizationChecker(): AuthorizationCheckerInterface
@@ -432,12 +444,7 @@ class ResourceRepository extends BaseEntityRepository
      */
     public function getResourceType()
     {
-        $em = $this->getEntityManager();
-        $service = get_class($this);
-        $name = $this->toolChain->getResourceTypeNameFromRepository($service);
-        $repo = $em->getRepository('ChamiloCoreBundle:Resource\ResourceType');
-
-        return $repo->findOneBy(['name' => $name]);
+        return $this->resourceType;
     }
 
     public function getResourcesByCourse(Course $course, Session $session = null, CGroupInfo $group = null, ResourceNode $parentNode = null): QueryBuilder

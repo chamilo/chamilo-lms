@@ -54,7 +54,6 @@ class ToolChain
     protected $typeList;
     protected $entityManager;
     protected $settingsManager;
-    protected $toolRepository;
     protected $security;
 
     public function __construct(EntityManagerInterface $entityManager, SettingsManager $settingsManager, Security $security)

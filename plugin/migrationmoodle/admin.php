@@ -104,6 +104,9 @@ $menu = [
     'users_scorms_view' => [
         'users_scorms_progress',
     ],
+    'users_learn_paths_quizzes' => [
+        'users_quizzes_attempts',
+    ],
 ];
 
 $htmlHeadXtra[] = '<style>.fa-ul {list-style-type: decimal; list-style-position: outside;}</style>';

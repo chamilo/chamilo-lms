@@ -106,6 +106,7 @@ $menu = [
     ],
     'users_learn_paths_quizzes' => [
         'users_quizzes_attempts',
+        'user_question_attempts',
     ],
 ];
 

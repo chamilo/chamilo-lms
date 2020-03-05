@@ -308,6 +308,11 @@ class ResourceController extends AbstractResourceController implements CourseCon
         );
 
         $setNodeDownloadParameters = function (RowAction $action, Row $row) use ($routeParams) {
+            /** @var ResourceNode $resourceNode */
+            $resourceNode = $row->getEntity()->getResourceNode();
+            if (false === $resourceNode->hasResourceFile()) {
+                return null;
+            }
             $id = $row->getEntity()->getResourceNode()->getId();
             $routeParams['id'] = $id;
             $action->setRouteParameters($routeParams);

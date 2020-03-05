@@ -252,6 +252,11 @@ class OAuth2 extends Plugin
                 foreach ($this->getValuesByKey($response, $key) as $value) {
                     if (array_key_exists($value, $availableUrls)) {
                         $allowedUrlIds[] = $availableUrls[$value];
+                    } else {
+                        $newValue = ($value[-1] === '/') ? substr($value, 0, -1) : $value.'/';
+                        if (array_key_exists($newValue, $availableUrls)) {
+                            $allowedUrlIds[] = $availableUrls[$newValue];
+                        }
                     }
                 }
                 $grantedUrlIds = [];

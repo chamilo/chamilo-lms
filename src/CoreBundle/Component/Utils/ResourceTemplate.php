@@ -44,120 +44,70 @@ class ResourceTemplate
         throw new \InvalidArgumentException("No template found for action: $action");
     }
 
-    /**
-     * @param string $index
-     *
-     * @return ResourceTemplate
-     */
-    public function setIndex(string $index): ResourceTemplate
+    public function setIndex(string $index): self
     {
         $this->index = $index;
 
         return $this;
     }
 
-    /**
-     * @param string $list
-     *
-     * @return ResourceTemplate
-     */
-    public function setList(string $list): ResourceTemplate
+    public function setList(string $list): self
     {
         $this->list = $list;
 
         return $this;
     }
 
-    /**
-     * @param string $edit
-     *
-     * @return ResourceTemplate
-     */
-    public function setEdit(string $edit): ResourceTemplate
+    public function setEdit(string $edit): self
     {
         $this->edit = $edit;
 
         return $this;
     }
 
-    /**
-     * @param string $viewResource
-     *
-     * @return ResourceTemplate
-     */
-    public function setViewResource(string $viewResource): ResourceTemplate
+    public function setViewResource(string $viewResource): self
     {
         $this->viewResource = $viewResource;
 
         return $this;
     }
 
-    /**
-     * @param string $new
-     *
-     * @return ResourceTemplate
-     */
-    public function setNew(string $new): ResourceTemplate
+    public function setNew(string $new): self
     {
         $this->new = $new;
 
         return $this;
     }
 
-    /**
-     * @param string $newFolder
-     *
-     * @return ResourceTemplate
-     */
-    public function setNewFolder(string $newFolder): ResourceTemplate
+    public function setNewFolder(string $newFolder): self
     {
         $this->newFolder = $newFolder;
 
         return $this;
     }
 
-    /**
-     * @param string $diskSpace
-     *
-     * @return ResourceTemplate
-     */
-    public function setDiskSpace(string $diskSpace): ResourceTemplate
+    public function setDiskSpace(string $diskSpace): self
     {
         $this->diskSpace = $diskSpace;
 
         return $this;
     }
 
-    /**
-     * @param string $info
-     *
-     * @return ResourceTemplate
-     */
-    public function setInfo(string $info): ResourceTemplate
+    public function setInfo(string $info): self
     {
         $this->info = $info;
 
         return $this;
     }
 
-    /**
-     * @param string $preview
-     *
-     * @return ResourceTemplate
-     */
-    public function setPreview(string $preview): ResourceTemplate
+    public function setPreview(string $preview): self
     {
         $this->preview = $preview;
 
         return $this;
     }
 
-    /**
-     * @param string $upload
-     *
-     * @return ResourceTemplate
-     */
-    public function setUpload(string $upload): ResourceTemplate
+    public function setUpload(string $upload): self
     {
         $this->upload = $upload;
 

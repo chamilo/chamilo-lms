@@ -42,7 +42,6 @@ final class CCourseDescriptionRepository extends ResourceRepository implements R
         return $settings;
     }
 
-
     public function getResources(User $user, ResourceNode $parentNode, Course $course = null, Session $session = null, CGroupInfo $group = null): QueryBuilder
     {
         return $this->getResourcesByCourse($course, $session, $group, $parentNode);

@@ -1010,7 +1010,7 @@ class ResourceController extends AbstractResourceController implements CourseCon
             $repo = $this->getRepositoryFromRequest($request);
             $settings = $repo->getResourceSettings();
 
-            /** @var AbstractResource $originalResource */
+            /** @var ResourceInterface $originalResource */
             $originalResource = $repo->findOneBy(['resourceNode' => $resourceNodeId]);
             if (null === $originalResource) {
                 return;
@@ -1032,7 +1032,7 @@ class ResourceController extends AbstractResourceController implements CourseCon
             }
 
             $parentList = array_reverse($parentList);
-            /** @var AbstractResource $item */
+            /** @var ResourceInterface $item */
             foreach ($parentList as $item) {
                 $params = $routeParams;
                 $params['id'] = $item->getResourceNode()->getId();
@@ -1181,7 +1181,7 @@ class ResourceController extends AbstractResourceController implements CourseCon
             $course = $this->getCourse();
             $session = $this->getSession();
 
-            /** @var AbstractResource $newResource */
+            /** @var ResourceInterface $newResource */
             $newResource = $repository->saveResource($form, $course, $session, $fileType);
 
             $file = null;

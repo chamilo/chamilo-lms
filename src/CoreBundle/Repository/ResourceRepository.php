@@ -104,8 +104,8 @@ class ResourceRepository extends BaseEntityRepository
         $this->resourceNodeRepository = $resourceNodeRepository;
         $this->slugify = $slugify;
         $this->toolChain = $toolChain;
-        $this->settings =  new ResourceSettings();
-        $this->templates =  new ResourceTemplate();
+        $this->settings = new ResourceSettings();
+        $this->templates = new ResourceTemplate();
     }
 
     public function getAuthorizationChecker(): AuthorizationCheckerInterface

@@ -11,6 +11,7 @@ use Chamilo\CoreBundle\Entity\Course;
 use Chamilo\CoreBundle\Entity\PersonalFile;
 use Chamilo\CoreBundle\Entity\Resource\ResourceNode;
 use Chamilo\CoreBundle\Entity\Session;
+use Chamilo\CoreBundle\Form\Resource\PersonalFileType;
 use Chamilo\CourseBundle\Entity\CGroupInfo;
 use Chamilo\UserBundle\Entity\User;
 use Doctrine\ORM\QueryBuilder;
@@ -62,5 +63,10 @@ final class PersonalFileRepository extends ResourceRepository implements Resourc
     public function getTitleColumn(Grid $grid): Column
     {
         return $grid->getColumn('name');
+    }
+
+    public function getResourceFormType(): string
+    {
+        return PersonalFileType::class;
     }
 }

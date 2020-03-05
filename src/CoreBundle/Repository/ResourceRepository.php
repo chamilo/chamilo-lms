@@ -154,12 +154,10 @@ class ResourceRepository extends BaseEntityRepository
      */
     public function getForm(FormFactory $formFactory, AbstractResource $resource = null, $options = [])
     {
-        $className = $this->repository->getClassName();
-        $shortName = (new \ReflectionClass($className))->getShortName();
+        $formType = $this->getResourceFormType();
 
-        // @todo remove hardcode class loading
-        $formType = 'Chamilo\CoreBundle\Form\Resource\\'.$shortName.'Type';
         if (null === $resource) {
+            $className = $this->repository->getClassName();
             $resource = new $className();
         }
 

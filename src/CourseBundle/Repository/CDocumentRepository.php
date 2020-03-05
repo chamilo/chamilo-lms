@@ -11,6 +11,7 @@ use Chamilo\CoreBundle\Entity\Course;
 use Chamilo\CoreBundle\Entity\Resource\ResourceLink;
 use Chamilo\CoreBundle\Entity\Resource\ResourceNode;
 use Chamilo\CoreBundle\Entity\Session;
+use Chamilo\CoreBundle\Form\Resource\CDocumentType;
 use Chamilo\CoreBundle\Repository\ResourceRepository;
 use Chamilo\CoreBundle\Repository\ResourceRepositoryInterface;
 use Chamilo\CourseBundle\Entity\CDocument;
@@ -213,5 +214,10 @@ final class CDocumentRepository extends ResourceRepository implements ResourceRe
     public function getTitleColumn(Grid $grid): Column
     {
         return $grid->getColumn('title');
+    }
+
+    public function getResourceFormType(): string
+    {
+        return CDocumentType::class;
     }
 }

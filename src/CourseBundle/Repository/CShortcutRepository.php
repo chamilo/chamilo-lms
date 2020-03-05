@@ -11,6 +11,7 @@ use Chamilo\CoreBundle\Entity\Course;
 use Chamilo\CoreBundle\Entity\Resource\AbstractResource;
 use Chamilo\CoreBundle\Entity\Resource\ResourceNode;
 use Chamilo\CoreBundle\Entity\Session;
+use Chamilo\CoreBundle\Form\Resource\CShortcutType;
 use Chamilo\CoreBundle\Repository\ResourceRepository;
 use Chamilo\CoreBundle\Repository\ResourceRepositoryInterface;
 use Chamilo\CourseBundle\Entity\CGroupInfo;
@@ -100,5 +101,10 @@ final class CShortcutRepository extends ResourceRepository implements ResourceRe
     public function getTitleColumn(Grid $grid): Column
     {
         return $grid->getColumn('name');
+    }
+
+    public function getResourceFormType(): string
+    {
+        return CShortcutType::class;
     }
 }

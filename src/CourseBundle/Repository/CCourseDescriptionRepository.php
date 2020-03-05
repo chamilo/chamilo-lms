@@ -11,6 +11,7 @@ use Chamilo\CoreBundle\Component\Utils\ResourceTemplate;
 use Chamilo\CoreBundle\Entity\Course;
 use Chamilo\CoreBundle\Entity\Resource\ResourceNode;
 use Chamilo\CoreBundle\Entity\Session;
+use Chamilo\CoreBundle\Form\Resource\CCourseDescriptionType;
 use Chamilo\CoreBundle\Repository\ResourceRepository;
 use Chamilo\CoreBundle\Repository\ResourceRepositoryInterface;
 use Chamilo\CourseBundle\Entity\CCourseDescription;
@@ -70,5 +71,10 @@ final class CCourseDescriptionRepository extends ResourceRepository implements R
         }
 
         return $newResource;
+    }
+
+    public function getResourceFormType(): string
+    {
+        return CCourseDescriptionType::class;
     }
 }

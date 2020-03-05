@@ -17,6 +17,7 @@ use Chamilo\CourseBundle\Entity\CGroupInfo;
 use Chamilo\UserBundle\Entity\User;
 use Doctrine\ORM\Query\Expr\Join;
 use Doctrine\ORM\QueryBuilder;
+use Symfony\Component\Form\Extension\Core\Type\FormType;
 use Symfony\Component\Form\FormInterface;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\Security\Core\Exception\AccessDeniedException;
@@ -110,5 +111,10 @@ final class CToolRepository extends ResourceRepository implements ResourceReposi
     public function getTitleColumn(Grid $grid): Column
     {
         return $grid->getColumn('name');
+    }
+
+    public function getResourceFormType(): string
+    {
+        return FormType::class;
     }
 }

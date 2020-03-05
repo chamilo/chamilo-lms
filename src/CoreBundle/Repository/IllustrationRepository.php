@@ -12,6 +12,7 @@ use Chamilo\CoreBundle\Entity\Resource\AbstractResource;
 use Chamilo\CoreBundle\Entity\Resource\ResourceFile;
 use Chamilo\CoreBundle\Entity\Resource\ResourceNode;
 use Chamilo\CoreBundle\Entity\Session;
+use Chamilo\CoreBundle\Form\Resource\IllustrationType;
 use Chamilo\CourseBundle\Entity\CGroupInfo;
 use Chamilo\UserBundle\Entity\User;
 use Doctrine\ORM\Query\Expr\Join;
@@ -181,5 +182,10 @@ final class IllustrationRepository extends ResourceRepository implements Resourc
     public function getTitleColumn(Grid $grid): Column
     {
         return $grid->getColumn('name');
+    }
+
+    public function getResourceFormType(): string
+    {
+        return IllustrationType::class;
     }
 }

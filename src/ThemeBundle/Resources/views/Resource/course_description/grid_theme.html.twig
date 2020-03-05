@@ -1,13 +1,6 @@
 {% extends 'APYDataGridBundle::blocks.html.twig' %}
 
-{# This file is loaded from config/services.yaml and then used in all grids. #}
-
-{# See block documentation here: #}
-{# https://github.com/APY/APYDataGridBundle/blob/master/Resources/doc/template/overriding_internal_blocks.md #}
-
-
 {% block grid_column_massaction_cell %}
-{#  <input type="checkbox" class="action" value="1" name="{{ grid.hash }}[{{ column.id }}][{{ row.primaryFieldValue }}]"/>#}
 {% endblock grid_column_massaction_cell %}
 
 {% block grid_column_content_cell %}
@@ -84,18 +77,9 @@
     <div class="box box-primary">
       <div class="box-body table-responsive no-padding">
         {% if grid.totalCount > 0 or grid.isFiltered or grid.noDataMessage is same as(false) %}
-          <form id="{{ grid.hash }}" action="{{ grid.routeUrl }}"
-                method="post">
+          <form id="{{ grid.hash }}" action="{{ grid.routeUrl }}" method="post">
             <div class="grid_body">
-
-{#                {% if grid.isTitleSectionVisible %}#}
-{#                  {{ grid_titles(grid) }}#}
-{#                {% endif %}#}
-{#                {% if grid.isFilterSectionVisible %}#}
-{#                  {{ grid_filters(grid) }}#}
-{#                {% endif %}#}
                 {{ grid_rows(grid) }}
-
             </div>
             <div class="grid_footer">
               {% if grid.isPagerSectionVisible %}
@@ -121,7 +105,6 @@
 {% endblock grid %}
 
 {% block grid_search %}
-
 {% endblock grid_search %}
 
 {% block grid_column_filter_type_input %}

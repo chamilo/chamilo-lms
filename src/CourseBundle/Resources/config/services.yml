@@ -111,6 +111,10 @@ services:
         arguments:
             $className: 'Chamilo\CourseBundle\Entity\CForumThread'
 
+    Chamilo\CourseBundle\Repository\CGlossaryRepository:
+        arguments:
+            $className: 'Chamilo\CourseBundle\Entity\CGlossary'
+
     Chamilo\CourseBundle\Repository\CGroupInfoRepository:
         arguments:
             $className: 'Chamilo\CourseBundle\Entity\CGroupInfo'

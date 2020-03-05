@@ -4,11 +4,15 @@
 
 namespace Chamilo\CourseBundle\Entity;
 
+use APY\DataGridBundle\Grid\Mapping as GRID;
+use Chamilo\CoreBundle\Entity\Resource\AbstractResource;
+use Chamilo\CoreBundle\Entity\Resource\ResourceInterface;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
  * CGlossary.
  *
+ * @GRID\Source(columns="iid, name, description", filterable=false, groups={"resource"})
  * @ORM\Table(
  *  name="c_glossary",
  *  indexes={
@@ -18,7 +22,7 @@ use Doctrine\ORM\Mapping as ORM;
  * )
  * @ORM\Entity
  */
-class CGlossary
+class CGlossary extends AbstractResource implements ResourceInterface
 {
     /**
      * @var int
@@ -35,13 +39,6 @@ class CGlossary
      * @ORM\Column(name="c_id", type="integer")
      */
     protected $cId;
-
-    /**
-     * @var int
-     *
-     * @ORM\Column(name="glossary_id", type="integer")
-     */
-    protected $glossaryId;
 
     /**
      * @var string
@@ -92,7 +89,7 @@ class CGlossary
      */
     public function getName()
     {
-        return $this->name;
+        return (string) $this->name;
     }
 
     /**
@@ -213,5 +210,28 @@ class CGlossary
     public function getCId()
     {
         return $this->cId;
+    }
+
+    public function getIid(): int
+    {
+        return $this->iid;
+    }
+
+    public function __toString(): string
+    {
+        return $this->getName();
+    }
+
+    /**
+     * Resource identifier.
+     */
+    public function getResourceIdentifier(): int
+    {
+        return $this->getIid();
+    }
+
+    public function getResourceName(): string
+    {
+        return $this->getName();
     }
 }

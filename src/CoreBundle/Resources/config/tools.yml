@@ -241,10 +241,10 @@ services:
         arguments:
             - 'glossary'
             - 'authoring'
-            - '/main/glossary/index.php'
+            - '/resources/glossary/words'
             - '@chamilo_course.settings.glossary'
             -
-                glossaries:
+                words:
                     repository: Chamilo\CourseBundle\Repository\CGlossaryRepository
         tags:
             - {name: chamilo_core.tool}

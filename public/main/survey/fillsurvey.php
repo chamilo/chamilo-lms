@@ -53,7 +53,7 @@ if (empty($courseInfo)) {
 }
 
 $userInfo = api_get_user_info();
-$sessionId = isset($_GET['id_session']) ? (int) $_GET['id_session'] : api_get_session_id();
+$sessionId = isset($_GET['sid']) ? (int) $_GET['sid'] : api_get_session_id();
 
 // Breadcrumbs
 if (!empty($userInfo)) {

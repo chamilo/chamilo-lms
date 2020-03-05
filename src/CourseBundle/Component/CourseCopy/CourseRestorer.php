@@ -2788,7 +2788,7 @@ class CourseRestorer
                         $params = [
                             'c_id' => $this->destination_course_id,
                             'name' => self::DBUTF8($lp->name),
-                            'link' => "lp/lp_controller.php?action=view&lp_id=$new_lp_id&id_session=$session_id",
+                            'link' => "lp/lp_controller.php?action=view&lp_id=$new_lp_id&sid=$session_id",
                             'image' => 'scormbuilder.gif',
                             'visibility' => '0',
                             'admin' => '0',

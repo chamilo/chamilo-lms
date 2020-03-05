@@ -3953,9 +3953,9 @@ class SurveyUtil
 
         $params = [
             'invitationcode' => $code,
-            'cidReq' => $courseInfo['code'],
+            'cid' => $courseInfo['code'],
             'course' => $courseInfo['code'],
-            'id_session' => $sessionId,
+            'sid' => $sessionId,
         ];
 
         if (!empty($surveyCode)) {

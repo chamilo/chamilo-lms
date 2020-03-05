@@ -80,7 +80,7 @@ class IndexManager
                     $my_exercise['title'],
                     api_get_path(
                         WEB_CODE_PATH
-                    ).'exercise/overview.php?exerciseId='.$my_exercise['id'].'&cidReq='.$my_exercise['course_code'].'&id_session='.$my_exercise['session_id']
+                    ).'exercise/overview.php?exerciseId='.$my_exercise['id'].'&cid='.$my_exercise['course_code'].'&sid='.$my_exercise['session_id']
                 );
                 $this->tpl->assign('exercise_url', $url);
                 $this->tpl->assign(
@@ -2309,7 +2309,7 @@ class IndexManager
             ICON_SIZE_LARGE
         );
 
-        $courseLink = $courseInfo['course_public_url'].'?id_session=0';
+        $courseLink = $courseInfo['course_public_url'].'?sid=0';
 
         // get html course params
         $courseParams = CourseManager::getCourseParamsForDisplay($id, $loadDirs);
@@ -2395,7 +2395,7 @@ class IndexManager
             ['class' => 'sessionView'],
             ICON_SIZE_LARGE
         );
-        $courseLink = $courseInfo['course_public_url'].'?id_session='.intval($id);
+        $courseLink = $courseInfo['course_public_url'].'?sid='.(int) $id;
 
         $html .= "<span class='$class1 session-view-session'>$icon$title</span>";
         $html .= '<div class="'.$class2.' session-view-session-go-to-course-in-session">

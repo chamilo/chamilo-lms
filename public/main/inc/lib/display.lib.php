@@ -1688,8 +1688,8 @@ class Display
                 api_get_path(WEB_CODE_PATH).
                 $notification['link'].'&cidReq='.$course_code.
                 '&ref='.$notification['ref'].
-                '&gidReq='.$notification['to_group_id'].
-                '&id_session='.$sessionId
+                '&gid='.$notification['to_group_id'].
+                '&sid='.$sessionId
             ).PHP_EOL;
         }
 

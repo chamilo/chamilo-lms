@@ -3584,7 +3584,7 @@ class CourseManager
 
                 $params['title'] = $course_info['title'];
                 $params['title_cut'] = $course_info['title'];
-                $params['link'] = $course_info['course_public_url'].'?id_session=0&autoreg=1';
+                $params['link'] = $course_info['course_public_url'].'?sid=0&autoreg=1';
                 if ('true' === api_get_setting('display_teacher_in_courselist')) {
                     $params['teachers'] = self::getTeachersFromCourse(
                         $courseId,
@@ -3853,7 +3853,7 @@ class CourseManager
                 );
             }
 
-            $courseUrl = $course_info['course_public_url'].'?id_session=0';
+            $courseUrl = $course_info['course_public_url'].'?sid=0';
             $teachers = [];
             if ('true' === api_get_setting('display_teacher_in_courselist')) {
                 $teachers = self::getTeachersFromCourse(
@@ -4074,7 +4074,7 @@ class CourseManager
                 }
 
                 if (COURSEMANAGER === $userInCourseStatus || $sessionCourseAvailable) {
-                    $session_url = $course_info['course_public_url'].'?id_session='.$course_info['id_session'];
+                    $session_url = $course_info['course_public_url'].'?sid='.$course_info['id_session'];
                     $session_title = '<a title="'.$course_info['name'].'" href="'.$session_url.'">'.
                         $course_info['name'].'</a>'.$notifications;
                 } else {

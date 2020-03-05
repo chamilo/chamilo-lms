@@ -118,8 +118,8 @@ class LoginSuccessHandler
             if (1 == $count_of_sessions && 0 == $count_of_courses_no_sessions) {
                 $key = array_keys($personal_course_list);
                 $course_info = $personal_course_list[$key[0]]['course_info'];
-                $id_session = isset($course_info['session_id']) ? $course_info['session_id'] : 0;
-                $url = api_get_path(WEB_COURSE_PATH).$course_info['directory'].'/index.php?sid='.$id_session;
+                $sessionId = isset($course_info['session_id']) ? $course_info['session_id'] : 0;
+                $url = api_get_path(WEB_COURSE_PATH).$course_info['directory'].'/index.php?sid='.$sessionId;
             }
 
             if (0 == $count_of_sessions && 1 == $count_of_courses_no_sessions) {

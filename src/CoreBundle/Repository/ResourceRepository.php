@@ -7,6 +7,7 @@ namespace Chamilo\CoreBundle\Repository;
 use APY\DataGridBundle\Grid\Action\RowAction;
 use APY\DataGridBundle\Grid\Row;
 use Chamilo\CoreBundle\Component\Utils\ResourceSettings;
+use Chamilo\CoreBundle\Component\Utils\ResourceTemplate;
 use Chamilo\CoreBundle\Entity\Course;
 use Chamilo\CoreBundle\Entity\Resource\AbstractResource;
 use Chamilo\CoreBundle\Entity\Resource\ResourceFile;
@@ -19,6 +20,7 @@ use Chamilo\CoreBundle\Entity\Session;
 use Chamilo\CoreBundle\Entity\Usergroup;
 use Chamilo\CoreBundle\Security\Authorization\Voter\ResourceNodeVoter;
 use Chamilo\CoreBundle\ToolChain;
+use Chamilo\CourseBundle\Component\CourseCopy\Resources\Resource;
 use Chamilo\CourseBundle\Entity\CDocument;
 use Chamilo\CourseBundle\Entity\CGroupInfo;
 use Chamilo\UserBundle\Entity\User;
@@ -81,6 +83,8 @@ class ResourceRepository extends BaseEntityRepository
 
     /** @var ToolChain */
     protected $toolChain;
+    protected $settings;
+    protected $templates;
 
     /**
      * ResourceRepository constructor.
@@ -100,6 +104,8 @@ class ResourceRepository extends BaseEntityRepository
         $this->resourceNodeRepository = $resourceNodeRepository;
         $this->slugify = $slugify;
         $this->toolChain = $toolChain;
+        $this->settings =  new ResourceSettings();
+        $this->templates =  new ResourceTemplate();
     }
 
     public function getAuthorizationChecker(): AuthorizationCheckerInterface
@@ -114,7 +120,7 @@ class ResourceRepository extends BaseEntityRepository
     {
         $class = $this->repository->getClassName();
 
-        return new $class;
+        return new $class();
     }
 
     public function getRouter(): RouterInterface
@@ -765,14 +771,12 @@ class ResourceRepository extends BaseEntityRepository
 
     public function getResourceSettings(): ResourceSettings
     {
-        $settings = new ResourceSettings();
-        $settings
-            ->setAllowNodeCreation(false)
-            ->setAllowResourceCreation(false)
-            ->setAllowResourceUpload(false)
-        ;
+        return $this->settings;
+    }
 
-        return $settings;
+    public function getTemplates(): ResourceTemplate
+    {
+        return $this->templates;
     }
 
     /**

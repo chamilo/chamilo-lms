@@ -70,10 +70,6 @@ class CourseHomeController extends ToolBaseController
             }
         }
 
-        // Deleting group session
-        $session->remove('toolgroup');
-        $session->remove('_gid');
-
         $isSpecialCourse = CourseManager::isSpecialCourse($courseId);
 
         if ($isSpecialCourse) {
@@ -85,7 +81,7 @@ class CourseHomeController extends ToolBaseController
         }
 
         $action = !empty($_GET['action']) ? Security::remove_XSS($_GET['action']) : '';
-        if ('subscribe' == $action) {
+        if ('subscribe' === $action) {
             if (Security::check_token('get')) {
                 Security::clear_token();
                 $result = CourseManager::autoSubscribeToCourse($courseCode);
@@ -186,9 +182,11 @@ class CourseHomeController extends ToolBaseController
         }
 
         // Deleting the objects
+        $session->remove('toolgroup');
         $session->remove('_gid');
         $session->remove('oLP');
         $session->remove('lpobject');
+
         api_remove_in_gradebook();
         \Exercise::cleanSessionVariables();
         \DocumentManager::removeGeneratedAudioTempFile();

@@ -1,0 +1,144 @@
+{% extends 'APYDataGridBundle::blocks.html.twig' %}
+
+{# This file is loaded from config/services.yaml and then used in all grids. #}
+
+{# See block documentation here: #}
+{# https://github.com/APY/APYDataGridBundle/blob/master/Resources/doc/template/overriding_internal_blocks.md #}
+
+
+{% block grid_column_massaction_cell %}
+{#  <input type="checkbox" class="action" value="1" name="{{ grid.hash }}[{{ column.id }}][{{ row.primaryFieldValue }}]"/>#}
+{% endblock grid_column_massaction_cell %}
+
+{% block grid_column_content_cell %}
+  <div class="card-body">
+    {{ value | raw }}
+  </div>
+{% endblock grid_column_content_cell %}
+
+{% block grid_column_title_cell %}
+<div class="card-header">
+  {{ value | raw }}
+</div>
+{% endblock grid_column_title_cell %}
+
+{% block grid_rows %}
+  {% for row in grid.rows %}
+    {% set last_row = loop.last %}
+    {% spaceless %}
+      {% set gridColumns %}
+        {% for column in grid.columns %}
+          {% if column.visible(grid.isReadyForExport) %}
+              {{ grid_cell(column, row, grid)|raw }}
+          {% endif %}
+        {% endfor %}
+      {% endset %}
+      <div class="card">
+            {{ gridColumns }}
+      </div >
+    {% endspaceless %}
+  {% endfor %}
+{% endblock grid_rows %}
+
+{% block grid_actions %}
+{% endblock grid_actions %}
+
+{# Bootstrap changes #}
+{% block grid_column_actions_cell %}
+  {% set actions = column.getActionsToRender(row) %}
+  <div class="btn-group">
+    {% for action in actions %}
+      {% if action.attributes.form_delete is defined and action.attributes.form_delete %}
+        <div class="btn-group">
+          <form method="post" action="{{ url(action.route, column.routeParameters(row, action), false) }}">
+            <input type="hidden" name="_method" value="DELETE" />
+            <button type="submit" class="btn btn-danger">
+              {{ action.title|trans }}
+            </button>
+          </form>
+        </div>
+      {% else %}
+          <a
+            href="{{ url(action.route, column.routeParameters(row, action), false) }}"
+            target="{{ action.target }}"
+            {% if action.confirm %} onclick="return confirm('{{ action.confirmMessage }}')"{% endif %}
+            {% for name, value in action.attributes %} {{ name }}="{{ value }}" {% endfor %}
+
+            {% if action.attributes.data_hidden is defined and action.attributes.data_hidden %}
+              style="display: none"
+            {% endif %}
+          >
+            {% if action.attributes.icon is defined and action.attributes.icon %}
+                <i class="fas {{ action.attributes.icon }} "></i>
+            {% else %}
+                {{ action.title|trans }}
+            {% endif %}
+          </a>
+      {% endif %}
+    {% endfor %}
+  </div>
+{% endblock grid_column_actions_cell %}
+
+{% block grid %}
+  <div class="col-md-12">
+    <div class="box box-primary">
+      <div class="box-body table-responsive no-padding">
+        {% if grid.totalCount > 0 or grid.isFiltered or grid.noDataMessage is same as(false) %}
+          <form id="{{ grid.hash }}" action="{{ grid.routeUrl }}"
+                method="post">
+            <div class="grid_body">
+
+{#                {% if grid.isTitleSectionVisible %}#}
+{#                  {{ grid_titles(grid) }}#}
+{#                {% endif %}#}
+{#                {% if grid.isFilterSectionVisible %}#}
+{#                  {{ grid_filters(grid) }}#}
+{#                {% endif %}#}
+                {{ grid_rows(grid) }}
+
+            </div>
+            <div class="grid_footer">
+              {% if grid.isPagerSectionVisible %}
+                {{ grid_pager(grid) }}
+              {% endif %}
+              {% if grid.exports|length > 0 %}
+                {{ grid_exports(grid) }}
+              {% endif %}
+              {% if grid.tweaks|length > 0 %}
+                {{ grid_tweaks(grid) }}
+              {% endif %}
+            </div>
+            {% if withjs %}
+              {{ grid_scripts(grid) }}
+            {% endif %}
+          </form>
+        {% else %}
+          {{ grid_no_data(grid) }}
+        {% endif %}
+      </div>
+    </div>
+  </div>
+{% endblock grid %}
+
+{% block grid_search %}
+
+{% endblock grid_search %}
+
+{% block grid_column_filter_type_input %}
+  {% set btwOperator = constant('APY\\DataGridBundle\\Grid\\Column\\Column::OPERATOR_BTW') %}
+  {% set btweOperator = constant('APY\\DataGridBundle\\Grid\\Column\\Column::OPERATOR_BTWE') %}
+  {% set isNullOperator = constant('APY\\DataGridBundle\\Grid\\Column\\Column::OPERATOR_ISNULL') %}
+  {% set isNotNullOperator = constant('APY\\DataGridBundle\\Grid\\Column\\Column::OPERATOR_ISNOTNULL') %}
+  {% set op = column.data.operator is defined ? column.data.operator : column.defaultOperator %}
+  {% set from = column.data.from is defined ? column.data.from : null %}
+  {% set to = column.data.to is defined ? column.data.to : null %}
+  <div class="form-group row">
+    <label for="staticEmail" class="col-sm-2 col-form-label">
+    {{ grid_column_operator(column, grid, op, submitOnChange) }}
+      <input type="{{ column.inputType }}" value="{{ to }}" class="grid-filter-input-query-to" name="{{ grid.hash }}[{{ column.id }}][to]" id="{{ grid.hash }}__{{ column.id }}__query__to" {% if submitOnChange is same as (true) %}onkeypress="return {{ grid.hash }}_submitForm(event, this.form);"{% endif%} {{ ( op == btwOperator or op == btweOperator ) ? '': 'style="display: none;" disabled="disabled"' }} />
+    </label>
+    <div class="col-sm-10">
+        <input type="{{ column.inputType }}" value="{{ from }}" class="form-control grid-filter-input-query-from" name="{{ grid.hash }}[{{ column.id }}][from]" id="{{ grid.hash }}__{{ column.id }}__query__from" {% if submitOnChange is same as (true) %}onkeypress="return {{ grid.hash }}_submitForm(event, this.form);"{% endif%} {{ ( op == isNullOperator or op == isNotNullOperator ) ? 'style="display: none;" disabled="disabled"' : '' }} />
+    </div>
+  </div>
+{% endblock grid_column_filter_type_input %}

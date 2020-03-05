@@ -12,7 +12,7 @@ use Doctrine\ORM\Mapping as ORM;
 /**
  * CCourseDescription.
  *
- * @GRID\Source(columns="iid, title, resourceNode.createdAt", filterable=false, groups={"resource"})
+ * @GRID\Source(columns="iid, title, content", filterable=false, groups={"resource"})
  *
  * @ORM\Table(name="c_course_description", indexes={@ORM\Index(name="session_id", columns={"session_id"})})
  * @ORM\Entity
@@ -88,8 +88,6 @@ class CCourseDescription extends AbstractResource implements ResourceInterface
 
     /**
      * CCourseDescription constructor.
-     *
-     * @param int $iid
      */
     public function __construct()
     {

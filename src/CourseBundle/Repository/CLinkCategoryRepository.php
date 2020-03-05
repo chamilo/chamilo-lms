@@ -33,11 +33,7 @@ final class CLinkCategoryRepository extends ResourceRepository implements Resour
     {
         $settings = parent::getResourceSettings();
 
-        $settings
-            ->setAllowNodeCreation(false)
-            ->setAllowResourceCreation(true)
-            ->setAllowResourceUpload(false)
-        ;
+        $settings->setAllowResourceCreation(true);
 
         return $settings;
     }

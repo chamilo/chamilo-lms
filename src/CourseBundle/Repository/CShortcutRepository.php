@@ -73,11 +73,7 @@ final class CShortcutRepository extends ResourceRepository implements ResourceRe
     {
         $settings = parent::getResourceSettings();
 
-        $settings
-            ->setAllowNodeCreation(false)
-            ->setAllowResourceCreation(true)
-            ->setAllowResourceUpload(false)
-        ;
+        $settings->setAllowResourceCreation(true);
 
         return $settings;
     }

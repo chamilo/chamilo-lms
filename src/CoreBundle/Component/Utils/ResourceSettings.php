@@ -16,14 +16,16 @@ class ResourceSettings
     public $allowResourceEdit;
     public $allowDownloadAll;
     public $allowDiskSpace;
+    // Shows an extra ckeditor input to save the HTML content into a ResourceFile.
     public $allowToSaveEditorToResourceFile;
+    public $templates;
 
     public function __construct()
     {
-        $this->allowNodeCreation = true;
-        $this->allowResourceCreation = true;
-        $this->allowResourceUpload = true;
-        $this->allowResourceEdit = true;
+        $this->allowNodeCreation = false;
+        $this->allowResourceCreation = false;
+        $this->allowResourceUpload = false;
+        $this->allowResourceEdit = false;
         $this->allowDownloadAll = false;
         $this->allowDiskSpace = false;
         $this->allowToSaveEditorToResourceFile = false;
@@ -89,45 +91,27 @@ class ResourceSettings
         return $this;
     }
 
-    /**
-     * @return bool
-     */
     public function isAllowDiskSpace(): bool
     {
         return $this->allowDiskSpace;
     }
 
-    /**
-     * @param bool $allowDiskSpace
-     *
-     * @return ResourceSettings
-     */
-    public function setAllowDiskSpace(bool $allowDiskSpace): ResourceSettings
+    public function setAllowDiskSpace(bool $allowDiskSpace): self
     {
         $this->allowDiskSpace = $allowDiskSpace;
 
         return $this;
     }
 
-    /**
-     * @return bool
-     */
     public function isAllowToSaveEditorToResourceFile(): bool
     {
         return $this->allowToSaveEditorToResourceFile;
     }
 
-    /**
-     * @param bool $allowToSaveEditorToResourceFile
-     *
-     * @return ResourceSettings
-     */
-    public function setAllowToSaveEditorToResourceFile(bool $allowToSaveEditorToResourceFile): ResourceSettings
+    public function setAllowToSaveEditorToResourceFile(bool $allowToSaveEditorToResourceFile): self
     {
         $this->allowToSaveEditorToResourceFile = $allowToSaveEditorToResourceFile;
 
         return $this;
     }
-
-
 }

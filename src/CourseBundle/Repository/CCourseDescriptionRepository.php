@@ -7,6 +7,7 @@ namespace Chamilo\CourseBundle\Repository;
 use APY\DataGridBundle\Grid\Column\Column;
 use APY\DataGridBundle\Grid\Grid;
 use Chamilo\CoreBundle\Component\Utils\ResourceSettings;
+use Chamilo\CoreBundle\Component\Utils\ResourceTemplate;
 use Chamilo\CoreBundle\Entity\Course;
 use Chamilo\CoreBundle\Entity\Resource\ResourceNode;
 use Chamilo\CoreBundle\Entity\Session;
@@ -25,15 +26,22 @@ final class CCourseDescriptionRepository extends ResourceRepository implements R
     {
         $settings = parent::getResourceSettings();
 
-        $settings
-            ->setAllowNodeCreation(false)
-            ->setAllowResourceCreation(true)
-            ->setAllowResourceUpload(false)
-            ->setAllowDownloadAll(false)
-        ;
+        $settings->setAllowResourceCreation(true);
 
         return $settings;
     }
+
+    public function getTemplates(): ResourceTemplate
+    {
+        $settings = parent::getTemplates();
+
+        $settings
+            ->setViewResource('@ChamiloTheme/Resource/course_description/view_resource.html.twig')
+            ->setIndex('@ChamiloTheme/Resource/course_description/index.html.twig');
+
+        return $settings;
+    }
+
 
     public function getResources(User $user, ResourceNode $parentNode, Course $course = null, Session $session = null, CGroupInfo $group = null): QueryBuilder
     {
@@ -45,8 +53,8 @@ final class CCourseDescriptionRepository extends ResourceRepository implements R
         return $grid->getColumn('title');
     }
 
-    public function saveUpload(UploadedFile $file) {
-
+    public function saveUpload(UploadedFile $file)
+    {
     }
 
     public function saveResource(FormInterface $form, $course, $session, $fileType)

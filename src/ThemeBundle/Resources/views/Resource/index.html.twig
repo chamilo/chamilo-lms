@@ -1,44 +1,7 @@
 {% extends "@ChamiloTheme/Layout/layout_one_col.html.twig" %}
 
 {% block content %}
-    {% if is_granted('CREATE', parent_resource_node) %}
-        <div class="actions">
-            {% if resource_settings.allowNodeCreation %}
-            <a class="btn btn-secondary"
-                href="{{ url('chamilo_core_resource_new_folder', {'tool': tool, 'type': type, 'cid': course.id, 'sid': session.id, 'id': id }) }}">
-                {{ 'New folder' | trans }}
-            </a>
-            {% endif %}
-
-            {% if resource_settings.allowResourceCreation %}
-            <a class="btn btn-secondary"
-               href="{{ url('chamilo_core_resource_new', { 'tool': tool, 'type': type, 'cid': course.id, 'sid': session.id,  'id': id }) }}">
-                {{ 'Create new ' ~ tool | trans }}
-            </a>
-            {% endif %}
-
-            {% if resource_settings.allowResourceUpload %}
-            <a class="btn btn-secondary"
-                href="{{ url('chamilo_core_resource_upload', { 'tool': tool, 'type': type, 'cid': course.id, 'sid': session.id,  'id': id }) }}">
-                {{ 'Upload' | trans }}
-            </a>
-            {% endif %}
-
-            {% if resource_settings.allowDownloadAll %}
-                <a class="btn btn-secondary"
-                   href="{{ url('chamilo_core_resource_download', { 'tool': tool, 'type': type, 'cid': course.id, 'sid': session.id,  'id': id }) }}">
-                    {{ 'Download all' | trans }}
-                </a>
-            {% endif %}
-
-            {% if resource_settings.allowToSaveEditorToResourceFile %}
-                <a class="btn btn-secondary"
-                   href="{{ url('chamilo_core_resource_disk_space', { 'tool': tool, 'type': type, 'cid': course.id, 'sid': session.id,  'id': id }) }}">
-                    {{ 'Disk Space' | trans }}
-                </a>
-            {% endif %}
-        </div>
-    {% endif %}
+   {% include '@ChamiloTheme/Resource/toolbar.html.twig' %}
 
     <style>
         .fancybox-slide--iframe .fancybox-content {

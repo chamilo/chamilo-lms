@@ -76,6 +76,8 @@ class Course extends AbstractResource implements ResourceInterface
     protected $urls;
 
     /**
+     * @var SessionRelCourse[]
+     *
      * @ORM\OneToMany(targetEntity="SessionRelCourse", mappedBy="course", cascade={"persist", "remove"})
      */
     protected $sessions;
@@ -380,7 +382,7 @@ class Course extends AbstractResource implements ResourceInterface
     }
 
     /**
-     * @return Session[]|ArrayCollection
+     * @return SessionRelCourse[]|ArrayCollection
      */
     public function getSessions()
     {

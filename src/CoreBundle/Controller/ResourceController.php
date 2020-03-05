@@ -52,6 +52,7 @@ use ZipStream\ZipStream;
 class ResourceController extends AbstractResourceController implements CourseControllerInterface
 {
     use CourseControllerTrait;
+
     private $fileContentName = 'file_content';
 
     /**
@@ -84,7 +85,7 @@ class ResourceController extends AbstractResourceController implements CourseCon
         $id = $parentResourceNode->getId();
 
         return $grid->getGridResponse(
-            '@ChamiloTheme/Resource/index.html.twig',
+            $repository->getTemplates()->getFromAction(__FUNCTION__),
             [
                 'tool' => $tool,
                 'type' => $type,
@@ -115,7 +116,7 @@ class ResourceController extends AbstractResourceController implements CourseCon
         $parentResourceNode = $this->getParentResourceNode($request);
 
         return $grid->getGridResponse(
-            '@ChamiloTheme/Resource/index.html.twig',
+            $repository->getTemplates()->getFromAction(__FUNCTION__),
             [
                 'parent_id' => $resourceNodeId,
                 'tool' => $tool,
@@ -172,6 +173,7 @@ class ResourceController extends AbstractResourceController implements CourseCon
 
         /** @var Column $titleColumn */
         $titleColumn = $repository->getTitleColumn($grid);
+
         $titleColumn->setSafe(false); // allows links in the title
 
         // Title link.
@@ -492,7 +494,9 @@ class ResourceController extends AbstractResourceController implements CourseCon
         $data[] = $size;
         $sessions = $course->getSessions();
 
-        foreach ($sessions as $session) {
+        foreach ($sessions as $sessionRelCourse) {
+            $session = $sessionRelCourse->getSession();
+
             $labels[] = $course->getTitle().' - '.$session->getName();
             $size = $repository->getResourceNodeRepository()->getSize(
                 $resourceNode,
@@ -521,7 +525,7 @@ class ResourceController extends AbstractResourceController implements CourseCon
         $data[] = $totalSize - $used;
 
         return $this->render(
-            '@ChamiloTheme/Resource/disk_space.html.twig',
+            $repository->getTemplates()->getFromAction(__FUNCTION__),
             [
                 'resourceNode' => $resourceNode,
                 'labels' => $labels,
@@ -607,7 +611,7 @@ class ResourceController extends AbstractResourceController implements CourseCon
         }
 
         return $this->render(
-            '@ChamiloTheme/Resource/edit.html.twig',
+            $repository->getTemplates()->getFromAction(__FUNCTION__),
             [
                 'form' => $form->createView(),
                 'parent' => $resourceNodeParentId,
@@ -650,7 +654,7 @@ class ResourceController extends AbstractResourceController implements CourseCon
             'type' => $type,
         ];
 
-        return $this->render('@ChamiloTheme/Resource/info.html.twig', $params);
+        return $this->render($repository->getTemplates()->getFromAction(__FUNCTION__), $params);
     }
 
     /**
@@ -686,7 +690,7 @@ class ResourceController extends AbstractResourceController implements CourseCon
             'type' => $type,
         ];
 
-        return $this->render('@ChamiloTheme/Resource/preview.html.twig', $params);
+        return $this->render($repository->getTemplates()->getFromAction(__FUNCTION__), $params);
     }
 
     /**
@@ -857,8 +861,10 @@ class ResourceController extends AbstractResourceController implements CourseCon
 
         /** @var AbstractResource $resource */
         $resource = $repository->getResourceFromResourceNode($id);
+
         $tool = $request->get('tool');
         $type = $request->get('type');
+        $this->setBreadCrumb($request);
 
         $params = [
             'resource' => $resource,
@@ -866,8 +872,7 @@ class ResourceController extends AbstractResourceController implements CourseCon
             'type' => $type,
         ];
 
-        return $this->render('@ChamiloTheme/Resource/view_resource.html.twig', $params);
-
+        return $this->render($repository->getTemplates()->getFromAction(__FUNCTION__), $params);
 
         //return $this->showFile($request, $resourceNode, $mode, $filter);
     }
@@ -979,15 +984,14 @@ class ResourceController extends AbstractResourceController implements CourseCon
         $routeParams['type'] = $type;
         $routeParams['id'] = $id;
 
-        return $this->render('@ChamiloTheme/Resource/upload.html.twig', $routeParams);
+        return $this->render($repository->getTemplates()->getFromAction(__FUNCTION__), $routeParams);
     }
 
-    public function setBreadCrumb(Request $request)
+    private function setBreadCrumb(Request $request)
     {
         $tool = $request->get('tool');
         $type = $request->get('type');
         $resourceNodeId = $request->get('id');
-
         $routeParams = $this->getResourceParams($request);
 
         if (!empty($resourceNodeId)) {
@@ -1004,8 +1008,9 @@ class ResourceController extends AbstractResourceController implements CourseCon
             );
 
             $repo = $this->getRepositoryFromRequest($request);
+            $settings = $repo->getResourceSettings();
 
-            /** @var ResourceInterface $parent */
+            /** @var AbstractResource $originalResource */
             $originalResource = $repo->findOneBy(['resourceNode' => $resourceNodeId]);
             if (null === $originalResource) {
                 return;
@@ -1027,7 +1032,7 @@ class ResourceController extends AbstractResourceController implements CourseCon
             }
 
             $parentList = array_reverse($parentList);
-            /** @var ResourceInterface $item */
+            /** @var AbstractResource $item */
             foreach ($parentList as $item) {
                 $params = $routeParams;
                 $params['id'] = $item->getResourceNode()->getId();
@@ -1041,13 +1046,16 @@ class ResourceController extends AbstractResourceController implements CourseCon
 
             $params = $routeParams;
             $params['id'] = $originalParent->getId();
-
-            $breadcrumb->addChild(
-                $originalResource->getResourceName(),
-                [
-                    'uri' => $this->generateUrl('chamilo_core_resource_list', $params),
-                ]
-            );
+            if (false === $settings->isAllowNodeCreation() || $originalResource->getResourceNode()->hasResourceFile()) {
+                $breadcrumb->addChild($originalResource->getResourceName());
+            } else {
+                $breadcrumb->addChild(
+                    $originalResource->getResourceName(),
+                    [
+                        'uri' => $this->generateUrl('chamilo_core_resource_list', $params),
+                    ]
+                );
+            }
         }
     }
 
@@ -1269,11 +1277,11 @@ class ResourceController extends AbstractResourceController implements CourseCon
 
         switch ($fileType) {
             case 'folder':
-                $template = '@ChamiloTheme/Resource/new_folder.html.twig';
+                $template = $repository->getTemplates()->getFromAction('newFolderAction');
 
                 break;
             case 'file':
-                $template = '@ChamiloTheme/Resource/new.html.twig';
+                $template = $repository->getTemplates()->getFromAction('newAction');
 
                 break;
         }

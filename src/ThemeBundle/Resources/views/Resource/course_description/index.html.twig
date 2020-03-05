@@ -1,0 +1,11 @@
+{% extends "@ChamiloTheme/Layout/layout_one_col.html.twig" %}
+
+{% block content %}
+    {% include '@ChamiloTheme/Resource/toolbar.html.twig' %}
+
+    {# Use a custom grid#}
+
+
+    {{ grid(grid, '@ChamiloTheme/Resource/course_description/grid_theme.html.twig') }}
+
+{% endblock %}

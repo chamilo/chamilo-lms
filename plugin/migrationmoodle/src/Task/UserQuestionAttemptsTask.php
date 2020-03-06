@@ -37,6 +37,7 @@ class UserQuestionAttemptsTask extends BaseTask
                     qa.userid,
                     qa.id quiz_attempt,
                     qqa.questionid,
+                    qqa.questionsummary,
                     qqa.rightanswer,
                     qqa.responsesummary,
                     qqa.timemodified,
@@ -81,7 +82,14 @@ class UserQuestionAttemptsTask extends BaseTask
                 ],
                 'answer' => [
                     'class' => UserQuestionAnswer::class,
-                    'properties' => ['qtype', 'rightanswer', 'responsesummary', 'fraction', 'defaultmark'],
+                    'properties' => [
+                        'qtype',
+                        'rightanswer',
+                        'responsesummary',
+                        'fraction',
+                        'defaultmark',
+                        'questionsummary',
+                    ],
                 ],
                 'marks' => 'fraction',
                 'c_id' => [

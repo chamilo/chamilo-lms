@@ -214,6 +214,7 @@ function prepare_user_sql_query($getCount)
     $admin_table = Database::get_main_table(TABLE_MAIN_ADMIN);
 
     $isMultipleUrl = (api_is_platform_admin() || api_is_session_admin()) && api_get_multiple_access_url();
+    $urlId = api_get_current_access_url_id();
 
     if ($getCount) {
         $sql .= "SELECT COUNT(u.id) AS total_number_of_items FROM $user_table u";
@@ -401,7 +402,7 @@ function prepare_user_sql_query($getCount)
         if (!empty($extraFieldHasData)) {
             $urlKeywordCondition = '';
             if ($isMultipleUrl) {
-                $urlKeywordCondition .= " AND u.id = url_rel_user.user_id ";
+                $urlKeywordCondition .= ' AND u.id = url_rel_user.user_id AND url_rel_user.access_url_id = '.$urlId;
             }
 
             $sql .= " OR (u.id IN ('".implode("','", $extraFieldResult)."') $urlKeywordCondition ) ";
@@ -410,7 +411,7 @@ function prepare_user_sql_query($getCount)
 
     // adding the filter to see the user's only of the current access_url
     if ($isMultipleUrl) {
-        $sql .= ' AND url_rel_user.access_url_id = '.api_get_current_access_url_id();
+        $sql .= ' AND url_rel_user.access_url_id = '.$urlId;
     }
 
     return $sql;

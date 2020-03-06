@@ -16,7 +16,7 @@ $htmlHeadXtra[] = api_get_jqgrid_js();
 
 $action = isset($_REQUEST['action']) ? $_REQUEST['action'] : null;
 $idChecked = isset($_REQUEST['idChecked']) ? $_REQUEST['idChecked'] : null;
-$listType = isset($_REQUEST['list_type']) ? $_REQUEST['list_type'] : SessionManager::getDefaultSessionTab();
+$listType = isset($_REQUEST['list_type']) ? Security::remove_XSS($_REQUEST['list_type']) : SessionManager::getDefaultSessionTab();
 
 switch ($action) {
     case 'delete':
@@ -371,14 +371,13 @@ if (api_is_platform_admin()) {
     $form = new FormValidator(
         'search_simple',
         'get',
-        '',
+        api_get_self().'?list_type='.$listType,
         '',
         [],
         FormValidator::LAYOUT_INLINE
     );
-    $form->addElement('text', 'keyword', null, [
-        'aria-label' => get_lang('Search'),
-    ]);
+    $form->addElement('text', 'keyword', null, ['aria-label' => get_lang('Search')]);
+    $form->addHidden('list_type', $listType);
     $form->addButtonSearch(get_lang('Search'));
     $form->display();
     echo '</div>';

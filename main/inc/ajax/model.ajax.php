@@ -1683,7 +1683,7 @@ switch ($action) {
             case 'all':
                 $result = SessionManager::formatSessionsAdminForGrid(
                     [
-                        ['where' => $whereCondition, 'extra' => $extra_fields],
+                        'where' => $whereCondition,
                         'order' => "$sidx $sord, s.name",
                         'extra' => $extra_fields,
                         'limit' => "$start , $limit",

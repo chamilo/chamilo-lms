@@ -4,6 +4,7 @@
 
 namespace Chamilo\CoreBundle\Admin;
 
+use Chamilo\CoreBundle\Entity\Resource\ResourceFile;
 use Sonata\AdminBundle\Admin\AbstractAdmin;
 use Sonata\AdminBundle\Datagrid\DatagridMapper;
 use Sonata\AdminBundle\Datagrid\ListMapper;
@@ -27,7 +28,24 @@ class ResourceFileAdmin extends AbstractAdmin
 
     protected function configureFormFields(FormMapper $formMapper)
     {
-        $fileOptions = [];
+        $router = $this->getRouteGenerator();
+
+        $fileOptions = [
+            'required' => true,
+            'allow_delete' => false,
+            //'download_uri' => true,
+            'download_uri' => static function (ResourceFile $file) use ($router) {
+                $resourceNode = $file->getResourceNode();
+                $params = [
+                    'tool' => $resourceNode->getResourceType()->getTool(),
+                    'type' => $resourceNode->getResourceType(),
+                    'id' => $resourceNode->getId(),
+                    'mode' => 'download',
+                ];
+
+                return $router->generate('chamilo_core_resource_view_file', $params);
+            },
+        ];
         $formMapper
             ->add('file', VichImageType::class, $fileOptions)
             ->end()

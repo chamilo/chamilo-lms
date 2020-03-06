@@ -19,10 +19,6 @@ defined in app/config/auth.conf.php.
 
 username field is used to identify and match LDAP and Chamilo accounts together.
 ($extldap_user_correspondance['username'])
-
-If more than one LDAP entries share the same username, a warning is printed on stderr and the user account is skipped.
-
-All the corrections are only applied in phase 2, and take time.
 */
 
 use Chamilo\CoreBundle\Entity\ExtraFieldValues;

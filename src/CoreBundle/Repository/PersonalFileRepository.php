@@ -18,7 +18,7 @@ use Doctrine\ORM\QueryBuilder;
 use Symfony\Component\Form\FormInterface;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 
-final class PersonalFileRepository extends ResourceRepository implements ResourceRepositoryInterface
+final class PersonalFileRepository extends ResourceRepository implements ResourceRepositoryGridInterface
 {
     public function getResources(User $user, ResourceNode $parentNode, Course $course = null, Session $session = null, CGroupInfo $group = null): QueryBuilder
     {

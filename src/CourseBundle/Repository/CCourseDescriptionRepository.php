@@ -13,7 +13,7 @@ use Chamilo\CoreBundle\Entity\Resource\ResourceNode;
 use Chamilo\CoreBundle\Entity\Session;
 use Chamilo\CoreBundle\Form\Resource\CCourseDescriptionType;
 use Chamilo\CoreBundle\Repository\ResourceRepository;
-use Chamilo\CoreBundle\Repository\ResourceRepositoryInterface;
+use Chamilo\CoreBundle\Repository\ResourceRepositoryGridInterface;
 use Chamilo\CourseBundle\Entity\CCourseDescription;
 use Chamilo\CourseBundle\Entity\CGroupInfo;
 use Chamilo\UserBundle\Entity\User;
@@ -21,7 +21,7 @@ use Doctrine\ORM\QueryBuilder;
 use Symfony\Component\Form\FormInterface;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 
-final class CCourseDescriptionRepository extends ResourceRepository implements ResourceRepositoryInterface
+final class CCourseDescriptionRepository extends ResourceRepository implements ResourceRepositoryGridInterface
 {
     public function getResourceSettings(): ResourceSettings
     {

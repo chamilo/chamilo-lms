@@ -4,28 +4,22 @@
 
 namespace Chamilo\CourseBundle\Repository;
 
-use APY\DataGridBundle\Grid\Column\Column;
-use APY\DataGridBundle\Grid\Grid;
-use Chamilo\CoreBundle\Component\Utils\ResourceSettings;
 use Chamilo\CoreBundle\Entity\Course;
 use Chamilo\CoreBundle\Entity\Resource\AbstractResource;
 use Chamilo\CoreBundle\Entity\Resource\ResourceNode;
 use Chamilo\CoreBundle\Entity\Session;
-use Chamilo\CoreBundle\Form\Resource\CShortcutType;
 use Chamilo\CoreBundle\Repository\ResourceRepository;
-use Chamilo\CoreBundle\Repository\ResourceRepositoryInterface;
 use Chamilo\CourseBundle\Entity\CGroupInfo;
 use Chamilo\CourseBundle\Entity\CShortcut;
 use Chamilo\UserBundle\Entity\User;
 use Doctrine\ORM\Query\Expr\Join;
 use Doctrine\ORM\QueryBuilder;
 use Symfony\Component\Form\FormInterface;
-use Symfony\Component\HttpFoundation\File\UploadedFile;
 
 /**
  * Class CShortcutRepository.
  */
-final class CShortcutRepository extends ResourceRepository implements ResourceRepositoryInterface
+final class CShortcutRepository extends ResourceRepository
 {
     public function getShortcutFromResource(AbstractResource $resource): ?CShortcut
     {
@@ -70,20 +64,6 @@ final class CShortcutRepository extends ResourceRepository implements ResourceRe
         return $qb;
     }
 
-    public function getResourceSettings(): ResourceSettings
-    {
-        $settings = parent::getResourceSettings();
-
-        $settings->setAllowResourceCreation(true);
-
-        return $settings;
-    }
-
-    public function saveUpload(UploadedFile $file)
-    {
-        return false;
-    }
-
     public function saveResource(FormInterface $form, $course, $session, $fileType)
     {
         $newResource = $form->getData();
@@ -96,15 +76,5 @@ final class CShortcutRepository extends ResourceRepository implements ResourceRe
         ;
 
         return $newResource;
-    }
-
-    public function getTitleColumn(Grid $grid): Column
-    {
-        return $grid->getColumn('name');
-    }
-
-    public function getResourceFormType(): string
-    {
-        return CShortcutType::class;
     }
 }

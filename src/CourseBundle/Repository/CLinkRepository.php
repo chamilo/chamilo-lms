@@ -12,7 +12,7 @@ use Chamilo\CoreBundle\Entity\Resource\ResourceNode;
 use Chamilo\CoreBundle\Entity\Session;
 use Chamilo\CoreBundle\Form\Resource\CLinkType;
 use Chamilo\CoreBundle\Repository\ResourceRepository;
-use Chamilo\CoreBundle\Repository\ResourceRepositoryInterface;
+use Chamilo\CoreBundle\Repository\ResourceRepositoryGridInterface;
 use Chamilo\CourseBundle\Entity\CGroupInfo;
 use Chamilo\CourseBundle\Entity\CLink;
 use Chamilo\UserBundle\Entity\User;
@@ -23,7 +23,7 @@ use Symfony\Component\HttpFoundation\File\UploadedFile;
 /**
  * Class CLinkRepository.
  */
-final class CLinkRepository extends ResourceRepository implements ResourceRepositoryInterface
+final class CLinkRepository extends ResourceRepository implements ResourceRepositoryGridInterface
 {
     public function getResources(User $user, ResourceNode $parentNode, Course $course = null, Session $session = null, CGroupInfo $group = null): QueryBuilder
     {

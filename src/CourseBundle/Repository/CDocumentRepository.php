@@ -13,7 +13,7 @@ use Chamilo\CoreBundle\Entity\Resource\ResourceNode;
 use Chamilo\CoreBundle\Entity\Session;
 use Chamilo\CoreBundle\Form\Resource\CDocumentType;
 use Chamilo\CoreBundle\Repository\ResourceRepository;
-use Chamilo\CoreBundle\Repository\ResourceRepositoryInterface;
+use Chamilo\CoreBundle\Repository\ResourceRepositoryGridInterface;
 use Chamilo\CourseBundle\Entity\CDocument;
 use Chamilo\CourseBundle\Entity\CGroupInfo;
 use Chamilo\UserBundle\Entity\User;
@@ -24,7 +24,7 @@ use Symfony\Component\HttpFoundation\File\UploadedFile;
 /**
  * Class CDocumentRepository.
  */
-final class CDocumentRepository extends ResourceRepository implements ResourceRepositoryInterface
+final class CDocumentRepository extends ResourceRepository implements ResourceRepositoryGridInterface
 {
     public function getResources(User $user, ResourceNode $parentNode, Course $course = null, Session $session = null, CGroupInfo $group = null): QueryBuilder
     {

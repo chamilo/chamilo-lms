@@ -6,6 +6,7 @@ namespace Chamilo\CoreBundle\Repository;
 
 use APY\DataGridBundle\Grid\Column\Column;
 use APY\DataGridBundle\Grid\Grid;
+use Chamilo\CoreBundle\Component\Utils\ResourceSettings;
 use Chamilo\CoreBundle\Entity\Course;
 use Chamilo\CoreBundle\Entity\Resource\ResourceNode;
 use Chamilo\CoreBundle\Entity\Session;
@@ -17,7 +18,7 @@ use Symfony\Component\HttpFoundation\File\UploadedFile;
 /**
  * Class ResourceRepositoryInterface.
  */
-interface ResourceRepositoryInterface
+interface ResourceRepositoryGridInterface
 {
     public function getResources(User $user, ResourceNode $parentNode, Course $course = null, Session $session = null, CGroupInfo $group = null);
 
@@ -29,4 +30,6 @@ interface ResourceRepositoryInterface
     public function getTitleColumn(Grid $grid): Column;
 
     public function getResourceFormType(): string;
+
+    public function getResourceSettings(): ResourceSettings;
 }

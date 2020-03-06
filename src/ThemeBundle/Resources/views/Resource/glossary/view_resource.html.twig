@@ -2,8 +2,10 @@
 
 {% block content %}
     {% autoescape false %}
-        <h3>{{ resource }}</h3>
+        <h3>{{ resource.name }}</h3>
+        <p>{{ resource.description }}</p>
 
         {% include '@ChamiloTheme/Resource/toolbar_view_resource.html.twig' %}
+
     {% endautoescape %}
 {% endblock %}

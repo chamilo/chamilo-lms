@@ -5,21 +5,6 @@
         <h3>{{ resource }}</h3>
         <h3>{{ resource.content }}</h3>
 
-        {{ 'Created at' | trans }}: {{ resource.resourceNode.createdAt | date_to_time_ago }}<br />
-        {{ 'Updated at' | trans }}: {{ resource.resourceNode.updatedAt | date_to_time_ago }}<br />
-        <br />
-
-        {% if is_granted('DELETE', resource.resourceNode) %}
-            <a class="btn btn-danger" href="{{ url('chamilo_core_resource_delete', {
-                'id': resource.resourceNode.id,
-                'cid': course.id,
-                'sid': session.id,
-                'type' : type,
-                'tool' : tool,
-            })
-            }}">
-                {{ 'Delete'|trans }}
-            </a>
-        {% endif %}
+        {% include '@ChamiloTheme/Resource/toolbar_view_resource.html.twig' %}
     {% endautoescape %}
 {% endblock %}

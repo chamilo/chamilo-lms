@@ -5,6 +5,7 @@
 namespace Chamilo\CoreBundle\Admin;
 
 use Chamilo\CoreBundle\Entity\Career;
+use FOS\CKEditorBundle\Form\Type\CKEditorType;
 use Sonata\AdminBundle\Admin\AbstractAdmin;
 use Sonata\AdminBundle\Datagrid\DatagridMapper;
 use Sonata\AdminBundle\Datagrid\ListMapper;
@@ -19,7 +20,7 @@ class CareerAdmin extends AbstractAdmin
     {
         $formMapper
             ->add('name')
-            ->add('description', 'ckeditor')
+            ->add('description', CKEditorType::class)
             //->add('status', 'choice', ['choices' => Career::getStatusList()])
         ;
     }

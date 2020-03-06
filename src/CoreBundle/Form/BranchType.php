@@ -5,6 +5,7 @@
 namespace Chamilo\CoreBundle\Form;
 
 use Symfony\Component\Form\AbstractType;
+use Symfony\Component\Form\Extension\Core\Type\EmailType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolverInterface;
 
@@ -52,7 +53,7 @@ class BranchType extends AbstractType
             ->add('up_speed', 'text')
             ->add('longitude', 'text')
             ->add('delay', 'text')
-            ->add('admin_mail', 'email')
+            ->add('admin_mail', EmailType::class)
             ->add('admin_name', 'text')
             ->add('admin_phone', 'text', ['required' => false])
             ->add(

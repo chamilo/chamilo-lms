@@ -9,6 +9,7 @@ use Sonata\AdminBundle\Form\FormMapper;
 use Sonata\AdminBundle\Form\Type\ModelType;
 use Sonata\UserBundle\Admin\Model\UserAdmin as BaseUserAdmin;
 use Sonata\UserBundle\Form\Type\SecurityRolesType;
+use Symfony\Component\Form\Extension\Core\Type\EmailType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 
 /**
@@ -39,7 +40,7 @@ class UserAdmin extends BaseUserAdmin
             ->tab('User')
             ->with('General')
                 ->add('username')
-                ->add('email')
+                ->add('email', EmailType::class)
                 /*->add(
                     'plainPassword',
                     'text',

@@ -18,13 +18,12 @@ class ToolAdmin extends AbstractAdmin
     {
         $formMapper
             ->add('name')
-            ->add('description', 'ckeditor')
-            ->add(
+            /*->add(
                 'toolResourceRight',
-                'sonata_type_collection',
+                CollectionType::class,
                 [
-                'cascade_validation' => true,
-            ],
+                    //'cascade_validation' => true,
+                ],
                 [
                     //'allow_delete' => true,
                     //'by_reference' => false,
@@ -36,25 +35,19 @@ class ToolAdmin extends AbstractAdmin
                     //'link_parameters'   => array('content' => $users),
                     'admin_code' => 'sonata.admin.tool_resource_right',
                 ]
-            )
-            /*->add('image', 'sonata_media_type', array(
-                'provider' => 'sonata.media.provider.image',
-                'context'  => 'default'
-            ));*/
+            )*/
         ;
     }
 
     protected function configureDatagridFilters(DatagridMapper $datagridMapper)
     {
         $datagridMapper
-            ->add('name')
-        ;
+            ->add('name');
     }
 
     protected function configureListFields(ListMapper $listMapper)
     {
         $listMapper
-            ->addIdentifier('name')
-        ;
+            ->addIdentifier('name');
     }
 }

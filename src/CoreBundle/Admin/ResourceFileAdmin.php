@@ -8,8 +8,8 @@ use Sonata\AdminBundle\Admin\AbstractAdmin;
 use Sonata\AdminBundle\Datagrid\DatagridMapper;
 use Sonata\AdminBundle\Datagrid\ListMapper;
 use Sonata\AdminBundle\Form\FormMapper;
-use Sonata\AdminBundle\Form\Type\ModelAutocompleteType;
 use Sonata\AdminBundle\Show\ShowMapper;
+use Vich\UploaderBundle\Form\Type\VichImageType;
 
 /**
  * Class ResourceFileAdmin.
@@ -20,13 +20,16 @@ class ResourceFileAdmin extends AbstractAdmin
     {
         $showMapper
             ->add('id')
+            ->add('name')
+            ->add('size')
         ;
     }
 
     protected function configureFormFields(FormMapper $formMapper)
     {
+        $fileOptions = [];
         $formMapper
-            ->add('media', ModelAutocompleteType::class, ['property' => 'name', 'btn_add' => 'link_add'])
+            ->add('file', VichImageType::class, $fileOptions)
             ->end()
         ;
     }
@@ -35,6 +38,8 @@ class ResourceFileAdmin extends AbstractAdmin
     {
         $datagridMapper
             ->add('id')
+            ->add('name')
+            ->add('mimeType')
         ;
     }
 
@@ -42,7 +47,8 @@ class ResourceFileAdmin extends AbstractAdmin
     {
         $listMapper
             ->addIdentifier('id')
-            ->addIdentifier('media')
+            ->addIdentifier('name')
+            ->add('size')
         ;
     }
 }

@@ -4,6 +4,7 @@
 
 namespace Chamilo\CoreBundle\Admin;
 
+use FOS\CKEditorBundle\Form\Type\CKEditorType;
 use Sonata\AdminBundle\Admin\AbstractAdmin;
 use Sonata\AdminBundle\Datagrid\DatagridMapper;
 use Sonata\AdminBundle\Datagrid\ListMapper;
@@ -23,7 +24,7 @@ class SettingsCurrentAdmin extends AbstractAdmin
             ->add('type')
             ->add('category')
             ->add('selectedValue')
-            ->add('comment', 'ckeditor')
+            ->add('comment', CKEditorType::class)
             ->add('accessUrl')
         ;
     }

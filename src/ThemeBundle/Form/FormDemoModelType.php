@@ -8,6 +8,7 @@
 namespace Chamilo\ThemeBundle\Form;
 
 use Symfony\Component\Form\AbstractType;
+use Symfony\Component\Form\Extension\Core\Type\EmailType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolverInterface;
 
@@ -32,7 +33,7 @@ class FormDemoModelType extends AbstractType
                 ->add('someOption', 'choice', ['choices' => $options, 'expanded' => true])
                 ->add('someChoices', 'choice', ['choices' => $choices, 'expanded' => true, 'multiple' => true])
                 ->add('username')
-                ->add('email')
+                ->add('email', EmailType::class)
                 ->add('termsAccepted', 'checkbox')
                 ->add('message', 'textarea')
                 ->add('price')

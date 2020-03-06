@@ -9,6 +9,7 @@ use Sonata\AdminBundle\Datagrid\DatagridMapper;
 use Sonata\AdminBundle\Datagrid\ListMapper;
 use Sonata\AdminBundle\Form\FormMapper;
 use Sonata\AdminBundle\Show\ShowMapper;
+use Symfony\Component\Form\Extension\Core\Type\UrlType;
 
 /**
  * Class CourseRequestAdmin.
@@ -19,7 +20,7 @@ class SessionCategoryAdmin extends AbstractAdmin
     {
         $formMapper
             ->add('name')
-            ->add('url')
+            ->add('url', UrlType::class)
             ->add('dateStart', 'sonata_type_datetime_picker')
             ->add('dateEnd', 'sonata_type_datetime_picker')
         ;

@@ -21,18 +21,18 @@ class ResourceNodeAdmin extends AbstractAdmin
     {
         $showMapper
             ->add('id')
-            ->add('name')
+            ->add('slug')
+            ->add('path')
         ;
     }
 
     protected function configureFormFields(FormMapper $formMapper)
     {
         $formMapper
-            ->add('name')
-            ->add('description')
+            ->add('slug')
             ->add('resourceType', ModelType::class, ['property' => 'name', 'btn_add' => false])
             ->add('creator', ModelAutocompleteType::class, ['property' => 'username'])
-            ->add('resourceFile', ModelType::class, ['property' => 'id', 'btn_add' => 'link_add'])
+            ->add('resourceFile', ModelType::class, ['property' => 'name', 'btn_add' => 'link_add'])
             ->add(
                 'resourceLinks',
                 ModelAutocompleteType::class,
@@ -42,22 +42,22 @@ class ResourceNodeAdmin extends AbstractAdmin
         ;
     }
 
-//    /**
-//     * @param DatagridMapper $listMapper
-//     */
-//    protected function configureDatagridFilters(DatagridMapper $datagridMapper)
-//    {
-//        $datagridMapper
-//            ->add('url')
-//        ;
-//    }
-//
+    protected function configureDatagridFilters(DatagridMapper $datagridMapper)
+    {
+        $datagridMapper
+            ->add('resourceType')
+            ->add('creator')
+        ;
+    }
 
     protected function configureListFields(ListMapper $listMapper)
     {
         $listMapper
             ->addIdentifier('id')
-            ->addIdentifier('name')
+            ->addIdentifier('slug')
+            ->add('resourceType')
+            ->add('resourceFile')
+            ->add('creator')
         ;
     }
 }

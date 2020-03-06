@@ -4,10 +4,13 @@
 
 namespace Chamilo\CoreBundle\Admin;
 
+use FOS\CKEditorBundle\Form\Type\CKEditorType;
 use Sonata\AdminBundle\Admin\AbstractAdmin;
 use Sonata\AdminBundle\Datagrid\DatagridMapper;
 use Sonata\AdminBundle\Datagrid\ListMapper;
 use Sonata\AdminBundle\Form\FormMapper;
+use Symfony\Component\Form\Extension\Core\Type\EmailType;
+use Symfony\Component\Form\Extension\Core\Type\UrlType;
 
 /**
  * Class AccessUrlAdmin.
@@ -27,8 +30,8 @@ class AccessUrlAdmin extends AbstractAdmin
     protected function configureFormFields(FormMapper $formMapper)
     {
         $formMapper
-            ->add('url', 'url')
-            ->add('description', 'ckeditor')
+            ->add('url', UrlType::class)
+            ->add('description', CKEditorType::class)
             ->add('active')
             ->add('limitCourses')
             ->add('limitActiveCourses')
@@ -36,7 +39,7 @@ class AccessUrlAdmin extends AbstractAdmin
             ->add('limitUsers')
             ->add('limitTeachers')
             ->add('limitDiskSpace')
-            ->add('email', 'email')
+            ->add('email', EmailType::class)
         ;
     }
 

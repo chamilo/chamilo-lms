@@ -23,7 +23,7 @@ use Symfony\Component\HttpFoundation\File\UploadedFile;
 /**
  * Class IllustrationRepository.
  */
-final class IllustrationRepository extends ResourceRepository implements ResourceRepositoryGridInterface
+final class IllustrationRepository extends ResourceRepository implements GridInterface, UploadInterface
 {
     public function getResources(User $user, ResourceNode $parentNode, Course $course = null, Session $session = null, CGroupInfo $group = null): QueryBuilder
     {

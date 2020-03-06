@@ -6,42 +6,36 @@ namespace Chamilo\CourseBundle\Repository;
 
 use APY\DataGridBundle\Grid\Column\Column;
 use APY\DataGridBundle\Grid\Grid;
-use Chamilo\CoreBundle\Component\Utils\ResourceSettings;
+use Chamilo\CoreBundle\Component\Resource\Settings;
 use Chamilo\CoreBundle\Entity\Course;
 use Chamilo\CoreBundle\Entity\Resource\ResourceNode;
 use Chamilo\CoreBundle\Entity\Session;
 use Chamilo\CoreBundle\Form\Resource\CLinkType;
+use Chamilo\CoreBundle\Repository\GridInterface;
 use Chamilo\CoreBundle\Repository\ResourceRepository;
-use Chamilo\CoreBundle\Repository\ResourceRepositoryGridInterface;
 use Chamilo\CourseBundle\Entity\CGroupInfo;
 use Chamilo\CourseBundle\Entity\CLink;
 use Chamilo\UserBundle\Entity\User;
 use Doctrine\ORM\QueryBuilder;
 use Symfony\Component\Form\FormInterface;
-use Symfony\Component\HttpFoundation\File\UploadedFile;
 
 /**
  * Class CLinkCategoryRepository.
  */
-final class CLinkCategoryRepository extends ResourceRepository implements ResourceRepositoryGridInterface
+final class CLinkCategoryRepository extends ResourceRepository implements GridInterface
 {
     public function getResources(User $user, ResourceNode $parentNode, Course $course = null, Session $session = null, CGroupInfo $group = null): QueryBuilder
     {
         return $this->getResourcesByCourse($course, $session, $group, $parentNode);
     }
 
-    public function getResourceSettings(): ResourceSettings
+    public function getResourceSettings(): Settings
     {
         $settings = parent::getResourceSettings();
 
         $settings->setAllowResourceCreation(true);
 
         return $settings;
-    }
-
-    public function saveUpload(UploadedFile $file)
-    {
-        return new CLink();
     }
 
     public function saveResource(FormInterface $form, $course, $session, $fileType)

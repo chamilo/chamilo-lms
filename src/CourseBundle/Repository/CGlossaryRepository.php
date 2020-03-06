@@ -6,24 +6,23 @@ namespace Chamilo\CourseBundle\Repository;
 
 use APY\DataGridBundle\Grid\Column\Column;
 use APY\DataGridBundle\Grid\Grid;
-use Chamilo\CoreBundle\Component\Utils\ResourceSettings;
-use Chamilo\CoreBundle\Component\Utils\ResourceTemplate;
+use Chamilo\CoreBundle\Component\Resource\Settings;
+use Chamilo\CoreBundle\Component\Resource\Template;
 use Chamilo\CoreBundle\Entity\Course;
 use Chamilo\CoreBundle\Entity\Resource\ResourceNode;
 use Chamilo\CoreBundle\Entity\Session;
 use Chamilo\CoreBundle\Form\Resource\CGlossaryType;
+use Chamilo\CoreBundle\Repository\GridInterface;
 use Chamilo\CoreBundle\Repository\ResourceRepository;
-use Chamilo\CoreBundle\Repository\ResourceRepositoryGridInterface;
 use Chamilo\CourseBundle\Entity\CGlossary;
 use Chamilo\CourseBundle\Entity\CGroupInfo;
 use Chamilo\UserBundle\Entity\User;
 use Doctrine\ORM\QueryBuilder;
 use Symfony\Component\Form\FormInterface;
-use Symfony\Component\HttpFoundation\File\UploadedFile;
 
-final class CGlossaryRepository extends ResourceRepository implements ResourceRepositoryGridInterface
+final class CGlossaryRepository extends ResourceRepository implements GridInterface
 {
-    public function getResourceSettings(): ResourceSettings
+    public function getResourceSettings(): Settings
     {
         $settings = parent::getResourceSettings();
 
@@ -32,9 +31,15 @@ final class CGlossaryRepository extends ResourceRepository implements ResourceRe
         return $settings;
     }
 
-    public function getTemplates(): ResourceTemplate
+    public function getTemplates(): Template
     {
-        return parent::getTemplates();
+        $templates = parent::getTemplates();
+
+        $templates
+            ->setViewResource('@ChamiloTheme/Resource/glossary/view_resource.html.twig')
+        ;
+
+        return $templates;
     }
 
     public function getResources(User $user, ResourceNode $parentNode, Course $course = null, Session $session = null, CGroupInfo $group = null): QueryBuilder
@@ -45,10 +50,6 @@ final class CGlossaryRepository extends ResourceRepository implements ResourceRe
     public function getTitleColumn(Grid $grid): Column
     {
         return $grid->getColumn('name');
-    }
-
-    public function saveUpload(UploadedFile $file)
-    {
     }
 
     public function saveResource(FormInterface $form, $course, $session, $fileType)

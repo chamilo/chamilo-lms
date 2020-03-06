@@ -33,7 +33,6 @@ class ResourceFileAdmin extends AbstractAdmin
         $fileOptions = [
             'required' => true,
             'allow_delete' => false,
-            //'download_uri' => true,
             'download_uri' => static function (ResourceFile $file) use ($router) {
                 $resourceNode = $file->getResourceNode();
                 $params = [
@@ -67,6 +66,8 @@ class ResourceFileAdmin extends AbstractAdmin
             ->addIdentifier('id')
             ->addIdentifier('name')
             ->add('size')
+            ->add('mimeType')
+
         ;
     }
 }

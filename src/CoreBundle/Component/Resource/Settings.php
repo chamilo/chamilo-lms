@@ -2,9 +2,9 @@
 
 /* For licensing terms, see /license.txt */
 
-namespace Chamilo\CoreBundle\Component\Utils;
+namespace Chamilo\CoreBundle\Component\Resource;
 
-class ResourceSettings
+class Settings
 {
     /** @var bool */
     public $allowNodeCreation;

@@ -1,3 +1,5 @@
+{% autoescape false %}
+
 {{ 'Created at' | trans }}: {{ resource.resourceNode.createdAt | date_to_time_ago }}<br />
 {{ 'Updated at' | trans }}: {{ resource.resourceNode.updatedAt | date_to_time_ago }}<br />
 <br />
@@ -38,3 +40,5 @@
         {{ 'Delete'|trans }}
     </a>
 {% endif %}
+
+{% endautoescape %}

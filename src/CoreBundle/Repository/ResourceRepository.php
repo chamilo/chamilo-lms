@@ -6,8 +6,8 @@ namespace Chamilo\CoreBundle\Repository;
 
 use APY\DataGridBundle\Grid\Action\RowAction;
 use APY\DataGridBundle\Grid\Row;
-use Chamilo\CoreBundle\Component\Utils\ResourceSettings;
-use Chamilo\CoreBundle\Component\Utils\ResourceTemplate;
+use Chamilo\CoreBundle\Component\Resource\Settings;
+use Chamilo\CoreBundle\Component\Resource\Template;
 use Chamilo\CoreBundle\Entity\Course;
 use Chamilo\CoreBundle\Entity\Resource\AbstractResource;
 use Chamilo\CoreBundle\Entity\Resource\ResourceFile;
@@ -104,8 +104,8 @@ class ResourceRepository extends BaseEntityRepository
         $this->resourceNodeRepository = $resourceNodeRepository;
         $this->slugify = $slugify;
         $this->toolChain = $toolChain;
-        $this->settings = new ResourceSettings();
-        $this->templates = new ResourceTemplate();
+        $this->settings = new Settings();
+        $this->templates = new Template();
 
         $em = $this->getEntityManager();
         $service = get_class($this);
@@ -774,12 +774,12 @@ class ResourceRepository extends BaseEntityRepository
         }
     }
 
-    public function getResourceSettings(): ResourceSettings
+    public function getResourceSettings(): Settings
     {
         return $this->settings;
     }
 
-    public function getTemplates(): ResourceTemplate
+    public function getTemplates(): Template
     {
         return $this->templates;
     }

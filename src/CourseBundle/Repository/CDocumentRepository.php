@@ -6,14 +6,15 @@ namespace Chamilo\CourseBundle\Repository;
 
 use APY\DataGridBundle\Grid\Column\Column;
 use APY\DataGridBundle\Grid\Grid;
-use Chamilo\CoreBundle\Component\Utils\ResourceSettings;
+use Chamilo\CoreBundle\Component\Resource\Settings;
 use Chamilo\CoreBundle\Entity\Course;
 use Chamilo\CoreBundle\Entity\Resource\ResourceLink;
 use Chamilo\CoreBundle\Entity\Resource\ResourceNode;
 use Chamilo\CoreBundle\Entity\Session;
 use Chamilo\CoreBundle\Form\Resource\CDocumentType;
+use Chamilo\CoreBundle\Repository\GridInterface;
 use Chamilo\CoreBundle\Repository\ResourceRepository;
-use Chamilo\CoreBundle\Repository\ResourceRepositoryGridInterface;
+use Chamilo\CoreBundle\Repository\UploadInterface;
 use Chamilo\CourseBundle\Entity\CDocument;
 use Chamilo\CourseBundle\Entity\CGroupInfo;
 use Chamilo\UserBundle\Entity\User;
@@ -24,14 +25,14 @@ use Symfony\Component\HttpFoundation\File\UploadedFile;
 /**
  * Class CDocumentRepository.
  */
-final class CDocumentRepository extends ResourceRepository implements ResourceRepositoryGridInterface
+final class CDocumentRepository extends ResourceRepository implements GridInterface, UploadInterface
 {
     public function getResources(User $user, ResourceNode $parentNode, Course $course = null, Session $session = null, CGroupInfo $group = null): QueryBuilder
     {
         return $this->getResourcesByCourse($course, $session, $group, $parentNode);
     }
 
-    public function getResourceSettings(): ResourceSettings
+    public function getResourceSettings(): Settings
     {
         $settings = parent::getResourceSettings();
 

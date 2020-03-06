@@ -2,9 +2,9 @@
 
 /* For licensing terms, see /license.txt */
 
-namespace Chamilo\CoreBundle\Component\Utils;
+namespace Chamilo\CoreBundle\Component\Resource;
 
-class ResourceTemplate
+class Template
 {
     protected $index;
     protected $list;

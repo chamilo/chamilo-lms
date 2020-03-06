@@ -156,9 +156,7 @@ class CourseCategory
                 ORDER BY t1.parent_id, t1.tree_pos";
 
         $result = Database::query($sql);
-        $categories = Database::store_result($result, 'ASSOC');
-
-        return $categories;
+        return Database::store_result($result, 'ASSOC');
     }
 
     /**
@@ -551,10 +549,13 @@ class CourseCategory
                     ).' '.$category['name'].' ('.$category['code'].')',
                     $url
                 );
+
+                $countCourses = self::countCoursesInCategory($category['code'], null, false);
+
                 $content = [
                     $title,
                     $category['children_count'],
-                    $category['nbr_courses'],
+                    $countCourses,
                     implode('', $actions),
                 ];
                 $column = 0;
@@ -616,17 +617,21 @@ class CourseCategory
     /**
      * @param string $category_code
      * @param string $searchTerm
+     * @paran bool  $avoidCourses
      *
      * @return int
      */
-    public static function countCoursesInCategory($category_code = '', $searchTerm = '')
+    public static function countCoursesInCategory($category_code = '', $searchTerm = '', $avoidCourses = true)
     {
         $tbl_course = Database::get_main_table(TABLE_MAIN_COURSE);
-
         $categoryCode = Database::escape_string($category_code);
         $searchTerm = Database::escape_string($searchTerm);
 
-        $avoidCoursesCondition = CoursesAndSessionsCatalog::getAvoidCourseCondition();
+        $avoidCoursesCondition = '';
+        if ($avoidCourses) {
+            $avoidCoursesCondition = CoursesAndSessionsCatalog::getAvoidCourseCondition();
+        }
+
         $visibilityCondition = CourseManager::getCourseVisibilitySQLCondition('course', true);
 
         $categoryFilter = '';

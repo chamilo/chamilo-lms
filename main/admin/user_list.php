@@ -213,6 +213,8 @@ function prepare_user_sql_query($getCount)
     $user_table = Database::get_main_table(TABLE_MAIN_USER);
     $admin_table = Database::get_main_table(TABLE_MAIN_ADMIN);
 
+    $isMultipleUrl = (api_is_platform_admin() || api_is_session_admin()) && api_get_multiple_access_url();
+
     if ($getCount) {
         $sql .= "SELECT COUNT(u.id) AS total_number_of_items FROM $user_table u";
     } else {
@@ -237,7 +239,7 @@ function prepare_user_sql_query($getCount)
     }
 
     // adding the filter to see the user's only of the current access_url
-    if ((api_is_platform_admin() || api_is_session_admin()) && api_get_multiple_access_url()) {
+    if ($isMultipleUrl) {
         $access_url_rel_user_table = Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_USER);
         $sql .= " INNER JOIN $access_url_rel_user_table url_rel_user
                   ON (u.id=url_rel_user.user_id)";
@@ -397,14 +399,17 @@ function prepare_user_sql_query($getCount)
         }
 
         if (!empty($extraFieldHasData)) {
-            $sql .= " OR (u.id IN ('".implode("','", $extraFieldResult)."')) ";
+            $urlKeywordCondition = '';
+            if ($isMultipleUrl) {
+                $urlKeywordCondition .= " AND u.id = url_rel_user.user_id ";
+            }
+
+            $sql .= " OR (u.id IN ('".implode("','", $extraFieldResult)."') $urlKeywordCondition ) ";
         }
     }
 
     // adding the filter to see the user's only of the current access_url
-    if ((api_is_platform_admin() || api_is_session_admin()) &&
-        api_get_multiple_access_url()
-    ) {
+    if ($isMultipleUrl) {
         $sql .= ' AND url_rel_user.access_url_id = '.api_get_current_access_url_id();
     }
 

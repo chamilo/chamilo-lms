@@ -304,14 +304,6 @@ function prepare_user_sql_query($getCount)
         }
 
         $keyword_extra_value = '';
-
-        // This block is never executed because $keyword_extra_data never exists
-        /*
-        if (isset($keyword_extra_data) && !empty($keyword_extra_data) &&
-            !empty($keyword_extra_data_text)) {
-            $keyword_extra_value = " AND ufv.field_value LIKE '%".trim($keyword_extra_data_text)."%' ";
-        }
-        */
         $sql .= " $query_admin_table
             WHERE (
                 u.firstname LIKE '".Database::escape_string("%".$keywordListValues['keyword_firstname']."%")."' AND
@@ -341,9 +333,18 @@ function prepare_user_sql_query($getCount)
     }
 
     $preventSessionAdminsToManageAllUsers = api_get_setting('prevent_session_admins_to_manage_all_users');
+
+    $extraConditions = '';
     if (api_is_session_admin() && $preventSessionAdminsToManageAllUsers === 'true') {
-        $sql .= ' AND u.creator_id = '.api_get_user_id();
+        $extraConditions .= ' AND u.creator_id = '.api_get_user_id();
     }
+
+    // adding the filter to see the user's only of the current access_url
+    if ($isMultipleUrl) {
+        $extraConditions .= ' AND url_rel_user.access_url_id = '.$urlId;
+    }
+
+    $sql .= $extraConditions;
 
     $variables = Session::read('variables_to_show', []);
 
@@ -400,18 +401,8 @@ function prepare_user_sql_query($getCount)
         }
 
         if (!empty($extraFieldHasData)) {
-            $urlKeywordCondition = '';
-            if ($isMultipleUrl) {
-                $urlKeywordCondition .= ' AND u.id = url_rel_user.user_id AND url_rel_user.access_url_id = '.$urlId;
-            }
-
-            $sql .= " OR (u.id IN ('".implode("','", $extraFieldResult)."') $urlKeywordCondition ) ";
+            $sql .= " OR (u.id IN ('".implode("','", $extraFieldResult)."') $extraConditions ) ";
         }
-    }
-
-    // adding the filter to see the user's only of the current access_url
-    if ($isMultipleUrl) {
-        $sql .= ' AND url_rel_user.access_url_id = '.$urlId;
     }
 
     return $sql;

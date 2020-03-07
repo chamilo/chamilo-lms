@@ -131,7 +131,7 @@ if ($showCourses && $action != 'display_sessions') {
     $showTeacher = api_get_setting('display_teacher_in_courselist') === 'true';
     $ajax_url = api_get_path(WEB_AJAX_PATH).'course.ajax.php?a=add_course_vote';
     $user_id = api_get_user_id();
-    $categoryListFromDatabase = CourseCategory::getCategories();
+    $categoryListFromDatabase = CourseCategory::getAllCategories();
 
     $categoryList = [];
     if (!empty($categoryListFromDatabase)) {

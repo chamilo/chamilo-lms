@@ -37,9 +37,7 @@ if (isset($message) && 'ok' == $message) {
 
 if ('thematic_plan_list' === $action) {
     $token = Security::get_token();
-
     Session::write('thematic_plan_token', $token);
-
     $form = new FormValidator(
         'thematic_plan_add',
         'POST',
@@ -100,81 +98,11 @@ if ('thematic_plan_list' === $action) {
     ]);
     $formLayout = $form->returnForm();
 } elseif ('thematic_plan_add' == $action || 'thematic_plan_edit' == $action) {
-    if ($description_type >= ADD_THEMATIC_PLAN) {
-        $header_form = get_lang('Other');
-    } else {
-        $header_form = $default_thematic_plan_title[$description_type];
-    }
-    if (!$error) {
-        $token = md5(uniqid(rand(), true));
-        Session::write('thematic_plan_token', $token);
-    }
 
-    // display form
-    $form = new FormValidator(
-        'thematic_plan_add',
-        'POST',
-        'index.php?action=thematic_plan_edit&thematic_id='.$thematic_id.'&'.api_get_cidreq(),
-        '',
-        'style="width: 100%;"'
-    );
-    $form->addElement('hidden', 'action', $action);
-    $form->addElement('hidden', 'thematic_plan_token', $token);
-
-    if (!empty($thematic_id)) {
-        $form->addElement('hidden', 'thematic_id', $thematic_id);
-    }
-    if (!empty($description_type)) {
-        $form->addElement('hidden', 'description_type', $description_type);
-    }
-
-    $form->addText('title', get_lang('Title'), true, ['size' => '50']);
-    $form->addHtmlEditor(
-        'description',
-        get_lang('Description'),
-        false,
-        false,
-        [
-            'ToolbarStartExpanded' => 'false',
-            'ToolbarSet' => 'Basic',
-            'Width' => '80%',
-            'Height' => '150',
-        ]
-    );
-    $form->addButtonSave(get_lang('Save'));
-
-    if ($description_type < ADD_THEMATIC_PLAN) {
-        $default['title'] = $default_thematic_plan_title[$description_type];
-    }
-    if (!empty($thematic_plan_data)) {
-        // set default values
-        $default['title'] = $thematic_plan_data[0]['title'];
-        $default['description'] = $thematic_plan_data[0]['description'];
-    }
-    $form->setDefaults($default);
-
-    if (isset($default_thematic_plan_question[$description_type])) {
-        $message = '<strong>'.get_lang('Help').'</strong><br />';
-        $message .= $default_thematic_plan_question[$description_type];
-        Display::addFlash(Display::return_message($message, 'normal', false));
-    }
-
-    // error messages
-    if ($error) {
-        Display::addFlash(
-            Display::return_message(
-                get_lang('The form contains incorrect or incomplete data. Please check your input.'),
-                'error',
-                false
-            )
-        );
-    }
-    $formLayout = $form->returnForm();
 }
-$tpl->assign('title_thematic', $thematic_data['title']);
-$tpl->assign('content_thematic', $thematic_data['content']);
-$tpl->assign('form_thematic', $formLayout);
-$thematicLayout = $tpl->get_template('course_progress/thematic_plan.tpl');
+
+
+
 $content = $tpl->fetch($thematicLayout);
 $tpl->assign('content', $content);
 

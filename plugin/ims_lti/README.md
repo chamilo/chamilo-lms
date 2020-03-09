@@ -1,7 +1,7 @@
 IMS/LTI plugin
 ===
 
-Version 1.5.1
+Version 1.7.0
 
 > This plugin is meant to be later integrated into Chamilo (in a major version
 release).
@@ -23,6 +23,13 @@ Settings tool. Then select a previously tool registered or register a new
 external tool.
 
 # Changelog
+
+## v1.7
+* Fix auth params
+* Add option to show LTI tool in iframe or new window.
+
+## v1.6
+* Add support to LTI 1.3 and Advantage Services
 
 ## v1.5
 * Plugin has passed the tests from the LTI Certification suite.
@@ -54,6 +61,11 @@ external tool.
 # Upgrading
 
 Run this changes on database:
+
+## To v1.7.0
+```sql
+ALTER TABLE plugin_ims_lti_tool ADD launch_presentation LONGTEXT NOT NULL COMMENT '(DC2Type:json)';
+```
 
 ## To v1.6.0
 ```sql

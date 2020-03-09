@@ -154,7 +154,7 @@ try {
     // Launch info
     $jwtContent['https://purl.imsglobal.org/spec/lti/claim/launch_presentation'] = [
         'locale' => api_get_language_isocode($user->getLanguage()),
-        'document_target' => 'iframe',
+        'document_target' => $tool->getDocumentTarget(),
         //'height' => 320,
         //'wdith' => 240,
         //'return_url' => api_get_course_url(),
@@ -177,7 +177,7 @@ try {
                 ',',
                 ['*/*', ':::asterisk:::/:::asterisk:::']
             ),
-            'accept_presentation_document_targets' => ['iframe'],
+            'accept_presentation_document_targets' => ['iframe', 'window'],
             'accept_multiple' => true,
             'auto_create' => true,
             'title' => $tool->getName(),

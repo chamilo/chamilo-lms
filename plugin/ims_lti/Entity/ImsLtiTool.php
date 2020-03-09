@@ -147,6 +147,12 @@ class ImsLtiTool
      * @ORM\Column(name="version", type="string", options={"default": "lti1p1"})
      */
     private $version;
+    /**
+     * @var array
+     *
+     * @ORM\Column(name="launch_presentation", type="json")
+     */
+    private $launchPresentation;
 
     /**
      * ImsLtiTool constructor.
@@ -164,6 +170,9 @@ class ImsLtiTool
         $this->sharedSecret = null;
         $this->lineItems = new ArrayCollection();
         $this->version = \ImsLti::V_1P1;
+        $this->launchPresentation = [
+            'document_target' => 'iframe',
+        ];
     }
 
     /**
@@ -793,5 +802,33 @@ class ImsLtiTool
     public function getChildren()
     {
         return $this->children;
+    }
+
+    /**
+     * @param string $target
+     *
+     * @return $this
+     */
+    public function setDocumenTarget($target)
+    {
+        $this->launchPresentation['document_target'] = in_array($target, ['iframe', 'window']) ? $target : 'iframe';
+
+        return $this;
+    }
+
+    /**
+     * @return string
+     */
+    public function getDocumentTarget()
+    {
+        return $this->launchPresentation['document_target'] ?: 'iframe';
+    }
+
+    /**
+     * @return array
+     */
+    public function getLaunchPresentation()
+    {
+        return $this->launchPresentation;
     }
 }

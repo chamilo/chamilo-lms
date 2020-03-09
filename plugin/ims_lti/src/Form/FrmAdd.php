@@ -81,6 +81,11 @@ class FrmAdd extends FormValidator
             'custom_params',
             [$plugin->get_lang('CustomParams'), $plugin->get_lang('CustomParamsHelp')]
         );
+        $this->addSelect(
+            'document_target',
+            get_lang('LinkTarget'),
+            ['iframe' => 'iframe', 'window' => 'window']
+        );
 
         if (null === $this->baseTool ||
             ($this->baseTool && !$this->baseTool->isActiveDeepLinking())
@@ -158,6 +163,7 @@ class FrmAdd extends FormValidator
             $defaults['name'] = $this->baseTool->getName();
             $defaults['description'] = $this->baseTool->getDescription();
             $defaults['custom_params'] = $this->baseTool->getCustomParams();
+            $defaults['document_target'] = $this->baseTool->getDocumentTarget();
             $defaults['share_name'] = $this->baseTool->isSharingName();
             $defaults['share_email'] = $this->baseTool->isSharingEmail();
             $defaults['share_picture'] = $this->baseTool->isSharingPicture();

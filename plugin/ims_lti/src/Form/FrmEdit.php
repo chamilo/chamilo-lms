@@ -92,6 +92,11 @@ class FrmEdit extends FormValidator
             'custom_params',
             [$plugin->get_lang('CustomParams'), $plugin->get_lang('CustomParamsHelp')]
         );
+        $this->addSelect(
+            'document_target',
+            get_lang('LinkTarget'),
+            ['iframe' => 'iframe', 'window' => 'window']
+        );
 
         if (null === $parent ||
             (null !== $parent && !$parent->isActiveDeepLinking())
@@ -187,6 +192,7 @@ class FrmEdit extends FormValidator
                 'redirect_url' => $this->tool->getRedirectUrl(),
                 '1p3_ags' => $advServices['ags'],
                 '1p3_nrps' => $advServices['nrps'],
+                'document_target' => $this->tool->getDocumentTarget(),
             ]
         );
     }

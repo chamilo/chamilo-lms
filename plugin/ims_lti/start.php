@@ -33,6 +33,11 @@ if ($is1p3) {
     $launchUrl = api_get_path(WEB_PLUGIN_PATH).'ims_lti/form.php?'.http_build_query(['id' => $tool->getId()]);
 }
 
+if ($tool->getDocumentTarget() == 'window') {
+    header("Location: $launchUrl");
+    exit;
+}
+
 $template = new Template($pageTitle);
 $template->assign('tool', $tool);
 

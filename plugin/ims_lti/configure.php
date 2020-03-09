@@ -85,7 +85,8 @@ switch ($action) {
                                     : LtiAssignmentGradesService::AGS_NONE,
                                 'nrps' => $formValues['1p3_nrps'],
                             ]
-                        );
+                        )
+                        ->publicKey = $formValues['public_key'];
                 } elseif (ImsLti::V_1P1 === $formValues['version']) {
                     if (empty($formValues['consumer_key']) && empty($formValues['shared_secret'])) {
                         try {
@@ -209,7 +210,8 @@ switch ($action) {
                                     : LtiAssignmentGradesService::AGS_NONE,
                                 'nrps' => $formValues['1p3_nrps'],
                             ]
-                        );
+                        )
+                        ->publicKey = $formValues['public_key'];
                 } elseif ($tool->getVersion() === ImsLti::V_1P1) {
                     $tool
                         ->setLaunchUrl($formValues['launch_url'])

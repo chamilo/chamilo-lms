@@ -66,7 +66,9 @@ if ($form->validate()) {
                 ->setRedirectUrl($formValues['redirect_url'])
                 ->setAdvantageServices(
                     [
-                        'ags' => $formValues['1p3_ags'],
+                        'ags' => isset($formValues['1p3_ags'])
+                            ? $formValues['1p3_ags']
+                            : LtiAssignmentGradesService::AGS_NONE,
                         'nrps' => $formValues['1p3_nrps'],
                     ]
                 )

@@ -104,15 +104,40 @@ class FrmEdit extends FormValidator
         }
 
         if (null === $parent && $this->tool->getVersion() === ImsLti::V_1P3) {
-            $this->addRadio(
-                '1p3_ags',
-                $plugin->get_lang('AssigmentAndGradesService'),
-                [
-                    LtiAssignmentGradesService::AGS_NONE => $plugin->get_lang('DontUseService'),
-                    LtiAssignmentGradesService::AGS_SIMPLE => $plugin->get_lang('AGServiceSimple'),
-                    LtiAssignmentGradesService::AGS_FULL => $plugin->get_lang('AGServiceFull'),
-                ]
-            );
+            $showAGS = false;
+
+            if (api_get_course_int_id()) {
+                $caterories = Category::load(null, null, api_get_course_id());
+
+                if (!empty($caterories)) {
+                    $showAGS = true;
+                }
+            } else {
+                $showAGS = true;
+            }
+
+            if ($showAGS) {
+                $this->addRadio(
+                    '1p3_ags',
+                    $plugin->get_lang('AssigmentAndGradesService'),
+                    [
+                        LtiAssignmentGradesService::AGS_NONE => $plugin->get_lang('DontUseService'),
+                        LtiAssignmentGradesService::AGS_SIMPLE => $plugin->get_lang('AGServiceSimple'),
+                        LtiAssignmentGradesService::AGS_FULL => $plugin->get_lang('AGServiceFull'),
+                    ]
+                );
+            } else {
+                $gradebookUrl = api_get_path(WEB_CODE_PATH).'gradebook/index.php?'.api_get_cidreq();
+
+                $this->addLabel(
+                    $plugin->get_lang('AssigmentAndGradesService'),
+                    sprintf(
+                        $plugin->get_lang('YouNeedCreateTheGradebokInCourseFirst'),
+                        Display::url($gradebookUrl, $gradebookUrl)
+                    )
+                );
+            }
+
             $this->addRadio(
                 '1p3_nrps',
                 $plugin->get_lang('NamesAndRoleProvisioningService'),

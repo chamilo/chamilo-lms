@@ -65,3 +65,4 @@ $strings['AuthUrl'] = 'OIDC Auth URL';
 $strings['TokenUrl'] = 'OAuth2 Access Token URL';
 $strings['KeySetUrl'] = 'Keyset URL';
 $strings['NamesAndRoleProvisioningService'] = 'Names and Role Provisioning Service';
+$strings['YouNeedCreateTheGradebokInCourseFirst'] = 'You must first create the course gradebook to use this service by following this link %s';

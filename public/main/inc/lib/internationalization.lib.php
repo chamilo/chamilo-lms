@@ -449,6 +449,9 @@ function api_format_date($time, $format = null, $language = null)
     if (is_null($format)) {
         $format = DATE_TIME_FORMAT_LONG;
     }
+    if ($time instanceof DateTime) {
+        $time = $time->format('Y-m-d H:i:s');
+    }
 
     $datetype = null;
     $timetype = null;

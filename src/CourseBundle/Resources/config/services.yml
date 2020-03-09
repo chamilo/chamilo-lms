@@ -63,13 +63,17 @@ services:
 #            $repository: 'Chamilo\CoreBundle\Repository\IllustrationRepository'
 
     # Entity repository as a service
-    Chamilo\CourseBundle\Repository\CAnnouncementRepository:
+    Chamilo\CourseBundle\Repository\CAttendanceRepository:
         arguments:
-            $className: 'Chamilo\CourseBundle\Entity\CAnnouncement'
+            $className: 'Chamilo\CourseBundle\Entity\CAttendance'
 
     Chamilo\CourseBundle\Repository\CAnnouncementAttachmentRepository:
         arguments:
             $className: 'Chamilo\CourseBundle\Entity\CAnnouncementAttachment'
+
+    Chamilo\CourseBundle\Repository\CAnnouncementRepository:
+        arguments:
+            $className: 'Chamilo\CourseBundle\Entity\CAnnouncement'
 
     Chamilo\CourseBundle\Repository\CCalendarEventRepository:
         arguments:
@@ -143,6 +147,10 @@ services:
         arguments:
             $className: 'Chamilo\CourseBundle\Entity\CLp'
 
+    Chamilo\CourseBundle\Repository\CLpCategoryRepository:
+        arguments:
+            $className: 'Chamilo\CourseBundle\Entity\CLpCategory'
+
     Chamilo\CourseBundle\Repository\CStudentPublicationRepository:
         arguments:
             $className: 'Chamilo\CourseBundle\Entity\CStudentPublication'
@@ -155,9 +163,17 @@ services:
         arguments:
             $className: 'Chamilo\CourseBundle\Entity\CStudentPublicationComment'
 
-    Chamilo\CourseBundle\Repository\CLpCategoryRepository:
+    Chamilo\CourseBundle\Repository\CThematicRepository:
         arguments:
-            $className: 'Chamilo\CourseBundle\Entity\CLpCategory'
+            $className: 'Chamilo\CourseBundle\Entity\CThematic'
+
+    Chamilo\CourseBundle\Repository\CThematicAdvanceRepository:
+        arguments:
+            $className: 'Chamilo\CourseBundle\Entity\CThematicAdvance'
+
+    Chamilo\CourseBundle\Repository\CThematicPlanRepository:
+        arguments:
+            $className: 'Chamilo\CourseBundle\Entity\CThematicPlan'
 
     Chamilo\CourseBundle\Repository\CShortcutRepository:
         arguments:

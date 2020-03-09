@@ -4,6 +4,8 @@
 
 namespace Chamilo\CourseBundle\Entity;
 
+use Chamilo\CoreBundle\Entity\Resource\AbstractResource;
+use Chamilo\CoreBundle\Entity\Resource\ResourceInterface;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -18,7 +20,7 @@ use Doctrine\ORM\Mapping as ORM;
  * )
  * @ORM\Entity
  */
-class CThematic
+class CThematic extends AbstractResource implements ResourceInterface
 {
     /**
      * @var int
@@ -77,6 +79,11 @@ class CThematic
      * @ORM\Column(name="session_id", type="integer", nullable=false)
      */
     protected $sessionId;
+
+    public function __construct()
+    {
+        $this->id = 0;
+    }
 
     /**
      * Set title.
@@ -236,6 +243,11 @@ class CThematic
         return $this;
     }
 
+    public function getIid(): int
+    {
+        return $this->iid;
+    }
+
     /**
      * Get cId.
      *
@@ -244,5 +256,23 @@ class CThematic
     public function getCId()
     {
         return $this->cId;
+    }
+
+    public function __toString(): string
+    {
+        return $this->getTitle();
+    }
+
+    /**
+     * Resource identifier.
+     */
+    public function getResourceIdentifier(): int
+    {
+        return $this->getIid();
+    }
+
+    public function getResourceName(): string
+    {
+        return $this->getTitle();
     }
 }

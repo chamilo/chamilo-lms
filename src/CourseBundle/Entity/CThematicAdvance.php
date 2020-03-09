@@ -4,6 +4,8 @@
 
 namespace Chamilo\CourseBundle\Entity;
 
+use Chamilo\CoreBundle\Entity\Resource\AbstractResource;
+use Chamilo\CoreBundle\Entity\Resource\ResourceInterface;
 use Chamilo\CoreBundle\Entity\Room;
 use Doctrine\ORM\Mapping as ORM;
 
@@ -19,7 +21,7 @@ use Doctrine\ORM\Mapping as ORM;
  * )
  * @ORM\Entity
  */
-class CThematicAdvance
+class CThematicAdvance extends AbstractResource implements ResourceInterface
 {
     /**
      * @var int
@@ -45,18 +47,20 @@ class CThematicAdvance
     protected $id;
 
     /**
-     * @var int
+     * @var CThematic
      *
-     * @ORM\Column(name="thematic_id", type="integer", nullable=false)
+     * @ORM\ManyToOne(targetEntity="Chamilo\CourseBundle\Entity\CThematic")
+     * @ORM\JoinColumn(name="thematic_id", referencedColumnName="iid")
      */
-    protected $thematicId;
+    protected $thematic;
 
     /**
-     * @var int
+     * @var CAttendance
      *
-     * @ORM\Column(name="attendance_id", type="integer", nullable=false)
+     * @ORM\ManyToOne(targetEntity="Chamilo\CourseBundle\Entity\CAttendance")
+     * @ORM\JoinColumn(name="attendance_id", referencedColumnName="iid")
      */
-    protected $attendanceId;
+    protected $attendance;
 
     /**
      * @var string
@@ -94,52 +98,10 @@ class CThematicAdvance
      */
     protected $room;
 
-    /**
-     * Set thematicId.
-     *
-     * @param int $thematicId
-     *
-     * @return CThematicAdvance
-     */
-    public function setThematicId($thematicId)
+    public function __construct()
     {
-        $this->thematicId = $thematicId;
-
-        return $this;
-    }
-
-    /**
-     * Get thematicId.
-     *
-     * @return int
-     */
-    public function getThematicId()
-    {
-        return $this->thematicId;
-    }
-
-    /**
-     * Set attendanceId.
-     *
-     * @param int $attendanceId
-     *
-     * @return CThematicAdvance
-     */
-    public function setAttendanceId($attendanceId)
-    {
-        $this->attendanceId = $attendanceId;
-
-        return $this;
-    }
-
-    /**
-     * Get attendanceId.
-     *
-     * @return int
-     */
-    public function getAttendanceId()
-    {
-        return $this->attendanceId;
+        $this->doneAdvance = 0;
+        $this->id = 0;
     }
 
     /**
@@ -304,6 +266,30 @@ class CThematicAdvance
         return $this;
     }
 
+    public function getThematic(): CThematic
+    {
+        return $this->thematic;
+    }
+
+    public function setThematic(CThematic $thematic): self
+    {
+        $this->thematic = $thematic;
+
+        return $this;
+    }
+
+    public function getAttendance(): CAttendance
+    {
+        return $this->attendance;
+    }
+
+    public function setAttendance(CAttendance $attendance): self
+    {
+        $this->attendance = $attendance;
+
+        return $this;
+    }
+
     /**
      * @return int
      */
@@ -312,15 +298,21 @@ class CThematicAdvance
         return $this->iid;
     }
 
-    /**
-     * @param int $iid
-     *
-     * @return CThematicAdvance
-     */
-    public function setIid($iid)
+    public function __toString(): string
     {
-        $this->iid = $iid;
+        return (string) $this->getIid();
+    }
 
-        return $this;
+    /**
+     * Resource identifier.
+     */
+    public function getResourceIdentifier(): int
+    {
+        return $this->getIid();
+    }
+
+    public function getResourceName(): string
+    {
+        return (string) $this->getContent();
     }
 }

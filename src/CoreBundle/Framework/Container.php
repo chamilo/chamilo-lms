@@ -13,6 +13,7 @@ use Chamilo\CoreBundle\Repository\IllustrationRepository;
 use Chamilo\CoreBundle\ToolChain;
 use Chamilo\CourseBundle\Repository\CAnnouncementAttachmentRepository;
 use Chamilo\CourseBundle\Repository\CAnnouncementRepository;
+use Chamilo\CourseBundle\Repository\CAttendanceRepository;
 use Chamilo\CourseBundle\Repository\CCalendarEventRepository;
 use Chamilo\CourseBundle\Repository\CDocumentRepository;
 use Chamilo\CourseBundle\Repository\CExerciseCategoryRepository;
@@ -292,11 +293,27 @@ class Container
     }
 
     /**
+     * @return CAttendanceRepository
+     */
+    public static function getAttendanceRepository()
+    {
+        return self::$container->get('Chamilo\CourseBundle\Repository\CAttendanceRepository');
+    }
+
+    /**
      * @return CAnnouncementRepository
      */
     public static function getAnnouncementRepository()
     {
         return self::$container->get('Chamilo\CourseBundle\Repository\CAnnouncementRepository');
+    }
+
+    /**
+     * @return AccessUrlRepository
+     */
+    public static function getAccessUrlRepository()
+    {
+        return self::$container->get('Chamilo\CoreBundle\Repository\AccessUrlRepository');
     }
 
     /**
@@ -308,11 +325,19 @@ class Container
     }
 
     /**
-     * @return CDocumentRepository
+     * @return CourseRepository
      */
-    public static function getDocumentRepository()
+    public static function getCourseRepository()
     {
-        return self::$container->get('Chamilo\CourseBundle\Repository\CDocumentRepository');
+        return self::$container->get('Chamilo\CoreBundle\Repository\CourseRepository');
+    }
+
+    /**
+     * @return CourseCategoryRepository|object|null
+     */
+    public static function getCourseCategoryRepository()
+    {
+        return self::$container->get('Chamilo\CoreBundle\Repository\CourseCategoryRepository');
     }
 
     /**
@@ -321,6 +346,14 @@ class Container
     public static function getCalendarEventRepository()
     {
         return self::$container->get('Chamilo\CourseBundle\Repository\CCalendarEventRepository');
+    }
+
+    /**
+     * @return CDocumentRepository
+     */
+    public static function getDocumentRepository()
+    {
+        return self::$container->get('Chamilo\CourseBundle\Repository\CDocumentRepository');
     }
 
     /**
@@ -436,35 +469,11 @@ class Container
     }
 
     /**
-     * @return AccessUrlRepository
-     */
-    public static function getAccessUrlRepository()
-    {
-        return self::$container->get('Chamilo\CoreBundle\Repository\AccessUrlRepository');
-    }
-
-    /**
-     * @return CourseRepository
-     */
-    public static function getCourseRepository()
-    {
-        return self::$container->get('Chamilo\CoreBundle\Repository\CourseRepository');
-    }
-
-    /**
      * @return UserRepository
      */
     public static function getUserRepository()
     {
         return self::$container->get('Chamilo\UserBundle\Repository\UserRepository');
-    }
-
-    /**
-     * @return CourseCategoryRepository|object|null
-     */
-    public static function getCourseCategoryRepository()
-    {
-        return self::$container->get('Chamilo\CoreBundle\Repository\CourseCategoryRepository');
     }
 
     /**
@@ -505,6 +514,21 @@ class Container
     public static function getStudentPublicationCommentRepository()
     {
         return self::$container->get('Chamilo\CourseBundle\Repository\CStudentPublicationCommentRepository');
+    }
+
+    public static function getThematicRepository()
+    {
+        return self::$container->get('Chamilo\CourseBundle\Repository\CThematicRepository');
+    }
+
+    public static function getThematicPlanRepository()
+    {
+        return self::$container->get('Chamilo\CourseBundle\Repository\CThematicPlanRepository');
+    }
+
+    public static function getThematicAdvanceRepository()
+    {
+        return self::$container->get('Chamilo\CourseBundle\Repository\CThematicAdvanceRepository');
     }
 
     /**

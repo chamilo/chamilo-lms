@@ -4,6 +4,8 @@
 
 namespace Chamilo\CourseBundle\Entity;
 
+use Chamilo\CoreBundle\Entity\Resource\AbstractResource;
+use Chamilo\CoreBundle\Entity\Resource\ResourceInterface;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -19,7 +21,7 @@ use Doctrine\ORM\Mapping as ORM;
  * )
  * @ORM\Entity
  */
-class CAttendance
+class CAttendance extends AbstractResource implements ResourceInterface
 {
     /**
      * @var int
@@ -99,6 +101,10 @@ class CAttendance
      * @ORM\Column(name="locked", type="integer", nullable=false)
      */
     protected $locked;
+
+    public function __construct()
+    {
+    }
 
     /**
      * Set name.
@@ -338,5 +344,28 @@ class CAttendance
     public function getCId()
     {
         return $this->cId;
+    }
+
+    public function __toString(): string
+    {
+        return (string) $this->getIid();
+    }
+
+    public function getIid(): int
+    {
+        return $this->iid;
+    }
+
+    /**
+     * Resource identifier.
+     */
+    public function getResourceIdentifier(): int
+    {
+        return $this->getIid();
+    }
+
+    public function getResourceName(): string
+    {
+        return $this->getName();
     }
 }

@@ -4,6 +4,8 @@
 
 namespace Chamilo\CourseBundle\Entity;
 
+use Chamilo\CoreBundle\Entity\Resource\AbstractResource;
+use Chamilo\CoreBundle\Entity\Resource\ResourceInterface;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -18,7 +20,7 @@ use Doctrine\ORM\Mapping as ORM;
  * )
  * @ORM\Entity
  */
-class CThematicPlan
+class CThematicPlan extends AbstractResource implements ResourceInterface
 {
     /**
      * @var int
@@ -44,11 +46,12 @@ class CThematicPlan
     protected $id;
 
     /**
-     * @var int
+     * @var CThematic
      *
-     * @ORM\Column(name="thematic_id", type="integer", nullable=false)
+     * @ORM\ManyToOne(targetEntity="Chamilo\CourseBundle\Entity\CThematic")
+     * @ORM\JoinColumn(name="thematic_id", referencedColumnName="iid")
      */
-    protected $thematicId;
+    protected $thematic;
 
     /**
      * @var string
@@ -213,5 +216,40 @@ class CThematicPlan
     public function getCId()
     {
         return $this->cId;
+    }
+
+    public function __toString(): string
+    {
+        return (string) $this->getIid();
+    }
+
+    public function getIid(): int
+    {
+        return $this->iid;
+    }
+
+    public function getThematic(): CThematic
+    {
+        return $this->thematic;
+    }
+
+    public function setThematic(CThematic $thematic): self
+    {
+        $this->thematic = $thematic;
+
+        return $this;
+    }
+
+    /**
+     * Resource identifier.
+     */
+    public function getResourceIdentifier(): int
+    {
+        return $this->getIid();
+    }
+
+    public function getResourceName(): string
+    {
+        return $this->getTitle();
     }
 }

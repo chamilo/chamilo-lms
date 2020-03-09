@@ -38,3 +38,4 @@ $strings['ToolAddedOnCourseX'] = 'Herramienta agregada en el curso <strong>%s</s
 $strings['SupportDeppLinkingHelp'] = 'Contacte a su Proveedor de Herramienta para verificar si el soporte a Deep Linking es obligatorio';
 $strings['NoAccessToUrl'] = 'Sin acceso a la URL';
 $strings['LaunchUrlNotFound'] = 'URL de lanzamiento no encontrada';
+$strings['YouNeedCreateTheGradebokInCourseFirst'] = 'Debe crear el libro de calificaciones del curso para usar este servicio siguiendo este enlace %s';

@@ -31,7 +31,7 @@ class ImsLtiPlugin extends Plugin
      */
     protected function __construct()
     {
-        $version = '1.5.1';
+        $version = '1.7.0';
         $author = 'Angel Fernando Quiroz Campos';
 
         $message = Display::return_message($this->get_lang('GenerateKeyPairInfo'));
@@ -186,6 +186,7 @@ class ImsLtiPlugin extends Plugin
                     redirect_url VARCHAR(255) DEFAULT NULL,
                     advantage_services LONGTEXT DEFAULT NULL COMMENT '(DC2Type:json)',
                     version VARCHAR(255) DEFAULT 'lti1p1' NOT NULL,
+                    launch_presentation LONGTEXT NOT NULL COMMENT '(DC2Type:json),
                     INDEX IDX_C5E47F7C91D79BD3 (c_id),
                     INDEX IDX_C5E47F7C82F80D8B (gradebook_eval_id),
                     INDEX IDX_C5E47F7C727ACA70 (parent_id),
@@ -337,19 +338,28 @@ class ImsLtiPlugin extends Plugin
     }
 
     /**
-     * Add the course tool
+     * Add the course tool.
      *
-     * @param Course     $course
-     * @param ImsLtiTool $tool
+     * @param Course $course
+     * @param ImsLtiTool $ltiTool
+     *
+     * @throws \Doctrine\ORM\OptimisticLockException
      */
-    public function addCourseTool(Course $course, ImsLtiTool $tool)
+    public function addCourseTool(Course $course, ImsLtiTool $ltiTool)
     {
-        $this->createLinkToCourseTool(
-            $tool->getName(),
+        $cTool = $this->createLinkToCourseTool(
+            $ltiTool->getName(),
             $course->getId(),
             null,
-            self::generateToolLink($tool)
+            self::generateToolLink($ltiTool)
         );
+        $cTool->setTarget(
+            $ltiTool->getDocumentTarget() === 'iframe' ? '_self' : '_blank'
+        );
+
+        $em = Database::getManager();
+        $em->persist($cTool);
+        $em->flush();
     }
 
     /**

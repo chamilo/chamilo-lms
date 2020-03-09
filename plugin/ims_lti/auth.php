@@ -101,7 +101,11 @@ try {
     $jwtContent['aud'] = $tool->getClientId();
     $jwtContent['iat'] = time();
     $jwtContent['exp'] = time() + 60;
-    $jwtContent['nonce'] = md5(microtime().mt_rand());
+    $jwtContent['nonce'] = $nonce;
+
+    if (empty($nonce)) {
+        $jwtContent['nonce'] = md5(microtime().mt_rand());
+    }
 
     // User info
     if ($tool->isSharingName()) {

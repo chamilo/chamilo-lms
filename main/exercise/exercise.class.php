@@ -747,9 +747,10 @@ class Exercise
      * @return int
      */
     public function getQuestionCount()
-    {   if ($this->isRandom()) {
-        return (count($this->getRandomList()));
-    }
+    {   
+        if ($this->isRandom()) {
+            return count($this->getRandomList());
+        }
         $TBL_EXERCICE_QUESTION = Database::get_course_table(TABLE_QUIZ_TEST_QUESTION);
         $TBL_QUESTIONS = Database::get_course_table(TABLE_QUIZ_QUESTION);
         $sql = "SELECT count(q.id) as count

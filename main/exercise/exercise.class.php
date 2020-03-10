@@ -3207,7 +3207,6 @@ class Exercise
                         $endReminderValue = true;
                     }
                 }
-                #$randomquestion = count($this->getRandomList());
                 if ($this->type == ALL_ON_ONE_PAGE || 
                     $nbrQuestions == $questionNum || 
                     $endReminderValue ) {

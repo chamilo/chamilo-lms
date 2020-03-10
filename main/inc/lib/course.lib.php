@@ -536,9 +536,9 @@ class CourseManager
      */
     public static function autoSubscribeToCourse($courseCode, $status = STUDENT)
     {
-        $courseInfo = api_get_course_info($courseCode);
+        $course = Database::getManager()->getRepository('ChamiloCoreBundle:Course')->findOneBy(['code' => $courseCode]);
 
-        if (empty($courseInfo)) {
+        if (is_null($course)) {
             return false;
         }
 
@@ -546,15 +546,11 @@ class CourseManager
             return false;
         }
 
-        if (in_array(
-            $courseInfo['visibility'],
-            [
+        if (in_array($course->getVisibility(), [
                 COURSE_VISIBILITY_CLOSED,
                 COURSE_VISIBILITY_REGISTERED,
                 COURSE_VISIBILITY_HIDDEN,
-            ]
-        )
-        ) {
+        ])) {
             Display::addFlash(
                 Display::return_message(
                     get_lang('SubscribingNotAllowed'),
@@ -565,7 +561,70 @@ class CourseManager
             return false;
         }
 
-        return self::subscribeUser(api_get_user_id(), $courseInfo['code'], $status);
+        $userId = api_get_user_id();
+
+        if (api_get_configuration_value('catalog_course_subscription_in_user_s_session')) {
+            /**
+             * @var $user Chamilo\UserBundle\Entity\User
+             */
+            $user = UserManager::getRepository()->find($userId);
+            $sessionRelUser = Database::getManager()->getRepository('ChamiloCoreBundle:SessionRelUser')->findOneBy([
+                'user' => $user,
+            ]);
+            if (is_null($sessionRelUser)) {
+                $numberOfDays = api_get_configuration_value('user_s_session_duration') ?: 3 * 365;
+                try {
+                    $duration = new DateInterval(sprintf('P%dD', $numberOfDays));
+                } catch (Exception $exception) {
+                    Display::addFlash(
+                        Display::return_message(
+                            get_lang('WrongNumberOfDays') . ': ' . $numberOfDays . ': ' . $exception->getMessage(),
+                            'warning'
+                        )
+                    );
+                    return false;
+                }
+                $endDate = new DateTime();
+                $endDate->add($duration);
+                $session = new \Chamilo\CoreBundle\Entity\Session();
+                $session->setName(get_lang(sprintf("%s %s Courses", $user->getFirstname(), $user->getLastname())));
+                $session->setAccessEndDate($endDate);
+                $session->setCoachAccessEndDate($endDate);
+                $session->setDisplayEndDate($endDate);
+                $session->setSendSubscriptionNotification(false);
+                $session->addUserInSession($status, $user);
+            } else {
+                $session = $sessionRelUser->getSession();
+            }
+            $now = new DateTime();
+            if ($now < $session->getAccessStartDate() or $session->getAccessEndDate() < $now) {
+                Display::addFlash(
+                    Display::return_message(
+                        get_lang('UserSessionExpired')
+                        .': now='.$now->format('y-M-d h:m')
+                        .', start='.$session->getAccessStartDate()->format('y-M-d h:m')
+                        .', end='.$session->getAccessEndDate()->format('y-M-d h:m'),
+                        'warning'
+                    )
+                );
+                return false;
+            }
+            $session->addCourse($course);
+            Database::getManager()->persist($session);
+            try {
+                Database::getManager()->flush();
+            } catch (\Doctrine\ORM\OptimisticLockException $exception) {
+                Display::addFlash(
+                    Display::return_message(
+                        get_lang('InternalDatabaseError') . ': ' . $exception->getMessage(),
+                        'warning'
+                    )
+                );
+                return false;
+            }
+            return true;
+        }
+        return self::subscribeUser($userId, $course->getCode(), $status);
     }
 
     /**

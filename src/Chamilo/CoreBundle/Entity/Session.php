@@ -329,6 +329,7 @@ class Session
 
         if (!$this->hasUser($user)) {
             $this->users[] = $user;
+            $this->setNbrUsers(count($this->users));
         }
     }
 
@@ -902,7 +903,9 @@ class Session
     {
         $entity = new SessionRelCourse();
         $entity->setCourse($course);
+        $entity->setPosition(0);
         $this->addCourses($entity);
+        $this->setNbrCourses(count($this->courses));
     }
 
     /**

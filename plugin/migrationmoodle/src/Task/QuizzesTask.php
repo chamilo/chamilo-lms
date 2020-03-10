@@ -39,7 +39,7 @@ class QuizzesTask extends BaseTask
                     q.timelimit,
                     gi.gradepass,
                     q.grade,
-                    cm.id cm_id,
+                    cm.id cm_id
                 FROM mdl_quiz q
                 INNER JOIN mdl_course_modules cm ON (q.course = cm.course AND cm.instance = q.id)
                 INNER JOIN mdl_modules m ON cm.module = m.id

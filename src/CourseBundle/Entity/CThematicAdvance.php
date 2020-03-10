@@ -102,6 +102,7 @@ class CThematicAdvance extends AbstractResource implements ResourceInterface
     {
         $this->doneAdvance = 0;
         $this->id = 0;
+        $this->duration = 1;
     }
 
     /**
@@ -278,7 +279,7 @@ class CThematicAdvance extends AbstractResource implements ResourceInterface
         return $this;
     }
 
-    public function getAttendance(): CAttendance
+    public function getAttendance(): ?CAttendance
     {
         return $this->attendance;
     }

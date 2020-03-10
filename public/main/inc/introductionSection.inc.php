@@ -178,20 +178,20 @@ if (TOOL_COURSE_HOMEPAGE == $tool && !isset($_GET['intro_cmdEdit'])) {
     $thematic = new Thematic();
     $displayMode = api_get_course_setting('display_info_advance_inside_homecourse');
     $class1 = '';
-    if ('1' == $displayMode) {
+    if ('1' === $displayMode) {
         // Show only the current course progress step
         $last_done_advance = $thematic->get_last_done_thematic_advance();
         $thematic_advance_info = $thematic->get_thematic_advance_list($last_done_advance);
         $subTitle1 = get_lang('Current topic');
         $class1 = ' current';
-    } elseif ('2' == $displayMode) {
+    } elseif ('2' === $displayMode) {
         // Show only the two next course progress steps
         $last_done_advance = $thematic->get_next_thematic_advance_not_done();
         $next_advance_not_done = $thematic->get_next_thematic_advance_not_done(2);
         $thematic_advance_info = $thematic->get_thematic_advance_list($last_done_advance);
         $thematic_advance_info2 = $thematic->get_thematic_advance_list($next_advance_not_done);
         $subTitle1 = $subTitle2 = get_lang('Next topic');
-    } elseif ('3' == $displayMode) {
+    } elseif ('3' === $displayMode) {
         // Show the current and next course progress steps
         $last_done_advance = $thematic->get_last_done_thematic_advance();
         $next_advance_not_done = $thematic->get_next_thematic_advance_not_done();
@@ -206,16 +206,16 @@ if (TOOL_COURSE_HOMEPAGE == $tool && !isset($_GET['intro_cmdEdit'])) {
         $thematic_advance = get_lang('Course progress');
         $thematicScore = $thematic->get_total_average_of_thematic_advances().'%';
         $thematicUrl = api_get_path(WEB_CODE_PATH).'course_progress/index.php?action=thematic_details&'.api_get_cidreq();
-        $thematic_info = $thematic->get_thematic_list($thematic_advance_info['thematic_id']);
 
-        $thematic_advance_info['start_date'] = api_get_local_time(
-            $thematic_advance_info['start_date']
-        );
+        $repo = \Chamilo\CoreBundle\Framework\Container::getThematicRepository();
+        /** @var \Chamilo\CourseBundle\Entity\CThematic $thematic_info */
+        $thematic_info = $repo->find($thematic_advance_info['thematic_id']);
+
+        $thematic_advance_info['start_date'] = api_get_local_time($thematic_advance_info['start_date']);
         $thematic_advance_info['start_date'] = api_format_date(
             $thematic_advance_info['start_date'],
             DATE_TIME_FORMAT_LONG
-        );
-        $userInfo = api_get_user_info();
+        );        $userInfo = api_get_user_info();
         $courseInfo = api_get_course_info();
         $titleThematic = $thematic_advance.' : '.$courseInfo['name'].' <b>( '.$thematicScore.' )</b>';
 
@@ -230,7 +230,7 @@ if (TOOL_COURSE_HOMEPAGE == $tool && !isset($_GET['intro_cmdEdit'])) {
         <div class="col-md-6 items-progress">
             <div class="thematic-cont '.$class1.'">
             <div class="topics">'.$subTitle1.'</div>
-            <h4 class="title-topics">'.Display::returnFontAwesomeIcon('book').strip_tags($thematic_info['title']).'</h4>
+            <h4 class="title-topics">'.Display::returnFontAwesomeIcon('book').strip_tags($thematic_info->getTitle()).'</h4>
             <p class="date">'.Display::returnFontAwesomeIcon('calendar-o').$thematic_advance_info['start_date'].'</p>
             <div class="views">'.Display::returnFontAwesomeIcon('file-text-o').strip_tags($thematic_advance_info['content']).'</div>
             <p class="time">'.Display::returnFontAwesomeIcon('clock-o').get_lang('Duration in hours').' : '.$thematic_advance_info['duration'].' - <a href="'.$thematicUrl.'">'.get_lang('See detail').'</a></p>
@@ -238,7 +238,7 @@ if (TOOL_COURSE_HOMEPAGE == $tool && !isset($_GET['intro_cmdEdit'])) {
         </div>';
 
         if (!empty($thematic_advance_info2)) {
-            $thematic_info2 = $thematic->get_thematic_list($thematic_advance_info2['thematic_id']);
+            $thematic_info2 = $repo->find($thematic_advance_info2['thematic_id']);
             $thematic_advance_info2['start_date'] = api_get_local_time($thematic_advance_info2['start_date']);
             $thematic_advance_info2['start_date'] = api_format_date($thematic_advance_info2['start_date'], DATE_TIME_FORMAT_LONG);
 
@@ -246,7 +246,7 @@ if (TOOL_COURSE_HOMEPAGE == $tool && !isset($_GET['intro_cmdEdit'])) {
                 <div class="col-md-6 items-progress">
                     <div class="thematic-cont">
                     <div class="topics">'.$subTitle2.'</div>
-                    <h4 class="title-topics">'.Display::returnFontAwesomeIcon('book').$thematic_info2['title'].'</h4>
+                    <h4 class="title-topics">'.Display::returnFontAwesomeIcon('book').api_get_local_time($thematic_info2->getStartDate()).'</h4>
                     <p class="date">'.Display::returnFontAwesomeIcon('calendar-o').$thematic_advance_info2['start_date'].'</p>
                     <div class="views">'.Display::returnFontAwesomeIcon('file-text-o').strip_tags($thematic_advance_info2['content']).'</div>
                     <p class="time">'.Display::returnFontAwesomeIcon('clock-o').get_lang('Duration in hours').' : '.$thematic_advance_info2['duration'].' - <a href="'.$thematicUrl.'">'.get_lang('See detail').'</a></p>

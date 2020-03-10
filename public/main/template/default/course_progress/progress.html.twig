@@ -1,14 +1,61 @@
 {% autoescape false %}
 
+<script>
+    function datetime_by_attendance(attendance_id, thematic_advance_id) {
+        $.ajax({
+            contentType: "application/x-www-form-urlencoded",
+            beforeSend: function(myObject) {},
+            type: "GET",
+            url: "{{ url('legacy_main', {'name' : 'inc/ajax/thematic.ajax.php'}) ~ '?' ~ course_url_params ~ '&a=get_datetime_by_attendance' }}",
+            data: "attendance_id="+attendance_id+"&thematic_advance_id="+thematic_advance_id,
+            success: function(data) {
+                $("#div_datetime_attendance").html(data);
+                if (thematic_advance_id == 0) {
+                    $("#start_date_select_calendar").val($("#start_date_select_calendar option:first").val());
+                }
+            }
+        });
+    }
+
+    function updateDoneThematicAdvance(advanceId) {
+        $.ajax({
+            contentType: "application/x-www-form-urlencoded",
+            beforeSend: function(myObject) {},
+            type: "GET",
+            url: "{{ url('legacy_main', {'name' : 'inc/ajax/thematic.ajax.php'}) ~ '?' ~ course_url_params ~ '&a=update_done_thematic_advance' }}",
+            data: "thematic_advance_id="+advanceId,
+            success: function(data) {
+                $("#div_result").html(data);
+            }
+        });
+
+        // clean all radios
+        for (var i=0; i< $(".done_thematic").length;i++) {
+            var id_radio_thematic = $(".done_thematic").get(i).id;
+            $("#td_"+id_radio_thematic).css({"background-color":"#FFF"});
+        }
+
+        // set background to previous radios
+        for (var i=0; i < $(".done_thematic").length;i++) {
+            var id_radio_thematic = $(".done_thematic").get(i).id;
+            $("#td_"+id_radio_thematic).css({"background-color":"#E5EDF9"});
+            if ($(".done_thematic").get(i).value == advanceId) {
+                break;
+            }
+        }
+    }
+</script>
+
+
 {% if data is not empty %}
-{% set tutor =  is_granted('ROLE_TEACHER') %}
+{% set tutor = is_granted('ROLE_TEACHER') %}
 <div id="course-progress" class="thematic">
     <div class="row">
         <div class="col-md-12">
             <div class="bar-progress">
                 <div class="float-right">
                     <div class="score-progress">
-                        <h3>{{ 'Progress' | get_lang }}: <span id="div_result">{{ score_progress }}</span> %</h3>
+                        <h3>{{ 'Progress' | trans }}: <span id="div_result">{{ score_progress }}</span> %</h3>
                     </div>
                 </div>
             </div>
@@ -16,9 +63,9 @@
                 <table width="100%" class="table">
                     <thead>
                         <tr>
-                            <th scope="col" style="width: 35%">{{ 'Thematic' | get_lang }}</th>
-                            <th scope="col" style="width: 40%">{{ 'ThematicPlan' | get_lang }}</th>
-                            <th scope="col" style="width: 25%">{{ 'ThematicAdvance' | get_lang }}</th>
+                            <th scope="col" style="width: 35%">{{ 'Thematic' | trans }}</th>
+                            <th scope="col" style="width: 40%">{{ 'Thematic plan' | trans }}</th>
+                            <th scope="col" style="width: 25%">{{ 'Thematic advance' | trans }}</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -47,14 +94,14 @@
                                         </div>
                                     {% endif %}
 
-                                    {% if item.thematic_plan is empty %}
-                                    <div class="alert-thematic">
-                                        <div class="alert alert-info" role="alert">{{ 'StillDoNotHaveAThematicPlan' | trans }}</div>
-                                    </div>
+                                    {% if item.plans is empty %}
+                                        <div class="alert-thematic">
+                                            <div class="alert alert-info" role="alert">{{ 'There is no thematic plan for now' | trans }}</div>
+                                        </div>
                                     {% else %}
-                                        {% for subitem in item.thematic_plan %}
-                                        <h5>{{ subitem.title }}</h5>
-                                        {{ subitem.description }}
+                                        {% for plan in item.plans %}ssss
+                                            <h5>{{ plan.title }}</h5>
+                                            {{ plan.description }}
                                         {% endfor %}
                                     {% endif %}
                                 </div>
@@ -71,13 +118,12 @@
                                     </div>
                                 {% endif %}
                                 <table width="100%" class="table">
-                                {% if item.thematic_advance is not empty %}
-                                    {% for advance in item.thematic_advance %}
-
+                                {% if item.advances is not empty %}
+                                    {% for advance in item.advances %}
                                         <tr>
                                             <td style="width: 90%" class="thematic_advance_content" id="thematic_advance_content_id_{{ advance.id }}">
                                                 <div id="thematic_advance_{{ advance.id }}">
-                                                <strong>{{ advance.start_date }}</strong>
+                                                <strong>{{ advance.startDate | format_date }}</strong>
                                                 {{ advance.content }}
                                                 </div>
                                                 {% if tutor %}
@@ -86,7 +132,7 @@
                                                             <div class="btn-group btn-group-sm">
                                                                 <a class="btn btn-default btn-sm"
                                                                    href="index.php?{{ course_url_params }}&action=thematic_advance_edit&thematic_id={{ item.id }}&thematic_advance_id={{ advance.id }}" title="{{ 'Edit' |trans }}">
-                                                                    <i class="fa fa-pencil" aria-hidden="true"></i>
+                                                                    <i class="fa fa-pen" aria-hidden="true"></i>
                                                                 </a>
                                                                 <a class="btn btn-default btn-sm"
                                                                     onclick="javascript:if(!confirm('{{ 'Are you sure to delete' | trans }}')) return false;"
@@ -111,16 +157,19 @@
                                                     {% set check = "checked"  %}
                                                 {% endif %}
                                                     <input type="radio" class="done_thematic"
-                                                           id="done_thematic_{{ advance.id }}"
-                                                           name="done_thematic"
-                                                           value="{{ advance.id }}" {{ check }} onclick="update_done_thematic_advance(this.value)">
+                                                       id="done_thematic_{{ advance.id }}"
+                                                       name="done_thematic"
+                                                       value="{{ advance.id }}" {{ check }}
+                                                       onclick="updateDoneThematicAdvance(this.value); ">
                                             {% else %}
                                                 </td>
                                             {% endif %}
                                         </tr>
                                     {% endfor %}
                                 {% else %}
-                                    <div class="alert alert-info" role="alert">{{ 'There is no thematic advance' | trans }}</div>
+                                    <div class="alert alert-info" role="alert">
+                                        {{ 'There is no thematic advance' | trans }}
+                                    </div>
                                 {% endif %}
                                 </table>
                                 </div>

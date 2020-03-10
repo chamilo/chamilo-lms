@@ -6,6 +6,7 @@ namespace Chamilo\CourseBundle\Entity;
 
 use Chamilo\CoreBundle\Entity\Resource\AbstractResource;
 use Chamilo\CoreBundle\Entity\Resource\ResourceInterface;
+use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -80,9 +81,27 @@ class CThematic extends AbstractResource implements ResourceInterface
      */
     protected $sessionId;
 
+    /**
+     * @var CThematicPlan[]
+     *
+     * @ORM\OneToMany(targetEntity="Chamilo\CourseBundle\Entity\CThematicPlan", mappedBy="thematic", cascade={"persist", "remove"}, orphanRemoval=true)
+     */
+    protected $plans;
+
+    /**
+     * @var CThematicAdvance[]
+     *
+     * @ORM\OrderBy({"startDate" = "ASC"})
+     *
+     * @ORM\OneToMany(targetEntity="Chamilo\CourseBundle\Entity\CThematicAdvance", mappedBy="thematic", cascade={"persist", "remove"}, orphanRemoval=true)
+     */
+    protected $advances;
+
     public function __construct()
     {
         $this->id = 0;
+        $this->plans = new ArrayCollection();
+        $this->advances = new ArrayCollection();
     }
 
     /**
@@ -256,6 +275,22 @@ class CThematic extends AbstractResource implements ResourceInterface
     public function getCId()
     {
         return $this->cId;
+    }
+
+    /**
+     * @return CThematicPlan[]|ArrayCollection
+     */
+    public function getPlans()
+    {
+        return $this->plans;
+    }
+
+    /**
+     * @return CThematicAdvance[]|ArrayCollection
+     */
+    public function getAdvances()
+    {
+        return $this->advances;
     }
 
     public function __toString(): string

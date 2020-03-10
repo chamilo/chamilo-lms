@@ -82,8 +82,8 @@ switch ($action) {
         echo $return[$_REQUEST['thematic_id']][$_REQUEST['thematic_advance_id']];*/
         break;
     case 'get_datetime_by_attendance':
-        $attendance_id = intval($_REQUEST['attendance_id']);
-        $thematic_advance_id = intval($_REQUEST['thematic_advance_id']);
+        $attendance_id = (int) $_REQUEST['attendance_id'];
+        $thematic_advance_id = (int) $_REQUEST['thematic_advance_id'];
 
         $label = '';
         $input_select = '';
@@ -144,17 +144,17 @@ switch ($action) {
         <?php
         break;
     case 'update_done_thematic_advance':
-        $thematic_advance_id = intval($_GET['thematic_advance_id']);
-        $total_average = 0;
-        if (!empty($thematic_advance_id)) {
+        $advanceId = (int) $_GET['thematic_advance_id'];
+        $average = 0;
+        if (!empty($advanceId)) {
             $thematic = new Thematic();
-            $affected_rows = $thematic->update_done_thematic_advances($thematic_advance_id);
-            $total_average = $thematic->get_total_average_of_thematic_advances(
+            $thematic->update_done_thematic_advances($advanceId);
+            $average = $thematic->get_total_average_of_thematic_advances(
                 api_get_course_id(),
                 api_get_session_id()
             );
         }
-        echo $total_average;
+        echo $average;
         break;
     default:
         echo '';

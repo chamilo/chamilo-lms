@@ -29,9 +29,9 @@ class UserQuestionAnswer implements TransformPropertyInterface
 
         switch ($mQType) {
             case 'shortanswer':
-                return $this->shortAnswer($mRightAnswer, $mResponseSummary, $mFraction, $mDefaultMark);
+                return $this->shortanswer($mRightAnswer, $mResponseSummary, $mFraction, $mDefaultMark);
             case 'gapselect':
-                return $this->gapSelect($mResponseSummary, $mFraction, $mDefaultMark, $mQuestionSummary);
+                return $this->gapselect($mRightAnswer, $mResponseSummary, $mDefaultMark, $mQuestionSummary);
             default:
                 return '';
         }
@@ -45,7 +45,7 @@ class UserQuestionAnswer implements TransformPropertyInterface
      *
      * @return string
      */
-    private function shortAnswer($mRightAnswer, $mResponseSummary, $mFraction, $mDefaultMark)
+    private function shortanswer($mRightAnswer, $mResponseSummary, $mFraction, $mDefaultMark)
     {
         $width = LessonAnswersShortAnswerLoader::INPUT_WIDTH;
 
@@ -53,49 +53,127 @@ class UserQuestionAnswer implements TransformPropertyInterface
     }
 
     /**
+     * @param string $mRightAnswer
      * @param string $mResponseSummary
-     * @param float  $mFraction
      * @param float  $mDefaultMark
      * @param string $mQuestionSummary
      *
      * @return string
      */
-    private function gapSelect($mResponseSummary, $mFraction, $mDefaultMark, $mQuestionSummary)
+    private function gapselect($mRightAnswer, $mResponseSummary, $mDefaultMark, $mQuestionSummary)
+    {
+        $mRightAnswer = $this->gapselectGetRightAnswers($mRightAnswer);
+
+        $mResponseSummary = $this->gapselectGetResposeSummary($mResponseSummary);
+
+        $mQuestionSummary = explode(";", $mQuestionSummary);
+        $mQuestionSummary = array_map('trim', $mQuestionSummary);
+
+        $questionText = array_shift($mQuestionSummary);
+
+        $groupsAndOptions = $this->gapselectGetGroupsAndOptions($mQuestionSummary);
+
+        $blanks = $this->gapselectGetBlanks($mRightAnswer, $groupsAndOptions);
+
+        $count = 0;
+
+        foreach ($blanks as $placeholder => $blank) {
+            $userAnswer = empty($mResponseSummary[$count]) ? '' : $mResponseSummary[$count];
+            $replacement = $blank."[$userAnswer][0]";
+
+            $questionText = str_replace("[[$placeholder]]", $replacement, $questionText);
+
+            $count++;
+        }
+
+        $scorePerBlank = $mDefaultMark / count($mRightAnswer);
+
+        $optionsScores = array_fill(0, count($mRightAnswer), $scorePerBlank);
+        $width = array_fill(0, count($mRightAnswer), 300);
+
+        return "$questionText::".implode(',', $optionsScores).':'.implode(',', $width).':0@';
+    }
+
+    /**
+     * @param string $mRightAnswer
+     *
+     * @return array
+     */
+    private function gapselectGetRightAnswers($mRightAnswer)
+    {
+        $rightAnswers = [];
+
+        $mRightAnswer = explode('} {', $mRightAnswer);
+
+        foreach ($mRightAnswer as $i0 => $item) {
+            $rightAnswers[$i0 + 1] = trim($item, "{} \t\n\r\x0B");
+        }
+
+        return $rightAnswers;
+    }
+
+    /**
+     * @param string $mResponseSummary
+     *
+     * @return array
+     */
+    private function gapselectGetResposeSummary($mResponseSummary)
     {
         $mResponseSummary = explode('} {', $mResponseSummary);
-        $mResponseSummary = array_map(
+
+        return array_map(
             function ($item) {
                 return trim($item, "{} \t\n\r\x0B");
             },
             $mResponseSummary
         );
+    }
 
-        $mQuestionSummary = explode("\n;", $mQuestionSummary);
-        $mQuestionSummary = array_map('trim', $mQuestionSummary);
+    /**
+     * @param array $mQuestionSummary
+     *
+     * @return array
+     */
+    private function gapselectGetGroupsAndOptions(array $mQuestionSummary)
+    {
+        $groupsAndOptions = [];
 
-        list($questionText, $questionOptions) = $mQuestionSummary;
+        foreach ($mQuestionSummary as $groupAndOptions) {
+            list($group, $options) = explode(' -> ', $groupAndOptions);
 
-        $questionOptions = explode('; ', $questionOptions);
+            $group = str_replace(['[', ']'], '', $group);
+            $options = explode(' / ', trim($options, "{} \t\n\r\x0B"));
 
-        $mDefaultMark = count($mQuestionSummary) > 0 ? $mDefaultMark / count($mQuestionSummary) : 0;
-        $userScore = count($mQuestionSummary) > 0 ? $mFraction / count($mQuestionSummary) : 0;
-
-        $width = [];
-        $score = [];
-
-        foreach ($questionOptions as $i => $questionOption) {
-            list($position, $options) = explode(' -> ', $questionOption);
-
-            $options = str_replace(['{', '}', ' / '], ['[', ']', '|'], $options);
-            $options .= '['.$mResponseSummary[$i].']';
-            $options .= '['.$userScore.']';
-
-            $questionText = str_replace($position, $options, $questionText);
-
-            $width[] = 300;
-            $score[] = $mDefaultMark;
+            $groupsAndOptions[$group] = $options;
         }
 
-        return "$questionText::".implode(',', $score).':'.implode(',', $width).':0@';
+        return $groupsAndOptions;
+    }
+
+    /**
+     * @param array $rightAnswers
+     * @param array $groupsAndOptions
+     *
+     * @return array
+     */
+    private function gapselectGetBlanks(array $rightAnswers, array $groupsAndOptions)
+    {
+        $blanks = [];
+
+        foreach ($rightAnswers as $i => $rightAnswer) {
+            foreach ($groupsAndOptions as $group => $options) {
+                if (in_array($rightAnswer, $options)) {
+                    $optionIndex = array_search($rightAnswer, $options);
+
+                    unset($options[$optionIndex]);
+
+                    $options = array_merge([$rightAnswer], $options);
+
+                    $blanks[$i] = '['.implode('|', $options).']';
+                }
+            }
+        }
+
+        return $blanks;
     }
 }

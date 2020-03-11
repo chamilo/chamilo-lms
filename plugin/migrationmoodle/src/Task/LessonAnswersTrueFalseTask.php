@@ -27,7 +27,13 @@ class LessonAnswersTrueFalseTask extends BaseTask
     {
         return [
             'class' => LoadedCoursesFilterExtractor::class,
-            'query' => 'SELECT la.id, la.pageid, la.score, la.answer, la.response, l.course
+            'query' => 'SELECT la.id, la.pageid, la.score, la.answer, la.response, l.course,
+                    (
+                        SELECT MIN(id) = la.id
+                        FROM mdl_lesson_answers
+                        WHERE pageid = la.pageid
+                        GROUP BY lessonid, pageid
+                    ) is_correct
                 FROM mdl_lesson_answers la
                 INNER JOIN mdl_lesson_pages lp ON (la.pageid = lp.id AND la.lessonid = lp.lessonid)
                 INNER JOIN mdl_lesson l ON (lp.lessonid = l.id AND la.lessonid = l.id)
@@ -62,6 +68,7 @@ class LessonAnswersTrueFalseTask extends BaseTask
                     'properties' => ['answer', 'course'],
                 ],
                 'feedback' => 'response',
+                'is_correct' => 'is_correct',
             ],
         ];
     }

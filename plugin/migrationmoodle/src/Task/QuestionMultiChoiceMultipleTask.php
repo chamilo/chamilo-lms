@@ -26,6 +26,7 @@ class QuestionMultiChoiceMultipleTask extends QuestionMultiChoiceSingleTask
                     qa.answer,
                     qa.feedback,
                     (qa.fraction * qq.defaultmark) score,
+                    IF (qa.fraction > 0, TRUE, FALSE) is_correct,
                     q.id quizid,
                     q.course
                 FROM mdl_question_answers qa

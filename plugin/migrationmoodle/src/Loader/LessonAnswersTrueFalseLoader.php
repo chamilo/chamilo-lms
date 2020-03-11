@@ -46,19 +46,15 @@ class LessonAnswersTrueFalseLoader implements LoaderInterface
             );
         }
 
-        $isGoodAnswer = !empty($incomingData['score']);
-
-        if ($isGoodAnswer) {
+        if ($incomingData['is_correct']) {
             $incomingData['score'] = abs($incomingData['score']);
 
-            if ($incomingData['score'] > 0) {
-                $question->weighting += $incomingData['score'];
-            }
+            $question->weighting += $incomingData['score'];
         }
 
         $answer->createAnswer(
             $incomingData['answer'],
-            $isGoodAnswer,
+            $incomingData['is_correct'],
             $incomingData['feedback'],
             $incomingData['score'],
             $question->countAnswers() + 1,

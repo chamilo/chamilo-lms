@@ -44,10 +44,9 @@ class LessonAnswersMultipleAnswerLoader implements LoaderInterface
             );
         }
 
-        $isGoodAnswer = !empty($incomingData['score']) && $incomingData['score'] > 0;
         $incomingData['score'] = abs($incomingData['score']);
 
-        if (!$isGoodAnswer) {
+        if (!$incomingData['is_correct']) {
             $incomingData['score'] = -$incomingData['score'];
         }
 
@@ -57,7 +56,7 @@ class LessonAnswersMultipleAnswerLoader implements LoaderInterface
 
         $answer->createAnswer(
             $incomingData['answer'],
-            $isGoodAnswer,
+            $incomingData['is_correct'],
             $incomingData['feedback'],
             $incomingData['score'],
             $question->countAnswers() + 1,

@@ -33,6 +33,7 @@ class QuestionMultiChoiceSingleTask extends BaseTask
                     qa.answer,
                     qa.feedback,
                     (qa.fraction * qq.defaultmark) score,
+                    IF (qa.fraction = 1, TRUE, FALSE) is_correct,
                     q.id quizid,
                     q.course
                 FROM mdl_question_answers qa
@@ -74,6 +75,7 @@ class QuestionMultiChoiceSingleTask extends BaseTask
                     'class' => ReplaceFilePaths::class,
                     'properties' => ['feedback', 'course'],
                 ],
+                'is_correct' => 'is_correct',
             ],
         ];
     }

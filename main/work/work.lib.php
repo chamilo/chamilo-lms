@@ -1829,6 +1829,8 @@ function get_work_user_list(
         $course_info
     );
 
+    $isDrhOfSession = !empty(SessionManager::getSessionFollowedByDrh(api_get_user_id(), $session_id));
+
     $groupIid = 0;
     if ($group_id) {
         $groupInfo = GroupManager::get_group_properties($group_id);
@@ -1845,7 +1847,7 @@ function get_work_user_list(
             $extra_conditions = " (work.post_group_id = '0' OR work.post_group_id is NULL) ";
         }
 
-        if ($is_allowed_to_edit || $isDrhOfCourse) {
+        if ($is_allowed_to_edit || $isDrhOfCourse || $isDrhOfSession) {
             $extra_conditions .= ' AND work.active IN (0, 1) ';
         } else {
             if (isset($course_info['show_score']) &&

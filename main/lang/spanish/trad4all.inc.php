@@ -8501,4 +8501,7 @@ $PluginUploaded = "Plugin subido";
 $PluginOfficial = "Oficial";
 $PluginThirdParty = "Plugin de terceros";
 $ErrorPluginOfficialCannotBeUploaded = "Su plugin tiene el mismo nombre que un plugin oficial. Los plugins oficiales no pueden ser sobre-escritos. Por favor cambie el nombre del archivo de su plugin.";
+$AllSessionsShort = "Todas";
+$ActiveSessionsShort = "Activas";
+$ClosedSessionsShort = "Cerradas";
 ?>

@@ -8473,4 +8473,7 @@ $PluginUploaded = "Plugin uploaded";
 $PluginOfficial = "Official";
 $PluginThirdParty = "Third party";
 $ErrorPluginOfficialCannotBeUploaded = "Your plugin has the same name as an official plugin. Official plugins cannot be overwritten. Please change your plugin's zip file name.";
+$AllSessionsShort = "All";
+$ActiveSessionsShort = "Active";
+$ClosedSessionsShort = "Closed";
 ?>

@@ -8405,4 +8405,7 @@ $PluginUploaded = "Plugin envoyé";
 $PluginOfficial = "Officiel";
 $PluginThirdParty = "Plugin tiers";
 $ErrorPluginOfficialCannotBeUploaded = "Votre plugin a le même nom qu'un plugin officiel. Les plugins officiels ne peuvent pas être remplacés. Merci de renommer le fichier zip et le répertoire de votre plugin.";
+$AllSessionsShort = "Toutes";
+$ActiveSessionsShort = "Actives";
+$ClosedSessionsShort = "Fermées";
 ?>

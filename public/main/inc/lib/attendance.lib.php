@@ -1,19 +1,17 @@
 <?php
+
 /* For licensing terms, see /license.txt */
 
-/**
- * This file contains class used like library, provides functions for attendance tool.
- * It's also used like model to attendance_controller (MVC pattern).
- *
- * @author Christian Fasanando <christian1827@gmail.com>
- * @author Julio Montoya <gugli100@gmail.com> improvements
- */
+use Chamilo\CoreBundle\Entity\Resource\ResourceLink;
+use Chamilo\CoreBundle\Framework\Container;
+use Chamilo\CourseBundle\Entity\CAttendance;
+
 class Attendance
 {
     // constants
-    const DONE_ATTENDANCE_LOG_TYPE = 'done_attendance_sheet';
-    const UPDATED_ATTENDANCE_LOG_TYPE = 'updated_attendance_sheet';
-    const LOCKED_ATTENDANCE_LOG_TYPE = 'locked_attendance_sheet';
+    public const DONE_ATTENDANCE_LOG_TYPE = 'done_attendance_sheet';
+    public const UPDATED_ATTENDANCE_LOG_TYPE = 'updated_attendance_sheet';
+    public const LOCKED_ATTENDANCE_LOG_TYPE = 'locked_attendance_sheet';
     public $category_id;
     private $session_id;
     private $course_id;
@@ -23,14 +21,6 @@ class Attendance
     private $attendance_qualify_title;
     private $attendance_weight;
     private $course_int_id;
-
-    /**
-     * Constructor.
-     */
-    public function __construct()
-    {
-        //$this->course_int_id = api_get_course_int_id();
-    }
 
     /**
      * Get the total number of attendance inside current course and current session.
@@ -49,7 +39,6 @@ class Attendance
         $course_id = api_get_course_int_id();
 
         $active_plus = '';
-
         if ((isset($_GET['isStudentView']) && 'true' == $_GET['isStudentView']) ||
             !api_is_allowed_to_edit(null, true)
         ) {
@@ -58,8 +47,8 @@ class Attendance
 
         $sql = "SELECT COUNT(att.id) AS total_number_of_items
                 FROM $tbl_attendance att
-                WHERE 
-                      c_id = $course_id AND 
+                WHERE
+                      c_id = $course_id AND
                       active <> 2 $active_plus $condition_session  ";
         /*$active = (int) $active;
         if ($active === 1 || $active === 0) {
@@ -68,7 +57,7 @@ class Attendance
         $res = Database::query($sql);
         $obj = Database::fetch_object($res);
 
-        return $obj->total_number_of_items;
+        return (int) $obj->total_number_of_items;
     }
 
     /**
@@ -252,11 +241,15 @@ class Attendance
                         } else {
                             $message_alert = get_lang('The attendance is not locked, which means your teacher is still able to modify it.');
                         }
-                        $actions .= '&nbsp;<a onclick="javascript:if(!confirm(\''.$message_alert.'\')) return false;" href="index.php?'.api_get_cidreq().'&action=lock_attendance&attendance_id='.$attendance[0].'">'.
+                        $actions .= '&nbsp;<a
+                            onclick="javascript:if(!confirm(\''.$message_alert.'\')) return false;"
+                            href="index.php?'.api_get_cidreq().'&action=lock_attendance&attendance_id='.$attendance[0].'">'.
                             Display::return_icon('unlock.png', get_lang('Lock attendance')).'</a>';
                     } else {
                         if (api_is_platform_admin()) {
-                            $actions .= '&nbsp;<a onclick="javascript:if(!confirm(\''.get_lang('Are you sure you want to unlock the attendance?').'\')) return false;" href="index.php?'.api_get_cidreq().'&action=unlock_attendance&attendance_id='.$attendance[0].'">'.
+                            $actions .= '&nbsp;<a
+                            onclick="javascript:if(!confirm(\''.get_lang('Are you sure you want to unlock the attendance?').'\')) return false;"
+                            href="index.php?'.api_get_cidreq().'&action=unlock_attendance&attendance_id='.$attendance[0].'">'.
                                     Display::return_icon('locked.png', get_lang('Unlock attendance')).'</a>';
                         } else {
                             $actions .= '&nbsp;'.Display::return_icon('locked_na.png', get_lang('Locked attendance'));
@@ -287,31 +280,6 @@ class Attendance
     }
 
     /**
-     * Get the attendances by id to display on the current page.
-     *
-     * @param int $attendanceId
-     *
-     * @return array attendance data
-     */
-    public function get_attendance_by_id($attendanceId)
-    {
-        $tbl_attendance = Database::get_course_table(TABLE_ATTENDANCE);
-        $attendanceId = (int) $attendanceId;
-        $course_id = api_get_course_int_id();
-        $attendance_data = [];
-        $sql = "SELECT * FROM $tbl_attendance
-                WHERE c_id = $course_id AND id = '$attendanceId'";
-        $res = Database::query($sql);
-        if (Database::num_rows($res) > 0) {
-            while ($row = Database::fetch_array($res)) {
-                $attendance_data = $row;
-            }
-        }
-
-        return $attendance_data;
-    }
-
-    /**
      * Add attendances sheet inside table. This is the *list of* dates, not
      * a specific date in itself.
      *
@@ -325,38 +293,52 @@ class Attendance
         $tbl_attendance = Database::get_course_table(TABLE_ATTENDANCE);
         $table_link = Database::get_main_table(TABLE_MAIN_GRADEBOOK_LINK);
         $session_id = api_get_session_id();
-        $user_id = api_get_user_id();
         $course_code = $_course['code'];
         $course_id = $_course['real_id'];
         $title_gradebook = $this->attendance_qualify_title;
         $value_calification = 0;
         $weight_calification = api_float_val($this->attendance_weight);
 
-        $params = [
-            'c_id' => $course_id,
-            'name' => $this->name,
-            'description' => $this->description,
-            'attendance_qualify_title' => $title_gradebook,
-            'attendance_weight' => $weight_calification,
-            'session_id' => $session_id,
-            'active' => 1,
-            'attendance_qualify_max' => 0,
-            'locked' => 0,
-        ];
-        $last_id = Database::insert($tbl_attendance, $params);
+        $attendance = new CAttendance();
+        $attendance
+            ->setCId($course_id)
+            ->setName($this->name)
+            ->setDescription($this->description)
+            ->setSessionId($session_id)
+            ->setAttendanceQualifyTitle($title_gradebook)
+            ->setAttendanceWeight($weight_calification)
+        ;
+
+        $repo = Container::getAttendanceRepository();
+        $em = $repo->getEntityManager();
+
+        $em->persist($attendance);
+
+        $repo->addResourceToCourse(
+            $attendance,
+            ResourceLink::VISIBILITY_PUBLISHED,
+            api_get_user_entity(api_get_user_id()),
+            api_get_course_entity(),
+            api_get_session_entity(),
+            api_get_group_entity()
+        );
+        $em->flush();
+
+        $last_id = $attendance->getIid();
 
         if (!empty($last_id)) {
             $sql = "UPDATE $tbl_attendance SET id = iid WHERE iid = $last_id";
             Database::query($sql);
 
-            api_item_property_update(
+            /*api_item_property_update(
                 $_course,
                 TOOL_ATTENDANCE,
                 $last_id,
                 "AttendanceAdded",
                 $user_id
-            );
+            );*/
         }
+
         // add link to gradebook
         if ($link_to_gradebook && !empty($this->category_id)) {
             $description = '';
@@ -391,12 +373,12 @@ class Attendance
     /**
      * edit attendances inside table.
      *
-     * @param int attendance id
+     * @param CAttendance $attendance
      * @param bool true for adding link in gradebook or false otherwise (optional)
      *
      * @return int last id
      */
-    public function attendance_edit($attendanceId, $link_to_gradebook = false)
+    public function attendance_edit($attendance, $link_to_gradebook = false)
     {
         $_course = api_get_course_info();
         $tbl_attendance = Database::get_course_table(TABLE_ATTENDANCE);
@@ -404,15 +386,27 @@ class Attendance
 
         $session_id = api_get_session_id();
         $user_id = api_get_user_id();
-        $attendanceId = (int) $attendanceId;
+        $attendanceId = $attendance->getIid();
         $course_code = $_course['code'];
         $course_id = $_course['real_id'];
         $title_gradebook = $this->attendance_qualify_title;
         $value_calification = 0;
         $weight_calification = api_float_val($this->attendance_weight);
 
-        if (!empty($attendanceId)) {
-            $params = [
+        if ($attendance) {
+            $attendanceId = $attendance->getIid();
+            $attendance
+                ->setName($this->name)
+                ->setDescription($this->description)
+                ->setAttendanceQualifyTitle($title_gradebook)
+                ->setAttendanceWeight($weight_calification)
+            ;
+
+            $repo = Container::getAttendanceRepository();
+            $repo->getEntityManager()->persist($attendance);
+            $repo->getEntityManager()->flush();
+
+            /*$params = [
                 'name' => $this->name,
                 'description' => $this->description,
                 'attendance_qualify_title' => $title_gradebook,
@@ -423,14 +417,13 @@ class Attendance
                 $params,
                 ['c_id = ? AND id = ?' => [$course_id, $attendanceId]]
             );
-
             api_item_property_update(
                 $_course,
                 TOOL_ATTENDANCE,
                 $attendanceId,
                 "AttendanceUpdated",
                 $user_id
-            );
+            );*/
 
             // add link to gradebook
             if ($link_to_gradebook && !empty($this->category_id)) {
@@ -455,7 +448,7 @@ class Attendance
                         $session_id
                     );
                 } else {
-                    Database::query('UPDATE '.$table_link.' SET weight='.$weight_calification.' WHERE id='.$link_info['id'].'');
+                    Database::query('UPDATE '.$table_link.' SET weight='.$weight_calification.' WHERE id='.$link_info['id']);
                 }
             }
 
@@ -520,127 +513,108 @@ class Attendance
     /**
      * Delete attendances.
      *
-     * @param int|array $attendanceId one or many attendances id
+     * @param CAttendance $attendance one or many attendances id
      *
-     * @return int affected rows
+     * @return bool
      */
-    public function attendance_delete($attendanceId)
+    public function attendance_delete(CAttendance $attendance)
     {
-        $_course = api_get_course_info();
+        $allowDeleteAttendance = api_get_setting('allow_delete_attendance');
+        if ('true' !== $allowDeleteAttendance) {
+            return false;
+        }
+
+        $repo = Container::getAttendanceRepository();
+        $attendance->setActive(2);
+        $repo->getEntityManager()->persist($attendance);
+        $repo->getEntityManager()->flush();
+
+        Skill::deleteSkillsFromItem($attendance->getIid(), ITEM_TYPE_ATTENDANCE);
+
+        return true;
+
+        /*$_course = api_get_course_info();
         $tbl_attendance = Database::get_course_table(TABLE_ATTENDANCE);
         $user_id = api_get_user_id();
         $course_id = $_course['real_id'];
 
-        if (is_array($attendanceId)) {
-            foreach ($attendanceId as $id) {
-                $id = intval($id);
-                $sql = "UPDATE $tbl_attendance SET active = 2
-                        WHERE c_id = $course_id AND id = '$id'";
-                $result = Database::query($sql);
-                $affected_rows = Database::affected_rows($result);
-                if (!empty($affected_rows)) {
-                    // update row item property table
-                    api_item_property_update(
-                        $_course,
-                        TOOL_ATTENDANCE,
-                        $id,
-                        "delete",
-                        $user_id
-                    );
-                }
-            }
-        } else {
-            $attendanceId = intval($attendanceId);
-            $sql = "UPDATE $tbl_attendance SET active = 2
-                    WHERE c_id = $course_id AND id = '$attendanceId'";
+        $attendanceId = (int) $attendanceId;
+        $sql = "UPDATE $tbl_attendance SET active = 2
+                WHERE c_id = $course_id AND id = '$attendanceId'";
 
-            $result = Database::query($sql);
-            $affected_rows = Database::affected_rows($result);
-            if (!empty($affected_rows)) {
-                // update row item property table
-                api_item_property_update(
-                    $_course,
-                    TOOL_ATTENDANCE,
-                    $attendanceId,
-                    "delete",
-                    $user_id
-                );
-            }
-        }
-
-        return $affected_rows;
+        $result = Database::query($sql);
+        $affected_rows = Database::affected_rows($result);
+        if (!empty($affected_rows)) {
+            // update row item property table
+            api_item_property_update(
+                $_course,
+                TOOL_ATTENDANCE,
+                $attendanceId,
+                "delete",
+                $user_id
+            );
+        }return $affected_rows;
+        */
     }
 
     /**
      * Changes visibility.
      *
-     * @param int|array $attendanceId one or many attendances id
-     * @param int       $status
+     * @param CAttendance $attendance one or many attendances id
+     * @param int         $status
      *
      * @return int affected rows
      */
-    public function changeVisibility($attendanceId, $status = 1)
+    public function changeVisibility(CAttendance $attendance, $status = 1)
     {
-        $_course = api_get_course_info();
-        $tbl_attendance = Database::get_course_table(TABLE_ATTENDANCE);
-        $user_id = api_get_user_id();
-        $course_id = $_course['real_id'];
         $status = (int) $status;
 
-        $action = 'visible';
-        if (0 == $status) {
-            $action = 'invisible';
-        }
+        $repo = Container::getAttendanceRepository();
+        $em = $repo->getEntityManager();
+        $attendance->setActive($status);
+        $em->persist($attendance);
+        $em->flush();
 
-        if (is_array($attendanceId)) {
-            foreach ($attendanceId as $id) {
-                $id = (int) $id;
-                $sql = "UPDATE $tbl_attendance SET active = $status
-                        WHERE c_id = $course_id AND id = '$id'";
-                $result = Database::query($sql);
-                $affected_rows = Database::affected_rows($result);
-                if (!empty($affected_rows)) {
-                    // update row item property table
-                    api_item_property_update(
-                        $_course,
-                        TOOL_ATTENDANCE,
-                        $id,
-                        $action,
-                        $user_id
-                    );
-                }
-            }
-        } else {
-            $attendanceId = (int) $attendanceId;
-            $sql = "UPDATE $tbl_attendance SET active = $status
-                    WHERE c_id = $course_id AND id = '$attendanceId'";
-            $result = Database::query($sql);
-            $affected_rows = Database::affected_rows($result);
-            if (!empty($affected_rows)) {
-                // update row item property table
-                api_item_property_update(
-                    $_course,
-                    TOOL_ATTENDANCE,
-                    $attendanceId,
-                    $action,
-                    $user_id
-                );
-            }
+        return true;
+        /*
+
+        $attendanceId = (int) $attendanceId;
+        $sql = "UPDATE $tbl_attendance SET active = $status
+                WHERE c_id = $course_id AND id = '$attendanceId'";
+        $result = Database::query($sql);
+        $affected_rows = Database::affected_rows($result);
+        if (!empty($affected_rows)) {
+            // update row item property table
+            api_item_property_update(
+                $_course,
+                TOOL_ATTENDANCE,
+                $attendanceId,
+                $action,
+                $user_id
+            );
         }
 
         return $affected_rows;
+        */
     }
 
     /**
      * Lock or unlock an attendance.
      *
-     * @param   int     attendance id
-     * @param   bool    True to lock or false otherwise
+     * @param bool    True to lock or false otherwise
      *
-     * @return int
+     * @return bool
      */
-    public function lock_attendance($attendanceId, $lock = true)
+    public function lock(CAttendance $attendance, $lock = true)
     {
+        $repo = Container::getAttendanceRepository();
+        $em = $repo->getEntityManager();
+        $attendance->setLocked($lock);
+        $em->persist($attendance);
+        $em->flush();
+
+        return true;
+
         $tbl_attendance = Database::get_course_table(TABLE_ATTENDANCE);
         $course_id = api_get_course_int_id();
         $attendanceId = (int) $attendanceId;
@@ -832,7 +806,7 @@ class Attendance
 
         // save users absent in class
         foreach ($users_absent as $user_absent) {
-            $uid = intval($user_absent);
+            $uid = (int) $user_absent;
             // check if user already was registered with the $calendar_id
             $sql = "SELECT user_id FROM $tbl_attendance_sheet
                     WHERE c_id = $course_id AND user_id='$uid' AND attendance_calendar_id = '$calendar_id'";
@@ -844,9 +818,6 @@ class Attendance
                         attendance_calendar_id = '$calendar_id',
                         presence = 0";
                 $result = Database::query($sql);
-
-                Database::insert_id();
-
                 $affected_rows += Database::affected_rows($result);
             } else {
                 $sql = "UPDATE $tbl_attendance_sheet SET presence = 0
@@ -893,7 +864,7 @@ class Attendance
         $tbl_attendance_result = Database::get_course_table(TABLE_ATTENDANCE_RESULT);
         $tbl_attendance = Database::get_course_table(TABLE_ATTENDANCE);
         $course_id = api_get_course_int_id();
-        $attendanceId = intval($attendanceId);
+        $attendanceId = (int) $attendanceId;
         // fill results about presence of students
         $attendance_calendar = $this->get_attendance_calendar(
             $attendanceId,
@@ -919,8 +890,8 @@ class Attendance
                             WHERE
                                 c_id = $course_id AND
                                 user_id = '$uid' AND
-                                attendance_calendar_id IN (".implode(',', $calendar_ids).") AND
-                                presence = 1";
+                                attendance_calendar_id IN (".implode(',', $calendar_ids).') AND
+                                presence = 1';
                     $rs_count = Database::query($sql);
                     $row_count = Database::fetch_array($rs_count);
                     $count_presences = $row_count['count_presences'];
@@ -993,8 +964,8 @@ class Attendance
         $tbl_attendance_sheet_log = Database::get_course_table(TABLE_ATTENDANCE_SHEET_LOG);
 
         // protect data
-        $attendanceId = intval($attendanceId);
-        $lastedit_user_id = intval($lastedit_user_id);
+        $attendanceId = (int) $attendanceId;
+        $lastedit_user_id = (int) $lastedit_user_id;
 
         if (isset($calendar_date_value)) {
             $calendar_date_value = $calendar_date_value;
@@ -1030,7 +1001,7 @@ class Attendance
     public static function get_done_attendance_calendar($attendanceId)
     {
         $table = Database::get_course_table(TABLE_ATTENDANCE_CALENDAR);
-        $attendanceId = intval($attendanceId);
+        $attendanceId = (int) $attendanceId;
         $course_id = api_get_course_int_id();
         $sql = "SELECT count(done_attendance) as count
                 FROM $table
@@ -1058,8 +1029,8 @@ class Attendance
      */
     public function get_faults_of_user($user_id, $attendanceId, $groupId = null)
     {
-        $user_id = intval($user_id);
-        $attendanceId = intval($attendanceId);
+        $user_id = (int) $user_id;
+        $attendanceId = (int) $attendanceId;
         $results = [];
         $calendar_count = self::get_number_of_attendance_calendar(
             $attendanceId,
@@ -1119,7 +1090,7 @@ class Attendance
     {
         // get all courses of current user
         $courses = CourseManager::get_courses_list_by_user_id($user_id, true);
-        $user_id = intval($user_id);
+        $user_id = (int) $user_id;
         $results = [];
         $total_faults = $total_weight = $porcent = 0;
         foreach ($courses as $course) {
@@ -1177,7 +1148,7 @@ class Attendance
         // Database tables and variables
         $course_info = api_get_course_info($course_code);
         $tbl_attendance_result = Database::get_course_table(TABLE_ATTENDANCE_RESULT);
-        $user_id = intval($user_id);
+        $user_id = (int) $user_id;
         $results = [];
         $total_faults = $total_weight = $porcent = 0;
         $attendances_by_course = $this->get_attendances_list(
@@ -1255,8 +1226,8 @@ class Attendance
                             WHERE
                                 c_id = $course_id AND
                                 user_id = '$uid' AND
-                                attendance_calendar_id IN(".implode(',', $calendar_ids).")
-                            ";
+                                attendance_calendar_id IN(".implode(',', $calendar_ids).')
+                            ';
                     $res = Database::query($sql);
                     if (Database::num_rows($res) > 0) {
                         while ($row = Database::fetch_array($res)) {
@@ -1277,12 +1248,16 @@ class Attendance
                             att.c_id = $course_id AND
                             cal.c_id =  $course_id AND
                             att.user_id = '$user_id' AND
-                            att.attendance_calendar_id IN (".implode(',', $calendar_ids).")
-                        ORDER BY date_time";
+                            att.attendance_calendar_id IN (".implode(',', $calendar_ids).')
+                        ORDER BY date_time';
                 $res = Database::query($sql);
                 if (Database::num_rows($res) > 0) {
                     while ($row = Database::fetch_array($res)) {
-                        $row['date_time'] = api_convert_and_format_date($row['date_time'], null, date_default_timezone_get());
+                        $row['date_time'] = api_convert_and_format_date(
+                            $row['date_time'],
+                            null,
+                            date_default_timezone_get()
+                        );
                         $data[$user_id][] = $row;
                     }
                 }
@@ -1366,8 +1341,8 @@ class Attendance
         $tbl_attendance_sheet = Database::get_course_table(TABLE_ATTENDANCE_SHEET);
         $tbl_attendance_cal_rel_group = Database::get_course_table(TABLE_ATTENDANCE_CALENDAR_REL_GROUP);
         $tbl_attendance_cal = Database::get_course_table(TABLE_ATTENDANCE_CALENDAR);
-        $user_id = intval($user_id);
-        $attendanceId = intval($attendanceId);
+        $user_id = (int) $user_id;
+        $attendanceId = (int) $attendanceId;
         $groupId = (int) $groupId;
         $course_id = api_get_course_int_id();
 
@@ -1414,7 +1389,7 @@ class Attendance
     public function get_attendance_calendar_by_id($calendar_id)
     {
         $table = Database::get_course_table(TABLE_ATTENDANCE_CALENDAR);
-        $calendar_id = intval($calendar_id);
+        $calendar_id = (int) $calendar_id;
         $course_id = api_get_course_int_id();
         $sql = "SELECT * FROM $table
                 WHERE c_id = $course_id AND id = '$calendar_id' ";
@@ -1450,7 +1425,7 @@ class Attendance
     ) {
         $tbl_attendance_calendar = Database::get_course_table(TABLE_ATTENDANCE_CALENDAR);
         $tbl_acrg = Database::get_course_table(TABLE_ATTENDANCE_CALENDAR_REL_GROUP);
-        $attendanceId = intval($attendanceId);
+        $attendanceId = (int) $attendanceId;
         $course_id = api_get_course_int_id();
 
         if ($showAll) {
@@ -1469,7 +1444,7 @@ class Attendance
         }
 
         if (!empty($groupId)) {
-            $groupId = intval($groupId);
+            $groupId = (int) $groupId;
             $sql = "SELECT c.* FROM $tbl_attendance_calendar c
                     INNER JOIN $tbl_acrg g
                     ON c.c_id = g.c_id AND c.id = g.calendar_id
@@ -1486,7 +1461,7 @@ class Attendance
 
         switch ($type) {
             case 'calendar_id':
-                $calendar_id = intval($calendar_id);
+                $calendar_id = (int) $calendar_id;
                 if (!empty($calendar_id)) {
                     $sql .= " AND c.id = $calendar_id";
                 }
@@ -1495,16 +1470,16 @@ class Attendance
                 //$sql .= ' AND DATE_FORMAT(date_time,"%d-%m-%Y") = DATE_FORMAT("'.api_get_utc_datetime().'", "%d-%m-%Y" )';
                 break;
             case 'all_done':
-                $sql .= " AND done_attendance = 1 ";
+                $sql .= ' AND done_attendance = 1 ';
                 break;
             case 'all_not_done':
-                $sql .= " AND done_attendance = 0 ";
+                $sql .= ' AND done_attendance = 0 ';
                 break;
             case 'all':
             default:
                 break;
         }
-        $sql .= " ORDER BY date_time ";
+        $sql .= ' ORDER BY date_time ';
 
         $rs = Database::query($sql);
         $data = [];
@@ -1515,7 +1490,7 @@ class Attendance
                 $row['date'] = api_format_date($row['date_time'], DATE_FORMAT_SHORT);
                 $row['time'] = api_format_date($row['date_time'], TIME_NO_SEC_FORMAT);
                 $row['groups'] = $this->getGroupListByAttendanceCalendar($row['id'], $course_id);
-                if ('today' == $type) {
+                if ('today' === $type) {
                     if (date('d-m-Y', api_strtotime($row['date_time'], 'UTC')) == date('d-m-Y', time())) {
                         $data[] = $row;
                     }
@@ -1547,8 +1522,8 @@ class Attendance
         $tbl_attendance_calendar = Database::get_course_table(TABLE_ATTENDANCE_CALENDAR);
         $calendarRelGroup = Database::get_course_table(TABLE_ATTENDANCE_CALENDAR_REL_GROUP);
         $tbl_groupRelUser = Database::get_course_table(TABLE_GROUP_USER);
-        $attendanceId = intval($attendanceId);
-        $groupId = intval($groupId);
+        $attendanceId = (int) $attendanceId;
+        $groupId = (int) $groupId;
         $course_id = api_get_course_int_id();
 
         $where_attendance = '';
@@ -1620,9 +1595,8 @@ class Attendance
 
         $rs = Database::query($sql);
         $row = Database::fetch_row($rs);
-        $count = $row[0];
 
-        return $count;
+        return $row[0];
     }
 
     /**
@@ -1635,7 +1609,7 @@ class Attendance
     public static function get_count_dates_inside_attendance_calendar($attendanceId)
     {
         $tbl_attendance_calendar = Database::get_course_table(TABLE_ATTENDANCE_CALENDAR);
-        $attendanceId = intval($attendanceId);
+        $attendanceId = (int) $attendanceId;
         $course_id = api_get_course_int_id();
         $sql = "SELECT count(id) FROM $tbl_attendance_calendar
                 WHERE
@@ -1684,24 +1658,22 @@ class Attendance
     public static function is_locked_attendance($attendanceId)
     {
         //  Use gradebook lock
-        $result = api_resource_is_locked_by_gradebook($attendanceId, LINK_ATTENDANCE);
-
-        return $result;
+        return api_resource_is_locked_by_gradebook($attendanceId, LINK_ATTENDANCE);
     }
 
     /**
      * Add new datetime inside attendance calendar table.
      *
-     * @param int   $attendanceId
+     * @param CAttendance   $attendance
      * @param array $groupList
      *
      * @return int affected rows
      */
-    public function attendance_calendar_add($attendanceId, $groupList = [])
+    public function attendance_calendar_add($attendance, $groupList = [])
     {
         $tbl_attendance_calendar = Database::get_course_table(TABLE_ATTENDANCE_CALENDAR);
         $affected_rows = 0;
-        $attendanceId = intval($attendanceId);
+        $attendanceId = $attendance->getIid();
         $course_id = api_get_course_int_id();
         // check if datetime already exists inside the table
         /*$sql = "SELECT id FROM $tbl_attendance_calendar
@@ -1722,17 +1694,17 @@ class Attendance
         if ($id) {
             $sql = "UPDATE $tbl_attendance_calendar SET id = iid WHERE iid = $id";
             Database::query($sql);
-            $affected_rows++;
+            ++$affected_rows;
         }
         $this->addAttendanceCalendarToGroup($id, $course_id, $groupList);
         //}
 
         // update locked attendance
-        $is_all_calendar_done = self::is_all_attendance_calendar_done($attendanceId);
+        $is_all_calendar_done = $this->is_all_attendance_calendar_done($attendanceId);
         if (!$is_all_calendar_done) {
-            self::lock_attendance($attendanceId, false);
+            $this->lock($attendance, false);
         } else {
-            self::lock_attendance($attendanceId);
+            $this->lock($attendance);
         }
 
         return $affected_rows;
@@ -1837,24 +1809,23 @@ class Attendance
     /**
      * save repeated date inside attendance calendar table.
      *
-     * @param int    $attendanceId
+     * @param CAttendance    $attendance
      * @param int    $start_date   start date in tms
      * @param int    $end_date     end date in tms
      * @param string $repeat_type  daily, weekly, monthlyByDate
      * @param array  $groupList
      */
     public function attendance_repeat_calendar_add(
-        $attendanceId,
+        $attendance,
         $start_date,
         $end_date,
         $repeat_type,
         $groupList = []
     ) {
-        $attendanceId = intval($attendanceId);
+        $attendanceId = $attendance->getIid();
         // save start date
-        $datetimezone = api_get_utc_datetime($start_date);
-        $this->set_date_time($datetimezone);
-        $this->attendance_calendar_add($attendanceId, $groupList);
+        $this->set_date_time(api_get_utc_datetime($start_date));
+        $this->attendance_calendar_add($attendance, $groupList);
 
         // 86400 = 24 hours in seconds
         // 604800 = 1 week in seconds
@@ -1863,18 +1834,16 @@ class Attendance
             case 'daily':
                 $j = 1;
                 for ($i = $start_date + 86400; ($i <= $end_date); $i += 86400) {
-                    $datetimezone = api_get_utc_datetime($i);
-                    $this->set_date_time($datetimezone);
-                    $this->attendance_calendar_add($attendanceId, $groupList);
+                    $this->set_date_time(api_get_utc_datetime($i));
+                    $this->attendance_calendar_add($attendance, $groupList);
                     $j++;
                 }
                 break;
             case 'weekly':
                 $j = 1;
                 for ($i = $start_date + 604800; ($i <= $end_date); $i += 604800) {
-                    $datetimezone = api_get_utc_datetime($i);
-                    $this->set_date_time($datetimezone);
-                    $this->attendance_calendar_add($attendanceId, $groupList);
+                    $this->set_date_time(api_get_utc_datetime($i));
+                    $this->attendance_calendar_add($attendance, $groupList);
                     $j++;
                 }
                 break;
@@ -1882,8 +1851,7 @@ class Attendance
                 $j = 1;
                 //@todo fix bug with february
                 for ($i = $start_date + 2419200; ($i <= $end_date); $i += 2419200) {
-                    $datetimezone = api_get_utc_datetime($i);
-                    $this->set_date_time($datetimezone);
+                    $this->set_date_time(api_get_utc_datetime($i));
                     $this->attendance_calendar_add($attendanceId, $groupList);
                     $j++;
                 }
@@ -1894,16 +1862,17 @@ class Attendance
     /**
      * edit a datetime inside attendance calendar table.
      *
-     * @param	int	attendance calendar id
-     * @param	int	attendance id
+     * @param	int	$calendar_id
+     * @param	CAttendance	$attendance
      *
      * @return int affected rows
      */
-    public function attendance_calendar_edit($calendar_id, $attendanceId)
+    public function attendance_calendar_edit($calendar_id, $attendance)
     {
         $tbl_attendance_calendar = Database::get_course_table(TABLE_ATTENDANCE_CALENDAR);
         $affected_rows = 0;
-        $attendanceId = intval($attendanceId);
+        $attendanceId = $attendance->getIid();
+
         $course_id = api_get_course_int_id();
         // check if datetime already exists inside the table
         $sql = "SELECT id FROM $tbl_attendance_calendar
@@ -1923,9 +1892,9 @@ class Attendance
         // update locked attendance
         $is_all_calendar_done = self::is_all_attendance_calendar_done($attendanceId);
         if (!$is_all_calendar_done) {
-            self::lock_attendance($attendanceId, false);
+            $this->lock($attendance, false);
         } else {
-            self::lock_attendance($attendanceId);
+            $this->lock($attendance);
         }
 
         return $affected_rows;
@@ -1948,7 +1917,7 @@ class Attendance
         $tbl_attendance_calendar = Database::get_course_table(TABLE_ATTENDANCE_CALENDAR);
         $tbl_attendance_sheet = Database::get_course_table(TABLE_ATTENDANCE_SHEET);
 
-        $attendanceId = intval($attendanceId);
+        $attendanceId = (int) $attendanceId;
         $calendar_id = (int) $calendar_id;
 
         // get all registered users inside current course
@@ -2074,11 +2043,11 @@ class Attendance
     public function getAttendanceLogin($startDate, $endDate)
     {
         if (empty($startDate) ||
-            '0000-00-00' == $startDate ||
-            '0000-00-00 00:00:00' == $startDate ||
+            '0000-00-00' === $startDate ||
+            '0000-00-00 00:00:00' === $startDate ||
             empty($endDate) ||
-            '0000-00-00' == $endDate ||
-            '0000-00-00 00:00:00' == $endDate
+            '0000-00-00' === $endDate ||
+            '0000-00-00 00:00:00' === $endDate
         ) {
             return false;
         }
@@ -2109,7 +2078,7 @@ class Attendance
         $dateTimeStart = new DateTime($startDate);
         $dateTimeEnd = new DateTime($endDate);
         $interval = $dateTimeStart->diff($dateTimeEnd);
-        $days = intval($interval->format('%a'));
+        $days = (int) $interval->format('%a');
 
         $dateList = [$dateTimeStart->format('Y-m-d')];
         $headers = [
@@ -2117,7 +2086,7 @@ class Attendance
             $dateTimeStart->format('Y-m-d'),
         ];
 
-        for ($i = 0; $i < $days; $i++) {
+        for ($i = 0; $i < $days; ++$i) {
             $dateTimeStart = $dateTimeStart->add(new DateInterval('P1D'));
             $date = $dateTimeStart->format('Y-m-d');
             $dateList[] = $date;
@@ -2193,7 +2162,7 @@ class Attendance
                     $status = 'X';
                 }
                 $table->setCellContents($row, $column, $status);
-                $column++;
+                ++$column;
             }
             $row++;
             $column = 1;
@@ -2253,5 +2222,769 @@ class Attendance
         ];
         $pdf = new PDF('A4', null, $params);
         $pdf->html_to_pdf_with_template($tableToString);
+    }
+
+    public function setAttendanceForm(FormValidator $form, CAttendance $attendance = null)
+    {
+        $skillList = [];
+        $header = get_lang('Create a new attendance list');
+        if ($attendance) {
+            $header = get_lang('Edit');
+            $form->addHidden('attendance_id', $attendance->getIid());
+        }
+        $form->addHeader($header);
+
+        //$form->addElement('hidden', 'sec_token', $token);
+        $form->addText('title', get_lang('Title'), true);
+        $form->applyFilter('title', 'html_filter');
+        $form->addHtmlEditor(
+            'description',
+            get_lang('Description'),
+            false,
+            false,
+            ['ToolbarSet' => 'Basic', 'Width' => '100%', 'Height' => '150']
+        );
+
+        $sessionId = api_get_session_id();
+
+        // Advanced Parameters
+        if ((0 != $sessionId && Gradebook::is_active()) || 0 == $sessionId) {
+            $form->addButtonAdvancedSettings('id_qualify');
+            $form->addElement('html', '<div id="id_qualify_options" style="display:none">');
+
+            // Qualify Attendance for gradebook option
+            $form->addElement(
+                'checkbox',
+                'attendance_qualify_gradebook',
+                '',
+                get_lang('Grade the attendance list in the assessment tool'),
+                'onclick="javascript: if(this.checked){document.getElementById(\'options_field\').style.display = \'block\';}else{document.getElementById(\'options_field\').style.display = \'none\';}"'
+            );
+            $form->addElement('html', '<div id="options_field" style="display:none">');
+
+            GradebookUtils::load_gradebook_select_in_tool($form);
+
+            $form->addElement('text', 'attendance_qualify_title', get_lang('Column header in Competences Report'));
+            $form->applyFilter('attendance_qualify_title', 'html_filter');
+            $form->addElement(
+                'text',
+                'attendance_weight',
+                get_lang('Weight in Report'),
+                'value="0.00" Style="width:40px" onfocus="javascript: this.select();"'
+            );
+            $form->applyFilter('attendance_weight', 'html_filter');
+            $form->addElement('html', '</div>');
+
+            $skillList = Skill::addSkillsToForm($form, ITEM_TYPE_ATTENDANCE, $attendance ? $attendance->getIid() : 0);
+
+            $form->addElement('html', '</div>');
+        }
+
+        if ($attendance) {
+            $form->addButtonUpdate(get_lang('Update'));
+        } else {
+            $form->addButtonCreate(get_lang('Save'));
+        }
+
+        if ($attendance) {
+            $default = [];
+            $default['title'] = Security::remove_XSS($attendance->getName());
+            $default['description'] = Security::remove_XSS($attendance->getDescription(), STUDENT);
+            $default['attendance_qualify_title'] = $attendance->getAttendanceQualifyTitle();
+            $default['attendance_weight'] = $attendance->getAttendanceWeight();
+            $default['skills'] = array_keys($skillList);
+
+            $link_info = GradebookUtils::isResourceInCourseGradebook(
+                api_get_course_id(),
+                7,
+                $attendance->getIid(),
+                $sessionId
+            );
+            if ($link_info) {
+                $default['category_id'] = $link_info['category_id'];
+            }
+            $form->setDefaults($default);
+        }
+
+        return $form;
+    }
+
+    public function getCalendarSheet($edit, $attendanceId, $student_id)
+    {
+        $content = '';
+        $groupId = isset($_REQUEST['group_id']) ? $_REQUEST['group_id'] : null;
+        $filter_type = 'today';
+        if (!empty($_REQUEST['filter'])) {
+            $filter_type = $_REQUEST['filter'];
+        }
+
+        $users_in_course = $this->get_users_rel_course($attendanceId, $groupId);
+        $is_locked_attendance = $this->is_locked_attendance($attendanceId);
+
+        $attendant_calendar_all = $this->get_attendance_calendar(
+            $attendanceId,
+            'all',
+            null,
+            $groupId
+        );
+        $attendant_calendar = $this->get_attendance_calendar(
+            $attendanceId,
+            $filter_type,
+            null,
+            $groupId
+        );
+
+        $isDrhOfCourse = CourseManager::isUserSubscribedInCourseAsDrh(
+                api_get_user_id(),
+                api_get_course_info()
+            ) || api_is_drh();
+        if (true == $edit) {
+            if (api_is_allowed_to_edit(null, true) || $isDrhOfCourse) {
+                $data['users_presence'] = $this->get_users_attendance_sheet(
+                    $attendanceId,
+                    0,
+                    $groupId
+                );
+            }
+        } else {
+            if (!empty($student_id)) {
+                $user_id = (int) $student_id;
+            } else {
+                $user_id = api_get_user_id();
+            }
+
+            if (api_is_allowed_to_edit(null, true) ||
+                api_is_coach(api_get_session_id(), api_get_course_int_id()) ||
+                $isDrhOfCourse
+            ) {
+                $users_presence = $this->get_users_attendance_sheet(
+                    $attendanceId,
+                    0,
+                    $groupId
+                );
+            } else {
+                $users_presence = $this->get_users_attendance_sheet(
+                    $attendanceId,
+                    $user_id,
+                    $groupId
+                );
+            }
+
+            $faults = $this->get_faults_of_user($user_id, $attendanceId, $groupId);
+        }
+
+        $next_attendance_calendar_id = $this->get_next_attendance_calendar_id($attendanceId);
+        $next_attendance_calendar_datetime = $this->getNextAttendanceCalendarDatetime($attendanceId);
+
+        if (api_is_allowed_to_edit(null, true) ||
+            api_is_coach(api_get_session_id(), api_get_course_int_id()) ||
+            $isDrhOfCourse
+        ) {
+            $groupId = isset($_REQUEST['group_id']) ? (int) ($_REQUEST['group_id']) : null;
+            $form = new FormValidator(
+                'filter',
+                'post',
+                'index.php?action=attendance_sheet_list&'.api_get_cidreq().'&attendance_id='.$attendanceId,
+                null,
+                [],
+                'inline'
+            );
+
+            $values = [
+                'all' => get_lang('All'),
+                'today' => get_lang('Today'),
+                'all_done' => get_lang('All done'),
+                'all_not_done' => get_lang('All not done'),
+            ];
+            $today = api_convert_and_format_date(null, DATE_FORMAT_SHORT);
+            $exists_attendance_today = false;
+
+            if (!empty($attendant_calendar_all)) {
+                $values[''] = '---------------';
+                foreach ($attendant_calendar_all as $attendance_date) {
+                    $includeCalendar = true;
+                    if (isset($attendance_date['groups']) && !empty($groupId)) {
+                        foreach ($attendance_date['groups'] as $group) {
+                            if ($groupId == $group['group_id']) {
+                                $includeCalendar = true;
+
+                                break;
+                            } else {
+                                $includeCalendar = false;
+                            }
+                        }
+                    }
+
+                    if ($today == $attendance_date['date']) {
+                        $exists_attendance_today = true;
+                    }
+                    if ($includeCalendar) {
+                        $values[$attendance_date['id']] = $attendance_date['date_time'];
+                    }
+                }
+            }
+
+            if (!$exists_attendance_today) {
+                $content .= Display::return_message(
+                    get_lang('There is no class scheduled today, try picking another day or add your attendance entry yourself using the action icons.'),
+                    'warning'
+                );
+            }
+
+            $form->addSelect(
+                'filter',
+                get_lang('Filter'),
+                $values,
+                ['id' => 'filter_id', 'onchange' => 'submit();']
+            );
+
+            $groupList = GroupManager::get_group_list(null, null, 1);
+            $groupIdList = ['--'];
+            foreach ($groupList as $group) {
+                $groupIdList[$group['id']] = $group['name'];
+            }
+
+            if (!empty($groupList)) {
+                $form->addSelect('group_id', get_lang('Group'), $groupIdList);
+            }
+
+            if (isset($_REQUEST['filter'])) {
+                if (in_array($_REQUEST['filter'], array_keys($values))) {
+                    $default_filter = $_REQUEST['filter'];
+                }
+            } else {
+                $default_filter = 'today';
+            }
+
+            $renderer = $form->defaultRenderer();
+            $renderer->setCustomElementTemplate(
+                '<div class="col-md-2">{label}</div><div class="col-md-10"> {element} </div>'
+            );
+
+            $form->setDefaults(
+                [
+                    'filter' => $default_filter,
+                    'group_id' => $groupId,
+                ]
+            );
+
+            if (!$is_locked_attendance || api_is_platform_admin()) {
+                $actionsLeft = '<a style="float:left;" href="index.php?'.api_get_cidreq().'&action=calendar_list&attendance_id='.$attendanceId.'">'.
+                    Display::return_icon('attendance_calendar.png', get_lang('Attendance calendar'), '', ICON_SIZE_MEDIUM).'</a>';
+                $actionsLeft .= '<a id="pdf_export" style="float:left;"  href="index.php?'.api_get_cidreq().'&action=attendance_sheet_export_to_pdf&attendance_id='.$attendanceId.'&filter='.$default_filter.'&group_id='.$groupId.'">'.
+                    Display::return_icon('pdf.png', get_lang('Export to PDF'), '', ICON_SIZE_MEDIUM).'</a>';
+
+                $actionsRight = $form->returnForm();
+                $content .= Display::toolbarAction('toolbar-attendance', [$actionsLeft, $actionsRight]);
+            }
+
+            $message_information = get_lang('The attendance sheets allow you to specify a list of dates in which you will report attendance to your courses');
+            if (!empty($message_information)) {
+                $message = '<strong>'.get_lang('Information').'</strong><br />';
+                $message .= $message_information;
+                $content .= Display::return_message($message, 'normal', false);
+            }
+
+            if ($is_locked_attendance) {
+                $content .= Display::return_message(get_lang('The attendance sheet is locked.'), 'warning', false);
+            }
+
+            $param_filter = '&filter='.Security::remove_XSS($default_filter).'&group_id='.$groupId;
+
+            if (count($users_in_course) > 0) {
+                $form = '
+                <form method="post" action="index.php?action=attendance_sheet_add&'.api_get_cidreq().$param_filter.'&attendance_id='.$attendanceId.'">
+                    <div class="attendance-sheet-content" style="width:100%;background-color:#E1E1E1;margin-top:20px;">
+                        <div class="divTableWithFloatingHeader attendance-users-table" style="width:45%;float:left;margin:0px;padding:0px;">
+                            <table class="tableWithFloatingHeader data_table" width="100%">
+                                <thead>
+                                <tr class="tableFloatingHeader" style="position: absolute; top: 0px; left: 0px; visibility: hidden; margin:0px;padding:0px" >
+                                    <th width="10px">#</th>
+                                    <th width="10px">'.get_lang('Photo').'</th>
+                                    <th width="100px">'.get_lang('Last name').'</th>
+                                    <th width="100px">'.get_lang('First name').'</th>
+                                    <th width="100px">'.get_lang('Not attended').'</th>
+                                </tr>
+                                <tr class="tableFloatingHeaderOriginal" >
+                                    <th width="10px">#</th>
+                                    <th width="10px">'.get_lang('Photo').'</th>
+                                    <th width="150px">'.get_lang('Last name').'</th>
+                                    <th width="140px">'.get_lang('First name').'</th>
+                                    <th width="100px">'.get_lang('Not attended').'</th>
+                                </tr>
+                                </thead>
+                                <tbody>';
+
+                $i = 1;
+                $class = '';
+                foreach ($users_in_course as $data) {
+                    $faults = 0;
+                    if (0 == $i % 2) {
+                        $class = 'row_odd';
+                    } else {
+                        $class = 'row_even';
+                    }
+                    $username = api_htmlentities(
+                        sprintf(get_lang('Login: %s'), $data['username']),
+                        ENT_QUOTES
+                    );
+
+                    $form .= '<tr class="'.$class.'">
+                                <td><center>'.$i.'</center></td>
+                                <td>'.$data['photo'].'</td>
+                                <td><span title="'.$username.'">'.$data['lastname'].'</span></td>
+                                <td>'.$data['firstname'].'</td>
+                                <td>
+                                    <div class="attendance-faults-bar"
+                                    style="background-color:'.(!empty($data['result_color_bar']) ? $data['result_color_bar'] : 'none').'">
+                                        '.$data['attendance_result'].'
+                                    </div>
+                                </td>
+                            </tr>';
+
+                    ++$i;
+                }
+                $form .= '</tbody>
+                            </table>
+                        </div>';
+
+                $form .= '<div
+                    class="divTableWithFloatingHeader attendance-calendar-table"
+                    style="margin:0px;padding:0px;float:left;width:55%;overflow:auto;overflow-y:hidden;">';
+                $form .= '<table class="tableWithFloatingHeader data_table" width="100%">';
+                $form .= '<thead>';
+                $result = null;
+
+                if (count($attendant_calendar) > 0) {
+                    foreach ($attendant_calendar as $calendar) {
+                        $date = $calendar['date'];
+                        $time = $calendar['time'];
+                        $datetime = '<div class="grey">'.$date.' - '.$time.'</div>';
+
+                        $img_lock = Display::return_icon(
+                            'lock-closed.png',
+                            get_lang('Unlock date'),
+                            ['class' => 'img_lock', 'id' => 'datetime_column_'.$calendar['id']]
+                        );
+
+                        if (!empty($calendar['done_attendance'])) {
+                            $datetime = '<div class="blue">'.$date.' - '.$time.'</div>';
+                        }
+                        $disabled_check = 'disabled = "true"';
+                        $input_hidden = '<input type="hidden" id="hidden_input_'.$calendar['id'].'" name="hidden_input[]" value="" disabled />';
+                        if ($next_attendance_calendar_id == $calendar['id']) {
+                            $input_hidden = '<input type="hidden" id="hidden_input_'.$calendar['id'].'" name="hidden_input[]" value="'.$calendar['id'].'" />';
+                            $disabled_check = '';
+                            $img_lock = Display::return_icon('lock-closed.png', get_lang('Lock date'), ['class' => 'img_unlock', 'id' => 'datetime_column_'.$calendar['id']]);
+                        }
+
+                        $result .= '<th>';
+                        $result .= '<div class="date-attendance">'.$datetime.'&nbsp;';
+                        if (api_is_allowed_to_edit(null, true)) {
+                            $result .= '<span id="attendance_lock" style="cursor:pointer">'.(!$is_locked_attendance || api_is_platform_admin() ? $img_lock : '').'</span>';
+                        }
+
+                        if (false == $is_locked_attendance) {
+                            if (api_is_allowed_to_edit(null, true)) {
+                                $result .= '<input type="checkbox" class="checkbox_head_'.$calendar['id'].'" id="checkbox_head_'.$calendar['id'].'" '.$disabled_check.' checked="checked" />'.$input_hidden.'</div></th>';
+                            }
+                        }
+                    }
+                } else {
+                    $result = '<th width="2000px"><span>
+                    <a href="index.php?'.api_get_cidreq().'&action=calendar_list&attendance_id='.$attendanceId.'">';
+                    $result .= Display::return_icon(
+                            'attendance_calendar.png',
+                            get_lang('Attendance calendar'),
+                            '',
+                            ICON_SIZE_MEDIUM
+                        ).' '.get_lang('Go to the attendance calendar');
+                    $result .= '</a></span></th>';
+                }
+
+                $form .= '<tr
+                        class="tableFloatingHeader row_odd"
+                        style="position: absolute; top: 0px; left: 0px; visibility: hidden; margin:0px;padding:0px">';
+                $form .= $result;
+                $form .= '</tr>';
+                $form .= '<tr class="tableWithFloatingHeader row_odd tableFloatingHeaderOriginal">';
+                $form .= $result;
+                $form .= '</tr>';
+                $form .= '</thead>';
+                $form .= '<tbody>';
+                $i = 0;
+                foreach ($users_in_course as $user) {
+                    $class = '';
+                    if (0 == $i % 2) {
+                        $class = 'row_even';
+                    } else {
+                        $class = 'row_odd';
+                    }
+                    $form .= '<tr class="'.$class.'">';
+
+                    if (count($attendant_calendar) > 0) {
+                        foreach ($attendant_calendar as $calendar) {
+                            $checked = 'checked';
+                            $presence = -1;
+
+                            if (isset($users_presence[$user['user_id']][$calendar['id']]['presence'])) {
+                                $presence = $users_presence[$user['user_id']][$calendar['id']]['presence'];
+                                if (1 == (int) $presence) {
+                                    $checked = 'checked';
+                                } else {
+                                    $checked = '';
+                                }
+                            } else {
+                                //if the user wasn't registered at that time, consider unchecked
+                                if (0 == $next_attendance_calendar_datetime ||
+                                    $calendar['date_time'] < $next_attendance_calendar_datetime
+                                ) {
+                                    $checked = '';
+                                }
+                            }
+                            $disabled = 'disabled';
+                            $style_td = '';
+
+                            if ($next_attendance_calendar_id == $calendar['id']) {
+                                if (0 == $i % 2) {
+                                    $style_td = 'background-color:#eee;';
+                                } else {
+                                    $style_td = 'background-color:#dcdcdc;';
+                                }
+                                $disabled = '';
+                            }
+
+                            $form .= '<td style="'.$style_td.'" class="checkboxes_col_'.$calendar['id'].'">';
+                            $form .= '<div class="check">';
+
+                            if (api_is_allowed_to_edit(null, true)) {
+                                if (!$is_locked_attendance || api_is_platform_admin()) {
+                                    $form .= '<input type="checkbox" name="check_presence['.$calendar['id'].'][]" value="'.$user['user_id'].'" '.$disabled.' '.$checked.' />';
+                                    $form .= '<span class="anchor_'.$calendar['id'].'"></span>';
+                                } else {
+                                    $form .= $presence ? Display::return_icon('checkbox_on.png', get_lang('Assistance'), null, ICON_SIZE_TINY) : Display::return_icon('checkbox_off.png', get_lang('Assistance'), null, ICON_SIZE_TINY);
+                                }
+                            } else {
+                                switch ($presence) {
+                                    case 1:
+                                        $form .= Display::return_icon('accept.png', get_lang('Attended'));
+
+                                        break;
+                                    case 0:
+                                        $form .= Display::return_icon('exclamation.png', get_lang('Not attended'));
+
+                                        break;
+                                    case -1:
+                                        break;
+                                }
+                            }
+
+                            $form .= '</div>';
+                            $form .= '</td>';
+                        }
+                    } else {
+                        $calendarClass = null;
+                        if (isset($calendar)) {
+                            $calendarClass = 'checkboxes_col_'.$calendar['id'];
+                        }
+                        $form .= '<td class="'.$calendarClass.'">';
+                        $form .= '<div>';
+                        $form .= '<center>&nbsp;</center>
+                                </div>
+                                </td>';
+                    }
+                    echo '</tr>';
+                    ++$i;
+                }
+                $form .= '</tbody></table>';
+                $form .= '</div></div>';
+
+                $form .= '<div class="row">
+                            <div class="col-md-12">';
+                if (!$is_locked_attendance || api_is_platform_admin()) {
+                    if (api_is_allowed_to_edit(null, true)) {
+                        $form .= '<button type="submit" class="btn btn-primary">'.get_lang('Save').'</button>';
+                    }
+                }
+                $form .= '</div>
+                        </div>
+                </form>';
+                $content .= $form;
+            } else {
+                $content .= Display::return_message(
+                    '<a href="'.api_get_path(WEB_CODE_PATH).'user/user.php?'.api_get_cidreq().'">'.
+                    get_lang('There are no registered learners inside the course').'</a>',
+                    'warning',
+                    false
+                );
+            }
+        } else {
+            $content .= Display::page_header(get_lang('Report of attendance sheets'));
+            if (!empty($users_presence)) {
+                $content .= '
+                <div>
+                    <table width="250px;">
+                        <tr>
+                            <td>'.get_lang('To attend').': </td>
+                            <td>
+                                <center>
+                                <div
+                                    class="attendance-faults-bar"
+                                    style="background-color:'.(!empty($faults['color_bar']) ? $faults['color_bar'] : 'none').'">
+                                        '.$faults['faults'].'/'.$faults['total'].' ('.$faults['faults_porcent'].'%)
+                                </div>
+                                </center>
+                            </td>
+                        </tr>
+                    </table>
+                </div>';
+            }
+
+            $content .= '<table class="data_table">
+                <tr class="row_odd" >
+                    <th>'.get_lang('Attendance').'</th>
+                </tr>';
+
+            if (!empty($users_presence)) {
+                $i = 0;
+                foreach ($users_presence[$user_id] as $presence) {
+                    $class = '';
+                    if (0 == $i % 2) {
+                        $class = 'row_even';
+                    } else {
+                        $class = 'row_odd';
+                    }
+
+                    $check = $presence['presence'] ? Display::return_icon('checkbox_on.png', get_lang('Assistance'), null, ICON_SIZE_TINY) : Display::return_icon('checkbox_off.png', get_lang('Assistance'), null, ICON_SIZE_TINY);
+                    $content .= '<tr class="'.$class.'">
+                            <td>
+                                '.$check.'&nbsp; '.$presence['date_time'].'
+                            </td>
+                        </tr>';
+                }
+            } else {
+                $content .= '
+                        <tr>
+                            <td>
+                            <center>'.get_lang('You do not have attendances').'</center>
+                            </td>
+                        </tr>';
+            }
+            $content .= ' </table>';
+        }
+
+        return $content;
+    }
+
+    /**
+     * It's used to print attendance sheet.
+     *
+     * @param string $action
+     * @param int    $attendance_id
+     */
+    public function attendance_sheet_export_to_pdf(
+        $attendance_id,
+        $student_id = 0,
+        $course_id = ''
+    ) {
+        $courseInfo = api_get_course_info($course_id);
+        $this->set_course_id($courseInfo['code']);
+        $groupId = isset($_REQUEST['group_id']) ? $_REQUEST['group_id'] : null;
+        $data_array = [];
+        $data_array['attendance_id'] = $attendance_id;
+        $data_array['users_in_course'] = $this->get_users_rel_course($attendance_id, $groupId);
+
+        $filter_type = 'today';
+
+        if (!empty($_REQUEST['filter'])) {
+            $filter_type = $_REQUEST['filter'];
+        }
+
+        $my_calendar_id = null;
+        if (is_numeric($filter_type)) {
+            $my_calendar_id = $filter_type;
+            $filter_type = 'calendar_id';
+        }
+
+        $data_array['attendant_calendar'] = $this->get_attendance_calendar(
+            $attendance_id,
+            $filter_type,
+            $my_calendar_id,
+            $groupId
+        );
+
+        if (api_is_allowed_to_edit(null, true) || api_is_drh()) {
+            $data_array['users_presence'] = $this->get_users_attendance_sheet($attendance_id, 0, $groupId);
+        } else {
+            if (!empty($student_id)) {
+                $user_id = (int) $student_id;
+            } else {
+                $user_id = api_get_user_id();
+            }
+            $data_array['users_presence'] = $this->get_users_attendance_sheet($attendance_id, $user_id, $groupId);
+            $data_array['faults'] = $this->get_faults_of_user($user_id, $attendance_id, $groupId);
+            $data_array['user_id'] = $user_id;
+        }
+
+        $data_array['next_attendance_calendar_id'] = $this->get_next_attendance_calendar_id($attendance_id);
+
+        // Set headers pdf.
+        $courseCategory = CourseManager::get_course_category($courseInfo['categoryCode']);
+        $teacherInfo = CourseManager::get_teacher_list_from_course_code($courseInfo['code']);
+        $teacherName = null;
+        foreach ($teacherInfo as $teacherData) {
+            if (null != $teacherName) {
+                $teacherName .= ' / ';
+            }
+            $teacherName .= api_get_person_name($teacherData['firstname'], $teacherData['lastname']);
+        }
+
+        // Get data table
+        $data_table = [];
+        $head_table = ['#', get_lang('Name')];
+        foreach ($data_array['attendant_calendar'] as $class_day) {
+            $head_table[] =
+                api_format_date($class_day['date_time'], DATE_FORMAT_NUMBER_NO_YEAR).' '.
+                api_format_date($class_day['date_time'], TIME_NO_SEC_FORMAT);
+        }
+        $data_table[] = $head_table;
+        $data_attendant_calendar = $data_array['attendant_calendar'];
+        $data_users_presence = $data_array['users_presence'];
+        $count = 1;
+
+        if (!empty($data_array['users_in_course'])) {
+            foreach ($data_array['users_in_course'] as $user) {
+                $cols = 1;
+                $result = [];
+                $result['count'] = $count;
+                $result['full_name'] = api_get_person_name($user['firstname'], $user['lastname']);
+                foreach ($data_array['attendant_calendar'] as $class_day) {
+                    if (1 == $class_day['done_attendance']) {
+                        if (1 == $data_users_presence[$user['user_id']][$class_day['id']]['presence']) {
+                            $result[$class_day['id']] = get_lang('P');
+                        } else {
+                            $result[$class_day['id']] = '<span style="color:red">'.get_lang('NP').'</span>';
+                        }
+                    } else {
+                        $result[$class_day['id']] = ' ';
+                    }
+                    ++$cols;
+                }
+                ++$count;
+                $data_table[] = $result;
+            }
+        }
+        $max_cols_per_page = 12; //10 dates + 2 name and number
+        $max_dates_per_page = $max_dates_per_page_original = $max_cols_per_page - 2; //10
+        $rows = count($data_table);
+
+        if ($cols > $max_cols_per_page) {
+            $number_tables = round(($cols - 2) / $max_dates_per_page);
+            $headers = $data_table[0];
+            $all = [];
+            $tables = [];
+            $changed = 1;
+
+            for ($i = 0; $i <= $rows; ++$i) {
+                $row = isset($data_table[$i]) ? $data_table[$i] : null;
+                $key = 1;
+                $max_dates_per_page = 10;
+                $item = isset($data_table[$i]) ? $data_table[$i] : null;
+                $count_j = 0;
+
+                if (!empty($item)) {
+                    foreach ($item as $value) {
+                        if ($count_j >= $max_dates_per_page) {
+                            ++$key;
+                            $max_dates_per_page = $max_dates_per_page_original * $key;
+                            //magic hack
+                            $tables[$key][$i][] = $tables[1][$i][0];
+                            $tables[$key][$i][] = $tables[1][$i][1];
+                        }
+                        $tables[$key][$i][] = $value;
+                        ++$count_j;
+                    }
+                }
+            }
+
+            $content = null;
+            if (!empty($tables)) {
+                foreach ($tables as $sub_table) {
+                    $content .= Export::convert_array_to_html($sub_table).'<br /><br />';
+                }
+            }
+        } else {
+            $content = Export::convert_array_to_html(
+                $data_table,
+                ['header_attributes' => ['align' => 'center']]
+            );
+        }
+
+        $params = [
+            'filename' => get_lang('Attendance').'-'.api_get_local_time(),
+            'pdf_title' => $courseInfo['title'],
+            'course_code' => $courseInfo['code'],
+            'add_signatures' => ['Drh', 'Teacher', 'Date'],
+            'pdf_teachers' => $teacherName,
+            'pdf_course_category' => $courseCategory ? $courseCategory['name'] : '',
+            'format' => 'A4-L',
+            'orientation' => 'L',
+        ];
+
+        Export::export_html_to_pdf($content, $params);
+        exit;
+    }
+
+    /**
+     * Gets attendance base in the table:
+     * TABLE_STATISTIC_TRACK_E_COURSE_ACCESS.
+     *
+     * @param bool $showForm
+     * @param bool $exportToPdf
+     */
+    public function getAttendanceBaseInLogin($showForm = false, $exportToPdf = true)
+    {
+        $table = null;
+        $formToDisplay = null;
+        $startDate = null;
+        $endDate = null;
+
+        $sessionId = api_get_session_id();
+        if ($showForm) {
+            $form = new FormValidator(
+                'search',
+                'post',
+                api_get_self().'?'.api_get_cidreq().'&action=calendar_logins'
+            );
+            $form->addDateRangePicker('range', get_lang('Date range'));
+            $form->addButton('submit', get_lang('Submit'));
+
+            if ($form->validate()) {
+                $values = $form->getSubmitValues();
+                $startDate = api_get_utc_datetime($values['range_start']);
+                $endDate = api_get_utc_datetime($values['range_end']);
+            }
+            $formToDisplay = $form->returnForm();
+        } else {
+            if (!empty($sessionId)) {
+                $sessionInfo = api_get_session_info($sessionId);
+                $startDate = $sessionInfo['access_start_date'];
+                $endDate = $sessionInfo['access_end_date'];
+            }
+        }
+
+        if ($exportToPdf) {
+            $result = $this->exportAttendanceLogin($startDate, $endDate);
+            if (empty($result)) {
+                api_not_allowed(true, get_lang('No data available'));
+            }
+        }
+
+        $table = $this->getAttendanceLoginTable($startDate, $endDate);
+
+        return [
+            'form' => $formToDisplay,
+            'table' => $table,
+        ];
     }
 }

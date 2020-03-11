@@ -104,6 +104,9 @@ class CAttendance extends AbstractResource implements ResourceInterface
 
     public function __construct()
     {
+        $this->active = 1;
+        $this->attendanceQualifyMax = 0;
+        $this->locked = 0;
     }
 
     /**

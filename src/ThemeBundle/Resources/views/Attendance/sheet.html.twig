@@ -1,0 +1,78 @@
+{% autoescape false %}
+
+<script>
+    var original_url = '';
+    $("#filter_id").on('change', function() {
+        filter = $(this).val();
+        if (original_url == '') {
+            original_url = $("#pdf_export").attr('href');
+        }
+        new_url =  original_url + "&filter=" +filter
+        $("#pdf_export").attr('href', new_url);
+    });
+
+    function UpdateTableHeaders() {
+        $("div.divTableWithFloatingHeader").each(function() {
+            var originalHeaderRow = $(".tableFloatingHeaderOriginal", this);
+            var floatingHeaderRow = $(".tableFloatingHeader", this);
+            var offset = $(this).offset();
+            var scrollTop = $(window).scrollTop();
+            if ((scrollTop > offset.top) && (scrollTop < offset.top + $(this).height())) {
+                floatingHeaderRow.css("visibility", "hidden");
+                var topbar = 0;
+                if ($("#topbar").length != 0) {
+                    topbar = $("#topbar").height();
+                } else {
+                    if ($(".subnav").length != 0) {
+                        topbar = $(".subnav").height();
+                    }
+                }
+
+                var top_value = Math.min(scrollTop - offset.top, $(this).height() - floatingHeaderRow.height()) + topbar;
+
+                floatingHeaderRow.css("top",  top_value + "px");
+
+                // Copy cell widths from original header
+                $("th", floatingHeaderRow).each(function(index) {
+                    var cellWidth = $("th", originalHeaderRow).eq(index).css('width');
+                    $(this).css('width', cellWidth);
+                });
+
+                // Copy row width from whole table
+                floatingHeaderRow.css("width", $(this).css("width"));
+                floatingHeaderRow.css("visibility", "visible");
+                floatingHeaderRow.css("z-index", "1000");
+                originalHeaderRow.css("height", "64px");
+            } else {
+                floatingHeaderRow.css("visibility", "hidden");
+                floatingHeaderRow.css("top", "0px");
+            }
+        });
+    }
+
+    $(function() {
+        $("table.tableWithFloatingHeader").each(function() {
+            $(this).wrap("<div class=\"divTableWithFloatingHeader\" style=\"position:relative\"></div>");
+
+            var originalHeaderRow = $("tr:first", this)
+            originalHeaderRow.before(originalHeaderRow.clone());
+            var clonedHeaderRow = $("tr:first", this)
+
+            clonedHeaderRow.addClass("tableFloatingHeader");
+            clonedHeaderRow.css("position", "absolute");
+            clonedHeaderRow.css("top", "0px");
+            clonedHeaderRow.css("left", $(this).css("margin-left"));
+            clonedHeaderRow.css("visibility", "hidden");
+
+            originalHeaderRow.addClass("tableFloatingHeaderOriginal");
+        });
+
+        UpdateTableHeaders();
+        $(window).scroll(UpdateTableHeaders);
+        $(window).resize(UpdateTableHeaders);
+    });
+</script>
+
+{{ table }}
+
+{% endautoescape %}

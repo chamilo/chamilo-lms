@@ -56,7 +56,6 @@ $displayHeader = !empty($_REQUEST['display']) && 'no_header' === $_REQUEST['disp
 $thematicId = isset($_REQUEST['thematic_id']) ? (int) $_REQUEST['thematic_id'] : null;
 $thematicAdvanceId = isset($_REQUEST['thematic_advance_id']) ? (int) $_REQUEST['thematic_advance_id'] : null;
 
-
 $htmlHeadXtra[] = '<script>
 $(function() {
     $(".thematic_advance_actions, .thematic_tools ").hide();
@@ -253,8 +252,8 @@ switch ($action) {
         if (isset($_POST['replace']) && $_POST['replace']) {
             // Remove current thematic.
             $list = $thematicManager->get_thematic_list();
-            foreach ($list as $i) {
-                $thematicManager->delete($i);
+            foreach ($list as $id) {
+                $thematicManager->delete($id);
             }
         }
 

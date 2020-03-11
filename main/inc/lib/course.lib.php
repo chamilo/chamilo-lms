@@ -1149,6 +1149,35 @@ class CourseManager
         $user_id = (int) $user_id;
         $session_id = (int) $session_id;
 
+        if (api_get_configuration_value('catalog_course_subscription_in_user_s_session')) {
+            $course = Database::getManager()->getRepository('ChamiloCoreBundle:Course')->findOneBy([
+                'code' => $course_code
+            ]);
+            if (is_null($course)) {
+                return false;
+            }
+            $user = UserManager::getRepository()->find($user_id);
+            $sessionRelUser = Database::getManager()->getRepository('ChamiloCoreBundle:SessionRelUser')->findOneBy([
+                'user' => $user,
+            ]);
+            if (is_null($sessionRelUser)) {
+                return false;
+            }
+            /**
+             * @var $session \Chamilo\CoreBundle\Entity\Session
+             */
+            $session = $sessionRelUser->getSession();
+            $now = new DateTime();
+            if ($now < $session->getAccessStartDate() or $session->getAccessEndDate() < $now) {
+                return false;
+            }
+            $sessionRelCourse = Database::getManager()->getRepository('ChamiloCoreBundle:SessionRelCourse')->findOneBy([
+                'session' => $session,
+                'course' => $course,
+            ]);
+            return !is_null($sessionRelCourse);
+        }
+
         if (empty($session_id)) {
             $session_id = api_get_session_id();
         }

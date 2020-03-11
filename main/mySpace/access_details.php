@@ -137,13 +137,11 @@ $interbreadcrumb[] = ['url' => '#', 'name' => get_lang('AccessDetails')];
 
 Display::display_header('');
 $userInfo = api_get_user_info($user_id);
-$result_to_print = '';
-$sql_result = MySpace::get_connections_to_course($user_id, $courseInfo);
-$result_to_print = convert_to_string($sql_result);
 
 echo Display::page_header(get_lang('DetailsStudentInCourse'));
 echo Display::page_subheader(
-    get_lang('User').': '.$userInfo['complete_name'].' - '.get_lang('Course').': '.$courseInfo['title'].' ('.$course_code.')'
+    get_lang('User').': '.$userInfo['complete_name'].' - '.
+    get_lang('Course').': '.$courseInfo['title'].' ('.$course_code.')'
 );
 
 $form->setDefaults(['from' => $from, 'to' => $to]);

@@ -2901,7 +2901,8 @@ class MySpace
         }
 
         if (isset($_GET['date']) && !empty($_GET['date'])) {
-            $dates = DateRangePicker::parseDateRange($_GET['date']);
+            $dateRangePicker = new DateRangePicker('date');
+            $dates = $dateRangePicker->parseDateRange($_GET['date']);
             if (isset($dates['start']) && !empty($dates['start'])) {
                 $dates['start'] = Database::escape_string($dates['start']);
                 $sql .= " AND login_course_date >= '".$dates['start']."'";

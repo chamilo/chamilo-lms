@@ -53,14 +53,14 @@
                    <img class="img-responsive" src="{{ item.image ? _p.web_upload ~ item.image : _p.web_img ~ 'session_default.png' }}">
                     <div class="black-shadow">
                         <div class="author-card">
-                            <a href="{{ item.coach_url }}" class="ajax" data-title="{{ item.coach_name }}">
+<!--                            <a href="{{ item.coach_url }}" class="ajax" data-title="{{ item.coach_name }}"> -->
                                 <img src="{{ item.coach_avatar }}"/>
-                            </a>
+<!--                            </a> -->
                             <div class="teachers-details">
                                 <h5>
-                                    <a href="{{ item.coach_url }}" class="ajax" data-title="{{ item.coach_name }}">
+<!--                                    <a href="{{ item.coach_url }}" class="ajax" data-title="{{ item.coach_name }}"> -->
                                         {{ item.coach_name }}
-                                    </a>
+<!--                                    </a> -->
                                 </h5>
                             </div>
                         </div>

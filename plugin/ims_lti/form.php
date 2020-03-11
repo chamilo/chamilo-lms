@@ -42,7 +42,7 @@ if ($tool->isActiveDeepLinking()) {
     $params['lti_message_type'] = 'ContentItemSelectionRequest';
     $params['content_item_return_url'] = $pluginPath.'item_return.php';
     $params['accept_media_types'] = '*/*';
-    $params['accept_presentation_document_targets'] = 'iframe';
+    $params['accept_presentation_document_targets'] = 'iframe,window';
     //$params['accept_unsigned'];
     //$params['accept_multiple'];
     //$params['accept_copy_advice'];
@@ -99,7 +99,7 @@ $params['context_type'] = 'CourseSection';
 $params['context_label'] = $course->getCode();
 $params['context_title'] = $course->getTitle();
 $params['launch_presentation_locale'] = api_get_language_isocode();
-$params['launch_presentation_document_target'] = 'iframe';
+$params['launch_presentation_document_target'] = $tool->getDocumentTarget();
 $params['tool_consumer_info_product_family_code'] = 'Chamilo LMS';
 $params['tool_consumer_info_version'] = api_get_version();
 $params['tool_consumer_instance_guid'] = $platformDomain;

@@ -60,6 +60,7 @@ switch ($action) {
                 ->setCustomParams(
                     empty($formValues['custom_params']) ? null : $formValues['custom_params']
                 )
+                ->setDocumenTarget($formValues['document_target'])
                 ->setCourse($course)
                 ->setPrivacy(
                     !empty($formValues['share_name']),
@@ -79,10 +80,13 @@ switch ($action) {
                         ->setRedirectUrl($formValues['redirect_url'])
                         ->setAdvantageServices(
                             [
-                                'ags' => $formValues['1p3_ags'],
+                                'ags' => isset($formValues['1p3_ags'])
+                                    ? $formValues['1p3_ags']
+                                    : LtiAssignmentGradesService::AGS_NONE,
                                 'nrps' => $formValues['1p3_nrps'],
                             ]
-                        );
+                        )
+                        ->publicKey = $formValues['public_key'];
                 } elseif (ImsLti::V_1P1 === $formValues['version']) {
                     if (empty($formValues['consumer_key']) && empty($formValues['shared_secret'])) {
                         try {
@@ -186,6 +190,7 @@ switch ($action) {
                 ->setCustomParams(
                     empty($formValues['custom_params']) ? null : $formValues['custom_params']
                 )
+                ->setDocumenTarget($formValues['document_target'])
                 ->setPrivacy(
                     !empty($formValues['share_name']),
                     !empty($formValues['share_email']),
@@ -200,10 +205,13 @@ switch ($action) {
                         ->setRedirectUrl($formValues['redirect_url'])
                         ->setAdvantageServices(
                             [
-                                'ags' => $formValues['1p3_ags'],
+                                'ags' => isset($formValues['1p3_ags'])
+                                    ? $formValues['1p3_ags']
+                                    : LtiAssignmentGradesService::AGS_NONE,
                                 'nrps' => $formValues['1p3_nrps'],
                             ]
-                        );
+                        )
+                        ->publicKey = $formValues['public_key'];
                 } elseif ($tool->getVersion() === ImsLti::V_1P1) {
                     $tool
                         ->setLaunchUrl($formValues['launch_url'])

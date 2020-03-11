@@ -43,6 +43,7 @@ if ($form->validate()) {
         ->setCustomParams(
             empty($formValues['custom_params']) ? null : $formValues['custom_params']
         )
+        ->setDocumenTarget($formValues['document_target'])
         ->setPrivacy(
             !empty($formValues['share_name']),
             !empty($formValues['share_email']),
@@ -66,7 +67,9 @@ if ($form->validate()) {
                 ->setRedirectUrl($formValues['redirect_url'])
                 ->setAdvantageServices(
                     [
-                        'ags' => $formValues['1p3_ags'],
+                        'ags' => isset($formValues['1p3_ags'])
+                            ? $formValues['1p3_ags']
+                            : LtiAssignmentGradesService::AGS_NONE,
                         'nrps' => $formValues['1p3_nrps'],
                     ]
                 )

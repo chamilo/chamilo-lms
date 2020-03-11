@@ -27,6 +27,7 @@ if ($form->validate()) {
         ->setCustomParams(
             empty($formValues['custom_params']) ? null : $formValues['custom_params']
         )
+        ->setDocumenTarget($formValues['document_target'])
         ->setCourse(null)
         ->setActiveDeepLinking(
             isset($formValues['deep_linking'])

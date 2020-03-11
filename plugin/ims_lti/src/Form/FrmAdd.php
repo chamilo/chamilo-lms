@@ -81,6 +81,11 @@ class FrmAdd extends FormValidator
             'custom_params',
             [$plugin->get_lang('CustomParams'), $plugin->get_lang('CustomParamsHelp')]
         );
+        $this->addSelect(
+            'document_target',
+            get_lang('LinkTarget'),
+            ['iframe' => 'iframe', 'window' => 'window']
+        );
 
         if (null === $this->baseTool ||
             ($this->baseTool && !$this->baseTool->isActiveDeepLinking())
@@ -92,16 +97,42 @@ class FrmAdd extends FormValidator
             );
         }
 
+        $showAGS = false;
+
+        if (api_get_course_int_id()) {
+            $caterories = Category::load(null, null, api_get_course_id());
+
+            if (!empty($caterories)) {
+                $showAGS = true;
+            }
+        } else {
+            $showAGS = true;
+        }
+
         $this->addHtml('<div class="'.ImsLti::V_1P3.'" style="display: none;">');
-        $this->addRadio(
-            '1p3_ags',
-            $plugin->get_lang('AssigmentAndGradesService'),
-            [
-                LtiAssignmentGradesService::AGS_NONE => $plugin->get_lang('DontUseService'),
-                LtiAssignmentGradesService::AGS_SIMPLE => $plugin->get_lang('AGServiceSimple'),
-                LtiAssignmentGradesService::AGS_FULL => $plugin->get_lang('AGServiceFull'),
-            ]
-        );
+
+        if ($showAGS) {
+            $this->addRadio(
+                '1p3_ags',
+                $plugin->get_lang('AssigmentAndGradesService'),
+                [
+                    LtiAssignmentGradesService::AGS_NONE => $plugin->get_lang('DontUseService'),
+                    LtiAssignmentGradesService::AGS_SIMPLE => $plugin->get_lang('AGServiceSimple'),
+                    LtiAssignmentGradesService::AGS_FULL => $plugin->get_lang('AGServiceFull'),
+                ]
+            );
+        } else {
+            $gradebookUrl = api_get_path(WEB_CODE_PATH).'gradebook/index.php?'.api_get_cidreq();
+
+            $this->addLabel(
+                $plugin->get_lang('AssigmentAndGradesService'),
+                sprintf(
+                    $plugin->get_lang('YouNeedCreateTheGradebokInCourseFirst'),
+                    Display::url($gradebookUrl, $gradebookUrl)
+                )
+            );
+        }
+
         $this->addRadio(
             '1p3_nrps',
             $plugin->get_lang('NamesAndRoleProvisioningService'),
@@ -132,6 +163,7 @@ class FrmAdd extends FormValidator
             $defaults['name'] = $this->baseTool->getName();
             $defaults['description'] = $this->baseTool->getDescription();
             $defaults['custom_params'] = $this->baseTool->getCustomParams();
+            $defaults['document_target'] = $this->baseTool->getDocumentTarget();
             $defaults['share_name'] = $this->baseTool->isSharingName();
             $defaults['share_email'] = $this->baseTool->isSharingEmail();
             $defaults['share_picture'] = $this->baseTool->isSharingPicture();

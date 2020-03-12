@@ -1200,10 +1200,6 @@ class CourseManager
              * @var $session \Chamilo\CoreBundle\Entity\Session
              */
             $session = $sessionRelUser->getSession();
-            $now = new DateTime();
-            if ($now < $session->getAccessStartDate() or $session->getAccessEndDate() < $now) {
-                return false;
-            }
             $sessionRelCourse = Database::getManager()->getRepository('ChamiloCoreBundle:SessionRelCourse')->findOneBy([
                 'session' => $session,
                 'course' => $course,

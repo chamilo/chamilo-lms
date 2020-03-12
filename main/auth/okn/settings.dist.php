@@ -2,6 +2,8 @@
 
 exit;
 
+require_once '../../../main/inc/global.inc.php';
+
 $spBaseUrl = api_get_path(WEB_CODE_PATH).'auth/okn/';
 
 $url = 'https://example.es/';

@@ -125,7 +125,7 @@ if (isset($_GET['sso'])) {
     }
 
     if (!empty($userId)) {
-        $result = Tracking::getCourseLpProgress($userId, $attributes['session_id']);
+        $result = Tracking::getCourseLpProgress($userId, 0);
         echo json_encode($result);
     }
     exit;

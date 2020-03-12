@@ -1799,8 +1799,11 @@ abstract class Question
             $exercise->addToList($this->id);
             $exercise->update_question_positions();
 
+            $params = $form->exportValues();
+            $params['item_id'] = $this->id;
+
             $extraFieldValues = new ExtraFieldValue('question');
-            $extraFieldValues->saveFieldValues($form->exportValues());
+            $extraFieldValues->saveFieldValues($params);
         }
     }
 

@@ -8330,4 +8330,8 @@ $CompilatioSeeReport = "Ver relatório";
 $CompilatioNonToAnalyse = "Sua seleção não contém trabalhos para analisar. Somente trabalhos gerenciados pelo Compilatio e ainda não digitalizados podem ser enviados.";
 $CompilatioComunicationAjaxImpossible = "A comunicação AJAX com o servidor de compilação é impossível. Tente novamente mais tarde.";
 $UserClassExplanation = "Informações: A lista de turmas abaixo contém a lista de turmas que você já se matriculou em seu curso. Se esta lista estiver vazia, use o + verde acima para adicionar classes.";
+$InsertTwoNames = "Insira seus dois nomes";
+$AddRightLogo = "Adicione o logotipo certo";
+$LearnpathUseScoreAsProgress = "Usar pontuação como progresso";
+$LearnpathUseScoreAsProgressComment = "Use a pontuação retornada, pelo único SCO neste caminho de aprendizado, como o indicador de progresso na barra de progresso. Isso modifica o comportamento do SCORM no sentido estrito, mas melhora o feedback visual para o aluno.";
 ?>

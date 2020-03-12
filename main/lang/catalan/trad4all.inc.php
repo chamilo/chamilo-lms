@@ -7183,7 +7183,6 @@ $CasMainPortComment = "El port actual en el qual un es pot connectar al servidor
 $CasMainProtocolTitle = "Protocol del servidor principal CAS";
 $CAS1Text = "CAS 1";
 $CAS2Text = "CAS 2";
-$CAS3Text = "CAS 3";
 $SAMLText = "SAML";
 $CasMainProtocolComment = "Protocol amb el que ens connectem al servidor CAS";
 $CasUserAddActivateTitle = "Activa registre d'usuaris mitjançant CAS";

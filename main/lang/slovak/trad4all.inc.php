@@ -6923,7 +6923,6 @@ $CasMainPortComment = "Port, na ktorom sa pripojíme k hlavnému serveru CAS";
 $CasMainProtocolTitle = "Hlavný CAS server protokol";
 $CAS1Text = "CAS 1";
 $CAS2Text = "CAS 2";
-$CAS3Text = "CAS 3";
 $SAMLText = "SAML";
 $CasMainProtocolComment = "Protokol, s ktorým sme budeme pripájať k serveru CAS";
 $CasUserAddActivateTitle = "Povoliť CAS používateľský doplnok";

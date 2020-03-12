@@ -6774,7 +6774,6 @@ $CasMainPortComment = "Vrata (port) preko katerih se izvede prijava na CAS stre�
 $CasMainProtocolTitle = "Strežniški protokol glavnega CAS strežnika";
 $CAS1Text = "CAS 1";
 $CAS2Text = "CAS 2";
-$CAS3Text = "CAS 3";
 $SAMLText = "SAML";
 $CasMainProtocolComment = "Protokol, ki se uporablja pri povezavi s CAS strežnikom";
 $CasUserAddActivateTitle = "Omogoči CAS dodajanje uporabnikov";

@@ -632,10 +632,7 @@ class CourseManager
             if ($now < $session->getAccessStartDate() or $session->getAccessEndDate() < $now) {
                 Display::addFlash(
                     Display::return_message(
-                        get_lang('UserSessionExpired')
-                        .': now='.$now->format('y-M-d h:m')
-                        .', start='.$session->getAccessStartDate()->format('y-M-d h:m')
-                        .', end='.$session->getAccessEndDate()->format('y-M-d h:m'),
+                        get_lang('CanNotSubscribeToCourseUserSessionExpired'),
                         'warning'
                     )
                 );

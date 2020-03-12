@@ -7,6 +7,7 @@ namespace Chamilo\CourseBundle\Entity;
 use Chamilo\CoreBundle\Entity\Resource\AbstractResource;
 use Chamilo\CoreBundle\Entity\Resource\ResourceInterface;
 use Chamilo\CoreBundle\Entity\Room;
+use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -116,6 +117,13 @@ class CCalendarEvent extends AbstractResource implements ResourceInterface
      * @ORM\JoinColumn(name="room_id", referencedColumnName="id")
      */
     protected $room;
+
+    /**
+     * @var ArrayCollection|CCalendarEventAttachment[]
+     *
+     * @ORM\OneToMany(targetEntity="Chamilo\CourseBundle\Entity\CCalendarEventAttachment", mappedBy="event", cascade={"persist", "remove"}, orphanRemoval=true)
+     */
+    protected $attachments;
 
     public function __construct()
     {
@@ -418,6 +426,33 @@ class CCalendarEvent extends AbstractResource implements ResourceInterface
     public function setIid($iid)
     {
         $this->iid = $iid;
+
+        return $this;
+    }
+
+    /**
+     * @return CCalendarEventAttachment[]|ArrayCollection
+     */
+    public function getAttachments()
+    {
+        return $this->attachments;
+    }
+
+    /**
+     * @param CCalendarEventAttachment[]|ArrayCollection $attachments
+     *
+     * @return CCalendarEvent
+     */
+    public function setAttachments($attachments)
+    {
+        $this->attachments = $attachments;
+
+        return $this;
+    }
+
+    public function addAttachment(CCalendarEventAttachment $attachment)
+    {
+        $this->attachments->add($attachment);
 
         return $this;
     }

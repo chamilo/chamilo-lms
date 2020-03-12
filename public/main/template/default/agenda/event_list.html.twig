@@ -35,7 +35,7 @@
                             &dash;
 
                             {% if event.allDay %}
-                                {{ 'AllDay' | get_lang }}
+                                {{ 'All day' | trans }}
                             {% else %}
                                 {{ event.end_date_localtime }}
                             {% endif %}

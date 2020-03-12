@@ -2,7 +2,10 @@
 
 /* For licensing terms, see /license.txt */
 
+use Chamilo\CoreBundle\Framework\Container;
+
 // use anonymous mode when accessing this course tool
+
 $use_anonymous = true;
 require_once __DIR__.'/../inc/global.inc.php';
 $current_course_tool = TOOL_CALENDAR_EVENT;
@@ -28,8 +31,6 @@ if (empty($action)) {
 
 $logInfo = [
     'tool' => TOOL_CALENDAR_EVENT,
-    'tool_id' => 0,
-    'tool_id_detail' => 0,
     'action' => $action,
 ];
 Event::registerLog($logInfo);
@@ -126,12 +127,21 @@ if ($allowToEdit) {
                 $sendEmail = isset($values['add_announcement']) ? true : false;
                 $allDay = isset($values['all_day']) ? 'true' : 'false';
                 $sendAttachment = isset($_FILES) && !empty($_FILES) ? true : false;
-                $attachmentList = $sendAttachment ? $_FILES : null;
                 $attachmentCommentList = isset($values['legend']) ? $values['legend'] : null;
                 $comment = isset($values['comment']) ? $values['comment'] : null;
                 $usersToSend = isset($values['users_to_send']) ? $values['users_to_send'] : '';
                 $startDate = $values['date_range_start'];
                 $endDate = $values['date_range_end'];
+
+                $attachmentList = [];
+                if ($sendAttachment) {
+                    $request = Container::getRequest();
+                    foreach ($_FILES as $name => $file) {
+                        if ($request->files->has($name)) {
+                            $attachmentList[] = $request->files->get($name);
+                        }
+                    }
+                }
 
                 $eventId = $agenda->addEvent(
                     $startDate,
@@ -145,7 +155,7 @@ if ($allowToEdit) {
                     $attachmentList,
                     $attachmentCommentList,
                     $comment
-                );
+                );exit;
 
                 if (!empty($values['repeat']) && !empty($eventId)) {
                     // End date is always set as 23:59:59
@@ -157,6 +167,7 @@ if ($allowToEdit) {
                         $values['users_to_send']
                     );
                 }
+
                 $message = Display::return_message(get_lang('Event added'), 'confirmation');
                 if ($sendEmail) {
                     $message .= Display::return_message(
@@ -284,13 +295,12 @@ if ($allowToEdit) {
                     $message = Display::return_message(get_lang('This file is not in iCal format'), 'error');
                 }
                 Display::addFlash($message);
-                $url = api_get_self().'?action=importical&type='.$agenda->type;
-                header("Location: $url");
+                header("Location: $agendaUrl");
                 exit;
             }
             $content = $form->returnForm();
             break;
-        case "delete":
+        case 'delete':
             if (!(api_is_session_general_coach() &&
                 !api_is_element_in_the_session(TOOL_AGENDA, $eventId))
             ) {

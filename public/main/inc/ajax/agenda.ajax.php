@@ -109,7 +109,7 @@ switch ($action) {
         $start = isset($_REQUEST['start']) ? api_strtotime($_REQUEST['start']) : null;
         $end = isset($_REQUEST['end']) ? api_strtotime($_REQUEST['end']) : null;
 
-        if ('personal' == $type && !empty($sessionId)) {
+        if ('personal' === $type && !empty($sessionId)) {
             $agenda->setSessionId($sessionId);
         }
 

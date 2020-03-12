@@ -1,72 +1,71 @@
 {% autoescape false %}
-
 <script>
-function checkLength( o, n, min, max ) {
-    if ( o.val().length > max || o.val().length < min ) {
-        o.addClass( "ui-state-error" );
-        /*updateTips( "Length of " + n + " must be between " +
-            min + " and " + max + "." );*/
-        return false;
-    } else {
-        return true;
-    }
-}
-function clean_user_select() {
-    //Cleans the selected attr
-    $("#users_to_send").val('').trigger("chosen:updated");
-}
-
-var region_value = '{{ region_value }}';
-
-$(function() {
-    var cookieData = Cookies.getJSON('agenda_cookies');
-    var defaultView = (cookieData && cookieData.view) || '{{ default_view }}';
-    var defaultStartDate = (cookieData && cookieData.start) || moment.now();
-
-    // Reset button.
-    $("button[type=reset]").click(function() {
-        $("#session_id").find('option').removeAttr("selected");
-    });
-
-    function loadColors(calEvent){
-        $("#calendarModal #color_calendar").removeClass();
-        $("#calendarModal #color_calendar").html('{{ type_label | escape('js') }}');
-        $("#calendarModal #color_calendar").addClass('label_tag');
-        $("#calendarModal #color_calendar").addClass(calEvent.type+'_event');
-    }
-
-	var title = $("#title"),
-	content = $("#content"),
-	allFields = $([]).add( title ).add( content ), tips = $(".validateTips");
-
-    $("#select_form_id_search").change(function() {
-        var temp ="&user_id="+$("#select_form_id_search").val();
-        var position =String(window.location).indexOf("&user");
-        var url = String(window.location).substring(0,position)+temp;
-        if (position > 0) {
-            window.location.replace(url);
+    function checkLength( o, n, min, max ) {
+        if ( o.val().length > max || o.val().length < min ) {
+            o.addClass( "ui-state-error" );
+            /*updateTips( "Length of " + n + " must be between " +
+                min + " and " + max + "." );*/
+            return false;
         } else {
-            url = String(window.location)+temp;
-            window.location.replace(url);
+            return true;
         }
-    });
+    }
+    function clean_user_select() {
+        //Cleans the selected attr
+        $("#users_to_send").val('').trigger("chosen:updated");
+    }
 
-    var calendar = $('#calendar').fullCalendar({
-        themeSystem: 'bootstrap4',
-        contentHeight: 650,
-        handleWindowResize: true,
-		header: {
-			left: 'prev,next today',
-			center: 'title',
-			right: 'month,agendaWeek,agendaDay,listMonth'
-		},
-        views: {
-            /*listDay: { buttonText: 'list day' },
-            listWeek: { buttonText: 'list week' },*/
-            listMonth: { buttonText: 'list month' },
-        },
-        locale: region_value,
-        {% if use_google_calendar == 1 %}
+    var region_value = '{{ region_value }}';
+
+    $(function() {
+        var cookieData = Cookies.getJSON('agenda_cookies');
+        var defaultView = (cookieData && cookieData.view) || '{{ default_view }}';
+        var defaultStartDate = (cookieData && cookieData.start) || moment.now();
+
+        // Reset button.
+        $("button[type=reset]").click(function() {
+            $("#session_id").find('option').removeAttr("selected");
+        });
+
+        function loadColors(calEvent){
+            $("#calendarModal #color_calendar").removeClass();
+            $("#calendarModal #color_calendar").html('{{ type_label | escape('js') }}');
+            $("#calendarModal #color_calendar").addClass('label_tag');
+            $("#calendarModal #color_calendar").addClass(calEvent.type+'_event');
+        }
+
+        var title = $("#title"),
+            content = $("#content"),
+            allFields = $([]).add( title ).add( content ), tips = $(".validateTips");
+
+        $("#select_form_id_search").change(function() {
+            var temp ="&user_id="+$("#select_form_id_search").val();
+            var position =String(window.location).indexOf("&user");
+            var url = String(window.location).substring(0,position)+temp;
+            if (position > 0) {
+                window.location.replace(url);
+            } else {
+                url = String(window.location)+temp;
+                window.location.replace(url);
+            }
+        });
+
+        var calendar = $('#calendar').fullCalendar({
+            themeSystem: 'bootstrap4',
+            contentHeight: 650,
+            handleWindowResize: true,
+            header: {
+                left: 'prev,next today',
+                center: 'title',
+                right: 'month,agendaWeek,agendaDay,listMonth'
+            },
+            views: {
+                /*listDay: { buttonText: 'list day' },
+                listWeek: { buttonText: 'list week' },*/
+                listMonth: { buttonText: 'list month' },
+            },
+            locale: region_value,
+            {% if use_google_calendar == 1 %}
             eventSources: [
                 // if you want to add more just add URL in this array
                 '{{ google_calendar_url }}',
@@ -74,391 +73,397 @@ $(function() {
                     className: 'gcal-event' // an option!
                 }
             ],
-        {% endif %}
-        defaultView: defaultView,
-        defaultDate: defaultStartDate,
-        firstHour: 8,
-        firstDay: 1,
-		selectable	: true,
-		selectHelper: true,
-        viewRender: function(view, element) {
-            var data = {
-                'view': view.name,
-                'start': view.intervalStart.format("YYYY-MM-DD")
-            };
-            Cookies.set('agenda_cookies', data, 1); // Expires 1 day
-        },
-		// Add event
-		select: function(start, end, jsEvent, view) {
-            //var start_date = start.format("YYYY-MM-DD h:mm");
-            //var end_date = end.format("YYYY-MM-DD h:mm");
-            var diffDays = moment(end).diff(start, 'days');
+            {% endif %}
+            defaultView: defaultView,
+            defaultDate: defaultStartDate,
+            firstHour: 8,
+            firstDay: 1,
+            selectable	: true,
+            selectHelper: true,
+            viewRender: function(view, element) {
+                var data = {
+                    'view': view.name,
+                    'start': view.intervalStart.format("YYYY-MM-DD")
+                };
+                Cookies.set('agenda_cookies', data, 1); // Expires 1 day
+            },
+            // Add event
+            select: function(start, end, jsEvent, view) {
+                //var start_date = start.format("YYYY-MM-DD h:mm");
+                //var end_date = end.format("YYYY-MM-DD h:mm");
+                var diffDays = moment(end).diff(start, 'days');
 
-            var allDay = true;
-            if (end.hasTime()) {
-                allDay = false;
-            }
-
-			$('#visible_to_input').show();
-			$('#add_as_announcement_div').show();
-			$('#visible_to_read_only').hide();
-
-			// Cleans the selected attr
-		    clean_user_select();
-
-            // Sets the 1st item selected by default
-            $('#users_to_send option').eq(0).attr('selected', 'selected');
-
-			// Update chz-select
-			//$("#users_to_send").trigger("chosen:updated");
-			if ({{ can_add_events }} == 1) {
-				var url = '{{ web_agenda_ajax_url }}&a=add_event&start='+start.format("YYYY-MM-DD HH:mm:00")+'&end='+end.format("YYYY-MM-DD HH:mm:00")+'&all_day='+allDay+'&view='+view.name;
-			    var start_date_value = start.format('{{ js_format_date }}');
-                $('#start_date').html(start_date_value);
-
-                if (diffDays > 1) {
-                    $('#start_date').html('');
-                    var end_date_value = '';
-                    if (end) {
-                        var clone = end.clone();
-                        end_date_value = clone.subtract(1, 'days').format('{{ js_format_date }}');
-                    }
-                    $('#end_date').html(start_date_value + " - " + end_date_value);
-                } else if (diffDays == 0) {
-                    var start_date_value = start.format('ll');
-                    var startTime = start.format('LT');
-                    var endTime = end.format('LT');
-                    $('#start_date').html('');
-                    $('#end_date').html(start_date_value + " (" + startTime + " - " + endTime+") ");
-                } else {
-                    $('#end_date').html('');
+                var allDay = true;
+                if (end.hasTime()) {
+                    allDay = false;
                 }
 
-				$('#color_calendar')
-                    .html('{{ type_label | escape('js')}}')
-                    .removeClass('group_event')
-                    .addClass('label_tag')
-                    .addClass('{{ type_event_class | escape('js') }}')
-                    .css('background-color', '{{ type_event_color }}');
+                $('#visible_to_input').show();
+                $('#add_as_announcement_div').show();
+                $('#visible_to_read_only').hide();
 
-                //It shows the CKEDITOR while Adding an Event
-                $('#cke_content').show();
-                //Reset the CKEditor content that persist in memory
-                CKEDITOR.instances['content'].setData('');
-				allFields.removeClass("ui-state-error");
+                // Cleans the selected attr
+                clean_user_select();
 
-				$("#modalDialogForm").modal();
+                // Sets the 1st item selected by default
+                $('#users_to_send option').eq(0).attr('selected', 'selected');
 
-				var btnSave = '<button id="btnSave" type="button" class="btn btn-primary">{{ "Add" | get_lang }}</button>';
-                $("#modalDialogForm #modalFooter").html(btnSave);
+                // Update chz-select
+                //$("#users_to_send").trigger("chosen:updated");
+                if ({{ can_add_events }} == 1) {
+                    var url = '{{ web_agenda_ajax_url }}&a=add_event&start='+start.format("YYYY-MM-DD HH:mm:00")+'&end='+end.format("YYYY-MM-DD HH:mm:00")+'&all_day='+allDay+'&view='+view.name;
+                    var start_date_value = start.format('{{ js_format_date }}');
+                    $('#start_date').html(start_date_value);
 
-                $("#btnSave").click( function() {
-                    var bValid = true;
-                    bValid = bValid && checkLength(title, "title", 1, 255);
-
-                    //Update the CKEditor Instance to the remplaced textarea, ready to be serializable
-                    for ( instance in CKEDITOR.instances ) {
-                        CKEDITOR.instances[instance].updateElement();
+                    if (diffDays > 1) {
+                        $('#start_date').html('');
+                        var end_date_value = '';
+                        if (end) {
+                            var clone = end.clone();
+                            end_date_value = clone.subtract(1, 'days').format('{{ js_format_date }}');
+                        }
+                        $('#end_date').html(start_date_value + " - " + end_date_value);
+                    } else if (diffDays == 0) {
+                        var start_date_value = start.format('ll');
+                        var startTime = start.format('LT');
+                        var endTime = end.format('LT');
+                        $('#start_date').html('');
+                        $('#end_date').html(start_date_value + " (" + startTime + " - " + endTime+") ");
+                    } else {
+                        $('#end_date').html('');
                     }
 
-                    var params = $("#add_event_form").serialize();
+                    $('#color_calendar')
+                        .html('{{ type_label | escape('js')}}')
+                        .removeClass('group_event')
+                        .addClass('label_tag')
+                        .addClass('{{ type_event_class | escape('js') }}')
+                        .css('background-color', '{{ type_event_color }}');
 
-                    $.ajax({
-                        url: url+'&'+params,
-                        success:function(data) {
-                            var user = $('#users_to_send').val();
-                            if (user) {
-                                if (user.length > 1) {
-                                    user = 0;
-                                } else {
-                                    user = user[0];
+                    //It shows the CKEDITOR while Adding an Event
+                    $('#cke_content').show();
+                    //Reset the CKEditor content that persist in memory
+                    CKEDITOR.instances['content'].setData('');
+                    allFields.removeClass("ui-state-error");
+                    $("#modalDialogForm").modal();
+                    var btnSave = '<button id="btnSave" type="button" class="btn btn-primary">{{ "Add" | trans }}</button>';
+                    $("#modalDialogForm #modalFooter").html(btnSave);
+
+                    $("#btnSave").click( function() {
+                        var bValid = true;
+                        bValid = bValid && checkLength(title, "title", 1, 255);
+
+                        //Update the CKEditor Instance to the remplaced textarea, ready to be serializable
+                        for ( instance in CKEDITOR.instances ) {
+                            CKEDITOR.instances[instance].updateElement();
+                        }
+
+                        var params = $("#add_event_form").serialize();
+
+                        $.ajax({
+                            url: url+'&'+params,
+                            success:function(data) {
+                                var user = $('#users_to_send').val();
+                                if (user) {
+                                    if (user.length > 1) {
+                                        user = 0;
+                                    } else {
+                                        user = user[0];
+                                    }
+                                    var user_length = String(user).length;
+                                    if (String(user).substring(0,1) == 'G') {
+                                        var user_id = String(user).substring(6,user_length);
+                                        var user_id = "G:"+user_id;
+                                    } else {
+                                        var user_id = String(user).substring(5,user_length);
+                                    }
+                                    //var temp = "&user_id="+user_id;
+                                    //var position = String(window.location).indexOf("&user");
+                                    //var url = String(window.location).substring(0, position)+temp;
+                                    /*if (position > 0) {
+                                        window.location.replace(url);
+                                    } else {
+                                        url = String(window.location)+temp;
+                                        window.location.replace(url);
+                                    }*/
                                 }
-                                var user_length = String(user).length;
-                                if (String(user).substring(0,1) == 'G') {
-                                    var user_id = String(user).substring(6,user_length);
-                                    var user_id = "G:"+user_id;
-                                } else {
-                                    var user_id = String(user).substring(5,user_length);
-                                }
-                                //var temp = "&user_id="+user_id;
-                                //var position = String(window.location).indexOf("&user");
-                                //var url = String(window.location).substring(0, position)+temp;
-                                /*if (position > 0) {
-                                    window.location.replace(url);
-                                } else {
-                                    url = String(window.location)+temp;
-                                    window.location.replace(url);
-                                }*/
+
+                                calendar.fullCalendar('refetchEvents');
+                                calendar.fullCalendar('rerenderEvents');
+
+                                $('#modalDialogForm').modal('toggle');
+                            }
+                        });
+                    });
+
+                    calendar.fullCalendar('unselect');
+                    //Reload events
+                    calendar.fullCalendar("refetchEvents");
+                    calendar.fullCalendar("rerenderEvents");
+                }
+            },
+            eventClick: function(calEvent, jsEvent, view) {
+                var start = calEvent.start;
+                var end = calEvent.end;
+                var diffDays = moment(end).diff(start, 'days');
+                var endDateMinusOne = '';
+
+                if (end) {
+                    var clone = end.clone();
+                    endDateMinusOne = clone.subtract(1, 'days').format('{{ js_format_date }}');
+                }
+                var startDateToString = start.format("{{ js_format_date }}");
+
+                // Edit event.
+                if (calEvent.editable) {
+                    $('#visible_to_input').hide();
+                    $('#add_as_announcement_div').hide();
+                    {% if type != 'admin' %}
+                        $('#visible_to_read_only').show();
+                        $("#visible_to_read_only_users").html(calEvent.sent_to);
+                        $(".user-sender").show();
+                    {% endif %}
+
+                    loadColors(calEvent);
+
+                    $('#simple_start_date').html(startDateToString);
+                    if (diffDays > 1) {
+                        $('#simple_end_date').html(' - ' + endDateMinusOne);
+                    } else if (diffDays == 0) {
+                        var start_date_value = start.format('ll');
+                        var startTime = start.format('LT');
+                        var endTime = end.format('LT');
+                        $('#simple_start_date').html('');
+                        $('#simple_end_date').html(start_date_value + " (" + startTime + " - " + endTime+") ");
+                    } else {
+                        $('#simple_end_date').html('');
+                    }
+
+                    $("#simple_title").html(calEvent.title);
+                    $("#simple_content").html(calEvent.description);
+                    $("#simple_comment").html(calEvent.comment);
+                    $("#simple_attachment").html(calEvent.attachment);
+
+                    $("#calendar_course_info_simple").html('');
+
+                    if (calEvent.course_name) {
+                        $("#calendar_course_info_simple").html(calEvent.course_name);
+                        $("#type_course").html("{{ 'Course' | trans }}");
+                    }
+
+                    if (calEvent.session_name) {
+                        $("#calendar_course_info_simple").html(calEvent.session_name);
+                        $('#type_course').html("{{ 'Session' | trans }}");
+                    }
+
+                    if (calEvent.comment != '') {
+                        $("#comment_edit").html(calEvent.comment);
+                        $("#comment_edit").show();
+                    }
+
+                    if (calEvent.attachment != '') {
+                        $("#attachment_text").html(calEvent.attachment);
+                        $("#attachment_block").show();
+                        $("#attachment_text").show();
+                    }
+
+                    allFields.removeClass( "ui-state-error" );
+
+                    $('#calendarModal #modalTitle').html(calEvent.title);
+                    $('#calendarModal').modal();
+
+                    var url = '{{ web_agenda_ajax_url }}&a=edit_event&id='+calEvent.id+'&view='+view.name;
+                    var delete_url = '{{ web_agenda_ajax_url }}&a=delete_event&id='+calEvent.id;
+
+                    var urlOne = "{{ url('web.main') }}calendar/ical_export.php?id=" + calEvent.id+'&course_id='+calEvent.course_id+"&class=confidential";
+                    var urlTwo = "{{ url('web.main') }}calendar/ical_export.php?id=" + calEvent.id+'&course_id='+calEvent.course_id+"&class=private";
+                    var urlThree = "{{ url('web.main') }}calendar/ical_export.php?id=" + calEvent.id+'&course_id='+calEvent.course_id+"&class=public";
+                    var urlEdit = "{{ url('web.main') }}calendar/agenda.php?action=edit&type=fromjs&id="+calEvent.id+'&course_id='+calEvent.course_id+"";
+
+                    var exportCalConfidential = '<a href="'+urlOne+'" class="btn btn-light">{{"Export in iCal format as confidential event"|trans}}</a>';
+                    var exportCalPrivate = '<a href="'+urlTwo+'" class="btn btn-light">{{"Export in iCal format as private event"|trans}}</a>';
+                    var exportCalPublic = '<a href="'+urlThree+'" class="btn btn-light">{{"Export in iCal format as public event"|trans}}</a>';
+                    var btnEdit = '<a href="'+urlEdit+'" id="btnEdit" class="btn btn-primary">{{ "Edit" | trans }}</a>';
+                    var btnDelete = '<button type="button" id="btnDelete" class="btn btn-danger">{{ "Delete" | trans }}</button>';
+
+                    $('#calendarModal #modalFooter').html(exportCalConfidential+exportCalPrivate+exportCalPublic+btnEdit+btnDelete);
+
+                    {% if type == 'not_available' %}
+                    $('#btnEdit').click(function() {
+                        var bValid = true;
+                        bValid = bValid && checkLength( title, "title", 1, 255 );
+
+                        var params = $("#add_event_form").serialize();
+                        $.ajax({
+                            url: url+'&'+params,
+                            success:function() {
+                                calEvent.title = $("#title").val();
+                                calEvent.start = calEvent.start;
+                                calEvent.end = calEvent.end;
+                                calEvent.allDay = calEvent.allDay;
+                                calEvent.description = $("#content").val();
+                                calendar.fullCalendar('updateEvent',
+                                    calEvent,
+                                    true // make the event "stick"
+                                );
+                                //close modal
+                                $('#calendarModal').modal('toggle');
+                            }
+                        });
+                    });
+                    {% endif %}
+
+                    $('#btnDelete').click(function() {
+                        if (calEvent.parent_event_id || calEvent.has_children != '') {
+                            var newDiv = $('<div>');
+                            newDiv.dialog({
+                                modal: true,
+                                title: "{{ 'Delete this item' | trans }}",
+                                buttons: []
+                            });
+
+                            var buttons = newDiv.dialog("option", "buttons");
+
+                            if (calEvent.has_children == '0') {
+                                buttons.push({
+                                    text: '{{ "Delete this item" | trans }}',
+                                    click: function() {
+                                        $.ajax({
+                                            url: delete_url,
+                                            success:function() {
+                                                calendar.fullCalendar('removeEvents',
+                                                    calEvent
+                                                );
+                                                calendar.fullCalendar("refetchEvents");
+                                                calendar.fullCalendar("rerenderEvents");
+                                                $("#dialog-form").dialog("close");
+                                                newDiv.dialog( "destroy" );
+                                            }
+                                        });
+                                    }
+                                });
+                                newDiv.dialog("option", "buttons", buttons);
                             }
 
-                            calendar.fullCalendar('refetchEvents');
-                            calendar.fullCalendar('rerenderEvents');
-
-                            $('#modalDialogForm').modal('toggle');
-                        }
-                    });
-                });
-
-				calendar.fullCalendar('unselect');
-                //Reload events
-                calendar.fullCalendar("refetchEvents");
-                calendar.fullCalendar("rerenderEvents");
-			}
-		},
-		eventClick: function(calEvent, jsEvent, view) {
-            var start = calEvent.start;
-            var end = calEvent.end;
-            var diffDays = moment(end).diff(start, 'days');
-            var endDateMinusOne = '';
-
-            if (end) {
-                var clone = end.clone();
-                endDateMinusOne = clone.subtract(1, 'days').format('{{ js_format_date }}');
-            }
-            var startDateToString = start.format("{{ js_format_date }}");
-
-			// Edit event.
-			if (calEvent.editable) {
-				$('#visible_to_input').hide();
-                $('#add_as_announcement_div').hide();
-
-                {% if type != 'admin' %}
-                    $('#visible_to_read_only').show();
-                    $("#visible_to_read_only_users").html(calEvent.sent_to);
-                    $(".user-sender").show();
-				{% endif %}
-
-                loadColors(calEvent);
-
-                $('#simple_start_date').html(startDateToString);
-                if (diffDays > 1) {
-                    $('#simple_end_date').html(' - ' + endDateMinusOne);
-                } else if (diffDays == 0) {
-                    var start_date_value = start.format('ll');
-                    var startTime = start.format('LT');
-                    var endTime = end.format('LT');
-                    $('#simple_start_date').html('');
-                    $('#simple_end_date').html(start_date_value + " (" + startTime + " - " + endTime+") ");
-                } else {
-                    $('#simple_end_date').html('');
-                }
-
-                $("#simple_title").html(calEvent.title);
-                $("#simple_content").html(calEvent.description);
-                $("#simple_comment").html(calEvent.comment);
-
-                if (calEvent.course_name) {
-                    $("#calendar_course_info_simple").html(calEvent.course_name);
-                    $("#type_course").html("{{ 'Course' | get_lang }}");
-                } else {
-                    $("#calendar_course_info_simple").html('');
-                }
-
-                if (calEvent.session_name) {
-                    $("#calendar_course_info_simple").html(calEvent.session_name);
-                    $('#type_course').html("{{ 'Session' | get_lang }}");
-                } else {
-                    $("#calendar_course_info_simple").html('');
-                }
-
-				allFields.removeClass( "ui-state-error" );
-
-                $('#calendarModal #modalTitle').html(calEvent.title);
-                $('#calendarModal').modal();
-
-				var url = '{{ web_agenda_ajax_url }}&a=edit_event&id='+calEvent.id+'&view='+view.name;
-				var delete_url = '{{ web_agenda_ajax_url }}&a=delete_event&id='+calEvent.id;
-
-                var urlOne =  "{{ _p.web_main }}calendar/ical_export.php?id=" + calEvent.id+'&course_id='+calEvent.course_id+"&class=confidential";
-                var urlTwo =  "{{ _p.web_main }}calendar/ical_export.php?id=" + calEvent.id+'&course_id='+calEvent.course_id+"&class=private";
-                var urlThree =  "{{ _p.web_main }}calendar/ical_export.php?id=" + calEvent.id+'&course_id='+calEvent.course_id+"&class=public";
-                var urlEdit =  "{{ _p.web_main }}calendar/agenda.php?action=edit&type=fromjs&id="+calEvent.id+'&course_id='+calEvent.course_id+"";
-
-                var exportCalConfidential = '<a href="'+urlOne+'" class="btn btn-light">{{"ExportiCalConfidential"|get_lang}}</a>';
-                var exportCalPrivate = '<a href="'+urlTwo+'" class="btn btn-light">{{"ExportiCalPrivate"|get_lang}}</a>';
-                var exportCalPublic = '<a href="'+urlThree+'" class="btn btn-light">{{"ExportiCalPrivate"|get_lang}}</a>';
-                var btnEdit = '<a href="'+urlEdit+'" id="btnEdit" class="btn btn-primary">{{ "Edit" | get_lang }}</a>';
-                var btnDelete = '<button type="button" id="btnDelete" class="btn btn-danger">{{ "Delete" | get_lang }}</button>';
-
-                $('#calendarModal #modalFooter').html(exportCalConfidential+exportCalPrivate+exportCalPublic+btnEdit+btnDelete);
-
-                {% if type == 'not_available' %}
-                $('#btnEdit').click(function() {
-                    var bValid = true;
-                    bValid = bValid && checkLength( title, "title", 1, 255 );
-
-                    var params = $("#add_event_form").serialize();
-                    $.ajax({
-                        url: url+'&'+params,
-                        success:function() {
-                            calEvent.title = $("#title").val();
-                            calEvent.start = calEvent.start;
-                            calEvent.end = calEvent.end;
-                            calEvent.allDay = calEvent.allDay;
-                            calEvent.description = $("#content").val();
-                            calendar.fullCalendar('updateEvent',
-                                calEvent,
-                                true // make the event "stick"
-                            );
-                            //close modal
-                            $('#calendarModal').modal('toggle');
-                        }
-                    });
-                });
-                {% endif %}
-
-                $('#btnDelete').click(function() {
-                    if (calEvent.parent_event_id || calEvent.has_children != '') {
-                        var newDiv = $('<div>');
-                        newDiv.dialog({
-                            modal: true,
-                            title: "{{ 'DeleteThisItem' | get_lang }}",
-                            buttons: []
-                        });
-
-                        var buttons = newDiv.dialog("option", "buttons");
-
-                        if (calEvent.has_children == '0') {
+                            var buttons = newDiv.dialog("option", "buttons");
                             buttons.push({
-                                text: '{{ "DeleteThisItem" | get_lang }}',
+                                text: '{{ "Delete all items" | trans }}',
                                 click: function() {
                                     $.ajax({
-                                        url: delete_url,
+                                        url: delete_url+'&delete_all_events=1',
                                         success:function() {
                                             calendar.fullCalendar('removeEvents',
                                                 calEvent
                                             );
-                                            calendar.fullCalendar("refetchEvents");
-                                            calendar.fullCalendar("rerenderEvents");
-                                            $("#dialog-form").dialog("close");
+                                            calendar.fullCalendar('refetchEvents');
+                                            calendar.fullCalendar('rerenderEvents');
+                                            $("#dialog-form").dialog('close');
                                             newDiv.dialog( "destroy" );
                                         }
                                     });
                                 }
                             });
                             newDiv.dialog("option", "buttons", buttons);
+                            return true;
                         }
 
-                        var buttons = newDiv.dialog("option", "buttons");
-                        buttons.push({
-                            text: '{{ "DeleteAllItems" | get_lang }}',
-                            click: function() {
-                                $.ajax({
-                                    url: delete_url+'&delete_all_events=1',
-                                    success:function() {
-                                        calendar.fullCalendar('removeEvents',
-                                            calEvent
-                                        );
-                                        calendar.fullCalendar('refetchEvents');
-                                        calendar.fullCalendar('rerenderEvents');
-                                        $("#dialog-form").dialog('close');
-                                        newDiv.dialog( "destroy" );
-                                    }
-                                });
+                        $.ajax({
+                            url: delete_url,
+                            success:function() {
+                                calendar.fullCalendar('removeEvents',
+                                    calEvent
+                                );
+                                calendar.fullCalendar('refetchEvents');
+                                calendar.fullCalendar('rerenderEvents');
+                                //close modal
+                                $('#calendarModal').modal('toggle');
                             }
                         });
-                        newDiv.dialog("option", "buttons", buttons);
-                        return true;
+                    });
+
+                } else {
+                    // Simple form
+                    $('#simple_start_date').html(startDateToString);
+                    if (diffDays > 1) {
+                        $('#simple_end_date').html(' - ' + endDateMinusOne);
+                    } else if (diffDays == 0) {
+                        var start_date_value = start.format('ll');
+                        var startTime = start.format('LT');
+                        var endTime = end.format('LT');
+                        $('#simple_start_date').html('');
+                        $('#simple_end_date').html(start_date_value + " (" + startTime + " - " + endTime+") ");
+                    } else {
+                        $('#simple_end_date').html('');
                     }
 
-                    $.ajax({
-                        url: delete_url,
-                        success:function() {
-                            calendar.fullCalendar('removeEvents',
-                                calEvent
-                            );
-                            calendar.fullCalendar('refetchEvents');
-                            calendar.fullCalendar('rerenderEvents');
-                            //close modal
-                            $('#calendarModal').modal('toggle');
-                        }
-                    });
+                    loadColors(calEvent);
+
+                    if (calEvent.course_name) {
+                        $("#calendar_course_info_simple").html(calEvent.course_name);
+                        $("#type_course").html("{{ 'Course' | trans }}");
+                    } else {
+                        $("#calendar_course_info_simple").html('');
+                    }
+
+                    if (calEvent.session_name) {
+                        $("#type_course").append("{{ 'Session' | trans }}");
+                        $("#calendar_session_info").html(calEvent.session_name);
+                    } else {
+                        $("#calendar_session_info").html('');
+                    }
+
+                    $("#simple_title").html(calEvent.title);
+                    $("#simple_content").html(calEvent.description);
+                    $("#simple_comment").html(calEvent.comment);
+                    $('#modalTitle').html(calEvent.title);
+                    $('#calendarModal').modal();
+
+                    var urlOne =  "ical_export.php?id=" + calEvent.id+'&course_id='+calEvent.course_id+"&class=confidential";
+                    var exportCalConfidential = '<a href="'+urlOne+'" class="btn btn-light">{{"Export in iCal format as confidential event"|trans}}</a>';
+                    var urlTwo =  "ical_export.php?id=" + calEvent.id+'&course_id='+calEvent.course_id+"&class=private";
+                    var exportCalPrivate = '<a href="'+urlTwo+'" class="btn btn-light">{{"Export in iCal format as private event"|trans}}</a>';
+                    var urlThree =  "ical_export.php?id=" + calEvent.id+'&course_id='+calEvent.course_id+"&class=public";
+                    var exportCalPublic = '<a href="'+urlThree+'" class="btn btn-light">{{"Export in iCal format as public event"|trans}}</a>';
+
+                    $('#calendarModal #modalFooter').html(exportCalConfidential+exportCalPrivate+exportCalPublic);
+
+                }
+            },
+            editable: true,
+            events: "{{web_agenda_ajax_url}}&a=get_events",
+            eventDrop: function(event, delta, revert_func) {
+                var allDay = 0;
+                if (event.allDay == true) {
+                    allDay = 1;
+                }
+                $.ajax({
+                    url: '{{ web_agenda_ajax_url }}',
+                    data: {
+                        a: 'move_event',
+                        id: event.id,
+                        all_day: allDay,
+                        minute_delta: delta.asMinutes()
+                    }
                 });
-
-			} else {
-			    // Simple form
-                $('#simple_start_date').html(startDateToString);
-                if (diffDays > 1) {
-                    $('#simple_end_date').html(' - ' + endDateMinusOne);
-                } else if (diffDays == 0) {
-                    var start_date_value = start.format('ll');
-                    var startTime = start.format('LT');
-                    var endTime = end.format('LT');
-                    $('#simple_start_date').html('');
-                    $('#simple_end_date').html(start_date_value + " (" + startTime + " - " + endTime+") ");
-                } else {
-                    $('#simple_end_date').html('');
-                }
-
-                loadColors(calEvent);
-
-                if (calEvent.course_name) {
-                    $("#calendar_course_info_simple").html(calEvent.course_name);
-                    $("#type_course").html("{{ 'Course' | get_lang }}");
-                } else {
-                    $("#calendar_course_info_simple").html('');
-                }
-
-                if (calEvent.session_name) {
-                    $("#type_course").append("{{ 'Session' | get_lang }}");
-                    $("#calendar_session_info").html(calEvent.session_name);
-                } else {
-                    $("#calendar_session_info").html('');
-                }
-
-                $("#simple_title").html(calEvent.title);
-                $("#simple_content").html(calEvent.description);
-                $("#simple_comment").html(calEvent.comment);
-                $('#modalTitle').html(calEvent.title);
-                $('#calendarModal').modal();
-
-
-                var urlOne =  "ical_export.php?id=" + calEvent.id+'&course_id='+calEvent.course_id+"&class=confidential";
-                var exportCalConfidential = '<a href="'+urlOne+'" class="btn btn-light">{{"ExportiCalConfidential"|get_lang}}</a>';
-                var urlTwo =  "ical_export.php?id=" + calEvent.id+'&course_id='+calEvent.course_id+"&class=private";
-                var exportCalPrivate = '<a href="'+urlTwo+'" class="btn btn-light">{{"ExportiCalPrivate"|get_lang}}</a>';
-                var urlThree =  "ical_export.php?id=" + calEvent.id+'&course_id='+calEvent.course_id+"&class=public";
-                var exportCalPublic = '<a href="'+urlThree+'" class="btn btn-light">{{"ExportiCalPrivate"|get_lang}}</a>';
-
-                $('#calendarModal #modalFooter').html(exportCalConfidential+exportCalPrivate+exportCalPublic);
-
+            },
+            eventResize: function(event, delta, revert_func) {
+                $.ajax({
+                    url: '{{ web_agenda_ajax_url }}',
+                    data: {
+                        a: 'resize_event',
+                        id: event.id,
+                        minute_delta: delta.asMinutes()
+                    }
+                });
+            },
+            axisFormat: 'H(:mm)', // pm-am format -> h(:mm)a
+            timeFormat: 'H:mm',   // pm-am format -> h:mm
+            loading: function(bool) {
+                if (bool) $('#loading').show();
+                else $('#loading').hide();
             }
-		},
-		editable: true,
-		events: "{{web_agenda_ajax_url}}&a=get_events",
-		eventDrop: function(event, delta, revert_func) {
-		    var allDay = 0;
-		    if (event.allDay == true) {
-		        allDay = 1;
-            }
-			$.ajax({
-				url: '{{ web_agenda_ajax_url }}',
-				data: {
-                    a: 'move_event',
-                    id: event.id,
-                    all_day: allDay,
-                    minute_delta: delta.asMinutes()
-				}
-			});
-		},
-        eventResize: function(event, delta, revert_func) {
-            $.ajax({
-				url: '{{ web_agenda_ajax_url }}',
-				data: {
-                    a: 'resize_event',
-                    id: event.id,
-                    minute_delta: delta.asMinutes()
-				}
-			});
-        },
-		axisFormat: 'H(:mm)', // pm-am format -> h(:mm)a
-		timeFormat: 'H:mm',   // pm-am format -> h:mm
-		loading: function(bool) {
-			if (bool) $('#loading').show();
-			else $('#loading').hide();
-		}
-	});
-});
+        });
+    });
 </script>
 
 {{ actions_div }}
@@ -473,7 +478,7 @@ $(function() {
 
 
 <div id="loading" style="margin-left:150px;position:absolute;display:none">
-    {{ "Loading" | get_lang }}...
+    {{ "Loading" | trans }}...
 </div>
 
 <div id="calendar"></div>
@@ -482,7 +487,7 @@ $(function() {
     <div class="modal-dialog modal-lg" role="document">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title">{{ "Add event" | get_lang }}</h5>
+                <h5 class="modal-title">{{ "Add event" | trans }}</h5>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>
@@ -516,7 +521,7 @@ $(function() {
                     </dd>
                     <!--- user sender -->
                     <dt class="user-sender col-sm-2" style="display: none;">
-                        {{ "To" |get_lang }}
+                        {{ "To" |trans }}
                     </dt>
                     <dd class="user-sender col-sm-10" style="display: none">
                         <span id="visible_to_read_only_users"></span>
@@ -524,39 +529,43 @@ $(function() {
                     <!--- type agenda -->
 
                     <dt class="col-sm-2">
-                        {{ "Agenda" |get_lang }}
+                        {{ "Agenda" |trans }}
                     </dt>
                     <dd class="col-sm-10">
                         <div id="color_calendar"></div>
                     </dd>
 
-                    <dt class="col-sm-2">{{ "Title" |get_lang }}</dt>
+                    <dt class="col-sm-2">{{ "Title" |trans }}</dt>
                     <dd class="col-sm-10">
                         <div id="simple_title"></div>
                     </dd>
 
-                    <dt class="col-sm-2">{{ "Date" |get_lang }}</dt>
+                    <dt class="col-sm-2">{{ "Date" |trans }}</dt>
                     <dd class="col-sm-10">
                         <span id="simple_start_date"></span>
                         <span id="simple_end_date"></span>
                     </dd>
 
-                    <dt class="col-sm-2">{{ "Description" |get_lang }}</dt>
+                    <dt class="col-sm-2">{{ "Description" |trans }}</dt>
                     <dd class="col-sm-10">
                         <div id="simple_content"></div>
                     </dd>
 
-                    <dt class="col-sm-2">{{ "Comment" |get_lang }}</dt>
+                    <dt class="col-sm-2">{{ "Comment" |trans }}</dt>
                     <dd class="col-sm-10">
                         <div id="simple_comment"></div>
                     </dd>
+
+                    <dt class="col-sm-2">{{ "Attachment" |trans }}</dt>
+                    <dd class="col-sm-10">
+                        <div id="simple_attachment"></div>
+                    </dd>
+
                 </dl>
             </div>
             <div id="modalFooter" class="modal-footer">
-
             </div>
         </div>
     </div>
 </div>
-
 {% endautoescape %}

@@ -4,6 +4,9 @@
 
 namespace Chamilo\CourseBundle\Entity;
 
+use Chamilo\CoreBundle\Entity\Resource\AbstractResource;
+use Chamilo\CoreBundle\Entity\Resource\ResourceInterface;
+use Chamilo\CoreBundle\Entity\Room;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -17,7 +20,7 @@ use Doctrine\ORM\Mapping as ORM;
  * )
  * @ORM\Entity
  */
-class CCalendarEventAttachment
+class CCalendarEventAttachment extends AbstractResource implements ResourceInterface
 {
     /**
      * @var int
@@ -64,18 +67,19 @@ class CCalendarEventAttachment
     protected $size;
 
     /**
-     * @var int
-     *
-     * @ORM\Column(name="agenda_id", type="integer", nullable=false)
-     */
-    protected $agendaId;
-
-    /**
      * @var string
      *
      * @ORM\Column(name="filename", type="string", length=255, nullable=false)
      */
     protected $filename;
+
+    /**
+     * @var CCalendarEvent
+     *
+     * @ORM\ManyToOne(targetEntity="Chamilo\CourseBundle\Entity\CCalendarEvent", cascade={"persist"}, inversedBy="attachments")
+     * @ORM\JoinColumn(name="agenda_id", referencedColumnName="iid", onDelete="CASCADE")
+     */
+    protected $event;
 
     /**
      * Set path.
@@ -150,30 +154,6 @@ class CCalendarEventAttachment
     }
 
     /**
-     * Set agendaId.
-     *
-     * @param int $agendaId
-     *
-     * @return CCalendarEventAttachment
-     */
-    public function setAgendaId($agendaId)
-    {
-        $this->agendaId = $agendaId;
-
-        return $this;
-    }
-
-    /**
-     * Get agendaId.
-     *
-     * @return int
-     */
-    public function getAgendaId()
-    {
-        return $this->agendaId;
-    }
-
-    /**
      * Set filename.
      *
      * @param string $filename
@@ -243,5 +223,51 @@ class CCalendarEventAttachment
     public function getCId()
     {
         return $this->cId;
+    }
+
+    /**
+     * @return int
+     */
+    public function getIid()
+    {
+        return $this->iid;
+    }
+
+    /**
+     * @return CCalendarEvent
+     */
+    public function getEvent(): CCalendarEvent
+    {
+        return $this->event;
+    }
+
+    /**
+     * @param CCalendarEvent $event
+     *
+     * @return CCalendarEventAttachment
+     */
+    public function setEvent(CCalendarEvent $event): self
+    {
+        $this->event = $event;
+
+        return $this;
+    }
+
+    public function __toString(): string
+    {
+        return $this->getFilename();
+    }
+
+    /**
+     * Resource identifier.
+     */
+    public function getResourceIdentifier(): int
+    {
+        return $this->getIid();
+    }
+
+    public function getResourceName(): string
+    {
+        return $this->getFilename();
     }
 }

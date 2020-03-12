@@ -156,7 +156,7 @@ $tpl->assign('type', $type);
 
 $type_event_class = $type.'_event';
 $type_label = get_lang(ucfirst($type).'Calendar');
-if ('course' == $type && !empty($group_id)) {
+if ('course' === $type && !empty($group_id)) {
     $type_event_class = 'group_event';
     $type_label = get_lang('Agenda');
 }
@@ -170,7 +170,7 @@ if (empty($defaultView)) {
 /* month, basicWeek, agendaWeek, agendaDay */
 $tpl->assign('default_view', $defaultView);
 
-if ('course' == $type && !empty($session_id)) {
+if ('course' === $type && !empty($session_id)) {
     $type_event_class = 'session_event';
     $type_label = get_lang('Session calendar');
 }
@@ -219,7 +219,7 @@ if (!empty($userId)) {
     $agenda_ajax_url = api_get_path(WEB_AJAX_PATH).'agenda.ajax.php?type='.$type;
 }
 
-if ('course' == $type && !empty($courseId)) {
+if ('course' === $type && !empty($courseId)) {
     $agenda_ajax_url .= '&'.api_get_cidreq();
 }
 

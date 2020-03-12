@@ -79,6 +79,10 @@ services:
         arguments:
             $className: 'Chamilo\CourseBundle\Entity\CCalendarEvent'
 
+    Chamilo\CourseBundle\Repository\CCalendarEventAttachmentRepository:
+        arguments:
+            $className: 'Chamilo\CourseBundle\Entity\CCalendarEventAttachment'
+
     Chamilo\CourseBundle\Repository\CChatConversationRepository:
         arguments:
             $className: 'Chamilo\CourseBundle\Entity\CChatConversation'

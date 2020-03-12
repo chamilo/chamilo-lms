@@ -198,7 +198,7 @@ class AnnouncementEmail
         if (!empty($attachments)) {
             $repo = Container::getAnnouncementAttachmentRepository();
             foreach ($attachments as $attachment) {
-                $url = $repo->getResourceFileUrl($attachment, ['mode' => 'download']);
+                $url = $repo->getResourceFileDownloadUrl($attachment);
                 $result .= '<br />';
                 $result .= Display::url(
                     $attachment->getFilename(),

@@ -6206,7 +6206,7 @@ function getAttachedFiles(
         while ($row = Database::fetch_array($result, 'ASSOC')) {
             /** @var CForumAttachment $attachment */
             $attachment = $repo->find($row['iid']);
-            $downloadUrl = $repo->getResourceFileUrl($attachment);
+            $downloadUrl = $repo->getResourceFileDownloadUrl($attachment);
 
             // name contains an URL to download attachment file and its filename
             $json['name'] = Display::url(

@@ -3377,7 +3377,7 @@ function getWorkComment($id, $courseInfo = [])
         $deleteUrl = null;
         $fileName = null;
         if ($commentEntity->getResourceNode()->hasResourceFile()) {
-            $fileUrl = $repo->getResourceFileUrl($commentEntity);
+            $fileUrl = $repo->getResourceFileDownloadUrl($commentEntity);
             $workId = $commentEntity->getWorkId();
             $filePath = '';
             $deleteUrl = api_get_path(WEB_CODE_PATH).'work/view.php?'.api_get_cidreq().'&id='.$workId.'&action=delete_attachment&comment_id='.$id;

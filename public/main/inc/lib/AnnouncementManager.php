@@ -543,7 +543,7 @@ class AnnouncementManager
             $repo = Container::getAnnouncementAttachmentRepository();
             foreach ($attachments as $attachment) {
                 $attachmentId = $attachment->getIid();
-                $url = $repo->getResourceFileUrl($attachment, ['mode' => 'download']);
+                $url = $repo->getResourceFileDownloadUrl($attachment);
                 $html .= "<tr><td>";
                 $html .= '<br/>';
                 $html .= Display::returnFontAwesomeIcon('paperclip');

@@ -412,6 +412,22 @@ class Session
     }
 
     /**
+     * Check for existence of a relation (SessionRelCourse) between a course and this session
+     *
+     * @param Course $course
+     * @return bool whether the course is related to this session
+     */
+    public function isRelatedToCourse(Course $course)
+    {
+        return !is_null(
+            \Database::getManager()->getRepository('ChamiloCoreBundle:SessionRelCourse')->findOneBy([
+                'session' => $this,
+                'course' => $course,
+            ])
+        );
+    }
+
+    /**
      * Remove $course.
      *
      * @param SessionRelCourse $course
@@ -897,6 +913,23 @@ class Session
         $now = new \Datetime('now');
 
         return $now > $this->getAccessStartDate();
+    }
+
+    /**
+     * Compare the current date with start and end access dates.
+     * Either missing date is interpreted as no limit.
+     *
+     * @return bool whether now is between the session access start and end dates
+     */
+    public function isCurrentlyAccessible()
+    {
+        try {
+            $now = new \Datetime();
+        } catch (\Exception $exception) {
+            return false;
+        }
+        return (is_null($this->accessStartDate) || $this->accessStartDate < $now)
+            && (is_null($this->accessEndDate) || $now < $this->accessEndDate);
     }
 
     public function addCourse(Course $course)

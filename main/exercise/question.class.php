@@ -1306,8 +1306,8 @@ abstract class Question
             $sql = "SELECT question_order
                     FROM $table
                     WHERE
-                        c_id = $courseId AND 
-                        question_id = $id AND 
+                        c_id = $courseId AND
+                        question_id = $id AND
                         exercice_id = $exerciseId";
             $res = Database::query($sql);
             if (Database::num_rows($res) > 0) {
@@ -1316,8 +1316,8 @@ abstract class Question
                     $sql = "UPDATE $table
                             SET question_order = question_order-1
                             WHERE
-                                c_id = $courseId AND 
-                                exercice_id = $exerciseId AND 
+                                c_id = $courseId AND
+                                exercice_id = $exerciseId AND
                                 question_order > ".$row['question_order'];
                     Database::query($sql);
                 }
@@ -1325,8 +1325,8 @@ abstract class Question
 
             $sql = "DELETE FROM $table
                     WHERE
-                        c_id = $courseId AND 
-                        question_id = $id AND 
+                        c_id = $courseId AND
+                        question_id = $id AND
                         exercice_id = $exerciseId";
             Database::query($sql);
 
@@ -1367,7 +1367,7 @@ abstract class Question
         // if the question must be removed from all exercises
         if (!$deleteFromEx) {
             //update the question_order of each question to avoid inconsistencies
-            $sql = "SELECT exercice_id, question_order 
+            $sql = "SELECT exercice_id, question_order
                     FROM $TBL_EXERCISE_QUESTION
                     WHERE c_id = $courseId AND question_id = ".$id;
 
@@ -1378,8 +1378,8 @@ abstract class Question
                         $sql = "UPDATE $TBL_EXERCISE_QUESTION
                                 SET question_order = question_order-1
                                 WHERE
-                                    c_id = $courseId AND 
-                                    exercice_id = ".intval($row['exercice_id'])." AND 
+                                    c_id = $courseId AND
+                                    exercice_id = ".intval($row['exercice_id'])." AND
                                     question_order > ".$row['question_order'];
                         Database::query($sql);
                     }
@@ -1400,8 +1400,8 @@ abstract class Question
 
             // remove the category of this question in the question_rel_category table
             $sql = "DELETE FROM $TBL_QUIZ_QUESTION_REL_CATEGORY
-                    WHERE 
-                        c_id = $courseId AND 
+                    WHERE
+                        c_id = $courseId AND
                         question_id = ".$id;
             Database::query($sql);
 
@@ -1503,7 +1503,7 @@ abstract class Question
         $newQuestionId = Database::insert($questionTable, $params);
 
         if ($newQuestionId) {
-            $sql = "UPDATE $questionTable 
+            $sql = "UPDATE $questionTable
                     SET id = iid
                     WHERE iid = $newQuestionId";
             Database::query($sql);
@@ -1517,7 +1517,7 @@ abstract class Question
                     unset($item['iid']);
                     $id = Database::insert($TBL_QUESTION_OPTIONS, $item);
                     if ($id) {
-                        $sql = "UPDATE $TBL_QUESTION_OPTIONS 
+                        $sql = "UPDATE $TBL_QUESTION_OPTIONS
                                 SET id = iid
                                 WHERE iid = $id";
                         Database::query($sql);
@@ -2176,7 +2176,7 @@ abstract class Question
 
         // Get the max position
         $sql = "SELECT max(position) as max_position
-                FROM $tbl_quiz_question q 
+                FROM $tbl_quiz_question q
                 INNER JOIN $tbl_quiz_rel_question r
                 ON
                     q.id = r.question_id AND
@@ -2199,7 +2199,7 @@ abstract class Question
         $question_id = Database::insert($tbl_quiz_question, $params);
 
         if ($question_id) {
-            $sql = "UPDATE $tbl_quiz_question  
+            $sql = "UPDATE $tbl_quiz_question
                     SET id = iid WHERE iid = $question_id";
             Database::query($sql);
 
@@ -2475,10 +2475,10 @@ abstract class Question
 
         $result = $em
             ->createQuery('
-                SELECT e 
+                SELECT e
                 FROM ChamiloCourseBundle:CQuizRelQuestion qq
-                JOIN ChamiloCourseBundle:CQuiz e                
-                WHERE e.iid = qq.exerciceId AND qq.questionId = :id 
+                JOIN ChamiloCourseBundle:CQuiz e
+                WHERE e.iid = qq.exerciceId AND qq.questionId = :id
             ')
             ->setParameters(['id' => (int) $this->id])
             ->getResult();

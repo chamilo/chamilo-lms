@@ -588,7 +588,9 @@ class CourseManager
                 $endDate = new DateTime();
                 $endDate->add($duration);
                 $session = new \Chamilo\CoreBundle\Entity\Session();
-                $session->setName(get_lang(sprintf("%s %s Courses", $user->getFirstname(), $user->getLastname())));
+                $session->setName(
+                    sprintf(get_lang("FirstnameLastnameCourses"), $user->getFirstname(), $user->getLastname())
+                );
                 $session->setAccessEndDate($endDate);
                 $session->setCoachAccessEndDate($endDate);
                 $session->setDisplayEndDate($endDate);
@@ -622,6 +624,7 @@ class CourseManager
                     );
                     return false;
                 }
+
             } else {
                 $session = $sessionRelUser->getSession();
             }

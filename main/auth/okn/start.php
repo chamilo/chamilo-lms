@@ -82,57 +82,53 @@ if (isset($_GET['sso'])) {
         exit;
     }
 
-    var_dump($auth);
-
-    $keyCloackUserName = $auth->getNameId();
-    $userInfo = api_get_user_info_from_username($keyCloackUserName);
     $attributes = $auth->getAttributes();
-    $userId = 0;
-    var_dump($attributes);
-    exit;
-    if (!empty($attributes) && empty($userInfo)) {
-        $firstName = '';
-        if (isset($attributes['FirstName']) && !empty($attributes['FirstName'])) {
-            $firstName = reset($attributes['FirstName']);
-        }
 
-        $lastName = '';
-        if (isset($attributes['LastName']) && !empty($attributes['LastName'])) {
-            $lastName = reset($attributes['LastName']);
-        }
+    if (!isset($attributes['email']) ||
+        !isset($attributes['firstname']) ||
+        !isset($attributes['lastname1']) ||
+        !isset($attributes['lastname2'])
+    ) {
+        var_dump($attributes);
+        echo 'Not enough parameters'; exit;
+    }
 
-        $email = '';
-        if (isset($attributes['Email']) && !empty($attributes['Email'])) {
-            $email = reset($attributes['Email']);
-        }
+    foreach ($attributes as &$attribute) {
+        $attribute = implode('', $attribute);
+    }
 
-        if (empty($email)) {
-            api_not_allowed(true);
-        }
-
+    $userInfo = api_get_user_info_from_email($attributes['email']);
+    if (empty($userInfo)) {
+        $lastName = $attributes['lastname1'].' '.$attributes['lastname2'];
+        $username = UserManager::create_unique_username($attributes['firstname'], $lastName);
         $userId = UserManager::create_user(
-            $firstName,
+            $attributes['firstname'],
             $lastName,
             STUDENT,
-            $email,
-            $keyCloackUserName,
+            $attributes['email'],
+            $username,
             '',
             '',
             '',
             '',
             '',
-            'keycloak'
+            'okn'
         );
-
         if ($userId) {
             $userInfo = api_get_user_info($userId);
         }
     } else {
         // Only load users that were created using this method.
-        if ($userInfo['auth_source'] === 'keycloak') {
+        if ($userInfo['auth_source'] === 'okn') {
             $userId = $userInfo['user_id'];
         }
     }
+
+    if (!empty($userId)) {
+        $result = Tracking::getCourseLpProgress($userId, $attributes['session_id']);
+        echo json_encode($result);
+    }
+    exit;
 
     if (!empty($userId)) {
         // Set chamilo sessions

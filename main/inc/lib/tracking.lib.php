@@ -4,6 +4,7 @@
 use Chamilo\CoreBundle\Entity\Course;
 use Chamilo\CoreBundle\Entity\ExtraField as EntityExtraField;
 use Chamilo\CoreBundle\Entity\Session as SessionEntity;
+use Chamilo\CourseBundle\Entity\CLpCategory;
 use Chamilo\UserBundle\Entity\User;
 use ChamiloSession as Session;
 use CpChart\Cache as pCache;
@@ -6856,6 +6857,128 @@ class Tracking
             api_is_course_admin();
 
         return $allow;
+    }
+
+    public static function getCourseLpProgress($userId, $sessionId)
+    {
+        $controller = new IndexManager(get_lang('MyCourses'));
+        $data = $controller->returnCoursesAndSessions($userId);
+        $courseList = $data['courses'];
+
+        $result = [];
+        if ($courseList) {
+            $counter = 0;
+            foreach ($courseList as $course) {
+                $courseId = $course['course_id'];
+                $courseInfo = api_get_course_info_by_id($courseId);
+                if (empty($courseInfo)) {
+                    continue;
+                }
+                $courseCode = $courseInfo['code'];
+                $categoriesTempList = learnpath::getCategories($courseId);
+
+                $categoryNone = new CLpCategory();
+                $categoryNone->setId(0);
+                $categoryNone->setName(get_lang('WithOutCategory'));
+                $categoryNone->setPosition(0);
+
+                $categories = array_merge([$categoryNone], $categoriesTempList);
+
+                /** @var CLpCategory $category */
+                foreach ($categories as $category) {
+                    $learnPathList = new LearnpathList(
+                        $userId,
+                        $courseInfo,
+                        $sessionId,
+                        null,
+                        false,
+                        $category->getId()
+                    );
+
+                    $flatLpList = $learnPathList->get_flat_list();
+
+                    if (empty($flatLpList)) {
+                        continue;
+                    }
+
+                    foreach ($flatLpList as $lpId => $lpDetails) {
+                        if ($lpDetails['lp_visibility'] == 0) {
+                            continue;
+                        }
+
+                        if (!learnpath::is_lp_visible_for_student(
+                            $lpId,
+                            $userId,
+                            $courseInfo,
+                            $sessionId
+                        )) {
+                            continue;
+                        }
+
+                        $timeLimits = false;
+
+                        // This is an old LP (from a migration 1.8.7) so we do nothing
+                        if (empty($lpDetails['created_on']) && empty($lpDetails['modified_on'])) {
+                            $timeLimits = false;
+                        }
+
+                        // Checking if expired_on is ON
+                        if (!empty($lpDetails['expired_on'])) {
+                            $timeLimits = true;
+                        }
+
+                        if ($timeLimits) {
+                            if (!empty($lpDetails['publicated_on']) && !empty($lpDetails['expired_on'])) {
+                                $startTime = api_strtotime($lpDetails['publicated_on'], 'UTC');
+                                $endTime = api_strtotime($lpDetails['expired_on'], 'UTC');
+                                $now = time();
+                                $isActiveTime = false;
+
+                                if ($now > $startTime && $endTime > $now) {
+                                    $isActiveTime = true;
+                                }
+
+                                if (!$isActiveTime) {
+                                    continue;
+                                }
+                            }
+                        }
+
+                        $progress = learnpath::getProgress($lpId, $userId, $courseId, $sessionId);
+                        $time = self::get_time_spent_in_lp($userId, $courseCode, [], $sessionId);
+                        $score = self::getAverageStudentScore($userId, $courseCode, [], $sessionId);
+
+                        /*$listData[] = [
+                            'id' => $lpId,
+                            'title' => Security::remove_XSS($lpDetails['lp_name']),
+                            'progress' => $progress,
+                            'url' => api_get_path(WEB_CODE_PATH).'webservices/api/v2.php?'.http_build_query(
+                                    [
+                                        'hash' => $this->encodeParams(
+                                            [
+                                                'action' => 'course_learnpath',
+                                                'lp_id' => $lpId,
+                                                'course' => $this->course->getId(),
+                                                'session' => $sessionId,
+                                            ]
+                                        ),
+                                    ]
+                                ),
+                        ];*/
+
+                        $counter++;
+                        $result['course'.$counter] = [
+                            'module' => $lpDetails['lp_name'],
+                            'progress' => $progress,
+                            'qualification' => $score,
+                            'activeTime' => $time,
+                        ];
+                    }
+                }
+            }
+        }
+
+        return $result;
     }
 }
 

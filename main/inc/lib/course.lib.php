@@ -584,6 +584,7 @@ class CourseManager
                     );
                     return false;
                 }
+                $sessionAdminId = api_get_configuration_value('session_automatic_creation_user_id') ?: 1;
                 $endDate = new DateTime();
                 $endDate->add($duration);
                 $session = new \Chamilo\CoreBundle\Entity\Session();
@@ -592,7 +593,35 @@ class CourseManager
                 $session->setCoachAccessEndDate($endDate);
                 $session->setDisplayEndDate($endDate);
                 $session->setSendSubscriptionNotification(false);
-                $session->addUserInSession($status, $user);
+                $session->setSessionAdminId($sessionAdminId);
+                $session->addUserInSession(0, $user);
+                Database::getManager()->persist($session);
+                try {
+                    Database::getManager()->flush();
+                } catch (\Doctrine\ORM\OptimisticLockException $exception) {
+                    Display::addFlash(
+                        Display::return_message(
+                            get_lang('InternalDatabaseError') . ': ' . $exception->getMessage(),
+                            'warning'
+                        )
+                    );
+                    return false;
+                }
+                $accessUrlRelSession = new \Chamilo\CoreBundle\Entity\AccessUrlRelSession();
+                $accessUrlRelSession->setAccessUrlId(api_get_current_access_url_id());
+                $accessUrlRelSession->setSessionId($session->getId());
+                Database::getManager()->persist($accessUrlRelSession);
+                try {
+                    Database::getManager()->flush();
+                } catch (\Doctrine\ORM\OptimisticLockException $exception) {
+                    Display::addFlash(
+                        Display::return_message(
+                            get_lang('InternalDatabaseError') . ': ' . $exception->getMessage(),
+                            'warning'
+                        )
+                    );
+                    return false;
+                }
             } else {
                 $session = $sessionRelUser->getSession();
             }
@@ -622,6 +651,7 @@ class CourseManager
                 );
                 return false;
             }
+            SessionManager::subscribe_users_to_session_course([$userId], $session->getId(), $course->getCode());
             return true;
         }
         return self::subscribeUser($userId, $course->getCode(), $status);

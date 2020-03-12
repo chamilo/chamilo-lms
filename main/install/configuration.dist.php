@@ -1413,6 +1413,8 @@ ALTER TABLE notification_event ADD COLUMN event_id INT NULL;
 //$_configuration['catalog_course_subscription_in_user_s_session'] = false;
 // user session duration in days - after the session end date, more subscriptions are prevented
 //$_configuration['user_s_session_duration'] = 3*365;
+// id of the admin to attach user session
+//$_configuration['session_automatic_creation_user_id'] = 1;
 
 // KEEP THIS AT THE END
 // -------- Custom DB changes

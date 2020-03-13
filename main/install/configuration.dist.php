@@ -1389,6 +1389,9 @@ ALTER TABLE notification_event ADD COLUMN event_id INT NULL;
 // In Scorm comunication use the username instead of the user_id
 //$_configuration['scorm_api_username_as_student_id'] = false;
 
+// In Scorm comunication use a specific extra field instead of the user_id
+//$_configuration['scorm_api_extrafield_to_use_as_student_id'] = "";
+
 // Show online user only to Administrators
 //$_configuration['whoisonline_only_for_admin'] = false;
 

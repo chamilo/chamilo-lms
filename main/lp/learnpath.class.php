@@ -13810,8 +13810,12 @@ EOD;
     {
         if (api_get_configuration_value('scorm_api_username_as_student_id')) {
             return api_get_user_info(api_get_user_id())['username'];
+	} elseif (api_get_configuration_value('scorm_api_extrafield_to_use_as_student_id') != null) {
+            $extraFieldValue = new ExtraFieldValue('user');
+            $extrafield = $extraFieldValue->get_values_by_handler_and_field_variable(api_get_user_id(), api_get_configuration_value('scorm_api_extrafield_to_use_as_student_id'));
+            return $extrafield['value'];
         } else {
             return api_get_user_id();
-        }
+        } 
     }
 }

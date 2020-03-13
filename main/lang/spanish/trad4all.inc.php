@@ -8504,4 +8504,6 @@ $ErrorPluginOfficialCannotBeUploaded = "Su plugin tiene el mismo nombre que un p
 $AllSessionsShort = "Todas";
 $ActiveSessionsShort = "Activas";
 $ClosedSessionsShort = "Cerradas";
+$FirstnameLastnameCourses = "Cursos de %s %s";
+$CanNotSubscribeToCourseUserSessionExpired = "No puede mas inscribirse a cursos porque su sesion ha expirado.";
 ?>

@@ -536,9 +536,9 @@ class CourseManager
      */
     public static function autoSubscribeToCourse($courseCode, $status = STUDENT)
     {
-        $courseInfo = api_get_course_info($courseCode);
+        $course = Database::getManager()->getRepository('ChamiloCoreBundle:Course')->findOneBy(['code' => $courseCode]);
 
-        if (empty($courseInfo)) {
+        if (is_null($course)) {
             return false;
         }
 
@@ -546,15 +546,11 @@ class CourseManager
             return false;
         }
 
-        if (in_array(
-            $courseInfo['visibility'],
-            [
+        if (in_array($course->getVisibility(), [
                 COURSE_VISIBILITY_CLOSED,
                 COURSE_VISIBILITY_REGISTERED,
                 COURSE_VISIBILITY_HIDDEN,
-            ]
-        )
-        ) {
+        ])) {
             Display::addFlash(
                 Display::return_message(
                     get_lang('SubscribingNotAllowed'),
@@ -565,7 +561,101 @@ class CourseManager
             return false;
         }
 
-        return self::subscribeUser(api_get_user_id(), $courseInfo['code'], $status);
+        $userId = api_get_user_id();
+
+        if (api_get_configuration_value('catalog_course_subscription_in_user_s_session')) {
+            /**
+             * @var $user Chamilo\UserBundle\Entity\User
+             */
+            $user = UserManager::getRepository()->find($userId);
+            $sessions = $user->getCurrentlyAccessibleSessions();
+            if (empty($sessions)) {
+                // user has no accessible session
+                if ($user->getStudentSessions()) {
+                    // user has ancient or future student session(s) but not available now
+                    Display::addFlash(
+                        Display::return_message(
+                            get_lang('CanNotSubscribeToCourseUserSessionExpired'),
+                            'warning'
+                        )
+                    );
+                    return false;
+                }
+                // user has no session at all, create one starting now
+                $numberOfDays = api_get_configuration_value('user_s_session_duration') ?: 3 * 365;
+                try {
+                    $duration = new DateInterval(sprintf('P%dD', $numberOfDays));
+                } catch (Exception $exception) {
+                    Display::addFlash(
+                        Display::return_message(
+                            get_lang('WrongNumberOfDays') . ': ' . $numberOfDays . ': ' . $exception->getMessage(),
+                            'warning'
+                        )
+                    );
+                    return false;
+                }
+                $endDate = new DateTime();
+                $endDate->add($duration);
+                $session = new \Chamilo\CoreBundle\Entity\Session();
+                $session->setName(
+                    sprintf(get_lang("FirstnameLastnameCourses"), $user->getFirstname(), $user->getLastname())
+                );
+                $session->setAccessEndDate($endDate);
+                $session->setCoachAccessEndDate($endDate);
+                $session->setDisplayEndDate($endDate);
+                $session->setSendSubscriptionNotification(false);
+                $session->setSessionAdminId(api_get_configuration_value('session_automatic_creation_user_id') ?: 1);
+                $session->addUserInSession(0, $user);
+                Database::getManager()->persist($session);
+                try {
+                    Database::getManager()->flush();
+                } catch (\Doctrine\ORM\OptimisticLockException $exception) {
+                    Display::addFlash(
+                        Display::return_message(
+                            get_lang('InternalDatabaseError') . ': ' . $exception->getMessage(),
+                            'warning'
+                        )
+                    );
+                    return false;
+                }
+                $accessUrlRelSession = new \Chamilo\CoreBundle\Entity\AccessUrlRelSession();
+                $accessUrlRelSession->setAccessUrlId(api_get_current_access_url_id());
+                $accessUrlRelSession->setSessionId($session->getId());
+                Database::getManager()->persist($accessUrlRelSession);
+                try {
+                    Database::getManager()->flush();
+                } catch (\Doctrine\ORM\OptimisticLockException $exception) {
+                    Display::addFlash(
+                        Display::return_message(
+                            get_lang('InternalDatabaseError') . ': ' . $exception->getMessage(),
+                            'warning'
+                        )
+                    );
+                    return false;
+                }
+            } else {
+                // user has at least one accessible session, let's use it
+                $session = $sessions[0];
+            }
+            // add chosen course to the user session
+            $session->addCourse($course);
+            Database::getManager()->persist($session);
+            try {
+                Database::getManager()->flush();
+            } catch (\Doctrine\ORM\OptimisticLockException $exception) {
+                Display::addFlash(
+                    Display::return_message(
+                        get_lang('InternalDatabaseError') . ': ' . $exception->getMessage(),
+                        'warning'
+                    )
+                );
+                return false;
+            }
+            // subscribe user to course within this session
+            SessionManager::subscribe_users_to_session_course([$userId], $session->getId(), $course->getCode());
+            return true;
+        }
+        return self::subscribeUser($userId, $course->getCode(), $status);
     }
 
     /**
@@ -1089,6 +1179,29 @@ class CourseManager
     ) {
         $user_id = (int) $user_id;
         $session_id = (int) $session_id;
+
+        if (api_get_configuration_value('catalog_course_subscription_in_user_s_session')) {
+            // with this option activated, only check whether the course is in one of the users' sessions
+            $course = Database::getManager()->getRepository('ChamiloCoreBundle:Course')->findOneBy([
+                'code' => $course_code
+            ]);
+            if (is_null($course)) {
+                return false;
+            }
+            /**
+             * @var $user \Chamilo\UserBundle\Entity\User
+             */
+            $user = UserManager::getRepository()->find($user_id);
+            if (is_null($user)) {
+                return false;
+            }
+            foreach($user->getStudentSessions() as $session) {
+                if ($session->isRelatedToCourse($course)) {
+                    return true;
+                }
+            }
+            return false;
+        }
 
         if (empty($session_id)) {
             $session_id = api_get_session_id();

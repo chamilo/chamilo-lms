@@ -196,7 +196,11 @@ $(function () {
         },
         init: function () {
             ChChat.track().done(function () {
-                ChChat.init();
+                var chatTimeout = window.setTimeout(function () {
+                    window.clearTimeout(chatTimeout);
+
+                    ChChat.init();
+                }, 4000);
             });
         }
     };

@@ -1181,7 +1181,7 @@ class CourseManager
         $session_id = (int) $session_id;
 
         if (api_get_configuration_value('catalog_course_subscription_in_user_s_session')) {
-            // with this option activated, only check whether the course is in one of the users' accessible sessions
+            // with this option activated, only check whether the course is in one of the users' sessions
             $course = Database::getManager()->getRepository('ChamiloCoreBundle:Course')->findOneBy([
                 'code' => $course_code
             ]);
@@ -1195,7 +1195,7 @@ class CourseManager
             if (is_null($user)) {
                 return false;
             }
-            foreach($user->getCurrentlyAccessibleSessions() as $session) {
+            foreach($user->getStudentSessions() as $session) {
                 if ($session->isRelatedToCourse($course)) {
                     return true;
                 }

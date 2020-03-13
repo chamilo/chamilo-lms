@@ -41,7 +41,10 @@ $isDrhOfCourse = CourseManager::isUserSubscribedInCourseAsDrh(
     $courseInfo
 );
 
-if ((user_is_author($id) || $isDrhOfCourse || (api_is_allowed_to_edit() || api_is_coach())) ||
+$sessionId = (int) $_GET['id_session'];
+$isDrhOfSession = !empty(SessionManager::getSessionFollowedByDrh(api_get_user_id(), $sessionId));
+
+if ((user_is_author($id) || $isDrhOfCourse || $isDrhOfSession || (api_is_allowed_to_edit() || api_is_coach())) ||
     (
         $courseInfo['show_score'] == 0 &&
         $work['active'] == 1 &&
@@ -64,7 +67,7 @@ if ((user_is_author($id) || $isDrhOfCourse || (api_is_allowed_to_edit() || api_i
         $work['active'] == 1 &&
         $work['accepted'] == 1
         ) ||
-        (api_is_allowed_to_edit() || api_is_coach()) || user_is_author($id) || $isDrhOfCourse
+            (api_is_allowed_to_edit() || api_is_coach()) || user_is_author($id) || $isDrhOfCourse || $isDrhOfSession
     ) {
         $action = isset($_REQUEST['action']) ? $_REQUEST['action'] : null;
         $page = isset($_REQUEST['page']) ? $_REQUEST['page'] : null;

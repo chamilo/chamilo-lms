@@ -152,6 +152,19 @@ if ($action == 'subscribe') {
             if (CourseManager::is_user_subscribed_in_course($user_id, $course_code)) {
                 Session::write('is_allowed_in_course', true);
             }
+            if (api_get_configuration_value('catalog_course_subscription_in_user_s_session')) {
+                // append session id to redirect URL
+                /**
+                 * @var $user Chamilo\UserBundle\Entity\User
+                 */
+                $user = UserManager::getRepository()->find(api_get_user_id());
+                if ($user) {
+                    foreach ($user->getCurrentlyAccessibleSessions() as $session) {
+                        $redirectionTarget = api_get_self() . '?id_session=' . $session->getId();
+                        break;
+                    }
+                }
+            }
         } elseif (api_get_configuration_value('catalog_course_subscription_in_user_s_session')) {
             /**
              * @var $user Chamilo\UserBundle\Entity\User

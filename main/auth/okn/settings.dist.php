@@ -13,6 +13,7 @@ $path = '/path';
 //$certificate = file_get_contents($path);
 
 $settingsInfo = [
+    'course_list' => ['ABC', 'CDE'],
     'strict' => false,
     'debug' => true,
     'sp' => [

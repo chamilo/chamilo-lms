@@ -87,20 +87,25 @@ if (isset($_GET['sso'])) {
     if (!isset($attributes['email']) ||
         !isset($attributes['firstname']) ||
         !isset($attributes['lastname1']) ||
-        !isset($attributes['lastname2'])
+        !isset($attributes['lastname2']) ||
+        !isset($attributes['username'])
     ) {
         var_dump($attributes);
-        echo 'Not enough parameters'; exit;
+        echo 'Not enough parameters';
+        exit;
     }
 
     foreach ($attributes as &$attribute) {
         $attribute = implode('', $attribute);
     }
 
-    $userInfo = api_get_user_info_from_email($attributes['email']);
+    $username = $attributes['username'];
+    $userInfo = api_get_user_info($username);
+    $userId = null;
+
     if (empty($userInfo)) {
         $lastName = $attributes['lastname1'].' '.$attributes['lastname2'];
-        $username = UserManager::create_unique_username($attributes['firstname'], $lastName);
+        //$username = UserManager::create_unique_username($attributes['firstname'], $lastName);
         $userId = UserManager::create_user(
             $attributes['firstname'],
             $lastName,
@@ -116,6 +121,8 @@ if (isset($_GET['sso'])) {
         );
         if ($userId) {
             $userInfo = api_get_user_info($userId);
+        } else {
+            echo "Error cannot create user: $username";
         }
     } else {
         // Only load users that were created using this method.
@@ -125,6 +132,12 @@ if (isset($_GET['sso'])) {
     }
 
     if (!empty($userId)) {
+        if (isset($settingsInfo['course_list']) && !empty($settingsInfo['course_list'])) {
+            foreach ($settingsInfo['course_list'] as $courseCode) {
+                CourseManager::subscribeUser($userId, $courseCode, STUDENT, 0, 0, false);
+            }
+        }
+
         $result = Tracking::getCourseLpProgress($userId, 0);
         echo json_encode($result);
     }
@@ -196,7 +209,7 @@ if (isset($_SESSION['samlUserdata'])) {
     $content .= '<p><a href="?slo" >Logout</a></p>';
 } else {
     $content .= '<p><a href="?sso" >Login</a></p>';
-    $content .= '<p><a href="?sso2" >Login and access to attrs.php page</a></p>';
+    //$content .= '<p><a href="?sso2" >Login and access to attrs.php page</a></p>';
 }
 
 $template->assign('content', $content);

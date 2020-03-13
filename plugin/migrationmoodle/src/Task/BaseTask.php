@@ -54,8 +54,6 @@ abstract class BaseTask
         $this->loader = $this->getLoader();
 
         $this->calledClass = get_called_class();
-
-        $this->initMapLog();
     }
 
     /**
@@ -75,6 +73,42 @@ abstract class BaseTask
 
     public function execute()
     {
+        $taskId = \Database::insert(
+            'plugin_migrationmoodle_task',
+            ['name' => $this->getTaskName()]
+        );
+
+        $i = 0;
+
+        foreach ($this->executeETL() as $hash => $ids) {
+            \Database::insert(
+                'plugin_migrationmoodle_item',
+                [
+                    'hash' => $hash,
+                    'extracted_id' => (int) $ids['extracted'],
+                    'loaded_id' => (int) $ids['loaded'],
+                    'task_id' => $taskId,
+                ]
+            );
+
+            echo "Data migrated: $hash".PHP_EOL;
+
+            $i++;
+
+            if ($i % 10 === 0) {
+                flush();
+                ob_flush();
+            }
+        }
+
+        ob_end_flush();
+    }
+
+    /**
+     * @return \Generator
+     */
+    private function executeETL()
+    {
         foreach ($this->extractFiltered() as $extractedData) {
             try {
                 $incomingData = $this->transformer->transform($extractedData);
@@ -92,34 +126,11 @@ abstract class BaseTask
                 continue;
             }
 
-            try {
-                $hash = $this->saveMapLog($extractedData['id'], $loadedId);
-
-                echo "Data migrated. $hash".PHP_EOL;
-            } catch (\Exception $exception) {
-                echo "Data migrated, but... \n";
-                echo "\n".$exception->getTraceAsString();
-            }
+            yield md5("{$extractedData['id']}@@$loadedId") => [
+                'extracted' => $extractedData['id'],
+                'loaded' => $loadedId
+            ];
         }
-    }
-
-    /**
-     * @throws \Exception
-     */
-    private function initMapLog()
-    {
-        $taskName = $this->getTaskName();
-
-        $id = \Database::insert(
-            'plugin_migrationmoodle_task',
-            ['name' => $taskName]
-        );
-
-        if (empty($id)) {
-            throw new \Exception("Failed to save task ($taskName).");
-        }
-
-        $this->taskId = $id;
     }
 
     /**
@@ -138,31 +149,6 @@ abstract class BaseTask
         } catch (\Exception $exception) {
             new ExtractMessage($exception);
         }
-    }
-
-    /**
-     * @param int $extractedId
-     * @param int $loadedId
-     *
-     * @throws \Exception
-     *
-     * @return string
-     */
-    private function saveMapLog($extractedId, $loadedId)
-    {
-        $hash = md5("$extractedId@@$loadedId");
-
-        \Database::insert(
-            'plugin_migrationmoodle_item',
-            [
-                'hash' => $hash,
-                'extracted_id' => $extractedId,
-                'loaded_id' => $loadedId,
-                'task_id' => $this->taskId,
-            ]
-        );
-
-        return $hash;
     }
 
     /**

@@ -100,7 +100,7 @@ if (isset($_GET['sso'])) {
     }
 
     $username = $attributes['username'];
-    $userInfo = api_get_user_info($username);
+    $userInfo = api_get_user_info_from_username($username);
     $userId = null;
 
     if (empty($userInfo)) {
@@ -128,6 +128,9 @@ if (isset($_GET['sso'])) {
         // Only load users that were created using this method.
         if ($userInfo['auth_source'] === 'okn') {
             $userId = $userInfo['user_id'];
+        } else {
+            echo "Error cannot handle user $username, because it was not created by okn";
+            exit;
         }
     }
 
@@ -140,6 +143,8 @@ if (isset($_GET['sso'])) {
 
         $result = Tracking::getCourseLpProgress($userId, 0);
         echo json_encode($result);
+    } else {
+        echo 'User not found';
     }
     exit;
 

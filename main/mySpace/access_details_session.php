@@ -457,7 +457,7 @@ if ($formByDay->validate()) {
 
         $table = new HTML_Table(['class' => ' data_table']);
         $headers = [
-            get_lang('FirstConnection'),
+            get_lang('FirstLogin'),
             get_lang('LastConnection'),
             get_lang('Total'),
         ];
@@ -484,8 +484,6 @@ if ($formByDay->validate()) {
         $totalCourseSessionTable = $result['third'];
         $total = $result['total'];
         $tableList .= '<div style="text-align:center">'.Display::page_subheader2($dateToCheck).'</div>'.$table->toHtml();
-        //echo $tableList;exit;
-
         if (!$reduced && !empty($total)) {
             $diff = get_lang('NotInCourse').' '.api_format_time($data['diff'] - $total, 'js');
             $tableList .= $courseSessionTable;

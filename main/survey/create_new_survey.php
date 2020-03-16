@@ -1,15 +1,12 @@
 <?php
+
 /* For licensing terms, see /license.txt */
 
 /**
- * @package chamilo.survey
- *
  * @author Patrick Cool <patrick.cool@UGent.be>, Ghent University: cleanup,
  *  refactoring and rewriting large parts (if not all) of the code
  * @author Julio Montoya Armas <gugli100@gmail.com>, Chamilo: Personality
  * Test modification and rewriting large parts of the code
- *
- * @version $Id: create_new_survey.php 22297 2009-07-22 22:08:30Z cfasanando $
  *
  * @todo only the available platform languages should be used => need an
  *  api get_languages and and api_get_available_languages (or a parameter)
@@ -17,7 +14,6 @@
 require_once __DIR__.'/../inc/global.inc.php';
 
 $_course = api_get_course_info();
-
 $this_section = SECTION_COURSES;
 
 $allowSurveyAvailabilityDatetime = api_get_configuration_value('allow_survey_availability_datetime');
@@ -211,7 +207,26 @@ $form->addElement(
 );
 
 $extraField = new ExtraField('survey');
-$extraField->addElements($form, $survey_id);
+$extraField->addElements($form, $survey_id, ['group_id']);
+
+if ($extraField->get_handler_field_info_by_field_variable('group_id') ) {
+    $extraFieldValue = new ExtraFieldValue('survey');
+    $groupData = $extraFieldValue->get_values_by_handler_and_field_variable($survey_id, 'group_id');
+    $groupValue = [];
+    if ($groupData && !empty($groupData['value'])) {
+        $groupInfo = GroupManager::get_group_properties($groupData['value']);
+        $groupValue = [$groupInfo['iid'] => $groupInfo['name']];
+    }
+
+    $form->addSelectAjax(
+        'extra_group_id',
+        get_lang('Group'),
+        $groupValue,
+        [
+            'url' => api_get_path(WEB_AJAX_PATH).'group.ajax.php?a=search&'.api_get_cidreq(),
+        ]
+    );
+}
 
 // Additional Parameters
 $form->addButtonAdvancedSettings('advanced_params');

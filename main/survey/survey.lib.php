@@ -2188,17 +2188,51 @@ class SurveyManager
         $options['where'] = [' usergroup.course_id = ? ' => $courseId];
         $classList = $obj->getUserGroupInCourse($options);
 
+        $classToParse = [];
+        foreach ($classList as $class) {
+            $users = $obj->get_users_by_usergroup($class['id']);
+            if (empty($users)) {
+                continue;
+            }
+            $classToParse[] = [
+                'name' => $class['name'],
+                'users' => $users
+            ];
+        }
+
+        self::parseMultiplicateUserList($classToParse, $questions, $courseId, $surveyData);
+
+        $extraFieldValue = new ExtraFieldValue('survey');
+        $groupData = $extraFieldValue->get_values_by_handler_and_field_variable($surveyId, 'group_id');
+        if ($groupData && !empty($groupData['value'])) {
+            $groupInfo = GroupManager::get_group_properties($groupData['value']);
+            if (!empty($groupInfo)) {
+                $users = GroupManager::getStudents($groupInfo['iid'], true);
+                if (!empty($users)) {
+                    $users = array_column($users, 'id');
+                    $classToParse = [
+                        [
+                            'name' =>  $groupInfo['name'],
+                            'users'=> $users
+                        ]
+                    ];
+                    self::parseMultiplicateUserList($classToParse, $questions, $courseId, $surveyData);
+                }
+            }
+        }
+    }
+
+    public function parseMultiplicateUserList($itemList, $questions, $courseId, $surveyData)
+    {
+        $surveyId = $surveyData['survey_id'];
         $classTag = '{{class_name}}';
         $studentTag = '{{student_full_name}}';
         $classCounter = 0;
-        foreach ($classList as $class) {
+        foreach ($itemList as $class) {
             $className = $class['name'];
-            foreach ($questions as $question) {
-                $users = $obj->get_users_by_usergroup($class['id']);
-                if (empty($users)) {
-                    continue;
-                }
+            $users = $class['users'];
 
+            foreach ($questions as $question) {
                 $text = $question['question'];
                 if (strpos($text, $classTag) !== false) {
                     $replacedText = str_replace($classTag, $className, $text);
@@ -2219,7 +2253,6 @@ class SurveyManager
 
                 foreach ($users as $userId) {
                     $userInfo = api_get_user_info($userId);
-
                     if (strpos($text, $studentTag) !== false) {
                         $replacedText = str_replace($studentTag, $userInfo['complete_name'], $text);
                         $values = [
@@ -2246,7 +2279,7 @@ class SurveyManager
                     }
                 }
 
-                if ($classCounter < count($classList)) {
+                if ($classCounter < count($itemList)) {
                     // Add end page
                     $values = [
                         'c_id' => $courseId,

@@ -1,18 +1,15 @@
 <?php
+
 /* For licensing terms, see /license.txt */
 
+use ChamiloSession as Session;
+
 /**
- * @package chamilo.survey
- *
- * @author unknown, the initial survey that did not make it in 1.8 because of bad code
  * @author Patrick Cool <patrick.cool@UGent.be>, Ghent University: cleanup, refactoring and rewriting large parts of the code
  * @author Julio Montoya Armas <gugli100@gmail.com>, Chamilo: Personality Test modification and rewriting large parts of the code
  *
- * @version $Id: survey_list.php 21933 2009-07-09 06:08:22Z ivantcholakov $
- *
  * @todo use quickforms for the forms
  */
-use ChamiloSession as Session;
 
 if (!isset($_GET['cidReq'])) {
     $_GET['cidReq'] = 'none'; // Prevent sql errors
@@ -32,8 +29,6 @@ Event::event_access_tool(TOOL_SURVEY);
 
 $logInfo = [
     'tool' => TOOL_SURVEY,
-    'tool_id' => 0,
-    'tool_id_detail' => 0,
 ];
 Event::registerLog($logInfo);
 
@@ -52,7 +47,6 @@ $htmlHeadXtra[] = '<script>'.api_get_language_translate_html().'</script>';
 
 if ($isDrhOfCourse) {
     Display::display_header(get_lang('SurveyList'));
-    // Tool introduction
     Display::display_introduction_section('survey', 'left');
     SurveyUtil::displaySurveyListForDrh();
     Display::display_footer();
@@ -62,7 +56,6 @@ if ($isDrhOfCourse) {
 if (!api_is_allowed_to_edit(false, true)) {
     // Coach can see this
     Display::display_header(get_lang('SurveyList'));
-    // Tool introduction
     Display::display_introduction_section('survey', 'left');
     SurveyUtil::getSurveyList($currentUserId);
     Display::display_footer();

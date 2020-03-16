@@ -65,4 +65,6 @@ $strings['UsersLearnPathsLessonBranchTask'] = 'Lesson branch to total time in le
 $strings['UsersLearnPathsLessonAttemptsTask'] = 'Lesson attempts to total time in learn paths quizzes';
 $strings['UsersLearnPathsQuizzesTask'] = 'Quizzes attempts to learn paths quizzes attempts';
 $strings['UsersQuizzesAttemptsTask'] = 'Quiz attempts of users';
-$strings['UserQuestionAttemptsTask'] = 'Question attempts of users';
+$strings['UserQuestionAttemptsShortanswerTask'] = 'Question attempts of users for shortanswer';
+$strings['UserQuestionAttemptsGapselectTask'] = 'Question attempts of users for gapselect';
+$strings['UserQuestionAttemptsTruefalseTask'] = 'Question attempts of users for truefalse';

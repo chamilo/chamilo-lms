@@ -19,8 +19,10 @@ use Chamilo\PluginBundle\MigrationMoodle\Transformer\Property\UserQuestionAnswer
  *
  * @package Chamilo\PluginBundle\MigrationMoodle\Task
  */
-class UserQuestionAttemptsTask extends BaseTask
+abstract class UserQuestionAttemptsTask extends BaseTask
 {
+    protected $questionType;
+
     /**
      * @inheritDoc
      */
@@ -55,6 +57,7 @@ class UserQuestionAttemptsTask extends BaseTask
                 INNER JOIN mdl_user u ON (qqas.userid = u.id)
                 WHERE qqas.state NOT IN ('todo', 'complete')
                     AND (qqasd.name = '-finish' AND qqasd.value = 1)
+                    AND qq.qtype = '{$this->questionType}'
                     $userFilterCondition
                 ORDER BY qa.userid, qa.quiz, qqa.slot",
         ];

@@ -5877,8 +5877,15 @@ class UserManager
                         $name = $studentInfo['complete_name'];
                         $url = api_get_path(WEB_CODE_PATH).'mySpace/myStudents.php?student='.$studentId;
                         $url = Display::url($url, $url);
-                        $subject = sprintf(get_lang('UserXHasBeenAssignedToBoss'), $name);
-                        $message = sprintf(get_lang('UserXHasBeenAssignedToBossWithUrlX'), $name, $url);
+                        $subject = sprintf(
+                            get_lang('UserXHasBeenAssignedToBoss', false, $studentInfo['language']),
+                            $name
+                        );
+                        $message = sprintf(
+                            get_lang('UserXHasBeenAssignedToBossWithUrlX', false, $studentInfo['language']),
+                            $name,
+                            $url
+                        );
                         MessageManager::send_message_simple(
                             $bossId,
                             $subject,

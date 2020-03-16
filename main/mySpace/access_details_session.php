@@ -1,4 +1,5 @@
 <?php
+
 /* For licensing terms, see /license.txt */
 
 require_once __DIR__.'/../inc/global.inc.php';
@@ -48,7 +49,8 @@ function customDate($dateTime, $showTime = false)
     return $dateTime;
 }
 
-$sessions = SessionManager::getSessionsFollowedByUser($userId,
+$sessions = SessionManager::getSessionsFollowedByUser(
+    $userId,
     null,
     null,
     null,
@@ -76,7 +78,7 @@ $form = new FormValidator(
 );
 $form->addElement('text', 'from', get_lang('From'));
 $form->addElement('text', 'to', get_lang('Until'));
-$form->addElement('hidden', 'user_id', $userId);
+$form->addHidden('user_id', $userId);
 $form->addRule('from', get_lang('ThisFieldIsRequired'), 'required');
 $form->addRule('from', get_lang('ThisFieldIsRequired').' dd/mm/yyyy', 'callback', 'validateDate');
 $form->addRule('to', get_lang('ThisFieldIsRequired'), 'required');
@@ -99,17 +101,8 @@ function validateDate($value)
     return true;
 }
 
-if ($form->validate()) {
-    $values = $form->getSubmitValues();
-    $from = $values['from'];
-    $to = $values['to'];
-
-    $from = DateTime::createFromFormat('d/m/Y', $from);
-    $to = DateTime::createFromFormat('d/m/Y', $to);
-
-    $from = api_get_utc_datetime($from->format('Y-m-d'));
-    $to = api_get_utc_datetime($to->format('Y-m-d'));
-
+function getReport($userId, $from, $to, $addTime = false)
+{
     $sessionCategories = UserManager::get_sessions_by_category($userId, false);
     $report = [];
     $minLogin = 0;
@@ -185,6 +178,14 @@ if ($form->validate()) {
     $courses = CourseManager::returnCourses($userId);
     $courses = array_merge($courses['in_category'], $courses['not_category']);
 
+    if ($addTime) {
+        $fromFirst = api_get_local_time($from.' 00:00:00');
+        $toEnd = api_get_local_time($from.' 23:59:59');
+
+        $from = api_get_utc_datetime($fromFirst);
+        $to = api_get_utc_datetime($toEnd);
+    }
+
     foreach ($courses as $course) {
         $result = MySpace::get_connections_to_course_by_date(
             $userId,
@@ -193,7 +194,6 @@ if ($form->validate()) {
             $from,
             $to
         );
-
         $partialMinLogin = 0;
         $partialMaxLogin = 0;
         $partialDuration = 0;
@@ -244,7 +244,7 @@ if ($form->validate()) {
         }
     }
 
-    $table = new HTML_Table(['class' => 'data_table_pdf']);
+    $table = new HTML_Table(['class' => 'data_table']);
     $headers = [
         get_lang('MinStartDate'),
         get_lang('MaxEndDate'),
@@ -259,18 +259,19 @@ if ($form->validate()) {
     $row++;
     $column = 0;
     $table->setCellContents($row, $column++, customDate($minLogin));
-
     $table->setCellContents($row, $column++, customDate($maxLogin));
     $table->setRowAttributes($row, ['style' => 'font-weight:bold']);
-
     $table->setCellContents($row, $column++, api_format_time($totalDuration, 'js'));
-    $totalTable = Display::page_subheader3(sprintf(get_lang('ExtractionFromX'), api_get_local_time()));
-    $totalTable .= $table->toHtml();
+
+    $first = $table->toHtml();
 
     $courseSessionTable = '';
     $courseSessionTableData = [];
     foreach ($report as $sessionId => $data) {
         foreach ($data['courses'] as $courseId => $courseData) {
+            if (empty($courseData)) {
+                continue;
+            }
             $courseSessionTable .= Display::page_subheader3($data['name'][$courseId]);
             $table = new HTML_Table(['class' => 'data_table']);
             $headers = [
@@ -300,36 +301,65 @@ if ($form->validate()) {
             $courseSessionTable .= $table->toHtml();
         }
     }
+    $totalCourseSessionTable = '';
 
-    $table = new HTML_Table(['class' => 'data_table']);
-    $headers = [
-        get_lang('Course'),
-        get_lang('TotalDuration'),
-    ];
-    $row = 0;
-    $column = 0;
-    foreach ($headers as $header) {
-        $table->setHeaderContents($row, $column, $header);
-        $column++;
-    }
-    $row++;
-    foreach ($courseSessionTableData as $name => $duration) {
+    if ($courseSessionTableData) {
+        $table = new HTML_Table(['class' => 'table data_table']);
+        $headers = [
+            get_lang('Course'),
+            get_lang('TotalDuration'),
+        ];
+        $row = 0;
         $column = 0;
-        $table->setCellContents($row, $column++, $name);
-        $table->setCellContents($row, $column++, $duration);
+        foreach ($headers as $header) {
+            $table->setHeaderContents($row, $column, $header);
+            $column++;
+        }
         $row++;
+        foreach ($courseSessionTableData as $name => $duration) {
+            $column = 0;
+            $table->setCellContents($row, $column++, $name);
+            $table->setCellContents($row, $column++, $duration);
+            $row++;
+        }
+        $totalCourseSessionTable = $table->toHtml();
     }
-    $totalCourseSessionTable = $table->toHtml();
+
+    $result = [];
+    $result['first'] = $first;
+    $result['second'] = $courseSessionTable;
+    $result['third'] = $totalCourseSessionTable;
+    $result['total'] = $totalDuration;
+
+    return $result;
+}
+
+if ($form->validate()) {
+    $values = $form->getSubmitValues();
+    $from = $values['from'];
+    $to = $values['to'];
+
+    $from = DateTime::createFromFormat('d/m/Y', $from);
+    $to = DateTime::createFromFormat('d/m/Y', $to);
+
+    $from = api_get_utc_datetime($from->format('Y-m-d'));
+    $to = api_get_utc_datetime($to->format('Y-m-d'));
+    $title = Display::page_subheader3(sprintf(get_lang('ExtractionFromX'), api_get_local_time()));
+    $result = getReport($userId, $from, $to);
+
+    $first = $result['first'];
+    $courseSessionTable = $result['second'];
+    $totalCourseSessionTable = $result['third'];
 
     $tpl = new Template('', false, false, false, true, false, false);
     $tpl->assign('title', get_lang('RealisationCertificate'));
     $tpl->assign('student', $userInfo['complete_name']);
-    $tpl->assign('table_progress', $totalTable.$totalCourseSessionTable.'<pagebreak>'.$courseSessionTable);
+    $tpl->assign('table_progress', $title.$first.$totalCourseSessionTable.'<pagebreak>'.$courseSessionTable);
 
     $content = $tpl->fetch($tpl->get_template('my_space/pdf_export_student.tpl'));
+
     $params = [
         'pdf_title' => get_lang('Resume'),
-        //'session_info' => $sessionInfo,
         'course_info' => '',
         'pdf_date' => '',
         'student_info' => $userInfo,
@@ -341,7 +371,7 @@ if ($form->validate()) {
 
     @$pdf = new PDF('A4', $params['orientation'], $params);
 
-    $pdf->setBackground($tpl->theme);
+    @$pdf->setBackground($tpl->theme);
     @$pdf->content_to_pdf(
         $content,
         '',
@@ -358,14 +388,159 @@ if ($form->validate()) {
 }
 
 $interbreadcrumb[] = ['url' => '#', 'name' => get_lang('AccessDetails')];
+$userInfo = api_get_user_info($userId);
+
+
+$form->setDefaults(['from' => $startDate, 'to' => $endDate]);
+
+$formByDay = new FormValidator(
+    'by_day',
+    'get',
+    api_get_self().'?user_id='.$userId,
+    null,
+    ['id' => 'by_day']
+);
+$formByDay->addElement('text', 'from', get_lang('From'));
+$formByDay->addElement('text', 'to', get_lang('Until'));
+$formByDay->addCheckBox('reduced', null, get_lang('ReducedReport'));
+$formByDay->addHidden('user_id', $userId);
+$formByDay->addRule('from', get_lang('ThisFieldIsRequired'), 'required');
+$formByDay->addRule('from', get_lang('ThisFieldIsRequired').' dd/mm/yyyy', 'callback', 'validateDate');
+$formByDay->addRule('to', get_lang('ThisFieldIsRequired'), 'required');
+$formByDay->addRule('to', get_lang('ThisFieldIsRequired').' dd/mm/yyyy', 'callback', 'validateDate');
+$formByDay->addButtonSearch(get_lang('GenerateReport'));
+
+if ($formByDay->validate()) {
+    $from = $formByDay->getSubmitValue('from');
+    $to = $formByDay->getSubmitValue('to');
+    $reduced = !empty($formByDay->getSubmitValue('reduced'));
+
+    $fromObject = DateTime::createFromFormat('d/m/Y', $from);
+    $toObject = DateTime::createFromFormat('d/m/Y', $to);
+
+    $from = api_get_utc_datetime($fromObject->format('Y-m-d'));
+    $to = api_get_utc_datetime($toObject->format('Y-m-d'));
+
+    $list = Tracking::get_time_spent_on_the_platform($userId, 'custom', $from, $to, true);
+    $newList = [];
+    foreach ($list as $list) {
+        $key = substr($list['login_date'], 0, 10);
+        if (!isset($newList[$key])) {
+            $newList[$key] = [
+                'login_date' => $list['login_date'],
+                'logout_date' => $list['logout_date'],
+                'diff' => $list['diff'],
+            ];
+        } else {
+            $newList[$key] = [
+                'login_date' => $newList[$key]['login_date'],
+                'logout_date' => $list['logout_date'],
+                'diff' => $newList[$key]['diff'] + $list['diff'],
+            ];
+        }
+    }
+
+    $period = new DatePeriod(
+        $fromObject,
+        new DateInterval('P1D'),
+        $toObject
+    );
+
+    $tableList = '';
+    foreach ($period as $value) {
+        $dateToCheck = $value->format('Y-m-d');
+        $data = isset($newList[$dateToCheck]) ? $newList[$dateToCheck] : [];
+
+        if (empty($data)) {
+            continue;
+        }
+
+        $table = new HTML_Table(['class' => ' data_table']);
+        $headers = [
+            get_lang('FirstConnection'),
+            get_lang('LastConnection'),
+            get_lang('Total'),
+        ];
+
+        /*$table->setHeaderContents(0, 0, $dateToCheck);
+        $table->setCellAttributes(0,0,['colspan' => 3]);*/
+
+        $row = 0;
+        $column = 0;
+        foreach ($headers as $header) {
+            $table->setHeaderContents($row, $column, $header);
+            $column++;
+        }
+
+        $row = 1;
+        $column = 0;
+        $table->setCellContents($row, $column++, customDate($data['login_date'], true));
+        $table->setCellContents($row, $column++, customDate($data['logout_date'], true));
+        $table->setCellContents($row, $column, api_format_time($data['diff'], 'js'));
+
+        $result = getReport($userId, $dateToCheck, $dateToCheck, true);
+        $first = $result['first'];
+        $courseSessionTable = $result['second'];
+        $totalCourseSessionTable = $result['third'];
+        $total = $result['total'];
+        $tableList .= '<div style="text-align:center">'.Display::page_subheader2($dateToCheck).'</div>'.$table->toHtml();
+        //echo $tableList;exit;
+
+        if (!$reduced && !empty($total)) {
+            $diff = get_lang('NotInCourse').' '.api_format_time($data['diff'] - $total, 'js');
+            $tableList .= $courseSessionTable;
+            $tableList .= $totalCourseSessionTable;
+            $tableList .= Display::page_subheader3($diff);
+        }
+    }
+
+    $tpl = new Template('', false, false, false, true, false, false);
+    $tpl->assign('title', get_lang('RealisationCertificate'));
+    $tpl->assign('student', $userInfo['complete_name']);
+    $totalTable = Display::page_subheader3(sprintf(get_lang('ExtractionFromX'), api_get_local_time()));
+    $tpl->assign('table_progress', $totalTable.$tableList);
+
+    $content = $tpl->fetch($tpl->get_template('my_space/pdf_export_student.tpl'));
+
+    $params = [
+        'pdf_title' => get_lang('Resume'),
+        'course_info' => '',
+        'pdf_date' => '',
+        'student_info' => $userInfo,
+        'show_grade_generated_date' => true,
+        'show_real_course_teachers' => false,
+        'show_teacher_as_myself' => false,
+        'orientation' => 'P',
+    ];
+
+    @$pdf = new PDF('A4', $params['orientation'], $params);
+    @$pdf->setBackground($tpl->theme);
+    @$pdf->content_to_pdf(
+        $content,
+        '',
+        '',
+        null,
+        'D',
+        false,
+        null,
+        false,
+        true,
+        false
+    );
+    exit;
+}
+
+$formByDay->setDefaults(['from' => $startDate, 'to' => $endDate]);
 
 Display::display_header('');
-$userInfo = api_get_user_info($userId);
 echo Display::page_header(get_lang('DetailsStudentInCourse'));
 echo Display::page_subheader(
     get_lang('User').': '.$userInfo['complete_name']
 );
 
-$form->setDefaults(['from' => $startDate, 'to' => $endDate]);
-$form->display();
+echo Display::tabs(
+    [get_lang('CertificateOfAchievement'), get_lang('CertificateOfAchievementByDay')],
+    [$form->returnForm(), $formByDay->returnForm()]
+);
+
 Display::display_footer();

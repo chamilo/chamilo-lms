@@ -1660,7 +1660,8 @@ class Tracking
         $userId,
         $timeFilter = 'last_7_days',
         $start_date = null,
-        $end_date = null
+        $end_date = null,
+        $returnAllRecords = false
     ) {
         $tbl_track_login = Database::get_main_table(TABLE_STATISTIC_TRACK_E_LOGIN);
         $condition_time = '';
@@ -1670,6 +1671,14 @@ class Tracking
             $userCondition = " login_user_id IN ('".implode("','", $userList)."')";
         } else {
             $userCondition = " login_user_id = ".intval($userId);
+        }
+
+        $url_condition = null;
+        $tbl_url_rel_user = Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_USER);
+        if (api_is_multiple_url_enabled()) {
+            $access_url_id = api_get_current_access_url_id();
+            $url_table = ", ".$tbl_url_rel_user." as url_users";
+            $url_condition = " AND u.login_user_id = url_users.user_id AND access_url_id='$access_url_id'";
         }
 
         if (empty($timeFilter)) {
@@ -1698,9 +1707,19 @@ class Tracking
                 break;
         }
 
-        $sql = 'SELECT SUM(TIMESTAMPDIFF(SECOND, login_date, logout_date)) diff
-    	        FROM '.$tbl_track_login.'
-                WHERE '.$userCondition.$condition_time;
+        if ($returnAllRecords) {
+            $sql = "SELECT login_date, logout_date, TIMESTAMPDIFF(SECOND, login_date, logout_date) diff
+                    FROM $tbl_track_login u $url_table
+                    WHERE $userCondition $condition_time $url_condition
+                    ORDER BY login_date";
+            $rs = Database::query($sql);
+
+            return Database::store_result($rs, 'ASSOC');
+        }
+
+        $sql = "SELECT SUM(TIMESTAMPDIFF(SECOND, login_date, logout_date)) diff
+    	        FROM $tbl_track_login u $url_table
+                WHERE $userCondition $condition_time $url_condition";
         $rs = Database::query($sql);
         $row = Database::fetch_array($rs, 'ASSOC');
         $diff = $row['diff'];
@@ -1738,7 +1757,6 @@ class Tracking
             $endDate = Database::escape_string($endDate);
             $condition_time = ' (login_date >= "'.$startDate.'" AND logout_date <= "'.$endDate.'" ) ';
         }
-
         $sql = "SELECT SUM(TIMESTAMPDIFF(SECOND, login_date, logout_date)) diff
     	        FROM $tbl_track_login u $url_table
                 WHERE $condition_time $url_condition";
@@ -1974,10 +1992,10 @@ class Tracking
     /**
      * Get last user's connection date on the course.
      *
-     * @param     int         User id
+     * @param int         User id
      * @param array $courseInfo real_id and code are used
-     * @param    int            Session id (optional, default=0)
-     * @param bool $convert_date
+     * @param int            Session id (optional, default=0)
+     * @param bool  $convert_date
      *
      * @return string|bool Date with format long without day or false if there is no date
      */

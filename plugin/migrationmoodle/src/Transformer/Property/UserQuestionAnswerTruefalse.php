@@ -3,7 +3,7 @@
 
 namespace Chamilo\PluginBundle\MigrationMoodle\Transformer\Property;
 
-use Chamilo\PluginBundle\MigrationMoodle\Interfaces\TransformPropertyInterface;
+use Chamilo\PluginBundle\MigrationMoodle\Task\QuestionsTask;
 use Doctrine\DBAL\DBALException;
 
 /**
@@ -11,8 +11,16 @@ use Doctrine\DBAL\DBALException;
  *
  * @package Chamilo\PluginBundle\MigrationMoodle\Transformer\Property
  */
-class UserQuestionAnswerTruefalse implements TransformPropertyInterface
+class UserQuestionAnswerTruefalse extends LoadedKeyLookup
 {
+    /**
+     * UserQuestionAnswerTruefalse constructor.
+     */
+    public function __construct()
+    {
+        $this->calledClass = QuestionsTask::class;
+    }
+
     /**
      * @inheritDoc
      */
@@ -28,24 +36,23 @@ class UserQuestionAnswerTruefalse implements TransformPropertyInterface
             $mQuestionId
         ) = array_values($data);
 
-        try {
-            $connection = \MigrationMoodlePlugin::create()->getConnection();
-        } catch (DBALException $exception) {
-            throw new \Exception('Unable to start connection.', 0, $exception);
+        $questionId = parent::transform([$mQuestionId]);
+
+        $answer = \Database::select(
+            'iid',
+            \Database::get_course_table(TABLE_QUIZ_ANSWER),
+            [
+                'where' => [
+                    'question_id = ? AND answer = ?' => [$questionId, "<p>$mResponseSummary</p>"],
+                ],
+            ],
+            'first'
+        );
+
+        if (empty($answer)) {
+            return 0;
         }
 
-        try {
-            $sql = "SELECT id
-                FROM mdl_question_answers
-                WHERE question = ? and answer = ?";
-
-            $result = $connection->fetchAssoc($sql, [$mQuestionId, $mResponseSummary]);
-        } catch (DBALException $exception) {
-            throw new \Exception("Unable to execute query \"{$this->query}\".", 0, $exception);
-        }
-
-        $connection->close();
-
-        return $result['id'];
+        return $answer['iid'];
     }
 }

@@ -89,6 +89,7 @@ class UserQuestionAttemptsTask extends BaseTask
                         'fraction',
                         'defaultmark',
                         'questionsummary',
+                        'questionid',
                     ],
                 ],
                 'marks' => 'fraction',

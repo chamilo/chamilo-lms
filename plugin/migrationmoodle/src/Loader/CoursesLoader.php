@@ -23,6 +23,14 @@ class CoursesLoader implements LoaderInterface
         $incomingData['unsubscribe'] = false;
         $incomingData['disk_quota'] = 500 * 1024 * 1024;
 
+        $course = \Database::getManager()
+            ->getRepository('ChamiloCoreBundle:Course')
+            ->findOneBy(['code' => $incomingData['wanted_code']]);
+
+        if ($course) {
+            $incomingData['wanted_code'] = $unique_prefix = substr(md5(uniqid(rand())), 0, 10);
+        }
+
         $courseInfo = \CourseManager::create_course($incomingData, 1);
 
         return $courseInfo['real_id'];

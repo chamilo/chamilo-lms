@@ -73,6 +73,8 @@ abstract class BaseTask
 
     public function execute()
     {
+        $outputBuffering = isset($GLOBALS['outputBuffering']) ? $GLOBALS['outputBuffering'] : true;
+
         $taskId = \Database::insert(
             'plugin_migrationmoodle_task',
             ['name' => $this->getTaskName()]
@@ -95,13 +97,15 @@ abstract class BaseTask
 
             $i++;
 
-            if ($i % 10 === 0) {
+            if ($i % 10 === 0 && $outputBuffering) {
                 flush();
                 ob_flush();
             }
         }
 
-        ob_end_flush();
+        if ($outputBuffering) {
+            ob_end_flush();
+        }
     }
 
     /**

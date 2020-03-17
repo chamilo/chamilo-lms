@@ -1,13 +1,14 @@
 <?php
 /* For licensing terms, see /license.txt */
 
-use Chamilo\PluginBundle\MigrationMoodle\Exceptions\Message as MigrationMoodleException;
 use Chamilo\PluginBundle\MigrationMoodle\Task\BaseTask;
-
-$cidReset = true;
 
 ini_set('memory_limit', -1);
 ini_set('max_execution_time', 0);
+
+$cidReset = true;
+
+$outputBuffering = false;
 
 require_once __DIR__.'/../../main/inc/global.inc.php';
 

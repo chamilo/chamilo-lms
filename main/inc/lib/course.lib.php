@@ -2864,12 +2864,10 @@ class CourseManager
         $extraFieldType = EntityExtraField::COURSE_FIELD_TYPE;
 
         // get course list auto-register
-        $sql = "SELECT DISTINCT(c.id)
+        $sql = "SELECT DISTINCT(tcfv.item_id)
                 FROM $tbl_course_field_value tcfv
                 INNER JOIN $tbl_course_field tcf
                 ON tcfv.field_id =  tcf.id $join_access_url
-                INNER JOIN $courseTable c
-                ON (c.id = tcfv.item_id)
                 WHERE
                     tcf.extra_field_type = $extraFieldType AND
                     tcf.variable = 'special_course' AND

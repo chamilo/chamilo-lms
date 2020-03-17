@@ -28,7 +28,7 @@ $authRequest = new AuthnRequest($settings);
 $samlRequest = $authRequest->getRequest();
 $idpData = $settings->getIdPData();
 
-if (isset($_GET['sso'])) {
+if (isset($_GET['email'])) {
     $auth->login();
 // If AuthNRequest ID need to be saved in order to later validate it, do instead
     /*$ssoBuiltUrl = $auth->login(null, [], false, false, true);

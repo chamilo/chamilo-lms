@@ -5,10 +5,12 @@
 use ChamiloSession as Session;
 
 /**
- * @author Patrick Cool <patrick.cool@UGent.be>, Ghent University: cleanup, refactoring and rewriting large parts of the code
- * @author Julio Montoya Armas <gugli100@gmail.com>, Chamilo: Personality Test modification and rewriting large parts of the code
+ * @author Patrick Cool <patrick.cool@UGent.be>, Ghent University: cleanup, refactoring and rewriting large parts of
+ *         the code
+ * @author Julio Montoya Armas <gugli100@gmail.com>, Chamilo: Personality Test modification and rewriting large parts
+ *         of the code
  *
- * @todo use quickforms for the forms
+ * @todo   use quickforms for the forms
  */
 if (!isset($_GET['cidReq'])) {
     $_GET['cidReq'] = 'none'; // Prevent sql errors
@@ -78,58 +80,70 @@ if (isset($_GET['search']) && $_GET['search'] === 'advanced') {
 $listUrl = api_get_path(WEB_CODE_PATH).'survey/survey_list.php?'.api_get_cidreq();
 $surveyId = isset($_GET['survey_id']) ? $_GET['survey_id'] : 0;
 
-
 // Action handling: performing the same action on multiple surveys
 if (isset($_POST['action']) && $_POST['action'] && isset($_POST['id']) && is_array($_POST['id'])) {
     if (!api_is_allowed_to_edit()) {
         api_not_allowed(true);
     }
 
-    switch ($action){
-        case 'multiplicate':
-            foreach ($_POST['id'] as $key => $value) {
-                $surveyData = SurveyManager::get_survey($value);
-                if (!empty($surveyData)) {
-                    $result = SurveyManager::multiplicateQuestions($surveyData);
-                    $title = $surveyData['title'];
-                    if ($result) {
-                        Display::addFlash(
-                            Display::return_message(
-                                sprintf(get_lang('SurveyXMultiplicated'), $title),
-                                'confirmation',
-                                false
-                            )
-                        );
-                    } else {
-                        Display::addFlash(
-                            Display::return_message(
-                                sprintf(get_lang('SurveyXNotMultiplicated'), $title),
-                                'warning',
-                                false
-                            )
-                        );
-                    }
+    foreach ($_POST['id'] as $value) {
+        $surveyData = SurveyManager::get_survey($value);
+        if (empty($surveyData)) {
+            continue;
+        }
+        $surveyData['title'] = strip_tags($surveyData['title']);
+
+        switch ($action) {
+            case 'send_to_tutors':
+                $result = SurveyManager::sendToTutors($value);
+                if ($result) {
+                    Display::addFlash(
+                        Display::return_message(get_lang('InvitationHasBeenSent').': '.$surveyData['title'], 'confirmation', false)
+                    );
+                } else {
+                    Display::addFlash(
+                        Display::return_message(get_lang('InvitationHasBeenNotSent').': '.$surveyData['title'], 'warning', false)
+                    );
                 }
-            }
-            header('Location: '.$listUrl);
-            exit;
-            break;
-        case 'delete':
-            foreach ($_POST['id'] as $key => $value) {
-                // getting the information of the survey (used for when the survey is shared)
-                $survey_data = SurveyManager::get_survey($value);
+                break;
+            case 'multiplicate':
+                $result = SurveyManager::multiplicateQuestions($surveyData);
+                $title = $surveyData['title'];
+                if ($result) {
+                    Display::addFlash(
+                        Display::return_message(
+                            sprintf(get_lang('SurveyXMultiplicated'), $title),
+                            'confirmation',
+                            false
+                        )
+                    );
+                } else {
+                    Display::addFlash(
+                        Display::return_message(
+                            sprintf(get_lang('SurveyXNotMultiplicated'), $title),
+                            'warning',
+                            false
+                        )
+                    );
+                }
+                break;
+            case 'delete':
                 // if the survey is shared => also delete the shared content
-                if (is_numeric($survey_data['survey_share'])) {
-                    SurveyManager::delete_survey($survey_data['survey_share'], true);
+                if (is_numeric($surveyData['survey_share'])) {
+                    SurveyManager::delete_survey($surveyData['survey_share'], true);
                 }
+
                 // delete the actual survey
                 SurveyManager::delete_survey($value);
-            }
-            Display::addFlash(Display::return_message(get_lang('SurveysDeleted'), 'confirmation', false));
 
-            header('Location: '.$listUrl);
-            exit;
-            break;
+                Display::addFlash(
+                    Display::return_message(get_lang('SurveysDeleted').': '.$surveyData['title'], 'confirmation', false)
+                );
+                break;
+        }
+
+        header('Location: '.$listUrl);
+        exit;
     }
 }
 
@@ -138,47 +152,11 @@ switch ($action) {
         if (!api_is_allowed_to_edit()) {
             api_not_allowed(true);
         }
-        $surveyData = SurveyManager::get_survey($surveyId);
-        if (!empty($surveyData)) {
-            $survey = Database::getManager()->getRepository('ChamiloCourseBundle:CSurvey')->find($surveyId);
-            $extraFieldValue = new ExtraFieldValue('survey');
-            $groupData = $extraFieldValue->get_values_by_handler_and_field_variable($surveyId, 'group_id');
-            if ($groupData && !empty($groupData['value'])) {
-                $groupInfo = GroupManager::get_group_properties($groupData['value']);
-                if ($groupInfo) {
-                    $tutors = GroupManager::getTutors($groupInfo);
-                    if (!empty($tutors)) {
-                        SurveyUtil::saveInviteMail(
-                            $survey,
-                            ' ',
-                            ' ',
-                            false
-                        );
-
-                        foreach ($tutors as $tutor) {
-                            $subject = sprintf(get_lang('GroupSurveyX'), $tutor['complete_name']);
-                            $content = sprintf(
-                                get_lang('HelloXGroupX'),
-                                $tutor['complete_name'],
-                                $groupInfo['name']
-                            );
-
-                            SurveyUtil::saveInvitations(
-                                ['users' => $tutor['user_id']],
-                                $subject,
-                                $content,
-                                false,
-                                true,
-                                false,
-                                true
-                            );
-                        }
-                        Display::addFlash(Display::return_message(get_lang('Updated'), 'confirmation', false));
-                    }
-                    SurveyUtil::update_count_invited($survey->getCode());
-                }
-            }
+        $result = SurveyManager::sendToTutors($surveyId);
+        if ($result) {
+            Display::addFlash(Display::return_message(get_lang('Updated'), 'confirmation', false));
         }
+
         header('Location: '.$listUrl);
         exit;
         break;
@@ -279,7 +257,10 @@ if (!api_is_session_general_coach() || $extend_rights_for_coachs === 'true') {
     echo '<a href="'.api_get_path(WEB_CODE_PATH).'survey/create_new_survey.php?'.api_get_cidreq().'&amp;action=add">'.
         Display::return_icon('new_survey.png', get_lang('CreateNewSurvey'), '', ICON_SIZE_MEDIUM).'</a> ';
     $url = api_get_path(WEB_CODE_PATH).'survey/create_meeting.php?'.api_get_cidreq();
-    echo Display::url(Display::return_icon('add_doodle.png', get_lang('CreateNewSurveyDoodle'), '', ICON_SIZE_MEDIUM), $url);
+    echo Display::url(
+        Display::return_icon('add_doodle.png', get_lang('CreateNewSurveyDoodle'), '', ICON_SIZE_MEDIUM),
+        $url
+    );
 }
 echo '<a href="'.api_get_self().'?'.api_get_cidreq().'&amp;search=advanced">'.
     Display::return_icon('search.png', get_lang('Search'), '', ICON_SIZE_MEDIUM).'</a>';
@@ -319,6 +300,7 @@ function get_number_of_surveys_for_coach()
 {
     return SurveyUtil::get_number_of_surveys_for_coach();
 }
+
 function get_survey_data_for_coach($from, $number_of_items, $column, $direction)
 {
     return SurveyUtil::get_survey_data_for_coach($from, $number_of_items, $column, $direction);

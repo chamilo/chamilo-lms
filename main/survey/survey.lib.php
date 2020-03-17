@@ -1,4 +1,5 @@
 <?php
+
 /* For licensing terms, see /license.txt */
 
 use Chamilo\CourseBundle\Entity\CSurveyInvitation;
@@ -2552,4 +2553,56 @@ class SurveyManager
 
         return $content;
     }
+
+    public static function sendToTutors($surveyId)
+    {
+        $survey = Database::getManager()->getRepository('ChamiloCourseBundle:CSurvey')->find($surveyId);
+        if (null === $survey) {
+            return false;
+        }
+
+        $extraFieldValue = new ExtraFieldValue('survey');
+        $groupData = $extraFieldValue->get_values_by_handler_and_field_variable($surveyId, 'group_id');
+        if ($groupData && !empty($groupData['value'])) {
+            $groupInfo = GroupManager::get_group_properties($groupData['value']);
+            if ($groupInfo) {
+                $tutors = GroupManager::getTutors($groupInfo);
+                if (!empty($tutors)) {
+                    SurveyUtil::saveInviteMail(
+                        $survey,
+                        ' ',
+                        ' ',
+                        false
+                    );
+
+                    foreach ($tutors as $tutor) {
+                        $subject = sprintf(get_lang('GroupSurveyX'), $tutor['complete_name']);
+                        $content = sprintf(
+                            get_lang('HelloXGroupX'),
+                            $tutor['complete_name'],
+                            $groupInfo['name']
+                        );
+
+                        SurveyUtil::saveInvitations(
+                            ['users' => $tutor['user_id']],
+                            $subject,
+                            $content,
+                            false,
+                            true,
+                            false,
+                            true
+                        );
+                    }
+                    Display::addFlash(Display::return_message(get_lang('Updated'), 'confirmation', false));
+                }
+                SurveyUtil::update_count_invited($survey->getCode());
+
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+
 }

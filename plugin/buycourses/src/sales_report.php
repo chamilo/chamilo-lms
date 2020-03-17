@@ -69,8 +69,8 @@ $paymentTypes = $plugin->getPaymentTypes();
 $selectedFilterType = '0';
 $selectedStatus = isset($_GET['status']) ? $_GET['status'] : BuyCoursesPlugin::SALE_STATUS_PENDING;
 $selectedSale = isset($_GET['sale']) ? intval($_GET['sale']) : 0;
-$dateStart = isset($_GET['date_start']) ? $_GET['date_start'] : date('Y-m-d H:i', mktime(0,0,0));
-$dateEnd = isset($_GET['date_end']) ? $_GET['date_end'] : date('Y-m-d H:i', mktime(23,59,59));
+$dateStart = isset($_GET['date_start']) ? $_GET['date_start'] : date('Y-m-d H:i', mktime(0, 0, 0));
+$dateEnd = isset($_GET['date_end']) ? $_GET['date_end'] : date('Y-m-d H:i', mktime(23, 59, 59));
 $searchTerm = '';
 $email = '';
 
@@ -100,7 +100,7 @@ $form->addRadio(
         $plugin->get_lang('ByStatus'),
         $plugin->get_lang('ByUser'),
         $plugin->get_lang('ByDate'),
-        $plugin->get_lang('ByEmail')
+        $plugin->get_lang('ByEmail'),
     ]
 );
 $form->addHtml('<div id="report-by-status" '.($selectedFilterType !== '0' ? 'style="display:none"' : '').'>');
@@ -121,7 +121,7 @@ $form->setDefaults([
     'status' => $selectedStatus,
     'date_start' => $dateStart,
     'date_end' => $dateEnd,
-    'email' => $email
+    'email' => $email,
 ]);
 
 switch ($selectedFilterType) {

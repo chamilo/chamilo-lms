@@ -1,18 +1,15 @@
 <?php
+
 /* For licensing terms, see /license.txt */
 
 /**
  * This script shows a list of courses and allows searching for courses codes
  * and names.
- *
- * @package chamilo.admin
  */
 $cidReset = true;
 require_once __DIR__.'/../inc/global.inc.php';
 $this_section = SECTION_PLATFORM_ADMIN;
-
 api_protect_admin_script();
-
 $sessionId = isset($_GET['session_id']) ? $_GET['session_id'] : null;
 
 /**
@@ -97,7 +94,7 @@ function get_course_data($from, $number_of_items, $column, $direction)
 {
     $course_table = Database::get_main_table(TABLE_MAIN_COURSE);
 
-    $sql = "SELECT  
+    $sql = "SELECT
                 code AS col0,
                 title AS col1,
                 code AS col2,
@@ -432,8 +429,10 @@ if (isset($_GET['search']) && $_GET['search'] === 'advanced') {
     ];
     $tool_name = get_lang('CourseList');
     if (isset($_GET['delete_course'])) {
-        CourseManager::delete_course($_GET['delete_course']);
-        Display::addFlash(Display::return_message(get_lang('Deleted')));
+        $result = CourseManager::delete_course($_GET['delete_course']);
+        if ($result) {
+            Display::addFlash(Display::return_message(get_lang('Deleted')));
+        }
     }
     // Create a search-box
     $form = new FormValidator(
@@ -516,7 +515,7 @@ if (isset($_GET['search']) && $_GET['search'] === 'advanced') {
                 if (!sessionId) {
                     return;
                 }
-    
+
                 window.location = "'.$courseListUrl.'?session_id="+sessionId;
             });
         });

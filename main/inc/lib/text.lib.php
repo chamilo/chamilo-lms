@@ -779,21 +779,23 @@ function cut($text, $maxchar, $embed = false)
  */
 function float_format($number, $flag = 1, $decimalPoint = '.', $thousandsSeparator = ',')
 {
+    $flag = (int) $flag;
+
     if (is_numeric($number)) {
         if (!$number) {
-            $result = ($flag == 2 ? '0.'.str_repeat('0', EXERCISE_NUMBER_OF_DECIMALS) : '0');
+            $result = $flag === 2 ? '0.'.str_repeat('0', EXERCISE_NUMBER_OF_DECIMALS) : '0';
         } else {
             if (floor($number) == $number) {
                 $result = number_format(
                     $number,
-                    ($flag == 2 ? EXERCISE_NUMBER_OF_DECIMALS : 0),
+                    $flag === 2 ? EXERCISE_NUMBER_OF_DECIMALS : 0,
                     $decimalPoint,
                     $thousandsSeparator
                 );
             } else {
                 $result = number_format(
                     round($number, 2),
-                    ($flag == 0 ? 0 : EXERCISE_NUMBER_OF_DECIMALS),
+                    $flag === 0 ? 0 : EXERCISE_NUMBER_OF_DECIMALS,
                     $decimalPoint,
                     $thousandsSeparator
                 );

@@ -62,20 +62,27 @@ class Notification extends Model
     public function __construct()
     {
         $this->table = Database::get_main_table(TABLE_NOTIFICATION);
-        // Default no-reply email
-        $this->adminEmail = api_get_setting('noreply_email_address');
-        $this->adminName = api_get_setting('siteName');
-        $this->titlePrefix = '['.api_get_setting('siteName').'] ';
+        if (!empty($platform_email['SMTP_FROM_EMAIL'])) {
+            $this->adminEmail = $platform_email['SMTP_FROM_EMAIL'];
+            if (!empty($platform_email['SMTP_FROM_NAME'])) {
+                $this->adminName = $platform_email['SMTP_FROM_NAME'];
+            }
+        } else {
+            // Default no-reply email
+            $this->adminEmail = api_get_setting('noreply_email_address');
+            $this->adminName = api_get_setting('siteName');
+            $this->titlePrefix = '['.api_get_setting('siteName').'] ';
 
-        // If no-reply email doesn't exist use the admin name/email
-        if (empty($this->adminEmail)) {
-            $this->adminEmail = api_get_setting('emailAdministrator');
-            $this->adminName = api_get_person_name(
-                api_get_setting('administratorName'),
-                api_get_setting('administratorSurname'),
-                null,
-                PERSON_NAME_EMAIL_ADDRESS
-            );
+            // If no-reply email doesn't exist use the admin name/email
+            if (empty($this->adminEmail)) {
+                $this->adminEmail = api_get_setting('emailAdministrator');
+                $this->adminName = api_get_person_name(
+                    api_get_setting('administratorName'),
+                    api_get_setting('administratorSurname'),
+                    null,
+                    PERSON_NAME_EMAIL_ADDRESS
+                );
+            }
         }
     }
 
@@ -524,6 +531,8 @@ class Notification extends Model
             'data' => [
                 'title' => $title,
                 'message' => $content,
+                'body' => $content,
+                'sound' => 'default',
             ],
             'notification' => [
                 'title' => $title,

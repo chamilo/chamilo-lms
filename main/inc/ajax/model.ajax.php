@@ -1,4 +1,5 @@
 <?php
+
 /* For licensing terms, see /license.txt */
 
 use ChamiloSession as Session;
@@ -174,20 +175,26 @@ if (($search || $forceSearch) && ($search !== 'false')) {
                 // Extra field.
                 $extraField = new ExtraField($type);
 
-                foreach ($filters->rules as $key => $data) {
-                    if (empty($data)) {
-                        continue;
-                    }
-                    if ($data->field === 'extra_access_start_date') {
-                        $accessStartDate = $data->data;
-                    }
+                if (is_object($filters)
+                    && property_exists($filters, 'rules')
+                    && is_array($filters->rules)
+                    && !empty($filters->rules)
+                ) {
+                    foreach ($filters->rules as $key => $data) {
+                        if (empty($data)) {
+                            continue;
+                        }
+                        if ($data->field === 'extra_access_start_date') {
+                            $accessStartDate = $data->data;
+                        }
 
-                    if ($data->field === 'extra_access_end_date') {
-                        $accessEndDate = $data->data;
-                    }
+                        if ($data->field === 'extra_access_end_date') {
+                            $accessEndDate = $data->data;
+                        }
 
-                    if (in_array($data->field, $toRemove)) {
-                        unset($filters->rules[$key]);
+                        if (in_array($data->field, $toRemove)) {
+                            unset($filters->rules[$key]);
+                        }
                     }
                 }
                 $result = $extraField->getExtraFieldRules($filters, 'extra_');
@@ -695,16 +702,31 @@ switch ($action) {
         }
         break;
     case 'get_sessions':
-        $list_type = isset($_REQUEST['list_type']) ? $_REQUEST['list_type'] : 'simple';
-        if ($list_type === 'simple') {
-            $count = SessionManager::formatSessionsAdminForGrid(
-                ['where' => $whereCondition, 'extra' => $extra_fields],
-                true
-            );
-        } else {
-            $count = SessionManager::get_count_admin_complete(
-                ['where' => $whereCondition, 'extra' => $extra_fields]
-            );
+        $listType = isset($_REQUEST['list_type']) ? $_REQUEST['list_type'] : SessionManager::getDefaultSessionTab();
+
+        if ('custom' === $listType && api_get_configuration_value('allow_session_status')) {
+            $whereCondition .= ' AND (s.status IN ("'.SessionManager::STATUS_PLANNED.'", "'.SessionManager::STATUS_PROGRESS.'") ) ';
+        }
+
+        switch ($listType) {
+            case 'complete':
+                $count = SessionManager::get_count_admin_complete(
+                    ['where' => $whereCondition, 'extra' => $extra_fields]
+                );
+                break;
+            case 'custom':
+            case 'active':
+            case 'close':
+            case 'all':
+            default:
+                $count = SessionManager::formatSessionsAdminForGrid(
+                    ['where' => $whereCondition, 'extra' => $extra_fields],
+                    true,
+                    [],
+                    [],
+                    $listType
+                );
+                break;
         }
         break;
     case 'get_session_lp_progress':
@@ -904,7 +926,7 @@ switch ($action) {
                 'calendar_id',
             ];
         }
-        $result = $usergroup->getUserGroupUsers($id);
+        $result = $usergroup->getUserGroupUsers($id, false, $start, $limit);
         break;
     case 'get_learning_path_calendars':
         $columns = ['title', 'total_hours', 'minutes_per_day', 'actions'];
@@ -1151,6 +1173,9 @@ switch ($action) {
             'currently_learning',
             'rank',
         ];
+        if (trim($whereCondition) === '1 = 1') {
+            $whereCondition = '';
+        }
         $result = $skill->getUserListSkillRanking(
             $start,
             $limit,
@@ -1572,8 +1597,8 @@ switch ($action) {
             );
         }
 
-        $session_columns = SessionManager::getGridColumns('my_space');
-        $columns = $session_columns['simple_column_name'];
+        $sessionColumns = SessionManager::getGridColumns('my_space');
+        $columns = $sessionColumns['simple_column_name'];
 
         $result = [];
         if (!empty($sessions)) {
@@ -1638,29 +1663,37 @@ switch ($action) {
         }
         break;
     case 'get_sessions':
-        $session_columns = SessionManager::getGridColumns($list_type);
-        $columns = $session_columns['simple_column_name'];
+        $sessionColumns = SessionManager::getGridColumns($listType);
+        $columns = $sessionColumns['simple_column_name'];
 
-        if ($list_type == 'simple') {
-            $result = SessionManager::formatSessionsAdminForGrid(
-                [
-                    'where' => $whereCondition,
-                    'order' => "$sidx $sord, s.name",
-                    'extra' => $extra_fields,
-                    'limit' => "$start , $limit",
-                ],
-                false,
-                $session_columns
-            );
-        } else {
-            $result = SessionManager::get_sessions_admin_complete(
-                [
-                    'where' => $whereCondition,
-                    'order' => "$sidx $sord, s.name",
-                    'extra' => $extra_fields,
-                    'limit' => "$start , $limit",
-                ]
-            );
+        switch ($listType) {
+            case 'complete':
+                $result = SessionManager::get_sessions_admin_complete(
+                    [
+                        'where' => $whereCondition,
+                        'order' => "$sidx $sord, s.name",
+                        'extra' => $extra_fields,
+                        'limit' => "$start , $limit",
+                    ]
+                );
+                break;
+            case 'active':
+            case 'close':
+            case 'custom':
+            case 'all':
+                $result = SessionManager::formatSessionsAdminForGrid(
+                    [
+                        'where' => $whereCondition,
+                        'order' => "$sidx $sord, s.name",
+                        'extra' => $extra_fields,
+                        'limit' => "$start , $limit",
+                    ],
+                    false,
+                    $sessionColumns,
+                    [],
+                    $listType
+                );
+                break;
         }
         break;
     case 'get_exercise_progress':

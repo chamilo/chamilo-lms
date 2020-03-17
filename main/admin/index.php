@@ -1,9 +1,9 @@
 <?php
+
 /* For licensing terms, see /license.txt */
+
 /**
  * Index page of the admin tools.
- *
- * @package chamilo.admin
  */
 // Resetting the course id.
 $cidReset = true;
@@ -418,6 +418,21 @@ if (api_is_platform_admin()) {
         ];
     }
 
+    if (api_get_configuration_value('notification_event')) {
+        $items[] = [
+            'url' => api_get_path(WEB_CODE_PATH).'notification_event/list.php',
+            'label' => get_lang('Notifications'),
+        ];
+    }
+
+    $allowJustification = api_get_plugin_setting('justification', 'tool_enable') === 'true';
+    if ($allowJustification) {
+        $items[] = [
+            'url' => api_get_path(WEB_PLUGIN_PATH).'justification/list.php',
+            'label' => get_lang('Justification'),
+        ];
+    }
+
     $blocks['platform']['items'] = $items;
     $blocks['platform']['extra'] = null;
 }
@@ -582,6 +597,13 @@ if (api_is_platform_admin()) {
         $items[] = [
             'url' => "db.php?username=$username&db=$databaseName&server=$host",
             'label' => get_lang('DatabaseManager'),
+        ];
+    }
+
+    if (api_get_configuration_value('allow_session_status')) {
+        $items[] = [
+            'url' => api_get_path(WEB_CODE_PATH).'session/cron_status.php',
+            'label' => get_lang('UpdateSessionStatus'),
         ];
     }
 

@@ -73,17 +73,18 @@
                                     {{ row.coach_name }}
                                 </li>
                             {% endif %}
-
-                            {% if row.date %}
-                                <li>
-                                    <i class="fa fa-calendar" aria-hidden="true"></i>
-                                    {{ row.date }}
-                                </li>
-                            {% elseif row.duration %}
-                                <li>
-                                    <i class="fa fa-calendar" aria-hidden="true"></i>
-                                    {{ row.duration }}
-                                </li>
+                            {% if hide_session_dates_in_user_portal == false %}
+                                {% if row.date %}
+                                    <li>
+                                        <i class="fa fa-calendar" aria-hidden="true"></i>
+                                        {{ row.date }}
+                                    </li>
+                                {% elseif row.duration %}
+                                    <li>
+                                        <i class="fa fa-calendar" aria-hidden="true"></i>
+                                        {{ row.duration }}
+                                    </li>
+                                {% endif %}
                             {% endif %}
                         </ul>
                         <div class="sessions-items">
@@ -96,8 +97,15 @@
                                         </a>
                                     </div>
                                     <div class="col-md-10">
-                                        <h4>{{ item.title }}</h4>
-                                        <div class="list-teachers">
+                                        {% if item.requirements %}
+                                            <h4>{{ item.name }}</h4>
+                                        {% else %}
+                                            <h4>{{ item.title }}</h4>
+                                        {% endif %}
+
+                                         <div class="list-teachers">
+                                            {{ item.requirements }}
+
                                             {% if item.coaches|length > 0 %}
                                                 <img src="{{ 'teacher.png'|icon(16) }}" width="16" height="16">
                                                 {% for coach in item.coaches %}

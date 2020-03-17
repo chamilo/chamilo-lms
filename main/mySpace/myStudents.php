@@ -1855,7 +1855,7 @@ if (empty($details)) {
             echo '<td class="text-center"><a href="'.$url.'">('.$documentNumber.')</a></td>';
             $qualification = !empty($results['qualification']) ? $results['qualification'] : '-';
             echo '<td class="text-center">'.$qualification.'</td>';
-            echo '<td class="text-center">'.$results['formatted_date'].'</td>';
+            echo '<td class="text-center">'.api_convert_and_format_date($results['sent_date_from_db']).' '.$results['expiry_note'].'</td>';
             $assignment = get_work_assignment_by_id($work->id, $courseInfo['real_id']);
 
             echo '<td class="text-center">';

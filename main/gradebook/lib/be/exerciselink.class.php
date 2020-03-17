@@ -135,7 +135,7 @@ class ExerciseLink extends AbstractLink
             foreach ($exerciseInLP as $exercise) {
                 $cats[] = [
                     $exercise['iid'],
-                    $exercise['title'].' ('.get_lang('ToolLearnpath').')',
+                    strip_tags(Exercise::get_formated_title_variable($exercise['title'])).' ('.get_lang('ToolLearnpath').')',
                 ];
             }
         }
@@ -471,7 +471,9 @@ class ExerciseLink extends AbstractLink
             }
         }
 
-        return $data['title'];
+        $title = strip_tags(Exercise::get_formated_title_variable($data['title']));
+
+        return $title;
     }
 
     /**

@@ -15,9 +15,6 @@ use Sonata\AdminBundle\Show\ShowMapper;
  */
 class UserFieldValuesAdmin extends Admin
 {
-    /**
-     * @param FormMapper $formMapper
-     */
     protected function configureFormFields(FormMapper $formMapper)
     {
         $formMapper
@@ -28,18 +25,12 @@ class UserFieldValuesAdmin extends Admin
             ->add('author');
     }
 
-    /**
-     * @param ShowMapper $showMapper
-     */
     protected function configureShowField(ShowMapper $showMapper)
     {
         $showMapper
             ->add('id', 'text');
     }
 
-    /**
-     * @param DatagridMapper $datagridMapper
-     */
     protected function configureDatagridFilters(DatagridMapper $datagridMapper)
     {
         $datagridMapper
@@ -47,9 +38,6 @@ class UserFieldValuesAdmin extends Admin
             ->add('field');
     }
 
-    /**
-     * @param ListMapper $listMapper
-     */
     protected function configureListFields(ListMapper $listMapper)
     {
         $listMapper

@@ -47,7 +47,6 @@ class GradebookTable extends SortableTable
      * @param null     $showTeacherView
      * @param int      $userId
      * @param array    $studentList
-     * @param array    $loadStats
      */
     public function __construct(
         $currentcat,
@@ -268,7 +267,6 @@ class GradebookTable extends SortableTable
                                 $defaultData[$item->get_id()]['ranking'] = $rankingStudentList;
                                 $defaultData[$item->get_id()]['ranking_invalidate'] = $invalidateRanking;
                             }
-                            //exit;
                         }
                         break;
                 }

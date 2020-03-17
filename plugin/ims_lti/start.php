@@ -11,6 +11,9 @@ $em = Database::getManager();
 
 /** @var ImsLtiTool $tool */
 $tool = isset($_GET['id']) ? $em->find('ChamiloPluginBundle:ImsLti\ImsLtiTool', intval($_GET['id'])) : null;
+$user = api_get_user_entity(
+    api_get_user_id()
+);
 
 if (!$tool) {
     api_not_allowed(true);
@@ -20,12 +23,25 @@ $imsLtiPlugin = ImsLtiPlugin::create();
 
 $pageTitle = Security::remove_XSS($tool->getName());
 
+
+$is1p3 = !empty($tool->publicKey) && !empty($tool->getClientId()) &&
+    !empty($tool->getLoginUrl()) && !empty($tool->getRedirectUrl());
+
+if ($is1p3) {
+    $launchUrl = api_get_path(WEB_PLUGIN_PATH).'ims_lti/login.php?id='.$tool->getId();
+} else {
+    $launchUrl = api_get_path(WEB_PLUGIN_PATH).'ims_lti/form.php?'.http_build_query(['id' => $tool->getId()]);
+}
+
+if ($tool->getDocumentTarget() == 'window') {
+    header("Location: $launchUrl");
+    exit;
+}
+
 $template = new Template($pageTitle);
 $template->assign('tool', $tool);
-$template->assign(
-    'launch_url',
-    api_get_path(WEB_PLUGIN_PATH).'ims_lti/form.php?'.http_build_query(['id' => $tool->getId()])
-);
+
+$template->assign('launch_url', $launchUrl);
 
 $content = $template->fetch('ims_lti/view/start.tpl');
 

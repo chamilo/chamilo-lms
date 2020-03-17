@@ -35,9 +35,9 @@ if (!$result) {
     api_not_allowed(true);
 }
 
-$learnpath_id = isset($_REQUEST['learnpath_id']) ? intval($_REQUEST['learnpath_id']) : null;
-$learnpath_item_id = isset($_REQUEST['learnpath_item_id']) ? intval($_REQUEST['learnpath_item_id']) : null;
-$learnpathItemViewId = isset($_REQUEST['learnpath_item_view_id']) ? intval($_REQUEST['learnpath_item_view_id']) : null;
+$learnpath_id = isset($_REQUEST['learnpath_id']) ? (int) $_REQUEST['learnpath_id'] : null;
+$learnpath_item_id = isset($_REQUEST['learnpath_item_id']) ? (int) $_REQUEST['learnpath_item_id'] : null;
+$learnpathItemViewId = isset($_REQUEST['learnpath_item_view_id']) ? (int) $_REQUEST['learnpath_item_view_id'] : null;
 $origin = api_get_origin();
 
 $logInfo = [
@@ -345,6 +345,7 @@ if (!empty($attempts)) {
         case RESULT_DISABLE_SHOW_SCORE_AND_EXPECTED_ANSWERS_AND_RANKING:
         case RESULT_DISABLE_SHOW_FINAL_SCORE_ONLY_WITH_CATEGORIES:
         case RESULT_DISABLE_RANKING:
+        case RESULT_DISABLE_SHOW_ONLY_IN_CORRECT_ANSWER:
             $header_names = [
                 get_lang('Attempt'),
                 get_lang('StartDate'),

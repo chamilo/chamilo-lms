@@ -648,9 +648,9 @@ $CourseVisibilityModified = "معدّل ( تفاصيل أكثر حول نظام 
 $WorkEmailAlert = "التنبيه على المواضيع الجديدة بواسطة البريد الالكتروني";
 $WorkEmailAlertActivate = "تفعيل التنبيه بواسطة الايميل في حالة وجود موضوع جديد";
 $WorkEmailAlertDeactivate = "تعطيل التنبيه بواسطة الايميل في حالة وجود موضوع جديد";
-$DropboxEmailAlert = "ارسال اشعار عبر البريد للمستخدمين عند استلام ملف في مستودع الملفات";
-$DropboxEmailAlertActivate = "الاشعار بالبريد للمستخدمين عند استلام ملف في مستودع الملفات";
-$DropboxEmailAlertDeactivate = "تعطيل الاشعار بالبريد عند استلام ملف في مستودع الملفات";
+$DropboxEmailAlert = "ارسال اشعار عبر البريد للمستخدمين عند استلام ملف من اداة مشاركة الملفات";
+$DropboxEmailAlertActivate = "الاشعار بالبريد للمستخدمين عند استلام ملف من اداة مشاركة الملفات";
+$DropboxEmailAlertDeactivate = "تعطيل الاشعار بالبريد عند استلام ملف من اداة مشاركة الملفات";
 $AllowUserEditAgenda = "السماح للمستخدمين في تحرير التقويم";
 $AllowUserEditAgendaActivate = "تفعيل امكانية تحرير التقويم في المقرر من قبل المستخدمين";
 $AllowUserEditAgendaDeactivate = "تعطيل تحرير التقويم من قبل الطلبة";
@@ -830,7 +830,7 @@ $EnableIframeInclusionComment = "ان السماح بذكل سوف يحسن ام
 $AddedToLPCannotBeAccessed = "هذا التمرين سوف يتم تضمينه في مسار التعلم، ولذا لا يمكن الوصول اليه من قبل الطلبة بشكل مباشر، واذا اردت ان تضع نفس التمرين متوفرا في اداة التمارين فعليك ان تعمل نسخة من التمرين الحالي عبر ايقونة النسخ";
 $EnableIframeInclusionTitle = "HTML في محرر iframes السماح باضافة";
 $MailTemplateRegistrationMessage = "عزيري ((firstname)) ((lastname)),\n\nانت مسجل في ((sitename)) مع الاعدادات التالية:\n\nاسم المستخدم : ((username))\nرمز المرور : ((password))\n\nعنوان الموقع ((sitename)) هو : ((url))\n\nاذا واجهتك مشكلة، فعليك ان تتواصل معنا.\n\nمع وافر التقدير والاحترام \n((admin_name)) ((admin_surname)).";
-$Explanation = "بمجرد نفرك على زر \"انشاء مقرر\"، فانه سوف يتم انشاء مقرر مع قسم للاختبارات والواجبات والمقررات ومستودع الملفات والتقويم والمزيد، ان تسجيل الدخول كمدرس سوف يمنحك صلاحيات التحرير في المقرر";
+$Explanation = "بمجرد نفرك على زر \"انشاء مقرر\"، فانه سوف يتم انشاء مقرر مع قسم للاختبارات والواجبات والمقررات ومشاركة الملفات والتقويم والمزيد، ان تسجيل الدخول كمدرس سوف يمنحك صلاحيات التحرير في المقرر";
 $CodeTaken = "  رمز المقرر هذا تم استخدامه مسبقا. <br/ > استخدم  <b> زر الرجوع </b> في المتصفح وحاول مرة أخرى";
 $ExerciceEx = " نموذج اختبار";
 $Antique = " Irony";
@@ -1582,15 +1582,15 @@ $UseDocumentTitleComment = " سيسمح هذا باستخدام عنوانا ل�
 $StudentPublications = " منشورات الطالب";
 $PermanentlyRemoveFilesTitle = " لا يمكن استرجاع الملفات المحذوفة";
 $PermanentlyRemoveFilesComment = " .عند حذف ملفا في أداة المستندات يتم حذفه نهائيا. لا يمكن استرجاع الملف";
-$DropboxMaxFilesizeTitle = "مستودع الملفات: اقصى حجم لملف المستند";
-$DropboxMaxFilesizeComment = "ما مدى حجم مستودع الملفات (بالميكابايت)؟";
-$DropboxAllowOverwriteTitle = "مستودع الملفات: هل يمكن ان يتم استبدال الملفات في حال كان الاسم متشابه";
+$DropboxMaxFilesizeTitle = "مشاركة الملفات: اقصى حجم لملف المستند";
+$DropboxMaxFilesizeComment = "ما مدى حجم المستندات في اداة مشاركة الملفات (بالميكابايت)؟";
+$DropboxAllowOverwriteTitle = "مشاركة الملفات: هل يمكن ان يتم استبدال الملفات في حال كان الاسم متشابه";
 $DropboxAllowOverwriteComment = "في حال كان اسم الملف موجود فعلا فهل يتم استبداله بالملف الجديد؟ اذا اخترت نعم فسوف تفقد خاصية الاصدارات";
-$DropboxAllowJustUploadTitle = "مستودع الملفات: رفع الملف الى المساحة الشخصية لك في مستودع الملفات";
-$DropboxAllowJustUploadComment = "السماح للمستخدمين في رفع المستندات الى مستودع الملفات الخاص بهم من دون ارسال الملفات لانفسهم";
-$DropboxAllowStudentToStudentTitle = "مستودع الملفات: الطالب <-> الطالب";
-$DropboxAllowStudentToStudentComment = "السماح بارسال المستندات الى المستخدمين (الند للند). لكن قد يستخدم المستخدمين هذه الخاصية في امور غير ملائمة مثل ارسال ملفات صوتية وارسال حلول الواجبات. اذا لم تفعل هذه الخاصية فان المستخدمين سوف يرسلون المستندات الى المعلم فقط";
-$DropboxAllowMailingTitle = "مستودع الملفات: السماح بارسال البريد";
+$DropboxAllowJustUploadTitle = "مشاركة الملفات: رفع الملف الى المساحة الشخصية لك في اداة مشاركة الملفات";
+$DropboxAllowJustUploadComment = "السماح للمعلمين في رفع المستندات الى اداة مشاركة الملفات من دون ارسال الملفات لانفسهم";
+$DropboxAllowStudentToStudentTitle = "مشاركة الملفات: الطالب <-> الطالب";
+$DropboxAllowStudentToStudentComment = "السماح بارسال المستندات الى بقية المستخدمين (الند للند). لكن قد يستخدم المستخدمين هذه الخاصية في امور غير ملائمة مثل ارسال ملفات صوتية وارسال حلول الواجبات. اذا لم تفعل هذه الخاصية فان المستخدمين سوف يرسلون المستندات الى المعلم فقط";
+$DropboxAllowMailingTitle = "مشاركة الملفات: السماح بارسال البريد";
 $DropboxAllowMailingComment = "مع خاصية البريد فانك يمكنك ارسال مستند شخصي لكل طالب على حدة";
 $PermissionsForNewDirs = "السماحية لأدلة جديدة";
 $PermissionsForNewDirsComment = "إن القدرة على تعريف الرخص المسموحة المسندة لكل دليل جديد سوف تحسن المستوي الأمني مقابل أي هجوم من القراصنة (الهكر) الذين يحملونها بمحتويات خطره علي بوابتك بالانترنت. الإعداد الافتراضي (0770) يجب أن يكون بما فيه الكفاية حتى  يؤمن  مستوى حمايةِ معقولِ لخادم (السيرفر). تَستعملُ الصيغة المعطاة المصطلح يونيكسَ من مالك المجموعة الآخرين لإعطاء تصاريح بالكتابة والقراءة.";
@@ -1613,7 +1613,7 @@ $PleaseEnterNoticeTitle = " الرجاء إعطاء عنوانا للملاحظ�
 $PleaseEnterLinkName = "  الرجاء إعطاء اسم الرابط";
 $InsertThisLink = " قم بإدراج هذا اللرابط";
 $FirstPlace = " المكان الأول";
-$DropboxAllowGroupTitle = "مستودع الملفات: السماح للمجموعة";
+$DropboxAllowGroupTitle = "مشاركة الملفات: السماح للمجموعة";
 $DropboxAllowGroupComment = "يمكن للمستخدمين ارسال الملفات للمجاميع";
 $ClassDeleted = " لقد تم حذف الفصل";
 $ClassesDeleted = " لقد تم حذف الفصول";
@@ -3256,7 +3256,7 @@ $Document = "مستند";
 $Learnpath = " مسار تعليمي";
 $Link = "رابط";
 $Announcement = "التبليغات";
-$Dropbox = "مستودع الملفات";
+$Dropbox = "مشاركة الملفات";
 $Quiz = " تمارين";
 $Chat = "محادثة";
 $Conference = "إجتماع";
@@ -3713,7 +3713,7 @@ $DeleteSelected = "حذف المختار";
 $SetVisible = "مجموعة مرئية";
 $SetInvisible = "مجموعة غير مرئية";
 $ChooseLink = "اختر نوع الارتباط";
-$LMSDropbox = "مستودع الملفات";
+$LMSDropbox = "مشاركة الملفات";
 $ChooseExercise = "اختر التمرين";
 $AddResult = "أضف النتائج";
 $BackToOverview = "الرجوع للعرض الكامل";
@@ -3897,7 +3897,7 @@ $RequestDenied = "لقد تم حظر  المكالمة";
 $UsageDatacreated = "Usage data created";
 $SessionView = "عرض المقررات وفقا للمواسم";
 $CourseView = "عرض قائمة بجميع المقررات";
-$DropboxFileAdded = "تم اضافة ملف الى مستودع الملفات";
+$DropboxFileAdded = "تم اضافة ملف الى اداة مشاركة الملفات";
 $NewMessageInForum = "نشر رسالة جديدة في المنتدى";
 $FolderCreated = "تم إنشاء مجلد جديد";
 $AgendaAdded = "اضافة حدث";
@@ -4700,8 +4700,8 @@ $MailingNonMailingError = "لا يمكن استبدال الإرسال بعدم 
 $MailingSelectNoOther = "لا يمكن دمج الإرسال مع مستلمات أخرى";
 $MailingJustUploadSelectNoOther = "هكذا، لا يمكن دمج التحميل مع مستلمات أخرى";
 $PlatformUnsubscribeComment = "من خلال تفعيل هذا الخيار، فانك تسمح لاي مستخدم من ازالة حسابه وبياناته من النظام، وهذه الخاصية تنفع في النظام المفتوح ذو التسجيل التلقائي";
-$NewDropboxFileUploaded = "تم ارسال ملف جديد الى مستودع الملفات";
-$NewDropboxFileUploadedContent = "تم ارسال ملف جديد الى مستودع الملفات";
+$NewDropboxFileUploaded = "تم ارسال ملف جديد الى اداة مشاركة الملفات";
+$NewDropboxFileUploadedContent = "تم ارسال ملف جديد الى اداة مشاركة الملفات";
 $AddEdit = "اضافة / تعديل";
 $ErrorNoFilesInFolder = "هذا المجلد فارغ";
 $EditingExerciseCauseProblemsInLP = "تعديل التمارين سوف يسبب المشاكل في مسار التعلم";
@@ -4753,8 +4753,10 @@ $GlossaryManagement = "إدارة المصطلح";
 $TermMoved = "تم نقل المصطلح";
 $HFor = "Help Forums";
 $ForContent = "The forum is a written and asynchronous discussion tool. Where email allows one-to-one dialogue, forums allow public or semi-public (group)  dialogue.</p><p>Technically speaking, the users need only their browser to use Chamilo forums.</P><p>To organise forums, click on 'Forum Administration'. Discussions are organised in sets and subsets as following:</p><p><b>Category > Forum > Topic > Answers</b></p>To structure your users discussions, it is necessary to organise categories and forums beforehand, leaving the creation of topics and answers to them. By default, the Chamilo forum only contains the category 'Public', a sample forum and a sample topic.</p><p>The first thing you should do is deleting the sample topic and modify the first forum name. Then, you can create, in the 'public' category, other forums, by by themes, to fit your learning scenario requirements.</p><p>Don't mix Categories and forums, and don't forget that an empty category (without forums) does not appear on the student view.</p><p>The description of a forum can be the list of its members, the definition of a goal, a task, a theme...</p> <p>Group forums should not be created through Forum tool but through Groups tool. There you will be allowed to decide whether your group forums are private or public.</p> <b>Pedagogically advanced use</b> <p>Some teachers / trainers use the forum to post corrections. One student/trainee publishes a paper. The teacher corrects it using the edit button (yellow pencil) then the WYSYWIG editor to correct it (use colors and underline to show errors and corrections for instance) and the other students/trainees benefit of this correction.";
-$HDropbox = "مساعدة مستودع الملفات";
-$DropboxContent = "<p>The dropbox is a Content Management Tool dedicated to peer-to-peer data exchange.Any file type is accepted : Word, Excel, PDF etc. It will manage versions in the sens that it will avoid destruction of a document by a document having the same name.</p><p>The dropbox shows the files that were sent to you (the received folder)and the files that you sent to other members of this course (the sent folder).</p><p>If the list of received or sent files gets too long, you can delete allor some files from the list. The file itself is not removed as long asthe other party can see it.</p><p>To send a document to more than one person, you need to use CTRL+clic in the multiple select box. The multiple select box is the form field showing the list of members.</p>";
+$HDropbox = "المساعدة في مشاركة الملفات";
+$DropboxContent = "تمثل مشاركة الملفات اداة لادارة المحتوى تهدف الى تسهيل تبادل البيانات بين المستخدمين، اذ انها تتقبل اي نوع من الملفات، وتستبدل الملفات ذات الاسم المتشابه. ويسمح للمتعلمين بارسال الملفات الى المعلم فقط، ما لم يتم استثناء ذلك من قبل مدير النظام، في حين ان مدير المقرر يستطيع ارسال الملفات الى جميع المستخدمين في المقرر، كذلك يستطيع مدير النظام ان يخصص هذه الاداة بان يجعل الطلبة يستلمون الملفات فقط من دون ان يكونون قادرين على ارسال الملفات
+في مجلد الوارد يتم عرض الملفات التي تم ارسالها اليك وفي مجلد الصادر يتم عرض الملفات التي ارسلتها الى بقية المستخدمين في المقرر
+لغرض ارسال ملف الى اكثر من شخص، فانه يتوجد عليك استمرار النقر على زر (كونترول) ثم تحديد الاختيار المتعدد";
 $HHome = "Help Course Home Page";
 $HomeContent = "<p>The course home page shows a series of tools : an introduction text, a course description, a Documents manager etc. This page is modular : you can hide / show any tool in one clic. Hidden tools can be reactivated at any time.</p><b>Navigation</b><p>To browse your course, you have 2 navigation tools. One on top left is a tree showing where you are and how deep you are in the course. On top right, you can access to a tool through its icon in one clic. Whether you select your course code on left (always UPPER CASE) or the house icon on the right, you will reach the home page of your course. </p><b>Best practice</b><p>To motivate your students, it is important that your course area is a dynamic area. This will indicate that there is 'somebody behind the screen'. A quick way to give this feeling is to edit the Introduction text (clic on yellow pencil) at least evey week to tell latest news, forthcoming deadlines and so on.</p><p>To build your course, it might proove relevant to follow these steps:<ol><li>In Course Settings, check Course Acces : Private and Subscription : Denied. This way, nobody can enter your course area during building process,</li><li>Show all the tools clicking on the grey link below the ones situated at the bottom of the page,</li><li>Use the tools you need to 'fill' your area with content, events, guidelines, tests etc.,</li><li>Hide all tools : your home page is empty in Student view,</li><li>Use the Path tool to structure the way students will visit it and learn with it. This way, you use the other tools, but you don't show them at first sight.</li><li>Click on the eye icon besides the path you created : this path will then show on your home page,</li><li>The preparation of your course area is over. Your home page shows an introdution text followed by one link only and this link drives students through the course. Clic on Student view (top right) to see things from a student point of view.<I></I></li></ol>";
 $HOnline = "Help Live Conferencing system";
@@ -5095,7 +5097,7 @@ $ResourcesAdded = "تم إضافة المصادر";
 $ExternalResources = "مصادر خارجية";
 $CourseResources = "مصادر المقرر";
 $ExternalLink = "روابط خاريجة";
-$DropboxAdd = "اضافة مستودع الملفات الى هذا القسم";
+$DropboxAdd = "اضافة مشاركة الملفات الى هذا القسم";
 $AddAssignmentPage = "أضف صفحة نشرات الطلاب إلى هذا الفصل";
 $ShowDelete = "أظهر / حذف";
 $IntroductionText = "مقدمة المقرر";
@@ -5673,7 +5675,7 @@ $UploadedDate = "تاريخ الرفع";
 $Filename = "اسم الملف";
 $Recover = "استعادة";
 $Recovered = "تمت الاستعادة";
-$RecoverDropboxFiles = "استعادة ملفات مستودع الملفات";
+$RecoverDropboxFiles = "استعادة ملفات اداة مشاركة الملفات";
 $ForumCategory = "فئة المنتدى";
 $YouCanAccessTheExercise = "الذهاب للاختبار";
 $YouHaveBeenRegisteredToCourseX = "تم تسجيلك في مقرر %s";
@@ -5706,7 +5708,7 @@ $ToolGlossary = "قاموس المصطلحات";
 $ToolAttendance = "الحضور";
 $ToolCalendarEvent = "التقويم";
 $ToolForum = "المنتديات";
-$ToolDropbox = "مستودع الملفات";
+$ToolDropbox = "مشاركة الملفات";
 $ToolUser = "المستخدمين";
 $ToolGroup = "المجموعات";
 $ToolChat = "الدردشة";
@@ -7410,8 +7412,8 @@ $CertificateHideExportLinkStudentTitle = "الشهادات: اخفاء رابط 
 $CertificateHideExportLinkStudentComment = "عند تفعيل ذلك فان الطلبة لن يتمكنوا من تصدير شهاداتهم الى ملف بي دي اف. السبب في ذلك لان HTML ملف البي دي اف قد يكون ذو جودة منخفضة مقارنة بعرض الشهادة في الموقع";
 $CertificateHideExportLinkTitle = "الشهادات: اخفاء رابط التصدير الى ملف بي دي اف عن الجميع";
 $CertificateHideExportLinkComment = "تفعيل هذا الخيار سوف يؤدي الى الغاء امكانية تصدير الشهادات الى ملف بي دي اف لجميع المستخدمين بضمنهم الطلبة";
-$DropboxHideCourseCoachTitle = "مستودع الملفات: اخفاء معلم المقرر";
-$DropboxHideCourseCoachComment = "اخفاء معلم المقرر للموسم في مستودع الملفات عندما يتم ارسال  مستند من قبل المعلم للطلبة";
+$DropboxHideCourseCoachTitle = "مشاركة الملفات: اخفاء معلم المقرر";
+$DropboxHideCourseCoachComment = "اخفاء معلم المقرر للموسم في اداة مشاركة الملفات عندما يتم ارسال مستند من قبل المعلم للطلبة";
 $SSOForceRedirectTitle = "تسجيل الدخول المنفرد: فرض اعادة التوجيه";
 $SSOForceRedirectComment = "ان تفعيل هذا الخيار سوف يفرض على المستخدمين ان يتم توثيق معلوماتهم عبر المنصة الرئيسية، قم بتفعيل ذلك فقط اذا قد قمت فعلا بتهيئة اعدادات تسجيل الدخول المنفرد بشكل صحيح، والا فسوف تمنع نفسك من تسجيل الدخول الى النظام مرة ثانية، وعند SSO حدوث ذلك عليك الولوج الى قاعدة البيانات وتغيير اعدادات";
 $SessionCourseOrderingTitle = "الترتيب اليدوي لمقررات الموسم";
@@ -7578,8 +7580,8 @@ $ShowFullSkillNameOnSkillWheelTitle = "عرض الاسم الكامل للمها
 $ShowFullSkillNameOnSkillWheelComment = "على عجلة المهارات سوف يعرض اسم المهارة عندما يكون لها رمز مختصر";
 $DBPort = "المنفذ";
 $CreatedBy = "تم انشاؤه بواسطة";
-$DropboxHideGeneralCoachTitle = "اخفاء المعلم العام في مستودع الملفات";
-$DropboxHideGeneralCoachComment = "اخفاء اسم المعلم العام في اداة مستودع الملفات عندما يقوم المعلم العام برفع الملف";
+$DropboxHideGeneralCoachTitle = "اخفاء المعلم العام في اداة مشاركة الملفات";
+$DropboxHideGeneralCoachComment = "اخفاء اسم المعلم العام في اداة مشاركة الملفات عندما يقوم المعلم العام برفع الملف";
 $UploadMyAssignment = "رفع واجبي";
 $Inserted = "تم ادراجه";
 $YourBroswerDoesNotSupportWebRTC = "متصفحك لا يدعم بث الفيديو";
@@ -8477,4 +8479,34 @@ $CompilatioSeeReport = "معاينة التقرير";
 $CompilatioNonToAnalyse = "اختياراتك لا تتضمن عمل يمكن تحليله، فقط الاعمال التي تدار بواسطة خادم كومبيلاتيو يمكن ارسالها";
 $CompilatioComunicationAjaxImpossible = "من المستحيل الاتصال بخادم كوبيلاتو، يرجى المحاولة لاحقا";
 $UserClassExplanation = "معلومات: قائمة الصفوف ادناه تتضمن قائمة الصفوف التي سجلت فيها، واذا كانت القائمة فارغة فاستخدم رمز + لاضافة الصفوف";
+$InsertTwoNames = "قم بادراج اسمين";
+$AddRightLogo = "اضافة شعار على الجانب الايمن";
+$LearnpathUseScoreAsProgress = "استخدام النقاط كتقدم";
+$LearnpathUseScoreAsProgressComment = "استخدام النقاط في مسار التعلم كمؤشر للتقدم، وهذا سيعدل سلوك ملف السكورم ويؤدي الى تحسين العرض المرئي للمتعلم";
+$Planned = "مخطط";
+$InProgress = "قيد التقدم";
+$Cancelled = "ملغي";
+$Finished = "منتهي";
+$SessionStatus = "حالة الموسم";
+$UpdateSessionStatus = "تحديث حالة الموسم";
+$SessionListCustom = "قائمة مخصصة";
+$NoStatus = "لا توجد حالة";
+$CAS3Text = "CAS 3";
+$GoBackToVideo = "العودة الى الفيديو";
+$UseLearnpathScoreAsProgress = "استخدام النقاط في حساب التقدم";
+$UseLearnpathScoreAsProgressInfo = "SCO يؤدي هذا الاختيار الى حساب التقدم في مسار التعلم بالاستناد الى النقاط التي يستلمها النظام من ملف";
+$ThereIsASequenceResourceLinkedToThisCourseYouNeedToDeleteItFirst = "يوجد مورد يستخدم التسلسل في هذا المقرر، يتوجب عليك حذفه اولا";
+$QuizPreventBackwards = "منع الرجوع الى الاسئلة السابقة";
+$UploadPlugin = "رفع المكون الاضافي";
+$PluginUploadPleaseRememberUploadingThirdPartyPluginsCanBeDangerous = "تذكر بان رفع المكونات الاضافية من طرف ثالث يمكن ان يؤدي الى الاضرار بالنظام والخادم، تحقق دائما من تنصيب المكونات الاضافية من مصادر موثوقة يمكنك الاعتماد عليها في توفير الدعم الفني";
+$PluginUploadingTwiceWillReplacePreviousFiles = "رفع المكون الاضافي ذاته سوف يؤدي الى استبدال القديم ، كذلك فان رفع المكونات الاضافية من اطراف خارجية قد يؤدي الى حدوث اضرار";
+$UploadNewPlugin = "اختيار المكون الاضافي الجديد";
+$PluginUploadIsNotEnabled = "رفع المكونات الاضافية الخارجية غير مفعل، تحقق من تفعيل خيار رفع المكون الاضافي في ملف اعدادات النظام";
+$PluginUploaded = "تم رفع المكون الاضافي";
+$PluginOfficial = "رسمي";
+$PluginThirdParty = "طرف ثالث";
+$ErrorPluginOfficialCannotBeUploaded = "هذا المكون الاضافي يحتوي على نفس الاسم للمكون الاضافي الرسمي والذي لا يمكن استبداله، يرجى تغيير اسم المكون الاضافي";
+$AllSessionsShort = "الجميع";
+$ActiveSessionsShort = "مفعل";
+$ClosedSessionsShort = "مغلق";
 ?>

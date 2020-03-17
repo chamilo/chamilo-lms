@@ -135,7 +135,7 @@ class SurveyUtil
         Database::query($sql);
         $insertId = Database::insert_id();
 
-        $sql = "UPDATE $table_survey_answer SET answer_id = $insertId 
+        $sql = "UPDATE $table_survey_answer SET answer_id = $insertId
                 WHERE iid = $insertId";
         Database::query($sql);
 
@@ -623,7 +623,7 @@ class SurveyUtil
 			            c_id = $course_id AND
                         survey_id='".$surveyId."' AND
                         survey_question NOT LIKE '%{{%' AND
-                        type <>'pagebreak'                        
+                        type <>'pagebreak'
                     ORDER BY sort ASC
                     $limitStatement";
             $result = Database::query($sql);
@@ -823,7 +823,7 @@ class SurveyUtil
         }
 
         // Getting the answers
-        $sql = "SELECT *, count(answer_id) as total 
+        $sql = "SELECT *, count(answer_id) as total
                 FROM $table_survey_answer
                 WHERE
                    c_id = $course_id AND
@@ -935,7 +935,7 @@ class SurveyUtil
         $content = '';
         if ($addActionBar) {
             $content .= '<div class="actions">';
-            $content .= '<a 
+            $content .= '<a
                 href="'.api_get_path(WEB_CODE_PATH).'survey/reporting.php?survey_id='.$surveyId.'&'.api_get_cidreq().'">'
                 .Display::return_icon(
                     'back.png',
@@ -978,13 +978,13 @@ class SurveyUtil
             if ((isset($_POST['submit_question_filter']) && $_POST['submit_question_filter']) ||
                 (isset($_POST['export_report']) && $_POST['export_report'])
             ) {
-                $content .= '<button class="cancel" 
-                                type="submit" 
+                $content .= '<button class="cancel"
+                                type="submit"
                                 name="reset_question_filter" value="'.get_lang('ResetQuestionFilter').'">'.
                                 get_lang('ResetQuestionFilter').'</button>';
             }
-            $content .= '<button 
-                            class = "save" 
+            $content .= '<button
+                            class = "save"
                             type="submit" name="submit_question_filter" value="'.get_lang('SubmitQuestionFilter').'">'.
                             get_lang('SubmitQuestionFilter').'</button>';
             $content .= '</th>';
@@ -1020,18 +1020,18 @@ class SurveyUtil
             }
         }
 
-        $sql = "SELECT 
-                  q.question_id, 
-                  q.type, 
-                  q.survey_question, 
+        $sql = "SELECT
+                  q.question_id,
+                  q.type,
+                  q.survey_question,
                   count(o.question_option_id) as number_of_options
-				FROM $table_survey_question q 
+				FROM $table_survey_question q
 				LEFT JOIN $table_survey_question_option o
 				ON q.question_id = o.question_id AND q.c_id = o.c_id
-				WHERE 
+				WHERE
 				    survey_question NOT LIKE '%{{%' AND
 				    q.survey_id = '".$surveyId."' AND
-				    q.c_id = $course_id 
+				    q.c_id = $course_id
 				GROUP BY q.question_id
 				ORDER BY q.sort ASC";
         $result = Database::query($sql);
@@ -1053,8 +1053,8 @@ class SurveyUtil
                     $content .= '>';
                     $content .= '<label>';
                     if ($addFilters) {
-                        $content .= '<input 
-                                type="checkbox" 
+                        $content .= '<input
+                                type="checkbox"
                                 name="questions_filter[]" value="'.$row['question_id'].'" checked="checked"/>';
                     }
                     $content .= $row['survey_question'];
@@ -1083,15 +1083,15 @@ class SurveyUtil
         }
 
         // cells with option (none for open question)
-        $sql = "SELECT 	
-                    sq.question_id, 
+        $sql = "SELECT
+                    sq.question_id,
                     sq.survey_id,
-                    sq.survey_question, 
+                    sq.survey_question,
                     sq.display,
-                    sq.sort, 
-                    sq.type, 
+                    sq.sort,
+                    sq.type,
                     sqo.question_option_id,
-                    sqo.option_text, 
+                    sqo.option_text,
                     sqo.sort as option_sort
 				FROM $table_survey_question sq
 				LEFT JOIN $table_survey_question_option sqo
@@ -1148,7 +1148,7 @@ class SurveyUtil
         $sql = "SELECT * FROM $table_survey_answer
                 WHERE
                     c_id = $course_id AND
-                    survey_id = $surveyId 
+                    survey_id = $surveyId
                     $userCondition
                 ORDER BY answer_id, user ASC";
         $result = Database::query($sql);
@@ -1350,8 +1350,8 @@ class SurveyUtil
                     count(options.question_option_id) as number_of_options
 				FROM $table_survey_question questions
                 LEFT JOIN $table_survey_question_option options
-				ON 
-				  questions.question_id = options.question_id AND 
+				ON
+				  questions.question_id = options.question_id AND
 				  options.c_id = questions.c_id
 				WHERE
 				    survey_question NOT LIKE '%{{%' AND
@@ -1419,12 +1419,12 @@ class SurveyUtil
                     survey_question_option.sort as option_sort
 				FROM $table_survey_question survey_question
 				LEFT JOIN $table_survey_question_option survey_question_option
-				ON	    
+				ON
 				    survey_question.question_id = survey_question_option.question_id AND
 				    survey_question_option.c_id = survey_question.c_id
-				WHERE				
-				    survey_question NOT LIKE '%{{%' AND			
-				    survey_question.type <> 'pagebreak' AND				    
+				WHERE
+				    survey_question NOT LIKE '%{{%' AND
+				    survey_question.type <> 'pagebreak' AND
 				    survey_question.survey_id = $surveyId AND
 				    survey_question.c_id = $course_id
 				ORDER BY survey_question.sort ASC, survey_question_option.sort ASC";
@@ -1453,9 +1453,9 @@ class SurveyUtil
         $old_user = '';
         $answers_of_user = [];
         $sql = "SELECT * FROM $table_survey_answer
-		        WHERE 
-		          c_id = $course_id AND 
-		          survey_id='".$surveyId."'		           
+		        WHERE
+		          c_id = $course_id AND
+		          survey_id='".$surveyId."'
 		          ";
         if ($user_id != 0) {
             $sql .= "AND user='".Database::escape_string($user_id)."' ";
@@ -1652,8 +1652,8 @@ class SurveyUtil
                     count(options.question_option_id) as number_of_options
 				FROM $table_survey_question questions
 				LEFT JOIN $table_survey_question_option options
-                ON 
-                  questions.question_id = options.question_id AND 
+                ON
+                  questions.question_id = options.question_id AND
                   options.c_id = questions.c_id
 				WHERE
 				    survey_question NOT LIKE '%{{%' AND
@@ -1730,7 +1730,7 @@ class SurveyUtil
 				ON
 				    survey_question.question_id = survey_question_option.question_id AND
 				    survey_question_option.c_id = survey_question.c_id
-				WHERE				
+				WHERE
 				    survey_question NOT LIKE '%{{%' AND
 				    survey_question.type <> 'pagebreak' AND
 				    survey_question.survey_id = $surveyId AND
@@ -2250,34 +2250,19 @@ class SurveyUtil
         return $counter;
     }
 
-    /**
-     * Save the invitation mail.
-     *
-     * @param string Text of the e-mail
-     * @param int Whether the mail contents are for invite mail (0, default) or reminder mail (1)
-     *
-     * @author Patrick Cool <patrick.cool@UGent.be>, Ghent University
-     *
-     * @version January 2007
-     */
-    public static function save_invite_mail($mailtext, $mail_subject, $reminder = 0)
+    public static function saveInviteMail(CSurvey $survey, $content, $subject, $remind)
     {
-        $course_id = api_get_course_int_id();
-        // Database table definition
-        $table_survey = Database::get_course_table(TABLE_SURVEY);
-
         // Reminder or not
-        if ($reminder == 0) {
-            $mail_field = 'invite_mail';
+        if ($remind) {
+            $survey->setReminderMail($content);
         } else {
-            $mail_field = 'reminder_mail';
+            $survey->setInviteMail($content);
         }
 
-        $sql = "UPDATE $table_survey SET
-		        mail_subject='".Database::escape_string($mail_subject)."',
-		        $mail_field = '".Database::escape_string($mailtext)."'
-		        WHERE c_id = $course_id AND survey_id = '".intval($_GET['survey_id'])."'";
-        Database::query($sql);
+        $survey->setMailSubject($subject);
+        $em = Database::getManager();
+        $em->persist($survey);
+        $em->flush();
     }
 
     /**
@@ -2311,8 +2296,6 @@ class SurveyUtil
         $hideLink = false
     ) {
         if (!is_array($users_array)) {
-            // Should not happen
-
             return 0;
         }
 
@@ -2372,7 +2355,6 @@ class SurveyUtil
             if (in_array($value, $exclude_users)) {
                 continue;
             }
-
             // Get the unique invitation code if we already have it
             if ($reminder == 1 && array_key_exists($value, $survey_invitations)) {
                 $invitation_code = $survey_invitations[$value]['invitation_code'];
@@ -2801,7 +2783,6 @@ class SurveyUtil
     /**
      * This function displays the sortable table with all the surveys.
      *
-     *
      * @author Patrick Cool <patrick.cool@UGent.be>, Ghent University
      *
      * @version January 2007
@@ -2829,8 +2810,6 @@ class SurveyUtil
         $table->set_header(2, get_lang('SurveyCode'));
         $table->set_header(3, get_lang('NumberOfQuestions'));
         $table->set_header(4, get_lang('Author'));
-        //$table->set_header(5, get_lang('Language'));
-        //$table->set_header(6, get_lang('Shared'));
         $table->set_header(5, get_lang('AvailableFrom'));
         $table->set_header(6, get_lang('AvailableUntil'));
         $table->set_header(7, get_lang('Invite'));
@@ -2847,7 +2826,12 @@ class SurveyUtil
         }
 
         $table->set_column_filter(8, 'anonymous_filter');
-        $table->set_form_actions(['delete' => get_lang('DeleteSurvey')]);
+        $actions = [
+            'send_to_tutors' => get_lang('SendToGroupTutors'),
+            'multiplicate' => get_lang('MultiplicateQuestions'),
+            'delete' => get_lang('DeleteSurvey'),
+        ];
+        $table->set_form_actions($actions);
         $table->display();
     }
 
@@ -2928,13 +2912,9 @@ class SurveyUtil
      * @param int  $survey_id the id of the survey
      * @param bool $drh
      *
-     * @throws \Doctrine\ORM\ORMException
-     * @throws \Doctrine\ORM\OptimisticLockException
-     * @throws \Doctrine\ORM\TransactionRequiredException
+     * @return string html code that are the actions that can be performed on any survey
      *
      * @author Patrick Cool <patrick.cool@UGent.be>, Ghent University
-     *
-     * @return string html code that are the actions that can be performed on any survey
      *
      * @version January 2007
      */
@@ -2971,9 +2951,7 @@ class SurveyUtil
         $type = $survey->getSurveyType();
 
         // Coach can see that only if the survey is in his session
-        if (api_is_allowed_to_edit() ||
-            api_is_element_in_the_session(TOOL_SURVEY, $survey_id)
-        ) {
+        if (api_is_allowed_to_edit() || api_is_element_in_the_session(TOOL_SURVEY, $survey_id)) {
             $editUrl = $codePath.'survey/create_new_survey.php?'.
                 http_build_query($params + ['action' => 'edit', 'survey_id' => $survey_id]);
             if ($survey->getSurveyType() == 3) {
@@ -3040,6 +3018,15 @@ class SurveyUtil
             Display::return_icon('mail_send.png', get_lang('Publish')),
             $codePath.'survey/survey_invite.php?'.http_build_query($params + ['survey_id' => $survey_id])
         );
+
+        $extraFieldValue = new ExtraFieldValue('survey');
+        $groupData = $extraFieldValue->get_values_by_handler_and_field_variable($survey_id, 'group_id');
+        if ($groupData && !empty($groupData['value'])) {
+            $actions[] = Display::url(
+                Display::return_icon('teacher.png', get_lang('SendToGroupTutors')),
+                $codePath.'survey/survey_list.php?action=send_to_tutors&'.http_build_query($params + ['survey_id' => $survey_id])
+            );
+        }
 
         if ($type != 3) {
             $actions[] = $hideReportingButton ? null : $reportingLink;
@@ -3535,15 +3522,16 @@ class SurveyUtil
             echo '<tr>';
             if ($row['answered'] == 0) {
                 echo '<td>';
-                echo Display::return_icon(
-                    'statistics.png',
-                    get_lang('CreateNewSurvey'),
-                    [],
+                $url = self::generateFillSurveyLink($row['invitation_code'], $_course, $row['session_id']);
+                $icon = Display::return_icon(
+                    'survey.png',
+                    get_lang('ClickHereToAnswerTheSurvey'),
+                    ['style' => 'margin-top: -4px'],
                     ICON_SIZE_TINY
                 );
-                $url = self::generateFillSurveyLink($row['invitation_code'], $_course, $row['session_id']);
                 echo '<a href="'.$url.'">
-                    '.$row['title']
+                    '.$icon
+                    .$row['title']
                     .'</a></td>';
             } else {
                 $isDrhOfCourse = CourseManager::isUserSubscribedInCourseAsDrh(
@@ -3551,8 +3539,8 @@ class SurveyUtil
                     $_course
                 );
                 $icon = Display::return_icon(
-                    'statistics_na.png',
-                    get_lang('Survey'),
+                    'survey_na.png',
+                    get_lang('SurveysDone'),
                     [],
                     ICON_SIZE_TINY
                 );
@@ -3906,10 +3894,10 @@ class SurveyUtil
             SELECT s, si FROM ChamiloCourseBundle:CSurvey s
             INNER JOIN ChamiloCourseBundle:CSurveyInvitation si
                 WITH (s.code = si.surveyCode AND s.cId = si.cId AND s.sessionId = si.sessionId )
-            WHERE 
-                si.user = :user_id AND 
-                s.availFrom <= :now AND 
-                s.availTill >= :now AND 
+            WHERE
+                si.user = :user_id AND
+                s.availFrom <= :now AND
+                s.availTill >= :now AND
                 si.answered = 0
             ORDER BY s.availTill ASC
         ";
@@ -3978,6 +3966,9 @@ class SurveyUtil
 
         if (!empty($surveyCode)) {
             $params['scode'] = Security::remove_XSS($surveyCode);
+        }
+        if (!empty($courseInfo['language'])) {
+            $params['language'] = $courseInfo['language'];
         }
 
         return api_get_path(WEB_CODE_PATH).'survey/fillsurvey.php?'.http_build_query($params);

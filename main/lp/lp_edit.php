@@ -235,6 +235,24 @@ $form->addElement(
     get_lang('AccumulateScormTime')
 );
 
+$scoreAsProgressSetting = api_get_configuration_value('lp_score_as_progress_enable');
+$countItems = $learnPath->get_total_items_count();
+$lpType = $learnPath->get_type();
+// This option is only usable for SCORM, if there is only 1 item, otherwise
+// using the score as progress would not work anymore (we would have to divide
+// between the two without knowing if the second has any score at all)
+// TODO: automatically cancel this setting if items >= 2
+if ($scoreAsProgressSetting && $countItems < 2 && $lpType == 2) {
+    $scoreAsProgress = $learnPath->getUseScoreAsProgress();
+    $form->addElement(
+        'checkbox',
+        'extra_use_score_as_progress',
+        [null, get_lang('LearnpathUseScoreAsProgressComment')],
+        get_lang('LearnpathUseScoreAsProgress')
+    );
+    $defaults['extra_use_score_as_progress'] = $scoreAsProgress;
+}
+
 $options = learnpath::getIconSelect();
 
 if (!empty($options)) {
@@ -247,7 +265,11 @@ if (!empty($options)) {
 }
 
 $extraField = new ExtraField('lp');
-$extra = $extraField->addElements($form, $lpId, ['lp_icon']);
+$extra = $extraField->addElements(
+    $form,
+    $lpId,
+    ['lp_icon', 'use_score_as_progress']
+);
 
 $skillList = Skill::addSkillsToForm($form, ITEM_TYPE_LEARNPATH, $lpId);
 

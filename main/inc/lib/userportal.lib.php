@@ -109,11 +109,11 @@ class IndexManager
     {
         $hideAnnouncements = api_get_setting('hide_global_announcements_when_not_connected');
         $currentUserId = api_get_user_id();
-        if ($hideAnnouncements == 'true' && empty($currentUserId)) {
+        if ($hideAnnouncements === 'true' && empty($currentUserId)) {
             return null;
         }
         $announcement = isset($_GET['announcement']) ? $_GET['announcement'] : null;
-        $announcement = intval($announcement);
+        $announcement = (int) $announcement;
 
         if (!api_is_anonymous() && $this->user_id) {
             $visibility = SystemAnnouncementManager::getCurrentUserVisibility();
@@ -435,12 +435,12 @@ class IndexManager
                             t1.parent_id,
                             t1.children_count,COUNT(DISTINCT t3.code) AS nbCourse
                     FROM $main_category_table t1
-                    LEFT JOIN $main_category_table t2 
+                    LEFT JOIN $main_category_table t2
                     ON t1.code=t2.parent_id
-                    LEFT JOIN $main_course_table t3 
+                    LEFT JOIN $main_course_table t3
                     ON (t3.category_code = t1.code $platform_visible_courses)
                     WHERE t1.parent_id ".(empty($category) ? "IS NULL" : "='$category'")."
-                    GROUP BY t1.name,t1.code,t1.parent_id,t1.children_count 
+                    GROUP BY t1.name,t1.code,t1.parent_id,t1.children_count
                     ORDER BY t1.tree_pos, t1.name";
 
         // Showing only the category of courses of the current access_url_id
@@ -1762,9 +1762,13 @@ class IndexManager
                                     }
 
                                     $this->tpl->assign('session', $sessionParams);
-                                    $this->tpl->assign('show_tutor', (api_get_setting('show_session_coach') === 'true' ? true : false));
+                                    $this->tpl->assign('show_tutor', api_get_setting('show_session_coach') === 'true');
                                     $this->tpl->assign('gamification_mode', $gameModeIsActive);
                                     $this->tpl->assign('remove_session_url', api_get_configuration_value('remove_session_url'));
+                                    $this->tpl->assign(
+                                        'hide_session_dates_in_user_portal',
+                                        api_get_configuration_value('hide_session_dates_in_user_portal')
+                                    );
 
                                     if ($viewGridCourses) {
                                         $html_sessions .= $this->tpl->fetch(
@@ -1840,6 +1844,10 @@ class IndexManager
                 $this->tpl->assign('show_tutor', (api_get_setting('show_session_coach') === 'true' ? true : false));
                 $this->tpl->assign('gamification_mode', $gameModeIsActive);
                 $this->tpl->assign('remove_session_url', api_get_configuration_value('remove_session_url'));
+                $this->tpl->assign(
+                    'hide_session_dates_in_user_portal',
+                    api_get_configuration_value('hide_session_dates_in_user_portal')
+                );
 
                 if ($viewGridCourses) {
                     $sessions_with_no_category = $this->tpl->fetch(
@@ -2282,8 +2290,6 @@ class IndexManager
     /**
      * Generate the HTML code for items when displaying the right-side blocks.
      *
-     * @param array $items
-     *
      * @return string
      */
     private static function returnRightBlockItems(array $items)
@@ -2399,9 +2405,9 @@ class IndexManager
                     $button
                     <span class='$class'>$icon
                         <a class='sessionView' href='$courseLink'>$title</a>
-                    </span> 
-                    $notifications 
-                    $rightActions 
+                    </span>
+                    $notifications
+                    $rightActions
                 </div>
                 $teachers";
     }

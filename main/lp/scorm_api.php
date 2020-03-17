@@ -35,6 +35,10 @@ $oLP = UnserializeApi::unserialize(
     'lp',
     Session::read('lpobject')
 );
+if (!is_object($oLP)) {
+    error_log('New LP - scorm_api - Could not load oLP object', 0);
+    exit;
+}
 /** @var learnpathItem $oItem */
 $oItem = isset($oLP->items[$oLP->current]) ? $oLP->items[$oLP->current] : null;
 
@@ -50,6 +54,7 @@ header('Content-type: text/javascript');
 
 ?>var scorm_logs=<?php echo (empty($oLP->scorm_debug) or (!api_is_course_admin() && !api_is_platform_admin())) ? '0' : '3'; ?>; //debug log level for SCORM. 0 = none, 1=light, 2=a lot, 3=all - displays logs in log frame
 var lms_logs = 0; //debug log level for LMS actions. 0=none, 1=light, 2=a lot, 3=all
+var score_as_progress = <?php echo empty($oLP->getUseScoreAsProgress()) ? 'false' : 'true'; ?>;
 
 // API Object initialization (eases access later on)
 function APIobject() {
@@ -471,7 +476,7 @@ function LMSGetValue(param) {
         }
     } else if(param == 'cmi.core.student_id'){
         // ---- cmi.core.student_id
-        result='<?php echo $userId; ?>';
+        result='<?php echo learnpath::getUserIdentifierForExternalServices(); ?>';
     } else if(param == 'cmi.core.student_name'){
         // ---- cmi.core.student_name
         <?php
@@ -650,6 +655,9 @@ function LMSSetValue(param, val) {
     if (param == "cmi.core.score.raw") {
         olms.score= val;
         olms.updatable_vars_list['cmi.core.score.raw']=true;
+        if (score_as_progress) {
+            update_progress_bar(val, olms.max, '%');
+        }
         return_value='true';
     } else if ( param == "cmi.core.score.max") {
         olms.max = val;
@@ -2410,9 +2418,9 @@ function attach_glossary_into_scorm(type) {
  */
 function update_time_bar(nbr_complete, nbr_total, mode)
 {
-    logit_lms('update_progress_bar('+nbr_complete+', '+nbr_total+', '+mode+')',3);
+    logit_lms('update_time_bar('+nbr_complete+', '+nbr_total+', '+mode+')',3);
     logit_lms(
-        'update_progress_bar with params: lms_lp_id= ' + olms.lms_lp_id +
+        'update_time_bar with params: lms_lp_id= ' + olms.lms_lp_id +
         ', lms_view_id= '+ olms.lms_view_id + ' lms_user_id= '+ olms.lms_user_id,
         3
     );

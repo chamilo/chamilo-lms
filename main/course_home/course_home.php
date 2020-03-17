@@ -147,13 +147,35 @@ $action = !empty($_GET['action']) ? Security::remove_XSS($_GET['action']) : '';
 if ($action == 'subscribe') {
     if (Security::check_token('get')) {
         Security::clear_token();
-        $result = CourseManager::autoSubscribeToCourse($course_code);
-        if ($result) {
+        $redirectionTarget = api_get_self();
+        if (CourseManager::autoSubscribeToCourse($course_code)) {
             if (CourseManager::is_user_subscribed_in_course($user_id, $course_code)) {
                 Session::write('is_allowed_in_course', true);
             }
+            if (api_get_configuration_value('catalog_course_subscription_in_user_s_session')) {
+                // append session id to redirect URL
+                /**
+                 * @var Chamilo\UserBundle\Entity\User
+                 */
+                $user = UserManager::getRepository()->find(api_get_user_id());
+                if ($user) {
+                    foreach ($user->getCurrentlyAccessibleSessions() as $session) {
+                        $redirectionTarget = api_get_self().'?id_session='.$session->getId();
+                        break;
+                    }
+                }
+            }
+        } elseif (api_get_configuration_value('catalog_course_subscription_in_user_s_session')) {
+            /**
+             * @var Chamilo\UserBundle\Entity\User
+             */
+            $user = UserManager::getRepository()->find(api_get_user_id());
+            if ($user && !$user->getCurrentlyAccessibleSessions()) {
+                // subscription was probably refused because user session expired, go back to page "about"
+                $redirectionTarget = api_get_path(WEB_PATH).'course/'.$courseId.'/about';
+            }
         }
-        header('Location: '.api_get_self());
+        header('Location: '.$redirectionTarget);
         exit;
     }
 }

@@ -145,7 +145,7 @@ switch ($action) {
     case 'download':
         $userId = isset($_GET['user_id']) && $_GET['user_id'] ? $_GET['user_id'] : null;
         $cats = Category::load($cat_id, null, null, null, null, null, false);
-        GradebookUtils::generateTable($courseInfo, $userId, $cats);
+        GradebookUtils::generateTable($courseInfo, $userId, $cats, false, false, $userList);
         break;
 }
 

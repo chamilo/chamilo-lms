@@ -304,8 +304,6 @@ class UserRepository extends EntityRepository
     /**
      * Get the sessions admins for a user.
      *
-     * @param User $user
-     *
      * @return array
      */
     public function getSessionAdmins(User $user)
@@ -337,8 +335,6 @@ class UserRepository extends EntityRepository
 
     /**
      * Get the student bosses for a user.
-     *
-     * @param User $user
      *
      * @return array
      */
@@ -424,10 +420,13 @@ class UserRepository extends EntityRepository
                 $online_time = time() - $time_limit * 60;
                 $limit_date = api_get_utc_datetime($online_time);
                 $dql = "SELECT DISTINCT U
-                        FROM ChamiloUserBundle:User U
-                        INNER JOIN ChamiloCoreBundle:TrackEOnline T 
+			FROM ChamiloUserBundle:User U
+                        LEFT JOIN ChamiloCoreBundle:AccessUrlRelUser R
+                        WITH U = R.user
+			INNER JOIN ChamiloCoreBundle:TrackEOnline T
                         WITH U.id = T.loginUserId
-                        WHERE 
+			WHERE
+                          R.portal = $accessUrlId AND
                           U.active = 1 AND 
                           T.loginDate >= '".$limit_date."'";
             }
@@ -1325,8 +1324,6 @@ class UserRepository extends EntityRepository
      * This might be different from user.last_login in the case of legacy users
      * as user.last_login was only implemented in 1.10 version with a default
      * value of NULL (not the last record from track_e_login).
-     *
-     * @param User $user
      *
      * @throws \Exception
      *

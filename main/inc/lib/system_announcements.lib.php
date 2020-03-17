@@ -1,4 +1,5 @@
 <?php
+
 /* For licensing terms, see /license.txt */
 
 /**
@@ -67,7 +68,7 @@ class SystemAnnouncementManager
         $user_id = ''
     ) {
         $user_selected_language = api_get_interface_language();
-        $start = intval($start);
+        $start = (int) $start;
         $userGroup = new UserGroup();
         $tbl_announcement_group = Database::get_main_table(TABLE_MAIN_SYSTEM_ANNOUNCEMENTS_GROUPS);
         $temp_user_groups = $userGroup->get_groups_by_user(api_get_user_id(), 0);
@@ -183,7 +184,7 @@ class SystemAnnouncementManager
      */
     public static function count_nb_announcement($start = 0, $user_id = '')
     {
-        $start = intval($start);
+        $start = (int) $start;
         $user_selected_language = api_get_interface_language();
         $db_table = Database::get_main_table(TABLE_MAIN_SYSTEM_ANNOUNCEMENTS);
         $sql = 'SELECT id FROM '.$db_table.'
@@ -248,6 +249,8 @@ class SystemAnnouncementManager
      * @param int    $send_mail       Whether to send an e-mail to all users (1) or not (0)
      * @param bool   $add_to_calendar
      * @param bool   $sendEmailTest
+     * @param int    $careerId
+     * @param int    $promotionId
      *
      * @return mixed insert_id on success, false on failure
      */
@@ -260,7 +263,9 @@ class SystemAnnouncementManager
         $lang = '',
         $send_mail = 0,
         $add_to_calendar = false,
-        $sendEmailTest = false
+        $sendEmailTest = false,
+        $careerId = 0,
+        $promotionId = 0
     ) {
         $original_content = $content;
         $a_dateS = explode(' ', $date_start);
@@ -335,6 +340,11 @@ class SystemAnnouncementManager
             'access_url_id' => $current_access_url_id,
         ];
 
+        if (api_get_configuration_value('allow_careers_in_global_announcements') && !empty($careerId)) {
+            $params['career_id'] = (int) $careerId;
+            $params['promotion_id'] = (int) $promotionId;
+        }
+
         foreach ($visibility as $key => $value) {
             $params[$key] = $value;
         }
@@ -344,19 +354,15 @@ class SystemAnnouncementManager
         if ($resultId) {
             if ($sendEmailTest) {
                 self::send_system_announcement_by_email(
-                    $title,
-                    $content,
+                    $resultId,
                     $visibility,
-                    $lang,
                     true
                 );
             } else {
                 if ($send_mail == 1) {
                     self::send_system_announcement_by_email(
-                        $title,
-                        $content,
-                        $visibility,
-                        $lang
+                        $resultId,
+                        $visibility
                     );
                 }
             }
@@ -393,7 +399,7 @@ class SystemAnnouncementManager
         );
         //first delete all group associations for this announcement
         $res = Database::query(
-            "DELETE FROM $tbl_announcement_group 
+            "DELETE FROM $tbl_announcement_group
              WHERE announcement_id=".intval($announcement_id)
         );
 
@@ -453,6 +459,8 @@ class SystemAnnouncementManager
      * @param array  $lang
      * @param int    $send_mail
      * @param bool   $sendEmailTest
+     * @param int    $careerId
+     * @param int    $promotionId
      *
      * @return bool True on success, false on failure
      */
@@ -465,7 +473,9 @@ class SystemAnnouncementManager
         $visibility,
         $lang = null,
         $send_mail = 0,
-        $sendEmailTest = false
+        $sendEmailTest = false,
+        $careerId = 0,
+        $promotionId = 0
     ) {
         $em = Database::getManager();
         $announcement = $em->find('ChamiloCoreBundle:SysAnnouncement', $id);
@@ -524,26 +534,6 @@ class SystemAnnouncementManager
             $content
         );
 
-        if ($sendEmailTest) {
-            self::send_system_announcement_by_email(
-                $title,
-                $content,
-                null,
-                null,
-                $lang,
-                $sendEmailTest
-            );
-        } else {
-            if ($send_mail == 1) {
-                self::send_system_announcement_by_email(
-                    $title,
-                    $content,
-                    $visibility,
-                    $lang
-                );
-            }
-        }
-
         $dateStart = new DateTime($start, new DateTimeZone('UTC'));
         $dateEnd = new DateTime($end, new DateTimeZone('UTC'));
 
@@ -564,10 +554,37 @@ class SystemAnnouncementManager
         // Update visibility
         $list = self::getVisibilityList();
         $table = Database::get_main_table(TABLE_MAIN_SYSTEM_ANNOUNCEMENTS);
+
+        if (api_get_configuration_value('allow_careers_in_global_announcements') && !empty($careerId)) {
+            $params = [];
+            $params['career_id'] = (int) $careerId;
+            $params['promotion_id'] = (int) $promotionId;
+            Database::update(
+                $table,
+                $params,
+                ['id = ? ' => $id]
+            );
+        }
+
         foreach ($list as $key => $title) {
             $value = isset($visibility[$key]) && $visibility[$key] ? 1 : 0;
             $sql = "UPDATE $table SET $key = '$value' WHERE id = $id";
             Database::query($sql);
+        }
+
+        if ($sendEmailTest) {
+            self::send_system_announcement_by_email(
+                $id,
+                $visibility,
+                true
+            );
+        } else {
+            if ($send_mail == 1) {
+                self::send_system_announcement_by_email(
+                    $id,
+                    $visibility
+                );
+            }
         }
 
         return true;
@@ -583,7 +600,7 @@ class SystemAnnouncementManager
     public static function delete_announcement($id)
     {
         $table = Database::get_main_table(TABLE_MAIN_SYSTEM_ANNOUNCEMENTS);
-        $id = intval($id);
+        $id = (int) $id;
         $sql = "DELETE FROM $table WHERE id =".$id;
         $res = Database::query($sql);
         if ($res === false) {
@@ -603,7 +620,7 @@ class SystemAnnouncementManager
     public static function get_announcement($id)
     {
         $table = Database::get_main_table(TABLE_MAIN_SYSTEM_ANNOUNCEMENTS);
-        $id = intval($id);
+        $id = (int) $id;
         $sql = "SELECT * FROM ".$table." WHERE id = ".$id;
         $announcement = Database::fetch_object(Database::query($sql));
 
@@ -645,22 +662,28 @@ class SystemAnnouncementManager
     /**
      * Send a system announcement by e-mail to all teachers/students depending on parameters.
      *
-     * @param string $title
-     * @param string $content
-     * @param array  $visibility
-     * @param string $language      Language (optional, considered for all languages if left empty)
-     * @param bool   $sendEmailTest
+     * @param int   $id
+     * @param array $visibility
+     * @param bool  $sendEmailTest
      *
      * @return bool True if the message was sent or there was no destination matching.
      *              False on database or e-mail sending error.
      */
     public static function send_system_announcement_by_email(
-        $title,
-        $content,
+        $id,
         $visibility,
-        $language = null,
         $sendEmailTest = false
     ) {
+        $announcement = self::get_announcement($id);
+
+        if (empty($announcement)) {
+            return false;
+        }
+
+        $title = $announcement->title;
+        $content = $announcement->content;
+        $language = $announcement->lang;
+
         $content = str_replace(['\r\n', '\n', '\r'], '', $content);
         $now = api_get_utc_datetime();
         $teacher = $visibility['visible_teacher'];
@@ -682,17 +705,17 @@ class SystemAnnouncementManager
         }
 
         if ($teacher != 0 && $student == 0) {
-            $sql = "SELECT DISTINCT u.user_id FROM $user_table u $urlJoin 
+            $sql = "SELECT DISTINCT u.user_id FROM $user_table u $urlJoin
                     WHERE status = '1' $urlCondition";
         }
 
         if ($teacher == 0 && $student != 0) {
-            $sql = "SELECT DISTINCT u.user_id FROM $user_table u $urlJoin 
+            $sql = "SELECT DISTINCT u.user_id FROM $user_table u $urlJoin
                     WHERE status = '5' $urlCondition";
         }
 
         if ($teacher != 0 && $student != 0) {
-            $sql = "SELECT DISTINCT u.user_id FROM $user_table u $urlJoin 
+            $sql = "SELECT DISTINCT u.user_id FROM $user_table u $urlJoin
                     WHERE 1 = 1 $urlCondition";
         }
 
@@ -713,6 +736,44 @@ class SystemAnnouncementManager
 
         if ((empty($teacher) || $teacher == '0') && (empty($student) || $student == '0')) {
             return true;
+        }
+
+        $userListToFilter = [];
+        // @todo check if other filters will apply for the career/promotion option.
+        if (isset($announcement->career_id) && !empty($announcement->career_id)) {
+            $promotion = new Promotion();
+            $promotionList = $promotion->get_all_promotions_by_career_id($announcement->career_id);
+            if (isset($announcement->promotion_id) && !empty($announcement->promotion_id)) {
+                $promotionList = [];
+                $promotionList[] = $promotion->get($announcement->promotion_id);
+            }
+
+            if (!empty($promotionList)) {
+                foreach ($promotionList as $promotion) {
+                    $sessionList = SessionManager::get_all_sessions_by_promotion($promotion['id']);
+                    foreach ($sessionList as $session) {
+                        if ($teacher) {
+                            $users = SessionManager::get_users_by_session($session['id'], 2);
+                            if (!empty($users)) {
+                                $userListToFilter = array_merge($users, $userListToFilter);
+                            }
+                        }
+
+                        if ($student) {
+                            $users = SessionManager::get_users_by_session($session['id'], 0);
+                            if (!empty($users)) {
+                                $userListToFilter = array_merge($users, $userListToFilter);
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
+        if (!empty($userListToFilter)) {
+            $userListToFilter = array_column($userListToFilter, 'user_id');
+            $userListToFilterToString = implode("', '", $userListToFilter);
+            $sql .= " AND (u.user_id IN ('$userListToFilterToString') ) ";
         }
 
         $result = Database::query($sql);
@@ -769,12 +830,62 @@ class SystemAnnouncementManager
             $sql .= " AND access_url_id IN ('1', '$current_url_id') ";
         }
 
+        $checkCareers = api_get_configuration_value('allow_careers_in_global_announcements') === true;
+
+        $userId = api_get_user_id();
+
+        $promotion = new Promotion();
         $sql .= ' ORDER BY date_start DESC';
         $result = Database::query($sql);
         $announcements = [];
-
         if (Database::num_rows($result) > 0) {
             while ($announcement = Database::fetch_object($result)) {
+                if ($checkCareers && !empty($announcement->career_id)) {
+                    $promotionList = [];
+                    if (!empty($announcement->promotion_id)) {
+                        $promotionList[] = $announcement->promotion_id;
+                    } else {
+                        $promotionList = $promotion->get_all_promotions_by_career_id($announcement->career_id);
+                        if (!empty($promotionList)) {
+                            $promotionList = array_column($promotionList, 'id');
+                        }
+                    }
+
+                    $show = false;
+                    foreach ($promotionList as $promotionId) {
+                        $sessionList = SessionManager::get_all_sessions_by_promotion($promotionId);
+                        foreach ($sessionList as $session) {
+                            $sessionId = $session['id'];
+                            // Check student
+                            if ($visible === self::VISIBLE_STUDENT &&
+                                SessionManager::isUserSubscribedAsStudent($sessionId, $userId)
+                            ) {
+                                $show = true;
+                                break 2;
+                            }
+
+                            if ($visible === self::VISIBLE_TEACHER &&
+                                SessionManager::user_is_general_coach($userId, $sessionId)
+                            ) {
+                                $show = true;
+                                break 2;
+                            }
+
+                            // Check course coach
+                            $coaches = SessionManager::getCoachesBySession($sessionId);
+
+                            if ($visible === self::VISIBLE_TEACHER && in_array($userId, $coaches)) {
+                                $show = true;
+                                break 2;
+                            }
+                        }
+                    }
+
+                    if (false === $show) {
+                        continue;
+                    }
+                }
+
                 $announcementData = [
                     'id' => $announcement->id,
                     'title' => $announcement->title,

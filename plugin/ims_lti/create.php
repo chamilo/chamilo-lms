@@ -27,6 +27,7 @@ if ($form->validate()) {
         ->setCustomParams(
             empty($formValues['custom_params']) ? null : $formValues['custom_params']
         )
+        ->setDocumenTarget($formValues['document_target'])
         ->setCourse(null)
         ->setActiveDeepLinking(
             isset($formValues['deep_linking'])
@@ -37,28 +38,45 @@ if ($form->validate()) {
             isset($formValues['share_picture'])
         );
 
-    if (empty($formValues['consumer_key']) && empty($formValues['shared_secret'])) {
-        try {
-            $launchUrl = $plugin->getLaunchUrlFromCartridge($formValues['launch_url']);
-        } catch (Exception $e) {
-            Display::addFlash(
-                Display::return_message($e->getMessage(), 'error')
-            );
-
-            header('Location: '.api_get_path(WEB_PLUGIN_PATH).'ims_lti/admin.php');
-            exit;
-        }
-
-        $externalTool->setLaunchUrl($launchUrl);
-    } else {
+    if (ImsLti::V_1P3 === $formValues['version']) {
         $externalTool
+            ->setVersion(ImsLti::V_1P3)
             ->setLaunchUrl($formValues['launch_url'])
-            ->setConsumerKey(
-                empty($formValues['consumer_key']) ? null : $formValues['consumer_key']
+            ->setClientId(
+                ImsLti::generateClientId()
             )
-            ->setSharedSecret(
-                empty($formValues['shared_secret']) ? null : $formValues['shared_secret']
-            );
+            ->setLoginUrl($formValues['login_url'])
+            ->setRedirectUrl($formValues['redirect_url'])
+            ->setAdvantageServices(
+                [
+                    'ags' => $formValues['1p3_ags'],
+                ]
+            )
+            ->publicKey = $formValues['public_key'];
+    } else {
+        if (empty($formValues['consumer_key']) && empty($formValues['shared_secret'])) {
+            try {
+                $launchUrl = $plugin->getLaunchUrlFromCartridge($formValues['launch_url']);
+            } catch (Exception $e) {
+                Display::addFlash(
+                    Display::return_message($e->getMessage(), 'error')
+                );
+
+                header('Location: '.api_get_path(WEB_PLUGIN_PATH).'ims_lti/admin.php');
+                exit;
+            }
+
+            $externalTool->setLaunchUrl($launchUrl);
+        } else {
+            $externalTool
+                ->setLaunchUrl($formValues['launch_url'])
+                ->setConsumerKey(
+                    empty($formValues['consumer_key']) ? null : $formValues['consumer_key']
+                )
+                ->setSharedSecret(
+                    empty($formValues['shared_secret']) ? null : $formValues['shared_secret']
+                );
+        }
     }
 
     $em->persist($externalTool);

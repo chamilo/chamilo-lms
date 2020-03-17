@@ -212,6 +212,7 @@ define('LOG_PLATFORM_LANGUAGE_CHANGE', 'platform_lng_changed'); //changed in 1.9
 define('LOG_SUBSCRIBE_USER_TO_COURSE', 'user_subscribed');
 define('LOG_UNSUBSCRIBE_USER_FROM_COURSE', 'user_unsubscribed');
 define('LOG_ATTEMPTED_FORCED_LOGIN', 'attempted_forced_login');
+define('LOG_PLUGIN_CHANGE', 'plugin_changed');
 
 define('LOG_HOMEPAGE_CHANGED', 'homepage_changed');
 
@@ -252,6 +253,9 @@ define('LOG_SESSION_CATEGORY_ID', 'session_category_id');
 define('LOG_CONFIGURATION_SETTINGS_CATEGORY', 'settings_category');
 define('LOG_CONFIGURATION_SETTINGS_VARIABLE', 'settings_variable');
 define('LOG_PLATFORM_LANGUAGE', 'default_platform_language');
+define('LOG_PLUGIN_UPLOAD', 'plugin_upload');
+define('LOG_PLUGIN_ENABLE', 'plugin_enable');
+define('LOG_PLUGIN_SETTINGS_CHANGE', 'plugin_settings_change');
 define('LOG_CAREER_ID', 'career_id');
 define('LOG_PROMOTION_ID', 'promotion_id');
 define('LOG_GRADEBOOK_LOCKED', 'gradebook_locked');
@@ -279,6 +283,8 @@ define('LOG_USER_DELETE_ACCOUNT_REQUEST', 'user_delete_account_request');
 
 define('LOG_QUESTION_CREATED', 'question_created');
 define('LOG_QUESTION_UPDATED', 'question_updated');
+define('LOG_QUESTION_DELETED', 'question_deleted');
+define('LOG_QUESTION_REMOVED_FROM_QUIZ', 'question_removed_from_quiz');
 
 define('USERNAME_PURIFIER', '/[^0-9A-Za-z_\.-]/');
 
@@ -707,7 +713,6 @@ require_once __DIR__.'/internationalization.lib.php';
  *                     This parameter has meaning when $type parameter has one of the following values: TO_WEB, TO_SYS, TO_REL. Otherwise it is ignored.
  *
  * @return string the requested path or the converted path
- *
  *
  * Notes about the current behaviour model:
  * 1. Windows back-slashes are converted to slashes in the result.
@@ -1593,24 +1598,29 @@ function _api_format_user($user, $add_password = false, $loadAvatars = true)
         $urlImg = api_get_path(WEB_IMG_PATH);
         $iconStatus = '';
         $iconStatusMedium = '';
-
+        $label = '';
         switch ($result['status']) {
             case STUDENT:
                 if ($result['has_certificates']) {
                     $iconStatus = $urlImg.'icons/svg/identifier_graduated.svg';
+                    $label = get_lang('Graduated');
                 } else {
                     $iconStatus = $urlImg.'icons/svg/identifier_student.svg';
+                    $label = get_lang('Student');
                 }
                 break;
             case COURSEMANAGER:
                 if ($result['is_admin']) {
                     $iconStatus = $urlImg.'icons/svg/identifier_admin.svg';
+                    $label = get_lang('Admin');
                 } else {
                     $iconStatus = $urlImg.'icons/svg/identifier_teacher.svg';
+                    $label = get_lang('Teacher');
                 }
                 break;
             case STUDENT_BOSS:
                 $iconStatus = $urlImg.'icons/svg/identifier_teacher.svg';
+                $label = get_lang('StudentBoss');
                 break;
         }
 
@@ -1620,6 +1630,7 @@ function _api_format_user($user, $add_password = false, $loadAvatars = true)
         }
 
         $result['icon_status'] = $iconStatus;
+        $result['icon_status_label'] = $label;
         $result['icon_status_medium'] = $iconStatusMedium;
     }
 
@@ -1804,7 +1815,7 @@ function api_get_user_entity($userId)
  *
  * @author Yannick Warnier <yannick.warnier@beeznest.com>
  */
-function api_get_user_info_from_username($username = '')
+function api_get_user_info_from_username($username)
 {
     if (empty($username)) {
         return false;
@@ -1978,7 +1989,7 @@ function api_get_anonymous_id()
     $ip = Database::escape_string(api_get_real_ip());
     $max = (int) api_get_configuration_value('max_anonymous_users');
     if ($max >= 2) {
-        $sql = "SELECT * FROM $table as TEL 
+        $sql = "SELECT * FROM $table as TEL
                 JOIN $tableU as U
                 ON U.user_id = TEL.login_user_id
                 WHERE TEL.user_ip = '$ip'
@@ -2013,8 +2024,8 @@ function api_get_anonymous_id()
     }
 
     $table = Database::get_main_table(TABLE_MAIN_USER);
-    $sql = "SELECT user_id 
-            FROM $table 
+    $sql = "SELECT user_id
+            FROM $table
             WHERE status = ".ANONYMOUS." ";
     $res = Database::query($sql);
     if (Database::num_rows($res) > 0) {
@@ -2478,7 +2489,7 @@ function api_check_password($password)
 function api_clear_anonymous($db_check = false)
 {
     global $_user;
-    if (api_is_anonymous($_user['user_id'], $db_check)) {
+    if (isset($_user['user_id']) && api_is_anonymous($_user['user_id'], $db_check)) {
         unset($_user['user_id']);
         Session::erase('_uid');
 
@@ -2645,7 +2656,7 @@ function api_get_session_visibility(
     }
 
     $row = Database::fetch_array($result, 'ASSOC');
-    $visibility = $original_visibility = $row['visibility'];
+    $visibility = $row['visibility'];
 
     // I don't care the session visibility.
     if (empty($row['access_start_date']) && empty($row['access_end_date'])) {
@@ -3813,7 +3824,7 @@ function api_not_allowed(
         if (api_is_cas_activated()) {
             $content .= Display::return_message(sprintf(get_lang('YouHaveAnInstitutionalAccount'), api_get_setting("Institution")), '', false);
             $content .= Display::div(
-                "<br/><a href='".get_cas_direct_URL(api_get_course_id())."'>".sprintf(get_lang('LoginWithYourAccount'), api_get_setting("Institution"))."</a><br/><br/>",
+                Template::displayCASLoginButton(),
                 ['align' => 'center']
             );
             $content .= Display::return_message(get_lang('YouDontHaveAnInstitutionAccount'));
@@ -3864,7 +3875,10 @@ function api_not_allowed(
                 '',
                 false
             );
-            $msg .= Display::div("<br/><a href='".get_cas_direct_URL(api_get_course_int_id())."'>".getCASLogoHTML()." ".sprintf(get_lang('LoginWithYourAccount'), api_get_setting("Institution"))."</a><br/><br/>", ['align' => 'center']);
+            $msg .= Display::div(
+                Template::displayCASLoginButton(),
+                ['align' => 'center']
+            );
             $msg .= Display::return_message(get_lang('YouDontHaveAnInstitutionAccount'));
             $msg .= "<p style='text-align:center'><a href='#' onclick='$(this).parent().next().toggle()'>".get_lang('LoginWithExternalAccount')."</a></p>";
             $msg .= "<div style='display:none;'>";
@@ -4751,7 +4765,7 @@ function api_display_language_form($hide_if_no_choice = false, $showAsButton = f
     } else {
         $html = '
             <a href="'.$url.'" class="dropdown-toggle" data-toggle="dropdown" role="button">
-                <span class="flag-icon flag-icon-'.$countryCode.'"></span> 
+                <span class="flag-icon flag-icon-'.$countryCode.'"></span>
                 '.$currentLanguageInfo['original_name'].'
                 <span class="caret"></span>
             </a>
@@ -4866,7 +4880,7 @@ function languageToCountryIsoCode($languageIsoCode)
 function api_get_languages()
 {
     $tbl_language = Database::get_main_table(TABLE_MAIN_LANGUAGE);
-    $sql = "SELECT * FROM $tbl_language WHERE available='1' 
+    $sql = "SELECT * FROM $tbl_language WHERE available='1'
             ORDER BY original_name ASC";
     $result = Database::query($sql);
     $language_list = [];
@@ -6431,7 +6445,7 @@ function api_replace_dangerous_char($filename, $treat_spaces_as_hyphens = true)
         250,
         '',
         true,
-        true,
+        false,
         false,
         false,
         $treat_spaces_as_hyphens
@@ -8215,8 +8229,8 @@ function api_get_password_checker_js($usernameInputId, $passwordInputId)
     };
 
     $(function() {
-        var lang = ".json_encode($translations).";     
-        var options = {        
+        var lang = ".json_encode($translations).";
+        var options = {
             onLoad : function () {
                 //$('#messages').text('Start typing password');
             },
@@ -8234,7 +8248,7 @@ function api_get_password_checker_js($usernameInputId, $passwordInputId)
         options.i18n = {
             t: function (key) {
                 var result = lang[key];
-                return result === key ? '' : result; // This assumes you return the                
+                return result === key ? '' : result; // This assumes you return the
             }
         };
         $('".$passwordInputId."').pwstrength(options);
@@ -9522,10 +9536,6 @@ function api_unserialize_content($type, $serialized, $ignoreErrors = false)
 /**
  * Set the From and ReplyTo properties to PHPMailer instance.
  *
- * @param PHPMailer $mailer
- * @param array     $sender
- * @param array     $replyToAddress
- *
  * @throws phpmailerException
  */
 function api_set_noreply_and_from_address_to_mailer(PHPMailer $mailer, array $sender, array $replyToAddress = [])
@@ -9557,7 +9567,7 @@ function api_set_noreply_and_from_address_to_mailer(PHPMailer $mailer, array $se
             PHPMailer::ValidateAddress($replyToAddress['mail'])
         ) {
             $mailer->AddReplyTo($replyToAddress['mail'], $replyToAddress['name']);
-            $mailer->Sender = $replyToAddress['mail'];
+            //$mailer->Sender = $replyToAddress['mail'];
         }
     }
 
@@ -9566,8 +9576,8 @@ function api_set_noreply_and_from_address_to_mailer(PHPMailer $mailer, array $se
         isset($platformEmail['SMTP_UNIQUE_SENDER']) &&
         $platformEmail['SMTP_UNIQUE_SENDER']
     ) {
-        $senderName = $platformEmail['SMTP_FROM_NAME'];
-        $senderEmail = $platformEmail['SMTP_FROM_EMAIL'];
+        $senderName = $notification->getDefaultPlatformSenderName();
+        $senderEmail = $notification->getDefaultPlatformSenderEmail();
 
         if (PHPMailer::ValidateAddress($senderEmail)) {
             //force-set Sender to $senderEmail, otherwise SetFrom only does it if it is currently empty
@@ -9594,7 +9604,7 @@ function api_find_template($template)
 function api_get_language_list_for_flag()
 {
     $table = Database::get_main_table(TABLE_MAIN_LANGUAGE);
-    $sql = "SELECT english_name, isocode FROM $table 
+    $sql = "SELECT english_name, isocode FROM $table
             ORDER BY original_name ASC";
     static $languages = [];
     if (empty($languages)) {
@@ -9625,18 +9635,23 @@ function api_get_language_translate_html()
         $hideAll .= '
         $("span:lang('.$language['isocode'].')").filter(
             function(e, val) {
-                // Only find the spans if they have set the lang                
-                if ($(this).attr("lang") == null) {                
+                // Only find the spans if they have set the lang
+                if ($(this).attr("lang") == null) {
                     return false;
                 }
-                
+
                 // Ignore ckeditor classes
                 return !this.className.match(/cke(.*)/);
         }).hide();'."\n";
     }
 
     $userInfo = api_get_user_info();
-    $languageId = api_get_language_id($userInfo['language']);
+    $languageId = 0;
+    if (!empty($userInfo['language'])) {
+        $languageId = api_get_language_id($userInfo['language']);
+    } elseif (!empty($_GET['language'])) {
+        $languageId = api_get_language_id($_GET['language']);
+    }
     $languageInfo = api_get_language_info($languageId);
     $isoCode = 'en';
 
@@ -9646,32 +9661,32 @@ function api_get_language_translate_html()
 
     return '
             $(function() {
-                '.$hideAll.'                 
-                var defaultLanguageFromUser = "'.$isoCode.'";   
-                                             
+                '.$hideAll.'
+                var defaultLanguageFromUser = "'.$isoCode.'";
+
                 $("span:lang('.$isoCode.')").filter(
                     function() {
                         // Ignore ckeditor classes
                         return !this.className.match(/cke(.*)/);
                 }).show();
-                
+
                 var defaultLanguage = "";
                 var langFromUserFound = false;
-                
+
                 $(this).find("span").filter(
                     function() {
                         // Ignore ckeditor classes
                         return !this.className.match(/cke(.*)/);
                 }).each(function() {
-                    defaultLanguage = $(this).attr("lang");                            
+                    defaultLanguage = $(this).attr("lang");
                     if (defaultLanguage) {
-                        $(this).before().next("br").remove();                
+                        $(this).before().next("br").remove();
                         if (defaultLanguageFromUser == defaultLanguage) {
                             langFromUserFound = true;
                         }
                     }
                 });
-                
+
                 // Show default language
                 if (langFromUserFound == false && defaultLanguage) {
                     $("span:lang("+defaultLanguage+")").filter(

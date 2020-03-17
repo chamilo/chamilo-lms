@@ -10,25 +10,33 @@
     </script>
     <div class="row">
         <div class="col-md-12">
+        {{ actions }}
         <!-- header catalog session -->
-        <h2 class="title-session">{{ 'Sessions'|get_lang }}</h2>
        	<div class="search-session">
-                <div class="row">
-                {% if show_courses %}
-                    <div class="col-md-4">
-                        <div class="return-catalog">
-                            <a class="btn btn-default btn-lg btn-block" href="{{ _p.web_self }}">
-                                <em class="fa fa-arrow-left"></em> {{ "CourseManagement"|get_lang }}
-                            </a>
+            <div class="row">
+                {% if catalog_settings.sessions.by_title %}
+                <div class="col-md-4">
+                    <form method="post" action="{{ _p.web_self }}?action=search_session_title">
+                        <label>{{ "Name"|get_lang }}</label>
+                        <div class="input-group">
+                            <input type="text" name="keyword" title="{{ 'Name'|get_lang }}" class="form-control"
+                                   value="{{ keyword }}"/>
+                            <span class="input-group-btn">
+                                <button class="btn btn-default" type="submit">
+                                    <em class="fa fa-search"></em> {{ 'Search'|get_lang }}
+                                </button>
+                            </span>
                         </div>
-                    </div>
+                    </form>
+                </div>
                 {% endif %}
 
-                {% if show_courses %}
-                    <div class="col-md-4">
-                {% else %}
-                    <div class="col-md-6">
-                {% endif %}
+                {% if catalog_settings.sessions.by_date %}
+                    {% if show_courses %}
+                        <div class="col-md-4">
+                    {% else %}
+                        <div class="col-md-4">
+                    {% endif %}
                         <form method="post" action="{{ _p.web_self }}?action=display_sessions">
                             <div class="form-group">
                                 <label>{{ "ByDate"|get_lang }}</label>
@@ -44,25 +52,29 @@
                             </div>
                         </form>
                     </div>
-                {% if show_courses %}
-                    <div class="col-md-4">
-                {% else %}
-                    <div class="col-md-6">
                 {% endif %}
-                        <form method="post" action="{{ _p.web_self }}?action=search_tag">
-                            <label>{{ "ByTag"|get_lang }}</label>
-                            <div class="input-group">
-                                <input type="text" name="search_tag" title="{{ 'ByTag'|get_lang }}" class="form-control"
-                                       value="{{ search_tag }}"/>
-                                <span class="input-group-btn">
-                                    <button class="btn btn-default" type="submit">
-                                        <em class="fa fa-search"></em> {{ 'Search'|get_lang }}
-                                    </button>
-                                </span>
-                            </div>
-                        </form>
+
+                {% if catalog_settings.sessions.by_tag %}
+                    {% if show_courses %}
+                        <div class="col-md-4">
+                    {% else %}
+                        <div class="col-md-4">
+                    {% endif %}
+                            <form method="post" action="{{ _p.web_self }}?action=search_tag">
+                                <label>{{ "ByTag"|get_lang }}</label>
+                                <div class="input-group">
+                                    <input type="text" name="search_tag" title="{{ 'ByTag'|get_lang }}" class="form-control"
+                                           value="{{ search_tag }}"/>
+                                    <span class="input-group-btn">
+                                        <button class="btn btn-default" type="submit">
+                                            <em class="fa fa-search"></em> {{ 'Search'|get_lang }}
+                                        </button>
+                                    </span>
+                                </div>
+                            </form>
+                        </div>
                     </div>
-                </div>
+                {% endif %}
             </div>
         </div>
     </div>
@@ -117,21 +129,26 @@
                                    </div>
                             	</div>
                             	{% endif %}
-                            	<div class="block-info">
-                                    <ul class="info list-inline">
-                                        <li class="course_label_number_courses">
-                                            <i class="fa fa-book" aria-hidden="true"></i>
-                                            {{ item.nbr_courses ~ ' ' ~ 'Courses'|get_lang }}
-                                        </li>
-                                        <li class="course_label_number_users">
-                                            <i class="fa fa-user" aria-hidden="true"></i>
-                                            {{ item.nbr_users ~ ' ' ~ 'NbUsers'|get_lang }}
-                                        </li>
-                                    </ul>
-                            	</div>
-                                <div class="block-date">
-                                    {{ item.duration ? 'SessionDurationXDaysLeft'|get_lang|format(item.duration) : item.date }}
-                                </div>
+
+                                {% if catalog_settings.sessions.show_session_info %}
+                                    <div class="block-info">
+                                        <ul class="info list-inline">
+                                            <li class="course_label_number_courses">
+                                                <i class="fa fa-book" aria-hidden="true"></i>
+                                                {{ item.nbr_courses ~ ' ' ~ 'Courses'|get_lang }}
+                                            </li>
+                                            <li class="course_label_number_users">
+                                                <i class="fa fa-user" aria-hidden="true"></i>
+                                                {{ item.nbr_users ~ ' ' ~ 'NbUsers'|get_lang }}
+                                            </li>
+                                        </ul>
+                                    </div>
+                                {% endif %}
+                                {% if catalog_settings.sessions.show_session_date %}
+                                    <div class="block-date">
+                                        {{ item.duration ? 'SessionDurationXDaysLeft'|get_lang|format(item.duration) : item.date }}
+                                    </div>
+                                {% endif %}
                                 <div class="toolbar row">
                                     {% if item.price %}
                                         <div class="col-sm-4">

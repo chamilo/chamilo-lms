@@ -130,21 +130,21 @@ if ($conferenceManager) {
             exit;
             break;
         case 'logout':
-            if ($plugin->get('allow_regenerate_recording') !== 'true') {
-                api_not_allowed(true);
-            }
-            $allow = api_get_course_setting('bbb_force_record_generation', $courseInfo) == 1 ? true : false;
-            if ($allow) {
-                $result = $bbb->getMeetingByRemoteId($_GET['remote_id']);
-                if (!empty($result)) {
-                    $result = $bbb->regenerateRecording($result['id']);
-                    if ($result) {
-                        Display::addFlash(Display::return_message(get_lang('Success')));
-                    } else {
-                        Display::addFlash(Display::return_message(get_lang('Error'), 'error'));
+            if ($plugin->get('allow_regenerate_recording') === 'true') {
+                $allow = api_get_course_setting('bbb_force_record_generation', $courseInfo) == 1 ? true : false;
+                if ($allow) {
+                    $result = $bbb->getMeetingByRemoteId($_GET['remote_id']);
+                    if (!empty($result)) {
+                        $result = $bbb->regenerateRecording($result['id']);
+                        if ($result) {
+                            Display::addFlash(Display::return_message(get_lang('Success')));
+                        } else {
+                            Display::addFlash(Display::return_message(get_lang('Error'), 'error'));
+                        }
                     }
                 }
             }
+
             header('Location: '.$bbb->getListingUrl());
             exit;
             break;
@@ -188,12 +188,12 @@ if ($bbb->isGlobalConference() === false &&
     $plugin->get('enable_conference_in_course_groups') === 'true'
 ) {
     $url = api_get_self().'?'.api_get_cidreq(true, false).'&gidReq=';
-    $htmlHeadXtra[] = '<script>        
+    $htmlHeadXtra[] = '<script>
         $(document).ready(function() {
             $("#group_select").on("change", function() {
                 var groupId = $(this).find("option:selected").val();
-                var url = "'.$url.'";                
-                window.location.replace(url+groupId);                
+                var url = "'.$url.'";
+                window.location.replace(url+groupId);
             });
         });
         </script>';

@@ -1,237 +1,109 @@
 <?php
+
 /* For licensing terms, see /license.txt */
 
 namespace Chamilo\CoreBundle\Entity\Repository;
 
 use Chamilo\CoreBundle\Entity\SequenceResource;
 use Doctrine\ORM\EntityRepository;
-use Fhaculty\Graph\Set\Vertices;
-use Fhaculty\Graph\Vertex;
+use Doctrine\ORM\Query\Expr\Join;
 
 /**
  * Class SequenceRepository
  * The functions inside this class should return an instance of QueryBuilder.
- *
- * @package Chamilo\CoreBundle\Entity\Repository
  */
 class SequenceRepository extends EntityRepository
 {
     /**
-     * Find the SequenceResource based in the resourceId and type.
-     *
-     * @param int $resourceId
-     * @param int $type
-     *
-     * @return SequenceResource
-     */
-    public function findRequirementForResource($resourceId, $type)
-    {
-        return $this->findOneBy(['resourceId' => $resourceId, 'type' => $type]);
-    }
-
-    /**
-     * @todo implement for all types only work for sessions
-     *
-     * @param int $resourceId
-     * @param int $type
+     * @param string $type
      *
      * @return array
      */
-    public function getRequirementAndDependencies($resourceId, $type)
+    public static function getItems($type)
     {
-        $sequence = $this->findRequirementForResource($resourceId, $type);
-        $result = ['requirements' => [], 'dependencies' => []];
-        if ($sequence && $sequence->hasGraph()) {
-            $graph = $sequence->getSequence()->getUnSerializeGraph();
-            $vertex = $graph->getVertex($resourceId);
-            $from = $vertex->getVerticesEdgeFrom();
+        $list = [];
 
-            foreach ($from as $subVertex) {
-                $vertexId = $subVertex->getId();
-                $sessionInfo = api_get_session_info($vertexId);
-                $sessionInfo['admin_link'] = '<a href="'.\SessionManager::getAdminPath($vertexId).'">'.$sessionInfo['name'].'</a>';
-                $result['requirements'][] = $sessionInfo;
-            }
+        switch ($type) {
+            case SequenceResource::COURSE_TYPE:
+                $courseListFromDatabase = \CourseManager::get_course_list();
 
-            $to = $vertex->getVerticesEdgeTo();
-            foreach ($to as $subVertex) {
-                $vertexId = $subVertex->getId();
-                $sessionInfo = api_get_session_info($vertexId);
-                $sessionInfo['admin_link'] = '<a href="'.\SessionManager::getAdminPath($vertexId).'">'.$sessionInfo['name'].'</a>';
-                $result['dependencies'][] = $sessionInfo;
-            }
-        }
-
-        return $result;
-    }
-
-    /**
-     * Deletes a node and check in all the dependencies if the node exists in
-     * order to deleted.
-     *
-     * @param int $resourceId
-     * @param int $type
-     */
-    public function deleteResource($resourceId, $type)
-    {
-        $sequence = $this->findRequirementForResource($resourceId, $type);
-        if ($sequence && $sequence->hasGraph()) {
-            $em = $this->getEntityManager();
-            $graph = $sequence->getSequence()->getUnSerializeGraph();
-            $mainVertex = $graph->getVertex($resourceId);
-            $vertices = $graph->getVertices();
-
-            /** @var Vertex $vertex */
-            foreach ($vertices as $vertex) {
-                $subResourceId = $vertex->getId();
-                $subSequence = $this->findRequirementForResource($subResourceId, $type);
-                if ($sequence && $subSequence->hasGraph()) {
-                    $graph = $subSequence->getSequence()->getUnSerializeGraph();
-                    $subMainVertex = $graph->getVertex($resourceId);
-                    $subMainVertex->destroy();
-                    $subSequence->getSequence()->setGraphAndSerialize($graph);
-                    $em->persist($subSequence);
+                if (!empty($courseListFromDatabase)) {
+                    foreach ($courseListFromDatabase as $item) {
+                        $list[$item['id']] = $item['title'].' ('.$item['id'].')';
+                    }
                 }
-            }
 
-            $mainVertex->destroy();
-            $em->remove($sequence);
-            $em->flush();
-        }
-    }
-
-    /**
-     * Get the requirements for a resource only.
-     *
-     * @param int $resourceId The resource ID
-     * @param int $type       The type of sequence resource
-     *
-     * @return array
-     */
-    public function getRequirements($resourceId, $type)
-    {
-        $sequencesResource = $this->findBy([
-            'resourceId' => $resourceId,
-            'type' => $type,
-        ]);
-
-        $result = [];
-        /** @var SequenceResource $sequenceResource */
-        foreach ($sequencesResource as $sequenceResource) {
-            if (!$sequenceResource->hasGraph()) {
-                continue;
-            }
-
-            $sequence = $sequenceResource->getSequence();
-            $graph = $sequence->getUnSerializeGraph();
-            $vertex = $graph->getVertex($resourceId);
-            $from = $vertex->getVerticesEdgeFrom();
-
-            $sequenceInfo = [
-                'name' => $sequence->getName(),
-                'requirements' => [],
-            ];
-
-            foreach ($from as $subVertex) {
-                $vertexId = $subVertex->getId();
-
-                switch ($type) {
-                    case SequenceResource::SESSION_TYPE:
-                        $session = $this->getEntityManager()->getReference(
-                            'ChamiloCoreBundle:Session',
-                            $vertexId
-                        );
-
-                        if (empty($session)) {
-                            break;
-                        }
-
-                        $sequenceInfo['requirements'][$vertexId] = $session;
-                        break;
+                break;
+            case SequenceResource::SESSION_TYPE:
+                $sessionList = \SessionManager::get_sessions_list();
+                if (!empty($sessionList)) {
+                    foreach ($sessionList as $sessionItem) {
+                        $list[$sessionItem['id']] = $sessionItem['name'].' ('.$sessionItem['id'].')';
+                    }
                 }
-            }
 
-            $result[$sequence->getId()] = $sequenceInfo;
+                break;
         }
 
-        return $result;
+        return $list;
+    }
+
+    public function getItem($itemId, $type)
+    {
+        $resource = null;
+        switch ($type) {
+            case SequenceResource::COURSE_TYPE:
+                $repo = $this->getEntityManager()->getRepository('ChamiloCoreBundle:Course');
+
+                break;
+            case SequenceResource::SESSION_TYPE:
+                $repo = $this->getEntityManager()->getRepository('ChamiloCoreBundle:Session');
+
+                break;
+        }
+
+        if ($repo) {
+            $resource = $repo->find($itemId);
+        }
+
+        return $resource;
     }
 
     /**
-     * Get the requirements and dependencies within a sequence for a resource.
-     *
-     * @param int $resourceId The resource ID
-     * @param int $type       The type of sequence resource
-     *
-     * @return array
+     * @param int $id
      */
-    public function getRequirementsAndDependenciesWithinSequences($resourceId, $type)
+    public function removeSequence($id)
     {
-        $sequencesResource = $this->findBy([
-            'resourceId' => $resourceId,
-            'type' => $type,
-        ]);
+        $sequence = $this->find($id);
+        $em = $this->getEntityManager();
+        $em
+            ->createQuery('DELETE FROM ChamiloCoreBundle:SequenceResource sr WHERE sr.sequence = :seq')
+            ->execute(['seq' => $sequence]);
 
-        $result = [];
-
-        /** @var SequenceResource $sequenceResource */
-        foreach ($sequencesResource as $sequenceResource) {
-            if (!$sequenceResource->hasGraph()) {
-                continue;
-            }
-
-            $sequence = $sequenceResource->getSequence();
-            $graph = $sequence->getUnSerializeGraph();
-            $vertex = $graph->getVertex($resourceId);
-            $from = $vertex->getVerticesEdgeFrom();
-            $to = $vertex->getVerticesEdgeTo();
-
-            $requirements = [];
-            $dependencies = [];
-
-            switch ($type) {
-                case SequenceResource::SESSION_TYPE:
-                    $requirements = $this->findSessionFromVerticesEdges($from);
-                    $dependencies = $this->findSessionFromVerticesEdges($to);
-                    break;
-            }
-
-            $result[$sequence->getId()] = [
-                'name' => $sequence->getName(),
-                'requirements' => $requirements,
-                'dependencies' => $dependencies,
-            ];
-        }
-
-        return [
-            'sequences' => $result,
-        ];
+        $em->remove($sequence);
+        $em->flush();
     }
 
     /**
-     * Get sessions from vertices.
-     *
-     * @param Vertices $verticesEdges The vertices
+     * @param string $type
      *
      * @return array
      */
-    protected function findSessionFromVerticesEdges(Vertices $verticesEdges)
+    public function findAllToSelect($type)
     {
-        $sessionVertices = [];
-        foreach ($verticesEdges as $supVertex) {
-            $vertexId = $supVertex->getId();
-            $session = $this->getEntityManager()->getReference(
-                'ChamiloCoreBundle:Session',
-                $vertexId
-            );
+        $qb = $this->createQueryBuilder('r');
+        $qb
+            ->leftJoin('ChamiloCoreBundle:SequenceResource', 'sr', Join::WITH, 'sr.sequence = r');
 
-            if (empty($session)) {
-                continue;
-            }
+        $qb
+            ->andWhere(
+                $qb->expr()->orX(
+                    $qb->expr()->isNull('r.graph'),
+                    $qb->expr()->eq('sr.type', $type)
+                )
+            )
+            ->orderBy('r.name');
 
-            $sessionVertices[$vertexId] = $session;
-        }
-
-        return $sessionVertices;
+        return $qb->getQuery()->getResult();
     }
 }

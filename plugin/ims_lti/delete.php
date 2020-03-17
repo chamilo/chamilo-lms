@@ -18,8 +18,22 @@ if (!$tool) {
     api_not_allowed(true);
 }
 
+$links = [];
+$links[] = 'ims_lti/start.php?id='.$tool->getId();
+
+if (!$tool->getParent()) {
+    /** @var ImsLtiTool $child */
+    foreach ($tool->getChildren() as $child) {
+        $links[] = "ims_lti/start.php?id=".$child->getId();
+    }
+}
+
 $em->remove($tool);
 $em->flush();
+
+$em
+    ->createQuery("DELETE FROM ChamiloCourseBundle:CTool ct WHERE ct.category = :category AND ct.link IN (:links)")
+    ->execute(['category' => 'plugin', 'links' => $links]);
 
 Display::addFlash(
     Display::return_message($plugin->get_lang('ToolDeleted'), 'success')

@@ -1,4 +1,5 @@
 <?php
+
 /* For licensing terms, see /license.txt */
 
 use Chamilo\CoreBundle\Entity\UserRelUser;
@@ -8,8 +9,6 @@ use Chamilo\UserBundle\Entity\User;
  * Script showing information about a user (name, e-mail, courses and sessions).
  *
  * @author Bart Mollet
- *
- * @package chamilo.admin
  */
 $cidReset = true;
 require_once __DIR__.'/../inc/global.inc.php';
@@ -192,7 +191,6 @@ foreach ($data as $label => $item) {
     $csvContent[] = [$label, strip_tags($item)];
     $row++;
 }
-//$userInformation = $table->toHtml();
 
 $table = new HTML_Table(['class' => 'data_table']);
 $table->setHeaderContents(0, 0, get_lang('Tracking'));
@@ -230,7 +228,6 @@ if (api_get_setting('allow_terms_conditions') === 'true') {
     }
 
     $data[get_lang('LegalAccepted')] = $icon;
-
     $userInfo['legal'] = [
         'icon' => $icon,
         'datetime' => $timeLegalAccept,
@@ -253,7 +250,6 @@ foreach ($data as $label => $item) {
 if (api_get_setting('allow_social_tool') === 'true') {
     $userObject = api_get_user_entity($userId);
     $data = [];
-
     // Calculate values
     if (api_get_setting('allow_message_tool') === 'true') {
         $messagesSent = SocialManager::getCountMessagesSent($userId);
@@ -608,7 +604,6 @@ if (isset($_GET['action'])) {
 }
 
 Display::display_header($tool_name);
-
 echo Display::toolbarAction('toolbar-user-information', [implode(PHP_EOL, $actions)]);
 
 $fullUrlBig = UserManager::getUserPicture(
@@ -664,7 +659,6 @@ if ($user['status'] == DRH) {
     if ($usersAssigned) {
         echo Display::page_subheader(get_lang('AssignedUsersListToHumanResourcesManager'));
         echo '<div class="row">';
-
         foreach ($usersAssigned as $userAssigned) {
             $userAssigned = api_get_user_info($userAssigned['user_id']);
             $userPicture = isset($userAssigned['avatar_medium']) ? $userAssigned['avatar_medium'] : $userAssigned['avatar'];
@@ -704,9 +698,9 @@ echo Tracking::displayUserSkills(
     0,
     0
 );
-
 if (api_get_configuration_value('allow_career_users')) {
     $careers = UserManager::getUserCareers($userId);
+
     if (!empty($careers)) {
         echo Display::page_subheader(get_lang('Careers'), null, 'h3', ['class' => 'section-title']);
         $table = new HTML_Table(['class' => 'data_table']);

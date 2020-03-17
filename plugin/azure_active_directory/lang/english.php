@@ -25,3 +25,4 @@ $strings['management_login_name_help'] = 'By default is "Management Login".';
 $strings['OrganisationEmail'] = 'Organisation e-mail';
 $strings['AzureId'] = 'Azure ID (mailNickname)';
 $strings['ManagementLogin'] = 'Management Login';
+$strings['InvalidId'] = 'Login failed - incorrect login or password. Errocode: AZMNF';

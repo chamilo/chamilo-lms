@@ -597,9 +597,6 @@ class User implements UserInterface //implements ParticipantInterface, ThemeUser
             ;
     }
 
-    /**
-     * @param ClassMetadata $metadata
-     */
     public static function loadValidatorMetadata(ClassMetadata $metadata)
     {
         //$metadata->addPropertyConstraint('firstname', new Assert\NotBlank());
@@ -1452,8 +1449,6 @@ class User implements UserInterface //implements ParticipantInterface, ThemeUser
     /**
      * Set lastLogin.
      *
-     * @param \DateTime $lastLogin
-     *
      * @return User
      */
     public function setLastLogin(\DateTime $lastLogin)
@@ -1654,8 +1649,6 @@ class User implements UserInterface //implements ParticipantInterface, ThemeUser
     /**
      * Sets the last update date.
      *
-     * @param \DateTime|null $updatedAt
-     *
      * @return User
      */
     public function setUpdatedAt(\DateTime $updatedAt = null)
@@ -1697,8 +1690,6 @@ class User implements UserInterface //implements ParticipantInterface, ThemeUser
 
     /**
      * Sets the credentials expiration date.
-     *
-     * @param \DateTime|null $date
      *
      * @return User
      */
@@ -2102,8 +2093,6 @@ class User implements UserInterface //implements ParticipantInterface, ThemeUser
     }
 
     /**
-     * @param array $roles
-     *
      * @return User
      */
     public function setRealRoles(array $roles)
@@ -2304,8 +2293,6 @@ class User implements UserInterface //implements ParticipantInterface, ThemeUser
     }
 
     /**
-     * @param \DateTime $date
-     *
      * @return User
      */
     public function setExpiresAt(\DateTime $date)
@@ -2397,8 +2384,6 @@ class User implements UserInterface //implements ParticipantInterface, ThemeUser
     }
 
     /**
-     * @param GroupInterface $group
-     *
      * @return $this
      */
     public function addGroup(GroupInterface $group)
@@ -2599,5 +2584,65 @@ class User implements UserInterface //implements ParticipantInterface, ThemeUser
         $id = $this->id;
 
         return 'users/'.substr((string) $id, 0, 1).'/'.$id.'/'.'small_'.$this->getPictureUri();
+    }
+
+    /**
+     * Retreives this user's related sessions.
+     *
+     * @param int $relationType \Chamilo\CoreBundle\Entity\SessionRelUser::relationTypeList key
+     *
+     * @return \Chamilo\CoreBundle\Entity\Session[]
+     */
+    public function getSessions($relationType)
+    {
+        $sessions = [];
+        foreach (\Database::getManager()->getRepository('ChamiloCoreBundle:SessionRelUser')->findBy([
+            'user' => $this,
+        ]) as $sessionRelUser) {
+            if ($sessionRelUser->getRelationType() == $relationType) {
+                $sessions[] = $sessionRelUser->getSession();
+            }
+        }
+
+        return $sessions;
+    }
+
+    /**
+     * Retreives this user's related student sessions.
+     *
+     * @return \Chamilo\CoreBundle\Entity\Session[]
+     */
+    public function getStudentSessions()
+    {
+        return $this->getSessions(0);
+    }
+
+    /**
+     * Retreives this user's related DRH sessions.
+     *
+     * @return \Chamilo\CoreBundle\Entity\Session[]
+     */
+    public function getDRHSessions()
+    {
+        return $this->getSessions(1);
+    }
+
+    /**
+     * Retreives this user's related accessible sessions of a type, student by default.
+     *
+     * @param int $relationType \Chamilo\CoreBundle\Entity\SessionRelUser::relationTypeList key
+     *
+     * @return \Chamilo\CoreBundle\Entity\Session[]
+     */
+    public function getCurrentlyAccessibleSessions($relationType = 0)
+    {
+        $sessions = [];
+        foreach ($this->getSessions($relationType) as $session) {
+            if ($session->isCurrentlyAccessible()) {
+                $sessions[] = $session;
+            }
+        }
+
+        return $sessions;
     }
 }

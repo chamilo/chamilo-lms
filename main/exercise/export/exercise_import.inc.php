@@ -358,6 +358,7 @@ function parseQti2($xmlData)
     $currentQuestionItemBody = '';
     $cardinality = '';
     $nonHTMLTagToAvoid = [
+        'prompt',
         'simpleChoice',
         'choiceInteraction',
         'inlineChoiceInteraction',
@@ -391,6 +392,7 @@ function parseQti2($xmlData)
                     'category' => $node->getAttribute('category'),
                     'type' => '',
                     'tempdir' => $questionTempDir,
+                    'description' => null,
                 ];
                 break;
             case 'section':
@@ -620,6 +622,15 @@ function parseQti2($xmlData)
                     }
                 }
                 break;
+            case 'prompt':
+                $description = trim($node->nodeValue);
+                $description = htmlspecialchars_decode($description);
+                $description = Security::remove_XSS($description);
+
+                if (!empty($description)) {
+                    $exerciseInfo['question'][$currentQuestionIdent]['description'] = $description;
+                }
+                break;
         }
     }
 }
@@ -709,10 +720,10 @@ function qtiProcessManifest($filePath)
             $specialHref = Database::escape_string(preg_replace('/_/', '-', strtolower($href)));
             $specialHref = preg_replace('/(-){2,8}/', '-', $specialHref);
 
-            $sql = "SELECT iid FROM $tableDocuments 
+            $sql = "SELECT iid FROM $tableDocuments
                     WHERE
-                        c_id = ".$course['real_id']." AND 
-                        session_id = $sessionId AND 
+                        c_id = ".$course['real_id']." AND
+                        session_id = $sessionId AND
                         path = '/".$specialHref."'";
             $result = Database::query($sql);
             $documentId = 0;

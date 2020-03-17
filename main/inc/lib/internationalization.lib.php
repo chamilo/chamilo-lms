@@ -271,8 +271,8 @@ function api_get_language_isocode($language = null, $default_code = 'en')
             // This might happen, in case of calling this function early during the global initialization.
             return $default_code; // This might happen, in case of calling this function early during the global initialization.
         }
-        $sql = "SELECT isocode 
-                FROM ".Database::get_main_table(TABLE_MAIN_LANGUAGE)." 
+        $sql = "SELECT isocode
+                FROM ".Database::get_main_table(TABLE_MAIN_LANGUAGE)."
                 WHERE dokeos_folder = '$language'";
         $sql_result = Database::query($sql);
         if (Database::num_rows($sql_result)) {
@@ -299,8 +299,8 @@ function api_get_language_isocode($language = null, $default_code = 'en')
 function api_get_platform_isocodes()
 {
     $iso_code = [];
-    $sql = "SELECT isocode 
-            FROM ".Database::get_main_table(TABLE_MAIN_LANGUAGE)." 
+    $sql = "SELECT isocode
+            FROM ".Database::get_main_table(TABLE_MAIN_LANGUAGE)."
             ORDER BY isocode ";
     $sql_result = Database::query($sql);
     if (Database::num_rows($sql_result)) {

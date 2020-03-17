@@ -234,6 +234,10 @@ class Template
             $this->assign('language_form', api_display_language_form());
         }
 
+        if (api_get_configuration_value('notification_event')) {
+            $this->assign('notification_event', '1');
+        }
+
         // Chamilo plugins
         if ($this->show_header) {
             if ($this->load_plugins) {
@@ -823,7 +827,7 @@ class Template
                 $courseLogoutCode = "
                 <script>
                 var logOutUrl = '".$ajax."course.ajax.php?a=course_logout&".api_get_cidreq()."';
-                function courseLogout() {                
+                function courseLogout() {
                     $.ajax({
                         async : false,
                         url: logOutUrl,
@@ -959,6 +963,7 @@ class Template
      */
     public function display($template, $clearFlashMessages = true)
     {
+        $this->assign('page_origin', api_get_origin());
         $this->assign('flash_messages', Display::getFlashToString());
 
         if ($clearFlashMessages) {
@@ -1071,11 +1076,67 @@ class Template
         return Display::return_message($message, 'error', false);
     }
 
+    public static function displayCASLoginButton($label = null)
+    {
+        $course = api_get_course_id();
+        $form = new FormValidator(
+            'form-cas-login',
+            'POST',
+            null,
+            null,
+            null,
+            FormValidator::LAYOUT_BOX_NO_LABEL
+        );
+        $form->addHidden('forceCASAuthentication', 1);
+        $form->addButton(
+            'casLoginButton',
+            is_null($label) ? sprintf(get_lang('LoginWithYourAccount'), api_get_setting("Institution")) : $label,
+            api_get_setting("casLogoURL"),
+            'primary',
+            null,
+            'btn-block'
+        );
+
+        return $form->returnForm();
+    }
+
+    public static function displayCASLogoutButton($label = null)
+    {
+        $form = new FormValidator(
+            'form-cas-logout',
+            'GET',
+            api_get_path(WEB_PATH),
+            null,
+            null,
+            FormValidator::LAYOUT_BOX_NO_LABEL
+        );
+        $form->addHidden('logout', 1);
+        $form->addButton(
+            'casLogoutButton',
+            is_null($label) ? sprintf(get_lang('LogoutWithYourAccount'), api_get_setting("Institution")) : $label,
+            api_get_setting("casLogoURL"),
+            'primary',
+            null,
+            'btn-block'
+        );
+
+        return $form->returnForm();
+    }
+
     /**
+     * @throws Exception
+     *
      * @return string
      */
-    public function displayLoginForm()
+    public static function displayLoginForm()
     {
+        // Get the $cas array from app/config/auth.conf.php
+        global $cas;
+
+        if (is_array($cas) && array_key_exists('replace_login_form', $cas) && $cas['replace_login_form']) {
+            return self::displayCASLoginButton();
+        }
+
         $form = new FormValidator(
             'form-login',
             'POST',
@@ -1140,7 +1201,7 @@ class Template
 
                 // Minimum options using all defaults (including defaults for Image_Text):
                 //$options = array('callback' => 'qfcaptcha_image.php');
-                $captcha_question = $form->addElement('CAPTCHA_Image', 'captcha_question', '', $options);
+                $captchaQuestion = $form->addElement('CAPTCHA_Image', 'captcha_question', '', $options);
                 $form->addHtml(get_lang('ClickOnTheImageForANewOne'));
 
                 $form->addElement(
@@ -1159,7 +1220,7 @@ class Template
                     'captcha',
                     get_lang('TheTextYouEnteredDoesNotMatchThePicture'),
                     'CAPTCHA',
-                    $captcha_question
+                    $captchaQuestion
                 );
             }
         }

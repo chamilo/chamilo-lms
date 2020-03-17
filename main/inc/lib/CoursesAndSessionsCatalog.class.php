@@ -137,7 +137,7 @@ class CoursesAndSessionsCatalog
             $accessUrlId = 1;
         }
 
-        $sql = "SELECT count(course.id) 
+        $sql = "SELECT count(course.id)
                 FROM $tableCourse course
                 INNER JOIN $tableCourseRelAccessUrl u
                 ON (course.id = u.c_id)
@@ -207,9 +207,7 @@ class CoursesAndSessionsCatalog
             'level' => 0,
         ];
 
-        $result = array_merge($list, $categories);
-
-        return $result;
+        return array_merge($list, $categories);
     }
 
     /**
@@ -320,22 +318,22 @@ class CoursesAndSessionsCatalog
                 $result = Database::query($sql);
                 list($num_records) = Database::fetch_row($result);
 
-                $sql = "SELECT course.id, course.id as real_id 
+                $sql = "SELECT course.id, course.id as real_id
                         FROM $tbl_course course
                         INNER JOIN $tbl_url_rel_course as url_rel_course
                         ON (url_rel_course.c_id = course.id)
                         WHERE
                             $urlCondition AND
                             RAND()*$num_records< $random_value
-                            $avoidCoursesCondition 
+                            $avoidCoursesCondition
                             $visibilityCondition
                         ORDER BY RAND()
                         LIMIT 0, $random_value";
             } else {
                 $sql = "SELECT id, id as real_id FROM $tbl_course course
-                        WHERE 
-                            RAND()*$num_records< $random_value 
-                            $avoidCoursesCondition 
+                        WHERE
+                            RAND()*$num_records< $random_value
+                            $avoidCoursesCondition
                             $visibilityCondition
                         ORDER BY RAND()
                         LIMIT 0, $random_value";
@@ -374,7 +372,7 @@ class CoursesAndSessionsCatalog
             }
 
             if (empty($category_code) || $category_code == 'ALL') {
-                $sql = "SELECT *, id as real_id 
+                $sql = "SELECT *, id as real_id
                         FROM $tbl_course course
                         WHERE
                           1=1
@@ -384,7 +382,7 @@ class CoursesAndSessionsCatalog
             } else {
                 $sql = "SELECT *, id as real_id FROM $tbl_course course
                         WHERE
-                            $conditionCode 
+                            $conditionCode
                             $avoidCoursesCondition
                             $visibilityCondition
                         ORDER BY title $limitFilter ";
@@ -501,7 +499,7 @@ class CoursesAndSessionsCatalog
                         INNER JOIN $tbl_url_rel_course as url_rel_course
                         ON (url_rel_course.c_id = course.id)
                         WHERE
-                            access_url_id = $urlId AND 
+                            access_url_id = $urlId AND
                             (
                                 code LIKE '%".$search_term_safe."%' OR
                                 title LIKE '%".$search_term_safe."%' OR
@@ -569,16 +567,11 @@ class CoursesAndSessionsCatalog
     {
         $urlId = api_get_current_access_url_id();
 
-        $select = 's';
-        if ($getCount) {
-            $select = 'count(s) ';
-        }
-
-        $dql = "SELECT $select
+        /*$dql = "SELECT $select
                 FROM ChamiloCoreBundle:Session s
-                WHERE EXISTS 
+                WHERE EXISTS
                     (
-                        SELECT url.sessionId FROM ChamiloCoreBundle:AccessUrlRelSession url 
+                        SELECT url.sessionId FROM ChamiloCoreBundle:AccessUrlRelSession url
                         WHERE url.sessionId = s.id AND url.accessUrlId = $urlId
                     ) AND
                     s.nbrCourses > 0
@@ -587,23 +580,70 @@ class CoursesAndSessionsCatalog
             $date = Database::escape_string($date);
             $dql .= "
                 AND (
-                    (s.accessEndDate IS NULL) 
+                    (s.accessEndDate IS NULL)
                     OR
-                    ( 
-                    s.accessStartDate IS NOT NULL AND  
-                    s.accessEndDate IS NOT NULL AND
-                    s.accessStartDate >= '$date' AND s.accessEndDate <= '$date')                    
-                    OR 
                     (
-                        s.accessStartDate IS NULL AND 
-                        s.accessEndDate IS NOT NULL AND 
-                        s.accessStartDate >= '$date'
+                    s.accessStartDate IS NOT NULL AND
+                    s.accessEndDate IS NOT NULL AND
+                    s.accessStartDate <= '$date' AND s.accessEndDate >= '$date')
+                    OR
+                    (
+                        s.accessStartDate IS NULL AND
+                        s.accessEndDate IS NOT NULL AND
+                        s.accessEndDate >= '$date'
                     )
                 )
             ";
+        }*/
+
+        $em = Database::getManager();
+        $qb = $em->createQueryBuilder();
+        $qb2 = $em->createQueryBuilder();
+
+        $qb = $qb
+            ->select('s')
+            ->from('ChamiloCoreBundle:Session', 's')
+            ->where(
+                $qb->expr()->in(
+                    's',
+                    $qb2
+                        ->select('s2')
+                        ->from('ChamiloCoreBundle:AccessUrlRelSession', 'url')
+                        ->join('ChamiloCoreBundle:Session', 's2')
+                        ->where(
+                            $qb->expr()->eq('url.sessionId ', 's2.id')
+                        )->andWhere(
+                            $qb->expr()->eq('url.accessUrlId ', $urlId))
+                        ->getDQL()
+                )
+            )
+            ->andWhere($qb->expr()->gt('s.nbrCourses', 0))
+        ;
+
+        if (!is_null($date)) {
+            $qb->andWhere(
+        $qb->expr()->orX(
+                $qb->expr()->isNull('s.accessEndDate'),
+                    $qb->expr()->andX(
+                        $qb->expr()->isNotNull('s.accessStartDate'),
+                        $qb->expr()->isNotNull('s.accessEndDate'),
+                       $qb->expr()->lte('s.accessStartDate', $date),
+                        $qb->expr()->gte('s.accessEndDate', $date)
+                    ),
+                    $qb->expr()->andX(
+                        $qb->expr()->isNull('s.accessStartDate'),
+                        $qb->expr()->isNotNull('s.accessEndDate'),
+                        $qb->expr()->gte('s.accessEndDate', $date)
+                    )
+                )
+            );
         }
 
-        $qb = Database::getManager()->createQuery($dql);
+        if ($getCount) {
+            $qb->select('count(s)');
+        }
+
+        $qb = self::hideFromSessionCatalogCondition($qb);
 
         if (!empty($limit)) {
             $qb
@@ -612,15 +652,50 @@ class CoursesAndSessionsCatalog
             ;
         }
 
+        $query = $qb->getQuery();
+
         if ($returnQueryBuilder) {
-            return $qb;
+            return $query;
         }
 
         if ($getCount) {
-            return $qb->getSingleScalarResult();
+            return $query->getSingleScalarResult();
         }
 
-        return $qb->getResult();
+        return $query->getResult();
+    }
+
+    /**
+     * @param \Doctrine\ORM\QueryBuilder $qb
+     *
+     * @return mixed
+     */
+    public static function hideFromSessionCatalogCondition($qb)
+    {
+        $em = Database::getManager();
+        $qb3 = $em->createQueryBuilder();
+
+        $extraField = new \ExtraField('session');
+        $extraFieldInfo = $extraField->get_handler_field_info_by_field_variable('hide_from_catalog');
+        if (!empty($extraFieldInfo)) {
+            $qb->andWhere(
+                $qb->expr()->notIn(
+                    's',
+                    $qb3
+                        ->select('s3')
+                        ->from('ChamiloCoreBundle:ExtraFieldValues', 'fv')
+                        ->innerJoin('ChamiloCoreBundle:Session', 's3', Join::WITH, 'fv.itemId = s3.id')
+                        ->where(
+                            $qb->expr()->eq('fv.field', $extraFieldInfo['id'])
+                        )->andWhere(
+                            $qb->expr()->eq('fv.value ', 1)
+                        )
+                        ->getDQL()
+                )
+            );
+        }
+
+        return $qb;
     }
 
     /**
@@ -638,7 +713,7 @@ class CoursesAndSessionsCatalog
 
         $urlId = api_get_current_access_url_id();
 
-        $sessions = $qb->select('s')
+        $qb->select('s')
             ->distinct()
             ->from('ChamiloCoreBundle:Session', 's')
             ->innerJoin(
@@ -676,24 +751,69 @@ class CoursesAndSessionsCatalog
             )
             ->andWhere(
                 $qb->expr()->eq('f.extraFieldType', ExtraField::COURSE_FIELD_TYPE)
-            )->andWhere(
+            )
+            ->andWhere(
+                $qb->expr()->gt('s.nbrCourses', 0)
+            )
+            ->andWhere(
                 $qb->expr()->eq('url.accessUrlId', $urlId)
             )
             ->setFirstResult($limit['start'])
             ->setMaxResults($limit['length'])
             ->setParameter('tag', "$termTag%")
-            ->getQuery()
-            ->getResult();
+            ;
 
-        $sessionsToBrowse = [];
-        foreach ($sessions as $session) {
-            if ($session->getNbrCourses() === 0) {
-                continue;
-            }
-            $sessionsToBrowse[] = $session;
-        }
+        $qb = self::hideFromSessionCatalogCondition($qb);
 
-        return $sessionsToBrowse;
+        return $qb->getQuery()->getResult();
+    }
+
+    /**
+     * Search sessions by the title.
+     *
+     * @param string $keyword
+     * @param array  $limit   Limit info
+     *
+     * @return array The sessions
+     */
+    public static function getSessionsByName($keyword, array $limit)
+    {
+        $em = Database::getManager();
+        $qb = $em->createQueryBuilder();
+
+        $urlId = api_get_current_access_url_id();
+
+        $qb->select('s')
+            ->distinct()
+            ->from('ChamiloCoreBundle:Session', 's')
+            ->innerJoin(
+                'ChamiloCoreBundle:SessionRelCourse',
+                'src',
+                Join::WITH,
+                's.id = src.session'
+            )
+            ->innerJoin(
+                'ChamiloCoreBundle:AccessUrlRelSession',
+                'url',
+                Join::WITH,
+                'url.sessionId = s.id'
+            )
+            ->andWhere(
+                $qb->expr()->eq('url.accessUrlId', $urlId)
+            )->andWhere(
+                's.name LIKE :keyword'
+            )
+            ->andWhere(
+                $qb->expr()->gt('s.nbrCourses', 0)
+            )
+            ->setFirstResult($limit['start'])
+            ->setMaxResults($limit['length'])
+            ->setParameter('keyword', "%$keyword%")
+        ;
+
+        $qb = self::hideFromSessionCatalogCondition($qb);
+
+        return $qb->getQuery()->getResult();
     }
 
     /**

@@ -79,8 +79,8 @@ if (isset($_REQUEST['load_ajax'])) {
             echo get_lang('ThereWasAnError');
         } else {
             $origin_course_code = $combination_result['course_code'];
-            $origin_session_id = intval($combination_result['session_id']);
-            $new_session_id = intval($_REQUEST['session_id']);
+            $origin_session_id = (int) $combination_result['session_id'];
+            $new_session_id = (int) $_REQUEST['session_id'];
             $session = $em->find('ChamiloCoreBundle:Session', $new_session_id);
 
             //if (!isset($_REQUEST['view_stat'])) {
@@ -89,7 +89,7 @@ if (isset($_REQUEST['load_ajax'])) {
                 exit;
             }
             //}
-            $user_id = intval($_REQUEST['user_id']);
+            $user_id = (int) $_REQUEST['user_id'];
 
             $new_course_list = SessionManager::get_course_list_by_session_id($new_session_id);
 
@@ -173,9 +173,9 @@ if (isset($_REQUEST['load_ajax'])) {
                 // DESTINY COURSE
                 if (!$update_database) {
                     $sql = "SELECT * FROM $TABLETRACK_EXERCICES
-                            WHERE 
-                                c_id = $course_id AND  
-                                session_id = $new_session_id AND 
+                            WHERE
+                                c_id = $course_id AND
+                                session_id = $new_session_id AND
                                 exe_user_id = $user_id ";
                     $res = Database::query($sql);
                     $list = [];
@@ -186,7 +186,7 @@ if (isset($_REQUEST['load_ajax'])) {
                     if (!empty($list)) {
                         foreach ($list as $exe_id => $data) {
                             if ($update_database) {
-                                $sql = "UPDATE $TABLETRACK_EXERCICES 
+                                $sql = "UPDATE $TABLETRACK_EXERCICES
                                         SET session_id = '$new_session_id'
                                         WHERE exe_id = $exe_id";
                                 $res = Database::query($sql);
@@ -217,8 +217,8 @@ if (isset($_REQUEST['load_ajax'])) {
                 if (!empty($list)) {
                     foreach ($list as $id => $data) {
                         if ($update_database) {
-                            $sql = "UPDATE $TBL_TRACK_E_COURSE_ACCESS 
-                                    SET session_id = $new_session_id 
+                            $sql = "UPDATE $TBL_TRACK_E_COURSE_ACCESS
+                                    SET session_id = $new_session_id
                                     WHERE course_access_id = $id";
                             if ($debug) {
                                 echo $sql;
@@ -243,8 +243,8 @@ if (isset($_REQUEST['load_ajax'])) {
                 if (!empty($list)) {
                     foreach ($list as $id) {
                         if ($update_database) {
-                            $sql = "UPDATE $TBL_TRACK_E_LAST_ACCESS 
-                                    SET access_session_id = $new_session_id 
+                            $sql = "UPDATE $TBL_TRACK_E_LAST_ACCESS
+                                    SET access_session_id = $new_session_id
                                     WHERE access_id = $id";
                             if ($debug) {
                                 echo $sql;
@@ -262,23 +262,23 @@ if (isset($_REQUEST['load_ajax'])) {
                         WHERE user_id = $user_id AND session_id = $origin_session_id AND c_id = $course_id ";
                 $res = Database::query($sql);
 
-                //Getting the list of LPs in the new session
+                // Getting the list of LPs in the new session
                 $lp_list = new LearnpathList($user_id, $course_info, $new_session_id);
                 $flat_list = $lp_list->get_flat_list();
 
                 $list = [];
                 while ($row = Database::fetch_array($res, 'ASSOC')) {
-                    //Checking if the LP exist in the new session
-                    if (in_array($row['lp_id'], array_keys($flat_list))) {
-                        $list[$row['id']] = $row;
-                    }
+                    // Checking if the LP exist in the new session
+                    //if (in_array($row['lp_id'], array_keys($flat_list))) {
+                    $list[$row['id']] = $row;
+                    //}
                 }
 
                 if (!empty($list)) {
                     foreach ($list as $id => $data) {
                         if ($update_database) {
-                            $sql = "UPDATE $TBL_LP_VIEW 
-                                    SET session_id = $new_session_id 
+                            $sql = "UPDATE $TBL_LP_VIEW
+                                    SET session_id = $new_session_id
                                     WHERE c_id = $course_id AND id = $id ";
                             if ($debug) {
                                 var_dump($sql);
@@ -322,10 +322,11 @@ if (isset($_REQUEST['load_ajax'])) {
                     $list = [];
                     while ($row = Database::fetch_array($res, 'ASSOC')) {
                         //Checking if the LP exist in the new session
-                        if (in_array($row['lp_id'], array_keys($flat_list))) {
-                            $list[$row['id']] = $row;
-                        }
+                        //if (in_array($row['lp_id'], array_keys($flat_list))) {
+                        $list[$row['id']] = $row;
+                        //}
                     }
+
                     if (!empty($list)) {
                         foreach ($list as $id => $data) {
                             //Getting all information of that lp_item_id
@@ -351,7 +352,7 @@ if (isset($_REQUEST['load_ajax'])) {
 
                 //6. Agenda
                 //calendar_event_attachment no problems no session_id
-                $sql = "SELECT ref FROM $TBL_ITEM_PROPERTY 
+                $sql = "SELECT ref FROM $TBL_ITEM_PROPERTY
                         WHERE tool = 'calendar_event' AND insert_user_id = $user_id AND c_id = $course_id ";
                 $res = Database::query($sql);
                 while ($row = Database::fetch_array($res, 'ASSOC')) {
@@ -371,7 +372,7 @@ if (isset($_REQUEST['load_ajax'])) {
 
                 //7. Forum ?? So much problems when trying to import data
                 //8. Student publication - Works
-                $sql = "SELECT ref FROM $TBL_ITEM_PROPERTY 
+                $sql = "SELECT ref FROM $TBL_ITEM_PROPERTY
                         WHERE tool = 'work' AND insert_user_id = $user_id AND c_id = $course_id";
                 if ($debug) {
                     echo $sql;
@@ -391,7 +392,7 @@ if (isset($_REQUEST['load_ajax'])) {
                         }
                         $parent_id = $data['parent_id'];
                         if (isset($data['parent_id']) && !empty($data['parent_id'])) {
-                            $sql = "SELECT * FROM $TBL_STUDENT_PUBLICATION 
+                            $sql = "SELECT * FROM $TBL_STUDENT_PUBLICATION
                                     WHERE id = $parent_id AND c_id = $course_id";
                             $select_res = Database::query($sql);
                             $parent_data = Database::fetch_array(
@@ -543,7 +544,7 @@ if (isset($_REQUEST['load_ajax'])) {
 
                 //9. Survey   Pending
                 //10. Dropbox - not neccesary to move categories (no presence of session_id)
-                $sql = "SELECT id FROM $TBL_DROPBOX_FILE 
+                $sql = "SELECT id FROM $TBL_DROPBOX_FILE
                         WHERE uploader_id = $user_id AND session_id = $origin_session_id AND c_id = $course_id";
                 if ($debug) {
                     var_dump($sql);
@@ -584,8 +585,8 @@ if (isset($_REQUEST['load_ajax'])) {
                 while ($row = Database::fetch_array($res, 'ASSOC')) {
                     $id = $row['notebook_id'];
                     if ($update_database) {
-                        $sql = "UPDATE $TBL_NOTEBOOK 
-                                SET session_id = $new_session_id 
+                        $sql = "UPDATE $TBL_NOTEBOOK
+                                SET session_id = $new_session_id
                                 WHERE c_id = $course_id AND notebook_id = $id";
                         if ($debug) {
                             var_dump($sql);
@@ -709,7 +710,7 @@ if (isset($_GET['page']) && !empty($_GET['page'])) {
     $page = intval($_GET['page']);
 }
 $default = 20;
-$count = UserManager::get_number_of_users();
+$count = UserManager::get_number_of_users(null, api_get_current_access_url_id());
 $nro_pages = round($count / $default) + 1;
 $begin = $default * ($page - 1);
 $end = $default * $page;

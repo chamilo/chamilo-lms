@@ -1,4 +1,5 @@
 <?php
+
 /* For licensing terms, see /license.txt */
 
 /**
@@ -42,12 +43,14 @@ switch ($action) {
                 $sessionId
             );
         }
-        $foo_print = grapher($sql_result, $start_date, $end_date, $type);
+        $foo_print = MySpace::grapher($sql_result, $start_date, $end_date, $type);
         echo $foo_print;
 
         break;
     case 'access_detail_by_date':
-        $db = ['is_empty' => true];
+        $export = isset($_REQUEST['export']) ? $_REQUEST['export'] : false;
+
+        $result = ['is_empty' => true];
         $start_date = isset($_REQUEST['startDate']) ? $_REQUEST['startDate'] : '';
         $end_date = isset($_REQUEST['endDate']) ? $_REQUEST['endDate'] : '';
         $user_id = isset($_REQUEST['student']) ? $_REQUEST['student'] : '';
@@ -56,45 +59,73 @@ switch ($action) {
         $sessionId = isset($_REQUEST['session_id']) ? $_REQUEST['session_id'] : 0;
         $courseInfo = api_get_course_info($course_code);
 
-        $sql_result = MySpace::get_connections_to_course_by_date(
+        $connections = MySpace::get_connections_to_course_by_date(
             $user_id,
             $courseInfo,
             $sessionId,
             $start_date,
-            $end_date
+            $end_date,
+            true
         );
 
-        if (is_array($sql_result) && count($sql_result) > 0) {
-            $db['is_empty'] = false;
-            $db['result'] = convert_to_string($sql_result);
-            $rst = get_stats(
+        if (is_array($connections) && count($connections) > 0) {
+            $result['is_empty'] = false;
+            $tableData = [];
+            foreach ($connections as $data) {
+                $item = [
+                    api_get_local_time($data['login']),
+                    api_time_to_hms(api_strtotime($data['logout']) - api_strtotime($data['login'])),
+                    $data['user_ip'],
+                ];
+                $tableData[] = $item;
+            }
+
+            $table = new SortableTableFromArray(
+                $tableData,
+                0,
+                500,
+                'stat_table',
+                null,
+                'stat_table'
+            );
+            $table->set_header(1, get_lang('LoginDate'), false);
+            $table->set_header(2, get_lang('Duration'), false);
+            $table->set_header(3, get_lang('IP'), false);
+            $result['result'] = $table->return_table();
+
+            if ($export) {
+                Export::arrayToXls($table->toArray());
+                exit;
+            }
+
+            $rst = MySpace::getStats(
                 $user_id,
                 $courseInfo,
                 $sessionId,
                 $start_date,
                 $end_date
             );
-            $foo_stats = '<strong>'.get_lang('Total').': </strong>'.$rst['total'].'<br />';
-            $foo_stats .= '<strong>'.get_lang('Average').': </strong>'.$rst['avg'].'<br />';
-            $foo_stats .= '<strong>'.get_lang('Quantity').' : </strong>'.$rst['times'].'<br />';
-            $db['stats'] = $foo_stats;
-            $db['graph_result'] = grapher($sql_result, $start_date, $end_date, $type);
+            $stats = '<strong>'.get_lang('Total').': </strong>'.$rst['total'].'<br />';
+            $stats .= '<strong>'.get_lang('Average').': </strong>'.$rst['avg'].'<br />';
+            $stats .= '<strong>'.get_lang('Quantity').' : </strong>'.$rst['times'].'<br />';
+            $result['stats'] = $stats;
+            $result['graph_result'] = MySpace::grapher($connections, $start_date, $end_date, $type);
         } else {
-            $db['result'] = Display::return_message(
+            $result['result'] = Display::return_message(
                 get_lang('NoDataAvailable'),
                 'warning'
             );
-            $db['graph_result'] = Display::return_message(
+            $result['graph_result'] = Display::return_message(
                 get_lang('NoDataAvailable'),
                 'warning'
             );
-            $db['stats'] = Display::return_message(
+            $result['stats'] = Display::return_message(
                 get_lang('NoDataAvailable'),
                 'warning'
             );
         }
         header('Cache-Control: no-cache');
-        echo json_encode($db);
+        echo json_encode($result);
         break;
 }
 exit;

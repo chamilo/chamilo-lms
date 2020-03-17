@@ -55,7 +55,7 @@ if (isset($_POST) && $is_error) {
     $file_base_name = str_replace('.'.$extension, '', $filename);
 
     $new_dir = api_replace_dangerous_char(trim($file_base_name));
-    $type = learnpath::get_package_type(
+    $type = learnpath::getPackageType(
         $_FILES['user_file']['tmp_name'],
         $_FILES['user_file']['name']
     );
@@ -162,7 +162,7 @@ if (isset($_POST) && $is_error) {
             Display::return_message(get_lang('UplFileTooBig'))
         );
     }
-    $type = learnpath::get_package_type($s, basename($s));
+    $type = learnpath::getPackageType($s, basename($s));
 
     switch ($type) {
         case 'scorm':

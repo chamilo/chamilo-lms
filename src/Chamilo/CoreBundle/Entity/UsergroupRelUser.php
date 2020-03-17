@@ -65,8 +65,6 @@ class UsergroupRelUser
     /**
      * Set user.
      *
-     * @param User $user
-     *
      * @return UsergroupRelUser
      */
     public function setUser(User $user)
@@ -88,8 +86,6 @@ class UsergroupRelUser
 
     /**
      * Set usergroup.
-     *
-     * @param Usergroup $usergroup
      *
      * @return UsergroupRelUser
      */

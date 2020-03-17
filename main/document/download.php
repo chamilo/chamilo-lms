@@ -8,7 +8,7 @@
  */
 session_cache_limiter('none');
 
-require_once __DIR__.'/../inc/global.inc.php';
+require_once __DIR__.'/../inc/global-min.inc.php';
 $this_section = SECTION_COURSES;
 
 // Protection
@@ -20,10 +20,10 @@ if (!isset($_course)) {
     api_not_allowed(true);
 }
 
-$doc_url = $_GET['doc_url'];
 // Change the '&' that got rewritten to '///' by mod_rewrite back to '&'
-$doc_url = str_replace('///', '&', $doc_url);
+$doc_url = str_replace('///', '&', $_GET['doc_url']);
 // Still a space present? it must be a '+' (that got replaced by mod_rewrite)
+$docUrlNoPlus = $doc_url;
 $doc_url = str_replace(' ', '+', $doc_url);
 
 $docUrlParts = preg_split('/\/|\\\/', $doc_url);
@@ -52,7 +52,10 @@ $refer_script = isset($_SERVER["HTTP_REFERER"]) ? strrchr($_SERVER["HTTP_REFERER
 $sys_course_path = api_get_path(SYS_COURSE_PATH).$_course['path'].'/document';
 
 if (substr($refer_script, 0, 15) == '/fillsurvey.php') {
-    $invitation = substr(strstr($refer_script, 'invitationcode='), 15);
+    list($part1, $part2) = preg_split('/invitationcode=/', $refer_script);
+    list($invitation, $part1) = preg_split('/&/', $part2);
+    unset($part1);
+    unset($part2);
     $course = strstr($refer_script, 'course=');
     $course = substr($course, 7, strpos($course, '&') - 7);
     include '../survey/survey.download.inc.php';
@@ -90,6 +93,14 @@ if (isset($path_info['extension']) && $path_info['extension'] == 'swf') {
             $fix_file_name = true;
         }
     }
+}
+
+// When dealing with old systems or wierd migrations, it might so happen that
+// the filename contains spaces, that were replaced above by '+' signs, but
+// these '+' signs might not match the real filename. Give files with spaces
+// another chance if the '+' version doesn't exist.
+if (!is_file($sys_course_path.$doc_url) && is_file($sys_course_path.$docUrlNoPlus)) {
+    $doc_url = $docUrlNoPlus;
 }
 
 if (Security::check_abs_path($sys_course_path.$doc_url, $sys_course_path.'/')) {

@@ -1056,12 +1056,13 @@ class Answer
      */
     public function getJs()
     {
-        //if ($this->questionId == 2)
         return "<script>
-                jsPlumb.ready(function() {
-                    if ($('#drag{$this->questionId}_question').length > 0) {
-                        MatchingDraggable.init('{$this->questionId}');
-                    }
+                $(window).on('load', function() {
+                    jsPlumb.ready(function() {
+                        if ($('#drag{$this->questionId}_question').length > 0) {
+                            MatchingDraggable.init('{$this->questionId}');
+                        }
+                    });
                 });
             </script>";
     }

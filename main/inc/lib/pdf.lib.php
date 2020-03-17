@@ -930,7 +930,6 @@ class PDF
      * Fix images source paths to allow export to pdf.
      *
      * @param string $documentHtml
-     * @param array  $courseInfo
      * @param string $dirName
      *
      * @return string

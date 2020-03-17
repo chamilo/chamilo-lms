@@ -21,9 +21,6 @@ class CategoryAdmin extends Admin
         '_sort_order' => 'Desc',
     ];
 
-    /**
-     * @param DatagridMapper $datagridMapper
-     */
     protected function configureDatagridFilters(DatagridMapper $datagridMapper)
     {
         $datagridMapper
@@ -34,9 +31,6 @@ class CategoryAdmin extends Admin
         ;
     }
 
-    /**
-     * @param ListMapper $listMapper
-     */
     protected function configureListFields(ListMapper $listMapper)
     {
         $listMapper
@@ -58,9 +52,6 @@ class CategoryAdmin extends Admin
         ;
     }
 
-    /**
-     * @param FormMapper $formMapper
-     */
     protected function configureFormFields(FormMapper $formMapper)
     {
         $formMapper

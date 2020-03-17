@@ -17,6 +17,8 @@ $(function() {
     });
 } ); </script>';
 
+$htmlHeadXtra[] = '<script>'.api_get_language_translate_html().'</script>';
+
 /** @todo this has to be moved to a more appropriate place (after the display_header of the code)*/
 if (!api_is_allowed_to_edit(false, true)) {
     api_not_allowed(true);

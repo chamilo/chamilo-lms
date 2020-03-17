@@ -472,7 +472,7 @@ class Certificate extends Model
         ) {
             $table = Database::get_main_table(TABLE_MAIN_GRADEBOOK_CERTIFICATE);
             $now = api_get_utc_datetime();
-            $sql = 'UPDATE '.$table.' SET 
+            $sql = 'UPDATE '.$table.' SET
                         path_certificate="'.Database::escape_string($path_certificate).'",
                         created_at = "'.$now.'"
                     WHERE cat_id = "'.$categoryId.'" AND user_id="'.$user_id.'" ';
@@ -712,6 +712,8 @@ class Certificate extends Model
         $totalTimeInLearningPaths = 0;
         $sessionsApproved = [];
         $coursesApproved = [];
+        $courseList = [];
+
         if ($sessions) {
             foreach ($sessions as $session) {
                 $allCoursesApproved = [];
@@ -736,25 +738,41 @@ class Certificate extends Model
                             true
                         );
 
+                        // Find time spent in LP
+                        $timeSpent = Tracking::get_time_spent_in_lp(
+                            $this->user_id,
+                            $courseCode,
+                            [],
+                            $session['session_id']
+                        );
+
+                        if (!isset($courseList[$course['real_id']])) {
+                            $courseList[$course['real_id']]['approved'] = false;
+                            $courseList[$course['real_id']]['time_spent'] = 0;
+                        }
+
                         if ($result) {
+                            $courseList[$course['real_id']]['approved'] = true;
                             $coursesApproved[$course['real_id']] = $courseInfo['title'];
 
                             // Find time spent in LP
-                            $totalTimeInLearningPaths += Tracking::get_time_spent_in_lp(
-                                $this->user_id,
-                                $courseCode,
-                                [],
-                                $session['session_id']
-                            );
-
+                            //$totalTimeInLearningPaths += $timeSpent;
                             $allCoursesApproved[] = true;
                         }
+                        $courseList[$course['real_id']]['time_spent'] += $timeSpent;
                     }
                 }
 
                 if (count($allCoursesApproved) == count($session['courses'])) {
                     $sessionsApproved[] = $session;
                 }
+            }
+        }
+
+        $totalTimeInLearningPaths = 0;
+        foreach ($courseList as $courseId => $courseData) {
+            if ($courseData['approved'] === true) {
+                $totalTimeInLearningPaths += $courseData['time_spent'];
             }
         }
 
@@ -787,7 +805,9 @@ class Certificate extends Model
                 null,
                 null,
                 false,
-                false
+                false,
+                false,
+                'd-m-Y'
             )
         );
         $tplContent->assign(
@@ -797,7 +817,9 @@ class Certificate extends Model
                 null,
                 null,
                 false,
-                false
+                false,
+                false,
+                'd-m-Y'
             )
         );
         $tplContent->assign('skills', $skills);
@@ -805,6 +827,7 @@ class Certificate extends Model
         $tplContent->assign('courses', $coursesApproved);
         $tplContent->assign('time_spent_in_lps', api_time_to_hms($totalTimeInLearningPaths));
         $tplContent->assign('time_spent_in_lps_in_hours', round($totalTimeInLearningPaths / 3600, 1));
+
         $layoutContent = $tplContent->get_template('gradebook/custom_certificate.tpl');
         $content = $tplContent->fetch($layoutContent);
 

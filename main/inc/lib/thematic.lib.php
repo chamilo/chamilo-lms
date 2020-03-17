@@ -299,7 +299,7 @@ class Thematic
             }
             $condition = " WHERE active = 1 $condition_session ";
         }
-        $sql = "SELECT * 
+        $sql = "SELECT *
                 FROM $tbl_thematic $condition AND c_id = $course_id
                 ORDER BY display_order ";
 
@@ -502,7 +502,7 @@ class Thematic
         $course_id = api_get_course_int_id();
         $thematic_id = (int) $thematic_id;
 
-        $sql = "SELECT COUNT(id) AS total_number_of_items 
+        $sql = "SELECT COUNT(id) AS total_number_of_items
                 FROM $table
                 WHERE c_id = $course_id AND thematic_id = $thematic_id ";
         $res = Database::query($sql);
@@ -934,7 +934,7 @@ class Thematic
             $sql = "SELECT
                         tp.id, thematic_id, tp.title, description, description_type, t.session_id
                     FROM $tbl_thematic_plan tp
-                    INNER JOIN $tbl_thematic t 
+                    INNER JOIN $tbl_thematic t
                     ON (t.id = tp.thematic_id AND t.c_id = tp.c_id)
                     WHERE
                         t.c_id = $course_id AND
@@ -1189,7 +1189,6 @@ class Thematic
         $all = [];
         if (!empty($thematic_data)) {
             foreach ($thematic_data as $thematic) {
-                $thematic_id = $thematic['id'];
                 if (!empty($thematic_advance_data[$thematic['id']])) {
                     foreach ($thematic_advance_data[$thematic['id']] as $thematic_advance) {
                         $all[] = $thematic_advance['id'];

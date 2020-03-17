@@ -260,8 +260,6 @@ class SessionRelUser
     /**
      * Set registeredAt.
      *
-     * @param \DateTime $registeredAt
-     *
      * @return $this
      */
     public function setRegisteredAt(\DateTime $registeredAt)

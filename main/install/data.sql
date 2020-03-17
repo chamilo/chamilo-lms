@@ -543,6 +543,7 @@ VALUES
 ('cas_activate', 'false', 'No'),
 ('cas_protocol', 'CAS1', 'CAS1Text'),
 ('cas_protocol', 'CAS2', 'CAS2Text'),
+('cas_protocol', 'CAS3', 'CAS3Text'),
 ('cas_protocol', 'SAML', 'SAMLText'),
 ('cas_add_user_activate', 'false', 'No'),
 ('cas_add_user_activate', 'platform', 'casAddUserActivatePlatform'),

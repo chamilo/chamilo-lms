@@ -34,6 +34,15 @@ use Symfony\Component\Finder\Finder;
 class learnpath
 {
     const MAX_LP_ITEM_TITLE_LENGTH = 32;
+    const STATUS_CSS_CLASS_NAME = [
+        'not attempted' => 'scorm_not_attempted',
+        'incomplete' => 'scorm_not_attempted',
+        'failed' => 'scorm_failed',
+        'completed' => 'scorm_completed',
+        'passed' => 'scorm_completed',
+        'succeeded' => 'scorm_completed',
+        'browsed' => 'scorm_completed',
+    ];
 
     public $attempt = 0; // The number for the current ID view.
     public $cc; // Course (code) this learnpath is located in. @todo change name for something more comprensible ...
@@ -1956,9 +1965,9 @@ class learnpath
      * @param string $file_path the path to the file
      * @param string $file_name the original name of the file
      *
-     * @return string 'scorm','aicc','scorm2004','dokeos' or '' if the package cannot be recognized
+     * @return string 'scorm','aicc','scorm2004','dokeos', 'error-empty-package' if the package is empty, or '' if the package cannot be recognized
      */
-    public static function get_package_type($file_path, $file_name)
+    public static function getPackageType($file_path, $file_name)
     {
         // Get name of the zip file without the extension.
         $file_info = pathinfo($file_name);
@@ -1985,43 +1994,47 @@ class learnpath
         $aicc_match_au = 0;
         $aicc_match_des = 0;
         $aicc_match_cst = 0;
+        $countItems = 0;
 
         // The following loop should be stopped as soon as we found the right imsmanifest.xml (how to recognize it?).
-        if (is_array($zipContentArray) && count($zipContentArray) > 0) {
-            foreach ($zipContentArray as $thisContent) {
-                if (preg_match('~.(php.*|phtml)$~i', $thisContent['filename'])) {
-                    // New behaviour: Don't do anything. These files will be removed in scorm::import_package.
-                } elseif (stristr($thisContent['filename'], 'imsmanifest.xml') !== false) {
-                    $manifest = $thisContent['filename']; // Just the relative directory inside scorm/
-                    $package_type = 'scorm';
-                    break; // Exit the foreach loop.
-                } elseif (
-                    preg_match('/aicc\//i', $thisContent['filename']) ||
-                    in_array(
-                        strtolower(pathinfo($thisContent['filename'], PATHINFO_EXTENSION)),
-                        ['crs', 'au', 'des', 'cst']
-                    )
-                ) {
-                    $ext = strtolower(pathinfo($thisContent['filename'], PATHINFO_EXTENSION));
-                    switch ($ext) {
-                        case 'crs':
-                            $aicc_match_crs = 1;
-                            break;
-                        case 'au':
-                            $aicc_match_au = 1;
-                            break;
-                        case 'des':
-                            $aicc_match_des = 1;
-                            break;
-                        case 'cst':
-                            $aicc_match_cst = 1;
-                            break;
-                        default:
-                            break;
+        if (is_array($zipContentArray)) {
+            $countItems = count($zipContentArray);
+            if ($countItems > 0) {
+                foreach ($zipContentArray as $thisContent) {
+                    if (preg_match('~.(php.*|phtml)$~i', $thisContent['filename'])) {
+                        // New behaviour: Don't do anything. These files will be removed in scorm::import_package.
+                    } elseif (stristr($thisContent['filename'], 'imsmanifest.xml') !== false) {
+                        $manifest = $thisContent['filename']; // Just the relative directory inside scorm/
+                        $package_type = 'scorm';
+                        break; // Exit the foreach loop.
+                    } elseif (
+                        preg_match('/aicc\//i', $thisContent['filename']) ||
+                        in_array(
+                            strtolower(pathinfo($thisContent['filename'], PATHINFO_EXTENSION)),
+                            ['crs', 'au', 'des', 'cst']
+                        )
+                    ) {
+                        $ext = strtolower(pathinfo($thisContent['filename'], PATHINFO_EXTENSION));
+                        switch ($ext) {
+                            case 'crs':
+                                $aicc_match_crs = 1;
+                                break;
+                            case 'au':
+                                $aicc_match_au = 1;
+                                break;
+                            case 'des':
+                                $aicc_match_des = 1;
+                                break;
+                            case 'cst':
+                                $aicc_match_cst = 1;
+                                break;
+                            default:
+                                break;
+                        }
+                        //break; // Don't exit the loop, because if we find an imsmanifest afterwards, we want it, not the AICC.
+                    } else {
+                        $package_type = '';
                     }
-                    //break; // Don't exit the loop, because if we find an imsmanifest afterwards, we want it, not the AICC.
-                } else {
-                    $package_type = '';
                 }
             }
         }
@@ -2033,6 +2046,13 @@ class learnpath
 
         // Try with chamilo course builder
         if (empty($package_type)) {
+            // Sometimes users will try to upload an empty zip, or a zip with
+            // only a folder. Catch that and make the calling function aware.
+            // If the single file was the imsmanifest.xml, then $package_type
+            // would be 'scorm' and we wouldn't be here.
+            if ($countItems < 2) {
+                return 'error-empty-package';
+            }
             $package_type = 'chamilo';
         }
 
@@ -2529,16 +2549,41 @@ class learnpath
         if (empty($mode)) {
             $mode = $this->progress_bar_mode;
         }
+        $text = '';
+        $percentage = 0;
+        // If the option to use the score as progress is set for this learning
+        // path, then the rules are completely different: we assume only one
+        // item exists and the progress of the LP depends on the score
+        $scoreAsProgressSetting = api_get_configuration_value('lp_score_as_progress_enable');
+        if ($scoreAsProgressSetting === true) {
+            $scoreAsProgress = $this->getUseScoreAsProgress();
+            if ($scoreAsProgress) {
+                // Get single item's score
+                $itemId = $this->get_current_item_id();
+                $item = $this->getItem($itemId);
+                $score = $item->get_score();
+                $maxScore = $item->get_max();
+                if ($mode = '%') {
+                    $percentage = ((float) $score / (float) $maxScore) * 100;
+                    $percentage = number_format($percentage, 0);
+                    $text = '%';
+                } else {
+                    $percentage = $score;
+                    $text = '/'.$maxScore;
+                }
+
+                return [$percentage, $text];
+            }
+        }
+        // otherwise just continue the normal processing of progress
         $total_items = $this->getTotalItemsCountWithoutDirs();
         $completeItems = $this->get_complete_items_count();
         if ($add != 0) {
             $completeItems += $add;
         }
-        $text = '';
         if ($completeItems > $total_items) {
             $completeItems = $total_items;
         }
-        $percentage = 0;
         if ($mode == '%') {
             if ($total_items > 0) {
                 $percentage = ((float) $completeItems / (float) $total_items) * 100;
@@ -3004,6 +3049,80 @@ class learnpath
     }
 
     /**
+     * Returns the CSS class name associated with a given item status.
+     *
+     * @param $status string an item status
+     *
+     * @return string CSS class name
+     */
+    public static function getStatusCSSClassName($status)
+    {
+        if (array_key_exists($status, self::STATUS_CSS_CLASS_NAME)) {
+            return self::STATUS_CSS_CLASS_NAME[$status];
+        }
+
+        return '';
+    }
+
+    /**
+     * Generate the tree of contents for this learnpath as an associative array tree
+     * with keys id, title, status, type, description, path, parent_id, children
+     * (title and descriptions as secured)
+     * and clues for CSS class composition:
+     *  - booleans is_current, is_parent_of_current, is_chapter
+     *  - string status_css_class_name.
+     *
+     * @param $parentId int restrict returned list to children of this parent
+     *
+     * @return array TOC as a table
+     */
+    public function getTOCTree($parentId = 0)
+    {
+        $toc = [];
+        $currentItemId = $this->get_current_item_id();
+
+        foreach ($this->ordered_items as $itemId) {
+            $item = $this->items[$itemId];
+            if ($item->get_parent() == $parentId) {
+                $title = $item->get_title();
+                if (empty($title)) {
+                    $title = self::rl_get_resource_name(api_get_course_id(), $this->get_id(), $itemId);
+                }
+
+                $itemData = [
+                    'id' => $itemId,
+                    'title' => Security::remove_XSS($title),
+                    'status' => $item->get_status(),
+                    'level' => $item->get_level(), // FIXME should not be needed
+                    'type' => $item->get_type(),
+                    'description' => Security::remove_XSS($item->get_description()),
+                    'path' => $item->get_path(),
+                    'parent_id' => $item->get_parent(),
+                    'children' => $this->getTOCTree($itemId),
+                    'is_current' => ($itemId == $currentItemId),
+                    'is_parent_of_current' => false,
+                    'is_chapter' => in_array($item->get_type(), self::getChapterTypes()),
+                    'status_css_class_name' => $this->getStatusCSSClassName($item->get_status()),
+                    'current_id' => $currentItemId, // FIXME should not be needed, not a property of item
+                ];
+
+                if (!empty($itemData['children'])) {
+                    foreach ($itemData['children'] as $child) {
+                        if ($child['is_current'] || $child['is_parent_of_current']) {
+                            $itemData['is_parent_of_current'] = true;
+                            break;
+                        }
+                    }
+                }
+
+                $toc[] = $itemData;
+            }
+        }
+
+        return $toc;
+    }
+
+    /**
      * Generate and return the table of contents for this learnpath. The JS
      * table returned is used inside of scorm_api.php.
      *
@@ -3153,18 +3272,8 @@ class learnpath
                 $listParent[] = $subtree;
             }
             if (!in_array($subtree['type'], $dirTypes) && $subtree['parent'] == null) {
-                $classStatus = [
-                    'not attempted' => 'scorm_not_attempted',
-                    'incomplete' => 'scorm_not_attempted',
-                    'failed' => 'scorm_failed',
-                    'completed' => 'scorm_completed',
-                    'passed' => 'scorm_completed',
-                    'succeeded' => 'scorm_completed',
-                    'browsed' => 'scorm_completed',
-                ];
-
-                if (isset($classStatus[$subtree['status']])) {
-                    $cssStatus = $classStatus[$subtree['status']];
+                if (array_key_exists($subtree['status'], self::STATUS_CSS_CLASS_NAME)) {
+                    $cssStatus = self::STATUS_CSS_CLASS_NAME[$subtree['status']];
                 }
 
                 $title = Security::remove_XSS($subtree['title']);
@@ -3211,15 +3320,6 @@ class learnpath
         $dirTypes = self::getChapterTypes();
         $currentItemId = $this->get_current_item_id();
         $list = [];
-        $classStatus = [
-            'not attempted' => 'scorm_not_attempted',
-            'incomplete' => 'scorm_not_attempted',
-            'failed' => 'scorm_failed',
-            'completed' => 'scorm_completed',
-            'passed' => 'scorm_completed',
-            'succeeded' => 'scorm_completed',
-            'browsed' => 'scorm_completed',
-        ];
 
         foreach ($tree as $subtree) {
             $subtree['tree'] = null;
@@ -3230,8 +3330,8 @@ class learnpath
                 } else {
                     $subtree['current'] = null;
                 }
-                if (isset($classStatus[$subtree['status']])) {
-                    $cssStatus = $classStatus[$subtree['status']];
+                if (array_key_exists($subtree['status'], self::STATUS_CSS_CLASS_NAME)) {
+                    $cssStatus = self::STATUS_CSS_CLASS_NAME[$subtree['status']];
                 }
 
                 $title = Security::remove_XSS($subtree['title']);
@@ -3278,23 +3378,14 @@ class learnpath
         $currentItemId = $this->get_current_item_id();
         $list = [];
         $arrayList = [];
-        $classStatus = [
-            'not attempted' => 'scorm_not_attempted',
-            'incomplete' => 'scorm_not_attempted',
-            'failed' => 'scorm_failed',
-            'completed' => 'scorm_completed',
-            'passed' => 'scorm_completed',
-            'succeeded' => 'scorm_completed',
-            'browsed' => 'scorm_completed',
-        ];
 
         foreach ($toc_list as $item) {
             $list['id'] = $item['id'];
             $list['status'] = $item['status'];
             $cssStatus = null;
 
-            if (isset($classStatus[$item['status']])) {
-                $cssStatus = $classStatus[$item['status']];
+            if (array_key_exists($item['status'], self::STATUS_CSS_CLASS_NAME)) {
+                $cssStatus = self::STATUS_CSS_CLASS_NAME[$item['status']];
             }
 
             $classStyle = ' ';
@@ -4511,8 +4602,6 @@ class learnpath
     /**
      * Check if the learnpath category is visible for a user.
      *
-     * @param CLpCategory $category
-     * @param User        $user
      * @param int
      * @param int
      *
@@ -4556,32 +4645,31 @@ class learnpath
             return true;
         }
 
+        $noUserSubscribed = false;
+        $noGroupSubscribed = true;
         $users = $category->getUsers();
-
         if (empty($users) || !$users->count()) {
-            return true;
-        }
-
-        if ($category->hasUserAdded($user)) {
+            $noUserSubscribed = true;
+        } elseif ($category->hasUserAdded($user)) {
             return true;
         }
 
         $groups = GroupManager::getAllGroupPerUserSubscription($user->getId());
-        if (!empty($groups)) {
-            $em = Database::getManager();
+        $em = Database::getManager();
 
-            /** @var ItemPropertyRepository $itemRepo */
-            $itemRepo = $em->getRepository('ChamiloCourseBundle:CItemProperty');
+        /** @var ItemPropertyRepository $itemRepo */
+        $itemRepo = $em->getRepository('ChamiloCourseBundle:CItemProperty');
 
-            /** @var CourseRepository $courseRepo */
-            $courseRepo = $em->getRepository('ChamiloCoreBundle:Course');
-            $session = null;
-            if (!empty($sessionId)) {
-                $session = $em->getRepository('ChamiloCoreBundle:Session')->find($sessionId);
-            }
+        /** @var CourseRepository $courseRepo */
+        $courseRepo = $em->getRepository('ChamiloCoreBundle:Course');
+        $session = null;
+        if (!empty($sessionId)) {
+            $session = $em->getRepository('ChamiloCoreBundle:Session')->find($sessionId);
+        }
 
-            $course = $courseRepo->find($courseId);
+        $course = $courseRepo->find($courseId);
 
+        if ($courseId != 0) {
             // Subscribed groups to a LP
             $subscribedGroupsInLp = $itemRepo->getGroupsSubscribedToItem(
                 TOOL_LEARNPATH_CATEGORY,
@@ -4589,8 +4677,11 @@ class learnpath
                 $course,
                 $session
             );
+        }
 
-            if (!empty($subscribedGroupsInLp)) {
+        if (!empty($subscribedGroupsInLp)) {
+            $noGroupSubscribed = false;
+            if (!empty($groups)) {
                 $groups = array_column($groups, 'iid');
                 /** @var CItemProperty $item */
                 foreach ($subscribedGroupsInLp as $item) {
@@ -4602,15 +4693,15 @@ class learnpath
                 }
             }
         }
+        $response = $noGroupSubscribed && $noUserSubscribed;
 
-        return false;
+        return $response;
     }
 
     /**
      * Check if a learnpath category is published as course tool.
      *
-     * @param CLpCategory $category
-     * @param int         $courseId
+     * @param int $courseId
      *
      * @return bool
      */
@@ -9866,7 +9957,7 @@ class learnpath
                     name="min_'.$item['id'].'"
                     type="number"
                     min="0"
-                    step="1"
+                    step="any"
                     max="'.$item['max_score'].'"
                     value="'.$selectedMinScoreValue.'"
                 />';
@@ -9879,7 +9970,7 @@ class learnpath
                     name="max_'.$item['id'].'"
                     type="number"
                     min="0"
-                    step="1"
+                    step="any"
                     max="'.$item['max_score'].'"
                     value="'.$selectedMaxScoreValue.'"
                 />';
@@ -9894,7 +9985,7 @@ class learnpath
                     name="min_'.$item['id'].'"
                     type="number"
                     min="0"
-                    step="1"
+                    step="any"
                     max="'.$item['max_score'].'"
                     value="'.$selectedMinScoreValue.'"
                 />';
@@ -9906,7 +9997,7 @@ class learnpath
                     name="max_'.$item['id'].'"
                     type="number"
                     min="0"
-                    step="1"
+                    step="any"
                     max="'.$item['max_score'].'"
                     value="'.$selectedMaxScoreValue.'"
                 />';
@@ -11981,6 +12072,17 @@ EOD;
         }
     }
 
+    public static function getLpList($courseId)
+    {
+        $table = Database::get_course_table(TABLE_LP_MAIN);
+        $courseId = (int) $courseId;
+
+        $sql = "SELECT * FROM $table WHERE c_id = $courseId";
+        $result = Database::query($sql);
+
+        return Database::store_result($result, 'ASSOC');
+    }
+
     /**
      * @param int $courseId
      *
@@ -12944,7 +13046,7 @@ EOD;
                 }
 
                 $documentPathInfo = pathinfo($document->getPath());
-                $mediaSupportedFiles = ['mp3', 'mp4', 'ogv', 'flv', 'm4v'];
+                $mediaSupportedFiles = ['mp3', 'mp4', 'ogv', 'ogg', 'flv', 'm4v'];
                 $extension = isset($documentPathInfo['extension']) ? $documentPathInfo['extension'] : '';
                 $showDirectUrl = !in_array($extension, $mediaSupportedFiles);
 
@@ -13509,9 +13611,6 @@ EOD;
         return $value;
     }
 
-    /**
-     * @param FormValidator $form
-     */
     public function setItemTitle(FormValidator $form)
     {
         if (api_get_configuration_value('save_titles_as_html')) {
@@ -13571,6 +13670,53 @@ EOD;
         }
 
         return $arrLP;
+    }
+
+    /**
+     * Gets whether this SCORM learning path has been marked to use the score
+     * as progress. Takes into account whether the learnpath matches (SCORM
+     * content + less than 2 items).
+     *
+     * @return bool True if the score should be used as progress, false otherwise
+     */
+    public function getUseScoreAsProgress()
+    {
+        // If not a SCORM, we don't care about the setting
+        if ($this->get_type() != 2) {
+            return false;
+        }
+        // If more than one step in the SCORM, we don't care about the setting
+        if ($this->get_total_items_count() > 1) {
+            return false;
+        }
+        $extraFieldValue = new ExtraFieldValue('lp');
+        $doUseScore = false;
+        $useScore = $extraFieldValue->get_values_by_handler_and_field_variable($this->get_id(), 'use_score_as_progress');
+        if (!empty($useScore) && isset($useScore['value'])) {
+            $doUseScore = $useScore['value'];
+        }
+
+        return $doUseScore;
+    }
+
+    /**
+     * Get the user identifier (user_id or username
+     * Depends on scorm_api_username_as_student_id in app/config/configuration.php.
+     *
+     * @return string User ID or username, depending on configuration setting
+     */
+    public static function getUserIdentifierForExternalServices()
+    {
+        if (api_get_configuration_value('scorm_api_username_as_student_id')) {
+            return api_get_user_info(api_get_user_id())['username'];
+        } elseif (api_get_configuration_value('scorm_api_extrafield_to_use_as_student_id') != null) {
+            $extraFieldValue = new ExtraFieldValue('user');
+            $extrafield = $extraFieldValue->get_values_by_handler_and_field_variable(api_get_user_id(), api_get_configuration_value('scorm_api_extrafield_to_use_as_student_id'));
+
+            return $extrafield['value'];
+        } else {
+            return api_get_user_id();
+        }
     }
 
     /**

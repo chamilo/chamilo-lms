@@ -51,8 +51,6 @@ interface HookEventInterface
     /**
      * Set an array with data needed by hooks.
      *
-     * @param array $data
-     *
      * @return $this
      */
     public function setEventData(array $data);

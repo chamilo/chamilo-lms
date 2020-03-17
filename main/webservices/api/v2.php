@@ -1,5 +1,19 @@
 <?php
+
 /* For licensing terms, see /license.txt */
+
+/**
+ * Entry point for REST web services in Chamilo.
+ *
+ * Call it with the 'authenticate' action first, to get an api_key, then use
+ * the api_key in all subsequent calls.
+ *
+ * Send the REST call parameters as a 'hash' in POST or GET. The hash must be
+ * JSON encoded and contain at least 'action', 'username', and either
+ * 'password' for the first call or 'api_key' in subsequent calls.
+ * You can store the API key on an external system (it will remain the same),
+ * although it is not recommended to do so (for security reasons).
+ */
 require_once __DIR__.'/../../inc/global.inc.php';
 
 $hash = isset($_REQUEST['hash']) ? $_REQUEST['hash'] : null;
@@ -16,8 +30,8 @@ if ($hash) {
 $action = isset($_REQUEST['action']) ? $_REQUEST['action'] : null;
 $username = isset($_REQUEST['username']) ? Security::remove_XSS($_REQUEST['username']) : null;
 $apiKey = isset($_REQUEST['api_key']) ? Security::remove_XSS($_REQUEST['api_key']) : null;
-$course = !empty($_REQUEST['course']) ? intval($_REQUEST['course']) : null;
-$session = !empty($_REQUEST['session']) ? intval($_REQUEST['session']) : null;
+$course = !empty($_REQUEST['course']) ? (int) $_REQUEST['course'] : null;
+$session = !empty($_REQUEST['session']) ? (int) $_REQUEST['session'] : null;
 
 $restResponse = new RestResponse();
 
@@ -54,7 +68,7 @@ try {
             break;
 
         case Rest::GET_USER_MESSAGES:
-            $lastMessageId = isset($_POST['last']) ? intval($_POST['last']) : 0;
+            $lastMessageId = isset($_POST['last']) ? (int) $_POST['last'] : 0;
             $messages = $restApi->getUserMessages($lastMessageId);
             $restResponse->setData($messages);
             break;
@@ -65,7 +79,6 @@ try {
                 : [];
 
             $messagesId = array_filter($messagesId);
-
             if (empty($messagesId)) {
                 throw new Exception(get_lang('NoData'));
             }
@@ -128,8 +141,8 @@ try {
             $restResponse->setData($forum);
             break;
         case Rest::GET_COURSE_FORUM_THREAD:
-            $forumId = isset($_POST['forum']) ? intval($_POST['forum']) : 0;
-            $threadId = isset($_POST['thread']) ? intval($_POST['thread']) : 0;
+            $forumId = isset($_POST['forum']) ? (int) $_POST['forum'] : 0;
+            $threadId = isset($_POST['thread']) ? (int) $_POST['thread'] : 0;
             $thread = $restApi->getCourseForumThread($forumId, $threadId);
             $restResponse->setData($thread);
             break;
@@ -141,8 +154,11 @@ try {
             $data = $restApi->getCourseLearnPaths();
             $restResponse->setData($data);
             break;
+        case Rest::GET_COURSE_LP_PROGRESS:
+            $restResponse->setData($restApi->getCourseLpProgress());
+            break;
         case Rest::GET_COURSE_LEARNPATH:
-            $lpId = isset($_REQUEST['lp_id']) ? intval($_REQUEST['lp_id']) : 1;
+            $lpId = isset($_REQUEST['lp_id']) ? (int) $_REQUEST['lp_id'] : 1;
             $restApi->showLearningPath($lpId);
             break;
         case Rest::SAVE_COURSE:
@@ -177,7 +193,7 @@ try {
             $data = $restApi->getUsersCampus($_POST);
             $restResponse->setData($data);
             break;
-        case Rest::GET_COURSE:
+        case Rest::GET_COURSES:
             $data = $restApi->getCoursesCampus($_POST);
             $restResponse->setData($data);
             break;
@@ -185,7 +201,7 @@ try {
             $data = $restApi->addCoursesSession($_POST);
             $restResponse->setData($data);
             break;
-        case Rest::ADD_USER_SESSION:
+        case Rest::ADD_USERS_SESSION:
             $data = $restApi->addUsersSession($_POST);
             $restResponse->setData($data);
             break;
@@ -196,9 +212,9 @@ try {
                 throw new Exception(get_lang('NoData'));
             }
 
-            $forumId = isset($_POST['forum']) ? intval($_POST['forum']) : 0;
+            $forumId = isset($_POST['forum']) ? (int) $_POST['forum'] : 0;
             $notify = !empty($_POST['notify']);
-            $parentId = !empty($_POST['parent']) ? intval($_POST['parent']) : null;
+            $parentId = !empty($_POST['parent']) ? (int) $_POST['parent'] : null;
 
             $postValues = [
                 'post_title' => $_POST['title'],
@@ -239,13 +255,11 @@ try {
             $restResponse->setData($data);
             break;
         case Rest::SAVE_FORUM_THREAD:
-            if (
-                empty($_POST['title']) || empty($_POST['text']) || empty($_POST['forum'])
-            ) {
+            if (empty($_POST['title']) || empty($_POST['text']) || empty($_POST['forum'])) {
                 throw new Exception(get_lang('NoData'));
             }
 
-            $forumId = isset($_POST['forum']) ? intval($_POST['forum']) : 0;
+            $forumId = isset($_POST['forum']) ? (int) $_POST['forum'] : 0;
             $notify = !empty($_POST['notify']);
 
             $threadInfo = [
@@ -258,12 +272,64 @@ try {
             $data = $restApi->saveForumThread($threadInfo, $forumId);
             $restResponse->setData($data);
             break;
+        case Rest::GET_USER_MESSAGES_RECEIVED:
+            $lastMessageId = isset($_POST['last']) ? (int) $_POST['last'] : 0;
+            $messages = $restApi->getUserReceivedMessages($lastMessageId);
+            $restResponse->setData($messages);
+            break;
+        case Rest::GET_USER_MESSAGES_SENT:
+            $lastMessageId = isset($_POST['last']) ? (int) $_POST['last'] : 0;
+            $messages = $restApi->getUserSentMessages($lastMessageId);
+            $restResponse->setData($messages);
+            break;
+        case Rest::DELETE_USER_MESSAGE:
+            $messageId = isset($_POST['message_id']) ? (int) $_POST['message_id'] : 0;
+            $messageType = !empty($_POST['msg_type']) ? $_POST['msg_type'] : '';
+            $restApi->deleteUserMessage($messageId, $messageType);
+            $restResponse->setData(['status' => true]);
+            break;
+        case Rest::SET_MESSAGE_READ:
+            $messageId = isset($_POST['message_id']) ? (int) $_POST['message_id'] : 0;
+            $restApi->setMessageRead($messageId);
+            $restResponse->setData(['status' => true]);
+            break;
+        case Rest::CREATE_SESSION_FROM_MODEL:
+            $newSessionId = $restApi->createSessionFromModel(
+                $_POST['modelSessionId'],
+                $_POST['sessionName'],
+                $_POST['startDate'],
+                $_POST['endDate'],
+                isset($_POST['extraFields']) ? $_POST['extraFields'] : []);
+            $restResponse->setData([$newSessionId]);
+            break;
+        case Rest::SUBSCRIBE_USER_TO_SESSION_FROM_USERNAME:
+            if (empty($_POST['sessionId']) || empty($_POST['loginname'])) {
+                throw new Exception(get_lang('NoData'));
+            }
+            $subscribed = $restApi->subscribeUserToSessionFromUsername($_POST['sessionId'], $_POST['loginname']);
+            $restResponse->setData([$subscribed]);
+            break;
+        case Rest::GET_SESSION_FROM_EXTRA_FIELD:
+            if (empty($_POST['field_name']) || empty($_POST['field_value'])) {
+                throw new Exception(get_lang('NoData'));
+            }
+            $idSession = $restApi->getSessionFromExtraField($_POST['field_name'], $_POST['field_value']);
+            $restResponse->setData([$idSession]);
+            break;
+        case Rest::UPDATE_USER_FROM_USERNAME:
+            $data = $restApi->updateUserFromUserName($_POST);
+            $restResponse->setData([$data]);
+            break;
+        case Rest::USERNAME_EXIST:
+            $data = $restApi->usernameExist($_POST['loginname']);
+            $restResponse->setData([$data]);
+            break;
         default:
             throw new Exception(get_lang('InvalidAction'));
     }
-} catch (Exception $exeption) {
+} catch (Exception $exception) {
     $restResponse->setErrorMessage(
-        $exeption->getMessage()
+        $exception->getMessage()
     );
 }
 

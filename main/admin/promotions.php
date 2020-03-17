@@ -117,7 +117,6 @@ $(function() {
 </script>
 <?php
 $promotion = new Promotion();
-$token = Security::get_token();
 
 switch ($action) {
     case 'add':

@@ -323,7 +323,7 @@ if (!empty($_GET['category']) &&
         exit;
     }
 }
-$htmlHeadXtra[] = '<script>    
+$htmlHeadXtra[] = '<script>
     var hide_icon = "'.api_get_path(WEB_IMG_PATH).'/icons/32/shared_setting_na.png";
     var show_icon = "'.api_get_path(WEB_IMG_PATH).'/icons/32/shared_setting.png";
     var url       = "'.api_get_path(WEB_AJAX_PATH).'admin.ajax.php?a=update_changeable_setting";
@@ -466,6 +466,7 @@ if (!empty($_GET['category'])) {
             echo '<li><a href="#tabs-1">'.get_lang('Plugins').'</a></li>';
             echo '<li><a href="#tabs-2">'.get_lang('DashboardPlugins').'</a></li>';
             echo '<li><a href="#tabs-3">'.get_lang('ConfigureExtensions').'</a></li>';
+            echo '<li><a href="#tabs-4">'.get_lang('UploadPlugin').'</a></li>';
             echo '</ul>';
 
             echo '<div id="tabs-1">';
@@ -479,6 +480,11 @@ if (!empty($_GET['category'])) {
             echo '<div id="tabs-3">';
             handleExtensions();
             echo '</div>';
+
+            echo '<div id="tabs-4">';
+            handlePluginUpload();
+            echo '</div>';
+
             echo '</div>';
             break;
         case 'Stylesheets':
@@ -510,6 +516,8 @@ Display::display_header($tool_name);
 echo Display::actions($action_array);
 echo '<br />';
 echo $form_search_html;
+echo Display::getFlashToString();
+Display::cleanFlashMessages();
 echo $content;
 
 Display::display_footer();

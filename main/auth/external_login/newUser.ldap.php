@@ -63,7 +63,7 @@ if ($ldap_user !== false) {
         }
         Event::eventLogin($chamiloUser->getId());
 
-        MessageManager::sendNotificationByRegisteredUser($chamiloUser);
+        MessageManager::sendNotificationOfNewRegisteredUser($chamiloUser);
     }
 } else {
     $loginFailed = true;

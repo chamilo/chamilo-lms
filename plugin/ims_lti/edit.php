@@ -43,6 +43,7 @@ if ($form->validate()) {
         ->setCustomParams(
             empty($formValues['custom_params']) ? null : $formValues['custom_params']
         )
+        ->setDocumenTarget($formValues['document_target'])
         ->setPrivacy(
             !empty($formValues['share_name']),
             !empty($formValues['share_email']),
@@ -50,20 +51,52 @@ if ($form->validate()) {
         );
 
     if (null === $tool->getParent()) {
-        $tool
-            ->setLaunchUrl($formValues['launch_url'])
-            ->setConsumerKey(
-                empty($formValues['consumer_key']) ? null : $formValues['consumer_key']
-            )
-            ->setSharedSecret(
-                empty($formValues['shared_secret']) ? null : $formValues['shared_secret']
-            );
+        $tool->setLaunchUrl($formValues['launch_url']);
+
+        if ($tool->getVersion() === ImsLti::V_1P1) {
+            $tool
+                ->setConsumerKey(
+                    empty($formValues['consumer_key']) ? null : $formValues['consumer_key']
+                )
+                ->setSharedSecret(
+                    empty($formValues['shared_secret']) ? null : $formValues['shared_secret']
+                );
+        } elseif ($tool->getVersion() === ImsLti::V_1P3) {
+            $tool
+                ->setLoginUrl($formValues['login_url'])
+                ->setRedirectUrl($formValues['redirect_url'])
+                ->setAdvantageServices(
+                    [
+                        'ags' => isset($formValues['1p3_ags'])
+                            ? $formValues['1p3_ags']
+                            : LtiAssignmentGradesService::AGS_NONE,
+                        'nrps' => $formValues['1p3_nrps'],
+                    ]
+                )
+                ->publicKey = $formValues['public_key'];
+        }
     }
 
     if (null === $tool->getParent() ||
         (null !== $tool->getParent() && !$tool->getParent()->isActiveDeepLinking())
     ) {
         $tool->setActiveDeepLinking(!empty($formValues['deep_linking']));
+    }
+
+    if (null == $tool->getParent()) {
+        /** @var ImsLtiTool $child */
+        foreach ($tool->getChildren() as $child) {
+            $child
+                ->setLaunchUrl($tool->getLaunchUrl())
+                ->setLoginUrl($tool->getLoginUrl())
+                ->setRedirectUrl($tool->getRedirectUrl())
+                ->setAdvantageServices(
+                    $tool->getAdvantageServices()
+                )
+                ->publicKey = $tool->publicKey;
+
+            $em->persist($child);
+        }
     }
 
     $em->persist($tool);
@@ -75,9 +108,9 @@ if ($form->validate()) {
 
     header('Location: '.api_get_path(WEB_PLUGIN_PATH).'ims_lti/admin.php');
     exit;
+} else {
+    $form->setDefaultValues();
 }
-
-$form->setDefaultValues();
 
 $interbreadcrumb[] = ['url' => api_get_path(WEB_CODE_PATH).'admin/index.php', 'name' => get_lang('PlatformAdmin')];
 $interbreadcrumb[] = ['url' => api_get_path(WEB_PLUGIN_PATH).'ims_lti/admin.php', 'name' => $plugin->get_title()];

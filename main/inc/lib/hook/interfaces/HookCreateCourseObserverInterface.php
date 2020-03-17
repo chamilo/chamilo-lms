@@ -13,8 +13,6 @@
 interface HookCreateCourseObserverInterface extends HookObserverInterface
 {
     /**
-     * @param HookCreateCourseEventInterface $hook
-     *
      * @return int
      */
     public function hookCreateCourse(HookCreateCourseEventInterface $hook);

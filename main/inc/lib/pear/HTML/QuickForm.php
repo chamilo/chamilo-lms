@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Create, validate and process HTML forms
  *
@@ -987,7 +988,7 @@ class HTML_QuickForm extends HTML_Common
      * To validate grouped elements as separated entities,
      * use addGroupRule instead of addRule.
      *
-     * @param    string $element Form element name
+     * @param    string|array $element Form element name
      * @param    string $message Message to display for invalid data
      * @param    string $type Rule type, use getRegisteredRules() to get types
      * @param    string $format (optional)Required for extra rule data

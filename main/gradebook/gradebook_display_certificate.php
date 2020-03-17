@@ -317,12 +317,21 @@ if (count($certificate_list) == 0) {
             echo '<td width="30%">'.get_lang('Date').' : '.api_convert_and_format_date($valueCertificate['created_at']).'</td>';
             echo '<td width="20%">';
             $url = api_get_path(WEB_PATH).'certificates/index.php?id='.$valueCertificate['id'].'&user_id='.$value['user_id'];
-            $certificates = Display::url(
+            $certificateUrl = Display::url(
                 get_lang('Certificate'),
                 $url,
                 ['target' => '_blank', 'class' => 'btn btn-default']
             );
-            echo $certificates;
+            echo $certificateUrl;
+
+            $url .= '&action=export';
+            $pdf = Display::url(
+                Display::return_icon('pdf.png', get_lang('Download')),
+                $url,
+                ['target' => '_blank']
+            );
+            echo $pdf;
+
             echo '<a onclick="return confirmation();" href="gradebook_display_certificate.php?sec_token='.$token.'&'.api_get_cidreq().'&action=delete&cat_id='.$categoryId.'&certificate_id='.$valueCertificate['id'].'">
                     '.Display::return_icon('delete.png', get_lang('Delete')).'
                   </a>';

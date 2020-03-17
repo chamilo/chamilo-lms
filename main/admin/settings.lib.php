@@ -118,6 +118,101 @@ function handleExtensions()
 }
 
 /**
+ * Show form for plugin and validates inputs. Calls uploadPlugin() if everything OK.
+ *
+ * @throws Exception
+ *
+ * @return string|void The HTML form, or displays a message and returns nothing on error
+ */
+function handlePluginUpload()
+{
+    $allowPluginUpload = true == api_get_configuration_value('plugin_upload_enable');
+    if (!$allowPluginUpload) {
+        echo Display::return_message(
+            get_lang('PluginUploadIsNotEnabled'),
+            'error',
+            false
+        );
+
+        return;
+    }
+    $pluginPath = api_get_path(SYS_PLUGIN_PATH);
+    if (!is_writable($pluginPath)) {
+        echo Display::return_message(
+            $pluginPath.' '.get_lang('IsNotWritable'),
+            'error',
+            false
+        );
+
+        return;
+    }
+
+    echo Display::return_message(
+        get_lang('PluginUploadPleaseRememberUploadingThirdPartyPluginsCanBeDangerous'),
+        'warning',
+        false
+    );
+    echo Display::return_message(
+        get_lang('PluginUploadingTwiceWillReplacePreviousFiles'),
+        'normal',
+        false
+    );
+    $form = new FormValidator(
+        'plugin_upload',
+        'post',
+        'settings.php?category=Plugins#tabs-4'
+    );
+    $form->addElement(
+        'file',
+        'new_plugin',
+        [get_lang('UploadNewPlugin'), '.zip']
+    );
+    // Only zip files are allowed
+    $allowed_file_types[] = 'zip';
+
+    $form->addRule(
+        'new_plugin',
+        get_lang('InvalidExtension').' ('.implode(',', $allowed_file_types).')',
+        'filetype',
+        $allowed_file_types
+    );
+    $form->addRule(
+        'new_plugin',
+        get_lang('ThisFieldIsRequired'),
+        'required'
+    );
+    $form->addButtonUpload(get_lang('Upload'), 'plugin_upload');
+
+    // Plugin upload.
+    if (isset($_POST['plugin_upload'])) {
+        if ($form->validate()) {
+            $values = $form->exportValues();
+            $fileElement = $form->getElement('new_plugin');
+            $file = $fileElement->getValue();
+            $result = uploadPlugin($values, $file);
+
+            // Add event to the system log.
+            $user_id = api_get_user_id();
+            $category = $_GET['category'];
+            Event::addEvent(
+                LOG_PLUGIN_CHANGE,
+                LOG_PLUGIN_UPLOAD,
+                $file['filename'],
+                api_get_utc_datetime(),
+                $user_id
+            );
+
+            if ($result) {
+                Display::addFlash(Display::return_message(get_lang('PluginUploaded'), 'success', false));
+                header('Location: ?category=Plugins#');
+                exit;
+            }
+        }
+    }
+    echo $form->returnForm();
+}
+
+/**
  * This function allows easy activating and inactivating of plugins.
  *
  * @todo: a similar function needs to be written to activate or inactivate additional tools.
@@ -135,10 +230,11 @@ function handlePlugins()
         // Add event to the system log.
         $user_id = api_get_user_id();
         $category = $_GET['category'];
+        $installed = $plugin_obj->getInstalledPlugins();
         Event::addEvent(
-            LOG_CONFIGURATION_SETTINGS_CHANGE,
-            LOG_CONFIGURATION_SETTINGS_CATEGORY,
-            $category,
+            LOG_PLUGIN_CHANGE,
+            LOG_PLUGIN_ENABLE,
+            implode(',', $installed),
             api_get_utc_datetime(),
             $user_id
         );
@@ -147,6 +243,7 @@ function handlePlugins()
 
     $all_plugins = $plugin_obj->read_plugins_from_path();
     $installed_plugins = $plugin_obj->getInstalledPlugins();
+    $officialPlugins = $plugin_obj->getOfficialPlugins();
 
     // Plugins NOT installed
     echo Display::page_subheader(get_lang('Plugins'));
@@ -173,6 +270,12 @@ function handlePlugins()
             $plugin_info = [];
             require $plugin_info_file;
 
+            $officialRibbon = '';
+            if (in_array($pluginName, $officialPlugins)) {
+                $officialRibbon = '<div class="ribbon-diagonal ribbon-diagonal-top-right ribbon-diagonal-official"><span>'.get_lang('PluginOfficial').'</span></div>';
+            } else {
+                $officialRibbon = '<div class="ribbon-diagonal ribbon-diagonal-top-right ribbon-diagonal-thirdparty"><span>'.get_lang('PluginThirdParty').'</span></div>';
+            }
             $pluginRow = '';
 
             if (in_array($pluginName, $installed_plugins)) {
@@ -188,6 +291,7 @@ function handlePlugins()
                 $pluginRow .= '<input type="checkbox" name="plugin_'.$pluginName.'[]">';
             }
             $pluginRow .= '</td><td>';
+            $pluginRow .= $officialRibbon;
             $pluginRow .= '<h4>'.$plugin_info['title'].' <small>v '.$plugin_info['version'].'</small></h4>';
             $pluginRow .= '<p>'.$plugin_info['comment'].'</p>';
             $pluginRow .= '<p>'.get_lang('Author').': '.$plugin_info['author'].'</p>';
@@ -633,6 +737,132 @@ function uploadStylesheet($values, $picture)
             null,
             ['override' => true]
         );
+    }
+
+    return $result;
+}
+
+/**
+ * Creates the folder (if needed) and uploads the plugin in it. If the plugin
+ * is already there and the folder is writeable, overwrite.
+ *
+ * @param array $values          the values of the form
+ * @param array $file            the file passed to the upload form
+ * @param array $officialPlugins A list of official plugins that cannot be uploaded
+ *
+ * @return bool
+ */
+function uploadPlugin($values, $file, $officialPlugins)
+{
+    $result = false;
+    $pluginPath = api_get_path(SYS_PLUGIN_PATH);
+    $info = pathinfo($file['name']);
+    if ($info['extension'] == 'zip') {
+        // Try to open the file and extract it in the theme.
+        $zip = new ZipArchive();
+        if ($zip->open($file['tmp_name'])) {
+            // Make sure all files inside the zip are images or css.
+            $num_files = $zip->numFiles;
+            $valid = true;
+            $single_directory = true;
+            $invalid_files = [];
+
+            $allowedFiles = getAllowedFileTypes();
+            $allowedFiles[] = 'php';
+            $allowedFiles[] = 'js';
+            $pluginObject = new AppPlugin();
+            $officialPlugins = $pluginObject->getOfficialPlugins();
+
+            for ($i = 0; $i < $num_files; $i++) {
+                $file = $zip->statIndex($i);
+                if (substr($file['name'], -1) != '/') {
+                    $path_parts = pathinfo($file['name']);
+                    if (!in_array($path_parts['extension'], $allowedFiles)) {
+                        $valid = false;
+                        $invalid_files[] = $file['name'];
+                    }
+                }
+
+                if (strpos($file['name'], '/') === false) {
+                    $single_directory = false;
+                }
+            }
+            if (!$valid) {
+                $error_string = '<ul>';
+                foreach ($invalid_files as $invalid_file) {
+                    $error_string .= '<li>'.$invalid_file.'</li>';
+                }
+                $error_string .= '</ul>';
+                echo Display::return_message(
+                    get_lang('ErrorPluginFilesExtensionsInsideZip').$error_string,
+                    'error',
+                    false
+                );
+            } else {
+                // Prevent overwriting an official plugin
+
+                if (in_array($info['filename'], $officialPlugins)) {
+                    echo Display::return_message(
+                        get_lang('ErrorPluginOfficialCannotBeUploaded'),
+                        'error',
+                        false
+                    );
+                } else {
+                    // If the zip does not contain a single directory, extract it.
+                    if (!$single_directory) {
+                        // Extract zip file.
+                        $zip->extractTo($pluginPath.$info['filename'].'/');
+                        $result = true;
+                    } else {
+                        $extraction_path = $pluginPath.$info['filename'].'/';
+                        $mode = api_get_permissions_for_new_directories();
+                        if (!is_dir($extraction_path)) {
+                            @mkdir($extraction_path, $mode, true);
+                        }
+
+                        for ($i = 0; $i < $num_files; $i++) {
+                            $entry = $zip->getNameIndex($i);
+                            if (substr($entry, -1) == '/') {
+                                continue;
+                            }
+
+                            $pos_slash = strpos($entry, '/');
+                            $entry_without_first_dir = substr($entry, $pos_slash + 1);
+                            $shortPluginDir = dirname($entry_without_first_dir);
+                            // If there is still a slash, we need to make sure the directories are created.
+                            if (strpos($entry_without_first_dir, '/') !== false) {
+                                if (!is_dir($extraction_path.$shortPluginDir)) {
+                                    // Create it.
+                                    @mkdir($extraction_path.$shortPluginDir, $mode, true);
+                                }
+                            }
+
+                            $fp = $zip->getStream($entry);
+                            $shortPluginDir = dirname($entry_without_first_dir).'/';
+                            if ($shortPluginDir === './') {
+                                $shortPluginDir = '';
+                            }
+                            $ofp = fopen($extraction_path.$shortPluginDir.basename($entry), 'w');
+
+                            while (!feof($fp)) {
+                                fwrite($ofp, fread($fp, 8192));
+                            }
+
+                            fclose($fp);
+                            fclose($ofp);
+                        }
+                        $result = true;
+                    }
+                }
+            }
+            $zip->close();
+        } else {
+            echo Display::return_message(get_lang('ErrorReadingZip').$info['extension'], 'error', false);
+        }
+    } else {
+        // Simply move the file.
+        move_uploaded_file($file['tmp_name'], $pluginPath.'/'.$file['name']);
+        $result = true;
     }
 
     return $result;
@@ -1839,6 +2069,7 @@ function getAllowedFileTypes()
         'webp',
         'woff',
         'woff2',
+        'md',
     ];
 
     return $allowedFiles;

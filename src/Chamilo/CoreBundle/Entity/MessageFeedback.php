@@ -93,8 +93,6 @@ class MessageFeedback
     }
 
     /**
-     * @param Message $message
-     *
      * @return MessageFeedback
      */
     public function setMessage(Message $message)
@@ -113,8 +111,6 @@ class MessageFeedback
     }
 
     /**
-     * @param User $user
-     *
      * @return MessageFeedback
      */
     public function setUser(User $user)
@@ -173,8 +169,6 @@ class MessageFeedback
     }
 
     /**
-     * @param \DateTime $updatedAt
-     *
      * @return MessageFeedback
      */
     public function setUpdatedAt(\DateTime $updatedAt)

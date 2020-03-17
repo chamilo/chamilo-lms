@@ -6,8 +6,8 @@
  *	@package chamilo.configuration
  */
 
-$platform_email['SMTP_FROM_EMAIL'] = (isset($administrator['email']) ? $administrator['email'] : 'admin@example.com');
-$platform_email['SMTP_FROM_NAME'] = (isset($administrator['name']) ? $administrator['name'] : 'Admin');
+$platform_email['SMTP_FROM_EMAIL'] = ''; //See the function __construct() in main/inc/lib/notification.lib.php for more details on how the SMTP FROM email is defined and what to indicate here if needed to override users configuration
+$platform_email['SMTP_FROM_NAME'] = '';
 $platform_email['SMTP_HOST'] = 'localhost';
 $platform_email['SMTP_PORT'] = 25;
 $platform_email['SMTP_MAILER'] = 'mail'; // mail, sendmail or smtp (Windows probably only supports smtp)

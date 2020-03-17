@@ -326,7 +326,6 @@ $trackingDirection = isset($_GET['users_tracking_direction']) ? $_GET['users_tra
 // Show the charts part only if there are students subscribed to this course/session
 if ($nbStudents > 0) {
     $usersTracking = TrackingCourseLog::get_user_data(null, $nbStudents, $trackingColumn, $trackingDirection, false);
-
     $numberStudentsCompletedLP = 0;
     $averageStudentsTestScore = 0;
     $scoresDistribution = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
@@ -437,7 +436,7 @@ if ($nbStudents > 0) {
         'since',
         Display::returnFontAwesomeIcon('warning').get_lang('RemindInactivesLearnersSince'),
         $options,
-        ['disable_js' => true]
+        ['disable_js' => true, 'class' => 'col-sm-3']
     );
     $el->setSelected(7);
 
@@ -548,41 +547,26 @@ if ($nbStudents > 0) {
     if (empty($sessionId)) {
         $table->set_header(12, get_lang('Survey'), false);
         $headers['survey'] = get_lang('Survey');
-        $table->set_header(13, get_lang('FirstLoginInCourse'), false);
-        $headers['first_login'] = get_lang('FirstLoginInCourse');
-        $table->set_header(14, get_lang('LatestLoginInCourse'), false);
-        $headers['latest_login'] = get_lang('LatestLoginInCourse');
-        if (isset($_GET['additional_profile_field'])) {
-            $counter = 15;
-            foreach ($_GET['additional_profile_field'] as $fieldId) {
-                $table->set_header($counter, $extra_info[$fieldId]['display_text'], false);
-                $headers[$extra_info[$fieldId]['variable']] = $extra_info[$fieldId]['display_text'];
-                $counter++;
-            }
-
-            $table->set_header($counter, get_lang('Details'), false);
-            $headers['details'] = get_lang('Details');
-        } else {
-            $table->set_header(15, get_lang('Details'), false);
-            $headers['details'] = get_lang('Details');
-        }
     } else {
-        $table->set_header(12, get_lang('FirstLoginInCourse'), false);
-        $headers['first_login'] = get_lang('FirstLoginInCourse');
-        $table->set_header(13, get_lang('LatestLoginInCourse'), false);
-        $headers['latest_login'] = get_lang('LatestLoginInCourse');
-
-        if (isset($_GET['additional_profile_field'])) {
-            $counter = 15;
-            foreach ($_GET['additional_profile_field'] as $fieldId) {
-                $table->set_header($counter, $extra_info[$fieldId]['display_text'], false);
-                $headers[$extra_info[$fieldId]['variable']] = $extra_info[$fieldId]['display_text'];
-                $counter++;
-            }
-        } else {
-            $table->set_header(14, get_lang('Details'), false);
-            $headers['Details'] = get_lang('Details');
+        $table->set_header(12, get_lang('RegisteredDate'), false);
+        $headers['registered_at'] = get_lang('RegisteredDate');
+    }
+    $table->set_header(13, get_lang('FirstLoginInCourse'), false);
+    $headers['first_login'] = get_lang('FirstLoginInCourse');
+    $table->set_header(14, get_lang('LatestLoginInCourse'), false);
+    $headers['latest_login'] = get_lang('LatestLoginInCourse');
+    if (isset($_GET['additional_profile_field'])) {
+        $counter = 15;
+        foreach ($_GET['additional_profile_field'] as $fieldId) {
+            $table->set_header($counter, $extra_info[$fieldId]['display_text'], false);
+            $headers[$extra_info[$fieldId]['variable']] = $extra_info[$fieldId]['display_text'];
+            $counter++;
         }
+        $table->set_header($counter, get_lang('Details'), false);
+        $headers['details'] = get_lang('Details');
+    } else {
+        $table->set_header(15, get_lang('Details'), false);
+        $headers['Details'] = get_lang('Details');
     }
     // display buttons to un hide hidden columns
     $html .= '<div id="unhideButtons" class="btn-toolbar">';
@@ -635,6 +619,8 @@ if ($export_csv) {
 
     if (empty($sessionId)) {
         $csv_headers[] = get_lang('Survey');
+    } else {
+        $csv_headers[] = get_lang('RegistrationDate');
     }
 
     $csv_headers[] = get_lang('FirstLoginInCourse');

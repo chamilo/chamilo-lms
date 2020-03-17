@@ -1,6 +1,9 @@
 <?php
+
 /* For licensing terms, see /license.txt */
 
+use Chamilo\CoreBundle\Entity\Repository\SequenceRepository;
+use Chamilo\CoreBundle\Entity\Repository\SequenceResourceRepository;
 use Chamilo\CoreBundle\Entity\Sequence;
 use Chamilo\CoreBundle\Entity\SequenceResource;
 use ChamiloSession as Session;
@@ -19,108 +22,128 @@ $type = isset($_REQUEST['type']) ? $_REQUEST['type'] : null;
 $sequenceId = isset($_REQUEST['sequence_id']) ? $_REQUEST['sequence_id'] : 0;
 
 $em = Database::getManager();
-$repository = $em->getRepository('ChamiloCoreBundle:SequenceResource');
+/** @var SequenceRepository $sequenceRepository */
+$sequenceRepository = $em->getRepository('ChamiloCoreBundle:Sequence');
+/** @var SequenceResourceRepository $sequenceResourceRepository */
+$sequenceResourceRepository = $em->getRepository('ChamiloCoreBundle:SequenceResource');
+
 switch ($action) {
     case 'graph':
         api_block_anonymous_users();
         api_protect_admin_script();
 
-        switch ($type) {
-            case 'session':
-                $type = SequenceResource::SESSION_TYPE;
+        /** @var Sequence $sequence */
+        $sequence = $sequenceRepository->find($sequenceId);
 
-                /** @var Sequence $sequence */
-                $sequence = $em->getRepository('ChamiloCoreBundle:Sequence')->find($sequenceId);
-
-                if (empty($sequence)) {
-                    exit;
-                }
-
-                if ($sequence->hasGraph()) {
-                    $graph = $sequence->getUnSerializeGraph();
-                    $graph->setAttribute('graphviz.node.fontname', 'arial');
-                    $graphviz = new GraphViz();
-                    $graphImage = '';
-                    try {
-                        $graphImage = $graphviz->createImageSrc($graph);
-
-                        echo Display::img(
-                            $graphImage,
-                            get_lang('GraphDependencyTree'),
-                            ['class' => 'center-block'],
-                            false
-                        );
-                    } catch (UnexpectedValueException $e) {
-                        error_log(
-                            $e->getMessage()
-                            .' - Graph could not be rendered in resources sequence'
-                            .' because GraphViz command "dot" could not be executed '
-                            .'- Make sure graphviz is installed.'
-                        );
-                        echo '<p class="text-center"><small>'.get_lang('MissingChartLibraryPleaseCheckLog')
-                            .'</small></p>';
-                    }
-                }
-                break;
+        if (null === $sequence) {
+            exit;
         }
+
+        if ($sequence->hasGraph()) {
+            $graph = $sequence->getUnSerializeGraph();
+            $graph->setAttribute('graphviz.node.fontname', 'arial');
+            $graphviz = new GraphViz();
+            $graphImage = '';
+            try {
+                $graphImage = $graphviz->createImageSrc($graph);
+
+                //echo $graphviz->createScript($graph);
+                //$graphviz->display($graph);
+
+                echo Display::img(
+                    $graphImage,
+                    get_lang('GraphDependencyTree'),
+                    ['class' => 'center-block'],
+                    false
+                );
+            } catch (UnexpectedValueException $e) {
+                error_log(
+                    $e->getMessage()
+                    .' - Graph could not be rendered in resources sequence'
+                    .' because GraphViz command "dot" could not be executed '
+                    .'- Make sure graphviz is installed.'
+                );
+                echo '<p class="text-center"><small>'.get_lang('MissingChartLibraryPleaseCheckLog')
+                    .'</small></p>';
+            }
+        }
+
         break;
     case 'get_icon':
         api_block_anonymous_users();
         api_protect_admin_script();
 
+        $showDelete = isset($_REQUEST['show_delete']) ? $_REQUEST['show_delete'] : false;
+        $image = Display::return_icon('item-sequence.png', null, null, ICON_SIZE_LARGE);
+
+        if (empty($id)) {
+            exit;
+        }
+
         $link = '';
+        $linkDelete = $linkUndo = '';
+        $resourceName = '';
         switch ($type) {
-            case 'session':
-                $type = SequenceResource::SESSION_TYPE;
-                $showDelete = isset($_REQUEST['show_delete']) ? $_REQUEST['show_delete'] : false;
-                $image = Display::return_icon('item-sequence.png', null, null, ICON_SIZE_LARGE);
-                $sessionInfo = api_get_session_info($id);
-                if (!empty($sessionInfo)) {
-                    $linkDelete = $linkUndo = '';
-                    if ($showDelete) {
-                        $linkDelete = Display::toolbarButton(
-                            get_lang('Delete'),
-                            '#',
-                            'trash',
-                            'default',
-                            [
-                                'class' => 'delete_vertex btn btn-block btn-xs',
-                                'data-id' => $id,
-                            ]
-                        );
-
-                        $linkUndo = Display::toolbarButton(
-                            get_lang('Undo'),
-                            '#',
-                            'undo',
-                            'default',
-                            [
-                                'class' => 'undo_delete btn btn-block btn-xs',
-                                'style' => 'display: none;',
-                                'data-id' => $id,
-                            ]
-                        );
-                    }
-
-                    $link = '<div class="parent" data-id="'.$id.'">';
-                    $link .= '<div class="big-icon">';
-                    $link .= $image;
-                    $link .= '<div class="sequence-course">'.$sessionInfo['name'].'</div>';
-                    $link .= Display::tag(
-                        'button',
-                        $id,
-                        [
-                            'class' => 'sequence-id',
-                            'title' => get_lang('UseAsReference'),
-                            'type' => 'button',
-                        ]
-                    );
-                    $link .= $linkDelete;
-                    $link .= $linkUndo;
-                    $link .= '</div></div>';
+            case SequenceResource::SESSION_TYPE:
+                $resourceData = api_get_session_info($id);
+                if ($resourceData) {
+                    $resourceName = $resourceData['name'];
+                }
+                break;
+            case SequenceResource::COURSE_TYPE:
+                $resourceData = api_get_course_info_by_id($id);
+                if ($resourceData) {
+                    $resourceName = $resourceData['name'];
                 }
                 break;
         }
+
+        if (empty($resourceData)) {
+            exit;
+        }
+
+        if (!empty($resourceData) && $showDelete) {
+            $linkDelete = Display::toolbarButton(
+                get_lang('Delete'),
+                '#',
+                'trash',
+                'default',
+                [
+                    'class' => 'delete_vertex btn btn-block btn-xs',
+                    'data-id' => $id,
+                ]
+            );
+
+            $linkUndo = Display::toolbarButton(
+                get_lang('Undo'),
+                '#',
+                'undo',
+                'default',
+                [
+                    'class' => 'undo_delete btn btn-block btn-xs',
+                    'style' => 'display: none;',
+                    'data-id' => $id,
+                ]
+            );
+        }
+
+        $link = '<div class="parent" data-id="'.$id.'">';
+        $link .= '<div class="big-icon">';
+        $link .= $image;
+        $link .= '<div class="sequence-course">'.$resourceName.'</div>';
+        $link .= Display::tag(
+            'button',
+            $resourceName,
+            [
+                'class' => 'sequence-id',
+                'title' => get_lang('UseAsReference'),
+                'type' => 'button',
+            ]
+        );
+        $link .= $linkDelete;
+        $link .= $linkUndo;
+        $link .= '</div></div>';
+
         echo $link;
         break;
     case 'delete_vertex':
@@ -128,21 +151,20 @@ switch ($action) {
         api_protect_admin_script();
 
         $vertexId = isset($_REQUEST['vertex_id']) ? $_REQUEST['vertex_id'] : null;
-        $type = SequenceResource::SESSION_TYPE;
 
         /** @var Sequence $sequence */
-        $sequence = $em->getRepository('ChamiloCoreBundle:Sequence')->find($sequenceId);
+        $sequence = $sequenceRepository->find($sequenceId);
 
-        if (empty($sequence)) {
+        if (null === $sequence) {
             exit;
         }
 
         /** @var SequenceResource $sequenceResource */
-        $sequenceResource = $repository->findOneBy(
+        $sequenceResource = $sequenceResourceRepository->findOneBy(
             ['resourceId' => $id, 'type' => $type, 'sequence' => $sequence]
         );
 
-        if (empty($sequenceResource)) {
+        if (null === $sequenceResource) {
             exit;
         }
 
@@ -157,11 +179,11 @@ switch ($action) {
                         $vertexFromTo = null;
                         $vertexToFrom = null;
                         foreach ($edgeIterator as $edges) {
-                            if (intval($edges->getVertexEnd()->getId()) === intval($id)) {
+                            if ((int) $edges->getVertexEnd()->getId() === (int) $id) {
                                 $vertexFromTo = $edges;
                             }
 
-                            if (intval($edges->getVertexStart()->getId()) === intval($vertexId)) {
+                            if ((int) $edges->getVertexStart()->getId() === (int) $vertexId) {
                                 $vertexToFrom = $edges;
                             }
                         }
@@ -181,7 +203,7 @@ switch ($action) {
                         if ($vertexToFrom && !$vertexFromTo) {
                             $vertex = $graph->getVertex($vertexId);
                             $vertex->destroy();
-                            $sequenceResourceToDelete = $repository->findOneBy(
+                            $sequenceResourceToDelete = $sequenceResourceRepository->findOneBy(
                                 [
                                     'resourceId' => $vertexId,
                                     'type' => $type,
@@ -197,7 +219,7 @@ switch ($action) {
                             $vertexFrom = $graph->getVertex($vertexId);
                             if ($vertexTo->getVerticesEdgeFrom()->count() > 1) {
                                 $vertexFrom->destroy();
-                                $sequenceResourceToDelete = $repository->findOneBy(
+                                $sequenceResourceToDelete = $sequenceResourceRepository->findOneBy(
                                     [
                                         'resourceId' => $vertexId,
                                         'type' => $type,
@@ -208,7 +230,7 @@ switch ($action) {
                             } else {
                                 $vertexTo->destroy();
                                 $vertexFrom->destroy();
-                                $sequenceResourceToDelete = $repository->findOneBy(
+                                $sequenceResourceToDelete = $sequenceResourceRepository->findOneBy(
                                     [
                                         'resourceId' => $vertexId,
                                         'type' => $type,
@@ -227,6 +249,7 @@ switch ($action) {
                 $em->flush();
             }
         }
+
         break;
     case 'load_resource':
         api_block_anonymous_users();
@@ -234,22 +257,20 @@ switch ($action) {
 
         // children or parent
         $loadResourceType = isset($_REQUEST['load_resource_type']) ? $_REQUEST['load_resource_type'] : null;
-        $sequenceId = isset($_REQUEST['sequence_id']) ? $_REQUEST['sequence_id'] : 0;
-        $type = SequenceResource::SESSION_TYPE;
 
         /** @var Sequence $sequence */
-        $sequence = $em->getRepository('ChamiloCoreBundle:Sequence')->find($sequenceId);
+        $sequence = $sequenceRepository->find($sequenceId);
 
         if (empty($sequence)) {
             exit;
         }
 
         /** @var SequenceResource $sequenceResource */
-        $sequenceResource = $repository->findOneBy(
+        $sequenceResource = $sequenceResourceRepository->findOneBy(
             ['resourceId' => $id, 'type' => $type, 'sequence' => $sequence]
         );
 
-        if (empty($sequenceResource)) {
+        if (null === $sequenceResource) {
             exit;
         }
 
@@ -291,25 +312,24 @@ switch ($action) {
         api_protect_admin_script();
 
         $parents = isset($_REQUEST['parents']) ? $_REQUEST['parents'] : '';
-        $sequenceId = isset($_REQUEST['sequence_id']) ? $_REQUEST['sequence_id'] : 0;
-        $type = isset($_REQUEST['type']) ? $_REQUEST['type'] : '';
 
         if (empty($parents) || empty($sequenceId) || empty($type)) {
             exit;
         }
 
         /** @var Sequence $sequence */
-        $sequence = $em->getRepository('ChamiloCoreBundle:Sequence')->find($sequenceId);
+        $sequence = $sequenceRepository->find($sequenceId);
 
-        if (empty($sequence)) {
+        if (null === $sequence) {
             exit;
         }
-        $vertexFromSession = Session::read('sr_vertex');
+
+        /*$vertexFromSession = Session::read('sr_vertex');
         if ($vertexFromSession) {
             Session::erase('sr_vertex');
             echo Display::return_message(get_lang('Saved'), 'success');
             break;
-        }
+        }*/
 
         $parents = str_replace($id, '', $parents);
         $parents = explode(',', $parents);
@@ -321,114 +341,119 @@ switch ($action) {
             $graph = new Graph();
         }
 
-        switch ($type) {
-            case 'session':
-                $type = SequenceResource::SESSION_TYPE;
-                $sessionInfo = api_get_session_info($id);
-                $name = $sessionInfo['name'];
-
-                if ($graph->hasVertex($id)) {
-                    $main = $graph->getVertex($id);
-                } else {
-                    $main = $graph->createVertex($id);
-                }
-
-                foreach ($parents as $parentId) {
-                    if ($graph->hasVertex($parentId)) {
-                        $parent = $graph->getVertex($parentId);
-                        if (!$parent->hasEdgeTo($main)) {
-                            $parent->createEdgeTo($main);
-                        }
-                    } else {
-                        $parent = $graph->createVertex($parentId);
-                        $parent->createEdgeTo($main);
-                    }
-                }
-
-                foreach ($parents as $parentId) {
-                    $sequenceResourceParent = $repository->findOneBy(
-                        ['resourceId' => $parentId, 'type' => $type, 'sequence' => $sequence]
-                    );
-
-                    if (empty($sequenceResourceParent)) {
-                        $sequenceResourceParent = new SequenceResource();
-                        $sequenceResourceParent
-                            ->setSequence($sequence)
-                            ->setType(SequenceResource::SESSION_TYPE)
-                            ->setResourceId($parentId);
-                        $em->persist($sequenceResourceParent);
-                    }
-                }
-
-                //$graphviz = new GraphViz();
-                //echo $graphviz->createImageHtml($graph);
-                /** @var SequenceResource $sequenceResource */
-                $sequenceResource = $repository->findOneBy(
-                    ['resourceId' => $id, 'type' => $type, 'sequence' => $sequence]
-                );
-
-                if (empty($sequenceResource)) {
-                    // Create
-                    $sequence->setGraphAndSerialize($graph);
-
-                    $sequenceResource = new SequenceResource();
-                    $sequenceResource
-                        ->setSequence($sequence)
-                        ->setType(SequenceResource::SESSION_TYPE)
-                        ->setResourceId($id);
-                } else {
-                    // Update
-                    $sequenceResource->getSequence()->setGraphAndSerialize($graph);
-                }
-                $em->persist($sequenceResource);
-                $em->flush();
-
-                echo Display::return_message(get_lang('Saved'), 'success');
-                break;
+        if ($graph->hasVertex($id)) {
+            $main = $graph->getVertex($id);
+        } else {
+            $main = $graph->createVertex($id);
         }
+
+        $item = $sequenceRepository->getItem($id, $type);
+        $main->setAttribute('graphviz.shape', 'record');
+        $main->setAttribute('graphviz.label', $item->getName());
+
+        foreach ($parents as $parentId) {
+            $item = $sequenceRepository->getItem($parentId, $type);
+            if ($graph->hasVertex($parentId)) {
+                $parent = $graph->getVertex($parentId);
+                if (!$parent->hasEdgeTo($main)) {
+                    $newEdge = $parent->createEdgeTo($main);
+                }
+            } else {
+                $parent = $graph->createVertex($parentId);
+                $newEdge = $parent->createEdgeTo($main);
+            }
+
+            $parent->setAttribute('graphviz.shape', 'record');
+            $parent->setAttribute('graphviz.label', $item->getName());
+        }
+
+        foreach ($parents as $parentId) {
+            $sequenceResourceParent = $sequenceResourceRepository->findOneBy(
+                ['resourceId' => $parentId, 'type' => $type, 'sequence' => $sequence]
+            );
+
+            if (empty($sequenceResourceParent)) {
+                $sequenceResourceParent = new SequenceResource();
+                $sequenceResourceParent
+                    ->setSequence($sequence)
+                    ->setType($type)
+                    ->setResourceId($parentId);
+                $em->persist($sequenceResourceParent);
+            }
+        }
+
+        /** @var SequenceResource $sequenceResource */
+        $sequenceResource = $sequenceResourceRepository->findOneBy(
+            ['resourceId' => $id, 'type' => $type, 'sequence' => $sequence]
+        );
+
+        if (null === $sequenceResource) {
+            // Create
+            $sequence->setGraphAndSerialize($graph);
+            $sequenceResource = new SequenceResource();
+            $sequenceResource
+                ->setSequence($sequence)
+                ->setType($type)
+                ->setResourceId($id);
+        } else {
+            // Update
+            $sequenceResource->getSequence()->setGraphAndSerialize($graph);
+        }
+        $em->persist($sequenceResource);
+        $em->flush();
+
+        echo Display::return_message(get_lang('Saved'), 'success');
+
         break;
     case 'get_requirements':
         $userId = api_get_user_id();
 
         switch ($type) {
             case SequenceResource::SESSION_TYPE:
-                $session = api_get_session_info($id);
-
-                $sequences = $repository->getRequirements(
-                    $session['id'],
-                    $type
-                );
-
-                if (count($sequences) === 0) {
-                    break;
-                }
-
-                $sequenceList = SequenceResourceManager::checkRequirementsForUser($sequences, $type, $userId);
-                $allowSubscription = SequenceResourceManager::checkSequenceAreCompleted($sequenceList);
-
-                $courseController = new CoursesController();
-
-                $view = new Template(null, false, false, false, false, false);
-                $view->assign('sequences', $sequenceList);
-                $view->assign('allow_subscription', $allowSubscription);
-
-                if ($allowSubscription) {
-                    $view->assign(
-                        'subscribe_button',
-                        $courseController->getRegisteredInSessionButton(
-                            $session['id'],
-                            $session['name'],
-                            false
-                        )
-                    );
-                }
-
-                $template = $view->get_template(
-                    'sequence_resource/session_requirements.tpl'
-                );
-
-                $view->display($template);
+                $resourceData = api_get_session_info($id);
+                $resourceName = $resourceData['name'];
+                $template = 'session_requirements.tpl';
+                break;
+            case SequenceResource::COURSE_TYPE:
+                $resourceData = api_get_course_info_by_id($id);
+                $resourceName = $resourceData['title'];
+                $template = 'course_requirements.tpl';
                 break;
         }
+
+        if (empty($resourceData)) {
+            exit;
+        }
+
+        $sequences = $sequenceResourceRepository->getRequirements($id, $type);
+
+        if (empty($sequences)) {
+            exit;
+        }
+
+        $sequenceList = $sequenceResourceRepository->checkRequirementsForUser($sequences, $type, $userId);
+        $allowSubscription = $sequenceResourceRepository->checkSequenceAreCompleted($sequenceList);
+
+        $courseController = new CoursesController();
+        $view = new Template(null, false, false, false, false, false);
+        $view->assign('sequences', $sequenceList);
+        $view->assign('sequence_type', $type);
+        $view->assign('allow_subscription', $allowSubscription);
+
+        if ($allowSubscription) {
+            $view->assign(
+                'subscribe_button',
+                $courseController->getRegisteredInSessionButton(
+                    $id,
+                    $resourceName,
+                    false
+                )
+            );
+        }
+
+        $template = $view->get_template('sequence_resource/'.$template);
+
+        $view->display($template);
+
         break;
 }

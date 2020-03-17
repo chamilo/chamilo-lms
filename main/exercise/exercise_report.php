@@ -1,10 +1,9 @@
 <?php
+
 /* For licensing terms, see /license.txt */
 
 /**
  * Exercise list: This script shows the list of exercises for administrators and students.
- *
- * @package chamilo.exercise
  *
  * @author Julio Montoya <gugli100@gmail.com> jqgrid integration
  * Modified by hubert.borderiou (question category)
@@ -36,7 +35,6 @@ if ($limitTeacherAccess && !api_is_platform_admin()) {
     api_not_allowed(true);
 }
 
-// including additional libraries
 require_once 'hotpotatoes.lib.php';
 
 $_course = api_get_course_info();
@@ -299,29 +297,14 @@ if (isset($_REQUEST['comments']) &&
             Display::addFlash(Display::return_message(get_lang('LearnpathUpdated')));
         }
 
-        $sql = "UPDATE $TBL_LP_ITEM_VIEW 
+        $sql = "UPDATE $TBL_LP_ITEM_VIEW
                 SET score = '".floatval($tot)."'
                 $statusCondition
                 WHERE c_id = ".$course_id." AND id = ".$lp_item_view_id;
         Database::query($sql);
 
-        if (empty($origin)) {
-            header('Location: '.api_get_path(WEB_CODE_PATH).'exercise/exercise_report.php?exerciseId='.$exercise_id.'&'.api_get_cidreq());
-            exit;
-        }
-
-        if ($origin === 'tracking_course') {
-            //Redirect to the course detail in lp
-            header('Location: '.api_get_path(WEB_CODE_PATH).'exercise/exercise.php?course='.Security::remove_XSS($_GET['course']));
-            exit;
-        } else {
-            // Redirect to the reporting
-            header(
-                'Location: '.api_get_path(WEB_CODE_PATH).'mySpace/myStudents.php?origin='.$origin.'&student='.$student_id.'&details=true&course='.api_get_course_id(
-                ).'&session_id='.$session_id
-            );
-            exit;
-        }
+        header('Location: '.api_get_path(WEB_CODE_PATH).'exercise/exercise_show.php?id='.$id.'&student='.$student_id.'&'.api_get_cidreq());
+        exit;
     }
 }
 
@@ -339,6 +322,10 @@ if ($is_allowedToEdit && $origin != 'learnpath') {
             Display::return_icon('statistics.png', get_lang('ReportByQuestion'), '', ICON_SIZE_MEDIUM).'</a>';
         $actions .= '<a id="export_opener" href="'.api_get_self().'?export_report=1&exerciseId='.$exercise_id.'" >'.
         Display::return_icon('save.png', get_lang('Export'), '', ICON_SIZE_MEDIUM).'</a>';
+        $actions .= Display::url(
+            Display::return_icon('reload.png', get_lang('RecalculateResults'), [], ICON_SIZE_MEDIUM),
+            api_get_path(WEB_CODE_PATH).'exercise/recalculate_all.php?'.api_get_cidreq()."&exercise=$exercise_id"
+        );
         // clean result before a selected date icon
         $actions .= Display::url(
             Display::return_icon(
@@ -434,7 +421,7 @@ if (($is_allowedToEdit || $is_tutor || api_is_coach()) &&
 ) {
     // Close the user attempt otherwise left pending
     $exe_id = (int) $_GET['id'];
-    $sql = "UPDATE $TBL_TRACK_EXERCISES SET status = '' 
+    $sql = "UPDATE $TBL_TRACK_EXERCISES SET status = ''
             WHERE exe_id = $exe_id AND status = 'incomplete'";
     Database::query($sql);
 }
@@ -670,7 +657,7 @@ $extra_params['height'] = 'auto';
 $extra_params['gridComplete'] = "
     defaultGroupId = Cookies.get('default_group_".$exercise_id."');
     if (typeof defaultGroupId !== 'undefined') {
-        $('#gs_group_name').val(defaultGroupId);        
+        $('#gs_group_name').val(defaultGroupId);
     }
 ";
 
@@ -683,18 +670,18 @@ if (typeof defaultGroupId !== 'undefined') {
 } else {
     // get from cookies
     defaultGroupId = Cookies.get('default_group_".$exercise_id."');
-    $('#gs_group_name').val(defaultGroupId);    
+    $('#gs_group_name').val(defaultGroupId);
 }
 
 if (typeof defaultGroupId !== 'undefined') {
     var posted_data = $(\"#results\").jqGrid('getGridParam', 'postData');
-    var extraFilter = ',{\"field\":\"group_id\",\"op\":\"eq\",\"data\":\"'+ defaultGroupId +'\"}]}';       
-    var filters = posted_data.filters;        
-    var stringObj = new String(filters);    
-    stringObj.replace(']}', extraFilter);         
-    
+    var extraFilter = ',{\"field\":\"group_id\",\"op\":\"eq\",\"data\":\"'+ defaultGroupId +'\"}]}';
+    var filters = posted_data.filters;
+    var stringObj = new String(filters);
+    stringObj.replace(']}', extraFilter);
+
     posted_data['group_id_in_toolbar'] = defaultGroupId;
-    $(this).jqGrid('setGridParam', 'postData', posted_data);          
+    $(this).jqGrid('setGridParam', 'postData', posted_data);
 }
 ";
 
@@ -720,7 +707,6 @@ $gridJs = Display::grid_js(
         for (var i in data) {
             colNames[ii++] = i;
         }
-        // capture col names
         var html = "";
         for (i = 0; i < mya.length; i++) {
             data = $("#results").getRowData(mya[i]); // get each row

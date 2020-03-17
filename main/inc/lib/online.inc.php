@@ -188,6 +188,13 @@ function online_logout($user_id = null, $logout_redirect = false)
         exit;
     }
 
+    if (api_is_cas_activated()) {
+        require_once __DIR__.'/../../auth/cas/cas_var.inc.php';
+        if (phpCas::isInitialized()) {
+            phpCAS::logout();
+        }
+    }
+
     if ($logout_redirect) {
         header("Location: $url");
         exit;

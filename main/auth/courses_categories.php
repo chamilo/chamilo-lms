@@ -1,12 +1,11 @@
 <?php
+
 /* For licensing terms, see /license.txt */
 
 /**
  * View (MVC patter) for courses categories.
  *
  * @author Christian Fasanando <christian1827@gmail.com> - Beeznest
- *
- * @package chamilo.auth
  */
 if (isset($_REQUEST['action']) && Security::remove_XSS($_REQUEST['action']) !== 'subscribe') {
     $stok = Security::get_token();
@@ -20,8 +19,8 @@ $action = in_array($action, $actions) ? $action : 'display_courses';
 
 $showCourses = CoursesAndSessionsCatalog::showCourses();
 $showSessions = CoursesAndSessionsCatalog::showSessions();
-$pageCurrent = isset($pageCurrent) ? $pageCurrent : isset($_GET['pageCurrent']) ? (int) $_GET['pageCurrent'] : 1;
-$pageLength = isset($pageLength) ? $pageLength : isset($_GET['pageLength']) ? (int) $_GET['pageLength'] : CoursesAndSessionsCatalog::PAGE_LENGTH;
+$pageCurrent = isset($_GET['pageCurrent']) ? (int) $_GET['pageCurrent'] : 1;
+$pageLength = isset($_GET['pageLength']) ? (int) $_GET['pageLength'] : CoursesAndSessionsCatalog::PAGE_LENGTH;
 $pageTotal = (int) ceil((int) $countCoursesInCategory / $pageLength);
 $cataloguePagination = $pageTotal > 1 ? CourseCategory::getCatalogPagination($pageCurrent, $pageLength, $pageTotal) : '';
 $searchTerm = isset($_REQUEST['search_term']) ? Security::remove_XSS($_REQUEST['search_term']) : '';
@@ -44,12 +43,7 @@ $code = isset($code) ? $code : null;
                 url: $(this).attr('data-link'),
                 success: function(data) {
                     $("#rating_wrapper_"+id).html(data);
-                    if (data == 'added') {
-                        //$('#vote_label2_' + id).html("{'Saved'|get_lang}");
-                    }
-                    if (data == 'updated') {
-                        //$('#vote_label2_' + id).html("{'Saved'|get_lang}");
-                    }
+
                 }
             });
         });
@@ -69,9 +63,10 @@ $code = isset($code) ? $code : null;
 </script>
 <?php
 
+echo CoursesController::getTabList(1);
+
 echo '<div class="row">
     <div class="col-md-12">
-        <h2 class="title-courses">'.get_lang('CourseManagement').'</h2>
         <div class="search-courses">
             <div class="row">';
 
@@ -115,19 +110,6 @@ if ($showCourses) {
     echo '</div>';
 }
 
-if ($showSessions) {
-    $url = CourseCategory::getCourseCategoryUrl(1, $pageLength, null, 0, 'display_sessions');
-    echo '<div class="col-md-4">
-        <div class="return-catalog">
-            <a class="btn btn-default btn-lg btn-block"
-               href="'.$url.'">
-                <em class="fa fa-arrow-right"></em>'.get_lang('SessionList').'
-            </a>
-        </div>
-    </div>
-    ';
-}
-
 echo '</div></div></div></div>';
 
 if ($showCourses && $action != 'display_sessions') {
@@ -149,7 +131,7 @@ if ($showCourses && $action != 'display_sessions') {
     $showTeacher = api_get_setting('display_teacher_in_courselist') === 'true';
     $ajax_url = api_get_path(WEB_AJAX_PATH).'course.ajax.php?a=add_course_vote';
     $user_id = api_get_user_id();
-    $categoryListFromDatabase = CourseCategory::getCategories();
+    $categoryListFromDatabase = CourseCategory::getAllCategories();
 
     $categoryList = [];
     if (!empty($categoryListFromDatabase)) {
@@ -364,13 +346,13 @@ function return_teacher($courseInfo)
 
     $html = '<div class="block-author">';
     if ($length > 6) {
-        $html .= '<a 
-            id="plist" 
-            data-trigger="focus" 
-            tabindex="0" role="button" 
-            class="btn btn-default panel_popover" 
-            data-toggle="popover" 
-            title="'.addslashes(get_lang('CourseTeachers')).'" 
+        $html .= '<a
+            id="plist"
+            data-trigger="focus"
+            tabindex="0" role="button"
+            class="btn btn-default panel_popover"
+            data-toggle="popover"
+            title="'.addslashes(get_lang('CourseTeachers')).'"
             data-html="true"
         >
             <i class="fa fa-graduation-cap" aria-hidden="true"></i>

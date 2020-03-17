@@ -1,8 +1,9 @@
 <?php
+
 /* For licensing terms, see /license.txt */
 
 use Chamilo\CoreBundle\Entity\Course;
-use Chamilo\CoreBundle\Entity\Repository\SequenceRepository;
+use Chamilo\CoreBundle\Entity\Repository\SequenceResourceRepository;
 use Chamilo\CoreBundle\Entity\Repository\SessionRepository;
 use Chamilo\CoreBundle\Entity\SequenceResource;
 use Chamilo\CoreBundle\Entity\Session;
@@ -10,8 +11,6 @@ use Chamilo\CoreBundle\Entity\SessionRelCourseRelUser;
 
 /**
  * @author  Bart Mollet, Julio Montoya lot of fixes
- *
- * @package chamilo.admin
  */
 $cidReset = true;
 require_once __DIR__.'/../inc/global.inc.php';
@@ -26,7 +25,6 @@ if (empty($sessionId)) {
 }
 
 SessionManager::protectSession($sessionId);
-
 $codePath = api_get_path(WEB_CODE_PATH);
 
 $tool_name = get_lang('SessionOverview');
@@ -107,8 +105,8 @@ switch ($action) {
             );
             $nbr_affected_rows = Database::affected_rows($result);
             Database::query(
-                "UPDATE $tbl_session 
-                SET nbr_classes = nbr_classes - $nbr_affected_rows 
+                "UPDATE $tbl_session
+                SET nbr_classes = nbr_classes - $nbr_affected_rows
                 WHERE id = $sessionId");
         }
 
@@ -380,7 +378,7 @@ if (!empty($userList)) {
     $userListToShow .= $table->toHtml();
 }
 
-/** @var SequenceRepository $repo */
+/** @var SequenceResourceRepository $repo */
 $repo = $em->getRepository('ChamiloCoreBundle:SequenceResource');
 $requirementAndDependencies = $repo->getRequirementAndDependencies(
     $sessionId,

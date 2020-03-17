@@ -44,7 +44,7 @@ class SelectAjax extends HTML_QuickForm_select
 
         $plHolder = $this->getAttribute('placeholder');
         if (empty($plHolder)) {
-            $plHolder = get_lang('SelectAnOption');
+            $plHolder = preg_replace("/'/", "\\'", get_lang('SelectAnOption'));
         }
 
         $id = $this->getAttribute('id');

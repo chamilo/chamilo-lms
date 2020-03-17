@@ -8,21 +8,13 @@ use Doctrine\ORM\Mapping as ORM;
 /**
  * Class SequenceResource.
  *
- * @ORM\Entity(repositoryClass="Chamilo\CoreBundle\Entity\Repository\SequenceRepository")
+ * @ORM\Entity(repositoryClass="Chamilo\CoreBundle\Entity\Repository\SequenceResourceRepository")
  * @ORM\Table(name="sequence_resource")
  */
 class SequenceResource
 {
     const COURSE_TYPE = 1;
     const SESSION_TYPE = 2;
-
-    /**
-     * @var Sequence
-     *
-     * @ORM\ManyToOne(targetEntity="Sequence")
-     * @ORM\JoinColumn(name="sequence_id", referencedColumnName="id")
-     */
-    protected $sequence;
 
     /**
      * @var int
@@ -46,6 +38,14 @@ class SequenceResource
      * @ORM\Column(name="resource_id", type="integer")
      */
     protected $resourceId;
+
+    /**
+     * @var Sequence
+     *
+     * @ORM\ManyToOne(targetEntity="Sequence")
+     * @ORM\JoinColumn(name="sequence_id", referencedColumnName="id")
+     */
+    protected $sequence;
 
     /**
      * Get id.
@@ -126,8 +126,6 @@ class SequenceResource
     }
 
     /**
-     * @param Sequence $sequence
-     *
      * @return $this
      */
     public function setSequence(Sequence $sequence)

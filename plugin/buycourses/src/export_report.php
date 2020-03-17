@@ -1,5 +1,5 @@
 <?php
-
+/* For license terms, see /license.txt */
 //Initialization
 $cidReset = true;
 
@@ -12,7 +12,7 @@ $form = new FormValidator('export_validate');
 
 $form->addDatePicker('date_start', get_lang('DateStart'), false);
 $form->addDatePicker('date_end', get_lang('DateEnd'), false);
-$form->addButton('export_sales',get_lang('ExportExcel'),'check','primary');
+$form->addButton('export_sales', get_lang('ExportExcel'), 'check', 'primary');
 $salesStatus = [];
 
 if ($form->validate()) {
@@ -21,34 +21,34 @@ if ($form->validate()) {
     $dateStart = $reportValues['date_start'];
     $dateEnd = $reportValues['date_end'];
 
-    if($dateStart == null || $dateEnd == null){
+    if ($dateStart == null || $dateEnd == null) {
         Display::addFlash(
-            Display::return_message($plugin->get_lang('SelectDateRange'),'error', false)
+            Display::return_message($plugin->get_lang('SelectDateRange'), 'error', false)
         );
-    } else if($dateStart>$dateEnd) {
+    } elseif ($dateStart > $dateEnd) {
         Display::addFlash(
-            Display::return_message(get_lang('EndDateCannotBeBeforeTheStartDate'),'error', false)
+            Display::return_message(get_lang('EndDateCannotBeBeforeTheStartDate'), 'error', false)
         );
     } else {
-        $salesStatus = $plugin->getSaleListReport($dateStart,$dateEnd);
+        $salesStatus = $plugin->getSaleListReport($dateStart, $dateEnd);
     }
 }
 
-if(!empty($salesStatus)){
+if (!empty($salesStatus)) {
     $archiveFile = 'export_report_sales_'.api_get_local_time();
     Export::arrayToXls($salesStatus, $archiveFile);
 }
 $interbreadcrumb[] = [
-    'url' => '../index.php', 'name' => $plugin->get_lang('plugin_title')
+    'url' => '../index.php', 'name' => $plugin->get_lang('plugin_title'),
 ];
 $interbreadcrumb[] = [
     'url' => api_get_path(WEB_PLUGIN_PATH).'buycourses/src/sales_report.php',
-    'name' => $plugin->get_lang('SalesReport')
+    'name' => $plugin->get_lang('SalesReport'),
 ];
 
 $templateName = $plugin->get_lang('ExportReport');
 $toolbar = Display::url(
-    Display::return_icon('back.png',get_lang('GoBack'),[],ICON_SIZE_MEDIUM),
+    Display::return_icon('back.png', get_lang('GoBack'), [], ICON_SIZE_MEDIUM),
     api_get_path(WEB_PLUGIN_PATH).'buycourses/src/sales_report.php'
 );
 $template = new Template($templateName);

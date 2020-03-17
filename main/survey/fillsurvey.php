@@ -71,7 +71,7 @@ $surveyCode = isset($_GET['scode']) ? Database::escape_string($_GET['scode']) : 
 if ($surveyCode != '') {
     // Firstly we check if this survey is ready for anonymous use:
     $sql = "SELECT anonymous FROM $table_survey
-            WHERE c_id = $course_id AND code ='".$surveyCode."'";
+            WHERE c_id = $course_id AND code ='$surveyCode'";
     $resultAnonymous = Database::query($sql);
     $rowAnonymous = Database::fetch_array($resultAnonymous, 'ASSOC');
     // If is anonymous and is not allowed to take the survey to anonymous users, forbid access:
@@ -551,13 +551,15 @@ if ($survey_data['form_fields'] != '' &&
     $form->setDefaults($user_data);
 }
 
+$htmlHeadXtra[] = '<script>'.api_get_language_translate_html().'</script>';
+
 Display::display_header(get_lang('ToolSurvey'));
 
 // Displaying the survey title and subtitle (appears on every page)
 echo '<div class="survey-block">';
 echo '<div class="page-header">';
 echo '<h2>';
-echo strip_tags($survey_data['survey_title']).'</h2></div>';
+echo strip_tags($survey_data['survey_title'], '<span>').'</h2></div>';
 if (!empty($survey_data['survey_subtitle'])) {
     echo '<div class="survey_subtitle"><p>'.strip_tags($survey_data['survey_subtitle']).'</p></div>';
 }
@@ -686,8 +688,8 @@ if ((isset($_GET['show']) && $_GET['show'] != '') ||
         if (empty($paged_questions)) {
             $sql = "SELECT * FROM $table_survey_question
                     WHERE
-                        survey_question NOT LIKE '%{{%' AND 
-                        c_id = $course_id AND 
+                        survey_question NOT LIKE '%{{%' AND
+                        c_id = $course_id AND
                         survey_id = '".intval($survey_invitation['survey_id'])."'
                     ORDER BY sort ASC";
             $result = Database::query($sql);
@@ -767,7 +769,7 @@ if ((isset($_GET['show']) && $_GET['show'] != '') ||
                         LEFT JOIN $table_survey_question_option survey_question_option
                         ON survey_question.question_id = survey_question_option.question_id AND
                             survey_question_option.c_id = $course_id
-                        WHERE                        
+                        WHERE
                             survey_question NOT LIKE '%{{%' AND
                             survey_question.survey_id = '".intval($survey_invitation['survey_id'])."' AND
                             survey_question.question_id IN (".implode(',', $paged_questions[$_GET['show']]).") AND
@@ -810,9 +812,9 @@ if ((isset($_GET['show']) && $_GET['show'] != '') ||
             $answer_list = [];
             // Get current user results
             $results = [];
-            $sql = "SELECT 
-                      survey_group_pri, 
-                      user, 
+            $sql = "SELECT
+                      survey_group_pri,
+                      user,
                       SUM(value) as value
                     FROM $table_survey_answer as survey_answer
                     INNER JOIN $table_survey_question as survey_question
@@ -1049,7 +1051,7 @@ if ((isset($_GET['show']) && $_GET['show'] != '') ||
                                 ON survey_question.question_id = survey_question_option.question_id AND
                                 survey_question_option.c_id = $course_id
                                 WHERE
-                                    survey_question NOT LIKE '%{{%' AND 
+                                    survey_question NOT LIKE '%{{%' AND
                                     survey_question.survey_id = '".$my_survey_id."' AND
                                     survey_question.c_id = $course_id AND
                                     survey_question.question_id IN (".implode(',', $paged_questions_sec[$val]).")
@@ -1160,7 +1162,7 @@ if ((isset($_GET['show']) && $_GET['show'] != '') ||
                             ON survey_question.question_id = survey_question_option.question_id AND
                             survey_question_option.c_id = $course_id
                             WHERE
-                                survey_question NOT LIKE '%{{%' AND 
+                                survey_question NOT LIKE '%{{%' AND
                                 survey_question.survey_id = '".intval($survey_invitation['survey_id'])."' AND
                                 survey_question.c_id = $course_id  AND
                                 survey_question.question_id IN (".$imploded.")
@@ -1239,6 +1241,10 @@ $url = api_get_self().'?cidReq='.$courseInfo['code'].
     '&course='.$g_c.
     '&invitationcode='.$g_ic.
     '&show='.$show;
+if (!empty($_GET['language'])) {
+    $lang = Security::remove_XSS($_GET['language']);
+    $url .= '&language='.$lang;
+}
 $form = new FormValidator(
     'question',
     'post',

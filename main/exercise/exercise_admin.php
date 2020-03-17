@@ -1,4 +1,5 @@
 <?php
+
 /* For licensing terms, see /license.txt */
 
 use ChamiloSession as Session;
@@ -7,8 +8,6 @@ use ChamiloSession as Session;
  * Exercise administration
  * This script allows to manage an exercise. It is included from
  * the script admin.php.
- *
- * @package chamilo.exercise
  *
  * @author Olivier Brouckaert, Julio Montoya
  */

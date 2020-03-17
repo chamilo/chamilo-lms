@@ -151,8 +151,22 @@ function switch_item_toc($lpId, $userId, $viewId, $currentItem, $nextItem)
 
     $return .= "update_toc('unhighlight','".$currentItem."');".
         "update_toc('highlight','".$newItemId."');".
-        "update_toc('$lessonStatus','".$newItemId."');".
-        "update_progress_bar('$completedItems','$totalItems','$progressMode');";
+        "update_toc('$lessonStatus','".$newItemId."');";
+
+    $progressBarSpecial = false;
+    $scoreAsProgressSetting = api_get_configuration_value('lp_score_as_progress_enable');
+    if ($scoreAsProgressSetting === true) {
+        $scoreAsProgress = $myLP->getUseScoreAsProgress();
+        if ($scoreAsProgress) {
+            $score = $myLPI->get_score();
+            $maxScore = $myLPI->get_max();
+            $return .= "update_progress_bar('$score', '$maxScore', '$progressMode');";
+            $progressBarSpecial = true;
+        }
+    }
+    if (!$progressBarSpecial) {
+        $return .= "update_progress_bar('$completedItems','$totalItems','$progressMode');";
+    }
 
     $myLP->set_error_msg('');
     $myLP->prerequisites_match(); // Check the prerequisites are all complete.

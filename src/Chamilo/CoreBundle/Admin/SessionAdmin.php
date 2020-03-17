@@ -29,9 +29,6 @@ class SessionAdmin extends AbstractAdmin
         $session->setCourses($session->getCourses());
     }
 
-    /**
-     * @param FormMapper $formMapper
-     */
     protected function configureFormFields(FormMapper $formMapper)
     {
         $formMapper
@@ -73,9 +70,6 @@ class SessionAdmin extends AbstractAdmin
         ;
     }
 
-    /**
-     * @param ShowMapper $showMapper
-     */
     protected function configureShowField(ShowMapper $showMapper)
     {
         $showMapper
@@ -85,9 +79,6 @@ class SessionAdmin extends AbstractAdmin
         ;
     }
 
-    /**
-     * @param DatagridMapper $datagridMapper
-     */
     protected function configureDatagridFilters(DatagridMapper $datagridMapper)
     {
         $datagridMapper
@@ -103,9 +94,6 @@ class SessionAdmin extends AbstractAdmin
         ;
     }
 
-    /**
-     * @param ListMapper $listMapper
-     */
     protected function configureListFields(ListMapper $listMapper)
     {
         $listMapper

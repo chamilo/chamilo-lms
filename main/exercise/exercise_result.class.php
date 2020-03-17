@@ -56,10 +56,10 @@ class ExerciseResult
 
         $cid = api_get_course_id();
         $course_id = api_get_course_int_id();
-        $user_id = intval($user_id);
+        $user_id = (int) $user_id;
         $sessionId = api_get_session_id();
         $session_id_and = ' AND te.session_id = '.$sessionId.' ';
-        $exercise_id = intval($exercise_id);
+        $exercise_id = (int) $exercise_id;
 
         if (!empty($exercise_id)) {
             $session_id_and .= " AND exe_exo_id = $exercise_id ";
@@ -81,17 +81,17 @@ class ExerciseResult
                     te.exe_duration as duration,
                     te.orig_lp_id as orig_lp_id,
                     tlm.name as lp_name,
-                    user.username
+                    user.username,
+                    te.status as exstatus
                 FROM $TBL_EXERCISES  AS ce
-                INNER JOIN $TBL_TRACK_EXERCISES AS te 
+                INNER JOIN $TBL_TRACK_EXERCISES AS te
                 ON (te.exe_exo_id = ce.id)
-                INNER JOIN $TBL_USER AS user 
+                INNER JOIN $TBL_USER AS user
                 ON (user.user_id = exe_user_id)
-                LEFT JOIN $TBL_TABLE_LP_MAIN AS tlm 
+                LEFT JOIN $TBL_TABLE_LP_MAIN AS tlm
                 ON (tlm.id = te.orig_lp_id AND tlm.c_id = ce.c_id)
                 WHERE
                     ce.c_id = $course_id AND
-                    te.status != 'incomplete' AND
                     te.c_id = ce.c_id $user_id_and  $session_id_and AND
                     ce.active <>-1";
         } else {
@@ -112,17 +112,17 @@ class ExerciseResult
                         ce.results_disabled as exdisabled,
                         te.orig_lp_id as orig_lp_id,
                         tlm.name as lp_name,
-                        user.username
+                        user.username,
+                        te.status as exstatus
                     FROM $TBL_EXERCISES  AS ce
-                    INNER JOIN $TBL_TRACK_EXERCISES AS te 
+                    INNER JOIN $TBL_TRACK_EXERCISES AS te
                     ON (te.exe_exo_id = ce.id)
-                    INNER JOIN $TBL_USER AS user 
+                    INNER JOIN $TBL_USER AS user
                     ON (user.user_id = exe_user_id)
-                    LEFT JOIN $TBL_TABLE_LP_MAIN AS tlm 
+                    LEFT JOIN $TBL_TABLE_LP_MAIN AS tlm
                     ON (tlm.id = te.orig_lp_id AND tlm.c_id = ce.c_id)
                     WHERE
                         ce.c_id = $course_id AND
-                        te.status != 'incomplete' AND
                         te.c_id = ce.c_id $user_id_and $session_id_and AND
                         ce.active <>-1 AND
                     ORDER BY userpart2, te.c_id ASC, ce.title ASC, te.exe_date DESC";
@@ -180,25 +180,29 @@ class ExerciseResult
         if (is_array($results)) {
             $i = 0;
             foreach ($results as $result) {
-                $revised = false;
-                //revised or not
-                $sql_exe = "SELECT exe_id 
-                            FROM $TBL_TRACK_ATTEMPT_RECORDING
-                            WHERE 
-                                author != '' AND 
-                                exe_id = ".Database::escape_string($result['exid'])."
-                            LIMIT 1";
-                $query = Database::query($sql_exe);
+                $revised = 0;
+                if ($result['exstatus'] === 'incomplete') {
+                    $revised = -1;
+                } else {
+                    //revised or not
+                    $sql_exe = "SELECT exe_id
+                                FROM $TBL_TRACK_ATTEMPT_RECORDING
+                                WHERE
+                                    author != '' AND
+                                    exe_id = ".intval($result['exid'])."
+                                LIMIT 1";
+                    $query = Database::query($sql_exe);
 
-                if (Database:: num_rows($query) > 0) {
-                    $revised = true;
+                    if (Database:: num_rows($query) > 0) {
+                        $revised = 1;
+                    }
                 }
 
-                if ($filter_by_not_revised && $revised) {
+                if ($filter_by_not_revised && $revised === 1) {
                     continue;
                 }
 
-                if ($filter_by_revised && !$revised) {
+                if ($filter_by_revised && $revised < 1) {
                     continue;
                 }
 
@@ -222,7 +226,8 @@ class ExerciseResult
                 $return[$i]['duration'] = $result['duration'];
                 $return[$i]['result'] = $result['exresult'];
                 $return[$i]['max'] = $result['exweight'];
-                $return[$i]['status'] = $revised ? get_lang('Validated') : get_lang('NotValidated');
+                // Revised: 1 = revised, 0 = not revised, -1 = not even finished by user
+                $return[$i]['status'] = $revised === 1 ? get_lang('Validated') : ($revised === 0 ? get_lang('NotValidated') : get_lang('Unclosed'));
                 $return[$i]['lp_id'] = $result['orig_lp_id'];
                 $return[$i]['lp_name'] = $result['lp_name'];
 
@@ -366,6 +371,7 @@ class ExerciseResult
         $data .= get_lang('Status').';';
         $data .= get_lang('ToolLearnpath').';';
         $data .= get_lang('UserIsCurrentlySubscribed').';';
+        $data .= get_lang('CourseCode').';';
         $data .= "\n";
 
         //results
@@ -414,6 +420,8 @@ class ExerciseResult
             $data .= str_replace("\r\n", '  ', $row['status']).';';
             $data .= str_replace("\r\n", '  ', $row['lp_name']).';';
             $data .= str_replace("\r\n", '  ', $row['is_user_subscribed']).';';
+            $data .= str_replace("\r\n", '  ', api_get_course_id()).';';
+
             $data .= "\n";
         }
 
@@ -559,6 +567,8 @@ class ExerciseResult
         $worksheet->setCellValueByColumnAndRow($column, $line, get_lang('ToolLearnpath'));
         $column++;
         $worksheet->setCellValueByColumnAndRow($column, $line, get_lang('UserIsCurrentlySubscribed'));
+        $column++;
+        $worksheet->setCellValueByColumnAndRow($column, $line, get_lang('CourseCode'));
         $line++;
 
         foreach ($this->results as $row) {
@@ -708,6 +718,8 @@ class ExerciseResult
             $worksheet->setCellValueByColumnAndRow($column, $line, $row['lp_name']);
             $column++;
             $worksheet->setCellValueByColumnAndRow($column, $line, $row['is_user_subscribed']);
+            $column++;
+            $worksheet->setCellValueByColumnAndRow($column, $line, api_get_course_id());
             $line++;
         }
 

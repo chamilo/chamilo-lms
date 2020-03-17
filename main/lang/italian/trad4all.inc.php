@@ -7656,7 +7656,14 @@ $LastXDays = "Ultimi %s giorni";
 $ExportBadges = "Esporta i badge";
 $LanguagesDisableAllExceptDefault = "Abilita solo la lingua d default della piattaforma";
 $ThereAreUsersUsingThisLanguagesDisableItManually = "Alcuni utenti usano questa lingua: è necessario disabilitarla manualmente";
+$MessagingAllowSendPushNotificationTitle = "Consentire l'invio di notifiche all'applicazione Chamilo Messaging mobile";
+$MessagingAllowSendPushNotificationComment = "Inviare notifiche tramite Firebase Console di Google";
+$MessagingGDCProjectNumberTitle = "ID del mittente di Firebase Console per Messaggistica Cloud";
+$MessagingGDCProjectNumberComment = "Devi registrare un progetto su Google Firebase Console";
+$Overwrite = "Sovrascrivere";
 $FollowedStudentBosses = "Tutor che ha seguito gli studenti";
 $AdditionallyYouHaveObtainedTheFollowingSkills = "Hai inoltre acquisito le seguenti competenze";
+$ForumStartDate = "Data di pubblicazione";
+$ModeratedForum = "Forum moderato";
 $ExportToChamiloFormat = "Esporta un Modulo didattico";
 ?>

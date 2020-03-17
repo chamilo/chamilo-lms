@@ -20,8 +20,7 @@ class LegacyController extends Controller
     public $section;
 
     /**
-     * @param string  $name
-     * @param Request $request
+     * @param string $name
      *
      * @return Response
      */

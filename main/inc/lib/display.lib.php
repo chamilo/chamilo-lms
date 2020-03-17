@@ -1638,7 +1638,7 @@ class Display
                     c_id = $course_id AND
                     access_user_id = '$user_id' AND
                     access_session_id ='".$sessionId."'
-                ORDER BY access_date DESC 
+                ORDER BY access_date DESC
                 LIMIT 1
                 ";
         $result = Database::query($sql);
@@ -1659,10 +1659,10 @@ class Display
 
         $hideTools = [TOOL_NOTEBOOK, TOOL_CHAT];
         // Get current tools in course
-        $sql = "SELECT name, link, image 
-                FROM $course_tool_table 
-                WHERE 
-                    c_id = $course_id AND 
+        $sql = "SELECT name, link, image
+                FROM $course_tool_table
+                WHERE
+                    c_id = $course_id AND
                     visibility = '1' AND
                     name NOT IN ('".implode("','", $hideTools)."')
                 ";
@@ -1684,7 +1684,7 @@ class Display
 
                 $toolName = addslashes($toolName);
 
-                $sql = "SELECT * FROM $tool_edit_table 
+                $sql = "SELECT * FROM $tool_edit_table
                         WHERE
                             c_id = $course_id AND
                             $toolCondition
@@ -2583,10 +2583,10 @@ class Display
      * @param string $content
      * @param string $title
      * @param string $footer
-     * @param string $type        primary|success|info|warning|danger
+     * @param string $type            primary|success|info|warning|danger
      * @param string $extra
      * @param string $id
-     * @param string $customColor
+     * @param string $backgroundColor
      * @param string $extraClass
      *
      * @return string
@@ -2598,12 +2598,12 @@ class Display
         $type = 'default',
         $extra = '',
         $id = '',
-        $customColor = '',
+        $backgroundColor = '',
         $extraClass = ''
     ) {
         $headerStyle = '';
-        if (!empty($customColor)) {
-            $headerStyle = 'style = "color: white; background-color: '.$customColor.'" ';
+        if (!empty($backgroundColor)) {
+            $headerStyle = 'style = "color: white; background-color: '.$backgroundColor.'" ';
         }
 
         $title = !empty($title) ? '<div class="panel-heading" '.$headerStyle.' ><h3 class="panel-title">'.$title.'</h3>'.$extra.'</div>' : '';
@@ -2861,9 +2861,9 @@ HTML;
             $toolbar = '<div class="btn-group pull-right">'.$toolbar.'</div>';
         }
 
-        return '<div id="user_card_'.$userInfo['id'].'" class="col-md-12">                    
+        return '<div id="user_card_'.$userInfo['id'].'" class="col-md-12">
                     <div class="row">
-                        <div class="col-md-2">                            
+                        <div class="col-md-2">
                             <img src="'.$userInfo['avatar'].'" class="img-responsive img-circle">
                         </div>
                         <div class="col-md-10">
@@ -2872,7 +2872,7 @@ HTML;
                            <div class="col-md-2">
                            '.$status.'
                            </div>
-                           <div class="col-md-10">                           
+                           <div class="col-md-10">
                            '.$toolbar.'
                            </div>
                            </div>
@@ -2978,7 +2978,7 @@ HTML;
         $.frameReady(function() {
              $(function () {
                 $("video:not(.skip), audio:not(.skip)").mediaelementplayer({
-                    pluginPath: "'.$webPublicPath.'assets/mediaelement/plugins/",            
+                    pluginPath: "'.$webPublicPath.'assets/mediaelement/plugins/",
                     features: [\''.$videoFeatures.'\'],
                     success: function(mediaElement, originalNode, instance) {
                         '.ChamiloApi::getQuizMarkersRollsJS().'
@@ -2986,29 +2986,29 @@ HTML;
                     vrPath: "'.$webPublicPath.'assets/vrview/build/vrview.js"
                 });
             });
-        }, 
+        },
         "'.$frameName.'",
         [
             {type:"script", src:"'.api_get_jquery_web_path().'", deps: [
-            
-                '.$fixLink.'   
+
+                '.$fixLink.'
                 {type:"script", src:"'.api_get_path(WEB_LIBRARY_PATH).'javascript/jquery.highlight.js"},
                 {type:"script", src:"'.api_get_path(WEB_CODE_PATH).'glossary/glossary.js.php?'.api_get_cidreq().'"},
                 {type:"script", src:"'.$webPublicPath.'assets/jquery-ui/jquery-ui.min.js"},
-                {type:"script", src: "'.$webPublicPath.'assets/mediaelement/build/mediaelement-and-player.min.js", 
+                {type:"script", src: "'.$webPublicPath.'assets/mediaelement/build/mediaelement-and-player.min.js",
                     deps: [
                     {type:"script", src: "'.$webPublicPath.'assets/mediaelement/plugins/vrview/vrview.js"},
                     {type:"script", src: "'.$webPublicPath.'assets/mediaelement/plugins/markersrolls/markersrolls.js"},
                     '.$videoPluginFiles.'
-                ]},                
-                '.$translateHtml.'             
+                ]},
+                '.$translateHtml.'
             ]},
             '.$videoPluginCssFiles.'
             {type:"script", src:"'.$webPublicPath.'assets/MathJax/MathJax.js?config=AM_HTMLorMML"},
             {type:"stylesheet", src:"'.$webPublicPath.'assets/jquery-ui/themes/smoothness/jquery-ui.min.css"},
-            {type:"stylesheet", src:"'.$webPublicPath.'assets/jquery-ui/themes/smoothness/theme.css"},                
+            {type:"stylesheet", src:"'.$webPublicPath.'assets/jquery-ui/themes/smoothness/theme.css"},
             {type:"stylesheet", src:"'.$webPublicPath.'css/dialog.css"},
-            {type:"stylesheet", src: "'.$webPublicPath.'assets/mediaelement/build/mediaelementplayer.min.css"},                
+            {type:"stylesheet", src: "'.$webPublicPath.'assets/mediaelement/build/mediaelementplayer.min.css"},
             {type:"stylesheet", src: "'.$webPublicPath.'assets/mediaelement/plugins/vrview/vrview.css"},
         ]);';
 

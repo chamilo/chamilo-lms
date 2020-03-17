@@ -126,6 +126,8 @@ class AppPlugin
     }
 
     /**
+     * Returns a list of all installed plugins.
+     *
      * @param bool $fromDatabase
      *
      * @return array
@@ -157,6 +159,80 @@ class AppPlugin
         }
 
         return $installedPlugins;
+    }
+
+    /**
+     * Returns a list of all official (delivered with the Chamilo package)
+     * plugins. This list is maintained manually and updated with every new
+     * release to avoid hacking.
+     *
+     * @return array
+     */
+    public function getOfficialPlugins()
+    {
+        static $officialPlugins = null;
+        // Please keep this list alphabetically sorted
+        $officialPlugins = [
+            'add_cas_login_button',
+            'add_cas_logout_button',
+            'add_facebook_login_button',
+            'add_shibboleth_login_button',
+            'advanced_subscription',
+            'azure_active_directory',
+            'bbb',
+            'before_login',
+            'buycourses',
+            'card_game',
+            'clockworksms',
+            'courseblock',
+            'coursehomenotify',
+            'courselegal',
+            'createdrupaluser',
+            'customcertificate',
+            'customfooter',
+            'dashboard',
+            'date',
+            'dictionary',
+            'embedregistry',
+            'ext_auth_chamilo_logout_button_behaviour',
+            'follow_buttons',
+            'formLogin_hide_unhide',
+            'google_maps',
+            'grading_electronic',
+            'hello_world',
+            'ims_lti',
+            'jcapture',
+            'justification',
+            'kannelsms',
+            'keycloak',
+            'learning_calendar',
+            'maintenancemode',
+            'nosearchindex',
+            'notebookteacher',
+            'olpc_peru_filter',
+            'openmeetings',
+            'pens',
+            'questionoptionsevaluation',
+            'redirection',
+            'reports',
+            'resubscription',
+            'rss',
+            'search_course',
+            'sepe',
+            'share_buttons',
+            'show_regions',
+            'show_user_info',
+            'static',
+            'studentfollowup',
+            'surveyexportcsv',
+            'surveyexporttxt',
+            'test2pdf',
+            'tour',
+            'vchamilo',
+            'whispeakauth',
+        ];
+
+        return $officialPlugins;
     }
 
     /**

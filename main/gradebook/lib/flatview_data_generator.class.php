@@ -1008,8 +1008,6 @@ class FlatViewDataGenerator
 
     /**
      * Add columns heders according to gradebook_flatview_extrafields_columns conf setting.
-     *
-     * @param array $headers
      */
     private function addExtraFieldColumnsHeaders(array &$headers)
     {
@@ -1030,8 +1028,7 @@ class FlatViewDataGenerator
     /**
      * Add columns data according to gradebook_flatview_extrafields_columns conf setting.
      *
-     * @param array $row
-     * @param int   $userId
+     * @param int $userId
      */
     private function addExtraFieldColumnsData(array &$row, $userId)
     {

@@ -1,4 +1,5 @@
 <?php
+
 /* For licensing terms, see /license.txt */
 
 /**
@@ -10,10 +11,12 @@ class RestResponse
      * @var bool
      */
     private $error;
+
     /**
      * @var string
      */
     private $errorMessage;
+
     /**
      * @var array
      */
@@ -25,13 +28,10 @@ class RestResponse
     public function __construct()
     {
         $this->error = true;
-        $this->errorMessage = null;
+        $this->errorMessage = '';
         $this->data = [];
     }
 
-    /**
-     * @param array $data
-     */
     public function setData(array $data)
     {
         $this->error = false;

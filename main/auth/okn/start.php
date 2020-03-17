@@ -106,7 +106,6 @@ if (isset($_GET['email'])) {
 
     if (empty($userInfo)) {
         $lastName = $attributes['lastname1'].' '.$attributes['lastname2'];
-        //$username = UserManager::create_unique_username($attributes['firstname'], $lastName);
         $userId = UserManager::create_user(
             $attributes['firstname'],
             $lastName,
@@ -136,6 +135,7 @@ if (isset($_GET['email'])) {
     }
 
     if (!empty($userId)) {
+        $courseCode = null;
         if (isset($settingsInfo['course_list']) && !empty($settingsInfo['course_list'])) {
             foreach ($settingsInfo['course_list'] as $courseCode) {
                 CourseManager::subscribeUser($userId, $courseCode, STUDENT, 0, 0, false);
@@ -158,7 +158,12 @@ if (isset($_GET['email'])) {
         Session::write('is_platformAdmin', false);
         Session::write('is_allowedCreateCourse', false);
 
-        header('Location: '.api_get_path(WEB_PATH));
+        if (!empty($courseCode)) {
+            $courseInfo = api_get_course_info($courseCode);
+            header('Location: '.$courseInfo['course_public_url']);
+            exit;
+        }
+        header('Location: '.api_get_path(WEB_PATH).'user_portal.php');
         exit;
         /*$result = Tracking::getCourseLpProgress($userId, 0);
         echo json_encode($result);*/

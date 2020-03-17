@@ -85,9 +85,9 @@ if ($action == 'edit' && isset($survey_id) && is_numeric($survey_id)) {
         $survey_id,
         $session_id
     );
-    $gradebook_link_id = $link_info['id'];
 
     if ($link_info) {
+        $gradebook_link_id = $link_info['id'];
         $defaults['category_id'] = $link_info['category_id'];
         $gradebook_link_id = (int) $gradebook_link_id;
         $sql = "SELECT weight FROM $table_gradebook_link WHERE id = $gradebook_link_id";

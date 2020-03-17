@@ -65,6 +65,12 @@ class UsersLoader implements LoaderInterface
 
         \UserManager::update_extra_field_value($user->getId(), 'moodle_password', $incomingData['plain_password']);
 
+        $urlId = (int) \MigrationMoodlePlugin::create()->get(\MigrationMoodlePlugin::SETTING_URL_ID);
+
+        if ($urlId) {
+            \Database::query("UPDATE access_url_rel_user SET access_url_id = $urlId WHERE user_id = $userId");
+        }
+
         return $user->getId();
     }
 }

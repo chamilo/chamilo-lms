@@ -15,6 +15,8 @@ $strings['db_name'] = 'Moodle DB name';
 $strings['user_filter'] = 'Filter for users';
 $strings['user_filter_help'] = 'Allow migrate only users who have a username prefixed with it.<br>'
     .'Course migration is also affected by this configuration, it only migrates courses in which users with the username prefix are enrolled.';
+$strings['url_id'] = 'URL ID';
+$strings['url_id_help'] = 'Access URL ID to save course, users and sessions .';
 
 // Tasks
 $strings['UsersTask'] = 'Users';

@@ -11,6 +11,7 @@ use Doctrine\DBAL\DriverManager;
 class MigrationMoodlePlugin extends Plugin implements HookPluginInterface
 {
     const SETTING_USER_FILTER = 'user_filter';
+    const SETTING_URL_ID = 'url_id';
 
     public $isAdminPlugin = true;
 
@@ -28,6 +29,7 @@ class MigrationMoodlePlugin extends Plugin implements HookPluginInterface
             'db_password' => 'text',
             'db_name' => 'text',
             self::SETTING_USER_FILTER => 'text',
+            self::SETTING_URL_ID => 'text',
         ];
 
         parent::__construct($version, $author, $settings);

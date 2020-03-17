@@ -36,6 +36,8 @@ class UserSessionLoader implements LoaderInterface
             $courseIds[] = $courseId;
         }
 
+        $urlId = (int) \MigrationMoodlePlugin::create()->get(\MigrationMoodlePlugin::SETTING_URL_ID);
+
         $sessionId = \SessionManager::create_session(
             $incomingData['name'],
             $datetime,
@@ -45,7 +47,16 @@ class UserSessionLoader implements LoaderInterface
             $datetime,
             '',
             $coachId,
-            0
+            0,
+            1,
+            false,
+            null,
+            null,
+            0,
+            [],
+            0,
+            false,
+            $urlId
         );
         \SessionManager::add_courses_to_session($sessionId, $courseIds);
         \SessionManager::subscribeUsersToSession($sessionId, [$incomingData['user_id']]);

@@ -17,6 +17,8 @@ $strings['user_filter_help'] = 'Allow migrate only users who have a username pre
     .'Course migration is also affected by this configuration, it only migrates courses in which users with the username prefix are enrolled.';
 $strings['url_id'] = 'URL ID';
 $strings['url_id_help'] = 'Access URL ID to save course, users and sessions .';
+$strings['moodle_path'] = 'Moodle data path';
+$strings['moodle_path'] = '<pre>/var/www/moodle/moodledata</pre>';
 
 // Tasks
 $strings['UsersTask'] = 'Users';

@@ -12,6 +12,7 @@ class MigrationMoodlePlugin extends Plugin implements HookPluginInterface
 {
     const SETTING_USER_FILTER = 'user_filter';
     const SETTING_URL_ID = 'url_id';
+    const SETTING_MOODLE_PATH = 'moodle_path';
 
     public $isAdminPlugin = true;
 
@@ -30,6 +31,7 @@ class MigrationMoodlePlugin extends Plugin implements HookPluginInterface
             'db_name' => 'text',
             self::SETTING_USER_FILTER => 'text',
             self::SETTING_URL_ID => 'text',
+            self::SETTING_MOODLE_PATH => 'text',
         ];
 
         parent::__construct($version, $author, $settings);

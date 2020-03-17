@@ -8480,6 +8480,6 @@ $FirstnameLastnameCourses = "Courses of %s %s";
 $CanNotSubscribeToCourseUserSessionExpired = "You can not subscrive to the course any more because your session has expired.";
 $CertificateOfAchievement = "Certificate of achievement";
 $CertificateOfAchievementByDay = "Certificate of achievement by day";
-$ ReducedReport = "Reduced report";
+$ReducedReport = "Reduced report";
 $NotInCourse = "Outside courses";
 ?>

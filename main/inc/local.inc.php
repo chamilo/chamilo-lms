@@ -432,6 +432,19 @@ if (!empty($_SESSION['_user']['user_id']) && !($login || $logout)) {
                             $checkUserFromExternalWebservice = true;
                         }
                     }
+
+                    $checkLoginCredentialHook = CheckLoginCredentialsHook::create();
+
+                    if (!empty($checkLoginCredentialHook)) {
+                        $checkLoginCredentialHook->setEventData([
+                            'user' => $uData,
+                            'credentials' => [
+                                'username' => $login,
+                                'password' => $password,
+                            ]
+                        ]);
+                        $validPassword = $checkLoginCredentialHook->notifyLoginCredentials();
+                    }
                 }
 
                 // Check the user's password

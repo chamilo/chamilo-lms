@@ -130,27 +130,27 @@ class SessionManager
      *
      * @author Carlos Vargas <carlos.vargas@beeznest.com>, from existing code
      *
-     * @param string   $name
-     * @param string   $startDate                    (YYYY-MM-DD hh:mm:ss)
-     * @param string   $endDate                      (YYYY-MM-DD hh:mm:ss)
-     * @param string   $displayStartDate             (YYYY-MM-DD hh:mm:ss)
-     * @param string   $displayEndDate               (YYYY-MM-DD hh:mm:ss)
-     * @param string   $coachStartDate               (YYYY-MM-DD hh:mm:ss)
-     * @param string   $coachEndDate                 (YYYY-MM-DD hh:mm:ss)
-     * @param mixed    $coachId                      If int, this is the session coach id,
-     *                                               if string, the coach ID will be looked for from the user table
-     * @param int      $sessionCategoryId            ID of the session category in which this session is registered
-     * @param int      $visibility                   Visibility after end date (0 = read-only, 1 = invisible, 2 = accessible)
-     * @param bool     $fixSessionNameIfExists
-     * @param string   $duration
-     * @param string   $description                  Optional. The session description
-     * @param int      $showDescription              Optional. Whether show the session description
-     * @param array    $extraFields
-     * @param int      $sessionAdminId               Optional. If this sessions was created by a session admin, assign it to him
-     * @param bool     $sendSubscriptionNotification Optional.
-     *                                               Whether send a mail notification to users being subscribed
-     * @param int      $accessUrlId                  Optional.
-     * @param int      $status
+     * @param string $name
+     * @param string $startDate                    (YYYY-MM-DD hh:mm:ss)
+     * @param string $endDate                      (YYYY-MM-DD hh:mm:ss)
+     * @param string $displayStartDate             (YYYY-MM-DD hh:mm:ss)
+     * @param string $displayEndDate               (YYYY-MM-DD hh:mm:ss)
+     * @param string $coachStartDate               (YYYY-MM-DD hh:mm:ss)
+     * @param string $coachEndDate                 (YYYY-MM-DD hh:mm:ss)
+     * @param mixed  $coachId                      If int, this is the session coach id,
+     *                                             if string, the coach ID will be looked for from the user table
+     * @param int    $sessionCategoryId            ID of the session category in which this session is registered
+     * @param int    $visibility                   Visibility after end date (0 = read-only, 1 = invisible, 2 = accessible)
+     * @param bool   $fixSessionNameIfExists
+     * @param string $duration
+     * @param string $description                  Optional. The session description
+     * @param int    $showDescription              Optional. Whether show the session description
+     * @param array  $extraFields
+     * @param int    $sessionAdminId               Optional. If this sessions was created by a session admin, assign it to him
+     * @param bool   $sendSubscriptionNotification Optional.
+     *                                             Whether send a mail notification to users being subscribed
+     * @param int    $accessUrlId                  Optional.
+     * @param int    $status
      *
      * @return mixed Session ID on success, error message otherwise
      *
@@ -667,10 +667,10 @@ class SessionManager
     /**
      * Gets the admin session list callback of the session/session_list.php page.
      *
-     * @param array $options           order and limit keys
-     * @param bool  $getCount          Whether to get all the results or only the count
-     * @param array $columns
-     * @param array $extraFieldsToLoad
+     * @param array  $options           order and limit keys
+     * @param bool   $getCount          Whether to get all the results or only the count
+     * @param array  $columns
+     * @param array  $extraFieldsToLoad
      * @param string $listType
      *
      * @return mixed Integer for number of rows, or array of results
@@ -9408,6 +9408,85 @@ class SessionManager
         return $result;
     }
 
+    public static function getStatusList()
+    {
+        return [
+            self::STATUS_PLANNED => get_lang('Planned'),
+            self::STATUS_PROGRESS => get_lang('InProgress'),
+            self::STATUS_FINISHED => get_lang('Finished'),
+            self::STATUS_CANCELLED => get_lang('Cancelled'),
+        ];
+    }
+
+    public static function getStatusLabel($status)
+    {
+        $list = self::getStatusList();
+
+        if (!isset($list[$status])) {
+            return get_lang('NoStatus');
+        }
+
+        return $list[$status];
+    }
+
+    public static function getDefaultSessionTab()
+    {
+        $default = 'all';
+        $view = api_get_configuration_value('default_session_list_view');
+
+        if (!empty($view)) {
+            $default = $view;
+        }
+
+        return $default;
+    }
+
+    /**
+     * @return array
+     */
+    public static function getSessionListTabs($listType)
+    {
+        $tabs = [
+            [
+                'content' => get_lang('AllSessionsShort'),
+                'url' => api_get_path(WEB_CODE_PATH).'session/session_list.php?list_type=all',
+            ],
+            [
+                'content' => get_lang('ActiveSessionsShort'),
+                'url' => api_get_path(WEB_CODE_PATH).'session/session_list.php?list_type=active',
+            ],
+            [
+                'content' => get_lang('ClosedSessionsShort'),
+                'url' => api_get_path(WEB_CODE_PATH).'session/session_list.php?list_type=close',
+            ],
+            [
+                'content' => get_lang('SessionListCustom'),
+                'url' => api_get_path(WEB_CODE_PATH).'session/session_list.php?list_type=custom',
+            ],
+            /*[
+                'content' => get_lang('Complete'),
+                'url' => api_get_path(WEB_CODE_PATH).'session/session_list_simple.php?list_type=complete',
+            ],*/
+        ];
+
+        switch ($listType) {
+            case 'all':
+                $default = 1;
+                break;
+            case 'active':
+                $default = 2;
+                break;
+            case 'close':
+                $default = 3;
+                break;
+            case 'custom':
+                $default = 4;
+                break;
+        }
+
+        return Display::tabsOnlyLink($tabs, $default);
+    }
+
     /**
      * @param int $id
      *
@@ -9544,85 +9623,5 @@ class SessionManager
         } else {
             return -1;
         }
-    }
-
-    public static function getStatusList()
-    {
-        return [
-            self::STATUS_PLANNED => get_lang('Planned'),
-            self::STATUS_PROGRESS => get_lang('InProgress'),
-            self::STATUS_FINISHED => get_lang('Finished'),
-            self::STATUS_CANCELLED => get_lang('Cancelled'),
-        ];
-    }
-
-    public static function getStatusLabel($status)
-    {
-        $list = self::getStatusList();
-
-        if (!isset($list[$status])) {
-
-            return get_lang('NoStatus');
-        }
-
-        return $list[$status];
-    }
-
-    public static function getDefaultSessionTab()
-    {
-        $default = 'all';
-        $view = api_get_configuration_value('default_session_list_view');
-
-        if (!empty($view)) {
-            $default = $view;
-        }
-
-        return $default;
-    }
-
-    /**
-     * @return array
-     */
-    public static function getSessionListTabs($listType)
-    {
-        $tabs = [
-            [
-                'content' => get_lang('AllSessionsShort'),
-                'url' => api_get_path(WEB_CODE_PATH).'session/session_list.php?list_type=all',
-            ],
-            [
-                'content' => get_lang('ActiveSessionsShort'),
-                'url' => api_get_path(WEB_CODE_PATH).'session/session_list.php?list_type=active',
-            ],
-            [
-                'content' => get_lang('ClosedSessionsShort'),
-                'url' => api_get_path(WEB_CODE_PATH).'session/session_list.php?list_type=close',
-            ],
-            [
-                'content' => get_lang('SessionListCustom'),
-                'url' => api_get_path(WEB_CODE_PATH).'session/session_list.php?list_type=custom',
-            ],
-            /*[
-                'content' => get_lang('Complete'),
-                'url' => api_get_path(WEB_CODE_PATH).'session/session_list_simple.php?list_type=complete',
-            ],*/
-        ];
-
-        switch ($listType) {
-            case 'all':
-                $default = 1;
-                break;
-            case 'active':
-                $default = 2;
-                break;
-            case 'close':
-                $default = 3;
-                break;
-            case 'custom':
-                $default = 4;
-                break;
-        }
-
-        return Display::tabsOnlyLink($tabs, $default);
     }
 }

@@ -126,7 +126,8 @@ class AppPlugin
     }
 
     /**
-     * Returns a list of all installed plugins
+     * Returns a list of all installed plugins.
+     *
      * @param bool $fromDatabase
      *
      * @return array
@@ -164,6 +165,7 @@ class AppPlugin
      * Returns a list of all official (delivered with the Chamilo package)
      * plugins. This list is maintained manually and updated with every new
      * release to avoid hacking.
+     *
      * @return array
      */
     public function getOfficialPlugins()

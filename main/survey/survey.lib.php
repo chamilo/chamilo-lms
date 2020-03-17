@@ -2196,7 +2196,7 @@ class SurveyManager
             }
             $classToParse[] = [
                 'name' => $class['name'],
-                'users' => $users
+                'users' => $users,
             ];
         }
 
@@ -2212,9 +2212,9 @@ class SurveyManager
                     $users = array_column($users, 'id');
                     $classToParse = [
                         [
-                            'name' =>  $groupInfo['name'],
-                            'users'=> $users
-                        ]
+                            'name' => $groupInfo['name'],
+                            'users' => $users,
+                        ],
                     ];
                     self::parseMultiplicateUserList($classToParse, $questions, $courseId, $surveyData);
                 }

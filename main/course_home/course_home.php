@@ -155,19 +155,19 @@ if ($action == 'subscribe') {
             if (api_get_configuration_value('catalog_course_subscription_in_user_s_session')) {
                 // append session id to redirect URL
                 /**
-                 * @var $user Chamilo\UserBundle\Entity\User
+                 * @var Chamilo\UserBundle\Entity\User
                  */
                 $user = UserManager::getRepository()->find(api_get_user_id());
                 if ($user) {
                     foreach ($user->getCurrentlyAccessibleSessions() as $session) {
-                        $redirectionTarget = api_get_self() . '?id_session=' . $session->getId();
+                        $redirectionTarget = api_get_self().'?id_session='.$session->getId();
                         break;
                     }
                 }
             }
         } elseif (api_get_configuration_value('catalog_course_subscription_in_user_s_session')) {
             /**
-             * @var $user Chamilo\UserBundle\Entity\User
+             * @var Chamilo\UserBundle\Entity\User
              */
             $user = UserManager::getRepository()->find(api_get_user_id());
             if ($user && !$user->getCurrentlyAccessibleSessions()) {
@@ -175,7 +175,7 @@ if ($action == 'subscribe') {
                 $redirectionTarget = api_get_path(WEB_PATH).'course/'.$courseId.'/about';
             }
         }
-        header('Location: ' . $redirectionTarget);
+        header('Location: '.$redirectionTarget);
         exit;
     }
 }

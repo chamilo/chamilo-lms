@@ -8530,7 +8530,7 @@ class Exercise
                 $hiddenFromSessionCondition = ' 1=1 ';
 
                 if (!empty($result)) {
-                    $hiddenFromSession = implode("','",  array_column($result, 'iid'));
+                    $hiddenFromSession = implode("','", array_column($result, 'iid'));
                     $hiddenFromSessionCondition = " e.iid not in ('$hiddenFromSession')";
                 }
                 $condition_session = " AND (

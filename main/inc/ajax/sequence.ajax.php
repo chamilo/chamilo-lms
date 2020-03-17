@@ -440,7 +440,6 @@ switch ($action) {
         $view->assign('sequence_type', $type);
         $view->assign('allow_subscription', $allowSubscription);
 
-
         if ($allowSubscription) {
             $view->assign(
                 'subscribe_button',

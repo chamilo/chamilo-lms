@@ -209,7 +209,7 @@ $form->addElement(
 $extraField = new ExtraField('survey');
 $extraField->addElements($form, $survey_id, ['group_id']);
 
-if ($extraField->get_handler_field_info_by_field_variable('group_id') ) {
+if ($extraField->get_handler_field_info_by_field_variable('group_id')) {
     $extraFieldValue = new ExtraFieldValue('survey');
     $groupData = $extraFieldValue->get_values_by_handler_and_field_variable($survey_id, 'group_id');
     $groupValue = [];

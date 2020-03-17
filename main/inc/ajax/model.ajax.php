@@ -1667,7 +1667,7 @@ switch ($action) {
         $columns = $sessionColumns['simple_column_name'];
 
         switch ($listType) {
-            case 'complete' :
+            case 'complete':
                 $result = SessionManager::get_sessions_admin_complete(
                     [
                         'where' => $whereCondition,

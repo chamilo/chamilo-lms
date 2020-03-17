@@ -77,9 +77,9 @@ class WebService
      * @param string $username
      * @param string $password
      *
-     * @return bool Return true if the password belongs to the username. Otherwise return false
      * @throws Exception
      *
+     * @return bool Return true if the password belongs to the username. Otherwise return false
      */
     public static function isValidUser($username, $password)
     {

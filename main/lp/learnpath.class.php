@@ -2571,6 +2571,7 @@ class learnpath
                     $percentage = $score;
                     $text = '/'.$maxScore;
                 }
+
                 return [$percentage, $text];
             }
         }
@@ -13672,6 +13673,53 @@ EOD;
     }
 
     /**
+     * Gets whether this SCORM learning path has been marked to use the score
+     * as progress. Takes into account whether the learnpath matches (SCORM
+     * content + less than 2 items).
+     *
+     * @return bool True if the score should be used as progress, false otherwise
+     */
+    public function getUseScoreAsProgress()
+    {
+        // If not a SCORM, we don't care about the setting
+        if ($this->get_type() != 2) {
+            return false;
+        }
+        // If more than one step in the SCORM, we don't care about the setting
+        if ($this->get_total_items_count() > 1) {
+            return false;
+        }
+        $extraFieldValue = new ExtraFieldValue('lp');
+        $doUseScore = false;
+        $useScore = $extraFieldValue->get_values_by_handler_and_field_variable($this->get_id(), 'use_score_as_progress');
+        if (!empty($useScore) && isset($useScore['value'])) {
+            $doUseScore = $useScore['value'];
+        }
+
+        return $doUseScore;
+    }
+
+    /**
+     * Get the user identifier (user_id or username
+     * Depends on scorm_api_username_as_student_id in app/config/configuration.php.
+     *
+     * @return string User ID or username, depending on configuration setting
+     */
+    public static function getUserIdentifierForExternalServices()
+    {
+        if (api_get_configuration_value('scorm_api_username_as_student_id')) {
+            return api_get_user_info(api_get_user_id())['username'];
+        } elseif (api_get_configuration_value('scorm_api_extrafield_to_use_as_student_id') != null) {
+            $extraFieldValue = new ExtraFieldValue('user');
+            $extrafield = $extraFieldValue->get_values_by_handler_and_field_variable(api_get_user_id(), api_get_configuration_value('scorm_api_extrafield_to_use_as_student_id'));
+
+            return $extrafield['value'];
+        } else {
+            return api_get_user_id();
+        }
+    }
+
+    /**
      * Get the depth level of LP item.
      *
      * @param array $items
@@ -13774,48 +13822,5 @@ EOD;
         }
 
         return '';
-    }
-    /**
-     * Gets whether this SCORM learning path has been marked to use the score
-     * as progress. Takes into account whether the learnpath matches (SCORM
-     * content + less than 2 items).
-     * @return bool True if the score should be used as progress, false otherwise
-     */
-    public function getUseScoreAsProgress()
-    {
-        // If not a SCORM, we don't care about the setting
-        if ($this->get_type() != 2) {
-            return false;
-        }
-        // If more than one step in the SCORM, we don't care about the setting
-        if ($this->get_total_items_count() > 1) {
-            return false;
-        }
-        $extraFieldValue = new ExtraFieldValue('lp');
-        $doUseScore = false;
-        $useScore = $extraFieldValue->get_values_by_handler_and_field_variable($this->get_id(), 'use_score_as_progress');
-        if (!empty($useScore) && isset($useScore['value'])) {
-            $doUseScore = $useScore['value'];
-        }
-
-        return $doUseScore;
-    }
-    /**
-     * Get the user identifier (user_id or username
-     * Depends on scorm_api_username_as_student_id in app/config/configuration.php
-     *
-     * @return string User ID or username, depending on configuration setting
-     */
-    public static function getUserIdentifierForExternalServices()
-    {
-        if (api_get_configuration_value('scorm_api_username_as_student_id')) {
-            return api_get_user_info(api_get_user_id())['username'];
-	} elseif (api_get_configuration_value('scorm_api_extrafield_to_use_as_student_id') != null) {
-            $extraFieldValue = new ExtraFieldValue('user');
-            $extrafield = $extraFieldValue->get_values_by_handler_and_field_variable(api_get_user_id(), api_get_configuration_value('scorm_api_extrafield_to_use_as_student_id'));
-            return $extrafield['value'];
-        } else {
-            return api_get_user_id();
-        } 
     }
 }

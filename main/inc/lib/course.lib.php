@@ -565,7 +565,7 @@ class CourseManager
 
         if (api_get_configuration_value('catalog_course_subscription_in_user_s_session')) {
             /**
-             * @var $user Chamilo\UserBundle\Entity\User
+             * @var Chamilo\UserBundle\Entity\User
              */
             $user = UserManager::getRepository()->find($userId);
             $sessions = $user->getCurrentlyAccessibleSessions();
@@ -579,6 +579,7 @@ class CourseManager
                             'warning'
                         )
                     );
+
                     return false;
                 }
                 // user has no session at all, create one starting now
@@ -588,10 +589,11 @@ class CourseManager
                 } catch (Exception $exception) {
                     Display::addFlash(
                         Display::return_message(
-                            get_lang('WrongNumberOfDays') . ': ' . $numberOfDays . ': ' . $exception->getMessage(),
+                            get_lang('WrongNumberOfDays').': '.$numberOfDays.': '.$exception->getMessage(),
                             'warning'
                         )
                     );
+
                     return false;
                 }
                 $endDate = new DateTime();
@@ -612,10 +614,11 @@ class CourseManager
                 } catch (\Doctrine\ORM\OptimisticLockException $exception) {
                     Display::addFlash(
                         Display::return_message(
-                            get_lang('InternalDatabaseError') . ': ' . $exception->getMessage(),
+                            get_lang('InternalDatabaseError').': '.$exception->getMessage(),
                             'warning'
                         )
                     );
+
                     return false;
                 }
                 $accessUrlRelSession = new \Chamilo\CoreBundle\Entity\AccessUrlRelSession();
@@ -627,10 +630,11 @@ class CourseManager
                 } catch (\Doctrine\ORM\OptimisticLockException $exception) {
                     Display::addFlash(
                         Display::return_message(
-                            get_lang('InternalDatabaseError') . ': ' . $exception->getMessage(),
+                            get_lang('InternalDatabaseError').': '.$exception->getMessage(),
                             'warning'
                         )
                     );
+
                     return false;
                 }
             } else {
@@ -645,16 +649,19 @@ class CourseManager
             } catch (\Doctrine\ORM\OptimisticLockException $exception) {
                 Display::addFlash(
                     Display::return_message(
-                        get_lang('InternalDatabaseError') . ': ' . $exception->getMessage(),
+                        get_lang('InternalDatabaseError').': '.$exception->getMessage(),
                         'warning'
                     )
                 );
+
                 return false;
             }
             // subscribe user to course within this session
             SessionManager::subscribe_users_to_session_course([$userId], $session->getId(), $course->getCode());
+
             return true;
         }
+
         return self::subscribeUser($userId, $course->getCode(), $status);
     }
 
@@ -1183,23 +1190,24 @@ class CourseManager
         if (api_get_configuration_value('catalog_course_subscription_in_user_s_session')) {
             // with this option activated, only check whether the course is in one of the users' sessions
             $course = Database::getManager()->getRepository('ChamiloCoreBundle:Course')->findOneBy([
-                'code' => $course_code
+                'code' => $course_code,
             ]);
             if (is_null($course)) {
                 return false;
             }
             /**
-             * @var $user \Chamilo\UserBundle\Entity\User
+             * @var \Chamilo\UserBundle\Entity\User
              */
             $user = UserManager::getRepository()->find($user_id);
             if (is_null($user)) {
                 return false;
             }
-            foreach($user->getStudentSessions() as $session) {
+            foreach ($user->getStudentSessions() as $session) {
                 if ($session->isRelatedToCourse($course)) {
                     return true;
                 }
             }
+
             return false;
         }
 

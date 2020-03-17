@@ -2587,12 +2587,14 @@ class User implements UserInterface //implements ParticipantInterface, ThemeUser
     }
 
     /**
-     * Retreives this user's related sessions
+     * Retreives this user's related sessions.
      *
      * @param int $relationType \Chamilo\CoreBundle\Entity\SessionRelUser::relationTypeList key
+     *
      * @return \Chamilo\CoreBundle\Entity\Session[]
      */
-    public function getSessions($relationType) {
+    public function getSessions($relationType)
+    {
         $sessions = [];
         foreach (\Database::getManager()->getRepository('ChamiloCoreBundle:SessionRelUser')->findBy([
             'user' => $this,
@@ -2601,40 +2603,46 @@ class User implements UserInterface //implements ParticipantInterface, ThemeUser
                 $sessions[] = $sessionRelUser->getSession();
             }
         }
+
         return $sessions;
     }
 
     /**
-     * Retreives this user's related student sessions
+     * Retreives this user's related student sessions.
      *
      * @return \Chamilo\CoreBundle\Entity\Session[]
      */
-    public function getStudentSessions() {
+    public function getStudentSessions()
+    {
         return $this->getSessions(0);
     }
 
     /**
-     * Retreives this user's related DRH sessions
+     * Retreives this user's related DRH sessions.
      *
      * @return \Chamilo\CoreBundle\Entity\Session[]
      */
-    public function getDRHSessions() {
+    public function getDRHSessions()
+    {
         return $this->getSessions(1);
     }
 
     /**
-     * Retreives this user's related accessible sessions of a type, student by default
+     * Retreives this user's related accessible sessions of a type, student by default.
      *
      * @param int $relationType \Chamilo\CoreBundle\Entity\SessionRelUser::relationTypeList key
+     *
      * @return \Chamilo\CoreBundle\Entity\Session[]
      */
-    public function getCurrentlyAccessibleSessions($relationType = 0) {
+    public function getCurrentlyAccessibleSessions($relationType = 0)
+    {
         $sessions = [];
         foreach ($this->getSessions($relationType) as $session) {
             if ($session->isCurrentlyAccessible()) {
                 $sessions[] = $session;
             }
         }
+
         return $sessions;
     }
 }

@@ -165,15 +165,12 @@ if (isset($_GET['email'])) {
         }
         header('Location: '.api_get_path(WEB_PATH).'user_portal.php');
         exit;
-        /*$result = Tracking::getCourseLpProgress($userId, 0);
-        echo json_encode($result);*/
     } else {
         echo 'User not found';
     }
     exit;
 
     if (!empty($userId)) {
-
     } else {
         Display::addFlash(Display::return_message(get_lang('InvalidId')));
     }

@@ -156,6 +156,7 @@ class CourseCategory
                 ORDER BY t1.parent_id, t1.tree_pos";
 
         $result = Database::query($sql);
+
         return Database::store_result($result, 'ASSOC');
     }
 

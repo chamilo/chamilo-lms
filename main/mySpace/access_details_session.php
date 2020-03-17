@@ -390,7 +390,6 @@ if ($form->validate()) {
 $interbreadcrumb[] = ['url' => '#', 'name' => get_lang('AccessDetails')];
 $userInfo = api_get_user_info($userId);
 
-
 $form->setDefaults(['from' => $startDate, 'to' => $endDate]);
 
 $formByDay = new FormValidator(

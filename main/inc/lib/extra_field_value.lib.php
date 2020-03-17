@@ -812,10 +812,10 @@ class ExtraFieldValue extends Model
      * Gets the ID from the item (course, session, etc) for which
      * the given field is defined with the given value.
      *
-     * @param string $variable Field (type of data) we want to check
-     * @param string $value    Data we are looking for in the given field
-     * @param bool   $transform      Whether to transform the result to a human readable strings
-     * @param bool   $last           Whether to return the last element or simply the first one we get
+     * @param string $variable  Field (type of data) we want to check
+     * @param string $value     Data we are looking for in the given field
+     * @param bool   $transform Whether to transform the result to a human readable strings
+     * @param bool   $last      Whether to return the last element or simply the first one we get
      * @param bool   $useLike
      *
      * @return mixed Give the ID if found, or false on failure or not found

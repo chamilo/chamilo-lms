@@ -2250,12 +2250,6 @@ class SurveyUtil
         return $counter;
     }
 
-    /**
-     * @param CSurvey $survey
-     * @param         $content
-     * @param         $subject
-     * @param         $remind
-     */
     public static function saveInviteMail(CSurvey $survey, $content, $subject, $remind)
     {
         // Reminder or not

@@ -90,8 +90,9 @@ if (isset($_GET['sso'])) {
         !isset($attributes['lastname2']) ||
         !isset($attributes['username'])
     ) {
+        echo 'Not enough parameters, current values: ';
+        echo '<pre>';
         var_dump($attributes);
-        echo 'Not enough parameters';
         exit;
     }
 
@@ -141,14 +142,9 @@ if (isset($_GET['sso'])) {
             }
         }
 
-        $result = Tracking::getCourseLpProgress($userId, 0);
-        echo json_encode($result);
-    } else {
-        echo 'User not found';
-    }
-    exit;
+        // Clean flash messages
+        Session::write('flash_messages', '');
 
-    if (!empty($userId)) {
         // Set chamilo sessions
         Session::write('samlUserdata', $auth->getAttributes());
         Session::write('samlNameId', $auth->getNameId());
@@ -161,6 +157,18 @@ if (isset($_GET['sso'])) {
         Session::write('_user', $userInfo);
         Session::write('is_platformAdmin', false);
         Session::write('is_allowedCreateCourse', false);
+
+        header('Location: '.api_get_path(WEB_PATH));
+        exit;
+        /*$result = Tracking::getCourseLpProgress($userId, 0);
+        echo json_encode($result);*/
+    } else {
+        echo 'User not found';
+    }
+    exit;
+
+    if (!empty($userId)) {
+
     } else {
         Display::addFlash(Display::return_message(get_lang('InvalidId')));
     }

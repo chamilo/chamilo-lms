@@ -168,8 +168,6 @@ function switch_item_toc($lpId, $userId, $viewId, $currentItem, $nextItem)
         $return .= "update_progress_bar('$completedItems','$totalItems','$progressMode');";
     }
 
-
-
     $myLP->set_error_msg('');
     $myLP->prerequisites_match(); // Check the prerequisites are all complete.
     if ($debug > 1) {

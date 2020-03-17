@@ -1995,7 +1995,7 @@ class Tracking
      * @param int         User id
      * @param array $courseInfo real_id and code are used
      * @param int            Session id (optional, default=0)
-     * @param bool  $convert_date
+     * @param bool $convert_date
      *
      * @return string|bool Date with format long without day or false if there is no date
      */

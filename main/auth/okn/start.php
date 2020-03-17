@@ -28,7 +28,7 @@ $authRequest = new AuthnRequest($settings);
 $samlRequest = $authRequest->getRequest();
 $idpData = $settings->getIdPData();
 
-if (isset($_GET['sso'])) {
+if (isset($_GET['email'])) {
     $auth->login();
 // If AuthNRequest ID need to be saved in order to later validate it, do instead
     /*$ssoBuiltUrl = $auth->login(null, [], false, false, true);
@@ -90,8 +90,9 @@ if (isset($_GET['sso'])) {
         !isset($attributes['lastname2']) ||
         !isset($attributes['username'])
     ) {
+        echo 'Not enough parameters, current values: ';
+        echo '<pre>';
         var_dump($attributes);
-        echo 'Not enough parameters';
         exit;
     }
 
@@ -105,7 +106,6 @@ if (isset($_GET['sso'])) {
 
     if (empty($userInfo)) {
         $lastName = $attributes['lastname1'].' '.$attributes['lastname2'];
-        //$username = UserManager::create_unique_username($attributes['firstname'], $lastName);
         $userId = UserManager::create_user(
             $attributes['firstname'],
             $lastName,
@@ -135,20 +135,16 @@ if (isset($_GET['sso'])) {
     }
 
     if (!empty($userId)) {
+        $courseCode = null;
         if (isset($settingsInfo['course_list']) && !empty($settingsInfo['course_list'])) {
             foreach ($settingsInfo['course_list'] as $courseCode) {
                 CourseManager::subscribeUser($userId, $courseCode, STUDENT, 0, 0, false);
             }
         }
 
-        $result = Tracking::getCourseLpProgress($userId, 0);
-        echo json_encode($result);
-    } else {
-        echo 'User not found';
-    }
-    exit;
+        // Clean flash messages
+        Session::write('flash_messages', '');
 
-    if (!empty($userId)) {
         // Set chamilo sessions
         Session::write('samlUserdata', $auth->getAttributes());
         Session::write('samlNameId', $auth->getNameId());
@@ -161,6 +157,20 @@ if (isset($_GET['sso'])) {
         Session::write('_user', $userInfo);
         Session::write('is_platformAdmin', false);
         Session::write('is_allowedCreateCourse', false);
+
+        if (!empty($courseCode)) {
+            $courseInfo = api_get_course_info($courseCode);
+            header('Location: '.$courseInfo['course_public_url']);
+            exit;
+        }
+        header('Location: '.api_get_path(WEB_PATH).'user_portal.php');
+        exit;
+    } else {
+        echo 'User not found';
+    }
+    exit;
+
+    if (!empty($userId)) {
     } else {
         Display::addFlash(Display::return_message(get_lang('InvalidId')));
     }

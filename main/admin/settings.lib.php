@@ -118,9 +118,11 @@ function handleExtensions()
 }
 
 /**
- * Show form for plugin and validates inputs. Calls uploadPlugin() if everything OK
- * @return string|void The HTML form, or displays a message and returns nothing on error
+ * Show form for plugin and validates inputs. Calls uploadPlugin() if everything OK.
+ *
  * @throws Exception
+ *
+ * @return string|void The HTML form, or displays a message and returns nothing on error
  */
 function handlePluginUpload()
 {
@@ -131,6 +133,7 @@ function handlePluginUpload()
             'error',
             false
         );
+
         return;
     }
     $pluginPath = api_get_path(SYS_PLUGIN_PATH);
@@ -140,6 +143,7 @@ function handlePluginUpload()
             'error',
             false
         );
+
         return;
     }
 
@@ -742,8 +746,8 @@ function uploadStylesheet($values, $picture)
  * Creates the folder (if needed) and uploads the plugin in it. If the plugin
  * is already there and the folder is writeable, overwrite.
  *
- * @param array $values  the values of the form
- * @param array $file   the file passed to the upload form
+ * @param array $values          the values of the form
+ * @param array $file            the file passed to the upload form
  * @param array $officialPlugins A list of official plugins that cannot be uploaded
  *
  * @return bool

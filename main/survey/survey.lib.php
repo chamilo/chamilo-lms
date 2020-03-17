@@ -1,4 +1,5 @@
 <?php
+
 /* For licensing terms, see /license.txt */
 
 use Chamilo\CourseBundle\Entity\CSurveyInvitation;
@@ -1120,7 +1121,7 @@ class SurveyManager
      *
      * @version January 2007
      */
-    public static function save_question($survey_data, $form_content)
+    public static function save_question($survey_data, $form_content, $showMessage = true)
     {
         $return_message = '';
         if (strlen($form_content['question']) > 1) {
@@ -1291,8 +1292,10 @@ class SurveyManager
             $return_message = 'PleaseEnterAQuestion';
         }
 
-        if (!empty($return_message)) {
-            Display::addFlash(Display::return_message(get_lang($return_message)));
+        if ($showMessage) {
+            if (!empty($return_message)) {
+                Display::addFlash(Display::return_message(get_lang($return_message)));
+            }
         }
 
         return $return_message;
@@ -2185,8 +2188,11 @@ class SurveyManager
 
         $questions = self::get_questions($surveyId);
 
-        $obj = new UserGroup();
+        if (empty($questions)) {
+            return false;
+        }
 
+        $obj = new UserGroup();
         $options['where'] = [' usergroup.course_id = ? ' => $courseId];
         $classList = $obj->getUserGroupInCourse($options);
 
@@ -2198,7 +2204,7 @@ class SurveyManager
             }
             $classToParse[] = [
                 'name' => $class['name'],
-                'users' => $users
+                'users' => $users,
             ];
         }
 
@@ -2214,17 +2220,19 @@ class SurveyManager
                     $users = array_column($users, 'id');
                     $classToParse = [
                         [
-                            'name' =>  $groupInfo['name'],
-                            'users'=> $users
-                        ]
+                            'name' => $groupInfo['name'],
+                            'users' => $users,
+                        ],
                     ];
                     self::parseMultiplicateUserList($classToParse, $questions, $courseId, $surveyData);
                 }
             }
         }
+
+        return true;
     }
 
-    public function parseMultiplicateUserList($itemList, $questions, $courseId, $surveyData)
+    public static function parseMultiplicateUserList($itemList, $questions, $courseId, $surveyData)
     {
         $surveyId = $surveyData['survey_id'];
         $classTag = '{{class_name}}';
@@ -2248,7 +2256,7 @@ class SurveyManager
                         'question_id' => 0,
                         'shared_question_id' => 0,
                     ];
-                    self::save_question($surveyData, $values);
+                    self::save_question($surveyData, $values, false);
                     $classCounter++;
                     continue;
                 }
@@ -2277,7 +2285,7 @@ class SurveyManager
                             }
                         }
                         $values['answers'] = $answers;
-                        self::save_question($surveyData, $values);
+                        self::save_question($surveyData, $values, false);
                     }
                 }
 
@@ -2293,7 +2301,7 @@ class SurveyManager
                         'question_id' => 0,
                         'shared_question_id' => 0,
                     ];
-                    self::save_question($surveyData, $values);
+                    self::save_question($surveyData, $values, false);
                 }
             }
         }
@@ -2547,4 +2555,56 @@ class SurveyManager
 
         return $content;
     }
+
+    public static function sendToTutors($surveyId)
+    {
+        $survey = Database::getManager()->getRepository('ChamiloCourseBundle:CSurvey')->find($surveyId);
+        if (null === $survey) {
+            return false;
+        }
+
+        $extraFieldValue = new ExtraFieldValue('survey');
+        $groupData = $extraFieldValue->get_values_by_handler_and_field_variable($surveyId, 'group_id');
+        if ($groupData && !empty($groupData['value'])) {
+            $groupInfo = GroupManager::get_group_properties($groupData['value']);
+            if ($groupInfo) {
+                $tutors = GroupManager::getTutors($groupInfo);
+                if (!empty($tutors)) {
+                    SurveyUtil::saveInviteMail(
+                        $survey,
+                        ' ',
+                        ' ',
+                        false
+                    );
+
+                    foreach ($tutors as $tutor) {
+                        $subject = sprintf(get_lang('GroupSurveyX'), $tutor['complete_name']);
+                        $content = sprintf(
+                            get_lang('HelloXGroupX'),
+                            $tutor['complete_name'],
+                            $groupInfo['name']
+                        );
+
+                        SurveyUtil::saveInvitations(
+                            ['users' => $tutor['user_id']],
+                            $subject,
+                            $content,
+                            false,
+                            true,
+                            false,
+                            true
+                        );
+                    }
+                    Display::addFlash(Display::return_message(get_lang('Updated'), 'confirmation', false));
+                }
+                SurveyUtil::update_count_invited($survey->getCode());
+
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+
 }

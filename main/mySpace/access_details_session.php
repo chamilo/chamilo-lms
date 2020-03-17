@@ -390,7 +390,6 @@ if ($form->validate()) {
 $interbreadcrumb[] = ['url' => '#', 'name' => get_lang('AccessDetails')];
 $userInfo = api_get_user_info($userId);
 
-
 $form->setDefaults(['from' => $startDate, 'to' => $endDate]);
 
 $formByDay = new FormValidator(
@@ -423,20 +422,26 @@ if ($formByDay->validate()) {
 
     $list = Tracking::get_time_spent_on_the_platform($userId, 'custom', $from, $to, true);
     $newList = [];
-    foreach ($list as $list) {
-        $key = substr($list['login_date'], 0, 10);
+    foreach ($list as $item) {
+        $key = substr($item['login_date'], 0, 10);
         if (!isset($newList[$key])) {
             $newList[$key] = [
-                'login_date' => $list['login_date'],
-                'logout_date' => $list['logout_date'],
-                'diff' => $list['diff'],
+                'login_date' => $item['login_date'],
+                'logout_date' => $item['logout_date'],
+                'diff' => 0,
             ];
         } else {
             $newList[$key] = [
                 'login_date' => $newList[$key]['login_date'],
-                'logout_date' => $list['logout_date'],
-                'diff' => $newList[$key]['diff'] + $list['diff'],
+                'logout_date' => $item['logout_date'],
+                'diff' => 0,
             ];
+        }
+    }
+
+    if (!empty($newList)) {
+        foreach ($newList as &$item) {
+            $item['diff'] = api_strtotime($item['logout_date']) - api_strtotime($item['login_date']);
         }
     }
 
@@ -461,9 +466,6 @@ if ($formByDay->validate()) {
             get_lang('LastConnection'),
             get_lang('Total'),
         ];
-
-        /*$table->setHeaderContents(0, 0, $dateToCheck);
-        $table->setCellAttributes(0,0,['colspan' => 3]);*/
 
         $row = 0;
         $column = 0;

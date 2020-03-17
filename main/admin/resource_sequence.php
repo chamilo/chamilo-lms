@@ -133,7 +133,7 @@ $headers[] = [
     'content' => get_lang('Courses'),
 ];
 
-$tabs = Display::tabsOnlyLink($headers,$type === SequenceResource::COURSE_TYPE ? 2 : 1);
+$tabs = Display::tabsOnlyLink($headers, $type === SequenceResource::COURSE_TYPE ? 2 : 1);
 
 $tpl->assign('create_sequence', $formSequence->returnForm());
 $tpl->assign('select_sequence', $selectSequence->returnForm());

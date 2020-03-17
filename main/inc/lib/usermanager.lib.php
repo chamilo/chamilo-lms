@@ -3179,8 +3179,8 @@ class UserManager
     /**
      * Get extra user data by value.
      *
-     * @param string $variable       the internal variable name of the field
-     * @param string $value          the internal value of the field
+     * @param string $variable the internal variable name of the field
+     * @param string $value    the internal value of the field
      * @param bool   $useLike
      *
      * @return array with extra data info of a user i.e array('field_variable'=>'value');

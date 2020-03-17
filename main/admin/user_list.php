@@ -356,7 +356,7 @@ function prepare_user_sql_query($getCount)
                 $_GET['extra_'.$variable] = Security::remove_XSS($_GET['keyword']);
             }
         }
-        $variables = array_merge( $extraFieldList, $variables);
+        $variables = array_merge($extraFieldList, $variables);
     }
 
     if (!empty($variables)) {

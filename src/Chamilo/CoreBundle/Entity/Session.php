@@ -412,9 +412,8 @@ class Session
     }
 
     /**
-     * Check for existence of a relation (SessionRelCourse) between a course and this session
+     * Check for existence of a relation (SessionRelCourse) between a course and this session.
      *
-     * @param Course $course
      * @return bool whether the course is related to this session
      */
     public function isRelatedToCourse(Course $course)
@@ -928,6 +927,7 @@ class Session
         } catch (\Exception $exception) {
             return false;
         }
+
         return (is_null($this->accessStartDate) || $this->accessStartDate < $now)
             && (is_null($this->accessEndDate) || $now < $this->accessEndDate);
     }

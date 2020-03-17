@@ -546,7 +546,7 @@ if ($nbStudents > 0) {
 
     if (empty($sessionId)) {
         $table->set_header(12, get_lang('Survey'), false);
-	$headers['survey'] = get_lang('Survey');
+        $headers['survey'] = get_lang('Survey');
     } else {
         $table->set_header(12, get_lang('RegisteredDate'), false);
         $headers['registered_at'] = get_lang('RegisteredDate');

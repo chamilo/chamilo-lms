@@ -1416,7 +1416,6 @@ if (!empty($error)) {
                         break;
                     }
                 }
-
             }
         }
 

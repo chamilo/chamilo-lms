@@ -8,6 +8,7 @@ use ChamiloSession as Session;
  * Exercise administration
  * This script allows to manage an exercise. It is included from
  * the script admin.php.
+ *
  * @author Olivier Brouckaert, Julio Montoya
  */
 require_once __DIR__.'/../inc/global.inc.php';

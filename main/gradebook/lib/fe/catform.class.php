@@ -393,7 +393,7 @@ class CatForm extends FormValidator
         }
 
         //if (!empty($session_id)) {
-            $isRequirementCheckbox = $this->addCheckBox(
+        $isRequirementCheckbox = $this->addCheckBox(
                 'is_requirement',
                 [
                     null,

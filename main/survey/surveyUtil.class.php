@@ -2810,8 +2810,6 @@ class SurveyUtil
         $table->set_header(2, get_lang('SurveyCode'));
         $table->set_header(3, get_lang('NumberOfQuestions'));
         $table->set_header(4, get_lang('Author'));
-        //$table->set_header(5, get_lang('Language'));
-        //$table->set_header(6, get_lang('Shared'));
         $table->set_header(5, get_lang('AvailableFrom'));
         $table->set_header(6, get_lang('AvailableUntil'));
         $table->set_header(7, get_lang('Invite'));
@@ -2828,7 +2826,11 @@ class SurveyUtil
         }
 
         $table->set_column_filter(8, 'anonymous_filter');
-        $table->set_form_actions(['delete' => get_lang('DeleteSurvey')]);
+        $actions = [
+            'multiplicate' => get_lang('MultiplicateQuestions'),
+            'delete' => get_lang('DeleteSurvey'),
+        ];
+        $table->set_form_actions($actions);
         $table->display();
     }
 

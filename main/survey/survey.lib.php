@@ -1118,7 +1118,7 @@ class SurveyManager
      *
      * @version January 2007
      */
-    public static function save_question($survey_data, $form_content)
+    public static function save_question($survey_data, $form_content, $showMessage = true)
     {
         $return_message = '';
         if (strlen($form_content['question']) > 1) {
@@ -1289,8 +1289,10 @@ class SurveyManager
             $return_message = 'PleaseEnterAQuestion';
         }
 
-        if (!empty($return_message)) {
-            Display::addFlash(Display::return_message(get_lang($return_message)));
+        if ($showMessage) {
+            if (!empty($return_message)) {
+                Display::addFlash(Display::return_message(get_lang($return_message)));
+            }
         }
 
         return $return_message;
@@ -2183,8 +2185,11 @@ class SurveyManager
 
         $questions = self::get_questions($surveyId);
 
-        $obj = new UserGroup();
+        if (empty($questions)) {
+            return false;
+        }
 
+        $obj = new UserGroup();
         $options['where'] = [' usergroup.course_id = ? ' => $courseId];
         $classList = $obj->getUserGroupInCourse($options);
 
@@ -2220,9 +2225,11 @@ class SurveyManager
                 }
             }
         }
+
+        return true;
     }
 
-    public function parseMultiplicateUserList($itemList, $questions, $courseId, $surveyData)
+    public static function parseMultiplicateUserList($itemList, $questions, $courseId, $surveyData)
     {
         $surveyId = $surveyData['survey_id'];
         $classTag = '{{class_name}}';
@@ -2246,7 +2253,7 @@ class SurveyManager
                         'question_id' => 0,
                         'shared_question_id' => 0,
                     ];
-                    self::save_question($surveyData, $values);
+                    self::save_question($surveyData, $values, false);
                     $classCounter++;
                     continue;
                 }
@@ -2275,7 +2282,7 @@ class SurveyManager
                             }
                         }
                         $values['answers'] = $answers;
-                        self::save_question($surveyData, $values);
+                        self::save_question($surveyData, $values, false);
                     }
                 }
 
@@ -2291,7 +2298,7 @@ class SurveyManager
                         'question_id' => 0,
                         'shared_question_id' => 0,
                     ];
-                    self::save_question($surveyData, $values);
+                    self::save_question($surveyData, $values, false);
                 }
             }
         }

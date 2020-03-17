@@ -21,7 +21,7 @@ $current_course_tool = TOOL_SURVEY;
 $currentUserId = api_get_user_id();
 
 api_protect_course_script(true);
-$action = isset($_GET['action']) ? Security::remove_XSS($_GET['action']) : '';
+$action = isset($_REQUEST['action']) ? Security::remove_XSS($_REQUEST['action']) : '';
 
 // Tracking
 Event::event_access_tool(TOOL_SURVEY);
@@ -65,20 +65,73 @@ $extend_rights_for_coachs = api_get_setting('extend_rights_for_coach_on_survey')
 
 Session::erase('answer_count');
 Session::erase('answer_list');
-
+$tool_name = get_lang('SurveyList');
 // Language variables
-if (isset($_GET['search']) && $_GET['search'] == 'advanced') {
+if (isset($_GET['search']) && $_GET['search'] === 'advanced') {
     $interbreadcrumb[] = [
         'url' => api_get_path(WEB_CODE_PATH).'survey/survey_list.php',
         'name' => get_lang('SurveyList'),
     ];
     $tool_name = get_lang('SearchASurvey');
-} else {
-    $tool_name = get_lang('SurveyList');
 }
 
 $listUrl = api_get_path(WEB_CODE_PATH).'survey/survey_list.php?'.api_get_cidreq();
 $surveyId = isset($_GET['survey_id']) ? $_GET['survey_id'] : 0;
+
+
+// Action handling: performing the same action on multiple surveys
+if (isset($_POST['action']) && $_POST['action'] && isset($_POST['id']) && is_array($_POST['id'])) {
+    if (!api_is_allowed_to_edit()) {
+        api_not_allowed(true);
+    }
+
+    switch ($action){
+        case 'multiplicate':
+            foreach ($_POST['id'] as $key => $value) {
+                $surveyData = SurveyManager::get_survey($value);
+                if (!empty($surveyData)) {
+                    $result = SurveyManager::multiplicateQuestions($surveyData);
+                    $title = $surveyData['title'];
+                    if ($result) {
+                        Display::addFlash(
+                            Display::return_message(
+                                sprintf(get_lang('SurveyXMultiplicated'), $title),
+                                'confirmation',
+                                false
+                            )
+                        );
+                    } else {
+                        Display::addFlash(
+                            Display::return_message(
+                                sprintf(get_lang('SurveyXNotMultiplicated'), $title),
+                                'warning',
+                                false
+                            )
+                        );
+                    }
+                }
+            }
+            header('Location: '.$listUrl);
+            exit;
+            break;
+        case 'delete':
+            foreach ($_POST['id'] as $key => $value) {
+                // getting the information of the survey (used for when the survey is shared)
+                $survey_data = SurveyManager::get_survey($value);
+                // if the survey is shared => also delete the shared content
+                if (is_numeric($survey_data['survey_share'])) {
+                    SurveyManager::delete_survey($survey_data['survey_share'], true);
+                }
+                // delete the actual survey
+                SurveyManager::delete_survey($value);
+            }
+            Display::addFlash(Display::return_message(get_lang('SurveysDeleted'), 'confirmation', false));
+
+            header('Location: '.$listUrl);
+            exit;
+            break;
+    }
+}
 
 switch ($action) {
     case 'send_to_tutors':
@@ -129,18 +182,6 @@ switch ($action) {
         header('Location: '.$listUrl);
         exit;
         break;
-    case 'remove_multiplicate':
-        if (!api_is_allowed_to_edit()) {
-            api_not_allowed(true);
-        }
-        $surveyData = SurveyManager::get_survey($surveyId);
-        if (!empty($surveyData)) {
-            SurveyManager::removeMultiplicateQuestions($surveyData);
-            Display::addFlash(Display::return_message(get_lang('Updated'), 'confirmation', false));
-        }
-        header('Location: '.$listUrl);
-        exit;
-        break;
     case 'multiplicate':
         if (!api_is_allowed_to_edit()) {
             api_not_allowed(true);
@@ -149,6 +190,18 @@ switch ($action) {
         if (!empty($surveyData)) {
             SurveyManager::multiplicateQuestions($surveyData);
             Display::cleanFlashMessages();
+            Display::addFlash(Display::return_message(get_lang('Updated'), 'confirmation', false));
+        }
+        header('Location: '.$listUrl);
+        exit;
+        break;
+    case 'remove_multiplicate':
+        if (!api_is_allowed_to_edit()) {
+            api_not_allowed(true);
+        }
+        $surveyData = SurveyManager::get_survey($surveyId);
+        if (!empty($surveyData)) {
+            SurveyManager::removeMultiplicateQuestions($surveyData);
             Display::addFlash(Display::return_message(get_lang('Updated'), 'confirmation', false));
         }
         header('Location: '.$listUrl);
@@ -220,27 +273,8 @@ if (isset($_GET['search']) && $_GET['search'] === 'advanced') {
     SurveyUtil::display_survey_search_form();
 }
 
-// Action handling: performing the same action on multiple surveys
-if (isset($_POST['action']) && $_POST['action']) {
-    if (is_array($_POST['id'])) {
-        foreach ($_POST['id'] as $key => &$value) {
-            // getting the information of the survey (used for when the survey is shared)
-            $survey_data = SurveyManager::get_survey($value);
-            // if the survey is shared => also delete the shared content
-            if (is_numeric($survey_data['survey_share'])) {
-                SurveyManager::delete_survey($survey_data['survey_share'], true);
-            }
-            // delete the actual survey
-            SurveyManager::delete_survey($value);
-        }
-        echo Display::return_message(get_lang('SurveysDeleted'), 'confirmation', false);
-    } else {
-        echo Display::return_message(get_lang('NoSurveysSelected'), 'error', false);
-    }
-}
-
 echo '<div class="actions">';
-if (!api_is_session_general_coach() || $extend_rights_for_coachs == 'true') {
+if (!api_is_session_general_coach() || $extend_rights_for_coachs === 'true') {
     // Action links
     echo '<a href="'.api_get_path(WEB_CODE_PATH).'survey/create_new_survey.php?'.api_get_cidreq().'&amp;action=add">'.
         Display::return_icon('new_survey.png', get_lang('CreateNewSurvey'), '', ICON_SIZE_MEDIUM).'</a> ';

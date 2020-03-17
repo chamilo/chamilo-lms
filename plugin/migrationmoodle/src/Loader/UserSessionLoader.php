@@ -36,7 +36,7 @@ class UserSessionLoader implements LoaderInterface
             $courseIds[] = $courseId;
         }
 
-        $urlId = (int) \MigrationMoodlePlugin::create()->get(\MigrationMoodlePlugin::SETTING_URL_ID);
+        $urlId = \MigrationMoodlePlugin::create()->getAccessUrlId();
 
         $sessionId = \SessionManager::create_session(
             $incomingData['name'],

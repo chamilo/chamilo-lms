@@ -126,6 +126,24 @@ class MigrationMoodlePlugin extends Plugin implements HookPluginInterface
     }
 
     /**
+     * @return int
+     */
+    public function getAccessUrlId()
+    {
+        return (int) $this->get(self::SETTING_URL_ID);
+    }
+
+    /**
+     * @return string
+     */
+    public function getMoodledataPath()
+    {
+        $path = $this->get(self::SETTING_MOODLE_PATH);
+
+        return rtrim($path, ' /');
+    }
+
+    /**
      * @param string $name
      *
      * @return bool

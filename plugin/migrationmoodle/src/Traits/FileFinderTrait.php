@@ -22,8 +22,7 @@ trait FileFinderTrait
         $d1 = substr($contentHash, 0, 2);
         $d2 = substr($contentHash, 2, 2);
 
-        $moodleDataPath = \MigrationMoodlePlugin::create()->get(\MigrationMoodlePlugin::SETTING_MOODLE_PATH);
-        $moodleDataPath = rtrim($moodleDataPath, ' /');
+        $moodleDataPath = \MigrationMoodlePlugin::create()->getMoodledataPath();
 
         $filePath = "$moodleDataPath/filedir/$d1/$d2/$contentHash";
 

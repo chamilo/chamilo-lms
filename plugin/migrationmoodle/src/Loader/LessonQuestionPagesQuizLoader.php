@@ -44,6 +44,7 @@ class LessonQuestionPagesQuizLoader implements LoaderInterface
         $exercise->sessionId = 0;
         $exercise->start_time = null;
         $exercise->end_time = null;
+        $exercise->active = false;
 
         $quizId = $exercise->save();
 

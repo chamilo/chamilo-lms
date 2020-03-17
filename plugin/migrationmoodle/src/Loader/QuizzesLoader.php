@@ -41,6 +41,7 @@ class QuizzesLoader implements LoaderInterface
         $exercise->sessionId = 0;
         $exercise->start_time = api_get_utc_datetime($incomingData['start_time'], true);
         $exercise->end_time = api_get_utc_datetime($incomingData['end_time'], true);
+        $exercise->active = false;
 
         $quizId = $exercise->save();
 

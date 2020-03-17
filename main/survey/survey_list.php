@@ -82,7 +82,58 @@ $listUrl = api_get_path(WEB_CODE_PATH).'survey/survey_list.php?'.api_get_cidreq(
 $surveyId = isset($_GET['survey_id']) ? $_GET['survey_id'] : 0;
 
 switch ($action) {
+    case 'send_to_tutors':
+        if (!api_is_allowed_to_edit()) {
+            api_not_allowed(true);
+        }
+        $surveyData = SurveyManager::get_survey($surveyId);
+        if (!empty($surveyData)) {
+            $survey = Database::getManager()->getRepository('ChamiloCourseBundle:CSurvey')->find($surveyId);
+            $extraFieldValue = new ExtraFieldValue('survey');
+            $groupData = $extraFieldValue->get_values_by_handler_and_field_variable($surveyId, 'group_id');
+            if ($groupData && !empty($groupData['value'])) {
+                $groupInfo = GroupManager::get_group_properties($groupData['value']);
+                if ($groupInfo) {
+                    $tutors = GroupManager::getTutors($groupInfo);
+                    if (!empty($tutors)) {
+                        SurveyUtil::saveInviteMail(
+                            $survey,
+                            ' ',
+                            ' ',
+                            false
+                        );
+
+                        foreach ($tutors as $tutor) {
+                            $subject = sprintf(get_lang('GroupSurveyX'), $tutor['complete_name']);
+                            $content = sprintf(
+                                get_lang('HelloXGroupX'),
+                                $tutor['complete_name'],
+                                $groupInfo['name']
+                            );
+
+                            SurveyUtil::saveInvitations(
+                                ['users' => $tutor['user_id']],
+                                $subject,
+                                $content,
+                                false,
+                                true,
+                                false,
+                                true
+                            );
+                        }
+                        Display::addFlash(Display::return_message(get_lang('Updated'), 'confirmation', false));
+                    }
+                    SurveyUtil::update_count_invited($survey->getCode());
+                }
+            }
+        }
+        header('Location: '.$listUrl);
+        exit;
+        break;
     case 'remove_multiplicate':
+        if (!api_is_allowed_to_edit()) {
+            api_not_allowed(true);
+        }
         $surveyData = SurveyManager::get_survey($surveyId);
         if (!empty($surveyData)) {
             SurveyManager::removeMultiplicateQuestions($surveyData);
@@ -92,6 +143,9 @@ switch ($action) {
         exit;
         break;
     case 'multiplicate':
+        if (!api_is_allowed_to_edit()) {
+            api_not_allowed(true);
+        }
         $surveyData = SurveyManager::get_survey($surveyId);
         if (!empty($surveyData)) {
             SurveyManager::multiplicateQuestions($surveyData);
@@ -160,11 +214,10 @@ switch ($action) {
 }
 
 Display::display_header($tool_name, 'Survey');
-// Tool introduction
 Display::display_introduction_section('survey', 'left');
 
 // Action handling: searching
-if (isset($_GET['search']) && $_GET['search'] == 'advanced') {
+if (isset($_GET['search']) && $_GET['search'] === 'advanced') {
     SurveyUtil::display_survey_search_form();
 }
 
@@ -209,7 +262,6 @@ if (api_is_session_general_coach() && $extend_rights_for_coachs == 'false') {
 Display::display_footer();
 
 /* Bypass functions to make direct use from SortableTable possible */
-
 function get_number_of_surveys()
 {
     return SurveyUtil::get_number_of_surveys();
@@ -222,7 +274,7 @@ function get_survey_data($from, $number_of_items, $column, $direction)
 
 function modify_filter($survey_id)
 {
-    return SurveyUtil::modify_filter($survey_id);
+    return SurveyUtil::modify_filter($survey_id, false);
 }
 
 function modify_filter_drh($survey_id)

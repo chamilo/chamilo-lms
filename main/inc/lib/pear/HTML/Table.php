@@ -1023,4 +1023,24 @@ class HTML_Table extends HTML_Common
         return $strHtml;
     }
 
+    public function toArray()
+    {
+        $data = [];
+        $tBodyColCounts = array();
+        for ($i = 0; $i < $this->_tbodyCount; $i++) {
+            $tBodyColCounts[] = $this->_tbodies[$i]->getColCount();
+        }
+        $tBodyMaxColCount = 0;
+        if (count($tBodyColCounts) > 0) {
+            $tBodyMaxColCount = max($tBodyColCounts);
+        }
+        if ($this->getRowCount() > 0 && $tBodyMaxColCount > 0) {
+            for ($i = 0; $i < $this->_tbodyCount; $i++) {
+                $this->_tbodies[$i]->setAutoFill($this->_autoFill);
+                $data = $this->_tbodies[$i]->toArray();
+            }
+        }
+
+        return $data;
+    }
 }

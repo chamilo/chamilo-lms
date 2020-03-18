@@ -34,6 +34,7 @@
     "js-cookie": "2.1.*",
     "flag-icon-css": "*",
     "jquery.easy-pie-chart": "^2.1.6",
+    "chartjs-plugin-labels": "^1.1",
     "jqueryui-touch-punch": "*",
     "multiselect-two-sides": "2.5.*",
     "bootstrap-year-calendar": "1.1.*",

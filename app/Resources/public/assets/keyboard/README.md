@@ -2,7 +2,7 @@
 
 Originally posted by Jeremy Satterfield in his [blog](http://jsatt.blogspot.com/2010/01/on-screen-keyboard-widget-using-jquery.html), [jQuery plugins](http://plugins.jquery.com/project/virtual_keyboard) and on [Snipplr](http://snipplr.com/view/21577/virtual-keyboard-widget/). Currently maintained by [Mottie](https://github.com/Mottie/Keyboard).
 
-[![Bower Version][bower-image]][bower-url] [![NPM Version][npm-image]][npm-url] [![devDependency Status][david-dev-image]][david-dev-url] [![Join the chat at https://gitter.im/Mottie/Keyboard][gitter-image]][gitter]
+[![NPM Version][npm-image]][npm-url] [![devDependency Status][david-dev-image]][david-dev-url] [![Join the chat at https://gitter.im/Mottie/Keyboard][gitter-image]][gitter]
 [![FOSSA Status](https://app.fossa.io/api/projects/git%2Bgithub.com%2FMottie%2FKeyboard.svg?type=shield)](https://app.fossa.io/projects/git%2Bgithub.com%2FMottie%2FKeyboard?ref=badge_shield)
 
 ## Features ([Demo](https://mottie.github.io/Keyboard/))
@@ -15,7 +15,7 @@ Originally posted by Jeremy Satterfield in his [blog](http://jsatt.blogspot.com/
 
 ### Ease of installation
 
-* Grab the files as a zip, or from npm or bower - see the [installation](#installation) section below.
+* Grab the files as a zip, or from npm - see the [installation](#installation) section below.
 * In a minimal setup, the keyboard works by including:
   * jQuery
   * jQuery UI theme
@@ -82,13 +82,13 @@ Originally posted by Jeremy Satterfield in his [blog](http://jsatt.blogspot.com/
 
 * Download a [zip](https://github.com/Mottie/Keyboard/archive/master.zip) or [tar.gz](https://github.com/Mottie/Keyboard/archive/master.tar.gz) with all files, for use in the browser.
 * Use the files from [CDNJS](https://cdnjs.com/libraries/virtual-keyboard).
-* Install using [bower](https://github.com/bower/bower) via `bower install keyboard`.
 * Install using [npm](https://www.npmjs.com/) via `npm install virtual-keyboard`.
 * Use with:
-  * [AngularJs](https://github.com/antonio-spinelli/ng-virtual-keyboard) by [antonio-spinelli](https://github.com/antonio-spinelli) via `bower install ng-virtual-keyboard`.
-  * [Ember](https://github.com/SleepyWerewolf/ember-virtual-keyboard) by [SleepyWerewolf](https://github.com/SleepyWerewolf).
-  * [React.js](https://github.com/Utzel-Butzel/react-virtual-keyboard) by [Utzel-Butzel](https://github.com/Utzel-Butzel).
-  * [Ruby On Rails](https://github.com/scicasoft/virtual_keyboard) by [scicasoft](https://github.com/scicasoft) via `gem install virtual_keyboard`.
+  * Angular [ng-virtual-keyboard](https://github.com/antonio-spinelli/ng-virtual-keyboard) by [antonio-spinelli](https://github.com/antonio-spinelli) via `npm install ng-virtual-keyboard`.
+  * [ember-virtual-keyboard](https://github.com/SleepyWerewolf/ember-virtual-keyboard) by [SleepyWerewolf](https://github.com/SleepyWerewolf).
+  * [react-virtual-keyboard](https://github.com/Utzel-Butzel/react-virtual-keyboard) by [Utzel-Butzel](https://github.com/Utzel-Butzel) via `npm install react-virtual-keyboard`.
+  * [VueVirtualKeyboard](https://github.com/relzhong/vue-virtual-keyboard) by [relzhong](https://github.com/relzhong) via `npm install --save vue-virtual-keyboard`.
+  * Ruby on Rails [virtual_keyboard](https://github.com/scicasoft/virtual_keyboard) by [scicasoft](https://github.com/scicasoft) via `gem install virtual_keyboard`.
   * [VR Toolbox](https://steamcommunity.com/games/488040/announcements/detail/1431432753528769455).
 
 ## TypeScript
@@ -138,11 +138,8 @@ Wiki: [Home](https://github.com/Mottie/Keyboard/wiki/Home) | [FAQ](https://githu
 [npm-image]: https://img.shields.io/npm/v/virtual-keyboard.svg
 [david-dev-url]: https://david-dm.org/Mottie/keyboard?type=dev
 [david-dev-image]: https://david-dm.org/Mottie/keyboard/dev-status.svg
-[bower-url]: http://bower.io/search/?q=keyboard
-[bower-image]: https://img.shields.io/bower/v/keyboard.svg
 [gitter-image]: https://badges.gitter.im/Join%20Chat.svg
 [gitter]: https://gitter.im/Mottie/Keyboard?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge
-
 
 [![FOSSA Status](https://app.fossa.io/api/projects/git%2Bgithub.com%2FMottie%2FKeyboard.svg?type=large)](https://app.fossa.io/projects/git%2Bgithub.com%2FMottie%2FKeyboard?ref=badge_large)
 
@@ -150,29 +147,35 @@ Wiki: [Home](https://github.com/Mottie/Keyboard/wiki/Home) | [FAQ](https://githu
 
 Only the latest changes will be shown below, see the [wiki log](https://github.com/Mottie/Keyboard/wiki/Log) to view older versions.
 
-### Version 1.28.7 (2018-10-09)
+### Version 1.30.1 (2019-06-24)
 
 * Core:
-  * Fix JS Error. Closes [issue #699](https://github.com/Mottie/Keyboard/issues/699).
-* Readme:
-  * Fix Usability (spelling error). See [PR #694](https://github.com/Mottie/Keyboard/pull/694); thanks [@0xflotus](https://github.com/0xflotus)!
-  * Fix comboRegex (spelling error). See [PR #695](https://github.com/Mottie/Keyboard/pull/695); thanks [@0xflotus](https://github.com/0xflotus)!
+  * Fix focus when keyboard is set as current. Fixes [issue #744](https://github.com/Mottie/Keyboard/issues/744).
 
-### Version 1.28.6 (2018-09-15)
+### Version 1.30.0 (2019-06-18)
 
 * Core:
-  * Fix tab key insertion in textarea.
-* Typing:
-  * Prevent occasional focus error.
+  * The `display` option for action keys will now allow html (including colons), e.g. `<span style="color:red">Panic!</span>`.
+* Language:
+  * Add Czech translation. See [PR #742](https://github.com/Mottie/Keyboard/pull/742); thanks [@xmorave2](https://github.com/xmorave2)!
 * Meta:
-  * Update dependencies.
+  * Updated Qunit & jQuery migrate.
 
-### Version 1.28.5 (2018-07-28)
+### Version 1.29.0 &ndash; 1.29.1 (2019-05-02)
 
 * Core:
-  * Add mousewheel throttle & key check. See [issue #665](https://github.com/Mottie/Keyboard/issues/665).
-  * Include enter when restrictInput true; fixes [issue #686](https://github.com/Mottie/Keyboard/issues/686).
-  * Reduce rebinding focus delay. See [issue #677](https://github.com/Mottie/Keyboard/issues/677).
-* Meta:
-  * Add `CHANGELOG.md` file pointing to the wiki pages. See [issue #685](https://github.com/Mottie/Keyboard/issues/685).
-  * Update dependencies.
+  * Update to work with jQuery v3.4+.
+  * Remove focus binding on destroy.
+* Extensions:
+  * Updated navigation, scramble & typing extensions to work with jQuery 3.4+.
+* Docs:
+  * Update jQuery & UI (using slim & custom jQuery UI).
+
+### Version 1.28.9 (2019-03-09)
+
+* Core:
+  * Prevent overriding modified regex. Only if no language definition regex exists. See [issue #731](https://github.com/Mottie/Keyboard/issues/731).
+  * Add `base.isTextArea` & `base.isInput`; closes [pull #727](https://github.com/Mottie/Keyboard/pull/727); thanks [@DawidSu](https://github.com/DawidSu)
+* Language:
+  * Add untranslated Czech language file. See [issue #731](https://github.com/Mottie/Keyboard/issues/731).
+  * Update layouts dist (missing Syriac files).

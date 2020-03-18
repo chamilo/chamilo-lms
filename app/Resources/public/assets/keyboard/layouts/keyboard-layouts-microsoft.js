@@ -4883,6 +4883,46 @@ jQuery.keyboard.language.amh = {
 
 // Keyboard Language
 // please update this section to match this language and email me with corrections!
+// cs = ISO 639-1 code for Czech
+// ***********************
+jQuery.keyboard.language.cs = {
+	language: 'Czech (čeština)',
+	display : {
+		'a'      : '\u2714:Potvrdit (Shift+Enter)', // check mark - same action as accept
+		'accept' : 'Potvrdit:Potvrdit (Shift+Enter)',
+		'alt'    : 'AltGr:AltGr',
+		'b'      : '\u2190:Backspace',              // Left arrow (same as &larr;)
+		'bksp'   : 'Bksp:Backspace',
+		'c'      : '\u2716:Zavřít (Esc)',           // big X, close - same action as cancel
+		'cancel' : 'Zavřít:Zavřít (Esc)',
+		'clear'  : 'C:Vymazat',                     // clear num pad
+		'combo'  : '\u00f6:Slučování znaků',
+		'dec'    : ',:Desetinná čárka',             // decimal point for num pad (optional), change '.' to ',' for European format
+		'e'      : '\u21b5:Enter',                  // down, then left arrow - enter symbol
+		'enter'  : 'Enter:Enter',
+		'lock'   : '\u21ea Lock:Caps Lock',         // caps lock
+		's'      : '\u21e7:Shift',                  // thick hollow up arrow
+		'shift'  : 'Shift:Shift',
+		'sign'   : '\u00b1:Změnit znaménko',        // +/- sign for num pad
+		'space'  : '&nbsp;:Mezera',
+		't'      : '\u21e5:Tab',                    // right arrow to bar (used since this virtual keyboard works with one directional tabs)
+		'tab'    : '\u21e5 Tab:Tab'                 // \u21b9 is the true tab symbol (left & right arrows)
+	},
+	// Message added to the key title while hovering, if the mousewheel plugin exists
+	wheelMessage : 'Použijte kolečko myši pro zobrazení dalších kláves',
+	comboRegex: /([`\'~\^\"ao\u02c7\u00b4])([a-z])/mig,
+	combos: {
+		// caron
+		'\u02c7': { e: '\u011b', E: '\u011a', s: '\u0161', S: '\u0160', c: '\u010d', C: '\u010c', r: '\u0159', R: '\u0158', z: '\u017e', Z: '\u017d', d: '\u010f', D: '\u010e', t: '\u0165', T: '\u0164', n: '\u0148', N: '\u0147'},
+		// acute
+		'\u00b4': { a: '\u00e1', A: '\u00c1', e: '\u00e9', E: '\u00c9', i: '\u00ed', I: '\u00cd', o: '\u00f3', O: '\u00d3', u: '\u00fa', U: '\u00da', y: '\u00fd', Y: '\u00dd'}
+	},
+	// language direction
+	rtl: false
+};
+
+// Keyboard Language
+// please update this section to match this language and email me with corrections!
 // de = ISO 639-1 code for German
 // ***********************
 jQuery.keyboard.language.de = {
@@ -5428,4 +5468,36 @@ jQuery.keyboard.language.sq = {
 		// new combos below ( forward slash + d, forward slash + l )
 		'/' : { d:"\u0111", D:"\u0110", l:"\u0142", L:"\u0141" } // stroke đ Đ ł Ł
 	}
+};
+
+// Syriac (a.k.a. Suroyo, Surayt, Turoyo, Aramaic)
+// syr = ISO 639-3 code for Syriac
+// (it appears there is no 639-1 code? Cf. http://syriaca.org/documentation/isostandards.html)
+// ***********************
+jQuery.keyboard.language.syr = {
+	language: '\\u0723\\u0718\\u072a\\u071d\\u0730\\u072c (Syriac)',
+	display : {
+		'a'      : '\u2714:\u071a\u0736\u0726\u0733\u0715\u0742\u0710 (\u0719\u0730\u0718\u0725\u0736\u0710 + \u0725\u0712\u0730\u072a\u072c\u0710)',
+		'accept' : '\u071a\u0736\u0726\u0733\u0715\u0742\u0710:(\u0719\u0730\u0718\u0725\u0736\u0710 + \u0725\u0712\u0730\u072a\u072c\u0710)',
+		'alt'    : 'AltGr:\u0712\u0736\u0715\u0733\u0720\u0710 \u0713\u072a\u0730\u0726\u071d\u071f \u0715\u0725\u0730\u072a\u072c\u0710',
+		'b'      : '\u2190:\u0719\u072a\u0730\u0725\u0720\u0710 \u0715\u071d \u0715\u0725\u0730\u072a\u072c\u0710',
+		'bksp'   : '\u2190 Back:\u0719\u072a\u0730\u0725\u0720\u0710 \u0715\u071d \u0715\u0725\u0730\u072a\u072c\u0710',
+		'c'      : '\u2716:\u0725\u072a\u0730\u0729\u072c\u0710',
+		'cancel' : 'Esc:\u0725\u072a\u0730\u0729\u072c\u0710',
+		'clear'  : 'C:\u0720\u071a\u0733\u071d\u0710',
+		'combo'  : '\u00f6:\u0719\u072a\u0730\u0725\u0720\u0710 \u0721\u071d\u072c\u0742\u0710', 
+		'dec'    : ',:\u0722\u0718\u0729\u0719\u0710 \u0715\u072a\u0730\u0729\u0721\u0736\u0710 \u0028\u0710\u0737\u0722\u0713\u0720\u071d\u072b\u0733\u071d\u0710\u005c\u0710\u0730\u0721\u0736\u072a\u071d\u071f\u0733\u071d\u0710\u0029', 
+		'e'      : '\u21b5:\u0725\u0712\u0733\u072a\u0710',
+		'enter'  : '\u21b5 Enter:\u0725\u0712\u0733\u072a\u0710', 
+		'lock'   : '\u21E9:\u0710\u0737\u072c\u0742\u0718\u0733\u072c\u0742\u0736\u0710 \u0719\u0730\u0718\u0725\u0736\u0710 ',
+		's'      : '\u21e7:\u0719\u0730\u0718\u0725\u0736\u0710',
+		'shift'  : '\u21e7 Shift:\u0719\u0730\u0718\u0725\u0736\u0710', 
+		'sign'   : '\u00b1:\u0712\u0736\u0715\u0733\u0720\u0710 \u0726\u0741\u0733\u0723\u071d\u072c\u071d\u0726 Space \u0722\u0736\u0713\u0730\u072c\u071d\u0726', 
+		'space'  : '\\u0020:\u0715\u0718\u071f\u072c\u0742\u0710 \u071f\u0742\u0720\u071d\u072c\u0742\u0710', 
+		't'      : '\u21e5:\u0719\u072a\u0730\u0725\u0720\u0710 \u0715\u0737\u071f\u0720\u0733\u071d\u0710 \u0717\u0733\u072a\u071d\u0719\u0733\u0722\u0733\u071d\u0710',
+		'tab'    : '\u21e5 Tab:\u0719\u072a\u0730\u0725\u0720\u0710 \u0715\u0737\u071f\u0720\u0733\u071d\u0710 \u0717\u0733\u072a\u071d\u0719\u0733\u0722\u0733\u071d\u0710'
+	},
+	
+	wheelMessage : 'Mausrad benutzen, um weitere Tasten zu sehen',
+	rtl: true
 };

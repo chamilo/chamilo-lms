@@ -11,6 +11,7 @@ ini_set('max_execution_time', 0);
 require_once __DIR__.'/../../main/inc/global.inc.php';
 
 if (PHP_SAPI !== 'cli') {
+    echo 'Run on CLI.'.PHP_EOL;
     exit;
 }
 
@@ -18,9 +19,10 @@ $outputBuffering = false;
 
 $plugin = MigrationMoodlePlugin::create();
 
-if ('true' != $plugin->get('active')) {
-    exit;
-}
+//if ('true' != $plugin->get('active')) {
+//    echo 'Plugin not active.'.PHP_EOL;
+//    exit;
+//}
 
 $taskNames = [
     'course_categories',
@@ -76,10 +78,16 @@ $taskNames = [
 
 foreach ($taskNames as $i => $taskName) {
     $taskClass = api_underscore_to_camel_case($taskName).'Task';
-
     $taskClass = 'Chamilo\\PluginBundle\\MigrationMoodle\\Task\\'.$taskClass;
 
-    echo ($i + 1).": Executing $taskClass.".PHP_EOL;
+    echo PHP_EOL.($i + 1).': ';
+
+    if ($plugin->isTaskDone($taskName)) {
+        echo "$taskClass already done.".PHP_EOL;
+        continue;
+    }
+
+    echo "Executing $taskClass.".PHP_EOL;
 
     /** @var BaseTask $task */
     $task = new $taskClass();

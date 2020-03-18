@@ -2841,6 +2841,8 @@ class CourseManager
     }
 
     /**
+     * Get the list of course IDs with the special_course field
+     * set to 1. This function is access_url aware.
      * @return array
      */
     public static function get_special_course_list()
@@ -2848,37 +2850,51 @@ class CourseManager
         $courseTable = Database::get_main_table(TABLE_MAIN_COURSE);
         $tbl_course_field = Database::get_main_table(TABLE_EXTRA_FIELD);
         $tbl_course_field_value = Database::get_main_table(TABLE_EXTRA_FIELD_VALUES);
-
-        //we filter the courses from the URL
-        $join_access_url = $where_access_url = '';
-        if (api_get_multiple_access_url()) {
-            $access_url_id = api_get_current_access_url_id();
-            if ($access_url_id != -1) {
-                $tbl_url_course = Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_COURSE);
-                $join_access_url = "LEFT JOIN $tbl_url_course url_rel_course
-                                    ON url_rel_course.c_id = tcfv.item_id ";
-                $where_access_url = " AND access_url_id = $access_url_id ";
-            }
-        }
+        $tbl_url_course = Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_COURSE);
 
         $extraFieldType = EntityExtraField::COURSE_FIELD_TYPE;
-
-        // get course list auto-register
-        $sql = "SELECT DISTINCT(tcfv.item_id)
-                FROM $tbl_course_field_value tcfv
-                INNER JOIN $tbl_course_field tcf
-                ON tcfv.field_id =  tcf.id $join_access_url
-                WHERE
-                    tcf.extra_field_type = $extraFieldType AND
-                    tcf.variable = 'special_course' AND
-                    tcfv.value = 1 $where_access_url";
-
-        $result = Database::query($sql);
+        // Set the return list
         $courseList = [];
 
+        // Get special course field
+        $sql = "SELECT id FROM $tbl_course_field
+                WHERE extra_field_type = $extraFieldType AND
+                variable = 'special_course'";
+        $result = Database::query($sql);
+
         if (Database::num_rows($result) > 0) {
-            while ($row = Database::fetch_array($result)) {
-                $courseList[] = $row['id'];
+            $row = Database::fetch_assoc($result);
+            // Get list of special courses (appear to all)
+            // Note: The value is better indexed as string, so
+            // using '1' instead of integer is more efficient
+            $sql = "SELECT DISTINCT(item_id) as cid
+                FROM $tbl_course_field_value
+                WHERE field_id = ".$row['id']." AND value = '1'";
+            $result = Database::query($sql);
+            while ($row = Database::fetch_assoc($result)) {
+                $courseList[] = $row['cid'];
+            }
+            if (count($courseList) < 1) {
+                return $courseList;
+            }
+            if (api_get_multiple_access_url()) {
+                //we filter the courses by the active URL
+                $coursesSelect = '';
+                if (count($courseList) == 1) {
+                    $coursesSelect = $courseList[0];
+                } else {
+                    $coursesSelect = implode(',', $courseList);
+                }
+                $access_url_id = api_get_current_access_url_id();
+                if ($access_url_id != -1) {
+                    $sql = "SELECT c_id FROM $tbl_url_course
+                            WHERE access_url_id = $access_url_id
+                            AND c_id IN ($coursesSelect)";
+                    $result = Database::query($sql);
+                    while ($row = Database::fetch_assoc($result)) {
+                        $courseList[] = $row['c_id'];
+                    }
+                }
             }
         }
 

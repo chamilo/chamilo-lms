@@ -3,8 +3,6 @@
 
 namespace Chamilo\PluginBundle\MigrationMoodle\Transformer\Property;
 
-use Chamilo\PluginBundle\MigrationMoodle\Interfaces\TransformPropertyInterface;
-
 /**
  * Class ScormScoParentLookup.
  *
@@ -13,7 +11,7 @@ use Chamilo\PluginBundle\MigrationMoodle\Interfaces\TransformPropertyInterface;
 class ScormScoParentLookup extends LoadedScormLookup
 {
     /**
-     * @inheritDoc
+     * {@inheritdoc}
      */
     public function transform(array $data)
     {

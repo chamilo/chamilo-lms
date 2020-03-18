@@ -16,8 +16,6 @@ class LoadedCoursesFilterExtractor extends FilterExtractor
 {
     /**
      * LoadedCoursesFilterExtractor constructor.
-     *
-     * @param array $configuration
      */
     public function __construct(array $configuration)
     {
@@ -27,8 +25,6 @@ class LoadedCoursesFilterExtractor extends FilterExtractor
     }
 
     /**
-     * @param array $sourceData
-     *
      * @return bool
      */
     public function filter(array $sourceData)

@@ -16,8 +16,6 @@ use Chamilo\UserBundle\Entity\User;
 class UsersLoader implements LoaderInterface
 {
     /**
-     * @param array $incomingData
-     *
      * @throws \Doctrine\ORM\OptimisticLockException
      *
      * @return int

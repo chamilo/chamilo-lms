@@ -11,8 +11,6 @@ namespace Chamilo\PluginBundle\MigrationMoodle\Transformer\Property;
 class LearnPathItemViewQuizStatus extends LoadedQuizLookup
 {
     /**
-     * @param array $data
-     *
      * @throws \Doctrine\ORM\ORMException
      * @throws \Doctrine\ORM\OptimisticLockException
      * @throws \Doctrine\ORM\TransactionRequiredException

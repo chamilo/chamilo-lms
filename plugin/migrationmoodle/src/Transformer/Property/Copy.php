@@ -11,8 +11,6 @@ use Chamilo\PluginBundle\MigrationMoodle\Interfaces\TransformPropertyInterface;
 class Copy implements TransformPropertyInterface
 {
     /**
-     * @param array $data
-     *
      * @return array
      */
     public function transform(array $data)

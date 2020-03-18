@@ -58,7 +58,7 @@ class CQuizTask extends BaseTask
                 'enabletimercontroltotalminutes' => 'timelimit',
                 'pass_percentage' => [
                     'class' => Percentage::class,
-                    'properties' => ['sumgrades', 'grade']
+                    'properties' => ['sumgrades', 'grade'],
                 ],
                 //'text_when_finished',
             ],

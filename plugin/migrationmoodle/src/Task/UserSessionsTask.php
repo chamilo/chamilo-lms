@@ -19,7 +19,7 @@ class UserSessionsTask extends BaseTask
     const SEPARATOR_NAME = ' - ';
 
     /**
-     * @inheritDoc
+     * {@inheritdoc}
      */
     public function getExtractConfiguration()
     {
@@ -49,7 +49,7 @@ class UserSessionsTask extends BaseTask
     }
 
     /**
-     * @inheritDoc
+     * {@inheritdoc}
      */
     public function getTransformConfiguration()
     {
@@ -58,7 +58,7 @@ class UserSessionsTask extends BaseTask
             'map' => [
                 'name' => [
                     'class' => SessionName::class,
-                    'properties' => ['username', 'session_name']
+                    'properties' => ['username', 'session_name'],
                 ],
                 'user_id' => [
                     'class' => LoadedUserLookup::class,
@@ -70,7 +70,7 @@ class UserSessionsTask extends BaseTask
     }
 
     /**
-     * @inheritDoc
+     * {@inheritdoc}
      */
     public function getLoadConfiguration()
     {

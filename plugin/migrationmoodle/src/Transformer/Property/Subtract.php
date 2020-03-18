@@ -15,7 +15,7 @@ use Chamilo\PluginBundle\MigrationMoodle\Interfaces\TransformPropertyInterface;
 class Subtract implements TransformPropertyInterface
 {
     /**
-     * @inheritDoc
+     * {@inheritdoc}
      */
     public function transform(array $data)
     {

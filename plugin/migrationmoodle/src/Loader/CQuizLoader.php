@@ -15,8 +15,6 @@ class CQuizLoader implements LoaderInterface
     /**
      * Load the data and return the ID inserted.
      *
-     * @param array $incomingData
-     *
      * @throws \Doctrine\DBAL\DBALException
      *
      * @return int

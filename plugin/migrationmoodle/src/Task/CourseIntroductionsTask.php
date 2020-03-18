@@ -19,7 +19,7 @@ use Chamilo\PluginBundle\MigrationMoodle\Transformer\Property\ReplaceFilePaths;
 class CourseIntroductionsTask extends BaseTask
 {
     /**
-     * @inheritDoc
+     * {@inheritdoc}
      */
     public function getExtractConfiguration()
     {
@@ -32,7 +32,7 @@ class CourseIntroductionsTask extends BaseTask
     }
 
     /**
-     * @inheritDoc
+     * {@inheritdoc}
      */
     public function getTransformConfiguration()
     {
@@ -53,7 +53,7 @@ class CourseIntroductionsTask extends BaseTask
     }
 
     /**
-     * @inheritDoc
+     * {@inheritdoc}
      */
     public function getLoadConfiguration()
     {

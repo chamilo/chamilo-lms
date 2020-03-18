@@ -16,8 +16,6 @@ use Doctrine\DBAL\FetchMode;
 class LoadedCourseFromQuestionCategoryLookup extends LoadedCourseLookup
 {
     /**
-     * @param array $data
-     *
      * @throws \Exception
      *
      * @return mixed

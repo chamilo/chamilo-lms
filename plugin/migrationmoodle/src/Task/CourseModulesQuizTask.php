@@ -49,7 +49,7 @@ class CourseModulesQuizTask extends BaseTask
                 ],
                 'lp_id' => [
                     'class' => LoadedCourseSectionLookup::class,
-                    'properties' => ['section']
+                    'properties' => ['section'],
                 ],
                 'title' => 'name',
             ],

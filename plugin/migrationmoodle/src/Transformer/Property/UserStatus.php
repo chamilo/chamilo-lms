@@ -22,8 +22,6 @@ class UserStatus implements TransformPropertyInterface
     ];
 
     /**
-     * @param array $sourceData
-     *
      * @throws \Exception
      *
      * @return int

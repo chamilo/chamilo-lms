@@ -18,7 +18,7 @@ use Chamilo\PluginBundle\MigrationMoodle\Transformer\Property\LoadedQuizLookup;
 class QuizzesScoresTask extends BaseTask
 {
     /**
-     * @inheritDoc
+     * {@inheritdoc}
      */
     public function getExtractConfiguration()
     {
@@ -39,7 +39,7 @@ class QuizzesScoresTask extends BaseTask
     }
 
     /**
-     * @inheritDoc
+     * {@inheritdoc}
      */
     public function getTransformConfiguration()
     {
@@ -63,7 +63,7 @@ class QuizzesScoresTask extends BaseTask
     }
 
     /**
-     * @inheritDoc
+     * {@inheritdoc}
      */
     public function getLoadConfiguration()
     {

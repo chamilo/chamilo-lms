@@ -6,15 +6,13 @@ namespace Chamilo\PluginBundle\MigrationMoodle\Transformer\Property;
 use Chamilo\PluginBundle\MigrationMoodle\Interfaces\TransformPropertyInterface;
 
 /**
- * Class UserActive
+ * Class UserActive.
  *
  * @package Chamilo\PluginBundle\MigrationMoodle\Transformer\Property
  */
 class UserActive implements TransformPropertyInterface
 {
     /**
-     * @param array $data
-     *
      * @return bool
      */
     public function transform(array $data)

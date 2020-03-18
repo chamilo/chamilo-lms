@@ -24,7 +24,7 @@ abstract class UserQuestionAttemptsTask extends BaseTask
     protected $questionType;
 
     /**
-     * @inheritDoc
+     * {@inheritdoc}
      */
     public function getExtractConfiguration()
     {
@@ -64,7 +64,7 @@ abstract class UserQuestionAttemptsTask extends BaseTask
     }
 
     /**
-     * @inheritDoc
+     * {@inheritdoc}
      */
     public function getTransformConfiguration()
     {
@@ -113,7 +113,7 @@ abstract class UserQuestionAttemptsTask extends BaseTask
     }
 
     /**
-     * @inheritDoc
+     * {@inheritdoc}
      */
     public function getLoadConfiguration()
     {

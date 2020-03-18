@@ -16,8 +16,6 @@ abstract class LoadedKeyLookup implements TransformPropertyInterface
     use MapTrait;
 
     /**
-     * @param array $data
-     *
      * @throws \Exception
      *
      * @return mixed

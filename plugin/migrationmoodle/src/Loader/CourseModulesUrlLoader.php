@@ -13,7 +13,7 @@ use Chamilo\PluginBundle\MigrationMoodle\Interfaces\LoaderInterface;
 class CourseModulesUrlLoader implements LoaderInterface
 {
     /**
-     * @inheritDoc
+     * {@inheritdoc}
      */
     public function load(array $incomingData)
     {

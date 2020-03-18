@@ -13,7 +13,7 @@ use Chamilo\PluginBundle\MigrationMoodle\Interfaces\TransformPropertyInterface;
 class QuestionGapselectAnswer implements TransformPropertyInterface
 {
     /**
-     * @inheritDoc
+     * {@inheritdoc}
      */
     public function transform(array $data)
     {

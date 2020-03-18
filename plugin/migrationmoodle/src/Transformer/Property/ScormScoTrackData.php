@@ -16,7 +16,7 @@ class ScormScoTrackData implements TransformPropertyInterface
     const SEPARATOR_VALUES = '==>>';
 
     /**
-     * @inheritDoc
+     * {@inheritdoc}
      */
     public function transform(array $data)
     {

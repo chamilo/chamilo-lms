@@ -20,7 +20,7 @@ use Chamilo\PluginBundle\MigrationMoodle\Transformer\Property\Subtract;
 class UsersLearnPathsQuizzesTask extends BaseTask
 {
     /**
-     * @inheritDoc
+     * {@inheritdoc}
      */
     public function getExtractConfiguration()
     {
@@ -33,7 +33,7 @@ class UsersLearnPathsQuizzesTask extends BaseTask
     }
 
     /**
-     * @inheritDoc
+     * {@inheritdoc}
      */
     public function getTransformConfiguration()
     {
@@ -67,7 +67,7 @@ class UsersLearnPathsQuizzesTask extends BaseTask
     }
 
     /**
-     * @inheritDoc
+     * {@inheritdoc}
      */
     public function getLoadConfiguration()
     {

@@ -14,7 +14,7 @@ use Chamilo\PluginBundle\MigrationMoodle\Interfaces\LoaderInterface;
 class UserLearnPathQuizLoader implements LoaderInterface
 {
     /**
-     * @inheritDoc
+     * {@inheritdoc}
      */
     public function load(array $incomingData)
     {

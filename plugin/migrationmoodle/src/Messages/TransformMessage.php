@@ -19,9 +19,6 @@ class TransformMessage extends Message
 
     /**
      * TransformMessage constructor.
-     *
-     * @param array          $extractedData
-     * @param Throwable|null $previous
      */
     public function __construct(array $extractedData, Throwable $previous = null)
     {

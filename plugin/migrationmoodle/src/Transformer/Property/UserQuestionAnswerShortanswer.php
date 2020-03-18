@@ -14,7 +14,7 @@ use Chamilo\PluginBundle\MigrationMoodle\Loader\LessonAnswersShortAnswerLoader;
 class UserQuestionAnswerShortanswer implements TransformPropertyInterface
 {
     /**
-     * @inheritDoc
+     * {@inheritdoc}
      */
     public function transform(array $data)
     {

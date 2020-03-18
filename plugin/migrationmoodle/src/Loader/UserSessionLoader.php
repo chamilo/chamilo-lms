@@ -14,7 +14,7 @@ use Chamilo\PluginBundle\MigrationMoodle\Task\UserSessionsTask;
 class UserSessionLoader implements LoaderInterface
 {
     /**
-     * @inheritDoc
+     * {@inheritdoc}
      */
     public function load(array $incomingData)
     {
@@ -28,9 +28,7 @@ class UserSessionLoader implements LoaderInterface
             $courseId = api_get_course_int_id($courseCode);
 
             if (empty($courseId)) {
-                throw new \Exception(
-                    "Course ($courseCode) not found when creating course session for user ({$incomingData['user_id']})"
-                );
+                throw new \Exception("Course ($courseCode) not found when creating course session for user ({$incomingData['user_id']})");
             }
 
             $courseIds[] = $courseId;

@@ -15,15 +15,13 @@ use Doctrine\DBAL\DBALException;
 class QuizDataTracking extends LoadedQuestionLookup
 {
     /**
-     * @param array $data
-     *
      * @throws \Exception
      *
      * @return mixed
      */
     public function transform(array $data)
     {
-        list($mQuizId, $mAttemptLayout) =  array_values($data);
+        list($mQuizId, $mAttemptLayout) = array_values($data);
 
         $mAttemptLayout = explode(',', $mAttemptLayout);
         $mAttemptLayout = array_filter($mAttemptLayout);

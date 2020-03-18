@@ -19,8 +19,6 @@ class BaseExtractor implements ExtractorInterface
 
     /**
      * Extractor constructor.
-     *
-     * @param array $configuration
      */
     public function __construct(array $configuration)
     {
@@ -28,8 +26,6 @@ class BaseExtractor implements ExtractorInterface
     }
 
     /**
-     * @param array $sourceData
-     *
      * @return bool
      */
     public function filter(array $sourceData)

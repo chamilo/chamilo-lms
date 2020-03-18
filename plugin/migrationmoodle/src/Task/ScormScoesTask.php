@@ -18,7 +18,7 @@ use Chamilo\PluginBundle\MigrationMoodle\Transformer\Property\ScormScoParentLook
 class ScormScoesTask extends BaseTask
 {
     /**
-     * @inheritDoc
+     * {@inheritdoc}
      */
     public function getExtractConfiguration()
     {
@@ -32,7 +32,7 @@ class ScormScoesTask extends BaseTask
     }
 
     /**
-     * @inheritDoc
+     * {@inheritdoc}
      */
     public function getTransformConfiguration()
     {
@@ -60,7 +60,7 @@ class ScormScoesTask extends BaseTask
     }
 
     /**
-     * @inheritDoc
+     * {@inheritdoc}
      */
     public function getLoadConfiguration()
     {

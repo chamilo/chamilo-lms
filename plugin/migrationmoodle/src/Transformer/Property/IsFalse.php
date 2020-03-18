@@ -13,8 +13,6 @@ use Chamilo\PluginBundle\MigrationMoodle\Interfaces\TransformPropertyInterface;
 class IsFalse implements TransformPropertyInterface
 {
     /**
-     * @param array $data
-     *
      * @return bool
      */
     public function transform(array $data)

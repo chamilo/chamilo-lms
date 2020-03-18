@@ -6,11 +6,11 @@ namespace Chamilo\PluginBundle\MigrationMoodle\Task;
 use Chamilo\PluginBundle\MigrationMoodle\Extractor\LoadedCoursesFilterExtractor;
 use Chamilo\PluginBundle\MigrationMoodle\Loader\LessonPagesLoader;
 use Chamilo\PluginBundle\MigrationMoodle\Transformer\BaseTransformer;
+use Chamilo\PluginBundle\MigrationMoodle\Transformer\Property\LessonPageType;
 use Chamilo\PluginBundle\MigrationMoodle\Transformer\Property\LoadedCourseCodeLookup;
 use Chamilo\PluginBundle\MigrationMoodle\Transformer\Property\LoadedCourseModuleLessonLookup;
 use Chamilo\PluginBundle\MigrationMoodle\Transformer\Property\LoadedCourseSectionFromLessonLookup;
 use Chamilo\PluginBundle\MigrationMoodle\Transformer\Property\LoadedLessonPageLookup;
-use Chamilo\PluginBundle\MigrationMoodle\Transformer\Property\LessonPageType;
 
 /**
  * Class LessonPagesTask.
@@ -72,11 +72,11 @@ class LessonPagesTask extends BaseTask
                 ],
                 'lp_id' => [
                     'class' => LoadedCourseSectionFromLessonLookup::class,
-                    'properties' => ['lesson']
+                    'properties' => ['lesson'],
                 ],
                 'parent' => [
                     'class' => LoadedCourseModuleLessonLookup::class,
-                    'properties' => ['lesson']
+                    'properties' => ['lesson'],
                 ],
                 'previous' => [
                     'class' => LoadedLessonPageLookup::class,

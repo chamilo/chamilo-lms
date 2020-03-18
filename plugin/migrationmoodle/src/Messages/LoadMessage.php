@@ -20,8 +20,7 @@ class LoadMessage extends Message
     /**
      * LoadMessage constructor.
      *
-     * @param                $incomingData
-     * @param Throwable|null $previous
+     * @param $incomingData
      */
     public function __construct($incomingData, Throwable $previous = null)
     {

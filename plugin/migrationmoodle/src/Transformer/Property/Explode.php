@@ -15,8 +15,6 @@ class Explode implements TransformPropertyInterface
     const SEPARATOR = '@mm@';
 
     /**
-     * @param array $data
-     *
      * @return mixed
      */
     public function transform(array $data)

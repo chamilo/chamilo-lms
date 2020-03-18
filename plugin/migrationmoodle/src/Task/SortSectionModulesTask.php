@@ -20,7 +20,7 @@ use Chamilo\PluginBundle\MigrationMoodle\Transformer\Property\SectionSequenceLoo
 class SortSectionModulesTask extends BaseTask
 {
     /**
-     * @inheritDoc
+     * {@inheritdoc}
      */
     public function getExtractConfiguration()
     {
@@ -43,7 +43,7 @@ class SortSectionModulesTask extends BaseTask
     }
 
     /**
-     * @inheritDoc
+     * {@inheritdoc}
      */
     public function getTransformConfiguration()
     {
@@ -67,7 +67,7 @@ class SortSectionModulesTask extends BaseTask
     }
 
     /**
-     * @inheritDoc
+     * {@inheritdoc}
      */
     public function getLoadConfiguration()
     {

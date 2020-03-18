@@ -15,7 +15,7 @@ use Chamilo\PluginBundle\MigrationMoodle\Extractor\LoadedCoursesFilterExtractor;
 class QuestionsTrueFalseTask extends QuestionMultiChoiceSingleTask
 {
     /**
-     * @inheritDoc
+     * {@inheritdoc}
      */
     public function getExtractConfiguration()
     {

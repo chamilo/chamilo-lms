@@ -14,7 +14,7 @@ use Symfony\Component\Filesystem\Filesystem;
 class CourseModulesScormLoader implements LoaderInterface
 {
     /**
-     * @inheritDoc
+     * {@inheritdoc}
      */
     public function load(array $incomingData)
     {

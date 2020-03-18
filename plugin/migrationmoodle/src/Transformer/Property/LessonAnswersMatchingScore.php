@@ -16,8 +16,6 @@ use Doctrine\DBAL\DBALException;
 class LessonAnswersMatchingScore implements TransformPropertyInterface
 {
     /**
-     * @param array $data
-     *
      * @throws \Exception
      *
      * @return float|int

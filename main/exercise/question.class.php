@@ -2490,6 +2490,21 @@ abstract class Question
     }
 
     /**
+     * @return int
+     */
+    public function countAnswers()
+    {
+        $result = Database::select(
+            'COUNT(1) AS c',
+            Database::get_course_table(TABLE_QUIZ_ANSWER),
+            ['where' => ['question_id = ?' => [$this->id]]],
+            'first'
+        );
+
+        return (int) $result['c'];
+    }
+
+    /**
      * Resizes a picture || Warning!: can only be called after uploadPicture,
      * or if picture is already available in object.
      *
@@ -2552,20 +2567,5 @@ abstract class Question
         }
 
         return false;
-    }
-
-    /**
-     * @return int
-     */
-    public function countAnswers()
-    {
-        $result = Database::select(
-            'COUNT(1) AS c',
-            Database::get_course_table(TABLE_QUIZ_ANSWER),
-            ['where' => ['question_id = ?' => [$this->id]]],
-            'first'
-        );
-
-        return (int) $result['c'];
     }
 }

@@ -16,18 +16,18 @@ use Chamilo\PluginBundle\MigrationMoodle\Transformer\Property\LoadedUserLookup;
 class UsersScormsProgressTask extends BaseTask
 {
     /**
-     * @inheritDoc
+     * {@inheritdoc}
      */
     public function getExtractConfiguration()
     {
         return [
             'class' => LoadedUsersFilterExtractor::class,
-            'query' => "SELECT DISTINCT userid id FROM mdl_scorm_scoes_track"
+            'query' => "SELECT DISTINCT userid id FROM mdl_scorm_scoes_track",
         ];
     }
 
     /**
-     * @inheritDoc
+     * {@inheritdoc}
      */
     public function getTransformConfiguration()
     {
@@ -43,7 +43,7 @@ class UsersScormsProgressTask extends BaseTask
     }
 
     /**
-     * @inheritDoc
+     * {@inheritdoc}
      */
     public function getLoadConfiguration()
     {

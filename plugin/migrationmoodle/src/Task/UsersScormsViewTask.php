@@ -22,7 +22,7 @@ use Chamilo\PluginBundle\MigrationMoodle\Transformer\Property\ScormScoTrackData;
 class UsersScormsViewTask extends BaseTask
 {
     /**
-     * @inheritDoc
+     * {@inheritdoc}
      */
     public function getExtractConfiguration()
     {
@@ -45,7 +45,7 @@ class UsersScormsViewTask extends BaseTask
     }
 
     /**
-     * @inheritDoc
+     * {@inheritdoc}
      */
     public function getTransformConfiguration()
     {
@@ -78,7 +78,7 @@ class UsersScormsViewTask extends BaseTask
     }
 
     /**
-     * @inheritDoc
+     * {@inheritdoc}
      */
     public function getLoadConfiguration()
     {

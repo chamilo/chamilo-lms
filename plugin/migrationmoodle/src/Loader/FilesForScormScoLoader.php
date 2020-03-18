@@ -16,7 +16,7 @@ class FilesForScormScoLoader extends CourseFilesLoader
     use FileFinderTrait;
 
     /**
-     * @inheritDoc
+     * {@inheritdoc}
      */
     public function load(array $incomingData)
     {

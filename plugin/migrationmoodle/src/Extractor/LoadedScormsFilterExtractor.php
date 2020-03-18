@@ -16,8 +16,6 @@ class LoadedScormsFilterExtractor extends FilterExtractor
 {
     /**
      * LoadedScormsFilterExtractor constructor.
-     *
-     * @param array $configuration
      */
     public function __construct(array $configuration)
     {
@@ -28,8 +26,6 @@ class LoadedScormsFilterExtractor extends FilterExtractor
 
     /**
      * Filter to avoid scorms not yet migrated.
-     *
-     * @param array $sourceData
      *
      * @return bool
      */

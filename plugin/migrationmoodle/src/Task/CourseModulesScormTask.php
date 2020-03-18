@@ -19,7 +19,7 @@ use Chamilo\PluginBundle\MigrationMoodle\Transformer\Property\LoadedCourseLookup
 class CourseModulesScormTask extends BaseTask
 {
     /**
-     * @inheritDoc
+     * {@inheritdoc}
      */
     public function getExtractConfiguration()
     {
@@ -48,7 +48,7 @@ class CourseModulesScormTask extends BaseTask
     }
 
     /**
-     * @inheritDoc
+     * {@inheritdoc}
      */
     public function getTransformConfiguration()
     {
@@ -66,22 +66,22 @@ class CourseModulesScormTask extends BaseTask
                 'hide_toc_frame' => 'hidetoc',
                 'created_on' => [
                     'class' => DateTimeObject::class,
-                    'properties' => ['added']
+                    'properties' => ['added'],
                 ],
                 'modified_on' => [
                     'class' => DateTimeObject::class,
-                    'properties' => ['timemodified']
+                    'properties' => ['timemodified'],
                 ],
                 'publicated_on' => [
                     'class' => DateTimeObject::class,
-                    'properties' => ['added']
+                    'properties' => ['added'],
                 ],
             ],
         ];
     }
 
     /**
-     * @inheritDoc
+     * {@inheritdoc}
      */
     public function getLoadConfiguration()
     {

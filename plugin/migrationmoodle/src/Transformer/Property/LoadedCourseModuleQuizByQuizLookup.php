@@ -23,8 +23,6 @@ class LoadedCourseModuleQuizByQuizLookup extends LoadedKeyLookup
     }
 
     /**
-     * @param array $data
-     *
      * @throws \Exception
      *
      * @return mixed

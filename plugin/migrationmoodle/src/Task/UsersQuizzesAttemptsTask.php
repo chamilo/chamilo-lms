@@ -21,7 +21,7 @@ use Chamilo\PluginBundle\MigrationMoodle\Transformer\Property\Subtract;
 class UsersQuizzesAttemptsTask extends BaseTask
 {
     /**
-     * @inheritDoc
+     * {@inheritdoc}
      */
     public function getExtractConfiguration()
     {
@@ -44,7 +44,7 @@ class UsersQuizzesAttemptsTask extends BaseTask
     }
 
     /**
-     * @inheritDoc
+     * {@inheritdoc}
      */
     public function getTransformConfiguration()
     {
@@ -61,7 +61,7 @@ class UsersQuizzesAttemptsTask extends BaseTask
                 ],
                 'exo_id' => [
                     'class' => LoadedQuizLookup::class,
-                    'properties' => ['quiz']
+                    'properties' => ['quiz'],
                 ],
                 'result' => 'real_result',
                 'weighting' => 'weighting',
@@ -83,7 +83,7 @@ class UsersQuizzesAttemptsTask extends BaseTask
     }
 
     /**
-     * @inheritDoc
+     * {@inheritdoc}
      */
     public function getLoadConfiguration()
     {

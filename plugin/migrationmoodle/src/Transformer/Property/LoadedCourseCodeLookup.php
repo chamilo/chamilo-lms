@@ -20,8 +20,6 @@ class LoadedCourseCodeLookup extends LoadedKeyLookup
     }
 
     /**
-     * @param array $data
-     *
      * @throws \Exception
      *
      * @return string

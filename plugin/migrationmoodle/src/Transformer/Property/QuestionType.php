@@ -14,8 +14,6 @@ use Doctrine\DBAL\DBALException;
 class QuestionType implements TransformPropertyInterface
 {
     /**
-     * @param array $data
-     *
      * @throws \Exception
      *
      * @return mixed

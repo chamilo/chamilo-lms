@@ -441,7 +441,7 @@ if (!empty($_SESSION['_user']['user_id']) && !($login || $logout)) {
                             'credentials' => [
                                 'username' => $login,
                                 'password' => $password,
-                            ]
+                            ],
                         ]);
                         $validPassword = $checkLoginCredentialHook->notifyLoginCredentials();
                     }

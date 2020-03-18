@@ -4,7 +4,6 @@
 namespace Chamilo\PluginBundle\MigrationMoodle\Loader;
 
 use Chamilo\CoreBundle\Entity\Session;
-use Chamilo\CourseBundle\Entity\CLpView;
 use Chamilo\PluginBundle\MigrationMoodle\Interfaces\LoaderInterface;
 
 /**
@@ -15,7 +14,7 @@ use Chamilo\PluginBundle\MigrationMoodle\Interfaces\LoaderInterface;
 class UsersScormsViewLoader implements LoaderInterface
 {
     /**
-     * @inheritDoc
+     * {@inheritdoc}
      */
     public function load(array $incomingData)
     {
@@ -77,9 +76,7 @@ class UsersScormsViewLoader implements LoaderInterface
             ->findOneBy(['user' => $userId, 'course' => $courseId]);
 
         if (empty($subscription)) {
-            throw new \Exception(
-                "Session not found for user ($userId) with course ($courseId)"
-            );
+            throw new \Exception("Session not found for user ($userId) with course ($courseId)");
         }
 
         return $subscription->getSession();
@@ -102,7 +99,7 @@ class UsersScormsViewLoader implements LoaderInterface
                     'userId' => $userId,
                     'lpId' => $lpId,
                     'cId' => $cId,
-                    'sessionId' => $sessionId
+                    'sessionId' => $sessionId,
                 ],
                 ['viewCount' => 'DESC']
             );

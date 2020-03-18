@@ -20,7 +20,7 @@ use Chamilo\PluginBundle\MigrationMoodle\Transformer\Property\LoadedUserSessionL
 class UsersLearnPathsLessonTimerTask extends BaseTask
 {
     /**
-     * @inheritDoc
+     * {@inheritdoc}
      */
     public function getExtractConfiguration()
     {
@@ -31,7 +31,7 @@ class UsersLearnPathsLessonTimerTask extends BaseTask
     }
 
     /**
-     * @inheritDoc
+     * {@inheritdoc}
      */
     public function getTransformConfiguration()
     {
@@ -56,7 +56,7 @@ class UsersLearnPathsLessonTimerTask extends BaseTask
     }
 
     /**
-     * @inheritDoc
+     * {@inheritdoc}
      */
     public function getLoadConfiguration()
     {

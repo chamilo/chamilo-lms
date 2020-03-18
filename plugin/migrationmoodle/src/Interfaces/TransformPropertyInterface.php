@@ -9,8 +9,6 @@ namespace Chamilo\PluginBundle\MigrationMoodle\Interfaces;
 interface TransformPropertyInterface
 {
     /**
-     * @param array $data
-     *
      * @return mixed
      */
     public function transform(array $data);

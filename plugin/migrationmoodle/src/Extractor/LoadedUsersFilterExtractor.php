@@ -14,8 +14,6 @@ class LoadedUsersFilterExtractor extends FilterExtractor
 {
     /**
      * LoadedUsersFilterExtractor constructor.
-     *
-     * @param array $configuration
      */
     public function __construct(array $configuration)
     {
@@ -25,8 +23,6 @@ class LoadedUsersFilterExtractor extends FilterExtractor
     }
 
     /**
-     * @param array $sourceData
-     *
      * @return bool
      */
     public function filter(array $sourceData)

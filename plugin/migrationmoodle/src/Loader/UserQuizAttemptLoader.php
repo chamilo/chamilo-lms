@@ -3,8 +3,6 @@
 
 namespace Chamilo\PluginBundle\MigrationMoodle\Loader;
 
-use Chamilo\CoreBundle\Entity\TrackEExercises;
-use Chamilo\CourseBundle\Entity\CLpItemView;
 use Chamilo\PluginBundle\MigrationMoodle\Interfaces\LoaderInterface;
 
 /**
@@ -15,7 +13,7 @@ use Chamilo\PluginBundle\MigrationMoodle\Interfaces\LoaderInterface;
 class UserQuizAttemptLoader implements LoaderInterface
 {
     /**
-     * @inheritDoc
+     * {@inheritdoc}
      */
     public function load(array $incomingData)
     {

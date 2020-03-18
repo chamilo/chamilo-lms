@@ -13,8 +13,6 @@ use Chamilo\PluginBundle\MigrationMoodle\Interfaces\LoaderInterface;
 class CoursesLoader implements LoaderInterface
 {
     /**
-     * @param array $incomingData
-     *
      * @return int
      */
     public function load(array $incomingData)

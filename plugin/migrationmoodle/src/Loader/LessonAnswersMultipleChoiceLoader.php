@@ -13,8 +13,6 @@ namespace Chamilo\PluginBundle\MigrationMoodle\Loader;
 class LessonAnswersMultipleChoiceLoader extends LessonAnswersTrueFalseLoader
 {
     /**
-     * @param array $incomingData
-     *
      * @return int
      */
     public function load(array $incomingData)

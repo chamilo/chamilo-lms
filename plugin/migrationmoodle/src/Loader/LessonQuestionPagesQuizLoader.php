@@ -17,8 +17,6 @@ class LessonQuestionPagesQuizLoader implements LoaderInterface
     /**
      * Load the data and return the ID inserted.
      *
-     * @param array $incomingData
-     *
      * @throws \Doctrine\DBAL\DBALException
      * @throws \Exception
      *

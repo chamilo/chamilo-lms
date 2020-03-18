@@ -9,8 +9,6 @@ namespace Chamilo\PluginBundle\MigrationMoodle\Interfaces;
 interface TransformerInterface
 {
     /**
-     * @param array $sourceData
-     *
      * @throws \Exception
      *
      * @return array

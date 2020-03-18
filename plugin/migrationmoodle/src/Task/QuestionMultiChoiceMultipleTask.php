@@ -14,7 +14,7 @@ use Chamilo\PluginBundle\MigrationMoodle\Loader\LessonAnswersMultipleAnswerLoade
 class QuestionMultiChoiceMultipleTask extends QuestionMultiChoiceSingleTask
 {
     /**
-     * @inheritDoc
+     * {@inheritdoc}
      */
     public function getExtractConfiguration()
     {
@@ -40,7 +40,7 @@ class QuestionMultiChoiceMultipleTask extends QuestionMultiChoiceSingleTask
     }
 
     /**
-     * @inheritDoc
+     * {@inheritdoc}
      */
     public function getLoadConfiguration()
     {

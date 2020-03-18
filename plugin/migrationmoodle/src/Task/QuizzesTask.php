@@ -79,7 +79,7 @@ class QuizzesTask extends BaseTask
                 'enabletimercontroltotalminutes' => 'timelimit',
                 'pass_percentage' => [
                     'class' => Percentage::class,
-                    'properties' => ['gradepass', 'grade']
+                    'properties' => ['gradepass', 'grade'],
                 ],
             ],
         ];

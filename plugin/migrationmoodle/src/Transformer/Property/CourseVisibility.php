@@ -14,8 +14,6 @@ use Chamilo\PluginBundle\MigrationMoodle\Interfaces\TransformPropertyInterface;
 class CourseVisibility implements TransformPropertyInterface
 {
     /**
-     * @param array $data
-     *
      * @return int
      */
     public function transform(array $data)

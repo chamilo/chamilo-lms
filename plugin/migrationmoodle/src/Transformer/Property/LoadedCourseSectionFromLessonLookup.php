@@ -13,10 +13,7 @@ use Doctrine\DBAL\FetchMode;
  */
 class LoadedCourseSectionFromLessonLookup extends LoadedCourseSectionLookup
 {
-
     /**
-     * @param array $data
-     *
      * @throws \Exception
      *
      * @return mixed

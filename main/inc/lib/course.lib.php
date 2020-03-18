@@ -2843,6 +2843,7 @@ class CourseManager
     /**
      * Get the list of course IDs with the special_course field
      * set to 1. This function is access_url aware.
+     *
      * @return array
      */
     public static function get_special_course_list()

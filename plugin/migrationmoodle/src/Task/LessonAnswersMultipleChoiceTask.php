@@ -7,7 +7,7 @@ use Chamilo\PluginBundle\MigrationMoodle\Extractor\LoadedCoursesFilterExtractor;
 use Chamilo\PluginBundle\MigrationMoodle\Loader\LessonAnswersMultipleChoiceLoader;
 
 /**
- * Class LessonAnswersMultipleChoiceTask
+ * Class LessonAnswersMultipleChoiceTask.
  *
  * Task to convert Multiple Choice answers from a Moodle lesson page in answers for Unique Answer question for Chamilo.
  *

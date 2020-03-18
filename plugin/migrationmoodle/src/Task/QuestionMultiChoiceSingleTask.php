@@ -21,7 +21,7 @@ use Chamilo\PluginBundle\MigrationMoodle\Transformer\Property\ReplaceFilePaths;
 class QuestionMultiChoiceSingleTask extends BaseTask
 {
     /**
-     * @inheritDoc
+     * {@inheritdoc}
      */
     public function getExtractConfiguration()
     {
@@ -47,7 +47,7 @@ class QuestionMultiChoiceSingleTask extends BaseTask
     }
 
     /**
-     * @inheritDoc
+     * {@inheritdoc}
      */
     public function getTransformConfiguration()
     {
@@ -81,7 +81,7 @@ class QuestionMultiChoiceSingleTask extends BaseTask
     }
 
     /**
-     * @inheritDoc
+     * {@inheritdoc}
      */
     public function getLoadConfiguration()
     {

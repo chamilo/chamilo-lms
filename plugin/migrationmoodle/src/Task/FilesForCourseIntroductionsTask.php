@@ -13,7 +13,7 @@ use Chamilo\PluginBundle\MigrationMoodle\Extractor\LoadedCoursesFilterExtractor;
 class FilesForCourseIntroductionsTask extends CourseFilesTask
 {
     /**
-     * @inheritDoc
+     * {@inheritdoc}
      */
     public function getExtractConfiguration()
     {
@@ -35,7 +35,7 @@ class FilesForCourseIntroductionsTask extends CourseFilesTask
                     AND f.filearea = 'section'
                     AND ctx.contextlevel = 50
                     AND f.filename NOT IN ('.', '..')
-                    AND cs.section = 0 AND (cs.summary != '' AND cs.summary IS NOT NULL)"
+                    AND cs.section = 0 AND (cs.summary != '' AND cs.summary IS NOT NULL)",
         ];
     }
 }

@@ -4,7 +4,6 @@
 namespace Chamilo\PluginBundle\MigrationMoodle\Transformer\Property;
 
 use Chamilo\PluginBundle\MigrationMoodle\Task\QuestionsTask;
-use Doctrine\DBAL\DBALException;
 
 /**
  * Class UserQuestionAnswerTruefalse.
@@ -22,7 +21,7 @@ class UserQuestionAnswerTruefalse extends LoadedKeyLookup
     }
 
     /**
-     * @inheritDoc
+     * {@inheritdoc}
      */
     public function transform(array $data)
     {

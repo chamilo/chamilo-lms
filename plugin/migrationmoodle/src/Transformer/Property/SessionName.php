@@ -13,7 +13,7 @@ use Chamilo\PluginBundle\MigrationMoodle\Interfaces\TransformPropertyInterface;
 class SessionName implements TransformPropertyInterface
 {
     /**
-     * @inheritDoc
+     * {@inheritdoc}
      */
     public function transform(array $data)
     {
@@ -22,7 +22,7 @@ class SessionName implements TransformPropertyInterface
             $data['username'],
             ']',
             ' ',
-            $data['session_name']
+            $data['session_name'],
         ];
 
         return implode('', $pieces);

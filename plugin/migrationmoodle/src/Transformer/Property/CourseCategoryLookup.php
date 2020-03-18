@@ -21,8 +21,6 @@ class CourseCategoryLookup extends LoadedKeyLookup
     }
 
     /**
-     * @param array $data
-     *
      * @throws \Exception
      *
      * @return string|null

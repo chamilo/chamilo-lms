@@ -14,7 +14,7 @@ use Chamilo\PluginBundle\MigrationMoodle\Interfaces\LoaderInterface;
 class UserLearnPathLessonBranchLoader implements LoaderInterface
 {
     /**
-     * @inheritDoc
+     * {@inheritdoc}
      */
     public function load(array $incomingData)
     {
@@ -49,8 +49,6 @@ class UserLearnPathLessonBranchLoader implements LoaderInterface
     }
 
     /**
-     * @param array $incomingData
-     *
      * @throws \Doctrine\ORM\NonUniqueResultException
      *
      * @return CLpItemView
@@ -68,16 +66,13 @@ class UserLearnPathLessonBranchLoader implements LoaderInterface
             ->getOneOrNullResult();
 
         if (!$itemView) {
-            throw new \Exception("Item view not found for "
-                ."item ({$incomingData['item_id']}) and user ({$incomingData['user_id']}).");
+            throw new \Exception("Item view not found for "."item ({$incomingData['item_id']}) and user ({$incomingData['user_id']}).");
         }
 
         return $itemView;
     }
 
     /**
-     * @param array $incomingData
-     *
      * @throws \Doctrine\ORM\NonUniqueResultException
      *
      * @return CLpItemView
@@ -96,8 +91,7 @@ class UserLearnPathLessonBranchLoader implements LoaderInterface
             ->getOneOrNullResult();
 
         if (!$previuousItemView) {
-            throw new \Exception("Item view not found for "
-                ."previous item ({$incomingData['item_id']}) and user ({$incomingData['user_id']}).");
+            throw new \Exception("Item view not found for "."previous item ({$incomingData['item_id']}) and user ({$incomingData['user_id']}).");
         }
 
         return $previuousItemView;

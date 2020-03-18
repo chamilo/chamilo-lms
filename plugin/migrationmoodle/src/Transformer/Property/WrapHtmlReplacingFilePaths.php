@@ -13,8 +13,6 @@ use Chamilo\CoreBundle\Component\Utils\ChamiloApi;
 class WrapHtmlReplacingFilePaths extends ReplaceFilePaths
 {
     /**
-     * @param array $data
-     *
      * @throws \Exception
      *
      * @return string

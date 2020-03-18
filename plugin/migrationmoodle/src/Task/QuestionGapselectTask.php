@@ -19,7 +19,7 @@ use Chamilo\PluginBundle\MigrationMoodle\Transformer\Property\QuestionGapselectA
 class QuestionGapselectTask extends BaseTask
 {
     /**
-     * @inheritDoc
+     * {@inheritdoc}
      */
     public function getExtractConfiguration()
     {
@@ -43,12 +43,12 @@ class QuestionGapselectTask extends BaseTask
                 INNER JOIN mdl_quiz q ON qs.quizid = q.id
                 WHERE qq.qtype = 'gapselect'
                 GROUP BY q.id, qq.id
-                ORDER BY q.id, qq.id"
+                ORDER BY q.id, qq.id",
         ];
     }
 
     /**
-     * @inheritDoc
+     * {@inheritdoc}
      */
     public function getTransformConfiguration()
     {
@@ -78,7 +78,7 @@ class QuestionGapselectTask extends BaseTask
     }
 
     /**
-     * @inheritDoc
+     * {@inheritdoc}
      */
     public function getLoadConfiguration()
     {

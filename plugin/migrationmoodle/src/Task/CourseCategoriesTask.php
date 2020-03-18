@@ -6,8 +6,8 @@ namespace Chamilo\PluginBundle\MigrationMoodle\Task;
 use Chamilo\PluginBundle\MigrationMoodle\Extractor\BaseExtractor;
 use Chamilo\PluginBundle\MigrationMoodle\Loader\CourseCategoriesLoader;
 use Chamilo\PluginBundle\MigrationMoodle\Transformer\BaseTransformer;
-use Chamilo\PluginBundle\MigrationMoodle\Transformer\Property\CourseCode;
 use Chamilo\PluginBundle\MigrationMoodle\Transformer\Property\CourseCategoryLookup;
+use Chamilo\PluginBundle\MigrationMoodle\Transformer\Property\CourseCode;
 
 /**
  * Class CourseCategoriesTask.

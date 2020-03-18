@@ -7,7 +7,6 @@ use Chamilo\PluginBundle\MigrationMoodle\Extractor\LoadedCoursesFilterExtractor;
 use Chamilo\PluginBundle\MigrationMoodle\Loader\CourseSectionsLoader;
 use Chamilo\PluginBundle\MigrationMoodle\Transformer\BaseTransformer;
 use Chamilo\PluginBundle\MigrationMoodle\Transformer\Property\LoadedCourseCodeLookup;
-use Chamilo\PluginBundle\MigrationMoodle\Transformer\Property\ReplaceFilePaths;
 use Chamilo\PluginBundle\MigrationMoodle\Transformer\Property\WrapHtmlReplacingFilePaths;
 
 /**

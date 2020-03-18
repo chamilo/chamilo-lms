@@ -13,8 +13,6 @@ use Chamilo\PluginBundle\MigrationMoodle\Interfaces\TransformPropertyInterface;
 class Percentage implements TransformPropertyInterface
 {
     /**
-     * @param array $data
-     *
      * @return float|int
      */
     public function transform(array $data)

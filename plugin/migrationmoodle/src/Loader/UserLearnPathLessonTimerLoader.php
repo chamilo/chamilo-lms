@@ -14,7 +14,7 @@ use Chamilo\PluginBundle\MigrationMoodle\Interfaces\LoaderInterface;
 class UserLearnPathLessonTimerLoader implements LoaderInterface
 {
     /**
-     * @inheritDoc
+     * {@inheritdoc}
      */
     public function load(array $incomingData)
     {
@@ -32,8 +32,6 @@ class UserLearnPathLessonTimerLoader implements LoaderInterface
     }
 
     /**
-     * @param array $incomingData
-     *
      * @throws \Doctrine\ORM\NonUniqueResultException
      *
      * @return CLpItemView
@@ -58,8 +56,6 @@ class UserLearnPathLessonTimerLoader implements LoaderInterface
     }
 
     /**
-     * @param array $incomingData
-     *
      * @throws \Doctrine\ORM\NonUniqueResultException
      *
      * @return CLpItemView
@@ -93,8 +89,7 @@ class UserLearnPathLessonTimerLoader implements LoaderInterface
             ->getOneOrNullResult();
 
         if (!$itemView) {
-            throw new \Exception("Item view not found for item with"
-                ." parent item ({$incomingData['parent_item_id']}) and user ({$incomingData['user_id']})");
+            throw new \Exception("Item view not found for item with"." parent item ({$incomingData['parent_item_id']}) and user ({$incomingData['user_id']})");
         }
 
         return $itemView;

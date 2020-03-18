@@ -14,11 +14,8 @@ use Chamilo\PluginBundle\MigrationMoodle\Interfaces\LoaderInterface;
  */
 class CourseModulesQuizLoader implements LoaderInterface
 {
-
     /**
      * Load the data and return the ID inserted.
-     *
-     * @param array $incomingData
      *
      * @return int
      */

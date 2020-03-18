@@ -11,8 +11,6 @@ namespace Chamilo\PluginBundle\MigrationMoodle\Transformer\Property;
 class ReplaceFilePaths extends LoadedCourseLookup
 {
     /**
-     * @param array $data
-     *
      * @throws \Exception
      *
      * @return string
@@ -48,9 +46,8 @@ class ReplaceFilePaths extends LoadedCourseLookup
     }
 
     /**
-     * @param string      $attribute
-     * @param \DOMElement $domElement
-     * @param string      $coursePath
+     * @param string $attribute
+     * @param string $coursePath
      *
      * @return string
      */

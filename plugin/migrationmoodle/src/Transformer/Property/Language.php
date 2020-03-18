@@ -22,8 +22,6 @@ class Language implements TransformPropertyInterface
     ];
 
     /**
-     * @param array $data
-     *
      * @return string
      */
     public function transform(array $data)

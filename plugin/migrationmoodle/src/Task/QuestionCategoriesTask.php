@@ -42,7 +42,7 @@ class QuestionCategoriesTask extends BaseTask
             'map' => [
                 'c_id' => [
                     'class' => LoadedCourseFromQuestionCategoryLookup::class,
-                    'properties' => ['contextlevel', 'instanceid']
+                    'properties' => ['contextlevel', 'instanceid'],
                 ],
                 'name' => 'name',
                 'description' => 'info',

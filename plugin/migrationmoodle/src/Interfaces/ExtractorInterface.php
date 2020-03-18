@@ -9,8 +9,6 @@ namespace Chamilo\PluginBundle\MigrationMoodle\Interfaces;
 interface ExtractorInterface
 {
     /**
-     * @param array $sourceData
-     *
      * @return bool
      */
     public function filter(array $sourceData);

@@ -11,7 +11,7 @@ namespace Chamilo\PluginBundle\MigrationMoodle\Task;
 class UserQuestionAttemptsTruefalseTask extends UserQuestionAttemptsTask
 {
     /**
-     * @inheritDoc
+     * {@inheritdoc}
      */
     public function getExtractConfiguration()
     {

@@ -17,7 +17,7 @@ use Chamilo\PluginBundle\MigrationMoodle\Transformer\Property\LoadedQuestionLook
 class QuestionShortAnswerTask extends LessonAnswersShortAnswerTask
 {
     /**
-     * @inheritDoc
+     * {@inheritdoc}
      */
     public function getExtractConfiguration()
     {
@@ -44,7 +44,7 @@ class QuestionShortAnswerTask extends LessonAnswersShortAnswerTask
     }
 
     /**
-     * @inheritDoc
+     * {@inheritdoc}
      */
     public function getTransformConfiguration()
     {

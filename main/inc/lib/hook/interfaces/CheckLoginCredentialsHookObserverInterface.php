@@ -7,8 +7,6 @@
 interface CheckLoginCredentialsHookObserverInterface extends HookObserverInterface
 {
     /**
-     * @param CheckLoginCredentialsHookEventInterface $event
-     *
      * @return bool
      */
     public function checkLoginCredentials(CheckLoginCredentialsHookEventInterface $event);

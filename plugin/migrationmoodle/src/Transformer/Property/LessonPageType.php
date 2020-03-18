@@ -13,8 +13,6 @@ use Chamilo\PluginBundle\MigrationMoodle\Interfaces\TransformPropertyInterface;
 class LessonPageType implements TransformPropertyInterface
 {
     /**
-     * @param array $data
-     *
      * @return string
      */
     public function transform(array $data)

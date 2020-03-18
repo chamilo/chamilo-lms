@@ -19,8 +19,6 @@ class LessonAnswersShortAnswerLoader implements LoaderInterface
     /**
      * Load the data and return the ID inserted.
      *
-     * @param array $incomingData
-     *
      * @return int
      */
     public function load(array $incomingData)

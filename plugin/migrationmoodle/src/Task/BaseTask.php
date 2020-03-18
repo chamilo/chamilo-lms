@@ -132,7 +132,7 @@ abstract class BaseTask
 
             yield md5("{$extractedData['id']}@@$loadedId") => [
                 'extracted' => $extractedData['id'],
-                'loaded' => $loadedId
+                'loaded' => $loadedId,
             ];
         }
     }

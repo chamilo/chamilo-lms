@@ -14,8 +14,6 @@ class ExtractMessage extends Message
 {
     /**
      * ExtractMessage constructor.
-     *
-     * @param Throwable|null $previous
      */
     public function __construct(Throwable $previous = null)
     {

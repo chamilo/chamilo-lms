@@ -17,8 +17,6 @@ use Doctrine\DBAL\DBALException;
 class SectionSequenceLookup extends LoadedKeyLookup
 {
     /**
-     * @param array $data
-     *
      * @throws \Exception
      *
      * @return array

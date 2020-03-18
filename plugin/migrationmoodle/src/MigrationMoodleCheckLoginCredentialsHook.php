@@ -1,15 +1,13 @@
 <?php
 /* For licensing terms, see /license.txt */
 
-use Chamilo\CoreBundle\Entity\ExtraFieldValues;
 use Chamilo\CoreBundle\Entity\ExtraField;
+use Chamilo\CoreBundle\Entity\ExtraFieldValues;
 
 /**
  * Class MigrationMoodleCheckLoginCredentialsHook.
  */
-class MigrationMoodleCheckLoginCredentialsHook
-    extends HookObserver
-    implements CheckLoginCredentialsHookObserverInterface
+class MigrationMoodleCheckLoginCredentialsHook extends HookObserver implements CheckLoginCredentialsHookObserverInterface
 {
     /**
      * MigrationMoodleCheckLoginCredentialsHook constructor.
@@ -23,8 +21,6 @@ class MigrationMoodleCheckLoginCredentialsHook
     }
 
     /**
-     * @param CheckLoginCredentialsHookEventInterface $event
-     *
      * @return bool
      */
     public function checkLoginCredentials(CheckLoginCredentialsHookEventInterface $event)
@@ -75,9 +71,6 @@ class MigrationMoodleCheckLoginCredentialsHook
     }
 
     /**
-     * @param ExtraField $extraField
-     * @param array      $userData
-     *
      * @return ExtraFieldValues|null
      */
     private function getExtraFieldValue(ExtraField $extraField, array $userData)

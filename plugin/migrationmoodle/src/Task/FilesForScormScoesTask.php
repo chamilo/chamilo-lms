@@ -16,7 +16,7 @@ use Chamilo\PluginBundle\MigrationMoodle\Transformer\Property\LoadedCourseLookup
 class FilesForScormScoesTask extends BaseTask
 {
     /**
-     * @inheritDoc
+     * {@inheritdoc}
      */
     public function getExtractConfiguration()
     {
@@ -47,8 +47,9 @@ class FilesForScormScoesTask extends BaseTask
     }
 
     /**
-     * @inheritDoc
+     * {@inheritdoc}
      */
+
     /**
      * @return array
      */
@@ -71,7 +72,7 @@ class FilesForScormScoesTask extends BaseTask
     }
 
     /**
-     * @inheritDoc
+     * {@inheritdoc}
      */
     public function getLoadConfiguration()
     {

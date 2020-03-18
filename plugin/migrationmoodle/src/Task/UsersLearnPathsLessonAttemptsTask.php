@@ -14,7 +14,7 @@ use Chamilo\PluginBundle\MigrationMoodle\Loader\UserLearnPathLessonAttemptLoader
 class UsersLearnPathsLessonAttemptsTask extends UsersLearnPathsLessonBranchTask
 {
     /**
-     * @inheritDoc
+     * {@inheritdoc}
      */
     public function getExtractConfiguration()
     {
@@ -25,7 +25,7 @@ class UsersLearnPathsLessonAttemptsTask extends UsersLearnPathsLessonBranchTask
     }
 
     /**
-     * @inheritDoc
+     * {@inheritdoc}
      */
     public function getTransformConfiguration()
     {
@@ -37,7 +37,7 @@ class UsersLearnPathsLessonAttemptsTask extends UsersLearnPathsLessonBranchTask
     }
 
     /**
-     * @inheritDoc
+     * {@inheritdoc}
      */
     public function getLoadConfiguration()
     {

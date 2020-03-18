@@ -24,8 +24,7 @@ abstract class Message
     /**
      * Message constructor.
      *
-     * @param string         $message
-     * @param Throwable|null $previous
+     * @param string $message
      */
     public function __construct($message = "", Throwable $previous = null)
     {

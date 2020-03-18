@@ -18,7 +18,7 @@ use Chamilo\PluginBundle\MigrationMoodle\Transformer\Property\LoadedUserLookup;
 class UsersLearnPathsTask extends BaseTask
 {
     /**
-     * @inheritDoc
+     * {@inheritdoc}
      */
     public function getExtractConfiguration()
     {
@@ -37,7 +37,7 @@ class UsersLearnPathsTask extends BaseTask
     }
 
     /**
-     * @inheritDoc
+     * {@inheritdoc}
      */
     public function getTransformConfiguration()
     {
@@ -53,7 +53,7 @@ class UsersLearnPathsTask extends BaseTask
     }
 
     /**
-     * @inheritDoc
+     * {@inheritdoc}
      */
     public function getLoadConfiguration()
     {

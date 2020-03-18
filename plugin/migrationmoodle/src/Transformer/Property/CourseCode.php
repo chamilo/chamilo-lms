@@ -13,8 +13,6 @@ use Chamilo\PluginBundle\MigrationMoodle\Interfaces\TransformPropertyInterface;
 class CourseCode implements TransformPropertyInterface
 {
     /**
-     * @param array $data
-     *
      * @throws \Exception
      *
      * @return mixed

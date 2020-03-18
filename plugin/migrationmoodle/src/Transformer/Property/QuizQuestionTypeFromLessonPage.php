@@ -19,8 +19,6 @@ use Chamilo\PluginBundle\MigrationMoodle\Interfaces\TransformPropertyInterface;
 class QuizQuestionTypeFromLessonPage implements TransformPropertyInterface
 {
     /**
-     * @param array $data
-     *
      * @throws \Exception
      *
      * @return int

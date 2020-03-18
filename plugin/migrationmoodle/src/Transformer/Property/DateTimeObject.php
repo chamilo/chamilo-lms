@@ -11,8 +11,6 @@ use Chamilo\PluginBundle\MigrationMoodle\Interfaces\TransformPropertyInterface;
 class DateTimeObject implements TransformPropertyInterface
 {
     /**
-     * @param array $data
-     *
      * @throws \Exception
      *
      * @return \DateTime|null

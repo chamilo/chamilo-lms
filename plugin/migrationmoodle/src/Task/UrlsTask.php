@@ -18,7 +18,7 @@ use Chamilo\PluginBundle\MigrationMoodle\Transformer\Property\LoadedCourseSectio
 class UrlsTask extends BaseTask
 {
     /**
-     * @inheritDoc
+     * {@inheritdoc}
      */
     public function getExtractConfiguration()
     {
@@ -42,7 +42,7 @@ class UrlsTask extends BaseTask
     }
 
     /**
-     * @inheritDoc
+     * {@inheritdoc}
      */
     public function getTransformConfiguration()
     {
@@ -68,7 +68,7 @@ class UrlsTask extends BaseTask
     }
 
     /**
-     * @inheritDoc
+     * {@inheritdoc}
      */
     public function getLoadConfiguration()
     {

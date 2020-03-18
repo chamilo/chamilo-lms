@@ -15,8 +15,6 @@ class BaseTransformer implements TransformerInterface
 
     /**
      * BaseTransformer constructor.
-     *
-     * @param array $configuration
      */
     public function __construct(array $configuration)
     {
@@ -24,8 +22,6 @@ class BaseTransformer implements TransformerInterface
     }
 
     /**
-     * @param array $sourceData
-     *
      * @throws \Exception
      *
      * @return array

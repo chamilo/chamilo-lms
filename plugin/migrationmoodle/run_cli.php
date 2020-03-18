@@ -62,6 +62,7 @@ $taskNames = [
     /**//**/'scorm_scoes',
     /**//**//**/'files_for_scorm_scoes',
     'users',
+    /**/'users_last_login',
     /**/'user_sessions',
     /**//**/'users_learn_paths',
     /**//**//**/'users_learn_paths_lesson_timer',

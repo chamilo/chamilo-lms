@@ -93,6 +93,7 @@ $menu = [
         'urls',
     ],
     'users' => [
+        'users_last_login',
         'user_sessions',
     ],
     'user_sessions' => [

@@ -2553,4 +2553,19 @@ abstract class Question
 
         return false;
     }
+
+    /**
+     * @return int
+     */
+    public function countAnswers()
+    {
+        $result = Database::select(
+            'COUNT(1) AS c',
+            Database::get_course_table(TABLE_QUIZ_ANSWER),
+            ['where' => ['question_id = ?' => [$this->id]]],
+            'first'
+        );
+
+        return (int) $result['c'];
+    }
 }

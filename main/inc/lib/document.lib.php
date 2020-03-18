@@ -2949,6 +2949,10 @@ class DocumentManager
      * @param bool   $show_output             print html messages
      * @param string $fileKey
      * @param bool   $treat_spaces_as_hyphens
+     * @param int    $userId                  Optional. User ID who upload file
+     * @param array  $courseInfo              Optional. Course info
+     * @param int    $sessionId               Optional. Session ID
+     * @param int    $groupId                 Optional. Group ID
      *
      * @return array|bool
      */
@@ -2962,13 +2966,19 @@ class DocumentManager
         $index_document = false,
         $show_output = false,
         $fileKey = 'file',
-        $treat_spaces_as_hyphens = true
+        $treat_spaces_as_hyphens = true,
+        $userId = 0,
+        array $courseInfo = [],
+        $sessionId = 0,
+        $groupId = 0
     ) {
-        $course_info = api_get_course_info();
-        $sessionId = api_get_session_id();
+        $course_info = $courseInfo ?: api_get_course_info();
+        $sessionId = $sessionId ?: api_get_session_id();
         $course_dir = $course_info['path'].'/document';
         $sys_course_path = api_get_path(SYS_COURSE_PATH);
         $base_work_dir = $sys_course_path.$course_dir;
+        $userId = $userId ?: api_get_user_id();
+        $groupId = $groupId ?: api_get_group_id();
 
         if (isset($files[$fileKey])) {
             $uploadOk = process_uploaded_file($files[$fileKey], $show_output);
@@ -2978,8 +2988,8 @@ class DocumentManager
                     $files[$fileKey],
                     $base_work_dir,
                     $path,
-                    api_get_user_id(),
-                    api_get_group_id(),
+                    $userId,
+                    $groupId,
                     null,
                     $unzip,
                     $ifExists,

@@ -722,6 +722,8 @@ class SurveyManager
             $params['session_id'] = api_get_session_id();
             $params['title'] = $params['title'].' '.get_lang('Copy');
             unset($params['iid']);
+            $params['invited'] = 0;
+            $params['answered'] = 0;
             $new_survey_id = Database::insert($table_survey, $params);
 
             if ($new_survey_id) {

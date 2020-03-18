@@ -1,4 +1,5 @@
 <?php
+
 /* For licensing terms, see /license.txt */
 
 /**
@@ -11,8 +12,6 @@
  * @author Patrick Cool, show group comment under the group name
  * @author Roan Embrechts, initial self-unsubscribe code, code cleaning, virtual course support
  * @author Bart Mollet, code cleaning, use of Display-library, list of courseAdmin-tools, use of GroupManager
- *
- * @package chamilo.group
  */
 require_once __DIR__.'/../inc/global.inc.php';
 $this_section = SECTION_COURSES;
@@ -25,10 +24,55 @@ $nameTools = get_lang('GroupOverview');
 $courseId = api_get_course_int_id();
 $courseInfo = api_get_course_info();
 
-$keyword = isset($_GET['keyword']) ? $_GET['keyword'] : null;
+$groupId = isset($_GET['id']) ? (int) $_GET['id'] : 0;
+$keyword = isset($_GET['keyword']) ? $_GET['keyword'] : '';
 
 if (isset($_GET['action'])) {
     switch ($_GET['action']) {
+        case 'export_surveys':
+            $extraFieldValue = new ExtraFieldValue('survey');
+            $surveyList = $extraFieldValue->get_item_id_from_field_variable_and_field_value(
+                'group_id',
+                $groupId,
+                false,
+                false,
+                true
+            );
+
+            if (!empty($surveyList)) {
+                $exportList = [];
+                foreach ($surveyList as $data) {
+                    $surveyId = $data['item_id'];
+                    $surveyData = SurveyManager::get_survey($surveyId, 0, api_get_course_id());
+                    if (!empty($surveyData)) {
+                        $filename = 'survey_results_'.$surveyId.'.xlsx';
+                        $exportList[] = @SurveyUtil::export_complete_report_xls($surveyData, $filename, 0, true);
+                    }
+                }
+
+                if (!empty($exportList)) {
+                    $tempZipFile = api_get_path(SYS_ARCHIVE_PATH).api_get_unique_id().'.zip';
+                    $zip = new PclZip($tempZipFile);
+                    foreach ($exportList as $file) {
+                        $zip->add($file, PCLZIP_OPT_REMOVE_ALL_PATH);
+                    }
+
+                    DocumentManager::file_send_for_download(
+                        $tempZipFile,
+                        true,
+                        get_lang('Surveys').'-'.api_get_course_id().'-'.api_get_local_time().'.zip'
+                    );
+                    unlink($tempZipFile);
+                    exit;
+                }
+            }
+
+            Display::addFlash(Display::return_message(get_lang('NoSurveyAvailable')));
+
+            header('Location: '.api_get_path(WEB_CODE_PATH).'group/group.php?'.api_get_cidreq());
+            exit;
+
+            break;
         case 'export_all':
             $data = GroupManager::exportCategoriesAndGroupsToArray(null, true);
             Export::arrayToCsv($data);
@@ -44,7 +88,6 @@ if (isset($_GET['action'])) {
             $pdf->content_to_pdf($content, null, null, api_get_course_id());
             break;
         case 'export':
-            $groupId = isset($_GET['id']) ? intval($_GET['id']) : null;
             $data = GroupManager::exportCategoriesAndGroupsToArray($groupId, true);
             switch ($_GET['type']) {
                 case 'csv':
@@ -65,7 +108,7 @@ if (isset($_GET['action'])) {
 /*	Header */
 $interbreadcrumb[] = ['url' => 'group.php?'.api_get_cidreq(), 'name' => get_lang('Groups')];
 $origin = api_get_origin();
-if ($origin != 'learnpath') {
+if ($origin !== 'learnpath') {
     // So we are not in learnpath tool
     if (!api_is_allowed_in_course()) {
         api_not_allowed(true);
@@ -74,7 +117,6 @@ if ($origin != 'learnpath') {
         api_not_allowed(true);
     } else {
         Display::display_header($nameTools, 'Group');
-        // Tool introduction
         Display::display_introduction_section(TOOL_GROUP);
     }
 } else {
@@ -113,6 +155,6 @@ Display::return_icon('user.png', get_lang('GoTo').' '.get_lang('Users'), '', ICO
 echo Display::toolbarAction('actions', [$actions, GroupManager::getSearchForm()]);
 echo GroupManager::getOverview($courseId, $keyword);
 
-if ($origin != 'learnpath') {
+if ($origin !== 'learnpath') {
     Display::display_footer();
 }

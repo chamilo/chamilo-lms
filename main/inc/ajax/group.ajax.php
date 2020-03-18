@@ -14,7 +14,7 @@ switch ($action) {
             $list = [];
             foreach ($groups as $group) {
                 $list[] = [
-                    'id' => $group['id'],
+                    'id' => $group['iid'],
                     'text' => $group['name'],
                 ];
             }

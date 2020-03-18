@@ -1853,9 +1853,7 @@ class SurveyManager
      */
     public static function generate_survey_hash($survey_id, $course_id, $session_id, $group_id)
     {
-        $hash = hash('sha512', api_get_security_key().'_'.$course_id.'_'.$session_id.'_'.$group_id.'_'.$survey_id);
-
-        return $hash;
+        return hash('sha512', api_get_security_key().'_'.$course_id.'_'.$session_id.'_'.$group_id.'_'.$survey_id);
     }
 
     /**

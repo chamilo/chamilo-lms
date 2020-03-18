@@ -467,7 +467,7 @@ switch ($report) {
             $table->setCellContents($row, 1, $sessionAverage);
             ++$row;
 
-            $table->setCellContents($row, 0, get_lang('AverageUserPerWeek'));
+            $table->setCellContents($row, 0, get_lang('AverageUserPerSession'));
             $table->setCellContents($row, 1, $averageUser);
             ++$row;
 

@@ -369,13 +369,13 @@ if ($form->validate()) {
         'orientation' => 'P',
     ];
 
+    $pdfName = api_strtoupper($userInfo['lastname'].'_'.$userInfo['firstname']).'_'.api_get_local_time();
     @$pdf = new PDF('A4', $params['orientation'], $params);
-
     @$pdf->setBackground($tpl->theme);
     @$pdf->content_to_pdf(
         $content,
         '',
-        '',
+        $pdfName,
         null,
         'D',
         false,
@@ -512,13 +512,13 @@ if ($formByDay->validate()) {
         'show_teacher_as_myself' => false,
         'orientation' => 'P',
     ];
-
+    $pdfName = api_strtoupper($userInfo['lastname'].'_'.$userInfo['firstname']).'_'.api_get_local_time();
     @$pdf = new PDF('A4', $params['orientation'], $params);
     @$pdf->setBackground($tpl->theme);
     @$pdf->content_to_pdf(
         $content,
         '',
-        '',
+        $pdfName,
         null,
         'D',
         false,

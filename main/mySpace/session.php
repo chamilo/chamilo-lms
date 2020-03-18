@@ -57,6 +57,11 @@ if (api_is_platform_admin(true, true)) {
             Display::return_icon('session_na.png', get_lang('Sessions'), [], ICON_SIZE_MEDIUM),
             '#'
         );
+    } else {
+        $menu_items[] = Display::url(
+            Display::return_icon('teacher.png', get_lang('Trainers'), [], ICON_SIZE_MEDIUM),
+            'session_admin_teachers.php'
+        );
     }
 
     $menu_items[] = Display::url(

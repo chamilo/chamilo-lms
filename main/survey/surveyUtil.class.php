@@ -1605,11 +1605,11 @@ class SurveyUtil
      *
      * @version February 2007
      */
-    public static function export_complete_report_xls($survey_data, $filename, $user_id = 0)
+    public static function export_complete_report_xls($survey_data, $filename, $user_id = 0, $returnFile = false)
     {
         $course_id = api_get_course_int_id();
         $user_id = (int) $user_id;
-        $surveyId = isset($_GET['survey_id']) ? (int) $_GET['survey_id'] : 0;
+        $surveyId = $survey_data['survey_id'];
 
         if (empty($course_id) || empty($surveyId)) {
             return false;
@@ -1671,9 +1671,7 @@ class SurveyUtil
                 (isset($_POST['submit_question_filter']) && is_array($_POST['questions_filter']) &&
                 in_array($row['question_id'], $_POST['questions_filter']))
             ) {
-                if ($row['number_of_options'] == 0 &&
-                    ($row['type'] == 'open' || $row['type'] == 'comment')
-                ) {
+                if ($row['number_of_options'] == 0 && ($row['type'] === 'open' || $row['type'] === 'comment')) {
                     $worksheet->setCellValueByColumnAndRow(
                         $column,
                         $line,
@@ -1821,6 +1819,11 @@ class SurveyUtil
         $file = api_get_path(SYS_ARCHIVE_PATH).api_replace_dangerous_char($filename);
         $writer = new PHPExcel_Writer_Excel2007($spreadsheet);
         $writer->save($file);
+
+        if ($returnFile) {
+            return $file;
+        }
+
         DocumentManager::file_send_for_download($file, true, $filename);
 
         return null;
@@ -2827,6 +2830,7 @@ class SurveyUtil
 
         $table->set_column_filter(8, 'anonymous_filter');
         $actions = [
+            'export_all' => get_lang('Export'),
             'send_to_tutors' => get_lang('SendToGroupTutors'),
             'multiplicate' => get_lang('MultiplicateQuestions'),
             'delete' => get_lang('DeleteSurvey'),

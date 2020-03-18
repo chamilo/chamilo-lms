@@ -7,8 +7,6 @@ use Chamilo\CourseBundle\Entity\CSurveyInvitation;
 /**
  * Class SurveyManager.
  *
- * @package chamilo.survey
- *
  * @author Patrick Cool <patrick.cool@UGent.be>, Ghent University:
  * cleanup, refactoring and rewriting large parts (if not all) of the code
  * @author Julio Montoya <gugli100@gmail.com>, Personality Test modification
@@ -2603,6 +2601,4 @@ class SurveyManager
 
         return false;
     }
-
-
 }

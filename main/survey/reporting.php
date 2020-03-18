@@ -1,9 +1,8 @@
 <?php
+
 /* For licensing terms, see /license.txt */
 
 /**
- * @package chamilo.survey
- *
  * @author unknown, the initial survey that did not make it in 1.8 because of bad code
  * @author Patrick Cool <patrick.cool@UGent.be>, Ghent University: cleanup,
  * refactoring and rewriting large parts of the code
@@ -62,6 +61,7 @@ if (!empty($exportReport) && !empty($format)) {
     switch ($format) {
         case 'xls':
             $filename = 'survey_results_'.$survey_id.'.xlsx';
+
             SurveyUtil::export_complete_report_xls($survey_data, $filename, $userId);
             exit;
             break;
@@ -107,7 +107,7 @@ $interbreadcrumb[] = [
     'name' => $urlname,
 ];
 
-if ($action == 'overview') {
+if ($action === 'overview') {
     $tool_name = get_lang('Reporting');
 } else {
     $interbreadcrumb[] = [
@@ -138,7 +138,7 @@ Display::display_header($tool_name, 'Survey');
 SurveyUtil::handle_reporting_actions($survey_data, $people_filled);
 
 // Content
-if ($action == 'overview') {
+if ($action === 'overview') {
     $html = null;
     $url = api_get_path(WEB_CODE_PATH).'survey/reporting.php?'.api_get_cidreq().'&';
 

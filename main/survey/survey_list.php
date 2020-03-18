@@ -86,6 +86,8 @@ if (isset($_POST['action']) && $_POST['action'] && isset($_POST['id']) && is_arr
         api_not_allowed(true);
     }
 
+    $exportList = [];
+
     foreach ($_POST['id'] as $value) {
         $surveyData = SurveyManager::get_survey($value);
         if (empty($surveyData)) {
@@ -94,6 +96,10 @@ if (isset($_POST['action']) && $_POST['action'] && isset($_POST['id']) && is_arr
         $surveyData['title'] = strip_tags($surveyData['title']);
 
         switch ($action) {
+            case 'export_all':
+                $filename = 'survey_results_'.$value.'.xlsx';
+                $exportList[] = @SurveyUtil::export_complete_report_xls($surveyData, $filename, 0, true);
+                break;
             case 'send_to_tutors':
                 $result = SurveyManager::sendToTutors($value);
                 if ($result) {
@@ -135,16 +141,30 @@ if (isset($_POST['action']) && $_POST['action'] && isset($_POST['id']) && is_arr
 
                 // delete the actual survey
                 SurveyManager::delete_survey($value);
-
                 Display::addFlash(
                     Display::return_message(get_lang('SurveysDeleted').': '.$surveyData['title'], 'confirmation', false)
                 );
                 break;
         }
-
-        header('Location: '.$listUrl);
-        exit;
     }
+
+    if ($action === 'export_all') {
+        $tempZipFile = api_get_path(SYS_ARCHIVE_PATH).api_get_unique_id().'.zip';
+        $zip = new PclZip($tempZipFile);
+        foreach ($exportList as $file) {
+            $zip->add($file, PCLZIP_OPT_REMOVE_ALL_PATH);
+        }
+
+        DocumentManager::file_send_for_download(
+            $tempZipFile,
+            true,
+            get_lang('Surveys').'-'.api_get_course_id().'-'.api_get_local_time().'.zip'
+        );
+        unlink($tempZipFile);
+    }
+
+    header('Location: '.$listUrl);
+    exit;
 }
 
 switch ($action) {

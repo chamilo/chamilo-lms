@@ -433,7 +433,7 @@ switch ($report) {
             if (!empty($numberOfWeeks)) {
                 $sessionAverage = api_number_format($sessionCount / $numberOfWeeks, 2);
             }
-            if (!empty($numberUsers)) {
+            if (!empty($sessionCount)) {
                 $averageUser = api_number_format($numberUsers / $sessionCount, 2);
             }
             if (!empty($uniqueCoaches)) {

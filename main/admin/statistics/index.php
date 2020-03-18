@@ -841,8 +841,6 @@ switch ($report) {
             );
 
             $extraFieldValueUser = new ExtraFieldValue('user');
-            $statusList = api_get_status_langvars();
-
             foreach ($users as $user) {
                 $userId = $user['user_id'];
                 $userInfo = api_get_user_info($userId);
@@ -853,11 +851,7 @@ switch ($report) {
                     $extraFields[$extraData['variable']] = $extraData['value'];
                 }
 
-                $certificate = GradebookUtils::get_certificate_by_user_id(
-                    0,
-                    $userId
-                );
-
+                $certificate = GradebookUtils::get_certificate_by_user_id(0, $userId);
                 $language = isset($extraFields['langue_cible']) ? $extraFields['langue_cible'] : '';
                 $contract = isset($extraFields['termactivated']) ? $extraFields['termactivated'] : '';
                 $residence = isset($extraFields['terms_paysresidence']) ? $extraFields['terms_paysresidence'] : '';
@@ -1007,6 +1001,8 @@ switch ($report) {
             $all = [];
             $total = count($users);
             $usersFound = 0;
+
+            $extraFieldOption = new ExtraFieldOption('user');
             foreach ($extraField['options'] as $item) {
                 $value = Database::escape_string($item['option_value']);
                 $count = 0;
@@ -1020,6 +1016,9 @@ switch ($report) {
                 $result = Database::fetch_array($query);
                 $count = $result['count'];
                 $usersFound += $count;
+
+                $option = $extraFieldOption->get($item['id'], true);
+                $item['display_text'] = $option['display_text'];
                 $all[$item['display_text']] = $count;
             }
             $all[get_lang('N/A')] = $total - $usersFound;
@@ -1136,6 +1135,7 @@ switch ($report) {
             $usersFound = 0;
 
             $total = count($users);
+            $extraFieldOption = new ExtraFieldOption('user');
             foreach ($extraField['options'] as $item) {
                 $value = Database::escape_string($item['option_value']);
                 $count = 0;
@@ -1148,6 +1148,8 @@ switch ($report) {
                 $query = Database::query($sql);
                 $result = Database::fetch_array($query);
                 $count = $result['count'];
+                $option = $extraFieldOption->get($item['id'], true);
+                $item['display_text'] = $option['display_text'];
                 $all[$item['display_text']] = $count;
                 $usersFound += $count;
             }

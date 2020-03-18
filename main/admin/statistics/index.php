@@ -441,8 +441,8 @@ switch ($report) {
             if (!empty($numberOfWeeks)) {
                 $sessionAverage = api_number_format($sessionCount / $numberOfWeeks, 2);
             }
-            if (!empty($numberUsers)) {
-                $averageUser = api_number_format($sessionCount / $numberUsers, 2);
+            if (!empty($sessionCount)) {
+                $averageUser = api_number_format($numberUsers / $sessionCount, 2);
             }
             if (!empty($uniqueCoaches)) {
                 $averageCoach = api_number_format($sessionCount / $uniqueCoaches, 2);
@@ -462,7 +462,7 @@ switch ($report) {
             $table->setCellContents($row, 1, $sessionAverage);
             $row++;
 
-            $table->setCellContents($row, 0, get_lang('AverageUserPerWeek'));
+            $table->setCellContents($row, 0, get_lang('AverageUserPerSession'));
             $table->setCellContents($row, 1, $averageUser);
             $row++;
 

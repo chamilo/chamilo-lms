@@ -777,7 +777,6 @@ class HTML_Table_Storage extends HTML_Common
                     if (!empty($contents) || is_numeric($contents)) {
                         $strHtml .= $typeContent;
                     }
-
                 }
                 $strHtml .= $tabs . $tab . $extraTab . '</tr>' . $lnEnd;
             }

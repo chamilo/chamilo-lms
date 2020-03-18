@@ -938,7 +938,6 @@ if (api_is_platform_admin()) {
 
     $tpl->assign('extraDataForm', $extraContentForm->returnForm());
 }
-
 // The template contains the call to the AJAX version checker
 $admin_template = $tpl->get_template('admin/settings_index.tpl');
 $content = $tpl->fetch($admin_template);

@@ -166,6 +166,38 @@ class Statistics
     }
 
     /**
+     * @param string $startDate
+     * @param string $endDate
+     *
+     * @return array
+     */
+    public static function getCoursesWithActivity($startDate, $endDate)
+    {
+        $access_url_rel_course_table = Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_COURSE);
+        $table = Database::get_main_table(TABLE_STATISTIC_TRACK_E_LASTACCESS);
+        $startDate = Database::escape_string($startDate);
+        $endDate = Database::escape_string($endDate);
+
+        $urlId = api_get_current_access_url_id();
+
+        if (api_is_multiple_url_enabled()) {
+            $sql = "SELECT DISTINCT(t.c_id) FROM $table t , $access_url_rel_course_table a
+                    WHERE
+                        t.c_id = a.c_id AND
+                        access_url_id='".$urlId."' AND
+                        access_date BETWEEN '$startDate' AND '$endDate'
+                    ";
+        } else {
+            $sql = "SELECT DISTINCT(t.c_id) FROM $table t
+                   access_date BETWEEN '$startDate' AND '$endDate' ";
+        }
+
+        $result = Database::query($sql);
+
+        return Database::store_result($result);
+    }
+
+    /**
      * Count activities from track_e_default_table.
      *
      * @return int Number of activities counted

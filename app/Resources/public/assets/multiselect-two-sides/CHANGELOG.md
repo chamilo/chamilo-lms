@@ -2,6 +2,38 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+<a name="2.5.5"></a>
+## [2.5.5](https://github.com/crlcu/multiselect/compare/v2.5.2...v2.5.5) (2018-07-25)
+
+
+### Bug Fixes
+
+* :visible selector is not working on safari, use :not(.hidden) ([beebfe0](https://github.com/crlcu/multiselect/commit/beebfe0))
+* [#152](https://github.com/crlcu/multiselect/issues/152) - ignoreDisabled: true does not work with optgroups ([afc5d8c](https://github.com/crlcu/multiselect/commit/afc5d8c))
+* [#166](https://github.com/crlcu/multiselect/issues/166) - Searching and Adding elements cause the already selected elements to get added as a hidden element ([ddefce3](https://github.com/crlcu/multiselect/commit/ddefce3))
+
+
+
+<a name="2.5.4"></a>
+## [2.5.4](https://github.com/crlcu/multiselect/compare/v2.5.3...v2.5.4) (2018-07-17)
+
+
+### Bug Fixes
+
+* [#166](https://github.com/crlcu/multiselect/issues/166) - Searching and Adding elements cause the already selected elements to get added as a hidden element ([ddefce3](https://github.com/crlcu/multiselect/commit/ddefce3))
+
+
+
+<a name="2.5.3"></a>
+## [2.5.3](https://github.com/crlcu/multiselect/compare/v2.5.2...v2.5.3) (2018-07-16)
+
+
+### Bug Fixes
+
+* [#152](https://github.com/crlcu/multiselect/issues/152) - ignoreDisabled: true does not work with optgroups ([afc5d8c](https://github.com/crlcu/multiselect/commit/afc5d8c))
+
+
+
 <a name="2.5.2"></a>
 ## [2.5.2](https://github.com/crlcu/multiselect/compare/v2.5.1...v2.5.2) (2018-07-10)
 

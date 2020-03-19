@@ -205,7 +205,7 @@ if ($bbb->isGlobalConference() === false &&
         $meetingsGroup = array_column($meetingsInGroup, 'status', 'group_id');
 
         foreach ($groups as &$groupData) {
-            $itemGroupId = $groupData['id'];
+            $itemGroupId = $groupData['iid'];
             if (isset($meetingsGroup[$itemGroupId]) && $meetingsGroup[$itemGroupId] == 1) {
                 $groupData['name'] .= ' ('.get_lang('Active').')';
             }

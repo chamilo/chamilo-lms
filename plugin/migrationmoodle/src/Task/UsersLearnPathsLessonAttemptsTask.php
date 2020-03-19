@@ -18,9 +18,19 @@ class UsersLearnPathsLessonAttemptsTask extends UsersLearnPathsLessonBranchTask
      */
     public function getExtractConfiguration()
     {
+        $query = 'SELECT * FROM mdl_lesson_attempts';
+
+        $userFilter = $this->plugin->getUserFilterSetting();
+
+        if (!empty($userFilter)) {
+            $query = "SELECT la.* FROM mdl_lesson_attempts la
+                INNER JOIN mdl_user u ON la.userid = u.id
+                WHERE u.username LIKE '$userFilter%'";
+        }
+
         return [
             'class' => LoadedUsersFilterExtractor::class,
-            'query' => "SELECT * FROM mdl_lesson_attempts",
+            'query' => $query,
         ];
     }
 

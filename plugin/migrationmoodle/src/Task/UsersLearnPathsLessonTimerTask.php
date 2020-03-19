@@ -24,9 +24,19 @@ class UsersLearnPathsLessonTimerTask extends BaseTask
      */
     public function getExtractConfiguration()
     {
+        $query = 'SELECT * FROM mdl_lesson_timer';
+
+        $userFilter = $this->plugin->getUserFilterSetting();
+
+        if (!empty($userFilter)) {
+            $query = "SELECT lt.* FROM mdl_lesson_timer lt
+                INNER JOIN mdl_user u ON lt.userid = u.id
+                WHERE u.username LIKE '$userFilter%'";
+        }
+
         return [
             'class' => LoadedUsersFilterExtractor::class,
-            'query' => "SELECT * FROM mdl_lesson_timer",
+            'query' => $query,
         ];
     }
 

@@ -21,9 +21,18 @@ class UsersLastLoginTask extends BaseTask
      */
     public function getExtractConfiguration()
     {
+        $query = 'SELECT id, lastlogin FROM mdl_user WHERE lastlogin != 0';
+
+        $userFilter = $this->plugin->getUserFilterSetting();
+
+        if (!empty($userFilter)) {
+            $query = "SELECT id, lastlogin FROM mdl_user
+                WHERE lastlogin != 0 AND username LIKE '$userFilter%'";
+        }
+
         return [
             'class' => LoadedUsersFilterExtractor::class,
-            'query' => 'SELECT id, lastlogin FROM mdl_user WHERE lastlogin != 0',
+            'query' => $query,
         ];
     }
 

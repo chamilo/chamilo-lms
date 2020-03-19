@@ -498,9 +498,9 @@ switch ($report) {
             $column = 0;
             foreach ($headers as $header) {
                 $tableCourse->setHeaderContents($row, $column, $header);
-                ++$column;
+                $column++;
             }
-            ++$row;
+            $row++;
 
             if (!empty($courseSessions)) {
                 arsort($courseSessions);
@@ -508,7 +508,7 @@ switch ($report) {
                     $courseInfo = api_get_course_info_by_id($courseId);
                     $tableCourse->setCellContents($row, 0, $courseInfo['name']);
                     $tableCourse->setCellContents($row, 1, $count);
-                    ++$row;
+                    $row++;
                 }
             }
 
@@ -854,7 +854,7 @@ switch ($report) {
                 $item[] = $certificate ? get_lang('Yes') : get_lang('No');
                 $item[] = $birthDate;
                 $data[] = $item;
-                ++$row;
+                $row++;
             }
 
             if (isset($_REQUEST['action_table']) && 'export' === $_REQUEST['action_table']) {
@@ -931,15 +931,15 @@ switch ($report) {
             $column = 0;
             foreach ($headers as $header) {
                 $table->setHeaderContents($row, $column, $header);
-                ++$column;
+                $column++;
             }
 
-            ++$row;
+            $row++;
             $table->setCellContents($row, 0, get_lang('Total'));
             $table->setCellContents($row, 1, $totalCount);
             $table->setCellContents($row, 2, '100 %');
 
-            ++$row;
+            $row++;
             $total = 0;
             foreach ($all as $name => $value) {
                 $total += $value;
@@ -949,7 +949,7 @@ switch ($report) {
                 $table->setCellContents($row, 0, $name);
                 $table->setCellContents($row, 1, $value);
                 $table->setCellContents($row, 2, $percentage);
-                ++$row;
+                $row++;
             }
             $extraTables = Display::page_subheader2($reportName1).$table->toHtml();
 
@@ -1206,7 +1206,7 @@ switch ($report) {
                     );
 
                     if (!empty($certificate)) {
-                        ++$certificateCount;
+                        $certificateCount++;
                     }
                 }
 
@@ -1260,20 +1260,20 @@ switch ($report) {
                 ];
 
                 while ($row = Database::fetch_array($query)) {
-                    ++$usersFound;
+                    $usersFound++;
                     if (!empty($row['value'])) {
                         $date1 = new DateTime($row['value']);
                         $interval = $now->diff($date1);
                         $years = (int) $interval->y;
 
                         if ($years >= 16 && $years <= 17) {
-                            ++$all['16-17'];
+                            $all['16-17']++;
                         }
                         if ($years >= 18 && $years <= 25) {
-                            ++$all['18-25'];
+                            $all['18-25']++;
                         }
                         if ($years >= 26 && $years <= 30) {
-                            ++$all['26-30'];
+                            $all['26-30']++;
                         }
                         /*if ($years >= 31) {
                             $all[get_lang('N/A')] += 1;

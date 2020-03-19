@@ -1,7 +1,6 @@
 <?php
 /* For licensing terms, see /license.txt */
 
-
 use Chamilo\CoreBundle\Component\Utils\ChamiloApi;
 
 /**
@@ -567,7 +566,7 @@ class Statistics
             }
             $content .= self::printStats(get_lang('LastLogins').' ('.$period.')', $result_last_x, true);
             flush(); //flush web request at this point to see something already while the full data set is loading
-            $content .=  '<br />';
+            $content .= '<br />';
         }
         $res = Database::query($sql);
         $result = [];
@@ -661,10 +660,9 @@ class Statistics
             $content = self::printStats(get_lang('DistinctUsersLogins'), $totalLogin, false);
         } else {
             $content = self::printStats(get_lang('Logins'), $totalLogin, false);
-    }
+        }
 
         return $content;
-
     }
 
     /**
@@ -1120,6 +1118,7 @@ class Statistics
             $r = $total - $obj->number;
             $totalLogin[$index] = $r < 0 ? 0 : $r;
         }
+
         return self::printStats(
             get_lang('StatsUsersDidNotLoginInLastPeriods'),
             $totalLogin,
@@ -1343,13 +1342,48 @@ class Statistics
             $content = $table->toHtml();
         }
 
-        $content.= $form->returnForm();
+        $content .= $form->returnForm();
 
         if (!empty($actions)) {
-            $content.=  Display::toolbarAction('logins_by_date_toolbar', [$actions]);
+            $content .= Display::toolbarAction('logins_by_date_toolbar', [$actions]);
         }
 
         return $content;
+    }
+
+    public static function getBossTable($bossId)
+    {
+        $students = UserManager::getUsersFollowedByStudentBoss($bossId);
+
+        if (!empty($students)) {
+            $table = new HTML_Table(['class' => 'table table-responsive', 'id' => 'table_'.$bossId]);
+            $headers = [
+                get_lang('Name'),
+                //get_lang('LastName'),
+            ];
+            $row = 0;
+            $column = 0;
+            foreach ($headers as $header) {
+                $table->setHeaderContents($row, $column, $header);
+                $column++;
+            }
+            $row++;
+            foreach ($students as $student) {
+                $column = 0;
+                $content = api_get_person_name($student['firstname'], $student['lastname']).'';
+                $content = '<div style="width: 200px; overflow-wrap: break-word;">'.$content.'</div>';
+                $table->setCellContents(
+                    $row,
+                    $column++,
+                    $content
+                );
+                $row++;
+            }
+
+            return $table->toHtml();
+        }
+
+        return '<table id="table_'.$bossId.'"></table>';
     }
 
     /**
@@ -1397,40 +1431,5 @@ class Statistics
         $result = Database::store_result($stmt, 'ASSOC');
 
         return $result;
-    }
-
-    public static function getBossTable($bossId)
-    {
-        $students = UserManager::getUsersFollowedByStudentBoss($bossId);
-
-        if (!empty($students)) {
-            $table = new HTML_Table(['class' => 'table table-responsive', 'id' => 'table_'.$bossId]);
-            $headers = [
-                get_lang('Name'),
-                //get_lang('LastName'),
-            ];
-            $row = 0;
-            $column = 0;
-            foreach ($headers as $header) {
-                $table->setHeaderContents($row, $column, $header);
-                $column++;
-            }
-            $row++;
-            foreach ($students as $student) {
-                $column = 0;
-                $content = api_get_person_name($student['firstname'], $student['lastname']). '';
-                $content = '<div style="width: 200px; overflow-wrap: break-word;">'.$content.'</div>';
-                $table->setCellContents(
-                    $row,
-                    $column++,
-                    $content
-                );
-                $row++;
-            }
-
-            return $table->toHtml();
-        }
-
-        return '<table id="table_'.$bossId.'"></table>';
     }
 }

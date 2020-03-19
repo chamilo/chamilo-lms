@@ -93,7 +93,7 @@ abstract class BaseTask
                 ]
             );
 
-            echo "Data migrated: $hash".PHP_EOL;
+            echo "[".date(\DateTime::ATOM)."]\tData migrated: $hash".PHP_EOL;
 
             $i++;
 

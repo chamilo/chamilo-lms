@@ -82,18 +82,18 @@ foreach ($taskNames as $i => $taskName) {
     $taskClass = api_underscore_to_camel_case($taskName).'Task';
     $taskClass = 'Chamilo\\PluginBundle\\MigrationMoodle\\Task\\'.$taskClass;
 
-    echo PHP_EOL.($i + 1).': ';
+    echo PHP_EOL.'['.date(DateTime::ATOM).'] '.($i + 1).': ';
 
     if ($plugin->isTaskDone($taskName)) {
-        echo "$taskClass already done.".PHP_EOL;
+        echo "Already done \"$taskClass\"".PHP_EOL;
         continue;
     }
 
-    echo "Executing $taskClass.".PHP_EOL;
+    echo "Executing \"$taskClass.\"".PHP_EOL;
 
     /** @var BaseTask $task */
     $task = new $taskClass();
     $task->execute();
 
-    echo "$taskClass end.".PHP_EOL;
+    echo '['.date(DateTime::ATOM)."] End \"$taskClass\"".PHP_EOL;
 }

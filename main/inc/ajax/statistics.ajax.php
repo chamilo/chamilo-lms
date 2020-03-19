@@ -304,6 +304,7 @@ switch ($action) {
                 $all = [];
                 $total = count($users);
                 $usersFound = 0;
+                $extraFieldOption = new ExtraFieldOption('user');
                 foreach ($extraField['options'] as $item) {
                     $value = Database::escape_string($item['option_value']);
                     $count = 0;
@@ -315,8 +316,12 @@ switch ($action) {
                             field_id = ".$extraField['id'];
                     $query = Database::query($sql);
                     $result = Database::fetch_array($query);
+
                     $count = $result['count'];
                     $usersFound += $count;
+
+                    $option = $extraFieldOption->get($item['id'], true);
+                    $item['display_text'] = $option['display_text'];
                     $all[$item['display_text']] = $count;
                 }
                 $all[get_lang('N/A')] = $total - $usersFound;
@@ -437,11 +442,6 @@ switch ($action) {
                         if ($years >= 26 && $years <= 30) {
                             $all['26-30'] += 1;
                         }
-                        /*if ($years >= 31) {
-                            $all[get_lang('N/A')] += 1;
-                        }*/
-                    } else {
-                        //$all[get_lang('N/A')] += 1;
                     }
                 }
 
@@ -653,7 +653,7 @@ switch ($action) {
                         $courseId = $courses[0];
                         $courseInfo = api_get_course_info_by_id($courseId);
                         $language = $courseInfo['language'];
-                        $language = str_replace('2', '', $language);
+                        $language = get_lang(str_replace('2', '', $language));
                     }
 
                     if (!isset($all[$language])) {

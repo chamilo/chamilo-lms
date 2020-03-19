@@ -560,7 +560,7 @@ switch ($report) {
                 $courseId = $courses[0];
                 $courseInfo = api_get_course_info_by_id($courseId);
                 $language = $courseInfo['language'];
-                $language = str_replace('2', '', $language);
+                $language = get_lang(ucfirst(str_replace(2, '', $language)));
             }
             $table->setCellContents($row, 3, $language);
 

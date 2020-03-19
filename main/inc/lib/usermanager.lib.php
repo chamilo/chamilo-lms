@@ -1,4 +1,5 @@
 <?php
+
 /* For licensing terms, see /license.txt */
 
 use Chamilo\CoreBundle\Entity\ExtraField as EntityExtraField;
@@ -15,8 +16,6 @@ use Symfony\Component\Security\Core\Encoder\EncoderFactory;
  *
  * This library provides functions for user management.
  * Include/require it in your code to use its functionality.
- *
- * @package chamilo.library
  *
  * @author Julio Montoya <gugli100@gmail.com> Social network groups added 2009/12
  */
@@ -5868,6 +5867,14 @@ class UserManager
 
             foreach ($bossList as $bossId) {
                 $bossId = (int) $bossId;
+                $bossInfo = api_get_user_info($bossId);
+
+                if (empty($bossInfo)) {
+                    continue;
+                }
+
+                $bossLanguage = $bossInfo['language'];
+
                 $sql = "INSERT IGNORE INTO $userRelUserTable (user_id, friend_user_id, relation_type)
                         VALUES ($studentId, $bossId, ".USER_RELATION_TYPE_BOSS.")";
                 $insertId = Database::query($sql);
@@ -5878,11 +5885,11 @@ class UserManager
                         $url = api_get_path(WEB_CODE_PATH).'mySpace/myStudents.php?student='.$studentId;
                         $url = Display::url($url, $url);
                         $subject = sprintf(
-                            get_lang('UserXHasBeenAssignedToBoss', false, $studentInfo['language']),
+                            get_lang('UserXHasBeenAssignedToBoss', false, $bossLanguage),
                             $name
                         );
                         $message = sprintf(
-                            get_lang('UserXHasBeenAssignedToBossWithUrlX', false, $studentInfo['language']),
+                            get_lang('UserXHasBeenAssignedToBossWithUrlX', false, $bossLanguage),
                             $name,
                             $url
                         );

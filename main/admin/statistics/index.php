@@ -728,17 +728,18 @@ switch ($report) {
 
             $graph .= '<div class="row">';
             $graph .= '<div class="col-md-6"><canvas id="canvas4" style="margin-bottom: 20px"></canvas></div>';
-            $graph .= '<div class="col-md-6"><canvas id="canvas5" style="margin-bottom: 20px"></canvas></div>';
+            $graph .= '<div class="col-md-6"><canvas id="canvas8" style="margin-bottom: 20px"></canvas></div>';
             $graph .= '</div>';
 
             $graph .= '<div class="row">';
+            $graph .= '<div class="col-md-6"><canvas id="canvas5" style="margin-bottom: 20px"></canvas></div>';
             $graph .= '<div class="col-md-6"><canvas id="canvas6" style="margin-bottom: 20px"></canvas></div>';
+            $graph .= '</div>';
+
+            $graph .= '<div class="row">';
             $graph .= '<div class="col-md-6"><canvas id="canvas7" style="margin-bottom: 20px"></canvas></div>';
             $graph .= '</div>';
 
-            $graph .= '<div class="row">';
-            $graph .= '<div class="col-md-4"><canvas id="canvas8" style="margin-bottom: 20px"></canvas></div>';
-            $graph .= '</div>';
 
             $conditions = [];
             $extraConditions = '';
@@ -1088,8 +1089,72 @@ switch ($report) {
                 );
                 $extraTables .= $data['table'];
             }
-            // graph 5
 
+            // Graph Age
+            $extraFieldValueUser = new ExtraField('user');
+            $extraField = $extraFieldValueUser->get_handler_field_info_by_field_variable('terms_datedenaissance');
+            if ($extraField) {
+                $users = UserManager::getUserListExtraConditions(
+                    [],
+                    [],
+                    false,
+                    false,
+                    null,
+                    $extraConditions,
+                    false
+                );
+
+                $userIdList = array_column($users, 'user_id');
+                $userIdListToString = implode("', '", $userIdList);
+
+                $all = [];
+                $total = count($users);
+
+                $sql = "SELECT value
+                        FROM $extraFieldValueUser->table_field_values
+                        WHERE
+                        item_id IN ('$userIdListToString') AND
+                        field_id = ".$extraField['id'];
+                $query = Database::query($sql);
+                $usersFound = 0;
+                $now = new DateTime();
+                $all = [
+                    //get_lang('N/A') => 0,
+                    '16-17' => 0,
+                    '18-25' => 0,
+                    '26-30' => 0,
+                ];
+
+                while ($row = Database::fetch_array($query)) {
+                    ++$usersFound;
+                    if (!empty($row['value'])) {
+                        $date1 = new DateTime($row['value']);
+                        $interval = $now->diff($date1);
+                        $years = (int) $interval->y;
+
+                        if ($years >= 16 && $years <= 17) {
+                            ++$all['16-17'];
+                        }
+                        if ($years >= 18 && $years <= 25) {
+                            ++$all['18-25'];
+                        }
+                        if ($years >= 26 && $years <= 30) {
+                            ++$all['26-30'];
+                        }
+                    }
+                }
+
+                $data = Statistics::buildJsChartData($all, $reportName8);
+                $htmlHeadXtra[] = Statistics::getJSChartTemplateWithData(
+                    $data['chart'],
+                    'pie',
+                    $reportOptions8,
+                    'canvas8'
+                );
+                $extraTables .= $data['table'];
+            }
+
+            // graph 5
             $extraFieldValueUser = new ExtraField('user');
             $extraField = $extraFieldValueUser->get_handler_field_info_by_field_variable('filiere_user');
             if ($extraField) {
@@ -1181,8 +1246,8 @@ switch ($report) {
                 );
                 $extraTables .= $data['table'];
             }
-            // Graph 7
 
+            // Graph 7
             $extraFieldValueUser = new ExtraField('user');
             $extraField = $extraFieldValueUser->get_handler_field_info_by_field_variable('langue_cible');
             if ($extraField) {
@@ -1223,78 +1288,7 @@ switch ($report) {
                 $extraTables .= $data['table'];
             }
 
-            // Graph 8
-
-            $extraFieldValueUser = new ExtraField('user');
-            $extraField = $extraFieldValueUser->get_handler_field_info_by_field_variable('terms_datedenaissance');
-            if ($extraField) {
-                $users = UserManager::getUserListExtraConditions(
-                    [],
-                    [],
-                    false,
-                    false,
-                    null,
-                    $extraConditions,
-                    false
-                );
-
-                $userIdList = array_column($users, 'user_id');
-                $userIdListToString = implode("', '", $userIdList);
-
-                $all = [];
-                $total = count($users);
-
-                $sql = "SELECT value
-                        FROM $extraFieldValueUser->table_field_values
-                        WHERE
-                        item_id IN ('$userIdListToString') AND
-                        field_id = ".$extraField['id'];
-                $query = Database::query($sql);
-                $usersFound = 0;
-                $now = new DateTime();
-                $all = [
-                    //get_lang('N/A') => 0,
-                    '16-17' => 0,
-                    '18-25' => 0,
-                    '26-30' => 0,
-                ];
-
-                while ($row = Database::fetch_array($query)) {
-                    ++$usersFound;
-                    if (!empty($row['value'])) {
-                        $date1 = new DateTime($row['value']);
-                        $interval = $now->diff($date1);
-                        $years = (int) $interval->y;
-
-                        if ($years >= 16 && $years <= 17) {
-                            ++$all['16-17'];
-                        }
-                        if ($years >= 18 && $years <= 25) {
-                            ++$all['18-25'];
-                        }
-                        if ($years >= 26 && $years <= 30) {
-                            ++$all['26-30'];
-                        }
-                        /*if ($years >= 31) {
-                            $all[get_lang('N/A')] += 1;
-                        }*/
-                    } else {
-                        //$all[get_lang('N/A')] += 1;
-                    }
-                }
-
-                $data = Statistics::buildJsChartData($all, $reportName8);
-                $htmlHeadXtra[] = Statistics::getJSChartTemplateWithData(
-                    $data['chart'],
-                    'pie',
-                    $reportOptions8,
-                    'canvas8'
-                );
-                $extraTables .= $data['table'];
-            }
-            //$header = Display::page_subheader2(get_lang('NumberOfUsers').': '.$totalCount);
             $header = Display::page_subheader2(get_lang('TotalNumberOfStudents').': '.$studentCount);
-
             $content = $header.$extraTables.$graph.$content;
         }
 

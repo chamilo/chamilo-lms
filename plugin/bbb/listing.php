@@ -1,10 +1,9 @@
 <?php
+
 /* For license terms, see /license.txt */
 
 /**
  * This script initiates a video conference session, calling the BigBlueButton API.
- *
- * @package chamilo.plugin.bigbluebutton
  */
 $course_plugin = 'bbb'; //needed in order to load the plugin lang variables
 require_once __DIR__.'/config.php';
@@ -286,8 +285,7 @@ $tpl->assign('enter_conference_links', $urlList);
 $tpl->assign('warning_inteface_msg', $warningInterfaceMessage);
 $tpl->assign('show_client_options', $showClientOptions);
 
-$listing_tpl = 'bbb/view/listing.tpl';
-$content = $tpl->fetch($listing_tpl);
+$content = $tpl->fetch('bbb/view/listing.tpl');
 
 $actionLinks = '';
 if (api_is_platform_admin()) {

@@ -6,12 +6,10 @@
  * main/img/icons/64/plugin_name.png
  * main/img/icons/64/plugin_name_na.png
 */
-/**
- * Videoconference plugin with BBB
- */
 
 /**
  * Class BBBPlugin
+ * Videoconference plugin with BBB
  */
 class BBBPlugin extends Plugin
 {
@@ -37,7 +35,7 @@ class BBBPlugin extends Plugin
         [
             'name' => 'bbb_force_record_generation',
             'type' => 'checkbox',
-        ]
+        ],
     ];
 
     /**
@@ -64,16 +62,16 @@ class BBBPlugin extends Plugin
                         PLATFORM_ADMIN => get_lang('Administrator'),
                         COURSEMANAGER => get_lang('Teacher'),
                         STUDENT => get_lang('Student'),
-                        STUDENT_BOSS => get_lang('StudentBoss')
+                        STUDENT_BOSS => get_lang('StudentBoss'),
                     ],
-                    'attributes' => ['multiple' => 'multiple']
+                    'attributes' => ['multiple' => 'multiple'],
                 ],
                 'interface' => [
                     'type' => 'select',
                     'options' => [
                         self::INTERFACE_FLASH => 'Flash',
                         self::INTERFACE_HTML5 => 'HTML5',
-                    ]
+                    ],
                 ],
                 'launch_type' => [
                     'type' => 'select',
@@ -92,7 +90,18 @@ class BBBPlugin extends Plugin
     }
 
     /**
+     * @return BBBPlugin|null
+     */
+    public static function create()
+    {
+        static $result = null;
+
+        return $result ? $result : $result = new self();
+    }
+
+    /**
      * @param string $variable
+     *
      * @return bool
      */
     public function validateCourseSetting($variable)
@@ -106,15 +115,6 @@ class BBBPlugin extends Plugin
         }
 
         return true;
-    }
-
-    /**
-     * @return BBBPlugin|null
-     */
-    public static function create()
-    {
-        static $result = null;
-        return $result ? $result : $result = new self();
     }
 
     /**
@@ -144,7 +144,7 @@ class BBBPlugin extends Plugin
                 access_url INT NOT NULL DEFAULT 1,
                 video_url TEXT NULL,
                 has_video_m4v TINYINT NOT NULL DEFAULT 0,
-                interface INT NOT NULL DEFAULT 0                                              
+                interface INT NOT NULL DEFAULT 0
                 )";
         Database::query($sql);
 
@@ -176,7 +176,7 @@ class BBBPlugin extends Plugin
                 'variable' => 'plugin_bbb_course_users_limit',
                 'changeable' => 1,
                 'visible_to_self' => 1,
-                'visible_to_others' => 0
+                'visible_to_others' => 0,
             ]
         );
         $fieldLabel = 'plugin_bbb_session_users_limit';
@@ -194,7 +194,7 @@ class BBBPlugin extends Plugin
                 'variable' => 'plugin_bbb_session_users_limit',
                 'changeable' => 1,
                 'visible_to_self' => 1,
-                'visible_to_others' => 0
+                'visible_to_others' => 0,
             ]
         );
 
@@ -287,8 +287,9 @@ class BBBPlugin extends Plugin
         $data = [
             'text' => $this->get_lang('EnterConferenceFlash'),
             'url' => $conferenceUrl.'&interface='.self::INTERFACE_FLASH,
-            'icon' => 'resources/img/64/videoconference_flash.png'
+            'icon' => 'resources/img/64/videoconference_flash.png',
         ];
+
         return $data;
     }
 
@@ -304,6 +305,7 @@ class BBBPlugin extends Plugin
             'url' => $conferenceUrl.'&interface='.self::INTERFACE_HTML5,
             'icon' => 'resources/img/64/videoconference_html5.png',
         ];
+
         return $data;
     }
 }

@@ -23,7 +23,9 @@ username field is used to identify and match LDAP and Chamilo accounts together.
 
 use Chamilo\CoreBundle\Entity\ExtraFieldValues;
 use Chamilo\CoreBundle\Entity\ExtraField;
+use Chamilo\CoreBundle\Entity\TrackEDefault;
 use Chamilo\UserBundle\Entity\User;
+use Doctrine\DBAL\FetchMode;
 use Doctrine\ORM\OptimisticLockException;
 
 if (php_sapi_name() !== 'cli') {
@@ -35,8 +37,9 @@ require_once __DIR__.'/../../app/config/auth.conf.php';
 require_once __DIR__.'/../../main/inc/lib/api.lib.php';
 require_once __DIR__.'/../../main/inc/lib/database.constants.inc.php';
 
-$debug = true;
+$debug = false;
 
+ini_set('memory_limit', -1);
 
 // Retreive information from $extldap_user_correspondance and extra fields
 // into $tableFields, $extraFields, $allFields and $ldapAttributes
@@ -70,17 +73,21 @@ foreach ([false => $tableFieldMap, true => $extraFieldMap] as $areExtra => $fiel
                     'extraFieldType' => ExtraField::USER_FIELD_TYPE,
                     'variable' => $name,
                 ]
-            ) or die("Cannot find user extraFieldMap field '$name'\n");
+            ) or die("Cannot find user extra field '$name'\n");
             foreach ($extraFieldValueRepository->findBy(['field' => $userField->extraField]) as $extraFieldValue) {
                 $userField->extraFieldValues[$extraFieldValue->getItemId()] = $extraFieldValue;
             }
             $extraFields[] = $userField;
         } else {
             try {
-                $userField->getter = new ReflectionMethod('\Chamilo\UserBundle\Entity\User', 'get' . ucfirst($name));
-                $userField->setter = new ReflectionMethod('\Chamilo\UserBundle\Entity\User', 'set' . ucfirst($name));
+                $userField->getter = new ReflectionMethod(
+                    '\Chamilo\UserBundle\Entity\User', 'get' . str_replace('_', '', ucfirst($name))
+                );
+                $userField->setter = new ReflectionMethod(
+                    '\Chamilo\UserBundle\Entity\User', 'set' . str_replace('_', '', ucfirst($name))
+                );
             } catch (ReflectionException $exception) {
-                die($exception->getMessage()."\n");
+                die($exception->getMessage() . "\n");
             }
             $tableFields[] = $userField;
         }
@@ -147,6 +154,7 @@ if ($debug) {
 $ldapUsers = [];
 $entry = ldap_first_entry($ldap, $searchResult);
 while (false !== $entry) {
+    $attributes = ldap_get_attributes($ldap, $entry);
     $ldapUser = [];
     foreach ($allFields as $userField) {
         if (!is_null($userField->constant)) {
@@ -163,25 +171,29 @@ while (false !== $entry) {
                     die("'func' not implemented for $userField->name\n");
             }
         } else {
-            $values = ldap_get_values($ldap, $entry, $userField->ldapAttribute)
-            or die(
-                'cannot read attribute ' . $userField->ldapAttribute
-                . ' from entry ' . print_r($entry, true)
-                . "\n"
-            );
-            (1 === $values['count']) or die(
-                $values['count'] . ' values found'
-                . ' in attribute ' . $userField->ldapAttribute
-                . ' of entry ' . print_r($entry, true)
-                . "\n"
-            );
-            $value = $values[0];
+            if (array_key_exists($userField->ldapAttribute, $attributes)) {
+                $values = ldap_get_values($ldap, $entry, $userField->ldapAttribute)
+                or die(
+                    'could not read value of attribute ' . $userField->ldapAttribute
+                    . ' of entry ' . ldap_get_dn($ldap, $entry)
+                    . "\n"
+                );
+                (1 === $values['count'])
+                or die(
+                    $values['count'] . ' values found (expected only one)'
+                    . ' in attribute ' . $userField->ldapAttribute
+                    . ' of entry ' . ldap_get_dn($ldap, $entry)
+                    . "\n"
+                );
+                $value = $values[0];
+            } else {
+                $value = '';
+            }
         }
         $ldapUser[$userField->name] = $value;
     }
-    $username = $ldapUser['username'];
-    array_key_exists($username, $ldapUsers)
-    and die("duplicate username '$username' found in LDAP\n");
+    $username = strtolower($ldapUser['username']);
+    array_key_exists($username, $ldapUsers) and die("duplicate username '$username' found in LDAP\n");
     $ldapUsers[$username] = $ldapUser;
     $entry = ldap_next_entry($ldap, $entry);
 }
@@ -195,29 +207,41 @@ $userRepository = Database::getManager()->getRepository('ChamiloUserBundle:User'
 $dbUsers = [];
 foreach ($userRepository->findAll() as $user) {
     if ($user->getId() > 1) {
-        $username = $user->getUsername();
-        array_key_exists($username, $dbUsers) and die("username $username found twice in the database\n");
+        $username = strtolower($user->getUsername());
+        array_key_exists($username, $dbUsers) and die("duplicate username $username found in the database\n");
         $dbUsers[$username] = $user;
     }
 }
 if ($debug) {
-    echo count($dbUsers) . " non-admin users found in internal database\n";
+    echo count($dbUsers) . " users with id > 1 found in internal database\n";
 }
-
 
 // disable user accounts not found in the LDAP directory
 
+$now = new DateTime();
 foreach (array_diff(array_keys($dbUsers), array_keys($ldapUsers)) as $usernameToDisable) {
     $user = $dbUsers[$usernameToDisable];
     if ($user->isActive()) {
+        // In order to avoid slow individual SQL updates, we do not call
+        // UserManager::disable($user->getId());
         $user->setActive(false);
         UserManager::getManager()->save($user, false);
+        // In order to avoid slow individual SQL updates, we do not call
+        // Event::addEvent(LOG_USER_DISABLE, LOG_USER_ID, $user->getId());
+        $trackEDefault = new TrackEDefault();
+        $trackEDefault->setDefaultUserId(1);
+        $trackEDefault->setDefaultDate($now);
+        $trackEDefault->setDefaultEventType(LOG_USER_DISABLE);
+        $trackEDefault->setDefaultValueType(LOG_USER_ID);
+        $trackEDefault->setDefaultValue($user->getId());
+        Database::getManager()->persist($trackEDefault);
         if ($debug) {
             echo 'Disabled ' . $user->getUsername() . "\n";
         }
     }
 }
 try {
+    // Saving everything together
     Database::getManager()->flush();
 } catch (OptimisticLockException $exception) {
     die($exception->getMessage()."\n");
@@ -257,7 +281,7 @@ try {
 }
 
 
-// also update extraFieldMap field values
+// also update extra field values
 
 foreach ($ldapUsers as $username => $ldapUser) {
     $user = $dbUsers[$username];
@@ -272,7 +296,7 @@ foreach ($ldapUsers as $username => $ldapUser) {
                 $extraFieldValue->setValue($value);
                 Database::getManager()->persist($extraFieldValue);
                 if ($debug) {
-                    echo 'Updated ' . $username . ' extraFieldMap field ' . $userField->name . "\n";
+                    echo 'Updated ' . $username . ' extra field ' . $userField->name . "\n";
                 }
             }
         } else {
@@ -283,7 +307,7 @@ foreach ($ldapUsers as $username => $ldapUser) {
             Database::getManager()->persist($extraFieldValue);
             $userField->extraFieldValues[$user->getId()] = $extraFieldValue;
             if ($debug) {
-                echo 'Created ' . $username . ' extraFieldMap field ' . $userField->name . "\n";
+                echo 'Created ' . $username . ' extra field ' . $userField->name . "\n";
             }
         }
     }
@@ -296,23 +320,25 @@ try {
 
 // anonymize user accounts disabled for more than 3 years
 
-$result = Database::query(
+$longDisabledUserIds = [];
+foreach (Database::query(
     'select default_value
 from track_e_default
-where default_event_type=\'user_disable\' and default_value_type = \'user_id\'
+where default_event_type=\'user_disable\' and default_value_type=\'user_id\'
 group by default_value
-having max(default_date) < date_sub(now(), interval 3 year)
-except
-select default_value
-from track_e_default
-where default_event_type=\'user_anonymized\' and default_value_type = \'user_id\'
-group by default_value'
-);
-if ($result->errorCode() !== '00000') {
-    die('Could not retreive anonymizable user id list from database:'.print_r($result->errorInfo(), true."\n"));
+having max(default_date) < date_sub(now(), interval 3 year)'
+)->fetchAll(FetchMode::COLUMN) as $userId) {
+    $longDisabledUserIds[] = $userId;
 }
-$userId = $result->fetchColumn();
-while (false !== $userId) {
+$anonymizedUserIds = [];
+foreach (Database::query(
+    'select distinct default_value
+from track_e_default
+where default_event_type=\'user_anonymized\' and default_value_type=\'user_id\''
+)->fetchAll(FetchMode::COLUMN) as $userId) {
+    $anonymizedUserIds[] = $userId;
+}
+foreach (array_diff($longDisabledUserIds, $anonymizedUserIds) as $userId) {
     try {
         UserManager::anonymize($userId)
         or die("could not anonymize user $userId\n");
@@ -322,5 +348,4 @@ while (false !== $userId) {
     if ($debug) {
         echo "Anonymized user $userId\n";
     }
-    $userId = $result->fetchColumn();
 }

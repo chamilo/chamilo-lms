@@ -18,35 +18,39 @@ class UserLearnPathLessonTimerLoader implements LoaderInterface
      */
     public function load(array $incomingData)
     {
-        $em = \Database::getManager();
+        $tblItemView = \Database::get_course_table(TABLE_LP_ITEM_VIEW);
 
-        $parentItemView = $this->findViewOfParentItem($incomingData)->setStartTime($incomingData['start_time']);
+        $parentItemView = $this->findViewOfParentItem($incomingData);
+        $itemView = $this->findViewOfFirstItem($incomingData);
 
-        $itemView = $this->findViewOfFirstItem($incomingData)->setStartTime($incomingData['start_time']);
+        \Database::query(
+            "UPDATE $tblItemView SET start_time = {$incomingData['start_time']} WHERE iid = {$parentItemView['iid']}"
+        );
+        \Database::query(
+            "UPDATE $tblItemView SET start_time = {$incomingData['start_time']} WHERE iid = {$itemView['iid']}"
+        );
 
-        $em->persist($parentItemView);
-        $em->persist($itemView);
-        $em->flush();
-
-        return $itemView->getId();
+        return $itemView['iid'];
     }
 
     /**
-     * @throws \Doctrine\ORM\NonUniqueResultException
+     * @param array $incomingData
+     * @return array
      *
-     * @return CLpItemView
+     * @throws \Exception
      */
     private function findViewOfParentItem(array $incomingData)
     {
-        /** @var CLpItemView $parentItemView */
-        $parentItemView = \Database::getManager()
-            ->createQuery("SELECT lpiv
-                FROM ChamiloCourseBundle:CLpItemView lpiv
-                INNER JOIN ChamiloCourseBundle:CLpView lpv WITH (lpv.iid = lpiv.lpViewId AND lpv.cId = lpiv.cId)
-                WHERE lpiv.lpItemId = :item_id AND lpv.userId = :user_id")
-            ->setMaxResults(1)
-            ->setParameters(['item_id' => $incomingData['parent_item_id'], 'user_id' => $incomingData['user_id']])
-            ->getOneOrNullResult();
+        $parentItemView = \Database::fetch_assoc(
+            \Database::query(
+                "SELECT lpiv.iid
+                FROM c_lp_item_view lpiv
+                INNER JOIN c_lp_view lpv ON (lpv.iid = lpiv.lp_view_id AND lpv.c_id = lpiv.c_id)
+                WHERE lpiv.lp_item_id = {$incomingData['parent_item_id']}
+                    AND lpv.user_id = {$incomingData['user_id']}
+                LIMIT 1"
+            )
+        );
 
         if (!$parentItemView) {
             throw new \Exception("Item dir ({$incomingData['parent_item_id']}) not found.");
@@ -56,40 +60,33 @@ class UserLearnPathLessonTimerLoader implements LoaderInterface
     }
 
     /**
-     * @throws \Doctrine\ORM\NonUniqueResultException
+     * @param array $incomingData
+     * @return array
      *
-     * @return CLpItemView
+     * @throws \Exception
      */
     private function findViewOfFirstItem(array $incomingData)
     {
-        /** @var CLpItemView $itemView */
-        $itemView = \Database::getManager()
-            ->createQuery(
-                "SELECT lpiv
-                    FROM ChamiloCourseBundle:CLpItemView lpiv
-                    INNER JOIN ChamiloCourseBundle:CLpView lpv
-                        WITH (lpv.iid = lpiv.lpViewId AND lpv.cId = lpiv.cId)
-                    INNER JOIN ChamiloCourseBundle:CLpItem lpi
-                        WITH (lpi.lpId = lpv.lpId AND lpi.cId = lpv.cId AND lpi.iid = lpiv.lpItemId)
-                    WHERE lpi.itemType = :type
-                        AND lpv.userId = :user_id
-                        AND lpi.parentItemId = :parent_item_id
-                        AND lpv.sessionId = :session_id
-                        ORDER BY lpi.displayOrder ASC"
+        $itemView = \Database::fetch_assoc(
+            \Database::query(
+                "SELECT lpiv.iid
+                FROM c_lp_item_view lpiv
+                INNER JOIN c_lp_view lpv
+                    ON (lpv.iid = lpiv.lp_view_id AND lpv.c_id = lpiv.c_id)
+                INNER JOIN c_lp_item lpi
+                    ON (lpi.lp_id = lpv.lp_id AND lpi.c_id = lpv.c_id AND lpi.iid = lpiv.lp_item_id)
+                WHERE lpi.item_type = 'document'
+                    AND lpv.user_id = {$incomingData['user_id']}
+                    AND lpi.parent_item_id = {$incomingData['parent_item_id']}
+                    AND lpv.session_id = {$incomingData['session_id']}
+                ORDER BY lpi.display_order ASC
+                LIMIT 1"
             )
-            ->setMaxResults(1)
-            ->setParameters(
-                [
-                    'type' => 'document',
-                    'user_id' => $incomingData['user_id'],
-                    'parent_item_id' => $incomingData['parent_item_id'],
-                    'session_id' => $incomingData['session_id'],
-                ]
-            )
-            ->getOneOrNullResult();
+        );
 
         if (!$itemView) {
-            throw new \Exception("Item view not found for item with"." parent item ({$incomingData['parent_item_id']}) and user ({$incomingData['user_id']})");
+            throw new \Exception("Item view not found for item with"
+                ." parent item ({$incomingData['parent_item_id']}) and user ({$incomingData['user_id']})");
         }
 
         return $itemView;

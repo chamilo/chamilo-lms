@@ -11,30 +11,23 @@ namespace Chamilo\PluginBundle\MigrationMoodle\Loader;
 class UserLearnPathLessonAttemptLoader extends UserLearnPathLessonBranchLoader
 {
     /**
-     * @throws \Doctrine\ORM\ORMException
-     * @throws \Doctrine\ORM\OptimisticLockException
-     * @throws \Doctrine\ORM\TransactionRequiredException
+     * @param array $incomingData
+     *
+     * @throws \Exception
      *
      * @return int
      */
     public function load(array $incomingData)
     {
-        $em = \Database::getManager();
+        $tblLpItemView = \Database::get_course_table(TABLE_LP_ITEM_VIEW);
 
         $itemViewId = parent::load($incomingData);
 
-        $itemView = $em->find('ChamiloCourseBundle:CLpItemView', $itemViewId);
-
         if ((bool) $incomingData['is_correct']) {
-            $itemView->setScore(
-                $itemView->getMaxScore()
-            );
+            \Database::query("UPDATE $tblLpItemView SET score = max_score WHERE iid = $itemViewId");
         } else {
-            $itemView->setScore(0);
+            \Database::query("UPDATE $tblLpItemView SET score = 0 WHERE iid = $itemViewId");
         }
-
-        $em->persist($itemView);
-        $em->flush();
 
         return $itemViewId;
     }

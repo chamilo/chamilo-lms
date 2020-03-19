@@ -18,61 +18,57 @@ class UserLearnPathsLoader implements LoaderInterface
      */
     public function load(array $incomingData)
     {
-        $em = \Database::getManager();
-
-        $subscriptionsRepo = $em->getRepository('ChamiloCoreBundle:SessionRelCourseRelUser');
-        $learnPathsRepo = $em->getRepository('ChamiloCourseBundle:CLp');
-        $lpItemRepo = $em->getRepository('ChamiloCourseBundle:CLpItem');
-
+        $tblLp = \Database::get_course_table(TABLE_LP_MAIN);
+        $tblLpItem = \Database::get_course_table(TABLE_LP_ITEM);
         $tblLpView = \Database::get_course_table(TABLE_LP_VIEW);
         $tblLpItemView = \Database::get_course_table(TABLE_LP_ITEM_VIEW);
+        $tblSrCrU = \Database::get_main_table(TABLE_MAIN_SESSION_COURSE_USER);
 
-        $userId = $incomingData['user_id'];
+        $resSubscriptions = \Database::query(
+            "SELECT c_id, session_id FROM $tblSrCrU WHERE user_id = {$incomingData['user_id']}"
+        );
 
-        $subscriptions = $subscriptionsRepo->findBy(['user' => $userId]);
+        while ($subscription = \Database::fetch_assoc($resSubscriptions)) {
+            $resLps = \Database::query("SELECT iid FROM $tblLp WHERE c_id = {$subscription['c_id']} AND lp_type = 1");
 
-        /** @var SessionRelCourseRelUser $subscription */
-        foreach ($subscriptions as $subscription) {
-            $course = $subscription->getCourse();
-            $session = $subscription->getSession();
-
-            $lps = $learnPathsRepo->findBy(['cId' => $course->getId(), 'lpType' => 1]);
-
-            foreach ($lps as $lp) {
-                $params = [
-                    'c_id' => $course->getId(),
-                    'lp_id' => $lp->getId(),
-                    'user_id' => $userId,
-                    'view_count' => 1,
-                    'session_id' => $session->getId(),
-                    'last_item' => 0,
-                ];
-                $lpViewId = \Database::insert($tblLpView, $params);
+            while ($lp = \Database::fetch_assoc($resLps)) {
+                $lpViewId = \Database::insert(
+                    $tblLpView,
+                    [
+                        'c_id' => $subscription['c_id'],
+                        'lp_id' => $lp['iid'],
+                        'user_id' => $incomingData['user_id'],
+                        'view_count' => 1,
+                        'session_id' => $subscription['session_id'],
+                        'last_item' => 0,
+                    ]
+                );
                 \Database::query("UPDATE $tblLpView SET id = iid WHERE iid = $lpViewId");
 
-                $lpItems = $lpItemRepo->findBy(
-                    ['lpId' => $lp->getId()],
-                    ['parentItemId' => 'ASC', 'displayOrder' => 'ASC']
+                $resItems = \Database::query(
+                    "SELECT iid, max_score FROM $tblLpItem
+                        WHERE lp_id = {$lp['iid']} ORDER BY parent_item_id ASC, display_order ASC"
                 );
-
-                foreach ($lpItems as $lpItem) {
-                    $params = [
-                        'c_id' => $course->getId(),
-                        'lp_item_id' => $lpItem->getId(),
-                        'lp_view_id' => $lpViewId,
-                        'view_count' => 1,
-                        'status' => 'not attempted',
-                        'start_time' => 0,
-                        'total_time' => 0,
-                        'score' => 0,
-                        'max_score' => $lpItem->getMaxScore(),
-                    ];
-                    $lpItemViewId = \Database::insert($tblLpItemView, $params);
+                while ($lpItem = \Database::fetch_assoc($resItems)) {
+                    $lpItemViewId = \Database::insert(
+                        $tblLpItemView,
+                        [
+                            'c_id' => $subscription['c_id'],
+                            'lp_item_id' => $lpItem['iid'],
+                            'lp_view_id' => $lpViewId,
+                            'view_count' => 1,
+                            'status' => 'not attempted',
+                            'start_time' => 0,
+                            'total_time' => 0,
+                            'score' => 0,
+                            'max_score' => $lpItem['max_score'],
+                        ]
+                    );
                     \Database::query("UPDATE $tblLpItemView SET id = iid WHERE iid = $lpItemViewId");
                 }
             }
         }
 
-        return $userId;
+        return $incomingData['user_id'];
     }
 }

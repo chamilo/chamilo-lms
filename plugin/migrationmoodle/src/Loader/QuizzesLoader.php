@@ -39,14 +39,11 @@ class QuizzesLoader implements LoaderInterface
         $exercise->sessionId = 0;
         $exercise->start_time = api_get_utc_datetime($incomingData['start_time'], true);
         $exercise->end_time = api_get_utc_datetime($incomingData['end_time'], true);
-        $exercise->active = false;
 
         $quizId = $exercise->save();
 
-        \Database::getManager()
-            ->createQuery('UPDATE ChamiloCourseBundle:CLpItem i SET i.path = :path WHERE i.iid = :id')
-            ->setParameters(['path' => $quizId, 'id' => $incomingData['item_id']])
-            ->execute();
+        \Database::query("UPDATE c_quiz SET active = 0 WHERE iid = $quizId");
+        \Database::query("UPDATE c_lp_item SET path = '$quizId' WHERE iid = {$incomingData['item_id']}");
 
         return $quizId;
     }

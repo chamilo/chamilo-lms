@@ -18,9 +18,12 @@ class UserLearnPathLessonBranchLoader implements LoaderInterface
      */
     public function load(array $incomingData)
     {
-        $em = \Database::getManager();
+        $tblLpItem = \Database::get_course_table(TABLE_LP_ITEM);
+        $tblLpItemView = \Database::get_course_table(TABLE_LP_ITEM_VIEW);
 
-        $item = $em->find('ChamiloCourseBundle:CLpItem', $incomingData['item_id']);
+        $item = \Database::fetch_assoc(
+            \Database::query("SELECT display_order FROM $tblLpItem WHERE iid = {$incomingData['item_id']}")
+        );
 
         if (!$item) {
             throw new \Exception("LP item ({$incomingData['item_id']}) not found.");
@@ -28,72 +31,75 @@ class UserLearnPathLessonBranchLoader implements LoaderInterface
 
         $itemView = $this->findViewOfItem($incomingData);
 
-        if ($item->getDisplayOrder() !== 1) {
-            $previuousItemView = $this->findViewOfPreviousItem($incomingData);
+        $itemViewParams = ['status' => 'completed'];
 
-            $itemView->setStartTime(
-                $previuousItemView->getStartTime() + $previuousItemView->getTotalTime()
-            );
+        if ($item['display_order'] != 1) {
+            $previousItemView = $this->findViewOfPreviousItem($incomingData);
+
+            $itemViewParams['start_time'] = $previousItemView['start_time'] + $previousItemView['total_time'];
+            $itemView['start_time'] = $itemViewParams['start_time'];
         }
 
-        $totalTime = $incomingData['end_time'] - $itemView->getStartTime();
+        $itemViewParams['total_time'] = $incomingData['end_time'] - $itemView['start_time'];
 
-        $itemView
-            ->setStatus('completed')
-            ->setTotalTime($totalTime);
+        \Database::update(
+            $tblLpItemView,
+            $itemViewParams,
+            ['iid = ?' => [$itemView['iid']]]
+        );
 
-        $em->persist($itemView);
-        $em->flush();
-
-        return $itemView->getId();
+        return $itemView['iid'];
     }
 
     /**
-     * @throws \Doctrine\ORM\NonUniqueResultException
+     * @param array $incomingData
+     * @return array
      *
-     * @return CLpItemView
+     * @throws \Exception
      */
     private function findViewOfItem(array $incomingData)
     {
-        /** @var CLpItemView $itemView */
-        $itemView = \Database::getManager()
-            ->createQuery("SELECT lpiv
-                FROM ChamiloCourseBundle:CLpItemView lpiv
-                INNER JOIN ChamiloCourseBundle:CLpView lpv WITH (lpv.iid = lpiv.lpViewId AND lpv.cId = lpiv.cId)
-                WHERE lpiv.lpItemId = :item_id AND lpv.userId = :user_id")
-            ->setMaxResults(1)
-            ->setParameters(['item_id' => $incomingData['item_id'], 'user_id' => $incomingData['user_id']])
-            ->getOneOrNullResult();
+        $itemView = \Database::fetch_assoc(
+            \Database::query(
+                "SELECT lpiv.iid, lpiv.start_time
+                FROM c_lp_item_view lpiv
+                INNER JOIN c_lp_view lpv ON (lpv.iid = lpiv.lp_view_id AND lpv.c_id = lpiv.c_id)
+                WHERE lpiv.lp_item_id = {$incomingData['item_id']} AND lpv.user_id = {$incomingData['user_id']}
+                LIMIT 1"
+            )
+        );
 
         if (!$itemView) {
-            throw new \Exception("Item view not found for "."item ({$incomingData['item_id']}) and user ({$incomingData['user_id']}).");
+            throw new \Exception("Item view not found for "
+                ."item ({$incomingData['item_id']}) and user ({$incomingData['user_id']}).");
         }
 
         return $itemView;
     }
 
     /**
-     * @throws \Doctrine\ORM\NonUniqueResultException
+     * @param array $incomingData
+     * @return array
      *
-     * @return CLpItemView
+     * @throws \Exception
      */
     private function findViewOfPreviousItem(array $incomingData)
     {
-        /** @var CLpItemView $previuousItemView */
-        $previuousItemView = \Database::getManager()
-            ->createQuery("SELECT lpiv
-                    FROM ChamiloCourseBundle:CLpItemView lpiv
-                    INNER JOIN ChamiloCourseBundle:CLpView lpv WITH (lpv.iid = lpiv.lpViewId AND lpv.cId = lpiv.cId)
-                    INNER JOIN ChamiloCourseBundle:CLpItem lpi WITH (lpi.iid = lpiv.lpItemId AND lpi.cId = lpiv.cId)
-                    WHERE lpi.nextItemId = :item_id AND lpv.userId = :user_id")
-            ->setMaxResults(1)
-            ->setParameters(['item_id' => $incomingData['item_id'], 'user_id' => $incomingData['user_id']])
-            ->getOneOrNullResult();
+        $result = \Database::query(
+            "SELECT lpiv.start_time, lpiv.total_time
+                FROM c_lp_item_view lpiv
+                INNER JOIN c_lp_view lpv ON (lpv.iid = lpiv.lp_view_id AND lpv.c_id = lpiv.c_id)
+                INNER JOIN c_lp_item lpi ON (lpi.iid = lpiv.lp_item_id AND lpi.c_id = lpiv.c_id)
+                WHERE lpi.next_item_id = {$incomingData['item_id']} AND lpv.user_id = {$incomingData['user_id']}
+                LIMIT 1"
+        );
+        $previousItemView = \Database::fetch_assoc($result);
 
-        if (!$previuousItemView) {
-            throw new \Exception("Item view not found for "."previous item ({$incomingData['item_id']}) and user ({$incomingData['user_id']}).");
+        if (!$previousItemView) {
+            throw new \Exception("Item view not found for "
+                ."previous item ({$incomingData['item_id']}) and user ({$incomingData['user_id']}).");
         }
 
-        return $previuousItemView;
+        return $previousItemView;
     }
 }

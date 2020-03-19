@@ -23,17 +23,19 @@ class UserLearnPathQuizLoader implements LoaderInterface
             $incomingData['user_id'],
             $incomingData['session_id']
         );
-        $itemView
-            ->setStartTime($incomingData['start_time'])
-            ->setTotalTime($incomingData['total_time'])
-            ->setScore($incomingData['score'])
-            ->setStatus($incomingData['status']);
 
-        $em = \Database::getManager();
-        $em->persist($itemView);
-        $em->flush();
+        \Database::update(
+            \Database::get_course_table(TABLE_LP_ITEM_VIEW),
+            [
+                'start_time' => $incomingData['start_time'],
+                'total_time' => $incomingData['total_time'],
+                'score' => $incomingData['score'],
+                'status' => $incomingData['status'],
+            ],
+            ['iid = ?' => $itemView['iid']]
+        );
 
-        return $itemView->getId();
+        return $itemView['iid'];
     }
 
     /**
@@ -41,21 +43,20 @@ class UserLearnPathQuizLoader implements LoaderInterface
      * @param int $userId
      * @param int $sessionId
      *
-     * @throws \Doctrine\ORM\NonUniqueResultException
+     * @throws \Exception
      *
-     * @return CLpItemView
+     * @return array
      */
     private function findViewOfItem($itemId, $userId, $sessionId)
     {
-        /** @var CLpItemView $itemView */
-        $itemView = \Database::getManager()
-            ->createQuery("SELECT lpiv
-                FROM ChamiloCourseBundle:CLpItemView lpiv
-                INNER JOIN ChamiloCourseBundle:CLpView lpv WITH (lpv.iid = lpiv.lpViewId AND lpv.cId = lpiv.cId)
-                WHERE lpiv.lpItemId = :item_id AND lpv.userId = :user_id AND lpv.sessionId = :session_id")
-            ->setMaxResults(1)
-            ->setParameters(['item_id' => $itemId, 'user_id' => $userId, 'session_id' => $sessionId])
-            ->getOneOrNullResult();
+        $result = \Database::query(
+            "SELECT lpiv.iid
+                FROM c_lp_item_view lpiv
+                INNER JOIN c_lp_view lpv ON (lpv.iid = lpiv.lp_view_id AND lpv.c_id = lpiv.c_id)
+                WHERE lpiv.lp_item_id = $itemId AND lpv.user_id = $userId AND lpv.session_id = $sessionId
+                LIMIT 1"
+        );
+        $itemView = \Database::fetch_assoc($result);
 
         if (!$itemView) {
             throw new \Exception("Item view not found for item ($itemId) and user ($userId) in session ($sessionId).");

@@ -1,4 +1,5 @@
 <?php
+
 /* For licensing terms, see /license.txt */
 
 use Chamilo\CoreBundle\Entity\ExtraField as EntityExtraField;
@@ -15,8 +16,6 @@ use Symfony\Component\Security\Core\Encoder\EncoderFactory;
  *
  * This library provides functions for user management.
  * Include/require it in your code to use its functionality.
- *
- * @package chamilo.library
  *
  * @author Julio Montoya <gugli100@gmail.com> Social network groups added 2009/12
  */
@@ -126,7 +125,6 @@ class UserManager
 
     /**
      * @param string $raw
-     * @param User   $user
      *
      * @return string
      */
@@ -1796,7 +1794,6 @@ class UserManager
         $sql_result = Database::query($sql);
 
         if ($getCount) {
-
             $result = Database::fetch_array($sql_result);
 
             return $result['count'];
@@ -1809,7 +1806,6 @@ class UserManager
 
         return $return_array;
     }
-
 
     /**
      * Get a list of users of which the given conditions match with a LIKE '%cond%'.
@@ -2912,7 +2908,7 @@ class UserManager
     /**
      * Get the extra field information for a certain field (the options as well).
      *
-     * @param int $variable The name of the field we want to know everything about
+     * @param string $variable The name of the field we want to know everything about
      *
      * @return array Array containing all the information about the extra profile field
      *               (first level of array contains field details, then 'options' sub-array contains options details,
@@ -3179,7 +3175,7 @@ class UserManager
                     break;
                 case 'end_date':
                     $order = " ORDER BY s.accessEndDate $orderSetting ";
-                    if ($orderSetting == 'asc') {
+                    if ($orderSetting === 'asc') {
                         // Put null values at the end
                         // https://stackoverflow.com/questions/12652034/how-can-i-order-by-null-in-dql
                         $order = ' ORDER BY _isFieldNull asc, s.accessEndDate asc';
@@ -5741,6 +5737,14 @@ class UserManager
 
             foreach ($bossList as $bossId) {
                 $bossId = (int) $bossId;
+                $bossInfo = api_get_user_info($bossId);
+
+                if (empty($bossInfo)) {
+                    continue;
+                }
+
+                $bossLanguage = $bossInfo['language'];
+
                 $sql = "INSERT IGNORE INTO $userRelUserTable (user_id, friend_user_id, relation_type)
                         VALUES ($studentId, $bossId, ".USER_RELATION_TYPE_BOSS.")";
                 $insertId = Database::query($sql);
@@ -5750,8 +5754,15 @@ class UserManager
                         $name = $studentInfo['complete_name'];
                         $url = api_get_path(WEB_CODE_PATH).'mySpace/myStudents.php?student='.$studentId;
                         $url = Display::url($url, $url);
-                        $subject = sprintf(get_lang('UserXHasBeenAssignedToBoss', false, $studentInfo['language']), $name);
-                        $message = sprintf(get_lang('UserXHasBeenAssignedToBossWithUrlX', false, $studentInfo['language']), $name, $url);
+                        $subject = sprintf(
+                            get_lang('UserXHasBeenAssignedToBoss', false, $bossLanguage),
+                            $name
+                        );
+                        $message = sprintf(
+                            get_lang('UserXHasBeenAssignedToBossWithUrlX', false, $bossLanguage),
+                            $name,
+                            $url
+                        );
                         MessageManager::send_message_simple(
                             $bossId,
                             $subject,

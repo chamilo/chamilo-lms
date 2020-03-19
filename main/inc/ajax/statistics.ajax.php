@@ -167,10 +167,10 @@ switch ($action) {
         // for global tools usage (number of clicks)
         $list = [];
         $palette = ChamiloApi::getColorPalette(true, true);
-        if ($action == 'tools_usage') {
+        if ($action === 'tools_usage') {
             $statsName = 'Tools';
             $all = Statistics::getToolsStats();
-        } elseif ($action == 'courses') {
+        } elseif ($action === 'courses') {
             $statsName = 'CountCours';
             $course_categories = Statistics::getCourseCategories();
             // total amount of courses
@@ -178,7 +178,7 @@ switch ($action) {
             foreach ($course_categories as $code => $name) {
                 $all[$name] = Statistics::countCourses($code);
             }
-        } elseif ($action == 'courses_by_language') {
+        } elseif ($action === 'courses_by_language') {
             $statsName = 'CountCourseByLanguage';
             $all = Statistics::printCourseByLanguageStats();
             // use slightly different colors than previous chart
@@ -186,20 +186,20 @@ switch ($action) {
                 $item = array_shift($palette);
                 array_push($palette, $item);
             }
-        } elseif ($action == 'users') {
+        } elseif ($action === 'users') {
             $statsName = 'NumberOfUsers';
             $countInvisible = isset($_GET['count_invisible']) ? (int) $_GET['count_invisible'] : null;
             $all = [
                 get_lang('Teachers') => Statistics::countUsers(COURSEMANAGER, null, $countInvisible),
                 get_lang('Students') => Statistics::countUsers(STUDENT, null, $countInvisible),
             ];
-        } elseif ($action == 'users_teachers') {
+        } elseif ($action === 'users_teachers') {
             $statsName = 'Teachers';
             $course_categories = Statistics::getCourseCategories();
             $countInvisible = isset($_GET['count_invisible']) ? (int) $_GET['count_invisible'] : null;
             $all = [];
             foreach ($course_categories as $code => $name) {
-                $name = str_replace(get_lang('Department'), "", $name);
+                $name = str_replace(get_lang('Department'), '', $name);
                 $all[$name] = Statistics::countUsers(COURSEMANAGER, $code, $countInvisible);
             }
             // use slightly different colors than previous chart
@@ -207,7 +207,7 @@ switch ($action) {
                 $item = array_shift($palette);
                 array_push($palette, $item);
             }
-        } elseif ($action == 'users_students') {
+        } elseif ($action === 'users_students') {
             $statsName = 'Students';
             $course_categories = Statistics::getCourseCategories();
             $countInvisible = isset($_GET['count_invisible']) ? (int) $_GET['count_invisible'] : null;
@@ -653,7 +653,7 @@ switch ($action) {
                         $courseId = $courses[0];
                         $courseInfo = api_get_course_info_by_id($courseId);
                         $language = $courseInfo['language'];
-                        $language = get_lang(str_replace('2', '', $language));
+                        $language = get_lang(ucfirst(str_replace(2, '', $language)));
                     }
 
                     if (!isset($all[$language])) {

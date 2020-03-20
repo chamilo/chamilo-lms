@@ -2329,7 +2329,7 @@ function api_format_course_array($course_data)
             null,
             null,
             true,
-            true
+            false
         );
     }
 

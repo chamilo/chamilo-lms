@@ -182,7 +182,6 @@ $courseInfo = api_get_course_info();
 $formToString = '';
 
 if ($bbb->isGlobalConference() === false &&
-    $conferenceManager &&
     !empty($courseInfo) &&
     $plugin->get('enable_conference_in_course_groups') === 'true'
 ) {
@@ -199,7 +198,12 @@ if ($bbb->isGlobalConference() === false &&
 
     $form = new FormValidator(api_get_self().'?'.api_get_cidreq());
     $groupId = api_get_group_id();
-    $groups = GroupManager::get_groups();
+    if ($conferenceManager) {
+        $groups = GroupManager::get_groups();
+    } else {
+        $groups = GroupManager::getAllGroupPerUserSubscription(api_get_user_id(), api_get_course_int_id(), api_get_session_id());
+    }
+
     if ($groups) {
         $meetingsInGroup = $bbb->getAllMeetingsInCourse(api_get_course_int_id(), api_get_session_id(), 1);
         $meetingsGroup = array_column($meetingsInGroup, 'status', 'group_id');

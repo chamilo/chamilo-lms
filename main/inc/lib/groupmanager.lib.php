@@ -1467,11 +1467,11 @@ class GroupManager
     public static function number_of_students($group_id, $course_id = null)
     {
         $table = Database::get_course_table(TABLE_GROUP_USER);
-        $group_id = intval($group_id);
+        $group_id = (int) $group_id;
+        $course_id = (int) $course_id;
+
         if (empty($course_id)) {
             $course_id = api_get_course_int_id();
-        } else {
-            $course_id = intval($course_id);
         }
         $sql = "SELECT COUNT(*) AS number_of_students
                 FROM $table
@@ -1492,7 +1492,7 @@ class GroupManager
     public static function maximum_number_of_students($group_id)
     {
         $table = Database::get_course_table(TABLE_GROUP);
-        $group_id = intval($group_id);
+        $group_id = (int) $group_id;
         $course_id = api_get_course_int_id();
         $sql = "SELECT max_student FROM $table
                 WHERE c_id = $course_id AND iid = $group_id";
@@ -2241,10 +2241,11 @@ class GroupManager
      *
      * @param int $user_id
      * @param int $courseId
+     * @param int|null $sessionId
      *
      * @return array
      */
-    public static function getAllGroupPerUserSubscription($user_id, $courseId = 0)
+    public static function getAllGroupPerUserSubscription($user_id, $courseId = 0, $sessionId = null)
     {
         $table_group_user = Database::get_course_table(TABLE_GROUP_USER);
         $table_tutor_user = Database::get_course_table(TABLE_GROUP_TUTOR);
@@ -2261,6 +2262,12 @@ class GroupManager
                WHERE
                   g.c_id = $courseId AND
                   (gu.user_id = $user_id OR tu.user_id = $user_id) ";
+
+        if (null !== $sessionId) {
+            $sessionId = (int) $sessionId;
+            $sql .= " AND g.session_id = $sessionId ";
+        }
+
         $res = Database::query($sql);
         $groups = [];
         while ($group = Database::fetch_array($res, 'ASSOC')) {

@@ -22,11 +22,7 @@ class FilesForScormScoLoader extends CourseFilesLoader
     {
         $course = api_get_course_entity($incomingData['c_id']);
 
-        try {
-            $moodleFilePath = $this->findFilePath($incomingData['contenthash']);
-        } catch (\Exception $exception) {
-            return 0;
-        }
+        $moodleFilePath = $this->findFilePath($incomingData['contenthash']);
 
         $sysCourseScormPath = api_get_path(SYS_COURSE_PATH).$course->getDirectory().'/scorm';
         $lpDirectory = CourseModulesScormLoader::generateDirectoryName($incomingData['lp_name']);

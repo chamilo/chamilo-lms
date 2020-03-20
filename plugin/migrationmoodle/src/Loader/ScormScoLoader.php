@@ -22,7 +22,7 @@ class ScormScoLoader implements LoaderInterface
         $scorm = new \scorm(
             $incomingData['c_code'],
             $incomingData['lp_id'],
-            api_get_user_id()
+            1
         );
 
         $itemId = $scorm->add_item(

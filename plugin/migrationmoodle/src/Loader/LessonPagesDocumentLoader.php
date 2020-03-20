@@ -26,7 +26,7 @@ class LessonPagesDocumentLoader implements LoaderInterface
         $lp = new \learnpath(
             $courseInfo['code'],
             $incomingData['lp_id'],
-            api_get_user_id()
+            1
         );
 
         $lp->generate_lp_folder($courseInfo);

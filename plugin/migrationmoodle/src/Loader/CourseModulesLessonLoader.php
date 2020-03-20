@@ -24,7 +24,7 @@ class CourseModulesLessonLoader implements LoaderInterface
         $lp = new \learnpath(
             $incomingData['c_code'],
             $incomingData['lp_id'],
-            api_get_user_id()
+            1
         );
         $itemId = $lp->add_item(
             0,

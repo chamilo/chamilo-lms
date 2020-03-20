@@ -37,7 +37,7 @@ class CourseSectionsLoader implements LoaderInterface
             $lp = new \learnpath(
                 $incomingData['course_code'],
                 $lpId,
-                api_get_user_id()
+                1
             );
             $lp->generate_lp_folder($courseInfo);
 

@@ -24,7 +24,7 @@ class CourseModulesQuizLoader implements LoaderInterface
         $lp = new \learnpath(
             $incomingData['c_code'],
             $incomingData['lp_id'],
-            api_get_user_id()
+            1
         );
 
         return $lp->add_item(

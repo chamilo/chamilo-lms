@@ -25,9 +25,16 @@ class UsersQuizzesAttemptsTask extends BaseTask
      */
     public function getExtractConfiguration()
     {
+        $userFilter = $this->plugin->getUserFilterSetting();
+        $userCondition = '';
+
+        if (!empty($userFilter)) {
+            $userCondition = "INNER JOIN mdl_user u ON qa.userid = u.id WHERE u.username LIKE '$userFilter%'";
+        }
+
         return [
             'class' => LoadedUsersFilterExtractor::class,
-            'query' => 'SELECT
+            'query' => "SELECT
                     qa.id,
                     qa.quiz,
                     qa.userid,
@@ -39,7 +46,8 @@ class UsersQuizzesAttemptsTask extends BaseTask
                     q.sumgrades weighting
                 FROM mdl_quiz_attempts qa
                 INNER JOIN mdl_quiz q ON qa.quiz = q.id
-                ORDER BY qa.userid, q.id, qa.attempt',
+                $userCondition
+                ORDER BY qa.userid, q.id, qa.attempt",
         ];
     }
 

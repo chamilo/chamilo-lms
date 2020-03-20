@@ -21,9 +21,17 @@ class TrackLoginTask extends BaseTask
      */
     public function getExtractConfiguration()
     {
+        $query = 'SELECT id, firstaccess, lastaccess FROM mdl_user WHERE firstaccess != 0';
+
+        $userFilter = $this->plugin->getUserFilterSetting();
+
+        if (!empty($userFilter)) {
+            $query .= " AND username LIKE '$userFilter%'";
+        }
+
         return [
             'class' => LoadedUsersFilterExtractor::class,
-            'query' => 'SELECT id, firstaccess, lastaccess FROM mdl_user WHERE firstaccess != 0',
+            'query' => $query,
         ];
     }
 

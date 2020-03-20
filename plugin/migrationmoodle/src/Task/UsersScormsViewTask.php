@@ -26,6 +26,14 @@ class UsersScormsViewTask extends BaseTask
      */
     public function getExtractConfiguration()
     {
+        $userFilter = $this->plugin->getUserFilterSetting();
+
+        $userCondition = '';
+
+        if (!empty($userFilter)) {
+            $userCondition = "INNER JOIN mdl_user u ON sst.userid = u.id WHERE u.username LIKE '$userFilter%'";
+        }
+
         return [
             'class' => LoadedUsersFilterExtractor::class,
             'query' => "SELECT
@@ -39,6 +47,7 @@ class UsersScormsViewTask extends BaseTask
                 FROM mdl_scorm_scoes_track sst
                 INNER JOIN mdl_scorm_scoes ss ON (sst.scoid = ss.id AND sst.scormid = ss.scorm)
                 INNER JOIN mdl_scorm s ON (ss.scorm = s.id)
+                $userCondition
                 GROUP BY sst.userid, s.id, ss.id, sst.attempt
                 ORDER BY sst.userid, s.course, s.id",
         ];

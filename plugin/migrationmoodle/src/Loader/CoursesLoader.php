@@ -29,7 +29,9 @@ class CoursesLoader implements LoaderInterface
             $incomingData['wanted_code'] = $unique_prefix = substr(md5(uniqid(rand())), 0, 10);
         }
 
-        $courseInfo = \CourseManager::create_course($incomingData, 1);
+        $accessUrlId = \MigrationMoodlePlugin::create()->getAccessUrlId();
+
+        $courseInfo = \CourseManager::create_course($incomingData, 1, $accessUrlId);
 
         return $courseInfo['real_id'];
     }

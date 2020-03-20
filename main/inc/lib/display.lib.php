@@ -247,7 +247,7 @@ class Display
         if (is_array($query_vars)) {
             $table->set_additional_parameters($query_vars);
         }
-        if ($style == 'table') {
+        if ($style === 'table') {
             if (is_array($header) && count($header) > 0) {
                 foreach ($header as $index => $header_item) {
                     $table->set_header(

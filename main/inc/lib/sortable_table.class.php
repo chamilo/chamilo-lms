@@ -375,7 +375,6 @@ class SortableTable extends HTML_Table
             $table_id = 'form_'.$this->table_name.'_id';
             $form = $this->get_page_select_form();
             $nav = $this->get_navigation_html();
-
             if ($this->get_total_number_of_items() > $this->default_items_per_page) {
                 $html = '<div class="table-well">';
                 $html .= '<table class="data_table_pagination">';
@@ -444,8 +443,6 @@ class SortableTable extends HTML_Table
                 $html .= '</ul>';
                 $html .= '</div>'; //btn-group
                 $html .= '</div>'; //toolbar
-            } else {
-                //$html .= $form;
             }
 
             $html .= '</td>';
@@ -497,7 +494,6 @@ class SortableTable extends HTML_Table
                     .grid_element_0 { width:100px; height: 100px; float:left; text-align:center; margin-bottom:5px;}
                     .grid_element_1 { width:100px; float:left; text-align:center;margin-bottom:5px;}
                     .grid_element_2 { width:150px; float:left;}
-
                     .grid_selectbox { width:30%; float:left;}
                     .grid_title     { width:30%; float:left;}
                     .grid_nav         { }

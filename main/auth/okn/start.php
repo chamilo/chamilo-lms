@@ -67,14 +67,19 @@ if (isset($_GET['email']) || isset($_GET['email_bis'])) {
         'lastname1',
         'lastname2',
     ];
-    foreach ($attributes as $attribute) {
-        foreach ($attributeNameList as $name) {
-            if (isset($attribute[$name]) && !empty($attribute[$name])) {
-                $valueList[$name] = $attribute[$name];
-            }
-            if (isset($attribute[$name.'_bis']) && !empty($attribute[$name.'_bis'])) {
-                $valueList[$name] = $attribute[$name.'_bis'];
-            }
+
+    // Check normal params
+    foreach ($attributeNameList as $name) {
+        if (isset($attributes[$name]) && !empty($attributes[$name])) {
+            $valueList[$name] = $attributes[$name];
+        }
+    }
+
+    // Check bis params
+    foreach ($attributeNameList as $name) {
+        $bisName = $name.'_bis';
+        if (isset($attributes[$bisName]) && !empty($attributes[$bisName])) {
+            $valueList[$name] = $attributes[$bisName];
         }
     }
 
@@ -88,7 +93,7 @@ if (isset($_GET['email']) || isset($_GET['email_bis'])) {
     ) {
         echo 'Not enough parameters, current values: ';
         echo '<pre>';
-        var_dump($attributes);
+        var_dump($auth->getAttributes());
         exit;
     }
 

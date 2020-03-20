@@ -680,7 +680,8 @@ function getQuestions(
                     $where
                     $currentExerciseCondition
                     {$efConditions['where']}
-                ORDER BY question_order";
+                ORDER BY BINARY qu.question ASC
+                 ";
     } elseif ($exerciseId == -1) {
         $efConditions = getExtraFieldConditions($formValues, 'join');
         // If we have selected the option 'Orphan questions' in the list-box 'Filter'
@@ -823,7 +824,7 @@ function getQuestions(
                     $currentExerciseCondition
                     {$efConditions['where']}
                 GROUP BY qu.iid
-                ORDER BY session_id ASC
+                ORDER BY BINARY qu.question ASC
                 ";
     }
 
@@ -838,9 +839,7 @@ function getQuestions(
     }
 
     $sql .= " LIMIT $start, $length";
-
     $result = Database::query($sql);
-
     $mainQuestionList = [];
     while ($row = Database::fetch_array($result, 'ASSOC')) {
         $mainQuestionList[] = $row;
@@ -973,8 +972,6 @@ if (is_array($mainQuestionList)) {
             continue;
         }
         $sessionId = isset($question['session_id']) ? $question['session_id'] : null;
-        //$exerciseName = isset($question['exercise_name']) ? '<br />('.$question['exercise_id'].') ' : null;
-
         if (!$objExercise->hasQuestion($question['id'])) {
             $row[] = Display::input(
                 'checkbox',
@@ -1031,49 +1028,13 @@ if (is_array($mainQuestionList)) {
     }
 }
 
-// Display table
-$header = [
-    [
-        '',
-        false,
-        ['style' => 'text-align:center'],
-        ['style' => 'text-align:center'],
-        '',
-    ],
-    [
-        get_lang('QuestionUpperCaseFirstLetter'),
-        false,
-        ['style' => 'text-align:center'],
-        '',
-    ],
-    [
-        get_lang('Type'),
-        false,
-        ['style' => 'text-align:center'],
-        ['style' => 'text-align:center'],
-        '',
-    ],
-    [
-        get_lang('QuestionCategory'),
-        false,
-        ['style' => 'text-align:center'],
-        ['style' => 'text-align:center'],
-        '',
-    ],
-    [
-        get_lang('Difficulty'),
-        false,
-        ['style' => 'text-align:center'],
-        ['style' => 'text-align:center'],
-        '',
-    ],
-    [
-        $actionLabel,
-        false,
-        ['style' => 'text-align:center'],
-        ['style' => 'text-align:center'],
-        '',
-    ],
+$headers = [
+    '',
+    get_lang('QuestionUpperCaseFirstLetter'),
+    get_lang('Type'),
+    get_lang('QuestionCategory'),
+    get_lang('Difficulty'),
+    $actionLabel,
 ];
 
 echo $pagination;
@@ -1083,12 +1044,32 @@ echo '<input type="hidden" name="cidReq" value="'.$_course['code'].'">';
 echo '<input type="hidden" name="selected_course" value="'.$selected_course.'">';
 echo '<input type="hidden" name="course_id" value="'.$selected_course.'">';
 
-Display::display_sortable_table(
-    $header,
-    $data,
-    '',
-    ['per_page_default' => 999, 'per_page' => 999, 'page_nr' => 1]
-);
+$table = new HTML_Table(['class' => 'table table-bordered data_table'], false);
+$row = 0;
+$column = 0;
+foreach ($headers as $header) {
+    $table->setHeaderContents($row,$column , $header);
+
+    $column++;
+}
+
+$row = 1;
+foreach ($data as $rows) {
+    $column = 0;
+    foreach ($rows as $value) {
+        $table->setCellContents($row, $column, $value);
+        $table->updateCellAttributes(
+            $row,
+            $column,
+            $value
+        );
+        $column++;
+    }
+    $row++;
+}
+
+$table->display();
+
 echo '</form>';
 
 $tableId = 'question_pool_id';
@@ -1113,10 +1094,10 @@ if ($selected_course == api_get_course_int_id()) {
 
 foreach ($actions as $action => &$label) {
     $html .= '<li>
-                <a data-action ="'.$action.'" href="#" onclick="javascript:action_click(this, \''.$tableId.'\');">'.
-                    $label.'
-                </a>
-              </li>';
+            <a data-action ="'.$action.'" href="#" onclick="javascript:action_click(this, \''.$tableId.'\');">'.
+                $label.'
+            </a>
+          </li>';
 }
 $html .= '</ul>';
 $html .= '</div>'; //btn-group

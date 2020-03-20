@@ -31,16 +31,14 @@ function removeExtraField()
         ->getRepository('ChamiloCoreBundle:ExtraField')
         ->findOneBy(['variable' => 'moodle_password', 'extraFieldType' => ExtraField::USER_FIELD_TYPE]);
 
-    if (empty($extraField)) {
-        throw new Exception('User extra field not found.');
+    if ($extraField) {
+        $em
+            ->createQuery('DELETE FROM ChamiloCoreBundle:ExtraFieldValues efv WHERE efv.field = :field')
+            ->execute(['field' => $extraField]);
+
+        $em->remove($extraField);
+        $em->flush();
     }
-
-    $em
-        ->createQuery('DELETE FROM ChamiloCoreBundle:ExtraFieldValues efv WHERE efv.field = :field')
-        ->execute(['field' => $extraField]);
-
-    $em->remove($extraField);
-    $em->flush();
 }
 
 /**

@@ -7611,23 +7611,15 @@ class SessionManager
 
         // Get session field values
         $extra = new ExtraFieldValue('session');
-        $sessionFieldValueList = $extra->get_all(
-            [
-                "field_id IN ( ".implode(", ", $variablePlaceHolders)." )" => array_keys($fields),
-            ]
-        );
-
+        $sessionFieldValueList = [];
+        foreach (array_keys($fields) as $fieldId) {
+            $sessionFieldValue = $extra->get_values_by_handler_and_field_id($sessionId, $fieldId);
+            if ($sessionFieldValue != false) {
+                $sessionFieldValueList[$fieldId] = $sessionFieldValue;
+            }
+        }
+ 
         foreach ($sessionFieldValueList as $sessionFieldValue) {
-            // Match session field values to session
-            if ($sessionFieldValue['item_id'] != $sessionId) {
-                continue;
-            }
-
-            // Check if session field value is set in session field list
-            if (!isset($fields[$sessionFieldValue['field_id']])) {
-                continue;
-            }
-
             $extrafieldVariable = $fields[$sessionFieldValue['field_id']];
             $extrafieldValue = $sessionFieldValue['value'];
 

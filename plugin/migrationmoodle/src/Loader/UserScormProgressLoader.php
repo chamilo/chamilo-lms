@@ -25,7 +25,7 @@ class UserScormProgressLoader implements LoaderInterface
                 lpv.c_id,
                 lpv.iid,
                 lpv.lp_id,
-                CAST((count_item.c_lpi / count_item_view.c_lpiv * 100) AS INT) progress
+                (count_item.c_lpi / count_item_view.c_lpiv * 100) progress
             FROM c_lp_view lpv
             INNER JOIN (
                 SELECT lp_id, COUNT(iid) AS c_lpi
@@ -55,6 +55,8 @@ class UserScormProgressLoader implements LoaderInterface
         $tblLpView = \Database::get_course_table(TABLE_LP_VIEW);
 
         while ($row = \Database::fetch_assoc($statement)) {
+            $row['progress'] = (int) $row['progress'];
+
             $sql = "UPDATE $tblLpView
                 SET progress = {$row['progress']}
                 WHERE user_id = {$row['user_id']}

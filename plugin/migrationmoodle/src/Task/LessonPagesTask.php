@@ -49,7 +49,7 @@ class LessonPagesTask extends BaseTask
                     lpo.qtype,
                     lpo.prev,
                     lpo.lesson,
-                    cast(lpo.display_order AS INT) lpo_display_order,
+                    CAST(lpo.display_order AS SIGNED) lpo_display_order,
                     l.course
                 FROM lesson_pages_ordered lpo
                 INNER JOIN mdl_lesson l ON lpo.lesson = l.id

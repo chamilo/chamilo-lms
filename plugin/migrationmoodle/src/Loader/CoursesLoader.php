@@ -21,12 +21,19 @@ class CoursesLoader implements LoaderInterface
         $incomingData['unsubscribe'] = false;
         $incomingData['disk_quota'] = 500 * 1024 * 1024;
 
-        $course = \Database::getManager()
-            ->getRepository('ChamiloCoreBundle:Course')
-            ->findOneBy(['code' => $incomingData['wanted_code']]);
+        $result = \Database::select(
+            'COUNT(1) AS c',
+            \Database::get_main_table(TABLE_MAIN_COURSE),
+            [
+                'where' => [
+                    'code = ?' => $incomingData['wanted_code'],
+                ],
+            ],
+            'first'
+        );
 
-        if ($course) {
-            $incomingData['wanted_code'] = $unique_prefix = substr(md5(uniqid(rand())), 0, 10);
+        if (!empty($result['c'])) {
+            $incomingData['wanted_code'] = $incomingData['wanted_code'].substr(md5(uniqid(rand())), 0, 10);
         }
 
         $accessUrlId = \MigrationMoodlePlugin::create()->getAccessUrlId();

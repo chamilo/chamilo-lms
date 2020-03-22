@@ -46,10 +46,9 @@ class LessonQuestionPagesQuizLoader implements LoaderInterface
 
         $quizId = $exercise->save();
 
-        \Database::getManager()
-            ->createQuery('UPDATE ChamiloCourseBundle:CLpItem i SET i.path = :path WHERE i.iid = :id')
-            ->setParameters(['path' => $quizId, 'id' => $incomingData['item_id']])
-            ->execute();
+        $tblLpItem = \Database::get_course_table(TABLE_LP_ITEM);
+
+        \Database::query("UPDATE $tblLpItem SET path = '$quizId' WHERE iid = {$incomingData['item_id']}");
 
         return $quizId;
     }

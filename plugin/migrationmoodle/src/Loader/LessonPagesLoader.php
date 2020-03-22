@@ -17,6 +17,8 @@ class LessonPagesLoader implements LoaderInterface
     /**
      * Load the data and return the ID inserted.
      *
+     * @param array $incomingData
+     *
      * @return int
      */
     public function load(array $incomingData)
@@ -34,17 +36,6 @@ class LessonPagesLoader implements LoaderInterface
             $incomingData['title'],
             ''
         );
-
-        //$em = \Database::getManager();
-        //
-        //try {
-        //    $item = $em->find('ChamiloCourseBundle:CLpItem', $itemId)->setDisplayOrder(0);
-        //
-        //    $em->persist($item);
-        //    $em->flush();
-        //} catch (\Exception $e) {
-        //    return $itemId;
-        //}
 
         return $itemId;
     }

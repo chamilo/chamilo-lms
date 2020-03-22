@@ -17,8 +17,6 @@ class ScormScoLoader implements LoaderInterface
      */
     public function load(array $incomingData)
     {
-        $em = \Database::getManager();
-
         $scorm = new \scorm(
             $incomingData['c_code'],
             $incomingData['lp_id'],
@@ -34,14 +32,12 @@ class ScormScoLoader implements LoaderInterface
             ''
         );
 
-        $item = $em->find('ChamiloCourseBundle:CLpItem', $itemId);
-        $item
-            ->setPath($incomingData['path'])
-            ->setRef($incomingData['ref']);
+        $tblLpItem = \Database::get_course_table(TABLE_LP_ITEM);
 
-        $em->persist($item);
-        $em->flush();
+        \Database::query(
+            "UPDATE $tblLpItem SET path = '{$incomingData['path']}', ref = '{$incomingData['ref']}' WHERE iid = $itemId"
+        );
 
-        return $item->getId();
+        return $itemId;
     }
 }

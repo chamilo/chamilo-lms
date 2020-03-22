@@ -18,22 +18,29 @@ class SortSectionModuleLoader implements LoaderInterface
     public function load(array $incomingData)
     {
         // Search the Description document to put it as first item
-        $firstItem = \Database::getManager()
-            ->getRepository('ChamiloCourseBundle:CLpItem')
-            ->findOneBy(
-                [
-                    'cId' => $incomingData['c_id'],
-                    'lpId' => $incomingData['lp_id'],
-                    'parentItemId' => 0,
-                    'itemType' => TOOL_DOCUMENT,
+        $firstItem = \Database::select(
+            'iid',
+            \Database::get_course_table(TABLE_LP_ITEM),
+            [
+                'where' => [
+                    'c_id = ? AND lp_id = ? AND parent_item_id = ? AND item_type = ?' => [
+                        $incomingData['c_id'],
+                        $incomingData['lp_id'],
+                        0,
+                        TOOL_DOCUMENT,
+                    ],
                 ],
-                ['iid' => 'ASC']
-            );
+                'order' => [
+                    'iid' => 'ASC',
+                ],
+            ],
+            'first'
+        );
 
         $orderList = $incomingData['order_list'];
 
         if ($firstItem) {
-            $orderList = [$firstItem->getId() => 0] + $orderList;
+            $orderList = [$firstItem['iid'] => 0] + $orderList;
         }
 
         \learnpath::sortItemByOrderList(

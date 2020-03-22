@@ -23,6 +23,10 @@ class UserQuizAttemptLoader implements LoaderInterface
             $incomingData['session_id']
         );
 
+        /** @var \DateTime $exeDate */
+        $exeDate = clone $incomingData['date'];
+        $exeDate->modify("+{$incomingData['duration']} seconds");
+
         return \Database::insert(
             \Database::get_main_table(TABLE_STATISTIC_TRACK_E_EXERCISES),
             [
@@ -38,7 +42,7 @@ class UserQuizAttemptLoader implements LoaderInterface
                 'orig_lp_item_view_id' => $view['iid'],
                 'exe_weighting' => $incomingData['weighting'],
                 'user_ip' => '',
-                'exe_date' => $incomingData['date']->format('Y-m-d H:i:s'),
+                'exe_date' => $exeDate->format('Y-m-d H:i:s'),
                 'exe_result' => (float) $incomingData['result'],
                 'steps_counter' => 0,
                 'exe_duration' => $incomingData['duration'],

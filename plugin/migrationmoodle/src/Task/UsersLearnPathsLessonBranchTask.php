@@ -32,7 +32,7 @@ class UsersLearnPathsLessonBranchTask extends BaseTask
                 ORDER BY lt.userid, lt.lessonid, lt.starttime
             ) AS lesson_timer ON (lb.lessonid = lesson_timer.lessonid AND lb.userid = lesson_timer.userid)
             WHERE lb.timeseen >= lesson_timer.starttime AND lb.timeseen <= lesson_timer.lessontime
-            ORDER BY lb.userid, lb.lessonid, lb.timteseen';
+            ORDER BY lb.userid, lb.lessonid, lb.timeseen';
 
         $userFilter = $this->plugin->getUserFilterSetting();
 
@@ -50,7 +50,7 @@ class UsersLearnPathsLessonBranchTask extends BaseTask
                 INNER JOIN mdl_user u ON (lb.userid = u.id)
                 WHERE lb.timeseen >= lesson_timer.starttime AND lb.timeseen <= lesson_timer.lessontime
                     AND u.username LIKE '$userFilter%'
-                ORDER BY lb.userid, lb.lessonid, lb.timteseen";
+                ORDER BY lb.userid, lb.lessonid, lb.timeseen";
         }
 
         return [

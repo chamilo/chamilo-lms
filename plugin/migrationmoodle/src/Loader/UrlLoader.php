@@ -36,10 +36,9 @@ class UrlLoader implements LoaderInterface
         );
         $linkId = $link->save($params);
 
-        \Database::getManager()
-            ->createQuery('UPDATE ChamiloCourseBundle:CLpItem i SET i.path = :path WHERE i.iid = :id')
-            ->setParameters(['path' => $linkId, 'id' => $incomingData['item_id']])
-            ->execute();
+        $tblLpItem = \Database::get_course_table(TABLE_LP_ITEM);
+
+        \Database::query("UPDATE $tblLpItem SET path = '$linkId' AND WHERE iid = {$incomingData['item_id']}");
 
         return $linkId;
     }

@@ -52,16 +52,15 @@ class UsersLoader implements LoaderInterface
             throw new \Exception('Users not created');
         }
 
-        /** @var User $user */
-        $user = api_get_user_entity($userId);
-        $user->setRegistrationDate($incomingData['registration_date']);
+        $incomingData['registration_date'] = $incomingData['registration_date']->format('Y-m-d H:i:s');
 
-        $em = \Database::getManager();
+        $tblUser = \Database::get_main_table(TABLE_MAIN_USER);
 
-        $em->persist($user);
-        $em->flush();
+        \Database::query(
+            "UPDATE $tblUser SET registration_date = '{$incomingData['registration_date']}' WHERE id = $userId"
+        );
 
-        \UserManager::update_extra_field_value($user->getId(), 'moodle_password', $incomingData['plain_password']);
+        \UserManager::update_extra_field_value($userId, 'moodle_password', $incomingData['plain_password']);
 
         $urlId = \MigrationMoodlePlugin::create()->getAccessUrlId();
 
@@ -69,6 +68,6 @@ class UsersLoader implements LoaderInterface
             \Database::query("UPDATE access_url_rel_user SET access_url_id = $urlId WHERE user_id = $userId");
         }
 
-        return $user->getId();
+        return $userId;
     }
 }

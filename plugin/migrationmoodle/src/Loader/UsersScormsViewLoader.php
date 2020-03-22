@@ -110,9 +110,7 @@ class UsersScormsViewLoader implements LoaderInterface
                         $sessionId,
                     ],
                 ],
-                'order' => [
-                    'view_count' => 'DESC',
-                ],
+                'order' => 'view_count DESC',
             ],
             'first'
         );

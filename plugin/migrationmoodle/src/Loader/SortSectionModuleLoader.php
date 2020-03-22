@@ -30,9 +30,7 @@ class SortSectionModuleLoader implements LoaderInterface
                         TOOL_DOCUMENT,
                     ],
                 ],
-                'order' => [
-                    'iid' => 'ASC',
-                ],
+                'order' => 'iid ASC',
             ],
             'first'
         );

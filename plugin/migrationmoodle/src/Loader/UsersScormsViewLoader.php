@@ -78,7 +78,8 @@ class UsersScormsViewLoader implements LoaderInterface
                 'where' => [
                     'user_id = ? AND c_id = ?' => [$userId, $courseId],
                 ],
-            ]
+            ],
+            'first'
         );
 
         if (empty($srcru)) {
@@ -98,9 +99,11 @@ class UsersScormsViewLoader implements LoaderInterface
      */
     private function getLpView($userId, $lpId, $cId, $sessionId)
     {
+        $tblLpView = \Database::get_course_table(TABLE_LP_VIEW);
+
         $lpView = \Database::select(
             'iid',
-            \Database::get_course_table(TABLE_LP_VIEW),
+            $tblLpView,
             [
                 'where' => [
                     'user_id = ? AND lp_id = ? AND c_id = ? AND session_id = ?' => [
@@ -116,8 +119,6 @@ class UsersScormsViewLoader implements LoaderInterface
         );
 
         if (empty($lpView)) {
-            $tblLpView = \Database::get_course_table(TABLE_LP_VIEW);
-
             $lpView = [
                 'c_id' => $cId,
                 'lp_id' => $lpId,

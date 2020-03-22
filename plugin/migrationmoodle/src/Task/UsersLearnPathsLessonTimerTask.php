@@ -24,14 +24,20 @@ class UsersLearnPathsLessonTimerTask extends BaseTask
      */
     public function getExtractConfiguration()
     {
-        $query = 'SELECT * FROM mdl_lesson_timer';
+        $query = 'SELECT * FROM mdl_lesson_timer
+            WHERE completed = 1
+            GROUP BY lt.userid, lt.lessonid
+            ORDER BY userid, lessonid, starttime';
 
         $userFilter = $this->plugin->getUserFilterSetting();
 
         if (!empty($userFilter)) {
             $query = "SELECT lt.* FROM mdl_lesson_timer lt
                 INNER JOIN mdl_user u ON lt.userid = u.id
-                WHERE u.username LIKE '$userFilter%'";
+                WHERE u.username LIKE '$userFilter%'
+                    AND lt.completed = 1
+                GROUP BY lt.userid, lt.lessonid
+                ORDER BY lt.userid, lt.lessonid, lt.starttime";
         }
 
         return [

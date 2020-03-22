@@ -27,6 +27,7 @@ class QuestionGapselectTask extends BaseTask
             'class' => LoadedCoursesFilterExtractor::class,
             'query' => "SELECT
                     qa.id,
+                    qq.id,
                     qa.question,
                     GROUP_CONCAT(
                         CONCAT(qa.feedback, '==>>', qa.answer) ORDER BY qa.id ASC SEPARATOR '@||@'

@@ -17,7 +17,7 @@ class Language implements TransformPropertyInterface
      */
     private $languages = [
         'en' => 'english',
-        'fr' => 'english',
+        'fr' => 'french',
         'es' => 'spanish',
     ];
 

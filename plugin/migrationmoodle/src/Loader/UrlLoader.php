@@ -38,7 +38,7 @@ class UrlLoader implements LoaderInterface
 
         $tblLpItem = \Database::get_course_table(TABLE_LP_ITEM);
 
-        \Database::query("UPDATE $tblLpItem SET path = '$linkId' AND WHERE iid = {$incomingData['item_id']}");
+        \Database::query("UPDATE $tblLpItem SET path = '$linkId' WHERE iid = {$incomingData['item_id']}");
 
         return $linkId;
     }

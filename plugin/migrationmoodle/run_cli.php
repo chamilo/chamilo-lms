@@ -71,7 +71,6 @@ $taskNames = [
     'user_question_attempts_gapselect',
     'user_question_attempts_truefalse',
     'users_scorms_view',
-    'users_scorms_progress',
 ];
 
 foreach ($taskNames as $i => $taskName) {

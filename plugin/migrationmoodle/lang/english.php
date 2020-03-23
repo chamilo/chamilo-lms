@@ -74,3 +74,4 @@ $strings['UserQuestionAttemptsGapselectTask'] = 'Question attempts of users for 
 $strings['UserQuestionAttemptsTruefalseTask'] = 'Question attempts of users for truefalse';
 $strings['UsersLastLoginTask'] = 'Last logins for users';
 $strings['TrackLoginTask'] = 'First login and last logout';
+$strings['TrackCourseAccessTask'] = 'User access to course';

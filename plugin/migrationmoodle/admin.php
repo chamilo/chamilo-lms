@@ -100,6 +100,7 @@ $menu = [
     'user_sessions' => [
         'users_learn_paths',
         'users_scorms_view',
+        'track_course_access',
     ],
     'users_learn_paths' => [
         'users_learn_paths_lesson_timer',

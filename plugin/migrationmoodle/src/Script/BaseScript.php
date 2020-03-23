@@ -32,7 +32,7 @@ abstract class BaseScript
         $this->process();
     }
 
-    abstract function process();
+    abstract public function process();
 
     /**
      * @param string $message

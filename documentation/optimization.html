@@ -196,47 +196,50 @@ ALTER TABLE c_lp_item_view ADD INDEX idx_clpiv_c_i_v (c_id, id, view_count);
     Chamilo so you can benefit from them immediately by installing a new version.
     <p>In Chamilo 1.11.x you can boost the DB tables related surveys invitations by adding the following indexes:</p>
     <pre>
+
+        ALTER TABLE c_quiz_answer add index idx_qa_cidqid (c_id, question_id);
+        ALTER TABLE c_lp_item_view ADD INDEX idx_clpiv_c_i_v (c_id, id, view_count);
         CREATE INDEX idx_survey_q_qid ON c_survey_question (question_id);
         CREATE INDEX idx_survey_code ON c_survey (code);
         CREATE INDEX idx_survey_inv_code ON c_survey_invitation (survey_code);
         CREATE INDEX idx_survey_qo_qid ON c_survey_question_option (question_id);
         CREATE INDEX idx_c_survey_answerucsq ON c_survey_answer (user, c_id, survey_id, question_id);
-    </pre>
-    Also by adding a index on access_url_rel_session to improve the course/session list
-    <pre>
+
+        # Also by adding a index on access_url_rel_session to improve the course/session list
         CREATE INDEX idx_accessurs_sid ON access_url_rel_session (session_id);
-    </pre>
-    If you have lots of gradebook stuff, add this
-    <pre>
+
+        # If you have lots of gradebook stuff, add this
         ALTER TABLE gradebook_result ADD INDEX idx_gb_uid_eid (user_id, evaluation_id);
         ALTER TABLE gradebook_category ADD INDEX idx_gb_cat_parent (parent_id);
         ALTER TABLE gradebook_evaluation ADD INDEX idx_ge_cat (category_id);
         ALTER TABLE gradebook_link ADD INDEX idx_gl_cat (category_id);
-    </pre>
-    If you have to delete a lot of users, you'll realize deleting users is a slow operation.
-    Using the following queries might help:
-    <pre>
+
+        # If you have to delete a lot of users, you'll realize deleting users is a slow operation.
+        # Using the following queries might help:
         ALTER TABLE extra_field_values ADD INDEX idx_efv_item (item_id);
-        ALTER TABLE c_item_property ADD INDEX idx_cip_lasteditu (lastedit_user_id);
-    </pre>
-
-    Improvements after 1.11.10
-    <pre>
-        ALTER TABLE message ADD INDEX idx_message_status (msg_status);
-        ALTER TABLE track_e_default ADD INDEX idx_default_user_id (default_user_id);
-
         ALTER TABLE c_document ADD INDEX idx_cdoc_path (path);
         ALTER TABLE c_document ADD INDEX idx_cdoc_size (size);
         ALTER TABLE c_document ADD INDEX idx_cdoc_id (id);
         ALTER TABLE c_document add index idx_cdoc_type (filetype);
         ALTER TABLE c_document add index idx_cdoc_sid (session_id);
-        ALTER TABLE c_item_property ADD INDEX idx_item_property_visibility (visibility);
+
         ALTER TABLE track_e_attempt ADD INDEX idx_track_e_attempt_tms (tms);
+        alter table track_e_login CHANGE login_date login_date DATETIME NOT NULL;
         ALTER TABLE track_e_login ADD INDEX idx_track_e_login_date (login_date);
         ALTER TABLE track_e_course_access ADD INDEX idx_teca_countconn (c_id, session_id, login_course_date);
         ALTER TABLE extra_field_values ADD INDEX idx_efv_fv1 (field_id, value(1));
         ALTER TABLE message ADD INDEX idx_message_senddate (send_date);
 
+        CREATE INDEX idx_message_receiver_status_send_date ON message (user_receiver_id, msg_status, send_date);
+        CREATE INDEX idx_message_status ON message (msg_status);
+        CREATE INDEX idx_message_user_receiver_status ON message (user_receiver_id, msg_status);
+        CREATE INDEX idx_msg_urid ON message (user_receiver_id);
+
+        ALTER TABLE c_item_property CHANGE insert_date insert_date DATETIME NOT NULL, CHANGE lastedit_date lastedit_date DATETIME NOT NULL;
+        # If you have to delete a lot of users, you'll realize deleting users is a slow operation.
+        # Using the following queries might help:
+        ALTER TABLE c_item_property ADD INDEX idx_cip_lasteditu (lastedit_user_id);
+        ALTER TABLE c_item_property ADD INDEX idx_item_property_visibility (visibility);
     </pre>
 <hr />
 <h2><a name="3.Indexes-caching"></a>3. Indexes caching</h2>

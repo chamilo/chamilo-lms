@@ -3,7 +3,6 @@
 
 namespace Chamilo\PluginBundle\MigrationMoodle\Loader;
 
-use Chamilo\CourseBundle\Entity\CToolIntro;
 use Chamilo\PluginBundle\MigrationMoodle\Interfaces\LoaderInterface;
 
 /**

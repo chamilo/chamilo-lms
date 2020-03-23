@@ -7618,7 +7618,7 @@ class SessionManager
                 $sessionFieldValueList[$fieldId] = $sessionFieldValue;
             }
         }
- 
+
         foreach ($sessionFieldValueList as $sessionFieldValue) {
             $extrafieldVariable = $fields[$sessionFieldValue['field_id']];
             $extrafieldValue = $sessionFieldValue['value'];

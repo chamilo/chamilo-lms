@@ -1048,7 +1048,7 @@ $table = new HTML_Table(['class' => 'table table-bordered data_table'], false);
 $row = 0;
 $column = 0;
 foreach ($headers as $header) {
-    $table->setHeaderContents($row,$column , $header);
+    $table->setHeaderContents($row, $column, $header);
 
     $column++;
 }

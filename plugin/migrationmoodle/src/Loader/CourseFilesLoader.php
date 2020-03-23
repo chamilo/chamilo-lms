@@ -20,8 +20,6 @@ class CourseFilesLoader implements LoaderInterface
     /**
      * Load the data and return the ID inserted.
      *
-     * @param array $incomingData
-     *
      * @throws \Exception
      *
      * @return int

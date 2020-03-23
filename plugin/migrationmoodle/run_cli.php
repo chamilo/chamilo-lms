@@ -1,6 +1,7 @@
 <?php
 /* For licensing terms, see /license.txt */
 
+use Chamilo\PluginBundle\MigrationMoodle\Script\BaseScript;
 use Chamilo\PluginBundle\MigrationMoodle\Task\BaseTask;
 
 $cidReset = true;
@@ -18,11 +19,6 @@ if (PHP_SAPI !== 'cli') {
 $outputBuffering = false;
 
 $plugin = MigrationMoodlePlugin::create();
-
-//if ('true' != $plugin->get('active')) {
-//    echo 'Plugin not active.'.PHP_EOL;
-//    exit;
-//}
 
 $taskNames = [
     'course_categories',
@@ -96,4 +92,28 @@ foreach ($taskNames as $i => $taskName) {
     $task->execute();
 
     echo '['.date(DateTime::ATOM)."] End \"$taskClass\"".PHP_EOL;
+}
+
+$scriptNames = [
+    'user_learn_paths_progress',
+];
+
+foreach ($scriptNames as $i => $scriptName) {
+    $scriptClass = api_underscore_to_camel_case($scriptName).'Script';
+    $scriptClass = 'Chamilo\\PluginBundle\\MigrationMoodle\\Script\\'.$scriptClass;
+
+    echo PHP_EOL.'['.date(DateTime::ATOM).'] '.($i + 1).': ';
+
+    if ($plugin->isTaskDone($scriptName)) {
+        echo "Already done \"$scriptClass\"".PHP_EOL;
+        continue;
+    }
+
+    echo "Executing \"$scriptClass.\"".PHP_EOL;
+
+    /** @var BaseScript $script */
+    $script = new $scriptClass();
+    $script->run();
+
+    echo '['.date(DateTime::ATOM)."] End \"$scriptClass\"".PHP_EOL;
 }

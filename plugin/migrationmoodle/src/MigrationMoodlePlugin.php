@@ -153,7 +153,12 @@ class MigrationMoodlePlugin extends Plugin implements HookPluginInterface
         $result = Database::select(
             'COUNT(1) c',
             'plugin_migrationmoodle_task',
-            ['where' => ["name = ?" => Database::escape_string($name.'_task')]],
+            [
+                'where' => [
+                    'name = ?' => Database::escape_string($name.'_task'),
+                    'or name = ?' => Database::escape_string($name.'_script'),
+                ]
+            ],
             'first'
         );
 

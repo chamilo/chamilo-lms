@@ -157,7 +157,7 @@ class MigrationMoodlePlugin extends Plugin implements HookPluginInterface
                 'where' => [
                     'name = ?' => Database::escape_string($name.'_task'),
                     'or name = ?' => Database::escape_string($name.'_script'),
-                ]
+                ],
             ],
             'first'
         );

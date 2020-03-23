@@ -3,7 +3,6 @@
 
 namespace Chamilo\PluginBundle\MigrationMoodle\Loader;
 
-use Chamilo\CourseBundle\Entity\CLpItemView;
 use Chamilo\PluginBundle\MigrationMoodle\Interfaces\LoaderInterface;
 
 /**

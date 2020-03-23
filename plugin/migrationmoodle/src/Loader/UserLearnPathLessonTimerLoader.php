@@ -3,7 +3,6 @@
 
 namespace Chamilo\PluginBundle\MigrationMoodle\Loader;
 
-use Chamilo\CourseBundle\Entity\CLpItemView;
 use Chamilo\PluginBundle\MigrationMoodle\Interfaces\LoaderInterface;
 
 /**
@@ -34,10 +33,9 @@ class UserLearnPathLessonTimerLoader implements LoaderInterface
     }
 
     /**
-     * @param array $incomingData
-     * @return array
-     *
      * @throws \Exception
+     *
+     * @return array
      */
     private function findViewOfParentItem(array $incomingData)
     {
@@ -60,10 +58,9 @@ class UserLearnPathLessonTimerLoader implements LoaderInterface
     }
 
     /**
-     * @param array $incomingData
-     * @return array
-     *
      * @throws \Exception
+     *
+     * @return array
      */
     private function findViewOfFirstItem(array $incomingData)
     {
@@ -85,8 +82,7 @@ class UserLearnPathLessonTimerLoader implements LoaderInterface
         );
 
         if (!$itemView) {
-            throw new \Exception("Item view not found for item with"
-                ." parent item ({$incomingData['parent_item_id']}) and user ({$incomingData['user_id']})");
+            throw new \Exception("Item view not found for item with"." parent item ({$incomingData['parent_item_id']}) and user ({$incomingData['user_id']})");
         }
 
         return $itemView;

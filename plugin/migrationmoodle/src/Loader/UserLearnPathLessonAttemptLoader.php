@@ -11,8 +11,6 @@ namespace Chamilo\PluginBundle\MigrationMoodle\Loader;
 class UserLearnPathLessonAttemptLoader extends UserLearnPathLessonBranchLoader
 {
     /**
-     * @param array $incomingData
-     *
      * @throws \Exception
      *
      * @return int

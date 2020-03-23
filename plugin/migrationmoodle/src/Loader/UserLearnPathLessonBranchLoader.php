@@ -3,7 +3,6 @@
 
 namespace Chamilo\PluginBundle\MigrationMoodle\Loader;
 
-use Chamilo\CourseBundle\Entity\CLpItemView;
 use Chamilo\PluginBundle\MigrationMoodle\Interfaces\LoaderInterface;
 
 /**
@@ -52,10 +51,9 @@ class UserLearnPathLessonBranchLoader implements LoaderInterface
     }
 
     /**
-     * @param array $incomingData
-     * @return array
-     *
      * @throws \Exception
+     *
+     * @return array
      */
     private function findViewOfItem(array $incomingData)
     {
@@ -70,18 +68,16 @@ class UserLearnPathLessonBranchLoader implements LoaderInterface
         );
 
         if (!$itemView) {
-            throw new \Exception("Item view not found for "
-                ."item ({$incomingData['item_id']}) and user ({$incomingData['user_id']}).");
+            throw new \Exception("Item view not found for "."item ({$incomingData['item_id']}) and user ({$incomingData['user_id']}).");
         }
 
         return $itemView;
     }
 
     /**
-     * @param array $incomingData
-     * @return array
-     *
      * @throws \Exception
+     *
+     * @return array
      */
     private function findViewOfPreviousItem(array $incomingData)
     {
@@ -96,8 +92,7 @@ class UserLearnPathLessonBranchLoader implements LoaderInterface
         $previousItemView = \Database::fetch_assoc($result);
 
         if (!$previousItemView) {
-            throw new \Exception("Item view not found for "
-                ."previous item ({$incomingData['item_id']}) and user ({$incomingData['user_id']}).");
+            throw new \Exception("Item view not found for "."previous item ({$incomingData['item_id']}) and user ({$incomingData['user_id']}).");
         }
 
         return $previousItemView;

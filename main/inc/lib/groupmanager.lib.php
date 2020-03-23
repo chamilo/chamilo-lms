@@ -2239,8 +2239,8 @@ class GroupManager
     /**
      * Get all groups where a specific user is subscribed.
      *
-     * @param int $user_id
-     * @param int $courseId
+     * @param int      $user_id
+     * @param int      $courseId
      * @param int|null $sessionId
      *
      * @return array

@@ -554,7 +554,11 @@ if (is_array($forumCategories)) {
                             }
                         }
 
-                        if ($hideNotifications == false && !api_is_anonymous() && api_is_allowed_to_session_edit(false, true)) {
+                        if ($hideNotifications == false
+                            && !api_is_anonymous()
+                            && api_is_allowed_to_session_edit(false, true)
+                            && !api_get_configuration_value('disable_forum_notifications')
+                        ) {
                             $toolActions .= '<a href="'.api_get_self().'?'.api_get_cidreq()
                                 .'&action=notify&content=forum&id='.$forum['forum_id'].'">'
                                 .Display::return_icon($iconnotify, get_lang('NotifyMe'), null, ICON_SIZE_SMALL)

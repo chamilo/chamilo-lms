@@ -5776,6 +5776,11 @@ function get_notifications($content, $id)
 function send_notifications($forum_id = 0, $thread_id = 0, $post_id = 0)
 {
     $forum_id = (int) $forum_id;
+
+    if (api_get_configuration_value('disable_forum_notifications')) {
+        return false;
+    }
+
     // Users who subscribed to the forum
     if ($forum_id != 0) {
         $users_to_be_notified_by_forum = get_notifications('forum', $forum_id);

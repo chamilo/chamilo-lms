@@ -689,7 +689,7 @@ if (!empty($_SESSION['_user']['user_id']) && !($login || $logout)) {
              * If the login succeeds, for going further,
              * Chamilo needs the $_user['user_id'] variable to be
              * set and registered in the session. It's the
-             * responsability of the external login script
+             * responsibility of the external login script
              * to provide this $_user['user_id'].
              */
             if (isset($extAuthSource) && is_array($extAuthSource)) {
@@ -951,10 +951,10 @@ if (isset($uidReset) && $uidReset) {
         $sql = "SELECT user.*, a.user_id is_admin, login.login_date
                 FROM $user_table
                 LEFT JOIN $admin_table a
-                ON user.user_id = a.user_id
+                ON user.id = a.user_id
                 LEFT JOIN $track_e_login login
-                ON user.user_id  = login.login_user_id
-                WHERE user.user_id = '".$_user['user_id']."'
+                ON user.id  = login.login_user_id
+                WHERE user.id = ".$_user['user_id']."
                 ORDER BY login.login_date DESC LIMIT 1";
 
         $result = Database::query($sql);
@@ -968,7 +968,7 @@ if (isset($uidReset) && $uidReset) {
             ConditionalLogin::check_conditions($uData);
 
             Session::write('_user', $_user);
-            UserManager::update_extra_field_value($_user['user_id'], 'already_logged_in', 'true');
+            UserManager::update_extra_field_value($_user['id'], 'already_logged_in', 'true');
             Session::write('is_platformAdmin', $is_platformAdmin);
             Session::write('is_allowedCreateCourse', $is_allowedCreateCourse);
         } else {
@@ -1270,9 +1270,9 @@ if ((isset($uidReset) && $uidReset) || $cidReset) {
         $course_user_table = Database::get_main_table(TABLE_MAIN_COURSE_USER);
         $sql = "SELECT * FROM $course_user_table
                 WHERE
-                    user_id  = '".$user_id."' AND
+                    user_id  = $user_id AND
                     relation_type <> ".COURSE_RELATION_TYPE_RRHH." AND
-                    c_id = '$_real_cid'";
+                    c_id = $_real_cid";
         $result = Database::query($sql);
 
         $cuData = null;
@@ -1304,8 +1304,8 @@ if ((isset($uidReset) && $uidReset) || $cidReset) {
                         FROM $tbl_session session, $tbl_session_course_user session_rcru
                         WHERE
                             session_rcru.session_id  = session.id AND
-                            session_rcru.c_id = '$_real_cid' AND
-                            session_rcru.user_id = '$user_id' AND
+                            session_rcru.c_id = $_real_cid AND
+                            session_rcru.user_id = $user_id AND
                             session_rcru.session_id = $session_id AND
                             session_rcru.status = 2
                         ";
@@ -1328,7 +1328,7 @@ if ((isset($uidReset) && $uidReset) || $cidReset) {
                             ON sc.session_id = session.id
                             WHERE session.id = $session_id
                             AND session.id_coach = $user_id
-                            AND sc.c_id = '$_real_cid'";
+                            AND sc.c_id = $_real_cid";
                     $result = Database::query($sql);
 
                     if (Database::num_rows($result)) {
@@ -1338,12 +1338,12 @@ if ((isset($uidReset) && $uidReset) || $cidReset) {
                         $is_sessionAdmin = false;
                     } else {
                         // Am I a course coach or a student?
-                        $sql = "SELECT cu.user_id, cu.status
-                               FROM $tbl_session_course_user cu
+                        $sql = "SELECT user_id, status
+                               FROM $tbl_session_course_user
                                WHERE
-                                    c_id = '$_real_cid' AND
-                                    cu.user_id     = '".$user_id."' AND
-                                    cu.session_id  = '".$session_id."'
+                                    c_id = $_real_cid AND
+                                    user_id = $user_id AND
+                                    session_id = $session_id
                                LIMIT 1";
                         $result = Database::query($sql);
 

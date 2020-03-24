@@ -64,7 +64,7 @@ $strings['MaxXUsersWarning'] = 'This conference room has a maximum number of %s 
 $strings['MaxXUsersReached'] = 'The limit of %s simultaneous users has been reached for this conference room. Please wait for one seat to be freed or for another conference to start in order to join.';
 $strings['MaxXUsersReachedManager'] = 'The limit of %s simultaneous users has been reached for this conference room. To increase this limit, please contact the platform administrator.';
 $strings['MaxUsersInConferenceRoom'] = 'Max simultaneous users in a conference room';
-$strings['global_conference_allow_roles'] = "Global conference link only visible for this user roles";
+$strings['global_conference_allow_roles'] = "Global conference link only visible for these user roles";
 $strings['CreatedAt'] = 'Created at';
 
 $strings['interface'] = 'Default Interface';

@@ -61,7 +61,7 @@ $strings['MaxXUsersWarning'] = 'Esta sala de conferencia es limitada a un máxim
 $strings['MaxXUsersReached'] = 'El límite de %s usuarios simultáneos ha sido alcanzado en esta sala de conferencia. Por favor refresque la página en unos minutos para ver si un asiento se ha liberado, o espere la apertura de una nueva sala para poder participar.';
 $strings['MaxXUsersReachedManager'] = 'El límite de %s usuarios simultáneos ha sido alcanzado en esta sala de conferencia. Para aumentar el límite, contáctese con el administrador del portal.';
 $strings['MaxUsersInConferenceRoom'] = 'Número máximo de usuarios simultáneos en una sala de conferencia';
-$strings['global_conference_allow_roles'] = 'El enlace para la videoconferencia ';
+$strings['global_conference_allow_roles'] = 'El enlace de videoconferencia global es disponible para estos perfiles';
 $strings['CreatedAt'] = 'Creado el';
 
 $strings['interface'] = 'Interfaz por defecto';

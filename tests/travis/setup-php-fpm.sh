@@ -19,7 +19,6 @@ echo "cgi.fix_pathinfo = 1" >> ~/.phpenv/versions/$(phpenv version-name)/etc/con
 echo "always_populate_raw_post_data = -1" >> ~/.phpenv/versions/$(phpenv version-name)/etc/conf.d/travis.ini
 echo "error_log = /var/log/php-fpm.log" >> ~/.phpenv/versions/$(phpenv version-name)/etc/conf.d/travis.ini
 echo "memory_limit = 4G" >> ~/.phpenv/versions/$(phpenv version-name)/etc/conf.d/travis.ini
-echo "extension = zip.so" >> ~/.phpenv/versions/$(phpenv version-name)/etc/php.ini
 
 # Starting PHP FPM
 ~/.phpenv/versions/$(phpenv version-name)/sbin/php-fpm

@@ -19,7 +19,7 @@ use Chamilo\PluginBundle\MigrationMoodle\Transformer\Property\LoadedUserSessionL
 class TrackCourseAccessTask extends BaseTask
 {
     /**
-     * @inheritDoc
+     * {@inheritdoc}
      */
     public function getExtractConfiguration()
     {
@@ -46,7 +46,7 @@ class TrackCourseAccessTask extends BaseTask
     }
 
     /**
-     * @inheritDoc
+     * {@inheritdoc}
      */
     public function getTransformConfiguration()
     {
@@ -75,7 +75,7 @@ class TrackCourseAccessTask extends BaseTask
     }
 
     /**
-     * @inheritDoc
+     * {@inheritdoc}
      */
     public function getLoadConfiguration()
     {

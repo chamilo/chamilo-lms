@@ -6050,13 +6050,6 @@ class SessionManager
         $direction = in_array(strtolower($direction), ['asc', 'desc']) ? $direction : 'asc';
         $column = Database::escape_string($column);
 
-        $limitCondition = '';
-        if (isset($from) && isset($numberItems)) {
-            $from = (int) $from;
-            $numberItems = (int) $numberItems;
-            $limitCondition = "LIMIT $from, $numberItems";
-        }
-
         $urlId = api_get_current_access_url_id();
 
         $sessionConditions = '';
@@ -6097,34 +6090,34 @@ class SessionManager
         }
 
         switch ($status) {
+            case 'admin':
             case 'drh':
                 break;
             case 'drh_all':
                 // Show all by DRH
                 if (empty($sessionIdList)) {
-                    $sessionsListSql = self::get_sessions_followed_by_drh(
+                    $sessionListFollowed = self::get_sessions_followed_by_drh(
                         $userId,
                         null,
                         null,
                         false,
-                        true,
                         true
                     );
-                } else {
+
+                    if (!empty($sessionListFollowed)) {
+                        $sessionIdList = array_column($sessionListFollowed, 'id');
+                    }
+                }
+
+                if (!empty($sessionIdList)) {
                     $sessionIdList = array_map('intval', $sessionIdList);
                     $sessionsListSql = "'".implode("','", $sessionIdList)."'";
-                }
-                if (!empty($sessionsListSql)) {
                     $sessionConditions = " AND s.id IN ($sessionsListSql) ";
                 }
-                break;
-            case 'session_admin':
-                $sessionConditions = " AND s.id_coach = $userId ";
-                $userConditionsFromDrh = '';
-                break;
-            case 'admin':
+
                 break;
             case 'teacher':
+            case 'session_admin':
                 $sessionConditions = " AND s.id_coach = $userId ";
                 $userConditionsFromDrh = '';
                 break;
@@ -6177,19 +6170,19 @@ class SessionManager
 
         $sql = "$masterSelect (
                 ($select
-                FROM $tbl_session s
+                    FROM $tbl_session s
+                    INNER JOIN $tbl_session_rel_access_url url ON (url.session_id = s.id)
                     INNER JOIN $tbl_session_rel_course_rel_user su ON (s.id = su.session_id)
                     INNER JOIN $tbl_user u ON (u.user_id = su.user_id)
-                    INNER JOIN $tbl_session_rel_access_url url ON (url.session_id = s.id)
                     $where
                     $sessionConditions
                     $userConditionsFromDrh
                 ) UNION (
                     $select
                     FROM $tbl_course c
+                    INNER JOIN $tbl_course_rel_access_url url ON (url.c_id = c.id)
                     INNER JOIN $tbl_course_user cu ON (cu.c_id = c.id)
                     INNER JOIN $tbl_user u ON (u.user_id = cu.user_id)
-                    INNER JOIN $tbl_course_rel_access_url url ON (url.c_id = c.id)
                     $where
                     $courseConditions
                     $userConditionsFromDrh
@@ -6213,11 +6206,18 @@ class SessionManager
             $column = str_replace('u.', '', $column);
             $sql .= " ORDER BY $column $direction ";
         }
+
+        $limitCondition = '';
+        if (isset($from) && isset($numberItems)) {
+            $from = (int) $from;
+            $numberItems = (int) $numberItems;
+            $limitCondition = "LIMIT $from, $numberItems";
+        }
+
         $sql .= $limitCondition;
         $result = Database::query($sql);
-        $result = Database::store_result($result);
 
-        return $result;
+        return Database::store_result($result);
     }
 
     /**

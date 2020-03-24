@@ -65,6 +65,7 @@ before_install:
   - mysqld --version
   - apache2 -v
   - php -v
+  - php -m
   - php -ini | grep memory_limit
   - sudo cat /etc/hosts
 

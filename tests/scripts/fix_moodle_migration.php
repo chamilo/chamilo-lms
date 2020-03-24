@@ -64,7 +64,7 @@ foreach ($users as $user) {
     $errorLogString = '';
     $successLogString = '';
     $countUsers ++;
-    $customUsername = Database::escape_string('efc'.$user['Numero Inscrit']);
+    $customUsername = strtolower(Database::escape_string('efc'.$user['Numero Inscrit']));
     $chamiloUsername = Database::escape_string($user['Login Chamilo']);
     $res = Database::query(sprintf($sqlFindUser, $customUsername));
     if (Database::num_rows($res) < 1) {
@@ -100,7 +100,7 @@ foreach ($users as $user) {
             // Get sessions from user efcUsername and assign them to user chamiloUsername
             foreach ($sessions as $session) {
                 // subscribe the user with username =
-                //SessionManager::subscribeUsersToSession($session, [$rowUsername['id']], null, false, true);
+                SessionManager::subscribeUsersToSession($session, [$rowUsername['id']], null, false, true);
                 $errorLogString .= 'Special case: '.$chamiloUsername. ' already existed so it should be subscribed to the session of '.$customUsername.". Namely, session $session".PHP_EOL;
                 $errorLogString .= "  Example SQL: INSERT INTO session_rel_user (session_id, user_id, relation_type, registered_at) VALUES ($session, ".$row['id'].", 0, NOW())".PHP_EOL;
             }
@@ -113,8 +113,8 @@ foreach ($users as $user) {
         if (count($sessions) < 1) {
             $errorLogString .= $customUsername.' has no associated session'.PHP_EOL;
         } else {
-            // Rename the session (missing "code formation" in CSV for full-name)
-            $name = Database::escape_string($user['Login Chamilo'].' '.$user['Nom inscrit'].' '.$user['Prenom inscrit'].' : '.$user['Nom formation']);
+            // Rename the session
+            $name = Database::escape_string($user['Login Chamilo'].' '.$user['Nom inscrit'].' '.$user['Prenom inscrit'].' : '.trim($user['Code formation']).' '.$user['Nom formation']);
             foreach ($sessions as $session) {
                 // There should be only one session for this user
                 // Rename the session and assign promotion ID

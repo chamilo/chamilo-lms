@@ -30,6 +30,9 @@ env:
     - VHOST_URL=localhost
     - CHAMILO_VERSION=1.11.x
 
+allow_failures:
+  - php: 7.4
+
 before_install:
   #- sudo apt-get update
   #- sudo apt-get install apache2 libapache2-mod-fastcgi

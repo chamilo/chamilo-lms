@@ -96,6 +96,7 @@ foreach ($taskNames as $i => $taskName) {
 
 $scriptNames = [
     'user_learn_paths_progress',
+    'user_scorms_progress',
 ];
 
 foreach ($scriptNames as $i => $scriptName) {

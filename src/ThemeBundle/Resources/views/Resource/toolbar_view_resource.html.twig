@@ -1,22 +1,26 @@
 {% autoescape false %}
 
+{% if resource.resourceNode.resourceFile %}
+    <a class="btn btn-success"
+       href="{{ url('chamilo_core_resource_view_file', {
+           'id': resource.resourceNode.id,
+           'cid': course.id,
+           'sid': session.id,
+           'type' : type,
+           'tool' : tool,
+           'mode' : 'download'
+       })
+       }}">
+        {{ 'Download' | trans}}    {# {{ resource.resourceNode.slug }}#}
+    </a>
+    <br />
+    {{ 'Size' | trans }}: {{ resource.resourceNode.resourceFile.size | format_file_size }}
+    <br /><br />
+{% endif %}
+
 {{ 'Created at' | trans }}: {{ resource.resourceNode.createdAt | date_to_time_ago }}<br />
 {{ 'Updated at' | trans }}: {{ resource.resourceNode.updatedAt | date_to_time_ago }}<br />
-<br />
-{{ 'Author' | trans }}: {{ resource.resourceNode.creator }}
-
-{% if resource.resourceNode.resourceFile %}
-    <a class="btn btn-default"  href="{{ url('chamilo_core_resource_view_file', {
-        'id': resource.resourceNode.id,
-        'cid': course.id,
-        'sid': session.id,
-        'type' : type,
-        'tool' : tool
-    })
-    }}">
-        {{ 'View'|trans }}
-    </a>
-{% endif %}
+{{ 'Author' | trans }}: {{ resource.resourceNode.creator }}<br />
 
 {# Show where the file was added#}
 {% if resource.resourceNode.resourceLinks %}

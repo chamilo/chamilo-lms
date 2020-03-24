@@ -46,8 +46,7 @@ class BreadcrumbBlockService extends BaseBreadcrumbMenuBlockService
     protected function getMenu(BlockContextInterface $blockContext)
     {
         $menu = $this->getRootMenu($blockContext);
-
-        $menu->addChild('Home', ['route' => 'home']);
+        $menu->addChild('', ['route' => 'home'])->setExtra('icon', 'fas fa-home');
         $sessionId = 0;
         // Course/Session block are set here src/ThemeBundle/Resources/views/Layout/breadcrumb.html.twig
         if ($blockContext->getBlock()->getSetting('session')) {
@@ -105,9 +104,7 @@ class BreadcrumbBlockService extends BaseBreadcrumbMenuBlockService
 
         // Set CSS classes for the items
         foreach ($menu->getChildren() as $child) {
-            $child
-                //->setLinkAttribute('class', 'nav-link')
-                ->setAttribute('class', 'breadcrumb-item');
+            $child->setAttribute('class', 'breadcrumb-item');
         }
 
         return $menu;

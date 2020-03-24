@@ -1,5 +1,12 @@
 {% extends '@KnpMenu/menu.html.twig' %}
 
+{% block label %}
+    {% if item.extra('icon') is not null %}
+        <i class="{{ item.extra('icon') }}"></i>
+    {% endif %}
+    {{ parent() }}
+{% endblock %}
+
 {% block list %}
     {% apply spaceless %}
         <nav aria-label="breadcrumb">

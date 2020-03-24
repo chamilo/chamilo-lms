@@ -14,6 +14,7 @@ class Template
     protected $newFolder;
     protected $diskSpace;
     protected $info;
+    protected $infoAjax;
     protected $preview;
     protected $upload;
 
@@ -29,13 +30,17 @@ class Template
         $this->viewResource = '@ChamiloTheme/Resource/view_resource.html.twig';
         $this->diskSpace = '@ChamiloTheme/Resource/disk_space.html.twig';
         $this->info = '@ChamiloTheme/Resource/info.html.twig';
+        $this->infoAjax = '@ChamiloTheme/Resource/info_ajax.html.twig';
         $this->preview = '@ChamiloTheme/Resource/preview.html.twig';
         $this->upload = '@ChamiloTheme/Resource/upload.html.twig';
     }
 
-    public function getFromAction(string $action)
+    public function getFromAction(string $action, $isAjax = false)
     {
         $action = str_replace('Action', '', $action);
+        if ($isAjax) {
+            $action .= 'Ajax';
+        }
 
         if (property_exists($this, $action)) {
             return $this->$action;

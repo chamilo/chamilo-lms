@@ -2,29 +2,6 @@
 
 {% block content %}
     {% autoescape false %}
-        <h3>{{ resource }}</h3>
-        {% if resource.resourceNode.resourceFile %}
-            File:
-            <a href="{{ url('chamilo_core_resource_view_file', {
-                'id': resource.resourceNode.id,
-                'cid': course.id,
-                'sid': session.id,
-                'type' : type,
-                'tool' : tool,
-                'mode' : 'download'
-            })
-            }}">
-                {{ resource.resourceNode.slug }}
-            </a>
-            <br />
-            {{ 'Size' | trans }}: {{ resource.resourceNode.resourceFile.size }}
-            <br /><br />
-        {% endif %}
-
-        {% if illustration %}
-            <img src="{{ illustration }}" />
-        {% endif %}
-
-        {% include '@ChamiloTheme/Resource/toolbar_view_resource.html.twig' %}
+        {% include '@ChamiloTheme/Resource/info_ajax.html.twig' %}
     {% endautoescape %}
 {% endblock %}

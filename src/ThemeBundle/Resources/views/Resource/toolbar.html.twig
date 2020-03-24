@@ -1,38 +1,90 @@
 {% if is_granted('CREATE', parent_resource_node) %}
-    <div class="actions">
-        {% if resource_settings.allowNodeCreation %}
-            <a class="btn btn-secondary"
-               href="{{ url('chamilo_core_resource_new_folder', {'tool': tool, 'type': type, 'cid': course.id, 'sid': session.id, 'id': id }) }}">
-                {{ 'New folder' | trans }}
-            </a>
-        {% endif %}
+{#    <nav class="navbar navbar-light bg-light">#}
+    <nav class="navbar navbar-expand-lg navbar-light bg-light">
+        <div class="collapse navbar-collapse" id="navbarNavDropdown">
+            <ul class="navbar-nav mr-auto">
+                <li class="nav-item">
+                <div class="dropdown">
+                    <button
+                        class="btn btn-secondary dropdown-toggle"
+                        type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        <i class="fas fa-plus"></i>
+                    </button>
+                    <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                        {% if resource_settings.allowNodeCreation %}
+                            <a class="dropdown-item ajax"
+                               href="{{ url('chamilo_core_resource_new_folder', {'tool': tool, 'type': type, 'cid': course.id, 'sid': session.id, 'id': id }) }}"
+                            >
+                                {{ 'New folder' | trans }}
+                            </a>
+                        {% endif %}
 
-        {% if resource_settings.allowResourceCreation %}
-            <a class="btn btn-secondary"
-               href="{{ url('chamilo_core_resource_new', { 'tool': tool, 'type': type, 'cid': course.id, 'sid': session.id,  'id': id }) }}">
-                {{ 'Create new ' ~ tool | trans }}
-            </a>
-        {% endif %}
+                        {% if resource_settings.allowResourceCreation %}
+                            <a class="dropdown-item"
+                               href="{{ url('chamilo_core_resource_new', { 'tool': tool, 'type': type, 'cid': course.id, 'sid': session.id,  'id': id }) }}">
+                                {{ ('New ' ~ tool) | trans }}
+                            </a>
+                        {% endif %}
 
-        {% if resource_settings.allowResourceUpload %}
-            <a class="btn btn-secondary"
-               href="{{ url('chamilo_core_resource_upload', { 'tool': tool, 'type': type, 'cid': course.id, 'sid': session.id,  'id': id }) }}">
-                {{ 'Upload' | trans }}
-            </a>
-        {% endif %}
+                        {% if resource_settings.allowResourceUpload %}
+                            <a class="dropdown-item"
+                               href="{{ url('chamilo_core_resource_upload', { 'tool': tool, 'type': type, 'cid': course.id, 'sid': session.id,  'id': id }) }}">
+                                {{ 'File upload' | trans }}
+                            </a>
+                        {% endif %}
+                    </div>
+                </div>
+                </li>
+            </ul>
+{#            {% if resource_settings.allowDownloadAll %}#}
+{#                <a class="btn btn-secondary"#}
+{#                   href="{{ url('chamilo_core_resource_download', { 'tool': tool, 'type': type, 'cid': course.id, 'sid': session.id,  'id': id }) }}"#}
+{#                   title="{{ 'Download all' | trans }}"#}
+{#                >#}
+{#                    <i class="fas fa-arrow-circle-down"></i>#}
+{#                </a>#}
+{#            {% endif %}#}
+{#            var selectId = "{{ grid.hash }}[{{ constant('APY\\DataGridBundle\\Grid\\Grid::REQUEST_QUERY_MASS_ACTION') }}]";#}
+            <script>
+                $(function () {
+                    var formId = '{{ grid.hash }}';
+                    $('.action_shortcut').on('click', function () {
+                        var id = $(this).attr('data-id');
+                        var form = $('#' + formId);
+                        form.find('select').val(id);
+                        form.submit();
+                    });
+                });
+            </script>
 
-        {% if resource_settings.allowDownloadAll %}
-            <a class="btn btn-secondary"
-               href="{{ url('chamilo_core_resource_download', { 'tool': tool, 'type': type, 'cid': course.id, 'sid': session.id,  'id': id }) }}">
-                {{ 'Download all' | trans }}
-            </a>
-        {% endif %}
+            <span class="mass-actions" style="display: none">
+                {% for key, massAction in grid.massActions %}
+                    <a
+                        data-id="{{ key }}"
+                        href="#"
+                        class="btn btn-secondary action_shortcut"
+                        title="{{ massAction.title|trans }}"
+                    >
+                        <i class="fas {{ massAction.parameters.icon }}"></i>
+                    </a>
+                {% endfor %}
+            </span>
 
-        {% if resource_settings.allowToSaveEditorToResourceFile %}
-            <a class="btn btn-secondary"
-               href="{{ url('chamilo_core_resource_disk_space', { 'tool': tool, 'type': type, 'cid': course.id, 'sid': session.id,  'id': id }) }}">
-                {{ 'Disk Space' | trans }}
+            {% if resource_settings.allowToSaveEditorToResourceFile %}
+                <a class="btn btn-secondary"
+                   href="{{ url('chamilo_core_resource_disk_space', { 'tool': tool, 'type': type, 'cid': course.id, 'sid': session.id,  'id': id }) }}"
+                   title="{{ 'Disk Space' | trans }}"
+                >
+                    <i class="fas fa-chart-pie"></i>
+                </a>
+            {% endif %}
+
+            <a class="btn btn-secondary resource_info"
+               href="#"
+               title="{{ 'Information' | trans }}"
+            >
+                <i class="fas fa-info-circle"></i>
             </a>
-        {% endif %}
-    </div>
+        </div>
+    </nav>
 {% endif %}

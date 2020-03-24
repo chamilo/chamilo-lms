@@ -5,27 +5,26 @@
 {# See block documentation here: #}
 {# https://github.com/APY/APYDataGridBundle/blob/master/Resources/doc/template/overriding_internal_blocks.md #}
 
-{% block grid_actions %}
-  <div class="mass-actions">
-    <div class="btn-group" role="group">
+{% block grid_column_massaction_cell %}
+  <input type="checkbox" class="action" value="1" name="{{ grid.hash }}[{{ column.id }}][{{ row.primaryFieldValue }}]"/>
+{% endblock grid_column_massaction_cell %}
 
+{% block grid_actions %}
 {#      <a class="btn btn-secondary" href="#" onclick="return {{ grid.hash }}_markVisible(true);">#}
 {#        {{ 'Select visible'|trans }}#}
 {#      </a>#}
 {#      <a class="btn btn-secondary" href="#" onclick="return {{ grid.hash }}_markVisible(false);">#}
 {#        {{ 'Deselect visible'|trans }}#}
 {#      </a>#}
-
-      <a class="btn btn-secondary" href="#" onclick="return {{ grid.hash }}_markAll(true);">
-        {{ 'Select all'|trans }}
-      </a>
-      <a class="btn btn-secondary" href="#" onclick="return {{ grid.hash }}_markAll(false);">
-        {{ 'Deselect all'|trans }}
-      </a>
-      <span class="mass-actions-selected" id="{{ grid.hash }}_mass_action_selected"></span>
-    </div>
+{#      <a class="btn btn-secondary" href="#" onclick="return {{ grid.hash }}_markAll(true);">#}
+{#        {{ 'Select all'|trans }}#}
+{#      </a>#}
+{#      <a class="btn btn-secondary" href="#" onclick="return {{ grid.hash }}_markAll(false);">#}
+{#        {{ 'Deselect all'|trans }}#}
+{#      </a>#}
+{#      <span class="mass-actions-selected" id="{{ grid.hash }}_mass_action_selected"></span>#}
     {% apply spaceless %}
-      <div style="float:right;" class="grid_massactions">
+      <div style="float:right; display:none" class="grid_massactions">
         {{ 'Action'|trans }}
         <input type="hidden" id="{{ grid.hash }}_mass_action_all"
                name="{{ grid.hash }}[{{ constant('APY\\DataGridBundle\\Grid\\Grid::REQUEST_QUERY_MASS_ACTION_ALL_KEYS_SELECTED') }}]"
@@ -37,10 +36,10 @@
             <option value="{{ key }}">{{ massAction.title|trans }}</option>
           {% endfor %}
         </select>
-        <input class="btn btn-secondary" type="submit" value="{{ 'Submit'|trans }}"/>
+        <input id="mass_action_button" class="btn btn-secondary" type="submit" value="{{ 'Submit'|trans }}"/>
       </div>
     {% endapply %}
-  </div>
+
 {% endblock grid_actions %}
 
 {# Bootstrap changes #}
@@ -95,19 +94,19 @@
 {% endblock grid_column_actions_cell %}
 
 {% block grid %}
-  <div class="col-md-12">
     <div class="box box-primary">
       <div class="box-body table-responsive no-padding">
         {% if grid.totalCount > 0 or grid.isFiltered or grid.noDataMessage is same as(false) %}
-          <form id="{{ grid.hash }}" action="{{ grid.routeUrl }}"
-                method="post">
+          <form id="{{ grid.hash }}" action="{{ grid.routeUrl }}" method="post">
+
             <div class="grid_header">
               {% if grid.massActions|length > 0 %}
                 {{ grid_actions(grid) }}
               {% endif %}
             </div>
+
             <div class="grid_body">
-              <table class="table table-bordered table-striped">
+              <table class="table table-hover">
                 {% if grid.isTitleSectionVisible %}
                   {{ grid_titles(grid) }}
                 {% endif %}
@@ -137,7 +136,6 @@
         {% endif %}
       </div>
     </div>
-  </div>
 {% endblock grid %}
 
 {% block grid_search %}

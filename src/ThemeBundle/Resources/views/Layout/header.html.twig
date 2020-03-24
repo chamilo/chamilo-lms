@@ -1,16 +1,16 @@
 {% autoescape false %}
 <header id="app_header" class="app-header navbar">
+    <a class="navbar-brand" href="{{ url('home') }}">
+        <img class="navbar-brand-full" width="130"
+             src="{{ url('home') ~ 'build/css/themes/'~ theme ~'/images/header-logo.png' }}"
+             alt="Chamilo"/>
+    </a>
     <button class="navbar-toggler sidebar-toggler d-lg-none mr-auto" type="button" data-toggle="sidebar-show">
         <span class="navbar-toggler-icon"></span>
     </button>
     <button class="navbar-toggler sidebar-toggler d-md-down-none" type="button" data-toggle="sidebar-lg-show">
         <span class="navbar-toggler-icon"></span>
     </button>
-    <a class="navbar-brand" href="{{ url('home') }}">
-        <img class="navbar-brand-full" width="130"
-             src="{{ url('home') ~ 'build/css/themes/'~ theme ~'/images/header-logo.png' }}"
-             alt="Chamilo"/>
-    </a>
 
     <ul class="nav navbar-nav d-md-down-none">
         <li class="nav-item px-3">
@@ -18,6 +18,8 @@
                 {{ "Course catalog"|trans }}
             </a>
         </li>
+
+
         <form class="form-inline my-2 my-lg-0">
             <input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search">
             <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>

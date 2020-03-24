@@ -751,7 +751,7 @@ class ResourceRepository extends BaseEntityRepository
     public function getResourceFileDownloadUrl(AbstractResource $resource, array $extraParams = [], $referenceType = null): string
     {
         $extraParams['mode'] = 'download';
-        
+
         return $this->getResourceFileUrl($resource, $extraParams, $referenceType);
     }
 

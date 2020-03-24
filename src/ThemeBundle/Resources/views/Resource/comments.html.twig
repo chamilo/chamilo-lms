@@ -1,0 +1,13 @@
+{% autoescape false %}
+    <form class="form-inline" method="post">
+        {{ form_widget(comment_form) }}
+    </form>
+    <hr />
+    {% if resource.resourceNode.comments %}
+        {% for comment in resource.resourceNode.comments %}
+            <p>
+                {{ comment.content }}  {{ comment.author }} {{ comment.updatedAt  |date_to_time_ago}}
+            </p>
+        {% endfor %}
+    {% endif %}
+{% endautoescape %}

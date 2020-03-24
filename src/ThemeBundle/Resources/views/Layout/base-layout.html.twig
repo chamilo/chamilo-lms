@@ -22,7 +22,7 @@
     data-course-code="{{ course ? course.code : '' }}"
     data-session-id="{{ session ? session.id : '' }}"
 >
-<noscript> {{ "NoJavascript" | trans }} </noscript>
+<noscript> {{ "Your browser does not support Javascript" | trans }} </noscript>
 {% block chamilo_wrap %}
     <!-- PAGE -->
     {% block page_header %}
@@ -31,21 +31,21 @@
         <!-- END HEADER -->
     {% endblock %}
     <div class="app-body">
-        <!-- SIDEBAR -->
         {% block page_sidebar %}
+            <!-- SIDEBAR -->
             {% include '@ChamiloTheme/Layout/sidebar.html.twig' %}
+            <!-- END SIDEBAR -->
         {% endblock %}
-        <!-- END SIDEBAR -->
+
         <main id="app-main" class="main">
-            <!-- BREADCRUMB -->
             {% block chamilo_breadcrumb %}
+                <!-- BREADCRUMB -->
                 {% include '@ChamiloTheme/Layout/breadcrumb.html.twig' %}
+                <!-- END BREADCRUMB -->
             {% endblock %}
-            <!-- END BREADCRUMB -->
-            <!-- CONTENT -->
+
             {% block page_content %}
             {% endblock %}
-            <!-- END CONTENT -->
         </main>
     </div>
     <!-- END PAGE -->

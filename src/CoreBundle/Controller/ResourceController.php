@@ -13,9 +13,11 @@ use APY\DataGridBundle\Grid\Grid;
 use APY\DataGridBundle\Grid\Row;
 use APY\DataGridBundle\Grid\Source\Entity;
 use Chamilo\CoreBundle\Entity\Resource\AbstractResource;
+use Chamilo\CoreBundle\Entity\Resource\ResourceComment;
 use Chamilo\CoreBundle\Entity\Resource\ResourceInterface;
 use Chamilo\CoreBundle\Entity\Resource\ResourceLink;
 use Chamilo\CoreBundle\Entity\Resource\ResourceNode;
+use Chamilo\CoreBundle\Form\Type\ResourceCommentType;
 use Chamilo\CoreBundle\Repository\IllustrationRepository;
 use Chamilo\CoreBundle\Repository\ResourceRepository;
 use Chamilo\CoreBundle\Repository\ResourceWithLinkInterface;
@@ -178,7 +180,6 @@ class ResourceController extends AbstractResourceController implements CourseCon
 
         // Title link.
         $titleColumn->setTitle($this->trans('Name'));
-
         $titleColumn->manipulateRenderCell(
             function ($value, Row $row, $router) use ($routeParams, $settings) {
                 /** @var Router $router */
@@ -231,10 +232,9 @@ class ResourceController extends AbstractResourceController implements CourseCon
             }
         );
 
-        if ($grid->hasColumn('filetype')) {
+        /*if ($grid->hasColumn('filetype')) {
             $grid->getColumn('filetype')->manipulateRenderCell(
                 function ($value, Row $row, $router) {
-                    /** @var AbstractResource $entity */
                     $entity = $row->getEntity();
                     $resourceNode = $entity->getResourceNode();
 
@@ -247,7 +247,7 @@ class ResourceController extends AbstractResourceController implements CourseCon
                     return $this->trans('Folder');
                 }
             );
-        }
+        }*/
 
         if ($grid->hasColumn('iid')) {
             $grid->setHiddenColumns(['iid']);
@@ -255,6 +255,7 @@ class ResourceController extends AbstractResourceController implements CourseCon
 
         // Delete mass action.
         if ($this->isGranted(ResourceNodeVoter::DELETE, $parentNode)) {
+            $routeParams['icon'] = 'far fa-trash-alt';
             $deleteMassAction = new MassAction(
                 'Delete',
                 'ChamiloCoreBundle:Resource:deleteMass',
@@ -271,7 +272,7 @@ class ResourceController extends AbstractResourceController implements CourseCon
             false,
             '_self',
             [
-                'class' => 'btn btn-secondary info_action',
+                'class' => 'btn btn-secondary info_action resource_info',
                 'icon' => 'fa-info-circle',
                 'iframe' => false,
             ]
@@ -607,9 +608,7 @@ class ResourceController extends AbstractResourceController implements CourseCon
 
             $this->addFlash('success', $this->trans('Updated'));
 
-            //if ($newResource->getResourceNode()->hasResourceFile()) {
             $resourceNodeParentId = $newResource->getResourceNode()->getParent()->getId();
-            //}
             $routeParams['id'] = $resourceNodeParentId;
 
             return $this->redirectToRoute('chamilo_core_resource_list', $routeParams);
@@ -627,7 +626,7 @@ class ResourceController extends AbstractResourceController implements CourseCon
     /**
      * Shows a resource information.
      *
-     * @Route("/{tool}/{type}/{id}/info", methods={"GET"}, name="chamilo_core_resource_info")
+     * @Route("/{tool}/{type}/{id}/info", methods={"GET", "POST"}, name="chamilo_core_resource_info")
      */
     public function infoAction(Request $request, IllustrationRepository $illustrationRepository): Response
     {
@@ -652,14 +651,34 @@ class ResourceController extends AbstractResourceController implements CourseCon
 
         $illustration = $illustrationRepository->getIllustrationUrlFromNode($resource->getResourceNode());
 
+        $form = $this->createForm(ResourceCommentType::class, null);
+
+        $form->handleRequest($request);
+        if ($form->isSubmitted() && $form->isValid()) {
+            /** @var ResourceComment $comment */
+            $comment = $form->getData();
+            $comment->setAuthor($this->getUser());
+            $resourceNode->addComment($comment);
+            $repository->getEntityManager()->persist($resourceNode);
+            $repository->getEntityManager()->flush();
+        }
+
         $params = [
             'resource' => $resource,
             'illustration' => $illustration,
             'tool' => $tool,
             'type' => $type,
+            'comment_form' => $form->createView(),
         ];
 
-        return $this->render($repository->getTemplates()->getFromAction(__FUNCTION__), $params);
+        return $this->render(
+            $repository->getTemplates()->getFromAction(__FUNCTION__, $request->isXmlHttpRequest()),
+            $params
+        );
+    }
+
+    public function addCommentAction(Request $request): Response
+    {
     }
 
     /**
@@ -1291,13 +1310,11 @@ class ResourceController extends AbstractResourceController implements CourseCon
                 break;
         }
 
-        return $this->render(
-            $template,
-            [
-                'form' => $form->createView(),
-                'parent' => $resourceNodeParentId,
-                'file_type' => $fileType,
-            ]
-        );
+        $routeParams = $this->getResourceParams($request);
+        $routeParams['form'] = $form->createView();
+        $routeParams['parent'] = $resourceNodeParentId;
+        $routeParams['file_type'] = $fileType;
+
+        return $this->render($template, $routeParams);
     }
 }

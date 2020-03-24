@@ -1,0 +1,72 @@
+{% autoescape false %}
+
+<dl class="row">
+    {% if resource.resourceNode.resourceFile %}
+        <dt class="col-sm-3">{{ 'Size' | trans }}</dt>
+        <dd class="col-sm-9">{{ resource.resourceNode.resourceFile.size | format_file_size }}</dd>
+    {% endif %}
+
+    <dt class="col-sm-3">{{ 'Created at' | trans }}</dt>
+    <dd class="col-sm-9">{{ resource.resourceNode.createdAt | date_to_time_ago }}</dd>
+
+    <dt class="col-sm-3">{{ 'Updated at' | trans }}</dt>
+    <dd class="col-sm-9">{{ resource.resourceNode.updatedAt | date_to_time_ago }}</dd>
+
+    <dt class="col-sm-3">{{ 'Author' | trans }}</dt>
+    <dd class="col-sm-9">{{ resource.resourceNode.creator }}</dd>
+
+    {# Show where the file was added#}
+    {% if resource.resourceNode.resourceLinks %}
+        <dt class="col-sm-3">{{'Added in' | trans }}</dt>
+        <dd class="col-sm-9">
+        {% for link in resource.resourceNode.resourceLinks  %}
+            <p>
+                Course: {{ link.course }} {% if link.session %} - Session: {{ link.session }} {% endif %} - Visibility: {{ link.visibilityName | trans }}
+            </p>
+        {% endfor %}
+        </dd>
+    {% endif %}
+</dl>
+
+{% if resource.resourceNode.resourceFile %}
+    <a class="btn btn-success"
+       href="{{ url('chamilo_core_resource_view_file', {
+           'id': resource.resourceNode.id,
+           'cid': course.id,
+           'sid': session.id,
+           'type' : type,
+           'tool' : tool,
+           'mode' : 'download'
+       })
+       }}">
+        {{ 'Download' | trans}}    {# {{ resource.resourceNode.slug }}#}
+    </a>
+{% endif %}
+
+{% if is_granted('EDIT', resource.resourceNode) %}
+    <a class="btn btn-secondary" href="{{ url('chamilo_core_resource_edit', {
+        'id': resource.resourceNode.id,
+        'cid': course.id,
+        'sid': session.id,
+        'type' : type,
+        'tool' : tool,
+    })
+    }}">
+        {{ 'Edit'|trans }}
+    </a>
+{% endif %}
+
+{% if is_granted('DELETE', resource.resourceNode) %}
+    <a class="btn btn-danger" href="{{ url('chamilo_core_resource_delete', {
+        'id': resource.resourceNode.id,
+        'cid': course.id,
+        'sid': session.id,
+        'type' : type,
+        'tool' : tool,
+    })
+    }}">
+        {{ 'Delete'|trans }}
+    </a>
+{% endif %}
+
+{% endautoescape %}

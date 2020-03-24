@@ -84,16 +84,7 @@ hr {
 }
 .main{
   .container-fluid{
-    padding: 0 10px;
-    @include large($breakpoint-xl){
-      width: 95%;
-    }
-    @include portrait($breakpoint-sm, $breakpoint-md){
-      width: 100%;
-    }
-    @include landscape($breakpoint-sm) {
-      width: 100%;
-    }
+    padding: 0 20px;
   }
 }
 
@@ -246,11 +237,11 @@ hr {
   }
 }
 .table-hover{
-  tbody{
-    tr:hover{
-      background-color: #f9f9f9;
-    }
-  }
+  //tbody{
+  //  tr:hover{
+  //    background-color: #f9f9f9;
+  //  }
+  //}
 }
 .table{
   .row_selected {

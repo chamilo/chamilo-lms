@@ -47,8 +47,7 @@ $_course = api_get_course_info();
 $sessionId = api_get_session_id();
 $_user = api_get_user_info();
 
-$hideNotifications = api_get_course_setting('hide_forum_notifications');
-$hideNotifications = $hideNotifications == 1;
+$hideNotifications = api_get_course_setting('hide_forum_notifications') == 1;
 
 require_once 'forumfunction.inc.php';
 

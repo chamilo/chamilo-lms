@@ -4430,14 +4430,22 @@ function get_unaproved_messages($forum_id)
  * This function sends the notification mails to everybody who stated that they wanted to be informed when a new post
  * was added to a given thread.
  *
- * @param array reply information
+ * @param int $forumId
+ * @param int $thread_id
+ * @param int $reply_info
  *
  * @author Patrick Cool <patrick.cool@UGent.be>, Ghent University
  *
  * @version february 2006, dokeos 1.8
+ *
+ * @return void
  */
 function send_notification_mails($forumId, $thread_id, $reply_info)
 {
+    if (api_get_course_setting('hide_forum_notifications') == '1') {
+        return;
+    }
+
     $table = Database::get_course_table(TABLE_FORUM_MAIL_QUEUE);
 
     // First we need to check if

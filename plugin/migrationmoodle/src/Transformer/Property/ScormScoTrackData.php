@@ -40,6 +40,8 @@ class ScormScoTrackData implements TransformPropertyInterface
             'cmi.core.score.raw' => 'score',
             'cmi.core.score.max' => 'max_score',
             'cmi.total_time' => 'total_time',
+            'cmi.score.scaled' => 'score',
+            'cmi.completion_status' => 'status',
         ];
 
         $itemData = [];
@@ -49,8 +51,14 @@ class ScormScoTrackData implements TransformPropertyInterface
                 $value = $this->hmsToSeconds($value);
             } elseif ('cmi.core.exit' === $component) {
                 $value = $this->coreExit($value);
-            } elseif ('cmi.total_time' === $component && !empty($trackData['x.start.time'])) {
-                $value = $this->cmiTotalTime($trackData['x.start.time'], $value);
+            } elseif ('cmi.total_time' === $component) {
+                if (empty($trackData['x.start.time'])) {
+                    $value = 0;
+                } else {
+                    $value = $this->cmiTotalTime($trackData['x.start.time'], $value);
+                }
+            } elseif ('cmi.score.scaled' === $component) {
+                $value = $this->cmiScoreScaled($value);
             }
 
             if (isset($elements[$component])) {
@@ -111,5 +119,15 @@ class ScormScoTrackData implements TransformPropertyInterface
         $endTime->add(new \DateInterval($value));
 
         return $endTime->getTimestamp() - $startTime->getTimestamp();
+    }
+
+    /**
+     * @param string $value
+     *
+     * @return float
+     */
+    private function cmiScoreScaled($value)
+    {
+        return (float) $value * 100;
     }
 }

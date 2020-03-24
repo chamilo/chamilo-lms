@@ -37,10 +37,10 @@ class UsersScormsViewLoader implements LoaderInterface
             'lp_view_id' => $lpViewId,
             'view_count' => $incomingData['lp_item_view_count'],
             'status' => 'not attempted',
-            'start_time' => time(),
+            'start_time' => 0,
             'total_time' => 0,
             'score' => 0,
-            'max_score' => null,
+            'max_score' => 100,
         ];
 
         foreach (array_keys($itemView) as $key) {

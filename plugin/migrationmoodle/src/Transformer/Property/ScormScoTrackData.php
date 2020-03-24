@@ -23,7 +23,13 @@ class ScormScoTrackData implements TransformPropertyInterface
         $trackData = current($data);
         $strComponents = explode(self::SEPARATOR_COMPONENTS, $trackData);
 
-        $itemData = [];
+        $trackData = [];
+
+        foreach ($strComponents as $strComponent) {
+            list($component, $value) = explode(self::SEPARATOR_VALUES, $strComponent);
+
+            $trackData[$component] = $value;
+        }
 
         $elements = [
             'x.start.time' => 'start_time',
@@ -33,22 +39,25 @@ class ScormScoTrackData implements TransformPropertyInterface
             'cmi.suspend_data' => 'suspend_data',
             'cmi.core.score.raw' => 'score',
             'cmi.core.score.max' => 'max_score',
+            'cmi.total_time' => 'total_time',
         ];
 
-        foreach ($strComponents as $strComponent) {
-            list($component, $value) = explode(self::SEPARATOR_VALUES, $strComponent);
+        $itemData = [];
 
+        foreach ($trackData as $component => $value) {
             if ('cmi.core.total_time' === $component) {
                 $value = $this->hmsToSeconds($value);
             } elseif ('cmi.core.exit' === $component) {
                 $value = $this->coreExit($value);
+            } elseif ('cmi.total_time' === $component && !empty($trackData['x.start.time'])) {
+                $value = $this->cmiTotalTime($trackData['x.start.time'], $value);
             }
 
             if (isset($elements[$component])) {
-                $component = $elements[$component];
-            }
+                $variable = $elements[$component];
 
-            $itemData[$component] = $value;
+                $itemData[$variable] = $value;
+            }
         }
 
         return $itemData;
@@ -82,5 +91,25 @@ class ScormScoTrackData implements TransformPropertyInterface
         }
 
         $value;
+    }
+
+    /**
+     * @param int    $startTimeValue
+     * @param string $value
+     *
+     * @throws \Exception
+     *
+     * @return int
+     */
+    private function cmiTotalTime($startTimeValue, $value)
+    {
+        $startTime = new \DateTime();
+        $startTime->setTimestamp($startTimeValue);
+        $startTime->setTimezone(new \DateTimeZone('UTC'));
+
+        $endTime = clone $startTime;
+        $endTime->add(new \DateInterval($value));
+
+        return $endTime->getTimestamp() - $startTime->getTimestamp();
     }
 }

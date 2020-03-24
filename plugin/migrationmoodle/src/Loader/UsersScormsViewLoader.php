@@ -29,6 +29,8 @@ class UsersScormsViewLoader implements LoaderInterface
             $sessionId
         );
 
+        $lpItemViewId = $this->getLpItemView($lpViewId, $incomingData['lp_item_id']);
+
         $itemView = [
             'c_id' => $incomingData['c_id'],
             'lp_item_id' => $incomingData['lp_item_id'],
@@ -47,8 +49,12 @@ class UsersScormsViewLoader implements LoaderInterface
             }
         }
 
-        $lpItemViewId = \Database::insert($tblLpItemView, $itemView);
-        \Database::query("UPDATE $tblLpItemView SET id = iid WHERE iid = $lpItemViewId");
+        if (empty($lpItemViewId)) {
+            $lpItemViewId = \Database::insert($tblLpItemView, $itemView);
+            \Database::query("UPDATE $tblLpItemView SET id = iid WHERE iid = $lpItemViewId");
+        } else {
+            \Database::update($tblLpItemView, $itemView, ['iid = ?' => [$lpItemViewId]]);
+        }
 
         \Database::query(
             "UPDATE $tblLpView
@@ -134,5 +140,24 @@ class UsersScormsViewLoader implements LoaderInterface
         }
 
         return $lpView['iid'];
+    }
+
+    /**
+     * @param int $lpViewId
+     * @param int $lpItemId
+     *
+     * @return int
+     */
+    private function getLpItemView($lpViewId, $lpItemId)
+    {
+        $lpItemView = \Database::fetch_assoc(
+            \Database::query("SELECT iid FROM c_lp_item_view WHERE lp_view_id = $lpViewId AND lp_item_id = $lpItemId")
+        );
+
+        if (empty($lpItemView)) {
+            return 0;
+        }
+
+        return $lpItemView['iid'];
     }
 }

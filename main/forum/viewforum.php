@@ -634,10 +634,7 @@ if (is_array($threads)) {
                 }
             }
             $icon_liststd = 'user.png';
-            if (!api_is_anonymous()
-                && api_is_allowed_to_session_edit(false, true)
-                && !api_get_configuration_value('disable_forum_notifications')
-            ) {
+            if (!api_is_anonymous() && api_is_allowed_to_session_edit(false, true)) {
                 $iconsEdit .= '<a href="'.api_get_self().'?'.$cidreq.'&forum='
                     .$my_forum
                     ."&action=notify&content=thread&id={$row['thread_id']}"

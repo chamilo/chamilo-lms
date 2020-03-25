@@ -80,6 +80,22 @@ define('USERNAME_MAX_LENGTH', $defaultUserNameLength);
 // Fix bug in IIS that doesn't fill the $_SERVER['REQUEST_URI'].
 api_request_uri();
 
+// Set web proxy environment variables
+foreach ([
+             api_get_configuration_sub_value('proxy_settings/stream_context_create/https/proxy'),
+             api_get_configuration_sub_value('proxy_settings/stream_context_create/http/proxy'),
+             api_get_configuration_sub_value('proxy_settings/curl_setopt_array/CURLOPT_PROXY'),
+         ] as $value) {
+    if ($value && is_string($value)) {
+        foreach (['https_proxy', 'http_proxy', 'HTTPS_PROXY', 'HTTP_PROXY'] as $envVar) {
+            if (false === getenv($envVar)) {
+                putenv("$envVar=$value");
+            }
+        }
+        break;
+    }
+}
+
 define('_MPDF_TEMP_PATH', __DIR__.'/../../app/cache/mpdf/');
 define('_MPDF_TTFONTDATAPATH', __DIR__.'/../../app/cache/mpdf/');
 

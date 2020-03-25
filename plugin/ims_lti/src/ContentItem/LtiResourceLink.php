@@ -1,6 +1,7 @@
 <?php
 /* For licensing terms, see /license.txt */
 
+use Chamilo\CoreBundle\Entity\Course;
 use Chamilo\PluginBundle\Entity\ImsLti\ImsLtiTool;
 
 /**
@@ -48,18 +49,6 @@ class LtiResourceLink extends LtiContentItemType
      * @var stdClass
      */
     private $submission;
-
-    /**
-     * LtiContentItem constructor.
-     *
-     * @param stdClass $itemData
-     *
-     * @throws Exception
-     */
-    public function __construct(stdClass $itemData)
-    {
-        $this->validateItemData($itemData);
-    }
 
     /**
      * @param stdClass $itemData
@@ -127,9 +116,11 @@ class LtiResourceLink extends LtiContentItemType
     }
 
     /**
-     * @inheritDoc
+     * @param ImsLtiTool $baseTool
+     *
+     * @return ImsLtiTool
      */
-    protected function createTool(ImsLtiTool $baseTool)
+    private function createTool(ImsLtiTool $baseTool)
     {
         $newTool = clone $baseTool;
         $newTool->setParent($baseTool);
@@ -153,5 +144,26 @@ class LtiResourceLink extends LtiContentItemType
         }
 
         return $newTool;
+    }
+
+    /**
+     * @param ImsLtiTool $baseTool
+     * @param Course    $course
+     *
+     * @throws \Doctrine\ORM\OptimisticLockException
+     *
+     * @return ImsLtiTool
+     */
+    public function save(ImsLtiTool $baseTool, Course $course)
+    {
+        $newTool = $this->createTool($baseTool);
+        $newTool->setActiveDeepLinking(false);
+
+        $em = Database::getManager();
+
+        $em->persist($newTool);
+        $em->flush();
+
+        ImsLtiPlugin::create()->addCourseTool($course, $newTool);
     }
 }

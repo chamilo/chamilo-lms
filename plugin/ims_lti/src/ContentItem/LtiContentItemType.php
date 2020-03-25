@@ -14,41 +14,19 @@ abstract class LtiContentItemType
      * LtiContentItemType constructor.
      *
      * @param stdClass $itemData
-     */
-    abstract public function __construct(stdClass $itemData);
-
-    /**
-     * @param ImsLtiTool $baseTool
-     * @param Course     $course
      *
-     * @throws OptimisticLockException
-     *
-     * @return ImsLtiTool
+     * @throws Exception
      */
-    public function save(ImsLtiTool $baseTool, Course $course)
+    public function __construct(stdClass $itemData)
     {
-        $newTool = $this->createTool($baseTool);
-        $newTool->setActiveDeepLinking(false);
-
-        $em = Database::getManager();
-
-        $em->persist($newTool);
-        $em->flush();
-
-        ImsLtiPlugin::create()->addCourseTool($course, $newTool);
-
-        return $newTool;
+        $this->validateItemData($itemData);
     }
 
     /**
      * @param ImsLtiTool $baseTool
      * @param Course     $course
-     *
-     * @return ImsLtiTool
-     * @throws Exception
-     *
      */
-    abstract protected function createTool(ImsLtiTool $baseTool);
+    abstract function save(ImsLtiTool $baseTool, Course $course);
 
     /**
      * @param stdClass $itemData

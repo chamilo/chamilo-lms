@@ -6,7 +6,6 @@ namespace Chamilo\CourseBundle\Entity;
 
 use Chamilo\CoreBundle\Entity\Resource\AbstractResource;
 use Chamilo\CoreBundle\Entity\Resource\ResourceInterface;
-use Chamilo\CoreBundle\Entity\Room;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -233,17 +232,12 @@ class CCalendarEventAttachment extends AbstractResource implements ResourceInter
         return $this->iid;
     }
 
-    /**
-     * @return CCalendarEvent
-     */
     public function getEvent(): CCalendarEvent
     {
         return $this->event;
     }
 
     /**
-     * @param CCalendarEvent $event
-     *
      * @return CCalendarEventAttachment
      */
     public function setEvent(CCalendarEvent $event): self

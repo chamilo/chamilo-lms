@@ -5,6 +5,7 @@
 namespace Chamilo\CourseBundle\Controller;
 
 use Chamilo\CoreBundle\Controller\BaseController;
+use Chamilo\CoreBundle\Traits\CourseControllerTrait;
 
 /**
  * Each entity controller must extends this class.

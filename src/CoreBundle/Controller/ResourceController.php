@@ -22,8 +22,10 @@ use Chamilo\CoreBundle\Repository\IllustrationRepository;
 use Chamilo\CoreBundle\Repository\ResourceRepository;
 use Chamilo\CoreBundle\Repository\ResourceWithLinkInterface;
 use Chamilo\CoreBundle\Security\Authorization\Voter\ResourceNodeVoter;
+use Chamilo\CoreBundle\Traits\ControllerTrait;
+use Chamilo\CoreBundle\Traits\CourseControllerTrait;
+use Chamilo\CoreBundle\Traits\ResourceControllerTrait;
 use Chamilo\CourseBundle\Controller\CourseControllerInterface;
-use Chamilo\CourseBundle\Controller\CourseControllerTrait;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Criteria;
 use Doctrine\ORM\QueryBuilder;
@@ -46,7 +48,6 @@ use ZipStream\ZipStream;
 /**
  * Class ResourceController.
  *
- * @todo   improve/refactor $this->denyAccessUnlessGranted
  * @Route("/resources")
  *
  * @author Julio Montoya <gugli100@gmail.com>.
@@ -54,6 +55,8 @@ use ZipStream\ZipStream;
 class ResourceController extends AbstractResourceController implements CourseControllerInterface
 {
     use CourseControllerTrait;
+    use ResourceControllerTrait;
+    use ControllerTrait;
 
     private $fileContentName = 'file_content';
 
@@ -92,38 +95,6 @@ class ResourceController extends AbstractResourceController implements CourseCon
                 'tool' => $tool,
                 'type' => $type,
                 'id' => $id,
-                'parent_resource_node' => $parentResourceNode,
-                'resource_settings' => $settings,
-            ]
-        );
-    }
-
-    /**
-     * @Route("/{tool}/{type}/{id}/list", name="chamilo_core_resource_list")
-     *
-     * If node has children show it
-     */
-    public function listAction(Request $request, Grid $grid): Response
-    {
-        $tool = $request->get('tool');
-        $type = $request->get('type');
-        $resourceNodeId = $request->get('id');
-
-        $repository = $this->getRepositoryFromRequest($request);
-        $settings = $repository->getResourceSettings();
-
-        $grid = $this->getGrid($request, $repository, $grid, $resourceNodeId);
-
-        $this->setBreadCrumb($request);
-        $parentResourceNode = $this->getParentResourceNode($request);
-
-        return $grid->getGridResponse(
-            $repository->getTemplates()->getFromAction(__FUNCTION__),
-            [
-                'parent_id' => $resourceNodeId,
-                'tool' => $tool,
-                'type' => $type,
-                'id' => $resourceNodeId,
                 'parent_resource_node' => $parentResourceNode,
                 'resource_settings' => $settings,
             ]
@@ -447,6 +418,110 @@ class ResourceController extends AbstractResourceController implements CourseCon
     }
 
     /**
+     * @Route("/{tool}/{type}/{id}/list", name="chamilo_core_resource_list")
+     *
+     * If node has children show it
+     */
+    public function listAction(Request $request, Grid $grid): Response
+    {
+        $tool = $request->get('tool');
+        $type = $request->get('type');
+        $resourceNodeId = $request->get('id');
+
+        $repository = $this->getRepositoryFromRequest($request);
+        $settings = $repository->getResourceSettings();
+
+        $grid = $this->getGrid($request, $repository, $grid, $resourceNodeId);
+
+        $this->setBreadCrumb($request);
+        $parentResourceNode = $this->getParentResourceNode($request);
+
+        return $grid->getGridResponse(
+            $repository->getTemplates()->getFromAction(__FUNCTION__),
+            [
+                'parent_id' => $resourceNodeId,
+                'tool' => $tool,
+                'type' => $type,
+                'id' => $resourceNodeId,
+                'parent_resource_node' => $parentResourceNode,
+                'resource_settings' => $settings,
+            ]
+        );
+    }
+
+    private function setBreadCrumb(Request $request)
+    {
+        $tool = $request->get('tool');
+        $type = $request->get('type');
+        $resourceNodeId = $request->get('id');
+        $routeParams = $this->getResourceParams($request);
+
+        if (!empty($resourceNodeId)) {
+            $breadcrumb = $this->getBreadCrumb();
+            $toolParams = $routeParams;
+            $toolParams['id'] = null;
+
+            // Root tool link
+            $breadcrumb->addChild(
+                $this->trans($tool),
+                [
+                    'uri' => $this->generateUrl('chamilo_core_resource_index', $toolParams),
+                ]
+            );
+
+            $repo = $this->getRepositoryFromRequest($request);
+            $settings = $repo->getResourceSettings();
+
+            /** @var ResourceInterface $originalResource */
+            $originalResource = $repo->findOneBy(['resourceNode' => $resourceNodeId]);
+            if (null === $originalResource) {
+                return;
+            }
+            $parent = $originalParent = $originalResource->getResourceNode();
+
+            $parentList = [];
+            while (null !== $parent) {
+                if ($type !== $parent->getResourceType()->getName()) {
+                    break;
+                }
+                $parent = $parent->getParent();
+                if ($parent) {
+                    $resource = $repo->findOneBy(['resourceNode' => $parent->getId()]);
+                    if ($resource) {
+                        $parentList[] = $resource;
+                    }
+                }
+            }
+
+            $parentList = array_reverse($parentList);
+            /** @var ResourceInterface $item */
+            foreach ($parentList as $item) {
+                $params = $routeParams;
+                $params['id'] = $item->getResourceNode()->getId();
+                $breadcrumb->addChild(
+                    $item->getResourceName(),
+                    [
+                        'uri' => $this->generateUrl('chamilo_core_resource_list', $params),
+                    ]
+                );
+            }
+
+            $params = $routeParams;
+            $params['id'] = $originalParent->getId();
+            if (false === $settings->isAllowNodeCreation() || $originalResource->getResourceNode()->hasResourceFile()) {
+                $breadcrumb->addChild($originalResource->getResourceName());
+            } else {
+                $breadcrumb->addChild(
+                    $originalResource->getResourceName(),
+                    [
+                        'uri' => $this->generateUrl('chamilo_core_resource_list', $params),
+                    ]
+                );
+            }
+        }
+    }
+
+    /**
      * @Route("/{tool}/{type}/{id}/new_folder", methods={"GET", "POST"}, name="chamilo_core_resource_new_folder")
      */
     public function newFolderAction(Request $request): Response
@@ -454,6 +529,165 @@ class ResourceController extends AbstractResourceController implements CourseCon
         $this->setBreadCrumb($request);
 
         return $this->createResource($request, 'folder');
+    }
+
+    /**
+     * @param string $fileType
+     *
+     * @return RedirectResponse|Response
+     */
+    private function createResource(Request $request, $fileType = 'file')
+    {
+        $resourceNodeParentId = $request->get('id');
+        $repository = $this->getRepositoryFromRequest($request);
+
+        // Default parent node is course.
+        $parentNode = $this->getParentResourceNode($request);
+
+        $this->denyAccessUnlessGranted(
+            ResourceNodeVoter::CREATE,
+            $parentNode,
+            $this->trans('Unauthorised access to resource')
+        );
+
+        $form = $repository->getForm($this->container->get('form.factory'), null);
+
+        $settings = $repository->getResourceSettings();
+
+        if ('file' === $fileType && $settings->isAllowToSaveEditorToResourceFile()) {
+            $resourceParams = $this->getResourceParams($request);
+            $form->add(
+                $this->fileContentName,
+                CKEditorType::class,
+                [
+                    'mapped' => false,
+                    'config' => [
+                        'filebrowserImageBrowseRoute' => 'resources_filemanager',
+                        'filebrowserImageBrowseRouteParameters' => $resourceParams,
+                        'fullPage' => true,
+                    ],
+                ]
+            );
+        }
+
+        $form->handleRequest($request);
+        if ($form->isSubmitted() && $form->isValid()) {
+            $em = $this->getDoctrine()->getManager();
+
+            $course = $this->getCourse();
+            $session = $this->getSession();
+
+            /** @var ResourceInterface $newResource */
+            $newResource = $repository->saveResource($form, $course, $session, $fileType);
+
+            $file = null;
+            if ('file' === $fileType && $settings->isAllowToSaveEditorToResourceFile()) {
+                $content = $form->get($this->fileContentName)->getViewData();
+                $newResource->setTitle($newResource->getTitle().'.html');
+                $fileName = $newResource->getTitle();
+
+                $handle = tmpfile();
+                fwrite($handle, $content);
+                $meta = stream_get_meta_data($handle);
+                $file = new UploadedFile($meta['uri'], $fileName, 'text/html', null, true);
+                $em->persist($newResource);
+            }
+
+            $repository->addResourceToCourseWithParent(
+                $newResource,
+                $parentNode,
+                ResourceLink::VISIBILITY_PUBLISHED,
+                $this->getUser(),
+                $course,
+                $session,
+                null,
+                $file
+            );
+
+            $em->flush();
+
+            // Loops all sharing options
+            /*foreach ($shareList as $share) {
+                $idList = [];
+                if (isset($share['search'])) {
+                    $idList = explode(',', $share['search']);
+                }
+
+                $resourceRight = null;
+                if (isset($share['mask'])) {
+                    $resourceRight = new ResourceRight();
+                    $resourceRight
+                        ->setMask($share['mask'])
+                        ->setRole($share['role'])
+                    ;
+                }
+
+                // Build links
+                switch ($share['sharing']) {
+                    case 'everyone':
+                        $repository->addResourceToEveryone(
+                            $resourceNode,
+                            $resourceRight
+                        );
+                        break;
+                    case 'course':
+                        $repository->addResourceToCourse(
+                            $resourceNode,
+                            $course,
+                            $resourceRight
+                        );
+                        break;
+                    case 'session':
+                        $repository->addResourceToSession(
+                            $resourceNode,
+                            $course,
+                            $session,
+                            $resourceRight
+                        );
+                        break;
+                    case 'user':
+                        // Only for me
+                        if (isset($share['only_me'])) {
+                            $repository->addResourceOnlyToMe($resourceNode);
+                        } else {
+                            // To other users
+                            $repository->addResourceToUserList($resourceNode, $idList);
+                        }
+                        break;
+                    case 'group':
+                        // @todo
+                        break;
+                }*/
+            //}
+            $em->flush();
+            $this->addFlash('success', $this->trans('Saved'));
+
+            $params = $this->getResourceParams($request);
+            $params['id'] = $resourceNodeParentId;
+
+            return $this->redirectToRoute(
+                'chamilo_core_resource_list',
+                $params
+            );
+        }
+
+        switch ($fileType) {
+            case 'folder':
+                $template = $repository->getTemplates()->getFromAction('newFolderAction');
+
+                break;
+            case 'file':
+                $template = $repository->getTemplates()->getFromAction('newAction');
+
+                break;
+        }
+
+        $routeParams = $this->getResourceParams($request);
+        $routeParams['form'] = $form->createView();
+        $routeParams['parent'] = $resourceNodeParentId;
+        $routeParams['file_type'] = $fileType;
+
+        return $this->render($template, $routeParams);
     }
 
     /**
@@ -653,16 +887,6 @@ class ResourceController extends AbstractResourceController implements CourseCon
 
         $form = $this->createForm(ResourceCommentType::class, null);
 
-        $form->handleRequest($request);
-        if ($form->isSubmitted() && $form->isValid()) {
-            /** @var ResourceComment $comment */
-            $comment = $form->getData();
-            $comment->setAuthor($this->getUser());
-            $resourceNode->addComment($comment);
-            $repository->getEntityManager()->persist($resourceNode);
-            $repository->getEntityManager()->flush();
-        }
-
         $params = [
             'resource' => $resource,
             'illustration' => $illustration,
@@ -677,8 +901,81 @@ class ResourceController extends AbstractResourceController implements CourseCon
         );
     }
 
+    /**
+     * Shows a resource information.
+     *
+     * @Route("/{tool}/{type}/{id}/comments/new", methods={"POST"}, name="chamilo_core_resource_comment_new")
+     */
     public function addCommentAction(Request $request): Response
     {
+        if (!$request->isXmlHttpRequest()) {
+            return new JsonResponse(['message' => 'Only ajax'], Response::HTTP_BAD_REQUEST);
+        }
+
+        $nodeId = $request->get('id');
+        $repository = $this->getRepositoryFromRequest($request);
+
+        /** @var AbstractResource $resource */
+        $resource = $repository->getResourceFromResourceNode($nodeId);
+        $this->denyAccessUnlessValidResource($resource);
+
+        $comment = new ResourceComment();
+        $form = $this->createForm(ResourceCommentType::class, $comment, ['method' => 'POST']);
+
+        $form->handleRequest($request);
+        if ($form->isSubmitted() && $form->isValid()) {
+            /** @var ResourceComment $comment */
+            $comment = $form->getData();
+            $comment->setAuthor($this->getUser());
+            $resource->getResourceNode()->addComment($comment);
+            $repository->getEntityManager()->persist($resource);
+            $repository->getEntityManager()->flush();
+
+            return new JsonResponse(['message' => 'added'], Response::HTTP_OK);
+        }
+
+        return new JsonResponse(['message' => 'error'], Response::HTTP_BAD_REQUEST);
+    }
+
+    /**
+     * Shows a resource information.
+     *
+     * @Route("/{tool}/{type}/{id}/comments", methods={"GET"}, name="chamilo_core_resource_comments")
+     */
+    public function getCommentAction(Request $request): Response
+    {
+        $nodeId = $request->get('id');
+        $repository = $this->getRepositoryFromRequest($request);
+
+        /** @var AbstractResource $resource */
+        $resource = $repository->getResourceFromResourceNode($nodeId);
+        $this->denyAccessUnlessValidResource($resource);
+        $comments = $resource->getResourceNode()->getComments();
+
+        return new JsonResponse($comments, Response::HTTP_OK);
+    }
+
+    /**
+     * Shows a resource information.
+     *
+     * @Route("/{tool}/{type}/{id}/comments/{commentId}", methods={"DELETE"}, name="chamilo_core_resource_comments")
+     */
+    public function deleteCommentAction(Request $request, $commentId): Response
+    {
+        $nodeId = $request->get('id');
+        $repository = $this->getRepositoryFromRequest($request);
+
+        /** @var AbstractResource $resource */
+        $resource = $repository->getResourceFromResourceNode($nodeId);
+        $this->denyAccessUnlessValidResource($resource);
+
+        $em = $repository->getEntityManager();
+        $comment = $em->getRepository('ChamiloCoreBundle:Resource\ResourceComment')->find($commentId);
+        $resource->getResourceNode()->getComments()->removeElement($comment);
+        $repository->getEntityManager()->persist($resource);
+        $repository->getEntityManager()->flush();
+
+        return new JsonResponse(['message' => 'ok'], Response::HTTP_OK);
     }
 
     /**
@@ -863,6 +1160,82 @@ class ResourceController extends AbstractResourceController implements CourseCon
     }
 
     /**
+     * @param string $mode
+     * @param string $filter
+     *
+     * @return mixed|StreamedResponse
+     */
+    private function showFile(Request $request, ResourceNode $resourceNode, $mode = 'show', $filter = '')
+    {
+        $this->denyAccessUnlessGranted(
+            ResourceNodeVoter::VIEW,
+            $resourceNode,
+            $this->trans('Unauthorised access to resource')
+        );
+
+        $repo = $this->getRepositoryFromRequest($request);
+        $resourceFile = $resourceNode->getResourceFile();
+
+        if (!$resourceFile) {
+            throw new NotFoundHttpException($this->trans('File not found for resource'));
+        }
+
+        $fileName = $resourceNode->getSlug();
+        $mimeType = $resourceFile->getMimeType();
+
+        switch ($mode) {
+            case 'download':
+                $forceDownload = true;
+
+                break;
+            case 'show':
+            default:
+                $forceDownload = false;
+                // If it's an image then send it to Glide.
+                if (false !== strpos($mimeType, 'image')) {
+                    $glide = $this->getGlide();
+                    $server = $glide->getServer();
+                    $params = $request->query->all();
+
+                    // The filter overwrites the params from get
+                    if (!empty($filter)) {
+                        $params = $glide->getFilters()[$filter] ?? [];
+                    }
+
+                    // The image was cropped manually by the user, so we force to render this version,
+                    // no matter other crop parameters.
+                    $crop = $resourceFile->getCrop();
+                    if (!empty($crop)) {
+                        $params['crop'] = $crop;
+                    }
+
+                    $fileName = $repo->getResourceNodeRepository()->getFilename($resourceFile);
+
+                    return $server->getImageResponse($fileName, $params);
+                }
+
+                break;
+        }
+
+        $stream = $repo->getResourceNodeFileStream($resourceNode);
+
+        $response = new StreamedResponse(
+            function () use ($stream): void {
+                stream_copy_to_stream($stream, fopen('php://output', 'wb'));
+            }
+        );
+        $disposition = $response->headers->makeDisposition(
+            $forceDownload ? ResponseHeaderBag::DISPOSITION_ATTACHMENT : ResponseHeaderBag::DISPOSITION_INLINE,
+            $fileName
+        //Transliterator::transliterate($fileName)
+        );
+        $response->headers->set('Content-Disposition', $disposition);
+        $response->headers->set('Content-Type', $mimeType ?: 'application/octet-stream');
+
+        return $response;
+    }
+
+    /**
      * Shows the associated resource file.
      *
      * @Route("/{tool}/{type}/{id}/view_resource", methods={"GET"}, name="chamilo_core_resource_view_resource")
@@ -1009,312 +1382,5 @@ class ResourceController extends AbstractResourceController implements CourseCon
         $routeParams['id'] = $id;
 
         return $this->render($repository->getTemplates()->getFromAction(__FUNCTION__), $routeParams);
-    }
-
-    private function setBreadCrumb(Request $request)
-    {
-        $tool = $request->get('tool');
-        $type = $request->get('type');
-        $resourceNodeId = $request->get('id');
-        $routeParams = $this->getResourceParams($request);
-
-        if (!empty($resourceNodeId)) {
-            $breadcrumb = $this->getBreadCrumb();
-            $toolParams = $routeParams;
-            $toolParams['id'] = null;
-
-            // Root tool link
-            $breadcrumb->addChild(
-                $this->trans($tool),
-                [
-                    'uri' => $this->generateUrl('chamilo_core_resource_index', $toolParams),
-                ]
-            );
-
-            $repo = $this->getRepositoryFromRequest($request);
-            $settings = $repo->getResourceSettings();
-
-            /** @var ResourceInterface $originalResource */
-            $originalResource = $repo->findOneBy(['resourceNode' => $resourceNodeId]);
-            if (null === $originalResource) {
-                return;
-            }
-            $parent = $originalParent = $originalResource->getResourceNode();
-
-            $parentList = [];
-            while (null !== $parent) {
-                if ($type !== $parent->getResourceType()->getName()) {
-                    break;
-                }
-                $parent = $parent->getParent();
-                if ($parent) {
-                    $resource = $repo->findOneBy(['resourceNode' => $parent->getId()]);
-                    if ($resource) {
-                        $parentList[] = $resource;
-                    }
-                }
-            }
-
-            $parentList = array_reverse($parentList);
-            /** @var ResourceInterface $item */
-            foreach ($parentList as $item) {
-                $params = $routeParams;
-                $params['id'] = $item->getResourceNode()->getId();
-                $breadcrumb->addChild(
-                    $item->getResourceName(),
-                    [
-                        'uri' => $this->generateUrl('chamilo_core_resource_list', $params),
-                    ]
-                );
-            }
-
-            $params = $routeParams;
-            $params['id'] = $originalParent->getId();
-            if (false === $settings->isAllowNodeCreation() || $originalResource->getResourceNode()->hasResourceFile()) {
-                $breadcrumb->addChild($originalResource->getResourceName());
-            } else {
-                $breadcrumb->addChild(
-                    $originalResource->getResourceName(),
-                    [
-                        'uri' => $this->generateUrl('chamilo_core_resource_list', $params),
-                    ]
-                );
-            }
-        }
-    }
-
-    /**
-     * @param string $mode
-     * @param string $filter
-     *
-     * @return mixed|StreamedResponse
-     */
-    private function showFile(Request $request, ResourceNode $resourceNode, $mode = 'show', $filter = '')
-    {
-        $this->denyAccessUnlessGranted(
-            ResourceNodeVoter::VIEW,
-            $resourceNode,
-            $this->trans('Unauthorised access to resource')
-        );
-
-        $repo = $this->getRepositoryFromRequest($request);
-        $resourceFile = $resourceNode->getResourceFile();
-
-        if (!$resourceFile) {
-            throw new NotFoundHttpException($this->trans('File not found for resource'));
-        }
-
-        $fileName = $resourceNode->getSlug();
-        $mimeType = $resourceFile->getMimeType();
-
-        switch ($mode) {
-            case 'download':
-                $forceDownload = true;
-
-                break;
-            case 'show':
-            default:
-                $forceDownload = false;
-                // If it's an image then send it to Glide.
-                if (false !== strpos($mimeType, 'image')) {
-                    $glide = $this->getGlide();
-                    $server = $glide->getServer();
-                    $params = $request->query->all();
-
-                    // The filter overwrites the params from get
-                    if (!empty($filter)) {
-                        $params = $glide->getFilters()[$filter] ?? [];
-                    }
-
-                    // The image was cropped manually by the user, so we force to render this version,
-                    // no matter other crop parameters.
-                    $crop = $resourceFile->getCrop();
-                    if (!empty($crop)) {
-                        $params['crop'] = $crop;
-                    }
-
-                    $fileName = $repo->getResourceNodeRepository()->getFilename($resourceFile);
-
-                    return $server->getImageResponse($fileName, $params);
-                }
-
-                break;
-        }
-
-        $stream = $repo->getResourceNodeFileStream($resourceNode);
-
-        $response = new StreamedResponse(
-            function () use ($stream): void {
-                stream_copy_to_stream($stream, fopen('php://output', 'wb'));
-            }
-        );
-        $disposition = $response->headers->makeDisposition(
-            $forceDownload ? ResponseHeaderBag::DISPOSITION_ATTACHMENT : ResponseHeaderBag::DISPOSITION_INLINE,
-            $fileName
-        //Transliterator::transliterate($fileName)
-        );
-        $response->headers->set('Content-Disposition', $disposition);
-        $response->headers->set('Content-Type', $mimeType ?: 'application/octet-stream');
-
-        return $response;
-    }
-
-    /**
-     * @param string $fileType
-     *
-     * @return RedirectResponse|Response
-     */
-    private function createResource(Request $request, $fileType = 'file')
-    {
-        $resourceNodeParentId = $request->get('id');
-        $repository = $this->getRepositoryFromRequest($request);
-
-        // Default parent node is course.
-        $parentNode = $this->getParentResourceNode($request);
-
-        $this->denyAccessUnlessGranted(
-            ResourceNodeVoter::CREATE,
-            $parentNode,
-            $this->trans('Unauthorised access to resource')
-        );
-
-        $form = $repository->getForm($this->container->get('form.factory'), null);
-
-        $settings = $repository->getResourceSettings();
-
-        if ('file' === $fileType && $settings->isAllowToSaveEditorToResourceFile()) {
-            $resourceParams = $this->getResourceParams($request);
-            $form->add(
-                $this->fileContentName,
-                CKEditorType::class,
-                [
-                    'mapped' => false,
-                    'config' => [
-                        'filebrowserImageBrowseRoute' => 'resources_filemanager',
-                        'filebrowserImageBrowseRouteParameters' => $resourceParams,
-                        'fullPage' => true,
-                    ],
-                ]
-            );
-        }
-
-        $form->handleRequest($request);
-        if ($form->isSubmitted() && $form->isValid()) {
-            $em = $this->getDoctrine()->getManager();
-
-            $course = $this->getCourse();
-            $session = $this->getSession();
-
-            /** @var ResourceInterface $newResource */
-            $newResource = $repository->saveResource($form, $course, $session, $fileType);
-
-            $file = null;
-            if ('file' === $fileType && $settings->isAllowToSaveEditorToResourceFile()) {
-                $content = $form->get($this->fileContentName)->getViewData();
-                $newResource->setTitle($newResource->getTitle().'.html');
-                $fileName = $newResource->getTitle();
-
-                $handle = tmpfile();
-                fwrite($handle, $content);
-                $meta = stream_get_meta_data($handle);
-                $file = new UploadedFile($meta['uri'], $fileName, 'text/html', null, true);
-                $em->persist($newResource);
-            }
-
-            $repository->addResourceToCourseWithParent(
-                $newResource,
-                $parentNode,
-                ResourceLink::VISIBILITY_PUBLISHED,
-                $this->getUser(),
-                $course,
-                $session,
-                null,
-                $file
-            );
-
-            $em->flush();
-
-            // Loops all sharing options
-            /*foreach ($shareList as $share) {
-                $idList = [];
-                if (isset($share['search'])) {
-                    $idList = explode(',', $share['search']);
-                }
-
-                $resourceRight = null;
-                if (isset($share['mask'])) {
-                    $resourceRight = new ResourceRight();
-                    $resourceRight
-                        ->setMask($share['mask'])
-                        ->setRole($share['role'])
-                    ;
-                }
-
-                // Build links
-                switch ($share['sharing']) {
-                    case 'everyone':
-                        $repository->addResourceToEveryone(
-                            $resourceNode,
-                            $resourceRight
-                        );
-                        break;
-                    case 'course':
-                        $repository->addResourceToCourse(
-                            $resourceNode,
-                            $course,
-                            $resourceRight
-                        );
-                        break;
-                    case 'session':
-                        $repository->addResourceToSession(
-                            $resourceNode,
-                            $course,
-                            $session,
-                            $resourceRight
-                        );
-                        break;
-                    case 'user':
-                        // Only for me
-                        if (isset($share['only_me'])) {
-                            $repository->addResourceOnlyToMe($resourceNode);
-                        } else {
-                            // To other users
-                            $repository->addResourceToUserList($resourceNode, $idList);
-                        }
-                        break;
-                    case 'group':
-                        // @todo
-                        break;
-                }*/
-            //}
-            $em->flush();
-            $this->addFlash('success', $this->trans('Saved'));
-
-            $params = $this->getResourceParams($request);
-            $params['id'] = $resourceNodeParentId;
-
-            return $this->redirectToRoute(
-                'chamilo_core_resource_list',
-                $params
-            );
-        }
-
-        switch ($fileType) {
-            case 'folder':
-                $template = $repository->getTemplates()->getFromAction('newFolderAction');
-
-                break;
-            case 'file':
-                $template = $repository->getTemplates()->getFromAction('newAction');
-
-                break;
-        }
-
-        $routeParams = $this->getResourceParams($request);
-        $routeParams['form'] = $form->createView();
-        $routeParams['parent'] = $resourceNodeParentId;
-        $routeParams['file_type'] = $fileType;
-
-        return $this->render($template, $routeParams);
     }
 }

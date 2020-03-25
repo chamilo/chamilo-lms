@@ -86,7 +86,6 @@ class CourseListener
         if (null !== $course) {
             // Setting variables in the session.
             $sessionHandler->set('course', $course);
-
             $sessionHandler->set('_real_cid', $course->getId());
             $sessionHandler->set('cid', $course->getId());
             $sessionHandler->set('_cid', $course->getCode());

@@ -5,8 +5,8 @@
 namespace Chamilo\CoreBundle\Controller;
 
 use Chamilo\CoreBundle\Repository\ResourceNodeRepository;
+use Chamilo\CoreBundle\Traits\CourseControllerTrait;
 use Chamilo\CourseBundle\Controller\CourseControllerInterface;
-use Chamilo\CourseBundle\Controller\CourseControllerTrait;
 use Chamilo\CourseBundle\Repository\CChatConversationRepository;
 use Event;
 use Symfony\Component\HttpFoundation\JsonResponse;

@@ -6867,14 +6867,12 @@ class Tracking
      */
     public static function isAllowToTrack($sessionId)
     {
-        $allow =
+        return
             api_is_platform_admin(true, true) ||
             SessionManager::user_is_general_coach(api_get_user_id(), $sessionId) ||
             api_is_allowed_to_create_course() ||
             api_is_course_tutor() ||
             api_is_course_admin();
-
-        return $allow;
     }
 
     public static function getCourseLpProgress($userId, $sessionId)
@@ -6885,7 +6883,7 @@ class Tracking
 
         $result = [];
         if ($courseList) {
-            $counter = 0;
+            //$counter = 1;
             foreach ($courseList as $course) {
                 $courseId = $course['course_id'];
                 $courseInfo = api_get_course_info_by_id($courseId);
@@ -6893,8 +6891,19 @@ class Tracking
                     continue;
                 }
                 $courseCode = $courseInfo['code'];
-                $categoriesTempList = learnpath::getCategories($courseId);
 
+                $time = self::get_time_spent_in_lp($userId, $courseCode, [], $sessionId);
+                $score = self::getAverageStudentScore($userId, $courseCode, [], $sessionId);
+                $progress = self::get_avg_student_progress($userId, $courseCode, [], $sessionId);
+
+                $result[] = [
+                    'module' => $courseInfo['name'],
+                    'progress' => $progress,
+                    'qualification' => $score,
+                    'activeTime' => $time,
+                ];
+                /*
+                $categoriesTempList = learnpath::getCategories($courseId);
                 $categoryNone = new CLpCategory();
                 $categoryNone->setId(0);
                 $categoryNone->setName(get_lang('WithOutCategory'));
@@ -6902,7 +6911,6 @@ class Tracking
 
                 $categories = array_merge([$categoryNone], $categoriesTempList);
 
-                /** @var CLpCategory $category */
                 foreach ($categories as $category) {
                     $learnPathList = new LearnpathList(
                         $userId,
@@ -6966,33 +6974,8 @@ class Tracking
                         $time = self::get_time_spent_in_lp($userId, $courseCode, [], $sessionId);
                         $score = self::getAverageStudentScore($userId, $courseCode, [], $sessionId);
 
-                        /*$listData[] = [
-                            'id' => $lpId,
-                            'title' => Security::remove_XSS($lpDetails['lp_name']),
-                            'progress' => $progress,
-                            'url' => api_get_path(WEB_CODE_PATH).'webservices/api/v2.php?'.http_build_query(
-                                    [
-                                        'hash' => $this->encodeParams(
-                                            [
-                                                'action' => 'course_learnpath',
-                                                'lp_id' => $lpId,
-                                                'course' => $this->course->getId(),
-                                                'session' => $sessionId,
-                                            ]
-                                        ),
-                                    ]
-                                ),
-                        ];*/
-
-                        $counter++;
-                        $result['course'.$counter] = [
-                            'module' => $lpDetails['lp_name'],
-                            'progress' => $progress,
-                            'qualification' => $score,
-                            'activeTime' => $time,
-                        ];
                     }
-                }
+                }*/
             }
         }
 

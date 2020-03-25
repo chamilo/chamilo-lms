@@ -752,6 +752,10 @@ class scorm extends learnpath
                 $callBack = 'cleanZipFilesAllowHtaccess';
             }
 
+            if (api_get_configuration_value('skip_scorm_package_clean_up')) {
+                $callBack = 'cleanZipFilesNoRename';
+            }
+
             $zipFile->extract(
                 PCLZIP_CB_PRE_EXTRACT,
                 $callBack
@@ -809,7 +813,7 @@ class scorm extends learnpath
         $lp = $this->get_id();
         if ($lp != 0) {
             $tbl_lp = Database::get_course_table(TABLE_LP_MAIN);
-            $sql = "UPDATE $tbl_lp SET theme = '$theme' 
+            $sql = "UPDATE $tbl_lp SET theme = '$theme'
                     WHERE iid = $lp";
             $res = Database::query($sql);
 
@@ -834,7 +838,7 @@ class scorm extends learnpath
         $lp = $this->get_id();
         if ($lp != 0) {
             $tbl_lp = Database::get_course_table(TABLE_LP_MAIN);
-            $sql = "UPDATE $tbl_lp SET preview_image = '$preview_image' 
+            $sql = "UPDATE $tbl_lp SET preview_image = '$preview_image'
                     WHERE iid = $lp";
             $res = Database::query($sql);
 
@@ -859,7 +863,7 @@ class scorm extends learnpath
         $lp = $this->get_id();
         if ($lp != 0) {
             $tbl_lp = Database::get_course_table(TABLE_LP_MAIN);
-            $sql = "UPDATE $tbl_lp SET author = '$author' 
+            $sql = "UPDATE $tbl_lp SET author = '$author'
                     WHERE iid = ".$lp;
             $res = Database::query($sql);
 

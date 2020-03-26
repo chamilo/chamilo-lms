@@ -436,4 +436,4 @@ Feature: Exercise tool
     And wait for the page to be loaded
     And I follow "Delete"
     And I confirm the popup
-    Then I should see "Deleted"
+    Then I should see "Deleted" 

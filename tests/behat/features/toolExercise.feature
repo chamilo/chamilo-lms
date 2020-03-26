@@ -437,3 +437,4 @@ Feature: Exercise tool
     And I follow "Delete"
     And I confirm the popup
     Then I should see "Deleted"
+    

@@ -747,7 +747,7 @@ class Exercise
      * @return int
      */
     public function getQuestionCount()
-    {   
+    {
         $TBL_EXERCICE_QUESTION = Database::get_course_table(TABLE_QUIZ_TEST_QUESTION);
         $TBL_QUESTIONS = Database::get_course_table(TABLE_QUIZ_QUESTION);
         $sql = "SELECT count(q.id) as count
@@ -3204,7 +3204,7 @@ class Exercise
                         $endReminderValue = true;
                     }
                 }
-                if ($this->type == ALL_ON_ONE_PAGE || $nbrQuestions == $questionNum || $endReminderValue ) {
+                if ($this->type == ALL_ON_ONE_PAGE || $nbrQuestions == $questionNum || $endReminderValue) {
                     if ($this->review_answers) {
                         $label = get_lang('ReviewQuestions');
                         $class = 'btn btn-success';

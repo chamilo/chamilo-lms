@@ -437,12 +437,3 @@ Feature: Exercise tool
     And I follow "Delete"
     And I confirm the popup
     Then I should see "Deleted"
-  
-  Scenario: The button at random question should be next
-    Given I am on "/main/exercise/exercise.php?cidReq=TEST"
-    And I press "test"
-    And I press "Start test"
-    And I press "Next question"
-    And I press "Next question"
-    And I press "End test"
-    Then I should see "Score for the test: 0 / 0"

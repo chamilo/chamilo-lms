@@ -84,6 +84,7 @@
         "patchwork/utf8": "~1.2",
         "php": ">=5.6",
         "php-ffmpeg/php-ffmpeg": "0.5.1",
+        "phpmailer/phpmailer": "~6.1",
         "phpoffice/phpexcel": "~1.8",
         "phpoffice/phpword": "~0.14",
         "phpseclib/phpseclib": "^2.0",

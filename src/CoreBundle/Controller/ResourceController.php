@@ -13,7 +13,6 @@ use APY\DataGridBundle\Grid\Grid;
 use APY\DataGridBundle\Grid\Row;
 use APY\DataGridBundle\Grid\Source\Entity;
 use Chamilo\CoreBundle\Entity\Resource\AbstractResource;
-use Chamilo\CoreBundle\Entity\Resource\ResourceComment;
 use Chamilo\CoreBundle\Entity\Resource\ResourceInterface;
 use Chamilo\CoreBundle\Entity\Resource\ResourceLink;
 use Chamilo\CoreBundle\Entity\Resource\ResourceNode;

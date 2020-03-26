@@ -13,7 +13,6 @@ use Chamilo\CoreBundle\Repository\ResourceRepository;
 use Chamilo\UserBundle\Entity\User;
 use Doctrine\ORM\EntityNotFoundException;
 use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 
 trait ResourceControllerTrait

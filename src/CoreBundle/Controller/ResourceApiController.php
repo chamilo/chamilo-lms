@@ -19,13 +19,11 @@ use FOS\RestBundle\Controller\Annotations as Rest;
 use FOS\RestBundle\Request\ParamFetcher;
 use FOS\RestBundle\View\View;
 use Symfony\Component\HttpFoundation\Request;
-use FOS\RestBundle\Controller\Annotations\Route;
 use Symfony\Component\HttpFoundation\Response;
-use function _HumbugBox58fd4d9e2a25\Amp\Parallel\Worker\create;
 
 /**
  * Class ResourceApiController.
- * RouteResource("Resource")
+ * RouteResource("Resource").
  *
  * debug api routes with: bin/console debug:router | grep api
  */

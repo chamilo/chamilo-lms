@@ -948,23 +948,23 @@ if (isset($uidReset) && $uidReset) {
         $admin_table = Database::get_main_table(TABLE_MAIN_ADMIN);
         $track_e_login = Database::get_main_table(TABLE_STATISTIC_TRACK_E_LOGIN);
 
-        $sql = "SELECT user.*, a.user_id is_admin, login.login_date
+        /*$sql = "SELECT user.*, a.user_id is_admin, login.login_date
                 FROM $user_table
                 LEFT JOIN $admin_table a
                 ON user.id = a.user_id
                 LEFT JOIN $track_e_login login
                 ON user.id  = login.login_user_id
                 WHERE user.id = ".$_user['user_id']."
-                ORDER BY login.login_date DESC LIMIT 1";
-
+                ORDER BY login.login_date DESC LIMIT 1";*/
+        $sql = "SELECT * FROM $user_table WHERE id = ".$_user['user_id'];
         $result = Database::query($sql);
 
         if (Database::num_rows($result) > 0) {
             // Extracting the user data
             $uData = Database::fetch_array($result);
             $_user = _api_format_user($uData, false);
-            $is_platformAdmin = (bool) (!is_null($uData['is_admin']));
-            $is_allowedCreateCourse = (bool) (($uData['status'] == COURSEMANAGER) || (api_get_setting('drhCourseManagerRights') && $uData['status'] == DRH));
+            $is_platformAdmin = UserManager::is_admin($_user['user_id']);
+            $is_allowedCreateCourse = $uData['status'] == COURSEMANAGER || (api_get_setting('drhCourseManagerRights') && $uData['status'] == DRH);
             ConditionalLogin::check_conditions($uData);
 
             Session::write('_user', $_user);
@@ -974,7 +974,6 @@ if (isset($uidReset) && $uidReset) {
         } else {
             header('Location:'.api_get_path(WEB_PATH));
             exit;
-            //exit("WARNING UNDEFINED UID !! ");
         }
     } else {
         if (!api_is_anonymous()) {

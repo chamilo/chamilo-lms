@@ -339,13 +339,16 @@ where default_event_type=\'user_anonymized\' and default_value_type=\'user_id\''
     $anonymizedUserIds[] = $userId;
 }
 foreach (array_diff($longDisabledUserIds, $anonymizedUserIds) as $userId) {
-    try {
-        UserManager::anonymize($userId)
-        or die("could not anonymize user $userId\n");
-    } catch (Exception $exception) {
-        die($exception->getMessage()."\n");
-    }
-    if ($debug) {
-        echo "Anonymized user $userId\n";
+    $user = $userRepository->find($userId);
+    if ($user && !$user->isEnabled()) {
+        try {
+            UserManager::anonymize($userId)
+            or die("could not anonymize user $userId\n");
+        } catch (Exception $exception) {
+            die($exception->getMessage()."\n");
+        }
+        if ($debug) {
+            echo "Anonymized user $userId\n";
+        }
     }
 }

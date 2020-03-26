@@ -1241,7 +1241,6 @@ function cleanZipFilesNoRename($p_event, &$p_header)
     return 1;
 }
 
-
 /**
  * Allow .htaccess file.
  *

@@ -50,7 +50,7 @@ if ($form->validate()) {
         $values['subject'],
         $values['content'],
         UserManager::formatUserFullName($user),
-        (!empty($platform_email['SMTP_UNIQUE_SENDER']) ? $platform_email['SMTP_FROM_EMAIL'] :$user->getEmail())
+        (!empty($platform_email['SMTP_UNIQUE_SENDER']) ? $platform_email['SMTP_FROM_EMAIL'] : $user->getEmail())
     );
 
     Display::addFlash(

@@ -84,7 +84,7 @@ try {
                 throw new Exception(get_lang('NoData'));
             }
 
-            $messageStatus = $action === Rest::POST_USER_MESSAGE_READ ? MESSAGE_STATUS_NEW : MESSAGE_STATUS_UNREAD;
+            $messageStatus = Rest::POST_USER_MESSAGE_READ === $action ? MESSAGE_STATUS_NEW : MESSAGE_STATUS_UNREAD;
 
             $data = array_flip($messagesId);
 

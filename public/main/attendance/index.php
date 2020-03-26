@@ -41,7 +41,6 @@ $actions = [
     'calendar_all_delete',
 ];
 
-
 $action = 'attendance_list';
 if (isset($_REQUEST['action']) && (in_array($_REQUEST['action'], $actions))) {
     $action = $_REQUEST['action'];
@@ -422,7 +421,7 @@ switch ($action) {
                 $my_calendar_id = $filter_type;
                 $filter_type = 'calendar_id';
             }
-            $attendant_calendar  = $attendance->get_attendance_calendar(
+            $attendant_calendar = $attendance->get_attendance_calendar(
                 $attendanceId,
                 $filter_type,
                 $my_calendar_id,
@@ -630,7 +629,7 @@ switch ($action) {
             exit;
         } else {
             // calendar edit form
-            $content .=  '<div class="attendance-calendar-edit">';
+            $content .= '<div class="attendance-calendar-edit">';
             $form = new FormValidator(
                 'attendance_calendar_edit',
                 'POST',
@@ -648,7 +647,7 @@ switch ($action) {
             $form->addButtonCancel(get_lang('Cancel'), 'cancel');
             $form->setDefaults($defaults);
             $content .= $form->returnForm();
-            $content .=  '</div>';
+            $content .= '</div>';
         }
         break;
     case 'calendar_all_delete':
@@ -673,7 +672,6 @@ switch ($action) {
         header('Location: '.$currentUrl.'&action=calendar_list&attendance_id='.$attendanceId);
         exit;
         break;
-        //no break
     case 'calendar_list':
         $groupList = isset($_POST['groups']) ? [$_POST['groups']] : [];
         $attendance_calendar = $attendance->get_attendance_calendar(
@@ -727,12 +725,12 @@ switch ($action) {
             $groupIdList[$group['id']] = $group['name'];
         }
 
-        $content .=  Display::page_subheader(get_lang('Calendar list of attendances'));
-        $content .=  '<ul class="list-group">';
+        $content .= Display::page_subheader(get_lang('Calendar list of attendances'));
+        $content .= '<ul class="list-group">';
         if (!empty($attendance_calendar)) {
             foreach ($attendance_calendar as $calendar) {
-                $content .=  '<li class="list-group-item">';
-                $content .=  Display::return_icon(
+                $content .= '<li class="list-group-item">';
+                $content .= Display::return_icon(
                         'lp_calendar_event.png',
                         get_lang('Date DateTime time'),
                         null,
@@ -747,28 +745,28 @@ switch ($action) {
 
                 if (isset($calendar['groups']) && !empty($calendar['groups'])) {
                     foreach ($calendar['groups'] as $group) {
-                        $content .=  '&nbsp;'.Display::label($groupIdList[$group['group_id']]);
+                        $content .= '&nbsp;'.Display::label($groupIdList[$group['group_id']]);
                     }
                 }
 
                 if (!$is_locked_attendance || api_is_platform_admin()) {
                     if (api_is_allowed_to_edit()) {
-                        $content .=  '<div class="pull-right">';
-                        $content .=  '<a href="index.php?'.api_get_cidreq().'&action=calendar_edit&calendar_id='.(int) ($calendar['id']).'&attendance_id='.$attendanceId.'">'.
+                        $content .= '<div class="pull-right">';
+                        $content .= '<a href="index.php?'.api_get_cidreq().'&action=calendar_edit&calendar_id='.(int) ($calendar['id']).'&attendance_id='.$attendanceId.'">'.
                             Display::return_icon('edit.png', get_lang('Edit'), ['style' => 'vertical-align:middle'], ICON_SIZE_SMALL).'</a>&nbsp;';
-                        $content .=  '<a onclick="javascript:if(!confirm(\''.get_lang('Are you sure you want to delete').'\')) return false;" href="index.php?'.api_get_cidreq().'&action=calendar_delete&calendar_id='.(int) ($calendar['id']).'&attendance_id='.$attendanceId.'">'.
+                        $content .= '<a onclick="javascript:if(!confirm(\''.get_lang('Are you sure you want to delete').'\')) return false;" href="index.php?'.api_get_cidreq().'&action=calendar_delete&calendar_id='.(int) ($calendar['id']).'&attendance_id='.$attendanceId.'">'.
                             Display::return_icon('delete.png', get_lang('Delete'), ['style' => 'vertical-align:middle'], ICON_SIZE_SMALL).'</a>';
-                        $content .=  '</div>';
+                        $content .= '</div>';
                     }
                 }
 
-                $content .=  '</li>';
+                $content .= '</li>';
             }
 
-           /* } else {
-                echo Display::return_message(get_lang('There is no date/time registered yet'), 'warning');
-            }*/
-            $content .=  '</ul>';
+            /* } else {
+                 echo Display::return_message(get_lang('There is no date/time registered yet'), 'warning');
+             }*/
+            $content .= '</ul>';
         }
 
         break;

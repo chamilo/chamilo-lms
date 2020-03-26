@@ -2,7 +2,6 @@
 
 /* For licensing terms, see /license.txt */
 
-use Chamilo\CoreBundle\Repository\SequenceResourceRepository;
 use Chamilo\CoreBundle\Entity\SequenceResource;
 use Chamilo\CoreBundle\Entity\SessionRelCourse;
 use Chamilo\CoreBundle\Entity\Tag;
@@ -361,7 +360,7 @@ class CoursesController
     /**
      * Return Session catalog rendered view.
      *
-     * @param array  $limit
+     * @param array $limit
      */
     public function sessionList($limit = [])
     {
@@ -614,7 +613,7 @@ class CoursesController
 
             $hasRequirements = false;
             foreach ($sequences as $sequence) {
-                if (count($sequence['requirements']) === 0) {
+                if (0 === count($sequence['requirements'])) {
                     continue;
                 }
                 $hasRequirements = true;

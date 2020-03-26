@@ -172,6 +172,8 @@ class Course extends AbstractResource implements ResourceInterface
     /**
      * @var string
      *
+     * @Assert\NotBlank()
+     *
      * @Gedmo\Slug(
      *      fields={"title"},
      *      updatable = false,

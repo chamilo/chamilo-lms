@@ -17,16 +17,14 @@ use Doctrine\ORM\QueryBuilder;
 use FOS\RestBundle\Controller\AbstractFOSRestController;
 use FOS\RestBundle\Controller\Annotations as Rest;
 use FOS\RestBundle\Controller\Annotations\RouteResource;
-use FOS\RestBundle\View\View;
 use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Contracts\Translation\TranslatorInterface;
 
 /**
  * Class ResourceApiController.
  *
- * @RouteResource("Resource2")
+ * @RouteResource("resources/{tool}/{type}/{id}")
  */
 class ResourceApiController extends AbstractFOSRestController implements CourseControllerInterface
 {
@@ -55,8 +53,6 @@ class ResourceApiController extends AbstractFOSRestController implements CourseC
         $repository = $this->getRepositoryFromRequest($request);
 
         $resourceNodeId = $request->get('id');
-        var_dump($resourceNodeId);
-        exit;
         $parentNode = $repository->getResourceNodeRepository()->find($resourceNodeId);
 
         $course = $this->getCourse();
@@ -89,8 +85,20 @@ class ResourceApiController extends AbstractFOSRestController implements CourseC
         $this->denyAccessUnlessValidResource($resource);
 
         return $resource;
+    }
 
-        return View::create($resource, Response::HTTP_CREATED);
-        //return $resource;
+    /**
+     * @Rest\View(serializerGroups={"list"})
+     */
+    public function getResourceCommentsAction(Request $request)
+    {
+        $repository = $this->getRepositoryFromRequest($request);
+        $nodeId = $request->get('id');
+
+        /** @var AbstractResource $resource */
+        $resource = $repository->getResourceFromResourceNode($nodeId);
+        $this->denyAccessUnlessValidResource($resource);
+
+        return $resource->getResourceNode()->getComments();
     }
 }

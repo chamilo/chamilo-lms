@@ -1,0 +1,196 @@
+<?php
+
+/* For licensing terms, see /license.txt */
+
+namespace Chamilo\CoreBundle\Entity\Resource;
+
+use Chamilo\UserBundle\Entity\User;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\ORM\Mapping as ORM;
+use Gedmo\Mapping\Annotation as Gedmo;
+use Gedmo\Timestampable\Traits\TimestampableEntity;
+use Gedmo\Tree\Traits\NestedSetEntity;
+use JMS\Serializer\Annotation as JMS;
+use JMS\Serializer\Annotation\Groups;
+use Symfony\Component\Validator\Constraints as Assert;
+
+/**
+ * @Gedmo\Tree(type="nested")
+ * @ORM\Entity(repositoryClass="Gedmo\Tree\Entity\Repository\NestedTreeRepository")
+ * @ORM\Table(name="resource_comment")
+ */
+class ResourceComment
+{
+    use TimestampableEntity;
+    use NestedSetEntity;
+
+    /**
+     * @ORM\Id
+     * @ORM\Column(type="integer")
+     * @ORM\GeneratedValue(strategy="AUTO")
+     * @Groups({"list"})
+     */
+    protected $id;
+
+    /**
+     * @ORM\ManyToOne(targetEntity="Chamilo\CoreBundle\Entity\Resource\ResourceNode", inversedBy="comments")
+     * @ORM\JoinColumn(name="resource_node_id", referencedColumnName="id", onDelete="SET NULL")
+     */
+    protected $resourceNode;
+
+    /**
+     * @var User
+     *
+     * @Groups({"list"})
+     * @ORM\ManyToOne(targetEntity="Chamilo\UserBundle\Entity\User", inversedBy="resourceComments")
+     * @ORM\JoinColumn(name="author_id", referencedColumnName="id", onDelete="SET NULL")
+     */
+    protected $author;
+
+    /**
+     * @var string
+     *
+     * @Groups({"list"})
+     * @Assert\NotBlank()
+     *
+     * @ORM\Column(name="content", type="string", nullable=false)
+     */
+    protected $content;
+
+    /**
+     * @Gedmo\TreeParent
+     *
+     * @ORM\ManyToOne(
+     *     targetEntity="ResourceComment",
+     *     inversedBy="children"
+     * )
+     * @ORM\JoinColumns({@ORM\JoinColumn(onDelete="CASCADE")})
+     */
+    protected $parent;
+
+    /**
+     * @var \DateTime
+     * @Groups({"list"})
+     * @Gedmo\Timestampable(on="create")
+     * @ORM\Column(type="datetime")
+     * @JMS\Type("DateTime")
+     */
+    protected $createdAt;
+
+    /**
+     * @var \DateTime
+     *
+     * @Groups({"list"})
+     * @Gedmo\Timestampable(on="update")
+     * @ORM\Column(type="datetime")
+     * @JMS\Type("DateTime")
+     */
+    protected $updatedAt;
+
+    /**
+     * @var ResourceComment[]
+     *
+     * @ORM\OneToMany(
+     *     targetEntity="ResourceComment",
+     *     mappedBy="parent"
+     * )
+     * @ORM\OrderBy({"id" = "ASC"})
+     */
+    protected $children;
+
+    public function __construct()
+    {
+        $this->content = '';
+        $this->children = new ArrayCollection();
+    }
+
+    public function getId()
+    {
+        return $this->id;
+    }
+
+    /**
+     * @return ResourceComment
+     */
+    public function setId($id)
+    {
+        $this->id = $id;
+
+        return $this;
+    }
+
+    public function getContent(): string
+    {
+        return $this->content;
+    }
+
+    public function setContent(string $content): self
+    {
+        $this->content = $content;
+
+        return $this;
+    }
+
+    public function getResourceNode()
+    {
+        return $this->resourceNode;
+    }
+
+    /**
+     * @return ResourceComment
+     */
+    public function setResourceNode($resourceNode)
+    {
+        $this->resourceNode = $resourceNode;
+
+        return $this;
+    }
+
+    public function getAuthor(): User
+    {
+        return $this->author;
+    }
+
+    /**
+     * @return ResourceComment
+     */
+    public function setAuthor(User $author)
+    {
+        $this->author = $author;
+
+        return $this;
+    }
+
+    public function getParent()
+    {
+        return $this->parent;
+    }
+
+    /**
+     * @return ResourceComment
+     */
+    public function setParent($parent)
+    {
+        $this->parent = $parent;
+
+        return $this;
+    }
+
+    /**
+     * @return ResourceComment[]
+     */
+    public function getChildren(): array
+    {
+        return $this->children;
+    }
+
+    /**
+     * @param ResourceComment[] $children
+     */
+    public function setChildren(array $children): self
+    {
+        $this->children = $children;
+
+        return $this;
+    }
+}

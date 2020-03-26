@@ -12,6 +12,7 @@ use Chamilo\CoreBundle\Entity\Session;
 use Chamilo\CourseBundle\Traits\ShowCourseResourcesInSessionTrait;
 use Doctrine\ORM\Event\LifecycleEventArgs;
 use Doctrine\ORM\Mapping as ORM;
+use JMS\Serializer\Annotation\Groups;
 
 /**
  * CDocument.
@@ -37,7 +38,7 @@ class CDocument extends AbstractResource implements ResourceInterface
 
     /**
      * @var int
-     *
+     * @Groups({"list"})
      * @ORM\Column(name="iid", type="integer")
      * @ORM\Id
      * @ORM\GeneratedValue
@@ -67,7 +68,7 @@ class CDocument extends AbstractResource implements ResourceInterface
 
     /**
      * @var string
-     *
+     * @Groups({"list"})
      * @ORM\Column(name="title", type="string", length=255, nullable=true)
      */
     protected $title;

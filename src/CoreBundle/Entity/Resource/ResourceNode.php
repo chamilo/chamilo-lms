@@ -12,6 +12,8 @@ use Doctrine\Common\Collections\Criteria;
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Mapping\Annotation as Gedmo;
 use Gedmo\Timestampable\Traits\TimestampableEntity;
+use JMS\Serializer\Annotation as JMS;
+use JMS\Serializer\Annotation\Groups;
 use Symfony\Component\Routing\RouterInterface;
 use Symfony\Component\Validator\Constraints as Assert;
 
@@ -26,7 +28,26 @@ use Symfony\Component\Validator\Constraints as Assert;
  */
 class ResourceNode
 {
-    use TimestampableEntity;
+    //use TimestampableEntity;
+
+    /**
+     * @var \DateTime
+     * @Groups({"list"})
+     * @Gedmo\Timestampable(on="create")
+     * @ORM\Column(type="datetime")
+     * @JMS\Type("DateTime")
+     */
+    protected $createdAt;
+
+    /**
+     * @var \DateTime
+     *
+     *  @Groups({"list"})
+     * @Gedmo\Timestampable(on="update")
+     * @ORM\Column(type="datetime")
+     * @JMS\Type("DateTime")
+     */
+    protected $updatedAt;
 
     public const PATH_SEPARATOR = '`';
 
@@ -60,6 +81,7 @@ class ResourceNode
 
     /**
      * @var ResourceFile
+     * @Groups({"list"})
      *
      * @ORM\OneToOne(targetEntity="ResourceFile", inversedBy="resourceNode", orphanRemoval=true)
      * @ORM\JoinColumn(name="resource_file_id", referencedColumnName="id", onDelete="CASCADE")
@@ -124,6 +146,13 @@ class ResourceNode
      */
     protected $illustration;
 
+    /**
+     * @var ResourceComment[]
+     *
+     * @ORM\OneToMany(targetEntity="ResourceComment", mappedBy="resourceNode", cascade={"persist", "remove"})
+     */
+    protected $comments;
+
     //protected $pathForCreationLog = '';
 
     /**
@@ -133,6 +162,7 @@ class ResourceNode
     {
         $this->children = new ArrayCollection();
         $this->resourceLinks = new ArrayCollection();
+        $this->comments = new ArrayCollection();
     }
 
     /**
@@ -254,6 +284,21 @@ class ResourceNode
     public function getPath()
     {
         return $this->path;
+    }
+
+    /**
+     * @return ResourceComment[]|ArrayCollection
+     */
+    public function getComments()
+    {
+        return $this->comments;
+    }
+
+    public function addComment(ResourceComment $comment)
+    {
+        $comment->setResourceNode($this);
+
+        return $this->comments->add($comment);
     }
 
     /**

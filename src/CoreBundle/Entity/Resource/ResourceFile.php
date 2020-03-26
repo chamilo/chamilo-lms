@@ -6,6 +6,7 @@ namespace Chamilo\CoreBundle\Entity\Resource;
 
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Timestampable\Traits\TimestampableEntity;
+use JMS\Serializer\Annotation\Groups;
 use Symfony\Component\HttpFoundation\File\File;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\Validator\Constraints as Assert;
@@ -31,6 +32,7 @@ class ResourceFile
 
     /**
      * @Assert\NotBlank()
+     * @Groups({"list"})
      *
      * @var string
      *

@@ -9,6 +9,7 @@ use Chamilo\CoreBundle\Entity\Course;
 use Chamilo\CoreBundle\Entity\Session;
 use Doctrine\Common\Collections\Criteria;
 use Doctrine\ORM\Mapping as ORM;
+use JMS\Serializer\Annotation\Groups;
 
 /**
  * @ORM\MappedSuperclass
@@ -19,7 +20,7 @@ abstract class AbstractResource
 {
     /**
      * @GRID\Column(field="resourceNode.createdAt", title="Date added", type="datetime")
-     *
+     * @Groups({"list"})
      * @ORM\OneToOne(
      *     targetEntity="Chamilo\CoreBundle\Entity\Resource\ResourceNode", mappedBy="resource", cascade={"remove"}, orphanRemoval=true
      * )

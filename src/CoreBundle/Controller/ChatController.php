@@ -5,7 +5,9 @@
 namespace Chamilo\CoreBundle\Controller;
 
 use Chamilo\CoreBundle\Repository\ResourceNodeRepository;
+use Chamilo\CoreBundle\Traits\ControllerTrait;
 use Chamilo\CoreBundle\Traits\CourseControllerTrait;
+use Chamilo\CoreBundle\Traits\ResourceControllerTrait;
 use Chamilo\CourseBundle\Controller\CourseControllerInterface;
 use Chamilo\CourseBundle\Repository\CChatConversationRepository;
 use Event;
@@ -19,6 +21,8 @@ use Symfony\Component\Routing\Annotation\Route;
  */
 class ChatController extends AbstractResourceController implements CourseControllerInterface
 {
+    use ControllerTrait;
+    use ResourceControllerTrait;
     use CourseControllerTrait;
 
     /**

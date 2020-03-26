@@ -147,7 +147,7 @@ class ResourceNode
     protected $illustration;
 
     /**
-     * @var ResourceComment[]
+     * @var ResourceComment[]|ArrayCollection
      *
      * @ORM\OneToMany(targetEntity="ResourceComment", mappedBy="resourceNode", cascade={"persist", "remove"})
      */

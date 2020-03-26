@@ -5,6 +5,7 @@
 namespace Chamilo\CoreBundle\Controller;
 
 use Chamilo\CoreBundle\Repository\IllustrationRepository;
+use Chamilo\CoreBundle\Traits\ControllerTrait;
 use Chamilo\ThemeBundle\Model\UserInterface;
 use Chamilo\UserBundle\Form\ProfileType;
 use FOS\UserBundle\Model\UserManagerInterface;
@@ -21,6 +22,8 @@ use Symfony\Component\Routing\Annotation\Route;
  */
 class AccountController extends BaseController
 {
+    use ControllerTrait;
+
     /**
      * @Route("/home", methods={"GET"}, name="chamilo_core_account_home")
      */

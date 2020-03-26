@@ -5,6 +5,7 @@
 namespace Chamilo\PageBundle\Controller;
 
 use Chamilo\CoreBundle\Controller\BaseController;
+use Chamilo\CoreBundle\Traits\ControllerTrait;
 use Chamilo\PageBundle\Entity\Block;
 use Chamilo\PageBundle\Entity\Page;
 use Chamilo\PageBundle\Entity\Snapshot;
@@ -25,6 +26,8 @@ use Symfony\Component\Routing\Annotation\Route;
  */
 class PageController extends BaseController
 {
+    use ControllerTrait;
+
     /**
      * @Route("/cms/page/latest/{number}")
      *

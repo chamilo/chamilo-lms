@@ -4,6 +4,7 @@
 
 namespace Chamilo\CoreBundle\Controller;
 
+use Chamilo\CoreBundle\Traits\ControllerTrait;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
@@ -15,6 +16,8 @@ use Symfony\Component\Routing\Annotation\Route;
  */
 class NewsController extends BaseController
 {
+    use ControllerTrait;
+
     /**
      * @Route("/", name="news_index", methods={"GET"}, options={"expose"=true})
      */

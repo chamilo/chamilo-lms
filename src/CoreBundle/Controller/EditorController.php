@@ -14,6 +14,9 @@ use Chamilo\CoreBundle\Component\Utils\ChamiloApi;
 use Chamilo\CoreBundle\Entity\Resource\AbstractResource;
 use Chamilo\CoreBundle\Repository\ResourceFactory;
 use Chamilo\CoreBundle\Security\Authorization\Voter\ResourceNodeVoter;
+use Chamilo\CoreBundle\Traits\ControllerTrait;
+use Chamilo\CoreBundle\Traits\CourseControllerTrait;
+use Chamilo\CoreBundle\Traits\ResourceControllerTrait;
 use Chamilo\SettingsBundle\Manager\SettingsManager;
 use FM\ElfinderBundle\Connector\ElFinderConnector;
 use Symfony\Component\HttpFoundation\Request;
@@ -29,6 +32,10 @@ use Symfony\Contracts\Translation\TranslatorInterface;
  */
 class EditorController extends BaseController
 {
+    use ControllerTrait;
+    use ResourceControllerTrait;
+    use CourseControllerTrait;
+
     /**
      * Get templates (left column when creating a document).
      *

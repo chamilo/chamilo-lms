@@ -12,6 +12,7 @@ use Chamilo\CoreBundle\Traits\ControllerTrait;
 use Chamilo\CoreBundle\Traits\CourseControllerTrait;
 use Chamilo\CoreBundle\Traits\ResourceControllerTrait;
 use Chamilo\CourseBundle\Controller\CourseControllerInterface;
+use Doctrine\Common\Collections\Criteria;
 use Doctrine\ORM\QueryBuilder;
 use FOS\RestBundle\Controller\AbstractFOSRestController;
 use FOS\RestBundle\Controller\Annotations as Rest;
@@ -20,6 +21,7 @@ use FOS\RestBundle\View\View;
 use Symfony\Component\HttpFoundation\Request;
 use FOS\RestBundle\Controller\Annotations\Route;
 use Symfony\Component\HttpFoundation\Response;
+use function _HumbugBox58fd4d9e2a25\Amp\Parallel\Worker\create;
 
 /**
  * Class ResourceApiController.
@@ -71,7 +73,7 @@ class ResourceApiController extends AbstractFOSRestController implements CourseC
     }
 
     /**
-     * @Rest\QueryParam(name="orderBy", nullable=true, description="Ordering")
+     * @Rest\QueryParam(name="orderBy", default="createdAt", nullable=true, description="Ordering")
      * @Rest\View(serializerGroups={"list"})
      */
     public function getResourceCommentsAction($id, Request $request, ParamFetcher $paramFetcher)
@@ -82,9 +84,10 @@ class ResourceApiController extends AbstractFOSRestController implements CourseC
         $resource = $repository->getResourceFromResourceNode($id);
         $this->denyAccessUnlessValidResource($resource);
 
-        //$paramFetcher->get('orderBy');
+        $orderBy = $paramFetcher->get('orderBy');
+        $criteria = Criteria::create()->orderBy([$orderBy => Criteria::DESC]);
 
-        return $resource->getResourceNode()->getComments();
+        return $resource->getResourceNode()->getComments()->matching($criteria);
     }
 
     /**

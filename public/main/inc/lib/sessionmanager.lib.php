@@ -4,7 +4,6 @@
 
 use Chamilo\CoreBundle\Entity\Course;
 use Chamilo\CoreBundle\Entity\ExtraField;
-use Chamilo\CoreBundle\Repository\SequenceResourceRepository;
 use Chamilo\CoreBundle\Entity\SequenceResource;
 use Chamilo\CoreBundle\Entity\Session;
 use Chamilo\CoreBundle\Entity\SessionRelCourse;
@@ -133,27 +132,27 @@ class SessionManager
      *
      * @author Carlos Vargas <carlos.vargas@beeznest.com>, from existing code
      *
-     * @param string   $name
-     * @param string   $startDate                    (YYYY-MM-DD hh:mm:ss)
-     * @param string   $endDate                      (YYYY-MM-DD hh:mm:ss)
-     * @param string   $displayStartDate             (YYYY-MM-DD hh:mm:ss)
-     * @param string   $displayEndDate               (YYYY-MM-DD hh:mm:ss)
-     * @param string   $coachStartDate               (YYYY-MM-DD hh:mm:ss)
-     * @param string   $coachEndDate                 (YYYY-MM-DD hh:mm:ss)
-     * @param mixed    $coachId                      If int, this is the session coach id,
-     *                                               if string, the coach ID will be looked for from the user table
-     * @param int      $sessionCategoryId            ID of the session category in which this session is registered
-     * @param int      $visibility                   Visibility after end date (0 = read-only, 1 = invisible, 2 = accessible)
-     * @param bool     $fixSessionNameIfExists
-     * @param string   $duration
-     * @param string   $description                  Optional. The session description
-     * @param int      $showDescription              Optional. Whether show the session description
-     * @param array    $extraFields
-     * @param int      $sessionAdminId               Optional. If this sessions was created by a session admin, assign it to him
-     * @param bool     $sendSubscriptionNotification Optional.
-     *                                               Whether send a mail notification to users being subscribed
-     * @param int      $accessUrlId                  Optional.
-     * @param int      $status
+     * @param string $name
+     * @param string $startDate                    (YYYY-MM-DD hh:mm:ss)
+     * @param string $endDate                      (YYYY-MM-DD hh:mm:ss)
+     * @param string $displayStartDate             (YYYY-MM-DD hh:mm:ss)
+     * @param string $displayEndDate               (YYYY-MM-DD hh:mm:ss)
+     * @param string $coachStartDate               (YYYY-MM-DD hh:mm:ss)
+     * @param string $coachEndDate                 (YYYY-MM-DD hh:mm:ss)
+     * @param mixed  $coachId                      If int, this is the session coach id,
+     *                                             if string, the coach ID will be looked for from the user table
+     * @param int    $sessionCategoryId            ID of the session category in which this session is registered
+     * @param int    $visibility                   Visibility after end date (0 = read-only, 1 = invisible, 2 = accessible)
+     * @param bool   $fixSessionNameIfExists
+     * @param string $duration
+     * @param string $description                  Optional. The session description
+     * @param int    $showDescription              Optional. Whether show the session description
+     * @param array  $extraFields
+     * @param int    $sessionAdminId               Optional. If this sessions was created by a session admin, assign it to him
+     * @param bool   $sendSubscriptionNotification Optional.
+     *                                             Whether send a mail notification to users being subscribed
+     * @param int    $accessUrlId                  Optional.
+     * @param int    $status
      *
      * @return mixed Session ID on success, error message otherwise
      *
@@ -1688,7 +1687,7 @@ class SessionManager
                 }
 
                 if (api_get_configuration_value('allow_session_status')) {
-                   $sessionEntity->setStatus($status);
+                    $sessionEntity->setStatus($status);
                 }
 
                 $em->merge($sessionEntity);
@@ -9322,6 +9321,27 @@ class SessionManager
         ];
     }
 
+    public static function getStatusList()
+    {
+        return [
+            self::STATUS_PLANNED => get_lang('Planned'),
+            self::STATUS_PROGRESS => get_lang('InProgress'),
+            self::STATUS_FINISHED => get_lang('Finished'),
+            self::STATUS_CANCELLED => get_lang('Cancelled'),
+        ];
+    }
+
+    public static function getStatusLabel($status)
+    {
+        $list = self::getStatusList();
+
+        if (!isset($list[$status])) {
+            return get_lang('NoStatus');
+        }
+
+        return $list[$status];
+    }
+
     /**
      * @param int $id
      *
@@ -9458,27 +9478,5 @@ class SessionManager
         } else {
             return -1;
         }
-    }
-
-    public static function getStatusList()
-    {
-        return [
-            self::STATUS_PLANNED => get_lang('Planned'),
-            self::STATUS_PROGRESS => get_lang('InProgress'),
-            self::STATUS_FINISHED => get_lang('Finished'),
-            self::STATUS_CANCELLED => get_lang('Cancelled'),
-        ];
-    }
-
-    public static function getStatusLabel($status)
-    {
-        $list = self::getStatusList();
-
-        if (!isset($list[$status])) {
-
-            return get_lang('NoStatus');
-        }
-
-        return $list[$status];
     }
 }

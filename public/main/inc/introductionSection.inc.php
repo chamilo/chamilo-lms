@@ -215,7 +215,8 @@ if (TOOL_COURSE_HOMEPAGE == $tool && !isset($_GET['intro_cmdEdit'])) {
         $thematic_advance_info['start_date'] = api_format_date(
             $thematic_advance_info['start_date'],
             DATE_TIME_FORMAT_LONG
-        );        $userInfo = api_get_user_info();
+        );
+        $userInfo = api_get_user_info();
         $courseInfo = api_get_course_info();
         $titleThematic = $thematic_advance.' : '.$courseInfo['name'].' <b>( '.$thematicScore.' )</b>';
 

@@ -551,7 +551,7 @@ switch ($action) {
         $list = [];
         // Display thematic data
         if (!empty($thematic_data)) {
-            $listThematic = [ ];
+            $listThematic = [];
             /** @var CThematic $thematic */
             foreach ($thematic_data as $thematic) {
                 $id = $thematic->getIid();
@@ -699,7 +699,7 @@ switch ($action) {
             $description_list = $_REQUEST['description'];
             $description_type = $_REQUEST['description_type'];
 
-            for ($i = 1; $i < count($title_list) + 1; ++$i) {
+            for ($i = 1; $i < count($title_list) + 1; $i++) {
                 $thematicManager->set_thematic_plan_attributes(
                     $_REQUEST['thematic_id'],
                     $title_list[$i],
@@ -1103,7 +1103,7 @@ switch ($action) {
                     $attendance_select_item_id = $key;
                     break;
                 }
-                ++$i;
+                $i++;
             }
             if (!empty($attendance_select_item_id)) {
                 $default['attendance_select'] = $attendance_select_item_id;
@@ -1128,11 +1128,11 @@ switch ($action) {
                 $default['start_date_type'] = 2;
                 //$default['custom_start_date'] = null;
                 //if ($advance->getStartDate()) {
-                    $default['custom_start_date'] = date(
+                $default['custom_start_date'] = date(
                         'Y-m-d H:i:s',
                         api_strtotime(api_get_local_time($advance->getStartDate()))
                     );
-                //}
+            //}
             } else {
                 $default['start_date_type'] = 1;
                 if (!empty($thematic_advance_data['start_date'])) {

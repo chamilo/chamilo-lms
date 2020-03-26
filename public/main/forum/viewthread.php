@@ -39,7 +39,7 @@ $threadEntity = $repoThread->find($threadId);
 
 if (empty($threadEntity)) {
     $url = api_get_path(WEB_CODE_PATH).'forum/viewforum.php?'.api_get_cidreq().'&forum='.$forumId;
-    header('Location: '. $url);
+    header('Location: '.$url);
     exit;
 }
 

@@ -105,6 +105,11 @@ class CThematicAdvance extends AbstractResource implements ResourceInterface
         $this->duration = 1;
     }
 
+    public function __toString(): string
+    {
+        return (string) $this->getIid();
+    }
+
     /**
      * Set content.
      *
@@ -297,11 +302,6 @@ class CThematicAdvance extends AbstractResource implements ResourceInterface
     public function getIid()
     {
         return $this->iid;
-    }
-
-    public function __toString(): string
-    {
-        return (string) $this->getIid();
     }
 
     /**

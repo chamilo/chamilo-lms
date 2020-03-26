@@ -224,18 +224,18 @@ class Agenda
     /**
      * Adds an event to the calendar.
      *
-     * @param string $start                 datetime format: 2012-06-14 09:00:00 in local time
-     * @param string $end                   datetime format: 2012-06-14 09:00:00 in local time
-     * @param string $allDay                (true, false)
-     * @param string $title
-     * @param string $content
-     * @param array  $usersToSend           array('everyone') or a list of user/group ids
-     * @param bool   $addAsAnnouncement     event as a *course* announcement
-     * @param int    $parentEventId
-     * @param UploadedFile[]  $attachmentArray       array of $_FILES['']
-     * @param array  $attachmentCommentList
-     * @param string $eventComment
-     * @param string $color
+     * @param string         $start                 datetime format: 2012-06-14 09:00:00 in local time
+     * @param string         $end                   datetime format: 2012-06-14 09:00:00 in local time
+     * @param string         $allDay                (true, false)
+     * @param string         $title
+     * @param string         $content
+     * @param array          $usersToSend           array('everyone') or a list of user/group ids
+     * @param bool           $addAsAnnouncement     event as a *course* announcement
+     * @param int            $parentEventId
+     * @param UploadedFile[] $attachmentArray       array of $_FILES['']
+     * @param array          $attachmentCommentList
+     * @param string         $eventComment
+     * @param string         $color
      *
      * @return int
      */
@@ -2137,6 +2137,24 @@ class Agenda
                 $event['type'] = 'session';
             }
 
+            $everyone = false;
+            $links = $row->getResourceNode()->getResourceLinks();
+            $sentTo = [];
+            foreach ($links as $link) {
+                if ($link->getUser()) {
+                    $sentTo[] = $link->getUser()->getFirstname();
+                }
+                if ($link->getCourse()) {
+                    $sentTo[] = $link->getCourse()->getName();
+                }
+                if ($link->getSession()) {
+                    $sentTo[] = $link->getSession()->getName();
+                }
+                if ($link->getGroup()) {
+                    $sentTo[] = $link->getGroup()->getName();
+                }
+            }
+
             // Event Sent to a group?
             /*if (isset($row['to_group_id']) && !empty($row['to_group_id'])) {
                 $sent_to = [];
@@ -2185,6 +2203,7 @@ class Agenda
             /*if (empty($event['sent_to'])) {
                 $event['sent_to'] = '<div class="label_tag notice">'.get_lang('Everyone').'</div>';
             }*/
+            $event['sent_to'] = implode('<br />', $sentTo);
             $event['description'] = $row->getContent();
             $event['visibility'] = $row->isVisible($courseEntity, $session) ? 1 : 0;
             $event['real_id'] = $eventId;
@@ -2940,7 +2959,6 @@ class Agenda
                     api_get_user_id()
                 );*/
             }
-
         }
     }
 

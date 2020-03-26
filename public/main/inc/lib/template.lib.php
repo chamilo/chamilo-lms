@@ -399,80 +399,20 @@ class Template
     }
 
     /**
-     * Set system parameters from api_get_configuration into _s array for use in TPLs
-     * Also fills the _p array from getWebPaths().
-     *
-     * @uses \self::getWebPaths()
-     */
-    public function set_system_parameters()
-    {
-        $this->theme = api_get_visual_theme();
-        if (!empty($this->preview_theme)) {
-            $this->theme = $this->preview_theme;
-        }
-
-        $this->assign('theme', $this->theme);
-
-        $this->themeDir = self::getThemeDir($this->theme);
-
-        // Setting app paths/URLs
-        //$this->assign('_p', $this->getWebPaths());
-
-        // Here we can add system parameters that can be use in any template
-        $_s = [
-            'software_name' => api_get_configuration_value('software_name'),
-            'system_version' => api_get_configuration_value('system_version'),
-            'site_name' => api_get_setting('siteName'),
-            'institu_tion' => api_get_setting('Institution'),
-            'date' => api_format_date('now', DATE_FORMAT_LONG),
-            'timezone' => api_get_timezone(),
-            'gamification_mode' => api_get_setting('gamification_mode'),
-        ];
-        $this->assign('_s', $_s);
-    }
-
-    /**
      * Set legacy twig globals in order to be hook in the LegacyListener.php.
      *
      * @return array
      */
     public static function getGlobals()
     {
-        $queryString = empty($_SERVER['QUERY_STRING']) ? '' : $_SERVER['QUERY_STRING'];
-        $requestURI = empty($_SERVER['REQUEST_URI']) ? '' : $_SERVER['REQUEST_URI'];
-
-        /*$_p = [
-            'web' => api_get_path(WEB_PATH),
-            'web_relative' => api_get_path(REL_PATH),
-            'web_course' => api_get_path(WEB_COURSE_PATH),
-            'web_main' => api_get_path(WEB_CODE_PATH),
-            'web_css' => api_get_path(WEB_CSS_PATH),
-            //'web_css_theme' => api_get_path(WEB_CSS_PATH).$this->themeDir,
-            'web_ajax' => api_get_path(WEB_AJAX_PATH),
-            'web_img' => api_get_path(WEB_IMG_PATH),
-            'web_plugin' => api_get_path(WEB_PLUGIN_PATH),
-            'web_lib' => api_get_path(WEB_LIBRARY_PATH),
-            'web_self' => api_get_self(),
-            'web_self_query_vars' => api_htmlentities($requestURI),
-            'web_cid_query' => api_get_cidreq(),
-        ];*/
-        $_s = [
-            'software_name' => api_get_configuration_value('software_name'),
-            'system_version' => api_get_configuration_value('system_version'),
-            'site_name' => api_get_setting('siteName'),
-            'institution' => api_get_setting('Institution'),
-            //'date' => api_format_date('now', DATE_FORMAT_LONG),
-            'date' => '',
-            'timezone' => '',
-            //'timezone' => api_get_timezone(),
-            'gamification_mode' => api_get_setting('gamification_mode'),
-        ];
-
-        //$user_info = api_get_user_info();
-
         return [
-            '_s' => $_s,
-            //       '_u' => $user_info,
+            '_s' => [
+                'software_name' => api_get_configuration_value('software_name'),
+                'system_version' => api_get_configuration_value('system_version'),
+                'site_name' => api_get_setting('siteName'),
+                'institution' => api_get_setting('Institution'),
+                'gamification_mode' => api_get_setting('gamification_mode'),
+            ],
             'template' => 'default', // @todo setup template folder in config.yml;
         ];
     }

@@ -151,7 +151,7 @@ function handleForum($url)
                 $message = set_notification($content, $id);
                 Display::addFlash(Display::return_message($message, 'confirm', false));
 
-                header('Location: '. $url);
+                header('Location: '.$url);
                 exit;
                 break;
             case 'lock':
@@ -160,7 +160,7 @@ function handleForum($url)
                     if ('lock' === $action) {
                         $locked = 1;
                         $message = get_lang('Locked: students can no longer post new messages in this forum category, forum or thread but they can still read the messages that were already posted');
-                    } else  {
+                    } else {
                         $locked = 0;
                         $message = get_lang('Unlocked: learners can post new messages in this forum category, forum or thread');
                     }
@@ -174,12 +174,12 @@ function handleForum($url)
                     );
                 }
 
-                header('Location: '. $url);
+                header('Location: '.$url);
                 exit;
                 break;
             case 'move':
                 move_up_down($content, $_REQUEST['direction'] ?? '', $id);
-                header('Location: '. $url);
+                header('Location: '.$url);
                 exit;
                 break;
             case 'move_thread':
@@ -202,7 +202,7 @@ function handleForum($url)
                 Display::addFlash(
                     Display::return_message(get_lang('Updated'), 'confirmation', false)
                 );
-                header('Location: '. $url);
+                header('Location: '.$url);
                 exit;
                 break;
             case 'delete':
@@ -229,7 +229,7 @@ function handleForum($url)
                 }
 
                 Display::addFlash(Display::return_message(get_lang('Forum category deleted'), 'confirmation', false));
-                header('Location: '. $url);
+                header('Location: '.$url);
                 exit;
                 break;
         }
@@ -1260,7 +1260,6 @@ function return_up_down_icon($content, $id, $list)
     return $return_value;
 }
 
-
 /**
  * This function moves a forum or a forum category up or down.
  *
@@ -1365,7 +1364,6 @@ function move_up_down($content, $direction, $id)
             /** @var CForumCategory $forum */
             $category = $repo->find($id);
             if ($category) {
-
                 $category->setCatOrder($next_sort);
                 $repo->getEntityManager()->persist($category);
                 $repo->getEntityManager()->flush();
@@ -1380,8 +1378,8 @@ function move_up_down($content, $direction, $id)
  * Retrieve all the information off the forum categories (or one specific) for the current course.
  * The categories are sorted according to their sorting order (cat_order.
  *
- * @param int        $courseId  Optional. The course ID
- * @param int        $sessionId Optional. The session ID
+ * @param int $courseId  Optional. The course ID
+ * @param int $sessionId Optional. The session ID
  *
  * @return CForumCategory[]
  */
@@ -1400,8 +1398,8 @@ function get_forum_categories($courseId = 0, $sessionId = 0)
 /**
  * This function retrieves all the fora in a given forum category.
  *
- * @param int $categoryId   the id of the forum category
- * @param int $courseId Optional. The course ID
+ * @param int $categoryId the id of the forum category
+ * @param int $courseId   Optional. The course ID
  *
  * @return CForumForum[] containing all the information about the forums (regardless of their category)
  *
@@ -2035,7 +2033,7 @@ function getPosts(
             'visible' => $post->getVisible(),
             'status' => $post->getStatus(),
             'indent_cnt' => $depth,
-            'entity' => $post
+            'entity' => $post,
         ];
 
         $posterId = $post->getPosterId();
@@ -2714,17 +2712,15 @@ function store_thread(
 /**
  * This function displays the form that is used to add a post. This can be a new thread or a reply.
  *
- * @param CForumForum  $forum
- * @param CForumThread $thread
- * @param string       $action
- *  is the parameter that determines if we are
- *  2. replythread: Replying to a thread ($action = replythread) => I-frame with the complete thread (if enabled)
- *  3. replymessage: Replying to a message ($action =replymessage) => I-frame with the complete thread (if enabled)
- *  (I first thought to put and I-frame with the message only)
- *  4. quote: Quoting a message ($action= quotemessage) => I-frame with the complete thread (if enabled).
- *  The message will be in the reply. (I first thought not to put an I-frame here)
- * @param array        $form_values
- * @param bool         $showPreview
+ * @param string $action
+ *                            is the parameter that determines if we are
+ *                            2. replythread: Replying to a thread ($action = replythread) => I-frame with the complete thread (if enabled)
+ *                            3. replymessage: Replying to a message ($action =replymessage) => I-frame with the complete thread (if enabled)
+ *                            (I first thought to put and I-frame with the message only)
+ *                            4. quote: Quoting a message ($action= quotemessage) => I-frame with the complete thread (if enabled).
+ *                            The message will be in the reply. (I first thought not to put an I-frame here)
+ * @param array  $form_values
+ * @param bool   $showPreview
  *
  * @return FormValidator
  */
@@ -4504,7 +4500,6 @@ function move_post_form()
     // Setting the rules
     $form->addRule('thread', get_lang('Required field'), 'required');
 
-
     return $form;
 }
 
@@ -4568,7 +4563,6 @@ function store_move_post($values)
 
         $new_thread_id = $thread->getIid();
 
-
         // Storing a new thread.
         /*$params = [
             'c_id' => $course_id,
@@ -4588,7 +4582,7 @@ function store_move_post($values)
             $new_thread_id,
             'visible',
             $current_post['poster_id']
-        );*/;
+        );*/
 
         // Moving the post to the newly created thread.
         $sql = "UPDATE $table_posts SET thread_id='".(int) $new_thread_id."', post_parent_id = NULL
@@ -4985,8 +4979,8 @@ function search_link()
 /**
  * This function adds an attachment file into a forum.
  *
- * @param string $file_comment a comment about file
- * @param CForumPost    $post      from forum_post table
+ * @param string     $file_comment a comment about file
+ * @param CForumPost $post         from forum_post table
  *
  * @return false|null
  */

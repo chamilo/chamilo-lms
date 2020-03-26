@@ -56,6 +56,30 @@ trait ResourceControllerTrait
         }
     }
 
+    public function getResourceParams(Request $request): array
+    {
+        $tool = $request->get('tool');
+        $type = $request->get('type');
+        $id = (int) $request->get('id');
+
+        $courseId = null;
+        $sessionId = null;
+
+        if ($this->hasCourse()) {
+            $courseId = $this->getCourse()->getId();
+            $session = $this->getCourseSession();
+            $sessionId = $session ? $session->getId() : 0;
+        }
+
+        return [
+            'id' => $id,
+            'tool' => $tool,
+            'type' => $type,
+            'cid' => $courseId,
+            'sid' => $sessionId,
+        ];
+    }
+
     protected function getParentResourceNode(Request $request): ResourceNode
     {
         $parentNodeId = $request->get('id');
@@ -80,30 +104,6 @@ trait ResourceControllerTrait
         }
 
         return $parentResourceNode;
-    }
-
-    public function getResourceParams(Request $request): array
-    {
-        $tool = $request->get('tool');
-        $type = $request->get('type');
-        $id = (int) $request->get('id');
-
-        $courseId = null;
-        $sessionId = null;
-
-        if ($this->hasCourse()) {
-            $courseId = $this->getCourse()->getId();
-            $session = $this->getCourseSession();
-            $sessionId = $session ? $session->getId() : 0;
-        }
-
-        return [
-            'id' => $id,
-            'tool' => $tool,
-            'type' => $type,
-            'cid' => $courseId,
-            'sid' => $sessionId,
-        ];
     }
 
     private function setBreadCrumb(Request $request)

@@ -179,15 +179,15 @@ class AnnouncementManager
                     announcement.id,
                     announcement.title,
                     announcement.content
-				FROM $tbl_announcement announcement
-				INNER JOIN $tbl_item_property i
-				ON (announcement.id = i.ref AND announcement.c_id = i.c_id)
-				WHERE
+                FROM $tbl_announcement announcement
+                INNER JOIN $tbl_item_property i
+                ON (announcement.id = i.ref AND announcement.c_id = i.c_id)
+                WHERE
                     i.tool='announcement' AND
                     announcement.session_id  = '$session_id' AND
                     announcement.c_id = $courseId AND
                     i.c_id = $courseId
-				ORDER BY display_order DESC";
+                ORDER BY display_order DESC";
         $rs = Database::query($sql);
         $num_rows = Database::num_rows($rs);
         if ($num_rows > 0) {

@@ -861,7 +861,7 @@ class SystemAnnouncementManager
         // Expiration date
         $sql .= " AND (expiration_date = '' OR expiration_date IS NULL OR expiration_date > '$now') ";
 
-        if ((empty($teacher) || $teacher == '0') && (empty($student) || $student == '0')) {
+        if ((empty($teacher) || '0' == $teacher) && (empty($student) || '0' == $student)) {
             return true;
         }
 
@@ -957,7 +957,7 @@ class SystemAnnouncementManager
             $sql .= " AND access_url_id IN ('1', '$current_url_id') ";
         }
 
-        $checkCareers = api_get_configuration_value('allow_careers_in_global_announcements') === true;
+        $checkCareers = true === api_get_configuration_value('allow_careers_in_global_announcements');
 
         $userId = api_get_user_id();
 
@@ -984,14 +984,14 @@ class SystemAnnouncementManager
                         foreach ($sessionList as $session) {
                             $sessionId = $session['id'];
                             // Check student
-                            if ($visible === self::VISIBLE_STUDENT &&
+                            if (self::VISIBLE_STUDENT === $visible &&
                                 SessionManager::isUserSubscribedAsStudent($sessionId, $userId)
                             ) {
                                 $show = true;
                                 break 2;
                             }
 
-                            if ($visible === self::VISIBLE_TEACHER &&
+                            if (self::VISIBLE_TEACHER === $visible &&
                                 SessionManager::user_is_general_coach($userId, $sessionId)
                             ) {
                                 $show = true;
@@ -1001,7 +1001,7 @@ class SystemAnnouncementManager
                             // Check course coach
                             $coaches = SessionManager::getCoachesBySession($sessionId);
 
-                            if ($visible === self::VISIBLE_TEACHER && in_array($userId, $coaches)) {
+                            if (self::VISIBLE_TEACHER === $visible && in_array($userId, $coaches)) {
                                 $show = true;
                                 break 2;
                             }

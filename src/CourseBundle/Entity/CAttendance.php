@@ -109,6 +109,11 @@ class CAttendance extends AbstractResource implements ResourceInterface
         $this->locked = 0;
     }
 
+    public function __toString(): string
+    {
+        return (string) $this->getIid();
+    }
+
     /**
      * Set name.
      *
@@ -347,11 +352,6 @@ class CAttendance extends AbstractResource implements ResourceInterface
     public function getCId()
     {
         return $this->cId;
-    }
-
-    public function __toString(): string
-    {
-        return (string) $this->getIid();
     }
 
     public function getIid(): int

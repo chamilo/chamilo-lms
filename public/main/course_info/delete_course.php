@@ -53,4 +53,3 @@ if (isset($_GET['delete']) && 'yes' === $_GET['delete']) {
     $tpl->assign('content', Display::return_message($message, 'warning', false));
     $tpl->display_one_col_template();
 }
-

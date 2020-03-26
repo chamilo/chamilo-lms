@@ -7,7 +7,7 @@ use Chamilo\CourseBundle\Entity\CDocument;
 use Chamilo\CourseBundle\Entity\CLpItem;
 
 /**
- * Class LearnPathItemForm
+ * Class LearnPathItemForm.
  */
 class LearnPathItemForm
 {

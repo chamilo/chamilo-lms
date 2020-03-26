@@ -114,9 +114,7 @@ class ResourceRepository extends BaseEntityRepository
         $this->resourceType = $repo->findOneBy(['name' => $name]);
 
         if (empty($this->resourceType)) {
-            throw new \Exception(
-                "Resource Type missing in repo: $service, you need to add a record in the resource_type table"
-            );
+            throw new \Exception("Resource Type missing in repo: $service, you need to add a record in the resource_type table");
         }
     }
 

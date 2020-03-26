@@ -28,6 +28,7 @@ use Symfony\Component\Validator\Constraints as Assert;
  */
 class ResourceNode
 {
+    public const PATH_SEPARATOR = '`';
     //use TimestampableEntity;
 
     /**
@@ -48,8 +49,6 @@ class ResourceNode
      * @JMS\Type("DateTime")
      */
     protected $updatedAt;
-
-    public const PATH_SEPARATOR = '`';
 
     /**
      * @ORM\Id

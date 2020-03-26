@@ -4174,7 +4174,7 @@ class learnpath
      * to normal users.
      * Can be used as abstract.
      *
-     * @param int $id          Learnpath ID
+     * @param int $id         Learnpath ID
      * @param int $visibility New visibility
      *
      * @return bool
@@ -4262,7 +4262,7 @@ class learnpath
      * on the course homepage
      * Can be used as abstract.
      *
-     * @param int    $id          Learnpath id
+     * @param int    $id            Learnpath id
      * @param string $setVisibility New visibility (v/i - visible/invisible)
      *
      * @return bool
@@ -6860,7 +6860,6 @@ class learnpath
 
     /**
      * Edit a document based on $_POST and $_GET parameters 'dir' and 'path'.
-     *
      */
     public function edit_document()
     {
@@ -6990,7 +6989,7 @@ class learnpath
         if (empty($lpItem)) {
             return '';
         }
-        $item_id  = $lpItem->getIid();
+        $item_id = $lpItem->getIid();
         $itemType = $lpItem->getItemType();
         $path = $lpItem->getPath();
 
@@ -7167,10 +7166,10 @@ class learnpath
     /**
      * Displays a document by id.
      *
-     * @param CDocument  $document
-     * @param bool $show_title
-     * @param bool $iframe
-     * @param bool $edit_link
+     * @param CDocument $document
+     * @param bool      $show_title
+     * @param bool      $iframe
+     * @param bool      $edit_link
      *
      * @return string
      */
@@ -7205,9 +7204,9 @@ class learnpath
     /**
      * Return HTML form to add/edit a link item.
      *
-     * @param string $action     (add/edit)
-     * @param CLpItem    $lpItem
-     * @param CLink  $link
+     * @param string  $action (add/edit)
+     * @param CLpItem $lpItem
+     * @param CLink   $link
      *
      * @throws Exception
      * @throws HTML_QuickForm_Error
@@ -7241,9 +7240,9 @@ class learnpath
     /**
      * Return HTML form to add/edit a quiz.
      *
-     * @param string $action     Action (add/edit)
-     * @param CLpItem    $lpItem         Item ID if already exists
-     * @param CQuiz  $exercise Extra information (quiz ID if integer)
+     * @param string  $action   Action (add/edit)
+     * @param CLpItem $lpItem   Item ID if already exists
+     * @param CQuiz   $exercise Extra information (quiz ID if integer)
      *
      * @throws Exception
      *
@@ -7294,9 +7293,9 @@ class learnpath
     /**
      * Return HTML form to add/edit forum threads.
      *
-     * @param string $action
-     * @param CLpItem    $lpItem
-     * @param string $resource
+     * @param string  $action
+     * @param CLpItem $lpItem
+     * @param string  $resource
      *
      * @throws Exception
      *
@@ -7321,9 +7320,9 @@ class learnpath
      * Return the HTML form to display an item (generally a dir item).
      *
      * @param CLpItem $lpItem
-     * @param string $title
-     * @param string $action
-     * @param string $extra_info
+     * @param string  $title
+     * @param string  $action
+     * @param string  $extra_info
      *
      * @throws Exception
      * @throws HTML_QuickForm_Error
@@ -7346,12 +7345,10 @@ class learnpath
         return $form->returnForm();
     }
 
-
     /**
      * Return HTML form to add/edit a student publication (work).
      *
-     * @param string $action
-     * @param CLpItem    $lpItem
+     * @param string              $action
      * @param CStudentPublication $resource
      *
      * @throws Exception
@@ -7394,17 +7391,16 @@ class learnpath
         return $form->returnForm();
     }
 
-
     /**
      * Returns the form to update or create a document.
      *
      * @param string  $action (add/edit)
      * @param CLpItem $lpItem
      *
-     * @return string HTML form
      * @throws HTML_QuickForm_Error
-     *
      * @throws Exception
+     *
+     * @return string HTML form
      */
     public function displayDocumentForm($action = 'add', $lpItem = null)
     {
@@ -7843,8 +7839,6 @@ class learnpath
      * Return HTML form to allow prerequisites selection.
      *
      * @todo use FormValidator
-     *
-     * @param CLpItem $lpItem
      *
      * @return string HTML form
      */

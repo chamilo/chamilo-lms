@@ -90,7 +90,7 @@ function process_uploaded_file($uploadedFileData, $show_output = true)
     $uploadedFile = [];
     if ($uploadedFileData instanceof UploadedFile) {
         $uploadedFile['error'] = $uploadedFileData->getError();
-        $uploadedFile['tmp_name'] =$uploadedFileData->getPathname() ;
+        $uploadedFile['tmp_name'] = $uploadedFileData->getPathname();
         $uploadedFile['size'] = $uploadedFileData->getSize();
     } else {
         $uploadedFile = $uploadedFileData;

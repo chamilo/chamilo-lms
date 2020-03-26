@@ -1834,7 +1834,6 @@ class learnpathItem
         ];
 
         if ($this->status_is($completedStatusList)) {
-
             return true;
         }
 

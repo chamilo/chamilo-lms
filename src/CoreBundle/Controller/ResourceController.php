@@ -460,165 +460,6 @@ class ResourceController extends AbstractResourceController implements CourseCon
     }
 
     /**
-     * @param string $fileType
-     *
-     * @return RedirectResponse|Response
-     */
-    private function createResource(Request $request, $fileType = 'file')
-    {
-        $resourceNodeParentId = $request->get('id');
-        $repository = $this->getRepositoryFromRequest($request);
-
-        // Default parent node is course.
-        $parentNode = $this->getParentResourceNode($request);
-
-        $this->denyAccessUnlessGranted(
-            ResourceNodeVoter::CREATE,
-            $parentNode,
-            $this->trans('Unauthorised access to resource')
-        );
-
-        $form = $repository->getForm($this->container->get('form.factory'), null);
-
-        $settings = $repository->getResourceSettings();
-
-        if ('file' === $fileType && $settings->isAllowToSaveEditorToResourceFile()) {
-            $resourceParams = $this->getResourceParams($request);
-            $form->add(
-                $this->fileContentName,
-                CKEditorType::class,
-                [
-                    'mapped' => false,
-                    'config' => [
-                        'filebrowserImageBrowseRoute' => 'resources_filemanager',
-                        'filebrowserImageBrowseRouteParameters' => $resourceParams,
-                        'fullPage' => true,
-                    ],
-                ]
-            );
-        }
-
-        $form->handleRequest($request);
-        if ($form->isSubmitted() && $form->isValid()) {
-            $em = $this->getDoctrine()->getManager();
-
-            $course = $this->getCourse();
-            $session = $this->getSession();
-
-            /** @var ResourceInterface $newResource */
-            $newResource = $repository->saveResource($form, $course, $session, $fileType);
-
-            $file = null;
-            if ('file' === $fileType && $settings->isAllowToSaveEditorToResourceFile()) {
-                $content = $form->get($this->fileContentName)->getViewData();
-                $newResource->setTitle($newResource->getTitle().'.html');
-                $fileName = $newResource->getTitle();
-
-                $handle = tmpfile();
-                fwrite($handle, $content);
-                $meta = stream_get_meta_data($handle);
-                $file = new UploadedFile($meta['uri'], $fileName, 'text/html', null, true);
-                $em->persist($newResource);
-            }
-
-            $repository->addResourceToCourseWithParent(
-                $newResource,
-                $parentNode,
-                ResourceLink::VISIBILITY_PUBLISHED,
-                $this->getUser(),
-                $course,
-                $session,
-                null,
-                $file
-            );
-
-            $em->flush();
-
-            // Loops all sharing options
-            /*foreach ($shareList as $share) {
-                $idList = [];
-                if (isset($share['search'])) {
-                    $idList = explode(',', $share['search']);
-                }
-
-                $resourceRight = null;
-                if (isset($share['mask'])) {
-                    $resourceRight = new ResourceRight();
-                    $resourceRight
-                        ->setMask($share['mask'])
-                        ->setRole($share['role'])
-                    ;
-                }
-
-                // Build links
-                switch ($share['sharing']) {
-                    case 'everyone':
-                        $repository->addResourceToEveryone(
-                            $resourceNode,
-                            $resourceRight
-                        );
-                        break;
-                    case 'course':
-                        $repository->addResourceToCourse(
-                            $resourceNode,
-                            $course,
-                            $resourceRight
-                        );
-                        break;
-                    case 'session':
-                        $repository->addResourceToSession(
-                            $resourceNode,
-                            $course,
-                            $session,
-                            $resourceRight
-                        );
-                        break;
-                    case 'user':
-                        // Only for me
-                        if (isset($share['only_me'])) {
-                            $repository->addResourceOnlyToMe($resourceNode);
-                        } else {
-                            // To other users
-                            $repository->addResourceToUserList($resourceNode, $idList);
-                        }
-                        break;
-                    case 'group':
-                        // @todo
-                        break;
-                }*/
-            //}
-            $em->flush();
-            $this->addFlash('success', $this->trans('Saved'));
-
-            $params = $this->getResourceParams($request);
-            $params['id'] = $resourceNodeParentId;
-
-            return $this->redirectToRoute(
-                'chamilo_core_resource_list',
-                $params
-            );
-        }
-
-        switch ($fileType) {
-            case 'folder':
-                $template = $repository->getTemplates()->getFromAction('newFolderAction');
-
-                break;
-            case 'file':
-                $template = $repository->getTemplates()->getFromAction('newAction');
-
-                break;
-        }
-
-        $routeParams = $this->getResourceParams($request);
-        $routeParams['form'] = $form->createView();
-        $routeParams['parent'] = $resourceNodeParentId;
-        $routeParams['file_type'] = $fileType;
-
-        return $this->render($template, $routeParams);
-    }
-
-    /**
      * @Route("/{tool}/{type}/{id}/new", methods={"GET", "POST"}, name="chamilo_core_resource_new")
      */
     public function newAction(Request $request): Response
@@ -1088,82 +929,6 @@ class ResourceController extends AbstractResourceController implements CourseCon
     }
 
     /**
-     * @param string $mode
-     * @param string $filter
-     *
-     * @return mixed|StreamedResponse
-     */
-    private function showFile(Request $request, ResourceNode $resourceNode, $mode = 'show', $filter = '')
-    {
-        $this->denyAccessUnlessGranted(
-            ResourceNodeVoter::VIEW,
-            $resourceNode,
-            $this->trans('Unauthorised access to resource')
-        );
-
-        $repo = $this->getRepositoryFromRequest($request);
-        $resourceFile = $resourceNode->getResourceFile();
-
-        if (!$resourceFile) {
-            throw new NotFoundHttpException($this->trans('File not found for resource'));
-        }
-
-        $fileName = $resourceNode->getSlug();
-        $mimeType = $resourceFile->getMimeType();
-
-        switch ($mode) {
-            case 'download':
-                $forceDownload = true;
-
-                break;
-            case 'show':
-            default:
-                $forceDownload = false;
-                // If it's an image then send it to Glide.
-                if (false !== strpos($mimeType, 'image')) {
-                    $glide = $this->getGlide();
-                    $server = $glide->getServer();
-                    $params = $request->query->all();
-
-                    // The filter overwrites the params from get
-                    if (!empty($filter)) {
-                        $params = $glide->getFilters()[$filter] ?? [];
-                    }
-
-                    // The image was cropped manually by the user, so we force to render this version,
-                    // no matter other crop parameters.
-                    $crop = $resourceFile->getCrop();
-                    if (!empty($crop)) {
-                        $params['crop'] = $crop;
-                    }
-
-                    $fileName = $repo->getResourceNodeRepository()->getFilename($resourceFile);
-
-                    return $server->getImageResponse($fileName, $params);
-                }
-
-                break;
-        }
-
-        $stream = $repo->getResourceNodeFileStream($resourceNode);
-
-        $response = new StreamedResponse(
-            function () use ($stream): void {
-                stream_copy_to_stream($stream, fopen('php://output', 'wb'));
-            }
-        );
-        $disposition = $response->headers->makeDisposition(
-            $forceDownload ? ResponseHeaderBag::DISPOSITION_ATTACHMENT : ResponseHeaderBag::DISPOSITION_INLINE,
-            $fileName
-        //Transliterator::transliterate($fileName)
-        );
-        $response->headers->set('Content-Disposition', $disposition);
-        $response->headers->set('Content-Type', $mimeType ?: 'application/octet-stream');
-
-        return $response;
-    }
-
-    /**
      * Shows the associated resource file.
      *
      * @Route("/{tool}/{type}/{id}/view_resource", methods={"GET"}, name="chamilo_core_resource_view_resource")
@@ -1310,5 +1075,240 @@ class ResourceController extends AbstractResourceController implements CourseCon
         $routeParams['id'] = $id;
 
         return $this->render($repository->getTemplates()->getFromAction(__FUNCTION__), $routeParams);
+    }
+
+    /**
+     * @param string $fileType
+     *
+     * @return RedirectResponse|Response
+     */
+    private function createResource(Request $request, $fileType = 'file')
+    {
+        $resourceNodeParentId = $request->get('id');
+        $repository = $this->getRepositoryFromRequest($request);
+
+        // Default parent node is course.
+        $parentNode = $this->getParentResourceNode($request);
+
+        $this->denyAccessUnlessGranted(
+            ResourceNodeVoter::CREATE,
+            $parentNode,
+            $this->trans('Unauthorised access to resource')
+        );
+
+        $form = $repository->getForm($this->container->get('form.factory'), null);
+
+        $settings = $repository->getResourceSettings();
+
+        if ('file' === $fileType && $settings->isAllowToSaveEditorToResourceFile()) {
+            $resourceParams = $this->getResourceParams($request);
+            $form->add(
+                $this->fileContentName,
+                CKEditorType::class,
+                [
+                    'mapped' => false,
+                    'config' => [
+                        'filebrowserImageBrowseRoute' => 'resources_filemanager',
+                        'filebrowserImageBrowseRouteParameters' => $resourceParams,
+                        'fullPage' => true,
+                    ],
+                ]
+            );
+        }
+
+        $form->handleRequest($request);
+        if ($form->isSubmitted() && $form->isValid()) {
+            $em = $this->getDoctrine()->getManager();
+
+            $course = $this->getCourse();
+            $session = $this->getSession();
+
+            /** @var ResourceInterface $newResource */
+            $newResource = $repository->saveResource($form, $course, $session, $fileType);
+
+            $file = null;
+            if ('file' === $fileType && $settings->isAllowToSaveEditorToResourceFile()) {
+                $content = $form->get($this->fileContentName)->getViewData();
+                $newResource->setTitle($newResource->getTitle().'.html');
+                $fileName = $newResource->getTitle();
+
+                $handle = tmpfile();
+                fwrite($handle, $content);
+                $meta = stream_get_meta_data($handle);
+                $file = new UploadedFile($meta['uri'], $fileName, 'text/html', null, true);
+                $em->persist($newResource);
+            }
+
+            $repository->addResourceToCourseWithParent(
+                $newResource,
+                $parentNode,
+                ResourceLink::VISIBILITY_PUBLISHED,
+                $this->getUser(),
+                $course,
+                $session,
+                null,
+                $file
+            );
+
+            $em->flush();
+
+            // Loops all sharing options
+            /*foreach ($shareList as $share) {
+                $idList = [];
+                if (isset($share['search'])) {
+                    $idList = explode(',', $share['search']);
+                }
+
+                $resourceRight = null;
+                if (isset($share['mask'])) {
+                    $resourceRight = new ResourceRight();
+                    $resourceRight
+                        ->setMask($share['mask'])
+                        ->setRole($share['role'])
+                    ;
+                }
+
+                // Build links
+                switch ($share['sharing']) {
+                    case 'everyone':
+                        $repository->addResourceToEveryone(
+                            $resourceNode,
+                            $resourceRight
+                        );
+                        break;
+                    case 'course':
+                        $repository->addResourceToCourse(
+                            $resourceNode,
+                            $course,
+                            $resourceRight
+                        );
+                        break;
+                    case 'session':
+                        $repository->addResourceToSession(
+                            $resourceNode,
+                            $course,
+                            $session,
+                            $resourceRight
+                        );
+                        break;
+                    case 'user':
+                        // Only for me
+                        if (isset($share['only_me'])) {
+                            $repository->addResourceOnlyToMe($resourceNode);
+                        } else {
+                            // To other users
+                            $repository->addResourceToUserList($resourceNode, $idList);
+                        }
+                        break;
+                    case 'group':
+                        // @todo
+                        break;
+                }*/
+            //}
+            $em->flush();
+            $this->addFlash('success', $this->trans('Saved'));
+
+            $params = $this->getResourceParams($request);
+            $params['id'] = $resourceNodeParentId;
+
+            return $this->redirectToRoute(
+                'chamilo_core_resource_list',
+                $params
+            );
+        }
+
+        switch ($fileType) {
+            case 'folder':
+                $template = $repository->getTemplates()->getFromAction('newFolderAction');
+
+                break;
+            case 'file':
+                $template = $repository->getTemplates()->getFromAction('newAction');
+
+                break;
+        }
+
+        $routeParams = $this->getResourceParams($request);
+        $routeParams['form'] = $form->createView();
+        $routeParams['parent'] = $resourceNodeParentId;
+        $routeParams['file_type'] = $fileType;
+
+        return $this->render($template, $routeParams);
+    }
+
+    /**
+     * @param string $mode
+     * @param string $filter
+     *
+     * @return mixed|StreamedResponse
+     */
+    private function showFile(Request $request, ResourceNode $resourceNode, $mode = 'show', $filter = '')
+    {
+        $this->denyAccessUnlessGranted(
+            ResourceNodeVoter::VIEW,
+            $resourceNode,
+            $this->trans('Unauthorised access to resource')
+        );
+
+        $repo = $this->getRepositoryFromRequest($request);
+        $resourceFile = $resourceNode->getResourceFile();
+
+        if (!$resourceFile) {
+            throw new NotFoundHttpException($this->trans('File not found for resource'));
+        }
+
+        $fileName = $resourceNode->getSlug();
+        $mimeType = $resourceFile->getMimeType();
+
+        switch ($mode) {
+            case 'download':
+                $forceDownload = true;
+
+                break;
+            case 'show':
+            default:
+                $forceDownload = false;
+                // If it's an image then send it to Glide.
+                if (false !== strpos($mimeType, 'image')) {
+                    $glide = $this->getGlide();
+                    $server = $glide->getServer();
+                    $params = $request->query->all();
+
+                    // The filter overwrites the params from get
+                    if (!empty($filter)) {
+                        $params = $glide->getFilters()[$filter] ?? [];
+                    }
+
+                    // The image was cropped manually by the user, so we force to render this version,
+                    // no matter other crop parameters.
+                    $crop = $resourceFile->getCrop();
+                    if (!empty($crop)) {
+                        $params['crop'] = $crop;
+                    }
+
+                    $fileName = $repo->getResourceNodeRepository()->getFilename($resourceFile);
+
+                    return $server->getImageResponse($fileName, $params);
+                }
+
+                break;
+        }
+
+        $stream = $repo->getResourceNodeFileStream($resourceNode);
+
+        $response = new StreamedResponse(
+            function () use ($stream): void {
+                stream_copy_to_stream($stream, fopen('php://output', 'wb'));
+            }
+        );
+        $disposition = $response->headers->makeDisposition(
+            $forceDownload ? ResponseHeaderBag::DISPOSITION_ATTACHMENT : ResponseHeaderBag::DISPOSITION_INLINE,
+            $fileName
+        //Transliterator::transliterate($fileName)
+        );
+        $response->headers->set('Content-Disposition', $disposition);
+        $response->headers->set('Content-Type', $mimeType ?: 'application/octet-stream');
+
+        return $response;
     }
 }

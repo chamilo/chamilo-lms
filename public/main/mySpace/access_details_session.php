@@ -1,4 +1,5 @@
 <?php
+
 /* For licensing terms, see /license.txt */
 
 require_once __DIR__.'/../inc/global.inc.php';
@@ -235,7 +236,6 @@ if ($form->validate()) {
     $row++;
     $column = 0;
     $table->setCellContents($row, $column++, customDate($minLogin));
-
     $table->setCellContents($row, $column++, customDate($maxLogin));
     $table->setRowAttributes($row, ['style' => 'font-weight:bold']);
 

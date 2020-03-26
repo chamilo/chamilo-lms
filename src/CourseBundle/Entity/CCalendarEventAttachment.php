@@ -80,6 +80,11 @@ class CCalendarEventAttachment extends AbstractResource implements ResourceInter
      */
     protected $event;
 
+    public function __toString(): string
+    {
+        return $this->getFilename();
+    }
+
     /**
      * Set path.
      *
@@ -245,11 +250,6 @@ class CCalendarEventAttachment extends AbstractResource implements ResourceInter
         $this->event = $event;
 
         return $this;
-    }
-
-    public function __toString(): string
-    {
-        return $this->getFilename();
     }
 
     /**

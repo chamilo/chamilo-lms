@@ -8,7 +8,6 @@ use Chamilo\CoreBundle\Entity\Resource\ResourceLink;
 use Chamilo\CoreBundle\Entity\Resource\ResourceNode;
 use Chamilo\CoreBundle\Entity\Session;
 use Chamilo\CoreBundle\Entity\SessionRelCourseRelUser;
-use Chamilo\CoreBundle\Repository\ResourceNodeRepository;
 use Chamilo\CoreBundle\Repository\ResourceRepository;
 use Chamilo\CourseBundle\Entity\CChatConnected;
 use Chamilo\CourseBundle\Entity\CChatConversation;
@@ -127,8 +126,6 @@ class CourseChatUtils
 
         $fileTitle = $basename_chat.'-log.html';
 
-
-
         $userPhoto = UserManager::getUserPicture($this->userId, USER_IMAGE_SIZE_MEDIUM);
 
         if ($isMaster) {
@@ -170,7 +167,6 @@ class CourseChatUtils
                 $this->repository->updateResourceFileContent($resource, $content.$fileContent);
             }
         }
-
 
         /*fputs($fp, $fileContent);
         fclose($fp);
@@ -499,7 +495,6 @@ class CourseChatUtils
         }
 
         return '';
-
 
         $remove = 0;
         $content = [];

@@ -1664,8 +1664,8 @@ class Attendance
     /**
      * Add new datetime inside attendance calendar table.
      *
-     * @param CAttendance   $attendance
-     * @param array $groupList
+     * @param CAttendance $attendance
+     * @param array       $groupList
      *
      * @return int affected rows
      */
@@ -1694,7 +1694,7 @@ class Attendance
         if ($id) {
             $sql = "UPDATE $tbl_attendance_calendar SET id = iid WHERE iid = $id";
             Database::query($sql);
-            ++$affected_rows;
+            $affected_rows++;
         }
         $this->addAttendanceCalendarToGroup($id, $course_id, $groupList);
         //}
@@ -1809,11 +1809,11 @@ class Attendance
     /**
      * save repeated date inside attendance calendar table.
      *
-     * @param CAttendance    $attendance
-     * @param int    $start_date   start date in tms
-     * @param int    $end_date     end date in tms
-     * @param string $repeat_type  daily, weekly, monthlyByDate
-     * @param array  $groupList
+     * @param CAttendance $attendance
+     * @param int         $start_date  start date in tms
+     * @param int         $end_date    end date in tms
+     * @param string      $repeat_type daily, weekly, monthlyByDate
+     * @param array       $groupList
      */
     public function attendance_repeat_calendar_add(
         $attendance,
@@ -1862,8 +1862,8 @@ class Attendance
     /**
      * edit a datetime inside attendance calendar table.
      *
-     * @param	int	$calendar_id
-     * @param	CAttendance	$attendance
+     * @param int         $calendar_id
+     * @param CAttendance $attendance
      *
      * @return int affected rows
      */
@@ -2086,7 +2086,7 @@ class Attendance
             $dateTimeStart->format('Y-m-d'),
         ];
 
-        for ($i = 0; $i < $days; ++$i) {
+        for ($i = 0; $i < $days; $i++) {
             $dateTimeStart = $dateTimeStart->add(new DateInterval('P1D'));
             $date = $dateTimeStart->format('Y-m-d');
             $dateList[] = $date;
@@ -2162,7 +2162,7 @@ class Attendance
                     $status = 'X';
                 }
                 $table->setCellContents($row, $column, $status);
-                ++$column;
+                $column++;
             }
             $row++;
             $column = 1;
@@ -2542,7 +2542,7 @@ class Attendance
                                 </td>
                             </tr>';
 
-                    ++$i;
+                    $i++;
                 }
                 $form .= '</tbody>
                             </table>
@@ -2694,7 +2694,7 @@ class Attendance
                                 </td>';
                     }
                     echo '</tr>';
-                    ++$i;
+                    $i++;
                 }
                 $form .= '</tbody></table>';
                 $form .= '</div></div>';
@@ -2868,9 +2868,9 @@ class Attendance
                     } else {
                         $result[$class_day['id']] = ' ';
                     }
-                    ++$cols;
+                    $cols++;
                 }
-                ++$count;
+                $count++;
                 $data_table[] = $result;
             }
         }
@@ -2885,7 +2885,7 @@ class Attendance
             $tables = [];
             $changed = 1;
 
-            for ($i = 0; $i <= $rows; ++$i) {
+            for ($i = 0; $i <= $rows; $i++) {
                 $row = isset($data_table[$i]) ? $data_table[$i] : null;
                 $key = 1;
                 $max_dates_per_page = 10;
@@ -2895,14 +2895,14 @@ class Attendance
                 if (!empty($item)) {
                     foreach ($item as $value) {
                         if ($count_j >= $max_dates_per_page) {
-                            ++$key;
+                            $key++;
                             $max_dates_per_page = $max_dates_per_page_original * $key;
                             //magic hack
                             $tables[$key][$i][] = $tables[1][$i][0];
                             $tables[$key][$i][] = $tables[1][$i][1];
                         }
                         $tables[$key][$i][] = $value;
-                        ++$count_j;
+                        $count_j++;
                     }
                 }
             }

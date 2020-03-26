@@ -3,11 +3,11 @@
 
 use Chamilo\CoreBundle\Entity\Course;
 use Chamilo\CoreBundle\Entity\ExtraField as EntityExtraField;
-use Chamilo\CoreBundle\Repository\SequenceResourceRepository;
 use Chamilo\CoreBundle\Entity\SequenceResource;
 use Chamilo\CoreBundle\Framework\Container;
 use Chamilo\CoreBundle\Hook\HookCreateCourse;
 use Chamilo\CoreBundle\Repository\CourseRepository;
+use Chamilo\CoreBundle\Repository\SequenceResourceRepository;
 use Chamilo\CoreBundle\ToolChain;
 use Chamilo\CourseBundle\Component\CourseCopy\CourseBuilder;
 use Chamilo\CourseBundle\Component\CourseCopy\CourseRestorer;
@@ -2306,7 +2306,6 @@ class CourseManager
         $codeFiltered = $course['code'];
         $courseId = $course['real_id'];
         $courseEntity = api_get_course_entity($courseId);
-
 
         /** @var SequenceResourceRepository $repo */
         $repo = Database::getManager()->getRepository('ChamiloCoreBundle:SequenceResource');

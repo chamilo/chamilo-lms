@@ -306,7 +306,6 @@ if (api_is_allowed_to_edit(false, true) ||
 }
 echo '</div>';
 
-
 /* Display the action messages */
 if (!empty($message)) {
     echo $message;

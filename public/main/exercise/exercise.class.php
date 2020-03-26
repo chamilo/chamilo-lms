@@ -7989,7 +7989,7 @@ class Exercise
     public function getPreventBackwards()
     {
         $allow = api_get_configuration_value('quiz_prevent_backwards_move');
-        if ($allow === false) {
+        if (false === $allow) {
             return 0;
         }
 

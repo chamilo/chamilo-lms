@@ -68,6 +68,11 @@ class CGlossary extends AbstractResource implements ResourceInterface
      */
     protected $sessionId;
 
+    public function __toString(): string
+    {
+        return $this->getName();
+    }
+
     /**
      * Set name.
      *
@@ -215,11 +220,6 @@ class CGlossary extends AbstractResource implements ResourceInterface
     public function getIid(): int
     {
         return $this->iid;
-    }
-
-    public function __toString(): string
-    {
-        return $this->getName();
     }
 
     /**

@@ -2,10 +2,10 @@
 
 /* For licensing terms, see /license.txt */
 
-use Chamilo\CoreBundle\Repository\SequenceRepository;
-use Chamilo\CoreBundle\Repository\SequenceResourceRepository;
 use Chamilo\CoreBundle\Entity\Sequence;
 use Chamilo\CoreBundle\Entity\SequenceResource;
+use Chamilo\CoreBundle\Repository\SequenceRepository;
+use Chamilo\CoreBundle\Repository\SequenceResourceRepository;
 use ChamiloSession as Session;
 use Fhaculty\Graph\Graph;
 use Fhaculty\Graph\Vertex;
@@ -439,7 +439,6 @@ switch ($action) {
         $view->assign('sequences', $sequenceList);
         $view->assign('sequence_type', $type);
         $view->assign('allow_subscription', $allowSubscription);
-
 
         if ($allowSubscription) {
             $view->assign(

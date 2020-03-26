@@ -104,6 +104,11 @@ class CThematic extends AbstractResource implements ResourceInterface
         $this->advances = new ArrayCollection();
     }
 
+    public function __toString(): string
+    {
+        return $this->getTitle();
+    }
+
     /**
      * Set title.
      *
@@ -291,11 +296,6 @@ class CThematic extends AbstractResource implements ResourceInterface
     public function getAdvances()
     {
         return $this->advances;
-    }
-
-    public function __toString(): string
-    {
-        return $this->getTitle();
     }
 
     /**

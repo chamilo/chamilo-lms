@@ -4,18 +4,10 @@ legacy_main:
     requirements:
         name: .+
 
-legacy_upload:
-    path: ../var/upload/
-
 # Controllers
 controllers:
     resource: '../src/CoreBundle/Controller/'
     type: annotation
-
-#legacy_javascript:
-#    resource: '@ChamiloCoreBundle/Controller/JavascriptLegacyController.php'
-#    type: annotation
-#    prefix: /js
 
 legacy_plugin:
     path: /plugin/{name}

@@ -69,7 +69,7 @@ before_install:
 
 install:
   - phpenv config-rm xdebug.ini || return 0
-  - composer update --prefer-source --no-interaction
+  - composer install --prefer-source --no-interaction
   # Install bundle js/css
   - php bin/console assets:install
   # Permissions

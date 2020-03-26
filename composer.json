@@ -47,8 +47,8 @@
         "brumann/polyfill-unserialize": "^1.0",
         "chamilo/settings-bundle": "dev-master",
         "clue/graph": "~0.9",
-        "cocur/slugify": "^3.2",
-        "doctrine/data-fixtures": "~1.0@dev",
+        "cocur/slugify": "^4.0",
+        "doctrine/data-fixtures": "~1.0",
         "doctrine/dbal": "~2.10",
         "doctrine/doctrine-bundle": "~1.9",
         "doctrine/doctrine-fixtures-bundle": "^3.0",
@@ -118,12 +118,12 @@
         "sensiolabs/security-checker": "~6.0",
         "simplethings/entity-audit-bundle": "^1.0",
         "sonata-project/admin-bundle": "~3.0",
-        "sonata-project/block-bundle": "~3.0",
-        "sonata-project/cache-bundle": "~2.0",
+        "sonata-project/block-bundle": "~3.0|~4.0",
+        "sonata-project/cache-bundle": "~2.0|~3.0",
         "sonata-project/classification-bundle": "~3.0",
         "sonata-project/core-bundle": "~3.0",
-        "sonata-project/datagrid-bundle": "^2.5",
-        "sonata-project/doctrine-extensions": "~1.3",
+        "sonata-project/datagrid-bundle": "^2.5|~3.0",
+        "sonata-project/doctrine-extensions": "~1.6",
         "sonata-project/doctrine-orm-admin-bundle": "~3.0",
         "sonata-project/easy-extends-bundle": "~2.5",
         "sonata-project/exporter": "~2.0",
@@ -160,7 +160,9 @@
         "tgalopin/html-sanitizer-bundle": "^1.1",
         "twig/extensions": "^1.5",
         "vich/uploader-bundle": "^1.13",
-        "webit/eval-math": "~1.0"
+        "webit/eval-math": "~1.0",
+        "jms/serializer-bundle": "^3.5",
+        "friendsofsymfony/rest-bundle": "^2.7"
     },
     "config": {
         "component-dir": "public/assets"
@@ -171,8 +173,8 @@
         "behat/mink-extension": "@stable",
         "behat/mink-goutte-driver": "@stable",
         "behat/mink-selenium2-driver": "@stable",
-        "php-translation/symfony-bundle": "^0.11",
-        "phpstan/phpstan": "^0.12.3",
+        "php-translation/symfony-bundle": "^0.12",
+        "phpstan/phpstan": "^0.12",
         "symfony/browser-kit": "^4.0|^5.0",
         "symfony/css-selector": "^4.0|^5.0",
         "symfony/debug-pack": "*",
@@ -180,7 +182,7 @@
         "symfony/profiler-pack": "*",
         "symfony/test-pack": "*",
         "symplify/easy-coding-standard": "^7.0",
-        "vimeo/psalm": "^3.7"
+        "vimeo/psalm": "^3.10"
     },
     "scripts": {
         "analyse": [
@@ -189,13 +191,16 @@
         ],
         "auto-scripts": {
             "cache:clear": "symfony-cmd",
-            "ckeditor:install %PUBLIC_DIR%/libs/ckeditor --clear=keep --tag=4.13.0 --exclude=samples --exclude=adapters ": "symfony-cmd",
             "assets:install %PUBLIC_DIR%": "symfony-cmd",
             "security-checker security:check": "script",
             "requirements-checker": "script"
         },
+        "install-ckeditor": {
+            "ckeditor:install %PUBLIC_DIR%/libs/ckeditor --clear=keep --tag=4.13.0 --exclude=samples --exclude=adapters ": "symfony-cmd"
+        },
         "post-install-cmd": [
-            "@auto-scripts"
+            "@auto-scripts",
+            "@install-ckeditor"
         ],
         "post-update-cmd": [
             "@auto-scripts"
@@ -204,7 +209,6 @@
             "Chamilo\\CoreBundle\\Composer\\ScriptHandler::deleteOldFilesFrom19x"
         ],
         "pre-update-cmd": [
-            "Chamilo\\CoreBundle\\Composer\\ScriptHandler::deleteOldFilesFrom19x"
         ],
         "phpcs": "phpcs --standard=.php_cs.dist"
     }

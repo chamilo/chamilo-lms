@@ -1,4 +1,8 @@
 oneup_flysystem:
+    cache:
+        my_cache:
+            memory: ~
+
     adapters:
         resource_adapter:
             local:

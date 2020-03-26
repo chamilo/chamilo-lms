@@ -5,6 +5,7 @@
 namespace Chamilo\CourseBundle\Controller;
 
 use Chamilo\CoreBundle\Controller\BaseController;
+use Chamilo\CoreBundle\Traits\ControllerTrait;
 use Chamilo\CoreBundle\Traits\CourseControllerTrait;
 
 /**
@@ -15,4 +16,5 @@ use Chamilo\CoreBundle\Traits\CourseControllerTrait;
 abstract class ToolBaseController extends BaseController implements CourseControllerInterface
 {
     use CourseControllerTrait;
+    use ControllerTrait;
 }

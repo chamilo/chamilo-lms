@@ -4,8 +4,11 @@
 
 namespace Chamilo\CoreBundle\Traits;
 
+use Chamilo\CoreBundle\Component\Utils\Glide;
 use Chamilo\CoreBundle\Entity\Resource\AbstractResource;
+use Chamilo\CoreBundle\Entity\Resource\ResourceInterface;
 use Chamilo\CoreBundle\Entity\Resource\ResourceNode;
+use Chamilo\CoreBundle\Repository\ResourceFactory;
 use Chamilo\CoreBundle\Repository\ResourceRepository;
 use Chamilo\UserBundle\Entity\User;
 use Symfony\Component\HttpFoundation\Request;
@@ -20,6 +23,19 @@ trait ResourceControllerTrait
         $type = $request->get('type');
 
         return $this->getRepository($tool, $type);
+    }
+
+    public function getResourceRepositoryFactory(): ResourceFactory
+    {
+        return $this->container->get('resource_factory');
+    }
+
+    /**
+     * @return Glide
+     */
+    public function getGlide()
+    {
+        return $this->container->get('glide');
     }
 
     public function getRepository($tool, $type): ResourceRepository
@@ -88,5 +104,77 @@ trait ResourceControllerTrait
             'cid' => $courseId,
             'sid' => $sessionId,
         ];
+    }
+
+    private function setBreadCrumb(Request $request)
+    {
+        $tool = $request->get('tool');
+        $type = $request->get('type');
+        $resourceNodeId = $request->get('id');
+        $routeParams = $this->getResourceParams($request);
+
+        if (!empty($resourceNodeId)) {
+            $breadcrumb = $this->getBreadCrumb();
+            $toolParams = $routeParams;
+            $toolParams['id'] = null;
+
+            // Root tool link
+            $breadcrumb->addChild(
+                $this->trans($tool),
+                [
+                    'uri' => $this->generateUrl('chamilo_core_resource_index', $toolParams),
+                ]
+            );
+
+            $repo = $this->getRepositoryFromRequest($request);
+            $settings = $repo->getResourceSettings();
+
+            /** @var ResourceInterface $originalResource */
+            $originalResource = $repo->findOneBy(['resourceNode' => $resourceNodeId]);
+            if (null === $originalResource) {
+                return;
+            }
+            $parent = $originalParent = $originalResource->getResourceNode();
+
+            $parentList = [];
+            while (null !== $parent) {
+                if ($type !== $parent->getResourceType()->getName()) {
+                    break;
+                }
+                $parent = $parent->getParent();
+                if ($parent) {
+                    $resource = $repo->findOneBy(['resourceNode' => $parent->getId()]);
+                    if ($resource) {
+                        $parentList[] = $resource;
+                    }
+                }
+            }
+
+            $parentList = array_reverse($parentList);
+            /** @var ResourceInterface $item */
+            foreach ($parentList as $item) {
+                $params = $routeParams;
+                $params['id'] = $item->getResourceNode()->getId();
+                $breadcrumb->addChild(
+                    $item->getResourceName(),
+                    [
+                        'uri' => $this->generateUrl('chamilo_core_resource_list', $params),
+                    ]
+                );
+            }
+
+            $params = $routeParams;
+            $params['id'] = $originalParent->getId();
+            if (false === $settings->isAllowNodeCreation() || $originalResource->getResourceNode()->hasResourceFile()) {
+                $breadcrumb->addChild($originalResource->getResourceName());
+            } else {
+                $breadcrumb->addChild(
+                    $originalResource->getResourceName(),
+                    [
+                        'uri' => $this->generateUrl('chamilo_core_resource_list', $params),
+                    ]
+                );
+            }
+        }
     }
 }

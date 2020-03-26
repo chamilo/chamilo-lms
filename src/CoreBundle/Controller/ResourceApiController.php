@@ -16,14 +16,17 @@ use Chamilo\CourseBundle\Controller\CourseControllerInterface;
 use Doctrine\ORM\QueryBuilder;
 use FOS\RestBundle\Controller\AbstractFOSRestController;
 use FOS\RestBundle\Controller\Annotations as Rest;
+use FOS\RestBundle\Controller\Annotations\RouteResource;
+use FOS\RestBundle\View\View;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Contracts\Translation\TranslatorInterface;
 
 /**
  * Class ResourceApiController.
  *
- * @Route("/api/resources")
+ * @RouteResource("Resource2")
  */
 class ResourceApiController extends AbstractFOSRestController implements CourseControllerInterface
 {
@@ -42,23 +45,18 @@ class ResourceApiController extends AbstractFOSRestController implements CourseC
         return $services;
     }
 
-    public function getResourceRepositoryFactory(): ResourceFactory
-    {
-        return $this->container->get('resource_factory');
-    }
-
     /**
      * Route("/{tool}/{type}/{id}/list", name="chamilo_core_api_resource_list").
      *
-     * @Rest\Get("/{tool}/{type}/{id}/list")
-     *
-     * If node has children show it
+     * @Rest\View(serializerGroups={"list"})
      */
     public function getResourcesAction(Request $request)
     {
         $repository = $this->getRepositoryFromRequest($request);
 
         $resourceNodeId = $request->get('id');
+        var_dump($resourceNodeId);
+        exit;
         $parentNode = $repository->getResourceNodeRepository()->find($resourceNodeId);
 
         $course = $this->getCourse();
@@ -73,16 +71,13 @@ class ResourceApiController extends AbstractFOSRestController implements CourseC
         /** @var QueryBuilder $qb */
         $qb = $repository->getResources($this->getUser(), $parentNode, $course, $session, null);
 
-        $resources = $qb->getQuery()->getResult();
-
-        return $this->handleView($this->view($resources));
+        return $qb->getQuery()->getResult();
     }
 
     /**
-     * Route("/{tool}/{type}/{id}", name="chamilo_core_api_resource").
+     * Rest\Get("/{tool}/{type}/{id}").
      *
-     * @Rest\Get("/{tool}/{type}/{id}")
-     *
+     * @Rest\View(serializerGroups={"list"})
      */
     public function getResourceAction(Request $request)
     {
@@ -93,7 +88,9 @@ class ResourceApiController extends AbstractFOSRestController implements CourseC
         $resource = $repository->getResourceFromResourceNode($nodeId);
         $this->denyAccessUnlessValidResource($resource);
 
+        return $resource;
 
-        return $this->handleView($this->view($resource));
+        return View::create($resource, Response::HTTP_CREATED);
+        //return $resource;
     }
 }

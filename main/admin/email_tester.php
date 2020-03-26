@@ -10,6 +10,7 @@ $cidReset = true;
 
 // Including some necessary chamilo files.
 require_once __DIR__.'/../inc/global.inc.php';
+global $platform_email;
 
 api_protect_admin_script();
 
@@ -49,7 +50,7 @@ if ($form->validate()) {
         $values['subject'],
         $values['content'],
         UserManager::formatUserFullName($user),
-        $user->getEmail()
+        (!empty($platform_email['SMTP_UNIQUE_SENDER']) ? $platform_email['SMTP_FROM_EMAIL'] : $user->getEmail())
     );
 
     Display::addFlash(

@@ -46,6 +46,7 @@ class Rest extends WebService
     const SAVE_FORUM_THREAD = 'save_forum_thread';
     const SAVE_COURSE = 'save_course';
     const SAVE_USER = 'save_user';
+    const SAVE_USER_JSON = 'save_user_json';
     const SUBSCRIBE_USER_TO_COURSE = 'subscribe_user_to_course';
     const EXTRAFIELD_GCM_ID = 'gcm_registration_id';
     const GET_USER_MESSAGES_RECEIVED = 'user_messages_received';

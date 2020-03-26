@@ -1,4 +1,5 @@
 <?php
+
 /* For licensing terms, see /license.txt */
 
 use Chamilo\CoreBundle\Entity\Course;
@@ -294,7 +295,7 @@ class CourseChatUtils
         $connection = $em
             ->createQuery("
                 SELECT ccc FROM ChamiloCourseBundle:CChatConnected ccc
-                WHERE ccc.userId = :user AND ccc.cId = :course $extraCondition 
+                WHERE ccc.userId = :user AND ccc.cId = :course $extraCondition
             ")
             ->setParameters([
                 'user' => $this->userId,

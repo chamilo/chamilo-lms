@@ -17,16 +17,4 @@ use Symfony\Contracts\Translation\TranslatorInterface;
  */
 abstract class BaseController extends AbstractController
 {
-    protected $translator;
-
-    public static function getSubscribedServices(): array
-    {
-        $services = parent::getSubscribedServices();
-        $services['translator'] = TranslatorInterface::class;
-        $services['breadcrumb'] = BreadcrumbBlockService::class;
-        $services['resource_factory'] = ResourceFactory::class;
-        $services['glide'] = Glide::class;
-
-        return $services;
-    }
 }

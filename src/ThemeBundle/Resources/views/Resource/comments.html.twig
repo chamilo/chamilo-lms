@@ -1,13 +1,94 @@
 {% autoescape false %}
-    <form class="form-inline" method="post">
+    {% set nodeParams = {
+        'id': resource.resourceNode.id,
+        'cid': course.id,
+        'sid': session.id,
+        'type' : type,
+        'tool' : tool
+    } %}
+
+    <form id="add_comment" class="form-inline" method="post" action="{{ url('post_resource_comment', nodeParams) }}">
         {{ form_widget(comment_form) }}
     </form>
-    <hr />
+
+    <script>
+        $(function(){
+            $('#add_comment').submit(function(event) {
+                $.ajax({
+                    type: $(this).attr('method'),
+                    url: $(this).attr('action'),
+                    data: $(this).serialize(),
+                    beforeSend: function() {
+                        $(this).find('button').html(' <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>');
+                    },
+                    success: function (val) {
+                        $(this).find('.spinner-border').remove();
+                        var createdAt = moment(val.created_at).fromNow();
+                        var comment = '<p>' + val.content + ' ' + val.author.username +' - '+createdAt+'</p>';
+
+                        $(comment).prependTo($("#comment_list"));
+                        //$("#comment_list").html().appendTo(comment);
+                    },
+                });
+
+                event.preventDefault();
+            });
+        });
+
+        /*$.ajax({
+            type: $(this).attr('method'),
+            url: $(this).attr('action'),
+            data: $(this).serialize(),
+            beforeSend: function() {
+            },
+            success: function (response) {
+                $.ajax({
+                    dataType: "json",
+                    url: '{{ url('get_resource_comments', nodeParams) }}',
+                    success: function (data) {
+                        var items = [];
+                        $.each( data, function(key, val) {
+                            items.push( "<li id='" + key + "'>" + val.content + "</li>" );
+                        });
+
+                        $("#comment_list").html(
+                            $( "<ul/>", {
+                                "class": "my-new-list",
+                                html: items.join( "" )
+                            }));
+                    },
+                });
+            },
+        });*/
+    </script>
+
     {% if resource.resourceNode.comments %}
-        {% for comment in resource.resourceNode.comments %}
-            <p>
-                {{ comment.content }}  {{ comment.author }} {{ comment.updatedAt  |date_to_time_ago}}
-            </p>
-        {% endfor %}
+        <hr />
+        <script>
+            $(function() {
+                $.ajax({
+                    dataType: "json",
+                    url: '{{ url('get_resource_comments', nodeParams) }}&orderBy=createdAt',
+                    beforeSend: function() {
+                        $("#comment_list").html('<div class="spinner-border" role="status"></div>');
+                    },
+                    success: function (data) {
+                        var items = [];
+                        $.each(data, function(key, val) {
+                            var createdAt = moment(val.created_at).fromNow();
+                            items.push( '<p>' + val.content + ' ' + val.author.username +' - '+createdAt+'</p>' );
+                        });
+                        $("#comment_list").html(items.join(''));
+                    },
+                });
+            });
+        </script>
+        <div id="comment_list">
+{#            {% for comment in resource.resourceNode.comments %}#}
+{#                <p>#}
+{#                    {{ comment.content }}  {{ comment.author }} {{ comment.updatedAt | date_to_time_ago}}#}
+{#                </p>#}
+{#            {% endfor %}#}
+        </div>
     {% endif %}
 {% endautoescape %}

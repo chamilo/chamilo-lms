@@ -5,6 +5,8 @@
 namespace Chamilo\CoreBundle\Traits;
 
 use Chamilo\CoreBundle\Block\BreadcrumbBlockService;
+use Chamilo\CoreBundle\Component\Utils\Glide;
+use Chamilo\CoreBundle\Repository\ResourceFactory;
 use Knp\Menu\FactoryInterface as MenuFactoryInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
@@ -12,6 +14,17 @@ use Symfony\Contracts\Translation\TranslatorInterface;
 
 trait ControllerTrait
 {
+    public static function getSubscribedServices(): array
+    {
+        $services = parent::getSubscribedServices();
+        $services['translator'] = TranslatorInterface::class;
+        $services['breadcrumb'] = BreadcrumbBlockService::class;
+        $services['resource_factory'] = ResourceFactory::class;
+        $services['glide'] = Glide::class;
+
+        return $services;
+    }
+
     /**
      * @return Request|null
      */

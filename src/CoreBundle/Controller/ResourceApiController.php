@@ -4,10 +4,9 @@
 
 namespace Chamilo\CoreBundle\Controller;
 
-use Chamilo\CoreBundle\Block\BreadcrumbBlockService;
-use Chamilo\CoreBundle\Component\Utils\Glide;
 use Chamilo\CoreBundle\Entity\Resource\AbstractResource;
-use Chamilo\CoreBundle\Repository\ResourceFactory;
+use Chamilo\CoreBundle\Entity\Resource\ResourceComment;
+use Chamilo\CoreBundle\Form\Type\ResourceCommentType;
 use Chamilo\CoreBundle\Security\Authorization\Voter\ResourceNodeVoter;
 use Chamilo\CoreBundle\Traits\ControllerTrait;
 use Chamilo\CoreBundle\Traits\CourseControllerTrait;
@@ -16,15 +15,17 @@ use Chamilo\CourseBundle\Controller\CourseControllerInterface;
 use Doctrine\ORM\QueryBuilder;
 use FOS\RestBundle\Controller\AbstractFOSRestController;
 use FOS\RestBundle\Controller\Annotations as Rest;
-use FOS\RestBundle\Controller\Annotations\RouteResource;
+use FOS\RestBundle\Request\ParamFetcher;
+use FOS\RestBundle\View\View;
 use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\Routing\Annotation\Route;
-use Symfony\Contracts\Translation\TranslatorInterface;
+use FOS\RestBundle\Controller\Annotations\Route;
+use Symfony\Component\HttpFoundation\Response;
 
 /**
  * Class ResourceApiController.
+ * RouteResource("Resource")
  *
- * @RouteResource("resources/{tool}/{type}/{id}")
+ * debug api routes with: bin/console debug:router | grep api
  */
 class ResourceApiController extends AbstractFOSRestController implements CourseControllerInterface
 {
@@ -32,28 +33,13 @@ class ResourceApiController extends AbstractFOSRestController implements CourseC
     use ResourceControllerTrait;
     use ControllerTrait;
 
-    public static function getSubscribedServices(): array
-    {
-        $services = parent::getSubscribedServices();
-        $services['translator'] = TranslatorInterface::class;
-        $services['breadcrumb'] = BreadcrumbBlockService::class;
-        $services['resource_factory'] = ResourceFactory::class;
-        $services['glide'] = Glide::class;
-
-        return $services;
-    }
-
     /**
-     * Route("/{tool}/{type}/{id}/list", name="chamilo_core_api_resource_list").
-     *
      * @Rest\View(serializerGroups={"list"})
      */
-    public function getResourcesAction(Request $request)
+    public function getResourcesListAction($id, Request $request)
     {
         $repository = $this->getRepositoryFromRequest($request);
-
-        $resourceNodeId = $request->get('id');
-        $parentNode = $repository->getResourceNodeRepository()->find($resourceNodeId);
+        $parentNode = $repository->getResourceNodeRepository()->find($id);
 
         $course = $this->getCourse();
         $session = $this->getSession();
@@ -71,34 +57,60 @@ class ResourceApiController extends AbstractFOSRestController implements CourseC
     }
 
     /**
-     * Rest\Get("/{tool}/{type}/{id}").
-     *
      * @Rest\View(serializerGroups={"list"})
      */
-    public function getResourceAction(Request $request)
+    public function getResourceAction($id, Request $request)
     {
         $repository = $this->getRepositoryFromRequest($request);
-        $nodeId = $request->get('id');
 
         /** @var AbstractResource $resource */
-        $resource = $repository->getResourceFromResourceNode($nodeId);
+        $resource = $repository->getResourceFromResourceNode($id);
         $this->denyAccessUnlessValidResource($resource);
 
         return $resource;
     }
 
     /**
+     * @Rest\QueryParam(name="orderBy", nullable=true, description="Ordering")
      * @Rest\View(serializerGroups={"list"})
      */
-    public function getResourceCommentsAction(Request $request)
+    public function getResourceCommentsAction($id, Request $request, ParamFetcher $paramFetcher)
     {
         $repository = $this->getRepositoryFromRequest($request);
-        $nodeId = $request->get('id');
 
         /** @var AbstractResource $resource */
-        $resource = $repository->getResourceFromResourceNode($nodeId);
+        $resource = $repository->getResourceFromResourceNode($id);
         $this->denyAccessUnlessValidResource($resource);
 
+        //$paramFetcher->get('orderBy');
+
         return $resource->getResourceNode()->getComments();
+    }
+
+    /**
+     * @Rest\View(serializerGroups={"list"})
+     */
+    public function postResourceCommentAction($id, Request $request)
+    {
+        $repository = $this->getRepositoryFromRequest($request);
+
+        /** @var AbstractResource $resource */
+        $resource = $repository->getResourceFromResourceNode($id);
+        $this->denyAccessUnlessValidResource($resource);
+
+        $comment = new ResourceComment();
+        $form = $this->createForm(ResourceCommentType::class, $comment, ['method' => 'POST']);
+
+        $form->handleRequest($request);
+        if ($form->isSubmitted() && $form->isValid()) {
+            /** @var ResourceComment $comment */
+            $comment = $form->getData();
+            $comment->setAuthor($this->getUser());
+            $resource->getResourceNode()->addComment($comment);
+            $repository->getEntityManager()->persist($resource);
+            $repository->getEntityManager()->flush();
+
+            return View::create($comment, Response::HTTP_CREATED);
+        }
     }
 }

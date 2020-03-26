@@ -11,6 +11,7 @@ use Chamilo\CoreBundle\Entity\Resource\ResourceNode;
 use Chamilo\CoreBundle\Repository\ResourceFactory;
 use Chamilo\CoreBundle\Repository\ResourceRepository;
 use Chamilo\UserBundle\Entity\User;
+use Doctrine\ORM\EntityNotFoundException;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\Security\Core\Exception\AccessDeniedException;
@@ -46,13 +47,13 @@ trait ResourceControllerTrait
     public function denyAccessUnlessValidResource(AbstractResource $resource)
     {
         if (null === $resource) {
-            throw new NotFoundHttpException($this->trans('Resource doesn\'t exists.'));
+            throw new EntityNotFoundException($this->trans('Resource doesn\'t exists.'));
         }
 
         $resourceNode = $resource->getResourceNode();
 
         if (null === $resourceNode) {
-            throw new NotFoundHttpException($this->trans('Resource doesn\'t have a node.'));
+            throw new EntityNotFoundException($this->trans('Resource doesn\'t have a node.'));
         }
     }
 

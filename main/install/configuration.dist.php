@@ -1422,6 +1422,9 @@ ALTER TABLE notification_event ADD COLUMN event_id INT NULL;
 // Skip scorm package file names clean up
 //$_configuration['skip_scorm_package_clean_up'] = false;
 
+// Course chat: Send message on button click only, if false then send on enter too.
+//$_configuration['course_chat_send_message_only_on_button'] = true;
+
 // KEEP THIS AT THE END
 // -------- Custom DB changes
 // Add user activation by confirmation email

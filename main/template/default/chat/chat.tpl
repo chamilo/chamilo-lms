@@ -269,6 +269,16 @@ $(function () {
 
     $('button#chat-send-message').on('click', ChChat.onSendMessageListener);
 
+    if ({{ send_message_only_on_button }} == 0) {
+        $('.emoji-wysiwyg-editor').keypress(function (e) {
+            if (e.which == 13) {
+                ChChat.onSendMessageListener(e);
+
+                return false;    //<---- Add this line
+            }
+        });
+    }
+
     $('#chat-users').on('click', 'div.chat-user', function (e) {
         e.preventDefault();
         var jSelf = $(this),

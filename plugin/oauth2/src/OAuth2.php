@@ -363,12 +363,9 @@ class OAuth2 extends Plugin
         return api_get_path(WEB_PLUGIN_PATH).$this->get_name().'/src/callback.php';
     }
 
-    public function logout($token)
+    public function getLogoutUrl()
     {
-        $url = $this->get(self::SETTING_LOGOUT_URL);
-        if ($url) {
-            (new GuzzleHttp\Client())->post($url, [ 'body' => $token ]);
-        }
+        return $this->get(self::SETTING_LOGOUT_URL);
     }
 
     /**

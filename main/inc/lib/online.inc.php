@@ -182,8 +182,10 @@ function online_logout($user_id = null, $logout_redirect = false)
         if (!isset($oAuth2Plugin)) {
             $oAuth2Plugin = OAuth2::create();
         }
-        $accessToken = new \League\OAuth2\Client\Token\AccessToken(ChamiloSession::read('oauth2AccessToken'));
-        $oAuth2Plugin->logout($accessToken->getToken());
+        $logoutUrl = $oAuth2Plugin->getLogoutUrl();
+        if (!empty($logoutUrl)) {
+            $url = $logoutUrl;
+        }
     }
 
     api_delete_firstpage_parameter();

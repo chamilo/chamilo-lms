@@ -88,7 +88,7 @@ There can be more than one <code>*</code> in this key expression.
 </ul>';
 
 $strings['logout_url'] = 'Logout URL';
-$strings['logout_url_help'] = 'If this URL is set, the OAuth2 token will be POSTed to it at user logout.';
+$strings['logout_url_help'] = 'If set, the user agent will be redirected to this URL at logout.';
 
 $strings['block_name'] = 'Block name';
 $strings['block_name_help'] = 'The title shown above the <em>OAuth2</em> Login button';

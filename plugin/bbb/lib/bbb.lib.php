@@ -927,10 +927,22 @@ class bbb
                 $courseCode = $courseInfo['code'];
             }
 
-            if ($manager) {
-                $pass = $this->getModMeetingPassword($courseCode);
+            if (!empty($courseId) && empty($courseInfo)) {
+                // If the course cannot be found (i.e. been deleted), then
+                // the password cannot be generated. Use the one from the
+                // database (as we need one further down)
+                if ($manager) {
+                    $pass = $meetingDB['moderator_pw'];
+                } else {
+                    $pass = $meetingDB['attendee_pw'];
+                }
             } else {
-                $pass = $this->getUserMeetingPassword($courseCode);
+                // Otherwise just generate a normal password
+                if ($manager) {
+                    $pass = $this->getModMeetingPassword($courseCode);
+                } else {
+                    $pass = $this->getUserMeetingPassword($courseCode);
+                }
             }
 
             $meetingBBB = $this->getMeetingInfo(

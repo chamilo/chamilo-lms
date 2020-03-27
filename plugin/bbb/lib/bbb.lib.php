@@ -928,9 +928,9 @@ class bbb
             }
 
             if ($manager) {
-                $pass = $this->getUserMeetingPassword($courseCode);
-            } else {
                 $pass = $this->getModMeetingPassword($courseCode);
+            } else {
+                $pass = $this->getUserMeetingPassword($courseCode);
             }
 
             $meetingBBB = $this->getMeetingInfo(

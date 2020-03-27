@@ -930,22 +930,10 @@ class bbb
                 $courseCode = $courseInfo['code'];
             }
 
-            if (!empty($courseId) && empty($courseInfo)) {
-                // If the course cannot be found (i.e. been deleted), then
-                // the password cannot be generated. Use the one from the
-                // database (as we need one further down)
-                if ($manager) {
-                    $pass = $meetingDB['moderator_pw'];
-                } else {
-                    $pass = $meetingDB['attendee_pw'];
-                }
+            if ($manager) {
+                $pass = $meetingDB['moderator_pw'];
             } else {
-                // Otherwise just generate a normal password
-                if ($manager) {
-                    $pass = $this->getModMeetingPassword($courseCode);
-                } else {
-                    $pass = $this->getUserMeetingPassword($courseCode);
-                }
+                $pass = $meetingDB['attendee_pw'];
             }
 
             $meetingBBB = $this->getMeetingInfo(
@@ -1124,9 +1112,9 @@ class bbb
         );
         $manager = $this->isConferenceManager();
         if ($manager) {
-            $pass = $this->getModMeetingPassword($courseCode);
+            $pass = $meetingData['moderator_pw'];
         } else {
-            $pass = $this->getUserMeetingPassword($courseCode);
+            $pass = $meetingData['attendee_pw'];
         }
 
         $endParams = array(
@@ -1485,7 +1473,7 @@ class bbb
         if (empty($meetingData)) {
             return 0;
         }
-        $pass = $this->getModMeetingPassword();
+        $pass = $meetingData['moderator_pw'];
         $info = $this->getMeetingInfo(array('meetingId' => $meetingData['remote_id'], 'password' => $pass));
         if ($info === false) {
             //checking with the remote_id didn't work, so just in case and

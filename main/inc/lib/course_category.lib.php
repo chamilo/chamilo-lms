@@ -743,10 +743,12 @@ class CourseCategory
      * @param $pageCurrent
      * @param $pageLength
      * @param $pageTotal
+     * @param $categoryCode
+     * @param $action
      *
      * @return string
      */
-    public static function getCatalogPagination($pageCurrent, $pageLength, $pageTotal)
+    public static function getCatalogPagination($pageCurrent, $pageLength, $pageTotal, $categoryCode = '', $action = '')
     {
         // Start empty html
         $pageDiv = '';
@@ -761,7 +763,9 @@ class CourseCategory
                     $pageBottom - 1,
                     $pageLength,
                     null,
-                    '...'
+                    '...',
+                    $categoryCode,
+                    $action
                 );
             }
         }
@@ -776,7 +780,10 @@ class CourseCategory
             $pageDiv .= self::getPageNumberItem(
                 $i,
                 $pageLength,
-                $pageItemAttributes
+                $pageItemAttributes,
+                '',
+                $categoryCode,
+                $action
             );
         }
 
@@ -787,10 +794,12 @@ class CourseCategory
                     $pageTop + 1,
                     $pageLength,
                     null,
-                    '...'
+                    '...',
+                    $categoryCode,
+                    $action
                 );
             }
-            $pageDiv .= self::getPageNumberItem($pageTotal, $pageLength);
+            $pageDiv .= self::getPageNumberItem($pageTotal, $pageLength, [], '', $categoryCode, $action);
         }
 
         // Complete pagination html
@@ -827,9 +836,9 @@ class CourseCategory
         }
 
         $categoryCodeRequest = isset($_REQUEST['category_code']) ? Security::remove_XSS($_REQUEST['category_code']) : null;
-        $categoryCode = isset($categoryCode) ? Security::remove_XSS($categoryCode) : $categoryCodeRequest;
-        $hiddenLinksRequest = isset($_REQUEST['hidden_links']) ? Security::remove_XSS($_REQUEST['hidden_links']) : null;
-        $hiddenLinks = isset($hiddenLinks) ? Security::remove_XSS($hiddenLinksRequest) : $categoryCodeRequest;
+        $categoryCode = !empty($categoryCode) ? Security::remove_XSS($categoryCode) : $categoryCodeRequest;
+        $hiddenLinksRequest = !empty($_REQUEST['hidden_links']) ? Security::remove_XSS($_REQUEST['hidden_links']) : null;
+        $hiddenLinks = !empty($hiddenLinks) ? Security::remove_XSS($hiddenLinksRequest) : $categoryCodeRequest;
 
         // Start URL with params
         $pageUrl = api_get_self().
@@ -869,13 +878,12 @@ class CourseCategory
         $pageNumber,
         $pageLength,
         $liAttributes = [],
-        $content = ''
+        $content = '',
+        $categoryCode = '',
+        $action = ''
     ) {
         // Get page URL
-        $url = self::getCourseCategoryUrl(
-            $pageNumber,
-            $pageLength
-        );
+        $url = self::getCourseCategoryUrl($pageNumber, $pageLength, $categoryCode, null, $action);
 
         // If is current page ('active' class) clear URL
         if (isset($liAttributes) && is_array($liAttributes) && isset($liAttributes['class'])) {

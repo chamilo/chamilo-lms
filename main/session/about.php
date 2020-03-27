@@ -168,8 +168,6 @@ foreach ($requirements as $sequence) {
     }
 }
 
-$courseController = new CoursesController();
-
 /* View */
 $template = new Template($session->getName(), true, true, false, true, false);
 $template->assign('show_tutor', ('true' === api_get_setting('show_session_coach') ? true : false));
@@ -185,7 +183,7 @@ $template->assign(
 );
 $template->assign(
     'subscribe_button',
-    $courseController->getRegisteredInSessionButton(
+    CoursesAndSessionsCatalog::getRegisteredInSessionButton(
         $session->getId(),
         $session->getName(),
         $hasRequirements,

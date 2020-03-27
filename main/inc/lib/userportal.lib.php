@@ -614,7 +614,7 @@ class IndexManager
                     // 2.
                     if ($user_identified && !array_key_exists($course['code'], $courses_of_user)) {
                         if ($course['subscribe'] == '1') {
-                            $courses_list_string .= '&nbsp;<a class="btn btn-primary" href="main/auth/courses.php?action=subscribe_course&sec_token='.$stok.'&subscribe_course='.$course['code'].'&category_code='.Security::remove_XSS(
+                            $courses_list_string .= '&nbsp;<a class="btn btn-primary" href="main/auth/courses.php?action=subscribe_course&sec_token='.$stok.'&course_code='.$course['code'].'&category_code='.Security::remove_XSS(
                                     $_GET['category']
                                 ).'">'.get_lang('Subscribe').'</a><br />';
                         } else {

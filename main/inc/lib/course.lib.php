@@ -3971,7 +3971,6 @@ class CourseManager
         $courseAdded = [];
         $courseList = [];
 
-        $courseController = new CoursesController();
         while ($row = Database::fetch_array($result)) {
             $course_info = api_get_course_info_by_id($row['id']);
             if (empty($course_info)) {
@@ -4320,9 +4319,6 @@ class CourseManager
             );
         }
         $params['link'] = $session_url;
-
-        $courseController = new CoursesController();
-
         $entityManager = Database::getManager();
         /** @var SequenceResourceRepository $repo */
         $repo = $entityManager->getRepository('ChamiloCoreBundle:SequenceResource');
@@ -4343,7 +4339,7 @@ class CourseManager
                 }
             }
             if ($hasRequirements) {
-                $params['requirements'] = $courseController->getRequirements(
+                $params['requirements'] = CoursesAndSessionsCatalog::getRequirements(
                     $course_info['real_id'],
                     SequenceResource::COURSE_TYPE,
                     false,

@@ -1,4 +1,5 @@
 <?php
+
 /* For licensing terms, see /license.txt */
 
 /**
@@ -8,8 +9,6 @@
  * It's also used like model to courses_controller (MVC pattern).
  *
  * @author Christian Fasanando <christian1827@gmail.com>
- *
- * @package chamilo.auth
  */
 class Auth
 {
@@ -53,7 +52,7 @@ class Auth
                 WHERE
                     course.id = course_rel_user.c_id AND
                     course_rel_user.relation_type <> ".COURSE_RELATION_TYPE_RRHH." AND
-                    course_rel_user.user_id = '".$user_id."' 
+                    course_rel_user.user_id = '".$user_id."'
                     $avoidCoursesCondition
                     $visibilityCondition
                 ORDER BY course_rel_user.sort ASC";
@@ -262,11 +261,11 @@ class Auth
         $result = false;
         if (count($target_category) > 0 && count($source_category) > 0) {
             $table = Database::get_main_table(TABLE_USER_COURSE_CATEGORY);
-            $sql = "UPDATE $table SET 
+            $sql = "UPDATE $table SET
                     sort = '".Database::escape_string($target_category['sort'])."'
                     WHERE id='".intval($source_category['id'])."' AND user_id='".$userId."'";
             $resultFirst = Database::query($sql);
-            $sql = "UPDATE $table SET 
+            $sql = "UPDATE $table SET
                     sort = '".Database::escape_string($source_category['sort'])."'
                     WHERE id='".intval($target_category['id'])."' AND user_id='".$userId."'";
             $resultSecond = Database::query($sql);
@@ -288,7 +287,6 @@ class Auth
      */
     public function store_edit_course_category($title, $category_id)
     {
-        // protect data
         $title = Database::escape_string($title);
         $category_id = (int) $category_id;
         $result = false;
@@ -319,8 +317,8 @@ class Auth
         $category_id = (int) $category_id;
         $result = false;
         $sql = "DELETE FROM $tucc
-                WHERE 
-                    id='".$category_id."' AND 
+                WHERE
+                    id='".$category_id."' AND
                     user_id='".$current_user_id."'";
         $resultQuery = Database::query($sql);
         if (Database::affected_rows($resultQuery)) {
@@ -349,13 +347,12 @@ class Auth
         $categoryId = (int) $categoryId;
 
         $sql = "SELECT * FROM $tucc
-                WHERE 
-                    id= $categoryId AND 
+                WHERE
+                    id= $categoryId AND
                     user_id= $userId";
         $resultQuery = Database::query($sql);
-        $result = Database::fetch_array($resultQuery, 'ASSOC');
 
-        return $result;
+        return Database::fetch_array($resultQuery, 'ASSOC');
     }
 
     /**
@@ -413,8 +410,8 @@ class Auth
         $result = false;
 
         // step 1: we determine the max value of the user defined course categories
-        $sql = "SELECT sort FROM $table 
-                WHERE user_id='".$current_user_id."' 
+        $sql = "SELECT sort FROM $table
+                WHERE user_id='".$current_user_id."'
                 ORDER BY sort DESC";
         $rs_sort = Database::query($sql);
         $maxsort = Database::fetch_array($rs_sort);
@@ -422,9 +419,9 @@ class Auth
 
         // step 2: we check if there is already a category with this name,
         // if not we store it, else we give an error.
-        $sql = "SELECT * FROM $table 
-                WHERE 
-                    user_id='".$current_user_id."' AND 
+        $sql = "SELECT * FROM $table
+                WHERE
+                    user_id='".$current_user_id."' AND
                     title='".$category_title."'
                 ORDER BY sort DESC";
         $rs = Database::query($sql);

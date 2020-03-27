@@ -506,7 +506,7 @@
 </div>
 
 {% if not is_invitee and lp_is_shown and allow_min_time %}
-    <div class="controls text-center">
+    <div id="lp_notification_control" class="controls text-center">
         {% if not is_ending %}
             <button class="btn btn-primary" type="button" disabled>
                 {{ 'IHaveFinishedTheLessonsNotifyTheTeacher'|get_lang }}

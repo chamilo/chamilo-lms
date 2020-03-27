@@ -183,8 +183,6 @@ foreach ($requirements as $sequence) {
     }
 }
 
-$courseController = new CoursesController();
-
 $template = new Template($course->getTitle(), true, true, false, true, false);
 $template->assign('course', $courseItem);
 $essence = Essence\Essence::instance();
@@ -195,7 +193,7 @@ $template->assign('token', $token);
 $template->assign('url', $urlCourse);
 $template->assign(
     'subscribe_button',
-    $courseController->getRequirements(
+    CoursesAndSessionsCatalog::getRequirements(
         $course->getId(),
         SequenceResource::COURSE_TYPE,
         true,

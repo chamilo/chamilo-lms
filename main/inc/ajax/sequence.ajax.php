@@ -434,7 +434,6 @@ switch ($action) {
         $sequenceList = $sequenceResourceRepository->checkRequirementsForUser($sequences, $type, $userId);
         $allowSubscription = $sequenceResourceRepository->checkSequenceAreCompleted($sequenceList);
 
-        $courseController = new CoursesController();
         $view = new Template(null, false, false, false, false, false);
         $view->assign('sequences', $sequenceList);
         $view->assign('sequence_type', $type);
@@ -443,7 +442,7 @@ switch ($action) {
         if ($allowSubscription) {
             $view->assign(
                 'subscribe_button',
-                $courseController->getRegisteredInSessionButton(
+                CoursesAndSessionsCatalog::getRegisteredInSessionButton(
                     $id,
                     $resourceName,
                     false

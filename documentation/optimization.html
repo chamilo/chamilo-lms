@@ -227,6 +227,7 @@ ALTER TABLE c_lp_item_view ADD INDEX idx_clpiv_c_i_v (c_id, id, view_count);
         ALTER TABLE track_e_login CHANGE login_date login_date DATETIME NOT NULL;
         ALTER TABLE track_e_login ADD INDEX idx_track_e_login_date (login_date);
         ALTER TABLE track_e_login ADD INDEX idx_track_e_login_user_id (login_user_id);
+        ALTER TABLE track_e_login ADD INDEX idx_track_e_login_user_date (login_user_id, login_date);
         ALTER TABLE track_e_course_access ADD INDEX idx_teca_countconn (c_id, session_id, login_course_date);
         ALTER TABLE track_e_course_access ADD INDEX idx_c_id_session_user (c_id, session_id, user_id);
 

@@ -1,22 +1,22 @@
 framework:
     cache:
+        directory: '%kernel.cache_dir%/pools'
         pools:
-            cache.array:
-                adapter: cache.adapter.array
+            doctrine.result_cache_pool:
+                adapter: cache.app
+            doctrine.system_cache_pool:
+                adapter: cache.system
+#        default_doctrine_provider: 'app.doctrine_cache'
 
-            # Put the unique name of your app here: the prefix seed
+        # Put the unique name of your app here: the prefix seed
         # is used to compute stable namespaces for cache keys.
         #prefix_seed: your_vendor_name/app_name
 
-        # The app cache caches to the filesystem by default.
-        # Other options include:
-
-        # Redis
-        #app: cache.adapter.redis
-        #default_redis_provider: redis://localhost
-
         # APCu (not recommended with heavy random-write workloads as memory fragmentation can cause perf issues)
         #app: cache.adapter.apcu
+
+        app: cache.adapter.filesystem
+        system: cache.adapter.system
 
         # Namespaced pools use the above "app" backend by default
         #pools:

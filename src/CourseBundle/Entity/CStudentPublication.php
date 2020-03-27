@@ -50,14 +50,14 @@ class CStudentPublication extends AbstractResource implements ResourceInterface
     /**
      * @var string
      *
-     * @ORM\Column(name="url", type="string", length=255, nullable=true)
+     * @ORM\Column(name="url", type="string", length=500, nullable=true)
      */
     protected $url;
 
     /**
      * @var string
      *
-     * @ORM\Column(name="url_correction", type="string", length=255, nullable=true)
+     * @ORM\Column(name="url_correction", type="string", length=500, nullable=true)
      */
     protected $urlCorrection;
 

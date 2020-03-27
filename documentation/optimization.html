@@ -245,6 +245,8 @@ ALTER TABLE c_lp_item_view ADD INDEX idx_clpiv_c_i_v (c_id, id, view_count);
         # Using the following queries might help:
         ALTER TABLE c_item_property ADD INDEX idx_cip_lasteditu (lastedit_user_id);
         ALTER TABLE c_item_property ADD INDEX idx_item_property_visibility (visibility);
+        ALTER TABLE c_dropbox_person ADD INDEX idx_file(file_id);
+
     </pre>
 <hr />
 <h2><a name="3.Indexes-caching"></a>3. Indexes caching</h2>

@@ -9,8 +9,7 @@
  * It's also used like model to courses_controller (MVC pattern).
  *
  * @author Christian Fasanando <christian1827@gmail.com>
- *
- **/
+ */
 class Auth
 {
     /**

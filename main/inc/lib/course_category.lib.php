@@ -799,7 +799,7 @@ class CourseCategory
                     $action
                 );
             }
-            $pageDiv .= self::getPageNumberItem($pageTotal, $pageLength,[], '', $categoryCode, $action);
+            $pageDiv .= self::getPageNumberItem($pageTotal, $pageLength, [], '', $categoryCode, $action);
         }
 
         // Complete pagination html

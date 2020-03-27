@@ -5,8 +5,8 @@ use Chamilo\CoreBundle\Entity\SettingsCurrent;
 use Chamilo\CourseBundle\Entity\CItemProperty;
 use Chamilo\UserBundle\Entity\User;
 use ChamiloSession as Session;
-use Symfony\Component\Finder\Finder;
 use PHPMailer\PHPMailer\PHPMailer as PHPMailer;
+use Symfony\Component\Finder\Finder;
 
 /**
  * This is a code library for Chamilo.

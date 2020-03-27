@@ -3,11 +3,11 @@
 /* For licensing terms, see /license.txt */
 
 use Chamilo\CoreBundle\Entity\ExtraField;
-use Doctrine\ORM\Query\Expr\Join;
 use Chamilo\CoreBundle\Entity\Repository\SequenceResourceRepository;
 use Chamilo\CoreBundle\Entity\SequenceResource;
 use Chamilo\CoreBundle\Entity\SessionRelCourse;
 use Chamilo\CoreBundle\Entity\Tag;
+use Doctrine\ORM\Query\Expr\Join;
 
 /**
  * @todo change class name
@@ -1603,6 +1603,4 @@ class CoursesAndSessionsCatalog
 
         return $sessionsBlocks;
     }
-
-
 }

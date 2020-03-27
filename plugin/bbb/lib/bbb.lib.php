@@ -1124,9 +1124,9 @@ class bbb
         );
         $manager = $this->isConferenceManager();
         if ($manager) {
-            $pass = $this->getUserMeetingPassword($courseCode);
-        } else {
             $pass = $this->getModMeetingPassword($courseCode);
+        } else {
+            $pass = $this->getUserMeetingPassword($courseCode);
         }
 
         $endParams = array(

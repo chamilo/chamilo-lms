@@ -1,4 +1,5 @@
 <?php
+
 /* For licensing terms, see /license.txt */
 
 use ChamiloSession as Session;
@@ -385,7 +386,7 @@ function store_addcategory()
             ];
             $id = Database::insert(Database::get_course_table(TABLE_DROPBOX_CATEGORY), $params);
             if ($id) {
-                $sql = "UPDATE ".Database::get_course_table(TABLE_DROPBOX_CATEGORY)." SET cat_id = iid 
+                $sql = "UPDATE ".Database::get_course_table(TABLE_DROPBOX_CATEGORY)." SET cat_id = iid
                         WHERE iid = $id";
                 Database::query($sql);
             }
@@ -1218,13 +1219,13 @@ function user_can_download_file($id, $user_id)
     $id = (int) $id;
     $user_id = (int) $user_id;
 
-    $sql = "SELECT file_id 
+    $sql = "SELECT file_id
             FROM ".Database::get_course_table(TABLE_DROPBOX_PERSON)."
             WHERE c_id = $course_id AND user_id = $user_id AND file_id = ".$id;
     $result = Database::query($sql);
     $number_users_who_see_file = Database::num_rows($result);
 
-    $sql = "SELECT file_id 
+    $sql = "SELECT file_id
             FROM ".Database::get_course_table(TABLE_DROPBOX_POST)."
             WHERE c_id = $course_id AND dest_user_id = $user_id AND file_id = ".$id;
     $result = Database::query($sql);
@@ -1240,13 +1241,13 @@ function check_if_file_exist($id)
 {
     $id = (int) $id;
     $course_id = api_get_course_int_id();
-    $sql = "SELECT file_id 
+    $sql = "SELECT file_id
             FROM ".Database::get_course_table(TABLE_DROPBOX_PERSON)."
             WHERE c_id = $course_id AND file_id = ".$id;
     $result = Database::query($sql);
     $number_users_who_see_file = Database::num_rows($result);
 
-    $sql = "SELECT file_id 
+    $sql = "SELECT file_id
             FROM ".Database::get_course_table(TABLE_DROPBOX_POST)."
             WHERE c_id = $course_id AND file_id = ".$id;
     $result = Database::query($sql);
@@ -1450,7 +1451,7 @@ function get_total_number_feedback()
     $course_id = api_get_course_int_id();
     $sql = "SELECT COUNT(feedback_id) AS total, file_id
             FROM ".Database::get_course_table(TABLE_DROPBOX_FEEDBACK)."
-            WHERE c_id = $course_id 
+            WHERE c_id = $course_id
             GROUP BY file_id";
     $result = Database::query($sql);
     $return = [];

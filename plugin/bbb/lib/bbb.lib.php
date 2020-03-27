@@ -816,9 +816,10 @@ class bbb
     }
 
     /**
+     * Gets a list from the database of all meetings attached to a course with the given status
      * @param int $courseId
      * @param int $sessionId
-     * @param int $status
+     * @param int $status 0 for closed meetings, 1 for open meetings
      *
      * @return array
      */
@@ -842,7 +843,8 @@ class bbb
     }
 
     /**
-     * Gets all the course meetings saved in the plugin_bbb_meeting table
+     * Gets all the course meetings saved in the plugin_bbb_meeting table and
+     * generate actionable links (join/close/delete/etc)
      *
      * @param int   $courseId
      * @param int   $sessionId
@@ -851,6 +853,7 @@ class bbb
      * @param array $dateRange     Optional
      *
      * @return array Array of current open meeting rooms
+     * @throws Exception
      */
     public function getMeetings(
         $courseId = 0,

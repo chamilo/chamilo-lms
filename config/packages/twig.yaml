@@ -1,5 +1,7 @@
 twig:
     debug: '%kernel.debug%'
+    cache:
+        '%kernel.cache_dir%/twig'
     paths:
         - '%kernel.project_dir%/var/templates'
         - '%kernel.project_dir%/public/main/template'

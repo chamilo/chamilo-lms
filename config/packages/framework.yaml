@@ -12,7 +12,6 @@ framework:
         # handler_id set to null will use default session handler from php.ini
         handler_id: session.handler.native_file
         name: chamilo2
-    fragments: true
     http_method_override: true
     annotations:
         cache: file

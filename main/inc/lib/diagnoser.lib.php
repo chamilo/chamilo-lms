@@ -550,55 +550,60 @@ class Diagnoser
         // Extensions
         $extensions = [
             'gd' => [
-                'link' => 'http://www.php.net/gd',
+                'link' => 'https://www.php.net/gd',
                 'expected' => 1,
                 'comment' => get_lang('ExtensionMustBeLoaded'),
             ],
             'pdo_mysql' => [
-                'link' => 'http://php.net/manual/en/ref.pdo-mysql.php',
+                'link' => 'https://php.net/manual/en/ref.pdo-mysql.php',
                 'expected' => 1,
                 'comment' => get_lang('ExtensionMustBeLoaded'),
             ],
             'pcre' => [
-                'link' => 'http://www.php.net/pcre',
+                'link' => 'https://www.php.net/pcre',
                 'expected' => 1,
                 'comment' => get_lang('ExtensionMustBeLoaded'),
             ],
             'session' => [
-                'link' => 'http://www.php.net/session',
+                'link' => 'https://www.php.net/session',
                 'expected' => 1,
                 'comment' => get_lang('ExtensionMustBeLoaded'),
             ],
             'standard' => [
-                'link' => 'http://www.php.net/spl',
+                'link' => 'https://www.php.net/spl',
                 'expected' => 1,
                 'comment' => get_lang('ExtensionMustBeLoaded'),
             ],
             'zlib' => [
-                'link' => 'http://www.php.net/zlib',
+                'link' => 'https://www.php.net/zlib',
                 'expected' => 1,
                 'comment' => get_lang('ExtensionMustBeLoaded'),
             ],
             'xsl' => [
-                'link' => 'http://be2.php.net/xsl',
+                'link' => 'https://be2.php.net/xsl',
                 'expected' => 2,
                 'comment' => get_lang('ExtensionShouldBeLoaded'),
             ],
             'curl' => [
-                'link' => 'http://www.php.net/curl',
+                'link' => 'https://www.php.net/curl',
                 'expected' => 2,
                 'comment' => get_lang('ExtensionShouldBeLoaded'),
             ],
             'Zend OPcache' => [
-                'link' => 'http://www.php.net/opcache',
+                'link' => 'https://www.php.net/opcache',
                 'expected' => 2,
                 'comment' => get_lang('ExtensionShouldBeLoaded'),
             ],
             'apcu' => [
-                'link' => 'http://www.php.net/apcu',
+                'link' => 'https://www.php.net/apcu',
                 'expected' => 2,
                 'comment' => get_lang('ExtensionShouldBeLoaded'),
             ],
+            'openssl' => [ //required only for DKIM e-mail signatures
+                'link' => 'https://www.php.net/openssl',
+                'expected' => 2,
+                'comment' => get_lang('ExtensionShouldBeLoaded'),
+            ]
         ];
 
         foreach ($extensions as $extension => $data) {

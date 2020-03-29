@@ -1674,7 +1674,8 @@ class Tracking
         }
 
         $url_condition = null;
-        $tbl_url_rel_user = Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_USER);
+	$tbl_url_rel_user = Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_USER);
+        $url_table = null;
         if (api_is_multiple_url_enabled()) {
             $access_url_id = api_get_current_access_url_id();
             $url_table = ", ".$tbl_url_rel_user." as url_users";

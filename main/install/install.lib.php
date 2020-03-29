@@ -425,7 +425,7 @@ function write_system_config_file($path)
                 Your problems can be related on two possible causes:<br />
                 <ul>
                   <li>Permission problems.<br />Try initially with <em>chmod -R 777</em> and increase restrictions gradually.</li>
-                  <li>PHP is running in <a href="http://www.php.net/manual/en/features.safe-mode.php" target="_blank">Safe-Mode</a>. 
+                  <li>PHP is running in <a href="http://www.php.net/manual/en/features.safe-mode.php" target="_blank">Safe-Mode</a>.
                   If possible, try to switch it off.</li>
                 </ul>
                 <a href="http://forum.chamilo.org/" target="_blank">Read about this problem in Support Forum</a><br /><br />
@@ -884,6 +884,10 @@ function display_requirements(
             <tr>
                 <td class="requirements-item"><a href="http://xapian.org/" target="_blank">Xapian</a> '.get_lang('Support').' ('.get_lang('Optional').')</td>
                 <td class="requirements-value">'.checkExtension('xapian', get_lang('Yes'), get_lang('No'), true).'</td>
+            </tr>
+            <tr>
+                <td class="requirements-item"><a href="https://www.php.net/openssl" target="_blank">OpenSSL</a> '.get_lang('Support').' ('.get_lang('Optional').')</td>
+                <td class="requirements-value">'.checkExtension('openssl', get_lang('Yes'), get_lang('No'), true).'</td>
             </tr>
         </table>';
     echo '</div>';
@@ -2885,7 +2889,7 @@ function fixLpId($connection, $debug)
                     $correctLink = "lp/lp_controller.php?action=view&lp_id=$lpIid&id_session=$sessionId";
                     $link = "newscorm/lp_controller.php?action=view&lp_id=$oldId&id_session=$sessionId";
                     $secondLink = "lp/lp_controller.php?action=view&lp_id=$oldId&id_session=$sessionId";
-                    $sql = "UPDATE $toolTable 
+                    $sql = "UPDATE $toolTable
                         SET link = '$correctLink'
                         WHERE c_id = $courseId AND (link = '$link' OR link ='$secondLink')";
                     $connection->query($sql);
@@ -2901,7 +2905,7 @@ function fixLpId($connection, $debug)
                     foreach ($variablesToFix as $variable) {
                         if (!empty($item[$variable]) && isset($itemList[$item[$variable]])) {
                             $newId = $itemList[$item[$variable]];
-                            $sql = "UPDATE $tblCLpItem SET $variable = $newId 
+                            $sql = "UPDATE $tblCLpItem SET $variable = $newId
                                     WHERE iid = $itemIid AND c_id = $courseId AND lp_id = $oldId";
                             $connection->query($sql);
                             if ($debug) {
@@ -2918,7 +2922,7 @@ function fixLpId($connection, $debug)
                         if (!empty($document)) {
                             $newDocumentId = $document['iid'];
                             if (!empty($newDocumentId)) {
-                                $sql = "UPDATE $tblCLpItem SET path = $newDocumentId 
+                                $sql = "UPDATE $tblCLpItem SET path = $newDocumentId
                                         WHERE iid = $itemIid AND c_id = $courseId";
                                 $connection->query($sql);
                             }
@@ -2933,7 +2937,7 @@ function fixLpId($connection, $debug)
                         if (!empty($document)) {
                             $newLinkId = $document['iid'];
                             if (!empty($newLinkId)) {
-                                $sql = "UPDATE $tblCLpItem SET path = $newLinkId 
+                                $sql = "UPDATE $tblCLpItem SET path = $newLinkId
                                         WHERE iid = $itemIid AND c_id = $courseId";
                                 $connection->query($sql);
                             }
@@ -2941,22 +2945,22 @@ function fixLpId($connection, $debug)
                     }
 
                     // c_lp_view
-                    $sql = "UPDATE c_lp_view SET last_item = $itemIid 
+                    $sql = "UPDATE c_lp_view SET last_item = $itemIid
                             WHERE c_id = $courseId AND last_item = $itemId AND lp_id = $oldId";
                     $connection->query($sql);
 
                     // c_lp_item_view
-                    $sql = "UPDATE c_lp_item_view SET lp_item_id = $itemIid 
+                    $sql = "UPDATE c_lp_item_view SET lp_item_id = $itemIid
                             WHERE c_id = $courseId AND lp_item_id = $itemId";
                     $connection->query($sql);
 
                     // Update track_exercises
-                    $sql = "UPDATE track_e_exercises SET orig_lp_item_id = $itemIid 
+                    $sql = "UPDATE track_e_exercises SET orig_lp_item_id = $itemIid
                             WHERE c_id = $courseId AND orig_lp_id = $oldId AND orig_lp_item_id = $itemId";
                     $connection->query($sql);
 
                     // c_forum_thread
-                    $sql = "UPDATE c_forum_thread SET lp_item_id = $itemIid 
+                    $sql = "UPDATE c_forum_thread SET lp_item_id = $itemIid
                             WHERE c_id = $courseId AND lp_item_id = $itemId";
                     $connection->query($sql);
 
@@ -2975,14 +2979,14 @@ function fixLpId($connection, $debug)
                                 continue;
                             }
 
-                            $sql = "UPDATE track_e_exercises 
-                                SET orig_lp_item_view_id = $newItemView 
-                                WHERE 
-                                  c_id = $courseId AND 
-                                  orig_lp_id = $oldId AND 
-                                  orig_lp_item_id = $itemIid AND 
-                                  orig_lp_item_view_id = $oldItemViewId AND 
-                                  exe_user_id = $userId                                       
+                            $sql = "UPDATE track_e_exercises
+                                SET orig_lp_item_view_id = $newItemView
+                                WHERE
+                                  c_id = $courseId AND
+                                  orig_lp_id = $oldId AND
+                                  orig_lp_item_id = $itemIid AND
+                                  orig_lp_item_view_id = $oldItemViewId AND
+                                  exe_user_id = $userId
                                   ";
                             $connection->query($sql);
 
@@ -2996,11 +3000,11 @@ function fixLpId($connection, $debug)
                         }
                     }
 
-                    $sql = "UPDATE $tblCLpItem SET lp_id = $lpIid 
+                    $sql = "UPDATE $tblCLpItem SET lp_id = $lpIid
                             WHERE c_id = $courseId AND lp_id = $oldId AND id = $itemId";
                     $connection->query($sql);
 
-                    $sql = "UPDATE $tblCLpItem SET id = iid 
+                    $sql = "UPDATE $tblCLpItem SET id = iid
                             WHERE c_id = $courseId AND lp_id = $oldId AND id = $itemId";
                     $connection->query($sql);
                 }
@@ -3012,7 +3016,7 @@ function fixLpId($connection, $debug)
                 $connection->query($sql);
 
                 // Update track_exercises.
-                $sql = "UPDATE track_e_exercises SET orig_lp_id = $lpIid 
+                $sql = "UPDATE track_e_exercises SET orig_lp_id = $lpIid
                         WHERE c_id = $courseId AND orig_lp_id = $oldId";
                 $connection->query($sql);
 
@@ -3564,7 +3568,7 @@ function fixPostGroupIds($connection)
     error_log('Fix c_student_publication.post_group_id');
 
     // Fix post_group_id
-    $sql = "SELECT * FROM c_student_publication 
+    $sql = "SELECT * FROM c_student_publication
             WHERE (post_group_id <> 0 AND post_group_id is not null)";
     $statement = $connection->executeQuery($sql);
     $result = $statement->fetchAll();
@@ -3573,7 +3577,7 @@ function fixPostGroupIds($connection)
         $groupId = $row['post_group_id'];
         $courseId = $row['c_id'];
         $workIid = $row['iid'];
-        $sql = "SELECT iid from c_group_info 
+        $sql = "SELECT iid from c_group_info
                 WHERE c_id = $courseId AND id = $groupId";
         $statement = $connection->executeQuery($sql);
         $count = $statement->rowCount();
@@ -3584,9 +3588,9 @@ function fixPostGroupIds($connection)
                 continue;
             }
             if ($newGroupId) {
-                $sql = "UPDATE c_student_publication 
-                        SET post_group_id = $newGroupId 
-                        WHERE 
+                $sql = "UPDATE c_student_publication
+                        SET post_group_id = $newGroupId
+                        WHERE
                             c_id = $courseId AND
                             iid = $workIid
                         ";
@@ -3598,7 +3602,7 @@ function fixPostGroupIds($connection)
     error_log('End - Fix c_student_publication.post_group_id');
 
     // Delete c_student_publication from any session that doesn't exist anymore
-    $sql = "DELETE FROM c_student_publication 
+    $sql = "DELETE FROM c_student_publication
             WHERE session_id NOT IN (SELECT id FROM session) AND (session_id <> 0 AND session_id is not null)";
     $connection->executeQuery($sql);
 

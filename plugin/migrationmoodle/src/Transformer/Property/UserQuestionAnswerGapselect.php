@@ -29,7 +29,7 @@ class UserQuestionAnswerGapselect implements TransformPropertyInterface
 
         $mRightAnswer = $this->gapselectGetRightAnswers($mRightAnswer);
 
-        $mResponseSummary = $this->gapselectGetResposeSummary($mResponseSummary);
+        $mResponseSummary = $this->gapselectGetResponseSummary($mResponseSummary);
 
         $mQuestionSummary = explode(";", $mQuestionSummary);
         $mQuestionSummary = array_map('trim', $mQuestionSummary);
@@ -56,7 +56,7 @@ class UserQuestionAnswerGapselect implements TransformPropertyInterface
         $optionsScores = array_fill(0, count($mRightAnswer), $scorePerBlank);
         $width = array_fill(0, count($mRightAnswer), 300);
 
-        return "$questionText::".implode(',', $optionsScores).':'.implode(',', $width).':0@';
+        return utf8_encode("$questionText::".implode(',', $optionsScores).':'.implode(',', $width).':0@');
     }
 
     /**
@@ -82,7 +82,7 @@ class UserQuestionAnswerGapselect implements TransformPropertyInterface
      *
      * @return array
      */
-    private function gapselectGetResposeSummary($mResponseSummary)
+    private function gapselectGetResponseSummary($mResponseSummary)
     {
         $mResponseSummary = explode('} {', $mResponseSummary);
 

@@ -270,6 +270,7 @@ $form->addHtmlEditor(
     [
         'ToolbarSet' => 'TestProposedAnswer',
         'Height' => '120',
+        'id' => 'content',
     ]
 );
 
@@ -279,6 +280,10 @@ if ($agenda->type === 'course') {
     $form->addHtml('</div>');
     $form->addElement('textarea', 'comment', get_lang('Comment'), ['id' => 'comment']);
 }
+
+$form->addHtml('<div id="attachment_block" style="display: none">');
+$form->addLabel(get_lang('Attachment'), '<div id="attachment_text" style="display: none"></div>');
+$form->addHtml('</div>');
 
 $tpl->assign('form_add', $form->returnForm());
 $tpl->assign('legend_list', api_get_configuration_value('agenda_legend'));

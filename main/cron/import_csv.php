@@ -156,6 +156,10 @@ class ImportCsv
                         $method = 'importCareersDiagram';
                     }
 
+                    if ($method == 'importCareersresults') {
+                        $method = 'importCareersResults';
+                    }
+
                     if ($method == 'importOpensessions') {
                         $method = 'importOpenSessions';
                     }
@@ -184,7 +188,7 @@ class ImportCsv
                         echo "Error - This file '$file' can't be processed.".PHP_EOL;
                         echo "Trying to call $method".PHP_EOL;
                         echo "The file have to has this format:".PHP_EOL;
-                        echo "prefix_students_ddmmyyyy.csv, prefix_teachers_ddmmyyyy.csv, 
+                        echo "prefix_students_ddmmyyyy.csv, prefix_teachers_ddmmyyyy.csv,
                         prefix_courses_ddmmyyyy.csv, prefix_sessions_ddmmyyyy.csv ".PHP_EOL;
                         exit;
                     }
@@ -209,6 +213,7 @@ class ImportCsv
                 'care',
                 'careers',
                 'careersdiagram',
+                'careersresults',
             ];
 
             foreach ($sections as $section) {
@@ -812,7 +817,7 @@ class ImportCsv
             $counter = 1;
             $secondsInYear = 365 * 24 * 60 * 60;
 
-            foreach ($data as $row) {
+            foreach ($data as $row  ) {
                 $row = $this->cleanUserRow($row);
                 $user_id = UserManager::get_user_id_from_original_id(
                     $row['extra_'.$this->extraFieldIdNameList['user']],
@@ -844,7 +849,7 @@ class ImportCsv
                             if (!empty($emails)) {
                                 $this->logger->addInfo('Preparing email to users in configuration: "cron_notification_help_desk"');
                                 $subject = 'User not added due to same username';
-                                $body = 'Cannot add username: "'.$row['username'].'" 
+                                $body = 'Cannot add username: "'.$row['username'].'"
                                     with external_user_id: '.$row['extra_'.$this->extraFieldIdNameList['user']].'
                                     because '.$userInfoFromUsername['username'].' with external_user_id '.$value.' exists on the portal';
                                 $this->logger->addInfo($body);
@@ -1164,8 +1169,8 @@ class ImportCsv
                     $date->sub($interval);
                     if ($date->getTimestamp() > time()) {
                         $this->logger->addInfo(
-                            "Calendar event # ".$row['external_calendar_itemID']." 
-                            in session [$externalSessionId] was not added 
+                            "Calendar event # ".$row['external_calendar_itemID']."
+                            in session [$externalSessionId] was not added
                             because the startdate is more than 7 days in the future: ".$sessionInfo['access_start_date']
                         );
                         $errorFound = true;
@@ -1295,15 +1300,15 @@ class ImportCsv
                                 "Delete event # $calendarId because session # $calendarSessionId doesn't exist"
                             );
 
-                            $sql = "DELETE FROM c_calendar_event 
+                            $sql = "DELETE FROM c_calendar_event
                                     WHERE iid = $calendarId AND session_id = $calendarSessionId";
                             Database::query($sql);
                             $this->logger->addInfo($sql);
 
-                            $sql = "DELETE FROM c_item_property 
-                                    WHERE 
-                                        tool = 'calendar_event' AND 
-                                        ref = $calendarSessionId AND 
+                            $sql = "DELETE FROM c_item_property
+                                    WHERE
+                                        tool = 'calendar_event' AND
+                                        ref = $calendarSessionId AND
                                         session_id = $calendarSessionId";
                             Database::query($sql);
                             $this->logger->addInfo($sql);
@@ -1429,28 +1434,45 @@ class ImportCsv
 
                     $courseTitle = $courseInfo['title'];
 
+                    // Get the value of the "careerid" extra field of this
+                    // session
                     $sessionExtraFieldValue = new ExtraFieldValue('session');
-                    $values = $sessionExtraFieldValue->get_values_by_handler_and_field_variable(
+                    $externalCareerIdList = $sessionExtraFieldValue->get_values_by_handler_and_field_variable(
                         $event['session_id'],
-                        $this->extraFieldIdNameList['session_career']
+                        'careerid'
                     );
-
-                    $careerName = '';
-                    if (!empty($values)) {
-                        foreach ($values as $value) {
-                            if (isset($value['value'])) {
-                                $careerName = $value['value'];
-                            }
-                        }
+                    $externalCareerIdList = $externalCareerIdList['value'];
+                    if (substr($externalCareerIdList, 0, 1) === '[') {
+                        $externalCareerIdList = substr($externalCareerIdList, 1, -1);
+                        $externalCareerIds = preg_split('/,/', $externalCareerIdList);
+                    } else {
+                        $externalCareerIds = [$externalCareerIdList];
                     }
+
+                    $careerExtraFieldValue = new ExtraFieldValue('career');
+                    $career = new Career();
+                    $careerName = '';
+
+                    // Concat the names of each career linked to this session
+                    foreach ($externalCareerIds as $externalCareerId) {
+                        // Using the external_career_id field (from above),
+                        // find the career ID
+                        $careerValue = $careerExtraFieldValue->get_item_id_from_field_variable_and_field_value(
+                            'external_career_id',
+                            $externalCareerId
+                        );
+                        $career = $career->find($careerValue['item_id']);
+                        $careerName .= $career['name'].', ';
+                    }
+                    // Remove trailing comma
+                    $careerName = substr($careerName, 0, -2);
 
                     $subject = sprintf(
                         get_lang('WelcomeToPortalXInCourseSessionX'),
-                        api_get_setting('siteName'),
+                        api_get_setting('Institution'),
                         $courseInfo['title']
                     );
 
-                    $tpl->assign('site_name', api_get_setting('siteName'));
                     $tpl->assign('course_title', $courseTitle);
                     $tpl->assign('career_name', $careerName);
                     $tpl->assign('first_lesson', $date);
@@ -1582,7 +1604,7 @@ class ImportCsv
                                 ];
                                 $extraFieldValue->update($params);
                                 $this->logger->addInfo(
-                                    'Updating calendar extra field #'.$extraFieldValueItem['id'].' 
+                                    'Updating calendar extra field #'.$extraFieldValueItem['id'].'
                                     new item_id: '.$eventId.' old item_id: '.$item['item_id']
                                 );
                             }
@@ -2542,17 +2564,17 @@ class ImportCsv
         $data = Import::csv_reader($file);
 
         if (!empty($data)) {
-            $this->logger->addInfo(count($data)." records found.");
+            $this->logger->addInfo(count($data).' records found.');
             $extraFieldValue = new ExtraFieldValue('career');
             $extraFieldName = $this->extraFieldIdNameList['career'];
             $externalEventId = null;
 
             $extraField = new ExtraField('career');
-            $extraFieldInfo = $extraField->get_handler_field_info_by_field_variable(
-                $extraFieldName
-            );
+            $extraFieldInfo = $extraField->get_handler_field_info_by_field_variable($extraFieldName);
 
             if (empty($extraFieldInfo)) {
+                $this->logger->addInfo("Extra field doesn't exists: $extraFieldName");
+
                 return false;
             }
 
@@ -2632,6 +2654,105 @@ class ImportCsv
      * @param array $teacherBackup
      * @param array $groupBackup
      */
+    private function importCareersResults(
+        $file,
+        $moveFile = false,
+        &$teacherBackup = [],
+        &$groupBackup = []
+    ) {
+        $data = Import::csv_reader($file);
+
+        if (!empty($data)) {
+            $this->logger->addInfo(count($data).' records found.');
+
+            $extraFieldValue = new ExtraFieldValue('career');
+            $extraFieldName = $this->extraFieldIdNameList['career'];
+
+            foreach ($data as $row) {
+                if (empty($row)) {
+                    continue;
+                }
+                foreach ($row as $key => $value) {
+                    $key = (string) trim($key);
+                    // Remove utf8 bom
+                    $key = preg_replace('/[\x00-\x1F\x80-\xFF]/', '', $key);
+                    $row[$key] = $value;
+                }
+
+                $studentId = $row['StudentId'];
+                $studentId = UserManager::get_user_id_from_original_id(
+                    $studentId,
+                    $this->extraFieldIdNameList['user']
+                );
+
+                $studentInfo = api_get_user_info($studentId);
+                if (empty($studentInfo)) {
+                    $this->logger->addInfo("Student id not found: $studentId");
+                    continue;
+                }
+
+                $careerId = $row['CareerId'];
+                $item = $extraFieldValue->get_item_id_from_field_variable_and_field_value(
+                    $extraFieldName,
+                    $careerId
+                );
+
+                $careerChamiloId = null;
+                if (empty($item)) {
+                    $this->logger->addInfo("Career not found: $careerId");
+                    continue;
+                } else {
+                    if (isset($item['item_id'])) {
+                        $careerChamiloId = $item['item_id'];
+                    } else {
+                        continue;
+                    }
+                }
+
+                if (UserManager::userHasCareer($studentId, $careerChamiloId) === false) {
+                    $this->logger->addInfo(
+                        "User $studentId (".$row['StudentId'].") has no career #$careerChamiloId (ext #$careerId)"
+                    );
+                    continue;
+                }
+
+                $userCareerData = UserManager::getUserCareer($studentId, $careerChamiloId);
+
+                $extraData = isset($userCareerData['extra_data']) && !empty($userCareerData['extra_data']) ? unserialize($userCareerData['extra_data']) : [];
+
+                $teacherInfo = api_get_user_info_from_username($row['TeacherUsername']);
+                $teacherName = $row['TeacherUsername'];
+                if ($teacherInfo) {
+                    $teacherName = $teacherInfo['complete_name'];
+                }
+
+                $extraData[$row['CourseId']][$row['ResultId']] = [
+                    'Description' => $row['Description'],
+                    'Period' => $row['Period'],
+                    'TeacherText' => $row['TeacherText'],
+                    'TeacherUsername' => $teacherName,
+                    'ScoreText' => $row['ScoreText'],
+                    'ScoreValue' => $row['ScoreValue'],
+                    'Info' => $row['Info'],
+                    'BgColor' => $row['BgColor'],
+                    'Color' => $row['Color'],
+                    'BorderColor' => $row['BorderColor'],
+                    'Icon' => $row['Icon'],
+                    'IconColor' => $row['IconColor'],
+                ];
+                $serializedValue = serialize($extraData);
+
+                UserManager::updateUserCareer($userCareerData['id'], $serializedValue);
+            }
+        }
+    }
+
+    /**
+     * @param $file
+     * @param bool  $moveFile
+     * @param array $teacherBackup
+     * @param array $groupBackup
+     */
     private function importCareersDiagram(
         $file,
         $moveFile = false,
@@ -2645,9 +2766,7 @@ class ImportCsv
         $externalEventId = null;
 
         $extraField = new ExtraField('career');
-        $extraFieldInfo = $extraField->get_handler_field_info_by_field_variable(
-            $extraFieldName
-        );
+        $extraFieldInfo = $extraField->get_handler_field_info_by_field_variable($extraFieldName);
 
         $careerDiagramExtraFieldName = $this->extraFieldIdNameList['career_diagram'];
         $extraFieldDiagramInfo = $extraField->get_handler_field_info_by_field_variable(
@@ -2659,7 +2778,7 @@ class ImportCsv
         }
 
         if (!empty($data)) {
-            $this->logger->addInfo(count($data)." records found.");
+            $this->logger->addInfo(count($data).' records found.');
             $values = [];
             foreach ($data as $row) {
                 if (empty($row)) {
@@ -2690,7 +2809,6 @@ class ImportCsv
                         false
                     );
 
-                    $chamiloCareerName = '';
                     if (empty($item)) {
                         $this->logger->addInfo("Career not found: $careerId");
                         continue;
@@ -2720,7 +2838,7 @@ class ImportCsv
                         $careerList[$careerId] = $graph;
                     }
 
-                    $currentCourseId = (int) $row['CourseId'];
+                    $currentCourseId = $row['CourseId'];
                     $name = $row['CourseName'];
                     $notes = $row['Notes'];
                     $groupValue = $row['Group'];
@@ -2764,7 +2882,7 @@ class ImportCsv
                         continue;
                     }
 
-                    $currentCourseId = (int) $row['CourseId'];
+                    $currentCourseId = $row['CourseId'];
                     if ($graph->hasVertex($currentCourseId)) {
                         $current = $graph->getVertex($currentCourseId);
                     } else {

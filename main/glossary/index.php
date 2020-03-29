@@ -93,7 +93,7 @@ switch ($action) {
                 get_lang('TermName'),
                 false,
                 false,
-                ['ToolbarSet' => 'Minimal']
+                ['ToolbarSet' => 'TitleAsHtml']
             );
         } else {
             $form->addElement('text', 'name', get_lang('TermName'), ['id' => 'glossary_title']);
@@ -157,7 +157,7 @@ switch ($action) {
                     get_lang('TermName'),
                     false,
                     false,
-                    ['ToolbarSet' => 'Minimal']
+                    ['ToolbarSet' => 'TitleAsHtml']
                 );
             } else {
                 $form->addElement('text', 'name', get_lang('TermName'), ['id' => 'glossary_title']);

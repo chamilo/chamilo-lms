@@ -83,8 +83,18 @@ class Event
         Database::query($sql);
 
         // Auto subscribe
-        $user_status = $userInfo['status'] == SESSIONADMIN ? 'sessionadmin' : $userInfo['status'] == COURSEMANAGER ? 'teacher' : $userInfo['status'] == DRH ? 'DRH' : 'student';
-        $autoSubscribe = api_get_setting($user_status.'_autosubscribe');
+        $status = 'student';
+        if ($userInfo['status'] == SESSIONADMIN) {
+            $status = 'sessionadmin';
+        }
+        if ($userInfo['status'] == COURSEMANAGER) {
+            $status = 'teacher';
+        }
+        if ($userInfo['status'] == DRH) {
+            $status = 'DRH';
+        }
+
+        $autoSubscribe = api_get_setting($status.'_autosubscribe');
         if ($autoSubscribe) {
             $autoSubscribe = explode('|', $autoSubscribe);
             foreach ($autoSubscribe as $code) {
@@ -1713,6 +1723,8 @@ class Event
     }
 
     /**
+     * Get the last best result from all attempts in exercises per user (out of learning paths).
+     *
      * @param int $user_id
      * @param int $exercise_id
      * @param int $courseId
@@ -2258,6 +2270,17 @@ class Event
         $courseTrackingTable = Database::get_main_table(TABLE_STATISTIC_TRACK_E_COURSE_ACCESS);
         Database::insert($courseTrackingTable, $params);
 
+        // Time should also be added to the track_e_login table so as to
+        // affect total time on the platform
+        $params = [
+            'login_user_id' => $userId,
+            'login_date' => $loginDate,
+            'user_ip' => api_get_real_ip(),
+            'logout_date' => $logoutDate,
+        ];
+        $platformTrackingTable = Database::get_main_table(TABLE_STATISTIC_TRACK_E_LOGIN);
+        Database::insert($platformTrackingTable, $params);
+
         return true;
     }
 
@@ -2290,6 +2313,7 @@ class Event
             return false;
         }
         $courseTrackingTable = Database::get_main_table(TABLE_STATISTIC_TRACK_E_COURSE_ACCESS);
+        $platformTrackingTable = Database::get_main_table(TABLE_STATISTIC_TRACK_E_LOGIN);
         $courseId = (int) $courseId;
         $userId = (int) $userId;
         $sessionId = (int) $sessionId;
@@ -2324,6 +2348,21 @@ class Event
             $courseAccessId = $row[0];
             $sql = "DELETE FROM $courseTrackingTable 
                     WHERE course_access_id = $courseAccessId";
+            Database::query($sql);
+        }
+        $sql = "SELECT login_id
+                FROM $platformTrackingTable
+                WHERE
+                    login_user_id = $userId AND
+                    (UNIX_TIMESTAMP(logout_date) - UNIX_TIMESTAMP(login_date)) = '$virtualTime'
+                ORDER BY login_date DESC LIMIT 0,1";
+        $result = Database::query($sql);
+        if (Database::num_rows($result) > 0) {
+            // Found the latest connection
+            $row = Database::fetch_row($result);
+            $loginAccessId = $row[0];
+            $sql = "DELETE FROM $platformTrackingTable
+                    WHERE login_id = $loginAccessId";
             $result = Database::query($sql);
 
             return $result;

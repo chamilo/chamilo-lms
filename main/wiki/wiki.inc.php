@@ -4897,7 +4897,6 @@ class Wiki
 
             if (api_is_allowed_to_edit(false, true) || api_is_platform_admin()) {
                 // only by professors if page is hidden
-                //only by professors if page is hidden
                 $sql = "SELECT * FROM ".$tbl_wiki." s1
                         WHERE s1.c_id = $course_id AND linksto LIKE '%".Database::escape_string(
                         $page

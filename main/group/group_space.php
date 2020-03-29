@@ -44,17 +44,17 @@ if (!GroupManager::userHasAccessToBrowse($user_id, $current_group, api_get_sessi
  * User wants to register in this group
  */
 if (!empty($_GET['selfReg']) &&
-    GroupManager :: is_self_registration_allowed($user_id, $current_group)
+    GroupManager::is_self_registration_allowed($user_id, $current_group)
 ) {
     GroupManager::subscribe_users($user_id, $current_group);
-    Display::addFlash(Display::return_message(get_lang('GroupNowMember'), 'normal'));
+    Display::addFlash(Display::return_message(get_lang('GroupNowMember')));
 }
 
 /*
  * User wants to unregister from this group
  */
 if (!empty($_GET['selfUnReg']) &&
-    GroupManager :: is_self_unregistration_allowed($user_id, $current_group)
+    GroupManager::is_self_unregistration_allowed($user_id, $current_group)
 ) {
     GroupManager::unsubscribe_users($user_id, $current_group);
     Display::addFlash(
@@ -84,9 +84,9 @@ echo '<a href="'.api_get_path(WEB_CODE_PATH).'group/group.php?'.api_get_cidreq()
  * Register to group
  */
 $subscribe_group = '';
-if (GroupManager :: is_self_registration_allowed($user_id, $current_group)) {
+if (GroupManager::is_self_registration_allowed($user_id, $current_group)) {
     $subscribe_group = '<a class="btn btn-default" href="'.api_get_self().'?selfReg=1&group_id='.$current_group['id'].'" onclick="javascript: if(!confirm('."'".addslashes(api_htmlentities(get_lang("ConfirmYourChoice"), ENT_QUOTES))."'".')) return false;">'.
-        get_lang("RegIntoGroup").'</a>';
+        get_lang('RegIntoGroup').'</a>';
 }
 
 /*
@@ -95,7 +95,7 @@ if (GroupManager :: is_self_registration_allowed($user_id, $current_group)) {
 $unsubscribe_group = '';
 if (GroupManager :: is_self_unregistration_allowed($user_id, $current_group)) {
     $unsubscribe_group = '<a class="btn btn-default" href="'.api_get_self().'?selfUnReg=1" onclick="javascript: if(!confirm('."'".addslashes(api_htmlentities(get_lang("ConfirmYourChoice"), ENT_QUOTES))."'".')) return false;">'.
-        get_lang("StudentUnsubscribe").'</a>';
+        get_lang('StudentUnsubscribe').'</a>';
 }
 echo '&nbsp;</div>';
 
@@ -103,7 +103,7 @@ echo '&nbsp;</div>';
 
 $edit_url = '';
 if (api_is_allowed_to_edit(false, true) ||
-    GroupManager::is_tutor_of_group(api_get_user_id(), $current_group)
+    GroupManager::is_tutor_of_group($user_id, $current_group)
 ) {
     $edit_url = '<a href="'.api_get_path(WEB_CODE_PATH).'group/settings.php?'.api_get_cidreq().'">'.
         Display::return_icon('edit.png', get_lang('EditGroup'), '', ICON_SIZE_SMALL).'</a>';
@@ -117,17 +117,13 @@ if (!empty($current_group['description'])) {
     echo '<p>'.Security::remove_XSS($current_group['description']).'</p>';
 }
 
-/*
- * Group Tools
- */
+//if (GroupManager::userHasAccessToBrowse($user_id, $this_group, $session_id)) {
+
 // If the user is subscribed to the group or the user is a tutor of the group then
 if (api_is_allowed_to_edit(false, true) ||
-    GroupManager::is_user_in_group(api_get_user_id(), $current_group)
+    GroupManager::userHasAccessToBrowse($user_id, $current_group, api_get_session_id())
 ) {
     $actions_array = [];
-    // Link to the forum of this group
-    $forums_of_groups = get_forums_of_group($current_group);
-
     if (is_array($forums_of_groups)) {
         if ($current_group['forum_state'] != GroupManager::TOOL_NOT_AVAILABLE) {
             foreach ($forums_of_groups as $key => $value) {
@@ -227,8 +223,6 @@ if (api_is_allowed_to_edit(false, true) ||
     }
 } else {
     $actions_array = [];
-    // Link to the forum of this group
-    $forums_of_groups = get_forums_of_group($current_group);
     if (is_array($forums_of_groups)) {
         if ($current_group['forum_state'] == GroupManager::TOOL_PUBLIC) {
             foreach ($forums_of_groups as $key => $value) {

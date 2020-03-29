@@ -141,7 +141,7 @@ class ReadingComprehension extends UniqueAnswer
         $form->addTextarea('questionDescription', get_lang('Text'), ['rows' => 20]);
         // question name
         if (api_get_configuration_value('save_titles_as_html')) {
-            $editorConfig = ['ToolbarSet' => 'Minimal'];
+            $editorConfig = ['ToolbarSet' => 'TitleAsHtml'];
             $form->addHtmlEditor(
                 'questionName',
                 get_lang('Question'),

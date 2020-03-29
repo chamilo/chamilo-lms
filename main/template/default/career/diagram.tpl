@@ -31,13 +31,10 @@
         function main(container)
         {
             // Checks if the browser is supported
-            if (!mxClient.isBrowserSupported())
-            {
+            if (!mxClient.isBrowserSupported()) {
                 // Displays an error message if the browser is not supported.
                 mxUtils.error('Browser is not supported!', 200, false);
-            }
-            else
-            {
+            } else {
                 // Disables the built-in context menu
                 mxEvent.disableContextMenu(container);
 
@@ -50,8 +47,7 @@
                 graph.setEnabled(false);
 
                 // Enables connect preview for the default edge style
-                graph.connectionHandler.createEdgeState = function(me)
-                {
+                graph.connectionHandler.createEdgeState = function(me) {
                     var edge = graph.createEdge(null, null, null, null, null);
 
                     return new mxCellState(this.graph.view, edge, this.graph.getCellStyle(edge));

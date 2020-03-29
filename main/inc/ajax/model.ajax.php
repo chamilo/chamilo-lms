@@ -686,6 +686,7 @@ switch ($action) {
     case 'get_sessions':
         $list_type = isset($_REQUEST['list_type']) ? $_REQUEST['list_type'] : 'simple';
         $language = isset($_REQUEST['lang']) ? $_REQUEST['lang'] : '';
+        $order = isset($_REQUEST['order']) ? $_REQUEST['order'] : '';
 
         $session_columns = SessionManager::getGridColumns($list_type);
         $columns = $session_columns['simple_column_name'];
@@ -700,15 +701,18 @@ switch ($action) {
                 $extraFieldsToLoad[] = $fieldData;
             }
         }
-        if ($list_type === 'simple') {
+
+        if ($list_type === 'custom') {
+            $whereCondition .= ' AND (s.status IN ("'.SessionManager::STATUS_PLANNED.'", "'.SessionManager::STATUS_PROGRESS.'") ) ';
+        }
+
+        if ($list_type === 'simple' || $list_type === 'custom') {
             $count = SessionManager::get_sessions_admin(
                 ['where' => $whereCondition, 'extra' => $extra_fields],
                 true,
                 [],
                 $extraFieldsToLoad,
                 $language
-                //$accessStartDate,
-                //$accessEndDate
             );
         } else {
             $count = SessionManager::get_count_admin_complete(
@@ -1639,7 +1643,7 @@ switch ($action) {
         $session_columns = SessionManager::getGridColumns($list_type);
         $columns = $session_columns['simple_column_name'];
 
-        if ($list_type == 'simple') {
+        if ($list_type === 'simple' || $list_type === 'custom') {
             $result = SessionManager::get_sessions_admin(
                 [
                     'where' => $whereCondition,

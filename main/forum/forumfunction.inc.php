@@ -829,9 +829,9 @@ function store_forum($values, $courseInfo = [], $returnId = false)
                 }
                 $tableItemProperty = Database::get_course_table(TABLE_ITEM_PROPERTY);
                 foreach ($threads as $thread) {
-                    $sql = "UPDATE $tableItemProperty 
+                    $sql = "UPDATE $tableItemProperty
                             SET to_group_id = $toGroupId
-                            WHERE 
+                            WHERE
                                 tool = '".TOOL_FORUM_THREAD."' AND
                                 ref = ".$thread['thread_id']." AND
                                 c_id = ".$courseId;
@@ -847,19 +847,19 @@ function store_forum($values, $courseInfo = [], $returnId = false)
                         $attachMentList = getAllAttachment($postId);
                         if (!empty($attachMentList)) {
                             foreach ($attachMentList as $attachMent) {
-                                $sql = "UPDATE $tableItemProperty 
+                                $sql = "UPDATE $tableItemProperty
                                         SET to_group_id = $toGroupId
-                                        WHERE 
-                                            tool = '".TOOL_FORUM_ATTACH."' AND 
+                                        WHERE
+                                            tool = '".TOOL_FORUM_ATTACH."' AND
                                             ref = ".$attachMent['iid']." AND
                                             c_id = ".$courseId;
                                 Database::query($sql);
                             }
                         }
 
-                        $sql = "UPDATE $tableItemProperty 
+                        $sql = "UPDATE $tableItemProperty
                                 SET to_group_id = $toGroupId
-                                WHERE 
+                                WHERE
                                     tool = '".TOOL_FORUM_POST."' AND
                                     ref = $postId AND
                                     c_id = $courseId";
@@ -1053,7 +1053,7 @@ function deleteForumCategoryThread($content, $id)
         $return_message = get_lang('ForumDeleted');
 
         if (!empty($number_threads)) {
-            $sql = "SELECT thread_id FROM $table_forum_thread 
+            $sql = "SELECT thread_id FROM $table_forum_thread
                     WHERE c_id = $course_id AND forum_id = $id ";
             $result = Database::query($sql);
             $row = Database::fetch_array($result);
@@ -1577,26 +1577,26 @@ function get_forum_categories($id = '', $courseId = 0, $sessionId = 0)
 
     if (empty($id)) {
         $sql = "SELECT *
-                FROM $table_item_property item_properties 
+                FROM $table_item_property item_properties
                 INNER JOIN $table_categories forum_categories
                 ON (
-                    forum_categories.cat_id = item_properties.ref AND 
+                    forum_categories.cat_id = item_properties.ref AND
                     item_properties.c_id = forum_categories.c_id
                 )
-                WHERE                    
+                WHERE
                     item_properties.visibility = 1 AND
                     item_properties.tool = '".TOOL_FORUM_CATEGORY."'
                     $condition_session
                 ORDER BY forum_categories.cat_order ASC";
         if (api_is_allowed_to_edit()) {
             $sql = "SELECT *
-                    FROM $table_item_property item_properties  
+                    FROM $table_item_property item_properties
                     INNER JOIN $table_categories forum_categories
                     ON (
-                        forum_categories.cat_id = item_properties.ref AND 
+                        forum_categories.cat_id = item_properties.ref AND
                         item_properties.c_id = forum_categories.c_id
                     )
-                    WHERE                        
+                    WHERE
                         item_properties.visibility<>2 AND
                         item_properties.tool='".TOOL_FORUM_CATEGORY."'
                         $condition_session
@@ -1604,13 +1604,13 @@ function get_forum_categories($id = '', $courseId = 0, $sessionId = 0)
         }
     } else {
         $sql = "SELECT *
-                FROM $table_item_property item_properties 
+                FROM $table_item_property item_properties
                 INNER JOIN $table_categories forum_categories
                 ON (
-                    forum_categories.cat_id = item_properties.ref AND 
+                    forum_categories.cat_id = item_properties.ref AND
                     item_properties.c_id = forum_categories.c_id
                 )
-                WHERE                    
+                WHERE
                     item_properties.tool='".TOOL_FORUM_CATEGORY."' AND
                     forum_categories.cat_id = ".intval($id)."
                     $condition_session
@@ -1654,22 +1654,22 @@ function get_forums_in_category($cat_id, $courseId = 0)
     $course_id = $courseId ?: api_get_course_int_id();
     $cat_id = (int) $cat_id;
 
-    $sql = "SELECT * FROM $table_forums forum 
+    $sql = "SELECT * FROM $table_forums forum
             INNER JOIN $table_item_property item_properties
             ON (forum.forum_id = item_properties.ref AND item_properties.c_id = forum.c_id)
             WHERE
-                forum.forum_category = '".$cat_id."' AND                
+                forum.forum_category = '".$cat_id."' AND
                 item_properties.visibility = 1 AND
                 forum.c_id = $course_id AND
                 item_properties.c_id = $course_id AND
-                item_properties.tool = '".TOOL_FORUM."'                 
+                item_properties.tool = '".TOOL_FORUM."'
             ORDER BY forum.forum_order ASC";
     if (api_is_allowed_to_edit()) {
-        $sql = "SELECT * FROM $table_forums forum  
+        $sql = "SELECT * FROM $table_forums forum
                 INNER JOIN $table_item_property item_properties
                 ON (forum.forum_id = item_properties.ref AND item_properties.c_id = forum.c_id)
                 WHERE
-                    forum.forum_category = '".$cat_id."' AND                    
+                    forum.forum_category = '".$cat_id."' AND
                     item_properties.visibility <> 2 AND
                     item_properties.tool = '".TOOL_FORUM."' AND
                     item_properties.c_id = $course_id AND
@@ -1740,7 +1740,7 @@ function get_forums(
     if (empty($id)) {
         // Student
         // Select all the forum information of all forums (that are visible to students).
-        $sql = "SELECT item_properties.*, forum.* 
+        $sql = "SELECT item_properties.*, forum.*
                 FROM $table_forums forum
                 INNER JOIN $table_item_property item_properties
                 ON (
@@ -1775,7 +1775,7 @@ function get_forums(
         // Course Admin
         if ($allowToEdit) {
             // Select all the forum information of all forums (that are not deleted).
-            $sql = "SELECT item_properties.*, forum.* 
+            $sql = "SELECT item_properties.*, forum.*
                     FROM $table_forums forum
                     INNER JOIN $table_item_property item_properties
                     ON (
@@ -1817,7 +1817,7 @@ function get_forums(
         we use this part of the function) */
 
         // Select all the forum information of the given forum (that is not deleted).
-        $sql = "SELECT * FROM $table_item_property item_properties 
+        $sql = "SELECT * FROM $table_item_property item_properties
                 INNER JOIN $table_forums forum
                 ON (forum.forum_id = item_properties.ref AND forum.c_id = item_properties.c_id)
                 WHERE
@@ -1921,9 +1921,9 @@ function get_last_post_by_thread($course_id, $thread_id, $forum_id, $show_visibl
 
     $table_posts = Database::get_course_table(TABLE_FORUM_POST);
     $sql = "SELECT * FROM $table_posts
-            WHERE 
-                c_id = $course_id AND 
-                thread_id = $thread_id AND 
+            WHERE
+                c_id = $course_id AND
+                thread_id = $thread_id AND
                 forum_id = $forum_id";
 
     if ($show_visible == false) {
@@ -1973,10 +1973,10 @@ function get_last_post_information($forum_id, $show_invisibles = false, $course_
 
     // First get the threads to make sure there is no inconsistency in the
     // database between forum and thread
-    $sql = "SELECT thread_id FROM $table_threads 
-            WHERE 
-                forum_id = $forum_id AND 
-                c_id = $course_id AND 
+    $sql = "SELECT thread_id FROM $table_threads
+            WHERE
+                forum_id = $forum_id AND
+                c_id = $course_id AND
                 session_id = $sessionId";
     $result = Database::query($sql);
     if (Database::num_rows($result) == 0) {
@@ -2106,7 +2106,7 @@ function get_threads($forum_id, $courseId = null, $sessionId = null)
             ON
                 thread.thread_id = item_properties.ref AND
                 item_properties.c_id = thread.c_id AND
-                item_properties.tool = '".TABLE_FORUM_THREAD."' 
+                item_properties.tool = '".TABLE_FORUM_THREAD."'
                 $groupCondition
                 $sessionCondition
             LEFT JOIN $table_users users
@@ -2114,7 +2114,7 @@ function get_threads($forum_id, $courseId = null, $sessionId = null)
             WHERE
                 item_properties.visibility='1' AND
                 thread.forum_id = ".intval($forum_id)." AND
-                thread.c_id = $courseId 
+                thread.c_id = $courseId
             ORDER BY thread.thread_sticky DESC, thread.thread_date DESC";
 
     if (api_is_allowed_to_edit()) {
@@ -2138,7 +2138,7 @@ function get_threads($forum_id, $courseId = null, $sessionId = null)
                 WHERE
                     item_properties.visibility<>2 AND
                     thread.forum_id = ".intval($forum_id)." AND
-                    thread.c_id = $courseId 
+                    thread.c_id = $courseId
                 ORDER BY thread.thread_sticky DESC, thread.thread_date DESC";
     }
     $result = Database::query($sql);
@@ -2252,10 +2252,10 @@ function getPosts(
         if (!api_is_allowed_to_edit(false, true)) {
             $userId = api_get_user_id();
             $qb->andWhere(
-                "p.status = 1 OR 
+                "p.status = 1 OR
                     (p.status = ".CForumPost::STATUS_WAITING_MODERATION." AND p.posterId = $userId) OR
                     (p.status = ".CForumPost::STATUS_REJECTED." AND p.posterId = $userId) OR
-                    (p.status IS NULL AND p.posterId = $userId) 
+                    (p.status IS NULL AND p.posterId = $userId)
                     "
             );
         }
@@ -4334,8 +4334,10 @@ function get_whats_new()
                     access_tool = '".Database::escape_string($tool)."'";
         $result = Database::query($sql);
         $row = Database::fetch_array($result);
-        Session::write('last_forum_access', $row['access_date']);
-        $lastForumAccess = $row['access_date'];
+        if (isset($row['access_date'])) {
+            Session::write('last_forum_access', $row['access_date']);
+            $lastForumAccess = $row['access_date'];
+        }
     }
 
     $whatsNew = Session::read('whatsnew_post_info');
@@ -6369,7 +6371,8 @@ function getAttachedFiles(
     $courseId = (int) $courseId;
     $attachId = (int) $attachId;
     $postId = (int) $postId;
-    $threadId = !empty($threadId) ? intval($threadId) : isset($_REQUEST['thread']) ? intval($_REQUEST['thread']) : '';
+    $threadId = (int) $threadId;
+
     if (empty($courseId)) {
         // $courseId can be null, use api method
         $courseId = api_get_course_int_id();

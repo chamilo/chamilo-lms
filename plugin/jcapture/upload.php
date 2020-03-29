@@ -6,7 +6,7 @@ require_once __DIR__.'/../../main/inc/global.inc.php';
 api_protect_course_script();
 
 $plugin = new AppPlugin();
-$pluginList = $plugin->get_installed_plugins();
+$pluginList = $plugin->getInstalledPlugins();
 $capturePluginInstalled = in_array('jcapture', $pluginList);
 if (!$capturePluginInstalled) {
     exit;

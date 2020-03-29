@@ -390,7 +390,6 @@ class ExerciseShowFunctions
         echo '<td width="5%">';
         echo Display::return_icon($icon, null, null, ICON_SIZE_TINY);
         echo '</td>';
-
         if ($exercise->showExpectedChoiceColumn()) {
             if ($hide_expected_answer === false) {
                 echo '<td width="5%">';

@@ -41,7 +41,7 @@ function handleRegions()
     }
 
     $plugin_obj = new AppPlugin();
-    $installed_plugins = $plugin_obj->get_installed_plugins();
+    $installed_plugins = $plugin_obj->getInstalledPlugins();
 
     echo '<form name="plugins" method="post" action="'.api_get_self().'?category='.Security::remove_XSS($_GET['category']).'">';
     echo '<table class="data_table">';
@@ -146,7 +146,7 @@ function handlePlugins()
     }
 
     $all_plugins = $plugin_obj->read_plugins_from_path();
-    $installed_plugins = $plugin_obj->get_installed_plugins();
+    $installed_plugins = $plugin_obj->getInstalledPlugins();
 
     // Plugins NOT installed
     echo Display::page_subheader(get_lang('Plugins'));
@@ -646,7 +646,7 @@ function storeRegions()
     $plugin_obj = new AppPlugin();
 
     // Get a list of all current 'Plugins' settings
-    $installed_plugins = $plugin_obj->get_installed_plugins();
+    $installed_plugins = $plugin_obj->getInstalledPlugins();
     $shortlist_installed = [];
     if (!empty($installed_plugins)) {
         foreach ($installed_plugins as $plugin) {

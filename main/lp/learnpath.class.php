@@ -34,6 +34,15 @@ use Symfony\Component\Finder\Finder;
 class learnpath
 {
     const MAX_LP_ITEM_TITLE_LENGTH = 32;
+    const STATUS_CSS_CLASS_NAME = [
+        'not attempted' => 'scorm_not_attempted',
+        'incomplete' => 'scorm_not_attempted',
+        'failed' => 'scorm_failed',
+        'completed' => 'scorm_completed',
+        'passed' => 'scorm_completed',
+        'succeeded' => 'scorm_completed',
+        'browsed' => 'scorm_completed',
+    ];
 
     public $attempt = 0; // The number for the current ID view.
     public $cc; // Course (code) this learnpath is located in. @todo change name for something more comprensible ...
@@ -253,11 +262,6 @@ class learnpath
                         ORDER BY parent_item_id, display_order";
                 $res = Database::query($sql);
 
-                if ($debug) {
-                    error_log('learnpath::__construct() '.__LINE__.' - query lp items: '.$sql);
-                    error_log('-- Start while--');
-                }
-
                 $lp_item_id_list = [];
                 while ($row = Database::fetch_array($res)) {
                     $lp_item_id_list[] = $row['iid'];
@@ -342,10 +346,6 @@ class learnpath
                     }
                 }
 
-                if ($debug) {
-                    error_log('learnpath::__construct() '.__LINE__.' ----- end while ----');
-                }
-
                 if (!empty($lp_item_id_list)) {
                     $lp_item_id_list_to_string = implode("','", $lp_item_id_list);
                     if (!empty($lp_item_id_list_to_string)) {
@@ -359,14 +359,6 @@ class learnpath
                                     lp_view_id = ".$this->get_view_id()." AND
                                     lp_item_id IN ('".$lp_item_id_list_to_string."')
                                 ORDER BY view_count DESC ";
-
-                        if ($debug) {
-                            error_log(
-                                'learnpath::__construct() - Selecting item_views: '.$sql,
-                                0
-                            );
-                        }
-
                         $status_list = [];
                         $res = Database::query($sql);
                         while ($row = Database:: fetch_array($res)) {
@@ -503,9 +495,6 @@ class learnpath
         $userId = 0
     ) {
         $course_id = $this->course_info['real_id'];
-        if ($this->debug > 0) {
-            error_log('In learnpath::add_item('.$parent.','.$previous.','.$type.','.$id.','.$title.')');
-        }
         if (empty($course_id)) {
             // Sometimes Oogie doesn't catch the course info but sets $this->cc
             $this->course_info = api_get_course_info($this->cc);
@@ -527,7 +516,7 @@ class learnpath
                 WHERE
                     c_id = $course_id AND
                     lp_id = ".$this->get_id()." AND
-                    parent_item_id = ".$parent;
+                    parent_item_id = $parent ";
 
         $res_count = Database::query($sql);
         $row = Database::fetch_array($res_count);
@@ -618,9 +607,6 @@ class learnpath
 
         $new_item_id = Database::insert($tbl_lp_item, $params);
         if ($new_item_id) {
-            if ($this->debug > 2) {
-                error_log('Inserting dir/chapter: '.$new_item_id, 0);
-            }
             $sql = "UPDATE $tbl_lp_item SET id = iid WHERE iid = $new_item_id";
             Database::query($sql);
 
@@ -912,10 +898,6 @@ class learnpath
     {
         $debug = $this->debug;
 
-        if ($debug) {
-            error_log('Learnpath::autocomplete_parents()');
-        }
-
         if (empty($item)) {
             $item = $this->current;
         }
@@ -1028,9 +1010,6 @@ class learnpath
      */
     public function close()
     {
-        if ($this->debug > 0) {
-            error_log('In learnpath::close()', 0);
-        }
         if (empty($this->lp_id)) {
             $this->error = 'Trying to close this learnpath but no ID is set';
 
@@ -1177,21 +1156,20 @@ class learnpath
     public function delete_children_items($id)
     {
         $course_id = $this->course_info['real_id'];
-        if ($this->debug > 0) {
-            error_log('In learnpath::delete_children_items('.$id.')', 0);
-        }
+
         $num = 0;
-        if (empty($id) || $id != strval(intval($id))) {
+        $id = (int) $id;
+        if (empty($id) || empty($course_id)) {
             return false;
         }
         $lp_item = Database::get_course_table(TABLE_LP_ITEM);
         $sql = "SELECT * FROM $lp_item 
-                WHERE c_id = ".$course_id." AND parent_item_id = $id";
+                WHERE c_id = $course_id AND parent_item_id = $id";
         $res = Database::query($sql);
         while ($row = Database::fetch_array($res)) {
             $num += $this->delete_children_items($row['iid']);
             $sql = "DELETE FROM $lp_item 
-                    WHERE c_id = ".$course_id." AND iid = ".$row['iid'];
+                    WHERE c_id = $course_id AND iid = ".$row['iid'];
             Database::query($sql);
             $num++;
         }
@@ -1211,11 +1189,9 @@ class learnpath
     public function delete_item($id)
     {
         $course_id = api_get_course_int_id();
-        if ($this->debug > 0) {
-            error_log('In learnpath::delete_item()', 0);
-        }
+        $id = (int) $id;
         // TODO: Implement the resource removal.
-        if (empty($id) || $id != strval(intval($id))) {
+        if (empty($id) || empty($course_id)) {
             return false;
         }
         // First select item to get previous, next, and display order.
@@ -1232,15 +1208,9 @@ class learnpath
         $parent = $row['parent_item_id'];
         $lp = $row['lp_id'];
         // Delete children items.
-        $num = $this->delete_children_items($id);
-        if ($this->debug > 2) {
-            error_log('learnpath::delete_item() - deleted '.$num.' children of element '.$id, 0);
-        }
+        $this->delete_children_items($id);
         // Now delete the item.
         $sql_del = "DELETE FROM $lp_item WHERE iid = $id";
-        if ($this->debug > 2) {
-            error_log('Deleting item: '.$sql_del, 0);
-        }
         Database::query($sql_del);
         // Now update surrounding items.
         $sql_upd = "UPDATE $lp_item SET next_item_id = $next
@@ -1559,10 +1529,6 @@ class learnpath
         $minScore = 0,
         $maxScore = 100
     ) {
-        if ($this->debug > 0) {
-            error_log('In learnpath::edit_item_prereq('.$id.','.$prerequisite_id.','.$minScore.','.$maxScore.')', 0);
-        }
-
         $id = (int) $id;
         $prerequisite_id = (int) $prerequisite_id;
 

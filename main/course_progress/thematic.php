@@ -237,7 +237,7 @@ if ($action == 'thematic_list') {
             get_lang('Title'),
             true,
             false,
-            ['ToolbarSet' => 'Minimal']
+            ['ToolbarSet' => 'TitleAsHtml']
         );
     } else {
         $form->addText('title', get_lang('Title'), true, ['size' => '50']);

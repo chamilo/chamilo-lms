@@ -349,9 +349,18 @@ class UserGroup extends Model
     {
         // action links
         echo '<div class="actions">';
-        echo '<a href="../admin/usergroups.php">'.
-            Display::return_icon('back.png', get_lang('BackTo').' '.get_lang('PlatformAdmin'), '', '32').
-            '</a>';
+        $courseInfo = api_get_course_info();
+        if (empty($courseInfo)) {
+            echo '<a href="../admin/usergroups.php">'.
+                Display::return_icon('back.png', get_lang('BackTo').' '.get_lang('PlatformAdmin'), '', '32').
+                '</a>';
+        } else {
+            echo Display::url(
+                Display::return_icon('back.png', get_lang('BackTo').' '.get_lang('PlatformAdmin'), '', '32'),
+                api_get_path(WEB_CODE_PATH).'user/class.php?'.api_get_cidreq()
+            );
+        }
+
         echo '</div>';
         echo Display::grid_html('usergroups');
     }

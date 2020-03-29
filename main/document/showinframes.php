@@ -103,7 +103,7 @@ if (!$is_allowed_to_edit && !$is_visible) {
 }
 
 $pathinfo = pathinfo($header_file);
-$playerSupportedFiles = ['mp3', 'mp4', 'ogv', 'flv', 'm4v', 'webm'];
+$playerSupportedFiles = ['mp3', 'mp4', 'ogv', 'ogg', 'flv', 'm4v', 'webm'];
 $playerSupported = false;
 if (in_array(strtolower($pathinfo['extension']), $playerSupportedFiles)) {
     $playerSupported = true;
@@ -111,9 +111,12 @@ if (in_array(strtolower($pathinfo['extension']), $playerSupportedFiles)) {
 
 $group_id = api_get_group_id();
 $current_group = GroupManager::get_group_properties($group_id);
-$current_group_name = $current_group['name'];
 
 if (isset($group_id) && $group_id != '') {
+    if ($current_group) {
+        $current_group_name = $current_group['name'];
+    }
+
     $interbreadcrumb[] = [
         'url' => api_get_path(WEB_CODE_PATH).'group/group.php?'.api_get_cidreq(),
         'name' => get_lang('Groups'),
@@ -236,13 +239,28 @@ if (!$playerSupported && $execute_iframe) {
     -->
     </script>';
     $htmlHeadXtra[] = '<script type="text/javascript" src="'.api_get_path(WEB_LIBRARY_PATH).'javascript/jquery.frameready.js"></script>';
+
+    // Ofaj
+    $htmlHeadXtra[] = '<script>
+        var updateContentHeight = function() {
+            my_iframe = document.getElementById("mainFrame");
+            if (my_iframe) {
+                //this doesnt seem to work in IE 7,8,9
+                my_iframe.height = my_iframe.contentWindow.document.body.scrollHeight + 50 + "px";
+            }
+        };
+        // Fixes the content height of the frame
+        window.onload = function() {
+            updateContentHeight();
+        }
+    </script>';
+
     $htmlHeadXtra[] = '<script>
         // Fixes the content height of the frame
         $(function() {
-            $(\'#mainFrame\').on(\'load\', function () {
+            /*$(\'#mainFrame\').on(\'load\', function () {
                 this.style.height = (this.contentWindow.document.body.scrollHeight + 50) + \'px\';
-            });
-            
+            });*/
             '.$frameReady.'
         });
     </script>';
@@ -414,7 +432,7 @@ if ($execute_iframe) {
         if ($translate) {
             $display = ' display:none ';
             echo "<script>
-                    function waitToLoad() {     
+                    function waitToLoad() {
                         $('#mainFrame').css('display', 'block');
                         updateContentHeight();
                     }
@@ -424,15 +442,15 @@ if ($execute_iframe) {
             </script>";
         }
 
-        echo '<iframe 
-            id="mainFrame" 
-            name="mainFrame" 
-            border="0" 
-            frameborder="0" 
-            scrolling="no" 
-            style="width:100%; '.$display.'" 
-            height="600" 
-            src="'.$file_url_web.'&rand='.mt_rand(1, 10000).'" 
+        echo '<iframe
+            id="mainFrame"
+            name="mainFrame"
+            border="0"
+            frameborder="0"
+            scrolling="no"
+            style="width:100%; '.$display.'"
+            height="600"
+            src="'.$file_url_web.'&rand='.mt_rand(1, 10000).'"
             height="500" allowfullscreen="true" webkitallowfullscreen="true" mozallowfullscreen="true"></iframe>';
     }
 }

@@ -434,6 +434,39 @@ switch ($action) {
 
         echo true;
         break;
+    case 'search_template_session':
+        SessionManager::protectSession(null, false);
+
+        api_protect_limit_for_session_admin();
+
+        if (empty($_GET['q'])) {
+            break;
+        }
+
+        $q = strtolower(trim($_GET['q']));
+
+        $list = array_map(
+            function ($session) {
+                return [
+                    'id' => $session['id'],
+                    'text' => strip_tags($session['name']),
+                ];
+            },
+            SessionManager::formatSessionsAdminForGrid()
+        );
+
+        $list = array_filter(
+            $list,
+            function ($session) use ($q) {
+                $name = strtolower($session['text']);
+
+                return strpos($name, $q) !== false;
+            }
+        );
+
+        header('Content-Type: application/json');
+        echo json_encode(['items' => array_values($list)]);
+        break;
     default:
         echo '';
 }

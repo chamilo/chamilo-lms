@@ -25,7 +25,6 @@ $_course = api_get_course_info();
 
 /* Constants and variables */
 define('MODULE_HELP_NAME', 'Settings');
-define('COURSE_CHANGE_PROPERTIES', 'COURSE_CHANGE_PROPERTIES');
 
 $currentCourseRepository = $_course['path'];
 $is_allowedToEdit = api_is_course_admin() || api_is_platform_admin();
@@ -943,7 +942,7 @@ $values['show_score'] = $all_course_information['show_score'];
 $courseSettings = CourseManager::getCourseSettingVariables($appPlugin);
 
 foreach ($courseSettings as $setting) {
-    $result = api_get_course_setting($setting);
+    $result = api_get_course_setting($setting, $_course, true);
     if ($result != '-1') {
         $values[$setting] = $result;
     }
@@ -961,7 +960,7 @@ if ($form->validate() && is_settings_editable()) {
     // update course picture
     $picture = $_FILES['picture'];
     if (!empty($picture['name'])) {
-        $picture_uri = CourseManager::update_course_picture(
+        CourseManager::update_course_picture(
             $_course,
             $picture['name'],
             $picture['tmp_name'],
@@ -1008,7 +1007,7 @@ if ($form->validate() && is_settings_editable()) {
         : null;
 
     if (!empty($pdf_export_watermark_path['name'])) {
-        $pdf_export_watermark_path_result = PDF::upload_watermark(
+        PDF::upload_watermark(
             $pdf_export_watermark_path['name'],
             $pdf_export_watermark_path['tmp_name'],
             $course_code
@@ -1054,6 +1053,7 @@ if ($form->validate() && is_settings_editable()) {
     $cidReset = true;
     $cidReq = $course_code;
     Display::addFlash(Display::return_message(get_lang('Updated')));
+
     require '../inc/local.inc.php';
     $url = api_get_path(WEB_CODE_PATH).'course_info/infocours.php?'.$courseParams;
     header("Location: $url");
@@ -1066,10 +1066,8 @@ if ($show_delete_watermark_text_message) {
     );
 }
 
-/*	Header */
 Display::display_header($nameTools, MODULE_HELP_NAME);
 
-// Display the form
 echo '<div id="course_settings">';
 $form->display();
 echo '</div>';

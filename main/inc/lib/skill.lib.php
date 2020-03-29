@@ -629,8 +629,6 @@ class SkillRelUser extends Model
     /**
      * Get the URL for the issue.
      *
-     * @param SkillRelUserEntity $skillIssue
-     *
      * @return string
      */
     public static function getIssueUrl(SkillRelUserEntity $skillIssue)
@@ -641,8 +639,6 @@ class SkillRelUser extends Model
     /**
      * Get the URL for the All issues page.
      *
-     * @param SkillRelUserEntity $skillIssue
-     *
      * @return string
      */
     public static function getIssueUrlAll(SkillRelUserEntity $skillIssue)
@@ -652,8 +648,6 @@ class SkillRelUser extends Model
 
     /**
      * Get the URL for the assertion.
-     *
-     * @param SkillRelUserEntity $skillIssue
      *
      * @return string
      */
@@ -1344,7 +1338,6 @@ class Skill extends Model
     }
 
     /**
-     * @param Vertex $vertex
      * @param array  $skills
      * @param int    $level
      *
@@ -2379,7 +2372,6 @@ class Skill extends Model
     }
 
     /**
-     * @param FormValidator $form
      * @param array         $skillInfo
      *
      * @return array
@@ -2519,7 +2511,6 @@ class Skill extends Model
     /**
      * Assign a user with a SkilRelItem object.
      *
-     * @param FormValidator $form
      * @param int           $typeId see ITEM_TYPE_* constants
      * @param int           $itemId
      * @param int           $userId
@@ -2595,7 +2586,6 @@ class Skill extends Model
     /**
      * Add skills select ajax for an item (exercise, lp).
      *
-     * @param FormValidator $form
      * @param int           $typeId see ITEM_TYPE_* constants
      * @param int           $itemId
      *
@@ -2874,8 +2864,6 @@ class Skill extends Model
     /**
      * Relate skill with an item (exercise, gradebook, lp, etc).
      *
-     * @param FormValidator $form
-     *
      * @return bool
      */
     public static function saveSkillsToCourseFromForm(FormValidator $form)
@@ -2959,7 +2947,6 @@ class Skill extends Model
     /**
      * Get the icon (badge image) URL.
      *
-     * @param SkillEntity $skill
      * @param bool        $getSmall Optional. Allow get the small image
      *
      * @return string
@@ -3008,7 +2995,7 @@ class Skill extends Model
         }
         $skillLevelRepo = $entityManager->getRepository('ChamiloSkillBundle:Level');
 
-        $skillUser = new \Chamilo\CoreBundle\Entity\SkillRelUser();
+        $skillUser = new SkillRelUserEntity();
         $skillUser->setUser($user);
         $skillUser->setSkill($skill);
 

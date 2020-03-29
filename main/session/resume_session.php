@@ -1,4 +1,5 @@
 <?php
+
 /* For licensing terms, see /license.txt */
 
 use Chamilo\CoreBundle\Entity\Course;
@@ -10,9 +11,8 @@ use Chamilo\CoreBundle\Entity\SessionRelCourseRelUser;
 
 /**
  * @author  Bart Mollet, Julio Montoya lot of fixes
- *
- * @package chamilo.admin
  */
+
 $cidReset = true;
 require_once __DIR__.'/../inc/global.inc.php';
 
@@ -26,7 +26,6 @@ if (empty($sessionId)) {
 }
 
 SessionManager::protectSession($sessionId);
-
 $codePath = api_get_path(WEB_CODE_PATH);
 
 $tool_name = get_lang('SessionOverview');
@@ -50,6 +49,7 @@ $table_access_url_user = Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_USER
 
 $em = Database::getManager();
 $sessionInfo = api_get_session_info($sessionId);
+
 /** @var SessionRepository $sessionRepository */
 $sessionRepository = $em->getRepository('ChamiloCoreBundle:Session');
 /** @var Session $session */
@@ -107,8 +107,8 @@ switch ($action) {
             );
             $nbr_affected_rows = Database::affected_rows($result);
             Database::query(
-                "UPDATE $tbl_session 
-                SET nbr_classes = nbr_classes - $nbr_affected_rows 
+                "UPDATE $tbl_session
+                SET nbr_classes = nbr_classes - $nbr_affected_rows
                 WHERE id = $sessionId");
         }
 

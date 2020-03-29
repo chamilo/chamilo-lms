@@ -16,7 +16,6 @@ $this_section = SECTION_PLATFORM_ADMIN;
 api_protect_admin_script();
 
 $course_table = Database::get_main_table(TABLE_MAIN_COURSE);
-$course_user_table = Database::get_main_table(TABLE_MAIN_COURSE_USER);
 $em = Database::getManager();
 /** @var CourseCategoryRepository $courseCategoriesRepo */
 $courseCategoriesRepo = $em->getRepository('ChamiloCoreBundle:CourseCategory');
@@ -221,7 +220,6 @@ if (!empty($coursesInSession) && $allowEditSessionCoaches) {
 
         $sessionTeachers = [];
         foreach ($coaches as $coachId) {
-            $userInfo = api_get_user_info($coachId);
             $sessionTeachers[] = $coachId;
 
             if (isset($teachers[$coachId])) {
@@ -230,10 +228,6 @@ if (!empty($coursesInSession) && $allowEditSessionCoaches) {
         }
 
         $groupName = 'session_coaches_'.$sessionId;
-        $platformTeacherId = 'platform_teachers_by_session_'.$sessionId;
-        $coachId = 'coaches_by_session_'.$sessionId;
-        $platformTeacherName = 'platform_teachers_by_session';
-        $coachName = 'coaches_by_session';
         $sessionUrl = api_get_path(WEB_CODE_PATH).'session/resume_session.php?id_session='.$sessionId;
         $form->addElement(
             'advmultiselect',
@@ -508,7 +502,6 @@ function mysort(a, b) {
 
 function valide() {
     // Checking all multiple
-
     $('select').filter(function() {
         if ($(this).attr('multiple')) {
             $(this).find('option').each(function() {
@@ -516,7 +509,6 @@ function valide() {
             });
         }
     });
-	//document.update_course.submit();
 }
 </script>";
 

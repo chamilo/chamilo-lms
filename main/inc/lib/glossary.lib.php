@@ -75,25 +75,42 @@ class GlossaryManager
      *
      * @author Isaac Flores <florespaz_isaac@hotmail.com>
      *
-     * @param string $glossary_name The glossary term name
+     * @param string $name The glossary term name
      *
      * @return array The glossary info
      */
-    public static function get_glossary_term_by_glossary_name($glossary_name)
+    public static function get_glossary_term_by_glossary_name($name)
     {
         $table = Database::get_course_table(TABLE_GLOSSARY);
         $session_id = api_get_session_id();
         $course_id = api_get_course_int_id();
-        $sql_filter = api_get_session_condition($session_id);
-        $sql = 'SELECT * FROM '.$table.'
-		        WHERE
-		            c_id = '.$course_id.' AND
-		            name LIKE trim("'.Database::escape_string($glossary_name).'")'.$sql_filter;
-        $rs = Database::query($sql);
-        if (Database::num_rows($rs) > 0) {
-            $row = Database::fetch_array($rs, 'ASSOC');
+        $sessionCondition = api_get_session_condition($session_id);
 
-            return $row;
+        $glossaryName = Security::remove_XSS($name);
+        $glossaryName = api_convert_encoding($glossaryName, 'UTF-8', 'UTF-8');
+        $glossaryName = trim($glossaryName);
+        $parsed = $glossaryName;
+
+        if (api_get_configuration_value('save_titles_as_html')) {
+            $parsed = api_htmlentities($parsed);
+            $parsed = "%$parsed%";
+        }
+
+        $sql = "SELECT * FROM $table
+		        WHERE
+		            c_id = $course_id AND
+		            (
+		                name LIKE '".Database::escape_string($glossaryName)."'
+		                OR
+		                name LIKE '".Database::escape_string($parsed)."'
+                    )
+                    $sessionCondition
+                LIMIT 1
+                ";
+        $rs = Database::query($sql);
+
+        if (Database::num_rows($rs) > 0) {
+            return Database::fetch_array($rs, 'ASSOC');
         }
 
         return [];
@@ -359,7 +376,11 @@ class GlossaryManager
 
         if ($showMessage) {
             Display::addFlash(
-                Display::return_message(get_lang('TermDeleted').': '.$glossaryInfo['name'])
+                Display::return_message(
+                    get_lang('TermDeleted').': '.Security::remove_XSS($glossaryInfo['name']),
+                    'normal',
+                    false
+                )
             );
         }
 
@@ -637,7 +658,7 @@ class GlossaryManager
         $return = '<a href="'.api_get_self().'?action=edit_glossary&glossary_id='.$glossary_id.'&'.api_get_cidreq().'&msg=edit">'.
             Display::return_icon('edit.png', get_lang('Edit'), '', 22).'</a>';
         $glossary_data = self::get_glossary_information($glossary_id);
-        $glossary_term = $glossary_data['name'];
+        $glossary_term = Security::remove_XSS(strip_tags($glossary_data['name']));
         if (api_is_allowed_to_edit(null, true)) {
             if ($glossary_data['session_id'] == api_get_session_id()) {
                 $return .= '<a href="'.api_get_self().'?action=delete_glossary&glossary_id='.$glossary_id.'&'.api_get_cidreq().'" onclick="return confirmation(\''.$glossary_term.'\');">'.

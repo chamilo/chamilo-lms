@@ -1,10 +1,9 @@
 <?php
+
 /* For licensing terms, see /license.txt */
 
 /**
  * List sessions in an efficient and usable way.
- *
- * @package chamilo.admin
  */
 $cidReset = true;
 
@@ -18,30 +17,7 @@ $htmlHeadXtra[] = api_get_jqgrid_js();
 
 $action = isset($_REQUEST['action']) ? $_REQUEST['action'] : null;
 $idChecked = isset($_REQUEST['idChecked']) ? $_REQUEST['idChecked'] : null;
-$list_type = isset($_REQUEST['list_type']) ? $_REQUEST['list_type'] : 'simple';
-
-if ($action == 'delete') {
-    $sessionInfo = api_get_session_info($idChecked);
-    if ($sessionInfo) {
-        $response = SessionManager::delete($idChecked);
-        if ($response) {
-            Display::addFlash(
-                Display::return_message(get_lang('Deleted').': '.Security::remove_XSS($sessionInfo['name']))
-            );
-        }
-    }
-    header('Location: session_list.php');
-    exit();
-} elseif ($action == 'copy') {
-    $result = SessionManager::copy($idChecked);
-    if ($result) {
-        Display::addFlash(Display::return_message(get_lang('ItemCopied')));
-    } else {
-        Display::addFlash(Display::return_message(get_lang('ThereWasAnError'), 'error'));
-    }
-    header('Location: session_list.php');
-    exit();
-}
+$list_type = isset($_REQUEST['list_type']) ? $_REQUEST['list_type'] : 'custom';
 
 $tool_name = get_lang('SessionList');
 Display::display_header($tool_name);
@@ -67,7 +43,6 @@ $courseSelect = $sessionFilter->addElement(
 if (!empty($courseId)) {
     $courseInfo = api_get_course_info_by_id($courseId);
     $parents = CourseCategory::getParentsToString($courseInfo['categoryCode']);
-
     $courseSelect->addOption($parents.$courseInfo['title'], $courseInfo['code'], ['selected' => 'selected']);
 }
 
@@ -77,11 +52,9 @@ $actions = '
 $(function() {
     $("#course_name").on("change", function() {
        var courseId = $(this).val();
-
        if (!courseId) {
-        return;
+            return;
        }
-
        window.location = "'.$url.'?course_id="+courseId;
     });
 });
@@ -130,6 +103,10 @@ $extra_params['autowidth'] = 'true';
 // height auto
 $extra_params['height'] = 'auto';
 
+// Custom params
+$extra_params['sortname'] = 'display_end_date';
+$extra_params['sortorder'] = 'desc';
+
 if (!isset($_GET['keyword'])) {
     $extra_params['postData'] = [
         'filters' => [
@@ -158,8 +135,7 @@ $orderUrl = api_get_path(WEB_AJAX_PATH).'session.ajax.php?a=order';
 ?>
     <script>
         function setSearchSelect(columnName) {
-            $("#sessions").jqGrid('setColProp', columnName, {
-            });
+            $("#sessions").jqGrid('setColProp', columnName, {});
         }
         var added_cols = [];
         var original_cols = [];
@@ -168,7 +144,7 @@ $orderUrl = api_get_path(WEB_AJAX_PATH).'session.ajax.php?a=order';
             // Cleaning
             for (key in added_cols) {
                 grid.hideCol(key);
-            };
+            }
             grid.showCol('name');
             grid.showCol('display_start_date');
             grid.showCol('display_end_date');
@@ -273,7 +249,7 @@ $orderUrl = api_get_path(WEB_AJAX_PATH).'session.ajax.php?a=order';
             original_cols = grid.jqGrid('getGridParam', 'colModel');
 
             <?php if ($allowOrder) {
-                ?>
+            ?>
             options = {
                 update: function (e, ui) {
                     var rowNum = jQuery("#sessions").getGridParam('rowNum');
@@ -294,14 +270,13 @@ $orderUrl = api_get_path(WEB_AJAX_PATH).'session.ajax.php?a=order';
 
             // Sortable rows
             grid.jqGrid('sortableRows', options);
-            <?php
-            } ?>
+            <?php } ?>
 
-            grid.jqGrid('navGrid','#sessions_pager',
-                {edit:false,add:false,del:false},
-                {height:280,reloadAfterSubmit:false}, // edit options
-                {height:280,reloadAfterSubmit:false}, // add options
-                {reloadAfterSubmit:false},// del options
+            grid.jqGrid('navGrid', '#sessions_pager',
+                {edit: false, add: false, del: false},
+                {height: 280, reloadAfterSubmit: false}, // edit options
+                {height: 280, reloadAfterSubmit: false}, // add options
+                {reloadAfterSubmit: false},// del options
                 prmSearch
             );
 
@@ -317,7 +292,7 @@ $orderUrl = api_get_path(WEB_AJAX_PATH).'session.ajax.php?a=order';
             searchDialogAll.addClass("table");
             var searchDialog = $("#searchmodfbox_"+grid[0].id);
             searchDialog.addClass("ui-jqgrid ui-widget ui-widget-content ui-corner-all");
-            searchDialog.css({position:"adsolute", "z-index":"100", "float":"left", "top":"55%", "left" : "25%", "padding" : "5px", "border": "1px solid #CCC"})
+            searchDialog.css({position:"absolute", "z-index":"100", "float":"left", "top":"55%", "left" : "25%", "padding" : "5px", "border": "1px solid #CCC"})
             var gbox = $("#gbox_"+grid[0].id);
             gbox.before(searchDialog);
             gbox.css({clear:"left"});
@@ -380,6 +355,19 @@ if (api_is_platform_admin()) {
     echo '</div>';
 }
 echo '</div>';
+
+$tabs = [
+    [
+        'content' => get_lang('SessionListCustom'),
+        'url' => api_get_path(WEB_CODE_PATH).'session/session_list.php',
+    ],
+    [
+        'content' => get_lang('SessionList'),
+        'url' => api_get_path(WEB_CODE_PATH).'session/session_list_simple.php',
+    ],
+];
+
+echo Display::tabsOnlyLink($tabs, 1);
 echo '<div id="session-table" class="table-responsive">';
 echo Display::grid_html('sessions');
 echo '</div>';

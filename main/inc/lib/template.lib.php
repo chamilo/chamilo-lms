@@ -848,7 +848,7 @@ class Template
                 $courseLogoutCode = "
                 <script>
                 var logOutUrl = '".$ajax."course.ajax.php?a=course_logout&".api_get_cidreq()."';
-                function courseLogout() {                
+                function courseLogout() {
                     $.ajax({
                         async : false,
                         url: logOutUrl,
@@ -926,7 +926,7 @@ class Template
                 $this->force_plugin_load
             );
 
-            $pluginList = $this->plugin->get_installed_plugins();
+            $pluginList = $this->plugin->getInstalledPlugins();
             foreach ($pluginList as $plugin_name) {
                 // The plugin_info variable is available inside the plugin index
                 $pluginInfo = $this->plugin->getPluginInfo($plugin_name);
@@ -984,6 +984,7 @@ class Template
      */
     public function display($template, $clearFlashMessages = true)
     {
+        $this->assign('page_origin', api_get_origin());
         $this->assign('flash_messages', Display::getFlashToString());
 
         if ($clearFlashMessages) {
@@ -1460,7 +1461,7 @@ class Template
         if ($categories) {
             /** @var \Chamilo\FaqBundle\Entity\Category $cat */
             foreach ($categories as $cat) {
-                $sql = "SELECT * FROM faq_category_translation 
+                $sql = "SELECT * FROM faq_category_translation
                         WHERE locale = '$locale' AND translatable_id = ".$cat->getId();
                 $result = Database::query($sql);
                 $category = Database::fetch_array($result, 'ASSOC');

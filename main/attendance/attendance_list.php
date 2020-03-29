@@ -51,7 +51,6 @@ if (api_is_allowed_to_edit(null, true)) {
     }
     $table->set_form_actions($actions);
 }
-
 if ($table->get_total_number_of_items() > 0) {
     $table->display();
 }

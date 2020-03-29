@@ -7,7 +7,7 @@
 require_once __DIR__.'/../inc/global.inc.php';
 $this_section = SECTION_COURSES;
 
-api_protect_course_script(true);
+api_protect_course_script(true, false, 'user');
 
 if (api_get_setting('allow_user_course_subscription_by_course_admin') == 'false') {
     if (!api_is_platform_admin()) {
@@ -21,12 +21,13 @@ $htmlHeadXtra[] = api_get_jqgrid_js();
 
 // Extra entries in breadcrumb
 $interbreadcrumb[] = [
-    "url" => "user.php?".api_get_cidreq(),
-    "name" => get_lang('ToolUser'),
+    'url' => 'user.php?'.api_get_cidreq(),
+    'name' => get_lang('ToolUser'),
 ];
 
 $type = isset($_GET['type']) ? Security::remove_XSS($_GET['type']) : 'registered';
-$groupFilter = isset($_GET['group_filter']) ? intval($_GET['group_filter']) : 0;
+$groupFilter = isset($_GET['group_filter']) ? (int) $_GET['group_filter'] : 0;
+$keyword = isset($_GET['keyword']) ? Security::remove_XSS($_GET['keyword']) : '';
 
 $htmlHeadXtra[] = '
 <script>
@@ -40,6 +41,8 @@ $(function() {
 $actionsLeft = '';
 $actionsRight = '';
 $usergroup = new UserGroup();
+$actions = '';
+
 if (api_is_allowed_to_edit()) {
     if ($type === 'registered') {
         $actionsLeft .= '<a href="class.php?'.api_get_cidreq().'&type=not_registered">'.
@@ -50,8 +53,8 @@ if (api_is_allowed_to_edit()) {
 
         $form = new FormValidator(
             'groups',
-            'post',
-            api_get_self(),
+            'get',
+            api_get_self().'?type='.$type,
             '',
             [],
             FormValidator::LAYOUT_INLINE
@@ -65,15 +68,18 @@ if (api_is_allowed_to_edit()) {
             'group_filter',
             get_lang('Groups'),
             $options,
-            ['id' => 'group_filter']
+            ['id' => 'group_filter', 'disable_js' => 'disable_js']
         );
+        $form->addHidden('type', $type);
+        $form->addText('keyword', '', false);
         $form->setDefaults(['group_filter' => $groupFilter]);
-        $actionsRight = $form->returnForm();
-    }
-    $actions = Display::toolbarAction('actions-class', [$actionsLeft, $actionsRight]);
-}
+        $form->addCourseHiddenParams();
+        $form->addButtonSearch(get_lang('SearchButton'));
 
-if (api_is_allowed_to_edit()) {
+        $actionsRight .= $form->returnForm();
+    }
+
+    $actions = Display::toolbarAction('actions-class', [$actionsLeft, $actionsRight]);
     $action = isset($_GET['action']) ? $_GET['action'] : null;
     switch ($action) {
         case 'add_class_to_course':
@@ -103,7 +109,7 @@ if (api_is_allowed_to_edit()) {
 }
 
 // jqgrid will use this URL to do the selects
-$url = api_get_path(WEB_AJAX_PATH).'model.ajax.php?a=get_usergroups_teacher&type='.$type.'&group_filter='.$groupFilter;
+$url = api_get_path(WEB_AJAX_PATH).'model.ajax.php?a=get_usergroups_teacher&type='.$type.'&group_filter='.$groupFilter.'&keyword='.$keyword;
 
 // The order is important you need to check the the $column variable in the model.ajax.php file
 $columns = [
@@ -176,5 +182,6 @@ $(function() {
 
 echo $actions;
 echo UserManager::getUserSubscriptionTab(4);
+echo Display::return_message(get_lang('UserClassExplanation'));
 $usergroup->display_teacher_view();
 Display::display_footer();

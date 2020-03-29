@@ -1,0 +1,12 @@
+{
+  "name": "chartjs-plugin-labels",
+  "version": "1.1.0",
+  "main": ["src/chartjs-plugin-labels.js"],
+  "ignore": [
+    "samples",
+    "tests"
+  ],
+  "dependencies": {
+    "chart.js": ">= 2.6.0"
+  }
+}

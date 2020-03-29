@@ -1,11 +1,10 @@
 <?php
+
 /* For licensing terms, see /license.txt */
 
 use ChamiloSession as Session;
 
 /**
- * @package chamilo.social
- *
  * @author Julio Montoya <gugli100@gmail.com>
  * @autor Alex Aragon <alex.aragon@beeznest.com> CSS Design and Template
  */
@@ -65,10 +64,10 @@ if (api_get_setting('profile', 'picture') == 'true') {
             )) {
                 $table_user = Database::get_main_table(TABLE_MAIN_USER);
                 $sql = "UPDATE $table_user
-                        SET 
-                            picture_uri = '$new_picture' 
-                        WHERE user_id =  ".api_get_user_id();
-                $result = Database::query($sql);
+                        SET
+                            picture_uri = '$new_picture'
+                        WHERE user_id =  ".$user_id;
+                Database::query($sql);
             }
         }
     }

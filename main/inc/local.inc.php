@@ -1542,12 +1542,14 @@ if ((isset($uidReset) && $uidReset) || $cidReset) {
 
 //set variable according to student_view_enabled choices
 if (api_get_setting('student_view_enabled') == "true") {
+    $changed = false;
     if (isset($_GET['isStudentView'])) {
         if ($_GET['isStudentView'] == 'true') {
             if (isset($_SESSION['studentview'])) {
                 if (!empty($_SESSION['studentview'])) {
                     // switching to studentview
                     $_SESSION['studentview'] = 'studentview';
+                    $changed = true;
                 }
             }
         } elseif ($_GET['isStudentView'] == 'false') {
@@ -1555,6 +1557,7 @@ if (api_get_setting('student_view_enabled') == "true") {
                 if (!empty($_SESSION['studentview'])) {
                     // switching to teacherview
                     $_SESSION['studentview'] = 'teacherview';
+                    $changed = true;
                 }
             }
         }
@@ -1563,6 +1566,11 @@ if (api_get_setting('student_view_enabled') == "true") {
     } elseif (empty($_SESSION['studentview'])) {
         // We are in teacherview here
         $_SESSION['studentview'] = 'teacherview';
+        $changed = true;
+    }
+
+    if ($changed) {
+        Session::write('clean_sortable_table', true);
     }
 }
 

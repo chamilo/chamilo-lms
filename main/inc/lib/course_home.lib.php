@@ -858,7 +858,7 @@ class CourseHome
                 $item = [];
                 $studentview = false;
                 $tool['original_link'] = $tool['link'];
-                if ($tool['image'] == 'scormbuilder.gif') {
+                if ($tool['image'] === 'scormbuilder.gif') {
                     // Check if the published learnpath is visible for student
                     $lpId = self::getPublishedLpIdFromLink($tool['link']);
                     if (api_is_allowed_to_edit(null, true)) {
@@ -928,7 +928,6 @@ class CourseHome
                                     $info = pathinfo($tool['image']);
                                     $basename = basename($tool['image'], '.'.$info['extension']); // $file is set to "index"
                                     $tool['image'] = $basename.'_na.'.$info['extension'];
-
                                     $link['name'] = Display::return_icon(
                                         'invisible.png',
                                         get_lang('Activate'),
@@ -977,7 +976,7 @@ class CourseHome
                     }
                 }
 
-                $item['visibility'] = null;
+                $item['visibility'] = '';
                 if (isset($lnk) && is_array($lnk)) {
                     foreach ($lnk as $this_link) {
                         if (empty($tool['adminlink'])) {
@@ -986,8 +985,6 @@ class CourseHome
                                 $this_link['name'].'</a>';
                         }
                     }
-                } else {
-                    $item['visibility'] .= '';
                 }
 
                 // NOTE : Table contains only the image file name, not full path
@@ -1009,7 +1006,7 @@ class CourseHome
                 $qm_or_amp = strpos($tool['link'], '?') === false ? '?' : '&';
 
                 // If it's a link, we don't add the cidReq
-                if ($tool['image'] == 'file_html.png' || $tool['image'] == 'file_html_na.png') {
+                if ($tool['image'] === 'file_html.png' || $tool['image'] === 'file_html_na.png') {
                     $tool['link'] = $tool['link'];
                 } else {
                     $tool['link'] = $tool['link'].$qm_or_amp.api_get_cidreq();
@@ -1216,7 +1213,7 @@ class CourseHome
             'external_na.gif',
         ];
 
-        $toolName = Security::remove_XSS(stripslashes($tool['name']));
+        $toolName = Security::remove_XSS(stripslashes(strip_tags($tool['name'])));
 
         if (isset($tool['image']) && in_array($tool['image'], $already_translated_icons)) {
             return $toolName;
@@ -1777,7 +1774,6 @@ class CourseHome
     /**
      * Find the tool icon when homepage_view is activity_big.
      *
-     * @param array $item
      * @param int   $iconSize
      * @param bool  $generateId
      *

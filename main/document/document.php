@@ -93,7 +93,7 @@ Session::erase('paint_dir');
 Session::erase('temp_audio_nanogong');
 
 $plugin = new AppPlugin();
-$pluginList = $plugin->get_installed_plugins();
+$pluginList = $plugin->getInstalledPlugins();
 $capturePluginInstalled = in_array('jcapture', $pluginList);
 
 if ($capturePluginInstalled) {
@@ -209,7 +209,7 @@ if (!empty($groupId)) {
 }
 
 // Actions.
-$document_id = isset($_REQUEST['id']) ? (int) $_REQUEST['id'] : null;
+$documentIdFromGet = $document_id = isset($_REQUEST['id']) ? (int) $_REQUEST['id'] : null;
 $currentUrl = api_get_self().'?'.api_get_cidreq().'&id='.$document_id;
 $curdirpath = isset($_GET['curdirpath']) ? Security::remove_XSS($_GET['curdirpath']) : null;
 
@@ -431,13 +431,15 @@ switch ($action) {
                 );
             }
 
-            GroupManager::allowUploadEditDocument(
-                $userId,
-                $courseId,
-                $group_properties,
-                $document_info,
-                true
-            );
+            if (!empty($groupId)) {
+                GroupManager::allowUploadEditDocument(
+                    $userId,
+                    $courseId,
+                    $group_properties,
+                    $document_info,
+                    true
+                );
+            }
 
             $parent_id = $document_info['parent_id'];
             $my_path = UserManager::getUserPathById(api_get_user_id(), 'system');
@@ -672,10 +674,12 @@ if (isset($document_id) && empty($action)) {
         true
     );
 
-    $parent_id = $document_data['parent_id'];
+    if (isset($document_data['parent_id'])) {
+        $parent_id = $document_data['parent_id'];
+    }
 }
 
-if (isset($document_data) && $document_data['path'] == '/certificates') {
+if (isset($document_data) && isset($document_data['path']) && $document_data['path'] == '/certificates') {
     $is_certificate_mode = true;
 }
 
@@ -1767,7 +1771,7 @@ if ($isAllowedToEdit ||
     if ($fileLinkEnabled && !$is_certificate_mode) {
         $actionsLeft .= Display::url(
             Display::return_icon('clouddoc_new.png', get_lang('AddCloudLink'), '', ICON_SIZE_MEDIUM),
-            api_get_path(WEB_CODE_PATH).'document/add_link.php?'.api_get_cidreq().'&id='.$document_id
+            api_get_path(WEB_CODE_PATH).'document/add_link.php?'.api_get_cidreq().'&id='.$documentIdFromGet
         );
     }
 }
@@ -1841,6 +1845,11 @@ if (!empty($documentAndFolders)) {
             } else {
                 $document_name = basename($document_data['path']);
             }
+
+            if (api_get_configuration_value('save_titles_as_html')) {
+                $document_name = strip_tags($document_name);
+            }
+
             $row['name'] = $document_name;
             // Data for checkbox
             if (($isAllowedToEdit || $groupMemberWithUploadRights) && count($documentAndFolders) > 1) {
@@ -2158,18 +2167,24 @@ echo $dirForm;
 echo $selector;
 
 $table->display();
-$ajaxURL = api_get_path(WEB_AJAX_PATH).'document.ajax.php?a=get_document_quota&'.api_get_cidreq();
 
 if (count($documentAndFolders) > 1) {
-    echo '<script>
-    $(function() {
-        $.ajax({
-            url:"'.$ajaxURL.'",
-            success:function(data){
-                $("#course_quota").html(data);
-            }
+    $ajaxURL = api_get_path(WEB_AJAX_PATH).'document.ajax.php?a=get_document_quota&'.api_get_cidreq();
+    if ($isAllowedToEdit) {
+        echo '<script>
+        $(function() {        
+            $.ajax({
+                url:"'.$ajaxURL.'",
+                success:function(data){
+                    $("#course_quota").html(data);
+                }
+            });
         });
-        
+        </script>';
+    }
+
+    echo '<script>
+    $(function() {        
         $(".document_size").each(function(i, obj) {
             var path = obj.getAttribute("data-path");
                             
@@ -2182,6 +2197,7 @@ if (count($documentAndFolders) > 1) {
         });    
     });
     </script>';
+
     echo '<span id="course_quota"></span>';
 }
 

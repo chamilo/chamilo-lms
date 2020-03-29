@@ -106,7 +106,7 @@ if ($action == 'add' || $action == 'edit') {
             get_lang('CategoryName'),
             true,
             false,
-            ['ToolbarSet' => 'Minimal']
+            ['ToolbarSet' => 'TitleAsHtml']
         );
     } else {
         $form->addElement('text', 'name', get_lang("CategoryName"));

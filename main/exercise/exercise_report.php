@@ -41,10 +41,8 @@ require_once 'hotpotatoes.lib.php';
 $_course = api_get_course_info();
 
 // document path
-$documentPath = api_get_path(SYS_COURSE_PATH).$_course['path']."/document";
+$documentPath = api_get_path(SYS_COURSE_PATH).$_course['path'].'/document';
 $origin = api_get_origin();
-$path = isset($_GET['path']) ? Security::remove_XSS($_GET['path']) : null;
-
 $is_allowedToEdit = api_is_allowed_to_edit(null, true) ||
     api_is_drh() ||
     api_is_student_boss() ||
@@ -56,7 +54,6 @@ $TBL_TRACK_ATTEMPT = Database::get_main_table(TABLE_STATISTIC_TRACK_E_ATTEMPT);
 $TBL_TRACK_ATTEMPT_RECORDING = Database::get_main_table(TABLE_STATISTIC_TRACK_E_ATTEMPT_RECORDING);
 $TBL_LP_ITEM_VIEW = Database::get_course_table(TABLE_LP_ITEM_VIEW);
 $allowCoachFeedbackExercises = api_get_setting('allow_coach_feedback_exercises') === 'true';
-
 $course_id = api_get_course_int_id();
 $exercise_id = isset($_REQUEST['exerciseId']) ? (int) $_REQUEST['exerciseId'] : 0;
 $locked = api_resource_is_locked_by_gradebook($exercise_id, LINK_EXERCISE);
@@ -155,7 +152,7 @@ $courseInfo = api_get_course_info();
 
 //Send student email @todo move this code in a class, library
 if (isset($_REQUEST['comments']) &&
-    $_REQUEST['comments'] == 'update' &&
+    $_REQUEST['comments'] === 'update' &&
     ($is_allowedToEdit || $is_tutor || $allowCoachFeedbackExercises)
 ) {
     // Filtered by post-condition
@@ -397,7 +394,7 @@ if ($is_allowedToEdit && $origin != 'learnpath') {
 
 // Deleting an attempt
 if (($is_allowedToEdit || $is_tutor || api_is_coach()) &&
-    isset($_GET['delete']) && $_GET['delete'] == 'delete' &&
+    isset($_GET['delete']) && $_GET['delete'] === 'delete' &&
     !empty($_GET['did']) && $locked == false
 ) {
     $exe_id = (int) $_GET['did'];
@@ -420,7 +417,7 @@ if (($is_allowedToEdit || $is_tutor || api_is_coach()) &&
 
 if ($is_allowedToEdit || $is_tutor) {
     $interbreadcrumb[] = [
-        'url' => "exercise.php?".api_get_cidreq(),
+        'url' => 'exercise.php?'.api_get_cidreq(),
         'name' => get_lang('Exercises'),
     ];
 
@@ -442,11 +439,11 @@ if ($is_allowedToEdit || $is_tutor) {
 }
 
 if (($is_allowedToEdit || $is_tutor || api_is_coach()) &&
-    isset($_GET['a']) && $_GET['a'] == 'close' &&
+    isset($_GET['a']) && $_GET['a'] === 'close' &&
     !empty($_GET['id']) && $locked == false
 ) {
     // Close the user attempt otherwise left pending
-    $exe_id = intval($_GET['id']);
+    $exe_id = (int) $_GET['id'];
     $sql = "UPDATE $TBL_TRACK_EXERCISES SET status = ''
             WHERE exe_id = $exe_id AND status = 'incomplete'";
     Database::query($sql);
@@ -512,7 +509,7 @@ $extra = '<script>
     });
     </script>';
 
-$extra .= '<div id="dialog-confirm" title="'.get_lang("ConfirmYourChoice").'">';
+$extra .= '<div id="dialog-confirm" title="'.get_lang('ConfirmYourChoice').'">';
 $form = new FormValidator(
     'report',
     'post',
@@ -658,12 +655,8 @@ if ($is_allowedToEdit || $is_tutor) {
     }';
 }
 
-// Autowidth
 $extra_params['autowidth'] = 'true';
-
-// Height auto
 $extra_params['height'] = 'auto';
-
 $extra_params['gridComplete'] = "
     defaultGroupId = Cookies.get('default_group_".$exercise_id."');
     if (typeof defaultGroupId !== 'undefined') {
@@ -672,7 +665,6 @@ $extra_params['gridComplete'] = "
 ";
 
 $extra_params['beforeRequest'] = "
-//console.log('beforeRequest');
 var defaultGroupId = $('#gs_group_name').val();
 
 // Load from group menu
@@ -682,7 +674,6 @@ if (typeof defaultGroupId !== 'undefined') {
     // get from cookies
     defaultGroupId = Cookies.get('default_group_".$exercise_id."');
     $('#gs_group_name').val(defaultGroupId);
-    //console.log('from cookies');
 }
 
 if (typeof defaultGroupId !== 'undefined') {
@@ -758,8 +749,6 @@ $gridJs = Display::grid_js(
 
             // Update group
             var defaultGroupId = Cookies.get('default_group_<?php echo $exercise_id; ?>');
-            //console.log('cookie GET defaultGroupId ' + defaultGroupId );
-
             $('#gs_group_name').val(defaultGroupId);
             // Adding search options
             var options = {
@@ -768,15 +757,12 @@ $gridJs = Display::grid_js(
                 'searchOnEnter': false,
                 afterSearch: function () {
                     $('#gs_group_name').on('change', function() {
-                        //console.log('changed');
                         var defaultGroupId = $('#gs_group_name').val();
                         // Save default group id
                         Cookies.set('default_group_<?php echo $exercise_id; ?>', defaultGroupId);
-                        //console.log('cookie SET defaultGroupId ' + defaultGroupId );
                     });
                 }
             }
-
             jQuery("#results").jqGrid('filterToolbar', options);
             sgrid.triggerToolbar();
             $('#results').on('click', 'a.exercise-recalculate', function (e) {

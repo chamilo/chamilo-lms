@@ -1,10 +1,11 @@
 <?php
+
 /* For licensing terms, see /license.txt */
+
+use Chamilo\CoreBundle\Component\Utils\ChamiloApi;
 
 /**
  * This class provides some functions for statistics.
- *
- * @package chamilo.statistics
  */
 class Statistics
 {
@@ -165,6 +166,38 @@ class Statistics
     }
 
     /**
+     * @param string $startDate
+     * @param string $endDate
+     *
+     * @return array
+     */
+    public static function getCoursesWithActivity($startDate, $endDate)
+    {
+        $access_url_rel_course_table = Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_COURSE);
+        $table = Database::get_main_table(TABLE_STATISTIC_TRACK_E_LASTACCESS);
+        $startDate = Database::escape_string($startDate);
+        $endDate = Database::escape_string($endDate);
+
+        $urlId = api_get_current_access_url_id();
+
+        if (api_is_multiple_url_enabled()) {
+            $sql = "SELECT DISTINCT(t.c_id) FROM $table t , $access_url_rel_course_table a
+                    WHERE
+                        t.c_id = a.c_id AND
+                        access_url_id='".$urlId."' AND
+                        access_date BETWEEN '$startDate' AND '$endDate'
+                    ";
+        } else {
+            $sql = "SELECT DISTINCT(t.c_id) FROM $table t
+                   access_date BETWEEN '$startDate' AND '$endDate' ";
+        }
+
+        $result = Database::query($sql);
+
+        return Database::store_result($result);
+    }
+
+    /**
      * Count activities from track_e_default_table.
      *
      * @return int Number of activities counted
@@ -198,9 +231,9 @@ class Statistics
         if (isset($_GET['keyword'])) {
             $keyword = Database::escape_string(trim($_GET['keyword']));
             $sql .= " AND (
-                        user.username LIKE '%".$keyword."%' OR 
-                        default_event_type LIKE '%".$keyword."%' OR 
-                        default_value_type LIKE '%".$keyword."%' OR 
+                        user.username LIKE '%".$keyword."%' OR
+                        default_event_type LIKE '%".$keyword."%' OR
+                        default_value_type LIKE '%".$keyword."%' OR
                         default_value LIKE '%".$keyword."%') ";
         }
 
@@ -371,7 +404,7 @@ class Statistics
     public static function getCourseCategories()
     {
         $categoryTable = Database::get_main_table(TABLE_MAIN_CATEGORY);
-        $sql = "SELECT code, name 
+        $sql = "SELECT code, name
                 FROM $categoryTable
                 ORDER BY tree_pos";
         $res = Database::query($sql);
@@ -422,8 +455,7 @@ class Statistics
         $isFileSize = false
     ) {
         $total = 0;
-        $data = self::rescale($stats);
-        echo '<table class="data_table" cellspacing="0" cellpadding="3">
+        $content = '<table class="data_table" cellspacing="0" cellpadding="3">
                 <tr><th colspan="'.($showTotal ? '4' : '3').'">'.$title.'</th></tr>';
         $i = 0;
         foreach ($stats as $subtitle => $number) {
@@ -438,14 +470,14 @@ class Statistics
             }
             $percentage = ($total > 0 ? number_format(100 * $number / $total, 1, ',', '.') : '0');
 
-            echo '<tr class="row_'.($i % 2 == 0 ? 'odd' : 'even').'">
+            $content .= '<tr class="row_'.($i % 2 == 0 ? 'odd' : 'even').'">
                     <td width="150">'.$subtitle.'</td>
                     <td width="550">'.Display::bar_progress($percentage, false).'</td>
                     <td align="right">'.$number_label.'</td>';
             if ($showTotal) {
-                echo '<td align="right"> '.$percentage.'%</td>';
+                $content .= '<td align="right"> '.$percentage.'%</td>';
             }
-            echo '</tr>';
+            $content .= '</tr>';
             $i++;
         }
         if ($showTotal) {
@@ -454,9 +486,11 @@ class Statistics
             } else {
                 $total_label = self::makeSizeString($total);
             }
-            echo '<tr><th colspan="4" align="right">'.get_lang('Total').': '.$total_label.'</td></tr>';
+            $content .= '<tr><th colspan="4" align="right">'.get_lang('Total').': '.$total_label.'</td></tr>';
         }
-        echo '</table>';
+        $content .= '</table>';
+
+        return $content;
     }
 
     /**
@@ -482,8 +516,8 @@ class Statistics
 
         $period = get_lang('PeriodMonth');
         $periodCollection = api_get_months_long();
-        $sql = "SELECT 
-                DATE_FORMAT( login_date, '%Y-%m' ) AS stat_date , 
+        $sql = "SELECT
+                DATE_FORMAT( login_date, '%Y-%m' ) AS stat_date ,
                 count( login_id ) AS number_of_logins
                 FROM $table $table_url $where_url
                 GROUP BY stat_date
@@ -493,36 +527,37 @@ class Statistics
         switch ($type) {
             case 'hour':
                 $period = get_lang('PeriodHour');
-                $sql = "SELECT 
-                          DATE_FORMAT( login_date, '%H') AS stat_date, 
-                          count( login_id ) AS number_of_logins 
-                        FROM $table $table_url $where_url 
-                        GROUP BY stat_date 
+                $sql = "SELECT
+                          DATE_FORMAT( login_date, '%H') AS stat_date,
+                          count( login_id ) AS number_of_logins
+                        FROM $table $table_url $where_url
+                        GROUP BY stat_date
                         ORDER BY stat_date ";
-                $sql_last_x = "SELECT 
-                                DATE_FORMAT( login_date, '%H' ) AS stat_date, 
-                                count( login_id ) AS number_of_logins 
-                               FROM $table $table_url $where_url ".sprintf($where_url_last, 'DAY')." 
-                               GROUP BY stat_date 
+                $sql_last_x = "SELECT
+                                DATE_FORMAT( login_date, '%H' ) AS stat_date,
+                                count( login_id ) AS number_of_logins
+                               FROM $table $table_url $where_url ".sprintf($where_url_last, 'DAY')."
+                               GROUP BY stat_date
                                ORDER BY stat_date ";
                 break;
             case 'day':
                 $periodCollection = api_get_week_days_long();
                 $period = get_lang('PeriodDay');
-                $sql = "SELECT DATE_FORMAT( login_date, '%w' ) AS stat_date , 
-                        count( login_id ) AS number_of_logins 
-                        FROM  $table $table_url $where_url 
-                        GROUP BY stat_date 
+                $sql = "SELECT DATE_FORMAT( login_date, '%w' ) AS stat_date ,
+                        count( login_id ) AS number_of_logins
+                        FROM  $table $table_url $where_url
+                        GROUP BY stat_date
                         ORDER BY DATE_FORMAT( login_date, '%w' ) ";
-                $sql_last_x = "SELECT 
-                                DATE_FORMAT( login_date, '%w' ) AS stat_date, 
-                                count( login_id ) AS number_of_logins 
-                               FROM $table $table_url $where_url ".sprintf($where_url_last, 'WEEK')." 
-                               GROUP BY stat_date 
+                $sql_last_x = "SELECT
+                                DATE_FORMAT( login_date, '%w' ) AS stat_date,
+                                count( login_id ) AS number_of_logins
+                               FROM $table $table_url $where_url ".sprintf($where_url_last, 'WEEK')."
+                               GROUP BY stat_date
                                ORDER BY DATE_FORMAT( login_date, '%w' ) ";
                 break;
         }
 
+        $content = '';
         if ($sql_last_x) {
             $res_last_x = Database::query($sql_last_x);
             $result_last_x = [];
@@ -530,9 +565,9 @@ class Statistics
                 $stat_date = ($type === 'day') ? $periodCollection[$obj->stat_date] : $obj->stat_date;
                 $result_last_x[$stat_date] = $obj->number_of_logins;
             }
-            self::printStats(get_lang('LastLogins').' ('.$period.')', $result_last_x, true);
+            $content .= self::printStats(get_lang('LastLogins').' ('.$period.')', $result_last_x, true);
             flush(); //flush web request at this point to see something already while the full data set is loading
-            echo '<br />';
+            $content .=  '<br />';
         }
         $res = Database::query($sql);
         $result = [];
@@ -550,7 +585,9 @@ class Statistics
             }
             $result[$stat_date] = $obj->number_of_logins;
         }
-        self::printStats(get_lang('AllLogins').' ('.$period.')', $result, true);
+        $content .= self::printStats(get_lang('AllLogins').' ('.$period.')', $result, true);
+
+        return $content;
     }
 
     /**
@@ -599,17 +636,17 @@ class Statistics
                 $label = get_lang('Today');
             }
             $label .= " <br /> $localDate - $localEndDate";
-            $sql = "SELECT count($field) AS number 
-                    FROM $table $table_url 
-                    WHERE 
+            $sql = "SELECT count($field) AS number
+                    FROM $table $table_url
+                    WHERE
                         UNIX_TIMESTAMP(logout_date) - UNIX_TIMESTAMP(login_date) > $sessionDuration AND
-                        login_date BETWEEN '$startDate' AND '$endDate'  
+                        login_date BETWEEN '$startDate' AND '$endDate'
                         $where_url";
             $sqlList[$label] = $sql;
         }
 
-        $sql = "SELECT count($field) AS number 
-                FROM $table $table_url                
+        $sql = "SELECT count($field) AS number
+                FROM $table $table_url
                 WHERE UNIX_TIMESTAMP(logout_date) - UNIX_TIMESTAMP(login_date) > $sessionDuration $where_url
                ";
         $sqlList[get_lang('Total')] = $sql;
@@ -619,11 +656,15 @@ class Statistics
             $obj = Database::fetch_object($res);
             $totalLogin[$label] = $obj->number;
         }
+
         if ($distinct) {
-            self::printStats(get_lang('DistinctUsersLogins'), $totalLogin, false);
+            $content = self::printStats(get_lang('DistinctUsersLogins'), $totalLogin, false);
         } else {
-            self::printStats(get_lang('Logins'), $totalLogin, false);
+            $content = self::printStats(get_lang('Logins'), $totalLogin, false);
         }
+
+        return $content;
+
     }
 
     /**
@@ -660,10 +701,10 @@ class Statistics
         $sessionDuration = (int) $sessionDuration;
 
         $sql = "SELECT count($field) AS number, date(login_date) as login_date
-                FROM $table $table_url 
-                WHERE 
+                FROM $table $table_url
+                WHERE
                 UNIX_TIMESTAMP(logout_date) - UNIX_TIMESTAMP(login_date) > $sessionDuration AND
-                login_date >= '$newDate' $where_url 
+                login_date >= '$newDate' $where_url
                 GROUP BY date(login_date)";
 
         $res = Database::query($sql);
@@ -797,7 +838,7 @@ class Statistics
         $result[get_lang('No')] = $count1->n - $count2->n;
         $result[get_lang('Yes')] = $count2->n; // #users with picture
 
-        self::printStats(get_lang('CountUsers').' ('.get_lang('UserPicture').')', $result, true);
+        return self::printStats(get_lang('CountUsers').' ('.get_lang('UserPicture').')', $result, true);
     }
 
     /**
@@ -805,7 +846,7 @@ class Statistics
      */
     public static function printActivitiesStats()
     {
-        echo '<h4>'.get_lang('ImportantActivities').'</h4>';
+        $content = '<h4>'.get_lang('ImportantActivities').'</h4>';
         // Create a search-box
         $form = new FormValidator(
             'search_simple',
@@ -822,9 +863,9 @@ class Statistics
         $form->addHidden('activities_column', '4');
         $form->addElement('text', 'keyword', get_lang('Keyword'));
         $form->addButtonSearch(get_lang('Search'), 'submit');
-        echo '<div class="actions">';
-        $form->display();
-        echo '</div>';
+        $content .= '<div class="actions">';
+        $content .= $form->returnForm();
+        $content .= '</div>';
 
         $table = new SortableTable(
             'activities',
@@ -850,7 +891,9 @@ class Statistics
         $table->set_header(5, get_lang('UserName'));
         $table->set_header(6, get_lang('IPAddress'));
         $table->set_header(7, get_lang('Date'));
-        $table->display();
+        $content = $table->toHtml();
+
+        return $content;
     }
 
     /**
@@ -884,7 +927,8 @@ class Statistics
             $defaults['date_diff'] = Security::remove_XSS($_GET['date_diff']);
         }
         $form->setDefaults($defaults);
-        $form->display();
+        $content = $form->returnForm();
+
         $values = $form->exportValues();
         $date_diff = $values['date_diff'];
         $table = Database::get_main_table(TABLE_STATISTIC_TRACK_E_LASTACCESS);
@@ -906,7 +950,7 @@ class Statistics
         $from = ($page_nr - 1) * $per_page;
         $sql .= ' LIMIT '.$from.','.$per_page;
 
-        echo '<p>'.get_lang('LastAccess').' &gt;= '.$date_diff.' '.get_lang('Days').'</p>';
+        $content .= '<p>'.get_lang('LastAccess').' &gt;= '.$date_diff.' '.get_lang('Days').'</p>';
         $res = Database::query($sql);
         if (Database::num_rows($res) > 0) {
             $courses = [];
@@ -922,6 +966,8 @@ class Statistics
             $parameters['report'] = 'courselastvisit';
             $table_header[] = [get_lang("CourseCode"), true];
             $table_header[] = [get_lang("LastAccess"), true];
+
+            ob_start();
             Display:: display_sortable_table(
                 $table_header,
                 $courses,
@@ -929,9 +975,13 @@ class Statistics
                 [],
                 $parameters
             );
+            $content .= ob_get_contents();
+            ob_end_clean();
         } else {
-            echo get_lang('NoSearchResults');
+            $content = get_lang('NoSearchResults');
         }
+
+        return $content;
     }
 
     /**
@@ -959,16 +1009,16 @@ class Statistics
         }
 
         if (api_is_multiple_url_enabled()) {
-            $sql = "SELECT lastname, firstname, username, COUNT($field) AS count_message 
-                FROM $access_url_rel_user_table as url, $message_table m 
-                LEFT JOIN $user_table u ON m.$field = u.user_id 
-                WHERE  url.user_id = m.$field AND  access_url_id='".$urlId."' 
-                GROUP BY m.$field 
+            $sql = "SELECT lastname, firstname, username, COUNT($field) AS count_message
+                FROM $access_url_rel_user_table as url, $message_table m
+                LEFT JOIN $user_table u ON m.$field = u.user_id
+                WHERE  url.user_id = m.$field AND  access_url_id='".$urlId."'
+                GROUP BY m.$field
                 ORDER BY count_message DESC ";
         } else {
-            $sql = "SELECT lastname, firstname, username, COUNT($field) AS count_message 
-                FROM $message_table m 
-                LEFT JOIN $user_table u ON m.$field = u.user_id 
+            $sql = "SELECT lastname, firstname, username, COUNT($field) AS count_message
+                FROM $message_table m
+                LEFT JOIN $user_table u ON m.$field = u.user_id
                 GROUP BY m.$field ORDER BY count_message DESC ";
         }
         $res = Database::query($sql);
@@ -998,23 +1048,23 @@ class Statistics
         $urlId = api_get_current_access_url_id();
 
         if (api_is_multiple_url_enabled()) {
-            $sql = "SELECT lastname, firstname, username, COUNT(friend_user_id) AS count_friend 
-                    FROM $access_url_rel_user_table as url, $user_friend_table uf 
-                    LEFT JOIN $user_table u 
-                    ON (uf.user_id = u.user_id) 
-                    WHERE 
-                        uf.relation_type <> '".USER_RELATION_TYPE_RRHH."' AND 
-                        uf.user_id = url.user_id AND  
-                        access_url_id = '".$urlId."' 
-                    GROUP BY uf.user_id 
+            $sql = "SELECT lastname, firstname, username, COUNT(friend_user_id) AS count_friend
+                    FROM $access_url_rel_user_table as url, $user_friend_table uf
+                    LEFT JOIN $user_table u
+                    ON (uf.user_id = u.user_id)
+                    WHERE
+                        uf.relation_type <> '".USER_RELATION_TYPE_RRHH."' AND
+                        uf.user_id = url.user_id AND
+                        access_url_id = '".$urlId."'
+                    GROUP BY uf.user_id
                     ORDER BY count_friend DESC ";
         } else {
-            $sql = "SELECT lastname, firstname, username, COUNT(friend_user_id) AS count_friend 
-                    FROM $user_friend_table uf 
-                    LEFT JOIN $user_table u 
-                    ON (uf.user_id = u.user_id) 
-                    WHERE uf.relation_type <> '".USER_RELATION_TYPE_RRHH."' 
-                    GROUP BY uf.user_id 
+            $sql = "SELECT lastname, firstname, username, COUNT(friend_user_id) AS count_friend
+                    FROM $user_friend_table uf
+                    LEFT JOIN $user_table u
+                    ON (uf.user_id = u.user_id)
+                    WHERE uf.relation_type <> '".USER_RELATION_TYPE_RRHH."'
+                    GROUP BY uf.user_id
                     ORDER BY count_friend DESC ";
         }
         $res = Database::query($sql);
@@ -1070,7 +1120,7 @@ class Statistics
             $r = $total - $obj->number;
             $totalLogin[$index] = $r < 0 ? 0 : $r;
         }
-        self::printStats(
+        return self::printStats(
             get_lang('StatsUsersDidNotLoginInLastPeriods'),
             $totalLogin,
             false
@@ -1137,17 +1187,88 @@ class Statistics
                 success: function(data) {
                     Chart.defaults.global.responsive = true;
                     var ctx = document.getElementById("'.$elementId.'").getContext("2d");
-                    var myLoginChart = new Chart(ctx, {
+                    var chart = new Chart(ctx, {
                         type: "'.$type.'",
                         data: data,
                         options: {'.$options.'}
                     });
+                    var title = chart.options.title.text;
+                    $("#'.$elementId.'_title").html(title);
+                    $("#'.$elementId.'_table").html(data.table);
                 }
             });
         });
         </script>';
 
         return $chartCode;
+    }
+
+    public static function getJSChartTemplateWithData($data, $type = 'pie', $options = '', $elementId = 'canvas')
+    {
+        $data = json_encode($data);
+        $chartCode = '
+        <script>
+            $(function() {
+                Chart.defaults.global.responsive = true;
+                var ctx = document.getElementById("'.$elementId.'").getContext("2d");
+                var chart = new Chart(ctx, {
+                    type: "'.$type.'",
+                    data: '.$data.',
+                    options: {'.$options.'}
+                });
+            });
+        </script>';
+
+        return $chartCode;
+    }
+
+    public static function buildJsChartData($all, $chartName)
+    {
+        $list = [];
+        $palette = ChamiloApi::getColorPalette(true, true);
+        foreach ($all as $tick => $tock) {
+            $list['labels'][] = $tick;
+        }
+
+        $list['datasets'][0]['label'] = $chartName;
+        $list['datasets'][0]['borderColor'] = 'rgba(255,255,255,1)';
+
+        $i = 0;
+        foreach ($all as $tick => $tock) {
+            $j = $i % count($palette);
+            $list['datasets'][0]['data'][] = $tock;
+            $list['datasets'][0]['backgroundColor'][] = $palette[$j];
+            $i++;
+        }
+
+        $scoreDisplay = ScoreDisplay::instance();
+        $table = new HTML_Table(['class' => 'data_table']);
+        $headers = [
+            get_lang('Name'),
+            get_lang('Count'),
+            get_lang('Percentage'),
+        ];
+        $row = 0;
+        $column = 0;
+        foreach ($headers as $header) {
+            $table->setHeaderContents($row, $column, $header);
+            $column++;
+        }
+
+        $total = 0;
+        foreach ($all as $name => $value) {
+            $total += $value;
+        }
+        $row++;
+        foreach ($all as $name => $value) {
+            $table->setCellContents($row, 0, $name);
+            $table->setCellContents($row, 1, $value);
+            $table->setCellContents($row, 2, $scoreDisplay->display_score([$value, $total], SCORE_PERCENT));
+            $row++;
+        }
+        $table = Display::page_subheader2($chartName).$table->toHtml();
+
+        return ['chart' => $list, 'table' => $table];
     }
 
     /**
@@ -1169,15 +1290,12 @@ class Statistics
             }
 
             Export::arrayToXls($data);
-
             exit;
         }
 
-        echo Display::page_header(get_lang('LoginsByDate'));
+        $content = Display::page_header(get_lang('LoginsByDate'));
 
         $actions = '';
-        $content = '';
-
         $form = new FormValidator('frm_logins_by_date', 'get');
         $form->addDateRangePicker(
             'daterange',
@@ -1225,13 +1343,13 @@ class Statistics
             $content = $table->toHtml();
         }
 
-        $form->display();
+        $content.= $form->returnForm();
 
         if (!empty($actions)) {
-            echo  Display::toolbarAction('logins_by_date_toolbar', [$actions]);
+            $content.=  Display::toolbarAction('logins_by_date_toolbar', [$actions]);
         }
 
-        echo $content;
+        return $content;
     }
 
     /**
@@ -1279,5 +1397,40 @@ class Statistics
         $result = Database::store_result($stmt, 'ASSOC');
 
         return $result;
+    }
+
+    public static function getBossTable($bossId)
+    {
+        $students = UserManager::getUsersFollowedByStudentBoss($bossId);
+
+        if (!empty($students)) {
+            $table = new HTML_Table(['class' => 'table table-responsive', 'id' => 'table_'.$bossId]);
+            $headers = [
+                get_lang('Name'),
+                //get_lang('LastName'),
+            ];
+            $row = 0;
+            $column = 0;
+            foreach ($headers as $header) {
+                $table->setHeaderContents($row, $column, $header);
+                $column++;
+            }
+            $row++;
+            foreach ($students as $student) {
+                $column = 0;
+                $content = api_get_person_name($student['firstname'], $student['lastname']). '';
+                $content = '<div style="width: 200px; overflow-wrap: break-word;">'.$content.'</div>';
+                $table->setCellContents(
+                    $row,
+                    $column++,
+                    $content
+                );
+                $row++;
+            }
+
+            return $table->toHtml();
+        }
+
+        return '<table id="table_'.$bossId.'"></table>';
     }
 }

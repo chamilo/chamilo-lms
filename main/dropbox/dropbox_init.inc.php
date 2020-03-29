@@ -83,29 +83,6 @@ Version 1.1
 - index.php: add filesize info in sent/received lists
 - dropbox_submit.php: resubmit prevention only for GET action, because it gives some annoying behaviour in POST
  * situation: white screen in IE6.
-Version 1.2
------------
-- adapted entire dropbox tool so it can be used as a default tool in Dokeos 1.5
-- index.php: add event registration to log use of tool in stats tables
-- index.php: upload form checks for correct user selection and file specification before uploading the script
-- dropbox_init1.inc.php: added dropbox_cnf["allowOverwrite"] to allow or disallow overwriting of files
-- index.php: author name textbox is automatically filled in
-- mailing functionality (René Haentjens)
-- allowStudentToStudent and allowJustUpload options (id.)
-- help in separate window (id.)
-
-Version 1.3 (Patrick Cool)
---------------------------
-- sortable table
-- categories
-- fixing a security hole
-- tabs (which can be disabled: see $dropbox_cnf['sent_received_tabs'])
-- same action on multiple documents ([zip]download, move, delete)
-- consistency with the docuements tool (open/download file, icons of documents, ...)
-- zip download of complete folder
-
-Version 1.4 (Yannick Warnier)
------------------------------
 - removed all self-built database tables names
  */
 

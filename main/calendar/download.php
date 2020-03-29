@@ -19,18 +19,14 @@ header('Expires: Wed, 01 Jan 1990 00:00:00 GMT');
 header('Cache-Control: public');
 header('Pragma: no-cache');
 
-$course_id = isset($_REQUEST['course_id']) ? $_REQUEST['course_id'] : 0;
+$course_id = isset($_REQUEST['course_id']) ? (int) $_REQUEST['course_id'] : api_get_course_int_id();
 $user_id = api_get_user_id();
 $course_info = api_get_course_info_by_id($course_id);
+$doc_url = $_REQUEST['file'];
 
-if (empty($course_id)) {
-    $course_id = api_get_course_int_id();
-}
 if (empty($course_id) || empty($doc_url)) {
     api_not_allowed();
 }
-
-$doc_url = $_REQUEST['file'];
 $session_id = api_get_session_id();
 
 $is_user_is_subscribed = CourseManager::is_user_subscribed_in_course(

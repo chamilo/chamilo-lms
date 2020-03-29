@@ -33,22 +33,6 @@ if (!api_is_allowed_to_edit(false, true) && !$is_group_member) {
 }
 
 /**
- *  List all users registered to the course.
- */
-function search_members_keyword($firstname, $lastname, $username, $official_code, $keyword)
-{
-    if (api_strripos($firstname, $keyword) !== false ||
-        api_strripos($lastname, $keyword) !== false ||
-        api_strripos($username, $keyword) !== false ||
-        api_strripos($official_code, $keyword) !== false
-    ) {
-        return true;
-    } else {
-        return false;
-    }
-}
-
-/**
  * Function to sort users after getting the list in the DB.
  * Necessary because there are 2 or 3 queries. Called by usort().
  */

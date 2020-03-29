@@ -1,4 +1,5 @@
 <?php
+
 /* For licensing terms, see /license.txt */
 
 use Chamilo\CoreBundle\Entity\ExtraField as EntityExtraField;
@@ -15,8 +16,6 @@ use Symfony\Component\Security\Core\Encoder\EncoderFactory;
  *
  * This library provides functions for user management.
  * Include/require it in your code to use its functionality.
- *
- * @package chamilo.library
  *
  * @author Julio Montoya <gugli100@gmail.com> Social network groups added 2009/12
  */
@@ -126,7 +125,6 @@ class UserManager
 
     /**
      * @param string $raw
-     * @param User   $user
      *
      * @return string
      */
@@ -778,8 +776,8 @@ class UserManager
         $table_work = Database::get_course_table(TABLE_STUDENT_PUBLICATION);
 
         // Unsubscribe the user from all groups in all his courses
-        $sql = "SELECT c.id 
-                FROM $table_course c 
+        $sql = "SELECT c.id
+                FROM $table_course c
                 INNER JOIN $table_course_user cu
                 ON (c.id = cu.c_id)
                 WHERE
@@ -1740,6 +1738,75 @@ class UserManager
         return $return_array;
     }
 
+    public static function getUserListExtraConditions(
+        $conditions = [],
+        $order_by = [],
+        $limit_from = false,
+        $limit_to = false,
+        $idCampus = null,
+        $extraConditions = '',
+        $getCount = false
+    ) {
+        $user_table = Database::get_main_table(TABLE_MAIN_USER);
+        $userUrlTable = Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_USER);
+        $return_array = [];
+        $sql = "SELECT user.* FROM $user_table user ";
+
+        if ($getCount) {
+            $sql = "SELECT count(user.id) count FROM $user_table user ";
+        }
+
+        if (api_is_multiple_url_enabled()) {
+            if ($idCampus) {
+                $urlId = $idCampus;
+            } else {
+                $urlId = api_get_current_access_url_id();
+            }
+            $sql .= " INNER JOIN $userUrlTable url_user
+                      ON (user.user_id = url_user.user_id)
+                      WHERE url_user.access_url_id = $urlId";
+        } else {
+            $sql .= " WHERE 1=1 ";
+        }
+
+        $sql .= " AND status <> ".ANONYMOUS." ";
+
+        if (count($conditions) > 0) {
+            foreach ($conditions as $field => $value) {
+                $field = Database::escape_string($field);
+                $value = Database::escape_string($value);
+                $sql .= " AND $field = '$value'";
+            }
+        }
+
+        $sql .= str_replace("\'", "'", Database::escape_string($extraConditions));
+
+        if (!empty($order_by) && count($order_by) > 0) {
+            $sql .= ' ORDER BY '.Database::escape_string(implode(',', $order_by));
+        }
+
+        if (is_numeric($limit_from) && is_numeric($limit_from)) {
+            $limit_from = (int) $limit_from;
+            $limit_to = (int) $limit_to;
+            $sql .= " LIMIT $limit_from, $limit_to";
+        }
+
+        $sql_result = Database::query($sql);
+
+        if ($getCount) {
+            $result = Database::fetch_array($sql_result);
+
+            return $result['count'];
+        }
+
+        while ($result = Database::fetch_array($sql_result)) {
+            $result['complete_name'] = api_get_person_name($result['firstname'], $result['lastname']);
+            $return_array[] = $result;
+        }
+
+        return $return_array;
+    }
+
     /**
      * Get a list of users of which the given conditions match with a LIKE '%cond%'.
      *
@@ -2330,13 +2397,13 @@ class UserManager
                     </a>';
                 if ($showDelete) {
                     $production_list .= '&nbsp;&nbsp;
-                        <input 
-                            style="width:16px;" 
-                            type="image" 
-                            name="remove_production['.urlencode($file).']" 
-                            src="'.$del_image.'" 
-                            alt="'.$del_text.'" 
-                            title="'.$del_text.' '.htmlentities($file).'" 
+                        <input
+                            style="width:16px;"
+                            type="image"
+                            name="remove_production['.urlencode($file).']"
+                            src="'.$del_image.'"
+                            alt="'.$del_text.'"
+                            title="'.$del_text.' '.htmlentities($file).'"
                             onclick="javascript: return confirmation(\''.htmlentities($file).'\');" /></li>';
                 }
             }
@@ -2550,13 +2617,13 @@ class UserManager
                         '.htmlentities($filename).
                     '</a> ';
                 if ($showDelete) {
-                    $extra_file_list .= '<input 
-                        style="width:16px;" 
-                        type="image" 
-                        name="remove_extra_'.$extra_field.'['.urlencode($file).']" 
-                        src="'.$del_image.'" 
+                    $extra_file_list .= '<input
+                        style="width:16px;"
+                        type="image"
+                        name="remove_extra_'.$extra_field.'['.urlencode($file).']"
+                        src="'.$del_image.'"
                         alt="'.$del_text.'"
-                        title="'.$del_text.' '.htmlentities($filename).'" 
+                        title="'.$del_text.' '.htmlentities($filename).'"
                         onclick="javascript: return confirmation(\''.htmlentities($filename).'\');" /></li>';
                 }
             }
@@ -2811,7 +2878,7 @@ class UserManager
         $res = Database::query($sql);
         if (Database::num_rows($res) > 0) {
             while ($row = Database::fetch_array($res)) {
-                $sqlu = "SELECT value as fval FROM $t_ufv v 
+                $sqlu = "SELECT value as fval FROM $t_ufv v
                          INNER JOIN $t_uf f
                          ON (v.field_id = f.id)
                          WHERE
@@ -2841,7 +2908,7 @@ class UserManager
     /**
      * Get the extra field information for a certain field (the options as well).
      *
-     * @param int $variable The name of the field we want to know everything about
+     * @param string $variable The name of the field we want to know everything about
      *
      * @return array Array containing all the information about the extra profile field
      *               (first level of array contains field details, then 'options' sub-array contains options details,
@@ -3108,11 +3175,14 @@ class UserManager
                     break;
                 case 'end_date':
                     $order = " ORDER BY s.accessEndDate $orderSetting ";
-                    if ($orderSetting == 'asc') {
+                    if ($orderSetting === 'asc') {
                         // Put null values at the end
                         // https://stackoverflow.com/questions/12652034/how-can-i-order-by-null-in-dql
                         $order = ' ORDER BY _isFieldNull asc, s.accessEndDate asc';
                     }
+                    break;
+                case 'name':
+                    $order = " ORDER BY s.name $orderSetting ";
                     break;
             }
         }
@@ -3496,7 +3566,7 @@ class UserManager
             FROM $tbl_session_course_user as session_course_user
             INNER JOIN $tbl_course AS course
             ON course.id = session_course_user.c_id AND session_course_user.session_id = $session_id
-            INNER JOIN $tbl_session as session 
+            INNER JOIN $tbl_session as session
             ON session_course_user.session_id = session.id
             LEFT JOIN $tbl_user as user ON user.id = session_course_user.user_id
             WHERE session_course_user.user_id = $user_id
@@ -3584,7 +3654,7 @@ class UserManager
 
         if (api_is_allowed_to_create_course()) {
             $sql = "SELECT DISTINCT
-                        c.visibility, 
+                        c.visibility,
                         c.id as real_id,
                         c.code as course_code,
                         sc.position
@@ -3662,6 +3732,14 @@ class UserManager
 
         if (!empty($myCourseList)) {
             ksort($myCourseList);
+            $checkPosition = array_filter(array_column($myCourseList, 'position'));
+            if (empty($checkPosition)) {
+                // The session course list doesn't have any position,
+                // then order the course list by course code
+                $list = array_column($myCourseList, 'course_code');
+
+                @array_multisort($myCourseList, SORT_ASC, $list);
+            }
         }
 
         return $myCourseList;
@@ -3887,7 +3965,7 @@ class UserManager
             return false;
         }
         $t_api = Database::get_main_table(TABLE_MAIN_USER_API_KEY);
-        $sql = "SELECT id FROM $t_api 
+        $sql = "SELECT id FROM $t_api
                 WHERE user_id=".$user_id." AND api_service='".$api_service."'";
         $res = Database::query($sql);
         $num = Database::num_rows($res);
@@ -3921,7 +3999,7 @@ class UserManager
         }
         $t_api = Database::get_main_table(TABLE_MAIN_USER_API_KEY);
         $api_service = Database::escape_string($api_service);
-        $sql = "SELECT id FROM $t_api 
+        $sql = "SELECT id FROM $t_api
                 WHERE user_id=".$user_id." AND api_service='".$api_service."'";
         $res = Database::query($sql);
         if (Database::num_rows($res) < 1) {
@@ -3957,31 +4035,40 @@ class UserManager
     /**
      * Get the total count of users.
      *
-     * @param   int     Status of users to be counted
-     * @param   int     Access URL ID (optional)
+     * @param int $status        Status of users to be counted
+     * @param int $access_url_id Access URL ID (optional)
+     * @param int $active
      *
      * @return mixed Number of users or false on error
      */
-    public static function get_number_of_users($status = 0, $access_url_id = 1)
+    public static function get_number_of_users($status = 0, $access_url_id = 1, $active = null)
     {
         $t_u = Database::get_main_table(TABLE_MAIN_USER);
         $t_a = Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_USER);
 
         if (api_is_multiple_url_enabled()) {
-            $sql = "SELECT count(u.id) 
-                    FROM $t_u u 
+            $sql = "SELECT count(u.id)
+                    FROM $t_u u
                     INNER JOIN $t_a url_user
                     ON (u.id = url_user.user_id)
-                    WHERE url_user.access_url_id = $access_url_id                
+                    WHERE url_user.access_url_id = $access_url_id
             ";
         } else {
-            $sql = "SELECT count(u.id) 
+            $sql = "SELECT count(u.id)
                     FROM $t_u u
                     WHERE 1 = 1 ";
         }
+
         if (is_int($status) && $status > 0) {
+            $status = (int) $status;
             $sql .= " AND u.status = $status ";
         }
+
+        if ($active !== null) {
+            $active = (int) $active;
+            $sql .= " AND u.active = $active ";
+        }
+
         $res = Database::query($sql);
         if (Database::num_rows($res) === 1) {
             return (int) Database::result($res, 0, 0);
@@ -4722,13 +4809,13 @@ class UserManager
                 $extra_condition = ' AND relation_type = '.intval($with_status_condition);
             }
             $sql = 'DELETE FROM '.$tbl_my_friend.'
-                    WHERE 
-                        relation_type <> '.USER_RELATION_TYPE_RRHH.' AND 
+                    WHERE
+                        relation_type <> '.USER_RELATION_TYPE_RRHH.' AND
                         friend_user_id='.$friend_id.' '.$extra_condition;
             Database::query($sql);
             $sql = 'DELETE FROM '.$tbl_my_friend.'
-                   WHERE 
-                    relation_type <> '.USER_RELATION_TYPE_RRHH.' AND 
+                   WHERE
+                    relation_type <> '.USER_RELATION_TYPE_RRHH.' AND
                     user_id='.$friend_id.' '.$extra_condition;
             Database::query($sql);
         } else {
@@ -4745,16 +4832,16 @@ class UserManager
                           WHERE user_id='.$user_id.' AND friend_user_id='.$friend_id;
 
                 $sql_j = 'UPDATE '.$tbl_my_message.' SET msg_status='.MESSAGE_STATUS_INVITATION_DENIED.'
-                          WHERE 
-                                user_receiver_id='.$user_id.' AND 
+                          WHERE
+                                user_receiver_id='.$user_id.' AND
                                 user_sender_id='.$friend_id.' AND update_date="0000-00-00 00:00:00" ';
                 // Delete user
                 $sql_ij = 'UPDATE '.$tbl_my_friend.'  SET relation_type='.USER_RELATION_TYPE_DELETED.'
                            WHERE user_id='.$friend_id.' AND friend_user_id='.$user_id;
                 $sql_ji = 'UPDATE '.$tbl_my_message.' SET msg_status='.MESSAGE_STATUS_INVITATION_DENIED.'
-                           WHERE 
-                                user_receiver_id='.$friend_id.' AND 
-                                user_sender_id='.$user_id.' AND 
+                           WHERE
+                                user_receiver_id='.$friend_id.' AND
+                                user_sender_id='.$user_id.' AND
                                 update_date="0000-00-00 00:00:00" ';
                 Database::query($sql_i);
                 Database::query($sql_j);
@@ -4764,15 +4851,15 @@ class UserManager
         }
 
         // Delete accepted invitations
-        $sql = "DELETE FROM $tbl_my_message 
+        $sql = "DELETE FROM $tbl_my_message
                 WHERE
                     msg_status = ".MESSAGE_STATUS_INVITATION_ACCEPTED." AND
                     (
-                        user_receiver_id = $user_id AND 
+                        user_receiver_id = $user_id AND
                         user_sender_id = $friend_id
-                    ) OR 
+                    ) OR
                     (
-                        user_sender_id = $user_id AND 
+                        user_sender_id = $user_id AND
                         user_receiver_id = $friend_id
                     )
         ";
@@ -4991,7 +5078,7 @@ class UserManager
                                     $tbl_session_rel_access_url session_rel_access_rel_user
                                     ON session_rel_access_rel_user.session_id = s.id
                                     WHERE access_url_id = ".api_get_current_access_url_id()."
-                                    $sessionConditionsCoach                                  
+                                    $sessionConditionsCoach
                                 ) OR sru.session_id IN (
                                     SELECT DISTINCT(s.id) FROM $tbl_session s
                                     INNER JOIN $tbl_session_rel_access_url url
@@ -5001,7 +5088,7 @@ class UserManager
                                     WHERE access_url_id = ".api_get_current_access_url_id()."
                                     $sessionConditionsTeacher
                                 )
-                            )                            
+                            )
                             $userConditions
                     )
                     UNION ALL(
@@ -5171,29 +5258,29 @@ class UserManager
         if ($deleteOtherAssignedUsers) {
             if (api_get_multiple_access_url()) {
                 // Deleting assigned users to hrm_id
-                $sql = "SELECT s.user_id 
-                        FROM $userRelUserTable s 
+                $sql = "SELECT s.user_id
+                        FROM $userRelUserTable s
                         INNER JOIN $userRelAccessUrlTable a
-                        ON (a.user_id = s.user_id) 
-                        WHERE 
-                            friend_user_id = $userId AND 
-                            relation_type = $relationType AND 
+                        ON (a.user_id = s.user_id)
+                        WHERE
+                            friend_user_id = $userId AND
+                            relation_type = $relationType AND
                             access_url_id = ".api_get_current_access_url_id();
             } else {
-                $sql = "SELECT user_id 
-                        FROM $userRelUserTable 
-                        WHERE 
-                            friend_user_id = $userId AND 
+                $sql = "SELECT user_id
+                        FROM $userRelUserTable
+                        WHERE
+                            friend_user_id = $userId AND
                             relation_type = $relationType";
             }
             $result = Database::query($sql);
 
             if (Database::num_rows($result) > 0) {
                 while ($row = Database::fetch_array($result)) {
-                    $sql = "DELETE FROM $userRelUserTable 
+                    $sql = "DELETE FROM $userRelUserTable
                             WHERE
-                                user_id = {$row['user_id']} AND 
-                                friend_user_id = $userId AND 
+                                user_id = {$row['user_id']} AND
+                                friend_user_id = $userId AND
                                 relation_type = $relationType";
                     Database::query($sql);
                 }
@@ -5201,8 +5288,8 @@ class UserManager
         }
 
         if ($deleteUsersBeforeInsert) {
-            $sql = "DELETE FROM $userRelUserTable 
-                    WHERE 
+            $sql = "DELETE FROM $userRelUserTable
+                    WHERE
                         user_id = $userId AND
                         relation_type = $relationType";
             Database::query($sql);
@@ -5212,11 +5299,11 @@ class UserManager
         if (is_array($subscribedUsersId)) {
             foreach ($subscribedUsersId as $subscribedUserId) {
                 $subscribedUserId = (int) $subscribedUserId;
-                $sql = "SELECT id 
+                $sql = "SELECT id
                         FROM $userRelUserTable
-                        WHERE 
-                            user_id = $subscribedUserId AND 
-                            friend_user_id = $userId AND 
+                        WHERE
+                            user_id = $subscribedUserId AND
+                            friend_user_id = $userId AND
                             relation_type = $relationType";
 
                 $result = Database::query($sql);
@@ -5331,7 +5418,7 @@ class UserManager
         $user_id = (int) $user_id;
 
         $table = Database::get_main_table(TABLE_MAIN_GRADEBOOK_CERTIFICATE);
-        $sql = 'SELECT path_certificate 
+        $sql = 'SELECT path_certificate
                 FROM '.$table.'
                 WHERE
                     cat_id = "'.$cat_id.'" AND
@@ -5366,12 +5453,12 @@ class UserManager
             $session_condition = " AND session_id = $session_id";
         }
 
-        $sql = 'SELECT * FROM '.$tbl_grade_certificate.' 
+        $sql = 'SELECT * FROM '.$tbl_grade_certificate.'
                 WHERE cat_id = (
                     SELECT id FROM '.$tbl_grade_category.'
                     WHERE
-                        course_code = "'.Database::escape_string($course_code).'" '.$session_condition.' 
-                    LIMIT 1 
+                        course_code = "'.Database::escape_string($course_code).'" '.$session_condition.'
+                    LIMIT 1
                 ) AND user_id='.intval($user_id);
 
         $rs = Database::query($sql);
@@ -5424,7 +5511,7 @@ class UserManager
         $sql = "SELECT tc.path_certificate,tc.cat_id,tgc.course_code,tgc.name
                 FROM $table_certificate tc, $table_gradebook_category tgc
                 WHERE tgc.id = tc.cat_id AND tc.user_id = $user_id
-                ORDER BY tc.date_certificate DESC 
+                ORDER BY tc.date_certificate DESC
                 LIMIT 5";
 
         $rs = Database::query($sql);
@@ -5576,15 +5663,18 @@ class UserManager
      *
      * @param int   $bossId  The boss id
      * @param array $usersId The users array
+     * @param bool  $deleteOtherAssignedUsers
      *
      * @return int Affected rows
      */
-    public static function subscribeBossToUsers($bossId, $usersId)
+    public static function subscribeBossToUsers($bossId, $usersId, $deleteOtherAssignedUsers = true)
     {
         return self::subscribeUsersToUser(
             $bossId,
             $usersId,
-            USER_RELATION_TYPE_BOSS
+            USER_RELATION_TYPE_BOSS,
+            false,
+            $deleteOtherAssignedUsers
         );
     }
 
@@ -5602,7 +5692,7 @@ class UserManager
         }
 
         $userRelUserTable = Database::get_main_table(TABLE_MAIN_USER_REL_USER);
-        $sql = "DELETE FROM $userRelUserTable 
+        $sql = "DELETE FROM $userRelUserTable
                 WHERE user_id = $userId AND relation_type = ".USER_RELATION_TYPE_BOSS;
         Database::query($sql);
 
@@ -5647,6 +5737,14 @@ class UserManager
 
             foreach ($bossList as $bossId) {
                 $bossId = (int) $bossId;
+                $bossInfo = api_get_user_info($bossId);
+
+                if (empty($bossInfo)) {
+                    continue;
+                }
+
+                $bossLanguage = $bossInfo['language'];
+
                 $sql = "INSERT IGNORE INTO $userRelUserTable (user_id, friend_user_id, relation_type)
                         VALUES ($studentId, $bossId, ".USER_RELATION_TYPE_BOSS.")";
                 $insertId = Database::query($sql);
@@ -5656,8 +5754,15 @@ class UserManager
                         $name = $studentInfo['complete_name'];
                         $url = api_get_path(WEB_CODE_PATH).'mySpace/myStudents.php?student='.$studentId;
                         $url = Display::url($url, $url);
-                        $subject = sprintf(get_lang('UserXHasBeenAssignedToBoss'), $name);
-                        $message = sprintf(get_lang('UserXHasBeenAssignedToBossWithUrlX'), $name, $url);
+                        $subject = sprintf(
+                            get_lang('UserXHasBeenAssignedToBoss', false, $bossLanguage),
+                            $name
+                        );
+                        $message = sprintf(
+                            get_lang('UserXHasBeenAssignedToBossWithUrlX', false, $bossLanguage),
+                            $name,
+                            $url
+                        );
                         MessageManager::send_message_simple(
                             $bossId,
                             $subject,
@@ -5975,7 +6080,7 @@ class UserManager
         $sql = <<<SQL
             SELECT id, username, lastname, firstname
             FROM $userTable
-            WHERE 
+            WHERE
                 firstname LIKE '$firstname%' AND
                 lastname LIKE '$lastname%'
 SQL;
@@ -6647,12 +6752,8 @@ SQL;
         $calendar = [];
 
         foreach ($sessionsList as $sessionId => $sessionInfo) {
-            $startDate = $sessionInfo['access_start_date']
-                ? new DateTime(api_get_local_time($sessionInfo['access_start_date']), $timezone)
-                : null;
-            $endDate = $sessionInfo['access_end_date']
-                ? new DateTime(api_get_local_time($sessionInfo['access_end_date']), $timezone)
-                : null;
+            $startDate = $sessionInfo['access_start_date'] ? new DateTime(api_get_local_time($sessionInfo['access_start_date']), $timezone): null;
+            $endDate = $sessionInfo['access_end_date'] ? new DateTime(api_get_local_time($sessionInfo['access_end_date']), $timezone): null;
 
             $startYear = $startDate ? (int) $startDate->format('Y') : 0;
             $startWeekYear = $startDate ? (int) $startDate->format('o') : 0;
@@ -6714,6 +6815,107 @@ SQL;
         }
 
         return $fullName;
+    }
+
+    /**
+     * @param int $userId
+     *
+     * @return array
+     */
+    public static function getUserCareers($userId)
+    {
+        $table = Database::get_main_table(TABLE_MAIN_USER_CAREER);
+        $tableCareer = Database::get_main_table(TABLE_CAREER);
+        $userId = (int) $userId;
+
+        $sql = "SELECT c.id, c.name
+                FROM $table uc
+                INNER JOIN $tableCareer c
+                ON uc.career_id = c.id
+                WHERE user_id = $userId
+                ORDER BY uc.created_at
+                ";
+        $result = Database::query($sql);
+
+        return Database::store_result($result, 'ASSOC');
+    }
+
+    /**
+     * @param int $userId
+     * @param int $careerId
+     */
+    public static function addUserCareer($userId, $careerId)
+    {
+        if (!api_get_configuration_value('allow_career_users')) {
+            return false;
+        }
+
+        if (self::userHasCareer($userId, $careerId) === false) {
+            $params = ['user_id' => $userId, 'career_id' => $careerId, 'created_at' => api_get_utc_datetime(), 'updated_at' => api_get_utc_datetime()];
+            $table = Database::get_main_table(TABLE_MAIN_USER_CAREER);
+            Database::insert($table, $params);
+        }
+
+        return true;
+    }
+
+    /**
+     * @param int   $userCareerId
+     * @param array $data
+     *
+     * @return bool
+     */
+    public static function updateUserCareer($userCareerId, $data)
+    {
+        if (!api_get_configuration_value('allow_career_users')) {
+            return false;
+        }
+
+        $params = ['extra_data' => $data, 'updated_at' => api_get_utc_datetime()];
+        $table = Database::get_main_table(TABLE_MAIN_USER_CAREER);
+        Database::update(
+            $table,
+            $params,
+            ['id = ?' => (int) $userCareerId]
+        );
+
+        return true;
+    }
+
+    /**
+     * @param int $userId
+     * @param int $careerId
+     *
+     * @return array
+     */
+    public static function getUserCareer($userId, $careerId)
+    {
+        $userId = (int) $userId;
+        $careerId = (int) $careerId;
+        $table = Database::get_main_table(TABLE_MAIN_USER_CAREER);
+
+        $sql = "SELECT * FROM $table WHERE user_id = $userId AND career_id = $careerId";
+        $result = Database::query($sql);
+
+        return Database::fetch_array($result, 'ASSOC');
+    }
+
+    /**
+     * @param int $userId
+     * @param int $careerId
+     *
+     * @return bool
+     */
+    public static function userHasCareer($userId, $careerId)
+    {
+        $userId = (int) $userId;
+        $careerId = (int) $careerId;
+        $table = Database::get_main_table(TABLE_MAIN_USER_CAREER);
+
+        $sql = "SELECT id FROM $table WHERE user_id = $userId AND career_id = $careerId";
+        $result = Database::query($sql);
+
+        return Database::num_rows($result) > 0;
     }
 
     /**

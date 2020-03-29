@@ -266,38 +266,38 @@ class ExerciseLib
                 $header = Display::tag('th', get_lang('Options'), ['width' => '50%']);
                 echo "
                 <script>
-                    function RadioValidator(question_id, answer_id) 
+                    function RadioValidator(question_id, answer_id)
                     {
                         var ShowAlert = '';
                         var typeRadioB = '';
                         var AllFormElements = window.document.getElementById('exercise_form').elements;
-                    
+
                         for (i = 0; i < AllFormElements.length; i++) {
                             if (AllFormElements[i].type == 'radio') {
                                 var ThisRadio = AllFormElements[i].name;
                                 var ThisChecked = 'No';
                                 var AllRadioOptions = document.getElementsByName(ThisRadio);
-                              
+
                                 for (x = 0; x < AllRadioOptions.length; x++) {
                                      if (AllRadioOptions[x].checked && ThisChecked == 'No') {
                                          ThisChecked = 'Yes';
                                          break;
-                                     } 
-                                }  
-                              
-                                var AlreadySearched = ShowAlert.indexOf(ThisRadio);                                
-                                if (ThisChecked == 'No' && AlreadySearched == -1) { 
+                                     }
+                                }
+
+                                var AlreadySearched = ShowAlert.indexOf(ThisRadio);
+                                if (ThisChecked == 'No' && AlreadySearched == -1) {
                                     ShowAlert = ShowAlert + ThisRadio;
-                                }     
+                                }
                             }
                         }
                         if (ShowAlert != '') {
-                    
+
                         } else {
                             $('.question-validate-btn').removeAttr('disabled');
                         }
                     }
-                    
+
                     function handleRadioRow(event, question_id, answer_id) {
                         var t = event.target;
                         if (t && t.tagName == 'INPUT')
@@ -309,38 +309,38 @@ class ExerciseLib
                         r.click();
                         RadioValidator(question_id, answer_id);
                     }
-                    
+
                     $(function() {
                         var ShowAlert = '';
                         var typeRadioB = '';
                         var question_id = $('input[name=question_id]').val();
                         var AllFormElements = window.document.getElementById('exercise_form').elements;
-                    
+
                         for (i = 0; i < AllFormElements.length; i++) {
                             if (AllFormElements[i].type == 'radio') {
                                 var ThisRadio = AllFormElements[i].name;
                                 var ThisChecked = 'No';
                                 var AllRadioOptions = document.getElementsByName(ThisRadio);
-                                
+
                                 for (x = 0; x < AllRadioOptions.length; x++) {
                                     if (AllRadioOptions[x].checked && ThisChecked == 'No') {
                                         ThisChecked = \"Yes\";
                                         break;
                                     }
                                 }
-                                
-                                var AlreadySearched = ShowAlert.indexOf(ThisRadio);                                
-                                if (ThisChecked == 'No' && AlreadySearched == -1) { 
+
+                                var AlreadySearched = ShowAlert.indexOf(ThisRadio);
+                                if (ThisChecked == 'No' && AlreadySearched == -1) {
                                     ShowAlert = ShowAlert + ThisRadio;
                                 }
                             }
                         }
-                        
+
                         if (ShowAlert != '') {
                              $('.question-validate-btn').attr('disabled', 'disabled');
                         } else {
                             $('.question-validate-btn').removeAttr('disabled');
-                        }                    
+                        }
                     });
                 </script>";
 
@@ -416,7 +416,7 @@ class ExerciseLib
                         $header2 .= Display::tag(
                             'td',
                             nl2br($descriptionList[$counter2]),
-                            ['style' => 'background-color: #EFEFFC; color: black; width: 110px; text-align:center; 
+                            ['style' => 'background-color: #EFEFFC; color: black; width: 110px; text-align:center;
                                 vertical-align: top; padding:5px; '.$color_border2]);
                         $counter2++;
                     }
@@ -508,16 +508,16 @@ class ExerciseLib
                         if ($answerType == UNIQUE_ANSWER_IMAGE) {
                             if ($show_comment) {
                                 if (empty($comment)) {
-                                    $s .= '<div id="answer'.$questionId.$numAnswer.'" 
+                                    $s .= '<div id="answer'.$questionId.$numAnswer.'"
                                             class="exercise-unique-answer-image" style="text-align: center">';
                                 } else {
-                                    $s .= '<div id="answer'.$questionId.$numAnswer.'" 
-                                            class="exercise-unique-answer-image col-xs-6 col-sm-12" 
+                                    $s .= '<div id="answer'.$questionId.$numAnswer.'"
+                                            class="exercise-unique-answer-image col-xs-6 col-sm-12"
                                             style="text-align: center">';
                                 }
                             } else {
-                                $s .= '<div id="answer'.$questionId.$numAnswer.'" 
-                                        class="exercise-unique-answer-image col-xs-6 col-md-3" 
+                                $s .= '<div id="answer'.$questionId.$numAnswer.'"
+                                        class="exercise-unique-answer-image col-xs-6 col-md-3"
                                         style="text-align: center">';
                             }
                         }
@@ -1073,8 +1073,8 @@ class ExerciseLib
                             // Id of select is # question + # of option
                             $s .= '<td width="10%" valign="top" align="center">
                                 <div class="select-matching">
-                                <select 
-                                    id="choice_id_'.$current_item.'_'.$lines_count.'" 
+                                <select
+                                    id="choice_id_'.$current_item.'_'.$lines_count.'"
                                     name="choice['.$questionId.']['.$numAnswer.']">';
 
                             // fills the list-box
@@ -1219,16 +1219,16 @@ class ExerciseLib
                         break;
                     case MATCHING_DRAGGABLE:
                         if ($answerId == 1) {
-                            echo $objAnswerTmp->getJs();
+                            $s .= $objAnswerTmp->getJs();
                         }
                         if ($answerCorrect != 0) {
                             $windowId = "{$questionId}_{$lines_count}";
                             $s .= <<<HTML
                             <tr>
                                 <td width="45%">
-                                    <div id="window_{$windowId}" 
+                                    <div id="window_{$windowId}"
                                         class="window window_left_question window{$questionId}_question">
-                                        <strong>$lines_count.</strong> 
+                                        <strong>$lines_count.</strong>
                                         $answer
                                     </div>
                                 </td>
@@ -1275,7 +1275,7 @@ HTML;
                                 if (!$freeze) {
                                     $s .= "
                                         <script>
-                                            $(function() {
+                                            $(window).on('load', function() {
                                                 jsPlumb.ready(function() {
                                                     jsPlumb.connect({
                                                         source: 'window_$windowId',
@@ -1299,7 +1299,7 @@ HTML;
                             if (isset($select_items[$lines_count])) {
                                 $s .= <<<HTML
                                 <div id="window_{$windowId}_answer" class="window window_right_question">
-                                    <strong>{$select_items[$lines_count]['letter']}.</strong> 
+                                    <strong>{$select_items[$lines_count]['letter']}.</strong>
                                     {$select_items[$lines_count]['answer']}
                                 </div>
 HTML;
@@ -1458,7 +1458,7 @@ HTML;
                     echo "
                         <div class=\"row\">
                             <div class=\"col-sm-9\">
-                                <div id=\"hotspot-preview-$questionId\"></div>                                
+                                <div id=\"hotspot-preview-$questionId\"></div>
                             </div>
                             <div class=\"col-sm-3\">
                                 $answerList
@@ -1580,15 +1580,15 @@ HOTSPOT;
                                         <div class="btn-group" data-toggle="buttons">
                                             <label class="btn btn-default active"
                                                 aria-label="'.get_lang('AddAnnotationPath').'">
-                                                <input 
-                                                    type="radio" value="0" 
+                                                <input
+                                                    type="radio" value="0"
                                                     name="'.$questionId.'-options" autocomplete="off" checked>
                                                 <span class="fa fa-pencil" aria-hidden="true"></span>
                                             </label>
                                             <label class="btn btn-default"
                                                 aria-label="'.get_lang('AddAnnotationText').'">
-                                                <input 
-                                                    type="radio" value="1" 
+                                                <input
+                                                    type="radio" value="1"
                                                     name="'.$questionId.'-options" autocomplete="off">
                                                 <span class="fa fa-font fa-fw" aria-hidden="true"></span>
                                             </label>
@@ -1847,12 +1847,12 @@ HOTSPOT;
         );
         $TBL_USER = Database::get_main_table(TABLE_MAIN_USER);
 
-        $sql = "SELECT *, thp.id AS thp_id 
+        $sql = "SELECT *, thp.id AS thp_id
                 FROM $TBL_TRACK_HOTPOTATOES thp
-                JOIN $TBL_USER u 
+                JOIN $TBL_USER u
                 ON thp.exe_user_id = u.user_id
-                WHERE 
-                    thp.c_id = $courseId AND 
+                WHERE
+                    thp.c_id = $courseId AND
                     exe_name LIKE '$in_hotpot_path%'";
 
         // just count how many answers
@@ -2022,12 +2022,12 @@ HOTSPOT;
         $sql_inner_join_tbl_track_exercices = "
         (
             SELECT DISTINCT ttte.*, if(tr.exe_id,1, 0) as revised
-            FROM $TBL_TRACK_EXERCICES ttte 
+            FROM $TBL_TRACK_EXERCICES ttte
             LEFT JOIN $TBL_TRACK_ATTEMPT_RECORDING tr
             ON (ttte.exe_id = tr.exe_id)
             WHERE
                 c_id = $course_id AND
-                exe_exo_id = $exercise_id 
+                exe_exo_id = $exercise_id
                 $sessionCondition
         )";
 
@@ -2171,7 +2171,7 @@ HOTSPOT;
                 ON (user.user_id = exe_user_id)
                 WHERE
                     te.c_id = $course_id $session_id_and AND
-                    ce.active <> -1 AND 
+                    ce.active <> -1 AND
                     ce.c_id = $course_id
                     $exercise_where
                     $extra_where_conditions
@@ -2780,7 +2780,7 @@ HOTSPOT;
         $minNote = api_get_setting('exercise_min_score');
 
         if ($maxNote != '' && $minNote != '') {
-            if (!empty($weight) && intval($weight) != 0) {
+            if (!empty($weight) && (float) $weight !== 0) {
                 $score = $minNote + ($maxNote - $minNote) * $score / $weight;
             } else {
                 $score = $minNote;
@@ -2833,6 +2833,7 @@ HOTSPOT;
         $percentage = float_format($percentage, 1);
         $score = float_format($score, 1);
         $weight = float_format($weight, 1);
+
         if ($roundValues) {
             $whole = floor($percentage); // 1
             $fraction = $percentage - $whole; // .25
@@ -2871,6 +2872,7 @@ HOTSPOT;
             if ($hidePercentageSign) {
                 $percentageSign = '';
             }
+
             $html = $percentage."$percentageSign ($score / $weight)";
             if ($show_only_percentage) {
                 $html = $percentage.$percentageSign;
@@ -2888,6 +2890,7 @@ HOTSPOT;
         // Ignore other formats and use the configuratio['exercise_score_format'] value
         // But also keep the round values settings.
         $format = api_get_configuration_value('exercise_score_format');
+
         if (!empty($format)) {
             $html = ScoreDisplay::instance()->display_score([$score, $weight], $format);
         }
@@ -2994,7 +2997,6 @@ HOTSPOT;
     }
 
     /**
-     * @param FormValidator $form
      * @param string        $name
      * @param $weight
      * @param $selected
@@ -3052,7 +3054,7 @@ HOTSPOT;
             return '';
         }
         $js = <<<EOT
-        
+
         function updateSelect(element) {
             var spanTag = element.parent().find('span.filter-option');
             var value = element.val();
@@ -3061,7 +3063,7 @@ HOTSPOT;
             spanTag.removeClass('$cssListToString');
             spanTag.addClass(optionClass);
         }
-        
+
         $(function() {
             // Loading values
             $('.exercise_mark_select').on('loaded.bs.select', function() {
@@ -3547,7 +3549,7 @@ EOT;
         $best_score = 0;
         if (!empty($user_results)) {
             foreach ($user_results as $result) {
-                if (!empty($result['exe_weighting']) && intval($result['exe_weighting']) != 0) {
+                if (!empty($result['exe_weighting']) && (float) $result['exe_weighting'] != 0) {
                     $score = $result['exe_result'] / $result['exe_weighting'];
                     if ($score >= $best_score) {
                         $best_score = $score;
@@ -4953,12 +4955,9 @@ EOT;
             ->getScalarResult();
 
         $data = [];
-
         /** @var TrackEExercises $item */
         foreach ($result as $item) {
-            $bestAttemp = self::get_best_attempt_by_user($item['exeUserId'], $exerciseId, $courseId, $sessionId = 0);
-
-            $data[] = $bestAttemp;
+            $data[] = self::get_best_attempt_by_user($item['exeUserId'], $exerciseId, $courseId, $sessionId = 0);
         }
 
         usort(
@@ -4979,7 +4978,6 @@ EOT;
         // flags to display the same position in case of tie
         $lastScore = $data[0]['exe_result'];
         $position = 1;
-
         $data = array_map(
             function ($item) use (&$lastScore, &$position) {
                 if ($item['exe_result'] < $lastScore) {
@@ -5056,7 +5054,6 @@ EOT;
     }
 
     /**
-     * @param Exercise $objExercise
      * @param float    $score
      * @param float    $weight
      * @param bool     $checkPassPercentage
@@ -5298,7 +5295,6 @@ EOT;
     }
 
     /**
-     * @param DateTime $time
      * @param int      $userId
      * @param int      $courseId
      * @param int      $sessionId
@@ -5410,7 +5406,6 @@ EOT;
      *
      * @param float    $totalScore
      * @param float    $totalWeight
-     * @param Exercise $objExercise
      * @param int      $studentId
      * @param string   $courseCode
      * @param int      $sessionId
@@ -5467,5 +5462,105 @@ EOT;
         }
 
         return Category::getDownloadCertificateBlock($certificate);
+    }
+
+    /**
+     * @param int $exeId      ID from track_e_exercises
+     * @param int $userId     User ID
+     * @param int $exerciseId Exercise ID
+     * @param int $courseId   Optional. Coure ID.
+     *
+     * @throws \Doctrine\ORM\ORMException
+     * @throws \Doctrine\ORM\OptimisticLockException
+     * @throws \Doctrine\ORM\TransactionRequiredException
+     *
+     * @return TrackEExercises|null
+     */
+    public static function recalculateResult($exeId, $userId, $exerciseId, $courseId = 0)
+    {
+        if (empty($userId) || empty($exerciseId)) {
+            return null;
+        }
+
+        $em = Database::getManager();
+        /** @var TrackEExercises $trackedExercise */
+        $trackedExercise = $em->getRepository('ChamiloCoreBundle:TrackEExercises')->find($exeId);
+
+        if (empty($trackedExercise)) {
+            return null;
+        }
+
+        if ($trackedExercise->getExeUserId() != $userId ||
+            $trackedExercise->getExeExoId() != $exerciseId
+        ) {
+            return null;
+        }
+
+        $questionList = $trackedExercise->getDataTracking();
+
+        if (empty($questionList)) {
+            return null;
+        }
+
+        $questionList = explode(',', $questionList);
+
+        $exercise = new Exercise($courseId);
+        $courseInfo = $courseId ? api_get_course_info_by_id($courseId) : [];
+
+        if ($exercise->read($exerciseId) === false) {
+            return null;
+        }
+
+        $totalScore = 0;
+        $totalWeight = 0;
+
+        $pluginEvaluation = QuestionOptionsEvaluationPlugin::create();
+
+        $formula = 'true' === $pluginEvaluation->get(QuestionOptionsEvaluationPlugin::SETTING_ENABLE)
+            ? $pluginEvaluation->getFormulaForExercise($exerciseId)
+            : 0;
+
+        if (empty($formula)) {
+            foreach ($questionList as $questionId) {
+                $question = Question::read($questionId, $courseInfo);
+
+                if (false === $question) {
+                    continue;
+                }
+
+                $totalWeight += $question->selectWeighting();
+
+                // We're inside *one* question. Go through each possible answer for this question
+                $result = $exercise->manage_answer(
+                    $exeId,
+                    $questionId,
+                    [],
+                    'exercise_result',
+                    [],
+                    false,
+                    true,
+                    false,
+                    $exercise->selectPropagateNeg(),
+                    [],
+                    [],
+                    true
+                );
+
+                //  Adding the new score.
+                $totalScore += $result['score'];
+            }
+        } else {
+            $totalScore = $pluginEvaluation->getResultWithFormula($exeId, $formula);
+            $totalWeight = $pluginEvaluation->getMaxScore();
+        }
+
+        $trackedExercise
+            ->setExeResult($totalScore)
+            ->setExeWeighting($totalWeight);
+
+        $em->persist($trackedExercise);
+        $em->flush();
+
+        return $trackedExercise;
     }
 }

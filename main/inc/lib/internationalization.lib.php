@@ -112,6 +112,7 @@ function get_lang($variable, $returnEmptyIfNotFound = false, $language = null)
         $initialized = true;
     }
 
+    $languageParameter = $language;
     // Combining both ways for requesting specific language.
     if (empty($language)) {
         $language = $language_interface;
@@ -138,6 +139,7 @@ function get_lang($variable, $returnEmptyIfNotFound = false, $language = null)
     // - from a local variable after reloading the language files - on test server mode or when requested language
     // is different than the genuine interface language.
     $read_global_variables = $is_interface_language;
+
     $langvar = '';
 
     if ($read_global_variables) {
@@ -152,7 +154,16 @@ function get_lang($variable, $returnEmptyIfNotFound = false, $language = null)
                 return '';
             }
         }
+    } else {
+        if (!empty($languageParameter)) {
+            $langPath = api_get_path(SYS_LANG_PATH);
+            if (file_exists($langPath.$language.'/trad4all.inc.php')) {
+                include $langPath.$language.'/trad4all.inc.php';
+                $langvar = $$variable;
+            }
+        }
     }
+
     if (empty($langvar) || !is_string($langvar) && !$returnEmptyIfNotFound) {
         $langvar = $show_special_markup ? SPECIAL_OPENING_TAG.$variable.SPECIAL_CLOSING_TAG : $variable;
     }
@@ -271,8 +282,8 @@ function api_get_language_isocode($language = null, $default_code = 'en')
             // This might happen, in case of calling this function early during the global initialization.
             return $default_code; // This might happen, in case of calling this function early during the global initialization.
         }
-        $sql = "SELECT isocode 
-                FROM ".Database::get_main_table(TABLE_MAIN_LANGUAGE)." 
+        $sql = "SELECT isocode
+                FROM ".Database::get_main_table(TABLE_MAIN_LANGUAGE)."
                 WHERE dokeos_folder = '$language'";
         $sql_result = Database::query($sql);
         if (Database::num_rows($sql_result)) {
@@ -299,8 +310,8 @@ function api_get_language_isocode($language = null, $default_code = 'en')
 function api_get_platform_isocodes()
 {
     $iso_code = [];
-    $sql = "SELECT isocode 
-            FROM ".Database::get_main_table(TABLE_MAIN_LANGUAGE)." 
+    $sql = "SELECT isocode
+            FROM ".Database::get_main_table(TABLE_MAIN_LANGUAGE)."
             ORDER BY isocode ";
     $sql_result = Database::query($sql);
     if (Database::num_rows($sql_result)) {

@@ -26,7 +26,7 @@ $actions .= Display::url(
 );
 
 $action = isset($_GET['action']) ? $_GET['action'] : '';
-$id = isset($_GET['id']) ? intval($_GET['id']) : '';
+$id = isset($_GET['id']) ? (int) $_GET['id'] : '';
 $currentUrl = api_get_self().'?'.api_get_cidreq();
 
 switch ($action) {
@@ -51,8 +51,8 @@ switch ($action) {
 }
 
 $interbreadcrumb[] = [
-    "url" => api_get_path(WEB_CODE_PATH).'document/document.php?'.api_get_cidreq(),
-    "name" => get_lang('Documents'),
+    'url' => api_get_path(WEB_CODE_PATH).'document/document.php?'.api_get_cidreq(),
+    'name' => get_lang('Documents'),
 ];
 $template = new Template(get_lang('DeletedDocuments'));
 $template->assign('files', $files);

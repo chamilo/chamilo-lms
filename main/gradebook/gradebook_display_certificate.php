@@ -13,6 +13,12 @@ if (!api_is_student_boss()) {
     api_protect_course_script(true);
 }
 
+api_block_anonymous_users();
+
+if (!api_is_allowed_to_edit() && !api_is_student_boss()) {
+    api_not_allowed(true);
+}
+
 api_set_more_memory_and_time_limits();
 
 //extra javascript functions for in html head:
@@ -25,12 +31,6 @@ function confirmation() {
 	}
 }
 </script>";
-
-api_block_anonymous_users();
-
-if (!api_is_allowed_to_edit() && !api_is_student_boss()) {
-    api_not_allowed(true);
-}
 
 $categoryId = isset($_GET['cat_id']) ? (int) $_GET['cat_id'] : 0;
 $action = isset($_GET['action']) && $_GET['action'] ? $_GET['action'] : null;

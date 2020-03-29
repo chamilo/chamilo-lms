@@ -68,7 +68,7 @@ if (api_get_configuration_value('save_titles_as_html')) {
         get_lang('Title'),
         true,
         false,
-        ['ToolbarSet' => 'Minimal']
+        ['ToolbarSet' => 'TitleAsHtml']
     );
 } else {
     $form->addText('title', get_lang('Title'));

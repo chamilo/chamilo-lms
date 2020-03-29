@@ -162,7 +162,7 @@ class RedirectionPlugin extends Plugin
     {
         // Check redirection plugin
         $plugin = new AppPlugin();
-        $pluginList = $plugin->get_installed_plugins();
+        $pluginList = $plugin->getInstalledPlugins();
         $redirectionInstalled = in_array('redirection', $pluginList);
         if ($redirectionInstalled) {
             $pluginInfo = $plugin->getPluginInfo('redirection');

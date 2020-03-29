@@ -24,7 +24,7 @@ class Minimal extends Basic
             [
                 'name' => 'basicstyles',
                 'groups' => ['basicstyles', 'cleanup'],
-                'items' => ['Bold', 'Italic', 'Underline', 'Strike', 'Subscript', 'Superscript'],
+                'items' => ['Bold', 'Italic', 'Underline', 'Strike', 'TextColor'],
             ],
             [
                 'name' => 'paragraph',

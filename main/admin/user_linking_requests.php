@@ -87,7 +87,6 @@ if (!empty($action) && $hrm && $assignedId) {
 /**
  * Get the data to fill the tables on screen.
  *
- * @param User $hrm
  * @param int  $status
  *
  * @return array

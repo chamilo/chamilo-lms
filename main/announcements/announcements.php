@@ -27,8 +27,6 @@ $token = Security::get_existing_token();
 $courseId = api_get_course_int_id();
 $_course = api_get_course_info_by_id($courseId);
 $group_id = api_get_group_id();
-$sessionId = api_get_session_id();
-
 $current_course_tool = TOOL_ANNOUNCEMENT;
 $this_section = SECTION_COURSES;
 $nameTools = get_lang('ToolAnnouncement');
@@ -45,20 +43,7 @@ if (!empty($sessionId) && $drhHasAccessToSessionContent) {
     $allowToEdit = $allowToEdit || api_is_drh();
 }
 
-// Configuration settings
-$display_announcement_list = true;
-$display_form = false;
-$display_title_list = true;
-
-// Maximum title messages to display
-$maximum = '12';
-
-// Length of the titles
-$length = '36';
-
 // Database Table Definitions
-$tbl_courses = Database::get_main_table(TABLE_MAIN_COURSE);
-$tbl_sessions = Database::get_main_table(TABLE_MAIN_SESSION);
 $tbl_announcement = Database::get_course_table(TABLE_ANNOUNCEMENT);
 $tbl_item_property = Database::get_course_table(TABLE_ITEM_PROPERTY);
 
@@ -100,8 +85,6 @@ $searchFormToString = '';
 
 $logInfo = [
     'tool' => TOOL_ANNOUNCEMENT,
-    'tool_id' => 0,
-    'tool_id_detail' => 0,
     'action' => $action,
 ];
 Event::registerLog($logInfo);
@@ -128,7 +111,6 @@ switch ($action) {
                 $sortDirection = 'ASC';
             }
 
-            $announcementInfo = AnnouncementManager::get_by_id($courseId, $thisAnnouncementId);
             $sql = "SELECT DISTINCT announcement.id, announcement.display_order
                     FROM $tbl_announcement announcement 
                     INNER JOIN $tbl_item_property itemproperty
@@ -322,7 +304,7 @@ switch ($action) {
         break;
     case 'delete':
         /* Delete announcement */
-        $id = intval($_GET['id']);
+        $id = (int) $_GET['id'];
         if ($sessionId != 0 && api_is_allowed_to_session_edit(false, true) == false) {
             api_not_allowed();
         }
@@ -449,7 +431,14 @@ switch ($action) {
             } elseif (isset($_GET['remindallinactives']) && $_GET['remindallinactives'] === 'true') {
                 // we want to remind inactive users. The $_GET['since'] parameter
                 // determines which users have to be warned (i.e the users who have been inactive for x days or more
-                $since = isset($_GET['since']) ? (int) $_GET['since'] : 6;
+                $since = 6;
+                if (isset($_GET['since'])) {
+                    if ($_GET['since'] === 'never') {
+                        $since = 'never';
+                    } else {
+                        $since = (int) $_GET['since'];
+                    }
+                }
 
                 // Getting the users who have to be reminded
                 $to = Tracking::getInactiveStudentsInCourse(

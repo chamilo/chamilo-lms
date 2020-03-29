@@ -460,47 +460,6 @@ function get_course_user_info($user_id)
 }
 
 /**
- * get the main user information.
- *
- * @author - Hugues Peeters <peeters@ipm.ucl.ac.be>
- * @author - Christophe Gesche <gesche@ipm.ucl.ac.be>
- *
- * @param int $user_id user id as stored in the Dokeos main db
- *
- * @return array containing user info as 'lastName', 'firstName', 'email', 'role'
- */
-function get_main_user_info($user_id, $courseCode)
-{
-    $user_id = (int) $user_id;
-    $courseCode = Database::escape_string($courseCode);
-    $courseId = api_get_course_int_id($courseCode);
-    if (0 == $user_id) {
-        return false;
-    }
-
-    $table_course_user = Database::get_main_table(TABLE_MAIN_COURSE_USER);
-    $table_user = Database::get_main_table(TABLE_MAIN_USER);
-    $sql = "SELECT  u.*, u.lastname lastName, u.firstname firstName,
-                    u.email, u.picture_uri picture,
-                    cu.status status, cu.is_tutor as tutor_id
-            FROM    $table_user u, $table_course_user cu
-            WHERE   u.user_id = cu.user_id AND cu.relation_type<>".COURSE_RELATION_TYPE_RRHH."
-            AND     u.user_id = $user_id
-            AND     cu.c_id = $courseId";
-
-    $result = Database::query($sql);
-
-    if (Database::num_rows($result) > 0) {
-        $userInfo = Database::fetch_array($result, 'ASSOC');
-        $userInfo['password'] = '';
-
-        return $userInfo;
-    }
-
-    return false;
-}
-
-/**
  * get the user content of a categories plus the categories definition.
  *
  * @author - Hugues Peeters <peeters@ipm.ucl.ac.be>

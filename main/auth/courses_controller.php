@@ -1,6 +1,7 @@
 <?php
 /* For licensing terms, see /license.txt */
 
+
 use Chamilo\CoreBundle\Entity\Repository\SequenceRepository;
 use Chamilo\CoreBundle\Entity\SequenceResource;
 use Chamilo\CoreBundle\Entity\SessionRelCourse;
@@ -512,6 +513,7 @@ class CoursesController
         $includeText = false,
         $btnBing = false
     ) {
+        $sessionId = (int) $sessionId;
         if ($btnBing) {
             $btnBing = 'btn-lg btn-block';
         } else {
@@ -522,7 +524,7 @@ class CoursesController
             $url .= 'sequence.ajax.php?';
             $url .= http_build_query([
                 'a' => 'get_requirements',
-                'id' => intval($sessionId),
+                'id' => $sessionId,
                 'type' => SequenceResource::SESSION_TYPE,
             ]);
 
@@ -552,7 +554,7 @@ class CoursesController
             $url .= 'auth/courses.php?';
             $url .= http_build_query([
                 'action' => 'subscribe_to_session',
-                'session_id' => intval($sessionId),
+                'session_id' => $sessionId,
             ]);
 
             $result = Display::toolbarButton(
@@ -588,7 +590,7 @@ class CoursesController
         $hook = HookResubscribe::create();
         if (!empty($hook)) {
             $hook->setEventData([
-                'session_id' => intval($sessionId),
+                'session_id' => $sessionId,
             ]);
             try {
                 $hook->notifyResubscribe(HOOK_EVENT_TYPE_PRE);

@@ -86,6 +86,12 @@ class UserScormsProgressScript extends BaseScript
         );
 
         while ($row = \Database::fetch_assoc($result)) {
+            if (!$this->isLoadedUser($row['user_id']) ||
+                !$this->isMigratedScorm($row['lp_id'])
+            ) {
+                continue;
+            }
+
             yield $row;
         }
     }

@@ -1261,8 +1261,9 @@ class UserRepository extends EntityRepository
             if ($login) {
                 $lastLogin = $login->getLoginDate();
             }
+        } else {
+            $user->setLastLogin($lastLogin);
         }
-        $user->setLastLogin($lastLogin);
 
         $dateNormalizer = new GetSetMethodNormalizer();
         $dateNormalizer->setCircularReferenceHandler(function ($object) {

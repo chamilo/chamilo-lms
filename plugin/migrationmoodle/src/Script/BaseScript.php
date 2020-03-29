@@ -46,8 +46,8 @@ abstract class BaseScript
             \Database::query(
                 "SELECT COUNT(pmi.id) AS nbr
                     FROM plugin_migrationmoodle_item pmi
-                    INNER JOIN plugin_migrationmoodle_task pmt ON pmi.task_id pmt.id
-                    WHERE pmt.name = '$taskName' AND pmi.loade_id = $id"
+                    INNER JOIN plugin_migrationmoodle_task pmt ON pmi.task_id = pmt.id
+                    WHERE pmt.name = '$taskName' AND pmi.loaded_id = $id"
             )
         );
 

@@ -27,7 +27,7 @@
 {% endif %}
 
 {% if subtitle %}
-<div style="padding-bottom: 20px; margin-top: 20px;">
+<div style="padding-bottom: 20px; margin-top: 20px; font-weight: bold;">
     {{ subtitle }}
 </div>
 {% endif %}

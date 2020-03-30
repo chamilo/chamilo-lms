@@ -881,40 +881,34 @@ div.system_announcement_content {
 }
 
 /* print table pdf */
-.data_table tr.row_even {
-	background-color: #fff;
-}
-
-.data_table td .highlight {
-	font-weight: bold;
+.data_table{
+	width: 100%;
+	padding: 0;
+	border: 1px solid #b5cae7;
+	border-spacing: 0;
+	margin: 0 0 18px;
 }
 
 .data_table td {
 	padding: 5px;
-	border-bottom: 1px solid #b0b0b0;
-	border-right: 1px dotted #e1e1e1;
-	border-left: 1px dotted #e1e1e1;
+	border-bottom: 1px solid #b5cae7;
+	border-right: 1px solid #b5cae7;
+	border-top: 1px solid #b5cae7;
 	text-align: left;
-}
-.data_table {
-	margin-bottom: 18px;
-	width: 100%;
-	border: 1px solid #DDDDDD;
-}
-.data_table td {
 	font-size: 12px;
+	color: #666666;
 }
+
 .data_table th, .data_table td {
-	border-top: 1px solid #DDDDDD;
 	line-height: 18px;
 	padding: 10px;
 }
 .data_table th {
 	padding: 8px 10px;
-	font-weight: normal;
-	background-color: #EEEEEE;
-	border-bottom: 1px solid #DDDDDD;
-	color: #333;
+	font-weight: bold;
+	background-color: #eef5fa;
+	border-bottom: 2px solid #b5cae7;
+	color: #4171b5;
 }
 .data_table th a {
 	color: #333;
@@ -938,37 +932,43 @@ div.system_announcement_content {
 	background-color: #F9F9F9;
 }
 
+.data-title .page-header{
+	color: #000;
+	font-weight: bold;
+	border-bottom: 1px solid #b5cae7;
+}
+.date-calendar .page-header{
+	color: #000;
+	font-weight: bold;
+	border-bottom: 1px solid #b5cae7;
+}
 
-.table_print {
-	border: 1px solid #B8B8B8;
-	background-color: #FFFFFF;
+.table_print{
 	width: 100%;
+	padding: 0;
+	border: 1px solid #CEE0CC;
+	border-spacing: 0;
+	margin: 0 0 18px;
+}
+
+.table_print td {
+	padding: 5px;
+	border-bottom: 1px solid #CEE0CC;
+	border-right: 1px solid #CEE0CC;
+	border-top: 1px solid #CEE0CC;
 	text-align: left;
-	border-collapse: collapse;
-}
-.table_print td, .table_print th {
-	border: 1px solid #B8B8B8;
-	padding: 5px 4px;
-}
-.table_print tbody td {
-	font-size: 13px;
+	font-size: 12px;
 	color: #666666;
 }
-.table_print thead {
-	border-bottom: 0px solid #B8B8B8;
-}
-.table_print thead th {
-	font-size: 15px;
-	font-weight: bold;
-	color: #000000;
-	background: #CFCFCF;
-	text-align: left;
-	border-left: 0px solid #D0E4F5;
-}
-.table_print thead th:first-child {
-	border-left: none;
-}
 
-.table_print tfoot td {
-	font-size: 14px;
+.table_print th, .table_print td {
+	line-height: 18px;
+	padding: 10px;
+}
+.table_print th {
+	padding: 8px 10px;
+	font-weight: bold;
+	background-color: #CEE0CC;
+	border-bottom: 2px solid #4F7849;
+	color: #4F7849;
 }

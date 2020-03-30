@@ -82,11 +82,14 @@ api_request_uri();
 
 // Set web proxy environment variables
 foreach ([
-             api_get_configuration_sub_value('proxy_settings/stream_context_create/https/proxy'),
-             api_get_configuration_sub_value('proxy_settings/stream_context_create/http/proxy'),
-             api_get_configuration_sub_value('proxy_settings/curl_setopt_array/CURLOPT_PROXY'),
-         ] as $value) {
-    if ($value && is_string($value)) {
+             'proxy_settings/stream_context_create/https/proxy',
+             'proxy_settings/stream_context_create/http/proxy',
+             'proxy_settings/curl_setopt_array/CURLOPT_PROXY',
+         ] as $path) {
+    $value = api_get_configuration_sub_value($path);
+    if (!empty($value) && is_string($value)) {
+        // libcurl reads environment variable https_proxy: https://curl.haxx.se/libcurl/c/libcurl-env.html
+        // \GuzzleHttp\Client::configureDefaults reads environment variable HTTPS_PROXY
         foreach (['https_proxy', 'http_proxy', 'HTTPS_PROXY', 'HTTP_PROXY'] as $envVar) {
             if (false === getenv($envVar)) {
                 putenv("$envVar=$value");

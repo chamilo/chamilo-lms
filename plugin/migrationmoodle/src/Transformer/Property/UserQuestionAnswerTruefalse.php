@@ -42,7 +42,7 @@ class UserQuestionAnswerTruefalse extends LoadedKeyLookup
             \Database::get_course_table(TABLE_QUIZ_ANSWER),
             [
                 'where' => [
-                    'question_id = ? AND answer = ?' => [$questionId, "<p>$mResponseSummary</p>"],
+                    'question_id = ? AND answer = ?' => [$questionId, utf8_encode("<p>$mResponseSummary</p>")],
                 ],
             ],
             'first'

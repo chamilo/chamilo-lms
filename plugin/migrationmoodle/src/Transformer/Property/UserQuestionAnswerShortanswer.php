@@ -30,6 +30,6 @@ class UserQuestionAnswerShortanswer implements TransformPropertyInterface
 
         $width = LessonAnswersShortAnswerLoader::INPUT_WIDTH;
 
-        return "[$mRightAnswer][$mResponseSummary][$mFraction]::$mDefaultMark:$width:0@";
+        return utf8_encode("[$mRightAnswer][$mResponseSummary][$mFraction]::$mDefaultMark:$width:0@");
     }
 }

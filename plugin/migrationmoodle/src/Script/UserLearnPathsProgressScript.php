@@ -78,13 +78,23 @@ class UserLearnPathsProgressScript extends BaseScript
             "SELECT lpv.iid, lpv.lp_id, lpv.user_id, lpv.c_id
                 FROM $tblLpView lpv
                 INNER JOIN $tblLp lp ON lpv.lp_id = lp.iid
-                WHERE lp.lp_type = 1"
+                INNER JOIN plugin_migrationmoodle_item pmi ON pmi.loaded_id = lpv.user_id
+                INNER JOIN plugin_migrationmoodle_task pmt ON pmi.task_id = pmt.id
+                WHERE lp.lp_type = 1 AND pmt.name = 'users_task'"
         );
 
         while ($row = \Database::fetch_assoc($result)) {
+            if (!$this->isLoadedUser($row['user_id']) ||
+                !$this->isMigratedLearningPath($row['lp_id'])
+            ) {
+                continue;
+            }
+
             yield $row;
         }
     }
+
+
 
     /**
      * @param int $userId

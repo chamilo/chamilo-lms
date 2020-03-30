@@ -6,6 +6,7 @@ namespace Chamilo\PluginBundle\MigrationMoodle\Task;
 use Chamilo\PluginBundle\MigrationMoodle\Extractor\LoadedUsersFilterExtractor;
 use Chamilo\PluginBundle\MigrationMoodle\Loader\UserSessionLoader;
 use Chamilo\PluginBundle\MigrationMoodle\Transformer\BaseTransformer;
+use Chamilo\PluginBundle\MigrationMoodle\Transformer\Property\CoursesArrayLookup;
 use Chamilo\PluginBundle\MigrationMoodle\Transformer\Property\LoadedUserLookup;
 use Chamilo\PluginBundle\MigrationMoodle\Transformer\Property\SessionName;
 
@@ -36,6 +37,7 @@ class UserSessionsTask extends BaseTask
             'query' => "SELECT
                     u.id,
                     u.username,
+                    GROUP_CONCAT(c.id) course_ids,
                     GROUP_CONCAT(c.shortname SEPARATOR '".self::SEPARATOR_NAME."') session_name
                 FROM mdl_role_assignments ra
                 INNER JOIN mdl_role r ON ra.roleid = r.id
@@ -65,6 +67,10 @@ class UserSessionsTask extends BaseTask
                     'properties' => ['id'],
                 ],
                 'courses_list' => 'session_name',
+                'course_ids' => [
+                    'class' => CoursesArrayLookup::class,
+                    'properties' => ['course_ids'],
+                ],
             ],
         ];
     }

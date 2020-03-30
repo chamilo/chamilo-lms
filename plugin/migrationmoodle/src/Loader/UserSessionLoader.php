@@ -4,7 +4,6 @@
 namespace Chamilo\PluginBundle\MigrationMoodle\Loader;
 
 use Chamilo\PluginBundle\MigrationMoodle\Interfaces\LoaderInterface;
-use Chamilo\PluginBundle\MigrationMoodle\Task\UserSessionsTask;
 
 /**
  * Class UserSessionLoader.
@@ -21,17 +20,13 @@ class UserSessionLoader implements LoaderInterface
         $datetime = api_get_utc_datetime();
         $coachId = 1;
 
-        $courseCodes = explode(UserSessionsTask::SEPARATOR_NAME, $incomingData['courses_list']);
-        $courseIds = [];
-
-        foreach ($courseCodes as $courseCode) {
-            $courseId = api_get_course_int_id($courseCode);
-
+        foreach ($incomingData['course_ids'] as $courseId) {
             if (empty($courseId)) {
-                throw new \Exception("Course ($courseCode) not found when creating course session for user ({$incomingData['user_id']})");
+                throw new \Exception(
+                    "Course ($courseId) not found when creating course session for user ({$incomingData['user_id']}). "
+                        .'Session will not be created.'
+                );
             }
-
-            $courseIds[] = $courseId;
         }
 
         $urlId = \MigrationMoodlePlugin::create()->getAccessUrlId();
@@ -56,7 +51,7 @@ class UserSessionLoader implements LoaderInterface
             false,
             $urlId
         );
-        \SessionManager::add_courses_to_session($sessionId, $courseIds);
+        \SessionManager::add_courses_to_session($sessionId, $incomingData['course_ids']);
         \SessionManager::subscribeUsersToSession($sessionId, [$incomingData['user_id']]);
 
         return $sessionId;

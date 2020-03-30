@@ -8655,6 +8655,47 @@ function api_get_configuration_value($variable)
 }
 
 /**
+ * Retreives and returns a value in a hierarchical configuration array
+ * api_get_configuration_sub_value('a/b/c') returns api_get_configuration_value('a')['b']['c'].
+ *
+ * @param string $path      the successive array keys, seperated by the separator
+ * @param mixed  $default   value to be returned if not found, null by default
+ * @param string $separator '/' by default
+ * @param array  $array     the active configuration array by default
+ *
+ * @return mixed the found value or $default
+ */
+function api_get_configuration_sub_value($path, $default = null, $separator = '/', $array = null)
+{
+    $pos = strpos($path, $separator);
+    if (false === $pos) {
+        if (is_null($array)) {
+            return api_get_configuration_value($path);
+        }
+        if (is_array($array) && array_key_exists($path, $array)) {
+            return $array[$path];
+        }
+
+        return $default;
+    }
+    $key = substr($path, 0, $pos);
+    if (is_null($array)) {
+        $newArray = api_get_configuration_value($key);
+    } elseif (is_array($array) && array_key_exists($key, $array)) {
+        $newArray = $array[$key];
+    } else {
+        return $default;
+    }
+    if (is_array($newArray)) {
+        $newPath = substr($path, $pos + 1);
+
+        return api_get_configuration_sub_value($newPath, $default, $separator, $newArray);
+    }
+
+    return $default;
+}
+
+/**
  * Returns supported image extensions in the portal.
  *
  * @param bool $supportVectors Whether vector images should also be accepted or not

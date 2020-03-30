@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Base class for <input /> form elements
  *
@@ -33,7 +34,6 @@
  */
 class HTML_QuickForm_input extends HTML_QuickForm_element
 {
-
     /**
      * Sets the element type
      *

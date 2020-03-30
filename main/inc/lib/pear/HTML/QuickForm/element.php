@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Base class for form elements
  *
@@ -242,9 +243,7 @@ class HTML_QuickForm_element extends HTML_Common
      */
     public function getCleanValue()
     {
-        $value = $this->cleanValueFromParameter($this->getValue());
-
-        return $value;
+        return $this->cleanValueFromParameter($this->getValue());
     }
 
     /**
@@ -254,9 +253,7 @@ class HTML_QuickForm_element extends HTML_Common
      */
     public function cleanValueFromParameter($value)
     {
-        $value = @htmlspecialchars($value, ENT_COMPAT, HTML_Common::charset());
-
-        return $value;
+        return @htmlspecialchars($value, ENT_COMPAT, HTML_Common::charset());
     }
 
     /**
@@ -316,14 +313,16 @@ class HTML_QuickForm_element extends HTML_Common
     {
         if (!$this->_persistantFreeze) {
             return '';
-        } else {
-            $id = $this->getAttribute('id');
-            return '<input' . $this->_getAttrString(array(
-                       'type'  => 'hidden',
-                       'name'  => $this->getName(),
-                       'value' => $this->getValue()
-                   ) + (isset($id)? array('id' => $id): array())) . ' />';
         }
+
+        $id = $this->getAttribute('id');
+
+        return '<input' . $this->_getAttrString(array(
+                   'type'  => 'hidden',
+                   'name'  => $this->getName(),
+                   'value' => $this->getValue()
+               ) + (isset($id)? array('id' => $id): array())) . ' />';
+
     }
 
     /**
@@ -523,6 +522,7 @@ class HTML_QuickForm_element extends HTML_Common
         if (null === $value) {
             $value = $this->getValue();
         }
+
         return $this->_prepareValue($value, $assoc);
     }
 

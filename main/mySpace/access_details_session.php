@@ -517,7 +517,7 @@ if ($formByDay->validate()) {
     ];
     $pdfName = api_strtoupper($userInfo['lastname'].'_'.$userInfo['firstname']).'_'.api_get_local_time();
     @$pdf = new PDF('A4', $params['orientation'], $params);
-    @$pdf->setBackground($tpl->theme);
+    @$pdf->setBackground($tpl->theme, true);
     @$pdf->content_to_pdf(
         $content,
         '',

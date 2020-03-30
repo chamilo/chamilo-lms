@@ -159,7 +159,8 @@ table.table td {
     text-align: center;
     background-color: #EDEDED;
     padding-top: 10px;
-    border-radis: 10px;
+    border-radius: 10px;
+    font-size: 14px;
 }
 
 .table_print{

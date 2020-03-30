@@ -498,15 +498,15 @@ class PDF
             }
         }
 
+        $cssBootstrap = file_get_contents(api_get_path(SYS_PATH).'web/assets/bootstrap/dist/css/bootstrap.min.css');
         if ($addDefaultCss) {
             $css_file = api_get_path(SYS_CSS_PATH).'themes/'.api_get_visual_theme().'/print.css';
             if (!file_exists($css_file)) {
                 $css_file = api_get_path(SYS_CSS_PATH).'/print.css';
             }
-
             $cssContent = file_get_contents($css_file);
-
             try {
+                $this->pdf->WriteHTML($cssBootstrap, 1);
                 $this->pdf->WriteHTML($cssContent, 1);
             } catch (MpdfException $e) {
                 error_log($e);

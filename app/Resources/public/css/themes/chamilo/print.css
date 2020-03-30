@@ -941,6 +941,11 @@ div.system_announcement_content {
 	color: #000;
 	font-weight: bold;
 	border-bottom: 1px solid #b5cae7;
+	border-top: 1px solid #b5cae7;
+	text-align: center;
+	background-color: #EDEDED;
+	padding-top: 10px;
+	border-radis: 10px;
 }
 
 .table_print{
@@ -949,6 +954,7 @@ div.system_announcement_content {
 	border: 1px solid #CEE0CC;
 	border-spacing: 0;
 	margin: 0 0 18px;
+	background-color: #F3FFE6;
 }
 
 .table_print td {

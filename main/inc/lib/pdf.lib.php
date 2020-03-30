@@ -155,7 +155,7 @@ class PDF
 
         $css_file = api_get_path(SYS_CSS_PATH).'themes/'.$tpl->theme.'/print.css';
         if (!file_exists($css_file)) {
-            $css_file = api_get_path(SYS_CSS_PATH).'print.css';
+            $css_file = api_get_path(SYS_CSS_PATH).'/print.css';
         }
         $css = file_get_contents($css_file);
 
@@ -498,22 +498,18 @@ class PDF
             }
         }
 
+        $cssBootstrap = file_get_contents(api_get_path(SYS_PATH).'web/assets/bootstrap/dist/css/bootstrap.min.css');
         if ($addDefaultCss) {
-            $basicStyles = [
-                api_get_path(SYS_PATH).'web/assets/bootstrap/dist/css/bootstrap.min.css',
-                api_get_path(SYS_PATH).'web/css/base.css',
-                api_get_path(SYS_PATH).'web/css/themes/'.api_get_visual_theme().'/default.css',
-                api_get_path(SYS_PATH).'web/css/themes/'.api_get_visual_theme().'/print.css',
-            ];
-            foreach ($basicStyles as $style) {
-                if (file_exists($style)) {
-                    $cssContent = file_get_contents($style);
-                    try {
-                        $this->pdf->WriteHTML($cssContent, 1);
-                    } catch (MpdfException $e) {
-                        error_log($e);
-                    }
-                }
+            $css_file = api_get_path(SYS_CSS_PATH).'themes/'.api_get_visual_theme().'/print.css';
+            if (!file_exists($css_file)) {
+                $css_file = api_get_path(SYS_CSS_PATH).'/print.css';
+            }
+            $cssContent = file_get_contents($css_file);
+            try {
+                $this->pdf->WriteHTML($cssBootstrap, 1);
+                $this->pdf->WriteHTML($cssContent, 1);
+            } catch (MpdfException $e) {
+                error_log($e);
             }
         }
 
@@ -903,20 +899,20 @@ class PDF
     /**
      * @param string $theme
      *
+     * @param bool $fullPage
      * @throws MpdfException
      */
-    public function setBackground($theme)
+    public function setBackground($theme, $fullPage = false)
     {
         $themeName = empty($theme) ? api_get_visual_theme() : $theme;
         $themeDir = \Template::getThemeDir($themeName);
         $customLetterhead = $themeDir.'images/letterhead.png';
         $urlPathLetterhead = api_get_path(SYS_CSS_PATH).$customLetterhead;
 
-        $urlWebLetterhead = '#FFFFFF';
-        $fullPage = false;
         if (file_exists($urlPathLetterhead)) {
-            $fullPage = true;
             $urlWebLetterhead = 'url('.api_get_path(WEB_CSS_PATH).$customLetterhead.')';
+        } else {
+            $urlWebLetterhead = 'url('.api_get_path(WEB_CSS_PATH).'themes/chamilo/images/letterhead.png)';
         }
 
         if ($fullPage) {

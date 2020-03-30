@@ -460,7 +460,7 @@ if ($formByDay->validate()) {
             continue;
         }
 
-        $table = new HTML_Table(['class' => ' data_table']);
+        $table = new HTML_Table(['class' => ' table_print']);
         $headers = [
             get_lang('FirstLogin'),
             get_lang('LastConnection'),

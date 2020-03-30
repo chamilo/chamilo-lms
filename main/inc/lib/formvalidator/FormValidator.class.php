@@ -52,8 +52,10 @@ class FormValidator extends HTML_QuickForm
                 $attributes['class'] = 'form-horizontal';
                 break;
             case self::LAYOUT_INLINE:
-            case self::LAYOUT_BOX:
                 $attributes['class'] = 'form-inline';
+                break;
+            case self::LAYOUT_BOX:
+                $attributes['class'] = 'form-inline-box';
                 break;
         }
 
@@ -1165,7 +1167,8 @@ EOT;
         $returnValue = '';
 
         /** @var HTML_QuickForm_element $element */
-        foreach ($this->_elements as $element) {
+        foreach ($this->_elements as &$element) {
+            $element->setLayout($this->getLayout());
             $elementError = parent::getElementError($element->getName());
             if (!is_null($elementError)) {
                 $returnValue .= Display::return_message($elementError, 'warning').'<br />';
@@ -1177,12 +1180,8 @@ EOT;
         // Add div-element which is to hold the progress bar
         $id = $this->getAttribute('id');
         if (isset($this->with_progress_bar) && $this->with_progress_bar) {
-            // Deprecated
-            // $icon = Display::return_icon('progress_bar.gif');
-
             // @todo improve UI
             $returnValue .= '<br />
-
             <div id="loading_div_'.$id.'" class="loading_div" style="display:none;margin-left:40%; margin-top:10px; height:50px;">
                 <div class="wobblebar-loader"></div>
             </div>

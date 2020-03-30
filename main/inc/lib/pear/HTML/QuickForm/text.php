@@ -103,9 +103,15 @@ class HTML_QuickForm_text extends HTML_QuickForm_input
         $size = $this->calculateSize();
         $attributes = $this->getAttributes();
 
+        $template = '<label {label-for}>{label}</label>
+                        <div class="input-group">
+                            {icon}
+                            {element}
+                        </div>';
+
         switch ($layout) {
             case FormValidator::LAYOUT_INLINE:
-                return '
+                $template = '
                 <div class="form-group {error_class}">
                     <label {label-for} >
                         <!-- BEGIN required --><span class="form_required">*</span><!-- END required -->
@@ -115,7 +121,7 @@ class HTML_QuickForm_text extends HTML_QuickForm_input
                 </div>';
                 break;
             case FormValidator::LAYOUT_HORIZONTAL:
-                return '
+                $template = '
                 <div class="form-group {error_class}">
                     <label {label-for} class="col-sm-'.$size[0].' control-label" >
                         <!-- BEGIN required --><span class="form_required">*</span><!-- END required -->
@@ -143,7 +149,6 @@ class HTML_QuickForm_text extends HTML_QuickForm_input
             case FormValidator::LAYOUT_BOX_NO_LABEL:
                 if (isset($attributes['custom']) && $attributes['custom'] == true) {
                     $template = '
-                        <label {label-for}>{label}</label>
                         <div class="input-group">
                             {icon}
                             {element}
@@ -154,17 +159,11 @@ class HTML_QuickForm_text extends HTML_QuickForm_input
                             </div>
                         </div>
                     ';
-                } else {
-                    $template = '
-                        <label {label-for}>{label}</label>
-                        <div class="input-group">
-                            {icon}
-                            {element}
-                        </div>';
                 }
-                return $template;
                 break;
         }
+
+        return $template;
     }
 
     /**

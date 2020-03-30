@@ -415,8 +415,10 @@ class HTML_QuickForm_group extends HTML_QuickForm_element
         $this->_createElementsIfNotExist();
         $renderer->startGroup($this, $required, $error);
         $name = $this->getName();
+        /** @var HTML_QuickForm_element $element */
         foreach (array_keys($this->_elements) as $key) {
             $element = &$this->_elements[$key];
+            $element->setLayout($this->getLayout());
 
             if ($this->_appendName) {
                 $elementName = $element->getName();

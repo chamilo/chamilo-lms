@@ -650,6 +650,7 @@ class HTML_QuickForm extends HTML_Common
         }
         // If not done, the elements will appear in reverse order
         ksort($this->_elements);
+
         return $element;
     }
 
@@ -683,8 +684,8 @@ class HTML_QuickForm extends HTML_Common
         if ($createElement) {
             return $this->createElement('group', $name, $groupLabel, $elements, $separator, $appendName);
         }
-        $group = & $this->addElement('group', $name, $groupLabel, $elements, $separator, $appendName);
-        return $group;
+
+        return $this->addElement('group', $name, $groupLabel, $elements, $separator, $appendName);
     }
 
     /**

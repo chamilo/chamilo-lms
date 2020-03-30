@@ -45,9 +45,6 @@ class HTML_QuickForm_checkbox extends HTML_QuickForm_input
     public $labelClass;
     public $checkboxClass;
 
-    // }}}
-    // {{{ constructor
-
     /**
      * Class constructor
      *
@@ -99,17 +96,14 @@ class HTML_QuickForm_checkbox extends HTML_QuickForm_input
      * @access    public
      * @return    void
      */
-    function setChecked($checked)
+    public function setChecked($checked)
     {
         if (!$checked) {
             $this->removeAttribute('checked');
         } else {
             $this->updateAttributes(array('checked' => 'checked'));
         }
-    } //end func setChecked
-
-    // }}}
-    // {{{ getChecked()
+    }
 
     /**
      * Returns whether a checkbox is checked
@@ -118,13 +112,10 @@ class HTML_QuickForm_checkbox extends HTML_QuickForm_input
      * @access    public
      * @return    bool
      */
-    function getChecked()
+    public function getChecked()
     {
         return (bool)$this->getAttribute('checked');
-    } //end func getChecked
-
-    // }}}
-    // {{{ toHtml()
+    }
 
     /**
      * Returns the checkbox element in HTML
@@ -144,7 +135,7 @@ class HTML_QuickForm_checkbox extends HTML_QuickForm_input
             $checkClass = $this->checkboxClass;
             $name = $this->_attributes['name'];
             $label ='<div id="'.$name.'" class="'.$checkClass.'">
-                <label class="'.$labelClass.'">' .
+                <label class="'.$labelClass.'">'.
                     HTML_QuickForm_input::toHtml().' '.$this->_text.
                 '</label>
                 </div>
@@ -153,7 +144,7 @@ class HTML_QuickForm_checkbox extends HTML_QuickForm_input
             return $label;
         }
 
-        return HTML_QuickForm_input::toHtml() . $label;
+        return HTML_QuickForm_input::toHtml().$label;
     }
 
     /**
@@ -164,7 +155,6 @@ class HTML_QuickForm_checkbox extends HTML_QuickForm_input
     public function getTemplate($layout)
     {
         $size = $this->calculateSize();
-
         switch ($layout) {
             case FormValidator::LAYOUT_INLINE:
                 return '
@@ -172,10 +162,10 @@ class HTML_QuickForm_checkbox extends HTML_QuickForm_input
                     <label {label-for} >
                         <!-- BEGIN required --><span class="form_required">*</span><!-- END required -->
                         {label}
-                    </label>     
+                    </label>
                 </div>
-                <div class="input-group {error_class}">                               
-                    {element}                     
+                <div class="input-group {error_class}">
+                    {element}
                 </div>
                 ';
                 break;
@@ -222,18 +212,15 @@ class HTML_QuickForm_checkbox extends HTML_QuickForm_input
      * @access    public
      * @return    string
      */
-    function getFrozenHtml()
+    public function getFrozenHtml()
     {
         if ($this->getChecked()) {
-            return '<code>[x]</code>' .
-                   $this->_getPersistantData();
+            return '<code>[x]</code>'.
+                $this->_getPersistantData();
         } else {
             return '<code>[ ]</code>';
         }
-    } //end func getFrozenHtml
-
-    // }}}
-    // {{{ setText()
+    }
 
     /**
      * Sets the checkbox text
@@ -243,13 +230,10 @@ class HTML_QuickForm_checkbox extends HTML_QuickForm_input
      * @access    public
      * @return    void
      */
-    function setText($text)
+    public function setText($text)
     {
         $this->_text = $text;
-    } //end func setText
-
-    // }}}
-    // {{{ getText()
+    }
 
     /**
      * Returns the checkbox text
@@ -258,13 +242,10 @@ class HTML_QuickForm_checkbox extends HTML_QuickForm_input
      * @access    public
      * @return    string
      */
-    function getText()
+    public function getText()
     {
         return $this->_text;
-    } //end func getText
-
-    // }}}
-    // {{{ setValue()
+    }
 
     /**
      * Sets the value of the form element
@@ -274,13 +255,10 @@ class HTML_QuickForm_checkbox extends HTML_QuickForm_input
      * @access    public
      * @return    void
      */
-    function setValue($value)
+    public function setValue($value)
     {
         return $this->setChecked($value);
-    } // end func setValue
-
-    // }}}
-    // {{{ getValue()
+    }
 
     /**
      * Returns the value of the form element
@@ -289,13 +267,10 @@ class HTML_QuickForm_checkbox extends HTML_QuickForm_input
      * @access    public
      * @return    bool
      */
-    function getValue()
+    public function getValue()
     {
         return $this->getChecked();
-    } // end func getValue
-
-    // }}}
-    // {{{ onQuickFormEvent()
+    }
 
     /**
      * Called by HTML_QuickForm whenever form event is made on this element
@@ -307,7 +282,7 @@ class HTML_QuickForm_checkbox extends HTML_QuickForm_input
      * @access    public
      * @return    void
      */
-    function onQuickFormEvent($event, $arg, &$caller)
+    public function onQuickFormEvent($event, $arg, &$caller)
     {
         switch ($event) {
             case 'updateValue':
@@ -335,16 +310,14 @@ class HTML_QuickForm_checkbox extends HTML_QuickForm_input
             default:
                 parent::onQuickFormEvent($event, $arg, $caller);
         }
-        return true;
-    } // end func onQuickFormEvent
 
-    // }}}
-    // {{{ exportValue()
+        return true;
+    }
 
    /**
     * Return true if the checkbox is checked, null if it is not checked (getValue() returns false)
     */
-    function exportValue(&$submitValues, $assoc = false)
+    public function exportValue(&$submitValues, $assoc = false)
     {
         $value = $this->_findValue($submitValues);
         if (null === $value) {

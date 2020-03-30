@@ -8658,9 +8658,9 @@ function api_get_configuration_value($variable)
  * api_get_configuration_sub_value('a/b/c') returns api_get_configuration_value('a')['b']['c'].
  *
  * @param string $path      the successive array keys, seperated by the separator
- * @param mixed $default    value to be returned if not found, null by default
+ * @param mixed  $default   value to be returned if not found, null by default
  * @param string $separator '/' by default
- * @param array $array      the active configuration array by default
+ * @param array  $array     the active configuration array by default
  *
  * @return mixed the found value or $default
  */
@@ -8674,6 +8674,7 @@ function api_get_configuration_sub_value($path, $default = null, $separator = '/
         if (is_array($array) && array_key_exists($path, $array)) {
             return $array[$path];
         }
+
         return $default;
     }
     $key = substr($path, 0, $pos);
@@ -8686,8 +8687,10 @@ function api_get_configuration_sub_value($path, $default = null, $separator = '/
     }
     if (is_array($newArray)) {
         $newPath = substr($path, $pos + 1);
+
         return api_get_configuration_sub_value($newPath, $default, $separator, $newArray);
     }
+
     return $default;
 }
 

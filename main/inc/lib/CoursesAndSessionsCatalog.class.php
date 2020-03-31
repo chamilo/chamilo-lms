@@ -411,9 +411,9 @@ class CoursesAndSessionsCatalog
      * The search is done on the code, title and tutor field of the course table.
      *
      * @param string $categoryCode
-     * @param string $keyword     The string that the user submitted
+     * @param string $keyword      The string that the user submitted
      * @param array  $limit
-     * @param bool   $justVisible search only on visible courses in the catalogue
+     * @param bool   $justVisible  search only on visible courses in the catalogue
      * @param array  $conditions
      *
      * @return array an array containing a list of all the courses matching the the search term

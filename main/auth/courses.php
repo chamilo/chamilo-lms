@@ -81,7 +81,6 @@ if (!empty($settings)) {
     }
 }
 
-
 switch ($action) {
     case 'unsubscribe':
         // We are unsubscribing from a course (=Unsubscribe from course).
@@ -187,7 +186,7 @@ switch ($action) {
             if ($level > 0) {
                 $separate = str_repeat('--', $level);
             }
-            $select->addOption($separate.' '.$categoryName.' ('.$countCourse.')',$categoryCodeItem);
+            $select->addOption($separate.' '.$categoryName.' ('.$countCourse.')', $categoryCodeItem);
         }
 
         $defaults['category_code'] = $categoryCode;
@@ -279,8 +278,8 @@ switch ($action) {
         $pageLength = isset($_GET['pageLength']) ? (int) $_GET['pageLength'] : CoursesAndSessionsCatalog::PAGE_LENGTH;
         $pageTotal = (int) ceil($countCoursesInCategory / $pageLength);
 
-        $url = CoursesAndSessionsCatalog::getCatalogUrl(1, $pageLength, 'ALL',  'search_course', $fields);
-        $urlNoCategory = CoursesAndSessionsCatalog::getCatalogUrl(1, $pageLength, '',  'search_course', $fields);
+        $url = CoursesAndSessionsCatalog::getCatalogUrl(1, $pageLength, 'ALL', 'search_course', $fields);
+        $urlNoCategory = CoursesAndSessionsCatalog::getCatalogUrl(1, $pageLength, '', 'search_course', $fields);
         $urlNoCategory = str_replace('&category_code=ALL', '', $urlNoCategory);
 
         $form->setAttribute('action', $url);
@@ -409,7 +408,6 @@ switch ($action) {
 
             $courseUrl = api_get_path(WEB_COURSE_PATH);
             $hideRating = api_get_configuration_value('hide_course_rating');
-
 
             if (!empty($courses)) {
                 foreach ($courses as &$course) {

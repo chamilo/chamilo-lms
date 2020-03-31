@@ -273,7 +273,8 @@ function getReport($userId, $from, $to, $addTime = false)
             if (empty($courseData)) {
                 continue;
             }
-            $courseSessionTable .= '<div class="data-title">'.Display::page_subheader3($iconCourse.$data['name'][$courseId]).'</div>';
+            $courseSessionTable .= '<div class="data-title">'.
+                Display::page_subheader3($iconCourse.$data['name'][$courseId]).'</div>';
             $table = new HTML_Table(['class' => 'data_table']);
             $headers = [
                 get_lang('StartDate'),
@@ -302,8 +303,8 @@ function getReport($userId, $from, $to, $addTime = false)
             $courseSessionTable .= $table->toHtml();
         }
     }
-    $totalCourseSessionTable = '';
 
+    $totalCourseSessionTable = '';
     if ($courseSessionTableData) {
         $table = new HTML_Table(['class' => 'data_table']);
         $headers = [
@@ -487,7 +488,8 @@ if ($formByDay->validate()) {
         $totalCourseSessionTable = $result['third'];
         $total = $result['total'];
         $iconCalendar = Display::return_icon('calendar.png', null, [], ICON_SIZE_SMALL);
-        $tableList .= '<div class="date-calendar">'.Display::page_subheader2($iconCalendar.get_lang('Date').': '.$dateToCheck).'</div>';
+        $tableList .= '<div class="date-calendar">'.
+            Display::page_subheader2($iconCalendar.get_lang('Date').': '.$dateToCheck).'</div>';
         $tableList .= $table->toHtml();
         if (!$reduced && !empty($total)) {
             $diff = get_lang('NotInCourse').' '.api_format_time($data['diff'] - $total, 'js');

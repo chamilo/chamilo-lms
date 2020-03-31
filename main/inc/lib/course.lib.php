@@ -6543,7 +6543,7 @@ class CourseManager
     /**
      * Display the description button of a course in the course catalog.
      *
-     * @param array $course
+     * @param array  $course
      * @param string $url
      *
      * @return string HTML string

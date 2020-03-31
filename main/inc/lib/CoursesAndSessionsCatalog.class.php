@@ -484,6 +484,7 @@ class CoursesAndSessionsCatalog
                        ";
             }
         }
+
         $result = Database::query($sql);
         $courses = [];
         while ($row = Database::fetch_array($result)) {

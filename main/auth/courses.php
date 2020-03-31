@@ -156,6 +156,9 @@ switch ($action) {
             $jqueryReadyContent = $returnParams['jquery_ready_content'];
         }
 
+        $conditions = [];
+        $fields = [];
+
         if ('display_random_courses' === $action) {
             // Random value is used instead limit filter
             $courses = CoursesAndSessionsCatalog::getCoursesInCategory(null, 12);
@@ -175,16 +178,10 @@ switch ($action) {
                             $tag
                         );
                     }
-                    $form->setDefaults(
-                        [
-                            'extra_tags' => $tags,
-                        ]
-                    );
+                    $form->setDefaults(['extra_tags' => $tags,]);
                 }
             }
 
-            $conditions = [];
-            $fields = [];
             if ($allowExtraFields) {
                 // Parse params.
                 foreach ($values as $key => $value) {

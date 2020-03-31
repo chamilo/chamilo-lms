@@ -1425,6 +1425,9 @@ ALTER TABLE notification_event ADD COLUMN event_id INT NULL;
 // Course chat: Send message on button click only, if false then send on enter too.
 //$_configuration['course_chat_send_message_only_on_button'] = true;
 
+// Course catalog show extra fields (visible and filtered)
+//$_configuration['allow_course_extra_field_in_catalog'] = false;
+
 // KEEP THIS AT THE END
 // -------- Custom DB changes
 // Add user activation by confirmation email

@@ -235,6 +235,7 @@
             </div>
         </div>
     </div>
+
     <!-- end view session grib -->
     {{ catalog_pagination }}
 {% endblock %}

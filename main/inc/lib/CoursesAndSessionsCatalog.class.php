@@ -1223,7 +1223,6 @@ class CoursesAndSessionsCatalog
     public static function sessionList($limit = [])
     {
         $date = isset($_POST['date']) ? $_POST['date'] : date('Y-m-d');
-        $hiddenLinks = isset($_GET['hidden_links']) ? $_GET['hidden_links'] == 1 : false;
         $limit = isset($limit) ? $limit : self::getLimitArray();
 
         $countSessions = self::browseSessions($date, [], false, true);
@@ -1239,7 +1238,6 @@ class CoursesAndSessionsCatalog
             1,
             $limit['length'],
             null,
-            0,
             'subscribe'
         );
 
@@ -1250,7 +1248,6 @@ class CoursesAndSessionsCatalog
         $tpl->assign('show_tutor', api_get_setting('show_session_coach') === 'true');
         $tpl->assign('course_url', $courseUrl);
         $tpl->assign('catalog_pagination', $pagination);
-        $tpl->assign('hidden_links', $hiddenLinks);
         $tpl->assign('search_token', Security::get_token());
         $tpl->assign('search_date', $date);
         $tpl->assign('web_session_courses_ajax_url', api_get_path(WEB_AJAX_PATH).'course.ajax.php');
@@ -1271,12 +1268,10 @@ class CoursesAndSessionsCatalog
     public static function sessionsListByName(array $limit)
     {
         $keyword = isset($_POST['keyword']) ? $_POST['keyword'] : null;
-        $hiddenLinks = isset($_GET['hidden_links']) ? (int) $_GET['hidden_links'] == 1 : false;
         $courseUrl = self::getCatalogUrl(
             1,
             $limit['length'],
             null,
-            0,
             'subscribe'
         );
 
@@ -1287,10 +1282,9 @@ class CoursesAndSessionsCatalog
         $tpl->assign('actions', self::getTabList(2));
         $tpl->assign('show_courses', self::showCourses());
         $tpl->assign('show_sessions', self::showSessions());
-        $tpl->assign('show_tutor', api_get_setting('show_session_coach') === 'true' ? true : false);
+        $tpl->assign('show_tutor', api_get_setting('show_session_coach') === 'true');
         $tpl->assign('course_url', $courseUrl);
         $tpl->assign('already_subscribed_label', self::getAlreadyRegisteredInSessionLabel());
-        $tpl->assign('hidden_links', $hiddenLinks);
         $tpl->assign('search_token', Security::get_token());
         $tpl->assign('keyword', Security::remove_XSS($keyword));
         $tpl->assign('sessions', $sessionsBlocks);
@@ -1329,7 +1323,7 @@ class CoursesAndSessionsCatalog
     {
         $pageLength = isset($_GET['pageLength']) ? (int) $_GET['pageLength'] : self::PAGE_LENGTH;
 
-        $url = self::getCatalogUrl(1, $pageLength, null, 0, 'display_sessions');
+        $url = self::getCatalogUrl(1, $pageLength, null, 'display_sessions');
         $headers = [];
         if (self::showCourses()) {
             $headers[] = [
@@ -1357,12 +1351,10 @@ class CoursesAndSessionsCatalog
     {
         $searchTag = isset($_POST['search_tag']) ? $_POST['search_tag'] : null;
         $searchDate = isset($_POST['date']) ? $_POST['date'] : date('Y-m-d');
-        $hiddenLinks = isset($_GET['hidden_links']) ? (int) $_GET['hidden_links'] == 1 : false;
         $courseUrl = self::getCatalogUrl(
             1,
             $limit['length'],
             null,
-            0,
             'subscribe'
         );
 
@@ -1372,10 +1364,9 @@ class CoursesAndSessionsCatalog
         $tpl = new Template();
         $tpl->assign('show_courses', self::showCourses());
         $tpl->assign('show_sessions', self::showSessions());
-        $tpl->assign('show_tutor', api_get_setting('show_session_coach') === 'true' ? true : false);
+        $tpl->assign('show_tutor', api_get_setting('show_session_coach') === 'true');
         $tpl->assign('course_url', $courseUrl);
         $tpl->assign('already_subscribed_label', self::getAlreadyRegisteredInSessionLabel());
-        $tpl->assign('hidden_links', $hiddenLinks);
         $tpl->assign('search_token', Security::get_token());
         $tpl->assign('search_date', Security::remove_XSS($searchDate));
         $tpl->assign('search_tag', Security::remove_XSS($searchTag));
@@ -1638,7 +1629,7 @@ class CoursesAndSessionsCatalog
         $fields = []
     ) {
         // Get page URL
-        $url = self::getCatalogUrl($pageNumber, $pageLength, $categoryCode, null, $action, $fields);
+        $url = self::getCatalogUrl($pageNumber, $pageLength, $categoryCode, $action, $fields);
 
         // If is current page ('active' class) clear URL
         if (isset($liAttributes) && is_array($liAttributes) && isset($liAttributes['class'])) {
@@ -1665,8 +1656,8 @@ class CoursesAndSessionsCatalog
      * @param int    $pageCurrent
      * @param int    $pageLength
      * @param string $categoryCode
-     * @param int    $hiddenLinks
      * @param string $action
+     * @param array  $extraFields
      *
      * @return string
      */
@@ -1674,7 +1665,6 @@ class CoursesAndSessionsCatalog
         $pageCurrent,
         $pageLength,
         $categoryCode = null,
-        $hiddenLinks = null,
         $action = null,
         $extraFields = []
     ) {
@@ -1688,14 +1678,11 @@ class CoursesAndSessionsCatalog
 
         $categoryCodeRequest = isset($_REQUEST['category_code']) ? Security::remove_XSS($_REQUEST['category_code']) : null;
         $categoryCode = !empty($categoryCode) ? Security::remove_XSS($categoryCode) : $categoryCodeRequest;
-        $hiddenLinksRequest = !empty($_REQUEST['hidden_links']) ? Security::remove_XSS($_REQUEST['hidden_links']) : null;
-        $hiddenLinks = !empty($hiddenLinks) ? Security::remove_XSS($hiddenLinksRequest) : $categoryCodeRequest;
 
         // Start URL with params
         $pageUrl = api_get_self().
             '?action='.$action.
             '&category_code='.$categoryCode.
-            '&hidden_links='.$hiddenLinks.
             '&pageCurrent='.$pageCurrent.
             '&pageLength='.$pageLength;
 

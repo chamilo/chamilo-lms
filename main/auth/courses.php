@@ -185,7 +185,6 @@ switch ($action) {
 
             $conditions = [];
             $fields = [];
-
             if ($allowExtraFields) {
                 // Parse params.
                 foreach ($values as $key => $value) {
@@ -247,7 +246,7 @@ switch ($action) {
         $pageLength = isset($_GET['pageLength']) ? (int) $_GET['pageLength'] : CoursesAndSessionsCatalog::PAGE_LENGTH;
         $pageTotal = (int) ceil($countCoursesInCategory / $pageLength);
 
-        $url = CoursesAndSessionsCatalog::getCatalogUrl(1, $pageLength, 'ALL', 0, 'search_course', $fields);
+        $url = CoursesAndSessionsCatalog::getCatalogUrl(1, $pageLength, 'ALL',  'search_course', $fields);
         $form->setAttribute('action', $url);
 
         // getting all the courses to which the user is subscribed to
@@ -285,12 +284,8 @@ switch ($action) {
                 $fields
             );
         }
-        /*$date = date('Y-m-d');
-        if ($showSessions && isset($_POST['date'])) {
-            $date = $_POST['date'];
-        }*/
-        $userInfo = api_get_user_info();
 
+        $userInfo = api_get_user_info();
         $extraDate = '';
         if ($showSessions) {
             $extraDate = "
@@ -331,20 +326,17 @@ switch ($action) {
                 <div class="row">';
         if ($showCourses) {
             $content .= '<div class="col-md-'.($showSessions ? '4' : '6').'">';
-            if (!isset($_GET['hidden_links']) || 1 != intval($_GET['hidden_links'])) {
-                $htmlHeadXtra[] = '<script>
-                $(function () {
-                    '.$jqueryReadyContent.'
-                });
-                </script>';
+            $htmlHeadXtra[] = '<script>
+            $(function () {
+                '.$jqueryReadyContent.'
+            });
+            </script>';
 
-                $form->addButtonSearch(get_lang('Search'));
-                $content .= $form->returnForm();
-            }
+            $form->addButtonSearch(get_lang('Search'));
+            $content .= $form->returnForm();
 
             $content .= '</div>';
             $content .= '<div class="col-md-'.($showSessions ? '4' : '6').'">';
-            //$listCategories = CoursesAndSessionsCatalog::getCourseCategoriesTree();
             $categoriesSelect = CoursesAndSessionsCatalog::getOptionSelect($listCategories, $categoryCode);
 
             $webAction = api_get_path(WEB_CODE_PATH).'auth/courses.php';
@@ -557,10 +549,7 @@ switch ($action) {
                 if (!isset($_REQUEST['subscribe_user_with_password']) &&
                     !isset($_REQUEST['subscribe_course'])
                 ) {
-                    Display::addFlash(Display::return_message(
-                        get_lang('ThereAreNoCoursesInThisCategory'),
-                        'warning'
-                    ));
+                    Display::addFlash(Display::return_message(get_lang('NoResults'), 'warning'));
                 }
             }
         }

@@ -15,13 +15,39 @@ use Chamilo\UserBundle\Entity\User;
  */
 class UsersLoader implements LoaderInterface
 {
+    const LOAD_MODE_REUSE = 'reuse';
+    const LOAD_MODE_DUPLICATE = 'duplicate';
+
     /**
-     * @throws \Doctrine\ORM\OptimisticLockException
+     * @var string Load mode: "reuse" or "duplicate". Default is "duplicate".
+     */
+    private $loadMode = self::LOAD_MODE_DUPLICATE;
+
+    /**
+     * @param array $incomingData
+     *
+     * @throws \Exception
      *
      * @return int
      */
     public function load(array $incomingData)
     {
+        $tblUser = \Database::get_main_table(TABLE_MAIN_USER);
+
+        $userInfo = \Database::fetch_assoc(
+            \Database::query("SELECT id FROM $tblUser WHERE username = '{$incomingData['username']}'")
+        );
+
+        if (!empty($userInfo)) {
+            if ($this->loadMode == self::LOAD_MODE_REUSE) {
+                return $userInfo['id'];
+            }
+
+            if ($this->loadMode === self::LOAD_MODE_DUPLICATE) {
+                $incomingData['username'] .= substr(md5(uniqid(rand())), 0, 10);
+            }
+        }
+
         $userId = \UserManager::create_user(
             $incomingData['firstname'],
             $incomingData['lastname'],
@@ -49,12 +75,10 @@ class UsersLoader implements LoaderInterface
         );
 
         if (empty($userId)) {
-            throw new \Exception('Users not created');
+            throw new \Exception('User was not created');
         }
 
         $incomingData['registration_date'] = $incomingData['registration_date']->format('Y-m-d H:i:s');
-
-        $tblUser = \Database::get_main_table(TABLE_MAIN_USER);
 
         \Database::query(
             "UPDATE $tblUser SET registration_date = '{$incomingData['registration_date']}' WHERE id = $userId"

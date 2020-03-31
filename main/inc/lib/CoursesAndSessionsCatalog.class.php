@@ -410,6 +410,7 @@ class CoursesAndSessionsCatalog
      * Search the courses database for a course that matches the search term.
      * The search is done on the code, title and tutor field of the course table.
      *
+     * @param string $categoryCode
      * @param string $keyword     The string that the user submitted
      * @param array  $limit
      * @param bool   $justVisible search only on visible courses in the catalogue
@@ -417,13 +418,14 @@ class CoursesAndSessionsCatalog
      *
      * @return array an array containing a list of all the courses matching the the search term
      */
-    public static function searchCourses($keyword, $limit, $justVisible = false, $conditions = [])
+    public static function searchCourses($categoryCode, $keyword, $limit, $justVisible = false, $conditions = [])
     {
         $courseTable = Database::get_main_table(TABLE_MAIN_COURSE);
         $limitFilter = self::getLimitFilterFromArray($limit);
         $avoidCoursesCondition = self::getAvoidCourseCondition();
         $visibilityCondition = $justVisible ? CourseManager::getCourseVisibilitySQLCondition('s', true) : '';
         $keyword = Database::escape_string($keyword);
+        $categoryCode = Database::escape_string($categoryCode);
 
         $sqlInjectJoins = '';
         $where = ' 1 = 1 ';
@@ -437,6 +439,15 @@ class CoursesAndSessionsCatalog
             $injectExtraFields = rtrim($injectExtraFields, ', ');
         }
 
+        $categoryFilter = '';
+        if ($categoryCode === 'ALL') {
+            // Nothing to do
+        } elseif ($categoryCode === 'NONE') {
+            $categoryFilter = ' AND category_code = "" ';
+        } else {
+            $categoryFilter = ' AND category_code = "'.$categoryCode.'" ';
+        }
+
         $sql = "SELECT DISTINCT course.*, $injectExtraFields
                 FROM $courseTable course
                 $sqlInjectJoins
@@ -446,6 +457,7 @@ class CoursesAndSessionsCatalog
                         course.tutor_name LIKE '%".$keyword."%'
                     )
                     $where
+                    $categoryFilter
                     $sqlInjectWhere
                     $avoidCoursesCondition
                     $visibilityCondition
@@ -476,6 +488,7 @@ class CoursesAndSessionsCatalog
                                 tutor_name LIKE '%".$keyword."%'
                             )
                             $where
+                            $categoryFilter
                             $sqlInjectWhere
                             $avoidCoursesCondition
                             $visibilityCondition
@@ -851,31 +864,6 @@ class CoursesAndSessionsCatalog
         }
 
         return $row;
-    }
-
-    public static function getOptionSelect($categories, $codeType)
-    {
-        $html = '';
-        $html .= '<select name="category_code" onchange="submit();" class="selectpicker form-control">';
-        foreach ($categories as $category) {
-            $categoryCode = Security::remove_XSS($category['code']);
-            $categoryName = Security::remove_XSS($category['name']);
-            $countCourse = (int) $category['number_courses'];
-            $level = $category['level'];
-            if (empty($countCourse)) {
-                continue;
-            }
-            if ($level > 0) {
-                $separate = str_repeat('--', $level);
-            } else {
-                $separate = '';
-            }
-            $html .= '<option '.($categoryCode == $codeType ? 'selected="selected" ' : '')
-                .' value="'.$categoryCode.'">'.$separate.' '.$categoryName.' ('.$countCourse.') </option>';
-        }
-        $html .= '</select>';
-
-        return $html;
     }
 
     /**
@@ -1677,8 +1665,7 @@ class CoursesAndSessionsCatalog
             $action = 'subscribe';
         }
 
-        $categoryCodeRequest = isset($_REQUEST['category_code']) ? Security::remove_XSS($_REQUEST['category_code']) : null;
-        $categoryCode = !empty($categoryCode) ? Security::remove_XSS($categoryCode) : $categoryCodeRequest;
+        $categoryCode = !empty($categoryCode) ? Security::remove_XSS($categoryCode) : 'ALL';
 
         // Start URL with params
         $pageUrl = api_get_self().

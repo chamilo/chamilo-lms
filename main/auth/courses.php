@@ -143,11 +143,31 @@ switch ($action) {
             api_not_allowed(true);
         }
 
+        $defaults = [];
         $listCategories = CoursesAndSessionsCatalog::getCourseCategoriesTree();
 
         $form = new FormValidator('search', 'get', '', null, null, FormValidator::LAYOUT_BOX);
         $form->addHidden('action', 'search_course');
         $form->addText('search_term', get_lang('Title'));
+        $select = $form->addSelect('category_code', get_lang('CourseCategories'));
+
+        foreach ($listCategories as $category) {
+            $categoryCodeItem = Security::remove_XSS($category['code']);
+            $categoryName = Security::remove_XSS($category['name']);
+            $countCourse = (int) $category['number_courses'];
+            $level = $category['level'];
+            if (empty($countCourse)) {
+                continue;
+            }
+
+            $separate = '';
+            if ($level > 0) {
+                $separate = str_repeat('--', $level);
+            }
+            $select->addOption($separate.' '.$categoryName.' ('.$countCourse.')',$categoryCodeItem);
+        }
+
+        $defaults['category_code'] = $categoryCode;
 
         $jqueryReadyContent = '';
         if ($allowExtraFields) {
@@ -163,7 +183,7 @@ switch ($action) {
             // Random value is used instead limit filter
             $courses = CoursesAndSessionsCatalog::getCoursesInCategory(null, 12);
             $countCoursesInCategory = count($courses);
-        } elseif ('search_course' === $action) {
+        } else {
             $values = $_REQUEST;
 
             if (!empty($values) && $form->hasElement('extra_tags')) {
@@ -178,7 +198,7 @@ switch ($action) {
                             $tag
                         );
                     }
-                    $form->setDefaults(['extra_tags' => $tags,]);
+                    $defaults['extra_tags'] = $tags;
                 }
             }
 
@@ -227,15 +247,15 @@ switch ($action) {
                 $conditions = $extraField->parseConditions($options, 'course');
             }
 
-            $courses = CoursesAndSessionsCatalog::searchCourses($searchTerm, $limit, false, $conditions);
-            $countCoursesInCategory = CourseCategory::countCoursesInCategory('ALL', $searchTerm, true, $conditions);
-        } else {
+            $courses = CoursesAndSessionsCatalog::searchCourses($categoryCode, $searchTerm, $limit, false, $conditions);
+            $countCoursesInCategory = CourseCategory::countCoursesInCategory($categoryCode, $searchTerm, true, $conditions);
+        } /*else {
             if (empty($categoryCode)) {
                 $categoryCode = $listCategories['ALL']['code']; // by default first category
             }
             $courses = CoursesAndSessionsCatalog::getCoursesInCategory($categoryCode, null, $limit);
             $countCoursesInCategory = CourseCategory::countCoursesInCategory($categoryCode, $searchTerm);
-        }
+        }*/
 
         $showCourses = CoursesAndSessionsCatalog::showCourses();
         $showSessions = CoursesAndSessionsCatalog::showSessions();
@@ -244,8 +264,7 @@ switch ($action) {
         $pageTotal = (int) ceil($countCoursesInCategory / $pageLength);
 
         $url = CoursesAndSessionsCatalog::getCatalogUrl(1, $pageLength, 'ALL',  'search_course', $fields);
-
-        $urlNoCategory = CoursesAndSessionsCatalog::getCatalogUrl(1, $pageLength, '',  'display_courses', $fields);
+        $urlNoCategory = CoursesAndSessionsCatalog::getCatalogUrl(1, $pageLength, '',  'search_course', $fields);
         $urlNoCategory = str_replace('&category_code=ALL', '', $urlNoCategory);
 
         $form->setAttribute('action', $url);
@@ -334,24 +353,8 @@ switch ($action) {
             </script>';
 
             $form->addButtonSearch(get_lang('Search'));
+            $form->setDefaults($defaults);
             $content .= $form->returnForm();
-
-            $content .= '</div>';
-            $content .= '<div class="col-md-'.($showSessions ? '4' : '6').'">';
-            $categoriesSelect = CoursesAndSessionsCatalog::getOptionSelect($listCategories, $categoryCode);
-
-            $webAction = api_get_path(WEB_CODE_PATH).'auth/courses.php';
-
-            $form = '<form action="'.$webAction.'" method="GET">';
-            $form .= '<input type="hidden" name="action" value="display_courses">';
-            $form .= '<input type="hidden" name="pageCurrent" value="'.$pageCurrent.'">';
-            $form .= '<input type="hidden" name="pageLength" value="'.$pageLength.'">';
-            $form .= '<div class="form-group">';
-            $form .= '<label>'.get_lang('CourseCategories').'</label>';
-            $form .= $categoriesSelect;
-            $form .= '</div>';
-            $form .= '</form>';
-            $content .= $form;
             $content .= '</div>';
         }
 

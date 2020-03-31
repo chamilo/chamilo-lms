@@ -425,7 +425,13 @@ if ($formByDay->validate()) {
     $list = Tracking::get_time_spent_on_the_platform($userId, 'custom', $from, $to, true);
     $newList = [];
     foreach ($list as $item) {
+        // YYYY-MM-DD
         $key = substr($item['login_date'], 0, 10);
+        $dateLogout = substr($item['logout_date'], 0, 10);
+        if ($dateLogout > $key) {
+            $item['logout_date'] = api_get_utc_datetime($key.' 23:59:59');
+        }
+
         if (!isset($newList[$key])) {
             $newList[$key] = [
                 'login_date' => $item['login_date'],
@@ -504,7 +510,6 @@ if ($formByDay->validate()) {
     $tpl->assign('student', $userInfo['complete_name']);
     $totalTable = Display::page_subheader3(sprintf(get_lang('ExtractionFromX'), api_get_local_time()));
     $tpl->assign('table_progress', $totalTable.$tableList);
-
     $content = $tpl->fetch($tpl->get_template('my_space/pdf_export_student.tpl'));
 
     $params = [

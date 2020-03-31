@@ -483,7 +483,7 @@ class Dropbox_Person
                 INNER JOIN $person_tbl p
                 ON (f.id = p.file_id AND f.c_id = p.c_id)
                 WHERE
-                    f.c_id = $course_id
+                    f.c_id = $course_id AND
                     f.uploader_id   = ".intval($this->userId).' AND
                     p.user_id       = '.intval($this->userId)."
                     $condition_session

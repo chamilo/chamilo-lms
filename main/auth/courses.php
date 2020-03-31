@@ -230,7 +230,7 @@ switch ($action) {
             $courses = CoursesAndSessionsCatalog::searchCourses($searchTerm, $limit, false, $conditions);
             $countCoursesInCategory = CourseCategory::countCoursesInCategory('ALL', $searchTerm, true, $conditions);
         } else {
-            if (!isset($categoryCode)) {
+            if (empty($categoryCode)) {
                 $categoryCode = $listCategories['ALL']['code']; // by default first category
             }
             $courses = CoursesAndSessionsCatalog::getCoursesInCategory($categoryCode, null, $limit);
@@ -244,6 +244,10 @@ switch ($action) {
         $pageTotal = (int) ceil($countCoursesInCategory / $pageLength);
 
         $url = CoursesAndSessionsCatalog::getCatalogUrl(1, $pageLength, 'ALL',  'search_course', $fields);
+
+        $urlNoCategory = CoursesAndSessionsCatalog::getCatalogUrl(1, $pageLength, '',  'display_courses', $fields);
+        $urlNoCategory = str_replace('&category_code=ALL', '', $urlNoCategory);
+
         $form->setAttribute('action', $url);
 
         // getting all the courses to which the user is subscribed to
@@ -414,6 +418,7 @@ switch ($action) {
                     $course['category_title'] = '';
                     if (isset($course['category'])) {
                         $course['category_title'] = isset($categoryList[$course['category']]) ? $categoryList[$course['category']] : '';
+                        $course['category_code_link'] = $urlNoCategory.'&category_code='.$course['category'];
                     }
 
                     // Display thumbnail

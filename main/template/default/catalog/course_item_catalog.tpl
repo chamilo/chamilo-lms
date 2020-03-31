@@ -8,7 +8,11 @@
             {% endblock %}
 
             {% if course.category_title %}
-                <span class="category">{{ course.category_title }}</span>
+                <span class="category">
+                    <a href="{{ course.category_code_link }}">
+                        {{ course.category_title }}
+                    </a>
+                </span>
                 <div class="cribbon"></div>
             {% endif %}
 
@@ -42,7 +46,9 @@
                                         <li> {{ 'Tags' | get_lang }}</li>
                                         {% for tag in course.extra_data_tags %}
                                             <li class="label label-info">
-                                                <span>{{ tag }}</span>
+                                                <span>
+                                                    {{ tag }}
+                                                </span>
                                             </li>
                                         {% endfor %}
                                     </ul>

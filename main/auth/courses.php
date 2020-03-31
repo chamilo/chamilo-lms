@@ -64,6 +64,24 @@ $currentUrl = api_get_path(WEB_CODE_PATH).'auth/courses.php?category_code='.$cat
 $content = '';
 $toolTitle = get_lang('CourseCatalog');
 
+$courseCatalogSettings = [
+    'info_url' => 'course_description_popup',
+    'title_url' => 'course_home',
+    'image_url' => 'course_about',
+];
+
+$redirectAfterSubscription = 'course_home';
+$settings = api_get_configuration_value('course_catalog_settings');
+if (!empty($settings)) {
+    if (isset($settings['link_settings'])) {
+        $courseCatalogSettings = $settings['link_settings'];
+    }
+    if (isset($settings['redirect_after_subscription'])) {
+        $redirectAfterSubscription = $settings['redirect_after_subscription'];
+    }
+}
+
+
 switch ($action) {
     case 'unsubscribe':
         // We are unsubscribing from a course (=Unsubscribe from course).
@@ -86,7 +104,12 @@ switch ($action) {
         }
         $courseCodeToSubscribe = isset($_GET['course_code']) ? Security::remove_XSS($_GET['course_code']) : '';
         if (Security::check_token('get')) {
+            $courseInfo = api_get_course_info($courseCodeToSubscribe);
             CourseManager::autoSubscribeToCourse($courseCodeToSubscribe);
+            if ('course_home' === $redirectAfterSubscription) {
+                header('Location: '.$courseInfo['course_public_url']);
+                exit;
+            }
             header('Location: '.api_get_self());
             exit;
         }
@@ -387,16 +410,6 @@ switch ($action) {
             $courseUrl = api_get_path(WEB_COURSE_PATH);
             $hideRating = api_get_configuration_value('hide_course_rating');
 
-            $courseCatalogSettings = [
-                'info_url' => 'course_description_popup',
-                'title_url' => 'course_home',
-                'image_url' => 'course_about',
-            ];
-
-            $settings = api_get_configuration_value('course_catalog_settings');
-            if (!empty($settings) && isset($settings['link_settings'])) {
-                $courseCatalogSettings = $settings['link_settings'];
-            }
 
             if (!empty($courses)) {
                 foreach ($courses as &$course) {

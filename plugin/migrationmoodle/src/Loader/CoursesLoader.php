@@ -12,29 +12,36 @@ use Chamilo\PluginBundle\MigrationMoodle\Interfaces\LoaderInterface;
  */
 class CoursesLoader implements LoaderInterface
 {
+    const LOAD_MODE_REUSE = 'reuse';
+    const LOAD_MODE_DUPLICATE = 'duplicate';
+
     /**
+     * @var string Load mode: "reuse" or "duplicate". Default is "duplicate".
+     */
+    private $loadMode = self::LOAD_MODE_DUPLICATE;
+
+    /**
+     * @param array $incomingData
+     *
      * @return int
      */
     public function load(array $incomingData)
     {
+        $courseInfo = api_get_course_info($incomingData['wanted_code']);
+
+        if (!empty($courseInfo)) {
+            if ($this->loadMode === self::LOAD_MODE_REUSE) {
+                return $courseInfo['real_id'];
+            }
+
+            if ($this->loadMode === self::LOAD_MODE_DUPLICATE) {
+                $incomingData['wanted_code'] = $incomingData['wanted_code'].substr(md5(uniqid(rand())), 0, 10);
+            }
+        }
+
         $incomingData['subscribe'] = false;
         $incomingData['unsubscribe'] = false;
         $incomingData['disk_quota'] = 500 * 1024 * 1024;
-
-        $result = \Database::select(
-            'COUNT(1) AS c',
-            \Database::get_main_table(TABLE_MAIN_COURSE),
-            [
-                'where' => [
-                    'code = ?' => $incomingData['wanted_code'],
-                ],
-            ],
-            'first'
-        );
-
-        if (!empty($result['c'])) {
-            $incomingData['wanted_code'] = $incomingData['wanted_code'].substr(md5(uniqid(rand())), 0, 10);
-        }
 
         $accessUrlId = \MigrationMoodlePlugin::create()->getAccessUrlId();
 

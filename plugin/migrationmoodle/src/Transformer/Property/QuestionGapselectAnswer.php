@@ -72,6 +72,6 @@ class QuestionGapselectAnswer implements TransformPropertyInterface
 
         $inputs = str_repeat('300,', $countBlanks - 1).'300';
 
-        return "$questionText::".implode(',', $scores).":$inputs:0@";
+        return utf8_encode("$questionText::".implode(',', $scores).":$inputs:0@");
     }
 }

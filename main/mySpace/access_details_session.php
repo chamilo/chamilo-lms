@@ -267,12 +267,13 @@ function getReport($userId, $from, $to, $addTime = false)
 
     $courseSessionTable = '';
     $courseSessionTableData = [];
+    $iconCourse = Display::return_icon('course.png',null,[],ICON_SIZE_SMALL);
     foreach ($report as $sessionId => $data) {
         foreach ($data['courses'] as $courseId => $courseData) {
             if (empty($courseData)) {
                 continue;
             }
-            $courseSessionTable .= Display::page_subheader3($data['name'][$courseId]);
+            $courseSessionTable .= '<div class="data-title">'.Display::page_subheader3($iconCourse.$data['name'][$courseId]).'</div>';
             $table = new HTML_Table(['class' => 'data_table']);
             $headers = [
                 get_lang('StartDate'),
@@ -304,7 +305,7 @@ function getReport($userId, $from, $to, $addTime = false)
     $totalCourseSessionTable = '';
 
     if ($courseSessionTableData) {
-        $table = new HTML_Table(['class' => 'table data_table']);
+        $table = new HTML_Table(['class' => 'data_table']);
         $headers = [
             get_lang('Course'),
             get_lang('TotalDuration'),
@@ -460,7 +461,7 @@ if ($formByDay->validate()) {
             continue;
         }
 
-        $table = new HTML_Table(['class' => ' data_table']);
+        $table = new HTML_Table(['class' => ' table_print']);
         $headers = [
             get_lang('FirstLogin'),
             get_lang('LastConnection'),
@@ -485,12 +486,14 @@ if ($formByDay->validate()) {
         $courseSessionTable = $result['second'];
         $totalCourseSessionTable = $result['third'];
         $total = $result['total'];
-        $tableList .= '<div style="text-align:center">'.Display::page_subheader2($dateToCheck).'</div>'.$table->toHtml();
+        $iconCalendar = Display::return_icon('calendar.png',null,[],ICON_SIZE_SMALL);
+        $tableList .= '<div class="date-calendar">'.Display::page_subheader2($iconCalendar.get_lang('Date').': '.$dateToCheck).'</div>';
+        $tableList .= $table->toHtml();
         if (!$reduced && !empty($total)) {
             $diff = get_lang('NotInCourse').' '.api_format_time($data['diff'] - $total, 'js');
             $tableList .= $courseSessionTable;
             $tableList .= $totalCourseSessionTable;
-            $tableList .= Display::page_subheader3($diff);
+            $tableList .= '<div style="text-align: center;">'.Display::page_subheader3($diff).'</div>';
         }
     }
 
@@ -514,7 +517,7 @@ if ($formByDay->validate()) {
     ];
     $pdfName = api_strtoupper($userInfo['lastname'].'_'.$userInfo['firstname']).'_'.api_get_local_time();
     @$pdf = new PDF('A4', $params['orientation'], $params);
-    @$pdf->setBackground($tpl->theme);
+    @$pdf->setBackground($tpl->theme, true);
     @$pdf->content_to_pdf(
         $content,
         '',

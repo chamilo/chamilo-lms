@@ -7,6 +7,7 @@ $plugin = MigrationMoodlePlugin::create();
 
 try {
     removeExtraField();
+    removePluginTables();
 
     $plugin->uninstallHook();
 } catch (Exception $exception) {

@@ -26,6 +26,12 @@ try {
  */
 function createPluginTables()
 {
+    $installed = AppPlugin::getInstance()->isInstalled('migrationmoodle');
+
+    if ($installed) {
+        return;
+    }
+
     $queries = [];
     $queries[] = "CREATE TABLE IF NOT EXISTS plugin_migrationmoodle_task (
             id INT AUTO_INCREMENT NOT NULL,

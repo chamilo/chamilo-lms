@@ -1,4 +1,5 @@
 <?php
+
 /* For licensing terms, see /license.txt */
 
 use Chamilo\CoreBundle\Entity\CourseCategory;
@@ -35,8 +36,8 @@ if (empty($courseInfo)) {
 }
 
 $tool_name = get_lang('ModifyCourseInfo');
-$interbreadcrumb[] = ["url" => 'index.php', "name" => get_lang('PlatformAdmin')];
-$interbreadcrumb[] = ["url" => "course_list.php", "name" => get_lang('CourseList')];
+$interbreadcrumb[] = ['url' => 'index.php', 'name' => get_lang('PlatformAdmin')];
+$interbreadcrumb[] = ['url' => 'course_list.php', 'name' => get_lang('CourseList')];
 
 // Get all course categories
 $table_user = Database::get_main_table(TABLE_MAIN_USER);
@@ -47,12 +48,14 @@ $courseId = $courseInfo['real_id'];
 $table_course_user = Database::get_main_table(TABLE_MAIN_COURSE_USER);
 $order_clause = api_sort_by_first_name() ? ' ORDER BY firstname, lastname' : ' ORDER BY lastname, firstname';
 $sql = "SELECT user.user_id,lastname,firstname
-        FROM $table_user as user,$table_course_user as course_user
+        FROM
+            $table_user as user,
+            $table_course_user as course_user
         WHERE
             course_user.status='1' AND
             course_user.user_id=user.user_id AND
             course_user.c_id ='".$courseId."'".
-        $order_clause;
+            $order_clause;
 $res = Database::query($sql);
 $course_teachers = [];
 while ($obj = Database::fetch_object($res)) {
@@ -108,7 +111,7 @@ $form = new FormValidator(
     'post',
     api_get_self().'?id='.$courseId
 );
-$form->addElement('header', get_lang('Course').'  #'.$courseInfo['real_id'].' '.$course_code);
+$form->addHeader(get_lang('Course').'  #'.$courseInfo['real_id'].' '.$course_code);
 $form->addElement('hidden', 'code', $course_code);
 
 //title
@@ -184,7 +187,6 @@ if ($countCategories >= 100) {
 }
 
 $courseTeacherNames = [];
-
 foreach ($course_teachers as $courseTeacherId) {
     /** @var User $courseTeacher */
     $courseTeacher = UserManager::getRepository()->find($courseTeacherId);
@@ -254,11 +256,35 @@ $form->applyFilter('department_url', 'trim');
 $form->addSelectLanguage('course_language', get_lang('CourseLanguage'));
 
 $group = [];
-$group[] = $form->createElement('radio', 'visibility', get_lang("CourseAccess"), get_lang('OpenToTheWorld'), COURSE_VISIBILITY_OPEN_WORLD);
-$group[] = $form->createElement('radio', 'visibility', null, get_lang('OpenToThePlatform'), COURSE_VISIBILITY_OPEN_PLATFORM);
+$group[] = $form->createElement(
+    'radio',
+    'visibility',
+    get_lang('CourseAccess'),
+    get_lang('OpenToTheWorld'),
+    COURSE_VISIBILITY_OPEN_WORLD
+);
+$group[] = $form->createElement(
+    'radio',
+    'visibility',
+    null,
+    get_lang('OpenToThePlatform'),
+    COURSE_VISIBILITY_OPEN_PLATFORM
+);
 $group[] = $form->createElement('radio', 'visibility', null, get_lang('Private'), COURSE_VISIBILITY_REGISTERED);
-$group[] = $form->createElement('radio', 'visibility', null, get_lang('CourseVisibilityClosed'), COURSE_VISIBILITY_CLOSED);
-$group[] = $form->createElement('radio', 'visibility', null, get_lang('CourseVisibilityHidden'), COURSE_VISIBILITY_HIDDEN);
+$group[] = $form->createElement(
+    'radio',
+    'visibility',
+    null,
+    get_lang('CourseVisibilityClosed'),
+    COURSE_VISIBILITY_CLOSED
+);
+$group[] = $form->createElement(
+    'radio',
+    'visibility',
+    null,
+    get_lang('CourseVisibilityHidden'),
+    COURSE_VISIBILITY_HIDDEN
+);
 $form->addGroup($group, '', get_lang('CourseAccess'));
 
 $group = [];
@@ -267,7 +293,13 @@ $group[] = $form->createElement('radio', 'subscribe', null, get_lang('Denied'), 
 $form->addGroup($group, '', get_lang('Subscription'));
 
 $group = [];
-$group[] = $form->createElement('radio', 'unsubscribe', get_lang('Unsubscription'), get_lang('AllowedToUnsubscribe'), 1);
+$group[] = $form->createElement(
+    'radio',
+    'unsubscribe',
+    get_lang('Unsubscription'),
+    get_lang('AllowedToUnsubscribe'),
+    1
+);
 $group[] = $form->createElement('radio', 'unsubscribe', null, get_lang('NotAllowedToUnsubscribe'), 0);
 $form->addGroup($group, '', get_lang('Unsubscription'));
 
@@ -303,7 +335,6 @@ $form->addButtonUpdate(get_lang('ModifyCourseInfo'));
 $courseInfo['disk_quota'] = round(DocumentManager::get_course_quota($courseInfo['code']) / 1024 / 1024, 1);
 $courseInfo['real_code'] = $courseInfo['code'];
 $courseInfo['add_teachers_to_sessions_courses'] = isset($courseInfo['add_teachers_to_sessions_courses']) ? $courseInfo['add_teachers_to_sessions_courses'] : 0;
-
 $form->setDefaults($courseInfo);
 
 // Validate form
@@ -460,8 +491,15 @@ if ($form->validate()) {
 Display::display_header($tool_name);
 
 echo '<div class="actions">';
-echo Display::url(Display::return_icon('back.png', get_lang('Back')), api_get_path(WEB_CODE_PATH).'admin/course_list.php');
-echo Display::url(Display::return_icon('course_home.png', get_lang('CourseHome')), $courseInfo['course_public_url'], ['target' => '_blank']);
+echo Display::url(
+    Display::return_icon('back.png', get_lang('Back')),
+    api_get_path(WEB_CODE_PATH).'admin/course_list.php'
+);
+echo Display::url(
+    Display::return_icon('course_home.png', get_lang('CourseHome')),
+    $courseInfo['course_public_url'],
+    ['target' => '_blank']
+);
 echo '</div>';
 
 echo "<script>
@@ -515,4 +553,4 @@ function valide() {
 // Display the form
 $form->display();
 
-Display :: display_footer();
+Display:: display_footer();

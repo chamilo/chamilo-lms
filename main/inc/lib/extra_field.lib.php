@@ -1,4 +1,5 @@
 <?php
+
 /* For licensing terms, see /license.txt */
 
 use Chamilo\CoreBundle\Entity\ExtraField as EntityExtraField;
@@ -601,14 +602,14 @@ class ExtraField extends Model
         $fields = $this->get_all();
         $field_values = new ExtraFieldValue($this->type);
 
-        if (!empty($fields) > 0) {
+        if (!empty($fields)) {
             foreach ($fields as $field) {
                 $field_value = $field_values->get_values_by_handler_and_field_id(
                     $itemId,
                     $field['id']
                 );
 
-                if ($field['field_type'] == self::FIELD_TYPE_TAG) {
+                if (self::FIELD_TYPE_TAG == $field['field_type']) {
                     $tags = UserManager::get_user_tags_to_string(
                         $itemId,
                         $field['id'],
@@ -761,7 +762,6 @@ class ExtraField extends Model
     public static function tripleSelectConvertStringToArray($string)
     {
         $options = [];
-
         foreach (explode('|', $string) as $i => $item0) {
             $level1 = explode('\\', $item0);
 
@@ -798,18 +798,18 @@ class ExtraField extends Model
      */
     public static function extra_field_double_select_convert_array_to_ordered_array($options)
     {
-        $options_parsed = [];
+        $optionsParsed = [];
         if (!empty($options)) {
             foreach ($options as $option) {
-                if ($option['option_value'] == 0) {
-                    $options_parsed[$option['id']][] = $option;
+                if (0 == $option['option_value']) {
+                    $optionsParsed[$option['id']][] = $option;
                 } else {
-                    $options_parsed[$option['option_value']][] = $option;
+                    $optionsParsed[$option['option_value']][] = $option;
                 }
             }
         }
 
-        return $options_parsed;
+        return $optionsParsed;
     }
 
     /**
@@ -840,13 +840,13 @@ class ExtraField extends Model
     public static function extra_field_double_select_convert_array_to_string($options)
     {
         $string = null;
-        $options_parsed = self::extra_field_double_select_convert_array_to_ordered_array($options);
+        $optionsParsed = self::extra_field_double_select_convert_array_to_ordered_array($options);
 
-        if (!empty($options_parsed)) {
-            foreach ($options_parsed as $option) {
+        if (!empty($optionsParsed)) {
+            foreach ($optionsParsed as $option) {
                 foreach ($option as $key => $item) {
                     $string .= $item['display_text'];
-                    if ($key == 0) {
+                    if (0 == $key) {
                         $string .= ':';
                     } else {
                         if (isset($option[$key + 1])) {
@@ -872,16 +872,15 @@ class ExtraField extends Model
      */
     public static function extraFieldSelectWithTextConvertArrayToString(array $options)
     {
-        $string = '';
         $parsedOptions = self::extra_field_double_select_convert_array_to_ordered_array($options);
 
         if (empty($parsedOptions)) {
             return '';
         }
 
+        $string = '';
         foreach ($parsedOptions as $options) {
             $option = current($options);
-
             $string .= $option['display_text'];
             $string .= '|';
         }
@@ -894,9 +893,8 @@ class ExtraField extends Model
      */
     public static function tripleSelectConvertArrayToString(array $options)
     {
-        $string = '';
         $parsedOptions = self::tripleSelectConvertArrayToOrderedArray($options);
-
+        $string = '';
         foreach ($parsedOptions['level1'] as $item1) {
             $string .= $item1['display_text'];
             $level2 = self::getOptionsFromTripleSelect($parsedOptions['level2'], $item1['id']);
@@ -925,7 +923,7 @@ class ExtraField extends Model
             $params['variable'] = $params['display_text'];
         }
 
-        $params['variable'] = trim(strtolower(str_replace(" ", "_", $params['variable'])));
+        $params['variable'] = trim(strtolower(str_replace(' ', '_', $params['variable'])));
 
         if (!isset($params['field_order'])) {
             $max_order = self::get_max_field_order();
@@ -1081,7 +1079,7 @@ class ExtraField extends Model
                 }
 
                 if (!$adminPermissions) {
-                    if ($field_details['visible_to_self'] == 0) {
+                    if (0 == $field_details['visible_to_self']) {
                         continue;
                     }
 
@@ -1098,7 +1096,7 @@ class ExtraField extends Model
 
                 $freezeElement = false;
                 if (!$adminPermissions) {
-                    $freezeElement = $field_details['visible_to_self'] == 0 || $field_details['changeable'] == 0;
+                    $freezeElement = 0 == $field_details['visible_to_self'] || 0 == $field_details['changeable'];
                 }
 
                 $translatedDisplayText = get_lang($field_details['display_text'], true);
@@ -1211,7 +1209,7 @@ class ExtraField extends Model
 
                             if (empty($checkboxAttributes) &&
                                 isset($field_details['default_value']) && empty($extraData)) {
-                                if ($field_details['default_value'] == 1) {
+                                if (1 == $field_details['default_value']) {
                                     $checkboxAttributes['checked'] = 1;
                                 }
                             }
@@ -1311,7 +1309,6 @@ class ExtraField extends Model
                         }
 
                         $selectedOptions = [];
-
                         if ($separateValue > 0) {
                             $em = Database::getManager();
                             $fieldTags = $em
@@ -1361,7 +1358,7 @@ class ExtraField extends Model
                                 ['style' => 'width: 100%;']
                             );
 
-                            if ($useTagAsSelect === false) {
+                            if (false === $useTagAsSelect) {
                                 $tagsSelect->setAttribute('class', null);
                             }
 
@@ -1372,7 +1369,7 @@ class ExtraField extends Model
                             $tagsSelect->setMultiple(true);
 
                             $selectedOptions = [];
-                            if ($this->type === 'user') {
+                            if ('user' === $this->type) {
                                 // The magic should be here
                                 $user_tags = UserManager::get_user_tags(
                                     $itemId,
@@ -1474,7 +1471,7 @@ class ExtraField extends Model
                                 ]
                             );
 
-                            if ($useTagAsSelect == false) {
+                            if (false == $useTagAsSelect) {
                                 $jquery_ready_content .= "
                                 $('#extra_$variable').select2({
                                     ajax: {
@@ -1523,7 +1520,7 @@ class ExtraField extends Model
                         $leftpad = '1.7';
                         $top = '0.4';
                         $domain = parse_url($icon_path, PHP_URL_HOST);
-                        if ($domain == 'www.hi5.com' or $domain == 'hi5.com') {
+                        if ('www.hi5.com' === $domain || 'hi5.com' === $domain) {
                             $leftpad = '3';
                             $top = '0';
                         }
@@ -1555,7 +1552,7 @@ class ExtraField extends Model
                         $form->addElement(
                             'text',
                             'extra_'.$field_details['variable'],
-                            $field_details['display_text']." (".get_lang('CountryDialCode').")",
+                            $field_details['display_text'].' ('.get_lang('CountryDialCode').')',
                             ['size' => 40, 'placeholder' => '(xx)xxxxxxxxx']
                         );
                         $form->applyFilter('extra_'.$field_details['variable'], 'stripslashes');
@@ -1602,7 +1599,7 @@ class ExtraField extends Model
                             }
                         }
 
-                        if ($fieldTexts[0] === 'Image') {
+                        if ('Image' === $fieldTexts[0]) {
                             $fieldTexts[0] = get_lang($fieldTexts[0]);
                         }
 
@@ -1831,10 +1828,10 @@ class ExtraField extends Model
      */
     public function setupBreadcrumb(&$breadcrumb, $action)
     {
-        if ($action == 'add') {
+        if ('add' === $action) {
             $breadcrumb[] = ['url' => $this->pageUrl, 'name' => $this->pageName];
             $breadcrumb[] = ['url' => '#', 'name' => get_lang('Add')];
-        } elseif ($action == 'edit') {
+        } elseif ('edit' === $action) {
             $breadcrumb[] = ['url' => $this->pageUrl, 'name' => $this->pageName];
             $breadcrumb[] = ['url' => '#', 'name' => get_lang('Edit')];
         } else {
@@ -1977,7 +1974,7 @@ class ExtraField extends Model
         $header = get_lang('Add');
         $defaults = [];
 
-        if ($action === 'edit') {
+        if ('edit' === $action) {
             $header = get_lang('Modify');
             // Setting the defaults
             $defaults = $this->get($id, false);
@@ -1985,7 +1982,7 @@ class ExtraField extends Model
 
         $form->addElement('header', $header);
 
-        if ($action === 'edit') {
+        if ('edit' === $action) {
             $translateUrl = api_get_path(WEB_CODE_PATH).'extrafield/translate.php?'
                 .http_build_query(['extra_field' => $id]);
             $translateButton = Display::toolbarButton(get_lang('TranslateThisTerm'), $translateUrl, 'language', 'link');
@@ -2027,7 +2024,7 @@ class ExtraField extends Model
             self::FIELD_TYPE_TRIPLE_SELECT,
         ];
 
-        if ($action == 'edit') {
+        if ('edit' == $action) {
             if (in_array($defaults['field_type'], $fieldWithOptions)) {
                 $url = Display::url(
                     get_lang('EditExtraFieldOptions'),
@@ -2035,7 +2032,7 @@ class ExtraField extends Model
                 );
                 $form->addElement('label', null, $url);
 
-                if ($defaults['field_type'] == self::FIELD_TYPE_SELECT) {
+                if (self::FIELD_TYPE_SELECT == $defaults['field_type']) {
                     $urlWorkFlow = Display::url(
                         get_lang('EditExtraFieldWorkFlow'),
                         'extra_field_workflow.php?type='.$this->type.'&field_id='.$id
@@ -2082,7 +2079,7 @@ class ExtraField extends Model
 
         $form->addElement('text', 'field_order', get_lang('FieldOrder'));
 
-        if ($action == 'edit') {
+        if ('edit' == $action) {
             $option = new ExtraFieldOption($this->type);
             $defaults['field_options'] = $option->get_field_options_by_field_to_string($id);
             $form->addButtonUpdate(get_lang('Modify'));
@@ -2120,7 +2117,7 @@ class ExtraField extends Model
         $editIcon = Display::return_icon('edit.png', get_lang('Edit'), '', ICON_SIZE_SMALL);
         $deleteIcon = Display::return_icon('delete.png', get_lang('Delete'), '', ICON_SIZE_SMALL);
         $confirmMessage = addslashes(
-            api_htmlentities(get_lang("ConfirmYourChoice"), ENT_QUOTES)
+            api_htmlentities(get_lang('ConfirmYourChoice'), ENT_QUOTES)
         );
 
         $editButton = <<<JAVASCRIPT
@@ -2176,7 +2173,7 @@ JAVASCRIPT;
                     ? $search_options['field_default_value']
                     : null;
 
-                if ($field['field_type'] == self::FIELD_TYPE_DOUBLE_SELECT) {
+                if (self::FIELD_TYPE_DOUBLE_SELECT == $field['field_type']) {
                     // Add 2 selects
                     $options = $extraFieldOption->get_field_options_by_field($field['id']);
                     $options = self::extra_field_double_select_convert_array_to_ordered_array($options);
@@ -2185,7 +2182,7 @@ JAVASCRIPT;
                     if (!empty($options)) {
                         foreach ($options as $option) {
                             foreach ($option as $sub_option) {
-                                if ($sub_option['option_value'] == 0) {
+                                if (0 == $sub_option['option_value']) {
                                     $first_options[] = $sub_option['field_id'].'#'.$sub_option['id'].':'
                                         .$sub_option['display_text'];
                                 }
@@ -2261,7 +2258,7 @@ JAVASCRIPT;
      *
      * @return array
      */
-    public function parseConditions($options)
+    public function parseConditions($options, $alias = 's')
     {
         $inject_extra_fields = null;
         $extraFieldOption = new ExtraFieldOption($this->type);
@@ -2271,8 +2268,8 @@ JAVASCRIPT;
             $extra_fields = $options['extra'];
             if (!empty($extra_fields)) {
                 $counter = 1;
+                $extra_field_obj = new ExtraField($this->type);
                 foreach ($extra_fields as &$extra) {
-                    $extra_field_obj = new ExtraField($this->type);
                     $extra_field_info = $extra_field_obj->get($extra['id']);
                     $extra['extra_field_info'] = $extra_field_info;
 
@@ -2287,6 +2284,8 @@ JAVASCRIPT;
                         )
                     ) {
                         $inject_extra_fields .= " fvo$counter.display_text as {$extra['field']}, ";
+                    } elseif ($extra_field_info['field_type'] == self::FIELD_TYPE_TAG) {
+                        $inject_extra_fields .= " tag$counter.tag as {$extra['field']}, ";
                     } else {
                         $inject_extra_fields .= " fv$counter.value as {$extra['field']}, ";
                     }
@@ -2297,7 +2296,7 @@ JAVASCRIPT;
                         $info = $this->get($extra['id']);
                         $extra_fields_info[$extra['id']] = $info;
                     }
-                    if (isset($info['field_type']) && $info['field_type'] == self::FIELD_TYPE_DOUBLE_SELECT) {
+                    if (isset($info['field_type']) && self::FIELD_TYPE_DOUBLE_SELECT == $info['field_type']) {
                         $double_fields[$info['id']] = $info;
                     }
                     $counter++;
@@ -2307,10 +2306,7 @@ JAVASCRIPT;
 
         $options_by_double = [];
         foreach ($double_fields as $double) {
-            $my_options = $extraFieldOption->get_field_options_by_field(
-                $double['id'],
-                true
-            );
+            $my_options = $extraFieldOption->get_field_options_by_field($double['id'], true);
             $options_by_double['extra_'.$double['variable']] = $my_options;
         }
 
@@ -2329,7 +2325,7 @@ JAVASCRIPT;
                 foreach ($extra_fields as $extra_info) {
                     $extra_field_info = $extra_info['extra_field_info'];
                     $inject_joins .= " INNER JOIN $this->table_field_values fv$counter
-                                       ON (s.".$this->primaryKey." = fv$counter.".$this->handler_id.") ";
+                                       ON ($alias.".$this->primaryKey." = fv$counter.".$this->handler_id.') ';
                     // Add options
                     if (isset($extra_field_info['field_type']) &&
                         in_array(
@@ -2355,7 +2351,7 @@ JAVASCRIPT;
                             ";
                     } else {
                         if (isset($extra_field_info['field_type']) &&
-                            $extra_field_info['field_type'] == self::FIELD_TYPE_TAG
+                            self::FIELD_TYPE_TAG == $extra_field_info['field_type']
                         ) {
                             $options['where'] = str_replace(
                                 $extra_info['field'],
@@ -2367,13 +2363,13 @@ JAVASCRIPT;
                                 INNER JOIN $this->table_field_rel_tag tag_rel$counter
                                 ON (
                                     tag_rel$counter.field_id = ".$extra_info['id']." AND
-                                    tag_rel$counter.item_id = s.".$this->primaryKey."
+                                    tag_rel$counter.item_id = $alias.".$this->primaryKey."
                                 )
                                 INNER JOIN $this->table_field_tag tag$counter
                                 ON (tag$counter.id = tag_rel$counter.tag_id)
                             ";
                         } else {
-                            //text, textarea, etc
+                            // text, textarea, etc
                             $options['where'] = str_replace(
                                 $extra_info['field'],
                                 'fv'.$counter.'.field_id = '.$extra_info['id'].' AND fv'.$counter.'.value',
@@ -2383,10 +2379,10 @@ JAVASCRIPT;
                     }
 
                     $field_value_to_join[] = " fv$counter.$this->handler_id ";
-                    $counter++;
+                    ++$counter;
                 }
                 if (!empty($field_value_to_join)) {
-                    //$inject_where .= " AND s.id = ".implode(' = ', $field_value_to_join);
+                    //$inject_where .= " AND $alias.id = ".implode(' = ', $field_value_to_join);
                 }
             }
             $where .= ' AND '.$options['where'];
@@ -2394,11 +2390,11 @@ JAVASCRIPT;
 
         $order = null;
         if (!empty($options['order'])) {
-            $order = " ORDER BY ".$options['order'];
+            $order = ' ORDER BY '.$options['order'];
         }
         $limit = null;
         if (!empty($options['limit'])) {
-            $limit = " LIMIT ".$options['limit'];
+            $limit = ' LIMIT '.$options['limit'];
         }
 
         return [
@@ -2426,13 +2422,13 @@ JAVASCRIPT;
         if (empty($col)) {
             return '';
         }
-        if ($oper == 'bw' || $oper == 'bn') {
+        if ('bw' === $oper || 'bn' === $oper) {
             $val .= '%';
         }
-        if ($oper == 'ew' || $oper == 'en') {
+        if ('ew' === $oper || 'en' === $oper) {
             $val = '%'.$val;
         }
-        if ($oper == 'cn' || $oper == 'nc' || $oper == 'in' || $oper == 'ni') {
+        if ('cn' === $oper || 'nc' === $oper || 'in' === $oper || 'ni' === $oper) {
             if (is_array($val)) {
                 $result = '"%'.implode(';', $val).'%"';
                 foreach ($val as $item) {
@@ -2477,7 +2473,7 @@ JAVASCRIPT;
                 if (empty($rule)) {
                     continue;
                 }
-                if (strpos($rule->field, '_second') === false) {
+                if (false === strpos($rule->field, '_second')) {
                 } else {
                     $my_field = str_replace('_second', '', $rule->field);
                     $double_select[$my_field] = $rule->data;
@@ -2488,20 +2484,20 @@ JAVASCRIPT;
                 if (empty($rule)) {
                     continue;
                 }
-                if (strpos($rule->field, $stringToSearch) === false) {
+                if (false === strpos($rule->field, $stringToSearch)) {
                     // normal fields
                     $field = $rule->field;
-                    if (isset($rule->data) && is_string($rule->data) && $rule->data != -1) {
+                    if (isset($rule->data) && is_string($rule->data) && -1 != $rule->data) {
                         $condition_array[] = $this->get_where_clause($field, $rule->op, $rule->data);
                     }
                 } else {
                     // Extra fields
-                    if (strpos($rule->field, '_second') === false) {
+                    if (false === strpos($rule->field, '_second')) {
                         //No _second
                         $original_field = str_replace($stringToSearch, '', $rule->field);
                         $field_option = $this->get_handler_field_info_by_field_variable($original_field);
 
-                        if ($field_option['field_type'] == self::FIELD_TYPE_DOUBLE_SELECT) {
+                        if (self::FIELD_TYPE_DOUBLE_SELECT == $field_option['field_type']) {
                             if (isset($double_select[$rule->field])) {
                                 $data = explode('#', $rule->data);
                                 $rule->data = $data[1].'::'.$double_select[$rule->field];
@@ -2521,7 +2517,7 @@ JAVASCRIPT;
                             }
                         } else {
                             if (isset($rule->data)) {
-                                if (isset($rule->data) && is_int($rule->data) && $rule->data == -1) {
+                                if (isset($rule->data) && is_int($rule->data) && -1 == $rule->data) {
                                     continue;
                                 }
                                 $condition_array[] = ' ('
@@ -2566,8 +2562,10 @@ JAVASCRIPT;
         $fields = $this->get_all();
         $em = Database::getManager();
 
+        $repoTag = $em->getRepository('ChamiloCoreBundle:ExtraFieldRelTag');
+
         foreach ($fields as $field) {
-            if ($field['visible_to_self'] != '1') {
+            if ('1' != $field['visible_to_self']) {
                 continue;
             }
 
@@ -2578,25 +2576,14 @@ JAVASCRIPT;
                 true
             );
 
-            if ($field['field_type'] == ExtraField::FIELD_TYPE_TAG) {
-                $tags = $em
-                    ->getRepository('ChamiloCoreBundle:ExtraFieldRelTag')
-                    ->findBy(
-                        [
-                            'fieldId' => $field['id'],
-                            'itemId' => $itemId,
-                        ]
-                    );
+            if (ExtraField::FIELD_TYPE_TAG == $field['field_type']) {
+                $tags = $repoTag->findBy(['fieldId' => $field['id'], 'itemId' => $itemId]);
                 if ($tags) {
-                    /** @var \Chamilo\CoreBundle\Entity\ExtraFieldRelTag $tag */
+                    /** @var ExtraFieldRelTag $tag */
                     $data = [];
                     foreach ($tags as $extraFieldTag) {
-                        /** @var \Chamilo\CoreBundle\Entity\Tag $tag */
+                        /** @var Tag $tag */
                         $tag = $em->find('ChamiloCoreBundle:Tag', $extraFieldTag->getTagId());
-                        /*$data[] = [
-                            'id' => $extraFieldTag->getTagId(),
-                            'value' => $tag->getTag()
-                        ];*/
                         $data[] = $tag->getTag();
                     }
                     $valueData = implode(',', $data);
@@ -2611,14 +2598,14 @@ JAVASCRIPT;
 
             switch ($field['field_type']) {
                 case self::FIELD_TYPE_CHECKBOX:
-                    if ($valueData !== false && $valueData['value'] == '1') {
+                    if (false !== $valueData && '1' == $valueData['value']) {
                         $displayedValue = get_lang('Yes');
                     } else {
                         $displayedValue = get_lang('No');
                     }
                     break;
                 case self::FIELD_TYPE_DATE:
-                    if ($valueData !== false && !empty($valueData['value'])) {
+                    if (false !== $valueData && !empty($valueData['value'])) {
                         $displayedValue = api_format_date($valueData['value'], DATE_FORMAT_LONG_NO_DAY);
                     }
                     break;
@@ -2628,7 +2615,7 @@ JAVASCRIPT;
                     }
                     break;
                 case self::FIELD_TYPE_FILE_IMAGE:
-                    if ($valueData === false || empty($valueData['value'])) {
+                    if (false === $valueData || empty($valueData['value'])) {
                         break;
                     }
 
@@ -2649,7 +2636,7 @@ JAVASCRIPT;
                     );
                     break;
                 case self::FIELD_TYPE_FILE:
-                    if ($valueData === false || empty($valueData['value'])) {
+                    if (false === $valueData || empty($valueData['value'])) {
                         break;
                     }
 
@@ -2748,8 +2735,8 @@ JAVASCRIPT;
     {
         $skillTable = Database::get_main_table(TABLE_MAIN_SKILL);
         $tagRelExtraTable = Database::get_main_table(TABLE_MAIN_EXTRA_FIELD_REL_TAG);
-        $fieldId = intval($fieldId);
-        $tagId = intval($tagId);
+        $fieldId = (int) $fieldId;
+        $tagId = (int) $tagId;
 
         $sql = "SELECT s.id
                 FROM $skillTable s INNER JOIN $tagRelExtraTable t
@@ -2957,7 +2944,7 @@ JAVASCRIPT;
                                 alert('".get_lang('NotFound')."');
                             }
                         } else {
-                            alert('Geocode ".get_lang('Error').": ".get_lang("AddressField")." ".get_lang('NotFound')."');
+                            alert('Geocode ".get_lang('Error').': '.get_lang('AddressField').' '.get_lang('NotFound')."');
                         }
                     });
                 }
@@ -3015,9 +3002,12 @@ JAVASCRIPT;
      */
     private static function getOptionsFromTripleSelect(array $options, $parentId)
     {
-        return array_filter($options, function ($option) use ($parentId) {
-            return $option['option_value'] == $parentId;
-        });
+        return array_filter(
+            $options,
+            function ($option) use ($parentId) {
+                return $option['option_value'] == $parentId;
+            }
+        );
     }
 
     /**
@@ -3221,7 +3211,7 @@ JAVASCRIPT;
         if (!empty($options)) {
             foreach ($options as $option) {
                 foreach ($option as $sub_option) {
-                    if ($sub_option['option_value'] == '0') {
+                    if ('0' == $sub_option['option_value']) {
                         $values[$sub_option['id']] = $sub_option['display_text'];
 
                         continue;
@@ -3233,6 +3223,7 @@ JAVASCRIPT;
                 }
             }
         }
+
         $form
             ->defaultRenderer()
             ->setGroupElementTemplate('<p>{element}</p>', 'extra_'.$fieldDetails['variable']);
@@ -3294,7 +3285,7 @@ JAVASCRIPT;
         if (!empty($options)) {
             foreach ($options as $option) {
                 foreach ($option as $sub_option) {
-                    if ($sub_option['option_value'] != '0') {
+                    if ('0' != $sub_option['option_value']) {
                         continue;
                     }
 

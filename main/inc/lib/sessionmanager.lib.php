@@ -521,7 +521,7 @@ class SessionManager
         $sqlInjectJoins = $conditions['inject_joins'];
         $where .= $conditions['where'];
         $sqlInjectWhere = $conditions['inject_where'];
-        $inject_extra_fields = $conditions['inject_extra_fields'];
+        $injectExtraFields = $conditions['inject_extra_fields'];
         $order = $conditions['order'];
         $limit = $conditions['limit'];
 
@@ -548,7 +548,7 @@ class SessionManager
                      access_end_date,
                      s.visibility,
                      s.session_category_id,
-                     $inject_extra_fields
+                     $injectExtraFields
                      s.id
              ";
 
@@ -3940,30 +3940,30 @@ class SessionManager
                 $imageFilename = ExtraFieldModel::FIELD_TYPE_FILE_IMAGE.'_'.$row['id'].'.png';
                 $row['image'] = is_file($sysUploadPath.$imageFilename) ? $webUploadPath.$imageFilename : $imgPath;
 
-                if ($row['display_start_date'] == '0000-00-00 00:00:00' || $row['display_start_date'] == '0000-00-00') {
+                if ($row['display_start_date'] === '0000-00-00 00:00:00' || $row['display_start_date'] === '0000-00-00') {
                     $row['display_start_date'] = null;
                 }
 
-                if ($row['display_end_date'] == '0000-00-00 00:00:00' || $row['display_end_date'] == '0000-00-00') {
+                if ($row['display_end_date'] === '0000-00-00 00:00:00' || $row['display_end_date'] === '0000-00-00') {
                     $row['display_end_date'] = null;
                 }
 
-                if ($row['access_start_date'] == '0000-00-00 00:00:00' || $row['access_start_date'] == '0000-00-00') {
+                if ($row['access_start_date'] === '0000-00-00 00:00:00' || $row['access_start_date'] === '0000-00-00') {
                     $row['access_start_date'] = null;
                 }
 
-                if ($row['access_end_date'] == '0000-00-00 00:00:00' || $row['access_end_date'] == '0000-00-00') {
+                if ($row['access_end_date'] === '0000-00-00 00:00:00' || $row['access_end_date'] === '0000-00-00') {
                     $row['access_end_date'] = null;
                 }
 
-                if ($row['coach_access_start_date'] == '0000-00-00 00:00:00' ||
-                    $row['coach_access_start_date'] == '0000-00-00'
+                if ($row['coach_access_start_date'] === '0000-00-00 00:00:00' ||
+                    $row['coach_access_start_date'] === '0000-00-00'
                 ) {
                     $row['coach_access_start_date'] = null;
                 }
 
-                if ($row['coach_access_end_date'] == '0000-00-00 00:00:00' ||
-                    $row['coach_access_end_date'] == '0000-00-00'
+                if ($row['coach_access_end_date'] === '0000-00-00 00:00:00' ||
+                    $row['coach_access_end_date'] === '0000-00-00'
                 ) {
                     $row['coach_access_end_date'] = null;
                 }
@@ -8666,7 +8666,7 @@ class SessionManager
         }
 
         $today = api_get_utc_datetime();
-        $inject_extra_fields = null;
+        $injectExtraFields = null;
         $extra_fields_info = [];
 
         //for now only sessions
@@ -8678,7 +8678,7 @@ class SessionManager
             $extra_fields = $options['extra'];
             if (!empty($extra_fields)) {
                 foreach ($extra_fields as $extra) {
-                    $inject_extra_fields .= " IF (fv.field_id = {$extra['id']}, fvo.option_display_text, NULL ) as {$extra['field']} , ";
+                    $injectExtraFields .= " IF (fv.field_id = {$extra['id']}, fvo.option_display_text, NULL ) as {$extra['field']} , ";
                     if (isset($extra_fields_info[$extra['id']])) {
                         $info = $extra_fields_info[$extra['id']];
                     } else {
@@ -8723,7 +8723,7 @@ class SessionManager
                 access_end_date,
                 s.visibility,
                 u.user_id,
-                $inject_extra_fields
+                $injectExtraFields
                 c.title as course_title,
                 s.id ";
 

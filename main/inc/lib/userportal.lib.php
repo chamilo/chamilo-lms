@@ -79,33 +79,6 @@ class IndexManager
     }
 
     /**
-     * @param $listA
-     * @param $listB
-     *
-     * @return int
-     */
-    private static function compareByCourse($listA, $listB)
-    {
-        if ($listA['userCatTitle'] == $listB['userCatTitle']) {
-            if ($listA['title'] == $listB['title']) {
-                return 0;
-            }
-
-            if ($listA['title'] > $listB['title']) {
-                return 1;
-            }
-
-            return -1;
-        }
-
-        if ($listA['userCatTitle'] > $listB['userCatTitle']) {
-            return 1;
-        }
-
-        return -1;
-    }
-
-    /**
      * @param bool $setLoginForm
      */
     public function set_login_form($setLoginForm = true)
@@ -709,8 +682,8 @@ class IndexManager
      * @param int $user_id : the id of the user
      *
      * @return array an array containing all the information of the courses of the given user
-     * @author Patrick Cool <patrick.cool@UGent.be>, Ghent University, Belgium
      *
+     * @author Patrick Cool <patrick.cool@UGent.be>, Ghent University, Belgium
      */
     public function get_courses_of_user($user_id)
     {
@@ -771,8 +744,8 @@ class IndexManager
 
     /**
      * @return string
-     * @todo use FormValidator
      *
+     * @todo use FormValidator
      */
     public function return_search_block()
     {
@@ -800,8 +773,8 @@ class IndexManager
      * @param string $idCollapse
      *
      * @return string
-     * @todo use the template system
      *
+     * @todo use the template system
      */
     public function showRightBlock(
         $title,
@@ -881,28 +854,6 @@ class IndexManager
         );
 
         return $html;
-    }
-
-    /**
-     * Generate the HTML code for items when displaying the right-side blocks.
-     *
-     * @return string
-     */
-    private static function returnRightBlockItems(array $items)
-    {
-        $my_account_content = '';
-        foreach ($items as $item) {
-            if (empty($item['link']) && empty($item['title'])) {
-                continue;
-            }
-
-            $my_account_content .= '<li class="list-group-item '.(empty($item['class']) ? '' : $item['class']).'">'
-                .(empty($item['icon']) ? '' : '<span class="item-icon">'.$item['icon'].'</span>')
-                .'<a href="'.$item['link'].'">'.$item['title'].'</a>'
-                .'</li>';
-        }
-
-        return '<ul class="list-group">'.$my_account_content.'</ul>';
     }
 
     /**
@@ -1408,174 +1359,6 @@ class IndexManager
             'session_count' => $sessionCount,
             'course_count' => $courseCount,
         ];
-    }
-
-    /**
-     * Return HTML code for personal user course category.
-     *
-     * @param $id
-     * @param $title
-     *
-     * @return string
-     */
-    private static function getHtmlForUserCategory($id, $title)
-    {
-        if ($id == 0) {
-            return '';
-        }
-        $icon = Display::return_icon(
-            'folder_yellow.png',
-            $title,
-            ['class' => 'sessionView'],
-            ICON_SIZE_LARGE
-        );
-
-        return "<div class='session-view-user-category'>$icon<span>$title</span></div>";
-    }
-
-    /**
-     * return HTML code for course display in session view.
-     *
-     * @param array $courseInfo
-     * @param       $userCategoryId
-     * @param bool  $displayButton
-     * @param       $loadDirs
-     *
-     * @return string
-     */
-    private static function getHtmlForCourse(
-        $courseInfo,
-        $userCategoryId,
-        $displayButton = false,
-        $loadDirs
-    ) {
-        if (empty($courseInfo)) {
-            return '';
-        }
-
-        $id = $courseInfo['real_id'];
-        $title = $courseInfo['title'];
-        $code = $courseInfo['code'];
-
-        $class = 'session-view-lvl-6';
-        if ($userCategoryId != 0 && !$displayButton) {
-            $class = 'session-view-lvl-7';
-        }
-
-        $class2 = 'session-view-lvl-6';
-        if ($displayButton || $userCategoryId != 0) {
-            $class2 = 'session-view-lvl-7';
-        }
-
-        $button = '';
-        if ($displayButton) {
-            $button = '<input id="session-view-button-'.intval(
-                    $id
-                ).'" class="btn btn-default btn-sm" type="button" onclick="hideUnhide(\'courseblock-'.intval(
-                    $id
-                ).'\', \'session-view-button-'.intval($id).'\', \'+\', \'-\')" value="+" />';
-        }
-
-        $icon = Display::return_icon(
-            'blackboard.png',
-            $title,
-            ['class' => 'sessionView'],
-            ICON_SIZE_LARGE
-        );
-
-        $courseLink = $courseInfo['course_public_url'].'?id_session=0';
-
-        // get html course params
-        $courseParams = CourseManager::getCourseParamsForDisplay($id, $loadDirs);
-        $teachers = '';
-        $rightActions = '';
-
-        // teacher list
-        if (!empty($courseParams['teachers'])) {
-            $teachers = '<p class="'.$class2.' view-by-session-teachers">'.$courseParams['teachers'].'</p>';
-        }
-
-        // notification
-        if (!empty($courseParams['right_actions'])) {
-            $rightActions = '<div class="pull-right">'.$courseParams['right_actions'].'</div>';
-        }
-
-        $notifications = isset($courseParams['notifications']) ? $courseParams['notifications'] : '';
-
-        return "<div>
-                    $button
-                    <span class='$class'>$icon
-                        <a class='sessionView' href='$courseLink'>$title</a>
-                    </span>
-                    $notifications
-                    $rightActions
-                </div>
-                $teachers";
-    }
-
-    /**
-     * return HTML code for session category.
-     *
-     * @param $id
-     * @param $title
-     *
-     * @return string
-     */
-    private static function getHtmlSessionCategory($id, $title)
-    {
-        if ($id == 0) {
-            return '';
-        }
-
-        $icon = Display::return_icon(
-            'folder_blue.png',
-            $title,
-            ['class' => 'sessionView'],
-            ICON_SIZE_LARGE
-        );
-
-        return "<div class='session-view-session-category'>
-                <span class='session-view-lvl-2'>
-                    $icon
-                    <span>$title</span>
-                </span>
-                </div>";
-    }
-
-    /**
-     * return HTML code for session.
-     *
-     * @param int    $id    session id
-     * @param string $title session title
-     * @param int    $categorySessionId
-     * @param array  $courseInfo
-     *
-     * @return string
-     */
-    private static function getHtmlForSession($id, $title, $categorySessionId, $courseInfo)
-    {
-        $html = '';
-        if ($categorySessionId == 0) {
-            $class1 = 'session-view-lvl-2'; // session
-            $class2 = 'session-view-lvl-4'; // got to course in session link
-        } else {
-            $class1 = 'session-view-lvl-3'; // session
-            $class2 = 'session-view-lvl-5'; // got to course in session link
-        }
-
-        $icon = Display::return_icon(
-            'session.png',
-            $title,
-            ['class' => 'sessionView'],
-            ICON_SIZE_LARGE
-        );
-        $courseLink = $courseInfo['course_public_url'].'?id_session='.intval($id);
-
-        $html .= "<span class='$class1 session-view-session'>$icon$title</span>";
-        $html .= '<div class="'.$class2.' session-view-session-go-to-course-in-session">
-                  <a class="" href="'.$courseLink.'">'.get_lang('GoToCourseInsideSession').'</a></div>';
-
-        return '<div>'.$html.'</div>';
     }
 
     /**
@@ -2516,9 +2299,226 @@ class IndexManager
     }
 
     /**
+     * @param $listA
+     * @param $listB
+     *
+     * @return int
+     */
+    private static function compareByCourse($listA, $listB)
+    {
+        if ($listA['userCatTitle'] == $listB['userCatTitle']) {
+            if ($listA['title'] == $listB['title']) {
+                return 0;
+            }
+
+            if ($listA['title'] > $listB['title']) {
+                return 1;
+            }
+
+            return -1;
+        }
+
+        if ($listA['userCatTitle'] > $listB['userCatTitle']) {
+            return 1;
+        }
+
+        return -1;
+    }
+
+    /**
+     * Generate the HTML code for items when displaying the right-side blocks.
+     *
+     * @return string
+     */
+    private static function returnRightBlockItems(array $items)
+    {
+        $my_account_content = '';
+        foreach ($items as $item) {
+            if (empty($item['link']) && empty($item['title'])) {
+                continue;
+            }
+
+            $my_account_content .= '<li class="list-group-item '.(empty($item['class']) ? '' : $item['class']).'">'
+                .(empty($item['icon']) ? '' : '<span class="item-icon">'.$item['icon'].'</span>')
+                .'<a href="'.$item['link'].'">'.$item['title'].'</a>'
+                .'</li>';
+        }
+
+        return '<ul class="list-group">'.$my_account_content.'</ul>';
+    }
+
+    /**
+     * Return HTML code for personal user course category.
+     *
+     * @param $id
+     * @param $title
+     *
+     * @return string
+     */
+    private static function getHtmlForUserCategory($id, $title)
+    {
+        if ($id == 0) {
+            return '';
+        }
+        $icon = Display::return_icon(
+            'folder_yellow.png',
+            $title,
+            ['class' => 'sessionView'],
+            ICON_SIZE_LARGE
+        );
+
+        return "<div class='session-view-user-category'>$icon<span>$title</span></div>";
+    }
+
+    /**
+     * return HTML code for course display in session view.
+     *
+     * @param array $courseInfo
+     * @param       $userCategoryId
+     * @param bool  $displayButton
+     * @param       $loadDirs
+     *
+     * @return string
+     */
+    private static function getHtmlForCourse(
+        $courseInfo,
+        $userCategoryId,
+        $displayButton = false,
+        $loadDirs
+    ) {
+        if (empty($courseInfo)) {
+            return '';
+        }
+
+        $id = $courseInfo['real_id'];
+        $title = $courseInfo['title'];
+        $code = $courseInfo['code'];
+
+        $class = 'session-view-lvl-6';
+        if ($userCategoryId != 0 && !$displayButton) {
+            $class = 'session-view-lvl-7';
+        }
+
+        $class2 = 'session-view-lvl-6';
+        if ($displayButton || $userCategoryId != 0) {
+            $class2 = 'session-view-lvl-7';
+        }
+
+        $button = '';
+        if ($displayButton) {
+            $button = '<input id="session-view-button-'.intval(
+                    $id
+                ).'" class="btn btn-default btn-sm" type="button" onclick="hideUnhide(\'courseblock-'.intval(
+                    $id
+                ).'\', \'session-view-button-'.intval($id).'\', \'+\', \'-\')" value="+" />';
+        }
+
+        $icon = Display::return_icon(
+            'blackboard.png',
+            $title,
+            ['class' => 'sessionView'],
+            ICON_SIZE_LARGE
+        );
+
+        $courseLink = $courseInfo['course_public_url'].'?id_session=0';
+
+        // get html course params
+        $courseParams = CourseManager::getCourseParamsForDisplay($id, $loadDirs);
+        $teachers = '';
+        $rightActions = '';
+
+        // teacher list
+        if (!empty($courseParams['teachers'])) {
+            $teachers = '<p class="'.$class2.' view-by-session-teachers">'.$courseParams['teachers'].'</p>';
+        }
+
+        // notification
+        if (!empty($courseParams['right_actions'])) {
+            $rightActions = '<div class="pull-right">'.$courseParams['right_actions'].'</div>';
+        }
+
+        $notifications = isset($courseParams['notifications']) ? $courseParams['notifications'] : '';
+
+        return "<div>
+                    $button
+                    <span class='$class'>$icon
+                        <a class='sessionView' href='$courseLink'>$title</a>
+                    </span>
+                    $notifications
+                    $rightActions
+                </div>
+                $teachers";
+    }
+
+    /**
+     * return HTML code for session category.
+     *
+     * @param $id
+     * @param $title
+     *
+     * @return string
+     */
+    private static function getHtmlSessionCategory($id, $title)
+    {
+        if ($id == 0) {
+            return '';
+        }
+
+        $icon = Display::return_icon(
+            'folder_blue.png',
+            $title,
+            ['class' => 'sessionView'],
+            ICON_SIZE_LARGE
+        );
+
+        return "<div class='session-view-session-category'>
+                <span class='session-view-lvl-2'>
+                    $icon
+                    <span>$title</span>
+                </span>
+                </div>";
+    }
+
+    /**
+     * return HTML code for session.
+     *
+     * @param int    $id                session id
+     * @param string $title             session title
+     * @param int    $categorySessionId
+     * @param array  $courseInfo
+     *
+     * @return string
+     */
+    private static function getHtmlForSession($id, $title, $categorySessionId, $courseInfo)
+    {
+        $html = '';
+        if ($categorySessionId == 0) {
+            $class1 = 'session-view-lvl-2'; // session
+            $class2 = 'session-view-lvl-4'; // got to course in session link
+        } else {
+            $class1 = 'session-view-lvl-3'; // session
+            $class2 = 'session-view-lvl-5'; // got to course in session link
+        }
+
+        $icon = Display::return_icon(
+            'session.png',
+            $title,
+            ['class' => 'sessionView'],
+            ICON_SIZE_LARGE
+        );
+        $courseLink = $courseInfo['course_public_url'].'?id_session='.intval($id);
+
+        $html .= "<span class='$class1 session-view-session'>$icon$title</span>";
+        $html .= '<div class="'.$class2.' session-view-session-go-to-course-in-session">
+                  <a class="" href="'.$courseLink.'">'.get_lang('GoToCourseInsideSession').'</a></div>';
+
+        return '<div>'.$html.'</div>';
+    }
+
+    /**
      * Filter the course list by category code.
      *
-     * @param array  $courseList course list
+     * @param array  $courseList   course list
      * @param string $categoryCode
      *
      * @return array
@@ -2545,7 +2545,7 @@ class IndexManager
      *
      * @param string      $coachName
      * @param string      $dates
-     * @param string|null $duration Optional
+     * @param string|null $duration  Optional
      *
      * @return string
      */

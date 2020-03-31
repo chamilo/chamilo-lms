@@ -2379,7 +2379,7 @@ JAVASCRIPT;
                     }
 
                     $field_value_to_join[] = " fv$counter.$this->handler_id ";
-                    ++$counter;
+                    $counter++;
                 }
                 if (!empty($field_value_to_join)) {
                     //$inject_where .= " AND $alias.id = ".implode(' = ', $field_value_to_join);

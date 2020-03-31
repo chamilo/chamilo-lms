@@ -213,7 +213,7 @@ class CoursesAndSessionsCatalog
         return array_merge($list, $categories);
     }
 
-     /**
+    /**
      * Return LIMIT to filter SQL query.
      *
      * @param array $limit
@@ -235,8 +235,8 @@ class CoursesAndSessionsCatalog
     /**
      * @param string $categoryCode
      * @param int    $randomValue
-     * @param array  $limit         will be used if $randomValue is not set.
-     *                              This array should contains 'start' and 'length' keys
+     * @param array  $limit        will be used if $randomValue is not set.
+     *                             This array should contains 'start' and 'length' keys
      *
      * @return array
      */
@@ -410,7 +410,7 @@ class CoursesAndSessionsCatalog
      * Search the courses database for a course that matches the search term.
      * The search is done on the code, title and tutor field of the course table.
      *
-     * @param string $keyword The string that the user submitted
+     * @param string $keyword     The string that the user submitted
      * @param array  $limit
      * @param bool   $justVisible search only on visible courses in the catalogue
      * @param array  $conditions
@@ -1615,7 +1615,6 @@ class CoursesAndSessionsCatalog
         return $html;
     }
 
-
     /**
      * Get li HTML of page number.
      *
@@ -1625,7 +1624,7 @@ class CoursesAndSessionsCatalog
      * @param string $content
      * @param string $categoryCode
      * @param string $action
-     * @param array $fields
+     * @param array  $fields
      *
      * @return string
      */

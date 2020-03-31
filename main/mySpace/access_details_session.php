@@ -267,7 +267,7 @@ function getReport($userId, $from, $to, $addTime = false)
 
     $courseSessionTable = '';
     $courseSessionTableData = [];
-    $iconCourse = Display::return_icon('course.png',null,[],ICON_SIZE_SMALL);
+    $iconCourse = Display::return_icon('course.png', null, [], ICON_SIZE_SMALL);
     foreach ($report as $sessionId => $data) {
         foreach ($data['courses'] as $courseId => $courseData) {
             if (empty($courseData)) {
@@ -486,7 +486,7 @@ if ($formByDay->validate()) {
         $courseSessionTable = $result['second'];
         $totalCourseSessionTable = $result['third'];
         $total = $result['total'];
-        $iconCalendar = Display::return_icon('calendar.png',null,[],ICON_SIZE_SMALL);
+        $iconCalendar = Display::return_icon('calendar.png', null, [], ICON_SIZE_SMALL);
         $tableList .= '<div class="date-calendar">'.Display::page_subheader2($iconCalendar.get_lang('Date').': '.$dateToCheck).'</div>';
         $tableList .= $table->toHtml();
         if (!$reduced && !empty($total)) {

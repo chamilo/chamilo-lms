@@ -6647,6 +6647,65 @@ class CourseManager
     }
 
     /**
+     * retrieves all the courses that the user has already subscribed to.
+     *
+     * @param int $user_id
+     *
+     * @return array an array containing all the information of the courses of the given user
+     */
+    public static function getCoursesByUserCourseCategory($user_id)
+    {
+        $course = Database::get_main_table(TABLE_MAIN_COURSE);
+        $courseRelUser = Database::get_main_table(TABLE_MAIN_COURSE_USER);
+        $avoidCoursesCondition = CoursesAndSessionsCatalog::getAvoidCourseCondition();
+        $visibilityCondition = self::getCourseVisibilitySQLCondition('course', true);
+
+        // Secondly we select the courses that are in a category (user_course_cat<>0) and
+        // sort these according to the sort of the category
+        $user_id = (int) $user_id;
+        $sql = "SELECT
+                    course.code k,
+                    course.visual_code vc,
+                    course.subscribe subscr,
+                    course.unsubscribe unsubscr,
+                    course.title i,
+                    course.tutor_name t,
+                    course.category_code cat,
+                    course.directory dir,
+                    course_rel_user.status status,
+                    course_rel_user.sort sort,
+                    course_rel_user.user_course_cat user_course_cat
+                FROM $course course, $courseRelUser  course_rel_user
+                WHERE
+                    course.id = course_rel_user.c_id AND
+                    course_rel_user.relation_type <> ".COURSE_RELATION_TYPE_RRHH." AND
+                    course_rel_user.user_id = '".$user_id."'
+                    $avoidCoursesCondition
+                    $visibilityCondition
+                ORDER BY course_rel_user.sort ASC";
+
+        $result = Database::query($sql);
+        $courses = [];
+        while ($row = Database::fetch_array($result, 'ASOC')) {
+            $courses[] = [
+                'code' => $row['k'],
+                'visual_code' => $row['vc'],
+                'title' => $row['i'],
+                'directory' => $row['dir'],
+                'status' => $row['status'],
+                'tutor' => $row['t'],
+                'subscribe' => $row['subscr'],
+                'category' => $row['cat'],
+                'unsubscribe' => $row['unsubscr'],
+                'sort' => $row['sort'],
+                'user_course_category' => $row['user_course_cat'],
+            ];
+        }
+
+        return $courses;
+    }
+
+    /**
      * Check if a specific access-url-related setting is a problem or not.
      *
      * @param array  $_configuration The $_configuration array
@@ -6712,64 +6771,5 @@ class CourseManager
 
         $courseFieldValue = new ExtraFieldValue('course');
         $courseFieldValue->saveFieldValues($params);
-    }
-
-    /**
-     * retrieves all the courses that the user has already subscribed to.
-     *
-     * @param int $user_id
-     *
-     * @return array an array containing all the information of the courses of the given user
-     */
-    public static function getCoursesByUserCourseCategory($user_id)
-    {
-        $course = Database::get_main_table(TABLE_MAIN_COURSE);
-        $courseRelUser = Database::get_main_table(TABLE_MAIN_COURSE_USER);
-        $avoidCoursesCondition = CoursesAndSessionsCatalog::getAvoidCourseCondition();
-        $visibilityCondition = self::getCourseVisibilitySQLCondition('course', true);
-
-        // Secondly we select the courses that are in a category (user_course_cat<>0) and
-        // sort these according to the sort of the category
-        $user_id = (int) $user_id;
-        $sql = "SELECT
-                    course.code k,
-                    course.visual_code vc,
-                    course.subscribe subscr,
-                    course.unsubscribe unsubscr,
-                    course.title i,
-                    course.tutor_name t,
-                    course.category_code cat,
-                    course.directory dir,
-                    course_rel_user.status status,
-                    course_rel_user.sort sort,
-                    course_rel_user.user_course_cat user_course_cat
-                FROM $course course, $courseRelUser  course_rel_user
-                WHERE
-                    course.id = course_rel_user.c_id AND
-                    course_rel_user.relation_type <> ".COURSE_RELATION_TYPE_RRHH." AND
-                    course_rel_user.user_id = '".$user_id."'
-                    $avoidCoursesCondition
-                    $visibilityCondition
-                ORDER BY course_rel_user.sort ASC";
-
-        $result = Database::query($sql);
-        $courses = [];
-        while ($row = Database::fetch_array($result, 'ASOC')) {
-            $courses[] = [
-                'code' => $row['k'],
-                'visual_code' => $row['vc'],
-                'title' => $row['i'],
-                'directory' => $row['dir'],
-                'status' => $row['status'],
-                'tutor' => $row['t'],
-                'subscribe' => $row['subscr'],
-                'category' => $row['cat'],
-                'unsubscribe' => $row['unsubscr'],
-                'sort' => $row['sort'],
-                'user_course_category' => $row['user_course_cat'],
-            ];
-        }
-
-        return $courses;
     }
 }

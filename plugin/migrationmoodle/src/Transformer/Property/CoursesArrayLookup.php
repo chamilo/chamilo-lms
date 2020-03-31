@@ -13,8 +13,6 @@ use Exception;
 class CoursesArrayLookup extends LoadedCourseLookup
 {
     /**
-     * @param array $data
-     *
      * @throws Exception
      *
      * @return mixed

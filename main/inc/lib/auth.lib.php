@@ -167,7 +167,7 @@ class Auth
     /**
      * Moves the course one place up or down.
      *
-     * @param string $direction Direction up/down
+     * @param string $direction     Direction up/down
      * @param string $category2move Category id
      *
      * @return bool True If it success

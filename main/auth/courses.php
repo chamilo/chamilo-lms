@@ -166,7 +166,6 @@ switch ($action) {
             if (!empty($values) && $form->hasElement('extra_tags')) {
                 $tagElement = $form->getElement('extra_tags');
                 if (isset($values['extra_tags']) && !empty($values['extra_tags'])) {
-
                     $tags = [];
                     foreach ($values['extra_tags'] as $tag) {
                         $tag = Security::remove_XSS($tag);

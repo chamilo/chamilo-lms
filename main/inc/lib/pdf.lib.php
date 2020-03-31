@@ -898,8 +898,8 @@ class PDF
 
     /**
      * @param string $theme
+     * @param bool   $fullPage
      *
-     * @param bool $fullPage
      * @throws MpdfException
      */
     public function setBackground($theme, $fullPage = false)

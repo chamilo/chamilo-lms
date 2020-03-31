@@ -94,8 +94,6 @@ class UserLearnPathsProgressScript extends BaseScript
         }
     }
 
-
-
     /**
      * @param int $userId
      * @param int $lpId

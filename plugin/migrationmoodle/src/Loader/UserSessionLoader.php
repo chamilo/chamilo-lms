@@ -22,10 +22,7 @@ class UserSessionLoader implements LoaderInterface
 
         foreach ($incomingData['course_ids'] as $courseId) {
             if (empty($courseId)) {
-                throw new \Exception(
-                    "Course ($courseId) not found when creating course session for user ({$incomingData['user_id']}). "
-                        .'Session will not be created.'
-                );
+                throw new \Exception("Course ($courseId) not found when creating course session for user ({$incomingData['user_id']}). ".'Session will not be created.');
             }
         }
 

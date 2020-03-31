@@ -603,7 +603,7 @@ class Diagnoser
                 'link' => 'https://www.php.net/openssl',
                 'expected' => 2,
                 'comment' => get_lang('ExtensionShouldBeLoaded'),
-            ]
+            ],
         ];
 
         foreach ($extensions as $extension => $data) {

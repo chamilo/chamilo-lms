@@ -35,26 +35,6 @@ abstract class BaseScript
     abstract public function process();
 
     /**
-     * @param int    $id
-     * @param string $taskName
-     *
-     * @return bool
-     */
-    private function isLoadedId($id, $taskName)
-    {
-        $row = \Database::fetch_assoc(
-            \Database::query(
-                "SELECT COUNT(pmi.id) AS nbr
-                    FROM plugin_migrationmoodle_item pmi
-                    INNER JOIN plugin_migrationmoodle_task pmt ON pmi.task_id = pmt.id
-                    WHERE pmt.name = '$taskName' AND pmi.loaded_id = $id"
-            )
-        );
-
-        return $row['nbr'] > 0;
-    }
-
-    /**
      * @param int $userId
      *
      * @return bool
@@ -90,5 +70,25 @@ abstract class BaseScript
     protected function showMessage($message)
     {
         echo '['.date(\DateTime::ATOM)."]\t$message".PHP_EOL;
+    }
+
+    /**
+     * @param int    $id
+     * @param string $taskName
+     *
+     * @return bool
+     */
+    private function isLoadedId($id, $taskName)
+    {
+        $row = \Database::fetch_assoc(
+            \Database::query(
+                "SELECT COUNT(pmi.id) AS nbr
+                    FROM plugin_migrationmoodle_item pmi
+                    INNER JOIN plugin_migrationmoodle_task pmt ON pmi.task_id = pmt.id
+                    WHERE pmt.name = '$taskName' AND pmi.loaded_id = $id"
+            )
+        );
+
+        return $row['nbr'] > 0;
     }
 }

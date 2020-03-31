@@ -6544,31 +6544,35 @@ class CourseManager
      * Display the description button of a course in the course catalog.
      *
      * @param array $course
+     * @param string $url
      *
      * @return string HTML string
      */
-    public static function returnDescriptionButton($course)
+    public static function returnDescriptionButton($course, $url = '')
     {
         if (empty($course)) {
             return '';
         }
 
-        if (api_get_setting('show_courses_descriptions_in_catalog') == 'true') {
+        $class = '';
+        if (api_get_setting('show_courses_descriptions_in_catalog') === 'true') {
             $title = $course['title'];
-            $url = api_get_path(WEB_CODE_PATH).'inc/ajax/course_home.ajax.php?a=show_course_information&code='.$course['code'];
-            $html = Display::url(
+            if (empty($url)) {
+                $class = 'ajax';
+                $url = api_get_path(WEB_CODE_PATH).'inc/ajax/course_home.ajax.php?a=show_course_information&code='.$course['code'];
+            }
+
+            return Display::url(
                 Display::returnFontAwesomeIcon('info-circle', 'lg'),
                 $url,
                 [
-                    'class' => 'ajax btn btn-default btn-sm',
+                    'class' => "$class btn btn-default btn-sm",
                     'data-title' => $title,
                     'title' => get_lang('Description'),
                     'aria-label' => get_lang('Description'),
                     'data-size' => 'lg',
                 ]
             );
-
-            return $html;
         }
 
         return '';

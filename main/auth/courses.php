@@ -249,14 +249,7 @@ switch ($action) {
 
             $courses = CoursesAndSessionsCatalog::searchCourses($categoryCode, $searchTerm, $limit, false, $conditions);
             $countCoursesInCategory = CourseCategory::countCoursesInCategory($categoryCode, $searchTerm, true, $conditions);
-        } /*else {
-            if (empty($categoryCode)) {
-                $categoryCode = $listCategories['ALL']['code']; // by default first category
-            }
-            $courses = CoursesAndSessionsCatalog::getCoursesInCategory($categoryCode, null, $limit);
-            $countCoursesInCategory = CourseCategory::countCoursesInCategory($categoryCode, $searchTerm);
-        }*/
-
+        }
         $showCourses = CoursesAndSessionsCatalog::showCourses();
         $showSessions = CoursesAndSessionsCatalog::showSessions();
         $pageCurrent = isset($_GET['pageCurrent']) ? (int) $_GET['pageCurrent'] : 1;
@@ -393,6 +386,18 @@ switch ($action) {
 
             $courseUrl = api_get_path(WEB_COURSE_PATH);
             $hideRating = api_get_configuration_value('hide_course_rating');
+
+            $courseCatalogSettings = [
+                'info_url' => 'course_description_popup',
+                'title_url' => 'course_home',
+                'image_url' => 'course_about',
+            ];
+
+            $settings = api_get_configuration_value('course_catalog_settings');
+            if (!empty($settings) && isset($settings['link_settings'])) {
+                $courseCatalogSettings = $settings['link_settings'];
+            }
+
             if (!empty($courses)) {
                 foreach ($courses as &$course) {
                     $courseId = $course['real_id'];
@@ -403,6 +408,18 @@ switch ($action) {
                     if ($allowExtraFields && !is_null($tagField)) {
                         $courseTags = $fieldTagsRepo->getTags($tagField, $courseId);
                     }
+
+                    $aboutPage = api_get_path(WEB_PATH).'course/'.$course['real_id'].'/about';
+
+                    $settingsUrl = [
+                        'course_description_popup' => api_get_path(WEB_CODE_PATH).'inc/ajax/course_home.ajax.php?a=show_course_information&code='.$course['code'],
+                        'course_about' => $aboutPage,
+                        'course_home' => $courseUrl.$course['directory'].'/index.php?id_session=0',
+                    ];
+
+                    $infoUrl = $settingsUrl[$courseCatalogSettings['info_url']];
+                    $course['title_url'] = $settingsUrl[$courseCatalogSettings['title_url']];
+                    $course['image_url'] = $settingsUrl[$courseCatalogSettings['image_url']];
 
                     $userRegisteredInCourse = CourseManager::is_user_subscribed_in_course($user_id, $course['code']);
                     $userRegisteredInCourseAsTeacher = CourseManager::is_course_teacher($user_id, $course['code']);
@@ -426,7 +443,7 @@ switch ($action) {
 
                     // Display thumbnail
                     $course['thumbnail'] = CoursesAndSessionsCatalog::returnThumbnail($course);
-                    $course['description_button'] = CourseManager::returnDescriptionButton($course);
+                    $course['description_button'] = CourseManager::returnDescriptionButton($course, $infoUrl);
                     $subscribeButton = CoursesAndSessionsCatalog::return_register_button(
                         $course,
                         $stok,
@@ -456,7 +473,7 @@ switch ($action) {
                     }
 
                     // end buy course validation
-                    $course['title_formatted'] = CoursesAndSessionsCatalog::return_title($course, $userRegisteredInCourse);
+
                     $course['rating'] = '';
                     if ($hideRating === false) {
                         $ajax_url = api_get_path(WEB_AJAX_PATH).'course.ajax.php?a=add_course_vote';

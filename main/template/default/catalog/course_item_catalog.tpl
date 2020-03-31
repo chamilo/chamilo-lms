@@ -2,7 +2,11 @@
     {% block course_image %}
         <div class="image">
             {% block course_thumbnail %}
-                <a href="{{ course.course_public_url }}" title="{{ course.title }}">
+                {% set class= '' %}
+                {% if 'ajax' in course.image_url %}
+                    {% set class= 'ajax' %}
+                {% endif %}
+                <a href="{{ course.image_url }}" title="{{ course.title }}" class="{{ class }}">
                     <img class="img-responsive" src="{{ course.thumbnail }}"  alt="{{ course.title }}"/>
                 </a>
             {% endblock %}
@@ -27,7 +31,18 @@
     {% block course_description %}
         <div class="description">
             {% block course_title %}
-                {{ course.title_formatted }}
+                <div class="block-title">
+                    <h4 class="title">
+                        {% set class= '' %}
+                        {% if 'ajax' in course.title_url %}
+                            {% set class= 'ajax' %}
+                        {% endif %}
+
+                        <a title="{{ course.title }}" href="{{ course.title_url }}" class="{{ class }}">
+                            {{ course.title }}
+                        </a>
+                    </h4>
+                </div>
             {% endblock %}
 
             {% block course_rating %}

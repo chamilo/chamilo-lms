@@ -955,23 +955,6 @@ class CoursesAndSessionsCatalog
     }
 
     /**
-     * Display the title of a course in course catalog.
-     *
-     * @param array $course
-     *
-     * @return string HTML string
-     */
-    public static function return_title($course)
-    {
-        $linkCourse = api_get_path(WEB_PATH).'course/'.$course['real_id'].'/about';
-        $html = '<div class="block-title"><h4 class="title">';
-        $html .= '<a title="'.$course['title'].'" href="'.$linkCourse.'">'.$course['title'].'</a>';
-        $html .= '</h4></div>';
-
-        return $html;
-    }
-
-    /**
      * Display the already registerd text in a course in the course catalog.
      *
      * @param $status

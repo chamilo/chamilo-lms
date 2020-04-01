@@ -460,18 +460,28 @@ class ResourceRepository extends BaseEntityRepository
         $qb = $repo->getEntityManager()->createQueryBuilder()
             ->select('resource')
             ->from($className, 'resource')
+            /* ->innerJoin(
+                 ResourceNode::class,
+                 'node',
+                 Join::WITH,
+                 'resource.resourceNode = node.id'
+             )*/
             ->innerJoin(
-                ResourceNode::class,
-                'node',
-                Join::WITH,
-                'resource.resourceNode = node.id'
+                'resource.resourceNode',
+                'node'
             )
             ->innerJoin('node.resourceLinks', 'links')
+            ->leftJoin('node.resourceFile', 'file')
             ->where('node.resourceType = :type')
-            ->setParameter('type', $type);
-        $qb
+            ->setParameter('type', $type)
             ->andWhere('links.course = :course')
             ->setParameter('course', $course)
+            /*->addSelect('node')
+            ->addSelect('resource')
+            ->addSelect('links')*/
+            //->addSelect('node.resourceLinks')
+            //->addSelect('resource.resourceNode')
+
         ;
 
         $isAdmin = $checker->isGranted('ROLE_ADMIN') ||

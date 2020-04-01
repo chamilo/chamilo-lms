@@ -21,7 +21,6 @@ final class CToolRepository extends ResourceRepository
         $repo = $this->getRepository();
         $className = $repo->getClassName();
         $checker = $this->getAuthorizationChecker();
-
         $reflectionClass = $repo->getClassMetadata()->getReflectionClass();
 
         // Check if this resource type requires to load the base course resources when using a session
@@ -73,8 +72,6 @@ final class CToolRepository extends ResourceRepository
         $qb->setParameter('parentNode', $parentNode);
 
         $qb->andWhere('links.group IS NULL');
-
-        ///var_dump($qb->getQuery()->getSQL(), $type->getId(), $parentNode->getId());exit;
 
         return $qb;
     }

@@ -59,6 +59,9 @@ class SettingsManager implements SettingsManagerInterface
      */
     protected $resolvedSettings = [];
 
+    protected $settings;
+    protected $schemaList;
+
     /**
      * SettingsManager constructor.
      *
@@ -71,10 +74,8 @@ class SettingsManager implements SettingsManagerInterface
         $eventDispatcher
     ) {
         $this->schemaRegistry = $schemaRegistry;
-        //$this->resolverRegistry = $resolverRegistry;
         $this->manager = $manager;
         $this->repository = $repository;
-        //$this->settingsFactory = $settingsFactory;
         $this->eventDispatcher = $eventDispatcher;
     }
 
@@ -98,7 +99,7 @@ class SettingsManager implements SettingsManagerInterface
 
         /**
          * @var string
-         * @var \Sylius\Bundle\SettingsBundle\Schema\SchemaInterface $schema
+         * @var SchemaInterface $schema
          */
         foreach ($schemas as $schema) {
             $settings = $this->load($this->convertServiceToNameSpace($schema));
@@ -113,7 +114,7 @@ class SettingsManager implements SettingsManagerInterface
 
         /**
          * @var string
-         * @var \Sylius\Bundle\SettingsBundle\Schema\SchemaInterface $schema
+         * @var SchemaInterface $schema
          */
         foreach ($schemas as $schema) {
             $settings = $this->load($this->convertServiceToNameSpace($schema));
@@ -130,11 +131,473 @@ class SettingsManager implements SettingsManagerInterface
     }
 
     /**
+     * @param string $category
+     *
+     * @return string
+     */
+    public function convertNameSpaceToService($category)
+    {
+        return 'chamilo_core.settings.'.$category;
+    }
+
+    /**
+     * @param string $category
+     *
+     * @return string
+     */
+    public function convertServiceToNameSpace($category)
+    {
+        return str_replace('chamilo_core.settings.', '', $category);
+    }
+
+    /**
+     * @param string $name
+     *
+     * @throws \InvalidArgumentException
+     */
+    public function getSetting($name)
+    {
+        if (false === strpos($name, '.')) {
+            //throw new \InvalidArgumentException(sprintf('Parameter must be in format "namespace.name", "%s" given.', $name));
+
+            // This code allows the possibility of calling
+            // api_get_setting('allow_skills_tool') instead of
+            // the "correct" way api_get_setting('platform.allow_skills_tool')
+            $items = $this->getVariablesAndCategories();
+
+            if (isset($items[$name])) {
+                $originalName = $name;
+                $name = $this->renameVariable($name);
+                $category = $this->fixCategory(
+                    strtolower($name),
+                    strtolower($items[$originalName])
+                );
+                $name = $category.'.'.$name;
+            } else {
+                throw new \InvalidArgumentException(sprintf('Parameter must be in format "category.name", "%s" given.', $name));
+            }
+        }
+
+        list($category, $name) = explode('.', $name);
+        $this->loadAll();
+
+        if (!empty($this->schemaList)) {
+            $settings = $this->schemaList[$category];
+
+            return $settings->get($name);
+        }
+
+        exit;
+
+        $settings = $this->load($category, $name);
+
+        if (!$settings) {
+            throw new \InvalidArgumentException(sprintf("Parameter '$name' not found in category '$category'"));
+        }
+
+        $this->settings = $settings;
+
+        return $settings->get($name);
+    }
+
+    public function loadAll()
+    {
+        if (empty($this->schemaList)){
+            $schemas = array_keys($this->getSchemas());
+
+            /**
+             * @var string
+             * @var SchemaInterface $schema
+             */
+            $schemaList = [];
+            $settingsBuilder = new SettingsBuilder();
+
+            $all = $this->getAllParametersByCategory();
+
+            foreach ($schemas as $schema) {
+                $schemaRegister = $this->schemaRegistry->get($schema);
+                $schemaRegister->buildSettings($settingsBuilder);
+                $name = $this->convertServiceToNameSpace($schema);
+                $settings = new Settings();
+                //$settings = $this->load($name);
+                $parameters = $all[$name];
+                foreach ($settingsBuilder->getTransformers() as $parameter => $transformer) {
+                    if (array_key_exists($parameter, $parameters)) {
+                        if ('course_creation_use_template' === $parameter) {
+                            if (empty($parameters[$parameter])) {
+                                $parameters[$parameter] = null;
+                            }
+                        } else {
+                            $parameters[$parameter] = $transformer->reverseTransform($parameters[$parameter]);
+                        }
+                    }
+                }
+
+                $parameters = $settingsBuilder->resolve($parameters);
+                $settings->setParameters($parameters);
+
+                $schemaList[$name] = $settings;
+            }
+            $this->schemaList = $schemaList;
+        }
+    }
+
+    public function load($schemaAlias, $namespace = null, $ignoreUnknown = true)
+    {
+        $schemaAliasNoPrefix = $schemaAlias;
+        $schemaAlias = 'chamilo_core.settings.'.$schemaAlias;
+        if ($this->schemaRegistry->has($schemaAlias)) {
+            /** @var SchemaInterface $schema */
+            $schema = $this->schemaRegistry->get($schemaAlias);
+        } else {
+            return [];
+        }
+
+        $settings = new Settings();
+        $settings->setSchemaAlias($schemaAlias);
+
+        // We need to get a plain parameters array since we use the options resolver on it
+        $parameters = $this->getParameters($schemaAliasNoPrefix);
+        $settingsBuilder = new SettingsBuilder();
+        $schema->buildSettings($settingsBuilder);
+
+        // Remove unknown settings' parameters (e.g. From a previous version of the settings schema)
+        if (true === $ignoreUnknown) {
+            foreach ($parameters as $name => $value) {
+                if (!$settingsBuilder->isDefined($name)) {
+                    unset($parameters[$name]);
+                }
+            }
+        }
+
+        foreach ($settingsBuilder->getTransformers() as $parameter => $transformer) {
+            if (array_key_exists($parameter, $parameters)) {
+                if ('course_creation_use_template' === $parameter) {
+                    if (empty($parameters[$parameter])) {
+                        $parameters[$parameter] = null;
+                    }
+                } else {
+                    $parameters[$parameter] = $transformer->reverseTransform($parameters[$parameter]);
+                }
+            }
+        }
+
+        $parameters = $settingsBuilder->resolve($parameters);
+        $settings->setParameters($parameters);
+
+        return $settings;
+    }
+
+    /**
+     * @throws \Doctrine\ORM\ORMException
+     * @throws \Doctrine\ORM\OptimisticLockException
+     */
+    public function update(SettingsInterface $settings)
+    {
+        $namespace = $settings->getSchemaAlias();
+
+        /** @var SchemaInterface $schema */
+        $schema = $this->schemaRegistry->get($settings->getSchemaAlias());
+
+        $settingsBuilder = new SettingsBuilder();
+        $schema->buildSettings($settingsBuilder);
+        $parameters = $settingsBuilder->resolve($settings->getParameters());
+        // Transform value. Example array to string using transformer. Example:
+        // 1. Setting "tool_visible_by_default_at_creation" it's a multiple select
+        // 2. Is defined as an array in class DocumentSettingsSchema
+        // 3. Add transformer for that variable "ArrayToIdentifierTransformer"
+        // 4. Here we recover the transformer and convert the array to string
+        foreach ($settingsBuilder->getTransformers() as $parameter => $transformer) {
+            if (array_key_exists($parameter, $parameters)) {
+                $parameters[$parameter] = $transformer->transform($parameters[$parameter]);
+            }
+        }
+        $settings->setParameters($parameters);
+        $persistedParameters = $this->repository->findBy(
+            ['category' => $this->convertServiceToNameSpace($settings->getSchemaAlias())]
+        );
+
+        $persistedParametersMap = [];
+        /** @var SettingsCurrent $parameter */
+        foreach ($persistedParameters as $parameter) {
+            $persistedParametersMap[$parameter->getVariable()] = $parameter;
+        }
+
+        /** @var SettingsCurrent $url */
+        $url = $this->getUrl();
+        $simpleCategoryName = str_replace('chamilo_core.settings.', '', $namespace);
+
+        foreach ($parameters as $name => $value) {
+            if (isset($persistedParametersMap[$name])) {
+                $parameter = $persistedParametersMap[$name];
+                $parameter->setSelectedValue($value);
+                $parameter->setCategory($simpleCategoryName);
+                $this->manager->persist($parameter);
+            } else {
+                $parameter = new SettingsCurrent();
+                $parameter
+                    ->setVariable($name)
+                    ->setCategory($simpleCategoryName)
+                    ->setTitle($name)
+                    ->setSelectedValue($value)
+                    ->setUrl($url)
+                    ->setAccessUrlChangeable(1)
+                    ->setAccessUrlLocked(1)
+                ;
+
+                /** @var ConstraintViolationListInterface $errors */
+                /*$errors = $this->validator->validate($parameter);
+                if (0 < $errors->count()) {
+                    throw new ValidatorException($errors->get(0)->getMessage());
+                }*/
+                $this->manager->persist($parameter);
+            }
+        }
+
+        $this->manager->flush();
+    }
+
+    /**
+     * @throws ValidatorException
+     */
+    public function save(SettingsInterface $settings)
+    {
+        $namespace = $settings->getSchemaAlias();
+
+        /** @var SchemaInterface $schema */
+        $schema = $this->schemaRegistry->get($settings->getSchemaAlias());
+
+        $settingsBuilder = new SettingsBuilder();
+        $schema->buildSettings($settingsBuilder);
+        $parameters = $settingsBuilder->resolve($settings->getParameters());
+        // Transform value. Example array to string using transformer. Example:
+        // 1. Setting "tool_visible_by_default_at_creation" it's a multiple select
+        // 2. Is defined as an array in class DocumentSettingsSchema
+        // 3. Add transformer for that variable "ArrayToIdentifierTransformer"
+        // 4. Here we recover the transformer and convert the array to string
+        foreach ($settingsBuilder->getTransformers() as $parameter => $transformer) {
+            if (array_key_exists($parameter, $parameters)) {
+                $parameters[$parameter] = $transformer->transform($parameters[$parameter]);
+            }
+        }
+        $settings->setParameters($parameters);
+        $persistedParameters = $this->repository->findBy(
+            ['category' => $this->convertServiceToNameSpace($settings->getSchemaAlias())]
+        );
+        $persistedParametersMap = [];
+
+        foreach ($persistedParameters as $parameter) {
+            $persistedParametersMap[$parameter->getTitle()] = $parameter;
+        }
+
+        /** @var SettingsEvent $event */
+        /*$event = $this->eventDispatcher->dispatch(
+            SettingsEvent::PRE_SAVE,
+            new SettingsEvent($settings, $parameters)
+        );*/
+
+        /** @var SettingsCurrent $url */
+        $url = $this->getUrl();
+        $simpleCategoryName = str_replace('chamilo_core.settings.', '', $namespace);
+
+        foreach ($parameters as $name => $value) {
+            if (isset($persistedParametersMap[$name])) {
+                $parameter = $persistedParametersMap[$name];
+                $parameter->setSelectedValue($value);
+            } else {
+                $parameter = new SettingsCurrent();
+                $parameter
+                    ->setVariable($name)
+                    ->setCategory($simpleCategoryName)
+                    ->setTitle($name)
+                    ->setSelectedValue($value)
+                    ->setUrl($url)
+                    ->setAccessUrlChangeable(1)
+                    ->setAccessUrlLocked(1)
+                ;
+
+                /** @var ConstraintViolationListInterface $errors */
+                /*$errors = $this->validator->validate($parameter);
+                if (0 < $errors->count()) {
+                    throw new ValidatorException($errors->get(0)->getMessage());
+                }*/
+                $this->manager->persist($parameter);
+            }
+            $this->manager->persist($parameter);
+        }
+
+        $this->manager->flush();
+
+        return;
+
+        ////
+        $schemaAlias = $settings->getSchemaAlias();
+        $schemaAliasChamilo = str_replace('chamilo_core.settings.', '', $schemaAlias);
+
+        $schema = $this->schemaRegistry->get($schemaAlias);
+
+        $settingsBuilder = new SettingsBuilder();
+        $schema->buildSettings($settingsBuilder);
+
+        $parameters = $settingsBuilder->resolve($settings->getParameters());
+
+        foreach ($settingsBuilder->getTransformers() as $parameter => $transformer) {
+            if (array_key_exists($parameter, $parameters)) {
+                $parameters[$parameter] = $transformer->transform($parameters[$parameter]);
+            }
+        }
+
+        /** @var \Sylius\Bundle\SettingsBundle\Event\SettingsEvent $event */
+        $event = $this->eventDispatcher->dispatch(
+            SettingsEvent::PRE_SAVE,
+            new SettingsEvent($settings)
+        );
+
+        /** @var SettingsCurrent $url */
+        $url = $event->getSettings()->getAccessUrl();
+
+        foreach ($parameters as $name => $value) {
+            if (isset($persistedParametersMap[$name])) {
+                if ($value instanceof Course) {
+                    $value = $value->getId();
+                }
+                $persistedParametersMap[$name]->setValue($value);
+            } else {
+                $setting = new Settings();
+                $setting->setSchemaAlias($schemaAlias);
+
+                $setting
+                    ->setNamespace($schemaAliasChamilo)
+                    ->setName($name)
+                    ->setValue($value)
+                    ->setUrl($url)
+                    ->setAccessUrlLocked(0)
+                    ->setAccessUrlChangeable(1)
+                ;
+
+                /** @var ConstraintViolationListInterface $errors */
+                /*$errors = $this->->validate($parameter);
+                if (0 < $errors->count()) {
+                    throw new ValidatorException($errors->get(0)->getMessage());
+                }*/
+                $this->manager->persist($setting);
+                $this->manager->flush();
+            }
+        }
+        /*$parameters = $settingsBuilder->resolve($settings->getParameters());
+        $settings->setParameters($parameters);
+
+        $this->eventDispatcher->dispatch(SettingsEvent::PRE_SAVE, new SettingsEvent($settings));
+
+        $this->manager->persist($settings);
+        $this->manager->flush();
+
+        $this->eventDispatcher->dispatch(SettingsEvent::POST_SAVE, new SettingsEvent($settings));*/
+    }
+
+    /**
+     * @param string $keyword
+     *
+     * @return array
+     */
+    public function getParametersFromKeywordOrderedByCategory($keyword)
+    {
+        $query = $this->repository->createQueryBuilder('s')
+            ->where('s.variable LIKE :keyword')
+            ->setParameter('keyword', "%$keyword%")
+        ;
+        $parametersFromDb = $query->getQuery()->getResult();
+        $parameters = [];
+        /** @var SettingsCurrent $parameter */
+        foreach ($parametersFromDb as $parameter) {
+            $parameters[$parameter->getCategory()][] = $parameter;
+        }
+
+        return $parameters;
+    }
+
+    /**
+     * @param string $namespace
+     * @param string $keyword
+     * @param bool   $returnObjects
+     *
+     * @return array
+     */
+    public function getParametersFromKeyword($namespace, $keyword = '', $returnObjects = false)
+    {
+        if (empty($keyword)) {
+            $criteria = ['category' => $namespace];
+            $parametersFromDb = $this->repository->findBy($criteria);
+        } else {
+            $query = $this->repository->createQueryBuilder('s')
+                ->where('s.variable LIKE :keyword')
+                ->setParameter('keyword', "%$keyword%")
+            ;
+            $parametersFromDb = $query->getQuery()->getResult();
+        }
+
+        if ($returnObjects) {
+            return $parametersFromDb;
+        }
+        $parameters = [];
+        /** @var SettingsCurrent $parameter */
+        foreach ($parametersFromDb as $parameter) {
+            $parameters[$parameter->getVariable()] = $parameter->getSelectedValue();
+        }
+
+        return $parameters;
+    }
+
+    /**
+     * Load parameter from database.
+     *
+     * @param string $namespace
+     *
+     * @return array
+     */
+    private function getParameters($namespace)
+    {
+        $parameters = [];
+        /** @var SettingsCurrent $parameter */
+        foreach ($this->repository->findBy(['category' => $namespace]) as $parameter) {
+            $parameters[$parameter->getVariable()] = $parameter->getSelectedValue();
+        }
+
+        return $parameters;
+    }
+
+    private function getAllParametersByCategory()
+    {
+        $parameters = [];
+        $all = $this->repository->findAll();
+        /** @var SettingsCurrent $parameter */
+        foreach ($all as $parameter) {
+            $parameters[$parameter->getCategory()][$parameter->getVariable()] = $parameter->getSelectedValue();
+        }
+
+        return $parameters;
+    }
+
+
+    /*private function transformParameters(SettingsBuilder $settingsBuilder, array $parameters)
+    {
+        $transformedParameters = $parameters;
+
+        foreach ($settingsBuilder->getTransformers() as $parameter => $transformer) {
+            if (array_key_exists($parameter, $parameters)) {
+                $transformedParameters[$parameter] = $transformer->reverseTransform($parameters[$parameter]);
+            }
+        }
+
+        return $transformedParameters;
+    }*/
+
+    /**
      * Get variables and categories as in 1.11.x.
      *
      * @return array
      */
-    public function getVariablesAndCategories()
+    private function getVariablesAndCategories()
     {
         return [
             'Institution' => 'Platform',
@@ -435,7 +898,7 @@ class SettingsManager implements SettingsManagerInterface
      *
      * @param string $variable
      */
-    public function renameVariable($variable)
+    private function renameVariable($variable)
     {
         $list = [
             'timezone_value' => 'timezone',
@@ -462,7 +925,7 @@ class SettingsManager implements SettingsManagerInterface
             'profile' => 'changeable_options',
         ];
 
-        return isset($list[$variable]) ? $list[$variable] : $variable;
+        return $list[$variable] ?? $variable;
     }
 
     /**
@@ -471,7 +934,7 @@ class SettingsManager implements SettingsManagerInterface
      * @param string $variable
      * @param string $defaultCategory
      */
-    public function fixCategory($variable, $defaultCategory)
+    private function fixCategory($variable, $defaultCategory)
     {
         $settings = [
             'cookie_warning' => 'platform',
@@ -611,399 +1074,4 @@ class SettingsManager implements SettingsManagerInterface
 
         return isset($settings[$variable]) ? $settings[$variable] : $defaultCategory;
     }
-
-    /**
-     * @param string $name
-     *
-     * @throws \InvalidArgumentException
-     */
-    public function getSetting($name)
-    {
-        if (false === strpos($name, '.')) {
-            //throw new \InvalidArgumentException(sprintf('Parameter must be in format "namespace.name", "%s" given.', $name));
-
-            // This code allows the possibility of calling
-            // api_get_setting('allow_skills_tool') instead of
-            // the "correct" way api_get_setting('platform.allow_skills_tool')
-            $items = $this->getVariablesAndCategories();
-
-            if (isset($items[$name])) {
-                $originalName = $name;
-                $name = $this->renameVariable($name);
-                $category = $this->fixCategory(
-                    strtolower($name),
-                    strtolower($items[$originalName])
-                );
-                $name = $category.'.'.$name;
-            } else {
-                throw new \InvalidArgumentException(sprintf('Parameter must be in format "category.name", "%s" given.', $name));
-            }
-        }
-
-        list($category, $name) = explode('.', $name);
-        $settings = $this->load($category, $name);
-
-        if (!$settings) {
-            throw new \InvalidArgumentException(sprintf("Parameter '$name' not found in category '$category'"));
-        }
-
-        return $settings->get($name);
-    }
-
-    /**
-     * @param string $category
-     *
-     * @return string
-     */
-    public function convertNameSpaceToService($category)
-    {
-        return 'chamilo_core.settings.'.$category;
-    }
-
-    /**
-     * @param string $category
-     *
-     * @return string
-     */
-    public function convertServiceToNameSpace($category)
-    {
-        return str_replace('chamilo_core.settings.', '', $category);
-    }
-
-    public function load($schemaAlias, $namespace = null, $ignoreUnknown = true)
-    {
-        $schemaAliasNoPrefix = $schemaAlias;
-        $schemaAlias = 'chamilo_core.settings.'.$schemaAlias;
-        if ($this->schemaRegistry->has($schemaAlias)) {
-            /** @var SchemaInterface $schema */
-            $schema = $this->schemaRegistry->get($schemaAlias);
-        } else {
-            return [];
-        }
-
-        $settings = new Settings();
-        $settings->setSchemaAlias($schemaAlias);
-
-        // We need to get a plain parameters array since we use the options resolver on it
-        $parameters = $this->getParameters($schemaAliasNoPrefix);
-        $settingsBuilder = new SettingsBuilder();
-        $schema->buildSettings($settingsBuilder);
-
-        // Remove unknown settings' parameters (e.g. From a previous version of the settings schema)
-        if (true === $ignoreUnknown) {
-            foreach ($parameters as $name => $value) {
-                if (!$settingsBuilder->isDefined($name)) {
-                    unset($parameters[$name]);
-                }
-            }
-        }
-
-        foreach ($settingsBuilder->getTransformers() as $parameter => $transformer) {
-            if (array_key_exists($parameter, $parameters)) {
-                if ('course_creation_use_template' === $parameter) {
-                    if (empty($parameters[$parameter])) {
-                        $parameters[$parameter] = null;
-                    }
-                } else {
-                    $parameters[$parameter] = $transformer->reverseTransform($parameters[$parameter]);
-                }
-            }
-        }
-
-        $parameters = $settingsBuilder->resolve($parameters);
-        $settings->setParameters($parameters);
-
-        return $settings;
-    }
-
-    /**
-     * @throws \Doctrine\ORM\ORMException
-     * @throws \Doctrine\ORM\OptimisticLockException
-     */
-    public function update(SettingsInterface $settings)
-    {
-        $namespace = $settings->getSchemaAlias();
-
-        /** @var SchemaInterface $schema */
-        $schema = $this->schemaRegistry->get($settings->getSchemaAlias());
-
-        $settingsBuilder = new SettingsBuilder();
-        $schema->buildSettings($settingsBuilder);
-        $parameters = $settingsBuilder->resolve($settings->getParameters());
-        // Transform value. Example array to string using transformer. Example:
-        // 1. Setting "tool_visible_by_default_at_creation" it's a multiple select
-        // 2. Is defined as an array in class DocumentSettingsSchema
-        // 3. Add transformer for that variable "ArrayToIdentifierTransformer"
-        // 4. Here we recover the transformer and convert the array to string
-        foreach ($settingsBuilder->getTransformers() as $parameter => $transformer) {
-            if (array_key_exists($parameter, $parameters)) {
-                $parameters[$parameter] = $transformer->transform($parameters[$parameter]);
-            }
-        }
-        $settings->setParameters($parameters);
-        $persistedParameters = $this->repository->findBy(
-            ['category' => $this->convertServiceToNameSpace($settings->getSchemaAlias())]
-        );
-
-        $persistedParametersMap = [];
-        /** @var SettingsCurrent $parameter */
-        foreach ($persistedParameters as $parameter) {
-            $persistedParametersMap[$parameter->getVariable()] = $parameter;
-        }
-
-        /** @var SettingsCurrent $url */
-        $url = $this->getUrl();
-        $simpleCategoryName = str_replace('chamilo_core.settings.', '', $namespace);
-
-        foreach ($parameters as $name => $value) {
-            if (isset($persistedParametersMap[$name])) {
-                $parameter = $persistedParametersMap[$name];
-                $parameter->setSelectedValue($value);
-                $parameter->setCategory($simpleCategoryName);
-                $this->manager->persist($parameter);
-            } else {
-                $parameter = new SettingsCurrent();
-                $parameter
-                    ->setVariable($name)
-                    ->setCategory($simpleCategoryName)
-                    ->setTitle($name)
-                    ->setSelectedValue($value)
-                    ->setUrl($url)
-                    ->setAccessUrlChangeable(1)
-                    ->setAccessUrlLocked(1)
-                ;
-
-                /** @var ConstraintViolationListInterface $errors */
-                /*$errors = $this->validator->validate($parameter);
-                if (0 < $errors->count()) {
-                    throw new ValidatorException($errors->get(0)->getMessage());
-                }*/
-                $this->manager->persist($parameter);
-            }
-        }
-
-        $this->manager->flush();
-    }
-
-    /**
-     * @throws ValidatorException
-     */
-    public function save(SettingsInterface $settings)
-    {
-        $namespace = $settings->getSchemaAlias();
-
-        /** @var SchemaInterface $schema */
-        $schema = $this->schemaRegistry->get($settings->getSchemaAlias());
-
-        $settingsBuilder = new SettingsBuilder();
-        $schema->buildSettings($settingsBuilder);
-        $parameters = $settingsBuilder->resolve($settings->getParameters());
-        // Transform value. Example array to string using transformer. Example:
-        // 1. Setting "tool_visible_by_default_at_creation" it's a multiple select
-        // 2. Is defined as an array in class DocumentSettingsSchema
-        // 3. Add transformer for that variable "ArrayToIdentifierTransformer"
-        // 4. Here we recover the transformer and convert the array to string
-        foreach ($settingsBuilder->getTransformers() as $parameter => $transformer) {
-            if (array_key_exists($parameter, $parameters)) {
-                $parameters[$parameter] = $transformer->transform($parameters[$parameter]);
-            }
-        }
-        $settings->setParameters($parameters);
-        $persistedParameters = $this->repository->findBy(
-            ['category' => $this->convertServiceToNameSpace($settings->getSchemaAlias())]
-        );
-        $persistedParametersMap = [];
-
-        foreach ($persistedParameters as $parameter) {
-            $persistedParametersMap[$parameter->getTitle()] = $parameter;
-        }
-
-        /** @var SettingsEvent $event */
-        /*$event = $this->eventDispatcher->dispatch(
-            SettingsEvent::PRE_SAVE,
-            new SettingsEvent($settings, $parameters)
-        );*/
-
-        /** @var SettingsCurrent $url */
-        $url = $this->getUrl();
-        $simpleCategoryName = str_replace('chamilo_core.settings.', '', $namespace);
-
-        foreach ($parameters as $name => $value) {
-            if (isset($persistedParametersMap[$name])) {
-                $parameter = $persistedParametersMap[$name];
-                $parameter->setSelectedValue($value);
-            } else {
-                $parameter = new SettingsCurrent();
-                $parameter
-                    ->setVariable($name)
-                    ->setCategory($simpleCategoryName)
-                    ->setTitle($name)
-                    ->setSelectedValue($value)
-                    ->setUrl($url)
-                    ->setAccessUrlChangeable(1)
-                    ->setAccessUrlLocked(1)
-                ;
-
-                /** @var ConstraintViolationListInterface $errors */
-                /*$errors = $this->validator->validate($parameter);
-                if (0 < $errors->count()) {
-                    throw new ValidatorException($errors->get(0)->getMessage());
-                }*/
-                $this->manager->persist($parameter);
-            }
-            $this->manager->persist($parameter);
-        }
-
-        $this->manager->flush();
-
-        return;
-
-        ////
-        $schemaAlias = $settings->getSchemaAlias();
-        $schemaAliasChamilo = str_replace('chamilo_core.settings.', '', $schemaAlias);
-
-        $schema = $this->schemaRegistry->get($schemaAlias);
-
-        $settingsBuilder = new SettingsBuilder();
-        $schema->buildSettings($settingsBuilder);
-
-        $parameters = $settingsBuilder->resolve($settings->getParameters());
-
-        foreach ($settingsBuilder->getTransformers() as $parameter => $transformer) {
-            if (array_key_exists($parameter, $parameters)) {
-                $parameters[$parameter] = $transformer->transform($parameters[$parameter]);
-            }
-        }
-
-        /** @var \Sylius\Bundle\SettingsBundle\Event\SettingsEvent $event */
-        $event = $this->eventDispatcher->dispatch(
-            SettingsEvent::PRE_SAVE,
-            new SettingsEvent($settings)
-        );
-
-        /** @var SettingsCurrent $url */
-        $url = $event->getSettings()->getAccessUrl();
-
-        foreach ($parameters as $name => $value) {
-            if (isset($persistedParametersMap[$name])) {
-                if ($value instanceof Course) {
-                    $value = $value->getId();
-                }
-                $persistedParametersMap[$name]->setValue($value);
-            } else {
-                $setting = new Settings();
-                $setting->setSchemaAlias($schemaAlias);
-
-                $setting
-                    ->setNamespace($schemaAliasChamilo)
-                    ->setName($name)
-                    ->setValue($value)
-                    ->setUrl($url)
-                    ->setAccessUrlLocked(0)
-                    ->setAccessUrlChangeable(1)
-                ;
-
-                /** @var ConstraintViolationListInterface $errors */
-                /*$errors = $this->->validate($parameter);
-                if (0 < $errors->count()) {
-                    throw new ValidatorException($errors->get(0)->getMessage());
-                }*/
-                $this->manager->persist($setting);
-                $this->manager->flush();
-            }
-        }
-        /*$parameters = $settingsBuilder->resolve($settings->getParameters());
-        $settings->setParameters($parameters);
-
-        $this->eventDispatcher->dispatch(SettingsEvent::PRE_SAVE, new SettingsEvent($settings));
-
-        $this->manager->persist($settings);
-        $this->manager->flush();
-
-        $this->eventDispatcher->dispatch(SettingsEvent::POST_SAVE, new SettingsEvent($settings));*/
-    }
-
-    /**
-     * @param string $keyword
-     *
-     * @return array
-     */
-    public function getParametersFromKeywordOrderedByCategory($keyword)
-    {
-        $query = $this->repository->createQueryBuilder('s')
-            ->where('s.variable LIKE :keyword')
-            ->setParameter('keyword', "%$keyword%")
-        ;
-        $parametersFromDb = $query->getQuery()->getResult();
-        $parameters = [];
-        /** @var \Chamilo\CoreBundle\Entity\SettingsCurrent $parameter */
-        foreach ($parametersFromDb as $parameter) {
-            $parameters[$parameter->getCategory()][] = $parameter;
-        }
-
-        return $parameters;
-    }
-
-    /**
-     * @param string $namespace
-     * @param string $keyword
-     * @param bool   $returnObjects
-     *
-     * @return array
-     */
-    public function getParametersFromKeyword($namespace, $keyword = '', $returnObjects = false)
-    {
-        if (empty($keyword)) {
-            $criteria = ['category' => $namespace];
-            $parametersFromDb = $this->repository->findBy($criteria);
-        } else {
-            $query = $this->repository->createQueryBuilder('s')
-                ->where('s.variable LIKE :keyword')
-                ->setParameter('keyword', "%$keyword%")
-            ;
-            $parametersFromDb = $query->getQuery()->getResult();
-        }
-
-        if ($returnObjects) {
-            return $parametersFromDb;
-        }
-        $parameters = [];
-        /** @var \Chamilo\CoreBundle\Entity\SettingsCurrent $parameter */
-        foreach ($parametersFromDb as $parameter) {
-            $parameters[$parameter->getVariable()] = $parameter->getSelectedValue();
-        }
-
-        return $parameters;
-    }
-
-    /**
-     * Load parameter from database.
-     *
-     * @param string $namespace
-     *
-     * @return array
-     */
-    private function getParameters($namespace)
-    {
-        $parameters = [];
-        /** @var SettingsCurrent $parameter */
-        foreach ($this->repository->findBy(['category' => $namespace]) as $parameter) {
-            $parameters[$parameter->getVariable()] = $parameter->getSelectedValue();
-        }
-
-        return $parameters;
-    }
-
-    /*private function transformParameters(SettingsBuilder $settingsBuilder, array $parameters)
-    {
-        $transformedParameters = $parameters;
-
-        foreach ($settingsBuilder->getTransformers() as $parameter => $transformer) {
-            if (array_key_exists($parameter, $parameters)) {
-                $transformedParameters[$parameter] = $transformer->reverseTransform($parameters[$parameter]);
-            }
-        }
-
-        return $transformedParameters;
-    }*/
 }

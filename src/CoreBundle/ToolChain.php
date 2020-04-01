@@ -104,7 +104,6 @@ class ToolChain
                 foreach ($types as $name => $data) {
                     $resourceType = new ResourceType();
                     $resourceType->setName($name);
-                    //$resourceType->setService($data['repository']);
                     $resourceType->setTool($toolEntity);
                     $manager->persist($resourceType);
                 }
@@ -188,12 +187,7 @@ class ToolChain
                 ->setTool($toolEntity)
                 ->setName($tool->getName())
                 ->setPosition($position)
-                //->setCourse($course)
-                //->setImage($tool->getImage())
-                //->setName($tool->getName())
                 ->setVisibility($visibility)
-                //->setLink($tool->getLink())
-                //->setTarget($tool->getTarget())
                 ->setCategory($tool->getCategory())
             ;
 

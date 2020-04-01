@@ -74,7 +74,7 @@ class ResourceNode
     /**
      * @var ResourceLink[]
      *
-     * @ORM\OneToMany(targetEntity="ResourceLink", mappedBy="resourceNode", cascade={"remove"})
+     * @ORM\OneToMany(targetEntity="ResourceLink", mappedBy="resourceNode", cascade={"remove"}, fetch="EAGER")
      */
     protected $resourceLinks;
 

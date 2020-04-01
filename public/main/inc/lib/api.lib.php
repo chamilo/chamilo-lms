@@ -1394,7 +1394,6 @@ function _api_format_user($user, $add_password = false, $loadAvatars = true)
 
     $result['icon_status'] = '';
     $result['icon_status_medium'] = '';
-
     $result['is_admin'] = UserManager::is_admin($user_id);
 
     // Getting user avatar.
@@ -1537,59 +1536,24 @@ function api_get_user_info(
     $loadAvatars = true,
     $updateCache = false
 ) {
-    $apcVar = null;
+    // Make sure user_id is safe
+    $user_id = (int) $user_id;
     $user = false;
-    $cacheAvailable = api_get_configuration_value('apc');
 
     if (empty($user_id)) {
         $userFromSession = Session::read('_user');
 
-        if (isset($userFromSession)) {
-            if (true === $cacheAvailable &&
-                (
-                    empty($userFromSession['is_anonymous']) &&
-                    (isset($userFromSession['status']) && ANONYMOUS != $userFromSession['status'])
-                )
-            ) {
-                $apcVar = api_get_configuration_value('apc_prefix').'userinfo_'.$userFromSession['user_id'];
-                if (apcu_exists($apcVar)) {
-                    if ($updateCache) {
-                        apcu_store($apcVar, $userFromSession, 60);
-                    }
-                    $user = apcu_fetch($apcVar);
-                } else {
-                    $user = _api_format_user(
-                        $userFromSession,
-                        $showPassword,
-                        $loadAvatars
-                    );
-                    apcu_store($apcVar, $user, 60);
-                }
-            } else {
-                $user = _api_format_user(
-                    $userFromSession,
-                    $showPassword,
-                    $loadAvatars
-                );
-            }
-
-            return $user;
+        if (isset($userFromSession) && !empty($userFromSession)) {
+            return $userFromSession;
+            /*
+            return _api_format_user(
+                $userFromSession,
+                $showPassword,
+                $loadAvatars
+            );*/
         }
 
         return false;
-    }
-
-    // Make sure user_id is safe
-    $user_id = (int) $user_id;
-
-    // Re-use user information if not stale and already stored in APCu
-    if (true === $cacheAvailable) {
-        $apcVar = api_get_configuration_value('apc_prefix').'userinfo_'.$user_id;
-        if (apcu_exists($apcVar) && false == $updateCache && false == $checkIfUserOnline) {
-            $user = apcu_fetch($apcVar);
-
-            return $user;
-        }
     }
 
     $sql = "SELECT * FROM ".Database::get_main_table(TABLE_MAIN_USER)."
@@ -1624,10 +1588,6 @@ function api_get_user_info(
             );
         }
         $user = _api_format_user($result_array, $showPassword, $loadAvatars);
-    }
-
-    if (true === $cacheAvailable) {
-        apcu_store($apcVar, $user, 60);
     }
 
     return $user;
@@ -6200,32 +6160,6 @@ function api_get_access_url_from_user($user_id)
     }
 
     return $list;
-}
-
-/**
- * Gets the status of a user in a course.
- *
- * @param int $user_id
- * @param int $courseId
- *
- * @return int user status
- */
-function api_get_status_of_user_in_course($user_id, $courseId)
-{
-    $tbl_rel_course_user = Database::get_main_table(TABLE_MAIN_COURSE_USER);
-    if (!empty($user_id) && !empty($courseId)) {
-        $user_id = intval($user_id);
-        $courseId = intval($courseId);
-        $sql = 'SELECT status
-                FROM '.$tbl_rel_course_user.'
-                WHERE user_id='.$user_id.' AND c_id = '.$courseId;
-        $result = Database::query($sql);
-        $row_status = Database::fetch_array($result, 'ASSOC');
-
-        return $row_status['status'];
-    } else {
-        return 0;
-    }
 }
 
 /**

@@ -47,7 +47,6 @@ class LocaleListener implements EventSubscriberInterface
         if (!$installed) {
             return;
         }
-
         // Try to see if the locale has been set as a _locale routing parameter (from lang switcher)
         //if ($locale = $request->getSession('_locale')) {
         if (false) {
@@ -76,12 +75,9 @@ class LocaleListener implements EventSubscriberInterface
             // 3. Check course locale
             $courseId = $request->get('cid');
 
-            /** @var EntityManager $em */
-            $em = $container->get('doctrine')->getManager();
-
             if (!empty($courseId)) {
                 /** @var Course $course */
-                $course = $em->getRepository('ChamiloCoreBundle:Course')->find($courseId);
+                $course = $request->getSession()->get('course');
                 // 3. Check course locale
                 /** @var Course $course */
                 if (!empty($course)) {
@@ -126,7 +122,6 @@ class LocaleListener implements EventSubscriberInterface
                 ];
                 foreach ($priorityList as $setting) {
                     if (isset($localeList[$setting])) {
-                        //var_dump($setting);
                         $locale = $localeList[$setting];
                     }
                 }
@@ -134,11 +129,6 @@ class LocaleListener implements EventSubscriberInterface
 
             if (empty($locale)) {
                 $locale = $this->defaultLocale;
-            }
-
-            // Force locale if it was selected from the URL
-            if (!empty($localeFromUrl)) {
-                //$locale = $localeFromUrl;
             }
 
             // if no explicit locale has been set on this request, use one from the session

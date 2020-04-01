@@ -6,6 +6,8 @@ namespace Chamilo\CoreBundle\Controller;
 
 use Career;
 use Chamilo\CoreBundle\Entity\Course;
+use Chamilo\CoreBundle\Entity\Resource\ResourceNode;
+use Chamilo\CoreBundle\Entity\Tool;
 use Chamilo\CoreBundle\ToolChain;
 use Chamilo\CourseBundle\Controller\ToolBaseController;
 use Chamilo\CourseBundle\Entity\CTool;
@@ -15,6 +17,7 @@ use Chamilo\CourseBundle\Repository\CToolRepository;
 use CourseManager;
 use Database;
 use Display;
+use Doctrine\ORM\Query\Expr\Join;
 use Event;
 use ExtraFieldValue;
 use Fhaculty\Graph\Graph;
@@ -112,18 +115,19 @@ class CourseHomeController extends ToolBaseController
         );*/
 
         $qb = $toolRepository->getResourcesByCourse($course, $this->getSession());
+        $qb->addSelect('tool');
+        $qb->innerJoin(
+            'resource.tool',
+            'tool'
+        );
         $result = $qb->getQuery()->getResult();
-
-        $shortcutQuery = $shortcutRepository->getResources($this->getUser(), $course->getResourceNode(), $course);
-        $shortcuts = $shortcutQuery->getQuery()->getResult();
 
         $tools = [];
         /** @var CTool $item */
         foreach ($result as $item) {
-            if ('course_tool' === $item->getTool()->getName()) {
+            if ('course_tool' === $item->getName()) {
                 continue;
             }
-
             $toolModel = $toolChain->getToolFromName($item->getTool()->getName());
 
             if ('admin' === $toolModel->getCategory() && !$this->isGranted('ROLE_CURRENT_COURSE_TEACHER')) {
@@ -190,6 +194,9 @@ class CourseHomeController extends ToolBaseController
         api_remove_in_gradebook();
         \Exercise::cleanSessionVariables();
         \DocumentManager::removeGeneratedAudioTempFile();
+
+        $shortcutQuery = $shortcutRepository->getResources($this->getUser(), $course->getResourceNode(), $course);
+        $shortcuts = $shortcutQuery->getQuery()->getResult();
 
         return $this->render(
             '@ChamiloTheme/Course/home.html.twig',

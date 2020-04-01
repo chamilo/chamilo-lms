@@ -2024,10 +2024,10 @@ class CourseManager
             $teachers['status'] = $teacher['status'];
             $teachers['fullname'] = api_get_person_name($teacher['firstname'], $teacher['lastname']);
             $teachers['avatar'] = '';
-            if ($loadAvatars) {
+            /*if ($loadAvatars) {
                 $userPicture = UserManager::getUserPicture($teacher['user_id'], USER_IMAGE_SIZE_SMALL);
                 $teachers['avatar'] = $userPicture;
-            }
+            }*/
             $teachers['url'] = $url.'&user_id='.$teacher['user_id'];
             $listTeachers[] = $teachers;
         }

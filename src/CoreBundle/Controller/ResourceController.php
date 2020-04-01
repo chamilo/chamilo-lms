@@ -126,6 +126,11 @@ class ResourceController extends AbstractResourceController implements CourseCon
         $source->initQueryBuilder($qb);
         $grid->setSource($source);
 
+        /*$result = $qb->getQuery()->getResult();
+        foreach ($result as $data) {
+            dump(get_class($data));
+        }*/
+
         $resourceParams = $this->getResourceParams($request);
 
         if (0 === $resourceParams['id']) {
@@ -403,7 +408,6 @@ class ResourceController extends AbstractResourceController implements CourseCon
             $myRowAction->addManipulateRender($setNodeParameters);
             $grid->addRowAction($myRowAction);
         }
-
         /*$grid->addExport(new CSVExport($this->trans('CSV export'), 'export', ['course' => $courseIdentifier]));
         $grid->addExport(
             new ExcelExport(

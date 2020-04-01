@@ -1653,6 +1653,7 @@ class Tracking
      * @param string    $timeFilter type of time filter: 'last_week' or 'custom'
      * @param string    $start_date start date date('Y-m-d H:i:s')
      * @param string    $end_date   end date date('Y-m-d H:i:s')
+     * @param bool      $returnAllRecords
      *
      * @return int
      */
@@ -1670,7 +1671,8 @@ class Tracking
             $userList = array_map('intval', $userId);
             $userCondition = " login_user_id IN ('".implode("','", $userList)."')";
         } else {
-            $userCondition = " login_user_id = ".intval($userId);
+            $userId = (int) $userId;
+            $userCondition = " login_user_id = $userId ";
         }
 
         $url_condition = null;
@@ -1678,7 +1680,7 @@ class Tracking
         $url_table = null;
         if (api_is_multiple_url_enabled()) {
             $access_url_id = api_get_current_access_url_id();
-            $url_table = ", ".$tbl_url_rel_user." as url_users";
+            $url_table = ", $tbl_url_rel_user as url_users";
             $url_condition = " AND u.login_user_id = url_users.user_id AND access_url_id='$access_url_id'";
         }
 
@@ -1698,6 +1700,17 @@ class Tracking
                 $newDate = new DateTime('-30 days', new DateTimeZone('UTC'));
                 $condition_time = " AND (login_date >= '{$newDate->format('Y-m-d H:i:s')}'";
                 $condition_time .= "AND logout_date <= '{$today->format('Y-m-d H:i:s')}') ";
+                break;
+            case 'wide':
+                if (!empty($start_date) && !empty($end_date)) {
+                    $start_date = Database::escape_string($start_date);
+                    $end_date = Database::escape_string($end_date);
+                    $condition_time = ' AND (
+                        (login_date >= "'.$start_date.'" AND login_date <= "'.$end_date.'") OR
+                        (logout_date >= "'.$start_date.'" AND logout_date <= "'.$end_date.'") OR
+                        (login_date <= "'.$start_date.'" AND logout_date >= "'.$end_date.'")
+                    ) ';
+                }
                 break;
             case 'custom':
                 if (!empty($start_date) && !empty($end_date)) {

@@ -422,7 +422,7 @@ if ($formByDay->validate()) {
     $from = api_get_utc_datetime($fromObject->format('Y-m-d').' 00:00:00');
     $to = api_get_utc_datetime($toObject->format('Y-m-d').' 23:59:59');
 
-    $list = Tracking::get_time_spent_on_the_platform($userId, 'custom', $from, $to, true);
+    $list = Tracking::get_time_spent_on_the_platform($userId, 'wide', $from, $to, true);
     $newList = [];
     foreach ($list as $item) {
         $key = substr($item['login_date'], 0, 10);

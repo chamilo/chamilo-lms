@@ -75,3 +75,5 @@ $strings['UserQuestionAttemptsTruefalseTask'] = 'Question attempts of users for 
 $strings['UsersLastLoginTask'] = 'Last logins for users';
 $strings['TrackLoginTask'] = 'First login and last logout';
 $strings['TrackCourseAccessTask'] = 'User access to course';
+$strings['UserLearnPathsProgressScript'] = 'Update progress in learning paths for users.';
+$strings['UserScormsProgressScript'] = 'Update progress in SCORMs for users.';

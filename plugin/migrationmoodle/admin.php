@@ -1,6 +1,7 @@
 <?php
 /* For licensing terms, see /license.txt */
 
+use Chamilo\PluginBundle\MigrationMoodle\Script\BaseScript;
 use Chamilo\PluginBundle\MigrationMoodle\Task\BaseTask;
 
 ini_set('memory_limit', -1);
@@ -22,7 +23,7 @@ if ('true' != $plugin->get('active')) {
     api_not_allowed(true);
 }
 
-$menu = [
+$menuTasks = [
     '_' => [
         'course_categories',
         'courses',
@@ -116,6 +117,13 @@ $menu = [
     ],
 ];
 
+$menuScripts = [
+    '_' => [
+        'user_learn_paths_progress',
+        'user_scorms_progress',
+    ],
+];
+
 $htmlHeadXtra[] = '<style>.fa-ul {list-style-type: decimal; list-style-position: outside;}</style>';
 
 Display::display_header($plugin->get_title());
@@ -123,7 +131,7 @@ Display::display_header($plugin->get_title());
 echo '<div class="row">';
 echo '<div class="col-sm-6 col-sm-push-6">';
 
-if (!empty($action) && isAllowedAction($action, $menu) && !$plugin->isTaskDone($action)) {
+if (!empty($action) && isAllowedAction($action, $menuTasks) && !$plugin->isTaskDone($action)) {
     $taskName = api_underscore_to_camel_case($action).'Task';
 
     echo Display::page_subheader(
@@ -140,25 +148,48 @@ if (!empty($action) && isAllowedAction($action, $menu) && !$plugin->isTaskDone($
     echo '</pre>';
 }
 
+if (!empty($action) && isAllowedAction($action, $menuScripts) && !$plugin->isTaskDone($action)) {
+    $scriptName = api_underscore_to_camel_case($action).'Script';
+
+    echo Display::page_subheader(
+        $plugin->get_lang($scriptName)
+    );
+
+    $scriptClass = 'Chamilo\\PluginBundle\\MigrationMoodle\\Script\\'.$scriptName;
+
+    /** @var BaseScript $script */
+    $script = new $scriptClass();
+
+    echo '<pre>';
+    $script->run();
+    echo '</pre>';
+}
+
 echo '</div>';
 echo '<div class="col-sm-6 col-sm-pull-6">';
-echo displayMenu();
+echo Display::page_subheader('Tasks');
+echo displayMenu($menuTasks);
+echo Display::page_subheader('Scripts');
+echo displayMenu($menuScripts, 'Script');
 echo '</div>';
 echo '</div>';
 
 Display::display_footer();
 
 /**
+ * @param array  $menu
  * @param string $parent
+ * @param string $type
  *
  * @return string
  */
-function displayMenu($parent = '_')
+function displayMenu(array $menu, $type = 'Task', $parent = '_')
 {
     $plugin = MigrationMoodlePlugin::create();
-    $menu = $GLOBALS['menu'];
 
     $items = $menu[$parent];
+
+    $isParentDone = $parent === '_' ? true : $plugin->isTaskDone($parent);
 
     $baseUrl = api_get_self()."?action=";
 
@@ -169,19 +200,23 @@ function displayMenu($parent = '_')
 
         $html .= '<li>';
 
-        if ($plugin->isTaskDone($item)) {
-            $html .= Display::returnFontAwesomeIcon('check-square-o', '', true);
-            $html .= $plugin->get_lang($title.'Task');
-        } else {
-            $html .= Display::returnFontAwesomeIcon('square-o', '', true);
-            $html .= Display::url(
-                $plugin->get_lang($title.'Task'),
-                $baseUrl.$item
-            );
+        $htmlItem = Display::returnFontAwesomeIcon('check-square-o', '', true);
+        $htmlItem .= $plugin->get_lang($title.$type);
+
+        if ($isParentDone) {
+            if (!$plugin->isTaskDone($item)) {
+                $htmlItem = Display::returnFontAwesomeIcon('square-o', '', true);
+                $htmlItem .= Display::url(
+                    $plugin->get_lang($title.$type),
+                    $baseUrl.$item
+                );
+            }
         }
 
+        $html .= $htmlItem;
+
         if (isset($menu[$item])) {
-            $html .= displayMenu($item);
+            $html .= displayMenu($menu, $type, $item);
         }
 
         $html .= '</li>';
@@ -194,6 +229,7 @@ function displayMenu($parent = '_')
 
 /**
  * @param string $action
+ * @param array  $menu
  *
  * @return bool
  */

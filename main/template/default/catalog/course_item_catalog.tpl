@@ -53,22 +53,44 @@
                 {% if course.extra_data %}
                     <div class="toolbar row">
                         <div class="col-sm-12">
-                            {{ course.extra_data }}
+                            {% for field in course.extra_data %}
+                                {% if field.value_as_array %}
+                                    <div class="panel-tags">
+                                        <ul class="list-inline course-tags">
+                                            <li> {{ field.text }} :</li>
+                                            {% for tag  in field.value_as_array %}
+                                                <li class="label label-info">
+                                                    <span>
+                                                        <a href="{{ catalog_url_no_extra_fields }}&extra_{{ field.variable }}%5B%5D={{ tag }}" >
+                                                            {{ tag }}
+                                                        </a>
+                                                    </span>
+                                                </li>
+                                            {% endfor %}
+                                        </ul>
+                                    </div>
+                                {% else %}
+                                    {{ field.text }} : {{ field.value }}       <br />
+                                {% endif %}
 
-                            {% if course.extra_data_tags %}
-                                <div class="panel-tags">
-                                    <ul class="list-inline course-tags">
-                                        <li> {{ 'Tags' | get_lang }}</li>
-                                        {% for tag in course.extra_data_tags %}
-                                            <li class="label label-info">
-                                                <span>
-                                                    {{ tag }}
-                                                </span>
-                                            </li>
-                                        {% endfor %}
-                                    </ul>
-                                </div>
-                            {% endif %}
+                            {% endfor %}
+
+{#                            {% if course.extra_data_tags %}ss#}
+{#                                {% for tags in course.extra_data_tags %}#}
+{#                                    <div class="panel-tags">#}
+{#                                        <ul class="list-inline course-tags">#}
+{#                                            <li> {{ 'Tags' | get_lang }}</li>#}
+{#                                            {% for tag in tags %}#}
+{#                                                <li class="label label-info">#}
+{#                                                    <span>#}
+{#                                                        {{ tag }}#}
+{#                                                    </span>#}
+{#                                                </li>#}
+{#                                            {% endfor %}#}
+{#                                        </ul>#}
+{#                                    </div>#}
+{#                                {% endfor %}#}
+{#                            {% endif %}#}
                         </div>
                     </div>
                 {% endif %}

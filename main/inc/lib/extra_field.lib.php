@@ -2553,10 +2553,11 @@ JAVASCRIPT;
      * Get the extra fields and their formatted values.
      *
      * @param int|string $itemId The item ID (It could be a session_id, course_id or user_id)
+     * @param bool       $filter
      *
      * @return array The extra fields data
      */
-    public function getDataAndFormattedValues($itemId)
+    public function getDataAndFormattedValues($itemId, $filter = false)
     {
         $valuesData = [];
         $fields = $this->get_all();
@@ -2569,6 +2570,11 @@ JAVASCRIPT;
                 continue;
             }
 
+            if ($filter && $field['filter'] != 1) {
+                continue;
+            }
+
+            $valueAsArray = [];
             $fieldValue = new ExtraFieldValue($this->type);
             $valueData = $fieldValue->get_values_by_handler_and_field_id(
                 $itemId,
@@ -2587,13 +2593,13 @@ JAVASCRIPT;
                         $data[] = $tag->getTag();
                     }
                     $valueData = implode(',', $data);
+                    $valueAsArray = $data;
                 }
             }
 
             if (!$valueData) {
                 continue;
             }
-
             $displayedValue = get_lang('None');
 
             switch ($field['field_type']) {
@@ -2660,8 +2666,10 @@ JAVASCRIPT;
             }
 
             $valuesData[] = [
+                'variable' => $field['variable'],
                 'text' => $field['display_text'],
                 'value' => $displayedValue,
+                'value_as_array' => $valueAsArray,
             ];
         }
 

@@ -207,23 +207,6 @@ switch ($action) {
             $countCoursesInCategory = count($courses);
         } else {
             $values = $_REQUEST;
-
-            if (!empty($values) && $form->hasElement('extra_tags')) {
-                $tagElement = $form->getElement('extra_tags');
-                if (isset($values['extra_tags']) && !empty($values['extra_tags'])) {
-                    $tags = [];
-                    foreach ($values['extra_tags'] as $tag) {
-                        $tag = Security::remove_XSS($tag);
-                        $tags[] = $tag;
-                        $tagElement->addOption(
-                            $tag,
-                            $tag
-                        );
-                    }
-                    $defaults['extra_tags'] = $tags;
-                }
-            }
-
             if ($allowExtraFields) {
                 // Parse params.
                 foreach ($values as $key => $value) {
@@ -235,12 +218,17 @@ switch ($action) {
                     }
                 }
 
-                $extraFields = $extraField->get_all(['visible_to_self = ? AND filter = ?' => [1, 1]], 'option_order');
-                $extraFields = array_column($extraFields, 'variable');
+                $extraFieldsAll = $extraField->get_all(
+                    ['visible_to_self = ? AND filter = ?' => [1, 1]],
+                    'option_order'
+                );
+                $extraFieldsType = array_column($extraFieldsAll, 'field_type', 'variable');
+                $extraFields = array_column($extraFieldsAll, 'variable');
                 $filter = new stdClass();
                 foreach ($fields as $variable => $col) {
+                    $variableNoExtra = str_replace('extra_', '', $variable);
                     if (isset($values[$variable]) && !empty($values[$variable]) &&
-                        in_array(str_replace('extra_', '', $variable), $extraFields)
+                        in_array($variableNoExtra, $extraFields)
                     ) {
                         $rule = new stdClass();
                         $rule->field = $variable;
@@ -252,6 +240,20 @@ switch ($action) {
                         $rule->data = $data;
                         $filter->rules[] = $rule;
                         $filter->groupOp = 'AND';
+
+                        if ($extraFieldsType[$variableNoExtra] == ExtraField::FIELD_TYPE_TAG) {
+                            $tagElement = $form->getElement($variable);
+                            $tags = [];
+                            foreach ($values[$variable] as $tag) {
+                                $tag = Security::remove_XSS($tag);
+                                $tags[] = $tag;
+                                $tagElement->addOption(
+                                    $tag,
+                                    $tag
+                                );
+                            }
+                            $defaults[$variable] = $tags;
+                        }
                     }
                 }
                 $result = $extraField->getExtraFieldRules($filter);
@@ -270,7 +272,12 @@ switch ($action) {
             }
 
             $courses = CoursesAndSessionsCatalog::searchCourses($categoryCode, $searchTerm, $limit, false, $conditions);
-            $countCoursesInCategory = CourseCategory::countCoursesInCategory($categoryCode, $searchTerm, true, $conditions);
+            $countCoursesInCategory = CourseCategory::countCoursesInCategory(
+                $categoryCode,
+                $searchTerm,
+                true,
+                $conditions
+            );
         }
         $showCourses = CoursesAndSessionsCatalog::showCourses();
         $showSessions = CoursesAndSessionsCatalog::showSessions();
@@ -279,6 +286,7 @@ switch ($action) {
         $pageTotal = (int) ceil($countCoursesInCategory / $pageLength);
 
         $url = CoursesAndSessionsCatalog::getCatalogUrl(1, $pageLength, 'ALL', 'search_course', $fields);
+        $urlNoExtraFields = CoursesAndSessionsCatalog::getCatalogUrl(1, $pageLength, 'ALL', 'search_course');
         $urlNoCategory = CoursesAndSessionsCatalog::getCatalogUrl(1, $pageLength, '', 'search_course', $fields);
         $urlNoCategory = str_replace('&category_code=ALL', '', $urlNoCategory);
 
@@ -376,9 +384,9 @@ switch ($action) {
         $content .= '</div></div></div></div>';
 
         if ($showCourses) {
-            if (!empty($searchTerm)) {
+            /*if (!empty($searchTerm)) {
                 $content .= '<p><strong>'.get_lang('SearchResultsFor').' '.$searchTerm.'</strong><br />';
-            }
+            }*/
 
             $showTeacher = 'true' === api_get_setting('display_teacher_in_courselist');
             $ajax_url = api_get_path(WEB_AJAX_PATH).'course.ajax.php?a=add_course_vote';
@@ -397,13 +405,6 @@ switch ($action) {
                 $em = Database::getManager();
                 $fieldsRepo = $em->getRepository('ChamiloCoreBundle:ExtraField');
                 $fieldTagsRepo = $em->getRepository('ChamiloCoreBundle:ExtraFieldRelTag');
-
-                $tagField = $fieldsRepo->findOneBy(
-                    [
-                        'extraFieldType' => \Chamilo\CoreBundle\Entity\ExtraField::COURSE_FIELD_TYPE,
-                        'variable' => 'tags',
-                    ]
-                );
             }
 
             $courseUrl = api_get_path(WEB_COURSE_PATH);
@@ -415,13 +416,8 @@ switch ($action) {
                     if (COURSE_VISIBILITY_HIDDEN == $course['visibility']) {
                         continue;
                     }
-                    $courseTags = [];
-                    if ($allowExtraFields && !is_null($tagField)) {
-                        $courseTags = $fieldTagsRepo->getTags($tagField, $courseId);
-                    }
 
                     $aboutPage = api_get_path(WEB_PATH).'course/'.$course['real_id'].'/about';
-
                     $settingsUrl = [
                         'course_description_popup' => api_get_path(WEB_CODE_PATH).'inc/ajax/course_home.ajax.php?a=show_course_information&code='.$course['code'],
                         'course_about' => $aboutPage,
@@ -482,7 +478,6 @@ switch ($action) {
                             );
                         }
                     }
-
                     // end buy course validation
 
                     $course['rating'] = '';
@@ -502,41 +497,58 @@ switch ($action) {
 
                     // display button line
                     $course['buy_course'] = $separator;
-
+                    $course['extra_data'] = '';
+                    $course['extra_data_tags'] = [];
+                    //$tagUrl = Display::url($tag->getTag(), $url.'&extra_tags%5B%5D='.$tag->getTag());
                     if ($allowExtraFields) {
-                        $course['extra_data'] = '';
-                        $values = $extraFieldValues->getAllValuesForAnItem($courseId, true, true);
-                        foreach ($values as $valueItem) {
-                            /** @var \Chamilo\CoreBundle\Entity\ExtraFieldValues $value */
-                            $value = $valueItem['value'];
-                            if ($value) {
-                                $data = $value->getValue();
-                                if (!empty($data)) {
-                                    $course['extra_data'] .= $value->getField()->getDisplayText().': ';
-                                    switch ($value->getField()->getFieldType()) {
-                                        case ExtraField::FIELD_TYPE_CHECKBOX:
-                                            if ($value->getValue() == 1) {
-                                                $course['extra_data'] .= get_lang('Yes').'<br />';
-                                            } else {
-                                                $course['extra_data'] .= get_lang('No').'<br />';
-                                            }
-                                            break;
-                                        default:
-                                            $course['extra_data'] .= $value->getValue().'<br />';
-                                            break;
-                                    }
-                                }
-                            }
-                        }
+                        $course['extra_data'] = $extraField->getDataAndFormattedValues($courseId, true);
 
-                        $course['extra_data_tags'] = [];
-                        if (!empty($courseTags)) {
-                            /** @var \Chamilo\CoreBundle\Entity\Tag $tag */
-                            foreach ($courseTags as $tag) {
-                                $tagUrl = Display::url($tag->getTag(), $url.'&extra_tags%5B%5D='.$tag->getTag());
-                                $course['extra_data_tags'][] = $tagUrl;
-                            }
-                        }
+//                        $values = $extraFieldValues->getAllValuesForAnItem($courseId, true, true);
+//                        foreach ($values as $valueItem) {
+//                            /** @var \Chamilo\CoreBundle\Entity\ExtraFieldValues $value */
+//                            $value = $valueItem['value'];
+//                            var_dump($value->getField()->getVariable());
+//                            if ($value) {
+//                                $data = $value->getValue();
+//                                if (!empty($data) || $value->getField()->getFieldType() == ExtraField::FIELD_TYPE_TAG) {
+//                                    $course['extra_data'] .= $value->getField()->getDisplayText().': ';
+//                                    switch ($value->getField()->getFieldType()) {
+//                                        case ExtraField::FIELD_TYPE_TAG:
+//                                            $tagField = $fieldsRepo->findOneBy(
+//                                                [
+//                                                    'extraFieldType' => \Chamilo\CoreBundle\Entity\ExtraField::COURSE_FIELD_TYPE,
+//                                                    'variable' => $value->getField()->getVariable(),
+//                                                ]
+//                                            );
+//
+//                                            $courseTags = [];
+//                                            if (!is_null($tagField)) {
+//                                                $courseTags = $fieldTagsRepo->getTags($tagField, $courseId);
+//                                            }
+//
+//                                            if (!empty($courseTags)) {
+//                                                /** @var \Chamilo\CoreBundle\Entity\Tag $tag */
+//                                                foreach ($courseTags as $tag) {
+//                                                    $tagUrl = Display::url($tag->getTag(), $url.'&extra_tags%5B%5D='.$tag->getTag());
+//                                                    $course['extra_data_tags'][$value->getField()->getVariable()][] = $tagUrl;
+//                                                }
+//                                            }
+//
+//                                            break;
+//                                        case ExtraField::FIELD_TYPE_CHECKBOX:
+//                                            if ($value->getValue() == 1) {
+//                                                $course['extra_data'] .= get_lang('Yes').'<br />';
+//                                            } else {
+//                                                $course['extra_data'] .= get_lang('No').'<br />';
+//                                            }
+//                                            break;
+//                                        default:
+//                                            $course['extra_data'] .= $value->getValue().'<br />';
+//                                            break;
+//                                    }
+//                                }
+//                            }
+//                        }
                     }
 
                     // if user registered as student
@@ -590,7 +602,9 @@ switch ($action) {
         $template = new Template($toolTitle, true, true, false, false, false);
         $template->assign('content', $content);
         $template->assign('courses', $courses);
+        $template->assign('catalog_url_no_extra_fields', $urlNoExtraFields);
         $template->assign('pagination', $catalogPagination);
+
         $template->display($template->get_template('catalog/course_catalog.tpl'));
         exit;
         break;

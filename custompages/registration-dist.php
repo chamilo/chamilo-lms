@@ -23,15 +23,6 @@ if (isset($content['form']->_elementIndex['extra_mail_notify_message'])) {
 if (isset($content['form']->_elementIndex['extra_mail_notify_group_message'])) {
     $content['form']->removeElement('extra_mail_notify_group_message');
 }
-if (isset($content['form']->_elementIndex['official_code'])) {
-    $content['form']->removeElement('official_code');
-}
-if (isset($content['form']->_elementIndex['phone'])) {
-    $content['form']->removeElement('phone');
-}
-if (isset($content['form']->_elementIndex['submit'])) {
-    $content['form']->removeElement('submit');
-}
 
 if (isset($content['form']->_elementIndex['status'])) {
     $content['form']->removeElement('status');

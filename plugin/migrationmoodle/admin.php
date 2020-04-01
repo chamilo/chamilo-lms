@@ -130,6 +130,7 @@ Display::display_header($plugin->get_title());
 
 echo '<div class="row">';
 echo '<div class="col-sm-6 col-sm-push-6">';
+echo '<pre style="max-height: 1190px; overflow: auto; height: 1190px;">';
 
 if (!empty($action) && isAllowedAction($action, $menuTasks) && !$plugin->isTaskDone($action)) {
     $taskName = api_underscore_to_camel_case($action).'Task';
@@ -143,9 +144,7 @@ if (!empty($action) && isAllowedAction($action, $menuTasks) && !$plugin->isTaskD
     /** @var BaseTask $task */
     $task = new $taskName();
 
-    echo '<pre>';
     $task->execute();
-    echo '</pre>';
 }
 
 if (!empty($action) && isAllowedAction($action, $menuScripts) && !$plugin->isTaskDone($action)) {
@@ -160,11 +159,10 @@ if (!empty($action) && isAllowedAction($action, $menuScripts) && !$plugin->isTas
     /** @var BaseScript $script */
     $script = new $scriptClass();
 
-    echo '<pre>';
     $script->run();
-    echo '</pre>';
 }
 
+echo '</pre>';
 echo '</div>';
 echo '<div class="col-sm-6 col-sm-pull-6">';
 echo Display::page_subheader('Tasks');

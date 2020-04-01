@@ -273,8 +273,9 @@ function getReport($userId, $from, $to, $addTime = false)
             if (empty($courseData)) {
                 continue;
             }
-            $courseSessionTable .= '<div class="data-title">'.
-                Display::page_subheader3($iconCourse.$data['name'][$courseId]).'</div>';
+            $courseSessionTable .= '<div class="data-title">'.Display::page_subheader3(
+                    $iconCourse.$data['name'][$courseId]
+                ).'</div>';
             $table = new HTML_Table(['class' => 'data_table']);
             $headers = [
                 get_lang('StartDate'),
@@ -303,7 +304,6 @@ function getReport($userId, $from, $to, $addTime = false)
             $courseSessionTable .= $table->toHtml();
         }
     }
-
     $totalCourseSessionTable = '';
     if ($courseSessionTableData) {
         $table = new HTML_Table(['class' => 'data_table']);
@@ -425,11 +425,40 @@ if ($formByDay->validate()) {
     $list = Tracking::get_time_spent_on_the_platform($userId, 'custom', $from, $to, true);
     $newList = [];
     foreach ($list as $item) {
-        // YYYY-MM-DD
         $key = substr($item['login_date'], 0, 10);
+
         $dateLogout = substr($item['logout_date'], 0, 10);
         if ($dateLogout > $key) {
+            $itemLogoutOriginal = $item['logout_date'];
+            $fromItemObject = DateTime::createFromFormat('Y-m-d H:i:s', $item['login_date'], new DateTimeZone('UTC'));
+            $toItemObject = DateTime::createFromFormat('Y-m-d H:i:s', $item['logout_date'], new DateTimeZone('UTC'));
             $item['logout_date'] = api_get_utc_datetime($key.' 23:59:59');
+
+            $period = new DatePeriod(
+                $fromItemObject,
+                new DateInterval('P1D'),
+                $toItemObject
+            );
+
+            $counter = 1;
+            $itemKey = null;
+            foreach ($period as $value) {
+                $dateToCheck = api_get_utc_datetime($value->format('Y-m-d').' 00:00:01');
+                $end = api_get_utc_datetime($value->format('Y-m-d').' 23:59:59');
+                if ($counter === 1) {
+                    $dateToCheck = $item['login_date'];
+                }
+                $itemKey = substr($value->format('Y-m-d'), 0, 10);
+                $newList[$itemKey] = [
+                    'login_date' => $dateToCheck,
+                    'logout_date' => $end,
+                    'diff' => 0,
+                ];
+                $counter++;
+            }
+            if (!empty($itemKey)) {
+                $newList[$itemKey]['logout_date'] = $itemLogoutOriginal;
+            }
         }
 
         if (!isset($newList[$key])) {
@@ -494,8 +523,9 @@ if ($formByDay->validate()) {
         $totalCourseSessionTable = $result['third'];
         $total = $result['total'];
         $iconCalendar = Display::return_icon('calendar.png', null, [], ICON_SIZE_SMALL);
-        $tableList .= '<div class="date-calendar">'.
-            Display::page_subheader2($iconCalendar.get_lang('Date').': '.$dateToCheck).'</div>';
+        $tableList .= '<div class="date-calendar">'.Display::page_subheader2(
+                $iconCalendar.get_lang('Date').': '.$dateToCheck
+            ).'</div>';
         $tableList .= $table->toHtml();
         if (!$reduced && !empty($total)) {
             $diff = get_lang('NotInCourse').' '.api_format_time($data['diff'] - $total, 'js');
@@ -510,6 +540,7 @@ if ($formByDay->validate()) {
     $tpl->assign('student', $userInfo['complete_name']);
     $totalTable = Display::page_subheader3(sprintf(get_lang('ExtractionFromX'), api_get_local_time()));
     $tpl->assign('table_progress', $totalTable.$tableList);
+
     $content = $tpl->fetch($tpl->get_template('my_space/pdf_export_student.tpl'));
 
     $params = [

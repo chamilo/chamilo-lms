@@ -1,11 +1,11 @@
 <?php
 /* For licensing terms, see /license.txt */
 
-$strings['plugin_title'] = 'Migration From Moodle';
-$strings['plugin_comment'] = 'Execute a migration process from Moodle data to Chamilo.';
+$strings['plugin_title'] = 'Import from Moodle';
+$strings['plugin_comment'] = 'Execute an import process from a Moodle database and files to Chamilo.';
 
 $strings['MoodlePassword'] = 'Moodle password';
-$strings['UninstallError'] = 'An error ocurred while the plugin was uninstalled.';
+$strings['UninstallError'] = 'An error ocurred uninstalling the plugin.';
 
 $strings['active'] = 'Active';
 $strings['db_host'] = 'Moodle DB host';
@@ -13,12 +13,12 @@ $strings['db_user'] = 'Moodle DB user';
 $strings['db_password'] = 'Moodle DB password';
 $strings['db_name'] = 'Moodle DB name';
 $strings['user_filter'] = 'Filter for users';
-$strings['user_filter_help'] = 'Allow migrate only users who have a username prefixed with it.<br>'
-    .'Course migration is also affected by this configuration, it only migrates courses in which users with the username prefix are enrolled.';
+$strings['user_filter_help'] = 'Only import users who have a username prefixed with this string.<br>'
+    .'The import of courses is also affected by this configuration, as it only imports courses in which users with this username prefix are enrolled.';
 $strings['url_id'] = 'URL ID';
-$strings['url_id_help'] = 'Access URL ID to save course, users and sessions .';
-$strings['moodle_path'] = 'Moodle data path';
-$strings['moodle_path_help'] = '<pre>/var/www/moodle/moodledata</pre>';
+$strings['url_id_help'] = 'Access URL ID to save courses, users and sessions to (if using multi-url).';
+$strings['moodle_path'] = 'Moodledata path';
+$strings['moodle_path_help'] = 'The moodledata folder path. Usually something like <pre>/var/www/moodledata</pre>';
 
 // Tasks
 $strings['UsersTask'] = 'Users';
@@ -49,9 +49,9 @@ $strings['QuestionMultiChoiceSingleTask'] = 'Answers for multichoice questions (
 $strings['QuestionMultiChoiceMultipleTask'] = 'Answers for multichoice questions (multiple)';
 $strings['QuestionsTrueFalseTask'] = 'Answers for truefalse questions';
 $strings['QuestionShortAnswerTask'] = 'Answers for shortanswers questions';
-$strings['CourseModulesScormTask'] = 'Course Scorms';
-$strings['ScormScoesTask'] = 'Scorms items';
-$strings['FilesForScormScoesTask'] = 'Files for Scorm items';
+$strings['CourseModulesScormTask'] = 'SCORM courses';
+$strings['ScormScoesTask'] = 'SCORM items';
+$strings['FilesForScormScoesTask'] = 'Files for SCORM items';
 $strings['UserSessionsTask'] = 'Course Sessions for users';
 $strings['CourseIntroductionsTask'] = 'Course introductions';
 $strings['FilesForCourseIntroductionsTask'] = 'Files for course introductions';
@@ -59,8 +59,8 @@ $strings['FilesForCourseSectionsTask'] = 'Files for course sections';
 $strings['CourseModulesUrlTask'] = 'Course modules: URLs';
 $strings['UrlsTask'] = 'URLs';
 $strings['SortSectionModulesTask'] = 'Sort modules in section';
-$strings['UsersScormsViewTask'] = 'Scorm views for users';
-$strings['UsersScormsProgressTask'] = 'Scorm progress';
+$strings['UsersScormsViewTask'] = 'SCORM views for users';
+$strings['UsersScormsProgressTask'] = 'SCORM progress';
 $strings['UsersLearnPathsTask'] = 'Learn paths views of users';
 $strings['UsersLearnPathsLessonTimerTask'] = 'Lesson timer to start time of Learn paths section';
 $strings['QuizzesScoresTask'] = 'Update quiz scores in learn path';

@@ -18,7 +18,7 @@ $strings['user_filter_help'] = 'Allow migrate only users who have a username pre
 $strings['url_id'] = 'URL ID';
 $strings['url_id_help'] = 'Access URL ID to save course, users and sessions .';
 $strings['moodle_path'] = 'Moodle data path';
-$strings['moodle_path'] = '<pre>/var/www/moodle/moodledata</pre>';
+$strings['moodle_path_help'] = '<pre>/var/www/moodle/moodledata</pre>';
 
 // Tasks
 $strings['UsersTask'] = 'Users';
@@ -75,3 +75,5 @@ $strings['UserQuestionAttemptsTruefalseTask'] = 'Question attempts of users for 
 $strings['UsersLastLoginTask'] = 'Last logins for users';
 $strings['TrackLoginTask'] = 'First login and last logout';
 $strings['TrackCourseAccessTask'] = 'User access to course';
+$strings['UserLearnPathsProgressScript'] = 'Update progress in learning paths for users.';
+$strings['UserScormsProgressScript'] = 'Update progress in SCORMs for users.';

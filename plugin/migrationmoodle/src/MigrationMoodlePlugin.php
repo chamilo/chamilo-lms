@@ -130,7 +130,9 @@ class MigrationMoodlePlugin extends Plugin implements HookPluginInterface
      */
     public function getAccessUrlId()
     {
-        return (int) $this->get(self::SETTING_URL_ID);
+        $urlId = (int) $this->get(self::SETTING_URL_ID);
+
+        return $urlId ?: 1;
     }
 
     /**

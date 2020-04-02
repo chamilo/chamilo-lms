@@ -274,7 +274,7 @@ if (api_is_drh()) {
     );
 
     $actionsLeft .= Display::url(
-        Display::return_icon('statistics.png', get_lang('CalendarPlan'), [], ICON_SIZE_MEDIUM),
+        Display::return_icon('calendar-user.png', get_lang('MyStudentsSchedule'), [], ICON_SIZE_MEDIUM),
         $webCodePath.'mySpace/calendar_plan.php'
     );
 

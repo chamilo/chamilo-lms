@@ -7,6 +7,7 @@ use Symfony\Bundle\FrameworkBundle\Console\Application;
 use Symfony\Component\Console\Input\ArrayInput;
 use Symfony\Component\Console\Output\ConsoleOutput;
 use Symfony\Component\Dotenv\Dotenv;
+use Symfony\Component\ErrorHandler\Debug;
 use Symfony\Component\Translation\Loader\PoFileLoader;
 use Symfony\Component\Translation\Translator;
 
@@ -41,6 +42,7 @@ define('MAX_FORM_FIELD_LENGTH', 80);
 
 api_check_php_version();
 ob_implicit_flush(true);
+Debug::enable();
 
 // Defaults settings
 putenv('APP_LOCALE=en');
@@ -76,7 +78,11 @@ if (!array_key_exists($installationLanguage, get_language_folder_list())) {
 // Set translation
 $translator = new Translator($installationLanguage);
 $translator->addLoader('po', new PoFileLoader());
-$translator->addResource('po', "../../../var/translations/installation.$installationLanguage.po", $installationLanguage);
+$translator->addResource(
+    'po',
+    "../../../var/translations/installation.$installationLanguage.po",
+    $installationLanguage
+);
 Container::$translator = $translator;
 
 // The function api_get_setting() might be called within the installation scripts.

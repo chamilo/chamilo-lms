@@ -3144,7 +3144,9 @@ function finishInstallationWithContainer(
     error_log('finishInstallationWithContainer');
     $sysPath = !empty($sysPath) ? $sysPath : api_get_path(SYMFONY_SYS_PATH);
     Container::setContainer($container);
+    error_log('Container set');
     Container::setLegacyServices($container, false);
+    error_log('setLegacyServices');
 
     $manager = Database::getManager();
     $connection = $manager->getConnection();
@@ -3153,6 +3155,8 @@ function finishInstallationWithContainer(
 
     // Add version table
     $connection->executeQuery($sql);
+
+    error_log("Create $sql ");
 
     // Add tickets defaults
     $ticketProject = new TicketProject();
@@ -3209,6 +3213,7 @@ function finishInstallationWithContainer(
         $manager->persist($ticketPriority);
         $i++;
     }
+    error_log("Save ticket data");
     $manager->flush();
 
     $table = Database::get_main_table(TABLE_TICKET_STATUS);

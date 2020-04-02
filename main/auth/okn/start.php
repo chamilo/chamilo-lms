@@ -66,6 +66,7 @@ if (isset($_GET['email']) || isset($_GET['email_bis'])) {
         'firstname',
         'lastname1',
         'lastname2',
+        'courses',
     ];
 
     // Check normal params
@@ -144,19 +145,22 @@ if (isset($_GET['email']) || isset($_GET['email_bis'])) {
         }
 
         if (isset($attributes['courses']) && !empty($attributes['courses'])) {
-            error_log('Courses: '.$attributes['courses']);
+            //error_log('Courses: '.$attributes['courses']);
             $courses = explode(',', $attributes['courses']);
             $firstCourseCode = '';
-            $counter = 1;
-            foreach ($courses as $course) {
-                if ($counter == 1) {
+            if (!empty($courses)) {
+                $counter = 1;
+                foreach ($courses as $course) {
                     $courseInfo = api_get_course_info($course);
                     if ($courseInfo) {
-                        $firstCourseCode = $course;
+                        if ($counter == 1) {
+                            $firstCourseCode = $course;
+                        }
                         CourseManager::subscribeUser($userId, $courseInfo['code'], STUDENT, 0, 0, false);
                     }
+                    $counter++;
                 }
-                $counter++;
+                $courseCode = $firstCourseCode;
             }
         }
 

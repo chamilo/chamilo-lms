@@ -78,11 +78,13 @@ class UsersLoader implements LoaderInterface
             throw new \Exception('User was not created');
         }
 
-        $incomingData['registration_date'] = $incomingData['registration_date']->format('Y-m-d H:i:s');
+        if ($incomingData['registration_date']) {
+            $incomingData['registration_date'] = $incomingData['registration_date']->format('Y-m-d H:i:s');
 
-        \Database::query(
-            "UPDATE $tblUser SET registration_date = '{$incomingData['registration_date']}' WHERE id = $userId"
-        );
+            \Database::query(
+                "UPDATE $tblUser SET registration_date = '{$incomingData['registration_date']}' WHERE id = $userId"
+            );
+        }
 
         \UserManager::update_extra_field_value($userId, 'moodle_password', $incomingData['plain_password']);
 

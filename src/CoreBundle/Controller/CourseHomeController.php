@@ -6,8 +6,6 @@ namespace Chamilo\CoreBundle\Controller;
 
 use Career;
 use Chamilo\CoreBundle\Entity\Course;
-use Chamilo\CoreBundle\Entity\Resource\ResourceNode;
-use Chamilo\CoreBundle\Entity\Tool;
 use Chamilo\CoreBundle\ToolChain;
 use Chamilo\CourseBundle\Controller\ToolBaseController;
 use Chamilo\CourseBundle\Entity\CTool;
@@ -17,7 +15,6 @@ use Chamilo\CourseBundle\Repository\CToolRepository;
 use CourseManager;
 use Database;
 use Display;
-use Doctrine\ORM\Query\Expr\Join;
 use Event;
 use ExtraFieldValue;
 use Fhaculty\Graph\Graph;
@@ -193,7 +190,7 @@ class CourseHomeController extends ToolBaseController
 
         api_remove_in_gradebook();
         \Exercise::cleanSessionVariables();
-        \DocumentManager::removeGeneratedAudioTempFile();
+        //\DocumentManager::removeGeneratedAudioTempFile();
 
         $shortcutQuery = $shortcutRepository->getResources($this->getUser(), $course->getResourceNode(), $course);
         $shortcuts = $shortcutQuery->getQuery()->getResult();

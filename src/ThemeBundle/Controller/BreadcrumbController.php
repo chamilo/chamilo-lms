@@ -39,18 +39,6 @@ class BreadcrumbController extends AbstractController
         )->getActive();
 
         /** @var MenuItemInterface $active */
-        //var_dump($request->get('course'));        exit;
-        //$active->addChild()
-
-        /*$active->addChild(
-            'Courses',
-            array(
-                'route' => 'admin_chamilo_core_course_list',
-                'routeParameters' => array(),
-                array("attributes" => array("id" => 'nav'))
-            )
-        );*/
-
         $list = [];
         if ($active) {
             $list[] = $active;

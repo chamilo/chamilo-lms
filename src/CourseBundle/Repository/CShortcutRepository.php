@@ -12,7 +12,6 @@ use Chamilo\CoreBundle\Repository\ResourceRepository;
 use Chamilo\CourseBundle\Entity\CGroupInfo;
 use Chamilo\CourseBundle\Entity\CShortcut;
 use Chamilo\UserBundle\Entity\User;
-use Doctrine\ORM\Query\Expr\Join;
 use Doctrine\ORM\QueryBuilder;
 use Symfony\Component\Form\FormInterface;
 
@@ -38,11 +37,10 @@ final class CShortcutRepository extends ResourceRepository
             ->select('resource')
             ->from($className, 'resource')
             ->innerJoin(
-                ResourceNode::class,
-                'node',
-                Join::WITH,
-                'resource.resourceNode = node.id'
+                'resource.resourceNode',
+                'node'
             )
+            ->innerJoin('node.resourceFile', 'file')
             //->innerJoin('node.resourceLinks', 'links')
             //->where('node.resourceType = :type')
             //->setParameter('type',$type)

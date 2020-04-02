@@ -31,16 +31,6 @@ class LegacyListener
         /** @var ContainerInterface $container */
         $container = $this->container;
 
-        if (true === $request->get('load_legacy')) {
-            /*$container->get('router.default')->getRouteCollection()->remove('legacy_index');
-            $route = new Route('/aaa/');
-            $container->get('router')->getRouteCollection()->add('legacy_index', $route);*/
-        }
-
-        /*$context = $container->get('router.request_context');
-        $context->setBaseUrl('/');
-        $container->get('router.default')->setContext($context);*/
-
         // Setting container
         Container::setRequest($request);
         Container::setContainer($container);
@@ -54,10 +44,10 @@ class LegacyListener
             $twig = $container->get('twig');
 
             // Set legacy twig globals _p, _u, _s
-            $globals = \Template::getGlobals();
+            /*$globals = \Template::getGlobals();
             foreach ($globals as $index => $value) {
                 $twig->addGlobal($index, $value);
-            }
+            }*/
 
             $token = $container->get('security.token_storage')->getToken();
             $userObject = null;
@@ -73,7 +63,7 @@ class LegacyListener
             $userId = $session->get('_uid');
 
             if (null !== $userObject && !empty($userId)) {
-                $userInfo = api_get_user_info($userId);
+                $userInfo = api_get_user_info();
                 if ($userInfo) {
                     $userStatus = $userInfo['status'];
                     $isAdmin = $userInfo['is_admin'];
@@ -85,14 +75,13 @@ class LegacyListener
             $session->set('is_platformAdmin', $isAdmin);
             $session->set('is_allowedCreateCourse', $allowedCreateCourse);
 
-            $adminInfo = [
+            /*$adminInfo = [
                 'email' => api_get_setting('emailAdministrator'),
                 'surname' => api_get_setting('administratorSurname'),
                 'name' => api_get_setting('administratorName'),
                 'telephone' => api_get_setting('administratorTelephone'),
             ];
-
-            $twig->addGlobal('_admin', $adminInfo);
+            $twig->addGlobal('_admin', $adminInfo);*/
 
             // Theme icon is loaded in the TwigListener src/ThemeBundle/EventListener/TwigListener.php
             //$theme = api_get_visual_theme();
@@ -125,51 +114,6 @@ class LegacyListener
                 $extraHeader = trim(api_get_setting('header_extra_content'));
             }
             $twig->addGlobal('header_extra_content', $extraHeader);
-
-            $rightFloatMenu = '';
-            $iconBug = \Display::return_icon(
-                'bug.png',
-                get_lang('Report a bug'),
-                [],
-                ICON_SIZE_LARGE
-            );
-
-            $allow = ANONYMOUS !== $userStatus;
-            if ($allow && 'true' === api_get_setting('show_link_bug_notification')) {
-                $rightFloatMenu = '<div class="report">
-		        <a href="https://github.com/chamilo/chamilo-lms/wiki/How-to-report-issues" target="_blank">
-                    '.$iconBug.'
-                </a>
-		        </div>';
-            }
-
-            if ($allow && 'true' === api_get_setting('show_link_ticket_notification')) {
-                // by default is project_id = 1
-                $defaultProjectId = 1;
-                $allow = \TicketManager::userIsAllowInProject($userInfo, $defaultProjectId);
-                if ($allow) {
-                    $iconTicket = \Display::return_icon(
-                        'help.png',
-                        get_lang('Ticket'),
-                        [],
-                        ICON_SIZE_LARGE
-                    );
-                    $courseInfo = api_get_course_info();
-                    $courseParams = '';
-                    if (!empty($courseInfo)) {
-                        $courseParams = api_get_cidreq();
-                    }
-                    $url = api_get_path(WEB_CODE_PATH).
-                        'ticket/tickets.php?project_id='.$defaultProjectId.'&'.$courseParams;
-                    $rightFloatMenu .= '<div class="help">
-                        <a href="'.$url.'" target="_blank">
-                            '.$iconTicket.'
-                        </a>
-                    </div>';
-                }
-            }
-
-            $twig->addGlobal('bug_notification', $rightFloatMenu);
         }
 
         // We set cid_reset = true if we enter inside a main/admin url

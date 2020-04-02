@@ -202,7 +202,7 @@ class SettingsManager implements SettingsManagerInterface
 
     public function loadAll()
     {
-        if (empty($this->schemaList)){
+        if (empty($this->schemaList)) {
             $schemas = array_keys($this->getSchemas());
 
             /**
@@ -577,7 +577,6 @@ class SettingsManager implements SettingsManagerInterface
 
         return $parameters;
     }
-
 
     /*private function transformParameters(SettingsBuilder $settingsBuilder, array $parameters)
     {

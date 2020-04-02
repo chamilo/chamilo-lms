@@ -11,7 +11,6 @@ use Chamilo\CoreBundle\Entity\Session;
 use Chamilo\CoreBundle\Repository\ResourceRepository;
 use Chamilo\CourseBundle\Entity\CGroupInfo;
 use Chamilo\UserBundle\Entity\User;
-use Doctrine\ORM\Query\Expr\Join;
 use Doctrine\ORM\QueryBuilder;
 
 final class CToolRepository extends ResourceRepository
@@ -32,15 +31,12 @@ final class CToolRepository extends ResourceRepository
             ->select('resource')
             ->from($className, 'resource')
             ->innerJoin(
-                ResourceNode::class,
-                'node',
-                Join::WITH,
-                'resource.resourceNode = node.id'
+                'resource.resourceNode',
+                'node'
             )
             ->innerJoin('node.resourceLinks', 'links')
             ->where('node.resourceType = :type')
-            ->setParameter('type', $type);
-        $qb
+            ->setParameter('type', $type)
             ->andWhere('links.course = :course')
             ->setParameter('course', $course)
         ;

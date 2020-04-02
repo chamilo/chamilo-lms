@@ -4,7 +4,6 @@
 
 namespace Chamilo\ThemeBundle\EventListener;
 
-use Chamilo\CoreBundle\Framework\Container;
 use CourseManager;
 use SessionManager;
 use Symfony\Component\DependencyInjection\ContainerAwareTrait;
@@ -35,10 +34,6 @@ class TwigListener implements EventSubscriberInterface
         }
 
         $container = $this->container;
-
-        //Container::setContainer($container);
-        //Container::setLegacyServices($container);
-
         $settingsManager = $container->get('chamilo.settings.manager');
         $theme = api_get_visual_theme();
         $twig = $container->get('twig');
@@ -193,6 +188,52 @@ class TwigListener implements EventSubscriberInterface
             }
             $twig->addGlobal("plugin_$region", $contentToString);
         }
+
+        /*$userInfo = api_get_user_info();
+        $rightFloatMenu = '';
+        $iconBug = \Display::return_icon(
+            'bug.png',
+            get_lang('Report a bug'),
+            [],
+            ICON_SIZE_LARGE
+        );
+
+        $allow = ANONYMOUS !== $userInfo['status'];
+        if ($allow && 'true' === api_get_setting('show_link_bug_notification')) {
+            $rightFloatMenu = '<div class="report">
+                <a href="https://github.com/chamilo/chamilo-lms/wiki/How-to-report-issues" target="_blank">
+                    '.$iconBug.'
+                </a>
+                </div>';
+        }
+
+        if ($allow && 'true' === api_get_setting('show_link_ticket_notification')) {
+            // by default is project_id = 1
+            $defaultProjectId = 1;
+            $allow = \TicketManager::userIsAllowInProject($userInfo, $defaultProjectId);
+            if ($allow) {
+                $iconTicket = \Display::return_icon(
+                    'help.png',
+                    get_lang('Ticket'),
+                    [],
+                    ICON_SIZE_LARGE
+                );
+                $courseInfo = api_get_course_info();
+                $courseParams = '';
+                if (!empty($courseInfo)) {
+                    $courseParams = api_get_cidreq();
+                }
+                $url = api_get_path(WEB_CODE_PATH).
+                    'ticket/tickets.php?project_id='.$defaultProjectId.'&'.$courseParams;
+                $rightFloatMenu .= '<div class="help">
+                        <a href="'.$url.'" target="_blank">
+                            '.$iconTicket.'
+                        </a>
+                    </div>';
+            }
+        }
+
+        $twig->addGlobal('bug_notification', $rightFloatMenu);*/
 
         return true;
     }

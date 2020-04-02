@@ -481,7 +481,6 @@ class ResourceRepository extends BaseEntityRepository
             ->addSelect('links')*/
             //->addSelect('node.resourceLinks')
             //->addSelect('resource.resourceNode')
-
         ;
 
         $isAdmin = $checker->isGranted('ROLE_ADMIN') ||
@@ -551,10 +550,8 @@ class ResourceRepository extends BaseEntityRepository
             ->select('resource')
             ->from($className, 'resource')
             ->innerJoin(
-                ResourceNode::class,
-                'node',
-                Join::WITH,
-                'resource.resourceNode = node.id'
+                'resource.resourceNode',
+                'node'
             )
             ->innerJoin('node.resourceLinks', 'links')
             ->where('node.resourceType = :type')
@@ -601,10 +598,8 @@ class ResourceRepository extends BaseEntityRepository
             ->select('resource')
             ->from($className, 'resource')
             ->innerJoin(
-                ResourceNode::class,
-                'node',
-                Join::WITH,
-                'resource.resourceNode = node.id'
+                'resource.resourceNode',
+                'node'
             )
             //->innerJoin('node.resourceLinks', 'links')
             //->where('node.resourceType = :type')
@@ -649,10 +644,8 @@ class ResourceRepository extends BaseEntityRepository
             ->select('resource')
             ->from($className, 'resource')
             ->innerJoin(
-                ResourceNode::class,
-                'node',
-                Join::WITH,
-                'resource.resourceNode = node.id'
+                'resource.resourceNode',
+                'node'
             )
             ->innerJoin('node.resourceLinks', 'links')
             ->where('node.resourceType = :type')

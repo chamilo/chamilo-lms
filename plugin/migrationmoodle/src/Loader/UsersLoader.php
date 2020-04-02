@@ -24,8 +24,6 @@ class UsersLoader implements LoaderInterface
     private $loadMode = self::LOAD_MODE_DUPLICATE;
 
     /**
-     * @param array $incomingData
-     *
      * @throws \Exception
      *
      * @return int

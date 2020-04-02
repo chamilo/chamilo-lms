@@ -1650,9 +1650,9 @@ class Tracking
      * Calculates the time spent on the platform by a user.
      *
      * @param int|array $userId
-     * @param string    $timeFilter type of time filter: 'last_week' or 'custom'
-     * @param string    $start_date start date date('Y-m-d H:i:s')
-     * @param string    $end_date   end date date('Y-m-d H:i:s')
+     * @param string    $timeFilter       type of time filter: 'last_week' or 'custom'
+     * @param string    $start_date       start date date('Y-m-d H:i:s')
+     * @param string    $end_date         end date date('Y-m-d H:i:s')
      * @param bool      $returnAllRecords
      *
      * @return int

@@ -175,7 +175,6 @@ echo '</div>';
 Display::display_footer();
 
 /**
- * @param array  $menu
  * @param string $parent
  * @param string $type
  *
@@ -227,7 +226,6 @@ function displayMenu(array $menu, $type = 'Task', $parent = '_')
 
 /**
  * @param string $action
- * @param array  $menu
  *
  * @return bool
  */

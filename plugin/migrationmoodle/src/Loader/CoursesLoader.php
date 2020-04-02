@@ -21,8 +21,6 @@ class CoursesLoader implements LoaderInterface
     private $loadMode = self::LOAD_MODE_DUPLICATE;
 
     /**
-     * @param array $incomingData
-     *
      * @return int
      */
     public function load(array $incomingData)

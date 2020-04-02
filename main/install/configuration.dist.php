@@ -1434,7 +1434,7 @@ ALTER TABLE notification_event ADD COLUMN event_id INT NULL;
         'info_url' => 'course_description_popup', // course description popup page
         'title_url' => 'course_home', // Course home URL
         'image_url' => 'course_about', // Course about URL
-    ]
+    ],
     'redirect_after_subscription' => 'course_home', // or 'course_catalog' to stay in the page
 ];*/
 

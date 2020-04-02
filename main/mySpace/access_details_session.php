@@ -449,15 +449,29 @@ if ($formByDay->validate()) {
                     $dateToCheck = $item['login_date'];
                 }
                 $itemKey = substr($value->format('Y-m-d'), 0, 10);
+
+                if (isset($newList[$itemKey])) {
+                    if ($newList[$itemKey]['login_date']) {
+                        $dateToCheck = $newList[$itemKey]['login_date'];
+                    }
+                }
+
                 $newList[$itemKey] = [
                     'login_date' => $dateToCheck,
                     'logout_date' => $end,
                     'diff' => 0,
                 ];
+
                 $counter++;
             }
-            if (!empty($itemKey)) {
-                $newList[$itemKey]['logout_date'] = $itemLogoutOriginal;
+
+            if (!empty($itemKey) && isset($newList[$itemKey])) {
+                if (
+                    substr(api_get_local_time($newList[$itemKey]['login_date']), 0, 10) ===
+                    substr(api_get_local_time($itemLogoutOriginal), 0, 10)
+                ) {
+                    $newList[$itemKey]['logout_date'] = $itemLogoutOriginal;
+                }
             }
         }
 

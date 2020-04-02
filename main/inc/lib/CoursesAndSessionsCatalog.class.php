@@ -530,6 +530,7 @@ class CoursesAndSessionsCatalog
                 'creation_date' => $row['creation_date'],
                 'visibility' => $row['visibility'],
                 'count_users' => $countUsers,
+                'category_code' => $row['category_code'],
                 'count_connections' => $connectionsLastMonth,
             ];
         }

@@ -471,9 +471,9 @@ switch ($action) {
 
                     // display the course bloc
                     $course['category_title'] = '';
-                    if (isset($course['category'])) {
-                        $course['category_title'] = isset($categoryList[$course['category']]) ? $categoryList[$course['category']] : '';
-                        $course['category_code_link'] = $urlNoCategory.'&category_code='.$course['category'];
+                    if (isset($course['category_code'])) {
+                        $course['category_title'] = isset($categoryList[$course['category_code']]) ? $categoryList[$course['category_code']] : '';
+                        $course['category_code_link'] = $urlNoCategory.'&category_code='.$course['category_code'];
                     }
 
                     // Display thumbnail

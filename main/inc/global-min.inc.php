@@ -54,6 +54,8 @@ $libraryPath = __DIR__.'/lib/';
 // @todo convert this libs in classes
 require_once $libraryPath.'database.constants.inc.php';
 require_once $libraryPath.'text.lib.php';
+require_once $libraryPath.'array.lib.php';
+require_once $libraryPath.'online.inc.php';
 require_once $libraryPath.'banner.lib.php';
 
 // Doctrine ORM configuration

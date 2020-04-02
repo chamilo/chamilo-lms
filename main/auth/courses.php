@@ -106,7 +106,18 @@ switch ($action) {
             $courseInfo = api_get_course_info($courseCodeToSubscribe);
             CourseManager::autoSubscribeToCourse($courseCodeToSubscribe);
             if ('course_home' === $redirectAfterSubscription) {
-                header('Location: '.$courseInfo['course_public_url']);
+                $redirectionTarget = $courseInfo['course_public_url'];
+                if (api_get_configuration_value('catalog_course_subscription_in_user_s_session')) {
+                    $user = api_get_user_entity(api_get_user_id());
+                    if ($user) {
+                        foreach ($user->getCurrentlyAccessibleSessions() as $session) {
+                            $redirectionTarget = $redirectionTarget.'?id_session='.$session->getId();
+                            break;
+                        }
+                    }
+                }
+                header('Location: '.$redirectionTarget);
+
                 exit;
             }
             header('Location: '.api_get_self());
@@ -141,6 +152,23 @@ switch ($action) {
         if ($form->validate()) {
             if (sha1($_POST['course_registration_code']) === $courseInfo['registration_code']) {
                 CourseManager::autoSubscribeToCourse($_POST['subscribe_user_with_password']);
+
+                if ('course_home' === $redirectAfterSubscription) {
+                    $redirectionTarget = $courseInfo['course_public_url'];
+                    if (api_get_configuration_value('catalog_course_subscription_in_user_s_session')) {
+                        $user = api_get_user_entity(api_get_user_id());
+                        if ($user) {
+                            foreach ($user->getCurrentlyAccessibleSessions() as $session) {
+                                $redirectionTarget = $redirectionTarget.'?id_session='.$session->getId();
+                                break;
+                            }
+                        }
+                    }
+                    header('Location: '.$redirectionTarget);
+
+                    exit;
+                }
+
                 header('Location: '.api_get_self());
                 exit;
             } else {

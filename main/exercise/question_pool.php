@@ -104,7 +104,7 @@ if ($is_allowedToEdit) {
             api_not_allowed(true);
         }
         // Construction of the Question object
-        $objQuestionTmp = Question::read($delete);
+        $objQuestionTmp = isQuestionInActiveQuiz($delete) ? false : Question::read($delete);
         // if the question exists
         if ($objQuestionTmp) {
             // deletes the question from all exercises
@@ -842,6 +842,10 @@ function getQuestions(
     $result = Database::query($sql);
     $mainQuestionList = [];
     while ($row = Database::fetch_array($result, 'ASSOC')) {
+        if ($exerciseId == -1 && isQuestionInActiveQuiz($row['iid'])) {
+            continue;
+        }
+
         $mainQuestionList[] = $row;
     }
 
@@ -1215,10 +1219,16 @@ function get_action_icon_for_question(
             if ($limitTeacherAccess && !api_is_platform_admin()) {
                 break;
             }
-            $res = "<a href='".api_get_self()."?".
-                api_get_cidreq().$getParams."&delete=$in_questionid' onclick='return confirm_your_choice()'>";
-            $res .= Display::return_icon('delete.png', get_lang('Delete'));
-            $res .= "</a>";
+
+            if (isQuestionInActiveQuiz($in_questionid)) {
+                $res = Display::return_icon('delete_na.png', get_lang('ThisQuestionExistsInAnotherExercisesWarning'));
+            } else {
+                $res = "<a href='".api_get_self()."?".
+                    api_get_cidreq().$getParams."&delete=$in_questionid' onclick='return confirm_your_choice()'>";
+                $res .= Display::return_icon('delete.png', get_lang('Delete'));
+                $res .= "</a>";
+            }
+
             break;
         case 'edit':
             $res = getLinkForQuestion(
@@ -1254,6 +1264,28 @@ function get_action_icon_for_question(
     }
 
     return $res;
+}
+
+/**
+ * @param int $questionId
+ *
+ * @return bool
+ */
+function isQuestionInActiveQuiz($questionId)
+{
+    $tblQuizRelQuestion = Database::get_course_table(TABLE_QUIZ_TEST_QUESTION);
+    $tblQuiz = Database::get_course_table(TABLE_QUIZ_TEST);
+
+    $result = Database::fetch_assoc(
+        Database::query(
+            "SELECT COUNT(qq.question_id) c FROM $tblQuizRelQuestion qq
+                INNER JOIN $tblQuiz q ON qq.exercice_id = q.iid
+                WHERE q.active = 1
+                AND qq.question_id = $questionId"
+        )
+    );
+
+    return $result['c'] > 0;
 }
 
 /**

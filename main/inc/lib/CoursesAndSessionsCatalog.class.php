@@ -428,7 +428,7 @@ class CoursesAndSessionsCatalog
         $categoryCode = Database::escape_string($categoryCode);
 
         $sqlInjectJoins = '';
-        $where = ' 1 = 1 ';
+        $where = 'AND 1 = 1 ';
         $sqlInjectWhere = '';
         $injectExtraFields = '1';
         if (!empty($conditions)) {

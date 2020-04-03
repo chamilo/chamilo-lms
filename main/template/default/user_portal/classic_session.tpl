@@ -117,6 +117,18 @@
                                                 {% endfor %}
                                             {% endif %}
                                         </div>
+                                        <div class="category">
+                                            {{ item.category }}
+                                        </div>
+                                        <div class="course_extrafields">
+                                            {% if item.extrafields|length > 0 %}
+                                            {% for extrafield in item.extrafields %}
+                                            {% set counter = counter + 1 %}
+                                            {% if counter > 1 %} | {% endif %}
+                                            {{ extrafield.text }} <strong>{{ extrafield.value }}</strong>
+                                            {% endfor %}
+                                            {% endif %}
+                                        </div>
                                     </div>
 
                                     {% if item.student_info %}

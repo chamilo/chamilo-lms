@@ -5,7 +5,6 @@
     function clickRow(firstRow) {
         var anchor = firstRow.find('a');
         var url = anchor.attr('href');
-        console.log(url);
 
         url = url.replace('/view_resource?', '/info?');
         url = url.replace('/view?', '/info?');
@@ -56,7 +55,15 @@
         //     alert(  +' row(s) selected' );
         // } );
 
-        $('.resource_info').on( 'click', function (event) {
+        $('.resource_info_row').on('click', function (event) {
+            var row = $(this).parent().parent().parent();
+            $('#info_bar').show();
+            clickRow(row);
+
+            event.preventDefault();
+        });
+
+        $('.resource_info').on('click', function (event) {
             var firstRow = $('tbody tr.table-active:first ');
             var rowCount = firstRow.length;
             if (rowCount) {

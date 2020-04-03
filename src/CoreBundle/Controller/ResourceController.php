@@ -247,7 +247,7 @@ class ResourceController extends AbstractResourceController implements CourseCon
             false,
             '_self',
             [
-                'class' => 'btn btn-secondary info_action resource_info',
+                'class' => 'btn btn-secondary info_action resource_info_row',
                 'icon' => 'fa-info-circle',
                 'iframe' => false,
             ]

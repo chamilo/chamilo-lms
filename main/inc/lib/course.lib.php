@@ -3285,18 +3285,18 @@ class CourseManager
     /**
      * Gets extra field value data and formatted values of a course
      * for extra fields listed in configuration.php in My_course_course_extrafields_to_be_presented
-     * (variables separated by spaces)
+     * (array of variables as value of key 'fields')
      *
      * @param $courseId  int The numeric identifier of the course
      * @return array     of data and formatted values as returned by ExtraField::getDataAndFormattedValues
      */
     public static function getExtraFieldsToBePresented($courseId) {
         $extraFields = [];
-        $extraFieldNames = api_get_configuration_value('My_course_course_extrafields_to_be_presented');
-        if (!empty($extraFieldNames) && is_string($extraFieldNames)) {
+        $fields = api_get_configuration_sub_value('My_course_course_extrafields_to_be_presented/fields');
+        if (!empty($fields) && is_array($fields)) {
             $extraFieldManager = new ExtraField('course');
             $dataAndFormattedValues = $extraFieldManager->getDataAndFormattedValues($courseId);
-            foreach(explode(' ', $extraFieldNames) as $variable) {
+            foreach($fields as $variable) {
                 foreach($dataAndFormattedValues as $value) {
                     if ($value['variable'] === $variable && !empty($value['value'])) {
                         $extraFields[] = $value;

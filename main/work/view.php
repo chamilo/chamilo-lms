@@ -1,4 +1,5 @@
 <?php
+
 /* For licensing terms, see /license.txt */
 
 require_once __DIR__.'/../inc/global.inc.php';
@@ -9,13 +10,15 @@ require_once 'work.lib.php';
 $id = isset($_GET['id']) ? (int) $_GET['id'] : null;
 $work = get_work_data_by_id($id);
 
-if (empty($id) || empty($work)) {
+if (empty($work)) {
     api_not_allowed(true);
 }
 
-if ($work['active'] != 1) {
-    api_not_allowed(true);
-}
+protectWork(api_get_course_info(), $work['parent_id']);
+
+$action = isset($_REQUEST['action']) ? $_REQUEST['action'] : null;
+$page = isset($_REQUEST['page']) ? $_REQUEST['page'] : null;
+
 $work['title'] = isset($work['title']) ? Security::remove_XSS($work['title']) : '';
 $work['description'] = isset($work['description']) ? Security::remove_XSS($work['description']) : '';
 
@@ -25,16 +28,14 @@ $interbreadcrumb[] = [
     'name' => get_lang('StudentPublications'),
 ];
 
-$my_folder_data = get_work_data_by_id($work['parent_id']);
+$folderData = get_work_data_by_id($work['parent_id']);
 $courseInfo = api_get_course_info();
 
 $blockScoreEdition = api_get_configuration_value('block_student_publication_score_edition');
-
+$allowEdition = true;
 if ($blockScoreEdition && !empty($work['qualification']) && !api_is_platform_admin()) {
-    api_not_allowed(true);
+    $allowEdition = false;
 }
-
-protectWork(api_get_course_info(), $work['parent_id']);
 
 $isDrhOfCourse = CourseManager::isUserSubscribedInCourseAsDrh(
     api_get_user_id(),
@@ -49,13 +50,13 @@ if ((user_is_author($id) || $isDrhOfCourse || (api_is_allowed_to_edit() || api_i
     )
 ) {
     if ((api_is_allowed_to_edit() || api_is_coach()) || api_is_drh()) {
-        $url_dir = api_get_path(WEB_CODE_PATH).'work/work_list_all.php?id='.$my_folder_data['id'].'&'.api_get_cidreq();
+        $url_dir = api_get_path(WEB_CODE_PATH).'work/work_list_all.php?id='.$folderData['id'].'&'.api_get_cidreq();
     } else {
-        $url_dir = api_get_path(WEB_CODE_PATH).'work/work_list.php?id='.$my_folder_data['id'].'&'.api_get_cidreq();
+        $url_dir = api_get_path(WEB_CODE_PATH).'work/work_list.php?id='.$folderData['id'].'&'.api_get_cidreq();
     }
 
     $userInfo = api_get_user_info($work['user_id']);
-    $interbreadcrumb[] = ['url' => $url_dir, 'name' => $my_folder_data['title']];
+    $interbreadcrumb[] = ['url' => $url_dir, 'name' => $folderData['title']];
     $interbreadcrumb[] = ['url' => '#', 'name' => $userInfo['complete_name']];
     $interbreadcrumb[] = ['url' => '#', 'name' => $work['title']];
 
@@ -66,11 +67,9 @@ if ((user_is_author($id) || $isDrhOfCourse || (api_is_allowed_to_edit() || api_i
         ) ||
         (api_is_allowed_to_edit() || api_is_coach()) || user_is_author($id) || $isDrhOfCourse
     ) {
-        $action = isset($_REQUEST['action']) ? $_REQUEST['action'] : null;
-        $page = isset($_REQUEST['page']) ? $_REQUEST['page'] : null;
 
-        if ($page == 'edit') {
-            $url = api_get_path(WEB_CODE_PATH).'work/edit.php?id='.$my_folder_data['id'].'&item_id='.$work['id'].'&'.api_get_cidreq();
+        if ($page === 'edit') {
+            $url = api_get_path(WEB_CODE_PATH).'work/edit.php?id='.$folderData['id'].'&item_id='.$work['id'].'&'.api_get_cidreq();
         } else {
             $url = api_get_path(WEB_CODE_PATH).'work/view.php?id='.$work['id'].'&'.api_get_cidreq();
 
@@ -90,33 +89,30 @@ if ((user_is_author($id) || $isDrhOfCourse || (api_is_allowed_to_edit() || api_i
                 addWorkComment(
                     api_get_course_info(),
                     api_get_user_id(),
-                    $my_folder_data,
+                    $folderData,
                     $work,
                     $_POST
                 );
 
-                if (api_is_allowed_to_edit()) {
+                if (api_is_allowed_to_edit() && $allowEdition) {
                     $work_table = Database::get_course_table(TABLE_STUDENT_PUBLICATION);
-                    $sql = "UPDATE $work_table 
-                            SET	
+                    $sql = "UPDATE $work_table
+                            SET
                                 qualificator_id = '".api_get_user_id()."',
                                 qualification = '".api_float_val($_POST['qualification'])."',
                                 date_of_qualification = '".api_get_utc_datetime()."'
                             WHERE c_id = ".$courseInfo['real_id']." AND id = $id";
                     Database::query($sql);
-
                     Display::addFlash(Display::return_message(get_lang('Updated')));
 
                     $resultUpload = uploadWork(
-                        $my_folder_data,
+                        $folderData,
                         $courseInfo,
                         true,
                         $work
                     );
                     if ($resultUpload) {
-                        $work_table = Database::get_course_table(
-                            TABLE_STUDENT_PUBLICATION
-                        );
+                        $work_table = Database::get_course_table(TABLE_STUDENT_PUBLICATION);
 
                         if (isset($resultUpload['url']) && !empty($resultUpload['url'])) {
                             $title = isset($resultUpload['filename']) && !empty($resultUpload['filename']) ? $resultUpload['filename'] : get_lang('Untitled');
@@ -134,11 +130,10 @@ if ((user_is_author($id) || $isDrhOfCourse || (api_is_allowed_to_edit() || api_i
                     }
                 }
 
-                $blockScoreEdition = api_get_configuration_value('block_student_publication_score_edition');
-
+                /*$blockScoreEdition = api_get_configuration_value('block_student_publication_score_edition');
                 if ($blockScoreEdition && !api_is_platform_admin()) {
-                    $url = api_get_path(WEB_CODE_PATH).'work/work_list_all.php?'.api_get_cidreq().'&id='.$my_folder_data['id'];
-                }
+                    $url = api_get_path(WEB_CODE_PATH).'work/work_list_all.php?'.api_get_cidreq().'&id='.$folderData['id'];
+                }*/
                 header('Location: '.$url);
                 exit;
                 break;
@@ -156,9 +151,7 @@ if ((user_is_author($id) || $isDrhOfCourse || (api_is_allowed_to_edit() || api_i
                 if (isset($work['url_correction']) && !empty($work['url_correction'])) {
                     if (api_is_allowed_to_edit()) {
                         deleteCorrection($courseInfo, $work);
-                        Display::addFlash(
-                            Display::return_message(get_lang('Deleted'))
-                        );
+                        Display::addFlash(Display::return_message(get_lang('Deleted')));
                     }
                 }
 
@@ -168,13 +161,13 @@ if ((user_is_author($id) || $isDrhOfCourse || (api_is_allowed_to_edit() || api_i
         }
 
         $comments = getWorkComments($work);
-        $commentForm = getWorkCommentForm($work, $my_folder_data);
+        $commentForm = getWorkCommentForm($work, $folderData);
 
         $tpl = new Template();
         $tpl->assign('work', $work);
         $tpl->assign('comments', $comments);
-
         $actions = '';
+
         if (isset($work['contains_file']) && !empty($work['contains_file'])) {
             if (isset($work['download_url']) && !empty($work['download_url'])) {
                 $actions = Display::url(
@@ -213,7 +206,8 @@ if ((user_is_author($id) || $isDrhOfCourse || (api_is_allowed_to_edit() || api_i
                 ),
                 $work['download_url'].'&correction=1'
             );
-            if (api_is_allowed_to_edit()) {
+
+            if (api_is_allowed_to_edit() && $allowEdition) {
                 $actions .= Display::url(
                     Display::return_icon(
                         'delete.png',

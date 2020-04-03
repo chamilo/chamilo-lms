@@ -1429,13 +1429,22 @@ ALTER TABLE notification_event ADD COLUMN event_id INT NULL;
 //$_configuration['allow_course_extra_field_in_catalog'] = false;
 
 // Course catalog links behaviour.
-/*$_configuration['course_catalog_settings'] = [
+/*
+$_configuration['course_catalog_settings'] = [
     'link_settings' => [
         'info_url' => 'course_description_popup', // course description popup page
         'title_url' => 'course_home', // Course home URL
         'image_url' => 'course_about', // Course about URL
     ],
     'redirect_after_subscription' => 'course_home', // or 'course_catalog' to stay in the page
+    'extra_fields_in_search_form' => ['variable1', 'variable2'],
+    'extra_fields_in_course_block' => ['variable3', 'variable4'],
+];
+*/
+
+// Page "My Courses" shows specific course extra fields (CourseManager::getExtraFieldsToBePresented)
+/*$_configuration['My_course_course_extrafields_to_be_presented'] = [
+    'fields' => ['mots_cles', 'duree_en_min', 'format'],
 ];*/
 
 // KEEP THIS AT THE END

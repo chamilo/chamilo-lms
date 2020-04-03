@@ -1917,6 +1917,9 @@ class IndexManager
                                                     }
                                                 }
                                             }
+
+                                            $course_session['extrafields'] = CourseManager::getExtraFieldsToBePresented($course['real_id']);
+
                                             $html_courses_session[] = $course_session;
                                         }
                                     }

@@ -3283,6 +3283,31 @@ class CourseManager
     }
 
     /**
+     * Gets extra field value data and formatted values of a course
+     * for extra fields listed in configuration.php in My_course_course_extrafields_to_be_presented
+     * (array of variables as value of key 'fields')
+     *
+     * @param $courseId  int The numeric identifier of the course
+     * @return array     of data and formatted values as returned by ExtraField::getDataAndFormattedValues
+     */
+    public static function getExtraFieldsToBePresented($courseId) {
+        $extraFields = [];
+        $fields = api_get_configuration_sub_value('My_course_course_extrafields_to_be_presented/fields');
+        if (!empty($fields) && is_array($fields)) {
+            $extraFieldManager = new ExtraField('course');
+            $dataAndFormattedValues = $extraFieldManager->getDataAndFormattedValues($courseId);
+            foreach($fields as $variable) {
+                foreach($dataAndFormattedValues as $value) {
+                    if ($value['variable'] === $variable && !empty($value['value'])) {
+                        $extraFields[] = $value;
+                    }
+                }
+            }
+        }
+        return $extraFields;
+    }
+
+    /**
      * Lists details of the course description.
      *
      * @param array        The course description
@@ -3787,6 +3812,8 @@ class CourseManager
                     );
                 }
 
+                $params['extrafields'] = CourseManager::getExtraFieldsToBePresented($course_info['real_id']);
+
                 if ($showCustomIcon === 'true') {
                     $params['thumbnails'] = $course_info['course_image'];
                     $params['image'] = $course_info['course_image_large'];
@@ -4084,6 +4111,7 @@ class CourseManager
             $params['category'] = $course_info['categoryName'];
             $params['category_code'] = $course_info['categoryCode'];
             $params['teachers'] = $teachers;
+            $params['extrafields'] = CourseManager::getExtraFieldsToBePresented($course_info['real_id']);
             $params['real_id'] = $course_info['real_id'];
 
             if ($course_info['visibility'] != COURSE_VISIBILITY_CLOSED) {

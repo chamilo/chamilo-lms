@@ -106,16 +106,6 @@ class ResourceRepository extends BaseEntityRepository
         $this->toolChain = $toolChain;
         $this->settings = new Settings();
         $this->templates = new Template();
-
-        $service = get_class($this);
-        $name = $this->toolChain->getResourceTypeNameFromRepository($service);
-
-        $repo = $entityManager->getRepository('ChamiloCoreBundle:Resource\ResourceType');
-        $this->resourceType = $repo->findOneBy(['name' => $name]);
-
-        if (empty($this->resourceType)) {
-            //throw new \Exception("Resource Type missing in repo: $service, you need to add a record in the resource_type table");
-        }
     }
 
     public function getAuthorizationChecker(): AuthorizationCheckerInterface
@@ -442,7 +432,16 @@ class ResourceRepository extends BaseEntityRepository
      */
     public function getResourceType()
     {
+        $name = $this->getResourceTypeName();
+        $repo = $this->getEntityManager()->getRepository('ChamiloCoreBundle:Resource\ResourceType');
+        $this->resourceType = $repo->findOneBy(['name' => $name]);
+
         return $this->resourceType;
+    }
+
+    public function getResourceTypeName(): string
+    {
+        return $this->toolChain->getResourceTypeNameFromRepository(get_class($this));
     }
 
     public function getResourcesByCourse(Course $course, Session $session = null, CGroupInfo $group = null, ResourceNode $parentNode = null): QueryBuilder
@@ -454,33 +453,22 @@ class ResourceRepository extends BaseEntityRepository
 
         // Check if this resource type requires to load the base course resources when using a session
         $loadBaseSessionContent = $reflectionClass->hasProperty('loadCourseResourcesInSession');
-
-        $type = $this->getResourceType();
+        $resourceTypeName = $this->getResourceTypeName();
 
         $qb = $repo->getEntityManager()->createQueryBuilder()
             ->select('resource')
             ->from($className, 'resource')
-            /* ->innerJoin(
-                 ResourceNode::class,
-                 'node',
-                 Join::WITH,
-                 'resource.resourceNode = node.id'
-             )*/
             ->innerJoin(
                 'resource.resourceNode',
                 'node'
             )
             ->innerJoin('node.resourceLinks', 'links')
+            ->innerJoin('node.resourceType', 'type')
             ->leftJoin('node.resourceFile', 'file')
-            ->where('node.resourceType = :type')
-            ->setParameter('type', $type)
+            ->where('type.name = :type')
+            ->setParameter('type', $resourceTypeName)
             ->andWhere('links.course = :course')
             ->setParameter('course', $course)
-            /*->addSelect('node')
-            ->addSelect('resource')
-            ->addSelect('links')*/
-            //->addSelect('node.resourceLinks')
-            //->addSelect('resource.resourceNode')
         ;
 
         $isAdmin = $checker->isGranted('ROLE_ADMIN') ||
@@ -544,7 +532,7 @@ class ResourceRepository extends BaseEntityRepository
         $repo = $this->getRepository();
         $className = $repo->getClassName();
         $checker = $this->getAuthorizationChecker();
-        $type = $this->getResourceType();
+        $resourceTypeName = $this->getResourceTypeName();
 
         $qb = $repo->getEntityManager()->createQueryBuilder()
             ->select('resource')
@@ -554,9 +542,9 @@ class ResourceRepository extends BaseEntityRepository
                 'node'
             )
             ->innerJoin('node.resourceLinks', 'links')
-            ->where('node.resourceType = :type')
-            ->setParameter('type', $type);
-        $qb
+            ->innerJoin('node.resourceType', 'type')
+            ->where('type.name = :type')
+            ->setParameter('type', $resourceTypeName)
             ->andWhere('links.course = :course')
             ->setParameter('course', $course)
         ;
@@ -638,7 +626,7 @@ class ResourceRepository extends BaseEntityRepository
         $repo = $this->getRepository();
         $className = $repo->getClassName();
         $checker = $this->getAuthorizationChecker();
-        $type = $this->getResourceType();
+        $resourceTypeName = $this->getResourceTypeName();
 
         $qb = $repo->getEntityManager()->createQueryBuilder()
             ->select('resource')
@@ -648,9 +636,9 @@ class ResourceRepository extends BaseEntityRepository
                 'node'
             )
             ->innerJoin('node.resourceLinks', 'links')
-            ->where('node.resourceType = :type')
-            ->setParameter('type', $type);
-        $qb
+            ->innerJoin('node.resourceType', 'type')
+            ->where('type.name = :type')
+            ->setParameter('type', $resourceTypeName)
             ->andWhere('links.user = :user')
             ->setParameter('user', $user)
         ;

@@ -26,8 +26,6 @@ api_block_anonymous_users(); // Only users who are logged in can proceed.
 
 $logInfo = [
     'tool' => SECTION_COURSES,
-    'tool_id' => 0,
-    'tool_id_detail' => 0,
 ];
 Event::registerLog($logInfo);
 

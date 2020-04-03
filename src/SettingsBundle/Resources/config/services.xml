@@ -28,7 +28,6 @@
         <service id="%chamilo_settings.settings.manager.class%" alias="chamilo.settings.manager">
         </service>
 
-
         <service id="chamilo_settings.form_factory.settings" public="true" class="Sylius\Bundle\SettingsBundle\Form\Factory\SettingsFormFactory">
             <argument type="service" id="sylius.registry.settings_schema" />
             <argument type="service" id="form.factory" />

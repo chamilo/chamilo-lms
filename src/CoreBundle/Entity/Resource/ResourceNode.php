@@ -29,7 +29,7 @@ use Symfony\Component\Validator\Constraints as Assert;
 class ResourceNode
 {
     public const PATH_SEPARATOR = '`';
-    //use TimestampableEntity;
+    use TimestampableEntity;
 
     /**
      * @var \DateTime
@@ -162,6 +162,7 @@ class ResourceNode
         $this->children = new ArrayCollection();
         $this->resourceLinks = new ArrayCollection();
         $this->comments = new ArrayCollection();
+        $this->createdAt = new \DateTime();
     }
 
     /**

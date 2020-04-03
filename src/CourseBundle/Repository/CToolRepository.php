@@ -25,8 +25,7 @@ final class CToolRepository extends ResourceRepository
         // Check if this resource type requires to load the base course resources when using a session
         $loadBaseSessionContent = $reflectionClass->hasProperty('loadCourseResourcesInSession');
 
-        $type = $this->getResourceType();
-
+        $resourceTypeName = $this->getResourceTypeName();
         $qb = $repo->getEntityManager()->createQueryBuilder()
             ->select('resource')
             ->from($className, 'resource')
@@ -35,8 +34,9 @@ final class CToolRepository extends ResourceRepository
                 'node'
             )
             ->innerJoin('node.resourceLinks', 'links')
-            ->where('node.resourceType = :type')
-            ->setParameter('type', $type)
+            ->innerJoin('node.resourceType', 'type')
+            ->where('type.name = :type')
+            ->setParameter('type', $resourceTypeName)
             ->andWhere('links.course = :course')
             ->setParameter('course', $course)
         ;

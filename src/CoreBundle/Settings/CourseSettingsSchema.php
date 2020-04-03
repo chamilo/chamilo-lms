@@ -26,8 +26,7 @@ class CourseSettingsSchema extends AbstractSettingsSchema
      * @var ToolChain
      */
     protected $toolChain;
-
-    protected $repository;
+    //protected $repository;
 
     public function getProcessedToolChain(): array
     {
@@ -99,10 +98,10 @@ class CourseSettingsSchema extends AbstractSettingsSchema
                 'course_hide_tools',
                 new ArrayToIdentifierTransformer()
             )
-            ->setTransformer(
+           /* ->setTransformer(
                 'course_creation_use_template',
                 new ResourceToIdentifierTransformer($this->getRepository())
-            )
+            )*/
         ;
 
         $allowedTypes = [

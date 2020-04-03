@@ -258,7 +258,7 @@ class Container
      */
     public static function getSettingsManager()
     {
-        return self::$settingsManager;
+        return self::$container->get('chamilo.settings.manager');
     }
 
     /**
@@ -330,7 +330,7 @@ class Container
      */
     public static function getCourseRepository()
     {
-        return self::$container->get('Chamilo\CoreBundle\Repository\CourseRepository');
+        return self::$container->get(CourseRepository::class);
     }
 
     /**
@@ -624,15 +624,12 @@ class Container
         $em = $container->get('doctrine.orm.entity_manager');
         \Database::setManager($em);
         \CourseManager::setEntityManager($em);
-
         self::setSettingsManager($container->get('chamilo.settings.manager'));
         self::setUserManager($container->get('fos_user.user_manager'));
         self::setSiteManager($container->get('sonata.page.manager.site'));
-
         \CourseManager::setCourseSettingsManager($container->get('Chamilo\CourseBundle\Manager\SettingsManager'));
         // Setting course tool chain (in order to create tools to a course)
         \CourseManager::setToolList($container->get(ToolChain::class));
-
         if ($setSession) {
             self::$session = $container->get('session');
         }

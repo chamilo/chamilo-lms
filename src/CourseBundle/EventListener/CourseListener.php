@@ -183,9 +183,9 @@ class CourseListener
                 $sessionHandler->set('course_already_visited', $courseCode);
             }*/
 
-            Container::setRequest($request);
-            Container::setContainer($container);
-            Container::setLegacyServices($container);
+//            Container::setRequest($request);
+//            Container::setContainer($container);
+//            Container::setLegacyServices($container);
         }
     }
 

@@ -1147,6 +1147,7 @@ function api_protect_teacher_script()
 function api_block_anonymous_users($printHeaders = true)
 {
     $user = api_get_user_info();
+
     if (!(isset($user['user_id']) && $user['user_id']) || api_is_anonymous($user['user_id'], true)) {
         api_not_allowed($printHeaders);
 
@@ -3614,6 +3615,7 @@ function api_not_allowed(
     $message = null,
     $responseCode = 0
 ) {
+    throw new Exception('You are not allowed');
     $message = empty($message) ? get_lang('You are not allowed') : $message;
     Session::write('error_message', $message);
 

@@ -5,6 +5,7 @@
 namespace Chamilo\CourseBundle\Manager;
 
 use Chamilo\CoreBundle\Entity\Course;
+use Chamilo\CoreBundle\Entity\SettingsCurrent;
 use Chamilo\CourseBundle\Entity\CCourseSetting;
 use Chamilo\SettingsBundle\Manager\SettingsManager as ChamiloSettingsManager;
 use Sylius\Bundle\SettingsBundle\Model\Settings;
@@ -100,15 +101,13 @@ class SettingsManager extends ChamiloSettingsManager
 
         $repo = $this->manager->getRepository('ChamiloCoreBundle:SettingsCurrent');
         $persistedParameters = $repo->findBy(['category' => $settings->getSchemaAlias()]);
-        $persistedParametersMap = [];
 
+        $persistedParametersMap = [];
         foreach ($persistedParameters as $parameter) {
             $persistedParametersMap[$parameter->getTitle()] = $parameter;
         }
 
-        /** @var \Chamilo\CoreBundle\Entity\SettingsCurrent $url */
-        //$url = $event->getArgument('url');
-        //$url = $this->getUrl();
+        /** @var SettingsCurrent $url */
         $simpleCategoryName = str_replace('chamilo_course.settings.', '', $namespace);
 
         foreach ($parameters as $name => $value) {
@@ -123,7 +122,6 @@ class SettingsManager extends ChamiloSettingsManager
                     ->setValue($value)
                     ->setCId($this->getCourse()->getId())
                 ;
-
                 $this->manager->persist($parameter);
             }
         }
@@ -184,7 +182,6 @@ class SettingsManager extends ChamiloSettingsManager
         }
 
         $this->parameterManager->flush();
-
         $this->cache->save($namespace, $parameters);
     }
 

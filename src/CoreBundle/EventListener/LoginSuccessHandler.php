@@ -96,12 +96,14 @@ class LoginSuccessHandler
             }
         }
 
+        $goToCourse = $this->settingsManager->getSetting('course.go_to_course_after_login');
+
         $session->set('_uid', $user->getId());
         //$session->set('_user', $userInfo);
         //$session->set('is_platformAdmin', \UserManager::is_admin($userId));
         //$session->set('is_allowedCreateCourse', $userInfo['status'] === 1);
         // Redirecting to a course or a session.
-        if ('true' === api_get_setting('course.go_to_course_after_login')) {
+        if ('true' === $goToCourse) {
             // Get the courses list
             $personal_course_list = \UserManager::get_personal_session_course_list($userId);
             $my_session_list = [];

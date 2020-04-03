@@ -342,7 +342,6 @@ class UserManager
         try {
             $factory = Container::$container->get('Chamilo\CoreBundle\Repository\ResourceFactory');
             $repo = $factory->createRepository('global', 'users');
-
             $userManager->updateUser($user);
 
             // Add user as a node

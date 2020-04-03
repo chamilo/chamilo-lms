@@ -33,11 +33,6 @@ class SettingsManager implements SettingsManagerInterface
     protected $schemaRegistry;
 
     /**
-     * @var ServiceRegistryInterface
-     */
-    protected $resolverRegistry;
-
-    /**
      * @var EntityManager
      */
     protected $manager;
@@ -58,7 +53,6 @@ class SettingsManager implements SettingsManagerInterface
      * @var Settings[]
      */
     protected $resolvedSettings = [];
-
     protected $settings;
     protected $schemaList;
 
@@ -211,7 +205,6 @@ class SettingsManager implements SettingsManagerInterface
              */
             $schemaList = [];
             $settingsBuilder = new SettingsBuilder();
-
             $all = $this->getAllParametersByCategory();
 
             foreach ($schemas as $schema) {
@@ -219,7 +212,6 @@ class SettingsManager implements SettingsManagerInterface
                 $schemaRegister->buildSettings($settingsBuilder);
                 $name = $this->convertServiceToNameSpace($schema);
                 $settings = new Settings();
-                //$settings = $this->load($name);
                 $parameters = $all[$name];
                 foreach ($settingsBuilder->getTransformers() as $parameter => $transformer) {
                     if (array_key_exists($parameter, $parameters)) {
@@ -235,7 +227,6 @@ class SettingsManager implements SettingsManagerInterface
 
                 $parameters = $settingsBuilder->resolve($parameters);
                 $settings->setParameters($parameters);
-
                 $schemaList[$name] = $settings;
             }
             $this->schemaList = $schemaList;

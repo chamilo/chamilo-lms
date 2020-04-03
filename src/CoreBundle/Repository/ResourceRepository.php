@@ -107,14 +107,14 @@ class ResourceRepository extends BaseEntityRepository
         $this->settings = new Settings();
         $this->templates = new Template();
 
-        $em = $this->getEntityManager();
         $service = get_class($this);
         $name = $this->toolChain->getResourceTypeNameFromRepository($service);
-        $repo = $em->getRepository('ChamiloCoreBundle:Resource\ResourceType');
+
+        $repo = $entityManager->getRepository('ChamiloCoreBundle:Resource\ResourceType');
         $this->resourceType = $repo->findOneBy(['name' => $name]);
 
         if (empty($this->resourceType)) {
-            throw new \Exception("Resource Type missing in repo: $service, you need to add a record in the resource_type table");
+            //throw new \Exception("Resource Type missing in repo: $service, you need to add a record in the resource_type table");
         }
     }
 

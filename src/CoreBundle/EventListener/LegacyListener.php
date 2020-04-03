@@ -5,11 +5,13 @@
 namespace Chamilo\CoreBundle\EventListener;
 
 use Chamilo\CoreBundle\Framework\Container;
+use Chamilo\UserBundle\Entity\User;
 use Symfony\Component\DependencyInjection\ContainerAwareTrait;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\HttpKernel\Event\ControllerEvent;
 use Symfony\Component\HttpKernel\Event\RequestEvent;
 use Symfony\Component\HttpKernel\Event\ResponseEvent;
+use Symfony\Component\Security\Core\User\UserInterface;
 
 /**
  * Class LegacyListener
@@ -38,83 +40,84 @@ class LegacyListener
 
         // Legacy way of detect current access_url
         $installed = $container->getParameter('installed');
+
         $urlId = 1;
-
-        if (!empty($installed)) {
-            $twig = $container->get('twig');
-
-            // Set legacy twig globals _p, _u, _s
-            /*$globals = \Template::getGlobals();
-            foreach ($globals as $index => $value) {
-                $twig->addGlobal($index, $value);
-            }*/
-
-            $token = $container->get('security.token_storage')->getToken();
-            $userObject = null;
-            if (null !== $token) {
-                $userObject = $container->get('security.token_storage')->getToken()->getUser();
-            }
-
-            $userInfo = [];
-            $userInfo['is_anonymous'] = true;
-            $isAdmin = false;
-            $allowedCreateCourse = false;
-            $userStatus = null;
-            $userId = $session->get('_uid');
-
-            if (null !== $userObject && !empty($userId)) {
-                $userInfo = api_get_user_info();
-                if ($userInfo) {
-                    $userStatus = $userInfo['status'];
-                    $isAdmin = $userInfo['is_admin'];
-                    $userInfo['is_anonymous'] = false;
-                }
-                $allowedCreateCourse = 1 === $userStatus;
-            }
-            $session->set('_user', $userInfo);
-            $session->set('is_platformAdmin', $isAdmin);
-            $session->set('is_allowedCreateCourse', $allowedCreateCourse);
-
-            /*$adminInfo = [
-                'email' => api_get_setting('emailAdministrator'),
-                'surname' => api_get_setting('administratorSurname'),
-                'name' => api_get_setting('administratorName'),
-                'telephone' => api_get_setting('administratorTelephone'),
-            ];
-            $twig->addGlobal('_admin', $adminInfo);*/
-
-            // Theme icon is loaded in the TwigListener src/ThemeBundle/EventListener/TwigListener.php
-            //$theme = api_get_visual_theme();
-            $languages = api_get_languages();
-            $languageList = [];
-            foreach ($languages as $isoCode => $language) {
-                $languageList[languageToCountryIsoCode($isoCode)] = $language;
-            }
-
-            $isoFixed = languageToCountryIsoCode($request->getLocale());
-
-            if (!isset($languageList[$isoFixed])) {
-                $isoFixed = 'en';
-            }
-
-            $twig->addGlobal(
-                'current_locale_info',
-                [
-                    'flag' => $isoFixed,
-                    'text' => $languageList[$isoFixed] ?? 'English',
-                ]
-            );
-            $twig->addGlobal('current_locale', $request->getLocale());
-            $twig->addGlobal('available_locales', $languages);
-            $twig->addGlobal('show_toolbar', \Template::isToolBarDisplayedForUser() ? 1 : 0);
-
-            // Extra content
-            $extraHeader = '';
-            if (!api_is_platform_admin()) {
-                $extraHeader = trim(api_get_setting('header_extra_content'));
-            }
-            $twig->addGlobal('header_extra_content', $extraHeader);
+        if (empty($installed)) {
+            throw new \Exception('Chamilo is not installed');
         }
+
+        $twig = $container->get('twig');
+
+        // Set legacy twig globals _p, _u, _s
+        /*$globals = \Template::getGlobals();
+        foreach ($globals as $index => $value) {
+            $twig->addGlobal($index, $value);
+        }*/
+
+        $token = $container->get('security.token_storage')->getToken();
+        $userObject = null;
+        if (null !== $token) {
+            /** @var User $userObject */
+            $userObject = $container->get('security.token_storage')->getToken()->getUser();
+        }
+
+        $userInfo = [];
+        $isAdmin = false;
+        $allowedCreateCourse = false;
+        $userStatus = null;
+        //$userId = $session->get('_uid');
+        if ($userObject instanceof UserInterface) {
+            $userInfo = api_get_user_info($userObject->getId());
+            if ($userInfo) {
+                $userStatus = $userObject->getStatus();
+                $isAdmin = $userObject->hasGroup('ROLE_ADMIN');
+            }
+            $allowedCreateCourse = 1 === $userStatus;
+        }
+        $session->set('_user', $userInfo);
+        $session->set('is_platformAdmin', $isAdmin);
+        $session->set('is_allowedCreateCourse', $allowedCreateCourse);
+
+        /*$adminInfo = [
+            'email' => api_get_setting('emailAdministrator'),
+            'surname' => api_get_setting('administratorSurname'),
+            'name' => api_get_setting('administratorName'),
+            'telephone' => api_get_setting('administratorTelephone'),
+        ];
+        $twig->addGlobal('_admin', $adminInfo);*/
+
+        // Theme icon is loaded in the TwigListener src/ThemeBundle/EventListener/TwigListener.php
+        //$theme = api_get_visual_theme();
+        $languages = api_get_languages();
+        $languageList = [];
+        foreach ($languages as $isoCode => $language) {
+            $languageList[languageToCountryIsoCode($isoCode)] = $language;
+        }
+
+        $isoFixed = languageToCountryIsoCode($request->getLocale());
+
+        if (!isset($languageList[$isoFixed])) {
+            $isoFixed = 'en';
+        }
+
+        $twig->addGlobal(
+            'current_locale_info',
+            [
+                'flag' => $isoFixed,
+                'text' => $languageList[$isoFixed] ?? 'English',
+            ]
+        );
+        $twig->addGlobal('current_locale', $request->getLocale());
+        $twig->addGlobal('available_locales', $languages);
+        $twig->addGlobal('show_toolbar', \Template::isToolBarDisplayedForUser() ? 1 : 0);
+
+        // Extra content
+        $extraHeader = '';
+        if (!api_is_platform_admin()) {
+            $extraHeader = trim(api_get_setting('header_extra_content'));
+        }
+        $twig->addGlobal('header_extra_content', $extraHeader);
+
 
         // We set cid_reset = true if we enter inside a main/admin url
         // CourseListener check this variable and deletes the course session

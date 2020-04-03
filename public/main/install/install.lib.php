@@ -1000,8 +1000,10 @@ function display_requirements(
     } else {
         $error = false;
         // First, attempt to set writing permissions if we don't have them yet
-        $perm = api_get_permissions_for_new_directories();
-        $perm_file = api_get_permissions_for_new_files();
+        //$perm = api_get_permissions_for_new_directories();
+        $perm = octdec('0777');
+        //$perm_file = api_get_permissions_for_new_files();
+        $perm_file = octdec('0666');
         $notWritable = [];
 
         $checked_writable = api_get_path(SYS_PUBLIC_PATH);
@@ -3018,8 +3020,7 @@ function installPages($container)
  */
 function installSchemas($container, $manager, $upgrade = false)
 {
-    error_log('installSchemas');
-    $settingsManager = Container::getSettingsManager();
+    $settingsManager = $container->get('chamilo.settings.manager');
 
     // Install course tools (table "tool")
     $toolChain = $container->get(ToolChain::class);
@@ -3144,7 +3145,6 @@ function finishInstallationWithContainer(
     error_log('finishInstallationWithContainer');
     $sysPath = !empty($sysPath) ? $sysPath : api_get_path(SYMFONY_SYS_PATH);
     Container::setContainer($container);
-    error_log('Container set');
     Container::setLegacyServices($container, false);
     error_log('setLegacyServices');
 

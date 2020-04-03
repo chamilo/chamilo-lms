@@ -125,7 +125,7 @@
                                             {% for extrafield in item.extrafields %}
                                             {% set counter = counter + 1 %}
                                             {% if counter > 1 %} | {% endif %}
-                                            {{ extrafield.text }} <strong>{{ extrafield.value }}</strong>
+                                            {{ extrafield.text }} : <strong>{{ extrafield.value }}</strong>
                                             {% endfor %}
                                             {% endif %}
                                         </div>

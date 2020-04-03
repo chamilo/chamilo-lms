@@ -368,6 +368,32 @@ class ExtraFieldValue extends Model
                     $this->save($newParams);
 
                     break;
+                case ExtraField::FIELD_TYPE_DATE:
+                    $d = DateTime::createFromFormat('Y-m-d', $value);
+                    $valid = $d && $d->format('Y-m-d') === $value;
+                    if ($valid) {
+                        $newParams = [
+                            'item_id' => $params['item_id'],
+                            'field_id' => $extraFieldInfo['id'],
+                            'value' => $value,
+                            'comment' => $comment,
+                        ];
+                        $this->save($newParams, $showQuery);
+                    }
+                    break;
+                case ExtraField::FIELD_TYPE_DATETIME:
+                    $d = DateTime::createFromFormat('Y-m-d H:i', $value);
+                    $valid = $d && $d->format('Y-m-d H:i') === $value;
+                    if ($valid) {
+                        $newParams = [
+                            'item_id' => $params['item_id'],
+                            'field_id' => $extraFieldInfo['id'],
+                            'value' => $value,
+                            'comment' => $comment,
+                        ];
+                        $this->save($newParams, $showQuery);
+                    }
+                    break;
                 default:
                     $newParams = [
                         'item_id' => $params['item_id'],

@@ -155,7 +155,7 @@ if ($allowToEdit) {
                     $attachmentList,
                     $attachmentCommentList,
                     $comment
-                );exit;
+                );
 
                 if (!empty($values['repeat']) && !empty($eventId)) {
                     // End date is always set as 23:59:59

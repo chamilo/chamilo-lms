@@ -2554,10 +2554,11 @@ JAVASCRIPT;
      *
      * @param int|string $itemId The item ID (It could be a session_id, course_id or user_id)
      * @param bool       $filter
+     * @param array      $onlyShow (list of extra fields variables to show)
      *
      * @return array The extra fields data
      */
-    public function getDataAndFormattedValues($itemId, $filter = false)
+    public function getDataAndFormattedValues($itemId, $filter = false, $onlyShow = [])
     {
         $valuesData = [];
         $fields = $this->get_all();
@@ -2566,11 +2567,16 @@ JAVASCRIPT;
         $repoTag = $em->getRepository('ChamiloCoreBundle:ExtraFieldRelTag');
 
         foreach ($fields as $field) {
+
             if ('1' != $field['visible_to_self']) {
                 continue;
             }
 
             if ($filter && $field['filter'] != 1) {
+                continue;
+            }
+
+            if (!empty($onlyShow) && !in_array($field['variable'], $onlyShow)) {
                 continue;
             }
 
@@ -2581,7 +2587,6 @@ JAVASCRIPT;
                 $field['id'],
                 true
             );
-
             if (ExtraField::FIELD_TYPE_TAG == $field['field_type']) {
                 $tags = $repoTag->findBy(['fieldId' => $field['id'], 'itemId' => $itemId]);
                 if ($tags) {

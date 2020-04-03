@@ -72,12 +72,23 @@ $courseCatalogSettings = [
 
 $redirectAfterSubscription = 'course_home';
 $settings = api_get_configuration_value('course_catalog_settings');
+// By default all extra fields are shown (visible and filterable)
+$extraFieldsInSearchForm = [];
+$extraFieldsInCourseBlock = [];
 if (!empty($settings)) {
     if (isset($settings['link_settings'])) {
         $courseCatalogSettings = $settings['link_settings'];
     }
     if (isset($settings['redirect_after_subscription'])) {
         $redirectAfterSubscription = $settings['redirect_after_subscription'];
+    }
+
+    if (isset($settings['extra_fields_in_search_form'])) {
+        $extraFieldsInSearchForm = $settings['extra_fields_in_search_form'];
+    }
+
+    if (isset($settings['extra_fields_in_course_block'])) {
+        $extraFieldsInCourseBlock = $settings['extra_fields_in_course_block'];
     }
 }
 
@@ -165,7 +176,6 @@ switch ($action) {
                         }
                     }
                     header('Location: '.$redirectionTarget);
-
                     exit;
                 }
 
@@ -222,7 +232,8 @@ switch ($action) {
         $jqueryReadyContent = '';
         if ($allowExtraFields) {
             $extraField = new ExtraField('course');
-            $returnParams = $extraField->addElements($form, null, [], true);
+            $onlyFields = [ ];
+            $returnParams = $extraField->addElements($form, null, [], true, false, $extraFieldsInSearchForm);
             $jqueryReadyContent = $returnParams['jquery_ready_content'];
         }
 
@@ -412,10 +423,6 @@ switch ($action) {
         $content .= '</div></div></div></div>';
 
         if ($showCourses) {
-            /*if (!empty($searchTerm)) {
-                $content .= '<p><strong>'.get_lang('SearchResultsFor').' '.$searchTerm.'</strong><br />';
-            }*/
-
             $showTeacher = 'true' === api_get_setting('display_teacher_in_courselist');
             $ajax_url = api_get_path(WEB_AJAX_PATH).'course.ajax.php?a=add_course_vote';
             $user_id = api_get_user_id();
@@ -471,7 +478,7 @@ switch ($action) {
 
                     // display the course bloc
                     $course['category_title'] = '';
-                    if (isset($course['category_code'])) {
+                    if (!empty($course['category_code'])) {
                         $course['category_title'] = isset($categoryList[$course['category_code']]) ? $categoryList[$course['category_code']] : '';
                         $course['category_code_link'] = $urlNoCategory.'&category_code='.$course['category_code'];
                     }
@@ -506,7 +513,6 @@ switch ($action) {
                             );
                         }
                     }
-                    // end buy course validation
 
                     $course['rating'] = '';
                     if ($hideRating === false) {
@@ -526,57 +532,8 @@ switch ($action) {
                     // display button line
                     $course['buy_course'] = $separator;
                     $course['extra_data'] = '';
-                    $course['extra_data_tags'] = [];
-                    //$tagUrl = Display::url($tag->getTag(), $url.'&extra_tags%5B%5D='.$tag->getTag());
                     if ($allowExtraFields) {
-                        $course['extra_data'] = $extraField->getDataAndFormattedValues($courseId, true);
-
-//                        $values = $extraFieldValues->getAllValuesForAnItem($courseId, true, true);
-//                        foreach ($values as $valueItem) {
-//                            /** @var \Chamilo\CoreBundle\Entity\ExtraFieldValues $value */
-//                            $value = $valueItem['value'];
-//                            var_dump($value->getField()->getVariable());
-//                            if ($value) {
-//                                $data = $value->getValue();
-//                                if (!empty($data) || $value->getField()->getFieldType() == ExtraField::FIELD_TYPE_TAG) {
-//                                    $course['extra_data'] .= $value->getField()->getDisplayText().': ';
-//                                    switch ($value->getField()->getFieldType()) {
-//                                        case ExtraField::FIELD_TYPE_TAG:
-//                                            $tagField = $fieldsRepo->findOneBy(
-//                                                [
-//                                                    'extraFieldType' => \Chamilo\CoreBundle\Entity\ExtraField::COURSE_FIELD_TYPE,
-//                                                    'variable' => $value->getField()->getVariable(),
-//                                                ]
-//                                            );
-//
-//                                            $courseTags = [];
-//                                            if (!is_null($tagField)) {
-//                                                $courseTags = $fieldTagsRepo->getTags($tagField, $courseId);
-//                                            }
-//
-//                                            if (!empty($courseTags)) {
-//                                                /** @var \Chamilo\CoreBundle\Entity\Tag $tag */
-//                                                foreach ($courseTags as $tag) {
-//                                                    $tagUrl = Display::url($tag->getTag(), $url.'&extra_tags%5B%5D='.$tag->getTag());
-//                                                    $course['extra_data_tags'][$value->getField()->getVariable()][] = $tagUrl;
-//                                                }
-//                                            }
-//
-//                                            break;
-//                                        case ExtraField::FIELD_TYPE_CHECKBOX:
-//                                            if ($value->getValue() == 1) {
-//                                                $course['extra_data'] .= get_lang('Yes').'<br />';
-//                                            } else {
-//                                                $course['extra_data'] .= get_lang('No').'<br />';
-//                                            }
-//                                            break;
-//                                        default:
-//                                            $course['extra_data'] .= $value->getValue().'<br />';
-//                                            break;
-//                                    }
-//                                }
-//                            }
-//                        }
+                        $course['extra_data'] = $extraField->getDataAndFormattedValues($courseId, true, $extraFieldsInCourseBlock);
                     }
 
                     // if user registered as student

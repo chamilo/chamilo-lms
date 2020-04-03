@@ -1438,6 +1438,9 @@ ALTER TABLE notification_event ADD COLUMN event_id INT NULL;
     'redirect_after_subscription' => 'course_home', // or 'course_catalog' to stay in the page
 ];*/
 
+// Page "My Courses" shows specific course extra fields. List the field variables separated by character space.
+/*$_configuration['My_course_course_extrafields_to_be_presented'] = '';*/
+
 // KEEP THIS AT THE END
 // -------- Custom DB changes
 // Add user activation by confirmation email

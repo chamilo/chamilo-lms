@@ -1,11 +1,14 @@
 <section id="about-course">
-    {% if is_subscribed and user_session_time != -0 and user_session_time >= 1 %}
-        <div class="alert alert-info">
-            {{ 'AlreadyRegisteredToSession'|get_lang }}
-        </div>
-    {% elseif is_subscribed and user_session_time < 1 %}
+    {% if is_subscribed %}
         <div class="alert alert-warning">
-            {{ 'YourSessionTimeIsExpired'|get_lang }}
+            <span class="fa fa-info-circle" aria-hidden="true"></span>
+            <strong>
+                {% if session.duration and user_session_time < 1 %}
+                    {{ 'YourSessionTimeIsExpired'|get_lang }}
+                {% else %}
+                    {{ 'AlreadyRegisteredToSession'|get_lang }}
+                {% endif %}
+            </strong>
         </div>
     {% endif %}
     <section class="session">
@@ -87,10 +90,12 @@
                                     <div class="price-text">
                                         {{ is_premium.total_price_formatted }}
                                     </div>
-                                    <div class="buy-box">
-                                        <a href="{{ _p.web }}plugin/buycourses/src/process.php?i={{ is_premium.product_id }}&t={{ is_premium.product_type }}"
-                                           class="btn btn-lg btn-primary btn-block">{{ 'BuyNow'|get_lang }}</a>
-                                    </div>
+                                    {% if _u.logged and not is_subscribed %}
+                                        <div class="buy-box">
+                                            <a href="{{ _p.web }}plugin/buycourses/src/process.php?i={{ is_premium.product_id }}&t={{ is_premium.product_type }}"
+                                               class="btn btn-lg btn-primary btn-block">{{ 'BuyNow'|get_lang }}</a>
+                                        </div>
+                                    {% endif %}
                                 </div>
                             {% endif %}
                             {% if has_requirements %}

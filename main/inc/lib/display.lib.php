@@ -1394,8 +1394,8 @@ class Display
             if (!empty($rowList) && isset($rowList['options'])) {
                 $rowList = $rowList['options'];
                 $rowList[] = $all_value;
+                $extra_params['rowList'] = $rowList;
             }
-            $extra_params['rowList'] = $rowList;
         }
 
         $defaultRow = api_get_configuration_value('table_default_row');

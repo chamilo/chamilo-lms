@@ -41,6 +41,11 @@
                         <a title="{{ course.title }}" href="{{ course.title_url }}" class="{{ class }}">
                             {{ course.title }}
                         </a>
+                        {% if course.admin_url %}
+                            <a href="{{ course.admin_url }}">
+                                {{ 'edit.png'|img(22, 'Edit'|get_lang) }}
+                            </a>
+                        {% endif %}
                     </h4>
                 </div>
             {% endblock %}
@@ -116,11 +121,6 @@
                     {% else %}
                         <div class="col-sm-12">
                             {{ course.subscribe_formatted }}
-                        </div>
-                    {% endif %}
-                    {% if course.admin_url %}
-                        <div class="col-sm-12">
-                            <a href="{{ course.admin_url }}">{{ course.code }}</a>
                         </div>
                     {% endif %}
                 </div>

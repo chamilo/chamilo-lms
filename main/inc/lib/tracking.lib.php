@@ -6931,7 +6931,7 @@ class Tracking
                         if ($lpProgress == 100) {
                             $time = self::get_time_spent_in_lp($userId, $courseCode, [$lp_id], $sessionId);
                             if (!empty($time)) {
-                                $timeInMinutes = $time * 60;
+                                $timeInMinutes = $time / 60;
                                 $min = (int) learnpath::getAccumulateWorkTimePrerequisite($lp_id, $courseId);
                                 if ($timeInMinutes >= $min) {
                                     $totalProgress++;

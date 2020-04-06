@@ -573,11 +573,11 @@ class BuyCoursesPlugin extends Plugin
      *
      * It can return the number of rows when $typeResult is 'count'.
      *
-     * @param int $start
-     * @param int $end
-     * @param string $name Optional. The name filter.
-     * @param int $min Optional. The minimum price filter.
-     * @param int $max Optional. The maximum price filter.
+     * @param int    $start
+     * @param int    $end
+     * @param string $name       Optional. The name filter.
+     * @param int    $min        Optional. The minimum price filter.
+     * @param int    $max        Optional. The maximum price filter.
      * @param string $typeResult Optional. 'all', 'first' or 'count'.
      *
      * @return array|int

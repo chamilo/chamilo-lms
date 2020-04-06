@@ -67,7 +67,6 @@ if ((user_is_author($id) || $isDrhOfCourse || (api_is_allowed_to_edit() || api_i
         ) ||
         (api_is_allowed_to_edit() || api_is_coach()) || user_is_author($id) || $isDrhOfCourse
     ) {
-
         if ($page === 'edit') {
             $url = api_get_path(WEB_CODE_PATH).'work/edit.php?id='.$folderData['id'].'&item_id='.$work['id'].'&'.api_get_cidreq();
         } else {

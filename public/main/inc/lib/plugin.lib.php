@@ -147,7 +147,7 @@ class AppPlugin
                 return $installedPlugins;
             }
         }
-
+        
         if ($fromDatabase || null === $installedPlugins) {
             $installedPlugins = [];
             $plugins = api_get_settings_params(

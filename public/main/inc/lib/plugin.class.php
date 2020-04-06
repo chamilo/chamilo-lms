@@ -571,11 +571,11 @@ class Plugin
 
         $pluginName = Database::escape_string($pluginName);
         $sql = "DELETE FROM $t_tool
-                WHERE c_id = $courseId AND 
+                WHERE c_id = $courseId AND
                 (
                   name = '$pluginName' OR
                   name = '$pluginName:student' OR
-                  name = '$pluginName:teacher'  
+                  name = '$pluginName:teacher'
                 )";
         Database::query($sql);
     }

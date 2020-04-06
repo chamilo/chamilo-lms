@@ -96,9 +96,6 @@ try {
     }
     define('DEFAULT_DOCUMENT_QUOTA', $default_quota);*/
 } catch (Exception $e) {
-    var_dump($e->getMessage());
-    var_dump($e->getCode());
-    var_dump($e->getLine());
     /*echo $e->getMessage();    exit;
     var_dump($e->getMessage());
     var_dump($e->getCode());

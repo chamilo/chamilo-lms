@@ -15,7 +15,6 @@ use Chamilo\CoreBundle\Entity\Session;
 use Chamilo\CoreBundle\Form\Resource\IllustrationType;
 use Chamilo\CourseBundle\Entity\CGroupInfo;
 use Chamilo\UserBundle\Entity\User;
-use Doctrine\ORM\Query\Expr\Join;
 use Doctrine\ORM\QueryBuilder;
 use Symfony\Component\Form\FormInterface;
 use Symfony\Component\HttpFoundation\File\UploadedFile;

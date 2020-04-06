@@ -6941,7 +6941,7 @@ class Tracking
                     }
 
                     if (!empty($totalProgress)) {
-                        $totalProgress = api_number_format($totalProgress / count($list) * 100, 2);
+                        $totalProgress = (float) api_number_format($totalProgress / count($list) * 100, 2);
                     }
                 }
 

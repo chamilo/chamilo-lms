@@ -12,6 +12,14 @@
             margin-bottom: 0px;
         }
     </style>
+<div>
+    {{ 'TotalNumberOfAvailableCourses' }} :
+    <strong>{{ total_number_of_courses }}</strong>
+</div>
+<div>
+    {{ 'NumberOfMatchingCourses' }} :
+    <strong>{{ courses|length }}</strong>
+</div>
     {% block course_grid %}
         <div class="grid-courses row">
             {% for course in courses %}

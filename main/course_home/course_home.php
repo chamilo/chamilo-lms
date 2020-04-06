@@ -43,13 +43,13 @@ $(function() {
         $(".btn-show-thematic").show(); //show using class
         $("#pross").fadeToggle(); //Not working collapse for Chrome
     });
-    
+
     $("#thematic-hide").click(function(){
         $(".btn-show-thematic").hide(); //show using class
         $(".btn-hide-thematic").show();
         $("#pross").fadeToggle(); //Not working collapse for Chrome
     });
-    
+
 	$(".make_visible_and_invisible").attr("href", "javascript:void(0);");
 	$(".make_visible_and_invisible > img").click(function () {
 		make_visible = "visible.gif";
@@ -144,7 +144,7 @@ if ($isSpecialCourse) {
 
 $action = !empty($_GET['action']) ? Security::remove_XSS($_GET['action']) : '';
 
-if ($action == 'subscribe') {
+if ($action === 'subscribe') {
     if (Security::check_token('get')) {
         Security::clear_token();
         $redirectionTarget = api_get_self();

@@ -122,6 +122,11 @@ if (!empty($groupId)) {
     $groupCondition = " (props.to_group_id = 0 OR props.to_group_id IS NULL ) ";
 }
 
+$userIsSubscribed = CourseManager::is_user_subscribed_in_course(
+    api_get_user_id(),
+    $courseInfo['code']
+);
+
 // Admins are allowed to download invisible files
 if (api_is_allowed_to_edit()) {
     // Set the path that will be used in the query
@@ -210,7 +215,6 @@ if (api_is_allowed_to_edit()) {
                 docs.c_id = $courseId AND
                 props.tool = '".TOOL_DOCUMENT."' AND
                 docs.path LIKE '".$querypath."/%' AND
-                props.visibility = '1' AND
                 docs.filetype = 'file' AND
                 (props.session_id IN ('0', '$sessionId') OR props.session_id IS NULL) AND
                 $groupCondition
@@ -232,17 +236,31 @@ if (api_is_allowed_to_edit()) {
                 }
             }
         }
+
+        $isVisible = DocumentManager::is_visible_by_id(
+            $all_visible_files['id'],
+            $courseInfo,
+            api_get_session_id(),
+            api_get_user_id(),
+            false,
+            $userIsSubscribed
+        );
+
+        if (!$isVisible) {
+            continue;
+        }
+
         $all_visible_files_path[] = $all_visible_files['path'];
         $files[$all_visible_files['path']] = $all_visible_files;
     }
 
     // 2nd: Get all folders that are invisible in the given path
     $sql = "SELECT path, docs.session_id, docs.id, props.to_group_id, docs.c_id
-            FROM $doc_table AS docs 
+            FROM $doc_table AS docs
             INNER JOIN $prop_table AS props
             ON
                 docs.id = props.ref AND
-                docs.c_id = props.c_id                
+                docs.c_id = props.c_id
             WHERE
                 docs.c_id = $courseId AND
                 props.tool = '".TOOL_DOCUMENT."' AND
@@ -263,17 +281,29 @@ if (api_is_allowed_to_edit()) {
                     INNER JOIN $prop_table AS props
                     ON
                         docs.id = props.ref AND
-                        docs.c_id = props.c_id                        
+                        docs.c_id = props.c_id
                     WHERE
                         docs.c_id = $courseId AND
                         props.tool ='".TOOL_DOCUMENT."' AND
                         docs.path LIKE '".$invisible_folders['path']."/%' AND
                         docs.filetype = 'file' AND
-                        (props.session_id IN ('0', '$sessionId') OR props.session_id IS NULL) AND
-                        props.visibility ='1'";
+                        (props.session_id IN ('0', '$sessionId') OR props.session_id IS NULL)
+                    ";
             $query3 = Database::query($sql);
             // Add tem to an array
             while ($files_in_invisible_folder = Database::fetch_assoc($query3)) {
+                $isVisible = DocumentManager::is_visible_by_id(
+                    $files_in_invisible_folder['id'],
+                    $courseInfo,
+                    api_get_session_id(),
+                    api_get_user_id(),
+                    false,
+                    $userIsSubscribed
+                );
+
+                if (!$isVisible) {
+                    continue;
+                }
                 $files_in_invisible_folder_path[] = $files_in_invisible_folder['path'];
                 $files[$files_in_invisible_folder['path']] = $files_in_invisible_folder;
             }

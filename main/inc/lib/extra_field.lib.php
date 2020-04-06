@@ -2552,7 +2552,7 @@ JAVASCRIPT;
     /**
      * Get the extra fields and their formatted values.
      *
-     * @param int|string $itemId The item ID (It could be a session_id, course_id or user_id)
+     * @param int|string $itemId   The item ID (It could be a session_id, course_id or user_id)
      * @param bool       $filter
      * @param array      $onlyShow (list of extra fields variables to show)
      *
@@ -2567,7 +2567,6 @@ JAVASCRIPT;
         $repoTag = $em->getRepository('ChamiloCoreBundle:ExtraFieldRelTag');
 
         foreach ($fields as $field) {
-
             if ('1' != $field['visible_to_self']) {
                 continue;
             }

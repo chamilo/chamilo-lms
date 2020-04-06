@@ -232,7 +232,7 @@ switch ($action) {
         $jqueryReadyContent = '';
         if ($allowExtraFields) {
             $extraField = new ExtraField('course');
-            $onlyFields = [ ];
+            $onlyFields = [];
             $returnParams = $extraField->addElements($form, null, [], true, false, $extraFieldsInSearchForm);
             $jqueryReadyContent = $returnParams['jquery_ready_content'];
         }

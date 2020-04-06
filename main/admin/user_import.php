@@ -59,11 +59,11 @@ function validate_data($users, $checkUniqueEmail = false)
                 $user['has_error'] = true;
             }
             // 2.1.1
-            $hasDash = strpos($username, '-');
+            /*$hasDash = strpos($username, '-');
             if ($hasDash !== false) {
                 $user['message'] .= Display::return_message(get_lang('UserNameHasDash'), 'warning');
                 $user['has_error'] = true;
-            }
+            }*/
             // 2.2. Check whether the username was used twice in import file.
             if (isset($usernames[$username])) {
                 $user['message'] .= Display::return_message(get_lang('UserNameUsedTwice'), 'warning');
@@ -715,13 +715,13 @@ if ($formContinue) {
 
 if ($reloadImport) {
     echo '<script>
-        
+
         $(function() {
             function reload() {
-                $("#user_import_continue").submit();                
+                $("#user_import_continue").submit();
             }
             setTimeout(reload, 3000);
-        });        
+        });
     </script>';
 }
 

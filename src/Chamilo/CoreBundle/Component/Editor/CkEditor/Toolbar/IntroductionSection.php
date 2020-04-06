@@ -86,7 +86,7 @@ class IntroductionSection extends Basic
             ['Styles', 'Format', 'Font', 'FontSize'],
             ['Bold', 'Italic', 'Underline'],
             ['JustifyLeft', 'JustifyCenter', 'JustifyRight'],
-            api_get_setting('enabled_wiris') === 'true' ? ['ckeditor_wiris_formulaEditor', 'ckeditor_wiris_CAS'] : [''],
+            api_get_setting('enabled_wiris') === 'true' ? ['ckeditor_wiris_formulaEditor', 'ckeditor_wiris_formulaEditorChemistry'] : [''],
             ['Source'],
         ];
     }
@@ -129,7 +129,7 @@ class IntroductionSection extends Basic
             [
                 'ShowBlocks',
             ],
-            api_get_setting('enabled_wiris') === 'true' ? ['ckeditor_wiris_formulaEditor', 'ckeditor_wiris_CAS'] : [''],
+            api_get_setting('enabled_wiris') === 'true' ? ['ckeditor_wiris_formulaEditor', 'ckeditor_wiris_formulaEditorChemistry'] : [''],
             ['Toolbarswitch', 'Source'],
         ];
     }
@@ -178,7 +178,7 @@ class IntroductionSection extends Basic
             [api_get_setting('allow_spellcheck') == 'true' ? 'Scayt' : ''],
             ['Styles', 'Format', 'Font', 'FontSize'],
             ['PageBreak', 'ShowBlocks'],
-            api_get_setting('enabled_wiris') == 'true' ? ['ckeditor_wiris_formulaEditor', 'ckeditor_wiris_CAS'] : [''],
+            api_get_setting('enabled_wiris') == 'true' ? ['ckeditor_wiris_formulaEditor', 'ckeditor_wiris_formulaEditorChemistry'] : [''],
             ['Toolbarswitch', 'Source'],
         ];
     }

@@ -3169,7 +3169,7 @@ class Tracking
      * @param int       $session_id  Session id (optional), if param $session_id is null(default)
      *                               it'll return results including sessions, 0 = session is not filtered
      *
-     * @return int Total time
+     * @return int Total time in seconds
      */
     public static function get_time_spent_in_lp(
         $student_id,
@@ -6907,13 +6907,50 @@ class Tracking
                 $courseCode = $courseInfo['code'];
 
                 $time = self::get_time_spent_in_lp($userId, $courseCode, [], $sessionId);
-                $score = self::getAverageStudentScore($userId, $courseCode, [], $sessionId);
+                //$score = self::getAverageStudentScore($userId, $courseCode, [], $sessionId);
+
+                // total progress
+                $list = new LearnpathList(
+                    $userId,
+                     $courseInfo,
+                    0,
+                    'lp.publicatedOn ASC',
+                    true,
+                    null,
+                    true
+                );
+
+                $list = $list->get_flat_list();
+                $totalProgress = 0;
+                if (!empty($list)) {
+                    foreach ($list as $lp_id => $learnpath) {
+                        if (!$learnpath['lp_visibility']) {
+                            continue;
+                        }
+                        $lpProgress = self::get_avg_student_progress($userId, $courseCode, [$lp_id], $sessionId);
+                        if ($lpProgress == 100) {
+                            $time = self::get_time_spent_in_lp($userId, $courseCode, [$lp_id], $sessionId);
+                            if (!empty($time)) {
+                                $timeInMinutes = $time * 60;
+                                $min = (int) learnpath::getAccumulateWorkTimePrerequisite($lp_id, $courseId);
+                                if ($timeInMinutes >= $min) {
+                                    $totalProgress++;
+                                }
+                            }
+                        }
+                    }
+
+                    if (!empty($totalProgress)) {
+                        $totalProgress = api_number_format($totalProgress / count($list) * 100, 2);
+                    }
+                }
+
                 $progress = self::get_avg_student_progress($userId, $courseCode, [], $sessionId);
 
                 $result[] = [
                     'module' => $courseInfo['name'],
                     'progress' => $progress,
-                    'qualification' => $score,
+                    'qualification' => $totalProgress,
                     'activeTime' => $time,
                 ];
                 /*

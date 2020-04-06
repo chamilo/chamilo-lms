@@ -115,7 +115,6 @@ class Basic extends Toolbar
 
         if (api_get_setting('enabled_wiris') == 'true') {
             // New version of wiris needs this plugins before it's loaded
-            $plugins[] = 'mapping';
             $plugins[] = 'widgetselection';
             $plugins[] = 'panelbutton';
 

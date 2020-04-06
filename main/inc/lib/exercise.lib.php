@@ -4963,7 +4963,7 @@ EOT;
         $data = [];
         /** @var TrackEExercises $item */
         foreach ($result as $item) {
-            $data[] = self::get_best_attempt_by_user($item['exeUserId'], $exerciseId, $courseId, $sessionId = 0);
+            $data[] = self::get_best_attempt_by_user($item['exeUserId'], $exerciseId, $courseId, $sessionId);
         }
 
         usort(

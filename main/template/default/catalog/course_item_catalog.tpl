@@ -118,6 +118,11 @@
                             {{ course.subscribe_formatted }}
                         </div>
                     {% endif %}
+                    {% if course.admin_url %}
+                        <div class="col-sm-12">
+                            <a href="{{ course.admin_url }}">{{ course.code }}</a>
+                        </div>
+                    {% endif %}
                 </div>
             {% endblock %}
         </div>

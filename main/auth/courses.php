@@ -584,6 +584,12 @@ switch ($action) {
             }
         }
 
+        if (api_is_course_admin()) {
+            foreach ($courses as &$course) {
+                $course['admin_url'] = api_get_path(WEB_CODE_PATH).'/admin/course_list.php?keyword='.$course['code'];
+            }
+        }
+
         $template = new Template($toolTitle, true, true, false, false, false);
         $template->assign('content', $content);
         $template->assign('courses', $courses);

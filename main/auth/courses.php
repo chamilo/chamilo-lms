@@ -590,6 +590,7 @@ switch ($action) {
         $template->assign('total_number_of_courses', CoursesAndSessionsCatalog::countAvailableCoursesToShowInCatalog(
             api_get_current_access_url_id()
         ));
+        $template->assign('total_number_of_matching_courses', $countCoursesInCategory);
         $template->assign('catalog_url_no_extra_fields', $urlNoExtraFields);
         $template->assign('pagination', $catalogPagination);
 

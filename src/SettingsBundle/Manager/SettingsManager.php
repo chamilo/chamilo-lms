@@ -17,6 +17,10 @@ use Sylius\Bundle\SettingsBundle\Schema\SchemaInterface;
 use Sylius\Bundle\SettingsBundle\Schema\SettingsBuilder;
 use Sylius\Component\Registry\ServiceRegistryInterface;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
+use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\RequestMatcherInterface;
+use Symfony\Component\HttpFoundation\RequestStack;
+use Symfony\Component\HttpFoundation\Session\Session;
 use Symfony\Component\Validator\ConstraintViolationListInterface;
 use Symfony\Component\Validator\Exception\ValidatorException;
 
@@ -55,6 +59,7 @@ class SettingsManager implements SettingsManagerInterface
     protected $resolvedSettings = [];
     protected $settings;
     protected $schemaList;
+    protected $request;
 
     /**
      * SettingsManager constructor.
@@ -65,12 +70,14 @@ class SettingsManager implements SettingsManagerInterface
         ServiceRegistryInterface $schemaRegistry,
         EntityManager $manager,
         EntityRepository $repository,
-        $eventDispatcher
+        $eventDispatcher,
+        RequestStack $request
     ) {
         $this->schemaRegistry = $schemaRegistry;
         $this->manager = $manager;
         $this->repository = $repository;
         $this->eventDispatcher = $eventDispatcher;
+        $this->request = $request;
     }
 
     /**
@@ -196,6 +203,15 @@ class SettingsManager implements SettingsManagerInterface
 
     public function loadAll()
     {
+        $session = $this->request->getCurrentRequest()->getSession();
+        $schemaList = $session->get('schemas');
+
+        if (!empty($schemaList)) {
+            $this->schemaList = $schemaList;
+
+            return true;
+        }
+
         if (empty($this->schemaList)) {
             $schemas = array_keys($this->getSchemas());
 
@@ -230,6 +246,7 @@ class SettingsManager implements SettingsManagerInterface
                 $schemaList[$name] = $settings;
             }
             $this->schemaList = $schemaList;
+            $session->set('schemas', $schemaList);
         }
     }
 

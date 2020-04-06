@@ -17,6 +17,7 @@ services:
             - '@doctrine.orm.entity_manager'
             - '@chamilo_course.repository.parameter'
             - '@event_dispatcher'
+            - '@request_stack'
 
     Chamilo\CourseBundle\Manager\SettingsFormFactory:
         arguments:

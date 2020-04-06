@@ -2705,7 +2705,7 @@ function api_get_setting_in_list($variable, $option)
 function api_get_plugin_setting($plugin, $variable)
 {
     $variableName = $plugin.'_'.$variable;
-
+    //$result = api_get_setting($variableName);
     $params = [
         'category = ? AND subkey = ? AND variable = ?' => [
             'Plugins',
@@ -4663,7 +4663,7 @@ function api_get_visual_theme()
     static $visual_theme;
     if (!isset($visual_theme)) {
         // Get style directly from DB
-        $styleFromDatabase = api_get_settings_params_simple(
+        /*$styleFromDatabase = api_get_settings_params_simple(
             [
                 'variable = ? AND access_url = ?' => [
                     'stylesheets',
@@ -4671,11 +4671,13 @@ function api_get_visual_theme()
                 ],
             ]
         );
+
         if ($styleFromDatabase) {
             $platform_theme = $styleFromDatabase['selected_value'];
         } else {
             $platform_theme = api_get_setting('stylesheets');
-        }
+        }*/
+        $platform_theme = api_get_setting('stylesheets');
 
         // Platform's theme.
         $visual_theme = $platform_theme;
@@ -7552,90 +7554,6 @@ function api_coach_can_edit_view_results($courseId = null, $session_id = null)
 function api_get_js_simple($file)
 {
     return '<script type="text/javascript" src="'.$file.'"></script>'."\n";
-}
-
-function api_set_settings_and_plugins()
-{
-    global $_configuration;
-    $_setting = [];
-    $_plugins = [];
-
-    // access_url == 1 is the default chamilo location
-    $settings_by_access_list = [];
-    $access_url_id = api_get_current_access_url_id();
-    if (1 != $access_url_id) {
-        $url_info = api_get_access_url($_configuration['access_url']);
-        if (1 == $url_info['active']) {
-            $settings_by_access = &api_get_settings(null, 'list', $_configuration['access_url'], 1);
-            foreach ($settings_by_access as &$row) {
-                if (empty($row['variable'])) {
-                    $row['variable'] = 0;
-                }
-                if (empty($row['subkey'])) {
-                    $row['subkey'] = 0;
-                }
-                if (empty($row['category'])) {
-                    $row['category'] = 0;
-                }
-                $settings_by_access_list[$row['variable']][$row['subkey']][$row['category']] = $row;
-            }
-        }
-    }
-
-    $result = api_get_settings(null, 'list', 1);
-
-    foreach ($result as &$row) {
-        if (1 != $access_url_id) {
-            if (1 == $url_info['active']) {
-                $var = empty($row['variable']) ? 0 : $row['variable'];
-                $subkey = empty($row['subkey']) ? 0 : $row['subkey'];
-                $category = empty($row['category']) ? 0 : $row['category'];
-            }
-
-            if (1 == $row['access_url_changeable'] && 1 == $url_info['active']) {
-                if (isset($settings_by_access_list[$var]) &&
-                    '' != $settings_by_access_list[$var][$subkey][$category]['selected_value']) {
-                    if (null == $row['subkey']) {
-                        $_setting[$row['variable']] = $settings_by_access_list[$var][$subkey][$category]['selected_value'];
-                    } else {
-                        $_setting[$row['variable']][$row['subkey']] = $settings_by_access_list[$var][$subkey][$category]['selected_value'];
-                    }
-                } else {
-                    if (null == $row['subkey']) {
-                        $_setting[$row['variable']] = $row['selected_value'];
-                    } else {
-                        $_setting[$row['variable']][$row['subkey']] = $row['selected_value'];
-                    }
-                }
-            } else {
-                if (null == $row['subkey']) {
-                    $_setting[$row['variable']] = $row['selected_value'];
-                } else {
-                    $_setting[$row['variable']][$row['subkey']] = $row['selected_value'];
-                }
-            }
-        } else {
-            if (null == $row['subkey']) {
-                $_setting[$row['variable']] = $row['selected_value'];
-            } else {
-                $_setting[$row['variable']][$row['subkey']] = $row['selected_value'];
-            }
-        }
-    }
-
-    $result = api_get_settings('Plugins', 'list', $access_url_id);
-    $_plugins = [];
-    foreach ($result as &$row) {
-        $key = &$row['variable'];
-        if (is_string($_setting[$key])) {
-            $_setting[$key] = [];
-        }
-        $_setting[$key][] = $row['selected_value'];
-        $_plugins[$key][] = $row['selected_value'];
-    }
-
-    $_SESSION['_setting'] = $_setting;
-    $_SESSION['_plugins'] = $_plugins;
 }
 
 /**

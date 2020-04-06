@@ -4948,7 +4948,7 @@ EOT;
      *
      * @return array
      */
-    public static function exerciseResultsInRanking($exerciseId, $courseId, $sessionId = 0)
+    public static function exerciseResultsInRanking($exerciseId, $courseId, $sessionId)
     {
         $em = Database::getManager();
 

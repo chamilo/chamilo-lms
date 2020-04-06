@@ -22,7 +22,7 @@ class Basic extends Toolbar
         'adobeair',
         'ajax',
         'audio',
-        'image2_chamilo',
+        'image2_chamilo', // Replace for 'image' if you want to user the Mapping plugin.
         'bidi',
         'colorbutton',
         'colordialog',
@@ -122,6 +122,7 @@ class Basic extends Toolbar
             $plugins[] = 'ckeditor_wiris';
         }
 
+        // Mapping plugin requires Image plugin. But Image2 plugin is activated by default
         if (api_get_setting('enabled_imgmap') == 'true') {
             $plugins[] = 'mapping';
         }

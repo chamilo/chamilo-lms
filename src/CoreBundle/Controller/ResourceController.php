@@ -75,7 +75,7 @@ class ResourceController extends AbstractResourceController implements CourseCon
         $repository = $this->getRepositoryFromRequest($request);
         $settings = $repository->getResourceSettings();
 
-        $grid = $this->getGrid($request, $repository, $grid, $parentResourceNode->getId());
+        $grid = $this->getGrid($request, $repository, $grid, $parentResourceNode->getId(), 'chamilo_core_resource_index');
 
         $breadcrumb = $this->getBreadCrumb();
         $breadcrumb->addChild(
@@ -100,7 +100,7 @@ class ResourceController extends AbstractResourceController implements CourseCon
         );
     }
 
-    public function getGrid(Request $request, ResourceRepository $repository, Grid $grid, int $resourceNodeId): Grid
+    public function getGrid(Request $request, ResourceRepository $repository, Grid $grid, int $resourceNodeId, string $routeName): Grid
     {
         $class = $repository->getRepository()->getClassName();
 
@@ -126,18 +126,13 @@ class ResourceController extends AbstractResourceController implements CourseCon
         $source->initQueryBuilder($qb);
         $grid->setSource($source);
 
-        /*$result = $qb->getQuery()->getResult();
-        foreach ($result as $data) {
-            dump(get_class($data));
-        }*/
-
         $resourceParams = $this->getResourceParams($request);
 
         if (0 === $resourceParams['id']) {
             $resourceParams['id'] = $resourceNodeId;
         }
 
-        $grid->setRouteUrl($this->generateUrl('chamilo_core_resource_list', $resourceParams));
+        $grid->setRouteUrl($this->generateUrl($routeName, $resourceParams));
 
         //$grid->hideFilters();
         //$grid->setLimits(20);
@@ -168,6 +163,7 @@ class ResourceController extends AbstractResourceController implements CourseCon
                 unset($myParams[0]);
 
                 $icon = $resourceNode->getIcon().' &nbsp;';
+
                 if ($resourceNode->hasResourceFile()) {
                     // Process node that contains a file, process previews.
                     if ($resourceNode->isResourceFileAnImage()) {
@@ -270,7 +266,7 @@ class ResourceController extends AbstractResourceController implements CourseCon
         $myRowAction->addManipulateRender($setNodeParameters);
         $grid->addRowAction($myRowAction);
 
-        // Download action
+        // Download action.
         $myRowAction = new RowAction(
             $this->trans('Download'),
             'chamilo_core_resource_download',
@@ -383,7 +379,7 @@ class ResourceController extends AbstractResourceController implements CourseCon
             }
 
             // More action.
-            /*$myRowAction = new RowAction(
+            $myRowAction = new RowAction(
                 $this->trans('More'),
                 'chamilo_core_resource_preview',
                 false,
@@ -392,7 +388,7 @@ class ResourceController extends AbstractResourceController implements CourseCon
             );
 
             $myRowAction->addManipulateRender($setNodeParameters);
-            $grid->addRowAction($myRowAction);*/
+            $grid->addRowAction($myRowAction);
 
             // Delete action.
             $myRowAction = new RowAction(
@@ -434,7 +430,7 @@ class ResourceController extends AbstractResourceController implements CourseCon
         $repository = $this->getRepositoryFromRequest($request);
         $settings = $repository->getResourceSettings();
 
-        $grid = $this->getGrid($request, $repository, $grid, $resourceNodeId);
+        $grid = $this->getGrid($request, $repository, $grid, $resourceNodeId, 'chamilo_core_resource_list');
 
         $this->setBreadCrumb($request);
         $parentResourceNode = $this->getParentResourceNode($request);
@@ -655,7 +651,7 @@ class ResourceController extends AbstractResourceController implements CourseCon
         $tool = $request->get('tool');
         $type = $request->get('type');
 
-        $illustration = $illustrationRepository->getIllustrationUrlFromNode($resource->getResourceNode());
+        $illustration = $illustrationRepository->getIllustrationUrlFromNode($resourceNode);
 
         $form = $this->createForm(ResourceCommentType::class, null);
 
@@ -666,7 +662,6 @@ class ResourceController extends AbstractResourceController implements CourseCon
             'type' => $type,
             'comment_form' => $form->createView(),
         ];
-
         return $this->render(
             $repository->getTemplates()->getFromAction(__FUNCTION__, $request->isXmlHttpRequest()),
             $params
@@ -753,7 +748,7 @@ class ResourceController extends AbstractResourceController implements CourseCon
     }
 
     /**
-     * @Route("/{tool}/{type}/{id}", name="chamilo_core_resource_delete")
+     * @Route("/{tool}/{type}/{id}/delete", name="chamilo_core_resource_delete")
      */
     public function deleteAction(Request $request): Response
     {
@@ -789,7 +784,7 @@ class ResourceController extends AbstractResourceController implements CourseCon
     }
 
     /**
-     * @Route("/{tool}/{type}/{id}", methods={"DELETE"}, name="chamilo_core_resource_delete_mass")
+     * @Route("/{tool}/{type}/{id}/delete_mass", methods={"DELETE"}, name="chamilo_core_resource_delete_mass")
      */
     public function deleteMassAction($primaryKeys, $allPrimaryKeys, Request $request): Response
     {

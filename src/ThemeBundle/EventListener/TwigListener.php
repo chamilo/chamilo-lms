@@ -134,59 +134,62 @@ class TwigListener implements EventSubscriberInterface
             }
         }
 
-        // Plugins - Region list
-        $pluginConfiguration = api_get_settings('Plugins', 'list', 1);
-        $pluginRegionList = [];
-        foreach ($pluginConfiguration as $plugin) {
-            if ('region' === $plugin['type']) {
-                $pluginRegionList[$plugin['variable']][] = $plugin['subkey'];
-            }
-        }
-
         $appPlugin = new \AppPlugin();
         $installedPlugins = $appPlugin->getInstalledPluginListName();
-        $pluginRegions = $appPlugin->getPluginRegions();
-        $courseInfo = api_get_course_info();
-        $regionListContent = [];
-        foreach ($installedPlugins as $pluginName) {
-            foreach ($pluginRegions as $region) {
-                if (!isset($pluginRegionList[$region])) {
-                    continue;
+        if (!empty($installedPlugins)) {
+            // Plugins - Region list
+            $pluginConfiguration = api_get_settings('Plugins', 'list', 1);
+            $pluginRegionList = [];
+            foreach ($pluginConfiguration as $plugin) {
+                if ('region' === $plugin['type']) {
+                    $pluginRegionList[$plugin['variable']][] = $plugin['subkey'];
                 }
+            }
 
-                if ('course_tool_plugin' === $region) {
-                    $courseRegions = $appPlugin->getPluginRegions();
-                    $pluginInfo = $appPlugin->getPluginInfo($pluginName, true);
+            $pluginRegions = $appPlugin->getPluginRegions();
+            $courseInfo = api_get_course_info();
+            $regionListContent = [];
 
-                    if (empty($courseInfo)) {
+            foreach ($installedPlugins as $pluginName) {
+                foreach ($pluginRegions as $region) {
+                    if (!isset($pluginRegionList[$region])) {
                         continue;
                     }
-                    foreach ($courseRegions as $subRegion) {
-                        if (isset($pluginInfo['obj']) && $pluginInfo['obj'] instanceof \Plugin) {
-                            /** @var \Plugin $plugin */
-                            $plugin = $pluginInfo['obj'];
-                            $regionListContent[$subRegion][] = $plugin->renderRegion($subRegion);
+
+                    if ('course_tool_plugin' === $region) {
+                        $courseRegions = $appPlugin->getPluginRegions();
+                        $pluginInfo = $appPlugin->getPluginInfo($pluginName, true);
+
+                        if (empty($courseInfo)) {
+                            continue;
                         }
-                    }
-                } else {
-                    if (in_array($pluginName, $pluginRegionList[$region])) {
-                        $regionListContent[$region][] = $appPlugin->loadRegion(
-                            $pluginName,
-                            $region,
-                            $twig,
-                            true //$this->force_plugin_load
-                        );
+                        foreach ($courseRegions as $subRegion) {
+                            if (isset($pluginInfo['obj']) && $pluginInfo['obj'] instanceof \Plugin) {
+                                /** @var \Plugin $plugin */
+                                $plugin = $pluginInfo['obj'];
+                                $regionListContent[$subRegion][] = $plugin->renderRegion($subRegion);
+                            }
+                        }
+                    } else {
+                        if (in_array($pluginName, $pluginRegionList[$region])) {
+                            $regionListContent[$region][] = $appPlugin->loadRegion(
+                                $pluginName,
+                                $region,
+                                $twig,
+                                true //$this->force_plugin_load
+                            );
+                        }
                     }
                 }
             }
-        }
 
-        foreach ($regionListContent as $region => $contentList) {
-            $contentToString = '';
-            foreach ($contentList as $content) {
-                $contentToString .= $content;
+            foreach ($regionListContent as $region => $contentList) {
+                $contentToString = '';
+                foreach ($contentList as $content) {
+                    $contentToString .= $content;
+                }
+                $twig->addGlobal("plugin_$region", $contentToString);
             }
-            $twig->addGlobal("plugin_$region", $contentToString);
         }
 
         /*$userInfo = api_get_user_info();

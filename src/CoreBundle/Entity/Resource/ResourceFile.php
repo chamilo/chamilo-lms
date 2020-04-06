@@ -122,7 +122,7 @@ class ResourceFile
     /**
      * @var ResourceNode
      *
-     * @ORM\OneToOne(targetEntity="Chamilo\CoreBundle\Entity\Resource\ResourceNode", mappedBy="resourceFile")
+     * @ORM\OneToOne(targetEntity="Chamilo\CoreBundle\Entity\Resource\ResourceNode", mappedBy="resourceFile", fetch="EAGER")
      */
     protected $resourceNode;
 

@@ -27,7 +27,6 @@ use Cocur\Slugify\SlugifyInterface;
 use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\EntityRepository;
 use Doctrine\ORM\EntityRepository as BaseEntityRepository;
-use Doctrine\ORM\Query\Expr\Join;
 use Doctrine\ORM\QueryBuilder;
 use League\Flysystem\FilesystemInterface;
 use Symfony\Component\Filesystem\Exception\FileNotFoundException;
@@ -605,7 +604,6 @@ class ResourceRepository extends BaseEntityRepository
 
         $qb->andWhere('node.creator = :creator');
         $qb->setParameter('creator', $user);
-        //var_dump($qb->getQuery()->getSQL(), $parentNode->getId());exit;
 
         return $qb;
     }
@@ -670,6 +668,23 @@ class ResourceRepository extends BaseEntityRepository
 
     public function getResourceFromResourceNode(int $resourceNodeId): ?AbstractResource
     {
+        /*$repo = $this->getRepository();
+        $className = $repo->getClassName();
+        $qb = $repo->getEntityManager()->createQueryBuilder()
+            ->select('resource')
+            ->from($className, 'resource')
+            ->innerJoin(
+                'resource.resourceNode',
+                'node'
+            )
+            ->innerJoin('node.resourceLinks', 'links')
+            ->leftJoin('node.resourceFile', 'file')
+            ->where('node = :id')
+            ->setParameters(['id' => $resourceNodeId])
+        ;
+
+        return $qb->getQuery()->getFirstResult();*/
+
         return $this->getRepository()->findOneBy(['resourceNode' => $resourceNodeId]);
     }
 

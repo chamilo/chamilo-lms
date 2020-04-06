@@ -82,7 +82,7 @@ class ResourceNode
      * @var ResourceFile
      * @Groups({"list"})
      *
-     * @ORM\OneToOne(targetEntity="ResourceFile", inversedBy="resourceNode", orphanRemoval=true)
+     * @ORM\OneToOne(targetEntity="ResourceFile", inversedBy="resourceNode", orphanRemoval=true, fetch="EAGER")
      * @ORM\JoinColumn(name="resource_file_id", referencedColumnName="id", onDelete="CASCADE")
      */
     protected $resourceFile;

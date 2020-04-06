@@ -57,19 +57,28 @@ class CourseListener
         }
 
         $sessionHandler = $request->getSession();
-
         $container = $this->container;
         $translator = $container->get('translator');
 
         $course = null;
         // Check if URL has cid value. Using Symfony request.
-        $courseId = $request->get('cid');
+        $courseId = (int) $request->get('cid');
+        $checker = $container->get('security.authorization_checker');
 
         if (!empty($courseId)) {
-            /** @var EntityManager $em */
-            $em = $container->get('doctrine')->getManager();
-            $checker = $container->get('security.authorization_checker');
-            $course = $em->getRepository('ChamiloCoreBundle:Course')->find($courseId);
+            if ($sessionHandler->has('course')) {
+                /** @var Course $courseFromSession */
+                $courseFromSession = $sessionHandler->get('course');
+                if ($courseId === $courseFromSession->getId()) {
+                    $course = $courseFromSession;
+                }
+            }
+
+            if (null === $course) {
+                /** @var EntityManager $em */
+                $em = $container->get('doctrine')->getManager();
+                $course = $em->getRepository('ChamiloCoreBundle:Course')->find($courseId);
+            }
 
             if (null === $course) {
                 throw new NotFoundHttpException($translator->trans('Course does not exist'));
@@ -165,27 +174,6 @@ class CourseListener
             $courseParams = $this->generateCourseUrl($course, $sessionId, $groupId, $origin);
             $sessionHandler->set('course_url_params', $courseParams);
             $container->get('twig')->addGlobal('course_url_params', $courseParams);
-
-            /*if (!$alreadyVisited ||
-                isset($alreadyVisited) && $alreadyVisited != $courseCode
-            ) {
-                // Course access events
-                $dispatcher = $this->container->get('event_dispatcher');
-                if (empty($sessionId)) {
-                    $dispatcher->dispatch('chamilo_course.course.access', new CourseAccess($user, $course));
-                } else {
-                    $dispatcher->dispatch(
-                        'chamilo_course.course.access',
-                        new SessionAccess($user, $course, $session)
-                    );
-                }
-                $coursesAlreadyVisited[$course->getCode()] = 1;
-                $sessionHandler->set('course_already_visited', $courseCode);
-            }*/
-
-//            Container::setRequest($request);
-//            Container::setContainer($container);
-//            Container::setLegacyServices($container);
         }
     }
 
@@ -237,7 +225,6 @@ class CourseListener
                 //|| $controllerList[0] instanceof LegacyController
             )
         ) {
-            //var_dump($courseId);
             if (!empty($courseId)) {
                 $controller = $controllerList[0];
                 $session = $sessionHandler->get('session');
@@ -266,17 +253,6 @@ class CourseListener
             //$controllerActionParts = explode(':', $controllerAction);
             //$controllerNameParts = explode('.', $controllerActionParts[0]);
             //$controllerName = $controllerActionParts[0];
-        } else {
-            /*$ignore = [
-                'fos_js_routing.controller:indexAction',
-                'web_profiler.controller.profiler:toolbarAction',
-            ];
-
-            $controllerAction = $request->get('_controller');
-            if (!in_array($controllerAction, $ignore)) {
-                //error_log('remove');
-                //$this->removeCourseFromSession($request);
-            }*/
         }
     }
 

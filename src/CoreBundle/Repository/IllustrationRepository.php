@@ -34,28 +34,13 @@ final class IllustrationRepository extends ResourceRepository implements GridInt
             ->select('resource')
             ->from($className, 'resource')
             ->innerJoin(
-                ResourceNode::class,
-                'node',
-                Join::WITH,
-                'resource.resourceNode = node.id'
+                'resource.resourceNode',
+                'node'
             )
-            //->innerJoin('node.resourceLinks', 'links')
-            //->where('node.resourceType = :type')
-            //->setParameter('type',$type)
         ;
-        /*$qb
-            ->andWhere('links.visibility = :visibility')
-            ->setParameter('visibility', ResourceLink::VISIBILITY_PUBLISHED)
-        ;*/
-
-        if (null !== $parentNode) {
-//            $qb->andWhere('node.parent = :parentNode');
- //           $qb->setParameter('parentNode', $parentNode);
-        }
 
         $qb->andWhere('node.creator = :creator');
         $qb->setParameter('creator', $user);
-        //var_dump($qb->getQuery()->getSQL(), $parentNode->getId());exit;
 
         return $qb;
     }
@@ -130,12 +115,19 @@ final class IllustrationRepository extends ResourceRepository implements GridInt
     public function getIllustrationNodeFromParent(ResourceNode $resourceNode): ?ResourceNode
     {
         $nodeRepo = $this->getResourceNodeRepository();
-        $resourceType = $this->getResourceType();
+        $name = $this->getResourceTypeName();
 
-        /** @var ResourceNode $node */
-        return $nodeRepo->findOneBy(
-            ['parent' => $resourceNode, 'resourceType' => $resourceType]
-        );
+        $qb = $nodeRepo->getEntityManager()->createQueryBuilder()
+            ->select('node')
+            ->from(ResourceNode::class, 'node')
+            ->innerJoin('node.resourceType', 'type')
+            ->innerJoin('node.resourceFile', 'file')
+            ->where('node.parent = :parent')
+            ->andWhere('type.name = :name')
+            ->setParameters(['parent' => $resourceNode, 'name' => $name])
+        ;
+
+        return $qb->getQuery()->getFirstResult();
     }
 
     public function deleteIllustration(AbstractResource $resource)
@@ -151,7 +143,7 @@ final class IllustrationRepository extends ResourceRepository implements GridInt
     /**
      * @param string $filter See: services.yaml parameter "glide_media_filters" to see the list of filters.
      */
-    public function getIllustrationUrl(AbstractResource $resource, $filter = ''): string
+    public function getIllustrationUrl(AbstractResource $resource, string $filter = ''): string
     {
         return $this->getIllustrationUrlFromNode($resource->getResourceNode(), $filter);
     }

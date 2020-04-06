@@ -6,6 +6,8 @@ namespace Chamilo\CoreBundle\Controller;
 
 use Career;
 use Chamilo\CoreBundle\Entity\Course;
+use Chamilo\CoreBundle\Entity\Tool;
+use Chamilo\CoreBundle\Tool\AbstractTool;
 use Chamilo\CoreBundle\ToolChain;
 use Chamilo\CourseBundle\Controller\ToolBaseController;
 use Chamilo\CourseBundle\Entity\CTool;
@@ -219,7 +221,9 @@ class CourseHomeController extends ToolBaseController
             throw new NotFoundHttpException($this->trans('Tool not found'));
         }
 
+        /** @var AbstractTool $tool */
         $tool = $toolChain->getToolFromName($tool->getTool()->getName());
+
         $url = $tool->getLink().'?'.$this->getCourseUrlQuery();
 
         return $this->redirect($url);

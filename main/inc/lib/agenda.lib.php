@@ -90,7 +90,7 @@ class Agenda
                     }
                 }
 
-                if (!empty($sessionId)) {
+                if (false === $isAllowToEdit && !empty($sessionId)) {
                     $allowDhrToEdit = api_get_configuration_value('allow_agenda_edit_for_hrm');
                     if ($allowDhrToEdit) {
                         $isHrm = SessionManager::isUserSubscribedAsHRM($sessionId, api_get_user_id());
@@ -1065,21 +1065,7 @@ class Agenda
                 break;
             case 'course':
                 $courseId = api_get_course_int_id();
-                $sessionId = api_get_session_id();
-                $isAllowToEdit = api_is_allowed_to_edit(null, true);
-
-                if ($isAllowToEdit == false && !empty($sessionId)) {
-                    $allowDhrToEdit = api_get_configuration_value('allow_agenda_edit_for_hrm');
-                    if ($allowDhrToEdit) {
-                        $isHrm = SessionManager::isUserSubscribedAsHRM(
-                            $sessionId,
-                            api_get_user_id()
-                        );
-                        if ($isHrm) {
-                            $isAllowToEdit = true;
-                        }
-                    }
-                }
+                $isAllowToEdit = $this->getIsAllowedToEdit();
 
                 if (!empty($courseId) && $isAllowToEdit) {
                     // Delete

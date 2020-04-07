@@ -1394,20 +1394,29 @@ class Statistics
                 GROUP BY u.id";
 
         $stmt = Database::query($sql);
-        $result = Database::store_result($stmt, 'ASSOC');
 
-        return $result;
+        return Database::store_result($stmt, 'ASSOC');
     }
 
     public static function getBossTable($bossId)
     {
-        $students = UserManager::getUsersFollowedByStudentBoss($bossId);
+        $students = UserManager::getUsersFollowedByStudentBoss(
+            $bossId,
+            0,
+            false,
+            false,
+            false,
+            null,
+            null,
+            null,
+            null,
+            1
+        );
 
         if (!empty($students)) {
             $table = new HTML_Table(['class' => 'table table-responsive', 'id' => 'table_'.$bossId]);
             $headers = [
                 get_lang('Name'),
-                //get_lang('LastName'),
             ];
             $row = 0;
             $column = 0;

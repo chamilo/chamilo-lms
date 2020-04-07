@@ -162,7 +162,7 @@ abstract class OpenofficeDocument extends learnpath
                     $this->add_docs_to_visio($files);
                     break;
             }
-            chmod($this->base_work_dir, api_get_permissions_for_new_directories());
+            @chmod($this->base_work_dir, api_get_permissions_for_new_directories());
         }
 
         return $this->first_item;

@@ -7287,7 +7287,7 @@ $BadgesManagement = "ادارة الاوسمة";
 $CurrentBadges = "الاوسم الحالية";
 $SaveBadge = "حفظ الوسام";
 $BadgeMeasuresXPixelsInPNG = "PNG قياس الوسام 200×200 بكسل بصيغة";
-$SetTutor = "تعيين كمعلم";
+$ConvertToCourseAssistant = "تعيين كمعلم";
 $UniqueAnswerImage = "اجابة واحدة للصورة";
 $TimeSpentByStudentsInCoursesGroupedByCode = "الوقت المبذول من قبل الطلبة في المقرر، مقسما وفقا للرمز";
 $TestResultsByStudentsGroupesByCode = "نتائج الاختبار وفقا لمجاميع الطلبة ووفقا للرمز";
@@ -7491,7 +7491,7 @@ $DocumentsDefaultVisibilityDefinedInCourseComment = "مرئية المستند �
 $HtmlPurifierWikiTitle = "HTMLPurifier في الويكي";
 $HtmlPurifierWikiComment = "ان تفعيل هذا الخيار في الويكي سوف يزيد الحماية لكن يقلل من خصائص التنسيق";
 $ClickOrDropFilesHere = "انقر او قم باسقاط الملفات";
-$RemoveTutorStatus = "ازالة مكانة المعلم";
+$RemoveCourseAssistantStatus = "ازالة مكانة المعلم";
 $ImportGradebookInCourse = "استيراد دفتر الدرجات من المقرر الاساس";
 $InstitutionAddressTitle = "عنوان المنظمة";
 $InstitutionAddressComment = "العنوان";

@@ -1037,9 +1037,9 @@ function modify_filter($user_id, $row, $data)
             $isTutor = isset($data['is_tutor']) ? intval($data['is_tutor']) : 0;
             $isTutor = empty($isTutor) ? 1 : 0;
 
-            $text = get_lang('RemoveTutorStatus');
+            $text = get_lang('RemoveCourseAssistantStatus');
             if ($isTutor) {
-                $text = get_lang('SetTutor');
+                $text = get_lang('ConvertToCourseAssistant');
             }
 
             if ($isInvitee) {

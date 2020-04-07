@@ -5,8 +5,6 @@ use ChamiloSession as Session;
 
 /**
  * This script is the Tickets plugin main entry point.
- *
- * @package chamilo.plugin.ticket
  */
 require_once __DIR__.'/../inc/global.inc.php';
 

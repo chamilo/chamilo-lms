@@ -3433,7 +3433,7 @@ class Exercise
                 $('#exercise_clock_warning').epiclock({
                     mode: $.epiclock.modes.countdown,
                     offset: {seconds: time_left},
-                    format: 'x:i:s',
+                    format: 'x:C:s',
                     renderer: 'minute'
                 }).bind('timer', function () {
                     onExpiredTimeExercise();

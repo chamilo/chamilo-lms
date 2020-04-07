@@ -45,7 +45,7 @@
 {# Bootstrap changes #}
 {% block grid_column_actions_cell %}
   {% set actions = column.getActionsToRender(row) %}
-  <div class="btn-group">
+  <div class="btn-group btn-group-sm">
     {% for action in actions %}
       {% if action.attributes.form_delete is defined and action.attributes.form_delete %}
         <div class="btn-group">
@@ -93,10 +93,8 @@
   </div>
 {% endblock grid_column_actions_cell %}
 
-
-
 {% block grid_scripts %}
-  {{ parent }}
+  {{ parent() }}
   <script>
     function clickRow(firstRow) {
       var anchor = firstRow.find('a');

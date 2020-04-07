@@ -29,7 +29,7 @@ class ResourceUploadController extends BlueimpController
      *
      * @return JsonResponse
      */
-    public function upload()
+    public function upload(): JsonResponse
     {
         error_log('upload');
         $container = $this->container;

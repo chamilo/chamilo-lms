@@ -45,19 +45,25 @@
                         <a class="nav-link" id="activity-tab" data-toggle="tab" href="#activity" role="tab" aria-controls="activity" aria-selected="true" >Activity</a>
                     </li>
                     <li class="nav-item">
+                        <a class="nav-link" id="sharing-tab" data-toggle="tab" href="#sharing" role="tab" aria-controls="sharing" aria-selected="true" >Activity</a>
+                    </li>
+                    <li class="nav-item">
                         <a class="nav-link" id="comments-tab" data-toggle="tab" href="#comments" role="tab" aria-controls="comments" aria-selected="true" >Comments</a>
                     </li>
                 </ul>
 
                 <div class="tab-content" id="myTabContent">
                     <div class="tab-pane fade show active" id="details" role="tabpanel" aria-labelledby="details-tab">
-                        {% include '@ChamiloTheme/Resource/details.html.twig' %}
+                        {% include '@ChamiloTheme/Resource/info_details.html.twig' %}
                     </div>
                     <div class="tab-pane fade" id="activity" role="tabpanel" aria-labelledby="activity-tab">
-                        {% include '@ChamiloTheme/Resource/activity.html.twig' %}
+                        {% include '@ChamiloTheme/Resource/info_activity.html.twig' %}
+                    </div>
+                    <div class="tab-sharing fade" id="sharing" role="tabpanel" aria-labelledby="sharing-tab">
+                        {% include '@ChamiloTheme/Resource/info_sharing.html.twig' %}
                     </div>
                     <div class="tab-pane fade" id="comments" role="tabpanel" aria-labelledby="comments-tab">
-                        {% include '@ChamiloTheme/Resource/comments.html.twig' %}
+                        {% include '@ChamiloTheme/Resource/info_comments.html.twig' %}
                     </div>
                 </div>
             <div/>

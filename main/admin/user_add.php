@@ -214,7 +214,7 @@ $group[] = $form->createElement(
     null,
     [
         'id' => 'password',
-        'autocomplete' => 'off',
+        'autocomplete' => 'new-password',
         'onkeydown' => 'javascript: password_switch_radio_button();',
         //'required' => 'required'
     ]

@@ -1447,6 +1447,9 @@ $_configuration['course_catalog_settings'] = [
     'fields' => ['mots_cles', 'duree_en_min', 'format'],
 ];*/
 
+// Disable fields to add an attachment when creating and announcement.
+//$_configuration['disabled_announcement_attachment'] = false;
+
 // KEEP THIS AT THE END
 // -------- Custom DB changes
 // Add user activation by confirmation email

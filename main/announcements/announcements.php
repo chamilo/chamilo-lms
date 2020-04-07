@@ -89,6 +89,8 @@ $logInfo = [
 ];
 Event::registerLog($logInfo);
 
+$announcementAttachmentIsDisabled = api_get_configuration_value('disabled_announcement_attachment');
+
 switch ($action) {
     case 'move':
         if (!$allowToEdit) {
@@ -112,7 +114,7 @@ switch ($action) {
             }
 
             $sql = "SELECT DISTINCT announcement.id, announcement.display_order
-                    FROM $tbl_announcement announcement 
+                    FROM $tbl_announcement announcement
                     INNER JOIN $tbl_item_property itemproperty
                     ON (announcement.c_id = itemproperty.c_id)
                     WHERE
@@ -524,22 +526,22 @@ switch ($action) {
         $form->addHtml("
             <script>
                 $(function () {
-                    $('#announcement_preview').on('click', function() {  
+                    $('#announcement_preview').on('click', function() {
                         var users = [];
                         $('#users_to option').each(function() {
-                            users.push($(this).val());                            
+                            users.push($(this).val());
                         });
-                        
+
                         var form = $('#announcement').serialize();
                         $.ajax({
                             type: 'POST',
                             dataType: 'json',
                             url: '".$ajaxUrl."',
-                            data: {users : JSON.stringify(users), form: form},  
+                            data: {users : JSON.stringify(users), form: form},
                             beforeSend: function() {
                                 $('#announcement_preview_result').html('<i class=\"fa fa-spinner\"></i>');
                                 $('#send_button').hide();
-                            },  
+                            },
                             success: function(result) {
                                 var resultToString = '';
                                 $.each(result, function(index, value) {
@@ -549,7 +551,7 @@ switch ($action) {
                                     '".addslashes(get_lang('AnnouncementWillBeSentTo'))."<br/>' + resultToString
                                 );
                                 $('#announcement_preview_result').show();
-                                $('#send_button').show();                                
+                                $('#send_button').show();
                             }
                         });
                     });
@@ -600,8 +602,12 @@ switch ($action) {
             false,
             ['ToolbarSet' => 'Announcements']
         );
-        $form->addElement('file', 'user_upload', get_lang('AddAnAttachment'));
-        $form->addElement('textarea', 'file_comment', get_lang('FileComment'));
+
+        if (!$announcementAttachmentIsDisabled) {
+            $form->addElement('file', 'user_upload', get_lang('AddAnAttachment'));
+            $form->addElement('textarea', 'file_comment', get_lang('FileComment'));
+        }
+
         $form->addHidden('sec_token', $token);
 
         if (empty($sessionId)) {
@@ -645,8 +651,8 @@ switch ($action) {
             if (isset($id) && $id) {
                 // there is an Id => the announcement already exists => update mode
                 if (Security::check_token('post')) {
-                    $file_comment = $_POST['file_comment'];
-                    $file = $_FILES['user_upload'];
+                    $file_comment = $announcementAttachmentIsDisabled ? null : $_POST['file_comment'];
+                    $file = $announcementAttachmentIsDisabled ? [] : $_FILES['user_upload'];
 
                     AnnouncementManager::edit_announcement(
                         $id,
@@ -688,8 +694,8 @@ switch ($action) {
             } else {
                 // Insert mode
                 if (Security::check_token('post')) {
-                    $file = $_FILES['user_upload'];
-                    $file_comment = $data['file_comment'];
+                    $file = $announcementAttachmentIsDisabled ? [] : $_FILES['user_upload'];
+                    $file_comment = $announcementAttachmentIsDisabled ? null : $data['file_comment'];
 
                     if (empty($group_id)) {
                         $insert_id = AnnouncementManager::add_announcement(

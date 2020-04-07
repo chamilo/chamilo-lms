@@ -97,10 +97,32 @@ if (!empty($userInfo)) {
     $users = [];
     switch ($userInfo['status']) {
         case DRH:
-            $users = UserManager::get_users_followed_by_drh($userId);
+            $users = UserManager::get_users_followed_by_drh(
+                $userId,
+                0,
+                false,
+                false,
+                false,
+                null,
+                null,
+                null,
+                null,
+                1
+            );
             break;
         case STUDENT_BOSS:
-            $users = UserManager::getUsersFollowedByStudentBoss($userId);
+            $users = UserManager::getUsersFollowedByStudentBoss(
+                $userId,
+                0,
+                false,
+                false,
+                false,
+                null,
+                null,
+                null,
+                null,
+                1
+            );
             break;
     }
 

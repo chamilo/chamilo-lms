@@ -8510,4 +8510,6 @@ $CertificateOfAchievement = "Certificado de logro";
 $CertificateOfAchievementByDay = "Certificado de logro por dia";
 $ReducedReport = "Reporte reducido";
 $NotInCourse = "Fuera de cursos";
+$LearnpathCategory = "Categoría de lecciones";
+$MailTemplates = "Plantillas de correos";
 ?>

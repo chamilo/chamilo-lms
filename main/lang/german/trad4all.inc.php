@@ -7973,6 +7973,7 @@ $NewPasswordRequirementMaxXLength = "Maximale %s Zeichen insgesamt";
 $YouCantNotEditThisQuestionBecauseAlreadyExistAnswers = "Diese Frage kann nicht mehr bearbeitet werden, da schon Antworten dazu abgegeben wurden.";
 $Avatar = "Benutzerbild";
 $ReadingComprehensionLevelX = "%s Wörter pro Minute";
+$UpdateTitleInLps = "Diese Überschrift in Lernpfaden ersetzen";
 $SendEmailToTeacherWhenStudentStartQuiz = "E-Mail an den Tutor senden, wenn der Lernende eine Übung startet";
 $SendEmailToTeacherWhenStudentEndQuiz = "E-Mail an den Tutor senden, wenn der Lernende eine Übung beendet hat";
 $SendEmailToTeacherWhenStudentEndQuizOnlyIfOpenQuestion = "E-Mail an den Tutor senden, wenn der Lernende eine Übung beendet hat, aber nur wenn er eine offene Frage beantwortet hat";
@@ -7988,6 +7989,7 @@ Benutzer %s hat eine Follow-up-Nachricht zum Lernenden %s gesendet.<br/><br/>
 
 Die Nachricht ist an %s sichtbar";
 $PersonalDataReport = "Persönliche Daten";
+$MoreDataAvailableInTheDatabaseButTrunkedForEfficiencyReasons = "Es gibt noch weitere Daten in der Datenbank, zur Übersichtlichkeit werden diese ausgeblendet.";
 $FromTimeX = "Von %s";
 $ToTimeX = "bis %s";
 $SubscribeUsersToAllForumNotifications = "Automatisch alle Benutzer anmelden";

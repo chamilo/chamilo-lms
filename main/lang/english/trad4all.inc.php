@@ -8482,4 +8482,6 @@ $CertificateOfAchievement = "Certificate of achievement";
 $CertificateOfAchievementByDay = "Certificate of achievement by day";
 $ReducedReport = "Reduced report";
 $NotInCourse = "Outside courses";
+$LearnpathCategory = "Learnpaths category";
+$MailTemplates = "Mail templates";
 ?>

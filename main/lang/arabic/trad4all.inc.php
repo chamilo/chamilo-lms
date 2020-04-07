@@ -8509,4 +8509,10 @@ $ErrorPluginOfficialCannotBeUploaded = "هذا المكون الاضافي يح�
 $AllSessionsShort = "الجميع";
 $ActiveSessionsShort = "مفعل";
 $ClosedSessionsShort = "مغلق";
+$FirstnameLastnameCourses = "مقررات من %s %s";
+$CanNotSubscribeToCourseUserSessionExpired = "لا يمكنك الاستمرار بالتسجيل في المقرر لان الموسم قد انتهى";
+$CertificateOfAchievement = "شهادة الانجاز";
+$CertificateOfAchievementByDay = "شهادة الانجاز وفقا لليوم";
+$ReducedReport = "تقرير مختصر";
+$NotInCourse = "مقررات خارجية";
 ?>

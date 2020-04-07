@@ -5,15 +5,6 @@ monolog:
             path: "%kernel.logs_dir%/%kernel.environment%.log"
             level: debug
             channels: ["!event"]
-        buffered:
-            type:     buffer
-            handler:  easylog
-            channels: ["!event"]
-            level:    debug
-        easylog:
-            type: service
-            id: EasyCorp\EasyLog\EasyLogHandler
-
         #firephp:
         #    type: firephp
         #    level: info

@@ -414,7 +414,7 @@ if (api_is_platform_admin()) {
     if (api_get_configuration_value('mail_template_system')) {
         $items[] = [
             'url' => api_get_path(WEB_CODE_PATH).'mail_template/list.php',
-            'label' => get_lang('MailTemplate'),
+            'label' => get_lang('MailTemplates'),
         ];
     }
 

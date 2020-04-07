@@ -42,7 +42,7 @@ switch ($action) {
         if ($form->validate()) {
             $values = $form->getSubmitValues();
             $studentInfo = api_get_user_info($values['user_id']);
-            UserManager::subscribeUserToBossList($values['user_id'], [$values['boss_id']]);
+            UserManager::subscribeUserToBossList($values['user_id'], [$values['boss_id']], true);
             Display::addFlash(Display::return_message(get_lang('Saved').' '.$studentInfo['complete_name']));
             header('Location: '.api_get_self());
             exit;
@@ -59,7 +59,6 @@ $(function() {
     $(".add_user form").on("submit", function(e) {
         e.preventDefault();
         var id = $(this).attr("id");
-        console.log(id);
         var data = $("#" + id ).serializeArray();
         var bossId = id.replace("add_user_to_", "") ;
 
@@ -67,7 +66,6 @@ $(function() {
             if (data[i].name === "user_id") {
                 var userId = data[i].value;
                 var params = "boss_id="+ bossId + "&student_id="+ userId + "&";
-
                 $.get(
                     "'.$url.'",
                     params,
@@ -141,22 +139,27 @@ if ($action !== 'add_user') {
     if (!empty($languageFilter) && $languageFilter !== 'placeholder') {
         $conditions['language'] = $languageFilter;
     }
-    $bossList = UserManager::get_user_list($conditions);
+    $bossList = UserManager::get_user_list($conditions, ['firstname']);
     $tableContent .= '<div class="container-fluid"><div class="row flex-row flex-nowrap">';
     foreach ($bossList as $boss) {
         $bossId = $boss['id'];
         $tableContent .= '<div class="col-md-1">';
         $tableContent .= '<div class="boss_column">';
-
         $tableContent .= '<h5><strong>'.api_get_person_name($boss['firstname'], $boss['lastname']).'</strong></h5>';
-
         $tableContent .= Statistics::getBossTable($bossId);
 
         $url = api_get_self().'?a=add_user&boss_id='.$bossId;
 
         $tableContent .= '<div class="add_user">';
         $tableContent .= '<strong>'.get_lang('AddStudent').'</strong>';
-        $addUserForm = new FormValidator('add_user_to_'.$bossId, 'post', '', '', [], FormValidator::LAYOUT_BOX_NO_LABEL);
+        $addUserForm = new FormValidator(
+            'add_user_to_'.$bossId,
+            'post',
+            '',
+            '',
+            [],
+            FormValidator::LAYOUT_BOX_NO_LABEL
+        );
         $addUserForm->addSelectAjax(
             'user_id',
             '',

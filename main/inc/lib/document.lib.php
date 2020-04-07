@@ -715,9 +715,9 @@ class DocumentManager
             }
 
             return $finalDocumentData;
-        } else {
-            return [];
         }
+
+        return [];
     }
 
     /**
@@ -1367,7 +1367,7 @@ class DocumentManager
      *
      * @return int id of document / false if no doc found
      */
-    public static function get_document_id($courseInfo, $path, $sessionId = null)
+    public static function get_document_id($courseInfo, $path, $sessionId = null, $forceFileTypeFolder = false)
     {
         $table = Database::get_course_table(TABLE_DOCUMENT);
         $courseId = $courseInfo['real_id'];
@@ -1380,11 +1380,16 @@ class DocumentManager
 
         $path = Database::escape_string($path);
         if (!empty($courseId) && !empty($path)) {
+            $folderCondition = '';
+            if ($forceFileTypeFolder) {
+                $folderCondition = ' AND filetype = "folder" ';
+            }
             $sql = "SELECT id FROM $table
                     WHERE
                         c_id = $courseId AND
                         path LIKE BINARY '$path' AND
                         session_id = $sessionId
+                        $folderCondition
                     LIMIT 1";
 
             $result = Database::query($sql);
@@ -1459,10 +1464,10 @@ class DocumentManager
             if (dirname($row['path']) == '.') {
                 $row['parent_id'] = '0';
             } else {
-                $row['parent_id'] = self::get_document_id($course_info, dirname($row['path']), $session_id);
+                $row['parent_id'] = self::get_document_id($course_info, dirname($row['path']), $session_id, true);
                 if (empty($row['parent_id'])) {
                     // Try one more with session id = 0
-                    $row['parent_id'] = self::get_document_id($course_info, dirname($row['path']), 0);
+                    $row['parent_id'] = self::get_document_id($course_info, dirname($row['path']), 0, true);
                 }
             }
             $parents = [];

@@ -26,7 +26,7 @@ class LeftMenuBuilder implements ContainerAwareInterface
         $menu = $factory->createItem('root');
         $translator = $this->container->get('translator');
         $checked = $this->container->get('session')->get('IS_AUTHENTICATED_FULLY');
-        $settingsManager = $this->container->get('chamilo.settings.manager');
+        //$settingsManager = $this->container->get('chamilo.settings.manager');
 
         if ($checked) {
             $menu->setChildrenAttribute('class', 'nav nav-pills nav-stacked');

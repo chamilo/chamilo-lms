@@ -4,25 +4,25 @@
 {% autoescape false %}
 
 {% if is_granted('IS_AUTHENTICATED_FULLY') %}
-    {{ macro.panel(
-        'Profile' | trans,
-        mopa_bootstrap_menu('ChamiloCoreBundle:LeftMenuBuilder:profileMenu', {'automenu': 'navbar', 'stacked':false})
-    ) }}
+{#    {{ macro.panel(#}
+{#        'Profile' | trans,#}
+{#        mopa_bootstrap_menu('ChamiloCoreBundle:LeftMenuBuilder:profileMenu', {'automenu': 'navbar', 'stacked':false})#}
+{#    ) }}#}
 
-    {{ macro.panel(
-        'Courses' | trans,
-        mopa_bootstrap_menu('ChamiloCoreBundle:LeftMenuBuilder:courseMenu', {'automenu': 'navbar', 'stacked':false})
-    ) }}
+{#    {{ macro.panel(#}
+{#        'Courses' | trans,#}
+{#        mopa_bootstrap_menu('ChamiloCoreBundle:LeftMenuBuilder:courseMenu', {'automenu': 'navbar', 'stacked':false})#}
+{#    ) }}#}
 
-    {{ macro.panel(
-        'Sessions' | trans,
-        mopa_bootstrap_menu('ChamiloCoreBundle:LeftMenuBuilder:sessionMenu', {'automenu': 'navbar', 'stacked':false})
-    ) }}
+{#    {{ macro.panel(#}
+{#        'Sessions' | trans,#}
+{#        mopa_bootstrap_menu('ChamiloCoreBundle:LeftMenuBuilder:sessionMenu', {'automenu': 'navbar', 'stacked':false})#}
+{#    ) }}#}
 
-    {{ macro.panel(
-        'Skills' | trans,
-        mopa_bootstrap_menu('ChamiloCoreBundle:LeftMenuBuilder:skillsMenu', {'automenu': 'navbar', 'stacked':false})
-    ) }}
+{#    {{ macro.panel(#}
+{#        'Skills' | trans,#}
+{#        mopa_bootstrap_menu('ChamiloCoreBundle:LeftMenuBuilder:skillsMenu', {'automenu': 'navbar', 'stacked':false})#}
+{#    ) }}#}
 {% else %}
     {# Plugin login before/after tpls #}
     {% if plugin_login_top is not null %}

@@ -226,12 +226,12 @@ services:
 #            - {name: mopa_bootstrap.menu, alias: chamilo_core.menu.nav}
             - {name: knp_menu.menu_builder, method: menuApp, alias: menuApp}
 
-    chamilo_core.menu.course_menu_builder:
-        class: Chamilo\CoreBundle\Menu\LeftMenuBuilder
-        calls:
-            - [setContainer, ['@service_container']]
-        tags:
-            - {name: mopa_bootstrap.menu, alias: chamilo_core.left.nav}
+#    chamilo_core.menu.course_menu_builder:
+#        class: Chamilo\CoreBundle\Menu\LeftMenuBuilder
+#        calls:
+#            - [setContainer, ['@service_container']]
+#        tags:
+#            - {name: mopa_bootstrap.menu, alias: chamilo_core.left.nav}
 
     # Auth listeners
     chamilo_core.listener.login_success_handler:

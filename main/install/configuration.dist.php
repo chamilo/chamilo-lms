@@ -1448,7 +1448,7 @@ $_configuration['course_catalog_settings'] = [
 ];*/
 
 // Disable fields to add an attachment when creating and announcement.
-//$_configuration['disabled_announcement_attachment'] = false;
+//$_configuration['disable_announcement_attachment'] = false;
 
 // KEEP THIS AT THE END
 // -------- Custom DB changes

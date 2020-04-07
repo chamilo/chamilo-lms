@@ -90,7 +90,7 @@ class Agenda
                     }
                 }
 
-                if (!empty($sessionId)) {
+                if (false === $isAllowToEdit && !empty($sessionId)) {
                     $allowDhrToEdit = api_get_configuration_value('allow_agenda_edit_for_hrm');
                     if ($allowDhrToEdit) {
                         $isHrm = SessionManager::isUserSubscribedAsHRM($sessionId, api_get_user_id());

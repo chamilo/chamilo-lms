@@ -151,6 +151,7 @@ class UserManager
         $userManager = self::getManager();
         $user->setPlainPassword($password);
         $userManager->updateUser($user, true);
+        Event::addEvent(LOG_USER_PASSWORD_UPDATE, LOG_USER_ID, $userId);
     }
 
     /**

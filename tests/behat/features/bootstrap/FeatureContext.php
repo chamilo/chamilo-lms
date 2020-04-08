@@ -93,19 +93,8 @@ class FeatureContext extends MinkContext
      */
     public function courseExists($argument)
     {
-        $this->iAmAPlatformAdministrator();
         $this->visit('/main/admin/course_list.php?keyword='.$argument);
         $this->assertPageContainsText($argument);
-    }
-
-    /**
-     * @Given /^course "([^"]*)" is deleted$/
-     */
-    public function courseIsDeleted($argument)
-    {
-        $this->iAmAPlatformAdministrator();
-        $this->visit('/main/admin/course_list.php?keyword='.$argument);
-        $this->clickLink('Delete');
     }
 
     /**
@@ -178,10 +167,12 @@ class FeatureContext extends MinkContext
                 ]
             );
 
+        $this->visit('/index.php?logout=logout');
         $this->iAmAPlatformAdministrator();
         $this->visit($sendInvitationURL);
         $this->iAmLoggedAs($friendUsername);
         $this->visit($acceptInvitationURL);
+        $this->visit('/index.php?logout=logout');
         $this->iAmAPlatformAdministrator();
     }
 
@@ -235,7 +226,6 @@ class FeatureContext extends MinkContext
      */
     public function adminTopBarIsDisabled()
     {
-        $this->iAmAPlatformAdministrator();
         $this->visit('/main/admin/settings.php');
         $this->fillField('search_field', 'show_admin_toolbar');
         $this->pressButton('submit_button');
@@ -248,7 +238,6 @@ class FeatureContext extends MinkContext
      */
     public function adminTopBarIsEnabled()
     {
-        $this->iAmAPlatformAdministrator();
         $this->visit('/main/admin/settings.php');
         $this->fillField('search_field', 'show_admin_toolbar');
         $this->pressButton('submit_button');

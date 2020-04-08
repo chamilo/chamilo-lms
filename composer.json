@@ -120,8 +120,8 @@
         "zendframework/zend-soap": "~2.6|^3.0"
     },
     "require-dev": {
-        "behat/behat": "@stable",
-        "behat/mink": "@stable",
+        "behat/behat": "3.5.0",
+        "behat/mink": "1.7.1",
         "behat/mink-extension": "*",
         "behat/mink-goutte-driver": "*",
         "behat/mink-selenium2-driver": "*",

@@ -8146,6 +8146,9 @@ class Exercise
         if (!empty($temp_question_list)) {
             /* If both array don't match it means that question_order was not correctly set
                for all questions using the default mysql order */
+            // <--- here it is:: - no order preserving, no key normalization
+            $questionList = array_unique (array_merge ($questionList, $temp_question_list));
+            // <--- satisfies condion below too ! (it's short, keep it)
             if (count($temp_question_list) != $count_question_orders) {
                 $questionList = $temp_question_list;
             }

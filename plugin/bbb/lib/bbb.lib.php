@@ -1117,6 +1117,16 @@ class bbb
             $pass = $meetingData['attendee_pw'];
         }
 
+        Event::addEvent(
+            'bbb_end_meeting',
+            'meeting_id',
+            (int) $id,
+            null,
+            api_get_user_id(),
+            api_get_course_int_id(),
+            api_get_session_id()
+        );
+
         $endParams = array(
             'meetingId' => $meetingData['remote_id'], // REQUIRED - We have to know which meeting to end.
             'password' => $pass, // REQUIRED - Must match moderator pass for meeting.
@@ -1517,6 +1527,16 @@ class bbb
             'first'
         );
 
+        Event::addEvent(
+            'bbb_regenerate_record',
+            'record_id',
+            (int) $recordId,
+            null,
+            api_get_user_id(),
+            api_get_course_int_id(),
+            api_get_session_id()
+        );
+
         // Check if there are recordings for this meeting
         $recordings = $this->api->getRecordings(['meetingId' => $meetingData['remote_id']]);
         if (!empty($recordings) && isset($recordings['messageKey']) && $recordings['messageKey'] === 'noRecordings') {
@@ -1572,6 +1592,16 @@ class bbb
             $this->table,
             array('where' => array('id = ?' => array($id))),
             'first'
+        );
+
+        Event::addEvent(
+            'bbb_delete_record',
+            'meeting_id',
+            $id,
+            null,
+            api_get_user_id(),
+            api_get_course_int_id(),
+            api_get_session_id()
         );
 
         $delete = false;

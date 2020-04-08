@@ -1,4 +1,5 @@
 <?php
+
 /* For licensing terms, see /license.txt */
 
 /**
@@ -6,7 +7,7 @@
  */
 $type = isset($_REQUEST['type']) && in_array($_REQUEST['type'], ['personal', 'course', 'admin']) ? $_REQUEST['type'] : 'personal';
 
-if ($type == 'personal') {
+if ($type === 'personal') {
     $cidReset = true; // fixes #5162
 }
 
@@ -15,16 +16,13 @@ require_once __DIR__.'/../global.inc.php';
 $action = isset($_REQUEST['a']) ? $_REQUEST['a'] : null;
 $group_id = api_get_group_id();
 
-if ($type == 'course') {
+if ($type === 'course') {
     api_protect_course_script(true);
 }
 
 $logInfo = [
     'tool' => TOOL_CALENDAR_EVENT,
-    'tool_id' => 0,
-    'tool_id_detail' => 0,
     'action' => $action,
-    'info' => '',
 ];
 Event::registerLog($logInfo);
 
@@ -51,9 +49,9 @@ switch ($action) {
             $content,
             $userToSend,
             $add_as_announcement,
-            null, //$parentEventId = null,
-            [], //$attachmentArray = array(),
-            null, //$attachmentComment = null,
+            null,
+            [],
+            null,
             $comment
         );
         break;
@@ -111,7 +109,7 @@ switch ($action) {
         $start = isset($_REQUEST['start']) ? api_strtotime($_REQUEST['start']) : null;
         $end = isset($_REQUEST['end']) ? api_strtotime($_REQUEST['end']) : null;
 
-        if ($type == 'personal' && !empty($sessionId)) {
+        if ($type === 'personal' && !empty($sessionId)) {
             $agenda->setSessionId($sessionId);
         }
 
@@ -126,7 +124,7 @@ switch ($action) {
         echo $events;
         break;
     case 'get_user_agenda':
-        //Used in the admin user list
+        // Used in the admin user list.
         api_protect_admin_script();
 
         if (api_is_allowed_to_edit(null, true)) {

@@ -322,7 +322,6 @@ if ($allowEdition &&
         header("Location:".api_get_self()."?ticket_id=".$ticket_id);
         exit;
     }
-
 }
 
 Display::display_header();

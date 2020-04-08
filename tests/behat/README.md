@@ -23,6 +23,8 @@ then adapt the following command to the latest version:
 cd /tmp && wget https://chromedriver.storage.googleapis.com/2.34/chromedriver_linux64.zip && unzip chromedriver_linux64.zip && sudo mv chromedriver /usr/local/bin
 ```
 
+- Install google-chrome (stable version, not beta or dev).
+
 ### Chamilo configuration
 
 - An administrator user should be created with these parameters:

@@ -136,7 +136,7 @@ class OpenofficePresentation extends OpenofficeDocument
             $html_file = $file_name.'.html';
             $fp = fopen($this->base_work_dir.$dir.$html_file, 'w+');
 
-            if (substr($dir,0,1) != '/') {
+            if (substr($dir, 0, 1) != '/') {
                 $dir = '/'.$dir;
             }
             $slide_src = api_get_path(REL_COURSE_PATH).$_course['path'].'/document'.$dir.utf8_encode($file_name);

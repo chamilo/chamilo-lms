@@ -13,11 +13,11 @@
         }
     </style>
 <div>
-    {{ 'TotalNumberOfAvailableCourses' | get_lang }} :
+    {{ 'TotalNumberOfAvailableCourses'|get_lang }} :
     <strong>{{ total_number_of_courses }}</strong>
 </div>
 <div>
-    {{ 'NumberOfMatchingCourses' | get_lang }} :
+    {{ 'NumberOfMatchingCourses'|get_lang }} :
     <strong>{{ total_number_of_matching_courses }}</strong>
 </div>
     {% block course_grid %}

@@ -23,8 +23,8 @@ Feature: Users management as admin
       | email     | smarshall@example.com |
       | username  | smarshall             |
       | password  | smarshall             |
+    And I check the "#send_mail_no" radio button selector
     And I press "submit"
-    And wait for the page to be loaded
     Then I should see "The user has been added"
 
   Scenario: Search and delete a user
@@ -45,6 +45,7 @@ Feature: Users management as admin
       | email     | hrm@example.com |
       | username  | hrm             |
       | password  | hrm             |
+    And I check the "#send_mail_no" radio button selector
     And I fill in select bootstrap static input "#status_select" select "4"
     And I press "submit"
     Then I should see "The user has been added"
@@ -59,6 +60,7 @@ Feature: Users management as admin
       | username  | teacher             |
       | password  | teacher             |
     And I fill in select bootstrap static input "#status_select" select "1"
+    And I check the "#send_mail_no" radio button selector
     And I press "submit"
     Then I should see "The user has been added"
 
@@ -72,6 +74,7 @@ Feature: Users management as admin
       | username  | student             |
       | password  | student             |
     And I fill in select bootstrap static input "#status_select" select "5"
+    And I check the "#send_mail_no" radio button selector
     And I press "submit"
     Then I should see "The user has been added"
 

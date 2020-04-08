@@ -494,6 +494,20 @@ class FeatureContext extends MinkContext
     }
 
     /**
+     * @Given /^I check the "([^"]*)" radio button selector$/
+     */
+    public function iCheckTheRadioButtonBasedInSelector($element)
+    {
+        $this->getSession()->executeScript("
+            $(function() {
+                $('$element').prop('checked', true);
+            });
+        ");
+
+        return true;
+    }
+
+    /**
      * @Then /^I should see an icon with title "([^"]*)"$/
      */
     public function iShouldSeeAnIconWithTitle($value)

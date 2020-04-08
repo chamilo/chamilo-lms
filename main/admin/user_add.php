@@ -274,8 +274,8 @@ $form->addSelectLanguage('language', get_lang('Language'), null);
 
 // Send email
 $group = [];
-$group[] = $form->createElement('radio', 'send_mail', null, get_lang('Yes'), 1);
-$group[] = $form->createElement('radio', 'send_mail', null, get_lang('No'), 0);
+$group[] = $form->createElement('radio', 'send_mail', null, get_lang('Yes'), 1, ['id' => 'send_mail_yes']);
+$group[] = $form->createElement('radio', 'send_mail', null, get_lang('No'), 0, ['id' => 'send_mail_no']);
 $form->addGroup($group, 'mail', get_lang('SendMailToNewUser'));
 // Expiration Date
 $form->addElement('radio', 'radio_expiration_date', get_lang('ExpirationDate'), get_lang('NeverExpires'), 0);

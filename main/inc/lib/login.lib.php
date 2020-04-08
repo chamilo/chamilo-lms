@@ -121,12 +121,13 @@ class Login
             null,
             PERSON_NAME_EMAIL_ADDRESS
         );
-        $email_admin = api_get_setting('emailAdministrator');
 
-        if (api_mail_html('', $email_to, $email_subject, $email_body, $sender_name, $email_admin) == 1) {
+        $email_admin = api_get_setting('emailAdministrator');
+        $result = api_mail_html('', $email_to, $email_subject, $email_body, $sender_name, $email_admin);
+        if ($result == 1) {
             return get_lang('YourPasswordHasBeenReset');
         } else {
-            $admin_email = Display:: encrypted_mailto_link(
+            $mail = Display:: encrypted_mailto_link(
                 api_get_setting('emailAdministrator'),
                 api_get_person_name(
                     api_get_setting('administratorName'),
@@ -136,7 +137,7 @@ class Login
 
             return sprintf(
                 get_lang('ThisPlatformWasUnableToSendTheEmailPleaseContactXForMoreInformation'),
-                $admin_email
+                $mail
             );
         }
     }
@@ -258,7 +259,7 @@ class Login
     public static function reset_password($secret, $id, $by_username = false)
     {
         $tbl_user = Database::get_main_table(TABLE_MAIN_USER);
-        $id = intval($id);
+        $id = (int) $id;
         $sql = "SELECT
                     user_id AS uid,
                     lastname AS lastName,
@@ -267,7 +268,7 @@ class Login
                     password,
                     email,
                     auth_source
-                FROM ".$tbl_user."
+                FROM $tbl_user
                 WHERE user_id = $id";
         $result = Database::query($sql);
         $num_rows = Database::num_rows($result);
@@ -275,7 +276,7 @@ class Login
         if ($result && $num_rows > 0) {
             $user = Database::fetch_array($result);
 
-            if ($user['auth_source'] == 'extldap') {
+            if ($user['auth_source'] === 'extldap') {
                 return get_lang('CouldNotResetPassword');
             }
         } else {
@@ -285,13 +286,12 @@ class Login
         if (self::get_secret_word($user['email']) == $secret) {
             // OK, secret word is good. Now change password and mail it.
             $user['password'] = api_generate_password();
-
             UserManager::updatePassword($id, $user['password']);
 
             return self::send_password_to_user($user, $by_username);
-        } else {
-            return get_lang('NotAllowed');
         }
+
+        return get_lang('NotAllowed');
     }
 
     /**

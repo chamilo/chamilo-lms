@@ -1,4 +1,5 @@
 <?php
+
 /* For licensing terms, see /license.txt */
 
 /**
@@ -12,9 +13,8 @@
  * to generate a new one.
  *
  * @todo refactor, move relevant functions to code libraries
- *
- * @package chamilo.auth
  */
+
 require_once __DIR__.'/../inc/global.inc.php';
 
 // Custom pages
@@ -22,7 +22,7 @@ require_once __DIR__.'/../inc/global.inc.php';
 // already be some display output.
 
 // Forbidden to retrieve the lost password
-if (api_get_setting('allow_lostpassword') == 'false') {
+if (api_get_setting('allow_lostpassword') === 'false') {
     api_not_allowed(true);
 }
 
@@ -87,10 +87,8 @@ if ($allowCaptcha) {
         $options
     );
     $form->addElement('static', null, null, get_lang('ClickOnTheImageForANewOne'));
-
     $form->addElement('text', 'captcha', get_lang('EnterTheLettersYouSee'), ['size' => 40]);
     $form->addRule('captcha', get_lang('EnterTheCharactersYouReadInTheImage'), 'required', null, 'client');
-
     $form->addRule('captcha', get_lang('TheTextYouEnteredDoesNotMatchThePicture'), 'CAPTCHA', $captcha_question);
 }
 

@@ -8484,4 +8484,5 @@ $ReducedReport = "Reduced report";
 $NotInCourse = "Outside courses";
 $LearnpathCategory = "Learnpaths category";
 $MailTemplates = "Mail templates";
+$AnEmailToResetYourPasswordHasBeenSent = "An email to reset your password has been sent.";
 ?>

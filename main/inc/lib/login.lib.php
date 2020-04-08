@@ -192,7 +192,12 @@ class Login
         );
 
         if ($result == 1) {
-            return get_lang('YourPasswordHasBeenEmailed');
+            $passwordEncryption = api_get_configuration_value('password_encryption');
+            if ($passwordEncryption === 'none') {
+                return get_lang('YourPasswordHasBeenEmailed');
+            }
+
+            return get_lang('AnEmailToResetYourPasswordHasBeenSent');
         } else {
             $admin_email = Display:: encrypted_mailto_link(
                 api_get_setting('emailAdministrator'),
@@ -840,17 +845,17 @@ class Login
         }
 
         $tbl_user = Database::get_main_table(TABLE_MAIN_USER);
-        $query = "SELECT 
-                    user_id AS uid, 
-		            lastname AS lastName, 
-		            firstname AS firstName, 
-		            username AS loginName, 
-		            password, 
+        $query = "SELECT
+                    user_id AS uid,
+		            lastname AS lastName,
+		            firstname AS firstName,
+		            username AS loginName,
+		            password,
 		            email,
-                    status AS status, 
-                    official_code, 
-                    phone, 
-                    picture_uri, 
+                    status AS status,
+                    official_code,
+                    phone,
+                    picture_uri,
                     creator_id,
                     auth_source
 				 FROM $tbl_user

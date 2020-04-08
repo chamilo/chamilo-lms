@@ -8512,4 +8512,5 @@ $ReducedReport = "Reporte reducido";
 $NotInCourse = "Fuera de cursos";
 $LearnpathCategory = "Categoría de lecciones";
 $MailTemplates = "Plantillas de correos";
+$AnEmailToResetYourPasswordHasBeenSent = "Se le ha enviado un correo electrónico para restablecer su contraseña.";
 ?>

@@ -21,7 +21,6 @@ class FeatureContext extends MinkContext
      */
     public function iAmAPlatformAdministrator()
     {
-        $this->visit('/index.php?logout=logout&uid=1');
         $this->iAmOnHomepage();
         $this->fillField('login', 'admin');
         $this->fillField('password', 'admin');
@@ -315,7 +314,7 @@ class FeatureContext extends MinkContext
         $this->getSession()->executeScript(
             "
                 var textarea = $('textarea');
-                var id = textarea.attr('id'); 
+                var id = textarea.attr('id');
                 CKEDITOR.instances[id].setData(\"$value\");
                 "
         );
@@ -409,7 +408,7 @@ class FeatureContext extends MinkContext
            $('$field > option').each(function(index, option) {
                 if (option.text == '$value') {
                     $('$field').selectpicker('val', option.value);
-                }                
+                }
             });
         ");
     }
@@ -423,7 +422,7 @@ class FeatureContext extends MinkContext
         $this->getSession()->executeScript("
             var input = $('$field').filter('$class');
             var id = input.attr('id');
-            var input = $('#'+id);            
+            var input = $('#'+id);
             input.val($value);
         ");
     }

@@ -37,7 +37,6 @@ Feature: Users management as admin
     Then I should see "The user has been deleted"
 
   Scenario: Create a HRM user
-    Given I am a platform administrator
     And I am on "/main/admin/user_add.php"
     And I fill in the following:
       | firstname | HRM firstname|
@@ -51,7 +50,6 @@ Feature: Users management as admin
     Then I should see "The user has been added"
 
   Scenario: Create a teacher user
-    Given I am a platform administrator
     And I am on "/main/admin/user_add.php"
     And I fill in the following:
       | firstname | teacher firstname|
@@ -65,7 +63,6 @@ Feature: Users management as admin
     Then I should see "The user has been added"
 
   Scenario: Create a student user
-    Given I am a platform administrator
     And I am on "/main/admin/user_add.php"
     And I fill in the following:
       | firstname | student firstname|
@@ -79,7 +76,6 @@ Feature: Users management as admin
     Then I should see "The user has been added"
 
   Scenario: HRM follows teacher
-    Given I am a platform administrator
     And I am on "/main/admin/user_list.php?keyword=hrm&submit=&_qf__search_simple="
     And I should see "HRM lastname"
     And I should see "Human Resources Manager"
@@ -90,7 +86,6 @@ Feature: Users management as admin
     Then I should see "The assigned users have been updated"
 
   Scenario: HRM follows student
-    Given I am a platform administrator
     And I am on "/main/admin/user_list.php?keyword=hrm&submit=&_qf__search_simple="
     And I should see "HRM lastname"
     And I should see "Human Resources Manager"

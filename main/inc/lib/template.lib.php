@@ -1082,7 +1082,7 @@ class Template
         $form = new FormValidator(
             'form-cas-login',
             'POST',
-            null,
+            $_SERVER['REQUEST_URI'],
             null,
             null,
             FormValidator::LAYOUT_BOX_NO_LABEL

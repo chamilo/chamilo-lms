@@ -5745,6 +5745,10 @@ class UserManager
         return $icon_link;
     }
 
+    /**
+     * Add the admin role to the given user
+     * @param User $user
+     */
     public static function add_user_as_admin(User $user)
     {
         $table_admin = Database::get_main_table(TABLE_MAIN_ADMIN);
@@ -5762,15 +5766,21 @@ class UserManager
     }
 
     /**
-     * @param int $userId
+     * Remove the admin role from the given user
+     * @param User $user
      */
-    public static function remove_user_admin($userId)
+    public static function remove_user_admin($user)
     {
         $table_admin = Database::get_main_table(TABLE_MAIN_ADMIN);
-        $userId = (int) $userId;
-        if (self::is_admin($userId)) {
-            $sql = "DELETE FROM $table_admin WHERE user_id = $userId";
-            Database::query($sql);
+        if ($user) {
+            $userId = $user->getId();
+
+            if (self::is_admin($userId)) {
+                $sql = "DELETE FROM $table_admin WHERE user_id = $userId";
+                Database::query($sql);
+            }
+            $user->removeRole('ROLE_SUPER_ADMIN');
+            self::getManager()->updateUser($user, true);
         }
     }
 

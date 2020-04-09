@@ -382,7 +382,7 @@ class UserManager
             Database::query($sql);
 
             if ($isAdmin) {
-                self::add_user_as_admin($user);
+                self::addUserAsAdmin($user);
             }
 
             if (api_get_multiple_access_url()) {
@@ -5742,14 +5742,13 @@ class UserManager
         return $icon_link;
     }
 
-    public static function add_user_as_admin(User $user)
+    public static function addUserAsAdmin(User $user)
     {
-        $table_admin = Database::get_main_table(TABLE_MAIN_ADMIN);
         if ($user) {
             $userId = $user->getId();
-
             if (!self::is_admin($userId)) {
-                $sql = "INSERT INTO $table_admin SET user_id = $userId";
+                $table = Database::get_main_table(TABLE_MAIN_ADMIN);
+                $sql = "INSERT INTO $table SET user_id = $userId";
                 Database::query($sql);
             }
 
@@ -5758,16 +5757,15 @@ class UserManager
         }
     }
 
-    /**
-     * @param int $userId
-     */
-    public static function remove_user_admin($userId)
+    public static function removeUserAdmin(User $user)
     {
-        $table_admin = Database::get_main_table(TABLE_MAIN_ADMIN);
-        $userId = (int) $userId;
+        $userId = (int) $user->getId();
         if (self::is_admin($userId)) {
-            $sql = "DELETE FROM $table_admin WHERE user_id = $userId";
+            $table = Database::get_main_table(TABLE_MAIN_ADMIN);
+            $sql = "DELETE FROM $table WHERE user_id = $userId";
             Database::query($sql);
+            $user->removeRole('ROLE_SUPER_ADMIN');
+            self::getManager()->updateUser($user, true);
         }
     }
 

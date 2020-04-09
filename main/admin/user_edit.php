@@ -466,17 +466,15 @@ if ($form->validate()) {
             $up = UserManager::update_openid($user_id, $user['openid']);
         }
         $currentUserId = api_get_user_id();
-
         $userObj = api_get_user_entity($user_id);
 
-        UserManager::add_user_as_admin($userObj);
+        UserManager::addUserAsAdmin($userObj);
 
         if ($user_id != $currentUserId) {
             if ($platform_admin == 1) {
-                $userObj = api_get_user_entity($user_id);
-                UserManager::add_user_as_admin($userObj);
+                UserManager::addUserAsAdmin($userObj);
             } else {
-                UserManager::remove_user_admin($user_id);
+                UserManager::removeUserAdmin($userObj);
             }
         }
 

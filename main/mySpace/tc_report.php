@@ -135,7 +135,7 @@ echo $style;
 $tableContent = '';
 
 if ($action !== 'add_user') {
-    $conditions = ['status' => STUDENT_BOSS];
+    $conditions = ['status' => STUDENT_BOSS, 'active' => 1];
     if (!empty($languageFilter) && $languageFilter !== 'placeholder') {
         $conditions['language'] = $languageFilter;
     }

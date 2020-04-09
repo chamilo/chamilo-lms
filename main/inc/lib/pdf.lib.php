@@ -706,7 +706,6 @@ class PDF
                 $visualTheme = api_get_visual_theme();
                 $img = api_get_path(SYS_CSS_PATH).'themes/'.$visualTheme.'/images/pdf_logo_header.png';
                 if (file_exists($img)) {
-                    //$img = api_get_path(WEB_CSS_PATH).'themes/'.$visualTheme.'/images/pdf_logo_header.png';
                     $organization = "<img src='$img'>";
                 }
             }

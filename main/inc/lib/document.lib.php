@@ -2910,12 +2910,12 @@ class DocumentManager
         $course_data = api_get_course_info($courseCode);
         $document_data = self::get_document_data_by_id($document_id, $courseCode);
         $file_path = api_get_path(SYS_COURSE_PATH).$course_data['path'].'/document'.$document_data['path'];
-        if ($orientation == 'landscape') {
+
+        $pageFormat = 'A4';
+        $pdfOrientation = 'P';
+        if ($orientation === 'landscape') {
             $pageFormat = 'A4-L';
             $pdfOrientation = 'L';
-        } else {
-            $pageFormat = 'A4';
-            $pdfOrientation = 'P';
         }
         $pdf = new PDF(
             $pageFormat,
@@ -2926,10 +2926,7 @@ class DocumentManager
         if (api_get_configuration_value('use_alternative_document_pdf_footer')) {
             $view = new Template('', false, false, false, true, false, false);
             $template = $view->get_template('export/alt_pdf_footer.tpl');
-
-            $pdf->set_custom_footer([
-                'html' => $view->fetch($template),
-            ]);
+            $pdf->set_custom_footer(['html' => $view->fetch($template),]);
         }
 
         $pdf->html_to_pdf(

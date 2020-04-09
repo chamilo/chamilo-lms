@@ -107,7 +107,7 @@
                         </div>
                     </div>
 
-                    {% if _u.status == 1 %}
+                    {% if _u.status == 1 and isPlatformAdmin %}
                         <a href="{{ _p.web_main }}admin/dashboard_add_users_to_user.php?user={{ _u.id }}" class="btn btn-default btn-sm">
                             <i class="fa fa-plus" aria-hidden="true"></i>
                         </a>
@@ -154,7 +154,7 @@
                             <a class="btn btn-default" href="{{ _p.web_main }}mySpace/session.php">{{ 'FollowedSessions' | get_lang }}</a>
                         </div>
                     </div>
-                    {% if _u.status == 1 %}
+                    {% if _u.status == 1 and isPlatformAdmin %}
                         <a href="{{ _p.web_main }}admin/dashboard_add_sessions_to_user.php?user={{ _u.id }}" class="btn btn-default btn-sm">
                             <i class="fa fa-plus" aria-hidden="true"></i>
                         </a>

@@ -423,7 +423,8 @@ class CoursesAndSessionsCatalog
         $courseTable = Database::get_main_table(TABLE_MAIN_COURSE);
         $limitFilter = self::getLimitFilterFromArray($limit);
         $avoidCoursesCondition = self::getAvoidCourseCondition();
-        $visibilityCondition = $justVisible ? CourseManager::getCourseVisibilitySQLCondition('s', true) : '';
+        $visibilityCondition = $justVisible ? CourseManager::getCourseVisibilitySQLCondition('course', true) : '';
+
         $keyword = Database::escape_string($keyword);
         $categoryCode = Database::escape_string($categoryCode);
 

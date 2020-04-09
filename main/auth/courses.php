@@ -203,14 +203,13 @@ switch ($action) {
             api_not_allowed(true);
         }
 
-        $defaults = [];
-        $listCategories = CoursesAndSessionsCatalog::getCourseCategoriesTree();
-
         $form = new FormValidator('search', 'get', '', null, null, FormValidator::LAYOUT_BOX);
         $form->addHidden('action', 'search_course');
         $form->addText('search_term', get_lang('Title'));
         $select = $form->addSelect('category_code', get_lang('CourseCategories'));
 
+        $defaults = [];
+        $listCategories = CoursesAndSessionsCatalog::getCourseCategoriesTree();
         foreach ($listCategories as $category) {
             $categoryCodeItem = Security::remove_XSS($category['code']);
             $categoryName = Security::remove_XSS($category['name']);
@@ -310,7 +309,7 @@ switch ($action) {
                 $conditions = $extraField->parseConditions($options, 'course');
             }
 
-            $courses = CoursesAndSessionsCatalog::searchCourses($categoryCode, $searchTerm, $limit, false, $conditions);
+            $courses = CoursesAndSessionsCatalog::searchCourses($categoryCode, $searchTerm, $limit, true, $conditions);
             $countCoursesInCategory = CourseCategory::countCoursesInCategory(
                 $categoryCode,
                 $searchTerm,

@@ -23,7 +23,7 @@ switch ($action) {
         $bossId =  isset($_GET['boss_id']) ? (int) $_GET['boss_id'] : 0;
 
         if ($studentId && $bossId) {
-            UserManager::subscribeBossToUsers($bossId, [$studentId], false);
+            UserManager::subscribeUserToBossList($studentId, [$bossId], true);
         }
 
         echo Statistics::getBossTable($bossId);

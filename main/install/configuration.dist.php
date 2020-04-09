@@ -1450,6 +1450,9 @@ $_configuration['course_catalog_settings'] = [
 // Disable fields to add an attachment when creating and announcement.
 //$_configuration['disable_announcement_attachment'] = false;
 
+// Disable sending emails.
+//$_configuration['disable_send_mail'] = false;
+
 // KEEP THIS AT THE END
 // -------- Custom DB changes
 // Add user activation by confirmation email

@@ -8936,7 +8936,7 @@ function api_mail_html(
 ) {
     global $platform_email;
 
-    if ('1' === getenv('TRAVIS')) {
+    if (true === api_get_configuration_value('disable_send_mail')) {
         return true;
     }
 

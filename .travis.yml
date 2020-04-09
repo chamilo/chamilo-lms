@@ -102,6 +102,7 @@ script:
 #  - google-chrome-stable --version
 #  - whereis chromedriver
 #  - chromedriver --version
+  - echo "\$_configuration[\"disable_send_mail\"] = true;" >> app/config/configuration.php
   - cd tests/behat
   - pwd
   - travis_wait 45 ../../vendor/behat/behat/bin/behat -v

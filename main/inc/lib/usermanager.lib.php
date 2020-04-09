@@ -5662,16 +5662,16 @@ class UserManager
      * Subscribe boss to students.
      *
      * @param int   $bossId  The boss id
-     * @param array $usersId The users array
+     * @param array $userList
      * @param bool  $deleteOtherAssignedUsers
      *
      * @return int Affected rows
      */
-    public static function subscribeBossToUsers($bossId, $usersId, $deleteOtherAssignedUsers = true)
+    public static function subscribeBossToUsers($bossId, $userList, $deleteOtherAssignedUsers = true, $sendNotification = false)
     {
         return self::subscribeUsersToUser(
             $bossId,
-            $usersId,
+            $userList,
             USER_RELATION_TYPE_BOSS,
             false,
             $deleteOtherAssignedUsers

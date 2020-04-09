@@ -462,15 +462,13 @@ if ($form->validate()) {
             true
         );
 
-        if (api_get_setting('openid_authentication') == 'true' && !empty($user['openid'])) {
+        if (api_get_setting('openid_authentication') === 'true' && !empty($user['openid'])) {
             $up = UserManager::update_openid($user_id, $user['openid']);
         }
+
         $currentUserId = api_get_user_id();
-        $userObj = api_get_user_entity($user_id);
-
-        UserManager::addUserAsAdmin($userObj);
-
         if ($user_id != $currentUserId) {
+            $userObj = api_get_user_entity($user_id);
             if ($platform_admin == 1) {
                 UserManager::addUserAsAdmin($userObj);
             } else {

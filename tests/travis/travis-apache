@@ -6,6 +6,7 @@
         Options Indexes FollowSymLinks
         AllowOverride All
         Require all granted
+        SetEnv TRAVIS 1
     </Directory>
 
     #ErrorLog ${APACHE_LOG_DIR}/%VHOST_URL%-error.log

@@ -14,7 +14,6 @@
  *
  * @todo refactor, move relevant functions to code libraries
  */
-
 require_once __DIR__.'/../inc/global.inc.php';
 
 // Custom pages

@@ -2926,7 +2926,7 @@ class DocumentManager
         if (api_get_configuration_value('use_alternative_document_pdf_footer')) {
             $view = new Template('', false, false, false, true, false, false);
             $template = $view->get_template('export/alt_pdf_footer.tpl');
-            $pdf->set_custom_footer(['html' => $view->fetch($template),]);
+            $pdf->set_custom_footer(['html' => $view->fetch($template)]);
         }
 
         $pdf->html_to_pdf(

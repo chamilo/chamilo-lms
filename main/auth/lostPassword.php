@@ -36,13 +36,13 @@ $tool_name = get_lang('LostPassword');
 if ($reset && $userId) {
     $messageText = Login::reset_password($reset, $userId, true);
 
-    if (CustomPages::enabled() && CustomPages::exists(CustomPages::INDEX_UNLOGGED)) {
+    /*if (CustomPages::enabled() && CustomPages::exists(CustomPages::INDEX_UNLOGGED)) {
         CustomPages::display(
             CustomPages::INDEX_UNLOGGED,
             ['info' => $messageText]
         );
         exit;
-    }
+    }*/
 
     Display::addFlash(
         Display::return_message($messageText, 'info', false)

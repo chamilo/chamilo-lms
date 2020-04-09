@@ -8936,6 +8936,10 @@ function api_mail_html(
 ) {
     global $platform_email;
 
+    if (isset($_ENV['TRAVIS']) && '1' === $_ENV['TRAVIS']) {
+        return true;
+    }
+
     $mail = new PHPMailer();
     $mail->Mailer = $platform_email['SMTP_MAILER'];
     $mail->Host = $platform_email['SMTP_HOST'];

@@ -29,6 +29,7 @@ env:
   global:
     - VHOST_URL=localhost
     - CHAMILO_VERSION=1.11.x
+    - TRAVIS=1
 
 allow_failures:
   - php: 7.4
@@ -38,8 +39,6 @@ before_install:
   #- sudo apt-get install apache2 libapache2-mod-fastcgi
   # Fix travis error https://github.com/travis-ci/travis-ci/issues/8607
   - sudo rm -vf /etc/apt/sources.list.d/*riak*
-  - sudo apt-get update -qq
-  - sudo apt-get install -y -qq postfix
   # Get Chrome
   #- wget -q -O - https://dl-ssl.google.com/linux/linux_signing_key.pub | sudo apt-key add -
   #- sudo apt-get update
@@ -102,12 +101,6 @@ before_install:
   # Check the result of index.php and check if main.js is build in travis
   - curl $VHOST_URL
   - ls -la web/build
-
-before_script:
-  - sudo service postfix stop
-  - smtp-sink -d "%d.%H.%M.%S" localhost:2500 1000 &
-  - echo -e '#!/usr/bin/env bash\nexit 0' | sudo tee /usr/sbin/sendmail
-  - echo 'sendmail_path = "/usr/sbin/sendmail -t -i "' | sudo tee "/home/travis/.phpenv/versions/`php -i | grep "PHP Version" | head -n 1 | grep -o -P '\d+\.\d+\.\d+.*'`/etc/conf.d/sendmail.ini"
 
 script:
 #  - whereis google-chrome-stable

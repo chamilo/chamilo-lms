@@ -151,6 +151,7 @@ class UserManager
         $userManager = self::getManager();
         $user->setPlainPassword($password);
         $userManager->updateUser($user, true);
+        Event::addEvent(LOG_USER_PASSWORD_UPDATE, LOG_USER_ID, $userId);
     }
 
     /**
@@ -1438,9 +1439,11 @@ class UserManager
 
         if (!is_null($password)) {
             $user->setPlainPassword($password);
+            Event::addEvent(LOG_USER_PASSWORD_UPDATE, LOG_USER_ID, $user_id);
         }
 
         $userManager->updateUser($user, true);
+        Event::addEvent(LOG_USER_UPDATE, LOG_USER_ID, $user_id);
 
         if ($change_active == 1) {
             if ($active == 1) {

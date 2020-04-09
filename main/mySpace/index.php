@@ -298,7 +298,6 @@ $view->assign(
 $view->assign('studentboss', STUDENT_BOSS);
 $view->assign('drh', DRH);
 $view->assign('stats', $stats);
-$view->assign('isPlatformAdmin', $is_platform_admin);
 
 $form = new FormValidator(
     'search_user',

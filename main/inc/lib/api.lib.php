@@ -8936,7 +8936,7 @@ function api_mail_html(
 ) {
     global $platform_email;
 
-    if (isset($_ENV['TRAVIS']) && '1' === $_ENV['TRAVIS']) {
+    if ('1' === getenv('TRAVIS')) {
         return true;
     }
 

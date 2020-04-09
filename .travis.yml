@@ -23,16 +23,11 @@ php:
   - 7.1
   - 7.2
   - 7.3
-#  - 7.4
 
 env:
   global:
     - VHOST_URL=localhost
     - CHAMILO_VERSION=1.11.x
-    - TRAVIS=1
-
-allow_failures:
-  - php: 7.4
 
 before_install:
   #- sudo apt-get update
@@ -110,7 +105,6 @@ script:
   - cd tests/behat
   - pwd
   - travis_wait 45 ../../vendor/behat/behat/bin/behat -v
-
   # - sudo cat /var/log/apache2/$VHOST_URL-access.log
 
 after_failure:

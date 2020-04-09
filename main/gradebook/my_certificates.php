@@ -31,9 +31,12 @@ if (empty($courseList) && empty($sessionList)) {
     );
 }
 
+$hideExportLinkStudent = api_get_setting('hide_certificate_export_link_students') === 'false';
+
 $template = new Template(get_lang('MyCertificates'));
 $template->assign('course_list', $courseList);
 $template->assign('session_list', $sessionList);
+$template->assign('allow_export', $hideExportLinkStudent);
 $templateName = $template->get_template('gradebook/my_certificates.tpl');
 $content = $template->fetch($templateName);
 

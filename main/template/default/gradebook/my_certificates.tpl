@@ -17,12 +17,16 @@
                         <td>{{ row.course }}</td>
                         <td class="text-right">{{ row.score }}</td>
                         <td class="text-center">{{ row.date }}</td>
+
+                        {% if allow_export %}
                         <td class="text-right">
                             <a href="{{ row.pdf }}" target="_blank" class="btn btn-primary btn-block">
                                 <i class="fa fa-file-pdf-o" aria-hidden="true"></i>
                                 {{ 'DownloadCertificatePdf'|get_lang }}
                             </a>
                         </td>
+                        {% endif %}
+
                         <td class="text-right">
                             <a href="{{ row.link }}" target="_blank" class="btn btn-default btn-block">
                                 <em class="fa fa-external-link"></em> {{ 'Certificate'|get_lang }}

@@ -33,7 +33,6 @@ class FeatureContext extends MinkContext
      */
     public function iAmATeacher()
     {
-        $this->visit('/index.php?logout=logout');
         $this->iAmOnHomepage();
         $this->fillField('login', 'mmosquera');
         $this->fillField('password', 'mmosquera');
@@ -45,7 +44,6 @@ class FeatureContext extends MinkContext
      */
     public function iAmAStudent()
     {
-        $this->visit('/index.php?logout=logout');
         $this->iAmOnHomepage();
         $this->fillField('login', 'acostea');
         $this->fillField('password', 'acostea');

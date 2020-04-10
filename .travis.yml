@@ -88,6 +88,8 @@ before_install:
   # Check chamilo status
   - php -d date.timezone="Europe/Paris" $TRAVIS_BUILD_DIR/chash/chash.php chash:chamilo_status
   - ls -la
+  - sudo echo "\$_configuration[\"disable_send_mail\"] = true;" >> app/config/configuration.php
+  - sudo cat app/config/configuration.php
   # Permissions
   - sudo chown -R www-data:www-data $TRAVIS_BUILD_DIR
   - sudo chown -R 775 $TRAVIS_BUILD_DIR
@@ -102,8 +104,6 @@ script:
 #  - google-chrome-stable --version
 #  - whereis chromedriver
 #  - chromedriver --version
-  - sudo echo "\$_configuration[\"disable_send_mail\"] = true;" >> app/config/configuration.php
-  - sudo cat app/config/configuration.php
   - cd tests/behat
   - pwd
   - travis_wait 45 ../../vendor/behat/behat/bin/behat -v

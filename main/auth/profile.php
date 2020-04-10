@@ -1,4 +1,5 @@
 <?php
+
 /* For licensing terms, see /license.txt */
 
 use Chamilo\UserBundle\Entity\User;
@@ -9,22 +10,18 @@ use ChamiloSession as Session;
  * optionally it allows users to modify their profile as well.
  *
  * See inc/conf/profile.conf.php to modify settings
- *
- * @package chamilo.auth
  */
 $cidReset = true;
 require_once __DIR__.'/../inc/global.inc.php';
 
 $this_section = SECTION_MYPROFILE;
-$allowSocialTool = api_get_setting('allow_social_tool') == 'true';
+$allowSocialTool = api_get_setting('allow_social_tool') === 'true';
 if ($allowSocialTool) {
     $this_section = SECTION_SOCIAL;
 }
 
 $logInfo = [
     'tool' => 'profile',
-    'tool_id' => 0,
-    'tool_id_detail' => 0,
     'action' => $this_section,
 ];
 Event::registerLog($logInfo);
@@ -97,7 +94,10 @@ $user_data = api_get_user_info(
 );
 $array_list_key = UserManager::get_api_keys(api_get_user_id());
 $id_temp_key = UserManager::get_api_key_id(api_get_user_id(), 'dokeos');
-$value_array = $array_list_key[$id_temp_key];
+$value_array = [];
+if (isset($array_list_key[$id_temp_key])) {
+    $value_array = $array_list_key[$id_temp_key];
+}
 $user_data['api_key_generate'] = $value_array;
 
 if ($user_data !== false) {

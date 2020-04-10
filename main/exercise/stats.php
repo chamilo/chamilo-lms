@@ -44,9 +44,6 @@ if (empty($sessionId)) {
 }
 $count_students = count($students);
 
-//$question_list = $objExercise->get_validated_question_list();
-// why validated list?? this is not stat per execution but for all of them ? 
-// did not see this file used anywhere else so
 $question_list = $objExercise->questionList;
 
 $data = [];

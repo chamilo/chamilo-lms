@@ -61,6 +61,8 @@ class Notification extends Model
      */
     public function __construct()
     {
+        // Get config from mail.conf.php, as loaded by global.inc.php
+        $platform_email = $GLOBALS['platform_email'];
         $this->table = Database::get_main_table(TABLE_NOTIFICATION);
         if (!empty($platform_email['SMTP_FROM_EMAIL'])) {
             $this->adminEmail = $platform_email['SMTP_FROM_EMAIL'];

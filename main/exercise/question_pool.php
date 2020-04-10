@@ -965,6 +965,9 @@ if ($fromExercise <= 0) {
     }
 }
 
+ // remove duplicates 
+ $aabbcc=[]; foreach($mainQuestionList as $q001) $aabbcc[$q001['id']]=$q001; $mainQuestionList=$aabbcc; unset($aabbcc);
+
 $data = [];
 if (is_array($mainQuestionList)) {
     foreach ($mainQuestionList as $question) {

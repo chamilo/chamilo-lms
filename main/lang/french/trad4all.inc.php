@@ -8417,4 +8417,6 @@ $NotInCourse = "En dehors des cours";
 $LearnpathCategory = "Catégorie de parcours";
 $MailTemplates = "Modèles de courriels";
 $AnEmailToResetYourPasswordHasBeenSent = "Un mail pour réinitialiser votre mot de passe vous a été envoyé.";
+$TotalNumberOfAvailableCourses = "Nombre total de cours disponibles";
+$NumberOfMatchingCourses = "Nombre de cours correspondant à la recherche";
 ?>

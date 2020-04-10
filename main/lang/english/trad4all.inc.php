@@ -8485,4 +8485,6 @@ $NotInCourse = "Outside courses";
 $LearnpathCategory = "Learnpaths category";
 $MailTemplates = "Mail templates";
 $AnEmailToResetYourPasswordHasBeenSent = "An email to reset your password has been sent.";
+$TotalNumberOfAvailableCourses = "Total number of available courses";
+$NumberOfMatchingCourses = "Number of matching courses";
 ?>

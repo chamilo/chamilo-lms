@@ -55,7 +55,6 @@ class FeatureContext extends MinkContext
      */
     public function iAmAnHR()
     {
-        $this->visit('/index.php?logout=logout');
         $this->iAmOnHomepage();
         $this->fillField('login', 'ptook');
         $this->fillField('password', 'ptook');
@@ -67,7 +66,6 @@ class FeatureContext extends MinkContext
      */
     public function iAmAStudentBoss()
     {
-        $this->visit('/index.php?logout=logout');
         $this->iAmOnHomepage();
         $this->fillField('login', 'abaggins');
         $this->fillField('password', 'abaggins');
@@ -79,7 +77,6 @@ class FeatureContext extends MinkContext
      */
     public function iAmAnInvitee()
     {
-        $this->visit('/index.php?logout=logout');
         $this->iAmOnHomepage();
         $this->fillField('login', 'bproudfoot');
         $this->fillField('password', 'bproudfoot');

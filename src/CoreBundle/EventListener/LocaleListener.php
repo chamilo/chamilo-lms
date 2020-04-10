@@ -46,6 +46,7 @@ class LocaleListener implements EventSubscriberInterface
         if (!$installed) {
             return;
         }
+
         // Try to see if the locale has been set as a _locale routing parameter (from lang switcher)
         //if ($locale = $request->getSession('_locale')) {
         if (false) {
@@ -62,12 +63,11 @@ class LocaleListener implements EventSubscriberInterface
             if (!empty($platformLocale)) {
                 $localeList['platform_lang'] = $platformLocale;
             }
-
             // 2. Check user locale
             // _locale_user is set when user logins the system check UserLocaleListener
             $userLocale = $request->getSession()->get('_locale_user');
+
             if (!empty($userLocale)) {
-                //$locale = $userLocale;
                 $localeList['user_profil_lang'] = $userLocale;
             }
 

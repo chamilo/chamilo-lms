@@ -75,6 +75,7 @@ class SettingsManager implements SettingsManagerInterface
         $this->repository = $repository;
         $this->eventDispatcher = $eventDispatcher;
         $this->request = $request;
+        $this->schemaList = [];
     }
 
     /**
@@ -200,26 +201,15 @@ class SettingsManager implements SettingsManagerInterface
 
     public function loadAll()
     {
-        $session = $this->request->getCurrentRequest()->getSession();
+        /*$session = $this->request->getCurrentRequest()->getSession();
         $schemaList = $session->get('schemas');
-
-        if (!empty($schemaList)) {
-            $this->schemaList = $schemaList;
-
-            return true;
-        }
-
+        */
         if (empty($this->schemaList)) {
             $schemas = array_keys($this->getSchemas());
-
-            /**
-             * @var string
-             * @var SchemaInterface $schema
-             */
             $schemaList = [];
             $settingsBuilder = new SettingsBuilder();
             $all = $this->getAllParametersByCategory();
-
+            /** @var SchemaInterface $schema */
             foreach ($schemas as $schema) {
                 $schemaRegister = $this->schemaRegistry->get($schema);
                 $schemaRegister->buildSettings($settingsBuilder);
@@ -237,13 +227,12 @@ class SettingsManager implements SettingsManagerInterface
                         }
                     }
                 }
-
                 $parameters = $settingsBuilder->resolve($parameters);
                 $settings->setParameters($parameters);
                 $schemaList[$name] = $settings;
             }
             $this->schemaList = $schemaList;
-            $session->set('schemas', $schemaList);
+            //$session->set('schemas', $schemaList);
         }
     }
 
@@ -318,9 +307,8 @@ class SettingsManager implements SettingsManagerInterface
             }
         }
         $settings->setParameters($parameters);
-        $persistedParameters = $this->repository->findBy(
-            ['category' => $this->convertServiceToNameSpace($settings->getSchemaAlias())]
-        );
+        $category = $this->convertServiceToNameSpace($settings->getSchemaAlias());
+        $persistedParameters = $this->repository->findBy(['category' => $category]);
 
         $persistedParametersMap = [];
         /** @var SettingsCurrent $parameter */

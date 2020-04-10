@@ -21,8 +21,6 @@ class UserLocaleListener
 {
     /** @var SessionInterface */
     private $session;
-    /** @var SettingsManager */
-    //private $settings;
 
     /**
      * UserLocaleListener constructor.
@@ -30,7 +28,6 @@ class UserLocaleListener
     public function __construct(SessionInterface $session)
     {
         $this->session = $session;
-        //$this->settings = $settings;
     }
 
     /**

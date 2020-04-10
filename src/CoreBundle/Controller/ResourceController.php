@@ -134,12 +134,6 @@ class ResourceController extends AbstractResourceController implements CourseCon
 
         $grid->setRouteUrl($this->generateUrl($routeName, $resourceParams));
 
-        //$grid->hideFilters();
-        //$grid->setLimits(20);
-        //$grid->isReadyForRedirect();
-        //$grid->setMaxResults(1);
-        //$grid->setLimits(2);
-        //$grid->setColumns($columns);
         $routeParams = $resourceParams;
         $routeParams['id'] = null;
 
@@ -329,15 +323,16 @@ class ResourceController extends AbstractResourceController implements CourseCon
             $setVisibleParameters = function (RowAction $action, Row $row) use ($routeParams) {
                 /** @var AbstractResource $resource */
                 $resource = $row->getEntity();
-                $allowedEdit = $this->isGranted(ResourceNodeVoter::EDIT, $resource->getResourceNode());
+                $resourceNode = $resource->getResourceNode();
+                $allowedEdit = $this->isGranted(ResourceNodeVoter::EDIT, $resourceNode);
 
                 if (false === $allowedEdit) {
                     return null;
                 }
 
-                $id = $resource->getResourceNode()->getId();
-
+                $id = $resourceNode->getId();
                 $icon = 'fa-eye-slash';
+
                 if ($this->hasCourse()) {
                     $link = $resource->getCourseSessionResourceLink($this->getCourse(), $this->getSession());
                 } else {
@@ -347,6 +342,7 @@ class ResourceController extends AbstractResourceController implements CourseCon
                 if (null === $link) {
                     return null;
                 }
+
                 if (ResourceLink::VISIBILITY_PUBLISHED === $link->getVisibility()) {
                     $icon = 'fa-eye';
                 }
@@ -379,7 +375,7 @@ class ResourceController extends AbstractResourceController implements CourseCon
             }
 
             // More action.
-            $myRowAction = new RowAction(
+            /*$myRowAction = new RowAction(
                 $this->trans('More'),
                 'chamilo_core_resource_preview',
                 false,
@@ -388,7 +384,7 @@ class ResourceController extends AbstractResourceController implements CourseCon
             );
 
             $myRowAction->addManipulateRender($setNodeParameters);
-            $grid->addRowAction($myRowAction);
+            $grid->addRowAction($myRowAction);*/
 
             // Delete action.
             $myRowAction = new RowAction(
@@ -775,7 +771,7 @@ class ResourceController extends AbstractResourceController implements CourseCon
         }
 
         $em->remove($resourceNode);
-        $this->addFlash('success', $this->trans('Deleted'));
+        $this->addFlash('success', $this->trans('Deleted').': '.$resourceNode->getSlug());
         $em->flush();
 
         $routeParams = $this->getResourceParams($request);

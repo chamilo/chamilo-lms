@@ -26,8 +26,6 @@ class ResourceUploadController extends BlueimpController
     /**
      * This will upload an image to the selected node id.
      * This action is listend by the ResourceUploadListener.
-     *
-     * @return JsonResponse
      */
     public function upload(): JsonResponse
     {
@@ -77,13 +75,11 @@ class ResourceUploadController extends BlueimpController
             /** @var UploadedFile $file */
             foreach ($files as $file) {
                 try {
-                    //$title = $file->getClientOriginalName();
                     if (!($file instanceof FileInterface)) {
                         $file = new FilesystemFile($file);
                     }
 
                     $this->validate($file, $request, $response);
-
                     $this->dispatchPreUploadEvent($file, $response, $request);
 
                     $resource = $repo->saveUpload($file, $course, $session);

@@ -1,4 +1,5 @@
 dist: bionic
+os: linux
 language: php
 php:
   7.2
@@ -38,12 +39,12 @@ before_install:
   - php -m
   - php -ini | grep memory_limit
   # Fix travis error https://github.com/travis-ci/travis-ci/issues/8607
-  - sudo rm -vf /etc/apt/sources.list.d/*riak*
+  - rm -vf /etc/apt/sources.list.d/*riak*
   - google-chrome-stable --headless --disable-gpu --remote-debugging-port=9222 http://localhost &
   # Get Chrome driver
   - wget https://chromedriver.storage.googleapis.com/2.35/chromedriver_linux64.zip && unzip chromedriver_linux64.zip
-  - sudo mv chromedriver /usr/bin
-  - sudo chmod +x /usr/bin/chromedriver
+  - mv chromedriver /usr/bin
+  - chmod +x /usr/bin/chromedriver
   - chromedriver --version
 
   # Get Selenium
@@ -53,8 +54,8 @@ before_install:
   - java -jar selenium-server-standalone-3.141.59.jar -log selenium.log  > /dev/null &
 
   # Use default config
-  - sudo apt-get update
-  - sudo apt-get install php php-mysql php-xml php-gd php-intl php-soap php-bcmath
+  - apt-get update
+  - apt-get install php php-mysql php-xml php-gd php-intl php-soap php-bcmath
   #- sudo apt-get install php7.3 php7.3-mysql php7.3-xml php7.3-gd php7.3-intl php7.3-soap php7.3-bcmath
   #- sudo a2enmod rewrite actions fastcgi alias
 
@@ -63,8 +64,8 @@ before_install:
   - bash tests/travis/setup-apache.sh
 
   # Starting Apache
-  - sudo service apache2 restart
-  - sudo cat /etc/hosts
+  - service apache2 restart
+  - cat /etc/hosts
   - curl http://localhost/php.php
 
 install:
@@ -73,16 +74,16 @@ install:
   # Install bundle js/css
   - php bin/console assets:install
   # Permissions
-  - sudo chmod -R 777 var public
+  - chmod -R 777 var public
   # Dump js routes
   - php bin/console fos:js-routing:dump --format=json --target=public/js/fos_js_routes.json
   # Install third party js/css libraries
   - yarn install
   - ./node_modules/.bin/encore dev
   # Permissions
-  - sudo chown -R www-data:www-data $TRAVIS_BUILD_DIR
-  - sudo chown -R 775 $TRAVIS_BUILD_DIR
-  - sudo chmod +x /home/travis/build
+  - chown -R www-data:www-data $TRAVIS_BUILD_DIR
+  - chown -R 775 $TRAVIS_BUILD_DIR
+  - chmod +x /home/travis/build
   - ls -la public/build
 
 script:
@@ -121,8 +122,9 @@ script:
   - ../../vendor/behat/behat/bin/behat features/toolLink.feature -v
   - ../../vendor/behat/behat/bin/behat features/toolLp.feature -v
   - ../../vendor/behat/behat/bin/behat features/toolWork.feature -v
+
 after_failure:
-  - sudo cat /var/log/apache2/error.log
+  - cat /var/log/apache2/error.log
 
 # configure notifications (email, IRC, campfire etc)
 notifications:

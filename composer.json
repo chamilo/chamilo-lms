@@ -54,7 +54,7 @@
         "doctrine/doctrine-fixtures-bundle": "^3.0",
         "doctrine/doctrine-migrations-bundle": "~2.0",
         "doctrine/orm": "~2.7",
-        "endroid/qr-code": "~3.4",
+        "endroid/qr-code": "~3.7",
         "erusev/parsedown": "~1.7",
         "essence/essence": "~3.0",
         "ext-bcmath": "*",

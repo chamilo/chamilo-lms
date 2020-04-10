@@ -74,7 +74,7 @@ class ResourceNode
     /**
      * @var ResourceLink[]
      *
-     * @ORM\OneToMany(targetEntity="ResourceLink", mappedBy="resourceNode", cascade={"remove"}, fetch="EAGER")
+     * @ORM\OneToMany(targetEntity="ResourceLink", mappedBy="resourceNode", cascade={"remove"})
      */
     protected $resourceLinks;
 
@@ -82,7 +82,7 @@ class ResourceNode
      * @var ResourceFile
      * @Groups({"list"})
      *
-     * @ORM\OneToOne(targetEntity="ResourceFile", inversedBy="resourceNode", orphanRemoval=true, fetch="EAGER")
+     * @ORM\OneToOne(targetEntity="ResourceFile", inversedBy="resourceNode", orphanRemoval=true)
      * @ORM\JoinColumn(name="resource_file_id", referencedColumnName="id", onDelete="CASCADE")
      */
     protected $resourceFile;

@@ -79,9 +79,6 @@ class CourseRepository extends ResourceRepository
 
         $queryBuilder->where($wherePart);
 
-        //var_dump($queryBuilder->getQuery()->getSQL());
-        //$q = $queryBuilder->getQuery();
-        //return $q->execute();
         return $queryBuilder;
     }
 

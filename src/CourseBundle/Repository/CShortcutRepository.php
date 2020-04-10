@@ -55,10 +55,6 @@ final class CShortcutRepository extends ResourceRepository
             $qb->setParameter('parentNode', $parentNode);
         }
 
-        //$qb->andWhere('node.creator = :creator');
-        //$qb->setParameter('creator', $user);
-        //var_dump($qb->getQuery()->getSQL(), $parentNode->getId());exit;
-
         return $qb;
     }
 

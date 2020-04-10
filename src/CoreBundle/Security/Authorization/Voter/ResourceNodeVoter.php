@@ -309,7 +309,6 @@ class ResourceNodeVoter extends Voter
         // Set rights from the ResourceRight
         foreach ($rights as $right) {
             //$roles[$right->getMask()] = $right->getRole();
-            //var_dump($right->getRole());
             $acl->allow($right->getRole(), null, $right->getMask());
         }
 

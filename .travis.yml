@@ -91,8 +91,7 @@ before_install:
   # Permissions
   - sudo chown -R www-data:www-data $TRAVIS_BUILD_DIR
   - sudo chown -R 775 $TRAVIS_BUILD_DIR
-  - sudo echo "\$_configuration[\"disable_send_mail\"] = true;" >> app/config/configuration.php
-  - sudo cat app/config/configuration.php
+  - bash tests/travis/post_installation.sh
   - sudo chmod +x /home/travis/build
   - sudo service apache2 restart
   # Check the result of index.php and check if main.js is build in travis

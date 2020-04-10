@@ -3,6 +3,8 @@
 
 namespace Chamilo\CoreBundle\Entity;
 
+use Database;
+use Doctrine\Common\Collections\Criteria;
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Mapping\Annotation as Gedmo;
 use Sylius\Component\Attribute\Model\Attribute as BaseAttribute;
@@ -368,5 +370,122 @@ class ExtraField extends BaseAttribute
             default:
                 return 'text';
         }
+    }
+
+    /**
+     * Retreives and returns the value stored in this extra field for an item
+     *
+     * @param $itemId string|int the item identifier
+     *
+     * @return mixed|null the value if found, null if not found
+     */
+    public function getValueForItem($itemId)
+    {
+        $values = Database::getManager()->getRepository(
+            "ChamiloCoreBundle:ExtraFieldValues"
+        )->matching(
+            Criteria::create()->where(
+                Criteria::expr()->eq('field', $this)
+            )->andWhere(
+                Criteria::expr()->eq('itemId', $itemId)
+            )
+        );
+        return count($values) === 1 ? $values[0] : null;
+    }
+
+    /**
+     * Retreives and returns the value stored in this extra field for each item
+     *
+     * @return array itemId => value
+     */
+    public function getValueForEachItem()
+    {
+        $values = [];
+        /** @var ExtraFieldValues $value */
+        foreach (Database::getManager()->getRepository(
+            "ChamiloCoreBundle:ExtraFieldValues"
+        )->matching(
+            Criteria::create()->where(
+                Criteria::expr()->eq('field', $this)
+            )
+        ) as $value) {
+            $values[$value->getItemId()] = $value->getValue();
+        }
+        return $values;
+    }
+
+    /**
+     * Retreives and returns the value stored in each extra field for each item
+     *
+     * @param ExtraField[] $extraFields
+     *
+     * @return array itemId => [ fieldId => value ]
+     */
+    public static function getValueForEachExtraFieldForEachItem($extraFields, $itemIds)
+    {
+        $values = [];
+        /** @var ExtraFieldValues $value */
+        foreach (Database::getManager()->getRepository(
+            "ChamiloCoreBundle:ExtraFieldValues"
+        )->matching(
+            Criteria::create()->where(
+                Criteria::expr()->in('field', $extraFields)
+            )->andWhere(
+                Criteria::expr()->in('itemId', $itemIds)
+            )
+        ) as $value) {
+            $itemId = $value->getItemId();
+            if (!array_key_exists($itemId, $values)) {
+                $values[$itemId] = [];
+            }
+            $values[$itemId][$value->getField()->getId()] = $value->getValue();
+        }
+        return $values;
+    }
+
+    /**
+     * Retreives extra fields from a list of variables
+     *
+     * @param string[] $variables extra field variables
+     * @param int      $extraFieldType such as self::COURSE_FIELD_TYPE
+     *
+     * @return ExtraField[] found extra fields
+     */
+    public static function getExtraFieldsFromVariables($variables, $extraFieldType)
+    {
+        /** @var ExtraField[] $extraFields */
+        $extraFields = Database::getManager()->getRepository("ChamiloCoreBundle:ExtraField")->matching(
+            Criteria::create()->where(
+                Criteria::expr()->eq('extraFieldType', $extraFieldType)
+            )->andWhere(
+                Criteria::expr()->in('variable', $variables)
+            )
+        );
+        return $extraFields;
+    }
+
+    /**
+     * Retreives and sorts extra fields from a list of variables
+     *
+     * @param string[] $variables extra field variables
+     * @param int      $extraFieldType such as self::COURSE_FIELD_TYPE
+     *
+     * @return ExtraField[] the sorted extra fields, in the same order as the variables
+     */
+    public static function getExtraFieldsFromVariablesOrdered($variables, $extraFieldType)
+    {
+        /** @var ExtraField[] $sortedExtraFields */
+        $sortedExtraFields = [];
+        /** @var ExtraField[] $extraFields */
+        $extraFields = self::getExtraFieldsFromVariables($variables, $extraFieldType);
+        foreach ($variables as $variable) {
+            foreach ($extraFields as $extraField) {
+                if ($extraField->getVariable() === $variable) {
+                    $sortedExtraFields[] = $extraField;
+                    break;
+                }
+            }
+        }
+        return $sortedExtraFields;
     }
 }

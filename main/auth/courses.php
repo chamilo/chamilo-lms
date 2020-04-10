@@ -236,6 +236,13 @@ switch ($action) {
             $jqueryReadyContent = $returnParams['jquery_ready_content'];
         }
 
+        $sortKeySelect = $form->addSelect(
+            'sortKeys',
+            get_lang('SortKeys'),
+            CoursesAndSessionsCatalog::courseSortOptions(),
+            [ 'multiple' => true ]
+        );
+
         $conditions = [];
         $fields = [];
 
@@ -314,7 +321,14 @@ switch ($action) {
                 $conditions = $extraField->parseConditions($options, 'course');
             }
 
-            $courses = CoursesAndSessionsCatalog::searchCourses($categoryCode, $searchTerm, $limit, true, $conditions);
+            $courses = CoursesAndSessionsCatalog::searchAndSortCourses(
+                $categoryCode,
+                $searchTerm,
+                $limit,
+                true,
+                $conditions,
+                $sortKeySelect->getValue()
+            );
             $countCoursesInCategory = CourseCategory::countCoursesInCategory(
                 $categoryCode,
                 $searchTerm,
@@ -367,7 +381,8 @@ switch ($action) {
                 $pageTotal,
                 $categoryCode,
                 $action,
-                $fields
+                $fields,
+                $sortKeySelect->getValue()
             );
         }
 

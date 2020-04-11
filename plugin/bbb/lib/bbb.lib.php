@@ -131,19 +131,28 @@ class bbb
     }
 
     /**
+     * @param int $courseId  Optional. Course ID.
+     * @param int $sessionId Optional. Session ID.
+     * @param int $groupId   Optional. Group ID.
+     *
      * @return string
      */
-    public function getListingUrl()
+    public function getListingUrl($courseId = 0, $sessionId = 0, $groupId = 0)
     {
-        return api_get_path(WEB_PLUGIN_PATH).'bbb/listing.php?'.$this->getUrlParams();
+        return api_get_path(WEB_PLUGIN_PATH).'bbb/listing.php?'
+            .$this->getUrlParams($courseId, $sessionId, $groupId);
     }
 
     /**
+     * @param int $courseId  Optional. Course ID.
+     * @param int $sessionId Optional. Session ID.
+     * @param int $groupId   Optional. Group ID.
+     *
      * @return string
      */
-    public function getUrlParams()
+    public function getUrlParams($courseId = 0, $sessionId = 0, $groupId = 0)
     {
-        if (empty($this->courseCode)) {
+        if (empty($this->courseCode) && !$courseId) {
             if ($this->isGlobalConferencePerUserEnabled()) {
                 return 'global=1&user_id='.$this->userId;
             }
@@ -157,9 +166,9 @@ class bbb
 
         return http_build_query(
             [
-                'cidReq' => $this->courseCode,
-                'id_session' => $this->sessionId,
-                'gidReq' => $this->groupId,
+                'cidReq' => $courseId ? api_get_course_entity($courseId)->getCode() : $this->courseCode,
+                'id_session' => $sessionId ?: $this->sessionId,
+                'gidReq' => $groupId ?: $this->groupId,
             ]
         );
     }
@@ -1236,7 +1245,7 @@ class bbb
             } else {
                 $links[] = Display::url(
                     Display::return_icon('course_home.png', get_lang('GoToCourse')),
-                    $this->getListingUrl()
+                    $this->getListingUrl($meetingInfo['c_id'], $meetingInfo['session_id'], $meetingInfo['group_id'])
                 );
 
                 return $links;
@@ -1286,7 +1295,7 @@ class bbb
         } else {
             $links[] = Display::url(
                 Display::return_icon('course_home.png', get_lang('GoToCourse')),
-                $this->getListingUrl()
+                $this->getListingUrl($meetingInfo['c_id'], $meetingInfo['session_id'], $meetingInfo['group_id'])
             );
         }
 

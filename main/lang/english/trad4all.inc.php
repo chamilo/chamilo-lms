@@ -8487,4 +8487,15 @@ $MailTemplates = "Mail templates";
 $AnEmailToResetYourPasswordHasBeenSent = "An email to reset your password has been sent.";
 $TotalNumberOfAvailableCourses = "Total number of available courses";
 $NumberOfMatchingCourses = "Number of matching courses";
+$SessionsByDate = "Sessions by date";
+$GeneralStats = "Global statistics";
+$Weeks = "Weeks";
+$SessionCount = "Sessions count";
+$SessionsPerWeek = "Sessions per week";
+$AverageUserPerSession = "Average number of users per session";
+$AverageSessionPerGeneralCoach = "Average number of sessions per general session coach";
+$SessionsPerCategory = "Sessions per category";
+$SessionsPerLanguage = "Sessions per language";
+$CountOfSessions = "Number of sessions";
+$CourseInSession = "Courses in sessions";
 ?>

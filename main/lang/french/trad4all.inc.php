@@ -8419,4 +8419,15 @@ $MailTemplates = "Modèles de courriels";
 $AnEmailToResetYourPasswordHasBeenSent = "Un mail pour réinitialiser votre mot de passe vous a été envoyé.";
 $TotalNumberOfAvailableCourses = "Nombre total de cours disponibles";
 $NumberOfMatchingCourses = "Nombre de cours correspondant à la recherche";
+$SessionsByDate = "Sessions par dates";
+$GeneralStats = "Statistiques générales";
+$Weeks = "Semaines";
+$SessionCount = "Nombre de sessions";
+$SessionsPerWeek = "Sessions par semaine";
+$AverageUserPerSession = "Nombre moyen d'utilisateurs par session";
+$AverageSessionPerGeneralCoach = "Nombre de sessions par tuteur général de session";
+$SessionsPerCategory = "Sessions par catégorie";
+$SessionsPerLanguage = "Sessions par langue";
+$CountOfSessions = "Nombre de sessions";
+$CourseInSession = "Cours dans les sessions";
 ?>

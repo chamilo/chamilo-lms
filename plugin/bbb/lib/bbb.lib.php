@@ -107,13 +107,15 @@ class bbb
             }
 
             $this->salt = $bbb_salt;
-            if (substr($bbb_host, -1, 1) !== '/') {
-                $bbb_host .= '/';
+            if (!empty($bbb_host)) {
+                if (substr($bbb_host, -1, 1) !== '/') {
+                    $bbb_host .= '/';
+                }
+                if (!preg_match('#/bigbluebutton/$#', $bbb_host)) {
+                    $bbb_host .= 'bigbluebutton/';
+                }
             }
             $info = parse_url($bbb_host);
-            if (!preg_match('#/bigbluebutton/$#', $bbb_host)) {
-                $bbb_host .= 'bigbluebutton/';
-            }
             $this->url = $bbb_host;
 
             if (isset($info['scheme'])) {
@@ -1715,9 +1717,26 @@ class bbb
      */
     public function isServerRunning()
     {
+        return true;
+        //return BigBlueButtonBN::isServerRunning($this->protocol.$this->url);
+    }
+
+    /**
+     * Checks if the video conference plugin is properly configured
+     * @return bool True if plugin has a host and a salt, false otherwise
+     * @assert () === false
+     */
+    public function isServerConfigured()
+    {
         $host = $this->plugin->get('host');
 
         if (empty($host)) {
+            return false;
+        }
+
+        $salt = $this->plugin->get('salt');
+
+        if (empty($salt)) {
             return false;
         }
 

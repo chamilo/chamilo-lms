@@ -579,13 +579,18 @@ class Diagnoser
                 'expected' => 1,
                 'comment' => get_lang('ExtensionMustBeLoaded'),
             ],
-            'xsl' => [
-                'link' => 'https://be2.php.net/xsl',
-                'expected' => 2,
-                'comment' => get_lang('ExtensionShouldBeLoaded'),
-            ],
             'curl' => [
                 'link' => 'https://www.php.net/curl',
+                'expected' => 1,
+                'comment' => get_lang('ExtensionMustBeLoaded'),
+            ],
+            'fileinfo' => [
+                'link' => 'https://www.php.net/fileinfo',
+                'expected' => 1,
+                'comment' => get_lang('ExtensionMustBeLoaded'),
+            ],
+            'xsl' => [
+                'link' => 'https://be2.php.net/xsl',
                 'expected' => 2,
                 'comment' => get_lang('ExtensionShouldBeLoaded'),
             ],

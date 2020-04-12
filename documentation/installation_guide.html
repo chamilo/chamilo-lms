@@ -255,48 +255,49 @@ To get the best out of Chamilo, you need to finetune your PHP settings. Consider
 </ul>
 
 <pre>
-    max_execution_time = 300; Maximum execution time of each script, in seconds
-    max_input_time = 600; Maximum amount of time each script may spend parsing request data
-    memory_limit = 256M; Maximum amount of memory a script may consume (128MB)
+    max_execution_time = 300 ;Maximum execution time of each script, in seconds
+    max_input_time = 600 ;Maximum amount of time each script may spend parsing request data
+    memory_limit = 256M ;Maximum amount of memory a script may consume (128MB)
     post_max_size = 100M
-    upload_max_filesize = 100M;
-    short_open_tag       = Off
-    safe_mode            = Off
-    magic_quotes_gpc     = Off
-    magic_quotes_runtime = Off</pre>
+    upload_max_filesize = 100M
+    short_open_tag       = 0
+    safe_mode            = 0
+    magic_quotes_gpc     = 0
+    magic_quotes_runtime = 0</pre>
 
-<p><strong>Important:</strong> You need to set
-your <em>date.timezone</em> setting to whatever your server's timezone is. For example, if your server is in the 'America/New_York' timezone,
-    set the date.timezone parameter to this value in your php.ini:</p>
+<p><strong>Important:</strong> You need to set your <em>date.timezone</em> setting to whatever your server's timezone
+    is. For example, if your server is in the 'America/New_York' timezone, set the date.timezone parameter to this
+    value in your php.ini:</p>
 
 <pre>
-date.timezone = 'America/New_York'
+date.timezone = 'America/New_York';
 </pre>
 <br />
-<p><strong>Note:</strong> <span class="text-muted">PHP 5.3.9 introduces a new setting "max_input_vars", which limits the number of elements you can send in one single form. If you are dealing with numerous users or very long learning paths (many items), make sure you set this setting higher than its default value of 1000.</span></p>
+<p><strong>Note:</strong> <span class="text-muted">PHP 5.3.9 introduced the "max_input_vars" setting, which limits the number of elements you can send in one single form. If you are dealing with numerous users or very long learning paths (many items), make sure you set this setting higher than its default value of 1000.</span></p>
 
-<p><strong>BSD and CentOS users:</strong> these php libraries have to be included during the PHP installation (php5 might have to be replaced by php in some instances):</p>
+<p><strong>BSD and CentOS users:</strong> these php libraries have to be included during the PHP installation (php might have to be replaced by php{version} in some instances):</p>
 
 <ul>
-    <li>php5-session: The session shared extension for php</li>
-    <li>php5-mysqlnd (or php5-mysqli): The mysql shared extension for php</li>
-    <li>php5-zlib: The zlib shared extension for php</li>
-    <li>php5-pcre: The pcre shared extension for php</li>
-    <li>php5-xml</li>
-    <li>php5-json</li>
-    <li>php5-mcrypt</li>
-    <li>php5-iconv or php5-mbstring (either one of them)</li>
-    <li>php5-gd The graphics-generation extension for PHP</li>
-    <li>php5-intl The international behaviours extension for PHP</li>
+    <li>php-session: The session shared extension for php</li>
+    <li>php-mysql (or php-mysqlnd): The mysql shared extension for php</li>
+    <li>php-zlib: The zlib shared extension for php</li>
+    <li>php-pcre: The pcre shared extension for php</li>
+    <li>php-xml</li>
+    <li>php-json</li>
+    <li>php-mcrypt (only for PHP 5.*)</li>
+    <li>php-iconv or php5-mbstring (either one of them)</li>
+    <li>php-gd, the graphics-generation extension for PHP</li>
+    <li>php-intl, the international behaviours extension for PHP</li>
+    <li>php-fileinfo, the extension to properly deal with file types - used in assignments tool</li>
+    <li>php-curl, the extension to deal with external calls. Used in the links tool</li>
 </ul>
 
 <p>You might also add the following php modules and packages:</p>
 <ul>
-    <li>php5-ctype</li>
-    <li>php5-ldap</li>
-    <li>php5-xapian</li>
-    <li>php5-curl</li>
-    <li>php5-xsl</li>
+    <li>php-ctype</li>
+    <li>php-ldap</li>
+    <li>php-xapian</li>
+    <li>php-xsl</li>
 </ul>
 
 

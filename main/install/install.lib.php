@@ -860,6 +860,10 @@ function display_requirements(
                 <td class="requirements-item"><a href="http://php.net/manual/en/book.curl.php" target="_blank">cURL</a>'.get_lang('Support').'</td>
                 <td class="requirements-value">'.checkExtension('curl', get_lang('Yes'), get_lang('No')).'</td>
             </tr>
+            <tr>
+                <td class="requirements-item"><a href="http://php.net/manual/en/book.fileinfo.php" target="_blank">FileInfo</a>'.get_lang('Support').'</td>
+                <td class="requirements-value">'.checkExtension('fileinfo', get_lang('Yes'), get_lang('No')).'</td>
+            </tr>
 
             <tr>
                 <td class="requirements-item"><a href="http://php.net/manual/en/book.mbstring.php" target="_blank">Multibyte string</a> '.get_lang('Support').' ('.get_lang('Optional').')</td>

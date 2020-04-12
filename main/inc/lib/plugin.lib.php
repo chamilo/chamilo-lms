@@ -207,6 +207,7 @@ class AppPlugin
             'keycloak',
             'learning_calendar',
             'maintenancemode',
+            'migrationmoodle',
             'nosearchindex',
             'notebookteacher',
             'olpc_peru_filter',

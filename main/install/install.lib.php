@@ -790,7 +790,7 @@ function display_requirements(
         // If PHP < 7.0, then an undefined date.timezone would trigger a
         // warning, so ask for it to be defined. Above 7.0, date.timezone
         // defaults to UTC and does not trigger warnings.
-        // See http://php.net/manual/en/migration70.other-changes.php
+        // See https://php.net/manual/en/migration70.other-changes.php
         $timezone = checkPhpSettingExists("date.timezone");
         if (!$timezone) {
             echo "<div class='alert alert-warning'>".
@@ -821,76 +821,76 @@ function display_requirements(
     echo '</td>
             </tr>
             <tr>
-                <td class="requirements-item"><a href="http://php.net/manual/en/book.session.php" target="_blank">Session</a> '.get_lang('Support').'</td>
+                <td class="requirements-item"><a href="https://php.net/manual/en/book.session.php" target="_blank">Session</a> '.get_lang('Support').'</td>
                 <td class="requirements-value">'.checkExtension('session', get_lang('Yes'), get_lang('ExtensionSessionsNotAvailable')).'</td>
             </tr>
             <tr>
-                <td class="requirements-item"><a href="http://php.net/manual/en/book.mysql.php" target="_blank">pdo_mysql</a> '.get_lang('Support').'</td>
+                <td class="requirements-item"><a href="https://php.net/manual/en/book.mysql.php" target="_blank">pdo_mysql</a> '.get_lang('Support').'</td>
                 <td class="requirements-value">'.checkExtension('pdo_mysql', get_lang('Yes'), get_lang('ExtensionMySQLNotAvailable')).'</td>
             </tr>
             <tr>
-                <td class="requirements-item"><a href="http://php.net/manual/en/book.zip.php" target="_blank">Zip</a> '.get_lang('Support').'</td>
+                <td class="requirements-item"><a href="https://php.net/manual/en/book.zip.php" target="_blank">Zip</a> '.get_lang('Support').'</td>
                 <td class="requirements-value">'.checkExtension('zip', get_lang('Yes'), get_lang('ExtensionNotAvailable')).'</td>
             </tr>
             <tr>
-                <td class="requirements-item"><a href="http://php.net/manual/en/book.zlib.php" target="_blank">Zlib</a> '.get_lang('Support').'</td>
+                <td class="requirements-item"><a href="https://php.net/manual/en/book.zlib.php" target="_blank">Zlib</a> '.get_lang('Support').'</td>
                 <td class="requirements-value">'.checkExtension('zlib', get_lang('Yes'), get_lang('ExtensionZlibNotAvailable')).'</td>
             </tr>
             <tr>
-                <td class="requirements-item"><a href="http://php.net/manual/en/book.pcre.php" target="_blank">Perl-compatible regular expressions</a> '.get_lang('Support').'</td>
+                <td class="requirements-item"><a href="https://php.net/manual/en/book.pcre.php" target="_blank">Perl-compatible regular expressions</a> '.get_lang('Support').'</td>
                 <td class="requirements-value">'.checkExtension('pcre', get_lang('Yes'), get_lang('ExtensionPCRENotAvailable')).'</td>
             </tr>
             <tr>
-                <td class="requirements-item"><a href="http://php.net/manual/en/book.xml.php" target="_blank">XML</a> '.get_lang('Support').'</td>
+                <td class="requirements-item"><a href="https://php.net/manual/en/book.xml.php" target="_blank">XML</a> '.get_lang('Support').'</td>
                 <td class="requirements-value">'.checkExtension('xml', get_lang('Yes'), get_lang('No')).'</td>
             </tr>
             <tr>
-                <td class="requirements-item"><a href="http://php.net/manual/en/book.intl.php" target="_blank">Internationalization</a> '.get_lang('Support').'</td>
+                <td class="requirements-item"><a href="https://php.net/manual/en/book.intl.php" target="_blank">Internationalization</a> '.get_lang('Support').'</td>
                 <td class="requirements-value">'.checkExtension('intl', get_lang('Yes'), get_lang('No')).'</td>
             </tr>
                <tr>
-                <td class="requirements-item"><a href="http://php.net/manual/en/book.json.php" target="_blank">JSON</a> '.get_lang('Support').'</td>
+                <td class="requirements-item"><a href="https://php.net/manual/en/book.json.php" target="_blank">JSON</a> '.get_lang('Support').'</td>
                 <td class="requirements-value">'.checkExtension('json', get_lang('Yes'), get_lang('No')).'</td>
             </tr>
              <tr>
-                <td class="requirements-item"><a href="http://php.net/manual/en/book.image.php" target="_blank">GD</a> '.get_lang('Support').'</td>
+                <td class="requirements-item"><a href="https://php.net/manual/en/book.image.php" target="_blank">GD</a> '.get_lang('Support').'</td>
                 <td class="requirements-value">'.checkExtension('gd', get_lang('Yes'), get_lang('ExtensionGDNotAvailable')).'</td>
             </tr>
             <tr>
-                <td class="requirements-item"><a href="http://php.net/manual/en/book.curl.php" target="_blank">cURL</a>'.get_lang('Support').'</td>
+                <td class="requirements-item"><a href="https://php.net/manual/en/book.curl.php" target="_blank">cURL</a>'.get_lang('Support').'</td>
                 <td class="requirements-value">'.checkExtension('curl', get_lang('Yes'), get_lang('No')).'</td>
             </tr>
             <tr>
-                <td class="requirements-item"><a href="http://php.net/manual/en/book.fileinfo.php" target="_blank">FileInfo</a>'.get_lang('Support').'</td>
+                <td class="requirements-item"><a href="https://php.net/manual/en/book.fileinfo.php" target="_blank">FileInfo</a>'.get_lang('Support').'</td>
                 <td class="requirements-value">'.checkExtension('fileinfo', get_lang('Yes'), get_lang('No')).'</td>
             </tr>
 
             <tr>
-                <td class="requirements-item"><a href="http://php.net/manual/en/book.mbstring.php" target="_blank">Multibyte string</a> '.get_lang('Support').' ('.get_lang('Optional').')</td>
+                <td class="requirements-item"><a href="https://php.net/manual/en/book.mbstring.php" target="_blank">Multibyte string</a> '.get_lang('Support').' ('.get_lang('Optional').')</td>
                 <td class="requirements-value">'.checkExtension('mbstring', get_lang('Yes'), get_lang('ExtensionMBStringNotAvailable'), true).'</td>
             </tr>
             <tr>
-                <td class="requirements-item"><a href="http://php.net/opcache" target="_blank">Zend OpCache</a> '.get_lang('Support').' ('.get_lang('Optional').')</td>
+                <td class="requirements-item"><a href="https://php.net/opcache" target="_blank">Zend OpCache</a> '.get_lang('Support').' ('.get_lang('Optional').')</td>
                 <td class="requirements-value">'.checkExtension('Zend OPcache', get_lang('Yes'), get_lang('No'), true, 'opcache.enable').'</td>
             </tr>
             <tr>
-                <td class="requirements-item"><a href="http://php.net/apcu" target="_blank">APCu</a> '.get_lang('Support').' ('.get_lang('Optional').')</td>
+                <td class="requirements-item"><a href="https://php.net/apcu" target="_blank">APCu</a> '.get_lang('Support').' ('.get_lang('Optional').')</td>
                 <td class="requirements-value">'.checkExtension('apcu', get_lang('Yes'), get_lang('No'), true, 'apc.enabled').'</td>
             </tr>
             <tr>
-                <td class="requirements-item"><a href="http://php.net/manual/en/book.iconv.php" target="_blank">Iconv</a> '.get_lang('Support').' ('.get_lang('Optional').')</td>
+                <td class="requirements-item"><a href="https://php.net/manual/en/book.iconv.php" target="_blank">Iconv</a> '.get_lang('Support').' ('.get_lang('Optional').')</td>
                 <td class="requirements-value">'.checkExtension('iconv', get_lang('Yes'), get_lang('No'), true).'</td>
             </tr>
             <tr>
-                <td class="requirements-item"><a href="http://php.net/manual/en/book.ldap.php" target="_blank">LDAP</a> '.get_lang('Support').' ('.get_lang('Optional').')</td>
+                <td class="requirements-item"><a href="https://php.net/manual/en/book.ldap.php" target="_blank">LDAP</a> '.get_lang('Support').' ('.get_lang('Optional').')</td>
                 <td class="requirements-value">'.checkExtension('ldap', get_lang('Yes'), get_lang('ExtensionLDAPNotAvailable'), true).'</td>
             </tr>
             <tr>
-                <td class="requirements-item"><a href="http://xapian.org/" target="_blank">Xapian</a> '.get_lang('Support').' ('.get_lang('Optional').')</td>
+                <td class="requirements-item"><a href="https://xapian.org/" target="_blank">Xapian</a> '.get_lang('Support').' ('.get_lang('Optional').')</td>
                 <td class="requirements-value">'.checkExtension('xapian', get_lang('Yes'), get_lang('No'), true).'</td>
             </tr>
             <tr>
-                <td class="requirements-item"><a href="https://www.php.net/openssl" target="_blank">OpenSSL</a> '.get_lang('Support').' ('.get_lang('Optional').')</td>
+                <td class="requirements-item"><a href="https://php.net/openssl" target="_blank">OpenSSL</a> '.get_lang('Support').' ('.get_lang('Optional').')</td>
                 <td class="requirements-value">'.checkExtension('openssl', get_lang('Yes'), get_lang('No'), true).'</td>
             </tr>
         </table>';
@@ -910,62 +910,62 @@ function display_requirements(
                 <th>'.get_lang('Actual').'</th>
             </tr>
             <tr>
-                <td class="requirements-item"><a href="http://php.net/manual/features.safe-mode.php">Safe Mode</a></td>
+                <td class="requirements-item"><a href="https://php.net/manual/features.safe-mode.php">Safe Mode</a></td>
                 <td class="requirements-recommended">'.Display::label('OFF', 'success').'</td>
                 <td class="requirements-value">'.checkPhpSetting('safe_mode', 'OFF').'</td>
             </tr>
             <tr>
-                <td class="requirements-item"><a href="http://php.net/manual/ref.errorfunc.php#ini.display-errors">Display Errors</a></td>
+                <td class="requirements-item"><a href="https://php.net/manual/ref.errorfunc.php#ini.display-errors">Display Errors</a></td>
                 <td class="requirements-recommended">'.Display::label('OFF', 'success').'</td>
                 <td class="requirements-value">'.checkPhpSetting('display_errors', 'OFF').'</td>
             </tr>
             <tr>
-                <td class="requirements-item"><a href="http://php.net/manual/ini.core.php#ini.file-uploads">File Uploads</a></td>
+                <td class="requirements-item"><a href="https://php.net/manual/ini.core.php#ini.file-uploads">File Uploads</a></td>
                 <td class="requirements-recommended">'.Display::label('ON', 'success').'</td>
                 <td class="requirements-value">'.checkPhpSetting('file_uploads', 'ON').'</td>
             </tr>
             <tr>
-                <td class="requirements-item"><a href="http://php.net/manual/ref.info.php#ini.magic-quotes-gpc">Magic Quotes GPC</a></td>
+                <td class="requirements-item"><a href="https://php.net/manual/ref.info.php#ini.magic-quotes-gpc">Magic Quotes GPC</a></td>
                 <td class="requirements-recommended">'.Display::label('OFF', 'success').'</td>
                 <td class="requirements-value">'.checkPhpSetting('magic_quotes_gpc', 'OFF').'</td>
             </tr>
             <tr>
-                <td class="requirements-item"><a href="http://php.net/manual/ref.info.php#ini.magic-quotes-runtime">Magic Quotes Runtime</a></td>
+                <td class="requirements-item"><a href="https://php.net/manual/ref.info.php#ini.magic-quotes-runtime">Magic Quotes Runtime</a></td>
                 <td class="requirements-recommended">'.Display::label('OFF', 'success').'</td>
                 <td class="requirements-value">'.checkPhpSetting('magic_quotes_runtime', 'OFF').'</td>
             </tr>
             <tr>
-                <td class="requirements-item"><a href="http://php.net/manual/security.globals.php">Register Globals</a></td>
+                <td class="requirements-item"><a href="https://php.net/manual/security.globals.php">Register Globals</a></td>
                 <td class="requirements-recommended">'.Display::label('OFF', 'success').'</td>
                 <td class="requirements-value">'.checkPhpSetting('register_globals', 'OFF').'</td>
             </tr>
             <tr>
-                <td class="requirements-item"><a href="http://php.net/manual/ref.session.php#ini.session.auto-start">Session auto start</a></td>
+                <td class="requirements-item"><a href="https://php.net/manual/ref.session.php#ini.session.auto-start">Session auto start</a></td>
                 <td class="requirements-recommended">'.Display::label('OFF', 'success').'</td>
                 <td class="requirements-value">'.checkPhpSetting('session.auto_start', 'OFF').'</td>
             </tr>
             <tr>
-                <td class="requirements-item"><a href="http://php.net/manual/ini.core.php#ini.short-open-tag">Short Open Tag</a></td>
+                <td class="requirements-item"><a href="https://php.net/manual/ini.core.php#ini.short-open-tag">Short Open Tag</a></td>
                 <td class="requirements-recommended">'.Display::label('OFF', 'success').'</td>
                 <td class="requirements-value">'.checkPhpSetting('short_open_tag', 'OFF').'</td>
             </tr>
             <tr>
-                <td class="requirements-item"><a href="http://www.php.net/manual/en/session.configuration.php#ini.session.cookie-httponly">Cookie HTTP Only</a></td>
+                <td class="requirements-item"><a href="https://php.net/manual/en/session.configuration.php#ini.session.cookie-httponly">Cookie HTTP Only</a></td>
                 <td class="requirements-recommended">'.Display::label('ON', 'success').'</td>
                 <td class="requirements-value">'.checkPhpSetting('session.cookie_httponly', 'ON').'</td>
             </tr>
             <tr>
-                <td class="requirements-item"><a href="http://php.net/manual/ini.core.php#ini.upload-max-filesize">Maximum upload file size</a></td>
+                <td class="requirements-item"><a href="https://php.net/manual/ini.core.php#ini.upload-max-filesize">Maximum upload file size</a></td>
                 <td class="requirements-recommended">'.Display::label('>= '.REQUIRED_MIN_UPLOAD_MAX_FILESIZE.'M', 'success').'</td>
                 <td class="requirements-value">'.compare_setting_values(ini_get('upload_max_filesize'), REQUIRED_MIN_UPLOAD_MAX_FILESIZE).'</td>
             </tr>
             <tr>
-                <td class="requirements-item"><a href="http://php.net/manual/ini.core.php#ini.post-max-size">Maximum post size</a></td>
+                <td class="requirements-item"><a href="https://php.net/manual/ini.core.php#ini.post-max-size">Maximum post size</a></td>
                 <td class="requirements-recommended">'.Display::label('>= '.REQUIRED_MIN_POST_MAX_SIZE.'M', 'success').'</td>
                 <td class="requirements-value">'.compare_setting_values(ini_get('post_max_size'), REQUIRED_MIN_POST_MAX_SIZE).'</td>
             </tr>
             <tr>
-                <td class="requirements-item"><a href="http://www.php.net/manual/en/ini.core.php#ini.memory-limit">Memory Limit</a></td>
+                <td class="requirements-item"><a href="https://php.net/manual/en/ini.core.php#ini.memory-limit">Memory Limit</a></td>
                 <td class="requirements-recommended">'.Display::label('>= '.REQUIRED_MIN_MEMORY_LIMIT.'M', 'success').'</td>
                 <td class="requirements-value">'.compare_setting_values($originalMemoryLimit, REQUIRED_MIN_MEMORY_LIMIT).'</td>
             </tr>

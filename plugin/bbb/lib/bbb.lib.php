@@ -107,15 +107,21 @@ class bbb
             }
 
             $this->salt = $bbb_salt;
+            if (substr($bbb_host, -1, 1) !== '/') {
+                $bbb_host .= '/';
+            }
             $info = parse_url($bbb_host);
-            $this->url = $bbb_host.'/bigbluebutton/';
+            if (!preg_match('#/bigbluebutton/$#', $bbb_host)) {
+                $bbb_host .= 'bigbluebutton/';
+            }
+            $this->url = $bbb_host;
 
             if (isset($info['scheme'])) {
                 $this->protocol = $info['scheme'].'://';
                 $this->url = str_replace($this->protocol, '', $this->url);
                 $urlWithProtocol = $bbb_host;
             } else {
-                // We asume it's an http, if user wants to use https host must include the protocol.
+                // We assume it's an http, if user wants to use https, the host *must* include the protocol.
                 $urlWithProtocol = 'http://'.$bbb_host;
             }
 

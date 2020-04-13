@@ -412,22 +412,24 @@ foreach ($categories as $item) {
                     $accumulateWorkTime = ($pl * $accumulateWorkTimeTotal * $perc / 100);
 
                     // If the time spent is less than necessary, then we show an icon in the actions column indicating the warning
+                    $formattedLpTime = api_time_to_hms($lpTime);
+                    $formattedAccumulateWorkTime = api_time_to_hms($accumulateWorkTime * 60);
                     if ($lpTime < ($accumulateWorkTime * 60)) {
                         $linkMinTime = Display::return_icon(
                             'warning.png',
-                            get_lang('LpMinTimeWarning').' - '.api_time_to_hms($lpTime).' / '.api_time_to_hms(
-                                $accumulateWorkTime * 60
-                            )
+                            get_lang('LpMinTimeWarning').' - '.
+                            $formattedLpTime.' / '.
+                            $formattedAccumulateWorkTime
                         );
                     } else {
                         $linkMinTime = Display::return_icon(
                             'check.png',
-                            get_lang('LpMinTimeWarning').' - '.api_time_to_hms($lpTime).' / '.api_time_to_hms(
-                                $accumulateWorkTime * 60
-                            )
+                            get_lang('LpMinTimeWarning').' - '.
+                            $formattedLpTime.' / '.
+                            $formattedAccumulateWorkTime
                         );
                     }
-                    $linkMinTime .= '&nbsp;<b>'.api_time_to_hms($lpTime).' / '.api_time_to_hms($accumulateWorkTime * 60).'</b>';
+                    $linkMinTime .= '&nbsp;<b>'.$formattedLpTime.' / '.$formattedAccumulateWorkTime.'</b>';
 
                     // Calculate the percentage exceeded of the time for the "exceeding the minimum time" bar
                     if ($lpTime >= ($accumulateWorkTime * 60)) {

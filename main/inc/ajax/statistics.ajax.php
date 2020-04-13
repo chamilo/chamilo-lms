@@ -124,7 +124,7 @@ switch ($action) {
         // for global recent logins
         header('Content-type: application/json');
         $list = [];
-        $all = Statistics::getRecentLoginStats(false, $sessionDuration);
+        $all = Statistics::getRecentLoginStats(false, $sessionDuration, [31]);
         foreach ($all as $tick => $tock) {
             $list['labels'][] = $tick;
         }
@@ -149,7 +149,7 @@ switch ($action) {
         $list['datasets'][1]['pointHoverBackgroundColor'] = '#fff';
         $list['datasets'][1]['pointHoverBorderColor'] = 'rgba(0,204,0,1)';
 
-        $distinct = Statistics::getRecentLoginStats(true, $sessionDuration);
+        $distinct = Statistics::getRecentLoginStats(true, $sessionDuration, [31]);
         foreach ($distinct as $tick => $tock) {
             $list['datasets'][1]['data'][] = $tock;
         }

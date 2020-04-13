@@ -594,8 +594,9 @@ class Statistics
      *
      * @param bool $distinct        whether to only give distinct users stats, or *all* logins
      * @param int  $sessionDuration
+     * @param array $periods List of number of days we want to query (default: [1, 7, 31] for last 1 day, last 7 days, last 31 days)
      */
-    public static function printRecentLoginStats($distinct = false, $sessionDuration = 0)
+    public static function printRecentLoginStats($distinct = false, $sessionDuration = 0, $periods = [])
     {
         $table = Database::get_main_table(TABLE_STATISTIC_TRACK_E_LOGIN);
         $access_url_rel_user_table = Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_USER);
@@ -613,11 +614,13 @@ class Statistics
             $field = 'DISTINCT(login_user_id)';
         }
 
-        $days = [1, 7, 15, 31];
+        if (empty($periods)) {
+            $periods = [1, 7, 31];
+        }
         $sqlList = [];
 
         $sessionDuration = (int) $sessionDuration;
-        foreach ($days as $day) {
+        foreach ($periods as $day) {
             $date = new DateTime($now);
             $startDate = $date->format('Y-m-d').' 00:00:00';
             $endDate = $date->format('Y-m-d').' 23:59:59';
@@ -637,17 +640,24 @@ class Statistics
             $label .= " <br /> $localDate - $localEndDate";
             $sql = "SELECT count($field) AS number
                     FROM $table $table_url
-                    WHERE
-                        UNIX_TIMESTAMP(logout_date) - UNIX_TIMESTAMP(login_date) > $sessionDuration AND
-                        login_date BETWEEN '$startDate' AND '$endDate'
+                    WHERE ";
+            if ($sessionDuration == 0) {
+                $sql .= " logout_date != login_date AND ";
+            } else {
+                $sql .= " UNIX_TIMESTAMP(logout_date) - UNIX_TIMESTAMP(login_date) > $sessionDuration AND ";
+            }
+            $sql .= "login_date BETWEEN '$startDate' AND '$endDate'
                         $where_url";
             $sqlList[$label] = $sql;
         }
 
         $sql = "SELECT count($field) AS number
-                FROM $table $table_url
-                WHERE UNIX_TIMESTAMP(logout_date) - UNIX_TIMESTAMP(login_date) > $sessionDuration $where_url
-               ";
+                FROM $table $table_url ";
+        if ($sessionDuration == 0) {
+            $sql .= " WHERE logout_date != login_date $where_url";
+        } else {
+            $sql .= " WHERE UNIX_TIMESTAMP(logout_date) - UNIX_TIMESTAMP(login_date) > $sessionDuration $where_url";
+        }
         $sqlList[get_lang('Total')] = $sql;
         $totalLogin = [];
         foreach ($sqlList as $label => $query) {
@@ -688,7 +698,7 @@ class Statistics
 
         $now = api_get_utc_datetime();
         $date = new DateTime($now);
-        $date->sub(new DateInterval('P15D'));
+        $date->sub(new DateInterval('P31D'));
         $newDate = $date->format('Y-m-d h:i:s');
         $totalLogin = self::buildDatesArray($newDate, $now, true);
 
@@ -700,9 +710,13 @@ class Statistics
 
         $sql = "SELECT count($field) AS number, date(login_date) as login_date
                 FROM $table $table_url
-                WHERE
-                UNIX_TIMESTAMP(logout_date) - UNIX_TIMESTAMP(login_date) > $sessionDuration AND
-                login_date >= '$newDate' $where_url
+                WHERE ";
+        if ($sessionDuration == 0) {
+            $sql .= " logout_date != login_date AND ";
+        } else {
+            $sql .= " UNIX_TIMESTAMP(logout_date) - UNIX_TIMESTAMP(login_date) > $sessionDuration AND ";
+        }
+        $sql .= " login_date >= '$newDate' $where_url
                 GROUP BY date(login_date)";
 
         $res = Database::query($sql);

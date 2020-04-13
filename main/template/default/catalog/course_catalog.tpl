@@ -3,13 +3,18 @@
 {% block content %}
     {{ content }}
     <style>
+        .input-group .form-control {
+            z-index: auto !important;
+        }
         /* WIP: To be move in base.css */
         .search-courses .form-inline-box .input-group {
             width: 80%;
             padding-bottom: 14px;
+            z-index: auto;
         }
         .search-courses .form-inline-box .input-group label {
             margin-bottom: 0px;
+            z-index: auto;
         }
     </style>
 <div>

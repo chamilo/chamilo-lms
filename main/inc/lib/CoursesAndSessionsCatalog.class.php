@@ -624,12 +624,16 @@ class CoursesAndSessionsCatalog
                 }
             }
         }
-        usort($courses, function ($a, $b) use ($sortKeys) {
+        $descKeys = [
+            'count_users',
+            'point_info/users',
+        ];
+        usort($courses, function ($a, $b) use ($sortKeys, $descKeys) {
             foreach ($sortKeys as $key) {
                 $valueA = array_key_exists($key, $a) ? $a[$key] : null;
                 $valueB = array_key_exists($key, $b) ? $b[$key] : null;
                 if ($valueA !== $valueB) {
-                    return $valueA < $valueB ? -1 : 1;
+                    return ($valueA < $valueB ? -1 : 1) * (in_array($key, $descKeys) ? -1 : 1);
                 }
             }
             return 0;

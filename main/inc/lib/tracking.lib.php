@@ -6894,7 +6894,6 @@ class Tracking
         $controller = new IndexManager(get_lang('MyCourses'));
         $data = $controller->returnCoursesAndSessions($userId);
         $courseList = $data['courses'];
-
         $result = [];
         if ($courseList) {
             //$counter = 1;
@@ -6905,9 +6904,7 @@ class Tracking
                     continue;
                 }
                 $courseCode = $courseInfo['code'];
-
-                $time = self::get_time_spent_in_lp($userId, $courseCode, [], $sessionId);
-                //$score = self::getAverageStudentScore($userId, $courseCode, [], $sessionId);
+                $lpTimeList = self::getCalculateTime($userId, $courseId, $sessionId);
 
                 // total progress
                 $list = new LearnpathList(
@@ -6929,7 +6926,8 @@ class Tracking
                         }
                         $lpProgress = self::get_avg_student_progress($userId, $courseCode, [$lp_id], $sessionId);
                         if ($lpProgress == 100) {
-                            $time = self::get_time_spent_in_lp($userId, $courseCode, [$lp_id], $sessionId);
+                            //$time = self::get_time_spent_in_lp($userId, $courseCode, [$lp_id], $sessionId);
+                            $time = isset($lpTimeList[TOOL_LEARNPATH][$lp_id]) ? $lpTimeList[TOOL_LEARNPATH][$lp_id] : 0;
                             if (!empty($time)) {
                                 $timeInMinutes = $time / 60;
                                 $min = (int) learnpath::getAccumulateWorkTimePrerequisite($lp_id, $courseId);

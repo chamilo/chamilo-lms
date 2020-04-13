@@ -615,6 +615,7 @@ class CoursesAndSessionsCatalog
                     }
                 }
             }
+            unset($course);
         }
         // do we have special cases to sort on ?
         if (in_array('point_info/users', $sortKeys)) {
@@ -624,6 +625,7 @@ class CoursesAndSessionsCatalog
                 }
             }
         }
+        unset($course);
         $descKeys = [
             'count_users',
             'point_info/users',

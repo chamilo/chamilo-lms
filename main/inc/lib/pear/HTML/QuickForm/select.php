@@ -241,10 +241,10 @@ class HTML_QuickForm_select extends HTML_QuickForm_element
     public function getPrivateName()
     {
         if ($this->getAttribute('multiple')) {
-            return $this->getName() . '[]';
-        } else {
-            return $this->getName();
+            return $this->getName().'[]';
         }
+
+        return $this->getName();
     }
 
     /**
@@ -323,7 +323,7 @@ class HTML_QuickForm_select extends HTML_QuickForm_element
      */
     public function getMultiple()
     {
-        return (bool)$this->getAttribute('multiple');
+        return (bool) $this->getAttribute('multiple');
     }
 
     /**

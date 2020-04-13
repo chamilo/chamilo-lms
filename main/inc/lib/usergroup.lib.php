@@ -2237,7 +2237,9 @@ class UserGroup extends Model
         return $array;
     }
 
-    /** Gets the inner join of users and group table
+    /**
+     * Gets the inner join of users and group table.
+     *
      * @param int  quantity of records
      * @param bool show groups with image or not
      *
@@ -2301,7 +2303,9 @@ class UserGroup extends Model
         return $array;
     }
 
-    /** Gets the last groups created
+    /**
+     * Gets the last groups created.
+     *
      * @param int  $num       quantity of records
      * @param bool $withImage show groups with image or not
      *

@@ -48,7 +48,8 @@ Feature: LP tool
     Then I should see "LP 1"
     And I should see "Document 1"
     And I should see "Exercise 1"
-    And I am on "/main/lp/lp_controller.php?cidReq=TEMP&action=list"
+    Then I am on "/main/lp/lp_controller.php?cidReq=TEMP&action=list"
+    And wait for the page to be loaded
     Then I should see "LP 1"
 
 #  Scenario: Check the PDF export in LP list if hide SCORM PDF link is false

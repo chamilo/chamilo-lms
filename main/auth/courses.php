@@ -291,7 +291,11 @@ switch ($action) {
                             }
                             $defaults[$variable] = $tags;
                         } else {
-                            $defaults[$variable] = $data;
+                            if (is_array($data)) {
+                                $defaults[$variable] = array_map(['Security', 'remove_XSS'], $data);
+                            } else {
+                                $defaults[$variable] = Security::remove_XSS($data);
+                            }
                         }
                     }
                 }

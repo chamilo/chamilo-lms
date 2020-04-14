@@ -540,24 +540,27 @@ class CoursesAndSessionsCatalog
     }
 
     /**
-     * Gets the extra fields listed in configuration option course_catalogue_order_by_extrafield
+     * Gets the extra fields listed in configuration option course_catalogue_order_by_extrafield.
      *
      * @return ExtraField[]
      */
-    public static function getCourseExtraFieldsAvailableForSorting() {
+    public static function getCourseExtraFieldsAvailableForSorting()
+    {
         $variables = api_get_configuration_sub_value('course_catalogue_order_by_extrafield/fields');
         if (is_array($variables) && !empty($variables)) {
             return ExtraField::getExtraFieldsFromVariablesOrdered($variables, ExtraField::COURSE_FIELD_TYPE);
         }
+
         return [];
     }
 
     /**
-     * Builds the list of possible course sort criteria to be used in an HTML select element
+     * Builds the list of possible course sort criteria to be used in an HTML select element.
      *
      * @return array select option name => display text
      */
-    public static function courseSortOptions() {
+    public static function courseSortOptions()
+    {
         /** @var $extraFields ExtraField[] */
         $options = [
             'title' => get_lang('Title'),
@@ -566,13 +569,14 @@ class CoursesAndSessionsCatalog
             'point_info/users' => get_lang('VoteCount'),
         ];
         foreach (self::getCourseExtraFieldsAvailableForSorting() as $extraField) {
-            $options['extra_field_' . $extraField->getId()] = $extraField->getDisplayText();
+            $options['extra_field_'.$extraField->getId()] = $extraField->getDisplayText();
         }
+
         return $options;
     }
 
     /**
-     * Wrapper for self::searchCourses which locally sorts the results according to $sortKey
+     * Wrapper for self::searchCourses which locally sorts the results according to $sortKey.
      *
      * @param string   $categoryCode can be 'ALL', 'NONE' or any existing course category code
      * @param string   $keyword      search pattern to be found in course code, title or tutor_name
@@ -596,7 +600,7 @@ class CoursesAndSessionsCatalog
         // Do we have extra fields to sort on ?
         $extraFieldsToSortOn = [];
         foreach (self::getCourseExtraFieldsAvailableForSorting() as $extraField) {
-            if (in_array('extra_field_' . $extraField->getId(), $sortKeys)) {
+            if (in_array('extra_field_'.$extraField->getId(), $sortKeys)) {
                 $extraFieldsToSortOn[] = $extraField;
             }
         }
@@ -611,7 +615,7 @@ class CoursesAndSessionsCatalog
                 $courseId = $course['real_id'];
                 if (array_key_exists($courseId, $values)) {
                     foreach ($values[$courseId] as $extraFieldId => $value) {
-                        $course['extra_field_' . $extraFieldId] = $value;
+                        $course['extra_field_'.$extraFieldId] = $value;
                     }
                 }
             }
@@ -640,11 +644,14 @@ class CoursesAndSessionsCatalog
                         : $valueA < $valueB;
                     $reverseOrder = in_array($key, $descKeys);
                     $aIsBeforeB = ($aIsLessThanB xor $reverseOrder);
+
                     return $aIsBeforeB ? -1 : 1;
                 }
             }
+
             return 0;
         });
+
         return array_slice($courses, $limit['start'], $limit['length']);
     }
 
@@ -1631,7 +1638,7 @@ class CoursesAndSessionsCatalog
         $categoryCode = '',
         $action = '',
         $fields = [],
-        $sortKeys
+        $sortKeys = []
     ) {
         // Start empty html
         $pageDiv = '';
@@ -1802,7 +1809,7 @@ class CoursesAndSessionsCatalog
 
         if (!empty($sortKeys)) {
             foreach ($sortKeys as $sortKey) {
-                $pageUrl .= '&sortKeys%5B%5D=' . Security::remove_XSS($sortKey);
+                $pageUrl .= '&sortKeys%5B%5D='.Security::remove_XSS($sortKey);
             }
         }
 

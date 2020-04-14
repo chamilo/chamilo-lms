@@ -373,7 +373,7 @@ class ExtraField extends BaseAttribute
     }
 
     /**
-     * Retreives and returns the value stored in this extra field for an item
+     * Retreives and returns the value stored in this extra field for an item.
      *
      * @param $itemId string|int the item identifier
      *
@@ -390,11 +390,12 @@ class ExtraField extends BaseAttribute
                 Criteria::expr()->eq('itemId', $itemId)
             )
         );
+
         return count($values) === 1 ? $values[0] : null;
     }
 
     /**
-     * Retreives and returns the value stored in this extra field for each item
+     * Retreives and returns the value stored in this extra field for each item.
      *
      * @return array itemId => value
      */
@@ -411,11 +412,12 @@ class ExtraField extends BaseAttribute
         ) as $value) {
             $values[$value->getItemId()] = $value->getValue();
         }
+
         return $values;
     }
 
     /**
-     * Retreives and returns the value stored in each extra field for each item
+     * Retreives and returns the value stored in each extra field for each item.
      *
      * @param ExtraField[] $extraFields
      *
@@ -440,13 +442,14 @@ class ExtraField extends BaseAttribute
             }
             $values[$itemId][$value->getField()->getId()] = $value->getValue();
         }
+
         return $values;
     }
 
     /**
-     * Retreives extra fields from a list of variables
+     * Retreives extra fields from a list of variables.
      *
-     * @param string[] $variables extra field variables
+     * @param string[] $variables      extra field variables
      * @param int      $extraFieldType such as self::COURSE_FIELD_TYPE
      *
      * @return ExtraField[] found extra fields
@@ -461,13 +464,14 @@ class ExtraField extends BaseAttribute
                 Criteria::expr()->in('variable', $variables)
             )
         );
+
         return $extraFields;
     }
 
     /**
-     * Retreives and sorts extra fields from a list of variables
+     * Retreives and sorts extra fields from a list of variables.
      *
-     * @param string[] $variables extra field variables
+     * @param string[] $variables      extra field variables
      * @param int      $extraFieldType such as self::COURSE_FIELD_TYPE
      *
      * @return ExtraField[] the sorted extra fields, in the same order as the variables

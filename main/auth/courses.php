@@ -240,7 +240,7 @@ switch ($action) {
             'sortKeys',
             get_lang('SortKeys'),
             CoursesAndSessionsCatalog::courseSortOptions(),
-            [ 'multiple' => true ]
+            ['multiple' => true]
         );
         if (array_key_exists('sortKeys', $_GET)) {
             $defaults['sortKeys'] = $_GET['sortKeys'];

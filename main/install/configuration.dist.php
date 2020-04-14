@@ -1453,6 +1453,11 @@ $_configuration['course_catalog_settings'] = [
 // Disable sending emails.
 //$_configuration['disable_send_mail'] = false;
 
+// Page "Catalog" extra fields to be used as sorting criteria
+/*$_configuration['course_catalogue_order_by_extrafield'] = [
+    'fields' => ['duree_en_min'],
+];*/
+
 // KEEP THIS AT THE END
 // -------- Custom DB changes
 // Add user activation by confirmation email

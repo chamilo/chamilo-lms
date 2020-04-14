@@ -158,6 +158,64 @@ if ($_configuration['access_url'] != 1) {
     }
 }
 
+$result = &api_get_settings(null, 'list', 1);
+foreach ($result as &$row) {
+    if ($_configuration['access_url'] != 1) {
+        if ($url_info['active'] == 1) {
+            $var = empty($row['variable']) ? 0 : $row['variable'];
+            $subkey = empty($row['subkey']) ? 0 : $row['subkey'];
+            $category = empty($row['category']) ? 0 : $row['category'];
+        }
+
+        if ($row['access_url_changeable'] == 1 && $url_info['active'] == 1) {
+            if (isset($settings_by_access_list[$var]) &&
+                isset($settings_by_access_list[$var][$subkey]) &&
+                $settings_by_access_list[$var][$subkey][$category]['selected_value'] != '') {
+                if ($row['subkey'] == null) {
+                    $_setting[$row['variable']] = $settings_by_access_list[$var][$subkey][$category]['selected_value'];
+                } else {
+                    $_setting[$row['variable']][$row['subkey']] = $settings_by_access_list[$var][$subkey][$category]['selected_value'];
+                }
+            } else {
+                if ($row['subkey'] == null) {
+                    $_setting[$row['variable']] = $row['selected_value'];
+                } else {
+                    $_setting[$row['variable']][$row['subkey']] = $row['selected_value'];
+                }
+            }
+        } else {
+            if ($row['subkey'] == null) {
+                $_setting[$row['variable']] = $row['selected_value'];
+            } else {
+                $_setting[$row['variable']][$row['subkey']] = $row['selected_value'];
+            }
+        }
+    } else {
+        if ($row['subkey'] == null) {
+            $_setting[$row['variable']] = $row['selected_value'];
+        } else {
+            $_setting[$row['variable']][$row['subkey']] = $row['selected_value'];
+        }
+    }
+}
+
+$result = &api_get_settings('Plugins', 'list', $_configuration['access_url']);
+$_plugins = [];
+foreach ($result as &$row) {
+    $key = &$row['variable'];
+    if (isset($_setting[$key]) && is_string($_setting[$key])) {
+        $_setting[$key] = [];
+    }
+    if ($row['subkey'] == null) {
+        $_setting[$key][] = $row['selected_value'];
+        $_plugins[$key][] = $row['selected_value'];
+    } else {
+        $_setting[$key][$row['subkey']] = $row['selected_value'];
+        $_plugins[$key][$row['subkey']] = $row['selected_value'];
+    }
+}
+
+
 ini_set('log_errors', '1');
 
 /**

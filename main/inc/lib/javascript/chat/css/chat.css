@@ -46,15 +46,16 @@
     width: 80%;
     float: right !important;
     border-radius: 12px;
+    padding: 10px;
 }
 
 .chatboxmessage {
     background-color: #ebedf2;
     color: #2a2f35;
-    margin-left: 1em;
     width: 80%;
     float: left;
     border-radius: 12px;
+    padding: 10px;
 }
 
 .chatboxmessagecontent {
@@ -170,7 +171,6 @@
 }
 
 .chatboxmessagefrom {
-    margin-left: -1em;
     font-weight: bold;
 }
 

@@ -446,6 +446,7 @@ class Statistics
      * @param array  $stats
      * @param bool   $showTotal
      * @param bool   $isFileSize
+     * @return string HTML table
      */
     public static function printStats(
         $title,
@@ -454,7 +455,7 @@ class Statistics
         $isFileSize = false
     ) {
         $total = 0;
-        $content = '<table class="data_table" cellspacing="0" cellpadding="3">
+        $content = '<table class="data_table" cellspacing="0" cellpadding="3" width="90%">
                 <tr><th colspan="'.($showTotal ? '4' : '3').'">'.$title.'</th></tr>';
         $i = 0;
         foreach ($stats as $subtitle => $number) {
@@ -470,11 +471,11 @@ class Statistics
             $percentage = ($total > 0 ? number_format(100 * $number / $total, 1, ',', '.') : '0');
 
             $content .= '<tr class="row_'.($i % 2 == 0 ? 'odd' : 'even').'">
-                    <td width="150">'.$subtitle.'</td>
-                    <td width="550">'.Display::bar_progress($percentage, false).'</td>
-                    <td align="right">'.$number_label.'</td>';
+                    <td width="25%" style="vertical-align:top;">'.$subtitle.'</td>
+                    <td width="60%">'.Display::bar_progress($percentage, false).'</td>
+                    <td width="5%" align="right" style="vertical-align:top;">'.$number_label.'</td>';
             if ($showTotal) {
-                $content .= '<td align="right"> '.$percentage.'%</td>';
+                $content .= '<td width="5%" align="right"> '.$percentage.'%</td>';
             }
             $content .= '</tr>';
             $i++;
@@ -591,11 +592,13 @@ class Statistics
 
     /**
      * Print the number of recent logins.
-     *
      * @param bool $distinct        whether to only give distinct users stats, or *all* logins
-     * @param int  $sessionDuration
+     * @param int  $sessionDuration Number of minutes a session must have lasted at a minimum to be taken into account
+     * @param array $periods List of number of days we want to query (default: [1, 7, 31] for last 1 day, last 7 days, last 31 days)
+     * @return string HTML table
+     * @throws Exception
      */
-    public static function printRecentLoginStats($distinct = false, $sessionDuration = 0)
+    public static function printRecentLoginStats($distinct = false, $sessionDuration = 0, $periods = [])
     {
         $table = Database::get_main_table(TABLE_STATISTIC_TRACK_E_LOGIN);
         $access_url_rel_user_table = Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_USER);
@@ -613,11 +616,13 @@ class Statistics
             $field = 'DISTINCT(login_user_id)';
         }
 
-        $days = [1, 7, 15, 31];
+        if (empty($periods)) {
+            $periods = [1, 7, 31];
+        }
         $sqlList = [];
 
-        $sessionDuration = (int) $sessionDuration;
-        foreach ($days as $day) {
+        $sessionDuration = (int) $sessionDuration * 60; // convert from minutes to seconds
+        foreach ($periods as $day) {
             $date = new DateTime($now);
             $startDate = $date->format('Y-m-d').' 00:00:00';
             $endDate = $date->format('Y-m-d').' 23:59:59';
@@ -634,20 +639,27 @@ class Statistics
             if ($day == 1) {
                 $label = get_lang('Today');
             }
-            $label .= " <br /> $localDate - $localEndDate";
+            $label .= " <span class=\"muted right\" style=\"float: right; margin-right: 5px;\">[$localDate - $localEndDate]</span>";
             $sql = "SELECT count($field) AS number
                     FROM $table $table_url
-                    WHERE
-                        UNIX_TIMESTAMP(logout_date) - UNIX_TIMESTAMP(login_date) > $sessionDuration AND
-                        login_date BETWEEN '$startDate' AND '$endDate'
+                    WHERE ";
+            if ($sessionDuration == 0) {
+                $sql .= " logout_date != login_date AND ";
+            } else {
+                $sql .= " UNIX_TIMESTAMP(logout_date) - UNIX_TIMESTAMP(login_date) > $sessionDuration AND ";
+            }
+            $sql .= "login_date BETWEEN '$startDate' AND '$endDate'
                         $where_url";
             $sqlList[$label] = $sql;
         }
 
         $sql = "SELECT count($field) AS number
-                FROM $table $table_url
-                WHERE UNIX_TIMESTAMP(logout_date) - UNIX_TIMESTAMP(login_date) > $sessionDuration $where_url
-               ";
+                FROM $table $table_url ";
+        if ($sessionDuration == 0) {
+            $sql .= " WHERE logout_date != login_date $where_url";
+        } else {
+            $sql .= " WHERE UNIX_TIMESTAMP(logout_date) - UNIX_TIMESTAMP(login_date) > $sessionDuration $where_url";
+        }
         $sqlList[get_lang('Total')] = $sql;
         $totalLogin = [];
         foreach ($sqlList as $label => $query) {
@@ -666,13 +678,13 @@ class Statistics
     }
 
     /**
-     * get the number of recent logins.
-     *
+     * Get the number of recent logins.
      * @param bool $distinct            Whether to only give distinct users stats, or *all* logins
-     * @param int  $sessionDuration
+     * @param int  $sessionDuration     Number of minutes a session must have lasted at a minimum to be taken into account
      * @param bool $completeMissingDays Whether to fill the daily gaps (if any) when getting a list of logins
      *
      * @return array
+     * @throws Exception
      */
     public static function getRecentLoginStats($distinct = false, $sessionDuration = 0, $completeMissingDays = true)
     {
@@ -688,7 +700,7 @@ class Statistics
 
         $now = api_get_utc_datetime();
         $date = new DateTime($now);
-        $date->sub(new DateInterval('P15D'));
+        $date->sub(new DateInterval('P31D'));
         $newDate = $date->format('Y-m-d h:i:s');
         $totalLogin = self::buildDatesArray($newDate, $now, true);
 
@@ -696,13 +708,17 @@ class Statistics
         if ($distinct) {
             $field = 'DISTINCT(login_user_id)';
         }
-        $sessionDuration = (int) $sessionDuration;
+        $sessionDuration = (int) $sessionDuration * 60; //Convert from minutes to seconds
 
         $sql = "SELECT count($field) AS number, date(login_date) as login_date
                 FROM $table $table_url
-                WHERE
-                UNIX_TIMESTAMP(logout_date) - UNIX_TIMESTAMP(login_date) > $sessionDuration AND
-                login_date >= '$newDate' $where_url
+                WHERE ";
+        if ($sessionDuration == 0) {
+            $sql .= " logout_date != login_date AND ";
+        } else {
+            $sql .= " UNIX_TIMESTAMP(logout_date) - UNIX_TIMESTAMP(login_date) > $sessionDuration AND ";
+        }
+        $sql .= " login_date >= '$newDate' $where_url
                 GROUP BY date(login_date)";
 
         $res = Database::query($sql);

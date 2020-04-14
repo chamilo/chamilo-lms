@@ -1327,7 +1327,7 @@ switch ($report) {
         $content .= Statistics::printStats(get_lang('Students'), $students);
         break;
     case 'recentlogins':
-        $content .= '<h2>'.sprintf(get_lang('LastXDays'), '15').'</h2>';
+        $content .= '<h2>'.sprintf(get_lang('LastXDays'), '31').'</h2>';
         $form = new FormValidator(
             'session_time',
             'get',

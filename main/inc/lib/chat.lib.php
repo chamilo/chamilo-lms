@@ -400,7 +400,7 @@ class Chat extends Model
             $params = [];
             $params['from_user'] = (int) $fromUserId;
             $params['to_user'] = (int) $to_user_id;
-            $params['message'] = $message;
+            $params['message'] = $messagesan;
             $params['sent'] = api_get_utc_datetime();
 
             if (!empty($fromUserId) && !empty($to_user_id)) {

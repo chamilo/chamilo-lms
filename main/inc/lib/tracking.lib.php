@@ -6919,15 +6919,15 @@ class Tracking
 
                 $list = $list->get_flat_list();
                 $totalProgress = 0;
+                $totalTime = 0;
                 if (!empty($list)) {
                     foreach ($list as $lp_id => $learnpath) {
                         if (!$learnpath['lp_visibility']) {
                             continue;
                         }
                         $lpProgress = self::get_avg_student_progress($userId, $courseCode, [$lp_id], $sessionId);
+                        $time = isset($lpTimeList[TOOL_LEARNPATH][$lp_id]) ? $lpTimeList[TOOL_LEARNPATH][$lp_id] : 0;
                         if ($lpProgress == 100) {
-                            //$time = self::get_time_spent_in_lp($userId, $courseCode, [$lp_id], $sessionId);
-                            $time = isset($lpTimeList[TOOL_LEARNPATH][$lp_id]) ? $lpTimeList[TOOL_LEARNPATH][$lp_id] : 0;
                             if (!empty($time)) {
                                 $timeInMinutes = $time / 60;
                                 $min = (int) learnpath::getAccumulateWorkTimePrerequisite($lp_id, $courseId);
@@ -6936,6 +6936,7 @@ class Tracking
                                 }
                             }
                         }
+                        $totalTime += $time;
                     }
 
                     if (!empty($totalProgress)) {
@@ -6949,82 +6950,8 @@ class Tracking
                     'module' => $courseInfo['name'],
                     'progress' => $progress,
                     'qualification' => $totalProgress,
-                    'activeTime' => $time,
+                    'activeTime' => $totalTime,
                 ];
-                /*
-                $categoriesTempList = learnpath::getCategories($courseId);
-                $categoryNone = new CLpCategory();
-                $categoryNone->setId(0);
-                $categoryNone->setName(get_lang('WithOutCategory'));
-                $categoryNone->setPosition(0);
-
-                $categories = array_merge([$categoryNone], $categoriesTempList);
-
-                foreach ($categories as $category) {
-                    $learnPathList = new LearnpathList(
-                        $userId,
-                        $courseInfo,
-                        $sessionId,
-                        null,
-                        false,
-                        $category->getId()
-                    );
-
-                    $flatLpList = $learnPathList->get_flat_list();
-
-                    if (empty($flatLpList)) {
-                        continue;
-                    }
-
-                    foreach ($flatLpList as $lpId => $lpDetails) {
-                        if ($lpDetails['lp_visibility'] == 0) {
-                            continue;
-                        }
-
-                        if (!learnpath::is_lp_visible_for_student(
-                            $lpId,
-                            $userId,
-                            $courseInfo,
-                            $sessionId
-                        )) {
-                            continue;
-                        }
-
-                        $timeLimits = false;
-
-                        // This is an old LP (from a migration 1.8.7) so we do nothing
-                        if (empty($lpDetails['created_on']) && empty($lpDetails['modified_on'])) {
-                            $timeLimits = false;
-                        }
-
-                        // Checking if expired_on is ON
-                        if (!empty($lpDetails['expired_on'])) {
-                            $timeLimits = true;
-                        }
-
-                        if ($timeLimits) {
-                            if (!empty($lpDetails['publicated_on']) && !empty($lpDetails['expired_on'])) {
-                                $startTime = api_strtotime($lpDetails['publicated_on'], 'UTC');
-                                $endTime = api_strtotime($lpDetails['expired_on'], 'UTC');
-                                $now = time();
-                                $isActiveTime = false;
-
-                                if ($now > $startTime && $endTime > $now) {
-                                    $isActiveTime = true;
-                                }
-
-                                if (!$isActiveTime) {
-                                    continue;
-                                }
-                            }
-                        }
-
-                        $progress = learnpath::getProgress($lpId, $userId, $courseId, $sessionId);
-                        $time = self::get_time_spent_in_lp($userId, $courseCode, [], $sessionId);
-                        $score = self::getAverageStudentScore($userId, $courseCode, [], $sessionId);
-
-                    }
-                }*/
             }
         }
 

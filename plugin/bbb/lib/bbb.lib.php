@@ -1622,8 +1622,20 @@ class bbb
         );
 
         $delete = false;
+        $recordings = [];
         // Check if there are recordings for this meeting
-        $recordings = $this->api->getRecordings(['meetingId' => $meetingData['remote_id']]);
+        if (!empty($meetingData['remote_id'])) {
+            Event::addEvent(
+                'bbb_delete_record',
+                'remote_id',
+                $meetingData['remote_id'],
+                null,
+                api_get_user_id(),
+                api_get_course_int_id(),
+                api_get_session_id()
+            );
+            $recordings = $this->api->getRecordings(['meetingId' => $meetingData['remote_id']]);
+        }
         if (!empty($recordings) && isset($recordings['messageKey']) && $recordings['messageKey'] == 'noRecordings') {
             $delete = true;
         } else {
@@ -1633,6 +1645,15 @@ class bbb
                     $recordsToDelete[] = $record['recordId'];
                 }
                 $recordingParams = ['recordId' => implode(',', $recordsToDelete)];
+                Event::addEvent(
+                    'bbb_delete_record',
+                    'record_id_list',
+                    implode(',', $recordsToDelete),
+                    null,
+                    api_get_user_id(),
+                    api_get_course_int_id(),
+                    api_get_session_id()
+                );
                 $result = $this->api->deleteRecordingsWithXmlResponseArray($recordingParams);
                 if (!empty($result) && isset($result['deleted']) && $result['deleted'] === 'true') {
                     $delete = true;
@@ -1640,7 +1661,7 @@ class bbb
             }
         }
 
-        /*if ($delete) {
+        if ($delete) {
             Database::delete(
                 'plugin_bbb_room',
                 array('meeting_id = ?' => array($id))
@@ -1650,7 +1671,7 @@ class bbb
                 $this->table,
                 array('id = ?' => array($id))
             );
-        }*/
+        }
 
         return $delete;
     }

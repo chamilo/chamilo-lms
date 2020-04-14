@@ -242,6 +242,10 @@ switch ($action) {
             CoursesAndSessionsCatalog::courseSortOptions(),
             [ 'multiple' => true ]
         );
+        if (array_key_exists('sortKeys', $_GET)) {
+            $defaults['sortKeys'] = $_GET['sortKeys'];
+            $form->setDefaults($defaults);
+        }
 
         $conditions = [];
         $fields = [];

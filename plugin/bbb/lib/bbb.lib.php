@@ -1012,10 +1012,6 @@ class bbb
                         if (!empty($record['playbackFormatUrl'])) {
                             $this->updateMeetingVideoUrl($meetingDB['id'], $record['playbackFormatUrl']);
                         }
-
-                        /*if (!$this->isConferenceManager()) {
-                            $record = [];
-                        }*/
                     }
                 }
 
@@ -1639,24 +1635,27 @@ class bbb
         if (!empty($recordings) && isset($recordings['messageKey']) && $recordings['messageKey'] == 'noRecordings') {
             $delete = true;
         } else {
-            $recordsToDelete = [];
             if (!empty($recordings['records'])) {
+                $recordsToDelete = [];
                 foreach ($recordings['records'] as $record) {
                     $recordsToDelete[] = $record['recordId'];
                 }
-                $recordingParams = ['recordId' => implode(',', $recordsToDelete)];
-                Event::addEvent(
-                    'bbb_delete_record',
-                    'record_id_list',
-                    implode(',', $recordsToDelete),
-                    null,
-                    api_get_user_id(),
-                    api_get_course_int_id(),
-                    api_get_session_id()
-                );
-                $result = $this->api->deleteRecordingsWithXmlResponseArray($recordingParams);
-                if (!empty($result) && isset($result['deleted']) && $result['deleted'] === 'true') {
-                    $delete = true;
+                $delete = true;
+                if (!empty($recordsToDelete)) {
+                    $recordingParams = ['recordId' => implode(',', $recordsToDelete)];
+                    Event::addEvent(
+                        'bbb_delete_record',
+                        'record_id_list',
+                        implode(',', $recordsToDelete),
+                        null,
+                        api_get_user_id(),
+                        api_get_course_int_id(),
+                        api_get_session_id()
+                    );
+                    $result = $this->api->deleteRecordingsWithXmlResponseArray($recordingParams);
+                    if (!empty($result) && isset($result['deleted']) && $result['deleted'] === 'true') {
+                        $delete = true;
+                    }
                 }
             }
         }

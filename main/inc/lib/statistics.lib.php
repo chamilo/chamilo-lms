@@ -446,6 +446,7 @@ class Statistics
      * @param array  $stats
      * @param bool   $showTotal
      * @param bool   $isFileSize
+     *
      * @return string HTML table
      */
     public static function printStats(
@@ -592,11 +593,14 @@ class Statistics
 
     /**
      * Print the number of recent logins.
-     * @param bool $distinct        whether to only give distinct users stats, or *all* logins
-     * @param int  $sessionDuration Number of minutes a session must have lasted at a minimum to be taken into account
-     * @param array $periods List of number of days we want to query (default: [1, 7, 31] for last 1 day, last 7 days, last 31 days)
-     * @return string HTML table
+     *
+     * @param bool  $distinct        whether to only give distinct users stats, or *all* logins
+     * @param int   $sessionDuration Number of minutes a session must have lasted at a minimum to be taken into account
+     * @param array $periods         List of number of days we want to query (default: [1, 7, 31] for last 1 day, last 7 days, last 31 days)
+     *
      * @throws Exception
+     *
+     * @return string HTML table
      */
     public static function printRecentLoginStats($distinct = false, $sessionDuration = 0, $periods = [])
     {
@@ -679,12 +683,14 @@ class Statistics
 
     /**
      * Get the number of recent logins.
+     *
      * @param bool $distinct            Whether to only give distinct users stats, or *all* logins
      * @param int  $sessionDuration     Number of minutes a session must have lasted at a minimum to be taken into account
      * @param bool $completeMissingDays Whether to fill the daily gaps (if any) when getting a list of logins
      *
-     * @return array
      * @throws Exception
+     *
+     * @return array
      */
     public static function getRecentLoginStats($distinct = false, $sessionDuration = 0, $completeMissingDays = true)
     {

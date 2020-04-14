@@ -215,7 +215,6 @@ foreach ($result as &$row) {
     }
 }
 
-
 ini_set('log_errors', '1');
 
 /**

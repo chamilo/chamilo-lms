@@ -3134,28 +3134,6 @@ class Exercise
     }
 
     /**
-     * Get number of questions in exercise by user attempt.
-     *
-     * @return int
-     */
-    private function countQuestionsInExercise()
-    {
-        $lpId = isset($_REQUEST['learnpath_id']) ? (int) $_REQUEST['learnpath_id'] : 0;
-        $lpItemId = isset($_REQUEST['learnpath_item_id']) ? (int) $_REQUEST['learnpath_item_id'] : 0;
-        $lpItemViewId = isset($_REQUEST['learnpath_item_view_id']) ? (int) $_REQUEST['learnpath_item_view_id'] : 0;
-
-        $trackInfo = $this->get_stat_track_exercise_info($lpId, $lpItemId, $lpItemViewId);
-
-        if (!empty($trackInfo)) {
-            $questionIds = explode(',', $trackInfo['data_tracking']);
-
-            return count($questionIds);
-        }
-
-        return $this->getQuestionCount();
-    }
-
-    /**
      * @param int    $question_id
      * @param int    $questionNum
      * @param array  $questions_in_media
@@ -9740,6 +9718,28 @@ class Exercise
         Session::erase('hotspot_coord');
         Session::erase('hotspot_dest');
         Session::erase('hotspot_delineation_result');
+    }
+
+    /**
+     * Get number of questions in exercise by user attempt.
+     *
+     * @return int
+     */
+    private function countQuestionsInExercise()
+    {
+        $lpId = isset($_REQUEST['learnpath_id']) ? (int) $_REQUEST['learnpath_id'] : 0;
+        $lpItemId = isset($_REQUEST['learnpath_item_id']) ? (int) $_REQUEST['learnpath_item_id'] : 0;
+        $lpItemViewId = isset($_REQUEST['learnpath_item_view_id']) ? (int) $_REQUEST['learnpath_item_view_id'] : 0;
+
+        $trackInfo = $this->get_stat_track_exercise_info($lpId, $lpItemId, $lpItemViewId);
+
+        if (!empty($trackInfo)) {
+            $questionIds = explode(',', $trackInfo['data_tracking']);
+
+            return count($questionIds);
+        }
+
+        return $this->getQuestionCount();
     }
 
     /**

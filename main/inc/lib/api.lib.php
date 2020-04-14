@@ -6482,7 +6482,6 @@ function api_request_uri()
  * @return int access_url_id of the current Chamilo Installation
  *
  * @author Julio Montoya <gugli100@gmail.com>
- *
  */
 function api_get_current_access_url_id()
 {

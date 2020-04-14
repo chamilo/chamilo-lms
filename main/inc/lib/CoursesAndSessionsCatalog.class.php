@@ -635,7 +635,12 @@ class CoursesAndSessionsCatalog
                 $valueA = array_key_exists($key, $a) ? $a[$key] : null;
                 $valueB = array_key_exists($key, $b) ? $b[$key] : null;
                 if ($valueA !== $valueB) {
-                    return ($valueA < $valueB ? -1 : 1) * (in_array($key, $descKeys) ? -1 : 1);
+                    $aIsLessThanB = (is_string($valueA) && is_string($valueB))
+                        ? strtolower($valueA) < strtolower($valueB)
+                        : $valueA < $valueB;
+                    $reverseOrder = in_array($key, $descKeys);
+                    $aIsBeforeB = ($aIsLessThanB xor $reverseOrder);
+                    return $aIsBeforeB ? -1 : 1;
                 }
             }
             return 0;

@@ -323,13 +323,13 @@ if ($showReporting) {
 $trackingColumn = isset($_GET['users_tracking_column']) ? $_GET['users_tracking_column'] : null;
 $trackingDirection = isset($_GET['users_tracking_direction']) ? $_GET['users_tracking_direction'] : null;
 
+$hideReports = api_get_configuration_value('hide_course_report_graph');
+
 // Show the charts part only if there are students subscribed to this course/session
 if ($nbStudents > 0) {
-    $usersTracking = TrackingCourseLog::get_user_data(null, $nbStudents, $trackingColumn, $trackingDirection, false);
     $numberStudentsCompletedLP = 0;
     $averageStudentsTestScore = 0;
     $scoresDistribution = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
-
     $userScoreList = [];
     $listStudentIds = [];
     $timeStudent = [];
@@ -343,9 +343,14 @@ if ($nbStudents > 0) {
         $sessionId
     );
 
-    $hideReports = api_get_configuration_value('hide_course_report_graph');
-
     if ($hideReports === false) {
+        $usersTracking = TrackingCourseLog::get_user_data(
+            null,
+            $nbStudents,
+            $trackingColumn,
+            $trackingDirection,
+            false
+        );
         foreach ($usersTracking as $userTracking) {
             $userInfo = api_get_user_info_from_username($userTracking[3]);
             if (empty($userInfo)) {
@@ -402,10 +407,7 @@ if ($nbStudents > 0) {
         $tpl->assign('number_students', $nbStudents);
         $tpl->assign('top_students', $userScoreList);
 
-        $trackingSummaryLayout = $tpl->get_template('tracking/tracking_course_log.tpl');
-        $content = $tpl->fetch($trackingSummaryLayout);
-
-        echo $content;
+        echo $tpl->fetch($tpl->get_template('tracking/tracking_course_log.tpl'));
     }
 }
 
@@ -460,12 +462,22 @@ if ($nbStudents > 0) {
         $_GET['users_tracking_per_page'] = 1000000;
     }
 
-    $table = new SortableTableFromArray(
-        $usersTracking,
-        1,
-        20,
-        'users_tracking'
-    );
+    if ($hideReports === false) {
+        $table = new SortableTableFromArray(
+            $usersTracking,
+            1,
+            20,
+            'users_tracking'
+        );
+    } else {
+        $table = new SortableTable(
+            'users_tracking',
+            ['TrackingCourseLog', 'get_number_of_users'],
+            ['TrackingCourseLog', 'get_user_data'],
+            1
+        );
+    }
+
     $table->total_number_of_items = $nbStudents;
 
     $parameters['cidReq'] = isset($_GET['cidReq']) ? Security::remove_XSS($_GET['cidReq']) : '';

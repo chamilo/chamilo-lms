@@ -1640,7 +1640,7 @@ class bbb
             }
         }
 
-        if ($delete) {
+        /*if ($delete) {
             Database::delete(
                 'plugin_bbb_room',
                 array('meeting_id = ?' => array($id))
@@ -1650,7 +1650,7 @@ class bbb
                 $this->table,
                 array('id = ?' => array($id))
             );
-        }
+        }*/
 
         return $delete;
     }

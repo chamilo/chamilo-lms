@@ -420,6 +420,7 @@ class ExtraField extends BaseAttribute
      * Retreives and returns the value stored in each extra field for each item.
      *
      * @param ExtraField[] $extraFields
+     * @param int[]        $itemIds
      *
      * @return array itemId => [ fieldId => value ]
      */
@@ -490,6 +491,7 @@ class ExtraField extends BaseAttribute
                 }
             }
         }
+
         return $sortedExtraFields;
     }
 }

@@ -446,6 +446,7 @@ class Statistics
      * @param array  $stats
      * @param bool   $showTotal
      * @param bool   $isFileSize
+     * @return string HTML table
      */
     public static function printStats(
         $title,
@@ -454,7 +455,7 @@ class Statistics
         $isFileSize = false
     ) {
         $total = 0;
-        $content = '<table class="data_table" cellspacing="0" cellpadding="3">
+        $content = '<table class="data_table" cellspacing="0" cellpadding="3" width="90%">
                 <tr><th colspan="'.($showTotal ? '4' : '3').'">'.$title.'</th></tr>';
         $i = 0;
         foreach ($stats as $subtitle => $number) {
@@ -470,11 +471,11 @@ class Statistics
             $percentage = ($total > 0 ? number_format(100 * $number / $total, 1, ',', '.') : '0');
 
             $content .= '<tr class="row_'.($i % 2 == 0 ? 'odd' : 'even').'">
-                    <td width="150">'.$subtitle.'</td>
-                    <td width="550">'.Display::bar_progress($percentage, false).'</td>
-                    <td align="right">'.$number_label.'</td>';
+                    <td width="25%" style="vertical-align:top;">'.$subtitle.'</td>
+                    <td width="60%">'.Display::bar_progress($percentage, false).'</td>
+                    <td width="5%" align="right" style="vertical-align:top;">'.$number_label.'</td>';
             if ($showTotal) {
-                $content .= '<td align="right"> '.$percentage.'%</td>';
+                $content .= '<td width="5%" align="right"> '.$percentage.'%</td>';
             }
             $content .= '</tr>';
             $i++;
@@ -591,10 +592,11 @@ class Statistics
 
     /**
      * Print the number of recent logins.
-     *
      * @param bool $distinct        whether to only give distinct users stats, or *all* logins
-     * @param int  $sessionDuration
+     * @param int  $sessionDuration Number of minutes a session must have lasted at a minimum to be taken into account
      * @param array $periods List of number of days we want to query (default: [1, 7, 31] for last 1 day, last 7 days, last 31 days)
+     * @return string HTML table
+     * @throws Exception
      */
     public static function printRecentLoginStats($distinct = false, $sessionDuration = 0, $periods = [])
     {
@@ -619,7 +621,7 @@ class Statistics
         }
         $sqlList = [];
 
-        $sessionDuration = (int) $sessionDuration;
+        $sessionDuration = (int) $sessionDuration * 60; // convert from minutes to seconds
         foreach ($periods as $day) {
             $date = new DateTime($now);
             $startDate = $date->format('Y-m-d').' 00:00:00';
@@ -637,7 +639,7 @@ class Statistics
             if ($day == 1) {
                 $label = get_lang('Today');
             }
-            $label .= " <br /> $localDate - $localEndDate";
+            $label .= " <span class=\"muted right\" style=\"float: right; margin-right: 5px;\">[$localDate - $localEndDate]</span>";
             $sql = "SELECT count($field) AS number
                     FROM $table $table_url
                     WHERE ";
@@ -676,13 +678,13 @@ class Statistics
     }
 
     /**
-     * get the number of recent logins.
-     *
+     * Get the number of recent logins.
      * @param bool $distinct            Whether to only give distinct users stats, or *all* logins
-     * @param int  $sessionDuration
+     * @param int  $sessionDuration     Number of minutes a session must have lasted at a minimum to be taken into account
      * @param bool $completeMissingDays Whether to fill the daily gaps (if any) when getting a list of logins
      *
      * @return array
+     * @throws Exception
      */
     public static function getRecentLoginStats($distinct = false, $sessionDuration = 0, $completeMissingDays = true)
     {
@@ -706,7 +708,7 @@ class Statistics
         if ($distinct) {
             $field = 'DISTINCT(login_user_id)';
         }
-        $sessionDuration = (int) $sessionDuration;
+        $sessionDuration = (int) $sessionDuration * 60; //Convert from minutes to seconds
 
         $sql = "SELECT count($field) AS number, date(login_date) as login_date
                 FROM $table $table_url

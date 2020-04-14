@@ -8498,4 +8498,9 @@ $SessionsPerCategory = "Sessions per category";
 $SessionsPerLanguage = "Sessions per language";
 $CountOfSessions = "Number of sessions";
 $CourseInSession = "Courses in sessions";
+$UserStats = "Users statistics";
+$TotalNumberOfStudents = "Total number of students";
+$UsersCreatedInTheSelectedPeriod = "Users created in the selected period";
+$UserByLanguage = "Users per language";
+$Count = "Count";
 ?>

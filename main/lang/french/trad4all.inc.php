@@ -8435,4 +8435,7 @@ $TotalNumberOfStudents = "Nombre total d'étudiants";
 $UsersCreatedInTheSelectedPeriod = "Utilisateurs créés durant la période sélectionnée";
 $UserByLanguage = "Utilisateurs par langue";
 $Count = "Nombre";
+$SortKeys = "Trier par";
+$SubscriptionCount = "Nombre d'inscrits";
+$VoteCount = "Nombre de vote";
 ?>

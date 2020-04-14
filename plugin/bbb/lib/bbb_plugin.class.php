@@ -106,15 +106,20 @@ class BBBPlugin extends Plugin
      */
     public function validateCourseSetting($variable)
     {
-        if ($variable === 'bbb_enable_conference_in_groups') {
-            if ($this->get('enable_conference_in_course_groups') === 'true') {
-                return true;
-            }
+        $result = true;
+        switch ($variable) {
+            case 'bbb_enable_conference_in_groups':
 
-            return false;
+                $result = $this->get('enable_conference_in_course_groups') === 'true';
+                break;
+            case 'bbb_force_record_generation':
+            case 'big_blue_button_record_and_store':
+
+                $result = $this->get('allow_regenerate_recording') === 'true';
+                break;
         }
 
-        return true;
+        return $result;
     }
 
     /**

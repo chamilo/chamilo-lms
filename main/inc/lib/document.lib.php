@@ -3433,7 +3433,7 @@ class DocumentManager
             $levelCondition = " AND docs.path NOT LIKE'/%/%'";
         }
 
-        $sql = "SELECT DISTINCT last.visibility, docs.* as did
+        $sql = "SELECT DISTINCT last.visibility, docs.* 
                 FROM $tbl_item_prop AS last
                 INNER JOIN $tbl_doc AS docs
                 ON (docs.iid = last.ref AND docs.c_id = last.c_id)
@@ -3471,7 +3471,7 @@ class DocumentManager
         if (!empty($resources) && $user_in_course) {
             foreach ($resources as $resource) {
                 $is_visible = self::is_visible_by_id(
-                    $resource['did'],
+                    $resource['iid'],
                     $course_info,
                     $session_id,
                     api_get_user_id()

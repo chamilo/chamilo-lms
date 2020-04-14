@@ -145,7 +145,6 @@ if (isset($_GET['email']) || isset($_GET['email_bis'])) {
         }
 
         if (isset($attributes['courses']) && !empty($attributes['courses'])) {
-            //error_log('Courses: '.$attributes['courses']);
             $courses = explode(',', $attributes['courses']);
             $firstCourseCode = '';
             if (!empty($courses)) {
@@ -179,6 +178,8 @@ if (isset($_GET['email']) || isset($_GET['email_bis'])) {
         Session::write('_user', $userInfo);
         Session::write('is_platformAdmin', false);
         Session::write('is_allowedCreateCourse', false);
+
+        Event::eventLogin($userId);
 
         if (!empty($courseCode)) {
             $courseInfo = api_get_course_info($courseCode);

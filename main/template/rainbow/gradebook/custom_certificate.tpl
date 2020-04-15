@@ -47,10 +47,10 @@
                                         {{ complete_name }}
                                     </h3>
                                     <p style="font-size: 16px;">
-                                        {% if document_language == 'fr' %}
-                                            {{ 'UserHasParticipateDansDePlatformeXTheContratDateXCertificateDateXTimeX' | get_lang | format(_s.site_name, terms_validation_date_no_time, certificate_generated_date_no_time)}}
-                                        {% else %}
+                                        {% if document_language == 'de' %}
                                             {{ 'UserHasParticipateDansDePlatformeXTheContratDateXCertificateDateXTimeX' | get_lang | format(terms_validation_date_no_time, certificate_generated_date_no_time, _s.site_name)}}
+                                        {% else %}
+                                            {{ 'UserHasParticipateDansDePlatformeXTheContratDateXCertificateDateXTimeX' | get_lang | format(_s.site_name, terms_validation_date_no_time, certificate_generated_date_no_time)}}
                                         {% endif %}
                                     </p>
                                     <br />
@@ -87,7 +87,7 @@
                                         <br />
                                     {% endif %}
 
-                                    <p style="color:#40ad49; font-size: 16px;">Berlin/Paris, {{ 'The' | get_lang }} <span style="font-weight: bold; color: #672290;">{{ certificate_generated_date_no_time }}</span><br />
+                                    <p style="color:#40ad49; font-size: 16px;">{{ 'BerlinParis' | get_lang }}, {{ 'The' | get_lang }} <span style="font-weight: bold; color: #672290;">{{ certificate_generated_date_no_time }}</span><br />
                                         {{ 'ThePlatformTeam' | get_lang }}</p>
                                     <br />
                                 </td>

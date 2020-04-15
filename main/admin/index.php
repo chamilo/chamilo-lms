@@ -708,7 +708,10 @@ if (api_is_platform_admin()) {
                 $pluginInfo = $plugin_obj->getPluginInfo($pluginName, true);
                 /** @var \Plugin $plugin */
                 $plugin = $pluginInfo['obj'];
-                $pluginUrl = $plugin->getAdminUrl();
+                $pluginUrl = null;
+                if ($plugin) {
+                    $pluginUrl = $plugin->getAdminUrl();
+                }
 
                 if (empty($pluginUrl)) {
                     continue;

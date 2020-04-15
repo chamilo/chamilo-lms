@@ -3839,7 +3839,7 @@ class learnpath
      * Gets the latest usable view or generate a new one.
      *
      * @param int $attempt_num Optional attempt number. If none given, takes the highest from the lp_view table
-     * @param int $userId The user ID, as $this->get_user_id() is not always available
+     * @param int $userId      The user ID, as $this->get_user_id() is not always available
      *
      * @return int DB lp_view id
      */
@@ -3860,6 +3860,7 @@ class learnpath
         if (empty($userId)) {
             if (empty($this->get_user_id())) {
                 $this->error = 'User ID is empty in learnpath::get_view()';
+
                 return null;
             } else {
                 $userId = $this->get_user_id();

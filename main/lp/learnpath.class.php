@@ -4907,6 +4907,13 @@ class learnpath
         );
         $table = Database::get_course_table(TABLE_LP_VIEW);
 
+        $userId = $this->get_user_id();
+        if (empty($userId)) {
+            $userId = api_get_user_id();
+            if ($debug) {
+                error_log('$this->get_user_id() was empty, used api_get_user_id() instead in '.__FILE__.' line '.__LINE__);
+            }
+        }
         if (isset($this->current) && !api_is_invitee()) {
             if ($debug) {
                 error_log('Saving current item ('.$this->current.') for later review', 0);
@@ -4916,7 +4923,7 @@ class learnpath
                     WHERE
                         c_id = $course_id AND
                         lp_id = ".$this->get_id()." AND
-                        user_id = ".$this->get_user_id()." ".$session_condition;
+                        user_id = ".$userId." ".$session_condition;
 
             if ($debug) {
                 error_log('Saving last item seen : '.$sql, 0);
@@ -4934,7 +4941,7 @@ class learnpath
                         WHERE
                             c_id = $course_id AND
                             lp_id = ".$this->get_id()." AND
-                            user_id = ".$this->get_user_id()." ".$session_condition;
+                            user_id = ".$userId." ".$session_condition;
                 // Ignore errors as some tables might not have the progress field just yet.
                 Database::query($sql);
                 $this->progress_db = $progress;

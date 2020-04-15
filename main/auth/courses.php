@@ -226,6 +226,7 @@ switch ($action) {
             $select->addOption($separate.' '.$categoryName.' ('.$countCourse.')', $categoryCodeItem);
         }
 
+        $defaults['search_term'] = $searchTerm;
         $defaults['category_code'] = $categoryCode;
 
         $jqueryReadyContent = '';

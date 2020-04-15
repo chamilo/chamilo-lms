@@ -3839,10 +3839,11 @@ class learnpath
      * Gets the latest usable view or generate a new one.
      *
      * @param int $attempt_num Optional attempt number. If none given, takes the highest from the lp_view table
+     * @param int $userId The user ID, as $this->get_user_id() is not always available
      *
      * @return int DB lp_view id
      */
-    public function get_view($attempt_num = 0)
+    public function get_view($attempt_num = 0, $userId = null)
     {
         $search = '';
         // Use $attempt_num to enable multi-views management (disabled so far).
@@ -3855,11 +3856,21 @@ class learnpath
         $course_id = api_get_course_int_id();
         $sessionId = api_get_session_id();
 
+        // Check user ID.
+        if (empty($userId)) {
+            if (empty($this->get_user_id())) {
+                $this->error = 'User ID is empty in learnpath::get_view()';
+                return null;
+            } else {
+                $userId = $this->get_user_id();
+            }
+        }
+
         $sql = "SELECT iid, view_count FROM $lp_view_table
         		WHERE
         		    c_id = $course_id AND
         		    lp_id = ".$this->get_id()." AND
-        		    user_id = ".$this->get_user_id()." AND
+        		    user_id = ".$userId." AND
         		    session_id = $sessionId
         		    $search
                 ORDER BY view_count DESC";

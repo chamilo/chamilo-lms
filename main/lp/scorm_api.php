@@ -187,7 +187,7 @@ olms.switch_finished = 0;
 //olms.lms_progress_bar_mode = '<?php echo $oLP->progress_bar_mode; ?>';
 //if(lms_progress_bar_mode == ''){lms_progress_bar_mode='%';}
 
-olms.lms_view_id = '<?php echo $oLP->get_view(); ?>';
+olms.lms_view_id = '<?php echo $oLP->get_view(null, $userId); ?>';
 if(olms.lms_view_id == ''){ olms.lms_view_id = 1;}
 olms.lms_user_id = '<?php echo $userId; ?>';
 olms.lms_next_item = '<?php echo $oLP->get_next_item_id(); ?>';

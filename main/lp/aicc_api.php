@@ -103,7 +103,7 @@ var lms_total_lessons = <?php echo $oLP->get_total_items_count(); ?>;
 var lms_complete_lessons = <?php echo $oLP->get_complete_items_count(); ?>;
 var lms_progress_bar_mode = '<?php echo $oLP->progress_bar_mode; ?>';
 if(lms_progress_bar_mode == ''){lms_progress_bar_mode='%';}
-var lms_view_id = '<?php echo $oLP->get_view(); ?>';
+var lms_view_id = '<?php echo $oLP->get_view(null, $_user['user_id']); ?>';
 if(lms_view_id == ''){ lms_view_id = 1;}
 var lms_user_id = '<?php echo $_user['user_id']; ?>';
 var lms_next_item = '<?php echo $oLP->get_next_item_id(); ?>';

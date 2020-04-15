@@ -84,7 +84,7 @@
                                 <div class="row">
                                     <div class="col-xs-4 col-md-3">
                                         <div class="number-post">
-                                            <a href="{{ forum.url }}" title="{{forum.title}}">
+                                            <a href="{{ subitem.url }}" title="{{subitem.title}}">
                                                 {% if subitem.forum_image is not empty %}
                                                     <img src="{{ subitem.forum_image }}" width="48px">
                                                 {% else %}

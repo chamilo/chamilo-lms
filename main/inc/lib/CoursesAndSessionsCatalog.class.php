@@ -1793,6 +1793,7 @@ class CoursesAndSessionsCatalog
         // Start URL with params
         $pageUrl = api_get_self().
             '?action='.$action.
+            '&search_term='.$searchTerm.
             '&category_code='.$categoryCode.
             '&pageCurrent='.$pageCurrent.
             '&pageLength='.$pageLength;
@@ -1817,7 +1818,6 @@ class CoursesAndSessionsCatalog
             case 'subscribe':
                 // for search
                 $pageUrl .=
-                    '&search_term='.$searchTerm.
                     '&sec_token='.Security::getTokenFromSession();
                 break;
             case 'display_courses':

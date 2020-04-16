@@ -515,6 +515,7 @@
             <a href="{{ web_self ~ "?" ~ _p.web_cid_query ~ "&action=send_notify_teacher" }}" class="btn btn-primary">
                 {{ 'IHaveFinishedTheLessonsNotifyTheTeacher'|get_lang }}
             </a>
+            {{ download_files_after_finish }}
         {% endif %}
     </div>
 {% endif %}

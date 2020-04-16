@@ -130,6 +130,15 @@ if (!empty($_configuration['multiple_access_urls'])) {
     $_configuration['access_url'] = 1;
 }
 
+// Check if APCu is available. If so, store the value in $_configuration
+if (extension_loaded('apcu')) {
+    $apcEnabled = ini_get('apc.enabled');
+    if (!empty($apcEnabled) && $apcEnabled != 'Off' && $apcEnabled != 'off') {
+        $_configuration['apc'] = true;
+        $_configuration['apc_prefix'] = $_configuration['main_database'].'_'.$_configuration['access_url'].'_';
+    }
+}
+
 $charset = 'UTF-8';
 
 // Enables the portability layer and configures PHP for UTF-8

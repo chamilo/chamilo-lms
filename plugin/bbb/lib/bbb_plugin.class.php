@@ -109,14 +109,12 @@ class BBBPlugin extends Plugin
         $result = true;
         switch ($variable) {
             case 'bbb_enable_conference_in_groups':
-
                 $result = $this->get('enable_conference_in_course_groups') === 'true';
                 break;
             case 'bbb_force_record_generation':
-            case 'big_blue_button_record_and_store':
-
                 $result = $this->get('allow_regenerate_recording') === 'true';
                 break;
+            case 'big_blue_button_record_and_store':
         }
 
         return $result;

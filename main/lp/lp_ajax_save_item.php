@@ -95,7 +95,9 @@ function save_item(
     $prerequisitesCheck = $myLP->prerequisites_match($item_id);
 
     /** @var learnpathItem $myLPI */
-    $myLPI = $myLP->items[$item_id];
+    if ($myLP->items && isset($myLP->items[$item_id])) {
+        $myLPI = $myLP->items[$item_id];
+    }
 
     if (empty($myLPI)) {
         if ($debug > 0) {

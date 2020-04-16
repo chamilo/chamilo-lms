@@ -158,6 +158,7 @@ if ($allowMinTime) {
 
 $user = api_get_user_entity($userId);
 $ending = true;
+$allLpTimeValid = true;
 $isInvitee = api_is_invitee();
 $hideScormExportLink = api_get_setting('hide_scorm_export_link');
 $hideScormCopyLink = api_get_setting('hide_scorm_copy_link');
@@ -414,6 +415,7 @@ foreach ($categories as $item) {
                     $formattedLpTime = api_time_to_hms($lpTime);
                     $formattedAccumulateWorkTime = api_time_to_hms($accumulateWorkTime * 60);
                     if ($lpTime < ($accumulateWorkTime * 60)) {
+                        $allLpTimeValid = false;
                         $linkMinTime = Display::return_icon(
                             'warning.png',
                             get_lang('LpMinTimeWarning').' - '.
@@ -442,6 +444,8 @@ foreach ($categories as $item) {
                         $ending = false;
                     }
                     $dsp_time = learnpath::get_progress_bar($time_progress_value, '%');
+                } else {
+                    $allLpTimeValid = false;
                 }
             }
 
@@ -940,7 +944,7 @@ learnpath::generate_learning_path_folder($courseInfo);
 DocumentManager::removeGeneratedAudioTempFile();
 
 $downloadFileAfterFinish = '';
-if ($ending && api_get_configuration_value('download_files_after_all_lp_finished')) {
+if ($ending && $allLpTimeValid && api_get_configuration_value('download_files_after_all_lp_finished')) {
     $downloadFilesSetting = api_get_configuration_value('download_files_after_all_lp_finished');
     $courseCode = $courseInfo['code'];
     $downloadFinishId = isset($_REQUEST['download_finished']) ? (int) $_REQUEST['download_finished'] : 0;

@@ -1,4 +1,5 @@
 <?php
+
 /* For licensing terms, see /license.txt */
 
 use ChamiloSession as Session;
@@ -1121,8 +1122,26 @@ function addListeners(){
         logit_lms('Chamilo LP or asset');
         //if this path is a Chamilo learnpath, then start manual save
         //when something is loaded in there
-        addEvent(window, 'unload', lms_save_asset,false);
+        //addEvent(window, 'unload', lms_save_asset,false);
+
+        $(window).on('unload', function(e){
+            lms_save_asset();
+            logit_lms('Unload call', 3);
+        });
         logit_lms('Added event listener lms_save_asset() on window unload', 3);
+    }
+
+    if (olms.lms_item_type=='sco') {
+        $(window).on('beforeunload', function(e){
+            savedata(olms.lms_item_id);
+            logit_lms('beforeunload called', 3);
+        });
+
+        $(window).on('unload', function(e){
+            savedata(olms.lms_item_id);
+            logit_lms('unload called', 3);
+        });
+        logit_lms('Added unload savedata() on window unload', 3);
     }
     logit_lms('Quitting addListeners()');
 }

@@ -1,4 +1,5 @@
 <?php
+
 /* For licensing terms, see /license.txt */
 
 use Chamilo\CourseBundle\Entity\CLpCategory;
@@ -8,8 +9,6 @@ use ChamiloSession as Session;
  * This file was originally the copy of document.php, but many modifications happened since then ;
  * the direct file view is not any more needed, if the user uploads a SCORM zip file, a directory
  * will be automatically created for it, and the files will be uncompressed there for example ;.
- *
- * @package chamilo.learnpath
  *
  * @author  Yannick Warnier <ywarnier@beeznest.org>
  */
@@ -940,11 +939,41 @@ Session::erase('questionList');
 learnpath::generate_learning_path_folder($courseInfo);
 DocumentManager::removeGeneratedAudioTempFile();
 
+$downloadFileAfterFinish = '';
+if ($ending && api_get_configuration_value('download_files_after_all_lp_finished')) {
+    $downloadFilesSetting = api_get_configuration_value('download_files_after_all_lp_finished');
+    $courseCode = $courseInfo['code'];
+    $downloadFinishId = isset($_REQUEST['download_finished']) ? (int) $_REQUEST['download_finished'] : 0;
+    if (isset($downloadFilesSetting['courses'][$courseCode])) {
+        $files = $downloadFilesSetting['courses'][$courseCode];
+        $coursePath = $courseInfo['course_sys_path'].'/document';
+        foreach ($files as $documentId) {
+            $documentData = DocumentManager::get_document_data_by_id($documentId, $courseCode);
+            if ($documentData) {
+                $downloadFileAfterFinish .= Display::url(
+                    get_lang('Download').': '.$documentData['title'],
+                    api_get_self().'?'.api_get_cidreq().'&download_finished='.$documentId,
+                    ['class' => 'btn btn-primary']
+                );
+                if ($downloadFinishId === $documentId) {
+                    $docUrl = $documentData['path'];
+                    if (Security::check_abs_path($coursePath.$docUrl, $coursePath.'/')) {
+                        Event::event_download($docUrl);
+                        DocumentManager::file_send_for_download($coursePath.$docUrl, true);
+                        exit;
+                    }
+                }
+            }
+        }
+    }
+}
+
 $template = new Template($nameTools);
 $template->assign('subscription_settings', $subscriptionSettings);
 $template->assign('is_allowed_to_edit', $is_allowed_to_edit);
 $template->assign('is_invitee', $isInvitee);
 $template->assign('is_ending', $ending);
+$template->assign('download_files_after_finish', $downloadFileAfterFinish);
 $template->assign('actions', $actions);
 $template->assign('categories', $categories);
 $template->assign('message', $message);

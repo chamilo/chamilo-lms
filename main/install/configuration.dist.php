@@ -1458,6 +1458,10 @@ $_configuration['course_catalog_settings'] = [
     'fields' => ['duree_en_min'],
 ];*/
 
+/* Show download files button after finishing all LP. Example: ABC is the course code, and 1 and 100 are the doc id
+$_configuration['download_files_after_all_lp_finished'] = ['courses' => ['ABC' => [1, 100]]];
+*/
+
 // KEEP THIS AT THE END
 // -------- Custom DB changes
 // Add user activation by confirmation email

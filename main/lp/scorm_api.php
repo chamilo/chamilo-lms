@@ -1129,7 +1129,27 @@ function addListeners(){
     }
 
     if (olms.lms_item_type=='sco') {
-        $(window).on('beforeunload', function(e){
+        window.addEventListener('beforeunload', function (e) {
+            savedata(olms.lms_item_id);
+            xajax_save_item_scorm(
+                olms.lms_lp_id,
+                olms.lms_user_id,
+                olms.lms_view_id,
+                olms.lms_item_id,
+                olms.lms_session_id,
+                olms.lms_course_id,
+                olms.finishSignalReceived,
+                1,
+                olms.statusSignalReceived
+            );
+            // Cancel the event
+            e.preventDefault(); // If you prevent default behavior in Mozilla Firefox prompt will always be shown
+            // Chrome requires returnValue to be set
+            e.returnValue = '';
+        });
+
+        /*window.addEventListener("pagehide", pageHidden, false);
+        $(window).on('onpagehide', function(e){
             savedata(olms.lms_item_id);
             xajax_save_item_scorm(
                 olms.lms_lp_id,
@@ -1144,7 +1164,7 @@ function addListeners(){
             );
 
             logit_lms('beforeunload called', 3);
-        });
+        });*/
 
         $(window).on('unload', function(e){
             savedata(olms.lms_item_id);
@@ -2028,11 +2048,12 @@ function xajax_save_item_scorm(
     }
 
     logit_lms('xajax_save_item_scorm with params:' + params, 3);
+    var codePathUrl = '<?php echo api_get_path(WEB_CODE_PATH).'lp/'; ?>';
 
     $.ajax({
         type:"POST",
         data: params,
-        url: "lp_ajax_save_item.php" + courseUrl,
+        url: codePathUrl + "lp_ajax_save_item.php" + courseUrl,
         dataType: "script",
         async: false
     });
@@ -2157,7 +2178,6 @@ function xajax_switch_item_toc(lms_lp_id, lms_user_id, lms_view_id, lms_item_id,
         async: false
     });
 }
-
 
 /**
  * Allow attach the glossary terms into html document of scorm. This has

@@ -1458,6 +1458,21 @@ $_configuration['course_catalog_settings'] = [
     'fields' => ['duree_en_min'],
 ];*/
 
+// CKEditor font names
+/*$_configuration['ck_editor_font_names'] = [
+    'names' => [
+        'Arial' => 'Arial, Helvetica, sans-serif',
+        'Comic Sans MS' => 'Comic Sans MS, cursive',
+        'Courier New' => 'Courier New, Courier, monospace',
+        'Georgia' => 'Georgia, serif',
+        'Lucida Sans Unicode' => 'Lucida Sans Unicode, Lucida Grande, sans-serif',
+        'Tahoma' => 'Tahoma, Geneva, sans-serif',
+        'Times New Roman' => 'Times New Roman, Times, serif',
+        'Trebuchet MS' => 'Trebuchet MS, Helvetica, sans-serif',
+        'Verdana' => 'Verdana, Geneva, sans-serif',
+    ]
+];*/
+
 /* Show download files button after finishing all LP. Example: ABC is the course code, and 1 and 100 are the doc id
 $_configuration['download_files_after_all_lp_finished'] = ['courses' => ['ABC' => [1, 100]]];
 */

@@ -122,6 +122,8 @@ CKEDITOR.editorConfig = function (config) {
     config.language_list = ['{{ language_list }}'];
 
     config.qMarkersRollsUrl = '{{ _p.web_ajax }}exercise.ajax.php?a=get_quiz_embeddable';
+
+    config.font_names = "{{ font_names }}";
 };
 
 // Sets default target to "_blank" in link plugin

@@ -6479,7 +6479,7 @@ function api_request_uri()
 /**
  * Gets the current access_url id of the Chamilo Platform.
  *
- * @return int access_url_id of the current Chamilo Installation
+ * @return int access_url_id of the current Chamilo Installation or 1 if multiple_access_urls is not enabled
  *
  * @author Julio Montoya <gugli100@gmail.com>
  */
@@ -6488,6 +6488,11 @@ function api_get_current_access_url_id()
     static $id;
     if (!empty($id)) {
         return $id;
+    }
+    if (!api_get_multiple_access_url()) {
+        // If the feature is not enabled, assume 1 and return before querying
+        // the database
+        return 1;
     }
 
     $table = Database::get_main_table(TABLE_MAIN_ACCESS_URL);
@@ -7498,6 +7503,7 @@ function api_get_multiple_access_url()
 }
 
 /**
+ * Just a synonym for api_get_multiple_access_url()
  * @return bool
  */
 function api_is_multiple_url_enabled()

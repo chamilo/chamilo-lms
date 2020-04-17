@@ -213,8 +213,10 @@ function return_logo($theme = '', $responsive = true)
 
 /**
  * Check if user have access to "who is online" page.
- * @param int $userId The user for whom we want to check
+ *
+ * @param int $userId   The user for whom we want to check
  * @param int $courseId The course ID for if we want the number of users in the course. Set to 0 for "out of a course context". Leave empty if you want the PHP session info to be used.
+ *
  * @return bool
  */
 function accessToWhoIsOnline($userId = null, $courseId = null)
@@ -265,7 +267,7 @@ function returnNotificationMenu()
 
     $user_id = api_get_user_id();
     $courseInfo = api_get_course_info();
-    if (accessToWhoIsOnline($user_id, (!empty($courseInfo['real_id'])?:0))) {
+    if (accessToWhoIsOnline($user_id, (!empty($courseInfo['real_id']) ?: 0))) {
         // Display the who's online of the platform
         if ((api_get_setting('showonline', 'world') == 'true' && !$user_id) ||
             (api_get_setting('showonline', 'users') == 'true' && $user_id)

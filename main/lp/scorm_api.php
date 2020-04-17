@@ -1129,27 +1129,7 @@ function addListeners(){
     }
 
     if (olms.lms_item_type=='sco') {
-        window.addEventListener('beforeunload', function (e) {
-            savedata(olms.lms_item_id);
-            xajax_save_item_scorm(
-                olms.lms_lp_id,
-                olms.lms_user_id,
-                olms.lms_view_id,
-                olms.lms_item_id,
-                olms.lms_session_id,
-                olms.lms_course_id,
-                olms.finishSignalReceived,
-                1,
-                olms.statusSignalReceived
-            );
-            // Cancel the event
-            e.preventDefault(); // If you prevent default behavior in Mozilla Firefox prompt will always be shown
-            // Chrome requires returnValue to be set
-            e.returnValue = '';
-        });
-
-        /*window.addEventListener("pagehide", pageHidden, false);
-        $(window).on('onpagehide', function(e){
+        $(window).on('beforeunload', function(e){
             savedata(olms.lms_item_id);
             xajax_save_item_scorm(
                 olms.lms_lp_id,
@@ -1164,9 +1144,10 @@ function addListeners(){
             );
 
             logit_lms('beforeunload called', 3);
-        });*/
+            return 'true';
+        });
 
-        $(window).on('unload', function(e){
+        $(window).on('unload', function(e) {
             savedata(olms.lms_item_id);
             logit_lms('unload called', 3);
             xajax_save_item_scorm(
@@ -1180,6 +1161,8 @@ function addListeners(){
                 1,
                 olms.statusSignalReceived
             );
+
+            return 'true';
         });
         logit_lms('Added unload savedata() on window unload', 3);
     }

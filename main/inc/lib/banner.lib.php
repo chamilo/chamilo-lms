@@ -230,6 +230,7 @@ function accessToWhoIsOnline()
         (api_get_setting('showonline', 'users') == 'true' && $user_id) ||
         (api_get_setting('showonline', 'course') == 'true' && $user_id && $course_id)
     ) {
+        $access = true;
         $profileList = api_get_configuration_value('allow_online_users_by_status');
         if (!empty($profileList) && isset($profileList['status'])) {
             $userInfo = api_get_user_info();

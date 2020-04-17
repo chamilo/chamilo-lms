@@ -7503,7 +7503,8 @@ function api_get_multiple_access_url()
 }
 
 /**
- * Just a synonym for api_get_multiple_access_url()
+ * Just a synonym for api_get_multiple_access_url().
+ *
  * @return bool
  */
 function api_is_multiple_url_enabled()

@@ -515,8 +515,13 @@
             <a href="{{ web_self ~ "?" ~ _p.web_cid_query ~ "&action=send_notify_teacher" }}" class="btn btn-primary">
                 {{ 'IHaveFinishedTheLessonsNotifyTheTeacher'|get_lang }}
             </a>
-            {{ download_files_after_finish }}
         {% endif %}
+    </div>
+{% endif %}
+
+{% if not is_invitee and lp_is_shown and allow_min_time and is_ending %}
+    <div id="lp_download_file_after_finish" class="controls text-center">
+        {{ download_files_after_finish }}
     </div>
 {% endif %}
 

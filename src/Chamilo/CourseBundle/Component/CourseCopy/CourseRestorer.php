@@ -2635,8 +2635,8 @@ class CourseRestorer
                         $tblLpCategory,
                         [
                             'WHERE' => [
-                                'c_id = ? AND name = ?' => [$this->destination_course_id, $lpCategory->getName()]
-                            ]
+                                'c_id = ? AND name = ?' => [$this->destination_course_id, $lpCategory->getName()],
+                            ],
                         ],
                         'first'
                     );

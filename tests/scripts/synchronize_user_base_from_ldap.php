@@ -21,6 +21,12 @@ username field is used to identify and match LDAP and Chamilo accounts together.
 ($extldap_user_correspondance['username'])
 */
 
+// Change this to the absolute path to chamilo root folder if you move the script out of tests/scripts
+$chamiloRoot = __DIR__.'/../..';
+
+// Set to true in order to get a trace of changes made by this script
+$debug = false;
+
 use Chamilo\CoreBundle\Entity\ExtraFieldValues;
 use Chamilo\CoreBundle\Entity\ExtraField;
 use Chamilo\CoreBundle\Entity\TrackEDefault;
@@ -32,12 +38,10 @@ if (php_sapi_name() !== 'cli') {
     die("this script is supposed to be run from the command-line\n");
 }
 
-require __DIR__.'/../../cli-config.php';
-require_once __DIR__.'/../../app/config/auth.conf.php';
-require_once __DIR__.'/../../main/inc/lib/api.lib.php';
-require_once __DIR__.'/../../main/inc/lib/database.constants.inc.php';
-
-$debug = false;
+require $chamiloRoot.'/cli-config.php';
+require_once $chamiloRoot.'/app/config/auth.conf.php';
+require_once $chamiloRoot.'/main/inc/lib/api.lib.php';
+require_once $chamiloRoot.'/main/inc/lib/database.constants.inc.php';
 
 ini_set('memory_limit', -1);
 
@@ -81,10 +85,12 @@ foreach ([false => $tableFieldMap, true => $extraFieldMap] as $areExtra => $fiel
         } else {
             try {
                 $userField->getter = new ReflectionMethod(
-                    '\Chamilo\UserBundle\Entity\User', 'get' . str_replace('_', '', ucfirst($name))
+                    '\Chamilo\UserBundle\Entity\User',
+                    'get' . str_replace('_', '', ucfirst($name))
                 );
                 $userField->setter = new ReflectionMethod(
-                    '\Chamilo\UserBundle\Entity\User', 'set' . str_replace('_', '', ucfirst($name))
+                    '\Chamilo\UserBundle\Entity\User',
+                    'set' . str_replace('_', '', ucfirst($name))
                 );
             } catch (ReflectionException $exception) {
                 die($exception->getMessage() . "\n");

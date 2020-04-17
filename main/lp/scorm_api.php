@@ -1,4 +1,5 @@
 <?php
+
 /* For licensing terms, see /license.txt */
 
 use ChamiloSession as Session;
@@ -15,8 +16,6 @@ use ChamiloSession as Session;
  * @author   Yannick Warnier <ywarnier@beeznest.org> (extended and maintained - 2005-2014)
  *
  * @version  v 1.2
- *
- * @package  chamilo.learnpath.scorm
  */
 
 // If you open the imsmanifest.xml via local machine (f.ex.: file://c:/...), then the Apiwrapper.js
@@ -894,7 +893,7 @@ function savedata(item_id) {
         item_to_save = old_item_id;
     }
 
-    //Original behaviour
+    // Original behaviour
     // xajax_save_item_scorm(olms.lms_lp_id, olms.lms_user_id, olms.lms_view_id, old_item_id);
 
     // Modified version
@@ -1031,7 +1030,7 @@ function GetErrorString(errCode){
  */
 function LMSGetDiagnostic(errCode){
     logit_scorm('LMSGetDiagnostic()',1);
-    return(API.LMSGetLastError());
+    return API.LMSGetLastError();
 }
 
 /**
@@ -1121,8 +1120,51 @@ function addListeners(){
         logit_lms('Chamilo LP or asset');
         //if this path is a Chamilo learnpath, then start manual save
         //when something is loaded in there
-        addEvent(window, 'unload', lms_save_asset,false);
+        //addEvent(window, 'unload', lms_save_asset,false);
+        $(window).on('unload', function(e){
+            lms_save_asset();
+            logit_lms('Unload call', 3);
+        });
         logit_lms('Added event listener lms_save_asset() on window unload', 3);
+    }
+
+    if (olms.lms_item_type=='sco') {
+        $(window).on('beforeunload', function(e){
+            savedata(olms.lms_item_id);
+            xajax_save_item_scorm(
+                olms.lms_lp_id,
+                olms.lms_user_id,
+                olms.lms_view_id,
+                olms.lms_item_id,
+                olms.lms_session_id,
+                olms.lms_course_id,
+                olms.finishSignalReceived,
+                1,
+                olms.statusSignalReceived
+            );
+
+            logit_lms('beforeunload called', 3);
+            return 'true';
+        });
+
+        $(window).on('unload', function(e) {
+            savedata(olms.lms_item_id);
+            logit_lms('unload called', 3);
+            xajax_save_item_scorm(
+                olms.lms_lp_id,
+                olms.lms_user_id,
+                olms.lms_view_id,
+                olms.lms_item_id,
+                olms.lms_session_id,
+                olms.lms_course_id,
+                olms.finishSignalReceived,
+                1,
+                olms.statusSignalReceived
+            );
+
+            return 'true';
+        });
+        logit_lms('Added unload savedata() on window unload', 3);
     }
     logit_lms('Quitting addListeners()');
 }
@@ -1224,8 +1266,8 @@ function logit_scorm(message, priority) {
     return false;
 }
 
-function log_in_log(message, priority) {
-
+function log_in_log(message, priority)
+{
     // Colorize a little
     var color = "color: black";
     switch (priority) {
@@ -1593,7 +1635,7 @@ function switch_item(current_item, next_item)
      */
 
     /*
-    if (olms.lms_item_type=='sco' &&
+    if (olms.lms_item_type == 'sco' &&
         olms.lesson_status != 'completed' &&
         olms.lesson_status != 'passed' &&
         olms.lesson_status != 'browsed' &&
@@ -1610,7 +1652,8 @@ function switch_item(current_item, next_item)
         olms.lms_user_id,
         olms.lms_view_id,
         olms.lms_item_id,
-        olms.score, olms.max,
+        olms.score,
+        olms.max,
         olms.min,
         olms.lesson_status,
         olms.session_time,
@@ -1988,11 +2031,12 @@ function xajax_save_item_scorm(
     }
 
     logit_lms('xajax_save_item_scorm with params:' + params, 3);
+    var codePathUrl = '<?php echo api_get_path(WEB_CODE_PATH).'lp/'; ?>';
 
     $.ajax({
         type:"POST",
         data: params,
-        url: "lp_ajax_save_item.php" + courseUrl,
+        url: codePathUrl + "lp_ajax_save_item.php" + courseUrl,
         dataType: "script",
         async: false
     });
@@ -2117,7 +2161,6 @@ function xajax_switch_item_toc(lms_lp_id, lms_user_id, lms_view_id, lms_item_id,
         async: false
     });
 }
-
 
 /**
  * Allow attach the glossary terms into html document of scorm. This has

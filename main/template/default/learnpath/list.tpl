@@ -519,6 +519,12 @@
     </div>
 {% endif %}
 
+{% if not is_invitee and lp_is_shown and allow_min_time and is_ending %}
+    <div id="lp_download_file_after_finish" class="controls text-center">
+        {{ download_files_after_finish }}
+    </div>
+{% endif %}
+
 {% if is_allowed_to_edit and not lp_is_shown %}
     <div id="no-data-view">
         <h2>{{ "LearningPaths"|get_lang }}</h2>

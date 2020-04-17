@@ -909,16 +909,17 @@ function get_user_data($from, $number_of_items, $column, $direction)
                             $user_id,
                             $extraField['id']
                         );
-
-                        $optionList = $extraFieldOption->get_field_option_by_field_and_option(
-                            $extraField['id'],
-                            $data['value']
-                        );
-                        if (!empty($optionList)) {
-                            $options = implode(', ', array_column($optionList, 'display_text'));
-                            $temp[] = $options;
-                        } else {
-                            $temp[] = $data['value'];
+                        if (isset($data['value'])) {
+                            $optionList = $extraFieldOption->get_field_option_by_field_and_option(
+                                $extraField['id'],
+                                $data['value']
+                            );
+                            if (!empty($optionList)) {
+                                $options = implode(', ', array_column($optionList, 'display_text'));
+                                $temp[] = $options;
+                            } else {
+                                $temp[] = $data['value'];
+                            }
                         }
                     }
                 }

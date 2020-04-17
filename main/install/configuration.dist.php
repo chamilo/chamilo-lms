@@ -1030,7 +1030,7 @@ VALUES (2, 13, 'session_courses_read_only_mode', 'Lock Course In Session', 1, 1,
 // Block student publication add documents BT#14986
 //$_configuration['block_student_publication_add_documents'] = false;
 
-// Block student publication score edition BT#14987
+// Block teacher to modify a work score edition BT#14987
 // $_configuration['block_student_publication_score_edition'] = false;
 
 // Enable system to manage e-mail templates in users registration forms
@@ -1472,6 +1472,10 @@ $_configuration['course_catalog_settings'] = [
         'Verdana' => 'Verdana, Geneva, sans-serif',
     ]
 ];*/
+
+/* Show download files button after finishing all LP. Example: ABC is the course code, and 1 and 100 are the doc id
+$_configuration['download_files_after_all_lp_finished'] = ['courses' => ['ABC' => [1, 100]]];
+*/
 
 // KEEP THIS AT THE END
 // -------- Custom DB changes

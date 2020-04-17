@@ -70,7 +70,7 @@ class GradebookTable extends SortableTable
             null,
             null,
             api_is_allowed_to_edit() ? 1 : 0,
-            20,
+            1000,
             'ASC',
             'gradebook_list'
         );

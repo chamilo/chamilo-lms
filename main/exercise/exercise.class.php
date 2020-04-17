@@ -8771,24 +8771,17 @@ class Exercise
                             $title = $cut_title;
                         }
 
-                        $count_exercise_not_validated = (int) Event::count_exercise_result_not_validated(
+                        /*$count_exercise_not_validated = (int) Event::count_exercise_result_not_validated(
                             $my_exercise_id,
                             $courseId,
                             $sessionId
-                        );
-
-                        /*$move = Display::return_icon(
-                            'all_directions.png',
-                            get_lang('Move'),
-                            ['class' => 'moved', 'style' => 'margin-bottom:-0.5em;']
                         );*/
                         $move = null;
                         $class_tip = '';
-                        if (!empty($count_exercise_not_validated)) {
+                        /*if (!empty($count_exercise_not_validated)) {
                             $results_text = $count_exercise_not_validated == 1 ? get_lang('ResultNotRevised') : get_lang('ResultsNotRevised');
                             $title .= '<span class="exercise_tooltip" style="display: none;">'.$count_exercise_not_validated.' '.$results_text.' </span>';
-                            $class_tip = 'link_tooltip';
-                        }
+                        }*/
 
                         $url = $move.'<a '.$alt_title.' class="'.$class_tip.'" id="tooltip_'.$row['id'].'" href="overview.php?'.api_get_cidreq().$mylpid.$mylpitemid.'&exerciseId='.$row['id'].'">
                              '.Display::return_icon('quiz.png', $row['title']).'
@@ -9413,7 +9406,7 @@ class Exercise
         }
 
         if (empty($tableRows) && empty($categoryId)) {
-            if ($is_allowedToEdit && $origin != 'learnpath') {
+            if ($is_allowedToEdit && $origin !== 'learnpath') {
                 $content .= '<div id="no-data-view">';
                 $content .= '<h3>'.get_lang('Quiz').'</h3>';
                 $content .= Display::return_icon('quiz.png', '', [], 64);

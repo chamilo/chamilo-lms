@@ -213,27 +213,33 @@ function return_logo($theme = '', $responsive = true)
 
 /**
  * Check if user have access to "who is online" page.
- *
+ * @param int $userId The user for whom we want to check
+ * @param int $courseId The course ID for if we want the number of users in the course. Set to 0 for "out of a course context". Leave empty if you want the PHP session info to be used.
  * @return bool
  */
-function accessToWhoIsOnline()
+function accessToWhoIsOnline($userId = null, $courseId = null)
 {
-    $user_id = api_get_user_id();
-    $course_id = api_get_course_int_id();
+    if (empty($userId)) {
+        $userId = api_get_user_id();
+    }
+    // If we received 0, treat it as "no course" instead of searching again
+    if ($courseId === null) {
+        $courseId = api_get_course_int_id();
+    }
     $access = false;
 
     if (true === api_get_configuration_value('whoisonline_only_for_admin') && !api_is_platform_admin()) {
         return false;
     }
 
-    if ((api_get_setting('showonline', 'world') == 'true' && !$user_id) ||
-        (api_get_setting('showonline', 'users') == 'true' && $user_id) ||
-        (api_get_setting('showonline', 'course') == 'true' && $user_id && $course_id)
+    if ((api_get_setting('showonline', 'world') == 'true' && !$userId) ||
+        (api_get_setting('showonline', 'users') == 'true' && $userId) ||
+        (api_get_setting('showonline', 'course') == 'true' && $userId && $courseId)
     ) {
         $access = true;
         $profileList = api_get_configuration_value('allow_online_users_by_status');
         if (!empty($profileList) && isset($profileList['status'])) {
-            $userInfo = api_get_user_info();
+            $userInfo = api_get_user_info($userId);
             if ($userInfo['is_admin']) {
                 $userInfo['status'] = PLATFORM_ADMIN;
             }
@@ -255,39 +261,39 @@ function accessToWhoIsOnline()
  */
 function returnNotificationMenu()
 {
-    $courseInfo = api_get_course_info();
-    $user_id = api_get_user_id();
-    $sessionId = api_get_session_id();
     $html = '';
 
-    if (accessToWhoIsOnline()) {
-        $number = getOnlineUsersCount();
-        $number_online_in_course = getOnlineUsersInCourseCount($user_id, $courseInfo);
-
+    $user_id = api_get_user_id();
+    $courseInfo = api_get_course_info();
+    if (accessToWhoIsOnline($user_id, (!empty($courseInfo['real_id'])?:0))) {
         // Display the who's online of the platform
-        if ($number &&
-            (api_get_setting('showonline', 'world') == 'true' && !$user_id) ||
+        if ((api_get_setting('showonline', 'world') == 'true' && !$user_id) ||
             (api_get_setting('showonline', 'users') == 'true' && $user_id)
         ) {
-            $html .= '<li class="user-online"><a href="'.api_get_path(WEB_PATH).'whoisonline.php" target="_self" title="'
-                .get_lang('UsersOnline').'" >'
-                .Display::return_icon('user.png', get_lang('UsersOnline'), [], ICON_SIZE_TINY)
-                .' '.$number.'</a></li>';
+            $number = getOnlineUsersCount();
+            if ($number) {
+                $html .= '<li class="user-online"><a href="'.api_get_path(WEB_PATH).'whoisonline.php" target="_self" title="'
+                    .get_lang('UsersOnline').'" >'
+                    .Display::return_icon('user.png', get_lang('UsersOnline'), [], ICON_SIZE_TINY)
+                    .' '.$number.'</a></li>';
+            }
         }
 
         // Display the who's online for the course
-        if ($number_online_in_course &&
-            (
-                is_array($courseInfo) &&
-                api_get_setting('showonline', 'course') == 'true' && isset($courseInfo['sysCode'])
-            )
+        if (
+            is_array($courseInfo) &&
+            api_get_setting('showonline', 'course') == 'true' && isset($courseInfo['sysCode'])
         ) {
-            $html .= '<li class="user-online-course"><a href="'.api_get_path(WEB_PATH).'whoisonline.php?cidReq='.$courseInfo['sysCode']
-                .'" target="_self">'
-                .Display::return_icon('course.png', get_lang('UsersOnline').' '.get_lang('InThisCourse'), [], ICON_SIZE_TINY)
-                .' '.$number_online_in_course.' </a></li>';
+            $number_online_in_course = getOnlineUsersInCourseCount($user_id, $courseInfo);
+            if ($number_online_in_course) {
+                $html .= '<li class="user-online-course"><a href="'.api_get_path(WEB_PATH).'whoisonline.php?cidReq='.$courseInfo['sysCode']
+                    .'" target="_self">'
+                    .Display::return_icon('course.png', get_lang('UsersOnline').' '.get_lang('InThisCourse'), [], ICON_SIZE_TINY)
+                    .' '.$number_online_in_course.' </a></li>';
+            }
         }
 
+        $sessionId = api_get_session_id();
         if (!empty($sessionId)) {
             $allow = api_is_platform_admin(true) ||
                 api_is_coach($sessionId, null, false) ||

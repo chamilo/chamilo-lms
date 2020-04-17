@@ -1047,7 +1047,7 @@ class CourseHome
                 // Including Courses Plugins
                 // Creating title and the link
                 if (isset($tool['category']) && $tool['category'] == 'plugin') {
-                    $plugin_info = $app_plugin->getPluginInfo($tool['name']);
+                    $plugin_info = $app_plugin->getPluginInfo($tool['name'], true);
                     if (isset($plugin_info) && isset($plugin_info['title'])) {
                         $tool_name = $plugin_info['title'];
                     }

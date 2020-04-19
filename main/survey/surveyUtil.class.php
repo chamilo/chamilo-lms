@@ -1314,7 +1314,7 @@ class SurveyUtil
      * that can be used in a csv file.
      * @param array $survey_data The basic survey data as initially obtained by SurveyManager::get_survey()
      * @param int   $user_id     The ID of the user asking for the report
-     * @param book  $compact     Whether to present the long (v marks with multiple columns per question) or compact (one column per question) answers format
+     * @param bool  $compact     Whether to present the long (v marks with multiple columns per question) or compact (one column per question) answers format
      *
      * @todo consider merging this function with display_complete_report
      *
@@ -1323,6 +1323,7 @@ class SurveyUtil
      * @author Patrick Cool <patrick.cool@UGent.be>, Ghent University
      *
      * @version February 2007
+     * @throws Exception
      */
     public static function export_complete_report($survey_data, $user_id = 0, $compact = false)
     {
@@ -1332,11 +1333,17 @@ class SurveyUtil
             return false;
         }
 
-        $course_id = api_get_course_int_id();
+        $course = api_get_course_info();
+        $course_id = $course['real_id'];
 
         $table_survey_question = Database::get_course_table(TABLE_SURVEY_QUESTION);
         $table_survey_question_option = Database::get_course_table(TABLE_SURVEY_QUESTION_OPTION);
         $table_survey_answer = Database::get_course_table(TABLE_SURVEY_ANSWER);
+
+        $translate = false;
+        if (api_get_configuration_value('translate_html') == true) {
+            $translate = true;
+        }
 
         // The first column
         $return = ';';
@@ -1374,6 +1381,9 @@ class SurveyUtil
 
         $result = Database::query($sql);
         while ($row = Database::fetch_array($result)) {
+            if ($translate) {
+                $row['survey_question'] = api_get_filtered_multilingual_HTML_string($row['survey_question'], $course['language']);
+            }
             // We show the questions if
             // 1. there is no question filter and the export button has not been clicked
             // 2. there is a question filter but the question is selected for display
@@ -1408,6 +1418,9 @@ class SurveyUtil
         // Show the fields names for user fields
         if (!empty($extra_user_fields)) {
             foreach ($extra_user_fields as &$field) {
+                if ($translate) {
+                    $field[3] = api_get_filtered_multilingual_HTML_string($field[3], $course['language']);
+                }
                 $return .= '"'
                     .str_replace(
                         "\r\n",
@@ -1446,6 +1459,9 @@ class SurveyUtil
             // We show the options if
             // 1. there is no question filter and the export button has not been clicked
             // 2. there is a question filter but the question is selected for display
+            if ($translate) {
+                $row['option_text'] = api_get_filtered_multilingual_HTML_string($row['option_text'], $course['language']);
+            }
             if (!(isset($_POST['submit_question_filter'])) || (
                 is_array($_POST['questions_filter']) &&
                 in_array($row['question_id'], $_POST['questions_filter'])

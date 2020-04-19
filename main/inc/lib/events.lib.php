@@ -305,23 +305,16 @@ class Event
         $courseId = api_get_course_int_id();
         $sessionId = api_get_session_id();
 
-        $sql = "INSERT INTO $table (
-                 down_user_id,
-                 c_id,
-                 down_doc_path,
-                 down_date,
-                 down_session_id
-                )
-                VALUES (
-                 $userId,
-                 $courseId,
-                 '$documentUrl',
-                 '$reallyNow',
-                 $sessionId
-                )";
-        Database::query($sql);
-
-        return 1;
+        return Database::insert(
+            $table,
+            [
+                'down_user_id' => $userId,
+                'c_id' => $courseId,
+                'down_doc_path' => $documentUrl,
+                'down_date' => $reallyNow,
+                'down_session_id' => $sessionId,
+            ]
+        );
     }
 
     /**

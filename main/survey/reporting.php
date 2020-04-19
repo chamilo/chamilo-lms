@@ -58,6 +58,7 @@ if (!api_is_allowed_to_edit(false, true) || $isDrhOfCourse) {
 $exportReport = isset($_REQUEST['export_report']) ? $_REQUEST['export_report'] : '';
 $format = isset($_REQUEST['export_format']) ? $_REQUEST['export_format'] : '';
 if (!empty($exportReport) && !empty($format)) {
+    $compact = false;
     switch ($format) {
         case 'xls':
             $filename = 'survey_results_'.$survey_id.'.xlsx';
@@ -65,10 +66,13 @@ if (!empty($exportReport) && !empty($format)) {
             SurveyUtil::export_complete_report_xls($survey_data, $filename, $userId);
             exit;
             break;
+        case 'csv-compact':
+            $compact = true;
+            // no break
         case 'csv':
         default:
-            $data = SurveyUtil::export_complete_report($survey_data, $userId);
-            $filename = 'survey_results_'.$survey_id.'.csv';
+            $data = SurveyUtil::export_complete_report($survey_data, $userId, $compact);
+            $filename = 'survey_results_'.$survey_id.($compact?'_compact':'').'.csv';
             header('Content-type: application/octet-stream');
             header('Content-Type: application/force-download');
 

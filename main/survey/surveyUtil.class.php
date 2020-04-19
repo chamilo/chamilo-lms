@@ -948,6 +948,8 @@ class SurveyUtil
                 .Display::return_icon('export_csv.png', get_lang('ExportAsCSV'), '', ICON_SIZE_MEDIUM).'</a>';
             $content .= '<a class="survey_export_link" href="javascript: void(0);" onclick="document.form1b.submit();">'
                 .Display::return_icon('export_excel.png', get_lang('ExportAsXLS'), '', ICON_SIZE_MEDIUM).'</a>';
+            $content .= '<a class="survey_export_link" href="javascript: void(0);" onclick="document.form1c.submit();">'
+                .Display::return_icon('export_compact_csv.png', get_lang('ExportAsCompactCSV'), '', ICON_SIZE_MEDIUM).'</a>';
             $content .= '</div>';
 
             // The form
@@ -962,6 +964,12 @@ class SurveyUtil
                 .$surveyId.'&'.api_get_cidreq().'">';
             $content .= '<input type="hidden" name="export_report" value="export_report">';
             $content .= '<input type="hidden" name="export_format" value="xls">';
+            $content .= '</form>';
+            $content .= '<form id="form1c" name="form1c" method="post" action="'.api_get_self(
+                ).'?action='.$action.'&survey_id='
+                .$surveyId.'&'.api_get_cidreq().'">';
+            $content .= '<input type="hidden" name="export_report" value="export_report">';
+            $content .= '<input type="hidden" name="export_format" value="csv-compact">';
             $content .= '</form>';
         }
 
@@ -1304,6 +1312,9 @@ class SurveyUtil
     /**
      * Quite similar to display_complete_report(), returns an HTML string
      * that can be used in a csv file.
+     * @param array $survey_data The basic survey data as initially obtained by SurveyManager::get_survey()
+     * @param int   $user_id     The ID of the user asking for the report
+     * @param book  $compact     Whether to present the long (v marks with multiple columns per question) or compact (one column per question) answers format
      *
      * @todo consider merging this function with display_complete_report
      *
@@ -1313,7 +1324,7 @@ class SurveyUtil
      *
      * @version February 2007
      */
-    public static function export_complete_report($survey_data, $user_id = 0)
+    public static function export_complete_report($survey_data, $user_id = 0, $compact = false)
     {
         $surveyId = isset($_GET['survey_id']) ? (int) $_GET['survey_id'] : 0;
 
@@ -1365,13 +1376,13 @@ class SurveyUtil
         while ($row = Database::fetch_array($result)) {
             // We show the questions if
             // 1. there is no question filter and the export button has not been clicked
-            // 2. there is a quesiton filter but the question is selected for display
+            // 2. there is a question filter but the question is selected for display
             if (!(isset($_POST['submit_question_filter'])) ||
                 (isset($_POST['submit_question_filter']) &&
                     is_array($_POST['questions_filter']) &&
                     in_array($row['question_id'], $_POST['questions_filter']))
             ) {
-                if ($row['number_of_options'] == 0) {
+                if ($row['number_of_options'] == 0 or $compact) {
                     $return .= str_replace(
                         "\r\n",
                         '  ',
@@ -1441,8 +1452,12 @@ class SurveyUtil
             )
             ) {
                 $row['option_text'] = str_replace(["\r", "\n"], ['', ''], $row['option_text']);
-                $return .= api_html_entity_decode(strip_tags($row['option_text']), ENT_QUOTES).';';
-                $possible_answers[$row['question_id']][$row['question_option_id']] = $row['question_option_id'];
+                if (!$compact) {
+                    $return .= api_html_entity_decode(strip_tags($row['option_text']), ENT_QUOTES).';';
+                    $possible_answers[$row['question_id']][$row['question_option_id']] = $row['question_option_id'];
+                } else {
+                    $possible_answers[$row['question_id']][$row['question_option_id']] = $row['option_text'];
+                }
                 $possible_answers_type[$row['question_id']] = $row['type'];
             }
         }
@@ -1455,10 +1470,11 @@ class SurveyUtil
         $sql = "SELECT * FROM $table_survey_answer
 		        WHERE
 		          c_id = $course_id AND
-		          survey_id='".$surveyId."'
+		          survey_id = $surveyId
 		          ";
         if ($user_id != 0) {
-            $sql .= "AND user='".Database::escape_string($user_id)."' ";
+            $user_id = intval($user_id);
+            $sql .= " AND user = $user_id ";
         }
         $sql .= ' ORDER BY user ASC ';
 
@@ -1475,7 +1491,8 @@ class SurveyUtil
                     $possible_answers,
                     $answers_of_user,
                     $old_user,
-                    true
+                    true,
+                    $compact
                 );
                 $answers_of_user = [];
             }
@@ -1498,7 +1515,8 @@ class SurveyUtil
             $possible_answers,
             $answers_of_user,
             $old_user,
-            true
+            true,
+            $compact
         );
 
         return $return;
@@ -1507,10 +1525,12 @@ class SurveyUtil
     /**
      * Add a line to the csv file.
      *
-     * @param array Possible answers
-     * @param array User's answers
-     * @param mixed User ID or user details as string - Used as a string in the result string
-     * @param bool Whether to display user fields or not
+     * @param array $survey_data Basic survey data (we're mostly interested in the 'anonymous' index)
+     * @param array $possible_options Possible answers
+     * @param array $answers_of_user User's answers
+     * @param mixed $user User ID or user details as string - Used as a string in the result string
+     * @param bool $display_extra_user_fields Whether to display user fields or not
+     * @param bool $compact Whether to show answers as different column values (true) or one column per option (false, default)
      *
      * @return string One line of the csv file
      *
@@ -1523,7 +1543,8 @@ class SurveyUtil
         $possible_options,
         $answers_of_user,
         $user,
-        $display_extra_user_fields = false
+        $display_extra_user_fields = false,
+        $compact = false
     ) {
         $return = '';
         if ($survey_data['anonymous'] == 0) {
@@ -1556,13 +1577,16 @@ class SurveyUtil
             }
         }
 
+        // Run through possible options
         if (is_array($possible_options)) {
             foreach ($possible_options as $question_id => $possible_option) {
                 if (is_array($possible_option) && count($possible_option) > 0) {
                     foreach ($possible_option as $option_id => &$value) {
+                        // For each option of this question, look if it matches the user's answer
                         $my_answer_of_user = !isset($answers_of_user[$question_id]) || isset($answers_of_user[$question_id]) && $answers_of_user[$question_id] == null ? [] : $answers_of_user[$question_id];
                         $key = array_keys($my_answer_of_user);
                         if (isset($key[0]) && substr($key[0], 0, 4) == 'open') {
+                            // If this is an open type question (type starts by 'open'), take whatever answer is given
                             $return .= '"'.
                                 str_replace(
                                     '"',
@@ -1574,16 +1598,42 @@ class SurveyUtil
                                         ENT_QUOTES
                                     )
                                 ).
-                                '"';
+                                '";';
                         } elseif (!empty($answers_of_user[$question_id][$option_id])) {
-                            //$return .= 'v';
-                            if ($answers_of_user[$question_id][$option_id]['value'] != 0) {
-                                $return .= $answers_of_user[$question_id][$option_id]['value'];
+                            // If this is a selected option from a list...
+                            if ($compact) {
+                                // If we asked for a compact view, show only one column for the question
+                                // and fill it with the text of the selected option (i.e. "Yes") instead of an ID
+                                if ($answers_of_user[$question_id][$option_id]['value'] != 0) {
+                                    $return .= $answers_of_user[$question_id][$option_id]['value'].";";
+                                } else {
+                                    $return .= '"'.
+                                        str_replace(
+                                            '"',
+                                            '""',
+                                            api_html_entity_decode(
+                                                strip_tags(
+                                                    $possible_option[$option_id]
+                                                ),
+                                                ENT_QUOTES
+                                            )
+                                        ).
+                                        '";';
+                                }
                             } else {
-                                $return .= 'v';
+                                // If we don't want a compact view, show one column per possible option and mark a 'v'
+                                // or the defined value in the corresponding column if the user selected it
+                                if ($answers_of_user[$question_id][$option_id]['value'] != 0) {
+                                    $return .= $answers_of_user[$question_id][$option_id]['value'].";";
+                                } else {
+                                    $return .= 'v;';
+                                }
+                            }
+                        } else {
+                            if (!$compact) {
+                                $return .= ';';
                             }
                         }
-                        $return .= ';';
                     }
                 }
             }
@@ -1666,7 +1716,7 @@ class SurveyUtil
         while ($row = Database::fetch_array($result)) {
             // We show the questions if
             // 1. there is no question filter and the export button has not been clicked
-            // 2. there is a quesiton filter but the question is selected for display
+            // 2. there is a question filter but the question is selected for display
             if (!(isset($_POST['submit_question_filter'])) ||
                 (isset($_POST['submit_question_filter']) && is_array($_POST['questions_filter']) &&
                 in_array($row['question_id'], $_POST['questions_filter']))

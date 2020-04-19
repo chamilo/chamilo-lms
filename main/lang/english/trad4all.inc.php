@@ -8506,4 +8506,5 @@ $Count = "Count";
 $SortKeys = "Sort by";
 $SubscriptionCount = "Subscription count";
 $VoteCount = "Vote count";
+$ExportAsCompactCSV = "Export as compact CSV";
 ?>

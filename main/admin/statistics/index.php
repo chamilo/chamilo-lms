@@ -826,7 +826,16 @@ switch ($report) {
 
                 $certificate = GradebookUtils::get_certificate_by_user_id(0, $userId);
                 $language = isset($extraFields['langue_cible']) ? $extraFields['langue_cible'] : '';
-                $contract = isset($extraFields['termactivated']) ? $extraFields['termactivated'] : '';
+                //$contract = isset($extraFields['termactivated']) ? $extraFields['termactivated'] : '';
+                $contract = false;
+                $legalAccept = $extraFieldValueUser->get_values_by_handler_and_field_variable($userId, 'legal_accept');
+                if ($legalAccept && isset($legalAccept['value'])) {
+                    list($legalId, $legalLanguageId, $legalTime) = explode(':', $legalAccept['value']);
+                    if ($legalId) {
+                        $contract = true;
+                    }
+                }
+
                 $residence = isset($extraFields['terms_paysresidence']) ? $extraFields['terms_paysresidence'] : '';
                 $career = isset($extraFields['filiere_user']) ? $extraFields['filiere_user'] : '';
                 $birthDate = isset($extraFields['terms_datedenaissance']) ? $extraFields['terms_datedenaissance'] : '';

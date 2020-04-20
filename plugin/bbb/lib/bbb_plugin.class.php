@@ -83,6 +83,7 @@ class BBBPlugin extends Plugin
                     'translate_options' => true, // variables will be translated using the plugin->get_lang
                 ],
                 'allow_regenerate_recording' => 'boolean',
+                'disable_course_settings' => 'boolean',
             ]
         );
 
@@ -119,7 +120,51 @@ class BBBPlugin extends Plugin
                 break;
         }
 
+        if ($result) {
+            $result = self::hasCourseSetting($variable);
+        }
+
         return $result;
+    }
+
+    /**
+     *
+     * @return array
+     */
+    public function getCourseSettings()
+    {
+        $settings = parent::getCourseSettings();
+
+        if (is_array($this->course_settings)) {
+            foreach ($this->course_settings as $item) {
+                $result = self::hasCourseSetting($item['name']);
+                if (!$result) {
+                    $key = array_search($item['name'], $settings);
+                    if (isset($key)) {
+                        unset($settings[$key]);
+                        array_values($settings);
+                    }
+                }
+            }
+        }
+
+        return $settings;
+    }
+
+    /**
+     *
+     * @return \Plugin
+     */
+    public function performActionsAfterConfigure()
+    {
+        $result = $this->get('disable_course_settings') === 'true';
+        if($result) {
+            $this->uninstall_course_fields_in_all_courses($this->course_settings);
+        } else {
+            $this->install_course_fields_in_all_courses();
+        }
+
+        return $this;
     }
 
     /**
@@ -312,5 +357,24 @@ class BBBPlugin extends Plugin
         ];
 
         return $data;
+    }
+
+    /**
+     * Check if course setting exists.
+     *
+     * @param string $variable
+     *
+     * @return bool
+     */
+    public static function hasCourseSetting($variable)
+    {
+        $courseSetting = Database::get_course_table(TABLE_COURSE_SETTING);
+        $courseId = api_get_course_int_id();
+        $variable = Database::escape_string($variable);
+        $sql = "SELECT variable FROM $courseSetting
+                WHERE c_id = $courseId AND variable = '$variable'";
+        $result = Database::query($sql);
+
+        return Database::num_rows($result) > 0;
     }
 }

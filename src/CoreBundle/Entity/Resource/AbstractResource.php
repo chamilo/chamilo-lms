@@ -22,7 +22,7 @@ abstract class AbstractResource
      * @GRID\Column(field="resourceNode.createdAt", title="Date added", type="datetime")
      * @Groups({"list"})
      * @ORM\OneToOne(
-     *     targetEntity="Chamilo\CoreBundle\Entity\Resource\ResourceNode", mappedBy="resource", cascade={"remove"}, orphanRemoval=true, fetch="EAGER"
+     *     targetEntity="Chamilo\CoreBundle\Entity\Resource\ResourceNode", mappedBy="resource", cascade={"remove"}, orphanRemoval=true
      * )
      * @ORM\JoinColumn(name="resource_node_id", referencedColumnName="id", onDelete="CASCADE")
      */
@@ -96,8 +96,12 @@ abstract class AbstractResource
 
         $result = null;
         if ($resourceNode && $resourceNode->getResourceLinks()->count() > 0) {
+            //var_dump($resourceNode->getResourceLinks()->count());
+            foreach ($resourceNode->getResourceLinks() as $link) {
+                //var_dump(get_class($link));
+            }
             $result = $resourceNode->getResourceLinks()->matching($criteria)->first();
-
+            //var_dump($result);
             if ($result) {
                 return $result;
             }

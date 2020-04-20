@@ -75,15 +75,21 @@ class ResourceController extends AbstractResourceController implements CourseCon
         $repository = $this->getRepositoryFromRequest($request);
         $settings = $repository->getResourceSettings();
 
-        $grid = $this->getGrid($request, $repository, $grid, $parentResourceNode->getId(), 'chamilo_core_resource_index');
+        $grid = $this->getGrid(
+            $request,
+            $repository,
+            $grid,
+            $parentResourceNode->getId(),
+            'chamilo_core_resource_index'
+        );
 
-        $breadcrumb = $this->getBreadCrumb();
+        /*$breadcrumb = $this->getBreadCrumb();
         $breadcrumb->addChild(
             $this->trans($tool),
             [
                 'uri' => '#',
             ]
-        );
+        );*/
 
         // The base resource node is the course.
         $id = $parentResourceNode->getId();
@@ -116,11 +122,12 @@ class ResourceController extends AbstractResourceController implements CourseCon
         );
 
         $settings = $repository->getResourceSettings();
-
         $course = $this->getCourse();
         $session = $this->getSession();
         /** @var QueryBuilder $qb */
         $qb = $repository->getResources($this->getUser(), $parentNode, $course, $session, null);
+
+        //$qb->getQuery()->setFetchMode(\Doctrine\ORM\Mapping\ClassMetadata::FETCH_EAGER);
 
         // 3. Set QueryBuilder to the source.
         $source->initQueryBuilder($qb);
@@ -338,7 +345,6 @@ class ResourceController extends AbstractResourceController implements CourseCon
                 } else {
                     $link = $resource->getFirstResourceLink();
                 }
-
                 if (null === $link) {
                     return null;
                 }
@@ -429,6 +435,7 @@ class ResourceController extends AbstractResourceController implements CourseCon
         $grid = $this->getGrid($request, $repository, $grid, $resourceNodeId, 'chamilo_core_resource_list');
 
         $this->setBreadCrumb($request);
+
         $parentResourceNode = $this->getParentResourceNode($request);
 
         return $grid->getGridResponse(
@@ -626,18 +633,20 @@ class ResourceController extends AbstractResourceController implements CourseCon
      *
      * @Route("/{tool}/{type}/{id}/info", methods={"GET", "POST"}, name="chamilo_core_resource_info")
      */
-    public function infoAction(Request $request, IllustrationRepository $illustrationRepository): Response
+    public function infoAction(Request $request): Response
     {
         $this->setBreadCrumb($request);
-        $nodeId = $request->get('id');
 
+        $nodeId = $request->get('id');
         $repository = $this->getRepositoryFromRequest($request);
 
         /** @var AbstractResource $resource */
         $resource = $repository->getResourceFromResourceNode($nodeId);
+
         $this->denyAccessUnlessValidResource($resource);
 
         $resourceNode = $resource->getResourceNode();
+        //throw new \Exception('as');
         $this->denyAccessUnlessGranted(
             ResourceNodeVoter::VIEW,
             $resourceNode,
@@ -647,13 +656,12 @@ class ResourceController extends AbstractResourceController implements CourseCon
         $tool = $request->get('tool');
         $type = $request->get('type');
 
-        $illustration = $illustrationRepository->getIllustrationUrlFromNode($resourceNode);
-
+        //$illustration = $illustrationRepository->getIllustrationUrlFromNode($resourceNode);
         $form = $this->createForm(ResourceCommentType::class, null);
 
         $params = [
             'resource' => $resource,
-            'illustration' => $illustration,
+         //   'illustration' => $illustration,
             'tool' => $tool,
             'type' => $type,
             'comment_form' => $form->createView(),
@@ -1015,7 +1023,6 @@ class ResourceController extends AbstractResourceController implements CourseCon
         );
 
         $form = $repository->getForm($this->container->get('form.factory'), null);
-
         $settings = $repository->getResourceSettings();
 
         if ('file' === $fileType && $settings->isAllowToSaveEditorToResourceFile()) {
@@ -1037,12 +1044,12 @@ class ResourceController extends AbstractResourceController implements CourseCon
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
             $em = $this->getDoctrine()->getManager();
-
-            $course = $this->getCourse();
+            $course = $this->getCourse()->getId();
+            $course = $this->getDoctrine()->getRepository('ChamiloCoreBundle:Course')->find($course);
             $session = $this->getSession();
 
             /** @var ResourceInterface $newResource */
-            $newResource = $repository->saveResource($form, $course, $session, $fileType);
+            $newResource = $repository->setResourceProperties($form, $course, $session, $fileType);
 
             $file = null;
             if ('file' === $fileType && $settings->isAllowToSaveEditorToResourceFile()) {
@@ -1054,7 +1061,6 @@ class ResourceController extends AbstractResourceController implements CourseCon
                 fwrite($handle, $content);
                 $meta = stream_get_meta_data($handle);
                 $file = new UploadedFile($meta['uri'], $fileName, 'text/html', null, true);
-                $em->persist($newResource);
             }
 
             $repository->addResourceToCourseWithParent(

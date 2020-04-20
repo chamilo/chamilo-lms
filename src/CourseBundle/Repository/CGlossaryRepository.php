@@ -52,7 +52,7 @@ final class CGlossaryRepository extends ResourceRepository implements GridInterf
         return $grid->getColumn('name');
     }
 
-    public function saveResource(FormInterface $form, $course, $session, $fileType)
+    public function setResourceProperties(FormInterface $form, $course, $session, $fileType)
     {
         /** @var CGlossary $newResource */
         $newResource = $form->getData();

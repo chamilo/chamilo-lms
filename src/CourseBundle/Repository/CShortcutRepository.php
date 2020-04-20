@@ -58,7 +58,7 @@ final class CShortcutRepository extends ResourceRepository
         return $qb;
     }
 
-    public function saveResource(FormInterface $form, $course, $session, $fileType)
+    public function setResourceProperties(FormInterface $form, $course, $session, $fileType)
     {
         $newResource = $form->getData();
         $newResource

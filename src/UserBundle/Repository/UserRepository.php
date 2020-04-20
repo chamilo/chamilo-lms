@@ -116,7 +116,7 @@ class UserRepository extends ResourceRepository
 
         $resourceNode = new ResourceNode();
         $resourceNode
-            ->setSlug($user->getUsername())
+            ->setTitle($user->getUsername())
             ->setCreator($creator)
             ->setResourceType($this->getResourceType())
         //    ->setParent($url->getResourceNode())

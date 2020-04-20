@@ -80,7 +80,7 @@ class Container
     public static $roles;
     /** @var string */
     public static $legacyTemplate = '@ChamiloTheme/Layout/layout_one_col.html.twig';
-    private static $settingsManager;
+    //private static $settingsManager;
     private static $userManager;
     private static $siteManager;
 
@@ -261,13 +261,10 @@ class Container
         return self::$container->get('chamilo.settings.manager');
     }
 
-    /**
-     * @param SettingsManager $manager
-     */
-    public static function setSettingsManager($manager)
+    /*public static function setSettingsManager($manager)
     {
         self::$settingsManager = $manager;
-    }
+    }*/
 
     /**
      * @return \Chamilo\CourseBundle\Manager\SettingsManager
@@ -624,7 +621,7 @@ class Container
         $em = $container->get('doctrine.orm.entity_manager');
         \Database::setManager($em);
         \CourseManager::setEntityManager($em);
-        self::setSettingsManager($container->get('chamilo.settings.manager'));
+        //self::setSettingsManager($container->get('chamilo.settings.manager'));
         self::setUserManager($container->get('fos_user.user_manager'));
         self::setSiteManager($container->get('sonata.page.manager.site'));
         \CourseManager::setCourseSettingsManager($container->get('Chamilo\CourseBundle\Manager\SettingsManager'));

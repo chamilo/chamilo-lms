@@ -60,7 +60,7 @@ final class CDocumentRepository extends ResourceRepository implements GridInterf
         return $resource;
     }
 
-    public function saveResource(FormInterface $form, $course, $session, $fileType)
+    public function setResourceProperties(FormInterface $form, $course, $session, $fileType)
     {
         $newResource = $form->getData();
         $newResource

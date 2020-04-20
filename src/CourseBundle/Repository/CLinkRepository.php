@@ -28,7 +28,7 @@ final class CLinkRepository extends ResourceRepository implements GridInterface
         return $this->getResourcesByCourse($course, $session, $group, $parentNode);
     }
 
-    public function saveResource(FormInterface $form, $course, $session, $fileType)
+    public function setResourceProperties(FormInterface $form, $course, $session, $fileType)
     {
         /** @var CLink $newResource */
         $newResource = $form->getData();

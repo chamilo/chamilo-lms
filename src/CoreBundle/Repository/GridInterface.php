@@ -18,7 +18,7 @@ interface GridInterface
 {
     public function getResources(User $user, ResourceNode $parentNode, Course $course = null, Session $session = null, CGroupInfo $group = null);
 
-    public function saveResource(FormInterface $form, Course $course, Session $session, $fileType);
+    public function setResourceProperties(FormInterface $form, Course $course, Session $session, $fileType);
 
     public function getTitleColumn(Grid $grid): Column;
 

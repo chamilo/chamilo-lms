@@ -52,7 +52,7 @@ final class CCourseDescriptionRepository extends ResourceRepository implements G
         return $grid->getColumn('title');
     }
 
-    public function saveResource(FormInterface $form, $course, $session, $fileType)
+    public function setResourceProperties(FormInterface $form, $course, $session, $fileType)
     {
         /** @var CCourseDescription $newResource */
         $newResource = $form->getData();

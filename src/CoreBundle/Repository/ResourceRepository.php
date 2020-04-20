@@ -208,7 +208,8 @@ class ResourceRepository extends BaseEntityRepository
             $slug = $this->slugify->slugify($resourceName);
         }
 
-        $resourceNode->setSlug($slug);
+        $resourceNode->setTitle($resourceName);
+        //$resourceNode->setSlug($slug);
 
         $em->persist($resourceNode);
         $em->persist($resource);
@@ -457,17 +458,21 @@ class ResourceRepository extends BaseEntityRepository
         $qb = $repo->getEntityManager()->createQueryBuilder()
             ->select('resource')
             ->from($className, 'resource')
-            ->innerJoin(
-                'resource.resourceNode',
-                'node'
-            )
+            ->innerJoin('resource.resourceNode', 'node')
             ->innerJoin('node.resourceLinks', 'links')
             ->innerJoin('node.resourceType', 'type')
+            //->innerJoin('links.course', 'course')
             ->leftJoin('node.resourceFile', 'file')
+
             ->where('type.name = :type')
             ->setParameter('type', $resourceTypeName)
             ->andWhere('links.course = :course')
             ->setParameter('course', $course)
+            ->addSelect('node')
+            ->addSelect('links')
+            //->addSelect('course')
+            ->addSelect('type')
+            ->addSelect('file')
         ;
 
         $isAdmin = $checker->isGranted('ROLE_ADMIN') ||
@@ -484,7 +489,7 @@ class ResourceRepository extends BaseEntityRepository
                 ->andWhere('links.visibility = :visibility')
                 ->setParameter('visibility', ResourceLink::VISIBILITY_PUBLISHED)
             ;
-            // @todo Add start/end visibility restrictrions
+            // @todo Add start/end visibility restrictions.
         }
 
         if (null === $session) {
@@ -673,17 +678,17 @@ class ResourceRepository extends BaseEntityRepository
         $qb = $repo->getEntityManager()->createQueryBuilder()
             ->select('resource')
             ->from($className, 'resource')
-            ->innerJoin(
-                'resource.resourceNode',
-                'node'
-            )
-            ->innerJoin('node.resourceLinks', 'links')
-            ->leftJoin('node.resourceFile', 'file')
-            ->where('node = :id')
+            ->innerJoin('resource.resourceNode', 'node')
+            ->innerJoin('node.creator', 'userCreator')
+            //->innerJoin('node.resourceLinks', 'links')
+            //->leftJoin('node.resourceFile', 'file')
+
+            ->where('node.id = :id')
             ->setParameters(['id' => $resourceNodeId])
+            //->addSelect('userCreator')
         ;
 
-        return $qb->getQuery()->getFirstResult();*/
+        return $qb->getQuery()->getSingleResult();*/
 
         return $this->getRepository()->findOneBy(['resourceNode' => $resourceNodeId]);
     }
@@ -866,6 +871,7 @@ class ResourceRepository extends BaseEntityRepository
         }
 
         $resourceNode
+            ->setTitle($resourceName)
             ->setSlug($slug)
             ->setCreator($creator)
             ->setResourceType($resourceType)

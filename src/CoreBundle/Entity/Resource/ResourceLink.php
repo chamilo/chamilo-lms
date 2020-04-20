@@ -31,10 +31,16 @@ class ResourceLink
     protected $id;
 
     /**
-     * @ORM\ManyToOne(targetEntity="Chamilo\CoreBundle\Entity\Resource\ResourceNode", inversedBy="resourceLinks", fetch="EAGER")
+     * @ORM\ManyToOne(targetEntity="Chamilo\CoreBundle\Entity\Resource\ResourceNode", inversedBy="resourceLinks")
      * @ORM\JoinColumn(name="resource_node_id", referencedColumnName="id", onDelete="SET NULL")
      */
     protected $resourceNode;
+
+    /**
+     * @ORM\ManyToOne(targetEntity="Chamilo\CoreBundle\Entity\Course", inversedBy="resourceLinks")
+     * @ORM\JoinColumn(name="c_id", referencedColumnName="id", nullable=true)
+     */
+    protected $course;
 
     /**
      * @ORM\ManyToOne(targetEntity="Chamilo\CoreBundle\Entity\Session", inversedBy="resourceLinks")
@@ -47,12 +53,6 @@ class ResourceLink
      * @ORM\JoinColumn(name="user_id", referencedColumnName="id", nullable=true)
      */
     protected $user;
-
-    /**
-     * @ORM\ManyToOne(targetEntity="Chamilo\CoreBundle\Entity\Course", inversedBy="resourceLinks")
-     * @ORM\JoinColumn(name="c_id", referencedColumnName="id", nullable=true)
-     */
-    protected $course;
 
     /**
      * @ORM\ManyToOne(targetEntity="Chamilo\CourseBundle\Entity\CGroupInfo")

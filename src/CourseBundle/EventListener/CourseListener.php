@@ -61,6 +61,8 @@ class CourseListener
         $translator = $container->get('translator');
 
         $course = null;
+        $courseInfo = [];
+
         // Check if URL has cid value. Using Symfony request.
         $courseId = (int) $request->get('cid');
         $checker = $container->get('security.authorization_checker');
@@ -78,6 +80,8 @@ class CourseListener
                 /** @var EntityManager $em */
                 $em = $container->get('doctrine')->getManager();
                 $course = $em->getRepository('ChamiloCoreBundle:Course')->find($courseId);
+                dump("get course from DB $courseId");
+                $courseInfo = api_get_course_info($course->getCode());
             }
 
             if (null === $course) {
@@ -98,8 +102,6 @@ class CourseListener
             $sessionHandler->set('_real_cid', $course->getId());
             $sessionHandler->set('cid', $course->getId());
             $sessionHandler->set('_cid', $course->getCode());
-
-            $courseInfo = api_get_course_info($course->getCode());
             $sessionHandler->set('_course', $courseInfo);
 
             // Setting variables for the twig templates.
@@ -114,10 +116,12 @@ class CourseListener
                 $sessionHandler->remove('session');
                 // Check if user is allowed to this course
                 // See CourseVoter.php
+                dump("Checkisgranted");
                 if (false === $checker->isGranted(CourseVoter::VIEW, $course)) {
                     throw new AccessDeniedException($translator->trans('Unauthorised access to course!'));
                 }
             } else {
+                dump("Load chamilo session from DB");
                 $session = $em->getRepository('ChamiloCoreBundle:Session')->find($sessionId);
                 if ($session) {
                     if (false === $session->hasCourse($course)) {
@@ -148,6 +152,7 @@ class CourseListener
             if (empty($groupId)) {
                 $sessionHandler->remove('gid');
             } else {
+                dump("Load chamilo group from DB");
                 $group = $em->getRepository('ChamiloCourseBundle:CGroupInfo')->find($groupId);
 
                 if (!$group) {

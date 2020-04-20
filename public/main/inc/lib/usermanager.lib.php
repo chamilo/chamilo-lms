@@ -348,7 +348,7 @@ class UserManager
             if ($addUserToNode) {
                 $resourceNode = new ResourceNode();
                 $resourceNode
-                    ->setSlug($loginName)
+                    ->setTitle($loginName)
                     ->setCreator(api_get_user_entity($creatorId))
                     ->setResourceType($repo->getResourceType())
                 //    ->setParent($url->getResourceNode())

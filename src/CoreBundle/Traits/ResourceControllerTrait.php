@@ -113,6 +113,8 @@ trait ResourceControllerTrait
         $resourceNodeId = $request->get('id');
         $routeParams = $this->getResourceParams($request);
 
+        $baseNodeId = $this->getCourse()->getResourceNode()->getId();
+
         if (!empty($resourceNodeId)) {
             $breadcrumb = $this->getBreadCrumb();
             $toolParams = $routeParams;
@@ -134,10 +136,13 @@ trait ResourceControllerTrait
             if (null === $originalResource) {
                 return;
             }
-            $parent = $originalParent = $originalResource->getResourceNode();
 
-            $parentList = [];
-            while (null !== $parent) {
+            $originalParent = $originalResource->getResourceNode();
+            $parentList = $originalParent->getPathForDisplayToArray($baseNodeId);
+//            var_dump($originalParent->getPath(), $originalParent->getPathForDisplay());
+
+//            $parentList = [];
+  /*          while (null !== $parent) {
                 if ($type !== $parent->getResourceType()->getName()) {
                     break;
                 }
@@ -149,14 +154,23 @@ trait ResourceControllerTrait
                     }
                 }
             }
-
             $parentList = array_reverse($parentList);
-            /** @var ResourceInterface $item */
             foreach ($parentList as $item) {
                 $params = $routeParams;
                 $params['id'] = $item->getResourceNode()->getId();
                 $breadcrumb->addChild(
                     $item->getResourceName(),
+                    [
+                        'uri' => $this->generateUrl('chamilo_core_resource_list', $params),
+                    ]
+                );
+            }*/
+
+            foreach ($parentList as $id => $title) {
+                $params = $routeParams;
+                $params['id'] = $id;
+                $breadcrumb->addChild(
+                    $title,
                     [
                         'uri' => $this->generateUrl('chamilo_core_resource_list', $params),
                     ]

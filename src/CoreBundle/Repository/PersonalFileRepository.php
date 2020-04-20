@@ -37,7 +37,7 @@ final class PersonalFileRepository extends ResourceRepository implements GridInt
         return $settings;
     }
 
-    public function saveResource(FormInterface $form, $course, $session, $fileType)
+    public function setResourceProperties(FormInterface $form, $course, $session, $fileType)
     {
         $newResource = $form->getData();
         $newResource

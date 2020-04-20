@@ -27,6 +27,7 @@ class LegacyListener
         if (!$event->isMasterRequest()) {
             return;
         }
+
         $request = $event->getRequest();
         $session = $request->getSession();
 
@@ -60,7 +61,6 @@ class LegacyListener
         $userStatus = null;
         if ($userObject instanceof UserInterface) {
             $userInfo = api_get_user_info($userObject->getId());
-
             if ($userInfo) {
                 $userStatus = $userObject->getStatus();
                 $isAdmin = $userObject->hasRole('ROLE_ADMIN');
@@ -73,7 +73,7 @@ class LegacyListener
 
         // Theme icon is loaded in the TwigListener src/ThemeBundle/EventListener/TwigListener.php
         //$theme = api_get_visual_theme();
-        $languages = api_get_languages();
+        /*$languages = api_get_languages();
         $languageList = [];
         foreach ($languages as $isoCode => $language) {
             $languageList[languageToCountryIsoCode($isoCode)] = $language;
@@ -91,9 +91,9 @@ class LegacyListener
                 'flag' => $isoFixed,
                 'text' => $languageList[$isoFixed] ?? 'English',
             ]
-        );
-        $twig->addGlobal('current_locale', $request->getLocale());
-        $twig->addGlobal('available_locales', $languages);
+        );*/
+        //$twig->addGlobal('current_locale', $request->getLocale());
+        //$twig->addGlobal('available_locales', $languages);
         $twig->addGlobal('show_toolbar', \Template::isToolBarDisplayedForUser() ? 1 : 0);
 
         // Extra content

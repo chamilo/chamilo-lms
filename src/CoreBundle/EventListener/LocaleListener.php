@@ -47,12 +47,21 @@ class LocaleListener implements EventSubscriberInterface
             return;
         }
 
+        $loadFromDb = $request->getSession()->get('check_locale_from_db', true);
+
+        if (false === $loadFromDb &&
+            $request->getSession()->has('_locale') &&
+            !empty($request->getSession()->get('_locale'))
+        ) {
+            $locale = $request->getSession()->get('_locale');
+            $request->setLocale($locale);
+
+            return true;
+        }
+
         // Try to see if the locale has been set as a _locale routing parameter (from lang switcher)
         //if ($locale = $request->getSession('_locale')) {
-        if (false) {
-            //if ($locale = $request->attributes->get('_locale')) {
-            //$request->getSession()->set('_locale', $locale);
-        } else {
+        if ($loadFromDb) {
             $localeList = [];
 
             // 1. Check platform locale
@@ -133,6 +142,7 @@ class LocaleListener implements EventSubscriberInterface
             // if no explicit locale has been set on this request, use one from the session
             $request->setLocale($locale);
             $request->getSession()->set('_locale', $locale);
+            $request->getSession()->set('check_locale_from_db', false);
         }
     }
 

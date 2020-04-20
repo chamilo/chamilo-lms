@@ -32,25 +32,6 @@ class ResourceNode
     use TimestampableEntity;
 
     /**
-     * @var \DateTime
-     * @Groups({"list"})
-     * @Gedmo\Timestampable(on="create")
-     * @ORM\Column(type="datetime")
-     * @JMS\Type("DateTime")
-     */
-    protected $createdAt;
-
-    /**
-     * @var \DateTime
-     *
-     *  @Groups({"list"})
-     * @Gedmo\Timestampable(on="update")
-     * @ORM\Column(type="datetime")
-     * @JMS\Type("DateTime")
-     */
-    protected $updatedAt;
-
-    /**
      * @ORM\Id
      * @ORM\Column(type="integer")
      * @ORM\GeneratedValue(strategy="AUTO")
@@ -61,7 +42,16 @@ class ResourceNode
      * @Assert\NotBlank()
      *
      * @Gedmo\TreePathSource
-     * @ORM\Column(name="slug", type="string", length=255, nullable=true)
+     *
+     * @ORM\Column(name="title", type="string", length=255, nullable=false)
+     */
+    protected $title;
+
+    /**
+     * @Assert\NotBlank()
+     *
+     * @Gedmo\Slug(fields={"title"})
+     * @ORM\Column(name="slug", type="string", length=255, nullable=false)
      */
     protected $slug;
 
@@ -82,7 +72,7 @@ class ResourceNode
      * @var ResourceFile
      * @Groups({"list"})
      *
-     * @ORM\OneToOne(targetEntity="ResourceFile", inversedBy="resourceNode", orphanRemoval=true)
+     * @ORM\OneToOne(targetEntity="ResourceFile", inversedBy="resourceNode", orphanRemoval=true, fetch="EAGER")
      * @ORM\JoinColumn(name="resource_file_id", referencedColumnName="id", onDelete="CASCADE")
      */
     protected $resourceFile;
@@ -125,9 +115,9 @@ class ResourceNode
     protected $children;
 
     /**
-     * @Gedmo\TreePath(separator="`")
+     * @Gedmo\TreePath(appendId=true,separator="`")
      *
-     * @ORM\Column(name="path", type="string", length=3000, nullable=true)
+     * @ORM\Column(name="path", type="text", nullable=true)
      */
     protected $path;
 
@@ -152,7 +142,25 @@ class ResourceNode
      */
     protected $comments;
 
-    //protected $pathForCreationLog = '';
+    /**
+     * @var \DateTime
+     *
+     * @Groups({"list"})
+     * @Gedmo\Timestampable(on="create")
+     * @ORM\Column(type="datetime")
+     * @JMS\Type("DateTime")
+     */
+    protected $createdAt;
+
+    /**
+     * @var \DateTime
+     *
+     * @Groups({"list"})
+     * @Gedmo\Timestampable(on="update")
+     * @ORM\Column(type="datetime")
+     * @JMS\Type("DateTime")
+     */
+    protected $updatedAt;
 
     /**
      * Constructor.
@@ -312,6 +320,30 @@ class ResourceNode
         return self::convertPathForDisplay($this->path);
     }
 
+    public function getPathForDisplayToArray($baseRoot = null)
+    {
+        $parts = explode(self::PATH_SEPARATOR, $this->path);
+        $list = [];
+        foreach ($parts as $part) {
+            $parts = explode('-', $part);
+            if (empty($parts[1])) {
+                continue;
+            }
+
+            $value = $parts[0];
+            $id = $parts[1];
+
+            if (!empty($baseRoot)) {
+                if ($id < $baseRoot) {
+                    continue;
+                }
+            }
+            $list[$id] = $value;
+        }
+
+        return $list;
+    }
+
     /**
      * @return string
      */
@@ -325,6 +357,13 @@ class ResourceNode
     public function getSlug()
     {
         return $this->slug;
+    }
+
+    public function setTitle(string $title)
+    {
+        $this->title = $title;
+
+        return $this;
     }
 
     /**
@@ -370,26 +409,6 @@ class ResourceNode
         }
 
         return $pathForDisplay;
-    }
-
-    /**
-     * This is required for logging the resource path at the creation.
-     * Do not use this function otherwise.
-     */
-    public function setPathForCreationLog($path)
-    {
-        $this->pathForCreationLog = $path;
-    }
-
-    /**
-     * This is required for logging the resource path at the creation.
-     * Do not use this function otherwise.
-     *
-     * @return string
-     */
-    public function getPathForCreationLog()
-    {
-        return $this->pathForCreationLog;
     }
 
     /**

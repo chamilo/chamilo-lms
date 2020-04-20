@@ -201,9 +201,14 @@ class SettingsManager implements SettingsManagerInterface
 
     public function loadAll()
     {
-        /*$session = $this->request->getCurrentRequest()->getSession();
-        $schemaList = $session->get('schemas');
-        */
+        $loadFromSession = true;
+
+        if ($loadFromSession && $this->request->getCurrentRequest()) {
+            $session = $this->request->getCurrentRequest()->getSession();
+            $schemaList = $session->get('schemas');
+            $this->schemaList = $schemaList;
+        }
+
         if (empty($this->schemaList)) {
             $schemas = array_keys($this->getSchemas());
             $schemaList = [];
@@ -232,7 +237,9 @@ class SettingsManager implements SettingsManagerInterface
                 $schemaList[$name] = $settings;
             }
             $this->schemaList = $schemaList;
-            //$session->set('schemas', $schemaList);
+            if ($loadFromSession && $this->request->getCurrentRequest()) {
+                $session->set('schemas', $schemaList);
+            }
         }
     }
 

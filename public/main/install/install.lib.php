@@ -3321,7 +3321,6 @@ function finishInstallationWithContainer(
     $branch = new BranchSync();
     $branch->setBranchName('localhost');
     $branch->setUrl($accessUrl);
-
     $manager->persist($branch);
 
     $admin = $userManager->find($adminId);

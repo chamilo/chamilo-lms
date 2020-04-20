@@ -6,6 +6,9 @@ require_once __DIR__.'/../../main/inc/global.inc.php';
 
 $test = true;
 $newLine = '<br />';
+if (PHP_SAPI == 'cli') {
+    $newLine = PHP_EOL;
+}
 $userReportList = [];
 $extraFieldValue = new ExtraField('user');
 $extraFieldInfo = $extraFieldValue->get_handler_field_info_by_field_variable('termactivated');
@@ -15,7 +18,7 @@ $senderId = api_get_configuration_value('disable_user_conditions_sender_id');
 $senderInfo = api_get_user_info($senderId);
 
 if (empty($senderId) || empty($senderInfo)) {
-    echo 'Please set the configuraction value: "disable_user_conditions_sender_id" for a valid user.';
+    echo 'Please set the configuration value: "disable_user_conditions_sender_id" for a valid user.';
 }
 
 $statusCondition = ' AND u.status = '.STUDENT;
@@ -61,10 +64,12 @@ foreach ($students as $student) {
         $subject = get_lang('AccountDisabled', null, $language).': '.$disabledUser['complete_name'];
         $content = get_lang('DisableUserCase1', null, $language);
 
-        $userReportList[$studentId]['message'] .= $newLine.'Mail will be send to: '.$disabledUser['username'].$newLine.'Subject: '.$subject.$newLine.'Content: '.$content.$newLine;
+        $userReportList[$studentId]['message'] .= $newLine.
+            'Mail will be send to: '.$disabledUser['username'].' ('.$disabledUser['email'].')'.$newLine.
+            'Subject: '.$subject.$newLine.
+            'Content: '.$content.$newLine;
 
         if (false === $test) {
-            UserManager::disable($studentId);
             MessageManager::send_message(
                 $studentId,
                 $subject,
@@ -77,6 +82,7 @@ foreach ($students as $student) {
                 0,
                 $senderId
             );
+            UserManager::disable($studentId);
         }
     }
 }
@@ -117,10 +123,12 @@ foreach ($students as $student) {
         }
 
         $userReportList[$studentId]['message'] .= $newLine."User# $studentId (".$disabledUser['username'].") to be disabled. Case 3. Last connection: $lastDate - 6 months: $date6Months ";
-        $userReportList[$studentId]['message'] .= $newLine.'Mail will be send to: '.$disabledUser['username'].$newLine.'Subject: '.$subject.$newLine.'Content: '.$content;
+        $userReportList[$studentId]['message'] .= $newLine.
+            'Mail will be send to: '.$disabledUser['username'].$newLine.
+            'Subject: '.$subject.$newLine.
+            'Content: '.$content;
 
         if (false === $test) {
-            UserManager::disable($studentId);
             MessageManager::send_message(
                 $studentId,
                 $subject,
@@ -133,6 +141,7 @@ foreach ($students as $student) {
                 0,
                 $senderId
             );
+            UserManager::disable($studentId);
         }
     }
 }
@@ -186,7 +195,6 @@ foreach ($students as $student) {
         }
 
         if (false === $test) {
-            UserManager::disable($studentId);
             MessageManager::send_message(
                 $studentId,
                 $subject,
@@ -199,7 +207,7 @@ foreach ($students as $student) {
                 0,
                 $senderId
             );
-
+            UserManager::disable($studentId);
             if (!empty($bossInfo) && !empty($subjectBoss)) {
                 MessageManager::send_message(
                     $studentBoss,
@@ -219,17 +227,15 @@ foreach ($students as $student) {
     }
 }
 
-//$newLine = PHP_EOL;
-
 if ($test) {
     echo '<h3>No changes have been made.</h3>'.$newLine;
-
-    echo 'Sender user: '.$senderInfo['complete_name'].$newLine;
-    echo "Now: $now".$newLine;
-    echo "3 Months old: $date3Months".$newLine;
-    echo "6 Months old: $date6Months".$newLine;
-    echo $newLine;
 }
+
+echo 'Sender user: '.$senderInfo['complete_name'].' ('.$senderInfo['email'].') '.$newLine;
+echo "Now: $now".$newLine;
+echo "3 Months old: $date3Months".$newLine;
+echo "6 Months old: $date6Months".$newLine;
+echo $newLine;
 
 ksort($userReportList);
 

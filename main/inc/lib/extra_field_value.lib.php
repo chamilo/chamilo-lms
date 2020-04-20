@@ -694,6 +694,18 @@ class ExtraFieldValue extends Model
                                 $result['value'] = $extra_field_option_result[0]['display_text'];
                             }
                             break;
+                        case ExtraField::FIELD_TYPE_SELECT_MULTIPLE:
+                            $optionIds = explode(';', $result['value']);
+                            $optionValues = [];
+                            foreach ($optionIds as $optionId) {
+                                $objEfOption = new ExtraFieldOption($this->type);
+                                $options = $objEfOption->get_field_option_by_field_and_option($field_id, $optionId);
+                                foreach ($options as $optionItem) {
+                                    $optionValues[] = ExtraFieldOption::translateDisplayName($optionItem['display_text']);
+                                }
+                            }
+                            $result['value'] = implode(' / ', $optionValues);
+                            break;
                         case ExtraField::FIELD_TYPE_SELECT_WITH_TEXT_FIELD:
                             $options = explode('::', $result['value']);
 
@@ -713,7 +725,6 @@ class ExtraFieldValue extends Model
                             foreach ($optionIds as $optionId) {
                                 $objEfOption = new ExtraFieldOption('user');
                                 $optionInfo = $objEfOption->get($optionId);
-
                                 $optionValues[] = $optionInfo['display_text'];
                             }
 
@@ -724,9 +735,9 @@ class ExtraFieldValue extends Model
             }
 
             return $result;
-        } else {
-            return false;
         }
+
+        return false;
     }
 
     /**

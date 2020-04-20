@@ -4,7 +4,6 @@
 
 namespace Chamilo\CoreBundle\EventListener;
 
-use Chamilo\SettingsBundle\Manager\SettingsManager;
 use Symfony\Component\HttpFoundation\Session\SessionInterface;
 use Symfony\Component\Security\Http\Event\InteractiveLoginEvent;
 

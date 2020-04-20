@@ -13,9 +13,6 @@ abstract class OutcomeResponse
     const TYPE_READ = 'read';
     const TYPE_DELETE = 'delete';
 
-    /**
-     * @var mixed
-     */
     protected $bodyParams;
     /**
      * @var OutcomeResponseStatus

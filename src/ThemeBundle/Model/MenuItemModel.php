@@ -40,14 +40,8 @@ class MenuItemModel implements MenuItemInterface
      */
     protected $children = [];
 
-    /**
-     * @var mixed
-     */
     protected $icon = false;
 
-    /**
-     * @var mixed
-     */
     protected $badge = false;
 
     protected $badgeColor = 'green';

@@ -32,9 +32,6 @@ abstract class OutcomeRequest
      */
     protected $statusInfo;
 
-    /**
-     * @var mixed
-     */
     protected $responseBodyParam;
 
     /**

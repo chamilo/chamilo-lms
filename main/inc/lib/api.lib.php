@@ -9667,7 +9667,8 @@ function api_find_template($template)
 /**
  * Returns an array of languages (English names like "english", "french", etc)
  * to ISO 639-1 codes (fr, es, etc) for use (for example) to show flags
- * Note: 'english' is returned as 'gb'
+ * Note: 'english' is returned as 'gb'.
+ *
  * @return array
  */
 function api_get_language_list_for_flag()
@@ -9689,9 +9690,11 @@ function api_get_language_list_for_flag()
 
 /**
  * Generate the Javascript required for the on-page translation of
- * multi-language strings
- * @return string
+ * multi-language strings.
+ *
  * @throws Exception
+ *
+ * @return string
  */
 function api_get_language_translate_html()
 {
@@ -9773,11 +9776,14 @@ function api_get_language_translate_html()
 
 /**
  * Filter a multi-language HTML string (for the multi-language HTML
- * feature) into the given language (strip the rest)
+ * feature) into the given language (strip the rest).
+ *
  * @param string $htmlString The HTML string to "translate". Usually <p><span lang="en">Some string</span></p><p><span lang="fr">Une chaîne</span></p>
- * @param string $language The language in which we want to get the
- * @return string The filtered string in the given language, or the full string if no translated string was identified
+ * @param string $language   The language in which we want to get the
+ *
  * @throws Exception
+ *
+ * @return string The filtered string in the given language, or the full string if no translated string was identified
  */
 function api_get_filtered_multilingual_HTML_string($htmlString, $language = null)
 {

@@ -10104,9 +10104,9 @@ ul.dropdown-menu.inner > li > a {
         width: 100%;
     }
 
-    .form-inline .survey_question .form-group label {
+    /*.form-inline .survey_question .form-group label {
         display: none;
-    }
+    }*/
 
     .form-inline .survey_question .input-group .bootstrap-select {
         width: 300px;

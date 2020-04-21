@@ -5055,6 +5055,21 @@ function api_get_visual_theme()
 {
     static $visual_theme;
     if (!isset($visual_theme)) {
+        $cacheAvailable = api_get_configuration_value('apc');
+        $userThemeAvailable = api_get_setting('user_selected_theme') == 'true';
+        $courseThemeAvailable = api_get_setting('allow_course_theme') == 'true';
+        // only use a shared cache if no user-based or course-based theme is allowed
+        $useCache = ($cacheAvailable && !$userThemeAvailable && !$courseThemeAvailable);
+        $apcVar = '';
+        if ($useCache) {
+            $apcVar = api_get_configuration_value('apc_prefix').'my_campus_visual_theme';
+            if (apcu_exists($apcVar)) {
+                return apcu_fetch($apcVar);
+            }
+        }
+
+
+
         // Get style directly from DB
         $styleFromDatabase = api_get_settings_params_simple(
             [
@@ -5072,7 +5087,7 @@ function api_get_visual_theme()
 
         // Platform's theme.
         $visual_theme = $platform_theme;
-        if (api_get_setting('user_selected_theme') == 'true') {
+        if ($userThemeAvailable) {
             $user_info = api_get_user_info();
             if (isset($user_info['theme'])) {
                 $user_theme = $user_info['theme'];
@@ -5086,7 +5101,7 @@ function api_get_visual_theme()
 
         $course_id = api_get_course_id();
         if (!empty($course_id)) {
-            if (api_get_setting('allow_course_theme') == 'true') {
+            if ($courseThemeAvailable) {
                 $course_theme = api_get_course_setting('course_theme', api_get_course_info());
 
                 if (!empty($course_theme) && $course_theme != -1) {
@@ -5118,6 +5133,10 @@ function api_get_visual_theme()
         if ($lp_theme_log) {
             $visual_theme = $platform_theme;
         }
+        if ($useCache) {
+            apcu_store($apcVar, $visual_theme, 120);
+        }
+
     }
 
     return $visual_theme;

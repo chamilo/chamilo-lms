@@ -14,8 +14,6 @@ use ChamiloSession as Session;
  * @author Roan Embrechts, initial self-unsubscribe code, code cleaning, virtual course support
  * @author Bart Mollet, code cleaning, use of Display-library, list of courseAdmin-tools, use of GroupManager
  * @author Isaac Flores, code cleaning and improvements
- *
- * @package chamilo.group
  */
 require_once __DIR__.'/../inc/global.inc.php';
 
@@ -278,8 +276,7 @@ if (api_get_setting('allow_group_categories') === 'true') {
         echo $groupToShow;
     }
 } else {
-    $group_list = GroupManager::get_group_list();
-    echo GroupManager::process_groups($group_list);
+    echo GroupManager::process_groups(GroupManager::get_group_list());
 }
 
 if (!isset($_GET['origin']) || $_GET['origin'] != 'learnpath') {

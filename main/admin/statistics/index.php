@@ -15,6 +15,7 @@ $interbreadcrumb[] = ['url' => '../index.php', 'name' => get_lang('PlatformAdmin
 $report = isset($_REQUEST['report']) ? $_REQUEST['report'] : '';
 $sessionDuration = isset($_GET['session_duration']) ? (int) $_GET['session_duration'] : '';
 $validated = false;
+$sessionStatusAllowed = api_get_configuration_value('allow_session_status');
 
 if (
 in_array(
@@ -199,8 +200,12 @@ in_array(
                 true,
                 ['format' => 'YYYY-MM-DD', 'timePicker' => 'false', 'validate_format' => 'Y-m-d']
             );
-            $options = SessionManager::getStatusList();
-            $form->addSelect('status_id', get_lang('SessionStatus'), $options, ['placeholder' => get_lang('All')]);
+
+            if ($sessionStatusAllowed) {
+                $options = SessionManager::getStatusList();
+                $form->addSelect('status_id', get_lang('SessionStatus'), $options, ['placeholder' => get_lang('All')]);
+            }
+
             $form->addHidden('report', 'session_by_date');
             $form->addButtonSearch(get_lang('Search'));
 
@@ -267,12 +272,15 @@ in_array(
                     $reportOptions2,
                     'canvas2'
                 );
-                $htmlHeadXtra[] = Statistics::getJSChartTemplate(
-                    $url3,
-                    $reportType,
-                    $reportOptions3,
-                    'canvas3'
-                );
+
+                if ($sessionStatusAllowed) {
+                    $htmlHeadXtra[] = Statistics::getJSChartTemplate(
+                        $url3,
+                        $reportType,
+                        $reportOptions3,
+                        'canvas3'
+                    );
+                }
 
                 $reportOptions = '
                     legend: {
@@ -361,7 +369,6 @@ $tools = [
 
 $course_categories = Statistics::getCourseCategories();
 $content = '';
-$sessionStatusAllowed = api_get_configuration_value('allow_session_status');
 
 switch ($report) {
     case 'session_by_date':
@@ -498,9 +505,9 @@ switch ($report) {
             $column = 0;
             foreach ($headers as $header) {
                 $tableCourse->setHeaderContents($row, $column, $header);
-                ++$column;
+                $column++;
             }
-            ++$row;
+            $row++;
 
             if (!empty($courseSessions)) {
                 arsort($courseSessions);
@@ -508,7 +515,7 @@ switch ($report) {
                     $courseInfo = api_get_course_info_by_id($courseId);
                     $tableCourse->setCellContents($row, 0, $courseInfo['name']);
                     $tableCourse->setCellContents($row, 1, $count);
-                    ++$row;
+                    $row++;
                 }
             }
 
@@ -740,7 +747,6 @@ switch ($report) {
             $graph .= '<div class="col-md-6"><canvas id="canvas7" style="margin-bottom: 20px"></canvas></div>';
             $graph .= '</div>';
 
-
             $conditions = [];
             $extraConditions = '';
             if (!empty($startDate) && !empty($endDate)) {
@@ -864,7 +870,7 @@ switch ($report) {
                 $item[] = $certificate ? get_lang('Yes') : get_lang('No');
                 $item[] = $birthDate;
                 $data[] = $item;
-                ++$row;
+                $row++;
             }
 
             if (isset($_REQUEST['action_table']) && 'export' === $_REQUEST['action_table']) {
@@ -941,15 +947,15 @@ switch ($report) {
             $column = 0;
             foreach ($headers as $header) {
                 $table->setHeaderContents($row, $column, $header);
-                ++$column;
+                $column++;
             }
 
-            ++$row;
+            $row++;
             $table->setCellContents($row, 0, get_lang('Total'));
             $table->setCellContents($row, 1, $totalCount);
             $table->setCellContents($row, 2, '100 %');
 
-            ++$row;
+            $row++;
             $total = 0;
             foreach ($all as $name => $value) {
                 $total += $value;
@@ -959,7 +965,7 @@ switch ($report) {
                 $table->setCellContents($row, 0, $name);
                 $table->setCellContents($row, 1, $value);
                 $table->setCellContents($row, 2, $percentage);
-                ++$row;
+                $row++;
             }
             $extraTables = Display::page_subheader2($reportName1).$table->toHtml();
 
@@ -1284,7 +1290,7 @@ switch ($report) {
                     );
 
                     if (!empty($certificate)) {
-                        ++$certificateCount;
+                        $certificateCount++;
                     }
                 }
 
@@ -1336,7 +1342,7 @@ switch ($report) {
         $content .= Statistics::printStats(get_lang('Students'), $students);
         break;
     case 'recentlogins':
-        $content .= '<h2>'.sprintf(get_lang('LastXDays'), '15').'</h2>';
+        $content .= '<h2>'.sprintf(get_lang('LastXDays'), '31').'</h2>';
         $form = new FormValidator(
             'session_time',
             'get',

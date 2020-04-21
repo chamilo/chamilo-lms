@@ -1097,6 +1097,23 @@ function addEvent(elm, evType, fn, useCapture){
     }
 }
 
+function lastCall() {
+    console.log('lastCall');
+    savedata(olms.lms_item_id);
+    xajax_save_item_scorm(
+        olms.lms_lp_id,
+        olms.lms_user_id,
+        olms.lms_view_id,
+        olms.lms_item_id,
+        olms.lms_session_id,
+        olms.lms_course_id,
+        olms.finishSignalReceived,
+        1,
+        olms.statusSignalReceived,
+        1
+    );
+}
+
 /**
  * Add listeners to the page objects. This has to be defined for
  * the current context as it acts on objects that should exist
@@ -1129,39 +1146,21 @@ function addListeners(){
     }
 
     if (olms.lms_item_type=='sco') {
-        $(window).on('beforeunload', function(e){
-            savedata(olms.lms_item_id);
-            xajax_save_item_scorm(
-                olms.lms_lp_id,
-                olms.lms_user_id,
-                olms.lms_view_id,
-                olms.lms_item_id,
-                olms.lms_session_id,
-                olms.lms_course_id,
-                olms.finishSignalReceived,
-                1,
-                olms.statusSignalReceived
-            );
+        //window.addEventListener('beforeunload', lastCall);
 
+        $(window).on('beforeunload', function(e) {
+            console.log('beforeunload');
+            lastCall();
             logit_lms('beforeunload called', 3);
+
             return 'true';
         });
 
         $(window).on('unload', function(e) {
+            console.log('unload');
             savedata(olms.lms_item_id);
             logit_lms('unload called', 3);
-            xajax_save_item_scorm(
-                olms.lms_lp_id,
-                olms.lms_user_id,
-                olms.lms_view_id,
-                olms.lms_item_id,
-                olms.lms_session_id,
-                olms.lms_course_id,
-                olms.finishSignalReceived,
-                1,
-                olms.statusSignalReceived
-            );
-
+            lastCall();
             return 'true';
         });
         logit_lms('Added unload savedata() on window unload', 3);
@@ -1951,7 +1950,8 @@ function xajax_save_item_scorm(
     course_id,
     finishSignalReceived,
     userNavigatesAway,
-    statusSignalReceived
+    statusSignalReceived,
+    useSendBeacon
 ) {
     if (typeof(finishSignalReceived) == 'undefined') {
         finishSignalReceived = 0;
@@ -2022,7 +2022,6 @@ function xajax_save_item_scorm(
             }
             interact_temp = interact_temp.substr(0,(interact_temp.length-2)) + ']';
             //  interact_string += encodeURIComponent(interact_temp);
-
             interact_string += interact_temp;
         }
         //interact_string = encodeURIComponent(interact_string.substr(0,(interact_string.length-1)));
@@ -2032,14 +2031,30 @@ function xajax_save_item_scorm(
 
     logit_lms('xajax_save_item_scorm with params:' + params, 3);
     var codePathUrl = '<?php echo api_get_path(WEB_CODE_PATH).'lp/'; ?>';
+    var saveUrl = codePathUrl + "lp_ajax_save_item.php" + courseUrl;
 
-    $.ajax({
-        type:"POST",
-        data: params,
-        url: codePathUrl + "lp_ajax_save_item.php" + courseUrl,
-        dataType: "script",
-        async: false
-    });
+    if (useSendBeacon == 1 && navigator.sendBeacon) {
+        var formData = new FormData();
+        var paramsToArray = params.split('&');
+        for (var i = 0; i < paramsToArray.length; i++) {
+            if (!paramsToArray[i])
+                continue;
+            var pair = paramsToArray[i].split('=');
+            formData.append(pair[0], decodeURIComponent(pair[1]));
+        }
+
+        navigator.sendBeacon(saveUrl, formData);
+    } else {
+        $.ajax({
+            type:"POST",
+            data: params,
+            url: saveUrl,
+            dataType: "script",
+            async: false
+        });
+    }
+
+
     params = '';
     my_scorm_values = null;
 }

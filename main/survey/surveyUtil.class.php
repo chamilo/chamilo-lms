@@ -1312,18 +1312,20 @@ class SurveyUtil
     /**
      * Quite similar to display_complete_report(), returns an HTML string
      * that can be used in a csv file.
+     *
      * @param array $survey_data The basic survey data as initially obtained by SurveyManager::get_survey()
      * @param int   $user_id     The ID of the user asking for the report
      * @param bool  $compact     Whether to present the long (v marks with multiple columns per question) or compact (one column per question) answers format
      *
      * @todo consider merging this function with display_complete_report
      *
+     * @throws Exception
+     *
      * @return string The contents of a csv file
      *
      * @author Patrick Cool <patrick.cool@UGent.be>, Ghent University
      *
      * @version February 2007
-     * @throws Exception
      */
     public static function export_complete_report($survey_data, $user_id = 0, $compact = false)
     {
@@ -1541,12 +1543,12 @@ class SurveyUtil
     /**
      * Add a line to the csv file.
      *
-     * @param array $survey_data Basic survey data (we're mostly interested in the 'anonymous' index)
-     * @param array $possible_options Possible answers
-     * @param array $answers_of_user User's answers
-     * @param mixed $user User ID or user details as string - Used as a string in the result string
-     * @param bool $display_extra_user_fields Whether to display user fields or not
-     * @param bool $compact Whether to show answers as different column values (true) or one column per option (false, default)
+     * @param array $survey_data               Basic survey data (we're mostly interested in the 'anonymous' index)
+     * @param array $possible_options          Possible answers
+     * @param array $answers_of_user           User's answers
+     * @param mixed $user                      User ID or user details as string - Used as a string in the result string
+     * @param bool  $display_extra_user_fields Whether to display user fields or not
+     * @param bool  $compact                   Whether to show answers as different column values (true) or one column per option (false, default)
      *
      * @return string One line of the csv file
      *

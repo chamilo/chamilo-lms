@@ -15,6 +15,7 @@ $interbreadcrumb[] = ['url' => '../index.php', 'name' => get_lang('PlatformAdmin
 $report = isset($_REQUEST['report']) ? $_REQUEST['report'] : '';
 $sessionDuration = isset($_GET['session_duration']) ? (int) $_GET['session_duration'] : '';
 $validated = false;
+$sessionStatusAllowed = api_get_configuration_value('allow_session_status');
 
 if (
 in_array(
@@ -199,8 +200,12 @@ in_array(
                 true,
                 ['format' => 'YYYY-MM-DD', 'timePicker' => 'false', 'validate_format' => 'Y-m-d']
             );
-            $options = SessionManager::getStatusList();
-            $form->addSelect('status_id', get_lang('SessionStatus'), $options, ['placeholder' => get_lang('All')]);
+
+            if ($sessionStatusAllowed) {
+                $options = SessionManager::getStatusList();
+                $form->addSelect('status_id', get_lang('SessionStatus'), $options, ['placeholder' => get_lang('All')]);
+            }
+
             $form->addHidden('report', 'session_by_date');
             $form->addButtonSearch(get_lang('Search'));
 
@@ -267,12 +272,15 @@ in_array(
                     $reportOptions2,
                     'canvas2'
                 );
-                $htmlHeadXtra[] = Statistics::getJSChartTemplate(
-                    $url3,
-                    $reportType,
-                    $reportOptions3,
-                    'canvas3'
-                );
+
+                if ($sessionStatusAllowed) {
+                    $htmlHeadXtra[] = Statistics::getJSChartTemplate(
+                        $url3,
+                        $reportType,
+                        $reportOptions3,
+                        'canvas3'
+                    );
+                }
 
                 $reportOptions = '
                     legend: {
@@ -361,7 +369,6 @@ $tools = [
 
 $course_categories = Statistics::getCourseCategories();
 $content = '';
-$sessionStatusAllowed = api_get_configuration_value('allow_session_status');
 
 switch ($report) {
     case 'session_by_date':

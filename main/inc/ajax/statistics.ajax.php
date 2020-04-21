@@ -15,6 +15,7 @@ $sessionDuration = isset($_GET['session_duration']) ? (int) $_GET['session_durat
 $exportFormat = isset($_REQUEST['export_format']) ? $_REQUEST['export_format'] : 'csv';
 $operation = isset($_REQUEST['oper']) ? $_REQUEST['oper'] : false;
 $order = isset($_REQUEST['sord']) && in_array($_REQUEST['sord'], ['asc', 'desc']) ? $_REQUEST['sord'] : 'asc';
+$table = '';
 
 switch ($action) {
     case 'add_student_to_boss':
@@ -22,7 +23,7 @@ switch ($action) {
         $bossId = isset($_GET['boss_id']) ? (int) $_GET['boss_id'] : 0;
 
         if ($studentId && $bossId) {
-            UserManager::subscribeBossToUsers($bossId, [$studentId], false);
+            UserManager::subscribeUserToBossList($studentId, [$bossId], true);
         }
 
         echo Statistics::getBossTable($bossId);
@@ -166,10 +167,10 @@ switch ($action) {
         // for global tools usage (number of clicks)
         $list = [];
         $palette = ChamiloApi::getColorPalette(true, true);
-        if ($action == 'tools_usage') {
+        if ($action === 'tools_usage') {
             $statsName = 'Tools';
             $all = Statistics::getToolsStats();
-        } elseif ($action == 'courses') {
+        } elseif ($action === 'courses') {
             $statsName = 'CountCours';
             $course_categories = Statistics::getCourseCategories();
             // total amount of courses
@@ -177,7 +178,7 @@ switch ($action) {
             foreach ($course_categories as $code => $name) {
                 $all[$name] = Statistics::countCourses($code);
             }
-        } elseif ($action == 'courses_by_language') {
+        } elseif ($action === 'courses_by_language') {
             $statsName = 'CountCourseByLanguage';
             $all = Statistics::printCourseByLanguageStats();
             // use slightly different colors than previous chart
@@ -185,20 +186,20 @@ switch ($action) {
                 $item = array_shift($palette);
                 array_push($palette, $item);
             }
-        } elseif ($action == 'users') {
+        } elseif ($action === 'users') {
             $statsName = 'NumberOfUsers';
             $countInvisible = isset($_GET['count_invisible']) ? (int) $_GET['count_invisible'] : null;
             $all = [
                 get_lang('Teachers') => Statistics::countUsers(COURSEMANAGER, null, $countInvisible),
                 get_lang('Students') => Statistics::countUsers(STUDENT, null, $countInvisible),
             ];
-        } elseif ($action == 'users_teachers') {
+        } elseif ($action === 'users_teachers') {
             $statsName = 'Teachers';
             $course_categories = Statistics::getCourseCategories();
             $countInvisible = isset($_GET['count_invisible']) ? (int) $_GET['count_invisible'] : null;
             $all = [];
             foreach ($course_categories as $code => $name) {
-                $name = str_replace(get_lang('Department'), "", $name);
+                $name = str_replace(get_lang('Department'), '', $name);
                 $all[$name] = Statistics::countUsers(COURSEMANAGER, $code, $countInvisible);
             }
             // use slightly different colors than previous chart
@@ -206,7 +207,7 @@ switch ($action) {
                 $item = array_shift($palette);
                 array_push($palette, $item);
             }
-        } elseif ($action == 'users_students') {
+        } elseif ($action === 'users_students') {
             $statsName = 'Students';
             $course_categories = Statistics::getCourseCategories();
             $countInvisible = isset($_GET['count_invisible']) ? (int) $_GET['count_invisible'] : null;
@@ -303,6 +304,7 @@ switch ($action) {
                 $all = [];
                 $total = count($users);
                 $usersFound = 0;
+                $extraFieldOption = new ExtraFieldOption('user');
                 foreach ($extraField['options'] as $item) {
                     $value = Database::escape_string($item['option_value']);
                     $count = 0;
@@ -314,8 +316,12 @@ switch ($action) {
                             field_id = ".$extraField['id'];
                     $query = Database::query($sql);
                     $result = Database::fetch_array($query);
+
                     $count = $result['count'];
                     $usersFound += $count;
+
+                    $option = $extraFieldOption->get($item['id'], true);
+                    $item['display_text'] = $option['display_text'];
                     $all[$item['display_text']] = $count;
                 }
                 $all[get_lang('N/A')] = $total - $usersFound;
@@ -428,19 +434,14 @@ switch ($action) {
                         $years = (int) $interval->y;
 
                         if ($years >= 16 && $years <= 17) {
-                            $all['16-17']++;
+                            $all['16-17'] += 1;
                         }
                         if ($years >= 18 && $years <= 25) {
-                            $all['18-25']++;
+                            $all['18-25'] += 1;
                         }
                         if ($years >= 26 && $years <= 30) {
-                            $all['26-30']++;
+                            $all['26-30'] += 1;
                         }
-                        /*if ($years >= 31) {
-                            $all[get_lang('N/A')] += 1;
-                        }*/
-                    } else {
-                        //$all[get_lang('N/A')] += 1;
                     }
                 }
 
@@ -579,11 +580,6 @@ switch ($action) {
         $startDate = Database::escape_string($_REQUEST['date_start']);
         $endDate = Database::escape_string($_REQUEST['date_end']);
         $statusId = (int) $_REQUEST['status'];
-
-        /*$extraConditions = '';
-        if (!empty($startDate) && !empty($endDate)) {
-            $extraConditions .= " AND registration_date BETWEEN '$startDate' AND '$endDate' ";
-        }*/
         $table = Database::get_main_table(TABLE_MAIN_SESSION);
 
         $statusCondition = '';
@@ -611,6 +607,9 @@ switch ($action) {
                     }
                     $all[$label] = $row['count'];
                 }
+
+                $table = Statistics::buildJsChartData($all, '');
+                $table = $table['table'];
                 break;
             case 'status':
                 $sessionStatusAllowed = api_get_configuration_value('allow_session_status');
@@ -633,6 +632,8 @@ switch ($action) {
                     $row['status'] = SessionManager::getStatusLabel($row['status']);
                     $all[$row['status']] = $row['count'];
                 }
+                $table = Statistics::buildJsChartData($all, '');
+                $table = $table['table'];
 
                 break;
             case 'language':
@@ -652,14 +653,16 @@ switch ($action) {
                         $courseId = $courses[0];
                         $courseInfo = api_get_course_info_by_id($courseId);
                         $language = $courseInfo['language'];
-                        $language = str_replace('2', '', $language);
+                        $language = get_lang(ucfirst(str_replace(2, '', $language)));
                     }
 
                     if (!isset($all[$language])) {
                         $all[$language] = 0;
                     }
-                    $all[$language]++;
+                    $all[$language] += 1;
                 }
+                $table = Statistics::buildJsChartData($all, '');
+                $table = $table['table'];
                 break;
             case 'course_in_session':
                 $sql = "SELECT id FROM $table
@@ -692,6 +695,8 @@ switch ($action) {
                         $all[$courseInfo['name']] = $count;
                     }
                 }
+                $table = Statistics::buildJsChartData($all, '');
+                $table = $table['table'];
 
                 break;
         }
@@ -710,6 +715,9 @@ switch ($action) {
             $list['datasets'][0]['backgroundColor'][] = $palette[$j];
             $i++;
         }
+
+        $list['table'] = $table;
+
 
         header('Content-type: application/json');
         echo json_encode($list);

@@ -24,8 +24,8 @@ $nameTools = get_lang('Students');
 
 $export_csv = isset($_GET['export']) && $_GET['export'] == 'csv' ? true : false;
 $keyword = isset($_GET['keyword']) ? Security::remove_XSS($_GET['keyword']) : null;
-$active = isset($_GET['active']) ? intval($_GET['active']) : 1;
-$sleepingDays = isset($_GET['sleeping_days']) ? intval($_GET['sleeping_days']) : null;
+$active = isset($_GET['active']) ? (int) $_GET['active'] : 1;
+$sleepingDays = isset($_GET['sleeping_days']) ? (int) $_GET['sleeping_days'] : null;
 $this_section = SECTION_TRACKING;
 
 $webCodePath = api_get_path(WEB_CODE_PATH);

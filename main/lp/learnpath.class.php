@@ -2564,7 +2564,9 @@ class learnpath
                 $score = $item->get_score();
                 $maxScore = $item->get_max();
                 if ($mode = '%') {
-                    $percentage = ((float) $score / (float) $maxScore) * 100;
+                    if (!empty($maxScore)) {
+                        $percentage = ((float) $score / (float) $maxScore) * 100;
+                    }
                     $percentage = number_format($percentage, 0);
                     $text = '%';
                 } else {

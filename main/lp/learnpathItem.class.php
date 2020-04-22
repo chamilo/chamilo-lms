@@ -1,4 +1,5 @@
 <?php
+
 /* For licensing terms, see /license.txt */
 
 /**
@@ -6,8 +7,6 @@
  * lp_item defines items belonging to a learnpath. Each item has a name,
  * a score, a use time and additional information that enables tracking a user's
  * progress in a learning path.
- *
- * @package chamilo.learnpath
  *
  * @author  Yannick Warnier <ywarnier@beeznest.org>
  */
@@ -80,6 +79,7 @@ class learnpathItem
     private $last_scorm_session_time = 0;
     private $prerequisiteMaxScore;
     private $prerequisiteMinScore;
+    public $view_max_score;
 
     /**
      * Prepares the learning path item for later launch.
@@ -145,6 +145,7 @@ class learnpathItem
         $this->setPrerequisiteMaxScore($row['prerequisite_max_score']);
         $this->setPrerequisiteMinScore($row['prerequisite_min_score']);
         $this->oldTotalTime = 0;
+        $this->view_max_score = 0;
 
         if (isset($row['launch_data'])) {
             $this->launch_data = $row['launch_data'];
@@ -754,14 +755,7 @@ class learnpathItem
     public function get_max()
     {
         if ($this->type === 'sco') {
-            if (isset($this->view_max_score) &&
-                !empty($this->view_max_score) &&
-                $this->view_max_score > 0
-            ) {
-                return $this->view_max_score;
-            } elseif (isset($this->view_max_score) &&
-                $this->view_max_score === ''
-            ) {
+            if (!empty($this->view_max_score) && $this->view_max_score > 0) {
                 return $this->view_max_score;
             } else {
                 if (!empty($this->max_score)) {
@@ -2656,6 +2650,7 @@ class learnpathItem
 
             return true;
         }
+
         $this->save();
 
         $allowed = $this->isRestartAllowed();
@@ -2727,7 +2722,6 @@ class learnpathItem
                         0
                     );
                 }
-
                 // Get all new settings from the URL
                 if ($from_outside) {
                     if ($debug) {
@@ -3719,6 +3713,7 @@ class learnpathItem
                     0
                 );
             }
+
             $check_res = Database::query($sql);
             // Depending on what we want (really), we'll update or insert a new row
             // now save into DB.

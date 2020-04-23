@@ -1,9 +1,8 @@
 <?php
+
 /* For licensing terms, see /license.txt */
 
 /**
- * @package chamilo.survey
- *
  * @author unknown, the initial survey that did not make it in 1.8 because of bad code
  * @author Patrick Cool <patrick.cool@UGent.be>, Ghent University: cleanup,
  * refactoring and rewriting large parts of the code

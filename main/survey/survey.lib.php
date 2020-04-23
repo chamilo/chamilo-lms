@@ -1128,21 +1128,19 @@ class SurveyManager
 
             if ($survey_data['survey_type'] == 1) {
                 if (empty($form_content['choose'])) {
-                    $return_message = 'PleaseChooseACondition';
 
-                    return $return_message;
+                    return 'PleaseChooseACondition';
                 }
 
                 if (($form_content['choose'] == 2) &&
                     ($form_content['assigned1'] == $form_content['assigned2'])
                 ) {
-                    $return_message = 'ChooseDifferentCategories';
 
-                    return $return_message;
+                    return 'ChooseDifferentCategories';
                 }
             }
 
-            if ($form_content['type'] != 'percentage') {
+            if ($form_content['type'] !== 'percentage') {
                 if (isset($form_content['answers'])) {
                     for ($i = 0; $i < count($form_content['answers']); $i++) {
                         if (strlen($form_content['answers'][$i]) < 1) {
@@ -1153,7 +1151,7 @@ class SurveyManager
                 }
             }
 
-            if ($form_content['type'] == 'score') {
+            if ($form_content['type'] === 'score') {
                 if (strlen($form_content['maximum_score']) < 1) {
                     $empty_answer = true;
                 }
@@ -1271,7 +1269,7 @@ class SurveyManager
                 }
 
                 if (!empty($form_content['survey_id'])) {
-                    //Updating survey
+                    // Updating survey
                     api_item_property_update(
                         api_get_course_info(),
                         TOOL_SURVEY,
@@ -1542,7 +1540,7 @@ class SurveyManager
     {
         $course_id = api_get_course_int_id();
         // A percentage question type has options 1 -> 100
-        if ($form_content['type'] == 'percentage') {
+        if ($form_content['type'] === 'percentage') {
             for ($i = 1; $i < 101; $i++) {
                 $form_content['answers'][] = $i;
             }

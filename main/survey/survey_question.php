@@ -33,15 +33,15 @@ class survey_question
         $url = api_get_path(WEB_AJAX_PATH).'survey.ajax.php?'.api_get_cidreq();
         $form->addHtml('
             <script>
-                $(function() {                    
+                $(function() {
                     $("#parent_id").on("change", function() {
                         var questionId = $(this).val()
                         var params = {
                             "a": "load_question_options",
                             "survey_id": "'.$surveyId.'",
                             "question_id": questionId,
-                        };    
-                            
+                        };
+
                           $.ajax({
                             type: "GET",
                             url: "'.$url.'",
@@ -50,8 +50,7 @@ class survey_question
                             success: function(data) {
                                 $("#parent_options").html(data);
                             }
-                        });        
-                        console.log(); 
+                        });
                     });
                 });
             </script>
@@ -115,9 +114,9 @@ class survey_question
             ['align' => 'middle', 'height' => '22px']
         ).' ';
 
-        if ($action == 'add') {
+        if ($action === 'add') {
             $toolName .= get_lang('AddQuestion').': ';
-        } elseif ($action == 'edit') {
+        } elseif ($action === 'edit') {
             $toolName .= get_lang('EditQuestion').': ';
         }
 
@@ -163,11 +162,10 @@ class survey_question
             $form->addCheckBox('is_required', get_lang('IsMandatory'), get_lang('Yes'));
         }
 
-        // When survey type = 1??
         if ($surveyData['survey_type'] == 1) {
             $table_survey_question_group = Database::get_course_table(TABLE_SURVEY_QUESTION_GROUP);
-            $sql = 'SELECT id,name FROM '.$table_survey_question_group.'
-                    WHERE survey_id = '.(int) $_GET['survey_id'].'
+            $sql = 'SELECT id, name FROM '.$table_survey_question_group.'
+                    WHERE survey_id = '.$surveyId.'
                     ORDER BY name';
             $rs = Database::query($sql);
             $glist = null;
@@ -200,19 +198,18 @@ class survey_question
                 );
             }
 
-            $this->html .= '	<tr><td colspan="">
-			<fieldset style="border:1px solid black"><legend>'.get_lang('Condition').'</legend>
-
-			<b>'.get_lang('Primary').'</b><br />
-			'.'<input type="radio" name="choose" value="1" '.(($formData['choose'] == 1) ? 'checked' : '').
-                '><select name="assigned">'.$grouplist.'</select><br />';
-
+            $this->html .= '<tr><td colspan="">
+			<fieldset style="border:1px solid black">
+			    <legend>'.get_lang('Condition').'</legend>
+			    <b>'.get_lang('Primary').'</b><br />
+			    <input type="radio" name="choose" value="1" '.(($formData['choose'] == 1) ? 'checked' : '').'>
+			    <select name="assigned">'.$grouplist.'</select><br />';
             $this->html .= '
 			<b>'.get_lang('Secondary').'</b><br />
-			'.'<input type="radio" name="choose" value="2" '.(($formData['choose'] == 2) ? 'checked' : '').
-                '><select name="assigned1">'.$grouplist1.'</select> '.
-                '<select name="assigned2">'.$grouplist2.'</select>'
-                .'</fieldset><br />';
+			    <input type="radio" name="choose" value="2" '.(($formData['choose'] == 2) ? 'checked' : '').'>
+			    <select name="assigned1">'.$grouplist1.'</select>
+                <select name="assigned2">'.$grouplist2.'</select>
+            </fieldset><br />';
         }
 
         $this->setForm($form);
@@ -239,7 +236,8 @@ class survey_question
                     <div class="form-group">
                         <label class="col-sm-2 control-label"></label>
                         <div class="col-sm-8">
-                            <div class="alert alert-info">'.get_lang('YouCantNotEditThisQuestionBecauseAlreadyExistAnswers').'</div>
+                            <div class="alert alert-info">'.
+                            get_lang('YouCantNotEditThisQuestionBecauseAlreadyExistAnswers').'</div>
                         </div>
                         <div class="col-sm-2"></div>
                     </div>
@@ -406,12 +404,9 @@ class survey_question
         if (isset($_POST['buttons']) && isset($_POST['buttons']['save'])) {
             Session::erase('answer_count');
             Session::erase('answer_list');
-            $message = SurveyManager::save_question(
-                $surveyData,
-                $formData
-            );
+            $message = SurveyManager::save_question($surveyData, $formData);
 
-            if ($message == 'QuestionAdded' || $message == 'QuestionUpdated') {
+            if ($message === 'QuestionAdded' || $message === 'QuestionUpdated') {
                 header('Location: '.api_get_path(WEB_CODE_PATH).'survey/survey.php?survey_id='.intval($_GET['survey_id']).'&message='.$message.'&'.api_get_cidreq());
                 exit;
             }

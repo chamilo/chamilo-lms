@@ -64,7 +64,7 @@ Feature: LP tool
 #    Then I should not see an icon with title "Export to PDF"
 
   Scenario: LP exists and LP category exists
-    Given I am on "/main/lp/lp_controller.php?cidReq=TEMP&id_session=0&gidReq=0&gradebook=0&origin="
+    Given I am on "/main/lp/lp_controller.php?cidReq=TEMP&action=list"
     Then I should see "LP 1"
     And I should see "LP category 1"
 

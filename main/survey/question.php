@@ -89,6 +89,7 @@ $possible_types = [
     'pagebreak',
     'percentage',
     'score',
+    'selectivedisplay',
 ];
 
 // Actions
@@ -98,10 +99,7 @@ $actions .= '<a href="'.api_get_path(WEB_CODE_PATH).'survey/survey.php?survey_id
 $actions .= '</div>';
 // Checking if it is a valid type
 if (!in_array($_GET['type'], $possible_types)) {
-    Display :: display_header($tool_name, 'Survey');
-    echo $actions;
-    echo Display::return_message(get_lang('TypeDoesNotExist'), 'error', false);
-    Display::display_footer();
+    api_not_allowed(true, Display::return_message(get_lang('TypeDoesNotExist'), 'error', false));
 }
 
 // Displaying the form for adding or editing the question
@@ -114,6 +112,7 @@ $formData = [];
 $formData['answers'] = ['', ''];
 
 switch ($_GET['type']) {
+    case 'selectivedisplay':
     case 'yesno':
         $formData['answers'][0] = get_lang('Yes');
         $formData['answers'][1] = get_lang('No');
@@ -130,9 +129,6 @@ switch ($_GET['type']) {
         $formData['values'][2] = 1;
         $formData['values'][3] = 2;
         $formData['values'][4] = 3;
-        break;
-    case 'open':
-        Display::addFlash(Display::return_message(get_lang('QuestionTags')));
         break;
 }
 

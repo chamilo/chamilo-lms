@@ -86,6 +86,8 @@ class survey_question
                 return new ch_score();
             case 'yesno':
                 return new ch_yesno();
+            case 'selectivedisplay':
+                return new ch_selectivedisplay();
             default:
                 api_not_allowed(true);
                 break;
@@ -107,37 +109,49 @@ class survey_question
         $surveyId = isset($_GET['survey_id']) ? (int) $_GET['survey_id'] : null;
         $type = isset($_GET['type']) ? Security::remove_XSS($_GET['type']) : null;
 
-        $toolName = Display::return_icon(
-            SurveyManager::icon_question($type),
-            get_lang(ucfirst($type)),
-            ['align' => 'middle', 'height' => '22px']
-        ).' ';
-
+        $actionHeader = get_lang('EditQuestion').': ';
         if ($action === 'add') {
-            $toolName .= get_lang('AddQuestion').': ';
-        } elseif ($action === 'edit') {
-            $toolName .= get_lang('EditQuestion').': ';
+            $actionHeader = get_lang('AddQuestion').': ';
         }
 
-        switch ($_GET['type']) {
+        $questionComment = '';
+        switch ($type) {
+            case 'open':
+                $toolName = get_lang('Open');
+                $questionComment = get_lang('QuestionTags');
+                break;
             case 'yesno':
-                $toolName .= get_lang('YesNo');
+                $toolName = get_lang('YesNo');
                 break;
             case 'multiplechoice':
-                $toolName .= get_lang('UniqueSelect');
+                $toolName = get_lang('UniqueSelect');
                 break;
             case 'multipleresponse':
-                $toolName .= get_lang('MultipleResponse');
+                $toolName = get_lang('MultipleResponse');
+                break;
+            case 'selectivedisplay':
+                $toolName = get_lang('SurveyQuestionSelectiveDisplay');
+                $questionComment = get_lang('SurveyQuestionSelectiveDisplayComment');
                 break;
             default:
-                $toolName .= get_lang(api_ucfirst($type));
+                $toolName = get_lang(api_ucfirst($type));
         }
 
+        $icon = Display::return_icon(
+                SurveyManager::icon_question($type),
+                $toolName,
+                ['align' => 'middle', 'height' => '22px']
+            ).' ';
+
+        $toolName = $icon.$actionHeader.$toolName;
         $sharedQuestionId = isset($formData['shared_question_id']) ? $formData['shared_question_id'] : null;
 
         $url = api_get_self().'?action='.$action.'&type='.$type.'&survey_id='.$surveyId.'&question_id='.$questionId.'&'.api_get_cidreq();
         $form = new FormValidator('question_form', 'post', $url);
         $form->addHeader($toolName);
+        if (!empty($questionComment)) {
+            $form->addHtml(Display::return_message($questionComment, 'info', false));
+        }
         $form->addHidden('survey_id', $surveyId);
         $form->addHidden('question_id', $questionId);
         $form->addHidden('shared_question_id', Security::remove_XSS($sharedQuestionId));

@@ -837,8 +837,11 @@ EOT;
     public function addRadio($name, $label, $options = [], $attributes = [])
     {
         $group = [];
+        $counter = 1;
         foreach ($options as $key => $value) {
+            $attributes['data-order'] = $counter;
             $group[] = $this->createElement('radio', null, null, $value, $key, $attributes);
+            $counter++;
         }
 
         return $this->addGroup($group, $name, $label);

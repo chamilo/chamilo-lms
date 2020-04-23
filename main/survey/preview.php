@@ -1,9 +1,8 @@
 <?php
+
 /* For licensing terms, see /license.txt */
 
 /**
- * @package chamilo.survey
- *
  * @author  Patrick Cool <patrick.cool@UGent.be>, Ghent University
  * @author  Julio Montoya <gugli100@gmail.com>
  */
@@ -29,7 +28,6 @@ if (empty($survey_data)) {
 }
 
 $this_section = SECTION_COURSES;
-
 $table_survey_question = Database::get_course_table(TABLE_SURVEY_QUESTION);
 $table_survey_question_option = Database::get_course_table(TABLE_SURVEY_QUESTION_OPTION);
 
@@ -48,6 +46,7 @@ $interbreadcrumb[] = [
 ];
 
 $htmlHeadXtra[] = '<script>'.api_get_language_translate_html().'</script>';
+$htmlHeadXtra[] = ch_selectivedisplay::getJs();
 
 $show = 0;
 Display::display_header(get_lang('SurveyPreview'));
@@ -87,20 +86,20 @@ if (isset($_GET['show'])) {
             WHERE
               survey_question NOT LIKE '%{{%' AND
               c_id = $course_id AND
-              survey_id = '".$surveyId."'
+              survey_id = $surveyId
             ORDER BY sort ASC";
     $result = Database::query($sql);
     $questions_exists = true;
     if (Database::num_rows($result)) {
         while ($row = Database::fetch_array($result)) {
             if ($survey_data['one_question_per_page'] == 1) {
-                if ($row['type'] != 'pagebreak') {
+                if ($row['type'] !== 'pagebreak') {
                     $paged_questions[$counter][] = $row['question_id'];
                     $counter++;
                     continue;
                 }
             } else {
-                if ($row['type'] == 'pagebreak') {
+                if ($row['type'] === 'pagebreak') {
                     $counter++;
                 } else {
                     $paged_questions[$counter][] = $row['question_id'];
@@ -163,6 +162,7 @@ if (isset($_GET['show'])) {
 $originalShow = isset($_GET['show']) ? (int) $_GET['show'] : 0;
 
 $url = api_get_self().'?survey_id='.$surveyId.'&show='.$show.'&'.api_get_cidreq();
+
 $form = new FormValidator(
     'question-survey',
     'post',

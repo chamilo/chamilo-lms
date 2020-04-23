@@ -1,11 +1,10 @@
 <?php
+
 /* For licensing terms, see /license.txt */
 
 use ChamiloSession as Session;
 
 /**
- * @package chamilo.survey
- *
  * @author unknown, the initial survey that did not make it in 1.8 because of bad code
  * @author Patrick Cool <patrick.cool@UGent.be>, Ghent University: cleanup,
  * refactoring and rewriting large parts of the code
@@ -92,7 +91,7 @@ if ((!isset($_GET['course']) || !isset($_GET['invitationcode'])) && !isset($_GET
 $invitationcode = $_GET['invitationcode'];
 
 // Start auto-invitation feature FS#3403 (all-users-can-do-the-survey-URL handling)
-if ($invitationcode == 'auto' && isset($_GET['scode'])) {
+if ($invitationcode === 'auto' && isset($_GET['scode'])) {
     $userid = api_get_user_id();
     // Survey_code of the survey
     $surveyCode = $_GET['scode'];
@@ -175,7 +174,6 @@ if (!isset($_POST['finish_survey']) &&
 $logInfo = [
     'tool' => TOOL_SURVEY,
     'tool_id' => $survey_invitation['survey_invitation_id'],
-    'tool_id_detail' => 0,
     'action' => 'invitationcode',
     'action_details' => $invitationcode,
 ];
@@ -480,7 +478,7 @@ if ($survey_data['form_fields'] != '' &&
     }
 
     if (isset($list['official_code']) && $list['official_code'] == 1) {
-        //    OFFICIAL CODE
+        // OFFICIAL CODE
         if (CONFVAL_ASK_FOR_OFFICIAL_CODE) {
             $form->addElement('text', 'official_code', get_lang('OfficialCode'), ['size' => 40]);
             if (api_get_setting('profile', 'officialcode') !== 'true') {
@@ -552,6 +550,7 @@ if ($survey_data['form_fields'] != '' &&
 }
 
 $htmlHeadXtra[] = '<script>'.api_get_language_translate_html().'</script>';
+$htmlHeadXtra[] = ch_selectivedisplay::getJs();
 
 Display::display_header(get_lang('ToolSurvey'));
 

@@ -1,11 +1,10 @@
 <?php
+
 /* For licensing terms, see /license.txt */
 
 use ChamiloSession as Session;
 
 /**
- * @package chamilo.survey
- *
  * @author Patrick Cool <patrick.cool@UGent.be>, Ghent University:
  * cleanup, refactoring and rewriting large parts of the code
  * @author Julio Montoya
@@ -20,10 +19,7 @@ api_protect_course_script(true);
 /** @todo this has to be moved to a more appropriate place (after the display_header of the code)*/
 // Coach can't view this page
 $extend_rights_for_coachs = api_get_setting('extend_rights_for_coach_on_survey');
-$isDrhOfCourse = CourseManager::isUserSubscribedInCourseAsDrh(
-    api_get_user_id(),
-    api_get_course_info()
-);
+$isDrhOfCourse = CourseManager::isUserSubscribedInCourseAsDrh(api_get_user_id(), api_get_course_info());
 
 if ($isDrhOfCourse) {
     header('Location: '.api_get_path(WEB_CODE_PATH).'survey/survey_list.php?'.api_get_cidreq());
@@ -76,9 +72,9 @@ if (api_strlen(strip_tags($survey_data['title'])) > 40) {
     $tool_name .= '...';
 }
 
-if ($is_survey_type_1 && ($action == 'addgroup' || $action == 'deletegroup')) {
+if ($is_survey_type_1 && ($action === 'addgroup' || $action === 'deletegroup')) {
     $_POST['name'] = trim($_POST['name']);
-    if ($action == 'addgroup') {
+    if ($action === 'addgroup') {
         if (!empty($_POST['group_id'])) {
             Database::query('UPDATE '.$table_survey_question_group.' SET description = \''.Database::escape_string($_POST['description']).'\'
                              WHERE c_id = '.$course_id.' AND id = \''.Database::escape_string($_POST['group_id']).'\'');
@@ -91,7 +87,7 @@ if ($is_survey_type_1 && ($action == 'addgroup' || $action == 'deletegroup')) {
         }
     }
 
-    if ($action == 'deletegroup') {
+    if ($action === 'deletegroup') {
         $sql = 'DELETE FROM '.$table_survey_question_group.'
                 WHERE c_id = '.$course_id.' AND id = '.intval($_GET['gid']).' AND survey_id = '.intval($survey_id);
         Database::query($sql);
@@ -113,7 +109,7 @@ $my_survey_id_survey = Security::remove_XSS($_GET['survey_id']);
 $message_information = isset($_GET['message']) ? Security::remove_XSS($_GET['message']) : null;
 
 if (isset($action)) {
-    if (($action == 'moveup' || $action == 'movedown') && isset($_GET['question_id'])) {
+    if (($action === 'moveup' || $action === 'movedown') && isset($_GET['question_id'])) {
         SurveyManager::move_survey_question(
             $my_action_survey,
             $my_question_id_survey,
@@ -121,7 +117,7 @@ if (isset($action)) {
         );
         echo Display::return_message(get_lang('SurveyQuestionMoved'), 'confirmation');
     }
-    if ($action == 'delete' && is_numeric($_GET['question_id'])) {
+    if ($action === 'delete' && is_numeric($_GET['question_id'])) {
         SurveyManager::delete_survey_question(
             $my_survey_id_survey,
             $my_question_id_survey,
@@ -206,6 +202,10 @@ if ($survey_data['survey_type'] == 0) {
 
     if ($survey_data['one_question_per_page'] == 0) {
         echo Display::url(
+            Display::return_icon('yesno.png', get_lang('Selectivedisplay'), null, ICON_SIZE_BIG),
+            $urlQuestion.'&type=selectivedisplay&survey_id='.$survey_id
+        );
+        echo Display::url(
             Display::return_icon('page_end.png', get_lang('Pagebreak'), null, ICON_SIZE_BIG),
             $urlQuestion.'&type=pagebreak&survey_id='.$survey_id
         );
@@ -278,12 +278,14 @@ while ($row = Database::fetch_array($result, 'ASSOC')) {
         echo api_get_local_time($parts[0]).' - '.api_get_local_time($parts[1]);
     }
 
-    if ($row['type'] == 'yesno') {
+    if ($row['type'] === 'yesno') {
         $tool_name = get_lang('YesNo');
-    } elseif ($row['type'] == 'multiplechoice') {
+    } elseif ($row['type'] === 'multiplechoice') {
         $tool_name = get_lang('UniqueSelect');
-    } elseif ($row['type'] == 'multipleresponse') {
+    } elseif ($row['type'] === 'multipleresponse') {
         $tool_name = get_lang('MultipleChoiceMultipleAnswers');
+    } elseif ($row['type'] === 'selectivedisplay') {
+        $tool_name = get_lang('SurveyQuestionSelectiveDisplay');
     } else {
         $tool_name = get_lang(api_ucfirst(Security::remove_XSS($row['type'])));
     }

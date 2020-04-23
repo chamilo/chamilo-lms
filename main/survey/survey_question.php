@@ -41,8 +41,7 @@ class survey_question
                             "survey_id": "'.$surveyId.'",
                             "question_id": questionId,
                         };
-
-                          $.ajax({
+                        $.ajax({
                             type: "GET",
                             url: "'.$url.'",
                             data: params,
@@ -328,21 +327,28 @@ class survey_question
             }
 
             $newAnswers = [];
+            $newAnswersId = [];
             foreach ($formData['answers'] as $key => &$value) {
                 if ($key > $deleted) {
                     // swap with previous (deleted) option slot
                     $newAnswers[$key - 1] = $formData['answers'][$key];
+                    $newAnswersId[$key - 1] = $formData['answersid'][$key];
                     unset($formData['answers'][$key]);
+                    unset($formData['answersid'][$key]);
                 } elseif ($key === $deleted) {
                     // delete option
                     unset($formData['answers'][$deleted]);
+                    unset($formData['answersid'][$deleted]);
                 } else {
                     // keep as is
                     $newAnswers[$key] = $value;
+                    $newAnswersId[$key] = $formData['answersid'][$key];
                 }
             }
             unset($formData['answers']);
+            unset($formData['answersid']);
             $formData['answers'] = $newAnswers;
+            $formData['answersid'] = $newAnswersId;
         }
 
         // Adding an answer
@@ -358,6 +364,7 @@ class survey_question
             foreach ($formData['answers'] as $index => &$data) {
                 if ($index > $counter) {
                     unset($formData['answers'][$index]);
+                    unset($formData['answersid'][$index]);
                 }
             }
         }
@@ -398,13 +405,13 @@ class survey_question
      *
      * @return mixed
      */
-    public function save($surveyData, $formData)
+    public function save($surveyData, $formData, $dataFromDatabase = [])
     {
         // Saving a question
         if (isset($_POST['buttons']) && isset($_POST['buttons']['save'])) {
             Session::erase('answer_count');
             Session::erase('answer_list');
-            $message = SurveyManager::save_question($surveyData, $formData);
+            $message = SurveyManager::save_question($surveyData, $formData, true, $dataFromDatabase);
 
             if ($message === 'QuestionAdded' || $message === 'QuestionUpdated') {
                 header('Location: '.api_get_path(WEB_CODE_PATH).'survey/survey.php?survey_id='.intval($_GET['survey_id']).'&message='.$message.'&'.api_get_cidreq());

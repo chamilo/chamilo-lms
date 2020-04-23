@@ -20,6 +20,12 @@ class ch_dropdown extends survey_question
             }
         }
 
+        if (isset($formData['answersid']) && !empty($formData['answersid'])) {
+            foreach ($formData['answersid'] as $value) {
+                $this->getForm()->addHidden('answersid[]', $value);
+            }
+        }
+
         parent::addRemoveButtons($formData);
     }
 

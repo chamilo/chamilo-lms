@@ -1015,7 +1015,6 @@ class SurveyManager
         }
 
         // Getting the information of the question
-
         $result = Database::query($sql);
         $row = Database::fetch_array($result, 'ASSOC');
 
@@ -1041,13 +1040,18 @@ class SurveyManager
 
         // Getting the information of the question options
         $result = Database::query($sqlOption);
+        $counter = 0;
         while ($row = Database::fetch_array($result, 'ASSOC')) {
             /** @todo this should be renamed to options instead of answers */
             $return['answers'][] = $row['option_text'];
             $return['values'][] = $row['value'];
 
+            $return['answer_data'][$counter]['data'] = $row['option_text'];
+            $return['answer_data'][$counter]['iid'] = $row['iid'];
+
             /** @todo this can be done more elegantly (used in reporting) */
             $return['answersid'][] = $row['question_option_id'];
+            $counter++;
         }
 
         return $return;
@@ -1119,13 +1123,12 @@ class SurveyManager
      *
      * @version January 2007
      */
-    public static function save_question($survey_data, $form_content, $showMessage = true)
+    public static function save_question($survey_data, $form_content, $showMessage = true, $dataFromDatabase = [])
     {
         $return_message = '';
         if (strlen($form_content['question']) > 1) {
             // Checks length of the question
             $empty_answer = false;
-
             if ($survey_data['survey_type'] == 1) {
                 if (empty($form_content['choose'])) {
 
@@ -1156,7 +1159,9 @@ class SurveyManager
                     $empty_answer = true;
                 }
             }
+
             $course_id = api_get_course_int_id();
+
             if (!$empty_answer) {
                 // Table definitions
                 $tbl_survey_question = Database::get_course_table(TABLE_SURVEY_QUESTION);
@@ -1280,7 +1285,7 @@ class SurveyManager
                 }
 
                 // Storing the options of the question
-                self::save_question_options($form_content, $survey_data);
+                self::save_question_options($form_content, $survey_data, $dataFromDatabase);
             } else {
                 $return_message = 'PleasFillAllAnswer';
             }
@@ -1536,7 +1541,7 @@ class SurveyManager
      *
      * @todo writing the update statement when editing a question
      */
-    public static function save_question_options($form_content, $survey_data)
+    public static function save_question_options($form_content, $survey_data, $dataFromDatabase = [])
     {
         $course_id = api_get_course_int_id();
         // A percentage question type has options 1 -> 100
@@ -1551,35 +1556,71 @@ class SurveyManager
         }
 
         // Table definition
-        $table_survey_question_option = Database::get_course_table(TABLE_SURVEY_QUESTION_OPTION);
+        $table = Database::get_course_table(TABLE_SURVEY_QUESTION_OPTION);
 
         // We are editing a question so we first have to remove all the existing options from the database
-        if (is_numeric($form_content['question_id'])) {
-            $sql = "DELETE FROM $table_survey_question_option
+        /*if (is_numeric($form_content['question_id'])) {
+            $sql = "DELETE FROM $table
 			        WHERE c_id = $course_id AND question_id = '".intval($form_content['question_id'])."'";
             Database::query($sql);
+        }*/
+        $optionsToDelete = [];
+        if (isset($dataFromDatabase['answer_data'])) {
+            foreach ($dataFromDatabase['answer_data'] as $data) {
+                if (!in_array($data['iid'], $form_content['answersid'])) {
+                    $optionsToDelete[] = $data['iid'];
+                }
+            }
+        }
+
+        if (!empty($optionsToDelete)) {
+            foreach ($optionsToDelete as $iid) {
+                $iid = (int) $iid;
+                $sql = "DELETE FROM $table
+			            WHERE
+			                iid = $iid AND
+			                c_id = $course_id AND
+                            question_id = '".intval($form_content['question_id'])."'
+                            ";
+                Database::query($sql);
+            }
         }
 
         $counter = 1;
         if (isset($form_content['answers']) && is_array($form_content['answers'])) {
             for ($i = 0; $i < count($form_content['answers']); $i++) {
                 $values = isset($form_content['values']) ? $form_content['values'][$i] : '';
-
-                $params = [
-                    'c_id' => $course_id,
-                    'question_id' => $form_content['question_id'],
-                    'survey_id' => $form_content['survey_id'],
-                    'option_text' => $form_content['answers'][$i],
-                    'value' => $values,
-                    'sort' => $counter,
-                ];
-                $insertId = Database::insert($table_survey_question_option, $params);
-                if ($insertId) {
-                    $sql = "UPDATE $table_survey_question_option
-                            SET question_option_id = $insertId
-                            WHERE iid = $insertId";
-                    Database::query($sql);
-
+                $answerId = 0;
+                if (isset($form_content['answersid']) && isset($form_content['answersid'][$i])) {
+                    $answerId = $form_content['answersid'][$i];
+                }
+                if (empty($answerId)) {
+                    $params = [
+                        'c_id' => $course_id,
+                        'question_id' => $form_content['question_id'],
+                        'survey_id' => $form_content['survey_id'],
+                        'option_text' => $form_content['answers'][$i],
+                        'value' => $values,
+                        'sort' => $counter,
+                    ];
+                    $insertId = Database::insert($table, $params);
+                    if ($insertId) {
+                        $sql = "UPDATE $table
+                                SET question_option_id = $insertId
+                                WHERE iid = $insertId";
+                        Database::query($sql);
+                        $counter++;
+                    }
+                } else {
+                    $params = [
+                        //'c_id' => $course_id,
+                        //'question_id' => $form_content['question_id'],
+                        //'survey_id' => $form_content['survey_id'],
+                        'option_text' => $form_content['answers'][$i],
+                        'value' => $values,
+                        'sort' => $counter,
+                    ];
+                    Database::update($table, $params, ['iid = ?' => [$answerId]]);
                     $counter++;
                 }
             }

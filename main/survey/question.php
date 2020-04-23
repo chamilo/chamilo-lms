@@ -108,7 +108,6 @@ if (!in_array($_GET['type'], $possible_types)) {
 $ch_type = 'ch_'.$_GET['type'];
 /** @var survey_question $surveyQuestion */
 $surveyQuestion = new $ch_type();
-//$surveyQuestion = survey_question::createQuestion($_GET['type'])
 
 // The defaults values for the form
 $formData = [];
@@ -143,13 +142,14 @@ if (isset($_GET['question_id']) && !empty($_GET['question_id'])) {
 }
 
 $formData = $surveyQuestion->preSave($formData);
+
 $surveyQuestion->createForm($surveyData, $formData);
 $surveyQuestion->getForm()->setDefaults($formData);
 $surveyQuestion->renderForm();
 
 if ($surveyQuestion->getForm()->validate()) {
     $values = $surveyQuestion->getForm()->getSubmitValues();
-    $surveyQuestion->save($surveyData, $values);
+    $surveyQuestion->save($surveyData, $values, $formData);
 }
 
 Display::display_header($tool_name, 'Survey');

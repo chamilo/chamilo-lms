@@ -352,25 +352,6 @@ class BBBPlugin extends Plugin
     }
 
     /**
-     * Check if course setting exists.
-     *
-     * @param string $variable
-     *
-     * @return bool
-     */
-    public static function hasCourseSetting($variable)
-    {
-        $courseSetting = Database::get_course_table(TABLE_COURSE_SETTING);
-        $courseId = api_get_course_int_id();
-        $variable = Database::escape_string($variable);
-        $sql = "SELECT variable FROM $courseSetting
-                WHERE c_id = $courseId AND variable = '$variable'";
-        $result = Database::query($sql);
-
-        return Database::num_rows($result) > 0;
-    }
-
-    /**
      * Set the course setting in all courses
      *
      * @param bool $variable Course setting to update

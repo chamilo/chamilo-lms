@@ -70,18 +70,18 @@ Feature: LP tool
 #    Then I should see "LP 1"
 #    And I should see "LP category 1"
 
-  Scenario: Delete a LP
-    Given I am not logged
-    And I am a platform administrator
-    And I am on course "TEMP" homepage
-    And I am on "/main/lp/lp_controller.php?cidReq=TEMP&action=list"
-    Then I should see "LP category 1"
-    And I follow "Delete"
-    And I confirm the popup
-    Then I should not see "LP 1"
-
-  Scenario: Delete a LP category
-    Given I am on "/main/lp/lp_controller.php?cidReq=TEMP"
-    Then I should see "LP category 1"
-    And I follow "Delete"
-    Then I should see "Deleted"
+#  Scenario: Delete a LP
+#    Given I am not logged
+#    And I am a platform administrator
+#    And I am on course "TEMP" homepage
+#    And I am on "/main/lp/lp_controller.php?cidReq=TEMP&action=list"
+#    Then I should see "LP category 1"
+#    And I follow "Delete"
+#    And I confirm the popup
+#    Then I should not see "LP 1"
+#
+#  Scenario: Delete a LP category
+#    Given I am on "/main/lp/lp_controller.php?cidReq=TEMP"
+#    Then I should see "LP category 1"
+#    And I follow "Delete"
+#    Then I should see "Deleted"

@@ -133,6 +133,7 @@ class BBBPlugin extends Plugin
      */
     public function getCourseSettings()
     {
+        $settings = [];
         if ($this->get('disable_course_settings') !== 'true') {
             $settings = parent::getCourseSettings();
         }

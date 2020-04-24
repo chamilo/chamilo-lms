@@ -1,12 +1,11 @@
 <?php
+
 /* For licensing terms, see /license.txt */
 
 use Chamilo\CourseBundle\Entity\CForumPost;
 
 /**
  * @author Julio Montoya <gugli100@gmail.com> UI Improvements + lots of bugfixes
- *
- * @package chamilo.forum
  */
 require_once __DIR__.'/../inc/global.inc.php';
 $current_course_tool = TOOL_FORUM;
@@ -29,15 +28,7 @@ $my_search = null;
 $forumId = isset($_GET['forum']) ? (int) $_GET['forum'] : 0;
 $threadId = isset($_GET['thread']) ? (int) $_GET['thread'] : 0;
 
-/* MAIN DISPLAY SECTION */
-/* Retrieving forum and forum category information */
-
-// We are getting all the information about the current forum and forum category.
-// Note pcool: I tried to use only one sql statement (and function) for this,
-// but the problem is that the visibility of the forum AND forum category are stored in the item_property table.
-// Note: This has to be validated that it is an existing thread
 $current_thread = get_thread_information($forumId, $threadId);
-// Note: This has to be validated that it is an existing forum.
 $current_forum = get_forum_information($current_thread['forum_id']);
 $current_forum_category = get_forumcategory_information($current_forum['forum_category']);
 $whatsnew_post_info = isset($_SESSION['whatsnew_post_info']) ? $_SESSION['whatsnew_post_info'] : null;
@@ -59,34 +50,32 @@ $(function() {
     $("span").on("click", ".change_post_status", function() {
         var updateDiv = $(this).parent();
         var postId = updateDiv.attr("id");
-                
+
         $.ajax({
             url: "'.$ajaxURL.'&post_id="+postId,
             type: "GET",
             success: function(data) {
                 updateDiv.html(data);
-            }                
+            }
         });
-    });  
+    });
 });
-    
+
 </script>';
 
-/* Actions */
-$my_action = isset($_GET['action']) ? $_GET['action'] : '';
-
+$action = isset($_GET['action']) ? $_GET['action'] : '';
 $logInfo = [
     'tool' => TOOL_FORUM,
     'tool_id' => $forumId,
     'tool_id_detail' => $threadId,
-    'action' => !empty($my_action) ? $my_action : 'view-thread',
+    'action' => !empty($action) ? $action : 'view-thread',
     'action_details' => isset($_GET['content']) ? $_GET['content'] : '',
 ];
 Event::registerLog($logInfo);
 
 $currentUrl = api_get_path(WEB_CODE_PATH).'forum/viewthread.php?forum='.$forumId.'&'.api_get_cidreq().'&thread='.$threadId;
 
-switch ($my_action) {
+switch ($action) {
     case 'delete':
         if (
             isset($_GET['content']) &&
@@ -106,7 +95,7 @@ switch ($my_action) {
             (api_is_allowed_to_edit(false, true) ||
                 (isset($group_properties['iid']) && GroupManager::is_tutor_of_group(api_get_user_id(), $group_properties)))
         ) {
-            $message = approve_post($_GET['id'], $_GET['action']);
+            $message = approve_post($_GET['id'], $action);
             Display::addFlash(Display::return_message(get_lang($message)));
         }
         header('Location: '.$currentUrl);
@@ -158,7 +147,7 @@ if (!empty($groupId)) {
     ];
 } else {
     $my_search = isset($_GET['search']) ? $_GET['search'] : '';
-    if ($origin != 'learnpath') {
+    if ($origin !== 'learnpath') {
         $interbreadcrumb[] = [
             'url' => api_get_path(WEB_CODE_PATH).'forum/index.php?'.api_get_cidreq().'&search='.Security::remove_XSS(
                     urlencode($my_search)
@@ -194,14 +183,14 @@ if (!api_is_allowed_to_edit(false, true) &&
 // this increases the number of times the thread has been viewed
 increase_thread_view($threadId);
 
-if ($origin == 'learnpath') {
+if ($origin === 'learnpath') {
     $template = new Template('', false, false, true, true, false);
 } else {
     $template = new Template();
 }
 
 $actions = '<span style="float:right;">'.search_link().'</span>';
-if ($origin != 'learnpath') {
+if ($origin !== 'learnpath') {
     $actions .= '<a href="'.$forumUrl.'viewforum.php?forum='.$forumId.'&'.api_get_cidreq().'">'
         .Display::return_icon('back.png', get_lang('BackToForum'), '', ICON_SIZE_MEDIUM).'</a>';
 }
@@ -243,21 +232,10 @@ if (($current_forum_category &&
 $template->assign('forum_actions', $actions);
 $template->assign('origin', api_get_origin());
 
-/* Display Forum Category and the Forum information */
-if (!isset($_SESSION['view'])) {
-    $viewMode = $current_forum['default_view'];
-} else {
-    $viewMode = $_SESSION['view'];
-}
-
-$whiteList = ['flat', 'threaded', 'nested'];
-if (isset($_GET['view']) && in_array($_GET['view'], $whiteList)) {
-    $viewMode = $_GET['view'];
-    $_SESSION['view'] = $viewMode;
-}
-
-if (empty($viewMode)) {
-    $viewMode = 'flat';
+$viewMode = $current_forum['default_view'];
+//$whiteList = ['flat', 'threaded', 'nested'];
+if ($viewMode !== 'flat') {
+    $viewMode = 'nested';
 }
 
 if ($current_thread['thread_peer_qualify'] == 1) {
@@ -269,9 +247,7 @@ $allowReport = reportAvailable();
 // Are we in a lp ?
 $origin = api_get_origin();
 //delete attachment file
-if (isset($_GET['action']) &&
-    $_GET['action'] == 'delete_attach' &&
-    isset($_GET['id_attach'])
+if ($action == 'delete_attach' && isset($_GET['id_attach'])
 ) {
     delete_attachment(0, $_GET['id_attach']);
 }
@@ -283,7 +259,7 @@ $userId = api_get_user_id();
 $groupId = api_get_group_id();
 
 // Decide whether we show the latest post first
-$sortDirection = isset($_GET['posts_order']) && $_GET['posts_order'] === 'desc' ? 'DESC' : ($origin != 'learnpath' ? 'ASC' : 'DESC');
+$sortDirection = isset($_GET['posts_order']) && $_GET['posts_order'] === 'desc' ? 'DESC' : ($origin !== 'learnpath' ? 'ASC' : 'DESC');
 $posts = getPosts($current_forum, $threadId, $sortDirection, true);
 $count = 0;
 $group_id = api_get_group_id();
@@ -314,7 +290,7 @@ foreach ($posts as $post) {
     }
 
     $post['user_data'] = '';
-    if ($origin != 'learnpath') {
+    if ($origin !== 'learnpath') {
         if ($allowUserImageForum) {
             $post['user_data'] = '<div class="thumbnail">'.
                 display_user_image($posterId, $name, $origin).'</div>';
@@ -345,7 +321,7 @@ foreach ($posts as $post) {
         );
     }
 
-    if ($origin != 'learnpath') {
+    if ($origin !== 'learnpath') {
         $post['user_data'] .= Display::tag(
             'p',
             Display::dateToStringAgoAndLongDate($post['post_date']),
@@ -366,7 +342,6 @@ foreach ($posts as $post) {
     $iconEdit = '';
     $editButton = '';
     $askForRevision = '';
-
     if ((isset($groupInfo['iid']) && $tutorGroup) ||
         ($current_forum['allow_edit'] == 1 && $posterId == $userId) ||
         (api_is_allowed_to_edit(false, true) &&
@@ -702,7 +677,5 @@ if ($showForm) {
 }
 
 $template->assign('form', $formToString);
-
-$layout = $template->get_template('forum/posts.tpl');
-
-$template->display($layout);
+$template->assign('view_mode', $viewMode);
+$template->display($template->get_template('forum/posts.tpl'));

@@ -1477,6 +1477,24 @@ $_configuration['course_catalog_settings'] = [
 $_configuration['download_files_after_all_lp_finished'] = ['courses' => ['ABC' => [1, 100]]];
 */
 
+// Show/Hide password field in user profile. Adds a customizable link depending on the user status.
+/*
+$_configuration['auth_password_links'] = [
+    'profiles' => [
+        5 => [
+            'azure' => [
+                'show_password_field' => false,
+                'extra_link' => '<h4>Change!</h4><a href="www.example.com">Wachtwoord aanpassen</span></a>'
+            ],
+            'extldap' => [
+                'show_password_field' => true,
+                'extra_link' => '<h4>Change!</h4><a href="www.example.com">Wachtwoord aanpassen</span></a>'
+            ]
+        ]
+    ]
+];
+*/
+
 // KEEP THIS AT THE END
 // -------- Custom DB changes
 // Add user activation by confirmation email

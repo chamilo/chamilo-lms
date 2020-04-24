@@ -3,8 +3,6 @@
 
 /**
  * This script initiates a video conference session, calling the BigBlueButton API.
- *
- * @package chamilo.plugin.bigbluebutton
  */
 require_once __DIR__.'/../../vendor/autoload.php';
 

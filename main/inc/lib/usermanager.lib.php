@@ -7012,9 +7012,7 @@ SQL;
             'Chamilo\\UserBundle\\Entity\\User' => new \Chamilo\UserBundle\Security\Encoder($encryption),
         ];
 
-        $encoderFactory = new EncoderFactory($encoders);
-
-        return $encoderFactory;
+        return new EncoderFactory($encoders);
     }
 
     /**

@@ -103,7 +103,7 @@ class ch_multiplechoiceother extends survey_question
             'other_question'.$questionId,
             get_lang('SurveyOtherAnswer'),
             false,
-            ['id' =>'other_question'.$questionId]
+            ['id' => 'other_question'.$questionId]
         );
         $form->addHtml('</div>');
 

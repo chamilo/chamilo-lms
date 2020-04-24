@@ -969,7 +969,12 @@ EOT;
      */
     public function addHtml($snippet)
     {
+        if (empty($snippet)) {
+            return false;
+        }
         $this->addElement('html', $snippet);
+
+        return true;
     }
 
     /**

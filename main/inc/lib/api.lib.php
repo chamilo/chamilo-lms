@@ -1380,6 +1380,7 @@ function api_get_navigator()
     if (strpos($version, '.') === false) {
         $version = number_format(doubleval($version), 1);
     }
+
     return ['name' => $navigator, 'version' => $version];
 }
 
@@ -2534,6 +2535,7 @@ function get_status_from_code($status_code)
         case INVITEE:
             return get_lang('Invitee', '');
     }
+
     return '';
 }
 
@@ -2905,6 +2907,7 @@ function api_get_settings_params($params)
 function api_get_settings_params_simple($params)
 {
     $table = Database::get_main_table(TABLE_MAIN_SETTINGS_CURRENT);
+
     return Database::select('*', $table, ['where' => $params], 'one');
 }
 
@@ -3612,6 +3615,7 @@ function api_is_allowed_to_session_edit($tutor = false, $coach = false)
             }
         }
     }
+
     return false;
 }
 
@@ -3694,6 +3698,7 @@ function api_is_allowed($tool, $action, $task_id = 0)
             return false;
         }
     }
+
     return false;
 }
 
@@ -5081,8 +5086,6 @@ function api_get_visual_theme()
             }
         }
 
-
-
         // Get style directly from DB
         $styleFromDatabase = api_get_settings_params_simple(
             [
@@ -5149,7 +5152,6 @@ function api_get_visual_theme()
         if ($useCache) {
             apcu_store($apcVar, $visual_theme, 120);
         }
-
     }
 
     return $visual_theme;
@@ -5429,10 +5431,10 @@ function rmdirr($dirname, $delete_only_content_in_folder = false, $strict = fals
  * function adapted from a php.net comment
  * copy recursively a folder.
  *
- * @param string $source the source folder
- * @param string $dest the dest folder
- * @param array $exclude an array of excluded file_name (without extension)
- * @param array $copied_files the returned array of copied files
+ * @param string $source       the source folder
+ * @param string $dest         the dest folder
+ * @param array  $exclude      an array of excluded file_name (without extension)
+ * @param array  $copied_files the returned array of copied files
  */
 function copyr($source, $dest, $exclude = [], $copied_files = [])
 {
@@ -9175,7 +9177,8 @@ function api_mail_html(
 }
 
 /**
- * Checks access to a course group
+ * Checks access to a course group.
+ *
  * @param string $tool       Possible values: GroupManager::GROUP_TOOL_*
  * @param bool   $showHeader
  */
@@ -9223,6 +9226,7 @@ function api_protect_course_group($tool, $showHeader = true)
             api_not_allowed($showHeader);
         }
     }
+
     return false;
 }
 
@@ -9346,6 +9350,7 @@ function api_upload_file($type, $file, $itemId, $cropParameters = '')
             return ['path_to_save' => $pathId.$name];
         }
     }
+
     return false;
 }
 
@@ -9632,9 +9637,7 @@ function api_unserialize_content($type, $serialized, $ignoreErrors = false)
 
 /**
  * Set the From and ReplyTo properties to PHPMailer instance.
- * @param PHPMailer $mailer
- * @param array     $sender
- * @param array     $replyToAddress
+ *
  * @throws \PHPMailer\PHPMailer\Exception
  */
 function api_set_noreply_and_from_address_to_mailer(PHPMailer $mailer, array $sender, array $replyToAddress = [])

@@ -159,7 +159,6 @@ class Tracking
 
         $hideTime = api_get_configuration_value('hide_lp_time');
         $allowNewTracking = api_get_configuration_value('use_new_tracking_in_lp_item');
-
         $lp_id = (int) $lp_id;
 
         if ($allowNewTracking) {

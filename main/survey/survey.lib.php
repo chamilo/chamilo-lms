@@ -1132,14 +1132,12 @@ class SurveyManager
             $empty_answer = false;
             if ($survey_data['survey_type'] == 1) {
                 if (empty($form_content['choose'])) {
-
                     return 'PleaseChooseACondition';
                 }
 
                 if (($form_content['choose'] == 2) &&
                     ($form_content['assigned1'] == $form_content['assigned2'])
                 ) {
-
                     return 'ChooseDifferentCategories';
                 }
             }
@@ -1661,7 +1659,6 @@ class SurveyManager
                 );
             }
         }
-
     }
 
     /**

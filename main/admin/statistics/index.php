@@ -1141,7 +1141,7 @@ switch ($report) {
                 ];
 
                 while ($row = Database::fetch_array($query)) {
-                    ++$usersFound;
+                    $usersFound++;
                     if (!empty($row['value'])) {
                         $validDate = DateTime::createFromFormat('Y-m-d', $row['value']);
                         $validDate = $validDate && $validDate->format('Y-m-d') === $row['value'];
@@ -1151,13 +1151,13 @@ switch ($report) {
                             $years = (int) $interval->y;
 
                             if ($years >= 16 && $years <= 17) {
-                                ++$all['16-17'];
+                                $all['16-17']++;
                             }
                             if ($years >= 18 && $years <= 25) {
-                                ++$all['18-25'];
+                                $all['18-25']++;
                             }
                             if ($years >= 26 && $years <= 30) {
-                                ++$all['26-30'];
+                                $all['26-30']++;
                             }
                         }
                     }

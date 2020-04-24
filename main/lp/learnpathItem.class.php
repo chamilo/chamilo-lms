@@ -75,11 +75,11 @@ class learnpathItem
     public $type;
     public $view_id;
     public $oldTotalTime;
+    public $view_max_score;
     //var used if absolute session time mode is used
     private $last_scorm_session_time = 0;
     private $prerequisiteMaxScore;
     private $prerequisiteMinScore;
-    public $view_max_score;
 
     /**
      * Prepares the learning path item for later launch.

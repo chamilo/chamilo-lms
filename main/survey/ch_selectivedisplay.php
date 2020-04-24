@@ -21,7 +21,7 @@ class ch_selectivedisplay extends ch_yesno
             $radioAttributes = [
                 'radio-class' => $class,
                 'label-class' => $labelClass,
-                'class' => 'survey_selective_input'
+                'class' => 'survey_selective_input',
             ];
 
             if (!empty($questionData['is_required'])) {

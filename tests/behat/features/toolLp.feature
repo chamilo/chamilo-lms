@@ -63,12 +63,12 @@ Feature: LP tool
 #    And I am on "/main/lp/lp_controller.php?cidReq=TEMP&action=list&isStudentView=true"
 #    Then I should not see an icon with title "Export to PDF"
 
-  Scenario: LP exists and LP category exists
-    Given I am on course "TEMP" homepage
-    Then I should see "Learning path"
-    Then I am on "/main/lp/lp_controller.php?cidReq=TEMP"
-    Then I should see "LP 1"
-    And I should see "LP category 1"
+#  Scenario: LP exists and LP category exists
+#    Given I am on course "TEMP" homepage
+#    Then I should see "Learning path"
+#    Then I am on "/main/lp/lp_controller.php?cidReq=TEMP"
+#    Then I should see "LP 1"
+#    And I should see "LP category 1"
 
   Scenario: Delete a LP
     Given I am on "/main/lp/lp_controller.php?cidReq=TEMP"

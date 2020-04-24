@@ -2394,8 +2394,7 @@ class UserGroup extends Model
         $withImage = false,
         $relation_type = [],
         $from = null,
-        $limit = null,
-        $image_conf = ['size' => USER_IMAGE_SIZE_MEDIUM, 'height' => 80]
+        $limit = null
     ) {
         $table_group_rel_user = $this->usergroup_rel_user_table;
         $tbl_user = Database::get_main_table(TABLE_MAIN_USER);
@@ -2426,7 +2425,11 @@ class UserGroup extends Model
             }
         }
 
-        $sql = "SELECT picture_uri as image, u.id, CONCAT (u.firstname,' ', u.lastname) as fullname, relation_type
+        $sql = "SELECT
+                    picture_uri as image,
+                    u.id,
+                    CONCAT (u.firstname,' ', u.lastname) as fullname,
+                    relation_type
     		    FROM $tbl_user u
     		    INNER JOIN $table_group_rel_user gu
     			ON (gu.user_id = u.id)
@@ -2445,6 +2448,8 @@ class UserGroup extends Model
                 $row['image'] = '<img src="'.$userPicture.'"  />';
                 $row['user_info'] = $userInfo;
             }
+
+            $row['user_id'] = $row['id'];
             $array[$row['id']] = $row;
         }
 

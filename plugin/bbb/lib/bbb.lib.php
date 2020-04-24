@@ -351,11 +351,9 @@ class bbb
             $params['user_id'] = (int) $this->userId;
         }
 
-        $params['attendee_pw'] = isset($params['attendee_pw']) ? $params['attendee_pw'] : $this->getUserMeetingPassword(
-        );
+        $params['attendee_pw'] = isset($params['attendee_pw']) ? $params['attendee_pw'] : $this->getUserMeetingPassword();
         $attendeePassword = $params['attendee_pw'];
-        $params['moderator_pw'] = isset($params['moderator_pw']) ? $params['moderator_pw'] : $this->getModMeetingPassword(
-        );
+        $params['moderator_pw'] = isset($params['moderator_pw']) ? $params['moderator_pw'] : $this->getModMeetingPassword();
         $moderatorPassword = $params['moderator_pw'];
 
         $params['record'] = api_get_course_setting('big_blue_button_record_and_store') == 1 ? true : false;
@@ -383,6 +381,16 @@ class bbb
         $id = Database::insert($this->table, $params);
 
         if ($id) {
+            Event::addEvent(
+                'bbb_create_meeting',
+                'meeting_id',
+                (int) $id,
+                null,
+                api_get_user_id(),
+                api_get_course_int_id(),
+                api_get_session_id()
+            );
+
             $meetingName = isset($params['meeting_name']) ? $params['meeting_name'] : $this->getCurrentVideoConferenceName(
             );
             $welcomeMessage = isset($params['welcome_msg']) ? $params['welcome_msg'] : null;

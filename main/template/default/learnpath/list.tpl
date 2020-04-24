@@ -133,8 +133,8 @@
                                         <a href="{{ row.url_start }}">
                                             {{ row.title }}
                                             {{ row.session_image }}
-                                            {{ row.extra }}
                                         </a>
+                                        {{ row.extra }}
                                     </td>
                                     {% if is_allowed_to_edit %}
                                         <td>

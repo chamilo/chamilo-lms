@@ -65,7 +65,8 @@ Feature: LP tool
 
   Scenario: LP exists and LP category exists
     Given I am on course "TEMP" homepage
-    And I follow "Learning path"
+    Then I should see "Learning path"
+    Then I am on "/main/lp/lp_controller.php?cidReq=TEMP"
     Then I should see "LP 1"
     And I should see "LP category 1"
 

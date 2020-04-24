@@ -99,6 +99,7 @@ $form = new FormValidator(
     api_get_self().'?user_id='.$user_id,
     ''
 );
+$form->protect();
 $form->addElement('header', $tool_name);
 $form->addElement('hidden', 'user_id', $user_id);
 

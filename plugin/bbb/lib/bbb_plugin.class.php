@@ -153,7 +153,7 @@ class BBBPlugin extends Plugin
 
             $valueRegenerate= $this->get('allow_regenerate_recording') === 'true' ? 1 : 0;
             self::update_course_field_in_all_courses('bbb_force_record_generation', $valueRegenerate);
-            self:: update_course_field_in_all_courses('big_blue_button_record_and_store', $valueRegenerate);
+            self::update_course_field_in_all_courses('big_blue_button_record_and_store', $valueRegenerate);
         }
 
         return $this;

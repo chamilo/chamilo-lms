@@ -107,7 +107,7 @@ class BBBPlugin extends Plugin
      */
     public function validateCourseSetting($variable)
     {
-        if($this->get('disable_course_settings') === 'true') {
+        if ($this->get('disable_course_settings') === 'true') {
             return false;
         }
 
@@ -133,7 +133,7 @@ class BBBPlugin extends Plugin
      */
     public function getCourseSettings()
     {
-        if($this->get('disable_course_settings') !== 'true') {
+        if ($this->get('disable_course_settings') !== 'true') {
             $settings = parent::getCourseSettings();
         }
 
@@ -147,7 +147,7 @@ class BBBPlugin extends Plugin
     public function performActionsAfterConfigure()
     {
         $result = $this->get('disable_course_settings') === 'true';
-        if($result) {
+        if ($result) {
             $valueConference = $this->get('enable_conference_in_course_groups') === 'true' ? 1 : 0;
             self::update_course_field_in_all_courses('bbb_enable_conference_in_groups', $valueConference);
 

@@ -256,9 +256,10 @@ if (count($_POST) > 0) {
         }
 
         // Looping through all the post values
+
         foreach ($_POST as $key => &$value) {
             // If the post value key contains the string 'question' then it is an answer on a question
-            if (strpos($key, 'question') !== false && ($key != '_qf__question')) {
+            if (strpos($key, 'question') !== false && $key !== '_qf__question') {
                 // Finding the question id by removing 'question'
                 $survey_question_id = str_replace('question', '', $key);
                 // If not question ID was defined, we're on the start
@@ -280,7 +281,7 @@ if (count($_POST) > 0) {
                     );
 
                     foreach ($value as $answer_key => &$answer_value) {
-                        if ($types[$survey_question_id] == 'score') {
+                        if ($types[$survey_question_id] === 'score') {
                             $option_id = $answer_key;
                             $option_value = $answer_value;
                         } else {
@@ -300,7 +301,7 @@ if (count($_POST) > 0) {
                 } else {
                     // All the other question types (open question, multiple choice, percentage, ...)
                     if (isset($types[$survey_question_id]) &&
-                        $types[$survey_question_id] == 'percentage') {
+                        $types[$survey_question_id] === 'percentage') {
                         $sql = "SELECT * FROM $table_survey_question_option
                                 WHERE
                                     c_id = $course_id AND
@@ -311,14 +312,15 @@ if (count($_POST) > 0) {
                     } else {
                         $option_value = 0;
                         if (isset($types[$survey_question_id]) &&
-                            $types[$survey_question_id] == 'open'
+                            $types[$survey_question_id] === 'open'
                         ) {
                             $option_value = $value;
                         }
                     }
 
-                    $survey_question_answer = $value;
+                    $other = isset($_POST['other_question'.$survey_question_id]) ? $_POST['other_question'.$survey_question_id] : '';
 
+                    $survey_question_answer = $value;
                     SurveyUtil::remove_answer(
                         $survey_invitation['user'],
                         $survey_invitation['survey_id'],
@@ -332,7 +334,8 @@ if (count($_POST) > 0) {
                         $survey_question_id,
                         $value,
                         $option_value,
-                        $survey_data
+                        $survey_data,
+                        $other
                     );
                 }
             }

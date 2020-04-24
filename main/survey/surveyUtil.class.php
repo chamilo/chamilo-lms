@@ -1,4 +1,5 @@
 <?php
+
 /* For licensing terms, see /license.txt */
 
 use Chamilo\CourseBundle\Entity\CSurvey;
@@ -6,8 +7,6 @@ use ChamiloSession as Session;
 
 /**
  * This class offers a series of general utility functions for survey querying and display.
- *
- * @package chamilo.survey
  */
 class SurveyUtil
 {
@@ -101,7 +100,8 @@ class SurveyUtil
         $question_id,
         $option_id,
         $option_value,
-        $survey_data
+        $survey_data,
+        $otherOption = ''
     ) {
         // If the question_id is empty, don't store an answer
         if (empty($question_id)) {
@@ -124,6 +124,10 @@ class SurveyUtil
 
         $course_id = $survey_data['c_id'];
 
+        if (!empty($otherOption)) {
+            $option_id = $option_id.'@:@'.$otherOption;
+        }
+
         $sql = "INSERT INTO $table_survey_answer (c_id, user, survey_id, question_id, option_id, value) VALUES (
 				$course_id,
 				'".Database::escape_string($user)."',
@@ -134,12 +138,15 @@ class SurveyUtil
 				)";
         Database::query($sql);
         $insertId = Database::insert_id();
+        if ($insertId) {
+            $sql = "UPDATE $table_survey_answer SET answer_id = $insertId
+                    WHERE iid = $insertId";
+            Database::query($sql);
 
-        $sql = "UPDATE $table_survey_answer SET answer_id = $insertId
-                WHERE iid = $insertId";
-        Database::query($sql);
+            return true;
+        }
 
-        return true;
+        return false;
     }
 
     /**
@@ -230,20 +237,16 @@ class SurveyUtil
         $action = isset($_GET['action']) ? $_GET['action'] : '';
 
         // Getting the number of question
-        $temp_questions_data = SurveyManager::get_questions($_GET['survey_id']);
+        $questions = SurveyManager::get_questions($survey_data['survey_id']);
 
-        // Sorting like they should be displayed and removing the non-answer question types (comment and pagebreak)
-        $my_temp_questions_data = $temp_questions_data == null ? [] : $temp_questions_data;
-        $questions_data = [];
-
-        foreach ($my_temp_questions_data as $key => &$value) {
-            if ($value['type'] != 'pagebreak') {
-                $questions_data[$value['sort']] = $value;
+        $counter = 0;
+        foreach ($questions as $key => $value) {
+            if ($value['type'] !== 'pagebreak') {
+                $counter++;
             }
         }
-
         // Counting the number of questions that are relevant for the reporting
-        $survey_data['number_of_questions'] = count($questions_data);
+        $survey_data['number_of_questions'] = $counter;
 
         switch ($action) {
             case 'questionreport':
@@ -448,9 +451,7 @@ class SurveyUtil
                         }
                         break;
                     case 'multipleresponse':
-                        $finalAnswer = isset($answers[$question['question_id']])
-                            ? $answers[$question['question_id']]
-                            : '';
+                        $finalAnswer = isset($answers[$question['question_id']]) ? $answers[$question['question_id']] : '';
                         break;
                     default:
                         $finalAnswer = '';
@@ -569,7 +570,7 @@ class SurveyUtil
         // Determining the offset of the sql statement (the n-th question of the survey)
         $offset = !isset($_GET['question']) ? 0 : (int) $_GET['question'];
         $currentQuestion = isset($_GET['question']) ? (int) $_GET['question'] : 0;
-        $surveyId = (int) $_GET['survey_id'];
+        $surveyId = (int) $survey_data['survey_id'];
         $action = Security::remove_XSS($_GET['action']);
         $course_id = api_get_course_int_id();
 
@@ -621,7 +622,7 @@ class SurveyUtil
             $sql = "SELECT * FROM $table_survey_question
 			        WHERE
 			            c_id = $course_id AND
-                        survey_id='".$surveyId."' AND
+                        survey_id = $surveyId AND
                         survey_question NOT LIKE '%{{%' AND
                         type <>'pagebreak'
                     ORDER BY sort ASC
@@ -639,16 +640,16 @@ class SurveyUtil
             echo strip_tags(isset($question['survey_question']) ? $question['survey_question'] : null);
             echo '</div>';
 
-            if ($question['type'] == 'score') {
+            if ($question['type'] === 'score') {
                 /** @todo This function should return the options as this is needed further in the code */
                 $options = self::display_question_report_score($survey_data, $question, $offset);
-            } elseif ($question['type'] == 'open' || $question['type'] == 'comment') {
+            } elseif ($question['type'] === 'open' || $question['type'] === 'comment') {
                 /** @todo Also get the user who has answered this */
                 $sql = "SELECT * FROM $table_survey_answer
                         WHERE
                             c_id = $course_id AND
-                            survey_id='".$surveyId."' AND
-                            question_id = '".$questionId."'";
+                            survey_id= $surveyId AND
+                            question_id = $questionId ";
                 $result = Database::query($sql);
                 while ($row = Database::fetch_array($result, 'ASSOC')) {
                     echo $row['option_id'].'<hr noshade="noshade" size="1" />';
@@ -658,19 +659,20 @@ class SurveyUtil
                 $sql = "SELECT * FROM $table_survey_question_option
                         WHERE
                             c_id = $course_id AND
-                            survey_id='".$surveyId."'
-                            AND question_id = '".$questionId."'
+                            survey_id = $surveyId AND
+                            question_id = $questionId
                         ORDER BY sort ASC";
                 $result = Database::query($sql);
                 while ($row = Database::fetch_array($result, 'ASSOC')) {
                     $options[$row['question_option_id']] = $row;
                 }
                 // Getting the answers
-                $sql = "SELECT *, count(answer_id) as total FROM $table_survey_answer
+                $sql = "SELECT *, count(answer_id) as total
+                        FROM $table_survey_answer
                         WHERE
                             c_id = $course_id AND
-                            survey_id='".$surveyId."'
-                            AND question_id = '".$questionId."'
+                            survey_id = $surveyId AND
+                            question_id = $questionId
                         GROUP BY option_id, value";
                 $result = Database::query($sql);
                 $number_of_answers = [];
@@ -680,18 +682,27 @@ class SurveyUtil
                         $number_of_answers[$row['question_id']] = 0;
                     }
                     $number_of_answers[$row['question_id']] += $row['total'];
+
+                    if ('multiplechoiceother' === $question['type']) {
+                        $parts = ch_multiplechoiceother::decodeOptionValue($row['option_id']);
+                        $row['option_id'] = $parts[0];
+                    }
+
                     $data[$row['option_id']] = $row;
                 }
 
                 foreach ($options as $option) {
                     $optionText = strip_tags($option['option_text']);
                     $optionText = html_entity_decode($optionText);
-                    $votes = isset($data[$option['question_option_id']]['total']) ?
-                        $data[$option['question_option_id']]['total'] : '0';
+                    $votes = 0;
+                    if (isset($data[$option['question_option_id']]['total'])) {
+                        $votes = $data[$option['question_option_id']]['total'];
+                    }
                     array_push($chartData, ['option' => $optionText, 'votes' => $votes]);
                 }
                 $chartContainerId = 'chartContainer'.$question['question_id'];
                 echo '<div id="'.$chartContainerId.'" class="col-md-12">';
+
                 echo self::drawChart($chartData, false, $chartContainerId);
 
                 // displaying the table: headers
@@ -706,11 +717,15 @@ class SurveyUtil
                 // Displaying the table: the content
                 if (is_array($options)) {
                     foreach ($options as $key => &$value) {
+                        if ('multiplechoiceother' === $question['type'] && 'other' === $value['option_text']) {
+                            $value['option_text'] = get_lang('SurveyOtherAnswer');
+                        }
+
                         $absolute_number = null;
                         if (isset($data[$value['question_option_id']])) {
                             $absolute_number = $data[$value['question_option_id']]['total'];
                         }
-                        if ($question['type'] == 'percentage' && empty($absolute_number)) {
+                        if ($question['type'] === 'percentage' && empty($absolute_number)) {
                             continue;
                         }
                         $number_of_answers[$option['question_id']] = isset($number_of_answers[$option['question_id']])
@@ -809,12 +824,13 @@ class SurveyUtil
         $table_survey_question_option = Database::get_course_table(TABLE_SURVEY_QUESTION_OPTION);
         $table_survey_answer = Database::get_course_table(TABLE_SURVEY_ANSWER);
         $course_id = api_get_course_int_id();
+        $surveyId = $survey_data['survey_id'];
 
         // Getting the options
         $sql = "SELECT * FROM $table_survey_question_option
                 WHERE
                     c_id = $course_id AND
-                    survey_id='".intval($_GET['survey_id'])."' AND
+                    survey_id= $surveyId AND
                     question_id = '".intval($question['question_id'])."'
                 ORDER BY sort ASC";
         $result = Database::query($sql);
@@ -827,7 +843,7 @@ class SurveyUtil
                 FROM $table_survey_answer
                 WHERE
                    c_id = $course_id AND
-                   survey_id='".intval($_GET['survey_id'])."' AND
+                   survey_id= $surveyId AND
                    question_id = '".Database::escape_string($question['question_id'])."'
                 GROUP BY option_id, value";
         $result = Database::query($sql);
@@ -842,7 +858,11 @@ class SurveyUtil
             $optionText = strip_tags($option['option_text']);
             $optionText = html_entity_decode($optionText);
             for ($i = 1; $i <= $question['max_value']; $i++) {
-                $votes = $data[$option['question_option_id']][$i]['total'];
+                $votes = null;
+                if (isset($data[$option['question_option_id']][$i])) {
+                    $votes = $data[$option['question_option_id']][$i]['total'];
+                }
+
                 if (empty($votes)) {
                     $votes = '0';
                 }
@@ -861,7 +881,7 @@ class SurveyUtil
         echo '</div>';
 
         // Displaying the table: headers
-        echo '<table class="data_table">';
+        echo '<table class="table">';
         echo '	<tr>';
         echo '		<th>&nbsp;</th>';
         echo '		<th>'.get_lang('Score').'</th>';
@@ -869,15 +889,20 @@ class SurveyUtil
         echo '		<th>'.get_lang('Percentage').'</th>';
         echo '		<th>'.get_lang('VisualRepresentation').'</th>';
         echo '	<tr>';
+
         // Displaying the table: the content
         foreach ($options as $key => &$value) {
             for ($i = 1; $i <= $question['max_value']; $i++) {
-                $absolute_number = $data[$value['question_option_id']][$i]['total'];
+                $absolute_number = null;
+                if (isset($data[$value['question_option_id']][$i])) {
+                    $absolute_number = $data[$value['question_option_id']][$i]['total'];
+                }
+
                 echo '	<tr>';
                 echo '		<td>'.$value['option_text'].'</td>';
                 echo '		<td>'.$i.'</td>';
                 echo '		<td><a href="'.api_get_path(WEB_CODE_PATH).'survey/reporting.php?action='.$action
-                    .'&survey_id='.intval($_GET['survey_id']).'&question='.Security::remove_XSS($offset)
+                    .'&survey_id='.$surveyId.'&question='.Security::remove_XSS($offset)
                     .'&viewoption='.$value['question_option_id'].'&value='.$i.'">'.$absolute_number.'</a></td>';
                 echo '		<td>'.round($absolute_number / $number_of_answers * 100, 2).' %</td>';
                 echo '		<td>';
@@ -897,7 +922,6 @@ class SurveyUtil
         echo '		<td style="border-top:1px solid black">&nbsp;</td>';
         echo '		<td style="border-top:1px solid black">&nbsp;</td>';
         echo '	</tr>';
-
         echo '</table>';
     }
 
@@ -1122,7 +1146,7 @@ class SurveyUtil
                 (is_array($_POST['questions_filter']) && in_array($row['question_id'], $_POST['questions_filter']))
             ) {
                 // we do not show comment and pagebreak question types
-                if ($row['type'] == 'open' || $row['type'] == 'comment') {
+                if ($row['type'] === 'open' || $row['type'] === 'comment') {
                     $content .= '<th>&nbsp;-&nbsp;</th>';
                     $possible_answers[$row['question_id']][$row['question_option_id']] = $row['question_option_id'];
                     $display_percentage_header = 1;
@@ -1130,9 +1154,9 @@ class SurveyUtil
                     $content .= '<th>&nbsp;%&nbsp;</th>';
                     $possible_answers[$row['question_id']][$row['question_option_id']] = $row['question_option_id'];
                     $display_percentage_header = 0;
-                } elseif ($row['type'] == 'percentage') {
+                } elseif ($row['type'] === 'percentage') {
                     $possible_answers[$row['question_id']][$row['question_option_id']] = $row['question_option_id'];
-                } elseif ($row['type'] != 'pagebreak' && $row['type'] != 'percentage') {
+                } elseif ($row['type'] !== 'pagebreak' && $row['type'] !== 'percentage') {
                     $content .= '<th>';
                     $content .= $row['option_text'];
                     $content .= '</th>';
@@ -1179,8 +1203,8 @@ class SurveyUtil
                 $answers_of_user = [];
             }
             if (isset($questions[$row['question_id']]) &&
-                $questions[$row['question_id']]['type'] != 'open' &&
-                $questions[$row['question_id']]['type'] != 'comment'
+                $questions[$row['question_id']]['type'] !== 'open' &&
+                $questions[$row['question_id']]['type'] !== 'comment'
             ) {
                 $answers_of_user[$row['question_id']][$row['option_id']] = $row;
             } else {
@@ -1250,7 +1274,8 @@ class SurveyUtil
 
                 $content .= '<th>
                     <a href="'.$url.'&action=userreport&user='.$user.'">'
-                    .$user_displayed.'</a>
+                        .$user_displayed.'
+                    </a>
                     </th>'; // the user column
             } else {
                 $content .= '<th>'.$user.'</th>'; // the user column
@@ -1274,16 +1299,27 @@ class SurveyUtil
         }
 
         if (is_array($possible_options)) {
-            foreach ($possible_options as $question_id => &$possible_option) {
-                if ($questions[$question_id]['type'] == 'open' || $questions[$question_id]['type'] == 'comment') {
+            foreach ($possible_options as $question_id => $possible_option) {
+                if ($questions[$question_id]['type'] === 'open' || $questions[$question_id]['type'] === 'comment') {
                     $content .= '<td align="center">';
                     if (isset($answers_of_user[$question_id]) && isset($answers_of_user[$question_id]['0'])) {
                         $content .= $answers_of_user[$question_id]['0']['option_id'];
                     }
                     $content .= '</td>';
                 } else {
-                    foreach ($possible_option as $option_id => &$value) {
-                        if ($questions[$question_id]['type'] == 'percentage') {
+                    foreach ($possible_option as $option_id => $value) {
+                        if ($questions[$question_id]['type'] === 'multiplechoiceother') {
+                            foreach ($answers_of_user[$question_id] as $key => $newValue) {
+                                $parts = ch_multiplechoiceother::decodeOptionValue($key);
+                                if (isset($parts[0])) {
+                                    $data = $answers_of_user[$question_id][$key];
+                                    unset($answers_of_user[$question_id][$key]);
+                                    $newKey = $parts[0];
+                                    $answers_of_user[$question_id][$newKey] = $data;
+                                }
+                            }
+                        }
+                        if ($questions[$question_id]['type'] === 'percentage') {
                             if (!empty($answers_of_user[$question_id][$option_id])) {
                                 $content .= "<td align='center'>";
                                 $content .= $answers_of_user[$question_id][$option_id]['value'];

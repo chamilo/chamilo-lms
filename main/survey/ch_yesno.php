@@ -72,6 +72,7 @@ class ch_yesno extends survey_question
             if (!empty($questionData['is_required'])) {
                 $radioAttributes['required'] = 'required';
             }
+
             $form->addRadio(
                 $name,
                 null,

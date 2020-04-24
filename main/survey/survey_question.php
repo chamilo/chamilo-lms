@@ -1,4 +1,5 @@
 <?php
+
 /* For licensing terms, see /license.txt */
 
 use ChamiloSession as Session;
@@ -88,6 +89,8 @@ class survey_question
                 return new ch_yesno();
             case 'selectivedisplay':
                 return new ch_selectivedisplay();
+            case 'multiplechoiceother':
+                return new ch_multiplechoiceother();
             default:
                 api_not_allowed(true);
                 break;
@@ -132,6 +135,10 @@ class survey_question
             case 'selectivedisplay':
                 $toolName = get_lang('SurveyQuestionSelectiveDisplay');
                 $questionComment = get_lang('SurveyQuestionSelectiveDisplayComment');
+                break;
+            case 'multiplechoiceother':
+                $toolName = get_lang('SurveyMultipleAnswerWithOther');
+                //$questionComment = get_lang('SurveyQuestionSelectiveDisplayComment');
                 break;
             default:
                 $toolName = get_lang(api_ucfirst($type));
@@ -367,6 +374,9 @@ class survey_question
 
         // Adding an answer
         if (isset($_POST['buttons']) && isset($_POST['buttons']['add_answer'])) {
+            if (isset($_REQUEST['type']) && 'multiplechoiceother' === $_REQUEST['type']) {
+                $counter--;
+            }
             $counter++;
             Session::write('answer_count', $counter);
         }
@@ -428,7 +438,8 @@ class survey_question
             $message = SurveyManager::save_question($surveyData, $formData, true, $dataFromDatabase);
 
             if ($message === 'QuestionAdded' || $message === 'QuestionUpdated') {
-                header('Location: '.api_get_path(WEB_CODE_PATH).'survey/survey.php?survey_id='.intval($_GET['survey_id']).'&message='.$message.'&'.api_get_cidreq());
+                $url = api_get_path(WEB_CODE_PATH).'survey/survey.php?survey_id='.intval($_GET['survey_id']).'&message='.$message.'&'.api_get_cidreq();
+                header('Location: '.$url);
                 exit;
             }
         }

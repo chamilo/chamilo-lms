@@ -14,7 +14,8 @@ $(function() {
     $("button").click(function() {
         $("#is_executable").attr("value",$(this).attr("name"));
     });
-} ); </script>';
+});
+</script>';
 
 $htmlHeadXtra[] = '<script>'.api_get_language_translate_html().'</script>';
 
@@ -23,8 +24,9 @@ if (!api_is_allowed_to_edit(false, true)) {
     api_not_allowed(true);
 }
 
+$surveyId = isset($_GET['survey_id']) ? (int) $_GET['survey_id'] : 0;
 // Getting the survey information
-$surveyData = SurveyManager::get_survey($_GET['survey_id']);
+$surveyData = SurveyManager::get_survey($surveyId);
 if (empty($surveyData)) {
     api_not_allowed(true);
 }
@@ -48,13 +50,13 @@ if ($surveyData['survey_type'] == 1) {
     $sql = 'SELECT id FROM '.Database::get_course_table(TABLE_SURVEY_QUESTION_GROUP).'
             WHERE
                 c_id = '.$course_id.' AND
-                survey_id = '.(int) $_GET['survey_id'].' LIMIT 1';
+                survey_id = '.$surveyId.' LIMIT 1';
     $rs = Database::query($sql);
     if (Database::num_rows($rs) === 0) {
         Display::addFlash(
             Display::return_message(get_lang('YouNeedToCreateGroups'))
         );
-        header('Location: '.api_get_path(WEB_CODE_PATH).'survey/survey.php?survey_id='.(int) $_GET['survey_id']);
+        header('Location: '.api_get_path(WEB_CODE_PATH).'survey/survey.php?survey_id='.$surveyId);
         exit;
     }
 }
@@ -65,15 +67,15 @@ $interbreadcrumb[] = [
     'name' => get_lang('SurveyList'),
 ];
 $interbreadcrumb[] = [
-    'url' => api_get_path(WEB_CODE_PATH).'survey/survey.php?survey_id='.intval($_GET['survey_id']),
+    'url' => api_get_path(WEB_CODE_PATH).'survey/survey.php?survey_id='.$surveyId,
     'name' => strip_tags($urlname),
 ];
 
 // Tool name
-if ($_GET['action'] == 'add') {
+if ($_GET['action'] === 'add') {
     $tool_name = get_lang('AddQuestion');
 }
-if ($_GET['action'] == 'edit') {
+if ($_GET['action'] === 'edit') {
     $tool_name = get_lang('EditQuestion');
 }
 
@@ -90,11 +92,12 @@ $possible_types = [
     'percentage',
     'score',
     'selectivedisplay',
+    'multiplechoiceother',
 ];
 
 // Actions
 $actions = '<div class="actions">';
-$actions .= '<a href="'.api_get_path(WEB_CODE_PATH).'survey/survey.php?survey_id='.intval($_GET['survey_id']).'">'.
+$actions .= '<a href="'.api_get_path(WEB_CODE_PATH).'survey/survey.php?survey_id='.$surveyId.'">'.
     Display::return_icon('back.png', get_lang('BackToSurvey'), '', ICON_SIZE_MEDIUM).'</a>';
 $actions .= '</div>';
 // Checking if it is a valid type

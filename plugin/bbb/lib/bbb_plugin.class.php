@@ -107,6 +107,10 @@ class BBBPlugin extends Plugin
      */
     public function validateCourseSetting($variable)
     {
+        if($this->get('disable_course_settings') === 'true') {
+            return false;
+        }
+
         $result = true;
         switch ($variable) {
             case 'bbb_enable_conference_in_groups':
@@ -120,10 +124,6 @@ class BBBPlugin extends Plugin
                 break;
         }
 
-        if ($result) {
-            $result = self::hasCourseSetting($variable);
-        }
-
         return $result;
     }
 
@@ -133,19 +133,8 @@ class BBBPlugin extends Plugin
      */
     public function getCourseSettings()
     {
-        $settings = parent::getCourseSettings();
-
-        if (is_array($this->course_settings)) {
-            foreach ($this->course_settings as $item) {
-                $result = self::hasCourseSetting($item['name']);
-                if (!$result) {
-                    $key = array_search($item['name'], $settings);
-                    if (isset($key)) {
-                        unset($settings[$key]);
-                        array_values($settings);
-                    }
-                }
-            }
+        if($this->get('disable_course_settings') !== 'true') {
+            $settings = parent::getCourseSettings();
         }
 
         return $settings;
@@ -159,9 +148,12 @@ class BBBPlugin extends Plugin
     {
         $result = $this->get('disable_course_settings') === 'true';
         if($result) {
-            $this->uninstall_course_fields_in_all_courses($this->course_settings);
-        } else {
-            $this->install_course_fields_in_all_courses();
+            $valueConference = $this->get('enable_conference_in_course_groups') === 'true' ? 1 : 0;
+            self::update_course_field_in_all_courses('bbb_enable_conference_in_groups', $valueConference);
+
+            $valueRegenerate= $this->get('allow_regenerate_recording') === 'true' ? 1 : 0;
+            self::update_course_field_in_all_courses('bbb_force_record_generation', $valueRegenerate);
+            self:: update_course_field_in_all_courses('big_blue_button_record_and_store', $valueRegenerate);
         }
 
         return $this;
@@ -376,5 +368,28 @@ class BBBPlugin extends Plugin
         $result = Database::query($sql);
 
         return Database::num_rows($result) > 0;
+    }
+
+    /**
+     * Set the course setting in all courses
+     *
+     * @param bool $variable Course setting to update
+     * @param bool $value New values of the course setting
+     */
+    public function update_course_field_in_all_courses($variable, $value)
+    {
+        // Update existing courses to add the new course setting value
+        $table = Database::get_main_table(TABLE_MAIN_COURSE);
+        $sql = "SELECT id FROM $table ORDER BY id";
+        $res = Database::query($sql);
+        while ($row = Database::fetch_assoc($res)) {
+            $courseSettingTable = Database::get_course_table(TABLE_COURSE_SETTING);
+
+            Database::update(
+                $courseSettingTable,
+                ['value' => $value],
+                ['variable = ? AND c_id = ?' => [$variable, $row['id']]]
+            );
+        }
     }
 }

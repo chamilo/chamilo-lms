@@ -1138,7 +1138,7 @@ class Template
         }
 
         $form = new FormValidator(
-            'form-login',
+            'formLogin',
             'POST',
             null,
             null,

@@ -106,9 +106,8 @@ class SurveyManager
         $sql = "SELECT * FROM $table
                 WHERE c_id = {$course_info['real_id']} $sessionCondition ";
         $result = Database::query($sql);
-        $result = Database::store_result($result, 'ASSOC');
 
-        return $result;
+        return Database::store_result($result, 'ASSOC');
     }
 
     /**

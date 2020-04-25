@@ -179,6 +179,11 @@ select {
     display: none;
 }
 
+#formLogin #QF_CAPTCHA_captcha_question {
+    max-width: 100%;
+    height: auto;
+}
+
 #login-block .alert {
     margin: 15px 0 5px;
 }

@@ -331,7 +331,6 @@ $conditions = [];
 $groupList = GroupManager::get_group_list(null, $courseInfo, 1);
 
 $class = new UserGroup();
-
 $options['where'] = [' usergroup.course_id = ? ' => $courseId];
 $classes = $class->getUserGroupInCourse($options);
 
@@ -341,7 +340,7 @@ if ($nbStudents > 0) {
     $formClass = new FormValidator(
         'classes',
         'get',
-        api_get_self().'?'.api_get_cidreq().'&'.$additionalParams.$users_tracking_per_page
+        api_get_self().'?'.api_get_cidreq().'&'.$additionalParams
     );
     $formClass->addHidden('cidReq', $courseCode);
     $formClass->addHidden('id_session', $sessionId);
@@ -356,7 +355,7 @@ if ($nbStudents > 0) {
     $formGroup = new FormValidator(
         'groups',
         'get',
-        api_get_self().'?'.api_get_cidreq().'&'.$additionalParams.$users_tracking_per_page
+        api_get_self().'?'.api_get_cidreq().'&'.$additionalParams
     );
     $formGroup->addHidden('cidReq', $courseCode);
     $formGroup->addHidden('id_session', $sessionId);
@@ -371,7 +370,7 @@ if ($nbStudents > 0) {
     $formExtraField = new FormValidator(
         'extra_fields',
         'get',
-        api_get_self().'?'.api_get_cidreq().'&'.$additionalParams.$users_tracking_per_page
+        api_get_self().'?'.api_get_cidreq().'&'.$additionalParams
     );
     $formExtraField->addHidden('cidReq', $courseCode);
     $formExtraField->addHidden('id_session', $sessionId);
@@ -563,6 +562,7 @@ if ($nbStudents > 0) {
             20,
             'users_tracking'
         );
+        $table->total_number_of_items = $nbStudents;
     } else {
         $conditions['include_invited_users'] = true;
         $table = new SortableTable(
@@ -575,7 +575,6 @@ if ($nbStudents > 0) {
         $table->setDataFunctionParams($conditions);
     }
 
-    $table->total_number_of_items = $nbStudents;
     $parameters['cidReq'] = isset($_GET['cidReq']) ? Security::remove_XSS($_GET['cidReq']) : '';
     $parameters['id_session'] = $sessionId;
     $parameters['from'] = isset($_GET['myspace']) ? Security::remove_XSS($_GET['myspace']) : null;

@@ -2350,7 +2350,13 @@ JAVASCRIPT;
                 $counter = 1;
                 $extra_field_obj = new ExtraField($this->type);
                 foreach ($extra_fields as &$extra) {
+                    if (!isset($extra['id'])) {
+                        continue;
+                    }
                     $extra_field_info = $extra_field_obj->get($extra['id']);
+                    if (empty($extra_field_info)) {
+                        continue;
+                    }
                     $extra['extra_field_info'] = $extra_field_info;
 
                     if (isset($extra_field_info['field_type']) &&
@@ -2573,7 +2579,7 @@ JAVASCRIPT;
                 } else {
                     // Extra fields
                     if (false === strpos($rule->field, '_second')) {
-                        //No _second
+                        // No _second
                         $original_field = str_replace($stringToSearch, '', $rule->field);
                         $field_option = $this->get_handler_field_info_by_field_variable($original_field);
 

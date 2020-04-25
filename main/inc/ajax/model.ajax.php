@@ -160,8 +160,20 @@ if (($search || $forceSearch) && ($search !== 'false')) {
     }
 
     if (!empty($filters)) {
-        if (in_array($action, ['get_questions', 'get_sessions', 'get_sessions_tracking'])) {
+        if (in_array($action,
+            [
+                'get_user_course_report_resumed',
+                'get_user_course_report',
+                'get_questions',
+                'get_sessions',
+                'get_sessions_tracking',
+            ]
+        )) {
             switch ($action) {
+                case 'get_user_course_report_resumed':
+                case 'get_user_course_report':
+                    $type = 'user';
+                    break;
                 case 'get_questions':
                     $type = 'question';
                     break;
@@ -197,6 +209,7 @@ if (($search || $forceSearch) && ($search !== 'false')) {
                         }
                     }
                 }
+
                 $result = $extraField->getExtraFieldRules($filters, 'extra_');
 
                 $extra_fields = $result['extra_fields'];
@@ -503,7 +516,8 @@ switch ($action) {
                 null,
                 $courseCodeList,
                 $userIdList,
-                $sessionIdList
+                $sessionIdList,
+                ['where' => $whereCondition, 'extra' => $extra_fields]
             );
         } else {
             $count = CourseManager::get_count_user_list_from_course_code(
@@ -511,7 +525,8 @@ switch ($action) {
                 ['ruc'],
                 $courseCodeList,
                 $userIdList,
-                $sessionIdList
+                $sessionIdList,
+                ['where' => $whereCondition, 'extra' => $extra_fields]
             );
         }
         break;
@@ -1012,7 +1027,7 @@ switch ($action) {
             get_lang('CountCertificates'),
         ];
 
-        $extra_fields = UserManager::get_extra_fields(
+        $userExtraFields = UserManager::get_extra_fields(
             0,
             100,
             null,
@@ -1021,18 +1036,14 @@ switch ($action) {
             true
         );
 
-        if (!empty($extra_fields)) {
-            foreach ($extra_fields as $extra) {
+        if (!empty($userExtraFields)) {
+            foreach ($userExtraFields as $extra) {
                 if ($extra['1'] == 'ruc') {
                     continue;
                 }
                 $columns[] = $extra['1'];
                 $column_names[] = $extra['3'];
             }
-        }
-
-        if (!in_array($sidx, ['training_hours'])) {
-            //$sidx = 'training_hours';
         }
 
         if (api_is_student_boss() && empty($userIdList)) {
@@ -1053,7 +1064,9 @@ switch ($action) {
             $courseCodeList,
             $userIdList,
             null,
-            $sessionIdList
+            $sessionIdList,
+            null,
+            ['where' => $whereCondition, 'extra' => $extra_fields]
         );
 
         $new_result = [];
@@ -1086,7 +1099,7 @@ switch ($action) {
             get_lang('CourseAdvance'),
         ];
 
-        $extra_fields = UserManager::get_extra_fields(
+        $userExtraFields = UserManager::get_extra_fields(
             0,
             100,
             null,
@@ -1094,8 +1107,8 @@ switch ($action) {
             true,
             true
         );
-        if (!empty($extra_fields)) {
-            foreach ($extra_fields as $extra) {
+        if (!empty($userExtraFields)) {
+            foreach ($userExtraFields as $extra) {
                 $columns[] = $extra['1'];
                 $column_names[] = $extra['3'];
             }
@@ -1115,10 +1128,10 @@ switch ($action) {
             break;
         }
 
-        //get sessions
-        $arrSessions = [];
+        // get sessions
+        $sessions = [];
         if (count($sessionIdList) > 0) {
-            $arrSessions = CourseManager::get_user_list_from_course_code(
+            $sessions = CourseManager::get_user_list_from_course_code(
                 null,
                 null,
                 "LIMIT $start, $limit",
@@ -1135,8 +1148,8 @@ switch ($action) {
             );
         }
 
-        //get courses
-        $arrCourses = CourseManager::get_user_list_from_course_code(
+        // get courses
+        $courses = CourseManager::get_user_list_from_course_code(
             null,
             null,
             "LIMIT $start, $limit",
@@ -1148,11 +1161,14 @@ switch ($action) {
             null,
             [],
             $userIdList,
-            null
+            null,
+            null,
+            null,
+            ['where' => $whereCondition, 'extra' => $extra_fields]
         );
 
         //merge courses and sessions
-        $result = array_merge($arrSessions, $arrCourses);
+        $result = array_merge($sessions, $courses);
 
         if (api_is_student_boss()) {
             $userGroup = new UserGroup();

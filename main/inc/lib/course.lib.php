@@ -1403,7 +1403,8 @@ class CourseManager
         $userIdList = [],
         $filterByActive = null,
         $sessionIdList = [],
-        $searchByKeyword = ''
+        $searchByKeyword = '',
+        $options = []
     ) {
         $course_table = Database::get_main_table(TABLE_MAIN_COURSE);
         $sessionTable = Database::get_main_table(TABLE_MAIN_SESSION);
@@ -1435,6 +1436,23 @@ class CourseManager
         }
 
         $filter_by_status_condition = null;
+        $sqlInjectWhere = '';
+        $whereExtraField = '';
+        $injectExtraFields = '';
+        $sqlInjectJoins = '';
+        if (!empty($options)) {
+            $extraFieldModel = new ExtraField('user');
+            $conditions = $extraFieldModel->parseConditions($options, 'user');
+            if (!empty($conditions)) {
+                $injectExtraFields = $conditions['inject_extra_fields'];
+                if (!empty($injectExtraFields)) {
+                    $injectExtraFields = ', '.$injectExtraFields;
+                }
+                $sqlInjectJoins = $conditions['inject_joins'];
+                $whereExtraField = $conditions['where'];
+                //$sqlInjectWhere = $conditions['inject_where'];
+            }
+        }
 
         if (!empty($session_id) || !empty($sessionIdList)) {
             $sql = 'SELECT DISTINCT
@@ -1446,6 +1464,7 @@ class CourseManager
                         course.*,
                         course.id AS c_id,
                         session.name as session_name
+                        '.$injectExtraFields.'
                     ';
             if ($return_count) {
                 $sql = " SELECT COUNT(user.user_id) as count";
@@ -1474,13 +1493,14 @@ class CourseManager
                         $courseCondition
                         INNER JOIN $sessionTable session
                         ON session_course_user.session_id = session.id
+                        $sqlInjectJoins
                    ";
             $where[] = ' session_course_user.c_id IS NOT NULL ';
 
             // 2 = coach
             // 0 = student
             if (isset($filter_by_status)) {
-                $filter_by_status = intval($filter_by_status);
+                $filter_by_status = (int) $filter_by_status;
                 $filter_by_status_condition = " session_course_user.status = $filter_by_status AND ";
             }
         } else {
@@ -1496,24 +1516,29 @@ class CourseManager
                                 user.id as user_id,
                                 user.email,
                                 course_rel_user.is_tutor,
-                                user.*  ';
+                                user.*
+                                '.$injectExtraFields;
                 } else {
                     $sql = 'SELECT DISTINCT
                                 course_rel_user.status as status_rel,
                                 user.id as user_id,
                                 user.email,
                                 course_rel_user.is_tutor,
-                                user.*  ';
+                                user.*
+                                '.$injectExtraFields
+                    ;
                 }
             }
 
             $sql .= " FROM ".Database::get_main_table(TABLE_MAIN_USER)." as user
                       LEFT JOIN ".Database::get_main_table(TABLE_MAIN_COURSE_USER)." as course_rel_user
                       ON
-                        user.id = course_rel_user.user_id AND
-                        course_rel_user.relation_type <> ".COURSE_RELATION_TYPE_RRHH."
+                            user.id = course_rel_user.user_id AND
+                            course_rel_user.relation_type <> ".COURSE_RELATION_TYPE_RRHH."
                        INNER JOIN $course_table course
-                       ON course_rel_user.c_id = course.id ";
+                       ON (course_rel_user.c_id = course.id)
+                       $sqlInjectJoins
+                       ";
 
             if (!empty($course_code)) {
                 $sql .= " AND course_rel_user.c_id = $courseId";
@@ -1548,7 +1573,9 @@ class CourseManager
             }
         }
 
-        $sql .= " WHERE $filter_by_status_condition ".implode(' OR ', $where);
+        $sql .= " WHERE
+            $filter_by_status_condition
+            ".implode(' OR ', $where);
 
         if ($multiple_access_url) {
             $current_access_url_id = api_get_current_access_url_id();
@@ -1586,6 +1613,8 @@ class CourseManager
                         user.lastname LIKE '$searchByKeyword'
                     ) ";
         }
+
+        $sql .= $whereExtraField;
 
         $sql .= " $order_by $limit";
 
@@ -1774,6 +1803,7 @@ class CourseManager
      * @param array $courseCodeList
      * @param array $userIdList
      * @param array $sessionIdList
+     * @param array $options
      *
      * @return array|int
      */
@@ -1782,7 +1812,8 @@ class CourseManager
         $extra_field = [],
         $courseCodeList = [],
         $userIdList = [],
-        $sessionIdList = []
+        $sessionIdList = [],
+        $options = []
     ) {
         return self::get_user_list_from_course_code(
             null,
@@ -1797,7 +1828,9 @@ class CourseManager
             $courseCodeList,
             $userIdList,
             null,
-            $sessionIdList
+            $sessionIdList,
+            null,
+            $options
         );
     }
 

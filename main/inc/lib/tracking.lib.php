@@ -15,8 +15,6 @@ use ExtraField as ExtraFieldModel;
  *  Class Tracking.
  *
  *  @author  Julio Montoya <gugli100@gmail.com>
- *
- *  @package chamilo.library
  */
 class Tracking
 {
@@ -1822,7 +1820,7 @@ class Tracking
      *
      * @param int $user_id
      * @param int $courseId
-     * @param int Session id (optional)
+     * @param int $session_id
      *
      * @return int Time in seconds
      */
@@ -1839,18 +1837,20 @@ class Tracking
 
         if (self::minimumTimeAvailable($session_id, $courseId)) {
             $courseTime = self::getCalculateTime($user_id, $courseId, $session_id);
-            $time = isset($courseTime['total_time']) ? $courseTime['total_time'] : 0;
 
-            return $time;
+            return isset($courseTime['total_time']) ? $courseTime['total_time'] : 0;
         }
 
+        $conditionUser = '';
         $session_id = (int) $session_id;
         if (is_array($user_id)) {
             $user_id = array_map('intval', $user_id);
             $conditionUser = " AND user_id IN (".implode(',', $user_id).") ";
         } else {
-            $user_id = (int) $user_id;
-            $conditionUser = " AND user_id = $user_id ";
+            if (!empty($user_id)) {
+                $user_id = (int) $user_id;
+                $conditionUser = " AND user_id = $user_id ";
+            }
         }
 
         $table = Database::get_main_table(TABLE_STATISTIC_TRACK_E_COURSE_ACCESS);
@@ -1866,6 +1866,7 @@ class Tracking
         }
 
         $sql .= $conditionUser;
+
         $rs = Database::query($sql);
         $row = Database::fetch_array($rs);
 
@@ -5916,7 +5917,6 @@ class Tracking
             $count = 0;
             foreach ($exercise_result as $result) {
                 $percentage = $result * 100;
-                //echo $percentage.' - '.$min.' - '.$max."<br />";
                 if ($percentage >= $min && $percentage <= $max) {
                     //echo ' is > ';
                     $count++;
@@ -7520,21 +7520,23 @@ class TrackingCourseLog
      *
      * @return int
      */
-    public static function get_number_of_users()
+    public static function get_number_of_users($conditions)
     {
-        global $user_ids;
+        $conditions['get_count'] = true;
 
-        return count($user_ids);
+        return self::get_user_data(null, null, null, null, $conditions);
+
+        //return count($user_ids);
     }
 
     /**
      * Get data for users list in sortable with pagination.
      *
-     * @param $from
-     * @param $number_of_items
+     * @param int $from
+     * @param int $number_of_items
      * @param $column
      * @param $direction
-     * @param $includeInvitedUsers boolean Whether include the invited users
+     * @param $conditions
      *
      * @return array
      */
@@ -7543,9 +7545,11 @@ class TrackingCourseLog
         $number_of_items,
         $column,
         $direction,
-        $includeInvitedUsers = false
+        $conditions = []
     ) {
         global $user_ids, $course_code, $export_csv, $session_id;
+        $includeInvitedUsers = $conditions['include_invited_users']; // include the invited users
+        $getCount = isset($conditions['get_count']) ? $conditions['get_count'] : false;
 
         $csv_content = [];
         $course_code = Database::escape_string($course_code);
@@ -7556,10 +7560,10 @@ class TrackingCourseLog
         // get all users data from a course for sortable with limit
         if (is_array($user_ids)) {
             $user_ids = array_map('intval', $user_ids);
-            $condition_user = " WHERE user.user_id IN (".implode(',', $user_ids).") ";
+            $condition_user = " WHERE user.id IN (".implode(',', $user_ids).") ";
         } else {
             $user_ids = (int) $user_ids;
-            $condition_user = " WHERE user.user_id = $user_ids ";
+            $condition_user = " WHERE user.id = $user_ids ";
         }
 
         if (!empty($_GET['user_keyword'])) {
@@ -7572,11 +7576,11 @@ class TrackingCourseLog
              ) ";
         }
 
-        $url_table = null;
-        $url_condition = null;
+        $url_table = '';
+        $url_condition = '';
         if (api_is_multiple_url_enabled()) {
-            $url_table = ", $tbl_url_rel_user as url_users";
-            $url_condition = " AND user.user_id = url_users.user_id AND access_url_id = '$access_url_id'";
+            $url_table = " INNER JOIN $tbl_url_rel_user as url_users ON (user.id = url_users.user_id)";
+            $url_condition = " AND access_url_id = '$access_url_id'";
         }
 
         $invitedUsersCondition = '';
@@ -7584,13 +7588,46 @@ class TrackingCourseLog
             $invitedUsersCondition = " AND user.status != ".INVITEE;
         }
 
-        $sql = "SELECT  user.user_id as user_id,
+        $select = '
+                SELECT user.id as user_id,
                     user.official_code  as col0,
                     user.lastname       as col1,
                     user.firstname      as col2,
-                    user.username       as col3
-                FROM $tbl_user as user $url_table
-                $condition_user $url_condition $invitedUsersCondition";
+                    user.username       as col3';
+        if ($getCount) {
+            $select = ' SELECT COUNT(distinct(user.id)';
+        }
+
+        $sqlInjectJoins = '';
+        $where = 'AND 1 = 1 ';
+        $sqlInjectWhere = '';
+        if (!empty($conditions)) {
+            if (isset($conditions['inject_joins'])) {
+                $sqlInjectJoins = $conditions['inject_joins'];
+            }
+            if (isset($conditions['where'])) {
+                $where = $conditions['where'];
+            }
+            if (isset($conditions['inject_where'])) {
+                $sqlInjectWhere = $conditions['inject_where'];
+            }
+            $injectExtraFields = !empty($conditions['inject_extra_fields']) ? $conditions['inject_extra_fields'] : 1;
+            $injectExtraFields = rtrim($injectExtraFields, ', ');
+            if (false === $getCount) {
+                $select .= " , $injectExtraFields";
+            }
+        }
+
+        $sql = "$select
+                FROM $tbl_user as user
+                $url_table
+                $sqlInjectJoins
+                $condition_user
+                $url_condition
+                $invitedUsersCondition
+                $where
+                $sqlInjectWhere
+                ";
 
         if (!in_array($direction, ['ASC', 'DESC'])) {
             $direction = 'ASC';
@@ -7599,6 +7636,13 @@ class TrackingCourseLog
         $column = (int) $column;
         $from = (int) $from;
         $number_of_items = (int) $number_of_items;
+
+        if ($getCount) {
+            $res = Database::query($sql);
+            $row = Database::fetch_array($res);
+
+            return $row['count'];
+        }
 
         $sql .= " ORDER BY col$column $direction ";
         $sql .= " LIMIT $from, $number_of_items";
@@ -7619,18 +7663,19 @@ class TrackingCourseLog
 
         if (empty($session_id)) {
             $survey_user_list = [];
-            $survey_list = SurveyManager::get_surveys($course_code, $session_id);
+            $surveyList = SurveyManager::get_surveys($course_code, $session_id);
+            if ($surveyList) {
+                $total_surveys = count($surveyList);
+                foreach ($surveyList as $survey) {
+                    $user_list = SurveyManager::get_people_who_filled_survey(
+                        $survey['survey_id'],
+                        false,
+                        $course_info['real_id']
+                    );
 
-            $total_surveys = count($survey_list);
-            foreach ($survey_list as $survey) {
-                $user_list = SurveyManager::get_people_who_filled_survey(
-                    $survey['survey_id'],
-                    false,
-                    $course_info['real_id']
-                );
-
-                foreach ($user_list as $user_id) {
-                    isset($survey_user_list[$user_id]) ? $survey_user_list[$user_id]++ : $survey_user_list[$user_id] = 1;
+                    foreach ($user_list as $user_id) {
+                        isset($survey_user_list[$user_id]) ? $survey_user_list[$user_id]++ : $survey_user_list[$user_id] = 1;
+                    }
                 }
             }
         }
@@ -7645,7 +7690,6 @@ class TrackingCourseLog
         while ($user = Database::fetch_array($res, 'ASSOC')) {
             $user['official_code'] = $user['col0'];
             $user['username'] = $user['col3'];
-
             $user['time'] = api_time_to_hms(
                 Tracking::get_time_spent_on_the_course(
                     $user['user_id'],
@@ -7782,6 +7826,7 @@ class TrackingCourseLog
             // we need to display an additional profile field
             if (isset($_GET['additional_profile_field'])) {
                 $data = Session::read('additional_user_profile_info');
+
                 $extraFieldInfo = Session::read('extra_field_info');
                 foreach ($_GET['additional_profile_field'] as $fieldId) {
                     if (isset($data[$fieldId]) && isset($data[$fieldId][$user['user_id']])) {

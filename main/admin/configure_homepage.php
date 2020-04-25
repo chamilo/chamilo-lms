@@ -62,7 +62,7 @@ $htmlHeadXtra[] = '<script>
 $(function() {
     $("#all_langs").change(function() {
         var checkboxes = $(this).closest("form").find("#table_langs").find(":checkbox");
-        
+
         checkboxes.prop("checked", $(this).is(":checked"));
     });
 });
@@ -1013,7 +1013,7 @@ switch ($action) {
                     <div id="login-block" class="panel panel-default">
                         <div class="panel-body">
                             <?php echo api_display_language_form(false, true); ?>
-                            <form id="form-login" class="form-horizontal">
+                            <form id="formLogin" class="form-horizontal">
                                 <div class="input-group">
                                     <div class="input-group-addon"><em class="fa fa-user"></em></div>
                                     <input class="form-control" type="text" id="login" value="" disabled="disabled"/>

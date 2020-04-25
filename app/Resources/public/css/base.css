@@ -166,17 +166,26 @@ select {
     margin: 10px 0;
 }
 
-#form-login .input-group {
+#formLogin .input-group {
     margin-top: 10px;
     margin-bottom: 10px;
 }
 
-#form-login .form-group small,  #form-login .form-group .form_required {
+#formLogin .form-group small,  #formLogin .form-group .form_required {
     display: none;
 }
 
-#form-login label {
+#formLogin label {
     display: none;
+}
+
+#formLogin #QF_CAPTCHA_captcha_question {
+    max-width: 100%;
+    height: auto;
+}
+
+#login-block .alert {
+    margin: 15px 0 5px;
 }
 
 #login-block #formLogin .form-group {

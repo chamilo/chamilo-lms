@@ -551,6 +551,7 @@ ALTER TABLE c_survey_question ADD is_required TINYINT(1) DEFAULT 0 NOT NULL;
 // Add "send_to_coaches" checkbox field in: main/admin/extra_fields.php?type=scheduled_announcement&action=add
 //$_configuration['allow_scheduled_announcements'] = false;
 // Add the list of emails as a bcc when sending an email.
+// Configure a cron task pointing at main/cron/scheduled_announcement.php
 /*
 $_configuration['send_all_emails_to'] = [
     'emails' => [

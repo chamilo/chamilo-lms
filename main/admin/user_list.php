@@ -419,7 +419,7 @@ function prepare_user_sql_query($getCount)
         }
 
         if (!empty($extraFieldHasData)) {
-            $sql .= " OR (u.id IN ('".implode("','", $extraFieldResult)."') $extraConditions ) ";
+            $sql .= " AND (u.id IN ('".implode("','", $extraFieldResult)."') $extraConditions ) ";
         }
     }
 

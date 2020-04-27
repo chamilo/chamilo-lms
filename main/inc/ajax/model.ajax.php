@@ -452,12 +452,9 @@ switch ($action) {
             if ($sessionId == -1) {
                 $sessionList = SessionManager::get_sessions_list();
                 $sessionIdList = array_column($sessionList, 'id');
-
                 $courseCodeList = [];
                 foreach ($sessionList as $session) {
-                    $courses = SessionManager::get_course_list_by_session_id(
-                        $session['id']
-                    );
+                    $courses = SessionManager::get_course_list_by_session_id($session['id']);
                     $courseCodeList = array_merge(
                         $courseCodeList,
                         array_column($courses, 'code')

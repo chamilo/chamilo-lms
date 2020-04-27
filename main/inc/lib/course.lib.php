@@ -1370,7 +1370,7 @@ class CourseManager
      * This only returns the users that are registered in this actual course, not linked courses.
      *
      * @param string    $course_code
-     * @param int       $session_id
+     * @param int       $sessionId
      * @param string    $limit
      * @param string    $order_by         the field to order the users by.
      *                                    Valid values are 'lastname', 'firstname', 'username', 'email', 'official_code' OR a part of a SQL statement
@@ -1391,7 +1391,7 @@ class CourseManager
      */
     public static function get_user_list_from_course_code(
         $course_code = null,
-        $session_id = 0,
+        $sessionId = 0,
         $limit = null,
         $order_by = null,
         $filter_by_status = null,
@@ -1409,7 +1409,7 @@ class CourseManager
         $course_table = Database::get_main_table(TABLE_MAIN_COURSE);
         $sessionTable = Database::get_main_table(TABLE_MAIN_SESSION);
 
-        $session_id = (int) $session_id;
+        $sessionId = (int) $sessionId;
         $course_code = Database::escape_string($course_code);
         $courseInfo = api_get_course_info($course_code);
         $courseId = 0;
@@ -1456,7 +1456,7 @@ class CourseManager
             }
         }
 
-        if (!empty($session_id) || !empty($sessionIdList)) {
+        if (!empty($sessionId) || !empty($sessionIdList)) {
             $sql = 'SELECT DISTINCT
                         user.user_id,
                         user.email,
@@ -1472,7 +1472,7 @@ class CourseManager
                 $sql = " SELECT COUNT(user.user_id) as count";
             }
 
-            $sessionCondition = " session_course_user.session_id = $session_id";
+            $sessionCondition = " session_course_user.session_id = $sessionId";
             if (!empty($sessionIdList)) {
                 $sessionIdListTostring = implode("','", array_map('intval', $sessionIdList));
                 $sessionCondition = " session_course_user.session_id IN ('$sessionIdListTostring') ";
@@ -1616,7 +1616,6 @@ class CourseManager
         }
 
         $sql .= $whereExtraField;
-
         $sql .= " $order_by $limit";
 
         $rs = Database::query($sql);
@@ -1645,23 +1644,24 @@ class CourseManager
                 if ($return_count) {
                     return $user['count'];
                 }
+
                 $report_info = [];
                 $user_info = $user;
                 $user_info['status'] = $user['status'];
                 if (isset($user['is_tutor'])) {
                     $user_info['is_tutor'] = $user['is_tutor'];
                 }
-                if (!empty($session_id)) {
+                if (!empty($sessionId)) {
                     $user_info['status_session'] = $user['status_session'];
                 }
 
                 $sessionId = isset($user['session_id']) ? $user['session_id'] : 0;
                 $course_code = isset($user['code']) ? $user['code'] : null;
+                $sessionName = isset($user['session_name']) ? $user['session_name'] : '';
 
                 if ($add_reports) {
                     if ($resumed_report) {
                         $extra = [];
-
                         if (!empty($extra_fields)) {
                             foreach ($extra_fields as $extra) {
                                 if (in_array($extra['1'], $extra_field)) {
@@ -1676,7 +1676,6 @@ class CourseManager
 
                         $row_key = '-1';
                         $name = '-';
-
                         if (!empty($extra)) {
                             if (!empty($user_data[$extra['1']])) {
                                 $row_key = $user_data[$extra['1']];
@@ -1732,7 +1731,7 @@ class CourseManager
                         }
 
                         foreach ($extra_fields as $extra) {
-                            if ($extra['1'] == 'ruc') {
+                            if ($extra['1'] === 'ruc') {
                                 continue;
                             }
 
@@ -1744,7 +1743,6 @@ class CourseManager
                             }
                         }
                     } else {
-                        $sessionName = !empty($sessionId) ? ' - '.$user['session_name'] : '';
                         $report_info['course'] = $user['title'].$sessionName;
                         $report_info['user'] = api_get_person_name($user['firstname'], $user['lastname']);
                         $report_info['email'] = $user['email'];

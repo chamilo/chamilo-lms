@@ -415,34 +415,34 @@ if ($nbStudents > 0) {
     $conditions = [];
     $fields = [];
 
-   if ($formClass->validate()) {
-       $classId = null;
-       $groupId = null;
+    if ($formClass->validate()) {
+        $classId = null;
+        $groupId = null;
 
-       $part = $formClass->getSubmitValue('class_id');
-       $item = explode('_', $part);
-       if (isset($item[0]) && isset($item[1])) {
-           if ('class' === $item[0]) {
-               $classId = (int) $item[1];
-           } else {
-               $groupId = (int) $item[1];
-           }
-       }
+        $part = $formClass->getSubmitValue('class_id');
+        $item = explode('_', $part);
+        if (isset($item[0]) && isset($item[1])) {
+            if ('class' === $item[0]) {
+                $classId = (int) $item[1];
+            } else {
+                $groupId = (int) $item[1];
+            }
+        }
 
-       if (!empty($classId)) {
-           $whereCondition = " AND gu.usergroup_id = $classId ";
-           $tableGroup = Database::get_main_table(TABLE_USERGROUP_REL_USER);
-           $joins = " INNER JOIN $tableGroup gu ON (user.id = gu.user_id) ";
-           $conditions = ['where' => $whereCondition, 'inject_joins' => $joins];
-       }
+        if (!empty($classId)) {
+            $whereCondition = " AND gu.usergroup_id = $classId ";
+            $tableGroup = Database::get_main_table(TABLE_USERGROUP_REL_USER);
+            $joins = " INNER JOIN $tableGroup gu ON (user.id = gu.user_id) ";
+            $conditions = ['where' => $whereCondition, 'inject_joins' => $joins];
+        }
 
-       if (!empty($groupId)) {
-           $whereCondition = " AND gu.group_id = $groupId ";
-           $tableGroup = Database::get_course_table(TABLE_GROUP_USER);
-           $joins = " INNER JOIN $tableGroup gu ON (user.id = gu.user_id) ";
-           $conditions = ['where' => $whereCondition, 'inject_joins' => $joins];
-       }
-   }
+        if (!empty($groupId)) {
+            $whereCondition = " AND gu.group_id = $groupId ";
+            $tableGroup = Database::get_course_table(TABLE_GROUP_USER);
+            $joins = " INNER JOIN $tableGroup gu ON (user.id = gu.user_id) ";
+            $conditions = ['where' => $whereCondition, 'inject_joins' => $joins];
+        }
+    }
 
     /*if ($formGroup->validate()) {
         $groupId = (int) $formGroup->getSubmitValue('group_id');
@@ -533,7 +533,6 @@ if ($nbStudents > 0) {
 $html .= Display::page_subheader2(get_lang('StudentList'));
 
 if ($nbStudents > 0) {
-
     $mainForm = new FormValidator(
         'filter',
         'get',

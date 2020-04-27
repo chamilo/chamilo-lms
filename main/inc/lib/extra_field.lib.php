@@ -2332,7 +2332,6 @@ JAVASCRIPT;
         return ['condition' => $conditions, 'fields' => $fields, 'defaults' => $defaults];
     }
 
-
     /**
      * @param array  $options
      * @param string $alias

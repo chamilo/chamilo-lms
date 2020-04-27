@@ -1055,7 +1055,6 @@ $form->addText('keyword_username', get_lang('LoginName'), false);
 $form->addText('keyword_email', get_lang('Email'), false);
 $form->addText('keyword_officialcode', get_lang('OfficialCode'), false);
 
-
 $classId = isset($_REQUEST['class_id']) && !empty($_REQUEST['class_id']) ? (int) $_REQUEST['class_id'] : 0;
 $options = [];
 if ($classId) {
@@ -1064,7 +1063,6 @@ if ($classId) {
     if ($groupInfo) {
         $options = [$classId => $groupInfo['name']];
     }
-
 }
 $form->addSelectAjax(
     'class_id',

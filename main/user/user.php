@@ -11,7 +11,6 @@
  * @author Roan Embrechts
  * @author Julio Montoya, Several fixes
  */
-
 $use_anonymous = true;
 require_once __DIR__.'/../inc/global.inc.php';
 $current_course_tool = TOOL_USER;

@@ -1445,8 +1445,11 @@ class CourseManager
             $conditions = $extraFieldModel->parseConditions($options, 'user');
             if (!empty($conditions)) {
                 $injectExtraFields = $conditions['inject_extra_fields'];
+
                 if (!empty($injectExtraFields)) {
                     $injectExtraFields = ', '.$injectExtraFields;
+                } else {
+                    $injectExtraFields = ' , ';
                 }
                 $sqlInjectJoins = $conditions['inject_joins'];
                 $whereExtraField = $conditions['where'];

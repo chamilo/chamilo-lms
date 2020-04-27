@@ -10,7 +10,6 @@ All notable changes to this project will be documented in this file. See [standa
 
 * :visible selector is not working on safari, use :not(.hidden) ([beebfe0](https://github.com/crlcu/multiselect/commit/beebfe0))
 * [#152](https://github.com/crlcu/multiselect/issues/152) - ignoreDisabled: true does not work with optgroups ([afc5d8c](https://github.com/crlcu/multiselect/commit/afc5d8c))
-* [#166](https://github.com/crlcu/multiselect/issues/166) - Searching and Adding elements cause the already selected elements to get added as a hidden element ([ddefce3](https://github.com/crlcu/multiselect/commit/ddefce3))
 
 
 

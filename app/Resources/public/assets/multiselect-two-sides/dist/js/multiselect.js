@@ -1,7 +1,7 @@
 /*
  * @license
  *
- * Multiselect v2.5.4
+ * Multiselect v2.5.5
  * http://crlcu.github.io/multiselect/
  *
  * Copyright (c) 2016-2018 Adrian Crisan
@@ -458,7 +458,7 @@ if (typeof jQuery === 'undefined') {
                             if (self.options.ignoreDisabled) {
                                 disabledSelector = ':not(:disabled)';
                             }
-                            
+
                             $destinationGroup.move($option.find('option' + disabledSelector));
                         } else {
                             $destinationGroup.move($option);
@@ -754,7 +754,7 @@ if (typeof jQuery === 'undefined') {
             });
         }
         if(isFirefox){
-            this.attr('disabled', false)
+            this.prop('disabled', false)
         }
 
         return this;
@@ -772,7 +772,7 @@ if (typeof jQuery === 'undefined') {
             });
         }
         if(isFirefox){
-            this.attr('disabled', true)
+            this.prop('disabled', true)
         }
         return this;
     };

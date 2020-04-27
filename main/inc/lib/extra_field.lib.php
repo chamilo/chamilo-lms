@@ -2334,7 +2334,8 @@ JAVASCRIPT;
 
 
     /**
-     * @param array $options
+     * @param array  $options
+     * @param string $alias
      *
      * @return array
      */

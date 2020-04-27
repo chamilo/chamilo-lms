@@ -1463,8 +1463,8 @@ class CourseManager
                         user.*,
                         course.*,
                         course.id AS c_id,
+                         '.$injectExtraFields.'
                         session.name as session_name
-                        '.$injectExtraFields.'
                     ';
             if ($return_count) {
                 $sql = " SELECT COUNT(user.user_id) as count";
@@ -1516,17 +1516,16 @@ class CourseManager
                                 user.id as user_id,
                                 user.email,
                                 course_rel_user.is_tutor,
-                                user.*
-                                '.$injectExtraFields;
+                                '.$injectExtraFields.'
+                                user.*';
                 } else {
                     $sql = 'SELECT DISTINCT
                                 course_rel_user.status as status_rel,
                                 user.id as user_id,
                                 user.email,
                                 course_rel_user.is_tutor,
-                                user.*
-                                '.$injectExtraFields
-                    ;
+                                '.$injectExtraFields.'
+                                user.*';
                 }
             }
 

@@ -779,18 +779,14 @@ if (typeof jQuery === 'undefined') {
 
     // sort options then reappend them to the select
     $.fn.mSort = function(callback) {
-        this
+        var children = this
             .children()
-            .sort(callback)
-            .appendTo(this);
-
-        this
-            .find('optgroup')
-            .each(function(i, group) {
-                $(group).children()
-                    .sort(callback)
-                    .appendTo(group);
-            })
+            .sort(callback);
+        for ( var j = 0; j < this.length; j++ ) {
+            for ( var i = 0; i < children.length; i++ ) {
+                this[j].appendChild(children[i]);
+            }
+        }
 
         return this;
     };

@@ -719,9 +719,22 @@ class AppPlugin
                             '',
                             $obj->get_lang($setting['name'])
                         );
+
+                        // Check global settings
+                        $courseSetting = api_get_course_setting($setting['name']);
+                        if (-1 === $courseSetting) {
+                            $defaultValue = api_get_plugin_setting($plugin_name, $setting['name']);
+                            if (!empty($defaultValue)) {
+                                if ('true' === $defaultValue) {
+                                    $element->setChecked(true);
+                                }
+                            }
+                        }
+
                         if (isset($setting['init_value']) && $setting['init_value'] == 1) {
                             $element->setChecked(true);
                         }
+
                         $form->addElement($element);
                         if (isset($setting['group'])) {
                             $groups[$setting['group']][] = $element;

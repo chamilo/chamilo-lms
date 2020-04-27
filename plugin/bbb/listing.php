@@ -130,7 +130,8 @@ if ($conferenceManager) {
             break;
         case 'logout':
             if ($plugin->get('allow_regenerate_recording') === 'true') {
-                $allow = api_get_course_setting('bbb_force_record_generation', $courseInfo) == 1 ? true : false;
+                $setting = api_get_course_plugin_setting('bbb', 'bbb_force_record_generation', $courseInfo);
+                $allow = $setting == 1 ? true : false;
                 if ($allow) {
                     $result = $bbb->getMeetingByRemoteId($_GET['remote_id']);
                     if (!empty($result)) {

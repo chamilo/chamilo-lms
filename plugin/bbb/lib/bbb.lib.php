@@ -85,7 +85,8 @@ class bbb
                     // Course check
                     $courseInfo = api_get_course_info();
                     if ($courseInfo) {
-                        $this->groupSupport = api_get_course_setting(
+                        $this->groupSupport = api_get_course_plugin_setting(
+                                'bbb',
                                 'bbb_enable_conference_in_groups',
                                 $courseInfo
                             ) === '1';
@@ -356,8 +357,8 @@ class bbb
         $params['moderator_pw'] = isset($params['moderator_pw']) ? $params['moderator_pw'] : $this->getModMeetingPassword();
         $moderatorPassword = $params['moderator_pw'];
 
-        $params['record'] = api_get_course_setting('big_blue_button_record_and_store') == 1 ? true : false;
-        $max = api_get_course_setting('big_blue_button_max_students_allowed');
+        $params['record'] = api_get_course_plugin_setting('bbb', 'big_blue_button_record_and_store') == 1 ? true : false;
+        $max = api_get_course_plugin_setting('bbb', 'big_blue_button_max_students_allowed');
         $max = isset($max) ? $max : -1;
 
         $params['status'] = 1;

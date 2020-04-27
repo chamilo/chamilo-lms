@@ -1,4 +1,5 @@
 <?php
+
 /* For licensing terms, see /license.txt */
 
 /**
@@ -12,8 +13,6 @@
  * @author  Patrick Cool <patrick.cool@UGent.be>
  * @author  Roan Embrechts, refactoring and improved course visibility|subscribe|unsubscribe options
  * @author  Julio Montoya <gugli100@gmail.com> Jquery support + lots of fixes
- *
- * @package chamilo.course_info
  */
 require_once __DIR__.'/../inc/global.inc.php';
 $current_course_tool = TOOL_COURSE_SETTING;

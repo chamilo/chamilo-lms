@@ -2,8 +2,8 @@
 
 /* For licensing terms, see /license.txt */
 
-use ChamiloSession as Session;
 use Chamilo\CourseBundle\Entity\CForumPost;
+use ChamiloSession as Session;
 
 /**
  * @author Julio Montoya <gugli100@gmail.com> UI Improvements + lots of bugfixes

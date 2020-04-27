@@ -1438,7 +1438,7 @@ class CourseManager
         $filter_by_status_condition = null;
         $sqlInjectWhere = '';
         $whereExtraField = '';
-        $injectExtraFields = '';
+        $injectExtraFields = ' , ';
         $sqlInjectJoins = '';
         if (!empty($options)) {
             $extraFieldModel = new ExtraField('user');
@@ -1450,7 +1450,6 @@ class CourseManager
                 }
                 $sqlInjectJoins = $conditions['inject_joins'];
                 $whereExtraField = $conditions['where'];
-                //$sqlInjectWhere = $conditions['inject_where'];
             }
         }
 
@@ -1462,7 +1461,7 @@ class CourseManager
                         session_id,
                         user.*,
                         course.*,
-                        course.id AS c_id,
+                        course.id AS c_id
                          '.$injectExtraFields.'
                         session.name as session_name
                     ';
@@ -1515,7 +1514,7 @@ class CourseManager
                                 course_rel_user.status as status_rel,
                                 user.id as user_id,
                                 user.email,
-                                course_rel_user.is_tutor,
+                                course_rel_user.is_tutor
                                 '.$injectExtraFields.'
                                 user.*';
                 } else {
@@ -1523,7 +1522,7 @@ class CourseManager
                                 course_rel_user.status as status_rel,
                                 user.id as user_id,
                                 user.email,
-                                course_rel_user.is_tutor,
+                                course_rel_user.is_tutor
                                 '.$injectExtraFields.'
                                 user.*';
                 }

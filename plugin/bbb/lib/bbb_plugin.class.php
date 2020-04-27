@@ -87,6 +87,7 @@ class BBBPlugin extends Plugin
                 'big_blue_button_record_and_store' => 'checkbox',
                 'bbb_enable_conference_in_groups' => 'checkbox',
                 'bbb_force_record_generation' => 'checkbox',
+                'disable_course_settings' => 'boolean',
             ]
         );
 
@@ -110,6 +111,10 @@ class BBBPlugin extends Plugin
      */
     public function validateCourseSetting($variable)
     {
+        if ($this->get('disable_course_settings') === 'true') {
+            return false;
+        }
+
         $result = true;
         switch ($variable) {
             case 'bbb_enable_conference_in_groups':
@@ -122,6 +127,41 @@ class BBBPlugin extends Plugin
         }
 
         return $result;
+    }
+
+    /**
+     *
+     * @return array
+     */
+    public function getCourseSettings()
+    {
+        $settings = [];
+        if ($this->get('disable_course_settings') !== 'true') {
+            $settings = parent::getCourseSettings();
+        }
+
+        return $settings;
+    }
+
+    /**
+     *
+     * @return \Plugin
+     */
+    public function performActionsAfterConfigure()
+    {
+        $result = $this->get('disable_course_settings') === 'true';
+        if ($result) {
+            $valueConference = $this->get('bbb_enable_conference_in_groups') === 'true' ? 1 : 0;
+            self::update_course_field_in_all_courses('bbb_enable_conference_in_groups', $valueConference);
+
+            $valueForceRecordGeneration = $this->get('bbb_force_record_generation') === 'true' ? 1 : 0;
+            self::update_course_field_in_all_courses('bbb_force_record_generation', $valueForceRecordGeneration);
+
+            $valueForceRecordStore = $this->get('big_blue_button_record_and_store') === 'true' ? 1 : 0;
+            self::update_course_field_in_all_courses('big_blue_button_record_and_store', $valueForceRecordStore);
+        }
+
+        return $this;
     }
 
     /**
@@ -314,5 +354,28 @@ class BBBPlugin extends Plugin
         ];
 
         return $data;
+    }
+
+    /**
+     * Set the course setting in all courses
+     *
+     * @param bool $variable Course setting to update
+     * @param bool $value New values of the course setting
+     */
+    public function update_course_field_in_all_courses($variable, $value)
+    {
+        // Update existing courses to add the new course setting value
+        $table = Database::get_main_table(TABLE_MAIN_COURSE);
+        $sql = "SELECT id FROM $table ORDER BY id";
+        $res = Database::query($sql);
+        while ($row = Database::fetch_assoc($res)) {
+            $courseSettingTable = Database::get_course_table(TABLE_COURSE_SETTING);
+
+            Database::update(
+                $courseSettingTable,
+                ['value' => $value],
+                ['variable = ? AND c_id = ?' => [$variable, $row['id']]]
+            );
+        }
     }
 }

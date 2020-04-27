@@ -328,7 +328,7 @@ $trackingDirection = isset($_GET['users_tracking_direction']) ? $_GET['users_tra
 $hideReports = api_get_configuration_value('hide_course_report_graph');
 $conditions = [];
 
-$groupList = GroupManager::get_group_list(null, $courseInfo, 1);
+$groupList = GroupManager::get_group_list(null, $courseInfo, 1, $sessionId);
 
 $class = new UserGroup();
 $options['where'] = [' usergroup.course_id = ? ' => $courseId];
@@ -345,14 +345,23 @@ if ($nbStudents > 0) {
     $formClass->addHidden('cidReq', $courseCode);
     $formClass->addHidden('id_session', $sessionId);
     $groupIdList = ['--'];
+    $select = $formClass->addSelect('class_id', get_lang('Class').'/'.get_lang('Group'), $groupIdList);
+    $groupIdList = [];
     foreach ($classes as $class) {
-        $groupIdList[$class['id']] = $class['name'];
+        //$groupIdList['class_'.$class['id']] = $class['name'];
+        $groupIdList[] = ['text' => $class['name'], 'value' => 'class_'.$class['id']];
     }
-    $formClass->addSelect('class_id', get_lang('Class'), $groupIdList);
+    $select->addOptGroup($groupIdList, get_lang('Class'));
+    $groupIdList = [];
+    foreach ($groupList as $group) {
+        $groupIdList[] = ['text' => $group['name'], 'value' => 'group_'.$group['id']];
+        //$groupIdList['group_'.$group['id']] = $group['name'];
+    }
+    $select->addOptGroup($groupIdList, get_lang('Group'));
     $formClass->addButtonSearch(get_lang('Search'));
 
     // Groups
-    $formGroup = new FormValidator(
+    /*$formGroup = new FormValidator(
         'groups',
         'get',
         api_get_self().'?'.api_get_cidreq().'&'.$additionalParams
@@ -364,7 +373,7 @@ if ($nbStudents > 0) {
         $groupIdList[$group['id']] = $group['name'];
     }
     $formGroup->addSelect('group_id', get_lang('Group'), $groupIdList);
-    $formGroup->addButtonSearch(get_lang('Search'));
+    $formGroup->addButtonSearch(get_lang('Search'));*/
 
     // Extra fields
     $formExtraField = new FormValidator(
@@ -378,13 +387,13 @@ if ($nbStudents > 0) {
         foreach ($_GET['additional_profile_field'] as $fieldId) {
             $fieldId = Security::remove_XSS($fieldId);
             $formExtraField->addHidden('additional_profile_field[]', $fieldId);
-            $formGroup->addHidden('additional_profile_field[]', $fieldId);
+            //$formGroup->addHidden('additional_profile_field[]', $fieldId);
             $formClass->addHidden('additional_profile_field[]', $fieldId);
         }
     }
 
     $extraField = new ExtraField('user');
-    $extraField->addElements($formExtraField);
+    $extraField->addElements($formExtraField, 0, [], true);
     $formExtraField->addButtonSearch(get_lang('Search'));
 
     $numberStudentsCompletedLP = 0;
@@ -407,16 +416,35 @@ if ($nbStudents > 0) {
     $fields = [];
 
    if ($formClass->validate()) {
-       $classId = (int) $formClass->getSubmitValue('class_id');
+       $classId = null;
+       $groupId = null;
+
+       $part = $formClass->getSubmitValue('class_id');
+       $item = explode('_', $part);
+       if (isset($item[0]) && isset($item[1])) {
+           if ('class' === $item[0]) {
+               $classId = (int) $item[1];
+           } else {
+               $groupId = (int) $item[1];
+           }
+       }
+
        if (!empty($classId)) {
            $whereCondition = " AND gu.usergroup_id = $classId ";
            $tableGroup = Database::get_main_table(TABLE_USERGROUP_REL_USER);
            $joins = " INNER JOIN $tableGroup gu ON (user.id = gu.user_id) ";
            $conditions = ['where' => $whereCondition, 'inject_joins' => $joins];
        }
+
+       if (!empty($groupId)) {
+           $whereCondition = " AND gu.group_id = $groupId ";
+           $tableGroup = Database::get_course_table(TABLE_GROUP_USER);
+           $joins = " INNER JOIN $tableGroup gu ON (user.id = gu.user_id) ";
+           $conditions = ['where' => $whereCondition, 'inject_joins' => $joins];
+       }
    }
 
-    if ($formGroup->validate()) {
+    /*if ($formGroup->validate()) {
         $groupId = (int) $formGroup->getSubmitValue('group_id');
         if (!empty($groupId)) {
             $whereCondition = " AND gu.group_id = $groupId ";
@@ -424,7 +452,7 @@ if ($nbStudents > 0) {
             $joins = " INNER JOIN $tableGroup gu ON (user.id = gu.user_id) ";
             $conditions = ['where' => $whereCondition, 'inject_joins' => $joins];
         }
-    }
+    }*/
 
     if ($formExtraField->validate()) {
         $extraResult = $extraField->processExtraFieldSearch($_REQUEST, $formExtraField, 'user');
@@ -505,9 +533,24 @@ if ($nbStudents > 0) {
 $html .= Display::page_subheader2(get_lang('StudentList'));
 
 if ($nbStudents > 0) {
-    $html .= $formClass->returnForm();
-    $html .= $formGroup->returnForm();
-    $html .= $formExtraField->returnForm();
+
+    $mainForm = new FormValidator(
+        'filter',
+        'get',
+        api_get_self().'?'.api_get_cidreq().'&'.$additionalParams
+    );
+    $mainForm->addButtonAdvancedSettings(
+        'advanced_search',
+        [get_lang('AdvancedSearch')]
+    );
+    $mainForm->addHtml('<div id="advanced_search_options" style="display:none;">');
+    $mainForm->addHtml($formClass->returnForm());
+    $mainForm->addHtml($formExtraField->returnForm());
+    $mainForm->addHtml('</div>');
+
+    //$html .= $formClass->returnForm();
+    //$html .= $formExtraField->returnForm();
+    $html .= $mainForm->returnForm();
 
     $getLangXDays = get_lang('XDays');
     $form = new FormValidator(

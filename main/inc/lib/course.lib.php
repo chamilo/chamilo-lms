@@ -1481,7 +1481,7 @@ class CourseManager
             $courseCondition = " course.id = $courseId";
             if (!empty($courseCodeList)) {
                 $courseCodeListForSession = array_map(['Database', 'escape_string'], $courseCodeList);
-                $courseCodeListForSession = implode('","', $courseCodeListForSession);
+                $courseCodeListForSession = implode("','", $courseCodeListForSession);
                 $courseCondition = " course.code IN ('$courseCodeListForSession')  ";
             }
 
@@ -1657,7 +1657,7 @@ class CourseManager
 
                 $sessionId = isset($user['session_id']) ? $user['session_id'] : 0;
                 $course_code = isset($user['code']) ? $user['code'] : null;
-                $sessionName = isset($user['session_name']) ? $user['session_name'] : '';
+                $sessionName = isset($user['session_name']) ? ' ('.$user['session_name'].') ' : '';
 
                 if ($add_reports) {
                     if ($resumed_report) {

@@ -592,7 +592,7 @@ class DocumentManager
         }
 
         $sql = "SELECT
-                    docs.iid as id,
+                    docs.id,
                     docs.filetype,
                     docs.path,
                     docs.title,
@@ -607,7 +607,7 @@ class DocumentManager
                 FROM $tblItemProperty AS last
                 INNER JOIN $tblDocument AS docs
                 ON (
-                    docs.iid = last.ref AND
+                    docs.id = last.ref AND
                     docs.c_id = last.c_id
                 )
                 WHERE
@@ -780,11 +780,11 @@ class DocumentManager
             $condition_session .= self::getSessionFolderFilters($path, $session_id);
 
             if ($groupIid != 0) {
-                $sql = "SELECT DISTINCT docs.iid as id, path
+                $sql = "SELECT DISTINCT docs.id, path
                        FROM $TABLE_ITEMPROPERTY  AS last
                        INNER JOIN $TABLE_DOCUMENT  AS docs
                        ON (
-                            docs.iid = last.ref AND
+                            docs.id = last.ref AND
                             docs.c_id = last.c_id
                        )
                        WHERE
@@ -798,11 +798,11 @@ class DocumentManager
                             last.visibility <> 2
                             $condition_session ";
             } else {
-                $sql = "SELECT DISTINCT docs.iid as id, path
+                $sql = "SELECT DISTINCT docs.id, path
                         FROM $TABLE_ITEMPROPERTY  AS last
                         INNER JOIN $TABLE_DOCUMENT  AS docs
                         ON (
-                            docs.iid = last.ref AND
+                            docs.id = last.ref AND
                             docs.c_id = last.c_id
                         )
                         WHERE
@@ -861,11 +861,11 @@ class DocumentManager
             }
 
             //get visible folders
-            $sql = "SELECT DISTINCT docs.iid as id, path
+            $sql = "SELECT DISTINCT docs.id, path
                     FROM
                     $TABLE_ITEMPROPERTY AS last
                     INNER JOIN $TABLE_DOCUMENT AS docs
-                    ON (docs.iid = last.ref AND last.c_id = docs.c_id)
+                    ON (docs.id = last.ref AND last.c_id = docs.c_id)
                     WHERE
                         $fileType
                         last.tool = '".TOOL_DOCUMENT."' AND
@@ -888,10 +888,10 @@ class DocumentManager
             }
 
             //get invisible folders
-            $sql = "SELECT DISTINCT docs.iid as id, path
+            $sql = "SELECT DISTINCT docs.id, path
                     FROM $TABLE_ITEMPROPERTY AS last
                     INNER JOIN $TABLE_DOCUMENT AS docs
-                    ON (docs.iid = last.ref AND last.c_id = docs.c_id)
+                    ON (docs.id = last.ref AND last.c_id = docs.c_id)
                     WHERE
                         docs.filetype = 'folder' AND
                         last.tool = '".TOOL_DOCUMENT."' AND
@@ -903,10 +903,10 @@ class DocumentManager
             $invisibleFolders = [];
             while ($row = Database::fetch_array($result, 'ASSOC')) {
                 //get visible folders in the invisible ones -> they are invisible too
-                $sql = "SELECT DISTINCT docs.iid as id, path
+                $sql = "SELECT DISTINCT docs.id, path
                         FROM $TABLE_ITEMPROPERTY AS last
                         INNER JOIN $TABLE_DOCUMENT AS docs
-                        ON (docs.iid = last.ref AND docs.c_id = last.c_id)
+                        ON (docs.id = last.ref AND docs.c_id = last.c_id)
                         WHERE
                             docs.path LIKE '".Database::escape_string($row['path'].'/%')."' AND
                             docs.filetype = 'folder' AND
@@ -982,10 +982,10 @@ class DocumentManager
                 if (!empty($file)) {
                     $path = Database::escape_string($file);
                     // Check
-                    $sql = "SELECT td.iid as id, readonly, tp.insert_user_id
+                    $sql = "SELECT td.id, readonly, tp.insert_user_id
                             FROM $TABLE_DOCUMENT td
                             INNER JOIN $TABLE_PROPERTY tp
-                            ON (td.c_id = tp.c_id AND tp.ref= td.iid)
+                            ON (td.c_id = tp.c_id AND tp.ref= td.id)
                             WHERE
                                 td.c_id = $course_id AND
                                 tp.c_id = $course_id AND
@@ -1021,7 +1021,7 @@ class DocumentManager
             $sql = "SELECT a.insert_user_id, b.readonly
                    FROM $TABLE_PROPERTY a
                    INNER JOIN $TABLE_DOCUMENT b
-                   ON (a.c_id = b.c_id AND a.ref= b.iid)
+                   ON (a.c_id = b.c_id AND a.ref= b.id)
                    WHERE
             			a.c_id = $course_id AND
                         b.c_id = $course_id AND
@@ -1644,7 +1644,7 @@ class DocumentManager
         $sql = "SELECT visibility
                 FROM $docTable d
                 INNER JOIN $propTable ip
-                ON (d.iid = ip.ref AND d.c_id = ip.c_id)
+                ON (d.id = ip.ref AND d.c_id = ip.c_id)
         		WHERE
         		    d.c_id  = $course_id AND
         		    ip.c_id = $course_id AND
@@ -3184,7 +3184,7 @@ class DocumentManager
         $sql = "SELECT SUM(size)
                 FROM $TABLE_ITEMPROPERTY AS props
                 INNER JOIN $TABLE_DOCUMENT AS docs
-                ON (docs.iid = props.ref AND props.c_id = docs.c_id)
+                ON (docs.id = props.ref AND props.c_id = docs.c_id)
                 WHERE
                     props.c_id = $course_id AND
                     docs.c_id = $course_id AND
@@ -3419,7 +3419,7 @@ class DocumentManager
 
                 $folderId = (int) $folderId;
                 $folderCondition = " AND
-                    docs.iid <> $folderId AND
+                    docs.id <> $folderId AND
                     docs.path LIKE '".$cleanedPath."/%'
                     $notLikeCondition
                 ";
@@ -3433,10 +3433,10 @@ class DocumentManager
             $levelCondition = " AND docs.path NOT LIKE'/%/%'";
         }
 
-        $sql = "SELECT DISTINCT last.visibility, docs.* 
+        $sql = "SELECT DISTINCT last.visibility, docs.*
                 FROM $tbl_item_prop AS last
                 INNER JOIN $tbl_doc AS docs
-                ON (docs.iid = last.ref AND docs.c_id = last.c_id)
+                ON (docs.id = last.ref AND docs.c_id = last.c_id)
                 WHERE
                     docs.path NOT LIKE '%_DELETED_%' AND
                     last.tool = '".TOOL_DOCUMENT."' $condition_session AND
@@ -3471,7 +3471,7 @@ class DocumentManager
         if (!empty($resources) && $user_in_course) {
             foreach ($resources as $resource) {
                 $is_visible = self::is_visible_by_id(
-                    $resource['iid'],
+                    $resource['id'],
                     $course_info,
                     $session_id,
                     api_get_user_id()
@@ -5248,8 +5248,8 @@ class DocumentManager
                     preg_match('/ogg$/i', urldecode($checkExtension))
                 ) {
                     return '<span style="float:left" '.$visibility_class.'>'.
-                    $title.
-                    '</span>'.$force_download_html.$send_to.$copyToMyFiles.$open_in_new_window_link.$pdf_icon;
+                        $title.
+                        '</span>'.$force_download_html.$send_to.$copyToMyFiles.$open_in_new_window_link.$pdf_icon;
                 } elseif (
                     // Show preview
                     preg_match('/swf$/i', urldecode($checkExtension)) ||
@@ -5268,17 +5268,17 @@ class DocumentManager
                     }
 
                     return Display::url(
-                        $title,
-                        $url,
-                        [
-                            'class' => $class,
-                            'title' => $tooltip_title_alt,
-                            'data-title' => $title,
-                            'style' => 'float:left;',
-                        ]
-                    )
-                    .$force_download_html.$send_to.$copyToMyFiles
-                    .$open_in_new_window_link.$pdf_icon;
+                            $title,
+                            $url,
+                            [
+                                'class' => $class,
+                                'title' => $tooltip_title_alt,
+                                'data-title' => $title,
+                                'style' => 'float:left;',
+                            ]
+                        )
+                        .$force_download_html.$send_to.$copyToMyFiles
+                        .$open_in_new_window_link.$pdf_icon;
                 } else {
                     // For a "PDF Download" of the file.
                     $pdfPreview = null;
@@ -5293,11 +5293,11 @@ class DocumentManager
                     }
                     // No plugin just the old and good showinframes.php page
                     return '<a href="'.$url.'" title="'.$tooltip_title_alt.'" style="float:left" '.$visibility_class.' >'.$title.'</a>'.
-                    $pdfPreview.$force_download_html.$send_to.$copyToMyFiles.$open_in_new_window_link.$pdf_icon;
+                        $pdfPreview.$force_download_html.$send_to.$copyToMyFiles.$open_in_new_window_link.$pdf_icon;
                 }
             } else {
                 return '<a href="'.$url.'" title="'.$tooltip_title_alt.'" '.$visibility_class.' style="float:left">'.$title.'</a>'.
-                $force_download_html.$send_to.$copyToMyFiles.$open_in_new_window_link.$pdf_icon;
+                    $force_download_html.$send_to.$copyToMyFiles.$open_in_new_window_link.$pdf_icon;
             }
             // end copy files to users myfiles
         } else {
@@ -5329,18 +5329,18 @@ class DocumentManager
                         return '<a href="'.$url.'" title="'.$tooltip_title_alt.'" '.$visibility_class.' style="float:left">'.
                             self::build_document_icon_tag($filetype, $path, $isAllowedToEdit).
                             Display::return_icon('shared.png', get_lang('ResourceShared'), []).
-                        '</a>';
+                            '</a>';
                     } else {
                         return '<a href="'.$url.'" title="'.$tooltip_title_alt.'" '.$visibility_class.' style="float:left">'.
                             self::build_document_icon_tag($filetype, $path, $isAllowedToEdit).
                             Display::return_icon('shared.png', get_lang('ResourceShared'), []).
-                        '</a>';
+                            '</a>';
                     }
                 } else {
                     return '<a href="'.$url.'" title="'.$tooltip_title_alt.'" target="'.$target.'"'.$visibility_class.' style="float:left">'.
                         self::build_document_icon_tag($filetype, $path, $isAllowedToEdit).
                         Display::return_icon('shared.png', get_lang('ResourceShared'), []).
-                    '</a>';
+                        '</a>';
                 }
             } else {
                 if ($filetype === 'file') {
@@ -5366,16 +5366,16 @@ class DocumentManager
                         $url = $basePageUrl.'showinframes.php?'.$courseParams.'&id='.$document_data['id']; //without preview
                         return '<a href="'.$url.'" title="'.$tooltip_title_alt.'" '.$visibility_class.' style="float:left">'.
                             self::build_document_icon_tag($filetype, $path, $isAllowedToEdit).
-                        '</a>';
+                            '</a>';
                     } else {
                         return '<a href="'.$url.'" title="'.$tooltip_title_alt.'" '.$visibility_class.' style="float:left">'.
                             self::build_document_icon_tag($filetype, $path, $isAllowedToEdit).
-                        '</a>';
+                            '</a>';
                     }
                 } else {
                     return '<a href="'.$url.'" title="'.$tooltip_title_alt.'" target="'.$target.'"'.$visibility_class.' style="float:left">'.
                         self::build_document_icon_tag($filetype, $path, $isAllowedToEdit).
-                    '</a>';
+                        '</a>';
                 }
             }
         }
@@ -6192,12 +6192,12 @@ class DocumentManager
         $courseId = $courseInfo['real_id'];
 
         // get invisible folders
-        $sql = "SELECT DISTINCT d.iid as id, path
+        $sql = "SELECT DISTINCT d.id, path
                 FROM $itemPropertyTable i
                 INNER JOIN $documentTable d
                 ON (i.c_id = d.c_id)
                 WHERE
-                    d.iid = i.ref AND
+                    d.id = i.ref AND
                     i.tool = '".TOOL_DOCUMENT."'
                     $conditionSession AND
                     i.c_id = $courseId AND
@@ -6349,7 +6349,7 @@ class DocumentManager
                 SELECT props.ref, size
                 FROM $table_itemproperty AS props
                 INNER JOIN $table_document AS docs
-                ON (docs.iid = props.ref AND docs.c_id = props.c_id)
+                ON (docs.id = props.ref AND docs.c_id = props.c_id)
                 WHERE
                     docs.c_id = $course_id AND
                     docs.path LIKE '$path/%' AND
@@ -6565,7 +6565,7 @@ class DocumentManager
                 FROM $tblItemProperty AS last
                 INNER JOIN $tblDocument AS docs
                 ON (
-                    docs.iid = last.ref AND
+                    docs.id = last.ref AND
                     docs.c_id = last.c_id AND
                     docs.filetype <> 'folder'
                 )
@@ -6671,10 +6671,10 @@ class DocumentManager
 
         $directUrl = $web_code_path.'document/document.php?cidReq='.$course_info['code'].'&id_session='.$session_id.'&id='.$documentId;
         $link .= '&nbsp;'.Display::url(
-            Display::return_icon('preview_view.png', get_lang('Preview')),
-            $directUrl,
-            ['target' => '_blank']
-        );
+                Display::return_icon('preview_view.png', get_lang('Preview')),
+                $directUrl,
+                ['target' => '_blank']
+            );
 
         $visibilityClass = null;
         if ($visibility == 0) {
@@ -6813,7 +6813,7 @@ class DocumentManager
 
             if (
                 in_array($extension, ['png', 'jpg', 'jpeg', 'bmp', 'gif', 'pxd']) &&
-                    api_get_setting('enabled_support_pixlr') == 'true'
+                api_get_setting('enabled_support_pixlr') == 'true'
             ) {
                 return Display::url($iconEn, "edit_paint.php?$courseParams&id=$document_id");
             }
@@ -6851,7 +6851,7 @@ class DocumentManager
 
         if (
             in_array($extension, ['png', 'jpg', 'jpeg', 'bmp', 'gif', 'pxd']) &&
-                api_get_setting('enabled_support_pixlr') == 'true'
+            api_get_setting('enabled_support_pixlr') == 'true'
         ) {
             return Display::url($iconEn, "edit_paint.php?$courseParams&id=$document_id");
         }

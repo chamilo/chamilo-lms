@@ -331,8 +331,9 @@ $conditions = [];
 $groupList = GroupManager::get_group_list(null, $courseInfo, 1, $sessionId);
 
 $class = new UserGroup();
-$options['where'] = [' usergroup.course_id = ? ' => $courseId];
-$classes = $class->getUserGroupInCourse($options);
+//$options['where'] = [' usergroup.course_id = ? ' => $courseId];
+//$classes = $class->getUserGroupInCourse($options);
+$classes = $class->get_all();
 
 // Show the charts part only if there are students subscribed to this course/session
 if ($nbStudents > 0) {

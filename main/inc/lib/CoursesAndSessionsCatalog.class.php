@@ -722,7 +722,7 @@ class CoursesAndSessionsCatalog
             ->andWhere($qb->expr()->gt('s.nbrCourses', 0))
         ;
 
-        if (!is_null($date)) {
+        if (!empty($date)) {
             $qb->andWhere(
                 $qb->expr()->orX(
                     $qb->expr()->isNull('s.accessEndDate'),
@@ -1310,7 +1310,7 @@ class CoursesAndSessionsCatalog
      */
     public static function sessionList($limit = [])
     {
-        $date = isset($_POST['date']) ? $_POST['date'] : date('Y-m-d');
+        $date = isset($_POST['date']) ? $_POST['date'] : '';
         $limit = isset($limit) ? $limit : self::getLimitArray();
 
         $countSessions = self::browseSessions($date, [], false, true);

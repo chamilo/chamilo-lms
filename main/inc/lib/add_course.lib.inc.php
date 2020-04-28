@@ -56,8 +56,8 @@ class AddCourse
             $keys_are_unique = true;
 
             // Check whether they are unique.
-            $query = "SELECT 1 FROM $course_table 
-                      WHERE code='".$keys_course_id."' 
+            $query = "SELECT 1 FROM $course_table
+                      WHERE code='".$keys_course_id."'
                       LIMIT 0, 1";
             $result = Database::query($query);
 

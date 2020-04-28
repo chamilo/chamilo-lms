@@ -899,6 +899,8 @@ if (!empty($groupList)) {
     } else {
         $studentIdList = array_column($studentList, 'user_id');
     }
+    $nbStudents = count($studentIdList);
+
     $timeInSeconds = Tracking::get_time_spent_on_the_course(
         $studentIdList,
         $courseId,

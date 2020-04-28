@@ -1469,13 +1469,13 @@ class CourseManager
                         session.name as session_name
                     ';
             if ($return_count) {
-                $sql = " SELECT COUNT(user.user_id) as count";
+                $sql = ' SELECT COUNT(user.user_id) as count';
             }
 
             $sessionCondition = " session_course_user.session_id = $sessionId";
             if (!empty($sessionIdList)) {
-                $sessionIdListTostring = implode("','", array_map('intval', $sessionIdList));
-                $sessionCondition = " session_course_user.session_id IN ('$sessionIdListTostring') ";
+                $sessionIdListToString = implode("','", array_map('intval', $sessionIdList));
+                $sessionCondition = " session_course_user.session_id IN ('$sessionIdListToString') ";
             }
 
             $courseCondition = " course.id = $courseId";
@@ -1486,16 +1486,16 @@ class CourseManager
             }
 
             $sql .= ' FROM '.Database::get_main_table(TABLE_MAIN_USER).' as user ';
-            $sql .= " LEFT JOIN ".Database::get_main_table(TABLE_MAIN_SESSION_COURSE_USER)." as session_course_user
-                      ON
+            $sql .= "LEFT JOIN ".Database::get_main_table(TABLE_MAIN_SESSION_COURSE_USER)." as session_course_user
+                    ON
                         user.id = session_course_user.user_id AND
                         $sessionCondition
-                        INNER JOIN $course_table course
-                        ON session_course_user.c_id = course.id AND
-                        $courseCondition
-                        INNER JOIN $sessionTable session
-                        ON session_course_user.session_id = session.id
-                        $sqlInjectJoins
+                    INNER JOIN $course_table course
+                    ON session_course_user.c_id = course.id AND
+                    $courseCondition
+                    INNER JOIN $sessionTable session
+                    ON session_course_user.session_id = session.id
+                    $sqlInjectJoins
                    ";
             $where[] = ' session_course_user.c_id IS NOT NULL ';
 
@@ -1636,7 +1636,6 @@ class CourseManager
         if ($return_count && $resumed_report) {
             return $count_rows;
         }
-
         $table_user_field_value = Database::get_main_table(TABLE_EXTRA_FIELD_VALUES);
         $tableExtraField = Database::get_main_table(TABLE_EXTRA_FIELD);
         if ($count_rows) {

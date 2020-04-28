@@ -1141,7 +1141,9 @@ switch ($action) {
                 $courseCodeList,
                 $userIdList,
                 null,
-                $sessionIdList
+                $sessionIdList,
+                null,
+                ['where' => $whereCondition, 'extra' => $extra_fields]
             );
         }
 

@@ -924,7 +924,7 @@ if (!empty($groupList)) {
                 $results = Event::get_best_exercise_results_by_user(
                     $exerciseData['id'],
                     $courseInfo['real_id'],
-                    0,
+                    $sessionId,
                     $userId
                 );
                 $best = 0;

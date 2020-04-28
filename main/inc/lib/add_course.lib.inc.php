@@ -1230,7 +1230,11 @@ class AddCourse
             $visibility = $params['visibility'];
         }
 
-        $subscribe = isset($params['subscribe']) ? (int) $params['subscribe'] : $visibility == COURSE_VISIBILITY_OPEN_PLATFORM ? 1 : 0;
+        if (isset($params['subscribe'])) {
+            $subscribe = (int)$params['subscribe'];
+        } else {
+            $subscribe = $visibility == COURSE_VISIBILITY_OPEN_PLATFORM ? 1 : 0;
+        }
         $unsubscribe = isset($params['unsubscribe']) ? (int) $params['unsubscribe'] : 0;
         $expiration_date = isset($params['expiration_date']) ? $params['expiration_date'] : null;
         $teachers = isset($params['teachers']) ? $params['teachers'] : null;

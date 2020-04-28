@@ -889,8 +889,8 @@ if (!empty($groupList)) {
     $groupTable->setCellContents($row, $column++, get_lang('Total'));
     $groupTable->setCellContents($row, $column++, $totalTime);
     $groupTable->setCellContents($row, $column++, $totalAverageTime);
-    $groupTable->setCellContents($row, $column++, round($totalLpProgress / count($groupList),2).'% ' );
-    $groupTable->setCellContents($row, $column++, round($totalBestScoreAverageNotInLP/ count($groupList), 2).'% ');
+    $groupTable->setCellContents($row, $column++, round($totalLpProgress / count($groupList), 2).'% ');
+    $groupTable->setCellContents($row, $column++, round($totalBestScoreAverageNotInLP / count($groupList), 2).'% ');
 } else {
     $userIdList = Session::read('user_id_list');
 

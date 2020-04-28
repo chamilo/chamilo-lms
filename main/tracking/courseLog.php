@@ -892,7 +892,13 @@ if (!empty($groupList)) {
     $groupTable->setCellContents($row, $column++, round($totalLpProgress / count($groupList),2).'% ' );
     $groupTable->setCellContents($row, $column++, round($totalBestScoreAverageNotInLP/ count($groupList), 2).'% ');
 } else {
-    $studentIdList = array_column($studentList, 'user_id');
+    $userIdList = Session::read('user_id_list');
+
+    if (!empty($userIdList)) {
+        $studentIdList = $userIdList;
+    } else {
+        $studentIdList = array_column($studentList, 'user_id');
+    }
     $timeInSeconds = Tracking::get_time_spent_on_the_course(
         $studentIdList,
         $courseId,

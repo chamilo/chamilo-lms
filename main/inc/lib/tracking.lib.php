@@ -7687,7 +7687,10 @@ class TrackingCourseLog
             '&course='.$course_code.'&origin=tracking_course&id_session='.$session_id;
 
         $sortByFirstName = api_sort_by_first_name();
+        Session::write('user_id_list', []);
+        $userIdList = [];
         while ($user = Database::fetch_array($res, 'ASSOC')) {
+            $userIdList[] = $user['user_id'];
             $user['official_code'] = $user['col0'];
             $user['username'] = $user['col3'];
             $user['time'] = api_time_to_hms(
@@ -7866,6 +7869,7 @@ class TrackingCourseLog
 
         Session::erase('additional_user_profile_info');
         Session::erase('extra_field_info');
+        Session::write('user_id_list', $userIdList);
 
         return $users;
     }

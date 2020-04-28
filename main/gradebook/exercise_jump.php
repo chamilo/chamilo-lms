@@ -55,23 +55,17 @@ if (!empty($doExerciseUrl)) {
         if (!empty($exercise->id)) {
             if ($exercise->exercise_was_added_in_lp) {
                 if (!empty($exercise->lpList)) {
-                    $count = count($exercise->lpList);
-                    if ($count == 1) {
-                        // If the exercise was added once redirect to the LP
-                        $firstLp = current($exercise->lpList);
-                        if (isset($firstLp['lp_id'])) {
-                            $url = api_get_path(WEB_CODE_PATH).'lp/lp_controller.php?'.api_get_cidreq().'&'
-                                .http_build_query(
-                                    [
-                                        'lp_id' => $firstLp['lp_id'],
-                                        'action' => 'view',
-                                        'isStudentView' => 'true',
-                                    ]
-                                );
-                        }
-                    } else {
-                        // If the exercise was added multiple times show the LP list
-                        $url = api_get_path(WEB_CODE_PATH).'lp/lp_controller.php?'.api_get_cidreq().'&action=list';
+                    // If the exercise was added once redirect to the LP
+                    $firstLp = $exercise->getLpBySession($session_id);
+                    if (isset($firstLp['lp_id'])) {
+                        $url = api_get_path(WEB_CODE_PATH).'lp/lp_controller.php?'.api_get_cidreq().'&'
+                            .http_build_query(
+                                [
+                                    'lp_id' => $firstLp['lp_id'],
+                                    'action' => 'view',
+                                    'isStudentView' => 'true',
+                                ]
+                            );
                     }
                 }
             } else {

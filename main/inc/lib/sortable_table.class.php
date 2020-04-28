@@ -1,4 +1,5 @@
 <?php
+
 /* For licensing terms, see /license.txt */
 
 use ChamiloSession as Session;
@@ -94,7 +95,6 @@ class SortableTable extends HTML_Table
     public $table_id = null;
     public $headers = [];
     public $actionButtons = [];
-
     /**
      * The array containing all data for this table.
      */
@@ -124,7 +124,7 @@ class SortableTable extends HTML_Table
      * @param string $default_order_direction   The default order direction;
      *                                          either the constant 'ASC' or 'DESC'
      * @param string $table_id
-     * @param array  $parameters                They are custom attributes of the table
+     * @param array  $attributes                They are custom attributes of the table
      */
     public function __construct(
         $table_name = 'table',
@@ -134,17 +134,20 @@ class SortableTable extends HTML_Table
         $default_items_per_page = 20,
         $default_order_direction = 'ASC',
         $table_id = null,
-        $parameters = []
+        $attributes = []
     ) {
         if (empty($table_id)) {
             $table_id = $table_name.uniqid('table', true);
         }
-        if (isset($parameters) && empty($parameters)) {
-            $parameters = ['class' => 'table table-bordered data_table', 'id' => $table_id];
+
+        if (empty($attributes)) {
+            $attributes = [];
+            $attributes['class'] = 'table table-bordered data_table';
+            $attributes['id'] = $table_id;
         }
 
         $this->table_id = $table_id;
-        parent::__construct($parameters);
+        parent::__construct($attributes);
         $this->table_name = $table_name;
         $this->additional_parameters = [];
         $this->param_prefix = $table_name.'_';
@@ -163,7 +166,6 @@ class SortableTable extends HTML_Table
         }
 
         // Allow to change paginate in multiples tabs
-        //Session::erase($this->param_prefix.'per_page');
         $this->per_page = Session::read($this->param_prefix.'per_page', $default_items_per_page);
 
         // If per page changed, then reset the page to 1

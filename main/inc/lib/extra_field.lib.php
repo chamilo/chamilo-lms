@@ -531,19 +531,17 @@ class ExtraField extends Model
         $extraData = false;
         if (!empty($itemId)) {
             $extraData = $this->get_handler_extra_data($itemId);
-            if ($form) {
-                if (!empty($showOnlyTheseFields)) {
-                    $setData = [];
-                    foreach ($showOnlyTheseFields as $variable) {
-                        $extraName = 'extra_'.$variable;
-                        if (in_array($extraName, array_keys($extraData))) {
-                            $setData[$extraName] = $extraData[$extraName];
-                        }
+            if (!empty($showOnlyTheseFields)) {
+                $setData = [];
+                foreach ($showOnlyTheseFields as $variable) {
+                    $extraName = 'extra_'.$variable;
+                    if (in_array($extraName, array_keys($extraData))) {
+                        $setData[$extraName] = $extraData[$extraName];
                     }
-                    $form->setDefaults($setData);
-                } else {
-                    $form->setDefaults($extraData);
                 }
+                $form->setDefaults($setData);
+            } else {
+                $form->setDefaults($extraData);
             }
         }
 
@@ -675,16 +673,16 @@ class ExtraField extends Model
     }
 
     /**
-     * @param string $field_type
+     * @param string $type
      *
      * @return array
      */
-    public function get_all_extra_field_by_type($field_type)
+    public function get_all_extra_field_by_type($type)
     {
         // all the information of the field
         $sql = "SELECT * FROM {$this->table}
                 WHERE
-                    field_type = '".Database::escape_string($field_type)."' AND
+                    field_type = '".Database::escape_string($type)."' AND
                     extra_field_type = $this->extraFieldType
                 ";
         $result = Database::query($sql);
@@ -2253,8 +2251,90 @@ JAVASCRIPT;
         return $rules;
     }
 
+    public function processExtraFieldSearch($values, $form, $alias)
+    {
+        // Parse params.
+        $fields = [];
+        foreach ($values as $key => $value) {
+            if (substr($key, 0, 6) !== 'extra_' && substr($key, 0, 7) !== '_extra_') {
+                continue;
+            }
+            if (!empty($value)) {
+                $fields[$key] = $value;
+            }
+        }
+
+        $extraFieldsAll = $this->get_all(
+            ['visible_to_self = ? AND filter = ?' => [1, 1]],
+            'option_order'
+        );
+        $extraFieldsType = array_column($extraFieldsAll, 'field_type', 'variable');
+        $extraFields = array_column($extraFieldsAll, 'variable');
+        $filter = new stdClass();
+        $defaults = [];
+        foreach ($fields as $variable => $col) {
+            $variableNoExtra = str_replace('extra_', '', $variable);
+            if (isset($values[$variable]) && !empty($values[$variable]) &&
+                in_array($variableNoExtra, $extraFields)
+            ) {
+                $rule = new stdClass();
+                $rule->field = $variable;
+                $rule->op = 'in';
+                $data = $col;
+                if (is_array($data) && array_key_exists($variable, $data)) {
+                    $data = $col;
+                }
+                $rule->data = $data;
+                $filter->rules[] = $rule;
+                $filter->groupOp = 'AND';
+
+                if ($extraFieldsType[$variableNoExtra] == ExtraField::FIELD_TYPE_TAG) {
+                    $tagElement = $form->getElement($variable);
+                    $tags = [];
+                    foreach ($values[$variable] as $tag) {
+                        $tag = Security::remove_XSS($tag);
+                        $tags[] = $tag;
+                        $tagElement->addOption(
+                            $tag,
+                            $tag
+                        );
+                    }
+                    $defaults[$variable] = $tags;
+                } else {
+                    if (is_array($data)) {
+                        $defaults[$variable] = array_map(['Security', 'remove_XSS'], $data);
+                    } else {
+                        $defaults[$variable] = Security::remove_XSS($data);
+                    }
+                }
+            }
+        }
+
+        $result = $this->getExtraFieldRules($filter);
+        $conditionArray = $result['condition_array'];
+
+        $whereCondition = '';
+        $extraCondition = '';
+        if (!empty($conditionArray)) {
+            $extraCondition = ' ( ';
+            $extraCondition .= implode(' AND ', $conditionArray);
+            $extraCondition .= ' ) ';
+        }
+        $whereCondition .= $extraCondition;
+        $conditions = $this->parseConditions(
+            [
+                'where' => $whereCondition,
+                'extra' => $result['extra_fields'],
+            ],
+            $alias
+        );
+
+        return ['condition' => $conditions, 'fields' => $fields, 'defaults' => $defaults];
+    }
+
     /**
-     * @param array $options
+     * @param array  $options
+     * @param string $alias
      *
      * @return array
      */
@@ -2270,7 +2350,13 @@ JAVASCRIPT;
                 $counter = 1;
                 $extra_field_obj = new ExtraField($this->type);
                 foreach ($extra_fields as &$extra) {
+                    if (!isset($extra['id'])) {
+                        continue;
+                    }
                     $extra_field_info = $extra_field_obj->get($extra['id']);
+                    if (empty($extra_field_info)) {
+                        continue;
+                    }
                     $extra['extra_field_info'] = $extra_field_info;
 
                     if (isset($extra_field_info['field_type']) &&
@@ -2493,7 +2579,7 @@ JAVASCRIPT;
                 } else {
                     // Extra fields
                     if (false === strpos($rule->field, '_second')) {
-                        //No _second
+                        // No _second
                         $original_field = str_replace($stringToSearch, '', $rule->field);
                         $field_option = $this->get_handler_field_info_by_field_variable($original_field);
 

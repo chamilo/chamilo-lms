@@ -3,6 +3,7 @@
 /* For licensing terms, see /license.txt */
 
 use Chamilo\CourseBundle\Entity\CForumPost;
+use ChamiloSession as Session;
 
 /**
  * @author Julio Montoya <gugli100@gmail.com> UI Improvements + lots of bugfixes
@@ -76,6 +77,14 @@ Event::registerLog($logInfo);
 $currentUrl = api_get_path(WEB_CODE_PATH).'forum/viewthread.php?forum='.$forumId.'&'.api_get_cidreq().'&thread='.$threadId;
 
 switch ($action) {
+    case 'change_view':
+        $view = isset($_REQUEST['view']) && in_array($_REQUEST['view'], ['nested', 'flat']) ? $_REQUEST['view'] : '';
+        if (!empty($view)) {
+            Session::write('thread_view', $view);
+        }
+        header('Location: '.$currentUrl);
+        exit;
+        break;
     case 'delete':
         if (
             isset($_GET['content']) &&
@@ -229,13 +238,29 @@ if (($current_forum_category &&
     }
 }
 
+$actions .= Display::url(
+    Display::return_icon('forum_nestedview.png', get_lang('NestedView'), [], ICON_SIZE_MEDIUM),
+    $currentUrl.'&action=change_view&view=nested'
+);
+
+$actions .= Display::url(
+    Display::return_icon('forum_listview.png', get_lang('FlatView'), [], ICON_SIZE_MEDIUM),
+    $currentUrl.'&action=change_view&view=flat'
+);
+
 $template->assign('forum_actions', $actions);
 $template->assign('origin', api_get_origin());
 
 $viewMode = $current_forum['default_view'];
+
 //$whiteList = ['flat', 'threaded', 'nested'];
 if ($viewMode !== 'flat') {
     $viewMode = 'nested';
+}
+
+$userView = Session::read('thread_view');
+if (!empty($userView)) {
+    $viewMode = $userView;
 }
 
 if ($current_thread['thread_peer_qualify'] == 1) {
@@ -247,7 +272,7 @@ $allowReport = reportAvailable();
 // Are we in a lp ?
 $origin = api_get_origin();
 //delete attachment file
-if ($action == 'delete_attach' && isset($_GET['id_attach'])
+if ($action === 'delete_attach' && isset($_GET['id_attach'])
 ) {
     delete_attachment(0, $_GET['id_attach']);
 }
@@ -445,7 +470,8 @@ foreach ($posts as $post) {
                 $languageInfo = api_get_language_info($languageId);
                 if ($languageInfo) {
                     $languages = api_get_language_list_for_flag();
-                    $flagRevision = '<span class="flag-icon flag-icon-'.$languages[$languageInfo['english_name']].'"></span> ';
+                    $flagRevision = '<span
+                        class="flag-icon flag-icon-'.$languages[$languageInfo['english_name']].'"></span> ';
                 }
             }
         }
@@ -667,10 +693,17 @@ if ($current_forum['forum_of_group'] != 0) {
 }
 
 if ($showForm) {
+    $values = [
+        'post_title' => Security::remove_XSS($current_thread['thread_title']),
+        'post_text' => '',
+        'post_notification' => '',
+        'thread_sticky' => '',
+        'thread_peer_qualify' => '',
+    ];
     $form = show_add_post_form(
         $current_forum,
         'replythread',
-        null,
+        $values,
         false
     );
     $formToString = $form->returnForm();

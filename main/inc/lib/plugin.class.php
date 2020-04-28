@@ -232,7 +232,7 @@ class Plugin
             $help = null;
             if ($this->get_lang_plugin_exists($name.'_help')) {
                 $help = $this->get_lang($name.'_help');
-                if ($name === "show_main_menu_tab") {
+                if ($name === 'show_main_menu_tab') {
                     $pluginName = strtolower(str_replace('Plugin', '', get_class($this)));
                     $pluginUrl = api_get_path(WEB_PATH)."plugin/$pluginName/index.php";
                     $pluginUrl = "<a href=$pluginUrl>$pluginUrl</a>";
@@ -275,6 +275,7 @@ class Plugin
                             $selectedValue = 'checked';
                         }
                     }
+
                     $element = $result->createElement(
                         $type,
                         $name,
@@ -301,7 +302,8 @@ class Plugin
             $result->addGroup(
                 $checkboxGroup,
                 null,
-                [$this->get_lang('sms_types'), $help]
+                ['', $help]
+                //[$this->get_lang('sms_types'), $help]
             );
         }
         $result->setDefaults($defaults);
@@ -478,6 +480,11 @@ class Plugin
                     $value = $setting['init_value'];
                 }
 
+                $pluginGlobalValue = api_get_plugin_setting($plugin_name, $variable);
+                if (null !== $pluginGlobalValue) {
+                    $value = 1;
+                }
+
                 $type = 'textfield';
                 if (isset($setting['type'])) {
                     $type = $setting['type'];
@@ -571,11 +578,11 @@ class Plugin
 
         $pluginName = Database::escape_string($pluginName);
         $sql = "DELETE FROM $t_tool
-                WHERE c_id = $courseId AND 
+                WHERE c_id = $courseId AND
                 (
                   name = '$pluginName' OR
                   name = '$pluginName:student' OR
-                  name = '$pluginName:teacher'  
+                  name = '$pluginName:teacher'
                 )";
         Database::query($sql);
     }

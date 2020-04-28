@@ -1,7 +1,7 @@
 /*
  * @license
  *
- * Multiselect v2.5.4
+ * Multiselect v2.5.5
  * http://crlcu.github.io/multiselect/
  *
  * Copyright (c) 2016-2018 Adrian Crisan
@@ -458,7 +458,7 @@ if (typeof jQuery === 'undefined') {
                             if (self.options.ignoreDisabled) {
                                 disabledSelector = ':not(:disabled)';
                             }
-                            
+
                             $destinationGroup.move($option.find('option' + disabledSelector));
                         } else {
                             $destinationGroup.move($option);
@@ -754,7 +754,7 @@ if (typeof jQuery === 'undefined') {
             });
         }
         if(isFirefox){
-            this.attr('disabled', false)
+            this.prop('disabled', false)
         }
 
         return this;
@@ -772,25 +772,21 @@ if (typeof jQuery === 'undefined') {
             });
         }
         if(isFirefox){
-            this.attr('disabled', true)
+            this.prop('disabled', true)
         }
         return this;
     };
 
     // sort options then reappend them to the select
     $.fn.mSort = function(callback) {
-        this
+        var children = this
             .children()
-            .sort(callback)
-            .appendTo(this);
-
-        this
-            .find('optgroup')
-            .each(function(i, group) {
-                $(group).children()
-                    .sort(callback)
-                    .appendTo(group);
-            })
+            .sort(callback);
+        for ( var j = 0; j < this.length; j++ ) {
+            for ( var i = 0; i < children.length; i++ ) {
+                this[j].appendChild(children[i]);
+            }
+        }
 
         return this;
     };

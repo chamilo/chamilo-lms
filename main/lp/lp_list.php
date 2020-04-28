@@ -316,7 +316,7 @@ foreach ($categories as $item) {
             }
 
             $url_start_lp = 'lp_controller.php?'.$cidReq.'&action=view&lp_id='.$id;
-            $name = strip_tags(Security::remove_XSS($details['lp_name']));
+            $name = trim(strip_tags(Security::remove_XSS($details['lp_name'])));
             $extra = null;
 
             if ($is_allowed_to_edit) {

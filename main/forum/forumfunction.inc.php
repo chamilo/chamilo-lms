@@ -3144,7 +3144,7 @@ function store_thread(
  *
  * @version february 2006, dokeos 1.8
  */
-function show_add_post_form($current_forum, $action, $form_values = '', $showPreview = true)
+function show_add_post_form($current_forum, $action, $form_values = [], $showPreview = true)
 {
     $_user = api_get_user_info();
     $action = isset($action) ? Security::remove_XSS($action) : '';
@@ -3955,7 +3955,7 @@ function show_edit_post_form(
     $current_post,
     $current_thread,
     $current_forum,
-    $form_values = '',
+    $form_values = [],
     $id_attach = 0
 ) {
     // Initialize the object.

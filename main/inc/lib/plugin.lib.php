@@ -686,7 +686,10 @@ class AppPlugin
                 $form->addHtml('
                     <div class="panel-heading" role="tab" id="heading-'.$plugin_name.'-settings">
                         <h4 class="panel-title">
-                            <a class="collapsed" role="button" data-toggle="collapse" data-parent="#accordion" href="#collapse-'.$plugin_name.'-settings" aria-expanded="false" aria-controls="collapse-'.$plugin_name.'-settings">
+                            <a class="collapsed"
+                                role="button" data-toggle="collapse" data-parent="#accordion"
+                                href="#collapse-'.$plugin_name.'-settings" aria-expanded="false"
+                                aria-controls="collapse-'.$plugin_name.'-settings">
                 ');
                 $form->addHtml($icon.' '.$pluginTitle);
                 $form->addHtml('
@@ -695,7 +698,10 @@ class AppPlugin
                     </div>
                 ');
                 $form->addHtml('
-                    <div id="collapse-'.$plugin_name.'-settings" class="panel-collapse collapse" role="tabpanel" aria-labelledby="heading-'.$plugin_name.'-settings">
+                    <div
+                        id="collapse-'.$plugin_name.'-settings"
+                        class="panel-collapse collapse" role="tabpanel"
+                        aria-labelledby="heading-'.$plugin_name.'-settings">
                         <div class="panel-body">
                 ');
 
@@ -704,7 +710,7 @@ class AppPlugin
                     if ($obj->validateCourseSetting($setting['name']) === false) {
                         continue;
                     }
-                    if ($setting['type'] != 'checkbox') {
+                    if ($setting['type'] !== 'checkbox') {
                         $form->addElement($setting['type'], $setting['name'], $obj->get_lang($setting['name']));
                     } else {
                         $element = &$form->createElement(
@@ -713,11 +719,23 @@ class AppPlugin
                             '',
                             $obj->get_lang($setting['name'])
                         );
+
+                        // Check global settings
+                        $courseSetting = api_get_course_setting($setting['name']);
+                        if (-1 === $courseSetting) {
+                            $defaultValue = api_get_plugin_setting($plugin_name, $setting['name']);
+                            if (!empty($defaultValue)) {
+                                if ('true' === $defaultValue) {
+                                    $element->setChecked(true);
+                                }
+                            }
+                        }
+
                         if (isset($setting['init_value']) && $setting['init_value'] == 1) {
                             $element->setChecked(true);
                         }
-                        $form->addElement($element);
 
+                        $form->addElement($element);
                         if (isset($setting['group'])) {
                             $groups[$setting['group']][] = $element;
                         }

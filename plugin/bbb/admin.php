@@ -5,8 +5,6 @@ use Chamilo\UserBundle\Entity\User;
 
 /**
  * This script initiates a video conference session, calling the BigBlueButton API.
- *
- * @package chamilo.plugin.bigbluebutton
  */
 $course_plugin = 'bbb'; //needed in order to load the plugin lang variables
 $cidReset = true;
@@ -46,7 +44,6 @@ $meetings = $bbb->getMeetings(0, 0, 0, true, $dateRange);
 
 foreach ($meetings as &$meeting) {
     $participants = $bbb->findConnectedMeetingParticipants($meeting['id']);
-
     foreach ($participants as $meetingParticipant) {
         /** @var User $participant */
         $participant = $meetingParticipant['participant'];

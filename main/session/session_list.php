@@ -184,7 +184,7 @@ $orderUrl = api_get_path(WEB_AJAX_PATH).'session.ajax.php?a=order';
             // Cleaning
             for (key in added_cols) {
                 grid.hideCol(key);
-            };
+            }
             grid.showCol('name');
             grid.showCol('display_start_date');
             grid.showCol('display_end_date');
@@ -195,7 +195,7 @@ $orderUrl = api_get_path(WEB_AJAX_PATH).'session.ajax.php?a=order';
             grid.showCol('name').trigger('reloadGrid');
             for (key in added_cols) {
                 grid.showCol(key);
-            };
+            }
         }
 
         var second_filters = [];
@@ -254,37 +254,36 @@ $orderUrl = api_get_path(WEB_AJAX_PATH).'session.ajax.php?a=order';
             ?>
 
             setSearchSelect("status");
+            var grid = $("#sessions");
+            var prmSearch = {
+                multipleSearch : true,
+                overlay : false,
+                width: 'auto',
+                caption: '<?php echo addslashes(get_lang('Search')); ?>',
+                formclass:'data_table',
+                onSearch : function() {
+                    var postdata = grid.jqGrid('getGridParam', 'postData');
 
-            var grid = $("#sessions"),
-                prmSearch = {
-                    multipleSearch : true,
-                    overlay : false,
-                    width: 'auto',
-                    caption: '<?php echo addslashes(get_lang('Search')); ?>',
-                    formclass:'data_table',
-                    onSearch : function() {
-                        var postdata = grid.jqGrid('getGridParam', 'postData');
-
-                        if (postdata && postdata.filters) {
-                            filters = jQuery.parseJSON(postdata.filters);
-                            clean_cols(grid, added_cols);
-                            added_cols = [];
-                            $.each(filters, function(key, value) {
-                                if (key == 'rules') {
-                                    $.each(value, function(subkey, subvalue) {
-                                        if (subvalue.data == undefined) {
-                                        }
-                                        added_cols[subvalue.field] = subvalue.field;
-                                    });
-                                }
-                            });
-                            show_cols(grid, added_cols);
-                        }
-                    },
-                    onReset: function() {
+                    if (postdata && postdata.filters) {
+                        filters = jQuery.parseJSON(postdata.filters);
                         clean_cols(grid, added_cols);
+                        added_cols = [];
+                        $.each(filters, function(key, value) {
+                            if (key == 'rules') {
+                                $.each(value, function(subkey, subvalue) {
+                                    if (subvalue.data == undefined) {
+                                    }
+                                    added_cols[subvalue.field] = subvalue.field;
+                                });
+                            }
+                        });
+                        show_cols(grid, added_cols);
                     }
-                };
+                },
+                onReset: function() {
+                    clean_cols(grid, added_cols);
+                }
+            };
 
             original_cols = grid.jqGrid('getGridParam', 'colModel');
 
@@ -333,7 +332,15 @@ $orderUrl = api_get_path(WEB_AJAX_PATH).'session.ajax.php?a=order';
             searchDialogAll.addClass("table");
             var searchDialog = $("#searchmodfbox_"+grid[0].id);
             searchDialog.addClass("ui-jqgrid ui-widget ui-widget-content ui-corner-all");
-            searchDialog.css({position:"adsolute", "z-index":"100", "float":"left", "top":"55%", "left" : "25%", "padding" : "5px", "border": "1px solid #CCC"})
+            searchDialog.css({
+                position: "absolute",
+                "z-index": "100",
+                "float": "left",
+                "top": "55%",
+                "left": "25%",
+                "padding": "5px",
+                "border": "1px solid #CCC"
+            })
             var gbox = $("#gbox_"+grid[0].id);
             gbox.before(searchDialog);
             gbox.css({clear:"left"});

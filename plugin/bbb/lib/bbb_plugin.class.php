@@ -83,6 +83,10 @@ class BBBPlugin extends Plugin
                     'translate_options' => true, // variables will be translated using the plugin->get_lang
                 ],
                 'allow_regenerate_recording' => 'boolean',
+                // Default course settings, must be the same as $course_settings
+                'big_blue_button_record_and_store' => 'checkbox',
+                'bbb_enable_conference_in_groups' => 'checkbox',
+                'bbb_force_record_generation' => 'checkbox',
             ]
         );
 

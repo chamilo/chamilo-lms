@@ -8572,7 +8572,7 @@ class Exercise
         $result_total = Database::query($total_sql);
 
         $total_exercises = 0;
-        if (Database :: num_rows($result_total)) {
+        if (Database::num_rows($result_total)) {
             $result_total = Database::fetch_array($result_total);
             $total_exercises = $result_total['count'];
         }

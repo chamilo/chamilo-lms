@@ -160,6 +160,7 @@ class Exercise
     {
         $table = Database::get_course_table(TABLE_QUIZ_TEST);
         $tableLpItem = Database::get_course_table(TABLE_LP_ITEM);
+        $tblLp = Database::get_course_table(TABLE_LP_MAIN);
 
         $id = (int) $id;
         if (empty($this->course_id)) {
@@ -218,12 +219,13 @@ class Exercise
                 $this->showPreviousButton = $object->show_previous_button == 1 ? true : false;
             }
 
-            $sql = "SELECT lp_id, max_score
-                    FROM $tableLpItem
+            $sql = "SELECT lpi.lp_id, lpi.max_score, lp.session_id
+                    FROM $tableLpItem lpi
+                    INNER JOIN $tblLp lp ON (lpi.lp_id = lp.iid AND lpi.c_id = lp.c_id)
                     WHERE
-                        c_id = {$this->course_id} AND
-                        item_type = '".TOOL_QUIZ."' AND
-                        path = '".$id."'";
+                        lpi.c_id = {$this->course_id} AND
+                        lpi.item_type = '".TOOL_QUIZ."' AND
+                        lpi.path = '$id'";
             $result = Database::query($sql);
 
             if (Database::num_rows($result) > 0) {
@@ -8327,7 +8329,7 @@ class Exercise
             $lpId = null;
             if (!empty($this->lpList)) {
                 // Taking only the first LP
-                $lpId = current($this->lpList);
+                $lpId = $this->getLpBySession($sessionId);
                 $lpId = $lpId['lp_id'];
             }
 
@@ -10224,5 +10226,29 @@ class Exercise
         );
 
         return $group;
+    }
+
+    /**
+     * Get the first LP found matching the session ID.
+     *
+     * @param int $sessionId
+     *
+     * @return array
+     */
+    public function getLpBySession($sessionId)
+    {
+        if (empty($this->lpList)) {
+            return [];
+        }
+
+        $sessionId = (int) $sessionId;
+
+        foreach ($this->lpList as $lp) {
+            if ((int) $lp['session_id'] == $sessionId) {
+                return $lp;
+            }
+        }
+
+        return [];
     }
 }

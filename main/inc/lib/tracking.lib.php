@@ -325,9 +325,9 @@ class Tracking
         $chapterTypes = learnpath::getChapterTypes();
         $accessToPdfExport = api_is_allowed_to_edit(false, false, true);
 
-        $minimunAvailable = self::minimumTimeAvailable($session_id, $course_id);
+        $minimumAvailable = self::minimumTimeAvailable($session_id, $course_id);
         $timeCourse = [];
-        if ($minimunAvailable) {
+        if ($minimumAvailable) {
             $timeCourse = self::getCalculateTime($user_id, $course_id, $session_id);
             Session::write('trackTimeCourse', $timeCourse);
         }
@@ -532,7 +532,7 @@ class Tracking
                         $time_for_total = $row['mytime'];
                         $attemptTime = $row['mytime'];
 
-                        if ($minimunAvailable) {
+                        if ($minimumAvailable) {
                             $lp_time = $timeCourse[TOOL_LEARNPATH];
                             $lpTime = null;
                             if (isset($lp_time[$lp_id])) {

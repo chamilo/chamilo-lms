@@ -1231,7 +1231,7 @@ class AddCourse
         }
 
         if (isset($params['subscribe'])) {
-            $subscribe = (int)$params['subscribe'];
+            $subscribe = (int) $params['subscribe'];
         } else {
             $subscribe = $visibility == COURSE_VISIBILITY_OPEN_PLATFORM ? 1 : 0;
         }

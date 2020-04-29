@@ -9716,6 +9716,30 @@ class Exercise
     }
 
     /**
+     * Get the first LP found matching the session ID.
+     *
+     * @param int $sessionId
+     *
+     * @return array
+     */
+    public function getLpBySession($sessionId)
+    {
+        if (empty($this->lpList)) {
+            return [];
+        }
+
+        $sessionId = (int) $sessionId;
+
+        foreach ($this->lpList as $lp) {
+            if ((int) $lp['session_id'] == $sessionId) {
+                return $lp;
+            }
+        }
+
+        return [];
+    }
+
+    /**
      * Get number of questions in exercise by user attempt.
      *
      * @return int
@@ -10226,29 +10250,5 @@ class Exercise
         );
 
         return $group;
-    }
-
-    /**
-     * Get the first LP found matching the session ID.
-     *
-     * @param int $sessionId
-     *
-     * @return array
-     */
-    public function getLpBySession($sessionId)
-    {
-        if (empty($this->lpList)) {
-            return [];
-        }
-
-        $sessionId = (int) $sessionId;
-
-        foreach ($this->lpList as $lp) {
-            if ((int) $lp['session_id'] == $sessionId) {
-                return $lp;
-            }
-        }
-
-        return [];
     }
 }

@@ -2034,6 +2034,7 @@ function xajax_save_item_scorm(
     var saveUrl = codePathUrl + "lp_ajax_save_item.php" + courseUrl;
 
     if (useSendBeacon == 1 && navigator.sendBeacon) {
+        console.log('useSendBeacon');
         var formData = new FormData();
         var paramsToArray = params.split('&');
         for (var i = 0; i < paramsToArray.length; i++) {
@@ -2043,7 +2044,8 @@ function xajax_save_item_scorm(
             formData.append(pair[0], decodeURIComponent(pair[1]));
         }
 
-        navigator.sendBeacon(saveUrl, formData);
+        result = navigator.sendBeacon(saveUrl, formData);
+        console.log(result);
     } else {
         $.ajax({
             type:"POST",
@@ -2053,8 +2055,6 @@ function xajax_save_item_scorm(
             async: false
         });
     }
-
-
     params = '';
     my_scorm_values = null;
 }

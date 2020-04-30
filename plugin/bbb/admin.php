@@ -137,6 +137,9 @@ if ($settingsForm->validate()) {
         $sql = "UPDATE $table SET value = '$value' WHERE variable = '$setting'";
         Database::query($sql);
     }
+    Display::addFlash(Display::return_message(get_lang('Updated')));
+    header('Location: '.api_get_self());
+    exit;
 }
 
 $settingsForm->setDefaults($defaults);

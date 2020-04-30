@@ -1,4 +1,5 @@
 <?php
+
 /* For license terms, see /license.txt */
 
 use Chamilo\UserBundle\Entity\User;
@@ -102,8 +103,45 @@ $tpl = new Template($tool_name);
 $tpl->assign('meetings', $meetings);
 $tpl->assign('search_form', $form->returnForm());
 
-$content = $tpl->fetch('bbb/view/admin.tpl');
+$settingsForm = new FormValidator('settings', api_get_self());
+$settingsForm->addHeader($plugin->get_lang('UpdateAllCourseSettings'));
+$settingsForm->addHtml(Display::return_message($plugin->get_lang('ThisWillUpdateAllSettingsInAllCourses')));
+$settings = $plugin->course_settings;
+$defaults = [];
+foreach ($settings as $setting) {
+    $setting = $setting['name'];
+    $text = $settingsForm->addText($setting,  $plugin->get_lang($setting), false);
+    $text->freeze();
+    $defaults[$setting] = api_get_plugin_setting('bbb', $setting) === 'true' ? get_lang('Yes') : get_lang('No');
+    //api_get_plugin_setting('bbb', $setting)
+}
+//$settingsForm->addHtml()main/admin/configure_plugin.php?name=bbb
 
+$settingsForm->addButtonSave($plugin->get_lang('UpdateAllCourses'));
+
+if ($settingsForm->validate()) {
+    $table = Database::get_course_table(TABLE_COURSE_SETTING);
+    foreach ($settings as $setting) {
+        $setting = $setting['name'];
+        $setting = Database::escape_string($setting);
+
+        if (empty($setting)) {
+            continue;
+        }
+        $value = api_get_plugin_setting('bbb', $setting);
+        if ($value === 'true') {
+            $value = 1;
+        } else {
+            $value = '';
+        }
+        $sql = "UPDATE $table SET value = '$value' WHERE variable = '$setting'";
+        Database::query($sql);
+    }
+}
+
+$settingsForm->setDefaults($defaults);
+$tpl->assign('settings_form', $settingsForm->returnForm());
+$content = $tpl->fetch('bbb/view/admin.tpl');
 if ($meetings) {
     $actions = Display::toolbarButton(
         get_lang('ExportInExcel'),
@@ -122,6 +160,5 @@ if ($meetings) {
     );
 }
 
-$tpl->assign('header', $plugin->get_lang('RecordList'));
 $tpl->assign('content', $content);
 $tpl->display_one_col_template();

@@ -101,14 +101,13 @@
                             </a>
                         </div>
                     </button>
+
+                    <button id="count_message_li" type="button" class="pull-right navbar-toggle collapsed menu-dropdown" aria-expanded="true">
+                        <a href="{{ message_url }}">
+                            <span id="count_message" class="badge badge-warning"></span>
+                        </a>
+                    </button>
                 {% endif %}
-
-                <button id="count_message_li" type="button" class="pull-right navbar-toggle collapsed menu-dropdown" aria-expanded="true">
-                    <a href="{{ message_url }}">
-                        <span id="count_message" class="badge badge-warning"></span>
-                    </a>
-                </button>
-
             {% endif %}
             <a class="navbar-brand" href="{{ _p.web }}"> <i class="fa fa-home"></i> </a>
         </div>
@@ -132,16 +131,19 @@
             </ul>
             {% if _u.logged == 1 and not user_in_anon_survey %}
                 <ul class="nav navbar-nav navbar-right">
-
                     {% if language_form %}
                         <li class="dropdown language">
                             {{ language_form }}
                         </li>
                     {% endif %}
-
                     {% if notification_event == 0 %}
                         {% if _u.status != 6 %}
-                            <li class="dropdown avatar-user">
+                            <li id="count_message_li" class="pull-left " style="float: left !important;" aria-expanded="true">
+                                <a href="{{ message_url }}">
+                                    <span id="count_message" class="badge badge-warning"></span>
+                                </a>
+                            </li>
+                            <li class="dropdown avatar-user" style="float:right">
                                 <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button"
                                    aria-expanded="false">
                                     <img class="img-circle" src="{{ _u.avatar_small }}" alt="{{ _u.complete_name }}"/>

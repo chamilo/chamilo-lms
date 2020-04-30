@@ -89,7 +89,7 @@ if ($is_survey_type_1 && ($action === 'addgroup' || $action === 'deletegroup')) 
 
     if ($action === 'deletegroup') {
         $sql = 'DELETE FROM '.$table_survey_question_group.'
-                WHERE c_id = '.$course_id.' AND id = '.intval($_GET['gid']).' AND survey_id = '.intval($survey_id);
+                WHERE c_id = '.$course_id.' AND id = '.intval($_GET['gid']).' AND survey_id = '.$survey_id;
         Database::query($sql);
         $sendmsg = 'GroupDeletedSuccessfully';
     }
@@ -258,7 +258,7 @@ $sql = "SELECT survey_question.*, count(survey_question_option.question_option_i
             survey_question.question_id = survey_question_option.question_id AND
             survey_question_option.c_id = $course_id
         WHERE
-            survey_question.survey_id 	= ".intval($survey_id)." AND
+            survey_question.survey_id 	= $survey_id AND
             survey_question.c_id 		= $course_id
         GROUP BY survey_question.question_id
         ORDER BY survey_question.sort ASC";

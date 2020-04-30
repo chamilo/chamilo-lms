@@ -32,6 +32,7 @@ class ResourceNode
     use TimestampableEntity;
 
     /**
+     * @Groups({"list"})
      * @ORM\Id
      * @ORM\Column(type="integer")
      * @ORM\GeneratedValue(strategy="AUTO")
@@ -40,7 +41,7 @@ class ResourceNode
 
     /**
      * @Assert\NotBlank()
-     *
+     * @Groups({"list"})
      * @Gedmo\TreePathSource
      *
      * @ORM\Column(name="title", type="string", length=255, nullable=false)
@@ -72,12 +73,13 @@ class ResourceNode
      * @var ResourceFile
      * @Groups({"list"})
      *
-     * @ORM\OneToOne(targetEntity="ResourceFile", inversedBy="resourceNode", orphanRemoval=true, fetch="EAGER")
+     * @ORM\OneToOne(targetEntity="ResourceFile", inversedBy="resourceNode", orphanRemoval=true)
      * @ORM\JoinColumn(name="resource_file_id", referencedColumnName="id", onDelete="CASCADE")
      */
     protected $resourceFile;
 
     /**
+     * @Groups({"list"})
      * @ORM\ManyToOne(
      *     targetEntity="Chamilo\UserBundle\Entity\User", inversedBy="resourceNodes"
      * )
@@ -124,16 +126,16 @@ class ResourceNode
     /**
      * Shortcut to access Course resource from ResourceNode.
      *
-     * @ORM\OneToOne(targetEntity="Chamilo\CoreBundle\Entity\Course", mappedBy="resourceNode")
+     * ORM\OneToOne(targetEntity="Chamilo\CoreBundle\Entity\Course", mappedBy="resourceNode")
      */
-    protected $course;
+    //protected $course;
 
     /**
      * Shortcut to access Course resource from ResourceNode.
      *
-     * @ORM\OneToOne(targetEntity="Chamilo\CoreBundle\Entity\Illustration", mappedBy="resourceNode")
+     * ORM\OneToOne(targetEntity="Chamilo\CoreBundle\Entity\Illustration", mappedBy="resourceNode")
      */
-    protected $illustration;
+    //protected $illustration;
 
     /**
      * @var ResourceComment[]|ArrayCollection
@@ -357,6 +359,11 @@ class ResourceNode
     public function getSlug()
     {
         return $this->slug;
+    }
+
+    public function getTitle()
+    {
+        return $this->title;
     }
 
     public function setTitle(string $title)

@@ -34,17 +34,22 @@ class TwigListener implements EventSubscriberInterface
         }
 
         $container = $this->container;
-        $settingsManager = $container->get('chamilo.settings.manager');
-        $theme = api_get_visual_theme();
         $twig = $container->get('twig');
 
         if (empty($twig)) {
             return false;
         }
 
+
+        $translator = $this->container->get('translator');
+
+        $settingsManager = $container->get('chamilo.settings.manager');
+        $theme = api_get_visual_theme();
+
         $twig->addGlobal('favico', \Template::getPortalIcon($theme));
 
         if ('true' === $settingsManager->getSetting('display.show_administrator_data')) {
+            // Admin data
             $firstName = $settingsManager->getSetting('admin.administrator_name');
             $lastName = $settingsManager->getSetting('admin.administrator_surname');
             $email = $settingsManager->getSetting('admin.administrator_email');
@@ -62,7 +67,7 @@ class TwigListener implements EventSubscriberInterface
             $adminName = '';
             // Administrator name
             if (!empty($name)) {
-                $adminName = get_lang('Administrator').' : ';
+                $adminName = $translator->trans('Administrator').' : ';
                 $adminName .= \Display::encrypted_mailto_link($email, $name);
             }
             $twig->addGlobal('administrator_name', $adminName);
@@ -85,7 +90,8 @@ class TwigListener implements EventSubscriberInterface
 
         if ('true' === $settingsManager->getSetting('display.show_tutor_data')) {
             // Course manager
-            $courseId = api_get_course_int_id();
+            // @todo load data using ajax
+            /* $courseId = api_get_course_int_id();
             $sessionId = api_get_session_id();
 
             if (!empty($courseId)) {
@@ -131,7 +137,7 @@ class TwigListener implements EventSubscriberInterface
                     $teacherData .= $label.' : '.array_to_string($links, CourseManager::USER_SEPARATOR);
                 }
                 $twig->addGlobal('teachers', $teacherData);
-            }
+            }*/
         }
 
         $appPlugin = new \AppPlugin();

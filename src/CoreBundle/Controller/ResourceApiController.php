@@ -41,14 +41,14 @@ class ResourceApiController extends AbstractFOSRestController implements CourseC
         $repository = $this->getRepositoryFromRequest($request);
         $parentNode = $repository->getResourceNodeRepository()->find($id);
 
-        $course = $this->getCourse();
-        $session = $this->getSession();
-
         $this->denyAccessUnlessGranted(
             ResourceNodeVoter::VIEW,
             $parentNode,
             'Unauthorised access to resource'
         );
+
+        $course = $this->getCourse();
+        $session = $this->getSession();
 
         /** @var QueryBuilder $qb */
         $qb = $repository->getResources($this->getUser(), $parentNode, $course, $session, null);

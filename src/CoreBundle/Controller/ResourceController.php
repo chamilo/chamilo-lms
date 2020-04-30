@@ -433,10 +433,9 @@ class ResourceController extends AbstractResourceController implements CourseCon
         $settings = $repository->getResourceSettings();
 
         $grid = $this->getGrid($request, $repository, $grid, $resourceNodeId, 'chamilo_core_resource_list');
-
-        $this->setBreadCrumb($request);
-
         $parentResourceNode = $this->getParentResourceNode($request);
+
+        $this->setBreadCrumb($request, $parentResourceNode);
 
         return $grid->getGridResponse(
             $repository->getTemplates()->getFromAction(__FUNCTION__),
@@ -456,8 +455,6 @@ class ResourceController extends AbstractResourceController implements CourseCon
      */
     public function newFolderAction(Request $request): Response
     {
-        $this->setBreadCrumb($request);
-
         return $this->createResource($request, 'folder');
     }
 
@@ -466,8 +463,6 @@ class ResourceController extends AbstractResourceController implements CourseCon
      */
     public function newAction(Request $request): Response
     {
-        $this->setBreadCrumb($request);
-
         return $this->createResource($request, 'file');
     }
 
@@ -476,12 +471,13 @@ class ResourceController extends AbstractResourceController implements CourseCon
      */
     public function diskSpaceAction(Request $request): Response
     {
-        $this->setBreadCrumb($request);
         $nodeId = $request->get('id');
         $repository = $this->getRepositoryFromRequest($request);
 
         /** @var ResourceNode $resourceNode */
         $resourceNode = $repository->getResourceNodeRepository()->find($nodeId);
+
+        $this->setBreadCrumb($request, $resourceNode);
 
         $this->denyAccessUnlessGranted(
             ResourceNodeVoter::VIEW,
@@ -552,12 +548,13 @@ class ResourceController extends AbstractResourceController implements CourseCon
     {
         $resourceNodeId = $request->get('id');
 
-        $this->setBreadCrumb($request);
         $repository = $this->getRepositoryFromRequest($request);
         $resource = $repository->getResourceFromResourceNode($resourceNodeId);
         $this->denyAccessUnlessValidResource($resource);
         $settings = $repository->getResourceSettings();
         $resourceNode = $resource->getResourceNode();
+
+        $this->setBreadCrumb($request, $resourceNode);
 
         $this->denyAccessUnlessGranted(
             ResourceNodeVoter::EDIT,
@@ -635,18 +632,16 @@ class ResourceController extends AbstractResourceController implements CourseCon
      */
     public function infoAction(Request $request): Response
     {
-        $this->setBreadCrumb($request);
-
         $nodeId = $request->get('id');
         $repository = $this->getRepositoryFromRequest($request);
 
         /** @var AbstractResource $resource */
         $resource = $repository->getResourceFromResourceNode($nodeId);
+        $resourceNode = $resource->getResourceNode();
 
         $this->denyAccessUnlessValidResource($resource);
+        $this->setBreadCrumb($request, $resourceNode);
 
-        $resourceNode = $resource->getResourceNode();
-        //throw new \Exception('as');
         $this->denyAccessUnlessGranted(
             ResourceNodeVoter::VIEW,
             $resourceNode,
@@ -666,7 +661,6 @@ class ResourceController extends AbstractResourceController implements CourseCon
             'type' => $type,
             'comment_form' => $form->createView(),
         ];
-
         return $this->render(
             $repository->getTemplates()->getFromAction(__FUNCTION__, $request->isXmlHttpRequest()),
             $params
@@ -680,9 +674,7 @@ class ResourceController extends AbstractResourceController implements CourseCon
      */
     public function previewAction(Request $request): Response
     {
-        $this->setBreadCrumb($request);
         $nodeId = $request->get('id');
-
         $repository = $this->getRepositoryFromRequest($request);
 
         /** @var AbstractResource $resource */
@@ -690,6 +682,7 @@ class ResourceController extends AbstractResourceController implements CourseCon
         $this->denyAccessUnlessValidResource($resource);
 
         $resourceNode = $resource->getResourceNode();
+        $this->setBreadCrumb($request, $resourceNode);
 
         $this->denyAccessUnlessGranted(
             ResourceNodeVoter::VIEW,
@@ -880,7 +873,7 @@ class ResourceController extends AbstractResourceController implements CourseCon
 
         $tool = $request->get('tool');
         $type = $request->get('type');
-        $this->setBreadCrumb($request);
+        $this->setBreadCrumb($request, $resourceNode);
 
         $params = [
             'resource' => $resource,
@@ -993,7 +986,7 @@ class ResourceController extends AbstractResourceController implements CourseCon
             $this->trans('Unauthorised access to resource')
         );
 
-        $this->setBreadCrumb($request);
+        $this->setBreadCrumb($request, $resourceNode);
 
         $routeParams = $this->getResourceParams($request);
         $routeParams['tool'] = $tool;
@@ -1015,6 +1008,8 @@ class ResourceController extends AbstractResourceController implements CourseCon
 
         // Default parent node is course.
         $parentNode = $this->getParentResourceNode($request);
+
+        $this->setBreadCrumb($request, $parentNode);
 
         $this->denyAccessUnlessGranted(
             ResourceNodeVoter::CREATE,

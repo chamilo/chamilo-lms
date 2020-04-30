@@ -2334,6 +2334,7 @@ class SurveyManager
                         'survey_id' => $surveyId,
                         'question_id' => 0,
                         'shared_question_id' => 0,
+                        'answers' => $question['answers'],
                     ];
                     self::save_question($surveyData, $values, false);
                     $classCounter++;

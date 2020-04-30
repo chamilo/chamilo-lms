@@ -9724,19 +9724,21 @@ class Exercise
      */
     public function getLpBySession($sessionId)
     {
-        if (empty($this->lpList)) {
-            return [];
-        }
+        if (!empty($this->lpList)) {
+            $sessionId = (int) $sessionId;
 
-        $sessionId = (int) $sessionId;
-
-        foreach ($this->lpList as $lp) {
-            if ((int) $lp['session_id'] == $sessionId) {
-                return $lp;
+            foreach ($this->lpList as $lp) {
+                if ((int) $lp['session_id'] == $sessionId) {
+                    return $lp;
+                }
             }
         }
 
-        return [];
+        return [
+            'lp_id' => 0,
+            'max_score' => 0,
+            'session_id' => 0,
+        ];
     }
 
     /**

@@ -48,7 +48,7 @@ class CThematicPlan extends AbstractResource implements ResourceInterface
     /**
      * @var CThematic
      *
-     * @ORM\ManyToOne(targetEntity="Chamilo\CourseBundle\Entity\CThematic")
+     * @ORM\ManyToOne(targetEntity="Chamilo\CourseBundle\Entity\CThematic", inversedBy="plans")
      * @ORM\JoinColumn(name="thematic_id", referencedColumnName="iid")
      */
     protected $thematic;

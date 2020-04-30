@@ -9,7 +9,6 @@ use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Timestampable\Traits\TimestampableEntity;
 
 /**
- * Usergroup.
  *
  * @ORM\Table(name="usergroup")
  * @ORM\Entity

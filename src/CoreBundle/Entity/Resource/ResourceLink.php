@@ -345,11 +345,10 @@ class ResourceLink
     }
 
     /**
-     * @return $this
      */
     public function getResource()
     {
-        return $this;
+//        return $this;
     }
 
     public static function getVisibilityList(): array

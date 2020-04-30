@@ -7,8 +7,6 @@ namespace Chamilo\CoreBundle\Entity;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * UsergroupRelCourse.
- *
  * @ORM\Table(name="usergroup_rel_course")
  * @ORM\Entity
  */

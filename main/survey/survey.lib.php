@@ -2302,15 +2302,26 @@ class SurveyManager
 
     public static function parseMultiplicateUserList($itemList, $questions, $courseId, $surveyData)
     {
+        if (empty($itemList) || empty($questions)) {
+            return false;
+        }
+
         $surveyId = $surveyData['survey_id'];
         $classTag = '{{class_name}}';
         $studentTag = '{{student_full_name}}';
         $classCounter = 0;
+
+        $newQuestionList = [];
+        foreach ($questions as $question) {
+            $newQuestionList[$question['sort']] = $question;
+        }
+        ksort($newQuestionList);
+
         foreach ($itemList as $class) {
             $className = $class['name'];
             $users = $class['users'];
 
-            foreach ($questions as $question) {
+            foreach ($newQuestionList as $question) {
                 $text = $question['question'];
                 if (strpos($text, $classTag) !== false) {
                     $replacedText = str_replace($classTag, $className, $text);
@@ -2373,6 +2384,8 @@ class SurveyManager
                 }
             }
         }
+
+        return true;
     }
 
     /**

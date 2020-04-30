@@ -2330,6 +2330,7 @@ class SurveyManager
                         'question_comment' => 'generated',
                         'type' => $question['type'],
                         'display' => $question['horizontalvertical'],
+                        'horizontalvertical' => $question['horizontalvertical'],
                         'question' => $replacedText,
                         'survey_id' => $surveyId,
                         'question_id' => 0,

@@ -8516,7 +8516,7 @@ class Exercise
                 $invisibleSql = "SELECT e.iid
                           FROM $TBL_EXERCISES e
                           INNER JOIN $TBL_ITEM_PROPERTY ip
-                          ON (e.iid = ip.ref AND e.c_id = ip.c_id)
+                          ON (e.id = ip.ref AND e.c_id = ip.c_id)
                           WHERE
                                 ip.tool = '".TOOL_QUIZ."' AND
                                 e.c_id = $courseId AND
@@ -8546,7 +8546,7 @@ class Exercise
             $total_sql = "SELECT count(DISTINCT(e.iid)) as count
                           FROM $TBL_EXERCISES e
                           INNER JOIN $TBL_ITEM_PROPERTY ip
-                          ON (e.iid = ip.ref AND e.c_id = ip.c_id)
+                          ON (e.id = ip.ref AND e.c_id = ip.c_id)
                           WHERE
                                 ip.tool = '".TOOL_QUIZ."' AND
                                 e.c_id = $courseId AND
@@ -8558,7 +8558,7 @@ class Exercise
 
             $sql = "SELECT DISTINCT e.* FROM $TBL_EXERCISES e
                     INNER JOIN $TBL_ITEM_PROPERTY ip
-                    ON (e.iid = ip.ref AND e.c_id = ip.c_id)
+                    ON (e.id = ip.ref AND e.c_id = ip.c_id)
                     WHERE
                          ip.tool = '".TOOL_QUIZ."' AND
                          e.c_id = $courseId AND

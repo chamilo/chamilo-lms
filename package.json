@@ -12,7 +12,7 @@
     "copy-webpack-plugin": "^5.0",
     "filemanager-webpack-plugin": "^2.0.5",
     "free-jqgrid": "https://github.com/chamilo/jqGrid.git#bs4",
-    "jquery": "^3.4",
+    "jquery": "^3.5",
     "node-sass": "^4.9",
     "popper.js": "^1.14.7",
     "sass-loader": "^7.0",

@@ -104,11 +104,19 @@ if (isset($_POST['action']) && $_POST['action'] && isset($_POST['id']) && is_arr
                 $result = SurveyManager::sendToTutors($value);
                 if ($result) {
                     Display::addFlash(
-                        Display::return_message(get_lang('InvitationHasBeenSent').': '.$surveyData['title'], 'confirmation', false)
+                        Display::return_message(
+                            get_lang('InvitationHasBeenSent').': '.$surveyData['title'],
+                            'confirmation',
+                            false
+                        )
                     );
                 } else {
                     Display::addFlash(
-                        Display::return_message(get_lang('InvitationHasBeenNotSent').': '.$surveyData['title'], 'warning', false)
+                        Display::return_message(
+                            get_lang('InvitationHasBeenNotSent').': '.$surveyData['title'],
+                            'warning',
+                            false
+                        )
                     );
                 }
                 break;

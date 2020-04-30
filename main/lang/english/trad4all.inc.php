@@ -8508,4 +8508,10 @@ $SubscriptionCount = "Subscription count";
 $VoteCount = "Vote count";
 $ExportAsCompactCSV = "Export as compact CSV";
 $PromotedMessages = "Promoted messages";
+$SendToGroupTutors = "Publish for group tutors";
+$GroupSurveyX = "Group survey for %s";
+$HelloXGroupX = "Hi %s <br/><br/>As group tutor for the group %s you are invited to participate at the following survey :";
+$SurveyXMultiplicated = "Survey %s multiplicated";
+$SurveyXNotMultiplicated = "Survey %s not multiplicated";
+$ExportSurveyResults = "Export survey results";
 ?>

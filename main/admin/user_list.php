@@ -365,7 +365,6 @@ function prepare_user_sql_query($getCount)
     $sql .= $extraConditions;
 
     $variables = Session::read('variables_to_show', []);
-
     $extraFields = api_get_configuration_value('user_search_on_extra_fields');
 
     if (!empty($extraFields) && isset($extraFields['extra_fields']) && isset($_GET['keyword'])) {
@@ -418,7 +417,7 @@ function prepare_user_sql_query($getCount)
             }
         }
 
-        if (!empty($extraFieldHasData)) {
+        if (!empty($extraFieldHasData) && !empty($extraFieldResult)) {
             $sql .= " AND (u.id IN ('".implode("','", $extraFieldResult)."') $extraConditions ) ";
         }
     }

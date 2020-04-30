@@ -1,3 +1,7 @@
+{{ settings_form }}
+
+{{ 'RecordList'|get_plugin_lang('BBBPlugin') }}
+
 {{ search_form }}
 <table class="table table-hover table-striped">
     <thead>

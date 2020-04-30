@@ -60,10 +60,10 @@ class LegacyListener
         $allowedCreateCourse = false;
         $userStatus = null;
         if ($userObject instanceof UserInterface) {
-            $userInfo = api_get_user_info($userObject->getId());
+            $userInfo = api_get_user_info_from_entity($userObject);
             if ($userInfo) {
                 $userStatus = $userObject->getStatus();
-                $isAdmin = $userObject->hasRole('ROLE_ADMIN');
+                $isAdmin = $userInfo['is_admin'];
             }
             $allowedCreateCourse = 1 === $userStatus;
         }
@@ -94,7 +94,7 @@ class LegacyListener
         );*/
         //$twig->addGlobal('current_locale', $request->getLocale());
         //$twig->addGlobal('available_locales', $languages);
-        $twig->addGlobal('show_toolbar', \Template::isToolBarDisplayedForUser() ? 1 : 0);
+        //$twig->addGlobal('show_toolbar', \Template::isToolBarDisplayedForUser() ? 1 : 0);
 
         // Extra content
         $extraHeader = '';

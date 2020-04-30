@@ -13,6 +13,7 @@ use Symfony\Bridge\Twig\Mime\TemplatedEmail;
 use Symfony\Component\Finder\Finder;
 use Symfony\Component\Mime\Address;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
+use Symfony\Component\Security\Core\User\UserInterface;
 
 /**
  * This is a code library for Chamilo.
@@ -1404,7 +1405,7 @@ function _api_format_user($user, $add_password = false, $loadAvatars = true)
         $result['avatar_small'] = '';
         $result['avatar_medium'] = '';
 
-        if (!isset($user['avatar'])) {
+        /*if (!isset($user['avatar'])) {
             $originalFile = UserManager::getUserPicture(
                 $user_id,
                 USER_IMAGE_SIZE_ORIGINAL,
@@ -1442,7 +1443,7 @@ function _api_format_user($user, $add_password = false, $loadAvatars = true)
             $result['avatar_medium'] = $mediumFile;
         } else {
             $result['avatar_medium'] = $user['avatar_medium'];
-        }
+        }*/
 
         $urlImg = api_get_path(WEB_IMG_PATH);
         $iconStatus = '';
@@ -1592,6 +1593,238 @@ function api_get_user_info(
     }
 
     return $user;
+}
+
+function api_get_user_info_from_entity(
+    User $user,
+    $checkIfUserOnline = false,
+    $showPassword = false,
+    $loadExtraData = false,
+    $loadOnlyVisibleExtraData = false,
+    $loadAvatars = true,
+    $loadCertificate = false
+) {
+    if (!$user instanceof UserInterface) {
+        return false;
+    }
+
+    // Make sure user_id is safe
+    $user_id = (int) $user->getId();
+
+    if (empty($user_id)) {
+        $userFromSession = Session::read('_user');
+
+        if (isset($userFromSession) && !empty($userFromSession)) {
+            return $userFromSession;
+        }
+
+        return false;
+    }
+
+    $result = [];
+    $result['user_is_online_in_chat'] = 0;
+    if ($checkIfUserOnline) {
+        $use_status_in_platform = user_is_online($user_id);
+        $result['user_is_online'] = $use_status_in_platform;
+        $user_online_in_chat = 0;
+        if ($use_status_in_platform) {
+            $user_status = UserManager::get_extra_user_data_by_field(
+                $user_id,
+                'user_chat_status',
+                false,
+                true
+            );
+            if (1 == (int) $user_status['user_chat_status']) {
+                $user_online_in_chat = 1;
+            }
+        }
+        $result['user_is_online_in_chat'] = $user_online_in_chat;
+    }
+
+    if ($loadExtraData) {
+        $fieldValue = new ExtraFieldValue('user');
+        $result['extra'] = $fieldValue->getAllValuesForAnItem(
+            $user_id,
+            $loadOnlyVisibleExtraData
+        );
+    }
+
+    $result['username'] = $user->getUsername();
+    $result['firstname'] = $user->getFirstname();
+    $result['lastname'] = $user->getLastname();
+    $result['email'] = $result['mail'] = $user->getEmail();
+    $result['complete_name'] = api_get_person_name($result['firstname'], $result['lastname']);
+    $result['complete_name_with_username'] = $result['complete_name'];
+
+    if (!empty($result['username']) && 'false' === api_get_setting('profile.hide_username_with_complete_name')) {
+        $result['complete_name_with_username'] = $result['complete_name'].' ('.$result['username'].')';
+    }
+
+    $showEmail = 'true' === api_get_setting('show_email_addresses');
+    if (!empty($result['email'])) {
+        $result['complete_name_with_email_forced'] = $result['complete_name'].' ('.$result['email'].')';
+        if ($showEmail) {
+            $result['complete_name_with_email'] = $result['complete_name'].' ('.$result['email'].')';
+        }
+    } else {
+        $result['complete_name_with_email'] = $result['complete_name'];
+        $result['complete_name_with_email_forced'] = $result['complete_name'];
+    }
+
+    // Kept for historical reasons
+    $result['firstName'] = $result['firstname'];
+    $result['lastName'] = $result['lastname'];
+
+    $attributes = [
+        'picture_uri',
+        'last_login',
+        'user_is_online',
+    ];
+
+    $result['phone'] = $user->getPhone();
+    $result['address'] = $user->getAddress();
+    $result['official_code'] = $user->getOfficialCode();
+    $result['active'] = $user->getActive();
+    $result['auth_source'] = $user->getAuthSource();
+    $result['language'] = $user->getLanguage();
+    $result['creator_id'] = $user->getCreatorId();
+    $result['registration_date'] = $user->getRegistrationDate()->format('Y-m-d H:i:s');
+    $result['hr_dept_id'] = $user->getHrDeptId();
+    $result['expiration_date'] = $user->getExpirationDate()->format('Y-m-d H:i:s');
+    $result['last_login'] = $user->getLastLogin()->format('Y-m-d H:i:s');
+    $result['competences'] = $user->getCompetences();
+    $result['diplomas'] = $user->getDiplomas();
+    $result['teach'] = $user->getTeach();
+    $result['openarea'] = $user->getOpenarea();
+    $user_id = (int) $user->getId();
+
+    // Maintain the user_id index for backwards compatibility
+    $result['user_id'] = $result['id'] = $user_id;
+
+    if ($loadCertificate) {
+        $hasCertificates = Certificate::getCertificateByUser($user_id);
+        $result['has_certificates'] = 0;
+        if (!empty($hasCertificates)) {
+            $result['has_certificates'] = 1;
+        }
+    }
+
+    $result['icon_status'] = '';
+    $result['icon_status_medium'] = '';
+    $result['is_admin'] = UserManager::is_admin($user_id);
+
+    // Getting user avatar.
+    if ($loadAvatars) {
+        $result['avatar'] = '';
+        $result['avatar_no_query'] = '';
+        $result['avatar_small'] = '';
+        $result['avatar_medium'] = '';
+
+        /*if (!isset($user['avatar'])) {
+            $originalFile = UserManager::getUserPicture(
+                $user_id,
+                USER_IMAGE_SIZE_ORIGINAL,
+                null,
+                $result
+            );
+            $result['avatar'] = $originalFile;
+            $avatarString = explode('?', $result['avatar']);
+            $result['avatar_no_query'] = reset($avatarString);
+        } else {
+            $result['avatar'] = $user['avatar'];
+            $avatarString = explode('?', $user['avatar']);
+            $result['avatar_no_query'] = reset($avatarString);
+        }
+
+        if (!isset($user['avatar_small'])) {
+            $smallFile = UserManager::getUserPicture(
+                $user_id,
+                USER_IMAGE_SIZE_SMALL,
+                null,
+                $result
+            );
+            $result['avatar_small'] = $smallFile;
+        } else {
+            $result['avatar_small'] = $user['avatar_small'];
+        }
+
+        if (!isset($user['avatar_medium'])) {
+            $mediumFile = UserManager::getUserPicture(
+                $user_id,
+                USER_IMAGE_SIZE_MEDIUM,
+                null,
+                $result
+            );
+            $result['avatar_medium'] = $mediumFile;
+        } else {
+            $result['avatar_medium'] = $user['avatar_medium'];
+        }*/
+
+        //$urlImg = api_get_path(WEB_IMG_PATH);
+        $urlImg = '/';
+        $iconStatus = '';
+        $iconStatusMedium = '';
+
+        switch ($user->getStatus()) {
+            case STUDENT:
+                if ($result['has_certificates']) {
+                    $iconStatus = $urlImg.'icons/svg/identifier_graduated.svg';
+                } else {
+                    $iconStatus = $urlImg.'icons/svg/identifier_student.svg';
+                }
+                break;
+            case COURSEMANAGER:
+                if ($result['is_admin']) {
+                    $iconStatus = $urlImg.'icons/svg/identifier_admin.svg';
+                } else {
+                    $iconStatus = $urlImg.'icons/svg/identifier_teacher.svg';
+                }
+                break;
+            case STUDENT_BOSS:
+                $iconStatus = $urlImg.'icons/svg/identifier_teacher.svg';
+                break;
+        }
+
+        if (!empty($iconStatus)) {
+            $iconStatusMedium = '<img src="'.$iconStatus.'" width="32px" height="32px">';
+            $iconStatus = '<img src="'.$iconStatus.'" width="22px" height="22px">';
+        }
+
+        $result['icon_status'] = $iconStatus;
+        $result['icon_status_medium'] = $iconStatusMedium;
+    }
+
+    if (isset($result['user_is_online'])) {
+        $result['user_is_online'] = true == $result['user_is_online'] ? 1 : 0;
+    }
+    if (isset($result['user_is_online_in_chat'])) {
+        $result['user_is_online_in_chat'] = (int) $result['user_is_online_in_chat'];
+    }
+
+    $result['password'] = '';
+    if ($showPassword) {
+        $result['password'] = $user->getPassword();
+    }
+
+    if (isset($result['profile_completed'])) {
+        $result['profile_completed'] = $result['profile_completed'];
+    }
+
+    $result['profile_url'] = api_get_path(WEB_CODE_PATH).'social/profile.php?u='.$user_id;
+
+    // Send message link
+    $sendMessage = api_get_path(WEB_AJAX_PATH).'user_manager.ajax.php?a=get_user_popup&user_id='.$user_id;
+    $result['complete_name_with_message_link'] = Display::url(
+        $result['complete_name_with_username'],
+        $sendMessage,
+        ['class' => 'ajax']
+    );
+
+    if (isset($result['extra'])) {
+        $result['extra'] = $result['extra'];
+    }
+
+    return $result;
 }
 
 /**
@@ -4647,9 +4880,8 @@ function api_get_language_info($languageId)
 function api_get_language_from_iso($code)
 {
     $em = Database::getManager();
-    $language = $em->getRepository('ChamiloCoreBundle:Language')->findOneBy(['isocode' => $code]);
 
-    return $language;
+    return $em->getRepository('ChamiloCoreBundle:Language')->findOneBy(['isocode' => $code]);
 }
 
 /**

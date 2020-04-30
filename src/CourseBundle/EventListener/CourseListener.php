@@ -80,7 +80,7 @@ class CourseListener
                 /** @var EntityManager $em */
                 $em = $container->get('doctrine')->getManager();
                 $course = $em->getRepository('ChamiloCoreBundle:Course')->find($courseId);
-                dump("get course from DB $courseId");
+                //dump("get course from DB $courseId");
                 $courseInfo = api_get_course_info($course->getCode());
             }
 
@@ -116,12 +116,12 @@ class CourseListener
                 $sessionHandler->remove('session');
                 // Check if user is allowed to this course
                 // See CourseVoter.php
-                dump("Checkisgranted");
+                //dump("Checkisgranted");
                 if (false === $checker->isGranted(CourseVoter::VIEW, $course)) {
                     throw new AccessDeniedException($translator->trans('Unauthorised access to course!'));
                 }
             } else {
-                dump("Load chamilo session from DB");
+                //dump("Load chamilo session from DB");
                 $session = $em->getRepository('ChamiloCoreBundle:Session')->find($sessionId);
                 if ($session) {
                     if (false === $session->hasCourse($course)) {

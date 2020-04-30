@@ -106,13 +106,11 @@ trait ResourceControllerTrait
         return $parentResourceNode;
     }
 
-    private function setBreadCrumb(Request $request)
+    private function setBreadCrumb(Request $request, ResourceNode $resourceNode)
     {
         $tool = $request->get('tool');
-        $type = $request->get('type');
         $resourceNodeId = $request->get('id');
         $routeParams = $this->getResourceParams($request);
-
         $baseNodeId = $this->getCourse()->getResourceNode()->getId();
 
         if (!empty($resourceNodeId)) {
@@ -132,13 +130,13 @@ trait ResourceControllerTrait
             $settings = $repo->getResourceSettings();
 
             /** @var ResourceInterface $originalResource */
-            $originalResource = $repo->findOneBy(['resourceNode' => $resourceNodeId]);
-            if (null === $originalResource) {
+            //$originalResource = $repo->findOneBy(['resourceNode' => $resourceNodeId]);
+            if (null === $resourceNode) {
                 return;
             }
+            //var_dump($resourceNode->getTitle());            throw new \Exception('22');
+            $parentList = $resourceNode->getPathForDisplayToArray($baseNodeId);
 
-            $originalParent = $originalResource->getResourceNode();
-            $parentList = $originalParent->getPathForDisplayToArray($baseNodeId);
 //            var_dump($originalParent->getPath(), $originalParent->getPathForDisplay());
 
 //            $parentList = [];
@@ -177,13 +175,14 @@ trait ResourceControllerTrait
                 );
             }
 
+
             $params = $routeParams;
-            $params['id'] = $originalParent->getId();
-            if (false === $settings->isAllowNodeCreation() || $originalResource->getResourceNode()->hasResourceFile()) {
-                $breadcrumb->addChild($originalResource->getResourceName());
+            $params['id'] = $resourceNode->getId();
+            if (false === $settings->isAllowNodeCreation() || $resourceNode->hasResourceFile()) {
+                $breadcrumb->addChild($resourceNode->getTitle());
             } else {
                 $breadcrumb->addChild(
-                    $originalResource->getResourceName(),
+                    $resourceNode->getTitle(),
                     [
                         'uri' => $this->generateUrl('chamilo_core_resource_list', $params),
                     ]

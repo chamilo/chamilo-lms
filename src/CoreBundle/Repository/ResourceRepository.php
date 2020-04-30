@@ -27,6 +27,7 @@ use Cocur\Slugify\SlugifyInterface;
 use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\EntityRepository;
 use Doctrine\ORM\EntityRepository as BaseEntityRepository;
+use Doctrine\ORM\Query\Expr\Join;
 use Doctrine\ORM\QueryBuilder;
 use League\Flysystem\FilesystemInterface;
 use Symfony\Component\Filesystem\Exception\FileNotFoundException;
@@ -673,24 +674,30 @@ class ResourceRepository extends BaseEntityRepository
 
     public function getResourceFromResourceNode(int $resourceNodeId): ?AbstractResource
     {
-        /*$repo = $this->getRepository();
-        $className = $repo->getClassName();
-        $qb = $repo->getEntityManager()->createQueryBuilder()
+        //return $this->getRepository()->findOneBy(['resourceNode' => $resourceNodeId]);
+        //$className = $this->getClassName();
+        /*var_dump(get_class($this->repository));
+        var_dump(get_class($this->getRepository()));
+        var_dump(get_class($this));*/
+        //var_dump($className);
+        // Include links
+        $qb = $this->getRepository()->createQueryBuilder('resource')
             ->select('resource')
-            ->from($className, 'resource')
+            ->addSelect('node')
+            ->addSelect('links')
+            //->addSelect('file')
+            //->from($className, 'resource')
             ->innerJoin('resource.resourceNode', 'node')
-            ->innerJoin('node.creator', 'userCreator')
-            //->innerJoin('node.resourceLinks', 'links')
-            //->leftJoin('node.resourceFile', 'file')
-
+        //    ->innerJoin('node.creator', 'userCreator')
+            ->innerJoin('node.resourceLinks', 'links')
+//            ->leftJoin('node.resourceFile', 'file')
             ->where('node.id = :id')
             ->setParameters(['id' => $resourceNodeId])
-            //->addSelect('userCreator')
+            //->addSelect('node')
         ;
 
-        return $qb->getQuery()->getSingleResult();*/
-
-        return $this->getRepository()->findOneBy(['resourceNode' => $resourceNodeId]);
+        $resource = $qb->getQuery()->getOneOrNullResult();
+        return $resource;
     }
 
     public function rowCanBeEdited(RowAction $action, Row $row, Session $session = null): ?RowAction

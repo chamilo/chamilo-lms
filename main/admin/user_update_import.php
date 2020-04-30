@@ -8,6 +8,7 @@
  */
 
 use Ddeboer\DataImport\Reader\CsvReader;
+use Symfony\Component\DomCrawler\Crawler;
 
 /**
  * Validate the imported data.
@@ -18,6 +19,11 @@ require_once __DIR__.'/../inc/global.inc.php';
 // Set this option to true to enforce strict purification for usenames.
 $purification_option_for_usernames = false;
 
+/**
+ * @param array $users
+ *
+ * @return array
+ */
 function validate_data($users)
 {
     global $defined_auth_sources;
@@ -29,7 +35,6 @@ function validate_data($users)
 
     foreach ($users as $user) {
         // 2. Check username, first, check whether it is empty.
-
         if (isset($user['NewUserName'])) {
             if (!UserManager::is_username_empty($user['NewUserName'])) {
                 // 2.1. Check whether username is too long.
@@ -87,8 +92,6 @@ function validate_data($users)
  *
  * @param array $users        List of users.
  * @param bool $resetPassword Optional.
- *
- * @return false|null
  */
 function updateUsers($users, $resetPassword = false)
 {
@@ -140,7 +143,7 @@ function updateUsers($users, $resetPassword = false)
             $hrDeptId = $userInfo['hr_dept_id'];
             $language = isset($user['Language']) ? $user['Language'] : $userInfo['language'];
             $sendEmail = isset($user['SendEmail']) ? $user['SendEmail'] : $userInfo['language'];
-            $userUpdated = UserManager :: update_user(
+            $userUpdated = UserManager::update_user(
                 $user_id,
                 $firstName,
                 $lastName,
@@ -169,7 +172,6 @@ function updateUsers($users, $resetPassword = false)
                 foreach ($user['Courses'] as $course) {
                     if (CourseManager::course_exists($course)) {
                         CourseManager::subscribeUser($user_id, $course, $user['Status']);
-                        $course_info = CourseManager::get_course_information($course);
                     }
                 }
             }
@@ -237,7 +239,7 @@ function parse_csv_data($file)
 
 function parse_xml_data($file)
 {
-    $crawler = new \Symfony\Component\DomCrawler\Crawler();
+    $crawler = new Crawler();
     $crawler->addXmlContent(file_get_contents($file));
     $crawler = $crawler->filter('Contacts > Contact ');
     $array = [];
@@ -371,15 +373,16 @@ if ($count_fields > 0) {
 }
 
 ?>
-<p><?php echo get_lang('CSVMustLookLike').' ('.get_lang('MandatoryFields').')'; ?> :</p>
-<blockquote>
+    <p><?php echo get_lang('CSVMustLookLike').' ('.get_lang('MandatoryFields').')'; ?> :</p>
+    <blockquote>
     <pre>
         <b>UserName</b>;LastName;FirstName;Email;NewUserName;Password;AuthSource;OfficialCode;PhoneNumber;Status;ExpiryDate;Active;Language;Courses;ClassId;
-        xxx;xxx;xxx;xxx;xxx;xxx;xxx;xxx;xxx;user/teacher/drh;YYYY-MM-DD 00:00:00;0/1;xxx;<span style="color:red;"><?php if (count($list_reponse) > 0) {
-    echo implode(';', $list_reponse).';';
-} ?></span>xxx1|xxx2|xxx3;1;<br />
+        xxx;xxx;xxx;xxx;xxx;xxx;xxx;xxx;xxx;user/teacher/drh;YYYY-MM-DD 00:00:00;0/1;xxx;<span
+            style="color:red;"><?php if (count($list_reponse) > 0) {
+                echo implode(';', $list_reponse).';';
+            } ?></span>xxx1|xxx2|xxx3;1;<br/>
     </pre>
-</blockquote>
-<p><?php
-
-Display :: display_footer();
+    </blockquote>
+    <p>
+<?php
+Display::display_footer();

@@ -8536,4 +8536,10 @@ $SubscriptionCount = "Numero de suscripción";
 $VoteCount = "Numero de votos";
 $ExportAsCompactCSV = "Exportar a CSV compacto";
 $PromotedMessages = "Mensajes importantes";
+$SendToGroupTutors = "Publicar a los tutores de grupo";
+$GroupSurveyX = "Encuesta del groupo %s";
+$HelloXGroupX = "Hola %s<br/><br/>Como tutor del grupo %s te invitamos a participar en la siguiente encuesta:";
+$SurveyXMultiplicated = "Encuesta %s demultiplicada";
+$SurveyXNotMultiplicated = "Encuesta %s no demultiplicada";
+$ExportSurveyResults = "Exportar resultados de encuestas";
 ?>

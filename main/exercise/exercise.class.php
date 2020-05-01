@@ -8510,64 +8510,77 @@ class Exercise
                     ORDER BY title
                     LIMIT $from , $limit";
         } else {
+            // Only for students
             if (empty($sessionId)) {
-                $condition_session = ' AND ( ip.session_id = 0 OR ip.session_id IS NULL) ';
+                $condition_session = ' AND ( session_id = 0 OR session_id IS NULL) ';
+                $total_sql = "SELECT count(DISTINCT(e.iid)) as count
+                              FROM $TBL_EXERCISES e
+                              WHERE
+                                    e.c_id = $courseId AND
+                                    e.active = 1
+                                    $condition_session
+                                    $categoryCondition
+                                    $keywordCondition
+                              ";
+
+                $sql = "SELECT DISTINCT e.* FROM $TBL_EXERCISES e
+                        WHERE
+                             e.c_id = $courseId AND
+                             e.active = 1
+                             $condition_session
+                             $categoryCondition
+                             $keywordCondition
+                        ORDER BY title
+                        LIMIT $from , $limit";
             } else {
                 $invisibleSql = "SELECT e.iid
-                          FROM $TBL_EXERCISES e
-                          INNER JOIN $TBL_ITEM_PROPERTY ip
-                          ON (e.id = ip.ref AND e.c_id = ip.c_id)
-                          WHERE
-                                ip.tool = '".TOOL_QUIZ."' AND
-                                e.c_id = $courseId AND
-                                e.active = 1 AND
-                                ip.visibility = 0 AND
-                                ip.session_id = $sessionId
-                                $categoryCondition
-                                $keywordCondition
-                          ";
+                                  FROM $TBL_EXERCISES e
+                                  INNER JOIN $TBL_ITEM_PROPERTY ip
+                                  ON (e.id = ip.ref AND e.c_id = ip.c_id)
+                                  WHERE
+                                        ip.tool = '".TOOL_QUIZ."' AND
+                                        e.c_id = $courseId AND
+                                        e.active = 1 AND
+                                        ip.visibility = 0 AND
+                                        ip.session_id = $sessionId
+                                        $categoryCondition
+                                        $keywordCondition
+                                  ";
 
                 $result = Database::query($invisibleSql);
                 $result = Database::store_result($result);
                 $hiddenFromSessionCondition = ' 1=1 ';
-
                 if (!empty($result)) {
                     $hiddenFromSession = implode("','", array_column($result, 'iid'));
                     $hiddenFromSessionCondition = " e.iid not in ('$hiddenFromSession')";
                 }
+
                 $condition_session = " AND (
-                        (ip.session_id = $sessionId OR ip.session_id = 0 OR ip.session_id IS NULL) AND
+                        (e.session_id = $sessionId OR e.session_id = 0 OR e.session_id IS NULL) AND
                         $hiddenFromSessionCondition
                 )
                 ";
+
+                // Only for students
+                $total_sql = "SELECT count(DISTINCT(e.iid)) as count
+                              FROM $TBL_EXERCISES e
+                              WHERE
+                                    e.c_id = $courseId AND
+                                    e.active = 1
+                                    $condition_session
+                                    $categoryCondition
+                                    $keywordCondition
+                              ";
+                $sql = "SELECT DISTINCT e.* FROM $TBL_EXERCISES e
+                        WHERE
+                             e.c_id = $courseId AND
+                             e.active = 1
+                             $condition_session
+                             $categoryCondition
+                             $keywordCondition
+                        ORDER BY title
+                        LIMIT $from , $limit";
             }
-
-            // Only for students
-            $total_sql = "SELECT count(DISTINCT(e.iid)) as count
-                          FROM $TBL_EXERCISES e
-                          INNER JOIN $TBL_ITEM_PROPERTY ip
-                          ON (e.id = ip.ref AND e.c_id = ip.c_id)
-                          WHERE
-                                ip.tool = '".TOOL_QUIZ."' AND
-                                e.c_id = $courseId AND
-                                e.active = 1
-                                $condition_session
-                                $categoryCondition
-                                $keywordCondition
-                          ";
-
-            $sql = "SELECT DISTINCT e.* FROM $TBL_EXERCISES e
-                    INNER JOIN $TBL_ITEM_PROPERTY ip
-                    ON (e.id = ip.ref AND e.c_id = ip.c_id)
-                    WHERE
-                         ip.tool = '".TOOL_QUIZ."' AND
-                         e.c_id = $courseId AND
-                         e.active = 1
-                         $condition_session
-                         $categoryCondition
-                         $keywordCondition
-                    ORDER BY title
-                    LIMIT $from , $limit";
         }
 
         $result = Database::query($sql);

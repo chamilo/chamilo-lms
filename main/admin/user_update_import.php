@@ -90,8 +90,8 @@ function validate_data($users)
 /**
  * Update users from the imported data.
  *
- * @param array $users        List of users.
- * @param bool $resetPassword Optional.
+ * @param array $users         List of users.
+ * @param bool  $resetPassword Optional.
  */
 function updateUsers($users, $resetPassword = false)
 {
@@ -379,8 +379,8 @@ if ($count_fields > 0) {
         <b>UserName</b>;LastName;FirstName;Email;NewUserName;Password;AuthSource;OfficialCode;PhoneNumber;Status;ExpiryDate;Active;Language;Courses;ClassId;
         xxx;xxx;xxx;xxx;xxx;xxx;xxx;xxx;xxx;user/teacher/drh;YYYY-MM-DD 00:00:00;0/1;xxx;<span
             style="color:red;"><?php if (count($list_reponse) > 0) {
-                echo implode(';', $list_reponse).';';
-            } ?></span>xxx1|xxx2|xxx3;1;<br/>
+    echo implode(';', $list_reponse).';';
+} ?></span>xxx1|xxx2|xxx3;1;<br/>
     </pre>
     </blockquote>
     <p>

@@ -4,16 +4,22 @@
 
 namespace Chamilo\CoreBundle\Entity;
 
+use ApiPlatform\Core\Annotation\ApiResource;
 use APY\DataGridBundle\Grid\Mapping as GRID;
 use Chamilo\CoreBundle\Entity\Resource\AbstractResource;
 use Chamilo\CoreBundle\Entity\Resource\ResourceInterface;
 use Chamilo\CourseBundle\Traits\PersonalResourceTrait;
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Timestampable\Traits\TimestampableEntity;
+use Symfony\Component\Serializer\Annotation\Groups;
 
 /**
  * Illustration.
  *
+ * @ApiResource(
+ *      attributes={"security"="is_granted('ROLE_ADMIN')"},
+ *      normalizationContext={"groups"={"illustration:read"}}
+ * )
  * @ORM\Table(name="illustration")
  * @ORM\Entity
  * @GRID\Source(columns="id, name, resourceNode.createdAt", filterable=false, groups={"resource"})
@@ -34,7 +40,7 @@ class Illustration extends AbstractResource implements ResourceInterface
 
     /**
      * @var string
-     *
+     * @Groups({"illustration:read"})
      * @ORM\Column(name="name", type="string", length=255, nullable=false)
      */
     protected $name;

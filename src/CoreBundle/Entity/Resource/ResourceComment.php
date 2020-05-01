@@ -4,17 +4,23 @@
 
 namespace Chamilo\CoreBundle\Entity\Resource;
 
+use ApiPlatform\Core\Annotation\ApiResource;
+use Chamilo\CoreBundle\Traits\TimestampableAgoTrait;
 use Chamilo\UserBundle\Entity\User;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Mapping\Annotation as Gedmo;
 use Gedmo\Timestampable\Traits\TimestampableEntity;
 use Gedmo\Tree\Traits\NestedSetEntity;
-use JMS\Serializer\Annotation as JMS;
-use JMS\Serializer\Annotation\Groups;
+use Symfony\Component\Serializer\Annotation\Groups;
 use Symfony\Component\Validator\Constraints as Assert;
 
 /**
+ * @ApiResource(
+ *      attributes={"security"="is_granted('ROLE_ADMIN')"},
+ *      normalizationContext={"groups"={"comment:read"}}
+ * )
+ *
  * @Gedmo\Tree(type="nested")
  * @ORM\Entity(repositoryClass="Gedmo\Tree\Entity\Repository\NestedTreeRepository")
  * @ORM\Table(name="resource_comment")
@@ -22,13 +28,14 @@ use Symfony\Component\Validator\Constraints as Assert;
 class ResourceComment
 {
     use TimestampableEntity;
+    use TimestampableAgoTrait;
     use NestedSetEntity;
 
     /**
      * @ORM\Id
      * @ORM\Column(type="integer")
      * @ORM\GeneratedValue(strategy="AUTO")
-     * @Groups({"list"})
+     * @Groups({"comment:read"})
      */
     protected $id;
 
@@ -41,7 +48,7 @@ class ResourceComment
     /**
      * @var User
      *
-     * @Groups({"list"})
+     * @Groups({"comment:read"})
      * @ORM\ManyToOne(targetEntity="Chamilo\UserBundle\Entity\User")
      * @ORM\JoinColumn(name="author_id", referencedColumnName="id", onDelete="SET NULL")
      */
@@ -50,7 +57,7 @@ class ResourceComment
     /**
      * @var string
      *
-     * @Groups({"list"})
+     * @Groups({"comment:read"})
      * @Assert\NotBlank()
      *
      * @ORM\Column(name="content", type="string", nullable=false)
@@ -70,20 +77,18 @@ class ResourceComment
 
     /**
      * @var \DateTime
-     * @Groups({"list"})
+     * @Groups({"comment:read"})
      * @Gedmo\Timestampable(on="create")
      * @ORM\Column(type="datetime")
-     * @JMS\Type("DateTime")
      */
     protected $createdAt;
 
     /**
      * @var \DateTime
      *
-     * @Groups({"list"})
+     * @Groups({"comment:read"})
      * @Gedmo\Timestampable(on="update")
      * @ORM\Column(type="datetime")
-     * @JMS\Type("DateTime")
      */
     protected $updatedAt;
 
@@ -100,6 +105,7 @@ class ResourceComment
 
     public function __construct()
     {
+        $this->createdAt = new \DateTimeImmutable();
         $this->content = '';
         $this->children = new ArrayCollection();
     }

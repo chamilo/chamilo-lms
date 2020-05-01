@@ -6,6 +6,9 @@ namespace Chamilo\CoreBundle\Repository;
 
 use Chamilo\CoreBundle\Entity\Course;
 use Chamilo\CoreBundle\Entity\Resource\ResourceNode;
+use Chamilo\CoreBundle\Entity\Session;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Criteria;
 use Doctrine\ORM\Query\Expr\Join;
 use Doctrine\ORM\QueryBuilder;
 
@@ -16,6 +19,26 @@ use Doctrine\ORM\QueryBuilder;
  */
 class CourseRepository extends ResourceRepository
 {
+    /**
+     * @param Session $session
+     *
+     * @return ArrayCollection
+     */
+    public function getTools(Course $course, Session $session = null)
+    {
+        $orWhere = Criteria::expr()->eq('sessionId', 0);
+
+        if ($session) {
+            $orWhere = Criteria::expr()->in('sessionId', [0, $session->getId()]);
+        }
+
+        $criteria = Criteria::create()
+            ->where(Criteria::expr()->isNull('sessionId'))
+            ->orWhere($orWhere);
+
+        return $course->getTools()->matching($criteria);
+    }
+
     public function deleteCourse(Course $course): void
     {
         $em = $this->getEntityManager();

@@ -4,6 +4,10 @@
 
 namespace Chamilo\CoreBundle\Entity;
 
+use ApiPlatform\Core\Annotation\ApiFilter;
+use ApiPlatform\Core\Annotation\ApiResource;
+use ApiPlatform\Core\Bridge\Doctrine\Orm\Filter\SearchFilter;
+use ApiPlatform\Core\Serializer\Filter\PropertyFilter;
 use Chamilo\CoreBundle\Entity\Resource\AbstractResource;
 use Chamilo\CoreBundle\Entity\Resource\ResourceInterface;
 use Chamilo\CourseBundle\Entity\CGroupInfo;
@@ -14,10 +18,20 @@ use Doctrine\Common\Collections\Criteria;
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Mapping\Annotation as Gedmo;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
+use Symfony\Component\Serializer\Annotation\Groups;
 use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * Class Course.
+ *
+ * @ApiResource(
+ *     attributes={"security"="is_granted('ROLE_ADMIN')"},
+ *     normalizationContext={"groups"={"course:read"}, "swagger_definition_name"="Read"},
+ *     denormalizationContext={"groups"={"course:write"}},
+ * )
+ *
+ * @ApiFilter(SearchFilter::class, properties={"title": "partial", "code": "partial"})
+ * @ApiFilter(PropertyFilter::class)
  *
  * @ORM\HasLifecycleCallbacks
  * @ORM\Table(
@@ -29,7 +43,6 @@ use Symfony\Component\Validator\Constraints as Assert;
  * @UniqueEntity("code")
  * @UniqueEntity("visualCode")
  * @UniqueEntity("directory")
- *
  * @ORM\Entity
  * @ORM\EntityListeners({"Chamilo\CoreBundle\Entity\Listener\CourseListener"})
  */
@@ -43,7 +56,7 @@ class Course extends AbstractResource implements ResourceInterface
 
     /**
      * @var int
-     *
+     * @Groups({"course:read", "list"})
      * @ORM\Column(name="id", type="integer", nullable=false, unique=false)
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="AUTO")
@@ -51,8 +64,8 @@ class Course extends AbstractResource implements ResourceInterface
     protected $id;
 
     /**
-     * @var string
-     *
+     * @var string the course title
+     * @Groups({"course:read", "course:write", "list"})
      * @Assert\NotBlank()
      *
      * @ORM\Column(name="title", type="string", length=250, nullable=true, unique=false)
@@ -171,7 +184,7 @@ class Course extends AbstractResource implements ResourceInterface
 
     /**
      * @var string
-     *
+     * @Groups({"course:read", "list"})
      * @Assert\NotBlank()
      *
      * @Gedmo\Slug(
@@ -193,7 +206,7 @@ class Course extends AbstractResource implements ResourceInterface
 
     /**
      * @var string
-     *
+     * @Groups({"course:read", "list"})
      * @ORM\Column(name="course_language", type="string", length=20, nullable=true, unique=false)
      */
     protected $courseLanguage;
@@ -207,7 +220,7 @@ class Course extends AbstractResource implements ResourceInterface
 
     /**
      * @var CourseCategory
-     *
+     * @Groups({"course:read", "list"})
      * @ORM\ManyToOne(targetEntity="Chamilo\CoreBundle\Entity\CourseCategory", inversedBy="courses")
      * @ORM\JoinColumn(name="category_id", referencedColumnName="id")
      */
@@ -215,7 +228,7 @@ class Course extends AbstractResource implements ResourceInterface
 
     /**
      * @var int
-     *
+     * @Groups({"course:read", "list"})
      * @Assert\NotBlank()
      *
      * @ORM\Column(name="visibility", type="integer", nullable=true, unique=false)
@@ -245,14 +258,14 @@ class Course extends AbstractResource implements ResourceInterface
 
     /**
      * @var string
-     *
+     * @Groups({"course:read", "list"})
      * @ORM\Column(name="department_name", type="string", length=30, nullable=true, unique=false)
      */
     protected $departmentName;
 
     /**
      * @var string
-     *
+     * @Groups({"course:read", "list"})
      * @Assert\Url()
      *
      * @ORM\Column(name="department_url", type="string", length=180, nullable=true, unique=false)
@@ -289,7 +302,7 @@ class Course extends AbstractResource implements ResourceInterface
 
     /**
      * @var \DateTime
-     *
+     * @Groups({"course:read", "list"})
      * @ORM\Column(name="expiration_date", type="datetime", nullable=true, unique=false)
      */
     protected $expirationDate;
@@ -367,6 +380,7 @@ class Course extends AbstractResource implements ResourceInterface
 
         $this->users = new ArrayCollection();
         $this->urls = new ArrayCollection();
+        $this->tools = new ArrayCollection();
         $this->gradebookCategories = new ArrayCollection();
         $this->gradebookEvaluations = new ArrayCollection();
         $this->gradebookLinks = new ArrayCollection();
@@ -391,24 +405,9 @@ class Course extends AbstractResource implements ResourceInterface
         return $this->sessions;
     }
 
-    /**
-     * @param Session $session
-     *
-     * @return ArrayCollection
-     */
-    public function getTools(Session $session = null)
+    public function getTools()
     {
-        $orWhere = Criteria::expr()->eq('sessionId', 0);
-
-        if ($session) {
-            $orWhere = Criteria::expr()->in('sessionId', [0, $session->getId()]);
-        }
-
-        $criteria = Criteria::create()
-            ->where(Criteria::expr()->isNull('sessionId'))
-            ->orWhere($orWhere);
-
-        return $this->tools->matching($criteria);
+        return $this->tools;
     }
 
     /**

@@ -161,7 +161,8 @@
         "twig/extensions": "^1.5",
         "vich/uploader-bundle": "^1.13",
         "webit/eval-math": "~1.0",
-        "api-platform/api-pack": "^1.2"
+        "api-platform/api-pack": "^1.2",
+        "nesbot/carbon": "^2.33"
     },
     "config": {
         "component-dir": "public/assets"

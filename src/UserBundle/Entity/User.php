@@ -4,6 +4,10 @@
 
 namespace Chamilo\UserBundle\Entity;
 
+use ApiPlatform\Core\Annotation\ApiFilter;
+use ApiPlatform\Core\Annotation\ApiResource;
+use ApiPlatform\Core\Bridge\Doctrine\Orm\Filter\BooleanFilter;
+use ApiPlatform\Core\Bridge\Doctrine\Orm\Filter\SearchFilter;
 use Chamilo\CoreBundle\Entity\AccessUrl;
 use Chamilo\CoreBundle\Entity\AccessUrlRelUser;
 use Chamilo\CoreBundle\Entity\Course;
@@ -16,15 +20,24 @@ use Doctrine\Common\Collections\Collection;
 use Doctrine\Common\Collections\Criteria;
 use Doctrine\ORM\Event\LifecycleEventArgs;
 use Doctrine\ORM\Mapping as ORM;
-use JMS\Serializer\Annotation\Groups;
 use Sonata\UserBundle\Entity\BaseUser;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\Security\Core\User\EquatableInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
+use Symfony\Component\Serializer\Annotation\Groups;
 use Symfony\Component\Validator\Constraints as Assert;
 use Symfony\Component\Validator\Mapping\ClassMetadata;
 
 /**
+ * @ApiResource(
+ *      attributes={"security"="is_granted('ROLE_ADMIN')"},
+ *      normalizationContext={"groups"={"user:read"}},
+ *      denormalizationContext={"groups"={"user:write"}},
+ * )
+ *
+ * @ApiFilter(SearchFilter::class, properties={"username": "partial", "firstname" : "partial"})
+ * @ApiFilter(BooleanFilter::class, properties={"isActive"})
+ *
  * @ORM\HasLifecycleCallbacks
  * @ORM\Table(
  *  name="user",
@@ -34,7 +47,6 @@ use Symfony\Component\Validator\Mapping\ClassMetadata;
  *  }
  * )
  * @UniqueEntity("username")
- *
  * @ORM\Entity()
  *
  * @ORM\AttributeOverrides({
@@ -83,18 +95,44 @@ class User extends BaseUser implements ThemeUser, EquatableInterface //implement
 
     /**
      * @var int
-     *
+     * @Groups({"user:read", "list"})
      * @ORM\Column(name="id", type="integer")
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="AUTO")
-     * @Groups({"list"})
      */
     protected $id;
 
     /**
-     * @Groups({"list"})
+     * @var string
+     * @Groups({"user:read", "user:write"})
+     */
+    protected $firstname;
+
+    /**
+     * @var string
+     * @Groups({"user:read", "user:write"})
+     */
+    protected $lastname;
+
+    /**
+     * @var string
+     * @Groups({"user:read", "user:write"})
+     * @Assert\NotBlank()
      */
     protected $username;
+
+    /**
+     * @var string
+     * @Groups({"user:read", "user:write"})
+     * @Assert\NotBlank()
+     * @Assert\Email()
+     */
+    protected $email;
+
+    /**
+     * @var string
+     */
+    protected $password;
 
     /**
      * @var int
@@ -102,13 +140,6 @@ class User extends BaseUser implements ThemeUser, EquatableInterface //implement
      * @ORM\Column(name="user_id", type="integer", nullable=true)
      */
     protected $userId;
-
-    /**
-     * @var string
-     *
-     * @ORM\Column(name="username", type="string", length=100, nullable=false, unique=true)
-     */
-    //protected $username;
 
     /**
      * @var string
@@ -662,10 +693,7 @@ class User extends BaseUser implements ThemeUser, EquatableInterface //implement
         $this->courses = $courses;
     }
 
-    /**
-     * @return ArrayCollection
-     */
-    public function getCourses()
+    public function getCourses(): Collection
     {
         return $this->courses;
     }

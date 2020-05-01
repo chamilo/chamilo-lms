@@ -4,22 +4,30 @@
 
 namespace Chamilo\CoreBundle\Entity\Resource;
 
-use Chamilo\CoreBundle\Entity\Course;
+use ApiPlatform\Core\Annotation\ApiFilter;
+use ApiPlatform\Core\Annotation\ApiResource;
+use ApiPlatform\Core\Serializer\Filter\PropertyFilter;
 use Chamilo\CoreBundle\Entity\Session;
+use Chamilo\CoreBundle\Traits\TimestampableAgoTrait;
 use Chamilo\UserBundle\Entity\User;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Criteria;
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Mapping\Annotation as Gedmo;
 use Gedmo\Timestampable\Traits\TimestampableEntity;
-use JMS\Serializer\Annotation as JMS;
-use JMS\Serializer\Annotation\Groups;
 use Symfony\Component\Routing\RouterInterface;
+use Symfony\Component\Serializer\Annotation\Groups;
 use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * Base entity for all resources.
  *
+ * @ApiResource(
+ *     attributes={"security"="is_granted('ROLE_ADMIN')"},
+ *     collectionOperations={"get"},
+ *     normalizationContext={"groups"={"resource_node:read", "document:read"}}
+ * )
+ * @ApiFilter(PropertyFilter::class)
  * @ORM\Entity(repositoryClass="Chamilo\CoreBundle\Repository\ResourceNodeRepository")
  *
  * @ORM\Table(name="resource_node")
@@ -30,9 +38,10 @@ class ResourceNode
 {
     public const PATH_SEPARATOR = '`';
     use TimestampableEntity;
+    use TimestampableAgoTrait;
 
     /**
-     * @Groups({"list"})
+     * @Groups({"resource_node:read", "document:read"})
      * @ORM\Id
      * @ORM\Column(type="integer")
      * @ORM\GeneratedValue(strategy="AUTO")
@@ -41,7 +50,7 @@ class ResourceNode
 
     /**
      * @Assert\NotBlank()
-     * @Groups({"list"})
+     * @Groups({"resource_node:read", "document:read"})
      * @Gedmo\TreePathSource
      *
      * @ORM\Column(name="title", type="string", length=255, nullable=false)
@@ -57,7 +66,7 @@ class ResourceNode
     protected $slug;
 
     /**
-     * @ORM\ManyToOne(targetEntity="ResourceType", inversedBy="resourceNodes")
+     * @ORM\ManyToOne(targetEntity="ResourceType")
      * @ORM\JoinColumn(name="resource_type_id", referencedColumnName="id", nullable=false)
      */
     protected $resourceType;
@@ -70,8 +79,9 @@ class ResourceNode
     protected $resourceLinks;
 
     /**
-     * @var ResourceFile
-     * @Groups({"list"})
+     * @var ResourceFile available file for this node
+     *
+     * @Groups({"resource_node:read", "document:read"})
      *
      * @ORM\OneToOne(targetEntity="ResourceFile", inversedBy="resourceNode", orphanRemoval=true)
      * @ORM\JoinColumn(name="resource_file_id", referencedColumnName="id", onDelete="CASCADE")
@@ -79,7 +89,9 @@ class ResourceNode
     protected $resourceFile;
 
     /**
-     * @Groups({"list"})
+     * @var User the creator of this node
+     * @Assert\Valid()
+     * @Groups({"resource_node:read", "document:read"})
      * @ORM\ManyToOne(
      *     targetEntity="Chamilo\UserBundle\Entity\User", inversedBy="resourceNodes"
      * )
@@ -89,7 +101,6 @@ class ResourceNode
 
     /**
      * @Gedmo\TreeParent
-     *
      * @ORM\ManyToOne(
      *     targetEntity="ResourceNode",
      *     inversedBy="children"
@@ -126,13 +137,6 @@ class ResourceNode
     /**
      * Shortcut to access Course resource from ResourceNode.
      *
-     * ORM\OneToOne(targetEntity="Chamilo\CoreBundle\Entity\Course", mappedBy="resourceNode")
-     */
-    //protected $course;
-
-    /**
-     * Shortcut to access Course resource from ResourceNode.
-     *
      * ORM\OneToOne(targetEntity="Chamilo\CoreBundle\Entity\Illustration", mappedBy="resourceNode")
      */
     //protected $illustration;
@@ -147,20 +151,18 @@ class ResourceNode
     /**
      * @var \DateTime
      *
-     * @Groups({"list"})
+     * @Groups({"resource_node:read", "list"})
      * @Gedmo\Timestampable(on="create")
      * @ORM\Column(type="datetime")
-     * @JMS\Type("DateTime")
      */
     protected $createdAt;
 
     /**
      * @var \DateTime
      *
-     * @Groups({"list"})
+     * @Groups({"resource_node:read", "list"})
      * @Gedmo\Timestampable(on="update")
      * @ORM\Column(type="datetime")
-     * @JMS\Type("DateTime")
      */
     protected $updatedAt;
 
@@ -181,24 +183,6 @@ class ResourceNode
     public function __toString()
     {
         return (string) $this->getPathForDisplay();
-    }
-
-    /**
-     * @return Course
-     */
-    public function getCourse(): ?Course
-    {
-        return $this->course;
-    }
-
-    public function isCourseNode(): bool
-    {
-        return null !== $this->course;
-    }
-
-    public function isIllustrationNode(): bool
-    {
-        return null !== $this->illustration;
     }
 
     /**

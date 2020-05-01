@@ -49,48 +49,45 @@ class Tool
     /**
      * @return ArrayCollection
      */
-    public function getToolResourceRight()
+    /*public function getToolResourceRight()
     {
         return $this->toolResourceRight;
-    }
+    }*/
 
-    /**
-     * @param ArrayCollection $toolResourceRight
-     */
-    public function setToolResourceRight($toolResourceRight)
+    /*public function setToolResourceRight($toolResourceRight)
     {
         $this->toolResourceRight = new ArrayCollection();
 
         foreach ($toolResourceRight as $item) {
             $this->addToolResourceRight($item);
         }
-    }
+    }*/
 
     /**
      * @return $this
      */
-    public function addToolResourceRight(ToolResourceRight $toolResourceRight)
+    /*public function addToolResourceRight(ToolResourceRight $toolResourceRight)
     {
         $toolResourceRight->setTool($this);
         $this->toolResourceRight[] = $toolResourceRight;
 
         return $this;
-    }
+    }*/
 
-    public function getResourceNodes()
+    /*public function getResourceNodes()
     {
         return $this->resourceNodes;
-    }
+    }*/
 
     /**
      * @return $this
      */
-    public function setResourceNodes($resourceNodes)
+    /*public function setResourceNodes($resourceNodes)
     {
         $this->resourceNodes = $resourceNodes;
 
         return $this;
-    }
+    }*/
 
     /**
      * Get id.

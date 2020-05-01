@@ -27,7 +27,6 @@ use Cocur\Slugify\SlugifyInterface;
 use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\EntityRepository;
 use Doctrine\ORM\EntityRepository as BaseEntityRepository;
-use Doctrine\ORM\Query\Expr\Join;
 use Doctrine\ORM\QueryBuilder;
 use League\Flysystem\FilesystemInterface;
 use Symfony\Component\Filesystem\Exception\FileNotFoundException;
@@ -696,8 +695,7 @@ class ResourceRepository extends BaseEntityRepository
             //->addSelect('node')
         ;
 
-        $resource = $qb->getQuery()->getOneOrNullResult();
-        return $resource;
+        return $qb->getQuery()->getOneOrNullResult();
     }
 
     public function rowCanBeEdited(RowAction $action, Row $row, Session $session = null): ?RowAction

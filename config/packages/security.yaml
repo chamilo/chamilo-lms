@@ -76,3 +76,7 @@ security:
                 path: /logout
                 target: /
             switch_user: false
+#            json_login:
+#                check_path: app_login
+#                username_path: username
+#                password_path: password

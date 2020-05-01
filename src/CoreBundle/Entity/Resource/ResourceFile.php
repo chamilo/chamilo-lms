@@ -4,17 +4,22 @@
 
 namespace Chamilo\CoreBundle\Entity\Resource;
 
+use ApiPlatform\Core\Annotation\ApiProperty;
+use ApiPlatform\Core\Annotation\ApiResource;
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Timestampable\Traits\TimestampableEntity;
-use JMS\Serializer\Annotation\Groups;
 use Symfony\Component\HttpFoundation\File\File;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
+use Symfony\Component\Serializer\Annotation\Groups;
 use Symfony\Component\Validator\Constraints as Assert;
 use Vich\UploaderBundle\Mapping\Annotation as Vich;
 
 /**
+ * @ApiResource(
+ *     attributes={"security"="is_granted('ROLE_ADMIN')"},
+ *     normalizationContext={"groups"={"resource_file:read"}}
+ * )
  * @ORM\Entity
- *
  * @Vich\Uploadable
  *
  * @ORM\Table(name="resource_file")
@@ -32,7 +37,7 @@ class ResourceFile
 
     /**
      * @Assert\NotBlank()
-     * @Groups({"list"})
+     * @Groups({"resource_file:read", "document:read"})
      *
      * @var string
      *
@@ -43,32 +48,32 @@ class ResourceFile
     /**
      * @var string
      */
-    protected $description;
+    //protected $description;
 
     /**
      * @var bool
      */
-    protected $enabled = false;
+    //protected $enabled;
 
     /**
      * @var int
      */
-    protected $width;
+    //protected $width;
 
     /**
      * @var int
      */
-    protected $height;
+    //protected $height;
 
     /**
      * @var float
      */
-    protected $length;
+    //protected $length;
 
     /**
      * @var string
      */
-    protected $copyright;
+    //protected $copyright;
 
     /**
      * @var string
@@ -93,6 +98,7 @@ class ResourceFile
 
     /**
      * @var int
+     * @Groups({"resource_file:read", "document:read"})
      *
      * @ORM\Column(type="integer", nullable=true)
      */
@@ -100,7 +106,8 @@ class ResourceFile
 
     /**
      * @var File
-     *
+     * @Groups({"resource_file:read", "document:read"})
+     * @Assert\NotNull(groups={"media_object_create"})
      * @Vich\UploadableField(
      *     mapping="resources",
      *     fileNameProperty="name",
@@ -118,6 +125,14 @@ class ResourceFile
      * @ORM\Column(name="crop", type="string", length=255, nullable=true)
      */
     protected $crop;
+
+    /**
+     * @var string|null
+     *
+     * @ApiProperty(iri="http://schema.org/contentUrl")
+     * @Groups({"media_object_read"})
+     */
+    public $contentUrl;
 
     /**
      * @var ResourceNode
@@ -138,7 +153,6 @@ class ResourceFile
      */
     public function __construct()
     {
-        $this->enabled = true;
         $this->metadata = [];
     }
 
@@ -185,18 +199,6 @@ class ResourceFile
         return $this;
     }
 
-    public function getHash(): string
-    {
-        return $this->hash;
-    }
-
-    public function setHash(string $hash): self
-    {
-        $this->hash = $hash;
-
-        return $this;
-    }
-
     public function getSize(): int
     {
         return (int) $this->size;
@@ -212,12 +214,12 @@ class ResourceFile
         return $this;
     }
 
-    public function getCopyright(): string
+    /*public function getCopyright(): string
     {
         return (string) $this->copyright;
-    }
+    }*/
 
-    public function getContentType(): string
+    /*public function getContentType(): string
     {
         return (string) $this->contentType;
     }
@@ -227,9 +229,9 @@ class ResourceFile
         $this->contentType = $contentType;
 
         return $this;
-    }
+    }*/
 
-    public function getExtension(): string
+    /*public function getExtension(): string
     {
         return $this->extension;
     }
@@ -239,7 +241,7 @@ class ResourceFile
         $this->extension = $extension;
 
         return $this;
-    }
+    }*/
 
     public function getResourceNode(): ResourceNode
     {
@@ -253,7 +255,7 @@ class ResourceFile
         return $this;
     }
 
-    public function isEnabled(): bool
+    /*public function isEnabled(): bool
     {
         return $this->enabled;
     }
@@ -263,7 +265,7 @@ class ResourceFile
         $this->enabled = $enabled;
 
         return $this;
-    }
+    }*/
 
     /**
      * @return int
@@ -283,7 +285,7 @@ class ResourceFile
         return $this;
     }
 
-    public function getDescription(): string
+    /*public function getDescription(): string
     {
         return $this->description;
     }
@@ -293,7 +295,7 @@ class ResourceFile
         $this->description = $description;
 
         return $this;
-    }
+    }*/
 
     public function getMimeType(): string
     {

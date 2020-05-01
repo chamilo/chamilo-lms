@@ -4,20 +4,28 @@
 
 namespace Chamilo\CoreBundle\Entity;
 
+use ApiPlatform\Core\Annotation\ApiFilter;
+use ApiPlatform\Core\Annotation\ApiResource;
+use ApiPlatform\Core\Bridge\Doctrine\Orm\Filter\SearchFilter;
 use Chamilo\CourseBundle\Entity\CStudentPublication;
 use Chamilo\UserBundle\Entity\User;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\Common\Collections\Criteria;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Serializer\Annotation\Groups;
+use Symfony\Component\Validator\Constraints as Assert;
 
 //use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 //use Gedmo\Mapping\Annotation as Gedmo;
 
 /**
- * Class Session.
- * UniqueEntity("name").
+ * @ApiResource(
+ *     attributes={"security"="is_granted('ROLE_ADMIN')"},
+ *     normalizationContext={"groups"={"session:read"}}
+ * )
  *
+ * @ApiFilter(SearchFilter::class, properties={"name": "partial"})
  * @ORM\Table(
  *      name="session",
  *      uniqueConstraints={@ORM\UniqueConstraint(name="name", columns={"name"})},
@@ -42,7 +50,7 @@ class Session
 
     /**
      * @var int
-     *
+     * @Groups({"session:read", "list"})
      * @ORM\Column(name="id", type="integer", nullable=false, unique=false)
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="AUTO")
@@ -114,13 +122,15 @@ class Session
 
     /**
      * @var string
-     *
+     * @Assert\NotBlank()
+     * @Groups({"session:read", "list"})
      * @ORM\Column(name="name", type="string", length=150, nullable=false, unique=false)
      */
     protected $name;
 
     /**
      * @var string
+     * @Groups({"session:read", "list"})
      *
      * @ORM\Column(name="description", type="text", nullable=true, unique=false)
      */
@@ -184,7 +194,7 @@ class Session
 
     /**
      * @var \DateTime
-     *
+     * @Groups({"session:read", "list"})
      * @ORM\Column(name="display_start_date", type="datetime", nullable=true, unique=false)
      */
     protected $displayStartDate;
@@ -233,7 +243,8 @@ class Session
 
     /**
      * @var int
-     *
+     * @Groups({"session:read", "list"})
+     *         +\
      * @ORM\Column(name="status", type="integer", nullable=false)
      */
     protected $status;
@@ -245,6 +256,7 @@ class Session
     protected $generalCoach;
 
     /**
+     * @Groups({"session:read", "list"})
      * @ORM\ManyToOne(targetEntity="Chamilo\CoreBundle\Entity\SessionCategory", inversedBy="session")
      * @ORM\JoinColumn(name="session_category_id", referencedColumnName="id")
      */

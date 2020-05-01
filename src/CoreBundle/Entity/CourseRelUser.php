@@ -6,6 +6,7 @@ namespace Chamilo\CoreBundle\Entity;
 
 use Chamilo\UserBundle\Entity\User;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Serializer\Annotation\Groups;
 
 /**
  * CourseRelUser.
@@ -32,6 +33,8 @@ class CourseRelUser
     protected $id;
 
     /**
+     * Groups({"course_rel_user:read", "course_rel_user:write"}).
+     *
      * @ORM\ManyToOne(targetEntity="Chamilo\UserBundle\Entity\User", inversedBy="courses", cascade={"persist"})
      * @ORM\JoinColumn(name="user_id", referencedColumnName="id")
      */

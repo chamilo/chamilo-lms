@@ -4,6 +4,10 @@
 
 namespace Chamilo\CourseBundle\Entity;
 
+use ApiPlatform\Core\Annotation\ApiFilter;
+use ApiPlatform\Core\Annotation\ApiResource;
+use ApiPlatform\Core\Bridge\Doctrine\Orm\Filter\SearchFilter;
+use ApiPlatform\Core\Serializer\Filter\PropertyFilter;
 use APY\DataGridBundle\Grid\Mapping as GRID;
 use Chamilo\CoreBundle\Entity\Course;
 use Chamilo\CoreBundle\Entity\Resource\AbstractResource;
@@ -12,10 +16,16 @@ use Chamilo\CoreBundle\Entity\Session;
 use Chamilo\CourseBundle\Traits\ShowCourseResourcesInSessionTrait;
 use Doctrine\ORM\Event\LifecycleEventArgs;
 use Doctrine\ORM\Mapping as ORM;
-use JMS\Serializer\Annotation\Groups;
+use Symfony\Component\Serializer\Annotation\Groups;
 
 /**
- * CDocument.
+ * @ApiResource(
+ *      shortName="Documents",
+ *      attributes={"security"="is_granted('ROLE_ADMIN')"},
+ *      normalizationContext={"groups"={"document:read", "resource_node"}, "swagger_definition_name"="Read"}
+ * )
+ * @ApiFilter(PropertyFilter::class)
+ * @ApiFilter(SearchFilter::class, properties={"title": "partial", "course.code": "partial"})
  *
  * @ORM\Table(
  *  name="c_document",
@@ -38,7 +48,7 @@ class CDocument extends AbstractResource implements ResourceInterface
 
     /**
      * @var int
-     * @Groups({"list"})
+     * @Groups({"list", "document:read"})
      * @ORM\Column(name="iid", type="integer")
      * @ORM\Id
      * @ORM\GeneratedValue

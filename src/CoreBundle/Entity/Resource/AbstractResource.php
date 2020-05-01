@@ -4,12 +4,14 @@
 
 namespace Chamilo\CoreBundle\Entity\Resource;
 
+use ApiPlatform\Core\Annotation\ApiSubresource;
 use APY\DataGridBundle\Grid\Mapping as GRID;
 use Chamilo\CoreBundle\Entity\Course;
 use Chamilo\CoreBundle\Entity\Session;
 use Doctrine\Common\Collections\Criteria;
 use Doctrine\ORM\Mapping as ORM;
-use JMS\Serializer\Annotation\Groups;
+use Symfony\Component\Serializer\Annotation\Groups;
+use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * @ORM\MappedSuperclass
@@ -19,8 +21,11 @@ use JMS\Serializer\Annotation\Groups;
 abstract class AbstractResource
 {
     /**
+     * SerializedName("description").
+     * @Assert\Valid()
+     * @ApiSubresource()
+     * @Groups({"resource_node:read", "document:read"})
      * @GRID\Column(field="resourceNode.createdAt", title="Date added", type="datetime")
-     * @Groups({"list"})
      * @ORM\OneToOne(
      *     targetEntity="Chamilo\CoreBundle\Entity\Resource\ResourceNode", cascade={"remove"}, orphanRemoval=true
      * )

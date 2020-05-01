@@ -4,17 +4,22 @@
 
 namespace Chamilo\CoreBundle\Entity;
 
+use ApiPlatform\Core\Annotation\ApiResource;
 use Chamilo\CoreBundle\Component\Utils\ChamiloApi;
 use Chamilo\SkillBundle\Entity\Profile;
 use Chamilo\SkillBundle\Entity\SkillRelCourse;
 use Chamilo\SkillBundle\Entity\SkillRelItem;
 use Doctrine\Common\Collections\ArrayCollection;
-use Doctrine\Common\Collections\Criteria;
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Mapping\Annotation as Gedmo;
+use Symfony\Component\Serializer\Annotation\Groups;
+use Symfony\Component\Validator\Constraints as Assert;
 
 /**
- * Skill.
+ * @ApiResource(
+ *      attributes={"security"="is_granted('ROLE_ADMIN')"},
+ *      normalizationContext={"groups"={"skill:read"}}
+ * )
  *
  * @ORM\Table(name="skill")
  * @ORM\Entity(repositoryClass="Chamilo\CoreBundle\Repository\SkillRepository")
@@ -47,7 +52,7 @@ class Skill
 
     /**
      * @var int
-     *
+     * @Groups({"skill:read"})
      * @ORM\Column(name="id", type="integer")
      * @ORM\Id
      * @ORM\GeneratedValue
@@ -56,6 +61,8 @@ class Skill
 
     /**
      * @var string
+     * @Groups({"skill:read"})
+     * @Assert\NotBlank()
      *
      * @ORM\Column(name="name", type="string", length=255, nullable=false)
      */

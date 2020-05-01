@@ -4,6 +4,7 @@
 
 namespace Chamilo\CoreBundle\Entity\Resource;
 
+use ApiPlatform\Core\Annotation\ApiResource;
 use Chamilo\CoreBundle\Entity\Course;
 use Chamilo\CoreBundle\Entity\Session;
 use Chamilo\CoreBundle\Entity\Usergroup;
@@ -13,6 +14,9 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
+ * @ApiResource(
+ *     attributes={"security"="is_granted('ROLE_ADMIN')"}
+ * )
  * @ORM\Entity
  * @ORM\Table(name="resource_link")
  */
@@ -342,11 +346,6 @@ class ResourceLink
     public function isDraft()
     {
         return self::VISIBILITY_DRAFT === $this->getVisibility();
-    }
-
-    public function getResource()
-    {
-//        return $this;
     }
 
     public static function getVisibilityList(): array

@@ -2661,7 +2661,7 @@ class SurveyManager
                     );
 
                     foreach ($tutors as $tutor) {
-                        $subject = sprintf(get_lang('GroupSurveyX'), $tutor['complete_name']);
+                        $subject = sprintf(get_lang('GroupSurveyX'), $groupInfo['name']);
                         $content = sprintf(
                             get_lang('HelloXGroupX'),
                             $tutor['complete_name'],

@@ -22,10 +22,10 @@ oneup_uploader:
     resource: .
     type: uploader
 
-resources:
-    type: rest
-    prefix: /api/{tool}/{type}
-    resource: Chamilo\CoreBundle\Controller\ResourceApiController
+#resources:
+#    type: rest
+#    prefix: /api/{tool}/{type}
+#    resource: Chamilo\CoreBundle\Controller\ResourceApiController
 
 # Resources
 

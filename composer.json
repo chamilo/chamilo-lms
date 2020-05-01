@@ -160,7 +160,8 @@
         "tgalopin/html-sanitizer-bundle": "^1.1",
         "twig/extensions": "^1.5",
         "vich/uploader-bundle": "^1.13",
-        "webit/eval-math": "~1.0"
+        "webit/eval-math": "~1.0",
+        "api-platform/api-pack": "^1.2"
     },
     "config": {
         "component-dir": "public/assets"

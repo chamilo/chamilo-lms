@@ -17,3 +17,4 @@ framework:
     annotations:
         cache: file
         file_cache_dir: "%kernel.cache_dir%/annotations"
+    serializer: { enable_annotations: true }

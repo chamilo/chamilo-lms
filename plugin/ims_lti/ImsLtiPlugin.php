@@ -323,6 +323,12 @@ class ImsLtiPlugin extends Plugin
 
         $courseTool->setName($ltiTool->getName());
 
+        if ('iframe' !== $ltiTool->getDocumentTarget()) {
+            $courseTool->setTarget('_blank');
+        } else {
+            $courseTool->setTarget('_self');
+        }
+
         $em->persist($courseTool);
         $em->flush();
     }

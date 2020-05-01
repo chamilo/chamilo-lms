@@ -81,4 +81,3 @@ $strings['bbb_force_record_generation'] = 'Force record generation at the end of
 $strings['UpdateAllCourses'] = 'Update all courses';
 $strings['UpdateAllCourseSettings'] = 'Update all course settings';
 $strings['ThisWillUpdateAllSettingsInAllCourses'] = 'This will update at once all your course settings.';
-

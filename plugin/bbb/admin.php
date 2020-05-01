@@ -110,7 +110,7 @@ $settings = $plugin->course_settings;
 $defaults = [];
 foreach ($settings as $setting) {
     $setting = $setting['name'];
-    $text = $settingsForm->addText($setting,  $plugin->get_lang($setting), false);
+    $text = $settingsForm->addText($setting, $plugin->get_lang($setting), false);
     $text->freeze();
     $defaults[$setting] = api_get_plugin_setting('bbb', $setting) === 'true' ? get_lang('Yes') : get_lang('No');
     //api_get_plugin_setting('bbb', $setting)

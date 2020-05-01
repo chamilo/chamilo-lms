@@ -93,10 +93,25 @@ if ($form->validate()) {
                 ->setAdvantageServices(
                     $tool->getAdvantageServices()
                 )
+                ->setDocumenTarget($tool->getDocumentTarget())
                 ->publicKey = $tool->publicKey;
 
             $em->persist($child);
+
+            $courseTool = $plugin->findCourseToolByLink(
+                $child->getCourse(),
+                $child
+            );
+
+            $plugin->updateCourseTool($courseTool, $child);
         }
+    } else {
+        $courseTool = $plugin->findCourseToolByLink(
+            $tool->getCourse(),
+            $tool
+        );
+
+        $plugin->updateCourseTool($courseTool, $tool);
     }
 
     $em->persist($tool);

@@ -344,8 +344,6 @@ class ResourceLink
         return self::VISIBILITY_DRAFT === $this->getVisibility();
     }
 
-    /**
-     */
     public function getResource()
     {
 //        return $this;

@@ -40,7 +40,6 @@ class TwigListener implements EventSubscriberInterface
             return false;
         }
 
-
         $translator = $this->container->get('translator');
 
         $settingsManager = $container->get('chamilo.settings.manager');

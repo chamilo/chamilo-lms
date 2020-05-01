@@ -152,7 +152,7 @@ class CourseListener
             if (empty($groupId)) {
                 $sessionHandler->remove('gid');
             } else {
-                dump("Load chamilo group from DB");
+                dump('Load chamilo group from DB');
                 $group = $em->getRepository('ChamiloCourseBundle:CGroupInfo')->find($groupId);
 
                 if (!$group) {

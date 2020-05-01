@@ -140,29 +140,29 @@ trait ResourceControllerTrait
 //            var_dump($originalParent->getPath(), $originalParent->getPathForDisplay());
 
 //            $parentList = [];
-  /*          while (null !== $parent) {
-                if ($type !== $parent->getResourceType()->getName()) {
-                    break;
-                }
-                $parent = $parent->getParent();
-                if ($parent) {
-                    $resource = $repo->findOneBy(['resourceNode' => $parent->getId()]);
-                    if ($resource) {
-                        $parentList[] = $resource;
-                    }
-                }
-            }
-            $parentList = array_reverse($parentList);
-            foreach ($parentList as $item) {
-                $params = $routeParams;
-                $params['id'] = $item->getResourceNode()->getId();
-                $breadcrumb->addChild(
-                    $item->getResourceName(),
-                    [
-                        'uri' => $this->generateUrl('chamilo_core_resource_list', $params),
-                    ]
-                );
-            }*/
+            /*          while (null !== $parent) {
+                          if ($type !== $parent->getResourceType()->getName()) {
+                              break;
+                          }
+                          $parent = $parent->getParent();
+                          if ($parent) {
+                              $resource = $repo->findOneBy(['resourceNode' => $parent->getId()]);
+                              if ($resource) {
+                                  $parentList[] = $resource;
+                              }
+                          }
+                      }
+                      $parentList = array_reverse($parentList);
+                      foreach ($parentList as $item) {
+                          $params = $routeParams;
+                          $params['id'] = $item->getResourceNode()->getId();
+                          $breadcrumb->addChild(
+                              $item->getResourceName(),
+                              [
+                                  'uri' => $this->generateUrl('chamilo_core_resource_list', $params),
+                              ]
+                          );
+                      }*/
 
             foreach ($parentList as $id => $title) {
                 $params = $routeParams;
@@ -174,7 +174,6 @@ trait ResourceControllerTrait
                     ]
                 );
             }
-
 
             $params = $routeParams;
             $params['id'] = $resourceNode->getId();

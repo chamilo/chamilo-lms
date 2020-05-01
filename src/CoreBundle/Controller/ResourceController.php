@@ -661,6 +661,7 @@ class ResourceController extends AbstractResourceController implements CourseCon
             'type' => $type,
             'comment_form' => $form->createView(),
         ];
+
         return $this->render(
             $repository->getTemplates()->getFromAction(__FUNCTION__, $request->isXmlHttpRequest()),
             $params

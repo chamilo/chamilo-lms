@@ -140,6 +140,9 @@ class AppPlugin
      */
     public function getInstalledPlugins($fromDatabase = true)
     {
+        // @todo restore plugin loading
+        return [];
+
         static $installedPlugins = null;
 
         if (false === $fromDatabase) {
@@ -147,7 +150,7 @@ class AppPlugin
                 return $installedPlugins;
             }
         }
-        
+
         if ($fromDatabase || null === $installedPlugins) {
             $installedPlugins = [];
             $plugins = api_get_settings_params(

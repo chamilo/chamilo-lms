@@ -16,44 +16,44 @@ doctrine:
         types:
             json: Doctrine\DBAL\Types\JsonType
     orm:
-        auto_generate_proxy_classes: false
-        metadata_cache_driver:
-            type: 'pool'
-            pool: 'doctrine.system_cache_pool'
-        query_cache_driver:
-            type: 'pool'
-            pool: 'doctrine.system_cache_pool'
-        result_cache_driver:
-            type: 'pool'
-            pool: 'doctrine.result_cache_pool'
-        naming_strategy: doctrine.orm.naming_strategy.underscore
+        auto_generate_proxy_classes: true
+#        metadata_cache_driver:
+#            type: 'pool'
+#            pool: 'doctrine.system_cache_pool'
+#        query_cache_driver:
+#            type: 'pool'
+#            pool: 'doctrine.system_cache_pool'
+#        result_cache_driver:
+#            type: 'pool'
+#            pool: 'doctrine.result_cache_pool'
+        naming_strategy: doctrine.orm.naming_strategy.underscore_number_aware
         auto_mapping: true
         mappings:
-            SonataUserBundle: ~
-            FOSUserBundle: ~
+#            SonataUserBundle: ~
+#            FOSUserBundle: ~
             gedmo_translatable:
                 type: annotation
                 prefix: ChamiloCore\Entity\Translation
-                dir: "%kernel.root_dir%/../vendor/gedmo/doctrine-extensions/lib/Gedmo/Translatable/Entity"
+                dir: "%kernel.project_dir%/vendor/gedmo/doctrine-extensions/lib/Gedmo/Translatable/Entity"
 #                dir: "%kernel.root_dir%/src/CoreBundle/Entity"
                 alias: GedmoTranslatable # (optional) it will default to the name set for the mapping
                 is_bundle: false
             gedmo_translator:
                 type: annotation
                 prefix: Gedmo\Translator\Entity
-                dir: "%kernel.root_dir%/../vendor/gedmo/doctrine-extensions/lib/Gedmo/Translator/Entity"
+                dir: "%kernel.project_dir%/vendor/gedmo/doctrine-extensions/lib/Gedmo/Translator/Entity"
                 alias: GedmoTranslator # (optional) it will default to the name set for the mapping
                 is_bundle: false
             gedmo_loggable:
                 type: annotation
                 prefix: Gedmo\Loggable\Entity
-                dir: "%kernel.root_dir%/../vendor/gedmo/doctrine-extensions/lib/Gedmo/Loggable/Entity"
+                dir: "%kernel.project_dir%/vendor/gedmo/doctrine-extensions/lib/Gedmo/Loggable/Entity"
                 alias: GedmoLoggable # (optional) it will default to the name set for the mappingmapping
                 is_bundle: false
             gedmo_tree:
                 type: annotation
                 prefix: Gedmo\Tree\Entity
-                dir: "%kernel.root_dir%/../vendor/gedmo/doctrine-extensions/lib/Gedmo/Tree/Entity"
+                dir: "%kernel.project_dir%/vendor/gedmo/doctrine-extensions/lib/Gedmo/Tree/Entity"
                 alias: GedmoTree # (optional) it will default to the name set for the mapping
                 is_bundle: false
         dql:

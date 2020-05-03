@@ -1,35 +1,35 @@
-sonata_formatter:
-    default_formatter: text
-    formatters:
-        markdown:
-            service: sonata.formatter.text.markdown
-            extensions:
-                - sonata.formatter.twig.control_flow
-                - sonata.formatter.twig.gist
-                - sonata.media.formatter.twig
-        text:
-            service: sonata.formatter.text.text
-            extensions:
-                - sonata.formatter.twig.control_flow
-                - sonata.formatter.twig.gist
-                - sonata.media.formatter.twig
-        rawhtml:
-            service: sonata.formatter.text.raw
-            extensions:
-                - sonata.formatter.twig.control_flow
-                - sonata.formatter.twig.gist
-                - sonata.media.formatter.twig
-        richhtml:
-            service: sonata.formatter.text.raw
-            extensions:
-                - sonata.formatter.twig.control_flow
-                - sonata.formatter.twig.gist
-                - sonata.media.formatter.twig
-        twig:
-            service: sonata.formatter.text.twigengine
-            extensions: [] # Twig formatter cannot have extensions
-
-    ckeditor:
-        templates:
-            browser: '@SonataFormatter/Ckeditor/browser.html.twig'
-            upload: '@SonataFormatter/Ckeditor/upload.html.twig'
+#sonata_formatter:
+#    default_formatter: text
+#    formatters:
+#        markdown:
+#            service: sonata.formatter.text.markdown
+#            extensions:
+#                - sonata.formatter.twig.control_flow
+#                - sonata.formatter.twig.gist
+#                - sonata.media.formatter.twig
+#        text:
+#            service: sonata.formatter.text.text
+#            extensions:
+#                - sonata.formatter.twig.control_flow
+#                - sonata.formatter.twig.gist
+#                - sonata.media.formatter.twig
+#        rawhtml:
+#            service: sonata.formatter.text.raw
+#            extensions:
+#                - sonata.formatter.twig.control_flow
+#                - sonata.formatter.twig.gist
+#                - sonata.media.formatter.twig
+#        richhtml:
+#            service: sonata.formatter.text.raw
+#            extensions:
+#                - sonata.formatter.twig.control_flow
+#                - sonata.formatter.twig.gist
+#                - sonata.media.formatter.twig
+#        twig:
+#            service: sonata.formatter.text.twigengine
+#            extensions: [] # Twig formatter cannot have extensions
+#
+#    ckeditor:
+#        templates:
+#            browser: '@SonataFormatter/Ckeditor/browser.html.twig'
+#            upload: '@SonataFormatter/Ckeditor/upload.html.twig'

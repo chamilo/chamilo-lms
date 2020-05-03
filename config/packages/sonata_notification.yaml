@@ -1,7 +1,0 @@
-sonata_notification:
-    class:
-        message: Chamilo\NotificationBundle\Entity\Message
-    consumers:
-        register_default: false
-    admin:
-        enabled: false

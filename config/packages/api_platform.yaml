@@ -1,5 +1,6 @@
 api_platform:
-    title: Chamilo
+    title: 'Chamilo Api'
+    version: '1.0.0'
     mapping:
         paths: ['%kernel.project_dir%/src/CoreBundle/Entity', '%kernel.project_dir%/src/CourseBundle/Entity']
     patch_formats:
@@ -7,15 +8,9 @@ api_platform:
     swagger:
         versions: [3]
     formats:
-        jsonld:
-            mime_types:
-                - application/ld+json
-        json:
-            mime_types:
-                - application/json
-        html:
-            mime_types:
-                - text/html
-        csv:
-            mime_types:
-                - text/csv
+        jsonld: ['application/ld+json']
+        json: ['application/json']
+        html: ['text/html']
+        graphql: ['application/graphql']
+#    mercure:
+#        hub_url: '%env(MERCURE_SUBSCRIBE_URL)%'

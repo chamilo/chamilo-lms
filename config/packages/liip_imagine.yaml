@@ -10,7 +10,7 @@ liip_imagine:
     loaders:
         resources:
             filesystem:
-                data_root: '%kernel.root_dir%/../var/upload/resource'
+                data_root: '%kernel.project_dir%/var/upload/resource'
     filter_sets:
         # Chamilo filters
         hotspot_question:

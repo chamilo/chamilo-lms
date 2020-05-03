@@ -1,11 +1,14 @@
 framework:
     cache:
-        directory: '%kernel.cache_dir%/pools'
-        pools:
-            doctrine.result_cache_pool:
-                adapter: cache.app
-            doctrine.system_cache_pool:
-                adapter: cache.system
+#        directory: '%kernel.cache_dir%/pools'
+
+#        pools:
+#            doctrine.result_cache_pool:
+#                adapter: cache.app
+#            doctrine.system_cache_pool:
+#                adapter: cache.system
+
+
 #        default_doctrine_provider: 'app.doctrine_cache'
 
         # Put the unique name of your app here: the prefix seed
@@ -15,8 +18,8 @@ framework:
         # APCu (not recommended with heavy random-write workloads as memory fragmentation can cause perf issues)
         #app: cache.adapter.apcu
 
-        app: cache.adapter.filesystem
-        system: cache.adapter.system
+#        app: cache.adapter.filesystem
+#        system: cache.adapter.system
 
         # Namespaced pools use the above "app" backend by default
         #pools:

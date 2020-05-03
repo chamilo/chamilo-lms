@@ -1,4 +1,4 @@
 # Controllers
 controllers:
-    resource: '../../src/UserBundle/Controller/'
+    resource: '../../src/CoreBundle/Controller/'
     type: annotation

@@ -19,17 +19,17 @@
 #    resource: "@SonataUserBundle/Resources/config/routing/sonata_change_password_1.xml"
 #    prefix: /profile
 
-sonata_page_cache:
-    resource: '@SonataPageBundle/Resources/config/routing/cache.xml'
-    prefix: /
+#sonata_page_cache:
+#    resource: '@SonataPageBundle/Resources/config/routing/cache.xml'
+#    prefix: /
 
-sonata_media_gallery:
-    resource: '@SonataMediaBundle/Resources/config/routing/gallery.xml'
-    prefix: /media/gallery
+#sonata_media_gallery:
+#    resource: '@SonataMediaBundle/Resources/config/routing/gallery.xml'
+#    prefix: /media/gallery
 
-sonata_media_media:
-    resource: '@SonataMediaBundle/Resources/config/routing/media.xml'
-    prefix: /media
+#sonata_media_media:
+#    resource: '@SonataMediaBundle/Resources/config/routing/media.xml'
+#    prefix: /media
 
 #sonata_customer:
 #    resource: @SonataCustomerBundle/Resources/config/routing/customer.xml

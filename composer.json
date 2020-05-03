@@ -11,6 +11,14 @@
         "docs": "https://github.com/chamilo/docs",
         "issues": "https://github.com/chamilo/chamilo-lms/issues"
     },
+    "replace": {
+        "paragonie/random_compat": "2.*",
+        "symfony/polyfill-ctype": "*",
+        "symfony/polyfill-iconv": "*",
+        "symfony/polyfill-php56": "*",
+        "symfony/polyfill-php70": "*",
+        "symfony/polyfill-php71": "*"
+    },
     "autoload": {
         "psr-4": {
             "Chamilo\\": "src/"
@@ -42,6 +50,7 @@
     "require": {
         "a2lix/translation-form-bundle": "^3.0",
         "antishov/doctrine-extensions-bundle": "~1.4",
+        "api-platform/api-pack": "^1.2",
         "apy/datagrid-bundle" : "dev-master",
         "beberlei/doctrineextensions": "^1.2",
         "brumann/polyfill-unserialize": "^1.0",
@@ -50,7 +59,7 @@
         "cocur/slugify": "^4.0",
         "doctrine/data-fixtures": "~1.0",
         "doctrine/dbal": "~2.10",
-        "doctrine/doctrine-bundle": "~1.9",
+        "doctrine/doctrine-bundle": "~2.0",
         "doctrine/doctrine-fixtures-bundle": "^3.0",
         "doctrine/doctrine-migrations-bundle": "~2.0",
         "doctrine/orm": "~2.7",
@@ -75,19 +84,18 @@
         "ezyang/htmlpurifier": "~4.12",
         "firebase/php-jwt": "^5.0",
         "friendsofsymfony/jsrouting-bundle": "~2.0",
-        "friendsofsymfony/rest-bundle": "^2.7",
+        "friendsofsymfony/rest-bundle": "dev-master",
         "graphp/algorithms": "~0.8",
         "graphp/graphviz": "~0.2",
         "gregwar/captcha-bundle": "^2.0",
         "jbroadway/urlify": "~1.1",
         "jeroendesloovere/vcard": "~1.7",
         "jimmiw/php-time-ago": "~3.0",
-        "jms/serializer-bundle": "^3.5",
         "kigkonsult/icalcreator": "~2.29",
         "knplabs/doctrine-behaviors": "~2.0",
         "knplabs/gaufrette": "~0.9",
         "knplabs/knp-components": "~2.0",
-        "knplabs/knp-menu-bundle": "^2.0|~3.0",
+        "knplabs/knp-menu-bundle": "~3.0",
         "knpuniversity/oauth2-client-bundle": "~2.0",
         "laminas/laminas-config": "~3.2",
         "laminas/laminas-feed": "~2.10",
@@ -102,6 +110,7 @@
         "masterminds/html5": "^2.0",
         "michelf/php-markdown": "~1.8",
         "mpdf/mpdf": "~8.0",
+        "nesbot/carbon": "^2.33",
         "oneup/flysystem-bundle": "~3.0",
         "oneup/uploader-bundle": "~3.0",
         "overblog/graphql-bundle": "~0.11",
@@ -116,61 +125,39 @@
         "sabre/vobject": "~4.2",
         "sensio/framework-extra-bundle": "~5.0",
         "sensiolabs/security-checker": "~6.0",
-        "simplethings/entity-audit-bundle": "^1.0",
-        "sonata-project/admin-bundle": "~3.0",
-        "sonata-project/block-bundle": "~3.0|~4.0",
-        "sonata-project/cache-bundle": "~2.0|~3.0",
-        "sonata-project/classification-bundle": "~3.0",
-        "sonata-project/core-bundle": "~3.0",
-        "sonata-project/datagrid-bundle": "^2.5|~3.0",
-        "sonata-project/doctrine-extensions": "~1.6",
-        "sonata-project/doctrine-orm-admin-bundle": "~3.0",
-        "sonata-project/easy-extends-bundle": "~2.5",
-        "sonata-project/exporter": "~2.0",
-        "sonata-project/formatter-bundle": "~4.0",
-        "sonata-project/intl-bundle": "~2.5",
-        "sonata-project/media-bundle": "~3.0",
-        "sonata-project/notification-bundle": "~3.0",
-        "sonata-project/page-bundle": "~3.0",
-        "sonata-project/seo-bundle": "~2.7",
-        "sonata-project/timeline-bundle" : "~3.0",
-        "sonata-project/user-bundle": "~4.0",
-        "stephpy/timeline-bundle": "~3.0",
         "sunra/php-simple-html-dom-parser": "~1.5",
         "symfony/apache-pack": "^1.0",
-        "symfony/asset": "^4.0|^5.0",
-        "symfony/cache": "^4.0|^5.0",
+        "symfony/asset": "^5.0",
         "symfony/dotenv": "^5.0",
-        "symfony/expression-language": "^4.0|^5.0",
+        "symfony/expression-language": "^5.0",
         "symfony/flex": "^1.6",
-        "symfony/form": "^4.0|^5.0",
-        "symfony/framework-bundle": "^4.0|^5.0",
-        "symfony/http-kernel": "^4.0|^5.0",
+        "symfony/form": "^5.0",
+        "symfony/http-kernel": "^5.0",
+        "symfony/intl": "^5.0",
         "symfony/mailer": "^5.0",
         "symfony/monolog-bundle": "^3.1",
         "symfony/polyfill-apcu": "^1.9",
         "symfony/requirements-checker": "^1.1",
-        "symfony/security-bundle": "^4.0|^5.0",
-        "symfony/templating" : "^4.0|^5.0",
-        "symfony/translation": "^4.0|^5.0",
-        "symfony/twig-bundle": "^4.0|^5.0",
-        "symfony/validator": "^4.0|^5.0",
+        "symfony/security-bundle": "^5.0",
+        "symfony/string": "5.0.*",
+        "symfony/templating" : "^5.0",
+        "symfony/translation": "^5.0",
+        "symfony/twig-pack": "^1.0",
+        "symfony/validator": "^5.0",
         "symfony/webpack-encore-bundle": "^1.7",
         "symfony/yaml": "^5.0",
         "tgalopin/html-sanitizer-bundle": "^1.1",
         "twig/extensions": "^1.5",
         "vich/uploader-bundle": "^1.13",
-        "webit/eval-math": "~1.0",
-        "api-platform/api-pack": "^1.2",
-        "nesbot/carbon": "^2.33"
+        "webit/eval-math": "~1.0"
     },
     "config": {
-        "component-dir": "public/assets"
+        "component-dir": "public/assets",
+        "sort-packages": true
     },
     "require-dev": {
         "behat/behat": "@stable",
         "behat/mink": "dev-master",
-        "behat/mink-extension": "@stable",
         "behat/mink-goutte-driver": "@stable",
         "behat/mink-selenium2-driver": "@stable",
         "php-translation/symfony-bundle": "^0.12",
@@ -191,12 +178,12 @@
         ],
         "auto-scripts": {
             "cache:clear": "symfony-cmd",
-            "assets:install %PUBLIC_DIR%": "symfony-cmd",
-            "security-checker security:check": "script",
-            "requirements-checker": "script"
+            "assets:install %PUBLIC_DIR%": "symfony-cmd"
         },
         "install-ckeditor": {
-            "ckeditor:install %PUBLIC_DIR%/libs/ckeditor --clear=keep --tag=4.13.0 --exclude=samples --exclude=adapters ": "symfony-cmd"
+            "ckeditor:install %PUBLIC_DIR%/libs/ckeditor --clear=keep --tag=4.13.0 --exclude=samples --exclude=adapters ": "symfony-cmd",
+            "security-checker security:check": "script",
+            "requirements-checker": "script"
         },
         "post-install-cmd": [
             "@auto-scripts",
@@ -211,5 +198,11 @@
         "pre-update-cmd": [
         ],
         "phpcs": "phpcs --standard=.php_cs.dist"
+    },
+    "extra": {
+        "symfony": {
+            "allow-contrib": false,
+            "require": "5.0.*"
+        }
     }
 }

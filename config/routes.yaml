@@ -1,20 +1,6 @@
 logout:
     path: /logout
 
-_admin:
-    resource: routes/sonata_admin.yaml
-    prefix: /administration
-
-sonata_admin_redirect:
-    path: /administration/dashboard
-
-sonata_admin_my_dashboard:
-    path: /administration
-    controller: Symfony\Bundle\FrameworkBundle\Controller\RedirectController::redirectAction
-    defaults:
-        route: sonata_admin_dashboard
-        permanent: false
-
 sonata_user_admin_security_logout:
     path: /logout
 
@@ -22,95 +8,51 @@ oneup_uploader:
     resource: .
     type: uploader
 
+legacy_main:
+    path: /main/{name}
+    defaults: {_controller: 'ChamiloCoreBundle:Legacy:classic'}
+    requirements:
+        name: .+
+
+legacy_plugin:
+    path: /plugin/{name}
+    defaults: {_controller: 'ChamiloCoreBundle:Legacy:plugin'}
+    requirements:
+        name: .+
+
+# web url shortcuts for legacy templates
+web.ajax:
+    path: main/inc/ajax/
+
+web.main:
+    path: main/
+
+# Core controllers
+core_admin:
+    resource: '@ChamiloCoreBundle/Controller/Admin'
+    type: annotation
+    prefix: /admin
+
 #resources:
 #    type: rest
 #    prefix: /api/{tool}/{type}
 #    resource: Chamilo\CoreBundle\Controller\ResourceApiController
 
-# Resources
-
-#app_document:
-#    resource: |
-#        alias: app.document
-#        path: /resource/documents
-#        form: Chamilo\CoreBundle\Form\Type\DocumentType
-#    type: sylius.resource
-
-#app_document_index:
-#    path: /courses/{course}/resource/documents/
-#    methods: [GET, POST]
-#    defaults:
-#        _controller: Chamilo\CoreBundle\Controller\ResourceController:indexAction
-#        _sylius:
-#            template: ChamiloCoreBundle:Document:show.html.twig
-
-# Create a folder
-#app_document_create:
-#    path: /courses/{course}/resource/documents/new
-#    methods: [GET, POST]
-#    defaults:
-#        _controller: app.controller.document:createAction
-#        _sylius:
-#            template: ChamiloCoreBundle:Document:create.html.twig
-#            form: Chamilo\CoreBundle\Form\Type\DocumentType
-
-# Create a document
-#app_document_create_document:
-#    path: /courses/{course}/resource/documents/new_document
-#    methods: [GET, POST]
-#    defaults:
-#        _controller: app.controller.document:createDocumentAction
-#        _sylius:
-#            template: ChamiloCoreBundle:Document:create.html.twig
-#            form: Chamilo\CoreBundle\Form\Type\DocumentType
-#
-#app_document_show:
-#    path: /courses/{course}/resource/documents/{id}
-#    methods: [GET]
-#    defaults:
-#        _controller: app.controller.document:showAction
-#        _sylius:
-#            template: ChamiloCoreBundle:Document:show.html.twig
-#
-#app_document_update:
-#    path: /courses/{course}/resource/documents/{id}/edit
-#    methods: [GET, PUT, PATCH]
-#    defaults:
-#        _controller: app.controller.document:updateAction
-#        _sylius:
-#            template: ChamiloCoreBundle:Document:update.html.twig
-#            form: Chamilo\CoreBundle\Form\Type\DocumentType
-#
-#app_document_delete:
-#    path: /courses/{course}/resource/documents/{id}
-#    methods: [DELETE]
-#    defaults:
-#        _controller: app.controller.document:deleteAction
-
-#admin_dashboard:
-#    pattern: /administration/
-#    defaults:
-#        _controller: FrameworkBundle:Redirect:redirect
-#        route: sonata_admin_dashboard
-#        permanent: true # this for 301
-
-#admin_without_locale:
-#    pattern: /administration
-#    defaults:
-#        _controller: FrameworkBundle:Redirect:redirect
-#        route: sonata_admin_dashboard
-#        permanent: true # this for 301
-
-#admin_dashboard_without_locale:
-#    pattern: /administration/dashboard
-#    defaults:
-#        _controller: FrameworkBundle:Redirect:redirect
-#        route: sonata_admin_dashboard
-#        permanent: true
-#_api:
-#    resource: routing_api.yml
-#    prefix:   /api
-
 #liip_theme:
 #    resource: "@LiipThemeBundle/Resources/config/routing.xml"
 #    prefix: /theme
+
+# Redirects /url/ to /url always located at the end
+#remove_trailing_slash:
+#    path: /{url}
+#    defaults: {_controller: 'ChamiloCoreBundle:Redirecting:removeTrailingSlash'}
+#    requirements:
+#        url: .*/$
+#        _method: GET
+
+chamilo_graphql:
+    resource: "@ChamiloGraphQlBundle/Resources/config/routing.yaml"
+
+chamilo_lti:
+    resource: "@ChamiloLtiBundle/Resources/config/routing.yml"
+

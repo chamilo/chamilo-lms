@@ -1,3 +1,0 @@
-contact:
-    resource: "@ChamiloContactBundle/Controller/ContactController.php"
-    type: annotation

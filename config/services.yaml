@@ -1,7 +1,6 @@
 # Put parameters here that don't need to change on each machine where the app is deployed
 # https://symfony.com/doc/current/best_practices/configuration.html#application-related-configuration
 parameters:
-#    container.dumper.inline_factories: true
     app_env: '%env(APP_ENV)%'
     password_encryption: '%env(APP_ENCRYPT_METHOD)%'
     secret: '%env(APP_SECRET)%'
@@ -11,10 +10,10 @@ parameters:
         form:
             resources:
                 - 'GeneratorBundle::fields.html.twig'
-    container.build_id: ~
     course_info_is_not_editable: false
-    sonata_media.cdn.host: '/var/upload/media/'
-    sonata_page.varnish.command: 'if [ ! -r "/etc/varnish/secret" ]; then echo "VALID ERROR :/"; else varnishadm -S /etc/varnish/secret -T 127.0.0.1:6082 {{ COMMAND }} "{{ EXPRESSION }}"; fi;'
+
+#    sonata_media.cdn.host: '/var/upload/media/'
+#    sonata_page.varnish.command: 'if [ ! -r "/etc/varnish/secret" ]; then echo "VALID ERROR :/"; else varnishadm -S /etc/varnish/secret -T 127.0.0.1:6082 {{ COMMAND }} "{{ EXPRESSION }}"; fi;'
 #    router.request_context.base_url: '%env(APP_URL_APPEND)%'
 #    asset.request_context.base_path: '%env(APP_URL_APPEND)%'
 
@@ -45,8 +44,6 @@ services:
         public: true       # Allows optimizing the container by removing unused services; this also means
           # fetching services directly from the container via $container->get() won't work.
         # The best practice is to be explicit about your dependencies anyway.
-        bind:
-            $passwordEncrypt: '%password_encryption%'
 
     Chamilo\CoreBundle\Component\Utils\Glide:
         arguments:
@@ -56,18 +53,13 @@ services:
     # makes classes in src/ available to be used as services
     # this creates a service per class whose id is the fully-qualified class name
 
-    Chamilo\PageBundle\:
-        resource: '../src/PageBundle/*'
-        exclude: '../src/PageBundle/{Entity,Migrations,Tests}'
-        public: true
-
     Vich\UploaderBundle\Naming\SubdirDirectoryNamer:
         public: true
 
     Chamilo\CoreBundle\Controller\ResourceController:
         arguments:
             - '@Chamilo\CoreBundle\Repository\ResourceFactory'
-            - '@Chamilo\CoreBundle\Block\BreadcrumbBlockService'
+#            - '@Chamilo\CoreBundle\Block\BreadcrumbBlockService'
 
     Symfony\Component\Mailer\Mailer:
         public: true
@@ -83,32 +75,6 @@ services:
     chamilo_core.hook_factory:
         class: 'Chamilo\CoreBundle\Hook\HookFactory'
 
-        # makes classes in src/ available to be used as services
-    # this creates a service per class whose id is the fully-qualified class name
-    AdminBundle\:
-        resource: '../src/AdminBundle/*'
-        # you can exclude directories or files
-        # but if a service is unused, it's removed anyway
-        exclude: '../src/AdminBundle/{ChamiloAdminBundle.php,Entity,Repository,Tests}'
-
-    ClassificationBundle\:
-        resource: '../src/ClassificationBundle/*'
-        # you can exclude directories or files
-        # but if a service is unused, it's removed anyway
-        exclude: '../src/ClassificationBundle/{ChamiloClassificationBundle.php,Entity,Admin,Document,Repository,Tests}'
-
-    ContactBundle\:
-        resource: '../src/ContactBundle/*'
-        # you can exclude directories or files
-        # but if a service is unused, it's removed anyway
-        exclude: '../src/ContactBundle/{ChamiloContactBundle.php,Entity,Admin,Controller,DependencyInjection,Form,Repository,Tests}'
-
-    Chamilo\UserBundle\:
-        resource: '../src/UserBundle/*'
-        # you can exclude directories or files
-        # but if a service is unused, it's removed anyway
-        exclude: '../src/UserBundle/{Admin,ChamiloUserBundle.php,Security/FOSUBUserProvider.php,DependencyInjection,Form,EventListener,Entity,Repository}'
-
     chamilo_lti_utils:
         class: Chamilo\LtiBundle\Util\Utils
         arguments: ['@chamilo.settings.manager']
@@ -122,13 +88,14 @@ services:
         class: APY\DataGridBundle\Grid\GridRegistry
         public: true
 
+
 sylius_settings:
     driver: doctrine/orm
 
 # Doctrine audit
-sonata_doctrine_orm_admin:
-    audit:
-        force: false # Audits are set in the admin.yml files with audit:true
+#sonata_doctrine_orm_admin:
+#    audit:
+#        force: false # Audits are set in the admin.yml files with audit:true
 
 # Grid default template
 apy_data_grid:
@@ -161,5 +128,4 @@ cocur_slugify:
 
 imports:
     - {resource: ../src/CoreBundle/Resources/config/services.yml}
-    - {resource: ../src/PageBundle/Resources/config/services.yml}
-#    - {resource: ../vendor/knplabs/doctrine-behaviors/config/orm-services.yml}
+#    - {resource: ../src/PageBundle/Resources/config/services.yml}

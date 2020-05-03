@@ -1,4 +1,0 @@
-# Controllers
-controllers:
-    resource: '../src/UserBundle/Controller/'
-    type: annotation

@@ -1,3 +1,0 @@
-page:
-    resource: '@ChamiloPageBundle/Controller/PageController.php'
-    type: annotation

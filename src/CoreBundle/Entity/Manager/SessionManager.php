@@ -7,13 +7,11 @@ namespace Chamilo\CoreBundle\Entity\Manager;
 use Chamilo\CoreBundle\Entity\Course;
 use Chamilo\CoreBundle\Entity\Session;
 use Chamilo\CoreBundle\Entity\SessionRelUser;
-use Chamilo\UserBundle\Entity\User;
-use Sonata\Doctrine\Entity\BaseEntityManager;
-
+use Chamilo\CoreBundle\Entity\User;
 /**
  * Class SessionManager.
  */
-class SessionManager extends BaseEntityManager
+class SessionManager
 {
     /**
      * @return Session

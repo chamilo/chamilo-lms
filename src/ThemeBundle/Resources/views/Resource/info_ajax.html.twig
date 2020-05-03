@@ -1,5 +1,12 @@
 {% block content %}
     {% autoescape false %}
+{#        <div id="app" data-resource="{{ resource.resourceNode.id }}" >#}
+{#        </div>#}
+
+        <div id="app">
+            <resource :id="{{ resource.resourceNode.id }}"></resource>
+        </div>
+
         <script>
             $(function () {
                 $('#close_info_bar').on('click', function () {

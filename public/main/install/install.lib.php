@@ -9,7 +9,7 @@ use Chamilo\CoreBundle\ToolChain;
 use Chamilo\TicketBundle\Entity\Category as TicketCategory;
 use Chamilo\TicketBundle\Entity\Priority as TicketPriority;
 use Chamilo\TicketBundle\Entity\Project as TicketProject;
-use Chamilo\UserBundle\Entity\Group;
+use Chamilo\CoreBundle\Entity\Group;
 use Doctrine\ORM\EntityManager;
 use Sonata\PageBundle\Entity\PageManager;
 use Symfony\Component\DependencyInjection\Container as SymfonyContainer;
@@ -2894,7 +2894,7 @@ function installGroups($container, $manager)
             'roles' => ['ROLE_INVITEE'],
         ],
     ];
-    $repo = $manager->getRepository('ChamiloUserBundle:Group');
+    $repo = $manager->getRepository('ChamiloCoreBundle:Group');
     foreach ($groups as $groupData) {
         $criteria = ['code' => $groupData['code']];
         $groupExists = $repo->findOneBy($criteria);
@@ -3313,7 +3313,7 @@ function finishInstallationWithContainer(
     );
 
     error_log('Adding access url as a node');
-    $userManager = $container->get('Chamilo\UserBundle\Repository\UserRepository');
+    $userManager = $container->get('Chamilo\CoreBundle\Repository\UserRepository');
     $urlRepo = $container->get('Chamilo\CoreBundle\Repository\AccessUrlRepository');
 
     $accessUrl = $urlRepo->find(1);

@@ -31,8 +31,8 @@ services:
         arguments:
             $className: 'Chamilo\CoreBundle\Entity\PersonalFile'
 
-    Chamilo\UserBundle\Repository\UserRepository:
+    Chamilo\CoreBundle\Repository\UserRepository:
         arguments:
-            $className: 'Chamilo\UserBundle\Entity\User'
+            $className: 'Chamilo\CoreBundle\Entity\User'
 
-    Chamilo\UserBundle\Repository\GroupRepository: ~
+    Chamilo\CoreBundle\Repository\GroupRepository: ~

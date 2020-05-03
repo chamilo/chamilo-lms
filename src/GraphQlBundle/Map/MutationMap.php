@@ -10,7 +10,7 @@ use Chamilo\CourseBundle\Entity\CForumPost;
 use Chamilo\CourseBundle\Entity\CForumThread;
 use Chamilo\CourseBundle\Entity\CNotebook;
 use Chamilo\GraphQlBundle\Traits\GraphQLTrait;
-use Chamilo\UserBundle\Entity\User;
+use Chamilo\CoreBundle\Entity\User;
 use GraphQL\Type\Definition\ResolveInfo;
 use Overblog\GraphQLBundle\Definition\Argument;
 use Overblog\GraphQLBundle\Error\UserError;
@@ -46,7 +46,7 @@ class MutationMap extends ResolverMap implements ContainerAwareInterface
     protected function resolveAuthenticate(Argument $args)
     {
         /** @var User $user */
-        $user = $this->em->getRepository('ChamiloUserBundle:User')->findOneBy(['username' => $args['username']]);
+        $user = $this->em->getRepository('ChamiloCoreBundle:User')->findOneBy(['username' => $args['username']]);
 
         if (!$user) {
             throw new UserError($this->translator->trans('User not found.'));
@@ -72,7 +72,7 @@ class MutationMap extends ResolverMap implements ContainerAwareInterface
     {
         $this->checkAuthorization();
 
-        $usersRepo = $this->em->getRepository('ChamiloUserBundle:User');
+        $usersRepo = $this->em->getRepository('ChamiloCoreBundle:User');
         $users = $usersRepo->findUsersToSendMessage($this->currentUser->getId());
         $receivers = array_filter(
             $args['receivers'],
@@ -312,7 +312,7 @@ class MutationMap extends ResolverMap implements ContainerAwareInterface
         \UserManager::create_extra_field($args['itemId']['name'], \ExtraField::FIELD_TYPE_TEXT, $args['itemId']['name'], '');
         \UserManager::update_extra_field_value($userId, $args['itemId']['name'], $args['itemId']['value']);
 
-        return $this->em->find('ChamiloUserBundle:User', $userId);
+        return $this->em->find('ChamiloCoreBundle:User', $userId);
     }
 
     /**
@@ -329,7 +329,7 @@ class MutationMap extends ResolverMap implements ContainerAwareInterface
         }
 
         /** @var User $user */
-        $user = $this->em->find('ChamiloUserBundle:User', $args['user']);
+        $user = $this->em->find('ChamiloCoreBundle:User', $args['user']);
         /** @var Course $course */
         $course = $this->em->find('ChamiloCoreBundle:Course', $args['course']);
 
@@ -622,7 +622,7 @@ class MutationMap extends ResolverMap implements ContainerAwareInterface
         }
 
         /** @var User $user */
-        $user = $this->em->find('ChamiloUserBundle:User', $userId);
+        $user = $this->em->find('ChamiloCoreBundle:User', $userId);
 
         \UserManager::update_user(
             $userId,
@@ -642,7 +642,7 @@ class MutationMap extends ResolverMap implements ContainerAwareInterface
 
         $this->em->clear($user);
 
-        return $this->em->find('ChamiloUserBundle:User', $userId);
+        return $this->em->find('ChamiloCoreBundle:User', $userId);
     }
 
     protected function resolveDeleteCourse(Argument $args): bool

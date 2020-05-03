@@ -4,7 +4,7 @@
 
 namespace Chamilo\CoreBundle\Entity;
 
-use Chamilo\UserBundle\Entity\User;
+use Chamilo\CoreBundle\Entity\User;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -44,7 +44,7 @@ class GradebookCategory
     /**
      * @var User
      *
-     * @ORM\ManyToOne(targetEntity="Chamilo\UserBundle\Entity\User", inversedBy="gradeBookCategories")
+     * @ORM\ManyToOne(targetEntity="Chamilo\CoreBundle\Entity\User", inversedBy="gradeBookCategories")
      * @ORM\JoinColumn(name="user_id", referencedColumnName="id")
      */
     protected $user;

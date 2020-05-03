@@ -22,7 +22,7 @@ use Chamilo\CoreBundle\Security\Authorization\Voter\ResourceNodeVoter;
 use Chamilo\CoreBundle\ToolChain;
 use Chamilo\CourseBundle\Entity\CDocument;
 use Chamilo\CourseBundle\Entity\CGroupInfo;
-use Chamilo\UserBundle\Entity\User;
+use Chamilo\CoreBundle\Entity\User;
 use Cocur\Slugify\SlugifyInterface;
 use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\EntityRepository;
@@ -418,7 +418,7 @@ class ResourceRepository extends BaseEntityRepository
         $em = $this->getEntityManager();
 
         if (!empty($userList)) {
-            $userRepo = $em->getRepository('ChamiloUserBundle:User');
+            $userRepo = $em->getRepository('ChamiloCoreBundle:User');
             foreach ($userList as $userId) {
                 $toUser = $userRepo->find($userId);
                 $resourceLink = $this->addResourceNodeToUser($resourceNode, $toUser);

@@ -35,7 +35,7 @@ if ($form->validate()) {
     $password = $values['pass1'];
     $token = $values['token'];
 
-    /** @var \Chamilo\UserBundle\Entity\User $user */
+    /** @var \Chamilo\CoreBundle\Entity\User $user */
     $user = UserManager::getManager()->findUserByConfirmationToken($token);
     if ($user) {
         if (!$user->isPasswordRequestNonExpired($ttl)) {

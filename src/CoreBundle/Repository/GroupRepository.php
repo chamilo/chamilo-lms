@@ -2,9 +2,9 @@
 
 /* For licensing terms, see /license.txt */
 
-namespace Chamilo\UserBundle\Repository;
+namespace Chamilo\CoreBundle\Repository;
 
-use Chamilo\UserBundle\Entity\Group;
+use Chamilo\CoreBundle\Entity\Group;
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\EntityRepository;
 

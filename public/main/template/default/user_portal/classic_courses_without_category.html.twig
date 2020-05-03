@@ -45,19 +45,20 @@
                         {% endif %}
                         <h4 class="course-items-title">
                             {% if item.visibility == constant('COURSE_VISIBILITY_CLOSED') and not item.current_user_is_teacher %}
-                                {{ item.title }} {{ item.code_course }}
+                                {{ item.title }} {{ item.course_code }}
                             {% else %}
                                 <a href="{{ item.link }}">
-                                    {{ item.title }} {{ item.code_course }}
+                                    {{ item.title }} {{ item.course_code }}
                                 </a>
                                 {{ item.notifications }}
-                                {% if item.is_special_course %}
+                                {% if item.is_special_course is defined and item.is_special_course %}
                                     {{ 'klipper.png' | img(22, 'CourseAutoRegister'|get_lang ) }}
                                 {% endif %}
                             {% endif %}
                         </h4>
                         <div class="course-items-session">
                             <div class="list-teachers">
+                                {% set counter = 0 %}
                                 {% if item.teachers|length > 0 %}
                                     {{ 'teacher.png' | img(16, 'Professor'|get_lang ) }}
                                     {% for teacher in item.teachers %}
@@ -70,7 +71,7 @@
                                     {% endfor %}
                                 {% endif %}
                             </div>
-                            {% if item.student_info %}
+                            {% if item.student_info is defined and item.student_info %}
                                 {% if item.student_info.progress is not null or item.student_info.score is not null or item.student_info.certificate is not null %}
                                     <div class="course-student-info">
                                         <div class="student-info">

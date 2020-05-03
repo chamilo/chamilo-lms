@@ -18,7 +18,7 @@ trait ControllerTrait
     {
         $services = parent::getSubscribedServices();
         $services['translator'] = TranslatorInterface::class;
-        $services['breadcrumb'] = BreadcrumbBlockService::class;
+        //$services['breadcrumb'] = BreadcrumbBlockService::class;
         $services['resource_factory'] = ResourceFactory::class;
         $services['glide'] = Glide::class;
 

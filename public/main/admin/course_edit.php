@@ -5,7 +5,7 @@
 use Chamilo\CoreBundle\Entity\CourseCategory;
 use Chamilo\CoreBundle\Repository\CourseCategoryRepository;
 use Chamilo\CoreBundle\Repository\CourseRepository;
-use Chamilo\UserBundle\Entity\User;
+use Chamilo\CoreBundle\Entity\User;
 
 $cidReset = true;
 

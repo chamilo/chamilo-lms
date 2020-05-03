@@ -26,7 +26,7 @@ class MenuVoter implements VoterInterface
     /**
      * @return bool|null
      */
-    public function matchItem(ItemInterface $item)
+    public function matchItem(ItemInterface $item): ?bool
     {
         $request = $this->requestStack->getCurrentRequest();
         $currentUri = $item->getUri();

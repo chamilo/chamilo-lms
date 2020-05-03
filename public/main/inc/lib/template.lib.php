@@ -4,7 +4,7 @@
 
 use Chamilo\CoreBundle\Entity\SessionRelCourseRelUser;
 use Chamilo\CoreBundle\Framework\Container;
-use Chamilo\UserBundle\Entity\User;
+use Chamilo\CoreBundle\Entity\User;
 use Symfony\Component\HttpFoundation\Response;
 
 /**
@@ -965,7 +965,7 @@ class Template
         $em = Database::getManager();
         $tutors = $em
             ->createQuery('
-                SELECT u FROM ChamiloUserBundle:User u
+                SELECT u FROM ChamiloCoreBundle:User u
                 INNER JOIN ChamiloCoreBundle:SessionRelCourseRelUser scu WITH u.id = scu.user
                 WHERE scu.status = :teacher_status AND scu.session = :session AND scu.course = :course
             ')
@@ -996,7 +996,7 @@ class Template
         $em = Database::getManager();
         $teachers = $em
             ->createQuery('
-                SELECT u FROM ChamiloUserBundle:User u
+                SELECT u FROM ChamiloCoreBundle:User u
                 INNER JOIN ChamiloCoreBundle:CourseRelUser cu WITH u.id = cu.user
                 WHERE cu.status = :teacher_status AND cu.course = :course
             ')

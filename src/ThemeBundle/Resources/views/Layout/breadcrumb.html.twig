@@ -4,17 +4,17 @@
     {% endif %}
 
     {# course and session variables are set in the src/CourseBundle/EventListener/CourseListener.php #}
-    {{
-        sonata_block_render_event(
-            'breadcrumb',
-            {
-                'context': 'chamilo_core.block.breadcrumb',
-                'course': course,
-                'session': session,
-                'legacy_breadcrumb': legacy_breadcrumb,
-                'current_uri': app.request.requestUri
-            }
-        )
-    }}
+{#    {{#}
+{#        sonata_block_render_event(#}
+{#            'breadcrumb',#}
+{#            {#}
+{#                'context': 'chamilo_core.block.breadcrumb',#}
+{#                'course': course,#}
+{#                'session': session,#}
+{#                'legacy_breadcrumb': legacy_breadcrumb,#}
+{#                'current_uri': app.request.requestUri#}
+{#            }#}
+{#        )#}
+{#    }}#}
 {% endautoescape %}
 

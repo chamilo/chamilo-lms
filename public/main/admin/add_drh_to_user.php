@@ -3,7 +3,7 @@
 /* For licensing terms, see /license.txt */
 
 use Chamilo\CoreBundle\Entity\UserRelUser;
-use Chamilo\UserBundle\Entity\User as UserEntity;
+use Chamilo\CoreBundle\Entity\User as UserEntity;
 
 $cidReset = true;
 

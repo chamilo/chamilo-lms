@@ -37,9 +37,7 @@ use Chamilo\CourseBundle\Repository\CStudentPublicationCommentRepository;
 use Chamilo\CourseBundle\Repository\CStudentPublicationRepository;
 use Chamilo\PageBundle\Entity\Page;
 use Chamilo\SettingsBundle\Manager\SettingsManager;
-use Chamilo\UserBundle\Repository\UserRepository;
-use Sonata\PageBundle\Entity\SiteManager;
-use Sonata\UserBundle\Entity\UserManager;
+use Chamilo\CoreBundle\Repository\UserRepository;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Session\Session;
@@ -169,7 +167,7 @@ class Container
      */
     public static function getTemplating()
     {
-        return self::$container->get('templating');
+        return self::$container->get('twig');
     }
 
     /**
@@ -479,7 +477,7 @@ class Container
      */
     public static function getUserRepository()
     {
-        return self::$container->get('Chamilo\UserBundle\Repository\UserRepository');
+        return self::$container->get('Chamilo\CoreBundle\Repository\UserRepository');
     }
 
     /**
@@ -543,14 +541,6 @@ class Container
     public static function setUserManager($manager)
     {
         self::$userManager = $manager;
-    }
-
-    /**
-     * @return SiteManager
-     */
-    public static function getSiteManager()
-    {
-        return self::$siteManager;
     }
 
     /**
@@ -622,8 +612,8 @@ class Container
         \Database::setManager($em);
         \CourseManager::setEntityManager($em);
         //self::setSettingsManager($container->get('chamilo.settings.manager'));
-        self::setUserManager($container->get('fos_user.user_manager'));
-        self::setSiteManager($container->get('sonata.page.manager.site'));
+        //self::setUserManager($container->get('fos_user.user_manager'));
+        //self::setSiteManager($container->get('sonata.page.manager.site'));
         \CourseManager::setCourseSettingsManager($container->get('Chamilo\CourseBundle\Manager\SettingsManager'));
         // Setting course tool chain (in order to create tools to a course)
         \CourseManager::setToolList($container->get(ToolChain::class));

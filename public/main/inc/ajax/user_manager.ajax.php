@@ -1,7 +1,7 @@
 <?php
 /* For licensing terms, see /license.txt */
 
-use Chamilo\UserBundle\Entity\User;
+use Chamilo\CoreBundle\Entity\User;
 use Doctrine\Common\Collections\Criteria;
 use Doctrine\ORM\Query\Expr\Join;
 
@@ -171,8 +171,8 @@ switch ($action) {
 
             if (!empty($user_id)) {
                 $user_table = Database::get_main_table(TABLE_MAIN_USER);
-                $sql = "UPDATE $user_table 
-                        SET active = '".$status."' 
+                $sql = "UPDATE $user_table
+                        SET active = '".$status."'
                         WHERE user_id = '".$user_id."'";
                 $result = Database::query($sql);
 

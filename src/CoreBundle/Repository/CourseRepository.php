@@ -81,7 +81,7 @@ class CourseRepository extends ResourceRepository
         // Selecting courses for users.
         $queryBuilder->innerJoin('c.users', 'subscriptions');
         $queryBuilder->innerJoin(
-            'ChamiloUserBundle:User',
+            'ChamiloCoreBundle:User',
             'user',
             Join::WITH,
             'subscriptions.user = user.id'

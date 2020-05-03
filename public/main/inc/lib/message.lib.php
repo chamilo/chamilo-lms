@@ -2,7 +2,7 @@
 /* For licensing terms, see /license.txt */
 
 use Chamilo\CoreBundle\Entity\Message;
-use Chamilo\UserBundle\Entity\User;
+use Chamilo\CoreBundle\Entity\User;
 use ChamiloSession as Session;
 
 /**
@@ -62,7 +62,7 @@ class MessageManager
 
         $sql = "SELECT COUNT(id) as number_messages
                 FROM $table
-                WHERE 
+                WHERE
                     $conditions
                 ";
         $result = Database::query($sql);
@@ -182,10 +182,10 @@ class MessageManager
         }
 
         $table = Database::get_main_table(TABLE_MESSAGE);
-        $sql = "SELECT 
-                    id as col0, 
-                    title as col1, 
-                    send_date as col2, 
+        $sql = "SELECT
+                    id as col0,
+                    title as col1,
+                    send_date as col2,
                     msg_status as col3,
                     user_sender_id
                 FROM $table
@@ -338,9 +338,9 @@ class MessageManager
         if (!empty($aboutUserInfo)) {
             $table = Database::get_main_table(TABLE_MESSAGE);
             $sql = 'SELECT id FROM '.$table.'
-                    WHERE 
-                      user_receiver_id = '.$aboutUserInfo['id'].' AND 
-                      msg_status = '.MESSAGE_STATUS_CONVERSATION.'                    
+                    WHERE
+                      user_receiver_id = '.$aboutUserInfo['id'].' AND
+                      msg_status = '.MESSAGE_STATUS_CONVERSATION.'
                     ';
             $result = Database::query($sql);
             $messages = [];
@@ -417,12 +417,12 @@ class MessageManager
         $message = Database::escape_string($message);
 
         $sql = "SELECT * FROM $table
-                WHERE 
+                WHERE
                     user_sender_id = $senderId AND
-                    user_receiver_id = $receiverId AND 
-                    title = '$subject' AND 
+                    user_receiver_id = $receiverId AND
+                    title = '$subject' AND
                     content = '$message' AND
-                    (msg_status = ".MESSAGE_STATUS_UNREAD." OR msg_status = ".MESSAGE_STATUS_NEW.")                    
+                    (msg_status = ".MESSAGE_STATUS_UNREAD." OR msg_status = ".MESSAGE_STATUS_NEW.")
                 ";
         $result = Database::query($sql);
 
@@ -852,8 +852,8 @@ class MessageManager
         }
 
         $sql = "SELECT * FROM $table
-                WHERE 
-                    id = $id AND 
+                WHERE
+                    id = $id AND
                     user_receiver_id = $user_receiver_id AND
                     msg_status <> ".MESSAGE_STATUS_OUTBOX;
         $rs = Database::query($sql);
@@ -862,10 +862,10 @@ class MessageManager
             // Delete attachment file.
             self::delete_message_attachment_file($id, $user_receiver_id);
             // Soft delete message.
-            $query = "UPDATE $table 
+            $query = "UPDATE $table
                       SET msg_status = ".MESSAGE_STATUS_DELETED."
                       WHERE
-                        id = $id AND 
+                        id = $id AND
                         user_receiver_id = $user_receiver_id ";
             Database::query($query);
 
@@ -1044,7 +1044,7 @@ class MessageManager
             $path_message_attach = $path_user_info['dir'].'message_attachments/';
             if (is_file($path_message_attach.$path)) {
                 if (rename($path_message_attach.$path, $path_message_attach.$new_path)) {
-                    $sql = "UPDATE $table_message_attach 
+                    $sql = "UPDATE $table_message_attach
                             SET path = '$new_path'
                             WHERE id = $attach_id ";
                     Database::query($sql);
@@ -1353,8 +1353,8 @@ class MessageManager
         }
 
         $query = "SELECT * FROM $table
-                  WHERE                            
-                    id = $messageId AND 
+                  WHERE
+                    id = $messageId AND
                     $userCondition
                     msg_status = $status";
         $result = Database::query($query);
@@ -2091,8 +2091,8 @@ class MessageManager
         $table = Database::get_main_table(TABLE_MESSAGE);
         $messageId = (int) $messageId;
         $sql = "SELECT * FROM $table
-                WHERE 
-                    id = '$messageId' AND 
+                WHERE
+                    id = '$messageId' AND
                     msg_status <> '".MESSAGE_STATUS_DELETED."' ";
         $res = Database::query($sql);
         $item = [];
@@ -2719,7 +2719,7 @@ class MessageManager
             return [];
         }
 
-        $sql = "SELECT DISTINCT * 
+        $sql = "SELECT DISTINCT *
                 FROM $messagesTable
                 WHERE
                     (user_receiver_id = $userId AND user_sender_id = $otherUserId) OR
@@ -2916,7 +2916,7 @@ class MessageManager
         }
 
         $table = Database::get_main_table(TABLE_MESSAGE);
-        $sql = "SELECT COUNT(id) as count 
+        $sql = "SELECT COUNT(id) as count
                 FROM $table
                 WHERE
                     user_receiver_id = $userId AND

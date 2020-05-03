@@ -22,7 +22,8 @@ use Symfony\Component\Serializer\Annotation\Groups;
  * @ApiResource(
  *      shortName="Documents",
  *      attributes={"security"="is_granted('ROLE_ADMIN')"},
- *      normalizationContext={"groups"={"document:read", "resource_node"}, "swagger_definition_name"="Read"}
+ *      normalizationContext={"groups"={"document:read", "resource_node"}},
+ *      denormalizationContext={"groups"={"document:write"}}
  * )
  * @ApiFilter(PropertyFilter::class)
  * @ApiFilter(SearchFilter::class, properties={"title": "partial", "course.code": "partial"})

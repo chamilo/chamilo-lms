@@ -9,7 +9,7 @@ if (!ctype_alnum($token)) {
     $token = '';
 }
 
-/** @var \Chamilo\UserBundle\Entity\User $user */
+/** @var \Chamilo\CoreBundle\Entity\User $user */
 $user = UserManager::getManager()->findUserByConfirmationToken($token);
 
 if ($user) {

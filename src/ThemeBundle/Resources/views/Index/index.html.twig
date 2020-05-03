@@ -12,7 +12,7 @@
     </section>
     <section class="section-welcome pb-5 pt-5">
         <div class="container">
-            {{ render(controller('Chamilo\\PageBundle\\Controller\\PageController::renderPageAction', {'slug': 'welcome'} )) }}
+{#            {{ render(controller('Chamilo\\PageBundle\\Controller\\PageController::renderPageAction', {'slug': 'welcome'} )) }}#}
         </div>
     </section>
     <section class="section-content">
@@ -24,7 +24,7 @@
         <div class="container">
             {% if chamilo_settings_get('display.show_hot_courses') == 'true' %}
                 {# See CourseBlockService.php #}
-                {{ sonata_block_render({'type': 'chamilo_core.block.course'}) }}
+{#                {{ sonata_block_render({'type': 'chamilo_core.block.course'}) }}#}
             {% endif %}
         </div>
     </section>

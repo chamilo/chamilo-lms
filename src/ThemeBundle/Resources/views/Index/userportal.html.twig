@@ -1,21 +1,20 @@
 {% block page_content %}
     {% autoescape false %}
-
         {% if plugin_content_top %}
             <div class="page-content-top">
                 {{ plugin_content_top }}
             </div>
         {% endif %}
 
-        {{ sniff_notification }}
+{#        {{ sniff_notification }}#}
 
-        {% if home_welcome %}
+        {% if home_welcome is defined %}
             <article id="home-welcome">
                 {{ home_welcome }}
             </article>
         {% endif %}
 
-        {% if home_include %}
+        {% if home_include is defined %}
             <article id="home-include">
                 {{ home_include }}
             </article>
@@ -25,7 +24,7 @@
             {# include 'layout/page_body.tpl'|get_template #}
         {% endblock %}
 
-        {% if welcome_to_course_block %}
+        {% if welcome_to_course_block is defined %}
             <article id="homepage-course">
                 {{ welcome_to_course_block }}
             </article>
@@ -39,20 +38,20 @@
             {% endif %}
         {% endblock %}
 
-        {% if announcements_block %}
+        {% if announcements_block is defined %}
             <article id="homepage-announcements">
                 {{ announcements_block }}
             </article>
         {% endif %}
 
-        {% if course_category_block %}
+        {% if course_category_block is defined %}
             <article id="homepage-course-category">
                 {{ course_category_block }}
             </article>
         {% endif %}
         {# % include 'layout/hot_courses.tpl'|get_template #}
         {# include 'session/sessions_current.tpl'|get_template #}
-        {% if plugin_content_bottom %}
+        {% if plugin_content_bottom is defined %}
             <div id="plugin_content_bottom">
                 {{ plugin_content_bottom }}
             </div>

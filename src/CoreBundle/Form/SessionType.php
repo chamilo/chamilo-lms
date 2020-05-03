@@ -19,7 +19,7 @@ class SessionType extends AbstractType
                 'general_coach',
                 'entity',
                 [
-                    'class' => 'ChamiloUserBundle:User',
+                    'class' => 'ChamiloCoreBundle:User',
                     'property' => 'username',
                 ]
             )
@@ -27,7 +27,7 @@ class SessionType extends AbstractType
                 'session_admin_id',
                 'entity',
                 [
-                    'class' => 'ChamiloUserBundle:User',
+                    'class' => 'ChamiloCoreBundle:User',
                     'property' => 'username',
                 ]
             )

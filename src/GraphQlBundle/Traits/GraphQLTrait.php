@@ -8,7 +8,7 @@ use Chamilo\CoreBundle\Entity\AccessUrl;
 use Chamilo\CoreBundle\Entity\Course;
 use Chamilo\CoreBundle\Entity\Session;
 use Chamilo\SettingsBundle\Manager\SettingsManager;
-use Chamilo\UserBundle\Entity\User;
+use Chamilo\CoreBundle\Entity\User;
 use Doctrine\ORM\EntityManager;
 use Firebase\JWT\JWT;
 use Overblog\GraphQLBundle\Error\UserError;
@@ -84,7 +84,7 @@ trait GraphQLTrait
 
         try {
             /** @var User $user */
-            $user = $this->em->find('ChamiloUserBundle:User', $tokenData['user']);
+            $user = $this->em->find('ChamiloCoreBundle:User', $tokenData['user']);
         } catch (\Exception $e) {
             $user = null;
         }

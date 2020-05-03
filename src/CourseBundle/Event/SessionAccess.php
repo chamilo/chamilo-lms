@@ -6,7 +6,7 @@ namespace Chamilo\CourseBundle\Event;
 
 use Chamilo\CoreBundle\Entity\Course;
 use Chamilo\CoreBundle\Entity\Session;
-use Chamilo\UserBundle\Entity\User;
+use Chamilo\CoreBundle\Entity\User;
 use Symfony\Component\EventDispatcher\Event;
 
 /**

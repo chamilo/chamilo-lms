@@ -12,7 +12,6 @@ security:
             entity:
                 class: Chamilo\CoreBundle\Entity\User
 
-
     access_control:
         - {path: ^/administrator, role: ROLE_ADMIN}
         - {path: ^/efconnect, role: ROLE_USER}
@@ -65,6 +64,9 @@ security:
             guard:
                 authenticators:
                     - Chamilo\CoreBundle\Security\LoginFormAuthenticator
+                    - Chamilo\CoreBundle\Security\TokenAuthenticator
+                entry_point: Chamilo\CoreBundle\Security\LoginFormAuthenticator
+
             remember_me:
                 secret: '%secret%'
                 lifetime: 604800 # 1 week in seconds

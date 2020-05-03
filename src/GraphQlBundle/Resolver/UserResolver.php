@@ -6,7 +6,7 @@ namespace Chamilo\GraphQlBundle\Resolver;
 
 use Chamilo\CoreBundle\Entity\Course;
 use Chamilo\GraphQlBundle\Traits\GraphQLTrait;
-use Chamilo\UserBundle\Entity\User;
+use Chamilo\CoreBundle\Entity\User;
 use Doctrine\Common\Collections\ArrayCollection;
 use Overblog\GraphQLBundle\Definition\Argument;
 use Symfony\Component\DependencyInjection\ContainerAwareInterface;
@@ -55,7 +55,7 @@ class UserResolver implements ContainerAwareInterface
             return [];
         }
 
-        $usersRepo = $this->em->getRepository('ChamiloUserBundle:User');
+        $usersRepo = $this->em->getRepository('ChamiloCoreBundle:User');
 
         return $usersRepo->findUsersToSendMessage($user->getId(), $args['filter']);
     }

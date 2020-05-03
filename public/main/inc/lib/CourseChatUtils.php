@@ -11,7 +11,7 @@ use Chamilo\CoreBundle\Entity\SessionRelCourseRelUser;
 use Chamilo\CoreBundle\Repository\ResourceRepository;
 use Chamilo\CourseBundle\Entity\CChatConnected;
 use Chamilo\CourseBundle\Entity\CChatConversation;
-use Chamilo\UserBundle\Entity\User;
+use Chamilo\CoreBundle\Entity\User;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Criteria;
 use Michelf\MarkdownExtra;
@@ -632,7 +632,7 @@ class CourseChatUtils
         if ($this->groupId) {
             $students = $em
                 ->createQuery(
-                    'SELECT u FROM ChamiloUserBundle:User u
+                    'SELECT u FROM ChamiloCoreBundle:User u
                     INNER JOIN ChamiloCourseBundle:CGroupRelUser gru
                         WITH u.id = gru.userId AND gru.cId = :course
                     WHERE u.id != :user AND gru.groupId = :group
@@ -642,7 +642,7 @@ class CourseChatUtils
                 ->getResult();
             $tutors = $em
                 ->createQuery(
-                    'SELECT u FROM ChamiloUserBundle:User u
+                    'SELECT u FROM ChamiloCoreBundle:User u
                     INNER JOIN ChamiloCourseBundle:CGroupRelTutor grt
                         WITH u.id = grt.userId AND grt.cId = :course
                     WHERE u.id != :user AND grt.groupId = :group

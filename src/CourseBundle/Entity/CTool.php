@@ -298,6 +298,6 @@ class CTool extends AbstractResource implements ResourceInterface
 
     public function getResourceName(): string
     {
-        return (string) $this->getName();
+        return $this->getName();
     }
 }

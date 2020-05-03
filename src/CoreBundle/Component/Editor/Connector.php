@@ -7,7 +7,7 @@ namespace Chamilo\CoreBundle\Component\Editor;
 use Chamilo\CoreBundle\Component\Editor\Driver\Driver;
 use Chamilo\CoreBundle\Entity\Course;
 use Chamilo\CoreBundle\Entity\Session;
-use Chamilo\UserBundle\Entity\User;
+use Chamilo\CoreBundle\Entity\User;
 use Doctrine\ORM\EntityManager;
 use Symfony\Component\Routing\Router;
 use Symfony\Component\Routing\RouterInterface;

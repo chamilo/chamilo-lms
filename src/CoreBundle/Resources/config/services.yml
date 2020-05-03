@@ -16,7 +16,7 @@ services:
 
     Chamilo\CoreBundle\:
         resource: '../../*'
-        exclude: '../../{Repository,Tool,Admin,Block,Component,Composer,DependencyInjection,EventListener,Form,Framework,Menu,Migrations,Security,Settings,ChamiloCoreBundle.php,Entity,Tests}'
+        exclude: '../../{Repository,Tool,Admin,Block,Component,Composer,DependencyInjection,EventListener,Form,Framework,Menu,Migrations,Settings,ChamiloCoreBundle.php,Entity,Tests}'
         public: true
 
     Chamilo\CoreBundle\Controller\:
@@ -53,7 +53,13 @@ services:
 
     # Chamilo custom password encoder (depends on the password_encryption param)
 #    chamilo_user.security.encoder:
-#        class: Chamilo\UserBundle\Security\Encoder
+#        class: Chamilo\CoreBundle\Security\Encoder
+#        bind:
+#            $passwordEncrypt: '%password_encryption%'
+
+    Chamilo\CoreBundle\Security\Encoder:
+        arguments:
+            - '%password_encryption%'
 
     # Course voter checks if a user has permissions to do actions in a course
     chamilo_core.security.authorization.voter.course_voter:
@@ -98,21 +104,21 @@ services:
             - {name: form.type, alias: yes_no}
 #    # Extra field attribute services
 #    chamilo_user.form.type.attribute_value_type:
-#        class: Chamilo\UserBundle\Form\Type\AttributeValueType
+#        class: Chamilo\CoreBundle\Form\Type\AttributeValueType
 #        arguments: [Chamilo\CoreBundle\Entity\ExtraFieldValues, ['registration'], 'user', @sylius.repository.subject_name_attribute_value]
 #        tags:
 #            - {name: form.type, alias: chamilo_user_extra_field_value}
 ##
 #
 #    chamilo_user.form.type.attribute_type:
-#        class: Chamilo\UserBundle\Form\Type\AttributeType
+#        class: Chamilo\CoreBundle\Form\Type\AttributeType
 #        arguments: [Chamilo\CoreBundle\Entity\ExtraField, ['registration'], 'user']
 ##        arguments: [%sylius.attribute.attribute_types%]
 #        tags:
 #            - {name: form.type, alias: chamilo_user_attribute_type}
 #
 #    chamilo_user.form.type.attribute_choice_type:
-#        class: Chamilo\UserBundle\Form\Type\AttributeTypeChoiceType
+#        class: Chamilo\CoreBundle\Form\Type\AttributeTypeChoiceType
 #        arguments: [%sylius.attribute.attribute_types%]
 #        tags:
 #            - {name: form.type, alias: chamilo_user_attribute_choice}
@@ -245,43 +251,43 @@ services:
         arguments: ['@router', '@security.authorization_checker', '@security.token_storage']
 
     # Block services
-    chamilo_core.block.course:
-        class: Chamilo\CoreBundle\Block\CourseBlockService
-        arguments: [chamilo_core.block.course, '@templating']
-        tags:
-            - {name: sonata.block}
+#    chamilo_core.block.course:
+#        class: Chamilo\CoreBundle\Block\CourseBlockService
+#        arguments: [chamilo_core.block.course, '@templating']
+#        tags:
+#            - {name: sonata.block}
 
-    chamilo_core.block.skill:
-        class: Chamilo\CoreBundle\Block\SkillBlockService
-        arguments: [chamilo_core.block.skill, '@templating']
-        tags:
-            - {name: sonata.block}
+#    chamilo_core.block.skill:
+#        class: Chamilo\CoreBundle\Block\SkillBlockService
+#        arguments: [chamilo_core.block.skill, '@templating']
+#        tags:
+#            - {name: sonata.block}
 
     # Breadcrumb
-    chamilo_core.block.breadcrumb:
-        class: Chamilo\CoreBundle\Block\BreadcrumbBlockService
-        arguments: ['chamilo_core.block.breadcrumb', 'breadcrumb', '@templating', '@knp_menu.menu_provider', '@knp_menu.factory']
-        tags:
-            - {name: sonata.block}
-            - {name: sonata.breadcrumb}
+#    chamilo_core.block.breadcrumb:
+#        class: Chamilo\CoreBundle\Block\BreadcrumbBlockService
+#        arguments: ['chamilo_core.block.breadcrumb', 'breadcrumb', '@templating', '@knp_menu.menu_provider', '@knp_menu.factory']
+#        tags:
+#            - {name: sonata.block}
+#            - {name: sonata.breadcrumb}
 
-    Chamilo\CoreBundle\Block\BreadcrumbBlockService: '@chamilo_core.block.breadcrumb'
+#    Chamilo\CoreBundle\Block\BreadcrumbBlockService: '@chamilo_core.block.breadcrumb'
 
-    Chamilo\CoreBundle\Controller\ResourceUploadController:
-        autowire: false
+#    Chamilo\CoreBundle\Controller\ResourceUploadController:
+#        autowire: false
 
     # Form types
-    chamilo_user.registration.form.type:
-        class: Chamilo\UserBundle\Form\Type\RegistrationFormType
-        arguments: ['%fos_user.model.user.class%']
-        tags:
-            - {name: form.type, alias: chamilo_sonata_user_registration}
+#    chamilo_user.registration.form.type:
+#        class: Chamilo\CoreBundle\Form\Type\RegistrationFormType
+#        arguments: ['%fos_user.model.user.class%']
+#        tags:
+#            - {name: form.type, alias: chamilo_sonata_user_registration}
 
-    chamilo_user.profile.form.type:
-        class: Chamilo\UserBundle\Form\ProfileType
-        arguments: ['%fos_user.model.user.class%']
-        tags:
-            - {name: form.type, alias: chamilo_sonata_user_profile}
+#    chamilo_user.profile.form.type:
+#        class: Chamilo\CoreBundle\Form\ProfileType
+#        arguments: ['%fos_user.model.user.class%']
+#        tags:
+#            - {name: form.type, alias: chamilo_sonata_user_profile}
 
     Liip\ImagineBundle\Service\FilterService:
         alias: 'liip_imagine.service.filter'

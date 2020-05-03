@@ -18,7 +18,7 @@ use Chamilo\CourseBundle\Entity\CLpCategory;
 use Chamilo\CourseBundle\Entity\CNotebook;
 use Chamilo\CourseBundle\Entity\CTool;
 use Chamilo\GraphQlBundle\Traits\GraphQLTrait;
-use Chamilo\UserBundle\Entity\User;
+use Chamilo\CoreBundle\Entity\User;
 use GraphQL\Type\Definition\ResolveInfo;
 use Overblog\GraphQLBundle\Definition\Argument;
 use Overblog\GraphQLBundle\Error\UserError;
@@ -237,7 +237,7 @@ class QueryMap extends ResolverMap implements ContainerAwareInterface
                     return $thread->getThreadTitle();
                 },
                 'userPoster' => function (CForumThread $thread) {
-                    $userRepo = $this->em->getRepository('ChamiloUserBundle:User');
+                    $userRepo = $this->em->getRepository('ChamiloCoreBundle:User');
 
                     return $userRepo->find($thread->getThreadPosterId());
                 },
@@ -273,7 +273,7 @@ class QueryMap extends ResolverMap implements ContainerAwareInterface
                     return $post->getPostText();
                 },
                 'userPoster' => function (CForumPost $post) {
-                    $userRepo = $this->em->getRepository('ChamiloUserBundle:User');
+                    $userRepo = $this->em->getRepository('ChamiloCoreBundle:User');
 
                     return $userRepo->find($post->getPosterId());
                 },

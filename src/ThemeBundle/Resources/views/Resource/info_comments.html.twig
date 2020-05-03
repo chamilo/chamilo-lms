@@ -6,11 +6,9 @@
         'type' : type,
         'tool' : tool
     } %}
-
     <form id="add_comment" class="form-inline" method="post" action="{{ url('post_resource_comment', nodeParams) }}">
         {{ form_widget(comment_form) }}
     </form>
-
     <script>
         $(function(){
             var commentForm = $('#add_comment');
@@ -30,7 +28,6 @@
                         var comment = '<p>' + val.content + ' ' + val.author.username +' - '+createdAt+'</p>';
 
                         $(comment).prependTo($("#comment_list"));
-                        //$("#comment_list").html().appendTo(comment);
                     },
                 });
 

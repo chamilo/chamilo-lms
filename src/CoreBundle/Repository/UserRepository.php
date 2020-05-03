@@ -2,7 +2,7 @@
 
 /* For licensing terms, see /license.txt */
 
-namespace Chamilo\UserBundle\Repository;
+namespace Chamilo\CoreBundle\Repository;
 
 use Chamilo\CoreBundle\Entity\AccessUrl;
 use Chamilo\CoreBundle\Entity\AccessUrlRelUser;
@@ -46,10 +46,13 @@ use Chamilo\CourseBundle\Entity\CStudentPublicationComment;
 use Chamilo\CourseBundle\Entity\CSurveyAnswer;
 use Chamilo\CourseBundle\Entity\CWiki;
 use Chamilo\TicketBundle\Entity\Ticket;
-use Chamilo\UserBundle\Entity\User;
+use Chamilo\CoreBundle\Entity\User;
 use Doctrine\Common\Collections\Criteria;
 use Doctrine\ORM\Query\Expr\Join;
+use Symfony\Bridge\Doctrine\Security\User\UserLoaderInterface;
 use Symfony\Component\Security\Core\Exception\UsernameNotFoundException;
+use Symfony\Component\Security\Core\User\PasswordUpgraderInterface;
+use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Component\Serializer\Encoder\JsonEncoder;
 use Symfony\Component\Serializer\Normalizer\AbstractNormalizer;
 use Symfony\Component\Serializer\Normalizer\GetSetMethodNormalizer;
@@ -61,8 +64,28 @@ use Symfony\Component\Serializer\Serializer;
  * All functions that query the database (selects)
  * Functions should return query builders.
  */
-class UserRepository extends ResourceRepository
+class UserRepository extends ResourceRepository implements UserLoaderInterface, PasswordUpgraderInterface
 {
+    public function loadUserByUsername($username)
+    {
+        return $this->findBy(['username' => $username]);
+    }
+
+    public function updateUser($user)
+    {
+
+        $this->getEntityManager()->persist($user);
+        $this->getEntityManager()->flush();
+    }
+
+    public function upgradePassword(UserInterface $user, string $newEncodedPassword): void
+    {
+        // this code is only an example; the exact code will depend on
+        // your own application needs
+        $user->setPassword($newEncodedPassword);
+        $this->getEntityManager()->flush($user);
+    }
+
     public function getRootUser(): User
     {
         $qb = $this->getRepository()->createQueryBuilder('u');
@@ -167,7 +190,7 @@ class UserRepository extends ResourceRepository
         // Selecting user info
         $qb->select('DISTINCT b');
 
-        $qb->from('Chamilo\UserBundle\Entity\User', 'b');
+        $qb->from('Chamilo\CoreBundle\Entity\User', 'b');
 
         // Selecting courses for users
         //$qb->innerJoin('u.courses', 'c');
@@ -194,7 +217,7 @@ class UserRepository extends ResourceRepository
         $queryBuilder->select('c');
 
         // Loading User.
-        //$qb->from('Chamilo\UserBundle\Entity\User', 'u');
+        //$qb->from('Chamilo\CoreBundle\Entity\User', 'u');
 
         // Selecting course
         $queryBuilder->innerJoin('Chamilo\CoreBundle\Entity\Course', 'c');
@@ -324,7 +347,7 @@ class UserRepository extends ResourceRepository
         $queryBuilder->select('c');
 
         // Loading User.
-        //$qb->from('Chamilo\UserBundle\Entity\User', 'u');
+        //$qb->from('Chamilo\CoreBundle\Entity\User', 'u');
 
         // Selecting course
         $queryBuilder->innerJoin('Chamilo\CoreBundle\Entity\Course', 'c');
@@ -486,7 +509,7 @@ class UserRepository extends ResourceRepository
             // All users
             if ('true' === $allowSendMessageToAllUsers || api_is_platform_admin()) {
                 $dql = "SELECT DISTINCT U
-                        FROM ChamiloUserBundle:User U
+                        FROM ChamiloCoreBundle:User U
                         LEFT JOIN ChamiloCoreBundle:AccessUrlRelUser R
                         WITH U = R.user
                         WHERE
@@ -497,7 +520,7 @@ class UserRepository extends ResourceRepository
             } else {
                 $dql = 'SELECT DISTINCT U
                         FROM ChamiloCoreBundle:AccessUrlRelUser R, ChamiloCoreBundle:UserRelUser UF
-                        INNER JOIN ChamiloUserBundle:User AS U
+                        INNER JOIN ChamiloCoreBundle:User AS U
                         WITH UF.friendUserId = U
                         WHERE
                             U.active = 1 AND
@@ -514,7 +537,7 @@ class UserRepository extends ResourceRepository
         ) {
             if ('true' === $allowSendMessageToAllUsers) {
                 $dql = "SELECT DISTINCT U
-                        FROM ChamiloUserBundle:User U
+                        FROM ChamiloCoreBundle:User U
                         LEFT JOIN ChamiloCoreBundle:AccessUrlRelUser R
                         WITH U = R.user
                         WHERE
@@ -527,7 +550,7 @@ class UserRepository extends ResourceRepository
                 $online_time = time() - $time_limit * 60;
                 $limit_date = api_get_utc_datetime($online_time);
                 $dql = "SELECT DISTINCT U
-                        FROM ChamiloUserBundle:User U
+                        FROM ChamiloCoreBundle:User U
                         INNER JOIN ChamiloCoreBundle:TrackEOnline T
                         WITH U.id = T.loginUserId
                         WHERE

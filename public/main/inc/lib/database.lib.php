@@ -35,7 +35,7 @@ class Database
         $config->setAutoGenerateProxyClasses(true);
         $config->setEntityNamespaces(
             [
-                'ChamiloUserBundle' => 'Chamilo\UserBundle\Entity',
+                'ChamiloCoreBundle' => 'Chamilo\CoreBundle\Entity',
                 'ChamiloCoreBundle' => 'Chamilo\CoreBundle\Entity',
                 'ChamiloCourseBundle' => 'Chamilo\CourseBundle\Entity',
                 'ChamiloSkillBundle' => 'Chamilo\SkillBundle\Entity',
@@ -650,7 +650,7 @@ class Database
             //$path.'src/Chamilo/MediaBundle/Entity',
             //$path.'src/Chamilo/PageBundle/Entity',
             $path.'src/Chamilo/CoreBundle/Entity',
-            $path.'src/Chamilo/UserBundle/Entity',
+            //$path.'src/Chamilo/UserBundle/Entity',
             $path.'src/Chamilo/CourseBundle/Entity',
             $path.'src/Chamilo/TicketBundle/Entity',
             $path.'src/Chamilo/SkillBundle/Entity',

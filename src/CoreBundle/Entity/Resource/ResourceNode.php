@@ -9,7 +9,7 @@ use ApiPlatform\Core\Annotation\ApiResource;
 use ApiPlatform\Core\Serializer\Filter\PropertyFilter;
 use Chamilo\CoreBundle\Entity\Session;
 use Chamilo\CoreBundle\Traits\TimestampableAgoTrait;
-use Chamilo\UserBundle\Entity\User;
+use Chamilo\CoreBundle\Entity\User;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Criteria;
 use Doctrine\ORM\Mapping as ORM;
@@ -25,7 +25,8 @@ use Symfony\Component\Validator\Constraints as Assert;
  * @ApiResource(
  *     attributes={"security"="is_granted('ROLE_ADMIN')"},
  *     collectionOperations={"get"},
- *     normalizationContext={"groups"={"resource_node:read", "document:read"}}
+ *     normalizationContext={"groups"={"resource_node:read", "document:read"}},
+ *     denormalizationContext={"groups"={"resource_node:write", "document:write"}}
  * )
  * @ApiFilter(PropertyFilter::class)
  * @ORM\Entity(repositoryClass="Chamilo\CoreBundle\Repository\ResourceNodeRepository")
@@ -93,7 +94,7 @@ class ResourceNode
      * @Assert\Valid()
      * @Groups({"resource_node:read", "document:read"})
      * @ORM\ManyToOne(
-     *     targetEntity="Chamilo\UserBundle\Entity\User", inversedBy="resourceNodes"
+     *     targetEntity="Chamilo\CoreBundle\Entity\User", inversedBy="resourceNodes"
      * )
      * @ORM\JoinColumn(name="creator_id", referencedColumnName="id", nullable=true, onDelete="CASCADE")
      */

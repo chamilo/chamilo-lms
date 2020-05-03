@@ -10,7 +10,7 @@ use Chamilo\CoreBundle\Entity\Resource\ResourceInterface;
 use Chamilo\CoreBundle\Entity\Resource\ResourceNode;
 use Chamilo\CoreBundle\Repository\ResourceFactory;
 use Chamilo\CoreBundle\Repository\ResourceRepository;
-use Chamilo\UserBundle\Entity\User;
+use Chamilo\CoreBundle\Entity\User;
 use Doctrine\ORM\EntityNotFoundException;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Security\Core\Exception\AccessDeniedException;
@@ -108,6 +108,7 @@ trait ResourceControllerTrait
 
     private function setBreadCrumb(Request $request, ResourceNode $resourceNode)
     {
+        return false;
         $tool = $request->get('tool');
         $resourceNodeId = $request->get('id');
         $routeParams = $this->getResourceParams($request);

@@ -1,7 +1,7 @@
 <?php
 /* For licensing terms, see /license.txt */
 
-use Chamilo\UserBundle\Entity\User;
+use Chamilo\CoreBundle\Entity\User;
 use ChamiloSession as Session;
 
 /**
@@ -391,17 +391,17 @@ class Login
         }
 
         $tbl_user = Database::get_main_table(TABLE_MAIN_USER);
-        $query = "SELECT 
-                    user_id AS uid, 
-		            lastname AS lastName, 
-		            firstname AS firstName, 
-		            username AS loginName, 
-		            password, 
+        $query = "SELECT
+                    user_id AS uid,
+		            lastname AS lastName,
+		            firstname AS firstName,
+		            username AS loginName,
+		            password,
 		            email,
-                    status AS status, 
-                    official_code, 
-                    phone, 
-                    picture_uri, 
+                    status AS status,
+                    official_code,
+                    phone,
+                    picture_uri,
                     creator_id,
                     auth_source
 				 FROM $tbl_user

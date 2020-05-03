@@ -2,7 +2,7 @@
 
 /* For licensing terms, see /license.txt */
 
-namespace Chamilo\UserBundle\Form;
+namespace Chamilo\CoreBundle\Form;
 
 use Chamilo\CoreBundle\Form\Type\IllustrationType;
 use Symfony\Component\Form\AbstractType;
@@ -170,7 +170,7 @@ class ProfileType extends AbstractType
     {
         $resolver->setDefaults(
             [
-                'data_class' => 'Chamilo\UserBundle\Entity\User',
+                'data_class' => 'Chamilo\CoreBundle\Entity\User',
             ]
         );
     }

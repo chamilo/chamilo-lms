@@ -1714,7 +1714,6 @@ class IndexManager
                                             isset($session_box['duration']) ? $session_box['duration'] : null
                                         );
                                     }
-
                                     $this->tpl->assign('session', $sessionParams);
                                     $this->tpl->assign('show_tutor', ('true' === api_get_setting('show_session_coach') ? true : false));
                                     $this->tpl->assign('gamification_mode', $gameModeIsActive);

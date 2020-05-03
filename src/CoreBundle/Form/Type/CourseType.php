@@ -45,11 +45,11 @@ class CourseType extends AbstractType
                 ['required' => false]
             )
             /* ->add('general_coach', 'entity', array(
-                 'class' => 'ChamiloUserBundle:User',
+                 'class' => 'ChamiloCoreBundle:User',
                  'property' => 'username',
              ))
              ->add('session_admin_id',  'entity', array(
-                 'class' => 'ChamiloUserBundle:User',
+                 'class' => 'ChamiloCoreBundle:User',
                  'property' => 'username',
              ))
              ->add('visibility', 'choice',

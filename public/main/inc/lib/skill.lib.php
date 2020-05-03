@@ -6,7 +6,7 @@ use Chamilo\CoreBundle\Entity\Skill as SkillEntity;
 use Chamilo\CoreBundle\Entity\SkillRelUser as SkillRelUserEntity;
 use Chamilo\SkillBundle\Entity\SkillRelCourse;
 use Chamilo\SkillBundle\Entity\SkillRelItem;
-use Chamilo\UserBundle\Entity\User;
+use Chamilo\CoreBundle\Entity\User;
 use Fhaculty\Graph\Graph;
 use Fhaculty\Graph\Vertex;
 
@@ -257,7 +257,7 @@ class SkillRelSkill extends Model
     public function getDirectParents($skillId)
     {
         $skillId = (int) $skillId;
-        $sql = 'SELECT parent_id as skill_id 
+        $sql = 'SELECT parent_id as skill_id
                 FROM '.$this->table.'
                 WHERE skill_id = '.$skillId;
         $result = Database::query($sql);
@@ -1825,7 +1825,7 @@ class Skill extends Model
     public function getUserSkillRanking($user_id)
     {
         $user_id = (int) $user_id;
-        $sql = "SELECT count(skill_id) count 
+        $sql = "SELECT count(skill_id) count
                 FROM {$this->table} s
                 INNER JOIN {$this->table_skill_rel_user} su
                 ON (s.id = su.skill_id)
@@ -2571,8 +2571,8 @@ class Skill extends Model
                                 success: function(result) {
                                     $("#" +skillId+ ".user_skill").html(result);
                                 }
-                            });                            
-                        });                        
+                            });
+                        });
                     });
                 </script>
                 ';

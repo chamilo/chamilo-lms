@@ -5,7 +5,7 @@
 namespace Chamilo\CoreBundle\EventListener;
 
 use Chamilo\CoreBundle\Framework\Container;
-use Chamilo\UserBundle\Entity\User;
+use Chamilo\CoreBundle\Entity\User;
 use Symfony\Component\DependencyInjection\ContainerAwareTrait;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\HttpKernel\Event\ControllerEvent;
@@ -49,6 +49,7 @@ class LegacyListener
 
         $twig = $container->get('twig');
         $token = $container->get('security.token_storage')->getToken();
+
         $userObject = null;
         if (null !== $token) {
             /** @var User $userObject */

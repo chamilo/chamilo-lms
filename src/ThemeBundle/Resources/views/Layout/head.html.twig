@@ -1,6 +1,6 @@
 <meta charset="utf-8">
 {# Check settings to add more metadata in app/config/sonata/sonata_seo.yml #}
-{{ sonata_seo_metadatas() }}
+{#{{ sonata_seo_metadatas() }}#}
 <link href="https://chamilo.org/chamilo-lms/" rel="help"/>
 <link href="https://chamilo.org/the-association/" rel="author"/>
 <link href="https://chamilo.org/the-association/" rel="copyright"/>
@@ -25,21 +25,29 @@
 {% set profile_link = '' %}
 {% set message_link = '' %}
 
-{# Files app.css is generated from "assets/css/app.scss" file using the file webpack.config.js #}
-<link rel="stylesheet" href="{{ url('home') ~ 'build/css/app.css' }}"/>
-{% if theme %}
-<link rel="stylesheet" href="{{ url('home') ~ 'build/css/themes/'~ theme ~'/default.css' }}"/>
-{% endif %}
-<link rel="stylesheet" media="print" href="{{ url('home') ~ 'build/css/print.css' }}"/>
+{% block stylesheets %}
+    {# Files app.css is generated from "assets/css/app.scss" file using the file webpack.config.js #}
+    <link rel="stylesheet" href="{{ url('home') ~ 'build/css/app.css' }}"/>
+{#    {{ encore_entry_link_tags('app') }}#}
+    {% if theme %}
+    <link rel="stylesheet" href="{{ url('home') ~ 'build/css/themes/'~ theme ~'/default.css' }}"/>
+    {% endif %}
+    <link rel="stylesheet" media="print" href="{{ url('home') ~ 'build/css/print.css' }}"/>
+    {{ encore_entry_link_tags('resource') }}
+{% endblock %}
+
 {# app.js is generated using the file webpack.config.js and using yarn read /assets/README.md for more info #}
-<script src="{{ url('home') ~ 'build/runtime.js' }}"></script>
+{#<script src="{{ url('home') ~ 'build/runtime.js' }}"></script>#}
 <script src="{{ url('home') ~ 'libs/ckeditor/ckeditor.js' }}"></script>
-<script src="{{ url('home') ~ 'build/app.js' }}"></script>
+{#<script src="{{ url('home') ~ 'build/app.js' }}"></script>#}
 {# Add third party js libraries that can't be loaded using webpack #}
 {#<script src="{{ asset('libs/readmore-js/readmore.js') }}"></script>#}
 <script src="{{ url('home') ~ 'build/libs/js-cookie/src/js.cookie.js' }}"></script>
 {# Check chamilo_js key in assetic.yml #}
 {% block javascripts %}
+    {{ encore_entry_script_tags('app') }}
+    {{ encore_entry_script_tags('resource') }}
+
     {% block chamilo_header_js %}
         {# Loading legacy js using the $htmlHeadXtra array #}
         {% autoescape false %}

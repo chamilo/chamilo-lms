@@ -22,7 +22,7 @@ services:
                 courses:
                     repository: Chamilo\CoreBundle\Repository\CourseRepository
                 users:
-                    repository: Chamilo\UserBundle\Repository\UserRepository
+                    repository: Chamilo\CoreBundle\Repository\UserRepository
         tags:
             - {name: chamilo_core.tool}
 

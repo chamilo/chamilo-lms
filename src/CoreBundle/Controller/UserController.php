@@ -5,8 +5,8 @@
 namespace Chamilo\CoreBundle\Controller;
 
 use Chamilo\CoreBundle\Repository\IllustrationRepository;
-use Chamilo\ThemeBundle\Model\UserInterface;
-use Chamilo\UserBundle\Repository\UserRepository;
+use Symfony\Component\Security\Core\User\UserInterface;
+use Chamilo\CoreBundle\Repository\UserRepository;
 use Symfony\Component\Routing\Annotation\Route;
 
 /**

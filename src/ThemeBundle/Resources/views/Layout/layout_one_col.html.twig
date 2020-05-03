@@ -36,7 +36,7 @@
         {% endblock %}
 
         <section class="container-fluid">
-            {% if introduction != '' %}
+            {% if introduction is defined %}
                 {{ introduction }}
             {% endif %}
 

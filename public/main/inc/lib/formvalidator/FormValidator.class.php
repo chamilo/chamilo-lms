@@ -1592,7 +1592,7 @@ EOT;
 
     /**
      * Add an element with user ID and avatar to the form.
-     * It needs a Chamilo\UserBundle\Entity\User as value. The exported value is the Chamilo\UserBundle\Entity\User ID.
+     * It needs a Chamilo\CoreBundle\Entity\User as value. The exported value is the Chamilo\CoreBundle\Entity\User ID.
      *
      * @see \UserAvatar
      *

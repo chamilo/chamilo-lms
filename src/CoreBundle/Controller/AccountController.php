@@ -5,13 +5,13 @@
 namespace Chamilo\CoreBundle\Controller;
 
 use Chamilo\CoreBundle\Repository\IllustrationRepository;
+use Chamilo\CoreBundle\Repository\UserRepository;
 use Chamilo\CoreBundle\Traits\ControllerTrait;
-use Chamilo\ThemeBundle\Model\UserInterface;
-use Chamilo\UserBundle\Form\ProfileType;
-use FOS\UserBundle\Model\UserManagerInterface;
+use Chamilo\CoreBundle\Form\ProfileType;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Security\Core\User\UserInterface;
 
 /**
  * Class UserController.
@@ -41,10 +41,11 @@ class AccountController extends BaseController
     /**
      * @Route("/edit", methods={"GET", "POST"}, name="chamilo_core_account_edit")
      */
-    public function editAction(Request $request, UserManagerInterface $userManager, IllustrationRepository $illustrationRepository)
+    public function editAction(Request $request, UserRepository $userRepository, IllustrationRepository $illustrationRepository)
     {
         $user = $this->getUser();
 
+        //UserManagerInterface $userManager,
         if (!is_object($user) || !$user instanceof UserInterface) {
             throw $this->createAccessDeniedException('This user does not have access to this section');
         }
@@ -63,7 +64,7 @@ class AccountController extends BaseController
                 $em->flush();
             }
 
-            $userManager->updateUser($user);
+            $userRepository->updateUser($user);
 
             $this->addFlash('success', $this->trans('Updated'));
             $url = $this->generateUrl('chamilo_core_account_home', ['username' => $user->getUsername()]);

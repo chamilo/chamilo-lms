@@ -2,9 +2,9 @@
 
 /* For licensing terms, see /license.txt */
 
-namespace Chamilo\UserBundle\Controller;
+namespace Chamilo\CoreBundle\Controller;
 
-use Chamilo\UserBundle\Form\LoginType;
+use Chamilo\CoreBundle\Form\LoginType;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
@@ -16,33 +16,19 @@ use Symfony\Component\Security\Http\Authentication\AuthenticationUtils;
 class SecurityController extends AbstractController
 {
     /**
-     * @var AuthenticationUtils
-     */
-    private $authenticationUtils;
-
-    /**
-     * SecurityController constructor.
-     */
-    public function __construct(AuthenticationUtils $authenticationUtils)
-    {
-        $this->authenticationUtils = $authenticationUtils;
-    }
-
-    /**
      * @Route("/login", name="login")
      *
-     * @return Response
      */
-    public function loginAction()
+    public function login(AuthenticationUtils $authenticationUtils): Response
     {
-        $helper = $this->authenticationUtils;
-        $error = $helper->getLastAuthenticationError();
-        $form = $this->createForm(LoginType::class, ['_username' => $helper->getLastUsername()]);
+        $error = $authenticationUtils->getLastAuthenticationError();
+        $lastUsername = $authenticationUtils->getLastUsername();
+        //$form = $this->createForm(LoginType::class, ['_username' => $lastUsername]);
 
-        return $this->render('@ChamiloUser/login.html.twig', [
-            'last_username' => $helper->getLastUsername(),
+        return $this->render('@ChamiloCore/login.html.twig', [
+            'last_username' => $lastUsername,
             'error' => $error,
-            'form' => $form->createView(),
+            //'form' => $form->createView(),
         ]);
     }
 
@@ -57,7 +43,7 @@ class SecurityController extends AbstractController
 
         $form = $this->createForm(LoginType::class, ['_username' => $helper->getLastUsername()]);
 
-        return $this->render('@ChamiloUser/login_sidebar.html.twig', [
+        return $this->render('@ChamiloCore/login_sidebar.html.twig', [
             'last_username' => $helper->getLastUsername(),
             'error' => '', // error will be printed in the /login page
             'form' => $form->createView(),

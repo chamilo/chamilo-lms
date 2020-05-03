@@ -192,8 +192,6 @@ class CourseHomeController extends ToolBaseController
 
         api_remove_in_gradebook();
         \Exercise::cleanSessionVariables();
-        //\DocumentManager::removeGeneratedAudioTempFile();
-
         $shortcutQuery = $shortcutRepository->getResources($this->getUser(), $course->getResourceNode(), $course);
         $shortcuts = $shortcutQuery->getQuery()->getResult();
 

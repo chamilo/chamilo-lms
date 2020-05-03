@@ -1337,7 +1337,7 @@ class GroupManager
         $em = Database::getManager();
         $subscriptions = $em
             ->createQuery("
-                SELECT u.id FROM ChamiloUserBundle:User u
+                SELECT u.id FROM ChamiloCoreBundle:User u
                 INNER JOIN ChamiloCourseBundle:CGroupRelUser gu
                     WITH u.id = gu.userId
                 INNER JOIN ChamiloCourseBundle:CGroupInfo g

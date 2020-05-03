@@ -8,8 +8,8 @@ use Chamilo\CoreBundle\Entity\SkillRelUserComment;
 use Chamilo\CoreBundle\Framework\Container;
 use Chamilo\CoreBundle\Hook\HookCreateUser;
 use Chamilo\CoreBundle\Hook\HookUpdateUser;
-use Chamilo\UserBundle\Entity\User;
-use Chamilo\UserBundle\Repository\UserRepository;
+use Chamilo\CoreBundle\Entity\User;
+use Chamilo\CoreBundle\Repository\UserRepository;
 use ChamiloSession as Session;
 
 /**
@@ -56,7 +56,7 @@ class UserManager
      */
     public static function getRepository()
     {
-        return Container::$container->get('Chamilo\UserBundle\Repository\UserRepository');
+        return Container::$container->get('Chamilo\CoreBundle\Repository\UserRepository');
     }
 
     /**
@@ -102,7 +102,7 @@ class UserManager
      */
     public static function isPasswordValid($encoded, $raw, $salt)
     {
-        $encoder = new \Chamilo\UserBundle\Security\Encoder(self::getPasswordEncryption());
+        $encoder = new \Chamilo\CoreBundle\Security\Encoder(self::getPasswordEncryption());
         $validPassword = $encoder->isPasswordValid($encoded, $raw, $salt);
 
         return $validPassword;
@@ -371,7 +371,7 @@ class UserManager
                 INVITEE => 'INVITEE',
             ];
 
-            $group = Container::$container->get('Chamilo\UserBundle\Repository\GroupRepository')->findOneBy(['code' => $statusToGroup[$status]]);
+            $group = Container::$container->get('Chamilo\CoreBundle\Repository\GroupRepository')->findOneBy(['code' => $statusToGroup[$status]]);
             if ($group) {
                 $user->addGroup($group);
                 $userManager->updateUser($user);
@@ -1197,7 +1197,7 @@ class UserManager
             INVITEE => 'INVITEE',
         ];
 
-        $group = Container::$container->get('Chamilo\UserBundle\Repository\GroupRepository')->findOneBy(['code' => $statusToGroup[$status]]);
+        $group = Container::$container->get('Chamilo\CoreBundle\Repository\GroupRepository')->findOneBy(['code' => $statusToGroup[$status]]);
         if ($group) {
             $user->addGroup($group);
         }
@@ -5368,7 +5368,7 @@ class UserManager
                 Database::query($sql);
             }
 
-            $group = Container::$container->get('Chamilo\UserBundle\Repository\GroupRepository')->findOneBy(['code' => 'ADMIN']);
+            $group = Container::$container->get('Chamilo\CoreBundle\Repository\GroupRepository')->findOneBy(['code' => 'ADMIN']);
             if ($group) {
                 $user->addGroup($group);
             }
@@ -6604,10 +6604,10 @@ SQL;
     {
         $encryption = self::getPasswordEncryption();
         $encoders = [
-            'Chamilo\\UserBundle\\Entity\\User' => new \Chamilo\UserBundle\Security\Encoder($encryption),
+            'Chamilo\\CoreBundle\\Entity\\User' => new \Chamilo\CoreBundle\Security\Encoder($encryption),
         ];
 
-        $encoderFactory = new EncoderFactory($encoders);
+        $encoderFactory = new \Symfony\Component\Security\Core\Encoder\EncoderFactory($encoders);
 
         return $encoderFactory;
     }

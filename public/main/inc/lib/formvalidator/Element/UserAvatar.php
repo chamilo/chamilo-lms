@@ -1,12 +1,12 @@
 <?php
 /* For licensing terms, see /license.txt */
 
-use Chamilo\UserBundle\Entity\User;
+use Chamilo\CoreBundle\Entity\User;
 
 /**
  * Class UserAvatar
  * FormValidator element to add an user avatar wrapping a hidden input with its user ID
- * Is necessary set an instance of Chamilo\UserBundle\Entity\User as value. The exported value is the user ID.
+ * Is necessary set an instance of Chamilo\CoreBundle\Entity\User as value. The exported value is the user ID.
  */
 class UserAvatar extends HTML_QuickForm_input
 {
@@ -44,7 +44,7 @@ class UserAvatar extends HTML_QuickForm_input
      */
     public function setValue($value)
     {
-        $this->user = !is_a($value, 'Chamilo\UserBundle\Entity\User')
+        $this->user = !is_a($value, 'Chamilo\CoreBundle\Entity\User')
             ? UserManager::getManager()->find($value)
             : $value;
 

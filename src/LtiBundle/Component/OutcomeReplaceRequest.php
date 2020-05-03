@@ -5,7 +5,7 @@
 namespace Chamilo\LtiBundle\Component;
 
 use Chamilo\CoreBundle\Entity\GradebookEvaluation;
-use Chamilo\UserBundle\Entity\User;
+use Chamilo\CoreBundle\Entity\User;
 
 /**
  * Class OutcomeReplaceRequest.
@@ -61,7 +61,7 @@ class OutcomeReplaceRequest extends OutcomeRequest
         /** @var GradebookEvaluation $evaluation */
         $evaluation = $this->entityManager->find('ChamiloCoreBundle:GradebookEvaluation', $sourcedParts['e']);
         /** @var User $user */
-        $user = $this->entityManager->find('ChamiloUserBundle:User', $sourcedParts['u']);
+        $user = $this->entityManager->find('ChamiloCoreBundle:User', $sourcedParts['u']);
 
         if (empty($evaluation) || empty($user)) {
             $this->statusInfo

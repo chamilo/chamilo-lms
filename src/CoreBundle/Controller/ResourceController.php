@@ -75,26 +75,19 @@ class ResourceController extends AbstractResourceController implements CourseCon
         $repository = $this->getRepositoryFromRequest($request);
         $settings = $repository->getResourceSettings();
 
-        $grid = $this->getGrid(
+        /*$grid = $this->getGrid(
             $request,
             $repository,
             $grid,
             $parentResourceNode->getId(),
             'chamilo_core_resource_index'
-        );
-
-        /*$breadcrumb = $this->getBreadCrumb();
-        $breadcrumb->addChild(
-            $this->trans($tool),
-            [
-                'uri' => '#',
-            ]
         );*/
 
         // The base resource node is the course.
         $id = $parentResourceNode->getId();
 
-        return $grid->getGridResponse(
+        //return $grid->getGridResponse(
+        return $this->render(
             $repository->getTemplates()->getFromAction(__FUNCTION__),
             [
                 'tool' => $tool,
@@ -437,7 +430,8 @@ class ResourceController extends AbstractResourceController implements CourseCon
 
         $this->setBreadCrumb($request, $parentResourceNode);
 
-        return $grid->getGridResponse(
+        //return $grid->getGridResponse(
+        return $this->render(
             $repository->getTemplates()->getFromAction(__FUNCTION__),
             [
                 'parent_id' => $resourceNodeId,

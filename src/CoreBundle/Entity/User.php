@@ -2,7 +2,7 @@
 
 /* For licensing terms, see /license.txt */
 
-namespace Chamilo\UserBundle\Entity;
+namespace Chamilo\CoreBundle\Entity;
 
 use ApiPlatform\Core\Annotation\ApiFilter;
 use ApiPlatform\Core\Annotation\ApiResource;
@@ -14,25 +14,32 @@ use Chamilo\CoreBundle\Entity\Course;
 use Chamilo\CoreBundle\Entity\Resource\ResourceNode;
 use Chamilo\CoreBundle\Entity\Skill;
 use Chamilo\CoreBundle\Entity\UsergroupRelUser;
-use Chamilo\ThemeBundle\Model\UserInterface as ThemeUser;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\Common\Collections\Criteria;
 use Doctrine\ORM\Event\LifecycleEventArgs;
 use Doctrine\ORM\Mapping as ORM;
-use Sonata\UserBundle\Entity\BaseUser;
+use FOS\UserBundle\Model\GroupInterface;
+use Symfony\Bridge\Doctrine\Security\User\UserLoaderInterface;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\Security\Core\User\EquatableInterface;
-use Symfony\Component\Security\Core\User\UserInterface;
+use Symfony\Component\Security\Core\User\PasswordUpgraderInterface;
 use Symfony\Component\Serializer\Annotation\Groups;
 use Symfony\Component\Validator\Constraints as Assert;
 use Symfony\Component\Validator\Mapping\ClassMetadata;
+use Symfony\Component\Security\Core\User\UserInterface;
 
 /**
  * @ApiResource(
  *      attributes={"security"="is_granted('ROLE_ADMIN')"},
  *      normalizationContext={"groups"={"user:read"}},
  *      denormalizationContext={"groups"={"user:write"}},
+ *      collectionOperations={"get"},
+ *      itemOperations={
+ *          "get"={},
+ *          "put"={},
+ *          "delete"={},
+ *     }
  * )
  *
  * @ApiFilter(SearchFilter::class, properties={"username": "partial", "firstname" : "partial"})
@@ -84,7 +91,7 @@ use Symfony\Component\Validator\Mapping\ClassMetadata;
  *     )
  * })
  */
-class User extends BaseUser implements ThemeUser, EquatableInterface //implements ParticipantInterface, ThemeUser
+class User implements UserInterface, EquatableInterface
 {
     public const COURSE_MANAGER = 1;
     public const TEACHER = 1;
@@ -102,35 +109,44 @@ class User extends BaseUser implements ThemeUser, EquatableInterface //implement
      */
     protected $id;
 
+     /**
+      * @ORM\Column(type="string", unique=true, nullable=true)
+      */
+     private $apiToken;
+
     /**
      * @var string
      * @Groups({"user:read", "user:write"})
+     * @ORM\Column(name="firstname", type="string", length=60, nullable=true, unique=false)
      */
     protected $firstname;
 
     /**
      * @var string
      * @Groups({"user:read", "user:write"})
+     * @ORM\Column(name="lastname", type="string", length=60, nullable=true, unique=false)
      */
     protected $lastname;
 
     /**
      * @var string
      * @Groups({"user:read", "user:write"})
-     * @Assert\NotBlank()
+     * @ORM\Column(name="locale", type="string", length=8, nullable=true, unique=false)
      */
-    protected $username;
+    protected $locale;
+
 
     /**
      * @var string
      * @Groups({"user:read", "user:write"})
      * @Assert\NotBlank()
-     * @Assert\Email()
+     * @ORM\Column(name="username", type="string", length=100, nullable=false, unique=true)
      */
-    protected $email;
+    protected $username;
 
     /**
      * @var string
+     * @ORM\Column(name="password", type="string", length=255, nullable=false, unique=false)
      */
     protected $password;
 
@@ -146,20 +162,32 @@ class User extends BaseUser implements ThemeUser, EquatableInterface //implement
      *
      * @ORM\Column(name="username_canonical", type="string", length=100, nullable=false)
      */
-    //protected $usernameCanonical;
+    protected $usernameCanonical;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="timezone", type="string", length=64)
+     */
+    protected $timezone;
 
     /**
      * @var string
      * @ORM\Column(name="email_canonical", type="string", length=100, nullable=false, unique=false)
      */
-    //protected $emailCanonical;
+    protected $emailCanonical;
 
     /**
      * @var string
      *
+     * @var string
+     * @Groups({"user:read", "user:write"})
+     * @Assert\NotBlank()
+     * @Assert\Email()
+     *
      * @ORM\Column(name="email", type="string", length=100, nullable=false, unique=false)
      */
-    //protected $email;
+    protected $email;
 
     /**
      * @var bool
@@ -173,7 +201,7 @@ class User extends BaseUser implements ThemeUser, EquatableInterface //implement
      *
      * @ORM\Column(name="enabled", type="boolean")
      */
-    //protected $enabled;
+    protected $enabled;
 
     /**
      * @var bool
@@ -208,7 +236,7 @@ class User extends BaseUser implements ThemeUser, EquatableInterface //implement
      *
      * @ORM\Column(name="phone", type="string", length=30, nullable=true, unique=false)
      */
-    //protected $phone;
+    protected $phone;
 
     /**
      * @var string
@@ -225,14 +253,14 @@ class User extends BaseUser implements ThemeUser, EquatableInterface //implement
     /**
      * @ORM\Column(type="string", length=255)
      */
-    //protected $salt;
+    protected $salt;
 
     /**
      * @var \DateTime
      *
      * @ORM\Column(name="last_login", type="datetime", nullable=true, unique=false)
      */
-    //protected $lastLogin;
+    protected $lastLogin;
 
     /**
      * Random string sent to the user email address in order to verify it.
@@ -240,14 +268,14 @@ class User extends BaseUser implements ThemeUser, EquatableInterface //implement
      * @var string
      * @ORM\Column(name="confirmation_token", type="string", length=255, nullable=true)
      */
-    //protected $confirmationToken;
+    protected $confirmationToken;
 
     /**
      * @var \DateTime
      *
      * @ORM\Column(name="password_requested_at", type="datetime", nullable=true, unique=false)
      */
-    //protected $passwordRequestedAt;
+    protected $passwordRequestedAt;
 
     /**
      * @ORM\OneToMany(targetEntity="Chamilo\CoreBundle\Entity\CourseRelUser", mappedBy="user", orphanRemoval=true)
@@ -272,7 +300,7 @@ class User extends BaseUser implements ThemeUser, EquatableInterface //implement
     /**
      * @ORM\Column(type="array")
      */
-    //protected $roles;
+    protected $roles;
 
     /**
      * @var bool
@@ -287,7 +315,8 @@ class User extends BaseUser implements ThemeUser, EquatableInterface //implement
     //protected $jurySubscriptions;
 
     /**
-     * @ORM\ManyToMany(targetEntity="Chamilo\UserBundle\Entity\Group", inversedBy="users")
+     * @var Group[]
+     * @ORM\ManyToMany(targetEntity="Chamilo\CoreBundle\Entity\Group", inversedBy="users")
      * @ORM\JoinTable(
      *      name="fos_user_user_group",
      *      joinColumns={
@@ -543,6 +572,18 @@ class User extends BaseUser implements ThemeUser, EquatableInterface //implement
     protected $receivedMessages;
 
     /**
+     * @var \DateTime
+     * @ORM\Column(name="created_at", type="datetime", nullable=true, unique=false)
+     */
+    protected $createdAt;
+
+    /**
+     * @var \DateTime
+     * @ORM\Column(name="updated_at", type="datetime", nullable=true, unique=false)
+     */
+    protected $updatedAt;
+
+    /**
      * Constructor.
      */
     public function __construct()
@@ -560,6 +601,7 @@ class User extends BaseUser implements ThemeUser, EquatableInterface //implement
         $this->portals = new ArrayCollection();
         $this->dropBoxSentFiles = new ArrayCollection();
         $this->dropBoxReceivedFiles = new ArrayCollection();
+        $this->groups = new ArrayCollection();
         //$this->extraFields = new ArrayCollection();
         //$this->userId = 0;
         //$this->createdAt = new \DateTime();
@@ -818,14 +860,6 @@ class User extends BaseUser implements ThemeUser, EquatableInterface //implement
     {
         return 1 == $this->getActive();
     }
-
-    /**
-     * @return ArrayCollection
-     */
-    /*public function getRolesObj()
-    {
-        return $this->roles;
-    }*/
 
     /**
      * Set salt.
@@ -1587,6 +1621,15 @@ class User extends BaseUser implements ThemeUser, EquatableInterface //implement
         return $this;
     }
 
+    public function addGroup($group)
+    {
+        if (!$this->getGroups()->contains($group)) {
+            $this->getGroups()->add($group);
+        }
+
+        return $this;
+    }
+
     /**
      * Sets the user groups.
      *
@@ -1611,6 +1654,11 @@ class User extends BaseUser implements ThemeUser, EquatableInterface //implement
         return sprintf('%s %s', $this->getFirstname(), $this->getLastname());
     }
 
+    public function getGroups()
+    {
+        return $this->groups;
+    }
+
     /**
      * Returns the user roles.
      *
@@ -1625,7 +1673,7 @@ class User extends BaseUser implements ThemeUser, EquatableInterface //implement
         }
 
         // we need to make sure to have at least one role
-        $roles[] = static::ROLE_DEFAULT;
+        $roles[] = 'ROLE_USER';
 
         return array_unique($roles);
     }
@@ -1964,6 +2012,98 @@ class User extends BaseUser implements ThemeUser, EquatableInterface //implement
         );
 
         return $this->courseGroupsAsMember->matching($criteria);
+    }
+
+    public function getFirstname(){
+
+    }
+
+    public function getLastname(){
+
+    }
+
+    public function eraseCredentials()
+    {
+        $this->plainPassword = null;
+    }
+    public function hasRole($role)
+    {
+        return in_array(strtoupper($role), $this->getRoles(), true);
+    }
+
+    public function isSuperAdmin()
+    {
+        return $this->hasRole('ROLE_SUPER_ADMIN');
+    }
+
+    public function isUser(UserInterface $user = null)
+    {
+        return null !== $user && $this->getId() === $user->getId();
+    }
+
+    public function removeRole($role)
+    {
+        if (false !== $key = array_search(strtoupper($role), $this->roles, true)) {
+            unset($this->roles[$key]);
+            $this->roles = array_values($this->roles);
+        }
+
+        return $this;
+    }
+
+    public function getUsernameCanonical()
+    {
+        return $this->usernameCanonical;
+    }
+
+    public function getEmailCanonical()
+    {
+        return $this->emailCanonical;
+    }
+
+    public function getPlainPassword()
+    {
+        return $this->plainPassword;
+    }
+
+    /**
+     * @param string $timezone
+     *
+     * @return User
+     */
+    public function setTimezone($timezone)
+    {
+        $this->timezone = $timezone;
+
+        return $this;
+    }
+
+    /**
+     * @return string
+     */
+    public function getTimezone()
+    {
+        return $this->timezone;
+    }
+
+    /**
+     * @param string $locale
+     *
+     * @return User
+     */
+    public function setLocale($locale)
+    {
+        $this->locale = $locale;
+
+        return $this;
+    }
+
+    /**
+     * @return string
+     */
+    public function getLocale()
+    {
+        return $this->locale;
     }
 
     public function getCourseGroupsAsTutorFromCourse(Course $course): ArrayCollection

@@ -1,4 +1,4 @@
-{% extends "@ChamiloUser/layout.html.twig" %}
+{% extends "@ChamiloCore/layout.html.twig" %}
 
 {% block fos_user_content %}
     {% block sonata_user_login %}
@@ -15,18 +15,17 @@
                 <form id="form-login-user" action="{{ path("login") }}" method="post" role="form">
 
                     <div class="wrap-input validate-input m-b-23" data-validate = "{{ 'Username is required' | trans }}">
-                        {{ form_label(form._username, 'Username' | trans , {'label_attr': {'class': 'label-input'}}) }}
-                        {{ form_widget(form._username, {'attr': {'placeholder': 'Type your username', 'class': 'input-login'}}) }}
+                        <label for="inputUsername">Username</label>
+                        <input type="text" value="{{ last_username }}" name="username" id="inputUsername" class="form-control" required autofocus>
                         <i class="focus-input fas fa-user fa-lg"></i>
                     </div>
 
                     <div class="wrap-input validate-input" data-validate="Password is required">
-                        {{ form_label(form._password, 'Password' | trans , {'label_attr': {'class': 'label-input'}})}}
-                        {{ form_widget(form._password, {'attr': {'placeholder': 'Type your password', 'class': 'input-login'}}) }}
+                        <label for="inputPassword">Password</label>
+                        <input type="password" name="password" id="inputPassword" class="form-control" required>
                         <i class="focus-input fas fa-lock fa-lg"></i>
                     </div>
 
-                    {{ form_widget(form,{ 'attr': {'class': 'login'} }) }}
                     <input type="hidden" name="_csrf_token" value="{{ csrf_token('authenticate') }}"/>
                     <div class="form-group has-feedback">
                         <div class="checkbox control-group">
@@ -39,7 +38,6 @@
                     </div>
 
                     <div class="form-group has-feedback">
-                        {#<a href="{{ path('fos_user_resetting_request') }}">#}
                         <a href="{{ path('legacy_main', { 'name' : 'auth/lostPassword.php'}) }}">
                             {{ 'forgotten_password'|trans({}, 'SonataUserBundle') }}
                         </a>

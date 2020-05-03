@@ -1,6 +1,7 @@
 <?php
 /* For licensing terms, see /license.txt */
 
+use Symfony\Component\ErrorHandler\Debug;
 use Chamilo\CoreBundle\Framework\Container;
 use Patchwork\Utf8\Bootup;
 use Symfony\Component\Dotenv\Dotenv;
@@ -31,10 +32,11 @@ try {
     }
 
     $env = $_SERVER['APP_ENV'] ?? 'dev';
-
+    //Debug::enable();
     $kernel = new Chamilo\Kernel($env, true);
     // Loading Request from Sonata. In order to use Sonata Pages Bundle.
-    $request = Sonata\PageBundle\Request\RequestFactory::createFromGlobals('host_with_path_by_locale');
+    $request = \Symfony\Component\HttpFoundation\Request::createFromGlobals();
+    //$request = Sonata\PageBundle\Request\RequestFactory::createFromGlobals('host_with_path_by_locale');
 
     // This 'load_legacy' variable is needed to know that symfony is loaded using old style legacy mode,
     // and not called from a symfony controller from public/
@@ -58,7 +60,8 @@ try {
         exit;
     }
     $newBaseUrl = substr($currentBaseUrl, 0, $pos - 1);
-    $request->setBaseUrl($newBaseUrl);
+
+    //$request->setBaseUrl($newBaseUrl);
     $context->setBaseUrl($newBaseUrl);
 
     $container = $kernel->getContainer();
@@ -96,10 +99,10 @@ try {
     }
     define('DEFAULT_DOCUMENT_QUOTA', $default_quota);*/
 } catch (Exception $e) {
-    /*echo $e->getMessage();    exit;
+    echo $e->getMessage();
     var_dump($e->getMessage());
     var_dump($e->getCode());
     var_dump($e->getLine());
     echo $e->getTraceAsString();
-    exit;*/
+    //exit;*/
 }

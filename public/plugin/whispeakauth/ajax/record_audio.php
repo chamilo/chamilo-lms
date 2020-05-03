@@ -2,7 +2,7 @@
 
 /* For licensing terms, see /license.txt */
 
-use Chamilo\UserBundle\Entity\User;
+use Chamilo\CoreBundle\Entity\User;
 use FFMpeg\FFMpeg;
 use FFMpeg\Format\Audio\Wav;
 
@@ -37,7 +37,7 @@ $plugin->protectTool(false);
 if ($isAuthentify) {
     $em = Database::getManager();
     /** @var User|null $user */
-    $user = $em->getRepository('ChamiloUserBundle:User')->findOneBy(['username' => $_POST['username']]);
+    $user = $em->getRepository('ChamiloCoreBundle:User')->findOneBy(['username' => $_POST['username']]);
 } else {
     /** @var User $user */
     $user = api_get_user_entity(api_get_user_id());

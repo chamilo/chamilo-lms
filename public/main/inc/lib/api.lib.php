@@ -7,7 +7,7 @@ use Chamilo\CoreBundle\Entity\Session as SessionEntity;
 use Chamilo\CoreBundle\Entity\SettingsCurrent;
 use Chamilo\CoreBundle\Framework\Container;
 use Chamilo\CourseBundle\Entity\CGroupInfo;
-use Chamilo\UserBundle\Entity\User;
+use Chamilo\CoreBundle\Entity\User;
 use ChamiloSession as Session;
 use Symfony\Bridge\Twig\Mime\TemplatedEmail;
 use Symfony\Component\Finder\Finder;
@@ -1541,10 +1541,8 @@ function api_get_user_info(
     // Make sure user_id is safe
     $user_id = (int) $user_id;
     $user = false;
-
     if (empty($user_id)) {
         $userFromSession = Session::read('_user');
-
         if (isset($userFromSession) && !empty($userFromSession)) {
             return $userFromSession;
             /*

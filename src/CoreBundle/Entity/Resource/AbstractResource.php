@@ -22,6 +22,7 @@ abstract class AbstractResource
 {
     /**
      * SerializedName("description").
+     *
      * @Assert\Valid()
      * @ApiSubresource()
      * @Groups({"resource_node:read", "document:read"})

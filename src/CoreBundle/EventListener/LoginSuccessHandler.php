@@ -4,8 +4,8 @@
 
 namespace Chamilo\CoreBundle\EventListener;
 
-use Chamilo\SettingsBundle\Manager\SettingsManager;
 use Chamilo\CoreBundle\Entity\User;
+use Chamilo\SettingsBundle\Manager\SettingsManager;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface;

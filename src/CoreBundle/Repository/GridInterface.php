@@ -10,8 +10,8 @@ use Chamilo\CoreBundle\Component\Resource\Settings;
 use Chamilo\CoreBundle\Entity\Course;
 use Chamilo\CoreBundle\Entity\Resource\ResourceNode;
 use Chamilo\CoreBundle\Entity\Session;
-use Chamilo\CourseBundle\Entity\CGroupInfo;
 use Chamilo\CoreBundle\Entity\User;
+use Chamilo\CourseBundle\Entity\CGroupInfo;
 use Symfony\Component\Form\FormInterface;
 
 interface GridInterface

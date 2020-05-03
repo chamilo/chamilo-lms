@@ -4,10 +4,10 @@
 
 namespace Chamilo\CoreBundle\Controller;
 
+use Chamilo\CoreBundle\Form\ProfileType;
 use Chamilo\CoreBundle\Repository\IllustrationRepository;
 use Chamilo\CoreBundle\Repository\UserRepository;
 use Chamilo\CoreBundle\Traits\ControllerTrait;
-use Chamilo\CoreBundle\Form\ProfileType;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;

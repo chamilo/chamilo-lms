@@ -4,8 +4,8 @@
 
 namespace Chamilo\GraphQlBundle\Map;
 
-use Chamilo\GraphQlBundle\Traits\GraphQLTrait;
 use Chamilo\CoreBundle\Entity\User;
+use Chamilo\GraphQlBundle\Traits\GraphQLTrait;
 use Overblog\GraphQLBundle\Resolver\ResolverMap;
 use Symfony\Component\DependencyInjection\ContainerAwareInterface;
 

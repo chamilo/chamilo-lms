@@ -10,9 +10,9 @@ use Chamilo\CoreBundle\Component\Resource\Settings;
 use Chamilo\CoreBundle\Entity\Course;
 use Chamilo\CoreBundle\Entity\Resource\ResourceNode;
 use Chamilo\CoreBundle\Entity\Session;
+use Chamilo\CoreBundle\Entity\User;
 use Chamilo\CoreBundle\Form\Resource\PersonalFileType;
 use Chamilo\CourseBundle\Entity\CGroupInfo;
-use Chamilo\CoreBundle\Entity\User;
 use Doctrine\ORM\QueryBuilder;
 use Symfony\Component\Form\FormInterface;
 

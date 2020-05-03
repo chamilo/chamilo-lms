@@ -8,26 +8,18 @@ use ApiPlatform\Core\Annotation\ApiFilter;
 use ApiPlatform\Core\Annotation\ApiResource;
 use ApiPlatform\Core\Bridge\Doctrine\Orm\Filter\BooleanFilter;
 use ApiPlatform\Core\Bridge\Doctrine\Orm\Filter\SearchFilter;
-use Chamilo\CoreBundle\Entity\AccessUrl;
-use Chamilo\CoreBundle\Entity\AccessUrlRelUser;
-use Chamilo\CoreBundle\Entity\Course;
 use Chamilo\CoreBundle\Entity\Resource\ResourceNode;
-use Chamilo\CoreBundle\Entity\Skill;
-use Chamilo\CoreBundle\Entity\UsergroupRelUser;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\Common\Collections\Criteria;
 use Doctrine\ORM\Event\LifecycleEventArgs;
 use Doctrine\ORM\Mapping as ORM;
-use FOS\UserBundle\Model\GroupInterface;
-use Symfony\Bridge\Doctrine\Security\User\UserLoaderInterface;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\Security\Core\User\EquatableInterface;
-use Symfony\Component\Security\Core\User\PasswordUpgraderInterface;
+use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Component\Serializer\Annotation\Groups;
 use Symfony\Component\Validator\Constraints as Assert;
 use Symfony\Component\Validator\Mapping\ClassMetadata;
-use Symfony\Component\Security\Core\User\UserInterface;
 
 /**
  * @ApiResource(
@@ -109,10 +101,10 @@ class User implements UserInterface, EquatableInterface
      */
     protected $id;
 
-     /**
-      * @ORM\Column(type="string", unique=true, nullable=true)
-      */
-     private $apiToken;
+    /**
+     * @ORM\Column(type="string", unique=true, nullable=true)
+     */
+    private $apiToken;
 
     /**
      * @var string
@@ -134,7 +126,6 @@ class User implements UserInterface, EquatableInterface
      * @ORM\Column(name="locale", type="string", length=8, nullable=true, unique=false)
      */
     protected $locale;
-
 
     /**
      * @var string
@@ -179,7 +170,6 @@ class User implements UserInterface, EquatableInterface
 
     /**
      * @var string
-     *
      * @var string
      * @Groups({"user:read", "user:write"})
      * @Assert\NotBlank()
@@ -2014,18 +2004,19 @@ class User implements UserInterface, EquatableInterface
         return $this->courseGroupsAsMember->matching($criteria);
     }
 
-    public function getFirstname(){
-
+    public function getFirstname()
+    {
     }
 
-    public function getLastname(){
-
+    public function getLastname()
+    {
     }
 
     public function eraseCredentials()
     {
         $this->plainPassword = null;
     }
+
     public function hasRole($role)
     {
         return in_array(strtoupper($role), $this->getRoles(), true);

@@ -44,7 +44,7 @@ class Group
      */
     protected $code;
 
-    public function __construct($name, $roles = array())
+    public function __construct($name, $roles = [])
     {
         $this->name = $name;
         $this->roles = $roles;
@@ -68,6 +68,7 @@ class Group
     {
         return $this->roles;
     }
+
     public function removeRole($role)
     {
         if (false !== $key = array_search(strtoupper($role), $this->roles, true)) {
@@ -91,8 +92,6 @@ class Group
     }
 
     /**
-     * @param array $roles
-     *
      * @return Group
      */
     public function setRoles(array $roles)

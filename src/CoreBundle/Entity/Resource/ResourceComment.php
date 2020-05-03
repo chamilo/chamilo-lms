@@ -5,8 +5,8 @@
 namespace Chamilo\CoreBundle\Entity\Resource;
 
 use ApiPlatform\Core\Annotation\ApiResource;
-use Chamilo\CoreBundle\Traits\TimestampableAgoTrait;
 use Chamilo\CoreBundle\Entity\User;
+use Chamilo\CoreBundle\Traits\TimestampableAgoTrait;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Mapping\Annotation as Gedmo;

@@ -6,8 +6,8 @@ namespace Chamilo\CourseBundle\Repository;
 
 use Chamilo\CoreBundle\Entity\Course;
 use Chamilo\CoreBundle\Entity\Session;
-use Chamilo\CoreBundle\Repository\ResourceRepository;
 use Chamilo\CoreBundle\Entity\User;
+use Chamilo\CoreBundle\Repository\ResourceRepository;
 use Doctrine\ORM\Query\Expr\Join;
 
 /**

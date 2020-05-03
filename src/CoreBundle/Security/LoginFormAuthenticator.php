@@ -7,7 +7,6 @@ namespace Chamilo\CoreBundle\Security;
 use Chamilo\CoreBundle\Entity\User;
 use Chamilo\CoreBundle\Hook\CheckLoginCredentialsHook;
 use Chamilo\CoreBundle\Hook\HookFactory;
-use Chamilo\CoreBundle\Form\LoginType;
 use Chamilo\CoreBundle\Repository\UserRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\Form\FormFactoryInterface;
@@ -55,7 +54,6 @@ class LoginFormAuthenticator extends AbstractFormLoginAuthenticator implements P
         HookFactory $hookFactory,
         UserRepository $userRepository,
         CsrfTokenManagerInterface $csrfTokenManager
-
     ) {
         $this->router = $router;
         $this->passwordEncoder = $passwordEncoder;
@@ -68,7 +66,6 @@ class LoginFormAuthenticator extends AbstractFormLoginAuthenticator implements P
         $this->urlGenerator = $urlGenerator;
         $this->csrfTokenManager = $csrfTokenManager;
         $this->passwordEncoder = $passwordEncoder;
-
     }
 
     public function supports(Request $request): bool

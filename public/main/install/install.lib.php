@@ -11,7 +11,6 @@ use Chamilo\TicketBundle\Entity\Priority as TicketPriority;
 use Chamilo\TicketBundle\Entity\Project as TicketProject;
 use Chamilo\CoreBundle\Entity\Group;
 use Doctrine\ORM\EntityManager;
-use Sonata\PageBundle\Entity\PageManager;
 use Symfony\Component\DependencyInjection\Container as SymfonyContainer;
 
 /**
@@ -2919,11 +2918,11 @@ function installPages($container)
 {
     error_log('installPages');
 
-    $siteManager = Container::getSiteManager();
+    //$siteManager = Container::getSiteManager();
 
     // Create site
     /** @var Chamilo\PageBundle\Entity\Site $site */
-    $site = $siteManager->create();
+    /*$site = $siteManager->create();
     $site->setHost('localhost');
     $site->setEnabled(true);
     $site->setName('localhost');
@@ -2932,12 +2931,11 @@ function installPages($container)
     $site->setRelativePath('');
     $site->setIsDefault(true);
     $site->setLocale('en');
-    $siteManager->save($site);
+    $siteManager->save($site);*/
 
     // Create home page
     /** @var PageManager $pageManager */
-    $pageManager = $container->get('sonata.page.manager.page');
-    /** @var \Sonata\PageBundle\Model\Page $page */
+    /*$pageManager = $container->get('sonata.page.manager.page');
     $page = $pageManager->create();
     $page->setSlug('homepage');
     $page->setUrl('/');
@@ -2997,12 +2995,12 @@ function installPages($container)
                 $parentBlock = $block;
             }
         }
-    }
+    }*/
 
     // Create block in main content
-    $block = $container->get('sonata.page.manager.block');
+    //$block = $container->get('sonata.page.manager.block');
     /** @var \Sonata\BlockBundle\Model\Block $myBlock */
-    $myBlock = $block->create();
+    /*$myBlock = $block->create();
     $myBlock->setType('sonata.formatter.block.formatter');
     $myBlock->setSetting('format', 'richhtml');
     $myBlock->setSetting('content', '');
@@ -3010,7 +3008,7 @@ function installPages($container)
     $myBlock->setSetting('template', '@SonataFormatter/Block/block_formatter.html.twig');
     $myBlock->setParent($parentBlock);
     $pageWelcome->addBlocks($myBlock);
-    $pageManager->save($pageWelcome);
+    $pageManager->save($pageWelcome);*/
 }
 
 /**

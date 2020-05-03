@@ -23,9 +23,6 @@ class MenuVoter implements VoterInterface
         $this->requestStack = $requestStack;
     }
 
-    /**
-     * @return bool|null
-     */
     public function matchItem(ItemInterface $item): ?bool
     {
         $request = $this->requestStack->getCurrentRequest();

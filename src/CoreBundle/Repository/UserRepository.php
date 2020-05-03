@@ -26,10 +26,10 @@ use Chamilo\CoreBundle\Entity\TrackELastaccess;
 use Chamilo\CoreBundle\Entity\TrackELogin;
 use Chamilo\CoreBundle\Entity\TrackEOnline;
 use Chamilo\CoreBundle\Entity\TrackEUploads;
+use Chamilo\CoreBundle\Entity\User;
 use Chamilo\CoreBundle\Entity\UserCourseCategory;
 use Chamilo\CoreBundle\Entity\UsergroupRelUser;
 use Chamilo\CoreBundle\Entity\UserRelCourseVote;
-use Chamilo\CoreBundle\Repository\ResourceRepository;
 use Chamilo\CourseBundle\Entity\CAttendanceResult;
 use Chamilo\CourseBundle\Entity\CAttendanceSheet;
 use Chamilo\CourseBundle\Entity\CBlogPost;
@@ -46,7 +46,6 @@ use Chamilo\CourseBundle\Entity\CStudentPublicationComment;
 use Chamilo\CourseBundle\Entity\CSurveyAnswer;
 use Chamilo\CourseBundle\Entity\CWiki;
 use Chamilo\TicketBundle\Entity\Ticket;
-use Chamilo\CoreBundle\Entity\User;
 use Doctrine\Common\Collections\Criteria;
 use Doctrine\ORM\Query\Expr\Join;
 use Symfony\Bridge\Doctrine\Security\User\UserLoaderInterface;
@@ -73,7 +72,6 @@ class UserRepository extends ResourceRepository implements UserLoaderInterface, 
 
     public function updateUser($user)
     {
-
         $this->getEntityManager()->persist($user);
         $this->getEntityManager()->flush();
     }

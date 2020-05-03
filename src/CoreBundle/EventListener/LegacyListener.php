@@ -4,8 +4,8 @@
 
 namespace Chamilo\CoreBundle\EventListener;
 
-use Chamilo\CoreBundle\Framework\Container;
 use Chamilo\CoreBundle\Entity\User;
+use Chamilo\CoreBundle\Framework\Container;
 use Symfony\Component\DependencyInjection\ContainerAwareTrait;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\HttpKernel\Event\ControllerEvent;

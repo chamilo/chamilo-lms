@@ -12,7 +12,6 @@ use Chamilo\CoreBundle\Entity\Resource\AbstractResource;
 use Chamilo\CoreBundle\Entity\Resource\ResourceInterface;
 use Chamilo\CourseBundle\Entity\CGroupInfo;
 use Chamilo\CourseBundle\Entity\CTool;
-use Chamilo\CoreBundle\Entity\User;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Criteria;
 use Doctrine\ORM\Mapping as ORM;
@@ -64,7 +63,7 @@ class Course extends AbstractResource implements ResourceInterface
     protected $id;
 
     /**
-     * @var string  The course title.
+     * @var string the course title
      * @Groups({"course:read", "course:write", "list"})
      * @Assert\NotBlank()
      *

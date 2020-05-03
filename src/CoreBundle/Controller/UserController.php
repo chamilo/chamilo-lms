@@ -5,9 +5,9 @@
 namespace Chamilo\CoreBundle\Controller;
 
 use Chamilo\CoreBundle\Repository\IllustrationRepository;
-use Symfony\Component\Security\Core\User\UserInterface;
 use Chamilo\CoreBundle\Repository\UserRepository;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Security\Core\User\UserInterface;
 
 /**
  * Class UserController.

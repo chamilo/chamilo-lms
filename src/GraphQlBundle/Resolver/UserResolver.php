@@ -5,8 +5,8 @@
 namespace Chamilo\GraphQlBundle\Resolver;
 
 use Chamilo\CoreBundle\Entity\Course;
-use Chamilo\GraphQlBundle\Traits\GraphQLTrait;
 use Chamilo\CoreBundle\Entity\User;
+use Chamilo\GraphQlBundle\Traits\GraphQLTrait;
 use Doctrine\Common\Collections\ArrayCollection;
 use Overblog\GraphQLBundle\Definition\Argument;
 use Symfony\Component\DependencyInjection\ContainerAwareInterface;

@@ -1396,6 +1396,9 @@ class CoursesAndSessionsCatalog
                     'show_session_info' => true,
                     'show_session_date' => true,
                 ],
+                'courses'=> [
+                    'by_title' => true,
+                ]
             ];
         }
 
@@ -1425,6 +1428,11 @@ class CoursesAndSessionsCatalog
                 'url' => $url,
                 'content' => get_lang('SessionList'),
             ];
+        }
+
+        // If only one option hide menu.
+        if (1 === count($headers)) {
+            return '';
         }
 
         return Display::tabsOnlyLink($headers, $active);

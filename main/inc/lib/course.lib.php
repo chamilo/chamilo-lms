@@ -9,6 +9,7 @@ use Chamilo\CoreBundle\Entity\SequenceResource;
 use Chamilo\CourseBundle\Component\CourseCopy\CourseBuilder;
 use Chamilo\CourseBundle\Component\CourseCopy\CourseRestorer;
 use ChamiloSession as Session;
+use Doctrine\Common\Collections\Criteria;
 
 /**
  * Class CourseManager.
@@ -524,6 +525,40 @@ class CourseManager
                 );
             }
         }
+        if (api_get_configuration_value('catalog_course_subscription_in_user_s_session')) {
+            // Also unlink the course from the users' currently accessible sessions
+            /** @var Course $course */
+            $course = Database::getManager()->getRepository('ChamiloCoreBundle:Course')->findOneBy([
+                'code' => $course_code
+            ]);
+            if (is_null($course)) {
+                return false;
+            }
+            /** @var Chamilo\UserBundle\Entity\User $user */
+            foreach (UserManager::getRepository()->matching(
+                Criteria::create()->where(Criteria::expr()->in('id', $userList))
+            ) as $user) {
+                foreach ($user->getCurrentlyAccessibleSessions() as $session) {
+                    $session->removeCourse($course);
+                    // unsubscribe user from course within this session
+                    SessionManager::unSubscribeUserFromCourseSession($user->getId(), $course->getId(), $session->getId());
+                }
+            }
+            try {
+                Database::getManager()->flush();
+            } catch (\Doctrine\ORM\OptimisticLockException $exception) {
+                Display::addFlash(
+                    Display::return_message(
+                        get_lang('InternalDatabaseError').': '.$exception->getMessage(),
+                        'warning'
+                    )
+                );
+
+                return false;
+            }
+        }
+
+        return true;
     }
 
     /**

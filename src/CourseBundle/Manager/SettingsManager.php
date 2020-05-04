@@ -7,7 +7,7 @@ namespace Chamilo\CourseBundle\Manager;
 use Chamilo\CoreBundle\Entity\Course;
 use Chamilo\CoreBundle\Entity\SettingsCurrent;
 use Chamilo\CourseBundle\Entity\CCourseSetting;
-use Chamilo\SettingsBundle\Manager\SettingsManager as ChamiloSettingsManager;
+use Chamilo\CoreBundle\Manager\SettingsManager as ChamiloSettingsManager;
 use Sylius\Bundle\SettingsBundle\Model\Settings;
 use Sylius\Bundle\SettingsBundle\Model\SettingsInterface;
 use Sylius\Bundle\SettingsBundle\Schema\SchemaInterface;

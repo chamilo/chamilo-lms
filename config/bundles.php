@@ -19,7 +19,6 @@ return [
     Chamilo\SkillBundle\ChamiloSkillBundle::class => ['all' => true],
     Chamilo\CourseBundle\ChamiloCourseBundle::class => ['all' => true],
     Chamilo\TicketBundle\ChamiloTicketBundle::class => ['all' => true],
-    Chamilo\SettingsBundle\ChamiloSettingsBundle::class => ['all' => true],
     Chamilo\GraphQlBundle\ChamiloGraphQlBundle::class => ['all' => true],
     Chamilo\LtiBundle\ChamiloLtiBundle::class => ['all' => true],
     Sylius\Bundle\SettingsBundle\SyliusSettingsBundle::class => ['all' => true],

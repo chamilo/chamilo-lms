@@ -37,7 +37,7 @@ use Chamilo\CourseBundle\Repository\CStudentPublicationAssignmentRepository;
 use Chamilo\CourseBundle\Repository\CStudentPublicationCommentRepository;
 use Chamilo\CourseBundle\Repository\CStudentPublicationRepository;
 use Chamilo\PageBundle\Entity\Page;
-use Chamilo\SettingsBundle\Manager\SettingsManager;
+use Chamilo\CoreBundle\Manager\SettingsManager;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Session\Session;

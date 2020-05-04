@@ -17,7 +17,7 @@ use Chamilo\CoreBundle\Security\Authorization\Voter\ResourceNodeVoter;
 use Chamilo\CoreBundle\Traits\ControllerTrait;
 use Chamilo\CoreBundle\Traits\CourseControllerTrait;
 use Chamilo\CoreBundle\Traits\ResourceControllerTrait;
-use Chamilo\SettingsBundle\Manager\SettingsManager;
+use Chamilo\CoreBundle\Manager\SettingsManager;
 use FM\ElfinderBundle\Connector\ElFinderConnector;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;

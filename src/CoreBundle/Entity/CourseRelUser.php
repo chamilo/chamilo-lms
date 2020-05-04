@@ -4,11 +4,17 @@
 
 namespace Chamilo\CoreBundle\Entity;
 
+use ApiPlatform\Core\Annotation\ApiResource;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Serializer\Annotation\Groups;
 
 /**
  * CourseRelUser.
+ * @ApiResource(
+ *      shortName="CourseSubscription",
+ *      attributes={"security"="is_granted('ROLE_ADMIN')"},
+ *      normalizationContext={"groups"={"skill:read"}}
+ * )
  *
  * @ORM\Table(
  *      name="course_rel_user",
@@ -32,8 +38,6 @@ class CourseRelUser
     protected $id;
 
     /**
-     * Groups({"course_rel_user:read", "course_rel_user:write"}).
-     *
      * @ORM\ManyToOne(targetEntity="Chamilo\CoreBundle\Entity\User", inversedBy="courses", cascade={"persist"})
      * @ORM\JoinColumn(name="user_id", referencedColumnName="id")
      */

@@ -250,6 +250,12 @@ services:
         class: Chamilo\CoreBundle\EventListener\LogoutSuccessHandler
         arguments: ['@router', '@security.authorization_checker', '@security.token_storage']
 
+    Chamilo\CoreBundle\Twig\SettingsHelper:
+        arguments:
+            - '@chamilo.settings.manager'
+        tags:
+            - {name: templating.helper, alias: chamilo_settings}
+
     # Block services
 #    chamilo_core.block.course:
 #        class: Chamilo\CoreBundle\Block\CourseBlockService

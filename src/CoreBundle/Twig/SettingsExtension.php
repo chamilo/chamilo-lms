@@ -2,9 +2,8 @@
 
 /* For licensing terms, see /license.txt */
 
-namespace Chamilo\SettingsBundle\Twig;
+namespace Chamilo\CoreBundle\Twig;
 
-use Chamilo\SettingsBundle\Templating\Helper\SettingsHelper;
 use Twig\Extension\AbstractExtension;
 use Twig\TwigFilter;
 use Twig\TwigFunction;
@@ -24,7 +23,7 @@ class SettingsExtension extends AbstractExtension
     /**
      * @param SettingsHelper $helper
      */
-    public function __construct($helper)
+    public function __construct(SettingsHelper $helper)
     {
         $this->helper = $helper;
     }

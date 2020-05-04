@@ -13,7 +13,7 @@ use Chamilo\CoreBundle\Security\Authorization\Voter\ResourceNodeVoter;
 use Chamilo\CoreBundle\Tool\AbstractTool;
 use Chamilo\CourseBundle\Entity\CTool;
 use Chamilo\CourseBundle\Repository\CToolRepository;
-use Chamilo\SettingsBundle\Manager\SettingsManager;
+use Chamilo\CoreBundle\Manager\SettingsManager;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\PropertyAccess\Exception\InvalidArgumentException;
 use Symfony\Component\Security\Core\Security;

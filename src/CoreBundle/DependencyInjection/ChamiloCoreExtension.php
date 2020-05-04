@@ -27,6 +27,12 @@ class ChamiloCoreExtension extends Extension
         $loader->load('settings.yml');
         $loader->load('repositories.yml');
         $loader->load('tool_settings.yml');
+
+        $loader = new Loader\XmlFileLoader(
+            $container,
+            new FileLocator(__DIR__.'/../Resources/config')
+        );
+        $loader->load('services.xml');
     }
 
     /**

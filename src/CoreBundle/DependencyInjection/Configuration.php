@@ -2,7 +2,7 @@
 
 /* For licensing terms, see /license.txt */
 
-namespace Chamilo\SettingsBundle\DependencyInjection;
+namespace Chamilo\CoreBundle\DependencyInjection;
 
 use Symfony\Component\Config\Definition\Builder\TreeBuilder;
 use Symfony\Component\Config\Definition\ConfigurationInterface;

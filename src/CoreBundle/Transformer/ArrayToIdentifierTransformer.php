@@ -2,7 +2,7 @@
 
 /* For licensing terms, see /license.txt */
 
-namespace Chamilo\SettingsBundle\Transformer;
+namespace Chamilo\CoreBundle\Transformer;
 
 use Symfony\Component\Form\DataTransformerInterface;
 

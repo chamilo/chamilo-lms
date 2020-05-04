@@ -9,7 +9,7 @@ use Chamilo\CoreBundle\Form\DataTransformer\ResourceToIdentifierTransformer;
 use Chamilo\CoreBundle\Form\Type\YesNoType;
 use Chamilo\CoreBundle\Tool\AbstractTool;
 use Chamilo\CoreBundle\ToolChain;
-use Chamilo\SettingsBundle\Transformer\ArrayToIdentifierTransformer;
+use Chamilo\CoreBundle\Transformer\ArrayToIdentifierTransformer;
 //use Sylius\Bundle\ResourceBundle\Form\DataTransformer\ResourceToIdentifierTransformer;
 use Sylius\Bundle\SettingsBundle\Schema\AbstractSettingsBuilder;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;

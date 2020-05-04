@@ -109,16 +109,30 @@ class User implements UserInterface, EquatableInterface
     /**
      * @var string
      * @Groups({"user:read", "user:write"})
-     * @ORM\Column(name="firstname", type="string", length=60, nullable=true, unique=false)
+     * @ORM\Column(name="firstname", type="string", length=64, nullable=true, unique=false)
      */
     protected $firstname;
 
     /**
      * @var string
      * @Groups({"user:read", "user:write"})
-     * @ORM\Column(name="lastname", type="string", length=60, nullable=true, unique=false)
+     * @ORM\Column(name="lastname", type="string", length=64, nullable=true, unique=false)
      */
     protected $lastname;
+
+    /**
+     * @var string
+     * @Groups({"user:read", "user:write"})
+     * @ORM\Column(name="website", type="string", length=64, nullable=true)
+     */
+    protected $website;
+
+    /**
+     * @var string
+     * @Groups({"user:read", "user:write"})
+     * @ORM\Column(name="biography", type="text", nullable=true)
+     */
+    protected $biography;
 
     /**
      * @var string
@@ -224,7 +238,7 @@ class User implements UserInterface, EquatableInterface
     /**
      * @var string
      *
-     * @ORM\Column(name="phone", type="string", length=30, nullable=true, unique=false)
+     * @ORM\Column(name="phone", type="string", length=64, nullable=true, unique=false)
      */
     protected $phone;
 

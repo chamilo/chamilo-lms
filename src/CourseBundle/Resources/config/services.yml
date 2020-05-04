@@ -28,31 +28,6 @@ services:
     chamilo_course.repository.parameter:
         class: Chamilo\CourseBundle\Repository\CCourseSettingRepository
 
-        #    chamilo_settings.repository.parameter:
-        #        class: Chamilo\CoreBundle\Repository\SettingsCurrentRepository
-        #        factory: ["@doctrine", getRepository]
-        #        arguments: [ Chamilo\CoreBundle\Entity\SettingsCurrent ]
-    #    chamilo_course.settings.manager:
-    #        class: '%chamilo_course.settings.manager.class%'
-    #        arguments:
-    #            - '@chamilo_course.registry.settings_schema'
-    #            - '@sylius.registry.settings_resolver'
-    #            - '@doctrine.orm.entity_manager'
-    #            - '@chamilo_course.repository.parameter'
-    #            - '@sylius.factory.settings'
-    #            - '@event_dispatcher'
-    #    chamilo_course.settings.manager:
-    #        class: '%chamilo_course.settings.manager.class%'
-    #        public: true
-    #        arguments:
-    #            - '@sylius.registry.settings_schema'
-    #            - '@sylius.registry.settings_resolver'
-    #            - '@doctrine.orm.entity_manager'
-    #            - '@chamilo_course.repository.parameter'
-    #            - '@sylius.factory.settings'
-    #            - '@event_dispatcher'
-
-
     Chamilo\CourseBundle\Repository\:
         resource: ../../Repository
         exclude: '../../Repository/{CDocumentRepository.php|CQuizRepository.php}'

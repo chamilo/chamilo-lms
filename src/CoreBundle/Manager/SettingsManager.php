@@ -2,7 +2,7 @@
 
 /* For licensing terms, see /license.txt */
 
-namespace Chamilo\SettingsBundle\Manager;
+namespace Chamilo\CoreBundle\Manager;
 
 use Chamilo\CoreBundle\Entity\AccessUrl;
 use Chamilo\CoreBundle\Entity\Course;
@@ -67,7 +67,7 @@ class SettingsManager implements SettingsManagerInterface
         ServiceRegistryInterface $schemaRegistry,
         EntityManager $manager,
         EntityRepository $repository,
-        $eventDispatcher,
+        EventDispatcherInterface $eventDispatcher,
         RequestStack $request
     ) {
         $this->schemaRegistry = $schemaRegistry;

@@ -2,9 +2,9 @@
 
 /* For licensing terms, see /license.txt */
 
-namespace Chamilo\SettingsBundle\Templating\Helper;
+namespace Chamilo\CoreBundle\Twig;
 
-use Chamilo\SettingsBundle\Manager\SettingsManager;
+use Chamilo\CoreBundle\Manager\SettingsManager;
 use Sylius\Bundle\SettingsBundle\Manager\SettingsManagerInterface;
 use Sylius\Bundle\SettingsBundle\Templating\Helper\SettingsHelperInterface;
 use Symfony\Component\Templating\Helper\Helper;

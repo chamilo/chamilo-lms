@@ -6,7 +6,7 @@ namespace Chamilo\LtiBundle\Util;
 
 use Chamilo\CoreBundle\Entity\User;
 use Chamilo\LtiBundle\Entity\ExternalTool;
-use Chamilo\SettingsBundle\Manager\SettingsManager;
+use Chamilo\CoreBundle\Manager\SettingsManager;
 
 /**
  * Class Utils.

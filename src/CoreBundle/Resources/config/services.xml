@@ -5,11 +5,10 @@
            xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
 
     <parameters>
-        <parameter key="chamilo_settings.settings.manager.class">Chamilo\SettingsBundle\Manager\SettingsManager</parameter>
-        <parameter key="chamilo_settings.repository.parameter.class">Chamilo\CoreBundle\Entity\Manager\SettingsCurrentManager</parameter>
+        <parameter key="chamilo_settings.settings.manager.class">Chamilo\CoreBundle\Manager\SettingsManager</parameter>
         <parameter key="chamilo_settings.repository.parameter.entity.class">Chamilo\CoreBundle\Entity\SettingsCurrent</parameter>
-        <parameter key="chamilo_settings.twig.extension.settings.class">Chamilo\SettingsBundle\Twig\SettingsExtension</parameter>
-        <parameter key="chamilo_settings.templating.helper.settings.class">Chamilo\SettingsBundle\Templating\Helper\SettingsHelper</parameter>
+        <parameter key="chamilo_settings.twig.extension.settings.class">Chamilo\CoreBundle\Twig\SettingsExtension</parameter>
+        <parameter key="chamilo_settings.templating.helper.settings.class">Chamilo\CoreBundle\Twig\SettingsHelper</parameter>
     </parameters>
 
     <services>
@@ -37,14 +36,14 @@
         <service id="Sylius\Bundle\SettingsBundle\Form\Factory\SettingsFormFactory" alias="chamilo_settings.form_factory.settings">
         </service>
 
-        <service id="chamilo_settings.templating.helper.settings" class="%chamilo_settings.templating.helper.settings.class%" public="true">
-            <argument type="service" id="chamilo.settings.manager" />
-            <tag name="templating.helper" alias="chamilo_settings" />
-        </service>
+<!--        <service id="chamilo_settings.templating.helper.settings" class="%chamilo_settings.templating.helper.settings.class%" public="true">-->
+<!--            <argument type="service" id="chamilo.settings.manager" />-->
+<!--            <tag name="templating.helper" alias="chamilo_settings" />-->
+<!--        </service>-->
 
-        <service id="chamilo.twig.extension.settings" class="%chamilo_settings.twig.extension.settings.class%" public="false">
-            <argument type="service" id="chamilo_settings.templating.helper.settings" />
-            <tag name="twig.extension" />
-        </service>
+<!--        <service id="chamilo.twig.extension.settings" class="%chamilo_settings.twig.extension.settings.class%" public="false">-->
+<!--            <argument type="service" id="chamilo_settings.templating.helper.settings" />-->
+<!--            <tag name="twig.extension" />-->
+<!--        </service>-->
     </services>
 </container>

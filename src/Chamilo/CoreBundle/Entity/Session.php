@@ -945,6 +945,7 @@ class Session
      * Removes a course from this session.
      *
      * @param Course $course the course to remove from this session
+     *
      * @return bool whether the course was actually found in this session and removed from it
      */
     public function removeCourse(Course $course)

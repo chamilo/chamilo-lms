@@ -1396,9 +1396,9 @@ class CoursesAndSessionsCatalog
                     'show_session_info' => true,
                     'show_session_date' => true,
                 ],
-                'courses'=> [
+                'courses' => [
                     'by_title' => true,
-                ]
+                ],
             ];
         }
 

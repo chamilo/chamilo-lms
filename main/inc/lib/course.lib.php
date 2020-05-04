@@ -529,7 +529,7 @@ class CourseManager
             // Also unlink the course from the users' currently accessible sessions
             /** @var Course $course */
             $course = Database::getManager()->getRepository('ChamiloCoreBundle:Course')->findOneBy([
-                'code' => $course_code
+                'code' => $course_code,
             ]);
             if (is_null($course)) {
                 return false;

@@ -203,9 +203,13 @@ switch ($action) {
             api_not_allowed(true);
         }
 
+        $settings = CoursesAndSessionsCatalog::getCatalogSearchSettings();
         $form = new FormValidator('search', 'get', '', null, null, FormValidator::LAYOUT_BOX);
         $form->addHidden('action', 'search_course');
-        $form->addText('search_term', get_lang('Title'));
+        if (true === $settings['courses']['by_title']) {
+            $form->addText('search_term', get_lang('Title'));
+        }
+
         $select = $form->addSelect('category_code', get_lang('CourseCategories'));
 
         $defaults = [];

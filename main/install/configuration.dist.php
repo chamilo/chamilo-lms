@@ -1377,7 +1377,18 @@ ALTER TABLE notification_event ADD COLUMN event_id INT NULL;
 //$_configuration['hide_session_dates_in_user_portal'] = false;
 
 // Catalog search settings visibility
-//$_configuration['catalog_settings'] = ['sessions' => ['by_title' => true, 'by_date' => true, 'by_tag' => true, 'show_session_info' => true, 'show_session_date' => true]];
+/*$_configuration['catalog_settings'] = [
+    'sessions' => [
+        'by_title' => true,
+        'by_date' => true,
+        'by_tag' => true,
+        'show_session_info' => true,
+        'show_session_date' => true,
+    ],
+    'courses' => [
+        'by_title' => true,
+    ],
+];*/
 
 // Enable learning paths with only one SCO item to use the score returned by
 // the SCO as an indicator of progress of the whole learning path
@@ -1437,6 +1448,7 @@ $_configuration['course_catalog_settings'] = [
         'title_url' => 'course_home', // Course home URL
         'image_url' => 'course_about', // Course about URL
     ],
+    'hide_course_title'
     'redirect_after_subscription' => 'course_home', // or 'course_catalog' to stay in the page
     'extra_fields_in_search_form' => ['variable1', 'variable2'],
     'extra_fields_in_course_block' => ['variable3', 'variable4'],

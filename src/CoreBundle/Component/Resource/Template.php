@@ -20,19 +20,19 @@ class Template
 
     public function __construct()
     {
-        $this->index = '@ChamiloTheme/Resource/index.html.twig';
-        $this->list = '@ChamiloTheme/Resource/index.html.twig';
-        $this->edit = '@ChamiloTheme/Resource/edit.html.twig';
+        $this->index = '@ChamiloCore/Resource/index.html.twig';
+        $this->list = '@ChamiloCore/Resource/index.html.twig';
+        $this->edit = '@ChamiloCore/Resource/edit.html.twig';
         // New resource
-        $this->new = '@ChamiloTheme/Resource/new.html.twig';
+        $this->new = '@ChamiloCore/Resource/new.html.twig';
         // New resource node (new folder)
-        $this->newFolder = '@ChamiloTheme/Resource/new_folder.html.twig';
-        $this->viewResource = '@ChamiloTheme/Resource/view_resource.html.twig';
-        $this->diskSpace = '@ChamiloTheme/Resource/disk_space.html.twig';
-        $this->info = '@ChamiloTheme/Resource/info.html.twig';
-        $this->infoAjax = '@ChamiloTheme/Resource/info_ajax.html.twig';
-        $this->preview = '@ChamiloTheme/Resource/preview.html.twig';
-        $this->upload = '@ChamiloTheme/Resource/upload.html.twig';
+        $this->newFolder = '@ChamiloCore/Resource/new_folder.html.twig';
+        $this->viewResource = '@ChamiloCore/Resource/view_resource.html.twig';
+        $this->diskSpace = '@ChamiloCore/Resource/disk_space.html.twig';
+        $this->info = '@ChamiloCore/Resource/info.html.twig';
+        $this->infoAjax = '@ChamiloCore/Resource/info_ajax.html.twig';
+        $this->preview = '@ChamiloCore/Resource/preview.html.twig';
+        $this->upload = '@ChamiloCore/Resource/upload.html.twig';
     }
 
     public function getFromAction(string $action, $isAjax = false)

@@ -1,0 +1,16 @@
+{#{% extends "@ChamiloCore/Layout/layout_one_col.html.twig" %}#}
+
+{% block content %}
+    <div class="box-body">
+        <form class="form-inline"
+          action="{{ url('chamilo_core_resource_new_folder', {'tool': tool, 'type': type, 'cid': course.id, 'sid': session.id, 'id': id }) }}"
+          method="post"
+        >
+        {{ form_widget(form) }}
+        <div class="form-group">
+            <button type="submit" class="btn-primary btn">{{ 'Save' | trans }}</button>
+        </div>
+        {{ form_end(form) }}
+        </form>
+    </div>
+{% endblock %}

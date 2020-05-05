@@ -42,7 +42,7 @@ class SettingsController extends SyliusSettingsController
         $schemas = $manager->getSchemas();
 
         return $this->render(
-            '@ChamiloTheme/Admin/Settings/index.html.twig',
+            '@ChamiloCore/Admin/Settings/index.html.twig',
             [
                 'schemas' => $schemas,
             ]
@@ -100,7 +100,7 @@ class SettingsController extends SyliusSettingsController
         $schemas = $manager->getSchemas();
 
         return $this->render(
-            '@ChamiloTheme/Admin/Settings/search.html.twig',
+            '@ChamiloCore/Admin/Settings/search.html.twig',
             [
                 'keyword' => $keyword,
                 'schemas' => $schemas,
@@ -185,7 +185,7 @@ class SettingsController extends SyliusSettingsController
         $schemas = $manager->getSchemas();
 
         return $this->render(
-            '@ChamiloTheme/Admin/Settings/default.html.twig',
+            '@ChamiloCore/Admin/Settings/default.html.twig',
             [
                 'schemas' => $schemas,
                 'settings' => $settings,

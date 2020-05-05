@@ -1,11 +1,11 @@
-{% extends "@ChamiloTheme/Layout/layout_one_col.html.twig" %}
+{% extends "@ChamiloCore/Layout/layout_one_col.html.twig" %}
 
 {% block content %}
 {% autoescape false %}
     <div class="row">
         <div class="col-md-3">
             <div class="sm-groups">
-            {% include '@ChamiloTheme/Social/user_block.html.twig' %}
+            {% include '@ChamiloCore/Social/user_block.html.twig' %}
             {{ social_menu_block }}
 
             <!-- Block chat list -->

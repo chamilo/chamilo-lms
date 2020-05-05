@@ -50,7 +50,7 @@ class CourseController extends BaseController
             $this->setConfigureBreadcrumb($course);
 
             return $this->render(
-                '@ChamiloTheme/Lti/course_configure.twig',
+                '@ChamiloCore/Lti/course_configure.twig',
                 [
                     'title' => $this->trans('Edit external tool'),
                     'added_tools' => [],
@@ -245,7 +245,7 @@ class CourseController extends BaseController
         Utils::removeQueryParamsFromLaunchUrl($tool, $params);
 
         return $this->render(
-            '@ChamiloTheme/Lti/launch.html.twig',
+            '@ChamiloCore/Lti/launch.html.twig',
             [
                 'params' => $params,
                 'launch_url' => $tool->getLaunchUrl(),
@@ -315,7 +315,7 @@ class CourseController extends BaseController
         }
 
         return $this->render(
-            '@ChamiloTheme/Lti/item_return.html.twig',
+            '@ChamiloCore/Lti/item_return.html.twig',
             ['course' => $course]
         );
     }
@@ -357,7 +357,7 @@ class CourseController extends BaseController
         );
 
         return $this->render(
-            'ChamiloThemeBundle:Lti:iframe.html.twig',
+            'ChamiloCoreBundle:Lti:iframe.html.twig',
             ['tool' => $externalTool, 'course' => $course]
         );
     }
@@ -415,7 +415,7 @@ class CourseController extends BaseController
             }
 
             return $this->render(
-                '@ChamiloTheme/Lti/course_configure.twig',
+                '@ChamiloCore/Lti/course_configure.twig',
                 [
                     'title' => $this->trans('Add external tool'),
                     'added_tools' => $repo->findBy(['course' => $course]),
@@ -529,7 +529,7 @@ class CourseController extends BaseController
             $this->setConfigureBreadcrumb($course);
 
             return $this->render(
-                '@ChamiloTheme/Lti/gradebook.html.twig',
+                '@ChamiloCore/Lti/gradebook.html.twig',
                 [
                     'form' => $form->returnForm(),
                 ]

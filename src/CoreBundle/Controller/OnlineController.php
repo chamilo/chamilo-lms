@@ -25,7 +25,7 @@ class OnlineController extends BaseController
         $users = \SocialManager::display_user_list($users);
 
         return $this->render(
-            '@ChamiloTheme/Online/index.html.twig',
+            '@ChamiloCore/Online/index.html.twig',
             [
                 'whoisonline' => $users,
             ]
@@ -49,7 +49,7 @@ class OnlineController extends BaseController
         $users = \SocialManager::display_user_list($users);
 
         return $this->render(
-            '@ChamiloTheme/Online/index.html.twig',
+            '@ChamiloCore/Online/index.html.twig',
             [
                 'whoisonline' => $users,
             ]
@@ -74,7 +74,7 @@ class OnlineController extends BaseController
         $users = \SocialManager::display_user_list($users);
 
         return $this->render(
-            '@ChamiloTheme/Online/index.html.twig',
+            '@ChamiloCore/Online/index.html.twig',
             [
                 'whoisonline' => $users,
             ]

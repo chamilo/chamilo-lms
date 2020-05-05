@@ -1,0 +1,11 @@
+{% extends "@ChamiloCore/Layout/layout_one_col.html.twig" %}
+
+{% block content %}
+    {% autoescape false %}
+        <h3>{{ resource.name }}</h3>
+        <p>{{ resource.description }}</p>
+
+        {% include '@ChamiloCore/Resource/toolbar_view_resource.html.twig' %}
+
+    {% endautoescape %}
+{% endblock %}

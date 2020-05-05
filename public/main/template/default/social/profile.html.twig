@@ -1,11 +1,11 @@
-{% extends '@ChamiloTheme/Layout/layout_one_col.html.twig' %}
-{% import '@ChamiloTheme/Macros/box.html.twig' as macro %}
+{% extends '@ChamiloCore/Layout/layout_one_col.html.twig' %}
+{% import '@ChamiloCore/Macros/box.html.twig' as macro %}
 
 {% block content %}
 {% autoescape false %}
 <div class="row">
     <div class="col-md-3">
-        {% include '@ChamiloTheme/Social/user_block.html.twig' %}
+        {% include '@ChamiloCore/Social/user_block.html.twig' %}
         {{ social_extra_info_block }}
     </div>
     <div id="wallMessages" class="col-md-6">

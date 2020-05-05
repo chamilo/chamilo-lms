@@ -36,8 +36,8 @@ final class CCourseDescriptionRepository extends ResourceRepository implements G
         $templates = parent::getTemplates();
 
         $templates
-            ->setViewResource('@ChamiloTheme/Resource/course_description/view_resource.html.twig')
-            ->setIndex('@ChamiloTheme/Resource/course_description/index.html.twig');
+            ->setViewResource('@ChamiloCore/Resource/course_description/view_resource.html.twig')
+            ->setIndex('@ChamiloCore/Resource/course_description/index.html.twig');
 
         return $templates;
     }

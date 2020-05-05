@@ -175,4 +175,4 @@ $page .= '</div>';
 
 $tpl->assign('post_page', $page);
 
-$tpl->displayTemplate('@ChamiloTheme/LearnPath/add_audio.html.twig');
+$tpl->displayTemplate('@ChamiloCore/LearnPath/add_audio.html.twig');

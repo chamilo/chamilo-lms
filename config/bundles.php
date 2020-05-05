@@ -15,7 +15,6 @@ return [
     FOS\JsRoutingBundle\FOSJsRoutingBundle::class => ['all' => true],
     FOS\RestBundle\FOSRestBundle::class => ['all' => true],
     Chamilo\CoreBundle\ChamiloCoreBundle::class => ['all' => true],
-    Chamilo\ThemeBundle\ChamiloThemeBundle::class => ['all' => true],
     Chamilo\SkillBundle\ChamiloSkillBundle::class => ['all' => true],
     Chamilo\CourseBundle\ChamiloCourseBundle::class => ['all' => true],
     Chamilo\TicketBundle\ChamiloTicketBundle::class => ['all' => true],
@@ -41,4 +40,5 @@ return [
     ApiPlatform\Core\Bridge\Symfony\Bundle\ApiPlatformBundle::class => ['all' => true],
     Twig\Extra\TwigExtraBundle\TwigExtraBundle::class => ['all' => true],
     Symfony\Bundle\MakerBundle\MakerBundle::class => ['dev' => true],
+    SymfonyCasts\Bundle\ResetPassword\SymfonyCastsResetPasswordBundle::class => ['all' => true],
 ];

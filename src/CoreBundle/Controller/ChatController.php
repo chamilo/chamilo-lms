@@ -40,7 +40,7 @@ class ChatController extends AbstractResourceController implements CourseControl
         Event::registerLog($logInfo);
 
         return $this->render(
-            '@ChamiloTheme/Chat/chat.html.twig',
+            '@ChamiloCore/Chat/chat.html.twig',
             [
                 'restrict_to_coach' => api_get_configuration_value('course_chat_restrict_to_coach'),
                 'user' => api_get_user_info(),

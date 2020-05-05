@@ -610,7 +610,7 @@ $template->assign(
 
 $frameReady = Display::getFrameReadyBlock('#content_id, #content_id_blank');
 $template->assign('frame_ready', $frameReady);
-$template->displayTemplate('@ChamiloTheme/LearnPath/view.html.twig');
+$template->displayTemplate('@ChamiloCore/LearnPath/view.html.twig');
 
 // Restore a global setting.
 $_setting['show_navigation_menu'] = $save_setting;

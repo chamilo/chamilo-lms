@@ -1,9 +1,0 @@
-{% import '@ChamiloTheme/Macros/box.html.twig' as macro %}
-{% import '@ChamiloTheme/Macros/image.html.twig' as macro_image %}
-
-{{
-    macro.panel(
-        'SocialNetwork' | trans,
-        mopa_bootstrap_menu('ChamiloCoreBundle:LeftMenuBuilder:socialMenu', {'automenu': 'pills', 'stacked':true})
-    )
-}}

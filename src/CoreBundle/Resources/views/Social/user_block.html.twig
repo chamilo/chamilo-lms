@@ -1,0 +1,85 @@
+{% import '@ChamiloCore/Macros/box.html.twig' as macro %}
+
+{% autoescape false %}
+<div class="profile">
+    {{ social_avatar_block }}
+    <div class="btn-toolbar justify-content-center">
+        {% if group is empty %}
+            <a href="{{ _p.web }}main/messages/new_message.php" title="{{ "Message" | trans }}" class="btn btn-primary btn-sm">
+                <i class="fas fa-envelope"></i>
+            </a>
+            <a href="{{ vcard_user_link }}" title="{{ "Business card" | trans }}" class="btn btn-success btn-sm">
+                <i class="fas fa-address-card"></i>
+            </a>
+            {% if is_granted('ROLE_ADMIN') %}
+                <a href="{{ _p.web }}main/admin/user_edit.php?user_id={{ user.id }}" title="{{ "Edit" | trans }}" class="btn btn-light btn-sm">
+                    <i class="fas fa-pencil-alt"></i>
+                </a>
+            {% endif %}
+        {% endif %}
+        {% if user_is_group_admin %}
+            <a class="btn btn-light btn-sm" title="{{ 'Edit group'|trans }}" href="{{ _p.web_main ~ 'social/group_edit.php?id=' ~ group.id }}">
+               <i class="fas fa-pencil-alt"></i>
+            </a>
+        {% endif %}
+    </div>
+    <hr>
+    <div class="group-info">
+        {{ group.description }}
+    </div>
+    {{ social_menu_block }}
+    <ul class="list-user-data">
+        {% if show_full_profile %}
+            {% set skype_account = '' %}
+            {% set linkedin_url = '' %}
+            {% for extra in user.extra %}
+                {% if extra.value.getField().getVariable() == 'skype' %}
+                    {% set skype_account = extra.value.getValue() %}
+                {% endif %}
+
+                {% if extra.value.getField().getVariable() == 'linkedin_url' %}
+                    {% set linkedin_url = extra.value.getValue() %}
+                {% endif %}
+            {% endfor %}
+
+            {% if 'allow_show_skype_account'|api_get_setting == 'true' and not skype_account is empty %}
+                <li class="item">
+                    <a href="skype:{{ skype_account }}?chat">
+                        <span class="fa fa-skype fa-fw" aria-hidden="true"></span> {{ 'Skype'|trans }}
+                    </a>
+                </li>
+            {% endif %}
+
+            {% if 'allow_show_linkedin_url'|api_get_setting == 'true' and not linkedin_url is empty %}
+                <li class="item">
+                    <a href="{{ linkedin_url }}" target="_blank">
+                        <span class="fa fa-linkedin fa-fw" aria-hidden="true"></span> {{ 'LinkedIn profile URL'|trans }}
+                    </a>
+                </li>
+            {% endif %}
+        {% endif %}
+        {% if chat_enabled == 1 %}
+            {% if user.user_is_online_in_chat != 0 %}
+                {% if user_relation == user_relation_type_friend %}
+                    <li class="item">
+                        <a onclick="javascript:chatWith('{{ user.id }}', '{{ user.complete_name }}', '{{ user.user_is_online }}','{{ user.avatar_small }}')" href="javascript:void(0);">
+                            <img src="{{ "online.png" | icon }}" alt="{{ "Online" | trans }}">
+                            {{ "Chat" | trans }} ({{ "Online" | trans }})
+                        </a>
+                    </li>
+                    {# else #}
+                    {# <img src="{{ "offline.png" | icon }}" alt="{{ "Online" | trans }}"> #}
+                    {# {{ "Chat" | trans }} ({{ "Offline" | trans }}) #}
+                {% endif %}
+            {% endif %}
+        {% endif %}
+        {#{% if not profile_edition_link is empty %}
+            <li class="item">
+                <a class="btn btn-link btn-sm btn-block" href="{{ profile_edition_link }}">
+                    <em class="fa fa-edit"></em>{{ "EditProfile" | trans }}
+                </a>
+            </li>
+        {% endif %}#}
+    </ul>
+</div>
+{% endautoescape %}

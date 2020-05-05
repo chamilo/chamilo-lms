@@ -1,0 +1,34 @@
+{% extends "@ChamiloCore/Layout/layout_one_col.html.twig" %}
+
+{% block content %}
+    <div class="box-body">
+        {{ form_start(form) }}
+        {{ form_errors(form) }}
+
+{#        {{ form_row(form.title) }}#}
+{#        {% if form.content %}#}
+{#            {{ form_row(form.content) }}#}
+{#        {% endif %}#}
+
+        {{ form_widget(form) }}
+
+        <div class="form-group">
+            <button type="submit" class="btn-primary btn">{{ 'Save' | trans }}</button>
+        </div>
+
+        {#      {{ form_label(form.title) }}#}
+        {#      {{ form_errors(form.title) }}#}
+        {#      {{ form_widget(form.title) }}#}
+        {#      {{ form_help(form.title) }}#}
+        {#      --commented already#}
+        {#      {{ form_row(form.c_id) }}#}
+        {#      {{ form_row(form.filetype) }}#}
+        {#{{ form_row(form.shared) }}#}
+        {#<ul id="rights" class="tags"#}
+        {#data-prototype="{{ form_widget(form.rights.vars.prototype)|e }}">#}
+        {#</ul>#}
+        {#      --commented already#}
+
+        {{ form_end(form) }}
+    </div>
+{% endblock %}

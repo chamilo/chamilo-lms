@@ -4912,7 +4912,7 @@ EOT;
         ];
 
         return Container::getTwig()->render(
-            '@ChamiloTheme/Mailer/Exercise/result_alert_body.html.twig',
+            '@ChamiloCore/Mailer/Exercise/result_alert_body.html.twig',
             $params
         );
     }

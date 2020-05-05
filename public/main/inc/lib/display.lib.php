@@ -78,7 +78,7 @@ class Display
     public static function display_reduced_header()
     {
         ob_start();
-        self::$legacyTemplate = '@ChamiloTheme/Layout/no_layout.html.twig';
+        self::$legacyTemplate = '@ChamiloCore/Layout/no_layout.html.twig';
 
         return true;
 
@@ -114,7 +114,7 @@ class Display
         if (ob_get_length()) {
             ob_end_clean();
         }
-        $tpl = '@ChamiloTheme/Layout/layout_one_col.html.twig';
+        $tpl = '@ChamiloCore/Layout/layout_one_col.html.twig';
         if (!empty(self::$legacyTemplate)) {
             $tpl = self::$legacyTemplate;
         }
@@ -143,7 +143,7 @@ class Display
         if (ob_get_length()) {
             ob_end_clean();
         }
-        $tpl = '@ChamiloTheme/Layout/no_layout.html.twig';
+        $tpl = '@ChamiloCore/Layout/no_layout.html.twig';
         if (!empty(self::$legacyTemplate)) {
             $tpl = self::$legacyTemplate;
         }

@@ -1,0 +1,45 @@
+{% import '@ChamiloCore/Macros/box.html.twig' as macro %}
+{% autoescape false %}
+
+    {% if hot_courses is not null and hot_courses is not empty %}
+        <script>
+            $(function() {
+                $('.star-rating li a').on('click', function (event) {
+                    var id = $(this).parents('ul').attr('id');
+                    $('#vote_label2_' + id).html("{{ 'Loading'|trans }}");
+                    $.ajax({
+                        url: $(this).attr('data-link'),
+                        success: function (data) {
+                            $("#rating_wrapper_" + id).html(data);
+                            if (data == 'added') {
+                                //$('#vote_label2_' + id).html("{{ 'Saved'|trans }}");
+                            }
+                            if (data == 'updated') {
+                                //$('#vote_label2_' + id).html("{{ 'Saved'|trans }}");
+                            }
+                        }
+                    });
+                });
+            });
+        </script>
+
+        {% set buttons %}
+            {% if is_granted('ROLE_ADMIN') %}
+                <a title="{{ "Hide"|trans }}"
+                   class="btn btn-light btn-sm"
+                   href="{{ url('admin_settings') }}/search_settings?keyword=show_hot_courses&submit_button=&_qf__search_settings=&category=search_setting"
+                >
+                    <i class="fas fa-pencil-alt"></i>
+                </a>
+            {% endif %}
+        {% endset %}
+
+        {% set content %}
+            {{ macro.box_header("HottestCourses" | trans, buttons) }}
+            <div class="row">
+                {% include '@ChamiloCore/default/layout/hot_course_item.html.twig' %}
+            </div>
+        {% endset %}
+        {{ content }}
+    {% endif %}
+{% endautoescape %}

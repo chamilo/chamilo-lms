@@ -28,7 +28,7 @@ class BreadcrumbBlockService extends BaseBreadcrumbMenuBlockService
 
         $resolver->setDefaults([
             //'menu_template' => 'SonataSeoBundle:Block:breadcrumb.html.twig',
-            'menu_template' => '@ChamiloTheme/Breadcrumb/breadcrumb_legacy.html.twig',
+            'menu_template' => '@ChamiloCore/Breadcrumb/breadcrumb_legacy.html.twig',
             'include_homepage_link' => false,
             'context' => false,
         ]);

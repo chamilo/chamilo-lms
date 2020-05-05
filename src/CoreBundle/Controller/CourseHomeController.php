@@ -196,7 +196,7 @@ class CourseHomeController extends ToolBaseController
         $shortcuts = $shortcutQuery->getQuery()->getResult();
 
         return $this->render(
-            '@ChamiloTheme/Course/home.html.twig',
+            '@ChamiloCore/Course/home.html.twig',
             [
                 'course' => $course,
                 'shortcuts' => $shortcuts,
@@ -274,7 +274,7 @@ class CourseHomeController extends ToolBaseController
         $schemas = $manager->getSchemas();
 
         return $this->render(
-            '@ChamiloTheme/Course/settings.html.twig',
+            '@ChamiloCore/Course/settings.html.twig',
             [
                 'course' => $course,
                 'schemas' => $schemas,

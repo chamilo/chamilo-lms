@@ -8721,7 +8721,7 @@ class Exercise
         ;
 
         return Container::$container->get('twig')->render(
-            '@ChamiloTheme/Resource/grid.html.twig',
+            '@ChamiloCore/Resource/grid.html.twig',
             ['grid' => $grid]
         );
     }

@@ -77,7 +77,7 @@ class Container
     public static $twig;
     public static $roles;
     /** @var string */
-    public static $legacyTemplate = '@ChamiloTheme/Layout/layout_one_col.html.twig';
+    public static $legacyTemplate = '@ChamiloCore/Layout/layout_one_col.html.twig';
     //private static $settingsManager;
     private static $userManager;
     private static $siteManager;

@@ -48,40 +48,6 @@ use Symfony\Component\Validator\Mapping\ClassMetadata;
  * @UniqueEntity("username")
  * @ORM\Entity()
  *
- * @ORM\AttributeOverrides({
- *     @ORM\AttributeOverride(name="username",
- *         column=@ORM\Column(
- *             name="username",
- *             type="string",
- *             length=100,
- *             unique=true
- *         )
- *     ),
- *      @ORM\AttributeOverride(name="email",
- *         column=@ORM\Column(
- *             name="email",
- *             type="string",
- *             length=100,
- *             unique=false
- *         )
- *     ),
- *     @ORM\AttributeOverride(name="emailCanonical",
- *         column=@ORM\Column(
- *             name="email_canonical",
- *             type="string",
- *             length=100,
- *             unique=false
- *         )
- *     ),
- *     @ORM\AttributeOverride(name="usernameCanonical",
- *         column=@ORM\Column(
- *             name="username_canonical",
- *             type="string",
- *             length=180,
- *             unique=false
- *         )
- *     )
- * })
  */
 class User implements UserInterface, EquatableInterface
 {
@@ -104,7 +70,7 @@ class User implements UserInterface, EquatableInterface
     /**
      * @ORM\Column(type="string", unique=true, nullable=true)
      */
-    private $apiToken;
+    protected $apiToken;
 
     /**
      * @var string
@@ -150,6 +116,13 @@ class User implements UserInterface, EquatableInterface
     protected $username;
 
     /**
+     * @var string|null
+     * @Assert\NotBlank()
+     * @Assert\Length(max=4096)
+     */
+    protected $plainPassword;
+
+    /**
      * @var string
      * @ORM\Column(name="password", type="string", length=255, nullable=false, unique=false)
      */
@@ -165,7 +138,7 @@ class User implements UserInterface, EquatableInterface
     /**
      * @var string
      *
-     * @ORM\Column(name="username_canonical", type="string", length=100, nullable=false)
+     * @ORM\Column(name="username_canonical", type="string", length=180, nullable=false)
      */
     protected $usernameCanonical;
 
@@ -592,7 +565,6 @@ class User implements UserInterface, EquatableInterface
      */
     public function __construct()
     {
-        parent::__construct();
         $this->status = self::STUDENT;
         $this->salt = sha1(uniqid(null, true));
         $this->active = true;
@@ -961,7 +933,7 @@ class User implements UserInterface, EquatableInterface
      *
      * @return User
      */
-    public function setLastname($lastname)
+    public function setLastname(string $lastname): self
     {
         $this->lastname = $lastname;
 
@@ -975,35 +947,23 @@ class User implements UserInterface, EquatableInterface
      *
      * @return User
      */
-    public function setFirstname($firstname)
+    public function setFirstname(string $firstname): self
     {
         $this->firstname = $firstname;
 
         return $this;
     }
 
-    /**
-     * Set password.
-     *
-     * @param string $password
-     *
-     * @return User
-     */
-    public function setPassword($password)
+    public function getPassword()
+    {
+        return $this->password;
+    }
+
+    public function setPassword(string $password): self
     {
         $this->password = $password;
 
         return $this;
-    }
-
-    /**
-     * Get password.
-     *
-     * @return string
-     */
-    public function getPassword()
-    {
-        return $this->password;
     }
 
     /**
@@ -1593,6 +1553,20 @@ class User implements UserInterface, EquatableInterface
         return (string) $this->username;
     }
 
+    public function getPlainPassword(): ?string
+    {
+        return $this->plainPassword;
+    }
+
+    public function setPlainPassword(string $password): void
+    {
+        $this->plainPassword = $password;
+
+        // forces the object to look "dirty" to Doctrine. Avoids
+        // Doctrine *not* saving this entity, if only plainPassword changes
+        $this->password = null;
+    }
+
     /**
      * Returns the expiration date.
      *
@@ -2064,11 +2038,6 @@ class User implements UserInterface, EquatableInterface
     public function getEmailCanonical()
     {
         return $this->emailCanonical;
-    }
-
-    public function getPlainPassword()
-    {
-        return $this->plainPassword;
     }
 
     /**

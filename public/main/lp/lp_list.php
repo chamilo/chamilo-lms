@@ -953,4 +953,4 @@ $template->assign('lp_is_shown', $lpIsShown);
 $template->assign('filtered_category', $filteredCategoryId);
 $template->assign('allow_min_time', $allowMinTime);
 
-$template->displayTemplate('@ChamiloTheme/LearnPath/list.html.twig');
+$template->displayTemplate('@ChamiloCore/LearnPath/list.html.twig');

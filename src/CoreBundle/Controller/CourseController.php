@@ -40,7 +40,7 @@ class CourseController extends AbstractController
      */
     public function welcomeAction(Course $course): Response
     {
-        return $this->render('@ChamiloTheme/Course/welcome.html.twig', ['course' => $course]);
+        return $this->render('@ChamiloCore/Course/welcome.html.twig', ['course' => $course]);
     }
 
     /**
@@ -193,6 +193,6 @@ class CourseController extends AbstractController
         $htmlHeadXtra[] = $metaInfo;
         $htmlHeadXtra[] = api_get_asset('readmore-js/readmore.js');
 
-        return $this->render('@ChamiloTheme/Course/about.html.twig', [$params]);
+        return $this->render('@ChamiloCore/Course/about.html.twig', [$params]);
     }
 }

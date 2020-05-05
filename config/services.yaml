@@ -64,12 +64,6 @@ services:
     Symfony\Component\Mailer\Mailer:
         public: true
 
-    Chamilo\ThemeBundle\:
-        autowire: true
-        resource: '../src/ThemeBundle/*'
-        exclude: '../src/ThemeBundle/{Entity,Migrations,Tests}'
-        public: true
-
     Doctrine\ORM\EntityManager: "@doctrine.orm.default_entity_manager"
 
     chamilo_core.hook_factory:
@@ -99,7 +93,7 @@ sylius_settings:
 
 # Grid default template
 apy_data_grid:
-    theme: '@ChamiloTheme/Resource/grid_theme.html.twig'
+    theme: '@ChamiloCore/Resource/grid_theme.html.twig'
     limits: [20, 50, 100]
     persistence: false
 #    no_data_message: "No data"

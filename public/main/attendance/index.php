@@ -440,7 +440,7 @@ switch ($action) {
         $content = $attendance->getCalendarSheet($edit, $attendanceId, $student_id);
 
         $tpl->assign('table', $content);
-        $content = $tpl->fetch('@ChamiloTheme/Attendance/sheet.html.twig');
+        $content = $tpl->fetch('@ChamiloCore/Attendance/sheet.html.twig');
         break;
     case 'attendance_sheet_export_to_pdf':
         $attendance->attendance_sheet_export_to_pdf(

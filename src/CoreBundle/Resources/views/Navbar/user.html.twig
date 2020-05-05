@@ -1,0 +1,38 @@
+<!-- User Account: style can be found in dropdown.less -->
+{% import "ChamiloCoreBundle:Macros:image.html.twig" as macro_image %}
+<li class="dropdown user user-menu">
+    <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+        <img class="img-circle" src="{{ asset(user.avatarOrAnonymous(32)) }}"
+             alt="{{ user.completeName }}" />
+        <span class="caret"></span>
+    </a>
+
+    <ul class="dropdown-menu" role="menu">
+        <li class="user-header">
+            <div class="text-center">
+            <img class="img-circle" src="{{ asset(user.avatarOrAnonymous(64)) }}" alt="{{ user.completeName }}" />
+            <p class="name">
+                <a href="{{ url('legacy_main', { 'name' : 'social/home.php' })}}">
+                    {{ user.completeName }}
+                </a>
+            </p>
+            <p><i class="fa fa-envelope-o" aria-hidden="true"></i> {{ user.email }}</p>
+            </div>
+        </li>
+        <li role="separator" class="divider"></li>
+        <li class="user-body">
+
+            {{ url('home') }}
+
+            <a title="{{ "Inbox"|trans }}" href="{{ url('legacy_main', { 'name' : 'messages/inbox.php' }) }}">
+                <em class="fa fa-envelope" aria-hidden="true"></em> {{ "Inbox"|trans }}
+            </a>
+            <a title="{{ "My certificates"|trans }}" href="{{ url('legacy_main', { 'name' : 'gradebook/my_certificates.php' })  }}">
+                <em class="fa fa-graduation-cap" aria-hidden="true"></em> {{ "My certificates"|trans }}
+            </a>
+            <a id="logout_button" title="{{ "Logout"|trans }}" href="{{ path('logout') }) }}" >
+                <em class="fa fa-sign-out"></em> {{ "Logout"|trans }}
+            </a>
+        </li>
+    </ul>
+</li>

@@ -1,0 +1,123 @@
+{% import "@ChamiloCore/Macros/box.html.twig" as macro_box %}
+{% import "@ChamiloCore/Macros/actions.html.twig" as macro_actions %}
+{% import "@ChamiloCore/Macros/buttons.html.twig" as macro_buttons %}
+{% import "@ChamiloCore/Macros/image.html.twig" as macro_image %}
+{% import '@ChamiloCore/Macros/headers.html.twig' as macro_headers %}
+<!doctype html>
+<!--[if IE 9 ]>
+<html lang="{{ app.request.locale }}" class="no-js ie9"> <![endif]-->
+<!--[if (gt IE 9)|!(IE)]><!-->
+<html lang="{{ app.request.locale }}" class="no-js"> <!--<![endif]-->
+{# Chamilo theme #}
+{% set theme = 'chamilo' %}
+{% block chamilo_head %}
+<head>
+{% include "@ChamiloCore/Layout/head.html.twig" %}
+</head>
+{% endblock %}
+<body
+    class="{{ section_name }} app header-fixed sidebar-fixed aside-menu-fixed sidebar-lg-show"
+{#    {{ sonata_seo_html_attributes() }}#}
+    data-in-course="{{ course ? 'true' : 'false' }}"
+    data-course-code="{{ course ? course.code : '' }}"
+    data-session-id="{{ session ? session.id : '' }}"
+>
+<noscript> {{ "Your browser does not support Javascript" | trans }} </noscript>
+{% block chamilo_wrap %}
+    <!-- PAGE -->
+    {% block page_header %}
+        <!-- HEADER -->
+        {% include '@ChamiloCore/Layout/header.html.twig' %}
+        <!-- END HEADER -->
+    {% endblock %}
+    <div class="app-body">
+        {% block page_sidebar %}
+            <!-- SIDEBAR -->
+            {% include '@ChamiloCore/Layout/sidebar.html.twig' %}
+            <!-- END SIDEBAR -->
+        {% endblock %}
+
+        <main id="app-main" class="main">
+            {% block chamilo_breadcrumb %}
+                <!-- BREADCRUMB -->
+                {% include '@ChamiloCore/Layout/breadcrumb.html.twig' %}
+                <!-- END BREADCRUMB -->
+            {% endblock %}
+
+            {% block page_content %}
+            {% endblock %}
+        </main>
+    </div>
+    <!-- END PAGE -->
+{% endblock %}
+
+{% block chamilo_footer %}
+    <!-- FOOTER -->
+    {% include '@ChamiloCore/Layout/footer.html.twig' %}
+    <!-- END FOOTER -->
+{% endblock %}
+
+<div class="modal fade" id="expand-image-modal" tabindex="-1" role="dialog" aria-labelledby="expand-image-modal-title" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="{{ "Close" | trans }}">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+                <h4 class="modal-title" id="expand-image-modal-title">&nbsp;</h4>
+            </div>
+            <div class="modal-body">
+            </div>
+        </div>
+    </div>
+</div>
+{# Global modal, load content by AJAX call to href attribute on anchor tag with 'ajax' class #}
+<div class="modal fade" id="global-modal" tabindex="-1" role="dialog" aria-labelledby="global-modal-title" aria-hidden="true">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="global-modal-title">Modal title</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    // MODAL DELETE CONFIRM
+    $('.delete-swal').click(function (e) {
+        e.preventDefault(); // Prevent the href from redirecting directly
+        var url = $(this).attr("href");
+        var title = $(this).attr("title");
+
+        Swal.fire({
+            title: title,
+            text: '',
+            icon: 'warning',
+            showCancelButton: true,
+            cancelButtonText: '{{ 'Cancel' | trans }}',
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#d33',
+            confirmButtonText: '{{ 'Yes' | trans }}',
+        }).then((result) => {
+            if (result.value) {
+                /*Swal.fire(
+                    'Deleted!',
+                    'Your file has been deleted.',
+                    'success'
+                )*/
+                window.location.href = url;
+            }
+        });
+    });
+</script>
+
+</body>
+</html>

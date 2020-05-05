@@ -1,12 +1,12 @@
-{% import '@ChamiloTheme/Macros/box.html.twig' as macro %}
-{% extends "@ChamiloTheme/Layout/layout_one_col.html.twig" %}
+{% import '@ChamiloCore/Macros/box.html.twig' as macro %}
+{% extends "@ChamiloCore/Layout/layout_one_col.html.twig" %}
 
 {% block content %}
 {% autoescape false %}
 <div class="row" xmlns="http://www.w3.org/1999/html">
     <div class="col-md-4">
         {% set avatar %}
-            {% include '@ChamiloTheme/Social/user_block.html.twig' %}
+            {% include '@ChamiloCore/Social/user_block.html.twig' %}
         {% endset %}
         {{ macro.panel('', avatar ) }}
     </div>

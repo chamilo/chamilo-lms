@@ -52,7 +52,7 @@ class EditorController extends BaseController
         $templates = $editor->simpleFormatTemplates();
 
         return $this->render(
-            '@ChamiloTheme/Editor/templates.html.twig',
+            '@ChamiloCore/Editor/templates.html.twig',
             ['templates' => $templates]
         );
     }
@@ -67,7 +67,7 @@ class EditorController extends BaseController
             'course_condition' => '?'.$this->getCourseUrlQuery(),
         ];
 
-        return $this->render('@ChamiloTheme/Editor/elfinder.html.twig', $params);
+        return $this->render('@ChamiloCore/Editor/elfinder.html.twig', $params);
     }
 
     /**
@@ -154,7 +154,7 @@ class EditorController extends BaseController
         );
 
         return $grid->getGridResponse(
-            '@ChamiloTheme/Editor/custom.html.twig',
+            '@ChamiloCore/Editor/custom.html.twig',
             ['id' => $id, 'tool' => $tool, 'type' => $type]
         );
     }
@@ -199,7 +199,7 @@ class EditorController extends BaseController
         $content = ob_get_contents();
 
         return $this->render(
-            '@ChamiloTheme/layout_empty.html.twig',
+            '@ChamiloCore/layout_empty.html.twig',
             ['content' => $content]
         );*/
     }
@@ -229,7 +229,7 @@ class EditorController extends BaseController
             'tool' => $tool,
         ];
 
-        $renderedView = $this->renderView('@ChamiloTheme/Editor/config_js.html.twig', $params);
+        $renderedView = $this->renderView('@ChamiloCore/Editor/config_js.html.twig', $params);
         $response = new Response($renderedView);
         $response->headers->set('Content-Type', 'text/javascript');
 

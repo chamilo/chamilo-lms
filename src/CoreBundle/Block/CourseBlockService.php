@@ -30,7 +30,7 @@ class CourseBlockService extends AbstractBlockService
         $resolver->setDefaults([
             'url' => false,
             'title' => 'Course block',
-            'template' => '@ChamiloTheme/Block/course.html.twig',
+            'template' => '@ChamiloCore/Block/course.html.twig',
             'ttl' => 0,
         ]);
     }

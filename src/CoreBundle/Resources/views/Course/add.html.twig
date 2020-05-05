@@ -1,0 +1,13 @@
+{% extends "@ChamiloCore/Layout/layout_one_col.html.twig" %}
+
+{% block content %}
+{% autoescape false %}
+    <form class="form-inline"
+          action="{{ path('chamilo_core_course_add', {'keyword': keyword}) }}"
+          method="post"
+    >
+        {{ form_widget(form) }}
+    </form>
+
+{% endautoescape %}
+{% endblock %}

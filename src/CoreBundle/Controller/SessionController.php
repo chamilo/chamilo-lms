@@ -249,6 +249,6 @@ class SessionController extends AbstractController
             ),
         ];
 
-        return $this->render('@ChamiloTheme/Session/about.html.twig', $params);
+        return $this->render('@ChamiloCore/Session/about.html.twig', $params);
     }
 }

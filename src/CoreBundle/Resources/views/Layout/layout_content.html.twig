@@ -1,0 +1,44 @@
+{% extends "@ChamiloCore/Layout/base-layout.html.twig" %}
+
+{% block page_content %}
+    <section class="container-fluid">
+        <div class="section-page">
+            {% autoescape false %}
+                {% if plugin_main_top %}
+                    <div id="plugin_main_top" class="col-md-12">
+                        {{ plugin_main_top }}
+                    </div>
+                {% endif %}
+
+                {% if plugin_content_top %}
+                    <div id="plugin_content_top">
+                        {{ plugin_content_top }}
+                    </div>
+                {% endif %}
+
+                {% block chamilo_messages %}
+                    {# Flash messages #}
+                    {% autoescape false %}
+                        {% include '@ChamiloCore/FlashMessage/render.html.twig' %}
+                    {% endautoescape %}
+                {% endblock %}
+
+                {% block content %}
+                    {{ content }}
+                {% endblock %}
+
+                {% if plugin_content_bottom %}
+                    <div id="plugin_content_bottom">
+                        {{ plugin_content_bottom }}
+                    </div>
+                {% endif %}
+
+                {% if plugin_main_bottom %}
+                    <div id="plugin_main_bottom" class="col-md-12">
+                        {{ plugin_main_bottom }}
+                    </div>
+                {% endif %}
+            {% endautoescape %}
+        </div>
+    </section>
+{% endblock %}

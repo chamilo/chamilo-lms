@@ -1,7 +1,0 @@
-{% extends '@ChamiloTheme/Layout/blank.html.twig' %}
-
-{% block content %}
-    <script>
-        window.parent.location.href = '{{ url('chamilo_course_home_home_index', {'course': course.code}) }}';
-    </script>
-{% endblock %}

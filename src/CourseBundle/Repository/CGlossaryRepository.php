@@ -36,7 +36,7 @@ final class CGlossaryRepository extends ResourceRepository implements GridInterf
         $templates = parent::getTemplates();
 
         $templates
-            ->setViewResource('@ChamiloTheme/Resource/glossary/view_resource.html.twig')
+            ->setViewResource('@ChamiloCore/Resource/glossary/view_resource.html.twig')
         ;
 
         return $templates;

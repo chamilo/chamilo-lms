@@ -1,0 +1,125 @@
+{% extends "@ChamiloCore/Layout/layout_one_col.html.twig" %}
+
+{% block content %}
+<script>
+    $(function () {
+        // Preview action.
+        $('[data-fancybox="gallery"]').fancybox({
+            toolbar: "true",
+            buttons: [
+                "zoom",
+                //"share",
+                "slideShow",
+                "fullScreen",
+                //"download",
+                "thumbs",
+                "close"
+            ],
+            // https://github.com/fancyapps/fancybox/issues/2009
+            video: {
+                autoStart: false
+            },
+            // caption : function( instance, item ) {
+            //     var caption = $(this).data('caption') || '';
+            //
+            //     if ( item.type === 'image' ) {
+            //         caption = (caption.length ? caption + '<br />' : '') + '<a href="' + item.src + '">Download image</a>' ;
+            //     }
+            //
+            //     return caption;
+            // }
+            // Base template for layout
+            {#baseTpl:#}
+            {#    '<div class="fancybox-container" role="dialog" tabindex="-1">' +#}
+            {#    '<div class="fancybox-bg"></div>' +#}
+            {#    '<div class="fancybox-inner">' +#}
+            {#    '<div class="fancybox-infobar"><span data-fancybox-index></span>&nbsp;/&nbsp;<span data-fancybox-count></span></div>' +#}
+            {#    '<div class="fancybox-toolbar">{{buttons}}</div>' +#}
+            {#    '<div class="fancybox-navigation">{{arrows}}</div>' +#}
+            {#    '<div class="fancybox-stage"></div>' +#}
+            {#    '<div class="fancybox-caption"><div class=""fancybox-caption__body"></div></div>' +#}
+            {#    '</div>' +#}
+            {#'</div>',#}
+        });
+
+        // Visibility action.
+        $('.change_visibility').on('click', function (e) {
+            e.preventDefault();
+            var link = $(this);
+            var url = $(this).attr('href');
+            $.ajax({
+                type: "post",
+                url: url,
+                contentType: "html",
+                beforeSend: function(){
+                    link.find('i').addClass('fa-spinner fa-spin');
+                    link.find('i').removeClass('fa-eye');
+                    link.find('i').removeClass('fa-eye-slash');
+                },
+                success: function (response) {
+                    link.find('i').removeClass('fa-eye');
+                    link.find('i').removeClass('fa-eye-slash');
+                    link.find('i').removeClass('fa-spinner fa-spin');
+                    link.find('i').addClass(response.icon);
+                },
+            });
+        });
+
+        // More action.
+        $.contextMenu({
+            selector: '.edit_resource',
+            callback: function(key, options, e) {
+                e.preventDefault();
+                var nodeId = options.$trigger.attr("data-node-id");
+                var action = 'chamilo_core_resource_'+key+ '_'+nodeId;
+                //console.log(action);
+                var newOption = options.$trigger.parent().find("[data-action-id='" + action + "']");
+                var link = $(newOption).attr('href');
+                //console.log(link);
+
+                if (link == 'javascript:;' || key == 'delete') {
+                    $(newOption).click();
+                    window.location.href = link;
+                } else {
+                    window.location.href = link;
+                }
+                return true;
+            },
+            autoHide: false,
+            animation: {duration: 250, show: 'fadeIn', hide: 'fadeOut'},
+            trigger: 'left',
+            items: {
+                // "preview": {name: "Preview", icon: "fas fa-search"},
+                "show": {name: "Info", icon: "fas fa-info-circle"},
+                "sep1": "---------",
+                "edit": {name: "Edit", icon: "fas fa-pen"},
+                //"download": {name: "Download", icon: "fas fa-arrow-alt-circle-down"},
+                "delete": {name: "Delete", icon: "fas fa-trash"},
+            }
+        });
+
+        $('.edit_resource').on('click', function(e) {
+            e.preventDefault();
+        })
+    });
+</script>
+<style>
+    .fancybox-slide--iframe .fancybox-content {
+        width  : 800px;
+        height : 600px;
+        max-width  : 80%;
+        max-height : 80%;
+        margin: 0;
+    }
+</style>
+
+<div class="row">
+    <div id="resources" class="col-lg-12">
+        {% include '@ChamiloCore/Resource/toolbar.html.twig' %}
+{#        {% include '@ChamiloCore/Resource/grid.html.twig' %}#}
+    </div>
+    <div id="info_bar" class="col-md-auto" style="display:none">
+    </div>
+</div>
+
+{% endblock %}

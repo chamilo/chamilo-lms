@@ -1,0 +1,44 @@
+{% import '@ChamiloCore/Macros/box.html.twig' as macro %}
+
+{% autoescape false %}
+{% set buttons %}
+    {% if is_granted('ROLE_ADMIN') and show_edit_page_link %}
+    <div class="d-block text-right">
+        <a
+                title="{{ "header.edit_page"|trans({}, 'SonataPageBundle') }}"
+                href="{{ url('home') ~ 'internal_page/edit/' ~ slug ~ '/?_locale=' ~ app.request.getLocale()  }}"
+                class="btn btn-primary btn-sm"
+        >
+            <i class="fas fa-pencil-alt"></i> {{ "Edit this section"|trans }}
+        </a>
+    </div>
+    {% endif %}
+{% endset %}
+
+{% set welcome %}
+
+    {{ buttons }}
+
+    {% if content %}
+        {{ content }}
+    {% else %}
+        <div class="row">
+            <div class="col-md-6">
+                <div class="text-center">
+                    <img class="img-fluid" src="{{ asset('img/developer.svg') }}">
+                </div>
+            </div>
+            <div class="col-md-6">
+                <h4>{{ "Community"|trans }}</h4>
+                <h1>{{ "Hello and welcome to the new Chamilo 2.0"|trans }}</h1>
+                <p>{{ "We create the easiest to use online learning environment, we involve educators to improve our world ..."|trans }}</p>
+                <p>{{ "You can always find more information about this software on our website:"|trans }} <a href="http://www.chamilo.org" target="_blank"> http://www.chamilo.org</a>.</p>
+                <p>{{ "Have fun, do not hesitate to join the community and give us your opinion through our forum:"|trans }} <a href="https://forum.chamilo.org/" target="_blank">https://forum.chamilo.org/</a></p>
+            </div>
+        </div>
+    {% endif %}
+
+{% endset %}
+
+{{ welcome }}
+{% endautoescape %}

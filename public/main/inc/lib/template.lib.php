@@ -211,10 +211,10 @@ class Template
     public function display_one_col_template()
     {
         $this->loadLegacyParams();
-        $template = '@ChamiloTheme/Layout/layout_one_col.html.twig';
+        $template = '@ChamiloCore/Layout/layout_one_col.html.twig';
         $origin = api_get_origin();
         if ('learnpath' === $origin) {
-            $template = '@ChamiloTheme/Layout/no_layout.html.twig';
+            $template = '@ChamiloCore/Layout/no_layout.html.twig';
         }
         $this->returnResponse($this->params, $template);
     }
@@ -225,7 +225,7 @@ class Template
     public function display_blank_template()
     {
         $this->loadLegacyParams();
-        $template = '@ChamiloTheme/Layout/blank.html.twig';
+        $template = '@ChamiloCore/Layout/blank.html.twig';
         $this->returnResponse($this->params, $template);
     }
 
@@ -235,7 +235,7 @@ class Template
     public function displayBlankTemplateNoHeader()
     {
         $this->loadLegacyParams();
-        $template = '@ChamiloTheme/Layout/blank_no_header.html.twig';
+        $template = '@ChamiloCore/Layout/blank_no_header.html.twig';
         $this->returnResponse($this->params, $template);
     }
 
@@ -245,7 +245,7 @@ class Template
     public function display_no_layout_template()
     {
         $this->loadLegacyParams();
-        $template = '@ChamiloTheme/Layout/no_layout.html.twig';
+        $template = '@ChamiloCore/Layout/no_layout.html.twig';
         $this->returnResponse($this->params, $template);
     }
 
@@ -255,7 +255,7 @@ class Template
     public function displaySkillLayout()
     {
         $this->loadLegacyParams();
-        $template = '@ChamiloTheme/Layout/skill_layout.html.twig';
+        $template = '@ChamiloCore/Layout/skill_layout.html.twig';
         $this->returnResponse($this->params, $template);
     }
 

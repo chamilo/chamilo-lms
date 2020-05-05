@@ -8667,8 +8667,8 @@ function api_mail_html(
         }
 
         $message
-            ->htmlTemplate('ChamiloThemeBundle:Mailer:Default/default.html.twig')
-            ->textTemplate('ChamiloThemeBundle:Mailer:Default/default.text.twig')
+            ->htmlTemplate('ChamiloCoreBundle:Mailer:Default/default.html.twig')
+            ->textTemplate('ChamiloCoreBundle:Mailer:Default/default.text.twig')
         ;
         $message->context($params);
         Container::getMailer()->send($message);

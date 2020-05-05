@@ -151,7 +151,7 @@ $template->assign(
     Display::toolbarAction('lp_actions', [$actions])
 );
 
-$result = $template->fetch('@ChamiloTheme/LearnPath/report.html.twig');
+$result = $template->fetch('@ChamiloCore/LearnPath/report.html.twig');
 $template->assign('content', $result);
 
 if ($export) {

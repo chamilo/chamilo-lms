@@ -27,7 +27,7 @@ class AdminController extends BaseController
         $repo = $this->getDoctrine()->getRepository('ChamiloLtiBundle:ExternalTool');
         $tools = $repo->findAll();
 
-        return $this->render('@ChamiloTheme/Lti/admin.html.twig', ['tools' => $tools]);
+        return $this->render('@ChamiloCore/Lti/admin.html.twig', ['tools' => $tools]);
     }
 
     /**
@@ -65,7 +65,7 @@ class AdminController extends BaseController
         $breadcrumb->addChild('Add external tool');
 
         return $this->render(
-            '@ChamiloTheme/Lti/admin_form.html.twig',
+            '@ChamiloCore/Lti/admin_form.html.twig',
             ['form' => $form->createView()]
         );
     }
@@ -119,7 +119,7 @@ class AdminController extends BaseController
         $breadcrumb->addChild('Edit external tool');
 
         return $this->render(
-            '@ChamiloTheme/Lti/admin_form.html.twig',
+            '@ChamiloCore/Lti/admin_form.html.twig',
             ['form' => $form->createView()]
         );
     }

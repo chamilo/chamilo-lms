@@ -25,21 +25,21 @@ class ExceptionController extends AbstractController
         $loader = $this->container->get('twig')->getLoader();
         // when not in debug, try to find a template for the specific HTTP status code and format
         if (!$showException) {
-            $template = sprintf('@ChamiloTheme/Exception/%s%s.%s.twig', $name, $code, $format);
+            $template = sprintf('@ChamiloCore/Exception/%s%s.%s.twig', $name, $code, $format);
             if ($loader->exists($template)) {
                 return $template;
             }
         }
 
         // try to find a template for the given format
-        $template = sprintf('@ChamiloTheme/Exception/%s.%s.twig', $name, $format);
+        $template = sprintf('@ChamiloCore/Exception/%s.%s.twig', $name, $format);
         if ($loader->exists($template)) {
             return $template;
         }
 
         // default to a generic HTML exception
         //$request->setRequestFormat('html');
-        $template = sprintf('@ChamiloTheme/Exception/%s.html.twig', $showException ? 'exception_full' : $name);
+        $template = sprintf('@ChamiloCore/Exception/%s.html.twig', $showException ? 'exception_full' : $name);
 
         return $this->render($template, ['exception' => $exception]);
     }
@@ -62,21 +62,21 @@ class ExceptionController extends AbstractController
         $loader = $this->container->get('twig')->getLoader();
         // when not in debug, try to find a template for the specific HTTP status code and format
         if (!$showException) {
-            $template = sprintf('@ChamiloTheme/Exception/%s%s.%s.twig', $name, $code, $format);
+            $template = sprintf('@ChamiloCore/Exception/%s%s.%s.twig', $name, $code, $format);
             if ($loader->exists($template)) {
                 return $template;
             }
         }
 
         // try to find a template for the given format
-        $template = sprintf('@ChamiloTheme/Exception/%s.%s.twig', $name, $format);
+        $template = sprintf('@ChamiloCore/Exception/%s.%s.twig', $name, $format);
         if ($loader->exists($template)) {
             return $template;
         }
 
         // default to a generic HTML exception
         //$request->setRequestFormat('html');
-        $template = sprintf('@ChamiloTheme/Exception/%s.html.twig', $showException ? 'exception_full' : $name);
+        $template = sprintf('@ChamiloCore/Exception/%s.html.twig', $showException ? 'exception_full' : $name);
 
         return $this->render($template, ['exception' => $exception]);
     }

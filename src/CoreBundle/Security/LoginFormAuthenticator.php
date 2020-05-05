@@ -44,6 +44,7 @@ class LoginFormAuthenticator extends AbstractFormLoginAuthenticator implements P
     private $userRepository;
     private $csrfTokenManager;
     private $urlGenerator;
+    private $entityManager;
 
     public function __construct(
         EntityManagerInterface $entityManager,
@@ -58,14 +59,11 @@ class LoginFormAuthenticator extends AbstractFormLoginAuthenticator implements P
         $this->router = $router;
         $this->passwordEncoder = $passwordEncoder;
         $this->formFactory = $formFactory;
-        //$this->settingsManager = $settingsManager;
         $this->hookFactory = $hookFactory;
         $this->userRepository = $userRepository;
         $this->csrfTokenManager = $csrfTokenManager;
         $this->entityManager = $entityManager;
         $this->urlGenerator = $urlGenerator;
-        $this->csrfTokenManager = $csrfTokenManager;
-        $this->passwordEncoder = $passwordEncoder;
     }
 
     public function supports(Request $request): bool

@@ -1,0 +1,145 @@
+{% extends "@ChamiloCore/Layout/layout_one_col.html.twig" %}
+
+{% block content %}
+
+<script>
+  $(function() {
+      $('#dropzone').on('click', function() {
+          $('#fileupload').click();
+      });
+
+      $('#fileupload').fileupload({
+          dataType: 'json',
+          formData: {
+              type: '{{ type }}',
+              tool: '{{ tool }}',
+              cid: '{{ course.id }}',
+              sid: '{{ session.id }}',
+              id: '{{ id }}'
+          },
+          // dataType: 'json',
+          // Enable image resizing, except for Android and Opera,
+          // which actually support image resizing, but fail to
+          // send Blob objects via XHR requests:
+          disableImageResize: /Android(?!.*Chrome)|Opera/.test(window.navigator.userAgent),
+          previewMaxWidth: 300,
+          previewMaxHeight: 169,
+          previewCrop: true,
+          dropzone: $('#dropzone'),
+      }).on('fileuploadadd', function (e, data) {
+          data.context = $('<div class=\"row\" />').appendTo('#files');
+          $.each(data.files, function (index, file) {
+              var node = $('<div class=\"col-sm-5 file_name\">').text(file.name);
+              node.appendTo(data.context);
+          });
+      }).on('fileuploadprocessalways', function (e, data) {
+          var index = data.index,
+              file = data.files[index],
+              node = $(data.context.children()[index]);
+          if (file.preview) {
+              data.context.prepend($('<div class=\"col-sm-4\">').html(file.preview));
+          } else {
+              data.context.prepend($('<div class=\"col-sm-4\">').html('".$icon."'));
+          }
+          if (index + 1 === data.files.length) {
+              data.context.find('button')
+                  .text('Upload')
+                  .prop('disabled', !!data.files.error);
+          }
+      }).on('fileuploadprogressall', function (e, data) {
+          var progress = parseInt(data.loaded / data.total * 100, 10);
+          $('#progress .progress-bar').css(
+              'width',
+              progress + '%'
+          );
+      }).on('fileuploaddone', function (e, data) {
+          $.each(data.result.files, function (index, file) {
+              if (file.error) {
+                  var link = $('<div>').attr({class : 'panel-image'});
+                  $(data.context.children()[index]).parent().wrap(link);
+                  // Update file name with new one from Chamilo
+                  $(data.context.children()[index]).parent().find('.file_name').html(file.name);
+                  var message = $('<div class=\"col-sm-3\">').html(
+                      $('<span class=\"message-image-danger\"/>').text(file.error)
+                  );
+                  $(data.context.children()[index]).parent().append(message);
+
+                  return;
+              }
+              if (file.url) {
+                  var link = $('<a>')
+                      .attr({target: '_blank', class : 'panel-image'})
+                      .prop('href', file.url);
+                  $(data.context.children()[index]).parent().wrap(link);
+              }
+              // Update file name with new one from Chamilo
+              $(data.context.children()[index]).parent().find('.file_name').html(file.name);
+              var message = $('<div class=\"col-sm-3\">').html(
+                  $('<span class=\"message-image-success\"/>').text('{{ 'File upload succeeded!' | trans }}')
+                );
+              $(data.context.children()[index]).parent().append(message);
+          });
+          $('#dropzone').removeClass('hover');
+          // ".$redirectCondition."
+      }).on('fileuploadfail', function (e, data) {
+          $.each(data.files, function (index) {
+              var failedMessage = ' {{ 'The file upload has failed.' | trans }}';
+              var error = $('<div class=\"col-sm-3\">').html(
+                  $('<span class=\"alert alert-danger\"/>').text(failedMessage)
+              );
+              $(data.context.children()[index]).parent().append(error);
+          });
+          $('#dropzone').removeClass('hover');
+      }).prop('disabled', !$.support.fileInput).parent().addClass($.support.fileInput ? undefined : 'disabled');
+
+      $('#dropzone').on('dragover', function (e) {
+          // dragleave callback implementation
+          $('#dropzone').addClass('hover');
+      });
+
+      $('#dropzone').on('dragleave', function (e) {
+          $('#dropzone').removeClass('hover');
+      });
+      $('.fileinput-button').hide();
+  });
+</script>
+
+{#  <input id="fileupload"#}
+{#         type="file"#}
+{#         name="files[]"#}
+{#         data-url="{{ oneup_uploader_endpoint('resource') }}"#}
+{#         multiple#}
+{#  />#}
+
+
+<div class="description-upload">
+    {{ 'Click on the box below to select files from your computer (you can use CTRL + clic to select various files at a time), or drag and drop some files from your desktop directly over the box below. The system will handle the rest!' | trans }}
+</div>
+
+<span class="btn btn-success fileinput-button">
+    <i class="glyphicon glyphicon-plus"></i>
+    <span> {{ 'Add files' | trans }}</span>
+
+    <input id="fileupload"
+         type="file"
+         name="files[]"
+         data-url="{{ oneup_uploader_endpoint('resource') }}"
+         multiple
+    />
+</span>
+
+<div id="dropzone">
+    <div class="button-load">
+        {{ 'Click or drag and drop files here to upload them' }}
+    </div>
+</div>
+
+<br />
+<!-- The global progress bar -->
+<div id="progress" class="progress">
+<div class="progress-bar progress-bar-success"></div>
+</div>
+<div id="files" class="files"></div>
+
+
+{% endblock %}

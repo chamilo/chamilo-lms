@@ -29,7 +29,7 @@ class SkillBlockService extends AbstractBlockService
     {
         $resolver->setDefaults(
             [
-                'template' => '@ChamiloTheme/Block/skill.html.twig',
+                'template' => '@ChamiloCore/Block/skill.html.twig',
                 'ttl' => 0,
             ]
         );

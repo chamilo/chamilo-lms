@@ -253,7 +253,7 @@ class HTML_QuickForm_button extends HTML_QuickForm_input
                 }
                 return $template;
                 break;
-            case FormValidator::LAYOUT_BOX:
+            case FormValidator::LAYOUT_GRID:
             case FormValidator::LAYOUT_BOX_NO_LABEL:
                 return '
                         {element}

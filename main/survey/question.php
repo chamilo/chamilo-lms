@@ -141,7 +141,6 @@ if (isset($_GET['question_id']) && !empty($_GET['question_id'])) {
 }
 
 $formData = $surveyQuestion->preSave($formData);
-
 $surveyQuestion->createForm($surveyData, $formData);
 $surveyQuestion->getForm()->setDefaults($formData);
 $surveyQuestion->renderForm();

@@ -16,13 +16,27 @@ class survey_question
     /**
      * @param array $surveyData
      */
-    public function addParentMenu(FormValidator $form, $surveyData)
+    public function addParentMenu($formData, FormValidator $form, $surveyData)
     {
         $surveyId = $surveyData['survey_id'];
+        $questionId = isset($formData['question_id']) ? $formData['question_id'] : 0;
+        $parentId = isset($formData['parent_id']) ? $formData['parent_id'] : 0;
+        $optionId = isset($formData['parent_option_id']) ? $formData['parent_option_id'] : 0;
         $questions = SurveyManager::get_questions($surveyId);
 
-        $options = [];
+        $newQuestionList = [];
         foreach ($questions as $question) {
+            $newQuestionList[$question['sort']] = $question;
+        }
+        ksort($newQuestionList);
+
+        $options = [];
+        foreach ($newQuestionList as $question) {
+            if (!empty($questionId)) {
+                if ($question['question_id'] == $questionId) {
+                    break;
+                }
+            }
             $options[$question['question_id']] = strip_tags($question['question']);
         }
         $form->addSelect(
@@ -31,32 +45,52 @@ class survey_question
             $options,
             ['id' => 'parent_id', 'placeholder' => get_lang('SelectAnOption')]
         );
-        $url = api_get_path(WEB_AJAX_PATH).'survey.ajax.php?'.api_get_cidreq();
+        $url = api_get_path(WEB_AJAX_PATH).
+            'survey.ajax.php?'.api_get_cidreq().'&a=load_question_options&survey_id='.$surveyId;
         $form->addHtml('
             <script>
                 $(function() {
                     $("#parent_id").on("change", function() {
                         var questionId = $(this).val()
-                        var params = {
-                            "a": "load_question_options",
-                            "survey_id": "'.$surveyId.'",
-                            "question_id": questionId,
-                        };
-                        $.ajax({
-                            type: "GET",
-                            url: "'.$url.'",
-                            data: params,
-                            async: false,
-                            success: function(data) {
-                                $("#parent_options").html(data);
-                            }
-                        });
+                        var $select = $("#parent_option_id");
+                        $select.empty();
+
+                        if (questionId === "") {
+                              $("#option_list").hide();
+                        } else {
+                            $.getJSON({
+                                url: "'.$url.'" + "&question_id=" + questionId,
+                                success: function(data) {
+                                    $("#option_list").show();
+                                    $.each(data, function(key, value) {
+                                        $("<option>").val(key).text(value).appendTo($select);
+                                    });
+                                }
+                            });
+                        }
                     });
                 });
             </script>
         ');
-        $form->addHtml('<div id="parent_options"></div>');
-        $form->addHidden('option_id', 0);
+
+        $style = 'display:none';
+        $options = [ ];
+        if (!empty($optionId) && !empty($parentId)) {
+            $parentData = SurveyManager::get_question($parentId);
+            $style = '';
+            foreach ($parentData['answer_data'] as $answer) {
+                $options[$answer['iid']] = strip_tags($answer['data']);
+            }
+        }
+
+        $form->addHtml('<div id="option_list" style="'.$style.'">');
+        $form->addSelect(
+            'parent_option_id',
+            get_lang('Option'),
+            $options,
+            ['id' => 'parent_option_id', 'disable_js' => true]
+        );
+        $form->addHtml('</div>');
     }
 
     /**
@@ -118,6 +152,7 @@ class survey_question
         }
 
         $questionComment = '';
+        $allowParent = false;
         switch ($type) {
             case 'open':
                 $toolName = get_lang('Open');
@@ -125,12 +160,15 @@ class survey_question
                 break;
             case 'yesno':
                 $toolName = get_lang('YesNo');
+                $allowParent = true;
                 break;
             case 'multiplechoice':
                 $toolName = get_lang('UniqueSelect');
+                $allowParent = true;
                 break;
             case 'multipleresponse':
                 $toolName = get_lang('MultipleResponse');
+                $allowParent = true;
                 break;
             case 'selectivedisplay':
                 $toolName = get_lang('SurveyQuestionSelectiveDisplay');
@@ -138,10 +176,13 @@ class survey_question
                 break;
             case 'multiplechoiceother':
                 $toolName = get_lang('SurveyMultipleAnswerWithOther');
-                //$questionComment = get_lang('SurveyQuestionSelectiveDisplayComment');
                 break;
             default:
                 $toolName = get_lang(api_ucfirst($type));
+        }
+
+        if (false === api_get_configuration_value('survey_question_dependency')) {
+            $allowParent = false;
         }
 
         $icon = Display::return_icon(
@@ -180,6 +221,10 @@ class survey_question
         if (api_get_configuration_value('allow_required_survey_questions') &&
             in_array($_GET['type'], ['yesno', 'multiplechoice'])) {
             $form->addCheckBox('is_required', get_lang('IsMandatory'), get_lang('Yes'));
+        }
+
+        if ($allowParent) {
+            $this->addParentMenu($formData, $form, $surveyData);
         }
 
         if ($surveyData['survey_type'] == 1) {
@@ -475,6 +520,90 @@ class survey_question
             'plus',
             'default'
         );
+    }
+
+    public static function getJs()
+    {
+        return '
+            <style>
+            .with_parent {
+                display: none;
+            }
+            </style>
+            <script>
+            $(function() {
+            });
+            </script>';
+    }
+
+    public static function getParents($questionId, $list = [])
+    {
+        $courseId = api_get_course_int_id();
+        $questionId = (int) $questionId;
+
+        $table = Database::get_course_table(TABLE_SURVEY_QUESTION);
+        $sql = "SELECT parent_id FROM $table
+                WHERE c_id = $courseId AND question_id = $questionId ";
+        $result = Database::query($sql);
+        $row = Database::fetch_array($result, 'ASSOC');
+        if ($row && !empty($row['parent_id'])) {
+            $list[] = $row['parent_id'];
+            $list = self::getParents($row['parent_id'], $list);
+        }
+
+        return $list;
+    }
+
+    public static function getQuestionJs($question)
+    {
+        $list = self::getDependecy($question);
+        if (empty($list)) {
+            return '';
+        }
+
+        $js = '';
+        $questionId = $question['question_id'];
+        $newList = [];
+        foreach ($list as $child) {
+            $childQuestionId = $child['question_id'];
+            $optionId = $child['parent_option_id'];
+            $newList[$optionId] = $childQuestionId;
+        }
+
+        $js .= '
+            <script>
+            $(function() {
+                var list = '.json_encode($newList).';
+                $("input[name=question'.$questionId.']").on("click", function() {
+                    $.each(list, function(index, value) {
+                        $(".with_parent_" + value).hide();
+                        $(".with_parent_" + value).find("input").prop("checked", false);
+                        $(".with_parent_only_hide_" + value).hide();
+                    });
+
+                    var questionId = $(this).val();
+                    var questionToShow = list[questionId];
+                    $(".with_parent_" + questionToShow).show();
+                });
+            });
+            </script>';
+
+        return $js;
+    }
+
+    public static function getDependecy($question)
+    {
+        $table = Database::get_course_table(TABLE_SURVEY_QUESTION);
+        $questionId = $question['question_id'];
+        $courseId = api_get_course_int_id();
+
+        // Getting the information of the question
+        $sql = "SELECT * FROM $table
+		        WHERE c_id = $courseId AND parent_id = $questionId ";
+        $result = Database::query($sql);
+        $row = Database::store_result($result, 'ASSOC');
+
+        return $row;
     }
 
     /**

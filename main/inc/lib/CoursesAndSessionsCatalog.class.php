@@ -1406,7 +1406,7 @@ class CoursesAndSessionsCatalog
                 ],
                 'courses' => [
                     'by_title' => true,
-                ]
+                ],
             ];
         }
 

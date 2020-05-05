@@ -8759,14 +8759,15 @@ function api_get_configuration_sub_value($path, $default = null, $separator = '/
  * Retrieves and returns a value in a hierarchical configuration array
  * api_array_sub_value($array, 'a/b/c') returns $array['a']['b']['c'].
  *
- * @param array $array      the recursive array that contains the value to be returned (or not)
+ * @param array  $array     the recursive array that contains the value to be returned (or not)
  * @param string $path      the successive array keys, separated by the separator
- * @param null $default     the value to be returned if not found
+ * @param mixed  $default   the value to be returned if not found
  * @param string $separator the separator substring
  *
  * @return mixed the found value or $default
  */
-function api_array_sub_value($array, $path, $default = null, $separator = '/') {
+function api_array_sub_value($array, $path, $default = null, $separator = '/')
+{
     $pos = strpos($path, $separator);
     if (false === $pos) {
         if (is_array($array) && array_key_exists($path, $array)) {
@@ -8788,7 +8789,7 @@ function api_array_sub_value($array, $path, $default = null, $separator = '/') {
     }
 
     return $default;
-};
+}
 
 /**
  * Returns supported image extensions in the portal.

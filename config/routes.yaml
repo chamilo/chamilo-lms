@@ -36,11 +36,6 @@ core_admin:
     type: annotation
     prefix: /admin
 
-#resources:
-#    type: rest
-#    prefix: /api/{tool}/{type}
-#    resource: Chamilo\CoreBundle\Controller\ResourceApiController
-
 #liip_theme:
 #    resource: "@LiipThemeBundle/Resources/config/routing.xml"
 #    prefix: /theme

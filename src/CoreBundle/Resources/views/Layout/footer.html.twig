@@ -16,7 +16,7 @@
         </a>&copy; {{ "now"|date("Y") }}
     </div>
     <div class="ml-auto">
-        {% if administrator_name is not null %}
+        {% if administrator_name is defined %}
             {{ administrator_name }}
         {% endif %}
     </div>

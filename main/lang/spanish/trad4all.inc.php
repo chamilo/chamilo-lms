@@ -8542,4 +8542,6 @@ $HelloXGroupX = "Hola %s<br/><br/>Como tutor del grupo %s te invitamos a partici
 $SurveyXMultiplicated = "Encuesta %s demultiplicada";
 $SurveyXNotMultiplicated = "Encuesta %s no demultiplicada";
 $ExportSurveyResults = "Exportar resultados de encuestas";
+$PointAverage = "Puntajes promedio";
+$TotalScore = "Suma de puntajes";
 ?>

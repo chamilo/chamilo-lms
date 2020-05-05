@@ -8443,7 +8443,9 @@ $PromotedMessages = "Messages importants";
 $SendToGroupTutors = "Publier aux tuteurs du groupe";
 $GroupSurveyX = "Enquête du groupe %s";
 $HelloXGroupX = "Bonjour %s<br/><br/>En tant que tuteur du groupe %s vous êtes invité à participer à l'enquête suivante :";
-$SurveyXMultiplicated = "Enquête %s démultiplié";
+$SurveyXMultiplicated = "Enquête %s démultipliée";
 $SurveyXNotMultiplicated = "Enquête %s non démultipliée";
 $ExportSurveyResults = "Exporter les résultats des enquêtes";
+$PointAverage = "Moyenne des scores";
+$TotalScore = "Somme des scores";
 ?>

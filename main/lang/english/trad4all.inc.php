@@ -8514,4 +8514,6 @@ $HelloXGroupX = "Hi %s <br/><br/>As group tutor for the group %s you are invited
 $SurveyXMultiplicated = "Survey %s multiplicated";
 $SurveyXNotMultiplicated = "Survey %s not multiplicated";
 $ExportSurveyResults = "Export survey results";
+$PointAverage = "Average score";
+$TotalScore = "Score Sum";
 ?>

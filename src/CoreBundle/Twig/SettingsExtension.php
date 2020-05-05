@@ -20,9 +20,6 @@ class SettingsExtension extends AbstractExtension
      */
     private $helper;
 
-    /**
-     * @param SettingsHelper $helper
-     */
     public function __construct(SettingsHelper $helper)
     {
         $this->helper = $helper;

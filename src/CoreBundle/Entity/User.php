@@ -47,7 +47,6 @@ use Symfony\Component\Validator\Mapping\ClassMetadata;
  * )
  * @UniqueEntity("username")
  * @ORM\Entity()
- *
  */
 class User implements UserInterface, EquatableInterface
 {
@@ -929,7 +928,6 @@ class User implements UserInterface, EquatableInterface
     /**
      * Set lastname.
      *
-     * @param string $lastname
      *
      * @return User
      */
@@ -943,7 +941,6 @@ class User implements UserInterface, EquatableInterface
     /**
      * Set firstname.
      *
-     * @param string $firstname
      *
      * @return User
      */

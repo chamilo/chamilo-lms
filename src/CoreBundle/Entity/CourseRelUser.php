@@ -10,6 +10,7 @@ use Symfony\Component\Serializer\Annotation\Groups;
 
 /**
  * CourseRelUser.
+ *
  * @ApiResource(
  *      shortName="CourseSubscription",
  *      attributes={"security"="is_granted('ROLE_ADMIN')"},

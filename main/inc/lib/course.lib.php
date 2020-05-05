@@ -3933,7 +3933,7 @@ class CourseManager
             'not_category' => [],
         ];
         $collapsable = api_get_configuration_value('allow_user_course_category_collapsable');
-        $stok = Security::get_token();
+        $stok = Security::get_existing_token();
         while ($row = Database::fetch_array($result)) {
             // We simply display the title of the category.
             $courseInCategory = self::returnCoursesCategories(
@@ -4182,6 +4182,15 @@ class CourseManager
             $params['teachers'] = $teachers;
             $params['extrafields'] = CourseManager::getExtraFieldsToBePresented($course_info['real_id']);
             $params['real_id'] = $course_info['real_id'];
+
+            if ('1' === $course_info['unsubscribe']) {
+                $params['unregister_button'] = CoursesAndSessionsCatalog::return_unregister_button(
+                    $course_info,
+                    Security::get_existing_token(),
+                    '',
+                    ''
+                );
+            }
 
             if ($course_info['visibility'] != COURSE_VISIBILITY_CLOSED) {
                 $params['notifications'] = $showNotification;

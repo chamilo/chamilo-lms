@@ -26,8 +26,9 @@
                         {% endif %}
                     </div>
                     <div class="col-md-10">
-                        {% if item.edit_actions != '' %}
+                        {% if item.edit_actions != '' or item.unregister_button %}
                             <div class="pull-right">
+                                {{ item.unregister_button }}
                                 {% if item.document == '' %}
                                     <a class="btn btn-default btn-sm" href="{{ item.edit_actions }}">
                                         <i class="fa fa-pencil" aria-hidden="true"></i>

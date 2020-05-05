@@ -566,6 +566,8 @@ class CoursesAndSessionsCatalog
             'title' => get_lang('Title'),
             'creation_date' => get_lang('CreationDate'),
             'count_users' => get_lang('SubscriptionCount'),
+            'point_info/point_average' => get_lang('PointAverage'),
+            'point_info/total_score' => get_lang('TotalScore'),
             'point_info/users' => get_lang('VoteCount'),
         ];
         foreach (self::getCourseExtraFieldsAvailableForSorting() as $extraField) {
@@ -621,17 +623,23 @@ class CoursesAndSessionsCatalog
             }
             unset($course);
         }
-        // do we have special cases to sort on ?
-        if (in_array('point_info/users', $sortKeys)) {
-            foreach ($courses as &$course) {
-                if (array_key_exists('point_info', $course) && array_key_exists('users', $course['point_info'])) {
-                    $course['point_info/users'] = $course['point_info']['users'];
+        // do we have $course['groupKey']['subKey'] to sort on, such as 'point_info/users' ?
+        foreach ($sortKeys as $key) {
+            if (false !== strpos($key, '/')) {
+                foreach ($courses as &$course) {
+                    $subValue = api_array_sub_value($course, $key);
+                    if (!is_null($subValue)) {
+                        $course[$key] = $subValue;
+                    }
                 }
+                unset($course);
             }
         }
-        unset($course);
         $descKeys = [
             'count_users',
+            'creation_date',
+            'point_info/point_average',
+            'point_info/total_score',
             'point_info/users',
         ];
         usort($courses, function ($a, $b) use ($sortKeys, $descKeys) {

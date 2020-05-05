@@ -24,6 +24,9 @@ external tool.
 
 # Changelog
 
+## v1.8
+* Add option to add replacements for launch params
+
 ## v1.7
 * Fix auth params
 * Add option to show LTI tool in iframe or new window.
@@ -61,6 +64,11 @@ external tool.
 # Upgrading
 
 Run this changes on database:
+
+## To v1.8.0
+```sql
+ALTER TABLE plugin_ims_lti_tool ADD replacement_params LONGTEXT NOT NULL COMMENT '(DC2Type:json)';
+```
 
 ## To v1.7.0
 ```sql

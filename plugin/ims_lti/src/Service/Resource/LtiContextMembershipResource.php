@@ -191,7 +191,7 @@ class LtiContextMembershipResource extends LtiAdvantageServiceResource
                 'status' => $user->isActive()
                     ? LtiNamesRoleProvisioningService::USER_STATUS_ACTIVE
                     : LtiNamesRoleProvisioningService::USER_STATUS_INACTIVE,
-                'user_id' => (string) $user->getId(),
+                'user_id' => ImsLtiPlugin::getLaunchUserIdClaim($this->tool, $user),
                 'lis_person_sourcedid' => ImsLti::getPersonSourcedId($platformDomain, $user),
                 'lti11_legacy_user_id' => ImsLtiPlugin::generateToolUserId($user->getId()),
             ];

@@ -153,6 +153,18 @@ class FrmEdit extends FormValidator
             );
         }
 
+        if (!$parent) {
+            $this->addText(
+                'replacement_user_id',
+                [
+                    $plugin->get_lang('ReplacementUserId'),
+                    $plugin->get_lang('ReplacementUserIdHelp')
+                ],
+                false
+            );
+            $this->applyFilter('replacement_user_id', 'trim');
+        }
+
         $this->addHtml('</div>');
         $this->addButtonAdvancedSettings('lti_privacy', get_lang('Privacy'));
         $this->addHtml('<div id="lti_privacy_options" style="display:none;">');
@@ -193,6 +205,7 @@ class FrmEdit extends FormValidator
                 '1p3_ags' => $advServices['ags'],
                 '1p3_nrps' => $advServices['nrps'],
                 'document_target' => $this->tool->getDocumentTarget(),
+                'replacement_user_id' => $this->tool->getReplacementForUserId(),
             ]
         );
     }

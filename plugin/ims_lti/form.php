@@ -32,7 +32,7 @@ $course = $em->find('ChamiloCoreBundle:Course', api_get_course_int_id());
 $user = $em->find('ChamiloUserBundle:User', api_get_user_id());
 
 $pluginPath = api_get_path(WEB_PLUGIN_PATH).'ims_lti/';
-$toolUserId = ImsLtiPlugin::generateToolUserId($user->getId());
+$toolUserId = ImsLtiPlugin::getLaunchUserIdClaim($tool, $user);
 $platformDomain = str_replace(['https://', 'http://'], '', api_get_setting('InstitutionUrl'));
 
 $params = [];
@@ -87,7 +87,7 @@ if ($tool->isSharingEmail()) {
 }
 
 if (DRH === $user->getStatus()) {
-    $scopeMentor = ImsLtiPlugin::getRoleScopeMentor($user);
+    $scopeMentor = ImsLtiPlugin::getRoleScopeMentor($user, $tool);
 
     if (!empty($scopeMentor)) {
         $params['role_scope_mentor'] = $scopeMentor;
@@ -117,7 +117,9 @@ $params += ImsLti::substituteVariablesInCustomParams(
     $user,
     $course,
     $session,
-    $platformDomain
+    $platformDomain,
+    ImsLti::V_1P1,
+    $tool
 );
 
 $imsLtiPlugin->trimParams($params);

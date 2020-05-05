@@ -204,7 +204,7 @@ switch ($action) {
         }
 
         $settings = CoursesAndSessionsCatalog::getCatalogSearchSettings();
-        $form = new FormValidator('search', 'get', '', null, null, FormValidator::LAYOUT_BOX);
+        $form = new FormValidator('search', 'get', '', null, null, FormValidator::LAYOUT_GRID);
         $form->addHidden('action', 'search_course');
         if (true === $settings['courses']['by_title']) {
             $form->addText('search_term', get_lang('Title'));
@@ -262,7 +262,7 @@ switch ($action) {
         } else {
             $values = $_REQUEST;
             if ($allowExtraFields) {
-                $extraResult = $extraField->processExtraFieldSearch($values, $form, 'course');
+                $extraResult = $extraField->processExtraFieldSearch($values, $form, 'course', 'AND');
                 $conditions = $extraResult['condition'];
                 $fields = $extraResult['fields'];
                 $defaults = $extraResult['defaults'];
@@ -371,9 +371,10 @@ switch ($action) {
         $content .= '<div class="row">
         <div class="col-md-12">
             <div class="search-courses">
-                <div class="row">';
+             ';
         if ($showCourses) {
-            $content .= '<div class="col-md-'.($showSessions ? '4' : '6').'">';
+            //$content .= '<div class="col-md-'.($showSessions ? '4' : '6').'">';
+            //$content .= '<div class="col-md-12">';
             $htmlHeadXtra[] = '<script>
             $(function () {
                 '.$jqueryReadyContent.'
@@ -384,10 +385,10 @@ switch ($action) {
             $form->setDefaults($defaults);
 
             $content .= $form->returnForm();
-            $content .= '</div>';
+            //$content .= '</div>';
         }
 
-        $content .= '</div></div></div></div>';
+        $content .= '</div></div></div>';
 
         if ($showCourses) {
             $showTeacher = 'true' === api_get_setting('display_teacher_in_courselist');

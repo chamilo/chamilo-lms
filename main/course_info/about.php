@@ -1,4 +1,5 @@
 <?php
+
 /* For licensing terms, see /license.txt */
 
 use Chamilo\CoreBundle\Entity\Course;
@@ -28,9 +29,7 @@ $token = Security::get_existing_token();
 $em = Database::getManager();
 //userID
 $userId = api_get_user_id();
-
-/** @var Course $course */
-$course = $em->find('ChamiloCoreBundle:Course', $courseId);
+$course = api_get_course_entity($courseId);
 
 if (!$course) {
     api_not_allowed(true);

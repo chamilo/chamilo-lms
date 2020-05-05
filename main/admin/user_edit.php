@@ -1,11 +1,9 @@
 <?php
+
 /* For licensing terms, see /license.txt */
 
 use ChamiloSession as Session;
 
-/**
- * @package chamilo.admin
- */
 $cidReset = true;
 require_once __DIR__.'/../inc/global.inc.php';
 
@@ -13,7 +11,7 @@ $this_section = SECTION_PLATFORM_ADMIN;
 
 api_protect_admin_script(true);
 
-$user_id = isset($_GET['user_id']) ? intval($_GET['user_id']) : intval($_POST['user_id']);
+$user_id = isset($_GET['user_id']) ? (int) $_GET['user_id'] : (int) $_POST['user_id'];
 api_protect_super_admin($user_id, null, true);
 $is_platform_admin = api_is_platform_admin() ? 1 : 0;
 $userInfo = api_get_user_info($user_id);
@@ -414,10 +412,9 @@ if ($form->validate()) {
         $language = $user['language'];
         $address = isset($user['address']) ? $user['address'] : null;
 
+        $expiration_date = null;
         if (!$user_data['platform_admin'] && $user['radio_expiration_date'] == '1') {
             $expiration_date = $user['expiration_date'];
-        } else {
-            $expiration_date = null;
         }
 
         $active = $user_data['platform_admin'] ? 1 : intval($user['active']);
@@ -465,9 +462,10 @@ if ($form->validate()) {
             true
         );
 
-        if (api_get_setting('openid_authentication') == 'true' && !empty($user['openid'])) {
+        if (api_get_setting('openid_authentication') === 'true' && !empty($user['openid'])) {
             $up = UserManager::update_openid($user_id, $user['openid']);
         }
+
         $currentUserId = api_get_user_id();
 
         $userObj = api_get_user_entity($user_id);

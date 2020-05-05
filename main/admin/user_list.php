@@ -1,13 +1,12 @@
 <?php
 /* For licensing terms, see /license.txt */
 
+
 use ChamiloSession as Session;
 
 /**
  * @author Bart Mollet
  * @author Julio Montoya <gugli100@gmail.com> BeezNest 2011
- *
- * @package chamilo.admin
  */
 $cidReset = true;
 require_once __DIR__.'/../inc/global.inc.php';
@@ -18,7 +17,7 @@ $urlId = api_get_current_access_url_id();
 $action = isset($_REQUEST['action']) ? $_REQUEST['action'] : '';
 
 // Login as can be used by different roles
-if (isset($_GET['user_id']) && $action == 'login_as') {
+if (isset($_GET['user_id']) && $action === 'login_as') {
     $check = Security::check_token('get');
     if ($check && api_can_login_as($_GET['user_id'])) {
         $result = UserManager::loginAsUser($_GET['user_id']);
@@ -47,7 +46,6 @@ if (isset($_GET['user_id']) && $action == 'login_as') {
 }
 
 api_protect_admin_script(true);
-
 trimVariables();
 
 $url = api_get_path(WEB_AJAX_PATH).'course.ajax.php?a=get_user_courses';
@@ -214,6 +212,9 @@ function prepare_user_sql_query($getCount)
     $user_table = Database::get_main_table(TABLE_MAIN_USER);
     $admin_table = Database::get_main_table(TABLE_MAIN_ADMIN);
 
+    $isMultipleUrl = (api_is_platform_admin() || api_is_session_admin()) && api_get_multiple_access_url();
+    $urlId = api_get_current_access_url_id();
+
     if ($getCount) {
         $sql .= "SELECT COUNT(u.id) AS total_number_of_items FROM $user_table u";
     } else {
@@ -238,7 +239,7 @@ function prepare_user_sql_query($getCount)
     }
 
     // adding the filter to see the user's only of the current access_url
-    if ((api_is_platform_admin() || api_is_session_admin()) && api_get_multiple_access_url()) {
+    if ($isMultipleUrl) {
         $access_url_rel_user_table = Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_USER);
         $sql .= " INNER JOIN $access_url_rel_user_table url_rel_user 
                   ON (u.id=url_rel_user.user_id)";
@@ -270,13 +271,6 @@ function prepare_user_sql_query($getCount)
         $keywordListValues = [];
     }
 
-    /*
-    // This block is never executed because $keyword_extra_data never exists
-    if (isset($keyword_extra_data) && !empty($keyword_extra_data)) {
-        $extra_info = UserManager::get_extra_field_information_by_name($keyword_extra_data);
-        $field_id = $extra_info['id'];
-        $sql.= " INNER JOIN user_field_values ufv ON u.id=ufv.user_id AND ufv.field_id=$field_id ";
-    } */
     if (isset($_GET['keyword']) && !empty($_GET['keyword'])) {
         $keywordFiltered = Database::escape_string("%".$_GET['keyword']."%");
         $sql .= " WHERE (
@@ -302,14 +296,6 @@ function prepare_user_sql_query($getCount)
         }
 
         $keyword_extra_value = '';
-
-        // This block is never executed because $keyword_extra_data never exists
-        /*
-        if (isset($keyword_extra_data) && !empty($keyword_extra_data) &&
-            !empty($keyword_extra_data_text)) {
-            $keyword_extra_value = " AND ufv.field_value LIKE '%".trim($keyword_extra_data_text)."%' ";
-        }
-        */
         $sql .= " $query_admin_table
             WHERE (
                 u.firstname LIKE '".Database::escape_string("%".$keywordListValues['keyword_firstname']."%")."' AND

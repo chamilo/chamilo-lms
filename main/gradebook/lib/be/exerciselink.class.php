@@ -204,10 +204,6 @@ class ExerciseLink extends AbstractLink
                         break;
                     case 'ranking':
                         return [null, null];
-                        /*
-                        $newList = [];
-                        $ranking = AbstractLink::getCurrentUserRanking($stud_id, $link->getUserScoreList());
-                        return $ranking;*/
                         break;
                     default:
                         if (!empty($stud_id)) {

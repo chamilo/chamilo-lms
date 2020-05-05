@@ -891,7 +891,7 @@ class Statistics
         $table->set_header(5, get_lang('UserName'));
         $table->set_header(6, get_lang('IPAddress'));
         $table->set_header(7, get_lang('Date'));
-        $content = $table->toHtml();
+        $content .= $table->return_table();
 
         return $content;
     }

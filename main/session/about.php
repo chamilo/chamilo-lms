@@ -1,4 +1,5 @@
 <?php
+
 /* For licensing terms, see /license.txt */
 
 use Chamilo\CoreBundle\Entity\Course;
@@ -14,8 +15,6 @@ use Chamilo\UserBundle\Entity\User;
  *
  * @author Angel Fernando Quiroz Campos <angel.quiroz@beeznest.com>
  * @author Julio Montoya
- *
- * @package chamilo.session
  */
 $cidReset = true;
 

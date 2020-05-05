@@ -12,7 +12,6 @@ use Chamilo\CoreBundle\Entity\SessionRelCourseRelUser;
 /**
  * @author  Bart Mollet, Julio Montoya lot of fixes
  */
-
 $cidReset = true;
 require_once __DIR__.'/../inc/global.inc.php';
 
@@ -49,7 +48,6 @@ $table_access_url_user = Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_USER
 
 $em = Database::getManager();
 $sessionInfo = api_get_session_info($sessionId);
-
 /** @var SessionRepository $sessionRepository */
 $sessionRepository = $em->getRepository('ChamiloCoreBundle:Session');
 /** @var Session $session */
@@ -178,6 +176,7 @@ if ($session->getNbrCourses() === 0) {
             $course,
             $session
         );
+
         // Get coachs of the courses in session
         $namesOfCoaches = [];
         $coachSubscriptions = $session->getUserCourseSubscriptionsByStatus($course, Session::COACH)

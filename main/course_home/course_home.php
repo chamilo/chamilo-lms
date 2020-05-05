@@ -144,7 +144,7 @@ if ($isSpecialCourse) {
 
 $action = !empty($_GET['action']) ? Security::remove_XSS($_GET['action']) : '';
 
-if ($action == 'subscribe') {
+if ($action === 'subscribe') {
     if (Security::check_token('get')) {
         Security::clear_token();
         $result = CourseManager::autoSubscribeToCourse($course_code);

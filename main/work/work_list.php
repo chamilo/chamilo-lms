@@ -11,7 +11,7 @@ api_protect_course_script(true);
 require_once 'work.lib.php';
 $this_section = SECTION_COURSES;
 
-$workId = isset($_GET['id']) ? intval($_GET['id']) : null;
+$workId = isset($_GET['id']) ? (int) $_GET['id'] : null;
 $courseInfo = api_get_course_info();
 
 if (empty($workId) || empty($courseInfo)) {
@@ -20,7 +20,7 @@ if (empty($workId) || empty($courseInfo)) {
 
 // Student publications are saved with the iid in a LP
 $origin = api_get_origin();
-if ($origin == 'learnpath') {
+if ($origin === 'learnpath') {
     $em = Database::getManager();
     /** @var CStudentPublication $work */
     $work = $em->getRepository('ChamiloCourseBundle:CStudentPublication')->findOneBy(

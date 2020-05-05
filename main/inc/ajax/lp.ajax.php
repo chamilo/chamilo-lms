@@ -78,6 +78,7 @@ switch ($action) {
         break;
     case 'update_lp_item_order':
         if (api_is_allowed_to_edit(null, true)) {
+            // $new_order gets a value like "647|0^648|0^649|0^"
             $new_order = $_POST['new_order'];
             $sections = explode('^', $new_order);
             // We have to update parent_item_id, previous_item_id, next_item_id, display_order in the database

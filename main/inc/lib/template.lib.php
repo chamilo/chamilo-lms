@@ -94,7 +94,6 @@ class Template
         ];
 
         $urlId = api_get_current_access_url_id();
-
         $cache_folder = api_get_path(SYS_ARCHIVE_PATH).'twig/'.$urlId.'/';
 
         if (!is_dir($cache_folder)) {
@@ -181,6 +180,10 @@ class Template
             [
                 'name' => 'date_to_time_ago',
                 'callable' => 'Display::dateToStringAgoAndLongDate',
+            ],
+            [
+                'name' => 'remove_xss',
+                'callable' => 'Security::remove_XSS',
             ],
         ];
 

@@ -8,8 +8,6 @@ use Chamilo\UserBundle\Entity\User;
  * Script showing information about a user (name, e-mail, courses and sessions).
  *
  * @author Bart Mollet
- *
- * @package chamilo.admin
  */
 $cidReset = true;
 require_once __DIR__.'/../inc/global.inc.php';

@@ -1,4 +1,5 @@
 <?php
+
 /* For licensing terms, see /license.txt */
 
 use Chamilo\CoreBundle\Entity\Course;
@@ -514,6 +515,7 @@ class SessionManager
 
         $extraFieldModel = new ExtraFieldModel('session');
         $conditions = $extraFieldModel->parseConditions($options);
+
         $sqlInjectJoins = $conditions['inject_joins'];
         $where .= $conditions['where'];
         $sqlInjectWhere = $conditions['inject_where'];
@@ -529,7 +531,7 @@ class SessionManager
         } else {
             if (!empty($columns['column_model'])) {
                 foreach ($columns['column_model'] as $column) {
-                    if ($column['name'] == 'users') {
+                    if ($column['name'] === 'users') {
                         $showCountUsers = true;
                     }
                 }
@@ -967,7 +969,6 @@ class SessionManager
         }
 
         $formattedSessions = [];
-
         $categories = self::get_all_session_category();
         $orderedCategories = [];
         if (!empty($categories)) {
@@ -978,14 +979,15 @@ class SessionManager
 
         $activeIcon = Display::return_icon('accept.png', get_lang('Active'));
         $inactiveIcon = Display::return_icon('error.png', get_lang('Inactive'));
+        $webPath = api_get_path(WEB_PATH);
 
         foreach ($sessions as $session) {
             if ($showCountUsers) {
                 $session['users'] = self::get_users_by_session($session['id'], 0, true);
             }
-            $url = api_get_path(WEB_CODE_PATH).'session/resume_session.php?id_session='.$session['id'];
+            $url = $webPath.'main/session/resume_session.php?id_session='.$session['id'];
             if ($extraFieldsToLoad || api_is_drh()) {
-                $url = api_get_path(WEB_PATH).'session/'.$session['id'].'/about/';
+                $url = $webPath.'session/'.$session['id'].'/about/';
             }
 
             $session['name'] = Display::url($session['name'], $url);
@@ -1008,7 +1010,6 @@ class SessionManager
                     $session[$field['variable']] = $fieldDataToString;
                 }
             }
-
             if (isset($session['session_active']) && $session['session_active'] == 1) {
                 $session['session_active'] = $activeIcon;
             } else {
@@ -1672,7 +1673,6 @@ class SessionManager
         $date_to = '',
         $options
     ) {
-        //escaping variables
         $sessionId = intval($sessionId);
         $courseId = intval($courseId);
         $studentId = intval($studentId);
@@ -4252,14 +4252,14 @@ class SessionManager
                     $row['access_end_date'] = null;
                 }
 
-                if ($row['coach_access_start_date'] == '0000-00-00 00:00:00' ||
-                    $row['coach_access_start_date'] == '0000-00-00'
+                if ($row['coach_access_start_date'] === '0000-00-00 00:00:00' ||
+                    $row['coach_access_start_date'] === '0000-00-00'
                 ) {
                     $row['coach_access_start_date'] = null;
                 }
 
-                if ($row['coach_access_end_date'] == '0000-00-00 00:00:00' ||
-                    $row['coach_access_end_date'] == '0000-00-00'
+                if ($row['coach_access_end_date'] === '0000-00-00 00:00:00' ||
+                    $row['coach_access_end_date'] === '0000-00-00'
                 ) {
                     $row['coach_access_end_date'] = null;
                 }
@@ -7913,7 +7913,7 @@ SQL;
 
     /**
      * @param int   $sessionId
-     * @param array $extraFieldsToInclude
+     * @param array $extraFieldsToInclude (empty means all)
      *
      * @return array
      */
@@ -7982,7 +7982,7 @@ SQL;
      */
     public static function isValidId($sessionId)
     {
-        $sessionId = intval($sessionId);
+        $sessionId = (int) $sessionId;
         if ($sessionId > 0) {
             $rows = Database::select(
                 'id',
@@ -8882,7 +8882,7 @@ SQL;
             }
 
             if (isset($params['access_start_date'])) {
-                $params[''] = api_format_date($params['access_start_date'], DATE_TIME_FORMAT_SHORT);
+                $params['access_start_date'] = api_format_date($params['access_start_date'], DATE_TIME_FORMAT_SHORT);
             }
 
             if (isset($params['access_end_date'])) {
@@ -9677,6 +9677,85 @@ SQL;
         return $result;
     }
 
+    public static function getStatusList()
+    {
+        return [
+            self::STATUS_PLANNED => get_lang('Planned'),
+            self::STATUS_PROGRESS => get_lang('InProgress'),
+            self::STATUS_FINISHED => get_lang('Finished'),
+            self::STATUS_CANCELLED => get_lang('Cancelled'),
+        ];
+    }
+
+    public static function getStatusLabel($status)
+    {
+        $list = self::getStatusList();
+
+        if (!isset($list[$status])) {
+            return get_lang('NoStatus');
+        }
+
+        return $list[$status];
+    }
+
+    public static function getDefaultSessionTab()
+    {
+        $default = 'all';
+        $view = api_get_configuration_value('default_session_list_view');
+
+        if (!empty($view)) {
+            $default = $view;
+        }
+
+        return $default;
+    }
+
+    /**
+     * @return array
+     */
+    public static function getSessionListTabs($listType)
+    {
+        $tabs = [
+            [
+                'content' => get_lang('AllSessionsShort'),
+                'url' => api_get_path(WEB_CODE_PATH).'session/session_list.php?list_type=all',
+            ],
+            [
+                'content' => get_lang('ActiveSessionsShort'),
+                'url' => api_get_path(WEB_CODE_PATH).'session/session_list.php?list_type=active',
+            ],
+            [
+                'content' => get_lang('ClosedSessionsShort'),
+                'url' => api_get_path(WEB_CODE_PATH).'session/session_list.php?list_type=close',
+            ],
+            [
+                'content' => get_lang('SessionListCustom'),
+                'url' => api_get_path(WEB_CODE_PATH).'session/session_list.php?list_type=custom',
+            ],
+            /*[
+                'content' => get_lang('Complete'),
+                'url' => api_get_path(WEB_CODE_PATH).'session/session_list_simple.php?list_type=complete',
+            ],*/
+        ];
+
+        switch ($listType) {
+            case 'all':
+                $default = 1;
+                break;
+            case 'active':
+                $default = 2;
+                break;
+            case 'close':
+                $default = 3;
+                break;
+            case 'custom':
+                $default = 4;
+                break;
+        }
+
+        return Display::tabsOnlyLink($tabs, $default);
+    }
+
     /**
      * @param int $id
      *
@@ -9813,27 +9892,5 @@ SQL;
         } else {
             return -1;
         }
-    }
-
-    public static function getStatusList()
-    {
-        return [
-            self::STATUS_PLANNED => get_lang('Planned'),
-            self::STATUS_PROGRESS => get_lang('InProgress'),
-            self::STATUS_FINISHED => get_lang('Finished'),
-            self::STATUS_CANCELLED => get_lang('Cancelled'),
-        ];
-    }
-
-    public static function getStatusLabel($status)
-    {
-        $list = self::getStatusList();
-
-        if (!isset($list[$status])) {
-
-            return get_lang('NoStatus');
-        }
-
-        return $list[$status];
     }
 }

@@ -1,4 +1,5 @@
 <?php
+
 /* For licensing terms, see /license.txt */
 
 define('CHAMILO_LOAD_WYSIWYG', false);

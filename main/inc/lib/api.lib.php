@@ -191,6 +191,8 @@ define('LOG_GROUP_PORTAL_USER_UPDATE_ROLE', 'soc_gr_update_role');
 
 define('LOG_USER_DELETE', 'user_deleted');
 define('LOG_USER_CREATE', 'user_created');
+define('LOG_USER_UPDATE', 'user_updated');
+define('LOG_USER_PASSWORD_UPDATE', 'user_password_updated');
 define('LOG_USER_ENABLE', 'user_enable');
 define('LOG_USER_DISABLE', 'user_disable');
 define('LOG_USER_ANONYMIZE', 'user_anonymized');
@@ -212,6 +214,7 @@ define('LOG_PLATFORM_LANGUAGE_CHANGE', 'platform_lng_changed'); //changed in 1.9
 define('LOG_SUBSCRIBE_USER_TO_COURSE', 'user_subscribed');
 define('LOG_UNSUBSCRIBE_USER_FROM_COURSE', 'user_unsubscribed');
 define('LOG_ATTEMPTED_FORCED_LOGIN', 'attempted_forced_login');
+define('LOG_PLUGIN_CHANGE', 'plugin_changed');
 
 define('LOG_HOMEPAGE_CHANGED', 'homepage_changed');
 
@@ -252,6 +255,9 @@ define('LOG_SESSION_CATEGORY_ID', 'session_category_id');
 define('LOG_CONFIGURATION_SETTINGS_CATEGORY', 'settings_category');
 define('LOG_CONFIGURATION_SETTINGS_VARIABLE', 'settings_variable');
 define('LOG_PLATFORM_LANGUAGE', 'default_platform_language');
+define('LOG_PLUGIN_UPLOAD', 'plugin_upload');
+define('LOG_PLUGIN_ENABLE', 'plugin_enable');
+define('LOG_PLUGIN_SETTINGS_CHANGE', 'plugin_settings_change');
 define('LOG_CAREER_ID', 'career_id');
 define('LOG_PROMOTION_ID', 'promotion_id');
 define('LOG_GRADEBOOK_LOCKED', 'gradebook_locked');
@@ -1373,9 +1379,8 @@ function api_get_navigator()
     if (strpos($version, '.') === false) {
         $version = number_format(doubleval($version), 1);
     }
-    $return = ['name' => $navigator, 'version' => $version];
 
-    return $return;
+    return ['name' => $navigator, 'version' => $version];
 }
 
 /**
@@ -2850,9 +2855,8 @@ function api_get_plugin_setting($plugin, $variable)
 function api_get_settings_params($params)
 {
     $table = Database::get_main_table(TABLE_MAIN_SETTINGS_CURRENT);
-    $result = Database::select('*', $table, ['where' => $params]);
 
-    return $result;
+    return Database::select('*', $table, ['where' => $params]);
 }
 
 /**
@@ -2863,9 +2867,8 @@ function api_get_settings_params($params)
 function api_get_settings_params_simple($params)
 {
     $table = Database::get_main_table(TABLE_MAIN_SETTINGS_CURRENT);
-    $result = Database::select('*', $table, ['where' => $params], 'one');
 
-    return $result;
+    return Database::select('*', $table, ['where' => $params], 'one');
 }
 
 /**
@@ -3571,6 +3574,8 @@ function api_is_allowed_to_session_edit($tutor = false, $coach = false)
             }
         }
     }
+
+    return false;
 }
 
 /**

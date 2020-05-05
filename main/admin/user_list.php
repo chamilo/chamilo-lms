@@ -46,7 +46,6 @@ if (isset($_GET['user_id']) && $action === 'login_as') {
 }
 
 api_protect_admin_script(true);
-
 trimVariables();
 
 $url = api_get_path(WEB_AJAX_PATH).'course.ajax.php?a=get_user_courses';
@@ -272,13 +271,6 @@ function prepare_user_sql_query($getCount)
         $keywordListValues = [];
     }
 
-    /*
-    // This block is never executed because $keyword_extra_data never exists
-    if (isset($keyword_extra_data) && !empty($keyword_extra_data)) {
-        $extra_info = UserManager::get_extra_field_information_by_name($keyword_extra_data);
-        $field_id = $extra_info['id'];
-        $sql.= " INNER JOIN user_field_values ufv ON u.id=ufv.user_id AND ufv.field_id=$field_id ";
-    } */
     if (isset($_GET['keyword']) && !empty($_GET['keyword'])) {
         $keywordFiltered = Database::escape_string("%".$_GET['keyword']."%");
         $sql .= " WHERE (

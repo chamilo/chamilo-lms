@@ -31,7 +31,7 @@ class ImsLtiPlugin extends Plugin
      */
     protected function __construct()
     {
-        $version = '1.7.0';
+        $version = '1.8.0';
         $author = 'Angel Fernando Quiroz Campos';
 
         $message = Display::return_message($this->get_lang('GenerateKeyPairInfo'));

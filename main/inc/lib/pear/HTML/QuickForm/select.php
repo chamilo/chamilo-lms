@@ -608,6 +608,7 @@ class HTML_QuickForm_select extends HTML_QuickForm_element
                             {element}
                         </div>';
                 break;
+            case FormValidator::LAYOUT_GRID:
             case FormValidator::LAYOUT_BOX:
                 return '
                         <div class="input-group" style="z-index: auto">

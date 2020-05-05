@@ -4183,7 +4183,9 @@ class CourseManager
             $params['extrafields'] = CourseManager::getExtraFieldsToBePresented($course_info['real_id']);
             $params['real_id'] = $course_info['real_id'];
 
-            if ('1' === $course_info['unsubscribe']) {
+            if (api_get_configuration_value('enable_unsubscribe_button_on_my_course_page')
+                && '1' === $course_info['unsubscribe']
+            ) {
                 $params['unregister_button'] = CoursesAndSessionsCatalog::return_unregister_button(
                     $course_info,
                     Security::get_existing_token(),

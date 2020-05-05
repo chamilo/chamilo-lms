@@ -1296,7 +1296,7 @@ if (isset($questions) && is_array($questions)) {
             $parentClass = ' with_parent with_parent_'.$question['question_id'];
             $parents = survey_question::getParents($question['question_id']);
             if (!empty($parents)) {
-                foreach($parents as $parentId) {
+                foreach ($parents as $parentId) {
                     $parentClass .= ' with_parent_only_hide_'.$parentId;
                 }
             }

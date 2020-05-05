@@ -74,7 +74,7 @@ class survey_question
         ');
 
         $style = 'display:none';
-        $options = [ ];
+        $options = [];
         if (!empty($optionId) && !empty($parentId)) {
             $parentData = SurveyManager::get_question($parentId);
             $style = '';

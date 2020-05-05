@@ -44,7 +44,7 @@ class PersonalDriver extends Driver implements DriverInterface
                 // Adding user personal files
                 $dir = \UserManager::getUserPathById($userId, 'system');
                 $dirWeb = \UserManager::getUserPathById($userId, 'web');
-                $mimeType =[];
+                $mimeType = [];
                 $mimeType[] = 'application';
                 $mimeType[] = 'text/html';
                 $mimeType[] = 'text/javascript';

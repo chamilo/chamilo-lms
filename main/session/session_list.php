@@ -6,7 +6,6 @@
  * List sessions in an efficient and usable way.
  */
 $cidReset = true;
-
 require_once __DIR__.'/../inc/global.inc.php';
 $this_section = SECTION_PLATFORM_ADMIN;
 
@@ -18,6 +17,39 @@ $htmlHeadXtra[] = api_get_jqgrid_js();
 $action = isset($_REQUEST['action']) ? $_REQUEST['action'] : null;
 $idChecked = isset($_REQUEST['idChecked']) ? $_REQUEST['idChecked'] : null;
 $list_type = isset($_REQUEST['list_type']) ? $_REQUEST['list_type'] : 'custom';
+
+switch ($action) {
+    case 'delete':
+        $sessionInfo = api_get_session_info($idChecked);
+        if ($sessionInfo) {
+            $response = SessionManager::delete($idChecked);
+            if ($response) {
+                Display::addFlash(
+                    Display::return_message(get_lang('Deleted').': '.Security::remove_XSS($sessionInfo['name']))
+                );
+            }
+        }
+        $url = 'session_list.php';
+        if ('custom' !== $list_type) {
+            $url = 'session_list.php?list_type='.$list_type;
+        }
+        header('Location: '.$url);
+        exit();
+        break;
+    case 'copy':
+        $result = SessionManager::copy($idChecked);
+        if ($result) {
+            Display::addFlash(Display::return_message(get_lang('ItemCopied')));
+        } else {
+            Display::addFlash(Display::return_message(get_lang('ThereWasAnError'), 'error'));
+        }
+        $url = 'session_list.php';
+        if ('custom' !== $list_type) {
+            $url = 'session_list.php?list_type='.$list_type;
+        }
+        header('Location: '.$url);
+        break;
+}
 
 $tool_name = get_lang('SessionList');
 Display::display_header($tool_name);
@@ -43,6 +75,7 @@ $courseSelect = $sessionFilter->addElement(
 if (!empty($courseId)) {
     $courseInfo = api_get_course_info_by_id($courseId);
     $parents = CourseCategory::getParentsToString($courseInfo['categoryCode']);
+
     $courseSelect->addOption($parents.$courseInfo['title'], $courseInfo['code'], ['selected' => 'selected']);
 }
 
@@ -52,9 +85,11 @@ $actions = '
 $(function() {
     $("#course_name").on("change", function() {
        var courseId = $(this).val();
+
        if (!courseId) {
             return;
        }
+
        window.location = "'.$url.'?course_id="+courseId;
     });
 });
@@ -96,14 +131,8 @@ $result = SessionManager::getGridColumns($list_type);
 
 $columns = $result['columns'];
 $column_model = $result['column_model'];
-
-// Autowidth
 $extra_params['autowidth'] = 'true';
-
-// height auto
 $extra_params['height'] = 'auto';
-
-// Custom params
 $extra_params['sortname'] = 'display_end_date';
 $extra_params['sortorder'] = 'desc';
 
@@ -155,7 +184,7 @@ $orderUrl = api_get_path(WEB_AJAX_PATH).'session.ajax.php?a=order';
             grid.showCol('name').trigger('reloadGrid');
             for (key in added_cols) {
                 grid.showCol(key);
-            };
+            }
         }
 
         var second_filters = [];

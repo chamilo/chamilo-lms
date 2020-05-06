@@ -3313,12 +3313,10 @@ JAVASCRIPT;
                                 'tag'.$counter.'.tag ',
                                 $options['where']
                             );*/
-
-                            //var_dump($options['where']);
-
                             $newCounter = 1;
                             $whereTag = [];
                             foreach ($extra['data'] as $data) {
+                                $data = Database::escape_string($data);
                                 $key = $counter.$newCounter;
                                 $whereTag[] = ' tag'.$key.'.tag LIKE "%'.$data.'%" ';
                                 $inject_joins .= "

@@ -1508,6 +1508,9 @@ $_configuration['auth_password_links'] = [
 ];
 */
 
+// Show unsubscribe buttons on page "My courses"
+//$_configuration['enable_unsubscribe_button_on_my_course_page'] = false;
+
 // KEEP THIS AT THE END
 // -------- Custom DB changes
 // Add user activation by confirmation email

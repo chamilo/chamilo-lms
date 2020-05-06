@@ -45,20 +45,29 @@ Event::registerLog($logInfo);
 
 $userId = api_get_user_id();
 
-$collapsable = api_get_configuration_value('allow_user_session_collapsable');
-if ($collapsable) {
-    $action = isset($_REQUEST['action']) ? $_REQUEST['action'] : '';
-    $sessionId = isset($_REQUEST['session_id']) ? $_REQUEST['session_id'] : '';
-    $value = isset($_REQUEST['value']) ? (int) $_REQUEST['value'] : '';
-    switch ($action) {
+if (array_key_exists('action', $_REQUEST)) {
+    switch ($_REQUEST['action']) {
         case 'collapse_session':
-            if (!empty($sessionId)) {
-                $userRelSession = SessionManager::getUserSession($userId, $sessionId);
+            if (api_get_configuration_value('allow_user_session_collapsable')
+                && array_key_exists('session_id', $_REQUEST)
+            ) {
+                $userRelSession = SessionManager::getUserSession($userId, $_REQUEST['session_id']);
                 if ($userRelSession) {
+                    $value = isset($_REQUEST['value']) ? (int) $_REQUEST['value'] : '';
                     $table = Database::get_main_table(TABLE_MAIN_SESSION_USER);
                     $sql = "UPDATE $table SET collapsed = $value WHERE id = ".$userRelSession['id'];
                     Database::query($sql);
                     Display::addFlash(Display::return_message(get_lang('Updated')));
+                }
+                header('Location: user_portal.php');
+                exit;
+            }
+            break;
+        case 'unsubscribe':
+            if (\Security::check_token('get')) {
+                $auth = new Auth();
+                if ($auth->remove_user_from_course($_GET['course_code'])) {
+                    Display::addFlash(Display::return_message(get_lang('YouAreNowUnsubscribed')));
                 }
                 header('Location: user_portal.php');
                 exit;

@@ -8448,4 +8448,5 @@ $SurveyXNotMultiplicated = "Enquête %s non démultipliée";
 $ExportSurveyResults = "Exporter les résultats des enquêtes";
 $PointAverage = "Moyenne des scores";
 $TotalScore = "Somme des scores";
+$ExportResults = "Exporter les résultats";
 ?>

@@ -8544,4 +8544,5 @@ $SurveyXNotMultiplicated = "Encuesta %s no demultiplicada";
 $ExportSurveyResults = "Exportar resultados de encuestas";
 $PointAverage = "Puntajes promedio";
 $TotalScore = "Suma de puntajes";
+$ExportResults = "Exportar resultados";
 ?>

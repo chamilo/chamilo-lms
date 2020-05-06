@@ -3665,7 +3665,7 @@ class learnpath
 
                             $type_quiz = false;
                             foreach ($list as $toc) {
-                                if ($toc['id'] == $lp_item_id && $toc['type'] == 'quiz') {
+                                if ($toc['id'] == $lp_item_id && $toc['type'] === 'quiz') {
                                     $type_quiz = true;
                                 }
                             }

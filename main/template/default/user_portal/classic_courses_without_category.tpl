@@ -26,8 +26,9 @@
                         {% endif %}
                     </div>
                     <div class="col-md-10">
-                        {% if item.edit_actions != '' %}
-                            <div class="pull-right">
+                        <div class="pull-right">
+                            {{ item.unregister_button }}
+                            {% if item.edit_actions != '' %}
                                 {% if item.document == '' %}
                                     <a class="btn btn-default btn-sm" href="{{ item.edit_actions }}">
                                         <i class="fa fa-pencil" aria-hidden="true"></i>
@@ -40,8 +41,8 @@
                                         {{ item.document }}
                                     </div>
                                 {% endif %}
-                            </div>
-                        {% endif %}
+                            {% endif %}
+                        </div>
                         <h4 class="course-items-title">
                             {% if item.visibility == constant('COURSE_VISIBILITY_CLOSED') and not item.current_user_is_teacher %}
                                 {{ item.title }} {{ item.code_course }}

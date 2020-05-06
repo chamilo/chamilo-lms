@@ -206,7 +206,7 @@ switch ($action) {
         $settings = CoursesAndSessionsCatalog::getCatalogSearchSettings();
         $form = new FormValidator('search', 'get', '', null, null, FormValidator::LAYOUT_GRID);
         $form->addHidden('action', 'search_course');
-        if (true === $settings['courses']['by_title']) {
+        if (isset($settings['courses']) && true === $settings['courses']['by_title']) {
             $form->addText('search_term', get_lang('Title'));
         }
 

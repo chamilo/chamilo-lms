@@ -697,14 +697,14 @@ class ExtraField extends Model
     /**
      * Add elements to a form.
      *
-     * @param FormValidator $form                The form object to which to attach this element
-     * @param int           $itemId              The item (course, user, session, etc) this extra_field is linked to
-     * @param array         $exclude             Variables of extra field to exclude
-     * @param bool          $filter              Whether to get only the fields with the "filter" flag set to 1 (true)
-     *                                           or not (false)
-     * @param bool          $useTagAsSelect      Whether to show tag fields as select drop-down or not
-     * @param array         $showOnlyTheseFields Limit the extra fields shown to just the list given here
-     * @param array         $orderFields         An array containing the names of the fields shown, in the right order
+     * @param FormValidator $form                            The form object to which to attach this element
+     * @param int           $itemId                          The item (course, user, session, etc) this extra_field is linked to
+     * @param array         $exclude                         Variables of extra field to exclude
+     * @param bool          $filter                          Whether to get only the fields with the "filter" flag set to 1 (true)
+     *                                                       or not (false)
+     * @param bool          $useTagAsSelect                  Whether to show tag fields as select drop-down or not
+     * @param array         $showOnlyTheseFields             Limit the extra fields shown to just the list given here
+     * @param array         $orderFields                     An array containing the names of the fields shown, in the right order
      * @param array         $extraData
      * @param bool          $orderDependingDefaults
      * @param bool          $adminPermissions
@@ -715,10 +715,10 @@ class ExtraField extends Model
      * @param array         $requiredFields
      * @param bool          $hideGeoLocalizationDetails
      *
-     * @return array|bool If relevant, returns a one-element array with JS code to be added to the page HTML headers.
-     *                    Returns false if the form object was not given
      * @throws Exception
      *
+     * @return array|bool If relevant, returns a one-element array with JS code to be added to the page HTML headers.
+     *                    Returns false if the form object was not given
      */
     public function addElements(
         $form,
@@ -948,9 +948,9 @@ class ExtraField extends Model
      * @param array         $showOnlyTheseFields Limit the extra fields shown to just the list given here
      * @param array         $orderFields         An array containing the names of the fields shown, in the right order
      *
-     * @return array If relevant, returns a one-element array with JS code to be added to the page HTML headers
      * @throws Exception
      *
+     * @return array If relevant, returns a one-element array with JS code to be added to the page HTML headers
      */
     public function set_extra_fields_in_form(
         $form,
@@ -1744,8 +1744,6 @@ class ExtraField extends Model
         return $return;
     }
 
-
-
     /**
      * @param array $options
      *
@@ -1766,7 +1764,6 @@ class ExtraField extends Model
 
         return $optionsParsed;
     }
-
 
     /**
      * @return array
@@ -3106,6 +3103,7 @@ JAVASCRIPT;
 
         return $result;
     }
+
     /**
      * @param \FormValidator $form
      * @param int            $defaultValueId

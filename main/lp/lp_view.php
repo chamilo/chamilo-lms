@@ -310,7 +310,7 @@ if (!empty($_REQUEST['exeId']) &&
     $safe_exe_id = (int) $_REQUEST['exeId'];
 
     if (!empty($safe_id) && !empty($safe_item_id)) {
-        Exercise::saveExerciseInLp( $safe_item_id, $safe_exe_id);
+        Exercise::saveExerciseInLp($safe_item_id, $safe_exe_id);
     }
     if (intval($_GET['fb_type']) != EXERCISE_FEEDBACK_TYPE_END) {
         $src = 'blank.php?msg=exerciseFinished&'.api_get_cidreq(true, true, 'learnpath');

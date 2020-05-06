@@ -441,7 +441,7 @@ class CoursesAndSessionsCatalog
         }
 
         $categoryFilter = '';
-        if ($categoryCode === 'ALL') {
+        if ($categoryCode === 'ALL' || empty($categoryCode)) {
             // Nothing to do
         } elseif ($categoryCode === 'NONE') {
             $categoryFilter = ' AND category_code = "" ';

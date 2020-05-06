@@ -75,6 +75,10 @@ if ($form->validate()) {
                 )
                 ->publicKey = $formValues['public_key'];
         }
+
+        if (!empty($formValues['replacement_user_id'])) {
+            $tool->setReplacementForUserId($formValues['replacement_user_id']);
+        }
     }
 
     if (null === $tool->getParent() ||

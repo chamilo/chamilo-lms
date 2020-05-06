@@ -110,6 +110,7 @@ class HTML_QuickForm_text extends HTML_QuickForm_input
                         </div>';
 
         switch ($layout) {
+            case FormValidator::LAYOUT_GRID:
             case FormValidator::LAYOUT_INLINE:
                 $template = '
                 <div class="form-group {error_class}">
@@ -146,7 +147,6 @@ class HTML_QuickForm_text extends HTML_QuickForm_input
                     </div>
                 </div>';
                 break;
-            case FormValidator::LAYOUT_GRID:
             case FormValidator::LAYOUT_BOX_NO_LABEL:
                 if (isset($attributes['custom']) && $attributes['custom'] == true) {
                     $template = '

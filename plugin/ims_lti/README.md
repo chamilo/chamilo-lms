@@ -1,7 +1,7 @@
 IMS/LTI plugin
 ===
 
-Version 1.7.0
+Version 1.8.0
 
 > This plugin is meant to be later integrated into Chamilo (in a major version
 release).
@@ -10,8 +10,9 @@ IMS/LTI defines the possibility to integrate tools or content into Chamilo.
 This plugin allows the integration of a new tool into courses, obtaining 
 data back from those tools and recording them as gradebook "external" activities.
 
-This plugin allow certified support for LTI 1.0, 1.1, 1.1.1, Deep Linking 1.x, Outcome Services 1.x.
+This plugin allows certified support for LTI 1.0, 1.1, 1.1.1, Deep Linking 1.x, Outcome Services 1.x.
 You can get information about the LTI Certification on [this page][certification link].
+The LTI 1.3 is being developed.
 
 As a platform admin, you can register external tools available for all courses.
 You need set the tools settings in the IMS/LTI administration page.
@@ -23,6 +24,9 @@ Settings tool. Then select a previously tool registered or register a new
 external tool.
 
 # Changelog
+
+## v1.8
+* Add option to add replacements for launch params
 
 ## v1.7
 * Fix auth params
@@ -61,6 +65,11 @@ external tool.
 # Upgrading
 
 Run this changes on database:
+
+## To v1.8.0
+```sql
+ALTER TABLE plugin_ims_lti_tool ADD replacement_params LONGTEXT NOT NULL COMMENT '(DC2Type:json)';
+```
 
 ## To v1.7.0
 ```sql

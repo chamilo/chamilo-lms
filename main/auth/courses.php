@@ -37,9 +37,7 @@ if (api_is_platform_admin() || api_is_course_admin() || api_is_allowed_to_create
 
 $defaultAction = CoursesAndSessionsCatalog::is(CATALOG_SESSIONS) ? 'display_sessions' : 'display_courses';
 $action = isset($_REQUEST['action']) ? Security::remove_XSS($_REQUEST['action']) : $defaultAction;
-$categoryCode = isset($_REQUEST['category_code']) && !empty($_REQUEST['category_code']) ? Security::remove_XSS(
-    $_REQUEST['category_code']
-) : 'ALL';
+$categoryCode = isset($_REQUEST['category_code']) ? Security::remove_XSS($_REQUEST['category_code']) : '';
 $searchTerm = isset($_REQUEST['search_term']) ? Security::remove_XSS($_REQUEST['search_term']) : '';
 
 $nameTools = CourseCategory::getCourseCatalogNameTools($action);
@@ -206,11 +204,16 @@ switch ($action) {
         $settings = CoursesAndSessionsCatalog::getCatalogSearchSettings();
         $form = new FormValidator('search', 'get', '', null, null, FormValidator::LAYOUT_GRID);
         $form->addHidden('action', 'search_course');
-        if (true === $settings['courses']['by_title']) {
+        if (isset($settings['courses']) && true === $settings['courses']['by_title']) {
             $form->addText('search_term', get_lang('Title'));
         }
 
-        $select = $form->addSelect('category_code', get_lang('CourseCategories'));
+        $select = $form->addSelect(
+            'category_code',
+            get_lang('CourseCategories'),
+            [],
+            ['placeholder' => get_lang('SelectAnOption')]
+        );
 
         $defaults = [];
         $listCategories = CoursesAndSessionsCatalog::getCourseCategoriesTree();

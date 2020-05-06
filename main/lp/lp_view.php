@@ -1,4 +1,5 @@
 <?php
+
 /* For licensing terms, see /license.txt */
 
 use Chamilo\CourseBundle\Entity\CLpCategory;
@@ -8,8 +9,6 @@ use ChamiloSession as Session;
  * This file was originally the copy of document.php, but many modifications happened since then ;
  * the direct file view is not needed anymore, if the user uploads a scorm zip file, a directory
  * will be automatically created for it, and the files will be uncompressed there for example ;.
- *
- * @package chamilo.learnpath
  *
  * @author Yannick Warnier <ywarnier@beeznest.org> - redesign
  * @author Denes Nagy, principal author
@@ -293,12 +292,12 @@ if ($debug) {
     error_log('$type_quiz: '.$type_quiz);
     error_log('$_REQUEST[exeId]: '.intval($_REQUEST['exeId']));
     error_log('$lp_id: '.$lp_id);
-    error_log('$_GET[lp_item_id]: '.intval($_GET['lp_item_id']));
+    error_log('$_REQUEST[lp_item_id]: '.intval($_REQUEST['lp_item_id']));
 }
 
 if (!empty($_REQUEST['exeId']) &&
     isset($lp_id) &&
-    isset($_GET['lp_item_id'])
+    isset($_REQUEST['lp_item_id'])
 ) {
     global $src;
     $lp->items[$lp->current]->write_to_db();
@@ -306,7 +305,7 @@ if (!empty($_REQUEST['exeId']) &&
     $TBL_TRACK_EXERCICES = Database::get_main_table(TABLE_STATISTIC_TRACK_E_EXERCISES);
     $TBL_LP_ITEM_VIEW = Database::get_course_table(TABLE_LP_ITEM_VIEW);
     $TBL_LP_ITEM = Database::get_course_table(TABLE_LP_ITEM);
-    $safe_item_id = (int) $_GET['lp_item_id'];
+    $safe_item_id = (int) $_REQUEST['lp_item_id'];
     $safe_id = $lp_id;
     $safe_exe_id = (int) $_REQUEST['exeId'];
 
@@ -372,7 +371,7 @@ if (!empty($_REQUEST['exeId']) &&
         }
     }
     if (intval($_GET['fb_type']) != EXERCISE_FEEDBACK_TYPE_END) {
-        $src = 'blank.php?msg=exerciseFinished';
+        $src = 'blank.php?msg=exerciseFinished&'.api_get_cidreq(true, true, 'learnpath');
     } else {
         $src = api_get_path(WEB_CODE_PATH).'exercise/result.php?id='.$safe_exe_id.'&'.api_get_cidreq(true, true, 'learnpath');
         if ($debug) {
@@ -391,7 +390,7 @@ $_setting['show_navigation_menu'] = 'false';
 $scorm_css_header = true;
 $lp_theme_css = $lp->get_theme();
 // Sets the css theme of the LP this call is also use at the frames (toc, nav, message).
-if ($lp->mode == 'fullscreen') {
+if ($lp->mode === 'fullscreen') {
     $htmlHeadXtra[] = "<script>
         window.open('$src','content_id','toolbar=0,location=0,status=0,scrollbars=1,resizable=1');
     </script>";
@@ -580,7 +579,7 @@ if (Tracking::minimumTimeAvailable(api_get_session_id(), api_get_course_int_id()
     }
 
     // Minimum time for each learning path
-    $time_min = intval($pl * $tc * $perc / 100);
+    $time_min = (int) ($pl * $tc * $perc / 100);
 
     if ($_SESSION['oLP']->getAccumulateWorkTime() > 0) {
         $lpMinTime = '('.$time_min.' min)';

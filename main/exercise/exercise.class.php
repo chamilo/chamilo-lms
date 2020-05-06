@@ -10266,4 +10266,86 @@ class Exercise
 
         return $group;
     }
+
+    public static function saveExerciseInLp($safe_item_id, $safe_exe_id)
+    {
+        $lp = Session::read('oLP');
+
+        $safe_exe_id = (int) $safe_exe_id;
+        $safe_item_id = (int) $safe_item_id;
+
+        if (empty($lp) || empty($safe_exe_id) || empty($safe_item_id)) {
+            return false;
+        }
+
+        $viewId = $lp->get_view_id();
+        $course_id = api_get_course_int_id();
+        $userId = (int) api_get_user_id();
+        $viewId = (int) $viewId;
+
+        $TBL_TRACK_EXERCICES = Database::get_main_table(TABLE_STATISTIC_TRACK_E_EXERCISES);
+        $TBL_LP_ITEM_VIEW = Database::get_course_table(TABLE_LP_ITEM_VIEW);
+        $TBL_LP_ITEM = Database::get_course_table(TABLE_LP_ITEM);
+
+        $sql = "SELECT start_date, exe_date, exe_result, exe_weighting, exe_exo_id, exe_duration
+                FROM $TBL_TRACK_EXERCICES
+                WHERE exe_id = $safe_exe_id AND exe_user_id = $userId";
+        $res = Database::query($sql);
+        $row_dates = Database::fetch_array($res);
+
+        if (empty($row_dates)) {
+            return false;
+        }
+
+        $duration = (int) $row_dates['exe_duration'];
+        $score = (float) $row_dates['exe_result'];
+        $max_score = (float) $row_dates['exe_weighting'];
+
+        $sql = "UPDATE $TBL_LP_ITEM SET
+                    max_score = '$max_score'
+                WHERE iid = $safe_item_id";
+        Database::query($sql);
+
+        $sql = "SELECT id FROM $TBL_LP_ITEM_VIEW
+                WHERE
+                    c_id = $course_id AND
+                    lp_item_id = $safe_item_id AND
+                    lp_view_id = $viewId
+                ORDER BY id DESC
+                LIMIT 1";
+        $res_last_attempt = Database::query($sql);
+
+        if (Database::num_rows($res_last_attempt) && !api_is_invitee()) {
+            $row_last_attempt = Database::fetch_row($res_last_attempt);
+            $lp_item_view_id = $row_last_attempt[0];
+
+            $exercise = new Exercise($course_id);
+            $exercise->read($row_dates['exe_exo_id']);
+            $status = 'completed';
+
+            if (!empty($exercise->pass_percentage)) {
+                $status = 'failed';
+                $success = ExerciseLib::isSuccessExerciseResult(
+                    $score,
+                    $max_score,
+                    $exercise->pass_percentage
+                );
+                if ($success) {
+                    $status = 'passed';
+                }
+            }
+
+            $sql = "UPDATE $TBL_LP_ITEM_VIEW SET
+                        status = '$status',
+                        score = $score,
+                        total_time = $duration
+                    WHERE iid = $lp_item_view_id";
+            Database::query($sql);
+
+            $sql = "UPDATE $TBL_TRACK_EXERCICES SET
+                        orig_lp_item_view_id = $lp_item_view_id
+                    WHERE exe_id = ".$safe_exe_id;
+            Database::query($sql);
+        }
+    }
 }

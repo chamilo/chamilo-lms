@@ -310,65 +310,7 @@ if (!empty($_REQUEST['exeId']) &&
     $safe_exe_id = (int) $_REQUEST['exeId'];
 
     if (!empty($safe_id) && !empty($safe_item_id)) {
-        $sql = 'SELECT start_date, exe_date, exe_result, exe_weighting, exe_exo_id, exe_duration
-                FROM '.$TBL_TRACK_EXERCICES.'
-                WHERE exe_id = '.$safe_exe_id;
-        $res = Database::query($sql);
-        $row_dates = Database::fetch_array($res);
-
-        $duration = (int) $row_dates['exe_duration'];
-        $score = (float) $row_dates['exe_result'];
-        $max_score = (float) $row_dates['exe_weighting'];
-
-        $sql = "UPDATE $TBL_LP_ITEM SET
-                    max_score = '$max_score'
-                WHERE iid = $safe_item_id";
-        Database::query($sql);
-
-        $sql = "SELECT id FROM $TBL_LP_ITEM_VIEW
-                WHERE
-                    c_id = $course_id AND
-                    lp_item_id = $safe_item_id AND
-                    lp_view_id = ".$lp->get_view_id()."
-                ORDER BY id DESC
-                LIMIT 1";
-        $res_last_attempt = Database::query($sql);
-
-        if (Database::num_rows($res_last_attempt) && !api_is_invitee()) {
-            $row_last_attempt = Database::fetch_row($res_last_attempt);
-            $lp_item_view_id = $row_last_attempt[0];
-
-            $exercise = new Exercise(api_get_course_int_id());
-            $exercise->read($row_dates['exe_exo_id']);
-            $status = 'completed';
-
-            if (!empty($exercise->pass_percentage)) {
-                $status = 'failed';
-                $success = ExerciseLib::isSuccessExerciseResult(
-                    $score,
-                    $max_score,
-                    $exercise->pass_percentage
-                );
-                if ($success) {
-                    $status = 'passed';
-                }
-            }
-
-            $sql = "UPDATE $TBL_LP_ITEM_VIEW SET
-                        status = '$status',
-                        score = $score,
-                        total_time = $duration
-                    WHERE iid = $lp_item_view_id";
-            if ($debug) {
-                error_log($sql);
-            }
-            Database::query($sql);
-
-            $sql = "UPDATE $TBL_TRACK_EXERCICES SET
-                        orig_lp_item_view_id = $lp_item_view_id
-                    WHERE exe_id = ".$safe_exe_id;
-            Database::query($sql);
-        }
+        Exercise::saveExerciseInLp( $safe_item_id, $safe_exe_id);
     }
     if (intval($_GET['fb_type']) != EXERCISE_FEEDBACK_TYPE_END) {
         $src = 'blank.php?msg=exerciseFinished&'.api_get_cidreq(true, true, 'learnpath');

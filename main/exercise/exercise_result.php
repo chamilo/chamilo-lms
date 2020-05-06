@@ -10,8 +10,6 @@ use ChamiloSession as Session;
  * that exercise.
  * Then it shows the results on the screen.
  *
- * @package chamilo.exercise
- *
  * @author Olivier Brouckaert, main author
  * @author Roan Embrechts, some refactoring
  * @author Julio Montoya switchable fill in blank option added
@@ -189,6 +187,12 @@ ExerciseLib::displayQuestionListByAttempt(
     $saveResults,
     $remainingMessage
 );
+
+// Save here LP status
+if (!empty($learnpath_id) && $saveResults) {
+    // Save attempt in lp
+    Exercise::saveExerciseInLp($learnpath_item_id, $exe_id);
+}
 
 //Unset session for clock time
 ExerciseLib::exercise_time_control_delete(

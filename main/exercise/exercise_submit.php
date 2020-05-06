@@ -679,7 +679,6 @@ if ($formSent && isset($_POST)) {
                             []
                         );
                     }
-                    //END of saving and qualifying
                 }
             }
         }

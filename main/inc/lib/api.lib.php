@@ -7099,7 +7099,9 @@ function api_browser_support($format = '')
         }
     } elseif ($format == 'pdf') {
         // native pdf support
-        if ($current_browser == 'Chrome' && $current_majorver >= 6) {
+        if (($current_browser == 'Chrome' && $current_majorver >= 6) ||
+            ('Firefox' === $current_browser && $current_majorver >= 15)
+        ) {
             $result[$format] = true;
 
             return true;

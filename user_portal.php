@@ -53,7 +53,7 @@ if (array_key_exists('action', $_REQUEST)) {
             ) {
                 $userRelSession = SessionManager::getUserSession($userId, $_REQUEST['session_id']);
                 if ($userRelSession) {
-                    $value = isset($_REQUEST['value']) ? (int)$_REQUEST['value'] : '';
+                    $value = isset($_REQUEST['value']) ? (int) $_REQUEST['value'] : '';
                     $table = Database::get_main_table(TABLE_MAIN_SESSION_USER);
                     $sql = "UPDATE $table SET collapsed = $value WHERE id = ".$userRelSession['id'];
                     Database::query($sql);

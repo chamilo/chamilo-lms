@@ -149,12 +149,12 @@ EOT;
 
     /**
      * <div class="col-md-12">
-    <div class="row">
-    <fieldset>
-    {content}
-    </fieldset>
-    </div>
-    </div>
+     * <div class="row">
+     * <fieldset>
+     * {content}
+     * </fieldset>
+     * </div>
+     * </div>
      */
 
 

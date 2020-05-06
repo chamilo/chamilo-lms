@@ -1920,7 +1920,9 @@ class IndexManager
 
                                             $course_session['extrafields'] = CourseManager::getExtraFieldsToBePresented($course['real_id']);
 
-                                            if (api_get_configuration_value('enable_unsubscribe_button_on_my_course_page')
+                                            if (api_get_configuration_value(
+                                                'enable_unsubscribe_button_on_my_course_page'
+                                                )
                                                 && '1' === $course['unsubscribe']
                                             ) {
                                                 $course_session['unregister_button'] =

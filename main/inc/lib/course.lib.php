@@ -2027,7 +2027,7 @@ class CourseManager
         $students = [];
 
         $limitCondition = '';
-        if (!empty($start) && !empty($limit)) {
+        if (isset($start) && isset($limit) && !empty($limit)) {
             $start = (int) $start;
             $limit = (int) $limit;
             $limitCondition = " LIMIT $start, $limit";
@@ -2038,7 +2038,7 @@ class CourseManager
             $select = 'count(u.id) as count';
         }
 
-        if ($sessionId == 0) {
+        if (empty($sessionId)) {
             if (empty($groupId)) {
                 // students directly subscribed to the course
                 $sql = "SELECT $select

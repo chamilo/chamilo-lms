@@ -1,4 +1,5 @@
 <?php
+
 /* For licensing terms, see /license.txt */
 
 use Chamilo\CoreBundle\Entity\Course;
@@ -566,7 +567,6 @@ class Tracking
 
                         // Remove "NaN" if any (@todo: locate the source of these NaN)
                         $time = str_replace('NaN', '00'.$h.'00\'00"', $time);
-
                         if ($row['item_type'] !== 'dir') {
                             if (!$is_allowed_to_edit && $result_disabled_ext_all) {
                                 $view_score = Display::return_icon(
@@ -600,7 +600,7 @@ class Tracking
                             }
 
                             $action = null;
-                            if ($type == 'classic') {
+                            if ($type === 'classic') {
                                 $action = '<td></td>';
                             }
                             $timeRow = '<td class="lp_time" colspan="2">'.$time.'</td>';
@@ -891,7 +891,7 @@ class Tracking
                     }
 
                     $action = null;
-                    if ($type == 'classic') {
+                    if ($type === 'classic') {
                         $action = '<td></td>';
                     }
 
@@ -980,7 +980,7 @@ class Tracking
                             }
 
                             $scoreItem = null;
-                            if ($row['item_type'] == 'quiz') {
+                            if ($row['item_type'] === 'quiz') {
                                 if (!$is_allowed_to_edit && $result_disabled_ext_all) {
                                     $scoreItem .= Display::return_icon(
                                         'invisible.gif',
@@ -1039,12 +1039,10 @@ class Tracking
                     if ($extend_this_attempt || $extend_all) {
                         $list1 = learnpath::get_iv_interactions_array($row['iv_id'], $course_id);
                         foreach ($list1 as $id => $interaction) {
+                            $oddclass = 'row_even';
                             if (($counter % 2) == 0) {
                                 $oddclass = 'row_odd';
-                            } else {
-                                $oddclass = 'row_even';
                             }
-
                             $timeRow = '<td class="lp_time">'.$interaction['time'].'</td>';
                             if ($hideTime) {
                                 $timeRow = '';
@@ -1065,13 +1063,12 @@ class Tracking
                                </tr>';
                             $counter++;
                         }
-                        $list2 = learnpath::get_iv_objectives_array($row['iv_id'], $course_id);
 
+                        $list2 = learnpath::get_iv_objectives_array($row['iv_id'], $course_id);
                         foreach ($list2 as $id => $interaction) {
+                            $oddclass = 'row_even';
                             if (($counter % 2) == 0) {
                                 $oddclass = 'row_odd';
-                            } else {
-                                $oddclass = 'row_even';
                             }
                             $output .= '<tr class="'.$oddclass.'">
                                     <td></td>

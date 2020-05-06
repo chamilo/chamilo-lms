@@ -1,12 +1,11 @@
 <?php
+
 /* For licensing terms, see /license.txt */
 
 use ChamiloSession as Session;
 
 /**
  * Script that displays an error message when no content could be loaded.
- *
- * @package chamilo.learnpath
  *
  * @author Yannick Warnier <ywarnier@beeznest.org>
  */
@@ -44,7 +43,7 @@ $list = $learnPath->get_toc();
 $dir = false;
 
 foreach ($list as $toc) {
-    if ($toc['id'] == $lpItemId && $toc['type'] == 'dir') {
+    if ($toc['id'] == $lpItemId && $toc['type'] === 'dir') {
         $dir = true;
     }
 }

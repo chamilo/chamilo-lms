@@ -441,7 +441,7 @@ class CoursesAndSessionsCatalog
         }
 
         $categoryFilter = '';
-        if ($categoryCode === 'ALL') {
+        if ($categoryCode === 'ALL' || empty($categoryCode)) {
             // Nothing to do
         } elseif ($categoryCode === 'NONE') {
             $categoryFilter = ' AND category_code = "" ';
@@ -498,6 +498,7 @@ class CoursesAndSessionsCatalog
                        ";
             }
         }
+        //var_dump($sql);
         $result = Database::query($sql);
         $courses = [];
         while ($row = Database::fetch_array($result)) {

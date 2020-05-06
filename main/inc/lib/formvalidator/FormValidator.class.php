@@ -136,7 +136,11 @@ EOT;
             .form_list {
                 display: grid;
                 grid-template-columns:  repeat(auto-fill, minmax(300px, 1fr));;
-                grid-gap: 50px;
+                grid-gap: 10px 30px;
+                gap: 10px 30px;
+            }
+            .form_list .input-group {
+                display:block;
             }
         </style>
         <form{attributes}>
@@ -146,17 +150,6 @@ EOT;
         {hidden}
         </form>';
     }
-
-    /**
-     * <div class="col-md-12">
-    <div class="row">
-    <fieldset>
-    {content}
-    </fieldset>
-    </div>
-    </div>
-     */
-
 
     /**
      * @todo this function should be added in the element class

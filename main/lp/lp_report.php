@@ -1,4 +1,5 @@
 <?php
+
 /* For licensing terms, see /license.txt */
 
 /**
@@ -14,7 +15,7 @@ if (!$isAllowedToEdit) {
 
 $lpTable = Database::get_course_table(TABLE_LP_MAIN);
 
-$lpId = isset($_GET['lp_id']) ? intval($_GET['lp_id']) : false;
+$lpId = isset($_GET['lp_id']) ? (int) $_GET['lp_id'] : false;
 $export = isset($_GET['export']) ? true : false;
 
 if (empty($lpId)) {
@@ -145,7 +146,6 @@ $template->assign('course_code', api_get_course_id());
 $template->assign('lp_id', $lpId);
 $template->assign('show_email', $showEmail === 'true');
 $template->assign('export', (int) $export);
-
 $layout = $template->get_template('learnpath/report.tpl');
 
 $template->assign('header', $lpInfo['name']);
@@ -160,8 +160,6 @@ $template->assign('content', $result);
 if ($export) {
     $pdfParams = [
         'filename' => get_lang('StudentScore').'_'.api_get_local_time(),
-        //'pdf_title' => $title,
-        //'course_code' => $course_code
     ];
     $pdf = new PDF('A4', 'P', $pdfParams);
     $pdf->html_to_pdf_with_template(

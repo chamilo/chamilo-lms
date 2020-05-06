@@ -87,17 +87,16 @@ if (isset($_POST['action']) && $_POST['action'] && isset($_POST['id']) && is_arr
     }
 
     $exportList = [];
-
     foreach ($_POST['id'] as $value) {
         $surveyData = SurveyManager::get_survey($value);
         if (empty($surveyData)) {
             continue;
         }
-        $surveyData['title'] = strip_tags($surveyData['title']);
+        $surveyData['title'] = trim(strip_tags($surveyData['title']));
 
         switch ($action) {
             case 'export_all':
-                $filename = 'survey_results_'.$value.'.xlsx';
+                $filename = $surveyData['code'].'.xlsx';
                 $exportList[] = @SurveyUtil::export_complete_report_xls($surveyData, $filename, 0, true);
                 break;
             case 'send_to_tutors':

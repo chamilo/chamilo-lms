@@ -20,13 +20,6 @@ if (!$is_allowedToTrack) {
 }
 
 $action = isset($_GET['action']) ? $_GET['action'] : null;
-
-$htmlHeadXtra[] = '<script>
-    $(function ()
-
-    });
-</script>';
-
 $lps = learnpath::getLpList($courseId);
 Session::write('lps', $lps);
 
@@ -432,7 +425,10 @@ $actionsRight = Display::url(
 );
 
 // Create a sortable table with user-data
+$parameters = [];
 $parameters['sec_token'] = Security::get_token();
+$parameters['cidReq'] = api_get_course_id();
+$parameters['id_session'] = api_get_session_id();
 
 $table = new SortableTable(
     'lps',

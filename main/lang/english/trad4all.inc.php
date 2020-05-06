@@ -8516,4 +8516,5 @@ $SurveyXNotMultiplicated = "Survey %s not multiplicated";
 $ExportSurveyResults = "Export survey results";
 $PointAverage = "Average score";
 $TotalScore = "Score Sum";
+$ExportResults = "Export results";
 ?>

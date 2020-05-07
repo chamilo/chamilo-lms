@@ -480,7 +480,6 @@ if (api_get_setting('allow_terms_conditions') === 'true' && $user_already_regist
     $tool_name = get_lang('TermsAndConditions');
 }
 
-
 $home = api_get_path(SYS_APP_PATH).'home/';
 if (api_is_multiple_url_enabled()) {
     $access_url_id = api_get_current_access_url_id();

@@ -35,7 +35,7 @@ if (!$skillIssue) {
 }
 
 $skillRepo = $entityManager->getRepository('ChamiloCoreBundle:Skill');
-$skillLevelRepo = $entityManager->getRepository('ChamiloSkillBundle:Level');
+$skillLevelRepo = $entityManager->getRepository('ChamiloCoreBundle:Level');
 
 $user = $skillIssue->getUser();
 $skill = $skillIssue->getSkill();

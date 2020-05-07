@@ -15,7 +15,6 @@ return [
     FOS\JsRoutingBundle\FOSJsRoutingBundle::class => ['all' => true],
     FOS\RestBundle\FOSRestBundle::class => ['all' => true],
     Chamilo\CoreBundle\ChamiloCoreBundle::class => ['all' => true],
-    Chamilo\SkillBundle\ChamiloSkillBundle::class => ['all' => true],
     Chamilo\CourseBundle\ChamiloCourseBundle::class => ['all' => true],
     Chamilo\TicketBundle\ChamiloTicketBundle::class => ['all' => true],
     Chamilo\GraphQlBundle\ChamiloGraphQlBundle::class => ['all' => true],

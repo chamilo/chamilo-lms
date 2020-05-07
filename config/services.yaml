@@ -83,6 +83,24 @@ services:
         public: true
 
 
+    League\Flysystem\MountManager: '@oneup_flysystem.mount_manager'
+
+    # Voters
+    # Group voter, checks if a user has permissions to do actions
+    chamilo_course.security.authorization.voter.group_voter:
+        class: Chamilo\CoreBundle\Security\Authorization\Voter\GroupVoter
+        arguments:
+            - '@doctrine.orm.entity_manager'
+            - '@Chamilo\CoreBundle\Repository\CourseRepository'
+            - '@Chamilo\CourseBundle\Repository\CGroupInfoRepository'
+            - '@security.authorization_checker'
+            - '@service_container'
+        public: false
+        tags:
+            - {name: security.voter}
+
+
+
 sylius_settings:
     driver: doctrine/orm
 

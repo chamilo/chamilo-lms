@@ -373,12 +373,12 @@ switch ($action) {
             exit;
         }
         $em = Database::getManager();
-        $skills = $em->getRepository('ChamiloSkillBundle:SkillRelCourse')->findBy(
+        $skills = $em->getRepository('ChamiloCoreBundle:SkillRelCourse')->findBy(
             ['course' => $courseId, 'session' => $sessionId]
         );
 
         $returnSkills = [];
-        /** @var \Chamilo\SkillBundle\Entity\SkillRelCourse $skill */
+        /** @var \Chamilo\CoreBundle\Entity\SkillRelCourse $skill */
         foreach ($skills as $skill) {
             $returnSkills[] = [
                 'id' => $skill->getSkill()->getId(),
@@ -421,8 +421,8 @@ switch ($action) {
             }
 
             $session = $em->getRepository('ChamiloCoreBundle:Session')->find($sessionId);
-            /** @var \Chamilo\SkillBundle\Entity\SkillRelItem $skillRelItem */
-            $skillRelItem = $em->getRepository('ChamiloSkillBundle:SkillRelItem')->findOneBy(
+            /** @var \Chamilo\CoreBundle\Entity\SkillRelItem $skillRelItem */
+            $skillRelItem = $em->getRepository('ChamiloCoreBundle:SkillRelItem')->findOneBy(
                 ['itemId' => $itemId, 'itemType' => $typeId, 'skill' => $skillId]
             );
 
@@ -431,13 +431,13 @@ switch ($action) {
                     'user' => $userId,
                     'skillRelItem' => $skillRelItem,
                 ];
-                $skillRelItemRelUser = $em->getRepository('ChamiloSkillBundle:SkillRelItemRelUser')->findOneBy($criteria);
+                $skillRelItemRelUser = $em->getRepository('ChamiloCoreBundle:SkillRelItemRelUser')->findOneBy($criteria);
                 if ($skillRelItemRelUser) {
                     $em->remove($skillRelItemRelUser);
                     $em->flush();
                     $skillRelItemRelUser = null;
                 } else {
-                    $skillRelItemRelUser = new Chamilo\SkillBundle\Entity\SkillRelItemRelUser();
+                    $skillRelItemRelUser = new Chamilo\CoreBundle\Entity\SkillRelItemRelUser();
                     $skillRelItemRelUser
                         ->setUser($user)
                         ->setSkillRelItem($skillRelItem)

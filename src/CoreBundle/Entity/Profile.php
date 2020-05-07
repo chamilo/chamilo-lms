@@ -2,7 +2,7 @@
 
 /* For licensing terms, see /license.txt */
 
-namespace Chamilo\SkillBundle\Entity;
+namespace Chamilo\CoreBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 
@@ -36,7 +36,7 @@ class Profile
     protected $skills;
 
     /**
-     * @ORM\OneToMany(targetEntity="Chamilo\SkillBundle\Entity\Level", mappedBy="profile", cascade={"persist"})
+     * @ORM\OneToMany(targetEntity="Chamilo\CoreBundle\Entity\Level", mappedBy="profile", cascade={"persist"})
      * @ORM\OrderBy({"position" = "ASC"})
      */
     protected $levels;

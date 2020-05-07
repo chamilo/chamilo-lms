@@ -36,9 +36,7 @@ class Database
         $config->setEntityNamespaces(
             [
                 'ChamiloCoreBundle' => 'Chamilo\CoreBundle\Entity',
-                'ChamiloCoreBundle' => 'Chamilo\CoreBundle\Entity',
                 'ChamiloCourseBundle' => 'Chamilo\CourseBundle\Entity',
-                'ChamiloSkillBundle' => 'Chamilo\SkillBundle\Entity',
                 'ChamiloTicketBundle' => 'Chamilo\TicketBundle\Entity',
                 'ChamiloPluginBundle' => 'Chamilo\PluginBundle\Entity',
             ]

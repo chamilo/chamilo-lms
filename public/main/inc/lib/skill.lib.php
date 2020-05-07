@@ -3,9 +3,10 @@
 
 use Chamilo\CoreBundle\Component\Utils\ChamiloApi;
 use Chamilo\CoreBundle\Entity\Skill as SkillEntity;
+use Chamilo\CoreBundle\Entity\SkillRelItemRelUser;
 use Chamilo\CoreBundle\Entity\SkillRelUser as SkillRelUserEntity;
-use Chamilo\SkillBundle\Entity\SkillRelCourse;
-use Chamilo\SkillBundle\Entity\SkillRelItem;
+use Chamilo\CoreBundle\Entity\SkillRelCourse;
+use Chamilo\CoreBundle\Entity\SkillRelItem;
 use Chamilo\CoreBundle\Entity\User;
 use Fhaculty\Graph\Graph;
 use Fhaculty\Graph\Vertex;
@@ -2482,9 +2483,9 @@ class Skill extends Model
     }
 
     /**
-     * @param \Chamilo\SkillBundle\Entity\SkillRelItem        $skillRelItem
-     * @param \Chamilo\SkillBundle\Entity\SkillRelItemRelUser $skillRelItemRelUser
-     * @param bool                                            $addHeader
+     * @param SkillRelItem        $skillRelItem
+     * @param SkillRelItemRelUser $skillRelItemRelUser
+     * @param bool                $addHeader
      *
      * @return string
      */
@@ -2522,7 +2523,7 @@ class Skill extends Model
         $allowSkillInTools = api_get_configuration_value('allow_skill_rel_items');
         if ($allowSkillInTools && !empty($typeId) && !empty($itemId) && !empty($userId)) {
             $em = Database::getManager();
-            $items = $em->getRepository('ChamiloSkillBundle:SkillRelItem')->findBy(
+            $items = $em->getRepository('ChamiloCoreBundle:SkillRelItem')->findBy(
                 ['itemId' => $itemId, 'itemType' => $typeId]
             );
 
@@ -2539,7 +2540,7 @@ class Skill extends Model
                     'user' => $userId,
                     'skillRelItem' => $skillRelItem,
                 ];
-                $skillRelItemRelUser = $em->getRepository('ChamiloSkillBundle:SkillRelItemRelUser')->findOneBy($criteria);
+                $skillRelItemRelUser = $em->getRepository('ChamiloCoreBundle:SkillRelItemRelUser')->findOneBy($criteria);
                 $skills .= self::getUserSkillStatusLabel($skillRelItem, $skillRelItemRelUser);
             }
 
@@ -2605,7 +2606,7 @@ class Skill extends Model
         $skillList = [];
         if (!empty($itemId)) {
             $em = Database::getManager();
-            $items = $em->getRepository('ChamiloSkillBundle:SkillRelItem')->findBy(
+            $items = $em->getRepository('ChamiloCoreBundle:SkillRelItem')->findBy(
                 ['itemId' => $itemId, 'itemType' => $typeId]
             );
             /** @var SkillRelItem $skillRelItem */
@@ -2649,7 +2650,7 @@ class Skill extends Model
 
         if ($allowSkillInTools) {
             $em = Database::getManager();
-            $skills = $em->getRepository('ChamiloSkillBundle:SkillRelItem')->findBy(
+            $skills = $em->getRepository('ChamiloCoreBundle:SkillRelItem')->findBy(
                 ['courseId' => $courseId, 'sessionId' => $sessionId]
             );
         }
@@ -2742,7 +2743,7 @@ class Skill extends Model
         $skills = [];
         if ($allowSkillInTools) {
             $em = Database::getManager();
-            $skills = $em->getRepository('ChamiloSkillBundle:SkillRelItem')->findBy(
+            $skills = $em->getRepository('ChamiloCoreBundle:SkillRelItem')->findBy(
                 ['itemId' => $itemId, 'itemType' => $typeId]
             );
         }
@@ -2785,7 +2786,7 @@ class Skill extends Model
 
             $em = Database::getManager();
             // Delete old ones
-            $items = $em->getRepository('ChamiloSkillBundle:SkillRelItem')->findBy(
+            $items = $em->getRepository('ChamiloCoreBundle:SkillRelItem')->findBy(
                 ['itemId' => $itemId, 'itemType' => $typeId]
             );
 
@@ -2824,7 +2825,7 @@ class Skill extends Model
             $skills = (array) $form->getSubmitValue('skills');
 
             // Delete old ones
-            $items = $em->getRepository('ChamiloSkillBundle:SkillRelItem')->findBy(
+            $items = $em->getRepository('ChamiloCoreBundle:SkillRelItem')->findBy(
                 ['itemId' => $itemId, 'itemType' => $typeId]
             );
             if (!empty($items)) {
@@ -2910,7 +2911,7 @@ class Skill extends Model
         }
 
         // Delete old ones
-        $items = $em->getRepository('ChamiloSkillBundle:SkillRelCourse')->findBy(
+        $items = $em->getRepository('ChamiloCoreBundle:SkillRelCourse')->findBy(
             ['course' => $courseId, 'session' => $sessionId]
         );
 
@@ -2995,7 +2996,7 @@ class Skill extends Model
         if (!empty($result)) {
             return false;
         }
-        $skillLevelRepo = $entityManager->getRepository('ChamiloSkillBundle:Level');
+        $skillLevelRepo = $entityManager->getRepository('ChamiloCoreBundle:Level');
 
         $skillUser = new SkillRelUserEntity();
         $skillUser->setUser($user);

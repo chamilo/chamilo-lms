@@ -10,7 +10,7 @@ $cidReset = true;
 require_once __DIR__.'/../inc/global.inc.php';
 api_protect_admin_script();
 $em = Database::getManager();
-$profiles = $em->getRepository('ChamiloSkillBundle:Profile')->findAll();
+$profiles = $em->getRepository('ChamiloCoreBundle:Profile')->findAll();
 $list = $em->getRepository('ChamiloCoreBundle:Skill')->findAll();
 
 $listAction = api_get_self();
@@ -62,7 +62,7 @@ switch ($action) {
 
         if ($form->validate()) {
             $values = $form->exportValues();
-            $profile = $em->getRepository('ChamiloSkillBundle:Profile')->find($values['profile_id']);
+            $profile = $em->getRepository('ChamiloCoreBundle:Profile')->find($values['profile_id']);
             if ($profile) {
                 $item->setProfile($profile);
                 $em->persist($item);

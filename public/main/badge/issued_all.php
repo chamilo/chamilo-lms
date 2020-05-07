@@ -37,7 +37,7 @@ if (!$user || !$skill) {
 
 $skillRepo = $em->getRepository('ChamiloCoreBundle:Skill');
 $skillUserRepo = $em->getRepository('ChamiloCoreBundle:SkillRelUser');
-$skillLevelRepo = $em->getRepository('ChamiloSkillBundle:Level');
+$skillLevelRepo = $em->getRepository('ChamiloCoreBundle:Level');
 
 $userSkills = $skillUserRepo->findBy([
     'user' => $user,

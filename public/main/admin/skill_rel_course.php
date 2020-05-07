@@ -1,7 +1,7 @@
 <?php
 /* For licensing terms, see /license.txt */
 
-use Chamilo\SkillBundle\Entity\SkillRelCourse;
+use Chamilo\CoreBundle\Entity\SkillRelCourse;
 
 $cidReset = true;
 require_once __DIR__.'/../inc/global.inc.php';
@@ -36,7 +36,7 @@ $form->addHeader(get_lang('Add skills').$sessionName);
 
 $skillList = [];
 $em = Database::getManager();
-$items = $em->getRepository('ChamiloSkillBundle:SkillRelCourse')->findBy(
+$items = $em->getRepository('ChamiloCoreBundle:SkillRelCourse')->findBy(
     ['course' => $courseId, 'session' => $sessionId]
 );
 /** @var SkillRelCourse $skillRelCourse */

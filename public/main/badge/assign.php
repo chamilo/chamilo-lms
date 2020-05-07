@@ -29,7 +29,7 @@ $entityManager = Database::getManager();
 $skillManager = new SkillManager();
 $skillRepo = $entityManager->getRepository('ChamiloCoreBundle:Skill');
 $skillRelSkill = $entityManager->getRepository('ChamiloCoreBundle:SkillRelSkill');
-$skillLevelRepo = $entityManager->getRepository('ChamiloSkillBundle:Level');
+$skillLevelRepo = $entityManager->getRepository('ChamiloCoreBundle:Level');
 $skillUserRepo = $entityManager->getRepository('ChamiloCoreBundle:SkillRelUser');
 
 $skillLevels = api_get_configuration_value('skill_levels_names');

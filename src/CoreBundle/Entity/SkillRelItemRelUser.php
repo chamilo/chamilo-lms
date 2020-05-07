@@ -2,7 +2,7 @@
 
 /* For licensing terms, see /license.txt */
 
-namespace Chamilo\SkillBundle\Entity;
+namespace Chamilo\CoreBundle\Entity;
 
 use Chamilo\CoreBundle\Entity\User;
 use Doctrine\ORM\Mapping as ORM;
@@ -30,7 +30,7 @@ class SkillRelItemRelUser
     /**
      * @var SkillRelItem
      *
-     * @ORM\ManyToOne(targetEntity="Chamilo\SkillBundle\Entity\SkillRelItem", cascade={"persist"})
+     * @ORM\ManyToOne(targetEntity="Chamilo\CoreBundle\Entity\SkillRelItem", cascade={"persist"})
      * @ORM\JoinColumn(name="skill_rel_item_id", referencedColumnName="id", nullable=false)
      */
     protected $skillRelItem;

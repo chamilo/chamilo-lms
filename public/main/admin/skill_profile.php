@@ -1,8 +1,8 @@
 <?php
 /* For licensing terms, see /license.txt */
 
-use Chamilo\SkillBundle\Entity\Level;
-use Chamilo\SkillBundle\Entity\Profile;
+use Chamilo\CoreBundle\Entity\Level;
+use Chamilo\CoreBundle\Entity\Profile;
 
 /**
  * Add a skill Profile.
@@ -12,7 +12,7 @@ require_once __DIR__.'/../inc/global.inc.php';
 
 api_protect_admin_script();
 $em = Database::getManager();
-$list = $em->getRepository('ChamiloSkillBundle:Profile')->findAll();
+$list = $em->getRepository('ChamiloCoreBundle:Profile')->findAll();
 
 $listAction = api_get_self();
 
@@ -25,7 +25,7 @@ $id = isset($_GET['id']) ? $_GET['id'] : '';
 
 $item = null;
 if (!empty($id)) {
-    $item = $em->getRepository('ChamiloSkillBundle:Profile')->find($id);
+    $item = $em->getRepository('ChamiloCoreBundle:Profile')->find($id);
     if (!$item) {
         api_not_allowed();
     }
@@ -52,7 +52,7 @@ $tpl = new Template($action);
 switch ($action) {
     case 'move_up':
         /** @var Level $item */
-        $item = $em->getRepository('ChamiloSkillBundle:Level')->find($_GET['level_id']);
+        $item = $em->getRepository('ChamiloCoreBundle:Level')->find($_GET['level_id']);
         if ($item) {
             $position = $item->getPosition();
             if (!empty($position)) {
@@ -68,7 +68,7 @@ switch ($action) {
         break;
     case 'move_down':
         /** @var Level $item */
-        $item = $em->getRepository('ChamiloSkillBundle:Level')->find($_GET['level_id']);
+        $item = $em->getRepository('ChamiloCoreBundle:Level')->find($_GET['level_id']);
         if ($item) {
             $position = $item->getPosition();
             $item->setPosition($position + 1);

@@ -6,7 +6,9 @@ namespace Chamilo\CoreBundle\Entity;
 
 use ApiPlatform\Core\Annotation\ApiFilter;
 use ApiPlatform\Core\Annotation\ApiResource;
+use ApiPlatform\Core\Annotation\ApiSubresource;
 use ApiPlatform\Core\Bridge\Doctrine\Orm\Filter\SearchFilter;
+use ApiPlatform\Core\Bridge\Doctrine\Orm\Filter\OrderFilter;
 use ApiPlatform\Core\Serializer\Filter\PropertyFilter;
 use Chamilo\CoreBundle\Entity\Resource\AbstractResource;
 use Chamilo\CoreBundle\Entity\Resource\ResourceInterface;
@@ -31,6 +33,7 @@ use Symfony\Component\Validator\Constraints as Assert;
  *
  * @ApiFilter(SearchFilter::class, properties={"title": "partial", "code": "partial"})
  * @ApiFilter(PropertyFilter::class)
+ * @ApiFilter(OrderFilter::class)
  *
  * @ORM\HasLifecycleCallbacks
  * @ORM\Table(
@@ -55,7 +58,7 @@ class Course extends AbstractResource implements ResourceInterface
 
     /**
      * @var int
-     * @Groups({"course:read", "list"})
+     * @Groups({"course:read"})
      * @ORM\Column(name="id", type="integer", nullable=false, unique=false)
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="AUTO")
@@ -63,16 +66,36 @@ class Course extends AbstractResource implements ResourceInterface
     protected $id;
 
     /**
-     * @var string the course title
-     * @Groups({"course:read", "course:write", "list"})
+     * @var string The course title
+     *
      * @Assert\NotBlank()
+     *
+     * @Groups({"course:read", "course:write"})
      *
      * @ORM\Column(name="title", type="string", length=250, nullable=true, unique=false)
      */
     protected $title;
 
     /**
+     * @var string
+     * @Assert\NotBlank()
+     *
+     * @Groups({"course:read"})
+     *
+     * @Gedmo\Slug(
+     *      fields={"title"},
+     *      updatable = false,
+     *      unique = true,
+     *      style = "upper"
+     * )
+     * @ORM\Column(name="code", type="string", length=40, nullable=false, unique=true)
+     */
+    protected $code;
+
+    /**
      * @var CourseRelUser[]|ArrayCollection
+     *
+     * @ApiSubresource()
      *
      * "orphanRemoval" is needed to delete the CourseRelUser relation
      * in the CourseAdmin class. The setUsers, getUsers, removeUsers and
@@ -122,7 +145,7 @@ class Course extends AbstractResource implements ResourceInterface
     protected $currentUrl;
 
     /**
-     * @ORM\OneToMany(targetEntity="Chamilo\SkillBundle\Entity\SkillRelCourse", mappedBy="course", cascade={"persist", "remove"})
+     * @ORM\OneToMany(targetEntity="Chamilo\CoreBundle\Entity\SkillRelCourse", mappedBy="course", cascade={"persist", "remove"})
      */
     protected $skills;
 
@@ -183,21 +206,6 @@ class Course extends AbstractResource implements ResourceInterface
 
     /**
      * @var string
-     * @Groups({"course:read", "list"})
-     * @Assert\NotBlank()
-     *
-     * @Gedmo\Slug(
-     *      fields={"title"},
-     *      updatable = false,
-     *      unique = true,
-     *      style = "upper"
-     * )
-     * @ORM\Column(name="code", type="string", length=40, nullable=false, unique=true)
-     */
-    protected $code;
-
-    /**
-     * @var string
      *
      * @ORM\Column(name="directory", type="string", length=40, nullable=true, unique=false)
      */
@@ -226,8 +234,8 @@ class Course extends AbstractResource implements ResourceInterface
     protected $category;
 
     /**
-     * @var int
-     * @Groups({"course:read", "list"})
+     * @var int Course visibility
+     * @Groups({"course:read", "course:write"})
      * @Assert\NotBlank()
      *
      * @ORM\Column(name="visibility", type="integer", nullable=true, unique=false)
@@ -257,6 +265,7 @@ class Course extends AbstractResource implements ResourceInterface
 
     /**
      * @var string
+     *
      * @Groups({"course:read", "list"})
      * @ORM\Column(name="department_name", type="string", length=30, nullable=true, unique=false)
      */

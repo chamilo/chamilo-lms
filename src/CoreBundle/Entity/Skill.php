@@ -6,9 +6,9 @@ namespace Chamilo\CoreBundle\Entity;
 
 use ApiPlatform\Core\Annotation\ApiResource;
 use Chamilo\CoreBundle\Component\Utils\ChamiloApi;
-use Chamilo\SkillBundle\Entity\Profile;
-use Chamilo\SkillBundle\Entity\SkillRelCourse;
-use Chamilo\SkillBundle\Entity\SkillRelItem;
+use Chamilo\CoreBundle\Entity\Profile;
+use Chamilo\CoreBundle\Entity\SkillRelCourse;
+use Chamilo\CoreBundle\Entity\SkillRelItem;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Mapping\Annotation as Gedmo;
@@ -30,7 +30,7 @@ class Skill
     public const STATUS_ENABLED = 1;
 
     /**
-     * @ORM\ManyToOne(targetEntity="Chamilo\SkillBundle\Entity\Profile", inversedBy="skills")
+     * @ORM\ManyToOne(targetEntity="Chamilo\CoreBundle\Entity\Profile", inversedBy="skills")
      * @ORM\JoinColumn(name="profile_id", referencedColumnName="id")
      */
     protected $profile;
@@ -41,12 +41,12 @@ class Skill
     protected $issuedSkills;
 
     /**
-     * @ORM\OneToMany(targetEntity="Chamilo\SkillBundle\Entity\SkillRelItem", mappedBy="skill", cascade={"persist"}).
+     * @ORM\OneToMany(targetEntity="Chamilo\CoreBundle\Entity\SkillRelItem", mappedBy="skill", cascade={"persist"}).
      */
     protected $items;
 
     /**
-     * @ORM\OneToMany(targetEntity="Chamilo\SkillBundle\Entity\SkillRelCourse", mappedBy="skill", cascade={"persist"}).
+     * @ORM\OneToMany(targetEntity="Chamilo\CoreBundle\Entity\SkillRelCourse", mappedBy="skill", cascade={"persist"}).
      */
     protected $courses;
 

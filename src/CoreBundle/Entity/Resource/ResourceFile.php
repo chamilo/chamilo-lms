@@ -78,6 +78,7 @@ class ResourceFile
     /**
      * @var string
      *
+     * @Groups({"resource_file:read", "document:read"})
      * @ORM\Column(type="text", nullable=true)
      */
     protected $mimeType;
@@ -92,6 +93,7 @@ class ResourceFile
     /**
      * @var string
      *
+     * @Groups({"resource_file:read", "document:read"})
      * @ORM\Column(type="simple_array", nullable=true)
      */
     protected $dimensions;

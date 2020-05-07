@@ -4,7 +4,6 @@
 
 namespace Chamilo\CoreBundle\Entity;
 
-use Chamilo\SkillBundle\Entity\Level;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Criteria;
 use Doctrine\ORM\Mapping as ORM;
@@ -95,7 +94,7 @@ class SkillRelUser
     /**
      * @var Level
      *
-     * @ORM\ManyToOne(targetEntity="Chamilo\SkillBundle\Entity\Level")
+     * @ORM\ManyToOne(targetEntity="Chamilo\CoreBundle\Entity\Level")
      * @ORM\JoinColumn(name="acquired_level", referencedColumnName="id")
      */
     protected $acquiredLevel;

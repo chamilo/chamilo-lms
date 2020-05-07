@@ -6,6 +6,7 @@ namespace Chamilo\CoreBundle\Entity;
 
 use ApiPlatform\Core\Annotation\ApiFilter;
 use ApiPlatform\Core\Annotation\ApiResource;
+use ApiPlatform\Core\Annotation\ApiSubresource;
 use ApiPlatform\Core\Bridge\Doctrine\Orm\Filter\BooleanFilter;
 use ApiPlatform\Core\Bridge\Doctrine\Orm\Filter\SearchFilter;
 use Chamilo\CoreBundle\Entity\Resource\ResourceNode;
@@ -59,7 +60,7 @@ class User implements UserInterface, EquatableInterface
 
     /**
      * @var int
-     * @Groups({"user:read", "list"})
+     * @Groups({"user:read"})
      * @ORM\Column(name="id", type="integer")
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="AUTO")
@@ -143,7 +144,7 @@ class User implements UserInterface, EquatableInterface
 
     /**
      * @var string
-     *
+     * @Groups({"user:read", "user:write"})
      * @ORM\Column(name="timezone", type="string", length=64)
      */
     protected $timezone;
@@ -174,14 +175,14 @@ class User implements UserInterface, EquatableInterface
 
     /**
      * @var bool
-     *
+     * @Groups({"user:read", "user:write"})
      * @ORM\Column(name="enabled", type="boolean")
      */
     protected $enabled;
 
     /**
      * @var bool
-     *
+     * @Groups({"user:read", "user:write"})
      * @ORM\Column(name="expired", type="boolean")
      */
     protected $expired;
@@ -202,21 +203,21 @@ class User implements UserInterface, EquatableInterface
 
     /**
      * @var \DateTime
-     *
+     * @Groups({"user:read", "user:write"})
      * @ORM\Column(name="expires_at", type="datetime", nullable=true, unique=false)
      */
     protected $expiresAt;
 
     /**
      * @var string
-     *
+     * @Groups({"user:read", "user:write"})
      * @ORM\Column(name="phone", type="string", length=64, nullable=true, unique=false)
      */
     protected $phone;
 
     /**
      * @var string
-     *
+     * @Groups({"user:read", "user:write"})
      * @ORM\Column(name="address", type="string", length=250, nullable=true, unique=false)
      */
     protected $address;
@@ -233,7 +234,7 @@ class User implements UserInterface, EquatableInterface
 
     /**
      * @var \DateTime
-     *
+     * @Groups({"user:read", "user:write"})
      * @ORM\Column(name="last_login", type="datetime", nullable=true, unique=false)
      */
     protected $lastLogin;
@@ -254,6 +255,7 @@ class User implements UserInterface, EquatableInterface
     protected $passwordRequestedAt;
 
     /**
+     * @ApiSubresource()
      * @ORM\OneToMany(targetEntity="Chamilo\CoreBundle\Entity\CourseRelUser", mappedBy="user", orphanRemoval=true)
      */
     protected $courses;

@@ -7,6 +7,7 @@ namespace Chamilo\CourseBundle\Entity;
 use ApiPlatform\Core\Annotation\ApiFilter;
 use ApiPlatform\Core\Annotation\ApiResource;
 use ApiPlatform\Core\Bridge\Doctrine\Orm\Filter\SearchFilter;
+use ApiPlatform\Core\Bridge\Doctrine\Orm\Filter\OrderFilter;
 use ApiPlatform\Core\Serializer\Filter\PropertyFilter;
 use APY\DataGridBundle\Grid\Mapping as GRID;
 use Chamilo\CoreBundle\Entity\Course;
@@ -26,7 +27,8 @@ use Symfony\Component\Serializer\Annotation\Groups;
  *      denormalizationContext={"groups"={"document:write"}}
  * )
  * @ApiFilter(PropertyFilter::class)
- * @ApiFilter(SearchFilter::class, properties={"title": "partial", "course.code": "partial"})
+ * @ApiFilter(SearchFilter::class, properties={"title": "partial"})
+ * @ApiFilter(OrderFilter::class)
  *
  * @ORM\Table(
  *  name="c_document",

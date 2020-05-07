@@ -49,7 +49,7 @@ class Session
 
     /**
      * @var int
-     * @Groups({"session:read", "list"})
+     * @Groups({"session:read"})
      * @ORM\Column(name="id", type="integer", nullable=false, unique=false)
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="AUTO")
@@ -58,7 +58,7 @@ class Session
 
     /**
      * @ORM\OneToMany(
-     *     targetEntity="Chamilo\SkillBundle\Entity\SkillRelCourse", mappedBy="session", cascade={"persist", "remove"}
+     *     targetEntity="SkillRelCourse", mappedBy="session", cascade={"persist", "remove"}
      * )
      */
     protected $skills;
@@ -122,14 +122,14 @@ class Session
     /**
      * @var string
      * @Assert\NotBlank()
-     * @Groups({"session:read", "list"})
+     * @Groups({"session:read", "session:write"})
      * @ORM\Column(name="name", type="string", length=150, nullable=false, unique=false)
      */
     protected $name;
 
     /**
      * @var string
-     * @Groups({"session:read", "list"})
+     * @Groups({"session:read", "session:write"})
      *
      * @ORM\Column(name="description", type="text", nullable=true, unique=false)
      */
@@ -137,6 +137,7 @@ class Session
 
     /**
      * @var bool
+     * @Groups({"session:read", "session:write"})
      *
      * @ORM\Column(name="show_description", type="boolean", nullable=true)
      */
@@ -151,21 +152,21 @@ class Session
 
     /**
      * @var int
-     *
+     * @Groups({"session:read"})
      * @ORM\Column(name="nbr_courses", type="smallint", nullable=true, unique=false)
      */
     protected $nbrCourses;
 
     /**
      * @var int
-     *
+     * @Groups({"session:read"})
      * @ORM\Column(name="nbr_users", type="integer", nullable=true, unique=false)
      */
     protected $nbrUsers;
 
     /**
      * @var int
-     *
+     * @Groups({"session:read"})
      * @ORM\Column(name="nbr_classes", type="integer", nullable=true, unique=false)
      */
     protected $nbrClasses;
@@ -179,7 +180,7 @@ class Session
 
     /**
      * @var int
-     *
+     * @Groups({"session:read"})
      * @ORM\Column(name="visibility", type="integer", nullable=false, unique=false)
      */
     protected $visibility;
@@ -193,14 +194,14 @@ class Session
 
     /**
      * @var \DateTime
-     * @Groups({"session:read", "list"})
+     * @Groups({"session:read"})
      * @ORM\Column(name="display_start_date", type="datetime", nullable=true, unique=false)
      */
     protected $displayStartDate;
 
     /**
      * @var \DateTime
-     *
+     * @Groups({"session:read"})
      * @ORM\Column(name="display_end_date", type="datetime", nullable=true, unique=false)
      */
     protected $displayEndDate;
@@ -242,20 +243,23 @@ class Session
 
     /**
      * @var int
-     * @Groups({"session:read", "list"})
-     *         +\
+     * @Groups({"session:read"})
+     *
      * @ORM\Column(name="status", type="integer", nullable=false)
      */
     protected $status;
 
     /**
+     * @var User
+     * @Groups({"session:read", "session:write"})
+     *
      * @ORM\ManyToOne(targetEntity="Chamilo\CoreBundle\Entity\User", inversedBy="sessionAsGeneralCoach")
      * @ORM\JoinColumn(name="id_coach", referencedColumnName="id")
      */
     protected $generalCoach;
 
     /**
-     * @Groups({"session:read", "list"})
+     * @Groups({"session:read"})
      * @ORM\ManyToOne(targetEntity="Chamilo\CoreBundle\Entity\SessionCategory", inversedBy="session")
      * @ORM\JoinColumn(name="session_category_id", referencedColumnName="id")
      */

@@ -1,7 +1,0 @@
-{% extends '@ChamiloTheme/Layout/base-layout.html.twig' %}
-
-{# Edit the default chamilo template #}
-
-{% block page_content %}
-    {{ parent() }}
-{% endblock %}

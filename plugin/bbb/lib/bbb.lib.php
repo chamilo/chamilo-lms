@@ -1159,6 +1159,24 @@ class bbb
             array('status' => 0, 'closed_at' => api_get_utc_datetime()),
             array('id = ? ' => $id)
         );
+
+        // Update users with in_at y ou_at field equal
+        $roomTable = Database::get_main_table('plugin_bbb_room');
+        $conditions['where'] = ['meeting_id=? AND in_at=out_at' => [$id]];
+        $roomList = Database::select(
+            '*',
+            $roomTable,
+            $conditions
+        );
+
+        foreach ($roomList as $roomDB) {
+            $roomId = $roomDB['id'];
+            Database::update(
+                $roomTable,
+                ['out_at' => api_get_utc_datetime()],
+                ['id = ? ' => $roomId]
+            );
+        }
     }
 
     /**
@@ -1786,6 +1804,20 @@ class bbb
         );
 
         return $meetingList['count'];
+    }
+
+    /**
+     * Get active session in the all platform
+     */
+    public function getActiveSessions()
+    {
+        $meetingList = Database::select(
+            '*',
+            $this->table,
+            array('where' => array('status = ? AND access_url = ?' => array(1, $this->accessUrl)))
+        );
+
+        return $meetingList;
     }
 
     /**

@@ -117,8 +117,6 @@ class User implements UserInterface, EquatableInterface
 
     /**
      * @var string|null
-     * @Assert\NotBlank()
-     * @Assert\Length(max=4096)
      */
     protected $plainPassword;
 

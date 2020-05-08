@@ -169,7 +169,7 @@ if ($conferenceManager) {
                     $meetingBBB = $bbb->getMeetingInfo(
                         [
                             'meetingId' => $remoteId,
-                            'password' => $pass
+                            'password' => $pass,
                         ]
                     );
 
@@ -179,7 +179,7 @@ if ($conferenceManager) {
                         $params = [
                             'meetingId' => $meetingId,
                             //  -- REQUIRED - The unique id for the meeting
-                            'password' => $pass
+                            'password' => $pass,
                             //  -- REQUIRED - The moderator password for the meeting
                         ];
                         $meetingBBB = $bbb->getMeetingInfo($params);
@@ -194,7 +194,7 @@ if ($conferenceManager) {
                                 $roomTable,
                                 [
                                     'where' => [
-                                        'meeting_id = ? AND participant_id = ?' => [$meetingId, $participantId]
+                                        'meeting_id = ? AND participant_id = ?' => [$meetingId, $participantId],
                                     ],
                                     'order' => 'id DESC',
                                 ],

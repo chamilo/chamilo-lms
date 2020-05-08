@@ -7,8 +7,8 @@ namespace Chamilo\CoreBundle\Entity;
 use ApiPlatform\Core\Annotation\ApiFilter;
 use ApiPlatform\Core\Annotation\ApiResource;
 use ApiPlatform\Core\Annotation\ApiSubresource;
-use ApiPlatform\Core\Bridge\Doctrine\Orm\Filter\SearchFilter;
 use ApiPlatform\Core\Bridge\Doctrine\Orm\Filter\OrderFilter;
+use ApiPlatform\Core\Bridge\Doctrine\Orm\Filter\SearchFilter;
 use ApiPlatform\Core\Serializer\Filter\PropertyFilter;
 use Chamilo\CoreBundle\Entity\Resource\AbstractResource;
 use Chamilo\CoreBundle\Entity\Resource\ResourceInterface;
@@ -33,7 +33,7 @@ use Symfony\Component\Validator\Constraints as Assert;
  *
  * @ApiFilter(SearchFilter::class, properties={"title": "partial", "code": "partial"})
  * @ApiFilter(PropertyFilter::class)
- * @ApiFilter(OrderFilter::class)
+ * @ApiFilter(OrderFilter::class, properties={"id", "title"})
  *
  * @ORM\HasLifecycleCallbacks
  * @ORM\Table(
@@ -46,7 +46,7 @@ use Symfony\Component\Validator\Constraints as Assert;
  * @UniqueEntity("visualCode")
  * @UniqueEntity("directory")
  * @ORM\Entity
- * @ORM\EntityListeners({"Chamilo\CoreBundle\Entity\Listener\CourseListener"})
+ * @ORM\EntityListeners({"Chamilo\CoreBundle\Entity\Listener\ResourceListener", "Chamilo\CoreBundle\Entity\Listener\CourseListener"})
  */
 class Course extends AbstractResource implements ResourceInterface
 {
@@ -80,7 +80,7 @@ class Course extends AbstractResource implements ResourceInterface
      * @var string
      * @Assert\NotBlank()
      *
-     * @Groups({"course:read"})
+     * @Groups({"course:read", "course:write"})
      *
      * @Gedmo\Slug(
      *      fields={"title"},

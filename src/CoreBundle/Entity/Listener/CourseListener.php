@@ -61,6 +61,8 @@ class CourseListener
             //$url = $course->getCurrentUrl();
             //$repo = $args->getEntityManager()->getRepository('ChamiloCoreBundle:Course');
             ///$this->checkLimit($repo, $course, $url);
+            ///
+            // $repo = $args->getEntityManager()->getRepository('ChamiloCoreBundle:Course');
             $this->toolChain->addToolsInCourse($this->toolRepository, $course);
         }
     }

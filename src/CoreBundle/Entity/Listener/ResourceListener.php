@@ -5,9 +5,13 @@
 namespace Chamilo\CoreBundle\Entity\Listener;
 
 use Chamilo\CoreBundle\Entity\Resource\AbstractResource;
+use Chamilo\CoreBundle\Entity\Resource\ResourceNode;
+use Chamilo\CoreBundle\ToolChain;
 use Cocur\Slugify\SlugifyInterface;
 use Doctrine\ORM\Event\LifecycleEventArgs;
 use Doctrine\ORM\Event\PreUpdateEventArgs;
+use Symfony\Component\HttpFoundation\RequestStack;
+use Symfony\Component\Security\Core\Security;
 
 /**
  * Class ResourceListener.
@@ -19,14 +23,49 @@ class ResourceListener
     /**
      * ResourceListener constructor.
      */
-    public function __construct(SlugifyInterface $slugify)
+    public function __construct(SlugifyInterface $slugify, ToolChain $toolChain, RequestStack $request, Security $security)
     {
         $this->slugify = $slugify;
+        $this->security = $security;
+        $this->toolChain = $toolChain;
     }
 
     public function prePersist(AbstractResource $resource, LifecycleEventArgs $args)
     {
-        //error_log('prePersist');
+        // Add resource node
+        $em = $args->getEntityManager();
+        $url = $em->getRepository('ChamiloCoreBundle:AccessUrl')->find(1);
+        $creator = $this->security->getUser();
+
+        $resourceNode = new ResourceNode();
+        $resourceName = $resource->getResourceName();
+        $extension = $this->slugify->slugify(pathinfo($resourceName, PATHINFO_EXTENSION));
+
+        if (empty($extension)) {
+            $slug = $this->slugify->slugify($resourceName);
+        } else {
+            $originalExtension = pathinfo($resourceName, PATHINFO_EXTENSION);
+            $originalBasename = \basename($resourceName, $originalExtension);
+            $slug = sprintf('%s.%s', $this->slugify->slugify($originalBasename), $originalExtension);
+        }
+
+        $repo = $em->getRepository('ChamiloCoreBundle:Resource\ResourceType');
+        $class = str_replace('Entity', 'Repository', get_class($args->getEntity()));
+        $class .= 'Repository';
+        $name = $this->toolChain->getResourceTypeNameFromRepository($class);
+        $resourceType = $repo->findOneBy(['name' => $name]);
+        $resourceNode
+            ->setTitle($resourceName)
+            ->setSlug($slug)
+            ->setCreator($creator)
+            ->setResourceType($resourceType)
+        ;
+
+        $resourceNode->setParent($url->getResourceNode());
+        $resource->setResourceNode($resourceNode);
+        $em->persist($resourceNode);
+
+        return $resourceNode;
     }
 
     /**

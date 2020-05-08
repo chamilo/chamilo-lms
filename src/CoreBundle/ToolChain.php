@@ -83,7 +83,6 @@ class ToolChain
     public function createTools(): void
     {
         $manager = $this->entityManager;
-
         $tools = $this->getTools();
 
         /** @var AbstractTool $tool */
@@ -135,7 +134,6 @@ class ToolChain
         $tools = $this->getTools();
         $manager = $this->entityManager;
         $toolVisibility = $this->settingsManager->getSetting('course.active_tools_on_create');
-
         $user = $this->security->getToken()->getUser();
 
         // Hardcoded tool list order

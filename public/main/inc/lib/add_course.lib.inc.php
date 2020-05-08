@@ -780,14 +780,6 @@ class AddCourse
                 ->setVisualCode($visual_code)
                 ->addUrl($url)
             ;
-            $repo->addResourceNode(
-                $course,
-                api_get_user_entity(api_get_user_id()),
-                $url
-            );
-
-            $repo->getEntityManager()->persist($course);
-
             $repo->getEntityManager()->persist($course);
             $repo->getEntityManager()->flush();
 

@@ -1,9 +1,8 @@
 <?php
+
 /**
  * This script initiates a video conference session, calling the BigBlueButton API.
- * @package chamilo.plugin.bigbluebutton
  */
-
 $course_plugin = 'bbb'; //needed in order to load the plugin lang variables
 require_once __DIR__.'/config.php';
 
@@ -18,9 +17,11 @@ if ($bbb->pluginEnabled) {
     if (!empty($activeSessions)) {
         foreach ($activeSessions as $value) {
             $meetingId = $value['id'];
-
+            $courseCode = null;
             $courseInfo = api_get_course_info_by_id($value['c_id']);
-            $courseCode = $courseInfo['code'];
+            if (!empty($courseInfo)) {
+                $courseCode = $courseInfo['code'];
+            }
 
             $meetingBBB = $bbb->getMeetingInfo(
                 [

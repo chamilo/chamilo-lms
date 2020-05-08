@@ -162,8 +162,6 @@ if ($conferenceManager) {
 
                 // If creator -> update
                 if ($meetingData['creator_id'] == api_get_user_id()) {
-                    $courseInfo = api_get_course_info();
-                    $courseCode = $courseInfo['code'];
                     $pass = $bbb->getModMeetingPassword($courseCode);
 
                     $meetingBBB = $bbb->getMeetingInfo(
@@ -219,13 +217,15 @@ if ($conferenceManager) {
                         $conditions
                     );
 
-                    foreach ($roomList as $roomDB) {
-                        $roomId = $roomDB['id'];
-                        Database::update(
-                            $roomTable,
-                            ['out_at' => api_get_utc_datetime()],
-                            ['id = ? ' => $roomId]
-                        );
+                    if (!empty($roomList)) {
+                        foreach ($roomList as $roomDB) {
+                            $roomId = $roomDB['id'];
+                            Database::update(
+                                $roomTable,
+                                ['out_at' => api_get_utc_datetime()],
+                                ['id = ? ' => $roomId]
+                            );
+                        }
                     }
                 }
 
@@ -359,7 +359,11 @@ if ($bbb->isGlobalConference() === false &&
     if ($conferenceManager) {
         $groups = GroupManager::get_groups();
     } else {
-        $groups = GroupManager::getAllGroupPerUserSubscription(api_get_user_id(), api_get_course_int_id(), api_get_session_id());
+        $groups = GroupManager::getAllGroupPerUserSubscription(
+            api_get_user_id(),
+            api_get_course_int_id(),
+            api_get_session_id()
+        );
     }
 
     if ($groups) {

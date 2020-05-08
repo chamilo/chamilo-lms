@@ -313,6 +313,7 @@ function getData($from, $numberOfItems, $column, $direction)
         $userId = $student['id'];
         $user[] = $student['firstname'];
         $user[] = $student['lastname'];
+        $user[] = $student['username'];
 
         $lpTimeList = [];
         if ($useNewTable) {
@@ -396,6 +397,7 @@ $tool_name = get_lang('CourseLPsGenericStats');
 $headers = [];
 $headers[] = get_lang('FirstName');
 $headers[] = get_lang('LastName');
+$headers[] = get_lang('Username');
 foreach ($lps as $lp) {
     $lpName = $lp['name'];
     $headers[] = get_lang('Progress').': '.$lpName;

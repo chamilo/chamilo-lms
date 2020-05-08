@@ -150,17 +150,19 @@ $(function () {
         },
         onSendMessageListener: function (e) {
             e.preventDefault();
-
-            if (!$('textarea#chat-writer').val().trim().length) {
+            var textarea = $('textarea#chat-writer');
+            if (!textarea.val().trim().length) {
                 return;
             }
 
+            $(".emoji-wysiwyg-editor").prop('contenteditable', 'false');
+            textarea.prop('disabled', true);
             var self = this;
             self.disabled = true;
 
             $.post(ChChat._ajaxUrl, {
                 action: 'write',
-                message: $('textarea#chat-writer').val(),
+                message: textarea.val(),
                 friend: ChChat.currentFriend
             })
             .done(function (response) {
@@ -169,8 +171,9 @@ $(function () {
                 if (!response.status) {
                     return;
                 }
-
-                $('textarea#chat-writer').val('');
+                textarea.prop('disabled', false);
+                textarea.val('');
+                $(".emoji-wysiwyg-editor").prop('contenteditable', 'true');
                 $(".emoji-wysiwyg-editor").html('');
             });
         },
@@ -271,10 +274,10 @@ $(function () {
 
     if ({{ send_message_only_on_button }} == 0) {
         $('.emoji-wysiwyg-editor').keypress(function (e) {
-            if (e.which == 13) {
+            if (e.which == 13 && $(".emoji-wysiwyg-editor").prop('contenteditable') == 'true') {
                 ChChat.onSendMessageListener(e);
 
-                return false;    //<---- Add this line
+                return false;
             }
         });
     }

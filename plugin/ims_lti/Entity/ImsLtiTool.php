@@ -863,4 +863,18 @@ class ImsLtiTool
 
         return null;
     }
+
+    /**
+     * @param array $coursesId
+     *
+     * @return ArrayCollection
+     */
+    public function getChildrenInCourses(array $coursesId)
+    {
+        return $this->children->filter(
+            function (ImsLtiTool $child) use ($coursesId) {
+                return in_array($child->getCourse()->getId(), $coursesId);
+            }
+        );
+    }
 }

@@ -804,4 +804,17 @@ class ImsLtiPlugin extends Plugin
 
         return trim($webPath, " /");
     }
+
+    public static function getCoursesForParentTool(ImsLtiTool $tool)
+    {
+        $coursesId = [];
+
+        if (!$tool->getParent()) {
+            $coursesId = $tool->getChildren()->map(function (ImsLtiTool $tool) {
+                return $tool->getCourse();
+            });
+        }
+
+        return $coursesId;
+    }
 }

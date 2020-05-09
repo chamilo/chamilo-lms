@@ -51,6 +51,10 @@ class Diagnoser
                 'lang' => 'Paths',
                 'info' => 'The following paths are called by their constant throughout Chamilo\'s code using the api_get_path() function. Here is a list of these paths and what they would be translated to on this portal.',
             ],
+            'courses_space' => [
+                'lang' => 'Courses space',
+                'info' => 'Information about space used by courses on disk. The space used on disk represents the total space used, whereas the quota only limits files in the documents tool. Only 1000 courses are shown, by order of last access and alphabetical code order. For more, please go to the courses folder and use "du -sh *" to get the size of the courses.',
+            ]
         ];
         $currentSection = isset($_GET['section']) ? $_GET['section'] : '';
         if (!in_array(trim($currentSection), array_keys($sections))) {
@@ -74,20 +78,7 @@ class Diagnoser
         $data = call_user_func([$this, 'get_'.$currentSection.'_data']);
         echo $html;
 
-        if ($currentSection != 'paths') {
-            echo '<br />';
-            echo Display::return_message($sections[$currentSection]['info'], 'normal');
-
-            $table = new SortableTableFromArray($data, 1, 100);
-            $table->set_header(0, '', false);
-            $table->set_header(1, get_lang('Section'), false);
-            $table->set_header(2, get_lang('Setting'), false);
-            $table->set_header(3, get_lang('Current'), false);
-            $table->set_header(4, get_lang('Expected'), false);
-            $table->set_header(5, get_lang('Comment'), false);
-
-            $table->display();
-        } else {
+        if ($currentSection == 'paths') {
             echo '<br />';
             echo Display::return_message($sections[$currentSection]['info'], 'normal');
 
@@ -114,6 +105,34 @@ class Diagnoser
                 );
                 $row++;
             }
+
+            $table->display();
+        } elseif ($currentSection == 'courses_space') {
+            echo '<br />';
+            echo Display::return_message($sections[$currentSection]['info'], 'normal');
+
+            $table = new SortableTableFromArray($data, 1, 1000);
+            $table->set_additional_parameters(['section' => 'courses_space']);
+            $table->set_header(0, '', false);
+            $table->set_header(1, get_lang('CourseCode'), true);
+            $table->set_header(2, 'Space used on disk (MB)', true);
+            $table->set_header(3, 'Set max course space (MB)', false);
+            $table->set_header(4, get_lang('Edit'), false);
+            $table->set_header(5, get_lang('LastVisit'), true);
+            $table->set_header(6, get_lang('CurrentDirectory'), false);
+
+            $table->display();
+        } else {
+            echo '<br />';
+            echo Display::return_message($sections[$currentSection]['info'], 'normal');
+
+            $table = new SortableTableFromArray($data, 1, 100);
+            $table->set_header(0, '', false);
+            $table->set_header(1, get_lang('Section'), false);
+            $table->set_header(2, get_lang('Setting'), false);
+            $table->set_header(3, get_lang('Current'), false);
+            $table->set_header(4, get_lang('Expected'), false);
+            $table->set_header(5, get_lang('Comment'), false);
 
             $table->display();
         }
@@ -798,6 +817,72 @@ class Diagnoser
         return $array;
     }
 
+    /**
+     * Functions to get the data for the courses space usage.
+     *
+     * @return array of data
+     * @throws Exception
+     */
+    public function get_courses_space_data()
+    {
+        $array = [];
+
+        $em = Database::getManager();
+        $connection = $em->getConnection();
+        $res = $connection->query('SELECT id, code, directory, disk_quota, last_visit FROM course ORDER BY last_visit DESC, code LIMIT 500');
+        $systemPath = api_get_path(SYS_COURSE_PATH);
+        $webPath = api_get_path(WEB_COURSE_PATH);
+        $courseHomeIcon = Display::return_icon('home.png', get_lang('CourseHome'));
+        $courseEditIcon = Display::return_icon('edit.png', get_lang('Edit'));
+        $windows = api_is_windows_os();
+        $courseEditPath = api_get_path(WEB_CODE_PATH).'admin/course_edit.php?id=';
+        while ($row = $res->fetch()) {
+            $quota = $row['disk_quota']/(1024*1024);
+            $dir = $systemPath.$row['directory'].'/';
+            $path = '<a href="'.$webPath.$row['code'].'/index.php?id_session=0">'.$courseHomeIcon.'</a>';
+            $size = '-';
+            $courseEditLink = '<a href="'.$courseEditPath.$row['id'].'">'.$courseEditIcon.'</a>';
+
+            if (!$windows) {
+                $err = [];
+                $du = exec('du -s '.$dir, $err);
+                list($size, $none) = explode("\t", $du);
+                unset($none);
+                $size = intval($size);
+                if ($size < 1024) {
+                    $size = 1;
+                } else {
+                    $size = round($size / 1024);
+                }
+            }
+            $array[] = [
+                $path,
+                $row['code'],
+                $size,
+                round($quota),
+                $courseEditLink,
+                $row['last_visit'],
+                $dir,
+            ];
+        }
+        return $array;
+    }
+    /**
+     * Functions to get the number of courses in the database
+     *
+     * @return array of data
+     * @throws Exception
+     */
+    public function get_courses_space_count()
+    {
+        $em = Database::getManager();
+        $connection = $em->getConnection();
+        $res = $connection->query('SELECT count(id) FROM course');
+        while ($row = $res->fetch()) {
+            $count = $row[0];
+        }
+        return $count;
+    }
     /**
      * Additional functions needed for fast integration.
      *

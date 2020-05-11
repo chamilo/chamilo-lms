@@ -4,12 +4,18 @@
 
 namespace Chamilo\CoreBundle\Entity;
 
+use ApiPlatform\Core\Annotation\ApiResource;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Serializer\Annotation\Groups;
+use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * CourseCategory.
- *
+ * @ApiResource(
+ *     normalizationContext={"groups"={"course_category:read"}, "swagger_definition_name"="Read"},
+ *     denormalizationContext={"groups"={"course_category:write"}},
+ * )
  * @ORM\Table(
  *  name="course_category",
  *  uniqueConstraints={
@@ -26,7 +32,7 @@ class CourseCategory
 {
     /**
      * @var int
-     *
+     * @Groups({"course_category:read", "course:read"})
      * @ORM\Column(name="id", type="integer")
      * @ORM\Id
      * @ORM\GeneratedValue()
@@ -40,14 +46,16 @@ class CourseCategory
 
     /**
      * @var string
-     *
+     * @Assert\NotBlank()
+     * @Groups({"course_category:read", "course_category:write", "course:read"})
      * @ORM\Column(name="name", type="text", nullable=false)
      */
     protected $name;
 
     /**
      * @var string
-     *
+     * @Assert\NotBlank()
+     * @Groups({"course_category:read", "course_category:write", "course:read"})
      * @ORM\Column(name="code", type="string", length=40, nullable=false)
      */
     protected $code;
@@ -95,7 +103,7 @@ class CourseCategory
 
     /**
      * @var string
-     *
+     * @Groups({"course_category:read", "course_category:write"})
      * @ORM\Column(name="description", type="text", nullable=true)
      */
     protected $description;
@@ -349,7 +357,7 @@ class CourseCategory
         return $this;
     }
 
-    public function getDescription(): string
+    public function getDescription()
     {
         return $this->description;
     }

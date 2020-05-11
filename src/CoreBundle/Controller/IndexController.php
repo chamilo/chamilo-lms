@@ -30,6 +30,16 @@ class IndexController extends BaseController
         );
     }
 
+    public function courses(): Response
+    {
+        return $this->render(
+            '@ChamiloCore/Index/courses.html.twig',
+            [
+                'content' => '',
+            ]
+        );
+    }
+
     /**
      * Toggle the student view action.
      *

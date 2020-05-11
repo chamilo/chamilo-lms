@@ -14,10 +14,11 @@ use Chamilo\CoreBundle\Traits\ResourceControllerTrait;
 use Chamilo\CourseBundle\Controller\CourseControllerInterface;
 use Doctrine\Common\Collections\Criteria;
 use Doctrine\ORM\QueryBuilder;
-use FOS\RestBundle\Controller\AbstractFOSRestController;
+/*use FOS\RestBundle\Controller\AbstractFOSRestController;
 use FOS\RestBundle\Controller\Annotations as Rest;
 use FOS\RestBundle\Request\ParamFetcher;
-use FOS\RestBundle\View\View;
+use FOS\RestBundle\View\View;*/
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 
@@ -27,14 +28,14 @@ use Symfony\Component\HttpFoundation\Response;
  *
  * debug api routes with: bin/console debug:router | grep api
  */
-class ResourceApiController extends AbstractFOSRestController implements CourseControllerInterface
+class ResourceApiController extends AbstractController implements CourseControllerInterface
 {
     use CourseControllerTrait;
     use ResourceControllerTrait;
     use ControllerTrait;
 
     /**
-     * @Rest\View(serializerGroups={"list"})
+     *
      */
     public function getResourcesListAction($id, Request $request)
     {
@@ -57,7 +58,7 @@ class ResourceApiController extends AbstractFOSRestController implements CourseC
     }
 
     /**
-     * @Rest\View(serializerGroups={"list"})
+     *
      */
     public function getResourceAction($id, Request $request)
     {
@@ -71,10 +72,8 @@ class ResourceApiController extends AbstractFOSRestController implements CourseC
     }
 
     /**
-     * @Rest\QueryParam(name="orderBy", default="createdAt", nullable=true, description="Ordering")
-     * @Rest\View(serializerGroups={"list"})
      */
-    public function getResourceCommentsAction($id, Request $request, ParamFetcher $paramFetcher)
+    public function getResourceCommentsAction($id, Request $request, $paramFetcher)
     {
         $repository = $this->getRepositoryFromRequest($request);
 
@@ -89,7 +88,6 @@ class ResourceApiController extends AbstractFOSRestController implements CourseC
     }
 
     /**
-     * @Rest\View(serializerGroups={"list"})
      */
     public function postResourceCommentAction($id, Request $request)
     {

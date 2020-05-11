@@ -5,6 +5,7 @@
 namespace Chamilo\CoreBundle\Entity;
 
 use ApiPlatform\Core\Annotation\ApiFilter;
+use ApiPlatform\Core\Annotation\ApiProperty;
 use ApiPlatform\Core\Annotation\ApiResource;
 use ApiPlatform\Core\Annotation\ApiSubresource;
 use ApiPlatform\Core\Bridge\Doctrine\Orm\Filter\OrderFilter;
@@ -26,12 +27,12 @@ use Symfony\Component\Validator\Constraints as Assert;
  * Class Course.
  *
  * @ApiResource(
- *     attributes={"security"="is_granted('ROLE_ADMIN')"},
+ *     iri="https://schema.org/Course",
  *     normalizationContext={"groups"={"course:read"}, "swagger_definition_name"="Read"},
  *     denormalizationContext={"groups"={"course:write"}},
  * )
  *
- * @ApiFilter(SearchFilter::class, properties={"title": "partial", "code": "partial"})
+ * @ApiFilter(SearchFilter::class, properties={"title": "partial", "code": "partial", "category": "partial"})
  * @ApiFilter(PropertyFilter::class)
  * @ApiFilter(OrderFilter::class, properties={"id", "title"})
  *
@@ -79,7 +80,7 @@ class Course extends AbstractResource implements ResourceInterface
     /**
      * @var string
      * @Assert\NotBlank()
-     *
+     * @ApiProperty(iri="http://schema.org/courseCode")
      * @Groups({"course:read", "course:write"})
      *
      * @Gedmo\Slug(
@@ -227,7 +228,8 @@ class Course extends AbstractResource implements ResourceInterface
 
     /**
      * @var CourseCategory
-     * @Groups({"course:read", "list"})
+     * @ApiSubresource()
+     * @Groups({"course:read", "course:write"})
      * @ORM\ManyToOne(targetEntity="Chamilo\CoreBundle\Entity\CourseCategory", inversedBy="courses")
      * @ORM\JoinColumn(name="category_id", referencedColumnName="id")
      */

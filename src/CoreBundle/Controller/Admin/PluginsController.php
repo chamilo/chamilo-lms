@@ -4,14 +4,14 @@
 
 namespace Chamilo\CoreBundle\Controller\Admin;
 
+use Chamilo\CoreBundle\Controller\BaseController;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
-use Sylius\Bundle\SettingsBundle\Controller\SettingsController as SyliusSettingsController;
 use Symfony\Component\Routing\Annotation\Route;
 
 /**
  * Class SettingsController.
  */
-class PluginsController extends SyliusSettingsController
+class PluginsController extends BaseController
 {
     /**
      * @Security("has_role('ROLE_ADMIN')")

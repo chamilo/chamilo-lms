@@ -15,13 +15,10 @@ use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Serializer\Annotation\Groups;
 use Symfony\Component\Validator\Constraints as Assert;
 
-//use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
-//use Gedmo\Mapping\Annotation as Gedmo;
-
 /**
  * @ApiResource(
- *     attributes={"security"="is_granted('ROLE_ADMIN')"},
- *     normalizationContext={"groups"={"session:read"}}
+ *     normalizationContext={"groups"={"session:read"}, "swagger_definition_name"="Read"},
+ *     denormalizationContext={"groups"={"session:write"}},
  * )
  *
  * @ApiFilter(SearchFilter::class, properties={"name": "partial"})
@@ -172,11 +169,12 @@ class Session
     protected $nbrClasses;
 
     /**
-     * @var int
+     * @var User
      *
-     * @ORM\Column(name="session_admin_id", type="integer", nullable=true, unique=false)
+     * @ORM\ManyToOne(targetEntity="Chamilo\CoreBundle\Entity\User", inversedBy="receivedMessages")
+     * @ORM\JoinColumn(name="session_admin_id", referencedColumnName="id", nullable=true)
      */
-    protected $sessionAdminId;
+    protected $sessionAdmin;
 
     /**
      * @var int
@@ -253,14 +251,14 @@ class Session
      * @var User
      * @Groups({"session:read", "session:write"})
      *
-     * @ORM\ManyToOne(targetEntity="Chamilo\CoreBundle\Entity\User", inversedBy="sessionAsGeneralCoach")
+     * @ORM\ManyToOne(targetEntity="User", inversedBy="sessionAsGeneralCoach")
      * @ORM\JoinColumn(name="id_coach", referencedColumnName="id")
      */
     protected $generalCoach;
 
     /**
-     * @Groups({"session:read"})
-     * @ORM\ManyToOne(targetEntity="Chamilo\CoreBundle\Entity\SessionCategory", inversedBy="session")
+     * @Groups({"session:read", "session:write"})
+     * @ORM\ManyToOne(targetEntity="SessionCategory", inversedBy="session")
      * @ORM\JoinColumn(name="session_category_id", referencedColumnName="id")
      */
     protected $category;
@@ -697,30 +695,6 @@ class Session
     public function getNbrClasses()
     {
         return $this->nbrClasses;
-    }
-
-    /**
-     * Set sessionAdminId.
-     *
-     * @param int $sessionAdminId
-     *
-     * @return Session
-     */
-    public function setSessionAdminId($sessionAdminId)
-    {
-        $this->sessionAdminId = $sessionAdminId;
-
-        return $this;
-    }
-
-    /**
-     * Get sessionAdminId.
-     *
-     * @return int
-     */
-    public function getSessionAdminId()
-    {
-        return $this->sessionAdminId;
     }
 
     /**

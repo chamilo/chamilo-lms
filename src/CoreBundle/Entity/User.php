@@ -5,6 +5,7 @@
 namespace Chamilo\CoreBundle\Entity;
 
 use ApiPlatform\Core\Annotation\ApiFilter;
+use ApiPlatform\Core\Annotation\ApiProperty;
 use ApiPlatform\Core\Annotation\ApiResource;
 use ApiPlatform\Core\Annotation\ApiSubresource;
 use ApiPlatform\Core\Bridge\Doctrine\Orm\Filter\BooleanFilter;
@@ -24,6 +25,7 @@ use Symfony\Component\Validator\Mapping\ClassMetadata;
 
 /**
  * @ApiResource(
+ *      iri="http://schema.org/Person",
  *      attributes={"security"="is_granted('ROLE_ADMIN')"},
  *      normalizationContext={"groups"={"user:read"}},
  *      denormalizationContext={"groups"={"user:write"}},
@@ -74,6 +76,7 @@ class User implements UserInterface, EquatableInterface
 
     /**
      * @var string
+     * @ApiProperty(iri="http://schema.org/name")
      * @Groups({"user:read", "user:write"})
      * @ORM\Column(name="firstname", type="string", length=64, nullable=true, unique=false)
      */
@@ -2075,6 +2078,66 @@ class User implements UserInterface, EquatableInterface
     public function getLocale()
     {
         return $this->locale;
+    }
+
+    /**
+     * @return string
+     */
+    public function getApiToken()
+    {
+        return $this->apiToken;
+    }
+
+    /**
+     * @param string $apiToken
+     *
+     * @return User
+     */
+    public function setApiToken($apiToken)
+    {
+        $this->apiToken = $apiToken;
+
+        return $this;
+    }
+
+    /**
+     * @return string
+     */
+    public function getWebsite(): string
+    {
+        return $this->website;
+    }
+
+    /**
+     * @param string $website
+     *
+     * @return User
+     */
+    public function setWebsite(string $website): User
+    {
+        $this->website = $website;
+
+        return $this;
+    }
+
+    /**
+     * @return string
+     */
+    public function getBiography(): string
+    {
+        return $this->biography;
+    }
+
+    /**
+     * @param string $biography
+     *
+     * @return User
+     */
+    public function setBiography(string $biography): User
+    {
+        $this->biography = $biography;
+
+        return $this;
     }
 
     public function getCourseGroupsAsTutorFromCourse(Course $course): ArrayCollection

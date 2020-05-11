@@ -58,7 +58,7 @@ class Skill
 
     /**
      * @var string
-     * @Groups({"skill:read"})
+     * @Groups({"skill:read", "skill:write"})
      * @Assert\NotBlank()
      *
      * @ORM\Column(name="name", type="string", length=255, nullable=false)
@@ -67,6 +67,8 @@ class Skill
 
     /**
      * @var string
+     * @Assert\NotBlank()
+     * @Groups({"skill:read", "skill:write"})
      *
      * @ORM\Column(name="short_code", type="string", length=100, nullable=false)
      */
@@ -74,6 +76,7 @@ class Skill
 
     /**
      * @var string
+     * @Groups({"skill:read", "skill:write"})
      *
      * @ORM\Column(name="description", type="text", nullable=false)
      */

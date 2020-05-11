@@ -4,10 +4,16 @@
 
 namespace Chamilo\CoreBundle\Entity;
 
+use ApiPlatform\Core\Annotation\ApiResource;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Serializer\Annotation\Groups;
 
 /**
  * SessionCategory.
+ * @ApiResource(
+ *     normalizationContext={"groups"={"session_category:read"}, "swagger_definition_name"="Read"},
+ *     denormalizationContext={"groups"={"session_category:write"}},
+ * )
  *
  * @ORM\Table(name="session_category")
  * @ORM\Entity
@@ -16,7 +22,7 @@ class SessionCategory
 {
     /**
      * @var int
-     *
+     * @Groups({"session_category:read"})
      * @ORM\Column(name="id", type="integer", nullable=false, unique=false)
      * @ORM\Id
      * @ORM\GeneratedValue
@@ -36,7 +42,7 @@ class SessionCategory
 
     /**
      * @var string
-     *
+     * @Groups({"session_category:read", "session_category:write"})
      * @ORM\Column(name="name", type="string", length=100, nullable=true, unique=false)
      */
     protected $name;

@@ -4,9 +4,9 @@
 
 namespace Chamilo\CoreBundle\Controller\Admin;
 
+use Chamilo\CoreBundle\Controller\BaseController;
 use Chamilo\CoreBundle\Manager\SettingsManager;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
-use Sylius\Bundle\SettingsBundle\Controller\SettingsController as SyliusSettingsController;
 use Sylius\Bundle\SettingsBundle\Form\Factory\SettingsFormFactory;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
@@ -19,7 +19,7 @@ use Symfony\Contracts\Translation\TranslatorInterface;
 /**
  * Class SettingsController.
  */
-class SettingsController extends SyliusSettingsController
+class SettingsController extends BaseController
 {
     public static function getSubscribedServices(): array
     {

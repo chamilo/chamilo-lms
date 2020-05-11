@@ -3,11 +3,18 @@
 
 use Vimeo\Vimeo;
 
-require 'vendor/autoload.php';
+require __DIR__.'/../../../../../../global.inc.php';
+
+$config = api_get_configuration_sub_value('ckeditor_vimeo_embed/config');
+
+if (false === $config ||
+    empty($config['client_id']) || empty($config['client_secret']) || empty($config['access_token'])
+) {
+    echo json_encode(['error' => true, 'message' => get_lang('NotAllowed')]);
+    exit;
+}
 
 header('Content-Type: application/json');
-
-$config = require __DIR__.'/config.php';
 
 try {
     if (empty($_FILES) ||

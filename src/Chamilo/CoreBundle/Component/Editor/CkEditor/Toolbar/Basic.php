@@ -64,6 +64,7 @@ class Basic extends Toolbar
         'inserthtml',
         'xml',
         'qmarkersrolls',
+        'ckeditor_vimeo_embed',
     ];
 
     /**

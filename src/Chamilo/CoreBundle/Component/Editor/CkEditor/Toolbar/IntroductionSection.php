@@ -55,6 +55,8 @@ class IntroductionSection extends Basic
      */
     protected function getNormalToolbar()
     {
+        $config = api_get_configuration_sub_value('ckeditor_vimeo_embed/config');
+
         return [
             ['Maximize', 'PasteFromWord', '-', 'Undo', 'Redo'],
             ['Link', 'Unlink', 'Anchor', 'inserthtml', 'Glossary'],
@@ -67,6 +69,7 @@ class IntroductionSection extends Basic
                 'Audio',
                 'Asciimath',
                 'Asciisvg',
+                empty($config) ? null : 'VimeoEmbed',
             ],
             ['Table', 'SpecialChar'],
             [
@@ -98,6 +101,8 @@ class IntroductionSection extends Basic
      */
     protected function getMinimizedToolbar()
     {
+        $config = api_get_configuration_sub_value('ckeditor_vimeo_embed/config');
+
         return [
             $this->getNewPageBlock(),
             ['Undo', 'Redo'],
@@ -107,6 +112,7 @@ class IntroductionSection extends Basic
                 'Video',
                 'Flash',
                 'Youtube',
+                empty($config) ? null : 'VimeoEmbed',
                 'Audio',
                 'Table',
                 'Asciimath',

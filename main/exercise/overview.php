@@ -151,6 +151,20 @@ $exercise_url_button = Display::url(
     ['class' => 'btn btn-success btn-large']
 );
 
+$btnCheck = '';
+$quizCheckButtonEnabled = api_get_configuration_value('quiz_check_button_enable');
+
+if ($quizCheckButtonEnabled) {
+    $btnCheck = '<span id="quiz-check-request-text"></span>'.PHP_EOL
+        .Display::toolbarButton(
+            get_lang('TestYourBrowser'),
+            '#',
+            'check',
+            'info',
+            ['role' => 'button', 'id' => 'quiz-check-request-button']
+        );
+}
+
 //3. Checking visibility of the exercise (overwrites the exercise button)
 $visible_return = $objExercise->is_visible(
     $learnpath_id,
@@ -423,6 +437,14 @@ $isLimitReached = ExerciseLib::isQuestionsLimitPerDayReached(
 );
 
 if (!empty($exercise_url_button) && !$isLimitReached) {
+    if ($quizCheckButtonEnabled) {
+        $html .= Display::div(
+            $btnCheck,
+            ['class' => 'exercise_overview_options']
+        );
+        $html .= '<br>';
+    }
+
     $html .= Display::div(
         Display::div(
             $exercise_url_button,
@@ -451,6 +473,46 @@ $html .= '</div>';
 
 if ($certificateBlock) {
     $html .= PHP_EOL.$certificateBlock;
+}
+
+if ($quizCheckButtonEnabled) {
+    $quizCheckRequestUrl = api_get_path(WEB_AJAX_PATH).'exercise.ajax.php?'.api_get_cidreq().'&a=browser_test';
+    $params = http_build_query(
+        [
+            'exe_id' => 0,
+            'exerciseId' => $exercise_id,
+            'learnpath_id' => $learnpath_id,
+            'learnpath_item_id' => $learnpath_item_id,
+            'learnpath_item_view_id' => $learnpathItemViewId,
+            'reminder' => '0',
+            'type' => 'simple',
+            'question_id' => 0,
+            'choice[0]' => 0,
+        ]
+    ).'&'.api_get_cidreq();
+
+    $html .= "<script>
+        $(function () {
+            $('#quiz-check-request-button').on('click', function (e) {
+                e.preventDefault();
+
+                var textResult = $('#quiz-check-request-text').removeClass('text-success text-danger').hide();
+
+                $.ajax({
+                    url: '$quizCheckRequestUrl',
+                    type: 'post',
+                    async: false,
+                    data: '$params'
+                }).always(function (response, status, xhr) {
+                    if (!!xhr && status === 'success' && !!response && 'ok' === response) {
+                        textResult.text(\"".get_lang('QuizBrowserCheckOK')."\").addClass('text-success').show();
+                    } else {
+                        textResult.text(\"".get_lang('QuizBrowserCheckNO')."\").addClass('text-danger').show();
+                    }
+                });
+            });
+        });
+        </script>";
 }
 
 echo $html;

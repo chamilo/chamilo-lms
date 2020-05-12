@@ -791,6 +791,9 @@ switch ($action) {
         header('Content-Type: application/json');
         echo json_encode($result);
         break;
+    case 'browser_test':
+        echo 'ok';
+        break;
     default:
         echo '';
 }

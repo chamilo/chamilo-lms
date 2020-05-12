@@ -7598,7 +7598,7 @@ class TrackingCourseLog
                     user.firstname      as col2,
                     user.username       as col3';
         if ($getCount) {
-            $select = ' SELECT COUNT(distinct(user.id)';
+            $select = ' SELECT COUNT(distinct(user.id)) as count ';
         }
 
         $sqlInjectJoins = '';

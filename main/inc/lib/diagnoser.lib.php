@@ -54,7 +54,7 @@ class Diagnoser
             'courses_space' => [
                 'lang' => 'Courses space',
                 'info' => 'Information about space used by courses on disk. The space used on disk represents the total space used, whereas the quota only limits files in the documents tool. Only 1000 courses are shown, by order of last access and alphabetical code order. For more, please go to the courses folder and use "du -sh *" to get the size of the courses.',
-            ]
+            ],
         ];
         $currentSection = isset($_GET['section']) ? $_GET['section'] : '';
         if (!in_array(trim($currentSection), array_keys($sections))) {
@@ -820,8 +820,9 @@ class Diagnoser
     /**
      * Functions to get the data for the courses space usage.
      *
-     * @return array of data
      * @throws Exception
+     *
+     * @return array of data
      */
     public function get_courses_space_data()
     {
@@ -837,7 +838,7 @@ class Diagnoser
         $windows = api_is_windows_os();
         $courseEditPath = api_get_path(WEB_CODE_PATH).'admin/course_edit.php?id=';
         while ($row = $res->fetch()) {
-            $quota = $row['disk_quota']/(1024*1024);
+            $quota = $row['disk_quota'] / (1024 * 1024);
             $dir = $systemPath.$row['directory'].'/';
             $path = '<a href="'.$webPath.$row['code'].'/index.php?id_session=0">'.$courseHomeIcon.'</a>';
             $size = '-';
@@ -865,13 +866,16 @@ class Diagnoser
                 $dir,
             ];
         }
+
         return $array;
     }
+
     /**
-     * Functions to get the number of courses in the database
+     * Functions to get the number of courses in the database.
+     *
+     * @throws Exception
      *
      * @return array of data
-     * @throws Exception
      */
     public function get_courses_space_count()
     {
@@ -881,8 +885,10 @@ class Diagnoser
         while ($row = $res->fetch()) {
             $count = $row[0];
         }
+
         return $count;
     }
+
     /**
      * Additional functions needed for fast integration.
      *

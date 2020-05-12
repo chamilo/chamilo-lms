@@ -247,11 +247,25 @@ class Basic extends Toolbar
         return [
             $this->getNewPageBlock(),
             ['Undo', 'Redo'],
-            ['Link', 'Image', 'Video', 'Oembed', 'Flash', 'Youtube', 'VimeoEmbed', 'Audio', 'Table', 'Asciimath', 'Asciisvg'],
+            [
+                'Link',
+                'Image',
+                'Video',
+                'Oembed',
+                'Flash',
+                'Youtube',
+                'VimeoEmbed',
+                'Audio',
+                'Table',
+                'Asciimath',
+                'Asciisvg',
+            ],
             ['BulletedList', 'NumberedList', 'HorizontalRule'],
             ['JustifyLeft', 'JustifyCenter', 'JustifyRight', 'JustifyBlock'],
             ['Styles', 'Format', 'Font', 'FontSize', 'Bold', 'Italic', 'Underline', 'TextColor', 'BGColor'],
-            api_get_setting('enabled_wiris') == 'true' ? ['ckeditor_wiris_formulaEditor', 'ckeditor_wiris_formulaEditorChemistry'] : [''],
+            api_get_setting('enabled_wiris') == 'true'
+                ? ['ckeditor_wiris_formulaEditor', 'ckeditor_wiris_formulaEditorChemistry']
+                : [''],
             ['Toolbarswitch', 'Source'],
         ];
     }
@@ -291,7 +305,9 @@ class Basic extends Toolbar
             [api_get_setting('allow_spellcheck') == 'true' ? 'Scayt' : ''],
             ['Styles', 'Format', 'Font', 'FontSize'],
             ['PageBreak', 'ShowBlocks'],
-            api_get_setting('enabled_wiris') == 'true' ? ['ckeditor_wiris_formulaEditor', 'ckeditor_wiris_formulaEditorChemistry'] : [''],
+            api_get_setting('enabled_wiris') == 'true'
+                ? ['ckeditor_wiris_formulaEditor', 'ckeditor_wiris_formulaEditorChemistry']
+                : [''],
             ['Toolbarswitch', 'Source'],
         ];
     }

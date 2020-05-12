@@ -46,6 +46,7 @@ class SurveyQuestion extends Basic
                 'Oembed',
                 'Flash',
                 'Youtube',
+                'VimeoEmbed',
                 'Audio',
                 'leaflet',
                 'Smiley',
@@ -88,7 +89,7 @@ class SurveyQuestion extends Basic
         return [
             $this->getNewPageBlock(),
             ['Undo', 'Redo'],
-            ['Link', 'Image', 'Video', 'Oembed', 'Flash', 'Youtube', 'Audio', 'Table', 'Asciimath', 'Asciisvg'],
+            ['Link', 'Image', 'Video', 'Oembed', 'Flash', 'Youtube', 'VimeoEmbed', 'Audio', 'Table', 'Asciimath', 'Asciisvg'],
             ['BulletedList', 'NumberedList', 'HorizontalRule'],
             ['JustifyLeft', 'JustifyCenter', 'JustifyRight', 'JustifyBlock'],
             [

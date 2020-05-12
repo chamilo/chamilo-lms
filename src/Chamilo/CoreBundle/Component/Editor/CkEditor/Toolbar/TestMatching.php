@@ -54,7 +54,7 @@ class TestMatching extends Basic
             ['Cut', 'Copy', 'Paste', 'PasteText', 'PasteFromWord'],
             ['Undo', 'Redo', '-', 'SelectAll', 'Find', '-', 'RemoveFormat'],
             ['Link', 'Unlink', 'Anchor', 'Glossary'],
-            ['Image', 'Mapping', 'Video', 'Oembed', 'Youtube', 'Flash', 'Audio', 'leaflet', 'Smiley', 'SpecialChar'],
+            ['Image', 'Mapping', 'Video', 'Oembed', 'Youtube', 'VimeoEmbed', 'Flash', 'Audio', 'leaflet', 'Smiley', 'SpecialChar'],
             ['Asciimath', 'Asciisvg'],
             '/',
             ['Table', '-', 'CreateDiv'],

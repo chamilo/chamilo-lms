@@ -1,3 +1,3 @@
-export const VueConfig = {
-    delimiters: ['[[', ']]']
-};
+// export const VueConfig = {
+//   delimiters: ['[[', ']]']
+// };

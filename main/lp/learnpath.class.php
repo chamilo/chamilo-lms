@@ -12019,10 +12019,19 @@ EOD;
         $em->persist($item);
         $em->flush();
 
+        $id = $item->getId();
+
+        $sessionId = api_get_session_id();
+        if (!empty($sessionId) && api_get_configuration_value('allow_session_lp_category')) {
+            $table = Database::get_course_table(TABLE_LP_CATEGORY);
+            $sql = "UPDATE $table SET session_id = $sessionId WHERE iid = $id";
+            Database::query($sql);
+        }
+
         api_item_property_update(
             api_get_course_info(),
             TOOL_LEARNPATH_CATEGORY,
-            $item->getId(),
+            $id,
             'visible',
             api_get_user_id()
         );
@@ -12133,11 +12142,8 @@ EOD;
         // Using doctrine extensions
         /** @var SortableRepository $repo */
         $repo = $em->getRepository('ChamiloCourseBundle:CLpCategory');
-        $items = $repo
-            ->getBySortableGroupsQuery(['cId' => $courseId])
-            ->getResult();
 
-        return $items;
+        return $repo->getBySortableGroupsQuery(['cId' => $courseId])->getResult();
     }
 
     /**
@@ -12153,9 +12159,8 @@ EOD;
     {
         $id = (int) $id;
         $em = Database::getManager();
-        $item = $em->find('ChamiloCourseBundle:CLpCategory', $id);
 
-        return $item;
+        return $em->find('ChamiloCourseBundle:CLpCategory', $id);
     }
 
     /**
@@ -12166,11 +12171,8 @@ EOD;
     public static function getCategoryByCourse($courseId)
     {
         $em = Database::getManager();
-        $items = $em->getRepository('ChamiloCourseBundle:CLpCategory')->findBy(
-            ['cId' => $courseId]
-        );
 
-        return $items;
+        return $em->getRepository('ChamiloCourseBundle:CLpCategory')->findBy(['cId' => $courseId]);
     }
 
     /**
@@ -12185,7 +12187,7 @@ EOD;
     public static function deleteCategory($id)
     {
         $em = Database::getManager();
-        $item = $em->find('ChamiloCourseBundle:CLpCategory', $id);
+        $item = self::getCategory($id);
         if ($item) {
             $courseId = $item->getCId();
             $query = $em->createQuery('SELECT u FROM ChamiloCourseBundle:CLp u WHERE u.cId = :id AND u.categoryId = :catId');

@@ -38,7 +38,6 @@ use ChamiloSession as Session;
  *  - index.php?loginFailed=1&error=user_password_incorrect
  *  - index.php?loginFailed=1&error=unrecognize_sso_origin');
  */
-
 require_once __DIR__.'/ldap.inc.php';
 require_once __DIR__.'/functions.inc.php';
 

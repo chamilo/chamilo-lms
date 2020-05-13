@@ -116,7 +116,7 @@ if (empty($sessionId)) {
         $choices[$user->getUserId()] = $user->getCompleteNameWithClasses();
     }
 } else {
-    $users = CourseManager::get_user_list_from_course_code(   $course->getCode(), $sessionId);
+    $users = CourseManager::get_user_list_from_course_code($course->getCode(), $sessionId);
     foreach ($users as $user) {
         $choices[$user['user_id']] = api_get_person_name($user['firstname'], $user['lastname']);
     }

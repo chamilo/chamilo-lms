@@ -668,7 +668,7 @@ switch ($action) {
         }
 
         CoursesAndSessionsCatalog::sessionsListByName($limit);
-
+        exit;
         break;
 }
 

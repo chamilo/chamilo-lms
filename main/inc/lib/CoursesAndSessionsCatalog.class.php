@@ -817,7 +817,7 @@ class CoursesAndSessionsCatalog
      *
      * @return array The sessions
      */
-    public static function browseSessionsByTags($termTag, array $limit)
+    public static function browseSessionsByTags($termTag, array $limit, $getCount = false)
     {
         $em = Database::getManager();
         $qb = $em->createQueryBuilder();
@@ -863,18 +863,25 @@ class CoursesAndSessionsCatalog
             ->andWhere(
                 $qb->expr()->eq('f.extraFieldType', ExtraField::COURSE_FIELD_TYPE)
             )
-            ->andWhere(
-                $qb->expr()->gt('s.nbrCourses', 0)
-            )
-            ->andWhere(
-                $qb->expr()->eq('url.accessUrlId', $urlId)
-            )
-            ->setFirstResult($limit['start'])
-            ->setMaxResults($limit['length'])
+            ->andWhere($qb->expr()->gt('s.nbrCourses', 0))
+            ->andWhere($qb->expr()->eq('url.accessUrlId', $urlId))
             ->setParameter('tag', "$termTag%")
+        ;
+
+        if (!empty($limit)) {
+            $qb
+                ->setFirstResult($limit['start'])
+                ->setMaxResults($limit['length'])
             ;
+        }
 
         $qb = self::hideFromSessionCatalogCondition($qb);
+
+        if ($getCount) {
+            $qb->select('count(s)');
+
+            return $qb->getQuery()->getSingleScalarResult();
+        }
 
         return $qb->getQuery()->getResult();
     }
@@ -887,7 +894,7 @@ class CoursesAndSessionsCatalog
      *
      * @return array The sessions
      */
-    public static function getSessionsByName($keyword, array $limit)
+    public static function getSessionsByName($keyword, array $limit, $getCount = false)
     {
         $em = Database::getManager();
         $qb = $em->createQueryBuilder();
@@ -908,20 +915,25 @@ class CoursesAndSessionsCatalog
                 Join::WITH,
                 'url.sessionId = s.id'
             )
-            ->andWhere(
-                $qb->expr()->eq('url.accessUrlId', $urlId)
-            )->andWhere(
-                's.name LIKE :keyword'
-            )
-            ->andWhere(
-                $qb->expr()->gt('s.nbrCourses', 0)
-            )
-            ->setFirstResult($limit['start'])
-            ->setMaxResults($limit['length'])
+            ->andWhere($qb->expr()->eq('url.accessUrlId', $urlId))
+            ->andWhere('s.name LIKE :keyword')
+            ->andWhere($qb->expr()->gt('s.nbrCourses', 0))
             ->setParameter('keyword', "%$keyword%")
         ;
 
+        if (!empty($limit)) {
+            $qb
+                ->setFirstResult($limit['start'])
+                ->setMaxResults($limit['length']);
+        }
+
         $qb = self::hideFromSessionCatalogCondition($qb);
+
+        if ($getCount) {
+            $qb->select('count(s)');
+
+            return $qb->getQuery()->getSingleScalarResult();
+        }
 
         return $qb->getQuery()->getResult();
     }
@@ -1312,6 +1324,24 @@ class CoursesAndSessionsCatalog
         );
     }
 
+    public static function getSessionPagination($action, $countSessions, $limit)
+    {
+        $pageTotal = ceil($countSessions / $limit['length']);
+        $pagination = '';
+        // Do NOT show pagination if only one page or less
+        if ($pageTotal > 1) {
+            $pagination = self::getCatalogPagination(
+                $limit['current'],
+                $limit['length'],
+                $pageTotal,
+                null,
+                $action
+            );
+        }
+
+        return $pagination;
+    }
+
     /**
      * Return Session catalog rendered view.
      *
@@ -1325,9 +1355,7 @@ class CoursesAndSessionsCatalog
         $countSessions = self::browseSessions($date, [], false, true);
         $sessions = self::browseSessions($date, $limit);
 
-        $pageTotal = ceil($countSessions / $limit['length']);
-        // Do NOT show pagination if only one page or less
-        $pagination = $pageTotal > 1 ? self::getCatalogPagination($limit['current'], $limit['length'], $pageTotal) : '';
+        $pagination = self::getSessionPagination('display_sessions', $countSessions, $limit);
         $sessionsBlocks = self::getFormattedSessionsBlock($sessions);
 
         // Get session search catalogue URL
@@ -1364,7 +1392,7 @@ class CoursesAndSessionsCatalog
      */
     public static function sessionsListByName(array $limit)
     {
-        $keyword = isset($_POST['keyword']) ? $_POST['keyword'] : null;
+        $keyword = isset($_REQUEST['keyword']) ? $_REQUEST['keyword'] : null;
         $courseUrl = self::getCatalogUrl(
             1,
             $limit['length'],
@@ -1372,10 +1400,13 @@ class CoursesAndSessionsCatalog
             'subscribe'
         );
 
+        $count = self::getSessionsByName($keyword, [], true);
         $sessions = self::getSessionsByName($keyword, $limit);
         $sessionsBlocks = self::getFormattedSessionsBlock($sessions);
+        $pagination = self::getSessionPagination('search_session_title', $count, $limit);
 
         $tpl = new Template();
+        $tpl->assign('catalog_pagination', $pagination);
         $tpl->assign('actions', self::getTabList(2));
         $tpl->assign('show_courses', self::showCourses());
         $tpl->assign('show_sessions', self::showSessions());
@@ -1454,8 +1485,8 @@ class CoursesAndSessionsCatalog
      */
     public static function sessionsListByCoursesTag(array $limit)
     {
-        $searchTag = isset($_POST['search_tag']) ? $_POST['search_tag'] : null;
-        $searchDate = isset($_POST['date']) ? $_POST['date'] : date('Y-m-d');
+        $searchTag = isset($_REQUEST['search_tag']) ? $_REQUEST['search_tag'] : '';
+        $searchDate = isset($_REQUEST['date']) ? $_REQUEST['date'] : date('Y-m-d');
         $courseUrl = self::getCatalogUrl(
             1,
             $limit['length'],
@@ -1466,7 +1497,11 @@ class CoursesAndSessionsCatalog
         $sessions = self::browseSessionsByTags($searchTag, $limit);
         $sessionsBlocks = self::getFormattedSessionsBlock($sessions);
 
+        $count = self::browseSessionsByTags($searchTag, [], true);
+        $pagination = self::getSessionPagination('search_tag', $count, $limit);
+
         $tpl = new Template();
+        $tpl->assign('catalog_pagination', $pagination);
         $tpl->assign('show_courses', self::showCourses());
         $tpl->assign('show_sessions', self::showSessions());
         $tpl->assign('show_tutor', api_get_setting('show_session_coach') === 'true');
@@ -1797,9 +1832,11 @@ class CoursesAndSessionsCatalog
         $extraFields = [],
         $sortKeys = []
     ) {
-        $requestAction = isset($_REQUEST['action']) ? Security::remove_XSS($_REQUEST['action']) : null;
+        $requestAction = isset($_REQUEST['action']) ? Security::remove_XSS($_REQUEST['action']) : '';
         $action = isset($action) ? Security::remove_XSS($action) : $requestAction;
-        $searchTerm = isset($_REQUEST['search_term']) ? Security::remove_XSS($_REQUEST['search_term']) : null;
+        $searchTerm = isset($_REQUEST['search_term']) ? Security::remove_XSS($_REQUEST['search_term']) : '';
+        $keyword = isset($_REQUEST['keyword']) ? Security::remove_XSS($_REQUEST['keyword']) : '';
+        $searchTag = isset($_REQUEST['search_tag']) ? $_REQUEST['search_tag'] : '';
 
         if ($action === 'subscribe_user_with_password') {
             $action = 'subscribe';
@@ -1811,6 +1848,8 @@ class CoursesAndSessionsCatalog
         $pageUrl = api_get_self().
             '?action='.$action.
             '&search_term='.$searchTerm.
+            '&keyword='.$keyword.
+            '&search_tag='.$searchTag.
             '&category_code='.$categoryCode.
             '&pageCurrent='.$pageCurrent.
             '&pageLength='.$pageLength;

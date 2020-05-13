@@ -47,8 +47,9 @@ class ItemPropertyRepository extends EntityRepository
     /**
      * Get Groups subscribed to a item: LP, Doc, etc.
      *
-     * @param string  $tool    learnpath | document | etc
+     * @param string  $tool learnpath | document | etc
      * @param int     $itemId
+     * @param Course  $course
      * @param Session $session
      *
      * @return array

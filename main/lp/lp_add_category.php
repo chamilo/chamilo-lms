@@ -1,10 +1,9 @@
 <?php
+
 /* For licensing terms, see /license.txt */
 
 /**
  * @author Julio Montoya <gugli100@gmail.com> Adding formvalidator support
- *
- * @package chamilo.learnpath
  */
 $this_section = SECTION_COURSES;
 api_protect_course_script();

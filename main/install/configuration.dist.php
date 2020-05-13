@@ -1466,6 +1466,16 @@ $_configuration['course_catalog_settings'] = [
 // Disable sending emails.
 //$_configuration['disable_send_mail'] = false;
 
+// Available course catalog filter options
+/*$_configuration['catalog_settings_order_by'] = [
+        'by_title' => true,
+        'by_creation_date' => true,
+        'by_subscription_count' => true,
+        'by_average_score' => true,
+        'by_score_sum' => true,
+        'by_vote_count' => true,
+];*/
+
 // Page "Catalog" extra fields to be used as sorting criteria
 /*$_configuration['course_catalogue_order_by_extrafield'] = [
     'fields' => ['duree_en_min'],

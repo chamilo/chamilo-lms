@@ -571,6 +571,21 @@ class CoursesAndSessionsCatalog
             'point_info/total_score' => get_lang('TotalScore'),
             'point_info/users' => get_lang('VoteCount'),
         ];
+        $catalogSettingsOrderBy = api_get_configuration_value('catalog_settings_order_by');
+        if (is_array($catalogSettingsOrderBy)) {
+            foreach ([
+                'by_title' => 'title',
+                'by_creation_date' => 'creation_date',
+                'by_subscription_count' => 'count_users',
+                'by_average_score' => 'point_info/point_average',
+                'by_score_sum' => 'point_info/total_score',
+                'by_vote_count' => 'point_info/users',
+                     ] as $configKey => $optionKey) {
+                if (array_key_exists($configKey, $catalogSettingsOrderBy) && false === $catalogSettingsOrderBy[$configKey]) {
+                    unset($options[$optionKey]);
+                }
+            }
+        }
         foreach (self::getCourseExtraFieldsAvailableForSorting() as $extraField) {
             $options['extra_field_'.$extraField->getId()] = $extraField->getDisplayText();
         }

@@ -6,7 +6,6 @@ use Doctrine\DBAL\Connection;
 use Doctrine\DBAL\Driver\Statement;
 use Doctrine\DBAL\Types\Type;
 use Doctrine\ORM\EntityManager;
-use Symfony\Component\Debug\ExceptionHandler;
 
 /**
  * Class Database.
@@ -286,11 +285,9 @@ class Database
      */
     public static function handleError($e)
     {
-        $debug = 'test' == api_get_setting('server_type');
+        $debug = 'test' === api_get_setting('server_type');
         if ($debug) {
-            // We use Symfony exception handler for better error information
-            $handler = new ExceptionHandler();
-            $handler->handle($e);
+            throw $e;
             exit;
         } else {
             error_log($e->getMessage());

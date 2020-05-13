@@ -436,12 +436,12 @@ class IndexManager
                             t1.parent_id,
                             t1.children_count,COUNT(DISTINCT t3.code) AS nbCourse
                     FROM $main_category_table t1
-                    LEFT JOIN $main_category_table t2 
+                    LEFT JOIN $main_category_table t2
                     ON t1.code=t2.parent_id
-                    LEFT JOIN $main_course_table t3 
+                    LEFT JOIN $main_course_table t3
                     ON (t3.category_code = t1.code $platform_visible_courses)
                     WHERE t1.parent_id ".(empty($category) ? "IS NULL" : "='$category'")."
-                    GROUP BY t1.name,t1.code,t1.parent_id,t1.children_count 
+                    GROUP BY t1.name,t1.code,t1.parent_id,t1.children_count
                     ORDER BY t1.tree_pos, t1.name";
 
         // Showing only the category of courses of the current access_url_id
@@ -1129,17 +1129,45 @@ class IndexManager
         $coursesWithoutCategoryTemplate = '/user_portal/classic_courses_without_category.tpl';
         $coursesWithCategoryTemplate = '/user_portal/classic_courses_with_category.tpl';
         $showAllSessions = api_get_configuration_value('show_all_sessions_on_my_course_page') === true;
+
+        $settings = api_get_configuration_value('userportal_session_settings');
+
+        $existSetting = false;
+        $userInfo = null;
+        $historyLimit = 0;
+        if (!empty($settings)) {
+            $userInfo = api_get_user_info($user_id);
+            if (isset($settings['status'][$userInfo['status']])) {
+                $existSetting = true;
+                $historyLimit = $settings['status'][$userInfo['status']]['end_date_history_start'];
+            }
+        }
+
         // ofaj
         if ($showAllSessions) {
-            $session_categories = UserManager::get_sessions_by_category($user_id, false, true, true);
-        } else {
-            if ($load_history) {
-                // Load sessions in category in *history*
-                $session_categories = UserManager::get_sessions_by_category($user_id, true);
+            if (false === $existSetting) {
+                $session_categories = UserManager::get_sessions_by_category(
+                    $user_id,
+                    false,
+                    true,
+                    true
+                );
             } else {
-                // Load sessions in category
-                $session_categories = UserManager::get_sessions_by_category($user_id, false);
+                switch ($userInfo['status']) {
+                    case COURSEMANAGER:
+                        $session_categories = UserManager::get_sessions_by_category(
+                            $user_id,
+                            $load_history,
+                            true,
+                            false,
+                            false,
+                            $historyLimit
+                        );
+                        break;
+                }
             }
+        } else {
+            $session_categories = UserManager::get_sessions_by_category($user_id, $load_history);
         }
 
         $sessionCount = 0;
@@ -2446,9 +2474,9 @@ class IndexManager
                     $button
                     <span class='$class'>$icon
                         <a class='sessionView' href='$courseLink'>$title</a>
-                    </span> 
-                    $notifications 
-                    $rightActions 
+                    </span>
+                    $notifications
+                    $rightActions
                 </div>
                 $teachers";
     }

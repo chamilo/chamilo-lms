@@ -182,12 +182,17 @@ class DateRangePicker extends HTML_QuickForm_text
             $timePicker = 'false';
         }
 
+        $timeIncrement = 30;
+        if(api_get_configuration_value('timepicker_increment')){
+            $timeIncrement = api_get_configuration_value('timepicker_increment');
+        }
+
         // timeFormat: 'hh:mm'
         $js .= "<script>
             $(function() {
                 $('#$id').daterangepicker({
                     timePicker: $timePicker,
-                    timePickerIncrement: 30,
+                    timePickerIncrement: $timeIncrement,
                     timePicker24Hour: true,
                     $defaultDates
                     $maxDate

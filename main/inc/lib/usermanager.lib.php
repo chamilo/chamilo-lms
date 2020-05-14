@@ -3284,7 +3284,6 @@ class UserManager
                 $historyLimit = (int) $historyLimit;
                 $interval = new \DateInterval('P'.$historyLimit.'D');
                 $historyEnded->sub($interval);
-                $finalDate = $historyEnded->format('Y-m-d');
 
                 if ($isHistory) {
                     // History
@@ -3296,7 +3295,7 @@ class UserManager
                         if (empty($row['access_end_date'])) {
                             continue;
                         } else {
-                            if ($row['access_end_date'] > $finalDate) {
+                            if ($row['access_end_date'] > $historyEnded) {
                                 continue;
                             }
                         }
@@ -3310,7 +3309,7 @@ class UserManager
                         if (isset($row['access_end_date']) &&
                             !empty($row['access_end_date'])
                         ) {
-                            if ($row['access_end_date'] <= $finalDate) {
+                            if ($row['access_end_date'] <= $historyEnded) {
                                 continue;
                             }
                         }

@@ -1153,18 +1153,14 @@ class IndexManager
                     true
                 );
             } else {
-                switch ($userInfo['status']) {
-                    case COURSEMANAGER:
-                        $session_categories = UserManager::get_sessions_by_category(
-                            $user_id,
-                            $load_history,
-                            true,
-                            false,
-                            false,
-                            $historyLimit
-                        );
-                        break;
-                }
+                $session_categories = UserManager::get_sessions_by_category(
+                    $user_id,
+                    $load_history,
+                    true,
+                    false,
+                    false,
+                    $historyLimit
+                );
             }
         } else {
             $session_categories = UserManager::get_sessions_by_category($user_id, $load_history);

@@ -15,8 +15,8 @@ use ChamiloSession as Session;
  */
 
 /**
- * Insert a login reference for the current user into the track_e_online stats 
- * table. This table keeps trace of the last login. Nothing else matters (we 
+ * Insert a login reference for the current user into the track_e_online stats
+ * table. This table keeps trace of the last login. Nothing else matters (we
  * don't keep traces of anything older).
  *
  * @param int user id

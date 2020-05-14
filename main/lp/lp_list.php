@@ -127,14 +127,21 @@ if ($is_allowed_to_edit) {
 
 $token = Security::get_token();
 $categoriesTempList = learnpath::getCategories($courseId);
-if ($allowCategory && empty($sessionId)) {
+$firstSessionCategoryId = 0;
+if ($allowCategory) {
     $newCategoryFiltered = [];
     foreach ($categoriesTempList as $category) {
         $categorySessionId = (int) learnpath::getCategorySessionId($category->getId());
-        if (empty($categorySessionId)) {
+        if ($categorySessionId === $sessionId || $categorySessionId === 0) {
             $newCategoryFiltered[] = $category;
+        } else {
+
+        }
+        if (!empty($sessionId) && empty($firstSessionCategoryId) && $categorySessionId == $sessionId) {
+            $firstSessionCategoryId = $category->getId();
         }
     }
+
     $categoriesTempList = $newCategoryFiltered;
 }
 
@@ -1008,6 +1015,7 @@ if ($ending && $allLpTimeValid && api_get_configuration_value('download_files_af
 }
 
 $template = new Template($nameTools);
+$template->assign('first_session_category', $firstSessionCategoryId);
 $template->assign('session_star_icon', Display::return_icon('star.png', get_lang('Session')));
 $template->assign('subscription_settings', $subscriptionSettings);
 $template->assign('is_allowed_to_edit', $is_allowed_to_edit);

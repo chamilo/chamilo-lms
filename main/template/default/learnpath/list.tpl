@@ -42,8 +42,8 @@
                                         </a>
                                     {% endif %}
 
-                                    {% if not _c.session_id %}
-                                        {% if loop.index0 == 1 %}
+                                    {% if lp_data.category.sessionId == _c.session_id %}
+                                        {% if loop.index0 == 1 or first_session_category == lp_data.category.id %}
                                             <a href="#">
                                                 <img src="{{ "up_na.png"|icon }}" alt="{{ "Move"|get_lang }}">
                                             </a>

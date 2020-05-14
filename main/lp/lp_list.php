@@ -69,6 +69,15 @@ $introduction = Display::return_introduction_section(
 
 $message = '';
 $actions = '';
+
+$allowCategory = true;
+if (!empty($sessionId)) {
+    $allowCategory = false;
+    if (api_get_configuration_value('allow_session_lp_category')) {
+        $allowCategory = true;
+    }
+}
+
 if ($is_allowed_to_edit) {
     $actionLeft = '';
     $actionLeft .= Display::url(
@@ -102,7 +111,7 @@ if ($is_allowed_to_edit) {
         );
     }
 
-    if (!$sessionId) {
+    if ($allowCategory) {
         $actionLeft .= Display::url(
             Display::return_icon(
                 'new_folder.png',
@@ -117,15 +126,30 @@ if ($is_allowed_to_edit) {
 }
 
 $token = Security::get_token();
-
 $categoriesTempList = learnpath::getCategories($courseId);
+$firstSessionCategoryId = 0;
+if ($allowCategory) {
+    $newCategoryFiltered = [];
+    foreach ($categoriesTempList as $category) {
+        $categorySessionId = (int) learnpath::getCategorySessionId($category->getId());
+        if ($categorySessionId === $sessionId || $categorySessionId === 0) {
+            $newCategoryFiltered[] = $category;
+        } else {
+
+        }
+        if (!empty($sessionId) && empty($firstSessionCategoryId) && $categorySessionId == $sessionId) {
+            $firstSessionCategoryId = $category->getId();
+        }
+    }
+
+    $categoriesTempList = $newCategoryFiltered;
+}
+
 $categoryTest = new CLpCategory();
 $categoryTest->setId(0);
 $categoryTest->setName(get_lang('WithOutCategory'));
 $categoryTest->setPosition(0);
-$categories = [
-    $categoryTest,
-];
+$categories = [$categoryTest];
 
 if (!empty($categoriesTempList)) {
     $categories = array_merge($categories, $categoriesTempList);
@@ -190,9 +214,15 @@ $enableAutoLaunch = api_get_course_setting('enable_lp_auto_launch');
 $gameMode = api_get_setting('gamification_mode');
 
 $data = [];
+$tableCategory = Database::get_course_table(TABLE_LP_CATEGORY);
 /** @var CLpCategory $item */
 foreach ($categories as $item) {
     $categoryId = $item->getId();
+    if (!empty($sessionId) && $allowCategory) {
+        $categorySessionId = learnpath::getCategorySessionId($categoryId);
+        $item->setSessionId($categorySessionId);
+    }
+
     if ($categoryId !== 0 && $subscriptionSettings['allow_add_users_to_lp_category'] == true) {
         // "Without category" has id = 0
         $categoryVisibility = api_get_item_visibility(
@@ -205,6 +235,21 @@ foreach ($categories as $item) {
         if (!$is_allowed_to_edit) {
             if ($categoryVisibility !== 1 && $categoryVisibility != -1) {
                 continue;
+            }
+        }
+
+        if ($allowCategory && !empty($sessionId)) {
+            // Check base course
+            if (0 === $item->getSessionId()) {
+                $categoryVisibility = api_get_item_visibility(
+                    $courseInfo,
+                    TOOL_LEARNPATH_CATEGORY,
+                    $categoryId,
+                    0
+                );
+                if ($categoryVisibility == 0) {
+                    continue;
+                }
             }
         }
 
@@ -544,7 +589,7 @@ foreach ($categories as $item) {
 
                 /* PUBLISH COMMAND */
                 if ($sessionId == $details['lp_session']) {
-                    if ($details['lp_published'] == 'i') {
+                    if ($details['lp_published'] === 'i') {
                         $dsp_publish = Display::url(
                             Display::return_icon(
                                 'lp_publish_na.png',
@@ -912,7 +957,7 @@ foreach ($categories as $item) {
             $lpIsShown = true;
             // Counter for number of elements treated
             $current++;
-        } // end foreach ($flat_list)
+        }
     }
 
     $data[] = [
@@ -923,10 +968,7 @@ foreach ($categories as $item) {
             $item->getId(),
             $sessionId
         ),
-        'category_is_published' => learnpath::categoryIsPublished(
-            $item,
-            $courseInfo['real_id']
-        ),
+        'category_is_published' => learnpath::categoryIsPublished($item, $courseInfo['real_id']),
         'lp_list' => $listData,
     ];
 }
@@ -973,6 +1015,8 @@ if ($ending && $allLpTimeValid && api_get_configuration_value('download_files_af
 }
 
 $template = new Template($nameTools);
+$template->assign('first_session_category', $firstSessionCategoryId);
+$template->assign('session_star_icon', Display::return_icon('star.png', get_lang('Session')));
 $template->assign('subscription_settings', $subscriptionSettings);
 $template->assign('is_allowed_to_edit', $is_allowed_to_edit);
 $template->assign('is_invitee', $isInvitee);

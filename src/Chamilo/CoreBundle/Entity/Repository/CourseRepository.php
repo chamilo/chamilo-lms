@@ -1,4 +1,5 @@
 <?php
+
 /* For licensing terms, see /license.txt */
 
 namespace Chamilo\CoreBundle\Entity\Repository;
@@ -12,8 +13,6 @@ use Doctrine\ORM\QueryBuilder;
 /**
  * Class CourseRepository
  * The functions inside this class must return an instance of QueryBuilder.
- *
- * @package Chamilo\CoreBundle\Entity\Repository
  */
 class CourseRepository extends EntityRepository
 {
@@ -49,14 +48,8 @@ class CourseRepository extends EntityRepository
 
         // Get only users subscribed to this course
         $wherePart->add($queryBuilder->expr()->eq('c.id', $course->getId()));
-
-        // $wherePart->add($queryBuilder->expr()->eq('c.status', $status));
-
         $queryBuilder->where($wherePart);
 
-        //var_dump($queryBuilder->getQuery()->getSQL());
-        //$q = $queryBuilder->getQuery();
-        //return $q->execute();
         return $queryBuilder;
     }
 

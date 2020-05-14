@@ -15,8 +15,9 @@ use ChamiloSession as Session;
  */
 
 /**
- * Insert a login reference for the current user into the track_e_online stats table.
- * This table keeps trace of the last login. Nothing else matters (we don't keep traces of anything older).
+ * Insert a login reference for the current user into the track_e_online stats
+ * table. This table keeps trace of the last login. Nothing else matters (we
+ * don't keep traces of anything older).
  *
  * @param int user id
  */
@@ -37,16 +38,22 @@ function LoginCheck($uid)
             $access_url_id = api_get_current_access_url_id();
         }
         $session_id = api_get_session_id();
-        // if the $_course array exists this means we are in a course and we have to store this in the who's online table also
-        // to have the x users in this course feature working
-        if (is_array($_course) && count($_course) > 0 && !empty($_course['id'])) {
-            $query = "REPLACE INTO ".$online_table." (login_id,login_user_id,login_date,user_ip, c_id, session_id, access_url_id)
-                      VALUES ($uid,$uid,'$login_date','$user_ip', '".$_course['real_id']."' , '$session_id' , '$access_url_id' )";
-        } else {
-            $query = "REPLACE INTO ".$online_table." (login_id,login_user_id,login_date,user_ip, c_id, session_id, access_url_id)
-                      VALUES ($uid,$uid,'$login_date','$user_ip', 0, '$session_id', '$access_url_id')";
+        $cid = 0;
+        if (is_array($_course) && count($_course) > 0 && !empty($_course['real_id'])) {
+            $cid = intval($_course['real_id']);
         }
-        Database::query($query);
+        $query = "SELECT login_id FROM $online_table WHERE login_id = $uid";
+        $resLogin = Database::query($query);
+        if (Database::num_rows($resLogin) > 0) {
+            $query = "UPDATE $online_table SET
+                      login_date = '$login_date', 
+                      user_ip = '$user_ip', 
+                      c_id = $cid,  
+                      session_id = $session_id, 
+                      access_url_id = $access_url_id 
+                      WHERE login_id = $uid";
+            Database::query($query);
+        }
     }
 }
 

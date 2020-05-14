@@ -543,6 +543,7 @@ class Event
         $position = Database::escape_string($position);
         $now = api_get_utc_datetime();
         $course_id = (int) $course_id;
+        $recording = api_get_configuration_value('quiz_answer_extra_recording') == true;
 
         // check user_id or get from context
         if (empty($user_id)) {
@@ -648,16 +649,16 @@ class Event
                     error_log("Insert attempt with id #$attempt_id");
                 }
 
-                if (defined('ENABLED_LIVE_EXERCISE_TRACKING')) {
+                if ($recording) {
                     if ($debug) {
                         error_log("Saving e attempt recording ");
                     }
                     $attempt_recording = [
                         'exe_id' => $attempt_id,
                         'question_id' => $question_id,
+                        'answer' => $answer,
                         'marks' => $score,
                         'insert_date' => $now,
-                        'author' => '',
                         'session_id' => $session_id,
                     ];
                     Database::insert($recording_table, $attempt_recording);
@@ -675,13 +676,13 @@ class Event
                     ]
                 );
 
-                if (defined('ENABLED_LIVE_EXERCISE_TRACKING')) {
+                if ($recording) {
                     $attempt_recording = [
                         'exe_id' => $exe_id,
                         'question_id' => $question_id,
+                        'answer' => $answer,
                         'marks' => $score,
                         'insert_date' => $now,
-                        'author' => '',
                         'session_id' => $session_id,
                     ];
 

@@ -1022,7 +1022,7 @@ class IndexManager
         $items = [];
 
         // My account section
-        if ($show_create_link) {
+        /*if ($show_create_link) {
             if (api_get_setting('course_validation') == 'true' && !api_is_platform_admin()) {
                 $items[] = [
                     'class' => 'add-course',
@@ -1047,7 +1047,7 @@ class IndexManager
                     'title' => get_lang('AddSession'),
                 ];
             }
-        }
+        }*/
 
         // Sort courses
         // ofaj
@@ -1056,7 +1056,7 @@ class IndexManager
             'icon' => Display::return_icon('order-course.png', get_lang('SortMyCourses')),
             'link' => api_get_path(WEB_CODE_PATH).'auth/courses.php?action=sortmycourses',
             'title' => get_lang('SortMyCourses')
-        ];
+        ];*/
 
         // Session history
         if (isset($_GET['history']) && intval($_GET['history']) == 1) {
@@ -1074,16 +1074,16 @@ class IndexManager
                 'title' => get_lang('HistoryTrainingSessions')
             ];
         }
-     */
-        if ($isHrm) {
+
+        /*if ($isHrm) {
             $items[] = [
                 'link' => api_get_path(WEB_CODE_PATH).'auth/hrm_courses.php',
                 'title' => get_lang('HrmAssignedUsersCourseList'),
             ];
-        }
+        }*/
 
         // Course catalog
-        if ($show_course_link) {
+        /*if ($show_course_link) {
             if (!api_is_drh()) {
                 $items[] = [
                     'class' => 'list-course',
@@ -1097,7 +1097,7 @@ class IndexManager
                     'title' => get_lang('Dashboard'),
                 ];
             }
-        }
+        }*/
 
         return $items;
     }

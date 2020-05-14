@@ -80,16 +80,16 @@ if ($loadNotificationsByAjax) {
     $(function() {
         $(".course_notification").each(function(index) {
             var div = $(this);
-            var id = $(this).attr("id");       
+            var id = $(this).attr("id");
             var idList = id.split("_");
             var courseId = idList[1];
             var sessionId = idList[2];
             var status = idList[3];
-            $.ajax({			
+            $.ajax({
                 type: "GET",
-                url: "'.api_get_path(WEB_AJAX_PATH).'course_home.ajax.php?a=get_notification&course_id="+courseId+"&session_id="+sessionId+"&status="+status,			
-                success: function(data) {			    
-                    div.append(data);			    
+                url: "'.api_get_path(WEB_AJAX_PATH).'course_home.ajax.php?a=get_notification&course_id="+courseId+"&session_id="+sessionId+"&status="+status,
+                success: function(data) {
+                    div.append(data);
                 }
             });
         });
@@ -141,7 +141,7 @@ if ($displayMyCourseViewBySessionLink) {
         $(document).ready(function() {
             changeMyCoursesView($.cookie("defaultMyCourseView" + userId));
         });
-    
+
         /**
         * Keep in cookie the last teacher view for the My Courses Tab. default view, or view by session
         * @param inView
@@ -363,7 +363,7 @@ $controller->tpl->assign('diagnosis_block', $block);
 $controller->tpl->assign('profile_block', $controller->return_profile_block());
 $controller->tpl->assign('user_image_block', $controller->return_user_image_block());
 // Ofaj
-//$controller->tpl->assign('course_block', $controller->return_course_block());
+$controller->tpl->assign('course_block', $controller->return_course_block());
 //$controller->tpl->assign('navigation_course_links', $controller->return_navigation_links());
 //$controller->tpl->assign('search_block', $controller->return_search_block());
 $controller->tpl->assign('notice_block', $controller->return_notice());

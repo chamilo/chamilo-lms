@@ -541,7 +541,7 @@ class CoursesAndSessionsCatalog
     }
 
     /**
-     * Gets extra fields listed in configuration option course_catalog_settings/extra_field_sort_options sorting order
+     * Gets extra fields listed in configuration option course_catalog_settings/extra_field_sort_options sorting order.
      *
      * @return array "extra_field_$id" => order (1 = ascending, -1 = descending)
      */
@@ -556,7 +556,7 @@ class CoursesAndSessionsCatalog
     }
 
     /**
-     * Gets the extra fields listed in configuration option course_catalog_settings/extra_field_sort_options
+     * Gets the extra fields listed in configuration option course_catalog_settings/extra_field_sort_options.
      *
      * @return ExtraField[]
      */
@@ -573,7 +573,7 @@ class CoursesAndSessionsCatalog
     }
 
     /**
-     * Builds the list of possible course standard sort criteria
+     * Builds the list of possible course standard sort criteria.
      *
      * @return array option name => order (1 = ascending, -1 = descending)
      */

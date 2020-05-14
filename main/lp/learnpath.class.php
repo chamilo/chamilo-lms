@@ -12133,7 +12133,7 @@ EOD;
     /**
      * @param int $courseId
      *
-     * @return mixed
+     * @return CLpCategory[]
      */
     public static function getCategories($courseId)
     {
@@ -12144,6 +12144,27 @@ EOD;
         $repo = $em->getRepository('ChamiloCourseBundle:CLpCategory');
 
         return $repo->getBySortableGroupsQuery(['cId' => $courseId])->getResult();
+    }
+
+    public static function getCategorySessionId($id)
+    {
+        if (false === api_get_configuration_value('allow_session_lp_category')) {
+            return 0;
+        }
+
+        $table = Database::get_course_table(TABLE_LP_CATEGORY);
+        $id = (int) $id;
+
+        $sql = "SELECT session_id FROM $table WHERE iid = $id";
+        $result = Database::query($sql);
+        $result = Database::fetch_array($result, 'ASSOC');
+
+        if ($result) {
+
+            return (int) $result['session_id'];
+        }
+
+        return 0;
     }
 
     /**

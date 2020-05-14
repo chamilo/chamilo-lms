@@ -196,7 +196,7 @@ class CoursesAndSessionsCatalog
         }
 
         // count courses that are in no category
-        $countCourses = CourseCategory::countCoursesInCategory();
+        $countCourses = CourseCategory::countCoursesInCategory('NONE');
         $categories['NONE'] = [
             'id' => 0,
             'name' => get_lang('WithoutCategory'),

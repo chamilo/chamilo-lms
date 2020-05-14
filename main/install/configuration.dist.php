@@ -1515,6 +1515,11 @@ $_configuration['auth_password_links'] = [
 // ALTER TABLE c_lp_category ADD COLUMN session_id INT(11) DEFAULT NULL;
 //$_configuration['allow_session_lp_category'] = false;
 
+// Enable recording of all answers (even temporary) in the track_e_attempt_recording table
+// This requires a column to be added to the table with the following query:
+// ALTER TABLE track_e_attempt_recording ADD COLUMN answer longtext default '' AFTER question_id;
+//$_configuration['quiz_answer_extra_recording'] = false;
+
 // KEEP THIS AT THE END
 // -------- Custom DB changes
 // Add user activation by confirmation email

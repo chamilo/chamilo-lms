@@ -1452,6 +1452,20 @@ $_configuration['course_catalog_settings'] = [
     'redirect_after_subscription' => 'course_home', // or 'course_catalog' to stay in the page
     'extra_fields_in_search_form' => ['variable1', 'variable2'],
     'extra_fields_in_course_block' => ['variable3', 'variable4'],
+    'standard_sort_options' => [
+        //  1 means allow sorting in ascending order
+        // -1 means allow sorting in descending order
+        'title' => 1,
+        'creation_date' => -1,
+        'count_users' => -1, // subscription count
+        'point_info/point_average' => -1, // average score
+        'point_info/total_score' => -1, // score sum
+        'point_info/users' => -1, // vote count
+    ],
+    'extra_field_sort_options' => [
+        'variable5' => -1,
+        'variable6' => 1,
+    ],
 ];
 */
 
@@ -1465,11 +1479,6 @@ $_configuration['course_catalog_settings'] = [
 
 // Disable sending emails.
 //$_configuration['disable_send_mail'] = false;
-
-// Page "Catalog" extra fields to be used as sorting criteria
-/*$_configuration['course_catalogue_order_by_extrafield'] = [
-    'fields' => ['duree_en_min'],
-];*/
 
 // CKEditor font names
 /*$_configuration['ck_editor_font_names'] = [

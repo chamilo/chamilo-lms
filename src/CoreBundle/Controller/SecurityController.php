@@ -22,7 +22,6 @@ class SecurityController extends AbstractController
     {
         $error = $authenticationUtils->getLastAuthenticationError();
         $lastUsername = $authenticationUtils->getLastUsername();
-        //$form = $this->createForm(LoginType::class, ['_username' => $lastUsername]);
 
         return $this->render('@ChamiloCore/login.html.twig', [
             'last_username' => $lastUsername,

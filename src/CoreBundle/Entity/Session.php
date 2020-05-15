@@ -6,7 +6,9 @@ namespace Chamilo\CoreBundle\Entity;
 
 use ApiPlatform\Core\Annotation\ApiFilter;
 use ApiPlatform\Core\Annotation\ApiResource;
+use ApiPlatform\Core\Bridge\Doctrine\Orm\Filter\OrderFilter;
 use ApiPlatform\Core\Bridge\Doctrine\Orm\Filter\SearchFilter;
+use ApiPlatform\Core\Serializer\Filter\PropertyFilter;
 use Chamilo\CourseBundle\Entity\CStudentPublication;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
@@ -22,6 +24,9 @@ use Symfony\Component\Validator\Constraints as Assert;
  * )
  *
  * @ApiFilter(SearchFilter::class, properties={"name": "partial"})
+ * @ApiFilter(PropertyFilter::class)
+ * @ApiFilter(OrderFilter::class, properties={"id", "name"})
+ *
  * @ORM\Table(
  *      name="session",
  *      uniqueConstraints={@ORM\UniqueConstraint(name="name", columns={"name"})},
@@ -292,7 +297,7 @@ class Session
 
         $this->nbrClasses = 0;
         $this->nbrUsers = 0;
-
+        $this->sendSubscriptionNotification = false;
         $this->displayStartDate = new \DateTime();
         $this->displayEndDate = new \DateTime();
         $this->accessStartDate = new \DateTime();
@@ -307,6 +312,7 @@ class Session
         $this->showDescription = false;
         $this->category = null;
         $this->status = 0;
+        $this->position = 0;
         $this->studentPublications = new ArrayCollection();
     }
 
@@ -1237,6 +1243,15 @@ class Session
         }
     }
 
+    public function addUrl(AccessUrl $url)
+    {
+        $accessUrlRelSession = new AccessUrlRelSession();
+        $accessUrlRelSession->setUrl($url);
+        $accessUrlRelSession->setSession($this);
+
+        $this->addUrls($accessUrlRelSession);
+    }
+
     public function addUrls(AccessUrlRelSession $url)
     {
         $url->setSession($this);
@@ -1274,6 +1289,28 @@ class Session
 
         return $this;
     }
+
+    /**
+     * @return User
+     */
+    public function getSessionAdmin(): User
+    {
+        return $this->sessionAdmin;
+    }
+
+    /**
+     * @param User $sessionAdmin
+     *
+     * @return Session
+     */
+    public function setSessionAdmin(User $sessionAdmin): Session
+    {
+        $this->sessionAdmin = $sessionAdmin;
+
+        return $this;
+    }
+
+
 
     public function isUserGeneralCoach(User $user): bool
     {

@@ -32,8 +32,6 @@ class SessionManager
     public const SESSION_CHANGE_USER_REASON_ENROLLMENT_ANNULATION = 4;
     public const DEFAULT_VISIBILITY = 4;  //SESSION_AVAILABLE
 
-    public static $_debug = false;
-
     /**
      * Constructor.
      */
@@ -74,7 +72,7 @@ class SessionManager
             'nbr_courses' => $session->getNbrCourses(),
             'nbr_users' => $session->getNbrUsers(),
             'nbr_classes' => $session->getNbrClasses(),
-            'session_admin_id' => $session->getSessionAdminId(),
+            'session_admin_id' => $session->getSessionAdmin()->getId(),
             'visibility' => $session->getVisibility(),
             'promotion_id' => $session->getPromotionId(),
             'display_start_date' => $session->getDisplayStartDate()
@@ -250,49 +248,56 @@ class SessionManager
 
             if ($ready_to_create) {
                 $sessionAdminId = !empty($sessionAdminId) ? $sessionAdminId : api_get_user_id();
-                $values = [
-                    'name' => $name,
-                    'id_coach' => $coachId,
-                    'session_admin_id' => $sessionAdminId,
-                    'visibility' => $visibility,
-                    'description' => $description,
-                    'show_description' => $showDescription,
-                    'send_subscription_notification' => (int) $sendSubscriptionNotification,
-                ];
+                $session = new Session();
+                $session
+                    ->setName($name)
+                    ->setGeneralCoach(api_get_user_entity($coachId))
+                    ->setSessionAdmin(api_get_user_entity($sessionAdminId))
+                    ->setVisibility($visibility)
+                    ->setDescription($description)
+                    ->setShowDescription($showDescription)
+                    ->setSendSubscriptionNotification((int) $sendSubscriptionNotification)
+                ;
 
                 if (!empty($startDate)) {
-                    $values['access_start_date'] = api_get_utc_datetime($startDate);
+                    $session->setAccessStartDate(api_get_utc_datetime($startDate, true, true));
                 }
 
                 if (!empty($endDate)) {
-                    $values['access_end_date'] = api_get_utc_datetime($endDate);
+                    $session->setAccessEndDate(api_get_utc_datetime($endDate, true, true));
                 }
 
                 if (!empty($displayStartDate)) {
-                    $values['display_start_date'] = api_get_utc_datetime($displayStartDate);
+                    $session->setDisplayStartDate(api_get_utc_datetime($displayStartDate, true, true));
                 }
 
                 if (!empty($displayEndDate)) {
-                    $values['display_end_date'] = api_get_utc_datetime($displayEndDate);
+                    $session->setDisplayEndDate(api_get_utc_datetime($displayEndDate, true, true));
                 }
 
                 if (!empty($coachStartDate)) {
-                    $values['coach_access_start_date'] = api_get_utc_datetime($coachStartDate);
+                    $session->setCoachAccessStartDate(api_get_utc_datetime($coachStartDate, true, true));
                 }
                 if (!empty($coachEndDate)) {
-                    $values['coach_access_end_date'] = api_get_utc_datetime($coachEndDate);
+                    $session->setCoachAccessEndDate(api_get_utc_datetime($coachEndDate, true, true));
                 }
 
                 if (!empty($sessionCategoryId)) {
-                    $values['session_category_id'] = $sessionCategoryId;
+                    //$session->setCategory($category);
+                    //$values['session_category_id'] = $sessionCategoryId;
                 }
 
                 if (api_get_configuration_value('allow_session_status')) {
-                    $values['status'] = $status;
+                    $session->setStatus($status);
                 }
 
-                $values['position'] = 0;
-                $session_id = Database::insert($tbl_session, $values);
+                $em = Database::getManager();
+                $em->persist($session);
+                $em->flush();
+
+                //$session_id = Database::insert($tbl_session, $values);
+                $session_id = $session->getId();
+
                 $duration = (int) $duration;
 
                 if (!empty($duration)) {
@@ -329,7 +334,7 @@ class SessionManager
                      *
                      */
                     // Adding to the correct URL
-                    UrlManager::add_session_to_url($session_id, $accessUrlId);
+                    //UrlManager::add_session_to_url($session_id, $accessUrlId);
 
                     // add event to system log
                     $user_id = api_get_user_id();

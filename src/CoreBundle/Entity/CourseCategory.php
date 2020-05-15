@@ -4,7 +4,11 @@
 
 namespace Chamilo\CoreBundle\Entity;
 
+use ApiPlatform\Core\Annotation\ApiFilter;
 use ApiPlatform\Core\Annotation\ApiResource;
+use ApiPlatform\Core\Bridge\Doctrine\Orm\Filter\OrderFilter;
+use ApiPlatform\Core\Bridge\Doctrine\Orm\Filter\SearchFilter;
+use ApiPlatform\Core\Serializer\Filter\PropertyFilter;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Serializer\Annotation\Groups;
@@ -16,6 +20,9 @@ use Symfony\Component\Validator\Constraints as Assert;
  *     normalizationContext={"groups"={"course_category:read"}, "swagger_definition_name"="Read"},
  *     denormalizationContext={"groups"={"course_category:write"}},
  * )
+ * @ApiFilter(SearchFilter::class, properties={"name": "partial", "code": "partial"})
+ * @ApiFilter(PropertyFilter::class)
+ * @ApiFilter(OrderFilter::class, properties={"name", "code"})
  * @ORM\Table(
  *  name="course_category",
  *  uniqueConstraints={

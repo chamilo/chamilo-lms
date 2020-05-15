@@ -8,7 +8,11 @@ use Chamilo\CoreBundle\Entity\AccessUrl;
 use Chamilo\CoreBundle\Entity\AccessUrlRelSession;
 use Chamilo\CoreBundle\Entity\Session;
 use Chamilo\CoreBundle\Repository\SessionRepository;
+use Chamilo\CoreBundle\ToolChain;
+use Cocur\Slugify\SlugifyInterface;
 use Doctrine\ORM\Event\LifecycleEventArgs;
+use Symfony\Component\HttpFoundation\RequestStack;
+use Symfony\Component\Security\Core\Security;
 
 /**
  * Class SessionListener
@@ -16,6 +20,17 @@ use Doctrine\ORM\Event\LifecycleEventArgs;
  */
 class SessionListener
 {
+    protected $request;
+
+    /**
+     * ResourceListener constructor.
+     */
+    public function __construct(RequestStack $request, Security $security)
+    {
+        $this->security = $security;
+        $this->request = $request;
+    }
+
     /**
      * This code is executed when a new session is created.
      *
@@ -26,13 +41,11 @@ class SessionListener
      */
     public function prePersist(Session $session, LifecycleEventArgs $args)
     {
-        /** @var AccessUrlRelSession $urlRelSession */
-        $urlRelSession = $session->getUrls()->first();
-
-        $url = $urlRelSession->getUrl();
-        $repo = $args->getEntityManager()->getRepository('ChamiloCoreBundle:Session');
-
-        $this->checkLimit($repo, $url);
+        $em = $args->getEntityManager();
+        $id = $this->request->getCurrentRequest()->getSession()->get('access_url_id');
+        $url = $em->getRepository('ChamiloCoreBundle:AccessUrl')->find($id);
+        $session->addUrl($url);
+        //$this->checkLimit($repo, $url);
     }
 
     /**

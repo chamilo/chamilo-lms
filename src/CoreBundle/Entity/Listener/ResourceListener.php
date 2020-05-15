@@ -19,6 +19,7 @@ use Symfony\Component\Security\Core\Security;
 class ResourceListener
 {
     protected $slugify;
+    protected $request;
 
     /**
      * ResourceListener constructor.
@@ -28,13 +29,15 @@ class ResourceListener
         $this->slugify = $slugify;
         $this->security = $security;
         $this->toolChain = $toolChain;
+        $this->request = $request;
     }
 
     public function prePersist(AbstractResource $resource, LifecycleEventArgs $args)
     {
         // Add resource node
         $em = $args->getEntityManager();
-        $url = $em->getRepository('ChamiloCoreBundle:AccessUrl')->find(1);
+        $id = $this->request->getCurrentRequest()->getSession()->get('access_url_id');
+        $url = $em->getRepository('ChamiloCoreBundle:AccessUrl')->find($id);
         $creator = $this->security->getUser();
 
         $resourceNode = new ResourceNode();

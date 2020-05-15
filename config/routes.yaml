@@ -4,9 +4,6 @@ login_check:
 logout:
     path: /logout
 
-sonata_user_admin_security_logout:
-    path: /logout
-
 oneup_uploader:
     resource: .
     type: uploader
@@ -23,18 +20,25 @@ legacy_plugin:
     requirements:
         name: .+
 
+courses_vue:
+    path: /courses/{wildcard}
+    controller: Chamilo\CoreBundle\Controller\IndexController::courses
+    requirements:
+        wildcard: .*
+
+sessions_vue:
+    path: /sessions/{wildcard}
+    controller: Chamilo\CoreBundle\Controller\IndexController::courses
+    requirements:
+        wildcard: .*
+
+
 # web url shortcuts for legacy templates
 web.ajax:
     path: main/inc/ajax/
 
 web.main:
     path: main/
-
-# Core controllers
-core_admin:
-    resource: '@ChamiloCoreBundle/Controller/Admin'
-    type: annotation
-    prefix: /admin
 
 #liip_theme:
 #    resource: "@LiipThemeBundle/Resources/config/routing.xml"

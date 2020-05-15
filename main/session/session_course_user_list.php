@@ -1,9 +1,7 @@
 <?php
+
 /* For licensing terms, see /license.txt */
 
-/**
- * @package chamilo.admin
- */
 $cidReset = true;
 
 require_once __DIR__.'/../inc/global.inc.php';
@@ -26,7 +24,7 @@ $course_code = Database::escape_string(trim($_GET['course_code']));
 $courseInfo = api_get_course_info($course_code);
 $courseId = $courseInfo['real_id'];
 
-$page = isset($_GET['page']) ? intval($_GET['page']) : null;
+$page = isset($_GET['page']) ? (int) $_GET['page'] : null;
 $action = isset($_REQUEST['action']) ? $_REQUEST['action'] : null;
 $default_sort = api_sort_by_first_name() ? 'firstname' : 'lastname';
 $sort = isset($_GET['sort']) && in_array($_GET['sort'], ['lastname', 'firstname', 'username'])
@@ -44,7 +42,7 @@ if (is_array($idChecked)) {
     $my_temp = [];
     foreach ($idChecked as $id) {
         // forcing the intval
-        $my_temp[] = intval($id);
+        $my_temp[] = (int) $id;
     }
     $idChecked = $my_temp;
 }

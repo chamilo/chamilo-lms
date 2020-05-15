@@ -172,10 +172,7 @@ if ($session->getNbrCourses() === 0) {
     /** @var Course $course */
     foreach ($courses as $course) {
         // Select the number of users
-        $numberOfUsers = SessionManager::getCountUsersInCourseSession(
-            $course,
-            $session
-        );
+        $numberOfUsers = SessionManager::getCountUsersInCourseSession($course, $session);
 
         // Get coachs of the courses in session
         $namesOfCoaches = [];

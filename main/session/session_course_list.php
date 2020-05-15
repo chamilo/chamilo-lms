@@ -1,8 +1,7 @@
 <?php
+
 /* For licensing terms, see /license.txt */
-/**
- *	@package chamilo.admin
- */
+
 $cidReset = true;
 
 require_once __DIR__.'/../inc/global.inc.php';
@@ -34,7 +33,7 @@ if (!list($session_name) = Database::fetch_row($result)) {
     exit;
 }
 
-if ($action == 'delete') {
+if ($action === 'delete') {
     $idChecked = $_REQUEST['idChecked'];
     if (is_array($idChecked) && count($idChecked) > 0) {
         $my_temp = [];

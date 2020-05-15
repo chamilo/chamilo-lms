@@ -9255,10 +9255,8 @@ class SessionManager
     /**
      * @return int
      */
-    public static function getCountUsersInCourseSession(
-        Course $course,
-        Session $session
-    ) {
+    public static function getCountUsersInCourseSession(Course $course, Session $session)
+    {
         return Database::getManager()
             ->createQuery("
                 SELECT COUNT(scu)

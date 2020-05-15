@@ -4710,8 +4710,7 @@ class learnpath
     /**
      * Check if a learnpath category is published as course tool.
      *
-     * @param CLpCategory $category
-     * @param int         $courseId
+     * @param int $courseId
      *
      * @return bool
      */

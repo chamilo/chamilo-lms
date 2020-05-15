@@ -552,6 +552,7 @@ class CoursesAndSessionsCatalog
         foreach (self::getCourseExtraFieldsAvailableForSorting() as $extraField) {
             $order['extra_field_'.$extraField->getId()] = $variableOrder[$extraField->getVariable()];
         }
+
         return $order;
     }
 

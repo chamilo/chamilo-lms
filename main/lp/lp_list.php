@@ -134,8 +134,6 @@ if ($allowCategory) {
         $categorySessionId = (int) learnpath::getCategorySessionId($category->getId());
         if ($categorySessionId === $sessionId || $categorySessionId === 0) {
             $newCategoryFiltered[] = $category;
-        } else {
-
         }
         if (!empty($sessionId) && empty($firstSessionCategoryId) && $categorySessionId == $sessionId) {
             $firstSessionCategoryId = $category->getId();

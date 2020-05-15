@@ -8413,15 +8413,24 @@ class Exercise
      * Return an HTML table of exercises for on-screen printing, including
      * action icons. If no exercise is present and the user can edit the
      * course, show a "create test" button.
-
      *
      * @param int    $categoryId
      * @param string $keyword
+     * @param int    $userId   Optional.
+     * @param int    $courseId   Optional.
+     * @param int    $sessionId  Optional.
+     * @param bool   $returnData Optional.
      *
      * @return string
      */
-    public static function exerciseGrid($categoryId, $keyword = '')
-    {
+    public static function exerciseGrid(
+        $categoryId,
+        $keyword = '',
+        $userId = 0,
+        $courseId = 0,
+        $sessionId = 0,
+        $returnData = false
+    ) {
         $TBL_DOCUMENT = Database::get_course_table(TABLE_DOCUMENT);
         $TBL_ITEM_PROPERTY = Database::get_course_table(TABLE_ITEM_PROPERTY);
         $TBL_EXERCISE_QUESTION = Database::get_course_table(TABLE_QUIZ_TEST_QUESTION);
@@ -8441,17 +8450,17 @@ class Exercise
         }
 
         $is_allowedToEdit = api_is_allowed_to_edit(null, true);
-        $courseInfo = api_get_course_info();
-        $sessionId = api_get_session_id();
+        $courseInfo = $courseId ? api_get_course_info_by_id($courseId) : api_get_course_info();
+        $sessionId = $sessionId ? (int) $sessionId : api_get_session_id();
         $courseId = $courseInfo['real_id'];
         $tableRows = [];
         $uploadPath = DIR_HOTPOTATOES; //defined in main_api
         $exercisePath = api_get_self();
         $origin = api_get_origin();
-        $userInfo = api_get_user_info();
+        $userInfo = $userId ? api_get_user_info($userId) : api_get_user_info();
         $charset = 'utf-8';
         $token = Security::get_token();
-        $userId = api_get_user_id();
+        $userId = $userId ? (int) $userId : api_get_user_id();
         $isDrhOfCourse = CourseManager::isUserSubscribedInCourseAsDrh($userId, $courseInfo);
         $documentPath = api_get_path(SYS_COURSE_PATH).$courseInfo['path'].'/document';
         $limitTeacherAccess = api_get_configuration_value('limit_exercise_teacher_access');
@@ -8664,6 +8673,8 @@ class Exercise
             }
         }
 
+        $webPath = api_get_path(WEB_CODE_PATH);
+
         if (!empty($exerciseList)) {
             if ($origin !== 'learnpath') {
                 $visibilitySetting = api_get_configuration_value('show_hidden_exercise_added_to_lp');
@@ -8675,7 +8686,7 @@ class Exercise
                     $my_exercise_id = $row['id'];
                     $attempt_text = '';
                     $actions = '';
-                    $exercise = new Exercise();
+                    $exercise = new Exercise($returnData ? $courseId : 0);
                     $exercise->read($my_exercise_id, false);
 
                     if (empty($exercise->id)) {
@@ -9107,6 +9118,10 @@ class Exercise
                         // Link of the exercise.
                         $currentRow['title'] = $url.' '.$session_img;
 
+                        if ($returnData) {
+                            $currentRow['title'] = $exercise->getUnformattedTitle();
+                        }
+
                         // This query might be improved later on by ordering by the new "tms" field rather than by exe_id
                         // Don't remove this marker: note-query-exe-results
                         $sql = "SELECT * FROM $TBL_TRACK_EXERCISES
@@ -9222,6 +9237,10 @@ class Exercise
                                 }
                             }
                         }
+
+                        if ($returnData) {
+                            $attempt_text = $num;
+                        }
                     }
 
                     $currentRow['attempt'] = $attempt_text;
@@ -9248,6 +9267,14 @@ class Exercise
                         if ($isDrhOfCourse) {
                             $currentRow[] = '<a href="exercise_report.php?'.api_get_cidreq().'&exerciseId='.$row['id'].'">'.
                                 Display::return_icon('test_results.png', get_lang('Results'), '', ICON_SIZE_SMALL).'</a>';
+                        }
+
+                        if ($returnData) {
+                            $currentRow['id'] = $exercise->id;
+                            $currentRow['url'] = $webPath.'exercise/overview.php?'
+                                .api_get_cidreq_params($courseInfo['code'], $sessionId).'&'
+                                ."$mylpid$mylpitemid&exerciseId={$row['id']}";
+                            $currentRow['name'] = $currentRow[0];
                         }
                     }
 
@@ -9418,6 +9445,10 @@ class Exercise
 
                 $tableRows[] = $currentRow;
             }
+        }
+
+        if ($returnData) {
+            return $tableRows;
         }
 
         if (empty($tableRows) && empty($categoryId)) {

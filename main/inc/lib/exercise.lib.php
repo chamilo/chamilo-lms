@@ -930,7 +930,12 @@ class ExerciseLib
                                     WHERE exe_id = $exe_id AND question_id= $questionId";
                             $rsLastAttempt = Database::query($sql);
                             $rowLastAttempt = Database::fetch_array($rsLastAttempt);
-                            $answer = $rowLastAttempt['answer'];
+
+                            $answer = null;
+                            if (isset($rowLastAttempt['answer'])) {
+                                $answer = $rowLastAttempt['answer'];
+                            }
+
                             if (empty($answer)) {
                                 $_SESSION['calculatedAnswerId'][$questionId] = mt_rand(
                                     1,

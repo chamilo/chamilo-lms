@@ -45,7 +45,7 @@ if (isset($_GET['action'])) {
                     $surveyId = $data['item_id'];
                     $surveyData = SurveyManager::get_survey($surveyId, 0, api_get_course_id());
                     if (!empty($surveyData)) {
-                        $filename = 'survey_results_'.$surveyId.'.xlsx';
+                        $filename = $surveyData['code'].'.xlsx';
                         $exportList[] = @SurveyUtil::export_complete_report_xls($surveyData, $filename, 0, true);
                     }
                 }

@@ -6,16 +6,16 @@ const FileManagerPlugin = require('filemanager-webpack-plugin');
 Encore
     .setOutputPath('public/build/')
     .setManifestKeyPrefix('public/build/')
-    .setPublicPath('../')
+    // .setPublicPath('../')
+    .setPublicPath('/build')
     .cleanupOutputBeforeBuild()
+    .enableBuildNotifications()
 
     .addEntry('app', './assets/js/app.js')
+    .addEntry('vue', './assets/vue/main.js')
     .addEntry('bootstrap', './assets/js/bootstrap.js')
-
     .addEntry('exercise', './assets/js/exercise.js')
-
-    .addEntry('free-jqgrid', './assets/js/free-jqgrid.js')
-
+    // .addEntry('free-jqgrid', './assets/js/free-jqgrid.js')
     .addStyleEntry('css/app', './assets/css/app.scss')
     .addStyleEntry('css/bootstrap', './assets/css/bootstrap.scss')
 
@@ -29,12 +29,21 @@ Encore
     .addStyleEntry('css/scorm', './assets/css/scorm.css')
 
     .enableSingleRuntimeChunk()
+    .enableIntegrityHashes()
 
     .enableSourceMaps(!Encore.isProduction())
-    // .enableVersioning(Encore.isProduction())
 
     .enableSassLoader()
-    .enableVueLoader()
+    .enableVueLoader(function(options) {
+        options.pluginOptions = {
+            quasar: {
+                importStrategy: 'manual',
+                rtlSupport: false
+            }
+        }
+
+        options.transpileDependencies = ['quasar'];
+    })
     .autoProvidejQuery()
     .copyFiles([
         {
@@ -63,6 +72,19 @@ Encore
             to: 'libs/mathjax/MathJax.js'
         },
     ])
+    // enable ESLint
+    // .addLoader({
+    //     enforce: 'pre',
+    //     test: /\.(js|vue)$/,
+    //     loader: 'eslint-loader',
+    //     exclude: /node_modules/,
+    //     options: {
+    //         fix: true,
+    //         emitError: false,
+    //         emitWarning: true,
+    //
+    //     },
+    // })
 ;
 
 Encore.addPlugin(new CopyWebpackPlugin([
@@ -102,18 +124,18 @@ themes.forEach(function (theme) {
 });
 
 // Fix free-jqgrid languages files
-Encore.addPlugin(new FileManagerPlugin({
-    onEnd: {
-        move: [
-            {
-                source: './public/public/build/free-jqgrid/',
-                destination: './public/build/free-jqgrid/'
-            }
-        ],
-        delete: [
-            './public/public/'
-        ]
-    }
-}));
+// Encore.addPlugin(new FileManagerPlugin({
+//     onEnd: {
+//         move: [
+//             {
+//                 source: './public/public/build/free-jqgrid/',
+//                 destination: './public/build/free-jqgrid/'
+//             }
+//         ],
+//         delete: [
+//             './public/public/'
+//         ]
+//     }
+// }));
 
 module.exports = Encore.getWebpackConfig();

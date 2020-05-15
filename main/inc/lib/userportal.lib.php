@@ -1058,21 +1058,32 @@ class IndexManager
             'title' => get_lang('SortMyCourses')
         ];*/
 
-        // Session history
-        if (isset($_GET['history']) && intval($_GET['history']) == 1) {
-            $items[] = [
-                'class' => 'history-course',
-                'icon' => Display::return_icon('history-course.png', get_lang('DisplayTrainingList')),
-                'link' => 'user_portal.php',
-                'title' => get_lang('DisplayTrainingList')
-            ];
-        } else {
-            $items[] = [
-                'class' => 'history-course',
-                'icon' => Display::return_icon('history-course.png', get_lang('HistoryTrainingSessions')),
-                'link' => 'user_portal.php?history=1',
-                'title' => get_lang('HistoryTrainingSessions')
-            ];
+        $settings = api_get_configuration_value('userportal_session_settings');
+        $existSetting = false;
+        if (!empty($settings)) {
+            $userInfo = api_get_user_info(api_get_user_id());
+            if ($userInfo && isset($settings['status'][$userInfo['status']])) {
+                $existSetting = true;
+            }
+        }
+
+        if ($existSetting) {
+            // Session history
+            if (isset($_GET['history']) && intval($_GET['history']) == 1) {
+                $items[] = [
+                    'class' => 'history-course',
+                    'icon' => Display::return_icon('history-course.png', get_lang('DisplayTrainingList')),
+                    'link' => 'user_portal.php',
+                    'title' => get_lang('DisplayTrainingList')
+                ];
+            } else {
+                $items[] = [
+                    'class' => 'history-course',
+                    'icon' => Display::return_icon('history-course.png', get_lang('HistoryTrainingSessions')),
+                    'link' => 'user_portal.php?history=1',
+                    'title' => get_lang('HistoryTrainingSessions')
+                ];
+            }
         }
 
         /*if ($isHrm) {
@@ -1133,11 +1144,10 @@ class IndexManager
         $settings = api_get_configuration_value('userportal_session_settings');
 
         $existSetting = false;
-        $userInfo = null;
         $historyLimit = 0;
         if (!empty($settings)) {
             $userInfo = api_get_user_info($user_id);
-            if (isset($settings['status'][$userInfo['status']])) {
+            if ($userInfo && isset($settings['status'][$userInfo['status']])) {
                 $existSetting = true;
                 $historyLimit = $settings['status'][$userInfo['status']]['end_date_history_start'];
             }

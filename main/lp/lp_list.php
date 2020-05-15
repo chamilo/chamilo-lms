@@ -69,6 +69,15 @@ $introduction = Display::return_introduction_section(
 
 $message = '';
 $actions = '';
+
+$allowCategory = true;
+if (!empty($sessionId)) {
+    $allowCategory = false;
+    if (api_get_configuration_value('allow_session_lp_category')) {
+        $allowCategory = true;
+    }
+}
+
 if ($is_allowed_to_edit) {
     $actionLeft = '';
     $actionLeft .= Display::url(
@@ -102,14 +111,6 @@ if ($is_allowed_to_edit) {
         );
     }
 
-    $allowCategory = true;
-    if (!empty($sessionId)) {
-        $allowCategory = false;
-        if (api_get_configuration_value('allow_session_lp_category')) {
-            $allowCategory = true;
-        }
-    }
-
     if ($allowCategory) {
         $actionLeft .= Display::url(
             Display::return_icon(
@@ -126,13 +127,27 @@ if ($is_allowed_to_edit) {
 
 $token = Security::get_token();
 $categoriesTempList = learnpath::getCategories($courseId);
+$firstSessionCategoryId = 0;
+if ($allowCategory) {
+    $newCategoryFiltered = [];
+    foreach ($categoriesTempList as $category) {
+        $categorySessionId = (int) learnpath::getCategorySessionId($category->getId());
+        if ($categorySessionId === $sessionId || $categorySessionId === 0) {
+            $newCategoryFiltered[] = $category;
+        }
+        if (!empty($sessionId) && empty($firstSessionCategoryId) && $categorySessionId == $sessionId) {
+            $firstSessionCategoryId = $category->getId();
+        }
+    }
+
+    $categoriesTempList = $newCategoryFiltered;
+}
+
 $categoryTest = new CLpCategory();
 $categoryTest->setId(0);
 $categoryTest->setName(get_lang('WithOutCategory'));
 $categoryTest->setPosition(0);
-$categories = [
-    $categoryTest,
-];
+$categories = [$categoryTest];
 
 if (!empty($categoriesTempList)) {
     $categories = array_merge($categories, $categoriesTempList);
@@ -201,13 +216,9 @@ $tableCategory = Database::get_course_table(TABLE_LP_CATEGORY);
 /** @var CLpCategory $item */
 foreach ($categories as $item) {
     $categoryId = $item->getId();
-    if (!empty($sessionId) && api_get_configuration_value('allow_session_lp_category')) {
-        $sql = "SELECT session_id FROM $tableCategory WHERE iid = $categoryId";
-        $result = Database::query($sql);
-        $row = Database::fetch_array($result, 'ASSOC');
-        if ($row) {
-            $item->setSessionId((int) $row['session_id']);
-        }
+    if (!empty($sessionId) && $allowCategory) {
+        $categorySessionId = learnpath::getCategorySessionId($categoryId);
+        $item->setSessionId($categorySessionId);
     }
 
     if ($categoryId !== 0 && $subscriptionSettings['allow_add_users_to_lp_category'] == true) {
@@ -222,6 +233,21 @@ foreach ($categories as $item) {
         if (!$is_allowed_to_edit) {
             if ($categoryVisibility !== 1 && $categoryVisibility != -1) {
                 continue;
+            }
+        }
+
+        if ($allowCategory && !empty($sessionId)) {
+            // Check base course
+            if (0 === $item->getSessionId()) {
+                $categoryVisibility = api_get_item_visibility(
+                    $courseInfo,
+                    TOOL_LEARNPATH_CATEGORY,
+                    $categoryId,
+                    0
+                );
+                if ($categoryVisibility == 0) {
+                    continue;
+                }
             }
         }
 
@@ -940,10 +966,7 @@ foreach ($categories as $item) {
             $item->getId(),
             $sessionId
         ),
-        'category_is_published' => learnpath::categoryIsPublished(
-            $item,
-            $courseInfo['real_id']
-        ),
+        'category_is_published' => learnpath::categoryIsPublished($item, $courseInfo['real_id']),
         'lp_list' => $listData,
     ];
 }
@@ -990,6 +1013,7 @@ if ($ending && $allLpTimeValid && api_get_configuration_value('download_files_af
 }
 
 $template = new Template($nameTools);
+$template->assign('first_session_category', $firstSessionCategoryId);
 $template->assign('session_star_icon', Display::return_icon('star.png', get_lang('Session')));
 $template->assign('subscription_settings', $subscriptionSettings);
 $template->assign('is_allowed_to_edit', $is_allowed_to_edit);

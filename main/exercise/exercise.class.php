@@ -3188,6 +3188,7 @@ class Exercise
             if ($this->getFeedbackType() === EXERCISE_FEEDBACK_TYPE_POPUP) {
                 //$params['data-block-div-after-closing'] = "question_div_$question_id";
                 $params['data-block-closing'] = 'true';
+                $params['class'] .= ' no-header ';
             }
 
             $html .= Display::url(
@@ -3641,7 +3642,7 @@ class Exercise
 
         $answerDestination = null;
         $userAnsweredQuestion = false;
-        $correctAnswerId = null;
+        $correctAnswerId = [];
         for ($answerId = 1; $answerId <= $nbrAnswers; $answerId++) {
             $answer = $objAnswerTmp->selectAnswer($answerId);
             $answerComment = $objAnswerTmp->selectComment($answerId);
@@ -3679,14 +3680,14 @@ class Exercise
                         if ($studentChoice) {
                             $questionScore += $answerWeighting;
                             $answerDestination = $objAnswerTmp->selectDestination($answerId);
-                            $correctAnswerId = $answerId;
+                            $correctAnswerId[] = $answerId;
                         }
                     } else {
                         $studentChoice = $choice == $answerAutoId ? 1 : 0;
                         if ($studentChoice) {
                             $questionScore += $answerWeighting;
                             $answerDestination = $objAnswerTmp->selectDestination($answerId);
-                            $correctAnswerId = $answerId;
+                            $correctAnswerId[] = $answerId;
                         }
                     }
                     break;
@@ -3709,11 +3710,12 @@ class Exercise
 
                     $studentChoice = isset($choice[$answerAutoId]) ? $choice[$answerAutoId] : null;
                     if (!empty($studentChoice)) {
+                        $correctAnswerId[] = $answerAutoId;
                         if ($studentChoice == $answerCorrect) {
                             $questionScore += $true_score;
                         } else {
-                            if ($quiz_question_options[$studentChoice]['name'] == "Don't know" ||
-                                $quiz_question_options[$studentChoice]['name'] == "DoubtScore"
+                            if ($quiz_question_options[$studentChoice]['name'] === "Don't know" ||
+                                $quiz_question_options[$studentChoice]['name'] === "DoubtScore"
                             ) {
                                 $questionScore += $doubt_score;
                             } else {
@@ -3798,14 +3800,11 @@ class Exercise
                         $real_answers[$answerId] = (bool) $studentChoice;
 
                         if (isset($studentChoice)) {
+                            $correctAnswerId[] = $answerAutoId;
                             $questionScore += $answerWeighting;
                         }
                     }
                     $totalScore += $answerWeighting;
-
-                    if ($debug) {
-                        error_log("studentChoice: $studentChoice");
-                    }
                     break;
                 case GLOBAL_MULTIPLE_ANSWER:
                     if ($from_database) {
@@ -4590,6 +4589,8 @@ class Exercise
                             if (isset($choice[$answerAutoId]) &&
                                 $answerCorrect == $choice[$answerAutoId]
                             ) {
+
+                                $correctAnswerId[] = $answerAutoId;
                                 $questionScore += $answerWeighting;
                                 $totalScore += $answerWeighting;
                                 $user_answer = Display::span($answerMatching[$choice[$answerAutoId]]);
@@ -4758,6 +4759,7 @@ class Exercise
                         $user_array = substr($user_array, 0, -1) ?: '';
                     } else {
                         if (!empty($studentChoice)) {
+                            $correctAnswerId[] = $answerAutoId;
                             $newquestionList[] = $questionId;
                         }
 

@@ -2323,8 +2323,7 @@ class learnpath
             $row = Database::fetch_array($rs, 'ASSOC');
 
             if (!empty($row['category_id'])) {
-                $em = Database::getManager();
-                $category = $em->getRepository('ChamiloCourseBundle:CLpCategory')->find($row['category_id']);
+                $category = self::getCategory($row['category_id']);
                 if (self::categoryIsVisibleForStudent($category, api_get_user_entity($student_id)) === false) {
                     return false;
                 }
@@ -4533,9 +4532,7 @@ class learnpath
         );
 
         $em = Database::getManager();
-
-        /** @var CLpCategory $category */
-        $category = $em->find('ChamiloCourseBundle:CLpCategory', $id);
+        $category = self::getCategory($id);
 
         if (!$category) {
             return false;
@@ -4717,10 +4714,8 @@ class learnpath
      *
      * @return bool
      */
-    public static function categoryIsPublished(
-        CLpCategory $category,
-        $courseId
-    ) {
+    public static function categoryIsPublished(CLpCategory $category, $courseId)
+    {
         $link = self::getCategoryLinkForTool($category->getId());
         $em = Database::getManager();
 
@@ -12041,16 +12036,12 @@ EOD;
 
     /**
      * @param array $params
-     *
-     * @throws \Doctrine\ORM\ORMException
-     * @throws \Doctrine\ORM\OptimisticLockException
-     * @throws \Doctrine\ORM\TransactionRequiredException
      */
     public static function updateCategory($params)
     {
         $em = Database::getManager();
-        /** @var CLpCategory $item */
-        $item = $em->find('ChamiloCourseBundle:CLpCategory', $params['id']);
+        $item = self::getCategory($params['id']);
+
         if ($item) {
             $item->setName($params['name']);
             $em->merge($item);
@@ -12060,18 +12051,12 @@ EOD;
 
     /**
      * @param int $id
-     *
-     * @throws \Doctrine\ORM\ORMException
-     * @throws \Doctrine\ORM\OptimisticLockException
-     * @throws \Doctrine\ORM\TransactionRequiredException
      */
     public static function moveUpCategory($id)
     {
-        $id = (int) $id;
-        $em = Database::getManager();
-        /** @var CLpCategory $item */
-        $item = $em->find('ChamiloCourseBundle:CLpCategory', $id);
+        $item = self::getCategory($id);
         if ($item) {
+            $em = Database::getManager();
             $position = $item->getPosition() - 1;
             $item->setPosition($position);
             $em->persist($item);
@@ -12088,11 +12073,9 @@ EOD;
      */
     public static function moveDownCategory($id)
     {
-        $id = (int) $id;
-        $em = Database::getManager();
-        /** @var CLpCategory $item */
-        $item = $em->find('ChamiloCourseBundle:CLpCategory', $id);
+        $item = self::getCategory($id);
         if ($item) {
+            $em = Database::getManager();
             $position = $item->getPosition() + 1;
             $item->setPosition($position);
             $em->persist($item);
@@ -12133,7 +12116,7 @@ EOD;
     /**
      * @param int $courseId
      *
-     * @return mixed
+     * @return CLpCategory[]
      */
     public static function getCategories($courseId)
     {
@@ -12146,12 +12129,28 @@ EOD;
         return $repo->getBySortableGroupsQuery(['cId' => $courseId])->getResult();
     }
 
+    public static function getCategorySessionId($id)
+    {
+        if (false === api_get_configuration_value('allow_session_lp_category')) {
+            return 0;
+        }
+
+        $table = Database::get_course_table(TABLE_LP_CATEGORY);
+        $id = (int) $id;
+
+        $sql = "SELECT session_id FROM $table WHERE iid = $id";
+        $result = Database::query($sql);
+        $result = Database::fetch_array($result, 'ASSOC');
+
+        if ($result) {
+            return (int) $result['session_id'];
+        }
+
+        return 0;
+    }
+
     /**
      * @param int $id
-     *
-     * @throws \Doctrine\ORM\ORMException
-     * @throws \Doctrine\ORM\OptimisticLockException
-     * @throws \Doctrine\ORM\TransactionRequiredException
      *
      * @return CLpCategory
      */

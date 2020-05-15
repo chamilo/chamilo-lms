@@ -42,8 +42,8 @@
                                         </a>
                                     {% endif %}
 
-                                    {% if not _c.session_id %}
-                                        {% if loop.index0 == 1 %}
+                                    {% if lp_data.category.sessionId == _c.session_id %}
+                                        {% if loop.index0 == 1 or first_session_category == lp_data.category.id %}
                                             <a href="#">
                                                 <img src="{{ "up_na.png"|icon }}" alt="{{ "Move"|get_lang }}">
                                             </a>
@@ -67,7 +67,7 @@
                                     {% endif %}
                                 {% endif %}
 
-                                {% if lp_data.category.sessionId == _c.session_id %}
+{#                                {% if lp_data.category.sessionId == _c.session_id %}#}
                                     {% if lp_data.category_visibility == 0 %}
                                         <a href="lp_controller.php?{{ _p.web_cid_query ~ '&' ~ {'action':'toggle_category_visibility', 'id':lp_data.category.id, 'new_status':1}|url_encode }}"
                                            title="{{ 'Show'|get_lang }}">
@@ -79,9 +79,9 @@
                                             <img src="{{ 'visible.png'|icon }}" alt="{{ 'Hide'|get_lang }}">
                                         </a>
                                     {% endif %}
-                                {% endif %}
+{#                                {% endif %}#}
 
-                                {% if not _c.session_id %}
+{#                                {% if not _c.session_id %}#}
                                     {% if lp_data.category_is_published == 0 %}
                                         <a href="lp_controller.php?{{ _p.web_cid_query ~ '&' ~ {'action':'toggle_category_publish', 'id':lp_data.category.id, 'new_status':1}|url_encode }}"
                                            title="{{ 'LearnpathPublish'|get_lang }}">
@@ -94,7 +94,7 @@
                                             <img src="{{ 'lp_publish.png'|icon }}" alt="{{ 'Hide'|get_lang }}">
                                         </a>
                                     {% endif %}
-                                {% endif %}
+{#                                {% endif %}#}
 
                                 {% if lp_data.category.sessionId == _c.session_id %}
                                     <a href="{{ 'lp_controller.php?' ~ _p.web_cid_query  ~ '&action=delete_lp_category&id=' ~ lp_data.category.getId() }}"

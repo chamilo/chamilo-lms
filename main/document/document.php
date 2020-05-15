@@ -850,17 +850,21 @@ if ($is_certificate_mode) {
 // Interbreadcrumb for the current directory root path
 if (empty($document_data['parents'])) {
     if (isset($_GET['createdir'])) {
-        $interbreadcrumb[] = [
-            'url' => $document_data['document_url'],
-            'name' => $document_data['title'],
-        ];
-    } else {
-        // Hack in order to not add the document to the breadcrumb in case it is a link
-        if ($document_data['filetype'] != 'link') {
+        if ($document_data) {
             $interbreadcrumb[] = [
-                'url' => '#',
+                'url' => $document_data['document_url'],
                 'name' => $document_data['title'],
             ];
+        }
+    } else {
+        if ($document_data) {
+            // Hack in order to not add the document to the breadcrumb in case it is a link
+            if ($document_data['filetype'] != 'link') {
+                $interbreadcrumb[] = [
+                    'url' => '#',
+                    'name' => $document_data['title'],
+                ];
+            }
         }
     }
 } else {

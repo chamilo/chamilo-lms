@@ -683,14 +683,20 @@ if (isset($modifyAnswers)) {
                 $option1 = $option2 = $option3 = '';
                 for ($k = 1; $k <= 100; $k++) {
                     $selected1 = $selected2 = $selected3 = '';
-                    if ($k == $threadhold1[$i]) {
-                        $selected1 = 'selected="selected"';
+                    if (isset($threadhold1[$i])) {
+                        if ($k == $threadhold1[$i]) {
+                            $selected1 = 'selected="selected"';
+                        }
                     }
-                    if ($k == $threadhold2[$i]) {
-                        $selected2 = 'selected="selected"';
+                    if (isset($threadhold2[$i])) {
+                        if ($k == $threadhold2[$i]) {
+                            $selected2 = 'selected="selected"';
+                        }
                     }
-                    if ($k == $threadhold3[$i]) {
-                        $selected3 = 'selected="selected"';
+                    if (isset($threadhold3[$i])) {
+                        if ($k == $threadhold3[$i]) {
+                            $selected3 = 'selected="selected"';
+                        }
                     }
                     $option1 .= '<option '.$selected1.' >'.$k.' % </option>';
                     $option2 .= '<option '.$selected2.' >'.$k.' % </option>';

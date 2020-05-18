@@ -25,42 +25,42 @@ external tool.
 
 # Changelog
 
-## v1.8 {#changelog-v1p8}
-> Requires DB changes to upgrade, see [v1.8](#upgrade-v1p8).
+## v1.8
+> Requires DB changes to upgrade, see [v1.8](#to-v180).
 * Add option to add replacements for launch params
 
-## v1.7 {#changelog-v17}
-> Requires DB changes to upgrade, see [v1.8](#upgrade-v1p7).
+## v1.7
+> Requires DB changes to upgrade, see [v1.8](#to-v170).
 * Fix auth params
 * Add option to show LTI tool in iframe or new window.
 
-## v1.6 {#changelog-v1p6}
-> Requires DB changes to upgrade, see [v1.8](#upgrade-v1p6).
+## v1.6
+> Requires DB changes to upgrade, see [v1.8](#to-v160).
 * Add support to LTI 1.3 and Advantage Services
 
-## v1.5 {#changelog-v1p5}
-> Requires DB changes to upgrade, see [v1.8](#upgrade-v1p5p1).
+## v1.5
+> Requires DB changes to upgrade, see [v1.8](#to-v151).
 * Plugin has passed the tests from the LTI Certification suite.
 * Add support for substitution of variable.
   See `ImsLti::getSubstitutableParams()`.
 * Outcome services has a unique URL and sourced ID.
 
-## v1.4 {#changelog-v1p4}
-> Requires DB changes to upgrade, see [v1.8](#upgrade-v1p4).
+## v1.4
+> Requires DB changes to upgrade, see [v1.8](#to-v140).
 * Allow create external tools when there is no key/secret available for launch
 
-## v1.3 {#changelog-v1p3}
-> Requires DB changes to upgrade, see [v1.8](#upgrade-v1p3).
+## v1.3
+> Requires DB changes to upgrade, see [v1.8](#to-v130).
 * Privacy settings added. Allow to indicate id the launcher's data
   should be sent in request.
 
-## v1.2 {#changelog-v1p2}
-> Requires DB changes to upgrade, see [v1.8](#upgrade-v1p2).
+## v1.2
+> Requires DB changes to upgrade, see [v1.8](#to-v120).
 * Register course in which the tool was added.
 * Register parent tool from which the new tool comes from.
 
-## v1.1 {#changelog-v1pp1}
-> Requires DB changes to upgrade, see [v1.8](#upgrade-v1p1).
+## v1.1
+> Requires DB changes to upgrade, see [v1.8](#to-v110).
 * Support for Deep-Linking added.
 * Support for outcomes services. And register score on course gradebook.
 

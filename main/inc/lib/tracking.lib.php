@@ -7653,10 +7653,13 @@ class TrackingCourseLog
         $res = Database::query($sql);
         $users = [];
 
-        $course_info = api_get_course_info($course_code);
+        $courseInfo = api_get_course_info($course_code);
+        $courseId = $courseInfo['real_id'];
+        $courseCode = $courseInfo['code'];
+
         $total_surveys = 0;
         $total_exercises = ExerciseLib::get_all_exercises(
-            $course_info,
+            $courseInfo,
             $session_id,
             false,
             null,
@@ -7673,7 +7676,7 @@ class TrackingCourseLog
                     $user_list = SurveyManager::get_people_who_filled_survey(
                         $survey['survey_id'],
                         false,
-                        $course_info['real_id']
+                        $courseId
                     );
 
                     foreach ($user_list as $user_id) {
@@ -7683,10 +7686,7 @@ class TrackingCourseLog
             }
         }
 
-        $courseInfo = api_get_course_info($course_code);
-        $courseId = $courseInfo['real_id'];
-
-        $urlBase = api_get_path(WEB_CODE_PATH).'mySpace/myStudents.php?details=true&cidReq='.$course_code.
+        $urlBase = api_get_path(WEB_CODE_PATH).'mySpace/myStudents.php?details=true&cidReq='.$courseCode.
             '&course='.$course_code.'&origin=tracking_course&id_session='.$session_id;
 
         $sortByFirstName = api_sort_by_first_name();
@@ -7935,9 +7935,9 @@ class TrackingCourseLog
             $direction = 'ASC';
         }
 
-        $column = intval($column);
-        $from = intval($from);
-        $number_of_items = intval($number_of_items);
+        $column = (int) $column;
+        $from = (int) $from;
+        $number_of_items = (int) $number_of_items;
 
         $sql .= " ORDER BY col$column $direction ";
         $sql .= " LIMIT $from,$number_of_items";
@@ -7945,12 +7945,11 @@ class TrackingCourseLog
         $res = Database::query($sql);
         $users = [];
 
-        $course_info = api_get_course_info($course_code);
         $sortByFirstName = api_sort_by_first_name();
-        while ($user = Database::fetch_array($res, 'ASSOC')) {
-            $courseInfo = api_get_course_info($course_code);
-            $courseId = $courseInfo['real_id'];
+        $courseInfo = api_get_course_info($course_code);
+        $courseId = $courseInfo['real_id'];
 
+        while ($user = Database::fetch_array($res, 'ASSOC')) {
             $user['official_code'] = $user['col0'];
             $user['lastname'] = $user['col1'];
             $user['firstname'] = $user['col2'];

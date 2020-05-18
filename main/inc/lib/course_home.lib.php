@@ -36,47 +36,47 @@ class CourseHome
                 if ((api_is_coach() || api_is_course_tutor() || api_is_platform_admin()) &&
                     $_SESSION['studentview'] != 'studentview'
                 ) {
-                    $condition_display_tools = ' WHERE 
-                        a.c_id = '.$course_id.' AND 
+                    $condition_display_tools = ' WHERE
+                        a.c_id = '.$course_id.' AND
                         a.link=t.link AND
-                         (t.position="basic" OR a.name = "'.TOOL_TRACKING.'") 
+                         (t.position="basic" OR a.name = "'.TOOL_TRACKING.'")
                     ';
                 }
 
-                $sql = "SELECT a.*, t.image img, t.row, t.column  
+                $sql = "SELECT a.*, t.image img, t.row, t.column
                         FROM $TBL_ACCUEIL a, $TABLE_TOOLS t
                         $condition_display_tools ORDER BY t.row, t.column";
                 break;
             case 'External':
                 if (api_is_allowed_to_edit()) {
                     $sql = "SELECT a.*, t.image img FROM $TBL_ACCUEIL a, $TABLE_TOOLS t
-                            WHERE 
-                              a.c_id = $course_id AND 
-                              ((a.link=t.link AND t.position='external') OR 
-                              (a.visibility <= 1 AND 
-                              (a.image = 'external.gif' OR a.image = 'scormbuilder.gif' OR t.image = 'blog.gif') AND 
+                            WHERE
+                              a.c_id = $course_id AND
+                              ((a.link=t.link AND t.position='external') OR
+                              (a.visibility <= 1 AND
+                              (a.image = 'external.gif' OR a.image = 'scormbuilder.gif' OR t.image = 'blog.gif') AND
                               a.image=t.image))
                             ORDER BY a.id";
                 } else {
                     $sql = "SELECT a.*, t.image img FROM $TBL_ACCUEIL a, $TABLE_TOOLS t
-                            WHERE 
-                              a.c_id = $course_id AND 
-                              (a.visibility = 1 AND ((a.link=t.link AND t.position='external') OR 
-                              ((a.image = 'external.gif' OR a.image = 'scormbuilder.gif' OR t.image = 'blog.gif') AND 
+                            WHERE
+                              a.c_id = $course_id AND
+                              (a.visibility = 1 AND ((a.link=t.link AND t.position='external') OR
+                              ((a.image = 'external.gif' OR a.image = 'scormbuilder.gif' OR t.image = 'blog.gif') AND
                               a.image=t.image)))
                             ORDER BY a.id";
                 }
                 break;
             case 'courseAdmin':
-                $sql = "SELECT a.*, t.image img, t.row, t.column  
+                $sql = "SELECT a.*, t.image img, t.row, t.column
                         FROM $TBL_ACCUEIL a, $TABLE_TOOLS t
-                        WHERE a.c_id = $course_id AND admin=1 AND a.link=t.link 
+                        WHERE a.c_id = $course_id AND admin=1 AND a.link=t.link
                         ORDER BY t.row, t.column";
                 break;
 
             case 'platformAdmin':
-                $sql = "SELECT *, image img FROM $TBL_ACCUEIL 
-                        WHERE c_id = $course_id AND visibility = 2 
+                $sql = "SELECT *, image img FROM $TBL_ACCUEIL
+                        WHERE c_id = $course_id AND visibility = 2
                         ORDER BY id";
         }
         $result = Database::query($sql);
@@ -96,7 +96,7 @@ class CourseHome
                 $sql_links = "SELECT tl.*, tip.visibility
                               FROM $tbl_link tl
                               LEFT JOIN $tbl_item_property tip ON tip.tool='link' AND tip.ref=tl.id
-                              WHERE 	
+                              WHERE
                                 tl.c_id = $course_id AND
                                 tip.c_id = $course_id AND
                                 tl.on_homepage='1' AND
@@ -105,7 +105,7 @@ class CourseHome
                 $sql_links = "SELECT tl.*, tip.visibility
                                 FROM $tbl_link tl
                                 LEFT JOIN $tbl_item_property tip ON tip.tool='link' AND tip.ref=tl.id
-                                WHERE 	
+                                WHERE
                                     tl.c_id = $course_id AND
                                     tip.c_id = $course_id AND
                                     tl.on_homepage='1' AND
@@ -275,8 +275,8 @@ class CourseHome
                 if ((api_is_coach() || api_is_course_tutor() || api_is_platform_admin()) &&
                     $_SESSION['studentview'] != 'studentview'
                 ) {
-                    $condition_display_tools = ' WHERE 
-                        c_id = '.$course_id.' AND 
+                    $condition_display_tools = ' WHERE
+                        c_id = '.$course_id.' AND
                         (visibility = 1 OR (visibility = 0 AND name = "'.TOOL_TRACKING.'")) ';
                 }
                 $result = Database::query("SELECT * FROM $course_tool_table $condition_display_tools ORDER BY id");
@@ -312,14 +312,14 @@ class CourseHome
             case TOOL_PUBLIC:
                 $sql_links = "SELECT tl.*, tip.visibility
                         FROM $course_link_table tl
-                        LEFT JOIN $course_item_property_table tip 
+                        LEFT JOIN $course_item_property_table tip
                         ON tip.tool='link' AND tl.c_id = tip.c_id AND tl.c_id = $course_id AND tip.ref=tl.id
                         WHERE tl.on_homepage='1' AND tip.visibility = 1";
                 break;
             case TOOL_PUBLIC_BUT_HIDDEN:
                 $sql_links = "SELECT tl.*, tip.visibility
                     FROM $course_link_table tl
-                    LEFT JOIN $course_item_property_table tip 
+                    LEFT JOIN $course_item_property_table tip
                     ON tip.tool='link' AND tl.c_id = tip.c_id AND tl.c_id = $course_id AND tip.ref=tl.id
                     WHERE tl.on_homepage='1' AND tip.visibility = 0";
 
@@ -524,29 +524,29 @@ class CourseHome
         $orderBy = ' ORDER BY id ';
         switch ($course_tool_category) {
             case TOOL_STUDENT_VIEW:
-                $conditions = ' WHERE visibility = 1 AND 
-                                (category = "authoring" OR category = "interaction" OR category = "plugin") AND 
+                $conditions = ' WHERE visibility = 1 AND
+                                (category = "authoring" OR category = "interaction" OR category = "plugin") AND
                                 t.name <> "notebookteacher" ';
                 if ((api_is_coach() || api_is_course_tutor() || api_is_platform_admin()) &&
                     $_SESSION['studentview'] != 'studentview'
                 ) {
                     $conditions = ' WHERE (
                         visibility = 1 AND (
-                            category = "authoring" OR 
-                            category = "interaction" OR 
+                            category = "authoring" OR
+                            category = "interaction" OR
                             category = "plugin"
-                        ) OR (t.name = "'.TOOL_TRACKING.'") 
+                        ) OR (t.name = "'.TOOL_TRACKING.'")
                     )';
                 }
 
                 // Add order if there are LPs
                 $sql = "SELECT t.* FROM $course_tool_table t
-                        LEFT JOIN $lpTable l 
+                        LEFT JOIN $lpTable l
                         ON (t.c_id = l.c_id AND link LIKE concat('%/lp_controller.php?action=view&lp_id=', l.id, '&%'))
                         LEFT JOIN $tblLpCategory lc
                         ON (t.c_id = lc.c_id AND l.category_id = lc.iid)
                         $conditions AND
-                        t.c_id = $course_id $condition_session 
+                        t.c_id = $course_id $condition_session
                         ORDER BY
                             CASE WHEN l.category_id IS NULL THEN 0 ELSE 1 END,
                             CASE WHEN l.display_order IS NULL THEN 0 ELSE 1 END,
@@ -1818,5 +1818,36 @@ class CourseHome
             $iconSize,
             false
         );
+    }
+
+    /**
+     * @param string $toolName
+     * @param int    $courseId
+     * @param int    $sessionId Optional.
+     *
+     * @return bool
+     */
+    public static function getToolVisibility($toolName, $courseId, $sessionId = 0)
+    {
+        $allowEditionInSession = api_get_configuration_value('allow_edit_tool_visibility_in_session');
+
+        $em = Database::getManager();
+        $toolRepo = $em->getRepository('ChamiloCourseBundle:CTool');
+
+        /** @var CTool $tool */
+        $tool = $toolRepo->findOneBy(['cId' => $courseId, 'sessionId' => 0, 'name' => $toolName]);
+        $visibility = $tool->getVisibility();
+
+        if ($allowEditionInSession && $sessionId) {
+            $tool = $toolRepo->findOneBy(
+                ['cId' => $courseId, 'sessionId' => $sessionId, 'name' => $toolName]
+            );
+
+            if ($tool) {
+                $visibility = $tool->getVisibility();
+            }
+        }
+
+        return $visibility;
     }
 }

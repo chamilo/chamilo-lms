@@ -66,6 +66,7 @@ class Rest extends WebService
     const GET_SESSION_FROM_EXTRA_FIELD = 'get_session_from_extra_field';
     const UPDATE_USER_FROM_USERNAME = 'update_user_from_username';
     const USERNAME_EXIST = 'username_exist';
+    const GET_COURSE_QUIZ_MDL_COMPAT = 'get_course_quiz_mdl_compat';
 
     /**
      * @var Session
@@ -1997,5 +1998,60 @@ class Rest extends WebService
         );
 
         return json_encode($params);
+    }
+
+    /**
+     * This service roughly matches what the call to MDL's API core_course_get_contents function returns.
+     *
+     * @return array
+     */
+    public function getCourseQuizMdlCompat()
+    {
+        $userId = $this->user->getId();
+        $courseId = $this->course->getId();
+        $sessionId = $this->session ? $this->session->getId() : 0;
+
+        $toolVisibility = CourseHome::getToolVisibility(TOOL_QUIZ, $courseId, $sessionId);
+
+        $json = [
+            "id" => $this->course->getId(),
+            "name" => get_lang('Exercises'),
+            "visible" => (int) $toolVisibility,
+            "summary" => '',
+            "summaryformat" => 1,
+            "section" => 1,
+            "hiddenbynumsections" => 0,
+            "uservisible" => $toolVisibility,
+            "modules" => [],
+        ];
+
+        $quizIcon = Display::return_icon('quiz.png', '', [], ICON_SIZE_SMALL, false, true);
+
+        $json['modules'] = array_map(
+            function (array $exercise) use ($quizIcon) {
+                return [
+                    'id' => $exercise['id'],
+                    'url' => $exercise['url'],
+                    'name' => $exercise['name'],
+                    'instance' => 1,
+                    'visible' => 1,
+                    'uservisible' => true,
+                    'visibleoncoursepage' => 0,
+                    'modicon' => $quizIcon,
+                    'modname' => 'quiz',
+                    'modplural' => get_lang('Exercises'),
+                    'availability' => null,
+                    'indent' => 0,
+                    'onclick' => '',
+                    'afterlink' =>  null,
+                    'customdata' =>  "",
+                    'noviewlink' => false,
+                    'completion' => (int) ($exercise[1] > 0),
+                ];
+            },
+            Exercise::exerciseGrid(0, '', $userId, $courseId, $sessionId, true)
+        );
+
+        return [$json];
     }
 }

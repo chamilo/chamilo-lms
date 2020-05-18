@@ -74,17 +74,17 @@ external tool.
 
 Run this changes on database:
 
-## To v1.8.0  {#upgrade-v1p8}
+## To v1.8.0
 ```sql
 ALTER TABLE plugin_ims_lti_tool ADD replacement_params LONGTEXT NOT NULL COMMENT '(DC2Type:json)';
 ```
 
-## To v1.7.0  {#upgrade-v1p7}
+## To v1.7.0
 ```sql
 ALTER TABLE plugin_ims_lti_tool ADD launch_presentation LONGTEXT NOT NULL COMMENT '(DC2Type:json)';
 ```
 
-## To v1.6.0  {#upgrade-v1p6}
+## To v1.6.0
 ```sql
 CREATE TABLE plugin_ims_lti_platform (
     id INT AUTO_INCREMENT NOT NULL,
@@ -130,26 +130,26 @@ ALTER TABLE plugin_ims_lti_lineitem
     ADD CONSTRAINT FK_BA81BBF01323A575 FOREIGN KEY (evaluation) REFERENCES gradebook_evaluation (id) ON DELETE CASCADE;
 ```
 
-## To v1.5.1  {#upgrade-v1p5p1}
+## To v1.5.1
 ```sql
 ALTER TABLE plugin_ims_lti_tool
     DROP FOREIGN KEY FK_C5E47F7C727ACA70,
     ADD FOREIGN KEY (parent_id) REFERENCES plugin_ims_lti_tool (id) ON DELETE CASCADE ON UPDATE RESTRICT;
 ```
 
-## To v1.4  {#upgrade-v1p4}
+## To v1.4
 ```sql
 ALTER TABLE plugin_ims_lti_tool
     CHANGE consumer_key consumer_key VARCHAR(255) DEFAULT NULL,
     CHANGE shared_secret shared_secret VARCHAR(255) DEFAULT NULL;
 ```
 
-## To v1.3  {#upgrade-v1p3}
+## To v1.3
 ```sql
 ALTER TABLE plugin_ims_lti_tool ADD privacy LONGTEXT DEFAULT NULL;
 ```
 
-## To v1.2  {#upgrade-v1p2}
+## To v1.2
 ```sql
 ALTER TABLE plugin_ims_lti_tool ADD c_id INT DEFAULT NULL;
 ALTER TABLE plugin_ims_lti_tool ADD CONSTRAINT FK_C5E47F7C91D79BD3
@@ -162,7 +162,7 @@ ALTER TABLE plugin_ims_lti_tool ADD CONSTRAINT FK_C5E47F7C727ACA70
 CREATE INDEX IDX_C5E47F7C727ACA70 ON plugin_ims_lti_tool (parent_id);
 ```
 
-## To v1.1  {#upgrade-v1p1}
+## To v1.1
 ```sql
 ALTER TABLE plugin_ims_lti_tool
     ADD active_deep_linking TINYINT(1) DEFAULT '0' NOT NULL,

@@ -4,15 +4,14 @@ import VueRouter from "vue-router";
 Vue.use(VueRouter);
 
 import courseRoutes from './course';
-import coursecategoryRoutes from './coursecategory';
-import sessionRoutes from './../../quasar/router/session';
+import courseCategoryRoutes from './coursecategory';
+import documents from './documents';
 
 export default new VueRouter({
     mode: "history",
     routes: [
         courseRoutes,
-        ...sessionRoutes,
-        coursecategoryRoutes,
-        // { path: "*", redirect: "/home" }
+        courseCategoryRoutes,
+        documents
     ]
 });

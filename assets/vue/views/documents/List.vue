@@ -1,21 +1,20 @@
 <template>
-  <div class="course-list">
-    <Toolbar :handle-add="addHandler" />
+  <div class="documents-list">
+    <Toolbar
+            :handle-add="addHandler"
+            :handle-add-document="addDocumentHandler"
+    />
 
     <v-container grid-list-xl fluid>
       <v-layout row wrap>
-<!--        <v-flex sm12>-->
-<!--          <h1>Course List</h1>-->
-<!--        </v-flex>-->
         <v-flex lg12>
           <DataFilter :handle-filter="onSendFilter" :handle-reset="resetFilter">
-            <CourseFilterForm
+            <DocumentsFilterForm
               ref="filterForm"
               :values="filters"
               slot="filter"
             />
           </DataFilter>
-
           <br />
 
           <v-data-table
@@ -32,23 +31,8 @@
             show-select
             @update:options="onUpdateOptions"
           >
-            <template slot="item.category" slot-scope="{ item }">
-              <div v-if="item['category']">
-                <router-link :to="{ name: 'CourseCategoryUpdate', params: {id: item['category']['@id']}}">
-                  {{ item['category'].name }}
-                </router-link>
-              </div>
-              <div v-else>
-                -
-              </div>
-            </template>
-
-            <template slot="item.visibility" slot-scope="{ item }">
-              {{ $n(item['visibility']) }}
-            </template>
-
-            <template slot="item.expirationDate" slot-scope="{ item }">
-              {{ formatDateTime(item['expirationDate'], 'long') }}
+            <template slot="item.resourceNode" slot-scope="{ item }">
+              {{ item['@id'] }}
             </template>
 
             <ActionCell
@@ -70,28 +54,25 @@ import { mapActions, mapGetters } from 'vuex';
 import { mapFields } from 'vuex-map-fields';
 import ListMixin from '../../mixins/ListMixin';
 import ActionCell from '../../components/ActionCell';
-import CourseFilterForm from '../../components/course/Filter';
+import DocumentsFilterForm from '../../components/documents/Filter';
 import DataFilter from '../../components/DataFilter';
 import Toolbar from '../../components/Toolbar';
 
 export default {
-  name: 'CourseList',
-  servicePrefix: 'Course',
+  name: 'DocumentsList',
+  servicePrefix: 'Documents',
   mixins: [ListMixin],
   components: {
     Toolbar,
     ActionCell,
-    CourseFilterForm,
+    DocumentsFilterForm,
     DataFilter
   },
   data() {
     return {
       headers: [
-        { text: 'title', value: 'title' },
-        { text: 'code', value: 'code' },
-        { text: 'courseLanguage', value: 'Language' },
-        { text: 'category', value: 'category' },
-        { text: 'visibility', value: 'visibility' },
+        {text: 'Title', value: 'resourceNode.title', sortable: true},
+        {text: 'Last modified', value: 'resourceNode.updatedAt', sortable: true},
         {
           text: 'Actions',
           value: 'action',
@@ -102,10 +83,10 @@ export default {
     };
   },
   computed: {
-    ...mapGetters('course', {
+    ...mapGetters('documents', {
       items: 'list'
     }),
-    ...mapFields('course', {
+    ...mapFields('documents', {
       deletedItem: 'deleted',
       error: 'error',
       isLoading: 'isLoading',
@@ -115,7 +96,7 @@ export default {
     })
   },
   methods: {
-    ...mapActions('course', {
+    ...mapActions('documents', {
       getPage: 'fetchAll',
       deleteItem: 'del'
     })

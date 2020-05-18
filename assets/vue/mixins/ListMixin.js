@@ -33,7 +33,7 @@ export default {
 
   methods: {
     onUpdateOptions(props) {
-      const { page, itemsPerPage, sortBy, descending, totalItems } = props;
+      const { page, itemsPerPage, sortBy, sortDesc, descending, totalItems } = props;
       let params = {
         ...this.filters
       };
@@ -41,9 +41,20 @@ export default {
         params = { ...params, itemsPerPage, page };
       }
 
-      if (!isEmpty(sortBy)) {
-        params[`order[${sortBy}]`] = descending ? 'desc' : 'asc';
+      let sortDescVuetify = false;
+      let vueDescending = descending;
+      if (sortBy.length === 1 && sortDesc.length === 1) {
+        if (sortDesc[0]) {
+          sortDescVuetify = true;
+        }
+        vueDescending = sortDescVuetify;
       }
+
+      if (!isEmpty(sortBy)) {
+        params[`order[${sortBy}]`] = vueDescending ? 'desc' : 'asc';
+      }
+
+      this.resetList = true;
 
       this.getPage(params).then(() => {
         this.options.sortBy = sortBy;
@@ -64,6 +75,10 @@ export default {
 
     addHandler() {
       this.$router.push({ name: `${this.$options.servicePrefix}Create` });
+    },
+
+    addDocumentHandler() {
+      this.$router.push({ name: `${this.$options.servicePrefix}CreateFile` });
     },
 
     showHandler(item) {

@@ -6,7 +6,7 @@
           <v-text-field
                   v-model="item.title"
                   :error-messages="titleErrors"
-                  :label="$t('title')"
+                  :label="$t('Title')"
                   required
                   @input="$v.item.title.$touch()"
                   @blur="$v.item.title.$touch()"

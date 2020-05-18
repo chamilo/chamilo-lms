@@ -5,7 +5,11 @@
 namespace Chamilo\CoreBundle\Entity\Resource;
 
 use ApiPlatform\Core\Annotation\ApiFilter;
+use ApiPlatform\Core\Annotation\ApiProperty;
 use ApiPlatform\Core\Annotation\ApiResource;
+use ApiPlatform\Core\Annotation\ApiSubresource;
+use ApiPlatform\Core\Bridge\Doctrine\Orm\Filter\OrderFilter;
+use ApiPlatform\Core\Bridge\Doctrine\Orm\Filter\SearchFilter;
 use ApiPlatform\Core\Serializer\Filter\PropertyFilter;
 use Chamilo\CoreBundle\Entity\Session;
 use Chamilo\CoreBundle\Entity\User;
@@ -19,16 +23,19 @@ use Symfony\Component\Routing\RouterInterface;
 use Symfony\Component\Serializer\Annotation\Groups;
 use Symfony\Component\Validator\Constraints as Assert;
 
+
+//*     attributes={"security"="is_granted('ROLE_ADMIN')"},
 /**
  * Base entity for all resources.
  *
  * @ApiResource(
- *     attributes={"security"="is_granted('ROLE_ADMIN')"},
  *     collectionOperations={"get"},
  *     normalizationContext={"groups"={"resource_node:read", "document:read"}},
  *     denormalizationContext={"groups"={"resource_node:write", "document:write"}}
  * )
+ * @ApiFilter(SearchFilter::class, properties={"title": "partial"})
  * @ApiFilter(PropertyFilter::class)
+ * @ApiFilter(OrderFilter::class, properties={"id", "title", "createdAt", "updatedAt"})
  * @ORM\Entity(repositoryClass="Chamilo\CoreBundle\Repository\ResourceNodeRepository")
  *
  * @ORM\Table(name="resource_node")
@@ -51,7 +58,7 @@ class ResourceNode
 
     /**
      * @Assert\NotBlank()
-     * @Groups({"resource_node:read", "document:read"})
+     * @Groups({"resource_node:read", "resource_node:write", "document:read"})
      * @Gedmo\TreePathSource
      *
      * @ORM\Column(name="title", type="string", length=255, nullable=false)
@@ -67,12 +74,16 @@ class ResourceNode
     protected $slug;
 
     /**
+     * @Groups({"resource_node:read", "resource_node:write"})
+     *
      * @ORM\ManyToOne(targetEntity="ResourceType")
      * @ORM\JoinColumn(name="resource_type_id", referencedColumnName="id", nullable=false)
      */
     protected $resourceType;
 
     /**
+     * @Groups({"resource_node:read", "resource_node:write"})
+     *
      * @var ResourceLink[]
      *
      * @ORM\OneToMany(targetEntity="ResourceLink", mappedBy="resourceNode", cascade={"remove"})
@@ -82,7 +93,7 @@ class ResourceNode
     /**
      * @var ResourceFile available file for this node
      *
-     * @Groups({"resource_node:read", "document:read"})
+     * @Groups({"resource_node:read", "resource_node:write", "document:read"})
      *
      * @ORM\OneToOne(targetEntity="ResourceFile", inversedBy="resourceNode", orphanRemoval=true)
      * @ORM\JoinColumn(name="resource_file_id", referencedColumnName="id", onDelete="CASCADE")
@@ -92,7 +103,7 @@ class ResourceNode
     /**
      * @var User the creator of this node
      * @Assert\Valid()
-     * @Groups({"resource_node:read", "document:read"})
+     * @Groups({"resource_node:read", "resource_node:write"})
      * @ORM\ManyToOne(
      *     targetEntity="Chamilo\CoreBundle\Entity\User", inversedBy="resourceNodes"
      * )
@@ -152,7 +163,7 @@ class ResourceNode
     /**
      * @var \DateTime
      *
-     * @Groups({"resource_node:read", "list"})
+     * @Groups({"resource_node:read", "document:read"})
      * @Gedmo\Timestampable(on="create")
      * @ORM\Column(type="datetime")
      */
@@ -161,7 +172,7 @@ class ResourceNode
     /**
      * @var \DateTime
      *
-     * @Groups({"resource_node:read", "list"})
+     * @Groups({"resource_node:read", "document:read"})
      * @Gedmo\Timestampable(on="update")
      * @ORM\Column(type="datetime")
      */

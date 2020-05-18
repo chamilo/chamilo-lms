@@ -39,8 +39,6 @@ export default function(id, options = {}) {
   if (isObject(payload) && payload['@id'])
     options.body = JSON.stringify(normalize(payload));
 
-    //console.log(id); console.log(new URL(id, entryPoint));
-
   return global.fetch(new URL(id, entryPoint), options).then(response => {
     if (response.ok) return response;
 

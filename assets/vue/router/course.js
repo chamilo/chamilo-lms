@@ -1,5 +1,5 @@
 export default {
-  path: '/courses',
+  path: '/resources/courses',
   name: 'courses',
   component: () => import('../components/course/Layout'),
   redirect: { name: 'CourseList' },

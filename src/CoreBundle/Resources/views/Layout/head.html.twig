@@ -33,21 +33,23 @@
     <link rel="stylesheet" href="{{ url('home') ~ 'build/css/themes/'~ theme ~'/default.css' }}"/>
     {% endif %}
     <link rel="stylesheet" media="print" href="{{ url('home') ~ 'build/css/print.css' }}"/>
-    {{ encore_entry_link_tags('resource') }}
+    {{ encore_entry_link_tags('vue') }}
 {% endblock %}
 
 {# app.js is generated using the file webpack.config.js and using yarn read /assets/README.md for more info #}
-{#<script src="{{ url('home') ~ 'build/runtime.js' }}"></script>#}
+<script src="{{ url('home') ~ 'build/runtime.js' }}"></script>
+<script src="{{ url('home') ~ 'build/app.js' }}"></script>
+{#{{ encore_entry_script_tags('app') }}#}
 <script src="{{ url('home') ~ 'libs/ckeditor/ckeditor.js' }}"></script>
-{#<script src="{{ url('home') ~ 'build/app.js' }}"></script>#}
 {# Add third party js libraries that can't be loaded using webpack #}
 {#<script src="{{ asset('libs/readmore-js/readmore.js') }}"></script>#}
 <script src="{{ url('home') ~ 'build/libs/js-cookie/src/js.cookie.js' }}"></script>
+
+<link href="https://fonts.googleapis.com/css?family=Roboto:100,300,400,500,700,900" rel="stylesheet">
+<link href="https://cdn.jsdelivr.net/npm/@mdi/font@4.x/css/materialdesignicons.min.css" rel="stylesheet">
+
 {# Check chamilo_js key in assetic.yml #}
 {% block javascripts %}
-    {{ encore_entry_script_tags('app') }}
-    {{ encore_entry_script_tags('resource') }}
-
     {% block chamilo_header_js %}
         {# Loading legacy js using the $htmlHeadXtra array #}
         {% autoescape false %}

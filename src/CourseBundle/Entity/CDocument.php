@@ -5,7 +5,9 @@
 namespace Chamilo\CourseBundle\Entity;
 
 use ApiPlatform\Core\Annotation\ApiFilter;
+use ApiPlatform\Core\Annotation\ApiProperty;
 use ApiPlatform\Core\Annotation\ApiResource;
+use ApiPlatform\Core\Annotation\ApiSubresource;
 use ApiPlatform\Core\Bridge\Doctrine\Orm\Filter\OrderFilter;
 use ApiPlatform\Core\Bridge\Doctrine\Orm\Filter\SearchFilter;
 use ApiPlatform\Core\Serializer\Filter\PropertyFilter;
@@ -18,17 +20,18 @@ use Chamilo\CourseBundle\Traits\ShowCourseResourcesInSessionTrait;
 use Doctrine\ORM\Event\LifecycleEventArgs;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Serializer\Annotation\Groups;
-
+//*      attributes={"security"="is_granted('ROLE_ADMIN')"},
 /**
  * @ApiResource(
  *      shortName="Documents",
- *      attributes={"security"="is_granted('ROLE_ADMIN')"},
- *      normalizationContext={"groups"={"document:read", "resource_node"}},
+ *      normalizationContext={"groups"={"document:read", "resource_node:node"}},
  *      denormalizationContext={"groups"={"document:write"}}
  * )
- * @ApiFilter(PropertyFilter::class)
  * @ApiFilter(SearchFilter::class, properties={"title": "partial"})
- * @ApiFilter(OrderFilter::class)
+ * @ApiFilter(
+ *     OrderFilter::class,
+ *     properties={"id", "resourceNode.title", "resourceNode.createdAt", "resourceNode.updatedAt"}
+ * )
  *
  * @ORM\Table(
  *  name="c_document",
@@ -51,7 +54,7 @@ class CDocument extends AbstractResource implements ResourceInterface
 
     /**
      * @var int
-     * @Groups({"list", "document:read"})
+     * @Groups({"document:read"})
      * @ORM\Column(name="iid", type="integer")
      * @ORM\Id
      * @ORM\GeneratedValue
@@ -75,19 +78,21 @@ class CDocument extends AbstractResource implements ResourceInterface
     /**
      * @var string
      *
+     * @Groups({"document:read", "document:write"})
+     *
      * @ORM\Column(name="comment", type="text", nullable=true)
      */
     protected $comment;
 
     /**
      * @var string
-     * @Groups({"list"})
+     * @Groups({"document:read", "document:write"})
      * @ORM\Column(name="title", type="string", length=255, nullable=true)
      */
     protected $title;
 
     /**
-     * @var string
+     * @var string File type, it can be 'folder' or 'file'
      *
      * @ORM\Column(name="filetype", type="string", length=10, nullable=false)
      */
@@ -133,6 +138,7 @@ class CDocument extends AbstractResource implements ResourceInterface
      */
     public function __construct()
     {
+        $this->filetype = 'folder';
         $this->readonly = false;
         $this->template = false;
         $this->size = 0;

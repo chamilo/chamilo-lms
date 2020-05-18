@@ -1,0 +1,33 @@
+{% extends "@ChamiloCore/Layout/no_layout.html.twig" %}
+
+{% block content %}
+    <div id="app">
+    </div>
+
+    <script>
+        /*window.quasarConfig = {
+            brand: { // this will NOT work on IE 11
+                primary: '#e46262',
+                // ... or all other brand colors
+            },
+            notify: {
+                position: 'top',
+                multiLine: true,
+                timeout: 0,
+            },
+            directives: ['ClosePopup'],
+            plugins: ['Notify'],
+            config: {
+                notify: {
+                    position: 'top',
+                    multiLine: true,
+                    timeout: 0,
+                },
+            },
+            loading: {}, // default set of options for Loading Quasar plugin
+            loadingBar: {}, // settings for LoadingBar Quasar plugin
+        }*/
+    </script>
+
+    {{ encore_entry_script_tags('vue') }}
+{% endblock %}

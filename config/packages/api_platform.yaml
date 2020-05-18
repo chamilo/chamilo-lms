@@ -12,5 +12,9 @@ api_platform:
         json: ['application/json']
         html: ['text/html']
         graphql: ['application/graphql']
+    collection:
+        pagination:
+            client_items_per_page: true # Disabled by default
+            items_per_page_parameter_name: itemsPerPage # Default value
 #    mercure:
 #        hub_url: '%env(MERCURE_SUBSCRIBE_URL)%'

@@ -29,7 +29,7 @@ use Symfony\Component\Validator\Constraints as Assert;
  * @ApiResource(
  *     iri="https://schema.org/Course",
  *     normalizationContext={"groups"={"course:read"}, "swagger_definition_name"="Read"},
- *     denormalizationContext={"groups"={"course:write"}},
+ *     denormalizationContext={"groups"={"course:write","course_category:write"}},
  * )
  *
  * @ApiFilter(SearchFilter::class, properties={"title": "partial", "code": "partial", "category": "partial"})

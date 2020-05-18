@@ -3,6 +3,7 @@ import App from "./App";
 import router from "./router";
 import store from "./store";
 import courseCategoryService from './services/coursecategory';
+import documentsService from './services/documents';
 import courseService from './services/course';
 import makeCrudModule from './store/modules/crud';
 
@@ -52,16 +53,23 @@ store.registerModule(
     })
 );
 
-Vue.config.productionTip = false;
+store.registerModule(
+    'documents',
+    makeCrudModule({
+        service: documentsService
+    })
+);
 
-new Vue({
-    vuetify,
-    i18n,
-    components: {App},
-    apolloProvider,
-    data: {},
-    store,
-    router,
-    render: h => h(App)
-}).
-$mount("#app");
+Vue.config.productionTip = false;
+if (document.getElementById('app')) {
+    new Vue({
+        vuetify,
+        i18n,
+        components: {App},
+        apolloProvider,
+        data: {},
+        store,
+        router,
+        render: h => h(App)
+    }).$mount("#app");
+}

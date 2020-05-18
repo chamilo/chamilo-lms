@@ -47,7 +47,7 @@ use ZipStream\ZipStream;
 /**
  * Class ResourceController.
  *
- * @Route("/resources")
+ * @Route("/resources2")
  *
  * @author Julio Montoya <gugli100@gmail.com>.
  */

@@ -13,17 +13,15 @@
         <div class="login-box-body">
             {% block sonata_user_login_form %}
                 <form id="form-login-user" action="{{ path("login") }}" method="post" role="form">
-
                     <div class="wrap-input validate-input m-b-23" data-validate = "{{ 'Username is required' | trans }}">
                         <label for="inputUsername">Username</label>
                         <input type="text" value="{{ last_username }}" name="username" id="inputUsername" class="form-control" required autofocus>
-                        <i class="focus-input fas fa-user fa-lg"></i>
                     </div>
 
                     <div class="wrap-input validate-input" data-validate="Password is required">
                         <label for="inputPassword">Password</label>
                         <input type="password" name="password" id="inputPassword" class="form-control" required>
-                        <i class="focus-input fas fa-lock fa-lg"></i>
+
                     </div>
 
                     <input type="hidden" name="_csrf_token" value="{{ csrf_token('authenticate') }}"/>

@@ -48,6 +48,11 @@
       <v-btn v-if="handleAdd" color="primary" rounded @click="addItem">
         <v-icon>mdi-plus-circle</v-icon>
       </v-btn>
+
+      <v-btn v-if="handleAddDocument" color="primary" rounded @click="addDocument">
+        Add document
+      </v-btn>
+
     </div>
     <ConfirmDelete
       v-if="handleDelete"
@@ -96,6 +101,11 @@ export default {
       type: Function,
       required: false
     },
+    handleAddDocument: {
+      type: Function,
+      required: false
+    },
+
     title: {
       type: String,
       required: false
@@ -117,6 +127,12 @@ export default {
         this.handleAdd();
       }
     },
+    addDocument() {
+      if (this.addDocument) {
+        this.handleAddDocument();
+      }
+    },
+
     editItem() {
       if (this.handleEdit) {
         this.handleEdit();

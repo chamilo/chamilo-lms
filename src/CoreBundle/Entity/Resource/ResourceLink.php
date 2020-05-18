@@ -14,9 +14,7 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * @ApiResource(
- *     attributes={"security"="is_granted('ROLE_ADMIN')"}
- * )
+ * @ApiResource()
  * @ORM\Entity
  * @ORM\Table(name="resource_link")
  */

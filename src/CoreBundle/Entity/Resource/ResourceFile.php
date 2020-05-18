@@ -4,8 +4,12 @@
 
 namespace Chamilo\CoreBundle\Entity\Resource;
 
+use ApiPlatform\Core\Annotation\ApiFilter;
 use ApiPlatform\Core\Annotation\ApiProperty;
 use ApiPlatform\Core\Annotation\ApiResource;
+use ApiPlatform\Core\Bridge\Doctrine\Orm\Filter\OrderFilter;
+use ApiPlatform\Core\Bridge\Doctrine\Orm\Filter\SearchFilter;
+use ApiPlatform\Core\Serializer\Filter\PropertyFilter;
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Timestampable\Traits\TimestampableEntity;
 use Symfony\Component\HttpFoundation\File\File;
@@ -13,12 +17,46 @@ use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\Serializer\Annotation\Groups;
 use Symfony\Component\Validator\Constraints as Assert;
 use Vich\UploaderBundle\Mapping\Annotation as Vich;
+use Chamilo\CoreBundle\Controller\CreateMediaObjectAction;
 
+//
+//*     attributes={"security"="is_granted('ROLE_ADMIN')"},
 /**
  * @ApiResource(
- *     attributes={"security"="is_granted('ROLE_ADMIN')"},
- *     normalizationContext={"groups"={"resource_file:read"}}
+ *     iri="http://schema.org/MediaObject",
+ *     normalizationContext={"groups"={"resource_file:read", "media_object_read"}},
+ *     collectionOperations={
+ *         "post"={
+ *             "controller"=CreateMediaObjectAction::class,
+ *             "deserialize"=false,
+ *             "security"="is_granted('ROLE_USER')",
+ *             "validation_groups"={"Default", "media_object_create"},
+ *             "openapi_context"={
+ *                 "requestBody"={
+ *                     "content"={
+ *                         "multipart/form-data"={
+ *                             "schema"={
+ *                                 "type"="object",
+ *                                 "properties"={
+ *                                     "file"={
+ *                                         "type"="string",
+ *                                         "format"="binary"
+ *                                     }
+ *                                 }
+ *                             }
+ *                         }
+ *                     }
+ *                 }
+ *             }
+ *         },
+ *         "get"
+ *     },
+ *     itemOperations={
+ *         "get"
+ *     }
  * )
+ * @ApiFilter(SearchFilter::class, properties={"name": "partial"})
+ * @ApiFilter(PropertyFilter::class)
  * @ORM\Entity
  * @Vich\Uploadable
  *
@@ -37,7 +75,7 @@ class ResourceFile
 
     /**
      * @Assert\NotBlank()
-     * @Groups({"resource_file:read", "document:read"})
+     * @Groups({"resource_file:read", "resource_node:read", "document:read"})
      *
      * @var string
      *
@@ -47,38 +85,8 @@ class ResourceFile
 
     /**
      * @var string
-     */
-    //protected $description;
-
-    /**
-     * @var bool
-     */
-    //protected $enabled;
-
-    /**
-     * @var int
-     */
-    //protected $width;
-
-    /**
-     * @var int
-     */
-    //protected $height;
-
-    /**
-     * @var float
-     */
-    //protected $length;
-
-    /**
-     * @var string
-     */
-    //protected $copyright;
-
-    /**
-     * @var string
      *
-     * @Groups({"resource_file:read", "document:read"})
+     * @Groups({"resource_file:read", "resource_node:read", "document:read"})
      * @ORM\Column(type="text", nullable=true)
      */
     protected $mimeType;
@@ -100,7 +108,7 @@ class ResourceFile
 
     /**
      * @var int
-     * @Groups({"resource_file:read", "document:read"})
+     * @Groups({"resource_file:read", "resource_node:read", "document:read"})
      *
      * @ORM\Column(type="integer", nullable=true)
      */
@@ -108,7 +116,7 @@ class ResourceFile
 
     /**
      * @var File
-     * @Groups({"resource_file:read", "document:read"})
+     * @Groups({"resource_file:read", "resource_node:read", "document:read"})
      * @Assert\NotNull(groups={"media_object_create"})
      * @Vich\UploadableField(
      *     mapping="resources",

@@ -32,6 +32,11 @@ sessions_vue:
     requirements:
         wildcard: .*
 
+resources_vue:
+    path: /resources/{wildcard}
+    controller: Chamilo\CoreBundle\Controller\IndexController::courses
+    requirements:
+        wildcard: .*
 
 # web url shortcuts for legacy templates
 web.ajax:

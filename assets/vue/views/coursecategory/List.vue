@@ -4,9 +4,6 @@
 
     <v-container grid-list-xl fluid>
       <v-layout row wrap>
-        <v-flex sm12>
-          <h1>CourseCategory List</h1>
-        </v-flex>
         <v-flex lg12>
           <DataFilter :handle-filter="onSendFilter" :handle-reset="resetFilter">
             <CourseCategoryFilterForm

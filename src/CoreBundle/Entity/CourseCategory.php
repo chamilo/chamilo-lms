@@ -17,8 +17,8 @@ use Symfony\Component\Validator\Constraints as Assert;
 /**
  * CourseCategory.
  * @ApiResource(
- *     normalizationContext={"groups"={"course_category:read"}, "swagger_definition_name"="Read"},
- *     denormalizationContext={"groups"={"course_category:write"}},
+ *     normalizationContext={"groups"={"course_category:read", "course:read"}, "swagger_definition_name"="Read"},
+ *     denormalizationContext={"groups"={"course_category:write", "course:write"}},
  * )
  * @ApiFilter(SearchFilter::class, properties={"name": "partial", "code": "partial"})
  * @ApiFilter(PropertyFilter::class)

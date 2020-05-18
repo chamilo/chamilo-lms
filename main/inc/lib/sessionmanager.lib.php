@@ -4507,21 +4507,34 @@ class SessionManager
         $inOneMonth = api_get_local_time($inOneMonth);
         if (api_strtotime($s['access_start_date']) < $now) {
             $s['access_start_date'] = api_get_local_time($now);
+        } else {
+            $s['access_start_date'] = api_get_local_time($s['access_start_date']);
         }
         if (api_strtotime($s['display_start_date']) < $now) {
             $s['display_start_date'] = api_get_local_time($now);
+        } else {
+            $s['display_start_date'] = api_get_local_time($s['display_start_date']);
         }
         if (api_strtotime($s['coach_access_start_date']) < $now) {
             $s['coach_access_start_date'] = api_get_local_time($now);
+        } else {
+            $s['coach_access_start_date'] = api_get_local_time($s['coach_access_start_date']);
         }
         if (api_strtotime($s['access_end_date']) < $now) {
             $s['access_end_date'] = $inOneMonth;
+        } else {
+            $s['access_end_date'] = api_get_local_time($s['access_end_date']);
         }
         if (api_strtotime($s['display_end_date']) < $now) {
             $s['display_end_date'] = $inOneMonth;
+        } else {
+            $s['display_end_date'] = api_get_local_time($s['display_end_date']);
         }
         if (api_strtotime($s['coach_access_end_date']) < $now) {
             $s['coach_access_end_date'] = $inOneMonth;
+        }
+        else {
+            $s['coach_access_end_date'] = api_get_local_time($s['coach_access_end_date']);
         }
 
         $extraFieldValue = new ExtraFieldValue('session');

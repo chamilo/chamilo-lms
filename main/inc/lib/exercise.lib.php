@@ -4516,16 +4516,15 @@ EOT;
             }
         }
 
-        if (($show_results || $show_only_score) && $origin !== 'embeddable') {
-            if (isset($exercise_stat_info['exe_user_id'])) {
-                if (!empty($studentInfo)) {
-                    // Shows exercise header
-                    echo $objExercise->showExerciseResultHeader(
-                        $studentInfo,
-                        $exercise_stat_info
-                    );
-                }
-            }
+        if ('embeddable' !== $origin &&
+            !empty($exercise_stat_info['exe_user_id']) &&
+            !empty($studentInfo)
+        ) {
+            // Shows exercise header
+            echo $objExercise->showExerciseResultHeader(
+                $studentInfo,
+                $exercise_stat_info
+            );
         }
 
         // Display text when test is finished #4074 and for LP #4227

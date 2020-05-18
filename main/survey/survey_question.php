@@ -25,8 +25,11 @@ class survey_question
         $questions = SurveyManager::get_questions($surveyId);
 
         $newQuestionList = [];
+        $allowTypes = ['yesno', 'multiplechoice'];
         foreach ($questions as $question) {
-            $newQuestionList[$question['sort']] = $question;
+            if (in_array($question['type'], $allowTypes)) {
+                $newQuestionList[$question['sort']] = $question;
+            }
         }
         ksort($newQuestionList);
 
@@ -157,6 +160,7 @@ class survey_question
             case 'open':
                 $toolName = get_lang('Open');
                 $questionComment = get_lang('QuestionTags');
+                $allowParent = true;
                 break;
             case 'yesno':
                 $toolName = get_lang('YesNo');
@@ -173,12 +177,20 @@ class survey_question
             case 'selectivedisplay':
                 $toolName = get_lang('SurveyQuestionSelectiveDisplay');
                 $questionComment = get_lang('SurveyQuestionSelectiveDisplayComment');
+                $allowParent = true;
                 break;
             case 'multiplechoiceother':
                 $toolName = get_lang('SurveyMultipleAnswerWithOther');
+                $allowParent = true;
+                break;
+            case 'pagebreak':
+                $toolName = get_lang(api_ucfirst($type));
+                $allowParent = false;
                 break;
             default:
                 $toolName = get_lang(api_ucfirst($type));
+                $allowParent = true;
+                break;
         }
 
         if (false === api_get_configuration_value('survey_question_dependency')) {

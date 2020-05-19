@@ -4532,8 +4532,7 @@ class SessionManager
         }
         if (api_strtotime($s['coach_access_end_date']) < $now) {
             $s['coach_access_end_date'] = $inOneMonth;
-        }
-        else {
+        } else {
             $s['coach_access_end_date'] = api_get_local_time($s['coach_access_end_date']);
         }
 

@@ -10404,7 +10404,7 @@ class Exercise
 
                 switch ($question->type) {
                     case FILL_IN_BLANKS:
-                        $option['answer'] = $question->fill_in_blank_answer_to_string($option['answer']);
+                        $option['answer'] = $this->fill_in_blank_answer_to_string($option['answer']);
                         break;
                 }
 

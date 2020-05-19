@@ -114,24 +114,24 @@ echo '<script>
         // Normal inputs
         window.location = "'.api_get_path(WEB_CODE_PATH).'exercise/exercise_result.php?'.api_get_cidreq().'&exe_id='.$exe_id.'&" + lp_data;
     }
-    
-    function changeOptionStatus(status) 
-    {    
-        $("input[type=checkbox]").each(function () {                 
-            $(this).prop("checked", status);                                                
-        });    
-        
-        var action = ""; 
-        var extraOption = "remove_all";       
+
+    function changeOptionStatus(status)
+    {
+        $("input[type=checkbox]").each(function () {
+            $(this).prop("checked", status);
+        });
+
+        var action = "";
+        var extraOption = "remove_all";
         if (status == 1) {
             extraOption = "add_all";
-        }     
+        }
         $.ajax({
             url: "'.api_get_path(WEB_AJAX_PATH).'exercise.ajax.php?'.api_get_cidreq().'&a=add_question_to_reminder",
             data: "option="+extraOption+"&exe_id='.$exe_id.'&action="+action,
             success: function(returnValue) {
             }
-        });  
+        });
     }
 
     function review_questions() {

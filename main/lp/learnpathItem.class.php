@@ -168,7 +168,7 @@ class learnpathItem
             }
 
             // Get search_did.
-            if (api_get_setting('search_enabled') == 'true') {
+            if (api_get_setting('search_enabled') === 'true') {
                 $tbl_se_ref = Database::get_main_table(TABLE_MAIN_SEARCH_ENGINE_REF);
                 $sql = 'SELECT *
                         FROM %s
@@ -195,13 +195,11 @@ class learnpathItem
                 }
             }
         }
+
         $this->seriousgame_mode = 0;
-        $this->audio = $row['audio'];
-        if (self::DEBUG > 0) {
-            error_log(
-                'New LP - End of learnpathItem constructor for item '.$id,
-                0
-            );
+        $this->audio = null;
+        if (isset($row['audio'])) {
+            $this->audio = $row['audio'];
         }
     }
 

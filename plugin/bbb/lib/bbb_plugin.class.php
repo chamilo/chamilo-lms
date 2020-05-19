@@ -369,9 +369,8 @@ class BBBPlugin extends Plugin
         $table = Database::get_main_table(TABLE_MAIN_COURSE);
         $sql = "SELECT id FROM $table ORDER BY id";
         $res = Database::query($sql);
+        $courseSettingTable = Database::get_course_table(TABLE_COURSE_SETTING);
         while ($row = Database::fetch_assoc($res)) {
-            $courseSettingTable = Database::get_course_table(TABLE_COURSE_SETTING);
-
             Database::update(
                 $courseSettingTable,
                 ['value' => $value],

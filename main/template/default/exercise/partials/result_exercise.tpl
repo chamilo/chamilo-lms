@@ -44,6 +44,18 @@
                             </div>
                         {% endif %}
                     </div>
+
+                    {% if data.number_of_answers_saved != data.number_of_answers %}
+                        <p class="alert alert-warning"
+                           style="margin-bottom: 0; margin-top: 20px;">
+                            <strong>{{ 'XAnswersSavedByUsersFromXTotal'|get_lang|format(data.number_of_answers_saved, data.number_of_answers) }}</strong>
+                        </p>
+                    {% else %}
+                        <p class="lead text-success"
+                           style="margin-bottom: 0; margin-top: 20px;">
+                            <strong>{{ 'XAnswersSavedByUsersFromXTotal'|get_lang|format(data.number_of_answers_saved, data.number_of_answers) }}</strong>
+                        </p>
+                    {% endif %}
                 </div>
             </div>
         </div>

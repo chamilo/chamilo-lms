@@ -60,4 +60,6 @@ ALTER TABLE plugin_bbb_room MODIFY COLUMN out_at datetime;
 
 For version 2.8
 
+```sql
 ALTER TABLE plugin_bbb_meeting ADD COLUMN internal_meeting_id VARCHAR(255) DEFAULT NULL;
+```

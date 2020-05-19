@@ -4589,7 +4589,6 @@ class Exercise
                             if (isset($choice[$answerAutoId]) &&
                                 $answerCorrect == $choice[$answerAutoId]
                             ) {
-
                                 $correctAnswerId[] = $answerAutoId;
                                 $questionScore += $answerWeighting;
                                 $totalScore += $answerWeighting;
@@ -8421,7 +8420,7 @@ class Exercise
      *
      * @param int    $categoryId
      * @param string $keyword
-     * @param int    $userId   Optional.
+     * @param int    $userId     Optional.
      * @param int    $courseId   Optional.
      * @param int    $sessionId  Optional.
      * @param bool   $returnData Optional.
@@ -9873,6 +9872,54 @@ class Exercise
     }
 
     /**
+     * Get the user answers saved in exercise.
+     *
+     * @param int $attemptId
+     *
+     * @return array
+     */
+    public function getUserAnswersSavedInExercise($attemptId)
+    {
+        $exerciseResult = [];
+
+        $attemptList = Event::getAllExerciseEventByExeId($attemptId);
+
+        foreach ($attemptList as $questionId => $options) {
+            foreach ($options as $option) {
+                $question = Question::read($option['question_id']);
+
+                switch ($question->type) {
+                    case FILL_IN_BLANKS:
+                        $option['answer'] = $this->fill_in_blank_answer_to_string($option['answer']);
+                        break;
+                }
+
+                if (!empty($option['answer'])) {
+                    $exerciseResult[] = $questionId;
+
+                    break;
+                }
+            }
+        }
+
+        return $exerciseResult;
+    }
+
+    /**
+     * Get the number of user answers saved in exercise.
+     *
+     * @param int $attemptId
+     *
+     * @return int
+     */
+    public function countUserAnswersSavedInExercise($attemptId)
+    {
+        $answers = $this->getUserAnswersSavedInExercise($attemptId);
+
+        return count($answers);
+    }
+
+    /**
      * Get number of questions in exercise by user attempt.
      *
      * @return int
@@ -10383,53 +10430,5 @@ class Exercise
         );
 
         return $group;
-    }
-
-    /**
-     * Get the user answers saved in exercise.
-     *
-     * @param int $attemptId
-     *
-     * @return array
-     */
-    public function getUserAnswersSavedInExercise($attemptId)
-    {
-        $exerciseResult = [];
-
-        $attemptList = Event::getAllExerciseEventByExeId($attemptId);
-
-        foreach ($attemptList as $questionId => $options) {
-            foreach ($options as $option) {
-                $question = Question::read($option['question_id']);
-
-                switch ($question->type) {
-                    case FILL_IN_BLANKS:
-                        $option['answer'] = $this->fill_in_blank_answer_to_string($option['answer']);
-                        break;
-                }
-
-                if (!empty($option['answer'])) {
-                    $exerciseResult[] = $questionId;
-
-                    break;
-                }
-            }
-        }
-
-        return $exerciseResult;
-    }
-
-    /**
-     * Get the number of user answers saved in exercise.
-     *
-     * @param int $attemptId
-     *
-     * @return int
-     */
-    public function countUserAnswersSavedInExercise($attemptId)
-    {
-        $answers = $this->getUserAnswersSavedInExercise($attemptId);
-
-        return count($answers);
     }
 }

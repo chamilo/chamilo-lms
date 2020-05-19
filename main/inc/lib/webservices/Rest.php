@@ -1983,24 +1983,6 @@ class Rest extends WebService
     }
 
     /**
-     * @param array $additionalParams Optional
-     *
-     * @return string
-     */
-    private function encodeParams(array $additionalParams = [])
-    {
-        $params = array_merge(
-            $additionalParams,
-            [
-                'api_key' => $this->apiKey,
-                'username' => $this->user->getUsername(),
-            ]
-        );
-
-        return json_encode($params);
-    }
-
-    /**
      * This service roughly matches what the call to MDL's API core_course_get_contents function returns.
      *
      * @return array
@@ -2043,8 +2025,8 @@ class Rest extends WebService
                     'availability' => null,
                     'indent' => 0,
                     'onclick' => '',
-                    'afterlink' =>  null,
-                    'customdata' =>  "",
+                    'afterlink' => null,
+                    'customdata' => "",
                     'noviewlink' => false,
                     'completion' => (int) ($exercise[1] > 0),
                 ];
@@ -2053,5 +2035,23 @@ class Rest extends WebService
         );
 
         return [$json];
+    }
+
+    /**
+     * @param array $additionalParams Optional
+     *
+     * @return string
+     */
+    private function encodeParams(array $additionalParams = [])
+    {
+        $params = array_merge(
+            $additionalParams,
+            [
+                'api_key' => $this->apiKey,
+                'username' => $this->user->getUsername(),
+            ]
+        );
+
+        return json_encode($params);
     }
 }

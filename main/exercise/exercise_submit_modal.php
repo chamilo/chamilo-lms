@@ -74,7 +74,7 @@ function SendEx(num) {
 
 $header = '';
 if ($objExercise->getFeedbackType() === EXERCISE_FEEDBACK_TYPE_POPUP) {
-    $header =  '
+    $header = '
         <div class="modal-header">
             <h4 class="modal-title" id="global-modal-title">'.get_lang('Incorrect').'</h4>
         </div>';
@@ -282,7 +282,7 @@ if ($objExercise->getFeedbackType() === EXERCISE_FEEDBACK_TYPE_DIRECT) {
 
     if ($answerCorrect) {
         $message = get_lang('Correct');
-        //$contents = Display::return_message($message, 'success');
+    //$contents = Display::return_message($message, 'success');
     } else {
         if ($partialCorrect) {
             $message = get_lang('PartialCorrect');
@@ -324,12 +324,11 @@ if ($objExercise->getFeedbackType() === EXERCISE_FEEDBACK_TYPE_DIRECT) {
     }
 
     $contents .= $comments;
-    $header =  '
+    $header = '
         <div class="modal-header">
             <h4 class="modal-title" id="global-modal-title">'.$message.'</h4>
         </div>';
 }
-
 
 if ($answerType === HOT_SPOT_DELINEATION) {
     $contents = $manageAnswerHtmlContent;

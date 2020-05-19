@@ -1715,6 +1715,37 @@ class CourseHome
     }
 
     /**
+     * @param string $toolName
+     * @param int    $courseId
+     * @param int    $sessionId Optional.
+     *
+     * @return bool
+     */
+    public static function getToolVisibility($toolName, $courseId, $sessionId = 0)
+    {
+        $allowEditionInSession = api_get_configuration_value('allow_edit_tool_visibility_in_session');
+
+        $em = Database::getManager();
+        $toolRepo = $em->getRepository('ChamiloCourseBundle:CTool');
+
+        /** @var CTool $tool */
+        $tool = $toolRepo->findOneBy(['cId' => $courseId, 'sessionId' => 0, 'name' => $toolName]);
+        $visibility = $tool->getVisibility();
+
+        if ($allowEditionInSession && $sessionId) {
+            $tool = $toolRepo->findOneBy(
+                ['cId' => $courseId, 'sessionId' => $sessionId, 'name' => $toolName]
+            );
+
+            if ($tool) {
+                $visibility = $tool->getVisibility();
+            }
+        }
+
+        return $visibility;
+    }
+
+    /**
      * Filter tool icons. Only show if $patronKey is = :teacher
      * Example dataIcons[i]['name']: parameter titleIcons1:teacher || titleIcons2 || titleIcons3:teacher.
      *
@@ -1818,36 +1849,5 @@ class CourseHome
             $iconSize,
             false
         );
-    }
-
-    /**
-     * @param string $toolName
-     * @param int    $courseId
-     * @param int    $sessionId Optional.
-     *
-     * @return bool
-     */
-    public static function getToolVisibility($toolName, $courseId, $sessionId = 0)
-    {
-        $allowEditionInSession = api_get_configuration_value('allow_edit_tool_visibility_in_session');
-
-        $em = Database::getManager();
-        $toolRepo = $em->getRepository('ChamiloCourseBundle:CTool');
-
-        /** @var CTool $tool */
-        $tool = $toolRepo->findOneBy(['cId' => $courseId, 'sessionId' => 0, 'name' => $toolName]);
-        $visibility = $tool->getVisibility();
-
-        if ($allowEditionInSession && $sessionId) {
-            $tool = $toolRepo->findOneBy(
-                ['cId' => $courseId, 'sessionId' => $sessionId, 'name' => $toolName]
-            );
-
-            if ($tool) {
-                $visibility = $tool->getVisibility();
-            }
-        }
-
-        return $visibility;
     }
 }

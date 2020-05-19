@@ -112,12 +112,12 @@ class bbb
                 if (substr($bbb_host, -1, 1) !== '/') {
                     $bbb_host .= '/';
                 }
+                $this->url = $bbb_host;
                 if (!preg_match('#/bigbluebutton/$#', $bbb_host)) {
-                    $bbb_host .= 'bigbluebutton/';
+                    $this->url = $bbb_host.'bigbluebutton/';
                 }
             }
             $info = parse_url($bbb_host);
-            $this->url = $bbb_host;
 
             if (isset($info['scheme'])) {
                 $this->protocol = $info['scheme'].'://';

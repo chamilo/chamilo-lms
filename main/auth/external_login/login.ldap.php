@@ -1,8 +1,9 @@
 <?php
 
+/* For licensing terms, see /license.txt */
+
 use ChamiloSession as Session;
 
-// External login module : LDAP
 /**
  * This file is included in main/inc/local.inc.php at user login if the user have 'external_ldap' in
  * his auth_source field instead of platform.
@@ -36,8 +37,7 @@ use ChamiloSession as Session;
  *  - index.php?loginFailed=1&error=account_inactive
  *  - index.php?loginFailed=1&error=user_password_incorrect
  *  - index.php?loginFailed=1&error=unrecognize_sso_origin');
- *
- * */
+ */
 require_once __DIR__.'/ldap.inc.php';
 require_once __DIR__.'/functions.inc.php';
 

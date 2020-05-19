@@ -993,8 +993,12 @@ class SurveyManager
         $course_id = api_get_course_int_id();
         $question_id = (int) $question_id;
 
+        if (empty($question_id)) {
+            return [];
+        }
+
         $sql = "SELECT * FROM $tbl_survey_question
-                WHERE c_id = $course_id AND question_id='".$question_id."'
+                WHERE c_id = $course_id AND question_id = $question_id
                 ORDER BY `sort` ";
 
         $sqlOption = "  SELECT * FROM $table_survey_question_option
@@ -1006,10 +1010,10 @@ class SurveyManager
             $table_survey_question_option = Database::get_main_table(TABLE_MAIN_SHARED_SURVEY_QUESTION_OPTION);
 
             $sql = "SELECT * FROM $tbl_survey_question
-                    WHERE question_id='".$question_id."'
+                    WHERE question_id = $question_id
                     ORDER BY `sort` ";
             $sqlOption = "SELECT * FROM $table_survey_question_option
-                          WHERE question_id='".$question_id."'
+                          WHERE question_id = $question_id
                           ORDER BY `sort` ";
         }
 
@@ -1018,6 +1022,8 @@ class SurveyManager
         $row = Database::fetch_array($result, 'ASSOC');
 
         $return['survey_id'] = $row['survey_id'];
+        $return['parent_id'] = isset($row['parent_id']) ? $row['parent_id'] : 0;
+        $return['parent_option_id'] = isset($row['parent_option_id']) ? $row['parent_option_id'] : 0;
         $return['question_id'] = $row['question_id'];
         $return['type'] = $row['type'];
         $return['question'] = $row['survey_question'];
@@ -1044,10 +1050,8 @@ class SurveyManager
             /** @todo this should be renamed to options instead of answers */
             $return['answers'][] = $row['option_text'];
             $return['values'][] = $row['value'];
-
             $return['answer_data'][$counter]['data'] = $row['option_text'];
             $return['answer_data'][$counter]['iid'] = $row['iid'];
-
             /** @todo this can be done more elegantly (used in reporting) */
             $return['answersid'][] = $row['question_option_id'];
             $counter++;
@@ -1163,9 +1167,10 @@ class SurveyManager
             if (!$empty_answer) {
                 // Table definitions
                 $tbl_survey_question = Database::get_course_table(TABLE_SURVEY_QUESTION);
+                $surveyId = (int) $form_content['survey_id'];
 
                 // Getting all the information of the survey
-                $survey_data = self::get_survey($form_content['survey_id']);
+                $survey_data = self::get_survey($surveyId);
 
                 // Storing the question in the shared database
                 if (is_numeric($survey_data['survey_share']) && $survey_data['survey_share'] != 0) {
@@ -1178,7 +1183,7 @@ class SurveyManager
                     // Finding the max sort order of the questions in the given survey
                     $sql = "SELECT max(sort) AS max_sort
 					        FROM $tbl_survey_question
-                            WHERE c_id = $course_id AND survey_id='".intval($form_content['survey_id'])."'";
+                            WHERE c_id = $course_id AND survey_id = $surveyId ";
                     $result = Database::query($sql);
                     $row = Database::fetch_array($result, 'ASSOC');
                     $max_sort = $row['max_sort'];
@@ -1200,7 +1205,7 @@ class SurveyManager
 
                     $params = [
                         'c_id' => $course_id,
-                        'survey_id' => $form_content['survey_id'],
+                        'survey_id' => $surveyId,
                         'survey_question' => $form_content['question'],
                         'survey_question_comment' => $questionComment,
                         'type' => $form_content['type'],
@@ -1209,6 +1214,19 @@ class SurveyManager
                         'shared_question_id' => $form_content['shared_question_id'],
                         'max_value' => $maxScore,
                     ];
+
+                    if (api_get_configuration_value('survey_question_dependency')) {
+                        $params['parent_id'] = 0;
+                        $params['parent_option_id'] = 0;
+                        if (isset($form_content['parent_id']) &&
+                            isset($form_content['parent_option_id']) &&
+                            !empty($form_content['parent_id']) &&
+                            !empty($form_content['parent_option_id'])
+                        ) {
+                            $params['parent_id'] = $form_content['parent_id'];
+                            $params['parent_option_id'] = $form_content['parent_option_id'];
+                        }
+                    }
 
                     if (api_get_configuration_value('allow_required_survey_questions')) {
                         $params['is_required'] = isset($form_content['is_required']);
@@ -1253,6 +1271,19 @@ class SurveyManager
 
                     if (api_get_configuration_value('allow_required_survey_questions')) {
                         $params['is_required'] = isset($form_content['is_required']);
+                    }
+
+                    if (api_get_configuration_value('survey_question_dependency')) {
+                        $params['parent_id'] = 0;
+                        $params['parent_option_id'] = 0;
+                        if (isset($form_content['parent_id']) &&
+                            isset($form_content['parent_option_id']) &&
+                            !empty($form_content['parent_id']) &&
+                            !empty($form_content['parent_option_id'])
+                        ) {
+                            $params['parent_id'] = $form_content['parent_id'];
+                            $params['parent_option_id'] = $form_content['parent_option_id'];
+                        }
                     }
 
                     $params = array_merge($params, $extraParams);
@@ -2302,15 +2333,26 @@ class SurveyManager
 
     public static function parseMultiplicateUserList($itemList, $questions, $courseId, $surveyData)
     {
+        if (empty($itemList) || empty($questions)) {
+            return false;
+        }
+
         $surveyId = $surveyData['survey_id'];
         $classTag = '{{class_name}}';
         $studentTag = '{{student_full_name}}';
         $classCounter = 0;
+
+        $newQuestionList = [];
+        foreach ($questions as $question) {
+            $newQuestionList[$question['sort']] = $question;
+        }
+        ksort($newQuestionList);
+
         foreach ($itemList as $class) {
             $className = $class['name'];
             $users = $class['users'];
 
-            foreach ($questions as $question) {
+            foreach ($newQuestionList as $question) {
                 $text = $question['question'];
                 if (strpos($text, $classTag) !== false) {
                     $replacedText = str_replace($classTag, $className, $text);
@@ -2319,10 +2361,12 @@ class SurveyManager
                         'question_comment' => 'generated',
                         'type' => $question['type'],
                         'display' => $question['horizontalvertical'],
+                        'horizontalvertical' => $question['horizontalvertical'],
                         'question' => $replacedText,
                         'survey_id' => $surveyId,
                         'question_id' => 0,
                         'shared_question_id' => 0,
+                        'answers' => $question['answers'],
                     ];
                     self::save_question($surveyData, $values, false);
                     $classCounter++;
@@ -2373,6 +2417,8 @@ class SurveyManager
                 }
             }
         }
+
+        return true;
     }
 
     /**
@@ -2646,7 +2692,7 @@ class SurveyManager
                     );
 
                     foreach ($tutors as $tutor) {
-                        $subject = sprintf(get_lang('GroupSurveyX'), $tutor['complete_name']);
+                        $subject = sprintf(get_lang('GroupSurveyX'), $groupInfo['name']);
                         $content = sprintf(
                             get_lang('HelloXGroupX'),
                             $tutor['complete_name'],

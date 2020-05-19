@@ -1,4 +1,5 @@
 <?php
+
 /* For licensing terms, see /license.txt */
 
 use Chamilo\CoreBundle\Entity\Course;
@@ -325,9 +326,9 @@ class Tracking
         $chapterTypes = learnpath::getChapterTypes();
         $accessToPdfExport = api_is_allowed_to_edit(false, false, true);
 
-        $minimunAvailable = self::minimumTimeAvailable($session_id, $course_id);
+        $minimumAvailable = self::minimumTimeAvailable($session_id, $course_id);
         $timeCourse = [];
-        if ($minimunAvailable) {
+        if ($minimumAvailable) {
             $timeCourse = self::getCalculateTime($user_id, $course_id, $session_id);
             Session::write('trackTimeCourse', $timeCourse);
         }
@@ -532,7 +533,7 @@ class Tracking
                         $time_for_total = $row['mytime'];
                         $attemptTime = $row['mytime'];
 
-                        if ($minimunAvailable) {
+                        if ($minimumAvailable) {
                             $lp_time = $timeCourse[TOOL_LEARNPATH];
                             $lpTime = null;
                             if (isset($lp_time[$lp_id])) {
@@ -566,7 +567,6 @@ class Tracking
 
                         // Remove "NaN" if any (@todo: locate the source of these NaN)
                         $time = str_replace('NaN', '00'.$h.'00\'00"', $time);
-
                         if ($row['item_type'] !== 'dir') {
                             if (!$is_allowed_to_edit && $result_disabled_ext_all) {
                                 $view_score = Display::return_icon(
@@ -600,7 +600,7 @@ class Tracking
                             }
 
                             $action = null;
-                            if ($type == 'classic') {
+                            if ($type === 'classic') {
                                 $action = '<td></td>';
                             }
                             $timeRow = '<td class="lp_time" colspan="2">'.$time.'</td>';
@@ -891,7 +891,7 @@ class Tracking
                     }
 
                     $action = null;
-                    if ($type == 'classic') {
+                    if ($type === 'classic') {
                         $action = '<td></td>';
                     }
 
@@ -980,7 +980,7 @@ class Tracking
                             }
 
                             $scoreItem = null;
-                            if ($row['item_type'] == 'quiz') {
+                            if ($row['item_type'] === 'quiz') {
                                 if (!$is_allowed_to_edit && $result_disabled_ext_all) {
                                     $scoreItem .= Display::return_icon(
                                         'invisible.gif',
@@ -1039,12 +1039,10 @@ class Tracking
                     if ($extend_this_attempt || $extend_all) {
                         $list1 = learnpath::get_iv_interactions_array($row['iv_id'], $course_id);
                         foreach ($list1 as $id => $interaction) {
+                            $oddclass = 'row_even';
                             if (($counter % 2) == 0) {
                                 $oddclass = 'row_odd';
-                            } else {
-                                $oddclass = 'row_even';
                             }
-
                             $timeRow = '<td class="lp_time">'.$interaction['time'].'</td>';
                             if ($hideTime) {
                                 $timeRow = '';
@@ -1065,13 +1063,12 @@ class Tracking
                                </tr>';
                             $counter++;
                         }
-                        $list2 = learnpath::get_iv_objectives_array($row['iv_id'], $course_id);
 
+                        $list2 = learnpath::get_iv_objectives_array($row['iv_id'], $course_id);
                         foreach ($list2 as $id => $interaction) {
+                            $oddclass = 'row_even';
                             if (($counter % 2) == 0) {
                                 $oddclass = 'row_odd';
-                            } else {
-                                $oddclass = 'row_even';
                             }
                             $output .= '<tr class="'.$oddclass.'">
                                     <td></td>
@@ -6642,11 +6639,17 @@ class Tracking
                 foreach ($results as $item) {
                     if (empty($beforeItem)) {
                         $beforeItem = $item;
+                        if (empty($min)) {
+                            $min = $item['date_reg'];
+                        }
+
+                        if (empty($max)) {
+                            $max = $item['date_reg'];
+                        }
                         continue;
                     }
 
                     $partialTime = $item['date_reg'] - $beforeItem['date_reg'];
-
                     if ($item['date_reg'] > $max) {
                         $max = $item['date_reg'];
                     }
@@ -7595,7 +7598,7 @@ class TrackingCourseLog
                     user.firstname      as col2,
                     user.username       as col3';
         if ($getCount) {
-            $select = ' SELECT COUNT(distinct(user.id)';
+            $select = ' SELECT COUNT(distinct(user.id)) as count ';
         }
 
         $sqlInjectJoins = '';
@@ -7650,10 +7653,13 @@ class TrackingCourseLog
         $res = Database::query($sql);
         $users = [];
 
-        $course_info = api_get_course_info($course_code);
+        $courseInfo = api_get_course_info($course_code);
+        $courseId = $courseInfo['real_id'];
+        $courseCode = $courseInfo['code'];
+
         $total_surveys = 0;
         $total_exercises = ExerciseLib::get_all_exercises(
-            $course_info,
+            $courseInfo,
             $session_id,
             false,
             null,
@@ -7670,7 +7676,7 @@ class TrackingCourseLog
                     $user_list = SurveyManager::get_people_who_filled_survey(
                         $survey['survey_id'],
                         false,
-                        $course_info['real_id']
+                        $courseId
                     );
 
                     foreach ($user_list as $user_id) {
@@ -7680,14 +7686,14 @@ class TrackingCourseLog
             }
         }
 
-        $courseInfo = api_get_course_info($course_code);
-        $courseId = $courseInfo['real_id'];
-
-        $urlBase = api_get_path(WEB_CODE_PATH).'mySpace/myStudents.php?details=true&cidReq='.$course_code.
+        $urlBase = api_get_path(WEB_CODE_PATH).'mySpace/myStudents.php?details=true&cidReq='.$courseCode.
             '&course='.$course_code.'&origin=tracking_course&id_session='.$session_id;
 
         $sortByFirstName = api_sort_by_first_name();
+        Session::write('user_id_list', []);
+        $userIdList = [];
         while ($user = Database::fetch_array($res, 'ASSOC')) {
+            $userIdList[] = $user['user_id'];
             $user['official_code'] = $user['col0'];
             $user['username'] = $user['col3'];
             $user['time'] = api_time_to_hms(
@@ -7866,6 +7872,7 @@ class TrackingCourseLog
 
         Session::erase('additional_user_profile_info');
         Session::erase('extra_field_info');
+        Session::write('user_id_list', $userIdList);
 
         return $users;
     }
@@ -7928,9 +7935,9 @@ class TrackingCourseLog
             $direction = 'ASC';
         }
 
-        $column = intval($column);
-        $from = intval($from);
-        $number_of_items = intval($number_of_items);
+        $column = (int) $column;
+        $from = (int) $from;
+        $number_of_items = (int) $number_of_items;
 
         $sql .= " ORDER BY col$column $direction ";
         $sql .= " LIMIT $from,$number_of_items";
@@ -7938,12 +7945,11 @@ class TrackingCourseLog
         $res = Database::query($sql);
         $users = [];
 
-        $course_info = api_get_course_info($course_code);
         $sortByFirstName = api_sort_by_first_name();
-        while ($user = Database::fetch_array($res, 'ASSOC')) {
-            $courseInfo = api_get_course_info($course_code);
-            $courseId = $courseInfo['real_id'];
+        $courseInfo = api_get_course_info($course_code);
+        $courseId = $courseInfo['real_id'];
 
+        while ($user = Database::fetch_array($res, 'ASSOC')) {
             $user['official_code'] = $user['col0'];
             $user['lastname'] = $user['col1'];
             $user['firstname'] = $user['col2'];

@@ -196,7 +196,7 @@ class CoursesAndSessionsCatalog
         }
 
         // count courses that are in no category
-        $countCourses = CourseCategory::countCoursesInCategory();
+        $countCourses = CourseCategory::countCoursesInCategory('NONE');
         $categories['NONE'] = [
             'id' => 0,
             'name' => get_lang('WithoutCategory'),
@@ -441,7 +441,7 @@ class CoursesAndSessionsCatalog
         }
 
         $categoryFilter = '';
-        if ($categoryCode === 'ALL') {
+        if ($categoryCode === 'ALL' || empty($categoryCode)) {
             // Nothing to do
         } elseif ($categoryCode === 'NONE') {
             $categoryFilter = ' AND category_code = "" ';
@@ -498,6 +498,7 @@ class CoursesAndSessionsCatalog
                        ";
             }
         }
+        //var_dump($sql);
         $result = Database::query($sql);
         $courses = [];
         while ($row = Database::fetch_array($result)) {
@@ -540,18 +541,56 @@ class CoursesAndSessionsCatalog
     }
 
     /**
-     * Gets the extra fields listed in configuration option course_catalogue_order_by_extrafield.
+     * Gets extra fields listed in configuration option course_catalog_settings/extra_field_sort_options sorting order.
+     *
+     * @return array "extra_field_$id" => order (1 = ascending, -1 = descending)
+     */
+    public static function courseExtraFieldSortingOrder()
+    {
+        $order = [];
+        $variableOrder = api_get_configuration_sub_value('course_catalog_settings/extra_field_sort_options', []);
+        foreach (self::getCourseExtraFieldsAvailableForSorting() as $extraField) {
+            $order['extra_field_'.$extraField->getId()] = $variableOrder[$extraField->getVariable()];
+        }
+
+        return $order;
+    }
+
+    /**
+     * Gets the extra fields listed in configuration option course_catalog_settings/extra_field_sort_options.
      *
      * @return ExtraField[]
      */
     public static function getCourseExtraFieldsAvailableForSorting()
     {
-        $variables = api_get_configuration_sub_value('course_catalogue_order_by_extrafield/fields');
+        $variables = array_keys(
+            api_get_configuration_sub_value('course_catalog_settings/extra_field_sort_options', [])
+        );
         if (is_array($variables) && !empty($variables)) {
             return ExtraField::getExtraFieldsFromVariablesOrdered($variables, ExtraField::COURSE_FIELD_TYPE);
         }
 
         return [];
+    }
+
+    /**
+     * Builds the list of possible course standard sort criteria.
+     *
+     * @return array option name => order (1 = ascending, -1 = descending)
+     */
+    public static function courseStandardSortOrder()
+    {
+        return api_get_configuration_sub_value(
+            'course_catalog_settings/standard_sort_options',
+            [
+                'title' => 1,
+                'creation_date' => -1,
+                'count_users' => -1, // subscription count
+                'point_info/point_average' => -1, // average score
+                'point_info/total_score' => -1, // score sum
+                'point_info/users' => -1, // vote count
+            ]
+        );
     }
 
     /**
@@ -562,17 +601,28 @@ class CoursesAndSessionsCatalog
     public static function courseSortOptions()
     {
         /** @var $extraFields ExtraField[] */
-        $options = [
+        $standardLabels = [
             'title' => get_lang('Title'),
             'creation_date' => get_lang('CreationDate'),
             'count_users' => get_lang('SubscriptionCount'),
+            'point_info/point_average' => get_lang('PointAverage'),
+            'point_info/total_score' => get_lang('TotalScore'),
             'point_info/users' => get_lang('VoteCount'),
         ];
+        $options = [];
+        foreach (array_keys(self::courseStandardSortOrder()) as $name) {
+            $options[$name] = $standardLabels[$name] ?: $name;
+        }
         foreach (self::getCourseExtraFieldsAvailableForSorting() as $extraField) {
             $options['extra_field_'.$extraField->getId()] = $extraField->getDisplayText();
         }
 
         return $options;
+    }
+
+    public static function courseSortOrder()
+    {
+        return self::courseStandardSortOrder() + self::courseExtraFieldSortingOrder();
     }
 
     /**
@@ -621,20 +671,20 @@ class CoursesAndSessionsCatalog
             }
             unset($course);
         }
-        // do we have special cases to sort on ?
-        if (in_array('point_info/users', $sortKeys)) {
-            foreach ($courses as &$course) {
-                if (array_key_exists('point_info', $course) && array_key_exists('users', $course['point_info'])) {
-                    $course['point_info/users'] = $course['point_info']['users'];
+        // do we have $course['groupKey']['subKey'] to sort on, such as 'point_info/users' ?
+        foreach ($sortKeys as $key) {
+            if (false !== strpos($key, '/')) {
+                foreach ($courses as &$course) {
+                    $subValue = api_array_sub_value($course, $key);
+                    if (!is_null($subValue)) {
+                        $course[$key] = $subValue;
+                    }
                 }
+                unset($course);
             }
         }
-        unset($course);
-        $descKeys = [
-            'count_users',
-            'point_info/users',
-        ];
-        usort($courses, function ($a, $b) use ($sortKeys, $descKeys) {
+        $sortOrder = self::courseSortOrder();
+        usort($courses, function ($a, $b) use ($sortKeys, $sortOrder) {
             foreach ($sortKeys as $key) {
                 $valueA = array_key_exists($key, $a) ? $a[$key] : null;
                 $valueB = array_key_exists($key, $b) ? $b[$key] : null;
@@ -642,7 +692,7 @@ class CoursesAndSessionsCatalog
                     $aIsLessThanB = (is_string($valueA) && is_string($valueB))
                         ? strtolower($valueA) < strtolower($valueB)
                         : $valueA < $valueB;
-                    $reverseOrder = in_array($key, $descKeys);
+                    $reverseOrder = (array_key_exists($key, $sortOrder) && -1 === $sortOrder[$key]);
                     $aIsBeforeB = ($aIsLessThanB xor $reverseOrder);
 
                     return $aIsBeforeB ? -1 : 1;
@@ -722,7 +772,7 @@ class CoursesAndSessionsCatalog
             ->andWhere($qb->expr()->gt('s.nbrCourses', 0))
         ;
 
-        if (!is_null($date)) {
+        if (!empty($date)) {
             $qb->andWhere(
                 $qb->expr()->orX(
                     $qb->expr()->isNull('s.accessEndDate'),
@@ -808,7 +858,7 @@ class CoursesAndSessionsCatalog
      *
      * @return array The sessions
      */
-    public static function browseSessionsByTags($termTag, array $limit)
+    public static function browseSessionsByTags($termTag, array $limit, $getCount = false)
     {
         $em = Database::getManager();
         $qb = $em->createQueryBuilder();
@@ -854,18 +904,25 @@ class CoursesAndSessionsCatalog
             ->andWhere(
                 $qb->expr()->eq('f.extraFieldType', ExtraField::COURSE_FIELD_TYPE)
             )
-            ->andWhere(
-                $qb->expr()->gt('s.nbrCourses', 0)
-            )
-            ->andWhere(
-                $qb->expr()->eq('url.accessUrlId', $urlId)
-            )
-            ->setFirstResult($limit['start'])
-            ->setMaxResults($limit['length'])
+            ->andWhere($qb->expr()->gt('s.nbrCourses', 0))
+            ->andWhere($qb->expr()->eq('url.accessUrlId', $urlId))
             ->setParameter('tag', "$termTag%")
+        ;
+
+        if (!empty($limit)) {
+            $qb
+                ->setFirstResult($limit['start'])
+                ->setMaxResults($limit['length'])
             ;
+        }
 
         $qb = self::hideFromSessionCatalogCondition($qb);
+
+        if ($getCount) {
+            $qb->select('count(s)');
+
+            return $qb->getQuery()->getSingleScalarResult();
+        }
 
         return $qb->getQuery()->getResult();
     }
@@ -878,7 +935,7 @@ class CoursesAndSessionsCatalog
      *
      * @return array The sessions
      */
-    public static function getSessionsByName($keyword, array $limit)
+    public static function getSessionsByName($keyword, array $limit, $getCount = false)
     {
         $em = Database::getManager();
         $qb = $em->createQueryBuilder();
@@ -899,20 +956,25 @@ class CoursesAndSessionsCatalog
                 Join::WITH,
                 'url.sessionId = s.id'
             )
-            ->andWhere(
-                $qb->expr()->eq('url.accessUrlId', $urlId)
-            )->andWhere(
-                's.name LIKE :keyword'
-            )
-            ->andWhere(
-                $qb->expr()->gt('s.nbrCourses', 0)
-            )
-            ->setFirstResult($limit['start'])
-            ->setMaxResults($limit['length'])
+            ->andWhere($qb->expr()->eq('url.accessUrlId', $urlId))
+            ->andWhere('s.name LIKE :keyword')
+            ->andWhere($qb->expr()->gt('s.nbrCourses', 0))
             ->setParameter('keyword', "%$keyword%")
         ;
 
+        if (!empty($limit)) {
+            $qb
+                ->setFirstResult($limit['start'])
+                ->setMaxResults($limit['length']);
+        }
+
         $qb = self::hideFromSessionCatalogCondition($qb);
+
+        if ($getCount) {
+            $qb->select('count(s)');
+
+            return $qb->getQuery()->getSingleScalarResult();
+        }
 
         return $qb->getQuery()->getResult();
     }
@@ -1303,6 +1365,24 @@ class CoursesAndSessionsCatalog
         );
     }
 
+    public static function getSessionPagination($action, $countSessions, $limit)
+    {
+        $pageTotal = ceil($countSessions / $limit['length']);
+        $pagination = '';
+        // Do NOT show pagination if only one page or less
+        if ($pageTotal > 1) {
+            $pagination = self::getCatalogPagination(
+                $limit['current'],
+                $limit['length'],
+                $pageTotal,
+                null,
+                $action
+            );
+        }
+
+        return $pagination;
+    }
+
     /**
      * Return Session catalog rendered view.
      *
@@ -1310,15 +1390,13 @@ class CoursesAndSessionsCatalog
      */
     public static function sessionList($limit = [])
     {
-        $date = isset($_POST['date']) ? $_POST['date'] : date('Y-m-d');
+        $date = isset($_POST['date']) ? $_POST['date'] : '';
         $limit = isset($limit) ? $limit : self::getLimitArray();
 
         $countSessions = self::browseSessions($date, [], false, true);
         $sessions = self::browseSessions($date, $limit);
 
-        $pageTotal = ceil($countSessions / $limit['length']);
-        // Do NOT show pagination if only one page or less
-        $pagination = $pageTotal > 1 ? self::getCatalogPagination($limit['current'], $limit['length'], $pageTotal) : '';
+        $pagination = self::getSessionPagination('display_sessions', $countSessions, $limit);
         $sessionsBlocks = self::getFormattedSessionsBlock($sessions);
 
         // Get session search catalogue URL
@@ -1355,7 +1433,7 @@ class CoursesAndSessionsCatalog
      */
     public static function sessionsListByName(array $limit)
     {
-        $keyword = isset($_POST['keyword']) ? $_POST['keyword'] : null;
+        $keyword = isset($_REQUEST['keyword']) ? $_REQUEST['keyword'] : null;
         $courseUrl = self::getCatalogUrl(
             1,
             $limit['length'],
@@ -1363,10 +1441,13 @@ class CoursesAndSessionsCatalog
             'subscribe'
         );
 
+        $count = self::getSessionsByName($keyword, [], true);
         $sessions = self::getSessionsByName($keyword, $limit);
         $sessionsBlocks = self::getFormattedSessionsBlock($sessions);
+        $pagination = self::getSessionPagination('search_session_title', $count, $limit);
 
         $tpl = new Template();
+        $tpl->assign('catalog_pagination', $pagination);
         $tpl->assign('actions', self::getTabList(2));
         $tpl->assign('show_courses', self::showCourses());
         $tpl->assign('show_sessions', self::showSessions());
@@ -1395,6 +1476,9 @@ class CoursesAndSessionsCatalog
                     'by_tag' => true,
                     'show_session_info' => true,
                     'show_session_date' => true,
+                ],
+                'courses' => [
+                    'by_title' => true,
                 ],
             ];
         }
@@ -1427,6 +1511,11 @@ class CoursesAndSessionsCatalog
             ];
         }
 
+        // If only one option hide menu.
+        if (1 === count($headers)) {
+            return '';
+        }
+
         return Display::tabsOnlyLink($headers, $active);
     }
 
@@ -1437,8 +1526,8 @@ class CoursesAndSessionsCatalog
      */
     public static function sessionsListByCoursesTag(array $limit)
     {
-        $searchTag = isset($_POST['search_tag']) ? $_POST['search_tag'] : null;
-        $searchDate = isset($_POST['date']) ? $_POST['date'] : date('Y-m-d');
+        $searchTag = isset($_REQUEST['search_tag']) ? $_REQUEST['search_tag'] : '';
+        $searchDate = isset($_REQUEST['date']) ? $_REQUEST['date'] : date('Y-m-d');
         $courseUrl = self::getCatalogUrl(
             1,
             $limit['length'],
@@ -1449,7 +1538,11 @@ class CoursesAndSessionsCatalog
         $sessions = self::browseSessionsByTags($searchTag, $limit);
         $sessionsBlocks = self::getFormattedSessionsBlock($sessions);
 
+        $count = self::browseSessionsByTags($searchTag, [], true);
+        $pagination = self::getSessionPagination('search_tag', $count, $limit);
+
         $tpl = new Template();
+        $tpl->assign('catalog_pagination', $pagination);
         $tpl->assign('show_courses', self::showCourses());
         $tpl->assign('show_sessions', self::showSessions());
         $tpl->assign('show_tutor', api_get_setting('show_session_coach') === 'true');
@@ -1780,9 +1873,11 @@ class CoursesAndSessionsCatalog
         $extraFields = [],
         $sortKeys = []
     ) {
-        $requestAction = isset($_REQUEST['action']) ? Security::remove_XSS($_REQUEST['action']) : null;
+        $requestAction = isset($_REQUEST['action']) ? Security::remove_XSS($_REQUEST['action']) : '';
         $action = isset($action) ? Security::remove_XSS($action) : $requestAction;
-        $searchTerm = isset($_REQUEST['search_term']) ? Security::remove_XSS($_REQUEST['search_term']) : null;
+        $searchTerm = isset($_REQUEST['search_term']) ? Security::remove_XSS($_REQUEST['search_term']) : '';
+        $keyword = isset($_REQUEST['keyword']) ? Security::remove_XSS($_REQUEST['keyword']) : '';
+        $searchTag = isset($_REQUEST['search_tag']) ? $_REQUEST['search_tag'] : '';
 
         if ($action === 'subscribe_user_with_password') {
             $action = 'subscribe';
@@ -1794,6 +1889,8 @@ class CoursesAndSessionsCatalog
         $pageUrl = api_get_self().
             '?action='.$action.
             '&search_term='.$searchTerm.
+            '&keyword='.$keyword.
+            '&search_tag='.$searchTag.
             '&category_code='.$categoryCode.
             '&pageCurrent='.$pageCurrent.
             '&pageLength='.$pageLength;

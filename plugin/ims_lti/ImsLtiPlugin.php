@@ -31,7 +31,7 @@ class ImsLtiPlugin extends Plugin
      */
     protected function __construct()
     {
-        $version = '1.7.0';
+        $version = '1.8.0';
         $author = 'Angel Fernando Quiroz Campos';
 
         $message = Display::return_message($this->get_lang('GenerateKeyPairInfo'));
@@ -323,6 +323,12 @@ class ImsLtiPlugin extends Plugin
 
         $courseTool->setName($ltiTool->getName());
 
+        if ('iframe' !== $ltiTool->getDocumentTarget()) {
+            $courseTool->setTarget('_blank');
+        } else {
+            $courseTool->setTarget('_self');
+        }
+
         $em->persist($courseTool);
         $em->flush();
     }
@@ -472,13 +478,45 @@ class ImsLtiPlugin extends Plugin
     }
 
     /**
-     * @param User $currentUser
+     * @param ImsLtiTool $tool
+     * @param User       $user
      *
      * @return string
      */
-    public static function getRoleScopeMentor(User $currentUser)
+    public static function getLaunchUserIdClaim(ImsLtiTool $tool, User $user)
     {
-        $scope = self::getRoleScopeMentorAsArray($currentUser, true);
+        if (null !== $tool->getParent()) {
+            $tool = $tool->getParent();
+        }
+
+        $replacement = $tool->getReplacementForUserId();
+
+        if (empty($replacement)) {
+            if ($tool->getVersion() === ImsLti::V_1P1) {
+                return self::generateToolUserId($user->getId());
+            }
+
+            return (string) $user->getId();
+        }
+
+        $replaced = str_replace(
+            ['$User.id', '$User.username'],
+            [$user->getId(), $user->getUsername()],
+            $replacement
+        );
+
+        return $replaced;
+    }
+
+    /**
+     * @param User $currentUser
+     * @param ImsLtiTool $tool
+     *
+     * @return string
+     */
+    public static function getRoleScopeMentor(User $currentUser, ImsLtiTool $tool)
+    {
+        $scope = self::getRoleScopeMentorAsArray($currentUser, $tool, true);
 
         return implode(',', $scope);
     }
@@ -486,26 +524,31 @@ class ImsLtiPlugin extends Plugin
     /**
      * Tool User IDs which the user DRH can access as a mentor.
      *
-     * @param User $user
-     * @param bool $generateIdForTool. Optional. Set TRUE for LTI 1.x.
+     * @param User       $user
+     * @param ImsLtiTool $tool
+     * @param bool       $generateIdForTool. Optional. Set TRUE for LTI 1.x.
      *
      * @return array
      */
-    public static function getRoleScopeMentorAsArray(User $user, $generateIdForTool = false)
+    public static function getRoleScopeMentorAsArray(User $user, ImsLtiTool $tool, $generateIdForTool = false)
     {
         if (DRH !== $user->getStatus()) {
             return [];
         }
 
-        $followedUsers = UserManager::get_users_followed_by_drh($user->getId());
+        $followedUsers = UserManager::get_users_followed_by_drh($user->getId(), 0, true);
 
         $scope = [];
 
         /** @var array $userInfo */
         foreach ($followedUsers as $userInfo) {
-            $scope[] = $generateIdForTool
-                ? self::generateToolUserId($userInfo['user_id'])
-                : (string) $userInfo['user_id'];
+            if ($generateIdForTool) {
+                $followedUser = api_get_user_entity($userInfo['user_id']);
+
+                $scope[] = self::getLaunchUserIdClaim($tool, $followedUser);
+            } else {
+                $scope[] = (string) $userInfo['user_id'];
+            }
         }
 
         return $scope;
@@ -760,5 +803,18 @@ class ImsLtiPlugin extends Plugin
         $webPath = api_get_path(WEB_PATH);
 
         return trim($webPath, " /");
+    }
+
+    public static function getCoursesForParentTool(ImsLtiTool $tool)
+    {
+        $coursesId = [];
+
+        if (!$tool->getParent()) {
+            $coursesId = $tool->getChildren()->map(function (ImsLtiTool $tool) {
+                return $tool->getCourse();
+            });
+        }
+
+        return $coursesId;
     }
 }

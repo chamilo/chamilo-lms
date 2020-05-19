@@ -1,4 +1,5 @@
 <?php
+
 /* For licensing terms, see /license.txt */
 
 /**
@@ -8,10 +9,7 @@
  *
  * @abstract The task of the internship was to integrate the 'send messages to specific users' with the
  *             Announcements tool and also add the resource linker here. The database also needed refactoring
- *             as there was no title field (the title was merged into the content field)
- *
- * @package chamilo.announcements
- * multiple functions
+ *             as there was no title field (the title was merged into the content field) multiple functions
  */
 
 // use anonymous mode when accessing this course tool

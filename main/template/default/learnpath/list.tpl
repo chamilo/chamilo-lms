@@ -24,8 +24,12 @@
                         <h3 class="page-header">
                             {{ lp_data.category.getName() | trim }}
 
+                            {% if lp_data.category.sessionId %}
+                                {{ session_star_icon }}
+                            {% endif %}
+
                             {% if lp_data.category.getId() > 0 %}
-                                {% if not _c.session_id %}
+                                {% if lp_data.category.sessionId == _c.session_id %}
                                     <a href="{{ 'lp_controller.php?' ~ _p.web_cid_query ~ '&action=add_lp_category&id=' ~ lp_data.category.getId() }}"
                                        title="{{ "Edit"|get_lang }}">
                                         <img src="{{ "edit.png"|icon }}" alt="{{ "Edit"|get_lang }}">
@@ -38,54 +42,61 @@
                                         </a>
                                     {% endif %}
 
-                                    {% if loop.index0 == 1 %}
-                                        <a href="#">
-                                            <img src="{{ "up_na.png"|icon }}" alt="{{ "Move"|get_lang }}">
+                                    {% if lp_data.category.sessionId == _c.session_id %}
+                                        {% if loop.index0 == 1 or first_session_category == lp_data.category.id %}
+                                            <a href="#">
+                                                <img src="{{ "up_na.png"|icon }}" alt="{{ "Move"|get_lang }}">
+                                            </a>
+                                        {% else %}
+                                            <a href="{{ 'lp_controller.php?' ~ _p.web_cid_query ~ '&action=move_up_category&id=' ~ lp_data.category.getId() }}"
+                                               title="{{ "Move"|get_lang }}">
+                                                <img src="{{ "up.png"|icon }}" alt="{{ "Move"|get_lang }}">
+                                            </a>
+                                        {% endif %}
+
+                                        {% if (data|length - 1) == loop.index0 %}
+                                            <a href="#">
+                                                <img src="{{ "down_na.png"|icon }}" alt="{{ "Move"|get_lang }}">
+                                            </a>
+                                        {% else %}
+                                            <a href="{{ 'lp_controller.php?' ~ _p.web_cid_query ~ '&action=move_down_category&id=' ~ lp_data.category.getId() }}"
+                                               title="{{ "Move"|get_lang }}">
+                                                <img src="{{ "down.png"|icon }}" alt="{{ "Move"|get_lang }}">
+                                            </a>
+                                        {% endif %}
+                                    {% endif %}
+                                {% endif %}
+
+{#                                {% if lp_data.category.sessionId == _c.session_id %}#}
+                                    {% if lp_data.category_visibility == 0 %}
+                                        <a href="lp_controller.php?{{ _p.web_cid_query ~ '&' ~ {'action':'toggle_category_visibility', 'id':lp_data.category.id, 'new_status':1}|url_encode }}"
+                                           title="{{ 'Show'|get_lang }}">
+                                            <img src="{{ 'invisible.png'|icon }}" alt="{{ 'Show'|get_lang }}">
                                         </a>
                                     {% else %}
-                                        <a href="{{ 'lp_controller.php?' ~ _p.web_cid_query ~ '&action=move_up_category&id=' ~ lp_data.category.getId() }}"
-                                           title="{{ "Move"|get_lang }}">
-                                            <img src="{{ "up.png"|icon }}" alt="{{ "Move"|get_lang }}">
+                                        <a href="lp_controller.php?{{ _p.web_cid_query ~ '&' ~ {'action':'toggle_category_visibility', 'id':lp_data.category.id, 'new_status':0}|url_encode }}"
+                                           title="{{ 'Hide'|get_lang }}">
+                                            <img src="{{ 'visible.png'|icon }}" alt="{{ 'Hide'|get_lang }}">
                                         </a>
                                     {% endif %}
+{#                                {% endif %}#}
 
-                                    {% if (data|length - 1) == loop.index0 %}
-                                        <a href="#">
-                                            <img src="{{ "down_na.png"|icon }}" alt="{{ "Move"|get_lang }}">
+{#                                {% if not _c.session_id %}#}
+                                    {% if lp_data.category_is_published == 0 %}
+                                        <a href="lp_controller.php?{{ _p.web_cid_query ~ '&' ~ {'action':'toggle_category_publish', 'id':lp_data.category.id, 'new_status':1}|url_encode }}"
+                                           title="{{ 'LearnpathPublish'|get_lang }}">
+                                            <img src="{{ 'lp_publish_na.png'|icon }}"
+                                                 alt="{{ 'LearnpathPublish'|get_lang }}">
                                         </a>
                                     {% else %}
-                                        <a href="{{ 'lp_controller.php?' ~ _p.web_cid_query ~ '&action=move_down_category&id=' ~ lp_data.category.getId() }}"
-                                           title="{{ "Move"|get_lang }}">
-                                            <img src="{{ "down.png"|icon }}" alt="{{ "Move"|get_lang }}">
+                                        <a href="lp_controller.php?{{ _p.web_cid_query ~ '&' ~ {'action':'toggle_category_publish', 'id':lp_data.category.id, 'new_status':0}|url_encode }}"
+                                           title="{{ 'LearnpathDoNotPublish'|get_lang }}">
+                                            <img src="{{ 'lp_publish.png'|icon }}" alt="{{ 'Hide'|get_lang }}">
                                         </a>
                                     {% endif %}
-                                {% endif %}
+{#                                {% endif %}#}
 
-                                {% if lp_data.category_visibility == 0 %}
-                                    <a href="lp_controller.php?{{ _p.web_cid_query ~ '&' ~ {'action':'toggle_category_visibility', 'id':lp_data.category.id, 'new_status':1}|url_encode }}"
-                                       title="{{ 'Show'|get_lang }}">
-                                        <img src="{{ 'invisible.png'|icon }}" alt="{{ 'Show'|get_lang }}">
-                                    </a>
-                                {% else %}
-                                    <a href="lp_controller.php?{{ _p.web_cid_query ~ '&' ~ {'action':'toggle_category_visibility', 'id':lp_data.category.id, 'new_status':0}|url_encode }}"
-                                       title="{{ 'Hide'|get_lang }}">
-                                        <img src="{{ 'visible.png'|icon }}" alt="{{ 'Hide'|get_lang }}">
-                                    </a>
-                                {% endif %}
-
-                                {% if lp_data.category_is_published == 0 %}
-                                    <a href="lp_controller.php?{{ _p.web_cid_query ~ '&' ~ {'action':'toggle_category_publish', 'id':lp_data.category.id, 'new_status':1}|url_encode }}"
-                                       title="{{ 'LearnpathPublish'|get_lang }}">
-                                        <img src="{{ 'lp_publish_na.png'|icon }}"
-                                             alt="{{ 'LearnpathPublish'|get_lang }}">
-                                    </a>
-                                {% else %}
-                                    <a href="lp_controller.php?{{ _p.web_cid_query ~ '&' ~ {'action':'toggle_category_publish', 'id':lp_data.category.id, 'new_status':0}|url_encode }}"
-                                       title="{{ 'LearnpathDoNotPublish'|get_lang }}">
-                                        <img src="{{ 'lp_publish.png'|icon }}" alt="{{ 'Hide'|get_lang }}">
-                                    </a>
-                                {% endif %}
-                                {% if not _c.session_id %}
+                                {% if lp_data.category.sessionId == _c.session_id %}
                                     <a href="{{ 'lp_controller.php?' ~ _p.web_cid_query  ~ '&action=delete_lp_category&id=' ~ lp_data.category.getId() }}"
                                        title="{{ "Delete"|get_lang }}">
                                         <img src="{{ "delete.png"|icon }}" alt="{{ "Delete"|get_lang }}">

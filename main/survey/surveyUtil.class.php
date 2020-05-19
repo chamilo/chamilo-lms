@@ -2934,7 +2934,7 @@ class SurveyUtil
 
         $table->set_column_filter(8, 'anonymous_filter');
         $actions = [
-            'export_all' => get_lang('Export'),
+            'export_all' => get_lang('ExportResults'),
             'send_to_tutors' => get_lang('SendToGroupTutors'),
             'multiplicate' => get_lang('MultiplicateQuestions'),
             'delete' => get_lang('DeleteSurvey'),

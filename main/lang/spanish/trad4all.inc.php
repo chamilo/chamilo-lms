@@ -8536,4 +8536,16 @@ $SubscriptionCount = "Numero de suscripción";
 $VoteCount = "Numero de votos";
 $ExportAsCompactCSV = "Exportar a CSV compacto";
 $PromotedMessages = "Mensajes importantes";
+$SendToGroupTutors = "Publicar a los tutores de grupo";
+$GroupSurveyX = "Encuesta del groupo %s";
+$HelloXGroupX = "Hola %s<br/><br/>Como tutor del grupo %s te invitamos a participar en la siguiente encuesta:";
+$SurveyXMultiplicated = "Encuesta %s demultiplicada";
+$SurveyXNotMultiplicated = "Encuesta %s no demultiplicada";
+$ExportSurveyResults = "Exportar resultados de encuestas";
+$PointAverage = "Puntajes promedio";
+$TotalScore = "Suma de puntajes";
+$ExportResults = "Exportar resultados";
+$QuizBrowserCheckOK = "Su navegador ha sido verificado. Puede proceder con seguridad.";
+$QuizBrowserCheckKO = "Su navegador no pudo ser verificado. Inténtelo de nuevo o pruebe con otro navegador o dispositivo antes de comenzar el examen.";
+$PartialCorrect = "Parcialmente correcto";
 ?>

@@ -331,8 +331,9 @@ $conditions = [];
 $groupList = GroupManager::get_group_list(null, $courseInfo, 1, $sessionId);
 
 $class = new UserGroup();
-$options['where'] = [' usergroup.course_id = ? ' => $courseId];
-$classes = $class->getUserGroupInCourse($options);
+//$options['where'] = [' usergroup.course_id = ? ' => $courseId];
+//$classes = $class->getUserGroupInCourse($options);
+$classes = $class->get_all();
 
 // Show the charts part only if there are students subscribed to this course/session
 if ($nbStudents > 0) {
@@ -765,31 +766,30 @@ if ($nbStudents > 0) {
 $groupContent = '';
 echo Display::panel($html, $titleSession);
 
+$groupTable = new HTML_Table(['class' => 'table data_table']);
+$column = 0;
+$groupTable->setHeaderContents(0, $column++, get_lang('Name'));
+$groupTable->setHeaderContents(0, $column++, get_lang('TrainingTime'));
+$groupTable->setHeaderContents(0, $column++, get_lang('AverageTrainingTime'));
+$groupTable->setHeaderContents(0, $column++, get_lang('CourseProgress'));
+$groupTable->setHeaderContents(0, $column++, get_lang('ExerciseAverage'));
+
+$exerciseList = ExerciseLib::get_all_exercises(
+    $courseInfo,
+    $sessionId,
+    false,
+    null,
+    false,
+    3
+);
+//$groupList = null;
 if (!empty($groupList)) {
-    $groupTable = new HTML_Table(['class' => 'table data_table']);
-    $column = 0;
-    $groupTable->setHeaderContents(0, $column++, get_lang('Name'));
-    $groupTable->setHeaderContents(0, $column++, get_lang('TrainingTime'));
-    $groupTable->setHeaderContents(0, $column++, get_lang('AverageTrainingTime'));
-    $groupTable->setHeaderContents(0, $column++, get_lang('CourseProgress'));
-    $groupTable->setHeaderContents(0, $column++, get_lang('ExerciseAverage'));
-
-    $row = 1;
-    $exerciseList = ExerciseLib::get_all_exercises(
-        $courseInfo,
-        $sessionId,
-        false,
-        null,
-        false,
-        3
-    );
-
     $totalTime = null;
     $totalLpProgress = null;
     $totalScore = null;
     $totalAverageTime = null;
-    $totalBestScoreAverageNotInLP = null;
-
+    $totalBestScoreAverageNotInLP = 0;
+    $row = 1;
     foreach ($groupList as $groupInfo) {
         $column = 0;
         $groupTable->setCellContents($row, $column++, $groupInfo['name']);
@@ -816,19 +816,22 @@ if (!empty($groupList)) {
                 $averageTime = api_time_to_hms($averageTime);
             }
 
-            $lpProgress = Tracking::get_avg_student_progress(
-                $usersInGroup,
-                $courseCode,
-                [],
-                $sessionId,
-                true
-            );
+            $totalGroupLpProgress = 0;
+            foreach ($usersInGroup as $studentId) {
+                $lpProgress = Tracking::get_avg_student_progress(
+                    $usersInGroup,
+                    $courseCode,
+                    [],
+                    $sessionId
+                );
+                $totalGroupLpProgress += $lpProgress;
+            }
 
-            if (empty($lpProgress)) {
-                $lpProgress = '';
+            if (empty($totalGroupLpProgress)) {
+                $totalGroupLpProgress = '';
             } else {
-                $lpProgress = $lpProgress[0] / $userInGroupCount;
-                $totalLpProgress += $lpProgress;
+                $lpProgress = $totalGroupLpProgress / $userInGroupCount;
+                $totalLpProgress += $totalGroupLpProgress;
             }
 
             if (!empty($exerciseList)) {
@@ -886,11 +889,83 @@ if (!empty($groupList)) {
     $groupTable->setCellContents($row, $column++, get_lang('Total'));
     $groupTable->setCellContents($row, $column++, $totalTime);
     $groupTable->setCellContents($row, $column++, $totalAverageTime);
-    $groupTable->setCellContents($row, $column++, $totalLpProgress);
-    $groupTable->setCellContents($row, $column++, $totalBestScoreAverageNotInLP);
+    $groupTable->setCellContents($row, $column++, round($totalLpProgress / count($groupList), 2).'% ');
+    $groupTable->setCellContents($row, $column++, round($totalBestScoreAverageNotInLP / count($groupList), 2).'% ');
+} else {
+    $userIdList = Session::read('user_id_list');
 
-    echo Display::panel($groupTable->toHtml(), '');
+    if (!empty($userIdList)) {
+        $studentIdList = $userIdList;
+    } else {
+        $studentIdList = array_column($studentList, 'user_id');
+    }
+    $nbStudents = count($studentIdList);
+
+    $timeInSeconds = Tracking::get_time_spent_on_the_course(
+        $studentIdList,
+        $courseId,
+        $sessionId
+    );
+    $averageTime = null;
+    if (!empty($timeInSeconds)) {
+        $time = api_time_to_hms($timeInSeconds);
+        $averageTime = $timeInSeconds / $nbStudents;
+        $averageTime = api_time_to_hms($averageTime);
+    }
+    $totalLpProgress = 0;
+    foreach ($studentIdList as $studentId) {
+        $lpProgress = Tracking::get_avg_student_progress(
+            $studentId,
+            $courseCode,
+            [],
+            $sessionId
+        );
+        $totalLpProgress += $lpProgress;
+    }
+
+    $lpProgress = round($totalLpProgress / $nbStudents, 2).' %';
+    $totalBestScoreAverageNotInLP = 0;
+    $bestScoreAverageNotInLP = 0;
+    if (!empty($exerciseList)) {
+        foreach ($exerciseList as $exerciseData) {
+            foreach ($studentIdList as $userId) {
+                $results = Event::get_best_exercise_results_by_user(
+                    $exerciseData['id'],
+                    $courseInfo['real_id'],
+                    $sessionId,
+                    $userId
+                );
+                $best = 0;
+                if (!empty($results)) {
+                    foreach ($results as $result) {
+                        if (!empty($result['exe_weighting'])) {
+                            $score = $result['exe_result'] / $result['exe_weighting'];
+                            if ($score > $best) {
+                                $best = $score;
+                            }
+                        }
+                    }
+                }
+
+                $bestScoreAverageNotInLP += $best;
+            }
+        }
+        $bestScoreAverageNotInLP = round(
+            $bestScoreAverageNotInLP / count($exerciseList) * 100 / $nbStudents,
+            2
+        ).' %';
+    }
+
+    $row = 1;
+    $column = 0;
+    $groupTable->setCellContents($row, $column++, get_lang('Total'));
+    $groupTable->setCellContents($row, $column++, $time);
+    $groupTable->setCellContents($row, $column++, $averageTime);
+    $groupTable->setCellContents($row, $column++, $lpProgress);
+    $groupTable->setCellContents($row, $column++, $bestScoreAverageNotInLP);
 }
+
+echo Display::panel($groupTable->toHtml(), '');
 
 // Send the csv file if asked.
 if ($export_csv) {

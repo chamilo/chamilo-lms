@@ -9255,10 +9255,10 @@ class SessionManager
     /**
      * @return int
      */
-    public static function getCountUsersInCourseSession(
-        Course $course,
-        Session $session
-    ) {
+    public static function getCountUsersInCourseSession(Course $course, Session $session)
+    {
+        $urlId = api_get_current_access_url_id();
+
         return Database::getManager()
             ->createQuery("
                 SELECT COUNT(scu)
@@ -9266,15 +9266,19 @@ class SessionManager
                 INNER JOIN ChamiloCoreBundle:SessionRelUser su
                     WITH scu.user = su.user
                     AND scu.session = su.session
+                INNER JOIN ChamiloCoreBundle:AccessUrlRelUser a
+                    WITH a.user = su.user
                 WHERE
                     scu.course = :course AND
                     su.relationType <> :relationType AND
-                    scu.session = :session
+                    scu.session = :session AND
+                    a.portal = :url
             ")
             ->setParameters([
                 'course' => $course->getId(),
                 'relationType' => SESSION_RELATION_TYPE_RRHH,
                 'session' => $session->getId(),
+                'url' => $urlId,
             ])
             ->getSingleScalarResult();
     }

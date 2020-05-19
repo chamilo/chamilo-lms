@@ -7099,7 +7099,9 @@ function api_browser_support($format = '')
         }
     } elseif ($format == 'pdf') {
         // native pdf support
-        if ($current_browser == 'Chrome' && $current_majorver >= 6) {
+        if (($current_browser == 'Chrome' && $current_majorver >= 6) ||
+            ('Firefox' === $current_browser && $current_majorver >= 15)
+        ) {
             $result[$format] = true;
 
             return true;
@@ -8718,7 +8720,7 @@ function api_get_configuration_value($variable)
  * Retreives and returns a value in a hierarchical configuration array
  * api_get_configuration_sub_value('a/b/c') returns api_get_configuration_value('a')['b']['c'].
  *
- * @param string $path      the successive array keys, seperated by the separator
+ * @param string $path      the successive array keys, separated by the separator
  * @param mixed  $default   value to be returned if not found, null by default
  * @param string $separator '/' by default
  * @param array  $array     the active configuration array by default
@@ -8750,6 +8752,42 @@ function api_get_configuration_sub_value($path, $default = null, $separator = '/
         $newPath = substr($path, $pos + 1);
 
         return api_get_configuration_sub_value($newPath, $default, $separator, $newArray);
+    }
+
+    return $default;
+}
+
+/**
+ * Retrieves and returns a value in a hierarchical configuration array
+ * api_array_sub_value($array, 'a/b/c') returns $array['a']['b']['c'].
+ *
+ * @param array  $array     the recursive array that contains the value to be returned (or not)
+ * @param string $path      the successive array keys, separated by the separator
+ * @param mixed  $default   the value to be returned if not found
+ * @param string $separator the separator substring
+ *
+ * @return mixed the found value or $default
+ */
+function api_array_sub_value($array, $path, $default = null, $separator = '/')
+{
+    $pos = strpos($path, $separator);
+    if (false === $pos) {
+        if (is_array($array) && array_key_exists($path, $array)) {
+            return $array[$path];
+        }
+
+        return $default;
+    }
+    $key = substr($path, 0, $pos);
+    if (is_array($array) && array_key_exists($key, $array)) {
+        $newArray = $array[$key];
+    } else {
+        return $default;
+    }
+    if (is_array($newArray)) {
+        $newPath = substr($path, $pos + 1);
+
+        return api_array_sub_value($newArray, $newPath, $default);
     }
 
     return $default;

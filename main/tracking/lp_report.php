@@ -19,12 +19,7 @@ if (!$is_allowedToTrack) {
     exit;
 }
 
-$htmlHeadXtra[] = '<script>
-    $(function ()
-
-    });
-</script>';
-
+$action = isset($_GET['action']) ? $_GET['action'] : null;
 $lps = learnpath::getLpList($courseId);
 Session::write('lps', $lps);
 
@@ -98,13 +93,6 @@ function prepare_user_sql_query($getCount)
         $keywordListValues = [];
     }
 
-    /*
-    // This block is never executed because $keyword_extra_data never exists
-    if (isset($keyword_extra_data) && !empty($keyword_extra_data)) {
-        $extra_info = UserManager::get_extra_field_information_by_name($keyword_extra_data);
-        $field_id = $extra_info['id'];
-        $sql.= " INNER JOIN user_field_values ufv ON u.id=ufv.user_id AND ufv.field_id=$field_id ";
-    } */
     if (isset($_GET['keyword']) && !empty($_GET['keyword'])) {
         $keywordFiltered = Database::escape_string("%".$_GET['keyword']."%");
         $sql .= " WHERE (
@@ -130,14 +118,6 @@ function prepare_user_sql_query($getCount)
         }
 
         $keyword_extra_value = '';
-
-        // This block is never executed because $keyword_extra_data never exists
-        /*
-        if (isset($keyword_extra_data) && !empty($keyword_extra_data) &&
-            !empty($keyword_extra_data_text)) {
-            $keyword_extra_value = " AND ufv.field_value LIKE '%".trim($keyword_extra_data_text)."%' ";
-        }
-        */
         $sql .= " $query_admin_table
             WHERE (
                 u.firstname LIKE '".Database::escape_string("%".$keywordListValues['keyword_firstname']."%")."' AND
@@ -291,6 +271,7 @@ function getData($from, $numberOfItems, $column, $direction)
 {
     $sessionId = api_get_session_id();
     $courseCode = api_get_course_id();
+    $courseId = api_get_course_int_id();
 
     $lps = Session::read('lps');
 
@@ -324,18 +305,22 @@ function getData($from, $numberOfItems, $column, $direction)
         );
     }
 
+    $useNewTable = Tracking::minimumTimeAvailable($sessionId, $courseId);
+
     $users = [];
     foreach ($students as $student) {
         $user = [];
         $userId = $student['id'];
-
-        //$user[] = $student['id'];
         $user[] = $student['firstname'];
         $user[] = $student['lastname'];
+        $user[] = $student['username'];
 
+        $lpTimeList = [];
+        if ($useNewTable) {
+            $lpTimeList = Tracking::getCalculateTime($userId, $courseId, $sessionId);
+        }
         foreach ($lps as $lp) {
             $lpId = $lp['id'];
-
             $progress = Tracking::get_avg_student_progress(
                 $userId,
                 $courseCode,
@@ -343,12 +328,16 @@ function getData($from, $numberOfItems, $column, $direction)
                 $sessionId
             );
 
-            $time = Tracking::get_time_spent_in_lp(
-                $userId,
-                $courseCode,
-                [$lpId],
-                $sessionId
-            );
+            if ($useNewTable) {
+                $time = isset($lpTimeList[TOOL_LEARNPATH][$lpId]) ? $lpTimeList[TOOL_LEARNPATH][$lpId] : 0;
+            } else {
+                $time = Tracking::get_time_spent_in_lp(
+                    $userId,
+                    $courseCode,
+                    [$lpId],
+                    $sessionId
+                );
+            }
             $time = api_time_to_hms($time);
 
             $first = Tracking::getFirstConnectionTimeInLp(
@@ -405,30 +394,43 @@ $interbreadcrumb[] = [
 
 $tool_name = get_lang('CourseLPsGenericStats');
 
+$headers = [];
+$headers[] = get_lang('FirstName');
+$headers[] = get_lang('LastName');
+$headers[] = get_lang('Username');
+foreach ($lps as $lp) {
+    $lpName = $lp['name'];
+    $headers[] = get_lang('Progress').': '.$lpName;
+    $headers[] = get_lang('FirstAccess').': '.$lpName;
+    $headers[] = get_lang('LastAccess').': '.$lpName;
+    $headers[] = get_lang('Time').': '.$lpName;
+    $headers[] = get_lang('Score').': '.$lpName;
+}
+
 if (!empty($action)) {
-    $check = Security::check_token('get');
-    if ($check) {
-        /*switch ($action) {
-            case 'add_user_to_my_url':
-                $user_id = $_REQUEST['user_id'];
-                $result = UrlManager::add_user_to_url($user_id, $urlId);
-                if ($result) {
-                    $user_info = api_get_user_info($user_id);
-                    $message = get_lang('UserAdded').' '.$user_info['complete_name_with_username'];
-                    $message = Display::return_message($message, 'confirmation');
-                }
-                break;
-        }
-        Security::clear_token();*/
+    switch ($action) {
+        case 'export':
+            $data = getData(0, 100000, null, null);
+            $data = array_merge([$headers], $data);
+            $name = api_get_course_id().'_'.get_lang('Learnpath').'_'.get_lang('Export');
+            Export::arrayToXls($data, $name);
+            exit;
+            break;
     }
 }
 
 $actionsLeft = TrackingCourseLog::actionsLeft('lp');
 $actionsCenter = '';
-$actionsRight = '';
+$actionsRight = Display::url(
+    Display::return_icon('export_excel.png', get_lang('ExportAsXLS'), null, ICON_SIZE_MEDIUM),
+    api_get_self().'?action=export&'.api_get_cidreq()
+);
 
 // Create a sortable table with user-data
+$parameters = [];
 $parameters['sec_token'] = Security::get_token();
+$parameters['cidReq'] = api_get_course_id();
+$parameters['id_session'] = api_get_session_id();
 
 $table = new SortableTable(
     'lps',
@@ -437,29 +439,12 @@ $table = new SortableTable(
 );
 $table->set_additional_parameters($parameters);
 $column = 0;
-$table->set_header($column++, get_lang('FirstName'), false);
-$table->set_header($column++, get_lang('LastName'), false);
-
-$count = 0;
-foreach ($lps as $lp) {
+foreach ($headers as $header) {
     $lpName = $lp['name'];
-    $table->set_header($column++, get_lang('Progress').': '.$lpName, false);
-    $table->set_header($column++, get_lang('FirstAccess').': '.$lpName, false);
-    $table->set_header($column++, get_lang('LastAccess').': '.$lpName, false);
-    $table->set_header($column++, get_lang('Time').': '.$lpName, false);
-    $table->set_header($column++, get_lang('Score').': '.$lpName, false);
+    $table->set_header($column++, $header, false);
 }
 
-/*
-// Only show empty actions bar if delete users has been blocked
-$actionsList = [];
-$actionsList['disable'] = get_lang('Disable');
-$actionsList['enable'] = get_lang('Enable');
-$table->set_form_actions($actionsList);
-*/
-
 $tableToString = $table->return_table();
-
 $toolbarActions = Display::toolbarAction(
     'toolbarUser',
     [$actionsLeft, $actionsCenter, $actionsRight],

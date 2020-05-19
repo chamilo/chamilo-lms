@@ -1,12 +1,9 @@
 <?php
-/* For licensing terms, see /license.txt */
 
-use ChamiloSession as Session;
+/* For licensing terms, see /license.txt */
 
 /**
  * Exercise list: This script shows the list of exercises for administrators and students.
- *
- * @package chamilo.exercise
  *
  * @author Olivier Brouckaert, original author
  * @author Denes Nagy, HotPotatoes integration
@@ -540,7 +537,6 @@ if ($is_allowedToEdit && $origin !== 'learnpath') {
     $actionsLeft .= Display::return_icon('database.png', get_lang('QuestionPool'), '', ICON_SIZE_MEDIUM);
     $actionsLeft .= '</a>';
 
-    //echo Display::url(Display::return_icon('looknfeel.png', get_lang('Media')), 'media.php?' . api_get_cidreq());
     // end question category
     $actionsLeft .= '<a href="'.api_get_path(WEB_CODE_PATH).'exercise/hotpotatoes.php?'.api_get_cidreq().'">'.
         Display::return_icon('import_hotpotatoes.png', get_lang('ImportHotPotatoesQuiz'), '', ICON_SIZE_MEDIUM).'</a>';
@@ -612,6 +608,7 @@ if ($is_allowedToEdit) {
         [6, 1, 5]
     );
 }
+
 if (api_get_configuration_value('allow_exercise_categories') === false) {
     echo Exercise::exerciseGrid(0, $keyword);
 } else {

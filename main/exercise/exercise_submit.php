@@ -1,4 +1,5 @@
 <?php
+
 /* For licensing terms, see /license.txt */
 
 use ChamiloSession as Session;
@@ -18,8 +19,6 @@ use ChamiloSession as Session;
  *
  * Notice : This script is also used to show a question before modifying it by
  * the administrator
- *
- * @package chamilo.exercise
  *
  * @author Olivier Brouckaert
  * @author Julio Montoya <gugli100@gmail.com>
@@ -101,7 +100,6 @@ $currentAnswer = isset($_REQUEST['num_answer']) ? (int) $_REQUEST['num_answer'] 
 $logInfo = [
     'tool' => TOOL_QUIZ,
     'tool_id' => $exerciseId,
-    'tool_id_detail' => 0,
     'action' => $learnpath_id,
     'action_details' => $learnpath_id,
 ];
@@ -467,10 +465,6 @@ if (!isset($questionListInSession)) {
         $questionList = explode(',', $exercise_stat_info['data_tracking']);
     }
     Session::write('questionList', $questionList);
-
-    if ($debug > 0) {
-        error_log('$_SESSION[questionList] was set');
-    }
 } else {
     if (isset($objExercise) && isset($exerciseInSession)) {
         $questionList = Session::read('questionList');
@@ -607,7 +601,7 @@ if ($debug) {
     error_log('8. Question list loaded '.print_r($questionList, 1));
 }
 
-//Real question count
+// Real question count.
 $question_count = 0;
 if (!empty($questionList)) {
     $question_count = count($questionList);
@@ -626,13 +620,12 @@ if ($formSent && isset($_POST)) {
         error_log('9. $formSent was set');
     }
 
-    // Initializing
     if (!is_array($exerciseResult)) {
         $exerciseResult = [];
         $exerciseResultCoordinates = [];
     }
 
-    //Only for hotspot
+    // Only for hotspot
     if (!isset($choice) && isset($_REQUEST['hidden_hotspot_id'])) {
         $hotspot_id = (int) $_REQUEST['hidden_hotspot_id'];
         $choice = [$hotspot_id => ''];
@@ -686,7 +679,6 @@ if ($formSent && isset($_POST)) {
                             []
                         );
                     }
-                    //END of saving and qualifying
                 }
             }
         }
@@ -892,7 +884,7 @@ $is_visible_return = $objExercise->is_visible(
 if ($is_visible_return['value'] == false) {
     echo $is_visible_return['message'];
     if (!in_array($origin, ['learnpath', 'embeddable'])) {
-        Display :: display_footer();
+        Display::display_footer();
     }
     exit;
 }

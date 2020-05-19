@@ -181,6 +181,10 @@ class Template
                 'name' => 'date_to_time_ago',
                 'callable' => 'Display::dateToStringAgoAndLongDate',
             ],
+            [
+                'name' => 'remove_xss',
+                'callable' => 'Security::remove_XSS',
+            ],
         ];
 
         foreach ($filters as $filter) {

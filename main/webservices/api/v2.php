@@ -335,6 +335,11 @@ try {
             $data = $restApi->usernameExist($_POST['loginname']);
             $restResponse->setData([$data]);
             break;
+        case Rest::GET_COURSE_QUIZ_MDL_COMPAT:
+            $data = $restApi->getCourseQuizMdlCompat();
+
+            echo json_encode($data, JSON_PRETTY_PRINT);
+            exit;
         default:
             throw new Exception(get_lang('InvalidAction'));
     }

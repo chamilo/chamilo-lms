@@ -1377,7 +1377,18 @@ ALTER TABLE notification_event ADD COLUMN event_id INT NULL;
 //$_configuration['hide_session_dates_in_user_portal'] = false;
 
 // Catalog search settings visibility
-//$_configuration['catalog_settings'] = ['sessions' => ['by_title' => true, 'by_date' => true, 'by_tag' => true, 'show_session_info' => true, 'show_session_date' => true]];
+/*$_configuration['catalog_settings'] = [
+    'sessions' => [
+        'by_title' => true,
+        'by_date' => true,
+        'by_tag' => true,
+        'show_session_info' => true,
+        'show_session_date' => true,
+    ],
+    'courses' => [
+        'by_title' => true,
+    ],
+];*/
 
 // Enable learning paths with only one SCO item to use the score returned by
 // the SCO as an indicator of progress of the whole learning path
@@ -1437,9 +1448,24 @@ $_configuration['course_catalog_settings'] = [
         'title_url' => 'course_home', // Course home URL
         'image_url' => 'course_about', // Course about URL
     ],
+    'hide_course_title'
     'redirect_after_subscription' => 'course_home', // or 'course_catalog' to stay in the page
     'extra_fields_in_search_form' => ['variable1', 'variable2'],
     'extra_fields_in_course_block' => ['variable3', 'variable4'],
+    'standard_sort_options' => [
+        //  1 means allow sorting in ascending order
+        // -1 means allow sorting in descending order
+        'title' => 1,
+        'creation_date' => -1,
+        'count_users' => -1, // subscription count
+        'point_info/point_average' => -1, // average score
+        'point_info/total_score' => -1, // score sum
+        'point_info/users' => -1, // vote count
+    ],
+    'extra_field_sort_options' => [
+        'variable5' => -1,
+        'variable6' => 1,
+    ],
 ];
 */
 
@@ -1453,11 +1479,6 @@ $_configuration['course_catalog_settings'] = [
 
 // Disable sending emails.
 //$_configuration['disable_send_mail'] = false;
-
-// Page "Catalog" extra fields to be used as sorting criteria
-/*$_configuration['course_catalogue_order_by_extrafield'] = [
-    'fields' => ['duree_en_min'],
-];*/
 
 // CKEditor font names
 /*$_configuration['ck_editor_font_names'] = [
@@ -1496,6 +1517,18 @@ $_configuration['auth_password_links'] = [
 ];
 */
 
+// Show unsubscribe buttons on page "My courses"
+//$_configuration['enable_unsubscribe_button_on_my_course_page'] = false;
+
+// Allow LP category in sessions.
+// ALTER TABLE c_lp_category ADD COLUMN session_id INT(11) DEFAULT NULL;
+//$_configuration['allow_session_lp_category'] = false;
+
+// Enable recording of all answers (even temporary) in the track_e_attempt_recording table
+// This requires a column to be added to the table with the following query:
+// ALTER TABLE track_e_attempt_recording ADD COLUMN answer longtext default '' AFTER question_id;
+//$_configuration['quiz_answer_extra_recording'] = false;
+
 // KEEP THIS AT THE END
 // -------- Custom DB changes
 // Add user activation by confirmation email
@@ -1503,3 +1536,6 @@ $_configuration['auth_password_links'] = [
 // You need add a new option called "confirmation" to the registration settings
 //INSERT INTO settings_options (variable, value, display_text) VALUES ('allow_registration', 'confirmation', 'MailConfirmation');
 // ------ (End) Custom DB changes
+
+//Allows to add increment in minutes to the date range component timepicker, example: 5,10,30 minutes
+//$_configuration['timepicker_increment'] = 5;

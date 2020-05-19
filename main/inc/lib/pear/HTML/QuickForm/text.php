@@ -110,6 +110,7 @@ class HTML_QuickForm_text extends HTML_QuickForm_input
                         </div>';
 
         switch ($layout) {
+            case FormValidator::LAYOUT_GRID:
             case FormValidator::LAYOUT_INLINE:
                 $template = '
                 <div class="form-group {error_class}">

@@ -930,7 +930,12 @@ class ExerciseLib
                                     WHERE exe_id = $exe_id AND question_id= $questionId";
                             $rsLastAttempt = Database::query($sql);
                             $rowLastAttempt = Database::fetch_array($rsLastAttempt);
-                            $answer = $rowLastAttempt['answer'];
+
+                            $answer = null;
+                            if (isset($rowLastAttempt['answer'])) {
+                                $answer = $rowLastAttempt['answer'];
+                            }
+
                             if (empty($answer)) {
                                 $_SESSION['calculatedAnswerId'][$questionId] = mt_rand(
                                     1,
@@ -2786,7 +2791,7 @@ HOTSPOT;
         $minNote = api_get_setting('exercise_min_score');
 
         if ($maxNote != '' && $minNote != '') {
-            if (!empty($weight) && (float) $weight !== 0) {
+            if (!empty($weight) && (float) $weight !== (float) 0) {
                 $score = $minNote + ($maxNote - $minNote) * $score / $weight;
             } else {
                 $score = $minNote;
@@ -4511,16 +4516,15 @@ EOT;
             }
         }
 
-        if (($show_results || $show_only_score) && $origin !== 'embeddable') {
-            if (isset($exercise_stat_info['exe_user_id'])) {
-                if (!empty($studentInfo)) {
-                    // Shows exercise header
-                    echo $objExercise->showExerciseResultHeader(
-                        $studentInfo,
-                        $exercise_stat_info
-                    );
-                }
-            }
+        if ('embeddable' !== $origin &&
+            !empty($exercise_stat_info['exe_user_id']) &&
+            !empty($studentInfo)
+        ) {
+            // Shows exercise header
+            echo $objExercise->showExerciseResultHeader(
+                $studentInfo,
+                $exercise_stat_info
+            );
         }
 
         // Display text when test is finished #4074 and for LP #4227

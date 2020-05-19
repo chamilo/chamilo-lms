@@ -7,28 +7,14 @@ use Chamilo\CoreBundle\Entity\ExtraFieldValues;
 use Chamilo\CoreBundle\Entity\Skill;
 use Chamilo\CoreBundle\Entity\UsergroupRelUser;
 use Doctrine\Common\Collections\ArrayCollection;
-//use Sonata\UserBundle\Entity\BaseUser as BaseUser;
 use Doctrine\ORM\Event\LifecycleEventArgs;
 use Doctrine\ORM\Mapping as ORM;
-//use Symfony\Component\Security\Core\User\UserInterface;
 use FOS\UserBundle\Model\GroupInterface;
 use FOS\UserBundle\Model\UserInterface;
-use Sonata\UserBundle\Model\User as BaseUser;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\HttpFoundation\File\File;
 use Symfony\Component\Validator\Constraints as Assert;
 use Symfony\Component\Validator\Mapping\ClassMetadata;
-
-//use Chamilo\CoreBundle\Component\Auth;
-//use FOS\MessageBundle\Model\ParticipantInterface;
-//use Chamilo\ThemeBundle\Model\UserInterface as ThemeUser;
-//use Vich\UploaderBundle\Mapping\Annotation as Vich;
-//use Application\Sonata\MediaBundle\Entity\Media;
-//use Chamilo\UserBundle\Model\UserInterface as UserInterfaceModel;
-
-//use Sylius\Component\Attribute\Model\AttributeValueInterface as BaseAttributeValueInterface;
-//use Sylius\Component\Variation\Model\OptionInterface as BaseOptionInterface;
-//use Sylius\Component\Variation\Model\VariantInterface as BaseVariantInterface;
 
 /**
  * @ORM\HasLifecycleCallbacks

@@ -58,6 +58,11 @@ $(function() {
         if ($(this).hasClass('no-close-button')) {
             globalModal.find('.close').hide();
         }
+
+        if ($(this).hasClass('no-header')) {
+            globalModal.find('.modal-header').hide();
+        }
+
         var contentUrl = this.href;
         var loadModalContent = $.get(contentUrl);
         var self = $(this);
@@ -78,8 +83,6 @@ $(function() {
                     modalTitle = self.data('title') || ' ';
 
             modalDialog.removeClass('modal-lg modal-sm').css('width', '');
-
-
             if (modalSize && modalSize.length != 0) {
                 switch (modalSize) {
                     case 'lg':

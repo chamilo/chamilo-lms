@@ -11,6 +11,7 @@ class FormValidator extends HTML_QuickForm
     const LAYOUT_INLINE = 'inline';
     const LAYOUT_BOX = 'box';
     const LAYOUT_BOX_NO_LABEL = 'box-no-label';
+    const LAYOUT_GRID = 'grid';
 
     public $with_progress_bar = false;
     private $layout;
@@ -47,6 +48,9 @@ class FormValidator extends HTML_QuickForm
 
         $this->setLayout($layout);
 
+        // Form template
+        $formTemplate = $this->getFormTemplate();
+
         switch ($layout) {
             case self::LAYOUT_HORIZONTAL:
                 $attributes['class'] = 'form-horizontal';
@@ -57,6 +61,10 @@ class FormValidator extends HTML_QuickForm
             case self::LAYOUT_BOX:
                 $attributes['class'] = 'form-inline-box';
                 break;
+            case self::LAYOUT_GRID:
+                $attributes['class'] = 'form-grid';
+                $formTemplate = $this->getGridFormTemplate();
+                break;
         }
 
         parent::__construct($name, $method, $action, $target, $attributes, $trackSubmit);
@@ -64,8 +72,6 @@ class FormValidator extends HTML_QuickForm
         // Modify the default templates
         $renderer = &$this->defaultRenderer();
 
-        // Form template
-        $formTemplate = $this->getFormTemplate();
         $renderer->setFormTemplate($formTemplate);
 
         // Element template
@@ -85,13 +91,6 @@ class FormValidator extends HTML_QuickForm
             //Display a gray div in the buttons + makes the button available when scrolling
             $templateBottom = '<div class="form-actions bottom_actions bg-form">{label} {element}</div>';
             $renderer->setElementTemplate($templateBottom, 'submit_fixed_in_bottom');
-
-            //When you want to group buttons use something like this
-            /* $group = array();
-              $group[] = $form->createElement('button', 'mark_all', get_lang('MarkAll'));
-              $group[] = $form->createElement('button', 'unmark_all', get_lang('UnmarkAll'));
-              $form->addGroup($group, 'buttons_in_action');
-             */
             $renderer->setElementTemplate($templateSimple, 'buttons_in_action');
 
             $templateSimpleRight = '<div class="form-actions"> <div class="pull-right">{label} {element}</div></div>';
@@ -123,6 +122,31 @@ EOT;
         <fieldset>
             {content}
         </fieldset>
+        {hidden}
+        </form>';
+    }
+
+    /**
+     * @return string
+     */
+    public function getGridFormTemplate()
+    {
+        return '
+        <style>
+            .form_list {
+                display: grid;
+                grid-template-columns:  repeat(auto-fill, minmax(300px, 1fr));;
+                grid-gap: 10px 30px;
+                gap: 10px 30px;
+            }
+            .form_list .input-group {
+                display:block;
+            }
+        </style>
+        <form{attributes}>
+            <div class="form_list">
+                {content}
+            </div>
         {hidden}
         </form>';
     }

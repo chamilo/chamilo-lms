@@ -37,9 +37,7 @@ if (api_is_platform_admin() || api_is_course_admin() || api_is_allowed_to_create
 
 $defaultAction = CoursesAndSessionsCatalog::is(CATALOG_SESSIONS) ? 'display_sessions' : 'display_courses';
 $action = isset($_REQUEST['action']) ? Security::remove_XSS($_REQUEST['action']) : $defaultAction;
-$categoryCode = isset($_REQUEST['category_code']) && !empty($_REQUEST['category_code']) ? Security::remove_XSS(
-    $_REQUEST['category_code']
-) : 'ALL';
+$categoryCode = isset($_REQUEST['category_code']) ? Security::remove_XSS($_REQUEST['category_code']) : '';
 $searchTerm = isset($_REQUEST['search_term']) ? Security::remove_XSS($_REQUEST['search_term']) : '';
 
 $nameTools = CourseCategory::getCourseCatalogNameTools($action);
@@ -203,10 +201,19 @@ switch ($action) {
             api_not_allowed(true);
         }
 
-        $form = new FormValidator('search', 'get', '', null, null, FormValidator::LAYOUT_BOX);
+        $settings = CoursesAndSessionsCatalog::getCatalogSearchSettings();
+        $form = new FormValidator('search', 'get', '', null, null, FormValidator::LAYOUT_GRID);
         $form->addHidden('action', 'search_course');
-        $form->addText('search_term', get_lang('Title'));
-        $select = $form->addSelect('category_code', get_lang('CourseCategories'));
+        if (isset($settings['courses']) && true === $settings['courses']['by_title']) {
+            $form->addText('search_term', get_lang('Title'));
+        }
+
+        $select = $form->addSelect(
+            'category_code',
+            get_lang('CourseCategories'),
+            [],
+            ['placeholder' => get_lang('SelectAnOption')]
+        );
 
         $defaults = [];
         $listCategories = CoursesAndSessionsCatalog::getCourseCategoriesTree();
@@ -258,7 +265,7 @@ switch ($action) {
         } else {
             $values = $_REQUEST;
             if ($allowExtraFields) {
-                $extraResult = $extraField->processExtraFieldSearch($values, $form, 'course');
+                $extraResult = $extraField->processExtraFieldSearch($values, $form, 'course', 'AND');
                 $conditions = $extraResult['condition'];
                 $fields = $extraResult['fields'];
                 $defaults = $extraResult['defaults'];
@@ -367,9 +374,10 @@ switch ($action) {
         $content .= '<div class="row">
         <div class="col-md-12">
             <div class="search-courses">
-                <div class="row">';
+             ';
         if ($showCourses) {
-            $content .= '<div class="col-md-'.($showSessions ? '4' : '6').'">';
+            //$content .= '<div class="col-md-'.($showSessions ? '4' : '6').'">';
+            //$content .= '<div class="col-md-12">';
             $htmlHeadXtra[] = '<script>
             $(function () {
                 '.$jqueryReadyContent.'
@@ -380,10 +388,10 @@ switch ($action) {
             $form->setDefaults($defaults);
 
             $content .= $form->returnForm();
-            $content .= '</div>';
+            //$content .= '</div>';
         }
 
-        $content .= '</div></div></div></div>';
+        $content .= '</div></div></div>';
 
         if ($showCourses) {
             $showTeacher = 'true' === api_get_setting('display_teacher_in_courselist');
@@ -660,7 +668,7 @@ switch ($action) {
         }
 
         CoursesAndSessionsCatalog::sessionsListByName($limit);
-
+        exit;
         break;
 }
 

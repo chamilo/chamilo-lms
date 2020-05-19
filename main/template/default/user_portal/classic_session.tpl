@@ -97,6 +97,9 @@
                                         </a>
                                     </div>
                                     <div class="col-md-10">
+                                        <div class="pull-right">
+                                            {{ item.unregister_button }}
+                                        </div>
                                         {% if item.requirements %}
                                             <h4>{{ item.name }}</h4>
                                         {% else %}

@@ -26,8 +26,6 @@ use Symfony\Component\Finder\Finder;
  *
  * @todo decouple class
  *
- * @package chamilo.learnpath
- *
  * @author  Yannick Warnier <ywarnier@beeznest.org>
  * @author  Julio Montoya   <gugli100@gmail.com> Several improvements and fixes
  */
@@ -2325,8 +2323,7 @@ class learnpath
             $row = Database::fetch_array($rs, 'ASSOC');
 
             if (!empty($row['category_id'])) {
-                $em = Database::getManager();
-                $category = $em->getRepository('ChamiloCourseBundle:CLpCategory')->find($row['category_id']);
+                $category = self::getCategory($row['category_id']);
                 if (self::categoryIsVisibleForStudent($category, api_get_user_entity($student_id)) === false) {
                     return false;
                 }
@@ -3665,7 +3662,7 @@ class learnpath
 
                             $type_quiz = false;
                             foreach ($list as $toc) {
-                                if ($toc['id'] == $lp_item_id && $toc['type'] == 'quiz') {
+                                if ($toc['id'] == $lp_item_id && $toc['type'] === 'quiz') {
                                     $type_quiz = true;
                                 }
                             }
@@ -4535,9 +4532,7 @@ class learnpath
         );
 
         $em = Database::getManager();
-
-        /** @var CLpCategory $category */
-        $category = $em->find('ChamiloCourseBundle:CLpCategory', $id);
+        $category = self::getCategory($id);
 
         if (!$category) {
             return false;
@@ -4719,10 +4714,8 @@ class learnpath
      *
      * @return bool
      */
-    public static function categoryIsPublished(
-        CLpCategory $category,
-        $courseId
-    ) {
+    public static function categoryIsPublished(CLpCategory $category, $courseId)
+    {
         $link = self::getCategoryLinkForTool($category->getId());
         $em = Database::getManager();
 
@@ -8542,16 +8535,16 @@ class learnpath
         $arrLP = isset($this->arrMenu) ? $this->arrMenu : [];
         unset($this->arrMenu);
 
-        if ($action == 'add') {
+        if ($action === 'add') {
             $return .= get_lang('CreateTheDocument');
-        } elseif ($action == 'move') {
+        } elseif ($action === 'move') {
             $return .= get_lang('MoveTheCurrentDocument');
         } else {
             $return .= get_lang('EditTheCurrentDocument');
         }
         $return .= '</legend>';
 
-        if (isset($_GET['edit']) && $_GET['edit'] == 'true') {
+        if (isset($_GET['edit']) && $_GET['edit'] === 'true') {
             $return .= Display::return_message(
                 '<strong>'.get_lang('Warning').' !</strong><br />'.get_lang('WarningEditingDocument'),
                 false
@@ -8571,9 +8564,9 @@ class learnpath
         $defaults['description'] = $item_description;
         $form->addElement('html', $return);
 
-        if ($action != 'move') {
+        if ($action !== 'move') {
             $data = $this->generate_lp_folder($_course);
-            if ($action != 'edit') {
+            if ($action !== 'edit') {
                 $folders = DocumentManager::get_all_document_folders(
                     $_course,
                     0,
@@ -8599,8 +8592,8 @@ class learnpath
         $arrHide[0]['padding'] = 20;
 
         for ($i = 0; $i < count($arrLP); $i++) {
-            if ($action != 'add') {
-                if ($arrLP[$i]['item_type'] == 'dir' &&
+            if ($action !== 'add') {
+                if ($arrLP[$i]['item_type'] === 'dir' &&
                     !in_array($arrLP[$i]['id'], $arrHide) &&
                     !in_array($arrLP[$i]['parent_item_id'], $arrHide)
                 ) {
@@ -8692,10 +8685,10 @@ class learnpath
             reset($arrLP);
         }
 
-        if ($action != 'move') {
+        if ($action !== 'move') {
             $arrHide = [];
             for ($i = 0; $i < count($arrLP); $i++) {
-                if ($arrLP[$i]['id'] != $id && $arrLP[$i]['item_type'] != 'dir' &&
+                if ($arrLP[$i]['id'] != $id && $arrLP[$i]['item_type'] !== 'dir' &&
                     $arrLP[$i]['item_type'] !== TOOL_LP_FINAL_ITEM
                 ) {
                     $arrHide[$arrLP[$i]['id']]['value'] = $arrLP[$i]['title'];
@@ -8705,8 +8698,8 @@ class learnpath
             if (!$no_display_add) {
                 $item_type = isset($extra_info['item_type']) ? $extra_info['item_type'] : null;
                 $edit = isset($_GET['edit']) ? $_GET['edit'] : null;
-                if ($extra_info == 'new' || $item_type == TOOL_DOCUMENT ||
-                    $item_type == TOOL_LP_FINAL_ITEM || $edit == 'true'
+                if ($extra_info === 'new' || $item_type == TOOL_DOCUMENT ||
+                    $item_type == TOOL_LP_FINAL_ITEM || $edit === 'true'
                 ) {
                     if (isset($_POST['content'])) {
                         $content = stripslashes($_POST['content']);
@@ -8768,11 +8761,11 @@ class learnpath
                             'BaseHref' => api_get_path(WEB_COURSE_PATH).api_get_course_path().'/document/'.$relative_path,
                         ];
 
-                        if ($_GET['action'] == 'add_item') {
+                        if ($_GET['action'] === 'add_item') {
                             $class = 'add';
                             $text = get_lang('LPCreateDocument');
                         } else {
-                            if ($_GET['action'] == 'edit_item') {
+                            if ($_GET['action'] === 'edit_item') {
                                 $class = 'save';
                                 $text = get_lang('SaveDocument');
                             }
@@ -8801,7 +8794,7 @@ class learnpath
             $position->freeze();
         }
 
-        if ($action == 'move') {
+        if ($action === 'move') {
             $form->addElement('hidden', 'title', $item_title);
             $form->addElement('hidden', 'description', $item_description);
         }
@@ -12021,10 +12014,19 @@ EOD;
         $em->persist($item);
         $em->flush();
 
+        $id = $item->getId();
+
+        $sessionId = api_get_session_id();
+        if (!empty($sessionId) && api_get_configuration_value('allow_session_lp_category')) {
+            $table = Database::get_course_table(TABLE_LP_CATEGORY);
+            $sql = "UPDATE $table SET session_id = $sessionId WHERE iid = $id";
+            Database::query($sql);
+        }
+
         api_item_property_update(
             api_get_course_info(),
             TOOL_LEARNPATH_CATEGORY,
-            $item->getId(),
+            $id,
             'visible',
             api_get_user_id()
         );
@@ -12034,16 +12036,12 @@ EOD;
 
     /**
      * @param array $params
-     *
-     * @throws \Doctrine\ORM\ORMException
-     * @throws \Doctrine\ORM\OptimisticLockException
-     * @throws \Doctrine\ORM\TransactionRequiredException
      */
     public static function updateCategory($params)
     {
         $em = Database::getManager();
-        /** @var CLpCategory $item */
-        $item = $em->find('ChamiloCourseBundle:CLpCategory', $params['id']);
+        $item = self::getCategory($params['id']);
+
         if ($item) {
             $item->setName($params['name']);
             $em->merge($item);
@@ -12053,18 +12051,12 @@ EOD;
 
     /**
      * @param int $id
-     *
-     * @throws \Doctrine\ORM\ORMException
-     * @throws \Doctrine\ORM\OptimisticLockException
-     * @throws \Doctrine\ORM\TransactionRequiredException
      */
     public static function moveUpCategory($id)
     {
-        $id = (int) $id;
-        $em = Database::getManager();
-        /** @var CLpCategory $item */
-        $item = $em->find('ChamiloCourseBundle:CLpCategory', $id);
+        $item = self::getCategory($id);
         if ($item) {
+            $em = Database::getManager();
             $position = $item->getPosition() - 1;
             $item->setPosition($position);
             $em->persist($item);
@@ -12081,11 +12073,9 @@ EOD;
      */
     public static function moveDownCategory($id)
     {
-        $id = (int) $id;
-        $em = Database::getManager();
-        /** @var CLpCategory $item */
-        $item = $em->find('ChamiloCourseBundle:CLpCategory', $id);
+        $item = self::getCategory($id);
         if ($item) {
+            $em = Database::getManager();
             $position = $item->getPosition() + 1;
             $item->setPosition($position);
             $em->persist($item);
@@ -12126,7 +12116,7 @@ EOD;
     /**
      * @param int $courseId
      *
-     * @return mixed
+     * @return CLpCategory[]
      */
     public static function getCategories($courseId)
     {
@@ -12135,19 +12125,32 @@ EOD;
         // Using doctrine extensions
         /** @var SortableRepository $repo */
         $repo = $em->getRepository('ChamiloCourseBundle:CLpCategory');
-        $items = $repo
-            ->getBySortableGroupsQuery(['cId' => $courseId])
-            ->getResult();
 
-        return $items;
+        return $repo->getBySortableGroupsQuery(['cId' => $courseId])->getResult();
+    }
+
+    public static function getCategorySessionId($id)
+    {
+        if (false === api_get_configuration_value('allow_session_lp_category')) {
+            return 0;
+        }
+
+        $table = Database::get_course_table(TABLE_LP_CATEGORY);
+        $id = (int) $id;
+
+        $sql = "SELECT session_id FROM $table WHERE iid = $id";
+        $result = Database::query($sql);
+        $result = Database::fetch_array($result, 'ASSOC');
+
+        if ($result) {
+            return (int) $result['session_id'];
+        }
+
+        return 0;
     }
 
     /**
      * @param int $id
-     *
-     * @throws \Doctrine\ORM\ORMException
-     * @throws \Doctrine\ORM\OptimisticLockException
-     * @throws \Doctrine\ORM\TransactionRequiredException
      *
      * @return CLpCategory
      */
@@ -12155,9 +12158,8 @@ EOD;
     {
         $id = (int) $id;
         $em = Database::getManager();
-        $item = $em->find('ChamiloCourseBundle:CLpCategory', $id);
 
-        return $item;
+        return $em->find('ChamiloCourseBundle:CLpCategory', $id);
     }
 
     /**
@@ -12168,11 +12170,8 @@ EOD;
     public static function getCategoryByCourse($courseId)
     {
         $em = Database::getManager();
-        $items = $em->getRepository('ChamiloCourseBundle:CLpCategory')->findBy(
-            ['cId' => $courseId]
-        );
 
-        return $items;
+        return $em->getRepository('ChamiloCourseBundle:CLpCategory')->findBy(['cId' => $courseId]);
     }
 
     /**
@@ -12187,7 +12186,7 @@ EOD;
     public static function deleteCategory($id)
     {
         $em = Database::getManager();
-        $item = $em->find('ChamiloCourseBundle:CLpCategory', $id);
+        $item = self::getCategory($id);
         if ($item) {
             $courseId = $item->getCId();
             $query = $em->createQuery('SELECT u FROM ChamiloCourseBundle:CLp u WHERE u.cId = :id AND u.categoryId = :catId');

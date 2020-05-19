@@ -53,6 +53,7 @@ $urlSession = api_get_path(WEB_AJAX_PATH).'session.ajax.php?a=get_user_sessions'
 $extraField = new ExtraField('user');
 $variables = $extraField->get_all_extra_field_by_type(ExtraField::FIELD_TYPE_TAG);
 $variablesSelect = $extraField->get_all_extra_field_by_type(ExtraField::FIELD_TYPE_SELECT);
+
 if (!empty($variablesSelect)) {
     $variables = array_merge($variables, $variablesSelect);
 }
@@ -365,7 +366,6 @@ function prepare_user_sql_query($getCount)
     $sql .= $extraConditions;
 
     $variables = Session::read('variables_to_show', []);
-
     $extraFields = api_get_configuration_value('user_search_on_extra_fields');
 
     if (!empty($extraFields) && isset($extraFields['extra_fields']) && isset($_GET['keyword'])) {
@@ -418,8 +418,14 @@ function prepare_user_sql_query($getCount)
             }
         }
 
-        if (!empty($extraFieldHasData)) {
-            $sql .= " AND (u.id IN ('".implode("','", $extraFieldResult)."') $extraConditions ) ";
+        $condition = '  AND ';
+        // If simple search then use "OR"
+        if (isset($_GET['keyword']) && !empty($_GET['keyword'])) {
+            $condition = ' OR ';
+        }
+
+        if (!empty($extraFieldHasData) && !empty($extraFieldResult)) {
+            $sql .= " $condition (u.id IN ('".implode("','", $extraFieldResult)."') $extraConditions ) ";
         }
     }
 

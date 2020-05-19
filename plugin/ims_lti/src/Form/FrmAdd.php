@@ -143,6 +143,18 @@ class FrmAdd extends FormValidator
         );
         $this->addHtml('</div>');
 
+        if (!$this->baseTool) {
+            $this->addText(
+                'replacement_user_id',
+                [
+                    $plugin->get_lang('ReplacementUserId'),
+                    $plugin->get_lang('ReplacementUserIdHelp')
+                ],
+                false
+            );
+            $this->applyFilter('replacement_user_id', 'trim');
+        }
+
         $this->addHtml('</div>');
         $this->addButtonAdvancedSettings('lti_privacy', get_lang('Privacy'));
         $this->addHtml('<div id="lti_privacy_options" style="display:none;">');

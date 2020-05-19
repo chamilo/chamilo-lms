@@ -155,6 +155,13 @@ class ImsLtiTool
     private $launchPresentation;
 
     /**
+     * @var array
+     *
+     * @ORM\Column(name="replacement_params", type="json")
+     */
+    private $replacementParams;
+
+    /**
      * ImsLtiTool constructor.
      */
     public function __construct()
@@ -173,6 +180,7 @@ class ImsLtiTool
         $this->launchPresentation = [
             'document_target' => 'iframe',
         ];
+        $this->replacementParams = [];
     }
 
     /**
@@ -830,5 +838,43 @@ class ImsLtiTool
     public function getLaunchPresentation()
     {
         return $this->launchPresentation;
+    }
+
+    /**
+     * @param string $replacement
+     *
+     * @return ImsLtiTool
+     */
+    public function setReplacementForUserId($replacement)
+    {
+        $this->replacementParams['user_id'] = $replacement;
+
+        return $this;
+    }
+
+    /**
+     * @return string|null
+     */
+    public function getReplacementForUserId()
+    {
+        if (!empty($this->replacementParams['user_id'])) {
+            return $this->replacementParams['user_id'];
+        }
+
+        return null;
+    }
+
+    /**
+     * @param array $coursesId
+     *
+     * @return ArrayCollection
+     */
+    public function getChildrenInCourses(array $coursesId)
+    {
+        return $this->children->filter(
+            function (ImsLtiTool $child) use ($coursesId) {
+                return in_array($child->getCourse()->getId(), $coursesId);
+            }
+        );
     }
 }

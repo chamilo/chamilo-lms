@@ -102,11 +102,11 @@
                             {% set linkedin_url = '' %}
                             {% for extra in user.extra %}
                                 {% if extra.value.getField().getVariable() == 'skype' %}
-                                    {% set skype_account = extra.value.getValue() | escape %}
+                                    {% set skype_account = extra.value.getValue() | remove_xss %}
                                 {% endif %}
 
                                 {% if extra.value.getField().getVariable() == 'linkedin_url' %}
-                                    {% set linkedin_url = extra.value.getValue() | escape %}
+                                    {% set linkedin_url = extra.value.getValue() | remove_xss %}
                                 {% endif %}
                             {% endfor %}
 
@@ -145,7 +145,7 @@
                         {% for item in extra_info %}
                             {% if item.variable != 'langue_cible' %}
                             <dt>{{ item.label }}:</dt>
-                            <dd>{{ item.value }}</dd>
+                            <dd>{{ item.value | remove_xss }}</dd>
                             {% endif %}
                         {% endfor %}
                     </dl>

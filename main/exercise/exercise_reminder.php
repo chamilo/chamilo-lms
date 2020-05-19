@@ -23,6 +23,7 @@ $learnpath_item_id = isset($_REQUEST['learnpath_item_id']) ? (int) $_REQUEST['le
 $learnpath_item_view_id = isset($_REQUEST['learnpath_item_view_id']) ? (int) $_REQUEST['learnpath_item_view_id'] : 0;
 $exerciseId = isset($_REQUEST['exerciseId']) ? (int) $_REQUEST['exerciseId'] : 0;
 
+/** @var Exercise $objExercise */
 $objExercise = null;
 $exerciseInSession = Session::read('objExercise');
 if (!empty($exerciseInSession)) {
@@ -114,24 +115,24 @@ echo '<script>
         // Normal inputs
         window.location = "'.api_get_path(WEB_CODE_PATH).'exercise/exercise_result.php?'.api_get_cidreq().'&exe_id='.$exe_id.'&" + lp_data;
     }
-    
-    function changeOptionStatus(status) 
-    {    
-        $("input[type=checkbox]").each(function () {                 
-            $(this).prop("checked", status);                                                
-        });    
-        
-        var action = ""; 
-        var extraOption = "remove_all";       
+
+    function changeOptionStatus(status)
+    {
+        $("input[type=checkbox]").each(function () {
+            $(this).prop("checked", status);
+        });
+
+        var action = "";
+        var extraOption = "remove_all";
         if (status == 1) {
             extraOption = "add_all";
-        }     
+        }
         $.ajax({
             url: "'.api_get_path(WEB_AJAX_PATH).'exercise.ajax.php?'.api_get_cidreq().'&a=add_question_to_reminder",
             data: "option="+extraOption+"&exe_id='.$exe_id.'&action="+action,
             success: function(returnValue) {
             }
-        });  
+        });
     }
 
     function review_questions() {
@@ -170,25 +171,8 @@ echo '<script>
 $attempt_list = Event::getAllExerciseEventByExeId($exe_id);
 $remind_list = $exercise_stat_info['questions_to_check'];
 $remind_list = explode(',', $remind_list);
-$exercise_result = [];
+$exercise_result = $objExercise->getUserAnswersSavedInExercise($exe_id);
 
-foreach ($attempt_list as $question_id => $options) {
-    foreach ($options as $item) {
-        $question_obj = Question::read($item['question_id']);
-        switch ($question_obj->type) {
-            case FILL_IN_BLANKS:
-                $item['answer'] = $objExercise->fill_in_blank_answer_to_string($item['answer']);
-                break;
-            case HOT_SPOT:
-                break;
-        }
-
-        if ($item['answer'] != '0' && !empty($item['answer'])) {
-            $exercise_result[] = $question_id;
-            break;
-        }
-    }
-}
 echo Display::label(get_lang('QuestionWithNoAnswer'), 'danger');
 echo '<div class="clear"></div><br />';
 

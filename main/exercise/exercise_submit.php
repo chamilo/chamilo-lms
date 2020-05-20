@@ -1205,7 +1205,7 @@ if (!empty($error)) {
 
         function save_question_list(question_list) {
             $.each(question_list, function(key, question_id) {
-                save_now(question_id, null, false);
+                save_now(question_id, null);
             });
 
             var url = "";
@@ -1224,7 +1224,7 @@ if (!empty($error)) {
             window.location = "'.$script_php.'?'.$params.'";
         }
 
-        function save_now(question_id, url_extra, validate) {
+        function save_now(question_id, url_extra) {
             // 1. Normal choice inputs
             var my_choice = $(\'*[name*="choice[\'+question_id+\']"]\').serialize();
 
@@ -1255,7 +1255,10 @@ if (!empty($error)) {
 
             // Only for the first time
             var dataparam = "'.$params.'&type=simple&question_id="+question_id;
-            dataparam += "&"+my_choice+"&"+hotspot+"&"+remind_list+"&"+my_choiceDc;
+            dataparam += "&"+my_choice;
+            dataparam += hotspot ? ("&" + hotspot) : "";
+            dataparam += remind_list ? ("&" + remind_list) : "";
+            dataparam += my_choiceDc ? ("&" + my_choiceDc) : "";
 
             $("#save_for_now_"+question_id).html(\''.
                 Display::returnFontAwesomeIcon('spinner', null, true, 'fa-spin').'\');
@@ -1326,11 +1329,17 @@ if (!empty($error)) {
             free_answers = $.param(free_answers);
             $("#save_all_response").html(\''.Display::returnFontAwesomeIcon('spinner', null, true, 'fa-spin').'\');
 
+            var requestData = "'.$params.'&type=all";
+            requestData += "&" + my_choice;
+            requestData += hotspot ? ("&" + hotspot) : "";
+            requestData += free_answers ? ("&" + free_answers) : "";
+            requestData += remind_list ? ("&" + remind_list) : "";
+
             $.ajax({
                 type:"post",
                 async: false,
                 url: "'.api_get_path(WEB_AJAX_PATH).'exercise.ajax.php?'.api_get_cidreq().'&a=save_exercise_by_now",
-                data: "'.$params.'&type=all&"+my_choice+"&"+hotspot+"&"+free_answers+"&"+remind_list,
+                data: requestData,
                 success: function(return_value) {
                     if (return_value == "ok") {
                         if (validate == "validate") {

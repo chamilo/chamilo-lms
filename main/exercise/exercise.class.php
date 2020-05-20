@@ -4122,14 +4122,40 @@ class Exercise
                                 $studentAnswer = trim($listStudentAnswerTemp[$i]);
                                 $studentAnswerToShow = $studentAnswer;
 
+                                if (empty($studentAnswer)) {
+                                    continue;
+                                }
+
                                 if ($debug) {
                                     error_log("Student answer: $i");
                                     error_log($studentAnswer);
                                 }
 
+                                if (!$from_database) {
+                                    $studentAnswer = FillBlanks::clearStudentAnswer($studentAnswer);
+                                    if ($debug) {
+                                        error_log("Student answer cleaned:");
+                                        error_log($studentAnswer);
+                                    }
+                                }
+
                                 $found = false;
                                 for ($j = 0; $j < count($listTeacherAnswerTemp); $j++) {
                                     $correctAnswer = $listTeacherAnswerTemp[$j];
+
+                                    if (!$found) {
+                                        if (FillBlanks::isStudentAnswerGood(
+                                            $studentAnswer,
+                                            $correctAnswer,
+                                            $from_database
+                                        )) {
+                                            $questionScore += $answerWeighting[$i];
+                                            $totalScore += $answerWeighting[$i];
+                                            $listTeacherAnswerTemp[$j] = '';
+                                            $found = true;
+                                        }
+                                    }
+
                                     $type = FillBlanks::getFillTheBlankAnswerType($correctAnswer);
                                     if ($type == FillBlanks::FILL_THE_BLANK_MENU) {
                                         $listMenu = FillBlanks::getFillTheBlankMenuAnswers($correctAnswer, false);
@@ -4142,27 +4168,9 @@ class Exercise
                                             }
                                         }
                                     }
-
-                                    if (!$found) {
-                                        if (FillBlanks::isStudentAnswerGood(
-                                            $studentAnswer,
-                                            $correctAnswer,
-                                            $from_database
-                                        )
-                                        ) {
-                                            $questionScore += $answerWeighting[$i];
-                                            $totalScore += $answerWeighting[$i];
-                                            $listTeacherAnswerTemp[$j] = '';
-                                            $found = true;
-                                        }
-                                    }
                                 }
                                 $listCorrectAnswers['student_answer'][$i] = $studentAnswerToShow;
-                                if (!$found) {
-                                    $listCorrectAnswers['student_score'][$i] = 0;
-                                } else {
-                                    $listCorrectAnswers['student_score'][$i] = 1;
-                                }
+                                $listCorrectAnswers['student_score'][$i] = $found ? 1 : 0;
                             }
                         }
                         $answer = FillBlanks::getAnswerInStudentAttempt($listCorrectAnswers);

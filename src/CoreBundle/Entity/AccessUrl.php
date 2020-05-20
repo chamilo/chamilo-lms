@@ -4,14 +4,18 @@
 
 namespace Chamilo\CoreBundle\Entity;
 
-use Chamilo\CoreBundle\Entity\AbstractResource;
-use Chamilo\CoreBundle\Entity\ResourceInterface;
+use ApiPlatform\Core\Annotation\ApiResource;
 use Chamilo\CoreBundle\Traits\CourseTrait;
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Mapping\Annotation as Gedmo;
+use Symfony\Component\Serializer\Annotation\Groups;
+use Symfony\Component\Validator\Constraints as Assert;
 
 /**
- * AccessUrl.
+ * @ApiResource(
+ *     normalizationContext={"groups"={"access_url:read"}, "swagger_definition_name"="Read"},
+ *     denormalizationContext={"groups"={"access_url:write","course_category:write"}},
+ * )
  *
  * @Gedmo\Tree(type="nested")
  * @ORM\Table(name="access_url")
@@ -109,6 +113,9 @@ class AccessUrl extends AbstractResource implements ResourceInterface
 
     /**
      * @var string
+     * @Assert\NotBlank()
+     *
+     * @Groups({"access_url:read", "access_url:write"})
      *
      * @ORM\Column(name="url", type="string", length=255, nullable=false, unique=false)
      */

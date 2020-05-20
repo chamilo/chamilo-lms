@@ -12,8 +12,8 @@ use Symfony\Component\Serializer\Annotation\Groups;
 
 /**
  * @ApiResource(
- *     normalizationContext={"groups"={"resource_link:read", "course:read"}},
- *
+ *     shortName="ResourceLink",
+ *     normalizationContext={"groups"={"resource_link:read", "course:read"}}
  * )
  * @ORM\Entity
  * @ORM\Table(name="resource_link")
@@ -28,12 +28,12 @@ class ResourceLink
     /**
      * @ORM\Id
      * @ORM\Column(type="integer")
-     * @ORM\GeneratedValue(strategy="AUTO")
+     * @ORM\GeneratedValue
      */
     protected $id;
 
     /**
-     * @Groups({"resource_link:read", "resource_node:read", "course:read"})
+     *
      *
      * @ORM\ManyToOne(targetEntity="Chamilo\CoreBundle\Entity\ResourceNode", inversedBy="resourceLinks")
      * @ORM\JoinColumn(name="resource_node_id", referencedColumnName="id", onDelete="SET NULL")
@@ -41,7 +41,6 @@ class ResourceLink
     protected $resourceNode;
 
     /**
-     * @Groups({"resource_link:read", "resource_node:read", "course:read"})
      *
      * @ORM\ManyToOne(targetEntity="Chamilo\CoreBundle\Entity\Course", inversedBy="resourceLinks")
      * @ORM\JoinColumn(name="c_id", referencedColumnName="id", nullable=true)

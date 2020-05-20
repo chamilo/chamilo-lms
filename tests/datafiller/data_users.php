@@ -440,17 +440,6 @@ $users[] = [
     'active' => 1,
 ];
 $users[] = [
-    'username' => 'mdolata',
-    'pass' => 'mdolata',
-    'firstname' => 'Małgorzata',
-    'lastname' => 'Summer',
-    'status' => 5,
-    'auth_source' => 'platform',
-    'email' => 'mdolata@example.com',
-    'creator_id' => 1,
-    'active' => 1,
-];
-$users[] = [
     'username' => 'adaniel',
     'pass' => 'adaniel',
     'firstname' => 'Anna',

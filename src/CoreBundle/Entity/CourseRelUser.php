@@ -13,7 +13,6 @@ use Symfony\Component\Serializer\Annotation\Groups;
  *
  * @ApiResource(
  *      shortName="CourseSubscription",
- *      attributes={"security"="is_granted('ROLE_ADMIN')"},
  *      normalizationContext={"groups"={"course_rel_user:read"}}
  * )
  *
@@ -25,7 +24,6 @@ use Symfony\Component\Serializer\Annotation\Groups;
  *      }
  * )
  * @ORM\Entity
- * @ORM\Table(name="course_rel_user")
  */
 class CourseRelUser
 {
@@ -39,6 +37,8 @@ class CourseRelUser
     protected $id;
 
     /**
+     * @Groups({"course:read"})
+     *
      * @ORM\ManyToOne(targetEntity="Chamilo\CoreBundle\Entity\User", inversedBy="courses", cascade={"persist"})
      * @ORM\JoinColumn(name="user_id", referencedColumnName="id")
      */

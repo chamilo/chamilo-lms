@@ -3,11 +3,11 @@
 
 use Chamilo\CourseBundle\Entity\CDocument;
 use Chamilo\CoreBundle\Framework\Container;
-use Chamilo\CoreBundle\Entity\Resource\ResourceNode;
-use Chamilo\CoreBundle\Entity\Resource\ResourceLink;
-use Chamilo\CoreBundle\Entity\Resource\ResourceFile;
-use Chamilo\CoreBundle\Entity\Resource\ResourceType;
-use Chamilo\CoreBundle\Entity\Resource\ResourceRight;
+use Chamilo\CoreBundle\Entity\ResourceNode;
+use Chamilo\CoreBundle\Entity\ResourceLink;
+use Chamilo\CoreBundle\Entity\ResourceFile;
+use Chamilo\CoreBundle\Entity\ResourceType;
+use Chamilo\CoreBundle\Entity\ResourceRight;
 use Chamilo\MediaBundle\Entity\Media;
 use Chamilo\CoreBundle\Security\Authorization\Voter\ResourceNodeVoter;
 
@@ -25,10 +25,10 @@ echo 'change course id in the query';
 
 require_once __DIR__.'/../../main/inc/global.inc.php';
 
-$sql = "SELECT 
-          d.id, 
+$sql = "SELECT
+          d.id,
           d.c_id,
-          d.session_id, 
+          d.session_id,
           i.to_group_id,
           i.to_user_id,
           i.iid,
@@ -36,18 +36,18 @@ $sql = "SELECT
           insert_date,
           lastedit_date,
           tool,
-          visibility           
-        FROM c_item_property i 
-        INNER JOIN c_document d 
-        ON (d.iid = i.ref AND i.c_id = d.c_id) 
-        WHERE 
-            i.tool = 'document' AND            
+          visibility
+        FROM c_item_property i
+        INNER JOIN c_document d
+        ON (d.iid = i.ref AND i.c_id = d.c_id)
+        WHERE
+            i.tool = 'document' AND
             d.c_id = 12
         ORDER BY d.path";
 $result = Database::query($sql);
 
 $em = Database::getManager();
-$resourceType = $em->getRepository('ChamiloCoreBundle:Resource\ResourceType')->findOneBy(['name' => 'document']);
+$resourceType = $em->getRepository('ChamiloCoreBundle:ResourceType')->findOneBy(['name' => 'document']);
 $coursePath = api_get_path(SYS_PATH).'app/courses/';
 $mediaManager = Container::$container->get('sonata.media.manager.media');
 $documentManager = $em->getRepository('ChamiloCourseBundle:CDocument');

@@ -2,7 +2,7 @@
 
 /* For licensing terms, see /license.txt */
 
-namespace Chamilo\CourseBundle\EventListener;
+namespace Chamilo\CoreBundle\EventListener;
 
 use Chamilo\CoreBundle\Entity\TrackECourseAccess;
 use Chamilo\CourseBundle\Event\SessionAccess;

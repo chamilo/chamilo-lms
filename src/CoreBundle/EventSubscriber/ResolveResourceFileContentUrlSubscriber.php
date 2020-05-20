@@ -6,13 +6,12 @@ namespace Chamilo\CoreBundle\EventSubscriber;
 
 use ApiPlatform\Core\EventListener\EventPriorities;
 use ApiPlatform\Core\Util\RequestAttributesExtractor;
-use Chamilo\CoreBundle\Entity\Resource\ResourceFile;
+use Chamilo\CoreBundle\Entity\ResourceFile;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Event\ViewEvent;
 use Symfony\Component\HttpKernel\KernelEvents;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
-use Symfony\Component\Routing\RouterInterface;
 use Vich\UploaderBundle\Storage\StorageInterface;
 
 class ResolveResourceFileContentUrlSubscriber implements EventSubscriberInterface
@@ -65,8 +64,6 @@ class ResolveResourceFileContentUrlSubscriber implements EventSubscriberInterfac
             ];
 
             $mediaObject->contentUrl = $this->generator->generate('chamilo_core_resource_view_file', $params);
-
-            //$mediaObject->contentUrl = $this->storage->resolveUri($mediaObject, 'file');
         }
     }
 }

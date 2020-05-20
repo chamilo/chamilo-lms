@@ -4,7 +4,6 @@
 
 namespace Chamilo\CoreBundle\Entity;
 
-use Chamilo\CoreBundle\Entity\ResourceType;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Criteria;
 use Doctrine\ORM\Mapping as ORM;

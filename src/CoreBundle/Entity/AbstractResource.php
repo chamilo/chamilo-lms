@@ -6,8 +6,6 @@ namespace Chamilo\CoreBundle\Entity;
 
 use ApiPlatform\Core\Annotation\ApiSubresource;
 use APY\DataGridBundle\Grid\Mapping as GRID;
-use Chamilo\CoreBundle\Entity\Course;
-use Chamilo\CoreBundle\Entity\Session;
 use Doctrine\Common\Collections\Criteria;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Serializer\Annotation\Groups;
@@ -27,9 +25,7 @@ abstract class AbstractResource
      * @ApiSubresource()
      * @Groups({"resource_node:read", "resource_node:write", "document:read","document:write"})
      * @GRID\Column(field="resourceNode.createdAt", title="Date added", type="datetime")
-     * @ORM\OneToOne(
-     *     targetEntity="Chamilo\CoreBundle\Entity\ResourceNode", cascade={"remove"}, orphanRemoval=true
-     * )
+     * @ORM\OneToOne(targetEntity="Chamilo\CoreBundle\Entity\ResourceNode", cascade={"persist", "remove"}, orphanRemoval=true)
      * @ORM\JoinColumn(name="resource_node_id", referencedColumnName="id", onDelete="CASCADE")
      */
     public $resourceNode;

@@ -5,8 +5,6 @@
 namespace Chamilo\CoreBundle\Entity;
 
 use APY\DataGridBundle\Grid\Mapping as GRID;
-use Chamilo\CoreBundle\Entity\AbstractResource;
-use Chamilo\CoreBundle\Entity\ResourceInterface;
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Timestampable\Traits\TimestampableEntity;
 

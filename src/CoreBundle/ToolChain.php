@@ -170,10 +170,6 @@ class ToolChain
         foreach ($tools as $tool) {
             $visibility = in_array($tool->getName(), $toolVisibility, true);
             $criteria = ['name' => $tool->getName()];
-            // Skip global tools.
-            /*if ($tool->isCourseTool() === false) {
-                continue;
-            }*/
             if (!isset($toolList[$tool->getName()])) {
                 continue;
             }
@@ -190,7 +186,7 @@ class ToolChain
             ;
 
             $toolRepository->addResourceToCourse($courseTool, ResourceLink::VISIBILITY_PUBLISHED, $user, $course);
-            $course->addTools($courseTool);
+            $course->addTool($courseTool);
         }
 
         return $course;

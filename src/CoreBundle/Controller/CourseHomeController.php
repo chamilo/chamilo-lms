@@ -120,7 +120,6 @@ class CourseHomeController extends ToolBaseController
             'tool'
         );
         $result = $qb->getQuery()->getResult();
-
         $tools = [];
         /** @var CTool $item */
         foreach ($result as $item) {

@@ -5,11 +5,8 @@
 namespace Chamilo\CoreBundle\Entity\Listener;
 
 use Chamilo\CoreBundle\Entity\AccessUrl;
-use Chamilo\CoreBundle\Entity\AccessUrlRelSession;
 use Chamilo\CoreBundle\Entity\Session;
 use Chamilo\CoreBundle\Repository\SessionRepository;
-use Chamilo\CoreBundle\ToolChain;
-use Cocur\Slugify\SlugifyInterface;
 use Doctrine\ORM\Event\LifecycleEventArgs;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\Security\Core\Security;

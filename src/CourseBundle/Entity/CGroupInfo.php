@@ -4,8 +4,8 @@
 
 namespace Chamilo\CourseBundle\Entity;
 
-use Chamilo\CoreBundle\Entity\Course;
 use Chamilo\CoreBundle\Entity\AbstractResource;
+use Chamilo\CoreBundle\Entity\Course;
 use Chamilo\CoreBundle\Entity\ResourceInterface;
 use Chamilo\CoreBundle\Entity\User;
 use Chamilo\CoreBundle\Traits\CourseTrait;

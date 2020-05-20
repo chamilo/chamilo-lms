@@ -34,5 +34,7 @@ services:
     Chamilo\CoreBundle\Repository\UserRepository:
         arguments:
             $className: 'Chamilo\CoreBundle\Entity\User'
+        calls:
+            - [setEncoder, ['@security.user_password_encoder.generic']]
 
     Chamilo\CoreBundle\Repository\GroupRepository: ~

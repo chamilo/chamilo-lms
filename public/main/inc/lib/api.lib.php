@@ -1689,7 +1689,12 @@ function api_get_user_info_from_entity(
     $result['registration_date'] = $user->getRegistrationDate()->format('Y-m-d H:i:s');
     $result['hr_dept_id'] = $user->getHrDeptId();
     $result['expiration_date'] = $user->getExpirationDate()->format('Y-m-d H:i:s');
-    $result['last_login'] = $user->getLastLogin()->format('Y-m-d H:i:s');
+
+    $result['last_login'] = null;
+    if ($user->getLastLogin()) {
+        $result['last_login'] = $user->getLastLogin()->format('Y-m-d H:i:s');
+    }
+
     $result['competences'] = $user->getCompetences();
     $result['diplomas'] = $user->getDiplomas();
     $result['teach'] = $user->getTeach();
@@ -3846,12 +3851,12 @@ function api_not_allowed(
     $message = null,
     $responseCode = 0
 ) {
-    throw new Exception('You are not allowed');
+    /*throw new Exception('You are not allowed');
     $message = empty($message) ? get_lang('You are not allowed') : $message;
     Session::write('error_message', $message);
 
     header('Location: '.api_get_path(WEB_PUBLIC_PATH).'error');
-    exit;
+    exit;*/
 }
 
 /**

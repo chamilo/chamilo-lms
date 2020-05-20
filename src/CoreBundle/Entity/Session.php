@@ -1290,27 +1290,17 @@ class Session
         return $this;
     }
 
-    /**
-     * @return User
-     */
     public function getSessionAdmin(): User
     {
         return $this->sessionAdmin;
     }
 
-    /**
-     * @param User $sessionAdmin
-     *
-     * @return Session
-     */
-    public function setSessionAdmin(User $sessionAdmin): Session
+    public function setSessionAdmin(User $sessionAdmin): self
     {
         $this->sessionAdmin = $sessionAdmin;
 
         return $this;
     }
-
-
 
     public function isUserGeneralCoach(User $user): bool
     {

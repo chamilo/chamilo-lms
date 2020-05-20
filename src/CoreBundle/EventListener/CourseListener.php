@@ -2,7 +2,7 @@
 
 /* For licensing terms, see /license.txt */
 
-namespace Chamilo\CourseBundle\EventListener;
+namespace Chamilo\CoreBundle\EventListener;
 
 use Chamilo\CoreBundle\Entity\Course;
 use Chamilo\CoreBundle\Entity\User;
@@ -73,6 +73,7 @@ class CourseListener
                 $courseFromSession = $sessionHandler->get('course');
                 if ($courseId === $courseFromSession->getId()) {
                     $course = $courseFromSession;
+                    $courseInfo = $sessionHandler->get('_course');
                 }
             }
 
@@ -80,6 +81,7 @@ class CourseListener
                 /** @var EntityManager $em */
                 $em = $container->get('doctrine')->getManager();
                 $course = $em->getRepository('ChamiloCoreBundle:Course')->find($courseId);
+
                 //dump("get course from DB $courseId");
                 $courseInfo = api_get_course_info($course->getCode());
             }

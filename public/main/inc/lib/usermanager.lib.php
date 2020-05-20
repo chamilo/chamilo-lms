@@ -2,7 +2,7 @@
 /* For licensing terms, see /license.txt */
 
 use Chamilo\CoreBundle\Entity\ExtraField as EntityExtraField;
-use Chamilo\CoreBundle\Entity\Resource\ResourceNode;
+use Chamilo\CoreBundle\Entity\ResourceNode;
 use Chamilo\CoreBundle\Entity\SkillRelUser;
 use Chamilo\CoreBundle\Entity\SkillRelUserComment;
 use Chamilo\CoreBundle\Framework\Container;
@@ -63,7 +63,6 @@ class UserManager
      * Create/update/delete methods are available in the UserManager
      * (based in the Sonata\UserBundle\Entity\UserManager).
      *
-     * @return \Sonata\UserBundle\Entity\UserManager
      */
     public static function getManager()
     {
@@ -311,10 +310,7 @@ class UserManager
         }
 
         $userManager = self::getManager();
-
-        /** @var User $user */
-        $user = $userManager->createUser();
-
+        $user = new User();
         $user
             ->setLastname($lastName)
             ->setFirstname($firstName)
@@ -339,48 +335,48 @@ class UserManager
             $user->setExpirationDate($expirationDate);
         }
 
-        try {
-            $factory = Container::$container->get('Chamilo\CoreBundle\Repository\ResourceFactory');
-            $repo = $factory->createRepository('global', 'users');
-            $userManager->updateUser($user);
+        $em = Database::getManager();
+        $repo = Container::$container->get('Chamilo\CoreBundle\Repository\UserRepository');
+        $repo->updateUser($user, false);
+        /*$factory = Container::$container->get('Chamilo\CoreBundle\Repository\ResourceFactory');
+        $repo = $factory->createRepository('global', 'users');*/
 
-            // Add user as a node
-            if ($addUserToNode) {
-                $resourceNode = new ResourceNode();
-                $resourceNode
-                    ->setTitle($loginName)
-                    ->setCreator(api_get_user_entity($creatorId))
-                    ->setResourceType($repo->getResourceType())
-                //    ->setParent($url->getResourceNode())
-                ;
-                $repo->getEntityManager()->persist($resourceNode);
-                $user->setResourceNode($resourceNode);
-            }
-
-            $repo->getEntityManager()->persist($user);
-
-            $userId = $user->getId();
-
-            // Add user to a group
-            $statusToGroup = [
-                COURSEMANAGER => 'TEACHER',
-                STUDENT => 'STUDENT',
-                DRH => 'RRHH',
-                SESSIONADMIN => 'SESSION_ADMIN',
-                STUDENT_BOSS => 'STUDENT_BOSS',
-                INVITEE => 'INVITEE',
-            ];
-
-            $group = Container::$container->get('Chamilo\CoreBundle\Repository\GroupRepository')->findOneBy(['code' => $statusToGroup[$status]]);
-            if ($group) {
-                $user->addGroup($group);
-                $userManager->updateUser($user);
-            }
-
-            $repo->getEntityManager()->flush();
-        } catch (Exception $e) {
-            error_log($e->getMessage());
+        // Add user as a node
+        if ($addUserToNode) {
+            $resourceNode = new ResourceNode();
+            $resourceNode
+                ->setTitle($loginName)
+                ->setCreator(api_get_user_entity($creatorId))
+                ->setResourceType($repo->getResourceType())
+            //    ->setParent($url->getResourceNode())
+            ;
+            $em->persist($resourceNode);
+            $user->setResourceNode($resourceNode);
         }
+
+        $em->persist($user);
+        $em->flush($user);
+
+        $userId = $user->getId();
+
+        // Add user to a group
+        $statusToGroup = [
+            COURSEMANAGER => 'TEACHER',
+            STUDENT => 'STUDENT',
+            DRH => 'RRHH',
+            SESSIONADMIN => 'SESSION_ADMIN',
+            STUDENT_BOSS => 'STUDENT_BOSS',
+            INVITEE => 'INVITEE',
+        ];
+
+        $group = Container::$container->get('Chamilo\CoreBundle\Repository\GroupRepository')->findOneBy(['code' => $statusToGroup[$status]]);
+        if ($group) {
+            $user->addGroup($group);
+            $repo->updateUser($user);
+        }
+
+        $em->flush();
+
         if (!empty($userId)) {
             $return = $userId;
             $sql = "UPDATE $table_user SET user_id = $return WHERE id = $return";

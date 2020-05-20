@@ -34,9 +34,6 @@ class ResourceApiController extends AbstractController implements CourseControll
     use ResourceControllerTrait;
     use ControllerTrait;
 
-    /**
-     *
-     */
     public function getResourcesListAction($id, Request $request)
     {
         $repository = $this->getRepositoryFromRequest($request);
@@ -57,9 +54,6 @@ class ResourceApiController extends AbstractController implements CourseControll
         return $qb->getQuery()->getResult();
     }
 
-    /**
-     *
-     */
     public function getResourceAction($id, Request $request)
     {
         $repository = $this->getRepositoryFromRequest($request);
@@ -71,8 +65,6 @@ class ResourceApiController extends AbstractController implements CourseControll
         return $resource;
     }
 
-    /**
-     */
     public function getResourceCommentsAction($id, Request $request, $paramFetcher)
     {
         $repository = $this->getRepositoryFromRequest($request);
@@ -87,8 +79,6 @@ class ResourceApiController extends AbstractController implements CourseControll
         return $resource->getResourceNode()->getComments()->matching($criteria);
     }
 
-    /**
-     */
     public function postResourceCommentAction($id, Request $request)
     {
         $repository = $this->getRepositoryFromRequest($request);

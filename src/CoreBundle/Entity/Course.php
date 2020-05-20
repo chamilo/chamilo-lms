@@ -11,9 +11,6 @@ use ApiPlatform\Core\Annotation\ApiSubresource;
 use ApiPlatform\Core\Bridge\Doctrine\Orm\Filter\OrderFilter;
 use ApiPlatform\Core\Bridge\Doctrine\Orm\Filter\SearchFilter;
 use ApiPlatform\Core\Serializer\Filter\PropertyFilter;
-use Chamilo\CoreBundle\Entity\AbstractResource;
-use Chamilo\CoreBundle\Entity\ResourceInterface;
-use Chamilo\CoreBundle\Entity\ResourceLink;
 use Chamilo\CourseBundle\Entity\CGroupInfo;
 use Chamilo\CourseBundle\Entity\CTool;
 use Doctrine\Common\Collections\ArrayCollection;
@@ -98,7 +95,7 @@ class Course extends AbstractResource implements ResourceInterface
      * @var CourseRelUser[]|ArrayCollection
      *
      * @ApiSubresource()
-     *
+     * @Groups({"course:read"})
      * "orphanRemoval" is needed to delete the CourseRelUser relation
      * in the CourseAdmin class. The setUsers, getUsers, removeUsers and
      * addUsers methods need to be added.
@@ -431,11 +428,11 @@ class Course extends AbstractResource implements ResourceInterface
     public function setTools($tools)
     {
         foreach ($tools as $tool) {
-            $this->addTools($tool);
+            $this->addTool($tool);
         }
     }
 
-    public function addTools(CTool $tool)
+    public function addTool(CTool $tool)
     {
         $tool->setCourse($this);
         $this->tools[] = $tool;

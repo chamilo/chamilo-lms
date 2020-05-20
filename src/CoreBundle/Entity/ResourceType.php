@@ -4,7 +4,6 @@
 
 namespace Chamilo\CoreBundle\Entity;
 
-use Chamilo\CoreBundle\Entity\Tool;
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Timestampable\Traits\TimestampableEntity;
 use Symfony\Component\Validator\Constraints as Assert;

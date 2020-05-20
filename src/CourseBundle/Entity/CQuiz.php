@@ -4,8 +4,8 @@
 
 namespace Chamilo\CourseBundle\Entity;
 
-use Chamilo\CoreBundle\Entity\Course;
 use Chamilo\CoreBundle\Entity\AbstractResource;
+use Chamilo\CoreBundle\Entity\Course;
 use Chamilo\CoreBundle\Entity\ResourceInterface;
 use Chamilo\CourseBundle\Traits\ShowCourseResourcesInSessionTrait;
 use Doctrine\ORM\Event\LifecycleEventArgs;

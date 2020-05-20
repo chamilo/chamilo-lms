@@ -5,21 +5,19 @@
 namespace Chamilo\CourseBundle\Entity;
 
 use ApiPlatform\Core\Annotation\ApiFilter;
-use ApiPlatform\Core\Annotation\ApiProperty;
 use ApiPlatform\Core\Annotation\ApiResource;
-use ApiPlatform\Core\Annotation\ApiSubresource;
 use ApiPlatform\Core\Bridge\Doctrine\Orm\Filter\OrderFilter;
 use ApiPlatform\Core\Bridge\Doctrine\Orm\Filter\SearchFilter;
-use ApiPlatform\Core\Serializer\Filter\PropertyFilter;
 use APY\DataGridBundle\Grid\Mapping as GRID;
-use Chamilo\CoreBundle\Entity\Course;
 use Chamilo\CoreBundle\Entity\AbstractResource;
+use Chamilo\CoreBundle\Entity\Course;
 use Chamilo\CoreBundle\Entity\ResourceInterface;
 use Chamilo\CoreBundle\Entity\Session;
 use Chamilo\CourseBundle\Traits\ShowCourseResourcesInSessionTrait;
 use Doctrine\ORM\Event\LifecycleEventArgs;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Serializer\Annotation\Groups;
+
 //*      attributes={"security"="is_granted('ROLE_ADMIN')"},
 /**
  * @ApiResource(
@@ -27,7 +25,7 @@ use Symfony\Component\Serializer\Annotation\Groups;
  *      normalizationContext={"groups"={"document:read", "resource_node:read"}},
  *      denormalizationContext={"groups"={"document:write"}}
  * )
- * @ApiFilter(SearchFilter::class, properties={"title": "partial", "resourceNode": "exact"})
+ * @ApiFilter(SearchFilter::class, properties={"title": "partial", "resourceNode.parent": "exact"})
  * @ApiFilter(
  *     OrderFilter::class,
  *     properties={

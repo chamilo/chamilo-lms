@@ -5,14 +5,11 @@
 namespace Chamilo\CoreBundle\Entity;
 
 use ApiPlatform\Core\Annotation\ApiFilter;
-use ApiPlatform\Core\Annotation\ApiProperty;
 use ApiPlatform\Core\Annotation\ApiResource;
 use ApiPlatform\Core\Annotation\ApiSubresource;
 use ApiPlatform\Core\Bridge\Doctrine\Orm\Filter\OrderFilter;
 use ApiPlatform\Core\Bridge\Doctrine\Orm\Filter\SearchFilter;
 use ApiPlatform\Core\Serializer\Filter\PropertyFilter;
-use Chamilo\CoreBundle\Entity\Session;
-use Chamilo\CoreBundle\Entity\User;
 use Chamilo\CoreBundle\Traits\TimestampableAgoTrait;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Criteria;
@@ -73,8 +70,6 @@ class ResourceNode
     protected $slug;
 
     /**
-     * @Groups({"resource_node:read", "resource_node:write"})
-     *
      * @ORM\ManyToOne(targetEntity="ResourceType")
      * @ORM\JoinColumn(name="resource_type_id", referencedColumnName="id", nullable=false)
      */
@@ -85,7 +80,7 @@ class ResourceNode
      *
      * @var ResourceLink[]
      *
-     * @ORM\OneToMany(targetEntity="ResourceLink", mappedBy="resourceNode", cascade={"remove"})
+     * @ORM\OneToMany(targetEntity="ResourceLink", mappedBy="resourceNode", cascade={"persist", "remove"})
      */
     protected $resourceLinks;
 
@@ -111,6 +106,9 @@ class ResourceNode
     protected $creator;
 
     /**
+     * @ApiSubresource()
+     *
+     * @Groups({"resource_node:read", "document:read"})
      * @Gedmo\TreeParent
      * @ORM\ManyToOne(
      *     targetEntity="ResourceNode",
@@ -139,6 +137,7 @@ class ResourceNode
     protected $children;
 
     /**
+     * @Groups({"resource_node:read", "document:read"})
      * @Gedmo\TreePath(appendId=true,separator="`")
      *
      * @ORM\Column(name="path", type="text", nullable=true)

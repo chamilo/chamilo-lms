@@ -11,6 +11,7 @@ use Symfony\Component\Routing\Annotation\Route;
 
 /**
  * Class Administrator.
+ *
  * @Route("/admin")
  */
 class AdminController extends BaseController

@@ -10,6 +10,7 @@ use ApiPlatform\Core\Annotation\ApiResource;
 use ApiPlatform\Core\Bridge\Doctrine\Orm\Filter\OrderFilter;
 use ApiPlatform\Core\Bridge\Doctrine\Orm\Filter\SearchFilter;
 use ApiPlatform\Core\Serializer\Filter\PropertyFilter;
+use Chamilo\CoreBundle\Controller\CreateResourceFileAction;
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Timestampable\Traits\TimestampableEntity;
 use Symfony\Component\HttpFoundation\File\File;
@@ -17,7 +18,6 @@ use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\Serializer\Annotation\Groups;
 use Symfony\Component\Validator\Constraints as Assert;
 use Vich\UploaderBundle\Mapping\Annotation as Vich;
-use Chamilo\CoreBundle\Controller\CreateResourceFileAction;
 
 //
 //*     attributes={"security"="is_granted('ROLE_ADMIN')"},
@@ -414,20 +414,12 @@ class ResourceFile
         }
     }
 
-    /**
-     * @return string|null
-     */
     public function getContentUrl(): ?string
     {
         return $this->contentUrl;
     }
 
-    /**
-     * @param string|null $contentUrl
-     *
-     * @return ResourceFile
-     */
-    public function setContentUrl(?string $contentUrl): ResourceFile
+    public function setContentUrl(?string $contentUrl): self
     {
         $this->contentUrl = $contentUrl;
 

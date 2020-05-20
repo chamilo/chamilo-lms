@@ -10,6 +10,7 @@ use Symfony\Component\Serializer\Annotation\Groups;
 
 /**
  * SessionCategory.
+ *
  * @ApiResource(
  *     normalizationContext={"groups"={"session_category:read"}, "swagger_definition_name"="Read"},
  *     denormalizationContext={"groups"={"session_category:write"}},

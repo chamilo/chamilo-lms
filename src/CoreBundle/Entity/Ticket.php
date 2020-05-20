@@ -4,8 +4,6 @@
 
 namespace Chamilo\CoreBundle\Entity;
 
-use Chamilo\CoreBundle\Entity\Course;
-use Chamilo\CoreBundle\Entity\Session;
 use Doctrine\ORM\Mapping as ORM;
 
 /**

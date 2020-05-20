@@ -8,8 +8,8 @@ use APY\DataGridBundle\Grid\Action\RowAction;
 use APY\DataGridBundle\Grid\Row;
 use Chamilo\CoreBundle\Component\Resource\Settings;
 use Chamilo\CoreBundle\Component\Resource\Template;
-use Chamilo\CoreBundle\Entity\Course;
 use Chamilo\CoreBundle\Entity\AbstractResource;
+use Chamilo\CoreBundle\Entity\Course;
 use Chamilo\CoreBundle\Entity\ResourceFile;
 use Chamilo\CoreBundle\Entity\ResourceInterface;
 use Chamilo\CoreBundle\Entity\ResourceLink;
@@ -26,7 +26,6 @@ use Chamilo\CourseBundle\Entity\CGroupInfo;
 use Cocur\Slugify\SlugifyInterface;
 use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\EntityRepository;
-use Doctrine\ORM\EntityRepository as BaseEntityRepository;
 use Doctrine\ORM\QueryBuilder;
 use League\Flysystem\FilesystemInterface;
 use Symfony\Component\Filesystem\Exception\FileNotFoundException;
@@ -41,7 +40,7 @@ use Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface;
  * Class ResourceRepository.
  * Extends EntityRepository is needed to process settings.
  */
-class ResourceRepository extends BaseEntityRepository
+class ResourceRepository extends EntityRepository
 {
     /**
      * @var EntityRepository
@@ -254,21 +253,21 @@ class ResourceRepository extends BaseEntityRepository
 
     public function addResourceToCourse(AbstractResource $resource, int $visibility, User $creator, Course $course, Session $session = null, CGroupInfo $group = null, UploadedFile $file = null)
     {
-        $node = $this->createNodeForResource($resource, $creator, $course->getResourceNode(), $file);
+        $resourceNode = $this->createNodeForResource($resource, $creator, $course->getResourceNode(), $file);
 
-        $this->addResourceNodeToCourse($node, $visibility, $course, $session, $group);
+        $this->addResourceNodeToCourse($resourceNode, $visibility, $course, $session, $group);
     }
 
     public function addResourceToCourseWithParent(AbstractResource $resource, ResourceNode $parentNode, int $visibility, User $creator, Course $course, Session $session = null, CGroupInfo $group = null, UploadedFile $file = null)
     {
-        $node = $this->createNodeForResource($resource, $creator, $parentNode, $file);
+        $resourceNode = $this->createNodeForResource($resource, $creator, $parentNode, $file);
 
-        $this->addResourceNodeToCourse($node, $visibility, $course, $session, $group);
+        $this->addResourceNodeToCourse($resourceNode, $visibility, $course, $session, $group);
     }
 
     public function addResourceNodeToCourse(ResourceNode $resourceNode, int $visibility, Course $course, Session $session = null, CGroupInfo $group = null, User $toUser = null): void
     {
-        if (empty($visibility)) {
+        if (0 === $visibility) {
             $visibility = ResourceLink::VISIBILITY_PUBLISHED;
         }
 
@@ -304,15 +303,14 @@ class ResourceRepository extends BaseEntityRepository
         }
 
         $em = $this->getEntityManager();
+        $em->persist($resourceNode);
         $em->persist($link);
     }
 
     public function addResourceToMe(ResourceNode $resourceNode): ResourceLink
     {
         $resourceLink = new ResourceLink();
-        $resourceLink
-            ->setResourceNode($resourceNode)
-        ;
+        $resourceLink->setResourceNode($resourceNode);
 
         $this->getEntityManager()->persist($resourceLink);
         $this->getEntityManager()->flush();
@@ -353,15 +351,15 @@ class ResourceRepository extends BaseEntityRepository
         return $resourceLink;
     }
 
-    public function addResourceToCourseGroup(
-        ResourceNode $resourceNode,
-        CGroupInfo $group
-    ) {
-        $exists = $resourceNode->getResourceLinks()->exists(function ($key, $element) use ($group) {
-            if ($element->getGroup()) {
-                return $group->getIid() == $element->getGroup()->getIid();
+    public function addResourceToCourseGroup(ResourceNode $resourceNode, CGroupInfo $group)
+    {
+        $exists = $resourceNode->getResourceLinks()->exists(
+            function ($key, $element) use ($group) {
+                if ($element->getGroup()) {
+                    return $group->getIid() == $element->getGroup()->getIid();
+                }
             }
-        });
+        );
 
         if (false === $exists) {
             $resourceLink = new ResourceLink();
@@ -863,7 +861,6 @@ class ResourceRepository extends BaseEntityRepository
         $em = $this->getEntityManager();
 
         $resourceType = $this->getResourceType();
-        $resourceNode = new ResourceNode();
         $resourceName = $resource->getResourceName();
         $extension = $this->slugify->slugify(pathinfo($resourceName, PATHINFO_EXTENSION));
 
@@ -875,6 +872,7 @@ class ResourceRepository extends BaseEntityRepository
             $slug = sprintf('%s.%s', $this->slugify->slugify($originalBasename), $originalExtension);
         }
 
+        $resourceNode = new ResourceNode();
         $resourceNode
             ->setTitle($resourceName)
             ->setSlug($slug)

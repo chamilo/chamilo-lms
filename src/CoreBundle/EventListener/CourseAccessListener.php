@@ -2,11 +2,12 @@
 
 /* For licensing terms, see /license.txt */
 
-namespace Chamilo\CourseBundle\EventListener;
+namespace Chamilo\CoreBundle\EventListener;
 
 use Chamilo\CoreBundle\Entity\TrackECourseAccess;
 use Chamilo\CourseBundle\Event\CourseAccess;
 use Doctrine\ORM\EntityManager;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\RequestStack;
 
 /**
@@ -19,7 +20,7 @@ class CourseAccessListener
     protected $em;
 
     /**
-     * @var \Symfony\Component\HttpFoundation\Request
+     * @var Request
      */
     protected $request;
 

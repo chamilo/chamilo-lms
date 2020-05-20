@@ -153,6 +153,36 @@ services:
         tags:
             - {name: doctrine.orm.entity_listener, entity_manager: default, lazy: true}
 
+    chamilo_course.listener.course:
+        class: Chamilo\CoreBundle\EventListener\CourseListener
+        calls:
+            - [setContainer, ['@service_container']]
+        tags:
+            - {name: kernel.event_listener, event: kernel.request, method: onKernelRequest, priority: 6}
+            - {name: kernel.event_listener, event: kernel.response, method: onKernelResponse}
+            - {name: kernel.event_listener, event: kernel.controller, method: onKernelController}
+
+    # Sets the user access in a course listener
+    chamilo_course.listener.course_access:
+        class: Chamilo\CoreBundle\EventListener\CourseAccessListener
+        arguments:
+            - '@doctrine.orm.entity_manager'
+        calls:
+            - [setRequest, ['@request_stack']]
+        tags:
+            - {name: kernel.event_listener, event: chamilo_course.course.access, method: onCourseAccessEvent}
+
+    # Sets the user access in a course session listener
+    chamilo_course.listener.session_access:
+        class: Chamilo\CoreBundle\EventListener\SessionAccessListener
+        arguments:
+            - '@doctrine.orm.entity_manager'
+        calls:
+            - [setRequest, ['@request_stack']]
+        tags:
+            - {name: kernel.event_listener, event: chamilo_course.course.session, method: onSessionAccessEvent}
+
+
     # When Course entity is loaded
     chamilo_core.listener.course:
         class: Chamilo\CoreBundle\Entity\Listener\CourseListener

@@ -831,7 +831,7 @@ class AddCourse
                 }
 
                 // Adding the course to an URL.
-                UrlManager::add_course_to_url($course_id, $accessUrlId);
+                //UrlManager::add_course_to_url($course_id, $accessUrlId);
 
                 // Add event to the system log.
                 $user_id = api_get_user_id();

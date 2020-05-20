@@ -10,7 +10,6 @@ use ApiPlatform\Core\Annotation\ApiResource;
 use ApiPlatform\Core\Annotation\ApiSubresource;
 use ApiPlatform\Core\Bridge\Doctrine\Orm\Filter\BooleanFilter;
 use ApiPlatform\Core\Bridge\Doctrine\Orm\Filter\SearchFilter;
-use Chamilo\CoreBundle\Entity\ResourceNode;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\Common\Collections\Criteria;
@@ -112,7 +111,7 @@ class User implements UserInterface, EquatableInterface
 
     /**
      * @var string
-     * @Groups({"user:read", "user:write"})
+     * @Groups({"user:read", "user:write", "course:read"})
      * @Assert\NotBlank()
      * @ORM\Column(name="username", type="string", length=100, nullable=false, unique=true)
      */
@@ -582,8 +581,8 @@ class User implements UserInterface, EquatableInterface
         $this->groups = new ArrayCollection();
         //$this->extraFields = new ArrayCollection();
         //$this->userId = 0;
-        //$this->createdAt = new \DateTime();
-        //$this->updatedAt = new \DateTime();
+        $this->createdAt = new \DateTime();
+        $this->updatedAt = new \DateTime();
 
         $this->enabled = false;
         $this->locked = false;
@@ -1485,8 +1484,6 @@ class User implements UserInterface, EquatableInterface
         return $this;
     }
 
-
-
     /**
      * Set lastLogin.
      *
@@ -2125,40 +2122,24 @@ class User implements UserInterface, EquatableInterface
         return $this;
     }
 
-    /**
-     * @return string
-     */
     public function getWebsite(): string
     {
         return $this->website;
     }
 
-    /**
-     * @param string $website
-     *
-     * @return User
-     */
-    public function setWebsite(string $website): User
+    public function setWebsite(string $website): self
     {
         $this->website = $website;
 
         return $this;
     }
 
-    /**
-     * @return string
-     */
     public function getBiography(): string
     {
         return $this->biography;
     }
 
-    /**
-     * @param string $biography
-     *
-     * @return User
-     */
-    public function setBiography(string $biography): User
+    public function setBiography(string $biography): self
     {
         $this->biography = $biography;
 
@@ -2174,6 +2155,4 @@ class User implements UserInterface, EquatableInterface
 
         return $this->courseGroupsAsTutor->matching($criteria);
     }
-
-
 }

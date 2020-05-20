@@ -5,6 +5,7 @@
 namespace Chamilo\CoreBundle\Entity\Listener;
 
 use Chamilo\CoreBundle\Entity\AbstractResource;
+use Chamilo\CoreBundle\Entity\Course;
 use Chamilo\CoreBundle\Entity\ResourceNode;
 use Chamilo\CoreBundle\ToolChain;
 use Cocur\Slugify\SlugifyInterface;
@@ -34,6 +35,10 @@ class ResourceListener
 
     public function prePersist(AbstractResource $resource, LifecycleEventArgs $args)
     {
+        if (!$resource instanceof Course) {
+            return true;
+        }
+
         // Add resource node
         $em = $args->getEntityManager();
         $id = $this->request->getCurrentRequest()->getSession()->get('access_url_id');

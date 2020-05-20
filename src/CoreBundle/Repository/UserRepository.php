@@ -16,6 +16,7 @@ use Chamilo\CoreBundle\Entity\Session;
 use Chamilo\CoreBundle\Entity\SessionRelCourseRelUser;
 use Chamilo\CoreBundle\Entity\SkillRelUser;
 use Chamilo\CoreBundle\Entity\SkillRelUserComment;
+use Chamilo\CoreBundle\Entity\Ticket;
 use Chamilo\CoreBundle\Entity\TrackEAccess;
 use Chamilo\CoreBundle\Entity\TrackEAttempt;
 use Chamilo\CoreBundle\Entity\TrackECourseAccess;
@@ -45,10 +46,10 @@ use Chamilo\CourseBundle\Entity\CStudentPublication;
 use Chamilo\CourseBundle\Entity\CStudentPublicationComment;
 use Chamilo\CourseBundle\Entity\CSurveyAnswer;
 use Chamilo\CourseBundle\Entity\CWiki;
-use Chamilo\CoreBundle\Entity\Ticket;
 use Doctrine\Common\Collections\Criteria;
 use Doctrine\ORM\Query\Expr\Join;
 use Symfony\Bridge\Doctrine\Security\User\UserLoaderInterface;
+use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
 use Symfony\Component\Security\Core\Exception\UsernameNotFoundException;
 use Symfony\Component\Security\Core\User\PasswordUpgraderInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
@@ -65,6 +66,16 @@ use Symfony\Component\Serializer\Serializer;
  */
 class UserRepository extends ResourceRepository implements UserLoaderInterface, PasswordUpgraderInterface
 {
+    /**
+     * @var UserPasswordEncoderInterface
+     */
+    protected $encoder;
+
+    public function setEncoder(UserPasswordEncoderInterface $encoder){
+
+        $this->encoder = $encoder;
+    }
+
     public function loadUserByUsername($username)
     {
         return $this->findBy(['username' => $username]);
@@ -80,25 +91,34 @@ class UserRepository extends ResourceRepository implements UserLoaderInterface, 
         }
     }
 
-    public function updateCanonicalFields(UserInterface $user)
+    public function canonicalize($string)
     {
-        //$user->setUsernameCanonical($this->canonicalizeUsername($user->getUsername()));
-        //$user->setEmailCanonical($this->canonicalizeEmail($user->getEmail()));
+        $encoding = mb_detect_encoding($string);
+        $result = $encoding
+            ? mb_convert_case($string, MB_CASE_LOWER, $encoding)
+            : mb_convert_case($string, MB_CASE_LOWER);
+
+        return $result;
     }
 
+    public function updateCanonicalFields(UserInterface $user)
+    {
+        $user->setUsernameCanonical($this->canonicalize($user->getUsername()));
+        $user->setEmailCanonical($this->canonicalize($user->getEmail()));
+    }
 
-    /**
-     * {@inheritDoc}
-     */
     public function updatePassword(UserInterface $user)
     {
+        //UserPasswordEncoderInterface $passwordEncoder
         if (0 !== strlen($password = $user->getPlainPassword())) {
-           // $encoder = $this->getEncoder($user);
+            $password = $this->encoder->encodePassword($user, $password);
+            $user->setPassword($password);
+            $user->eraseCredentials();
+            // $encoder = $this->getEncoder($user);
             //$user->setPassword($encoder->encodePassword($password, $user->getSalt()));
             //$user->eraseCredentials();
         }
     }
-
 
     public function upgradePassword(UserInterface $user, string $newEncodedPassword): void
     {

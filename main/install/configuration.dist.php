@@ -1292,6 +1292,15 @@ requires extension "php-soap"  sudo apt-get install php-soap
 // Sets the sender id when using the script tests/scripts/disable_user_conditions.php
 // $_configuration['disable_user_conditions_sender_id'] = 0;
 
+// User portal session status end date filter per user status BT#17083
+/*
+$_configuration['userportal_session_settings']['status'] = [
+    1 => [
+        'end_date_history_start' => 90, // days
+    ]
+];*/
+
+
 // KEEP THIS AT THE END
 // -------- Custom DB changes
 // Add user activation by confirmation email

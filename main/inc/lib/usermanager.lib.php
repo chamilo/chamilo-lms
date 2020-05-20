@@ -3081,11 +3081,11 @@ class UserManager
      * Gives a list of [session_category][session_id] for the current user.
      *
      * @param int  $user_id
-     * @param bool $is_time_over                 whether to fill the first element or not
-     *                                           (to give space for courses out of categories)
+     * @param bool $isHistory
      * @param bool $ignore_visibility_for_admins optional true if limit time from session is over, false otherwise
      * @param bool $ignoreTimeLimit              ignore time start/end
      * @param bool $getCount
+     * @param array $extraConditions
      *
      * @return array list of statuses [session_category][session_id]
      *
@@ -3093,10 +3093,11 @@ class UserManager
      */
     public static function get_sessions_by_category(
         $user_id,
-        $is_time_over = true,
+        $isHistory = true,
         $ignore_visibility_for_admins = false,
         $ignoreTimeLimit = false,
-        $getCount = false
+        $getCount = false,
+        $historyLimit = 0
     ) {
         $user_id = (int) $user_id;
 
@@ -3233,15 +3234,12 @@ class UserManager
             $coachList = SessionManager::getCoachesBySession($session_id);
             $categoryStart = $row['session_category_date_start'] ? $row['session_category_date_start']->format('Y-m-d') : '';
             $categoryEnd = $row['session_category_date_end'] ? $row['session_category_date_end']->format('Y-m-d') : '';
-            $courseList = self::get_courses_list_by_session(
-                $user_id,
-                $session_id
-            );
+            $courseList = self::get_courses_list_by_session($user_id, $session_id);
             $daysLeft = SessionManager::getDayLeftInSession($row, $user_id);
 
             // User portal filters:
             if ($ignoreTimeLimit === false) {
-                if ($is_time_over) {
+                if ($isHistory) {
                     // History
                     if ($row['duration']) {
                         if ($daysLeft >= 0) {
@@ -3275,6 +3273,44 @@ class UserManager
                                 if ($row['access_end_date'] <= $now) {
                                     continue;
                                 }
+                            }
+                        }
+                    }
+                }
+            }
+
+            if (!empty($historyLimit)) {
+                $historyEnded = new DateTime('now', new DateTimeZone('UTC'));
+                $historyLimit = (int) $historyLimit;
+                $interval = new \DateInterval('P'.$historyLimit.'D');
+                $historyEnded->sub($interval);
+
+                if ($isHistory) {
+                    // History
+                    if ($row['duration']) {
+                        if ($daysLeft >= 0) {
+                            continue;
+                        }
+                    } else {
+                        if (empty($row['access_end_date'])) {
+                            continue;
+                        } else {
+                            if ($row['access_end_date'] > $historyEnded) {
+                                continue;
+                            }
+                        }
+                    }
+                } else {
+                    if ($row['duration']) {
+                        if ($daysLeft <= 0) {
+                            continue;
+                        }
+                    } else {
+                        if (isset($row['access_end_date']) &&
+                            !empty($row['access_end_date'])
+                        ) {
+                            if ($row['access_end_date'] <= $historyEnded) {
+                                continue;
                             }
                         }
                     }

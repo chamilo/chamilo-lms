@@ -2,7 +2,7 @@
 
 /* For licensing terms, see /license.txt */
 
-namespace Chamilo\TicketBundle\Entity;
+namespace Chamilo\CoreBundle\Entity;
 
 use Chamilo\CoreBundle\Entity\User;
 use Doctrine\ORM\Mapping as ORM;
@@ -15,7 +15,7 @@ use Doctrine\ORM\Mapping as ORM;
  * )
  * @ORM\Entity
  */
-class AssignedLog
+class TicketAssignedLog
 {
     /**
      * @var int
@@ -29,7 +29,7 @@ class AssignedLog
     /**
      * @var Ticket
      *
-     * @ORM\ManyToOne(targetEntity="Chamilo\TicketBundle\Entity\Ticket")
+     * @ORM\ManyToOne(targetEntity="Chamilo\CoreBundle\Entity\Ticket")
      * @ORM\JoinColumn(name="ticket_id", referencedColumnName="id")
      */
     protected $ticket;

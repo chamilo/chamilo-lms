@@ -4,7 +4,7 @@
 
 namespace Chamilo\CoreBundle\Entity;
 
-use Chamilo\CoreBundle\Entity\Resource\ResourceType;
+use Chamilo\CoreBundle\Entity\ResourceType;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Criteria;
 use Doctrine\ORM\Mapping as ORM;
@@ -34,7 +34,7 @@ class Tool
     protected $name;
 
     /**
-     * @ORM\OneToMany(targetEntity="Chamilo\CoreBundle\Entity\Resource\ResourceType", mappedBy="tool", cascade={"persist", "remove"})
+     * @ORM\OneToMany(targetEntity="Chamilo\CoreBundle\Entity\ResourceType", mappedBy="tool", cascade={"persist", "remove"})
      */
     protected $resourceTypes;
 

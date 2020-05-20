@@ -1,11 +1,11 @@
 <?php
 /* For licensing terms, see /license.txt */
 
-use Chamilo\TicketBundle\Entity\MessageAttachment;
-use Chamilo\TicketBundle\Entity\Priority;
-use Chamilo\TicketBundle\Entity\Project;
-use Chamilo\TicketBundle\Entity\Status;
-use Chamilo\TicketBundle\Entity\Ticket;
+use Chamilo\CoreBundle\Entity\TicketMessageAttachment;
+use Chamilo\CoreBundle\Entity\TicketPriority;
+use Chamilo\CoreBundle\Entity\TicketProject;
+use Chamilo\CoreBundle\Entity\TicketStatus;
+use Chamilo\CoreBundle\Entity\Ticket;
 
 /**
  * Class TicketManager.
@@ -51,13 +51,13 @@ class TicketManager
         $order = Database::escape_string($order);
         $projectId = (int) $projectId;
 
-        $sql = "SELECT 
-                    category.*, 
+        $sql = "SELECT
+                    category.*,
                     category.id category_id,
-                    project.other_area, 
+                    project.other_area,
                     project.email
-                FROM 
-                $table_support_category category 
+                FROM
+                $table_support_category category
                 INNER JOIN $table_support_project project
                 ON project.id = category.project_id
                 WHERE project.id  = $projectId
@@ -218,7 +218,7 @@ class TicketManager
         $table = Database::get_main_table(TABLE_TICKET_CATEGORY_REL_USER);
         $userId = (int) $userId;
         $categoryId = (int) $categoryId;
-        $sql = "SELECT * FROM $table 
+        $sql = "SELECT * FROM $table
                 WHERE category_id = $categoryId AND user_id = $userId";
         $result = Database::query($sql);
 
@@ -670,7 +670,7 @@ class TicketManager
         if ($messageId) {
             // update_total_message
             $sql = "UPDATE $table_support_tickets
-                    SET 
+                    SET
                         sys_lastedit_user_id = $userId,
                         sys_lastedit_datetime = '$now',
                         total_messages = (
@@ -827,26 +827,26 @@ class TicketManager
                 $column = 'ticket_id';
         }
 
-        $sql = "SELECT DISTINCT 
+        $sql = "SELECT DISTINCT
                 ticket.*,
                 ticket.id ticket_id,
                 status.name AS status_name,
                 ticket.start_date,
                 ticket.sys_lastedit_datetime,
                 cat.name AS category_name,
-                priority.name AS priority_name,                           
+                priority.name AS priority_name,
                 ticket.total_messages AS total_messages,
                 ticket.message AS message,
                 ticket.subject AS subject,
                 ticket.assigned_last_user
-            FROM $table_support_tickets ticket 
+            FROM $table_support_tickets ticket
             INNER JOIN $table_support_category cat
             ON (cat.id = ticket.category_id)
             INNER JOIN $table_support_priority priority
             ON (ticket.priority_id = priority.id)
             INNER JOIN $table_support_status status
             ON (ticket.status_id = status.id)
-            WHERE 1=1                                
+            WHERE 1=1
         ";
 
         $projectId = (int) $_GET['project_id'];
@@ -870,7 +870,7 @@ class TicketManager
                       cat.name LIKE '%$keyword%' OR
                       status.name LIKE '%$keyword%' OR
                       priority.name LIKE '%$keyword%' OR
-                      ticket.personal_email LIKE '%$keyword%'                          
+                      ticket.personal_email LIKE '%$keyword%'
             )";
         }
 
@@ -908,11 +908,11 @@ class TicketManager
 
         if ('' != $keyword_course) {
             $course_table = Database::get_main_table(TABLE_MAIN_COURSE);
-            $sql .= " AND ticket.course_id IN ( 
+            $sql .= " AND ticket.course_id IN (
                      SELECT id FROM $course_table
                      WHERE (
-                        title LIKE '%$keyword_course%' OR 
-                        code LIKE '%$keyword_course%' OR 
+                        title LIKE '%$keyword_course%' OR
+                        code LIKE '%$keyword_course%' OR
                         visual_code LIKE '%$keyword_course%'
                      )
             )";
@@ -1091,12 +1091,12 @@ class TicketManager
         }
         if ('' != $keyword_course) {
             $course_table = Database::get_main_table(TABLE_MAIN_COURSE);
-            $sql .= " AND ticket.course_id IN (  
+            $sql .= " AND ticket.course_id IN (
                         SELECT id
                         FROM $course_table
                         WHERE (
-                            title LIKE '%$keyword_course%' OR 
-                            code LIKE '%$keyword_course%' OR 
+                            title LIKE '%$keyword_course%' OR
+                            code LIKE '%$keyword_course%' OR
                             visual_code LIKE '%$keyword_course%'
                         )
                    ) ";
@@ -1111,13 +1111,13 @@ class TicketManager
     /**
      * @param int $id
      *
-     * @return false|MessageAttachment
+     * @return false|TicketMessageAttachment
      */
     public static function getTicketMessageAttachment($id)
     {
         $id = (int) $id;
         $em = Database::getManager();
-        $item = $em->getRepository('ChamiloTicketBundle:MessageAttachment')->find($id);
+        $item = $em->getRepository('TicketMessageAttachment')->find($id);
         if ($item) {
             return $item;
         }
@@ -1134,7 +1134,7 @@ class TicketManager
     {
         $id = (int) $id;
         $em = Database::getManager();
-        $items = $em->getRepository('ChamiloTicketBundle:MessageAttachment')->findBy(['ticket' => $id]);
+        $items = $em->getRepository('TicketMessageAttachment')->findBy(['ticket' => $id]);
         if ($items) {
             return $items;
         }
@@ -1159,9 +1159,9 @@ class TicketManager
         $table_main_user = Database::get_main_table(TABLE_MAIN_USER);
 
         $sql = "SELECT
-                    ticket.*, 
+                    ticket.*,
                     cat.name,
-                    status.name as status, 
+                    status.name as status,
                     priority.name priority
                 FROM $table_support_tickets ticket
                 INNER JOIN $table_support_category cat
@@ -1214,8 +1214,8 @@ class TicketManager
                 $ticket['ticket'] = $row;
             }
 
-            $sql = "SELECT *, message.id as message_id 
-                    FROM $table_support_messages message 
+            $sql = "SELECT *, message.id as message_id
+                    FROM $table_support_messages message
                     INNER JOIN $table_main_user user
                     ON (message.sys_insert_user_id = user.user_id)
                     WHERE
@@ -1326,7 +1326,7 @@ class TicketManager
         $attachmentList = [];
         $attachments = self::getTicketMessageAttachmentsByTicketId($ticketId);
         if (!empty($attachments)) {
-            /** @var MessageAttachment $attachment */
+            /** @var TicketMessageAttachment $attachment */
             foreach ($attachments as $attachment) {
                 $file = api_get_uploaded_file(
                     'ticket_attachment',
@@ -1828,10 +1828,10 @@ class TicketManager
      */
     public static function getStatusList()
     {
-        $items = Database::getManager()->getRepository('ChamiloTicketBundle:Status')->findAll();
+        $items = Database::getManager()->getRepository('TicketStatus')->findAll();
 
         $list = [];
-        /** @var Status $row */
+        /** @var TicketStatus $row */
         foreach ($items as $row) {
             $list[$row->getId()] = $row->getName();
         }
@@ -1846,7 +1846,7 @@ class TicketManager
      */
     public static function getTicketsFromCriteria($criteria)
     {
-        $items = Database::getManager()->getRepository('ChamiloTicketBundle:Ticket')->findBy($criteria);
+        $items = Database::getManager()->getRepository('ChamiloCoreBundle:Ticket')->findBy($criteria);
 
         $list = [];
         /** @var Ticket $row */
@@ -1865,7 +1865,7 @@ class TicketManager
     public static function getStatusIdFromCode($code)
     {
         $item = Database::getManager()
-            ->getRepository('ChamiloTicketBundle:Status')
+            ->getRepository('TicketStatus')
             ->findOneBy(['code' => $code])
         ;
 
@@ -1881,10 +1881,10 @@ class TicketManager
      */
     public static function getPriorityList()
     {
-        $projects = Database::getManager()->getRepository('ChamiloTicketBundle:Priority')->findAll();
+        $projects = Database::getManager()->getRepository('TicketPriority')->findAll();
 
         $list = [];
-        /** @var Priority $row */
+        /** @var TicketPriority $row */
         foreach ($projects as $row) {
             $list[$row->getId()] = $row->getName();
         }
@@ -1897,10 +1897,10 @@ class TicketManager
      */
     public static function getProjects()
     {
-        $projects = Database::getManager()->getRepository('ChamiloTicketBundle:Project')->findAll();
+        $projects = Database::getManager()->getRepository('TicketProject')->findAll();
 
         $list = [];
-        /** @var Project $row */
+        /** @var TicketProject $row */
         foreach ($projects as $row) {
             $list[] = [
                 'id' => $row->getId(),
@@ -1919,10 +1919,10 @@ class TicketManager
      */
     public static function getProjectsSimple()
     {
-        $projects = Database::getManager()->getRepository('ChamiloTicketBundle:Project')->findAll();
+        $projects = Database::getManager()->getRepository('TicketProject')->findAll();
 
         $list = [];
-        /** @var Project $row */
+        /** @var TicketProject $row */
         foreach ($projects as $row) {
             $list[] = [
                 'id' => $row->getId(),
@@ -1943,7 +1943,7 @@ class TicketManager
      */
     public static function getProjectsCount()
     {
-        $count = Database::getManager()->getRepository('ChamiloTicketBundle:Project')->createQueryBuilder('p')
+        $count = Database::getManager()->getRepository('TicketProject')->createQueryBuilder('p')
             ->select('COUNT(p.id)')
             ->getQuery()
             ->getSingleScalarResult();
@@ -1956,7 +1956,7 @@ class TicketManager
      */
     public static function addProject($params)
     {
-        $project = new Project();
+        $project = new TicketProject();
         $project->setName($params['name']);
         $project->setDescription($params['description']);
         $project->setInsertUserId(api_get_user_id());
@@ -1968,11 +1968,11 @@ class TicketManager
     /**
      * @param int $id
      *
-     * @return Project
+     * @return TicketProject
      */
     public static function getProject($id)
     {
-        return Database::getManager()->getRepository('ChamiloTicketBundle:Project')->find($id);
+        return Database::getManager()->getRepository('TicketProject')->find($id);
     }
 
     /**
@@ -2023,10 +2023,10 @@ class TicketManager
      */
     public static function getStatusAdminList()
     {
-        $items = Database::getManager()->getRepository('ChamiloTicketBundle:Status')->findAll();
+        $items = Database::getManager()->getRepository('TicketStatus')->findAll();
 
         $list = [];
-        /** @var Status $row */
+        /** @var TicketStatus $row */
         foreach ($items as $row) {
             $list[] = [
                 'id' => $row->getId(),
@@ -2046,10 +2046,10 @@ class TicketManager
      */
     public static function getStatusSimple()
     {
-        $projects = Database::getManager()->getRepository('ChamiloTicketBundle:Status')->findAll();
+        $projects = Database::getManager()->getRepository('TicketStatus')->findAll();
 
         $list = [];
-        /** @var Project $row */
+        /** @var TicketProject $row */
         foreach ($projects as $row) {
             $list[] = [
                 'id' => $row->getId(),
@@ -2067,7 +2067,7 @@ class TicketManager
      */
     public static function getStatusCount()
     {
-        $count = Database::getManager()->getRepository('ChamiloTicketBundle:Status')->createQueryBuilder('p')
+        $count = Database::getManager()->getRepository('TicketStatus')->createQueryBuilder('p')
             ->select('COUNT(p.id)')
             ->getQuery()
             ->getSingleScalarResult();
@@ -2080,7 +2080,7 @@ class TicketManager
      */
     public static function addStatus($params)
     {
-        $item = new Status();
+        $item = new TicketStatus();
         $item->setCode(URLify::filter($params['name']));
         $item->setName($params['name']);
         $item->setDescription($params['description']);
@@ -2092,11 +2092,11 @@ class TicketManager
     /**
      * @param $id
      *
-     * @return Project
+     * @return TicketProject
      */
     public static function getStatus($id)
     {
-        return Database::getManager()->getRepository('ChamiloTicketBundle:Status')->find($id);
+        return Database::getManager()->getRepository('TicketStatus')->find($id);
     }
 
     /**
@@ -2145,10 +2145,10 @@ class TicketManager
      */
     public static function getPriorityAdminList()
     {
-        $items = Database::getManager()->getRepository('ChamiloTicketBundle:Priority')->findAll();
+        $items = Database::getManager()->getRepository('TicketPriority')->findAll();
 
         $list = [];
-        /** @var Status $row */
+        /** @var TicketStatus $row */
         foreach ($items as $row) {
             $list[] = [
                 'id' => $row->getId(),
@@ -2168,10 +2168,10 @@ class TicketManager
      */
     public static function getPrioritySimple()
     {
-        $projects = Database::getManager()->getRepository('ChamiloTicketBundle:Priority')->findAll();
+        $projects = Database::getManager()->getRepository('TicketPriority')->findAll();
 
         $list = [];
-        /** @var Priority $row */
+        /** @var TicketPriority $row */
         foreach ($projects as $row) {
             $list[] = [
                 'id' => $row->getId(),
@@ -2189,7 +2189,7 @@ class TicketManager
      */
     public static function getPriorityCount()
     {
-        $count = Database::getManager()->getRepository('ChamiloTicketBundle:Priority')->createQueryBuilder('p')
+        $count = Database::getManager()->getRepository('TicketPriority')->createQueryBuilder('p')
             ->select('COUNT(p.id)')
             ->getQuery()
             ->getSingleScalarResult();
@@ -2202,7 +2202,7 @@ class TicketManager
      */
     public static function addPriority($params)
     {
-        $item = new Priority();
+        $item = new TicketPriority();
         $item
             ->setCode(URLify::filter($params['name']))
             ->setName($params['name'])
@@ -2219,11 +2219,11 @@ class TicketManager
     /**
      * @param $id
      *
-     * @return Priority
+     * @return TicketPriority
      */
     public static function getPriority($id)
     {
-        return Database::getManager()->getRepository('ChamiloTicketBundle:Priority')->find($id);
+        return Database::getManager()->getRepository('TicketPriority')->find($id);
     }
 
     /**

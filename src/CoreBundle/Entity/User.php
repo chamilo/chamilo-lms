@@ -10,7 +10,7 @@ use ApiPlatform\Core\Annotation\ApiResource;
 use ApiPlatform\Core\Annotation\ApiSubresource;
 use ApiPlatform\Core\Bridge\Doctrine\Orm\Filter\BooleanFilter;
 use ApiPlatform\Core\Bridge\Doctrine\Orm\Filter\SearchFilter;
-use Chamilo\CoreBundle\Entity\Resource\ResourceNode;
+use Chamilo\CoreBundle\Entity\ResourceNode;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\Common\Collections\Criteria;
@@ -332,14 +332,14 @@ class User implements UserInterface, EquatableInterface
 
     /**
      * @ORM\OneToOne(
-     *     targetEntity="Chamilo\CoreBundle\Entity\Resource\ResourceNode", cascade={"remove"}, orphanRemoval=true
+     *     targetEntity="Chamilo\CoreBundle\Entity\ResourceNode", cascade={"remove"}, orphanRemoval=true
      * )
      * @ORM\JoinColumn(name="resource_node_id", referencedColumnName="id", onDelete="CASCADE")
      */
     protected $resourceNode;
 
     /**
-     * @ORM\OneToMany(targetEntity="Chamilo\CoreBundle\Entity\Resource\ResourceNode", mappedBy="creator")
+     * @ORM\OneToMany(targetEntity="Chamilo\CoreBundle\Entity\ResourceNode", mappedBy="creator")
      */
     protected $resourceNodes;
 
@@ -1464,6 +1464,29 @@ class User implements UserInterface, EquatableInterface
         return $this->setUsername($slug);
     }
 
+    public function setUsername($username)
+    {
+        $this->username = $username;
+
+        return $this;
+    }
+
+    public function setUsernameCanonical($usernameCanonical)
+    {
+        $this->usernameCanonical = $usernameCanonical;
+
+        return $this;
+    }
+
+    public function setEmailCanonical($emailCanonical)
+    {
+        $this->emailCanonical = $emailCanonical;
+
+        return $this;
+    }
+
+
+
     /**
      * Set lastLogin.
      *
@@ -1558,13 +1581,15 @@ class User implements UserInterface, EquatableInterface
         return $this->plainPassword;
     }
 
-    public function setPlainPassword(string $password): void
+    public function setPlainPassword(string $password)
     {
         $this->plainPassword = $password;
 
         // forces the object to look "dirty" to Doctrine. Avoids
         // Doctrine *not* saving this entity, if only plainPassword changes
         $this->password = null;
+
+        return $this;
     }
 
     /**
@@ -2149,4 +2174,6 @@ class User implements UserInterface, EquatableInterface
 
         return $this->courseGroupsAsTutor->matching($criteria);
     }
+
+
 }

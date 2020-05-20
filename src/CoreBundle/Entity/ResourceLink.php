@@ -2,19 +2,19 @@
 
 /* For licensing terms, see /license.txt */
 
-namespace Chamilo\CoreBundle\Entity\Resource;
+namespace Chamilo\CoreBundle\Entity;
 
 use ApiPlatform\Core\Annotation\ApiResource;
-use Chamilo\CoreBundle\Entity\Course;
-use Chamilo\CoreBundle\Entity\Session;
-use Chamilo\CoreBundle\Entity\User;
-use Chamilo\CoreBundle\Entity\Usergroup;
 use Chamilo\CourseBundle\Entity\CGroupInfo;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Serializer\Annotation\Groups;
 
 /**
- * @ApiResource()
+ * @ApiResource(
+ *     normalizationContext={"groups"={"resource_link:read", "course:read"}},
+ *
+ * )
  * @ORM\Entity
  * @ORM\Table(name="resource_link")
  */
@@ -33,12 +33,16 @@ class ResourceLink
     protected $id;
 
     /**
-     * @ORM\ManyToOne(targetEntity="Chamilo\CoreBundle\Entity\Resource\ResourceNode", inversedBy="resourceLinks")
+     * @Groups({"resource_link:read", "resource_node:read", "course:read"})
+     *
+     * @ORM\ManyToOne(targetEntity="Chamilo\CoreBundle\Entity\ResourceNode", inversedBy="resourceLinks")
      * @ORM\JoinColumn(name="resource_node_id", referencedColumnName="id", onDelete="SET NULL")
      */
     protected $resourceNode;
 
     /**
+     * @Groups({"resource_link:read", "resource_node:read", "course:read"})
+     *
      * @ORM\ManyToOne(targetEntity="Chamilo\CoreBundle\Entity\Course", inversedBy="resourceLinks")
      * @ORM\JoinColumn(name="c_id", referencedColumnName="id", nullable=true)
      */
@@ -70,7 +74,7 @@ class ResourceLink
 
     /**
      * @ORM\OneToMany(
-     *     targetEntity="Chamilo\CoreBundle\Entity\Resource\ResourceRight",
+     *     targetEntity="Chamilo\CoreBundle\Entity\ResourceRight",
      *     mappedBy="resourceLink", cascade={"persist", "remove"}, orphanRemoval=true
      * )
      */
@@ -78,6 +82,8 @@ class ResourceLink
 
     /**
      * @var int
+     *
+     * @Groups({"resource_link:read", "resource_node:read", "course:read"})
      *
      * @ORM\Column(name="visibility", type="integer", nullable=false)
      */

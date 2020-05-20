@@ -14,7 +14,7 @@ use Symfony\Component\Serializer\Annotation\Groups;
  * @ApiResource(
  *      shortName="CourseSubscription",
  *      attributes={"security"="is_granted('ROLE_ADMIN')"},
- *      normalizationContext={"groups"={"skill:read"}}
+ *      normalizationContext={"groups"={"course_rel_user:read"}}
  * )
  *
  * @ORM\Table(

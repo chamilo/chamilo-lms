@@ -12,10 +12,10 @@ use APY\DataGridBundle\Grid\Export\ExcelExport;
 use APY\DataGridBundle\Grid\Grid;
 use APY\DataGridBundle\Grid\Row;
 use APY\DataGridBundle\Grid\Source\Entity;
-use Chamilo\CoreBundle\Entity\Resource\AbstractResource;
-use Chamilo\CoreBundle\Entity\Resource\ResourceInterface;
-use Chamilo\CoreBundle\Entity\Resource\ResourceLink;
-use Chamilo\CoreBundle\Entity\Resource\ResourceNode;
+use Chamilo\CoreBundle\Entity\AbstractResource;
+use Chamilo\CoreBundle\Entity\ResourceInterface;
+use Chamilo\CoreBundle\Entity\ResourceLink;
+use Chamilo\CoreBundle\Entity\ResourceNode;
 use Chamilo\CoreBundle\Form\Type\ResourceCommentType;
 use Chamilo\CoreBundle\Repository\IllustrationRepository;
 use Chamilo\CoreBundle\Repository\ResourceRepository;
@@ -748,7 +748,7 @@ class ResourceController extends AbstractResourceController implements CourseCon
         $em = $this->getDoctrine()->getManager();
 
         $id = $request->get('id');
-        $resourceNode = $this->getDoctrine()->getRepository('ChamiloCoreBundle:Resource\ResourceNode')->find($id);
+        $resourceNode = $this->getDoctrine()->getRepository('ChamiloCoreBundle:ResourceNode')->find($id);
         $parentId = $resourceNode->getParent()->getId();
 
         $this->denyAccessUnlessGranted(
@@ -824,7 +824,7 @@ class ResourceController extends AbstractResourceController implements CourseCon
         $mode = $request->get('mode');
         $em = $this->getDoctrine();
         /** @var ResourceNode $resourceNode */
-        $resourceNode = $em->getRepository('ChamiloCoreBundle:Resource\ResourceNode')->find($id);
+        $resourceNode = $em->getRepository('ChamiloCoreBundle:ResourceNode')->find($id);
 
         if (null === $resourceNode) {
             throw new FileNotFoundException('Resource not found');
@@ -853,7 +853,7 @@ class ResourceController extends AbstractResourceController implements CourseCon
         $em = $this->getDoctrine();
 
         /** @var ResourceNode $resourceNode */
-        $resourceNode = $em->getRepository('ChamiloCoreBundle:Resource\ResourceNode')->find($id);
+        $resourceNode = $em->getRepository('ChamiloCoreBundle:ResourceNode')->find($id);
 
         $this->denyAccessUnlessGranted(
             ResourceNodeVoter::VIEW,

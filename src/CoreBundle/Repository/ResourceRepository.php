@@ -9,13 +9,13 @@ use APY\DataGridBundle\Grid\Row;
 use Chamilo\CoreBundle\Component\Resource\Settings;
 use Chamilo\CoreBundle\Component\Resource\Template;
 use Chamilo\CoreBundle\Entity\Course;
-use Chamilo\CoreBundle\Entity\Resource\AbstractResource;
-use Chamilo\CoreBundle\Entity\Resource\ResourceFile;
-use Chamilo\CoreBundle\Entity\Resource\ResourceInterface;
-use Chamilo\CoreBundle\Entity\Resource\ResourceLink;
-use Chamilo\CoreBundle\Entity\Resource\ResourceNode;
-use Chamilo\CoreBundle\Entity\Resource\ResourceRight;
-use Chamilo\CoreBundle\Entity\Resource\ResourceType;
+use Chamilo\CoreBundle\Entity\AbstractResource;
+use Chamilo\CoreBundle\Entity\ResourceFile;
+use Chamilo\CoreBundle\Entity\ResourceInterface;
+use Chamilo\CoreBundle\Entity\ResourceLink;
+use Chamilo\CoreBundle\Entity\ResourceNode;
+use Chamilo\CoreBundle\Entity\ResourceRight;
+use Chamilo\CoreBundle\Entity\ResourceType;
 use Chamilo\CoreBundle\Entity\Session;
 use Chamilo\CoreBundle\Entity\User;
 use Chamilo\CoreBundle\Entity\Usergroup;
@@ -433,7 +433,7 @@ class ResourceRepository extends BaseEntityRepository
     public function getResourceType()
     {
         $name = $this->getResourceTypeName();
-        $repo = $this->getEntityManager()->getRepository('ChamiloCoreBundle:Resource\ResourceType');
+        $repo = $this->getEntityManager()->getRepository('ChamiloCoreBundle:ResourceType');
         $this->resourceType = $repo->findOneBy(['name' => $name]);
 
         return $this->resourceType;

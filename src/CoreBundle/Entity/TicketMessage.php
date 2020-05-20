@@ -2,17 +2,17 @@
 
 /* For licensing terms, see /license.txt */
 
-namespace Chamilo\TicketBundle\Entity;
+namespace Chamilo\CoreBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * Category.
+ * Message.
  *
- * @ORM\Table(name="ticket_category")
+ * @ORM\Table(name="ticket_message")
  * @ORM\Entity
  */
-class Category
+class TicketMessage
 {
     /**
      * @var int
@@ -26,38 +26,38 @@ class Category
     /**
      * @var string
      *
-     * @ORM\Column(name="name", type="string", length=255, nullable=false)
+     * @ORM\Column(name="subject", type="string", length=255, nullable=true)
      */
-    protected $name;
+    protected $subject;
 
     /**
      * @var string
      *
-     * @ORM\Column(name="description", type="text", nullable=true)
+     * @ORM\Column(name="message", type="text", nullable=true)
      */
-    protected $description;
+    protected $message;
 
     /**
-     * @var int
+     * @var string
      *
-     * @ORM\Column(name="total_tickets", type="integer", nullable=false)
+     * @ORM\Column(name="status", type="string", nullable=false)
      */
-    protected $totalTickets;
+    protected $status;
 
     /**
-     * @var bool
+     * @var string
      *
-     * @ORM\Column(name="course_required", type="boolean", nullable=false)
+     * @ORM\Column(name="ip_address", type="string", nullable=false)
      */
-    protected $courseRequired;
+    protected $ipAddress;
 
     /**
-     * @var Project
+     * @var Ticket
      *
-     * @ORM\ManyToOne(targetEntity="Chamilo\TicketBundle\Entity\Project")
-     * @ORM\JoinColumn(name="project_id", referencedColumnName="id")
+     * @ORM\ManyToOne(targetEntity="Chamilo\CoreBundle\Entity\Ticket")
+     * @ORM\JoinColumn(name="ticket_id", referencedColumnName="id")
      */
-    protected $project;
+    protected $ticket;
 
     /**
      * @var int
@@ -88,15 +88,6 @@ class Category
     protected $lastEditDateTime;
 
     /**
-     * Category constructor.
-     */
-    public function __construct()
-    {
-        $this->totalTickets = 0;
-        $this->insertDateTime = new \DateTime();
-    }
-
-    /**
      * @return int
      */
     public function getId()
@@ -107,7 +98,7 @@ class Category
     /**
      * @param int $id
      *
-     * @return Category
+     * @return TicketMessage
      */
     public function setId($id)
     {
@@ -119,19 +110,19 @@ class Category
     /**
      * @return string
      */
-    public function getName()
+    public function getSubject()
     {
-        return $this->name;
+        return $this->subject;
     }
 
     /**
-     * @param string $name
+     * @param string $subject
      *
-     * @return Category
+     * @return TicketMessage
      */
-    public function setName($name)
+    public function setSubject($subject)
     {
-        $this->name = $name;
+        $this->subject = $subject;
 
         return $this;
     }
@@ -139,79 +130,79 @@ class Category
     /**
      * @return string
      */
-    public function getDescription()
+    public function getMessage()
     {
-        return $this->description;
+        return $this->message;
     }
 
     /**
-     * @param string $description
+     * @param string $message
      *
-     * @return Category
+     * @return TicketMessage
      */
-    public function setDescription($description)
+    public function setMessage($message)
     {
-        $this->description = $description;
+        $this->message = $message;
 
         return $this;
     }
 
     /**
-     * @return int
+     * @return string
      */
-    public function getTotalTickets()
+    public function getStatus()
     {
-        return $this->totalTickets;
+        return $this->status;
     }
 
     /**
-     * @param int $totalTickets
+     * @param string $status
      *
-     * @return Category
+     * @return TicketMessage
      */
-    public function setTotalTickets($totalTickets)
+    public function setStatus($status)
     {
-        $this->totalTickets = $totalTickets;
+        $this->status = $status;
 
         return $this;
     }
 
     /**
-     * @return bool
+     * @return string
      */
-    public function isCourseRequired()
+    public function getIpAddress()
     {
-        return $this->courseRequired;
+        return $this->ipAddress;
     }
 
     /**
-     * @param bool $courseRequired
+     * @param string $ipAddress
      *
-     * @return Category
+     * @return TicketMessage
      */
-    public function setCourseRequired($courseRequired)
+    public function setIpAddress($ipAddress)
     {
-        $this->courseRequired = $courseRequired;
+        $this->ipAddress = $ipAddress;
 
         return $this;
     }
 
     /**
-     * @return Project
+     * @return Ticket
      */
-    public function getProject()
+    public function getTicket()
     {
-        return $this->project;
+        return $this->ticket;
     }
 
     /**
-     * @param Project $project
+     * @param Ticket $ticket
      *
-     * @return Category
+     * @return TicketMessage
      */
-    public function setProject($project)
+    public function setTicket($ticket)
     {
-        $this->project = $project;
+        $this->ticket = $ticket;
 
         return $this;
     }
@@ -227,7 +218,7 @@ class Category
     /**
      * @param int $insertUserId
      *
-     * @return Category
+     * @return TicketMessage
      */
     public function setInsertUserId($insertUserId)
     {
@@ -247,7 +238,7 @@ class Category
     /**
      * @param \DateTime $insertDateTime
      *
-     * @return Category
+     * @return TicketMessage
      */
     public function setInsertDateTime($insertDateTime)
     {
@@ -267,7 +258,7 @@ class Category
     /**
      * @param int $lastEditUserId
      *
-     * @return Category
+     * @return TicketMessage
      */
     public function setLastEditUserId($lastEditUserId)
     {
@@ -287,7 +278,7 @@ class Category
     /**
      * @param \DateTime $lastEditDateTime
      *
-     * @return Category
+     * @return TicketMessage
      */
     public function setLastEditDateTime($lastEditDateTime)
     {

@@ -70,7 +70,7 @@ class ResourceLinkType extends AbstractType
     {
         $resolver->setDefaults(
             [
-                'data_class' => 'Chamilo\CoreBundle\Entity\Resource\ResourceLink',
+                'data_class' => 'Chamilo\CoreBundle\Entity\ResourceLink',
             ]
         );
     }

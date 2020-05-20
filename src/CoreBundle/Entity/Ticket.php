@@ -2,7 +2,7 @@
 
 /* For licensing terms, see /license.txt */
 
-namespace Chamilo\TicketBundle\Entity;
+namespace Chamilo\CoreBundle\Entity;
 
 use Chamilo\CoreBundle\Entity\Course;
 use Chamilo\CoreBundle\Entity\Session;
@@ -47,25 +47,25 @@ class Ticket
     protected $message;
 
     /**
-     * @var Project
+     * @var TicketProject
      *
-     * @ORM\ManyToOne(targetEntity="Chamilo\TicketBundle\Entity\Project")
+     * @ORM\ManyToOne(targetEntity="TicketProject")
      * @ORM\JoinColumn(name="project_id", referencedColumnName="id")
      */
     protected $project;
 
     /**
-     * @var Project
+     * @var TicketProject
      *
-     * @ORM\ManyToOne(targetEntity="Chamilo\TicketBundle\Entity\Category")
+     * @ORM\ManyToOne(targetEntity="TicketCategory")
      * @ORM\JoinColumn(name="category_id", referencedColumnName="id")
      */
     protected $category;
 
     /**
-     * @var Priority
+     * @var TicketPriority
      *
-     * @ORM\ManyToOne(targetEntity="Chamilo\TicketBundle\Entity\Priority")
+     * @ORM\ManyToOne(targetEntity="TicketPriority")
      * @ORM\JoinColumn(name="priority_id", referencedColumnName="id")
      */
     protected $priority;
@@ -101,9 +101,9 @@ class Ticket
     protected $assignedLastUser;
 
     /**
-     * @var Status
+     * @var TicketStatus
      *
-     * @ORM\ManyToOne(targetEntity="Chamilo\TicketBundle\Entity\Status")
+     * @ORM\ManyToOne(targetEntity="TicketStatus")
      * @ORM\JoinColumn(name="status_id", referencedColumnName="id")
      */
     protected $status;

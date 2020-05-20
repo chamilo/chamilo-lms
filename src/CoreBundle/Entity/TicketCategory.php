@@ -2,17 +2,17 @@
 
 /* For licensing terms, see /license.txt */
 
-namespace Chamilo\TicketBundle\Entity;
+namespace Chamilo\CoreBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * Priority.
+ * Category.
  *
- * @ORM\Table(name="ticket_priority")
+ * @ORM\Table(name="ticket_category")
  * @ORM\Entity
  */
-class Priority
+class TicketCategory
 {
     /**
      * @var int
@@ -33,30 +33,31 @@ class Priority
     /**
      * @var string
      *
-     * @ORM\Column(name="code", type="string", length=255, nullable=false)
-     */
-    protected $code;
-
-    /**
-     * @var string
-     *
      * @ORM\Column(name="description", type="text", nullable=true)
      */
     protected $description;
 
     /**
-     * @var string
+     * @var int
      *
-     * @ORM\Column(name="color", type="string", nullable=false)
+     * @ORM\Column(name="total_tickets", type="integer", nullable=false)
      */
-    protected $color;
+    protected $totalTickets;
 
     /**
-     * @var string
+     * @var bool
      *
-     * @ORM\Column(name="urgency", type="string", nullable=false)
+     * @ORM\Column(name="course_required", type="boolean", nullable=false)
      */
-    protected $urgency;
+    protected $courseRequired;
+
+    /**
+     * @var TicketProject
+     *
+     * @ORM\ManyToOne(targetEntity="TicketProject")
+     * @ORM\JoinColumn(name="project_id", referencedColumnName="id")
+     */
+    protected $project;
 
     /**
      * @var int
@@ -87,13 +88,12 @@ class Priority
     protected $lastEditDateTime;
 
     /**
-     * Priority constructor.
+     * Category constructor.
      */
     public function __construct()
     {
+        $this->totalTickets = 0;
         $this->insertDateTime = new \DateTime();
-        $this->color = '';
-        $this->urgency = '';
     }
 
     /**
@@ -107,7 +107,7 @@ class Priority
     /**
      * @param int $id
      *
-     * @return Priority
+     * @return TicketCategory
      */
     public function setId($id)
     {
@@ -127,31 +127,11 @@ class Priority
     /**
      * @param string $name
      *
-     * @return Priority
+     * @return TicketCategory
      */
     public function setName($name)
     {
         $this->name = $name;
-
-        return $this;
-    }
-
-    /**
-     * @return string
-     */
-    public function getCode()
-    {
-        return $this->code;
-    }
-
-    /**
-     * @param string $code
-     *
-     * @return Priority
-     */
-    public function setCode($code)
-    {
-        $this->code = $code;
 
         return $this;
     }
@@ -167,7 +147,7 @@ class Priority
     /**
      * @param string $description
      *
-     * @return Priority
+     * @return TicketCategory
      */
     public function setDescription($description)
     {
@@ -177,41 +157,61 @@ class Priority
     }
 
     /**
-     * @return string
+     * @return int
      */
-    public function getColor()
+    public function getTotalTickets()
     {
-        return $this->color;
+        return $this->totalTickets;
     }
 
     /**
-     * @param string $color
+     * @param int $totalTickets
      *
-     * @return Priority
+     * @return TicketCategory
      */
-    public function setColor($color)
+    public function setTotalTickets($totalTickets)
     {
-        $this->color = $color;
+        $this->totalTickets = $totalTickets;
 
         return $this;
     }
 
     /**
-     * @return string
+     * @return bool
      */
-    public function getUrgency()
+    public function isCourseRequired()
     {
-        return $this->urgency;
+        return $this->courseRequired;
     }
 
     /**
-     * @param string $urgency
+     * @param bool $courseRequired
      *
-     * @return Priority
+     * @return TicketCategory
      */
-    public function setUrgency($urgency)
+    public function setCourseRequired($courseRequired)
     {
-        $this->urgency = $urgency;
+        $this->courseRequired = $courseRequired;
+
+        return $this;
+    }
+
+    /**
+     * @return TicketProject
+     */
+    public function getProject()
+    {
+        return $this->project;
+    }
+
+    /**
+     * @param TicketProject $project
+     *
+     * @return TicketCategory
+     */
+    public function setProject($project)
+    {
+        $this->project = $project;
 
         return $this;
     }
@@ -227,7 +227,7 @@ class Priority
     /**
      * @param int $insertUserId
      *
-     * @return Priority
+     * @return TicketCategory
      */
     public function setInsertUserId($insertUserId)
     {
@@ -247,7 +247,7 @@ class Priority
     /**
      * @param \DateTime $insertDateTime
      *
-     * @return Priority
+     * @return TicketCategory
      */
     public function setInsertDateTime($insertDateTime)
     {
@@ -267,7 +267,7 @@ class Priority
     /**
      * @param int $lastEditUserId
      *
-     * @return Priority
+     * @return TicketCategory
      */
     public function setLastEditUserId($lastEditUserId)
     {
@@ -287,7 +287,7 @@ class Priority
     /**
      * @param \DateTime $lastEditDateTime
      *
-     * @return Priority
+     * @return TicketCategory
      */
     public function setLastEditDateTime($lastEditDateTime)
     {

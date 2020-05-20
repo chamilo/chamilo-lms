@@ -11,8 +11,9 @@ use ApiPlatform\Core\Annotation\ApiSubresource;
 use ApiPlatform\Core\Bridge\Doctrine\Orm\Filter\OrderFilter;
 use ApiPlatform\Core\Bridge\Doctrine\Orm\Filter\SearchFilter;
 use ApiPlatform\Core\Serializer\Filter\PropertyFilter;
-use Chamilo\CoreBundle\Entity\Resource\AbstractResource;
-use Chamilo\CoreBundle\Entity\Resource\ResourceInterface;
+use Chamilo\CoreBundle\Entity\AbstractResource;
+use Chamilo\CoreBundle\Entity\ResourceInterface;
+use Chamilo\CoreBundle\Entity\ResourceLink;
 use Chamilo\CourseBundle\Entity\CGroupInfo;
 use Chamilo\CourseBundle\Entity\CTool;
 use Doctrine\Common\Collections\ArrayCollection;
@@ -107,6 +108,15 @@ class Course extends AbstractResource implements ResourceInterface
     protected $users;
 
     /**
+     * @var ArrayCollection|ResourceLink[]
+     *
+     * @ApiSubresource()
+     * @Groups({"course:read"})
+     * @ORM\OneToMany(targetEntity="ResourceLink", mappedBy="course", cascade={"persist"}, orphanRemoval=true)
+     */
+    protected $resourceLinks;
+
+    /**
      * @ORM\OneToMany(targetEntity="AccessUrlRelCourse", mappedBy="course", cascade={"persist", "remove"}, orphanRemoval=true)
      */
     protected $urls;
@@ -189,11 +199,6 @@ class Course extends AbstractResource implements ResourceInterface
      * @ORM\OneToMany(targetEntity="Chamilo\CoreBundle\Entity\Templates", mappedBy="course", cascade={"persist", "remove"})
      */
     protected $templates;
-
-    /**
-     * @ORM\OneToMany(targetEntity="Chamilo\CoreBundle\Entity\Resource\ResourceLink", mappedBy="course", cascade={"remove"}, orphanRemoval=true)
-     */
-    protected $resourceLinks;
 
     /**
      * @ORM\OneToMany(targetEntity="Chamilo\CoreBundle\Entity\SpecificFieldValues", mappedBy="course")

@@ -2,7 +2,7 @@
 
 /* For licensing terms, see /license.txt */
 
-namespace Chamilo\CoreBundle\Entity\Resource;
+namespace Chamilo\CoreBundle\Entity;
 
 use ApiPlatform\Core\Annotation\ApiFilter;
 use ApiPlatform\Core\Annotation\ApiProperty;
@@ -23,7 +23,6 @@ use Symfony\Component\Routing\RouterInterface;
 use Symfony\Component\Serializer\Annotation\Groups;
 use Symfony\Component\Validator\Constraints as Assert;
 
-
 //*     attributes={"security"="is_granted('ROLE_ADMIN')"},
 /**
  * Base entity for all resources.
@@ -35,7 +34,7 @@ use Symfony\Component\Validator\Constraints as Assert;
  * )
  * @ApiFilter(SearchFilter::class, properties={"title": "partial"})
  * @ApiFilter(PropertyFilter::class)
- * @ApiFilter(OrderFilter::class, properties={"id", "title", "createdAt", "updatedAt"})
+ * @ApiFilter(OrderFilter::class, properties={"id", "title", "resourceFile", "createdAt", "updatedAt"})
  * @ORM\Entity(repositoryClass="Chamilo\CoreBundle\Repository\ResourceNodeRepository")
  *
  * @ORM\Table(name="resource_node")

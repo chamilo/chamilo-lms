@@ -2,7 +2,7 @@
 
 /* For licensing terms, see /license.txt */
 
-namespace Chamilo\TicketBundle\Entity;
+namespace Chamilo\CoreBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 
@@ -12,7 +12,7 @@ use Doctrine\ORM\Mapping as ORM;
  * @ORM\Table(name="ticket_message_attachments")
  * @ORM\Entity
  */
-class MessageAttachment
+class TicketMessageAttachment
 {
     /**
      * @var int
@@ -26,15 +26,15 @@ class MessageAttachment
     /**
      * @var Ticket
      *
-     * @ORM\ManyToOne(targetEntity="Chamilo\TicketBundle\Entity\Ticket")
+     * @ORM\ManyToOne(targetEntity="Chamilo\CoreBundle\Entity\Ticket")
      * @ORM\JoinColumn(name="ticket_id", referencedColumnName="id")
      */
     protected $ticket;
 
     /**
-     * @var Message
+     * @var TicketMessage
      *
-     * @ORM\ManyToOne(targetEntity="Chamilo\TicketBundle\Entity\Message")
+     * @ORM\ManyToOne(targetEntity="TicketMessage")
      * @ORM\JoinColumn(name="message_id", referencedColumnName="id")
      */
     protected $message;
@@ -99,7 +99,7 @@ class MessageAttachment
     /**
      * @param int $id
      *
-     * @return MessageAttachment
+     * @return TicketMessageAttachment
      */
     public function setId($id)
     {
@@ -109,7 +109,7 @@ class MessageAttachment
     }
 
     /**
-     * @return Message
+     * @return TicketMessage
      */
     public function getMessage()
     {
@@ -117,9 +117,9 @@ class MessageAttachment
     }
 
     /**
-     * @param Message $message
+     * @param TicketMessage $message
      *
-     * @return MessageAttachment
+     * @return TicketMessageAttachment
      */
     public function setMessage($message)
     {
@@ -139,7 +139,7 @@ class MessageAttachment
     /**
      * @param string $path
      *
-     * @return MessageAttachment
+     * @return TicketMessageAttachment
      */
     public function setPath($path)
     {
@@ -159,7 +159,7 @@ class MessageAttachment
     /**
      * @param string $filename
      *
-     * @return MessageAttachment
+     * @return TicketMessageAttachment
      */
     public function setFilename($filename)
     {
@@ -179,7 +179,7 @@ class MessageAttachment
     /**
      * @param int $size
      *
-     * @return MessageAttachment
+     * @return TicketMessageAttachment
      */
     public function setSize($size)
     {

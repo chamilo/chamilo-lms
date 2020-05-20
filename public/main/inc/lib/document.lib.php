@@ -1,8 +1,8 @@
 <?php
 /* For licensing terms, see /license.txt */
 
-use Chamilo\CoreBundle\Entity\Resource\ResourceFile;
-use Chamilo\CoreBundle\Entity\Resource\ResourceLink;
+use Chamilo\CoreBundle\Entity\ResourceFile;
+use Chamilo\CoreBundle\Entity\ResourceLink;
 use Chamilo\CoreBundle\Framework\Container;
 use Chamilo\CourseBundle\Entity\CDocument;
 use Chamilo\CourseBundle\Entity\CGroupInfo;
@@ -2904,7 +2904,7 @@ class DocumentManager
         $query = $em
             ->createQueryBuilder()
             ->select('node')
-            ->from('ChamiloCoreBundle:Resource\ResourceNode', 'node')
+            ->from('ChamiloCoreBundle:ResourceNode', 'node')
             ->innerJoin('node.resourceType', 'type')
             ->innerJoin('node.resourceLinks', 'links')
             //->innerJoin('node.resourceFile', 'file')

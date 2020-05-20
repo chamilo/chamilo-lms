@@ -11,7 +11,7 @@ use Chamilo\CoreBundle\Entity\CourseRelUser;
 use Chamilo\CoreBundle\Entity\GradebookCertificate;
 use Chamilo\CoreBundle\Entity\GradebookResult;
 use Chamilo\CoreBundle\Entity\Message;
-use Chamilo\CoreBundle\Entity\Resource\ResourceNode;
+use Chamilo\CoreBundle\Entity\ResourceNode;
 use Chamilo\CoreBundle\Entity\Session;
 use Chamilo\CoreBundle\Entity\SessionRelCourseRelUser;
 use Chamilo\CoreBundle\Entity\SkillRelUser;
@@ -45,7 +45,7 @@ use Chamilo\CourseBundle\Entity\CStudentPublication;
 use Chamilo\CourseBundle\Entity\CStudentPublicationComment;
 use Chamilo\CourseBundle\Entity\CSurveyAnswer;
 use Chamilo\CourseBundle\Entity\CWiki;
-use Chamilo\TicketBundle\Entity\Ticket;
+use Chamilo\CoreBundle\Entity\Ticket;
 use Doctrine\Common\Collections\Criteria;
 use Doctrine\ORM\Query\Expr\Join;
 use Symfony\Bridge\Doctrine\Security\User\UserLoaderInterface;
@@ -70,11 +70,35 @@ class UserRepository extends ResourceRepository implements UserLoaderInterface, 
         return $this->findBy(['username' => $username]);
     }
 
-    public function updateUser($user)
+    public function updateUser($user, $andFlush = true)
     {
+        $this->updateCanonicalFields($user);
+        $this->updatePassword($user);
         $this->getEntityManager()->persist($user);
-        $this->getEntityManager()->flush();
+        if ($andFlush) {
+            $this->getEntityManager()->flush();
+        }
     }
+
+    public function updateCanonicalFields(UserInterface $user)
+    {
+        //$user->setUsernameCanonical($this->canonicalizeUsername($user->getUsername()));
+        //$user->setEmailCanonical($this->canonicalizeEmail($user->getEmail()));
+    }
+
+
+    /**
+     * {@inheritDoc}
+     */
+    public function updatePassword(UserInterface $user)
+    {
+        if (0 !== strlen($password = $user->getPlainPassword())) {
+           // $encoder = $this->getEncoder($user);
+            //$user->setPassword($encoder->encodePassword($password, $user->getSalt()));
+            //$user->eraseCredentials();
+        }
+    }
+
 
     public function upgradePassword(UserInterface $user, string $newEncodedPassword): void
     {
@@ -1205,7 +1229,7 @@ class UserRepository extends ResourceRepository implements UserLoaderInterface, 
         $criteria = [
             'insertUserId' => $userId,
         ];
-        $result = $em->getRepository('ChamiloTicketBundle:Ticket')->findBy($criteria);
+        $result = $em->getRepository('ChamiloCoreBundle:Ticket')->findBy($criteria);
         $ticket = [];
         /** @var Ticket $item */
         foreach ($result as $item) {
@@ -1220,9 +1244,9 @@ class UserRepository extends ResourceRepository implements UserLoaderInterface, 
         $criteria = [
             'insertUserId' => $userId,
         ];
-        $result = $em->getRepository('ChamiloTicketBundle:Message')->findBy($criteria);
+        $result = $em->getRepository('TicketMessage')->findBy($criteria);
         $ticketMessage = [];
-        /** @var \Chamilo\TicketBundle\Entity\Message $item */
+        /** @var \Chamilo\CoreBundle\Entity\TicketMessage $item */
         foreach ($result as $item) {
             $date = $item->getInsertDateTime() ? $item->getInsertDateTime()->format($dateFormat) : '';
             $list = [

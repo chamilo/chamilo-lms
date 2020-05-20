@@ -1,7 +1,7 @@
 <?php
 /* For licensing terms, see /license.txt */
 
-use Chamilo\CoreBundle\Entity\Resource\ResourceLink;
+use Chamilo\CoreBundle\Entity\ResourceLink;
 use Chamilo\CoreBundle\Framework\Container;
 use ChamiloSession as Session;
 
@@ -146,8 +146,8 @@ if (api_is_allowed_to_edit()) {
             INNER JOIN $tblDocument AS docs
             ON (docs.resource_node_id = n.id)
             INNER JOIN resource_link l
-            ON (l.resource_node_id = n.id)                
-            WHERE	
+            ON (l.resource_node_id = n.id)
+            WHERE
                 docs.c_id = $courseId AND
                 docs.path LIKE '".$querypath."/%' AND
                 docs.filetype = 'file' AND
@@ -241,11 +241,11 @@ if (api_is_allowed_to_edit()) {
 
     // 2nd: Get all folders that are invisible in the given path
     $sql = "SELECT path, docs.session_id, docs.id, props.to_group_id, docs.c_id
-            FROM $doc_table AS docs 
+            FROM $doc_table AS docs
             INNER JOIN $prop_table AS props
             ON
                 docs.id = props.ref AND
-                docs.c_id = props.c_id                
+                docs.c_id = props.c_id
             WHERE
                 docs.c_id = $courseId AND
                 props.tool = '".TOOL_DOCUMENT."' AND
@@ -266,7 +266,7 @@ if (api_is_allowed_to_edit()) {
                     INNER JOIN $prop_table AS props
                     ON
                         docs.id = props.ref AND
-                        docs.c_id = props.c_id                        
+                        docs.c_id = props.c_id
                     WHERE
                         docs.c_id = $courseId AND
                         props.tool ='".TOOL_DOCUMENT."' AND

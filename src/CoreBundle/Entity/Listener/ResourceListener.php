@@ -4,8 +4,8 @@
 
 namespace Chamilo\CoreBundle\Entity\Listener;
 
-use Chamilo\CoreBundle\Entity\Resource\AbstractResource;
-use Chamilo\CoreBundle\Entity\Resource\ResourceNode;
+use Chamilo\CoreBundle\Entity\AbstractResource;
+use Chamilo\CoreBundle\Entity\ResourceNode;
 use Chamilo\CoreBundle\ToolChain;
 use Cocur\Slugify\SlugifyInterface;
 use Doctrine\ORM\Event\LifecycleEventArgs;
@@ -52,7 +52,7 @@ class ResourceListener
             $slug = sprintf('%s.%s', $this->slugify->slugify($originalBasename), $originalExtension);
         }
 
-        $repo = $em->getRepository('ChamiloCoreBundle:Resource\ResourceType');
+        $repo = $em->getRepository('ChamiloCoreBundle:ResourceType');
         $class = str_replace('Entity', 'Repository', get_class($args->getEntity()));
         $class .= 'Repository';
         $name = $this->toolChain->getResourceTypeNameFromRepository($class);

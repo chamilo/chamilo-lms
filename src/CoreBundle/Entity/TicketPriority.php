@@ -2,17 +2,17 @@
 
 /* For licensing terms, see /license.txt */
 
-namespace Chamilo\TicketBundle\Entity;
+namespace Chamilo\CoreBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * Project.
+ * Priority.
  *
- * @ORM\Table(name="ticket_project")
+ * @ORM\Table(name="ticket_priority")
  * @ORM\Entity
  */
-class Project
+class TicketPriority
 {
     /**
      * @var int
@@ -33,6 +33,13 @@ class Project
     /**
      * @var string
      *
+     * @ORM\Column(name="code", type="string", length=255, nullable=false)
+     */
+    protected $code;
+
+    /**
+     * @var string
+     *
      * @ORM\Column(name="description", type="text", nullable=true)
      */
     protected $description;
@@ -40,16 +47,16 @@ class Project
     /**
      * @var string
      *
-     * @ORM\Column(name="email", type="string", nullable=true)
+     * @ORM\Column(name="color", type="string", nullable=false)
      */
-    protected $email;
+    protected $color;
 
     /**
      * @var string
      *
-     * @ORM\Column(name="other_area", type="integer", nullable=true)
+     * @ORM\Column(name="urgency", type="string", nullable=false)
      */
-    protected $otherArea;
+    protected $urgency;
 
     /**
      * @var int
@@ -80,11 +87,13 @@ class Project
     protected $lastEditDateTime;
 
     /**
-     * Project constructor.
+     * Priority constructor.
      */
     public function __construct()
     {
         $this->insertDateTime = new \DateTime();
+        $this->color = '';
+        $this->urgency = '';
     }
 
     /**
@@ -98,7 +107,7 @@ class Project
     /**
      * @param int $id
      *
-     * @return Project
+     * @return TicketPriority
      */
     public function setId($id)
     {
@@ -118,11 +127,31 @@ class Project
     /**
      * @param string $name
      *
-     * @return Project
+     * @return TicketPriority
      */
     public function setName($name)
     {
         $this->name = $name;
+
+        return $this;
+    }
+
+    /**
+     * @return string
+     */
+    public function getCode()
+    {
+        return $this->code;
+    }
+
+    /**
+     * @param string $code
+     *
+     * @return TicketPriority
+     */
+    public function setCode($code)
+    {
+        $this->code = $code;
 
         return $this;
     }
@@ -138,7 +167,7 @@ class Project
     /**
      * @param string $description
      *
-     * @return Project
+     * @return TicketPriority
      */
     public function setDescription($description)
     {
@@ -150,19 +179,19 @@ class Project
     /**
      * @return string
      */
-    public function getEmail()
+    public function getColor()
     {
-        return $this->email;
+        return $this->color;
     }
 
     /**
-     * @param string $email
+     * @param string $color
      *
-     * @return Project
+     * @return TicketPriority
      */
-    public function setEmail($email)
+    public function setColor($color)
     {
-        $this->email = $email;
+        $this->color = $color;
 
         return $this;
     }
@@ -170,19 +199,19 @@ class Project
     /**
      * @return string
      */
-    public function getOtherArea()
+    public function getUrgency()
     {
-        return $this->otherArea;
+        return $this->urgency;
     }
 
     /**
-     * @param string $otherArea
+     * @param string $urgency
      *
-     * @return Project
+     * @return TicketPriority
      */
-    public function setOtherArea($otherArea)
+    public function setUrgency($urgency)
     {
-        $this->otherArea = $otherArea;
+        $this->urgency = $urgency;
 
         return $this;
     }
@@ -198,7 +227,7 @@ class Project
     /**
      * @param int $insertUserId
      *
-     * @return Project
+     * @return TicketPriority
      */
     public function setInsertUserId($insertUserId)
     {
@@ -218,7 +247,7 @@ class Project
     /**
      * @param \DateTime $insertDateTime
      *
-     * @return Project
+     * @return TicketPriority
      */
     public function setInsertDateTime($insertDateTime)
     {
@@ -238,7 +267,7 @@ class Project
     /**
      * @param int $lastEditUserId
      *
-     * @return Project
+     * @return TicketPriority
      */
     public function setLastEditUserId($lastEditUserId)
     {
@@ -258,7 +287,7 @@ class Project
     /**
      * @param \DateTime $lastEditDateTime
      *
-     * @return Project
+     * @return TicketPriority
      */
     public function setLastEditDateTime($lastEditDateTime)
     {

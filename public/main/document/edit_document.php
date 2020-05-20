@@ -36,7 +36,7 @@ $htmlHeadXtra[] = '
 <script>
 $(function() {
     $(".scrollbar-light").scrollbar();
-    
+
     expandColumnToogle("#hide_bar_template", {
         selector: "#template_col",
         width: 3
@@ -295,8 +295,8 @@ $filename = $path_info['filename'];
 $extension = $path_info['extension'] ?? '';
 
 $em = Database::getManager();
-/** @var \Chamilo\CoreBundle\Entity\Resource\ResourceNode $node */
-//$node = $em->getRepository('ChamiloCoreBundle:Resource\ResourceNode')->find($document_data['resource_node_id']);
+/** @var \Chamilo\CoreBundle\Entity\ResourceNode $node */
+//$node = $em->getRepository('ChamiloCoreBundle:ResourceNode')->find($document_data['resource_node_id']);
 $node = $document->getResourceNode();
 
 if (in_array($extension, ['html', 'htm'])) {
@@ -494,7 +494,7 @@ if ($owner_id == api_get_user_id() ||
         $(function() {
             $("[data-toggle=\'tooltip\']").tooltip(
                 {
-                    content: 
+                    content:
                         function() {
                             return $(this).attr("title");
                         }

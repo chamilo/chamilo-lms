@@ -2,7 +2,7 @@
 
 /* For licensing terms, see /license.txt */
 
-namespace Chamilo\TicketBundle\Entity;
+namespace Chamilo\CoreBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 
@@ -12,7 +12,7 @@ use Doctrine\ORM\Mapping as ORM;
  * @ORM\Table(name="ticket_status")
  * @ORM\Entity
  */
-class Status
+class TicketStatus
 {
     /**
      * @var int
@@ -55,7 +55,7 @@ class Status
     /**
      * @param int $id
      *
-     * @return Status
+     * @return TicketStatus
      */
     public function setId($id)
     {
@@ -75,7 +75,7 @@ class Status
     /**
      * @param string $code
      *
-     * @return Status
+     * @return TicketStatus
      */
     public function setCode($code)
     {
@@ -95,7 +95,7 @@ class Status
     /**
      * @param string $name
      *
-     * @return Status
+     * @return TicketStatus
      */
     public function setName($name)
     {
@@ -115,7 +115,7 @@ class Status
     /**
      * @param string $description
      *
-     * @return Status
+     * @return TicketStatus
      */
     public function setDescription($description)
     {

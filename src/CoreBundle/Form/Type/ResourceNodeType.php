@@ -30,7 +30,7 @@ class ResourceNodeType extends AbstractType
     {
         $resolver->setDefaults(
             [
-                'data_class' => 'Chamilo\CoreBundle\Entity\Resource\ResourceNode',
+                'data_class' => 'Chamilo\CoreBundle\Entity\ResourceNode',
             ]
         );
     }

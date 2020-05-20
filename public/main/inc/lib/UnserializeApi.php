@@ -102,8 +102,8 @@ class UnserializeApi
                         LpItem::class,
                         \Chamilo\CourseBundle\Entity\CLp::class,
                         \Chamilo\CoreBundle\Entity\Course::class,
-                        \Chamilo\CoreBundle\Entity\Resource\ResourceNode::class,
-                        \Chamilo\CoreBundle\Entity\Resource\ResourceType::class,
+                        \Chamilo\CoreBundle\Entity\ResourceNode::class,
+                        \Chamilo\CoreBundle\Entity\ResourceType::class,
                     ]
                 );
 

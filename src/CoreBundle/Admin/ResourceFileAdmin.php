@@ -4,7 +4,7 @@
 
 namespace Chamilo\CoreBundle\Admin;
 
-use Chamilo\CoreBundle\Entity\Resource\ResourceFile;
+use Chamilo\CoreBundle\Entity\ResourceFile;
 use Sonata\AdminBundle\Admin\AbstractAdmin;
 use Sonata\AdminBundle\Datagrid\DatagridMapper;
 use Sonata\AdminBundle\Datagrid\ListMapper;

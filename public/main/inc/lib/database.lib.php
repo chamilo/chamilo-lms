@@ -36,7 +36,6 @@ class Database
             [
                 'ChamiloCoreBundle' => 'Chamilo\CoreBundle\Entity',
                 'ChamiloCourseBundle' => 'Chamilo\CourseBundle\Entity',
-                'ChamiloTicketBundle' => 'Chamilo\TicketBundle\Entity',
                 'ChamiloPluginBundle' => 'Chamilo\PluginBundle\Entity',
             ]
         );

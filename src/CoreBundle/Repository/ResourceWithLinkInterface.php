@@ -4,7 +4,7 @@
 
 namespace Chamilo\CoreBundle\Repository;
 
-use Chamilo\CoreBundle\Entity\Resource\ResourceInterface;
+use Chamilo\CoreBundle\Entity\ResourceInterface;
 use Symfony\Component\Routing\RouterInterface;
 
 /**

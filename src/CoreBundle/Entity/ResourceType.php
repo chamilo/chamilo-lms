@@ -2,7 +2,7 @@
 
 /* For licensing terms, see /license.txt */
 
-namespace Chamilo\CoreBundle\Entity\Resource;
+namespace Chamilo\CoreBundle\Entity;
 
 use Chamilo\CoreBundle\Entity\Tool;
 use Doctrine\ORM\Mapping as ORM;
@@ -38,7 +38,7 @@ class ResourceType
     protected $tool;
 
     /**
-     * @ORM\OneToMany(targetEntity="Chamilo\CoreBundle\Entity\Resource\ResourceNode", mappedBy="resourceType", cascade={"persist", "remove"})
+     * @ORM\OneToMany(targetEntity="Chamilo\CoreBundle\Entity\ResourceNode", mappedBy="resourceType", cascade={"persist", "remove"})
      */
     protected $resourceNodes;
 

@@ -2,7 +2,7 @@
 
 /* For licensing terms, see /license.txt */
 
-namespace Chamilo\CoreBundle\Entity\Resource;
+namespace Chamilo\CoreBundle\Entity;
 
 use ApiPlatform\Core\Annotation\ApiFilter;
 use ApiPlatform\Core\Annotation\ApiProperty;
@@ -17,17 +17,19 @@ use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\Serializer\Annotation\Groups;
 use Symfony\Component\Validator\Constraints as Assert;
 use Vich\UploaderBundle\Mapping\Annotation as Vich;
-use Chamilo\CoreBundle\Controller\CreateMediaObjectAction;
+use Chamilo\CoreBundle\Controller\CreateResourceFileAction;
 
 //
 //*     attributes={"security"="is_granted('ROLE_ADMIN')"},
 /**
  * @ApiResource(
  *     iri="http://schema.org/MediaObject",
- *     normalizationContext={"groups"={"resource_file:read", "media_object_read"}},
+ *     normalizationContext={
+ *      "groups"={"resource_file:read", "resource_node:read", "document:read", "media_object_read"}
+ *     },
  *     collectionOperations={
  *         "post"={
- *             "controller"=CreateMediaObjectAction::class,
+ *             "controller"=CreateResourceFileAction::class,
  *             "deserialize"=false,
  *             "security"="is_granted('ROLE_USER')",
  *             "validation_groups"={"Default", "media_object_create"},
@@ -57,6 +59,7 @@ use Chamilo\CoreBundle\Controller\CreateMediaObjectAction;
  * )
  * @ApiFilter(SearchFilter::class, properties={"name": "partial"})
  * @ApiFilter(PropertyFilter::class)
+ * @ApiFilter(OrderFilter::class, properties={"id", "name", "size", "updatedAt"})
  * @ORM\Entity
  * @Vich\Uploadable
  *
@@ -101,7 +104,7 @@ class ResourceFile
     /**
      * @var string
      *
-     * @Groups({"resource_file:read", "document:read"})
+     * @Groups({"resource_file:read", "resource_node:read", "document:read"})
      * @ORM\Column(type="simple_array", nullable=true)
      */
     protected $dimensions;
@@ -140,14 +143,14 @@ class ResourceFile
      * @var string|null
      *
      * @ApiProperty(iri="http://schema.org/contentUrl")
-     * @Groups({"media_object_read"})
+     * @Groups({"resource_file:read", "resource_node:read", "document:read", "media_object_read"})
      */
     public $contentUrl;
 
     /**
      * @var ResourceNode
      *
-     * @ORM\OneToOne(targetEntity="Chamilo\CoreBundle\Entity\Resource\ResourceNode", mappedBy="resourceFile")
+     * @ORM\OneToOne(targetEntity="Chamilo\CoreBundle\Entity\ResourceNode", mappedBy="resourceFile")
      */
     protected $resourceNode;
 
@@ -409,5 +412,25 @@ class ResourceFile
             // otherwise the event listeners won't be called and the file is lost
             $this->updatedAt = new \DateTimeImmutable();
         }
+    }
+
+    /**
+     * @return string|null
+     */
+    public function getContentUrl(): ?string
+    {
+        return $this->contentUrl;
+    }
+
+    /**
+     * @param string|null $contentUrl
+     *
+     * @return ResourceFile
+     */
+    public function setContentUrl(?string $contentUrl): ResourceFile
+    {
+        $this->contentUrl = $contentUrl;
+
+        return $this;
     }
 }

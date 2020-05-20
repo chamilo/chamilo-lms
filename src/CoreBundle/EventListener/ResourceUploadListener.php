@@ -4,7 +4,7 @@
 
 namespace Chamilo\CoreBundle\EventListener;
 
-use Chamilo\CoreBundle\Entity\Resource\ResourceInterface;
+use Chamilo\CoreBundle\Entity\ResourceInterface;
 use Oneup\UploaderBundle\Event\PostPersistEvent;
 use Oneup\UploaderBundle\Uploader\Response\ResponseInterface;
 use Symfony\Component\Routing\RouterInterface;

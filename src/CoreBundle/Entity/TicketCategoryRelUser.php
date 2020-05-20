@@ -2,7 +2,7 @@
 
 /* For licensing terms, see /license.txt */
 
-namespace Chamilo\TicketBundle\Entity;
+namespace Chamilo\CoreBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 
@@ -12,7 +12,7 @@ use Doctrine\ORM\Mapping as ORM;
  * @ORM\Table(name="ticket_category_rel_user")
  * @ORM\Entity
  */
-class CategoryRelUser
+class TicketCategoryRelUser
 {
     /**
      * @var int
@@ -24,15 +24,15 @@ class CategoryRelUser
     protected $id;
 
     /**
-     * @var Category
+     * @var TicketCategory
      *
-     * @ORM\ManyToOne(targetEntity="Chamilo\TicketBundle\Entity\Category")
+     * @ORM\ManyToOne(targetEntity="TicketCategory")
      * @ORM\JoinColumn(name="category_id", referencedColumnName="id")
      */
     protected $category;
 
     /**
-     * @var Category
+     * @var TicketCategory
      *
      * @ORM\ManyToOne(targetEntity="Chamilo\CoreBundle\Entity\User")
      * @ORM\JoinColumn(name="user_id", referencedColumnName="id")

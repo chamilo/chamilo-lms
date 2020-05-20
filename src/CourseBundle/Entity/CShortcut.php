@@ -5,8 +5,8 @@
 namespace Chamilo\CourseBundle\Entity;
 
 use APY\DataGridBundle\Grid\Mapping as GRID;
-use Chamilo\CoreBundle\Entity\Resource\AbstractResource;
-use Chamilo\CoreBundle\Entity\Resource\ResourceInterface;
+use Chamilo\CoreBundle\Entity\AbstractResource;
+use Chamilo\CoreBundle\Entity\ResourceInterface;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
 
@@ -35,7 +35,7 @@ class CShortcut extends AbstractResource implements ResourceInterface
 
     /**
      * @ORM\OneToOne(
-     *     targetEntity="Chamilo\CoreBundle\Entity\Resource\ResourceNode"
+     *     targetEntity="Chamilo\CoreBundle\Entity\ResourceNode"
      * )
      * @ORM\JoinColumn(name="shortcut_node_id", referencedColumnName="id")
      */

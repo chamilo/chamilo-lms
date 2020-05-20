@@ -112,7 +112,7 @@ class Session
     protected $urls;
 
     /**
-     * @ORM\OneToMany(targetEntity="Chamilo\CoreBundle\Entity\Resource\ResourceLink", mappedBy="session", cascade={"remove"}, orphanRemoval=true)
+     * @ORM\OneToMany(targetEntity="Chamilo\CoreBundle\Entity\ResourceLink", mappedBy="session", cascade={"remove"}, orphanRemoval=true)
      */
     protected $resourceLinks;
 
@@ -176,7 +176,7 @@ class Session
     /**
      * @var User
      *
-     * @ORM\ManyToOne(targetEntity="Chamilo\CoreBundle\Entity\User", inversedBy="receivedMessages")
+     * @ORM\ManyToOne(targetEntity="Chamilo\CoreBundle\Entity\User")
      * @ORM\JoinColumn(name="session_admin_id", referencedColumnName="id", nullable=true)
      */
     protected $sessionAdmin;

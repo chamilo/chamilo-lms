@@ -13,8 +13,8 @@ use ApiPlatform\Core\Bridge\Doctrine\Orm\Filter\SearchFilter;
 use ApiPlatform\Core\Serializer\Filter\PropertyFilter;
 use APY\DataGridBundle\Grid\Mapping as GRID;
 use Chamilo\CoreBundle\Entity\Course;
-use Chamilo\CoreBundle\Entity\Resource\AbstractResource;
-use Chamilo\CoreBundle\Entity\Resource\ResourceInterface;
+use Chamilo\CoreBundle\Entity\AbstractResource;
+use Chamilo\CoreBundle\Entity\ResourceInterface;
 use Chamilo\CoreBundle\Entity\Session;
 use Chamilo\CourseBundle\Traits\ShowCourseResourcesInSessionTrait;
 use Doctrine\ORM\Event\LifecycleEventArgs;
@@ -24,13 +24,19 @@ use Symfony\Component\Serializer\Annotation\Groups;
 /**
  * @ApiResource(
  *      shortName="Documents",
- *      normalizationContext={"groups"={"document:read", "resource_node:node"}},
+ *      normalizationContext={"groups"={"document:read", "resource_node:read"}},
  *      denormalizationContext={"groups"={"document:write"}}
  * )
- * @ApiFilter(SearchFilter::class, properties={"title": "partial"})
+ * @ApiFilter(SearchFilter::class, properties={"title": "partial", "resourceNode": "exact"})
  * @ApiFilter(
  *     OrderFilter::class,
- *     properties={"id", "resourceNode.title", "resourceNode.createdAt", "resourceNode.updatedAt"}
+ *     properties={
+ *          "id",
+ *          "resourceNode.title",
+ *          "resourceNode.createdAt",
+ *          "resourceNode.resourceFile.size",
+ *          "resourceNode.updatedAt"
+ *      }
  * )
  *
  * @ORM\Table(
@@ -138,11 +144,11 @@ class CDocument extends AbstractResource implements ResourceInterface
      */
     public function __construct()
     {
+        $this->id = 0;
+        $this->size = 0;
         $this->filetype = 'folder';
         $this->readonly = false;
         $this->template = false;
-        $this->size = 0;
-        $this->id = 0;
     }
 
     public function __toString(): string

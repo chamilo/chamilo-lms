@@ -5,9 +5,9 @@
 namespace Chamilo\CoreBundle\Traits;
 
 use Chamilo\CoreBundle\Component\Utils\Glide;
-use Chamilo\CoreBundle\Entity\Resource\AbstractResource;
-use Chamilo\CoreBundle\Entity\Resource\ResourceInterface;
-use Chamilo\CoreBundle\Entity\Resource\ResourceNode;
+use Chamilo\CoreBundle\Entity\AbstractResource;
+use Chamilo\CoreBundle\Entity\ResourceInterface;
+use Chamilo\CoreBundle\Entity\ResourceNode;
 use Chamilo\CoreBundle\Entity\User;
 use Chamilo\CoreBundle\Repository\ResourceFactory;
 use Chamilo\CoreBundle\Repository\ResourceRepository;
@@ -95,7 +95,7 @@ trait ResourceControllerTrait
                 }
             }
         } else {
-            $repo = $this->getDoctrine()->getRepository('ChamiloCoreBundle:Resource\ResourceNode');
+            $repo = $this->getDoctrine()->getRepository('ChamiloCoreBundle:ResourceNode');
             $parentResourceNode = $repo->find($parentNodeId);
         }
 

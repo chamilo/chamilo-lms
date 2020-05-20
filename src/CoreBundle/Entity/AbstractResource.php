@@ -2,7 +2,7 @@
 
 /* For licensing terms, see /license.txt */
 
-namespace Chamilo\CoreBundle\Entity\Resource;
+namespace Chamilo\CoreBundle\Entity;
 
 use ApiPlatform\Core\Annotation\ApiSubresource;
 use APY\DataGridBundle\Grid\Mapping as GRID;
@@ -25,10 +25,10 @@ abstract class AbstractResource
      *
      * @Assert\Valid()
      * @ApiSubresource()
-     * @Groups({"resource_node:read", "document:read"})
+     * @Groups({"resource_node:read", "resource_node:write", "document:read","document:write"})
      * @GRID\Column(field="resourceNode.createdAt", title="Date added", type="datetime")
      * @ORM\OneToOne(
-     *     targetEntity="Chamilo\CoreBundle\Entity\Resource\ResourceNode", cascade={"remove"}, orphanRemoval=true
+     *     targetEntity="Chamilo\CoreBundle\Entity\ResourceNode", cascade={"remove"}, orphanRemoval=true
      * )
      * @ORM\JoinColumn(name="resource_node_id", referencedColumnName="id", onDelete="CASCADE")
      */

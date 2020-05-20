@@ -2,17 +2,17 @@
 
 /* For licensing terms, see /license.txt */
 
-namespace Chamilo\TicketBundle\Entity;
+namespace Chamilo\CoreBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * Message.
+ * Project.
  *
- * @ORM\Table(name="ticket_message")
+ * @ORM\Table(name="ticket_project")
  * @ORM\Entity
  */
-class Message
+class TicketProject
 {
     /**
      * @var int
@@ -26,38 +26,30 @@ class Message
     /**
      * @var string
      *
-     * @ORM\Column(name="subject", type="string", length=255, nullable=true)
+     * @ORM\Column(name="name", type="string", length=255, nullable=false)
      */
-    protected $subject;
+    protected $name;
 
     /**
      * @var string
      *
-     * @ORM\Column(name="message", type="text", nullable=true)
+     * @ORM\Column(name="description", type="text", nullable=true)
      */
-    protected $message;
+    protected $description;
 
     /**
      * @var string
      *
-     * @ORM\Column(name="status", type="string", nullable=false)
+     * @ORM\Column(name="email", type="string", nullable=true)
      */
-    protected $status;
+    protected $email;
 
     /**
      * @var string
      *
-     * @ORM\Column(name="ip_address", type="string", nullable=false)
+     * @ORM\Column(name="other_area", type="integer", nullable=true)
      */
-    protected $ipAddress;
-
-    /**
-     * @var Ticket
-     *
-     * @ORM\ManyToOne(targetEntity="Chamilo\TicketBundle\Entity\Ticket")
-     * @ORM\JoinColumn(name="ticket_id", referencedColumnName="id")
-     */
-    protected $ticket;
+    protected $otherArea;
 
     /**
      * @var int
@@ -88,6 +80,14 @@ class Message
     protected $lastEditDateTime;
 
     /**
+     * Project constructor.
+     */
+    public function __construct()
+    {
+        $this->insertDateTime = new \DateTime();
+    }
+
+    /**
      * @return int
      */
     public function getId()
@@ -98,7 +98,7 @@ class Message
     /**
      * @param int $id
      *
-     * @return Message
+     * @return TicketProject
      */
     public function setId($id)
     {
@@ -110,19 +110,19 @@ class Message
     /**
      * @return string
      */
-    public function getSubject()
+    public function getName()
     {
-        return $this->subject;
+        return $this->name;
     }
 
     /**
-     * @param string $subject
+     * @param string $name
      *
-     * @return Message
+     * @return TicketProject
      */
-    public function setSubject($subject)
+    public function setName($name)
     {
-        $this->subject = $subject;
+        $this->name = $name;
 
         return $this;
     }
@@ -130,19 +130,19 @@ class Message
     /**
      * @return string
      */
-    public function getMessage()
+    public function getDescription()
     {
-        return $this->message;
+        return $this->description;
     }
 
     /**
-     * @param string $message
+     * @param string $description
      *
-     * @return Message
+     * @return TicketProject
      */
-    public function setMessage($message)
+    public function setDescription($description)
     {
-        $this->message = $message;
+        $this->description = $description;
 
         return $this;
     }
@@ -150,19 +150,19 @@ class Message
     /**
      * @return string
      */
-    public function getStatus()
+    public function getEmail()
     {
-        return $this->status;
+        return $this->email;
     }
 
     /**
-     * @param string $status
+     * @param string $email
      *
-     * @return Message
+     * @return TicketProject
      */
-    public function setStatus($status)
+    public function setEmail($email)
     {
-        $this->status = $status;
+        $this->email = $email;
 
         return $this;
     }
@@ -170,39 +170,19 @@ class Message
     /**
      * @return string
      */
-    public function getIpAddress()
+    public function getOtherArea()
     {
-        return $this->ipAddress;
+        return $this->otherArea;
     }
 
     /**
-     * @param string $ipAddress
+     * @param string $otherArea
      *
-     * @return Message
+     * @return TicketProject
      */
-    public function setIpAddress($ipAddress)
+    public function setOtherArea($otherArea)
     {
-        $this->ipAddress = $ipAddress;
-
-        return $this;
-    }
-
-    /**
-     * @return Ticket
-     */
-    public function getTicket()
-    {
-        return $this->ticket;
-    }
-
-    /**
-     * @param Ticket $ticket
-     *
-     * @return Message
-     */
-    public function setTicket($ticket)
-    {
-        $this->ticket = $ticket;
+        $this->otherArea = $otherArea;
 
         return $this;
     }
@@ -218,7 +198,7 @@ class Message
     /**
      * @param int $insertUserId
      *
-     * @return Message
+     * @return TicketProject
      */
     public function setInsertUserId($insertUserId)
     {
@@ -238,7 +218,7 @@ class Message
     /**
      * @param \DateTime $insertDateTime
      *
-     * @return Message
+     * @return TicketProject
      */
     public function setInsertDateTime($insertDateTime)
     {
@@ -258,7 +238,7 @@ class Message
     /**
      * @param int $lastEditUserId
      *
-     * @return Message
+     * @return TicketProject
      */
     public function setLastEditUserId($lastEditUserId)
     {
@@ -278,7 +258,7 @@ class Message
     /**
      * @param \DateTime $lastEditDateTime
      *
-     * @return Message
+     * @return TicketProject
      */
     public function setLastEditDateTime($lastEditDateTime)
     {

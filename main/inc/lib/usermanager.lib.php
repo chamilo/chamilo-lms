@@ -910,14 +910,16 @@ class UserManager
             return false;
         }
 
-        $sql = "SELECT * FROM $table_course_user
-                WHERE status = 1 AND user_id = ".$user_id;
-        $res = Database::query($sql);
-        while ($course = Database::fetch_object($res)) {
-            $sql = "SELECT id FROM $table_course_user
-                    WHERE status=1 AND c_id = ".intval($course->c_id);
-            $res2 = Database::query($sql);
-            if (Database::num_rows($res2) == 1) {
+        $res = Database::query(
+            "SELECT c_id FROM $table_course_user WHERE status = 1 AND user_id = $user_id"
+        );
+        while ($course = Database::fetch_assoc($res)) {
+            $sql = Database::query(
+                "SELECT COUNT(id) number FROM $table_course_user WHERE status = 1 AND c_id = {$course['c_id']}"
+            );
+            $res2 = Database::fetch_assoc($sql);
+
+            if ($res2['number'] == 1) {
                 return false;
             }
         }

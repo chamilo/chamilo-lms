@@ -1016,7 +1016,7 @@ class UserManager
         $user_info = api_get_user_info($user_id);
 
         try {
-            self::deleteUserFiles($user_info);
+            self::deleteUserFiles($user_id);
         } catch (Exception $exception) {
             error_log('Delete user exception: '.$exception->getMessage());
         }
@@ -7097,24 +7097,15 @@ SQL;
     }
 
     /**
-     * @param array $userInfo
+     * @param int $userInfo
      *
      * @throws Exception
      */
-    private static function deleteUserFiles(array $userInfo)
+    public static function deleteUserFiles($userId)
     {
+        $path = self::getUserPathById($userId, 'system');
+
         $fs = new Filesystem();
-        $path = self::getUserPathById($userInfo['id'], 'system');
-
-        $dir = new DirectoryIterator($path);
-
-        /** @var DirectoryIterator $fileInfo */
-        foreach ($dir as $fileInfo) {
-            if ($fileInfo->isDot()) {
-                continue;
-            }
-
-            $fs->remove($fileInfo->getPathname());
-        }
+        $fs->remove($path);
     }
 }

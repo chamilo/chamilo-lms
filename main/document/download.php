@@ -46,18 +46,14 @@ if (empty($doc_url)) {
 // Dealing with image included into survey: when users receive a link towards a
 // survey while not being authenticated on the platform.
 // The administrator should probably be able to disable this code through admin
-// inteface.
+// interface.
 $refer_script = isset($_SERVER["HTTP_REFERER"]) ? strrchr($_SERVER["HTTP_REFERER"], '/') : null;
-
 $sys_course_path = api_get_path(SYS_COURSE_PATH).$_course['path'].'/document';
 
 if (substr($refer_script, 0, 15) == '/fillsurvey.php') {
-    list($part1, $part2) = preg_split('/invitationcode=/', $refer_script);
-    list($invitation, $part1) = preg_split('/&/', $part2);
-    unset($part1);
-    unset($part2);
-    $course = strstr($refer_script, 'course=');
-    $course = substr($course, 7, strpos($course, '&') - 7);
+    parse_str($refer_script, $parts);
+    $course = isset($parts['course']) ? $parts['course'] : '';
+    $invitation = isset($parts['invitationcode']) ? $parts['invitationcode'] : '';
     include '../survey/survey.download.inc.php';
     $_course = check_download_survey($course, $invitation, $doc_url);
     $_course['path'] = $_course['directory'];

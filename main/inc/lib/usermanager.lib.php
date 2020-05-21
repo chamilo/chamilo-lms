@@ -7106,18 +7106,11 @@ SQL;
         $fs = new Filesystem();
         $path = self::getUserPathById($userInfo['id'], 'system');
 
-        $avoidFiles = [
-            'my_files',
-            'message_attachments',
-        ];
-
         $dir = new DirectoryIterator($path);
 
         /** @var DirectoryIterator $fileInfo */
         foreach ($dir as $fileInfo) {
-            if ($fileInfo->isDot() ||
-                in_array($fileInfo->getFilename(), $avoidFiles)
-            ) {
+            if ($fileInfo->isDot()) {
                 continue;
             }
 

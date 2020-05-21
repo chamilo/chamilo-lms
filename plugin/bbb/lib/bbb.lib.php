@@ -125,13 +125,15 @@ class bbb
                 $urlWithProtocol = $bbb_host;
             } else {
                 // We assume it's an http, if user wants to use https, the host *must* include the protocol.
-                $urlWithProtocol = 'http://'.$bbb_host;
+                $this->protocol = 'http://';
+                $urlWithProtocol = $this->protocol.$bbb_host;
             }
 
             // Setting BBB api
             define('CONFIG_SECURITY_SALT', $this->salt);
             define('CONFIG_SERVER_URL_WITH_PROTOCOL', $urlWithProtocol);
             define('CONFIG_SERVER_BASE_URL', $this->url);
+            define('CONFIG_SERVER_PROTOCOL', $this->protocol);
 
             $this->api = new BigBlueButtonBN();
             $this->pluginEnabled = true;

@@ -9,6 +9,7 @@ use Chamilo\CoreBundle\Entity\SkillRelUserComment;
 use Chamilo\UserBundle\Entity\User;
 use Chamilo\UserBundle\Repository\UserRepository;
 use ChamiloSession as Session;
+use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\Security\Core\Encoder\EncoderFactory;
 
 /**
@@ -1012,17 +1013,12 @@ class UserManager
             RedirectionPlugin::deleteUserRedirection($user_id);
         }
 
-        // Delete user picture
-        /* TODO: Logic about api_get_setting('split_users_upload_directory') == 'true'
-        a user has 4 different sized photos to be deleted. */
         $user_info = api_get_user_info($user_id);
 
-        if (strlen($user_info['picture_uri']) > 0) {
-            $path = self::getUserPathById($user_id, 'system');
-            $img_path = $path.$user_info['picture_uri'];
-            if (file_exists($img_path)) {
-                unlink($img_path);
-            }
+        try {
+            self::deleteUserFiles($user_info);
+        } catch (Exception $exception) {
+            error_log('Delete user exception: '.$exception->getMessage());
         }
 
         // Delete the personal course categories
@@ -7098,5 +7094,34 @@ SQL;
         }
 
         return $url;
+    }
+
+    /**
+     * @param array $userInfo
+     *
+     * @throws Exception
+     */
+    private static function deleteUserFiles(array $userInfo)
+    {
+        $fs = new Filesystem();
+        $path = self::getUserPathById($userInfo['id'], 'system');
+
+        $avoidFiles = [
+            'my_files',
+            'message_attachments',
+        ];
+
+        $dir = new DirectoryIterator($path);
+
+        /** @var DirectoryIterator $fileInfo */
+        foreach ($dir as $fileInfo) {
+            if ($fileInfo->isDot() ||
+                in_array($fileInfo->getFilename(), $avoidFiles)
+            ) {
+                continue;
+            }
+
+            $fs->remove($fileInfo->getPathname());
+        }
     }
 }

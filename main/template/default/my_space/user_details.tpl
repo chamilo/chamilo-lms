@@ -167,6 +167,15 @@
                     <div class="col-md-4">
                         {{ display.card_widget('FirstLoginInPlatform'|get_lang, user.first_connection, 'calendar') }}
                         {{ display.card_widget('LatestLoginInPlatform'|get_lang, user.last_connection, 'calendar') }}
+
+                        {% if user.tools.course_first_access %}
+                            {{ display.card_widget('FirstLoginInCourse'|get_lang, user.tools.course_first_access, 'calendar-check-o', user.legal.icon) }}
+                        {% endif %}
+
+                        {% if user.tools.course_last_access %}
+                            {{ display.card_widget('LatestLoginInCourse'|get_lang, user.tools.course_last_access, 'calendar-o', user.legal.icon) }}
+                        {% endif %}
+
                         {% if(user.time_spent_course) %}
                             {{ display.card_widget('TimeSpentInTheCourse'|get_lang, user.time_spent_course, 'clock-o') }}
                         {% endif %}

@@ -23,7 +23,7 @@ return [
     A2lix\TranslationFormBundle\A2lixTranslationFormBundle::class => ['all' => true],
     Oneup\UploaderBundle\OneupUploaderBundle::class => ['all' => true],
     APY\DataGridBundle\APYDataGridBundle::class => ['all' => true],
-    Overblog\GraphQLBundle\OverblogGraphQLBundle::class => ['all' => true],
+    //Overblog\GraphQLBundle\OverblogGraphQLBundle::class => ['all' => true],
     Gregwar\CaptchaBundle\GregwarCaptchaBundle::class => ['all' => true],
     Symfony\WebpackEncoreBundle\WebpackEncoreBundle::class => ['all' => true],
     Liip\ImagineBundle\LiipImagineBundle::class => ['all' => true],

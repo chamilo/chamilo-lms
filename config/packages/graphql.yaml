@@ -1,44 +1,44 @@
-overblog_graphql:
-    definitions:
-        schema:
-            query: Query
-            mutation: Mutation
-            resolver_maps:
-                - '%chamilo_graphql.resolver_map.query.class%'
-                - '%chamilo_graphql.resolver_map.enum.class%'
-                - '%chamilo_graphql.resolver_map.interface.class%'
-                - '%chamilo_graphql.resolver_map.scalar.class%'
-                - '%chamilo_graphql.resolver_map.mutation.class%'
-        mappings:
-            types:
-                -
-                    type: graphql
-                    dir: "%kernel.project_dir%/config/graphql/types"
-
-parameters:
-    chamilo_graphql.resolver_map.query.class: Chamilo\GraphQlBundle\Map\QueryMap
-    chamilo_graphql.resolver_map.enum.class: Chamilo\GraphQlBundle\Map\EnumMap
-    chamilo_graphql.resolver_map.interface.class: Chamilo\GraphQlBundle\Map\InterfaceMap
-    chamilo_graphql.resolver_map.scalar.class: Chamilo\GraphQlBundle\Map\ScalarMap
-    chamilo_graphql.resolver_map.mutation.class: Chamilo\GraphQlBundle\Map\MutationMap
-
-services:
-    _defaults:
-        public: true
-
-    chamilo_graphql.resolver.user:
-        class: Chamilo\GraphQlBundle\Resolver\UserResolver
-        arguments: ['@service_container']
-
-    chamilo_graphql.resolver.course:
-        class: Chamilo\GraphQlBundle\Resolver\CourseResolver
-        arguments: ['@service_container']
-
-    chamilo_graphql.resolver.session:
-        class: Chamilo\GraphQlBundle\Resolver\SessionResolver
-        arguments: ['@service_container']
-
-    Chamilo\GraphQlBundle\Map\:
-        resource: "../../src/GraphQlBundle/Map/*"
-        arguments:
-            - "@service_container"
+#overblog_graphql:
+#    definitions:
+#        schema:
+#            query: Query
+#            mutation: Mutation
+#            resolver_maps:
+#                - '%chamilo_graphql.resolver_map.query.class%'
+#                - '%chamilo_graphql.resolver_map.enum.class%'
+#                - '%chamilo_graphql.resolver_map.interface.class%'
+#                - '%chamilo_graphql.resolver_map.scalar.class%'
+#                - '%chamilo_graphql.resolver_map.mutation.class%'
+#        mappings:
+#            types:
+#                -
+#                    type: graphql
+#                    dir: "%kernel.project_dir%/config/graphql/types"
+#
+#parameters:
+#    chamilo_graphql.resolver_map.query.class: Chamilo\GraphQlBundle\Map\QueryMap
+#    chamilo_graphql.resolver_map.enum.class: Chamilo\GraphQlBundle\Map\EnumMap
+#    chamilo_graphql.resolver_map.interface.class: Chamilo\GraphQlBundle\Map\InterfaceMap
+#    chamilo_graphql.resolver_map.scalar.class: Chamilo\GraphQlBundle\Map\ScalarMap
+#    chamilo_graphql.resolver_map.mutation.class: Chamilo\GraphQlBundle\Map\MutationMap
+#
+#services:
+#    _defaults:
+#        public: true
+#
+#    chamilo_graphql.resolver.user:
+#        class: Chamilo\GraphQlBundle\Resolver\UserResolver
+#        arguments: ['@service_container']
+#
+#    chamilo_graphql.resolver.course:
+#        class: Chamilo\GraphQlBundle\Resolver\CourseResolver
+#        arguments: ['@service_container']
+#
+#    chamilo_graphql.resolver.session:
+#        class: Chamilo\GraphQlBundle\Resolver\SessionResolver
+#        arguments: ['@service_container']
+#
+#    Chamilo\GraphQlBundle\Map\:
+#        resource: "../../src/GraphQlBundle/Map/*"
+#        arguments:
+#            - "@service_container"

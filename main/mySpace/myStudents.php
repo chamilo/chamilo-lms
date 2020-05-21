@@ -974,6 +974,7 @@ if (!empty($courseInfo)) {
         'upload_documents' => $uploaded_documents,
         'course_first_access' => Tracking::get_first_connection_date_on_the_course($student_id, $courseInfo['real_id'], $sessionId),
         'course_last_access' => Tracking::get_last_connection_date_on_the_course($student_id, $courseInfo, $sessionId),
+        'count_access_dates' => Tracking::getNumberOfCourseAccessDates($student_id, $courseInfo['real_id'], $sessionId),
     ];
 } else {
     $details = false;

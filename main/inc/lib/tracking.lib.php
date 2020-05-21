@@ -6958,6 +6958,29 @@ class Tracking
 
         return $result;
     }
+
+    /**
+     * @param int $userId
+     * @param int $courseId
+     * @param int $sessionId
+     *
+     * @return int
+     */
+    public static function getNumberOfCourseAccessDates($userId, $courseId, $sessionId)
+    {
+        $tblTrackCourseAccess = Database::get_main_table(TABLE_STATISTIC_TRACK_E_COURSE_ACCESS);
+        $sessionCondition = api_get_session_condition($sessionId);
+        $courseId = (int) $courseId;
+        $userId = (int) $userId;
+
+        $sql = "SELECT COUNT(DISTINCT (DATE(login_course_date))) AS c
+            FROM $tblTrackCourseAccess
+            WHERE c_id = $courseId $sessionCondition AND user_id = $userId";
+
+        $result = Database::fetch_assoc(Database::query($sql));
+
+        return (int) $result['c'];
+    }
 }
 
 /**

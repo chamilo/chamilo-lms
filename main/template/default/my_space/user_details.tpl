@@ -163,6 +163,23 @@
                             </div>
                         </div>
 
+                        {% if user.tools.count_access_dates %}
+                            <div class="row">
+                                <div class="col-md-6 col-md-offset-3">
+                                    <div class="card box-widget">
+                                        <div class="card-body">
+                                            <div class="stat-widget-five">
+                                                <i class="fa fa-sign-in" aria-hidden="true"></i>
+                                                {{ user.tools.count_access_dates }}
+                                                <div class="box-name">
+                                                    {{ 'CountToolAccess'|get_lang }}
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        {% endif %}
                     </div>
                     <div class="col-md-4">
                         {{ display.card_widget('FirstLoginInPlatform'|get_lang, user.first_connection, 'calendar') }}

@@ -2,12 +2,11 @@ framework:
     cache:
 #        directory: '%kernel.cache_dir%/pools'
 
-#        pools:
-#            doctrine.result_cache_pool:
-#                adapter: cache.app
-#            doctrine.system_cache_pool:
-#                adapter: cache.system
-
+        pools:
+            doctrine.result_cache_pool:
+                adapter: cache.app
+            doctrine.system_cache_pool:
+                adapter: cache.system
 
 #        default_doctrine_provider: 'app.doctrine_cache'
 

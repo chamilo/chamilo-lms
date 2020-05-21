@@ -897,8 +897,8 @@ $use_users_timezone = api_get_setting('use_users_timezone', 'timezones');
         $score = $avg_student_score;
     }
 
-$userInfo['student_score'] = $score;
-$userInfo['student_progress'] = $avg_student_progress;
+$userInfo['student_score'] = (float) $score;
+$userInfo['student_progress'] = (float) $avg_student_progress;
 $userInfo['first_connection'] = $first_connection_date;
 $userInfo['last_connection'] = $last_connection_date;
 if ($details === 'true') {

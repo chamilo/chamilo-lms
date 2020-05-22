@@ -75,7 +75,8 @@
     "vuex-map-fields": "^1.4.0",
     "webcamjs": "^1.0",
     "webpack-jquery-ui": "^2.0.1",
-    "xcolor": "https://github.com/infusion/jQuery-xcolor"
+    "xcolor": "https://github.com/infusion/jQuery-xcolor",
+    "snyk": "^1.323.2"
   },
   "devDependencies": {
     "@coreui/coreui": "^2.1.7",
@@ -102,5 +103,10 @@
     "sass-loader": "^7.0.2",
     "vue-cli-plugin-quasar": "~2.0.2",
     "webpack-notifier": "^1.6.0"
-  }
+  },
+  "scripts": {
+    "snyk-protect": "snyk protect",
+    "prepare": "yarn run snyk-protect"
+  },
+  "snyk": true
 }

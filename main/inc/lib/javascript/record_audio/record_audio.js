@@ -26,7 +26,6 @@ window.RecordAudio = (function () {
             var formData = new FormData();
             formData.append('audio_blob', recordedBlob, fileName + fileExtension);
             formData.append('audio_dir', rtcInfo.directory);
-            formData.append('audio_dir', rtcInfo.cidReq);
 
             var courseParams = "";
             if (rtcInfo.cidReq) {

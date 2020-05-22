@@ -13,7 +13,7 @@ $courseInfo = api_get_course_info();
 $tool = isset($_REQUEST['tool']) ? $_REQUEST['tool'] : '';
 $type = isset($_REQUEST['type']) ? $_REQUEST['type'] : 'document'; // can be document or message
 
-if ($type == 'document') {
+if ($type === 'document') {
     api_protect_course_script();
 }
 

@@ -1471,7 +1471,7 @@ if ($isAllowedToEdit ||
             'post',
             api_get_self()."?add_as_template=$document_id_for_template"
         );
-        $frmAddTemplate ->addHeader(get_lang('AddAsTemplate'));
+        $frmAddTemplate->addHeader(get_lang('AddAsTemplate'));
         $frmAddTemplate->addText('template_title', get_lang('TemplateName'), true);
         $frmAddTemplate->addFile('template_image', get_lang('TemplateImage'), ['id' => 'template_image']);
         $frmAddTemplate->addButtonSave(get_lang('CreateTemplate'), 'create_template');

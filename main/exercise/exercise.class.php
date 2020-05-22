@@ -9937,6 +9937,44 @@ class Exercise
         return count($answers);
     }
 
+    public static function allowAction($action)
+    {
+        if (api_is_platform_admin()) {
+            return true;
+        }
+
+        $limitTeacherAccess = api_get_configuration_value('limit_exercise_teacher_access');
+        $disableClean = api_get_configuration_value('disable_clean_exercise_results_for_teachers');
+
+        switch ($action) {
+            case 'delete':
+                if (api_is_allowed_to_edit(null, true)) {
+                    if ($limitTeacherAccess) {
+                        return false;
+                    }
+
+                    return true;
+                }
+                break;
+            case 'clean_results':
+                if (api_is_allowed_to_edit(null, true)) {
+                    if ($limitTeacherAccess) {
+                        return false;
+                    }
+
+                    if ($disableClean) {
+                        return false;
+                    }
+
+                    return true;
+                }
+
+                break;
+        }
+
+        return false;
+    }
+
     /**
      * Get number of questions in exercise by user attempt.
      *
@@ -10448,44 +10486,5 @@ class Exercise
         );
 
         return $group;
-    }
-
-    public static function allowAction($action)
-    {
-        if (api_is_platform_admin()) {
-            return true;
-        }
-
-        $limitTeacherAccess = api_get_configuration_value('limit_exercise_teacher_access');
-        $disableClean = api_get_configuration_value('disable_clean_exercise_results_for_teachers');
-
-        switch ($action) {
-            case 'delete':
-                if (api_is_allowed_to_edit(null, true)) {
-                    if ($limitTeacherAccess) {
-                        return false;
-                    }
-
-                    return true;
-                }
-                break;
-            case 'clean_results':
-                if (api_is_allowed_to_edit(null, true)) {
-                    if ($limitTeacherAccess) {
-                        return false;
-                    }
-
-                    if ($disableClean) {
-                        return false;
-                    }
-
-                    return true;
-                }
-
-                break;
-        }
-
-
-        return false;
     }
 }

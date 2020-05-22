@@ -1,4 +1,5 @@
 <?php
+
 /* For licensing terms, see /license.txt */
 
 use ChamiloSession as Session;
@@ -25,8 +26,6 @@ use ChamiloSession as Session;
  * 2) Define the directory to display
  * 3) Read files and directories from the directory defined in part 2
  * 4) Display all of that on an HTML page
- *
- * @package chamilo.document
  */
 require_once __DIR__.'/../inc/global.inc.php';
 
@@ -42,7 +41,7 @@ $allowUseTool = false;
 
 if ($allowDownloadDocumentsByApiKey) {
     try {
-        if ($action != 'download') {
+        if ($action !== 'download') {
             throw new Exception(get_lang('SelectAnAction'));
         }
 
@@ -71,7 +70,7 @@ $_user = api_get_user_info();
 $courseInfo = api_get_course_info();
 $courseId = $courseInfo['real_id'];
 $course_dir = $courseInfo['directory'].'/document';
-$usePpt2lp = api_get_setting('service_ppt2lp', 'active') == 'true';
+$usePpt2lp = api_get_setting('service_ppt2lp', 'active') === 'true';
 $sys_course_path = api_get_path(SYS_COURSE_PATH);
 $base_work_dir = $sys_course_path.$course_dir;
 $http_www = api_get_path(WEB_COURSE_PATH).$courseInfo['directory'].'/document';
@@ -83,7 +82,7 @@ $is_certificate_mode = false;
 if (isset($_GET['curdirpath'])) {
     $is_certificate_mode = DocumentManager::is_certificate_mode($_GET['curdirpath']);
 }
-if (isset($_REQUEST['certificate']) && $_REQUEST['certificate'] == 'true') {
+if (isset($_REQUEST['certificate']) && $_REQUEST['certificate'] === 'true') {
     $is_certificate_mode = true;
 }
 

@@ -21,35 +21,31 @@ $res1 = Database::query($sql1);
 while ($row1 = Database::fetch_array($res1)) {
     $usersIds[$row1['id']] = true;
 }
-$list = scandir($userFolder);
-foreach ($list as $directory) {
-    $directory = trim($directory);
-    if (substr($directory, 0, 1) == '.') {
+
+$usersFolder = new DirectoryIterator($userFolder);
+
+/** @var SplFileInfo $file */
+foreach ($usersFolder as $file) {
+    if (substr($file->getFilename(), 0, 1) == '.' || !$file->isDir()) {
         continue;
     }
-    if (intval($directory) != $directory) {
-        continue;
-    }
-    echo $userFolder.$directory."\n";
-    $subList = scandir($userFolder.'/'.$directory);
-    foreach ($subList as $subDirectory) {
-        $subDirectory = trim($subDirectory);
-        if (substr($subDirectory, 0, 1) == '.') {
+
+    echo $file->getPathname().PHP_EOL;
+
+    $numberFolder = new DirectoryIterator($file->getPathname());
+
+    /** @var SplFileInfo $userFolder */
+    foreach ($numberFolder as $userFolder) {
+        if (substr($userFolder->getFilename(), 0, 1) == '.') {
             continue;
         }
-        if ($subDirectory == 'my_files') {
-            continue;
-        }
-        $fullDirectory = $directory.'/'.$subDirectory;
-        if (!empty($usersIds[$subDirectory])) {
-            echo "User ".$subDirectory." exists\n";
+
+        if (!empty($usersIds[$userFolder->getFilename()])) {
+            echo "\tUser {$userFolder->getFilename()} exists".PHP_EOL;
         } else {
-            //echo "User ".$directory." does not exists\n";
-            $thisUserFolder = $userFolder.$fullDirectory;
-            //echo "Folder exists but user has been deleted: ".$thisUserFolder."\n";
-            echo "rm -rf $thisUserFolder\n";
-            exec("rm -rf ".$thisUserFolder);
+            echo "\tUser {$userFolder->getFilename()} does not exists."
+                ." Folder exists but user has been deleted: {$userFolder->getPathname()}".PHP_EOL;
+            UserManager::deleteUserFiles($userFolder->getFilename());
         }
     }
 }
-

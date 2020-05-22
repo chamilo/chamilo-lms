@@ -71,8 +71,8 @@ class UserRepository extends ResourceRepository implements UserLoaderInterface, 
      */
     protected $encoder;
 
-    public function setEncoder(UserPasswordEncoderInterface $encoder){
-
+    public function setEncoder(UserPasswordEncoderInterface $encoder)
+    {
         $this->encoder = $encoder;
     }
 
@@ -94,11 +94,10 @@ class UserRepository extends ResourceRepository implements UserLoaderInterface, 
     public function canonicalize($string)
     {
         $encoding = mb_detect_encoding($string);
-        $result = $encoding
+
+        return $encoding
             ? mb_convert_case($string, MB_CASE_LOWER, $encoding)
             : mb_convert_case($string, MB_CASE_LOWER);
-
-        return $result;
     }
 
     public function updateCanonicalFields(UserInterface $user)

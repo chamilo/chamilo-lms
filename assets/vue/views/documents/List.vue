@@ -16,7 +16,6 @@
             />
           </DataFilter>
           <br />
-
           <v-data-table
             v-model="selected"
             :headers="headers"
@@ -31,8 +30,28 @@
             show-select
             @update:options="onUpdateOptions"
           >
-            <template slot="item.resourceNode" slot-scope="{ item }">
-              {{ item['@id'] }}
+            <template slot="item.resourceNode.title" slot-scope="{ item }">
+              <div v-if="item['resourceNode']['resourceFile']">
+<!--                <a @click="showHandler(item)" >-->
+<!--                  {{ item['contentUrl'] }}-->
+<!--                </a>-->
+                <a data-fancybox="gallery"  :href=" item['contentUrl'] " >
+                    {{ item['resourceNode']['title'] }}
+                </a>
+              </div>
+              <div v-else>
+                <a @click="handleClick(item)">
+                  {{ item['resourceNode']['title'] }}
+                </a>
+              </div>
+            </template>
+
+<!--            <template slot="item.resourceNode" slot-scope="{ item }">-->
+<!--              {{ item['@id'] }}-->
+<!--            </template>-->
+
+            <template slot="item.resourceNode.updatedAt" slot-scope="{ item }">
+              {{ item.resourceNode.updatedAt | moment("from", "now") }}
             </template>
 
             <ActionCell
@@ -72,12 +91,9 @@ export default {
     return {
       headers: [
         {text: 'Title', value: 'resourceNode.title', sortable: true},
-        {text: 'Last modified', value: 'resourceNode.updatedAt', sortable: true},
-        {
-          text: 'Actions',
-          value: 'action',
-          sortable: false
-        }
+        {text: 'Modified', value: 'resourceNode.updatedAt', sortable: true},
+        {text: 'Size', value: 'resourceNode.resourceFile.size', sortable: true},
+        {text: 'Actions', value: 'action', sortable: false}
       ],
       selected: []
     };

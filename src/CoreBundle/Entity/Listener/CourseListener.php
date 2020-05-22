@@ -69,7 +69,6 @@ class CourseListener
     {
         /** @var AccessUrlRelCourse $urlRelCourse */
         if ($course) {
-
             /*$urlRelCourse = $course->getUrls()->first();
             $url = $urlRelCourse->getUrl();*/
             //$url = $course->getCurrentUrl();

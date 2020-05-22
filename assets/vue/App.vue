@@ -120,13 +120,10 @@
                 </v-btn>
             </v-app-bar>
 
-
-
             <v-content>
                 <Breadcrumb layout-class="pl-3 py-3" />
                 <router-view></router-view>
             </v-content>
-
 
             <v-footer color="indigo" app>
                 <span class="white--text">&copy; 2019</span>
@@ -148,6 +145,11 @@
         data: () => ({
             drawer: null
         }),
+        computed: {
+            isAuthenticated() {
+                return this.$store.getters['security/isAuthenticated']
+            },
+        },
         beforeMount() {
         }
     }

@@ -33,15 +33,12 @@ class ResourceLink
     protected $id;
 
     /**
-     *
-     *
      * @ORM\ManyToOne(targetEntity="Chamilo\CoreBundle\Entity\ResourceNode", inversedBy="resourceLinks")
      * @ORM\JoinColumn(name="resource_node_id", referencedColumnName="id", onDelete="SET NULL")
      */
     protected $resourceNode;
 
     /**
-     *
      * @ORM\ManyToOne(targetEntity="Chamilo\CoreBundle\Entity\Course", inversedBy="resourceLinks")
      * @ORM\JoinColumn(name="c_id", referencedColumnName="id", nullable=true)
      */

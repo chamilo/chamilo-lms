@@ -48,6 +48,7 @@ switch ($type) {
         if (!is_dir($saveDir)) {
             mkdir($saveDir, api_get_permissions_for_new_directories(), true);
         }
+
         $uploadedDocument = DocumentManager::upload_document(
             $file,
             $audioDir,
@@ -56,7 +57,13 @@ switch ($type) {
             0,
             'overwrite',
             false,
-            in_array($tool, ['document', 'exercise'])
+            in_array($tool, ['document', 'exercise']),
+            'file',
+            true,
+            api_get_user_id(),
+            $courseInfo,
+            api_get_session_id(),
+            api_get_group_id()
         );
 
         $error = empty($uploadedDocument) || !is_array($uploadedDocument);

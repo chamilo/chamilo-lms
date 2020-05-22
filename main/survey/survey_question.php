@@ -568,7 +568,7 @@ class survey_question
 
     public static function getQuestionJs($question)
     {
-        $list = self::getDependecy($question);
+        $list = self::getDependency($question);
         if (empty($list)) {
             return '';
         }
@@ -603,7 +603,7 @@ class survey_question
         return $js;
     }
 
-    public static function getDependecy($question)
+    public static function getDependency($question)
     {
         $table = Database::get_course_table(TABLE_SURVEY_QUESTION);
         $questionId = $question['question_id'];
